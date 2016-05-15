@@ -85,14 +85,14 @@ M: lambda-parser parse-quotation ( -- quotation )
 
 : (::) ( -- word def effect )
     [
-        scan-new-word
+        scan-new-word bootstrap-word
         [ parse-definition ]
         parse-locals-definition
     ] with-definition ;
 
 : (M::) ( -- word def )
     [
-        scan-new-method
+        scan-new-method bootstrap-word
         [
             [ parse-definition ]
             parse-locals-method-definition drop

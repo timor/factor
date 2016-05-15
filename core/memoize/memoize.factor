@@ -69,10 +69,6 @@ PRIVATE>
     dup in>> length zero? [ f 1array ] [ IH{ } clone ] if
     (define-memoized) ;
 
-SYNTAX: MEMO: (:) define-memoized ;
-
-SYNTAX: IDENTITY-MEMO: (:) define-identity-memoized ;
-
 PREDICATE: memoized < word "memoize" word-prop >boolean ;
 
 M: memoized definer drop \ MEMO: \ ; ;

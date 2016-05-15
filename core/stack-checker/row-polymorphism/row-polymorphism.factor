@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Joe Groff
 ! See http://factorcode.org/license.txt for BSD license
 USING: accessors arrays assocs combinators
-combinators.short-circuit effects fry kernel locals math
+combinators.short-circuit effects kernel math
 math.order namespaces sequences stack-checker.errors
 stack-checker.state stack-checker.values ;
 IN: stack-checker.row-polymorphism
@@ -21,10 +21,10 @@ IN: stack-checker.row-polymorphism
     [ with-inner-d ] 2dip (effect-here) ; inline
 
 : (diff-variable) ( diff variable vars -- diff' )
-    [ key? ] [ '[ _ _ at - ] ] [ '[ _ _ set-at 0 ] ] 2tri if ;
+    [ key? ] [ [ at - ] 2curry ] [ [ set-at 0 ] 2curry ] 2tri if ;
 
 : (check-variable) ( actual-count declared-count variable vars -- diff ? )
-    [ - ] 2dip dupd '[ _ _ (diff-variable) t ] [ dup 0 <= ] if ;
+    [ - ] 2dip dupd [ (diff-variable) t ] 2curry [ dup 0 <= ] if ;
 
 : adjust-variable ( diff var vars -- )
     pick 0 >= [ at+ ] [ 3drop ] if ; inline

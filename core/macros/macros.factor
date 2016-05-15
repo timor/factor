@@ -27,8 +27,6 @@ PRIVATE>
         [ 2drop changed-effect ]
     } 3cleave ;
 
-SYNTAX: MACRO: (:) define-macro ;
-
 PREDICATE: macro < word "macro" word-prop >boolean ;
 
 M: macro make-inline cannot-be-inline ;
