@@ -3,7 +3,7 @@
 USING: assocs hash-sets hashtables hashtables.identity
 hashtables.wrapped init io io.files kernel kernel.private make
 memory namespaces parser parser.notes sequences system vocabs
-vocabs.loader ;
+vocabs.loader vocabs.hierarchy ;
 QUALIFIED: bootstrap.image.private
 IN: bootstrap.stage1
 
@@ -45,6 +45,8 @@ load-help? off
     "alien.libraries" require
     "alien.c-types" require
     "delegate" require
+    "stack-checker" load
+    "generalizations" require
 
     [
         f parser-quiet? set-global
