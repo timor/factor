@@ -1,9 +1,9 @@
 ! Copyright (C) 2004, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: arrays assocs continuations debugger destructors generic
-hash-sets hashtables init io io.files kernel kernel.private
-make math memory namespaces parser parser.notes prettyprint
-sequences splitting system vectors vocabs vocabs.loader words ;
+USING: assocs hash-sets hashtables hashtables.identity
+hashtables.wrapped init io io.files kernel kernel.private make
+memory namespaces parser parser.notes sequences system vocabs
+vocabs.loader ;
 QUALIFIED: bootstrap.image.private
 IN: bootstrap.stage1
 
@@ -20,6 +20,8 @@ load-help? off
     [
         ! Rehash hashtables first, since bootstrap.image creates
         ! them using the host image's hashing algorithms.
+        [ identity-hashtable? ] instances [ hashtables:rehash ] each
+        [ wrapped-hashtable? ] instances [ hashtables:rehash ] each
         [ hashtable? ] instances [ hashtables:rehash ] each
         [ hash-set? ] instances [ hash-sets:rehash ] each
         boot
@@ -36,6 +38,13 @@ load-help? off
 
     "syntax" require
     "bootstrap.layouts" require
+
+    ! need this
+    "locals.macros" require
+    "locals.fry" require
+    "alien.libraries" require
+    "alien.c-types" require
+    "delegate" require
 
     [
         f parser-quiet? set-global
