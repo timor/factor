@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: command-line compiler.units continuations definitions io
 io.pathnames kernel math math.parser memory namespaces parser
-parser.notes sequences sets splitting system
+parser.notes sequences sets splitting system combinators
 vocabs vocabs.loader ;
 IN: bootstrap.stage2
 
@@ -74,6 +74,15 @@ CONSTANT: default-components
     strip-encodings
 
     (command-line) parse-command-line
+
+    ! Finish loading alien.libraries
+    ! We don't want this in core/ because
+    ! 1) can't have platform-dependent files in core
+    ! 2) it pulls in so many files
+    {
+        { [ os windows? ] [ "alien.libraries.windows" ] }
+        { [ os unix? ] [ "alien.libraries.unix" ] }
+    } cond require
 
     ! Set dll paths
     os windows? [ "windows" require ] when
