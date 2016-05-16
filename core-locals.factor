@@ -144,19 +144,34 @@ string-lines
 2dup diff
 
 
-
-
     "compiler"
     "command-line.debugger"
     "command-line.startup"
     "delegate.protocols"
     "locals.definitions"
-    "locals.prettyprint"
     "memoize.syntax"
     "typed.debugger"
     "typed.namespaces"
-    "typed.prettyprint"
-    "combinators.short-circuit.smart"
     "hashtables.identity.mirrors"
-    "hashtables.identity.prettyprint"
-    "hashtables.wrapped.prettyprint"
+    "vocabs.loader.test.a"
+    "vocabs.loader.test.b"
+    "vocabs.loader.test.c"
+    "vocabs.loader.test.d"
+    "vocabs.loader.test.e"
+    "vocabs.loader.test.f"
+    "vocabs.loader.test.g"
+    "vocabs.loader.test.h"
+    "vocabs.loader.test.i"
+    "vocabs.loader.test.j"
+    "vocabs.loader.test.k"
+    "vocabs.loader.test.l"
+    "vocabs.loader.test.m"
+    "vocabs.loader.test.n"
+    "vocabs.loader.test.o"
+    "vocabs.loader.test.p"
+    
+
+disable-optimizer
+enable-optimizer
+    
+IN: scratchpad 1 1 - restarts [ nth f ] change-global  "peg.ebnf" reload continue-restart
