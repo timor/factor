@@ -47,6 +47,7 @@ load-help? off
     "delegate" require
     "stack-checker" load
     "generalizations" require
+    "combinators.short-circuit.smart" require
 
     [
         f parser-quiet? set-global

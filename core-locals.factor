@@ -123,11 +123,40 @@ SYNTAX: HINTS:
 "compiler.cfg.parallel-copy" reload
 
 
-! vocab-exists? twice
-
-
-
-emit-words does not emit deffered locals, but fixup tries to fix them up.
-
-
 MD5 (boot.unix-x86.64.image) = 9fa82ffeeb8eebf763327205a78c4597
+
+
+
+ "/Users/erg/factor/core/" t recursive-directory-files
+[ "/Users/erg/factor/core/" ?head drop ] map
+[ "." swap subseq? ] reject
+[ H{ { CHAR: / CHAR: . } } substitute ] map
+[ vocab-exists? ] filter
+
+
+
+string-lines
+[ " " split1 nip ] map
+[ "resource:core/" ?head drop ] map
+[ H{ { CHAR: / CHAR: . } } substitute ] map
+[ "." split but-last but-last  "." join ] map
+
+2dup diff
+
+
+
+
+    "compiler"
+    "command-line.debugger"
+    "command-line.startup"
+    "delegate.protocols"
+    "locals.definitions"
+    "locals.prettyprint"
+    "memoize.syntax"
+    "typed.debugger"
+    "typed.namespaces"
+    "typed.prettyprint"
+    "combinators.short-circuit.smart"
+    "hashtables.identity.mirrors"
+    "hashtables.identity.prettyprint"
+    "hashtables.wrapped.prettyprint"

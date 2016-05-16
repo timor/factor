@@ -13,8 +13,6 @@ generic hints io kernel macros make match math namespaces
 prettyprint prettyprint.config prettyprint.custom
 prettyprint.sections quotations sequences sequences.private sets
 sorting words ;
-FROM: fry => _ ;
-RENAME: _ match => __
 IN: compiler.tree.debugger
 
 ! A simple tool for turning tree IR into quotations and
@@ -23,7 +21,7 @@ IN: compiler.tree.debugger
 GENERIC: node>quot ( node -- )
 
 MACRO: match-choose ( alist -- quot )
-    [ '[ _ ] ] assoc-map '[ _ match-cond ] ;
+    [ '[ syntax:_ ] ] assoc-map '[ syntax:_ match-cond ] ;
 
 MATCH-VARS: ?a ?b ?c ;
 
@@ -48,7 +46,7 @@ MATCH-VARS: ?a ?b ?c ;
         { { { ?a ?b ?c } { ?b ?c ?a } } [ rot ] }
         { { { ?a ?b } { ?b } } [ nip ] }
         { { { ?a ?b ?c } { ?c } } [ 2nip ] }
-        { __ f }
+        { match:_ f }
     } match-choose ;
 
 TUPLE: shuffle-node { effect effect } ;
@@ -56,7 +54,7 @@ TUPLE: shuffle-node { effect effect } ;
 M: shuffle-node pprint* effect>> effect>string text ;
 
 : (shuffle-effect) ( in out #shuffle -- effect )
-    mapping>> '[ _ at ] map [ >array ] bi@ <effect> ;
+    mapping>> '[ syntax:_ at ] map [ >array ] bi@ <effect> ;
 
 : shuffle-effect ( #shuffle -- effect )
     [ in-d>> ] [ out-d>> ] [ ] tri (shuffle-effect) ;
