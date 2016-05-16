@@ -1,10 +1,31 @@
 ! Copyright (C) 2007, 2008 Slava Pestov, Eduardo Cavazos.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors definitions effects generic kernel locals
-macros memoize prettyprint prettyprint.backend see words ;
+macros memoize prettyprint prettyprint.backend see words
+locals.types sequences make quotations ;
 IN: locals.definitions
 
 PREDICATE: lambda-word < word "lambda" word-prop >boolean ;
+
+! Lambdas/locals need to expose their uninterned subwords in order
+! to make a boot image.
+GENERIC: lambda-subwords ( obj -- )
+
+M: object lambda-subwords drop ;
+
+M: lambda lambda-subwords [ vars>> % ] [ body>> [ lambda-subwords ] each ] bi ;
+
+M: def lambda-subwords local>> , ;
+
+M: callable lambda-subwords [ lambda-subwords ] each ;
+
+
+M: lambda-word subwords
+    [
+        "lambda" word-prop
+        [ vars>> % ] [ body>> [ lambda-subwords ] each ] bi
+    ] { } make ;
+
 
 M: lambda-word definer drop \ :: \ ; ;
 
