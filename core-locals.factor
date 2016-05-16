@@ -94,6 +94,7 @@ SYNTAX: HINTS:
 
  H{ } clone root-cache set-global
  
+ USE: io.directories.search
  "/Users/erg/factor/core/locals" t recursive-directory-files
 [ "/Users/erg/factor/core/" ?head drop ] map
 [ "." swap subseq? ] reject
@@ -103,3 +104,17 @@ SYNTAX: HINTS:
 
 "fry" reload
 "bootstrap.image" reload
+
+
+! load somewhere!
+{
+    { [ os windows? ] [ "alien.libraries.windows" ] }
+    { [ os unix? ] [ "alien.libraries.unix" ] }
+} cond require
+
+
+! bug in locals with current approach...
+"compiler.cfg.parallel-copy" reload
+
+
+! vocab-exists? twice
