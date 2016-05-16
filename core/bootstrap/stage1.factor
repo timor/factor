@@ -40,8 +40,7 @@ load-help? off
     "bootstrap.layouts" require
 
     ! need this
-    "locals.macros" require
-    "locals.fry" require
+    "locals" load
     "alien.libraries" require
     "alien.c-types" require
     "delegate" require

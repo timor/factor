@@ -1,7 +1,7 @@
 ! Copyright (C) 2007, 2008 Slava Pestov, Eduardo Cavazos.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors definitions effects generic kernel locals
-macros memoize prettyprint prettyprint.backend see words
+macros memoize words
 locals.types sequences make quotations ;
 IN: locals.definitions
 
@@ -18,6 +18,7 @@ M: lambda lambda-subwords [ vars>> % ] [ body>> [ lambda-subwords ] each ] bi ;
 M: def lambda-subwords local>> , ;
 
 M: callable lambda-subwords [ lambda-subwords ] each ;
+M: sequence lambda-subwords [ lambda-subwords ] each ;
 
 
 M: lambda-word subwords
@@ -70,9 +71,3 @@ M: lambda-memoized reset-word
     swap "method-generic" word-prop stack-effect
     dup [ out>> ] when
     <effect> ;
-
-M: lambda-method synopsis*
-    dup dup dup definer.
-    "method-class" word-prop pprint-word
-    "method-generic" word-prop pprint-word
-    method-stack-effect effect>string comment. ;

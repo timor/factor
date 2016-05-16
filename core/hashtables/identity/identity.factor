@@ -35,6 +35,3 @@ M: identity-hashtable assoc-like
     drop dup identity-hashtable? [ >identity-hashtable ] unless ; inline
 
 M: identity-hashtable new-assoc drop <identity-hashtable> ;
-
-{ "hashtables.identity" "prettyprint" } "hashtables.identity.prettyprint" require-when
-{ "hashtables.identity" "mirrors" } "hashtables.identity.mirrors" require-when

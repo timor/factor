@@ -84,6 +84,17 @@ CONSTANT: default-components
         { [ os unix? ] [ "alien.libraries.unix" ] }
     } cond require
 
+    { "typed" "prettyprint" } "typed.prettyprint" require-when
+    { "typed" "compiler.cfg.debugger" } "typed.debugger" require-when
+
+    { "hashtables.identity" "prettyprint" } "hashtables.identity.prettyprint" require-when
+    { "hashtables.identity" "mirrors" } "hashtables.identity.mirrors" require-when
+    { "hashtables.wrapped" "prettyprint" } "hashtables.wrapped.prettyprint" require-when
+    "command-line.startup" require
+    { "locals" "prettyprint" } "locals.prettyprint" require-when
+    { "typed" "prettyprint" } "typed.prettyprint" require-when
+    { "typed" "compiler.cfg.debugger" } "typed.debugger" require-when
+
     ! Set dll paths
     os windows? [ "windows" require ] when
 

@@ -50,5 +50,3 @@ M: wrapped-hashtable equal?
     over wrapped-hashtable? [ [ underlying>> ] same? ] [ 2drop f ] if ;
 
 INSTANCE: wrapped-hashtable assoc
-
-{ "hashtables.wrapped" "prettyprint" } "hashtables.wrapped.prettyprint" require-when

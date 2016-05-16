@@ -5,10 +5,4 @@ vocabs.loader words kernel namespaces locals.parser locals.types
 locals.errors ;
 IN: locals
 
-{
-    "locals.macros"
-    "locals.fry"
-} [ require ] each
-
-{ "locals" "prettyprint" } "locals.definitions" require-when
-{ "locals" "prettyprint" } "locals.prettyprint" require-when
+! Empty on purpose for now.

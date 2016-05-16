@@ -159,8 +159,3 @@ PRIVATE>
     [ [ 2drop ] [ typed-def ] [ 2nip ] 3tri define-inline ]
     [ drop "typed-def" set-word-prop ]
     [ 2drop "typed-word" word-prop set-last-word ] 3tri ;
-
-USE: vocabs.loader
-
-{ "typed" "prettyprint" } "typed.prettyprint" require-when
-{ "typed" "compiler.cfg.debugger" } "typed.debugger" require-when
