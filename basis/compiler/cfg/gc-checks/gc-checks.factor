@@ -39,9 +39,9 @@ M: insn gc-check-offsets* 2drop ;
     ! Divide a basic block into sections, where every section
     ! other than the first requires a GC check.
     [
-        insns 0 seq [| insns from to |
-            from to insns subseq ,
-            insns to
+        insns 0 seq [| insns' from to |
+            from to insns' subseq ,
+            insns' to
         ] each
         tail ,
     ] { } make ;

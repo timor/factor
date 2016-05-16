@@ -32,9 +32,9 @@ SYMBOLS: locs preds to-do ready ;
 
 :: process-to-do ( b temp: ( src -- dst ) quot: ( dst src -- ) -- )
     b locs get at b = [
-        b temp call :> temp
-        temp b quot call
-        temp b locs get set-at
+        b temp call :> temp'
+        temp' b quot call
+        temp' b locs get set-at
         b ready get push-front
     ] when ; inline
 
