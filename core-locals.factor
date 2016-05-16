@@ -17,6 +17,8 @@ USE: delegate.private
 << FORGET: @ >>
 << FORGET: POSTPONE: [| >>
 << FORGET: POSTPONE: [let >>
+<< FORGET: POSTPONE: IH{ >>
+
 
 SYNTAX: :: (::) define-declared ;
 SYNTAX: M:: (M::) define ;
@@ -76,6 +78,18 @@ SYNTAX: HINTS:
     
 
 
+"::" "M::" "MEMO:" "MEMO::" "MACRO:" "MACRO::" "IDENTITY-MEMO:" "IDENTITY-MEMO::" "TYPED:" "TYPED::"
+":>" "[|" "[let" "MEMO["
+"'["
+"_"
+"@"
+"IH{"
+"PROTOCOL:"
+"CONSULT"
+"BROADCAST:"
+"SLOT-PROTOCOL:"
+"HINTS:"
+
 
 
  H{ } clone root-cache set-global
@@ -85,4 +99,7 @@ SYNTAX: HINTS:
 [ "." swap subseq? ] reject
 [ H{ { CHAR: / CHAR: . } } substitute ] map
 [ vocab-exists? ] filter
-[ reload ] each 
+[ reload ] each
+
+"fry" reload
+"bootstrap.image" reload

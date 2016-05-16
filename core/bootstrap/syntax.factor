@@ -94,6 +94,18 @@ IN: bootstrap.syntax
         "<<<<<<<"
         "======="
         ">>>>>>>"
+
+        "::" "M::" "MEMO:" "MEMO::" "MACRO:" "MACRO::" "IDENTITY-MEMO:" "IDENTITY-MEMO::" "TYPED:" "TYPED::"
+        ":>" "[|" "[let" "MEMO["
+        "'["
+        "_"
+        "@"
+        "IH{"
+        "PROTOCOL:"
+        "CONSULT"
+        "BROADCAST:"
+        "SLOT-PROTOCOL:"
+        "HINTS:"
     } [ "syntax" create-word drop ] each
 
     "t" "syntax" lookup-word define-symbol
