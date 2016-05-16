@@ -102,7 +102,7 @@ IN: bootstrap.syntax
         "@"
         "IH{"
         "PROTOCOL:"
-        "CONSULT"
+        "CONSULT:"
         "BROADCAST:"
         "SLOT-PROTOCOL:"
         "HINTS:"
