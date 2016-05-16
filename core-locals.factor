@@ -9,6 +9,8 @@ USE: delegate.private
 << FORGET: POSTPONE: M:: >>
 << FORGET: POSTPONE: IDENTITY-MEMO: >>
 << FORGET: POSTPONE: IDENTITY-MEMO:: >>
+<< FORGET: POSTPONE: TYPED: >>
+<< FORGET: POSTPONE: TYPED:: >>
 
 << FORGET: POSTPONE: '[ >>
 << FORGET: POSTPONE: :: >>
@@ -18,6 +20,12 @@ USE: delegate.private
 << FORGET: POSTPONE: [| >>
 << FORGET: POSTPONE: [let >>
 << FORGET: POSTPONE: IH{ >>
+<< FORGET: POSTPONE: PROTOCOL: >>
+<< FORGET: POSTPONE: CONSULT: >>
+<< FORGET: POSTPONE: BROADCAST: >>
+<< FORGET: POSTPONE: SLOT-PROTOCOL: >>
+<< FORGET: POSTPONE: HINTS: >>
+
 
 
 SYNTAX: :: (::) define-declared ;
@@ -78,20 +86,6 @@ SYNTAX: HINTS:
     
 
 
-"::" "M::" "MEMO:" "MEMO::" "MACRO:" "MACRO::" "IDENTITY-MEMO:" "IDENTITY-MEMO::" "TYPED:" "TYPED::"
-":>" "[|" "[let" "MEMO["
-"'["
-"_"
-"@"
-"IH{"
-"PROTOCOL:"
-"CONSULT"
-"BROADCAST:"
-"SLOT-PROTOCOL:"
-"HINTS:"
-
-
-
  H{ } clone root-cache set-global
  
  USE: io.directories.search
@@ -101,6 +95,18 @@ SYNTAX: HINTS:
 [ H{ { CHAR: / CHAR: . } } substitute ] map
 [ vocab-exists? ] filter
 [ reload ] each
+
+
+ USE: io.directories.search
+ USE: ui.tools.listener
+ "/Users/erg/factor/core/stack-checker" t recursive-directory-files
+[ "/Users/erg/factor/core/" ?head drop ] map
+[ "." swap subseq? ] reject
+[ H{ { CHAR: / CHAR: . } } substitute ] map
+[ vocab-exists? ] filter
+[ reload ] each
+
+
 
 "fry" reload
 "bootstrap.image" reload
@@ -118,3 +124,10 @@ SYNTAX: HINTS:
 
 
 ! vocab-exists? twice
+
+
+
+emit-words does not emit deffered locals, but fixup tries to fix them up.
+
+
+MD5 (boot.unix-x86.64.image) = 9fa82ffeeb8eebf763327205a78c4597
