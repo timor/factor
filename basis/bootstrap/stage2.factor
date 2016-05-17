@@ -94,6 +94,7 @@ CONSTANT: default-components
     { "locals" "prettyprint" } "locals.prettyprint" require-when
     { "typed" "prettyprint" } "typed.prettyprint" require-when
     { "typed" "compiler.cfg.debugger" } "typed.debugger" require-when
+    "stack-checker.row-polymorphism" reload
 
     ! Set dll paths
     os windows? [ "windows" require ] when
