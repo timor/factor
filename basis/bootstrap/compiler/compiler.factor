@@ -5,7 +5,7 @@ classes.tuple.private compiler.units hashtables
 hashtables.private io kernel libc math math.parser memory
 namespaces namespaces.private quotations quotations.private
 sbufs sequences sequences.private splitting system vectors
-vocabs vocabs.loader words ;
+vocabs vocabs.loader words stack-checker.row-polymorphism ;
 FROM: compiler => enable-optimizer ;
 IN: bootstrap.compiler
 
@@ -62,6 +62,11 @@ gc
     } compile-unoptimized
 
     "." write flush
+
+    {
+        unify-variables
+        (balance-actual-depth)
+    } compile-unoptimized
 
     {
         bitand bitor bitxor bitnot

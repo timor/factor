@@ -33,11 +33,9 @@ IN: stack-checker.row-polymorphism
     actual declared [ slot call length ] bi@ declared var-slot call
     [ vars (check-variable) ] keep ; inline
 
+
 :: unify-variables ( in-diff in-ok? in-var out-diff out-ok? out-var vars -- ? )
-    in-ok?
-    out-ok? and
-    in-diff out-diff = and
-    dup [
+    { [ in-ok? ] [ out-ok? ] [ in-diff out-diff = ] }  0 n&&  dup [
         in-var  [ in-diff  swap vars adjust-variable ] when*
         out-var [ out-diff swap vars adjust-variable ] when*
     ] when ;
@@ -45,19 +43,19 @@ IN: stack-checker.row-polymorphism
 ! A bit of a hack. If the declared effect is one-sided monomorphic and the actual effect is a
 ! shallow subtype of the root effect, adjust it here
 :: (balance-actual-depth) ( declared actual -- depth/f )
-    declared in-var>>
-    declared out-var>> not and
-    actual out>> length declared out>> length < and [
-        declared out>> length actual out>> length -
-    ] [
-        declared in-var>> not
-        declared out-var>> and
-        actual in>> length declared in>> length < and [
-            declared in>> length actual in>> length -
-        ] [
-            f
-        ] if
-    ] if ;
+    {
+        { [ {
+            [ declared in-var>> ]
+            [ declared out-var>> not ]
+            [ actual out>> length declared out>> length < ]
+        } 0 n&& ] [ declared out>> length actual out>> length - ] }
+        { [ {
+            [ declared in-var>> not ]
+            [ declared out-var>> ]
+            [ actual in>> length declared in>> length < ]
+        } 0 n&& ] [ declared in>> length actual in>> length - ] }
+        [ f ]
+    } cond ;
 
 : (balance-by) ( effect n -- effect' )
     "x" <array> swap
