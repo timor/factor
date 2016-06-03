@@ -17,9 +17,9 @@ IN: colors.constants
     [ parse-color ] H{ } map>assoc ;
 
 MEMO: colors ( -- assoc )
-    "resource:basis/colors/constants/rgb.txt"
-    "resource:basis/colors/constants/factor-colors.txt"
-    "resource:basis/colors/constants/solarized-colors.txt"
+    "vocab:colors/constants/rgb.txt"
+    "vocab:colors/constants/factor-colors.txt"
+    "vocab:colors/constants/solarized-colors.txt"
     [ utf8 file-lines parse-colors ] tri@ assoc-union assoc-union ;
 
 PRIVATE>

@@ -53,7 +53,7 @@ load-help? off
 
         init-resource-path
 
-        "resource:basis/bootstrap/stage2.factor"
+        "resource:language/bootstrap/stage2.factor"
         dup exists? [
             run-file
         ] [

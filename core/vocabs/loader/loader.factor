@@ -12,8 +12,17 @@ SYMBOL: add-vocab-root-hook
 [
     V{
         "resource:core"
-        "resource:basis"
-        "resource:extra"
+        "resource:language"
+        "resource:collections"
+        "resource:ffi"
+        "resource:libs"
+        "resource:frameworks"
+        "resource:apps"
+        "resource:tools"
+        "resource:webapps"
+        "resource:games"
+        "resource:demos"
+        "resource:benchmarks"
         "resource:work"
     } clone vocab-roots set-global
 
