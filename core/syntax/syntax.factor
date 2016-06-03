@@ -78,6 +78,7 @@ IN: bootstrap.syntax
     "use:" [ scan-token use-vocab ] define-core-syntax
 
     "UNUSE:" [ scan-token unuse-vocab ] define-core-syntax
+    "unuse:" [ scan-token unuse-vocab ] define-core-syntax
 
     "USING:" [ ";" [ use-vocab ] each-token ] define-core-syntax
 
@@ -222,6 +223,9 @@ IN: bootstrap.syntax
     "MIXIN:" [
         scan-new-class define-mixin-class
     ] define-core-syntax
+    "mixin:" [
+        scan-new-class define-mixin-class
+    ] define-core-syntax
 
     "INSTANCE:" [
         location [
@@ -240,12 +244,18 @@ IN: bootstrap.syntax
     "SINGLETON:" [
         scan-new-class define-singleton-class
     ] define-core-syntax
+    "singleton:" [
+        scan-new-class define-singleton-class
+    ] define-core-syntax
 
     "TUPLE:" [
         parse-tuple-definition define-tuple-class
     ] define-core-syntax
 
     "final" [
+        last-word make-final
+    ] define-core-syntax
+    "@final" [
         last-word make-final
     ] define-core-syntax
 
@@ -264,6 +274,9 @@ IN: bootstrap.syntax
     ] define-core-syntax
 
     "FORGET:" [
+        scan-object forget
+    ] define-core-syntax
+    "forget:" [
         scan-object forget
     ] define-core-syntax
 
