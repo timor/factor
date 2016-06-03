@@ -1,7 +1,7 @@
 ! Copyright (C) 2006, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: vocabs.loader ;
-IN: stack-checker.errors
+in: stack-checker.errors
 
 TUPLE: inference-error ;
 

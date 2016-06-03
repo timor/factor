@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: destructors kernel kernel.private math namespaces
 sequences sequences.private ;
-IN: io
+in: io
 
 SYMBOLS: +byte+ +character+ ;
 
@@ -36,7 +36,7 @@ GENERIC: stream-length ( stream -- n/f )
 ! Default streams
 MIXIN: input-stream
 MIXIN: output-stream
-SYMBOL: error-stream
+symbol: error-stream
 
 : readln ( -- str/f ) input-stream get stream-readln ; inline
 : read1 ( -- elt ) input-stream get stream-read1 ; inline

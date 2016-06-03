@@ -4,7 +4,7 @@ USING: accessors assocs classes classes.algebra
 classes.algebra.private classes.builtin classes.private
 combinators definitions kernel kernel.private math math.private
 quotations sequences sets words ;
-IN: classes.union
+in: classes.union
 
 PREDICATE: union-class < class
     "metaclass" word-prop union-class eq? ;

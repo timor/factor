@@ -5,7 +5,7 @@ USING: accessors arrays assocs classes.tuple definitions effects generic
 generic.standard hashtables kernel lexer math parser
 generic.parser sequences sets slots words words.symbol fry
 compiler.units make ;
-IN: delegate
+in: delegate
 
 ERROR: broadcast-words-must-have-no-outputs group ;
 

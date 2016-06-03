@@ -1,5 +1,5 @@
 USING: help.syntax help.markup arrays sequences ;
-IN: math.ranges
+in: math.ranges
 
 ARTICLE: "math.ranges" "Numeric ranges"
 "A " { $emphasis "range" } " is a virtual sequence with real number elements "

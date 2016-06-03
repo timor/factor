@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators.short-circuit kernel modern
 modern.out sequences tools.test multiline ;
-IN: modern.out.tests
+in: modern.out.tests
 
 : rewrite-same-string ( string -- ? )
     [ [ ] rewrite-string ] keep sequence= ;

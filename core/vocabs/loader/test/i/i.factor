@@ -1,2 +1,2 @@
-IN: vocabs.loader.test.i
-USE: vocabs.loader.test.h
+in: vocabs.loader.test.i
+use: vocabs.loader.test.h

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors byte-arrays byte-vectors io io.backend io.files
 kernel math math.parser sequences ;
-IN: checksums
+in: checksums
 
 MIXIN: checksum
 

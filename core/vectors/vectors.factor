@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays growable kernel math sequences
 sequences.private ;
-IN: vectors
+in: vectors
 
 TUPLE: vector
 { underlying array }

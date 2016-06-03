@@ -6,7 +6,7 @@ locals namespaces quotations sequences stack-checker.backend
 stack-checker.dependencies stack-checker.errors
 stack-checker.recursive-state stack-checker.values
 stack-checker.visitor words ;
-IN: stack-checker.transforms
+in: stack-checker.transforms
 
 : call-transformer ( stack quot -- newquot )
     '[ _ _ with-datastack [ length 1 assert= ] [ first ] bi ]

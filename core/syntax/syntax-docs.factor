@@ -3,7 +3,7 @@ effects generic generic.math generic.single help.markup
 help.syntax io.pathnames kernel math parser sequences
 vocabs.loader vocabs.parser words words.alias words.constant
 words.symbol ;
-IN: syntax
+in: syntax
 
 ARTICLE: "parser-algorithm" "Parser algorithm"
 "At the most abstract level, Factor syntax consists of whitespace-separated tokens. The parser tokenizes the input on whitespace boundaries. The parser is case-sensitive and whitespace between tokens is significant, so the following three expressions tokenize differently:"

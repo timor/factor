@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel sequences math math.order ;
-IN: stack-checker.recursive-state.tree
+in: stack-checker.recursive-state.tree
 
 ! Persistent unbalanced hash tree using eq? comparison.
 ! We use this to speed up stack-checker.recursive-state.

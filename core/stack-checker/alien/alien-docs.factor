@@ -1,6 +1,6 @@
 USING: alien alien.c-types compiler.tree effects help.markup help.syntax
 quotations sequences ;
-IN: stack-checker.alien
+in: stack-checker.alien
 
 HELP: alien-node-params
 { $class-description "Base class for the parameter slot of " { $link #alien-node } " nodes. It has the following slots:"

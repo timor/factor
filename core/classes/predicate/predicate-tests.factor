@@ -1,6 +1,6 @@
 USING: accessors assocs classes classes.algebra compiler.units
 eval generic.single kernel math strings tools.test words ;
-IN: classes.predicate.tests
+in: classes.predicate.tests
 
 PREDICATE: negative < integer 0 < ;
 PREDICATE: positive < integer 0 > ;

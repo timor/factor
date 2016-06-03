@@ -2,9 +2,9 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors byte-arrays io io.encodings
 io.encodings.private kernel math sequences strings ;
-IN: io.encodings.ascii
+in: io.encodings.ascii
 
-SINGLETON: ascii
+singleton: ascii
 
 M: ascii encode-char
     drop

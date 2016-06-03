@@ -3,6 +3,6 @@
 USING: lexer macros memoize parser sequences vocabs
 vocabs.loader words kernel namespaces locals.parser locals.types
 locals.errors ;
-IN: locals
+in: locals
 
 ! Empty on purpose for now.

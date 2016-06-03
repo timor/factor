@@ -1,6 +1,6 @@
 USING: assocs help.markup help.syntax kernel math
 namespaces.private quotations words words.symbol ;
-IN: namespaces
+in: namespaces
 
 ARTICLE: "namespaces-combinators" "Namespace combinators"
 { $subsections

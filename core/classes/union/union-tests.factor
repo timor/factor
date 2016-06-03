@@ -2,7 +2,7 @@ USING: accessors alien assocs classes classes.algebra
 classes.predicate classes.union classes.union.private
 compiler.units eval io.streams.string kernel math math.private
 parser quotations see sequences slots strings tools.test words ;
-IN: classes.union.tests
+in: classes.union.tests
 
 ! DEFER: bah
 ! FORGET: bah
@@ -134,7 +134,7 @@ PREDICATE: numba-ova-10 < union{ float integer }
 [ "IN: issue-420 UNION: omg omg ;" eval( -- ) ]
 [ error>> cannot-reference-self? ] must-fail-with
 
-IN: issue-420
+in: issue-420
 UNION: a ;
 UNION: b a ;
 

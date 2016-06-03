@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: words words.symbol sequences vocabs kernel
 compiler.units ;
-IN: bootstrap.syntax
+in: bootstrap.syntax
 
 [
     "syntax" create-vocab drop

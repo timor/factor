@@ -1,2 +1,2 @@
-IN: vocabs.loader.test.k
-USE: vocabs.loader.test.j
+in: vocabs.loader.test.k
+use: vocabs.loader.test.j

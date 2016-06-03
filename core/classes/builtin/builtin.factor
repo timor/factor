@@ -2,9 +2,9 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: classes classes.algebra.private classes.private kernel
 kernel.private make namespaces sequences words ;
-IN: classes.builtin
+in: classes.builtin
 
-SYMBOL: builtins
+symbol: builtins
 
 PREDICATE: builtin-class < class
     "metaclass" word-prop builtin-class eq? ;

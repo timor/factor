@@ -4,7 +4,7 @@ USING: accessors arrays assocs combinators
 combinators.short-circuit effects kernel math
 math.order namespaces sequences stack-checker.errors
 stack-checker.state stack-checker.values ;
-IN: stack-checker.row-polymorphism
+in: stack-checker.row-polymorphism
 
 : with-inner-d ( quot -- inner-d )
     inner-d-index get

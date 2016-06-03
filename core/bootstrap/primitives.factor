@@ -7,7 +7,7 @@ classes.tuple.private classes.union combinators compiler.units io
 kernel kernel.private layouts make math math.private namespaces parser
 quotations sequences slots source-files splitting vocabs vocabs.loader
 words ;
-IN: bootstrap.primitives
+in: bootstrap.primitives
 
 "* Creating primitives and basic runtime structures..." print flush
 

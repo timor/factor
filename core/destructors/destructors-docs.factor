@@ -1,5 +1,5 @@
 USING: classes help.markup help.syntax io quotations sequences ;
-IN: destructors
+in: destructors
 
 HELP: debug-leaks?
 { $var-description "When this variable is on, " { $link new-disposable } " stores the current continuation in the " { $link disposable } "'s " { $slot "continuation" } " slot." }

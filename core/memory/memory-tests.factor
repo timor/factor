@@ -2,7 +2,7 @@ USING: accessors arrays byte-arrays effects kernel
 kernel.private math memory namespaces quotations sequences
 tools.test words ;
 FROM: tools.memory => data-room code-room ;
-IN: memory.tests
+in: memory.tests
 
 [ save-image-and-exit ] must-fail
 
@@ -66,7 +66,7 @@ IN: memory.tests
 ! allocation filled up the heap past the high water mark, this
 ! promotion might trigger heap growth, even if most of those
 ! large objects are unreachable.
-SYMBOL: foo
+symbol: foo
 
 { } [
     gc
@@ -84,7 +84,7 @@ SYMBOL: foo
 
 ! Perform one gc cycle. Then increase the stack height by 100 and
 ! force a gc cycle again.
-SYMBOL: foo-var
+symbol: foo-var
 
 : perform ( -- )
     { 1 2 3 } { 4 5 6 } <effect> drop ;

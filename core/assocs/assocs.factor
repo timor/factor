@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays kernel math sequences sequences.private
 vectors ;
-IN: assocs
+in: assocs
 
 MIXIN: assoc
 

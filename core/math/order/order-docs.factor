@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel math ;
-IN: math.order
+in: math.order
 
 HELP: <=>
 { $values { "obj1" object } { "obj2" object } { "<=>" "an ordering specifier" } }

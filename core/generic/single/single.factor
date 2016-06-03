@@ -4,7 +4,7 @@ USING: accessors arrays assocs classes classes.algebra
 combinators combinators.private definitions effects generic
 hashtables kernel layouts make math namespaces quotations
 sequences words ;
-IN: generic.single
+in: generic.single
 
 <PRIVATE
 PRIMITIVE: inline-cache-miss ( generic methods index cache -- )
@@ -29,10 +29,10 @@ GENERIC: dispatch# ( word -- n )
 
 M: generic dispatch# "combination" word-prop dispatch# ;
 
-SYMBOL: assumed
-SYMBOL: default
-SYMBOL: generic-word
-SYMBOL: combination
+symbol: assumed
+symbol: default
+symbol: generic-word
+symbol: combination
 
 : with-combination ( combination quot -- )
     [ combination ] dip with-variable ; inline
@@ -189,7 +189,7 @@ M: tuple-dispatch-engine compile-engine
 
 PREDICATE: predicate-engine-word < word "owner-generic" word-prop ;
 
-SYMBOL: predicate-engines
+symbol: predicate-engines
 
 : sort-methods ( assoc -- assoc' )
     >alist [ keys sort-classes ] keep extract-keys ;

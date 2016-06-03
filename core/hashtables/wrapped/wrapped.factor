@@ -3,7 +3,7 @@
 
 USING: accessors arrays assocs hashtables kernel sequences
 vocabs.loader ;
-IN: hashtables.wrapped
+in: hashtables.wrapped
 
 TUPLE: wrapped-key
     { underlying read-only } ;

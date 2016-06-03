@@ -1,5 +1,5 @@
 USING: compiler.tree help.markup help.syntax words ;
-IN: stack-checker.inlining
+in: stack-checker.inlining
 
 HELP: inline-recursive-word
 { $values { "word" word } }

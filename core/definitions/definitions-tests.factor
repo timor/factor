@@ -1,18 +1,18 @@
 USING: arrays bit-arrays byte-arrays compiler.units definitions
 tools.test ;
-IN: definitions.tests
+in: definitions.tests
 
 GENERIC: some-generic ( a -- b )
 
-USE: arrays
+use: arrays
 
 M: array some-generic ;
 
-USE: bit-arrays
+use: bit-arrays
 
 M: bit-array some-generic ;
 
-USE: byte-arrays
+use: byte-arrays
 
 M: byte-array some-generic ;
 

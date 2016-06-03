@@ -1,7 +1,7 @@
 ! Copyright (C) 2003, 2007 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math sequences ;
-IN: io.binary
+in: io.binary
 
 : le> ( seq -- x ) 0 [ 8 * shift + ] reduce-index ;
 

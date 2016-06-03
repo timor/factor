@@ -1,6 +1,6 @@
 USING: help.markup help.syntax io.backend io.directories
 io.files io.pathnames.private kernel sequences strings system ;
-IN: io.pathnames
+in: io.pathnames
 
 HELP: path-separator?
 { $values { "ch" "a code point" } { "?" boolean } }

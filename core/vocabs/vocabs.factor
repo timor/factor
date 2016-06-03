@@ -2,9 +2,9 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs definitions kernel namespaces
 sequences sorting splitting strings ;
-IN: vocabs
+in: vocabs
 
-SYMBOL: dictionary
+symbol: dictionary
 
 TUPLE: vocab < identity-tuple
 name words
@@ -12,9 +12,9 @@ main help
 source-loaded? docs-loaded? ;
 
 ! sources-loaded? slot is one of these three
-SYMBOL: +parsing+
-SYMBOL: +running+
-SYMBOL: +done+
+symbol: +parsing+
+symbol: +running+
+symbol: +done+
 
 : <vocab> ( name -- vocab )
     vocab new
@@ -71,7 +71,7 @@ M: object vocab-main lookup-vocab vocab-main ;
 
 M: f vocab-main ;
 
-SYMBOL: vocab-observers
+symbol: vocab-observers
 
 GENERIC: vocab-changed ( vocab obj -- )
 
@@ -132,7 +132,7 @@ M: object >vocab-link dup lookup-vocab [ ] [ <vocab-link> ] ?if ;
 
 M: vocab-spec forget* forget-vocab ;
 
-SYMBOL: require-hook
+symbol: require-hook
 
 PREDICATE: runnable-vocab < vocab
     vocab-main >boolean ;

@@ -6,7 +6,7 @@ stack-checker.errors stack-checker.recursive-state
 stack-checker.state stack-checker.values stack-checker.visitor
 vectors ;
 FROM: sequences.private => dispatch ;
-IN: stack-checker.branches
+in: stack-checker.branches
 
 : balanced? ( pairs -- ? )
     [ second ] filter [ first2 length - ] map all-equal? ;

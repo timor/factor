@@ -1,1 +1,1 @@
-USE: vocabs.loader.test.i
+use: vocabs.loader.test.i

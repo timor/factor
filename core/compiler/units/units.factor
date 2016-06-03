@@ -4,12 +4,12 @@ USING: accessors arrays assocs classes classes.private
 classes.tuple.private continuations definitions generic
 hash-sets init kernel kernel.private math namespaces sequences
 sets source-files.errors vocabs words ;
-IN: compiler.units
+in: compiler.units
 
 PRIMITIVE: modify-code-heap ( alist update-existing? reset-pics? -- )
 
-SYMBOL: old-definitions
-SYMBOL: new-definitions
+symbol: old-definitions
+symbol: new-definitions
 
 TUPLE: redefine-error def ;
 
@@ -42,7 +42,7 @@ PRIVATE>
         new-definitions get [ in? ] with any? not
     ] [ drop f ] if ;
 
-SYMBOL: compiler-impl
+symbol: compiler-impl
 
 HOOK: update-call-sites compiler-impl ( class generic -- words )
 
@@ -84,7 +84,7 @@ M: f process-forgotten-words drop ;
 
 : <definitions> ( -- pair ) { HS{ } HS{ } } [ clone ] map ;
 
-SYMBOL: definition-observers
+symbol: definition-observers
 
 GENERIC: definitions-changed ( set obj -- )
 

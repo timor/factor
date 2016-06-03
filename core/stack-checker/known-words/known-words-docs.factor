@@ -1,6 +1,6 @@
 USING: combinators help.markup help.syntax kernel kernel.private sequences
 words ;
-IN: stack-checker.known-words
+in: stack-checker.known-words
 
 HELP: check-declaration
 { $values { "declaration" sequence } }

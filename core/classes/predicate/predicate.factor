@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: classes classes.algebra classes.algebra.private
 classes.private kernel make words ;
-IN: classes.predicate
+in: classes.predicate
 
 PREDICATE: predicate-class < class
     "metaclass" word-prop predicate-class eq? ;

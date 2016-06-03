@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs continuations definitions init io
 kernel math math.parser namespaces sequences sorting ;
-IN: source-files.errors
+in: source-files.errors
 
 GENERIC: error-file ( error -- file )
 GENERIC: error-line ( error -- line )
@@ -36,7 +36,7 @@ GENERIC: error-type ( error -- type )
         [ where [ first2 [ >>path ] [ >>line# ] bi* ] when* ] bi
         swap >>error ; inline
 
-SYMBOL: error-types
+symbol: error-types
 
 error-types [ V{ } clone ] initialize
 
@@ -66,7 +66,7 @@ error-types [ V{ } clone ] initialize
 
 GENERIC: errors-changed ( observer -- )
 
-SYMBOL: error-observers
+symbol: error-observers
 
 [
     V{ } clone error-observers set-global

@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel sequences strings ;
-IN: grouping
+in: grouping
 
 ARTICLE: "grouping" "Groups and clumps"
 "Splitting a sequence into disjoint, fixed-length subsequences:"

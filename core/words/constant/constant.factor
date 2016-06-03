@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: definitions kernel quotations words ;
-IN: words.constant
+in: words.constant
 
 PREDICATE: constant < word "constant" word-prop >boolean ;
 

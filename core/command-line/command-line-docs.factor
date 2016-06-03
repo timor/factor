@@ -1,6 +1,6 @@
 USING: help.markup help.syntax parser vocabs.loader strings
 vocabs ;
-IN: command-line
+in: command-line
 
 HELP: run-bootstrap-init
 { $description "Runs the bootstrap initialization file in the user's home directory, unless the " { $snippet "-no-user-init" } " command line switch was given. This file is named " { $snippet ".factor-boot-rc" } "." } ;

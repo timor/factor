@@ -5,7 +5,7 @@ hashtables.wrapped init io io.files kernel kernel.private make
 memory namespaces parser parser.notes sequences system vocabs
 vocabs.loader vocabs.hierarchy ;
 QUALIFIED: bootstrap.image.private
-IN: bootstrap.stage1
+in: bootstrap.stage1
 
 "Bootstrap stage 1..." print flush
 

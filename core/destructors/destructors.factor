@@ -2,13 +2,13 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs continuations init kernel namespaces
 sequences sets ;
-IN: destructors
+in: destructors
 
-SYMBOL: disposables
+symbol: disposables
 
 ERROR: already-unregistered disposable ;
 
-SYMBOL: debug-leaks?
+symbol: debug-leaks?
 
 <PRIVATE
 
@@ -63,9 +63,9 @@ M: disposable dispose
 
 <PRIVATE
 
-SYMBOL: always-destructors
+symbol: always-destructors
 
-SYMBOL: error-destructors
+symbol: error-destructors
 
 : do-always-destructors ( -- )
     always-destructors get <reversed> dispose-each ;

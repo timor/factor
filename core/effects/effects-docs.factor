@@ -1,6 +1,6 @@
 USING: arrays classes help.markup help.syntax kernel math
 sequences strings words ;
-IN: effects
+in: effects
 
 ARTICLE: "effects" "Stack effect declarations"
 "Word definition words such as " { $link POSTPONE: : } " and " { $link POSTPONE: GENERIC: } " have a " { $emphasis "stack effect declaration" } " as part of their syntax. A stack effect declaration takes the following form:"

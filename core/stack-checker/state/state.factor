@@ -4,23 +4,23 @@ USING: assocs arrays namespaces sequences kernel definitions
 math effects accessors words fry classes.algebra
 compiler.units stack-checker.values stack-checker.visitor
 stack-checker.errors ;
-IN: stack-checker.state
+in: stack-checker.state
 
-SYMBOL: terminated?
+symbol: terminated?
 
-SYMBOL: input-count
-SYMBOL: inner-d-index
+symbol: input-count
+symbol: inner-d-index
 
 DEFER: commit-literals
 
-SYMBOL: (meta-d)
-SYMBOL: (meta-r)
+symbol: (meta-d)
+symbol: (meta-r)
 
 : meta-d ( -- stack ) commit-literals (meta-d) get ;
 
 : meta-r ( -- stack ) (meta-r) get ;
 
-SYMBOL: literals
+symbol: literals
 
 : (push-literal) ( obj -- )
     dup <literal> make-known

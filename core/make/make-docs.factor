@@ -1,4 +1,4 @@
-IN: make
+in: make
 USING: assocs help.markup help.syntax kernel math.parser
 quotations sequences ;
 

@@ -6,7 +6,7 @@ kernel.private literals math math.constants memory namespaces
 parser parser.notes see sequences sequences.private slots
 splitting strings threads tools.test vectors vocabs words
 words.symbol ;
-IN: classes.tuple.tests
+in: classes.tuple.tests
 
 TUPLE: rect x y w h ;
 : <rect> ( x y w h -- rect ) rect boa ;
@@ -191,7 +191,7 @@ M: vector silly "z" ;
 { "zz" } [ 123 <reversed> silly nip ] unit-test
 
 ! Typo
-SYMBOL: not-a-tuple-class
+symbol: not-a-tuple-class
 
 ! Missing check
 [ not-a-tuple-class boa ] must-fail

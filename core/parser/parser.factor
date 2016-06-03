@@ -5,7 +5,7 @@ compiler.units continuations definitions effects io
 io.encodings.utf8 io.files kernel lexer math.parser namespaces
 parser.notes quotations sequences sets slots source-files
 vectors vocabs vocabs.parser words words.symbol ;
-IN: parser
+in: parser
 
 : location ( -- loc )
     current-source-file get lexer get line>> 2dup and
@@ -19,7 +19,7 @@ M: parsing-word stack-effect drop ( parsed -- parsed ) ;
 : create-word-in ( str -- word )
     current-vocab create-word dup set-last-word dup save-location ;
 
-SYMBOL: auto-use?
+symbol: auto-use?
 
 : auto-use ( -- ) auto-use? on ;
 
@@ -129,7 +129,7 @@ ERROR: classoid-expected object ;
 : parse-until ( end -- vec )
     100 <vector> swap (parse-until) ;
 
-SYMBOL: quotation-parser
+symbol: quotation-parser
 
 HOOK: parse-quotation quotation-parser ( -- quot )
 
@@ -152,7 +152,7 @@ ERROR: bad-number ;
 : scan-base ( base -- n )
     scan-token swap base> [ bad-number ] unless* ;
 
-SYMBOL: bootstrap-syntax
+symbol: bootstrap-syntax
 
 : with-file-vocabs ( quot -- )
     [
@@ -161,7 +161,7 @@ SYMBOL: bootstrap-syntax
         call
     ] with-manifest ; inline
 
-SYMBOL: print-use-hook
+symbol: print-use-hook
 
 print-use-hook [ [ ] ] initialize
 

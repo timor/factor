@@ -2,7 +2,7 @@ USING: accessors compiler.units effects eval kernel kernel.private layouts
 literals math namespaces quotations tools.test typed words words.symbol
 combinators.short-circuit compiler.tree.debugger prettyprint definitions
 sequences classes.intersection strings classes.union ;
-IN: typed.tests
+in: typed.tests
 
 TYPED: f+ ( a: float b: float -- c: float )
     + ;
@@ -67,7 +67,7 @@ TYPED: unboxy ( in: unboxable -- out: unboxable2 )
 [
 "
 USING: kernel math ;
-IN: typed.tests
+in: typed.tests
 
 TUPLE: unboxable
     { x fixnum read-only }
@@ -77,7 +77,7 @@ TUPLE: unboxable
 
 "
 USING: accessors kernel math ;
-IN: typed.tests
+in: typed.tests
 T{ unboxable f 12 3 4.0 } unboxy xy>>
 " eval( -- xy )
 ] unit-test
@@ -97,7 +97,7 @@ TYPED: no-inputs-unboxable-output ( -- out: unboxable3 )
 
 { f } [ no-inputs-unboxable-output no-inputs-unboxable-output eq? ] unit-test
 
-SYMBOL: buh
+symbol: buh
 
 TYPED: no-outputs ( x: integer -- )
     buh set ;
@@ -142,7 +142,7 @@ TYPED: flush-test ( s: symbol -- ? ) on t ; flushable
 : flush-print-1 ( symbol -- ) flush-test drop ;
 : flush-print-2 ( symbol -- ) flush-test . ;
 
-SYMBOL: a-symbol
+symbol: a-symbol
 
 { f } [
     f a-symbol [

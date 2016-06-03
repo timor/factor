@@ -1,5 +1,5 @@
 USING: help.syntax help.markup words.symbol words compiler.units ;
-IN: words.symbol
+in: words.symbol
 
 HELP: symbol
 { $description "The class of symbols created by " { $link POSTPONE: SYMBOL: } "." } ;

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays kernel math sbufs sequences sequences.private
 strings ;
-IN: splitting
+in: splitting
 
 <PRIVATE
 

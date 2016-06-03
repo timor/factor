@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs combinators definitions graphs kernel
 make namespaces quotations sequences sets words words.symbol ;
-IN: classes
+in: classes
 
 ERROR: bad-inheritance class superclass ;
 
@@ -16,12 +16,12 @@ INSTANCE: defining-class classoid
 
 <PRIVATE
 
-SYMBOL: class<=-cache
-SYMBOL: class-not-cache
-SYMBOL: classes-intersect-cache
-SYMBOL: class-and-cache
-SYMBOL: class-or-cache
-SYMBOL: next-method-quot-cache
+symbol: class<=-cache
+symbol: class-not-cache
+symbol: classes-intersect-cache
+symbol: class-and-cache
+symbol: class-or-cache
+symbol: next-method-quot-cache
 
 : init-caches ( -- )
     H{ } clone class<=-cache namespaces:set
@@ -39,9 +39,9 @@ SYMBOL: next-method-quot-cache
     class-or-cache get clear-assoc
     next-method-quot-cache get clear-assoc ;
 
-SYMBOL: update-map
+symbol: update-map
 
-SYMBOL: implementors-map
+symbol: implementors-map
 
 GENERIC: class-name ( class -- string )
 

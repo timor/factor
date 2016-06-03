@@ -1,5 +1,5 @@
 USING: help.syntax help.markup delegate.private ;
-IN: delegate
+in: delegate
 
 HELP: define-protocol
 { $values { "protocol" "a word for the new protocol" } { "wordlist" "a sequence of words" } }

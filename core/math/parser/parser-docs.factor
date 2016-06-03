@@ -2,7 +2,7 @@ USING: byte-arrays help.markup help.syntax math
 math.parser.private prettyprint namespaces make sequences
 strings ;
 
-IN: math.parser
+in: math.parser
 
 ARTICLE: "number-strings" "Converting between numbers and strings"
 "These words only convert between real numbers and strings. Complex numbers are constructed by the parser (" { $link "parser" } ") and printed by the prettyprinter (" { $link "prettyprint" } ")."

@@ -1,1 +1,1 @@
-IN: vocabs.loader.test.n
+in: vocabs.loader.test.n

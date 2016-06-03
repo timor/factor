@@ -2,7 +2,7 @@ USING: arrays assocs classes classes.algebra classes.mixin
 compiler.units definitions eval hashtables io.streams.string
 kernel math parser sequences source-files strings tools.test
 vectors words ;
-IN: classes.mixin.tests
+in: classes.mixin.tests
 
 ! Test mixins
 MIXIN: sequence-mixin
@@ -47,7 +47,7 @@ INSTANCE: integer mx1
 
 [ \ mx1 forget ] with-compilation-unit
 
-USE: io.streams.string
+use: io.streams.string
 
 2 [
     [ "mixin-forget-test" forget-source ] with-compilation-unit
@@ -119,11 +119,11 @@ MIXIN: move-instance-declaration-mixin
 { { string } } [ move-instance-declaration-mixin class-members ] unit-test
 
 MIXIN: silly-mixin
-SYMBOL: not-a-class
+symbol: not-a-class
 
 [ [ \ not-a-class \ silly-mixin add-mixin-instance ] with-compilation-unit ] must-fail
 
-SYMBOL: not-a-mixin
+symbol: not-a-mixin
 TUPLE: a-class ;
 
 [ [ \ a-class \ not-a-mixin add-mixin-instance ] with-compilation-unit ] must-fail

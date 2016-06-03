@@ -1,5 +1,5 @@
 USING: help.syntax help.markup classes layouts ;
-IN: classes.builtin
+in: classes.builtin
 
 ARTICLE: "builtin-classes" "Built-in classes"
 "Every object is an instance of exactly one canonical " { $emphasis "built-in class" } " which defines its layout in memory and basic behavior."

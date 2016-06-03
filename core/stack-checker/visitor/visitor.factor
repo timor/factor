@@ -1,9 +1,9 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel arrays namespaces ;
-IN: stack-checker.visitor
+in: stack-checker.visitor
 
-SYMBOL: stack-visitor
+symbol: stack-visitor
 
 HOOK: child-visitor stack-visitor ( -- visitor )
 

@@ -3,7 +3,7 @@
 USING: accessors alien alien.strings byte-arrays byte-vectors
 destructors io io.backend io.encodings.utf8 io.files kernel
 kernel.private math sequences threads.private ;
-IN: io.streams.c
+in: io.streams.c
 
 PRIMITIVE: (fopen) ( path mode -- alien )
 PRIMITIVE: fclose ( alien -- )

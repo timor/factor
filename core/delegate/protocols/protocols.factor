@@ -1,7 +1,7 @@
 ! Copyright (C) 2007 Daniel Ehrenberg
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs delegate io sequences sequences.private sets ;
-IN: delegate.protocols
+in: delegate.protocols
 
 PROTOCOL: sequence-protocol
 like new-sequence new-resizable nth nth-unsafe

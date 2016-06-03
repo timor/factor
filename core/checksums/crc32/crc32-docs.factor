@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math ;
-IN: checksums.crc32
+in: checksums.crc32
 
 HELP: crc32
 { $class-description "The CRC32 checksum algorithm." } ;

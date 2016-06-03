@@ -1,6 +1,6 @@
 USING: assocs hashtables help.markup help.syntax kernel
 quotations sequences vectors ;
-IN: sets
+in: sets
 
 ARTICLE: "sets" "Sets"
 "A set is an unordered collection of elements. Words for working with sets are in the " { $vocab-link "sets" } " vocabulary." $nl

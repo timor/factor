@@ -1,7 +1,7 @@
 ! Copyright (C) 2004, 2010 Slava Pestov, Joe Groff.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.private math.order ;
-IN: math.floats
+in: math.floats
 
 <PRIVATE
 : float-unordered? ( x y -- ? ) [ fp-nan? ] either? ;

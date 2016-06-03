@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel kernel.private math math.order
 math.private slots.private ;
-IN: sequences
+in: sequences
 
 MIXIN: sequence
 
@@ -1122,7 +1122,7 @@ PRIVATE>
     ] keep
     [ [ nth-unsafe ] with { } map-as ] curry { } map-as ; inline
 
-USE: arrays
+use: arrays
 
 : array-length ( array -- len )
     { array } declare length>> ; inline

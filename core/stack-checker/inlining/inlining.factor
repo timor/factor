@@ -6,7 +6,7 @@ stack-checker.dependencies stack-checker.errors
 stack-checker.known-words stack-checker.recursive-state
 stack-checker.state stack-checker.values stack-checker.visitor
 vectors words ;
-IN: stack-checker.inlining
+in: stack-checker.inlining
 
 ! Code to handle inline words. Much of the complexity stems from
 ! having to handle recursive inline words.
@@ -38,8 +38,8 @@ loop? ;
     [ quotation-param? [ copy-value ] [ drop <value> ] if ] 2map
     [ length make-values ] dip append ;
 
-SYMBOL: enter-in
-SYMBOL: enter-out
+symbol: enter-in
+symbol: enter-out
 
 : prepare-stack ( word -- )
     required-stack-effect in>>

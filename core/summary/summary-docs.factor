@@ -1,4 +1,4 @@
-IN: summary
+in: summary
 USING: kernel strings help.markup help.syntax ;
 
 ARTICLE: "summary" "Converting objects to summary strings"

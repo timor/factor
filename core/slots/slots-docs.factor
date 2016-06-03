@@ -2,7 +2,7 @@ USING: help.markup help.syntax generic kernel.private parser
 kernel quotations namespaces sequences arrays effects
 generic.standard classes.builtin slots.private classes strings math
 assocs byte-arrays alien classes.tuple ;
-IN: slots
+in: slots
 
 ARTICLE: "accessors" "Slot accessors"
 "For every tuple slot, a " { $emphasis "reader" } " method is defined in the " { $vocab-link "accessors" } " vocabulary. The reader is named " { $snippet { $emphasis "slot" } ">>" } " and given a tuple, pushes the slot value on the stack."

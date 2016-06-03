@@ -3,7 +3,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators kernel kernel.private math math.order
 math.private ;
-IN: math.integers
+in: math.integers
 
 <PRIVATE
 

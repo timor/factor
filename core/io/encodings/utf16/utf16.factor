@@ -4,13 +4,13 @@ USING: accessors byte-arrays combinators io io.binary
 io.encodings kernel math math.private namespaces sbufs
 sequences sequences.private splitting strings strings.private
 vectors ;
-IN: io.encodings.utf16
+in: io.encodings.utf16
 
-SINGLETON: utf16be
+singleton: utf16be
 
-SINGLETON: utf16le
+singleton: utf16le
 
-SINGLETON: utf16
+singleton: utf16
 
 ERROR: missing-bom ;
 

@@ -2,7 +2,7 @@ USING: accessors arrays assocs classes classes.algebra
 classes.tuple classes.union generic generic.private growable
 kernel math prettyprint quotations random sbufs sequences
 stack-checker strings tools.test vectors words ;
-IN: classes.algebra.tests
+in: classes.algebra.tests
 
 TUPLE: first-one ;
 TUPLE: second-one ;
@@ -26,9 +26,9 @@ UNION: x1 a1 b1 ;
 UNION: y1 a1 c1 ;
 UNION: z1 b1 c1 ;
 
-SINGLETON: sa
-SINGLETON: sb
-SINGLETON: sc
+singleton: sa
+singleton: sb
+singleton: sc
 
 INTERSECTION: empty-intersection ;
 
@@ -334,7 +334,7 @@ MIXIN: empty-mixin
     ] unit-test
 ] times
 
-SINGLETON: xxx
+singleton: xxx
 UNION: yyy xxx ;
 
 { { yyy xxx } } [ { xxx yyy } sort-classes ] unit-test

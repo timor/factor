@@ -1,8 +1,8 @@
 USING: arrays generic generic.single growable kernel math
 namespaces sequences strings tools.test vectors words ;
-IN: generic.hook.tests
+in: generic.hook.tests
 
-SYMBOL: my-var
+symbol: my-var
 HOOK: my-hook my-var ( -- x )
 
 M: integer my-hook "an integer" ;

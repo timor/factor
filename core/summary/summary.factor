@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs classes continuations kernel make math
 math.parser sequences sets strings ;
-IN: summary
+in: summary
 
 GENERIC: summary ( object -- string )
 

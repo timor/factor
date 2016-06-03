@@ -3,7 +3,7 @@
 USING: accessors assocs byte-arrays byte-vectors continuations
 continuations.private init kernel kernel.private math namespaces
 sequences ;
-IN: alien
+in: alien
 
 BUILTIN: alien { underlying c-ptr read-only initial: f } expired ;
 BUILTIN: dll { path byte-array read-only initial: B{ } } ;
@@ -109,7 +109,7 @@ ERROR: alien-assembly-error code ;
 ! are also pinned in a special callback area, so clearing this
 ! hashtable will not reclaim callbacks. It should only be
 ! cleared on startup.
-SYMBOL: callbacks
+symbol: callbacks
 
 [ H{ } clone callbacks set-global ] "alien" add-startup-hook
 

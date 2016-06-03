@@ -1,11 +1,11 @@
 ! Copyright (C) 2008, 2010 Slava Pestov, Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel kernel.private math ;
-IN: math.order
+in: math.order
 
-SYMBOL: +lt+
-SYMBOL: +eq+
-SYMBOL: +gt+
+symbol: +lt+
+symbol: +eq+
+symbol: +gt+
 
 : invert-comparison ( <=> -- >=< )
     ! Can't use case, index or nth here

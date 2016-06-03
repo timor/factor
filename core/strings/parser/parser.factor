@@ -3,7 +3,7 @@
 USING: accessors assocs combinators continuations kernel
 kernel.private lexer math math.parser namespaces sbufs sequences
 splitting strings ;
-IN: strings.parser
+in: strings.parser
 
 ERROR: bad-escape char ;
 
@@ -24,7 +24,7 @@ ERROR: bad-escape char ;
         { CHAR: \" CHAR: \" }
     } ?at [ bad-escape ] unless ;
 
-SYMBOL: name>char-hook
+symbol: name>char-hook
 
 name>char-hook [
     [ "Unicode support not available" throw ]

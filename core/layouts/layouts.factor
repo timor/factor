@@ -1,21 +1,21 @@
 ! Copyright (C) 2007, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs kernel kernel.private math math.order namespaces ;
-IN: layouts
+in: layouts
 
-SYMBOL: data-alignment
+symbol: data-alignment
 
-SYMBOL: tag-mask
+symbol: tag-mask
 
-SYMBOL: tag-bits
+symbol: tag-bits
 
-SYMBOL: num-types
+symbol: num-types
 
-SYMBOL: type-numbers
+symbol: type-numbers
 
-SYMBOL: mega-cache-size
+symbol: mega-cache-size
 
-SYMBOL: header-bits
+symbol: header-bits
 
 : type-number ( class -- n )
     type-numbers get at ;

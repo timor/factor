@@ -6,7 +6,7 @@ stack-checker.dependencies stack-checker.errors
 stack-checker.recursive-state stack-checker.state
 stack-checker.values stack-checker.visitor words ;
 FROM: sequences.private => from-end ;
-IN: stack-checker.backend
+in: stack-checker.backend
 
 : push-d ( obj -- ) meta-d push ;
 

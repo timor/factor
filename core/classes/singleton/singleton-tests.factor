@@ -1,5 +1,5 @@
 USING: classes.singleton io.streams.string kernel see tools.test ;
-IN: classes.singleton.tests
+in: classes.singleton.tests
 
 { } [ SINGLETON: bzzt ] unit-test
 { t } [ bzzt bzzt? ] unit-test
@@ -11,7 +11,7 @@ GENERIC: zammo ( obj -- str )
 { t } [ omg singleton-class? ] unit-test
 { "IN: classes.singleton.tests\nSINGLETON: omg\n" } [ [ omg see ] with-string-writer ] unit-test
 
-SINGLETON: word-and-singleton
+singleton: word-and-singleton
 
 : word-and-singleton ( -- x ) 3 ;
 

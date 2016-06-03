@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators kernel locals.backend math parser
 quotations sequences sets splitting words ;
-IN: fry
+in: fry
 
 ! : _ ( -- * ) "Only valid inside a fry" throw ;
 ! : @ ( -- * ) "Only valid inside a fry" throw ;

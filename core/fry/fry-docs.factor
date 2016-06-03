@@ -1,5 +1,5 @@
 USING: help.markup help.syntax quotations kernel ;
-IN: fry
+in: fry
 
 HELP: _
 { $description "Fry specifier. Inserts a literal value into the fried quotation." }

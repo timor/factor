@@ -1,5 +1,5 @@
 USING: help.markup help.syntax io kernel quotations sequences ;
-IN: io.files
+in: io.files
 
 ARTICLE: "io.files.examples" "Examples of reading and writing files"
 "Sort the lines in a file and write them back to the same file:"

@@ -1,6 +1,6 @@
 ! Copyright (C) 2015 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
-IN: alien.accessors
+in: alien.accessors
 
 PRIMITIVE: alien-cell ( c-ptr n -- value )
 PRIMITIVE: alien-double ( c-ptr n -- value )

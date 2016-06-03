@@ -1,4 +1,4 @@
-IN: hints
+in: hints
 USING: help.markup help.syntax words quotations sequences kernel ;
 
 ARTICLE: "hints" "Compiler specialization hints"

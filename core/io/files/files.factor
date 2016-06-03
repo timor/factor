@@ -3,15 +3,15 @@
 USING: alien.strings continuations init io io.backend
 io.encodings io.encodings.utf8 io.files.private io.pathnames
 kernel kernel.private namespaces sequences splitting system ;
-IN: io.files
+in: io.files
 
 <PRIVATE
 PRIMITIVE: (exists?) ( path -- ? )
 PRIVATE>
 
-SYMBOL: +retry+ ! just try the operation again without blocking
-SYMBOL: +input+
-SYMBOL: +output+
+symbol: +retry+ ! just try the operation again without blocking
+symbol: +input+
+symbol: +output+
 
 ! Returns an event to wait for which will ensure completion of
 ! this request

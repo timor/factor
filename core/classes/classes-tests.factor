@@ -1,7 +1,7 @@
 USING: assocs classes classes.private compiler.units definitions
 eval generic io.streams.string kernel math multiline namespaces
 parser sequences sets sorting tools.test vocabs words ;
-IN: classes.tests
+in: classes.tests
 
 { t } [ 3 object instance? ] unit-test
 { t } [ 3 fixnum instance? ] unit-test
@@ -26,7 +26,7 @@ M: method-forget-class method-forget-test ;
 ] unit-test
 
 ! Long-standing problem
-USE: multiline
+use: multiline
 
 ! So the user has some code...
 { } [

@@ -4,10 +4,10 @@ USING: accessors alien.c-types arrays assocs classes
 classes.algebra classes.tuple combinators.short-circuit fry
 generic kernel math namespaces sequences sets words ;
 FROM: classes.tuple.private => tuple-layout ;
-IN: stack-checker.dependencies
+in: stack-checker.dependencies
 
 ! Words that the current quotation depends on
-SYMBOL: dependencies
+symbol: dependencies
 
 SYMBOLS: effect-dependency conditional-dependency definition-dependency ;
 
@@ -53,7 +53,7 @@ M: pointer add-depends-on-c-type
     to>> add-depends-on-c-type ;
 
 ! Generic words that the current quotation depends on
-SYMBOL: generic-dependencies
+symbol: generic-dependencies
 
 : ?class-or ( class class/f -- class' )
     [ class-or ] when* ;
@@ -64,7 +64,7 @@ SYMBOL: generic-dependencies
 
 ! Conditional dependencies are re-evaluated when classes change;
 ! if any fail, the word is recompiled
-SYMBOL: conditional-dependencies
+symbol: conditional-dependencies
 
 GENERIC: satisfied? ( dependency -- ? )
 

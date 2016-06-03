@@ -5,7 +5,7 @@ classes.algebra.private classes.builtin classes.private
 combinators definitions effects generic kernel kernel.private
 make math math.private memory namespaces quotations
 sequences sequences.private slots slots.private strings words ;
-IN: classes.tuple
+in: classes.tuple
 
 <PRIVATE
 PRIMITIVE: <tuple> ( layout -- tuple )
@@ -211,7 +211,7 @@ M: object final-class? drop f ;
 : apply-slot-permutation ( old-values triples -- new-values )
     [ first3 update-slot ] with map ;
 
-SYMBOL: outdated-tuples
+symbol: outdated-tuples
 
 : permute-slots ( old-values layout -- new-values )
     [ first all-slots ] [ outdated-tuples get at ] bi

@@ -1,7 +1,7 @@
 ! Copyright (C) 2016 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel modern sequences strings tools.test ;
-IN: modern.tests
+in: modern.tests
 
 { 0 } [ "" string>literals length ] unit-test
 { 1 } [ "a" string>literals length ] unit-test

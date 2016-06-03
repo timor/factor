@@ -4,13 +4,13 @@ USING: accessors arrays assocs generic kernel kernel.private
 math math.order memory namespaces make sequences layouts system
 hashtables classes alien byte-arrays combinators words sets fry
 ;
-IN: cpu.architecture
+in: cpu.architecture
 
 ! Representations -- these are like low-level types
 
 ! Unknown representation; this is used for ##copy instructions which
 ! get eliminated later
-SINGLETON: any-rep
+singleton: any-rep
 
 ! Integer registers can contain data with one of these three representations
 ! tagged-rep: tagged pointer or fixnum

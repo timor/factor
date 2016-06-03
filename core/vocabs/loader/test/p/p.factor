@@ -1,2 +1,2 @@
-IN: vocabs.loader.test.p
+in: vocabs.loader.test.p
 : foo ( -- ) ;

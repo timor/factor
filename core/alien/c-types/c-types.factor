@@ -4,7 +4,7 @@ USING: accessors alien alien.accessors arrays byte-arrays
 classes combinators compiler.units cpu.architecture delegate
 fry kernel layouts locals macros math math.order quotations
 sequences system words words.symbol summary ;
-IN: alien.c-types
+in: alien.c-types
 
 SYMBOLS:
     char uchar
@@ -15,7 +15,7 @@ SYMBOLS:
     float double
     void* bool ;
 
-SINGLETON: void
+singleton: void
 
 TUPLE: abstract-c-type
     { class class initial: object }

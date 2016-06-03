@@ -3,7 +3,7 @@
 USING: accessors arrays assocs definitions hashtables kernel
 kernel.private math math.order namespaces quotations sequences
 slots.private strings vocabs ;
-IN: words
+in: words
 
 BUILTIN: word
 { hashcode fixnum initial: 0 } name vocabulary
@@ -87,7 +87,7 @@ ERROR: invalid-primitive vocabulary word effect ;
 : target-word ( word -- target )
     [ name>> ] [ vocabulary>> ] bi lookup-word ;
 
-SYMBOL: bootstrapping?
+symbol: bootstrapping?
 
 : if-bootstrapping ( true false -- )
     [ bootstrapping? get ] 2dip if ; inline

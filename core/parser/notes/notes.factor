@@ -2,9 +2,9 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors io kernel lexer math.parser namespaces
 source-files ;
-IN: parser.notes
+in: parser.notes
 
-SYMBOL: parser-quiet?
+symbol: parser-quiet?
 
 t parser-quiet? set-global
 

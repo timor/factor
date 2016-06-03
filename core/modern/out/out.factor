@@ -5,9 +5,9 @@ combinators.smart continuations fry io io.encodings.utf8
 io.files io.streams.string kernel modern modern.paths
 modern.slices multiline namespaces prettyprint sequences sets
 splitting strings arrays ;
-IN: modern.out
+in: modern.out
 
-SYMBOL: last-slice
+symbol: last-slice
 
 : write-whitespace ( obj -- )
     [ last-slice get [ swap slice-between ] [ slice-before ] if* io:write ]

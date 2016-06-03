@@ -1,5 +1,5 @@
 USING: effects generic.single help.markup help.syntax words ;
-IN: generic.standard
+in: generic.standard
 
 HELP: standard-combination
 { $class-description

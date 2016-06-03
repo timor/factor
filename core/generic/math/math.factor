@@ -3,7 +3,7 @@
 USING: arrays assocs classes classes.algebra combinators
 definitions generic kernel kernel.private math math.order
 math.private namespaces quotations sequences words ;
-IN: generic.math
+in: generic.math
 
 PREDICATE: math-class < class
     dup null bootstrap-word eq? [
@@ -71,7 +71,7 @@ PRIVATE>
 
 <PRIVATE
 
-SYMBOL: generic-word
+symbol: generic-word
 
 : make-math-method-table ( classes quot: ( ... class -- ... quot ) -- alist )
     [ bootstrap-words ] dip
@@ -109,7 +109,7 @@ SYMBOL: generic-word
 
 PRIVATE>
 
-SINGLETON: math-combination
+singleton: math-combination
 
 M: math-combination make-default-method
     drop default-math-method ;

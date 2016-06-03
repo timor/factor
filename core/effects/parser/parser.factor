@@ -3,7 +3,7 @@
 USING: accessors arrays combinators continuations effects
 kernel lexer make namespaces parser sequences sets
 splitting vocabs.parser words ;
-IN: effects.parser
+in: effects.parser
 
 DEFER: parse-effect
 
@@ -12,7 +12,7 @@ ERROR: invalid-row-variable ;
 ERROR: row-variable-can't-have-type ;
 ERROR: stack-effect-omits-dashes ;
 
-SYMBOL: effect-var
+symbol: effect-var
 
 <PRIVATE
 : end-token? ( end token -- token ? ) [ nip ] [ = ] 2bi ; inline

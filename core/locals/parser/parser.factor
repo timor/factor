@@ -4,9 +4,9 @@ USING: accessors arrays assocs combinators continuations
 effects.parser fry generic.parser kernel lexer locals.errors
 locals.rewrite.closures locals.types make namespaces parser
 quotations sequences splitting vocabs.parser words ;
-IN: locals.parser
+in: locals.parser
 
-SYMBOL: in-lambda?
+symbol: in-lambda?
 
 : ?rewrite-closures ( form -- form' )
     in-lambda? get [ 1array ] [ rewrite-closures ] if ;
@@ -29,7 +29,7 @@ ERROR: invalid-local-name name ;
 : parse-local-defs ( -- words assoc )
     "|" parse-tokens make-locals ;
 
-SINGLETON: lambda-parser
+singleton: lambda-parser
 
 : with-lambda-scope ( assoc reader-quot: ( -- quot ) -- quot )
     '[

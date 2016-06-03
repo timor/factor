@@ -6,7 +6,7 @@ namespaces quotations sequences stack-checker.backend
 stack-checker.dependencies stack-checker.state
 stack-checker.visitor strings words ;
 FROM: kernel.private => declare ;
-IN: stack-checker.alien
+in: stack-checker.alien
 
 TUPLE: alien-node-params
 return parameters
@@ -121,7 +121,7 @@ TUPLE: alien-callback-params < alien-node-params xt ;
 
 GENERIC: wrap-callback-quot ( params quot -- quot' )
 
-SYMBOL: wait-for-callback-hook
+symbol: wait-for-callback-hook
 
 wait-for-callback-hook [ [ drop ] ] initialize
 

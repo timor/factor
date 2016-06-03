@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien alien.syntax assocs help.markup
 help.syntax io.backend kernel namespaces strings ;
-IN: alien.libraries
+in: alien.libraries
 
 HELP: make-library
 { $values

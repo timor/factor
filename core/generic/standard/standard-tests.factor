@@ -6,7 +6,7 @@ math.constants math.functions namespaces parser quotations
 sequences specialized-vectors strings tools.test words ;
 QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-VECTOR: c:double
-IN: generic.standard.tests
+in: generic.standard.tests
 
 GENERIC: class-of ( x -- y )
 

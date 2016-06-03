@@ -2,7 +2,7 @@ USING: accessors alien.c-types alien.syntax classes
 classes.struct compiler.units eval io.encodings.ascii kernel
 math.constants tools.test ;
 FROM: alien.c-types => short ;
-IN: alien.c-types.tests
+in: alien.c-types.tests
 
 CONSTANT: xyz 123
 
@@ -126,26 +126,26 @@ must-fail-with
 
 ! generic -> callback
 "IN: alien.c-types.tests
-USE: alien.syntax
-USE: alien.c-types
+use: alien.syntax
+use: alien.c-types
 GENERIC: foo-func ( x -- )
 " eval( -- )
 
 "IN: alien.c-types.tests
-USE: alien.syntax
-USE: alien.c-types
+use: alien.syntax
+use: alien.c-types
 CALLBACK: void foo-func ( )
 " eval( -- )
 
 ! generic -> typedef
 "IN: alien.c-types.tests
-USE: alien.syntax
-USE: alien.c-types
+use: alien.syntax
+use: alien.c-types
 GENERIC: foo-func ( x -- )
 " eval( -- )
 
 "IN: alien.c-types.tests
-USE: alien.syntax
-USE: alien.c-types
+use: alien.syntax
+use: alien.c-types
 TYPEDEF: void* foo-func
 " eval( -- )

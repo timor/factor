@@ -1,7 +1,7 @@
 USING: tools.test macros math kernel arrays
 vectors io.streams.string prettyprint parser eval see
 stack-checker compiler.units definitions vocabs ;
-IN: macros.tests
+in: macros.tests
 
 MACRO: see-test ( a b -- quot ) + ;
 

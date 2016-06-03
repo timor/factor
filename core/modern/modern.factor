@@ -6,7 +6,7 @@ io.encodings.utf8 io.files kernel locals macros make math
 math.order modern.paths modern.slices multiline namespaces
 quotations sequences sequences.extras splitting
 splitting.monotonic strings unicode ;
-IN: modern
+in: modern
 
 <<
 ! Base rules, everything should have a generator macro
@@ -381,7 +381,7 @@ PRIVATE>
         [ make-tag-literal ]
     } cond ;
 
-SYMBOL: lexing-delimiters
+symbol: lexing-delimiters
 
 : add-lexing-delimiter ( rule -- )
     [ ] [ delimiter>> ] bi lexing-delimiters get set-once-at ;

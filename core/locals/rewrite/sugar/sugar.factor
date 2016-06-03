@@ -4,7 +4,7 @@ USING: accessors arrays assocs classes classes.tuple fry
 sequences.generalizations hashtables kernel locals locals.backend
 locals.errors locals.types make quotations sequences vectors
 words ;
-IN: locals.rewrite.sugar
+in: locals.rewrite.sugar
 
 ! Step 1: rewrite [| into :> forms, turn
 ! literals with locals in them into code which constructs

@@ -1,7 +1,7 @@
 USING: accessors arrays compiler.units definitions eval generic
 io.streams.string kernel math namespaces parser sequences
 tools.test vocabs words words.symbol ;
-IN: words.tests
+in: words.tests
 
 { 4 } [
     [
@@ -45,7 +45,7 @@ H{ } clone [
 
 { f } [ gensym gensym = ] unit-test
 
-SYMBOL: a-symbol
+symbol: a-symbol
 { t } [ \ a-symbol symbol? ] unit-test
 
 ! See if redefining a generic as a colon def clears some

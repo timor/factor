@@ -3,7 +3,7 @@
 USING: accessors arrays fry kernel math quotations sequences
 words combinators make locals.backend locals.types
 locals.errors ;
-IN: locals.rewrite.point-free
+in: locals.rewrite.point-free
 
 ! Step 3: rewrite locals usage within a single quotation into
 ! retain stack manipulation

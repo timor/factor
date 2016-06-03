@@ -1,7 +1,7 @@
 USING: accessors continuations debugger eval io kernel
 kernel.private math memory namespaces sequences tools.test
 vectors words ;
-IN: continuations.tests
+in: continuations.tests
 
 : (callcc1-test) ( n obj -- n' obj )
     [ 1 - dup ] dip ?push
@@ -62,8 +62,8 @@ IN: continuations.tests
 
 { 1 } [ "c" get innermost-frame-scan ] unit-test
 
-SYMBOL: always-counter
-SYMBOL: error-counter
+symbol: always-counter
+symbol: error-counter
 
 H{
     { always-counter 0 }

@@ -1,6 +1,6 @@
 USING: help.markup help.syntax strings words compiler.units
 vocabs.loader assocs ;
-IN: vocabs
+in: vocabs
 
 ARTICLE: "vocabularies" "Vocabularies"
 "A " { $emphasis "vocabulary" } " is a named collection of " { $link "words" } ". Vocabularies are defined in the " { $vocab-link "vocabs" } " vocabulary."

@@ -3,7 +3,7 @@ eval generic grouping io.pathnames io.streams.string kernel
 lexer math multiline namespaces parser sequences sets
 source-files source-files.errors strings tools.crossref
 tools.test vocabs vocabs.parser words words.symbol ;
-IN: parser.tests
+in: parser.tests
 
 { 1 [ 2 [ 3 ] 4 ] 5 }
 [ "1\n[\n2\n[\n3\n]\n4\n]\n5" eval( -- a b c ) ]
@@ -510,13 +510,13 @@ DEFER: blah1
 [ error>> error>> def>> \ blah1 eq? ]
 must-fail-with
 
-IN: qualified.tests.foo
+in: qualified.tests.foo
 : x ( -- a ) 1 ;
 : y ( -- a ) 5 ;
-IN: qualified.tests.bar
+in: qualified.tests.bar
 : x ( -- a ) 2 ;
 : y ( -- a ) 4 ;
-IN: qualified.tests.baz
+in: qualified.tests.baz
 : x ( -- a ) 3 ;
 
 QUALIFIED: qualified.tests.foo

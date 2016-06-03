@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors classes classes.error classes.tuple
 compiler.units effects eval generic kernel tools.test words ;
-IN: classes.error.tests
+in: classes.error.tests
 
 ! Test error classes
 ERROR: error-class-test a b c ;

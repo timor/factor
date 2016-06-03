@@ -3,7 +3,7 @@
 USING: accessors arrays assocs classes classes.private
 combinators kernel make math math.order namespaces sequences
 sets sorting vectors words ;
-IN: classes.algebra
+in: classes.algebra
 
 DEFER: sort-classes
 
@@ -107,7 +107,7 @@ PRIVATE>
 : class-or ( first second -- class )
     class-or-cache get [ (class-or) ] symmetric-class-op ;
 
-SYMBOL: +incomparable+
+symbol: +incomparable+
 
 : compare-classes ( first second -- <=> )
     [ swap class<= ] [ class<= ] 2bi

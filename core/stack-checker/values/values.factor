@@ -2,11 +2,11 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs fry kernel namespaces quotations
 sequences stack-checker.errors stack-checker.recursive-state ;
-IN: stack-checker.values
+in: stack-checker.values
 
 : <value> ( -- value ) \ <value> counter ;
 
-SYMBOL: known-values
+symbol: known-values
 
 : init-known-values ( -- )
     H{ } clone known-values set ;
@@ -90,9 +90,9 @@ M: composed (literal-value?)
 M: composed (literal)
     >composed< [ compose ] curried/composed-literal ;
 
-SINGLETON: input-parameter
+singleton: input-parameter
 
-SYMBOL: current-word
+symbol: current-word
 
 M: input-parameter (input-value?) drop t ;
 

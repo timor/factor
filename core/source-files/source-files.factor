@@ -4,9 +4,9 @@ USING: accessors arrays assocs checksums checksums.crc32
 compiler.units continuations definitions io.encodings.utf8
 io.files io.pathnames kernel namespaces sequences sets
 source-files.errors strings words ;
-IN: source-files
+in: source-files
 
-SYMBOL: source-files
+symbol: source-files
 
 TUPLE: source-file
 { path string }
@@ -52,7 +52,7 @@ M: pathname forget*
         new-definitions get [ union ] 2map
     ] change-definitions drop ;
 
-SYMBOL: current-source-file
+symbol: current-source-file
 
 : wrap-source-file-error ( error -- * )
     current-source-file get rollback-source-file

@@ -8,7 +8,7 @@ classes.tuple classes.union classes.predicate debugger
 threads.private io.streams.string io.timeouts io.thread
 sequences.private destructors combinators eval locals.backend
 system compiler.units shuffle vocabs combinators.smart ;
-IN: stack-checker.tests
+in: stack-checker.tests
 
 [ 1234 infer ] must-fail
 
@@ -119,7 +119,7 @@ DEFER: foe
 
 { 1 0 } [ nested-when* ] must-infer-as
 
-SYMBOL: sym-test
+symbol: sym-test
 
 { 0 1 } [ sym-test ] must-infer-as
 
@@ -264,7 +264,7 @@ DEFER: inline-recursive-2
 { 0 0 } [ inline-recursive-1 ] must-infer-as
 
 ! Hooks
-SYMBOL: my-var
+symbol: my-var
 HOOK: my-hook my-var ( -- x )
 
 M: integer my-hook "an integer" ;

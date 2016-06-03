@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel math math.private sequences
 sequences.private ;
-IN: growable
+in: growable
 
 MIXIN: growable
 

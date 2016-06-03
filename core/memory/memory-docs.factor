@@ -1,6 +1,6 @@
 USING: help.markup help.syntax debugger sequences kernel
 quotations math ;
-IN: memory
+in: memory
 
 HELP: instances
 { $values { "quot" { $quotation ( obj -- ? ) } } { "seq" "a fresh sequence" } }

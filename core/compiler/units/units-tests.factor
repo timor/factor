@@ -1,6 +1,6 @@
 USING: arrays compiler compiler.units definitions eval fry
 kernel math namespaces quotations sequences tools.test words ;
-IN: compiler.units.tests
+in: compiler.units.tests
 
 [ [ [ ] define-temp ] with-compilation-unit ] must-infer
 [ [ [ ] define-temp ] with-nested-compilation-unit ] must-infer
@@ -30,11 +30,11 @@ IN: compiler.units.tests
 ] unit-test
 
 ! Check that we notify observers
-SINGLETON: observer
+singleton: observer
 
 observer add-definition-observer
 
-SYMBOL: counter
+symbol: counter
 
 0 counter set-global
 

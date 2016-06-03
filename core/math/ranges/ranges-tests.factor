@@ -1,5 +1,5 @@
 USING: arrays kernel math math.ranges sequences sets tools.test ;
-IN: math.ranges.tests
+in: math.ranges.tests
 
 { { } } [ 1 1 (a,b) >array ] unit-test
 { { } } [ 1 1 (a,b] >array ] unit-test

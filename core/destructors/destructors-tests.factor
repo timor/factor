@@ -1,6 +1,6 @@
 USING: accessors continuations destructors destructors.private
 kernel namespaces sequences tools.test ;
-IN: destructors.tests
+in: destructors.tests
 
 TUPLE: dispose-error ;
 

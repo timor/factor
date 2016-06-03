@@ -1,6 +1,6 @@
 USING: compiler.tree effects help.markup help.syntax math quotations sequences
 stack-checker.state stack-checker.values stack-checker.visitor words ;
-IN: stack-checker.backend
+in: stack-checker.backend
 
 HELP: consume-d
 { $values { "n" integer } { "seq" sequence } }

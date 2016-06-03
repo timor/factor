@@ -1,7 +1,7 @@
 ! Copyright (C) 2004, 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel math ;
-IN: math.ratios
+in: math.ratios
 
 : 2>fraction ( a/b c/d -- a c b d )
     [ >fraction ] bi@ swapd ; inline

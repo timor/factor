@@ -1,6 +1,6 @@
 USING: alien arrays classes combinators help.markup help.syntax
 kernel.private layouts math quotations system words ;
-IN: kernel
+in: kernel
 
 HELP: JIT-PUSH-LITERAL
 { $description "JIT code template for pushing literals unto the datastack." } ;

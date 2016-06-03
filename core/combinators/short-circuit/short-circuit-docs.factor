@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax io.streams.string quotations
 math kernel ;
-IN: combinators.short-circuit
+in: combinators.short-circuit
 
 HELP: 0&&
 { $values { "quots" "a sequence of quotations with stack effect " { $snippet "( -- ? )" } } { "?" "the result of the last quotation, or " { $link f } } }

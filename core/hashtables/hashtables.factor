@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs kernel kernel.private math
 math.private sequences sequences.private slots.private vectors ;
-IN: hashtables
+in: hashtables
 
 TUPLE: hashtable
     { count array-capacity }

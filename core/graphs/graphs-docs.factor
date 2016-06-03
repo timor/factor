@@ -1,6 +1,6 @@
 USING: assocs hashtables hash-sets help.markup help.syntax
 kernel sequences sets ;
-IN: graphs
+in: graphs
 
 ARTICLE: "graphs" "Directed graph utilities"
 "Words for treating associative mappings as directed graphs can be found in the " { $vocab-link "graphs" } " vocabulary. A directed graph is represented as an assoc mapping each vertex to a " { $link hash-set } " of edges entering that vertex."

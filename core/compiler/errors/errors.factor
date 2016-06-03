@@ -2,10 +2,10 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs command-line fry kernel namespaces
 source-files.errors summary ;
-IN: compiler.errors
+in: compiler.errors
 
-SYMBOL: +compiler-error+
-SYMBOL: compiler-errors
+symbol: +compiler-error+
+symbol: compiler-errors
 
 compiler-errors [ H{ } clone ] initialize
 
@@ -13,8 +13,8 @@ TUPLE: compiler-error < source-file-error ;
 
 M: compiler-error error-type drop +compiler-error+ ;
 
-SYMBOL: +linkage-error+
-SYMBOL: linkage-errors
+symbol: +linkage-error+
+symbol: linkage-errors
 
 linkage-errors [ H{ } clone ] initialize
 

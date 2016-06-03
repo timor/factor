@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors growable kernel math sequences
 sequences.private strings strings.private ;
-IN: sbufs
+in: sbufs
 
 TUPLE: sbuf
 { underlying string }

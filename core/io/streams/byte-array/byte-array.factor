@@ -3,7 +3,7 @@
 USING: accessors byte-arrays byte-vectors destructors io
 io.encodings io.streams.sequence kernel math namespaces
 sequences sequences.private ;
-IN: io.streams.byte-array
+in: io.streams.byte-array
 
 INSTANCE: byte-vector output-stream
 M: byte-vector stream-element-type drop +byte+ ; inline

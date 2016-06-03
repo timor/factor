@@ -1,5 +1,5 @@
 USING: compiler.tree help.markup help.syntax kernel sequences words ;
-IN: stack-checker.visitor
+in: stack-checker.visitor
 
 HELP: #>r,
 { $values { "inputs" sequence } { "outputs" sequence } }

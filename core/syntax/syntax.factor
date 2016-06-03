@@ -13,7 +13,7 @@ parser quotations sbufs sequences slots source-files splitting
 stack-checker strings strings.parser strings.parser.private
 typed vectors vocabs vocabs.parser words words.alias
 words.constant words.symbol delegate.private hints ;
-IN: bootstrap.syntax
+in: bootstrap.syntax
 
 ! These words are defined as a top-level form, instead of with
 ! defining parsing words, because during stage1 bootstrap, the

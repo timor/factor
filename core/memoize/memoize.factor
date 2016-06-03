@@ -3,7 +3,7 @@
 USING: accessors arrays assocs definitions effects
 effects.parser fry hashtables.identity kernel kernel.private
 math sequences sequences.private words ;
-IN: memoize
+in: memoize
 
 <PRIVATE
 

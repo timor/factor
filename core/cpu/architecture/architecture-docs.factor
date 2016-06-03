@@ -2,7 +2,7 @@ USING: alien assocs classes compiler.cfg.instructions
 compiler.cfg.registers compiler.cfg.stack-frame cpu.x86.assembler
 cpu.x86.assembler.operands help.markup help.syntax kernel layouts
 literals math multiline sequences strings system vm words ;
-IN: cpu.architecture
+in: cpu.architecture
 
 <<
 STRING: ex-%allot

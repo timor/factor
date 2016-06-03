@@ -1,5 +1,5 @@
 USING: help.markup help.syntax quotations strings ;
-IN: init
+in: init
 
 HELP: boot
 { $description "Called on startup as part of the boot quotation to initialize the runtime and prepare it for running user code." } ;

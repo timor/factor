@@ -2,7 +2,7 @@
 USING: kernel sequences sequences.private math
 combinators macros math.order math.ranges quotations fry effects
 memoize.private generalizations ;
-IN: sequences.generalizations
+in: sequences.generalizations
 
 MACRO: nsequence ( n seq -- quot )
     [ [nsequence] ] keep '[ @ _ like ] ;

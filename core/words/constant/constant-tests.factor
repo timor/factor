@@ -1,5 +1,5 @@
 USING: math tools.test words.constant ;
-IN: words.constant.tests
+in: words.constant.tests
 
 CONSTANT: a +
 
@@ -15,6 +15,6 @@ CONSTANT: c { 1 2 3 }
 
 { { 1 2 3 } } [ c ] unit-test
 
-SYMBOL: foo
+symbol: foo
 
 { f } [ \ foo constant? ] unit-test

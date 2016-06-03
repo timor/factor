@@ -4,10 +4,10 @@ USING: accessors alien.strings assocs continuations fry init
 io.encodings.utf8 io.files io.pathnames kernel kernel.private
 namespaces parser parser.notes sequences source-files
 source-files.errors splitting system vocabs.loader ;
-IN: command-line
+in: command-line
 
-SYMBOL: user-init-errors
-SYMBOL: +user-init-error+
+symbol: user-init-errors
+symbol: +user-init-error+
 
 TUPLE: user-init-error error path line# asset ;
 
@@ -18,9 +18,9 @@ M: user-init-error error-file path>> ;
 M: user-init-error error-line line#>> ;
 M: user-init-error error-type drop +user-init-error+ ;
 
-SYMBOL: executable
-SYMBOL: script
-SYMBOL: command-line
+symbol: executable
+symbol: script
+symbol: command-line
 
 : (command-line) ( -- args )
     OBJ-ARGS special-object sift [ alien>native-string ] map ;
@@ -84,7 +84,7 @@ SYMBOL: command-line
     unclip executable set
     (parse-command-line) ;
 
-SYMBOL: main-vocab-hook
+symbol: main-vocab-hook
 
 : main-vocab ( -- vocab )
     embedded? [

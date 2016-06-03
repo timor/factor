@@ -1,7 +1,7 @@
 ! Copyright (C) 2005, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel math sequences sequences.private ;
-IN: arrays
+in: arrays
 
 BUILTIN: array { length array-capacity read-only initial: 0 } ;
 

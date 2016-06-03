@@ -1,6 +1,6 @@
 USING: kernel sequences math stack-checker effects accessors
 macros fry combinators.short-circuit ;
-IN: combinators.short-circuit.smart
+in: combinators.short-circuit.smart
 
 <PRIVATE
 

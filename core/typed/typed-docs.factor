@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: arrays effects help.markup help.syntax locals math quotations words ;
-IN: typed
+in: typed
 
 HELP: TYPED:
 { $syntax
@@ -12,7 +12,7 @@ HELP: TYPED:
 "A version of " { $link + } " specialized for floats, converting other real number types:"
 { $example
 "USING: math prettyprint typed ;
-IN: scratchpad
+in: scratchpad
 
 TYPED: add-floats ( a: float b: float -- c: float )
     + ;
@@ -30,7 +30,7 @@ HELP: TYPED::
 "A version of the quadratic formula specialized for floats, converting other real number types:"
 { $example
 "USING: kernel math math.libm prettyprint typed ;
-IN: scratchpad
+in: scratchpad
 
 TYPED:: quadratic-roots ( a: float b: float c: float -- q1: float q2: float )
     b neg

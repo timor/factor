@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: checksums io.binary kernel math sequences
 sequences.private ;
-IN: checksums.crc32
+in: checksums.crc32
 
 CONSTANT: crc32-polynomial 0xedb88320
 
@@ -19,7 +19,7 @@ CONSTANT: crc32-table V{ }
     mask-byte crc32-table nth-unsafe
     swap -8 shift bitxor ; inline
 
-SINGLETON: crc32
+singleton: crc32
 
 INSTANCE: crc32 checksum
 

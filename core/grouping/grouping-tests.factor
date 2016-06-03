@@ -1,6 +1,6 @@
 USING: grouping tools.test kernel sequences arrays
 math accessors ;
-IN: grouping.tests
+in: grouping.tests
 
 [ { 1 2 3 } 0 group ] must-fail
 

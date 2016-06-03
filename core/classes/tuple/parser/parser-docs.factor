@@ -1,4 +1,4 @@
-IN: classes.tuple.parser
+in: classes.tuple.parser
 USING: strings help.markup help.syntax ;
 
 HELP: invalid-slot-name

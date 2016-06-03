@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs combinators combinators.private kernel
 kernel.private make namespaces sequences vectors ;
-IN: continuations
+in: continuations
 
 : with-datastack ( stack quot -- new-stack )
     [
@@ -11,11 +11,11 @@ IN: continuations
         swap [ set-datastack ] dip
     ] ( stack quot -- new-stack ) call-effect-unsafe ;
 
-SYMBOL: original-error
-SYMBOL: error
-SYMBOL: error-continuation
-SYMBOL: error-thread
-SYMBOL: restarts
+symbol: original-error
+symbol: error
+symbol: error-continuation
+symbol: error-thread
+symbol: restarts
 
 <PRIVATE
 
@@ -97,7 +97,7 @@ PRIVATE>
 : continue ( continuation -- * )
     f swap continue-with ;
 
-SYMBOL: return-continuation
+symbol: return-continuation
 
 : with-return ( quot -- )
     [ return-continuation ] dip [ with-variable ] 2curry callcc0 ; inline
@@ -117,14 +117,14 @@ PRIVATE>
 
 GENERIC: error-in-thread ( error thread -- * )
 
-SYMBOL: thread-error-hook ! ( error thread -- * )
+symbol: thread-error-hook ! ( error thread -- * )
 
 M: object error-in-thread
     thread-error-hook get-global call( error thread -- * ) ;
 
 : in-callback? ( -- ? ) CONTEXT-OBJ-IN-CALLBACK-P context-object ;
 
-SYMBOL: callback-error-hook ! ( error -- * )
+symbol: callback-error-hook ! ( error -- * )
 
 : rethrow ( error -- * )
     dup save-error

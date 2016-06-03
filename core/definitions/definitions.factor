@@ -1,7 +1,7 @@
 ! Copyright (C) 2006, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs kernel namespaces sequences sets ;
-IN: definitions
+in: definitions
 
 MIXIN: definition-mixin
 
@@ -10,21 +10,21 @@ ERROR: no-compilation-unit definition ;
 : add-to-unit ( key set -- )
     [ adjoin ] [ no-compilation-unit ] if* ;
 
-SYMBOL: changed-definitions
+symbol: changed-definitions
 
 : changed-definition ( defspec -- )
     changed-definitions get add-to-unit ;
 
-SYMBOL: maybe-changed
+symbol: maybe-changed
 
 : changed-conditionally ( class -- )
     maybe-changed get add-to-unit ;
 
-SYMBOL: changed-effects
+symbol: changed-effects
 
-SYMBOL: outdated-generics
+symbol: outdated-generics
 
-SYMBOL: new-words
+symbol: new-words
 
 : new-word ( word -- )
     new-words get add-to-unit ;
@@ -37,7 +37,7 @@ GENERIC: set-where ( loc defspec -- )
 
 GENERIC: forget* ( defspec -- )
 
-SYMBOL: forgotten-definitions
+symbol: forgotten-definitions
 
 : forgotten-definition ( defspec -- )
     forgotten-definitions get add-to-unit ;

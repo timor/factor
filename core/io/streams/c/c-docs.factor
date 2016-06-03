@@ -1,6 +1,6 @@
 USING: help.markup help.syntax io io.files threads
 strings byte-arrays io.streams.plain alien math ;
-IN: io.streams.c
+in: io.streams.c
 
 ARTICLE: "io.streams.c" "ANSI C streams"
 "C streams are found in the " { $vocab-link "io.streams.c" } " vocabulary; they are " { $link "stream-protocol" } " implementations which read and write C " { $snippet "FILE*" } " handles."

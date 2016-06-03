@@ -1,6 +1,6 @@
 USING: effects generic help.markup help.syntax kernel math
 math.parser sequences ;
-IN: generic.single
+in: generic.single
 
 HELP: no-method
 { $values { "object" object } { "generic" "a generic word" } }

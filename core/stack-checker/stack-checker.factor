@@ -6,7 +6,7 @@ stack-checker.backend stack-checker.state
 stack-checker.known-words stack-checker.transforms
 stack-checker.errors stack-checker.inlining
 stack-checker.visitor.dummy ;
-IN: stack-checker
+in: stack-checker
 
 GENERIC: infer ( quot -- effect )
 

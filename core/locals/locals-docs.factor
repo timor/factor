@@ -1,6 +1,6 @@
 USING: help.syntax help.markup kernel macros prettyprint
 memoize combinators arrays generalizations see ;
-IN: locals
+in: locals
 
 HELP: [|
 { $syntax "[| bindings... | body... ]" }
@@ -70,7 +70,7 @@ ARTICLE: "locals-examples" "Examples of lexical variables"
 { $heading "Definitions with lexical variables" }
 "The following example demonstrates lexical variable bindings in word definitions. The " { $snippet "quadratic-roots" } " word is defined with " { $link POSTPONE: :: } ", so it takes its inputs from the top three elements of the datastack and binds them to the variables " { $snippet "a" } ", " { $snippet "b" } ", and " { $snippet "c" } ". In the body, the " { $snippet "disc" } " variable is bound using " { $link POSTPONE: :> } " and then used in the following line of code."
 { $example "USING: locals math math.functions kernel ;
-IN: scratchpad
+in: scratchpad
 :: quadratic-roots ( a b c -- x y )
     b sq 4 a c * * - sqrt :> disc
     b neg disc [ + ] [ - ] 2bi [ 2 a * / ] bi@ ;
@@ -80,7 +80,7 @@ IN: scratchpad
 }
 "If you wanted to perform the quadratic formula interactively from the listener, you could use " { $link POSTPONE: [let } " to provide a scope for the variables:"
 { $example "USING: locals math math.functions kernel ;
-IN: scratchpad
+in: scratchpad
 [let 1.0 :> a 1.0 :> b -6.0 :> c
     b sq 4 a c * * - sqrt :> disc
     b neg disc [ + ] [ - ] 2bi [ 2 a * / ] bi@
@@ -115,7 +115,7 @@ $nl
 "This next example demonstrates closures and mutable variable bindings. The " { $snippet "<counter>" } " word outputs a tuple containing a pair of quotations that respectively increment and decrement an internal counter in the mutable " { $snippet "value" } " variable and then return the new value. The quotations close over the counter, so each invocation of the word gives new quotations with a new internal counter."
 { $example
 "USING: locals kernel math ;
-IN: scratchpad
+in: scratchpad
 
 TUPLE: counter adder subtractor ;
 
@@ -136,7 +136,7 @@ TUPLE: counter adder subtractor ;
     "The same variable name can be bound multiple times in the same scope. This is different from reassigning the value of a mutable variable. The most recent binding for a variable name will mask previous bindings for that name. However, the old binding referring to the previous value can still persist in closures. The following contrived example demonstrates this:"
     { $example
 "USING: kernel locals prettyprint ;
-IN: scratchpad
+in: scratchpad
 :: rebinding-example ( -- quot1 quot2 )
     5 :> a [ a ]
     6 :> a [ a ] ;
@@ -155,7 +155,7 @@ mutable-example [ call . ] bi@"
 "Some kinds of literals can include references to lexical variables as described in " { $link "locals-literals" } ". For example, the " { $link 3array } " word could be implemented as follows:"
 { $example
 "USING: locals prettyprint ;
-IN: scratchpad
+in: scratchpad
 
 :: my-3array ( x y z -- array ) { x y z } ;
 1 \"two\" 3.0 my-3array ."

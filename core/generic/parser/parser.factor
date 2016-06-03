@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays combinators effects.parser generic
 kernel namespaces parser quotations sequences words ;
-IN: generic.parser
+in: generic.parser
 
 ERROR: not-in-a-method-error ;
 
@@ -20,7 +20,7 @@ ERROR: not-in-a-method-error ;
 : scan-new-method ( -- method )
     scan-class bootstrap-word scan-word create-method-in ;
 
-SYMBOL: current-method
+symbol: current-method
 
 : with-method-definition ( method quot -- )
     over current-method set call current-method off ; inline

@@ -1,7 +1,7 @@
 USING: generic help.markup help.syntax kernel kernel.private
 namespaces sequences words arrays help effects math
 classes.private classes compiler.units ;
-IN: classes.union
+in: classes.union
 
 ARTICLE: "unions" "Union classes"
 "An object is an instance of a union class if it is an instance of one of its members."

@@ -1,5 +1,5 @@
 USING: classes.singleton help.markup help.syntax init kernel math ;
-IN: system
+in: system
 
 ABOUT: "system"
 

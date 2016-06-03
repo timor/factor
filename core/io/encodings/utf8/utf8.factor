@@ -2,11 +2,11 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators io io.encodings
 io.encodings.private kernel math math.order sequences strings ;
-IN: io.encodings.utf8
+in: io.encodings.utf8
 
 ! Decoding UTF-8
 
-SINGLETON: utf8
+singleton: utf8
 
 <PRIVATE
 

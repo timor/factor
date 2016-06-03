@@ -2,7 +2,7 @@ USING: accessors alien alien.accessors alien.c-types
 alien.syntax byte-arrays continuations fry kernel layouts math
 namespaces prettyprint sequences tools.memory tools.test ;
 QUALIFIED: sets
-IN: alien.tests
+in: alien.tests
 
 { t } [ -1 <alien> alien-address 0 > ] unit-test
 
@@ -72,7 +72,7 @@ cell 8 = [
 
 { "( displaced alien )" } [ 1 B{ 1 2 3 } <displaced-alien> unparse ] unit-test
 
-SYMBOL: initialize-test
+symbol: initialize-test
 
 f initialize-test set-global
 
@@ -91,7 +91,7 @@ f initialize-test set-global
 : produce-until-error ( quot -- error seq )
     '[ [ @ t ] [ f ] recover ] [ ] produce ; inline
 
-SYMBOL: foo
+symbol: foo
 
 : fill-and-free-callback-heap ( -- )
     [ \ foo 33 <callback> ] produce-until-error nip [ free-callback ] each ;

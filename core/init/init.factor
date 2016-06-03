@@ -2,10 +2,10 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs continuations continuations.private kernel
 kernel.private namespaces ;
-IN: init
+in: init
 
-SYMBOL: startup-hooks
-SYMBOL: shutdown-hooks
+symbol: startup-hooks
+symbol: shutdown-hooks
 
 startup-hooks [ V{ } clone ] initialize
 shutdown-hooks [ V{ } clone ] initialize

@@ -4,7 +4,7 @@ USING: accessors assocs classes classes.algebra
 classes.algebra.private classes.private classes.union
 classes.union.private combinators definitions kernel sequences
 words ;
-IN: classes.mixin
+in: classes.mixin
 
 PREDICATE: mixin-class < union-class "mixin" word-prop ;
 

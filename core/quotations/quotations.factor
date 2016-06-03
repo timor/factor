@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays kernel kernel.private math sequences
 sequences.private slots.private ;
-IN: quotations
+in: quotations
 
 BUILTIN: quotation
     { array array read-only initial: { } }

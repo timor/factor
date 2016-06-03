@@ -5,7 +5,7 @@ USING: accessors arrays assocs combinators compiler.units
 continuations hash-sets hashtables kernel math namespaces
 parser.notes sequences sets sorting splitting vectors vocabs
 words ;
-IN: vocabs.parser
+in: vocabs.parser
 
 ERROR: no-word-error name ;
 

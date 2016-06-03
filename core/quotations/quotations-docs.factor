@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel sequences ;
-IN: quotations
+in: quotations
 
 ARTICLE: "quotations" "Quotations"
 "A quotation is an anonymous function (a value denoting a snippet of code) which can be used as a value and called using the " { $link "call" } "."

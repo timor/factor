@@ -3,7 +3,7 @@
 USING: accessors arrays assocs hashtables kernel kernel.private
 make math math.order math.private quotations sequences
 sequences.private sets sorting words ;
-IN: combinators
+in: combinators
 
 ! Most of these combinators have compile-time expansions in
 ! the optimizing compiler. See stack-checker.transforms and

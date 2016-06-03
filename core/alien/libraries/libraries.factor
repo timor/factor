@@ -3,7 +3,7 @@
 USING: accessors alien alien.strings assocs compiler.errors
 io.backend kernel namespaces destructors sequences strings
 system io.pathnames fry combinators vocabs ;
-IN: alien.libraries
+in: alien.libraries
 
 PRIMITIVE: dll-valid? ( dll -- ? )
 PRIMITIVE: (dlopen) ( path -- dll )
@@ -19,7 +19,7 @@ PRIMITIVE: (dlsym-raw) ( name dll -- alien )
 
 HOOK: dlerror os ( -- message/f )
 
-SYMBOL: libraries
+symbol: libraries
 
 libraries [ H{ } clone ] initialize
 
@@ -89,7 +89,7 @@ M: library dispose dll>> [ dispose ] when* ;
     2dup load-library dlsym-raw
     [ 2nip ] [ no-such-symbol ] if* ;
 
-SYMBOL: deploy-libraries
+symbol: deploy-libraries
 
 deploy-libraries [ V{ } clone ] initialize
 

@@ -3,7 +3,7 @@
 USING: accessors kernel locals.rewrite.point-free
 locals.rewrite.sugar locals.types macros.expander make
 quotations sequences sets words ;
-IN: locals.rewrite.closures
+in: locals.rewrite.closures
 
 ! Step 2: identify free variables and make them into explicit
 ! parameters of lambdas which are curried on

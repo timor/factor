@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: command-line eval io io.pathnames kernel namespaces
 sequences system vocabs.loader ;
-IN: command-line.startup
+in: command-line.startup
 
 : cli-usage ( -- )
 "Usage: " write vm-path file-name write " [Factor arguments] [script] [script arguments]
