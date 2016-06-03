@@ -56,6 +56,7 @@ in: bootstrap.syntax
         "CONSTANT:"
         "TUPLE:"
         "SLOT:"
+        "slot:"
         "T{"
         "UNION:"
         "INTERSECTION:"

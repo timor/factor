@@ -99,10 +99,19 @@ in: bootstrap.syntax
     ] define-core-syntax
 
     "NAN:" [ 16 scan-base <fp-nan> suffix! ] define-core-syntax
+    "nan:" [ 16 scan-base <fp-nan> suffix! ] define-core-syntax
 
     "f" [ f suffix! ] define-core-syntax
 
     "CHAR:" [
+        lexer get parse-raw [ "token" throw-unexpected-eof ] unless* {
+            { [ dup length 1 = ] [ first ] }
+            { [ "\\" ?head ] [ next-escape >string "" assert= ] }
+            [ name>char-hook get call( name -- char ) ]
+        } cond suffix!
+    ] define-core-syntax
+
+    "char:" [
         lexer get parse-raw [ "token" throw-unexpected-eof ] unless* {
             { [ dup length 1 = ] [ first ] }
             { [ "\\" ?head ] [ next-escape >string "" assert= ] }
@@ -260,6 +269,9 @@ in: bootstrap.syntax
     ] define-core-syntax
 
     "SLOT:" [
+        scan-token define-protocol-slot
+    ] define-core-syntax
+    "slot:" [
         scan-token define-protocol-slot
     ] define-core-syntax
 
