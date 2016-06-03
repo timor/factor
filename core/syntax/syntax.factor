@@ -68,12 +68,14 @@ IN: bootstrap.syntax
     ] define-core-syntax
 
     "IN:" [ scan-token set-current-vocab ] define-core-syntax
+    "in:" [ scan-token set-current-vocab ] define-core-syntax
 
     "<PRIVATE" [ begin-private ] define-core-syntax
 
     "PRIVATE>" [ end-private ] define-core-syntax
 
     "USE:" [ scan-token use-vocab ] define-core-syntax
+    "use:" [ scan-token use-vocab ] define-core-syntax
 
     "UNUSE:" [ scan-token unuse-vocab ] define-core-syntax
 
@@ -128,6 +130,7 @@ IN: bootstrap.syntax
     "HS{" [ \ } [ >hash-set ] parse-literal ] define-core-syntax
 
     "POSTPONE:" [ scan-word suffix! ] define-core-syntax
+    "postpone:" [ scan-word suffix! ] define-core-syntax
     "\\" [ scan-word <wrapper> suffix! ] define-core-syntax
     "M\\" [ scan-word scan-word lookup-method <wrapper> suffix! ] define-core-syntax
     "inline" [ last-word make-inline ] define-core-syntax
@@ -136,6 +139,13 @@ IN: bootstrap.syntax
     "flushable" [ last-word make-flushable ] define-core-syntax
     "delimiter" [ last-word t "delimiter" set-word-prop ] define-core-syntax
     "deprecated" [ last-word make-deprecated ] define-core-syntax
+
+    "@inline" [ last-word make-inline ] define-core-syntax
+    "@recursive" [ last-word make-recursive ] define-core-syntax
+    "@foldable" [ last-word make-foldable ] define-core-syntax
+    "@flushable" [ last-word make-flushable ] define-core-syntax
+    "@delimiter" [ last-word t "delimiter" set-word-prop ] define-core-syntax
+    "@deprecated" [ last-word make-deprecated ] define-core-syntax
 
     "SYNTAX:" [
         scan-new-word
@@ -150,6 +160,9 @@ IN: bootstrap.syntax
     ] define-core-syntax
 
     "SYMBOL:" [
+        scan-new-word define-symbol
+    ] define-core-syntax
+    "symbol:" [
         scan-new-word define-symbol
     ] define-core-syntax
 

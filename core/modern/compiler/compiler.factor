@@ -98,6 +98,7 @@ GENERIC: literal>tag ( class -- string/f )
 M: line-comment-literal literal>tag drop f ;
 M: uppercase-colon-literal literal>tag
     tag>> [ "word" ] [ >lower ] if-empty ;
+! M: lowercase-colon-literal literal>tag tag>> ;
 M: compound-literal literal>tag
     base-literal literal>tag ;
 
