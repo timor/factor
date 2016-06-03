@@ -503,7 +503,7 @@ M: amb-union-4 amb-generic-4 drop "4" ;
     T{ amb-tuple-b f 3 } amb-tuple-b \ amb-generic-4 method-for-class execute( a -- b ) assert=
 ] unit-test
 
-MIXIN: amb-mixin-5
+mixin: amb-mixin-5
 INSTANCE: amb-tuple-a amb-mixin-5
 INSTANCE: amb-tuple-d amb-mixin-5
 
@@ -539,7 +539,7 @@ M: amb-union-6 amb-generic-6 drop "6" ;
     T{ amb-tuple-b f 3 } amb-tuple-b \ amb-generic-6 method-for-class execute( a -- b ) assert=
 ] unit-test
 
-MIXIN: amb-mixin-7
+mixin: amb-mixin-7
 INSTANCE: amb-tuple-b amb-mixin-7
 INSTANCE: amb-tuple-d amb-mixin-7
 

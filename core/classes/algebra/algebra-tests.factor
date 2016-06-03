@@ -36,7 +36,7 @@ INTERSECTION: generic-class generic class ;
 
 UNION: union-with-one-member a ;
 
-MIXIN: mixin-with-one-member
+mixin: mixin-with-one-member
 INSTANCE: union-with-one-member mixin-with-one-member
 
 ! class<=
@@ -127,7 +127,7 @@ INSTANCE: union-with-one-member mixin-with-one-member
 { t } [ a union-with-one-member class<= ] unit-test
 { f } [ union-with-one-member class-not integer class<= ] unit-test
 
-MIXIN: empty-mixin
+mixin: empty-mixin
 
 { f } [ empty-mixin class-not null class<= ] unit-test
 { f } [ empty-mixin null class<= ] unit-test

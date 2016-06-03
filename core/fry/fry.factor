@@ -26,7 +26,7 @@ M: callable count-inputs [ count-inputs ] map-sum ;
 M: fry-specifier count-inputs drop 1 ;
 M: object count-inputs drop 0 ;
 
-MIXIN: fried
+mixin: fried
 PREDICATE: fried-callable < callable
     count-inputs 0 > ;
 INSTANCE: fried-callable fried

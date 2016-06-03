@@ -20,8 +20,8 @@ GENERIC: refill ( port handle -- event/f )
 
 HOOK: wait-for-fd io-backend ( handle event -- )
 
-MIXIN: file-reader
-MIXIN: file-writer
+mixin: file-reader
+mixin: file-writer
 
 M: file-reader stream-element-type drop +byte+ ; inline
 M: file-writer stream-element-type drop +byte+ ; inline

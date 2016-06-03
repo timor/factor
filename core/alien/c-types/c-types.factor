@@ -115,7 +115,7 @@ GENERIC: heap-size ( name -- size )
 
 M: abstract-c-type heap-size size>> ;
 
-MIXIN: value-type
+mixin: value-type
 
 MACRO: alien-value ( c-type -- quot: ( c-ptr offset -- value ) )
     [ c-type-getter ] [ c-type-boxer-quot ] bi append ;

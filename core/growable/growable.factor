@@ -4,7 +4,7 @@ USING: accessors kernel math math.private sequences
 sequences.private ;
 in: growable
 
-MIXIN: growable
+mixin: growable
 
 SLOT: length
 SLOT: underlying

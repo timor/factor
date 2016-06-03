@@ -4,7 +4,7 @@ USING: accessors byte-arrays byte-vectors io io.backend io.files
 kernel math math.parser sequences ;
 in: checksums
 
-MIXIN: checksum
+mixin: checksum
 
 TUPLE: checksum-state
 { bytes-read integer }

@@ -3,7 +3,7 @@ in: classes.intersection.tests
 
 TUPLE: a ;
 TUPLE: a1 < a ; TUPLE: a2 < a ; TUPLE: a3 < a2 ;
-MIXIN: b
+mixin: b
 INSTANCE: a3 b
 INSTANCE: a1 b
 INTERSECTION: c a2 b ;
