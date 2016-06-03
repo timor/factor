@@ -12,7 +12,7 @@ GENERIC: stream-read-quot ( stream -- quot/f )
 GENERIC# prompt. 1 ( stream prompt -- )
 
 : prompt ( -- str )
-    manifest get current-vocab>> [ name>> "IN: " prepend ] [ "" ] if*
+    manifest get current-vocab>> [ name>> "in: " prepend ] [ "" ] if*
     auto-use? get [ " auto-use" append ] when ;
 
 SYMBOL: prompt-style
