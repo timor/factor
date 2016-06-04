@@ -59,17 +59,17 @@ TYPEDEF: int PostgresPollingStatusType ;
 TYPEDEF: int PGTransactionStatusType ;
 TYPEDEF: int PGVerbosity ;
 
-C-TYPE: PGconn
-C-TYPE: PGresult
-C-TYPE: PGcancel
+c-type: PGconn
+c-type: PGresult
+c-type: PGcancel
 TYPEDEF: uint Oid ;
 TYPEDEF: char pqbool ;
-C-TYPE: PQconninfoOption
-C-TYPE: PGnotify
-C-TYPE: PQArgBlock
-C-TYPE: PQprintOpt
-C-TYPE: SSL
-C-TYPE: FILE
+c-type: PQconninfoOption
+c-type: PGnotify
+c-type: PQArgBlock
+c-type: PQprintOpt
+c-type: SSL
+c-type: FILE
 
 LIBRARY: postgresql
 

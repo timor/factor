@@ -178,8 +178,8 @@ FUNCTION: void alDopplerVelocity ( ALfloat value ) ;
 FUNCTION: void alSpeedOfSound ( ALfloat value ) ;
 FUNCTION: void alDistanceModel ( ALenum distanceModel ) ;
 
-C-TYPE: ALCdevice
-C-TYPE: ALCcontext
+c-type: ALCdevice
+c-type: ALCcontext
 TYPEDEF: char ALCboolean ;
 TYPEDEF: char ALCchar ;
 TYPEDEF: int ALCenum ;

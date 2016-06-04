@@ -10,7 +10,7 @@ in: curses.ffi
     { [ os unix?  ]  [ "ncursesw" find-library ] }
 } cond cdecl add-library >>
 
-C-TYPE: SCREEN
+c-type: SCREEN
 TYPEDEF: void* va_list ;
 
 TYPEDEF: uint chtype ;

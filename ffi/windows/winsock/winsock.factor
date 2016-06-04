@@ -116,7 +116,7 @@ CONSTANT: SD_BOTH 2 ;
 
 CONSTANT: SOL_SOCKET 0xffff ;
 
-C-TYPE: sockaddr
+c-type: sockaddr
 
 STRUCT: sockaddr-in
     { family short }

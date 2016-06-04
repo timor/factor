@@ -32,12 +32,12 @@ TYPEDEF: XID KeySym ;
 TYPEDEF: ulong Atom ;
 
 TYPEDEF: c-string XPointer ;
-C-TYPE: Screen
+c-type: Screen
 TYPEDEF: void* GC ;
-C-TYPE: Visual
-C-TYPE: XExtData
-C-TYPE: XFontProp
-C-TYPE: XComposeStatus
+c-type: Visual
+c-type: XExtData
+c-type: XFontProp
+c-type: XComposeStatus
 TYPEDEF: void* XIM ;
 TYPEDEF: void* XIC ;
 
@@ -281,7 +281,7 @@ X-FUNCTION: int XFreePixmap ( Display* display, Pixmap pixmap ) ;
 
 ! 5.2 - Creating, Recoloring, and Freeing Cursors
 
-C-TYPE: XColor
+c-type: XColor
 X-FUNCTION: Cursor XCreatePixmapCursor ( Display* display, Pixmap source, Pixmap mask, XColor* foreground_color, XColor* background_color, uint x, uint y ) ;
 X-FUNCTION: int XFreeCursor ( Display* display, Cursor cursor ) ;
 

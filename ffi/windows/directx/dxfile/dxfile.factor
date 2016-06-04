@@ -29,25 +29,25 @@ STRUCT: DXFILELOADMEMORY
     { dSize    DWORD  } ;
 TYPEDEF: DXFILELOADMEMORY* LPDXFILELOADMEMORY ;
 
-C-TYPE: IDirectXFile
+c-type: IDirectXFile
 TYPEDEF: IDirectXFile* LPDIRECTXFILE ;
 TYPEDEF: IDirectXFile** LPLPDIRECTXFILE ;
-C-TYPE: IDirectXFileEnumObject
+c-type: IDirectXFileEnumObject
 TYPEDEF: IDirectXFileEnumObject* LPDIRECTXFILEENUMOBJECT ;
 TYPEDEF: IDirectXFileEnumObject** LPLPDIRECTXFILEENUMOBJECT ;
-C-TYPE: IDirectXFileSaveObject
+c-type: IDirectXFileSaveObject
 TYPEDEF: IDirectXFileSaveObject* LPDIRECTXFILESAVEOBJECT ;
 TYPEDEF: IDirectXFileSaveObject** LPLPDIRECTXFILESAVEOBJECT ;
-C-TYPE: IDirectXFileObject
+c-type: IDirectXFileObject
 TYPEDEF: IDirectXFileObject* LPDIRECTXFILEOBJECT ;
 TYPEDEF: IDirectXFileObject** LPLPDIRECTXFILEOBJECT ;
-C-TYPE: IDirectXFileData
+c-type: IDirectXFileData
 TYPEDEF: IDirectXFileData* LPDIRECTXFILEDATA ;
 TYPEDEF: IDirectXFileData** LPLPDIRECTXFILEDATA ;
-C-TYPE: IDirectXFileDataReference
+c-type: IDirectXFileDataReference
 TYPEDEF: IDirectXFileDataReference* LPDIRECTXFILEDATAREFERENCE ;
 TYPEDEF: IDirectXFileDataReference** LPLPDIRECTXFILEDATAREFERENCE ;
-C-TYPE: IDirectXFileBinary
+c-type: IDirectXFileBinary
 TYPEDEF: IDirectXFileBinary* LPDIRECTXFILEBINARY ;
 TYPEDEF: IDirectXFileBinary** LPLPDIRECTXFILEBINARY ;
 

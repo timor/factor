@@ -38,8 +38,8 @@ TYPEDEF: long FT_F26Dot6 ;
 FUNCTION: FT_Error FT_Init_FreeType ( void* library ) ;
 
 ! circular reference between glyph and face
-C-TYPE: face
-C-TYPE: glyph
+c-type: face
+c-type: glyph
 
 STRUCT: glyph
     { library void* }
@@ -166,7 +166,7 @@ STRUCT: FT_Bitmap
     { palette_mode char }
     { palette void* } ;
 
-C-TYPE: FT_Face
+c-type: FT_Face
 
 FUNCTION: FT_Error FT_New_Face ( void* library, FT_Char* font, FT_Long index, face* face ) ;
 

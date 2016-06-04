@@ -54,7 +54,7 @@ TYPEDEF: int* MyIntArray ;
 { 127 } [ 230 char c-type-clamp ] unit-test
 { t } [ pi dup float c-type-clamp = ] unit-test
 
-C-TYPE: opaque
+c-type: opaque
 
 { t } [ void* lookup-c-type pointer: opaque lookup-c-type = ] unit-test
 [ opaque lookup-c-type ] [ no-c-type? ] must-fail-with
@@ -65,7 +65,7 @@ C-TYPE: opaque
     FUNCTION: opaque return_opaque ( ) ;
 " eval( -- ) ] [ no-c-type? ] must-fail-with
 
-C-TYPE: forward
+c-type: forward
 STRUCT: backward { x forward* } ;
 STRUCT: forward { x backward* } ;
 
@@ -88,7 +88,7 @@ defer: struct-redefined
     USING: alien.syntax ;
     in: alien.c-types.tests
 
-    C-TYPE: struct-redefined
+    c-type: struct-redefined
     " eval( -- )
 
     \ struct-redefined class?

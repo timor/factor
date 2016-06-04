@@ -24,7 +24,7 @@ TYPEDEF: double  GLclampd ;
 TYPEDEF: longlong  GLint64 ;
 TYPEDEF: ulonglong GLuint64 ;
 TYPEDEF: void*     GLsync ;
-C-TYPE: GLvoid
+c-type: GLvoid
 
 TYPEDEF: c-string[ascii] GLstring ;
 

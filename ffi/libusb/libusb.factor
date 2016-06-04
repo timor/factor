@@ -172,9 +172,9 @@ STRUCT: libusb_control_setup
 
 : LIBUSB_CONTROL_SETUP_SIZE ( -- x ) libusb_control_setup heap-size ; inline
 
-C-TYPE: libusb_context
-C-TYPE: libusb_device
-C-TYPE: libusb_device_handle
+c-type: libusb_context
+c-type: libusb_device
+c-type: libusb_device_handle
 
 ENUM: libusb_error
     { LIBUSB_SUCCESS             0 }
@@ -212,7 +212,7 @@ STRUCT: libusb_iso_packet_descriptor
     { status        libusb_transfer_status } ;
 specialized-array: libusb_iso_packet_descriptor
 
-C-TYPE: libusb_transfer
+c-type: libusb_transfer
 
 CALLBACK: void libusb_transfer_cb_fn ( libusb_transfer* transfer ) ;
 

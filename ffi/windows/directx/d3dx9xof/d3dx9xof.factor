@@ -31,11 +31,11 @@ STRUCT: D3DXF_FILELOADMEMORY
     { lpMemory LPCVOID }
     { dSize    SIZE_T  } ;
 
-C-TYPE: ID3DXFile
-C-TYPE: ID3DXFileSaveObject
-C-TYPE: ID3DXFileSaveData
-C-TYPE: ID3DXFileEnumObject
-C-TYPE: ID3DXFileData
+c-type: ID3DXFile
+c-type: ID3DXFileSaveObject
+c-type: ID3DXFileSaveData
+c-type: ID3DXFileEnumObject
+c-type: ID3DXFileData
 
 TYPEDEF: ID3DXFile* LPD3DXFILE ;
 TYPEDEF: ID3DXFile** LPLPD3DXFILE ;

@@ -13,7 +13,7 @@ in: tokyo.alien.tcrdb
 
 LIBRARY: tokyotyrant
 
-C-TYPE: TCRDB
+c-type: TCRDB
 ! STRUCT: TCRDB
 !     { mmtx pthread_mutex_t }
 !     { eckey pthread_key_t }
@@ -94,7 +94,7 @@ CONSTANT: RDBITOPT     TDBITOPT ;
 CONSTANT: RDBITVOID    TDBITVOID ;
 CONSTANT: RDBITKEEP    TDBITKEEP ;
 
-C-TYPE: RDBQRY
+c-type: RDBQRY
 ! STRUCT: RDBQRY
 !     { rdb TCRDB* }
 !     { args TCLIST* } ;

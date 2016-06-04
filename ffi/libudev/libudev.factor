@@ -8,7 +8,7 @@ in: libudev
 
 LIBRARY: libudev
 
-C-TYPE: udev
+c-type: udev
 
 FUNCTION: udev* udev_ref (
     udev* udev )
@@ -70,7 +70,7 @@ FUNCTION: void udev_set_userdata (
 
 
 
-C-TYPE: udev_list_entry
+c-type: udev_list_entry
 
 FUNCTION: udev_list_entry* udev_list_entry_get_next (
     udev_list_entry* list_entry )
@@ -104,7 +104,7 @@ FUNCTION: c-string udev_list_entry_get_value (
 
 
 
-C-TYPE: udev_device
+c-type: udev_device
 
 FUNCTION: udev_device* udev_device_ref (
     udev_device* udev_device )
@@ -230,7 +230,7 @@ FUNCTION: c-string udev_device_get_sysattr_value (
 
 
 
-C-TYPE: udev_monitor
+c-type: udev_monitor
 
 FUNCTION: udev_monitor* udev_monitor_ref (
     udev_monitor* udev_monitor )
@@ -297,7 +297,7 @@ FUNCTION: int udev_monitor_filter_remove (
 
 
 
-C-TYPE: udev_enumerate
+c-type: udev_enumerate
 
 FUNCTION: udev_enumerate* udev_enumerate_ref (
     udev_enumerate* udev_enumerate )
@@ -379,7 +379,7 @@ FUNCTION: udev_list_entry* udev_enumerate_get_list_entry (
 
 
 
-C-TYPE: udev_queue
+c-type: udev_queue
 
 FUNCTION: udev_queue* udev_queue_ref (
     udev_queue* udev_queue )

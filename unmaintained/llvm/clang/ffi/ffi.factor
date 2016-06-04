@@ -11,7 +11,7 @@ in: llvm.clang.ffi
 >>
 LIBRARY: libclang
 
-C-TYPE: CXTranslationUnitImpl
+c-type: CXTranslationUnitImpl
 
 TYPEDEF: void* CXIndex ;
 TYPEDEF: CXTranslationUnitImpl* CXTranslationUnit ;
@@ -314,7 +314,7 @@ FUNCTION: CXLinkageKind clang_getCursorLinkage ( CXCursor cursor ) ;
 FUNCTION: CXAvailabilityKind clang_getCursorAvailability ( CXCursor cursor ) ;
 FUNCTION: CXLanguageKind clang_getCursorLanguage ( CXCursor cursor ) ;
 
-C-TYPE: CXCursorSetImpl
+c-type: CXCursorSetImpl
 TYPEDEF: CXCursorSetImpl* CXCursorSet ;
 
 FUNCTION: CXCursorSet clang_createCXCursorSet ( ) ;

@@ -9,8 +9,8 @@ in: libtls.ffi
     { [ os unix? ] [ "libtls.so" ] }
 } cond cdecl add-library >>
 
-C-TYPE: tls_config
-C-TYPE: tls_ctx
+c-type: tls_config
+c-type: tls_ctx
 
 LIBRARY: libtls
 

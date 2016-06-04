@@ -43,7 +43,7 @@ CONSTANT: LUA_ERRSYNTAX 3 ;
 CONSTANT: LUA_ERRMEM    4 ;
 CONSTANT: LUA_ERRERR    5 ;
 
-C-TYPE: lua_State
+c-type: lua_State
 
 CALLBACK: int lua_CFunction ( lua_State* L ) ;
 CALLBACK: char* lua_Reader ( lua_State* L, void* ud, size_t* sz ) ;
@@ -175,7 +175,7 @@ CONSTANT: LUA_HOOKTAILRET 4 ;
 : LUA_MASKLINE ( n -- n ) LUA_HOOKLINE shift ; inline
 : LUA_MASKCOUNT ( n -- n ) LUA_HOOKCOUNT shift ; inline
 
-C-TYPE: lua_Debug
+c-type: lua_Debug
 CALLBACK: void lua_Hook ( lua_State* L, lua_Debug* ar ) ;
 
 FUNCTION: int lua_getstack ( lua_State* L, int level, lua_Debug* ar ) ;

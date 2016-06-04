@@ -13,7 +13,7 @@ CALLBACK: void CFFileDescriptorCallBack (
    void *info
 ) ;
 
-C-TYPE: CFFileDescriptorContext
+c-type: CFFileDescriptorContext
 
 FUNCTION: CFFileDescriptorRef CFFileDescriptorCreate (
     CFAllocatorRef allocator,

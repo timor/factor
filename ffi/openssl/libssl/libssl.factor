@@ -180,8 +180,8 @@ CONSTANT: SSL_ERROR_WANT_ACCEPT      8 ;
         { 8  "SSL_ERROR_WANT_ACCEPT" }
     } ;
 
-C-TYPE: SSL_CTX
-C-TYPE: SSL_SESSION
+c-type: SSL_CTX
+c-type: SSL_SESSION
 
 LIBRARY: libssl
 
@@ -201,12 +201,12 @@ TYPEDEF: stack_st _STACK ;
 ! asn1t.h
 ! ===============================================
 
-C-TYPE: ASN1_ITEM
+c-type: ASN1_ITEM
 
 ! ===============================================
 ! asn1.h
 ! ===============================================
-C-TYPE: ASN1_VALUE
+c-type: ASN1_VALUE
 TYPEDEF: ASN1_ITEM ASN1_ITEM_EXP ;
 
 STRUCT: ASN1_STRING
@@ -233,8 +233,8 @@ STRUCT: X509_EXTENSION
     { critical void* }
     { value ASN1_OCTET_STRING* } ;
 
-C-TYPE: X509_NAME
-C-TYPE: X509
+c-type: X509_NAME
+c-type: X509
 
 ! ===============================================
 ! x509v3.h
@@ -617,7 +617,7 @@ FUNCTION: X509_EXTENSION* X509_get_ext ( X509* a, int loc ) ;
 FUNCTION: void X509_free ( X509 *a ) ;
 destructor: X509_free
 
-C-TYPE: X509_STORE
+c-type: X509_STORE
 FUNCTION: X509_STORE* X509_STORE_new ( ) ;
 
 CONSTANT: X509_R_CERT_ALREADY_IN_HASH_TABLE 101 ;

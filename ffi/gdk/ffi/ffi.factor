@@ -25,7 +25,7 @@ LIBRARY: gdk
 STRUCT: cairo_rectangle_int_t
     { x int } { y int } { width int } { height int } ;
 
-C-TYPE: cairo_region_t
+c-type: cairo_region_t
 ! workaround>
 
 FOREIGN-RECORD-TYPE: cairo.RectangleInt cairo_rectangle_int_t

@@ -635,8 +635,8 @@ STRUCT: D3D11_BOX
     { bottom UINT }
     { back   UINT } ;
 
-C-TYPE: ID3D11Device
-C-TYPE: ID3D11ClassLinkage
+c-type: ID3D11Device
+c-type: ID3D11ClassLinkage
 
 COM-INTERFACE: ID3D11DeviceChild IUnknown {1841e5c8-16b0-489b-bcc8-44cfb0d5deae}
     void GetDevice ( ID3D11Device** ppDevice )

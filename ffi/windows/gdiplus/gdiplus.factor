@@ -915,34 +915,34 @@ STRUCT: ColorMap
     { oldColor GpColor }
     { newColor GpColor } ;
 
-C-TYPE: GpGraphics
-C-TYPE: GpPen
-C-TYPE: GpBrush
-C-TYPE: GpHatch
-C-TYPE: GpSolidFill
-C-TYPE: GpPath
-C-TYPE: GpMatrix
-C-TYPE: GpPathIterator
-C-TYPE: GpCustomLineCap
-C-TYPE: GpAdjustableArrowCap
-C-TYPE: GpImage
-C-TYPE: GpMetafile
-C-TYPE: GpImageAttributes
-C-TYPE: GpCachedBitmap
-C-TYPE: GpBitmap
-C-TYPE: GpPathGradient
-C-TYPE: GpLineGradient
-C-TYPE: GpTexture
-C-TYPE: GpFont
-C-TYPE: GpFontCollection
-C-TYPE: GpFontFamily
-C-TYPE: GpStringFormat
-C-TYPE: GpRegion
-C-TYPE: CGpEffect
+c-type: GpGraphics
+c-type: GpPen
+c-type: GpBrush
+c-type: GpHatch
+c-type: GpSolidFill
+c-type: GpPath
+c-type: GpMatrix
+c-type: GpPathIterator
+c-type: GpCustomLineCap
+c-type: GpAdjustableArrowCap
+c-type: GpImage
+c-type: GpMetafile
+c-type: GpImageAttributes
+c-type: GpCachedBitmap
+c-type: GpBitmap
+c-type: GpPathGradient
+c-type: GpLineGradient
+c-type: GpTexture
+c-type: GpFont
+c-type: GpFontCollection
+c-type: GpFontFamily
+c-type: GpStringFormat
+c-type: GpRegion
+c-type: CGpEffect
 
 ! dummy out other windows types we don't care to define yet
-C-TYPE: LOGFONTA
-C-TYPE: LOGFONTW
+c-type: LOGFONTA
+c-type: LOGFONTW
 
 FUNCTION: GpStatus GdipCreateAdjustableArrowCap ( REAL x, REAL x, BOOL x, GpAdjustableArrowCap** x ) ;
 FUNCTION: GpStatus GdipGetAdjustableArrowCapFillState ( GpAdjustableArrowCap* x, BOOL* x ) ;

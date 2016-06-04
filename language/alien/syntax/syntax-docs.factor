@@ -81,15 +81,15 @@ HELP: ENUM:
     { $code "ENUM: tv_peripherals_4 < uint\n{ appletv 1 } { chromecast 2 } { roku 4 } ;" }
 } ;
 
-HELP: C-TYPE:
-{ $syntax "C-TYPE: type" }
+HELP: c-type:
+{ $syntax "c-type: type" }
 { $values { "type" "a new C type" } }
 { $description "Defines a new, opaque C type. Since it is opaque, " { $snippet "type" } " will not be directly usable as a parameter or return type of a " { $link postpone: FUNCTION: } " or as a slot of a " { $link postpone: STRUCT: } ". However, it can be used as the type of a " { $link pointer } "." $nl
-{ $snippet "C-TYPE:" } " can also be used to forward declare C types, allowing circular dependencies to occur between types. For example:"
-{ $code "C-TYPE: forward
+{ $snippet "c-type:" } " can also be used to forward declare C types, allowing circular dependencies to occur between types. For example:"
+{ $code "c-type: forward
 STRUCT: backward { x forward* } ;
 STRUCT: forward { x backward* } ;" } }
-{ $notes "Primitive C types are displayed using " { $snippet "C-TYPE:" } " syntax when they are " { $link see } "n." } ;
+{ $notes "Primitive C types are displayed using " { $snippet "c-type:" } " syntax when they are " { $link see } "n." } ;
 
 HELP: CALLBACK:
 { $syntax "CALLBACK: return type ( parameters )" }

@@ -140,7 +140,7 @@ STRUCT: D3D10_SHADER_DEBUG_INFO
     { UintOffset        UINT }
     { StringOffset      UINT } ;
 
-C-TYPE: ID3D10ShaderReflection1
+c-type: ID3D10ShaderReflection1
 TYPEDEF: ID3D10ShaderReflection1* LPD3D10SHADERREFLECTION1 ;
 
 COM-INTERFACE: ID3D10ShaderReflection1 IUnknown {C3457783-A846-47CE-9520-CEA6F66E7447}

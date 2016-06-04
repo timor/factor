@@ -20,7 +20,7 @@ CONSTANT: TCDBTTABLE 3 ;
 ! FIXME: on windows 64bits this isn't correct, because long is 32bits there, and time_t is int64
 TYPEDEF: long tokyo_time_t ;
 
-C-TYPE: TCLIST
+c-type: TCLIST
 
 FUNCTION: TCLIST* tclistnew ( ) ;
 FUNCTION: TCLIST* tclistnew2 ( int anum ) ;

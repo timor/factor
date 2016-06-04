@@ -26,7 +26,7 @@ TUPLE: a-tuple slot1 slot2 { slot3 integer } ;
 ! : do-"that" ( x -- y ) ;
 
 ! ! C-TYPE
-C-TYPE: cairo_snurface_t
+c-type: cairo_snurface_t
 
 ! ! CHAR
 : stuff-with-chars ( -- K \n )

@@ -32,6 +32,8 @@ SYNTAX: ENUM:
 
 SYNTAX: C-TYPE:
     void CREATE-C-TYPE typedef ;
+SYNTAX: c-type:
+    void CREATE-C-TYPE typedef ;
 
 SYNTAX: &:
     scan-token current-library get '[ _ _ address-of ] append! ;

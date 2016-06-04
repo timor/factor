@@ -99,8 +99,8 @@ CONSTANT: SQLITE_OPEN_TEMP_JOURNAL     0x00001000 ;
 CONSTANT: SQLITE_OPEN_SUBJOURNAL       0x00002000 ;
 CONSTANT: SQLITE_OPEN_MASTER_JOURNAL   0x00004000 ;
 
-C-TYPE: sqlite3
-C-TYPE: sqlite3_stmt
+c-type: sqlite3
+c-type: sqlite3_stmt
 TYPEDEF: longlong sqlite3_int64 ;
 TYPEDEF: ulonglong sqlite3_uint64 ;
 

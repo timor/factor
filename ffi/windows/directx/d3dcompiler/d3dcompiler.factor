@@ -3,12 +3,12 @@ in: windows.directx.d3dcompiler
 
 LIBRARY: d3dcompiler
 
-C-TYPE: D3D_SHADER_MACRO
-C-TYPE: ID3DBlob
+c-type: D3D_SHADER_MACRO
+c-type: ID3DBlob
 TYPEDEF: ID3DBlob* LPD3DBLOB ;
-C-TYPE: ID3DInclude
+c-type: ID3DInclude
 TYPEDEF: ID3DInclude* LPD3DINCLUDE ;
-C-TYPE: ID3D10Effect
+c-type: ID3D10Effect
 
 FUNCTION: HRESULT D3DCompile (
     LPCVOID           pSrcData,

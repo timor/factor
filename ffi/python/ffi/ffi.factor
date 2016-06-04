@@ -13,7 +13,7 @@ cdecl add-library >>
 
 LIBRARY: python
 
-C-TYPE: PyObject
+c-type: PyObject
 
 ! Methods
 CONSTANT: METH_OLDARGS  0x0000 ;
@@ -25,7 +25,7 @@ CONSTANT: METH_CLASS    0x0010 ;
 CONSTANT: METH_STATIC   0x0020 ;
 CONSTANT: METH_COEXIST  0x0040 ;
 
-C-TYPE: PyCFunction
+c-type: PyCFunction
 
 STRUCT: PyMethodDef
     { ml_name c-string }

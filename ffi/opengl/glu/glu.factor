@@ -17,10 +17,10 @@ os {
 LIBRARY: glu
 
 ! These are defined as structs in glu.h, but we only ever use pointers to them
-C-TYPE: GLUnurbs
-C-TYPE: GLUquadric
-C-TYPE: GLUtesselator
-C-TYPE: GLubyte
+c-type: GLUnurbs
+c-type: GLUquadric
+c-type: GLUtesselator
+c-type: GLubyte
 TYPEDEF: void* GLUfuncptr ;
 
 ! StringName

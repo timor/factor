@@ -10,9 +10,9 @@ COM-INTERFACE: IUnknown f {00000000-0000-0000-C000-000000000046}
     ULONG AddRef ( )
     ULONG Release ( ) ;
 
-C-TYPE: IAdviseSink
-C-TYPE: IEnumFORMATETC
-C-TYPE: IEnumSTATDATA
+c-type: IAdviseSink
+c-type: IEnumFORMATETC
+c-type: IEnumSTATDATA
 
 COM-INTERFACE: IDataObject IUnknown {0000010E-0000-0000-C000-000000000046}
     HRESULT GetData ( FORMATETC* pFormatetc, STGMEDIUM* pmedium )

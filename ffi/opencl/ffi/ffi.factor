@@ -74,15 +74,15 @@ TYPEDEF: int  cl_GLint ;
 TYPEDEF: uint cl_GLenum ;
 
 ! cl.h
-C-TYPE: _cl_platform_id
-C-TYPE: _cl_device_id
-C-TYPE: _cl_context
-C-TYPE: _cl_command_queue
-C-TYPE: _cl_mem
-C-TYPE: _cl_program
-C-TYPE: _cl_kernel
-C-TYPE: _cl_event
-C-TYPE: _cl_sampler
+c-type: _cl_platform_id
+c-type: _cl_device_id
+c-type: _cl_context
+c-type: _cl_command_queue
+c-type: _cl_mem
+c-type: _cl_program
+c-type: _cl_kernel
+c-type: _cl_event
+c-type: _cl_sampler
 
 TYPEDEF: _cl_platform_id*    cl_platform_id ;
 TYPEDEF: _cl_device_id*      cl_device_id ;

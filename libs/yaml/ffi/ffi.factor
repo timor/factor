@@ -11,7 +11,7 @@ in: yaml.ffi
 "libyaml" { "yaml" "yaml-0" "libyaml-0-2" } find-library-from-list cdecl add-library
 >>
 
-C-TYPE: FILE
+c-type: FILE
 
 LIBRARY: libyaml
 

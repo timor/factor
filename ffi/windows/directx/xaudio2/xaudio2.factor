@@ -114,7 +114,7 @@ STRUCT: XAUDIO2_VOICE_DETAILS
     { InputChannels   UINT32 }
     { InputSampleRate UINT32 } ;
 
-C-TYPE: IXAudio2Voice
+c-type: IXAudio2Voice
 
 STRUCT: XAUDIO2_SEND_DESCRIPTOR
     { Flags        UINT32         }
@@ -200,11 +200,11 @@ CONSTANT: XAUDIO2_LOG_LOCKS      0x0080 ;
 CONSTANT: XAUDIO2_LOG_MEMORY     0x0100 ;
 CONSTANT: XAUDIO2_LOG_STREAMING  0x1000 ;
 
-C-TYPE: IXAudio2EngineCallback
-C-TYPE: IXAudio2VoiceCallback
-C-TYPE: IXAudio2SourceVoice
-C-TYPE: IXAudio2SubmixVoice
-C-TYPE: IXAudio2MasteringVoice
+c-type: IXAudio2EngineCallback
+c-type: IXAudio2VoiceCallback
+c-type: IXAudio2SourceVoice
+c-type: IXAudio2SubmixVoice
+c-type: IXAudio2MasteringVoice
 
 COM-INTERFACE: IXAudio2 IUnknown {8bcf1f58-9fe7-4583-8ac6-e2adc465c8bb}
     HRESULT GetDeviceCount ( UINT32* pCount )

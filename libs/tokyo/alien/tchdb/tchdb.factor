@@ -6,8 +6,8 @@ in: tokyo.alien.tchdb
 
 LIBRARY: tokyocabinet
 
-C-TYPE: TCXSTR
-C-TYPE: TCHDB
+c-type: TCXSTR
+c-type: TCHDB
 
 CONSTANT: HDBFOPEN  1 ;
 CONSTANT: HDBFFATAL 2 ;
