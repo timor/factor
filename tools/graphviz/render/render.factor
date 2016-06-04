@@ -19,7 +19,7 @@ CONSTANT: standard-layouts {
     "osage"
     "sfdp"
     "twopi"
-}
+} ;
 
 PRIVATE>
 
@@ -178,7 +178,7 @@ CONSTANT: standard-formats {
     ! ! ! Canvas formats don't actually use path argument...
     ! "gtk"
     ! "xlib"
-}
+} ;
 
 : define-graphviz-by-layout ( layout -- )
     [ "graphviz.render" create-word ]

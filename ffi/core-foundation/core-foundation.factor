@@ -7,7 +7,7 @@ in: core-foundation
 TYPEDEF: void* CFTypeRef
 
 TYPEDEF: void* CFAllocatorRef
-CONSTANT: kCFAllocatorDefault f
+CONSTANT: kCFAllocatorDefault f ;
 
 TYPEDEF: bool Boolean
 TYPEDEF: long CFIndex

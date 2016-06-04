@@ -13,8 +13,8 @@ UNIFORM-TUPLE: mvp-uniforms
     { "mv_matrix"  mat4-uniform f }
     { "p_matrix"   mat4-uniform f } ;
 
-CONSTANT: -pi/2 $[ pi -2.0 / ]
-CONSTANT:  pi/2 $[ pi  2.0 / ]
+CONSTANT: -pi/2 $[ pi -2.0 / ] ;
+CONSTANT:  pi/2 $[ pi  2.0 / ] ;
 
 TUPLE: wasd-world < game-world location yaw pitch p-matrix ;
 
@@ -52,7 +52,7 @@ M: wasd-world wasd-fly-vertically? drop t ;
 : <mvp-uniforms> ( world -- uniforms )
     [ wasd-mv-matrix ] [ wasd-p-matrix ] bi mvp-uniforms boa ;
 
-CONSTANT: fov 0.7
+CONSTANT: fov 0.7 ;
 
 : wasd-fov-vector ( world -- fov )
     dim>> dup first2 min >float v/n fov v*n ; inline

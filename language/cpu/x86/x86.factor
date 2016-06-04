@@ -324,7 +324,7 @@ M:: x86 %box-displaced-alien ( dst displacement base temp base-class -- )
 
 HOOK: has-small-reg? cpu ( reg size -- ? ) ;
 
-CONSTANT: have-byte-regs { EAX ECX EDX EBX }
+CONSTANT: have-byte-regs { EAX ECX EDX EBX } ;
 
 M: x86.32 has-small-reg?
     {

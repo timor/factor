@@ -96,7 +96,7 @@ CONSTANT: fortran>c-types H{
     { "double-precision" double-precision-type }
     { "complex"          real-complex-type     }
     { "double-complex"   double-complex-type   }
-}
+} ;
 
 : append-dimensions ( base-c-type type -- c-type )
     dims>> [ product 2array ] when* ;

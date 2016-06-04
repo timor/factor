@@ -89,7 +89,7 @@ TUPLE: annotation < entity parent ;
 ! LINKS, ETC
 ! ! !
 
-CONSTANT: pastebin-url URL" $pastebin/"
+CONSTANT: pastebin-url URL" $pastebin/" ;
 
 : paste-url ( id -- url )
     "$pastebin/paste" >url swap "id" set-query-param ;

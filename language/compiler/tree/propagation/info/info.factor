@@ -29,9 +29,9 @@ TUPLE: value-info-state
     literal?
     slots ;
 
-CONSTANT: null-info T{ value-info-state f null empty-interval }
+CONSTANT: null-info T{ value-info-state f null empty-interval } ;
 
-CONSTANT: object-info T{ value-info-state f object full-interval }
+CONSTANT: object-info T{ value-info-state f object full-interval } ;
 
 : interval>literal ( class interval -- literal literal? )
     dup special-interval? [

@@ -7,7 +7,7 @@ sequences splitting strings ;
 FROM: mongodb.driver => update ;
 in: mongodb.gridfs
 
-CONSTANT: default-chunk-size 262144
+CONSTANT: default-chunk-size 262144 ;
 
 TUPLE: gridfs 
     { bucket string } 

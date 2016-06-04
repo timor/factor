@@ -4,9 +4,9 @@ USING: checksums io.binary kernel math sequences
 sequences.private ;
 in: checksums.crc32
 
-CONSTANT: crc32-polynomial 0xedb88320
+CONSTANT: crc32-polynomial 0xedb88320 ;
 
-CONSTANT: crc32-table V{ }
+CONSTANT: crc32-table V{ } ;
 
 256 iota [
     8 [

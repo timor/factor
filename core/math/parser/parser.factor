@@ -115,10 +115,10 @@ TUPLE: float-parse
 ! does some rounding; For example,
 ! 0x1.0p-1074 is the smallest IE754 double, but floats down to
 ! 0x0.fffffffffffffcp-1074 are parsed as 0x1.0p-1074
-CONSTANT: max-magnitude-10 309
-CONSTANT: min-magnitude-10 -323
-CONSTANT: max-magnitude-2 1027
-CONSTANT: min-magnitude-2 -1074
+CONSTANT: max-magnitude-10 309 ;
+CONSTANT: min-magnitude-10 -323 ;
+CONSTANT: max-magnitude-2 1027 ;
+CONSTANT: min-magnitude-2 -1074 ;
 
 : make-float-dec-exponent ( float-parse n/f -- float/f )
     over [ exponent>> ] [ magnitude>> ] bi +
@@ -387,7 +387,7 @@ CONSTANT: TENS B{
     52 52 52 52 52 52 52 52 52 52 53 53 53 53 53 53 53 53 53 53
     54 54 54 54 54 54 54 54 54 54 55 55 55 55 55 55 55 55 55 55
     56 56 56 56 56 56 56 56 56 56 57 57 57 57 57 57 57 57 57 57
-}
+} ;
 
 CONSTANT: ONES B{
     48 49 50 51 52 53 54 55 56 57 48 49 50 51 52 53 54 55 56 57
@@ -395,7 +395,7 @@ CONSTANT: ONES B{
     48 49 50 51 52 53 54 55 56 57 48 49 50 51 52 53 54 55 56 57
     48 49 50 51 52 53 54 55 56 57 48 49 50 51 52 53 54 55 56 57
     48 49 50 51 52 53 54 55 56 57 48 49 50 51 52 53 54 55 56 57
-}
+} ;
 
 : (two-digit) ( num accum -- num' accum )
     [

@@ -5,7 +5,7 @@ in: unix.signals.tests
 symbol: sigusr1-count
 0 sigusr1-count set-global
 
-CONSTANT: test-sigusr1-handler [ 1 sigusr1-count +@ ]
+CONSTANT: test-sigusr1-handler [ 1 sigusr1-count +@ ] ;
 
 "=========" print
 "NOTE: This test uses SIGUSR1. It may break or cause unwanted behavior" print

@@ -6,21 +6,21 @@ memoize sequences sequences.extras sets sets.extras ;
 
 in: math.unicode
 
-CONSTANT: ½ 1/2
-CONSTANT: ¼ 1/4
-CONSTANT: ¾ 3/4
-CONSTANT: ⅓ 1/3
-CONSTANT: ⅔ 2/3
-CONSTANT: ⅕ 1/5
-CONSTANT: ⅖ 2/5
-CONSTANT: ⅗ 3/5
-CONSTANT: ⅘ 4/5
-CONSTANT: ⅙ 1/6
-CONSTANT: ⅚ 5/6
-CONSTANT: ⅛ 1/8
-CONSTANT: ⅜ 3/8
-CONSTANT: ⅝ 5/8
-CONSTANT: ⅞ 7/8
+CONSTANT: ½ 1/2 ;
+CONSTANT: ¼ 1/4 ;
+CONSTANT: ¾ 3/4 ;
+CONSTANT: ⅓ 1/3 ;
+CONSTANT: ⅔ 2/3 ;
+CONSTANT: ⅕ 1/5 ;
+CONSTANT: ⅖ 2/5 ;
+CONSTANT: ⅗ 3/5 ;
+CONSTANT: ⅘ 4/5 ;
+CONSTANT: ⅙ 1/6 ;
+CONSTANT: ⅚ 5/6 ;
+CONSTANT: ⅛ 1/8 ;
+CONSTANT: ⅜ 3/8 ;
+CONSTANT: ⅝ 5/8 ;
+CONSTANT: ⅞ 7/8 ;
 
 ALIAS: ≤ <= ;
 ALIAS: ≥ >= ;
@@ -47,7 +47,7 @@ ALIAS: ⌊ floor ;
 ALIAS: π pi ;
 
 MEMO: φ ( -- n ) 5 √ 1 + 2 / ;
-CONSTANT: ∞ 1/0.
+CONSTANT: ∞ 1/0. ;
 
 ALIAS: Π product ;
 ALIAS: Σ sum ;

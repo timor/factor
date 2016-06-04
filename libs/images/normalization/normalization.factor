@@ -11,8 +11,8 @@ in: images.normalization
 
 <PRIVATE
 
-CONSTANT: don't-care 127
-CONSTANT: fill-value 255
+CONSTANT: don't-care 127 ;
+CONSTANT: fill-value 255 ;
 
 : permutation ( src dst -- seq )
     swap '[ _ index [ don't-care ] unless* ] { } map-as

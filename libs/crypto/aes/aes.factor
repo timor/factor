@@ -7,14 +7,14 @@ math.ranges memoize namespaces sequences sequences.private
 sequences.unrolled ;
 in: crypto.aes
 
-CONSTANT: AES_BLOCK_SIZE 16
+CONSTANT: AES_BLOCK_SIZE 16 ;
 ! FIPS-197 AES
 ! input block, state, output block -- 4 32-bit words
 CONSTANT: FIPS-197 {
     { 128 10 } ! aes-128 -- Key(4) Block(4) Rounds(10)
     { 192 12 } ! aes-192 -- Key(6) Block(4) Rounds(12)
     { 256 14 } ! aes-256 -- Key(8) Block(4) Rounds(14)
-}
+} ;
 
 <PRIVATE
 

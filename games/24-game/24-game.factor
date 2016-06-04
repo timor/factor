@@ -34,7 +34,7 @@ in: 24-game
 
 : q ( -- obj ) "quit" ;
 
-CONSTANT: (operators) { + - * / rot swap q }
+CONSTANT: (operators) { + - * / rot swap q } ;
 
 : operators ( array -- operators )
     length 3 < [ \ rot (operators) remove ] [ (operators) ] if ;

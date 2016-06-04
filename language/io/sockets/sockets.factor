@@ -363,7 +363,7 @@ symbol: remote-address
     check-receive
     [ (receive-unsafe) ] [ addr>> ] bi parse-sockaddr ; inline
 
-CONSTANT: datagram-size 65536
+CONSTANT: datagram-size 65536 ;
 
 :: receive ( datagram -- bytes addrspec )
     datagram-size (byte-array) :> buf

@@ -10,7 +10,7 @@ windows.user32 classes.struct ;
 SPECIALIZED-ARRAY: DIDEVICEOBJECTDATA
 in: game.input.dinput
 
-CONSTANT: MOUSE-BUFFER-SIZE 16
+CONSTANT: MOUSE-BUFFER-SIZE 16 ;
 
 singleton: dinput-game-input-backend
 

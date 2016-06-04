@@ -4,16 +4,16 @@ USING: accessors kernel namespaces sequences ui.gadgets.frames
 ui.gadgets.grids ui.gadgets.icons ui.gadgets.theme ;
 in: ui.gadgets.corners
 
-CONSTANT: @center { 1 1 }
-CONSTANT: @left { 0 1 }
-CONSTANT: @right { 2 1 }
-CONSTANT: @top { 1 0 }
-CONSTANT: @bottom { 1 2 }
+CONSTANT: @center { 1 1 } ;
+CONSTANT: @left { 0 1 } ;
+CONSTANT: @right { 2 1 } ;
+CONSTANT: @top { 1 0 } ;
+CONSTANT: @bottom { 1 2 } ;
 
-CONSTANT: @top-left { 0 0 }
-CONSTANT: @top-right { 2 0 }
-CONSTANT: @bottom-left { 0 2 }
-CONSTANT: @bottom-right { 2 2 }
+CONSTANT: @top-left { 0 0 } ;
+CONSTANT: @top-right { 2 0 } ;
+CONSTANT: @bottom-left { 0 2 } ;
+CONSTANT: @bottom-right { 2 2 } ;
 
 symbol: name
 

@@ -30,7 +30,7 @@ M: mdb-pool make-connection
 
 : <mdb-pool> ( mdb -- pool ) [ mdb-pool <pool> ] dip >>mdb ; inline
 
-CONSTANT: PARTIAL? "partial?"
+CONSTANT: PARTIAL? "partial?" ;
 
 ERROR: mdb-error msg ;
 

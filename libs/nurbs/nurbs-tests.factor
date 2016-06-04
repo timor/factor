@@ -5,8 +5,8 @@ in: nurbs.tests
 
 symbol: test-nurbs
 
-CONSTANT:  √2/2 $[ 0.5 sqrt     ]
-CONSTANT: -√2/2 $[ 0.5 sqrt neg ]
+CONSTANT:  √2/2 $[ 0.5 sqrt     ] ;
+CONSTANT: -√2/2 $[ 0.5 sqrt neg ] ;
 
 ! unit circle as NURBS
 3 {

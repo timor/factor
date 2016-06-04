@@ -73,7 +73,7 @@ GENERIC: draw-cell ( font cell -- ) ;
 M: string cell-dim single-line text-dim first2 ceiling 0 ;
 M: string draw-cell single-line draw-text ;
 
-CONSTANT: image-padding 2
+CONSTANT: image-padding 2 ;
 
 M: image-name cell-dim nip image-dim first2 image-padding ;
 M: image-name draw-cell nip draw-image ;

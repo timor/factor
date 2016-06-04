@@ -22,7 +22,7 @@ M: persistent-vector length count>> ;
 
 <PRIVATE
 
-CONSTANT: node-size 32
+CONSTANT: node-size 32 ;
 
 : node-mask ( m -- n ) node-size mod ; inline
 

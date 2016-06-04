@@ -14,9 +14,9 @@ FROM: models => change-model ;
 SPECIALIZED-VECTORS: ushort float-4 ;
 in: gml.viewer
 
-CONSTANT: neutral-edge-color float-4{ 1 1 1 1 }
-CONSTANT: neutral-face-color float-4{ 1 1 1 1 }
-CONSTANT: selected-face-color float-4{ 1 0.9 0.8 1 }
+CONSTANT: neutral-edge-color float-4{ 1 1 1 1 } ;
+CONSTANT: neutral-face-color float-4{ 1 1 1 1 } ;
+CONSTANT: selected-face-color float-4{ 1 0.9 0.8 1 } ;
 
 : double-4>float-4 ( in: double-4 -- out: float-4 )
     [ head>> ] [ tail>> ] bi double-2 float-4 vconvert ; inline
@@ -229,7 +229,7 @@ TYPED: rotate-view-mode ( world: gml-viewer-world -- )
         [ f >>view-edges? t >>view-faces? ] if
     ] [ t >>view-edges? ] if drop ;
 
-CONSTANT: edge-hitbox-radius 0.05
+CONSTANT: edge-hitbox-radius 0.05 ;
 
 :: line-nearest-t ( p0 u q0 v -- tp tq )
     p0 q0 v- :> w0

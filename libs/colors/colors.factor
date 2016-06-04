@@ -27,7 +27,7 @@ M: color blue>> >rgba blue>> ;
 
 : opaque? ( color -- ? ) alpha>> 1 number= ;
 
-CONSTANT: transparent T{ rgba f 0.0 0.0 0.0 0.0 }
+CONSTANT: transparent T{ rgba f 0.0 0.0 0.0 0.0 } ;
 
 : inverse-color ( color -- color' )
     >rgba-components [ [ 1.0 swap - ] tri@ ] dip <rgba> ;

@@ -119,7 +119,7 @@ CONSTANT: action-gestures
         { "s" save-action }
         { "S" save-as-action }
         { "w" close-action }
-    }
+    } ;
 
 ! Modifiers
 SYMBOLS: C+ A+ M+ S+ ;

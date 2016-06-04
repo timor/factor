@@ -260,9 +260,9 @@ MACRO:: read-matched ( ch -- quot: ( n string tag -- n' string slice' ) )
 
 : read-string-payload ( n string -- n' string )
     over [
-        { char: \ char: " } slice-til-separator-inclusive {
+        { char: \ char: \" } slice-til-separator-inclusive {
             { f [ drop ] }
-            { char: " [ drop ] }
+            { char: \" [ drop ] }
             { char: \ [ drop next-char-from drop read-string-payload ] }
         } case
     ] [
@@ -412,7 +412,7 @@ CONSTANT: factor-lexing-rules {
     T{ line-comment-lexer { generator read-exclamation } { delimiter char: ! } }
     T{ backtick-lexer { generator read-backtick } { delimiter char: ` } }
     T{ backslash-lexer { generator read-backslash } { delimiter char: \ } }
-    T{ dquote-lexer { generator read-string } { delimiter char: " } { escape char: \ } }
+    T{ dquote-lexer { generator read-string } { delimiter char: \" } { escape char: \ } }
     T{ decorator-lexer { generator read-decorator } { delimiter char: @ } }
     
     T{ colon-lexer { generator read-colon } { delimiter char: : } }
@@ -428,7 +428,7 @@ CONSTANT: factor-lexing-rules {
     T{ whitespace-lexer { generator read-token-or-whitespace } { delimiter char: \s } }
     T{ whitespace-lexer { generator read-token-or-whitespace } { delimiter char: \r } }
     T{ whitespace-lexer { generator read-token-or-whitespace } { delimiter char: \n } }
-}
+} ;
 
 : lex-factor ( n/f string -- n'/f string literal )
     factor-lexing-rules rules>call-lexer ;
@@ -457,10 +457,10 @@ CONSTANT: factor-lexing-rules {
         { char: ! [ read-exclamation ] }
         { char: ` [ read-backtick ] }
         { char: \ [ read-backslash ] }
-        { char: " [ read-string ] }
-        { char: [ [ read-bracket ] }
-        { char: { [ read-brace ] }
-        { char: ( [ read-paren ] }
+        { char: \" [ read-string ] }
+        { char: \[ [ read-bracket ] }
+        { char: \{ [ read-brace ] }
+        { char: \( [ read-paren ] }
         { char: \s [ read-token-or-whitespace ] }
         { char: \r [ read-token-or-whitespace ] }
         { char: \n [ read-token-or-whitespace ] }

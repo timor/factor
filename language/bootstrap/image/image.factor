@@ -31,7 +31,7 @@ CONSTANT: image-names
     {
         "windows-x86.32" "unix-x86.32"
         "windows-x86.64" "unix-x86.64"
-    }
+    } ;
 
 <PRIVATE
 
@@ -88,14 +88,14 @@ symbol: objects
 
 ! Constants need to be synced with
 !   vm/image.hpp
-CONSTANT: image-magic 0x0f0e0d0c
-CONSTANT: image-version 4
+CONSTANT: image-magic 0x0f0e0d0c ;
+CONSTANT: image-version 4 ;
 
-CONSTANT: data-base 1024
+CONSTANT: data-base 1024 ;
 
-CONSTANT: header-size 10
+CONSTANT: header-size 10 ;
 
-CONSTANT: data-heap-size-offset 3
+CONSTANT: data-heap-size-offset 3 ;
 
 symbol: sub-primitives
 

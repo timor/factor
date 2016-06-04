@@ -71,7 +71,7 @@ M:: proc exec-proc ( registers gml proc -- registers gml )
 
 FROM: combinators.private => execute-effect-unsafe ;
 
-CONSTANT: primitive-effect ( registers gml -- registers gml )
+CONSTANT: primitive-effect ( registers gml -- registers gml ) ;
 
 M: word exec-proc primitive-effect execute-effect-unsafe ;
 
@@ -130,7 +130,7 @@ EXEC:: pathname ( registers gml obj -- registers gml )
 
 ! List building and stuff
 TUPLE: marker < identity-tuple ;
-CONSTANT: marker T{ marker }
+CONSTANT: marker T{ marker } ;
 
 ERROR: no-marker-found ;
 ERROR: gml-stack-underflow ;

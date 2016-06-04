@@ -119,7 +119,7 @@ M: page-elt next-elt
     3dup [ first ] [ last-line# ] [ lines>> ] tri* - >
     [ drop nip doc-end ] [ nip lines>> +line ] if ;
 
-CONSTANT: line-elt T{ page-elt f 1 }
+CONSTANT: line-elt T{ page-elt f 1 } ;
 
 singleton: doc-elt
 

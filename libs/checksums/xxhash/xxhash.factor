@@ -7,11 +7,11 @@ locals math math.bitwise math.ranges sequences ;
 
 in: checksums.xxhash
 
-CONSTANT: prime1 2654435761
-CONSTANT: prime2 2246822519
-CONSTANT: prime3 3266489917
-CONSTANT: prime4 668265263
-CONSTANT: prime5 374761393
+CONSTANT: prime1 2654435761 ;
+CONSTANT: prime2 2246822519 ;
+CONSTANT: prime3 3266489917 ;
+CONSTANT: prime4 668265263 ;
+CONSTANT: prime5 374761393 ;
 
 TUPLE: xxhash seed ;
 

@@ -32,7 +32,7 @@ M: x87-env (set-fp-env-register)
 M: x86 (fp-env-registers)
     sse2? [ <sse-env> <x87-env> 2array ] [ <x87-env> 1array ] if ;
 
-CONSTANT: sse-exception-flag-bits 0x3f
+CONSTANT: sse-exception-flag-bits 0x3f ;
 CONSTANT: sse-exception-flag>bit
     H{
         { +fp-invalid-operation+ 0x01 }
@@ -42,7 +42,7 @@ CONSTANT: sse-exception-flag>bit
         { +fp-inexact+           0x20 }
     }
 
-CONSTANT: sse-fp-traps-bits 0x1f80
+CONSTANT: sse-fp-traps-bits 0x1f80 ;
 CONSTANT: sse-fp-traps>bit
     H{
         { +fp-invalid-operation+ 0x0080 }
@@ -52,7 +52,7 @@ CONSTANT: sse-fp-traps>bit
         { +fp-inexact+           0x1000 }
     }
 
-CONSTANT: sse-rounding-mode-bits 0x6000
+CONSTANT: sse-rounding-mode-bits 0x6000 ;
 CONSTANT: sse-rounding-mode>bit
     $[ H{
         { +round-nearest+ 0x0000 }
@@ -61,7 +61,7 @@ CONSTANT: sse-rounding-mode>bit
         { +round-zero+    0x6000 }
     } >biassoc ]
 
-CONSTANT: sse-denormal-mode-bits 0x8040
+CONSTANT: sse-denormal-mode-bits 0x8040 ;
 
 M: sse-env (get-exception-flags) ( register -- exceptions )
     mxcsr>> sse-exception-flag>bit mask> ; inline
@@ -90,7 +90,7 @@ M: sse-env (set-denormal-mode) ( register mode -- register' )
 
 singleton: +fp-x87-stack-fault+
 
-CONSTANT: x87-exception-bits 0x7f
+CONSTANT: x87-exception-bits 0x7f ;
 CONSTANT: x87-exception>bit
     H{
         { +fp-invalid-operation+ 0x01 }
@@ -101,7 +101,7 @@ CONSTANT: x87-exception>bit
         { +fp-x87-stack-fault+   0x40 }
     }
 
-CONSTANT: x87-rounding-mode-bits 0x0c00
+CONSTANT: x87-rounding-mode-bits 0x0c00 ;
 CONSTANT: x87-rounding-mode>bit
     $[ H{
         { +round-nearest+ 0x0000 }

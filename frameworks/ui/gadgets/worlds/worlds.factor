@@ -22,7 +22,7 @@ CONSTANT: default-world-pixel-format-attributes
     {
         windowed
         double-buffered
-    }
+    } ;
 
 CONSTANT: default-world-window-controls
     {
@@ -31,7 +31,7 @@ CONSTANT: default-world-window-controls
         minimize-button
         maximize-button
         resize-handles
-    }
+    } ;
 
 TUPLE: world < track
     active? focused? grab-input? fullscreen?

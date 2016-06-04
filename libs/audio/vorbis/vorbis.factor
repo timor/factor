@@ -23,7 +23,7 @@ TUPLE: vorbis-stream < disposable
     { temp-state ogg-stream-state }
     { #vorbis-headers integer initial: 0 } ;
 
-CONSTANT: stream-buffer-size 4096
+CONSTANT: stream-buffer-size 4096 ;
 
 ERROR: ogg-error code ;
 ERROR: vorbis-error code ;

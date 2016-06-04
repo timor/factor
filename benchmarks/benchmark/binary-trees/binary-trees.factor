@@ -25,7 +25,7 @@ M: tree-node item-check
 
 M: f item-check drop 0 ;
 
-CONSTANT: min-depth 4
+CONSTANT: min-depth 4 ;
 
 : stretch-tree ( max-depth -- )
     1 + 0 over bottom-up-tree item-check

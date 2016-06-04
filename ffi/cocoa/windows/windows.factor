@@ -4,22 +4,22 @@ USING: cocoa cocoa.classes kernel math ;
 in: cocoa.windows
 
 ! Window styles
-CONSTANT: NSBorderlessWindowMask           0
-CONSTANT: NSTitledWindowMask               1
-CONSTANT: NSClosableWindowMask             2
-CONSTANT: NSMiniaturizableWindowMask       4
-CONSTANT: NSResizableWindowMask            8
-CONSTANT: NSTexturedBackgroundWindowMask 256
+CONSTANT: NSBorderlessWindowMask           0 ;
+CONSTANT: NSTitledWindowMask               1 ;
+CONSTANT: NSClosableWindowMask             2 ;
+CONSTANT: NSMiniaturizableWindowMask       4 ;
+CONSTANT: NSResizableWindowMask            8 ;
+CONSTANT: NSTexturedBackgroundWindowMask 256 ;
 
 ! Additional panel-only styles
-CONSTANT: NSUtilityWindowMask       16
-CONSTANT: NSDocModalWindowMask      64
-CONSTANT: NSNonactivatingPanelMask 128
-CONSTANT: NSHUDWindowMask    0x1000
+CONSTANT: NSUtilityWindowMask       16 ;
+CONSTANT: NSDocModalWindowMask      64 ;
+CONSTANT: NSNonactivatingPanelMask 128 ;
+CONSTANT: NSHUDWindowMask    0x1000 ;
 
-CONSTANT: NSBackingStoreRetained    0
-CONSTANT: NSBackingStoreNonretained 1
-CONSTANT: NSBackingStoreBuffered    2
+CONSTANT: NSBackingStoreRetained    0 ;
+CONSTANT: NSBackingStoreNonretained 1 ;
+CONSTANT: NSBackingStoreBuffered    2 ;
 
 : <NSWindow> ( rect style class -- window )
     [ -> alloc ] curry 2dip NSBackingStoreBuffered 1

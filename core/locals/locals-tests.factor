@@ -185,7 +185,7 @@ M:: fixnum next-method-test ( a -- b ) a call-next-method 1 + ;
 
 :: a-word-with-locals ( a b -- ) ;
 
-CONSTANT: new-definition "USING: math ;\nin: locals.tests\n: a-word-with-locals ( -- x ) 2 3 + ;\n"
+CONSTANT: new-definition "USING: math ;\nin: locals.tests\n: a-word-with-locals ( -- x ) 2 3 + ;\n" ;
 
 { } [ new-definition eval( -- ) ] unit-test
 
@@ -194,7 +194,7 @@ CONSTANT: new-definition "USING: math ;\nin: locals.tests\n: a-word-with-locals 
     new-definition =
 ] unit-test
 
-CONSTANT: method-definition "USING: locals.tests sequences ;\nM:: sequence method-with-locals ( a -- y ) a reverse ;\n"
+CONSTANT: method-definition "USING: locals.tests sequences ;\nM:: sequence method-with-locals ( a -- y ) a reverse ;\n" ;
 
 GENERIC: method-with-locals ( x -- y ) ;
 

@@ -6,8 +6,8 @@ io.files.temp io.files.unique io.streams.string kernel math
 quoting sequences splitting ;
 in: mime.multipart
 
-CONSTANT: buffer-size 65536
-CONSTANT: separator-prefix "\r\n--"
+CONSTANT: buffer-size 65536 ;
+CONSTANT: separator-prefix "\r\n--" ;
 
 TUPLE: multipart
 end-of-stream?

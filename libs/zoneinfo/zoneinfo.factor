@@ -21,7 +21,7 @@ CONSTANT: zoneinfo-paths
     "vocab:zoneinfo/southamerica"
     "vocab:zoneinfo/systemv"
     "vocab:zoneinfo/leapseconds"
-}
+} ;
 
 symbol: last-zone
 

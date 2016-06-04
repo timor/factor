@@ -99,7 +99,7 @@ CONSTANT: vector-reps
         ulonglong-2-rep
         float-4-rep
         double-2-rep
-    }
+    } ;
 
 UNION: representation
 any-rep
@@ -148,7 +148,7 @@ scalar-rep ;
 SINGLETONS: int-regs float-regs ;
 
 UNION: reg-class int-regs float-regs ;
-CONSTANT: reg-classes { int-regs float-regs }
+CONSTANT: reg-classes { int-regs float-regs } ;
 
 ! On x86, vectors and floats are stored in the same register bank
 ! On PowerPC they are distinct

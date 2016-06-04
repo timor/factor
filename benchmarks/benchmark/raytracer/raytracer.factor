@@ -18,11 +18,11 @@ CONSTANT: light
         0.5345224838248488
     }
 
-CONSTANT: oversampling 4
+CONSTANT: oversampling 4 ;
 
-CONSTANT: levels 3
+CONSTANT: levels 3 ;
 
-CONSTANT: size 200
+CONSTANT: size 200 ;
 
 : delta ( -- n ) epsilon sqrt ; inline
 
@@ -94,7 +94,7 @@ M: group intersect-scene ( hit ray group -- hit )
 
 HINTS: M\ group intersect-scene { hit ray group } ;
 
-CONSTANT: initial-hit T{ hit f double-array{ 0.0 0.0 0.0 } 1/0. }
+CONSTANT: initial-hit T{ hit f double-array{ 0.0 0.0 0.0 } 1/0. } ;
 
 : initial-intersect ( ray scene -- hit )
     [ initial-hit ] 2dip intersect-scene ; inline

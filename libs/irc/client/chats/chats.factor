@@ -4,7 +4,7 @@ USING: accessors calendar concurrency.mailboxes
 io.encodings.utf8 io.sockets kernel ;
 in: irc.client.chats
 
-CONSTANT: irc-port 6667 ! Default irc port
+CONSTANT: irc-port 6667 ; ! Default irc port
 
 TUPLE: irc-chat in-messages client ;
 TUPLE: irc-server-chat  < irc-chat ;

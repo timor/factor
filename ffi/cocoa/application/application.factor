@@ -6,16 +6,16 @@ in: cocoa.application
 
 : <NSString> ( str -- alien ) <CFString> -> autorelease ;
 
-CONSTANT: NSApplicationDelegateReplySuccess 0
-CONSTANT: NSApplicationDelegateReplyCancel  1
-CONSTANT: NSApplicationDelegateReplyFailure 2
+CONSTANT: NSApplicationDelegateReplySuccess 0 ;
+CONSTANT: NSApplicationDelegateReplyCancel  1 ;
+CONSTANT: NSApplicationDelegateReplyFailure 2 ;
 
 : with-autorelease-pool ( quot -- )
     NSAutoreleasePool -> new [ call ] [ -> release ] bi* ; inline
 
 : NSApp ( -- app ) NSApplication -> sharedApplication ;
 
-CONSTANT: NSAnyEventMask 0xffffffff
+CONSTANT: NSAnyEventMask 0xffffffff ;
 
 FUNCTION: void NSBeep ( ) ;
 

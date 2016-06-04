@@ -60,9 +60,9 @@ PREDICATE: file-exists-error < couchdb-error
 ! server
 TUPLE: server { host string } { port integer } { uuids vector } { uuids-to-cache integer } ;
 
-CONSTANT: default-couch-host "localhost"
-CONSTANT: default-couch-port 5984
-CONSTANT: default-uuids-to-cache 100
+CONSTANT: default-couch-host "localhost" ;
+CONSTANT: default-couch-port 5984 ;
+CONSTANT: default-uuids-to-cache 100 ;
 
 : <server> ( host port -- server )
     V{ } clone default-uuids-to-cache server boa ;

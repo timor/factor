@@ -75,7 +75,7 @@ ERROR: pcre-error value ;
 : options ( pcre -- opts )
     f PCRE_INFO_OPTIONS pcre-fullinfo ;
 
-CONSTANT: default-opts flags{ PCRE_UTF8 PCRE_UCP }
+CONSTANT: default-opts flags{ PCRE_UTF8 PCRE_UCP } ;
 
 : (pcre) ( expr -- pcre err-message err-offset )
     default-opts { c-string int } [ f pcre_compile ] with-out-parameters ;
@@ -94,7 +94,7 @@ TUPLE: matcher pcre extra subject ofs exec-opts ;
 : <matcher> ( subject compiled-pcre -- matcher )
     [ utf8 encode ] dip [ pcre>> ] [ extra>> ] bi rot 0 0 matcher boa ;
 
-CONSTANT: empty-match-opts flags{ PCRE_NOTEMPTY_ATSTART PCRE_ANCHORED }
+CONSTANT: empty-match-opts flags{ PCRE_NOTEMPTY_ATSTART PCRE_ANCHORED } ;
 
 : findnext ( matcher -- matcher match/f )
     dup {

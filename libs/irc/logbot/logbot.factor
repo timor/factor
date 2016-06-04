@@ -6,9 +6,9 @@ irc.client irc.client.chats irc.logbot.log-line splitting
 irc.messages.base kernel make namespaces sequences threads ;
 in: irc.logbot
 
-CONSTANT: bot-channel "#concatenative"
-CONSTANT: default-log-directory "resource:logs/irc"
-CONSTANT: default-nickserv-handle "flogbot2"
+CONSTANT: bot-channel "#concatenative" ;
+CONSTANT: default-log-directory "resource:logs/irc" ;
+CONSTANT: default-nickserv-handle "flogbot2" ;
 
 symbol: ircbot-log-directory
 symbol: nickserv-handle

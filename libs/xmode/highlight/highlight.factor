@@ -36,11 +36,11 @@ CONSTANT: STYLES H{
     { "MARKUP"   H{ { foreground HEXCOLOR: 0000ff } } }
     { "OPERATOR" H{ { foreground HEXCOLOR: 000000 }
                     { font-style bold } } }
-}
+} ;
 
 CONSTANT: BASE H{
     { font-name "monospace" }
-}
+} ;
 
 PRIVATE>
 

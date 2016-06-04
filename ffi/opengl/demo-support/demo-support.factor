@@ -3,9 +3,9 @@ namespaces opengl opengl.gl sequences ui ui.gadgets ui.gestures
 ui.gadgets.worlds ui.render accessors combinators literals ;
 in: opengl.demo-support
 
-CONSTANT: FOV $[ 2.0 sqrt 1 + ]
-CONSTANT: MOUSE-MOTION-SCALE 0.5
-CONSTANT: KEY-ROTATE-STEP 10.0
+CONSTANT: FOV $[ 2.0 sqrt 1 + ] ;
+CONSTANT: MOUSE-MOTION-SCALE 0.5 ;
+CONSTANT: KEY-ROTATE-STEP 10.0 ;
 
 symbol: last-drag-loc
 

@@ -131,7 +131,7 @@ CONSTANT: image-internal-formats H{
     { { RGBA      uint-integer-components   } $ GL_RGBA32UI       }
     { { RGBA      u-5-5-5-1-components      } $ GL_RGB5_A1            }
     { { RGBA      u-10-10-10-2-components   } $ GL_RGB10_A2           }
-}
+} ;
 
 GENERIC: fix-internal-component-order ( order -- order' ) ;
 
@@ -404,7 +404,7 @@ M: multi-texture draw-scaled-texture nip draw-texture ;
 
 M: multi-texture dispose* grid>> [ [ dispose ] each ] each ;
 
-CONSTANT: max-texture-size { 512 512 }
+CONSTANT: max-texture-size { 512 512 } ;
 
 PRIVATE>
 

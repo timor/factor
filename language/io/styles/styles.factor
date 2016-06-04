@@ -145,7 +145,7 @@ CONSTANT: standard-table-style
     H{
         { table-gap { 5 5 } }
         { table-border T{ rgba f 0.8 0.8 0.8 1.0 } }
-    }
+    } ;
 
 ! Input history
 TUPLE: input string ;

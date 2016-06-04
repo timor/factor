@@ -31,7 +31,7 @@ M: md5 initialize-checksum-state drop <md5-state> ;
 
 CONSTANT: T $[
     80 iota [ sin abs 32 2^ * >integer ] uint-array{ } map-as
-]
+] ;
 
 :: F ( X Y Z -- FXYZ )
     ! F(X,Y,Z) = XY v not(X) Z
@@ -49,27 +49,27 @@ CONSTANT: T $[
     ! I(X,Y,Z) = Y xor (X v not(Z))
     Z bitnot X bitor Y bitxor ; inline
 
-CONSTANT: S11 7
-CONSTANT: S12 12
-CONSTANT: S13 17
-CONSTANT: S14 22
-CONSTANT: S21 5
-CONSTANT: S22 9
-CONSTANT: S23 14
-CONSTANT: S24 20
-CONSTANT: S31 4
-CONSTANT: S32 11
-CONSTANT: S33 16
-CONSTANT: S34 23
-CONSTANT: S41 6
-CONSTANT: S42 10
-CONSTANT: S43 15
-CONSTANT: S44 21
+CONSTANT: S11 7 ;
+CONSTANT: S12 12 ;
+CONSTANT: S13 17 ;
+CONSTANT: S14 22 ;
+CONSTANT: S21 5 ;
+CONSTANT: S22 9 ;
+CONSTANT: S23 14 ;
+CONSTANT: S24 20 ;
+CONSTANT: S31 4 ;
+CONSTANT: S32 11 ;
+CONSTANT: S33 16 ;
+CONSTANT: S34 23 ;
+CONSTANT: S41 6 ;
+CONSTANT: S42 10 ;
+CONSTANT: S43 15 ;
+CONSTANT: S44 21 ;
 
-CONSTANT: a 0
-CONSTANT: b 1
-CONSTANT: c 2
-CONSTANT: d 3
+CONSTANT: a 0 ;
+CONSTANT: b 1 ;
+CONSTANT: c 2 ;
+CONSTANT: d 3 ;
 
 :: (ABCD) ( x state a b c d k s i quot -- )
     ! a = b + ((a + F(b,c,d) + X[k] + T[i]) <<< s)

@@ -121,7 +121,7 @@ CONSTANT: window-control>styleMask
         { textured-background $ NSTexturedBackgroundWindowMask }
         { normal-title-bar $ NSTitledWindowMask }
         { dialog-window $ NSTitledWindowMask }
-    }
+    } ;
 
 : world>styleMask ( world -- n )
     window-controls>> window-control>styleMask symbols>flags ;

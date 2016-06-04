@@ -28,7 +28,7 @@ symbol: timings
         ]
     } case ;
 
-CONSTANT: slowest 5
+CONSTANT: slowest 5 ;
 
 symbol: slowest-pages
 symbol: mean-time

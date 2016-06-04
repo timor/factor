@@ -9,7 +9,7 @@ in: terminal.linux
 
 <PRIVATE
 
-CONSTANT: TIOCGWINSZ 0x5413
+CONSTANT: TIOCGWINSZ 0x5413 ;
 
 STRUCT: winsize
 { ws_row c:short }

@@ -119,7 +119,7 @@ CONSTANT: default-file-systems-spec
     {
         +device-name+ +available-space+ +free-space+ +used-space+
         +total-space+ +percent-used+ +mount-point+
-    }
+    } ;
 
 : file-systems. ( -- )
     default-file-systems-spec print-file-systems ;

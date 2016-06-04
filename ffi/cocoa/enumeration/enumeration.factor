@@ -6,7 +6,7 @@ locals sequences specialized-arrays vectors ;
 SPECIALIZED-ARRAY: id
 in: cocoa.enumeration
 
-CONSTANT: NS-EACH-BUFFER-SIZE 16
+CONSTANT: NS-EACH-BUFFER-SIZE 16 ;
 
 : with-enumeration-buffers ( quot -- )
     '[

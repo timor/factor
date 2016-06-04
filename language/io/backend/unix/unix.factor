@@ -9,7 +9,7 @@ unix.stat unix.types ;
 QUALIFIED: io
 in: io.backend.unix
 
-CONSTANT: file-mode 0o0666
+CONSTANT: file-mode 0o0666 ;
 
 GENERIC: handle-fd ( handle -- fd ) ;
 

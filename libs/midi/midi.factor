@@ -40,13 +40,13 @@ CONSTANT: formats H{
     { 0 "the file contains a single multi-channel track" }
     { 1 "the file contains one or more simultaneous tracks (or MIDI outputs) of a sequence" }
     { 2 "the file contains one or more sequentially independant single-track patterns" }
-}
+} ;
 
-CONSTANT: min-pitchwheel -8192
-CONSTANT: max-pitchwheel 8191
+CONSTANT: min-pitchwheel -8192 ;
+CONSTANT: max-pitchwheel 8191 ;
 
-CONSTANT: min-songpos 0
-CONSTANT: max-songpos 16383
+CONSTANT: min-songpos 0 ;
+CONSTANT: max-songpos 16383 ;
 
 CONSTANT: key-signatures H{
     { B{ -7 0 } "Cb" }
@@ -79,14 +79,14 @@ CONSTANT: key-signatures H{
     { B{ 5 1 } "G#m" }
     { B{ 6 1 } "D#m" }
     { B{ 7 1 } "A#m" }
-}
+} ;
 
 CONSTANT: smpte-framerate H{
     { 0 24 }
     { 1 25 }
     { 2 29.97 }
     { 3 30 }
-}
+} ;
 
 <PRIVATE
 

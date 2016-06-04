@@ -9,6 +9,6 @@ INSTANCE: x sequence ;
 
 << gc >>
 
-CONSTANT: blah T{ x }
+CONSTANT: blah T{ x } ;
 
 [ T{ x } ] [ blah ] unit-test

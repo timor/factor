@@ -11,7 +11,7 @@ symbol: server-promise
 symbol: server
 symbol: port
 
-CONSTANT: number-of-requests 1000
+CONSTANT: number-of-requests 1000 ;
 
 : server-addr ( -- addr )
     "127.0.0.1" port get <inet4> ;

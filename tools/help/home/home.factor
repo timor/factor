@@ -7,7 +7,7 @@ in: help.home
 
 SYMBOLS: recent-words recent-articles recent-vocabs recent-searches ;
 
-CONSTANT: recent-count 10
+CONSTANT: recent-count 10 ;
 
 { recent-words recent-articles recent-vocabs recent-searches }
 [ [ V{ } clone ] initialize ] each

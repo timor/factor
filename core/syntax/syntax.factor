@@ -199,7 +199,7 @@ in: bootstrap.syntax
     ] define-core-syntax
 
     "CONSTANT:" [
-        scan-new-word scan-object define-constant
+        scan-new-word scan-object ";" expect define-constant
     ] define-core-syntax
 
     ":" [

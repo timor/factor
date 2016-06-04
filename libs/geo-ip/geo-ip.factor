@@ -8,7 +8,7 @@ in: geo-ip
 
 : db-path ( -- path ) "IpToCountry.csv" cache-file ;
 
-CONSTANT: db-url "http://software77.net/geo-ip/?DL=1"
+CONSTANT: db-url "http://software77.net/geo-ip/?DL=1" ;
 
 : download-db ( -- path )
     db-path dup exists? [

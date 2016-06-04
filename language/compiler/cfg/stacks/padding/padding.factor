@@ -29,7 +29,7 @@ in: compiler.cfg.stacks.padding
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ERROR: vacant-when-calling seq ;
 
-CONSTANT: initial-state { { 0 { } } { 0 { } } }
+CONSTANT: initial-state { { 0 { } } { 0 { } } } ;
 
 : apply-stack-op ( state insn quote: ( n stack -- stack' ) -- state' )
     [ [ first2 ] dip loc>> >loc< ] dip

@@ -35,8 +35,8 @@ TUPLE: node key value left right ;
 
 symbol: current-side
 
-CONSTANT: left -1
-CONSTANT: right 1
+CONSTANT: left -1 ;
+CONSTANT: right 1 ;
 
 : key-side ( k1 k2 -- n )
     <=> {

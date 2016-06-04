@@ -30,7 +30,7 @@ CONSTANT: colors H{
     { { 255  85 255 } 13 }
     { {  85 255 255 } 14 }
     { { 255 255 255 } 15 }
-}
+} ;
 
 : color>rgb ( color -- rgb )
     [ red>> ] [ green>> ] [ blue>> ] tri

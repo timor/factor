@@ -27,12 +27,12 @@ M: cpu write-port
     ! an 8-bit value.
     3drop ;
 
-CONSTANT: carry-flag        0x01
-CONSTANT: parity-flag       0x04
-CONSTANT: half-carry-flag   0x10
-CONSTANT: interrupt-flag    0x20
-CONSTANT: zero-flag         0x40
-CONSTANT: sign-flag         0x80
+CONSTANT: carry-flag        0x01 ;
+CONSTANT: parity-flag       0x04 ;
+CONSTANT: half-carry-flag   0x10 ;
+CONSTANT: interrupt-flag    0x20 ;
+CONSTANT: zero-flag         0x40 ;
+CONSTANT: sign-flag         0x80 ;
 
 : >word< ( word -- byte byte )
     ! Explode a word into its two 8 bit values.

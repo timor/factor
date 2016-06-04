@@ -169,7 +169,7 @@ CONSTANT: [start]
         init-catchstack
         self quot>> call
         stop
-    ]
+    ] ;
 
 GENERIC: (next) ( obj thread -- obj' ) ;
 

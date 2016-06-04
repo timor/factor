@@ -65,7 +65,7 @@ CONSTANT: month-names
     {
         "January" "February" "March" "April" "May" "June"
         "July" "August" "September" "October" "November" "December"
-    }
+    } ;
 
 GENERIC: month-name ( obj -- string ) ;
 
@@ -78,7 +78,7 @@ CONSTANT: month-abbreviations
     {
         "Jan" "Feb" "Mar" "Apr" "May" "Jun"
         "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"
-    }
+    } ;
 
 CONSTANT: month-abbreviations-hash
     H{
@@ -86,7 +86,7 @@ CONSTANT: month-abbreviations-hash
         { "Apr" 4 } { "May" 5 } { "Jun" 6 }
         { "Jul" 7 } { "Aug" 8 } { "Sep" 9 }
         { "Oct" 10 } { "Nov" 11 } { "Dec" 12 }
-    }
+    } ;
 
 : month-abbreviation ( n -- string )
     check-month 1 - month-abbreviations nth ;
@@ -95,32 +95,32 @@ CONSTANT: month-abbreviations-hash
     month-abbreviations-hash ?at
     [ not-a-month-abbreviation ] unless ;
 
-CONSTANT: day-counts { 0 31 28 31 30 31 30 31 31 30 31 30 31 }
+CONSTANT: day-counts { 0 31 28 31 30 31 30 31 31 30 31 30 31 } ;
 
 CONSTANT: day-names
-    { "Sunday" "Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday" }
+    { "Sunday" "Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday" } ;
 
 CONSTANT: day-abbreviations2
-    { "Su" "Mo" "Tu" "We" "Th" "Fr" "Sa" }
+    { "Su" "Mo" "Tu" "We" "Th" "Fr" "Sa" } ;
 
 : day-abbreviation2 ( n -- string )
     day-abbreviations2 nth ; inline
 
 CONSTANT: day-abbreviations3
-    { "Sun" "Mon" "Tue" "Wed" "Thu" "Fri" "Sat" }
+    { "Sun" "Mon" "Tue" "Wed" "Thu" "Fri" "Sat" } ;
 
 CONSTANT: day-abbreviations3-hash
     H{
         { "Sun" 0 } { "Mon" 1 } { "Tue" 2 } { "Wed" 3 }
         { "Thu" 4 } { "Fri" 5 } { "Sat" 6 }
-    }
+    } ;
 
-CONSTANT: average-month 30+5/12
-CONSTANT: months-per-year 12
-CONSTANT: days-per-year 3652425/10000
-CONSTANT: hours-per-year 876582/100
-CONSTANT: minutes-per-year 5259492/10
-CONSTANT: seconds-per-year 31556952
+CONSTANT: average-month 30+5/12 ;
+CONSTANT: months-per-year 12 ;
+CONSTANT: days-per-year 3652425/10000 ;
+CONSTANT: hours-per-year 876582/100 ;
+CONSTANT: minutes-per-year 5259492/10 ;
+CONSTANT: seconds-per-year 31556952 ;
 
 :: julian-day-number ( year month day -- n )
     ! Returns a composite date number
@@ -569,7 +569,7 @@ M: timestamp december clone 12 >>month ;
 : last-saturday-of-month ( timestamp -- new-timestamp ) 6 last-day-this-month ;
 
 CONSTANT: day-predicates
-    { sunday? monday? tuesday? wednesday? thursday? friday? saturday? }
+    { sunday? monday? tuesday? wednesday? thursday? friday? saturday? } ;
 
 : day-predicate ( string -- predicate )
     day-predicates nth ;

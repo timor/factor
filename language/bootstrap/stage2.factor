@@ -56,7 +56,7 @@ symbol: bootstrap-time
     error set-global ; inline
 
 CONSTANT: default-components
-    "math compiler threads io tools ui ui.tools unicode help handbook"
+    "math compiler threads io tools ui ui.tools unicode help handbook" ;
 
 [
     ! We time bootstrap

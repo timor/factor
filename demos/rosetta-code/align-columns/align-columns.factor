@@ -36,7 +36,7 @@ in: rosetta.align-columns
 ! * It is not a requirement to add separating characters between
 !   or around columns.
 
-CONSTANT: example-text "Given$a$text$file$of$many$lines,$where$fields$within$a$line$
+CONSTANT: example-text "Given$a$text$file$of$many$lines,$where$fields$within$a$line$ ;
 are$delineated$by$a$single$'dollar'$character,$write$a$program
 that$aligns$each$column$of$fields$by$ensuring$that$words$in$each$
 column$are$separated$by$at$least$one$space.

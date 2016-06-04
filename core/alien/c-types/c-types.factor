@@ -187,7 +187,7 @@ CONSTANT: primitive-types
         float double
         void* bool
         c-string
-    }
+    } ;
 
 : >c-bool ( ? -- int ) 1 0 ? ; inline
 

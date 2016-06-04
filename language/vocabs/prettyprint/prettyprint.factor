@@ -86,7 +86,7 @@ CONSTANT: manifest-style H{
     { page-color COLOR: FactorLightTan }
     { border-color COLOR: FactorDarkTan }
     { inset { 5 5 } }
-}
+} ;
 
 [
     nl

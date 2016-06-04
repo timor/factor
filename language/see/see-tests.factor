@@ -2,7 +2,7 @@ USING: see tools.test io.streams.string math sequences summary
 words ;
 in: see.tests
 
-CONSTANT: test-const 10
+CONSTANT: test-const 10 ;
 
 { "in: see.tests\nCONSTANT: test-const 10 inline\n" }
 [ [ \ test-const see ] with-string-writer ] unit-test

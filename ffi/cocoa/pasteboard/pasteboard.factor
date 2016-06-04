@@ -5,7 +5,7 @@ core-foundation.arrays core-foundation.strings kernel sequences
 ;
 in: cocoa.pasteboard
 
-CONSTANT: NSStringPboardType "NSStringPboardType"
+CONSTANT: NSStringPboardType "NSStringPboardType" ;
 
 : pasteboard-string? ( pasteboard -- ? )
     NSStringPboardType swap -> types CF>string-array member? ;

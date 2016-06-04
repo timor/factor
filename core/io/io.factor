@@ -169,7 +169,7 @@ ERROR: invalid-read-buffer buf stream ;
 : lines ( -- seq )
     input-stream get stream-lines ; inline
 
-CONSTANT: each-block-size 65536
+CONSTANT: each-block-size 65536 ;
 
 : (each-stream-block-slice) ( ... stream quot: ( ... block-slice -- ... ) block-size -- ... )
     [ [ drop ] prepose swap ] dip

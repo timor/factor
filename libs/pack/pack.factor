@@ -53,7 +53,7 @@ CONSTANT: pack-table
         { char: F write-float }
         { char: d write-double }
         { char: D write-double }
-    }
+    } ;
 
 CONSTANT: unpack-table
     H{
@@ -71,7 +71,7 @@ CONSTANT: unpack-table
         { char: F [ unsigned-endian> bits>float ] }
         { char: d [ unsigned-endian> bits>double ] }
         { char: D [ unsigned-endian> bits>double ] }
-    }
+    } ;
 
 CONSTANT: packed-length-table
     H{
@@ -89,7 +89,7 @@ CONSTANT: packed-length-table
         { char: F 4 }
         { char: d 8 }
         { char: D 8 }
-    }
+    } ;
 
 PRIVATE>
 

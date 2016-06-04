@@ -140,12 +140,12 @@ CONSTRUCTOR: <message> message ( query -- obj )
 : reverse-ipv4 ( string -- string )
     ipv4>byte-array reverse byte-array>ipv4 ;
 
-CONSTANT: ipv4-arpa-suffix ".in-addr.arpa"
+CONSTANT: ipv4-arpa-suffix ".in-addr.arpa" ;
 
 : ipv4>arpa ( string -- string )
     reverse-ipv4 ipv4-arpa-suffix append ;
 
-CONSTANT: ipv6-arpa-suffix ".ip6.arpa"
+CONSTANT: ipv6-arpa-suffix ".ip6.arpa" ;
 
 : ipv6>arpa ( string -- string )
     ipv6>byte-array

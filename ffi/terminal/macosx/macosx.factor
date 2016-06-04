@@ -10,10 +10,10 @@ in: terminal.macosx
 
 <PRIVATE
 
-CONSTANT: IOCPARM_MASK 0x1fff ! parameter length, at most 13 bits
-CONSTANT: IOC_VOID 0x20000000 ! no parameters
-CONSTANT: IOC_OUT  0x40000000 ! copy parameters out
-CONSTANT: IOC_IN   0x80000000 ! copy parameters in
+CONSTANT: IOCPARM_MASK 0x1fff ; ! parameter length, at most 13 bits
+CONSTANT: IOC_VOID 0x20000000 ; ! no parameters
+CONSTANT: IOC_OUT  0x40000000 ; ! copy parameters out
+CONSTANT: IOC_IN   0x80000000 ; ! copy parameters in
 
 : _IOC ( inout group num len -- n )
     [ 8 shift ] 2dip IOCPARM_MASK bitand 16 shift

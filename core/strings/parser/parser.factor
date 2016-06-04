@@ -22,6 +22,9 @@ ERROR: bad-escape char ;
         { char: 0  char: \0 }
         { char: \\ char: \\ }
         { char: \" char: \" }
+        { char: \{ char: \{ }
+        { char: \[ char: \[ }
+        { char: \( char: \( }
     } ?at [ bad-escape ] unless ;
 
 symbol: name>char-hook

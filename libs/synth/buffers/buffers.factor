@@ -61,11 +61,11 @@ M: 8bit-stereo-buffer buffer-data
 M: 16bit-stereo-buffer buffer-data
     interleaved-stereo-data 16bit-buffer-data ;
 
-CONSTANT: telephone-sample-freq 8000
-CONSTANT: half-sample-freq 22050
-CONSTANT: cd-sample-freq 44100
-CONSTANT: digital-sample-freq 48000
-CONSTANT: professional-sample-freq 88200
+CONSTANT: telephone-sample-freq 8000 ;
+CONSTANT: half-sample-freq 22050 ;
+CONSTANT: cd-sample-freq 44100 ;
+CONSTANT: digital-sample-freq 48000 ;
+CONSTANT: professional-sample-freq 88200 ;
 
 : send-buffer ( buffer -- buffer )
     {

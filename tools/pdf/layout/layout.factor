@@ -183,7 +183,7 @@ M: pb pdf-width
 
 
 
-CONSTANT: table-cell-padding 5
+CONSTANT: table-cell-padding 5 ;
 
 TUPLE: table-cell contents width ;
 

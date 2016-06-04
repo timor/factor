@@ -17,7 +17,7 @@ STRUCT: particle_t
     { m float    } ;
 SPECIALIZED-ARRAY: particle_t
 
-CONSTANT: gravity { 0.0 -0.1 }
+CONSTANT: gravity { 0.0 -0.1 } ;
 
 :: verlet-integrate-particle ( particle dt -- particle' )
     particle [ p>> ] [ v>> ] bi dt v*n v+

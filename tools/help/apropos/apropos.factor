@@ -33,7 +33,7 @@ SYMBOLS: word-result vocabulary-result article-result ;
 
 TUPLE: more-completions seq search category ;
 
-CONSTANT: max-completions 5
+CONSTANT: max-completions 5 ;
 
 M: more-completions valid-article? drop t ;
 

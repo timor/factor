@@ -40,7 +40,7 @@ in: gobject-introspection.loader
     } case ;
 
 CONSTANT: type-tags
-    $[ { "array" "type" "callback" "varargs" } [ <null-name> ] map ]
+    $[ { "array" "type" "callback" "varargs" } [ <null-name> ] map ] ;
 
 : child-type-tag ( xml -- type-tag )
     children-tags [

@@ -5,8 +5,8 @@ USING: accessors arrays combinators.short-circuit kernel
 locals math math.vectors random sequences ;
 in: boids.simulation
 
-CONSTANT: width 512
-CONSTANT: height 512
+CONSTANT: width 512 ;
+CONSTANT: height 512 ;
 
 TUPLE: behaviour
     { weight float }

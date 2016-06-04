@@ -10,7 +10,7 @@ in: io.streams.256color
 
 <PRIVATE
 
-CONSTANT: intensities { 0x00 0x5F 0x87 0xAF 0xD7 0xFF }
+CONSTANT: intensities { 0x00 0x5F 0x87 0xAF 0xD7 0xFF } ;
 
 CONSTANT: 256colors H{
 
@@ -33,7 +33,7 @@ CONSTANT: 256colors H{
     { { 255   0 255 } 13 }
     { {   0 255 255 } 14 }
     { { 255 255 255 } 15 }
-}
+} ;
 
 ! Add the RGB colors
 intensities [| r i |

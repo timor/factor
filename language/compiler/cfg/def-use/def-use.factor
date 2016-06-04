@@ -24,7 +24,7 @@ CONSTANT: special-vreg-insns {
     ##alien-assembly
     ##callback-inputs
     ##callback-outputs
-}
+} ;
 
 ! Special defs-vregs methods
 M: ##parallel-copy defs-vregs values>> [ first ] map ;

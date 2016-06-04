@@ -36,7 +36,7 @@ PRIVATE>
 
 M: object decode-until (decode-until) ;
 
-CONSTANT: replacement-char 0xfffd
+CONSTANT: replacement-char 0xfffd ;
 
 <PRIVATE
 

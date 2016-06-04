@@ -146,9 +146,9 @@ M: utf16be guess-decoded-length drop 2 /i ; inline
 
 ! UTF-16
 
-CONSTANT: bom-le B{ 0xff 0xfe }
+CONSTANT: bom-le B{ 0xff 0xfe } ;
 
-CONSTANT: bom-be B{ 0xfe 0xff }
+CONSTANT: bom-be B{ 0xfe 0xff } ;
 
 : bom>le/be ( bom -- le/be )
     dup bom-le sequence= [ drop utf16le ] [

@@ -103,7 +103,7 @@ CONSTANT: identity-matrix4
             float-4{ 0.0 0.0 1.0 0.0 }
             float-4{ 0.0 0.0 0.0 1.0 }
         }
-    }
+    } ;
 
 CONSTANT: zero-matrix4
     S{ matrix4 f
@@ -113,7 +113,7 @@ CONSTANT: zero-matrix4
             float-4{ 0.0 0.0 0.0 0.0 }
             float-4{ 0.0 0.0 0.0 0.0 }
         }
-    }
+    } ;
 
 TYPED:: m4^n ( m: matrix4 n: fixnum -- m^n: matrix4 )
     identity-matrix4 n [ m m4. ] times ;

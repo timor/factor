@@ -7,7 +7,7 @@ in: json.prettyprint
 
 <PRIVATE
 symbol: indent-level
-CONSTANT: nspaces 2
+CONSTANT: nspaces 2 ;
 
 GENERIC: pprint-json* ( obj -- ) ;
 

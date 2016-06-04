@@ -7,8 +7,8 @@ math math.parser namespaces sequences strings summary
 typed ;
 in: tar
 
-CONSTANT: zero-checksum 256
-CONSTANT: block-size 512
+CONSTANT: zero-checksum 256 ;
+CONSTANT: block-size 512 ;
 
 symbol: to-link
 

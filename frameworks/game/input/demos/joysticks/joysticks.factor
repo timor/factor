@@ -5,8 +5,8 @@ ui.gadgets.borders timers calendar locals strings ui.gadgets.buttons
 combinators math.parser assocs threads ;
 in: game.input.demos.joysticks
 
-CONSTANT: SIZE { 151 151 }
-CONSTANT: INDICATOR-SIZE { 4 4 }
+CONSTANT: SIZE { 151 151 } ;
+CONSTANT: INDICATOR-SIZE { 4 4 } ;
 : FREQUENCY ( -- f ) 30 recip seconds ;
 
 TUPLE: axis-gadget < gadget indicator z-indicator pov ;

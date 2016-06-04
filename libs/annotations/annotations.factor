@@ -36,7 +36,7 @@ SYNTAX: !NAME (parse-annotation) \ (NAME) suffix! ;
 CONSTANT: annotation-tags {
     "XXX" "TODO" "FIXME" "BUG" "REVIEW" "LICENSE"
     "AUTHOR" "BROKEN" "HACK" "LOL" "NOTE"
-}
+} ;
 
 annotation-tags [ define-annotation ] each
 

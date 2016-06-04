@@ -204,8 +204,8 @@ M: complex log >polar [ flog ] dip rect> ; inline
 : most-positive-finite-float ( -- x )
     0x1.ffff,ffff,ffff,fp1023 >integer ; inline
 
-CONSTANT: log-2   0x1.62e42fefa39efp-1
-CONSTANT: log10-2 0x1.34413509f79ffp-2
+CONSTANT: log-2   0x1.62e42fefa39efp-1 ;
+CONSTANT: log10-2 0x1.34413509f79ffp-2 ;
 
 : representable-as-float? ( x -- ? )
     most-negative-finite-float

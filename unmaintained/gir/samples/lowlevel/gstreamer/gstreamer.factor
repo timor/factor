@@ -6,7 +6,7 @@ gstreamer.ffi glib.ffi gobject.ffi gtk.ffi ;
 in: gir.samples.lowlevel.gstreamer
 
 ! CONSTANT: uri "http://www.xiph.org/vorbis/listen/compilation-ogg-q4.ogg"
-CONSTANT: uri "http://tinyvid.tv/file/3gocxnjott7wr.ogg"
+CONSTANT: uri "http://tinyvid.tv/file/3gocxnjott7wr.ogg" ;
 
 :: gstreamer-win ( -- window )
     f f gst_init

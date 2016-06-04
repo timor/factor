@@ -38,11 +38,11 @@ M: label B  ( label -- )       [ 0 B  ] dip rc-relative-ppc-3-pc label-fixup ;
 M: label BL ( label -- )       [ 0 BL ] dip rc-relative-ppc-3-pc label-fixup ;
 M: label BC ( bo bi label -- ) [ 0 BC ] dip rc-relative-ppc-2-pc label-fixup ;
 
-CONSTANT: scratch-reg    30
-CONSTANT: fp-scratch-reg 30
-CONSTANT: ds-reg         14
-CONSTANT: rs-reg         15
-CONSTANT: vm-reg         16
+CONSTANT: scratch-reg    30 ;
+CONSTANT: fp-scratch-reg 30 ;
+CONSTANT: ds-reg         14 ;
+CONSTANT: rs-reg         15 ;
+CONSTANT: vm-reg         16 ;
 
 enable-float-intrinsics
 

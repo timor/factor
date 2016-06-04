@@ -6,8 +6,8 @@ math.vectors models namespaces sequences threads vectors ;
 in: ui.gadgets
 
 ! Values for orientation slot
-CONSTANT: horizontal { 1 0 }
-CONSTANT: vertical { 0 1 }
+CONSTANT: horizontal { 1 0 } ;
+CONSTANT: vertical { 0 1 } ;
 
 TUPLE: gadget < rect
 pref-dim
@@ -139,7 +139,7 @@ symbol: ui-notify-flag
 : layout-queue ( -- queue )
     \ layout-queue get ;
 
-CONSTANT: layout-queue-limit 8000
+CONSTANT: layout-queue-limit 8000 ;
 
 : layout-later ( gadget -- )
     layout-queue [

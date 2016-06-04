@@ -89,7 +89,7 @@ M: object modify-form drop f ;
         [XML <input type="hidden" value=<-> name=<->/> XML]
     ] [ drop ] if ;
 
-CONSTANT: nested-forms-key "__n"
+CONSTANT: nested-forms-key "__n" ;
 
 : referrer ( -- referrer/f )
     ! Typo is intentional, it's in the HTTP spec!

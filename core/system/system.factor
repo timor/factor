@@ -42,13 +42,13 @@ CONSTANT: string>cpu-hash H{
     { "arm" arm }
     { "ppc.32" ppc.32 }
     { "ppc.64" ppc.64 }
-}
+} ;
 
 CONSTANT: string>os-hash H{
     { "windows" windows }
     { "macosx" macosx }
     { "linux" linux }
-}
+} ;
 
 : string>cpu ( str -- class )
     string>cpu-hash at ;

@@ -213,7 +213,7 @@ M: windows (wait-to-read) ( port -- )
 : select-sets ( socket event -- read-fds write-fds except-fds )
     [ make-fd-set ] dip +input+ = [ f f ] [ f swap f ] if ;
 
-CONSTANT: select-timeval S{ timeval { sec 0 } { usec 1000 } }
+CONSTANT: select-timeval S{ timeval { sec 0 } { usec 1000 } } ;
 
 M: windows wait-for-fd ( handle event -- )
     [ file>> handle>> 1 swap ] dip select-sets select-timeval
@@ -325,7 +325,7 @@ M: windows cwd
 M: windows cd
     SetCurrentDirectory win32-error=0/f ;
 
-CONSTANT: unicode-prefix "\\\\?\\"
+CONSTANT: unicode-prefix "\\\\?\\" ;
 
 M: windows root-directory? ( path -- ? )
     {

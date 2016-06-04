@@ -124,10 +124,10 @@ MACRO: if-literals-match ( quots -- quot )
         ] [ 2drop bad-simd-intrinsic ] if
     ] ;
 
-CONSTANT: [unary]        [ ds-drop  ds-pop ]
-CONSTANT: [unary/param]  [ [ -2 <ds-loc> inc-stack ds-pop ] dip ]
-CONSTANT: [binary]       [ ds-drop 2inputs ]
-CONSTANT: [binary/param] [ [ -2 <ds-loc> inc-stack 2inputs ] dip ]
+CONSTANT: [unary]        [ ds-drop  ds-pop ] ;
+CONSTANT: [unary/param]  [ [ -2 <ds-loc> inc-stack ds-pop ] dip ] ;
+CONSTANT: [binary]       [ ds-drop 2inputs ] ;
+CONSTANT: [binary/param] [ [ -2 <ds-loc> inc-stack 2inputs ] dip ] ;
 CONSTANT: [quaternary]
     [
         ds-drop
@@ -136,7 +136,7 @@ CONSTANT: [quaternary]
         D: 1 peek-loc
         D: 0 peek-loc
         -4 <ds-loc> inc-stack
-    ]
+    ] ;
 
 :: [emit-vector-op] ( trials params-quot op-quot literal-preds -- quot )
     params-quot trials op-quot literal-preds

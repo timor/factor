@@ -18,7 +18,7 @@ samples-per-second [ 1,000 ] initialize
 <PRIVATE
 symbol: raw-profile-data
 CONSTANT: ignore-words
-    { signal-handler leaf-signal-handler profiling minor-gc }
+    { signal-handler leaf-signal-handler profiling minor-gc } ;
 
 : ignore-word? ( word -- ? ) ignore-words member? ; inline
 PRIVATE>
@@ -85,7 +85,7 @@ TUPLE: profile-node
 : leaf-callstack? ( callstack -- ? )
     [ ignore-word? ] all? ;
 
-CONSTANT: zero-counts { 0 0 0 0 0 }
+CONSTANT: zero-counts { 0 0 0 0 0 } ;
 
 : sum-counts ( samples -- times )
     zero-counts [ sample-counts-slice v+ ] reduce ;
