@@ -11,7 +11,7 @@ in: cuda.ffi
 } cond add-library
 >>
 
-LIBRARY: cuda
+library: cuda
 
 TYPEDEF: uint CUdeviceptr ;
 TYPEDEF: int CUdevice ;

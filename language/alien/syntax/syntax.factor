@@ -13,6 +13,7 @@ SYNTAX: ALIEN: 16 scan-base <alien> suffix! ;
 SYNTAX: BAD-ALIEN <bad-alien> suffix! ;
 
 SYNTAX: LIBRARY: scan-token current-library set ;
+SYNTAX: library: scan-token current-library set ;
 
 SYNTAX: FUNCTION:
     (FUNCTION:) make-function define-inline ;

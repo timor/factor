@@ -13,7 +13,7 @@ in: zeromq.ffi
     { [ os unix? ] [ "libzmq.so" ] }
 } cond cdecl add-library >>
 
-LIBRARY: zmq
+library: zmq
 
 !
 ! 0MQ versioning support.

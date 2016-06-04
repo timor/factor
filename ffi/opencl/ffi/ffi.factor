@@ -10,7 +10,7 @@ in: opencl.ffi
         { [ os macosx? ] [ "/System/Library/Frameworks/OpenCL.framework/OpenCL" cdecl ] }
         { [ os unix? ] [ "libOpenCL.so" cdecl ] }
     } cond add-library >>
-LIBRARY: opencl
+library: opencl
 
 ! cl_platform.h
 TYPEDEF: char      cl_char ;

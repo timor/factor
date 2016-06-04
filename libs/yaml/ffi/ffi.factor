@@ -13,7 +13,7 @@ in: yaml.ffi
 
 c-type: FILE
 
-LIBRARY: libyaml
+library: libyaml
 
 ! /**
 !  * @defgroup version Version Information

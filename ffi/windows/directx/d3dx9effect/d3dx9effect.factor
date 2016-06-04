@@ -5,7 +5,7 @@ windows.directx.d3dx9math windows.directx.d3dx9shader
 windows.types ;
 in: windows.directx.d3dx9effect
 
-LIBRARY: d3dx9
+library: d3dx9
 
 CONSTANT: D3DXFX_DONOTSAVESTATE         1 ;
 CONSTANT: D3DXFX_DONOTSAVESHADERSTATE   2 ;

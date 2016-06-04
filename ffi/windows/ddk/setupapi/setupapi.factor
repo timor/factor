@@ -6,7 +6,7 @@ windows.advapi32 alien.libraries ;
 in: windows.ddk.setupapi
 
 << "setupapi" "setupapi.dll" stdcall add-library >>
-LIBRARY: setupapi
+library: setupapi
 
 TYPEDEF: DWORDLONG SP_LOG_TOKEN ;
 TYPEDEF: DWORDLONG* PSP_LOG_TOKEN ;

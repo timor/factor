@@ -3,7 +3,7 @@ windows.directx windows.directx.dxgiformat windows.com.syntax
 windows.com windows.ole32 windows.directx.dxgitype ;
 in: windows.directx.d3d10
 
-LIBRARY: d3d10
+library: d3d10
 
 CONSTANT: D3D10_16BIT_INDEX_STRIP_CUT_VALUE                                    0xffff ;
 CONSTANT: D3D10_32BIT_INDEX_STRIP_CUT_VALUE                                    0xffffffff ;

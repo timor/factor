@@ -129,7 +129,7 @@ CONSTANT: HPDF_PAGE_MODE_EOF 4 ;
      { 0x1075  "HPDF_INVALID_FONT\nAn invalid font-handle was specified." }
 } ;
 
-LIBRARY: libhpdf
+library: libhpdf
 
 ! ===============================================
 ! hpdf.h

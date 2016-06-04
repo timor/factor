@@ -4,8 +4,8 @@ USING: alien.inline alien.inline.syntax io.directories io.files
 kernel namespaces tools.test alien.c-types alien.data alien.structs ;
 in: alien.inline.syntax.tests
 
-DELETE-C-LIBRARY: test
-C-LIBRARY: test
+DELETE-C-library: test
+C-library: test
 
 C-FUNCTION: const-int add ( int a, int b )
     return a + b;
@@ -44,8 +44,8 @@ C-FUNCTION: int area ( rectangle c )
 ] unit-test
 
 
-DELETE-C-LIBRARY: cpplib
-C-LIBRARY: cpplib
+DELETE-C-library: cpplib
+C-library: cpplib
 
 COMPILE-AS-C++
 
@@ -62,8 +62,8 @@ C-FUNCTION: const-char* hello ( )
 [ "hello world" ] [ hello ] unit-test
 
 
-DELETE-C-LIBRARY: compile-error
-C-LIBRARY: compile-error
+DELETE-C-library: compile-error
+C-library: compile-error
 
 C-FUNCTION: char* breakme ( )
     return not a string;

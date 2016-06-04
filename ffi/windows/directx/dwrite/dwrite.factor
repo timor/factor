@@ -3,7 +3,7 @@ windows.com.syntax windows.directx.dcommon windows.kernel32
 windows.ole32 windows.types windows.directx ;
 in: windows.directx.dwrite
 
-LIBRARY: dwrite
+library: dwrite
 
 ENUM: DWRITE_FONT_FILE_TYPE
     DWRITE_FONT_FILE_TYPE_UNKNOWN

@@ -8,7 +8,7 @@ PREDICATE: cuda-function-word < word
     def>> { [ length 14 = ] [ last \ cuda-invoke eq? ] } 1&& ;
 
 : pprint-cuda-library ( library -- )
-    [ \ CUDA-LIBRARY: [ text ] pprint-prefix ] when* ;
+    [ \ CUDA-library: [ text ] pprint-prefix ] when* ;
 
 : pprint-cuda-function ( word quot -- )
     [

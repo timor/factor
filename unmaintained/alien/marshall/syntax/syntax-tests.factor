@@ -4,8 +4,8 @@ USING: alien.inline.syntax alien.marshall.syntax destructors
 tools.test accessors kernel ;
 in: alien.marshall.syntax.tests
 
-DELETE-C-LIBRARY: test
-C-LIBRARY: test
+DELETE-C-library: test
+C-library: test
 
 C-INCLUDE: <stdlib.h>
 C-INCLUDE: <string.h>

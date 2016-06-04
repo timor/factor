@@ -4,7 +4,7 @@ USING: alien.parser cuda.libraries fry kernel lexer namespaces
 parser ;
 in: cuda.syntax
 
-SYNTAX: CUDA-LIBRARY:
+SYNTAX: CUDA-library:
     scan-token scan-word scan-object
     '[ _ _ add-cuda-library ]
     [ current-cuda-library set-global ] bi ;

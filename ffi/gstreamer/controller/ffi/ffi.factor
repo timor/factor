@@ -8,7 +8,7 @@ in: gstreamer.controller.ffi
 "gstreamer.ffi" require
 >>
 
-LIBRARY: gstreamer.controller
+library: gstreamer.controller
 
 <<
 "gstreamer.controller" {

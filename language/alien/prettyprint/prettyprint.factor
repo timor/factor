@@ -65,7 +65,7 @@ M: typedef-word synopsis*
     ] if-empty ;
 
 : pprint-library ( library -- )
-    [ \ LIBRARY: [ text ] pprint-prefix ] when* ;
+    [ \ library: [ text ] pprint-prefix ] when* ;
 
 : pprint-function ( word quot -- )
     [ def>> first pprint-c-type ]

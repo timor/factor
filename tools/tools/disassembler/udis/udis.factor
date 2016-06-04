@@ -13,7 +13,7 @@ in: tools.disassembler.udis
     { [ os unix? ] [ "libudis86.so" ] }
 } cond cdecl add-library >>
 
-LIBRARY: libudis86
+library: libudis86
 
 TYPEDEF: void ud ;
 

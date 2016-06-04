@@ -4,7 +4,7 @@ windows.directx.d3d10misc windows.directx.dxgi
 windows.directx.dxgiformat windows.types ;
 in: windows.directx.d3d10_1
 
-LIBRARY: d3d10_1
+library: d3d10_1
 
 CONSTANT: D3D10_1_DEFAULT_SAMPLE_MASK                             0xffffffff ;
 CONSTANT: D3D10_1_FLOAT16_FUSED_TOLERANCE_IN_ULP                  0.6 ;

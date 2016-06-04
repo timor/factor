@@ -1,7 +1,7 @@
 USING: alien alien.c-types alien.syntax kernel windows.types ;
 in: opengl.gl.windows
 
-LIBRARY: gl
+library: gl
 
 FUNCTION: HGLRC wglGetCurrentContext ( ) ;
 FUNCTION: void* wglGetProcAddress ( c-string name ) ;

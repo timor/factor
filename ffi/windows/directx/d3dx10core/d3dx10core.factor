@@ -4,7 +4,7 @@ windows.directx.d3d10misc windows.directx.d3dx10math
 windows.directx.dxgi windows.gdi32 windows.types ;
 in: windows.directx.d3dx10core
 
-LIBRARY: d3dx10
+library: d3dx10
 
 CONSTANT: D3DX10_SDK_VERSION 42 ;
 

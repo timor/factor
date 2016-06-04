@@ -9,7 +9,7 @@ in: curl.ffi
     { [ os unix? ] [ "libcurl.so" ] }
 } cond cdecl add-library >>
 
-LIBRARY: curl
+library: curl
 
 ! curl.h
 

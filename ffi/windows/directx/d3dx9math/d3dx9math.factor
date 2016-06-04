@@ -2,7 +2,7 @@ USING: math classes.struct windows.types alien.syntax windows.directx.d3d9types
 windows.com.syntax windows.com windows.directx windows.directx.d3d9 ;
 in: windows.directx.d3dx9math
 
-LIBRARY: d3dx9
+library: d3dx9
 
 CONSTANT: D3DX_PI    3.141592654 ;
 CONSTANT: D3DX_1BYPI 0.318309886 ;

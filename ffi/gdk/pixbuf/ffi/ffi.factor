@@ -8,7 +8,7 @@ in: gdk.pixbuf.ffi
 
 << "gio.ffi" require >>
 
-LIBRARY: gdk.pixbuf
+library: gdk.pixbuf
 
 << "gdk.pixbuf" {
     { [ os windows? ] [ "libgdk_pixbuf-2.0-0.dll" ] }

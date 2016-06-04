@@ -4,7 +4,7 @@ USING: alien alien.c-types alien.syntax words ;
 FROM: math => float mod ;
 in: math.libm
 
-LIBRARY: libm
+library: libm
 
 FUNCTION-ALIAS: facos
     double acos ( double x ) ;

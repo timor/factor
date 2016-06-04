@@ -12,7 +12,7 @@ in: libusb
         { [ os macosx? ] [ "libusb-1.0.dylib"  ] }
         { [ os unix?  ] [ "libusb-1.0.so" ] }
     } cond cdecl add-library >>
-LIBRARY: libusb
+library: libusb
 
 : libusb_cpu_to_le16 ( x -- y )
     2 >native-endian le> ; inline

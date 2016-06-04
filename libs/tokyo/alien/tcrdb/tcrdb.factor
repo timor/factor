@@ -11,7 +11,7 @@ in: tokyo.alien.tcrdb
     { [ os windows? ] [ "tokyotyrant.dll" ] }
 } cond cdecl add-library >>
 
-LIBRARY: tokyotyrant
+library: tokyotyrant
 
 c-type: TCRDB
 ! STRUCT: TCRDB

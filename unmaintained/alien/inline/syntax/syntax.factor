@@ -4,7 +4,7 @@ USING: alien.inline lexer multiline namespaces parser ;
 in: alien.inline.syntax
 
 
-SYNTAX: C-LIBRARY: scan define-c-library ;
+SYNTAX: C-library: scan define-c-library ;
 
 SYNTAX: COMPILE-AS-C++ t library-is-c++ set ;
 
@@ -26,6 +26,6 @@ SYNTAX: C-STRUCTURE:
 
 SYNTAX: ;C-LIBRARY compile-c-library ;
 
-SYNTAX: DELETE-C-LIBRARY: scan delete-inline-library ;
+SYNTAX: DELETE-C-library: scan delete-inline-library ;
 
 SYNTAX: <RAW-C "RAW-C>" parse-multiline-string raw-c ;

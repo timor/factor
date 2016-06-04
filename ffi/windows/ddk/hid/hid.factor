@@ -5,7 +5,7 @@ classes.struct kernel math windows.types windows.ole32 ;
 in: windows.ddk.hid
 
 << "hid" "hid.dll" stdcall add-library >>
-LIBRARY: hid
+library: hid
 
 TYPEDEF: LONG   NTSTATUS ;
 TYPEDEF: USHORT USAGE ;

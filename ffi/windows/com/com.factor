@@ -3,7 +3,7 @@ windows.ole32 windows.types continuations kernel alien.syntax
 libc destructors accessors alien.data classes.struct windows.kernel32 ;
 in: windows.com
 
-LIBRARY: ole32
+library: ole32
 
 COM-INTERFACE: IUnknown f {00000000-0000-0000-C000-000000000046}
     HRESULT QueryInterface ( REFGUID iid, void** ppvObject )

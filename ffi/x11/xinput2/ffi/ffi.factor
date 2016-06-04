@@ -7,7 +7,7 @@ in: x11.xinput2.ffi
 
 << "xinput2" "libXi.so" cdecl add-library >>
 
-LIBRARY: xinput2
+library: xinput2
 
 
 ! *********

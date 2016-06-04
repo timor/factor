@@ -10,7 +10,7 @@ in: compression.snappy.ffi
     { [ os unix? ] [ "libsnappy.so" ] }
 } cond cdecl add-library >>
 
-LIBRARY: snappy
+library: snappy
 
 ENUM: snappy_status SNAPPY_OK SNAPPY_INVALID_INPUT SNAPPY_BUFFER_TOO_SMALL ;
 

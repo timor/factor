@@ -104,7 +104,7 @@ c-type: sqlite3_stmt
 TYPEDEF: longlong sqlite3_int64 ;
 TYPEDEF: ulonglong sqlite3_uint64 ;
 
-LIBRARY: sqlite
+library: sqlite
 FUNCTION: int sqlite3_open ( c-string filename, void* ppDb ) ;
 FUNCTION: int sqlite3_close ( sqlite3* pDb ) ;
 FUNCTION: c-string sqlite3_errmsg ( sqlite3* pDb ) ;

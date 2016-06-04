@@ -9,7 +9,7 @@ in: llvm.clang.ffi
     { [ os unix?    ] [ "/usrlibclang.so"    ] }
 } cond cdecl add-library
 >>
-LIBRARY: libclang
+library: libclang
 
 c-type: CXTranslationUnitImpl
 

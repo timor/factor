@@ -84,7 +84,7 @@ C-STRUCT: ldap
     { "int" "ld_refhoplimit" }
     { "ulong" "ld_options" } ;
 
-LIBRARY: libldap
+library: libldap
 
 ! ===============================================
 ! ldap.h

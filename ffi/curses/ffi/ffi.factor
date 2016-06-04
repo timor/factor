@@ -81,7 +81,7 @@ STRUCT: MEVENT
     { x int } { y int } { z int }
     { bstate mmask_t } ;
 
-LIBRARY: curses
+library: curses
 
 C-GLOBAL: void* stdscr ;
 

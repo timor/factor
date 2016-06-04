@@ -8,7 +8,7 @@ in: gdbm.ffi
 { "gdbm" "gdbm3" "libgdbm-3" } find-library-from-list
 cdecl add-library >>
 
-LIBRARY: libgdbm
+library: libgdbm
 
 C-GLOBAL: c-string gdbm_version ;
 

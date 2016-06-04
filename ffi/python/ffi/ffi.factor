@@ -11,7 +11,7 @@ cdecl add-library >>
 ! Functions that return borrowed references needs to be called like this:
 ! Py_Func dup Py_IncRef &Py_DecRef
 
-LIBRARY: python
+library: python
 
 c-type: PyObject
 

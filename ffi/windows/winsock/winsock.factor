@@ -169,7 +169,7 @@ STRUCT: fd_set
     { fd_count uint }
     { fd_array SOCKET[64] } ;
 
-LIBRARY: winsock
+library: winsock
 
 FUNCTION: int setsockopt ( SOCKET s, int level, int optname, c-string optval, int optlen ) ;
 FUNCTION: int ioctlsocket ( SOCKET s, long cmd, ulong* *argp ) ;
@@ -406,7 +406,7 @@ FUNCTION: DWORD WSAWaitForMultipleEvents ( DWORD cEvents,
                                            BOOL fAlertable ) ;
 
 
-LIBRARY: mswsock
+library: mswsock
 
 FUNCTION: int AcceptEx ( SOCKET listen,
                          SOCKET accept,

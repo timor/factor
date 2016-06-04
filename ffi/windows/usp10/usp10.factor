@@ -4,7 +4,7 @@ USING: alien.c-types alien.syntax alien.destructors classes.struct
 windows.types ;
 in: windows.usp10
 
-LIBRARY: usp10
+library: usp10
 
 STRUCT: SCRIPT_CONTROL
     { flags DWORD } ;

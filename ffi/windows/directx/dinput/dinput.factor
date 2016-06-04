@@ -3,7 +3,7 @@ alien alien.c-types alien.syntax kernel system namespaces math
 classes.struct windows.types windows.directx ;
 in: windows.directx.dinput
 
-LIBRARY: dinput
+library: dinput
 
 TYPEDEF: DWORD D3DCOLOR ;
 

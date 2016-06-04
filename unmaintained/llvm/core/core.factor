@@ -20,7 +20,7 @@ in: llvm.core
 
 ! llvm-c/Core.h
 
-LIBRARY: LLVMCore
+library: LLVMCore
 
 TYPEDEF: uint unsigned ;
 TYPEDEF: unsigned enum ;
@@ -407,7 +407,7 @@ FUNCTION: int LLVMCreateMemoryBufferWithContentsOfFile
 
 FUNCTION: void LLVMDisposeMemoryBuffer ( LLVMMemoryBufferRef MemBuf ) ;
 
-LIBRARY: LLVMBitReader
+library: LLVMBitReader
 
 FUNCTION: int LLVMParseBitcode
 ( LLVMMemoryBufferRef MemBuf, LLVMModuleRef* OutModule, c-string* OutMessage ) ;

@@ -15,7 +15,7 @@ HELP: CM-FUNCTION:
     "USING: alien.inline.syntax alien.marshall.syntax prettyprint ;"
     "in: example"
     ""
-    "C-LIBRARY: exlib"
+    "C-library: exlib"
     ""
     "C-INCLUDE: <stdio.h>"
     "C-INCLUDE: <stdlib.h>"

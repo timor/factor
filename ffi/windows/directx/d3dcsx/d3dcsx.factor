@@ -2,7 +2,7 @@ USING: alien.c-types alien.syntax classes.struct windows.com windows.com.syntax
 windows.directx windows.directx.d3d11 windows.types ;
 in: windows.directx.d3dcsx
 
-LIBRARY: d3dcsx
+library: d3dcsx
 
 CONSTANT: D3DX11_SCAN_DATA_TYPE_FLOAT 1 ;
 CONSTANT: D3DX11_SCAN_DATA_TYPE_INT   2 ;

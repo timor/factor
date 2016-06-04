@@ -9,7 +9,7 @@ in: libc
 
 HOOK: strerror os ( errno -- str ) ;
 
-LIBRARY: factor
+library: factor
 
 FUNCTION-ALIAS: errno int err_no ( ) ;
 
@@ -21,7 +21,7 @@ FUNCTION-ALIAS: set-errno void set_err_no ( int err-no ) ;
 : preserve-errno ( quot -- )
     errno [ call ] dip set-errno ; inline
 
-LIBRARY: libc
+library: libc
 
 FUNCTION-ALIAS: (malloc)
     void* malloc ( size_t size ) ;

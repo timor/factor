@@ -9,7 +9,7 @@ in: clutter.gtk.ffi
 "gtk.ffi" require
 >>
 
-LIBRARY: clutter.gtk
+library: clutter.gtk
 
 <<
 "clutter.gtk" {

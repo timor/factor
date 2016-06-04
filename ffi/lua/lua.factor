@@ -11,7 +11,7 @@ in: lua
     { [ os unix? ] [ "liblua5.1.so" ] }
 } cond cdecl add-library >>
 
-LIBRARY: liblua5.1
+library: liblua5.1
 
 ! luaconf.h
 TYPEDEF: double LUA_NUMBER ;

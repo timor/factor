@@ -19,7 +19,7 @@ in: openal
 
 << os unix? [ "openal" deploy-library ] unless >>
 
-LIBRARY: openal
+library: openal
 
 TYPEDEF: char ALboolean ;
 TYPEDEF: char ALchar ;

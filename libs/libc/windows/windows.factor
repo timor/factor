@@ -2,7 +2,7 @@ USING: alien.c-types alien.strings alien.syntax destructors
 io.encodings.utf8 kernel libc system ;
 in: libc
 
-LIBRARY: libc
+library: libc
 
 ! From errno.h in msvc 10:
 CONSTANT: EPERM           1 ;
@@ -104,7 +104,7 @@ CONSTANT: SIGABRT         22 ;
 
 CONSTANT: SIGABRT_COMPAT  6 ;
 
-LIBRARY: libc
+library: libc
 
 FUNCTION: int strerror_s ( char *buffer, size_t numberOfElements, int errnum ) ;
 

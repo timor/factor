@@ -6,7 +6,7 @@ grouping classes.struct combinators.smart ;
 specialized-array: uchar
 in: windows.ole32
 
-LIBRARY: ole32
+library: ole32
 
 TYPEDEF: GUID* REFGUID ;
 TYPEDEF: void* LPUNKNOWN ;

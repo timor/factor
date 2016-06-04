@@ -8,7 +8,7 @@ in: gdk.gl.ffi
 "gdk.ffi" require
 >>
 
-LIBRARY: gdk.gl
+library: gdk.gl
 
 <<
 "gdk.gl" {

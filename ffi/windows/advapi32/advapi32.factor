@@ -2,7 +2,7 @@ USING: alien.c-types alien.syntax classes.struct kernel
 literals math math.bitwise windows.kernel32 windows.types ;
 in: windows.advapi32
 
-LIBRARY: advapi32
+library: advapi32
 
 CONSTANT: MS_DEF_DH_SCHANNEL_PROV "Microsoft DH Schannel Cryptographic Provider" ;
 

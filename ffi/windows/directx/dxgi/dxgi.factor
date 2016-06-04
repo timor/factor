@@ -3,7 +3,7 @@ windows.directx.dxgiformat windows.directx.dxgitype windows.kernel32
 windows.ole32 windows.types windows.directx ;
 in: windows.directx.dxgi
 
-LIBRARY: dxgi
+library: dxgi
 
 CONSTANT: DXGI_CPU_ACCESS_NONE 0 ;
 CONSTANT: DXGI_CPU_ACCESS_DYNAMIC 1 ;

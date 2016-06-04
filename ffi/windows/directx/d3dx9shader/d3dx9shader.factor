@@ -4,7 +4,7 @@ windows.directx.d3d9 windows.directx.d3dx9core
 windows.directx.d3dx9math windows.types ;
 in: windows.directx.d3dx9shader
 
-LIBRARY: d3dx9
+library: d3dx9
 
 : D3DXSHADER_DEBUG                          ( -- n ) 1 0 shift ; inline
 : D3DXSHADER_SKIPVALIDATION                 ( -- n ) 1 1 shift ; inline

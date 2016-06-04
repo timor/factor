@@ -9,7 +9,7 @@ in: gtk.gl.ffi
 "gdk.gl.ffi" require
 >>
 
-LIBRARY: gtk.gl
+library: gtk.gl
 
 <<
 "gtk.gl" {

@@ -24,7 +24,7 @@ in: ogg.vorbis
 "vorbis" deploy-library
 >>
 
-LIBRARY: vorbis
+library: vorbis
 
 STRUCT: vorbis-info
     { version int  }

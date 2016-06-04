@@ -10,7 +10,7 @@ in: compression.zlib.ffi
     { [ os unix? ] [ "libz.so" ] }
 } cond cdecl add-library >>
 
-LIBRARY: zlib
+library: zlib
 
 TYPEDEF: void Bytef ;
 TYPEDEF: ulong uLongf ;

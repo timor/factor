@@ -5,7 +5,7 @@ in: alien.inline.syntax
 
 HELP: ;C-LIBRARY
 { $syntax ";C-LIBRARY" }
-{ $description "Writes, compiles, and links code generated since previous invocation of " { $link postpone: C-LIBRARY: } "." }
+{ $description "Writes, compiles, and links code generated since previous invocation of " { $link postpone: C-library: } "." }
 { $see-also postpone: compile-c-library } ;
 
 HELP: C-FRAMEWORK:
@@ -21,7 +21,7 @@ HELP: C-FUNCTION:
     "USING: alien.inline.syntax prettyprint ;"
     "in: cmath.ffi"
     ""
-    "C-LIBRARY: cmathlib"
+    "C-library: cmathlib"
     ""
     "C-FUNCTION: int add ( int a, int b )"
     "    return a + b;"
@@ -39,15 +39,15 @@ HELP: C-INCLUDE:
 { $description "Appends an include line to the C library in scope." }
 { $see-also postpone: c-include } ;
 
-HELP: C-LIBRARY:
-{ $syntax "C-LIBRARY: name" }
+HELP: C-library:
+{ $syntax "C-library: name" }
 { $description "Starts a new C library scope. Other " { $snippet "alien.inline" } " syntax can be used after this word." }
 { $examples
   { $example
     "USING: alien.inline.syntax ;"
     "in: rectangle.ffi"
     ""
-    "C-LIBRARY: rectlib"
+    "C-library: rectlib"
     ""
     "C-STRUCTURE: rectangle { \"int\" \"width\" } { \"int\" \"height\" } ;"
     ""
@@ -82,10 +82,10 @@ HELP: C-TYPEDEF:
 
 HELP: COMPILE-AS-C++
 { $syntax "COMPILE-AS-C++" }
-{ $description "Insert this word anywhere between " { $link postpone: C-LIBRARY: } " and " { $link postpone: ;C-LIBRARY } " and the generated code will be treated as C++ with " { $snippet "extern \"C\"" } " prepended to each function prototype." } ;
+{ $description "Insert this word anywhere between " { $link postpone: C-library: } " and " { $link postpone: ;C-LIBRARY } " and the generated code will be treated as C++ with " { $snippet "extern \"C\"" } " prepended to each function prototype." } ;
 
-HELP: DELETE-C-LIBRARY:
-{ $syntax "DELETE-C-LIBRARY: name" }
+HELP: DELETE-C-library:
+{ $syntax "DELETE-C-library: name" }
 { $description "Deletes the shared library file corresponding to " { $snippet "name" } " . " }
 { $notes
   { $list

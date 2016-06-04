@@ -14,7 +14,7 @@ in: pcre.ffi
     { [ os unix? ] [ "libpcre.so" ] }
 } cond cdecl add-library >>
 
-LIBRARY: pcre
+library: pcre
 
 CONSTANT: PCRE_CASELESS           0x00000001 ;
 CONSTANT: PCRE_MULTILINE          0x00000002 ;

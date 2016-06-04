@@ -988,7 +988,7 @@ TYPEDEF: int CRYPT_HANDLE ;
     { -50  "Need resource to proceed" }
 } ;
 
-LIBRARY: libcl
+library: libcl
 
 ! ===============================================
 ! cryptlib.h

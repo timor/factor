@@ -8,7 +8,7 @@ make refs sequences sequences.extras windows.errors
 windows.kernel32 windows.types windows.winsock fry ;
 in: windows.iphlpapi
 
-LIBRARY: iphlpapi
+library: iphlpapi
 
 <<
 CONSTANT: DEFAULT_MINIMUM_ENTITIES 32 ;

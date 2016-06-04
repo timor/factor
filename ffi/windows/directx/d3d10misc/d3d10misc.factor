@@ -3,7 +3,7 @@ windows.directx windows.directx.d3d10 windows.directx.dxgi
 windows.types ;
 in: windows.directx.d3d10misc
 
-LIBRARY: d3d10
+library: d3d10
 
 c-type: ID3D10Blob
 TYPEDEF: ID3D10Blob* LPD3D10BLOB ;

@@ -3,7 +3,7 @@ windows.com.syntax windows.com windows.directx windows.directx.d3d9caps
 windows.ole32 windows.kernel32 ;
 in: windows.directx.d3d9
 
-LIBRARY: d3d9
+library: d3d9
 
 CONSTANT: DIRECT3D_VERSION         0x0900 ;
 

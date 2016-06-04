@@ -4,8 +4,8 @@ USING: tools.test alien.cxx.syntax alien.inline.syntax
 alien.marshall.syntax alien.marshall accessors kernel ;
 in: alien.cxx.syntax.tests
 
-DELETE-C-LIBRARY: test
-C-LIBRARY: test
+DELETE-C-library: test
+C-library: test
 
 COMPILE-AS-C++
 
@@ -33,8 +33,8 @@ ALIAS: <std::string> new_string ;
 [ "abc" ] [ "abc" <std::string> to-string ] unit-test
 
 
-DELETE-C-LIBRARY: inheritance
-C-LIBRARY: inheritance
+DELETE-C-library: inheritance
+C-library: inheritance
 
 COMPILE-AS-C++
 

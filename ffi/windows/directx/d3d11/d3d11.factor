@@ -4,7 +4,7 @@ windows.directx.dxgitype windows.directx.dxgi windows.directx.d3dcommon
 windows.directx ;
 in: windows.directx.d3d11
 
-LIBRARY: d3d11
+library: d3d11
 
 CONSTANT: D3D11_16BIT_INDEX_STRIP_CUT_VALUE   0xffff ;
 CONSTANT: D3D11_32BIT_INDEX_STRIP_CUT_VALUE   0xffffffff ;

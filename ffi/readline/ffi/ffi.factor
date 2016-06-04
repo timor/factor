@@ -11,7 +11,7 @@ in: readline.ffi
     { [ os unix? ] [ "libreadline.so" ] }
 } cond cdecl add-library >>
 
-LIBRARY: readline
+library: readline
 
 TYPEDEF: void* histdata_t ;
 

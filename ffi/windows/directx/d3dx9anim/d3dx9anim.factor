@@ -5,7 +5,7 @@ windows.directx.d3dx9mesh windows.directx.d3dx9xof
 windows.types ;
 in: windows.directx.d3dx9anim
 
-LIBRARY: d3dx9
+library: d3dx9
 
 TYPEDEF: int D3DXMESHDATATYPE ;
 CONSTANT: D3DXMESHTYPE_MESH      1 ;

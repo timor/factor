@@ -6,7 +6,7 @@ in: gio.ffi
 
 << "gobject.ffi" require >>
 
-LIBRARY: gio
+library: gio
 
 << "gio" {
     { [ os windows? ] [ "libgio-2.0-0.dll" ] }

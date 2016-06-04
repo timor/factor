@@ -856,7 +856,7 @@ TYPEDEF: PROCESSENTRY32* LPPROCESSENTRY32 ;
 : RT_ANIICON      ( -- id ) 22 MAKEINTRESOURCE ; inline
 : RT_MANIFEST     ( -- id ) 24 MAKEINTRESOURCE ; inline
 
-LIBRARY: kernel32
+library: kernel32
 ! FUNCTION: _hread
 ! FUNCTION: _hwrite
 ! FUNCTION: _lclose

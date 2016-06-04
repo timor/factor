@@ -3,7 +3,7 @@
 in: jni-internals
 USING: kernel alien arrays sequences ;
 
-LIBRARY: jvm
+library: jvm
 
 TYPEDEF: int jint ;
 TYPEDEF: uchar jboolean ;

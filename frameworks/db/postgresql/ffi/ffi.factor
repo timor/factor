@@ -71,7 +71,7 @@ c-type: PQprintOpt
 c-type: SSL
 c-type: FILE
 
-LIBRARY: postgresql
+library: postgresql
 
 ! Exported functions of libpq
 

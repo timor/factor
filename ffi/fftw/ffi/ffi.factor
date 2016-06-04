@@ -6,7 +6,7 @@ alien.libraries.finder alien.syntax combinators kernel system ;
 
 in: fftw.ffi
 
-LIBRARY: fftw3
+library: fftw3
 
 << "fftw3" {
     { [ os windows? ] [ "libfftw3-3.dll" ] }

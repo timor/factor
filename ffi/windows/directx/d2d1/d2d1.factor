@@ -4,7 +4,7 @@ windows.directx.dcommon windows.directx.dxgi windows.directx.dxgiformat
 windows.ole32 windows.types ;
 in: windows.directx.d2d1
 
-LIBRARY: d2d1
+library: d2d1
 
 CONSTANT: D2D1_INVALID_TAG 0xffffffffffffffff ;
 CONSTANT: D2D1_DEFAULT_FLATTENING_TOLERANCE 0.25 ;

@@ -236,7 +236,7 @@ ARTICLE: "reading-writing-memory" "Reading and writing memory directly"
 ARTICLE: "alien-invoke" "Calling C from Factor"
 "The easiest way to call into a C library is to define bindings using a pair of parsing words:"
 { $subsections
-    postpone: LIBRARY:
+    postpone: library:
     postpone: FUNCTION:
     postpone: FUNCTION-ALIAS:
 }

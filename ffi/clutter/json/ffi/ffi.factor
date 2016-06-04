@@ -9,7 +9,7 @@ in: clutter.json.ffi
 "gio.ffi" require
 >>
 
-LIBRARY: clutter.json
+library: clutter.json
 
 <<
 "clutter.json" {

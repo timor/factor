@@ -4,7 +4,7 @@ USING: alien alien.c-types alien.libraries alien.syntax
 combinators kernel tokyo.alien.tcutil ;
 in: tokyo.alien.tchdb
 
-LIBRARY: tokyocabinet
+library: tokyocabinet
 
 c-type: TCXSTR
 c-type: TCHDB

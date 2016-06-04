@@ -11,7 +11,7 @@ in: db.mysql.ffi
     { [ os unix? ] [ "libmysqlclient.so.14" cdecl ] }
 } cond add-library >>
 
-LIBRARY: mysql
+library: mysql
 
 FUNCTION: void* mysql_init ( void* mysql ) ;
 FUNCTION: char* mysql_error ( void* mysql ) ;

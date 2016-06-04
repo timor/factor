@@ -3,7 +3,7 @@ windows.directx windows.directx.d3d10misc windows.directx.d3d11
 windows.directx.d3dx11core windows.directx.dxgiformat windows.types ;
 in: windows.directx.d3dx11tex
 
-LIBRARY: d3dx11
+library: d3dx11
 
 CONSTANT: D3DX11_FILTER_NONE             0x00000001 ;
 CONSTANT: D3DX11_FILTER_POINT            0x00000002 ;

@@ -3,7 +3,7 @@ windows.directx.d3d10misc windows.directx.d3d10shader
 windows.directx.d3dx10core windows.types ;
 in: windows.directx.d3dx10async
 
-LIBRARY: d3dx10
+library: d3dx10
 
 c-type: ID3DX10ThreadPump
 c-type: ID3D10EffectPool

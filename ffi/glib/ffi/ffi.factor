@@ -6,7 +6,7 @@ gobject-introspection.standard-types io.encodings.utf8 kernel
 system ;
 in: glib.ffi
 
-LIBRARY: glib
+library: glib
 
 << "glib" {
     { [ os windows? ] [ "libglib-2.0-0.dll" ] }

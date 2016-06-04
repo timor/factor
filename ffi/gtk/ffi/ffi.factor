@@ -11,7 +11,7 @@ in: gtk.ffi
 "gdk.ffi" require
 >>
 
-LIBRARY: gtk
+library: gtk
 
 <<
 "gtk" {

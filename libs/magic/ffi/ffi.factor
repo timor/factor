@@ -11,7 +11,7 @@ in: magic.ffi
     { [ os unix? ] [ "libmagic.so" ] }
 } cond cdecl add-library >>
 
-LIBRARY: magic
+library: magic
 
 CONSTANT: MAGIC_NONE 0x000000 ;
 CONSTANT: MAGIC_DEBUG 0x000001 ;

@@ -2,7 +2,7 @@ USING: alien.c-types alien.syntax classes.struct windows.directx
 windows.directx.d3dx10math windows.types ;
 in: windows.directx.x3daudio
 
-LIBRARY: x3daudio
+library: x3daudio
 
 CONSTANT: X3DAUDIO_HANDLE_BYTESIZE 20 ;
 

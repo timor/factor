@@ -4,7 +4,7 @@ windows.directx.d3d11 windows.com windows.com.syntax
 windows.directx.d3dcommon ;
 in: windows.directx.d3d11shader
 
-LIBRARY: d3d11
+library: d3d11
 
 CONSTANT: D3D11_SHVER_PIXEL_SHADER    0 ;
 CONSTANT: D3D11_SHVER_VERTEX_SHADER   1 ;

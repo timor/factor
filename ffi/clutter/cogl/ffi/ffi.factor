@@ -8,7 +8,7 @@ in: clutter.cogl.ffi
 "gobject.ffi" require
 >>
 
-LIBRARY: clutter.cogl
+library: clutter.cogl
 
 <<
 "clutter.cogl" {

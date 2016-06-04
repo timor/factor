@@ -2,7 +2,7 @@ USING: alien.c-types alien.syntax classes.struct windows.directx
 windows.kernel32 windows.types ;
 in: windows.directx.xinput
 
-LIBRARY: xinput
+library: xinput
 
 CONSTANT: XINPUT_DEVTYPE_GAMEPAD         1 ;
 CONSTANT: XINPUT_DEVSUBTYPE_GAMEPAD      1 ;

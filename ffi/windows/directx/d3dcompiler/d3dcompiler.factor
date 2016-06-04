@@ -1,7 +1,7 @@
 USING: alien.c-types alien.syntax windows.directx windows.ole32 windows.types ;
 in: windows.directx.d3dcompiler
 
-LIBRARY: d3dcompiler
+library: d3dcompiler
 
 c-type: D3D_SHADER_MACRO
 c-type: ID3DBlob

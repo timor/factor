@@ -5,7 +5,7 @@ USING: alien.c-types alien.syntax kernel random ;
 
 in: random.c
 
-LIBRARY: libc
+library: libc
 
 FUNCTION: int rand ( ) ;
 

@@ -161,7 +161,7 @@ TYPEDEF: void oci_svc_ctx ;
 TYPEDEF: void oci_session ;
 TYPEDEF: void oci_stmt ;
 
-LIBRARY: oci
+library: oci
 
 ! ===============================================
 ! ociap.h

@@ -9,7 +9,7 @@ QUALIFIED-WITH: alien.c-types c ;
 in: alien.fortran.tests
 
 << intel-unix-abi "(alien.fortran-tests)" (add-fortran-library) >>
-LIBRARY: (alien.fortran-tests)
+library: (alien.fortran-tests)
 STRUCT: fortran_test_record
     { FOO int }
     { BAR double[2] }

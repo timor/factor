@@ -17,7 +17,7 @@ literals ;
 FROM: alien.c-types => short ;
 in: x11.xlib
 
-LIBRARY: xlib
+library: xlib
 
 TYPEDEF: ulong XID ;
 TYPEDEF: XID Window ;

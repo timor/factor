@@ -11,7 +11,7 @@ in: gdk.ffi
 "gdk.pixbuf.ffi" require
 >>
 
-LIBRARY: gdk
+library: gdk
 
 <<
 "gdk" {

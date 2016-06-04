@@ -3,7 +3,7 @@ windows.com windows.com.syntax windows.directx
 windows.directx.audiodefs windows.types ;
 in: windows.directx.xaudio2
 
-LIBRARY: xaudio2
+library: xaudio2
 
 CONSTANT: XAUDIO2_MAX_BUFFER_BYTES        0x80000000 ;
 CONSTANT: XAUDIO2_MAX_QUEUED_BUFFERS      64 ;

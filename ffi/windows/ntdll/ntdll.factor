@@ -3,7 +3,7 @@
 USING: alien.c-types alien.syntax classes.struct windows.types ;
 in: windows.ntdll
 
-LIBRARY: ntdll
+library: ntdll
 
 TYPEDEF: uint NTSTATUS ;
 

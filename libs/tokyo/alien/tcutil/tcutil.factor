@@ -10,7 +10,7 @@ in: tokyo.alien.tcutil
     { [ os windows? ] [ "tokyocabinet.dll" ] }
 } cond cdecl add-library >>
 
-LIBRARY: tokyocabinet
+library: tokyocabinet
 
 CONSTANT: TCDBTHASH 0 ;
 CONSTANT: TCDBTBTREE 1 ;

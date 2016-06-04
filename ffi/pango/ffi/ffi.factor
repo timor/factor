@@ -7,7 +7,7 @@ in: pango.ffi
 
 << "gobject.ffi" require >>
 
-LIBRARY: pango
+library: pango
 
 << "pango" {
     { [ os windows? ] [ "libpango-1.0-0.dll" ] }

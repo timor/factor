@@ -10,7 +10,7 @@ in: gstreamer.ffi
 "gmodule.ffi" require
 >>
 
-LIBRARY: gstreamer
+library: gstreamer
 
 <<
 "gstreamer" {

@@ -6,7 +6,7 @@ in: libudev
 
 << "libudev" "libudev.so" cdecl add-library >>
 
-LIBRARY: libudev
+library: libudev
 
 c-type: udev
 

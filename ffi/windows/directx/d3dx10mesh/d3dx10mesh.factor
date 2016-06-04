@@ -3,7 +3,7 @@ windows.com.syntax windows.directx windows.directx.d3d10
 windows.directx.d3d10misc windows.types windows.directx.d3dx10math ;
 in: windows.directx.d3dx10mesh
 
-LIBRARY: d3dx10
+library: d3dx10
 
 CONSTANT: D3DX10_MESH_32_BIT       1 ;
 CONSTANT: D3DX10_MESH_GS_ADJACENCY 4 ;

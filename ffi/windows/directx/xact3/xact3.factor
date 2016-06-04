@@ -3,7 +3,7 @@ windows.com.syntax windows.directx windows.directx.xaudio2
 windows.kernel32 windows.types ;
 in: windows.directx.xact3
 
-LIBRARY: xactengine
+library: xactengine
 
 c-type: IXACT3SoundBank
 c-type: IXACT3WaveBank

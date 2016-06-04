@@ -6,7 +6,7 @@ destructors io io.encodings.string io.encodings.utf8 kernel locals
 math math.parser namespaces sequences strings ;
 in: cuda.demos.hello-world
 
-CUDA-LIBRARY: hello cuda32 "vocab:cuda/demos/hello-world/hello.ptx"
+CUDA-library: hello cuda32 "vocab:cuda/demos/hello-world/hello.ptx"
 
 CUDA-FUNCTION: helloWorld ( char* string-ptr ) ;
 

@@ -9,7 +9,7 @@ in: gobject.ffi
 << "glib.ffi" require >>
 use: glib.ffi
 
-LIBRARY: gobject
+library: gobject
 
 << "gobject" {
     { [ os windows? ] [ "libgobject-2.0-0.dll" ] }

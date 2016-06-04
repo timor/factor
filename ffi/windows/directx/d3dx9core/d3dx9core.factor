@@ -3,7 +3,7 @@ windows.com windows.directx windows.directx.d3dx9math windows.directx.d3d9types
 classes.struct windows.gdi32 ;
 in: windows.directx.d3dx9core
 
-LIBRARY: d3dx9
+library: d3dx9
 
 CONSTANT: D3DX_VERSION 0x0902 ;
 CONSTANT: D3DX_SDK_VERSION 42 ;

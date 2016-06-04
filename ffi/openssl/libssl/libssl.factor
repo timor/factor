@@ -183,7 +183,7 @@ CONSTANT: SSL_ERROR_WANT_ACCEPT      8 ;
 c-type: SSL_CTX
 c-type: SSL_SESSION
 
-LIBRARY: libssl
+library: libssl
 
 ! ===============================================
 ! stack.h

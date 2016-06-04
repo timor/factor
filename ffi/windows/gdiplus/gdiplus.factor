@@ -5,7 +5,7 @@ windows.kernel32 windows.ole32 windows.types ;
 FROM: alien.c-types => float ;
 in: windows.gdiplus
 
-LIBRARY: gdiplus
+library: gdiplus
 
 FUNCTION: void* GdipAlloc ( SIZE_T size ) ;
 FUNCTION: void GdipFree ( void* mem ) ;

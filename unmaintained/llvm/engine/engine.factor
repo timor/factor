@@ -15,7 +15,7 @@ in: llvm.engine
 
 ! llvm-c/ExecutionEngine.h
 
-LIBRARY: LLVMExecutionEngine
+library: LLVMExecutionEngine
 
 TYPEDEF: void* LLVMGenericValueRef ;
 TYPEDEF: void* LLVMExecutionEngineRef ;

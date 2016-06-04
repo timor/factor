@@ -24,7 +24,7 @@ STRUCT: DWM_BLURBEHIND
 
 << "dwmapi" "dwmapi.dll" stdcall add-library >>
 
-LIBRARY: dwmapi
+library: dwmapi
 
 FUNCTION: HRESULT DwmExtendFrameIntoClientArea ( HWND hWnd, MARGINS* pMarInset ) ;
 FUNCTION: HRESULT DwmEnableBlurBehindWindow ( HWND hWnd, DWM_BLURBEHIND* pBlurBehind ) ;

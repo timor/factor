@@ -7,7 +7,7 @@ in: odbc
 
 << "odbc" "odbc32.dll" stdcall add-library >>
 
-LIBRARY: odbc
+library: odbc
 
 TYPEDEF: void* usb_dev_handle* ;
 TYPEDEF: short SQLRETURN ;

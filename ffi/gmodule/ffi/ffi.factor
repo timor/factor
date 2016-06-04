@@ -6,7 +6,7 @@ in: gmodule.ffi
 
 << "glib.ffi" require >>
 
-LIBRARY: gmodule
+library: gmodule
 
 << "gmodule" {
     { [ os windows? ] [ "libgmodule-2.0-0.dll" ] }

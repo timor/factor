@@ -4,7 +4,7 @@ windows.directx.d3d9 windows.directx.d3dx9core windows.directx.d3dx9math
 windows.directx.d3dx9xof ;
 in: windows.directx.d3dx9mesh
 
-LIBRARY: d3dx9
+library: d3dx9
 
 TYPEDEF: int D3DXPATCHMESHTYPE ;
 CONSTANT: D3DXPATCHMESH_RECT   1 ;

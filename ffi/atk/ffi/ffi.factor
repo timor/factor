@@ -6,7 +6,7 @@ in: atk.ffi
 
 << "gobject.ffi" require >>
 
-LIBRARY: atk
+library: atk
 
 << "atk" {
     { [ os windows? ] [ "libatk-1.0-0.dll" ] }

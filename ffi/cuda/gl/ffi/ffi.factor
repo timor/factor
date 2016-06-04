@@ -2,7 +2,7 @@
 USING: alien.c-types alien.syntax cuda.ffi opengl.gl ;
 in: cuda.gl.ffi
 
-LIBRARY: cuda
+library: cuda
 
 FUNCTION: CUresult cuGLCtxCreate ( CUcontext* pCtx, uint Flags, CUdevice device ) ;
 FUNCTION: CUresult cuGraphicsGLRegisterBuffer ( CUgraphicsResource* pCudaResource, GLuint buffer, uint Flags ) ;

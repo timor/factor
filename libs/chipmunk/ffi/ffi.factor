@@ -16,7 +16,7 @@ in: chipmunk.ffi
 
 "chipmunk" deploy-library
 >>
-LIBRARY: chipmunk
+library: chipmunk
 
 ! chipmunk_types.h
 TYPEDEF: double cpFloat ;

@@ -10,7 +10,7 @@ in: freetype
     { [ t ] [ drop ] }
 } cond >>
 
-LIBRARY: freetype
+library: freetype
 
 TYPEDEF: uchar FT_Byte ;
 TYPEDEF: void* FT_Bytes ;

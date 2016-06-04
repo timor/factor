@@ -3,7 +3,7 @@ windows.com.syntax windows.directx windows.directx.d3d10
 windows.directx.d3d10misc windows.directx.d3d10shader windows.types ;
 in: windows.directx.d3d10effect
 
-LIBRARY: d3d10
+library: d3d10
 
 CONSTANT: D3D10_DST_SO_BUFFERS             1 ;
 CONSTANT: D3D10_DST_OM_RENDER_TARGETS      2 ;

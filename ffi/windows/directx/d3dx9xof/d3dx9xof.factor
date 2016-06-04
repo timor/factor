@@ -2,7 +2,7 @@ USING: alien.syntax classes.struct windows.com windows.com.syntax
 windows.directx windows.kernel32 windows.ole32 windows.types ;
 in: windows.directx.d3dx9xof
 
-LIBRARY: d3dx9
+library: d3dx9
 
 TYPEDEF: DWORD D3DXF_FILEFORMAT ;
 

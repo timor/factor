@@ -2,7 +2,7 @@ in: compiler.tests.x87-regression
 USING: math.floats.env alien.syntax alien.c-types compiler.test
 tools.test kernel math ;
 
-LIBRARY: libm
+library: libm
 FUNCTION: double sqrt ( double x ) ;
 
 [ { } ] [

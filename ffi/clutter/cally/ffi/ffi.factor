@@ -9,7 +9,7 @@ in: clutter.cally.ffi
 "clutter.ffi" require
 >>
 
-LIBRARY: clutter.cally
+library: clutter.cally
 
 <<
 "clutter.cally" {

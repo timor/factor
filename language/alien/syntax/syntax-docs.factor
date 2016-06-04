@@ -19,8 +19,8 @@ ARTICLE: "syntax-aliens" "Alien object literal syntax"
     postpone: DLL"
 } ;
 
-HELP: LIBRARY:
-{ $syntax "LIBRARY: name" }
+HELP: library:
+{ $syntax "library: name" }
 { $values { "name" "a logical library name" } }
 { $description "Sets the logical library for consequent " { $link postpone: FUNCTION: } ", " { $link postpone: C-GLOBAL: } " and " { $link postpone: CALLBACK: } " definitions, as well as " { $link postpone: &: } " forms." }
 { $notes "Logical library names are defined with the " { $link add-library } " word." } ;
@@ -28,7 +28,7 @@ HELP: LIBRARY:
 HELP: FUNCTION:
 { $syntax "FUNCTION: return name ( parameters )" }
 { $values { "return" "a C return type" } { "name" "a C function name" } { "parameters" "a comma-separated sequence of type/name pairs; " { $snippet "type1 arg1, type2 arg2, ..." } } }
-{ $description "Defines a new word " { $snippet "name" } " which calls the C library function with the same " { $snippet "name" } " in the logical library given by the most recent " { $link postpone: LIBRARY: } " declaration."
+{ $description "Defines a new word " { $snippet "name" } " which calls the C library function with the same " { $snippet "name" } " in the logical library given by the most recent " { $link postpone: library: } " declaration."
 $nl
 "The new word must be compiled before being executed." }
 { $examples
@@ -40,7 +40,7 @@ $nl
 }
 "You can define a word for invoking it:"
 { $unchecked-example
-    "LIBRARY: foo\nFUNCTION: void the_answer ( c-string question, int value )"
+    "library: foo\nFUNCTION: void the_answer ( c-string question, int value )"
     "\"the question\" 42 the_answer"
     "The answer to the question is 42."
 } }
@@ -51,7 +51,7 @@ HELP: FUNCTION-ALIAS:
 { $syntax "FUNCTION-ALIAS: factor-name
     return c_name ( parameters ) ;" }
 { $values { "factor-name" "a Factor word name" } { "return" "a C return type" } { "name" "a C function name" } { "parameters" "a comma-separated sequence of type/name pairs; " { $snippet "type1 arg1, type2 arg2, ..." } } }
-{ $description "Defines a new word " { $snippet "factor-name" } " which calls the C library function named " { $snippet "c_name" } " in the logical library given by the most recent " { $link postpone: LIBRARY: } " declaration."
+{ $description "Defines a new word " { $snippet "factor-name" } " which calls the C library function named " { $snippet "c_name" } " in the logical library given by the most recent " { $link postpone: library: } " declaration."
 $nl
 "The new word must be compiled before being executed." }
 { $notes "Note that the parentheses and commas are only syntax sugar and can be omitted. They serve no purpose other than to make the declaration easier to read." } ;
@@ -94,7 +94,7 @@ STRUCT: forward { x backward* } ;" } }
 HELP: CALLBACK:
 { $syntax "CALLBACK: return type ( parameters )" }
 { $values { "return" "a C return type" } { "type" "a type name" } { "parameters" "a comma-separated sequence of type/name pairs; " { $snippet "type1 arg1, type2 arg2, ..." } } }
-{ $description "Defines a new function pointer C type word " { $snippet "type" } ". The newly defined word works both as a C type and as a wrapper for " { $link alien-callback } " for callbacks that accept the given return type and parameters. The ABI of the callback is decided from the ABI of the active " { $link postpone: LIBRARY: } " declaration." }
+{ $description "Defines a new function pointer C type word " { $snippet "type" } ". The newly defined word works both as a C type and as a wrapper for " { $link alien-callback } " for callbacks that accept the given return type and parameters. The ABI of the callback is decided from the ABI of the active " { $link postpone: library: } " declaration." }
 { $examples
     { $code
         "CALLBACK: bool FakeCallback ( int message, void* payload )"
@@ -111,7 +111,7 @@ HELP: CALLBACK:
 HELP: &:
 { $syntax "&: symbol" }
 { $values { "symbol" "A C global variable name" } }
-{ $description "Pushes the address of a symbol named " { $snippet "symbol" } " from the current library, set with " { $link postpone: LIBRARY: } "." } ;
+{ $description "Pushes the address of a symbol named " { $snippet "symbol" } " from the current library, set with " { $link postpone: library: } "." } ;
 
 HELP: typedef
 { $values { "old" "a C type" } { "new" "a C type" } }
@@ -123,7 +123,7 @@ HELP: typedef
 HELP: C-GLOBAL:
 { $syntax "C-GLOBAL: type name ;" }
 { $values { "type" "a C type" } { "name" "a C global variable name" } }
-{ $description "Defines a getter " { $snippet "name" } " and setter " { $snippet "set-name" } " for the global value in the current library, set with " { $link postpone: LIBRARY: } "." } ;
+{ $description "Defines a getter " { $snippet "name" } " and setter " { $snippet "set-name" } " for the global value in the current library, set with " { $link postpone: library: } "." } ;
 
 ARTICLE: "alien.enums" "Enumeration types"
 "The " { $vocab-link "alien.enums" } " vocab contains the implementation for " { $link postpone: ENUM: } " C types, and provides words for converting between enum singletons and integers. It is possible to dispatch off of members of an enum."

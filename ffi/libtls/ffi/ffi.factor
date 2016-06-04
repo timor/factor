@@ -12,7 +12,7 @@ in: libtls.ffi
 c-type: tls_config
 c-type: tls_ctx
 
-LIBRARY: libtls
+library: libtls
 
 FUNCTION: int tls_init ( ) ;
 FUNCTION: c-string tls_error ( tls_ctx* ctx ) ;

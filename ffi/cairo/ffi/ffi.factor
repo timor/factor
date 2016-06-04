@@ -14,7 +14,7 @@ in: cairo.ffi
     { [ os unix? ] [ "libcairo.so" ] }
 } cond cdecl add-library >>
 
-LIBRARY: cairo
+library: cairo
 
 FUNCTION: int cairo_version ( ) ;
 FUNCTION: c-string cairo_version_string ( ) ;

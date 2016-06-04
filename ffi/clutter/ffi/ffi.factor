@@ -12,7 +12,7 @@ in: clutter.ffi
 "clutter.json.ffi" require
 >>
 
-LIBRARY: clutter
+library: clutter
 
 <<
 "clutter" {

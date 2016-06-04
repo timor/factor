@@ -14,7 +14,7 @@ os {
 
 >>
 
-LIBRARY: glu
+library: glu
 
 ! These are defined as structs in glu.h, but we only ever use pointers to them
 c-type: GLUnurbs
@@ -202,7 +202,7 @@ CONSTANT: GLU_TESS_WINDING_POSITIVE          100132 ;
 CONSTANT: GLU_TESS_WINDING_NEGATIVE          100133 ;
 CONSTANT: GLU_TESS_WINDING_ABS_GEQ_TWO       100134 ;
 
-LIBRARY: glu
+library: glu
 
 FUNCTION: void gluBeginCurve ( GLUnurbs* nurb ) ;
 FUNCTION: void gluBeginPolygon ( GLUtesselator* tess ) ;

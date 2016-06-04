@@ -16,7 +16,7 @@ in: javascriptcore.ffi
 } cond
 >>
 
-LIBRARY: javascriptcore
+library: javascriptcore
 
 TYPEDEF: void* JSContextGroupRef ;
 TYPEDEF: void* JSContextRef ;

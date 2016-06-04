@@ -8,7 +8,7 @@ in: gstreamer.net.ffi
 "gstreamer.ffi" require
 >>
 
-LIBRARY: gstreamer.net
+library: gstreamer.net
 
 <<
 "gstreamer.net" {
