@@ -4,7 +4,7 @@ USING: alien.c-types alien.syntax core-foundation
 core-foundation.urls kernel sequences ;
 in: core-foundation.bundles
 
-TYPEDEF: void* CFBundleRef
+TYPEDEF: void* CFBundleRef ;
 
 FUNCTION: CFBundleRef CFBundleCreate ( CFAllocatorRef allocator, CFURLRef bundleURL ) ;
 

@@ -13,9 +13,9 @@ LIBRARY: libclang
 
 C-TYPE: CXTranslationUnitImpl
 
-TYPEDEF: void* CXIndex
-TYPEDEF: CXTranslationUnitImpl* CXTranslationUnit
-TYPEDEF: void* CXClientData
+TYPEDEF: void* CXIndex ;
+TYPEDEF: CXTranslationUnitImpl* CXTranslationUnit ;
+TYPEDEF: void* CXClientData ;
 
 STRUCT: CXUnsavedFile
     { Filename c-string }
@@ -38,7 +38,7 @@ FUNCTION: CXIndex clang_createIndex ( int excludeDeclarationsFromPCH,
                                       int displayDiagnostics ) ;
 FUNCTION: void clang_disposeIndex ( CXIndex index ) ;
 
-TYPEDEF: void* CXFile
+TYPEDEF: void* CXFile ;
 
 FUNCTION: CXString clang_getFileName ( CXFile SFile ) ;
 FUNCTION: time_t clang_getFileTime ( CXFile SFile ) ;
@@ -89,7 +89,7 @@ ENUM: CXDiagnosticSeverity
   CXDiagnostic_Error
   CXDiagnostic_Fatal ;
 
-TYPEDEF: void* CXDiagnostic
+TYPEDEF: void* CXDiagnostic ;
 
 FUNCTION: uint clang_getNumDiagnostics ( CXTranslationUnit Unit ) ;
 FUNCTION: CXDiagnostic clang_getDiagnostic ( CXTranslationUnit Unit,
@@ -315,7 +315,7 @@ FUNCTION: CXAvailabilityKind clang_getCursorAvailability ( CXCursor cursor ) ;
 FUNCTION: CXLanguageKind clang_getCursorLanguage ( CXCursor cursor ) ;
 
 C-TYPE: CXCursorSetImpl
-TYPEDEF: CXCursorSetImpl* CXCursorSet
+TYPEDEF: CXCursorSetImpl* CXCursorSet ;
 
 FUNCTION: CXCursorSet clang_createCXCursorSet ( ) ;
 FUNCTION: void clang_disposeCXCursorSet ( CXCursorSet cset ) ;
@@ -487,7 +487,7 @@ FUNCTION: void clang_executeOnThread ( executeOnThreadCallback* callback,
                                        void*                    user_data,
                                        uint                     stack_size ) ;
 
-TYPEDEF: void* CXCompletionString
+TYPEDEF: void* CXCompletionString ;
 
 STRUCT: CXCompletionResult
     { CursorKind       CXCursorKind       }

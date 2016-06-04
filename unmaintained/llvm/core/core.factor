@@ -22,8 +22,8 @@ in: llvm.core
 
 LIBRARY: LLVMCore
 
-TYPEDEF: uint unsigned
-TYPEDEF: unsigned enum
+TYPEDEF: uint unsigned ;
+TYPEDEF: unsigned enum ;
 
 ENUM: LLVMAttribute
     { LLVMZExtAttribute         0b1 }
@@ -110,23 +110,23 @@ ENUM: LLVMRealPredicate
 
 ! Opaque Types
 
-TYPEDEF: void* LLVMModuleRef
+TYPEDEF: void* LLVMModuleRef ;
 
-TYPEDEF: void* LLVMPassManagerRef
+TYPEDEF: void* LLVMPassManagerRef ;
 
-TYPEDEF: void* LLVMModuleProviderRef
+TYPEDEF: void* LLVMModuleProviderRef ;
 
-TYPEDEF: void* LLVMTypeRef
+TYPEDEF: void* LLVMTypeRef ;
 
-TYPEDEF: void* LLVMTypeHandleRef
+TYPEDEF: void* LLVMTypeHandleRef ;
 
-TYPEDEF: void* LLVMValueRef
+TYPEDEF: void* LLVMValueRef ;
 
-TYPEDEF: void* LLVMBasicBlockRef
+TYPEDEF: void* LLVMBasicBlockRef ;
 
-TYPEDEF: void* LLVMBuilderRef
+TYPEDEF: void* LLVMBuilderRef ;
 
-TYPEDEF: void* LLVMMemoryBufferRef
+TYPEDEF: void* LLVMMemoryBufferRef ;
 
 ! Functions
 

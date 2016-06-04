@@ -48,7 +48,7 @@ in: alien.parser.tests
 
 >>
 
-TYPEDEF: char char2
+TYPEDEF: char char2 ;
 
 symbol: not-c-type
 
@@ -105,7 +105,7 @@ CALLBACK: void* alien-parser-callback-effect-test ( int *arg1 float arg2 ) ;
 { t } [ \ alien-parser-callback-effect-test inline? ] unit-test
 
 ! Reported by mnestic
-TYPEDEF: int alien-parser-test-int ! reasonably unique name...
+TYPEDEF: int alien-parser-test-int ! reasonably unique name... ;
 
 { "OK!" } [
     [

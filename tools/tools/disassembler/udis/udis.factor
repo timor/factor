@@ -15,7 +15,7 @@ in: tools.disassembler.udis
 
 LIBRARY: libudis86
 
-TYPEDEF: void ud
+TYPEDEF: void ud ;
 
 FUNCTION: void ud_translate_intel ( ud* u ) ;
 FUNCTION: void ud_translate_att ( ud* u ) ;

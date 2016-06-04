@@ -9,9 +9,9 @@ parser sequences words ;
 
 in: core-foundation.strings
 
-TYPEDEF: void* CFStringRef
+TYPEDEF: void* CFStringRef ;
 
-TYPEDEF: int CFStringEncoding
+TYPEDEF: int CFStringEncoding ;
 CONSTANT: kCFStringEncodingMacRoman 0x0 ;
 CONSTANT: kCFStringEncodingWindowsLatin1 0x0500 ;
 CONSTANT: kCFStringEncodingISOLatin1 0x0201 ;

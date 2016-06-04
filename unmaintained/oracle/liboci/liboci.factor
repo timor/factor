@@ -120,10 +120,10 @@ in: oracle.liboci
 ! OCI integer types
 ! ===============================================
 
-TYPEDEF: ushort ub2
-TYPEDEF: short sb2
-TYPEDEF: uint ub4
-TYPEDEF: int sb4
+TYPEDEF: ushort ub2 ;
+TYPEDEF: short sb2 ;
+TYPEDEF: uint ub4 ;
+TYPEDEF: int sb4 ;
 
 ! ===============================================
 ! Input data types (ocidfn.h)
@@ -153,13 +153,13 @@ TYPEDEF: int sb4
 ! Opaque pointer types
 ! ===============================================
 
-TYPEDEF: void dvoid
-TYPEDEF: void oci_env
-TYPEDEF: void oci_server
-TYPEDEF: void oci_error
-TYPEDEF: void oci_svc_ctx
-TYPEDEF: void oci_session
-TYPEDEF: void oci_stmt
+TYPEDEF: void dvoid ;
+TYPEDEF: void oci_env ;
+TYPEDEF: void oci_server ;
+TYPEDEF: void oci_error ;
+TYPEDEF: void oci_svc_ctx ;
+TYPEDEF: void oci_session ;
+TYPEDEF: void oci_stmt ;
 
 LIBRARY: oci
 

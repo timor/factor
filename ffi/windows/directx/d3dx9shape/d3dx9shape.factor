@@ -5,7 +5,7 @@ in: windows.directx.d3dx9shape
 
 LIBRARY: d3dx9
 
-TYPEDEF: void* LPGLYPHMETRICSFLOAT
+TYPEDEF: void* LPGLYPHMETRICSFLOAT ;
 
 FUNCTION: HRESULT
     D3DXCreatePolygon (

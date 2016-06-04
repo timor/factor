@@ -25,7 +25,7 @@ SYNTAX: CALLBACK:
     (CALLBACK:) define-inline ;
 
 SYNTAX: TYPEDEF:
-    scan-c-type CREATE-C-TYPE dup save-location typedef ;
+    scan-c-type CREATE-C-TYPE ";" expect dup save-location typedef ;
 
 SYNTAX: ENUM:
     parse-enum (define-enum) ;

@@ -17,8 +17,8 @@ in: llvm.engine
 
 LIBRARY: LLVMExecutionEngine
 
-TYPEDEF: void* LLVMGenericValueRef
-TYPEDEF: void* LLVMExecutionEngineRef
+TYPEDEF: void* LLVMGenericValueRef ;
+TYPEDEF: void* LLVMExecutionEngineRef ;
 
 FUNCTION: LLVMGenericValueRef LLVMCreateGenericValueOfInt
 ( LLVMTypeRef Ty, ulonglong N, int IsSigned ) ;

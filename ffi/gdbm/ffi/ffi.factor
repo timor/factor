@@ -26,7 +26,7 @@ CONSTANT: GDBM_COALESCEBLKS 5 ;
 STRUCT: datum { dptr char* } { dsize int } ;
 
 C-TYPE: _GDBM_FILE
-TYPEDEF: _GDBM_FILE* GDBM_FILE
+TYPEDEF: _GDBM_FILE* GDBM_FILE ;
 
 CALLBACK: void fatal_func_cb ( ) ;
 FUNCTION: GDBM_FILE gdbm_open ( c-string name, int block_size, int read_write, int mode, fatal_func_cb fatal_func ) ;

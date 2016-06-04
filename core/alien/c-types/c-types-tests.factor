@@ -22,7 +22,7 @@ UNION-STRUCT: foo
 
 { t } [ foo heap-size int heap-size = ] unit-test
 
-TYPEDEF: int MyInt
+TYPEDEF: int MyInt ;
 
 { t } [ int   lookup-c-type          MyInt lookup-c-type = ] unit-test
 { t } [ void* lookup-c-type pointer: MyInt lookup-c-type = ] unit-test
@@ -31,20 +31,20 @@ TYPEDEF: int MyInt
 
 { } [ pointer: { int 8 } heap-size pointer: void heap-size assert= ] unit-test
 
-TYPEDEF: char MyChar
+TYPEDEF: char MyChar ;
 
 { t } [ pointer: void lookup-c-type pointer: MyChar lookup-c-type = ] unit-test
 
-TYPEDEF: { c-string ascii } MyFunkyString
+TYPEDEF: { c-string ascii } MyFunkyString ;
 
 { { c-string ascii } } [ MyFunkyString lookup-c-type ] unit-test
 
-TYPEDEF: c-string MyString
+TYPEDEF: c-string MyString ;
 
 { t } [ c-string lookup-c-type MyString          lookup-c-type = ] unit-test
 { t } [ void* lookup-c-type pointer: MyString lookup-c-type = ] unit-test
 
-TYPEDEF: int* MyIntArray
+TYPEDEF: int* MyIntArray ;
 
 { t } [ void* lookup-c-type MyIntArray lookup-c-type = ] unit-test
 
@@ -98,8 +98,8 @@ defer: struct-redefined
     "in: alien.c-types.tests
     use: alien.syntax
     use: alien.c-types
-    TYPEDEF: int type-redefinition-test
-    TYPEDEF: int type-redefinition-test" eval( -- )
+    TYPEDEF: int type-redefinition-test ;
+    TYPEDEF: int type-redefinition-test ;" eval( -- )
 ]
 [ error>> error>> redefine-error? ]
 must-fail-with
@@ -147,5 +147,5 @@ GENERIC: foo-func ( x -- ) ;
 "in: alien.c-types.tests
 use: alien.syntax
 use: alien.c-types
-TYPEDEF: void* foo-func
+TYPEDEF: void* foo-func ;
 " eval( -- )

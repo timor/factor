@@ -18,28 +18,28 @@ in: javascriptcore.ffi
 
 LIBRARY: javascriptcore
 
-TYPEDEF: void* JSContextGroupRef
-TYPEDEF: void* JSContextRef
-TYPEDEF: void* JSGlobalContextRef
-TYPEDEF: void* JSStringRef
-TYPEDEF: void* JSClassRef
-TYPEDEF: void* JSPropertyNameArrayRef
-TYPEDEF: void* JSPropertyNameAccumulatorRef
-TYPEDEF: void* JSValueRef
-TYPEDEF: void* JSObjectRef
-TYPEDEF: void* JSObjectInitializeCallback
-TYPEDEF: void* JSObjectFinalizeCallback
-TYPEDEF: void* JSObjectHasPropertyCallback
-TYPEDEF: void* JSObjectGetPropertyCallback
-TYPEDEF: void* JSObjectSetPropertyCallback
-TYPEDEF: void* JSObjectDeletePropertyCallback
-TYPEDEF: void* JSObjectGetPropertyNamesCallback
-TYPEDEF: void* JSObjectCallAsFunctionCallback
-TYPEDEF: void* JSObjectCallAsConstructorCallback
-TYPEDEF: void* JSObjectHasInstanceCallback
-TYPEDEF: void* JSObjectConvertToTypeCallback
-TYPEDEF: uint unsigned
-TYPEDEF: ushort JSChar
+TYPEDEF: void* JSContextGroupRef ;
+TYPEDEF: void* JSContextRef ;
+TYPEDEF: void* JSGlobalContextRef ;
+TYPEDEF: void* JSStringRef ;
+TYPEDEF: void* JSClassRef ;
+TYPEDEF: void* JSPropertyNameArrayRef ;
+TYPEDEF: void* JSPropertyNameAccumulatorRef ;
+TYPEDEF: void* JSValueRef ;
+TYPEDEF: void* JSObjectRef ;
+TYPEDEF: void* JSObjectInitializeCallback ;
+TYPEDEF: void* JSObjectFinalizeCallback ;
+TYPEDEF: void* JSObjectHasPropertyCallback ;
+TYPEDEF: void* JSObjectGetPropertyCallback ;
+TYPEDEF: void* JSObjectSetPropertyCallback ;
+TYPEDEF: void* JSObjectDeletePropertyCallback ;
+TYPEDEF: void* JSObjectGetPropertyNamesCallback ;
+TYPEDEF: void* JSObjectCallAsFunctionCallback ;
+TYPEDEF: void* JSObjectCallAsConstructorCallback ;
+TYPEDEF: void* JSObjectHasInstanceCallback ;
+TYPEDEF: void* JSObjectConvertToTypeCallback ;
+TYPEDEF: uint unsigned ;
+TYPEDEF: ushort JSChar ;
 
 ENUM: JSPropertyAttributes
     { kJSPropertyAttributeNone       0 }

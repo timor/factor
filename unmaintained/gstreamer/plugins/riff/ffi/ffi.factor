@@ -14,14 +14,14 @@ in: gstreamer.ffi
 } cond
 >>
 
-TYPEDEF: gpointer GstClockID
-TYPEDEF: guint64 GstClockTime
-TYPEDEF: gint64 GstClockTimeDiff
+TYPEDEF: gpointer GstClockID ;
+TYPEDEF: guint64 GstClockTime ;
+TYPEDEF: gint64 GstClockTimeDiff ;
 
 ! types from libxml2
-TYPEDEF: void* xmlNodePtr
-TYPEDEF: void* xmlDocPtr
-TYPEDEF: void* xmlNsPtr
+TYPEDEF: void* xmlNodePtr ;
+TYPEDEF: void* xmlDocPtr ;
+TYPEDEF: void* xmlNsPtr ;
 
 GIR: vocab:gstreamer/Gst-0.10.gir
 

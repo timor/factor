@@ -6,8 +6,8 @@ in: core-foundation.dictionaries
 
 specialized-array: void*
 
-TYPEDEF: void* CFDictionaryRef
-TYPEDEF: void* CFMutableDictionaryRef
+TYPEDEF: void* CFDictionaryRef ;
+TYPEDEF: void* CFMutableDictionaryRef ;
 C-TYPE: CFDictionaryKeyCallBacks
 C-TYPE: CFDictionaryValueCallBacks
 

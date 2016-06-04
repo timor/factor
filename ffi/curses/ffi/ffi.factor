@@ -11,13 +11,13 @@ in: curses.ffi
 } cond cdecl add-library >>
 
 C-TYPE: SCREEN
-TYPEDEF: void* va_list
+TYPEDEF: void* va_list ;
 
-TYPEDEF: uint chtype
-TYPEDEF: chtype attr_t
-TYPEDEF: short NCURSES_SIZE_T
-TYPEDEF: ushort wchar_t
-TYPEDEF: ulong mmask_t
+TYPEDEF: uint chtype ;
+TYPEDEF: chtype attr_t ;
+TYPEDEF: short NCURSES_SIZE_T ;
+TYPEDEF: ushort wchar_t ;
+TYPEDEF: ulong mmask_t ;
 
 CONSTANT: CCHARW_MAX  5 ;
 

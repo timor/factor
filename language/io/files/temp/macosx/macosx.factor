@@ -8,10 +8,10 @@ in: io.files.temp.macosx
 
 FUNCTION: id NSTemporaryDirectory ( ) ;
 
-TYPEDEF: NSUInteger NSSearchPathDirectory
+TYPEDEF: NSUInteger NSSearchPathDirectory ;
 CONSTANT: NSCachesDirectory 13 ;
 
-TYPEDEF: NSUInteger NSSearchPathDomainMask
+TYPEDEF: NSUInteger NSSearchPathDomainMask ;
 CONSTANT: NSUserDomainMask 1 ;
 
 FUNCTION: id NSSearchPathForDirectoriesInDomains (

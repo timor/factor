@@ -25,19 +25,19 @@ FUNCTION-ALIAS: function-test int function_test
     [ \ function-test see ] with-string-writer
 ] unit-test
 
-TYPEDEF: c-string[ascii] string-typedef
-TYPEDEF: char[1][2][3] array-typedef
+TYPEDEF: c-string[ascii] string-typedef ;
+TYPEDEF: char[1][2][3] array-typedef ;
 
 { "USING: alien.c-types alien.syntax ;
 in: alien.prettyprint.tests
-TYPEDEF: c-string[ascii] string-typedef
+TYPEDEF: c-string[ascii] string-typedef ;
 " } [
     [ \ string-typedef see ] with-string-writer
 ] unit-test
 
 { "USING: alien.c-types alien.syntax ;
 in: alien.prettyprint.tests
-TYPEDEF: char[1][2][3] array-typedef
+TYPEDEF: char[1][2][3] array-typedef ;
 " } [
     [ \ array-typedef see ] with-string-writer
 ] unit-test
@@ -51,11 +51,11 @@ C-TYPE: opaque-c-type
     [ \ opaque-c-type see ] with-string-writer
 ] unit-test
 
-TYPEDEF: pointer: int pint
+TYPEDEF: pointer: int pint ;
 
 { "USING: alien.c-types alien.syntax ;
 in: alien.prettyprint.tests
-TYPEDEF: int* pint
+TYPEDEF: int* pint ;
 " } [
     [ \ pint see ] with-string-writer
 ] unit-test

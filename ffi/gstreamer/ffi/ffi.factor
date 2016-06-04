@@ -24,9 +24,9 @@ LIBRARY: gstreamer
 
 ! types from libxml2
 
-TYPEDEF: void* xmlNodePtr
-TYPEDEF: void* xmlDocPtr
-TYPEDEF: void* xmlNsPtr
+TYPEDEF: void* xmlNodePtr ;
+TYPEDEF: void* xmlDocPtr ;
+TYPEDEF: void* xmlNsPtr ;
 
 FOREIGN-ATOMIC-TYPE: libxml2.NodePtr xmlNodePtr
 FOREIGN-ATOMIC-TYPE: libxml2.DocPtr xmlDocPtr

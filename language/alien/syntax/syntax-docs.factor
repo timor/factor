@@ -59,7 +59,7 @@ $nl
 { postpone: FUNCTION: postpone: FUNCTION-ALIAS: } related-words
 
 HELP: TYPEDEF:
-{ $syntax "TYPEDEF: old new" }
+{ $syntax "TYPEDEF: old new ;" }
 { $values { "old" "a C type" } { "new" "a C type" } }
 { $description "Aliases the C type " { $snippet "old" } " under the name " { $snippet "new" } "." }
 { $notes "This word differs from " { $link typedef } " in that it runs at parse time, to ensure correct ordering of operations when loading source files. Words defined in source files are compiled before top-level forms are run, so if a source file defines C binding words and uses " { $link typedef } ", the type alias won't be available at compile time." } ;

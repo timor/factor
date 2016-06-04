@@ -6,8 +6,8 @@ core-foundation.strings core-graphics.types destructors fonts
 init kernel locals math memoize unix.types ;
 in: core-text.fonts
 
-TYPEDEF: void* CTFontRef
-TYPEDEF: void* CTFontDescriptorRef
+TYPEDEF: void* CTFontRef ;
+TYPEDEF: void* CTFontDescriptorRef ;
 
 ! CTFontSymbolicTraits
 : kCTFontItalicTrait ( -- n ) 0 2^ ; inline

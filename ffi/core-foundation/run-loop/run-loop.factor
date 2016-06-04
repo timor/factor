@@ -13,8 +13,8 @@ CONSTANT: kCFRunLoopRunStopped 2 ;
 CONSTANT: kCFRunLoopRunTimedOut 3 ;
 CONSTANT: kCFRunLoopRunHandledSource 4 ;
 
-TYPEDEF: void* CFRunLoopRef
-TYPEDEF: void* CFRunLoopSourceRef
+TYPEDEF: void* CFRunLoopRef ;
+TYPEDEF: void* CFRunLoopSourceRef ;
 
 FUNCTION: CFRunLoopRef CFRunLoopGetMain ( ) ;
 FUNCTION: CFRunLoopRef CFRunLoopGetCurrent ( ) ;

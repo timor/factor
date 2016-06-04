@@ -5,9 +5,9 @@ USING: kernel alien arrays sequences ;
 
 LIBRARY: jvm
 
-TYPEDEF: int jint
-TYPEDEF: uchar jboolean
-TYPEDEF: void* JNIEnv
+TYPEDEF: int jint ;
+TYPEDEF: uchar jboolean ;
+TYPEDEF: void* JNIEnv ;
 
 C-STRUCT: jdk-init-args
 	{ "jint" "version" }

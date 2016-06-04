@@ -8,7 +8,7 @@ fonts init kernel locals make math math.functions math.order
 math.vectors memoize namespaces sequences strings ;
 in: core-text
 
-TYPEDEF: void* CTLineRef
+TYPEDEF: void* CTLineRef ;
 
 C-GLOBAL: CFStringRef kCTFontAttributeName
 C-GLOBAL: CFStringRef kCTKernAttributeName

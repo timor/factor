@@ -22,7 +22,7 @@ in: cryptlib.libcl
 ! Machine-dependant types
 ! ===============================================
 
-TYPEDEF: int C_RET
+TYPEDEF: int C_RET ;
 
 ! ===============================================
 ! Algorithm and Object Types
@@ -68,7 +68,7 @@ TYPEDEF: int C_RET
 : CRYPT_ALGO_FIRST_MAC               300 ; inline
 : CRYPT_ALGO_LAST_MAC                399 ; inline ! End of mac algo.range
 
-TYPEDEF: int CRYPT_ALGO_TYPE
+TYPEDEF: int CRYPT_ALGO_TYPE ;
 
 ! CRYPT_MODE_TYPE
 : CRYPT_MODE_NONE                    0 ; inline ! No encryption mode
@@ -94,7 +94,7 @@ TYPEDEF: int CRYPT_ALGO_TYPE
 : CRYPT_KEYSET_PLUGIN_STORE           9  ; inline ! Database plugin certificate store
 : CRYPT_KEYSET_LAST                   10 ; inline ! Last possible keyset type
 
-TYPEDEF: int CRYPT_KEYSET_TYPE
+TYPEDEF: int CRYPT_KEYSET_TYPE ;
 
 ! Device subtypes
 
@@ -124,7 +124,7 @@ TYPEDEF: int CRYPT_KEYSET_TYPE
 : CRYPT_CERTTYPE_PKIUSER              13 ; inline ! PKI user information
 : CRYPT_CERTTYPE_LAST                 14 ; inline ! Last possible cert.type
 
-TYPEDEF: int CRYPT_CERTTYPE_TYPE
+TYPEDEF: int CRYPT_CERTTYPE_TYPE ;
 
 ! Envelope/data format subtypes
 
@@ -138,7 +138,7 @@ TYPEDEF: int CRYPT_CERTTYPE_TYPE
 : CRYPT_FORMAT_PGP                    5 ; inline ! PGP format
 : CRYPT_FORMAT_LAST                   6 ; inline ! Last possible format type
 
-TYPEDEF: int CRYPT_FORMAT_TYPE
+TYPEDEF: int CRYPT_FORMAT_TYPE ;
 
 ! Session subtypes
 
@@ -161,7 +161,7 @@ TYPEDEF: int CRYPT_FORMAT_TYPE
 : CRYPT_SESSION_CERTSTORE_SERVER      15 ; inline ! HTTP cert store interface
 : CRYPT_SESSION_LAST                  16 ; inline ! Last possible session type
 
-TYPEDEF: int CRYPT_SESSION_TYPE
+TYPEDEF: int CRYPT_SESSION_TYPE ;
 
 ! User subtypes
 
@@ -617,7 +617,7 @@ TYPEDEF: int CRYPT_SESSION_TYPE
 : CRYPT_USERINFO_LAST                                 7006 ; inline
 : CRYPT_ATTRIBUTE_LAST                                7006 ; inline
 
-TYPEDEF: int CRYPT_ATTRIBUTE_TYPE
+TYPEDEF: int CRYPT_ATTRIBUTE_TYPE ;
 
 ! ===============================================
 ! Attribute Subtypes and Related Values
@@ -760,7 +760,7 @@ TYPEDEF: int CRYPT_ATTRIBUTE_TYPE
 : CRYPT_CERTFORMAT_XML_CERTCHAIN       6 ; inline ! XML wrapped cert chain
 : CRYPT_CERTFORMAT_LAST                7 ; inline ! Last possible cert.format type
 
-TYPEDEF: int CRYPT_CERTFORMAT_TYPE
+TYPEDEF: int CRYPT_CERTFORMAT_TYPE ;
 
 ! CMP request types
 ! CRYPT_REQUESTTYPE_TYPE
@@ -781,7 +781,7 @@ TYPEDEF: int CRYPT_CERTFORMAT_TYPE
 : CRYPT_KEYID_EMAIL     2 ; inline ! Synonym: owner email addr.
 : CRYPT_KEYID_LAST      3 ; inline ! Last possible key ID type
 
-TYPEDEF: int CRYPT_KEYID_TYPE
+TYPEDEF: int CRYPT_KEYID_TYPE ;
 
 ! The encryption object types
 ! CRYPT_OBJECT_TYPE
@@ -886,20 +886,20 @@ CONSTANT: CRYPT_KEYOPT_LAST 4 ;
 
 : CRYPT_KEYOPT_LAST_EXTERNAL   3 ; inline ! = CRYPT_KEYOPT_CREATE + 1
 
-TYPEDEF: int CRYPT_KEYOPT_TYPE
+TYPEDEF: int CRYPT_KEYOPT_TYPE ;
 
 ! The various cryptlib objects - these are just integer handles
-TYPEDEF: int CRYPT_CERTIFICATE
-TYPEDEF: int CRYPT_CONTEXT
-TYPEDEF: int CRYPT_DEVICE
-TYPEDEF: int CRYPT_ENVELOPE
-TYPEDEF: int CRYPT_KEYSET
-TYPEDEF: int CRYPT_SESSION
-TYPEDEF: int CRYPT_USER
+TYPEDEF: int CRYPT_CERTIFICATE ;
+TYPEDEF: int CRYPT_CONTEXT ;
+TYPEDEF: int CRYPT_DEVICE ;
+TYPEDEF: int CRYPT_ENVELOPE ;
+TYPEDEF: int CRYPT_KEYSET ;
+TYPEDEF: int CRYPT_SESSION ;
+TYPEDEF: int CRYPT_USER ;
 
 ! Sometimes we don't know the exact type of a cryptlib object, so we use a
 ! generic handle type to identify it
-TYPEDEF: int CRYPT_HANDLE
+TYPEDEF: int CRYPT_HANDLE ;
 
 ! ===============================================
 ! Status Codes

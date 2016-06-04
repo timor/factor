@@ -6,7 +6,7 @@ in: windows.winmm
 
 LIBRARY: winmm
 
-TYPEDEF: int MCIERROR
+TYPEDEF: int MCIERROR ;
 
 FUNCTION: MCIERROR mciSendStringW (
   LPCTSTR lpszCommand,
