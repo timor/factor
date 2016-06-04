@@ -36,7 +36,7 @@ SYNTAX: C-TYPE:
 SYNTAX: &:
     scan-token current-library get '[ _ _ address-of ] append! ;
 
-SYNTAX: C-GLOBAL: scan-c-type scan-new-word define-global ;
+SYNTAX: C-GLOBAL: scan-c-type scan-new-word ";" expect define-global ;
 
 SYNTAX: pointer:
     scan-c-type <pointer> suffix! ;

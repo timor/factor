@@ -121,7 +121,7 @@ HELP: typedef
 { postpone: TYPEDEF: typedef } related-words
 
 HELP: C-GLOBAL:
-{ $syntax "C-GLOBAL: type name" }
+{ $syntax "C-GLOBAL: type name ;" }
 { $values { "type" "a C type" } { "name" "a C global variable name" } }
 { $description "Defines a getter " { $snippet "name" } " and setter " { $snippet "set-name" } " for the global value in the current library, set with " { $link postpone: LIBRARY: } "." } ;
 

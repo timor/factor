@@ -10,7 +10,7 @@ cdecl add-library >>
 
 LIBRARY: libgdbm
 
-C-GLOBAL: c-string gdbm_version
+C-GLOBAL: c-string gdbm_version ;
 
 CONSTANT: GDBM_SYNC   0x20 ;
 CONSTANT: GDBM_NOLOCK 0x40 ;
@@ -42,6 +42,6 @@ FUNCTION: int gdbm_exists ( GDBM_FILE dbf, datum key ) ;
 FUNCTION: int gdbm_setopt ( GDBM_FILE dbf, int option, int* value, int size ) ;
 FUNCTION: int gdbm_fdesc ( GDBM_FILE dbf ) ;
 
-C-GLOBAL: int gdbm_errno
+C-GLOBAL: int gdbm_errno ;
 
 FUNCTION: c-string gdbm_strerror ( int errno ) ;
