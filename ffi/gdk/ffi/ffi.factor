@@ -38,7 +38,7 @@ FOREIGN-ENUM-TYPE: cairo.Content cairo_content_t
 
 GIR: vocab:gdk/Gdk-3.0.gir
 
-DESTRUCTOR: gdk_cursor_unref
+destructor: gdk_cursor_unref
 
 STRUCT: GdkEventButton
     { type GdkEventType }

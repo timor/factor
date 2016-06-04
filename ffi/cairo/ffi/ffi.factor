@@ -92,7 +92,7 @@ FUNCTION: cairo_t* cairo_reference ( cairo_t* cr ) ;
 
 FUNCTION: void cairo_destroy ( cairo_t* cr ) ;
 
-DESTRUCTOR: cairo_destroy
+destructor: cairo_destroy
 
 FUNCTION: uint cairo_get_reference_count ( cairo_t* cr ) ;
 
@@ -614,7 +614,7 @@ FUNCTION: void cairo_surface_finish ( cairo_surface_t* surface ) ;
 
 FUNCTION: void cairo_surface_destroy ( cairo_surface_t* surface ) ;
 
-DESTRUCTOR: cairo_surface_destroy
+destructor: cairo_surface_destroy
 
 FUNCTION: uint cairo_surface_get_reference_count ( cairo_surface_t* surface ) ;
 

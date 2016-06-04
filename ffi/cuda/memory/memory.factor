@@ -17,7 +17,7 @@ in: cuda.memory
 : cuda-free ( ptr -- )
     cuMemFree cuda-error ; inline
 
-DESTRUCTOR: cuda-free
+destructor: cuda-free
 
 : memcpy-device>device ( dest-ptr src-ptr count -- )
     cuMemcpyDtoD cuda-error ; inline

@@ -52,4 +52,4 @@ FUNCTION: int magic_compile ( magic_t magic, c-string path ) ;
 FUNCTION: int magic_check ( magic_t magic, c-string path ) ;
 FUNCTION: int magic_errno ( magic_t magic ) ;
 
-DESTRUCTOR: magic_close
+destructor: magic_close

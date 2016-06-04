@@ -23,8 +23,8 @@ in: cuda.contexts
 : clean-up-context ( context -- )
     [ sync-context ] ignore-errors destroy-context ; inline
 
-DESTRUCTOR: destroy-context
-DESTRUCTOR: clean-up-context
+destructor: destroy-context
+destructor: clean-up-context
 
 : (with-cuda-context) ( context quot -- )
     swap '[ _ clean-up-context ] [ ] cleanup ; inline

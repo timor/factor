@@ -30,12 +30,12 @@ in: cuda.gl
 : unmap-resource ( resource -- )
     1 swap void* <ref> f cuGraphicsUnmapResources cuda-error ; inline
 
-DESTRUCTOR: unmap-resource
+destructor: unmap-resource
 
 : free-resource ( resource -- )
     cuGraphicsUnregisterResource cuda-error ; inline
 
-DESTRUCTOR: free-resource
+destructor: free-resource
 
 : with-mapped-resource ( ..a resource quot: ( ..a device-ptr size -- ..b ) -- ..b )
     over [ map-resource ] 2dip '[ _ unmap-resource ] [ ] cleanup ; inline

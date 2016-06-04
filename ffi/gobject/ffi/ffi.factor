@@ -29,7 +29,7 @@ forget: G_IO_ERR
 forget: G_IO_HUP
 forget: G_IO_NVAL
 
-DESTRUCTOR: g_object_unref
+destructor: g_object_unref
 
 CONSTANT: G_TYPE_INVALID $[ 0 2 shift ] ;
 CONSTANT: G_TYPE_NONE $[ 1 2 shift ] ;

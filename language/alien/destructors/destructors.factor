@@ -29,4 +29,4 @@ M: F-destructor dispose alien>> F N ndrop ;
 
 ;FUNCTOR
 
-SYNTAX: DESTRUCTOR: scan-word define-destructor ;
+SYNTAX: destructor: scan-word define-destructor ;

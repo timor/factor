@@ -615,7 +615,7 @@ FUNCTION: X509_NAME* X509_get_subject_name ( X509* a ) ;
 FUNCTION: int X509_check_trust ( X509* a, int id, int flags ) ;
 FUNCTION: X509_EXTENSION* X509_get_ext ( X509* a, int loc ) ;
 FUNCTION: void X509_free ( X509 *a ) ;
-DESTRUCTOR: X509_free
+destructor: X509_free
 
 C-TYPE: X509_STORE
 FUNCTION: X509_STORE* X509_STORE_new ( ) ;

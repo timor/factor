@@ -10,7 +10,7 @@ LIBRARY: gdiplus
 FUNCTION: void* GdipAlloc ( SIZE_T size ) ;
 FUNCTION: void GdipFree ( void* mem ) ;
 
-DESTRUCTOR: GdipFree
+destructor: GdipFree
 
 TYPEDEF: float REAL
 
@@ -1631,4 +1631,4 @@ CONSTANT: standard-gdi+-startup-input
 : stop-gdi+ ( token -- )
     GdiplusShutdown ;
 
-DESTRUCTOR: stop-gdi+
+destructor: stop-gdi+

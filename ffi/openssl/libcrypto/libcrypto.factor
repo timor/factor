@@ -206,7 +206,7 @@ FUNCTION: void* BN_bin2bn ( void* s, int len, void* ret ) ;
 FUNCTION: int BN_bn2bin ( void* a, void* to ) ;
 
 FUNCTION: void BN_clear_free ( void* a ) ;
-DESTRUCTOR: BN_clear_free
+destructor: BN_clear_free
 
 ! ===============================================
 ! ec.h

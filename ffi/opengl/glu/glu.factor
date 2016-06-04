@@ -267,9 +267,9 @@ FUNCTION: GLint gluUnProject ( GLdouble winX, GLdouble winY, GLdouble winZ, GLdo
 ! FUNCTION: GLboolean gluCheckExtension ( GLubyte* extName, GLubyte* extString ) ;
 ! FUNCTION: GLint gluUnProject4 ( GLdouble winX, GLdouble winY, GLdouble winZ, GLdouble clipW, GLdouble* model, GLdouble* proj, GLint* view, GLdouble nearVal, GLdouble farVal, GLdouble* objX, GLdouble* objY, GLdouble* objZ, GLdouble* objW ) ;
 
-DESTRUCTOR: gluDeleteNurbsRenderer
-DESTRUCTOR: gluDeleteQuadric
-DESTRUCTOR: gluDeleteTess
+destructor: gluDeleteNurbsRenderer
+destructor: gluDeleteQuadric
+destructor: gluDeleteTess
 
 CALLBACK: void GLUtessBeginCallback ( GLenum type ) ;
 CALLBACK: void GLUtessBeginDataCallback ( GLenum type, void* data ) ;

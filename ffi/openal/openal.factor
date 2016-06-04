@@ -244,8 +244,8 @@ FUNCTION: void alcCaptureStart ( ALCdevice* device ) ;
 FUNCTION: void alcCaptureStop ( ALCdevice* device ) ;
 FUNCTION: void alcCaptureSamples ( ALCdevice* device, void* buf, ALCsizei samps ) ;
 
-DESTRUCTOR: alcCloseDevice*
-DESTRUCTOR: alcDestroyContext
+destructor: alcCloseDevice*
+destructor: alcDestroyContext
 
 : gen-sources ( size -- seq )
     dup uint <c-array> [ alGenSources ] keep ;

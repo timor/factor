@@ -1415,11 +1415,11 @@ FUNCTION: HBRUSH CreateSolidBrush ( COLORREF colorref ) ;
 ! FUNCTION: DdEntry9
 ! FUNCTION: DeleteColorSpace
 FUNCTION: BOOL DeleteDC ( HDC hdc ) ;
-DESTRUCTOR: DeleteDC
+destructor: DeleteDC
 ! FUNCTION: DeleteEnhMetaFile
 ! FUNCTION: DeleteMetaFile
 FUNCTION: BOOL DeleteObject ( HGDIOBJ hObject ) ;
-DESTRUCTOR: DeleteObject
+destructor: DeleteObject
 FUNCTION: int DescribePixelFormat ( HDC hdc, int iPixelFormat, UINT nBytes, PIXELFORMATDESCRIPTOR* ppfd ) ;
 ! FUNCTION: DeviceCapabilitiesExA
 ! FUNCTION: DeviceCapabilitiesExW

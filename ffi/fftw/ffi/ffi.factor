@@ -40,4 +40,4 @@ FUNCTION: void fftw_execute ( fftw_plan p ) ;
 
 FUNCTION: void fftw_free ( void* p ) ;
 
-DESTRUCTOR: fftw_free
+destructor: fftw_free

@@ -266,7 +266,7 @@ FUNCTION: HRESULT ScriptStringFree (
     SCRIPT_STRING_ANALYSIS* pssa
 ) ;
 
-DESTRUCTOR: ScriptStringFree
+destructor: ScriptStringFree
 
 FUNCTION: SIZE* ScriptString_pSize ( SCRIPT_STRING_ANALYSIS ssa ) ;
 

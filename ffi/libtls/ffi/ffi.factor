@@ -66,5 +66,5 @@ FUNCTION: ssize_t tls_read ( tls_ctx* ctx, void* buf, size_t buflen ) ;
 FUNCTION: ssize_t tls_write ( tls_ctx* ctx, void* buf, size_t buflen ) ;
 FUNCTION: int tls_close ( tls_ctx* ctx ) ;
 
-DESTRUCTOR: tls_config_free
-DESTRUCTOR: tls_free
+destructor: tls_config_free
+destructor: tls_free

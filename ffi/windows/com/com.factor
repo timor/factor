@@ -99,4 +99,4 @@ ERROR: null-com-release ;
 : with-com-interface ( interface quot -- )
     over [ com-release ] curry [ ] cleanup ; inline
 
-DESTRUCTOR: com-release
+destructor: com-release

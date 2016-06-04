@@ -25,7 +25,7 @@ IMPLEMENT-STRUCTS: GtkTreeIter ;
 
 GIR: vocab:gtk/Gtk-3.0.gir
 
-DESTRUCTOR: gtk_widget_destroy
+destructor: gtk_widget_destroy
 
 ! <workaround
 forget: gtk_im_context_get_preedit_string

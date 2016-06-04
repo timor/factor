@@ -144,7 +144,7 @@ FUNCTION: int PyType_Check ( PyObject* obj ) ;
 ! Reference counting
 FUNCTION: void Py_IncRef ( PyObject* o ) ;
 FUNCTION: void Py_DecRef ( PyObject* o ) ;
-DESTRUCTOR: Py_DecRef
+destructor: Py_DecRef
 
 ! Reflection
 FUNCTION: c-string PyEval_GetFuncName ( PyObject* func ) ;

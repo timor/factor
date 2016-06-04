@@ -64,7 +64,7 @@ symbol: current-dbf
         [ block-size>> ] [ get-flag ] [ mode>> ]
     } cleave f gdbm_open [ gdbm-throw ] unless* ;
 
-DESTRUCTOR: gdbm-close
+destructor: gdbm-close
 
 : object>datum ( obj -- datum )
     object>bytes [ malloc-byte-array &free ] [ length ] bi
