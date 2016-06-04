@@ -27,8 +27,8 @@ in: vocabs.prettyprint.tests"
 : manifest-test-3 ( -- string )
     "USING: kernel namespaces vocabs.parser vocabs.prettyprint ;
     FROM: math => + - ;
-    QUALIFIED: system
-    QUALIFIED-WITH: assocs a
+    qualified: system
+    QUALIFIED-WITH: assocs a ;
     EXCLUDE: parser => run-file ;
     in: vocabs.prettyprint.tests
 
@@ -37,8 +37,8 @@ in: vocabs.prettyprint.tests"
 {
 "USING: kernel namespaces vocabs.parser vocabs.prettyprint ;
 FROM: math => + - ;
-QUALIFIED: system
-QUALIFIED-WITH: assocs a
+qualified: system
+QUALIFIED-WITH: assocs a ;
 EXCLUDE: parser => run-file ;
 in: vocabs.prettyprint.tests"
 }

@@ -2,7 +2,7 @@
 ! This vocab only exports forward-compatible OpenGL 3.x symbols.
 ! For legacy OpenGL and extensions, use opengl.gl
 
-QUALIFIED-WITH: opengl.gl gl
+QUALIFIED-WITH: opengl.gl gl ;
 in: opengl.gl3
 
 ALIAS: GL_DEPTH_BUFFER_BIT gl:GL_DEPTH_BUFFER_BIT ;

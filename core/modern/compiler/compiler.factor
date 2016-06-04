@@ -16,22 +16,22 @@ in: modern.compiler
 : filter-using ( using -- using' )
     { "accessors" "threads.private" "threads" } diff ;
 
-<<
- SYNTAX: STRING-DISPATCH:
-    [
-        scan-new-word scan-effect
-        H{ } clone over [ in>> but-last ] [ out>> ] bi <effect>
-        '[ _ ?at [ throw ] unless _ call-effect ]
-        swap
-    ] with-definition define-declared ;
+!  <<
+! SYNTAX: STRING-DISPATCH:
+    ! [
+        ! scan-new-word scan-effect
+        ! H{ } clone over [ in>> but-last ] [ out>> ] bi <effect>
+        ! '[ _ ?at [ throw ] unless _ call-effect ]
+        ! swap
+    ! ] with-definition define-declared ;
 
-SYNTAX: STRING-M:
-    [
-        scan-token scan-word parse-definition
-        over changed-definition
-        swap def>> first swapd set-at
-    ] with-definition ;
->>
+! SYNTAX: STRING-M:
+    ! [
+        ! scan-token scan-word parse-definition
+        ! over changed-definition
+        ! swap def>> first swapd set-at
+    ! ] with-definition ;
+! >>
 
 
 TUPLE: holder literal ;

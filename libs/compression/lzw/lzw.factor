@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators io kernel math math.order
 namespaces sequences vectors ;
-QUALIFIED-WITH: bitstreams bs
+QUALIFIED-WITH: bitstreams bs ;
 in: compression.lzw
 
 TUPLE: lzw

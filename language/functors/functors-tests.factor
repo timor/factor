@@ -1,6 +1,6 @@
 USING: classes.struct classes.tuple functors tools.test math
 words kernel multiline parser io.streams.string generic ;
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 in: functors.tests
 
 <<

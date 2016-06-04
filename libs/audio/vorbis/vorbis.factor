@@ -4,7 +4,7 @@ byte-arrays classes.struct combinators destructors fry io
 io.files io.encodings.binary kernel libc locals make math
 math.order math.parser ogg ogg.vorbis sequences
 specialized-arrays specialized-vectors ;
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-ARRAYS: c:float c:void* ;
 SPECIALIZED-VECTOR: c:short
 in: audio.vorbis

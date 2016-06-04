@@ -3,7 +3,7 @@
 USING: arrays alien.c-types assocs kernel sequences math
 math.functions grouping math.order math.libm math.floats.private
 fry combinators byte-arrays accessors locals ;
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 in: math.vectors
 
 GENERIC: vneg ( v -- w ) ;

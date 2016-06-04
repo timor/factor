@@ -114,7 +114,7 @@ PRIVATE>
 <PRIVATE
 
 : (complete-single-vocab?) ( str -- ? )
-    { "in:" "use:" "unuse:" "QUALIFIED:" "QUALIFIED-WITH:" }
+    { "in:" "use:" "unuse:" "qualified:" "QUALIFIED-WITH:" }
     member? ; inline
 
 : complete-single-vocab? ( tokens -- ? )

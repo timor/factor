@@ -547,11 +547,11 @@ HELP: QUALIFIED:
 } } ;
 
 HELP: QUALIFIED-WITH:
-{ $syntax "QUALIFIED-WITH: vocab word-prefix" }
-{ $description "Like " { $link postpone: QUALIFIED: } " but uses " { $snippet "word-prefix" } " as prefix." }
+{ $syntax "QUALIFIED-WITH: vocab word-prefix ;" }
+{ $description "Like " { $link postpone: qualified: } " but uses " { $snippet "word-prefix" } " as prefix." }
 { $examples { $example
     "USING: prettyprint ;"
-    "QUALIFIED-WITH: math m"
+    "QUALIFIED-WITH: math m ;"
     "1 2 m:+ ."
     "3"
 } } ;

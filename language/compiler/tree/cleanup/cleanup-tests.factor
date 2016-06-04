@@ -17,7 +17,7 @@ compiler.tree.propagation.info
 compiler.tree.checker
 compiler.tree.debugger ;
 FROM: math => float ;
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 in: compiler.tree.cleanup.tests
 
 { t } [ [ [ 1 ] [ 2 ] if ] cleaned-up-tree [ #if? ] contains-node? ] unit-test

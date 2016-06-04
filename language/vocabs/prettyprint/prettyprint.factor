@@ -30,11 +30,11 @@ GENERIC: pprint-qualified ( qualified -- ) ;
 M: qualified pprint-qualified ( qualified -- )
     [
         dup [ vocab>> vocab-name ] [ prefix>> ] bi = [
-            \ QUALIFIED: pprint-word
+            \ qualified: pprint-word
             vocab>> pprint-vocab
         ] [
             \ QUALIFIED-WITH: pprint-word
-            [ vocab>> pprint-vocab ] [ prefix>> text ] bi
+            [ vocab>> pprint-vocab ] [ prefix>> text ] bi ";" text
         ] if
     ] with-pprint ;
 

@@ -3,7 +3,7 @@ models monads namespaces parser sequences
 sequences.extras models.combinators ui.gadgets
 ui.gadgets.tracks words ui.gadgets.controls ;
 QUALIFIED: make
-QUALIFIED-WITH: ui.gadgets.books book
+QUALIFIED-WITH: ui.gadgets.books book ;
 in: ui.gadgets.layout
 
 symbol: templates

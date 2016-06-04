@@ -17,7 +17,7 @@ ARTICLE: "word-search-syntax" "Syntax to control word lookup"
 { $subsections
     postpone: use:
     postpone: USING:
-    postpone: QUALIFIED:
+    postpone: qualified:
     postpone: QUALIFIED-WITH:
 }
 "Parsing words which make a subset of all words in a vocabulary available:"
@@ -32,11 +32,11 @@ ARTICLE: "word-search-syntax" "Syntax to control word lookup"
 { $subsections postpone: in: } ;
 
 ARTICLE: "word-search-semantics" "Resolution of ambiguous word names"
-"There is a distinction between parsing words which perform “open” imports versus “closed” imports. An open import introduces all words from a vocabulary as identifiers, except possibly a finite set of exclusions. The " { $link postpone: use: } ", " { $link postpone: USING: } " and " { $link postpone: EXCLUDE: } " words perform open imports. A closed import only adds a fixed set of identifiers. The " { $link postpone: FROM: } ", " { $link postpone: RENAME: } ", " { $link postpone: QUALIFIED: } " and " { $link postpone: QUALIFIED-WITH: } " words perform closed imports. Note that the latter two are considered as closed imports, due to the fact that all identifiers they introduce are unambiguously qualified with a prefix. The " { $link postpone: in: } " parsing word also performs a closed import of the newly-created vocabulary."
+"There is a distinction between parsing words which perform “open” imports versus “closed” imports. An open import introduces all words from a vocabulary as identifiers, except possibly a finite set of exclusions. The " { $link postpone: use: } ", " { $link postpone: USING: } " and " { $link postpone: EXCLUDE: } " words perform open imports. A closed import only adds a fixed set of identifiers. The " { $link postpone: FROM: } ", " { $link postpone: RENAME: } ", " { $link postpone: qualified: } " and " { $link postpone: QUALIFIED-WITH: } " words perform closed imports. Note that the latter two are considered as closed imports, due to the fact that all identifiers they introduce are unambiguously qualified with a prefix. The " { $link postpone: in: } " parsing word also performs a closed import of the newly-created vocabulary."
 $nl
 "When the parser encounters a reference to a word, it first searches the closed imports, in order. Closed imports are searched from the most recent to least recent. If the word could not be found this way, it searches open imports. Unlike closed imports, with open imports, the order does not matter -- instead, if more than one vocabulary defines a word with this name, an error is thrown."
 { $subsections ambiguous-use-error }
-"To resolve the error, add a closed import, using " { $link postpone: FROM: } ", " { $link postpone: QUALIFIED: } " or " { $link postpone: QUALIFIED-WITH: } ". The closed import will then take precedence over the open imports, and the ambiguity will be resolved."
+"To resolve the error, add a closed import, using " { $link postpone: FROM: } ", " { $link postpone: qualified: } " or " { $link postpone: QUALIFIED-WITH: } ". The closed import will then take precedence over the open imports, and the ambiguity will be resolved."
 $nl
 "The rationale for this behavior is as follows. Open imports are named such because they are open to future extension; if a future version of a vocabulary that you use adds new words, those new words will now be in scope in your source file, too. To avoid problems, any references to the new word have to be resolved since the parser cannot safely determine which vocabulary was meant. This problem can be avoided entirely by using only closed imports, but this leads to additional verbosity."
 $nl
@@ -44,7 +44,7 @@ $nl
 { $list
   "Keep vocabularies small"
   { "Hide internal words using " { $link postpone: <PRIVATE } }
-  { "Make good use of " { $link postpone: FROM: } ", " { $link postpone: QUALIFIED: } " or " { $link postpone: QUALIFIED-WITH: } }
+  { "Make good use of " { $link postpone: FROM: } ", " { $link postpone: qualified: } " or " { $link postpone: QUALIFIED-WITH: } }
 } ;
 
 ARTICLE: "word-search-private" "Private words"
@@ -144,7 +144,7 @@ HELP: unuse-vocab
 HELP: add-qualified
 { $values { "vocab" "a vocabulary specifier" } { "prefix" string } }
 { $description "Adds the vocabulary's words, prefixed with the given string, to the current manifest." }
-{ $notes "If adding the vocabulary introduces ambiguity, the vocabulary will take precedence when resolving any ambiguous names. See the example in " { $link postpone: QUALIFIED: } " for further explanation." } ;
+{ $notes "If adding the vocabulary introduces ambiguity, the vocabulary will take precedence when resolving any ambiguous names. See the example in " { $link postpone: qualified: } " for further explanation." } ;
 
 HELP: add-words-from
 { $values { "vocab" "a vocabulary specifier" } { "words" { $sequence "word names" } } }
@@ -170,7 +170,7 @@ HELP: unuse-words
 { $description "Removes an assoc mapping word names to words from the current manifest." } ;
 
 HELP: ambiguous-use-error
-{ $error-description "Thrown when a word name referenced in source file is available in more than one vocabulary in the manifest. Such cases must be explicitly disambiguated using " { $link postpone: FROM: } ", " { $link postpone: EXCLUDE: } ", " { $link postpone: QUALIFIED: } ", or " { $link postpone: QUALIFIED-WITH: } "." } ;
+{ $error-description "Thrown when a word name referenced in source file is available in more than one vocabulary in the manifest. Such cases must be explicitly disambiguated using " { $link postpone: FROM: } ", " { $link postpone: EXCLUDE: } ", " { $link postpone: qualified: } ", or " { $link postpone: QUALIFIED-WITH: } "." } ;
 
 HELP: search-manifest
 { $values { "name" string } { "manifest" manifest } { "word/f" { $maybe word } } }

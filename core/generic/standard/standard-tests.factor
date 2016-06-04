@@ -4,7 +4,7 @@ compiler.units definitions eval generic generic.single
 generic.standard io.streams.string kernel make math
 math.constants math.functions namespaces parser quotations
 sequences specialized-vectors strings tools.test words ;
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-VECTOR: c:double
 in: generic.standard.tests
 

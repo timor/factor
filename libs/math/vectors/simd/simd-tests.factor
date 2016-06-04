@@ -8,7 +8,7 @@ specialized-arrays classes.struct eval classes.algebra sets
 quotations math.constants compiler.units splitting math.matrices
 math.vectors.simd.cords alien.data ;
 FROM: math.vectors.simd.intrinsics => alien-vector set-alien-vector ;
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-ARRAY: c:float
 in: math.vectors.simd.tests
 

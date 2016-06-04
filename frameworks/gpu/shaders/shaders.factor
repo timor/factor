@@ -9,7 +9,7 @@ opengl opengl.gl opengl.shaders parser quotations sequences
 specialized-arrays splitting strings tr ui.gadgets.worlds
 variants vectors vocabs vocabs.loader vocabs.parser words
 words.constant math.floats.half typed ;
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-ARRAY: int
 SPECIALIZED-ARRAY: void*
 in: gpu.shaders

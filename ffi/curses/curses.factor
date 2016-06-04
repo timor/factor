@@ -6,7 +6,7 @@ classes.struct combinators continuations destructors fry
 io.encodings.utf8 kernel libc locals math memoize multiline
 namespaces sequences unix.ffi ;
 
-QUALIFIED-WITH: curses.ffi ffi
+QUALIFIED-WITH: curses.ffi ffi ;
 
 in: curses
 

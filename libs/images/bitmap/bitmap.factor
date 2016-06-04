@@ -6,7 +6,7 @@ images.loader images.normalization io io.binary
 io.encodings.8-bit.latin1 io.encodings.string kernel math
 math.bitwise sequences specialized-arrays summary
 io.streams.throwing ;
-QUALIFIED-WITH: bitstreams b
+QUALIFIED-WITH: bitstreams b ;
 SPECIALIZED-ARRAYS: uint ushort ;
 in: images.bitmap
 

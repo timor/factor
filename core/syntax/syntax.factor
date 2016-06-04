@@ -83,8 +83,9 @@ in: bootstrap.syntax
     "USING:" [ ";" [ use-vocab ] each-token ] define-core-syntax
 
     "QUALIFIED:" [ scan-token dup add-qualified ] define-core-syntax
+    "qualified:" [ scan-token dup add-qualified ] define-core-syntax
 
-    "QUALIFIED-WITH:" [ scan-token scan-token add-qualified ] define-core-syntax
+    "QUALIFIED-WITH:" [ scan-token scan-token ";" expect add-qualified ] define-core-syntax
 
     "FROM:" [
         scan-token "=>" expect ";" parse-tokens add-words-from

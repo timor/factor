@@ -66,6 +66,7 @@ in: bootstrap.syntax
         "unuse:"
         "USING:"
         "QUALIFIED:"
+        "qualified:"
         "QUALIFIED-WITH:"
         "FROM:"
         "EXCLUDE:"

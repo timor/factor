@@ -4,7 +4,7 @@ grouping kernel libc locals math math.libm math.order math.ranges
 sequences sequences.cords sequences.generalizations sequences.private
 sequences.unrolled sequences.unrolled.private specialized-arrays
 vocabs ;
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-ARRAYS:
     c:char c:short c:int c:longlong
     c:uchar c:ushort c:uint c:ulonglong

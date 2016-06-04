@@ -7,7 +7,7 @@ parser sequences sequences.generalizations splitting
 stack-checker vectors vocabs.parser words locals
 io.encodings.ascii io.encodings.string shuffle effects
 math.ranges math.order sorting strings system alien.libraries ;
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 in: alien.fortran
 
 SINGLETONS: f2c-abi g95-abi gfortran-abi intel-unix-abi intel-windows-abi ;

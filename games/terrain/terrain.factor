@@ -9,7 +9,7 @@ terrain.generation terrain.shaders typed ui ui.gadgets
 ui.gadgets.worlds ui.pixel-formats game.worlds
 math.matrices.simd noise ui.gestures combinators.short-circuit
 destructors grid-meshes math.vectors.simd ;
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-ARRAY: c:float
 in: terrain
 

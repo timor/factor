@@ -2,7 +2,7 @@
 USING: accessors alien.c-types alien.data arrays byte-arrays
 combinators gpu kernel literals math math.rectangles opengl
 opengl.gl sequences typed variants specialized-arrays ;
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 FROM: math => float ;
 SPECIALIZED-ARRAY: c:int
 SPECIALIZED-ARRAY: c:float

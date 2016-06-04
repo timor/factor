@@ -52,8 +52,8 @@ fry
 adsoda
 adsoda.tools
 ;
-QUALIFIED-WITH: ui.pens.solid s
-QUALIFIED-WITH: ui.gadgets.wrappers w
+QUALIFIED-WITH: ui.pens.solid s ;
+QUALIFIED-WITH: ui.gadgets.wrappers w ;
 
 
 in: 4DNav

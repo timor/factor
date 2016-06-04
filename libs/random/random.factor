@@ -6,8 +6,8 @@ hashtables hashtables.private hash-sets hints io.backend
 io.binary kernel locals math math.bitwise math.constants
 math.functions math.order math.ranges namespaces sequences
 sequences.private sets summary system typed vocabs ;
-QUALIFIED-WITH: alien.c-types c
-QUALIFIED-WITH: sets sets
+QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: sets sets ;
 in: random
 
 symbol: system-random-generator

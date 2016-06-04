@@ -3,7 +3,7 @@ USING: accessors alien alien.data audio classes.struct fry
 calendar timers combinators combinators.short-circuit
 destructors generalizations kernel literals locals math openal
 sequences sequences.generalizations specialized-arrays strings ;
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-ARRAYS: c:float c:uchar c:uint ;
 in: audio.engine
 

@@ -22,7 +22,7 @@ in: tools.completion
 { t } [ { "use:" "" } complete-vocab? ] unit-test
 { f } [ { "use:" } complete-vocab? ] unit-test
 { t } [ { "unuse:" "A" } complete-vocab? ] unit-test
-{ t } [ { "QUALIFIED:" "A" } complete-vocab? ] unit-test
+{ t } [ { "qualified:" "A" } complete-vocab? ] unit-test
 { t } [ { "QUALIFIED-WITH:" "A" } complete-vocab? ] unit-test
 { t } [ { "USING:" "A" "B" "C" } complete-vocab? ] unit-test
 { f } [ { "USING:" "A" "B" "C" ";" } complete-vocab? ] unit-test

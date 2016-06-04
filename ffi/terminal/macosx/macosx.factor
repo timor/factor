@@ -4,7 +4,7 @@
 USING: accessors alien.c-types classes.struct io.streams.c
 kernel math memoize scratchpad system terminal unix unix.ffi ;
 
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 
 in: terminal.macosx
 

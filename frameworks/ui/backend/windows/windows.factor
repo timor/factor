@@ -15,7 +15,7 @@ io.encodings.utf16n windows.errors literals ui.pixel-formats
 ui.pixel-formats.private memoize classes colors
 specialized-arrays classes.struct ;
 SPECIALIZED-ARRAY: POINT
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 in: ui.backend.windows
 
 singleton: windows-ui-backend

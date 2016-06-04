@@ -1,7 +1,7 @@
 USING: accessors arrays kernel math.rectangles sequences
 ui.gadgets.controls models.combinators ui.gadgets ui.gadgets.glass
 ui.gadgets.labels ui.gestures ;
-QUALIFIED-WITH: ui.gadgets.tables tbl
+QUALIFIED-WITH: ui.gadgets.tables tbl ;
 in: ui.gadgets.comboboxes
 
 TUPLE: combo-table < table spawner ;

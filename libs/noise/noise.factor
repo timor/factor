@@ -3,7 +3,7 @@ fry generalizations images kernel locals math math.constants math.functions
 math.libm math.matrices.simd math.vectors math.vectors.conversion math.vectors.simd
 memoize random random.mersenne-twister sequences sequences.private specialized-arrays
 typed ;
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-ARRAYS: c:float c:uchar float-4 uchar-16 ;
 in: noise
 

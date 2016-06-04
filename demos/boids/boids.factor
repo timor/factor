@@ -7,7 +7,7 @@ opengl.demo-support opengl.gl sequences threads ui ui.gadgets
 ui.gadgets.borders ui.gadgets.buttons ui.gadgets.frames
 ui.gadgets.grids ui.gadgets.labeled ui.gadgets.labels
 ui.gadgets.packs ui.gadgets.sliders ui.render ;
-QUALIFIED-WITH: models.range mr
+QUALIFIED-WITH: models.range mr ;
 in: boids
 
 TUPLE: boids-gadget < gadget paused boids behaviours dt ;

@@ -8,7 +8,7 @@ kernel locals math math.bitwise math.blas.matrices
 math.blas.vectors math.constants math.functions math.matrices
 math.order math.vectors memoize namespaces sequences
 sequences.deep ;
-QUALIFIED-WITH: bitstreams bs
+QUALIFIED-WITH: bitstreams bs ;
 in: images.jpeg
 
 singleton: jpeg-image

@@ -8,7 +8,7 @@ compiler.cfg.stack-frame compiler.codegen compiler.codegen.fixup
 compiler.constants compiler.units cpu.architecture cpu.ppc.assembler fry io
 kernel layouts literals locals make math math.order math.ranges memory
 namespaces prettyprint sequences system vm words ;
-QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.c-types c ;
 FROM: cpu.ppc.assembler => B ;
 FROM: math => float ;
 in: cpu.ppc

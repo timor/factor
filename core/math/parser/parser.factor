@@ -180,44 +180,44 @@ CONSTANT: min-magnitude-2 -1074 ;
 : ?add-ratio ( m n/f -- m+n/f )
     dup ratio? [ + ] [ 2drop f ] if ; inline
 
-: @abort ( i number-parse n x -- f )
+: abort-parse ( i number-parse n x -- f )
     4drop f ; inline
 
-: @split ( i number-parse n -- n i number-parse' n' )
+: parse-split ( i number-parse n -- n i number-parse' n' )
     -rot 0 >>magnitude 0 ; inline
 
-: @split-exponent ( i number-parse n -- n i number-parse' n' )
+: parse-split-exponent ( i number-parse n -- n i number-parse' n' )
     -rot 10 >>radix 0 ; inline
 
 : <float-parse> ( i number-parse n -- float-parse i number-parse n )
      [ drop nip [ radix>> ] [ magnitude>> ] bi [ 0 f ] dip float-parse boa ] 3keep ; inline
 
-defer: @exponent-digit
-defer: @mantissa-digit
-defer: @denom-digit
-defer: @num-digit
-defer: @pos-digit
-defer: @neg-digit
+defer: parse-exponent-digit
+defer: parse-mantissa-digit
+defer: parse-denom-digit
+defer: parse-num-digit
+defer: parse-pos-digit
+defer: parse-neg-digit
 
-: @exponent-digit-or-punc ( float-parse i number-parse n char -- float-parse n/f )
+: parse-exponent-digit-or-punc ( float-parse i number-parse n char -- float-parse n/f )
     {
-        { char: , [ [ @exponent-digit ] require-next-digit ] }
-        [ @exponent-digit ]
+        { char: , [ [ parse-exponent-digit ] require-next-digit ] }
+        [ parse-exponent-digit ]
     } case ; inline
 
-: @exponent-digit ( float-parse i number-parse n char -- float-parse n/f )
+: parse-exponent-digit ( float-parse i number-parse n char -- float-parse n/f )
     { float-parse fixnum number-parse integer fixnum } declare
-    digit-in-radix [ [ @exponent-digit-or-punc ] add-exponent-digit ] [ @abort ] if ;
+    digit-in-radix [ [ parse-exponent-digit-or-punc ] add-exponent-digit ] [ abort-parse ] if ;
 
-: @exponent-first-char ( float-parse i number-parse n char -- float-parse n/f )
+: parse-exponent-first-char ( float-parse i number-parse n char -- float-parse n/f )
     {
-        { char: - [ [ @exponent-digit ] require-next-digit ?neg ] }
-        { char: + [ [ @exponent-digit ] require-next-digit ] }
-        [ @exponent-digit ]
+        { char: - [ [ parse-exponent-digit ] require-next-digit ?neg ] }
+        { char: + [ [ parse-exponent-digit ] require-next-digit ] }
+        [ parse-exponent-digit ]
     } case ; inline
 
 : ->exponent ( float-parse i number-parse n -- float-parse' n/f )
-    @split-exponent [ @exponent-first-char ] require-next-digit ?store-exponent ; inline
+    parse-split-exponent [ parse-exponent-first-char ] require-next-digit ?store-exponent ; inline
 
 : exponent-char? ( number-parse n char -- number-parse n char ? )
     pick radix>> {
@@ -231,74 +231,74 @@ defer: @neg-digit
 : or-mantissa->exponent ( float-parse i number-parse n char quot -- float-parse n/f )
     [ exponent-char? [ drop ->exponent ] ] dip if ; inline
 
-: @mantissa-digit-or-punc ( float-parse i number-parse n char -- float-parse n/f )
+: parse-mantissa-digit-or-punc ( float-parse i number-parse n char -- float-parse n/f )
     {
-        { char: , [ [ @mantissa-digit ] require-next-digit ] }
-        [ @mantissa-digit ]
+        { char: , [ [ parse-mantissa-digit ] require-next-digit ] }
+        [ parse-mantissa-digit ]
     } case ; inline
 
-: @mantissa-digit ( float-parse i number-parse n char -- float-parse n/f )
+: parse-mantissa-digit ( float-parse i number-parse n char -- float-parse n/f )
     { float-parse fixnum number-parse integer fixnum } declare
     [
         digit-in-radix
-        [ [ @mantissa-digit-or-punc ] add-mantissa-digit ]
-        [ @abort ] if
+        [ [ parse-mantissa-digit-or-punc ] add-mantissa-digit ]
+        [ abort-parse ] if
     ] or-mantissa->exponent ;
 
 : ->mantissa ( i number-parse n -- n/f )
-    <float-parse> [ @mantissa-digit ] next-digit ?make-float ; inline
+    <float-parse> [ parse-mantissa-digit ] next-digit ?make-float ; inline
 
 : ->required-mantissa ( i number-parse n -- n/f )
-    <float-parse> [ @mantissa-digit ] require-next-digit ?make-float ; inline
+    <float-parse> [ parse-mantissa-digit ] require-next-digit ?make-float ; inline
 
-: @denom-digit-or-punc ( i number-parse n char -- n/f )
+: parse-denom-digit-or-punc ( i number-parse n char -- n/f )
     {
-        { char: , [ [ @denom-digit ] require-next-digit ] }
+        { char: , [ [ parse-denom-digit ] require-next-digit ] }
         { char: . [ ->mantissa ] }
-        [ [ @denom-digit ] or-exponent ]
+        [ [ parse-denom-digit ] or-exponent ]
     } case ; inline
 
-: @denom-digit ( i number-parse n char -- n/f )
+: parse-denom-digit ( i number-parse n char -- n/f )
     { fixnum number-parse integer fixnum } declare
-    digit-in-radix [ [ @denom-digit-or-punc ] add-digit ] [ @abort ] if ;
+    digit-in-radix [ [ parse-denom-digit-or-punc ] add-digit ] [ abort-parse ] if ;
 
-: @denom-first-digit ( i number-parse n char -- n/f )
+: parse-denom-first-digit ( i number-parse n char -- n/f )
     {
         { char: . [ ->mantissa ] }
-        [ @denom-digit ]
+        [ parse-denom-digit ]
     } case ; inline
 
 : ->denominator ( i number-parse n -- n/f )
     { fixnum number-parse integer } declare
-    @split [ @denom-first-digit ] require-next-digit ?make-ratio ;
+    parse-split [ parse-denom-first-digit ] require-next-digit ?make-ratio ;
 
-: @num-digit-or-punc ( i number-parse n char -- n/f )
+: parse-num-digit-or-punc ( i number-parse n char -- n/f )
     {
-        { char: , [ [ @num-digit ] require-next-digit ] }
+        { char: , [ [ parse-num-digit ] require-next-digit ] }
         { char: / [ ->denominator ] }
-        [ @num-digit ]
+        [ parse-num-digit ]
     } case ; inline
 
-: @num-digit ( i number-parse n char -- n/f )
+: parse-num-digit ( i number-parse n char -- n/f )
     { fixnum number-parse integer fixnum } declare
-    digit-in-radix [ [ @num-digit-or-punc ] add-digit ] [ @abort ] if ;
+    digit-in-radix [ [ parse-num-digit-or-punc ] add-digit ] [ abort-parse ] if ;
 
 : ->numerator ( i number-parse n -- n/f )
     { fixnum number-parse integer } declare
-    @split [ @num-digit ] require-next-digit ?add-ratio ;
+    parse-split [ parse-num-digit ] require-next-digit ?add-ratio ;
 
-: @pos-digit-or-punc ( i number-parse n char -- n/f )
+: parse-pos-digit-or-punc ( i number-parse n char -- n/f )
     {
-        { char: , [ [ @pos-digit ] require-next-digit ] }
+        { char: , [ [ parse-pos-digit ] require-next-digit ] }
         { char: + [ ->numerator ] }
         { char: / [ ->denominator ] }
         { char: . [ ->mantissa ] }
-        [ [ @pos-digit ] or-exponent ]
+        [ [ parse-pos-digit ] or-exponent ]
     } case ; inline
 
-: @pos-digit ( i number-parse n char -- n/f )
+: parse-pos-digit ( i number-parse n char -- n/f )
     { fixnum number-parse integer fixnum } declare
-    digit-in-radix [ [ @pos-digit-or-punc ] add-digit ] [ @abort ] if ;
+    digit-in-radix [ [ parse-pos-digit-or-punc ] add-digit ] [ abort-parse ] if ;
 
 : ->radix ( i number-parse n quot radix -- i number-parse n quot )
     [ >>radix ] curry 2dip ; inline
@@ -313,66 +313,66 @@ defer: @neg-digit
         } case
     ] 2curry next-digit ; inline
 
-: @pos-first-digit ( i number-parse n char -- n/f )
+: parse-pos-first-digit ( i number-parse n char -- n/f )
     {
         { char: . [ ->required-mantissa ] }
-        { char: 0 [ [ @pos-digit ] [ @pos-digit-or-punc ] with-radix-char ] }
-        [ @pos-digit ]
+        { char: 0 [ [ parse-pos-digit ] [ parse-pos-digit-or-punc ] with-radix-char ] }
+        [ parse-pos-digit ]
     } case ; inline
 
-: @neg-digit-or-punc ( i number-parse n char -- n/f )
+: parse-neg-digit-or-punc ( i number-parse n char -- n/f )
     {
-        { char: , [ [ @neg-digit ] require-next-digit ] }
+        { char: , [ [ parse-neg-digit ] require-next-digit ] }
         { char: - [ ->numerator ] }
         { char: / [ ->denominator ] }
         { char: . [ ->mantissa ] }
-        [ [ @neg-digit ] or-exponent ]
+        [ [ parse-neg-digit ] or-exponent ]
     } case ; inline
 
-: @neg-digit ( i number-parse n char -- n/f )
+: parse-neg-digit ( i number-parse n char -- n/f )
     { fixnum number-parse integer fixnum } declare
-    digit-in-radix [ [ @neg-digit-or-punc ] add-digit ] [ @abort ] if ;
+    digit-in-radix [ [ parse-neg-digit-or-punc ] add-digit ] [ abort-parse ] if ;
 
-: @neg-first-digit ( i number-parse n char -- n/f )
+: parse-neg-first-digit ( i number-parse n char -- n/f )
     {
         { char: . [ ->required-mantissa ] }
-        { char: 0 [ [ @neg-digit ] [ @neg-digit-or-punc ] with-radix-char ] }
-        [ @neg-digit ]
+        { char: 0 [ [ parse-neg-digit ] [ parse-neg-digit-or-punc ] with-radix-char ] }
+        [ parse-neg-digit ]
     } case ; inline
 
-: @first-char ( i number-parse n char -- n/f )
+: parse-first-char ( i number-parse n char -- n/f )
     {
-        { char: - [ [ @neg-first-digit ] require-next-digit ?neg ] }
-        { char: + [ [ @pos-first-digit ] require-next-digit ] }
-        [ @pos-first-digit ]
+        { char: - [ [ parse-neg-first-digit ] require-next-digit ?neg ] }
+        { char: + [ [ parse-pos-first-digit ] require-next-digit ] }
+        [ parse-pos-first-digit ]
     } case ; inline
 
-: @neg-first-digit-no-radix ( i number-parse n char -- n/f )
-    {
-        { char: . [ ->required-mantissa ] }
-        [ @neg-digit ]
-    } case ; inline
-
-: @pos-first-digit-no-radix ( i number-parse n char -- n/f )
+: parse-neg-first-digit-no-radix ( i number-parse n char -- n/f )
     {
         { char: . [ ->required-mantissa ] }
-        [ @pos-digit ]
+        [ parse-neg-digit ]
     } case ; inline
 
-: @first-char-no-radix ( i number-parse n char -- n/f )
+: parse-pos-first-digit-no-radix ( i number-parse n char -- n/f )
     {
-        { char: - [ [ @neg-first-digit-no-radix ] require-next-digit ?neg ] }
-        { char: + [ [ @pos-first-digit-no-radix ] require-next-digit ] }
-        [ @pos-first-digit-no-radix ]
+        { char: . [ ->required-mantissa ] }
+        [ parse-pos-digit ]
+    } case ; inline
+
+: parse-first-char-no-radix ( i number-parse n char -- n/f )
+    {
+        { char: - [ [ parse-neg-first-digit-no-radix ] require-next-digit ?neg ] }
+        { char: + [ [ parse-pos-first-digit-no-radix ] require-next-digit ] }
+        [ parse-pos-first-digit-no-radix ]
     } case ; inline
 
 PRIVATE>
 
 : string>number ( str -- n/f )
-    10 <number-parse> [ @first-char ] require-next-digit ;
+    10 <number-parse> [ parse-first-char ] require-next-digit ;
 
 : base> ( str radix -- n/f )
-    <number-parse> [ @first-char-no-radix ] require-next-digit ;
+    <number-parse> [ parse-first-char-no-radix ] require-next-digit ;
 
 : bin> ( str -- n/f )  2 base> ; inline
 : oct> ( str -- n/f )  8 base> ; inline
