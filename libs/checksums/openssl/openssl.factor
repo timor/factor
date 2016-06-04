@@ -15,7 +15,7 @@ CONSTANT: openssl-sha1 T{ openssl-checksum f "sha1" }
 
 INSTANCE: openssl-checksum stream-checksum ;
 
-C: <openssl-checksum> openssl-checksum
+C: <openssl-checksum> openssl-checksum ;
 
 <PRIVATE
 

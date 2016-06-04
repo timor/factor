@@ -24,7 +24,7 @@ M: modified set-length seq>> set-length ;
 M: 1modified virtual-exemplar seq>> ;
 
 TUPLE: scaled < 1modified c ;
-C: <scaled> scaled
+C: <scaled> scaled ;
 
 : scale ( seq c -- new-seq )
     dupd <scaled> swap like ;
@@ -37,7 +37,7 @@ M:: scaled modified-set-nth ( elt n seq -- )
     elt seq c>> / n seq seq>> set-nth ;
 
 TUPLE: offset < 1modified n ;
-C: <offset> offset
+C: <offset> offset ;
 
 : seq-offset ( seq n -- new-seq )
     dupd <offset> swap like ;
@@ -49,7 +49,7 @@ M:: offset modified-set-nth ( elt n seq -- )
     elt seq n>> - n seq seq>> set-nth ;
 
 TUPLE: summed < modified seqs ;
-C: <summed> summed
+C: <summed> summed ;
 
 M: summed length seqs>> longest length ;
 

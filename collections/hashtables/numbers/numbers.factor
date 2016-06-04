@@ -9,7 +9,7 @@ in: hashtables.numbers
 
 TUPLE: number-wrapper < wrapped-key ;
 
-C: <number-wrapper> number-wrapper
+C: <number-wrapper> number-wrapper ;
 
 M: number-wrapper equal?
     over number-wrapper?

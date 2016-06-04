@@ -25,7 +25,7 @@ libraries [ H{ } clone ] initialize
 
 TUPLE: library { path string } dll dlerror { abi abi initial: cdecl } ;
 
-C: <library> library
+C: <library> library ;
 
 : lookup-library ( name -- library ) libraries get at ;
 

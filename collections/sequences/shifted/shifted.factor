@@ -8,7 +8,7 @@ TUPLE: shifted
 { n integer read-only }
 { fill read-only } ;
 
-C: <shifted> shifted
+C: <shifted> shifted ;
 
 M: shifted length underlying>> length ;
 

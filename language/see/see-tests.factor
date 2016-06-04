@@ -10,7 +10,7 @@ CONSTANT: test-const 10
 { "in: sequences\nERROR: non-negative-integer-expected n ;\n" }
 [ [ \ non-negative-integer-expected see ] with-string-writer ] unit-test
 
-ALIAS: test-alias +
+ALIAS: test-alias + ;
 
 { "USING: math ;\nin: see.tests\nALIAS: test-alias + inline\n" }
 [ [ \ test-alias see ] with-string-writer ] unit-test

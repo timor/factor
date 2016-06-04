@@ -26,16 +26,16 @@ TUPLE: ftp-command raw tokenized ;
         swap tokenize >>tokenized ;
 
 TUPLE: ftp-get path ;
-C: <ftp-get> ftp-get
+C: <ftp-get> ftp-get ;
 
 TUPLE: ftp-put path ;
-C: <ftp-put> ftp-put
+C: <ftp-put> ftp-put ;
 
 TUPLE: ftp-list ;
-C: <ftp-list> ftp-list
+C: <ftp-list> ftp-list ;
 
 TUPLE: ftp-disconnect ;
-C: <ftp-disconnect> ftp-disconnect
+C: <ftp-disconnect> ftp-disconnect ;
 
 : (send-response) ( n string separator -- )
     [ number>string write ] 2dip write ftp-send ;

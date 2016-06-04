@@ -396,7 +396,7 @@ TUPLE: inet < hostname port ;
 M: inet present
     [ host>> ] [ port>> number>string ] bi ":" glue ;
 
-C: <inet> inet
+C: <inet> inet ;
 
 M: string resolve-host
     f prepare-addrinfo f void* <ref> [

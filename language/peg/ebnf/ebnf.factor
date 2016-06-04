@@ -63,26 +63,26 @@ TUPLE: ebnf-var parser name ;
 TUPLE: ebnf-semantic parser code ;
 TUPLE: ebnf rules ;
 
-C: <ebnf-non-terminal> ebnf-non-terminal
-C: <ebnf-terminal> ebnf-terminal
-C: <ebnf-foreign> ebnf-foreign
-C: <ebnf-any-character> ebnf-any-character
-C: <ebnf-range> ebnf-range
-C: <ebnf-ensure> ebnf-ensure
-C: <ebnf-ensure-not> ebnf-ensure-not
-C: <ebnf-choice> ebnf-choice
-C: <ebnf-sequence> ebnf-sequence
-C: <ebnf-ignore> ebnf-ignore
-C: <ebnf-repeat0> ebnf-repeat0
-C: <ebnf-repeat1> ebnf-repeat1
-C: <ebnf-optional> ebnf-optional
-C: <ebnf-whitespace> ebnf-whitespace
-C: <ebnf-tokenizer> ebnf-tokenizer
-C: <ebnf-rule> ebnf-rule
-C: <ebnf-action> ebnf-action
-C: <ebnf-var> ebnf-var
-C: <ebnf-semantic> ebnf-semantic
-C: <ebnf> ebnf
+C: <ebnf-non-terminal> ebnf-non-terminal ;
+C: <ebnf-terminal> ebnf-terminal ;
+C: <ebnf-foreign> ebnf-foreign ;
+C: <ebnf-any-character> ebnf-any-character ;
+C: <ebnf-range> ebnf-range ;
+C: <ebnf-ensure> ebnf-ensure ;
+C: <ebnf-ensure-not> ebnf-ensure-not ;
+C: <ebnf-choice> ebnf-choice ;
+C: <ebnf-sequence> ebnf-sequence ;
+C: <ebnf-ignore> ebnf-ignore ;
+C: <ebnf-repeat0> ebnf-repeat0 ;
+C: <ebnf-repeat1> ebnf-repeat1 ;
+C: <ebnf-optional> ebnf-optional ;
+C: <ebnf-whitespace> ebnf-whitespace ;
+C: <ebnf-tokenizer> ebnf-tokenizer ;
+C: <ebnf-rule> ebnf-rule ;
+C: <ebnf-action> ebnf-action ;
+C: <ebnf-var> ebnf-var ;
+C: <ebnf-semantic> ebnf-semantic ;
+C: <ebnf> ebnf ;
 
 : filter-hidden ( seq -- seq )
     ! Remove elements that produce no AST from sequence

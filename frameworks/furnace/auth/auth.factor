@@ -84,7 +84,7 @@ GENERIC: logged-in-username ( realm -- username ) ;
 
 TUPLE: user-saver user ;
 
-C: <user-saver> user-saver
+C: <user-saver> user-saver ;
 
 M: user-saver dispose
     user>> dup changed?>> [ users update-user ] [ drop ] if ;
@@ -126,7 +126,7 @@ M: realm call-responder* ( path responder -- response )
 
 TUPLE: secure-realm-only < filter-responder ;
 
-C: <secure-realm-only> secure-realm-only
+C: <secure-realm-only> secure-realm-only ;
 
 M: secure-realm-only call-responder*
     '[ _ _ call-next-method ] if-secure-realm ;

@@ -8,7 +8,7 @@ in: colors.xyz
 
 TUPLE: xyza x y z alpha ;
 
-C: <xyza> xyza
+C: <xyza> xyza ;
 
 <PRIVATE
 

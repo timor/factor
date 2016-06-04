@@ -29,7 +29,7 @@ ERROR: bad-vocab-name name ;
 
 TUPLE: vocab-link name ;
 
-C: <vocab-link> vocab-link
+C: <vocab-link> vocab-link ;
 
 UNION: vocab-spec vocab vocab-link ;
 

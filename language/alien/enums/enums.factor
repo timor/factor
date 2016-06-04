@@ -6,7 +6,7 @@ in: alien.enums
 
 <PRIVATE
 TUPLE: enum-c-type base-type members ;
-C: <enum-c-type> enum-c-type
+C: <enum-c-type> enum-c-type ;
 CONSULT: c-type-protocol enum-c-type
     base-type>> ;
 PRIVATE>

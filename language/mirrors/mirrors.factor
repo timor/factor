@@ -7,7 +7,7 @@ in: mirrors
 
 TUPLE: mirror { object read-only } ;
 
-C: <mirror> mirror
+C: <mirror> mirror ;
 
 : object-slots ( mirror -- slots ) object>> class-of all-slots ; inline
 

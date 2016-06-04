@@ -8,7 +8,7 @@ in: colors.lab
 
 TUPLE: laba l a b alpha ;
 
-C: <laba> laba
+C: <laba> laba ;
 
 M: laba >rgba >xyza >rgba ;
 

@@ -202,7 +202,7 @@ FUNCTION: HRESULT
         LPD3DXEFFECT*                   ppEffect,
         LPD3DXBUFFER*                   ppCompilationErrors )
 
-ALIAS: D3DXCreateEffectFromFile D3DXCreateEffectFromFileW
+ALIAS: D3DXCreateEffectFromFile D3DXCreateEffectFromFileW ;
 
 FUNCTION: HRESULT
     D3DXCreateEffectFromResourceA (
@@ -228,7 +228,7 @@ FUNCTION: HRESULT
         LPD3DXEFFECT*                   ppEffect,
         LPD3DXBUFFER*                   ppCompilationErrors )
 
-ALIAS: D3DXCreateEffectFromResource D3DXCreateEffectFromResourceW
+ALIAS: D3DXCreateEffectFromResource D3DXCreateEffectFromResourceW ;
 
 FUNCTION: HRESULT
     D3DXCreateEffect (
@@ -266,7 +266,7 @@ FUNCTION: HRESULT
         LPD3DXEFFECT*                   ppEffect,
         LPD3DXBUFFER*                   ppCompilationErrors )
 
-ALIAS: D3DXCreateEffectFromFileEx D3DXCreateEffectFromFileExW
+ALIAS: D3DXCreateEffectFromFileEx D3DXCreateEffectFromFileExW ;
 
 FUNCTION: HRESULT
     D3DXCreateEffectFromResourceExA (
@@ -294,7 +294,7 @@ FUNCTION: HRESULT
         LPD3DXEFFECT*                   ppEffect,
         LPD3DXBUFFER*                   ppCompilationErrors )
 
-ALIAS: D3DXCreateEffectFromResourceEx D3DXCreateEffectFromResourceExW
+ALIAS: D3DXCreateEffectFromResourceEx D3DXCreateEffectFromResourceExW ;
 
 FUNCTION: HRESULT
     D3DXCreateEffectEx (
@@ -327,7 +327,7 @@ FUNCTION: HRESULT
         LPD3DXEFFECTCOMPILER*           ppCompiler,
         LPD3DXBUFFER*                   ppParseErrors )
 
-ALIAS: D3DXCreateEffectCompilerFromFile D3DXCreateEffectCompilerFromFileW
+ALIAS: D3DXCreateEffectCompilerFromFile D3DXCreateEffectCompilerFromFileW ;
 
 FUNCTION: HRESULT
     D3DXCreateEffectCompilerFromResourceA (
@@ -349,7 +349,7 @@ FUNCTION: HRESULT
         LPD3DXEFFECTCOMPILER*           ppCompiler,
         LPD3DXBUFFER*                   ppParseErrors )
 
-ALIAS: D3DXCreateEffectCompilerFromResource D3DXCreateEffectCompilerFromResourceW
+ALIAS: D3DXCreateEffectCompilerFromResource D3DXCreateEffectCompilerFromResourceW ;
 
 FUNCTION: HRESULT
     D3DXCreateEffectCompiler (

@@ -26,7 +26,7 @@ PRIVATE>
 
 TUPLE: icmp4 < ipv4 ;
 
-C: <icmp4> icmp4
+C: <icmp4> icmp4 ;
 
 M: ipv4 with-icmp host>> <icmp4> ;
 
@@ -56,6 +56,6 @@ M: icmp6 resolve-host 1array ;
 
 TUPLE: icmp < hostname ;
 
-C: <icmp> icmp
+C: <icmp> icmp ;
 
 M: icmp resolve-host call-next-method [ with-icmp ] map ;

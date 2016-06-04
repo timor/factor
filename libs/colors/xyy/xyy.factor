@@ -7,7 +7,7 @@ in: colors.xyy
 
 TUPLE: xyYa x y Y alpha ;
 
-C: <xyYa> xyYa
+C: <xyYa> xyYa ;
 
 M: xyYa >rgba
     >xyza >rgba ;

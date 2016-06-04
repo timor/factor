@@ -119,7 +119,7 @@ PRIVATE>
 
 TUPLE: byte value ;
 
-C: <byte> byte
+C: <byte> byte ;
 
 : extended-8-bit-register? ( register -- ? )
     { SPL BPL SIL DIL } member-eq? ;

@@ -42,14 +42,14 @@ TUPLE: FileArgs
     hFile lpBuffer nNumberOfBytesToRead
     lpNumberOfBytesRet lpOverlapped ;
 
-C: <FileArgs> FileArgs
+C: <FileArgs> FileArgs ;
 
 ! Global variable with assoc mapping overlapped to threads
 symbol: pending-overlapped
 
 TUPLE: io-callback port thread ;
 
-C: <io-callback> io-callback
+C: <io-callback> io-callback ;
 
 : <completion-port> ( handle existing -- handle )
      f 1 CreateIoCompletionPort dup win32-error=0/f ;

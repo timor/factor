@@ -88,7 +88,7 @@ STRUCT: JSClassDefinition
     { hasInstance JSObjectHasInstanceCallback }
     { convertToType JSObjectConvertToTypeCallback } ;
 
-ALIAS: kJSClassDefinitionEmpty JSClassDefinition
+ALIAS: kJSClassDefinitionEmpty JSClassDefinition ;
 
 FUNCTION: JSValueRef JSEvaluateScript (
     JSContextRef ctx,

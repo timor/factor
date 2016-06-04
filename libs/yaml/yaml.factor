@@ -51,7 +51,7 @@ ERROR: yaml-no-document ;
     [ yaml_emitter_emit ] [ drop yaml-emitter-assert-ok ] 2bi ;
 
 TUPLE: yaml-alias anchor ;
-C: <yaml-alias> yaml-alias
+C: <yaml-alias> yaml-alias ;
 
 symbol: anchors
 
@@ -339,7 +339,7 @@ M: assoc (replace-aliases)
     swap '[ [ _ swap ?replace-aliases ] bi@ ] assoc-map ;
 
 TUPLE: yaml-anchor anchor obj ;
-C: <yaml-anchor> yaml-anchor
+C: <yaml-anchor> yaml-anchor ;
 
 GENERIC: (replace-anchors) ( yaml-anchors obj -- obj' ) ;
 

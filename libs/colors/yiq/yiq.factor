@@ -12,7 +12,7 @@ TUPLE: yiqa < color
 { quadrature read-only }
 { alpha read-only } ;
 
-C: <yiqa> yiqa
+C: <yiqa> yiqa ;
 
 M: yiqa >rgba
     {

@@ -35,8 +35,8 @@ CONSTANT: constant-a 3
 
 CONSTANT: a 1
 CONSTANT: b 2
-ALIAS: c b
-ALIAS: d c
+ALIAS: c b ;
+ALIAS: d c ;
 
 CONSTANT: foo flags{ a b d }
 

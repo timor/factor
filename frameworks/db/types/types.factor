@@ -13,14 +13,14 @@ HOOK: compound db-connection ( string obj -- hash ) ;
 TUPLE: sql-spec class slot-name column-name type primary-key modifiers ;
 
 TUPLE: literal-bind key type value ;
-C: <literal-bind> literal-bind
+C: <literal-bind> literal-bind ;
 
 TUPLE: generator-bind slot-name key generator-singleton type ;
-C: <generator-bind> generator-bind
+C: <generator-bind> generator-bind ;
 singleton: random-id-generator
 
 TUPLE: low-level-binding value ;
-C: <low-level-binding> low-level-binding
+C: <low-level-binding> low-level-binding ;
 
 SINGLETONS: +db-assigned-id+ +user-assigned-id+ +random-id+ ;
 UNION: +primary-key+ +db-assigned-id+ +user-assigned-id+ +random-id+ ;

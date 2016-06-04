@@ -71,15 +71,15 @@ TUPLE: abstract-rectangle < shape width height ;
 
 TUPLE: rectangle < abstract-rectangle ;
 
-C: <rectangle> rectangle
+C: <rectangle> rectangle ;
 
 TUPLE: parallelogram < abstract-rectangle skew ;
 
-C: <parallelogram> parallelogram
+C: <parallelogram> parallelogram ;
 
 TUPLE: circle < shape radius ;
 
-C: <circle> circle
+C: <circle> circle ;
 
 GENERIC: area ( shape -- n ) ;
 
@@ -121,12 +121,12 @@ M: very-funny gooey sq ;
 GENERIC: empty-method-test ( x -- y ) ;
 M: object empty-method-test ;
 TUPLE: for-arguments-sake ;
-C: <for-arguments-sake> for-arguments-sake
+C: <for-arguments-sake> for-arguments-sake ;
 
 M: for-arguments-sake empty-method-test drop "Hi" ;
 
 TUPLE: another-one ;
-C: <another-one> another-one
+C: <another-one> another-one ;
 
 { "Hi" } [ <for-arguments-sake> empty-method-test empty-method-test ] unit-test
 { T{ another-one f } } [ <another-one> empty-method-test ] unit-test

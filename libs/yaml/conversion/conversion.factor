@@ -118,9 +118,9 @@ CONSTANT: YAML_SET_TAG "tag:yaml.org,2002:set"
     [ ymd>timestamp ] [ yaml>rfc3339 rfc3339>timestamp ] if ;
 
 TUPLE: yaml-merge ;
-C: <yaml-merge> yaml-merge
+C: <yaml-merge> yaml-merge ;
 TUPLE: yaml-value ;
-C: <yaml-value> yaml-value
+C: <yaml-value> yaml-value ;
 
 : construct-scalar ( scalar-event mapping-key? -- scalar )
     [ drop value>> ] [ resolve-scalar ] 2bi {

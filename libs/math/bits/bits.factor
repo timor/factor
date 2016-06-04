@@ -4,7 +4,7 @@ USING: sequences kernel math accessors sequences.private ;
 in: math.bits
 
 TUPLE: bits { number read-only } { length read-only } ;
-C: <bits> bits
+C: <bits> bits ;
 
 : check-negative-bits ( n -- n )
     dup 0 < [ non-negative-integer-expected ] when ; inline

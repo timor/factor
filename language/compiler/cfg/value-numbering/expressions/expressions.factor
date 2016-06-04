@@ -58,11 +58,11 @@ insn-classes get
 
 TUPLE: integer-expr value ;
 
-C: <integer-expr> integer-expr
+C: <integer-expr> integer-expr ;
 
 TUPLE: reference-expr value ;
 
-C: <reference-expr> reference-expr
+C: <reference-expr> reference-expr ;
 
 M: reference-expr equal?
     over reference-expr? [

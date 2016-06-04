@@ -36,7 +36,7 @@ symbol: +stdout+
 
 TUPLE: appender path ;
 
-C: <appender> appender
+C: <appender> appender ;
 
 symbol: +prepend-environment+
 symbol: +replace-environment+

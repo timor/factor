@@ -5,7 +5,7 @@ in: io.streams.memory
 
 TUPLE: memory-stream alien ;
 
-C: <memory-stream> memory-stream
+C: <memory-stream> memory-stream ;
 
 INSTANCE: memory-stream input-stream ;
 

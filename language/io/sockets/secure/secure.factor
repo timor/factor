@@ -58,7 +58,7 @@ TUPLE: secure
     { addrspec read-only }
     { hostname read-only } ;
 
-C: <secure> secure
+C: <secure> secure ;
 
 M: secure present addrspec>> present " (secure)" append ;
 

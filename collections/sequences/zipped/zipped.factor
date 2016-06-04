@@ -8,7 +8,7 @@ TUPLE: zipped
 { keys sequence read-only }
 { values sequence read-only } ;
 
-C: <zipped> zipped
+C: <zipped> zipped ;
 
 M: zipped length
     [ keys>> ] [ values>> ] bi min-length ;

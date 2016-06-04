@@ -12,7 +12,7 @@ in: jamshred.tunnel
 CONSTANT: n-segments 5000
 
 TUPLE: segment < oint number color radius ;
-C: <segment> segment
+C: <segment> segment ;
 
 : segment-number++ ( segment -- )
     [ number>> 1 + ] keep number<< ;

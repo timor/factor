@@ -53,27 +53,27 @@ TUPLE: texture-1d-attachment
     { texture texture-1d-data-target read-only initial: T{ texture-1d } }
     { level integer read-only } ;
 
-C: <texture-1d-attachment> texture-1d-attachment
+C: <texture-1d-attachment> texture-1d-attachment ;
 
 TUPLE: texture-2d-attachment
     { texture texture-2d-data-target read-only initial: T{ texture-2d } }
     { level integer read-only } ;
 
-C: <texture-2d-attachment> texture-2d-attachment
+C: <texture-2d-attachment> texture-2d-attachment ;
 
 TUPLE: texture-3d-attachment
     { texture texture-3d read-only initial: T{ texture-3d } }
     { z-offset integer read-only }
     { level integer read-only } ;
 
-C: <texture-3d-attachment> texture-3d-attachment
+C: <texture-3d-attachment> texture-3d-attachment ;
 
 TUPLE: texture-layer-attachment
     { texture texture-3d-data-target read-only initial: T{ texture-3d } }
     { layer integer read-only }
     { level integer read-only } ;
 
-C: <texture-layer-attachment> texture-layer-attachment
+C: <texture-layer-attachment> texture-layer-attachment ;
 
 UNION: texture-attachment
     texture-1d-attachment texture-2d-attachment texture-3d-attachment texture-layer-attachment ;
@@ -121,7 +121,7 @@ TUPLE: framebuffer-rect
     { attachment color-attachment-ref read-only initial: default-attachment }
     { rect rect read-only } ;
 
-C: <framebuffer-rect> framebuffer-rect
+C: <framebuffer-rect> framebuffer-rect ;
 
 TYPED: framebuffer-attachment-at ( framebuffer: framebuffer
                                    attachment-ref: attachment-ref

@@ -57,7 +57,7 @@ TUPLE: ignore-close-stream < filter-writer ;
 
 M: ignore-close-stream dispose drop ;
 
-C: <ignore-close-stream> ignore-close-stream
+C: <ignore-close-stream> ignore-close-stream ;
 
 TUPLE: style-stream < filter-writer style ;
 INSTANCE: style-stream output-stream ;
@@ -65,7 +65,7 @@ INSTANCE: style-stream output-stream ;
 : do-nested-style ( style style-stream -- style stream )
     [ style>> swap assoc-union ] [ stream>> ] bi ; inline
 
-C: <style-stream> style-stream
+C: <style-stream> style-stream ;
 
 M: style-stream stream-format
     do-nested-style stream-format ;
@@ -150,7 +150,7 @@ CONSTANT: standard-table-style
 ! Input history
 TUPLE: input string ;
 
-C: <input> input
+C: <input> input ;
 
 M: input present string>> ;
 

@@ -5,7 +5,7 @@ in: colors.gray
 
 TUPLE: gray < color { gray read-only } { alpha read-only } ;
 
-C: <gray> gray
+C: <gray> gray ;
 
 M: gray >rgba ( gray -- rgba )
     [ gray>> dup dup ] [ alpha>> ] bi <rgba> ; inline

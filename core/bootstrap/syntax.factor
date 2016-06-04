@@ -30,7 +30,7 @@ in: bootstrap.syntax
         "HS{"
         "IN:"
         "in:"
-        "INSTANCE:" ;
+        "INSTANCE:"
         "M:"
         "MAIN:"
         "main:"

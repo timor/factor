@@ -201,7 +201,7 @@ M: world draw-world*
 
 TUPLE: world-error error world ;
 
-C: <world-error> world-error
+C: <world-error> world-error ;
 
 symbol: ui-error-hook ! ( error -- )
 

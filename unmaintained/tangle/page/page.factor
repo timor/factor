@@ -11,7 +11,7 @@ RELATION: authored-by
 RELATION: authored-on
 
 TUPLE: page name abbreviation author created content ;
-C: <page> page
+C: <page> page ;
 
 : load-page-content ( node -- content )
     has-content-objects [ node-content ] map concat ;

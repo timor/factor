@@ -16,19 +16,19 @@ SINGLETONS: beginning-of-input ^ end-of-input $ end-of-file
 ^unix $unix word-break ;
 
 TUPLE: range-class { from read-only } { to read-only } ;
-C: <range-class> range-class
+C: <range-class> range-class ;
 
 TUPLE: primitive-class { class read-only } ;
-C: <primitive-class> primitive-class
+C: <primitive-class> primitive-class ;
 
 TUPLE: category-class { category read-only } ;
-C: <category-class> category-class
+C: <category-class> category-class ;
 
 TUPLE: category-range-class { category read-only } ;
-C: <category-range-class> category-range-class
+C: <category-range-class> category-range-class ;
 
 TUPLE: script-class { script read-only } ;
-C: <script-class> script-class
+C: <script-class> script-class ;
 
 GENERIC: class-member? ( obj class -- ? ) ;
 
@@ -272,7 +272,7 @@ M: primitive-class class-member?
     class>> class-member? ; inline
 
 TUPLE: condition question yes no ;
-C: <condition> condition
+C: <condition> condition ;
 
 GENERIC# answer 2 ( class from to -- new-class ) ;
 

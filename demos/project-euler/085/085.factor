@@ -38,7 +38,7 @@ in: project-euler.085
 
 TUPLE: result { area read-only } { distance read-only } ;
 
-C: <result> result
+C: <result> result ;
 
 : min-by-distance ( seq seq -- seq )
     [ [ distance>> ] bi@ < ] most ; inline

@@ -11,7 +11,7 @@ in: metar
 
 TUPLE: station cccc name state country latitude longitude ;
 
-C: <station> station
+C: <station> station ;
 
 <PRIVATE
 

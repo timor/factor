@@ -69,21 +69,21 @@ node node-attributes define-=attrs
 
 >>
 
-ALIAS: -> add-edge
-ALIAS: -- add-edge
-ALIAS: ~-> add-path
-ALIAS: ~-- add-path
+ALIAS: -> add-edge ;
+ALIAS: -- add-edge ;
+ALIAS: ~-> add-path ;
+ALIAS: ~-- add-path ;
 
-ALIAS: [graph <graph-attributes>
-ALIAS: [node <node-attributes>
-ALIAS: [edge <edge-attributes>
+ALIAS: [graph <graph-attributes> ;
+ALIAS: [node <node-attributes> ;
+ALIAS: [edge <edge-attributes> ;
 
-ALIAS: [add-node <node>
-ALIAS: [add-edge <edge>
-ALIAS: [-> <edge>
-ALIAS: [-- <edge>
+ALIAS: [add-node <node> ;
+ALIAS: [add-edge <edge> ;
+ALIAS: [-> <edge> ;
+ALIAS: [-- <edge> ;
 
-ALIAS: ]; add
+ALIAS: ]; add ;
 
 ! Can't really do add-path[ & add-nodes[ this way, since they
 ! involve multiple objects.

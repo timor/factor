@@ -12,7 +12,7 @@ TUPLE: yuva < color
 { v read-only }
 { alpha read-only } ;
 
-C: <yuva> yuva
+C: <yuva> yuva ;
 
 <PRIVATE
 

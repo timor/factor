@@ -45,12 +45,12 @@ CONSTANT: WS_OVERLAPPEDWINDOW
 
 CONSTANT: WS_POPUPWINDOW flags{ WS_POPUP WS_BORDER WS_SYSMENU }
 
-ALIAS: WS_CHILDWINDOW      WS_CHILD
+ALIAS: WS_CHILDWINDOW      WS_CHILD ;
 
-ALIAS: WS_TILED            WS_OVERLAPPED
-ALIAS: WS_ICONIC           WS_MINIMIZE
-ALIAS: WS_SIZEBOX          WS_THICKFRAME
-ALIAS: WS_TILEDWINDOW WS_OVERLAPPEDWINDOW
+ALIAS: WS_TILED            WS_OVERLAPPED ;
+ALIAS: WS_ICONIC           WS_MINIMIZE ;
+ALIAS: WS_SIZEBOX          WS_THICKFRAME ;
+ALIAS: WS_TILEDWINDOW WS_OVERLAPPEDWINDOW ;
 
 ! Extended window styles
 
@@ -505,7 +505,7 @@ CONSTANT: MB_ICONHAND        0x00000010
 CONSTANT: MB_ICONQUESTION    0x00000020
 CONSTANT: MB_OK              0x00000000
 
-ALIAS: FVIRTKEY TRUE
+ALIAS: FVIRTKEY TRUE ;
 CONSTANT: FNOINVERT 2
 CONSTANT: FSHIFT 4
 CONSTANT: FCONTROL 8
@@ -579,8 +579,8 @@ CONSTANT: SWP_HIDEWINDOW 128
 CONSTANT: SWP_NOCOPYBITS 256
 CONSTANT: SWP_NOOWNERZORDER 512
 CONSTANT: SWP_NOSENDCHANGING 1024
-ALIAS: SWP_DRAWFRAME SWP_FRAMECHANGED
-ALIAS: SWP_NOREPOSITION SWP_NOOWNERZORDER
+ALIAS: SWP_DRAWFRAME SWP_FRAMECHANGED ;
+ALIAS: SWP_NOREPOSITION SWP_NOOWNERZORDER ;
 CONSTANT: SWP_DEFERERASE 8192
 CONSTANT: SWP_ASYNCWINDOWPOS 16384
 
@@ -702,7 +702,7 @@ CONSTANT: SPI_GETWINDOWSEXTENSION   92
 CONSTANT: SPI_SETMOUSETRAILS        93
 CONSTANT: SPI_GETMOUSETRAILS        94
 CONSTANT: SPI_SETSCREENSAVERRUNNING 97
-ALIAS: SPI_SCREENSAVERRUNNING    SPI_SETSCREENSAVERRUNNING
+ALIAS: SPI_SCREENSAVERRUNNING    SPI_SETSCREENSAVERRUNNING ;
 
 ! WIN32_WINNT >= 0x0400 || WIN32_WINDOWS > 0x0400
 CONSTANT: SPI_GETMOUSEHOVERWIDTH    98
@@ -748,7 +748,7 @@ CONSTANT: SPI_SETFOREGROUNDFLASHCOUNT    0x2005
 ! SystemParamInfo Flags
 CONSTANT: SPIF_UPDATEINIFILE              1
 CONSTANT: SPIF_SENDWININICHANGE           2
-ALIAS: SPIF_SENDCHANGE                 SPIF_SENDWININICHANGE
+ALIAS: SPIF_SENDCHANGE                 SPIF_SENDWININICHANGE ;
 
 
 TYPEDEF: HANDLE HRAWINPUT
@@ -1047,8 +1047,8 @@ FUNCTION: HDC BeginPaint ( HWND hwnd, LPPAINTSTRUCT lpPaint ) ;
 ! FUNCTION: ChangeClipboardChain
 FUNCTION: LONG ChangeDisplaySettingsExW ( LPCTSTR lpszDeviceName, DEVMODE *lpDevMode, HWND hwnd, DWORD dwFlags, LPVOID lParam ) ;
 FUNCTION: LONG ChangeDisplaySettingsW ( DEVMODE *lpDevMode, DWORD dwFlags ) ;
-ALIAS: ChangeDisplaySettingsEx ChangeDisplaySettingsExW
-ALIAS: ChangeDisplaySettings ChangeDisplaySettingsW
+ALIAS: ChangeDisplaySettingsEx ChangeDisplaySettingsExW ;
+ALIAS: ChangeDisplaySettings ChangeDisplaySettingsW ;
 ! FUNCTION: ChangeMenuA
 ! FUNCTION: ChangeMenuW
 ! FUNCTION: CharLowerA
@@ -1085,14 +1085,14 @@ FUNCTION: BOOL CloseClipboard ( ) ;
 ! FUNCTION: CloseWindowStation
 ! FUNCTION: CopyAcceleratorTableA
 FUNCTION: int CopyAcceleratorTableW ( HACCEL hAccelSrc, LPACCEL lpAccelDst, int cAccelEntries ) ;
-ALIAS: CopyAcceleratorTable CopyAcceleratorTableW
+ALIAS: CopyAcceleratorTable CopyAcceleratorTableW ;
 ! FUNCTION: CopyIcon
 ! FUNCTION: CopyImage
 ! FUNCTION: CopyRect
 ! FUNCTION: CountClipboardFormats
 ! FUNCTION: CreateAcceleratorTableA
 FUNCTION: HACCEL CreateAcceleratorTableW ( LPACCEL lpaccl, int cEntries ) ;
-ALIAS: CreateAcceleratorTable CreateAcceleratorTableW
+ALIAS: CreateAcceleratorTable CreateAcceleratorTableW ;
 ! FUNCTION: CreateCaret
 ! FUNCTION: CreateCursor
 ! FUNCTION: CreateDesktopA
@@ -1126,7 +1126,7 @@ FUNCTION: HWND CreateWindowExW (
                 HINSTANCE hInstance,
                 LPVOID lpParam ) ;
 
-ALIAS: CreateWindowEx CreateWindowExW
+ALIAS: CreateWindowEx CreateWindowExW ;
 
 : CreateWindow ( a b c d e f g h i j k -- hwnd ) 0 12 -nrot CreateWindowEx ; inline
 
@@ -1176,7 +1176,7 @@ ALIAS: CreateWindowEx CreateWindowExW
 ! FUNCTION: DefMDIChildProcW
 FUNCTION: LRESULT DefRawInputProc ( PRAWINPUT* paRawInput, INT nInput, UINT cbSizeHeader ) ;
 FUNCTION: LRESULT DefWindowProcW ( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam ) ;
-ALIAS: DefWindowProc DefWindowProcW
+ALIAS: DefWindowProc DefWindowProcW ;
 ! FUNCTION: DeleteMenu
 ! FUNCTION: DeregisterShellHookWindow
 FUNCTION: BOOL DestroyAcceleratorTable ( HACCEL hAccel ) ;
@@ -1195,7 +1195,7 @@ FUNCTION: BOOL DestroyWindow ( HWND hWnd ) ;
 ! FUNCTION: DisableProcessWindowsGhosting
 
 FUNCTION: LONG DispatchMessageW ( MSG* lpMsg ) ;
-ALIAS: DispatchMessage DispatchMessageW
+ALIAS: DispatchMessage DispatchMessageW ;
 
 ! FUNCTION: DisplayExitWindowsWarnings
 ! FUNCTION: DlgDirListA
@@ -1254,7 +1254,7 @@ FUNCTION: UINT EnumClipboardFormats ( UINT format ) ;
 ! FUNCTION: EnumDisplaySettingsExA
 ! FUNCTION: EnumDisplaySettingsExW
 FUNCTION: BOOL EnumDisplaySettingsW ( LPCTSTR lpszDeviceName, DWORD iModeNum, DEVMODE *lpDevMode ) ;
-ALIAS: EnumDisplaySettings EnumDisplaySettingsW
+ALIAS: EnumDisplaySettings EnumDisplaySettingsW ;
 ! FUNCTION: EnumPropsA
 ! FUNCTION: EnumPropsExA
 ! FUNCTION: EnumPropsExW
@@ -1287,14 +1287,14 @@ FUNCTION: HWND GetCapture ( ) ;
 ! FUNCTION: GetCaretBlinkTime
 ! FUNCTION: GetCaretPos
 FUNCTION: BOOL GetClassInfoW ( HINSTANCE hInst, LPCWSTR lpszClass, LPWNDCLASS lpwcx ) ;
-ALIAS: GetClassInfo GetClassInfoW
+ALIAS: GetClassInfo GetClassInfoW ;
 
 FUNCTION: BOOL GetClassInfoExW ( HINSTANCE hInst, LPCWSTR lpszClass, LPWNDCLASSEX lpwcx ) ;
-ALIAS: GetClassInfoEx GetClassInfoExW
+ALIAS: GetClassInfoEx GetClassInfoExW ;
 
 FUNCTION: ULONG_PTR GetClassLongW ( HWND hWnd, int nIndex ) ;
-ALIAS: GetClassLong GetClassLongW
-ALIAS: GetClassLongPtr GetClassLongW
+ALIAS: GetClassLong GetClassLongW ;
+ALIAS: GetClassLongPtr GetClassLongW ;
 
 
 ! FUNCTION: GetClassNameA
@@ -1363,7 +1363,7 @@ FUNCTION: SHORT GetKeyState ( int nVirtKey ) ;
 ! FUNCTION: GetMenuStringW
 
 FUNCTION: BOOL GetMessageW ( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax ) ;
-ALIAS: GetMessage GetMessageW
+ALIAS: GetMessage GetMessageW ;
 
 ! FUNCTION: GetMessageExtraInfo
 ! FUNCTION: GetMessagePos
@@ -1371,7 +1371,7 @@ ALIAS: GetMessage GetMessageW
 ! FUNCTION: GetMonitorInfoA
 
 FUNCTION: BOOL GetMonitorInfoW ( HMONITOR hMonitor, LPMONITORINFO lpmi ) ;
-ALIAS: GetMonitorInfo GetMonitorInfoW
+ALIAS: GetMonitorInfo GetMonitorInfoW ;
 
 ! FUNCTION: GetMouseMovePointsEx
 ! FUNCTION: GetNextDlgGroupItem
@@ -1389,7 +1389,7 @@ FUNCTION: UINT GetRawInputBuffer ( PRAWINPUT pData, PUINT pcbSize, UINT cbSizeHe
 FUNCTION: UINT GetRawInputData ( HRAWINPUT hRawInput, UINT uiCommand, LPVOID pData, PUINT pcbSize, UINT cbSizeHeader ) ;
 FUNCTION: UINT GetRawInputDeviceInfoA ( HANDLE hDevice, UINT uiCommand, LPVOID pData, PUINT pcbSize ) ;
 FUNCTION: UINT GetRawInputDeviceInfoW ( HANDLE hDevice, UINT uiCommand, LPVOID pData, PUINT pcbSize ) ;
-ALIAS: GetRawInputDeviceInfo GetRawInputDeviceInfoW
+ALIAS: GetRawInputDeviceInfo GetRawInputDeviceInfoW ;
 FUNCTION: UINT GetRawInputDeviceList ( PRAWINPUTDEVICELIST pRawInputDeviceList, PUINT puiNumDevices, UINT cbSize ) ;
 FUNCTION: UINT GetRegisteredRawInputDevices ( PRAWINPUTDEVICE pRawInputDevices, PUINT puiNumDevices, UINT cbSize ) ;
 ! FUNCTION: GetReasonTitleFromReasonCode
@@ -1425,10 +1425,10 @@ FUNCTION: HWND GetWindow ( HWND hWnd, UINT uCmd ) ;
 ! FUNCTION: GetWindowLongA
 ! FUNCTION: GetWindowLongW
 FUNCTION: LONG_PTR GetWindowLongW ( HANDLE hWnd, int index ) ;
-ALIAS: GetWindowLong GetWindowLongW
+ALIAS: GetWindowLong GetWindowLongW ;
 
 FUNCTION: LONG_PTR GetWindowLongPtrW ( HWND hWnd, int nIndex ) ;
-ALIAS: GetWindowLongPtr GetWindowLongPtrW
+ALIAS: GetWindowLongPtr GetWindowLongPtrW ;
 ! FUNCTION: GetWindowModuleFileName
 ! FUNCTION: GetWindowModuleFileNameA
 ! FUNCTION: GetWindowModuleFileNameW
@@ -1508,11 +1508,11 @@ FUNCTION: HACCEL LoadAcceleratorsW ( HINSTANCE hInstance, LPCTSTR lpTableName ) 
 
 ! FUNCTION: HCURSOR LoadCursorW ( HINSTANCE hInstance, LPCWSTR lpCursorName ) ;
 FUNCTION: HCURSOR LoadCursorW ( HINSTANCE hInstance, ushort lpCursorName ) ;
-ALIAS: LoadCursor LoadCursorW
+ALIAS: LoadCursor LoadCursorW ;
 
 ! FUNCTION: HICON LoadIconA ( HINSTANCE hInstance, LPCTSTR lpIconName ) ;
 FUNCTION: HICON LoadIconW ( HINSTANCE hInstance, LPCTSTR lpIconName ) ;
-ALIAS: LoadIcon LoadIconW
+ALIAS: LoadIcon LoadIconW ;
 
 ! FUNCTION: LoadImageA
 ! FUNCTION: LoadImageW
@@ -1536,10 +1536,10 @@ ALIAS: LoadIcon LoadIconW
 ! FUNCTION: MapDialogRect
 
 FUNCTION: UINT MapVirtualKeyW ( UINT uCode, UINT uMapType ) ;
-ALIAS: MapVirtualKey MapVirtualKeyW
+ALIAS: MapVirtualKey MapVirtualKeyW ;
 
 FUNCTION: UINT MapVirtualKeyExW ( UINT uCode, UINT uMapType, HKL dwhkl ) ;
-ALIAS: MapVirtualKeyEx MapVirtualKeyExW
+ALIAS: MapVirtualKeyEx MapVirtualKeyExW ;
 
 ! FUNCTION: MapWindowPoints
 ! FUNCTION: MB_GetString
@@ -1580,9 +1580,9 @@ FUNCTION: int MessageBoxExW (
 ! FUNCTION: int MessageBoxIndirectW ( MSGBOXPARAMSW* params ) ;
 
 
-ALIAS: MessageBox MessageBoxW
+ALIAS: MessageBox MessageBoxW ;
 
-ALIAS: MessageBoxEx MessageBoxExW
+ALIAS: MessageBoxEx MessageBoxExW ;
 
 ! : MessageBoxIndirect
     ! \ MessageBoxIndirectW \ MessageBoxIndirectA unicode-exec ;
@@ -1627,7 +1627,7 @@ FUNCTION: BOOL OpenClipboard ( HWND hWndNewOwner ) ;
 ! FUNCTION: PaintMenuBar
 FUNCTION: BOOL PeekMessageA ( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg ) ;
 FUNCTION: BOOL PeekMessageW ( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg ) ;
-ALIAS: PeekMessage PeekMessageW
+ALIAS: PeekMessage PeekMessageW ;
 
 ! FUNCTION: PostMessageA
 ! FUNCTION: PostMessageW
@@ -1658,14 +1658,14 @@ FUNCTION: ATOM RegisterClassW ( WNDCLASS* lpWndClass ) ;
 FUNCTION: ATOM RegisterClassExA ( WNDCLASSEX* lpwcx ) ;
 FUNCTION: ATOM RegisterClassExW ( WNDCLASSEX* lpwcx ) ;
 
-ALIAS: RegisterClass RegisterClassW
-ALIAS: RegisterClassEx RegisterClassExW
+ALIAS: RegisterClass RegisterClassW ;
+ALIAS: RegisterClassEx RegisterClassExW ;
 
 ! FUNCTION: RegisterClipboardFormatA
 ! FUNCTION: RegisterClipboardFormatW
 FUNCTION: HANDLE RegisterDeviceNotificationA ( HANDLE hRecipient, LPVOID NotificationFilter, DWORD Flags ) ;
 FUNCTION: HANDLE RegisterDeviceNotificationW ( HANDLE hRecipient, LPVOID NotificationFilter, DWORD Flags ) ;
-ALIAS: RegisterDeviceNotification RegisterDeviceNotificationW
+ALIAS: RegisterDeviceNotification RegisterDeviceNotificationW ;
 ! FUNCTION: RegisterHotKey
 ! FUNCTION: RegisterLogonProcess
 ! FUNCTION: RegisterMessagePumpHook
@@ -1696,7 +1696,7 @@ FUNCTION: int ReleaseDC ( HWND hWnd, HDC hDC ) ;
 ! FUNCTION: SendIMEMessageExW
 ! FUNCTION: UINT SendInput ( UINT nInputs, LPINPUT pInputs, int cbSize ) ;
 FUNCTION: LRESULT SendMessageW ( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) ;
-ALIAS: SendMessage SendMessageW
+ALIAS: SendMessage SendMessageW ;
 ! FUNCTION: SendMessageCallbackA
 ! FUNCTION: SendMessageCallbackW
 ! FUNCTION: SendMessageTimeoutA
@@ -1709,8 +1709,8 @@ FUNCTION: HWND SetCapture ( HWND hWnd ) ;
 ! FUNCTION: SetCaretPos
 
 FUNCTION: ULONG_PTR SetClassLongW ( HWND hWnd, int nIndex, LONG_PTR dwNewLong ) ;
-ALIAS: SetClassLongPtr SetClassLongW
-ALIAS: SetClassLong SetClassLongW
+ALIAS: SetClassLongPtr SetClassLongW ;
+ALIAS: SetClassLong SetClassLongW ;
 
 ! FUNCTION: SetClassWord
 FUNCTION: HANDLE SetClipboardData ( UINT uFormat, HANDLE hMem ) ;
@@ -1771,12 +1771,12 @@ FUNCTION: void SetLastErrorEx ( DWORD dwErrCode, DWORD dwType ) ;
 ! FUNCTION: SetWindowLongA
 ! FUNCTION: SetWindowLongW
 FUNCTION: LONG_PTR SetWindowLongW ( HANDLE hWnd, int index, LONG_PTR dwNewLong ) ;
-ALIAS: SetWindowLong SetWindowLongW
+ALIAS: SetWindowLong SetWindowLongW ;
 ! FUNCTION: SetWindowPlacement
 FUNCTION: BOOL SetWindowPos ( HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, UINT uFlags ) ;
 
 FUNCTION: LONG_PTR SetWindowLongPtrW ( HWND hWnd, int nIndex, LONG_PTR dwNewLong ) ;
-ALIAS: SetWindowLongPtr SetWindowLongPtrW
+ALIAS: SetWindowLongPtr SetWindowLongPtrW ;
 
 : HWND_BOTTOM ( -- alien ) 1 <alien> ;
 : HWND_NOTOPMOST ( -- alien ) -2 <alien> ;
@@ -1810,7 +1810,7 @@ FUNCTION: BOOL ShowWindow ( HWND hWnd, int nCmdShow ) ;
 ! FUNCTION: SystemParametersInfoA
 
 FUNCTION: BOOL SystemParametersInfoW ( UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni ) ;
-ALIAS: SystemParametersInfo SystemParametersInfoW
+ALIAS: SystemParametersInfo SystemParametersInfoW ;
 
 ! FUNCTION: TabbedTextOutA
 ! FUNCTION: TabbedTextOutW
@@ -1826,7 +1826,7 @@ FUNCTION: BOOL TrackMouseEvent ( LPTRACKMOUSEEVENT lpEventTrack ) ;
 ! FUNCTION: TranslateAccelerator
 ! FUNCTION: TranslateAcceleratorA
 FUNCTION: int TranslateAcceleratorW ( HWND hWnd, HACCEL hAccTable, LPMSG lpMsg ) ;
-ALIAS: TranslateAccelerator TranslateAcceleratorW
+ALIAS: TranslateAccelerator TranslateAcceleratorW ;
 
 ! FUNCTION: TranslateMDISysAccel
 FUNCTION: BOOL TranslateMessage ( MSG* lpMsg ) ;
@@ -1839,7 +1839,7 @@ FUNCTION: BOOL TranslateMessage ( MSG* lpMsg ) ;
 ! FUNCTION: UnlockWindowStation
 ! FUNCTION: UnpackDDElParam
 FUNCTION: BOOL UnregisterClassW ( LPCWSTR lpClassName, HINSTANCE hInstance ) ;
-ALIAS: UnregisterClass UnregisterClassW
+ALIAS: UnregisterClass UnregisterClassW ;
 FUNCTION: BOOL UnregisterDeviceNotification ( HANDLE hDevNotify ) ;
 ! FUNCTION: UnregisterHotKey
 ! FUNCTION: UnregisterMessagePumpHook

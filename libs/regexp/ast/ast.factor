@@ -5,16 +5,16 @@ math.ranges math ;
 in: regexp.ast
 
 TUPLE: negation term ;
-C: <negation> negation
+C: <negation> negation ;
 
 TUPLE: from-to n m ;
-C: <from-to> from-to
+C: <from-to> from-to ;
 
 TUPLE: at-least n ;
-C: <at-least> at-least
+C: <at-least> at-least ;
 
 TUPLE: tagged-epsilon tag ;
-C: <tagged-epsilon> tagged-epsilon
+C: <tagged-epsilon> tagged-epsilon ;
 
 CONSTANT: epsilon T{ tagged-epsilon { tag t } }
 
@@ -29,13 +29,13 @@ TUPLE: alternation first second ;
     [ ] [ alternation boa ] map-reduce ;
 
 TUPLE: star term ;
-C: <star> star
+C: <star> star ;
 
 TUPLE: with-options tree options ;
-C: <with-options> with-options
+C: <with-options> with-options ;
 
 TUPLE: options on off ;
-C: <options> options
+C: <options> options ;
 
 SINGLETONS: unix-lines dotall multiline case-insensitive reversed-regexp ;
 
@@ -67,7 +67,7 @@ M: from-to <times>
     [ <or-class> ] dip [ <not-class> ] when ;
 
 TUPLE: lookahead term ;
-C: <lookahead> lookahead
+C: <lookahead> lookahead ;
 
 TUPLE: lookbehind term ;
-C: <lookbehind> lookbehind
+C: <lookbehind> lookbehind ;

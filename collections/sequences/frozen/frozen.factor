@@ -5,7 +5,7 @@ in: sequences.frozen
 
 TUPLE: frozen { seq read-only } ;
 
-C: <frozen> frozen
+C: <frozen> frozen ;
 
 M: frozen virtual@ seq>> ;
 

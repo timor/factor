@@ -90,10 +90,10 @@ M: unknown-typeflag summary
     dup name>> read/write-blocks ;
 
 TUPLE: hard-link linkname name ;
-C: <hard-link> hard-link
+C: <hard-link> hard-link ;
 
 TUPLE: symbolic-link linkname name ;
-C: <symbolic-link> symbolic-link
+C: <symbolic-link> symbolic-link ;
 
 ! Hard link, don't call normalize-path
 : typeflag-1 ( header -- )

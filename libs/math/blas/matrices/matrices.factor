@@ -189,7 +189,7 @@ M: blas-matrix-base clone
 
 TUPLE: blas-matrix-rowcol-sequence
     parent inc rowcol-length rowcol-jump length ;
-C: <blas-matrix-rowcol-sequence> blas-matrix-rowcol-sequence
+C: <blas-matrix-rowcol-sequence> blas-matrix-rowcol-sequence ;
 
 INSTANCE: blas-matrix-rowcol-sequence sequence ;
 

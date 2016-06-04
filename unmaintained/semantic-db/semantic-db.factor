@@ -7,7 +7,7 @@ sequences.lib strings words destructors ;
 in: semantic-db
 
 TUPLE: node id content ;
-C: <node> node
+C: <node> node ;
 
 node "node"
 {
@@ -185,7 +185,7 @@ arc "arc"
     ] if* ;
 
 TUPLE: relation-definition relate id-word unrelate related? subjects objects ;
-C: <relation-definition> relation-definition
+C: <relation-definition> relation-definition ;
 
 <PRIVATE
 
@@ -241,7 +241,7 @@ PRIVATE>
 
 ! hierarchy
 TUPLE: node-tree node children ;
-C: <node-tree> node-tree
+C: <node-tree> node-tree ;
 
 : children ( node has-parent-relation -- children ) select-subjects ;
 : parents ( node has-parent-relation -- parents ) select-objects ;

@@ -15,7 +15,7 @@ CONSTANT: prime5 374761393
 
 TUPLE: xxhash seed ;
 
-C: <xxhash> xxhash
+C: <xxhash> xxhash ;
 
 <PRIVATE
 

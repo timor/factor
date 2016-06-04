@@ -48,7 +48,7 @@ TUPLE: extra-words words ;
 M: extra-words equal?
     over extra-words? [ [ words>> ] bi@ eq? ] [ 2drop f ] if ;
 
-C: <extra-words> extra-words
+C: <extra-words> extra-words ;
 
 ERROR: no-word-in-vocab word vocab ;
 

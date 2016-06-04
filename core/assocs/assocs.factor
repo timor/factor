@@ -278,7 +278,7 @@ INSTANCE: sequence assoc ;
 
 TUPLE: enum { seq read-only } ;
 
-C: <enum> enum
+C: <enum> enum ;
 
 M: enum at*
     seq>> 2dup bounds-check?

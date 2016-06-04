@@ -48,7 +48,7 @@ PREDICATE: c-type-word < word
     "c-type" word-prop >boolean ;
 
 TUPLE: pointer { to initial: void read-only } ;
-C: <pointer> pointer
+C: <pointer> pointer ;
 
 UNION: c-type-name
     c-type-word pointer ;

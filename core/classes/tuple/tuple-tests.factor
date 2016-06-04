@@ -21,7 +21,7 @@ TUPLE: rect x y w h ;
 ! Make sure we handle tuple class redefinition
 TUPLE: redefinition-test ;
 
-C: <redefinition-test> redefinition-test
+C: <redefinition-test> redefinition-test ;
 
 <redefinition-test> "redefinition-test" set
 
@@ -65,7 +65,7 @@ TUPLE: slotty a b c ;
 
 TUPLE: predicate-test ;
 
-C: <predicate-test> predicate-test
+C: <predicate-test> predicate-test ;
 
 : predicate-test ( a -- ? ) drop f ;
 
@@ -85,7 +85,7 @@ M: circle area radius>> sq pi * ;
 ! Hashcode breakage
 TUPLE: empty ;
 
-C: <empty> empty
+C: <empty> empty ;
 
 { t } [ <empty> hashcode fixnum? ] unit-test
 
@@ -162,7 +162,7 @@ TUPLE: t4 ;
 M: t4 m1 drop ;
 M: t4 m2 nip ;
 
-C: <t4> t4
+C: <t4> t4 ;
 
 { 1 } [ 1 <t4> m1 ] unit-test
 { 1 } [ <t4> 1 m2 ] unit-test
@@ -199,18 +199,18 @@ symbol: not-a-tuple-class
 
 TUPLE: erg's-reshape-problem a b c d ;
 
-C: <erg's-reshape-problem> erg's-reshape-problem
+C: <erg's-reshape-problem> erg's-reshape-problem ;
 
 ! Inheritance
 TUPLE: computer cpu ram ;
-C: <computer> computer
+C: <computer> computer ;
 
 { "TUPLE: computer cpu ram ;" } [
     [ \ computer see ] with-string-writer string-lines second
 ] unit-test
 
 TUPLE: laptop < computer battery ;
-C: <laptop> laptop
+C: <laptop> laptop ;
 
 { t } [ laptop tuple-class? ] unit-test
 { t } [ laptop tuple class<= ] unit-test
@@ -237,7 +237,7 @@ test-laptop-slot-values
 { { tuple computer laptop } } [ laptop superclasses-of ] unit-test
 
 TUPLE: server < computer rackmount ;
-C: <server> server
+C: <server> server ;
 
 { t } [ server tuple-class? ] unit-test
 { t } [ server tuple class<= ] unit-test
@@ -836,7 +836,7 @@ defer: initial-slot
 ! Test no-slot error and get/set-slot-named
 
 TUPLE: no-slot-tuple0 a b c ;
-C: <no-slot-tuple0> no-slot-tuple0
+C: <no-slot-tuple0> no-slot-tuple0 ;
 
 [ 1 2 3 <no-slot-tuple0> "d" over get-slot-named ]
 [

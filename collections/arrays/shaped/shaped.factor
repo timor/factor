@@ -21,10 +21,10 @@ M: sequence array-replace
     ] if ;
 
 TUPLE: uniform-shape shape ;
-C: <uniform-shape> uniform-shape
+C: <uniform-shape> uniform-shape ;
 
 TUPLE: abnormal-shape shape ;
-C: <abnormal-shape> abnormal-shape
+C: <abnormal-shape> abnormal-shape ;
 
 GENERIC: wrap-shape ( object -- shape ) ;
 

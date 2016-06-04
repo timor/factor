@@ -58,7 +58,7 @@ in: project-euler.059
 
 TUPLE: rollover seq n ;
 
-C: <rollover> rollover
+C: <rollover> rollover ;
 
 M: rollover length n>> ;
 

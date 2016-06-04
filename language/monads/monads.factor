@@ -65,7 +65,7 @@ INSTANCE:  maybe-monad monad ;
 singleton: nothing
 
 TUPLE: just value ;
-C: <just> just
+C: <just> just ;
 
 UNION: maybe just nothing ;
 INSTANCE: maybe monad ;
@@ -86,10 +86,10 @@ singleton: either-monad
 INSTANCE:  either-monad monad ;
 
 TUPLE: left value ;
-C: <left> left
+C: <left> left ;
 
 TUPLE: right value ;
-C: <right> right
+C: <right> right ;
 
 UNION: either left right ;
 INSTANCE: either monad ;
@@ -134,7 +134,7 @@ singleton: state-monad
 INSTANCE:  state-monad monad ;
 
 TUPLE: state quot ;
-C: <state> state
+C: <state> state ;
 
 INSTANCE: state monad ;
 
@@ -159,7 +159,7 @@ singleton: reader-monad
 INSTANCE:  reader-monad monad ;
 
 TUPLE: reader quot ;
-C: <reader> reader
+C: <reader> reader ;
 INSTANCE: reader monad ;
 
 M: reader monad-of drop reader-monad ;
@@ -179,7 +179,7 @@ singleton: writer-monad
 INSTANCE:  writer-monad monad ;
 
 TUPLE: writer value log ;
-C: <writer> writer
+C: <writer> writer ;
 
 M: writer monad-of drop writer-monad ;
 

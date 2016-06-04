@@ -28,17 +28,17 @@ CONSTANT: size 200
 
 TUPLE: ray { orig double-array read-only } { dir double-array read-only } ;
 
-C: <ray> ray
+C: <ray> ray ;
 
 TUPLE: hit { normal double-array read-only } { lambda float read-only } ;
 
-C: <hit> hit
+C: <hit> hit ;
 
 GENERIC: intersect-scene ( hit ray scene -- hit ) ;
 
 TUPLE: sphere { center double-array read-only } { radius float read-only } ;
 
-C: <sphere> sphere
+C: <sphere> sphere ;
 
 : sphere-v ( sphere ray -- v )
     [ center>> ] [ orig>> ] bi* v- ; inline

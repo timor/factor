@@ -93,7 +93,7 @@ M: mixin-class metaclass-changed
 ! INSTANCE: declaration from a source file updates the mixin. ;
 TUPLE: mixin-instance class mixin ;
 
-C: <mixin-instance> mixin-instance
+C: <mixin-instance> mixin-instance ;
 
 <PRIVATE
 
@@ -106,7 +106,7 @@ M: mixin-instance where >mixin-instance< "instances" word-prop at ;
 
 M: mixin-instance set-where >mixin-instance< "instances" word-prop set-at ;
 
-M: mixin-instance definer drop \ INSTANCE: f ; ;
+M: mixin-instance definer drop \ INSTANCE: f ;
 
 M: mixin-instance definition drop f ;
 

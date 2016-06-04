@@ -467,7 +467,7 @@ HidP_SetUsages (
    PCHAR                Report,
    ULONG                ReportLength
    )
-ALIAS: HidP_SetButtons HidP_SetUsages
+ALIAS: HidP_SetButtons HidP_SetUsages ;
 
 FUNCTION: NTSTATUS
 HidP_UnsetUsages (
@@ -480,7 +480,7 @@ HidP_UnsetUsages (
    PCHAR                Report,
    ULONG                ReportLength
    )
-ALIAS: HidP_UnsetButtons HidP_UnsetUsages
+ALIAS: HidP_UnsetButtons HidP_UnsetUsages ;
 
 FUNCTION: NTSTATUS
 HidP_GetUsages (
@@ -493,7 +493,7 @@ HidP_GetUsages (
    PCHAR                Report,
    ULONG                ReportLength
    )
-ALIAS: HidP_GetButtons HidP_GetUsages
+ALIAS: HidP_GetButtons HidP_GetUsages ;
 
 FUNCTION: NTSTATUS
 HidP_GetUsagesEx (
@@ -505,7 +505,7 @@ HidP_GetUsagesEx (
     PCHAR                Report,
     ULONG                ReportLength
    )
-ALIAS: HidP_GetButtonsEx HidP_GetUsagesEx
+ALIAS: HidP_GetButtonsEx HidP_GetUsagesEx ;
 
 FUNCTION: ULONG
 HidP_MaxUsageListLength (

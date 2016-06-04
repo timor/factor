@@ -9,7 +9,7 @@ in: machine-learning.data-sets
 TUPLE: data-set data target target-names description
 feature-names ;
 
-C: <data-set> data-set
+C: <data-set> data-set ;
 
 <PRIVATE
 

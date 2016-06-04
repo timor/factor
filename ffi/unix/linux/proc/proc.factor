@@ -12,7 +12,7 @@ in: unix.linux.proc
 ! /proc/cgroups
 
 TUPLE: proc-cmdline string ;
-C: <proc-cmdline> proc-cmdline
+C: <proc-cmdline> proc-cmdline ;
 : parse-proc-cmdline ( -- obj )
     "/proc/cmdline" utf8 file-lines first <proc-cmdline> ;
 

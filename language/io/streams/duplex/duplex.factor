@@ -7,7 +7,7 @@ in: io.streams.duplex
 
 TUPLE: duplex-stream in out ;
 
-C: <duplex-stream> duplex-stream
+C: <duplex-stream> duplex-stream ;
 
 CONSULT: input-stream-protocol duplex-stream in>> ;
 CONSULT: output-stream-protocol duplex-stream out>> ;

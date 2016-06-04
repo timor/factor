@@ -72,7 +72,7 @@ M: single-combination make-default-method
 ! 1. Flatten methods
 TUPLE: predicate-engine class methods ;
 
-C: <predicate-engine> predicate-engine
+C: <predicate-engine> predicate-engine ;
 
 : push-method ( method class atomic assoc -- )
     dupd [
@@ -99,7 +99,7 @@ C: <predicate-engine> predicate-engine
 ! 2.1 Convert tuple methods
 TUPLE: echelon-dispatch-engine n methods ;
 
-C: <echelon-dispatch-engine> echelon-dispatch-engine
+C: <echelon-dispatch-engine> echelon-dispatch-engine ;
 
 TUPLE: tuple-dispatch-engine echelons ;
 
@@ -140,7 +140,7 @@ TUPLE: tuple-dispatch-engine echelons ;
 ! 3 Tag methods
 TUPLE: tag-dispatch-engine methods ;
 
-C: <tag-dispatch-engine> tag-dispatch-engine
+C: <tag-dispatch-engine> tag-dispatch-engine ;
 
 : <engine> ( assoc -- engine )
     flatten-methods

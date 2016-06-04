@@ -60,7 +60,7 @@ M: literal-tuple (literal) ;
 
 TUPLE: curried obj quot ;
 
-C: <curried> curried
+C: <curried> curried ;
 
 : >curried< ( curried -- obj quot )
     [ obj>> ] [ quot>> ] bi ; inline
@@ -76,7 +76,7 @@ M: curried (literal)
 
 TUPLE: composed quot1 quot2 ;
 
-C: <composed> composed
+C: <composed> composed ;
 
 : >composed< ( composed -- quot1 quot2 )
     [ quot1>> ] [ quot2>> ] bi ; inline
@@ -104,7 +104,7 @@ M: input-parameter (literal) current-word get unknown-macro-input ;
 
 TUPLE: declared-effect known word effect variables branches actual ;
 
-C: (declared-effect) declared-effect
+C: (declared-effect) declared-effect ;
 
 : <declared-effect> ( known word effect variables branches -- declared-effect )
     f (declared-effect) ; inline

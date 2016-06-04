@@ -10,7 +10,7 @@ TUPLE: empty-heap ;
 PREDICATE: singleton-heap < branch
     [ left>> ] [ right>> ] bi [ empty-heap? ] both? ;
 
-C: <branch> branch
+C: <branch> branch ;
 : >branch< ( branch -- value prio left right )
     { [ value>> ] [ prio>> ] [ left>> ] [ right>> ] } cleave ;
 PRIVATE>

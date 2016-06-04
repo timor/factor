@@ -22,7 +22,7 @@ singleton: windows-ui-backend
 
 TUPLE: win-base hDC hRC ;
 TUPLE: win < win-base hWnd world title ;
-C: <win> win
+C: <win> win ;
 
 <PRIVATE
 
@@ -208,7 +208,7 @@ PRIVATE>
     ] with-clipboard ;
 
 TUPLE: pasteboard ;
-C: <pasteboard> pasteboard
+C: <pasteboard> pasteboard ;
 
 M: pasteboard clipboard-contents drop paste ;
 M: pasteboard set-clipboard-contents drop copy ;

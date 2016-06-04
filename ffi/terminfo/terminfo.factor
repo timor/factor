@@ -23,7 +23,7 @@ ERROR: bad-magic ;
 TUPLE: terminfo-header names-bytes boolean-bytes #numbers
 #strings string-bytes ;
 
-C: <terminfo-header> terminfo-header
+C: <terminfo-header> terminfo-header ;
 
 : read-header ( -- header )
     12 read "ssssss" unpack-le unclip check-magic
@@ -54,7 +54,7 @@ C: <terminfo-header> terminfo-header
 
 TUPLE: terminfo names booleans numbers strings ;
 
-C: <terminfo> terminfo
+C: <terminfo> terminfo ;
 
 : read-terminfo ( -- terminfo )
     read-header {

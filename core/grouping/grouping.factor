@@ -103,7 +103,7 @@ M: circular-slice virtual-exemplar seq>> ; inline
 M: circular-slice virtual@
     [ from>> + ] [ seq>> ] bi [ length rem ] keep ; inline
 
-C: <circular-slice> circular-slice
+C: <circular-slice> circular-slice ;
 
 TUPLE: circular-clumps
     { seq read-only }

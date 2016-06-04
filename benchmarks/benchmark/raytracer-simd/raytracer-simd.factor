@@ -30,15 +30,15 @@ CONSTANT: size 200
 
 TUPLE: ray { orig double-4 read-only } { dir double-4 read-only } ;
 
-C: <ray> ray
+C: <ray> ray ;
 
 TUPLE: hit { normal double-4 read-only } { lambda float read-only } ;
 
-C: <hit> hit
+C: <hit> hit ;
 
 TUPLE: sphere { center double-4 read-only } { radius float read-only } ;
 
-C: <sphere> sphere
+C: <sphere> sphere ;
 
 : sphere-v ( sphere ray -- v ) [ center>> ] [ orig>> ] bi* v- ; inline no-compile
 

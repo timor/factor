@@ -14,7 +14,7 @@ in: crypto.rsa
 
 TUPLE: rsa modulus private-key public-key ;
 
-C: <rsa> rsa
+C: <rsa> rsa ;
 
 <PRIVATE
 

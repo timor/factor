@@ -68,7 +68,7 @@ M: f print-element drop ;
     [ snippet-style get print-element* ] ($span) ;
 
 ! for help-lint
-ALIAS: $slot $snippet
+ALIAS: $slot $snippet ;
 
 : $emphasis ( children -- )
     [ emphasis-style get print-element* ] ($span) ;

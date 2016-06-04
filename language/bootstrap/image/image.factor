@@ -39,7 +39,7 @@ CONSTANT: image-names
 ! same type
 TUPLE: eql-wrapper { obj read-only } ;
 
-C: <eql-wrapper> eql-wrapper
+C: <eql-wrapper> eql-wrapper ;
 
 M: eql-wrapper hashcode* obj>> hashcode* ;
 
@@ -64,7 +64,7 @@ M: eql-wrapper equal?
 
 TUPLE: eq-wrapper { obj read-only } ;
 
-C: <eq-wrapper> eq-wrapper
+C: <eq-wrapper> eq-wrapper ;
 
 M: eq-wrapper equal?
     over eq-wrapper? [ [ obj>> ] bi@ eq? ] [ 2drop f ] if ;
@@ -239,7 +239,7 @@ M: fixnum prepare-object
 
 TUPLE: fake-bignum n ;
 
-C: <fake-bignum> fake-bignum
+C: <fake-bignum> fake-bignum ;
 
 M: fake-bignum prepare-object n>> tag-fixnum ;
 

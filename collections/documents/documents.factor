@@ -16,7 +16,7 @@ in: documents
 
 TUPLE: edit old-string new-string from old-to new-to ;
 
-C: <edit> edit
+C: <edit> edit ;
 
 TUPLE: document < model locs undos redos inside-undo? ;
 

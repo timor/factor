@@ -6,7 +6,7 @@ in: yahoo
 
 TUPLE: result title url summary ;
 
-C: <result> result
+C: <result> result ;
 
 TUPLE: search query results adult-ok start appid region type
 format similar-ok language country site subscription license ;

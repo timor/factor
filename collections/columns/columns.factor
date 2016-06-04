@@ -6,7 +6,7 @@ in: columns
 ! A column of a matrix
 TUPLE: column seq col ;
 
-C: <column> column
+C: <column> column ;
 
 M: column virtual-exemplar seq>> ;
 M: column virtual@ [ col>> swap ] [ seq>> ] bi nth bounds-check ;

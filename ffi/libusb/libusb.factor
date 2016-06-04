@@ -17,7 +17,7 @@ LIBRARY: libusb
 : libusb_cpu_to_le16 ( x -- y )
     2 >native-endian le> ; inline
 
-ALIAS: libusb_le16_to_cpu libusb_cpu_to_le16
+ALIAS: libusb_le16_to_cpu libusb_cpu_to_le16 ;
 
 ENUM: libusb_class_code
     { LIBUSB_CLASS_PER_INTERFACE 0 }

@@ -8,7 +8,7 @@ in: pos
 
 TUPLE: pos val ;
 
-C: <pos> pos
+C: <pos> pos ;
 
 : pos> ( -- val ) self> val>> ;
 

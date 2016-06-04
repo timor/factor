@@ -26,7 +26,7 @@ VARIANT: cube-map-axis
 TUPLE: cube-map-face
     { texture texture-cube-map read-only }
     { axis cube-map-axis read-only } ;
-C: <cube-map-face> cube-map-face
+C: <cube-map-face> cube-map-face ;
 
 UNION: texture-1d-data-target
     texture-1d ;
@@ -45,7 +45,7 @@ TUPLE: texture-data
     { component-order component-order read-only initial: RGBA }
     { component-type component-type read-only initial: ubyte-components } ;
 
-C: <texture-data> texture-data
+C: <texture-data> texture-data ;
 
 VARIANT: compressed-texture-format
     DXT1-RGB DXT1-RGBA DXT3 DXT5
@@ -57,7 +57,7 @@ TUPLE: compressed-texture-data
     { format compressed-texture-format read-only }
     { length integer read-only } ;
 
-C: <compressed-texture-data> compressed-texture-data
+C: <compressed-texture-data> compressed-texture-data ;
 
 VARIANT: texture-wrap
     clamp-texcoord-to-edge clamp-texcoord-to-border repeat-texcoord repeat-texcoord-mirrored ;

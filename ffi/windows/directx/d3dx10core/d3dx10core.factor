@@ -164,7 +164,7 @@ FUNCTION: HRESULT
         LPCWSTR                 pFaceName,
         LPD3DX10FONT*           ppFont )
 
-ALIAS: D3DX10CreateFont D3DX10CreateFontW
+ALIAS: D3DX10CreateFont D3DX10CreateFontW ;
 
 FUNCTION: HRESULT
     D3DX10CreateFontIndirectA (
@@ -178,7 +178,7 @@ FUNCTION: HRESULT
         D3DX10_FONT_DESCW*        pDesc,
         LPD3DX10FONT*             ppFont )
 
-ALIAS: D3DX10CreateFontIndirect D3DX10CreateFontIndirectW
+ALIAS: D3DX10CreateFontIndirect D3DX10CreateFontIndirectW ;
 
 FUNCTION: HRESULT D3DX10UnsetAllDeviceObjects ( ID3D10Device* pDevice ) ;
 

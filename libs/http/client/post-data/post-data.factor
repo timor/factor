@@ -8,7 +8,7 @@ in: http.client.post-data
 
 TUPLE: measured-stream stream size ;
 
-C: <measured-stream> measured-stream
+C: <measured-stream> measured-stream ;
 
 <PRIVATE
 

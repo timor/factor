@@ -12,7 +12,7 @@ in: generalizations
 ! be done at compile-time.
 <<
 
-ALIAS: n*quot (n*quot)
+ALIAS: n*quot (n*quot) ;
 
 MACRO: call-n ( n -- quot )
     [ call ] <repetition> '[ _ cleave ] ;

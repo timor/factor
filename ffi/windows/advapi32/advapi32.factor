@@ -297,9 +297,9 @@ CONSTANT: WRITE_OWNER                0x00080000
 CONSTANT: SYNCHRONIZE                0x00100000
 CONSTANT: STANDARD_RIGHTS_REQUIRED   0x000f0000
 
-ALIAS: STANDARD_RIGHTS_READ       READ_CONTROL
-ALIAS: STANDARD_RIGHTS_WRITE      READ_CONTROL
-ALIAS: STANDARD_RIGHTS_EXECUTE    READ_CONTROL
+ALIAS: STANDARD_RIGHTS_READ       READ_CONTROL ;
+ALIAS: STANDARD_RIGHTS_WRITE      READ_CONTROL ;
+ALIAS: STANDARD_RIGHTS_EXECUTE    READ_CONTROL ;
 
 CONSTANT: TOKEN_TOKEN_ADJUST_DEFAULT   0x0080
 CONSTANT: TOKEN_ADJUST_GROUPS          0x0040
@@ -307,7 +307,7 @@ CONSTANT: TOKEN_ADJUST_PRIVILEGES      0x0020
 CONSTANT: TOKEN_ADJUST_SESSIONID       0x0100
 CONSTANT: TOKEN_ASSIGN_PRIMARY         0x0001
 CONSTANT: TOKEN_DUPLICATE              0x0002
-ALIAS: TOKEN_EXECUTE                STANDARD_RIGHTS_EXECUTE
+ALIAS: TOKEN_EXECUTE                STANDARD_RIGHTS_EXECUTE ;
 CONSTANT: TOKEN_IMPERSONATE            0x0004
 CONSTANT: TOKEN_QUERY                  0x0008
 CONSTANT: TOKEN_QUERY_SOURCE           0x0010
@@ -356,7 +356,7 @@ CONSTANT: KEY_READ                0x20019
 CONSTANT: KEY_WOW64_32KEY         0x0200
 CONSTANT: KEY_WOW64_64KEY         0x0100
 CONSTANT: KEY_WRITE               0x20006
-ALIAS: KEY_EXECUTE             KEY_READ
+ALIAS: KEY_EXECUTE             KEY_READ ;
 CONSTANT: KEY_ALL_ACCESS          0xF003F
 
 CONSTANT: REG_NONE                         0
@@ -955,7 +955,7 @@ FUNCTION: BOOL CryptAcquireContextW ( HCRYPTPROV* phProv,
                                       DWORD dwProvType,
                                       DWORD dwFlags )
 
-ALIAS: CryptAcquireContext CryptAcquireContextW
+ALIAS: CryptAcquireContext CryptAcquireContextW ;
 
 ! : CryptContextAddRef ;
 FUNCTION: BOOL CryptCreateHash ( HCRYPTPROV hProv, ALG_ID Algid, HCRYPTKEY hKey, DWORD dwFlags, HCRYPTHASH *pHash ) ;
@@ -1063,7 +1063,7 @@ FUNCTION: BOOL CryptReleaseContext ( HCRYPTPROV hProv, DWORD dwFlags ) ;
 ! : GetExplicitEntriesFromAclW ;
 ! : GetFileSecurityA ;
 FUNCTION: BOOL GetFileSecurityW ( LPCTSTR lpFileName, SECURITY_INFORMATION RequestedInformation, PSECURITY_DESCRIPTOR pSecurityDescriptor, DWORD nLength, LPDWORD lpnLengthNeeded ) ;
-ALIAS: GetFileSecurity GetFileSecurityW
+ALIAS: GetFileSecurity GetFileSecurityW ;
 ! : GetInformationCodeAuthzLevelW ;
 ! : GetInformationCodeAuthzPolicyW ;
 ! : GetInheritanceSourceA ;
@@ -1082,7 +1082,7 @@ ALIAS: GetFileSecurity GetFileSecurityW
 ! : GetNamedSecurityInfoExA ;
 ! FUNCTION: DWORD GetNamedSecurityInfoExW
 FUNCTION: DWORD GetNamedSecurityInfoW ( LPTSTR pObjectName, SE_OBJECT_TYPE ObjectType, SECURITY_INFORMATION SecurityInfo, PSID* ppsidOwner, PSID* ppsidGroup, PACL* ppDacl, PACL* ppSacl, PSECURITY_DESCRIPTOR* ppSecurityDescriptor ) ;
-ALIAS: GetNamedSecurityInfo GetNamedSecurityInfoW
+ALIAS: GetNamedSecurityInfo GetNamedSecurityInfoW ;
 ! : GetNumberOfEventLogRecords ;
 ! : GetOldestEventLogRecord ;
 ! : GetOverlappedAccessResults ;
@@ -1118,7 +1118,7 @@ FUNCTION: BOOL GetTokenInformation ( HANDLE TokenHandle, TOKEN_INFORMATION_CLASS
 
 ! : GetUserNameA ;
 FUNCTION: BOOL GetUserNameW ( LPCTSTR lpBuffer, LPDWORD lpnSize ) ;
-ALIAS: GetUserName GetUserNameW
+ALIAS: GetUserName GetUserNameW ;
 
 ! : GetWindowsAccountDomainSid ;
 ! : I_ScIsSecurityProcess ;
@@ -1163,7 +1163,7 @@ FUNCTION: BOOL InitializeSecurityDescriptor ( PSECURITY_DESCRIPTOR pSecurityDesc
 FUNCTION: BOOL LookupPrivilegeValueW ( LPCTSTR lpSystemName,
                                LPCTSTR lpName,
                                PLUID lpLuid )
-ALIAS: LookupPrivilegeValue LookupPrivilegeValueW
+ALIAS: LookupPrivilegeValue LookupPrivilegeValueW ;
 
 ! : LookupSecurityDescriptorPartsA ;
 ! : LookupSecurityDescriptorPartsW ;
@@ -1297,7 +1297,7 @@ FUNCTION: LONG RegCloseKey ( HKEY hKey ) ;
 ! : RegCreateKeyA ;
 ! : RegCreateKeyExA ;
 FUNCTION: LONG RegCreateKeyExW ( HKEY hKey, LPCTSTR lpSubKey, DWORD Reserved, LPTSTR lpClass, DWORD dwOptions, REGSAM samDesired, LPSECURITY_ATTRIBUTES lpSecurityAttributes, PHKEY phkResult, LPDWORD lpdwDisposition ) ;
-ALIAS: RegCreateKeyEx RegCreateKeyExW
+ALIAS: RegCreateKeyEx RegCreateKeyExW ;
 ! : RegCreateKeyW
 ! : RegDeleteKeyA ;
 ! : RegDeleteKeyW ;
@@ -1314,7 +1314,7 @@ FUNCTION: LONG RegDeleteKeyExW (
         LPDWORD lpdwDisposition
     )
 
-ALIAS: RegDeleteKeyEx RegDeleteKeyExW
+ALIAS: RegDeleteKeyEx RegDeleteKeyExW ;
 
 ! : RegDeleteValueA ;
 ! : RegDeleteValueW ;
@@ -1332,7 +1332,7 @@ FUNCTION: LONG RegEnumKeyExW (
         LPDWORD lpcClass,
         PFILETIME lpftLastWriteTime
     )
-ALIAS: RegEnumKeyEx RegEnumKeyExW
+ALIAS: RegEnumKeyEx RegEnumKeyExW ;
 
 ! : RegEnumKeyW ;
 ! : RegEnumValueA ;
@@ -1348,7 +1348,7 @@ FUNCTION: LONG RegEnumValueW (
         LPDWORD lpcbData
     )
 
-ALIAS: RegEnumValue RegEnumValueW
+ALIAS: RegEnumValue RegEnumValueW ;
 
 ! : RegFlushKey ;
 ! : RegGetKeySecurity ;
@@ -1359,7 +1359,7 @@ FUNCTION: LONG RegOpenCurrentUser ( REGSAM samDesired, PHKEY phkResult ) ;
 ! : RegOpenKeyA ;
 ! : RegOpenKeyExA ;
 FUNCTION: LONG RegOpenKeyExW ( HKEY hKey, LPCTSTR lpSubKey, DWORD ulOptions, REGSAM samDesired, PHKEY phkResult ) ;
-ALIAS: RegOpenKeyEx RegOpenKeyExW
+ALIAS: RegOpenKeyEx RegOpenKeyExW ;
 ! : RegOpenKeyW ;
 ! : RegOpenUserClassesRoot ;
 ! : RegOverridePredefKey ;
@@ -1378,13 +1378,13 @@ FUNCTION: LONG RegQueryInfoKeyW (
         LPDWORD lpcbSecurityDescriptor,
         PFILETIME lpftLastWriteTime
     )
-ALIAS: RegQueryInfoKey RegQueryInfoKeyW
+ALIAS: RegQueryInfoKey RegQueryInfoKeyW ;
 ! : RegQueryMultipleValuesA ;
 ! : RegQueryMultipleValuesW ;
 ! : RegQueryValueA ;
 ! : RegQueryValueExA ;
 FUNCTION: LONG RegQueryValueExW ( HKEY hKey, LPCTSTR lpValueName, LPDWORD lpReserved, LPDWORD lpType, LPBYTE lpData, LPDWORD lpcbData ) ;
-ALIAS: RegQueryValueEx RegQueryValueExW
+ALIAS: RegQueryValueEx RegQueryValueExW ;
 ! : RegQueryValueW ;
 ! : RegReplaceKeyA ;
 ! : RegReplaceKeyW ;
@@ -1399,7 +1399,7 @@ ALIAS: RegQueryValueEx RegQueryValueExW
 ! : RegSetValueExA ;
 ! : RegSetValueExW ;
 FUNCTION: LONG RegSetValueExW ( HKEY hKey, LPCTSTR lpValueName, DWORD Reserved, DWORD dwType, BYTE* lpData, DWORD cbData ) ;
-ALIAS: RegSetValueEx RegSetValueExW
+ALIAS: RegSetValueEx RegSetValueExW ;
 ! : RegUnLoadKeyA ;
 ! : RegUnLoadKeyW ;
 ! : RegisterEventSourceA ;
@@ -1437,7 +1437,7 @@ ALIAS: RegSetValueEx RegSetValueExW
 ! : SetEntriesInAccessListW ;
 ! : SetEntriesInAclA ;
 FUNCTION: DWORD SetEntriesInAclW ( ULONG cCountOfExplicitEntries, PEXPLICIT_ACCESS pListOfExplicitEntries, PACL OldAcl, PACL* NewAcl ) ;
-ALIAS: SetEntriesInAcl SetEntriesInAclW
+ALIAS: SetEntriesInAcl SetEntriesInAclW ;
 ! : SetEntriesInAuditListA ;
 ! : SetEntriesInAuditListW ;
 ! : SetFileSecurityA ;
@@ -1449,7 +1449,7 @@ ALIAS: SetEntriesInAcl SetEntriesInAclW
 ! : SetNamedSecurityInfoExA ;
 ! : SetNamedSecurityInfoExW ;
 FUNCTION: DWORD SetNamedSecurityInfoW ( LPTSTR pObjectName, SE_OBJECT_TYPE ObjectType, SECURITY_INFORMATION SecurityInfo, PSID psidOwner, PSID psidGroup, PACL pDacl, PACL pSacl ) ;
-ALIAS: SetNamedSecurityInfo SetNamedSecurityInfoW
+ALIAS: SetNamedSecurityInfo SetNamedSecurityInfoW ;
 ! : SetPrivateObjectSecurity ;
 ! : SetPrivateObjectSecurityEx ;
 ! : SetSecurityDescriptorControl ;

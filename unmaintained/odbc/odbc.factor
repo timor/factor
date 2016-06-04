@@ -189,7 +189,7 @@ FUNCTION: SQLRETURN SQLGetData ( SQLHSTMT statementHandle, SQLUSMALLINT columnNu
 
 TUPLE: column nullable digits size type name number ;
 
-C: <column> column
+C: <column> column ;
 
 : odbc-describe-column ( statement n -- column )
   dup >r
@@ -232,7 +232,7 @@ C: <column> column
 
 TUPLE: field value column ;
 
-C: <field> field
+C: <field> field ;
 
 : odbc-get-field ( statement column -- field )
   dup column? [ dupd odbc-describe-column ] unless dup >r number>>

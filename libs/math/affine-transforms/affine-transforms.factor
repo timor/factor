@@ -4,7 +4,7 @@ math.functions sequences ;
 in: math.affine-transforms
 
 TUPLE: affine-transform { x read-only } { y read-only } { origin read-only } ;
-C: <affine-transform> affine-transform
+C: <affine-transform> affine-transform ;
 
 CONSTANT: identity-transform T{ affine-transform f { 1.0 0.0 } { 0.0 1.0 } { 0.0 0.0 } }
 

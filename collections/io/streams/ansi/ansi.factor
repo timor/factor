@@ -56,7 +56,7 @@ CONSTANT: colors H{
 
 TUPLE: ansi stream ;
 
-C: <ansi> ansi
+C: <ansi> ansi ;
 
 M: ansi stream-write1 stream>> stream-write1 ;
 M: ansi stream-write stream>> stream-write ;

@@ -26,8 +26,8 @@ CONSTANT: EV_FLAG1    0x2000 ! filter-specific flag
 CONSTANT: EV_EOF          0x8000 ! EOF detected
 CONSTANT: EV_ERROR        0x4000 ! error, data contains errno
 
-ALIAS: EV_POLL EV_FLAG0
-ALIAS: EV_OOBAND EV_FLAG1
+ALIAS: EV_POLL EV_FLAG0 ;
+ALIAS: EV_OOBAND EV_FLAG1 ;
 
 CONSTANT: NOTE_LOWAT      0x00000001 ! low water mark
 

@@ -19,7 +19,7 @@ TUPLE: audio-orientation-state
     { forward initial: { 0.0 0.0 -1.0 } }
     { up initial: { 0.0 1.0 0.0 } } ;
 
-C: <audio-orientation-state> audio-orientation-state
+C: <audio-orientation-state> audio-orientation-state ;
 
 : orientation>float-array ( orientation -- float-array )
     [ forward>> first3 ]

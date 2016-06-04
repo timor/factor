@@ -9,7 +9,7 @@ in: checksums.murmur
 
 TUPLE: murmur3-32 seed ;
 
-C: <murmur3-32> murmur3-32
+C: <murmur3-32> murmur3-32 ;
 
 CONSTANT: c1 0xcc9e2d51
 CONSTANT: c2 0x1b873593

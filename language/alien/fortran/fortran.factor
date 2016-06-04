@@ -13,7 +13,7 @@ in: alien.fortran
 SINGLETONS: f2c-abi g95-abi gfortran-abi intel-unix-abi intel-windows-abi ;
 
 TUPLE: bad-fortran-abi detail ;
-C: <bad-fortran-abi> bad-fortran-abi
+C: <bad-fortran-abi> bad-fortran-abi ;
 
 : alien>nstring ( alien len encoding -- string )
     [ memory>byte-array ] dip decode ;

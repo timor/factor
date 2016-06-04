@@ -155,13 +155,13 @@ M: cl-event   dispose* handle>> clReleaseEvent        cl-success ;
 TUPLE: cl-buffer-ptr
     { buffer cl-buffer read-only }
     { offset integer   read-only } ;
-C: <cl-buffer-ptr> cl-buffer-ptr
+C: <cl-buffer-ptr> cl-buffer-ptr ;
 
 TUPLE: cl-buffer-range
     { buffer cl-buffer read-only }
     { offset integer   read-only }
     { size   integer   read-only } ;
-C: <cl-buffer-range> cl-buffer-range
+C: <cl-buffer-range> cl-buffer-range ;
 
 SYMBOLS: cl-current-context cl-current-queue cl-current-device ;
 

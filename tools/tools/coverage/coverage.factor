@@ -8,7 +8,7 @@ in: tools.coverage
 
 TUPLE: coverage-state < identity-tuple executed? ;
 
-C: <coverage-state> coverage-state
+C: <coverage-state> coverage-state ;
 
 symbol: covered
 

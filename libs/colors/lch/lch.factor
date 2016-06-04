@@ -8,7 +8,7 @@ in: colors.lch
 
 TUPLE: LCHuv l c h alpha ;
 
-C: <LCHuv> LCHuv
+C: <LCHuv> LCHuv ;
 
 <PRIVATE
 
@@ -58,7 +58,7 @@ M: luva >LCHuv
 
 TUPLE: LCHab l c h alpha ;
 
-C: <LCHab> LCHab
+C: <LCHab> LCHab ;
 
 M: LCHab >rgba >laba >rgba ;
 

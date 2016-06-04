@@ -6,7 +6,7 @@ in: core-foundation.time
 TYPEDEF: double CFTimeInterval
 TYPEDEF: double CFAbsoluteTime
 
-ALIAS: >CFTimeInterval duration>seconds
+ALIAS: >CFTimeInterval duration>seconds ;
 
 CONSTANT: epoch $[
     T{ timestamp { year 2001 } { month 1 } { day 1 } }

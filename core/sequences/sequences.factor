@@ -204,7 +204,7 @@ INSTANCE: virtual-sequence sequence ;
 ! A reversal of an underlying sequence.
 TUPLE: reversed { seq read-only } ;
 
-C: <reversed> reversed
+C: <reversed> reversed ;
 
 M: reversed virtual-exemplar seq>> ; inline
 M: reversed virtual@ seq>> [ length swap - 1 - ] keep ; inline
@@ -288,7 +288,7 @@ TUPLE: copy-state
     { dst-i read-only }
     { dst read-only } ;
 
-C: <copy> copy-state
+C: <copy> copy-state ;
 
 : copy-nth-unsafe ( n copy -- )
     [ [ src-i>> + ] [ src>> ] bi nth-unsafe ]

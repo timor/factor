@@ -36,7 +36,7 @@ DEFER: make-parent-directories
 ! Listing directories
 TUPLE: directory-entry name type ;
 
-C: <directory-entry> directory-entry
+C: <directory-entry> directory-entry ;
 
 HOOK: (directory-entries) os ( path -- seq ) ;
 

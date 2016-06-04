@@ -25,7 +25,7 @@ CM-FUNCTION: std::string* new_string ( const-char* s )
 
 ;C-LIBRARY
 
-ALIAS: <std::string> new_string
+ALIAS: <std::string> new_string ;
 
 { 1 1 } [ new_string ] must-infer-as
 { 1 1 } [ c_str_std__string ] must-infer-as
@@ -81,8 +81,8 @@ CM-FUNCTION: beta* new_beta ( const-char* s )
     return new beta(s);
 ;
 
-ALIAS: <alpha> new_alpha
-ALIAS: <beta> new_beta
+ALIAS: <alpha> new_alpha ;
+ALIAS: <beta> new_beta ;
 
 GENERIC: render ( obj -- obj )
 GENERIC: chop ( obj -- obj )

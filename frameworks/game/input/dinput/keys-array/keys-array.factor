@@ -5,7 +5,7 @@ in: game.input.dinput.keys-array
 TUPLE: keys-array
     { underlying sequence read-only }
     { length integer read-only } ;
-C: <keys-array> keys-array
+C: <keys-array> keys-array ;
 
 : >key ( byte -- ? )
     0x80 bitand c-bool> ;

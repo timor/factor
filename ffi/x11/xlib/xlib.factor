@@ -49,9 +49,9 @@ TYPEDEF: ulong VisualID
 TYPEDEF: ulong Time
 
 : *XID ( bytes -- n ) ulong deref ;
-ALIAS: *Window *XID
-ALIAS: *Drawable *XID
-ALIAS: *KeySym *XID
+ALIAS: *Window *XID ;
+ALIAS: *Drawable *XID ;
+ALIAS: *KeySym *XID ;
 : *Atom ( bytes -- n ) ulong deref ;
 !
 ! 2 - Display Functions

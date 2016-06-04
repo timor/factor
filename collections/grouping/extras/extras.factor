@@ -26,7 +26,7 @@ MACRO: nclump-map-as ( seq quot exemplar n -- result )
     { } swap nclump-map-as ; inline
 
 TUPLE: head-clumps seq ;
-C: <head-clumps> head-clumps
+C: <head-clumps> head-clumps ;
 M: head-clumps length seq>> length ;
 M: head-clumps nth-unsafe seq>> swap 1 + head-slice ;
 INSTANCE: head-clumps immutable-sequence ;
@@ -35,7 +35,7 @@ INSTANCE: head-clumps immutable-sequence ;
     [ <head-clumps> ] [ [ like ] curry map ] bi ;
 
 TUPLE: tail-clumps seq ;
-C: <tail-clumps> tail-clumps
+C: <tail-clumps> tail-clumps ;
 M: tail-clumps length seq>> length ;
 M: tail-clumps nth-unsafe seq>> swap tail-slice ;
 INSTANCE: tail-clumps immutable-sequence ;

@@ -7,7 +7,7 @@ in: ui.images
 
 TUPLE: image-name path ;
 
-C: <image-name> image-name
+C: <image-name> image-name ;
 
 MEMO: cached-image ( image-name -- image ) path>> load-image ;
 

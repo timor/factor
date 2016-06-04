@@ -13,8 +13,8 @@ TUPLE: parser peg compiled id ;
 M: parser equal? { [ [ class-of ] same? ] [ [ id>> ] same? ] } 2&& ;
 M: parser hashcode* id>> hashcode* ;
 
-C: <parse-result> parse-result
-C: <parse-error>  parse-error
+C: <parse-result> parse-result ;
+C: <parse-error>  parse-error ;
 
 symbol: error-stack
 

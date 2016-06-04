@@ -9,7 +9,7 @@ in: html.templates.chloe
 
 TUPLE: chloe path ;
 
-C: <chloe> chloe
+C: <chloe> chloe ;
 
 CHLOE: chloe compile-children ;
 

@@ -8,7 +8,7 @@ in: colors.luv
 
 TUPLE: luva l u v alpha ;
 
-C: <luva> luva
+C: <luva> luva ;
 
 <PRIVATE
 

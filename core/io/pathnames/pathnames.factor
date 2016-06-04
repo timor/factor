@@ -165,7 +165,7 @@ M: object normalize-path ( path -- path' )
 
 TUPLE: pathname string ;
 
-C: <pathname> pathname
+C: <pathname> pathname ;
 
 M: pathname absolute-path string>> absolute-path ;
 

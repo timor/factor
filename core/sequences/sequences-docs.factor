@@ -4,7 +4,7 @@ in: sequences
 
 HELP: sequence
 { $class-description "A mixin class whose instances are sequences. Custom implementations of the sequence protocol should be declared as instances of this mixin for all sequence functionality to work correctly:"
-    { $code "INSTANCE: my-sequence sequence" } ;
+    { $code "INSTANCE: my-sequence sequence ;" }
 } ;
 
 HELP: length

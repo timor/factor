@@ -12,7 +12,7 @@ TUPLE: hsla < color
 { lightness read-only }
 { alpha read-only } ;
 
-C: <hsla> hsla
+C: <hsla> hsla ;
 
 <PRIVATE
 

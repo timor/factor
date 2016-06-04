@@ -46,9 +46,9 @@ VARIANT: uniform-type
 
     texture-uniform ;
 
-ALIAS: mat2x2-uniform mat2-uniform
-ALIAS: mat3x3-uniform mat3-uniform
-ALIAS: mat4x4-uniform mat4-uniform
+ALIAS: mat2x2-uniform mat2-uniform ;
+ALIAS: mat3x3-uniform mat3-uniform ;
+ALIAS: mat4x4-uniform mat4-uniform ;
 
 TUPLE: uniform
     { name         string   read-only initial: "" }
@@ -64,20 +64,20 @@ TUPLE: index-range
     { start integer read-only }
     { count integer read-only } ;
 
-C: <index-range> index-range
+C: <index-range> index-range ;
 
 TUPLE: multi-index-range
     { starts uint-array read-only }
     { counts uint-array read-only } ;
 
-C: <multi-index-range> multi-index-range
+C: <multi-index-range> multi-index-range ;
 
 TUPLE: index-elements
     { ptr read-only }
     { count integer read-only }
     { index-type index-type read-only } ;
 
-C: <index-elements> index-elements
+C: <index-elements> index-elements ;
 
 TUPLE: multi-index-elements
     { buffer maybe{ buffer } read-only }
@@ -85,7 +85,7 @@ TUPLE: multi-index-elements
     { counts uint-array read-only }
     { index-type index-type read-only } ;
 
-C: <multi-index-elements> multi-index-elements
+C: <multi-index-elements> multi-index-elements ;
 
 UNION: vertex-indexes
     index-range

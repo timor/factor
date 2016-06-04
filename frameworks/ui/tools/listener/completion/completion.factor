@@ -26,7 +26,7 @@ slot: history
     history-list over empty? [ nip ] [ members completions ] if ;
 
 TUPLE: word-completion manifest ;
-C: <word-completion> word-completion
+C: <word-completion> word-completion ;
 
 SINGLETONS: vocab-completion color-completion char-completion
 path-completion history-completion ;

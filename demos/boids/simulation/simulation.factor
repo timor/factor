@@ -17,7 +17,7 @@ TUPLE: boid
     { pos array }
     { vel array } ;
 
-C: <boid> boid
+C: <boid> boid ;
 
 : vsum ( vecs -- v )
     { 0.0 0.0 } [ v+ ] reduce ; inline
@@ -84,9 +84,9 @@ TUPLE: cohesion < behaviour ;
 TUPLE: alignment < behaviour ;
 TUPLE: separation < behaviour ;
 
-C: <cohesion> cohesion
-C: <alignment> alignment
-C: <separation> separation
+C: <cohesion> cohesion ;
+C: <alignment> alignment ;
+C: <separation> separation ;
 
 M: cohesion force ( neighbors boid behaviour -- force )
     drop [ [ pos>> ] map vavg ] [ pos>> ] bi* v- normalize ;

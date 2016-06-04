@@ -51,7 +51,7 @@ singleton: x11-ui-backend
 TUPLE: x11-handle-base glx ;
 TUPLE: x11-handle < x11-handle-base window xic ;
 
-C: <x11-handle> x11-handle
+C: <x11-handle> x11-handle ;
 
 M: world expose-event nip relayout ;
 

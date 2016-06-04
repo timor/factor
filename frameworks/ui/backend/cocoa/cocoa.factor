@@ -15,7 +15,7 @@ in: ui.backend.cocoa
 
 TUPLE: window-handle view window ;
 
-C: <window-handle> window-handle
+C: <window-handle> window-handle ;
 
 singleton: cocoa-ui-backend
 
@@ -60,7 +60,7 @@ M: cocoa-ui-backend (pixel-format-attribute)
 
 TUPLE: pasteboard handle ;
 
-C: <pasteboard> pasteboard
+C: <pasteboard> pasteboard ;
 
 M: pasteboard clipboard-contents
     handle>> pasteboard-string ;

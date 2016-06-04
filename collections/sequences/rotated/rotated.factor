@@ -7,7 +7,7 @@ TUPLE: rotated
 { seq read-only }
 { n integer read-only } ;
 
-C: <rotated> rotated
+C: <rotated> rotated ;
 
 M: rotated length seq>> length ;
 

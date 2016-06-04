@@ -6,7 +6,7 @@ in: io.streams.zeros
 
 TUPLE: zero-stream ;
 
-C: <zero-stream> zero-stream
+C: <zero-stream> zero-stream ;
 
 M: zero-stream stream-element-type drop +byte+ ;
 

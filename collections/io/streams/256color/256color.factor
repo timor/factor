@@ -75,7 +75,7 @@ intensities [| r i |
 
 TUPLE: 256color stream ;
 
-C: <256color> 256color
+C: <256color> 256color ;
 
 M: 256color stream-write1 stream>> stream-write1 ;
 M: 256color stream-write stream>> stream-write ;

@@ -14,11 +14,11 @@ in: midi
 
 TUPLE: midi header chunks ;
 
-C: <midi> midi
+C: <midi> midi ;
 
 TUPLE: midi-chunk type bytes ;
 
-C: <midi-chunk> midi-chunk
+C: <midi-chunk> midi-chunk ;
 
 TUPLE: midi-header format #chunks division ;
 
@@ -26,15 +26,15 @@ TUPLE: midi-track events ;
 
 TUPLE: meta-event delta name value ;
 
-C: <meta-event> meta-event
+C: <meta-event> meta-event ;
 
 TUPLE: sysex-event delta type bytes ;
 
-C: <sysex-event> sysex-event
+C: <sysex-event> sysex-event ;
 
 TUPLE: midi-event delta name value ;
 
-C: <midi-event> midi-event
+C: <midi-event> midi-event ;
 
 CONSTANT: formats H{
     { 0 "the file contains a single multi-channel track" }

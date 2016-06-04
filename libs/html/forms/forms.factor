@@ -82,7 +82,7 @@ symbol: nested-forms
 
 TUPLE: validation-error-state value message ;
 
-C: <validation-error-state> validation-error-state
+C: <validation-error-state> validation-error-state ;
 
 : validation-error ( message -- )
     form get

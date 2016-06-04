@@ -23,7 +23,7 @@ symbol: con
 
 TUPLE: connection username password db ;
 
-C: <connection> connection
+C: <connection> connection ;
 
 ! =========================================================
 ! Error-handling routines

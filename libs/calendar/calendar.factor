@@ -18,7 +18,7 @@ TUPLE: duration
     { minute real }
     { second real } ;
 
-C: <duration> duration
+C: <duration> duration ;
 
 : instant ( -- duration ) 0 0 0 0 0 0 <duration> ;
 
@@ -31,7 +31,7 @@ TUPLE: timestamp
     { second real }
     { gmt-offset duration } ;
 
-C: <timestamp> timestamp
+C: <timestamp> timestamp ;
 
 M: timestamp clone (clone) [ clone ] change-gmt-offset ;
 

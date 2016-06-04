@@ -11,7 +11,7 @@ in: math.matrices.laplace
 
 ! using a virtual "missing element" sequence for performance
 TUPLE: missing seq i ;
-C: <missing> missing
+C: <missing> missing ;
 M: missing nth-unsafe
     [ i>> dupd >= [ 1 + ] when ] [ seq>> nth-unsafe ] bi ;
 M: missing length seq>> length 1 - ;

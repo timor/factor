@@ -676,7 +676,7 @@ HELP: GENERIC#
 { $notes
     "The following two definitions are equivalent:"
     { $code "GENERIC: foo ( obj -- ) ;" }
-    { $code "GENERIC# foo 0 ( obj -- )" }
+    { $code "GENERIC# foo 0 ( obj -- ) ;" }
 } ;
 
 HELP: MATH:
@@ -725,11 +725,11 @@ HELP: INTERSECTION:
 HELP: mixin:
 { $syntax "mixin: class" }
 { $values { "class" "a new class word to define" } }
-{ $description "Defines a mixin class. A mixin is similar to a union class, except it has no members initially, and new members can be added with the " { $link postpone: INSTANCE: } " word." } ;
+{ $description "Defines a mixin class. A mixin is similar to a union class, except it has no members initially, and new members can be added with the " { $link postpone: INSTANCE: } " word." }
 { $examples "The " { $link sequence } " and " { $link assoc } " mixin classes." } ;
 
-HELP: INSTANCE: ;
-{ $syntax "INSTANCE: instance mixin" } ;
+HELP: INSTANCE:
+{ $syntax "INSTANCE: instance mixin ;" }
 { $values { "instance" "a class word" } { "mixin" "a mixin class word" } }
 { $description "Makes " { $snippet "instance" } " an instance of " { $snippet "mixin" } "." } ;
 

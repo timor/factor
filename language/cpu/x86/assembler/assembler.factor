@@ -641,8 +641,8 @@ PRIVATE>
 : MOVHPD     ( dest src -- ) 0x16 0x66 2-operand-sse ;
 : MOVSHDUP   ( dest src -- ) 0x16 0xf3 2-operand-rm-sse ;
 
-ALIAS: MOVHLPS MOVLPS
-ALIAS: MOVLHPS MOVHPS
+ALIAS: MOVHLPS MOVLPS ;
+ALIAS: MOVLHPS MOVHPS ;
 
 : PREFETCHNTA ( mem -- )  { 0b000 f { 0x0f 0x18 } } 1-operand ;
 : PREFETCHT0  ( mem -- )  { 0b001 f { 0x0f 0x18 } } 1-operand ;
@@ -731,13 +731,13 @@ PRIVATE>
 
 : PEXTRW     ( dest src imm -- ) pick indirect? [ (PEXTRW-sse4) ] [ (PEXTRW-sse1) ] if ;
 : PEXTRD     ( dest src imm -- ) { 0x3a 0x16 } 0x66 3-operand-mr-sse ;
-ALIAS: PEXTRQ PEXTRD
+ALIAS: PEXTRQ PEXTRD ;
 : EXTRACTPS  ( dest src imm -- ) { 0x3a 0x17 } 0x66 3-operand-mr-sse ;
 
 : PINSRB     ( dest src imm -- ) { 0x3a 0x20 } 0x66 3-operand-rm-sse ;
 : INSERTPS   ( dest src imm -- ) { 0x3a 0x21 } 0x66 3-operand-rm-sse ;
 : PINSRD     ( dest src imm -- ) { 0x3a 0x22 } 0x66 3-operand-rm-sse ;
-ALIAS: PINSRQ PINSRD
+ALIAS: PINSRQ PINSRD ;
 : DPPS       ( dest src imm -- ) { 0x3a 0x40 } 0x66 3-operand-rm-sse ;
 : DPPD       ( dest src imm -- ) { 0x3a 0x41 } 0x66 3-operand-rm-sse ;
 : MPSADBW    ( dest src imm -- ) { 0x3a 0x42 } 0x66 3-operand-rm-sse ;

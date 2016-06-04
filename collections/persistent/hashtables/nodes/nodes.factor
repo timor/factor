@@ -11,13 +11,13 @@ TUPLE: leaf-node
 { key read-only }
 { hashcode fixnum read-only } ;
 
-C: <leaf-node> leaf-node
+C: <leaf-node> leaf-node ;
 
 TUPLE: collision-node
 { hashcode fixnum read-only }
 { leaves array read-only } ;
 
-C: <collision-node> collision-node
+C: <collision-node> collision-node ;
 
 TUPLE: full-node
 { nodes array read-only }

@@ -6,7 +6,7 @@ in: benchmark.binary-trees
 
 TUPLE: tree-node item left right ;
 
-C: <tree-node> tree-node
+C: <tree-node> tree-node ;
 
 : bottom-up-tree ( item depth -- tree )
     dup 0 > [

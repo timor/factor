@@ -52,7 +52,7 @@ M: class-wrapper c++-type class name>> parse-c++-type ;
 : marshall-primitive ( n -- n )
     [ bool>arg ] ptr-pass-through ;
 
-ALIAS: marshall-void* marshall-pointer
+ALIAS: marshall-void* marshall-pointer ;
 
 : marshall-void** ( seq -- alien )
     [ marshall-void* ] void*-array{ } map-as malloc-underlying ;

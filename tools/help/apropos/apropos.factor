@@ -74,7 +74,7 @@ M: more-completions article-content
 
 TUPLE: apropos-search text ;
 
-C: <apropos-search> apropos-search
+C: <apropos-search> apropos-search ;
 
 M: apropos-search valid-article? drop t ;
 

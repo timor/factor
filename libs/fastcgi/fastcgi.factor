@@ -208,7 +208,7 @@ ENUM: fcgi-protocol-status
     "</pre>" append ;
 
 TUPLE: test-responder ;
-C: <test-responder> test-responder
+C: <test-responder> test-responder ;
 M: test-responder call-responder* 2drop test-output <html-content> ;
 
 : do-it ( -- )

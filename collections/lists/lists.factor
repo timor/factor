@@ -12,7 +12,7 @@ GENERIC: nil? ( object -- ?   ) ;
 
 TUPLE: cons-state { car read-only } { cdr read-only } ;
 
-C: cons cons-state
+C: cons cons-state ;
 
 M: cons-state car ( cons -- car ) car>> ;
 

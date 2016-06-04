@@ -5,7 +5,7 @@ in: search-deques
 
 TUPLE: search-deque assoc deque ;
 
-C: <search-deque> search-deque
+C: <search-deque> search-deque ;
 
 M: search-deque deque-empty? deque>> deque-empty? ;
 

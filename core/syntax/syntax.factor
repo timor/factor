@@ -195,7 +195,7 @@ in: bootstrap.syntax
 
 
     "ALIAS:" [
-        scan-new-word scan-word define-alias
+        scan-new-word scan-word ";" expect define-alias
     ] define-core-syntax
 
     "CONSTANT:" [
@@ -273,7 +273,7 @@ in: bootstrap.syntax
         last-word make-final
     ] define-core-syntax
 
-    "slot:" [
+    "SLOT:" [
         scan-token define-protocol-slot
     ] define-core-syntax
     "slot:" [
@@ -281,7 +281,7 @@ in: bootstrap.syntax
     ] define-core-syntax
 
     "C:" [
-        scan-new-word scan-word define-boa-word
+        scan-new-word scan-word ";" expect define-boa-word
     ] define-core-syntax
 
     "ERROR:" [

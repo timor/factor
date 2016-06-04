@@ -76,7 +76,7 @@ M: mailbox mailbox-get-timeout block-if-empty data>> pop-back ;
 
 TUPLE: linked-error error thread ;
 
-C: <linked-error> linked-error
+C: <linked-error> linked-error ;
 
 : ?linked ( message -- message )
     dup linked-error? [ rethrow ] when ;

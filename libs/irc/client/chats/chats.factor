@@ -30,7 +30,7 @@ symbol: +server-chat+
          <mailbox> >>in-messages ;
 
 TUPLE: irc-profile server port nickname password ;
-C: <irc-profile> irc-profile
+C: <irc-profile> irc-profile ;
 
 TUPLE: irc-client profile stream in-messages out-messages
        chats is-running nick connect is-ready

@@ -38,7 +38,7 @@ TUPLE: vocab-tag name ;
 
 INSTANCE: vocab-tag topic ;
 
-C: <vocab-tag> vocab-tag
+C: <vocab-tag> vocab-tag ;
 
 : $tags ( seq -- ) [ <vocab-tag> ] map $links ;
 
@@ -46,7 +46,7 @@ TUPLE: vocab-author name ;
 
 INSTANCE: vocab-author topic ;
 
-C: <vocab-author> vocab-author
+C: <vocab-author> vocab-author ;
 
 : $authors ( seq -- ) [ <vocab-author> ] map $links ;
 

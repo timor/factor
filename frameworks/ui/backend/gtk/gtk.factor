@@ -31,7 +31,7 @@ TUPLE: window-handle window im-context fullscreen? ;
 
 TUPLE: gtk-clipboard handle ;
 
-C: <gtk-clipboard> gtk-clipboard
+C: <gtk-clipboard> gtk-clipboard ;
 
 M: gtk-clipboard clipboard-contents
     [

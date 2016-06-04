@@ -173,7 +173,7 @@ M: numeric-cursor cursor-key-value value>> dup ; inline
 
 TUPLE: linear-cursor < numeric-cursor
     { delta read-only } ;
-C: <linear-cursor> linear-cursor
+C: <linear-cursor> linear-cursor ;
 
 INSTANCE: linear-cursor random-access-cursor ;
 
@@ -204,7 +204,7 @@ TUPLE: quadratic-cursor < numeric-cursor
     { delta read-only }
     { delta2 read-only } ;
 
-C: <quadratic-cursor> quadratic-cursor
+C: <quadratic-cursor> quadratic-cursor ;
 
 INSTANCE: quadratic-cursor bidirectional-cursor ;
 
@@ -256,7 +256,7 @@ M: finite-stream-cursor end-cursor drop end-of-stream ; inline
 TUPLE: sequence-cursor
     { seq read-only }
     { n fixnum read-only } ;
-C: <sequence-cursor> sequence-cursor
+C: <sequence-cursor> sequence-cursor ;
 
 INSTANCE: sequence container ;
 
@@ -304,7 +304,7 @@ TUPLE: hash-set-cursor
     { hash-set hash-set read-only }
     { n fixnum read-only } ;
 <PRIVATE
-C: <hash-set-cursor> hash-set-cursor
+C: <hash-set-cursor> hash-set-cursor ;
 PRIVATE>
 
 INSTANCE: hash-set-cursor forward-cursor ;
@@ -351,7 +351,7 @@ M: hash-set end-cursor
 TUPLE: map-cursor
     { from read-only }
     { to read-only } ;
-C: <map-cursor> map-cursor
+C: <map-cursor> map-cursor ;
 
 INSTANCE: map-cursor forward-cursor ;
 
@@ -377,7 +377,7 @@ M: map-cursor set-cursor-value        to>> set-cursor-value        ; inline
 
 TUPLE: pusher-cursor
     { growable read-only } ;
-C: <pusher-cursor> pusher-cursor
+C: <pusher-cursor> pusher-cursor ;
 
 INSTANCE: pusher-cursor infinite-stream-cursor ;
 INSTANCE: pusher-cursor output-cursor ;
@@ -442,7 +442,7 @@ TUPLE: hashtable-cursor
     { hashtable hashtable read-only }
     { n fixnum read-only } ;
 <PRIVATE
-C: <hashtable-cursor> hashtable-cursor
+C: <hashtable-cursor> hashtable-cursor ;
 PRIVATE>
 
 INSTANCE: hashtable-cursor forward-cursor ;
@@ -490,7 +490,7 @@ M: hashtable end-cursor
 TUPLE: zip-cursor
     { keys   read-only }
     { values read-only } ;
-C: <zip-cursor> zip-cursor
+C: <zip-cursor> zip-cursor ;
 
 INSTANCE: zip-cursor forward-cursor ;
 
@@ -530,7 +530,7 @@ M: zip-cursor cursor-key-value
 : 2all- ( a b quot -- begin end quot )
     [ 2all ] dip ; inline
 
-ALIAS: -2in- -assoc-
+ALIAS: -2in- -assoc- ;
 
 : 2in- ( a b quot -- begin end quot' )
     2all- -2in- ; inline

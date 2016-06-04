@@ -6,7 +6,7 @@ in: tetris.tetromino
 
 TUPLE: tetromino states colour ;
 
-C: <tetromino> tetromino
+C: <tetromino> tetromino ;
 
 symbol: tetrominoes
 

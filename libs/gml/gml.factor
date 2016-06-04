@@ -7,7 +7,7 @@ in: gml
 
 TUPLE: gml-file-error pathname error ;
 
-C: <gml-file-error> gml-file-error
+C: <gml-file-error> gml-file-error ;
 
 M: gml-file-error error.
     "Error in GML file “" write

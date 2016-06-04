@@ -107,7 +107,7 @@ GENERIC: call-responder* ( path responder -- response ) ;
 
 TUPLE: trivial-responder response ;
 
-C: <trivial-responder> trivial-responder
+C: <trivial-responder> trivial-responder ;
 
 M: trivial-responder call-responder* nip response>> clone ;
 

@@ -26,7 +26,7 @@ refcounts init-cache
     [ cache-key* refcounts get [ [ 0 ] unless* ] ] dip compose change-at ;
 
 TUPLE: cache-entry tex dims ;
-C: <entry> cache-entry
+C: <entry> cache-entry ;
 
 : make-entry ( gadget -- entry )
     dup render* <entry>

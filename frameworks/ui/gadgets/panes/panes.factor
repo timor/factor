@@ -21,7 +21,7 @@ selection-color caret mark selecting? ;
 TUPLE: pane-stream pane ;
 INSTANCE: pane-stream output-stream ;
 
-C: <pane-stream> pane-stream
+C: <pane-stream> pane-stream ;
 
 M: pane-stream stream-element-type drop +character+ ;
 

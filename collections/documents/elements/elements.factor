@@ -108,7 +108,7 @@ M: one-line-elt next-elt
 
 TUPLE: page-elt { lines read-only } ;
 
-C: <page-elt> page-elt
+C: <page-elt> page-elt ;
 
 M: page-elt prev-elt
     nip

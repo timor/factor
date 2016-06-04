@@ -13,7 +13,7 @@ TUPLE: cmyka < color
 { black read-only }
 { alpha read-only } ;
 
-C: <cmyka> cmyka
+C: <cmyka> cmyka ;
 
 M: cmyka >rgba
     [ [ cyan>> ] [ black>> ] bi + ]

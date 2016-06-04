@@ -23,7 +23,7 @@ M:: object <menu-item> ( target hook command -- button )
 
 TUPLE: separator-pen color ;
 
-C: <separator-pen> separator-pen
+C: <separator-pen> separator-pen ;
 
 M: separator-pen draw-interior
     color>> gl-color

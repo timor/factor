@@ -131,7 +131,7 @@ FUNCTION: HRESULT
         LPCWSTR                 pFaceName,
         LPD3DXFONT*             ppFont )
 
-ALIAS: D3DXCreateFont D3DXCreateFontW
+ALIAS: D3DXCreateFont D3DXCreateFontW ;
 
 FUNCTION: HRESULT
     D3DXCreateFontIndirectA (
@@ -145,7 +145,7 @@ FUNCTION: HRESULT
         D3DXFONT_DESCW*         pDesc,
         LPD3DXFONT*             ppFont )
 
-ALIAS: D3DXCreateFontIndirect D3DXCreateFontIndirectW
+ALIAS: D3DXCreateFontIndirect D3DXCreateFontIndirectW ;
 
 STRUCT: D3DXRTS_DESC
     { Width                        UINT      }

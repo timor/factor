@@ -91,7 +91,7 @@ FUNCTION: HRESULT
         D3DX11_IMAGE_INFO*        pSrcInfo,
         HRESULT*                  pHResult )
 
-ALIAS: D3DX11GetImageInfoFromFile D3DX11GetImageInfoFromFileW
+ALIAS: D3DX11GetImageInfoFromFile D3DX11GetImageInfoFromFileW ;
 
 FUNCTION: HRESULT
     D3DX11GetImageInfoFromResourceA (
@@ -109,7 +109,7 @@ FUNCTION: HRESULT
         D3DX11_IMAGE_INFO*        pSrcInfo,
         HRESULT*                  pHResult )
 
-ALIAS: D3DX11GetImageInfoFromResource D3DX11GetImageInfoFromResourceW
+ALIAS: D3DX11GetImageInfoFromResource D3DX11GetImageInfoFromResourceW ;
 
 FUNCTION: HRESULT
     D3DX11GetImageInfoFromMemory (
@@ -137,7 +137,7 @@ FUNCTION: HRESULT
         ID3D11ShaderResourceView**  ppShaderResourceView,
         HRESULT*                    pHResult )
 
-ALIAS: D3DX11CreateShaderResourceViewFromFile D3DX11CreateShaderResourceViewFromFileW
+ALIAS: D3DX11CreateShaderResourceViewFromFile D3DX11CreateShaderResourceViewFromFileW ;
 
 FUNCTION: HRESULT
     D3DX11CreateTextureFromFileA (
@@ -157,7 +157,7 @@ FUNCTION: HRESULT
         ID3D11Resource**            ppTexture,
         HRESULT*                    pHResult )
 
-ALIAS: D3DX11CreateTextureFromFile D3DX11CreateTextureFromFileW
+ALIAS: D3DX11CreateTextureFromFile D3DX11CreateTextureFromFileW ;
 
 FUNCTION: HRESULT
     D3DX11CreateShaderResourceViewFromResourceA (
@@ -179,7 +179,7 @@ FUNCTION: HRESULT
         ID3D11ShaderResourceView** ppShaderResourceView,
         HRESULT*                   pHResult )
 
-ALIAS: D3DX11CreateShaderResourceViewFromResource D3DX11CreateShaderResourceViewFromResourceW
+ALIAS: D3DX11CreateShaderResourceViewFromResource D3DX11CreateShaderResourceViewFromResourceW ;
 
 FUNCTION: HRESULT
     D3DX11CreateTextureFromResourceA (
@@ -201,7 +201,7 @@ FUNCTION: HRESULT
         ID3D11Resource**        ppTexture,
         HRESULT*                pHResult )
 
-ALIAS: D3DX11CreateTextureFromResource D3DX11CreateTextureFromResourceW
+ALIAS: D3DX11CreateTextureFromResource D3DX11CreateTextureFromResourceW ;
 
 FUNCTION: HRESULT
     D3DX11CreateShaderResourceViewFromMemory (
@@ -263,7 +263,7 @@ FUNCTION: HRESULT
         D3DX11_IMAGE_FILE_FORMAT  DestFormat,
         LPCWSTR                   pDestFile )
 
-ALIAS: D3DX11SaveTextureToFile D3DX11SaveTextureToFileW
+ALIAS: D3DX11SaveTextureToFile D3DX11SaveTextureToFileW ;
 
 FUNCTION: HRESULT
     D3DX11SaveTextureToMemory (

@@ -132,7 +132,7 @@ M: url link-href ;
 
 TUPLE: simple-link title href ;
 
-C: <simple-link> simple-link
+C: <simple-link> simple-link ;
 
 M: simple-link link-title title>> ;
 M: simple-link link-href href>> ;

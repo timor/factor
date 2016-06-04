@@ -11,14 +11,14 @@ GENERIC: render* ( content templater -- output )
 GENERIC: render ( content templater -- )
 
 TUPLE: echo-template ;
-C: <echo-template> echo-template
+C: <echo-template> echo-template ;
 
 M: echo-template render* drop ;
 ! METHOD: render* { string echo-template } drop ;
 M: object render render* write ;
 
 TUPLE: tangle db seq templater ;
-C: <tangle> tangle
+C: <tangle> tangle ;
 
 : with-tangle ( tangle quot -- )
     [ [ db>> ] [ seq>> ] bi ] dip with-db ;
@@ -53,7 +53,7 @@ C: <tangle> tangle
     [ params get submit-node ] >>submit ;
 
 TUPLE: path-responder ;
-C: <path-responder> path-responder
+C: <path-responder> path-responder ;
 
 M: path-responder call-responder* ( path responder -- response )
     drop path>file [ node-content <text-content> ] [ <404> ] if* ;

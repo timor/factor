@@ -12,7 +12,7 @@ TUPLE: rgba < color
 { blue read-only }
 { alpha read-only } ;
 
-C: <rgba> rgba
+C: <rgba> rgba ;
 
 GENERIC: >rgba ( color -- rgba ) ;
 

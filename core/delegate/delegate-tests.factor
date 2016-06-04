@@ -5,10 +5,10 @@ delegate.private assocs see make ;
 in: delegate.tests
 
 TUPLE: hello this that ;
-C: <hello> hello
+C: <hello> hello ;
 
 TUPLE: goodbye these those ;
-C: <goodbye> goodbye
+C: <goodbye> goodbye ;
 
 GENERIC: foo ( x -- y ) ;
 GENERIC: bar ( a -- b ) ;
@@ -54,7 +54,7 @@ PROTOCOL: alpha one two ;
 PROTOCOL: beta three ;
 
 TUPLE: hey value ;
-C: <hey> hey
+C: <hey> hey ;
 CONSULT: alpha hey value>> 1 + ;
 CONSULT: beta hey value>> 1 - ;
 

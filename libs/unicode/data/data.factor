@@ -160,7 +160,7 @@ PRIVATE>
 
 TUPLE: code-point lower title upper ;
 
-C: <code-point> code-point
+C: <code-point> code-point ;
 
 <PRIVATE
 

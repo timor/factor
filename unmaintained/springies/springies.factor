@@ -30,7 +30,7 @@ VAR: gravity
 
 TUPLE: node < vel mass elas force ;
 
-C: <node> node
+C: <node> node ;
 
 : node-vel ( node -- vel ) vel>> ;
 
@@ -58,7 +58,7 @@ C: <node> node
 
 TUPLE: spring rest-length k damp node-a node-b ;
 
-C: <spring> spring
+C: <spring> spring ;
 
 : end-points ( spring -- b-pos a-pos )
   [ node-b>> pos>> ] [ node-a>> pos>> ] bi ;

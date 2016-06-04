@@ -119,7 +119,7 @@ EXEC: use-registers
 ! Pathnames
 TUPLE: pathname names ;
 
-C: <pathname> pathname
+C: <pathname> pathname ;
 
 : at-pathname ( pathname assoc -- value )
     swap names>> [ swap ?at [ unbound-name ] unless ] each ;

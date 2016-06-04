@@ -44,7 +44,7 @@ TUPLE: listing-tool path specs sort ;
 
 TUPLE: file-listing directory-entry file-info ;
 
-C: <file-listing> file-listing
+C: <file-listing> file-listing ;
 
 : <listing-tool> ( path -- listing-tool )
     listing-tool new

@@ -37,8 +37,8 @@ REGISTER: R13
 REGISTER: R14
 REGISTER: R15
 
-ALIAS: SL R10 ALIAS: FP R11 ALIAS: IP R12
-ALIAS: SP R13 ALIAS: LR R14 ALIAS: PC R15
+ALIAS: SL R10 ALIAS: FP R11 ALIAS: IP R12 ;
+ALIAS: SP R13 ALIAS: LR R14 ALIAS: PC R15 ;
 
 <PRIVATE
 
@@ -126,10 +126,10 @@ M: register-class shift-imm/reg ( Rs Rm shift -- n )
 PRIVATE>
 
 TUPLE: IMM immed rotate ;
-C: <IMM> IMM
+C: <IMM> IMM ;
 
 TUPLE: shifter Rm by shift ;
-C: <shifter> shifter
+C: <shifter> shifter ;
 
 <PRIVATE
 
@@ -248,7 +248,7 @@ PRIVATE>
 GENERIC: addressing-mode-2 ( addressing-mode -- n ) ;
 
 TUPLE: addressing base p u w ;
-C: <addressing> addressing
+C: <addressing> addressing ;
 
 M: addressing addressing-mode-2
     { [ p>> ] [ u>> ] [ w>> ] [ base>> addressing-mode-2 ] } cleave

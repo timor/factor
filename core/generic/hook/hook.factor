@@ -7,7 +7,7 @@ in: generic.hook
 
 TUPLE: hook-combination < single-combination var ;
 
-C: <hook-combination> hook-combination
+C: <hook-combination> hook-combination ;
 
 PREDICATE: hook-generic < generic
     "combination" word-prop hook-combination? ;

@@ -8,7 +8,7 @@ in: taxes.usa
 ! Withhold: FICA, Medicare, Federal (FICA is social security)
 
 TUPLE: tax-table entity single married ;
-C: <tax-table> tax-table
+C: <tax-table> tax-table ;
 
 GENERIC: adjust-allowances* ( salary w4 tax-table entity -- newsalary ) ;
 GENERIC: withholding* ( salary w4 tax-table entity -- x ) ;

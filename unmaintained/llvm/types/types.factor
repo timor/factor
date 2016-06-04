@@ -29,7 +29,7 @@ M: object ((tref>)) nip ;
 M: object c-type unsupported-type ;
 
 TUPLE: integer size ;
-C: <integer> integer
+C: <integer> integer ;
 
 M: integer (>tref) size>> LLVMIntType ;
 M: integer ((tref>)) swap LLVMGetIntTypeWidth >>size ;
@@ -179,7 +179,7 @@ M: function (tref>)*
    } case ;
 
 TUPLE: up-ref height ;
-C: <up-ref> up-ref
+C: <up-ref> up-ref ;
 
 M: up-ref (>tref)
     types get length swap height>> - types get nth

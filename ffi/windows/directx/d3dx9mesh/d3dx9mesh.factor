@@ -456,7 +456,7 @@ FUNCTION: HRESULT
         DWORD*            pNumMaterials,
         LPD3DXMESH*       ppMesh )
 
-ALIAS: D3DXLoadMeshFromX D3DXLoadMeshFromXW
+ALIAS: D3DXLoadMeshFromX D3DXLoadMeshFromXW ;
 
 FUNCTION: HRESULT
     D3DXLoadMeshFromXInMemory (
@@ -503,7 +503,7 @@ FUNCTION: HRESULT
         DWORD               NumMaterials,
         DWORD               Format )
 
-ALIAS: D3DXSaveMeshToX D3DXSaveMeshToXW
+ALIAS: D3DXSaveMeshToX D3DXSaveMeshToXW ;
 
 FUNCTION: HRESULT
     D3DXCreatePMeshFromStream (
@@ -1112,7 +1112,7 @@ FUNCTION: HRESULT
         LPCWSTR                pFilename,
         LPD3DXPRTBUFFER*       ppBuffer )
 
-ALIAS: D3DXLoadPRTBufferFromFile D3DXLoadPRTBufferFromFileW
+ALIAS: D3DXLoadPRTBufferFromFile D3DXLoadPRTBufferFromFileW ;
 
 FUNCTION: HRESULT
     D3DXSavePRTBufferToFileA (
@@ -1124,7 +1124,7 @@ FUNCTION: HRESULT
         LPCWSTR         pFileName,
         LPD3DXPRTBUFFER pBuffer )
 
-ALIAS: D3DXSavePRTBufferToFile D3DXSavePRTBufferToFileW
+ALIAS: D3DXSavePRTBufferToFile D3DXSavePRTBufferToFileW ;
 
 C-TYPE: D3DXPRTCOMPBUFFER
 TYPEDEF: D3DXPRTCOMPBUFFER* LPD3DXPRTCOMPBUFFER
@@ -1139,7 +1139,7 @@ FUNCTION: HRESULT
         LPCWSTR                    pFilename,
         LPD3DXPRTCOMPBUFFER*       ppBuffer )
 
-ALIAS: D3DXLoadPRTCompBufferFromFile D3DXLoadPRTCompBufferFromFileW
+ALIAS: D3DXLoadPRTCompBufferFromFile D3DXLoadPRTCompBufferFromFileW ;
 
 FUNCTION: HRESULT
     D3DXSavePRTCompBufferToFileA (
@@ -1151,7 +1151,7 @@ FUNCTION: HRESULT
         LPCWSTR             pFileName,
         LPD3DXPRTCOMPBUFFER pBuffer )
 
-ALIAS: D3DXSavePRTCompBufferToFile D3DXSavePRTCompBufferToFileW
+ALIAS: D3DXSavePRTCompBufferToFile D3DXSavePRTCompBufferToFileW ;
 
 FUNCTION: HRESULT
     D3DXCreatePRTCompBuffer (

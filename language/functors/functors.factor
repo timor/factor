@@ -67,7 +67,7 @@ FUNCTOR-SYNTAX: TUPLE:
 FUNCTOR-SYNTAX: final
     [ last-word make-final ] append! ;
 
-FUNCTOR-SYNTAX: singleton:
+FUNCTOR-SYNTAX: SINGLETON:
     scan-param suffix!
     \ define-singleton-class suffix! ;
 
@@ -75,7 +75,7 @@ FUNCTOR-SYNTAX: singleton:
     scan-param suffix!
     \ define-singleton-class suffix! ;
 
-FUNCTOR-SYNTAX: mixin:
+FUNCTOR-SYNTAX: MIXIN:
     scan-param suffix!
     \ define-mixin-class suffix! ;
 
@@ -102,7 +102,7 @@ FUNCTOR-SYNTAX: :
     parse-declared*
     \ define-declared* suffix! ;
 
-FUNCTOR-SYNTAX: symbol:
+FUNCTOR-SYNTAX: SYMBOL:
     scan-param suffix!
     \ define-symbol suffix! ;
 
@@ -115,9 +115,10 @@ FUNCTOR-SYNTAX: SYNTAX:
     parse-definition*
     \ define-syntax suffix! ;
 
-FUNCTOR-SYNTAX: INSTANCE: ;
+FUNCTOR-SYNTAX: INSTANCE:
     scan-param suffix!
     scan-param suffix!
+    ";" expect
     \ add-mixin-instance suffix! ;
 
 FUNCTOR-SYNTAX: GENERIC:

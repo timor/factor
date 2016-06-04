@@ -7,7 +7,7 @@ in: io.streams.random
 
 TUPLE: random-stream ;
 
-C: <random-stream> random-stream
+C: <random-stream> random-stream ;
 
 M: random-stream stream-element-type drop +byte+ ;
 

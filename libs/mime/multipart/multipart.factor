@@ -19,10 +19,10 @@ name name-content
 mime-parts ;
 
 TUPLE: mime-file headers filename temporary-path ;
-C: <mime-file> mime-file
+C: <mime-file> mime-file ;
 
 TUPLE: mime-variable headers key value ;
-C: <mime-variable> mime-variable
+C: <mime-variable> mime-variable ;
 
 : <multipart> ( mime-separator -- multipart )
     multipart new

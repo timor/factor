@@ -21,4 +21,4 @@ symbol: tokens
 
 TUPLE: token str id ;
 
-C: <token> token
+C: <token> token ;

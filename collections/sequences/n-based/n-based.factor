@@ -4,7 +4,7 @@ sequences.private ;
 in: sequences.n-based
 
 TUPLE: n-based-assoc seq base ;
-C: <n-based-assoc> n-based-assoc
+C: <n-based-assoc> n-based-assoc ;
 
 <PRIVATE
 

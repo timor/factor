@@ -9,7 +9,7 @@ in: gml.types
 
 TUPLE: proc { array array read-only } { registers array read-only } ;
 
-C: <proc> proc
+C: <proc> proc ;
 
 M: proc clone [ array>> clone ] [ registers>> clone ] bi <proc> ;
 
@@ -41,13 +41,13 @@ M: array (gml-copy) clone ;
 M: hashtable (gml-copy) clone ;
 M: proc (gml-copy) clone ;
 
-ALIAS: vec2d? double-2?
+ALIAS: vec2d? double-2? ;
 
-ALIAS: <vec2d> double-2-boa
+ALIAS: <vec2d> double-2-boa ;
 
-ALIAS: scalar>vec2d double-2-with
+ALIAS: scalar>vec2d double-2-with ;
 
-ALIAS: vec3d? double-4?
+ALIAS: vec3d? double-4? ;
 
 : <vec3d> ( x y z -- vec ) 0.0 double-4-boa ; inline
 

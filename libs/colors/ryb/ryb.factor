@@ -11,7 +11,7 @@ TUPLE: ryba < color
     { blue read-only }
     { alpha read-only } ;
 
-C: <ryba> ryba
+C: <ryba> ryba ;
 
 <PRIVATE
 

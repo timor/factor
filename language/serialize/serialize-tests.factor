@@ -36,7 +36,7 @@ in: serialize.tests
 
 TUPLE: serialize-test a b ;
 
-C: <serialize-test> serialize-test
+C: <serialize-test> serialize-test ;
 
 CONSTANT: objects
     {

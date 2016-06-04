@@ -31,8 +31,8 @@ in: project-euler.215
 TUPLE: block two three ;
 TUPLE: end { ways integer } ;
 
-C: <block> block
-C: <end> end
+C: <block> block ;
+C: <end> end ;
 : <failure> ( -- end ) 0 <end> ; inline
 : <success> ( -- end ) 1 <end> ; inline
 

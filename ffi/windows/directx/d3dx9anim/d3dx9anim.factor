@@ -312,7 +312,7 @@ D3DXLoadMeshHierarchyFromXW
     LPD3DXANIMATIONCONTROLLER* ppAnimController
     )
 
-ALIAS: D3DXLoadMeshHierarchyFromX D3DXLoadMeshHierarchyFromXW
+ALIAS: D3DXLoadMeshHierarchyFromX D3DXLoadMeshHierarchyFromXW ;
 
 FUNCTION: HRESULT
 D3DXLoadMeshHierarchyFromXInMemory
@@ -347,7 +347,7 @@ D3DXSaveMeshHierarchyToFileW
     LPD3DXSAVEUSERDATA        pUserDataSaver
     )
 
-ALIAS: D3DXSaveMeshHierarchyToFile D3DXSaveMeshHierarchyToFileW
+ALIAS: D3DXSaveMeshHierarchyToFile D3DXSaveMeshHierarchyToFileW ;
 
 FUNCTION: HRESULT
 D3DXFrameDestroy

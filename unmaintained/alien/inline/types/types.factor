@@ -63,7 +63,7 @@ MEMO: resolved-primitives ( -- seq )
     ] dip <effect> ;
 
 TUPLE: c++-type name params ptr ;
-C: <c++-type> c++-type
+C: <c++-type> c++-type ;
 
 EBNF: (parse-c++-type)
 dig  = [0-9]

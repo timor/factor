@@ -74,4 +74,4 @@ TUPLE: metrics width ascent descent height leading cap-height x-height ;
 
 TUPLE: selection string start end color ;
 
-C: <selection> selection
+C: <selection> selection ;

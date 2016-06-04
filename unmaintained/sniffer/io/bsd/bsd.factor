@@ -14,7 +14,7 @@ C-STRUCT: ifreq { { "char" 16 } "name" } { "ifreq_props" "props" } ;
 
 TUPLE: sniffer-spec path ifname ;
 
-C: <sniffer-spec> sniffer-spec
+C: <sniffer-spec> sniffer-spec ;
 
 : IOCPARM_MASK   0x1fff ; inline
 : IOCPARM_MAX    IOCPARM_MASK 1+ ; inline
