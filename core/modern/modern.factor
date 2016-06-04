@@ -371,13 +371,13 @@ PRIVATE>
 : read-decorator ( n string slice -- n' string obj )
     {
         { [ dup left-decorator? ] [ t make-decorator-sentinel ] }
-        { [ dup right-decorator? ] [
-            dup length 1 > [
-                [ -1 + ] 2dip
-                -1 modify-to make-tag-literal
-            ] [
-                f make-decorator-sentinel
-            ] if ] }
+        ! { [ dup right-decorator? ] [
+        !    dup length 1 > [
+        !        [ -1 + ] 2dip
+        !        -1 modify-to make-tag-literal
+        !    ] [
+        !        f make-decorator-sentinel
+        !    ] if ] }
         [ make-tag-literal ]
     } cond ;
 

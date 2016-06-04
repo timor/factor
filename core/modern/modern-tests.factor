@@ -88,10 +88,11 @@ in: modern.tests
 !    omg]] lol" string>literals length
 ! ] unit-test
 
+! Disabled right decorators for now
+! { 1 } [ "a@ b@ hi @c @d" string>literals length ] unit-test
 
-{ 1 } [ "a@ b@ hi @c @d" string>literals length ] unit-test
-
-{ 1 } [ "{ 1 }@ { 2 }@ hi @{ 3 } @{ 4 }" string>literals length ] unit-test
+! Disabled right decorators for now
+! { 1 } [ "{ 1 }@ { 2 }@ hi @{ 3 } @{ 4 }" string>literals length ] unit-test
 
 
 { 1 } [ ":foo" string>literals length ] unit-test
