@@ -442,13 +442,18 @@ MACRO: fortran-invoke ( return library function parameters -- quot )
 
 SYNTAX: SUBROUTINE:
     f current-library get scan-token ")" parse-tokens
-    [ "()" subseq? ] reject define-fortran-function ;
+    [ "()" subseq? ] reject ";" expect define-fortran-function ;
 
 SYNTAX: FUNCTION:
     scan-token current-library get scan-token ")" parse-tokens
-    [ "()" subseq? ] reject define-fortran-function ;
+    [ "()" subseq? ] reject ";" expect define-fortran-function ;
 
 SYNTAX: LIBRARY:
+    scan-token
+    [ current-library set ]
+    [ set-fortran-abi ] bi ;
+
+SYNTAX: library:
     scan-token
     [ current-library set ]
     [ set-fortran-abi ] bi ;

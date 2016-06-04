@@ -9,7 +9,7 @@ add-fortran-library
 deploy-blas? get [ "blas" deploy-library ] when
 >>
 
-LIBRARY: blas
+library: blas
 
 ! Level 1 BLAS (scalar-vector and vector-vector)
 
