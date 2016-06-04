@@ -9,7 +9,7 @@ ui.operations ui.pens.solid ui.theme ui.theme.images ;
 FROM: ui.gadgets.wrappers => wrapper ;
 in: ui.tools.browser.popups
 
-SINGLETON: link-renderer
+singleton: link-renderer
 
 M: link-renderer row-columns
     drop first2 [ definition-icon <image-name> ] dip 2array ;

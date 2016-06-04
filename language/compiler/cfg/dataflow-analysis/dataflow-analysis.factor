@@ -67,7 +67,7 @@ name-out DEFINES ${name}-out
 
 WHERE
 
-SINGLETON: name
+singleton: name
 
 SYMBOL: name-ins
 

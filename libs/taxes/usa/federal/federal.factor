@@ -30,7 +30,7 @@ in: taxes.usa.federal
         { 365100   1/0. DECIMAL: .35 }
     } ;
 
-SINGLETON: federal
+singleton: federal
 : <federal> ( -- obj )
     federal federal-single federal-married <tax-table> ;
 

@@ -135,7 +135,7 @@ M: word combinator? inline? ;
         } cleave
     ] with-return ;
 
-SINGLETON: optimizing-compiler
+singleton: optimizing-compiler
 
 M: optimizing-compiler update-call-sites ( class generic -- words )
     ! Words containing call sites with inferred type 'class'

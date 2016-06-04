@@ -51,7 +51,7 @@ M: bad-gadget pref-dim* drop { 100 100 } ;
     <bad-button> "Test 1" open-window
     <bad-gadget> "Test 2" open-window ;
 
-SINGLETON: metrics-paint
+singleton: metrics-paint
 
 M: metrics-paint draw-boundary
     drop

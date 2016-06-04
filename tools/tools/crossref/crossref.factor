@@ -137,7 +137,7 @@ M: f smart-usage drop \ f smart-usage ;
 
 <PRIVATE
 
-SINGLETON: invalidate-crossref
+singleton: invalidate-crossref
 
 M: invalidate-crossref definitions-changed
     2drop crossref global delete-at ;

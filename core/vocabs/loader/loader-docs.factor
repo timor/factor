@@ -36,7 +36,7 @@ ARTICLE: "vocabs.icons" "Vocabulary icons"
 } ;
 
 ARTICLE: "vocabs.loader" "Vocabulary loader"
-"The " { $link postpone: USE: } " and " { $link postpone: USING: } " words load vocabularies using the vocabulary loader. The vocabulary loader is implemented in the " { $vocab-link "vocabs.loader" } " vocabulary."
+"The " { $link postpone: use: } " and " { $link postpone: USING: } " words load vocabularies using the vocabulary loader. The vocabulary loader is implemented in the " { $vocab-link "vocabs.loader" } " vocabulary."
 $nl
 "The vocabulary loader searches for vocabularies in a set of directories known as vocabulary roots."
 { $subsections "vocabs.roots" }
@@ -44,7 +44,7 @@ $nl
 $nl
 "The vocabulary directory - " { $snippet "bar" } " in our example - contains a source file:"
 { $list
-  { { $snippet "foo/bar/bar.factor" } " - the source file must define words in the " { $snippet "foo.bar" } " vocabulary with an " { $snippet "IN: foo.bar" } " form" }
+  { { $snippet "foo/bar/bar.factor" } " - the source file must define words in the " { $snippet "foo.bar" } " vocabulary with an " { $snippet "in: foo.bar" } " form" }
 }
 "Two other Factor source files, storing documentation and tests, respectively, may optionally be placed alongside the source file:"
 { $list
@@ -94,7 +94,7 @@ HELP: find-vocab-root
 HELP: no-vocab
 { $values { "name" "a vocabulary name" } }
 { $description "A " { $link no-vocab } " error tuple. Call " { $link no-vocab } " to throw it." }
-{ $error-description "Thrown when a " { $link postpone: USE: } " or " { $link postpone: USING: } " form refers to a non-existent vocabulary." } ;
+{ $error-description "Thrown when a " { $link postpone: use: } " or " { $link postpone: USING: } " form refers to a non-existent vocabulary." } ;
 
 HELP: load-help?
 { $var-description "If set to a true value, documentation will be automatically loaded when vocabularies are loaded. This variable is usually on, except when Factor has been bootstrapped without the help system." } ;

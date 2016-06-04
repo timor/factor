@@ -6,7 +6,7 @@ math.parser sequences specialized-arrays io.streams.throwing ;
 SPECIALIZED-ARRAY: ushort
 in: images.pgm
 
-SINGLETON: pgm-image
+singleton: pgm-image
 "pgm" pgm-image ?register-image-class
 
 : read-token ( -- token )

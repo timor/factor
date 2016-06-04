@@ -7,7 +7,7 @@ combinators.short-circuit io.binary io.encodings.iana ;
 FROM: io.encodings.ascii => ascii ;
 in: io.encodings.gb18030
 
-SINGLETON: gb18030
+singleton: gb18030
 
 gb18030 "GB18030" register-encoding
 

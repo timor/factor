@@ -112,7 +112,7 @@ M: infinite-stream-cursor inc-cursor ; inline
 MIXIN: finite-stream-cursor
 INSTANCE: finite-stream-cursor stream-cursor
 
-SINGLETON: end-of-stream
+singleton: end-of-stream
 
 GENERIC: cursor-stream-ended? ( cursor -- ? ) ;
 

@@ -4,7 +4,7 @@ USING: math arrays kernel sequences
 accessors locals persistent.hashtables.config ;
 in: persistent.hashtables.nodes
 
-SINGLETON: empty-node
+singleton: empty-node
 
 TUPLE: leaf-node
 { value read-only }

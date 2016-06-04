@@ -6,7 +6,7 @@ io.backend.unix.multiplexers.run-loop namespaces system vocabs ;
 << "io.files.unix" require >> ! needed for deploy
 in: io.backend.unix.macosx
 
-SINGLETON: macosx-kqueue
+singleton: macosx-kqueue
 
 M: macosx-kqueue init-io ( -- )
     <kqueue-mx> mx set-global ;

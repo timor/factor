@@ -7,7 +7,7 @@ io.encodings.string io.encodings.utf8 io.streams.throwing kernel
 math math.bitwise math.vectors pack sequences ;
 in: images.tiff
 
-SINGLETON: tiff-image
+singleton: tiff-image
 
 TUPLE: loading-tiff endianness the-answer ifd-offset ifds ;
 

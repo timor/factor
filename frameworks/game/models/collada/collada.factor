@@ -9,7 +9,7 @@ QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAYS: c:float c:uint ;
 in: game.models.collada
 
-SINGLETON: collada-models
+singleton: collada-models
 "dae" ascii collada-models register-models-class
 
 ERROR: missing-attr tag attr ;

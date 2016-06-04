@@ -2,7 +2,7 @@ USING: editors io.pathnames io.standard-paths kernel make
 math.parser namespaces ;
 in: editors.coteditor
 
-SINGLETON: coteditor
+singleton: coteditor
 coteditor editor-class set-global
 
 : find-cot-bundle-path ( -- path/f )

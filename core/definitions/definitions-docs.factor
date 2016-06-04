@@ -25,7 +25,7 @@ $nl
 "The parser also catches forward references when reloading source files. This is best illustrated with an example. Suppose we load a source file " { $snippet "a.factor" } ":"
 { $code
     "USING: io sequences ;"
-    "IN: a"
+    "in: a"
     ": hello ( -- str ) \"Hello\" ;"
     ": world ( -- str ) \"world\" ;"
     ": hello-world ( -- ) hello \" \" world 3append print ;"
@@ -35,7 +35,7 @@ $nl
 "Now, after some heavily editing and refactoring, the file looks like this:"
 { $code
     "USING: make ;"
-    "IN: a"
+    "in: a"
     ": hello ( -- ) \"Hello\" % ;"
     ": hello-world ( -- str ) [ hello \" \" % world ] \"\" make ;"
     ": world ( -- ) \"world\" % ;"
@@ -52,7 +52,7 @@ $nl
 ARTICLE: "definitions" "Definitions"
 "A " { $emphasis "definition" } " is an artifact read from a source file. Words for working with definitions are found in the " { $vocab-link "definitions" } " vocabulary."
 $nl
-"Definitions are defined using parsing words. Examples of definitions together with their defining parsing words are words (" { $link postpone: : } "), methods (" { $link postpone: M: } "), and vocabularies (" { $link postpone: IN: } ")."
+"Definitions are defined using parsing words. Examples of definitions together with their defining parsing words are words (" { $link postpone: : } "), methods (" { $link postpone: M: } "), and vocabularies (" { $link postpone: in: } ")."
 $nl
 "All definitions share some common traits:"
 { $list

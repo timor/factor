@@ -138,8 +138,8 @@ MEMO:: d-table ( -- array )
 SYMBOL: aes-expand-inner
 HOOK: key-expand-round aes-expand-inner  ( temp i -- temp' ) ;
 
-SINGLETON: aes-128-key
-SINGLETON: aes-256-key
+singleton: aes-128-key
+singleton: aes-256-key
 
 : (add-rcon) ( word rcon-ndx -- word' )
     (rcon-nth) [ rotword subword ] dip bitxor ;
@@ -194,8 +194,8 @@ HOOK: (round) aes-strategy ( state -- ) ;
 HOOK: (add-key) aes-strategy ( aes -- aes' ) ;
 HOOK: (final-round) aes-strategy ( aes -- aes' ) ;
 
-SINGLETON: aes-decrypt
-SINGLETON: aes-encrypt
+singleton: aes-decrypt
+singleton: aes-encrypt
 
 
 ! rotates the 2nd row left by one element

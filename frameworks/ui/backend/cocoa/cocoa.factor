@@ -17,7 +17,7 @@ TUPLE: window-handle view window ;
 
 C: <window-handle> window-handle
 
-SINGLETON: cocoa-ui-backend
+singleton: cocoa-ui-backend
 
 PIXEL-FORMAT-ATTRIBUTE-TABLE: NSOpenGLPFA { } H{
     { double-buffered { $ NSOpenGLPFADoubleBuffer } }

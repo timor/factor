@@ -9,11 +9,11 @@ in: checksums.sha
 MIXIN: sha
 INSTANCE: sha checksum
 
-SINGLETON: sha1
+singleton: sha1
 INSTANCE: sha1 sha
 
-SINGLETON: sha-224
-SINGLETON: sha-256
+singleton: sha-224
+singleton: sha-256
 
 INSTANCE: sha-224 sha
 INSTANCE: sha-256 sha

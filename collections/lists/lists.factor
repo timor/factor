@@ -18,7 +18,7 @@ M: cons-state car ( cons -- car ) car>> ;
 
 M: cons-state cdr ( cons -- cdr ) cdr>> ;
 
-SINGLETON: +nil+
+singleton: +nil+
 M: +nil+ nil? drop t ;
 M: object nil? drop f ;
 

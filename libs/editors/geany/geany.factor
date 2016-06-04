@@ -4,7 +4,7 @@ USING: combinators.short-circuit editors fry io.standard-paths
 kernel make math.parser namespaces system vocabs ;
 in: editors.geany
 
-SINGLETON: geany
+singleton: geany
 geany editor-class set-global
 
 SYMBOL: geany-path

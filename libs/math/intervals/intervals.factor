@@ -7,7 +7,7 @@ in: math.intervals
 
 SYMBOL: empty-interval
 
-SINGLETON: full-interval
+singleton: full-interval
 
 TUPLE: interval { from read-only } { to read-only } ;
 

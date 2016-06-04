@@ -9,7 +9,7 @@ LIBRARY: libc
 
 FUNCTION: int rand ( ) ;
 
-SINGLETON: c-random
+singleton: c-random
 
 M: c-random random-32* drop rand ;
 

@@ -7,11 +7,11 @@ math.parser biassocs io.encodings.iana namespaces
 locals multiline combinators simple-flat-file ;
 in: io.encodings.shift-jis
 
-SINGLETON: shift-jis
+singleton: shift-jis
 
 shift-jis "Shift_JIS" register-encoding
 
-SINGLETON: windows-31j
+singleton: windows-31j
 
 windows-31j "Windows-31J" register-encoding
 

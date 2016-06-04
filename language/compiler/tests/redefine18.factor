@@ -7,7 +7,7 @@ GENERIC: g1 ( a -- b ) ;
 GENERIC: g2 ( a -- b ) ;
 
 MIXIN: c
-SINGLETON: a
+singleton: a
 INSTANCE: a c
 
 M: c g1 g2 ;
@@ -18,7 +18,7 @@ INSTANCE: d c
 
 M: d g2 drop d ;
 
-[ ] [ "in: compiler.tests.redefine18 SINGLETON: b INSTANCE: b d" eval( -- ) ] unit-test
+[ ] [ "in: compiler.tests.redefine18 singleton: b INSTANCE: b d" eval( -- ) ] unit-test
 
 [ d ] [ "b" "compiler.tests.redefine18" lookup-word g1 ] unit-test
 

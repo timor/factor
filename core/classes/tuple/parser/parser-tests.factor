@@ -50,20 +50,20 @@ TUPLE: test-8 { b integer read-only } ;
 
 DEFER: foo
 
-[ "IN: classes.tuple.parser.tests TUPLE: foo < test-1 < ;" eval( -- ) ]
+[ "in: classes.tuple.parser.tests TUPLE: foo < test-1 < ;" eval( -- ) ]
 [ error>> invalid-slot-name? ]
 must-fail-with
 
-[ "IN: classes.tuple.parser.tests TUPLE: foo :" eval( -- ) ]
+[ "in: classes.tuple.parser.tests TUPLE: foo :" eval( -- ) ]
 [ error>> invalid-slot-name? ]
 must-fail-with
 
-[ "IN: classes.tuple.parser.tests TUPLE: foo" eval( -- ) ]
+[ "in: classes.tuple.parser.tests TUPLE: foo" eval( -- ) ]
 [ error>> unexpected-eof? ]
 must-fail-with
 
 2 [
-    [ "IN: classes.tuple.parser.tests USE: alien TUPLE: foo { slot dll } ;" eval( -- ) ]
+    [ "in: classes.tuple.parser.tests use: alien TUPLE: foo { slot dll } ;" eval( -- ) ]
     [ error>> bad-initial-value? ]
     must-fail-with
 
@@ -71,14 +71,14 @@ must-fail-with
 ] times
 
 2 [
-    [ "IN: classes.tuple.parser.tests USE: arrays TUPLE: foo { slot array initial: 5 } ;" eval( -- ) ]
+    [ "in: classes.tuple.parser.tests use: arrays TUPLE: foo { slot array initial: 5 } ;" eval( -- ) ]
     [ error>> bad-initial-value? ]
     must-fail-with
 
     [ f ] [ \ foo tuple-class? ] unit-test
 ] times
 
-[ "IN: classes.tuple.parser.tests USE: arrays TUPLE: foo slot { slot array } ;" eval( -- ) ]
+[ "in: classes.tuple.parser.tests use: arrays TUPLE: foo slot { slot array } ;" eval( -- ) ]
 [ error>> duplicate-slot-names? ]
 must-fail-with
 
@@ -102,7 +102,7 @@ TUPLE: parsing-corner-case x ;
 
 { T{ parsing-corner-case f 3 } } [
     {
-        "USE: classes.tuple.parser.tests"
+        "use: classes.tuple.parser.tests"
         "T{ parsing-corner-case"
         "    f"
         "    3"
@@ -112,7 +112,7 @@ TUPLE: parsing-corner-case x ;
 
 { T{ parsing-corner-case f 3 } } [
     {
-        "USE: classes.tuple.parser.tests"
+        "use: classes.tuple.parser.tests"
         "T{ parsing-corner-case"
         "    { x 3 }"
         "}"
@@ -121,7 +121,7 @@ TUPLE: parsing-corner-case x ;
 
 { T{ parsing-corner-case f 3 } } [
     {
-        "USE: classes.tuple.parser.tests"
+        "use: classes.tuple.parser.tests"
         "T{ parsing-corner-case {"
         "    x 3 }"
         "}"
@@ -131,33 +131,33 @@ TUPLE: parsing-corner-case x ;
 
 [
     {
-        "USE: classes.tuple.parser.tests T{ parsing-corner-case"
+        "use: classes.tuple.parser.tests T{ parsing-corner-case"
         "    { x 3 }"
     } "\n" join eval( -- tuple )
 ] [ error>> unexpected-eof? ] must-fail-with
 
 [
     {
-        "USE: classes.tuple.parser.tests T{ parsing-corner-case {"
+        "use: classes.tuple.parser.tests T{ parsing-corner-case {"
         "    x 3 }"
     } "\n" join eval( -- tuple )
 ] [ error>> unexpected-eof? ] must-fail-with
 
 TUPLE: bad-inheritance-tuple ;
 [
-    "IN: classes.tuple.parser.tests TUPLE: bad-inheritance-tuple < bad-inheritance-tuple ;" eval( -- )
+    "in: classes.tuple.parser.tests TUPLE: bad-inheritance-tuple < bad-inheritance-tuple ;" eval( -- )
 ] [ error>> bad-inheritance? ] must-fail-with
 
 TUPLE: bad-inheritance-tuple2 ;
 TUPLE: bad-inheritance-tuple3 < bad-inheritance-tuple2 ;
 [
-    "IN: classes.tuple.parser.tests TUPLE: bad-inheritance-tuple2 < bad-inheritance-tuple3 ;" eval( -- )
+    "in: classes.tuple.parser.tests TUPLE: bad-inheritance-tuple2 < bad-inheritance-tuple3 ;" eval( -- )
 ] [ error>> bad-inheritance? ] must-fail-with
 
 ! This must not fail
 TUPLE: tup ;
 UNION: u tup ;
 
-{ } [ "IN: classes.tuple.parser.tests TUPLE: u < tup ;" eval( -- ) ] unit-test
+{ } [ "in: classes.tuple.parser.tests TUPLE: u < tup ;" eval( -- ) ] unit-test
 
 { t } [ u new tup? ] unit-test

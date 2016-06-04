@@ -5,7 +5,7 @@ namespaces math classes bit-arrays system sequences vectors
 x11 x11.xlib assocs generalizations ;
 in: game.input.x11
 
-SINGLETON: x11-game-input-backend
+singleton: x11-game-input-backend
 
 x11-game-input-backend game-input-backend set-global
 

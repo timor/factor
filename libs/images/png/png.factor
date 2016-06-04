@@ -8,7 +8,7 @@ locals math math.bitwise math.functions sequences sorting splitting ;
 QUALIFIED: bitstreams
 in: images.png
 
-SINGLETON: png-image
+singleton: png-image
 "png" png-image ?register-image-class
 
 TUPLE: icc-profile name data ;

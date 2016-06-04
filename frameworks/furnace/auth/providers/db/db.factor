@@ -18,7 +18,7 @@ user "USERS"
     { "deleted" "DELETED" INTEGER +not-null+ }
 } define-persistent
 
-SINGLETON: users-in-db
+singleton: users-in-db
 
 M: users-in-db get-user
     drop <user> select-tuple ;

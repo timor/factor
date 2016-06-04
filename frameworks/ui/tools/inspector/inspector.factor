@@ -18,7 +18,7 @@ TUPLE: slot-description key key-string value value-string ;
 : <slot-description> ( key value -- slot-description )
     [ dup unparse-short ] bi@ slot-description boa ;
 
-SINGLETON: inspector-renderer
+singleton: inspector-renderer
 
 M: inspector-renderer row-columns
     drop [ key-string>> ] [ value-string>> ] bi 2array ;

@@ -2,7 +2,7 @@ USING: editors io.standard-paths kernel make math.parser
 namespaces sequences ;
 in: editors.notepad++
 
-SINGLETON: notepad++
+singleton: notepad++
 notepad++ editor-class set-global
 
 : notepad++-path ( -- path )

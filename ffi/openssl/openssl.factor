@@ -6,7 +6,7 @@ in: openssl
 
 ! This code is based on http://www.rtfm.com/openssl-examples/
 
-SINGLETON: openssl
+singleton: openssl
 
 : (ssl-error-string) ( n -- string )
     ERR_clear_error f ERR_error_string ;

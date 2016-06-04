@@ -7,7 +7,7 @@ specialized-arrays unicode ;
 in: images.loader.gtk
 SPECIALIZED-ARRAY: uchar
 
-SINGLETON: gtk-image
+singleton: gtk-image
 
 os linux? [
     ! Explicit type initialization needed for glib < 2.36.

@@ -2,7 +2,7 @@ USING: editors io.standard-paths kernel make math.parser
 namespaces ;
 in: editors.emeditor
 
-SINGLETON: emeditor
+singleton: emeditor
 emeditor editor-class set-global
 
 : emeditor-path ( -- path )

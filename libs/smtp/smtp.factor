@@ -12,7 +12,7 @@ in: smtp
 
 TUPLE: smtp-config domain server tls? { read-timeout duration } auth ;
 
-SINGLETON: no-auth
+singleton: no-auth
 
 TUPLE: plain-auth username password ;
 C: <plain-auth> plain-auth

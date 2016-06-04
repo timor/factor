@@ -17,7 +17,7 @@ C: <literal-bind> literal-bind
 
 TUPLE: generator-bind slot-name key generator-singleton type ;
 C: <generator-bind> generator-bind
-SINGLETON: random-id-generator
+singleton: random-id-generator
 
 TUPLE: low-level-binding value ;
 C: <low-level-binding> low-level-binding

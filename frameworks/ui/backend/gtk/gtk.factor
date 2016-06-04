@@ -14,7 +14,7 @@ ui.pixel-formats ui.pixel-formats.private ui.private
 vocabs.loader ;
 in: ui.backend.gtk
 
-SINGLETON: gtk-ui-backend
+singleton: gtk-ui-backend
 
 TUPLE: window-handle window im-context fullscreen? ;
 

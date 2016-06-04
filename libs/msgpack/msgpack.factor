@@ -24,7 +24,7 @@ DEFER: read-msgpack
 
 PRIVATE>
 
-SINGLETON: +msgpack-nil+
+singleton: +msgpack-nil+
 
 ERROR: unknown-format n ;
 

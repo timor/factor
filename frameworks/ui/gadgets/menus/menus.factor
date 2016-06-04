@@ -35,7 +35,7 @@ M: separator-pen draw-interior
 
 PRIVATE>
 
-SINGLETON: ----
+singleton: ----
 
 M: ---- <menu-item>
     3drop

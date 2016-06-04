@@ -16,7 +16,7 @@ in: vocabs.cache
     \ all-authors reset-memoized
     \ all-tags reset-memoized ;
 
-SINGLETON: cache-observer
+singleton: cache-observer
 
 M: cache-observer vocab-changed drop reset-cache ;
 

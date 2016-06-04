@@ -37,7 +37,7 @@ in: curses.listener
         curses-stream-readln
     ] if ;
 
-SINGLETON: curses-listener-stream
+singleton: curses-listener-stream
 
 INSTANCE: curses-listener-stream input-stream
 INSTANCE: curses-listener-stream output-stream

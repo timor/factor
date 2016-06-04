@@ -2,7 +2,7 @@ in: ui.gadgets.tables.tests
 USING: ui.gadgets.tables ui.gadgets.scrollers ui.gadgets.debug accessors
 models namespaces tools.test kernel combinators prettyprint arrays ;
 
-SINGLETON: test-renderer
+singleton: test-renderer
 
 M: test-renderer row-columns drop ;
 
@@ -46,7 +46,7 @@ M: test-renderer column-titles drop { "First" "Last" } ;
     ] with-grafted-gadget
 ] unit-test
 
-SINGLETON: silly-renderer
+singleton: silly-renderer
 
 M: silly-renderer row-columns drop unparse 1array ;
 

@@ -9,7 +9,7 @@ ui.gadgets.tables ui.gadgets.labeled unicode ;
 FROM: gml => gml ;
 in: gml.ui
 
-SINGLETON: stack-entry-renderer
+singleton: stack-entry-renderer
 
 M: stack-entry-renderer row-columns
     drop [ write-gml ] with-string-writer 1array ;

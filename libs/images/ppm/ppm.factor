@@ -5,7 +5,7 @@ io.encodings.ascii io.encodings.string kernel locals make math
 math.parser sequences io.streams.throwing ;
 in: images.ppm
 
-SINGLETON: ppm-image
+singleton: ppm-image
 "ppm" ppm-image ?register-image-class
 
 : read-token ( -- token )

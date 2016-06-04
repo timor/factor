@@ -178,7 +178,7 @@ SYMBOL: cached-layouts
 : layout>image ( layout -- image )
     dup image>> [ dup draw-layout >>image ] unless image>> ;
 
-SINGLETON: pango-renderer
+singleton: pango-renderer
 
 M: pango-renderer string-dim
     [ " " string-dim { 0 1 } v* ]

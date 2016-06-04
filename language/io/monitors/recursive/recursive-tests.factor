@@ -4,7 +4,7 @@ concurrency.mailboxes tools.test destructors io.files.info
 io.pathnames io.files.temp io.directories.hierarchy fry ;
 in: io.monitors.recursive.tests
 
-SINGLETON: mock-io-backend
+singleton: mock-io-backend
 
 TUPLE: mock-counter i ;
 

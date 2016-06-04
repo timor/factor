@@ -3,7 +3,7 @@
 USING: checksums kernel math sequences ;
 in: checksums.bsd
 
-SINGLETON: bsd
+singleton: bsd
 
 M: bsd checksum-bytes ( bytes checksum -- value )
     drop 0 [

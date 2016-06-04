@@ -10,9 +10,9 @@ multi-methods:GENERIC: first-test ( -- ) ;
 
 MIXIN: thing
 
-SINGLETON: paper    INSTANCE: paper thing
-SINGLETON: scissors INSTANCE: scissors thing
-SINGLETON: rock     INSTANCE: rock thing
+singleton: paper    INSTANCE: paper thing
+singleton: scissors INSTANCE: scissors thing
+singleton: rock     INSTANCE: rock thing
 
 multi-methods:GENERIC: beats? ( obj1 obj2 -- ? ) ;
 

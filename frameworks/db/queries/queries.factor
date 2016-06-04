@@ -9,7 +9,7 @@ in: db.queries
 
 GENERIC: where ( specs obj -- ) ;
 
-SINGLETON: retryable
+singleton: retryable
 : make-retryable ( obj -- obj' )
     dup sequence? [
         [ make-retryable ] map

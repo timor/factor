@@ -5,7 +5,7 @@ math.parser namespaces sequences io.files arrays windows.shell32
 io.directories.search ;
 in: editors.notepad
 
-SINGLETON: notepad
+singleton: notepad
 notepad editor-class set-global
 
 : notepad-path ( -- path )

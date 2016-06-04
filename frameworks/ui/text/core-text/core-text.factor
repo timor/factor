@@ -7,7 +7,7 @@ core-foundation.strings math math.vectors init colors
 colors.constants cache arrays images ;
 in: ui.text.core-text
 
-SINGLETON: core-text-renderer
+singleton: core-text-renderer
 
 <PRIVATE
 

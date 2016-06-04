@@ -6,7 +6,7 @@ in: tools.errors.model
 
 SYMBOLS: (error-list-model) error-list-model ;
 
-SINGLETON: updater
+singleton: updater
 
 M: updater errors-changed
     drop f (error-list-model) get-global set-model ;

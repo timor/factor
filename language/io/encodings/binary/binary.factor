@@ -3,6 +3,6 @@
 USING: io.encodings kernel ;
 in: io.encodings.binary
 
-SINGLETON: binary
+singleton: binary
 M: binary <encoder> drop ; inline
 M: binary <decoder> drop ; inline

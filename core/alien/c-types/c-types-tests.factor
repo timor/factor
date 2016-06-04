@@ -61,7 +61,7 @@ C-TYPE: opaque
 
 [ "
     USING: alien.syntax ;
-    IN: alien.c-types.tests
+    in: alien.c-types.tests
     FUNCTION: opaque return_opaque ( ) ;
 " eval( -- ) ] [ no-c-type? ] must-fail-with
 
@@ -79,14 +79,14 @@ DEFER: struct-redefined
 
     "
     USING: alien.c-types classes.struct ;
-    IN: alien.c-types.tests
+    in: alien.c-types.tests
 
     STRUCT: struct-redefined { x int } ;
     " eval( -- )
 
     "
     USING: alien.syntax ;
-    IN: alien.c-types.tests
+    in: alien.c-types.tests
 
     C-TYPE: struct-redefined
     " eval( -- )
@@ -95,9 +95,9 @@ DEFER: struct-redefined
 ] unit-test
 
 [
-    "IN: alien.c-types.tests
-    USE: alien.syntax
-    USE: alien.c-types
+    "in: alien.c-types.tests
+    use: alien.syntax
+    use: alien.c-types
     TYPEDEF: int type-redefinition-test
     TYPEDEF: int type-redefinition-test" eval( -- )
 ]
@@ -105,9 +105,9 @@ DEFER: struct-redefined
 must-fail-with
 
 [
-    "IN: alien.c-types.tests
-    USE: alien.syntax
-    USE: alien.c-types
+    "in: alien.c-types.tests
+    use: alien.syntax
+    use: alien.c-types
     CALLBACK: void cb987 ( ) ;
     CALLBACK: void cb987 ( ) ;" eval( -- )
 ]
@@ -115,9 +115,9 @@ must-fail-with
 must-fail-with
 
 [
-    "IN: alien.c-types.tests
-    USE: alien.syntax
-    USE: alien.c-types
+    "in: alien.c-types.tests
+    use: alien.syntax
+    use: alien.c-types
     FUNCTION: void func987 ( ) ;
     FUNCTION: void func987 ( ) ;" eval( -- )
 ]
@@ -125,26 +125,26 @@ must-fail-with
 must-fail-with
 
 ! generic -> callback
-"IN: alien.c-types.tests
+"in: alien.c-types.tests
 use: alien.syntax
 use: alien.c-types
 GENERIC: foo-func ( x -- ) ;
 " eval( -- )
 
-"IN: alien.c-types.tests
+"in: alien.c-types.tests
 use: alien.syntax
 use: alien.c-types
 CALLBACK: void foo-func ( ) ;
 " eval( -- )
 
 ! generic -> typedef
-"IN: alien.c-types.tests
+"in: alien.c-types.tests
 use: alien.syntax
 use: alien.c-types
 GENERIC: foo-func ( x -- ) ;
 " eval( -- )
 
-"IN: alien.c-types.tests
+"in: alien.c-types.tests
 use: alien.syntax
 use: alien.c-types
 TYPEDEF: void* foo-func

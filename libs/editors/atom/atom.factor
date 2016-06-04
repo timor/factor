@@ -4,7 +4,7 @@ USING: editors io.pathnames io.standard-paths kernel make
 math.parser namespaces sequences system ;
 in: editors.atom
 
-SINGLETON: atom-editor
+singleton: atom-editor
 atom-editor editor-class set-global
 
 SYMBOL: atom-path

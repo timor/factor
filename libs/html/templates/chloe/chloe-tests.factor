@@ -60,7 +60,7 @@ in: html.templates.chloe.tests
 
 { } [ "A label" "label" set-value ] unit-test
 
-SINGLETON: link-test
+singleton: link-test
 
 M: link-test link-title drop "<Link Title>" ;
 

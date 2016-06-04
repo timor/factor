@@ -6,7 +6,7 @@ calendar math.ranges math.parser colors arrays hashtables
 ui.pixel-formats combinators continuations io.streams.throwing ;
 in: images.tga
 
-SINGLETON: tga-image
+singleton: tga-image
 "tga" tga-image ?register-image-class
 
 ERROR: bad-tga-header ;

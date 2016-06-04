@@ -6,7 +6,7 @@ io.encodings.string kernel locals make math math.functions math.parser
 sequences io.streams.throwing ;
 in: images.pbm
 
-SINGLETON: pbm-image
+singleton: pbm-image
 "pbm" pbm-image ?register-image-class
 
 <PRIVATE

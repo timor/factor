@@ -5,7 +5,7 @@ bit-arrays game.input gdk.ffi generalizations kernel math
 namespaces sequences system x11.xlib ;
 in: game.input.gtk
 
-SINGLETON: gtk-game-input-backend
+singleton: gtk-game-input-backend
 
 gtk-game-input-backend game-input-backend set-global
 

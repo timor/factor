@@ -7,7 +7,7 @@ math.functions sequences sequences.private specialized-arrays ;
 SPECIALIZED-ARRAY: uint
 in: checksums.md5
 
-SINGLETON: md5
+singleton: md5
 
 INSTANCE: md5 stream-checksum
 

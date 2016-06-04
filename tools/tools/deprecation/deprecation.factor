@@ -59,7 +59,7 @@ M: deprecated-usages error.
     " uses these deprecated words:" write nl
     usages>> [ "    " write pprint nl ] each ;
 
-SINGLETON: deprecation-observer
+singleton: deprecation-observer
 
 : initialize-deprecation-notes ( -- )
     [

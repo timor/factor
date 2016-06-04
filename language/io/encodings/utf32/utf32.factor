@@ -4,15 +4,15 @@ USING: math kernel io.encodings combinators io io.encodings.utf16
 sequences io.binary io.encodings.iana ;
 in: io.encodings.utf32
 
-SINGLETON: utf32be
+singleton: utf32be
 
 utf32be "UTF-32BE" register-encoding
 
-SINGLETON: utf32le
+singleton: utf32le
 
 utf32le "UTF-32LE" register-encoding
 
-SINGLETON: utf32
+singleton: utf32
 
 utf32 "UTF-32" register-encoding
 

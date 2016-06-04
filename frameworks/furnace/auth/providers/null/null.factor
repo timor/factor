@@ -3,7 +3,7 @@
 USING: furnace.auth.providers kernel ;
 in: furnace.auth.providers.null
 
-SINGLETON: no-users
+singleton: no-users
 
 M: no-users get-user 2drop f ;
 

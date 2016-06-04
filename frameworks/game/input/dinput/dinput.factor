@@ -12,7 +12,7 @@ in: game.input.dinput
 
 CONSTANT: MOUSE-BUFFER-SIZE 16
 
-SINGLETON: dinput-game-input-backend
+singleton: dinput-game-input-backend
 
 dinput-game-input-backend game-input-backend set-global
 

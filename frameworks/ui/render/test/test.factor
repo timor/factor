@@ -7,7 +7,7 @@ ui.gadgets.labels ui.gadgets.buttons ui.pens ui.pens.solid ui.render
 ui opengl opengl.gl colors.constants images images.loader ;
 in: ui.render.test
 
-SINGLETON: line-test
+singleton: line-test
 
 M: line-test draw-interior
     2drop { 0 0 } { 0 10 } gl-line ;

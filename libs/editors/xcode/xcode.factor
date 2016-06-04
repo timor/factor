@@ -2,7 +2,7 @@ USING: definitions io.launcher kernel math math.parser parser
 namespaces prettyprint editors make ;
 in: editors.xcode
 
-SINGLETON: xcode
+singleton: xcode
 xcode editor-class set-global
 
 M: xcode editor-command ( file line -- command )

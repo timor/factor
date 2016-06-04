@@ -8,7 +8,7 @@ in: editors.visual-studio-code
 ! Command line arguments
 ! https://code.visualstudio.com/docs/editor/codebasics#_additional-command-line-arguments
 
-SINGLETON: visual-studio-code
+singleton: visual-studio-code
 visual-studio-code editor-class set-global
 
 HOOK: find-visual-studio-code-invocation os ( -- array ) ;

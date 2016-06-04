@@ -30,7 +30,7 @@ in: rosetta-code.ternary-logic
 !   ternary logic is intrinsically useful, optimises the test case
 !   algorithm and is preferable to binary logic.
 
-SINGLETON: m
+singleton: m
 UNION: trit t m POSTPONE: f ;
 
 GENERIC: >trit ( object -- trit ) ;

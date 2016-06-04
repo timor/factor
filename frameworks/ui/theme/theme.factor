@@ -91,7 +91,7 @@ HOOK: labeled-border-color theme ( -- color ) ;
 
 HOOK: table-border-color theme ( -- color ) ;
 
-SINGLETON: light-theme
+singleton: light-theme
 theme [ light-theme ] initialize
 
 M: light-theme toolbar-background COLOR: grey95 ;
@@ -180,7 +180,7 @@ M: light-theme labeled-border-color COLOR: grey85 ;
 
 M: light-theme table-border-color COLOR: FactorTan ;
 
-SINGLETON: dark-theme
+singleton: dark-theme
 
 M: dark-theme toolbar-background COLOR: solarized-base02 ;
 M: dark-theme toolbar-button-pressed-background COLOR: solarized-base0 ;

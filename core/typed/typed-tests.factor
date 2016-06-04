@@ -128,7 +128,7 @@ TYPED: recompile-fail ( a: subclass -- ? ) buh get eq? ;
 
 { f } [ subclass new [ buh set ] [ recompile-fail ] bi ] unit-test
 
-{ } [ "IN: typed.tests TUPLE: subclass < superclass { y read-only } ;" eval( -- ) ] unit-test
+{ } [ "in: typed.tests TUPLE: subclass < superclass { y read-only } ;" eval( -- ) ] unit-test
 
 { t } [ subclass new [ buh set ] [ recompile-fail ] bi ] unit-test
 
@@ -185,5 +185,5 @@ TYPED: typed-intersection ( x: intersection{ integer bignum } -- ? ) >boolean ;
 [ 0 typed-intersection ] [ input-mismatch-error? ] must-fail-with
 
 [
-    "IN: test123 USE: typed TYPED: foo ( x -- y ) ;" eval( -- )
+    "in: test123 use: typed TYPED: foo ( x -- y ) ;" eval( -- )
 ] [ error>> no-types-specified? ] must-fail-with

@@ -7,7 +7,7 @@ in: images.loader.gdiplus
 
 SPECIALIZED-ARRAY: ImageCodecInfo
 
-SINGLETON: gdi+-image
+singleton: gdi+-image
 
 os windows? [
     { "png" "tif" "tiff" "gif" "jpg" "jpeg" "bmp" "ico" }

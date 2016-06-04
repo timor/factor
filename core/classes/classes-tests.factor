@@ -30,7 +30,7 @@ use: multiline
 
 ! So the user has some code...
 { } [
-    "IN: classes.test.a
+    "in: classes.test.a
     GENERIC: g ( a -- b ) ;
     TUPLE: x ;
     M: x g ;
@@ -40,16 +40,16 @@ use: multiline
 
 ! Note that q inlines M: x g ;
 { } [
-    "IN: classes.test.b
-    USE: classes.test.a
-    USE: kernel
+    "in: classes.test.b
+    use: classes.test.a
+    use: kernel
     : q ( -- b ) z new g ;" <string-reader>
     "class-intersect-no-method-b" parse-stream drop
 ] unit-test
 
 ! Now, the user removes the z class and adds a method,
 { } [
-    "IN: classes.test.a
+    "in: classes.test.a
     GENERIC: g ( a -- b ) ;
     TUPLE: x ;
     M: x g ;
@@ -60,17 +60,17 @@ use: multiline
 
 ! And changes the definition of q
 { } [
-    "IN: classes.test.b
-    USE: classes.test.a
-    USE: kernel
+    "in: classes.test.b
+    use: classes.test.a
+    use: kernel
     : q ( -- b ) j new g ;" <string-reader>
     "class-intersect-no-method-b" parse-stream drop
 ] unit-test
 
 ! Similar problem, but with anonymous classes
 { } [
-    "IN: classes.test.c
-    USE: kernel
+    "in: classes.test.c
+    use: kernel
     GENERIC: g ( a -- b ) ;
     M: object g ;
     TUPLE: z ;" <string-reader>
@@ -78,17 +78,17 @@ use: multiline
 ] unit-test
 
 { } [
-    "IN: classes.test.d
-    USE: classes.test.c
-    USE: kernel
+    "in: classes.test.d
+    use: classes.test.c
+    use: kernel
     : q ( a -- b ) dup z? [ g ] unless ;" <string-reader>
     "class-intersect-no-method-d" parse-stream drop
 ] unit-test
 
 ! Now, the user removes the z class and adds a method,
 { } [
-    "IN: classes.test.c
-    USE: kernel
+    "in: classes.test.c
+    use: kernel
     GENERIC: g ( a -- b ) ;
     M: object g ;
     TUPLE: j ;
@@ -109,6 +109,6 @@ TUPLE: forgotten-predicate-test ;
 
 GENERIC: generic-predicate? ( a -- b ) ;
 
-{ } [ "IN: classes.tests TUPLE: generic-predicate ;" eval( -- ) ] unit-test
+{ } [ "in: classes.tests TUPLE: generic-predicate ;" eval( -- ) ] unit-test
 
 { f } [ \ generic-predicate? generic? ] unit-test

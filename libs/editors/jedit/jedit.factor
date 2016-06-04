@@ -5,7 +5,7 @@ io.standard-paths kernel make math.parser namespaces sequences
 system ;
 in: editors.jedit
 
-SINGLETON: jedit
+singleton: jedit
 jedit editor-class set-global
 
 HOOK: find-jedit-path os ( -- path ) ;

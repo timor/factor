@@ -4,7 +4,7 @@ game.input.dinput sequences.private namespaces classes.struct
 windows.errors windows.com.syntax alien.strings ;
 in: game.input.xinput
 
-SINGLETON: xinput-game-input-backend
+singleton: xinput-game-input-backend
 
 xinput-game-input-backend game-input-backend set-global
 

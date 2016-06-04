@@ -4,7 +4,7 @@ USING: checksums classes.singleton kernel math math.ranges
 math.vectors sequences ;
 in: checksums.adler-32
 
-SINGLETON: adler-32
+singleton: adler-32
 
 CONSTANT: adler-32-modulus 65521
 

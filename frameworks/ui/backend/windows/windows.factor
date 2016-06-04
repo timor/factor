@@ -18,7 +18,7 @@ SPECIALIZED-ARRAY: POINT
 QUALIFIED-WITH: alien.c-types c
 in: ui.backend.windows
 
-SINGLETON: windows-ui-backend
+singleton: windows-ui-backend
 
 TUPLE: win-base hDC hRC ;
 TUPLE: win < win-base hWnd world title ;

@@ -67,7 +67,7 @@ FUNCTOR-SYNTAX: TUPLE:
 FUNCTOR-SYNTAX: final
     [ last-word make-final ] append! ;
 
-FUNCTOR-SYNTAX: SINGLETON:
+FUNCTOR-SYNTAX: singleton:
     scan-param suffix!
     \ define-singleton-class suffix! ;
 

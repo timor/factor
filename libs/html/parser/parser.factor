@@ -7,9 +7,9 @@ in: html.parser
 
 TUPLE: tag name attributes text closing? ;
 
-SINGLETON: text
-SINGLETON: dtd
-SINGLETON: comment
+singleton: text
+singleton: dtd
+singleton: comment
 
 <PRIVATE
 

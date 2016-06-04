@@ -9,7 +9,7 @@ QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAYS: c:float c:uint ;
 in: game.models.obj
 
-SINGLETON: obj-models
+singleton: obj-models
 "obj" ascii obj-models register-models-class
 
 <PRIVATE

@@ -8,7 +8,7 @@ SPECIALIZED-ARRAY: int
 SPECIALIZED-ARRAY: uint
 in: gpu.framebuffers
 
-SINGLETON: system-framebuffer
+singleton: system-framebuffer
 
 TUPLE: renderbuffer < gpu-object
     { component-order component-order initial: RGBA }

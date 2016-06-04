@@ -42,7 +42,7 @@ ARTICLE: "syntax-integers" "Integer syntax"
 }
 "Integers are entered in base 10 unless prefixed with a base-changing prefix. " { $snippet "0x" } " begins a hexadecimal literal, " { $snippet "0o" } " an octal literal, and " { $snippet "0b" } " a binary literal. A sign, if any, goes before the base prefix."
 { $example
-    "USE: prettyprint"
+    "use: prettyprint"
     "10 ."
     "0b10 ."
     "-0o10 ."
@@ -100,7 +100,7 @@ ARTICLE: "syntax-floats" "Float syntax"
 { "Not-a-number" { $snippet "0/0." } }
 }
 "A Not-a-number literal with an arbitrary payload can also be input:"
-{ $subsections postpone: NAN: }
+{ $subsections postpone: nan: }
 "Hexadecimal, octal and binary float literals are also supported. These consist of a hexadecimal, octal or binary literal with a decimal point and a mandatory base-two exponent expressed as a decimal number after " { $snippet "p" } " or " { $snippet "P" } ":"
 { $example
     "8.0 0x1.0p3 = ."
@@ -273,7 +273,7 @@ HELP: deprecated
 HELP: SYNTAX:
 { $syntax "SYNTAX: foo ... ;" }
 { $description "Defines a parsing word." }
-{ $examples "In the below example, the " { $snippet "world" } " word is never called, however its body references a parsing word which executes immediately:" { $example "USE: io" "IN: scratchpad" "<< SYNTAX: HELLO \"Hello parser!\" print ; >>\n: world ( -- ) HELLO ;" "Hello parser!" } } ;
+{ $examples "In the below example, the " { $snippet "world" } " word is never called, however its body references a parsing word which executes immediately:" { $example "use: io" "in: scratchpad" "<< SYNTAX: HELLO \"Hello parser!\" print ; >>\n: world ( -- ) HELLO ;" "Hello parser!" } } ;
 
 HELP: inline
 { $syntax ": foo ... ; inline" }
@@ -400,12 +400,12 @@ $nl
 { $code "T{ vector }" }
 "A BOA-form tuple:"
 { $code
-    "USE: colors"
+    "use: colors"
     "T{ rgba f 1.0 0.0 0.5 }"
 }
 "An assoc-form tuple equal to the above:"
 { $code
-    "USE: colors"
+    "use: colors"
     "T{ rgba { red 1.0 } { green 0.0 } { blue 0.5 } }"
 } } ;
 
@@ -441,7 +441,7 @@ HELP: SYMBOL:
 { $syntax "SYMBOL: word" }
 { $values { "word" "a new word to define" } }
 { $description "Defines a new symbol word in the current vocabulary. Symbols push themselves on the stack when executed, and are used to identify variables (see " { $link "namespaces" } ") as well as for storing crufties in word properties (see " { $link "word-props" } ")." }
-{ $examples { $example "USE: prettyprint" "IN: scratchpad" "SYMBOL: foo\nfoo ." "foo" } } ;
+{ $examples { $example "use: prettyprint" "in: scratchpad" "SYMBOL: foo\nfoo ." "foo" } } ;
 
 { define-symbol postpone: SYMBOL: postpone: SYMBOLS: } related-words
 
@@ -449,10 +449,10 @@ HELP: SYMBOLS:
 { $syntax "SYMBOLS: words... ;" }
 { $values { "words" { $sequence "new words to define" } } }
 { $description "Creates a new symbol for every token until the " { $snippet ";" } "." }
-{ $examples { $example "USING: prettyprint ;" "IN: scratchpad" "SYMBOLS: foo bar baz ;\nfoo . bar . baz ." "foo\nbar\nbaz" } } ;
+{ $examples { $example "USING: prettyprint ;" "in: scratchpad" "SYMBOLS: foo bar baz ;\nfoo . bar . baz ." "foo\nbar\nbaz" } } ;
 
-HELP: SINGLETON:
-{ $syntax "SINGLETON: class" }
+HELP: singleton:
+{ $syntax "singleton: class" }
 { $values
     { "class" "a new singleton to define" }
 }
@@ -460,7 +460,7 @@ HELP: SINGLETON:
     "Defines a new singleton class. The class word itself is the sole instance of the singleton class."
 }
 { $examples
-    { $example "USING: classes.singleton kernel io ;" "IN: singleton-demo" "USE: prettyprint\nSINGLETON: foo\nGENERIC: bar ( obj -- ) ;\nM: foo bar drop \"a foo!\" print ;\nfoo bar" "a foo!" }
+    { $example "USING: classes.singleton kernel io ;" "in: singleton-demo" "use: prettyprint\nsingleton: foo\nGENERIC: bar ( obj -- ) ;\nM: foo bar drop \"a foo!\" print ;\nfoo bar" "a foo!" }
 } ;
 
 HELP: SINGLETONS:
@@ -474,7 +474,7 @@ HELP: ALIAS:
 { $description "Creates a new inlined word that calls the existing word." }
 { $examples
     { $example "USING: prettyprint sequences ;"
-               "IN: alias.test"
+               "in: alias.test"
                "ALIAS: sequence-nth nth"
                "0 { 10 20 30 } sequence-nth ."
                "10"
@@ -509,15 +509,15 @@ HELP: FORGET:
 { $values { "word" word } }
 { $description "Removes the word from its vocabulary, or does nothing if no such word exists. Existing definitions that reference forgotten words will continue to work, but new occurrences of the word will not parse." } ;
 
-HELP: USE:
-{ $syntax "USE: vocabulary" }
+HELP: use:
+{ $syntax "use: vocabulary" }
 { $values { "vocabulary" "a vocabulary name" } }
 { $description "Adds a new vocabulary to the search path, loading it first if necessary." }
 { $notes "If adding the vocabulary introduces ambiguity, referencing the ambiguous names will throw a " { $link ambiguous-use-error } "." }
 { $errors "Throws an error if the vocabulary does not exist or could not be loaded." } ;
 
-HELP: UNUSE:
-{ $syntax "UNUSE: vocabulary" }
+HELP: unuse:
+{ $syntax "unuse: vocabulary" }
 { $values { "vocabulary" "a vocabulary name" } }
 { $description "Removes a vocabulary from the search path." }
 { $errors "Throws an error if the vocabulary does not exist." } ;
@@ -534,7 +534,7 @@ HELP: QUALIFIED:
 { $description "Adds the vocabulary's words, prefixed with the vocabulary name, to the search path." }
 { $notes "If adding the vocabulary introduces ambiguity, the vocabulary will take precedence when resolving any ambiguous names. This is a rare case; for example, suppose a vocabulary " { $snippet "fish" } " defines a word named " { $snippet "go:fishing" } ", and a vocabulary named " { $snippet "go" } " defines a word named " { $snippet "fishing" } ". Then, the following will call the latter word:"
   { $code
-  "USE: fish"
+  "use: fish"
   "QUALIFIED: go"
   "go:fishing"
   }
@@ -584,10 +584,10 @@ HELP: RENAME:
     "5"
 } } ;
 
-HELP: IN:
-{ $syntax "IN: vocabulary" }
+HELP: in:
+{ $syntax "in: vocabulary" }
 { $values { "vocabulary" "a new vocabulary name" } }
-{ $description "Sets the current vocabulary where new words will be defined, creating the vocabulary first if it does not exist. After the vocabulary has been created, it can be listed in " { $link postpone: USE: } " and " { $link postpone: USING: } " declarations." } ;
+{ $description "Sets the current vocabulary where new words will be defined, creating the vocabulary first if it does not exist. After the vocabulary has been created, it can be listed in " { $link postpone: use: } " and " { $link postpone: USING: } " declarations." } ;
 
 HELP: CHAR:
 { $syntax "CHAR: token" }
@@ -609,11 +609,11 @@ HELP: "
 { $description "Reads from the input string until the next occurrence of " { $snippet "\"" } ", and appends the resulting string to the parse tree. String literals can span multiple lines. Various special characters can be read by inserting " { $link "escape" } "." }
 { $examples
     "A string with an escaped newline in it:"
-    { $example "USE: io" "\"Hello\\nworld\" print" "Hello\nworld" }
+    { $example "use: io" "\"Hello\\nworld\" print" "Hello\nworld" }
     "A string with an actual newline in it:"
-    { $example "USE: io" "\"Hello\nworld\" print" "Hello\nworld" }
+    { $example "use: io" "\"Hello\nworld\" print" "Hello\nworld" }
     "A string with a named Unicode code point:"
-    { $example "USE: io" "\"\\u{greek-capital-letter-sigma}\" print" "\u{greek-capital-letter-sigma}" }
+    { $example "use: io" "\"\\u{greek-capital-letter-sigma}\" print" "\u{greek-capital-letter-sigma}" }
 } ;
 
 HELP: SBUF"
@@ -636,7 +636,7 @@ HELP: (
 { $examples
     { $example
         "USING: compiler.units kernel math prettyprint random words ;"
-        "IN: scratchpad"
+        "in: scratchpad"
         ""
         "SYMBOL: my-dynamic-word"
         ""
@@ -652,15 +652,15 @@ HELP: (
 { $see-also "effects" }
 ;
 
-HELP: NAN:
-{ $syntax "NAN: payload" }
+HELP: nan:
+{ $syntax "nan: payload" }
 { $values { "payload" "64-bit hexadecimal integer" } }
 { $description "Adds a floating point Not-a-Number literal to the parse tree." }
 { $examples
     { $example
-        "USE: prettyprint"
-        "NAN: 80000deadbeef ."
-        "NAN: 80000deadbeef"
+        "use: prettyprint"
+        "nan: 80000deadbeef ."
+        "nan: 80000deadbeef"
     }
 } ;
 
@@ -691,7 +691,7 @@ HELP: HOOK:
 { $examples
     { $example
         "USING: io namespaces ;"
-        "IN: scratchpad"
+        "in: scratchpad"
         "SYMBOL: transport"
         "TUPLE: land-transport ;"
         "TUPLE: air-transport ;"
@@ -835,7 +835,7 @@ HELP: <PRIVATE
 { $notes
     "The following is an example of usage:"
     { $code
-        "IN: factorial"
+        "in: factorial"
         ""
         "<PRIVATE"
         ""
@@ -848,12 +848,12 @@ HELP: <PRIVATE
     }
     "The above is equivalent to:"
     { $code
-        "IN: factorial.private"
+        "in: factorial.private"
         ""
         ": (fac) ( accum n -- n! )"
         "    dup 1 <= [ drop ] [ [ * ] keep 1 - (fac) ] if ;"
         ""
-        "IN: factorial"
+        "in: factorial"
         ""
         ": fac ( n -- n! ) 1 swap (fac) ;"
     }
@@ -902,7 +902,7 @@ HELP: execute(
 { $description "Calls the word on the top of the stack, asserting that it has the given stack effect. The word does not need to be known at compile time." }
 { $examples
   { $code
-    "IN: scratchpad"
+    "in: scratchpad"
     ""
     ": eat ( -- ) ; : sleep ( -- ) ; : hack ( -- ) ;"
     "{ eat sleep hack } [ execute( -- ) ] each"

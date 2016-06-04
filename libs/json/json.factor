@@ -1,7 +1,7 @@
 USING: kernel vocabs summary debugger io ;
 in: json
 
-SINGLETON: json-null
+singleton: json-null
 
 ERROR: json-error ;
 
