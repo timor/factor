@@ -10,9 +10,9 @@ singleton: fletcher-16
 singleton: fletcher-32
 singleton: fletcher-64
 
-INSTANCE: fletcher-16 checksum
-INSTANCE: fletcher-32 checksum
-INSTANCE: fletcher-64 checksum
+INSTANCE: fletcher-16 checksum ;
+INSTANCE: fletcher-32 checksum ;
+INSTANCE: fletcher-64 checksum ;
 
 :: fletcher ( seq k -- n )
     k 16 / :> chars

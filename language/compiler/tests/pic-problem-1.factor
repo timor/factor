@@ -5,7 +5,7 @@ TUPLE: x ;
 
 M: x length drop 0 ;
 
-INSTANCE: x sequence
+INSTANCE: x sequence ;
 
 << gc >>
 

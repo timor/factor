@@ -14,7 +14,7 @@ TUPLE: sparse-graph alist ;
     [ vertices ] keep
     '[ dup _ adjlist 2array ] map >hashtable sparse-graph boa ;
 
-INSTANCE: sparse-graph graph
+INSTANCE: sparse-graph graph ;
 
 M: sparse-graph vertices
     alist>> keys ;

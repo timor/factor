@@ -115,7 +115,7 @@ M: set all-unique? drop t ;
 PRIVATE>
 
 ! Sequences are sets
-INSTANCE: sequence set
+INSTANCE: sequence set ;
 
 M: sequence in?
     member? ; inline

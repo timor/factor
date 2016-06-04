@@ -19,7 +19,7 @@ M: zero-stream stream-read-partial-unsafe stream-read-unsafe ;
 
 M: zero-stream dispose drop ;
 
-INSTANCE: zero-stream input-stream
+INSTANCE: zero-stream input-stream ;
 
 <PRIVATE
 

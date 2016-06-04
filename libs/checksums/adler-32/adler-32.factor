@@ -14,4 +14,4 @@ M: adler-32 checksum-bytes ( bytes checksum -- value )
     [ [ dup length [1,b] <reversed> v. ] [ length ] bi + ] bi
     [ adler-32-modulus mod ] bi@ 16 shift bitor ;
 
-INSTANCE: adler-32 checksum
+INSTANCE: adler-32 checksum ;

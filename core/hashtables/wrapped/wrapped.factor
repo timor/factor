@@ -49,4 +49,4 @@ M: wrapped-hashtable values
 M: wrapped-hashtable equal?
     over wrapped-hashtable? [ [ underlying>> ] same? ] [ 2drop f ] if ;
 
-INSTANCE: wrapped-hashtable assoc
+INSTANCE: wrapped-hashtable assoc ;

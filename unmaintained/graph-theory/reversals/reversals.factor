@@ -13,7 +13,7 @@ M: graph reverse-graph reversal boa ;
 
 M: reversal reverse-graph graph>> ;
 
-INSTANCE: reversal graph
+INSTANCE: reversal graph ;
 
 M: reversal vertices
     graph>> vertices ;

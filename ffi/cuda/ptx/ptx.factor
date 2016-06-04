@@ -175,10 +175,10 @@ VARIANT: ptx-op
     .popc ;
 
 SINGLETONS: .lo .hi ;
-INSTANCE: .lo ptx-mul-mode
-INSTANCE: .lo ptx-cmp-op
-INSTANCE: .hi ptx-mul-mode
-INSTANCE: .hi ptx-cmp-op
+INSTANCE: .lo ptx-mul-mode ;
+INSTANCE: .lo ptx-cmp-op ;
+INSTANCE: .hi ptx-mul-mode ;
+INSTANCE: .hi ptx-cmp-op ;
 
 ROLE-TUPLE: ptx-set-instruction < ptx-3op-instruction
     { cmp-op ptx-cmp-op }

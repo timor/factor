@@ -4,7 +4,7 @@ in: sequences.inserters
 
 TUPLE: offset-growable { underlying read-only } { offset read-only } ;
 C: <offset-growable> offset-growable
-INSTANCE: offset-growable virtual-sequence
+INSTANCE: offset-growable virtual-sequence ;
 M: offset-growable length
     [ underlying>> length ] [ offset>> ] bi - ; inline
 M: offset-growable virtual-exemplar
@@ -25,7 +25,7 @@ M: inserter length
 TUPLE: appender { underlying read-only } ;
 C: <appender> appender
 
-INSTANCE: appender inserter
+INSTANCE: appender inserter ;
 
 M:: appender new-sequence ( len inserter -- sequence )
     inserter underlying>> :> underlying
@@ -37,7 +37,7 @@ M:: appender new-sequence ( len inserter -- sequence )
 TUPLE: replacer { underlying read-only } ;
 C: <replacer> replacer
 
-INSTANCE: replacer inserter
+INSTANCE: replacer inserter ;
 
 M: replacer new-sequence
     underlying>> [ set-length ] keep ; inline

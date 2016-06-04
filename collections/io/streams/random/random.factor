@@ -20,7 +20,7 @@ M: random-stream stream-read-partial-unsafe stream-read-unsafe ;
 
 M: random-stream dispose drop ;
 
-INSTANCE: random-stream input-stream
+INSTANCE: random-stream input-stream ;
 
 : random-file ( n path -- )
     [ <random-stream> swap limit-stream ]

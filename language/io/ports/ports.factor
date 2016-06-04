@@ -25,8 +25,8 @@ TUPLE: buffered-port < port { buffer buffer } ;
         default-buffer-size get <buffer> >>buffer ; inline
 
 TUPLE: input-port < buffered-port ;
-INSTANCE: input-port input-stream
-INSTANCE: input-port file-reader
+INSTANCE: input-port input-stream ;
+INSTANCE: input-port file-reader ;
 
 : <input-port> ( handle -- input-port )
     input-port <buffered-port> ; inline
@@ -112,8 +112,8 @@ M: input-port stream-read-until
     ] if ;
 
 TUPLE: output-port < buffered-port ;
-INSTANCE: output-port output-stream
-INSTANCE: output-port file-writer
+INSTANCE: output-port output-stream ;
+INSTANCE: output-port file-writer ;
 
 : <output-port> ( handle -- output-port )
     output-port <buffered-port> ;

@@ -4,7 +4,7 @@ USING: sequences accessors kernel locals assocs ;
 in: game.models.util
 
 TUPLE: indexed-seq dseq iseq rassoc ;
-INSTANCE: indexed-seq sequence
+INSTANCE: indexed-seq sequence ;
 
 M: indexed-seq length
     iseq>> length ; inline

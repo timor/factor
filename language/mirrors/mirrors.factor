@@ -53,7 +53,7 @@ M: mirror values ( mirror -- values )
 M: mirror assoc-size
     object>> class-of class-size ;
 
-INSTANCE: mirror assoc
+INSTANCE: mirror assoc ;
 
 GENERIC: make-mirror ( obj -- assoc ) ;
 M: hashtable make-mirror ;

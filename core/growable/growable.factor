@@ -77,4 +77,4 @@ M: growable shorten ( n seq -- )
 
 M: growable new-resizable new-sequence 0 over set-length ; inline
 
-INSTANCE: growable sequence
+INSTANCE: growable sequence ;

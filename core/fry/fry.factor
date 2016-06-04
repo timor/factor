@@ -29,7 +29,7 @@ M: object count-inputs drop 0 ;
 mixin: fried
 PREDICATE: fried-callable < callable
     count-inputs 0 > ;
-INSTANCE: fried-callable fried
+INSTANCE: fried-callable fried ;
 
 : (ncurry) ( quot n -- quot )
     {

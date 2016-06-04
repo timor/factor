@@ -251,7 +251,7 @@ M: code-blocks nth-unsafe
     [ cache>> ] [ blocks>> ] bi
     '[ _ nth-unsafe <code-block> ] cache ; inline
 
-INSTANCE: code-blocks immutable-sequence
+INSTANCE: code-blocks immutable-sequence ;
 
 : get-code-blocks ( -- blocks )
     (code-blocks) <code-blocks> ;

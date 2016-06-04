@@ -8,7 +8,7 @@ TUPLE: windowed-sequence
     { sequence sequence read-only }
     { n integer } ;
 
-INSTANCE: windowed-sequence sequence
+INSTANCE: windowed-sequence sequence ;
 
 C: <windowed-sequence> windowed-sequence
 

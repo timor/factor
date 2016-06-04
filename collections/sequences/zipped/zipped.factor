@@ -16,4 +16,4 @@ M: zipped length
 M: zipped nth-unsafe
     [ keys>> nth-unsafe ] [ values>> nth-unsafe ] 2bi 2array ;
 
-INSTANCE: zipped immutable-sequence
+INSTANCE: zipped immutable-sequence ;

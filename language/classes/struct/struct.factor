@@ -167,7 +167,7 @@ TUPLE: struct-c-type < abstract-c-type
     fields
     return-in-registers? ;
 
-INSTANCE: struct-c-type value-type
+INSTANCE: struct-c-type value-type ;
 
 M: struct-c-type lookup-c-type ;
 

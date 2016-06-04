@@ -11,8 +11,8 @@ PREDICATE: class < word "class" word-prop ;
 PREDICATE: defining-class < word "defining-class" word-prop ;
 
 mixin: classoid
-INSTANCE: class classoid
-INSTANCE: defining-class classoid
+INSTANCE: class classoid ;
+INSTANCE: defining-class classoid ;
 
 <PRIVATE
 

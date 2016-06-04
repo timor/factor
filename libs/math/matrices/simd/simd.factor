@@ -13,7 +13,7 @@ in: math.matrices.simd
 STRUCT: matrix4
     { columns float-4[4] } ;
 
-INSTANCE: matrix4 immutable-sequence
+INSTANCE: matrix4 immutable-sequence ;
 
 M: matrix4 length drop 4 ; inline
 M: matrix4 nth-unsafe columns>> nth-unsafe ; inline

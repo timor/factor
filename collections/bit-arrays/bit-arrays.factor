@@ -96,7 +96,7 @@ SYNTAX: ?{ \ } [ >bit-array ] parse-literal ;
 : bit-array>integer ( bit-array -- n )
     underlying>> le> ;
 
-INSTANCE: bit-array sequence
+INSTANCE: bit-array sequence ;
 
 M: bit-array pprint-delims drop \ ?{ \ } ;
 M: bit-array >pprint-sequence ;

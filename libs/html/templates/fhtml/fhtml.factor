@@ -74,4 +74,4 @@ C: <fhtml> fhtml
 M: fhtml call-template* ( filename -- )
     path>> utf8 file-contents eval-template ;
 
-INSTANCE: fhtml template
+INSTANCE: fhtml template ;

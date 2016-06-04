@@ -28,17 +28,17 @@ M: cursor cursor-distance-hint 2drop 0 ; inline
 !
 
 mixin: forward-cursor
-INSTANCE: forward-cursor cursor
+INSTANCE: forward-cursor cursor ;
 
 GENERIC: inc-cursor ( cursor -- cursor' ) ;
 
 mixin: bidirectional-cursor
-INSTANCE: bidirectional-cursor forward-cursor
+INSTANCE: bidirectional-cursor forward-cursor ;
 
 GENERIC: dec-cursor ( cursor -- cursor' ) ;
 
 mixin: random-access-cursor
-INSTANCE: random-access-cursor bidirectional-cursor
+INSTANCE: random-access-cursor bidirectional-cursor ;
 
 GENERIC# cursor+ 1 ( cursor n -- cursor' ) ;
 GENERIC# cursor- 1 ( cursor n -- cursor' ) ;
@@ -98,19 +98,19 @@ M: output-cursor set-cursor-value
 !
 
 mixin: stream-cursor
-INSTANCE: stream-cursor forward-cursor
+INSTANCE: stream-cursor forward-cursor ;
 
 M: stream-cursor cursor-compatible? 2drop f ; inline
 M: stream-cursor cursor-valid? drop t ; inline
 M: stream-cursor cursor= 2drop f ; inline
 
 mixin: infinite-stream-cursor
-INSTANCE: infinite-stream-cursor stream-cursor
+INSTANCE: infinite-stream-cursor stream-cursor ;
 
 M: infinite-stream-cursor inc-cursor ; inline
 
 mixin: finite-stream-cursor
-INSTANCE: finite-stream-cursor stream-cursor
+INSTANCE: finite-stream-cursor stream-cursor ;
 
 singleton: end-of-stream
 
@@ -119,7 +119,7 @@ GENERIC: cursor-stream-ended? ( cursor -- ? ) ;
 M: finite-stream-cursor inc-cursor
     dup cursor-stream-ended? [ drop end-of-stream ] when ; inline
 
-INSTANCE: end-of-stream finite-stream-cursor
+INSTANCE: end-of-stream finite-stream-cursor ;
 
 M: end-of-stream cursor-compatible? drop finite-stream-cursor? ; inline
 M: end-of-stream cursor-valid? drop f ; inline
@@ -163,7 +163,7 @@ M: numeric-cursor cursor<  [ value>> ] bi@ <  ; inline
 M: numeric-cursor cursor>  [ value>> ] bi@ >  ; inline
 M: numeric-cursor cursor>= [ value>> ] bi@ >= ; inline
 
-INSTANCE: numeric-cursor input-cursor
+INSTANCE: numeric-cursor input-cursor ;
 
 M: numeric-cursor cursor-key-value value>> dup ; inline
 
@@ -175,7 +175,7 @@ TUPLE: linear-cursor < numeric-cursor
     { delta read-only } ;
 C: <linear-cursor> linear-cursor
 
-INSTANCE: linear-cursor random-access-cursor
+INSTANCE: linear-cursor random-access-cursor ;
 
 M: linear-cursor cursor-compatible?
     [ linear-cursor? ] both? ; inline
@@ -206,7 +206,7 @@ TUPLE: quadratic-cursor < numeric-cursor
 
 C: <quadratic-cursor> quadratic-cursor
 
-INSTANCE: quadratic-cursor bidirectional-cursor
+INSTANCE: quadratic-cursor bidirectional-cursor ;
 
 M: quadratic-cursor cursor-compatible?
     [ linear-cursor? ] both? ; inline
@@ -237,14 +237,14 @@ GENERIC: end-cursor ( collection -- cursor ) ;
 !
 
 mixin: container
-INSTANCE: container collection
+INSTANCE: container collection ;
 
 : in- ( container quot -- begin end quot' )
     all- -in- ; inline
 
 : each ( ... container quot: ( ... x -- ... ) -- ... ) in- -each ; inline
 
-INSTANCE: finite-stream-cursor container
+INSTANCE: finite-stream-cursor container ;
 
 M: finite-stream-cursor begin-cursor ; inline
 M: finite-stream-cursor end-cursor drop end-of-stream ; inline
@@ -258,12 +258,12 @@ TUPLE: sequence-cursor
     { n fixnum read-only } ;
 C: <sequence-cursor> sequence-cursor
 
-INSTANCE: sequence container
+INSTANCE: sequence container ;
 
 M: sequence begin-cursor 0 <sequence-cursor> ; inline
 M: sequence end-cursor dup length <sequence-cursor> ; inline
 
-INSTANCE: sequence-cursor random-access-cursor
+INSTANCE: sequence-cursor random-access-cursor ;
 
 M: sequence-cursor cursor-compatible?
     {
@@ -286,12 +286,12 @@ M: sequence-cursor cursor- [ [ seq>> ] [ n>> ] bi ] dip - <sequence-cursor> ; in
 M: sequence-cursor cursor-distance ( cursor cursor -- n )
     [ n>> ] bi@ - ; inline
 
-INSTANCE: sequence-cursor input-cursor
+INSTANCE: sequence-cursor input-cursor ;
 
 M: sequence-cursor cursor-key-value-unsafe [ n>> dup ] [ seq>> ] bi nth-unsafe ; inline
 M: sequence-cursor cursor-key-value [ n>> dup ] [ seq>> ] bi nth ; inline
 
-INSTANCE: sequence-cursor output-cursor
+INSTANCE: sequence-cursor output-cursor ;
 
 M: sequence-cursor set-cursor-value-unsafe [ n>> ] [ seq>> ] bi set-nth-unsafe ; inline
 M: sequence-cursor set-cursor-value [ n>> ] [ seq>> ] bi set-nth ; inline
@@ -307,7 +307,7 @@ TUPLE: hash-set-cursor
 C: <hash-set-cursor> hash-set-cursor
 PRIVATE>
 
-INSTANCE: hash-set-cursor forward-cursor
+INSTANCE: hash-set-cursor forward-cursor ;
 
 M: hash-set-cursor cursor-compatible?
     {
@@ -332,12 +332,12 @@ M: hash-set-cursor inc-cursor ( cursor -- cursor' )
     [ hash-set>> dup array>> ] [ n>> 1 + ] bi
     (inc-hash-set-cursor) <hash-set-cursor> ; inline
 
-INSTANCE: hash-set-cursor input-cursor
+INSTANCE: hash-set-cursor input-cursor ;
 
 M: hash-set-cursor cursor-key-value-unsafe
     [ n>> dup ] [ hash-set>> array>> ] bi nth-unsafe ; inline
 
-INSTANCE: hash-set container
+INSTANCE: hash-set container ;
 
 M: hash-set begin-cursor
     dup array>> 0 (inc-hash-set-cursor) <hash-set-cursor> ; inline
@@ -353,14 +353,14 @@ TUPLE: map-cursor
     { to read-only } ;
 C: <map-cursor> map-cursor
 
-INSTANCE: map-cursor forward-cursor
+INSTANCE: map-cursor forward-cursor ;
 
 M: map-cursor cursor-compatible? [ from>> ] bi@ cursor-compatible? ; inline
 M: map-cursor cursor-valid? [ from>> ] [ to>> ] bi [ cursor-valid? ] both? ; inline
 M: map-cursor cursor= [ from>> ] bi@ cursor= ; inline
 M: map-cursor inc-cursor [ from>> inc-cursor ] [ to>> inc-cursor ] bi <map-cursor> ; inline
 
-INSTANCE: map-cursor output-cursor
+INSTANCE: map-cursor output-cursor ;
 
 M: map-cursor set-cursor-value-unsafe to>> set-cursor-value-unsafe ; inline
 M: map-cursor set-cursor-value        to>> set-cursor-value        ; inline
@@ -379,8 +379,8 @@ TUPLE: pusher-cursor
     { growable read-only } ;
 C: <pusher-cursor> pusher-cursor
 
-INSTANCE: pusher-cursor infinite-stream-cursor
-INSTANCE: pusher-cursor output-cursor
+INSTANCE: pusher-cursor infinite-stream-cursor ;
+INSTANCE: pusher-cursor output-cursor ;
 
 M: pusher-cursor set-cursor-value growable>> push ; inline
 
@@ -445,7 +445,7 @@ TUPLE: hashtable-cursor
 C: <hashtable-cursor> hashtable-cursor
 PRIVATE>
 
-INSTANCE: hashtable-cursor forward-cursor
+INSTANCE: hashtable-cursor forward-cursor ;
 
 M: hashtable-cursor cursor-compatible?
     {
@@ -470,13 +470,13 @@ M: hashtable-cursor inc-cursor ( cursor -- cursor' )
     [ hashtable>> dup array>> ] [ n>> 2 + ] bi
     (inc-hashtable-cursor) <hashtable-cursor> ; inline
 
-INSTANCE: hashtable-cursor input-cursor
+INSTANCE: hashtable-cursor input-cursor ;
 
 M: hashtable-cursor cursor-key-value-unsafe
     [ n>> ] [ hashtable>> array>> ] bi
     [ nth-unsafe ] [ [ 1 + ] dip nth-unsafe ] 2bi ; inline
 
-INSTANCE: hashtable container
+INSTANCE: hashtable container ;
 
 M: hashtable begin-cursor
     dup array>> 0 (inc-hashtable-cursor) <hashtable-cursor> ; inline
@@ -492,7 +492,7 @@ TUPLE: zip-cursor
     { values read-only } ;
 C: <zip-cursor> zip-cursor
 
-INSTANCE: zip-cursor forward-cursor
+INSTANCE: zip-cursor forward-cursor ;
 
 M: zip-cursor cursor-compatible? ( cursor cursor -- ? )
     {
@@ -516,7 +516,7 @@ M: zip-cursor cursor-distance-hint ( cursor cursor -- n )
 M: zip-cursor inc-cursor ( cursor -- cursor' )
     [ keys>> inc-cursor ] [ values>> inc-cursor ] bi <zip-cursor> ; inline
 
-INSTANCE: zip-cursor input-cursor
+INSTANCE: zip-cursor input-cursor ;
 
 M: zip-cursor cursor-key-value
     [ keys>> cursor-value-unsafe ] [ values>> cursor-value-unsafe ] bi ; inline

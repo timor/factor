@@ -9,7 +9,7 @@ in: checksums.md5
 
 singleton: md5
 
-INSTANCE: md5 stream-checksum
+INSTANCE: md5 stream-checksum ;
 
 TUPLE: md5-state < checksum-state
 { state uint-array }

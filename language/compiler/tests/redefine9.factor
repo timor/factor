@@ -10,7 +10,7 @@ in: compiler.tests.redefine9
     "USING: kernel math math.order sorting ;
     in: compiler.tests.redefine9
     mixin: my-mixin
-    INSTANCE: fixnum my-mixin
+    INSTANCE: fixnum my-mixin ;
     GENERIC: my-generic ( a -- b ) ;
     ! We add the bogus quotation here to hinder inlining
     ! since otherwise we cannot trigger this bug.
@@ -22,7 +22,7 @@ in: compiler.tests.redefine9
     "use: math
     in: compiler.tests.redefine9
     TUPLE: my-tuple ;
-    INSTANCE: my-tuple my-mixin"
+    INSTANCE: my-tuple my-mixin" ;
     eval( -- )
 ] unit-test
 

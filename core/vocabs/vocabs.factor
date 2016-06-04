@@ -137,7 +137,7 @@ symbol: require-hook
 PREDICATE: runnable-vocab < vocab
     vocab-main >boolean ;
 
-INSTANCE: vocab-spec definition-mixin
+INSTANCE: vocab-spec definition-mixin ;
 
 : call-require-hook ( name -- )
     require-hook get call( name -- ) ;

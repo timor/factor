@@ -21,7 +21,7 @@ CONSTANT: crc32-table V{ }
 
 singleton: crc32
 
-INSTANCE: crc32 checksum
+INSTANCE: crc32 checksum ;
 
 : init-crc32 ( input checksum -- x y input )
     drop [ 0xffffffff dup ] dip ; inline

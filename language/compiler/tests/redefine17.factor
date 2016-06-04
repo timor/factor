@@ -12,7 +12,7 @@ M: string bong length ;
 
 mixin: mixin
 
-INSTANCE: array mixin
+INSTANCE: array mixin ;
 
 : blah ( a -- b ) { mixin } declare bong ;
 
@@ -26,7 +26,7 @@ INSTANCE: array mixin
 
 mixin: mixin1
 
-INSTANCE: string mixin1
+INSTANCE: string mixin1 ;
 
 mixin: mixin2
 
@@ -36,7 +36,7 @@ M: mixin2 billy ;
 
 M: array billy drop "BILLY" ;
 
-INSTANCE: string mixin2
+INSTANCE: string mixin2 ;
 
 : bully ( a -- b ) { mixin1 } declare billy ;
 

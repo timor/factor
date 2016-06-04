@@ -6,13 +6,13 @@ in: help.topics
 
 TUPLE: link name ;
 
-INSTANCE: link definition-mixin
+INSTANCE: link definition-mixin ;
 
 mixin: topic
 
-INSTANCE: link topic
+INSTANCE: link topic ;
 
-INSTANCE: word topic
+INSTANCE: word topic ;
 
 GENERIC: >link ( obj -- obj ) ;
 M: link >link ;

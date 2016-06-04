@@ -7,16 +7,16 @@ sequences.generalizations sequences.private ;
 in: checksums.sha
 
 mixin: sha
-INSTANCE: sha checksum
+INSTANCE: sha checksum ;
 
 singleton: sha1
-INSTANCE: sha1 sha
+INSTANCE: sha1 sha ;
 
 singleton: sha-224
 singleton: sha-256
 
-INSTANCE: sha-224 sha
-INSTANCE: sha-256 sha
+INSTANCE: sha-224 sha ;
+INSTANCE: sha-256 sha ;
 
 <PRIVATE
 

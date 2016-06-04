@@ -13,4 +13,4 @@ C: <keys-array> keys-array
 M: keys-array length length>> ;
 M: keys-array nth-unsafe underlying>> nth-unsafe >key ;
 
-INSTANCE: keys-array sequence
+INSTANCE: keys-array sequence ;

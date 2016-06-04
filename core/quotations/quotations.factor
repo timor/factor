@@ -47,7 +47,7 @@ M: quotation nth-unsafe array>> nth-unsafe ;
 
 M: callable like drop dup quotation? [ >quotation ] unless ;
 
-INSTANCE: quotation immutable-sequence
+INSTANCE: quotation immutable-sequence ;
 
 : 1quotation ( obj -- quot ) 1array array>quotation ;
 
@@ -65,7 +65,7 @@ M: curry nth
     [ [ 1 - ] dip quot>> nth ]
     if ;
 
-INSTANCE: curry immutable-sequence
+INSTANCE: curry immutable-sequence ;
 
 M: compose length
     [ first>> length ] [ second>> length ] bi + ;
@@ -79,4 +79,4 @@ M: compose virtual@
         [ first>> length - ] [ second>> ] bi
     ] if ;
 
-INSTANCE: compose virtual-sequence
+INSTANCE: compose virtual-sequence ;

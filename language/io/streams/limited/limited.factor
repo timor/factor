@@ -7,7 +7,7 @@ namespaces sequences math.order ;
 in: io.streams.limited
 
 TUPLE: limited-stream stream count limit current start stop ;
-INSTANCE: limited-stream input-stream
+INSTANCE: limited-stream input-stream ;
 
 : <limited-stream> ( stream limit -- stream' )
     limited-stream new

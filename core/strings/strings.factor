@@ -91,4 +91,4 @@ M: string resize resize-string ; inline
 
 M: string new-sequence drop 0 <string> ; inline
 
-INSTANCE: string sequence
+INSTANCE: string sequence ;

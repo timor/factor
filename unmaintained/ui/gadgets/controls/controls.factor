@@ -76,8 +76,8 @@ M: model-btn text>> children>> first text>> ;
 in: ui.gadgets.controls
 
 singleton: gadget-monad
-INSTANCE: gadget-monad monad
-INSTANCE: gadget monad
+INSTANCE: gadget-monad monad ;
+INSTANCE: gadget monad ;
 M: gadget monad-of drop gadget-monad ;
 M: gadget-monad return drop <gadget> swap >>model ;
 M: gadget >>= output-model [ swap call( x -- y ) ] curry ; 

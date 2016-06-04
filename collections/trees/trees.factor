@@ -19,7 +19,7 @@ PRIVATE>
 : <tree> ( -- tree )
     tree new-tree ;
 
-INSTANCE: tree assoc
+INSTANCE: tree assoc ;
 
 <PRIVATE
 

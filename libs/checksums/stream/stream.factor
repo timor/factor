@@ -9,4 +9,4 @@ mixin: stream-checksum
 M: stream-checksum checksum-bytes
     [ binary <byte-reader> ] dip checksum-stream ;
 
-INSTANCE: stream-checksum checksum
+INSTANCE: stream-checksum checksum ;

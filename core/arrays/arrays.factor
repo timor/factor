@@ -17,7 +17,7 @@ M: array equal? over array? [ sequence= ] [ 2drop f ] if ;
 M: object new-sequence drop 0 <array> ; inline
 M: f new-sequence drop [ f ] [ 0 <array> ] if-zero ; inline
 
-INSTANCE: array sequence
+INSTANCE: array sequence ;
 
 : >array ( seq -- array ) { } clone-like ;
 : 1array ( x -- array ) 1 swap <array> ; inline

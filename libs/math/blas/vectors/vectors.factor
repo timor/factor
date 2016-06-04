@@ -12,7 +12,7 @@ in: math.blas.vectors
 
 TUPLE: blas-vector-base underlying length inc ;
 
-INSTANCE: blas-vector-base virtual-sequence
+INSTANCE: blas-vector-base virtual-sequence ;
 
 GENERIC: element-type ( v -- type ) ;
 

@@ -127,4 +127,4 @@ M: struct-mirror >alist ( mirror -- alist )
 
 M: struct make-mirror <struct-mirror> ;
 
-INSTANCE: struct-mirror assoc
+INSTANCE: struct-mirror assoc ;

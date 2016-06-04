@@ -9,9 +9,9 @@ CONSTANT: unroll-factor 32
 <PRIVATE
 
 mixin: ?node
-INSTANCE: f ?node
+INSTANCE: f ?node ;
 TUPLE: node { data array } { prev ?node } { next ?node } ;
-INSTANCE: node ?node
+INSTANCE: node ?node ;
 
 PRIVATE>
 
@@ -137,4 +137,4 @@ M: unrolled-list pop-back*
 
 PRIVATE>
 
-INSTANCE: unrolled-list deque
+INSTANCE: unrolled-list deque ;

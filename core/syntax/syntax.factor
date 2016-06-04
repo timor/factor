@@ -273,7 +273,7 @@ in: bootstrap.syntax
         last-word make-final
     ] define-core-syntax
 
-    "SLOT:" [
+    "slot:" [
         scan-token define-protocol-slot
     ] define-core-syntax
     "slot:" [

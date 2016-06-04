@@ -82,7 +82,7 @@ symbol: name-outs
 ! ! ! Forward dataflow analysis
 
 mixin: forward-analysis
-INSTANCE: forward-analysis dataflow-analysis
+INSTANCE: forward-analysis dataflow-analysis ;
 
 M: forward-analysis block-order  drop reverse-post-order ;
 M: forward-analysis successors   drop successors>> ;
@@ -97,7 +97,7 @@ compute-name-sets DEFINES compute-${name}-sets
 
 WHERE
 
-INSTANCE: name forward-analysis
+INSTANCE: name forward-analysis ;
 
 : compute-name-sets ( cfg -- )
     name run-dataflow-analysis
@@ -108,7 +108,7 @@ INSTANCE: name forward-analysis
 ! ! ! Backward dataflow analysis
 
 mixin: backward-analysis
-INSTANCE: backward-analysis dataflow-analysis
+INSTANCE: backward-analysis dataflow-analysis ;
 
 M: backward-analysis block-order  drop post-order ;
 M: backward-analysis successors   drop predecessors>> ;
@@ -123,7 +123,7 @@ compute-name-sets DEFINES compute-${name}-sets
 
 WHERE
 
-INSTANCE: name backward-analysis
+INSTANCE: name backward-analysis ;
 
 : compute-name-sets ( cfg -- )
     \ name run-dataflow-analysis

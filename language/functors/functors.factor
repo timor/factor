@@ -115,7 +115,7 @@ FUNCTOR-SYNTAX: SYNTAX:
     parse-definition*
     \ define-syntax suffix! ;
 
-FUNCTOR-SYNTAX: INSTANCE:
+FUNCTOR-SYNTAX: INSTANCE: ;
     scan-param suffix!
     scan-param suffix!
     \ add-mixin-instance suffix! ;

@@ -333,17 +333,17 @@ M: lazy-io cdr
 M: lazy-io nil?
     car nil? ;
 
-INSTANCE: sequence-cons list
-INSTANCE: memoized-cons list
-INSTANCE: promise list
-INSTANCE: lazy-io list
-INSTANCE: lazy-concat list
-INSTANCE: lazy-cons-state list
-INSTANCE: lazy-map list
-INSTANCE: lazy-take list
-INSTANCE: lazy-append list
-INSTANCE: lazy-from-by list
-INSTANCE: lazy-zip list
-INSTANCE: lazy-while list
-INSTANCE: lazy-until list
-INSTANCE: lazy-filter list
+INSTANCE: sequence-cons list ;
+INSTANCE: memoized-cons list ;
+INSTANCE: promise list ;
+INSTANCE: lazy-io list ;
+INSTANCE: lazy-concat list ;
+INSTANCE: lazy-cons-state list ;
+INSTANCE: lazy-map list ;
+INSTANCE: lazy-take list ;
+INSTANCE: lazy-append list ;
+INSTANCE: lazy-from-by list ;
+INSTANCE: lazy-zip list ;
+INSTANCE: lazy-while list ;
+INSTANCE: lazy-until list ;
+INSTANCE: lazy-filter list ;

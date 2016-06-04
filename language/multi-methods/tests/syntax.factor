@@ -10,9 +10,9 @@ multi-methods:GENERIC: first-test ( -- ) ;
 
 mixin: thing
 
-singleton: paper    INSTANCE: paper thing
-singleton: scissors INSTANCE: scissors thing
-singleton: rock     INSTANCE: rock thing
+singleton: paper    INSTANCE: paper thing ;
+singleton: scissors INSTANCE: scissors thing ;
+singleton: rock     INSTANCE: rock thing ;
 
 multi-methods:GENERIC: beats? ( obj1 obj2 -- ? ) ;
 
@@ -55,7 +55,7 @@ METHOD: hook-test { hashtable { some-var number } } assoc-size ;
 mixin: busted
 
 TUPLE: busted-1 ;
-TUPLE: busted-2 ; INSTANCE: busted-2 busted
+TUPLE: busted-2 ; INSTANCE: busted-2 busted ;
 TUPLE: busted-3 ;
 
 multi-methods:GENERIC: busted-sort ( obj1 obj2 -- obj1 obj2 ) ;

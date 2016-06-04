@@ -41,4 +41,4 @@ M: search-deque clear-deque
 M: search-deque deque-member?
     assoc>> key? ;
 
-INSTANCE: search-deque deque
+INSTANCE: search-deque deque ;

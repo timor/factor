@@ -28,4 +28,4 @@ M: merged virtual@ ( n seq -- n' seq' )
 M: merged virtual-exemplar ( merged -- seq )
     seqs>> ?first ; inline
 
-INSTANCE: merged virtual-sequence
+INSTANCE: merged virtual-sequence ;

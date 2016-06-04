@@ -13,6 +13,6 @@ M: frozen virtual-exemplar seq>> ;
 
 M: frozen length seq>> length ;
 
-INSTANCE: frozen virtual-sequence
+INSTANCE: frozen virtual-sequence ;
 
-INSTANCE: frozen immutable-sequence
+INSTANCE: frozen immutable-sequence ;

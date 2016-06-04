@@ -74,14 +74,14 @@ M: object encode-string [ encode-char ] 2curry each ; inline
 GENERIC: <decoder> ( stream encoding -- newstream ) ;
 
 TUPLE: decoder { stream read-only } { code read-only } { cr boolean } ;
-INSTANCE: decoder input-stream
+INSTANCE: decoder input-stream ;
 
 ERROR: decode-error ;
 
 GENERIC: <encoder> ( stream encoding -- newstream ) ;
 
 TUPLE: encoder { stream read-only } { code read-only } ;
-INSTANCE: encoder output-stream
+INSTANCE: encoder output-stream ;
 
 ERROR: encode-error ;
 
@@ -201,7 +201,7 @@ M: encoder dispose stream>> dispose ; inline
 
 M: encoder stream-flush stream>> stream-flush ; inline
 
-INSTANCE: encoder plain-writer
+INSTANCE: encoder plain-writer ;
 
 PRIVATE>
 

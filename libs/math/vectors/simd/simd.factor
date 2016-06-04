@@ -314,7 +314,7 @@ BOA-EFFECT define-inline
 M: A pprint-delims drop \ A{ \ } ;
 SYNTAX: A{ \ } [ >A ] parse-literal ;
 
-INSTANCE: A sequence
+INSTANCE: A sequence ;
 
 c:<c-type>
     byte-array >>class

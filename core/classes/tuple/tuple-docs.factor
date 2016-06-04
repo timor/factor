@@ -315,7 +315,7 @@ $nl
     "{ underlying string }"
     "{ length array-capacity } ;"
     ""
-    "INSTANCE: sbuf growable"
+    "INSTANCE: sbuf growable" ;
 }
 "with that of the " { $link vector } " class:"
 { $code
@@ -323,7 +323,7 @@ $nl
     "{ underlying array }"
     "{ length array-capacity } ;"
     ""
-    "INSTANCE: vector growable"
+    "INSTANCE: vector growable" ;
 } ;
 
 ARTICLE: "tuples" "Tuples"

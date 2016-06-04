@@ -96,7 +96,7 @@ M: vectored-T length
 M: vectored-T set-nth-unsafe
     T set-vectored-nth ; inline
 
-INSTANCE: vectored-T sequence
+INSTANCE: vectored-T sequence ;
 
 : <vectored-T> ( n -- vectored-T )
     T <vectored-slots> vectored-T boa ; inline

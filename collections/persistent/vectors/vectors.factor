@@ -187,4 +187,4 @@ M: persistent-vector pprint-delims drop \ PV{ \ } ;
 M: persistent-vector >pprint-sequence ;
 M: persistent-vector pprint* pprint-object ;
 
-INSTANCE: persistent-vector immutable-sequence
+INSTANCE: persistent-vector immutable-sequence ;

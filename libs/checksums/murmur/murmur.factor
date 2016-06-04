@@ -50,4 +50,4 @@ PRIVATE>
 M: murmur3-32 checksum-bytes ( bytes checksum -- value )
     seed>> 32 bits main-loop end-case avalanche ;
 
-INSTANCE: murmur3-32 checksum
+INSTANCE: murmur3-32 checksum ;

@@ -5,7 +5,7 @@ in: compiler.tests.redefine2
 
 defer: redefine2-test
 
-[ ] [ "use: sequences use: kernel in: compiler.tests.redefine2 TUPLE: redefine2-test ; M: redefine2-test nth 2drop 3 ; INSTANCE: redefine2-test sequence" eval( -- ) ] unit-test
+[ ] [ "use: sequences use: kernel in: compiler.tests.redefine2 TUPLE: redefine2-test ; M: redefine2-test nth 2drop 3 ; INSTANCE: redefine2-test sequence" eval( -- ) ] unit-test ;
 
 [ t ] [ \ redefine2-test symbol? ] unit-test
 

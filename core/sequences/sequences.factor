@@ -65,7 +65,7 @@ ERROR: immutable element index sequence ;
 
 M: immutable-sequence set-nth immutable ;
 
-INSTANCE: immutable-sequence sequence
+INSTANCE: immutable-sequence sequence ;
 
 <PRIVATE
 
@@ -99,7 +99,7 @@ M: f length drop 0 ; inline
 M: f nth-unsafe nip ; inline
 M: f like drop [ f ] when-empty ; inline
 
-INSTANCE: f immutable-sequence
+INSTANCE: f immutable-sequence ;
 
 ! Integer sequences
 TUPLE: iota-tuple { n integer read-only } ;
@@ -113,7 +113,7 @@ ERROR: non-negative-integer-expected n ;
 M: iota-tuple length n>> ; inline
 M: iota-tuple nth-unsafe drop ; inline
 
-INSTANCE: iota-tuple immutable-sequence
+INSTANCE: iota-tuple immutable-sequence ;
 
 <PRIVATE
 
@@ -199,7 +199,7 @@ M: virtual-sequence set-nth-unsafe virtual@ set-nth-unsafe ; inline
 M: virtual-sequence like virtual-exemplar like ; inline
 M: virtual-sequence new-sequence virtual-exemplar new-sequence ; inline
 
-INSTANCE: virtual-sequence sequence
+INSTANCE: virtual-sequence sequence ;
 
 ! A reversal of an underlying sequence.
 TUPLE: reversed { seq read-only } ;
@@ -210,7 +210,7 @@ M: reversed virtual-exemplar seq>> ; inline
 M: reversed virtual@ seq>> [ length swap - 1 - ] keep ; inline
 M: reversed length seq>> length ; inline
 
-INSTANCE: reversed virtual-sequence
+INSTANCE: reversed virtual-sequence ;
 
 ! A slice of another sequence.
 TUPLE: slice
@@ -258,7 +258,7 @@ M: slice length [ to>> ] [ from>> ] bi - ; inline
 
 : but-last-slice ( seq -- slice ) 1 head-slice* ; inline
 
-INSTANCE: slice virtual-sequence
+INSTANCE: slice virtual-sequence ;
 
 ! One element repeated many times
 TUPLE: repetition
@@ -272,7 +272,7 @@ TUPLE: repetition
 M: repetition length length>> ; inline
 M: repetition nth-unsafe nip elt>> ; inline
 
-INSTANCE: repetition immutable-sequence
+INSTANCE: repetition immutable-sequence ;
 
 <PRIVATE
 

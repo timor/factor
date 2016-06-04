@@ -27,7 +27,7 @@ ARTICLE: "graph-protocol" "Graph protocol"
 
 HELP: graph
 { $class-description "A mixin class whose instances are graphs.  Custom implementations of the graph protocol should be declared as instances of this mixin for all graph functionality to work correctly:"
-    { $code "INSTANCE: hex-board graph" }
+    { $code "INSTANCE: hex-board graph" } ;
 } ;
 
 { vertices num-vertices num-edges } related-words

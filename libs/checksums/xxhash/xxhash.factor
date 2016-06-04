@@ -71,4 +71,4 @@ M:: xxhash checksum-bytes ( bytes checksum -- value )
     [ -13 shift ] [ bitxor ] bi prime3 w*
     [ -16 shift ] [ bitxor ] bi ;
 
-INSTANCE: xxhash checksum
+INSTANCE: xxhash checksum ;

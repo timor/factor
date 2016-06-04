@@ -19,7 +19,7 @@ M: proc set-nth-unsafe array>> set-nth-unsafe ;
 M: proc like drop dup proc? [ { } like { } <proc> ] unless ;
 M: proc new-sequence drop 0 <array> { } <proc> ;
 
-INSTANCE: proc sequence
+INSTANCE: proc sequence ;
 
 : wrap ( n seq -- n seq ) [ length rem ] keep ; inline
 

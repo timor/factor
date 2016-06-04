@@ -86,7 +86,7 @@ M: apropos-search article-content
 
 M: apropos-search >link ;
 
-INSTANCE: apropos-search topic
+INSTANCE: apropos-search topic ;
 
 : apropos ( str -- )
     [ blank? ] trim <apropos-search> print-topic ;

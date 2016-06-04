@@ -274,7 +274,7 @@ M: f clear-assoc drop ; inline
 
 M: f assoc-like drop dup assoc-empty? [ drop f ] when ; inline
 
-INSTANCE: sequence assoc
+INSTANCE: sequence assoc ;
 
 TUPLE: enum { seq read-only } ;
 
@@ -299,10 +299,10 @@ M: enum assoc-size seq>> length ; inline
 
 M: enum clear-assoc seq>> delete-all ; inline
 
-INSTANCE: enum assoc
+INSTANCE: enum assoc ;
 
 M: enum length seq>> length ; inline
 
 M: enum nth-unsafe dupd seq>> nth-unsafe 2array ; inline
 
-INSTANCE: enum immutable-sequence
+INSTANCE: enum immutable-sequence ;

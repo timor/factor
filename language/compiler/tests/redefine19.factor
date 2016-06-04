@@ -8,7 +8,7 @@ mixin: m2 M: m2 g drop 2 ;
 
 TUPLE: c ;
 
-INSTANCE: c m2
+INSTANCE: c m2 ;
 
 : foo ( -- b ) c new g ;
 

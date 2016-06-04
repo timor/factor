@@ -26,7 +26,7 @@ M: byte-array equal?
 M: byte-array resize
     resize-byte-array ; inline
 
-INSTANCE: byte-array sequence
+INSTANCE: byte-array sequence ;
 
 : 1byte-array ( x -- byte-array ) B{ } 1sequence ; inline
 

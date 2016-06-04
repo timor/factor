@@ -504,8 +504,8 @@ M: amb-union-4 amb-generic-4 drop "4" ;
 ] unit-test
 
 mixin: amb-mixin-5
-INSTANCE: amb-tuple-a amb-mixin-5
-INSTANCE: amb-tuple-d amb-mixin-5
+INSTANCE: amb-tuple-a amb-mixin-5 ;
+INSTANCE: amb-tuple-d amb-mixin-5 ;
 
 GENERIC: amb-generic-5 ( a -- b ) ;
 
@@ -540,8 +540,8 @@ M: amb-union-6 amb-generic-6 drop "6" ;
 ] unit-test
 
 mixin: amb-mixin-7
-INSTANCE: amb-tuple-b amb-mixin-7
-INSTANCE: amb-tuple-d amb-mixin-7
+INSTANCE: amb-tuple-b amb-mixin-7 ;
+INSTANCE: amb-tuple-d amb-mixin-7 ;
 
 GENERIC: amb-generic-7 ( a -- b ) ;
 

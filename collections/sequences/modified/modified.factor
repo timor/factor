@@ -14,7 +14,7 @@ GENERIC: modified-set-nth ( elt n seq -- ) ;
 M: modified set-nth modified-set-nth ;
 M: modified set-nth-unsafe modified-set-nth ;
 
-INSTANCE: modified virtual-sequence
+INSTANCE: modified virtual-sequence ;
 
 TUPLE: 1modified < modified seq ;
 

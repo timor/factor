@@ -96,8 +96,8 @@ PRIVATE>
 : deeplist>array ( list -- array )
     [ dup list? [ deeplist>array ] when ] lmap>array ;
 
-INSTANCE: cons-state list
-INSTANCE: +nil+ list
+INSTANCE: cons-state list ;
+INSTANCE: +nil+ list ;
 
 GENERIC: >list ( object -- list ) ;
 

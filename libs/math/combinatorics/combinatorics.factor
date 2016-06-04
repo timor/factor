@@ -74,7 +74,7 @@ M: permutations length length>> ; inline
 M: permutations nth-unsafe seq>> permutation ;
 M: permutations hashcode* tuple-hashcode ;
 
-INSTANCE: permutations immutable-sequence
+INSTANCE: permutations immutable-sequence ;
 
 TUPLE: k-permutations length skip k seq ;
 
@@ -94,7 +94,7 @@ M: k-permutations nth-unsafe
     [ k>> swap [ head ] dip nths-unsafe ] tri ;
 M: k-permutations hashcode* tuple-hashcode ;
 
-INSTANCE: k-permutations immutable-sequence
+INSTANCE: k-permutations immutable-sequence ;
 
 defer: next-permutation
 
@@ -193,7 +193,7 @@ M: combinations length length>> ; inline
 M: combinations nth-unsafe [ seq>> ] [ k>> ] bi combination ;
 M: combinations hashcode* tuple-hashcode ;
 
-INSTANCE: combinations immutable-sequence
+INSTANCE: combinations immutable-sequence ;
 
 <PRIVATE
 

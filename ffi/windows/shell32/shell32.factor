@@ -135,11 +135,11 @@ SINGLETONS:
     +win32-nt-executable+ ;
 
 mixin: windows-executable
-INSTANCE: +dos-executable+ windows-executable        ! mz
-INSTANCE: +win32-console-executable+ windows-executable
-INSTANCE: +win32-vxd-executable+ windows-executable  ! le
-INSTANCE: +win32-os2-executable+ windows-executable  ! ne
-INSTANCE: +win32-nt-executable+ windows-executable   ! pe
+INSTANCE: +dos-executable+ windows-executable        ! mz ;
+INSTANCE: +win32-console-executable+ windows-executable ;
+INSTANCE: +win32-vxd-executable+ windows-executable  ! le ;
+INSTANCE: +win32-os2-executable+ windows-executable  ! ne ;
+INSTANCE: +win32-nt-executable+ windows-executable   ! pe ;
 
 : shell32-directory ( n -- str )
     f swap f SHGFP_TYPE_DEFAULT

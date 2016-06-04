@@ -125,4 +125,4 @@ TUPLE: cached-template-state path last-modified quot ;
 M: chloe call-template*
     template-quot call( -- ) ;
 
-INSTANCE: chloe template
+INSTANCE: chloe template ;

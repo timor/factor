@@ -267,4 +267,4 @@ M: word hashcode*
 
 M: word literalize <wrapper> ;
 
-INSTANCE: word definition-mixin
+INSTANCE: word definition-mixin ;

@@ -9,7 +9,7 @@ in: specialized-arrays
 
 mixin: specialized-array
 
-INSTANCE: specialized-array sequence
+INSTANCE: specialized-array sequence ;
 
 : (underlying) ( n c-type -- array )
     heap-size * (byte-array) ; inline
@@ -95,7 +95,7 @@ M: A >pprint-sequence ;
 
 SYNTAX: A{ \ } [ \ T >c-array ] parse-literal ;
 
-INSTANCE: A specialized-array
+INSTANCE: A specialized-array ;
 
 M: A vs+ [ + \ T c-type-clamp ] 2map ; inline
 M: A vs- [ - \ T c-type-clamp ] 2map ; inline

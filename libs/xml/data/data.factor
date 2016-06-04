@@ -72,7 +72,7 @@ M: attrs delete-at
 M: attrs clone
     alist>> clone <attrs> ;
 
-INSTANCE: attrs assoc
+INSTANCE: attrs assoc ;
 
 TUPLE: opener { name name } { attrs attrs } ;
 C: <opener> opener
@@ -155,11 +155,11 @@ TUPLE: tag
 
 ! They also follow the sequence protocol (for children)
 CONSULT: sequence-protocol tag children>> ;
-INSTANCE: tag sequence
+INSTANCE: tag sequence ;
 
 ! They also follow the assoc protocol (for attributes)
 CONSULT: assoc-protocol tag attrs>> ;
-INSTANCE: tag assoc
+INSTANCE: tag assoc ;
 
 CONSULT: name tag name>> ;
 
@@ -187,7 +187,7 @@ TUPLE: xml
 C: <xml> xml
 
 CONSULT: sequence-protocol xml body>> ;
-INSTANCE: xml sequence
+INSTANCE: xml sequence ;
 
 CONSULT: tag xml body>> ;
 
@@ -227,4 +227,4 @@ TUPLE: xml-chunk seq ;
 C: <xml-chunk> xml-chunk
 
 CONSULT: sequence-protocol xml-chunk seq>> ;
-INSTANCE: xml-chunk sequence
+INSTANCE: xml-chunk sequence ;
