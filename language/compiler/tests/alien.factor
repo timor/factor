@@ -172,7 +172,7 @@ FUNCTION: int ffi_test_10 ( int a, int b, double c, int d, float e, int f, int g
 
 FUNCTION: void ffi_test_20 ( double x1, double x2, double x3,
     double y1, double y2, double y3,
-    double z1, double z2, double z3 )
+    double z1, double z2, double z3 ) ;
 
 [ ] [ 1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0 ffi_test_20 ] unit-test
 
@@ -585,15 +585,15 @@ FUNCTION: test_struct_14 ffi_test_44 ( ) ; inline
 ! C99 tests
 os windows? [
 
-    FUNCTION: complex-float ffi_test_45 ( int x )
+    FUNCTION: complex-float ffi_test_45 ( int x ) ;
 
     [ C{ 3.0 0.0 } ] [ 3 ffi_test_45 ] unit-test
 
-    FUNCTION: complex-double ffi_test_46 ( int x )
+    FUNCTION: complex-double ffi_test_46 ( int x ) ;
 
     [ C{ 3.0 0.0 } ] [ 3 ffi_test_46 ] unit-test
 
-    FUNCTION: complex-float ffi_test_47 ( complex-float x, complex-double y )
+    FUNCTION: complex-float ffi_test_47 ( complex-float x, complex-double y ) ;
 
     [ C{ 4.0 4.0 } ] [
         C{ 1.0 2.0 }
@@ -606,7 +606,7 @@ os windows? [
         { on bool }
         { parents short } ;
 
-    FUNCTION: short ffi_test_48 ( bool-field-test x )
+    FUNCTION: short ffi_test_48 ( bool-field-test x ) ;
 
     [ 123 ] [
         bool-field-test <struct>
@@ -874,7 +874,7 @@ os windows? [
         { b bool }
         { ptr void* } ;
 
-    FUNCTION: bool-and-ptr ffi_test_61 ( )
+    FUNCTION: bool-and-ptr ffi_test_61 ( ) ;
 
     ! { S{ bool-and-ptr { b t } { ptr f } } } [ ffi_test_61 ] unit-test
     { t } [ ffi_test_61 bool-and-ptr? ] unit-test

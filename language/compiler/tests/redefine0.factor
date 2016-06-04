@@ -1,5 +1,5 @@
-USING: tools.test eval compiler compiler.errors compiler.units definitions kernel math
-namespaces macros assocs ;
+USING: tools.test eval compiler compiler.errors compiler.units definitions
+kernel math namespaces macros assocs ;
 IN: compiler.tests.redefine0
 
 ! Test ripple-up behavior
@@ -62,7 +62,7 @@ M: integer test-7 + ;
 [ 1 test-7 ] [ not-compiled? ] must-fail-with
 [ 1 test-8 ] [ not-compiled? ] must-fail-with
 
-[ ] [ "IN: compiler.tests.redefine0 USING: macros math kernel ; GENERIC: test-7 ( x y -- z ) : test-8 ( a b -- c ) 255 bitand test-7 ;" eval( -- ) ; ] unit-test
+[ ] [ "in: compiler.tests.redefine0 USING: macros math kernel ; GENERIC: test-7 ( x y -- z ) ; : test-8 ( a b -- c ) 255 bitand test-7 ;" eval( -- ) ] unit-test
 
 [ 4 ] [ 1 3 test-7 ] unit-test
 [ 4 ] [ 1 259 test-8 ] unit-test
@@ -76,7 +76,7 @@ M: integer test-7 + ;
 
 ! Indirect dependency on an unoptimized word
 : test-9 ( -- ) ;
-<< SYMBOL: quot
+<< symbol: quot
 [ test-9 ] quot set-global
 MACRO: test-10 ( -- quot ) quot get ; >>
 : test-11 ( -- ) test-10 ;
