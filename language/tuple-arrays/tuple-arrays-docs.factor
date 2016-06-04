@@ -19,7 +19,7 @@ $nl
 "An example:"
 { $example
   "USE: tuple-arrays"
-  "IN: scratchpad"
+  "in: scratchpad"
   "TUPLE: point x y ; final"
   "TUPLE-ARRAY: point"
   "{ T{ point f 1 2 } T{ point f 1 3 } T{ point f 2 3 } } >point-array first short."

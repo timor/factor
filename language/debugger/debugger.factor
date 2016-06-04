@@ -294,7 +294,7 @@ M: attempt-all-error summary drop "Nothing to attempt" ;
 M: already-disposed summary drop "Attempting to operate on disposed object" ;
 
 M: no-current-vocab-error summary
-    drop "Not in a vocabulary; IN: form required" ;
+    drop "Not in a vocabulary; in: form required" ;
 
 M: no-word-error summary
     name>>

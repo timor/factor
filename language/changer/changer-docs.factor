@@ -9,7 +9,7 @@ HELP: change:
     "Change a tuple slot:"
     { $example
         "USING: prettyprint changer kernel math ;"
-        "IN: changer"
+        "in: changer"
         "TUPLE: nightclub count ;"
         "T{ nightclub f 0 } [ 3 + ] change: count ."
         "T{ nightclub { count 3 } }"

@@ -28,7 +28,7 @@ HELP: <mirror>
 { $examples
     { $example
         "USING: assocs mirrors prettyprint ;"
-        "IN: scratchpad"
+        "in: scratchpad"
         "TUPLE: circle center radius ;"
         "C: <circle> circle"
         "{ 100 50 } 15 <circle> <mirror> >alist ."

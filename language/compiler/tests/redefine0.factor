@@ -8,7 +8,7 @@ in: compiler.tests.redefine0
 
 [ test-2 ] [ not-compiled? ] must-fail-with
 
-[ ] [ "IN: compiler.tests.redefine0 : test-1 ( -- ) ;" eval( -- ) ] unit-test
+[ ] [ "in: compiler.tests.redefine0 : test-1 ( -- ) ;" eval( -- ) ] unit-test
 
 { 0 0 } [ test-1 ] must-infer-as
 
@@ -26,7 +26,7 @@ in: compiler.tests.redefine0
 
 [ ] [ test-4 ] unit-test
 
-[ ] [ "IN: compiler.tests.redefine0 USE: kernel : test-3 ( a -- ) call ; inline" eval( -- ) ] unit-test
+[ ] [ "in: compiler.tests.redefine0 USE: kernel : test-3 ( a -- ) call ; inline" eval( -- ) ] unit-test
 
 [ test-4 ] [ not-compiled? ] must-fail-with
 
@@ -42,7 +42,7 @@ in: compiler.tests.redefine0
 
 [ 31337 ] [ 31337 test-6 ] unit-test
 
-[ ] [ "IN: compiler.tests.redefine0 USING: macros kernel ; MACRO: test-5 ( a -- quot ) drop [ ] ;" eval( -- ) ] unit-test
+[ ] [ "in: compiler.tests.redefine0 USING: macros kernel ; MACRO: test-5 ( a -- quot ) drop [ ] ;" eval( -- ) ] unit-test
 
 [ 31337 test-6 ] [ not-compiled? ] must-fail-with
 
@@ -83,15 +83,15 @@ MACRO: test-10 ( -- quot ) quot get ; >>
 
 [ ] [ test-11 ] unit-test
 
-[ ] [ "IN: compiler.tests.redefine0 : test-9 ( -- ) 1 ;" eval( -- ) ] unit-test
+[ ] [ "in: compiler.tests.redefine0 : test-9 ( -- ) 1 ;" eval( -- ) ] unit-test
 
 ! test-11 should get recompiled now
 
 [ test-11 ] [ not-compiled? ] must-fail-with
 
-[ ] [ "IN: compiler.tests.redefine0 : test-9 ( -- a ) 1 ;" eval( -- ) ] unit-test
+[ ] [ "in: compiler.tests.redefine0 : test-9 ( -- a ) 1 ;" eval( -- ) ] unit-test
 
-[ ] [ "IN: compiler.tests.redefine0 : test-9 ( -- ) ;" eval( -- ) ] unit-test
+[ ] [ "in: compiler.tests.redefine0 : test-9 ( -- ) ;" eval( -- ) ] unit-test
 
 [ ] [ test-11 ] unit-test
 

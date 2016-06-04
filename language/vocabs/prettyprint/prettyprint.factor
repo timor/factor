@@ -10,7 +10,7 @@ in: vocabs.prettyprint
     [ vocab-name ] [ lookup-vocab vocab-style ] bi styled-text ;
 
 : pprint-in ( vocab -- )
-    [ \ IN: pprint-word pprint-vocab ] with-pprint ;
+    [ \ in: pprint-word pprint-vocab ] with-pprint ;
 
 <PRIVATE
 

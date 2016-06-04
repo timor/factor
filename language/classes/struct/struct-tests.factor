@@ -332,27 +332,27 @@ STRUCT: struct-that's-a-word { x int } ;
 
 ! Interactive parsing of struct slot definitions
 [
-    "USE: classes.struct IN: classes.struct.tests STRUCT: unexpected-eof-test" <string-reader>
+    "USE: classes.struct in: classes.struct.tests STRUCT: unexpected-eof-test" <string-reader>
     "struct-class-test-1" parse-stream
 ] [ error>> error>> unexpected-eof? ] must-fail-with
 
 [
-    "USING: alien.c-types classes.struct ; IN: classes.struct.tests STRUCT: struct-test-duplicate-slots { x uint } { x uint } ;" eval( -- )
+    "USING: alien.c-types classes.struct ; in: classes.struct.tests STRUCT: struct-test-duplicate-slots { x uint } { x uint } ;" eval( -- )
 ] [ error>> duplicate-slot-names? ] must-fail-with
 
 [
-    "USING: alien.c-types classes.struct ; IN: classes.struct.tests STRUCT: struct-test-duplicate-slots { x uint } { x float } ;" eval( -- )
+    "USING: alien.c-types classes.struct ; in: classes.struct.tests STRUCT: struct-test-duplicate-slots { x uint } { x float } ;" eval( -- )
 ] [ error>> duplicate-slot-names? ] must-fail-with
 
 ! S{ with non-struct type
 [
-    "USE: classes.struct IN: classes.struct.tests TUPLE: not-a-struct ; S{ not-a-struct }"
+    "USE: classes.struct in: classes.struct.tests TUPLE: not-a-struct ; S{ not-a-struct }"
     eval( -- value )
 ] [ error>> no-method? ] must-fail-with
 
 ! Subclassing a struct class should not be allowed
 [
-    "USING: alien.c-types classes.struct ; IN: classes.struct.tests STRUCT: a-struct { x int } ; TUPLE: not-a-struct < a-struct ;"
+    "USING: alien.c-types classes.struct ; in: classes.struct.tests STRUCT: a-struct { x int } ; TUPLE: not-a-struct < a-struct ;"
     eval( -- )
 ] [ error>> bad-superclass? ] must-fail-with
 
@@ -365,7 +365,7 @@ TUPLE: a-subclass < will-become-struct ;
 
 { will-become-struct } [ a-subclass superclass-of ] unit-test
 
-{ } [ "IN: classes.struct.tests USING: classes.struct alien.c-types ; STRUCT: will-become-struct { x int } ;" eval( -- ) ] unit-test
+{ } [ "in: classes.struct.tests USING: classes.struct alien.c-types ; STRUCT: will-become-struct { x int } ;" eval( -- ) ] unit-test
 
 { t } [ will-become-struct struct-class? ] unit-test
 
@@ -517,7 +517,7 @@ STRUCT: struct-1-union { a int initial: 0 } ;
 ! Bug #206
 STRUCT: going-to-redefine { a uint } ;
 { } [
-    "IN: classes.struct.tests TUPLE: going-to-redefine b ;" eval( -- )
+    "in: classes.struct.tests TUPLE: going-to-redefine b ;" eval( -- )
 ] unit-test
 { f } [ \ going-to-redefine \ clone ?lookup-method ] unit-test
 { f } [ \ going-to-redefine \ struct-slot-values ?lookup-method ] unit-test

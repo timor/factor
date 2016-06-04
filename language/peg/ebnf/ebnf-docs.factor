@@ -51,7 +51,7 @@ HELP: EBNF:
 { $examples
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "IN: scratchpad"
+       "in: scratchpad"
        "EBNF: foo rule=\"a\" \"b\" ;EBNF"
        "\"ab\" foo ."
        "V{ \"a\" \"b\" }"
@@ -413,7 +413,7 @@ $nl
     { $example
         "USING: prettyprint peg peg.ebnf kernel math.parser strings"
         "accessors math arrays ;"
-        "IN: scratchpad"
+        "in: scratchpad"
         ""
         "TUPLE: ast-number value ;"
         "TUPLE: ast-string value ;"

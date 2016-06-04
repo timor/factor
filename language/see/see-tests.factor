@@ -4,18 +4,18 @@ in: see.tests
 
 CONSTANT: test-const 10
 
-{ "IN: see.tests\nCONSTANT: test-const 10 inline\n" }
+{ "in: see.tests\nCONSTANT: test-const 10 inline\n" }
 [ [ \ test-const see ] with-string-writer ] unit-test
 
-{ "IN: sequences\nERROR: non-negative-integer-expected n ;\n" }
+{ "in: sequences\nERROR: non-negative-integer-expected n ;\n" }
 [ [ \ non-negative-integer-expected see ] with-string-writer ] unit-test
 
 ALIAS: test-alias +
 
-{ "USING: math ;\nIN: see.tests\nALIAS: test-alias + inline\n" }
+{ "USING: math ;\nin: see.tests\nALIAS: test-alias + inline\n" }
 [ [ \ test-alias see ] with-string-writer ] unit-test
 
-{ "IN: see.tests ALIAS: test-alias ( x y -- z )" }
+{ "in: see.tests ALIAS: test-alias ( x y -- z )" }
 [ \ test-alias summary ] unit-test
 
 { } [ gensym see ] unit-test

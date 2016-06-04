@@ -105,7 +105,7 @@ M: integer W 1 + ;
 
 ! Does replacing an ordinary word with a functor-generated one work?
 [ [ ] ] [
-    "IN: functors.tests
+    "in: functors.tests
 
     TUPLE: some-tuple ;
     : some-word ( -- ) ;
@@ -144,7 +144,7 @@ SYMBOL: W-symbol
 ;FUNCTOR
 
 [ [ ] ] [
-    "IN: functors.tests
+    "in: functors.tests
     << \"some\" redefine-test >>" <string-reader> "functors-test" parse-stream
 ] unit-test
 

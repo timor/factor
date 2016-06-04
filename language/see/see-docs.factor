@@ -29,12 +29,12 @@ HELP: definer
 { $contract "Outputs the parsing words which delimit the definition." }
 { $examples
     { $example "USING: definitions prettyprint ;"
-               "IN: scratchpad"
+               "in: scratchpad"
                ": foo ( -- ) ; \\ foo definer . ."
                ";\nPOSTPONE: :"
     }
     { $example "USING: definitions prettyprint ;"
-               "IN: scratchpad"
+               "in: scratchpad"
                "SYMBOL: foo \\ foo definer . ."
                "f\nPOSTPONE: SYMBOL:"
     }

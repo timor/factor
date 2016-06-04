@@ -36,7 +36,7 @@ HELP: file-system-info
 { $examples
     { $unchecked-example
         "USING: io.files.info io.pathnames math prettyprint ;"
-        "IN: scratchpad"
+        "in: scratchpad"
         ""
         ": gb ( m -- n ) 30 2^ * ;"
         ""
