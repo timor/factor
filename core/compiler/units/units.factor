@@ -6,7 +6,7 @@ hash-sets init kernel kernel.private math namespaces sequences
 sets source-files.errors vocabs words ;
 in: compiler.units
 
-PRIMITIVE: modify-code-heap ( alist update-existing? reset-pics? -- )
+PRIMITIVE: modify-code-heap ( alist update-existing? reset-pics? -- ) ;
 
 symbol: old-definitions
 symbol: new-definitions

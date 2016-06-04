@@ -10,11 +10,11 @@ BUILTIN: word
 { def quotation initial: [ ] } props pic-def pic-tail-def
 { sub-primitive read-only } ;
 
-PRIMITIVE: word-code ( word -- start end )
-PRIMITIVE: word-optimized? ( word -- ? )
+PRIMITIVE: word-code ( word -- start end ) ;
+PRIMITIVE: word-optimized? ( word -- ? ) ;
 
 <PRIVATE
-PRIMITIVE: (word) ( name vocab hashcode -- word )
+PRIMITIVE: (word) ( name vocab hashcode -- word ) ;
 PRIVATE>
 
 ! Need a dummy word here because BUILTIN: word is not a real word

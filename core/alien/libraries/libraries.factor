@@ -5,11 +5,11 @@ io.backend kernel namespaces destructors sequences strings
 system io.pathnames fry combinators vocabs ;
 in: alien.libraries
 
-PRIMITIVE: dll-valid? ( dll -- ? )
-PRIMITIVE: (dlopen) ( path -- dll )
-PRIMITIVE: (dlsym) ( name dll -- alien )
-PRIMITIVE: dlclose ( dll -- )
-PRIMITIVE: (dlsym-raw) ( name dll -- alien )
+PRIMITIVE: dll-valid? ( dll -- ? ) ;
+PRIMITIVE: (dlopen) ( path -- dll ) ;
+PRIMITIVE: (dlsym) ( name dll -- alien ) ;
+PRIMITIVE: dlclose ( dll -- ) ;
+PRIMITIVE: (dlsym-raw) ( name dll -- alien ) ;
 
 : dlopen ( path -- dll ) native-string>alien (dlopen) ;
 

@@ -7,8 +7,8 @@ sequences sequences.generalizations sets sorting ;
 IN: tools.profiler.sampling
 
 <PRIVATE
-PRIMITIVE: (get-samples) ( -- samples/f )
-PRIMITIVE: profiling ( ? -- )
+PRIMITIVE: (get-samples) ( -- samples/f ) ;
+PRIMITIVE: profiling ( ? -- ) ;
 PRIVATE>
 
 SYMBOL: samples-per-second

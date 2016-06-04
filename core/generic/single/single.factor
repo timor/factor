@@ -7,11 +7,11 @@ sequences words ;
 in: generic.single
 
 <PRIVATE
-PRIMITIVE: inline-cache-miss ( generic methods index cache -- )
-PRIMITIVE: inline-cache-miss-tail ( generic methods index cache -- )
-PRIMITIVE: lookup-method ( object methods -- method )
-PRIMITIVE: mega-cache-lookup ( methods index cache -- )
-PRIMITIVE: mega-cache-miss ( methods index cache -- method )
+PRIMITIVE: inline-cache-miss ( generic methods index cache -- ) ;
+PRIMITIVE: inline-cache-miss-tail ( generic methods index cache -- ) ;
+PRIMITIVE: lookup-method ( object methods -- method ) ;
+PRIMITIVE: mega-cache-lookup ( methods index cache -- ) ;
+PRIMITIVE: mega-cache-miss ( methods index cache -- method ) ;
 PRIVATE>
 
 ERROR: no-method object generic ;

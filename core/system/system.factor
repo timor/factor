@@ -4,8 +4,8 @@ USING: assocs continuations init io kernel kernel.private make
 math math.parser namespaces sequences ;
 in: system
 
-PRIMITIVE: (exit) ( n -- * )
-PRIMITIVE: nano-count ( -- ns )
+PRIMITIVE: (exit) ( n -- * ) ;
+PRIMITIVE: nano-count ( -- ns ) ;
 
 SINGLETONS: x86.32 x86.64 arm ppc.32 ppc.64 ;
 

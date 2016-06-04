@@ -6,7 +6,7 @@ strings strings.private ;
 in: math.parser
 
 <PRIVATE
-PRIMITIVE: (format-float) ( n fill width precision format locale -- byte-array )
+PRIMITIVE: (format-float) ( n fill width precision format locale -- byte-array ) ;
 PRIVATE>
 
 : digit> ( ch -- n )

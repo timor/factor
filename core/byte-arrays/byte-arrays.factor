@@ -7,9 +7,9 @@ in: byte-arrays
 BUILTIN: byte-array
 { length array-capacity read-only initial: 0 } ;
 
-PRIMITIVE: (byte-array) ( n -- byte-array )
-PRIMITIVE: <byte-array> ( n -- byte-array )
-PRIMITIVE: resize-byte-array ( n byte-array -- new-byte-array )
+PRIMITIVE: (byte-array) ( n -- byte-array ) ;
+PRIMITIVE: <byte-array> ( n -- byte-array ) ;
+PRIMITIVE: resize-byte-array ( n byte-array -- new-byte-array ) ;
 
 M: byte-array clone (clone) ; inline
 M: byte-array clone-like

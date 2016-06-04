@@ -60,7 +60,7 @@ in: bootstrap.syntax
 
     "PRIMITIVE:" [
         current-vocab name>>
-        scan-word scan-effect ensure-primitive
+        scan-word scan-effect ";" expect ensure-primitive
     ] define-core-syntax
 
     "CS{" [

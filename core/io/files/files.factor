@@ -6,7 +6,7 @@ kernel kernel.private namespaces sequences splitting system ;
 in: io.files
 
 <PRIVATE
-PRIMITIVE: (exists?) ( path -- ? )
+PRIMITIVE: (exists?) ( path -- ? ) ;
 PRIVATE>
 
 symbol: +retry+ ! just try the operation again without blocking

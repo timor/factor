@@ -8,8 +8,8 @@ sequences sequences.private slots slots.private strings words ;
 in: classes.tuple
 
 <PRIVATE
-PRIMITIVE: <tuple> ( layout -- tuple )
-PRIMITIVE: <tuple-boa> ( slots... layout -- tuple )
+PRIMITIVE: <tuple> ( layout -- tuple ) ;
+PRIMITIVE: <tuple-boa> ( slots... layout -- tuple ) ;
 PRIVATE>
 
 PREDICATE: tuple-class < class

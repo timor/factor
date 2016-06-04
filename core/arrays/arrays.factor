@@ -5,8 +5,8 @@ in: arrays
 
 BUILTIN: array { length array-capacity read-only initial: 0 } ;
 
-PRIMITIVE: <array> ( n elt -- array )
-PRIMITIVE: resize-array ( n array -- new-array )
+PRIMITIVE: <array> ( n elt -- array ) ;
+PRIMITIVE: resize-array ( n array -- new-array ) ;
 
 M: array clone (clone) ; inline
 M: array length length>> ; inline

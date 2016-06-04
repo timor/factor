@@ -5,15 +5,15 @@ destructors io io.backend io.encodings.utf8 io.files kernel
 kernel.private math sequences threads.private ;
 in: io.streams.c
 
-PRIMITIVE: (fopen) ( path mode -- alien )
-PRIMITIVE: fclose ( alien -- )
-PRIMITIVE: fflush ( alien -- )
-PRIMITIVE: fgetc ( alien -- byte/f )
-PRIMITIVE: fputc ( byte alien -- )
-PRIMITIVE: fread-unsafe ( n buf alien -- count )
-PRIMITIVE: fseek ( alien offset whence -- )
-PRIMITIVE: ftell ( alien -- n )
-PRIMITIVE: fwrite ( data length alien -- )
+PRIMITIVE: (fopen) ( path mode -- alien ) ;
+PRIMITIVE: fclose ( alien -- ) ;
+PRIMITIVE: fflush ( alien -- ) ;
+PRIMITIVE: fgetc ( alien -- byte/f ) ;
+PRIMITIVE: fputc ( byte alien -- ) ;
+PRIMITIVE: fread-unsafe ( n buf alien -- count ) ;
+PRIMITIVE: fseek ( alien offset whence -- ) ;
+PRIMITIVE: ftell ( alien -- n ) ;
+PRIMITIVE: fwrite ( data length alien -- ) ;
 
 TUPLE: c-stream < disposable handle ;
 
