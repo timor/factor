@@ -19,7 +19,7 @@ TUPLE: hello length ;
 [ "xyz" 4 >>length ] [ no-method? ] must-fail-with
 
 ! Test protocol slots
-SLOT: my-protocol-slot-test
+slot: my-protocol-slot-test
 
 TUPLE: protocol-slot-test-tuple x ;
 

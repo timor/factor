@@ -36,7 +36,7 @@ INSTANCE: interactor input-stream
         [ thread>> dup [ thread-registered? ] when ]
     } 1&& not ;
 
-SLOT: manifest
+slot: manifest
 
 M: interactor manifest>>
     dup interactor-busy? [ drop f ] [

@@ -145,7 +145,7 @@ PROTOCOL: silly-protocol do-me ;
 
 ! A slot protocol issue
 defer: slot-protocol-test-3
-SLOT: y
+slot: y
 
 { f } [ \ slot-protocol-test-3 \ y>> ?lookup-method >boolean ] unit-test
 

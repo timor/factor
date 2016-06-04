@@ -14,8 +14,8 @@ ui.tools.listener.popups vocabs words ;
 in: ui.tools.listener.completion
 
 ! We don't directly depend on the listener tool but we use a few slots
-SLOT: interactor
-SLOT: history
+slot: interactor
+slot: history
 
 : history-list ( interactor -- alist )
     history>> elements>>

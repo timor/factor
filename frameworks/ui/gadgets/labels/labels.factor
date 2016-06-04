@@ -9,7 +9,7 @@ in: ui.gadgets.labels
 ! A label gadget draws a string.
 TUPLE: label < aligned-gadget text font ;
 
-SLOT: string
+slot: string
 
 M: label string>> ( label -- string )
     text>> dup string? [ "\n" join ] unless ; inline

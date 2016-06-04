@@ -26,7 +26,7 @@ M: tool layout*
     [ [ dim>> ] [ class-of ] bi set-tool-dim ]
     bi ;
 
-SLOT: scroller
+slot: scroller
 
 : com-page-up ( tool -- )
     scroller>> scroll-up-page ;

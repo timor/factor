@@ -631,10 +631,10 @@ M: bogus-hashcode-1 hashcode* 2drop 0 >bignum ;
 { } [ T{ bogus-hashcode-2 f T{ bogus-hashcode-1 } } hashcode drop ] unit-test
 
 defer: change-slot-test
-SLOT: kex
+slot: kex
 
 { } [
-    "in: classes.tuple.tests USING: kernel accessors ; TUPLE: change-slot-test ; SLOT: kex M: change-slot-test kex>> drop 3 ;"
+    "in: classes.tuple.tests USING: kernel accessors ; TUPLE: change-slot-test ; slot: kex M: change-slot-test kex>> drop 3 ;"
     <string-reader> "change-slot-test" parse-stream
     drop
 ] unit-test
@@ -650,7 +650,7 @@ SLOT: kex
 { t } [ \ change-slot-test \ kex>> ?lookup-method >boolean ] unit-test
 
 { } [
-    "in: classes.tuple.tests USING: kernel accessors ; TUPLE: change-slot-test ; SLOT: kex M: change-slot-test kex>> drop 3 ;"
+    "in: classes.tuple.tests USING: kernel accessors ; TUPLE: change-slot-test ; slot: kex M: change-slot-test kex>> drop 3 ;"
     <string-reader> "change-slot-test" parse-stream
     drop
 ] unit-test

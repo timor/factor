@@ -27,7 +27,7 @@ symbol: viewport-translation
     [ clip namespaces:set ] bi
     do-clip ;
 
-SLOT: background-color
+slot: background-color
 
 : gl-init ( -- )
     check-extensions "1.0" require-gl-version

@@ -6,8 +6,8 @@ in: growable
 
 mixin: growable
 
-SLOT: length
-SLOT: underlying
+slot: length
+slot: underlying
 
 M: growable length length>> ; inline
 M: growable nth-unsafe underlying>> nth-unsafe ; inline

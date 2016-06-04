@@ -53,7 +53,7 @@ PRIVATE>
     { T{ drag } [ update-clicked drop ] }
 } set-gestures
 
-SLOT: popup
+slot: popup
 
 <PRIVATE
 

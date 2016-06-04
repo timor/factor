@@ -57,12 +57,12 @@ TUPLE: spidering-site < watching-site max-depth max-count ;
 
 C: <spidering-site> spidering-site
 
-SLOT: site
+slot: site
 
 M: watching-site site>>
     site-id>> site-with-id ;
 
-SLOT: account
+slot: account
 
 M: watching-site account>>
     account-name>> account new swap >>account-name select-tuple ;

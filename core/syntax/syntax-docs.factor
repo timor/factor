@@ -789,8 +789,8 @@ HELP: read-only
 
 { initial: read-only } related-words
 
-HELP: SLOT:
-{ $syntax "SLOT: name" }
+HELP: slot:
+{ $syntax "slot: name" }
 { $values { "name" "a slot name" } }
 { $description "Defines a protocol slot; that is, defines the accessor words for a slot named " { $snippet "slot" } " without associating it with any specific tuple." } ;
 

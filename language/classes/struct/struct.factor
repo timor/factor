@@ -35,7 +35,7 @@ TUPLE: struct-bit-slot-spec < struct-slot-spec
 PREDICATE: struct-class < tuple-class
     superclass-of \ struct eq? ;
 
-SLOT: fields
+slot: fields
 
 : struct-slots ( struct-class -- slots )
     "c-type" word-prop fields>> ;

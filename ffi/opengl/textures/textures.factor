@@ -258,7 +258,7 @@ M: float-11-11-10-components (component-type>type)
 : image-data-format ( component-order component-type -- gl-format gl-type )
     [ (component-order>format) ] [ (component-type>type) ] 2bi ;
 
-SLOT: display-list
+slot: display-list
 
 : draw-texture ( texture -- ) display-list>> [ glCallList ] when* ;
 

@@ -69,7 +69,7 @@ M: local present path>> "Unix domain socket: " prepend ;
 
 M: local protocol drop 0 ;
 
-SLOT: port
+slot: port
 
 TUPLE: ipv4 { host maybe{ string } read-only } ;
 

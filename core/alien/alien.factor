@@ -43,7 +43,7 @@ M: slice >c-ptr
     [ [ from>> ] [ element-size ] bi * ] [ seq>> >c-ptr ] bi
     <displaced-alien> ; inline
 
-SLOT: underlying
+slot: underlying
 
 M: object >c-ptr underlying>> ; inline
 

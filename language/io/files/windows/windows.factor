@@ -12,7 +12,7 @@ windows.time windows.types windows.winsock ;
 SPECIALIZED-ARRAY: ushort
 in: io.files.windows
 
-SLOT: file
+slot: file
 
 : CreateFile-flags ( DWORD -- DWORD )
     flags{ FILE_FLAG_BACKUP_SEMANTICS FILE_FLAG_OVERLAPPED } bitor ;
@@ -281,7 +281,7 @@ SYMBOLS: +read-only+ +hidden+ +system+
 +sparse-file+ +reparse-point+ +compressed+ +offline+
 +not-content-indexed+ +encrypted+ ;
 
-SLOT: attributes
+slot: attributes
 
 : read-only? ( file-info -- ? )
     attributes>> +read-only+ swap member? ;

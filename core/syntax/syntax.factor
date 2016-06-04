@@ -243,7 +243,7 @@ in: bootstrap.syntax
 
     "INSTANCE:" [
         location [
-            scan-word scan-word 2dup add-mixin-instance
+            scan-word scan-word ";" expect 2dup add-mixin-instance
             <mixin-instance>
         ] dip remember-definition
     ] define-core-syntax

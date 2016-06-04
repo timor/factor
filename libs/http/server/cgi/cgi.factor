@@ -59,7 +59,7 @@ in: http.server.cgi
         ] with-stream
     ] >>body ;
 
-SLOT: special
+slot: special
 
 : enable-cgi ( responder -- responder )
     [ serve-cgi ] "application/x-cgi-script"

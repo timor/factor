@@ -39,7 +39,7 @@ links-popup H{
     { T{ key-down f f "ESC" } [ hide-glass ] }
 } set-gestures
 
-SLOT: model
+slot: model
 
 : show-links-popup ( browser-gadget quot title -- )
     [ dup model>> ] 2dip <links-popup>

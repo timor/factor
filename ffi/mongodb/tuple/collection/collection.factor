@@ -20,9 +20,9 @@ FROM: mongodb.tuple => +transient+ +load+ <tuple-index> ;
 
 mixin: mdb-persistent
 
-SLOT: id
-SLOT: _id
-SLOT: _mfd
+slot: id
+slot: _id
+slot: _mfd
 
 <PRIVATE
 

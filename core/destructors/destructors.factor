@@ -12,7 +12,7 @@ symbol: debug-leaks?
 
 <PRIVATE
 
-SLOT: continuation
+slot: continuation
 
 : register-disposable ( obj -- )
     debug-leaks? get-global [ current-continuation >>continuation ] when
