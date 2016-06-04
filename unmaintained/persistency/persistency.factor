@@ -2,7 +2,7 @@ USING: accessors arrays byte-arrays calendar classes
 classes.tuple classes.tuple.parser combinators db db.queries
 db.tuples db.types kernel math nmake parser sequences strings
 strings.parser unicode urls words ;
-IN: persistency
+in: persistency
 
 TUPLE: persistent id ;
 

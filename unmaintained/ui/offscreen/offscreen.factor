@@ -2,7 +2,7 @@
 USING: accessors alien.c-types continuations images kernel math
 sequences ui.gadgets ui.gadgets.private ui.gadgets.worlds
 ui.private ui ui.backend destructors locals ;
-IN: ui.offscreen
+in: ui.offscreen
 
 TUPLE: offscreen-world < world ;
 

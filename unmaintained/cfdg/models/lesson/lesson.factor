@@ -2,7 +2,7 @@
 USING: kernel namespaces math opengl.gl opengl.glu ui ui.gadgets.slate
        random-weighted cfdg ;
 
-IN: cfdg.models.lesson
+in: cfdg.models.lesson
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -104,5 +104,5 @@ iterate? [
 
 : run ( -- ) [ init ] cfdg-window. ;
 
-MAIN: run
+MAin: run
 

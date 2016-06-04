@@ -23,7 +23,7 @@ HELP: sort-by
     "Sort by slot a, then b descending:"
     { $example
         "USING: accessors math.order prettyprint sorting.slots ;"
-        "IN: scratchpad"
+        "in: scratchpad"
         "TUPLE: sort-me a b ;"
         "{"
         "    T{ sort-me f 2 3 } T{ sort-me f 3 2 }"

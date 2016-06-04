@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io kernel make sequences webapps.mason.version.common
 webapps.mason.version.files ;
-IN: webapps.mason.version.binary
+in: webapps.mason.version.binary
 
 : binary-release-command ( version builder -- command )
     [

@@ -143,7 +143,7 @@ SYNTAX: LOG:
     '[ 1array stack>message _ _ log-message ]
     ( message -- ) define-declared ;
 
-USE: vocabs
+use: vocabs
 
 "logging.parser" require
 "logging.analysis" require

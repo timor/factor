@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 
 USING: kernel sequences assocs namespaces lexer vocabs.parser sandbox ;
-IN: sandbox.syntax
+in: sandbox.syntax
 
 <PRIVATE
 
@@ -19,7 +19,7 @@ SYNTAX: APPLYING: ";" parse-tokens [ sandbox-use+ ] each ;
 
 REVEALING:
     ! !
-    HEX: OCT: BIN: f t CHAR: "
+    HEX: OCT: Bin: f t CHAR: "
     [ { T{
     ] } ;
 

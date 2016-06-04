@@ -7,7 +7,7 @@
 
 USING: alien alien.syntax combinators system ;
 
-IN: pdf.libhpdf
+in: pdf.libhpdf
 
 << "libhpdf" {
     { [ win32? ] [ "libhpdf.dll" stdcall ] }

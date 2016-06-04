@@ -8,7 +8,7 @@ sequences
     tools.test 
     arrays ;
 
-IN: adsoda.tests
+in: adsoda.tests
 
 
 

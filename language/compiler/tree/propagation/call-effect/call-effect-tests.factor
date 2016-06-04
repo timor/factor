@@ -132,7 +132,7 @@ TUPLE: a-tuple x ;
 
 { t } [ test-quotatation cached-effect ( a -- b ) effect<= ] unit-test
 
-{ } [ "in: compiler.tree.propagation.call-effect.tests USE: math : call(-redefine-test ( a b -- c ) + ;" eval( -- ) ] unit-test
+{ } [ "in: compiler.tree.propagation.call-effect.tests use: math : call(-redefine-test ( a b -- c ) + ;" eval( -- ) ] unit-test
 
 { t } [ test-quotatation cached-effect ( a b -- c ) effect<= ] unit-test
 
@@ -140,7 +140,7 @@ TUPLE: a-tuple x ;
 
 { 4 } [ 1 3 test-quotatation inline-cache-invalidation-test ] unit-test
 
-{ } [ "in: compiler.tree.propagation.call-effect.tests USE: math : call(-redefine-test ( a -- c ) 1 + ;" eval( -- ) ] unit-test
+{ } [ "in: compiler.tree.propagation.call-effect.tests use: math : call(-redefine-test ( a -- c ) 1 + ;" eval( -- ) ] unit-test
 
 [ 1 3 test-quotatation inline-cache-invalidation-test ] [ T{ wrong-values f [ call(-redefine-test ] ( a b -- c ) } = ] must-fail-with
 

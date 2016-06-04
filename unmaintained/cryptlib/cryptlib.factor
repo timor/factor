@@ -8,7 +8,7 @@
 USING: cryptlib.libcl kernel hashtables alien math 
 namespaces sequences assocs libc alien.c-types alien.accessors continuations ;
 
-IN: cryptlib
+in: cryptlib
 
 symbol: keyset
 symbol: certificate

@@ -6,7 +6,7 @@ models.range ui.gadgets.sliders ;
 QUALIFIED-WITH: ui.gadgets.sliders slider
 QUALIFIED-WITH: ui.gadgets.tables tbl
 EXCLUDE: ui.gadgets.editors => model-field ;
-IN: ui.gadgets.controls
+in: ui.gadgets.controls
 
 TUPLE: model-btn < button hook value ;
 : <model-btn> ( gadget -- button ) [
@@ -70,10 +70,10 @@ M: model-field output-model model*>> ;
 M: scroller output-model viewport>> children>> first output-model ;
 M: slider output-model model>> range-model ;
 
-IN: accessors
+in: accessors
 M: model-btn text>> children>> first text>> ;
 
-IN: ui.gadgets.controls
+in: ui.gadgets.controls
 
 singleton: gadget-monad
 INSTANCE: gadget-monad monad

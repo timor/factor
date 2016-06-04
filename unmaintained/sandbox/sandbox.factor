@@ -4,7 +4,7 @@
 USING: kernel sequences vectors assocs namespaces parser lexer vocabs
        combinators.short-circuit vocabs.parser ;
 
-IN: sandbox
+in: sandbox
 
 symbol: whitelist
 

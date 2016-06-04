@@ -26,8 +26,8 @@ in: benchmark.ant
 TUPLE: point x y ;
 C: <point> point
 
-! USE: alien.c-types
-! USE: classes.struct
+! use: alien.c-types
+! use: classes.struct
 ! STRUCT: point { x uint } { y uint } ;
 ! : <point> ( x y -- point ) point <struct-boa> ; inline
 

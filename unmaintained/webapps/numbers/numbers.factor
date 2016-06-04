@@ -34,7 +34,7 @@
 USING: kernel math parser html html.elements io namespaces
 math.parser random webapps.continuation ;
 
-IN: webapps.numbers
+in: webapps.numbers
 
 : web-print ( str -- )
   ! Display the string in a web page.

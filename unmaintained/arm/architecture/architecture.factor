@@ -4,7 +4,7 @@ USING: alien alien.c-types arrays cpu.arm.assembler compiler
 kernel kernel.private math namespaces words words.private
 generator.registers generator.fixup generator cpu.architecture
 system layouts ;
-IN: cpu.arm.architecture
+in: cpu.arm.architecture
 
 TUPLE: arm-backend ;
 

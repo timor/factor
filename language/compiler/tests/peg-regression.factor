@@ -20,7 +20,7 @@ EBNF: expr
 pipeline = "hello" => [[ ast>pipeline-expr ]]
 ;EBNF
 
-USE: tools.test
+use: tools.test
 
 [ t ] [ \ expr word-optimized? ] unit-test
 [ t ] [ \ ast>pipeline-expr word-optimized? ] unit-test

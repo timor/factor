@@ -1,6 +1,6 @@
 ! Copyright (C) 2006 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
-IN: jni-internals
+in: jni-internals
 USING: kernel alien arrays sequences ;
 
 LIBRARY: jvm

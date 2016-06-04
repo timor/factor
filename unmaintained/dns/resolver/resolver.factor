@@ -4,7 +4,7 @@ USING: kernel accessors namespaces continuations
        destructors
        locals strings sequences random prettyprint calendar dns dns.misc ;
 
-IN: dns.resolver
+in: dns.resolver
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

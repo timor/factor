@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: smtp namespaces accessors kernel arrays site-watcher.db ;
-IN: site-watcher.email
+in: site-watcher.email
 
 symbol: site-watcher-from
 site-watcher-from [ "factor-site-watcher@gmail.com" ] initialize

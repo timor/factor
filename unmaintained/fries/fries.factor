@@ -4,7 +4,7 @@ strings.parser parser fry sequences.extras ;
 ! a b c glue => acb
 ! c b a [ append ] dip prepend
 
-IN: fries
+in: fries
 : str-fry ( str on -- quot ) split
     [ unclip-last [ [ [ append ] [ prepend ] bi* ] reduce-r ] 2curry ]
     [ length 1 - 1 <effect> [ call-effect ] 2curry ] bi ;

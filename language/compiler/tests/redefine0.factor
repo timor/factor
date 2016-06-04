@@ -26,7 +26,7 @@ in: compiler.tests.redefine0
 
 [ ] [ test-4 ] unit-test
 
-[ ] [ "in: compiler.tests.redefine0 USE: kernel : test-3 ( a -- ) call ; inline" eval( -- ) ] unit-test
+[ ] [ "in: compiler.tests.redefine0 use: kernel : test-3 ( a -- ) call ; inline" eval( -- ) ] unit-test
 
 [ test-4 ] [ not-compiled? ] must-fail-with
 

@@ -8,7 +8,7 @@ in: compiler.tests.redefine9
 
 [ ] [
     "USING: kernel math math.order sorting ;
-    IN: compiler.tests.redefine9
+    in: compiler.tests.redefine9
     mixin: my-mixin
     INSTANCE: fixnum my-mixin
     GENERIC: my-generic ( a -- b ) ;
@@ -19,8 +19,8 @@ in: compiler.tests.redefine9
 ] unit-test
 
 [ ] [
-    "USE: math
-    IN: compiler.tests.redefine9
+    "use: math
+    in: compiler.tests.redefine9
     TUPLE: my-tuple ;
     INSTANCE: my-tuple my-mixin"
     eval( -- )

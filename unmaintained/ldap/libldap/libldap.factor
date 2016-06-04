@@ -7,7 +7,7 @@
 
 USING: alien alien.syntax combinators kernel system ;
 
-IN: ldap.libldap
+in: ldap.libldap
 
 << "libldap" {
     { [ win32? ]  [ "libldap.dll" stdcall ] }

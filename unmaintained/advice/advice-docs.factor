@@ -1,4 +1,4 @@
-IN: advice
+in: advice
 USING: help.markup help.syntax tools.annotations words coroutines ;
 
 HELP: make-advised

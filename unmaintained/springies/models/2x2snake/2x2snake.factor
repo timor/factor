@@ -2,7 +2,7 @@
 USING: kernel namespaces arrays sequences threads math math.vectors
        ui random springies springies.ui ;
 
-IN: springies.models.2x2snake
+in: springies.models.2x2snake
 
 : model ( -- )
 
@@ -220,4 +220,4 @@ each ;
 
 : go ( -- ) [ model ] go* ;
 
-MAIN: go
+MAin: go

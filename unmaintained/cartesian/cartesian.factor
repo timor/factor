@@ -3,7 +3,7 @@ USING: kernel combinators sequences opengl.gl
        ui.render ui.gadgets ui.gadgets.slate
        accessors ;
 
-IN: ui.gadgets.cartesian
+in: ui.gadgets.cartesian
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

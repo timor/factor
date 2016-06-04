@@ -3,7 +3,7 @@
 USING: accessors kernel alien alien.strings alien.syntax
 combinators alien.c-types strings sequences namespaces make
 words math threads io.encodings.ascii ;
-IN: odbc
+in: odbc
 
 << "odbc" "odbc32.dll" stdcall add-library >>
 

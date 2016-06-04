@@ -1,4 +1,4 @@
-IN: opengl.gadgets.tests
+in: opengl.gadgets.tests
 USING: tools.test opengl.gadgets ;
 
 \ render* must-infer

@@ -9,7 +9,7 @@
 
 USING: alien alien.syntax combinators kernel system ;
 
-IN: oracle.liboci
+in: oracle.liboci
 
 "oci" {
     { [ os winnt? ] [ "oci.dll" stdcall ] }

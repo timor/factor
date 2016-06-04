@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel modules.rpc peg peg-lexer peg.ebnf sequences
 strings vocabs.parser ;
-IN: modules.using
+in: modules.using
 
 EBNF: modulize
 tokenpart = (!(':').)+ => [[ >string ]]

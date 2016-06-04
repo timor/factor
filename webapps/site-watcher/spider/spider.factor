@@ -4,7 +4,7 @@ USING: site-watcher.db site-watcher.email site-watcher.spider
 spider spider.report
 accessors kernel sequences
 xml.writer concurrency.combinators ;
-IN: site-watcher.spider
+in: site-watcher.spider
 
 : <site-spider> ( spidering-site -- spider )
     [ max-depth>> ]

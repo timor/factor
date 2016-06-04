@@ -1,5 +1,5 @@
 USING: continuations db db.sqlite http.server io.files kernel namespaces semantic-db tangle tangle.path ;
-IN: tangle.sandbox
+in: tangle.sandbox
 
 : db-path "tangle-sandbox.db" temp-file ;
 : sandbox-db db-path sqlite-db ;

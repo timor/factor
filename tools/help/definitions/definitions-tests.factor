@@ -7,7 +7,7 @@ in: help.definitions.tests
 
 [
     [ 4 ] [
-        "IN: help.definitions.tests USING: help.syntax ; : hello ( -- ) ; HELP: hello \"test\" ; ARTICLE: \"hello\" \"world\" ; ARTICLE: \"hello2\" \"world\" ;" <string-reader> "foo"
+        "in: help.definitions.tests USING: help.syntax ; : hello ( -- ) ; HELP: hello \"test\" ; ARTICLE: \"hello\" \"world\" ; ARTICLE: \"hello2\" \"world\" ;" <string-reader> "foo"
         parse-stream drop
 
         "foo" path>source-file definitions>> first cardinality
@@ -20,7 +20,7 @@ in: help.definitions.tests
     ] unit-test
 
     [ 2 ] [
-        "IN: help.definitions.tests USING: help.syntax ; : hello ( -- ) ; ARTICLE: \"hello\" \"world\" ;" <string-reader> "foo"
+        "in: help.definitions.tests USING: help.syntax ; : hello ( -- ) ; ARTICLE: \"hello\" \"world\" ;" <string-reader> "foo"
         parse-stream drop
 
         "foo" path>source-file definitions>> first cardinality
@@ -32,7 +32,7 @@ in: help.definitions.tests
         "hello" "help.definitions.tests" lookup-word "help" word-prop
     ] unit-test
 
-    [ ] [ "IN: help.definitions.tests USING: help.syntax ; : xxx ( -- ) ; HELP: xxx ;" eval( -- ) ] unit-test
+    [ ] [ "in: help.definitions.tests USING: help.syntax ; : xxx ( -- ) ; HELP: xxx ;" eval( -- ) ] unit-test
 
     [ ] [ "xxx" "help.definitions.tests" lookup-word print-topic ] unit-test
 

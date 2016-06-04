@@ -21,7 +21,7 @@ SPECIALIZED-ARRAY: ulong
 SPECIALIZED-ARRAY: ulonglong
 SPECIALIZED-ARRAY: ushort
 SPECIALIZED-ARRAY: void*
-IN: alien.marshall
+in: alien.marshall
 
 << primitive-types [ [ void* = ] [ bool = ] bi or not ]
 filter [ define-primitive-marshallers ] each >>
@@ -30,7 +30,7 @@ TUPLE: alien-wrapper { underlying alien } ;
 TUPLE: struct-wrapper < alien-wrapper disposed ;
 TUPLE: class-wrapper < alien-wrapper disposed ;
 
-MIXIN: c++-root
+mixin: c++-root
 
 GENERIC: unmarshall-cast ( alien-wrapper -- alien-wrapper' )
 

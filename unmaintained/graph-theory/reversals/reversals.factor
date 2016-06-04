@@ -3,7 +3,7 @@
 
 USING: accessors kernel graph-theory ;
 
-IN: graph-theory.reversals
+in: graph-theory.reversals
 
 TUPLE: reversal graph ;
 

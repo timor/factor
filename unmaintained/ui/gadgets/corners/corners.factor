@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel namespaces sequences ui.gadgets.frames
 ui.gadgets.grids ui.gadgets.icons ui.gadgets.theme ;
-IN: ui.gadgets.corners
+in: ui.gadgets.corners
 
 CONSTANT: @center { 1 1 }
 CONSTANT: @left { 0 1 }

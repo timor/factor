@@ -4,7 +4,7 @@ USING: accessors arrays assocs db.tuples furnace.actions
 furnace.utilities html.forms kernel mason.config namespaces
 sequences urls validators webapps.mason.backend
 webapps.mason.version.data xml.syntax ;
-IN: webapps.mason.utils
+in: webapps.mason.utils
 
 : link ( url label -- xml )
     [XML <a href=<->><-></a> XML] ;

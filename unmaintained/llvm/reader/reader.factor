@@ -4,7 +4,7 @@ USING: accessors alien.c-types alien.data alien.syntax
 destructors kernel llvm.core llvm.engine llvm.jit llvm.wrappers
 ;
 
-IN: llvm.reader
+in: llvm.reader
 
 : buffer>module ( buffer -- module )
     [

@@ -1,6 +1,6 @@
 USING: macros quotations math math.functions math.trig 
 sequences.deep kernel make fry combinators grouping ;
-IN: 4DNav.deep
+in: 4DNav.deep
 
 ! USING: bake ;
 ! MACRO: deep-cleave-quots ( seq -- quot )

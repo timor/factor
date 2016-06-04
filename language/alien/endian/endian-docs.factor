@@ -9,7 +9,7 @@ HELP: BE-PACKED-STRUCT:
 { $unchecked-example
     "! When run on a big-endian platform, this struct should prettyprint the same as defined"
     "! The output of this example is from a little-endian platform"
-    "USE: alien.endian"
+    "use: alien.endian"
     "BE-PACKED-STRUCT: s1 { a char[7] } { b int } ;"
     "\\ s1 see"
     "USING: alien.c-types alien.endian classes.struct ;
@@ -22,7 +22,7 @@ HELP: BE-STRUCT:
 { $unchecked-example
     "! When run on a big-endian platform, this struct should prettyprint the same as defined"
     "! The output of this example is from a little-endian platform"
-    "USE: alien.endian"
+    "use: alien.endian"
     "BE-STRUCT: s1 { a int } { b le32 } ;"
     "\\ s1 see"
     "USING: alien.c-types alien.endian classes.struct ;
@@ -35,7 +35,7 @@ HELP: LE-PACKED-STRUCT:
 { $unchecked-example
     "! When run on a little-endian platform, this struct should prettyprint the same as defined"
     "! The output of this example is from a little-endian platform"
-    "USE: alien.endian"
+    "use: alien.endian"
     "LE-PACKED-STRUCT: s1 { a char[7] } { b int } ;"
     "\\ s1 see"
     "USING: alien.c-types alien.endian classes.struct ;
@@ -48,7 +48,7 @@ HELP: LE-STRUCT:
 { $unchecked-example
     "! When run on a little-endian platform, this struct should prettyprint the same as defined"
     "! The output of this example is from a little-endian platform"
-    "USE: alien.endian"
+    "use: alien.endian"
     "LE-STRUCT: s1 { a int } { b be32 } ;"
     "\\ s1 see"
     "USING: alien.c-types alien.endian classes.struct ;
@@ -141,10 +141,10 @@ ARTICLE: "alien.endian" "Alien endian-aware types"
 }
 "Syntax for making endian-aware structs out of native types:"
 { $subsections
-    POSTPONE: LE-STRUCT:
-    POSTPONE: BE-STRUCT:
-    POSTPONE: LE-PACKED-STRUCT:
-    POSTPONE: BE-PACKED-STRUCT:
+    postpone: LE-STRUCT:
+    postpone: BE-STRUCT:
+    postpone: LE-PACKED-STRUCT:
+    postpone: BE-PACKED-STRUCT:
 } ;
 
 ABOUT: "alien.endian"

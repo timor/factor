@@ -3,17 +3,17 @@
 USING: help.markup help.syntax kernel quotations words
 alien.inline alien.syntax effects alien.marshall
 alien.marshall.structs strings sequences alien.inline.syntax ;
-IN: alien.marshall.syntax
+in: alien.marshall.syntax
 
 HELP: CM-FUNCTION:
 { $syntax "CM-FUNCTION: return name args\n    body\n;" }
-{ $description "Like " { $link POSTPONE: C-FUNCTION: } " but with marshalling "
+{ $description "Like " { $link postpone: C-FUNCTION: } " but with marshalling "
     "of arguments and return values."
 }
 { $examples
   { $example
     "USING: alien.inline.syntax alien.marshall.syntax prettyprint ;"
-    "IN: example"
+    "in: example"
     ""
     "C-LIBRARY: exlib"
     ""
@@ -33,28 +33,28 @@ HELP: CM-FUNCTION:
     "3\n13\n\"sum 13, diff 3\""
   }
 }
-{ $see-also define-c-marshalled POSTPONE: C-FUNCTION: POSTPONE: M-FUNCTION: } ;
+{ $see-also define-c-marshalled postpone: C-FUNCTION: postpone: M-FUNCTION: } ;
 
 HELP: CM-STRUCTURE:
 { $syntax "CM-STRUCTURE: name fields ... ;" }
-{ $description "Like " { $link POSTPONE: C-STRUCTURE: } " but with marshalling of fields. "
+{ $description "Like " { $link postpone: C-STRUCTURE: } " but with marshalling of fields. "
     "Defines a subclass of " { $link struct-wrapper } " a constructor, and slot-like accessor words."
 }
-{ $see-also POSTPONE: C-STRUCTURE: POSTPONE: M-STRUCTURE: } ;
+{ $see-also postpone: C-STRUCTURE: postpone: M-STRUCTURE: } ;
 
 HELP: M-FUNCTION:
 { $syntax "M-FUNCTION: return name args ;" }
-{ $description "Like " { $link POSTPONE: FUNCTION: } " but with marshalling "
+{ $description "Like " { $link postpone: FUNCTION: } " but with marshalling "
     "of arguments and return values."
 }
-{ $see-also marshalled-function POSTPONE: C-FUNCTION: POSTPONE: CM-FUNCTION: } ;
+{ $see-also marshalled-function postpone: C-FUNCTION: postpone: CM-FUNCTION: } ;
 
 HELP: M-STRUCTURE:
 { $syntax "M-STRUCTURE: name fields ... ;" }
-{ $description "Like " { $link POSTPONE: C-STRUCT: } " but with marshalling of fields. "
+{ $description "Like " { $link postpone: C-STRUCT: } " but with marshalling of fields. "
     "Defines a subclass of " { $link struct-wrapper } " a constructor, and slot-like accessor words."
 }
-{ $see-also define-marshalled-struct POSTPONE: C-STRUCTURE: POSTPONE: CM-STRUCTURE: } ;
+{ $see-also define-marshalled-struct postpone: C-STRUCTURE: postpone: CM-STRUCTURE: } ;
 
 HELP: define-c-marshalled
 { $values

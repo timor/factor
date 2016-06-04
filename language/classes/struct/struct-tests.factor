@@ -132,7 +132,7 @@ STRUCT: struct-test-bar
     [ make-mirror clear-assoc ] keep
 ] unit-test
 
-{ POSTPONE: STRUCT: }
+{ postpone: STRUCT: }
 [ struct-test-foo struct-definer-word ] unit-test
 
 UNION-STRUCT: struct-test-float-and-bits
@@ -144,7 +144,7 @@ UNION-STRUCT: struct-test-float-and-bits
 
 { 123 } [ [ struct-test-foo malloc-struct &free y>> ] with-destructors ] unit-test
 
-{ POSTPONE: UNION-STRUCT: }
+{ postpone: UNION-STRUCT: }
 [ struct-test-float-and-bits struct-definer-word ] unit-test
 
 STRUCT: struct-test-string-ptr
@@ -332,7 +332,7 @@ STRUCT: struct-that's-a-word { x int } ;
 
 ! Interactive parsing of struct slot definitions
 [
-    "USE: classes.struct in: classes.struct.tests STRUCT: unexpected-eof-test" <string-reader>
+    "use: classes.struct in: classes.struct.tests STRUCT: unexpected-eof-test" <string-reader>
     "struct-class-test-1" parse-stream
 ] [ error>> error>> unexpected-eof? ] must-fail-with
 
@@ -346,7 +346,7 @@ STRUCT: struct-that's-a-word { x int } ;
 
 ! S{ with non-struct type
 [
-    "USE: classes.struct in: classes.struct.tests TUPLE: not-a-struct ; S{ not-a-struct }"
+    "use: classes.struct in: classes.struct.tests TUPLE: not-a-struct ; S{ not-a-struct }"
     eval( -- value )
 ] [ error>> no-method? ] must-fail-with
 
@@ -491,7 +491,7 @@ PACKED-STRUCT: packed-struct-test
 { 10 } [ "g" packed-struct-test offset-of ] unit-test
 { 11 } [ "h" packed-struct-test offset-of ] unit-test
 
-{ POSTPONE: PACKED-STRUCT: }
+{ postpone: PACKED-STRUCT: }
 [ packed-struct-test struct-definer-word ] unit-test
 
 STRUCT: struct-1 { a c:int } ;

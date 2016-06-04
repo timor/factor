@@ -1,6 +1,6 @@
 USING: kernel namespaces system io.files io.pathnames io.directories
 bootstrap.image http.client update update.backup update.util ;
-IN: update.latest
+in: update.latest
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -48,4 +48,4 @@ IN: update.latest
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-MAIN: update-latest
+MAin: update-latest

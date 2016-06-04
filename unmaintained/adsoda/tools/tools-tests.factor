@@ -5,7 +5,7 @@ adsoda.tools
 tools.test
 ;
 
-IN: adsoda.tools.tests
+in: adsoda.tools.tests
 
 
  [ { 1 0 } ] [ { { 0 0 } { 0 1 } }  normal-vector    ] unit-test

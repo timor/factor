@@ -3,7 +3,7 @@
 USING: kernel sequences fry words assocs linked-assocs tools.annotations
 coroutines lexer parser quotations arrays namespaces continuations
 summary ;
-IN: advice
+in: advice
 
 SYMBOLS: before after around advised in-advice? ;
 

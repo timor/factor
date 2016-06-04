@@ -4,7 +4,7 @@
 USING: alien alien.c-types alien.libraries alien.syntax
 combinators kernel sequences system ;
 
-IN: llvm.core
+in: llvm.core
 
 <<
 : add-llvm-library ( name -- )

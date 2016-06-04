@@ -17,7 +17,7 @@ CONSTANT: tc-lisp-slides
     }
     { $slide "First, some examples"
         { $code "3 weeks ago noon monday ." }
-        { $code "USE: roman 2009 >roman ." }
+        { $code "use: roman 2009 >roman ." }
         { $code ": average ( seq -- x )
     [ sum ] [ length ] bi / ;" }
         { $code "1 miles [ km ] undo >float ." }
@@ -78,11 +78,11 @@ CONSTANT: tc-lisp-slides
     }
     { $slide "Object system"
         "Based on CLOS"
-        { "We define generic words that operate on the top of the stack with " { $link POSTPONE: GENERIC:  } " or on an implicit parameter with " { $link POSTPONE: HOOK: } }
+        { "We define generic words that operate on the top of the stack with " { $link postpone: GENERIC:  } " or on an implicit parameter with " { $link postpone: HOOK: } }
     }
     { $slide "Object system example: shape protocol"
         "In ~/factor/work/shapes/shapes.factor"
-        { $code "IN: shapes
+        { $code "in: shapes
 
 GENERIC: area ( shape -- x ) ;
 GENERIC: perimeter ( shape -- x ) ;"

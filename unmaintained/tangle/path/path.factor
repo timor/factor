@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Alex Chapman
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel semantic-db sequences sequences.lib splitting ;
-IN: tangle.path
+in: tangle.path
 
 RELATION: has-filename
 RELATION: in-directory

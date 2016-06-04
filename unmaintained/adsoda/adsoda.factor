@@ -35,7 +35,7 @@ values
 tools.walker
 ;
 
-IN: adsoda
+in: adsoda
 
 DEFER: combinations
 VAR: pv

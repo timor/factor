@@ -56,7 +56,7 @@ QUALIFIED-WITH: ui.pens.solid s
 QUALIFIED-WITH: ui.gadgets.wrappers w
 
 
-IN: 4DNav
+in: 4DNav
 VALUE: selected-file
 VALUE: translation-step
 VALUE: rotation-step
@@ -562,6 +562,6 @@ M: space adsoda-display-model
     windows
 ;
 
-MAIN: 4DNav
+MAin: 4DNav
 
 

@@ -1,5 +1,5 @@
 USING: tools.test peg-lexer.test-parsers ;
-IN: peg-lexer.tests
+in: peg-lexer.tests
 
 { V{ "1234" "-end" } } [
    test1 1234-end

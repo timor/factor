@@ -197,7 +197,7 @@ in: peg.tests
 
 { f } [ \ + T{ parser f f f } equal? ] unit-test
 
-USE: compiler
+use: compiler
 
 { } [ disable-optimizer ] unit-test
 

@@ -2,7 +2,7 @@
 USING: kernel namespaces arrays sequences threads math ui random fry
        springies springies.ui ;
 
-IN: springies.models.3snake
+in: springies.models.3snake
 
 : random-range ( a b -- n ) 1+ over - random + ;
 
@@ -167,4 +167,4 @@ times
 
 : go ( -- ) [ model ] go* ;
 
-MAIN: go
+MAin: go

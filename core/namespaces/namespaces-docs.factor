@@ -110,7 +110,7 @@ HELP: +@
 { $description "Adds " { $snippet "n" } " to the value of the variable. A variable value of " { $link f } " is interpreted as being zero." }
 { $side-effects "variable" }
 { $examples
-    { $example "USING: namespaces prettyprint ;" "IN: scratchpad" "symbol: foo\n1 foo +@\n10 foo +@\nfoo get ." "11" }
+    { $example "USING: namespaces prettyprint ;" "in: scratchpad" "symbol: foo\n1 foo +@\n10 foo +@\nfoo get ." "11" }
 } ;
 
 HELP: inc
@@ -133,7 +133,7 @@ HELP: with-scope
 { $values { "quot" quotation } }
 { $description "Calls the quotation in a new namespace. Any variables set by the quotation are discarded when it returns." }
 { $examples
-    { $example "USING: math namespaces prettyprint ;" "IN: scratchpad" "symbol: x" "0 x set" "[ x [ 5 + ] change x get . ] with-scope x get ." "5\n0" }
+    { $example "USING: math namespaces prettyprint ;" "in: scratchpad" "symbol: x" "0 x set" "[ x [ 5 + ] change x get . ] with-scope x get ." "5\n0" }
 } ;
 
 HELP: with-variable

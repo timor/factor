@@ -2,7 +2,7 @@
 USING: kernel namespaces math random opengl.gl opengl.glu ui ui.gadgets.slate
        random-weighted cfdg ;
 
-IN: cfdg.models.aqua-star
+in: cfdg.models.aqua-star
 
 : tentacle ( -- )
 iterate? [
@@ -33,4 +33,4 @@ iterate? [
 
 : run ( -- ) [ init ] cfdg-window. ;
 
-MAIN: run
+MAin: run

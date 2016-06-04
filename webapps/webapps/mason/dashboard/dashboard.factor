@@ -3,7 +3,7 @@
 USING: accessors combinators kernel furnace.actions html.forms
 sequences sorting xml.syntax webapps.mason.backend
 webapps.mason.utils ;
-IN: webapps.mason.downloads
+in: webapps.mason.downloads
 
 CONSTANT: CRASHED
 [XML <span style="background-color: yellow;">CRASHED</span> XML]

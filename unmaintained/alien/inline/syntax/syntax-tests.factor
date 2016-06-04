@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.inline alien.inline.syntax io.directories io.files
 kernel namespaces tools.test alien.c-types alien.data alien.structs ;
-IN: alien.inline.syntax.tests
+in: alien.inline.syntax.tests
 
 DELETE-C-LIBRARY: test
 C-LIBRARY: test

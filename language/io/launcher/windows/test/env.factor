@@ -1,5 +1,5 @@
-USE: system
-USE: prettyprint
-USE: prettyprint.config
-USE: environment
+use: system
+use: prettyprint
+use: prettyprint.config
+use: environment
 os-envs [ . ] without-limits

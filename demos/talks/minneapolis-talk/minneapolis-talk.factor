@@ -80,7 +80,7 @@ CONSTANT: minneapolis-slides
     STRIP-TEASE:
         $slide "An example"
         { $code
-            "USE: math.constants"
+            "use: math.constants"
             "GENERIC: area ( shape -- meters^2 ) ;"
             "M: square area square-dimension sq ;"
             "M: circle area circle-radius sq pi * ;"
@@ -110,14 +110,14 @@ CONSTANT: minneapolis-slides
         "Let's profile it!"
     }
     { $slide "Memoization"
-        { { $link POSTPONE: : } " is just another word" }
+        { { $link postpone: : } " is just another word" }
         "What if we could define a word which caches its results?"
         { "The " { $vocab-link "memoize" } " library provides such a feature" }
-        { "Just change " { $link POSTPONE: : } " to " { $link POSTPONE: MEMO: } }
+        { "Just change " { $link postpone: : } " to " { $link postpone: MEMO: } }
     }
     { $slide "Memoization"
         { $code
-            "USE: memoize"
+            "use: memoize"
             ""
             "MEMO: fib ( x -- y )"
             "    dup 1 > ["

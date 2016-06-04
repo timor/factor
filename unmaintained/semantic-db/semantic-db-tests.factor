@@ -1,7 +1,7 @@
 USING: accessors arrays continuations db db.sqlite db.tuples io.files
 kernel math namespaces semantic-db sequences sorting tools.test
 tools.walker ;
-IN: semantic-db.tests
+in: semantic-db.tests
 
 symbol: context
 

@@ -2,7 +2,7 @@
 USING: accessors effects.parser kernel lexer multi-methods
        parser sequences words ;
 
-IN: multi-method-syntax
+in: multi-method-syntax
 
 ! A nicer specializer syntax to hold us over till multi-methods go in
 ! officially.

@@ -10,7 +10,7 @@ SYNTAX: hello "Hi" print ;
 
 [
     [ [ ] ] [
-        "USE: listener.tests hello" parse-interactive
+        "use: listener.tests hello" parse-interactive
     ] unit-test
 ] with-file-vocabs
 
@@ -23,7 +23,7 @@ SYNTAX: hello "Hi" print ;
                 "\\ + 1 2 3 4" parse-interactive
                 "cont" get continue-with
             ] ignore-errors
-            "USE: debugger :1" eval( -- quot )
+            "use: debugger :1" eval( -- quot )
         ] callcc1
     ] unit-test
 ] with-file-vocabs
@@ -36,7 +36,7 @@ SYNTAX: hello "Hi" print ;
 
 [
     [
-        "USE: vocabs.loader.test.c" parse-interactive
+        "use: vocabs.loader.test.c" parse-interactive
     ] must-fail
 ] with-file-vocabs
 
@@ -48,7 +48,7 @@ SYNTAX: hello "Hi" print ;
 
 [
     [ ] [
-        "IN: listener.tests : hello ( -- string )\n\"world\" ;" parse-interactive
+        "in: listener.tests : hello ( -- string )\n\"world\" ;" parse-interactive
         drop
     ] unit-test
 ] with-file-vocabs

@@ -226,12 +226,12 @@ SYMBOLS: out-path err-path ;
 
 [ "in: scratchpad " ] [
     console-vm-path "-run=listener" 2array
-    ascii [ "USE: system 0 exit" print flush lines last ] with-process-stream
+    ascii [ "use: system 0 exit" print flush lines last ] with-process-stream
 ] unit-test
 
 [ ] [
     console-vm-path "-run=listener" 2array
-    ascii [ "USE: system 0 exit" print ] with-process-writer
+    ascii [ "use: system 0 exit" print ] with-process-writer
 ] unit-test
 
 [ ] [

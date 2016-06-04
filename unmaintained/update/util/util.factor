@@ -10,7 +10,7 @@ USING: kernel classes strings quotations words math math.parser arrays
        calendar
        calendar.format ;
 
-IN: update.util
+in: update.util
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

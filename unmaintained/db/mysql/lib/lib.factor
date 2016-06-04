@@ -4,7 +4,7 @@
 ! Tested with MySQL version - 5.0.24a
 USING: kernel alien io prettyprint sequences
 namespaces arrays math db.mysql.ffi system accessors ;
-IN: db.mysql.lib
+in: db.mysql.lib
 
 symbol: my-conn
 

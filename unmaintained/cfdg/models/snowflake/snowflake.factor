@@ -2,7 +2,7 @@
 USING: kernel namespaces math opengl.gl opengl.glu ui ui.gadgets.slate
        random-weighted cfdg ;
 
-IN: cfdg.models.snowflake
+in: cfdg.models.snowflake
 
 : spike ( -- )
 iterate? [
@@ -33,5 +33,5 @@ spike
 
 : run ( -- ) [ init ] cfdg-window. ;
 
-MAIN: run
+MAin: run
 

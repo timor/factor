@@ -5,7 +5,7 @@ alien.inline.types classes.mixin classes.tuple kernel namespaces
 assocs sequences parser classes.parser alien.marshall.syntax
 interpolate locals effects io strings make vocabs.parser words
 generic fry quotations ;
-IN: alien.cxx
+in: alien.cxx
 
 <PRIVATE
 : class-mixin ( str -- word )

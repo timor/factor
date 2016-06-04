@@ -5,7 +5,7 @@ io kernel linked-assocs locals math math.parser mongodb.cmd
 mongodb.connection mongodb.driver mongodb.msg namespaces
 sequences splitting strings ;
 FROM: mongodb.driver => update ;
-IN: mongodb.gridfs
+in: mongodb.gridfs
 
 CONSTANT: default-chunk-size 262144
 

@@ -4,7 +4,7 @@ sequences.extras models.combinators ui.gadgets
 ui.gadgets.tracks words ui.gadgets.controls ;
 QUALIFIED: make
 QUALIFIED-WITH: ui.gadgets.books book
-IN: ui.gadgets.layout
+in: ui.gadgets.layout
 
 symbol: templates
 TUPLE: layout gadget size ; C: <layout> layout

@@ -56,7 +56,7 @@ ARTICLE: "concurrency-synchronous-sends" "Synchronous sends"
 "An example:"
 { $example
     "USING: concurrency.messaging threads ;"
-    "IN: scratchpad"
+    "in: scratchpad"
     ": pong-server ( -- )"
     "    receive [ \"pong\" ] dip reply-synchronous ;"
     "[ pong-server t ] \"pong-server\" spawn-server"

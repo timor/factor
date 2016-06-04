@@ -18,7 +18,7 @@ models
 prettyprint
 ;
 
-IN: 4DNav.window3D
+in: 4DNav.window3D
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! drawing functions 

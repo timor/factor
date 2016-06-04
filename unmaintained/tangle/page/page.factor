@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Alex Chapman
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel semantic-db sequences sequences.lib ;
-IN: tangle.page
+in: tangle.page
 
 RELATION: has-abbreviation
 RELATION: has-content

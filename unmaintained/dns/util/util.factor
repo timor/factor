@@ -1,7 +1,7 @@
 
 USING: kernel sequences sorting math math.order macros fry ;
 
-IN: dns.util
+in: dns.util
 
 : tri-chain ( obj p q r -- x y z )
   [ [ call dup ] dip call dup ] dip call ; inline

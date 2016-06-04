@@ -2,7 +2,7 @@
 USING: kernel namespaces math opengl.gl opengl.glu ui ui.gadgets.slate
        random-weighted cfdg ;
 
-IN: cfdg.models.sierpinski
+in: cfdg.models.sierpinski
 
 : shape ( -- ) circle ;
 
@@ -34,4 +34,4 @@ iterate? [
 
 : run ( -- ) [ init ] cfdg-window. ;
 
-MAIN: run
+MAin: run

@@ -218,6 +218,6 @@ PRIVATE>
 
 SYNTAX: R/ parse-regexp ;
 
-USE: vocabs.loader
+use: vocabs.loader
 
 { "prettyprint" "regexp" } "regexp.prettyprint" require-when

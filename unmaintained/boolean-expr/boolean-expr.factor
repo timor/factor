@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays classes kernel sequences sets
 io prettyprint multi-methods ;
-IN: boolean-expr
+in: boolean-expr
 
 ! Demonstrates the use of Unicode symbols in source files, and
 ! multi-method dispatch.

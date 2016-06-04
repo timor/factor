@@ -6,7 +6,7 @@ ARTICLE: "editor" "Editor integration"
 "Factor development is best done with one of the supported editors; this allows you to quickly jump to definitions from the Factor environment."
 { $subsections edit }
 "Depending on the editor you are using, you must load one of the child vocabularies of the " { $vocab-link "editors" } " vocabulary, for example " { $vocab-link "editors.emacs" } ":"
-{ $code "USE: editors.emacs" }
+{ $code "use: editors.emacs" }
 "If you intend to always use the same editor, it helps to have it load during stage 2 bootstrap. Place the code to load and possibly configure it in the " { $link ".factor-boot-rc" } "."
 $nl
 "Editor integration vocabularies store a class or tuple in a global variable when loaded:"

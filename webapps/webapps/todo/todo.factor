@@ -5,7 +5,7 @@ hashtables urls html.forms html.components html.templates.chloe http.server
 http.server.dispatchers furnace furnace.boilerplate furnace.auth
 furnace.actions furnace.redirection furnace.db furnace.auth.login
 webapps.utils ;
-IN: webapps.todo
+in: webapps.todo
 
 TUPLE: todo-list < dispatcher ;
 
@@ -139,4 +139,4 @@ furnace.alloy ;
     todo-db start-expiring
     run-test-httpd ;
 
-MAIN: run-todo
+MAin: run-todo

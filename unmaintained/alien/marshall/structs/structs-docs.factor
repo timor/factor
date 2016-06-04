@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: classes help.markup help.syntax kernel quotations words
 alien.marshall.structs strings alien.structs alien.marshall ;
-IN: alien.marshall.structs
+in: alien.marshall.structs
 
 HELP: define-marshalled-struct
 { $values

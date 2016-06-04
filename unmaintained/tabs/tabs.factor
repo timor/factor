@@ -6,7 +6,7 @@ USING: accessors kernel fry math math.vectors sequences arrays vectors assocs
        ui ui.gadgets ui.gadgets.buttons ui.gadgets.frames ui.gadgets.packs
        ui.gadgets.grids ui.gadgets.viewports ui.gadgets.books locals ;
 
-IN: ui.gadgets.tabs
+in: ui.gadgets.tabs
 
 TUPLE: tabbed < frame names toggler content ;
 

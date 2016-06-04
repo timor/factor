@@ -3,7 +3,7 @@
 USING: math kernel accessors http.server http.server.dispatchers
 furnace furnace.actions furnace.sessions furnace.redirection
 html.components html.forms fry urls ;
-IN: webapps.counter
+in: webapps.counter
 
 symbol: count
 
@@ -40,4 +40,4 @@ USING: db.sqlite furnace.alloy namespaces ;
         main-responder set-global
     8080 httpd drop ;
 
-MAIN: run-counter
+MAin: run-counter

@@ -16,7 +16,7 @@ furnace.boilerplate
 furnace.auth.login
 furnace.auth
 furnace.syndication ;
-IN: webapps.planet
+in: webapps.planet
 
 TUPLE: planet < dispatcher ;
 

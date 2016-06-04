@@ -4,7 +4,7 @@ USING: kernel sequences math math.order
        help.syntax
        easy-help ;
 
-IN: ui.gadgets.tiling
+in: ui.gadgets.tiling
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

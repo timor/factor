@@ -1,7 +1,7 @@
 
 USING: namespaces sequences math random-weighted cfdg ;
 
-IN: cfdg.models.spirales
+in: cfdg.models.spirales
 
 DEFER: line
 
@@ -25,4 +25,4 @@ DEFER: line
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-MAIN: run
+MAin: run

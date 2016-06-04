@@ -35,12 +35,12 @@ ARTICLE: "regexp-intro" "A quick introduction to regular expressions"
 "To search a file for all lines that match a given regular expression, you could use code like this:"
 { $code "\"file.txt\" ascii file-lines [ R/ (f|b)oo+/ re-contains? ] filter" }
 "To test if a string in its entirety matches a regular expression, the following can be used:"
-{ $example "USE: regexp \"fooo\" R/ (b|f)oo+/ matches? ." "t" }
+{ $example "use: regexp \"fooo\" R/ (b|f)oo+/ matches? ." "t" }
 "Regular expressions can't be used for all parsing tasks. For example, they are not powerful enough to match balancing parentheses." ;
 
 ARTICLE: "regexp-construction" "Constructing regular expressions"
 "Most of the time, regular expressions are literals and the parsing word should be used, to construct them at parse time. This ensures that they are only compiled once, and gives parse time syntax checking."
-{ $subsections POSTPONE: R/ }
+{ $subsections postpone: R/ }
 "Sometimes, regular expressions need to be constructed at run time instead; for example, in a text editor, the user might input a regular expression to search for in a document."
 { $subsections <regexp> <optioned-regexp> }
 "Another approach is to use " { $vocab-link "regexp.combinators" } "." ;

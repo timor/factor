@@ -5,7 +5,7 @@ USING: kernel sequences combinators accessors locals random
        dns dns.util dns.cache.rr dns.cache.nx
        dns.resolver ;
 
-IN: dns.forwarding
+in: dns.forwarding
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

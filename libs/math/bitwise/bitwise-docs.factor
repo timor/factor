@@ -128,7 +128,7 @@ HELP: symbols>flags
 { $description "Constructs an integer value by mapping the values in the " { $snippet "symbols" } " sequence to integer values using " { $snippet "assoc" } " and " { $link bitor } "ing the values together." }
 { $examples
     { $example "USING: math.bitwise prettyprint ui.gadgets.worlds ;"
-        "IN: scratchpad"
+        "in: scratchpad"
         "CONSTANT: window-controls>flags H{"
         "    { close-button 1 }"
         "    { minimize-button 2 }"

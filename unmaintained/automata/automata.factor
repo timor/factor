@@ -2,7 +2,7 @@
 USING: kernel math math.parser random arrays hashtables assocs sequences
        grouping vars ;
 
-IN: automata
+in: automata
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! set-rule

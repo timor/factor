@@ -5,15 +5,15 @@ compiler.cfg.instructions compiler.cfg.rpo
 compiler.cfg.utilities kernel locals namespaces sequences
 sequences.deep ;
 
-USE: compiler.cfg.value-numbering.alien
-USE: compiler.cfg.value-numbering.comparisons
-USE: compiler.cfg.value-numbering.expressions
-USE: compiler.cfg.value-numbering.folding
-USE: compiler.cfg.value-numbering.graph
-USE: compiler.cfg.value-numbering.math
-USE: compiler.cfg.value-numbering.misc
-USE: compiler.cfg.value-numbering.rewrite
-USE: compiler.cfg.value-numbering.slots
+use: compiler.cfg.value-numbering.alien
+use: compiler.cfg.value-numbering.comparisons
+use: compiler.cfg.value-numbering.expressions
+use: compiler.cfg.value-numbering.folding
+use: compiler.cfg.value-numbering.graph
+use: compiler.cfg.value-numbering.math
+use: compiler.cfg.value-numbering.misc
+use: compiler.cfg.value-numbering.rewrite
+use: compiler.cfg.value-numbering.slots
 
 in: compiler.cfg.value-numbering
 

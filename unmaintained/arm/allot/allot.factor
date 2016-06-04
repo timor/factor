@@ -4,7 +4,7 @@ USING: kernel cpu.architecture cpu.arm.assembler
 cpu.arm.architecture namespaces math sequences
 generator generator.registers generator.fixup system layouts
 alien ;
-IN: cpu.arm.allot
+in: cpu.arm.allot
 
 : load-zone-ptr ( reg -- ) "nursery" f rot %alien-global ;
 

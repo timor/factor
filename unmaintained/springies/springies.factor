@@ -2,7 +2,7 @@
 USING: kernel combinators sequences arrays math math.vectors
        generalizations vars accessors math.physics.vel ;
 
-IN: springies
+in: springies
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

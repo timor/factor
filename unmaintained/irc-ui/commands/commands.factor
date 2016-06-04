@@ -4,7 +4,7 @@
 USING: accessors kernel sequences arrays irc.client
        irc.messages irc.ui namespaces ;
 
-IN: irc.ui.commands
+in: irc.ui.commands
 
 : say ( string -- )
     irc-tab get

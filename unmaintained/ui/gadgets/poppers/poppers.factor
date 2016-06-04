@@ -5,7 +5,7 @@ models models.combinators namespaces sequences
 ui.gadgets ui.gadgets.controls ui.gadgets.layout
 ui.gadgets.tracks ui.gestures ui.gadgets.line-support ;
 EXCLUDE: ui.gadgets.editors => model-field ;
-IN: ui.gadgets.poppers
+in: ui.gadgets.poppers
 
 TUPLE: popped < model-field { fatal? initial: t } ;
 TUPLE: popped-editor < multiline-editor ;

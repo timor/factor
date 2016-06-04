@@ -1,7 +1,7 @@
 
 USING: namespaces sequences math random-weighted cfdg ;
 
-IN: cfdg.models.rules08
+in: cfdg.models.rules08
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -45,4 +45,4 @@ DEFER: line
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-MAIN: run
+MAin: run

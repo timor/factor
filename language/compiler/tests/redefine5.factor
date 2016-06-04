@@ -16,7 +16,7 @@ in: compiler.tests.redefine5
 ] unit-test
 
 [ ] [
-    "USE: kernel
+    "use: kernel
     in: compiler.tests.redefine5
     TUPLE: my-tuple ;
     M: my-tuple my-generic drop 0 ;" eval( -- )

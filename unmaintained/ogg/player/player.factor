@@ -17,7 +17,7 @@ USING: kernel alien ogg ogg.vorbis ogg.theora io byte-arrays
        continuations io.files hints combinators.lib sequences.lib
        io.encodings.binary debugger math.order accessors ;
 
-IN: ogg.player
+in: ogg.player
 
 : audio-buffer-size ( -- number ) 128 1024 * ; inline
 

@@ -5,7 +5,7 @@ io.buffers io.nonblocking io.sockets
 io.unix.backend io.unix.files kernel libc locals math qualified
 sequences io.sniffer.backend ;
 QUALIFIED: unix
-IN: io.sniffer.bsd
+in: io.sniffer.bsd
 
 M: unix-io destruct-handle ( obj -- ) unix:close ;
 

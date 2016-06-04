@@ -301,7 +301,7 @@ HELP: to-fixed-point
 { $examples
     { $example
         "USING: combinators kernel math prettyprint sequences ;"
-        "IN: scratchpad"
+        "in: scratchpad"
         ": flatten ( sequence -- sequence' )"
         "    \"flatten\" over index"
         "    [ [ 1 + swap nth ] [ nip dup 2 + ] [ drop ] 2tri replace-slice ] when* ;"
@@ -356,7 +356,7 @@ HELP: case
 { $examples
     { $example
         "USING: combinators io kernel ;"
-        "IN: scratchpad"
+        "in: scratchpad"
         "SYMBOLS: yes no maybe ;"
         "maybe {"
         "    { yes [ ] } ! Do nothing"

@@ -5,7 +5,7 @@ USING: http http.server io kernel math namespaces
 continuations calendar sequences assocs hashtables
 accessors arrays alarms quotations combinators fry
 http.server.redirection furnace assocs.lib urls ;
-IN: furnace.callbacks
+in: furnace.callbacks
 
 symbol: responder
 

@@ -24,7 +24,7 @@ USING:
     urls
     validators
 ;
-IN: webapps.fjsc
+in: webapps.fjsc
 
 TUPLE: fjsc < dispatcher ;
 

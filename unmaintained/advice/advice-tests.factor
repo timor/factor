@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel sequences io io.streams.string math tools.test advice math.parser
 parser namespaces multiline eval words assocs ;
-IN: advice.tests
+in: advice.tests
 
 [
     [ ad-do-it ] must-fail
@@ -74,7 +74,7 @@ IN: advice.tests
 
 !     { f t 3+3/4 } [
 !         <" USING: advice kernel math ;
-!            IN: advice.tests
+!            in: advice.tests
 !            \ quux advised?
 !            ADVISE: quux halve before [ 2 / ] bi@ ;
 !            \ quux advised? 
@@ -83,7 +83,7 @@ IN: advice.tests
 
 !     { 3+3/4 "1+1/2 2+1/2 3+3/4" } [
 !         <" USING: advice kernel math math.parser io io.streams.string ;
-!            IN: advice.tests
+!            in: advice.tests
 !            ADVISE: quux log around
 !            2dup [ number>string write " " write ] bi@
 !            ad-do-it 

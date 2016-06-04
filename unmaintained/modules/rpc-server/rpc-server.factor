@@ -3,7 +3,7 @@
 USING: accessors assocs combinators continuations effects
 io.encodings.binary io.servers.connection kernel namespaces
 sequences serialize sets threads vocabs vocabs.parser init io ;
-IN: modules.rpc-server
+in: modules.rpc-server
 
 <PRIVATE
 TUPLE: rpc-request args vocabspec wordname ;

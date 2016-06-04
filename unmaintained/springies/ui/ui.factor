@@ -3,7 +3,7 @@ USING: kernel namespaces threads sequences math math.vectors
        opengl.gl opengl colors ui ui.gadgets ui.gadgets.slate
        fry rewrite-closures vars springies accessors math.geometry.rect ;
 
-IN: springies.ui
+in: springies.ui
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

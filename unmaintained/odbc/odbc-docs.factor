@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.syntax help.markup threads ;
 
-IN: odbc
+in: odbc
 
 HELP: odbc-init 
 { $values { "env" "an ODBC environment handle" } } 

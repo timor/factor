@@ -2,7 +2,7 @@
 
 USING: kernel shuffle system locals
 prettyprint math io namespaces threads calendar ;
-IN: animations
+in: animations
 
 symbol: last-loop
 symbol: sleep-period

@@ -1,7 +1,7 @@
 
 USING: kernel namespaces sequences springies springies.ui ;
 
-IN: springies.models.ball
+in: springies.models.ball
 
 : model ( -- )
 
@@ -252,4 +252,4 @@ USING: threads ui ;
 
 : go ( -- ) [ [ springies-window* 1000 sleep model ] with-scope ] with-ui ;
 
-MAIN: go
+MAin: go

@@ -1,7 +1,7 @@
 
 USING: accessors ui L-system ;
 
-IN: L-system.models.airhorse
+in: L-system.models.airhorse
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -49,5 +49,5 @@ IN: L-system.models.airhorse
 
 : main ( -- ) [ L-system airhorse "L-system" open-window ] with-ui ;
 
-MAIN: main
+MAin: main
   

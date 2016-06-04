@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors furnace.actions http.server.responses kernel
 urls xml.syntax webapps.mason.backend webapps.mason.utils ;
-IN: webapps.mason.report
+in: webapps.mason.report
 
 : build-report ( -- response )
     [

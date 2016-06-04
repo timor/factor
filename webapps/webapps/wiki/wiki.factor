@@ -17,7 +17,7 @@ furnace.boilerplate
 furnace.syndication
 validators
 db.types db.tuples lcs urls ;
-IN: webapps.wiki
+in: webapps.wiki
 
 : wiki-url ( rest path -- url )
     [ "$wiki/" % % "/" % present % ] "" make

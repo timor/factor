@@ -8,7 +8,7 @@ USING: alien alien.c-types alien.strings combinators kernel math
 namespaces oracle.liboci prettyprint sequences
 io.encodings.ascii accessors ;
 
-IN: oracle
+in: oracle
 
 symbol: env
 symbol: err

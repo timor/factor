@@ -3,7 +3,7 @@
 
 USING: kernel vocabs.loader sequences strings splitting words irc.messages ;
 
-IN: irc.ui.commandparser
+in: irc.ui.commandparser
 
 : command ( string string -- string command )
     [ "say" ] when-empty

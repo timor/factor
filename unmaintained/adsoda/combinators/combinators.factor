@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel arrays sequences fry math combinators ;
 
-IN: adsoda.combinators
+in: adsoda.combinators
 
 ! : (combinations) ( seq -- seq ) [ 1 tail ] dip combinations ;
 

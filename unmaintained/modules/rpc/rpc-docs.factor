@@ -1,5 +1,5 @@
 USING: help.syntax help.markup ;
-IN: modules.rpc
+in: modules.rpc
 ARTICLE: { "modules" "protocol" } "RPC Protocol"
 { $list
    "Send vocab as string"

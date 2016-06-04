@@ -3,7 +3,7 @@ USING: accessors alien.c-types combinators grouping kernel
        locals math math.geometry.rect math.vectors opengl.gl sequences
        ui.gadgets ui.render ;
 
-IN: frame-buffer
+in: frame-buffer
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

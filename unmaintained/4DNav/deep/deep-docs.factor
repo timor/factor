@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Jean-François Bigot.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel quotations sequences ;
-IN: 4DNav.deep
+in: 4DNav.deep
 
 ! HELP: deep-cleave-quots
 ! { $values

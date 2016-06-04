@@ -7,7 +7,7 @@ ui.gadgets.grids ui.gadgets.labels ui.gadgets.tracks fonts
 wrap.strings ;
 EXCLUDE: accessors => change-model ;
 
-IN: drills
+in: drills
 SYMBOLS: it startLength ;
 : big ( gadget -- gadget ) T{ font { name "sans-serif" } { size 30 } } >>font ;
 : card ( model quot -- button ) <arrow> <label-control> big [ next ] <book-btn> ;
@@ -34,4 +34,4 @@ it get [ length startLength get swap - number>string "/" startLength get number>
    ] when*
 ] with-ui ;
 
-MAIN: drill
+MAin: drill

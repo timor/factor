@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Alex Chapman
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs digraphs kernel namespaces sequences ;
-IN: triggers
+in: triggers
 
 : triggers ( -- triggers )
     \ triggers global [ drop H{ } clone ] cache ;

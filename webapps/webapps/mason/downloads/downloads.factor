@@ -3,7 +3,7 @@
 USING: accessors furnace.actions html.components html.forms
 kernel webapps.mason.backend webapps.mason.version.data
 webapps.mason.grids webapps.mason.utils ;
-IN: webapps.mason.downloads
+in: webapps.mason.downloads
 
 : stable-release ( version -- link )
     [ version>> ] [ announcement-url>> ] bi <simple-link> ;

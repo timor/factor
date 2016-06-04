@@ -1,5 +1,5 @@
 USING: peg-lexer math.parser strings ;
-IN: peg-lexer.test-parsers
+in: peg-lexer.test-parsers
 
 ON-BNF: test1
       num = [1-4]* => [[ >string ]]

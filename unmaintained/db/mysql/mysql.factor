@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for license.
 USING: alien continuations destructors io kernel prettyprint
 sequences db db.mysql.ffi ;
-IN: db.mysql
+in: db.mysql
 
 TUPLE: mysql-db handle host user password db port ;
 TUPLE: mysql-statement ;

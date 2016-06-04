@@ -8,7 +8,7 @@ webapps.mason.downloads webapps.mason.counter
 webapps.mason.status-update webapps.mason.docs-update
 webapps.mason.dashboard webapps.mason.make-release
 webapps.mason.increment-counter ;
-IN: webapps.mason
+in: webapps.mason
 
 TUPLE: mason-app < dispatcher ;
 

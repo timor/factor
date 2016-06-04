@@ -1,5 +1,5 @@
 USING: help.syntax help.markup ;
-IN: fonts.syntax
+in: fonts.syntax
 
 HELP: FONT:
 { $syntax "\"testing\" <label> FONT: 18 serif bold ... ;" }

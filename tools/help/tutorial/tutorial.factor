@@ -7,7 +7,7 @@ ARTICLE: "first-program-start" "Creating a vocabulary for your first program"
 "Factor source code is organized into " { $link "vocabularies" } ". Before we can write our first program, we must create a vocabulary for it."
 $nl
 "Start by loading the scaffold tool:"
-{ $code "USE: tools.scaffold" }
+{ $code "use: tools.scaffold" }
 $nl
 "Then, ask the scaffold tool to create a new vocabulary named " { $snippet "palindrome" } ":"
 { $code "\"palindrome\" scaffold-work" }
@@ -31,18 +31,18 @@ $nl
     "! Copyright (C) 2012 Your name."
     "! See http://factorcode.org/license.txt for BSD license."
     "USING: ;"
-    "IN: palindrome"
+    "in: palindrome"
 }
 $nl
-"Notice that the file ends with an " { $link POSTPONE: IN: } " form telling Factor that all definitions in this source file should go into the " { $snippet "palindrome" } " vocabulary using the " { $link POSTPONE: IN: } " word. We will be adding new definitions after the " { $link POSTPONE: IN: } " form."
+"Notice that the file ends with an " { $link postpone: in: } " form telling Factor that all definitions in this source file should go into the " { $snippet "palindrome" } " vocabulary using the " { $link postpone: in: } " word. We will be adding new definitions after the " { $link postpone: in: } " form."
 $nl
 "In order to be able to call the words defined in the " { $snippet "palindrome" } " vocabulary, you need to issue the following command in the listener:"
-{ $code "USE: palindrome" }
+{ $code "use: palindrome" }
 $nl
 "Now, we will be making some additions to the file. Since the file was loaded by the scaffold tool in the previous step, you need to tell Factor to reload it if it changes. Factor has a handy feature for this; pressing " { $command tool "common" refresh-all } " in the listener window will reload any changed source files. You can also force a single vocabulary to reload, in case the refresh feature does not pick up changes from disk:"
 { $code "\"palindrome\" reload" }
 $nl
-"We will now write our first word using " { $link POSTPONE: : } ". This word will test if a string is a palindrome; it will take a string as input, and give back a boolean as output. We will call this word " { $snippet "palindrome?" } ", following a naming convention that words returning booleans have names ending with " { $snippet "?" } "."
+"We will now write our first word using " { $link postpone: : } ". This word will test if a string is a palindrome; it will take a string as input, and give back a boolean as output. We will call this word " { $snippet "palindrome?" } ", following a naming convention that words returning booleans have names ending with " { $snippet "?" } "."
 $nl
 "Recall that a string is a palindrome if it is spelled the same forwards or backwards; that is, if the string is equal to its reverse. We can express this in Factor as follows:"
 { $code ": palindrome? ( string -- ? ) dup reverse = ;" }
@@ -72,13 +72,13 @@ ARTICLE: "first-program-test" "Testing your first program"
     "! Copyright (C) 2012 Your name."
     "! See http://factorcode.org/license.txt for BSD license."
     "USING: kernel sequences ;"
-    "IN: palindrome"
+    "in: palindrome"
     ""
     ": palindrome? ( string -- ? ) dup reverse = ;"
 }
 $nl
 "We will now test our new word in the listener. If you haven't done so already, add the palindrome vocabulary to the listener's vocabulary search path:"
-{ $code "USE: palindrome" }
+{ $code "use: palindrome" }
 $nl
 "Next, push a string on the stack (by surrounding text with quotes in the listener and then hitting " { $snippet "ENTER" } "):"
 { $code "\"hello\"" }
@@ -101,7 +101,7 @@ $nl
 $nl
 "Now, open the file named " { $snippet "palindrome-tests.factor" } "; it is located in the same directory as " { $snippet "palindrome.factor" } ", and it was created by the scaffold tool."
 $nl
-"We will add some unit tests, which are similar to the interactive tests we did above. Unit tests are defined with the " { $link POSTPONE: unit-test } " word, which takes a sequence of expected outputs, and a piece of code. It runs the code, and asserts that it outputs the expected values."
+"We will add some unit tests, which are similar to the interactive tests we did above. Unit tests are defined with the " { $link postpone: unit-test } " word, which takes a sequence of expected outputs, and a piece of code. It runs the code, and asserts that it outputs the expected values."
 $nl
 "Add the following two lines to " { $snippet "palindrome-tests.factor" } ":"
 { $code

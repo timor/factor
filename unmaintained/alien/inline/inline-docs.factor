@@ -1,17 +1,17 @@
 ! Copyright (C) 2009 Jeremy Hughes.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel strings effects quotations ;
-IN: alien.inline
+in: alien.inline
 
 <PRIVATE
 : $binding-note ( x -- )
     drop
     { "This word requires that certain variables are correctly bound. "
-        "Call " { $link POSTPONE: define-c-library } " to set them up." } print-element ;
+        "Call " { $link postpone: define-c-library } " to set them up." } print-element ;
 PRIVATE>
 
 HELP: compile-c-library
-{ $description "Writes, compiles, and links code generated since last invocation of " { $link POSTPONE: define-c-library } ". "
+{ $description "Writes, compiles, and links code generated since last invocation of " { $link postpone: define-c-library } ". "
   "Also calls " { $snippet "add-library" } ". "
   "This word does nothing if the shared library is younger than the factor source file." }
 { $notes $binding-note } ;
@@ -36,7 +36,7 @@ HELP: define-c-function
     $binding-note
   }
 }
-{ $see-also POSTPONE: define-c-function' } ;
+{ $see-also postpone: define-c-function' } ;
 
 HELP: define-c-function'
 { $values

@@ -2,7 +2,7 @@
 USING: kernel namespaces arrays sequences threads math math.vectors
        ui random springies springies.ui ;
 
-IN: springies.models.nifty
+in: springies.models.nifty
 
 : model ( -- )
 
@@ -77,4 +77,4 @@ each ;
 
 : go ( -- ) [ model ] go* ;
 
-MAIN: go
+MAin: go

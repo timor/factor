@@ -4,7 +4,7 @@ USING: arrays assocs compiler.units
        namespaces parser sequences splitting words
        easy-help.expand-markup ;
 
-IN: easy-help
+in: easy-help
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

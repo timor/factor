@@ -4,7 +4,7 @@ USING: words kernel locals accessors compiler.tree.propagation.info
 sequences kernel.private assocs fry parser math quotations
 effects arrays definitions compiler.units namespaces
 compiler.tree.debugger generalizations stack-checker ;
-IN: specialized
+in: specialized
 
 : in-compilation-unit? ( -- ? )
     changed-definitions get >boolean ;

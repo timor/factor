@@ -3,7 +3,7 @@
 USING: alien alien.c-types alien.syntax byte-arrays io
 io.sockets kernel structs math math.parser
 prettyprint sequences ;
-IN: io.sockets.headers
+in: io.sockets.headers
 
 C-STRUCT: etherneth
     { { "char" 6 } "dmac" }

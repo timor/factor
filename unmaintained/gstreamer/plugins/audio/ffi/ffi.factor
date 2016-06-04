@@ -4,7 +4,7 @@ USING: alien alien.c-types alien.libraries combinators kernel
 system
 gobject-introspection glib.ffi gstreamer.ffi gstreamer.base.ffi
 gstreamer.interfaces.ffi ;
-IN: gstreamer.audio.ffi
+in: gstreamer.audio.ffi
 
 <<
 "gstreamer.audio" {

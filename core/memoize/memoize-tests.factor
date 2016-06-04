@@ -23,13 +23,13 @@ MEMO: x ( a b c d e -- f g h i j )
 
 MEMO: see-test ( a -- b ) reverse ;
 
-{ "USING: sequences ;\nIN: memoize.tests\nMEMO: see-test ( a -- b ) reverse ;\n" }
+{ "USING: sequences ;\nin: memoize.tests\nMEMO: see-test ( a -- b ) reverse ;\n" }
 [ [ \ see-test see ] with-string-writer ]
 unit-test
 
-{ } [ "IN: memoize.tests : fib ( -- ) ;" eval( -- ) ] unit-test
+{ } [ "in: memoize.tests : fib ( -- ) ;" eval( -- ) ] unit-test
 
-{ "IN: memoize.tests\n: fib ( -- ) ;\n" } [ [ \ fib see ] with-string-writer ] unit-test
+{ "in: memoize.tests\n: fib ( -- ) ;\n" } [ [ \ fib see ] with-string-writer ] unit-test
 
 [ sq ] ( a -- b ) memoize-quot "q" set
 

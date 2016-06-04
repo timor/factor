@@ -451,7 +451,7 @@ defer: foo
 
 { } [
     2 [
-        "in: parser.tests defer: twice-fails forget: twice-fails MIXin: twice-fails"
+        "in: parser.tests defer: twice-fails forget: twice-fails mixin: twice-fails"
         <string-reader> "twice-fails-test" parse-stream drop
     ] times
 ] unit-test

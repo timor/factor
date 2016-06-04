@@ -1,5 +1,5 @@
 USING: kernel sequences functors fry macros generalizations ;
-IN: models.combinators.templates
+in: models.combinators.templates
 FROM: models.combinators => <collection> #1 ;
 FUNCTOR: fmaps ( W -- )
 W        IS ${W}

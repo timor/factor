@@ -1,6 +1,6 @@
 USING: alien alien.c-types alien.libraries alien.syntax
 classes.struct combinators system unix.types ;
-IN: llvm.clang.ffi
+in: llvm.clang.ffi
 
 <<
 "libclang" {

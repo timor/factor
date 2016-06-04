@@ -2,7 +2,7 @@
 USING: kernel namespaces arrays quotations sequences assocs combinators
        mirrors math math.vectors random macros fry ;
 
-IN: random-weighted
+in: random-weighted
 
 : probabilities ( weights -- probabilities ) dup sum v/n ;
 

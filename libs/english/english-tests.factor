@@ -1,4 +1,4 @@
-USE: tools.test
+use: tools.test
 in: english
 
 { "record" } [ "records" singularize ] unit-test

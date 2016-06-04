@@ -13,7 +13,7 @@ ARTICLE: "starting-ui-tools" "Starting the UI tools"
     { "On Mac OS X, the tools start if the " { $snippet "Factor.app" } " application bundle is run." }
 }
 "In all cases, passing the " { $snippet "-run=listener" } " command line switch starts the terminal listener instead. The UI can be started from the terminal by issuing the following command:"
-{ $code "USE: threads" "[ \"ui.tools\" run ] in-thread" } ;
+{ $code "use: threads" "[ \"ui.tools\" run ] in-thread" } ;
 
 ARTICLE: "ui-shortcuts" "UI tool keyboard shortcuts"
 "Every UI tool has its own set of keyboard shortcuts. Mouse-over a toolbar button to see its shortcut, if any, in the status bar, or press " { $snippet "F1" } " to see a list of all shortcuts supported by the tool."

@@ -1,5 +1,5 @@
 USING: accessors arrays continuations db db.sqlite io.files kernel semantic-db sequences tangle tangle.html tangle.menu tangle.page tangle.path tools.test tools.walker tuple-syntax ;
-IN: tangle.tests
+in: tangle.tests
 
 : db-path "tangle-test.db" temp-file ;
 : test-db db-path sqlite-db ;

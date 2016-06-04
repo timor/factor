@@ -2,7 +2,7 @@
 USING: kernel math math.functions math.vectors sequences self
 accessors ;
 
-IN: pos
+in: pos
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

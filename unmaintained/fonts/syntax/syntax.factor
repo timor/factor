@@ -1,6 +1,6 @@
 USING: accessors arrays variants combinators io.styles
 kernel math parser sequences fry ;
-IN: fonts.syntax
+in: fonts.syntax
 
 VARIANT: fontname serif monospace ;
 

@@ -1,7 +1,7 @@
 
 USING: kernel sequences multi-methods accessors math.vectors ;
 
-IN: math.physics.pos
+in: math.physics.pos
 
 TUPLE: pos pos ;
 

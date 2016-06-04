@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-IN: animations
+in: animations
 
 HELP: animate
 

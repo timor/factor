@@ -1,5 +1,5 @@
 USING: kernel semantic-db tangle.html tools.test ;
-IN: tangle.html.tests
+in: tangle.html.tests
 
 [ "test" ] [ "test" >html ] unit-test
 [ "<ul><li>An Item</li></ul>" ] [ { "An Item" } <ulist> >html ] unit-test

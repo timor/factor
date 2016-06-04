@@ -3,7 +3,7 @@
 
 USING: accessors kernel sequences arrays vectors sets assocs hashtables graph-theory namespaces fry ;
 
-IN: graph-theory.sparse
+in: graph-theory.sparse
 
 TUPLE: sparse-graph alist ; 
 

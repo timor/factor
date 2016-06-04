@@ -1,4 +1,4 @@
-IN: ori.tests
+in: ori.tests
 USING: ori tools.test ;
 
 \ pitch-up   must-infer

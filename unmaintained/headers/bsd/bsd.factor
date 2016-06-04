@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.c-types alien.syntax byte-arrays io
 kernel math prettyprint ;
-IN: io.sockets.headers.bsd
+in: io.sockets.headers.bsd
 
 C-STRUCT: bpfh
     { "timeval" "timestamp" }

@@ -3,7 +3,7 @@
 
 USING: kernel io.files io.pathnames parser editors sequences ;
 
-IN: irc.ui.load
+in: irc.ui.load
 
 : file-or ( path path -- path ) [ [ exists? ] keep ] dip ? ;
 

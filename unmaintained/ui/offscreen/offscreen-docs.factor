@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel quotations ui.gadgets
 images strings ui.gadgets.worlds ;
-IN: ui.offscreen
+in: ui.offscreen
 
 HELP: <offscreen-world>
 { $values

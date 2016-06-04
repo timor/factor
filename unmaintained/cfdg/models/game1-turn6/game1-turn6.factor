@@ -2,7 +2,7 @@
 USING: kernel namespaces math opengl.gl opengl.glu ui ui.gadgets.slate
        random-weighted cfdg ;
 
-IN: cfdg.models.game1-turn6
+in: cfdg.models.game1-turn6
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -51,4 +51,4 @@ DEFER: start
 
 : run ( -- ) [ init ] cfdg-window. ;
 
-MAIN: run
+MAin: run

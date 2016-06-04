@@ -1,8 +1,8 @@
 
 USING: ui bubble-chamber ;
 
-IN: bubble-chamber.small
+in: bubble-chamber.small
 
 : main ( -- ) [ small ] with-ui ;
 
-MAIN: main
+MAin: main

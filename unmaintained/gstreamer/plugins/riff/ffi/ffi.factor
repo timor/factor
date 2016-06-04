@@ -4,7 +4,7 @@ USING: alien alien.syntax alien.libraries combinators kernel
 system
 gobject-introspection glib.ffi gmodule.ffi gobject.ffi ;
 EXCLUDE: alien.c-types => pointer ;
-IN: gstreamer.ffi
+in: gstreamer.ffi
 
 <<
 "gstreamer" {

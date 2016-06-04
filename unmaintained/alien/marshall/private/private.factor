@@ -5,7 +5,7 @@ combinators fry functors kernel lexer libc macros math
 sequences specialized-arrays libc.private
 combinators.short-circuit alien.data ;
 SPECIALIZED-ARRAY: void*
-IN: alien.marshall.private
+in: alien.marshall.private
 
 : bool>arg ( ? -- 1/0/obj )
     {

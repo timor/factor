@@ -2,33 +2,33 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel combinators fry continuations sequences arrays
 vectors assocs hashtables heaps namespaces ;
-IN: graph-theory
+in: graph-theory
 
-MIXIN: graph
+mixin: graph
 symbol: visited?
 ERROR: end-search ;
 
-GENERIC: vertices ( graph -- seq ) flushable
+GENERIC: vertices ( graph -- seq ) ; flushable
 
-GENERIC: num-vertices ( graph -- n ) flushable
+GENERIC: num-vertices ( graph -- n ) ; flushable
 
-GENERIC: num-edges ( graph -- n ) flushable
+GENERIC: num-edges ( graph -- n ) ; flushable
 
-GENERIC: adjlist ( from graph -- seq ) flushable
+GENERIC: adjlist ( from graph -- seq ) ; flushable
 
-GENERIC: adj? ( from to graph -- ? ) flushable
+GENERIC: adj? ( from to graph -- ? ) ; flushable
 
-GENERIC: add-blank-vertex ( index graph -- )
+GENERIC: add-blank-vertex ( index graph -- ) ;
 
-GENERIC: delete-blank-vertex ( index graph -- )
+GENERIC: delete-blank-vertex ( index graph -- ) ;
 
-GENERIC: add-edge* ( from to graph -- )
+GENERIC: add-edge* ( from to graph -- ) ;
 
-GENERIC: add-edge ( u v graph -- )
+GENERIC: add-edge ( u v graph -- ) ;
 
-GENERIC: delete-edge* ( from to graph -- )
+GENERIC: delete-edge* ( from to graph -- ) ;
 
-GENERIC: delete-edge ( u v graph -- )
+GENERIC: delete-edge ( u v graph -- ) ;
 
 M: graph num-vertices
     vertices length ;

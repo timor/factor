@@ -1,6 +1,6 @@
 ! Copyright (C) 2006 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
-IN: jni
+in: jni
 USING: kernel jni-internals namespaces ;
 
 ! High level interface for JNI to be added here...

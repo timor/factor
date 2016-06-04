@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Alex Chapman
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors html.elements io io.streams.string kernel namespaces semantic-db sequences strings tangle.path ;
-IN: tangle.html
+in: tangle.html
 
 TUPLE: element attributes ;
 

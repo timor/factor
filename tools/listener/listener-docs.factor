@@ -53,7 +53,7 @@ $nl
 { $example "\"Hello, world\" print" "Hello, world" }
 "New words can also be defined in the listener:"
 { $example
-    "USE: math.functions"
+    "use: math.functions"
     ": twice ( word -- ) [ execute ] [ execute ] bi ; inline"
     "81 \\ sqrt twice ."
     "3.0"

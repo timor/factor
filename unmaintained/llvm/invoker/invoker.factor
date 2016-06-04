@@ -6,7 +6,7 @@ llvm.reader llvm.types make namespaces sequences
 specialized-arrays vocabs words ;
 QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAY: c:void*
-IN: llvm.invoker
+in: llvm.invoker
 
 ! get function name, ret type, param types and names
 

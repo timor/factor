@@ -18,7 +18,7 @@ USING: kernel namespaces math quotations arrays hashtables sequences threads
        vars fry
        rewrite-closures automata math.geometry.rect newfx ;
 
-IN: automata.ui
+in: automata.ui
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -97,4 +97,4 @@ DEFER: automata-window
 
 : automata-window ( -- ) [ [ automata-window* ] with-scope ] with-ui ;
 
-MAIN: automata-window
+MAin: automata-window

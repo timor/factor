@@ -6,7 +6,7 @@ threads mason.email mason.twitter webapps.mason.backend
 webapps.mason.version.common webapps.mason.version.data
 webapps.mason.version.files webapps.mason.version.source
 webapps.mason.version.binary ;
-IN: webapps.mason.version
+in: webapps.mason.version
 
 : check-releases ( builders -- )
     [ release-git-id>> ] map all-equal?

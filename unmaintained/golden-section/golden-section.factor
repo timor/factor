@@ -5,7 +5,7 @@ USING: kernel namespaces math math.constants math.functions math.order
        ui.gadgets.cartesian colors accessors combinators.cleave
        processing.shapes ;
 
-IN: golden-section
+in: golden-section
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -51,4 +51,4 @@ IN: golden-section
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-MAIN: golden-section-window
+MAin: golden-section-window

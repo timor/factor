@@ -2,7 +2,7 @@
 USING: kernel combinators sequences splitting math 
        io.files io.encodings.utf8 random dns.util ;
 
-IN: dns.misc
+in: dns.misc
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

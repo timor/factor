@@ -20,7 +20,7 @@ furnace.boilerplate
 furnace.recaptcha
 furnace.syndication
 furnace.conversations ;
-IN: webapps.pastebin
+in: webapps.pastebin
 
 TUPLE: pastebin < dispatcher ;
 

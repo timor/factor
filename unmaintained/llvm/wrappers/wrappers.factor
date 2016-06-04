@@ -4,7 +4,7 @@ USING: accessors alien.c-types alien.data alien.strings
 io.encodings.utf8 destructors kernel
 llvm.core llvm.engine ;
 
-IN: llvm.wrappers
+in: llvm.wrappers
 
 : llvm-throw ( c-string -- )
     [ utf8 alien>string ] [ LLVMDisposeMessage ] bi throw ;

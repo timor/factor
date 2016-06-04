@@ -6,7 +6,7 @@
 USING: alien alien.c-types assocs continuations hashtables io kernel
 ldap.libldap math namespaces sequences ;
 
-IN: ldap
+in: ldap
 
 symbol: message
 symbol: ldp

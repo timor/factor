@@ -3,7 +3,7 @@
 USING: alien alien.c-types alien.libraries alien.syntax
 classes.struct combinators io.encodings.utf16n
 io.encodings.utf8 kernel system ;
-IN: javascriptcore.ffi
+in: javascriptcore.ffi
 
 <<
 "javascriptcore" {

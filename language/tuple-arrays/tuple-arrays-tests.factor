@@ -39,7 +39,7 @@ must-fail-with
 ! Can't define a tuple array for a non-final class
 TUPLE: non-final x ;
 
-[ "in: tuple-arrays.tests USE: tuple-arrays TUPLE-ARRAY: non-final" eval( -- ) ]
+[ "in: tuple-arrays.tests use: tuple-arrays TUPLE-ARRAY: non-final" eval( -- ) ]
 [ error>> not-final? ]
 must-fail-with
 

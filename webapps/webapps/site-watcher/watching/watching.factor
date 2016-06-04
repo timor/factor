@@ -3,7 +3,7 @@
 USING: accessors furnace.actions furnace.auth
 furnace.redirection html.forms site-watcher site-watcher.db
 validators webapps.site-watcher.common urls ;
-IN: webapps.site-watcher.watching
+in: webapps.site-watcher.watching
 
 CONSTANT: site-list-url URL" $site-watcher-app/watch-list"
 

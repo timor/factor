@@ -176,6 +176,6 @@ SYNTAX: <XML
 SYNTAX: [XML
     "XML]" [ string>chunk ] parse-def ;
 
-USE: vocabs.loader
+use: vocabs.loader
 
 { "xml.syntax" "inverse" } "xml.syntax.inverse" require-when

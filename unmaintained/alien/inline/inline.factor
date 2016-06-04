@@ -7,7 +7,7 @@ io.files.info io.files.temp kernel lexer math math.order
 math.ranges multiline namespaces sequences source-files
 splitting strings system vocabs.loader vocabs.parser words
 alien.c-types alien.structs make parser continuations ;
-IN: alien.inline
+in: alien.inline
 
 symbol: c-library
 symbol: library-is-c++

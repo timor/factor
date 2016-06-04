@@ -1,7 +1,7 @@
 USING: accessors arrays kernel models models.product monads
 sequences sequences.extras shuffle ;
 FROM: syntax => >> ;
-IN: models.combinators
+in: models.combinators
 
 TUPLE: multi-model < model important? ;
 GENERIC: (model-changed) ( model observer -- )
@@ -12,12 +12,12 @@ M: multi-model model-activated dup dependencies>> [ value>> ] find nip
 
 : #1 ( model -- model' ) t >>important? ;
 
-IN: models
+in: models
 : notify-connections ( model -- )
     dup connections>> dup [ dup multi-model? [ important?>> ] [ drop f ] if ] find-all
     [ second tuck [ remove ] dip prefix ] each
     [ model-changed ] with each ;
-IN: models.combinators
+in: models.combinators
 
 TUPLE: basic-model < multi-model ;
 M: basic-model (model-changed) [ value>> ] dip set-model ;
@@ -101,5 +101,5 @@ M: (when-model) (model-changed) [ quot>> ] 2keep
 ! only used in construction
 : with-self ( quot: ( model -- model ) -- model ) [ f <basic> dup ] dip call swap [ add-dependency ] keep ; inline
 
-USE: models.combinators.templates
+use: models.combinators.templates
 << { "$>" "<$" "fmap" } [ fmaps ] each >>

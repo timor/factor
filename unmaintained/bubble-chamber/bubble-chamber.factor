@@ -16,7 +16,7 @@ USING: kernel syntax accessors sequences
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-IN: bubble-chamber
+in: bubble-chamber
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -393,7 +393,7 @@ METHOD: move ( <quark> -- )
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-USE: syntax ! Switch back to non-multi-method 'TUPLE:' syntax
+use: syntax ! Switch back to non-multi-method 'TUPLE:' syntax
 
 TUPLE: <bubble-chamber> < <frame-buffer>
   paused particles collision-theta size ;

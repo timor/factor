@@ -180,7 +180,7 @@ SPECIALIZED-ARRAY: struct-resize-test
 
 { { 10 20 30 } } [ { 10 20 30 } struct-resize-test-usage ] unit-test
 
-{ } [ "IN: specialized-arrays.tests USE: classes.struct USE: alien.c-types STRUCT: struct-resize-test { x int } { y int } ;" eval( -- ) ] unit-test
+{ } [ "in: specialized-arrays.tests use: classes.struct use: alien.c-types STRUCT: struct-resize-test { x int } { y int } ;" eval( -- ) ] unit-test
 
 { 80 } [ 10 <struct-resize-test-array> byte-length ] unit-test
 

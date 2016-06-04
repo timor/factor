@@ -4,10 +4,10 @@
 USING: kernel accessors continuations lexer vocabs vocabs.parser
        combinators.short-circuit sandbox tools.test ;
 
-IN: sandbox.tests
+in: sandbox.tests
 
 << "sandbox.syntax" load-vocab drop >>
-USE: sandbox.syntax.private
+use: sandbox.syntax.private
 
 : run-script ( x lines -- y )
     H{ { "kernel" "kernel" } { "math" "math" } { "sequences" "sequences" } }
@@ -26,8 +26,8 @@ USE: sandbox.syntax.private
 [
     5
     {
-        "! Jailbreak attempt with USE:"
-        "USE: io"
+        "! Jailbreak attempt with use:"
+        "use: io"
         "\"Hello world!\" print"
     } run-script
 ]
@@ -36,7 +36,7 @@ USE: sandbox.syntax.private
         [ lexer-error? ]
         [ error>> condition? ]
         [ error>> error>> no-word-error? ]
-        [ error>> error>> name>> "USE:" = ]
+        [ error>> error>> name>> "use:" = ]
     } 1&&
 ] must-fail-with
 

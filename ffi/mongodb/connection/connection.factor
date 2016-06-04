@@ -20,7 +20,7 @@ TUPLE: mdb-connection instance node handle remote local buffer ;
 : connection-buffer ( -- buffer )
     mdb-connection get buffer>> 0 >>length ; inline
 
-USE: mongodb.operations
+use: mongodb.operations
 
 CONSTRUCTOR: <mdb-connection> mdb-connection ( instance -- mdb-connection ) ;
 

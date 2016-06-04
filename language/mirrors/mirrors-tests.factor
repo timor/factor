@@ -56,7 +56,7 @@ TUPLE: color
 ! Test reshaping with a mirror
 1 2 3 color boa <mirror> "mirror" set
 
-{ } [ "in: mirrors.tests USE: math TUPLE: color { green integer } { red integer } { blue integer } ;" eval( -- ) ] unit-test
+{ } [ "in: mirrors.tests use: math TUPLE: color { green integer } { red integer } { blue integer } ;" eval( -- ) ] unit-test
 
 { 1 } [ "red" "mirror" get at ] unit-test
 

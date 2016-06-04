@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel quotations sequences
 strings alien alien.c-types alien.data math byte-arrays ;
-IN: alien.marshall
+in: alien.marshall
 
 <PRIVATE
 : $memory-note ( arg -- )

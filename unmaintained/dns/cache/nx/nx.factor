@@ -2,7 +2,7 @@
 USING: kernel assocs locals combinators
        math math.functions system unicode ;
 
-IN: dns.cache.nx
+in: dns.cache.nx
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

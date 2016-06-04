@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math math.functions ;
-IN: math.derivatives
+in: math.derivatives
 
 HELP: derivative
 { $values { "x" "a position on the function" } { "function" "a differentiable function" } { "m" number } }

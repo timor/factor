@@ -1,6 +1,6 @@
 USING: accessors help.markup help.syntax ui.gadgets.buttons
 ui.gadgets.editors models ui.gadgets ;
-IN: ui.gadgets.controls
+in: ui.gadgets.controls
 
 HELP: <model-btn>
 { $values { "gadget" "the button's label" } { "button" button } }

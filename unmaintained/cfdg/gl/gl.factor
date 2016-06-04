@@ -1,7 +1,7 @@
 
 USING: kernel alien.c-types namespaces sequences opengl.gl ;
 
-IN: cfdg.gl
+in: cfdg.gl
 
 : get-modelview-matrix ( -- alien )
   GL_MODELVIEW_MATRIX 16 "GLdouble" <c-array> tuck glGetDoublev ;

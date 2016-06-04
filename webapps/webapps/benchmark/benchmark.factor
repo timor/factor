@@ -5,7 +5,7 @@ USING: accessors furnace.actions http.server
 http.server.dispatchers http.server.responses http.server.static
 kernel namespaces ;
 
-IN: webapps.benchmark
+in: webapps.benchmark
 
 : <hello-action> ( -- action )
     <page-action>
@@ -31,4 +31,4 @@ TUPLE: benchmark-dispatcher < dispatcher ;
 !   * static content
 !     http://localhost:8080/static/readme.html
 
-MAIN: run-benchmark-webapp
+MAin: run-benchmark-webapp

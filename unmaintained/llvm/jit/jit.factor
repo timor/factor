@@ -4,7 +4,7 @@ USING: accessors alien.c-types alien.data alien.syntax assocs
 destructors kernel llvm.core llvm.engine llvm.wrappers
 namespaces ;
 
-IN: llvm.jit
+in: llvm.jit
 
 TUPLE: jit ee mps ;
 

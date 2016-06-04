@@ -4,7 +4,7 @@ USING: accessors arrays combinators fry generalizations
 io.encodings.ascii io.files io.files.temp io.launcher kernel
 locals make sequences system vocabs.parser words io.directories
 io.pathnames ;
-IN: alien.inline.compiler
+in: alien.inline.compiler
 
 symbol: C
 symbol: C++

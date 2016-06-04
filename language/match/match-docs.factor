@@ -9,9 +9,9 @@ HELP: match
 }
 { $description "Pattern match " { $snippet "value1" } " against " { $snippet "value2" } ". These values can be any Factor value, including sequences and tuples. The values can contain pattern variables, which are symbols that begin with '?'. The result is a hashtable of the bindings, mapping the pattern variables from one sequence to the equivalent value in the other sequence. The " { $link _ } " symbol can be used to ignore the value at that point in the pattern for the match. " }
 { $examples
-    { $unchecked-example "USE: match" "MATCH-VARS: ?a ?b ;\n{ ?a { 2 ?b } 5 } { 1 { 2 3 } _ } match ." "H{ { ?a 1 } { ?b 3 } }" }
+    { $unchecked-example "use: match" "MATCH-VARS: ?a ?b ;\n{ ?a { 2 ?b } 5 } { 1 { 2 3 } _ } match ." "H{ { ?a 1 } { ?b 3 } }" }
 }
-{ $see-also match-cond POSTPONE: MATCH-VARS: replace-patterns match-replace } ;
+{ $see-also match-cond postpone: MATCH-VARS: replace-patterns match-replace } ;
 
 HELP: match-cond
 { $values { "assoc" "a sequence of pairs" } }
@@ -19,23 +19,23 @@ HELP: match-cond
 { $errors "Throws a " { $link no-match-cond } " error if none of the test quotations yield a true value." }
 { $examples
     { $code
-        "USE: match" "MATCH-VARS: ?value ;\n{ increment 346126 } {\n  { { increment ?value } [ ?value do-something ] }\n  { { decrement ?value } [ ?value do-something-else ] }\n  { _ [ no-match-found ] }\n} match-cond" }
+        "use: match" "MATCH-VARS: ?value ;\n{ increment 346126 } {\n  { { increment ?value } [ ?value do-something ] }\n  { { decrement ?value } [ ?value do-something-else ] }\n  { _ [ no-match-found ] }\n} match-cond" }
 }
-{ $see-also match POSTPONE: MATCH-VARS: replace-patterns match-replace } ;
+{ $see-also match postpone: MATCH-VARS: replace-patterns match-replace } ;
 
 HELP: MATCH-VARS:
 { $syntax "MATCH-VARS: var ... ;" }
 { $values { "var" "a match variable name beginning with '?'" } }
 { $description "Creates a symbol that can be used in " { $link match } " and " { $link match-cond } " for binding values in the matched sequence. The symbol name is created as a word that is defined to get the value of the symbol out of the current namespace. This can be used in " { $link match-cond } " to retrive the values in the quotation body." }
 { $examples
-    { $code "USE: match" "MATCH-VARS: ?value ;\n{ increment 346126 } {\n  { { increment ?value } [ ?value do-something ] }\n  { { decrement ?value } [ ?value do-something-else ] }\n  { _ [ no-match-found ] }\n} match-cond" }
+    { $code "use: match" "MATCH-VARS: ?value ;\n{ increment 346126 } {\n  { { increment ?value } [ ?value do-something ] }\n  { { decrement ?value } [ ?value do-something-else ] }\n  { _ [ no-match-found ] }\n} match-cond" }
 }
 { $see-also match match-cond replace-patterns match-replace } ;
 
 HELP: replace-patterns
 { $values { "object" object } { "result" object } }
 { $description "Copy the object, replacing each occurrence of a pattern matching variable with the actual value of that variable." }
-{ $see-also match-cond POSTPONE: MATCH-VARS: match-replace } ;
+{ $see-also match-cond postpone: MATCH-VARS: match-replace } ;
 
 HELP: match-replace
 { $values { "object" object } { "pattern1" object } { "pattern2" object } { "result" object } }
@@ -49,13 +49,13 @@ HELP: match-replace
       "{ 2 1 }"
   }
 }
-{ $see-also match-cond POSTPONE: MATCH-VARS: } ;
+{ $see-also match-cond postpone: MATCH-VARS: } ;
 
 ARTICLE: "match" "Pattern matching"
 "The " { $vocab-link "match" } " vocabulary implements ML-style pattern matching."
 $nl
 "Variables used for pattern matching must be explicitly defined first:"
-{ $subsections POSTPONE: MATCH-VARS: }
+{ $subsections postpone: MATCH-VARS: }
 "A basic pattern match:"
 { $subsections match }
 "A conditional form analogous to " { $link cond } ":"

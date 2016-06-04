@@ -3,7 +3,7 @@
 ! Adapted from mysql.h and mysql.c
 ! Tested with MySQL version - 5.0.24a
 USING: alien alien.syntax combinators kernel system ;
-IN: db.mysql.ffi
+in: db.mysql.ffi
 
 << "mysql" {
     { [ os winnt? ] [ "libmySQL.dll" stdcall ] }

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: bootstrap.image.private kernel namespaces system
 cpu.arm.assembler math layouts words compiler.units ;
-IN: bootstrap.arm
+in: bootstrap.arm
 
 ! We generate ARM3 code
 f have-BX? set

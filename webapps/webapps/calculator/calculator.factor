@@ -3,7 +3,7 @@
 USING: furnace furnace.actions furnace.redirection
 http.server.dispatchers html.forms validators urls accessors
 math kernel io.directories fry ;
-IN: webapps.calculator
+in: webapps.calculator
 
 TUPLE: calculator < dispatcher ;
 
@@ -46,4 +46,4 @@ USING: db.sqlite furnace.alloy namespaces http.server ;
 : run-calculator-main ( -- )
     8080 run-calculator ;
 
-MAIN: run-calculator-main
+MAin: run-calculator-main

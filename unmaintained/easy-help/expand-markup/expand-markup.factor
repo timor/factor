@@ -2,7 +2,7 @@
 USING: accessors arrays kernel lexer locals math namespaces parser
        sequences splitting ;
 
-IN: easy-help.expand-markup
+in: easy-help.expand-markup
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

@@ -1,5 +1,5 @@
 USING: assocs io.pathnames fry namespaces namespaces.private kernel sequences parser hashtables ;
-IN: closures
+in: closures
 symbol: |
 
 ! Selective Binding

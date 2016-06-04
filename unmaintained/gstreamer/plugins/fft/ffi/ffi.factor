@@ -3,7 +3,7 @@
 USING: alien alien.c-types alien.libraries combinators kernel
 system
 gobject-introspection glib.ffi gstreamer.ffi ;
-IN: gstreamer.fft.ffi
+in: gstreamer.fft.ffi
 
 <<
 "gstreamer.fft" {

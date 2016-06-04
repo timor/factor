@@ -5,7 +5,7 @@ USING: kernel combinators sequences sets math threads namespaces continuations
        fry arrays
        dns dns.util dns.misc ;
 
-IN: dns.server
+in: dns.server
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

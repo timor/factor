@@ -1,7 +1,7 @@
 
 USING: accessors ui L-system ;
 
-IN: L-system.models.tree-5
+in: L-system.models.tree-5
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -33,5 +33,5 @@ IN: L-system.models.tree-5
 
 : main ( -- ) [ L-system tree-5 "L-system" open-window ] with-ui ;
 
-MAIN: main
+MAin: main
   

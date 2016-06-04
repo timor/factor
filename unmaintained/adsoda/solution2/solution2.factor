@@ -6,7 +6,7 @@ math
 math.vectors
 math.matrices
 ;
-IN: adsoda.solution2
+in: adsoda.solution2
 
 ! -------------------
 ! correctif solution

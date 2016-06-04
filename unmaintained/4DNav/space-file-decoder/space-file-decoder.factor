@@ -3,7 +3,7 @@
 USING: adsoda xml xml.traversal xml.syntax accessors 
 combinators sequences math.parser kernel splitting values 
 continuations ;
-IN: 4DNav.space-file-decoder
+in: 4DNav.space-file-decoder
 
 : decode-number-array ( x -- y )  
     "," split [ string>number ] map ;

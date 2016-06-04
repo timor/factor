@@ -38,7 +38,7 @@ in: ini-file
 : unescape-string ( str -- str' )
     [ (unescape-string) ] "" make ;
 
-USE: xml.entities
+use: xml.entities
 
 : escape-string ( str -- str' )
     H{

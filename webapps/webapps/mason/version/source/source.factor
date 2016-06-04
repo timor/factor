@@ -4,7 +4,7 @@ USING: bootstrap.image bootstrap.image.download io
 io.directories io.directories.hierarchy io.files.temp
 io.files.unique io.launcher io.pathnames kernel namespaces
 sequences mason.common mason.config webapps.mason.version.files ;
-IN: webapps.mason.version.source
+in: webapps.mason.version.source
 
 : clone-factor ( -- )
     { "git" "clone" "git://factorcode.org/git/factor.git" } try-process ;

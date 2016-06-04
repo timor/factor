@@ -5,7 +5,7 @@ USING: kernel quotations arrays sequences math math.ranges fry
        help.syntax
        easy-help ;
 
-IN: ui.gadgets.plot
+in: ui.gadgets.plot
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

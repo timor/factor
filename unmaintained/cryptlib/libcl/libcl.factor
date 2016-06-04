@@ -10,7 +10,7 @@
 
 USING: alien kernel system combinators alien.syntax ;
 
-IN: cryptlib.libcl
+in: cryptlib.libcl
 
 << "libcl" {
         { [ win32? ] [ "cl32.dll" stdcall ] }

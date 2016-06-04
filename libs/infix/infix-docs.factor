@@ -9,14 +9,14 @@ HELP: [infix
 { $examples
     { $example
         "USING: infix prettyprint ;"
-        "IN: scratchpad"
+        "in: scratchpad"
         "[infix 8+2*3 infix] ."
         "14"
     } $nl
-    { $link POSTPONE: [infix } " isn't that useful by itself, as it can only access literal numbers and no variables. It is designed to be used together with locals; for example with " { $link POSTPONE: :: } " :"
+    { $link postpone: [infix } " isn't that useful by itself, as it can only access literal numbers and no variables. It is designed to be used together with locals; for example with " { $link postpone: :: } " :"
     { $example
         "USING: infix locals math.functions prettyprint ;"
-        "IN: scratchpad"
+        "in: scratchpad"
         ":: quadratic-equation ( a b c -- z- z+ )"
         "    [infix (-b-sqrt(b*b-4*a*c)) / (2*a) infix]"
         "    [infix (-b+sqrt(b*b-4*a*c)) / (2*a) infix] ;"
@@ -28,8 +28,8 @@ HELP: [infix
 ARTICLE: "infix" "Infix notation"
 "The " { $vocab-link "infix" } " vocabulary implements support for infix notation in Factor source code."
 { $subsections
-    POSTPONE: [infix
-    POSTPONE: INFIX::
+    postpone: [infix
+    postpone: INFIX::
 }
 "The usual infix math operators are supported:"
 { $list
@@ -42,7 +42,7 @@ ARTICLE: "infix" "Infix notation"
 }
 "The standard precedence rules apply: Grouping with parentheses before " { $snippet "*" } ", " { $snippet "/" } "and " { $snippet "%" } " before " { $snippet "+" } " and " { $snippet "-" } "."
 { $example
-    "USE: infix"
+    "use: infix"
     "[infix 5-40/10*2 infix] ."
     "-3"
 }

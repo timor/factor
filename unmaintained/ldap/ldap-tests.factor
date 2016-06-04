@@ -1,6 +1,6 @@
 USING: alien alien.c-types io kernel ldap ldap.libldap
 namespaces prettyprint tools.test ;
-IN: ldap.tests
+in: ldap.tests
 
 "void*" <c-object> "ldap://localhost:389" initialize
 

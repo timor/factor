@@ -7,7 +7,7 @@ quotations byte-arrays hashtables.private hashtables generator
 generator.registers generator.fixup sequences.private sbufs
 sbufs.private vectors vectors.private system
 classes.tuple.private layouts strings.private slots.private ;
-IN: cpu.arm.intrinsics
+in: cpu.arm.intrinsics
 
 : %slot-literal-known-tag
     "val" operand

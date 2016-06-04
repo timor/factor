@@ -4,7 +4,7 @@ monads persistency sequences sequences.extras ui ui.gadgets.controls
 ui.gadgets.layout models.combinators ui.gadgets.labels
 ui.gadgets.scrollers ui.pens.solid io.files.temp ;
 FROM: sets => prune ;
-IN: recipes
+in: recipes
 
 STORED-TUPLE: recipe { title { VARCHAR 100 } } { votes INTEGER } { txt TEXT } { genre { VARCHAR 100 } } ;
 : <recipe> ( title genre text -- recipe ) recipe new swap >>txt swap >>genre swap >>title 0 >>votes ;
@@ -58,4 +58,4 @@ STORED-TUPLE: recipe { title { VARCHAR 100 } } { votes INTEGER } { txt TEXT } { 
       2merge 0 <basic> switch-models >>model
    ] with-interface "recipes" open-window ] with-ui ;
 
-MAIN: recipe-browser
+MAin: recipe-browser

@@ -3,7 +3,7 @@ USING: kernel sequences assocs sets locals combinators
        accessors system math math.functions unicode prettyprint
        combinators.smart dns ;
 
-IN: dns.cache.rr
+in: dns.cache.rr
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

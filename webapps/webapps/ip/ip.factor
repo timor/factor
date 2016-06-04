@@ -3,7 +3,7 @@
 USING: accessors furnace.actions http.server
 http.server.dispatchers html.forms io.sockets
 namespaces prettyprint kernel ;
-IN: webapps.ip
+in: webapps.ip
 
 TUPLE: ip-app < dispatcher ;
 
@@ -20,4 +20,4 @@ TUPLE: ip-app < dispatcher ;
     <ip-app> main-responder set-global
     8080 httpd drop ;
 
-MAIN: run-ip-app
+MAin: run-ip-app

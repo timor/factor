@@ -3,7 +3,7 @@ lists.lazy locals math math.functions math.parser math.ranges
 models.product monads random sequences sets ui ui.gadgets.controls
 ui.gadgets.layout models.combinators ui.gadgets.alerts vectors fry
 ui.gadgets.labels shuffle ;
-IN: sudokus
+in: sudokus
 
 : row ( index -- row ) 1 + 9 / ceiling ;
 : col ( index -- col ) 9 mod 1 + ;
@@ -37,4 +37,4 @@ IN: sudokus
         ] with-self , ] <vbox> { 280 220 } >>pref-dim
     "Sudoku Sleuth" open-window ] with-ui ;
 
-MAIN: do-sudoku
+MAin: do-sudoku

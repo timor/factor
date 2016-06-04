@@ -1,5 +1,5 @@
 USING: io.backend kernel system vocabs.loader ;
-IN: io.sniffer.backend
+in: io.sniffer.backend
 
 symbol: sniffer-type
 TUPLE: sniffer ;

@@ -5,7 +5,7 @@ http http.server http.server.dispatchers http.server.responses
 http.server.static furnace.actions furnace.json
 io io.files json.writer kernel math.parser namespaces
 semantic-db sequences strings tangle.path ;
-IN: tangle
+in: tangle
 
 GENERIC: render* ( content templater -- output )
 GENERIC: render ( content templater -- )

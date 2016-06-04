@@ -5,7 +5,7 @@ byte-arrays namespaces io.buffers math generic io strings
 io.streams.lines io.streams.plain io.streams.duplex combinators
 alien.c-types continuations ;
 
-IN: cryptlib.streams
+in: cryptlib.streams
 
 : set-attribute ( handle attribute value -- )
     cryptSetAttribute check-result ;

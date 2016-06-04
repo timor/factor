@@ -9,7 +9,7 @@ USING: kernel byte-arrays combinators strings arrays sequences splitting
        assocs
        ;
 
-IN: dns
+in: dns
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

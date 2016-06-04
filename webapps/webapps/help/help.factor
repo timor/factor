@@ -5,7 +5,7 @@ help.html help.topics html.components html.forms http.server
 http.server.dispatchers http.server.static io.directories
 io.files.temp kernel locals namespaces sequences
 unicode urls ;
-IN: webapps.help
+in: webapps.help
 
 TUPLE: help-webapp < dispatcher ;
 
@@ -47,4 +47,4 @@ TUPLE: help-webapp < dispatcher ;
         main-responder set-global
     8080 httpd drop ;
 
-MAIN: run-help-webapp
+MAin: run-help-webapp

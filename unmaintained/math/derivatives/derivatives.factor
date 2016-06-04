@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel continuations combinators sequences math math.order math.ranges
     accessors float-arrays ;
-IN: math.derivatives
+in: math.derivatives
 
 TUPLE: state x func h err i j errt fac hh ans a done ;
 

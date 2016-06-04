@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Jeremy Hughes.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.inline lexer multiline namespaces parser ;
-IN: alien.inline.syntax
+in: alien.inline.syntax
 
 
 SYNTAX: C-LIBRARY: scan define-c-library ;

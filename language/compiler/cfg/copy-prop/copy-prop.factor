@@ -116,7 +116,7 @@ PRIVATE>
 ! value-numbering subsume copy-propagation, thus eliminating
 ! this pass altogether.
 
-USE: compiler.cfg
+use: compiler.cfg
 
 : copy-propagation ( cfg -- )
     {

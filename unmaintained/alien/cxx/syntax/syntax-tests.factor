@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: tools.test alien.cxx.syntax alien.inline.syntax
 alien.marshall.syntax alien.marshall accessors kernel ;
-IN: alien.cxx.syntax.tests
+in: alien.cxx.syntax.tests
 
 DELETE-C-LIBRARY: test
 C-LIBRARY: test

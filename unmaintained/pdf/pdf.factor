@@ -5,7 +5,7 @@
 
 USING: assocs continuations hashtables kernel math namespaces pdf.libhpdf ;
 
-IN: pdf
+in: pdf
 
 symbol: pdf
 symbol: page

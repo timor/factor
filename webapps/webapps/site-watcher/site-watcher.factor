@@ -10,7 +10,7 @@ http.server.dispatchers kernel namespaces site-watcher site-watcher.db
 site-watcher.private urls sequences validators
 webapps.site-watcher.common webapps.site-watcher.watching
 webapps.site-watcher.spidering webapps.utils ;
-IN: webapps.site-watcher
+in: webapps.site-watcher
 
 : <main-action> ( -- action )
     <page-action>

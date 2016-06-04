@@ -1,5 +1,5 @@
 USING: help.markup help.syntax models models.arrow sequences monads ;
-IN: models.combinators
+in: models.combinators
 
 HELP: merge
 { $values { "models" "a list of models" } { "model" basic-model } }

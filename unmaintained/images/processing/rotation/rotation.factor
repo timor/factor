@@ -3,7 +3,7 @@
 USING: accessors arrays colors combinators
 combinators.short-circuit fry grouping images images.bitmap
 images.loader images.normalization kernel locals math sequences ;
-IN: images.processing.rotation
+in: images.processing.rotation
 
 ERROR: unsupported-rotation degrees ;
 

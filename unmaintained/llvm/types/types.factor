@@ -5,7 +5,7 @@ kernel llvm.core locals math.parser math multiline namespaces
 parser peg.ebnf sequences sequences.deep specialized-arrays
 strings vocabs words ;
 SPECIALIZED-ARRAY: void*
-IN: llvm.types
+in: llvm.types
 
 ! Type resolution strategy:
 !  pass 1:

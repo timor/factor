@@ -3,7 +3,7 @@ io.sockets.headers.bsd kernel io.sniffer io.sniffer.bsd
 io.streams.string io.unix.backend math
 sequences system byte-arrays io.sniffer.filter.backend
 io.sniffer.filter.backend io.sniffer.backend ;
-IN: io.sniffer.filter.bsd
+in: io.sniffer.filter.bsd
 
 ! http://www.iana.org/assignments/ethernet-numbers
 

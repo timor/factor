@@ -221,7 +221,7 @@ C: <vocab-author> vocab-author
 : vocab-is-not-loaded ( vocab -- )
     "Not loaded" $heading
     "You must first load this vocabulary to browse its documentation and words."
-    print-element vocab-name "USE: " prepend 1array $code ;
+    print-element vocab-name "use: " prepend 1array $code ;
 
 : describe-words ( vocab -- )
     {

@@ -4,7 +4,7 @@ USING: accessors furnace.actions help.html
 http.server.responses io.directories io.directories.hierarchy
 io.files io.launcher io.pathnames kernel mason.config memoize
 namespaces sequences threads webapps.mason.utils ;
-IN: webapps.mason.docs-update
+in: webapps.mason.docs-update
 
 : docs-path ( -- path )
     docs-directory get "docs.tar.gz" append-path ;

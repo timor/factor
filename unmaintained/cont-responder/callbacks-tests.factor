@@ -2,7 +2,7 @@ USING: furnace furnace.actions furnace.callbacks accessors
 http http.server http.server.responses tools.test
 namespaces io fry sequences
 splitting kernel hashtables continuations ;
-IN: furnace.callbacks.tests
+in: furnace.callbacks.tests
 
 [ 123 ] [
     [

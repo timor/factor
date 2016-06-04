@@ -3,7 +3,7 @@ USING: kernel namespaces sequences math
        opengl.gl opengl.glu ui ui.gadgets.slate
        random-weighted cfdg ;
 
-IN: cfdg.models.flower6
+in: cfdg.models.flower6
 
 : petal6 ( -- )
 iterate? [
@@ -26,5 +26,5 @@ iterate? [
 
 : run ( -- ) [ init ] cfdg-window. ;
 
-MAIN: run
+MAin: run
 

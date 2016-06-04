@@ -4,7 +4,7 @@ windows.shell32 kernel accessors windows.types
 prettyprint namespaces ui.tools.listener ui.tools.workspace
 alien.data alien sequences math classes.struct ;
 SPECIALIZED-ARRAY: WCHAR
-IN: windows.dragdrop-listener
+in: windows.dragdrop-listener
 
 : filenames-from-hdrop ( hdrop -- filenames )
     dup 0xFFFFFFFF f 0 DragQueryFile ! get count of files
@@ -56,7 +56,7 @@ symbol: +listener-dragdrop-wrapper+
                 2drop nip
                 filenames-from-data-object
                 dup length 1 = [
-                    first unparse [ "USE: parser " % % " run-file" % ] "" make
+                    first unparse [ "use: parser " % % " run-file" % ] "" make
                     eval-listener
                     DROPEFFECT_COPY
                 ] [ 2drop DROPEFFECT_NONE ] if

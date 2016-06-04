@@ -1,7 +1,7 @@
 
 USING: kernel sequences random accessors dns ;
 
-IN: dns.stub
+in: dns.stub
 
 ! Stub resolver
 ! 

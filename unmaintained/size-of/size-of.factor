@@ -4,7 +4,7 @@ USING: io io.encodings.ascii io.files io.files.temp io.launcher
        help.syntax
        easy-help ;
 
-IN: size-of
+in: size-of
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

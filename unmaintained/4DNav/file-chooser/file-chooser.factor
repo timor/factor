@@ -29,7 +29,7 @@ values
 tools.walker
 fry
 ;
-IN: 4DNav.file-chooser
+in: 4DNav.file-chooser
 
 TUPLE: file-chooser < track 
     path

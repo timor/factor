@@ -10,7 +10,7 @@ USING: kernel alien.c-types combinators namespaces make arrays
 
 QUALIFIED: syntax
 
-IN: cfdg
+in: cfdg
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -256,7 +256,7 @@ symbol: the-slate
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-USE: fry
+use: fry
 
 : cfdg-window. ( quot -- )
   '[ [ @ <cfdg-gadget> "CFDG" open-window ] with-scope ] with-ui ;

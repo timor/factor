@@ -21,7 +21,7 @@ HELP: <trivial-response>
 { $description "Creates an HTTP error response." }
 { $examples
     { $code
-        "USE: http.server.responses"
+        "use: http.server.responses"
         "415 \"Unsupported Media Type\" <trivial-response>"
     }
 } ;

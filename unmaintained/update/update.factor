@@ -1,6 +1,6 @@
 USING: kernel system sequences io.files io.directories
 io.pathnames io.launcher bootstrap.image http.client update.util ;
-IN: update
+in: update
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -52,4 +52,4 @@ IN: update
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-MAIN: update
+MAin: update

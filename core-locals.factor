@@ -1,30 +1,30 @@
 auto-use
 in: syntax
-USE: delegate.private
+use: delegate.private
 
-<< forget: POSTPONE: MACRO: >>
-<< forget: POSTPONE: MACRO:: >>
-<< forget: POSTPONE: MEMO: >>
-<< forget: POSTPONE: MEMO:: >>
-<< forget: POSTPONE: M:: >>
-<< forget: POSTPONE: IDENTITY-MEMO: >>
-<< forget: POSTPONE: IDENTITY-MEMO:: >>
-<< forget: POSTPONE: TYPED: >>
-<< forget: POSTPONE: TYPED:: >>
+<< forget: postpone: MACRO: >>
+<< forget: postpone: MACRO:: >>
+<< forget: postpone: MEMO: >>
+<< forget: postpone: MEMO:: >>
+<< forget: postpone: M:: >>
+<< forget: postpone: IDENTITY-MEMO: >>
+<< forget: postpone: IDENTITY-MEMO:: >>
+<< forget: postpone: TYPED: >>
+<< forget: postpone: TYPED:: >>
 
-<< forget: POSTPONE: '[ >>
-<< forget: POSTPONE: :: >>
-<< forget: POSTPONE: :> >>
+<< forget: postpone: '[ >>
+<< forget: postpone: :: >>
+<< forget: postpone: :> >>
 << forget: _ >>
 << forget: @ >>
-<< forget: POSTPONE: [| >>
-<< forget: POSTPONE: [let >>
-<< forget: POSTPONE: IH{ >>
-<< forget: POSTPONE: PROTOCOL: >>
-<< forget: POSTPONE: CONSULT: >>
-<< forget: POSTPONE: BROADCAST: >>
-<< forget: POSTPONE: SLOT-PROTOCOL: >>
-<< forget: POSTPONE: HINTS: >>
+<< forget: postpone: [| >>
+<< forget: postpone: [let >>
+<< forget: postpone: IH{ >>
+<< forget: postpone: PROTOCOL: >>
+<< forget: postpone: CONSULT: >>
+<< forget: postpone: BROADCAST: >>
+<< forget: postpone: SLOT-PROTOCOL: >>
+<< forget: postpone: HINTS: >>
 
 
 
@@ -88,7 +88,7 @@ SYNTAX: HINTS:
 
  H{ } clone root-cache set-global
  
- USE: io.directories.search
+ use: io.directories.search
  "/Users/erg/factor/core/locals" t recursive-directory-files
 [ "/Users/erg/factor/core/" ?head drop ] map
 [ "." swap subseq? ] reject
@@ -97,8 +97,8 @@ SYNTAX: HINTS:
 [ reload ] each
 
 
- USE: io.directories.search
- USE: ui.tools.listener
+ use: io.directories.search
+ use: ui.tools.listener
  "/Users/erg/factor/core/stack-checker" t recursive-directory-files
 [ "/Users/erg/factor/core/" ?head drop ] map
 [ "." swap subseq? ] reject

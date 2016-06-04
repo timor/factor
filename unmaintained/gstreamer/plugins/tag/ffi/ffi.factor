@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.libraries combinators kernel system
 gobject-introspection glib.ffi gstreamer.ffi ;
-IN: gstreamer.tag.ffi
+in: gstreamer.tag.ffi
 
 <<
 "gstreamer.tag" {

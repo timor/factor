@@ -1,6 +1,6 @@
 USING: accessors db.sqlite http.server io.files.temp io.servers
 io.sockets.secure.debug kernel ;
-IN: webapps.utils
+in: webapps.utils
 
 : <temp-sqlite-db> ( name -- db )
     temp-file <sqlite-db> ;

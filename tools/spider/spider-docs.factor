@@ -24,7 +24,7 @@ ARTICLE: "spider-tutorial" "Spider tutorial"
 "But suppose the front page contains thousands of links. To avoid grabbing them all, we can set " { $slot "max-count" } " to a reasonable limit."
 { $code "10 >>max-count" }
 "A timeout might keep the spider from hitting the server too hard:"
-{ $code "USE: calendar 1.5 seconds >>sleep" }
+{ $code "use: calendar 1.5 seconds >>sleep" }
 "Since we happen to know that not all pages of a wiki are suitable for spidering, we will spider only the wiki view pages, not the edit or revisions pages. To do this, we add a filter through which new links are tested; links that pass the filter are added to the todo queue, while links that do not are discarded. You can add several filters to the filter array, but we'll just add a single one for now."
 { $code "{ [ path>> \"/wiki/view\" head? ] } >>filters" }
 "Finally, to start the spider, call the " { $link run-spider } " word."

@@ -81,7 +81,7 @@ ERROR: not-a-vocab-root string ;
     [
         scaffold-copyright
         "USING: ;" print
-        "IN: " write print
+        "in: " write print
     ] with-string-writer ;
 
 : set-scaffold-main-file ( vocab path -- )
@@ -217,7 +217,7 @@ M: object add-using ( object -- )
 : docs-file-string ( vocab -- str2 )
     [
         {
-            [ "IN: " write print nl ]
+            [ "in: " write print nl ]
             [ interesting-words. ]
             [
                 [ "ARTICLE: " write unparse dup write bl print ]
@@ -302,7 +302,7 @@ PRIVATE>
     [
         scaffold-copyright
         "USING: tools.test " write dup write " ;" print
-        "IN: " write write ".tests" print
+        "in: " write write ".tests" print
     ] with-string-writer ;
 
 : set-scaffold-tests-file ( vocab path -- )

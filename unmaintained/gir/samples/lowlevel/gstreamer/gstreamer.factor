@@ -3,7 +3,7 @@
 USING: alien.c-types alien.strings fry byte-arrays classes.struct
 io.encodings.utf8 kernel locals math prettyprint 
 gstreamer.ffi glib.ffi gobject.ffi gtk.ffi ;
-IN: gir.samples.lowlevel.gstreamer
+in: gir.samples.lowlevel.gstreamer
 
 ! CONSTANT: uri "http://www.xiph.org/vorbis/listen/compilation-ogg-q4.ogg"
 CONSTANT: uri "http://tinyvid.tv/file/3gocxnjott7wr.ogg"
@@ -59,5 +59,5 @@ CONSTANT: uri "http://tinyvid.tv/file/3gocxnjott7wr.ogg"
     
     gtk_main ;
 
-MAIN: gstreamer-main
+MAin: gstreamer-main
 

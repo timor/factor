@@ -3,7 +3,7 @@ USING: kernel namespaces arrays sequences threads math math.vectors
        ui random
        springies springies.ui ;
 
-IN: springies.models.urchin
+in: springies.models.urchin
 
 : model ( -- )
 
@@ -110,4 +110,4 @@ curry each
 
 : go ( -- ) [ model ] go* ;
 
-MAIN: go
+MAin: go

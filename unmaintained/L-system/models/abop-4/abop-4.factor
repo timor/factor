@@ -1,7 +1,7 @@
 
 USING: accessors ui L-system ;
 
-IN: L-system.models.abop-4
+in: L-system.models.abop-4
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -53,4 +53,4 @@ IN: L-system.models.abop-4
 
 : main ( -- ) [ L-system abop-4 "L-system" open-window ] with-ui ;
 
-MAIN: main
+MAin: main

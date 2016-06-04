@@ -1,5 +1,5 @@
 USING: triggers kernel tools.test ;
-IN: triggers.tests
+in: triggers.tests
 
 symbol: test-trigger
 test-trigger reset-trigger

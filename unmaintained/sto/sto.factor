@@ -1,7 +1,7 @@
 
 USING: kernel lexer parser words quotations compiler.units ;
 
-IN: sto
+in: sto
 
 ! Use 'sto' to bind a value on the stack to a word.
 !

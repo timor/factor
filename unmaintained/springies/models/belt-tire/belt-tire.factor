@@ -2,7 +2,7 @@
 USING: kernel namespaces arrays sequences threads math ui random
        springies springies.ui ;
 
-IN: springies.models.belt-tire
+in: springies.models.belt-tire
 
 : model ( -- )
 
@@ -304,4 +304,4 @@ nodes> 200 random -100 + 100 2array  [ swap set-node-vel ] curry each ;
 
 : go ( -- ) [ model ] go* ;
 
-MAIN: go
+MAin: go

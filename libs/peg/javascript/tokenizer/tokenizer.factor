@@ -6,7 +6,7 @@ in: peg.javascript.tokenizer
 ! Grammar for JavaScript. Based on OMeta-JS example from:
 ! http://jarrett.cs.ucla.edu/ometa-js/#JavaScript_Compiler
 
-USE: prettyprint
+use: prettyprint
 
 EBNF: tokenize-javascript
 Letter            = [a-zA-Z]

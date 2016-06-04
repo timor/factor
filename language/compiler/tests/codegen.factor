@@ -530,7 +530,7 @@ TUPLE: myseq { underlying1 byte-array read-only } { underlying2 byte-array read-
 [ 3524578 5702887 ] [ fib-count2 ] unit-test
 
 ! Stupid repro
-USE: compiler.cfg.registers
+use: compiler.cfg.registers
 
 reset-vreg-counter
 

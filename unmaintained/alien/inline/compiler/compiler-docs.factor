@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Jeremy Hughes.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel strings words.symbol sequences ;
-IN: alien.inline.compiler
+in: alien.inline.compiler
 
 HELP: C
 { $var-description "A symbol representing C source." } ;

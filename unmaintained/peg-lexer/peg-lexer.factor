@@ -1,7 +1,7 @@
 USING: hashtables assocs sequences locals math accessors multiline delegate strings
 delegate.protocols kernel peg peg.ebnf peg.private lexer namespaces combinators parser
 words ;
-IN: peg-lexer
+in: peg-lexer
 
 TUPLE: lex-hash hash ;
 CONSULT: assoc-protocol lex-hash hash>> ;

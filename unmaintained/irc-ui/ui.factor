@@ -13,7 +13,7 @@ USING: accessors kernel threads combinators concurrency.mailboxes
 
 RENAME: join sequences => sjoin
 
-IN: irc.ui
+in: irc.ui
 
 symbol: chat
 
@@ -245,6 +245,6 @@ M: irc-tab pref-dim*
 
 : main-run ( -- ) run-ircui ;
 
-MAIN: main-run
+MAin: main-run
 
 "irc.ui.commands" require

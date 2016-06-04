@@ -121,13 +121,13 @@ defer: expression-parser
 
 : USE-parser ( -- parser )
     [
-        "USE:" token sp hide ,
+        "use:" token sp hide ,
         identifier-parser sp ,
     ] seq* [ first value>> ast-use boa ] action ;
 
 : IN-parser ( -- parser )
     [
-        "IN:" token sp hide ,
+        "in:" token sp hide ,
         identifier-parser sp ,
     ] seq* [ first value>> ast-in boa ] action ;
 

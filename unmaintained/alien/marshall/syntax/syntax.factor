@@ -4,7 +4,7 @@ USING: accessors alien.inline alien.inline.types alien.marshall
 combinators effects generalizations kernel locals make namespaces
 quotations sequences words alien.marshall.structs lexer parser
 vocabs.parser multiline ;
-IN: alien.marshall.syntax
+in: alien.marshall.syntax
 
 :: marshalled-function ( name types effect -- word quot effect )
     name types effect factor-function

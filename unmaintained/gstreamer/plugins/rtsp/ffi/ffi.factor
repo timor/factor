@@ -3,7 +3,7 @@
 USING: alien alien.syntax alien.libraries combinators kernel
 system
 gobject-introspection glib.ffi gstreamer.ffi gstreamer.sdp.ffi ;
-IN: gstreamer.rtsp.ffi
+in: gstreamer.rtsp.ffi
 
 <<
 "gstreamer.rtsp" {

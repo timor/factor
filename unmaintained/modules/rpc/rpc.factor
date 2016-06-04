@@ -3,7 +3,7 @@
 USING: accessors assocs fry generalizations io.encodings.binary
 io.sockets kernel locals namespaces parser sequences serialize
 vocabs vocabs.parser words io ;
-IN: modules.rpc
+in: modules.rpc
 
 TUPLE: rpc-request args vocabspec wordname ;
 

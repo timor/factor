@@ -3,7 +3,7 @@
 USING: accessors alien.c-types assocs combinators.short-circuit
 continuations effects fry kernel math memoize sequences
 splitting strings peg.ebnf make words ;
-IN: alien.inline.types
+in: alien.inline.types
 
 : cify-type ( str -- str' )
     dup word? [ name>> ] when

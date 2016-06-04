@@ -9,7 +9,7 @@ math.blas.vectors math.constants math.functions math.matrices
 math.order math.vectors memoize namespaces sequences
 sequences.deep ;
 QUALIFIED-WITH: bitstreams bs
-IN: images.jpeg
+in: images.jpeg
 
 singleton: jpeg-image
 

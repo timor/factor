@@ -19,7 +19,7 @@ in: compiler.tests.redefine8
 ] unit-test
 
 [ ] [
-    "USE: math
+    "use: math
     in: compiler.tests.redefine8
     INSTANCE: float my-mixin"
     eval( -- )

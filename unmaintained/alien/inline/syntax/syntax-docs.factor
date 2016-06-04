@@ -1,17 +1,17 @@
 ! Copyright (C) 2009 Jeremy Hughes.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax alien.inline ;
-IN: alien.inline.syntax
+in: alien.inline.syntax
 
 HELP: ;C-LIBRARY
 { $syntax ";C-LIBRARY" }
-{ $description "Writes, compiles, and links code generated since previous invocation of " { $link POSTPONE: C-LIBRARY: } "." }
-{ $see-also POSTPONE: compile-c-library } ;
+{ $description "Writes, compiles, and links code generated since previous invocation of " { $link postpone: C-LIBRARY: } "." }
+{ $see-also postpone: compile-c-library } ;
 
 HELP: C-FRAMEWORK:
 { $syntax "C-FRAMEWORK: name" }
-{ $description "OS X only. Link to named framework. Takes effect when " { $link POSTPONE: ;C-LIBRARY } " is called." }
-{ $see-also POSTPONE: c-use-framework } ;
+{ $description "OS X only. Link to named framework. Takes effect when " { $link postpone: ;C-LIBRARY } " is called." }
+{ $see-also postpone: c-use-framework } ;
 
 HELP: C-FUNCTION:
 { $syntax "C-FUNCTION: return name ( args ... )\nbody\n;" }
@@ -19,7 +19,7 @@ HELP: C-FUNCTION:
 { $examples
   { $example
     "USING: alien.inline.syntax prettyprint ;"
-    "IN: cmath.ffi"
+    "in: cmath.ffi"
     ""
     "C-LIBRARY: cmathlib"
     ""
@@ -32,12 +32,12 @@ HELP: C-FUNCTION:
     "1 2 add ."
     "3" }
 }
-{ $see-also POSTPONE: define-c-function } ;
+{ $see-also postpone: define-c-function } ;
 
 HELP: C-INCLUDE:
 { $syntax "C-INCLUDE: name" }
 { $description "Appends an include line to the C library in scope." }
-{ $see-also POSTPONE: c-include } ;
+{ $see-also postpone: c-include } ;
 
 HELP: C-LIBRARY:
 { $syntax "C-LIBRARY: name" }
@@ -45,7 +45,7 @@ HELP: C-LIBRARY:
 { $examples
   { $example
     "USING: alien.inline.syntax ;"
-    "IN: rectangle.ffi"
+    "in: rectangle.ffi"
     ""
     "C-LIBRARY: rectlib"
     ""
@@ -58,31 +58,31 @@ HELP: C-LIBRARY:
     ";C-LIBRARY"
     "" }
 }
-{ $see-also POSTPONE: define-c-library } ;
+{ $see-also postpone: define-c-library } ;
 
 HELP: C-LINK/FRAMEWORK:
 { $syntax "C-LINK/FRAMEWORK: name" }
-{ $description "Equivalent to " { $link POSTPONE: C-FRAMEWORK: } " on OS X and " { $link POSTPONE: C-LINK: } " everywhere else." }
-{ $see-also POSTPONE: c-link-to/use-framework } ;
+{ $description "Equivalent to " { $link postpone: C-FRAMEWORK: } " on OS X and " { $link postpone: C-LINK: } " everywhere else." }
+{ $see-also postpone: c-link-to/use-framework } ;
 
 HELP: C-LINK:
 { $syntax "C-LINK: name" }
-{ $description "Link to named library. Takes effect when " { $link POSTPONE: ;C-LIBRARY } " is called." }
-{ $see-also POSTPONE: c-link-to } ;
+{ $description "Link to named library. Takes effect when " { $link postpone: ;C-LIBRARY } " is called." }
+{ $see-also postpone: c-link-to } ;
 
 HELP: C-STRUCTURE:
 { $syntax "C-STRUCTURE: name pairs ... ;" }
 { $description "Like " { $snippet "C-STRUCT:" } " but also generates equivalent C code."}
-{ $see-also POSTPONE: define-c-struct } ;
+{ $see-also postpone: define-c-struct } ;
 
 HELP: C-TYPEDEF:
 { $syntax "C-TYPEDEF: old new" }
 { $description "Like " { $snippet "TYPEDEF:" } " but generates a C typedef statement too." }
-{ $see-also POSTPONE: define-c-typedef } ;
+{ $see-also postpone: define-c-typedef } ;
 
 HELP: COMPILE-AS-C++
 { $syntax "COMPILE-AS-C++" }
-{ $description "Insert this word anywhere between " { $link POSTPONE: C-LIBRARY: } " and " { $link POSTPONE: ;C-LIBRARY } " and the generated code will be treated as C++ with " { $snippet "extern \"C\"" } " prepended to each function prototype." } ;
+{ $description "Insert this word anywhere between " { $link postpone: C-LIBRARY: } " and " { $link postpone: ;C-LIBRARY } " and the generated code will be treated as C++ with " { $snippet "extern \"C\"" } " prepended to each function prototype." } ;
 
 HELP: DELETE-C-LIBRARY:
 { $syntax "DELETE-C-LIBRARY: name" }
@@ -93,7 +93,7 @@ HELP: DELETE-C-LIBRARY:
     "This word is mainly useful for unit tests."
   }
 }
-{ $see-also POSTPONE: delete-inline-library } ;
+{ $see-also postpone: delete-inline-library } ;
 
 HELP: <RAW-C
 { $syntax "<RAW-C code RAW-C>" }

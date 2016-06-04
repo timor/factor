@@ -16,8 +16,8 @@ HELP: see
 { $contract "Prettyprints a definition." }
 { $examples
   "A word:" { $code "\\ append see" }
-  "A method:" { $code "USE: arrays" "M\\ array length see" }
-  "A help article:" { $code "USE: help.topics" "\"help\" >link see" }
+  "A method:" { $code "use: arrays" "M\\ array length see" }
+  "A help article:" { $code "use: help.topics" "\"help\" >link see" }
 } ;
 
 HELP: see-methods
@@ -31,12 +31,12 @@ HELP: definer
     { $example "USING: definitions prettyprint ;"
                "in: scratchpad"
                ": foo ( -- ) ; \\ foo definer . ."
-               ";\nPOSTPONE: :"
+               ";\npostpone: :"
     }
     { $example "USING: definitions prettyprint ;"
                "in: scratchpad"
                "symbol: foo \\ foo definer . ."
-               "f\nPOSTPONE: symbol:"
+               "f\npostpone: symbol:"
     }
 }
 { $notes "This word is used in the implementation of " { $link see } "." } ;

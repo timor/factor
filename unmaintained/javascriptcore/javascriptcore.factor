@@ -4,7 +4,7 @@ USING: alien.c-types alien.data byte-arrays continuations fry
 io.encodings.string io.encodings.utf8 io.files
 javascriptcore.ffi javascriptcore.ffi.hack kernel namespaces
 sequences ;
-IN: javascriptcore
+in: javascriptcore
 
 ERROR: javascriptcore-error error ;
 

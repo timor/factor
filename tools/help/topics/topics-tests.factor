@@ -17,7 +17,7 @@ symbol: foo
 
 { } [
     {
-        "USE: help.syntax"
+        "use: help.syntax"
         "ARTICLE: { \"test\" 1 } \"Hello\""
         "\"abc\""
         "\"def\" ;"

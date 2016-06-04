@@ -44,7 +44,7 @@ ARTICLE: "cookbook-colon-defs" "Shuffle word and definition cookbook"
 { $code ": sq ( x -- y ) dup * ;" }
 "(You could have looked this up yourself by clicking on the " { $link sq } " word itself.)"
 $nl
-"Note the key elements in a word definition: The colon " { $link POSTPONE: : } " denotes the start of a word definition. The name of the new word and a stack effect declaration must immediately follow. The word definition then continues on until the " { $link POSTPONE: ; } " token signifies the end of the definition. This type of word definition is called a " { $emphasis "compound definition." }
+"Note the key elements in a word definition: The colon " { $link postpone: : } " denotes the start of a word definition. The name of the new word and a stack effect declaration must immediately follow. The word definition then continues on until the " { $link postpone: ; } " token signifies the end of the definition. This type of word definition is called a " { $emphasis "compound definition." }
 $nl
 "Factor is all about code reuse through short and logical colon definitions. Breaking up a problem into small pieces which are easy to test is called " { $emphasis "factoring." }
 $nl
@@ -141,14 +141,14 @@ $nl
 { $code "\"Hello world\" print" }
 "The " { $link print } " word is contained inside the " { $vocab-link "io" } " vocabulary, which is available in the listener but must be explicitly added to the search path in source files:"
 { $code
-    "USE: io"
+    "use: io"
     "\"Hello world\" print"
 }
 "Typically a source file will refer to words in multiple vocabularies, and they can all be added to the search path in one go:"
 { $code "USING: arrays kernel math ;" }
-"New words go into the " { $vocab-link "scratchpad" } " vocabulary by default. You can change this with " { $link POSTPONE: IN: } ":"
+"New words go into the " { $vocab-link "scratchpad" } " vocabulary by default. You can change this with " { $link postpone: in: } ":"
 { $code
-    "IN: time-machine"
+    "in: time-machine"
     ": time-travel ( when what -- ) frob fizz flap ;"
 }
 "Note that words must be defined before being referenced. The following is generally invalid:"
@@ -157,7 +157,7 @@ $nl
     ": accelerate ( -- ) accelerator on ;"
     ": particles ( what -- ) [ (particles) ] each ;"
 }
-"You would have to place the first definition after the two others for the parser to accept the file. If you have a set of mutually recursive words, you can use " { $link POSTPONE: defer: } "."
+"You would have to place the first definition after the two others for the parser to accept the file. If you have a set of mutually recursive words, you can use " { $link postpone: defer: } "."
 { $references
     { }
     "word-search"
@@ -167,13 +167,13 @@ $nl
 
 ARTICLE: "cookbook-application" "Application cookbook"
 "Vocabularies can define a main entry point:"
-{ $code "IN: game-of-life"
+{ $code "in: game-of-life"
 "..."
 ": play-life ( -- ) ... ;"
 ""
 "main: play-life"
 }
-"See " { $link POSTPONE: main: } " for details. The " { $link run } " word loads a vocabulary if necessary, and calls its main entry point; try the following, it's fun:"
+"See " { $link postpone: main: } " for details. The " { $link run } " word loads a vocabulary if necessary, and calls its main entry point; try the following, it's fun:"
 { $code "\"tetris\" run" }
 "Factor can deploy stand-alone executables; they do not have any external dependencies and consist entirely of compiled native machine code:"
 { $code "\"tetris\" deploy-tool" }
@@ -234,7 +234,7 @@ command-line get [
 "You can run it like so,"
 { $code "./factor grep.factor '.*hello.*' myfile.txt" }
 "You'll notice this script takes a while to start. This is because it is loading and compiling the " { $vocab-link "regexp" } " vocabulary every time. To speed up startup, load the vocabulary into your image, and save the image:"
-{ $code "USE: regexp" "save" }
+{ $code "use: regexp" "save" }
 "Now, the " { $snippet "grep.factor" } " script will start up much faster. See " { $link "images" } " for details."
 { $heading "Executable scripts" }
 "It is also possible to make executable scripts. A Factor file can begin with a 'shebang' like the following:"

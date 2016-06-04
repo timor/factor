@@ -1,7 +1,7 @@
 ! Copyright (c) 2008 Reginald Keith Ford II.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.derivatives ;
-IN: math.newtons-method
+in: math.newtons-method
 
 ! Newton's method of approximating roots
 

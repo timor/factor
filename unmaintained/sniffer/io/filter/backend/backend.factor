@@ -1,7 +1,7 @@
 USING: byte-arrays combinators io io.backend
 io.sockets.headers io.sniffer.backend kernel
 prettyprint sequences ;
-IN: io.sniffer.filter.backend
+in: io.sniffer.filter.backend
 
 HOOK: sniffer-loop io-backend ( stream -- )
 HOOK: packet. io-backend ( string -- )

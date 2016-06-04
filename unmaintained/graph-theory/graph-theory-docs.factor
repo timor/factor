@@ -1,7 +1,7 @@
 ! See http://factorcode.org/license.txt for BSD licence.
 USING: help.markup help.syntax ;
 
-IN: graph-theory
+in: graph-theory
 
 ARTICLE: "graph-protocol" "Graph protocol"
 "All graphs must be instances of the graph mixin:"

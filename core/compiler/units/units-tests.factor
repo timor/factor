@@ -54,7 +54,7 @@ observer add-definition-observer
 
 defer: nesting-test
 
-{ } [ "IN: compiler.units.tests << : nesting-test ( -- ) ; >>" eval( -- ) ] unit-test
+{ } [ "in: compiler.units.tests << : nesting-test ( -- ) ; >>" eval( -- ) ] unit-test
 
 observer remove-definition-observer
 
