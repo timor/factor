@@ -52,6 +52,7 @@ M: typedef-word synopsis*
         [ definer. ]
         [ "c-type" word-prop pprint-c-type ]
         [ pprint-word ]
+        [ drop ";" text ]
     } cleave ;
 
 : pprint-function-arg ( type name -- )

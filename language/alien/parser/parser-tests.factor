@@ -117,5 +117,5 @@ TYPEDEF: int alien-parser-test-int ; ! reasonably unique name...
 
 ! Redefinitions
 { } [
-    [ c-type: hi TYPEDEF: void* hi ] with-compilation-unit
+    [ c-type: hi TYPEDEF: void* hi ; ] with-compilation-unit
 ] unit-test
