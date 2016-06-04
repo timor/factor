@@ -71,7 +71,15 @@ FUNCTOR-SYNTAX: SINGLETON:
     scan-param suffix!
     \ define-singleton-class suffix! ;
 
+FUNCTOR-SYNTAX: singleton:
+    scan-param suffix!
+    \ define-singleton-class suffix! ;
+
 FUNCTOR-SYNTAX: MIXIN:
+    scan-param suffix!
+    \ define-mixin-class suffix! ;
+
+FUNCTOR-SYNTAX: mixin:
     scan-param suffix!
     \ define-mixin-class suffix! ;
 
@@ -98,6 +106,10 @@ FUNCTOR-SYNTAX: SYMBOL:
     scan-param suffix!
     \ define-symbol suffix! ;
 
+FUNCTOR-SYNTAX: symbol:
+    scan-param suffix!
+    \ define-symbol suffix! ;
+
 FUNCTOR-SYNTAX: SYNTAX:
     scan-param suffix!
     parse-definition*
@@ -111,6 +123,7 @@ FUNCTOR-SYNTAX: INSTANCE:
 FUNCTOR-SYNTAX: GENERIC:
     scan-param suffix!
     scan-effect suffix!
+    ";" expect
     \ define-simple-generic* suffix! ;
 
 FUNCTOR-SYNTAX: MACRO:
@@ -119,6 +132,7 @@ FUNCTOR-SYNTAX: MACRO:
     \ define-macro suffix! ;
 
 FUNCTOR-SYNTAX: inline [ last-word make-inline ] append! ;
+FUNCTOR-SYNTAX: @inline [ last-word make-inline ] append! ;
 
 FUNCTOR-SYNTAX: call-next-method T{ fake-call-next-method } suffix! ;
 
