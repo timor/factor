@@ -85,7 +85,7 @@ FUNCTION: PGconn* PQconnectdb ( c-string conninfo ) ;
 FUNCTION: PGconn* PQsetdbLogin ( c-string pghost, c-string pgport,
              c-string pgoptions, c-string pgtty,
              c-string dbName,
-             c-string login, c-string pwd )
+             c-string login, c-string pwd ) ;
 
 : PQsetdb ( M_PGHOST M_PGPORT M_PGOPT M_PGTTY M_DBNAME -- PGconn* )
     f f PQsetdbLogin ;
@@ -126,9 +126,9 @@ FUNCTION: c-string PQoptions ( PGconn* conn ) ;
 FUNCTION: ConnStatusType PQstatus ( PGconn* conn ) ;
 FUNCTION: PGTransactionStatusType PQtransactionStatus ( PGconn* conn ) ;
 FUNCTION: c-string PQparameterStatus ( PGconn* conn,
-                  c-string paramName )
+                  c-string paramName ) ;
 FUNCTION: int PQprotocolVersion ( PGconn* conn ) ;
-! FUNCTION: int PQServerVersion ( PGconn* conn )
+! FUNCTION: int PQServerVersion ( PGconn* conn ) ;
 FUNCTION: c-string PQerrorMessage ( PGconn* conn ) ;
 FUNCTION: int PQsocket ( PGconn* conn ) ;
 FUNCTION: int PQbackendPID ( PGconn* conn ) ;
@@ -144,7 +144,7 @@ FUNCTION: void PQinitSSL ( int do_init ) ;
 
 ! Set verbosity for PQerrorMessage and PQresultErrorMessage
 FUNCTION: PGVerbosity PQsetErrorVerbosity ( PGconn* conn,
-    PGVerbosity verbosity )
+    PGVerbosity verbosity ) ;
 
 ! Enable/disable tracing
 FUNCTION: void PQtrace ( PGconn* conn, FILE* debug_port ) ;
@@ -160,10 +160,10 @@ FUNCTION: void PQuntrace ( PGconn* conn ) ;
 ! Override default notice handling routines
 ! FUNCTION: PQnoticeReceiver PQsetNoticeReceiver ( PGconn* conn,
                     ! PQnoticeReceiver proc,
-                    ! void* arg )
+                    ! void* arg ) ;
 ! FUNCTION: PQnoticeProcessor PQsetNoticeProcessor ( PGconn* conn,
                     ! PQnoticeProcessor proc,
-                    ! void* arg )
+                    ! void* arg ) ;
 ! END BROKEN
 
 ! === in fe-exec.c ===
@@ -177,17 +177,17 @@ FUNCTION: PGresult* PQexecParams ( PGconn* conn,
              c-string* paramValues,
              int* paramLengths,
              int* paramFormats,
-             int resultFormat )
+             int resultFormat ) ;
 FUNCTION: PGresult* PQprepare ( PGconn* conn, c-string stmtName,
         c-string query, int nParams,
-        Oid* paramTypes )
+        Oid* paramTypes ) ;
 FUNCTION: PGresult* PQexecPrepared ( PGconn* conn,
              c-string stmtName,
              int nParams,
              c-string* paramValues,
              int* paramLengths,
              int* paramFormats,
-             int resultFormat )
+             int resultFormat ) ;
 
 ! Interface for multiple-result or asynchronous queries
 FUNCTION: int PQsendQuery ( PGconn* conn, c-string query ) ;
@@ -198,17 +198,17 @@ FUNCTION: int PQsendQueryParams ( PGconn* conn,
                   c-string* paramValues,
                   int* paramLengths,
                   int* paramFormats,
-                  int resultFormat )
+                  int resultFormat ) ;
 FUNCTION: PGresult* PQsendPrepare ( PGconn* conn, c-string stmtName,
             c-string query, int nParams,
-            Oid* paramTypes )
+            Oid* paramTypes ) ;
 FUNCTION: int PQsendQueryPrepared ( PGconn* conn,
                   c-string stmtName,
                   int nParams,
                   c-string* paramValues,
                   int *paramLengths,
                   int *paramFormats,
-                  int resultFormat )
+                  int resultFormat ) ;
 FUNCTION: PGresult* PQgetResult ( PGconn* conn ) ;
 
 ! Routines for managing an asynchronous query
@@ -247,7 +247,7 @@ FUNCTION: PGresult* PQfn ( PGconn* conn,
      int* result_len,
      int result_is_int,
      PQArgBlock* args,
-     int nargs )
+     int nargs ) ;
 
 ! Accessor functions for PGresult objects
 FUNCTION: ExecStatusType PQresultStatus ( PGresult* res ) ;
@@ -269,7 +269,7 @@ FUNCTION: c-string PQcmdStatus ( PGresult* res ) ;
 FUNCTION: c-string PQoidStatus ( PGresult* res ) ;
 FUNCTION: Oid   PQoidValue ( PGresult* res ) ;
 FUNCTION: c-string PQcmdTuples ( PGresult* res ) ;
-! FUNCTION: c-string PQgetvalue ( PGresult* res, int tup_num, int field_num )
+! FUNCTION: c-string PQgetvalue ( PGresult* res, int tup_num, int field_num ) ;
 FUNCTION: void* PQgetvalue ( PGresult* res, int tup_num, int field_num ) ;
 FUNCTION: int   PQgetlength ( PGresult* res, int tup_num, int field_num ) ;
 FUNCTION: int   PQgetisnull ( PGresult* res, int tup_num, int field_num ) ;
@@ -293,16 +293,16 @@ FUNCTION: PGresult* PQmakeEmptyPGresult ( PGconn* conn, ExecStatusType status ) 
 ! Quoting strings before inclusion in queries.
 FUNCTION: size_t PQescapeStringConn ( PGconn* conn,
                                     c-string to, c-string from, size_t length,
-                                    int* error )
+                                    int* error ) ;
 FUNCTION: c-string PQescapeByteaConn ( PGconn* conn,
                                     c-string from, size_t length,
-                                    size_t* to_length )
+                                    size_t* to_length ) ;
 FUNCTION: void* PQunescapeBytea ( c-string strtext, size_t* retbuflen ) ;
-! FUNCTION: c-string PQunescapeBytea ( c-string strtext, size_t* retbuflen )
+! FUNCTION: c-string PQunescapeBytea ( c-string strtext, size_t* retbuflen ) ;
 ! These forms are deprecated!
 FUNCTION: size_t PQescapeString ( void* to, c-string from, size_t length ) ;
 FUNCTION: c-string PQescapeBytea ( c-string bintext, size_t binlen,
-              size_t* bytealen )
+              size_t* bytealen ) ;
 
 ! === in fe-print.c ===
 
@@ -314,13 +314,13 @@ FUNCTION: void PQdisplayTuples ( PGresult* res,
                                 int fillAlign,
                                 c-string fieldSep,
                                 int printHeader,
-                                int quiet )
+                                int quiet ) ;
 
 FUNCTION: void PQprintTuples ( PGresult* res,
                           FILE* fout,
                           int printAttName,
                           int terseOutput,
-                          int width )
+                          int width ) ;
 ! === in fe-lobj.c ===
 
 ! Large-object access routines
@@ -330,7 +330,7 @@ FUNCTION: int    lo_read ( PGconn* conn, int fd, c-string buf, size_t len ) ;
 FUNCTION: int    lo_write ( PGconn* conn, int fd, c-string buf, size_t len ) ;
 FUNCTION: int    lo_lseek ( PGconn* conn, int fd, int offset, int whence ) ;
 FUNCTION: Oid    lo_creat ( PGconn* conn, int mode ) ;
-! FUNCTION: Oid    lo_creat ( PGconn* conn, Oid lobjId )
+! FUNCTION: Oid    lo_creat ( PGconn* conn, Oid lobjId ) ;
 FUNCTION: int    lo_tell ( PGconn* conn, int fd ) ;
 FUNCTION: int    lo_unlink ( PGconn* conn, Oid lobjId ) ;
 FUNCTION: Oid    lo_import ( PGconn* conn, c-string filename ) ;

@@ -182,7 +182,7 @@ FUNCTION: c-string inet_ntoa ( int in-addr ) ;
 FUNCTION: int getaddrinfo ( c-string nodename,
                             c-string servername,
                             addrinfo* hints,
-                            addrinfo** res )
+                            addrinfo** res ) ;
 
 FUNCTION: void freeaddrinfo ( addrinfo* ai ) ;
 
@@ -310,7 +310,7 @@ FUNCTION: SOCKET WSAAccept ( SOCKET s,
                              sockaddr* addr,
                              LPINT addrlen,
                              LPCONDITIONPROC lpfnCondition,
-                             DWORD dwCallbackData )
+                             DWORD dwCallbackData ) ;
 
 ! FUNCTION: INT WSAAddressToString ( LPSOCKADDR lpsaAddress, DWORD dwAddressLength, LPWSAPROTOCOL_INFO lpProtocolInfo, LPTSTR lpszAddressString, LPDWORD lpdwAddressStringLength ) ;
 
@@ -323,23 +323,23 @@ FUNCTION: int WSAConnect ( SOCKET s,
                            LPWSABUF lpCallerData,
                            LPWSABUF lpCalleeData,
                            LPQOS lpSQOS,
-                           LPQOS lpGQOS )
+                           LPQOS lpGQOS ) ;
 FUNCTION: WSAEVENT WSACreateEvent ( ) ;
 ! FUNCTION: INT WSAEnumNameSpaceProviders ( LPDWORD lpdwBufferLength, LPWSANAMESPACE_INFO lpnspBuffer ) ;
 FUNCTION: int WSAEnumNetworkEvents ( SOCKET s,
                                      WSAEVENT hEventObject,
-                                     LPWSANETWORKEVENTS lpNetworkEvents )
+                                     LPWSANETWORKEVENTS lpNetworkEvents ) ;
 ! FUNCTION: int WSAEnumProtocols ( LPINT lpiProtocols, LPWSAPROTOCOL_INFO lpProtocolBuffer, LPDWORD lpwdBufferLength ) ;
 
 FUNCTION: int WSAEventSelect ( SOCKET s,
                                WSAEVENT hEventObject,
-                               long lNetworkEvents )
+                               long lNetworkEvents ) ;
 FUNCTION: int WSAGetLastError ( ) ;
 FUNCTION: BOOL WSAGetOverlappedResult ( SOCKET s,
                                         LPWSAOVERLAPPED lpOverlapped,
                                         LPDWORD lpcbTransfer,
                                         BOOL fWait,
-                                        LPDWORD lpdwFlags )
+                                        LPDWORD lpdwFlags ) ;
 
 TYPEDEF: void* LPWSAOVERLAPPED_COMPLETION_ROUTINE
 FUNCTION: int WSAIoctl ( SOCKET s,
@@ -350,7 +350,7 @@ FUNCTION: int WSAIoctl ( SOCKET s,
                          DWORD cbOutBuffer,
                          LPDWORD lpcbBytesReturned,
                          LPWSAOVERLAPPED lpOverlapped,
-                         LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine )
+                         LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine ) ;
 
 FUNCTION: int WSARecv ( SOCKET s,
                         LPWSABUF lpBuffers,
@@ -358,7 +358,7 @@ FUNCTION: int WSARecv ( SOCKET s,
                         LPDWORD lpNumberOfBytesRecvd,
                         LPDWORD lpFlags,
                         LPWSAOVERLAPPED lpOverlapped,
-                        LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine )
+                        LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine ) ;
 
 FUNCTION: int WSARecvFrom ( SOCKET s,
                             LPWSABUF lpBuffers,
@@ -368,7 +368,7 @@ FUNCTION: int WSARecvFrom ( SOCKET s,
                             sockaddr* lpFrom,
                             LPINT lpFromlen,
                             LPWSAOVERLAPPED lpOverlapped,
-                            LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine )
+                            LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine ) ;
 
 FUNCTION: BOOL WSAResetEvent ( WSAEVENT hEvent ) ;
 FUNCTION: int WSASend ( SOCKET s,
@@ -377,7 +377,7 @@ FUNCTION: int WSASend ( SOCKET s,
                         LPDWORD lpNumberOfBytesSent,
                         LPDWORD lpFlags,
                         LPWSAOVERLAPPED lpOverlapped,
-                 LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine )
+                 LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine ) ;
 
 FUNCTION: int WSASendTo ( SOCKET s,
                           LPWSABUF lpBuffers,
@@ -387,7 +387,7 @@ FUNCTION: int WSASendTo ( SOCKET s,
                           sockaddr* lpTo,
                           int iToLen,
                           LPWSAOVERLAPPED lpOverlapped,
-  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine )
+  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine ) ;
 
 FUNCTION: int WSAStartup ( WORD version,  LPWSADATA out-data ) ;
 
@@ -396,14 +396,14 @@ FUNCTION: SOCKET WSASocketW ( int af,
                              int protocol,
                              LPWSAPROTOCOL_INFOW lpProtocolInfo,
                              GROUP g,
-                             DWORD flags )
+                             DWORD flags ) ;
 ALIAS: WSASocket WSASocketW
 
 FUNCTION: DWORD WSAWaitForMultipleEvents ( DWORD cEvents,
                                            WSAEVENT* lphEvents,
                                            BOOL fWaitAll,
                                            DWORD dwTimeout,
-                                           BOOL fAlertable )
+                                           BOOL fAlertable ) ;
 
 
 LIBRARY: mswsock
@@ -415,7 +415,7 @@ FUNCTION: int AcceptEx ( SOCKET listen,
                          DWORD addr-len,
                          DWORD remote-len,
                          LPDWORD out-len,
-                         LPOVERLAPPED overlapped )
+                         LPOVERLAPPED overlapped ) ;
 
 FUNCTION: void GetAcceptExSockaddrs (
   PVOID lpOutputBuffer,

@@ -74,7 +74,7 @@ M: typedef-word synopsis*
         <block "(" text
         [ def>> fourth ] [ stack-effect in>> ] bi
         pprint-function-args
-        ")" text block>
+        ")" text ";" text block>
     ] tri ; inline
 
 M: alien-function-alias-word definer
@@ -114,7 +114,7 @@ M: alien-callback-type-word synopsis*
             <block "(" text
             [ def>> first second ] [ "callback-effect" word-prop in>> ] bi
             pprint-function-args
-            ")" text block>
+            ")" text ";" text block>
         ]
     } cleave ;
 

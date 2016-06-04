@@ -9,18 +9,18 @@ FUNCTION: int function_test ( float x, int[4][FOO] y, char* z, ushort *w ) ;
 { "USING: alien.c-types alien.syntax ;
 IN: alien.prettyprint.tests
 FUNCTION: int function_test
-    ( float x, int[4][FOO] y, char* z, ushort* w )
+    ( float x, int[4][FOO] y, char* z, ushort* w ) ;
 " } [
     [ \ function_test see ] with-string-writer
 ] unit-test
 
 FUNCTION-ALIAS: function-test int function_test
-    ( float x, int[4][FOO] y, char* z, ushort *w )
+    ( float x, int[4][FOO] y, char* z, ushort *w ) ;
 
 { "USING: alien.c-types alien.syntax ;
 IN: alien.prettyprint.tests
 FUNCTION-ALIAS: function-test int function_test
-    ( float x, int[4][FOO] y, char* z, ushort* w )
+    ( float x, int[4][FOO] y, char* z, ushort* w ) ;
 " } [
     [ \ function-test see ] with-string-writer
 ] unit-test

@@ -995,8 +995,8 @@ LIBRARY: libcl
 ! ===============================================
 
 ! Initialise and shut down cryptlib
-FUNCTION: C_RET cryptInit (  ) ;
-FUNCTION: C_RET cryptEnd (  ) ;
+FUNCTION: C_RET cryptInit ( ) ;
+FUNCTION: C_RET cryptEnd ( ) ;
 
 ! Create and destroy an encryption context
 

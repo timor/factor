@@ -960,7 +960,7 @@ FUNCTION: HANDLE  CreateFileMappingW ( HANDLE hFile,
                                        DWORD flProtect,
                                        DWORD dwMaximumSizeHigh,
                                        DWORD dwMaximumSizeLow,
-                                       LPCTSTR lpName )
+                                       LPCTSTR lpName ) ;
 ALIAS: CreateFileMapping CreateFileMappingW
 
 ! FUNCTION: CreateHardLinkA
@@ -1015,7 +1015,7 @@ FUNCTION: BOOL CreateProcessW ( LPCTSTR lpApplicationname,
                                 LPVOID lpEnvironment,
                                 LPCTSTR lpCurrentDirectory,
                                 LPSTARTUPINFO lpStartupInfo,
-                                LPPROCESS_INFORMATION lpProcessInformation )
+                                LPPROCESS_INFORMATION lpProcessInformation ) ;
 ALIAS: CreateProcess CreateProcessW
 ! FUNCTION: CreateProcessInternalA
 ! FUNCTION: CreateProcessInternalW
@@ -1026,7 +1026,7 @@ FUNCTION: HANDLE CreateRemoteThread ( HANDLE hProcess,
                                       LPVOID lpStartAddress,
                                       LPVOID lpParameter,
                                       DWORD dwCreationFlags,
-                                      LPDWORD lpThreadId )
+                                      LPDWORD lpThreadId ) ;
 ! FUNCTION: CreateSemaphoreA
 ! FUNCTION: CreateSemaphoreW
 ! FUNCTION: CreateSocketHandle
@@ -1086,7 +1086,7 @@ FUNCTION: BOOL DuplicateHandle (
     LPHANDLE lpTargetHandle,
     DWORD dwDesiredAccess,
     BOOL bInheritHandle,
-    DWORD dwOptions )
+    DWORD dwOptions ) ;
 
 CONSTANT: DUPLICATE_CLOSE_SOURCE 1
 CONSTANT: DUPLICATE_SAME_ACCESS 2
@@ -1154,7 +1154,7 @@ FUNCTION: BOOL FindClose ( HANDLE hFindFile ) ;
 FUNCTION: BOOL FindCloseChangeNotification ( HANDLE hChangeHandle ) ;
 FUNCTION: HANDLE FindFirstChangeNotificationW ( LPCTSTR lpPathName,
                                         BOOL bWatchSubtree,
-                                        DWORD dwNotifyFilter )
+                                        DWORD dwNotifyFilter ) ;
 ALIAS: FindFirstChangeNotification FindFirstChangeNotificationW
 ! FUNCTION: FindFirstFileA
 ! FUNCTION: FindFirstFileExA
@@ -1238,7 +1238,7 @@ FUNCTION: DWORD FormatMessageW (
         LPTSTR lpBuffer,
         DWORD nSize,
         void* Arguments
-    )
+    ) ;
 
 ALIAS: FormatMessage FormatMessageW
 
@@ -1661,14 +1661,14 @@ FUNCTION: LPVOID MapViewOfFile ( HANDLE hFileMappingObject,
                                  DWORD dwDesiredAccess,
                                  DWORD dwFileOffsetHigh,
                                  DWORD dwFileOffsetLow,
-                                 SIZE_T dwNumberOfBytesToMap )
+                                 SIZE_T dwNumberOfBytesToMap ) ;
 
 FUNCTION: LPVOID MapViewOfFileEx ( HANDLE hFileMappingObject,
                                  DWORD dwDesiredAccess,
                                  DWORD dwFileOffsetHigh,
                                  DWORD dwFileOffsetLow,
                                  SIZE_T dwNumberOfBytesToMap,
-                                 LPVOID lpBaseAddress )
+                                 LPVOID lpBaseAddress ) ;
 
 ! FUNCTION: Module32First
 ! FUNCTION: Module32FirstW
@@ -1695,7 +1695,7 @@ ALIAS: MoveFile MoveFileW
 ! FUNCTION: HFILE OpenFile ( LPCTSTR lpFileName, LPOFSTRUCT lpReOpenBuff, UINT uStyle ) ;
 FUNCTION: HANDLE OpenFileMappingW ( DWORD dwDesiredAccess,
                                     BOOL bInheritHandle,
-                                    LPCTSTR lpName )
+                                    LPCTSTR lpName ) ;
 ALIAS: OpenFileMapping OpenFileMappingW
 ! FUNCTION: OpenJobObjectA
 ! FUNCTION: OpenJobObjectW

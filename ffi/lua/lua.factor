@@ -108,8 +108,8 @@ FUNCTION: void lua_pushnumber ( lua_State* L, lua_Number n ) ;
 FUNCTION: void lua_pushinteger ( lua_State* L, lua_Integer n ) ;
 FUNCTION: void lua_pushlstring ( lua_State* L, char* s, size_t l ) ;
 FUNCTION: void lua_pushstring ( lua_State* L, c-string[ascii] s ) ;
-! FUNCTION: c-string[ascii] lua_pushvfstring ( lua_State* L, c-string[ascii] fmt, va_list argp )
-! FUNCTION: c-string[ascii] lua_pushfstring ( lua_State* L, c-string[ascii] fmt, ... )
+! FUNCTION: c-string[ascii] lua_pushvfstring ( lua_State* L, c-string[ascii] fmt, va_list argp ) ;
+! FUNCTION: c-string[ascii] lua_pushfstring ( lua_State* L, c-string[ascii] fmt, ... ) ;
 FUNCTION: void lua_pushcclosure ( lua_State* L, lua_CFunction fn, int n ) ;
 FUNCTION: void lua_pushboolean ( lua_State* L, int b ) ;
 FUNCTION: void lua_pushlightuserdata ( lua_State* L, void* p ) ;

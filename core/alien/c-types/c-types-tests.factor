@@ -108,8 +108,8 @@ must-fail-with
     "IN: alien.c-types.tests
     USE: alien.syntax
     USE: alien.c-types
-    CALLBACK: void cb987 ( )
-    CALLBACK: void cb987 ( )" eval( -- )
+    CALLBACK: void cb987 ( ) ;
+    CALLBACK: void cb987 ( ) ;" eval( -- )
 ]
 [ error>> error>> redefine-error? ]
 must-fail-with
@@ -118,8 +118,8 @@ must-fail-with
     "IN: alien.c-types.tests
     USE: alien.syntax
     USE: alien.c-types
-    FUNCTION: void func987 ( )
-    FUNCTION: void func987 ( )" eval( -- )
+    FUNCTION: void func987 ( ) ;
+    FUNCTION: void func987 ( ) ;" eval( -- )
 ]
 [ error>> error>> redefine-error? ]
 must-fail-with
