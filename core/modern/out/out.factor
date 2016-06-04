@@ -14,7 +14,7 @@ symbol: last-slice
     [ last-slice namespaces:set ] bi ;
 
 DEFER: write-literal
-GENERIC: write-literal ( obj -- )
+GENERIC: write-literal ( obj -- ) ;
 ! M: object write-literal lexed-underlying write ;
 M: string write-literal write ;
 M: slice write-literal [ write-whitespace ] [ write ] bi ;

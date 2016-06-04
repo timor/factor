@@ -14,9 +14,9 @@ TUPLE: demo-world < world yaw pitch distance ;
 : set-demo-orientation ( world yaw pitch distance -- world )
     [ >>yaw ] [ >>pitch ] [ >>distance ] tri* ;
 
-GENERIC: far-plane ( gadget -- z )
-GENERIC: near-plane ( gadget -- z )
-GENERIC: distance-step ( gadget -- dz )
+GENERIC: far-plane ( gadget -- z ) ;
+GENERIC: near-plane ( gadget -- z ) ;
+GENERIC: distance-step ( gadget -- dz ) ;
 
 M: demo-world far-plane ( gadget -- z )
     drop 4.0 ;

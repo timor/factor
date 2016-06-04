@@ -7,7 +7,7 @@ CONSTANT: sub-tag
 
 SYMBOL: ref-table
 
-GENERIC: (r-ref) ( xml -- )
+GENERIC: (r-ref) ( xml -- ) ;
 M: tag (r-ref)
     dup sub-tag attr [
         ref-table get at

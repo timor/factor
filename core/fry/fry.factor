@@ -10,7 +10,7 @@ in: fry
 
 ERROR: >r/r>-in-fry-error ;
 
-GENERIC: fry ( quot -- quot' )
+GENERIC: fry ( quot -- quot' ) ;
 
 <PRIVATE
 
@@ -20,7 +20,7 @@ GENERIC: fry ( quot -- quot' )
 
 PREDICATE: fry-specifier < word { _ @ } member-eq? ;
 
-GENERIC: count-inputs ( quot -- n )
+GENERIC: count-inputs ( quot -- n ) ;
 
 M: callable count-inputs [ count-inputs ] map-sum ;
 M: fry-specifier count-inputs drop 1 ;

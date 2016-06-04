@@ -338,7 +338,7 @@ DEFER: choice-parser
 : ebnf-parser ( -- parser )
     [ tokenizer-parser sp , rule-parser sp , ] choice* repeat1 [ <ebnf> ] action ;
 
-GENERIC: (transform) ( ast -- parser )
+GENERIC: (transform) ( ast -- parser ) ;
 
 SYMBOL: parser
 SYMBOL: main
@@ -417,7 +417,7 @@ M: ebnf-optional (transform) ( ast -- parser )
 M: ebnf-whitespace (transform) ( ast -- parser )
     t ignore-ws [ transform-group ] with-variable ;
 
-GENERIC: build-locals ( code ast -- code )
+GENERIC: build-locals ( code ast -- code ) ;
 
 M: ebnf-sequence build-locals ( code ast -- code )
     ! Note the need to filter out this ebnf items that

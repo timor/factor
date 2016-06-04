@@ -50,7 +50,7 @@ UNION: fp-denormal-mode
 
 <PRIVATE
 
-HOOK: (fp-env-registers) cpu ( -- registers )
+HOOK: (fp-env-registers) cpu ( -- registers ) ;
 
 : fp-env-register ( -- register ) (fp-env-registers) first ;
 
@@ -64,19 +64,19 @@ HOOK: (fp-env-registers) cpu ( -- registers )
 : remask ( x new-bits mask-bits -- x' )
     [ unmask ] [ mask ] bi-curry bi* bitor ; inline
 
-GENERIC: (set-fp-env-register) ( fp-env -- )
+GENERIC: (set-fp-env-register) ( fp-env -- ) ;
 
-GENERIC: (get-exception-flags) ( fp-env -- exceptions )
-GENERIC# (set-exception-flags) 1 ( fp-env exceptions -- fp-env )
+GENERIC: (get-exception-flags) ( fp-env -- exceptions ) ;
+GENERIC# (set-exception-flags) 1 ( fp-env exceptions -- fp-env ) ;
 
-GENERIC: (get-fp-traps) ( fp-env -- exceptions )
-GENERIC# (set-fp-traps) 1 ( fp-env exceptions -- fp-env )
+GENERIC: (get-fp-traps) ( fp-env -- exceptions ) ;
+GENERIC# (set-fp-traps) 1 ( fp-env exceptions -- fp-env ) ;
 
-GENERIC: (get-rounding-mode) ( fp-env -- mode )
-GENERIC# (set-rounding-mode) 1 ( fp-env mode -- fp-env )
+GENERIC: (get-rounding-mode) ( fp-env -- mode ) ;
+GENERIC# (set-rounding-mode) 1 ( fp-env mode -- fp-env ) ;
 
-GENERIC: (get-denormal-mode) ( fp-env -- mode )
-GENERIC# (set-denormal-mode) 1 ( fp-env mode -- fp-env )
+GENERIC: (get-denormal-mode) ( fp-env -- mode ) ;
+GENERIC# (set-denormal-mode) 1 ( fp-env mode -- fp-env ) ;
 
 : change-fp-env-registers ( quot -- )
     (fp-env-registers) swap [ (set-fp-env-register) ] compose each ; inline

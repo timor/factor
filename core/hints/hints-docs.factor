@@ -33,7 +33,7 @@ $nl
     "Specializers can also be defined on methods:"
     { $code
         "USING: assocs hashtables hints kernel sequences ;"
-        "GENERIC: count-occurrences ( elt obj -- n )"
+        "GENERIC: count-occurrences ( elt obj -- n ) ;"
         ""
         "M: sequence count-occurrences [ = ] with count ;"
         ""

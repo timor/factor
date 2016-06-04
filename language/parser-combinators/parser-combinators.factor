@@ -6,7 +6,7 @@ unicode sequences.deep accessors ;
 IN: parser-combinators
 
 ! Parser combinator protocol
-GENERIC: parse ( input parser -- list )
+GENERIC: parse ( input parser -- list ) ;
 
 M: promise parse ( input parser -- list )
     force parse ;

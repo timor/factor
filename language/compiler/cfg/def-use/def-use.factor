@@ -8,9 +8,9 @@ IN: compiler.cfg.def-use
 
 ! Utilities for iterating over instruction operands
 
-GENERIC: defs-vregs ( insn -- seq )
-GENERIC: temp-vregs ( insn -- seq )
-GENERIC: uses-vregs ( insn -- seq )
+GENERIC: defs-vregs ( insn -- seq ) ;
+GENERIC: temp-vregs ( insn -- seq ) ;
+GENERIC: uses-vregs ( insn -- seq ) ;
 
 M: insn defs-vregs drop { } ;
 M: insn temp-vregs drop { } ;

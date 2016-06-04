@@ -12,7 +12,7 @@ IN: compiler.cfg.gvn.expressions
 
 <<
 
-GENERIC: >expr ( insn -- expr )
+GENERIC: >expr ( insn -- expr ) ;
 
 : input-values ( slot-specs -- slot-specs' )
     [ type>> { use literal } member-eq? ] filter ;

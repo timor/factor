@@ -137,11 +137,11 @@ ERROR: invalid-uniform-type uniform ;
         { triangle-strip-with-adjacency-mode [ GL_TRIANGLE_STRIP_ADJACENCY ] }
     } case ; inline
 
-GENERIC: render-vertex-indexes ( primitive-mode vertex-indexes -- )
+GENERIC: render-vertex-indexes ( primitive-mode vertex-indexes -- ) ;
 
-GENERIC# render-vertex-indexes-instanced 1 ( primitive-mode vertex-indexes instances -- )
+GENERIC# render-vertex-indexes-instanced 1 ( primitive-mode vertex-indexes instances -- ) ;
 
-GENERIC: gl-array-element-type ( array -- type )
+GENERIC: gl-array-element-type ( array -- type ) ;
 M: uchar-array  gl-array-element-type drop GL_UNSIGNED_BYTE  ; inline
 M: ushort-array gl-array-element-type drop GL_UNSIGNED_SHORT ; inline
 M: uint-array   gl-array-element-type drop GL_UNSIGNED_INT   ; inline
@@ -189,8 +189,8 @@ M: multi-index-elements render-vertex-indexes
 : (bind-texture-unit) ( texture texture-unit -- )
     swap [ GL_TEXTURE0 + glActiveTexture ] [ bind-texture drop ] bi* ; inline
 
-GENERIC: (bind-uniform-textures) ( program-instance uniform-tuple -- )
-GENERIC: (bind-uniforms) ( program-instance uniform-tuple -- )
+GENERIC: (bind-uniform-textures) ( program-instance uniform-tuple -- ) ;
+GENERIC: (bind-uniforms) ( program-instance uniform-tuple -- ) ;
 
 M: uniform-tuple (bind-uniform-textures)
     2drop ;
@@ -259,32 +259,32 @@ DEFER: uniform-texture-accessors
 UNION: binary-data
     c-ptr specialized-array struct simd-128 ;
 
-GENERIC: >uniform-bool-array ( sequence -- c-array )
-GENERIC: >uniform-int-array ( sequence -- c-array )
-GENERIC: >uniform-uint-array ( sequence -- c-array )
-GENERIC: >uniform-float-array  ( sequence -- c-array )
+GENERIC: >uniform-bool-array ( sequence -- c-array ) ;
+GENERIC: >uniform-int-array ( sequence -- c-array ) ;
+GENERIC: >uniform-uint-array ( sequence -- c-array ) ;
+GENERIC: >uniform-float-array  ( sequence -- c-array ) ;
 
-GENERIC# >uniform-bvec-array 1 ( sequence dim -- c-array )
-GENERIC# >uniform-ivec-array 1 ( sequence dim -- c-array )
-GENERIC# >uniform-uvec-array 1 ( sequence dim -- c-array )
-GENERIC# >uniform-vec-array  1 ( sequence dim -- c-array )
+GENERIC# >uniform-bvec-array 1 ( sequence dim -- c-array ) ;
+GENERIC# >uniform-ivec-array 1 ( sequence dim -- c-array ) ;
+GENERIC# >uniform-uvec-array 1 ( sequence dim -- c-array ) ;
+GENERIC# >uniform-vec-array  1 ( sequence dim -- c-array ) ;
 
-GENERIC# >uniform-matrix 2 ( sequence cols rows -- c-array )
+GENERIC# >uniform-matrix 2 ( sequence cols rows -- c-array ) ;
 
-GENERIC# >uniform-matrix-array 2 ( sequence cols rows -- c-array )
+GENERIC# >uniform-matrix-array 2 ( sequence cols rows -- c-array ) ;
 
-GENERIC: bind-uniform-bvec2 ( index sequence -- )
-GENERIC: bind-uniform-bvec3 ( index sequence -- )
-GENERIC: bind-uniform-bvec4 ( index sequence -- )
-GENERIC: bind-uniform-ivec2 ( index sequence -- )
-GENERIC: bind-uniform-ivec3 ( index sequence -- )
-GENERIC: bind-uniform-ivec4 ( index sequence -- )
-GENERIC: bind-uniform-uvec2 ( index sequence -- )
-GENERIC: bind-uniform-uvec3 ( index sequence -- )
-GENERIC: bind-uniform-uvec4 ( index sequence -- )
-GENERIC: bind-uniform-vec2  ( index sequence -- )
-GENERIC: bind-uniform-vec3  ( index sequence -- )
-GENERIC: bind-uniform-vec4  ( index sequence -- )
+GENERIC: bind-uniform-bvec2 ( index sequence -- ) ;
+GENERIC: bind-uniform-bvec3 ( index sequence -- ) ;
+GENERIC: bind-uniform-bvec4 ( index sequence -- ) ;
+GENERIC: bind-uniform-ivec2 ( index sequence -- ) ;
+GENERIC: bind-uniform-ivec3 ( index sequence -- ) ;
+GENERIC: bind-uniform-ivec4 ( index sequence -- ) ;
+GENERIC: bind-uniform-uvec2 ( index sequence -- ) ;
+GENERIC: bind-uniform-uvec3 ( index sequence -- ) ;
+GENERIC: bind-uniform-uvec4 ( index sequence -- ) ;
+GENERIC: bind-uniform-vec2  ( index sequence -- ) ;
+GENERIC: bind-uniform-vec3  ( index sequence -- ) ;
+GENERIC: bind-uniform-vec4  ( index sequence -- ) ;
 
 M: object >uniform-bool-array [ >c-bool ] int-array{ } map-as ; inline
 M: binary-data >uniform-bool-array ; inline
@@ -555,7 +555,7 @@ SYNTAX: UNIFORM-TUPLE:
     dup first sequence?
     [ bind-named-output-attachments ] [ [ drop ] 2dip bind-unnamed-output-attachments ] if ;
 
-GENERIC: bind-transform-feedback-output ( output -- )
+GENERIC: bind-transform-feedback-output ( output -- ) ;
 
 M: buffer bind-transform-feedback-output
     [ GL_TRANSFORM_FEEDBACK_BUFFER 0 ] dip handle>> glBindBufferBase ; inline

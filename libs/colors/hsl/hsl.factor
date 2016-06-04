@@ -43,7 +43,7 @@ M: hsla >rgba
         ] if
     ] dip <rgba> ; inline
 
-GENERIC: >hsla ( color -- hsla )
+GENERIC: >hsla ( color -- hsla ) ;
 
 M: object >hsla >rgba >hsla ;
 

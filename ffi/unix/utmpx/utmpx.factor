@@ -27,9 +27,9 @@ FUNCTION: utmpx* pututxline ( utmpx* utx )
 
 TUPLE: utmpx-record user id line pid type timestamp host ;
 
-HOOK: new-utmpx-record os ( -- utmpx-record )
+HOOK: new-utmpx-record os ( -- utmpx-record ) ;
 
-HOOK: utmpx>utmpx-record os ( utmpx -- utmpx-record )
+HOOK: utmpx>utmpx-record os ( utmpx -- utmpx-record ) ;
 
 : memory>string ( alien n -- string )
     memory>byte-array utf8 decode [ 0 = ] trim-tail ;

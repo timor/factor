@@ -41,7 +41,7 @@ CONSTANT: fill-value 255
     [ [ ] [ dim>> first ] [ stride ] tri ] 2dip
     '[ _ _ _ _ permute ] change-bitmap ;
 
-GENERIC: normalize-component-type* ( image component-type -- image )
+GENERIC: normalize-component-type* ( image component-type -- image ) ;
 
 : normalize-floats ( float-array -- byte-array )
     [ 255.0 * >integer ] B{ } map-as ;

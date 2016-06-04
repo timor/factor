@@ -49,7 +49,7 @@ M: hsva >rgba ( hsva -- rgba )
 
 PRIVATE>
 
-GENERIC: >hsva ( color -- hsva )
+GENERIC: >hsva ( color -- hsva ) ;
 
 M: object >hsva >rgba >hsva ;
 

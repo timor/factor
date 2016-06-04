@@ -40,7 +40,7 @@ SYMBOLS: up-axis unit-ratio ;
 SINGLETONS: x-up y-up z-up ;
 UNION: rh-up x-up y-up z-up ;
 
-GENERIC: >y-up-axis! ( seq from-axis -- seq )
+GENERIC: >y-up-axis! ( seq from-axis -- seq ) ;
 M: x-up >y-up-axis!
     drop dup
     [

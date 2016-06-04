@@ -25,7 +25,7 @@ PREDICATE: single-generic < generic
 
 M: single-generic make-inline cannot-be-inline ;
 
-GENERIC: dispatch# ( word -- n )
+GENERIC: dispatch# ( word -- n ) ;
 
 M: generic dispatch# "combination" word-prop dispatch# ;
 
@@ -37,7 +37,7 @@ symbol: combination
 : with-combination ( combination quot -- )
     [ combination ] dip with-variable ; inline
 
-HOOK: picker combination ( -- quot )
+HOOK: picker combination ( -- quot ) ;
 
 M: single-combination next-method-quot* ( class generic combination -- quot )
     [
@@ -148,7 +148,7 @@ C: <tag-dispatch-engine> tag-dispatch-engine
     <tag-dispatch-engine> ;
 
 ! ! ! Compile engine ! ! !
-GENERIC: compile-engine ( engine -- obj )
+GENERIC: compile-engine ( engine -- obj ) ;
 
 : compile-engines ( assoc -- assoc' )
     [ compile-engine ] assoc-map ;
@@ -260,7 +260,7 @@ M: f compile-engine ;
         [ <engine> compile-engine ] bi
     ] tri ;
 
-HOOK: inline-cache-quots combination ( word methods -- pic-quot/f pic-tail-quot/f )
+HOOK: inline-cache-quots combination ( word methods -- pic-quot/f pic-tail-quot/f ) ;
 
 M: single-combination inline-cache-quots 2drop f f ;
 
@@ -269,7 +269,7 @@ M: single-combination inline-cache-quots 2drop f f ;
     [ >>pic-def ] [ >>pic-tail-def ] bi*
     drop ;
 
-HOOK: mega-cache-quot combination ( methods -- quot/f )
+HOOK: mega-cache-quot combination ( methods -- quot/f ) ;
 
 M: single-combination perform-combination
     [

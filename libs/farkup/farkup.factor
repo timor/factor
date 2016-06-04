@@ -220,7 +220,7 @@ CONSTANT: invalid-url "javascript:alert('Invalid URL in farkup');"
     [ string-lines ] dip htmlize-lines
     [XML <pre><-></pre> XML] ;
 
-GENERIC: (write-farkup) ( farkup -- xml )
+GENERIC: (write-farkup) ( farkup -- xml ) ;
 
 : farkup-inside ( farkup name -- xml )
     <simple-name> swap T{ attrs } swap

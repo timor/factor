@@ -10,7 +10,7 @@ in: classes.tests
 { f } [ 3 null instance? ] unit-test
 
 ! Regression
-GENERIC: method-forget-test ( obj -- obj )
+GENERIC: method-forget-test ( obj -- obj ) ;
 TUPLE: method-forget-class ;
 M: method-forget-class method-forget-test ;
 
@@ -31,7 +31,7 @@ use: multiline
 ! So the user has some code...
 { } [
     "IN: classes.test.a
-    GENERIC: g ( a -- b )
+    GENERIC: g ( a -- b ) ;
     TUPLE: x ;
     M: x g ;
     TUPLE: z < x ;" <string-reader>
@@ -50,7 +50,7 @@ use: multiline
 ! Now, the user removes the z class and adds a method,
 { } [
     "IN: classes.test.a
-    GENERIC: g ( a -- b )
+    GENERIC: g ( a -- b ) ;
     TUPLE: x ;
     M: x g ;
     TUPLE: j ;
@@ -71,7 +71,7 @@ use: multiline
 { } [
     "IN: classes.test.c
     USE: kernel
-    GENERIC: g ( a -- b )
+    GENERIC: g ( a -- b ) ;
     M: object g ;
     TUPLE: z ;" <string-reader>
     "class-intersect-no-method-c" parse-stream drop
@@ -89,7 +89,7 @@ use: multiline
 { } [
     "IN: classes.test.c
     USE: kernel
-    GENERIC: g ( a -- b )
+    GENERIC: g ( a -- b ) ;
     M: object g ;
     TUPLE: j ;
     M: j g ;" <string-reader>
@@ -107,7 +107,7 @@ TUPLE: forgotten-predicate-test ;
 { } [ [ \ forgotten-predicate-test forget ] with-compilation-unit ] unit-test
 { f } [ \ forgotten-predicate-test? predicate? ] unit-test
 
-GENERIC: generic-predicate? ( a -- b )
+GENERIC: generic-predicate? ( a -- b ) ;
 
 { } [ "IN: classes.tests TUPLE: generic-predicate ;" eval( -- ) ] unit-test
 

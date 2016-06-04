@@ -131,7 +131,7 @@ IN: math.vectors.simd.intrinsics
     ] unrolled-each-index-unsafe
     c' underlying>> ; inline
 
-GENERIC: native/ ( x y -- x/y )
+GENERIC: native/ ( x y -- x/y ) ;
 
 M: integer native/ /i ; inline
 M: float native/ /f ; inline

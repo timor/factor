@@ -77,7 +77,7 @@ TUPLE: generate-predicate' < define' ;
     new
         swap >>literal ; inline
 
-GENERIC: split-decorators ( seq -- base left right )
+GENERIC: split-decorators ( seq -- base left right ) ;
 M: compound-literal split-decorators
     sequence>>
     [ decorator-literal? not ] partition
@@ -85,16 +85,16 @@ M: compound-literal split-decorators
     [ left-decorator-literal? ] partition ;
 M: object split-decorators f f ;
 
-! GENERIC: apply-decorator ( base decorator -- )
+! GENERIC: apply-decorator ( base decorator -- ) ;
 ! : apply-decorators ( obj seq -- obj ) ;
 
-GENERIC: base-literal ( obj -- obj )
+GENERIC: base-literal ( obj -- obj ) ;
 M: compound-literal base-literal
     sequence>> [ decorator-literal? not ] find nip ;
 M: object base-literal ;
 
 
-GENERIC: literal>tag ( class -- string/f )
+GENERIC: literal>tag ( class -- string/f ) ;
 M: line-comment-literal literal>tag drop f ;
 M: uppercase-colon-literal literal>tag
     tag>> [ "word" ] [ >lower ] if-empty ;
@@ -112,7 +112,7 @@ M: compound-literal literal>tag
 : literals>holders ( literals -- holders )
     [ literal>holder ] map ;
 
-GENERIC: holder>definitions' ( literal -- assoc )
+GENERIC: holder>definitions' ( literal -- assoc ) ;
 M: comment' holder>definitions' drop f ;
 M: using' holder>definitions' drop f ;
 M: use' holder>definitions' drop f ;
@@ -160,7 +160,7 @@ M: slot' holder>definitions'
 
 ! these also make class predicate? words
 
-GENERIC: slot-accessor-name ( obj -- string )
+GENERIC: slot-accessor-name ( obj -- string ) ;
 M: single-matched-literal slot-accessor-name
     payload>> first tag>> ">>" append ;
 M: tag-literal slot-accessor-name tag>> ">>" append ;
@@ -219,12 +219,12 @@ M: singleton' holder>definitions'
     [ in'? ] filter
     [ literal>> payload>> [ tag>> ] map ] map concat ;
 
-GENERIC: handle-colon-tag ( seq tag -- obj )
-GENERIC: handle-paren-tag ( seq tag -- obj )
+GENERIC: handle-colon-tag ( seq tag -- obj ) ;
+GENERIC: handle-paren-tag ( seq tag -- obj ) ;
 ! M: f handle-paren-tag drop <effect> ;
-GENERIC: handle-brace-tag ( seq tag -- obj )
-GENERIC: handle-bracket-tag ( seq tag -- obj )
-GENERIC: handle-string-tag ( seq tag -- obj )
+GENERIC: handle-brace-tag ( seq tag -- obj ) ;
+GENERIC: handle-bracket-tag ( seq tag -- obj ) ;
+GENERIC: handle-string-tag ( seq tag -- obj ) ;
 
 ERROR: word-not-found word ;
 : lookup-in-namespace ( key namespace -- obj/f )
@@ -233,7 +233,7 @@ ERROR: word-not-found word ;
         word-not-found
     ] if ;
 
-GENERIC# lookup-literal 1 ( literal namespace -- obj )
+GENERIC# lookup-literal 1 ( literal namespace -- obj ) ;
 
 M: tag-literal lookup-literal
     [ tag>> ] dip lookup-in-namespace ;
@@ -258,7 +258,7 @@ M: single-matched-literal lookup-literal
     } case ;
 
 
-GENERIC: definition>quotation ( namespace name definition -- quot )
+GENERIC: definition>quotation ( namespace name definition -- quot ) ;
 M: define' definition>quotation
     holder>> definition>quotation
     ;
@@ -268,7 +268,7 @@ M: define' definition>quotation
 M: generate-predicate' definition>quotation 3drop f ;
 
 
-GENERIC: stack-effect? ( obj -- ? )
+GENERIC: stack-effect? ( obj -- ? ) ;
 M: single-matched-literal stack-effect? { [ tag>> ] [ delimiter>> "(" = ] } 1&& ;
 M: object stack-effect? drop f ;
 
@@ -330,7 +330,7 @@ DEFER: load-modern
     [ manifest>combined-namespace ] [ definitions>> ] bi
     [ [ name>> ] [ ] bi definition>quotation ] with { } map-as concat ;
 
-GENERIC: add-predicates ( obj -- seq )
+GENERIC: add-predicates ( obj -- seq ) ;
 M: string add-predicates dup "?" append 2array ;
 M: sequence add-predicates [ add-predicates ] map concat ;
 

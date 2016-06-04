@@ -145,7 +145,7 @@ ERROR: smtp-transaction-failed < smtp-error ;
 
 : get-ok ( -- ) receive-response check-response ;
 
-GENERIC: send-auth ( auth -- )
+GENERIC: send-auth ( auth -- ) ;
 
 M: no-auth send-auth drop ;
 

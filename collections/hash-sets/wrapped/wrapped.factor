@@ -12,7 +12,7 @@ TUPLE: wrapped-key
 TUPLE: wrapped-hash-set
     { underlying hash-set read-only } ;
 
-GENERIC: wrap-key ( key wrapped-hash -- wrapped-key )
+GENERIC: wrap-key ( key wrapped-hash -- wrapped-key ) ;
 
 <PRIVATE
 

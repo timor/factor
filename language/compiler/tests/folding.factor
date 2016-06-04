@@ -9,7 +9,7 @@ IN: compiler.tests.folding
 [ ] [
     "USING: math arrays ;
     IN: compiler.tests.folding
-    GENERIC: foldable-generic ( a -- b ) foldable
+    GENERIC: foldable-generic ( a -- b ) ; foldable
     M: integer foldable-generic f <array> ;"
     eval( -- )
 ] unit-test

@@ -56,7 +56,7 @@ PRIVATE>
         tokenize-line highlight-tokens
     ] curry each drop ;
 
-GENERIC: highlight. ( obj -- )
+GENERIC: highlight. ( obj -- ) ;
 
 M:: string highlight. ( path -- )
     path utf8 file-lines [

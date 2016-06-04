@@ -81,7 +81,7 @@ CONSTANT: minneapolis-slides
         $slide "An example"
         { $code
             "USE: math.constants"
-            "GENERIC: area ( shape -- meters^2 )"
+            "GENERIC: area ( shape -- meters^2 ) ;"
             "M: square area square-dimension sq ;"
             "M: circle area circle-radius sq pi * ;"
             "M: rectangle area"

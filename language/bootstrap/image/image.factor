@@ -43,7 +43,7 @@ C: <eql-wrapper> eql-wrapper
 
 M: eql-wrapper hashcode* obj>> hashcode* ;
 
-GENERIC: (eql?) ( obj1 obj2 -- ? )
+GENERIC: (eql?) ( obj1 obj2 -- ? ) ;
 
 : eql? ( obj1 obj2 -- ? )
     { [ [ class-of ] same? ] [ (eql?) ] } 2&& ;
@@ -186,7 +186,7 @@ H{ } clone special-objects set-global
     [ swap emit-header call align-here ] dip ; inline
 
 ! Read any object for emitting.
-GENERIC: prepare-object ( obj -- ptr )
+GENERIC: prepare-object ( obj -- ptr ) ;
 
 ! Image header
 

@@ -157,7 +157,7 @@ STRUCT: timeval
     { sec long }
     { usec long } ;
 
-GENERIC: sockaddr>ip ( sockaddr -- string )
+GENERIC: sockaddr>ip ( sockaddr -- string ) ;
 
 M: sockaddr-in sockaddr>ip ( sockaddr -- string )
     addr>> uint <ref> [ number>string ] { } map-as "." join ;

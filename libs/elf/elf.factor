@@ -566,7 +566,7 @@ TUPLE: section name elf-header section-header data ;
 TUPLE: segment elf-header program-header data ;
 TUPLE: symbol name elf-header sym data ;
 
-GENERIC: sections ( obj -- sections )
+GENERIC: sections ( obj -- sections ) ;
 
 : <elf> ( c-ptr -- elf )
     elf-header elf boa ;

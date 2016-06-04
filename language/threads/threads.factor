@@ -171,7 +171,7 @@ CONSTANT: [start]
         stop
     ]
 
-GENERIC: (next) ( obj thread -- obj' )
+GENERIC: (next) ( obj thread -- obj' ) ;
 
 M: thread (next)
     dup runnable>>
@@ -209,7 +209,7 @@ PRIVATE>
 : yield ( -- )
     self resume f suspend drop ;
 
-GENERIC: sleep-until ( n/f -- )
+GENERIC: sleep-until ( n/f -- ) ;
 
 M: integer sleep-until
     [ self ] dip schedule-sleep "sleep" suspend drop ;
@@ -217,7 +217,7 @@ M: integer sleep-until
 M: f sleep-until
     drop "standby" suspend drop ;
 
-GENERIC: sleep ( dt -- )
+GENERIC: sleep ( dt -- ) ;
 
 M: real sleep
     >integer nano-count + sleep-until ;

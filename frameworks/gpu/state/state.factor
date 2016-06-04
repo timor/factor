@@ -307,7 +307,7 @@ UNION: gpu-state
 
 PRIVATE>
 
-GENERIC: set-gpu-state* ( state -- )
+GENERIC: set-gpu-state* ( state -- ) ;
 
 M: viewport-state set-gpu-state*
     rect>> [ loc>> ] [ dim>> ] bi gl-viewport ;

@@ -17,7 +17,7 @@ INSTANCE: specialized-array sequence
 : <underlying> ( n type -- array )
     heap-size * <byte-array> ; inline
 
-GENERIC: underlying-type ( c-type -- c-type' )
+GENERIC: underlying-type ( c-type -- c-type' ) ;
 
 M: c-type-word underlying-type
     dup "c-type" word-prop {
@@ -32,8 +32,8 @@ M: pointer underlying-type
 
 <PRIVATE
 
-GENERIC: nth-c-ptr ( n seq -- displaced-alien )
-GENERIC: direct-like ( alien len exemplar -- seq )
+GENERIC: nth-c-ptr ( n seq -- displaced-alien ) ;
+GENERIC: direct-like ( alien len exemplar -- seq ) ;
 
 M: byte-array nth-c-ptr <displaced-alien> ; inline
 M: byte-array direct-like drop uchar <c-direct-array> ; inline

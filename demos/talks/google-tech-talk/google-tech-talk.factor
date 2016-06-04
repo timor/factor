@@ -111,7 +111,7 @@ CONSTANT: google-slides
     }
     { $slide "Object system"
         "Generic words and methods"
-        { $code "GENERIC: area ( shape -- n )" }
+        { $code "GENERIC: area ( shape -- n ) ;" }
         "Two methods:"
         { $code
             "USE: math.constants"
@@ -130,7 +130,7 @@ CONSTANT: google-slides
     { $slide "Object system"
         "New operation, existing types:"
         { $code
-            "GENERIC: perimeter ( shape -- n )"
+            "GENERIC: perimeter ( shape -- n ) ;"
             ""
             "M: rectangle perimeter"
             "    [ width>> ] [ height>> ] bi + 2 * ;"
@@ -188,7 +188,7 @@ CONSTANT: google-slides
     { $slide "Object system"
         "Or put methods on shapes:"
         { $code
-            "GENERIC: tell-me ( obj -- )"
+            "GENERIC: tell-me ( obj -- ) ;"
             ""
             "M: shape tell-me"
             "    \"My area is \" write area . ;"

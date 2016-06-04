@@ -157,7 +157,7 @@ ERROR: type-error type ;
 : finish-file-transfer ( -- )
     "File send OK." 226 server-response ;
 
-GENERIC: handle-passive-command ( stream obj -- )
+GENERIC: handle-passive-command ( stream obj -- ) ;
 
 : passive-loop ( server -- )
     [

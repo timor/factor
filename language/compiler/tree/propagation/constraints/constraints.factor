@@ -7,8 +7,8 @@ IN: compiler.tree.propagation.constraints
 
 SYMBOL: constraints
 
-GENERIC: assume* ( constraint -- )
-GENERIC: satisfied? ( constraint -- ? )
+GENERIC: assume* ( constraint -- ) ;
+GENERIC: satisfied? ( constraint -- ? ) ;
 
 M: f assume* drop ;
 

@@ -38,7 +38,7 @@ M: yuva >rgba
         [ 0.0 1.0 clamp ] tri@
     ] dip <rgba> ; inline
 
-GENERIC: >yuva ( color -- yuva )
+GENERIC: >yuva ( color -- yuva ) ;
 
 M: object >yuva >rgba >yuva ;
 

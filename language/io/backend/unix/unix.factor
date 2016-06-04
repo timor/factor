@@ -11,7 +11,7 @@ IN: io.backend.unix
 
 CONSTANT: file-mode 0o0666
 
-GENERIC: handle-fd ( handle -- fd )
+GENERIC: handle-fd ( handle -- fd ) ;
 
 TUPLE: fd < disposable fd ;
 

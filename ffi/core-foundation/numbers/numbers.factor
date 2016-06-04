@@ -33,7 +33,7 @@ FUNCTION: CFNumberType CFNumberGetType ( CFNumberRef number )
 
 FUNCTION: Boolean CFNumberGetValue ( CFNumberRef number, CFNumberType theType, void* valuePtr )
 
-GENERIC: <CFNumber> ( number -- alien )
+GENERIC: <CFNumber> ( number -- alien ) ;
 
 M: integer <CFNumber>
     [ f kCFNumberLongLongType ] dip longlong <ref> CFNumberCreate ;

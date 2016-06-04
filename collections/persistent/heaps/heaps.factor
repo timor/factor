@@ -34,7 +34,7 @@ PRIVATE>
 : both-with? ( obj a b quot -- ? )
    swap [ with ] dip swap both? ; inline
 
-GENERIC: sift-down ( value prio left right -- heap )
+GENERIC: sift-down ( value prio left right -- heap ) ;
 
 : singleton-sift-down ( value prio singleton empty -- heap )
     2over prio>> <= [ <branch> ] [
@@ -61,11 +61,11 @@ M: branch sift-down ! both arguments are branches
     ] if ;
 PRIVATE>
 
-GENERIC: pheap-peek ( heap -- value prio )
+GENERIC: pheap-peek ( heap -- value prio ) ;
 M: empty-heap pheap-peek empty-pheap ;
 M: branch pheap-peek [ value>> ] [ prio>> ] bi ;
 
-GENERIC: pheap-push ( value prio heap -- newheap )
+GENERIC: pheap-push ( value prio heap -- newheap ) ;
 
 M: empty-heap pheap-push
     drop <singleton-heap> ;

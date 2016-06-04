@@ -9,49 +9,49 @@ IN: flatland
 
 ! Two dimensional world protocol
 
-GENERIC: x ( obj -- x )
-GENERIC: y ( obj -- y )
+GENERIC: x ( obj -- x ) ;
+GENERIC: y ( obj -- y ) ;
 
-GENERIC: (x!) ( x obj -- )
-GENERIC: (y!) ( y obj -- )
+GENERIC: (x!) ( x obj -- ) ;
+GENERIC: (y!) ( y obj -- ) ;
 
 : x! ( obj x -- obj ) over (x!) ;
 : y! ( obj y -- obj ) over (y!) ;
 
-GENERIC: width  ( obj -- width  )
-GENERIC: height ( obj -- height )
+GENERIC: width  ( obj -- width  ) ;
+GENERIC: height ( obj -- height ) ;
 
-GENERIC: (width!)  ( width  obj -- )
-GENERIC: (height!) ( height obj -- )
+GENERIC: (width!)  ( width  obj -- ) ;
+GENERIC: (height!) ( height obj -- ) ;
 
 : width!  ( obj width  -- obj ) over (width!) ;
 : height! ( obj height -- obj ) over (width!) ;
 
 ! Predicates on relative placement
 
-GENERIC: to-the-left-of?  ( obj obj -- ? )
-GENERIC: to-the-right-of? ( obj obj -- ? )
+GENERIC: to-the-left-of?  ( obj obj -- ? ) ;
+GENERIC: to-the-right-of? ( obj obj -- ? ) ;
 
-GENERIC: below? ( obj obj -- ? )
-GENERIC: above? ( obj obj -- ? )
+GENERIC: below? ( obj obj -- ? ) ;
+GENERIC: above? ( obj obj -- ? ) ;
 
-GENERIC: in-between-horizontally? ( obj obj -- ? )
+GENERIC: in-between-horizontally? ( obj obj -- ? ) ;
 
-GENERIC: horizontal-interval ( obj -- interval )
+GENERIC: horizontal-interval ( obj -- interval ) ;
 
-GENERIC: move-to ( obj obj -- )
+GENERIC: move-to ( obj obj -- ) ;
 
-GENERIC: move-by ( obj delta -- )
+GENERIC: move-by ( obj delta -- ) ;
 
-GENERIC: move-left-by  ( obj obj -- )
-GENERIC: move-right-by ( obj obj -- )
+GENERIC: move-left-by  ( obj obj -- ) ;
+GENERIC: move-right-by ( obj obj -- ) ;
 
-GENERIC: left   ( obj -- left   )
-GENERIC: right  ( obj -- right  )
-GENERIC: bottom ( obj -- bottom )
-GENERIC: top    ( obj -- top    )
+GENERIC: left   ( obj -- left   ) ;
+GENERIC: right  ( obj -- right  ) ;
+GENERIC: bottom ( obj -- bottom ) ;
+GENERIC: top    ( obj -- top    ) ;
 
-GENERIC: distance ( a b -- c )
+GENERIC: distance ( a b -- c ) ;
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -216,7 +216,7 @@ METHOD: above? { sequence <rectangle> } [ y ] [ top    ] bi* > ;
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-GENERIC: within? ( a b -- ? )
+GENERIC: within? ( a b -- ? ) ;
 
 METHOD: within? { <pos> <rectangle> }
   {

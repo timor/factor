@@ -6,18 +6,18 @@ in: assocs
 
 mixin: assoc
 
-GENERIC: at* ( key assoc -- value/f ? )
-GENERIC: value-at* ( value assoc -- key/f ? )
-GENERIC: set-at ( value key assoc -- )
-GENERIC: new-assoc ( capacity exemplar -- newassoc )
-GENERIC: delete-at ( key assoc -- )
-GENERIC: clear-assoc ( assoc -- )
-GENERIC: assoc-size ( assoc -- n )
-GENERIC: assoc-like ( assoc exemplar -- newassoc )
-GENERIC: assoc-clone-like ( assoc exemplar -- newassoc )
-GENERIC: >alist ( assoc -- newassoc )
-GENERIC: keys ( assoc -- keys )
-GENERIC: values ( assoc -- values )
+GENERIC: at* ( key assoc -- value/f ? ) ;
+GENERIC: value-at* ( value assoc -- key/f ? ) ;
+GENERIC: set-at ( value key assoc -- ) ;
+GENERIC: new-assoc ( capacity exemplar -- newassoc ) ;
+GENERIC: delete-at ( key assoc -- ) ;
+GENERIC: clear-assoc ( assoc -- ) ;
+GENERIC: assoc-size ( assoc -- n ) ;
+GENERIC: assoc-like ( assoc exemplar -- newassoc ) ;
+GENERIC: assoc-clone-like ( assoc exemplar -- newassoc ) ;
+GENERIC: >alist ( assoc -- newassoc ) ;
+GENERIC: keys ( assoc -- keys ) ;
+GENERIC: values ( assoc -- values ) ;
 
 M: assoc assoc-like drop ; inline
 

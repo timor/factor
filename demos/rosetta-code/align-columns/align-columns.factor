@@ -53,7 +53,7 @@ justified,$right$justified,$or$center$justified$within$its$column."
 
 SINGLETONS: +left+ +middle+ +right+ ;
 
-GENERIC: align-string ( str n alignment -- str' )
+GENERIC: align-string ( str n alignment -- str' ) ;
 
 M: +left+ align-string  drop CHAR: space pad-tail ;
 M: +right+ align-string drop CHAR: space pad-head ;

@@ -248,7 +248,7 @@ TUPLE: peg-head rule-id involved-set eval-set ;
         H{ } clone \ packrat ,,
     ] H{ } make swap with-variables ; inline
 
-GENERIC: (compile) ( peg -- quot )
+GENERIC: (compile) ( peg -- quot ) ;
 
 : process-parser-result ( result -- result )
     dup failed? [

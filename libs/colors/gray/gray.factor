@@ -16,7 +16,7 @@ M: gray green>> gray>> ;
 
 M: gray blue>> gray>> ;
 
-GENERIC: >gray ( color -- gray )
+GENERIC: >gray ( color -- gray ) ;
 
 M: object >gray >rgba >gray ;
 

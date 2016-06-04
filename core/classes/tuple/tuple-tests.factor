@@ -74,7 +74,7 @@ C: <predicate-test> predicate-test
 PREDICATE: silly-pred < tuple
     class-of \ rect = ;
 
-GENERIC: area ( obj -- n )
+GENERIC: area ( obj -- n ) ;
 M: silly-pred area dup w>> swap h>> * ;
 
 TUPLE: circle radius ;
@@ -102,7 +102,7 @@ TUPLE: size-test a b c d ;
     size-test tuple-layout second =
 ] unit-test
 
-GENERIC: <yo-momma> ( a -- b )
+GENERIC: <yo-momma> ( a -- b ) ;
 
 TUPLE: yo-momma ;
 
@@ -126,7 +126,7 @@ TUPLE: loc-recording ;
 
 TUPLE: forget-robustness ;
 
-GENERIC: forget-robustness-generic ( a -- b )
+GENERIC: forget-robustness-generic ( a -- b ) ;
 
 M: forget-robustness forget-robustness-generic ;
 
@@ -139,8 +139,8 @@ M: integer forget-robustness-generic ;
 ] with-compilation-unit
 
 ! rapido found this one
-GENERIC# m1 0 ( s n -- n )
-GENERIC# m2 1 ( s n -- v )
+GENERIC# m1 0 ( s n -- n ) ;
+GENERIC# m2 1 ( s n -- v ) ;
 
 TUPLE: t1 ;
 
@@ -168,7 +168,7 @@ C: <t4> t4
 { 1 } [ <t4> 1 m2 ] unit-test
 
 ! another combination issue
-GENERIC: silly ( obj -- obj obj )
+GENERIC: silly ( obj -- obj obj ) ;
 
 UNION: my-union slice repetition column array vector reversed ;
 
@@ -488,7 +488,7 @@ must-fail-with
 { t } [ "z" accessor-exists? ] unit-test
 
 { [ ] } [
-    "IN: classes.tuple.tests GENERIC: forget-accessors-test ( a -- b )"
+    "IN: classes.tuple.tests GENERIC: forget-accessors-test ( a -- b ) ;"
     <string-reader>
     "forget-accessors-test" parse-stream
 ] unit-test
@@ -503,7 +503,7 @@ TUPLE: another-forget-accessors-test ;
 
 
 { [ ] } [
-    "IN: classes.tuple.tests GENERIC: another-forget-accessors-test ( a -- b )"
+    "IN: classes.tuple.tests GENERIC: another-forget-accessors-test ( a -- b ) ;"
     <string-reader>
     "another-forget-accessors-test" parse-stream
 ] unit-test

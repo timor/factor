@@ -98,7 +98,7 @@ MACRO: <struct-boa> ( class -- quot: ( ... -- struct ) )
 : sign-extender ( signed? bits -- quot )
     '[ _ [ _ sign-extend ] when ] ;
 
-GENERIC: (reader-quot) ( slot -- quot )
+GENERIC: (reader-quot) ( slot -- quot ) ;
 
 M: struct-slot-spec (reader-quot)
     [ offset>> ] [ type>> ] bi '[ >c-ptr _ _ alien-value ] ;
@@ -109,7 +109,7 @@ M: struct-bit-slot-spec (reader-quot)
     bi compose
     [ >c-ptr ] prepose ;
 
-GENERIC: (writer-quot) ( slot -- quot )
+GENERIC: (writer-quot) ( slot -- quot ) ;
 
 M: struct-slot-spec (writer-quot)
     [ offset>> ] [ type>> ] bi '[ >c-ptr _ _ set-alien-value ] ;
@@ -141,7 +141,7 @@ M: struct-class initial-value* <struct> t ; inline
 
 ! Struct slot accessors
 
-GENERIC: struct-slot-values ( struct -- sequence )
+GENERIC: struct-slot-values ( struct -- sequence ) ;
 
 M: struct-class reader-quot
     dup type>> array? [ dup type>> first define-array-vocab drop ] when
@@ -216,7 +216,7 @@ M: struct-c-type base-type ;
         class (unboxer-quot) >>unboxer-quot
         class (boxer-quot) >>boxer-quot ;
 
-GENERIC: compute-slot-offset ( offset class -- offset' )
+GENERIC: compute-slot-offset ( offset class -- offset' ) ;
 
 : c-type-align-at ( slot-spec offset -- n )
     over packed?>> [ 2drop 1 ] [

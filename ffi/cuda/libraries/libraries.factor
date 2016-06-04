@@ -53,7 +53,7 @@ TUPLE: grid
     grid boa ; inline
 
 <PRIVATE
-GENERIC: block-dim ( block-size -- x y z ) foldable
+GENERIC: block-dim ( block-size -- x y z ) ; foldable
 M: integer block-dim 1 1 ; inline
 M: sequence block-dim
     dup length {
@@ -63,7 +63,7 @@ M: sequence block-dim
         [ drop first3 ]
     } case ; inline
 
-GENERIC: grid-dim ( grid-size -- x y ) foldable
+GENERIC: grid-dim ( grid-size -- x y ) ; foldable
 M: integer grid-dim 1 ; inline
 M: sequence grid-dim
     dup length {

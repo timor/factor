@@ -124,7 +124,7 @@ MEMO: zoneinfo-array ( -- seq )
 : raw-zone-map ( -- assoc )
     zoneinfo-array [ raw-zone? ] filter [ name>> ] collect-by ;
 
-GENERIC: zone-matches? ( string rule -- ? )
+GENERIC: zone-matches? ( string rule -- ? ) ;
 
 M: raw-rule zone-matches? name>> = ;
 M: raw-zone zone-matches? name>> = ;

@@ -61,15 +61,15 @@ DEFER: (class<=)
 
 DEFER: (class-not)
 
-GENERIC: (classes-intersect?) ( first second -- ? )
+GENERIC: (classes-intersect?) ( first second -- ? ) ;
 
 DEFER: (class-and)
 
 DEFER: (class-or)
 
-GENERIC: (flatten-class) ( class -- )
+GENERIC: (flatten-class) ( class -- ) ;
 
-GENERIC: normalize-class ( class -- class' )
+GENERIC: normalize-class ( class -- class' ) ;
 
 M: object normalize-class ;
 

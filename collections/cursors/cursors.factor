@@ -12,12 +12,12 @@ IN: cursors
 
 MIXIN: cursor
 
-GENERIC: cursor-compatible? ( cursor cursor -- ? )
-GENERIC: cursor-valid? ( cursor -- ? )
-GENERIC: cursor= ( cursor cursor -- ? )
-GENERIC: cursor<= ( cursor cursor -- ? )
-GENERIC: cursor>= ( cursor cursor -- ? )
-GENERIC: cursor-distance-hint ( cursor cursor -- n )
+GENERIC: cursor-compatible? ( cursor cursor -- ? ) ;
+GENERIC: cursor-valid? ( cursor -- ? ) ;
+GENERIC: cursor= ( cursor cursor -- ? ) ;
+GENERIC: cursor<= ( cursor cursor -- ? ) ;
+GENERIC: cursor>= ( cursor cursor -- ? ) ;
+GENERIC: cursor-distance-hint ( cursor cursor -- n ) ;
 
 M: cursor cursor<= cursor= ; inline
 M: cursor cursor>= cursor= ; inline
@@ -30,21 +30,21 @@ M: cursor cursor-distance-hint 2drop 0 ; inline
 MIXIN: forward-cursor
 INSTANCE: forward-cursor cursor
 
-GENERIC: inc-cursor ( cursor -- cursor' )
+GENERIC: inc-cursor ( cursor -- cursor' ) ;
 
 MIXIN: bidirectional-cursor
 INSTANCE: bidirectional-cursor forward-cursor
 
-GENERIC: dec-cursor ( cursor -- cursor' )
+GENERIC: dec-cursor ( cursor -- cursor' ) ;
 
 MIXIN: random-access-cursor
 INSTANCE: random-access-cursor bidirectional-cursor
 
-GENERIC# cursor+ 1 ( cursor n -- cursor' )
-GENERIC# cursor- 1 ( cursor n -- cursor' )
-GENERIC: cursor-distance ( cursor cursor -- n )
-GENERIC: cursor<  ( cursor cursor -- ? )
-GENERIC: cursor>  ( cursor cursor -- ? )
+GENERIC# cursor+ 1 ( cursor n -- cursor' ) ;
+GENERIC# cursor- 1 ( cursor n -- cursor' ) ;
+GENERIC: cursor-distance ( cursor cursor -- n ) ;
+GENERIC: cursor<  ( cursor cursor -- ? ) ;
+GENERIC: cursor>  ( cursor cursor -- ? ) ;
 
 M: random-access-cursor inc-cursor  1 cursor+ ; inline
 M: random-access-cursor dec-cursor -1 cursor+ ; inline
@@ -61,9 +61,9 @@ ERROR: invalid-cursor cursor ;
 
 MIXIN: input-cursor
 
-GENERIC: cursor-key-value ( cursor -- key value )
+GENERIC: cursor-key-value ( cursor -- key value ) ;
 <PRIVATE
-GENERIC: cursor-key-value-unsafe ( cursor -- key value )
+GENERIC: cursor-key-value-unsafe ( cursor -- key value ) ;
 PRIVATE>
 M: input-cursor cursor-key-value-unsafe cursor-key-value ; inline
 M: input-cursor cursor-key-value
@@ -83,9 +83,9 @@ M: input-cursor cursor-key-value
 
 MIXIN: output-cursor
 
-GENERIC: set-cursor-value ( value cursor -- )
+GENERIC: set-cursor-value ( value cursor -- ) ;
 <PRIVATE
-GENERIC: set-cursor-value-unsafe ( value cursor -- )
+GENERIC: set-cursor-value-unsafe ( value cursor -- ) ;
 PRIVATE>
 M: output-cursor set-cursor-value-unsafe set-cursor-value ; inline
 M: output-cursor set-cursor-value
@@ -114,7 +114,7 @@ INSTANCE: finite-stream-cursor stream-cursor
 
 SINGLETON: end-of-stream
 
-GENERIC: cursor-stream-ended? ( cursor -- ? )
+GENERIC: cursor-stream-ended? ( cursor -- ? ) ;
 
 M: finite-stream-cursor inc-cursor
     dup cursor-stream-ended? [ drop end-of-stream ] when ; inline
@@ -189,7 +189,7 @@ M: linear-cursor cursor+
 M: linear-cursor cursor-
     [ [ value>> ] [ delta>> ] bi ] dip [ * - ] keep <linear-cursor> ; inline
 
-GENERIC: up/i ( distance delta -- distance' )
+GENERIC: up/i ( distance delta -- distance' ) ;
 M: integer up/i [ 1 - + ] keep /i ; inline
 M: real up/i / ceiling >integer ; inline
 
@@ -223,8 +223,8 @@ M: quadratic-cursor dec-cursor
 
 MIXIN: collection
 
-GENERIC: begin-cursor ( collection -- cursor )
-GENERIC: end-cursor ( collection -- cursor )
+GENERIC: begin-cursor ( collection -- cursor ) ;
+GENERIC: end-cursor ( collection -- cursor ) ;
 
 : all ( collection -- begin end )
     [ begin-cursor ] [ end-cursor ] bi ; inline
@@ -391,7 +391,7 @@ M: pusher-cursor set-cursor-value growable>> push ; inline
 : new-growable-cursor ( begin end exemplar -- cursor result )
     [ swap cursor-distance-hint ] dip new-resizable [ <pusher-cursor> ] keep ; inline
 
-GENERIC# new-sequence-cursor 1 ( begin end exemplar -- cursor result )
+GENERIC# new-sequence-cursor 1 ( begin end exemplar -- cursor result ) ;
 
 M: random-access-cursor new-sequence-cursor
     [ swap cursor-distance ] dip new-sequence [ begin-cursor ] keep ; inline

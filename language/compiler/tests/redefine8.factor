@@ -11,7 +11,7 @@ IN: compiler.tests.redefine8
     IN: compiler.tests.redefine8
     MIXIN: my-mixin
     INSTANCE: fixnum my-mixin
-    GENERIC: my-generic ( a -- b )
+    GENERIC: my-generic ( a -- b ) ;
     ! We add the bogus quotation here to hinder inlining
     ! since otherwise we cannot trigger this bug.
     M: my-mixin my-generic 1 + [ [ <=> ] sort ] drop ;"

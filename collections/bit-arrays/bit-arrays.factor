@@ -59,11 +59,11 @@ M: bit-array nth-unsafe
 M: bit-array set-nth-unsafe
     bit-index [ toggle-bit ] change-nth-unsafe ; inline
 
-GENERIC: clear-bits ( bit-array -- )
+GENERIC: clear-bits ( bit-array -- ) ;
 
 M: bit-array clear-bits 0 (set-bits) ; inline
 
-GENERIC: set-bits ( bit-array -- )
+GENERIC: set-bits ( bit-array -- ) ;
 
 M: bit-array set-bits -1 (set-bits) ; inline
 

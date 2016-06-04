@@ -119,7 +119,7 @@ TUPLE: alien-callback-params < alien-node-params xt ;
     [ [ c-type-boxer-quot ] map deep-spread>quot ]
     bi append ;
 
-GENERIC: wrap-callback-quot ( params quot -- quot' )
+GENERIC: wrap-callback-quot ( params quot -- quot' ) ;
 
 symbol: wait-for-callback-hook
 

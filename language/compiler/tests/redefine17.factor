@@ -4,7 +4,7 @@ IN: compiler.tests.redefine17
 
 << "compiler.tests.redefine17" vocab-words forget-all >>
 
-GENERIC: bong ( a -- b )
+GENERIC: bong ( a -- b ) ;
 
 M: array bong ;
 
@@ -30,7 +30,7 @@ INSTANCE: string mixin1
 
 MIXIN: mixin2
 
-GENERIC: billy ( a -- b )
+GENERIC: billy ( a -- b ) ;
 
 M: mixin2 billy ;
 

@@ -55,7 +55,7 @@ M: mirror assoc-size
 
 INSTANCE: mirror assoc
 
-GENERIC: make-mirror ( obj -- assoc )
+GENERIC: make-mirror ( obj -- assoc ) ;
 M: hashtable make-mirror ;
 M: hash-set make-mirror members make-mirror ;
 M: integer make-mirror drop f ;

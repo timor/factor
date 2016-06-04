@@ -50,7 +50,7 @@ symbol: a-symbol
 
 ! See if redefining a generic as a colon def clears some
 ! word props.
-GENERIC: testing ( a -- b )
+GENERIC: testing ( a -- b ) ;
 "IN: words.tests : testing ( -- ) ;" eval( -- )
 
 { f } [ \ testing generic? ] unit-test
@@ -89,7 +89,7 @@ DEFER: deferred
 [ error>> undefined-word? ] must-fail-with
 
 { } [
-    "IN: words.tests GENERIC: symbol-generic ( x -- x )" eval( -- )
+    "IN: words.tests GENERIC: symbol-generic ( x -- x )" eval( -- ) ;
 ] unit-test
 
 { } [
@@ -100,7 +100,7 @@ DEFER: deferred
 { f } [ "symbol-generic" "words.tests" lookup-word generic? ] unit-test
 
 { } [
-    "IN: words.tests GENERIC: symbol-generic ( a -- b )" <string-reader>
+    "IN: words.tests GENERIC: symbol-generic ( a -- b ) ;" <string-reader>
     "symbol-generic-test" parse-stream drop
 ] unit-test
 

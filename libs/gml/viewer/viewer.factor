@@ -76,7 +76,7 @@ TUPLE: b-rep-vertices
         ] data-map( object -- float-4[4] )
     ] [ length 2 * ] bi ; inline
 
-GENERIC: selected-vectors ( object -- vectors )
+GENERIC: selected-vectors ( object -- vectors ) ;
 M: object selected-vectors drop { } ;
 M: double-4 selected-vectors 1array ;
 M: sequence selected-vectors [ selected-vectors ] map concat ;

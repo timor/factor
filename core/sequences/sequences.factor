@@ -6,22 +6,22 @@ in: sequences
 
 mixin: sequence
 
-GENERIC: length ( seq -- n ) flushable
-GENERIC: set-length ( n seq -- )
-GENERIC: nth ( n seq -- elt ) flushable
-GENERIC: set-nth ( elt n seq -- )
-GENERIC: new-sequence ( len seq -- newseq ) flushable
-GENERIC: new-resizable ( len seq -- newseq ) flushable
-GENERIC: like ( seq exemplar -- newseq ) flushable
-GENERIC: clone-like ( seq exemplar -- newseq ) flushable
+GENERIC: length ( seq -- n ) ; flushable
+GENERIC: set-length ( n seq -- ) ;
+GENERIC: nth ( n seq -- elt ) ; flushable
+GENERIC: set-nth ( elt n seq -- ) ;
+GENERIC: new-sequence ( len seq -- newseq ) ; flushable
+GENERIC: new-resizable ( len seq -- newseq ) ; flushable
+GENERIC: like ( seq exemplar -- newseq ) ; flushable
+GENERIC: clone-like ( seq exemplar -- newseq ) ; flushable
 
 : new-like ( len exemplar quot -- seq )
     over [ [ new-sequence ] dip call ] dip like ; inline
 
 M: sequence like drop ; inline
 
-GENERIC: lengthen ( n seq -- )
-GENERIC: shorten ( n seq -- )
+GENERIC: lengthen ( n seq -- ) ;
+GENERIC: shorten ( n seq -- ) ;
 
 M: sequence lengthen 2dup length > [ set-length ] [ 2drop ] if ; inline
 M: sequence shorten 2dup length < [ set-length ] [ 2drop ] if ; inline
@@ -51,7 +51,7 @@ M: sequence shorten 2dup length < [ set-length ] [ 2drop ] if ; inline
 
 ERROR: bounds-error index seq ;
 
-GENERIC# bounds-check? 1 ( n seq -- ? )
+GENERIC# bounds-check? 1 ( n seq -- ? ) ;
 
 M: integer bounds-check? ( n seq -- ? )
     dupd length < [ 0 >= ] [ drop f ] if ; inline
@@ -77,11 +77,11 @@ INSTANCE: immutable-sequence sequence
 
 : dispatch ( n array -- ) array-nth call ;
 
-GENERIC: resize ( n seq -- newseq ) flushable
+GENERIC: resize ( n seq -- newseq ) ; flushable
 
 ! Unsafe sequence protocol for inner loops
-GENERIC: nth-unsafe ( n seq -- elt ) flushable
-GENERIC: set-nth-unsafe ( elt n seq -- )
+GENERIC: nth-unsafe ( n seq -- elt ) ; flushable
+GENERIC: set-nth-unsafe ( elt n seq -- ) ;
 
 M: sequence nth bounds-check nth-unsafe ; inline
 M: sequence set-nth bounds-check set-nth-unsafe ; inline
@@ -189,8 +189,8 @@ PRIVATE>
     [ 2drop f ] [ nth-unsafe ] if ; inline
 
 mixin: virtual-sequence
-GENERIC: virtual-exemplar ( seq -- seq' )
-GENERIC: virtual@ ( n seq -- n' seq' )
+GENERIC: virtual-exemplar ( seq -- seq' ) ;
+GENERIC: virtual@ ( n seq -- n' seq' ) ;
 
 M: virtual-sequence nth virtual@ nth ; inline
 M: virtual-sequence set-nth virtual@ set-nth ; inline
@@ -861,7 +861,7 @@ PRIVATE>
         [ 0 swap copy-unsafe ] keep reverse!
     ] keep like ;
 
-GENERIC: sum-lengths ( seq -- n )
+GENERIC: sum-lengths ( seq -- n ) ;
 
 M: object sum-lengths
     0 [ length + ] reduce ;
@@ -1061,7 +1061,7 @@ PRIVATE>
 : trim ( ... seq quot: ( ... elt -- ... ? ) -- ... newseq )
     [ trim-slice ] [ drop ] 2bi like ; inline
 
-GENERIC: sum ( seq -- n )
+GENERIC: sum ( seq -- n ) ;
 M: object sum 0 [ + ] binary-reduce ; inline
 M: iota-tuple sum length dup 1 - * 2/ ; inline
 M: repetition sum [ elt>> ] [ length>> ] bi * ; inline

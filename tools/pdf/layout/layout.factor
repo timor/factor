@@ -45,11 +45,11 @@ IN: pdf.layout
 ! FIXME: compress each pdf object to reduce file size?
 
 
-GENERIC: pdf-render ( canvas obj -- remain/f )
+GENERIC: pdf-render ( canvas obj -- remain/f ) ;
 
 M: f pdf-render 2drop f ;
 
-GENERIC: pdf-width ( canvas obj -- n )
+GENERIC: pdf-width ( canvas obj -- n ) ;
 
 <PRIVATE
 

@@ -415,7 +415,7 @@ CONSTANT: ONES B{
     [ over 10 >= ] [ (two-digit) ] while
     [ over zero? ] [ (one-digit) ] until ; inline
 
-GENERIC: (positive>dec) ( num -- str )
+GENERIC: (positive>dec) ( num -- str ) ;
 
 M: bignum (positive>dec)
     12 <sbuf> (bignum>dec) (fixnum>dec) "" like reverse! nip ; inline
@@ -464,7 +464,7 @@ M: fixnum (positive>dec)
 
 PRIVATE>
 
-GENERIC# >base 1 ( n radix -- str )
+GENERIC# >base 1 ( n radix -- str ) ;
 
 : number>string ( n -- str ) 10 >base ; inline
 

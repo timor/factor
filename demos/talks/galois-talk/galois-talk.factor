@@ -65,7 +65,7 @@ CONSTANT: galois-slides
     }
     { $slide "Object system"
         "Generic words and methods"
-        { $code "GENERIC: area ( shape -- n )" }
+        { $code "GENERIC: area ( shape -- n ) ;" }
         "Two methods:"
         { $code
             "USE: math.constants"
@@ -110,7 +110,7 @@ CONSTANT: galois-slides
             "PREDICATE: positive < integer 0 > ;"
             "PREDICATE: negative < integer 0 < ;"
             ""
-            "GENERIC: abs ( n -- )"
+            "GENERIC: abs ( n -- ) ;"
             ""
             "M: positive abs ;"
             "M: negative abs -1 * ;"

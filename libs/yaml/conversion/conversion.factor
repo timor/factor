@@ -159,8 +159,8 @@ C: <yaml-value> yaml-value
 
 ! !!!!!!!!!!!!!!
 ! factor -> yaml
-GENERIC: represent-scalar ( obj -- str )
-GENERIC: yaml-tag ( obj -- tag )
+GENERIC: represent-scalar ( obj -- str ) ;
+GENERIC: yaml-tag ( obj -- tag ) ;
 
 M: string represent-scalar ( obj -- str ) ;
 M: string yaml-tag ( obj -- tag ) drop YAML_STR_TAG ;

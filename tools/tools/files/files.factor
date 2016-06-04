@@ -56,7 +56,7 @@ C: <file-listing> file-listing
 
 ERROR: unknown-file-spec symbol ;
 
-HOOK: file-spec>string os ( file-listing spec -- string )
+HOOK: file-spec>string os ( file-listing spec -- string ) ;
 
 M: object file-spec>string ( file-listing spec -- string )
     {
@@ -82,7 +82,7 @@ M: object file-spec>string ( file-listing spec -- string )
 : list-files ( listing-tool -- array )
     dup list-slow? [ list-files-slow ] [ list-files-fast ] if ; inline
 
-HOOK: (directory.) os ( path -- lines )
+HOOK: (directory.) os ( path -- lines ) ;
 
 : directory. ( path -- ) (directory.) simple-table. ;
 

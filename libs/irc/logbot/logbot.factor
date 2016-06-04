@@ -51,7 +51,7 @@ SYMBOL: current-stream
     [ add-timestamp ] [ timestamp>stream ] bi
     [ stream-print ] [ stream-flush ] bi ;
 
-GENERIC: handle-message ( msg -- )
+GENERIC: handle-message ( msg -- ) ;
 
 M: object      handle-message drop ;
 M: irc-message handle-message [ >log-line ] [ timestamp>> ] bi log-message ;

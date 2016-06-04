@@ -6,7 +6,7 @@ regexp.transition-tables sequences sequences.private sets
 strings unicode words ;
 IN: regexp.compiler
 
-GENERIC: question>quot ( question -- quot )
+GENERIC: question>quot ( question -- quot ) ;
 
 SYMBOL: shortest?
 SYMBOL: backwards?

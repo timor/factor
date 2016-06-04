@@ -9,7 +9,7 @@ IN: compiler.cfg.intrinsics.simd.backend
 
 ! Selection of implementation based on available CPU instructions
 
-GENERIC: insn-available? ( ## -- reps )
+GENERIC: insn-available? ( ## -- reps ) ;
 
 M: object insn-available? drop t ;
 
@@ -71,7 +71,7 @@ M: ##horizontal-shr-vector-imm insn-available? rep>> %horizontal-shr-vector-imm-
 : [vector-op-checked] ( #dup quot -- quot )
     '[ _ ndup [ @ ] { } make dup [ insn-available? ] all? ] ;
 
-GENERIC# >vector-op-cond 2 ( quot #pick #dup -- quotpair )
+GENERIC# >vector-op-cond 2 ( quot #pick #dup -- quotpair ) ;
 M:: callable >vector-op-cond ( quot #pick #dup -- quotpair )
     #dup quot [vector-op-checked] '[ 2drop @ ]
     #dup '[ % _ nnip ]

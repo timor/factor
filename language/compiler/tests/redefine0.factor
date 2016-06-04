@@ -53,7 +53,7 @@ IN: compiler.tests.redefine0
     ] with-compilation-unit
 ] unit-test
 
-GENERIC: test-7 ( a -- b )
+GENERIC: test-7 ( a -- b ) ;
 
 M: integer test-7 + ;
 
@@ -62,7 +62,7 @@ M: integer test-7 + ;
 [ 1 test-7 ] [ not-compiled? ] must-fail-with
 [ 1 test-8 ] [ not-compiled? ] must-fail-with
 
-[ ] [ "IN: compiler.tests.redefine0 USING: macros math kernel ; GENERIC: test-7 ( x y -- z ) : test-8 ( a b -- c ) 255 bitand test-7 ;" eval( -- ) ] unit-test
+[ ] [ "IN: compiler.tests.redefine0 USING: macros math kernel ; GENERIC: test-7 ( x y -- z ) : test-8 ( a b -- c ) 255 bitand test-7 ;" eval( -- ) ; ] unit-test
 
 [ 4 ] [ 1 3 test-7 ] unit-test
 [ 4 ] [ 1 259 test-8 ] unit-test

@@ -9,7 +9,7 @@ ARTICLE: "method-order" "Method precedence"
 $nl
 "Here is an example:"
 { $code
-    "GENERIC: explain ( object -- )"
+    "GENERIC: explain ( object -- ) ;"
     "M: object explain drop \"an object\" print ;"
     "M: generic explain drop \"a generic word\" print ;"
     "M: class explain drop \"a class word\" print ;"
@@ -22,7 +22,7 @@ $nl
 { $subsections order } ;
 
 ARTICLE: "generic-introspection" "Generic word introspection"
-"In most cases, generic words and methods are defined at parse time with " { $link postpone: GENERIC: } " (or some other parsing word) and " { $link postpone: M: } "."
+"In most cases, generic words and methods are defined at parse time with " { $link postpone: GENERIC: } " (or some other parsing word) ; and " { $link postpone: M: } "."
 $nl
 "Sometimes, generic words need to be inspected or defined at run time; words for performing these tasks are found in the " { $vocab-link "generic" } " vocabulary."
 $nl
@@ -186,7 +186,7 @@ HELP: no-next-method
 { $examples
     "The following code throws this error:"
     { $code
-        "GENERIC: error-test ( object -- )"
+        "GENERIC: error-test ( object -- ) ;"
         ""
         "M: number error-test 3 + call-next-method ;"
         ""

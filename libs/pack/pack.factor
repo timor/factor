@@ -5,7 +5,7 @@ endian fry io kernel macros math math.statistics math.vectors
 sequences strings ;
 IN: pack
 
-GENERIC: >n-byte-array ( obj n -- byte-array )
+GENERIC: >n-byte-array ( obj n -- byte-array ) ;
 
 M: integer >n-byte-array ( m n -- byte-array ) >endian ;
 

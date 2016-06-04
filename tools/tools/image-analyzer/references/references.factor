@@ -9,7 +9,7 @@ IN: tools.image-analyzer.references
 QUALIFIED-WITH: tools.image-analyzer.vm vm
 
 ! Edges in the heap
-GENERIC: pointers ( heap heap-node struct -- seq )
+GENERIC: pointers ( heap heap-node struct -- seq ) ;
 
 : find-heap-node ( heap ptr -- node )
     15 unmask '[ address>> _ = ] find nip ;

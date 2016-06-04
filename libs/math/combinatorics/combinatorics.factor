@@ -13,7 +13,7 @@ IN: math.combinatorics
 : (nths-unsafe) ( indices seq -- seq' )
     [ { array } declare ] dip
     [ [ nth-unsafe ] curry ] keep map-as ; inline
-GENERIC: nths-unsafe ( indices seq -- seq' )
+GENERIC: nths-unsafe ( indices seq -- seq' ) ;
 M: string nths-unsafe (nths-unsafe) ;
 M: array nths-unsafe (nths-unsafe) ;
 M: vector nths-unsafe (nths-unsafe) ;

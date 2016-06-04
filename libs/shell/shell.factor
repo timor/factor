@@ -12,7 +12,7 @@ IN: shell
 
 CONSTANT: swords { "cd" "pwd" }
 
-GENERIC: expand ( expr -- expr )
+GENERIC: expand ( expr -- expr ) ;
 
 M: object expand ;
 

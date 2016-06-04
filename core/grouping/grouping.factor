@@ -8,7 +8,7 @@ ERROR: groups-error seq n ;
 
 <PRIVATE
 
-GENERIC: group@ ( n groups -- from to seq )
+GENERIC: group@ ( n groups -- from to seq ) ;
 
 TUPLE: chunking { seq read-only } { n read-only } ;
 

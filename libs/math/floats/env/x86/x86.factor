@@ -11,11 +11,11 @@ STRUCT: x87-env
     { status ushort }
     { control ushort } ;
 
-HOOK: get-sse-env cpu ( sse-env -- )
-HOOK: set-sse-env cpu ( sse-env -- )
+HOOK: get-sse-env cpu ( sse-env -- ) ;
+HOOK: set-sse-env cpu ( sse-env -- ) ;
 
-HOOK: get-x87-env cpu ( x87-env -- )
-HOOK: set-x87-env cpu ( x87-env -- )
+HOOK: get-x87-env cpu ( x87-env -- ) ;
+HOOK: set-x87-env cpu ( x87-env -- ) ;
 
 : <sse-env> ( -- sse-env )
     sse-env (struct) [ get-sse-env ] keep ;

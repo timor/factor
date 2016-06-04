@@ -18,22 +18,22 @@ CONSTANT:  pi/2 $[ pi  2.0 / ]
 
 TUPLE: wasd-world < game-world location yaw pitch p-matrix ;
 
-GENERIC: wasd-near-plane ( world -- near-plane )
+GENERIC: wasd-near-plane ( world -- near-plane ) ;
 M: wasd-world wasd-near-plane drop 0.25 ;
 
-GENERIC: wasd-far-plane ( world -- far-plane )
+GENERIC: wasd-far-plane ( world -- far-plane ) ;
 M: wasd-world wasd-far-plane drop 1024.0 ;
 
-GENERIC: wasd-movement-speed ( world -- speed )
+GENERIC: wasd-movement-speed ( world -- speed ) ;
 M: wasd-world wasd-movement-speed drop 1/16. ;
 
-GENERIC: wasd-mouse-scale ( world -- scale )
+GENERIC: wasd-mouse-scale ( world -- scale ) ;
 M: wasd-world wasd-mouse-scale drop 1/600. ;
 
-GENERIC: wasd-pitch-range ( world -- min max )
+GENERIC: wasd-pitch-range ( world -- min max ) ;
 M: wasd-world wasd-pitch-range drop -pi/2 pi/2 ;
 
-GENERIC: wasd-fly-vertically? ( world -- ? )
+GENERIC: wasd-fly-vertically? ( world -- ? ) ;
 M: wasd-world wasd-fly-vertically? drop t ;
 
 : wasd-mv-matrix ( world -- matrix )

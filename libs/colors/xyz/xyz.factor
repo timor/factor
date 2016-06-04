@@ -35,7 +35,7 @@ M: xyza >rgba
         ]
     ] [ alpha>> ] bi <rgba> ;
 
-GENERIC: >xyza ( color -- xyza )
+GENERIC: >xyza ( color -- xyza ) ;
 
 M: object >xyza >rgba >xyza ;
 

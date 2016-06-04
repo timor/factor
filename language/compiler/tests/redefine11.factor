@@ -12,7 +12,7 @@ IN: compiler.tests.redefine11
     MIXIN: my-mixin
     INSTANCE: array my-mixin
     INSTANCE: fixnum my-mixin
-    GENERIC: my-generic ( a -- b )
+    GENERIC: my-generic ( a -- b ) ;
     M: my-mixin my-generic drop 0 ;
     M: object my-generic drop 1 ;
     : my-inline ( -- b ) { } my-generic ;"

@@ -90,7 +90,7 @@ W DEFINES ${W}
 
 WHERE
 
-GENERIC: W ( a -- b )
+GENERIC: W ( a -- b ) ;
 M: object W ;
 M: integer W 1 + ;
 
@@ -109,7 +109,7 @@ M: integer W 1 + ;
 
     TUPLE: some-tuple ;
     : some-word ( -- ) ;
-    GENERIC: some-generic ( a -- b )
+    GENERIC: some-generic ( a -- b ) ;
     M: some-tuple some-generic ;
     SYMBOL: some-symbol" <string-reader> "functors-test" parse-stream
 ] unit-test
@@ -137,7 +137,7 @@ WHERE
 
 TUPLE: W-tuple ;
 : W-word ( -- ) ;
-GENERIC: W-generic ( a -- b )
+GENERIC: W-generic ( a -- b ) ;
 M: W-tuple W-generic ;
 SYMBOL: W-symbol
 

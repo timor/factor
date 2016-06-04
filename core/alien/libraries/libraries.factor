@@ -17,7 +17,7 @@ PRIMITIVE: (dlsym-raw) ( name dll -- alien ) ;
 
 : dlsym-raw ( name dll -- alien ) [ string>symbol ] dip (dlsym-raw) ;
 
-HOOK: dlerror os ( -- message/f )
+HOOK: dlerror os ( -- message/f ) ;
 
 symbol: libraries
 
@@ -30,7 +30,7 @@ C: <library> library
 : lookup-library ( name -- library ) libraries get at ;
 
 ERROR: no-library-named name ;
-GENERIC: dlsym? ( name string/dll -- ? )
+GENERIC: dlsym? ( name string/dll -- ? ) ;
 M: string dlsym? dup lookup-library [ nip dll>> dlsym? ] [ no-library-named ] if* ;
 M: dll dlsym? dlsym >boolean ;
 
@@ -98,7 +98,7 @@ deploy-libraries [ V{ } clone ] initialize
     [ deploy-libraries get 2dup member? [ 2drop ] [ push ] if ]
     [ "deploy-library failure" no-such-library ] if ;
 
-HOOK: >deployed-library-path os ( path -- path' )
+HOOK: >deployed-library-path os ( path -- path' ) ;
 
 ! {
     ! { [ os windows? ] [ "alien.libraries.windows" ] }

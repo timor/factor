@@ -36,7 +36,7 @@ M: LCHuv >luva
         ]
     ] [ alpha>> ] bi <luva> ;
 
-GENERIC: >LCHuv ( color -- LCHuv )
+GENERIC: >LCHuv ( color -- LCHuv ) ;
 
 M: object >LCHuv >luva >LCHuv ;
 
@@ -74,7 +74,7 @@ M: LCHab >laba
         ]
     ] [ alpha>> ] bi <laba> ;
 
-GENERIC: >LCHab ( color -- LCHab )
+GENERIC: >LCHab ( color -- LCHab ) ;
 
 M: object >LCHab >laba >LCHab ;
 

@@ -15,7 +15,7 @@ mixin: assoc-mixin
 
 INSTANCE: hashtable assoc-mixin
 
-GENERIC: collection-size ( x -- y )
+GENERIC: collection-size ( x -- y ) ;
 
 M: sequence-mixin collection-size length ;
 
@@ -58,7 +58,7 @@ use: io.streams.string
             "IN: classes.mixin.tests"
             "MIXIN: mixin-forget-test"
             "INSTANCE: sequence mixin-forget-test"
-            "GENERIC: mixin-forget-test-g ( x -- y )"
+            "GENERIC: mixin-forget-test-g ( x -- y ) ;"
             "M: mixin-forget-test mixin-forget-test-g ;"
         } "\n" join <string-reader> "mixin-forget-test"
         parse-stream drop
@@ -73,7 +73,7 @@ use: io.streams.string
             "IN: classes.mixin.tests"
             "MIXIN: mixin-forget-test"
             "INSTANCE: hashtable mixin-forget-test"
-            "GENERIC: mixin-forget-test-g ( x -- y )"
+            "GENERIC: mixin-forget-test-g ( x -- y ) ;"
             "M: mixin-forget-test mixin-forget-test-g ;"
         } "\n" join <string-reader> "mixin-forget-test"
         parse-stream drop
@@ -133,7 +133,7 @@ mixin: metaclass-change-mixin
 TUPLE: metaclass-change ;
 INSTANCE: metaclass-change metaclass-change-mixin
 
-GENERIC: metaclass-change-generic ( a -- b )
+GENERIC: metaclass-change-generic ( a -- b ) ;
 
 M: metaclass-change-mixin metaclass-change-generic ;
 

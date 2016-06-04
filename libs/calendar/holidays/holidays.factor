@@ -19,7 +19,7 @@ SYNTAX: HOLIDAY-NAME:
     value name holidays set-at ] ;
 >>
 
-GENERIC: holidays ( n singleton -- seq )
+GENERIC: holidays ( n singleton -- seq ) ;
 
 <PRIVATE
 

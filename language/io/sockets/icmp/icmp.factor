@@ -19,7 +19,7 @@ MEMO: IPPROTO_ICMP4 ( -- protocol )
 MEMO: IPPROTO_ICMP6 ( -- protocol )
     "ipv6-icmp" getprotobyname proto>> ;
 
-GENERIC: with-icmp ( addrspec -- addrspec )
+GENERIC: with-icmp ( addrspec -- addrspec ) ;
 
 PRIVATE>
 

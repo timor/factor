@@ -19,7 +19,7 @@ symbol: current-directory
 : last-path-separator ( path -- n ? )
     [ length 1 - ] keep [ path-separator? ] find-last-from ;
 
-HOOK: root-directory? io-backend ( path -- ? )
+HOOK: root-directory? io-backend ( path -- ? ) ;
 
 M: object root-directory? ( path -- ? )
     [ f ] [ [ path-separator? ] all? ] if-empty ;
@@ -128,20 +128,20 @@ PRIVATE>
 : path-components ( path -- seq )
     normalize-path path-separator split harvest ;
 
-HOOK: resolve-symlinks os ( path -- path' )
+HOOK: resolve-symlinks os ( path -- path' ) ;
 
 M: object resolve-symlinks normalize-path ;
 
 : resource-path ( path -- newpath )
     "resource-path" get prepend-path ;
 
-HOOK: home io-backend ( -- dir )
+HOOK: home io-backend ( -- dir ) ;
 
 M: object home "" resource-path ;
 
-GENERIC: vocab-path ( path -- newpath )
+GENERIC: vocab-path ( path -- newpath ) ;
 
-GENERIC: absolute-path ( path -- path' )
+GENERIC: absolute-path ( path -- path' ) ;
 
 M: string absolute-path
     "resource:" ?head [

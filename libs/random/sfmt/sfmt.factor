@@ -55,7 +55,7 @@ TUPLE: sfmt
     [ wB ] dip vbitxor
     [ wA ] dip vbitxor ; inline
 
-GENERIC: generate ( sfmt -- )
+GENERIC: generate ( sfmt -- ) ;
 
 M:: sfmt generate ( sfmt -- )
     sfmt state>> :> state

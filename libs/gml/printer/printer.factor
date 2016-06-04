@@ -4,7 +4,7 @@ hashtables io io.styles kernel math math.parser math.vectors.simd
 math.vectors.simd.cords sequences strings colors ;
 IN: gml.printer
 
-GENERIC: write-gml ( obj -- )
+GENERIC: write-gml ( obj -- ) ;
 
 M: object write-gml "«Object: " write name>> write "»" write ;
 M: integer write-gml number>string write ;

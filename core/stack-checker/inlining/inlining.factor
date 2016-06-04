@@ -111,7 +111,7 @@ symbol: enter-out
 : trimmed-enter-out ( label -- stack )
     dup enter-out>> trim-stack ;
 
-GENERIC: (undeclared-known) ( value -- known )
+GENERIC: (undeclared-known) ( value -- known ) ;
 M: object (undeclared-known) ;
 M: declared-effect (undeclared-known) known>> (undeclared-known) ;
 

@@ -35,7 +35,7 @@ INTERSECTION: 16bit-mono-buffer 16bit-buffer mono-buffer ;
 INTERSECTION: 8bit-stereo-buffer 8bit-buffer stereo-buffer ;
 INTERSECTION: 16bit-stereo-buffer 16bit-buffer stereo-buffer ;
 
-GENERIC: buffer-format ( buffer -- format )
+GENERIC: buffer-format ( buffer -- format ) ;
 M: 8bit-mono-buffer buffer-format drop AL_FORMAT_MONO8 ;
 M: 16bit-mono-buffer buffer-format drop AL_FORMAT_MONO16 ;
 M: 8bit-stereo-buffer buffer-format drop AL_FORMAT_STEREO8 ;
@@ -53,7 +53,7 @@ M: 16bit-stereo-buffer buffer-format drop AL_FORMAT_STEREO16 ;
 : interleaved-stereo-data ( stereo-buffer -- data )
     stereo-data <2merged> ;
 
-GENERIC: buffer-data ( buffer -- data size )
+GENERIC: buffer-data ( buffer -- data size ) ;
 M: 8bit-mono-buffer buffer-data data>> 8bit-buffer-data ;
 M: 16bit-mono-buffer buffer-data data>> 16bit-buffer-data ;
 M: 8bit-stereo-buffer buffer-data

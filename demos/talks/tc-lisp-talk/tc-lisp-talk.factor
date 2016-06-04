@@ -84,8 +84,8 @@ CONSTANT: tc-lisp-slides
         "In ~/factor/work/shapes/shapes.factor"
         { $code "IN: shapes
 
-GENERIC: area ( shape -- x )
-GENERIC: perimeter ( shape -- x )"
+GENERIC: area ( shape -- x ) ;
+GENERIC: perimeter ( shape -- x ) ;"
         }
     }
     { $slide "Implementing the shape protocol: circles"

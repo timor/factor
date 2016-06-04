@@ -17,7 +17,7 @@ SLOT: file
 : CreateFile-flags ( DWORD -- DWORD )
     flags{ FILE_FLAG_BACKUP_SEMANTICS FILE_FLAG_OVERLAPPED } bitor ;
 
-HOOK: open-append os ( path -- win32-file )
+HOOK: open-append os ( path -- win32-file ) ;
 
 TUPLE: win32-file < win32-handle ptr ;
 

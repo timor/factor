@@ -25,7 +25,7 @@ IN: vocabs.prettyprint
         \ ; pprint-word
     ] with-pprint ;
 
-GENERIC: pprint-qualified ( qualified -- )
+GENERIC: pprint-qualified ( qualified -- ) ;
 
 M: qualified pprint-qualified ( qualified -- )
     [

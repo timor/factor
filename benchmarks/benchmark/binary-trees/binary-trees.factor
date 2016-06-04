@@ -18,7 +18,7 @@ C: <tree-node> tree-node
         drop f f
     ] if <tree-node> ; inline recursive
 
-GENERIC: item-check ( node -- n )
+GENERIC: item-check ( node -- n ) ;
 
 M: tree-node item-check
     [ item>> ] [ left>> ] [ right>> ] tri [ item-check ] bi@ - + ;

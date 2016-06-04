@@ -24,7 +24,7 @@ SYMBOL: logged-in-user
 : username ( -- string/f )
     logged-in-user get dup [ username>> ] when ;
 
-GENERIC: init-user-profile ( responder -- )
+GENERIC: init-user-profile ( responder -- ) ;
 
 M: object init-user-profile drop ;
 
@@ -58,15 +58,15 @@ V{ } clone capabilities set-global
 
 TUPLE: realm < dispatcher name users checksum secure ;
 
-GENERIC: login-required* ( description capabilities realm -- response )
+GENERIC: login-required* ( description capabilities realm -- response ) ;
 
-GENERIC: user-registered ( user realm -- response )
+GENERIC: user-registered ( user realm -- response ) ;
 
 M: object user-registered 2drop URL" $realm" <redirect> ;
 
-GENERIC: init-realm ( realm -- )
+GENERIC: init-realm ( realm -- ) ;
 
-GENERIC: logged-in-username ( realm -- username )
+GENERIC: logged-in-username ( realm -- username ) ;
 
 : login-required ( description capabilities -- * )
     realm get login-required* exit-with ;

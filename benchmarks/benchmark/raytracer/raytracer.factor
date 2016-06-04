@@ -34,7 +34,7 @@ TUPLE: hit { normal double-array read-only } { lambda float read-only } ;
 
 C: <hit> hit
 
-GENERIC: intersect-scene ( hit ray scene -- hit )
+GENERIC: intersect-scene ( hit ray scene -- hit ) ;
 
 TUPLE: sphere { center double-array read-only } { radius float read-only } ;
 

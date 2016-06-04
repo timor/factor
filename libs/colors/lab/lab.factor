@@ -45,7 +45,7 @@ M: laba >xyza
         ]
     ] [ alpha>> ] bi <xyza> ;
 
-GENERIC: >laba ( color -- laba )
+GENERIC: >laba ( color -- laba ) ;
 
 M: object >laba >rgba >laba ;
 

@@ -266,7 +266,7 @@ M: sha-256 initialize-checksum-state drop <sha-256-state> ;
 : slice3 ( n seq -- a b c )
     [ dup 3 + ] dip <slice> first3 ; inline
 
-GENERIC: pad-initial-bytes ( string sha2 -- padded-string )
+GENERIC: pad-initial-bytes ( string sha2 -- padded-string ) ;
 
 :: T1-256 ( n M H sha2 -- T1 )
     n M nth-unsafe

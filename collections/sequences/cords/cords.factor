@@ -22,7 +22,7 @@ M: cord virtual@
 
 INSTANCE: cord virtual-sequence
 
-GENERIC: cord-append ( seq1 seq2 -- cord )
+GENERIC: cord-append ( seq1 seq2 -- cord ) ;
 
 M: object cord-append
     generic-cord boa ; inline

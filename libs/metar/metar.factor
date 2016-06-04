@@ -573,7 +573,7 @@ CONSTANT: re-recent-weather R/ ((\w{2})?[BE]\d{2,4}((\w{2})?[BE]\d{2,4})?)+/
 
 PRIVATE>
 
-GENERIC: metar ( station -- metar )
+GENERIC: metar ( station -- metar ) ;
 
 M: station metar cccc>> metar ;
 
@@ -581,7 +581,7 @@ M: string metar
     "http://weather.noaa.gov/pub/data/observations/metar/stations/%s.TXT"
     sprintf http-get nip ;
 
-GENERIC: metar. ( station -- )
+GENERIC: metar. ( station -- ) ;
 
 M: station metar. cccc>> metar. ;
 
@@ -713,7 +713,7 @@ sky-condition raw ;
 
 PRIVATE>
 
-GENERIC: taf ( station -- taf )
+GENERIC: taf ( station -- taf ) ;
 
 M: station taf cccc>> taf ;
 
@@ -721,7 +721,7 @@ M: string taf
     "http://weather.noaa.gov/pub/data/forecasts/taf/stations/%s.TXT"
     sprintf http-get nip ;
 
-GENERIC: taf. ( station -- )
+GENERIC: taf. ( station -- ) ;
 
 M: station taf. cccc>> taf. ;
 

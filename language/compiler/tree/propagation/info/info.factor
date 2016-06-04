@@ -14,7 +14,7 @@ IN: compiler.tree.propagation.info
 
 : null-class? ( class -- ? ) null class<= ;
 
-GENERIC: eql? ( obj1 obj2 -- ? )
+GENERIC: eql? ( obj1 obj2 -- ? ) ;
 M: object eql? eq? ;
 M: fixnum eql? eq? ;
 M: bignum eql? over bignum? [ = ] [ 2drop f ] if ;

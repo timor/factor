@@ -26,17 +26,17 @@ symbol: known-values
 : copy-values ( values -- values' )
     [ copy-value ] map ;
 
-GENERIC: (literal-value?) ( value -- ? )
+GENERIC: (literal-value?) ( value -- ? ) ;
 
 : literal-value? ( value -- ? )
     known (literal-value?) ;
 
-GENERIC: (input-value?) ( value -- ? )
+GENERIC: (input-value?) ( value -- ? ) ;
 
 : input-value? ( value -- ? )
     known (input-value?) ;
 
-GENERIC: (literal) ( known -- literal )
+GENERIC: (literal) ( known -- literal ) ;
 
 TUPLE: literal-tuple < identity-tuple value recursion ;
 
@@ -122,7 +122,7 @@ M: f (literal-value?) drop f ;
 
 M: f (literal) current-word get bad-macro-input ;
 
-GENERIC: known>callable ( known -- quot )
+GENERIC: known>callable ( known -- quot ) ;
 
 : ?@ ( x -- y )
     dup callable? [ drop [ @ ] ] unless ;

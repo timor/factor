@@ -43,7 +43,7 @@ PREDICATE: register-64 < register
 PREDICATE: register-128 < register
     "register-size" word-prop 128 = ;
 
-GENERIC: extended? ( op -- ? )
+GENERIC: extended? ( op -- ? ) ;
 
 M: object extended? drop f ;
 
@@ -76,7 +76,7 @@ ERROR: bad-index indirect ;
 ! Utilities
 UNION: operand register indirect ;
 
-GENERIC: operand-64? ( operand -- ? )
+GENERIC: operand-64? ( operand -- ? ) ;
 
 M: indirect operand-64?
     [ base>> ] [ index>> ] bi [ operand-64? ] either? ;

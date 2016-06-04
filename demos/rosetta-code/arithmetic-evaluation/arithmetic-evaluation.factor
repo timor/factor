@@ -53,7 +53,7 @@ exp      =   exp:a spaces "+" fac:b         => [[ a b <add> ]]
 main     = exp:e spaces !(.)                => [[ e ]]
 ;EBNF
 
-GENERIC: eval-ast ( ast -- result )
+GENERIC: eval-ast ( ast -- result ) ;
 
 M: number eval-ast ;
 

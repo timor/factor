@@ -14,7 +14,7 @@ TUPLE: rgba < color
 
 C: <rgba> rgba
 
-GENERIC: >rgba ( color -- rgba )
+GENERIC: >rgba ( color -- rgba ) ;
 
 M: rgba >rgba ; inline
 

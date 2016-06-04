@@ -23,19 +23,19 @@ INSTANCE: proc sequence
 
 : wrap ( n seq -- n seq ) [ length rem ] keep ; inline
 
-GENERIC# (gml-get) 1 ( collection key -- elt )
+GENERIC# (gml-get) 1 ( collection key -- elt ) ;
 
 M: sequence (gml-get) swap wrap nth ;
 M: hashtable (gml-get) of ;
 
-GENERIC# (gml-put) 2 ( collection key elt -- )
+GENERIC# (gml-put) 2 ( collection key elt -- ) ;
 
 M:: sequence (gml-put) ( collection key elt -- )
     elt key collection wrap set-nth ;
 M:: hashtable (gml-put) ( collection key elt -- )
     elt key collection set-at ;
 
-GENERIC: (gml-copy) ( collection -- collection' )
+GENERIC: (gml-copy) ( collection -- collection' ) ;
 
 M: array (gml-copy) clone ;
 M: hashtable (gml-copy) clone ;
@@ -53,7 +53,7 @@ ALIAS: vec3d? double-4?
 
 : scalar>vec3d ( x -- vec ) dup dup 0.0 double-4-boa ; inline
 
-GENERIC: mask-vec3d ( value -- value' )
+GENERIC: mask-vec3d ( value -- value' ) ;
 
 M: double-2 mask-vec3d ; inline
 

@@ -32,7 +32,7 @@ SYMBOL: current-cairo
 
 PRIVATE>
 
-GENERIC: render-cairo* ( gadget -- )
+GENERIC: render-cairo* ( gadget -- ) ;
 
 : render-cairo ( gadget -- alien )
     [

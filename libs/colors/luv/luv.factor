@@ -42,7 +42,7 @@ M: luva >xyza
         ]
     ] [ alpha>> ] bi <xyza> ;
 
-GENERIC: >luva ( color -- luva )
+GENERIC: >luva ( color -- luva ) ;
 
 M: object >luva >rgba >luva ;
 

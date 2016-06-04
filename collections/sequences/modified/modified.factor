@@ -6,11 +6,11 @@ IN: sequences.modified
 
 TUPLE: modified ;
 
-GENERIC: modified-nth ( n seq -- elt )
+GENERIC: modified-nth ( n seq -- elt ) ;
 M: modified nth modified-nth ;
 M: modified nth-unsafe modified-nth ;
 
-GENERIC: modified-set-nth ( elt n seq -- )
+GENERIC: modified-set-nth ( elt n seq -- ) ;
 M: modified set-nth modified-set-nth ;
 M: modified set-nth-unsafe modified-set-nth ;
 

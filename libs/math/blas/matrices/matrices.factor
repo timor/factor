@@ -22,17 +22,17 @@ TUPLE: blas-matrix-base underlying ld rows cols transpose ;
 : Mheight ( matrix -- height )
     dup Mtransposed? [ cols>> ] [ rows>> ] if ; inline
 
-GENERIC: n*M.V+n*V! ( alpha A x beta y -- y=alpha*A.x+b*y )
-GENERIC: n*V(*)V+M! ( alpha x y A -- A=alpha*x(*)y+A )
-GENERIC: n*V(*)Vconj+M! ( alpha x y A -- A=alpha*x(*)yconj+A )
-GENERIC: n*M.M+n*M! ( alpha A B beta C -- C=alpha*A.B+beta*C )
+GENERIC: n*M.V+n*V! ( alpha A x beta y -- y=alpha*A.x+b*y ) ;
+GENERIC: n*V(*)V+M! ( alpha x y A -- A=alpha*x(*)y+A ) ;
+GENERIC: n*V(*)Vconj+M! ( alpha x y A -- A=alpha*x(*)yconj+A ) ;
+GENERIC: n*M.M+n*M! ( alpha A B beta C -- C=alpha*A.B+beta*C ) ;
 
 <PRIVATE
 
 : (blas-transpose) ( matrix -- integer )
     transpose>> [ "T" ] [ "N" ] if ;
 
-GENERIC: (blas-matrix-like) ( data ld rows cols transpose exemplar -- matrix )
+GENERIC: (blas-matrix-like) ( data ld rows cols transpose exemplar -- matrix ) ;
 
 : (validate-gemv) ( A x y -- )
     {

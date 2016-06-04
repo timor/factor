@@ -460,7 +460,7 @@ HELP: SINGLETON:
     "Defines a new singleton class. The class word itself is the sole instance of the singleton class."
 }
 { $examples
-    { $example "USING: classes.singleton kernel io ;" "IN: singleton-demo" "USE: prettyprint\nSINGLETON: foo\nGENERIC: bar ( obj -- )\nM: foo bar drop \"a foo!\" print ;\nfoo bar" "a foo!" }
+    { $example "USING: classes.singleton kernel io ;" "IN: singleton-demo" "USE: prettyprint\nSINGLETON: foo\nGENERIC: bar ( obj -- ) ;\nM: foo bar drop \"a foo!\" print ;\nfoo bar" "a foo!" }
 } ;
 
 HELP: SINGLETONS:
@@ -665,7 +665,7 @@ HELP: NAN:
 } ;
 
 HELP: GENERIC:
-{ $syntax "GENERIC: word ( stack -- effect )" }
+{ $syntax "GENERIC: word ( stack -- effect ) ;" }
 { $values { "word" "a new word to define" } }
 { $description "Defines a new generic word in the current vocabulary. Initially, it contains no methods, and thus will throw a " { $link no-method } " error when called." } ;
 
@@ -675,7 +675,7 @@ HELP: GENERIC#
 { $description "Defines a new generic word which dispatches on the " { $snippet "n" } "th most element from the top of the stack in the current vocabulary. Initially, it contains no methods, and thus will throw a " { $link no-method } " error when called." }
 { $notes
     "The following two definitions are equivalent:"
-    { $code "GENERIC: foo ( obj -- )" }
+    { $code "GENERIC: foo ( obj -- ) ;" }
     { $code "GENERIC# foo 0 ( obj -- )" }
 } ;
 

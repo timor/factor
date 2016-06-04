@@ -15,7 +15,7 @@ ERROR: bad-simd-vector obj ;
 <PRIVATE
 ! Primitive SIMD constructors
 
-GENERIC: new-underlying ( underlying seq -- seq' )
+GENERIC: new-underlying ( underlying seq -- seq' ) ;
 
 : make-underlying ( seq quot -- seq' )
     dip new-underlying ; inline
@@ -48,9 +48,9 @@ PRIVATE>
 TUPLE: simd-128
     { underlying byte-array read-only initial: $[ 16 <byte-array> ] } ;
 
-GENERIC: simd-element-type ( obj -- c-type )
-GENERIC: simd-rep ( simd -- rep )
-GENERIC: simd-with ( n exemplar -- v )
+GENERIC: simd-element-type ( obj -- c-type ) ;
+GENERIC: simd-rep ( simd -- rep ) ;
+GENERIC: simd-with ( n exemplar -- v ) ;
 
 M: object simd-element-type drop f ;
 M: object simd-rep drop f ;

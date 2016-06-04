@@ -80,7 +80,7 @@ in: stack-checker.backend
         2drop f f
     ] if ;
 
-GENERIC: apply-object ( obj -- )
+GENERIC: apply-object ( obj -- ) ;
 
 M: wrapper apply-object
     wrapped>>

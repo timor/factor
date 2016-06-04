@@ -51,11 +51,11 @@ M: mdb-persistent id<< ( object value -- )
 
 TUPLE: mdb-tuple-collection < mdb-collection { classes } ;
 
-GENERIC: tuple-collection ( object -- mdb-collection )
+GENERIC: tuple-collection ( object -- mdb-collection ) ;
 
-GENERIC: mdb-slot-map  ( tuple -- assoc )
+GENERIC: mdb-slot-map  ( tuple -- assoc ) ;
 
-GENERIC: mdb-index-map ( tuple -- sequence )
+GENERIC: mdb-index-map ( tuple -- sequence ) ;
 
 <PRIVATE
 
@@ -156,7 +156,7 @@ M: mdb-collection mdb-index-map
 
 PRIVATE>
 
-GENERIC: <mdb-tuple-collection> ( name -- mdb-tuple-collection )
+GENERIC: <mdb-tuple-collection> ( name -- mdb-tuple-collection ) ;
 M: string <mdb-tuple-collection>
     collection-map [ ] [ key? ] 2bi
     [ at ] [ [ mdb-tuple-collection new dup ] 2dip

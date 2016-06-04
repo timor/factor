@@ -5,12 +5,12 @@ compiler.cfg.rpo compiler.cfg.utilities deques dlists functors kernel lexer
 locals namespaces sequences ;
 IN: compiler.cfg.dataflow-analysis
 
-GENERIC: join-sets ( sets bb dfa -- set )
-GENERIC: transfer-set ( in-set bb dfa -- out-set )
-GENERIC: block-order ( cfg dfa -- bbs )
-GENERIC: successors ( bb dfa -- seq )
-GENERIC: predecessors ( bb dfa -- seq )
-GENERIC: ignore-block? ( bb dfa -- ? )
+GENERIC: join-sets ( sets bb dfa -- set ) ;
+GENERIC: transfer-set ( in-set bb dfa -- out-set ) ;
+GENERIC: block-order ( cfg dfa -- bbs ) ;
+GENERIC: successors ( bb dfa -- seq ) ;
+GENERIC: predecessors ( bb dfa -- seq ) ;
+GENERIC: ignore-block? ( bb dfa -- ? ) ;
 
 <PRIVATE
 

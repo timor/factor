@@ -11,7 +11,7 @@ TUPLE: wrapped-key
 TUPLE: wrapped-hashtable
     { underlying hashtable read-only } ;
 
-GENERIC: wrap-key ( key wrapped-hash -- wrapped-key )
+GENERIC: wrap-key ( key wrapped-hash -- wrapped-key ) ;
 
 <PRIVATE
 

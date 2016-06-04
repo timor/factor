@@ -6,19 +6,19 @@ shuffle ;
 IN: monads
 
 ! Functors
-GENERIC# fmap 1 ( functor quot -- functor' )
-GENERIC# <$ 1 ( functor quot -- functor' )
-GENERIC# $> 1 ( functor quot -- functor' )
+GENERIC# fmap 1 ( functor quot -- functor' ) ;
+GENERIC# <$ 1 ( functor quot -- functor' ) ;
+GENERIC# $> 1 ( functor quot -- functor' ) ;
 
 ! Monads
 
 ! Mixin type for monad singleton classes, used for return/fail only
 MIXIN: monad
 
-GENERIC: monad-of ( mvalue -- singleton )
-GENERIC: return ( value singleton -- mvalue )
-GENERIC: fail ( value singleton -- mvalue )
-GENERIC: >>= ( mvalue -- quot )
+GENERIC: monad-of ( mvalue -- singleton ) ;
+GENERIC: return ( value singleton -- mvalue ) ;
+GENERIC: fail ( value singleton -- mvalue ) ;
+GENERIC: >>= ( mvalue -- quot ) ;
 
 M: monad return monad-of return ;
 M: monad fail   monad-of fail   ;

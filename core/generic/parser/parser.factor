@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays combinators effects.parser generic
-kernel namespaces parser quotations sequences words ;
+kernel namespaces parser quotations sequences words lexer ;
 in: generic.parser
 
 ERROR: not-in-a-method-error ;
@@ -9,7 +9,7 @@ ERROR: not-in-a-method-error ;
 : scan-new-generic ( -- word ) scan-new dup reset-word ;
 
 : (GENERIC:) ( quot -- )
-    [ scan-new-generic ] dip call scan-effect define-generic ; inline
+    [ scan-new-generic ] dip call scan-effect ";" expect define-generic ; inline
 
 : create-method-in ( class generic -- method )
     create-method dup set-last-word dup save-location ;

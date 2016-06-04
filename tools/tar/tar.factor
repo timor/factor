@@ -205,7 +205,7 @@ C: <symbolic-link> symbolic-link
         drop
     ] if ;
 
-GENERIC: do-link ( object -- )
+GENERIC: do-link ( object -- ) ;
 
 M: hard-link do-link
     [ linkname>> ] [ name>> ] bi make-hard-link ;

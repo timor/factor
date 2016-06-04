@@ -45,7 +45,7 @@ MEMO: ip-intervals ( -- interval-map )
     ip-db [ [ [ from>> ] [ to>> ] bi 2array ] keep ] { } map>assoc
     filter-overlaps <interval-map> ;
 
-GENERIC: lookup-ip ( ip -- ip-entry )
+GENERIC: lookup-ip ( ip -- ip-entry ) ;
 
 M: string lookup-ip ipv4-aton lookup-ip ;
 

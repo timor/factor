@@ -22,7 +22,7 @@ session "SESSIONS"
 : get-session ( id -- session )
     dup [ session get-state ] when ;
 
-GENERIC: init-session* ( responder -- )
+GENERIC: init-session* ( responder -- ) ;
 
 M: object init-session* drop ;
 

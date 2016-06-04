@@ -17,7 +17,7 @@ DEFER: error-y
 
 { } [ [ \ error-y dup class? [ forget-class ] [ drop ] if ] with-compilation-unit ] unit-test
 
-{ } [ "IN: classes.error.tests GENERIC: error-y ( a -- b )" eval( -- ) ] unit-test
+{ } [ "IN: classes.error.tests GENERIC: error-y ( a -- b )" eval( -- ) ; ] unit-test
 
 { f } [ \ error-y tuple-class? ] unit-test
 

@@ -52,7 +52,7 @@ C: <boid> boid
     boid boids [ behaviour within-neighborhood? ] with filter ;
 
 
-GENERIC: force ( neighbors boid behaviour -- force )
+GENERIC: force ( neighbors boid behaviour -- force ) ;
 
 :: (force) ( boid boids behaviour -- force )
     boid boids behaviour neighbors

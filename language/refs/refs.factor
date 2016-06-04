@@ -6,9 +6,9 @@ IN: refs
 
 MIXIN: ref
 
-GENERIC: get-ref ( ref -- obj )
-GENERIC: set-ref ( obj ref -- )
-GENERIC: delete-ref ( ref -- )
+GENERIC: get-ref ( ref -- obj ) ;
+GENERIC: set-ref ( obj ref -- ) ;
+GENERIC: delete-ref ( ref -- ) ;
 
 ! works like >>slot words
 : set-ref* ( ref obj -- ref ) over set-ref ;

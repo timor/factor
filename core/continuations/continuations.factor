@@ -105,7 +105,7 @@ symbol: return-continuation
 : return ( -- * )
     return-continuation get continue ;
 
-GENERIC: compute-restarts ( error -- seq )
+GENERIC: compute-restarts ( error -- seq ) ;
 
 <PRIVATE
 
@@ -115,7 +115,7 @@ GENERIC: compute-restarts ( error -- seq )
 
 PRIVATE>
 
-GENERIC: error-in-thread ( error thread -- * )
+GENERIC: error-in-thread ( error thread -- * ) ;
 
 symbol: thread-error-hook ! ( error thread -- * )
 

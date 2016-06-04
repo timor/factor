@@ -42,7 +42,7 @@ ALIAS: SP R13 ALIAS: LR R14 ALIAS: PC R15
 
 <PRIVATE
 
-GENERIC: register ( register -- n )
+GENERIC: register ( register -- n ) ;
 M: word register "register" word-prop ;
 M: f register drop 0 ;
 
@@ -84,7 +84,7 @@ SYMBOL: cond-code
 : insn ( bitspec -- ) bitfield (insn) ; inline
 
 ! Branching instructions
-GENERIC# (B) 1 ( target l -- )
+GENERIC# (B) 1 ( target l -- ) ;
 
 M: integer (B) { 24 { 1 25 } { 0 26 } { 1 27 } 0 } insn ;
 
@@ -109,7 +109,7 @@ PRIVATE>
 : sinsn ( bitspec -- )
     bitfield S> [ 20 2^ bitor ] when (insn) ; inline
 
-GENERIC# shift-imm/reg 2 ( shift-imm/Rs Rm shift -- n )
+GENERIC# shift-imm/reg 2 ( shift-imm/Rs Rm shift -- n ) ;
 
 M: integer shift-imm/reg ( shift-imm Rm shift -- n )
     { { 0 4 } 5 { register 0 } 7 } bitfield ;
@@ -133,7 +133,7 @@ C: <shifter> shifter
 
 <PRIVATE
 
-GENERIC: shifter-op ( shifter-op -- n )
+GENERIC: shifter-op ( shifter-op -- n ) ;
 
 M: IMM shifter-op
     [ immed>> ] [ rotate>> ] bi { { 1 25 } 8 0 } bitfield ;
@@ -245,7 +245,7 @@ PRIVATE>
 ! Load and store instructions
 <PRIVATE
 
-GENERIC: addressing-mode-2 ( addressing-mode -- n )
+GENERIC: addressing-mode-2 ( addressing-mode -- n ) ;
 
 TUPLE: addressing base p u w ;
 C: <addressing> addressing
@@ -294,7 +294,7 @@ SYMBOL: have-BLX?
 
 <PRIVATE
 
-GENERIC# (BX) 1 ( Rm l -- )
+GENERIC# (BX) 1 ( Rm l -- ) ;
 
 M: register-class (BX) ( Rm l -- )
     {
@@ -317,7 +317,7 @@ PRIVATE>
 ! More load and store instructions
 <PRIVATE
 
-GENERIC: addressing-mode-3 ( addressing-mode -- n )
+GENERIC: addressing-mode-3 ( addressing-mode -- n ) ;
 
 : b>n/n ( b -- n n ) [ -4 shift ] [ 0xf bitand ] bi ;
 

@@ -33,7 +33,7 @@ C: <vocab-link> vocab-link
 
 UNION: vocab-spec vocab vocab-link ;
 
-GENERIC: vocab-name ( vocab-spec -- name )
+GENERIC: vocab-name ( vocab-spec -- name ) ;
 
 M: vocab vocab-name name>> ;
 
@@ -41,13 +41,13 @@ M: vocab-link vocab-name name>> ;
 
 M: object vocab-name check-vocab-name ;
 
-GENERIC: lookup-vocab ( vocab-spec -- vocab )
+GENERIC: lookup-vocab ( vocab-spec -- vocab ) ;
 
 M: vocab lookup-vocab ;
 
 M: object lookup-vocab ( name -- vocab ) vocab-name dictionary get at ;
 
-GENERIC: vocab-words-assoc ( vocab-spec -- assoc/f )
+GENERIC: vocab-words-assoc ( vocab-spec -- assoc/f ) ;
 
 M: vocab vocab-words-assoc words>> ;
 
@@ -55,7 +55,7 @@ M: object vocab-words-assoc lookup-vocab vocab-words-assoc ;
 
 M: f vocab-words-assoc ;
 
-GENERIC: vocab-help ( vocab-spec -- help )
+GENERIC: vocab-help ( vocab-spec -- help ) ;
 
 M: vocab vocab-help help>> ;
 
@@ -63,7 +63,7 @@ M: object vocab-help lookup-vocab vocab-help ;
 
 M: f vocab-help ;
 
-GENERIC: vocab-main ( vocab-spec -- main )
+GENERIC: vocab-main ( vocab-spec -- main ) ;
 
 M: vocab vocab-main main>> ;
 
@@ -73,7 +73,7 @@ M: f vocab-main ;
 
 symbol: vocab-observers
 
-GENERIC: vocab-changed ( vocab obj -- )
+GENERIC: vocab-changed ( vocab obj -- ) ;
 
 : add-vocab-observer ( obj -- )
     vocab-observers get push ;
@@ -119,7 +119,7 @@ ERROR: no-vocab name ;
 : loaded-child-vocab-names ( vocab-spec -- seq )
     vocab-name loaded-vocab-names [ child-vocab? ] with filter ;
 
-GENERIC: >vocab-link ( name -- vocab )
+GENERIC: >vocab-link ( name -- vocab ) ;
 
 M: vocab-spec >vocab-link ;
 
@@ -142,7 +142,7 @@ INSTANCE: vocab-spec definition-mixin
 : call-require-hook ( name -- )
     require-hook get call( name -- ) ;
 
-GENERIC: require ( object -- )
+GENERIC: require ( object -- ) ;
 
 M: vocab require name>> require ;
 

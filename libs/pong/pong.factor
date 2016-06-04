@@ -85,7 +85,7 @@ TUPLE: <ball> < <vel>
 
 ! Protocol for drawing PONG objects
 
-GENERIC: draw ( obj -- )
+GENERIC: draw ( obj -- ) ;
 
 METHOD: draw { <paddle> } [ bottom-left ] [ dim>>          ] bi rectangle ;
 METHOD: draw { <ball>   } [ pos>>       ] [ diameter>> 2 / ] bi circle    ;

@@ -134,7 +134,7 @@ STRUCT: actor
 { velocity float-4 }
 { acceleration float-4 } ;
 
-GENERIC: advance ( dt object -- )
+GENERIC: advance ( dt object -- ) ;
 
 : update-velocity ( dt actor -- )
     [ acceleration>> n*v ] [ velocity>> v+ ] [ ] tri

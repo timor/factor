@@ -58,8 +58,8 @@ M: T S<<
 
 PRIVATE>
 
-GENERIC: struct-transpose ( structstruct -- ssttrruucctt )
-GENERIC: vectored-element> ( elt -- struct )
+GENERIC: struct-transpose ( structstruct -- ssttrruucctt ) ;
+GENERIC: vectored-element> ( elt -- struct ) ;
 
 FUNCTOR: define-vectored-struct ( T -- )
 

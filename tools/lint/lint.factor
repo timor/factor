@@ -241,7 +241,7 @@ SYMBOL: lint-definitions-keys
 : find-duplicates ( -- seq )
     lint-definitions get-global [ nip length 1 > ] assoc-filter ;
 
-GENERIC: lint ( obj -- seq )
+GENERIC: lint ( obj -- seq ) ;
 
 M: object lint ( obj -- seq ) drop f ;
 
@@ -264,7 +264,7 @@ M: word lint ( word -- seq/f )
 
 : lint. ( alist -- ) [ (lint.) ] each ;
 
-GENERIC: run-lint ( obj -- obj )
+GENERIC: run-lint ( obj -- obj ) ;
 
 : (trim-self) ( val key -- obj ? )
     lint-definitions get-global at*

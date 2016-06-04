@@ -92,7 +92,7 @@ in: stack-checker.known-words
 \ declare [ infer-declare ] "special" set-word-prop
 
 ! Call
-GENERIC: infer-call* ( value known -- )
+GENERIC: infer-call* ( value known -- ) ;
 
 : (infer-call) ( value -- ) dup known infer-call* ;
 

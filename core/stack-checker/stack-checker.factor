@@ -8,7 +8,7 @@ stack-checker.errors stack-checker.inlining
 stack-checker.visitor.dummy ;
 in: stack-checker
 
-GENERIC: infer ( quot -- effect )
+GENERIC: infer ( quot -- effect ) ;
 
 M: callable infer ( quot -- effect )
     (infer) ;

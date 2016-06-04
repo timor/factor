@@ -6,9 +6,9 @@ math.order sequences summary system vocabs vocabs.loader
 assocs ;
 IN: calendar
 
-HOOK: gmt-offset os ( -- hours minutes seconds )
+HOOK: gmt-offset os ( -- hours minutes seconds ) ;
 
-HOOK: gmt os ( -- timestamp )
+HOOK: gmt os ( -- timestamp ) ;
 
 TUPLE: duration
     { year real }
@@ -67,7 +67,7 @@ CONSTANT: month-names
         "July" "August" "September" "October" "November" "December"
     }
 
-GENERIC: month-name ( obj -- string )
+GENERIC: month-name ( obj -- string ) ;
 
 M: integer month-name check-month 1 - month-names nth ;
 M: timestamp month-name month>> 1 - month-names nth ;
@@ -146,7 +146,7 @@ CONSTANT: seconds-per-year 31556952
     12 m 10 /i * -
     e 153 m * 2 + 5 /i - 1 + ;
 
-GENERIC: easter ( obj -- obj' )
+GENERIC: easter ( obj -- obj' ) ;
 
 :: easter-month-day ( year -- month day )
     year 19 mod :> a
@@ -186,7 +186,7 @@ M: timestamp easter ( timestamp -- timestamp )
 : microseconds ( x -- duration ) 1000000 / seconds ;
 : nanoseconds ( x -- duration ) 1000000000 / seconds ;
 
-GENERIC: leap-year? ( obj -- ? )
+GENERIC: leap-year? ( obj -- ? ) ;
 
 M: integer leap-year? ( year -- ? )
     dup 100 divisor? 400 4 ? divisor? ;
@@ -196,12 +196,12 @@ M: timestamp leap-year? ( timestamp -- ? )
 
 <PRIVATE
 
-GENERIC: +year ( timestamp x -- timestamp )
-GENERIC: +month ( timestamp x -- timestamp )
-GENERIC: +day ( timestamp x -- timestamp )
-GENERIC: +hour ( timestamp x -- timestamp )
-GENERIC: +minute ( timestamp x -- timestamp )
-GENERIC: +second ( timestamp x -- timestamp )
+GENERIC: +year ( timestamp x -- timestamp ) ;
+GENERIC: +month ( timestamp x -- timestamp ) ;
+GENERIC: +day ( timestamp x -- timestamp ) ;
+GENERIC: +hour ( timestamp x -- timestamp ) ;
+GENERIC: +minute ( timestamp x -- timestamp ) ;
+GENERIC: +second ( timestamp x -- timestamp ) ;
 
 : /rem ( f n -- q r )
     ! q is positive or negative, r is positive from 0 <= r < n
@@ -276,7 +276,7 @@ M: number +second ( timestamp n -- timestamp )
 
 PRIVATE>
 
-GENERIC# time+ 1 ( time1 time2 -- time3 )
+GENERIC# time+ 1 ( time1 time2 -- time3 ) ;
 
 M: timestamp time+
     [ clone ] dip (time+) drop ;
@@ -318,7 +318,7 @@ M: duration <=> [ duration>years ] compare ;
 : duration>microseconds ( duration -- x ) duration>seconds 1000000 * ;
 : duration>nanoseconds ( duration -- x ) duration>seconds 1000000000 * ;
 
-GENERIC: time- ( time1 time2 -- time3 )
+GENERIC: time- ( time1 time2 -- time3 ) ;
 
 : convert-timezone ( timestamp duration -- timestamp' )
     over gmt-offset>> over = [ drop ] [
@@ -429,7 +429,7 @@ M: duration time-
         [ 1 + 3 * 5 /i + ] keep 2 * +
     ] dip 1 + + 7 mod ;
 
-GENERIC: days-in-year ( obj -- n )
+GENERIC: days-in-year ( obj -- n ) ;
 
 M: integer days-in-year ( year -- n ) leap-year? 366 365 ? ;
 M: timestamp days-in-year ( timestamp -- n ) year>> days-in-year ;
@@ -443,7 +443,7 @@ M: timestamp days-in-year ( timestamp -- n ) year>> days-in-year ;
 : day-of-week ( timestamp -- n )
     >date< zeller-congruence ;
 
-GENERIC: day-name ( obj -- string )
+GENERIC: day-name ( obj -- string ) ;
 M: integer day-name day-names nth ;
 M: timestamp day-name day-of-week day-names nth ;
 
@@ -497,18 +497,18 @@ M: timestamp day-name day-of-week day-names nth ;
 
 PRIVATE>
 
-GENERIC: january ( obj -- timestamp )
-GENERIC: february ( obj -- timestamp )
-GENERIC: march ( obj -- timestamp )
-GENERIC: april ( obj -- timestamp )
-GENERIC: may ( obj -- timestamp )
-GENERIC: june ( obj -- timestamp )
-GENERIC: july ( obj -- timestamp )
-GENERIC: august ( obj -- timestamp )
-GENERIC: september ( obj -- timestamp )
-GENERIC: october ( obj -- timestamp )
-GENERIC: november ( obj -- timestamp )
-GENERIC: december ( obj -- timestamp )
+GENERIC: january ( obj -- timestamp ) ;
+GENERIC: february ( obj -- timestamp ) ;
+GENERIC: march ( obj -- timestamp ) ;
+GENERIC: april ( obj -- timestamp ) ;
+GENERIC: may ( obj -- timestamp ) ;
+GENERIC: june ( obj -- timestamp ) ;
+GENERIC: july ( obj -- timestamp ) ;
+GENERIC: august ( obj -- timestamp ) ;
+GENERIC: september ( obj -- timestamp ) ;
+GENERIC: october ( obj -- timestamp ) ;
+GENERIC: november ( obj -- timestamp ) ;
+GENERIC: december ( obj -- timestamp ) ;
 
 M: integer january 1 1 <date> ;
 M: integer february 2 1 <date> ;
@@ -602,11 +602,11 @@ ERROR: twelve-hour-expected n ;
 : pm ( timestamp n -- new-timestamp )
     check-twelve-hour 12 + o'clock ;
 
-GENERIC: beginning-of-year ( object -- new-timestamp )
+GENERIC: beginning-of-year ( object -- new-timestamp ) ;
 M: timestamp beginning-of-year beginning-of-month 1 >>month ;
 M: integer beginning-of-year <year> ;
 
-GENERIC: end-of-year ( object -- new-timestamp )
+GENERIC: end-of-year ( object -- new-timestamp ) ;
 M: timestamp end-of-year 12 >>month 31 >>day ;
 M: integer end-of-year 12 31 <date> ;
 

@@ -23,7 +23,7 @@ TUPLE: gml { operand-stack vector } { dictionary-stack vector } ;
 
 : pop-operand ( gml -- value ) operand-stack>> pop ; inline
 
-GENERIC: (exec) ( registers gml obj -- registers gml )
+GENERIC: (exec) ( registers gml obj -- registers gml ) ;
 
 ! A bit of efficiency
 FROM: kernel.private => declare ;
@@ -61,7 +61,7 @@ ERROR: unbound-name { name name } ;
     dupd dictionary-stack>> assoc-stack
     [ ] [ unbound-name ] ?if ; inline
 
-GENERIC: exec-proc ( registers gml proc -- registers gml )
+GENERIC: exec-proc ( registers gml proc -- registers gml ) ;
 
 M:: proc exec-proc ( registers gml proc -- registers gml )
     proc registers>>

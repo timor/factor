@@ -22,7 +22,7 @@ M: xyYa >xyza
         ]
     ] [ alpha>> ] bi <xyza> ;
 
-GENERIC: >xyYa ( color -- xyYa )
+GENERIC: >xyYa ( color -- xyYa ) ;
 
 M: object >xyYa >xyza >xyYa ;
 

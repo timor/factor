@@ -9,10 +9,10 @@ IN: cpu.8080.emulator
 TUPLE: cpu b c d e f h l a pc sp halted? last-interrupt cycles
 ram ;
 
-GENERIC: reset        ( cpu            -- )
-GENERIC: update-video ( value addr cpu -- )
-GENERIC: read-port    ( port cpu       -- byte )
-GENERIC: write-port   ( value port cpu -- )
+GENERIC: reset        ( cpu            -- ) ;
+GENERIC: update-video ( value addr cpu -- ) ;
+GENERIC: read-port    ( port cpu       -- byte ) ;
+GENERIC: write-port   ( value port cpu -- ) ;
 
 M: cpu update-video
     3drop ;

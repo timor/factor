@@ -38,13 +38,13 @@ TUPLE: bitmap-node
     [ <full-node> nip ]
     [ over first hashcode>> bitmap-node boa ] if ;
 
-GENERIC: (entry-at) ( key hashcode node -- entry )
+GENERIC: (entry-at) ( key hashcode node -- entry ) ;
 
-GENERIC: (new-at) ( shift value key hashcode node -- node' added-leaf )
+GENERIC: (new-at) ( shift value key hashcode node -- node' added-leaf ) ;
 
-GENERIC: (pluck-at) ( key hashcode node -- node' )
+GENERIC: (pluck-at) ( key hashcode node -- node' ) ;
 
-GENERIC: >alist% ( node -- )
+GENERIC: >alist% ( node -- ) ;
 
 : >alist-each% ( nodes -- ) [ >alist% ] each ;
 

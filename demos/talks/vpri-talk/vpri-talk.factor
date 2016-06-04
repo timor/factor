@@ -61,7 +61,7 @@ CONSTANT: vpri-slides
     }
     { $slide "Object system"
         "Generic words and methods"
-        { $code "GENERIC: area ( shape -- n )" }
+        { $code "GENERIC: area ( shape -- n ) ;" }
         "Two methods:"
         { $code
             "USE: math.constants"
@@ -80,7 +80,7 @@ CONSTANT: vpri-slides
     { $slide "Object system"
         "New operation, existing types:"
         { $code
-            "GENERIC: perimeter ( shape -- n )"
+            "GENERIC: perimeter ( shape -- n ) ;"
             ""
             "M: rectangle perimeter"
             "    [ width>> ] [ height>> ] bi + 2 * ;"
@@ -252,7 +252,7 @@ CONSTANT: vpri-slides
         { { $link call } " is fundamental" }
         { { $link quotation } ", " { $link curry } " and " { $link compose } " are classes" }
         { $code
-            "GENERIC: call ( quot -- )"
+            "GENERIC: call ( quot -- ) ;"
             "M: curry call uncurry call ;"
             "M: compose call uncompose slip call ;"
             "M: quotation call (call) ;"

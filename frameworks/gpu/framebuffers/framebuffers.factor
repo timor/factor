@@ -82,7 +82,7 @@ M: texture-attachment dispose texture>> dispose ;
 
 UNION: framebuffer-attachment renderbuffer texture-attachment ;
 
-GENERIC: attachment-object ( attachment -- object )
+GENERIC: attachment-object ( attachment -- object ) ;
 M: renderbuffer attachment-object ;
 M: texture-attachment attachment-object texture>> texture-object ;
 
@@ -136,19 +136,19 @@ TYPED: framebuffer-attachment-at ( framebuffer: framebuffer
 
 <PRIVATE
 
-GENERIC: framebuffer-handle ( framebuffer -- handle )
+GENERIC: framebuffer-handle ( framebuffer -- handle ) ;
 
 M: system-framebuffer framebuffer-handle drop 0 ;
 M: framebuffer framebuffer-handle handle>> ;
 
-GENERIC# allocate-framebuffer-attachment 1 ( framebuffer-attachment dim -- )
+GENERIC# allocate-framebuffer-attachment 1 ( framebuffer-attachment dim -- ) ;
 
 M: texture-attachment allocate-framebuffer-attachment
     [ [ texture>> ] [ level>> ] bi ] dip f allocate-texture ;
 M: renderbuffer allocate-framebuffer-attachment
     allocate-renderbuffer ;
 
-GENERIC: framebuffer-attachment-dim ( framebuffer-attachment -- dim )
+GENERIC: framebuffer-attachment-dim ( framebuffer-attachment -- dim ) ;
 
 M: texture-attachment framebuffer-attachment-dim
     [ texture>> ] [ level>> ] bi texture-dim
@@ -170,7 +170,7 @@ M: renderbuffer framebuffer-attachment-dim
     framebuffer stencil-attachment>>
     [| attachment | GL_STENCIL_ATTACHMENT attachment quot call ] when* ; inline
 
-GENERIC: bind-framebuffer-attachment ( attachment-target attachment -- )
+GENERIC: bind-framebuffer-attachment ( attachment-target attachment -- ) ;
 
 M:: renderbuffer bind-framebuffer-attachment ( attachment-target renderbuffer -- )
     GL_DRAW_FRAMEBUFFER attachment-target
@@ -201,9 +201,9 @@ M:: texture-layer-attachment bind-framebuffer-attachment ( attachment-target tex
     [ level>> ] [ layer>> ] tri
     glFramebufferTextureLayer ;
 
-GENERIC: (default-gl-attachment) ( framebuffer -- gl-attachment )
-GENERIC: (default-attachment-type) ( framebuffer -- type )
-GENERIC: (default-attachment-image-type) ( framebuffer -- order type )
+GENERIC: (default-gl-attachment) ( framebuffer -- gl-attachment ) ;
+GENERIC: (default-attachment-type) ( framebuffer -- type ) ;
+GENERIC: (default-attachment-image-type) ( framebuffer -- order type ) ;
 
 M: system-framebuffer (default-gl-attachment)
     drop GL_BACK ;
@@ -265,7 +265,7 @@ M: framebuffer (default-attachment-image-type) ( framebuffer -- order type )
 : framebuffer-rect-image-type ( framebuffer-rect -- order type )
     [ framebuffer>> ] [ attachment>> ] bi color-attachment-image-type ;
 
-HOOK: (clear-integer-color-attachment) gpu-api ( type value -- )
+HOOK: (clear-integer-color-attachment) gpu-api ( type value -- ) ;
 
 M: opengl-2 (clear-integer-color-attachment)
     4 0 pad-tail first4

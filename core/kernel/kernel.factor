@@ -71,9 +71,9 @@ DEFER: 3dip
 : clear ( -- ) { } set-datastack ;
 
 ! Combinators
-GENERIC: call ( callable -- )
+GENERIC: call ( callable -- ) ;
 
-GENERIC: execute ( word -- )
+GENERIC: execute ( word -- ) ;
 
 DEFER: if
 
@@ -247,7 +247,7 @@ UNION: boolean postpone: t postpone: f ;
     [ [ not ] compose ] dip while ; inline
 
 ! Object protocol
-GENERIC: hashcode* ( depth obj -- code )
+GENERIC: hashcode* ( depth obj -- code ) ;
 
 M: object hashcode* 2drop 0 ; inline
 
@@ -265,7 +265,7 @@ M: f hashcode* 2drop 31337 ; inline
         ] if
     ] unless ; inline
 
-GENERIC: equal? ( obj1 obj2 -- ? )
+GENERIC: equal? ( obj1 obj2 -- ? ) ;
 
 M: object equal? 2drop f ; inline
 
@@ -282,20 +282,20 @@ M: identity-tuple hashcode* nip identity-hashcode ; inline
 
 : same? ( x y quot -- ? ) bi@ = ; inline
 
-GENERIC: clone ( obj -- cloned )
+GENERIC: clone ( obj -- cloned ) ;
 
 M: object clone ; inline
 
 M: callstack clone (clone) ; inline
 
 ! Tuple construction
-GENERIC: new ( class -- tuple )
+GENERIC: new ( class -- tuple ) ;
 
-GENERIC: boa ( slots... class -- tuple )
+GENERIC: boa ( slots... class -- tuple ) ;
 
 ! Error handling -- defined early so that other files can
 ! throw errors before continuations are loaded
-GENERIC: throw ( error -- * )
+GENERIC: throw ( error -- * ) ;
 
 ERROR: assert got expect ;
 

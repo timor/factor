@@ -51,7 +51,7 @@ INSTANCE: quotation immutable-sequence
 
 : 1quotation ( obj -- quot ) 1array array>quotation ;
 
-GENERIC: literalize ( obj -- wrapped )
+GENERIC: literalize ( obj -- wrapped ) ;
 
 M: object literalize ;
 

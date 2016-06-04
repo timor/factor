@@ -19,7 +19,7 @@ IN: xml
 : pop-xml ( -- object )
     xml-stack get pop ;
 
-GENERIC: process ( object -- )
+GENERIC: process ( object -- ) ;
 
 M: object process add-child ;
 

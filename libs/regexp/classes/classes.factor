@@ -30,7 +30,7 @@ C: <category-range-class> category-range-class
 TUPLE: script-class { script read-only } ;
 C: <script-class> script-class
 
-GENERIC: class-member? ( obj class -- ? )
+GENERIC: class-member? ( obj class -- ? ) ;
 
 M: t class-member? ( obj class -- ? ) 2drop t ; inline
 
@@ -245,7 +245,7 @@ TUPLE: class-partition integers not-integers simples not-simples and or other ;
         [ 3drop t ]
     } case ;
 
-GENERIC: <not-class> ( class -- inverse )
+GENERIC: <not-class> ( class -- inverse ) ;
 
 M: object <not-class>
     not-class boa ;
@@ -274,7 +274,7 @@ M: primitive-class class-member?
 TUPLE: condition question yes no ;
 C: <condition> condition
 
-GENERIC# answer 2 ( class from to -- new-class )
+GENERIC# answer 2 ( class from to -- new-class ) ;
 
 M:: object answer ( class from to -- new-class )
     class from = to class ? ;
@@ -291,7 +291,7 @@ M: or-class answer
 M: not-class answer
     [ class>> ] 2dip answer <not-class> ;
 
-GENERIC# substitute 1 ( class from to -- new-class )
+GENERIC# substitute 1 ( class from to -- new-class ) ;
 M: object substitute answer ;
 M: not-class substitute [ <not-class> ] bi@ answer ;
 
@@ -312,7 +312,7 @@ DEFER: make-condition
 : make-condition ( table questions -- condition )
     [ keys ] [ unclip (make-condition) ] if-empty ;
 
-GENERIC: class>questions ( class -- questions )
+GENERIC: class>questions ( class -- questions ) ;
 : compound-questions ( class -- questions ) seq>> [ class>questions ] gather ;
 M: or-class class>questions compound-questions ;
 M: and-class class>questions compound-questions ;

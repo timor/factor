@@ -36,7 +36,7 @@ SYMBOL: blank-line
     span last-element namespaces:set
     call ; inline
 
-GENERIC: print-element ( element -- )
+GENERIC: print-element ( element -- ) ;
 
 M: simple-element print-element [ print-element ] each ;
 M: string print-element [ write ] ($span) ;
@@ -179,12 +179,12 @@ ALIAS: $slot $snippet
 : link-text ( topic -- )
     [ article-name ] keep write-link ;
 
-GENERIC: link-long-text ( topic -- )
+GENERIC: link-long-text ( topic -- ) ;
 
 M: topic link-long-text
     [ article-title ] keep write-link ;
 
-GENERIC: link-effect? ( word -- ? )
+GENERIC: link-effect? ( word -- ? ) ;
 
 M: parsing-word link-effect? drop f ;
 M: symbol link-effect? drop f ;
@@ -344,7 +344,7 @@ PRIVATE>
     [ first ] [ length ] bi 1 =
     "afhilmnorsx" "aeiou" ? member? "an" "a" ? ;
 
-GENERIC: ($instance) ( element -- )
+GENERIC: ($instance) ( element -- ) ;
 
 M: word ($instance) dup name>> a/an write bl ($link) ;
 
@@ -476,7 +476,7 @@ M: f ($instance) ($link) ;
 : $content ( element -- )
     first article-content print-content nl ;
 
-GENERIC: elements* ( elt-type element -- )
+GENERIC: elements* ( elt-type element -- ) ;
 
 M: simple-element elements*
     [ elements* ] with each ;

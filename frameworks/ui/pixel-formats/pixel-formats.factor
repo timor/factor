@@ -41,9 +41,9 @@ TUPLE: aux-buffers < pixel-format-attribute ;
 TUPLE: sample-buffers < pixel-format-attribute ;
 TUPLE: samples < pixel-format-attribute ;
 
-HOOK: (make-pixel-format) ui-backend ( world attributes -- pixel-format-handle )
-HOOK: (free-pixel-format) ui-backend ( pixel-format -- )
-HOOK: (pixel-format-attribute) ui-backend ( pixel-format attribute-name -- value )
+HOOK: (make-pixel-format) ui-backend ( world attributes -- pixel-format-handle ) ;
+HOOK: (free-pixel-format) ui-backend ( pixel-format -- ) ;
+HOOK: (pixel-format-attribute) ui-backend ( pixel-format attribute-name -- value ) ;
 
 ERROR: invalid-pixel-format-attributes world attributes ;
 
@@ -67,7 +67,7 @@ FUNCTOR: define-pixel-format-attribute-table ( NAME PERM TABLE -- )
 
 WHERE
 
-GENERIC: >PFA ( attribute -- pfas )
+GENERIC: >PFA ( attribute -- pfas ) ;
 
 M: object >PFA
     drop { } ;
@@ -88,6 +88,6 @@ SYNTAX: PIXEL-FORMAT-ATTRIBUTE-TABLE:
 
 PRIVATE>
 
-GENERIC: world-pixel-format-attributes ( world -- attributes )
+GENERIC: world-pixel-format-attributes ( world -- attributes ) ;
 
-GENERIC# check-world-pixel-format 1 ( world pixel-format -- )
+GENERIC# check-world-pixel-format 1 ( world pixel-format -- ) ;

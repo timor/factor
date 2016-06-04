@@ -72,7 +72,7 @@ CONSTANT: VALUES { "Straight Flush" "Four of a Kind" "Full House" "Flush"
     rank rank suit rank card-bitfield ;
 
 ! Cactus Kev Format
-GENERIC: >ckf ( string -- n )
+GENERIC: >ckf ( string -- n ) ;
 
 M: string >ckf >upper 1 cut (>ckf) ;
 

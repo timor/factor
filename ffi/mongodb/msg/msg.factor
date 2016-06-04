@@ -75,7 +75,7 @@ CONSTRUCTOR: <mdb-delete-msg> mdb-delete-msg ( collection selector -- mdb-delete
 CONSTRUCTOR: <mdb-query-msg> mdb-query-msg ( collection query -- mdb-query-msg )
     OP_Query >>opcode ; inline
 
-GENERIC: <mdb-killcursors-msg> ( object -- mdb-killcursors-msg )
+GENERIC: <mdb-killcursors-msg> ( object -- mdb-killcursors-msg ) ;
 
 M: sequence <mdb-killcursors-msg> ( sequences -- mdb-killcursors-msg )
     [ mdb-killcursors-msg new ] dip
@@ -85,7 +85,7 @@ M: sequence <mdb-killcursors-msg> ( sequences -- mdb-killcursors-msg )
 M: integer <mdb-killcursors-msg> ( integer -- mdb-killcursors-msg )
     V{ } clone [ push ] keep <mdb-killcursors-msg> ;
 
-GENERIC: <mdb-insert-msg> ( collection objects -- mdb-insert-msg )
+GENERIC: <mdb-insert-msg> ( collection objects -- mdb-insert-msg ) ;
 
 M: sequence <mdb-insert-msg> ( collection sequence -- mdb-insert-msg )
     [ mdb-insert-msg new ] 2dip

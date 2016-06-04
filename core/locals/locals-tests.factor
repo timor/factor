@@ -101,9 +101,9 @@ write-test-2 "q" set
 
 { 13 } [ 10 let-let-test ] unit-test
 
-GENERIC: lambda-generic ( a b -- c )
+GENERIC: lambda-generic ( a b -- c ) ;
 
-GENERIC# lambda-generic-1 1 ( a b -- c )
+GENERIC# lambda-generic-1 1 ( a b -- c ) ;
 
 M:: integer lambda-generic-1 ( a b -- c ) a b * ;
 
@@ -112,7 +112,7 @@ M:: string lambda-generic-1 ( a b -- c )
 
 M:: integer lambda-generic ( a b -- c ) a b lambda-generic-1 ;
 
-GENERIC# lambda-generic-2 1 ( a b -- c )
+GENERIC# lambda-generic-2 1 ( a b -- c ) ;
 
 M:: integer lambda-generic-2 ( a b -- c )
     a CHAR: x <string> b lambda-generic ;
@@ -150,20 +150,20 @@ M:: string lambda-generic ( a b -- c ) a b lambda-generic-2 ;
 DEFER: xyzzy
 
 { } [
-    "IN: locals.tests USE: math GENERIC: xyzzy ( a -- b ) M: integer xyzzy ;"
+    "IN: locals.tests USE: math GENERIC: xyzzy ( a -- b ) ; M: integer xyzzy ;"
     <string-reader> "lambda-generic-test" parse-stream drop
 ] unit-test
 
 { 10 } [ 10 xyzzy ] unit-test
 
 { } [
-    "IN: locals.tests USE: math USE: locals GENERIC: xyzzy ( a -- b ) M:: integer xyzzy ( n -- x ) 5 ;"
+    "IN: locals.tests USE: math USE: locals GENERIC: xyzzy ( a -- b ) M:: integer xyzzy ( n -- x ) ; 5 ;"
     <string-reader> "lambda-generic-test" parse-stream drop
 ] unit-test
 
 { 5 } [ 10 xyzzy ] unit-test
 
-GENERIC: next-method-test ( a -- b )
+GENERIC: next-method-test ( a -- b ) ;
 
 M: integer next-method-test 3 + ;
 
@@ -196,7 +196,7 @@ CONSTANT: new-definition "USING: math ;\nIN: locals.tests\n: a-word-with-locals 
 
 CONSTANT: method-definition "USING: locals.tests sequences ;\nM:: sequence method-with-locals ( a -- y ) a reverse ;\n"
 
-GENERIC: method-with-locals ( x -- y )
+GENERIC: method-with-locals ( x -- y ) ;
 
 M:: sequence method-with-locals ( a -- y ) a reverse ;
 
@@ -379,7 +379,7 @@ ERROR: punned-class x ;
 \ littledan-case-problem-4 def>> must-infer
 */
 
-GENERIC: lambda-method-forget-test ( a -- b )
+GENERIC: lambda-method-forget-test ( a -- b ) ;
 
 M:: integer lambda-method-forget-test ( a -- b ) a ;
 
@@ -482,7 +482,7 @@ M:: integer lambda-method-forget-test ( a -- b ) a ;
 { 3 } [ 3 t erg's-:>-bug-2 ] unit-test
 
 ! dharmatech found this problem
-GENERIC: ed's-bug ( a -- b )
+GENERIC: ed's-bug ( a -- b ) ;
 
 M: string ed's-bug reverse ;
 M: integer ed's-bug neg ;

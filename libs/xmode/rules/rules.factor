@@ -96,7 +96,7 @@ TUPLE: escape-rule < rule ;
     f <string-matcher> f f f <matcher>
     escape-rule new swap >>start ;
 
-GENERIC: text-hash-char ( text -- ch )
+GENERIC: text-hash-char ( text -- ch ) ;
 
 M: f text-hash-char ;
 

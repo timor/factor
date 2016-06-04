@@ -150,7 +150,7 @@ symbol: blacklist
 : add-to-blacklist ( error vocab -- )
     vocab-name blacklist get [ set-at ] [ 2drop ] if* ;
 
-GENERIC: (require) ( name -- )
+GENERIC: (require) ( name -- ) ;
 
 M: vocab (require)
     [

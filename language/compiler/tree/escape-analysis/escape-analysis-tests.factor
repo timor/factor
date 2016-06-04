@@ -11,7 +11,7 @@ compiler.tree.checker compiler.tree.def-use compiler.tree.dead-code
 kernel.private vectors ;
 IN: compiler.tree.escape-analysis.tests
 
-GENERIC: count-unboxed-allocations* ( m node -- n )
+GENERIC: count-unboxed-allocations* ( m node -- n ) ;
 
 : (count-unboxed-allocations) ( m node -- n )
     out-d>> first escaping-allocation? [ 1 + ] unless ;

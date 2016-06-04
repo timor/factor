@@ -11,7 +11,7 @@ CONSULT: c-type-protocol enum-c-type
     base-type>> ;
 PRIVATE>
 
-GENERIC: enum>number ( enum -- number ) foldable
+GENERIC: enum>number ( enum -- number ) ; foldable
 M: integer enum>number ;
 M: word enum>number "enum-value" word-prop ;
 

@@ -2,7 +2,7 @@ USING: arrays bit-arrays byte-arrays compiler.units definitions
 tools.test ;
 in: definitions.tests
 
-GENERIC: some-generic ( a -- b )
+GENERIC: some-generic ( a -- b ) ;
 
 use: arrays
 

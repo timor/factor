@@ -7,11 +7,11 @@ namespaces present sequences splitting strings strings.tables
 summary ;
 IN: io.styles
 
-GENERIC: stream-format ( str style stream -- )
-GENERIC: make-span-stream ( style stream -- stream' )
-GENERIC: make-block-stream ( style stream -- stream' )
-GENERIC: make-cell-stream ( style stream -- stream' )
-GENERIC: stream-write-table ( table-cells style stream -- )
+GENERIC: stream-format ( str style stream -- ) ;
+GENERIC: make-span-stream ( style stream -- stream' ) ;
+GENERIC: make-block-stream ( style stream -- stream' ) ;
+GENERIC: make-cell-stream ( style stream -- stream' ) ;
+GENERIC: stream-write-table ( table-cells style stream -- ) ;
 
 PROTOCOL: formatted-output-stream-protocol
 stream-format make-span-stream make-block-stream

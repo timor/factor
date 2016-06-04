@@ -128,7 +128,7 @@ must-fail-with
 "IN: alien.c-types.tests
 use: alien.syntax
 use: alien.c-types
-GENERIC: foo-func ( x -- )
+GENERIC: foo-func ( x -- ) ;
 " eval( -- )
 
 "IN: alien.c-types.tests
@@ -141,7 +141,7 @@ CALLBACK: void foo-func ( )
 "IN: alien.c-types.tests
 use: alien.syntax
 use: alien.c-types
-GENERIC: foo-func ( x -- )
+GENERIC: foo-func ( x -- ) ;
 " eval( -- )
 
 "IN: alien.c-types.tests

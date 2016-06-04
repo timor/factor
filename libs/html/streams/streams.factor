@@ -6,7 +6,7 @@ math.order math.parser namespaces sequences strings words
 splitting xml xml.syntax ;
 IN: html.streams
 
-GENERIC: url-of ( object -- url )
+GENERIC: url-of ( object -- url ) ;
 
 M: object url-of drop f ;
 

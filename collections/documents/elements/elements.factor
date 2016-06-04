@@ -4,8 +4,8 @@ USING: arrays combinators documents fry kernel math sequences
 accessors unicode combinators.short-circuit ;
 IN: documents.elements
 
-GENERIC: prev-elt ( loc document elt -- newloc )
-GENERIC: next-elt ( loc document elt -- newloc )
+GENERIC: prev-elt ( loc document elt -- newloc ) ;
+GENERIC: next-elt ( loc document elt -- newloc ) ;
 
 : prev/next-elt ( loc document elt -- start end )
     [ prev-elt ] [ next-elt ] 3bi ;

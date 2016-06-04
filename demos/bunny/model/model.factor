@@ -78,8 +78,8 @@ TUPLE: bunny-buffers array element-array nv ni ;
         [ third length 3 * ]
     } cleave bunny-buffers boa ;
 
-GENERIC: bunny-geom ( geom -- )
-GENERIC: draw-bunny ( geom draw -- )
+GENERIC: bunny-geom ( geom -- ) ;
+GENERIC: draw-bunny ( geom draw -- ) ;
 
 M: bunny-dlist bunny-geom
     list>> glCallList ;

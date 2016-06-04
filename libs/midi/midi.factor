@@ -259,7 +259,7 @@ PRIVATE>
 : write-string ( str -- )
     utf8 encode [ length write-number ] [ write ] bi ;
 
-GENERIC: write-event ( prev-status event -- status )
+GENERIC: write-event ( prev-status event -- status ) ;
 
 M: meta-event write-event
     [ delta>> write-number 0xff write1 ] [ value>> ] [ name>> ] tri {
@@ -379,7 +379,7 @@ M: midi-event write-event
         { "reset" [ 2drop 0xff dup write1 ] }
     } case ;
 
-GENERIC: write-chunk ( chunk -- )
+GENERIC: write-chunk ( chunk -- ) ;
 
 M: midi-header write-chunk
     $[ "MThd" >byte-array ] write

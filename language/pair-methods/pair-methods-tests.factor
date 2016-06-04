@@ -13,7 +13,7 @@ TUPLE: zang < zim ;
 : class-names ( a b prefix -- string )
     [ [ class-of name>> ] bi@ "-" glue ] dip prepend ;
 
-PAIR-GENERIC: blibble ( a b -- c )
+PAIR-GENERIC: blibble ( a b -- c ) ;
 
 PAIR-M: thang thang blibble
     "vanilla " class-names ;

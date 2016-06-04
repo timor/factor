@@ -30,7 +30,7 @@ PRIVATE>
 : expand ( len seq -- )
     [ resize ] change-underlying drop ; inline
 
-GENERIC: contract ( len seq -- )
+GENERIC: contract ( len seq -- ) ;
 
 M: growable contract ( len seq -- )
     [ length ] keep

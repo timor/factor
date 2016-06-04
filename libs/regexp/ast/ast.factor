@@ -48,7 +48,7 @@ SINGLETONS: unix-lines dotall multiline case-insensitive reversed-regexp ;
 : repetition ( n term -- term' )
     <array> <concatenation> ;
 
-GENERIC: <times> ( term times -- term' )
+GENERIC: <times> ( term times -- term' ) ;
 
 M: at-least <times>
     n>> swap [ repetition ] [ <star> ] bi 2array <concatenation> ;

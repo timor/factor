@@ -129,7 +129,7 @@ DEFER: foo
 { f } [ "smudge-me" "parser.tests" lookup-word >boolean ] unit-test
 
 { 3 } [
-    "IN: parser.tests USING: math strings ; GENERIC: smudge-me ( a -- b ) M: integer smudge-me ; M: string smudge-me ;" <string-reader> "foo"
+    "IN: parser.tests USING: math strings ; GENERIC: smudge-me ( a -- b ) ; M: integer smudge-me ; M: string smudge-me ;" <string-reader> "foo"
     parse-stream drop
 
     "foo" path>source-file definitions>> first cardinality
@@ -143,7 +143,7 @@ DEFER: foo
 ] unit-test
 
 { 2 } [
-    "IN: parser.tests USING: math strings ; GENERIC: smudge-me ( a -- b ) M: integer smudge-me ;" <string-reader> "foo"
+    "IN: parser.tests USING: math strings ; GENERIC: smudge-me ( a -- b ) ; M: integer smudge-me ;" <string-reader> "foo"
     parse-stream drop
 
     "foo" path>source-file definitions>> first cardinality
@@ -234,7 +234,7 @@ DEFER: foo
 ! Turning a generic into a non-generic could cause all
 ! kinds of funnyness
 { } [
-    "IN: ayy USE: kernel GENERIC: ayy ( a -- b ) M: object ayy ;"
+    "IN: ayy USE: kernel GENERIC: ayy ( a -- b ) ; M: object ayy ;"
     <string-reader> "ayy" parse-stream drop
 ] unit-test
 
@@ -244,7 +244,7 @@ DEFER: foo
 ] unit-test
 
 { } [
-    "IN: azz TUPLE: my-class ; GENERIC: a-generic ( a -- b )"
+    "IN: azz TUPLE: my-class ; GENERIC: a-generic ( a -- b ) ;"
     <string-reader> "azz" parse-stream drop
 ] unit-test
 
@@ -254,7 +254,7 @@ DEFER: foo
 ] unit-test
 
 { } [
-    "IN: azz GENERIC: a-generic ( a -- b )"
+    "IN: azz GENERIC: a-generic ( a -- b ) ;"
     <string-reader> "azz" parse-stream drop
 ] unit-test
 
@@ -280,7 +280,7 @@ DEFER: foo
 ] unit-test
 
 { } [
-    "IN: parser.tests GENERIC: killer? ( a -- b )"
+    "IN: parser.tests GENERIC: killer? ( a -- b ) ;"
     <string-reader> "removing-the-predicate" parse-stream drop
 ] unit-test
 
@@ -289,7 +289,7 @@ DEFER: foo
 ] unit-test
 
 [
-    "IN: parser.tests TUPLE: another-pred-test ; GENERIC: another-pred-test? ( a -- b )"
+    "IN: parser.tests TUPLE: another-pred-test ; GENERIC: another-pred-test? ( a -- b ) ;"
     <string-reader> "removing-the-predicate" parse-stream
 ] [ error>> error>> error>> redefine-error? ] must-fail-with
 
@@ -359,7 +359,7 @@ DEFER: foo
 
 2 [
     [ ] [
-        "IN: parser.tests TUPLE: foo ; GENERIC: foo ( a -- b )"
+        "IN: parser.tests TUPLE: foo ; GENERIC: foo ( a -- b ) ;"
         <string-reader> "redefining-a-class-5" parse-stream drop
     ] unit-test
 
@@ -371,14 +371,14 @@ DEFER: foo
     [ f ] [ f "foo" "parser.tests" lookup-word execute ] unit-test
 
     [ ] [
-        "IN: parser.tests TUPLE: foo ; GENERIC: foo ( a -- b )"
+        "IN: parser.tests TUPLE: foo ; GENERIC: foo ( a -- b ) ;"
         <string-reader> "redefining-a-class-5" parse-stream drop
     ] unit-test
 
     [ f ] [ f "foo" "parser.tests" lookup-word execute ] unit-test
 
     [ ] [
-        "IN: parser.tests TUPLE: foo ; GENERIC: foo ( a -- b )"
+        "IN: parser.tests TUPLE: foo ; GENERIC: foo ( a -- b ) ;"
     <string-reader> "redefining-a-class-7" parse-stream drop
     ] unit-test
 
@@ -428,7 +428,7 @@ DEFER: foo
     {
         "IN: parser.tests"
         "USING: math arrays kernel ;"
-        "GENERIC: change-combination ( obj a -- b )"
+        "GENERIC: change-combination ( obj a -- b ) ;"
         "M: integer change-combination 2drop 1 ;"
         "M: array change-combination 2drop 2 ;"
     } "\n" join <string-reader> "change-combination-test" parse-stream drop
@@ -498,7 +498,7 @@ SYMBOLS: a b c ;
 
 DEFER: blah
 
-{ } [ "IN: parser.tests GENERIC: blah ( x -- x )" eval( -- ) ] unit-test
+{ } [ "IN: parser.tests GENERIC: blah ( x -- x )" eval( -- ) ; ] unit-test
 { } [ "IN: parser.tests SYMBOLS: blah ;" eval( -- ) ] unit-test
 
 { f } [ \ blah generic? ] unit-test
@@ -637,7 +637,7 @@ EXCLUDE: qualified.tests.bar => x ;
 [ ": 44 ( -- ) ;" <string-reader> "word identifier test" parse-stream ]
 [ error>> lexer-error? ] must-fail-with
 
-[ "GENERIC: 33 ( -- )" <string-reader> "generic identifier test" parse-stream ]
+[ "GENERIC: 33 ( -- ) ;" <string-reader> "generic identifier test" parse-stream ]
 [ error>> lexer-error? ] must-fail-with
 
 { t } [

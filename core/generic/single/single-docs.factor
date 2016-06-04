@@ -12,7 +12,7 @@ HELP: inconsistent-next-method
 { $examples
     "The following code throws this error:"
     { $code
-        "GENERIC: error-test ( object -- )"
+        "GENERIC: error-test ( object -- ) ;"
         ""
         "M: string error-test print ;"
         ""

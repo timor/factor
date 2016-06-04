@@ -47,7 +47,7 @@ CONSTANT: initial-state { { 0 { } } { 0 { } } }
 : all-live ( state -- state' )
     [ first { } 2array ] map ;
 
-GENERIC: visit-insn ( state insn -- state' )
+GENERIC: visit-insn ( state insn -- state' ) ;
 
 M: ##inc visit-insn ( state insn -- state' )
     [ shift-stack ] apply-stack-op ;

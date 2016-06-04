@@ -214,7 +214,7 @@ PRIVATE>
 
 <PRIVATE
 
-GENERIC: update ( search-path-elt -- valid? )
+GENERIC: update ( search-path-elt -- valid? ) ;
 
 : trim-forgotten ( qualified-vocab -- valid? )
     [ [ nip "forgotten" word-prop ] assoc-reject ] change-words

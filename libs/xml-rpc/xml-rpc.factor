@@ -11,7 +11,7 @@ IN: xml-rpc
 ! TODO: time
 ! The word for what this does is "serialization"! Wow!
 
-GENERIC: item>xml ( object -- xml )
+GENERIC: item>xml ( object -- xml ) ;
 
 M: integer item>xml
     dup 31 2^ neg 31 2^ 1 - between?
@@ -91,7 +91,7 @@ TUPLE: rpc-fault code string ;
 
 C: <rpc-fault> rpc-fault
 
-GENERIC: send-rpc ( rpc -- xml )
+GENERIC: send-rpc ( rpc -- xml ) ;
 M: rpc-method send-rpc
     [ name>> ] [ params>> ] bi method-call ;
 M: rpc-response send-rpc

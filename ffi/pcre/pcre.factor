@@ -138,7 +138,7 @@ TUPLE: compiled-pcre pcre extra nametable ;
 : has-option? ( compiled-pcre option -- ? )
     [ pcre>> options ] dip bitand 0 > ;
 
-GENERIC: findall ( subject obj -- matches )
+GENERIC: findall ( subject obj -- matches ) ;
 
 M: compiled-pcre findall
     [ <matcher> [ findnext dup ] [ ] produce 2nip ]
