@@ -8,7 +8,7 @@ IN: javascriptcore
 
 ERROR: javascriptcore-error error ;
 
-SYMBOL: js-context
+symbol: js-context
 
 : with-global-context ( quot -- )
     [

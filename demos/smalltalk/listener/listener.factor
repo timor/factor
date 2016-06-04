@@ -15,4 +15,4 @@ in: smalltalk.listener
     "Smalltalk>" { { background COLOR: light-blue } } format bl flush readln
     [ eval-interactively smalltalk-listener ] when* ;
 
-MAIN: smalltalk-listener
+main: smalltalk-listener

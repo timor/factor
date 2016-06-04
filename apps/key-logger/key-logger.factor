@@ -17,7 +17,7 @@ CONSTANT: path "resource:key-log.txt"
         [ 8 >be write ] bi@ flush
     ] with-file-appender ;
 
-SYMBOL: key-logger
+symbol: key-logger
 
 : start-key-logger ( -- )
     key-logger get-global [
@@ -32,4 +32,4 @@ SYMBOL: key-logger
     f key-logger set-global
     close-game-input ;
 
-MAIN: start-key-logger
+main: start-key-logger

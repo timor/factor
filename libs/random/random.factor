@@ -10,9 +10,9 @@ QUALIFIED-WITH: alien.c-types c
 QUALIFIED-WITH: sets sets
 in: random
 
-SYMBOL: system-random-generator
-SYMBOL: secure-random-generator
-SYMBOL: random-generator
+symbol: system-random-generator
+symbol: secure-random-generator
+symbol: random-generator
 
 GENERIC# seed-random 1 ( obj seed -- obj ) ;
 GENERIC: random-32* ( obj -- n ) ;

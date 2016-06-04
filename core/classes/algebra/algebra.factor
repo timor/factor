@@ -5,7 +5,7 @@ combinators kernel make math math.order namespaces sequences
 sets sorting vectors words ;
 in: classes.algebra
 
-DEFER: sort-classes
+defer: sort-classes
 
 <PRIVATE
 
@@ -57,15 +57,15 @@ M: anonymous-complement instance?
 M: anonymous-complement class-name
     class>> class-name ;
 
-DEFER: (class<=)
+defer: (class<=)
 
-DEFER: (class-not)
+defer: (class-not)
 
 GENERIC: (classes-intersect?) ( first second -- ? ) ;
 
-DEFER: (class-and)
+defer: (class-and)
 
-DEFER: (class-or)
+defer: (class-or)
 
 GENERIC: (flatten-class) ( class -- ) ;
 

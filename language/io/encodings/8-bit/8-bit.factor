@@ -12,7 +12,7 @@ in: io.encodings.8-bit
 : encoding-file ( file-name -- stream )
     "vocab:io/encodings/8-bit/" ".TXT" surround ;
 
-SYMBOL: 8-bit-encodings
+symbol: 8-bit-encodings
 8-bit-encodings [ H{ } clone ] initialize
 
 TUPLE: 8-bit { biassoc biassoc read-only } ;
@@ -32,7 +32,7 @@ M: 8-bit decode-char
     [ 2drop f ]
     if ;
 
-MIXIN: 8-bit-encoding
+mixin: 8-bit-encoding
 
 M: 8-bit-encoding <encoder>
     8-bit-encodings get-global at <encoder> ;

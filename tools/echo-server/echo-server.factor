@@ -19,4 +19,4 @@ in: echo-server
 
 : echod-main ( -- ) 1234 echod drop ;
 
-MAIN: echod-main
+main: echod-main

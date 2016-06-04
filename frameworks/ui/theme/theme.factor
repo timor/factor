@@ -3,7 +3,7 @@
 USING: colors colors.constants colors.hex namespaces ;
 in: ui.theme
 
-SYMBOL: theme
+symbol: theme
 
 HOOK: toolbar-background theme ( -- color ) ;
 HOOK: toolbar-button-pressed-background theme ( -- color ) ;

@@ -18,7 +18,7 @@ M: image-section long-section
 M: image-section short-section
     image>> <image-gadget> output-stream get write-gadget ;
 
-SYMBOL: prettyprint-images?
+symbol: prettyprint-images?
 
 M: image pprint*
     prettyprint-images? get

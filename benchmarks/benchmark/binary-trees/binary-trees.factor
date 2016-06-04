@@ -56,4 +56,4 @@ CONSTANT: min-depth 4
 : binary-trees-benchmark ( -- )
     16 binary-trees ;
 
-MAIN: binary-trees-benchmark
+main: binary-trees-benchmark

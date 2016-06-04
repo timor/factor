@@ -34,4 +34,4 @@ in: benchmark.nsieve-bits
 
 : nsieve-bits-benchmark ( -- ) 11 nsieve-bits-main ;
 
-MAIN: nsieve-bits-benchmark
+main: nsieve-bits-benchmark

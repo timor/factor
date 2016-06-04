@@ -6,13 +6,13 @@ sequences source-files.errors vocabs.hierarchy vocabs words
 classes locals tools.errors listener ;
 in: help.lint
 
-SYMBOL: lint-failures
+symbol: lint-failures
 
 lint-failures [ H{ } clone ] initialize
 
 TUPLE: help-lint-error < source-file-error ;
 
-SYMBOL: +help-lint-failure+
+symbol: +help-lint-failure+
 
 T{ error-type-holder
    { type +help-lint-failure+ }

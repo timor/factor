@@ -16,7 +16,7 @@ in: curses.listener
     ;
 
 : delchar ( y x -- )
-    [ cmove CHAR: space addch ] [ cmove ] 2bi ;
+    [ cmove char: space addch ] [ cmove ] 2bi ;
 
 : move-left ( -- )
     get-yx [
@@ -27,7 +27,7 @@ in: curses.listener
     building get [ pop* move-left ] unless-empty ;
 
 : curses-stream-readln ( -- )
-    getch dup CHAR: \n = [ addch ] [
+    getch dup char: \n = [ addch ] [
         {
             { KEY_MOUSE [ handle-mouse-click ] }
             { 127 [ handle-backspace ] }
@@ -67,4 +67,4 @@ INSTANCE: curses-listener-stream plain-writer
 : test-listener ( -- )
     [ run-listener ] with-global ;
 
-MAIN: run-listener
+main: run-listener

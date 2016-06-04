@@ -17,10 +17,10 @@ in: rosetta-code.number-reversal
 ! Note: Assume the players input does not need extra validation.
 
 : make-jumbled-array ( -- sorted jumbled )
-    CHAR: 1 CHAR: 9 [a,b] [ 1string ] map dup clone randomize
+    char: 1 char: 9 [a,b] [ 1string ] map dup clone randomize
     [ 2dup = ] [ randomize ] while ;
 
-SYMBOL: trials
+symbol: trials
 
 : prompt ( jumbled -- n )
     trials get "#%2d: " printf

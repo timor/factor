@@ -5,7 +5,7 @@ io.files namespaces system x11 x11.xlib x11.io
 accessors threads sequences kernel ;
 in: x11.io.unix
 
-SYMBOL: dpy-fd
+symbol: dpy-fd
 
 M: unix init-x-io dpy get XConnectionNumber <fd> dpy-fd set-global ;
 

@@ -11,7 +11,7 @@ symbol: terminated?
 symbol: input-count
 symbol: inner-d-index
 
-DEFER: commit-literals
+defer: commit-literals
 
 symbol: (meta-d)
 symbol: (meta-r)

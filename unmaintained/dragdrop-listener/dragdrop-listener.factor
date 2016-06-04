@@ -34,7 +34,7 @@ TUPLE: listener-dragdrop hWnd last-drop-effect ;
 : <listener-dragdrop> ( hWnd -- object )
     DROPEFFECT_NONE listener-dragdrop construct-boa ;
 
-SYMBOL: +listener-dragdrop-wrapper+
+symbol: +listener-dragdrop-wrapper+
 {
     { "IDropTarget" {
         [ ! DragEnter

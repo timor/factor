@@ -4,9 +4,9 @@ USING: accessors assocs fry help.markup kernel make quotations
 sequences splitting tr ui.gestures unicode words ;
 in: ui.commands
 
-SYMBOL: +nullary+
-SYMBOL: +listener+
-SYMBOL: +description+
+symbol: +nullary+
+symbol: +listener+
+symbol: +description+
 
 PREDICATE: listener-command < word +listener+ word-prop ;
 

@@ -24,4 +24,4 @@ in: zeromq.examples.wuserver
         drop
     ] with-destructors ;
 
-MAIN: wuserver
+main: wuserver

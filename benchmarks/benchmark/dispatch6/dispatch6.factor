@@ -33,4 +33,4 @@ in: benchmark.dispatch6
         ] each-integer
     ] times ;
 
-MAIN: dispatch6-benchmark
+main: dispatch6-benchmark

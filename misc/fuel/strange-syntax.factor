@@ -30,13 +30,13 @@ C-TYPE: cairo_snurface_t
 
 ! ! CHAR
 : stuff-with-chars ( -- K \n )
-    CHAR: K
-    CHAR: \n ;
+    char: K
+    char: \n ;
 
 ! ! MAIN
 : majn ( -- ) ;
 
-MAIN: majn
+main: majn
 
 ! ! SLOT
  SLOT: komba

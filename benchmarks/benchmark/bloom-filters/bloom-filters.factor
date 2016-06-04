@@ -14,4 +14,4 @@ in: benchmark.bloom-filters
 : bloom-filters-benchmark ( -- )
     0.01 2000 <bloom-filter> insert-data test-hit test-miss drop ;
 
-MAIN: bloom-filters-benchmark
+main: bloom-filters-benchmark

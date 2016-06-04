@@ -2,7 +2,7 @@ USING: namespaces math partial-continuations tools.test
 kernel sequences fry ;
 in: partial-continuations.tests
 
-SYMBOL: sum
+symbol: sum
 
 : range ( r from to -- n )
     over - 1 + rot [

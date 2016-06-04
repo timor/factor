@@ -32,7 +32,7 @@ in: smtp.server
 ! bye
 ! Connection closed by foreign host.
 
-SYMBOL: data-mode
+symbol: data-mode
 
 : process ( -- )
     read-crlf {

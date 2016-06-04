@@ -6,8 +6,8 @@ io.encodings.utf8 accessors calendar sequences locals ;
 QUALIFIED: io.sockets
 in: logging.insomniac
 
-SYMBOL: insomniac-sender
-SYMBOL: insomniac-recipients
+symbol: insomniac-sender
+symbol: insomniac-recipients
 
 : email-subject ( service -- string )
     [

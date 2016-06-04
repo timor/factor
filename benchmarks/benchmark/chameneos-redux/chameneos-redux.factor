@@ -103,4 +103,4 @@ TUPLE: meeting-place count mailbox ;
         { blue red yellow red yellow blue red yellow red blue } chameneos-redux
     ] bi ;
 
-MAIN: chameneos-redux-benchmark
+main: chameneos-redux-benchmark

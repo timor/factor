@@ -21,13 +21,13 @@ IMPLEMENT-STRUCTS: GValue GParamSpecVariant ;
 
 GIR: vocab:gobject/GObject-2.0.gir
 
-FORGET: GIOCondition
-FORGET: G_IO_IN
-FORGET: G_IO_OUT
-FORGET: G_IO_PRI
-FORGET: G_IO_ERR
-FORGET: G_IO_HUP
-FORGET: G_IO_NVAL
+forget: GIOCondition
+forget: G_IO_IN
+forget: G_IO_OUT
+forget: G_IO_PRI
+forget: G_IO_ERR
+forget: G_IO_HUP
+forget: G_IO_NVAL
 
 DESTRUCTOR: g_object_unref
 

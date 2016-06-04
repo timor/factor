@@ -36,4 +36,4 @@ CONSTANT: url URL" http://downloads.factorcode.org/images/latest/"
 : download-my-image ( -- )
     my-boot-image-name maybe-download-image drop ;
 
-MAIN: download-my-image
+main: download-my-image

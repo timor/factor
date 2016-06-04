@@ -4,7 +4,7 @@ USING: cpu.x86.assembler cpu.x86.assembler.operands kernel
 layouts ;
 in: bootstrap.x86
 
-DEFER: stack-reg
+defer: stack-reg
 
 : jit-save-tib ( -- ) ;
 : jit-restore-tib ( -- ) ;

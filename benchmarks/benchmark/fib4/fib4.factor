@@ -19,4 +19,4 @@ C: <box> box
 
 : fib4-benchmark ( -- ) T{ box f 34 } tuple-fib i>> 9227465 assert= ;
 
-MAIN: fib4-benchmark
+main: fib4-benchmark

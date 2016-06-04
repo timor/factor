@@ -96,7 +96,7 @@ M: k-permutations hashcode* tuple-hashcode ;
 
 INSTANCE: k-permutations immutable-sequence
 
-DEFER: next-permutation
+defer: next-permutation
 
 <PRIVATE
 

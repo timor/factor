@@ -79,7 +79,7 @@ PREDICATE: typed-word < word "typed-word" word-prop >boolean ;
     [ output-mismatch-error ] word types make-unboxer
     quot prepose ;
 
-DEFER: make-boxer
+defer: make-boxer
 
 : boxer ( type -- quot )
     dup unboxable-tuple-class?

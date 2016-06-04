@@ -162,7 +162,7 @@ M: world remove-gadget
     2dup layers>> member-eq?
     [ layers>> remove-eq! drop ] [ call-next-method ] if ;
 
-SYMBOL: flush-layout-cache-hook
+symbol: flush-layout-cache-hook
 
 flush-layout-cache-hook [ [ ] ] initialize
 
@@ -203,7 +203,7 @@ TUPLE: world-error error world ;
 
 C: <world-error> world-error
 
-SYMBOL: ui-error-hook ! ( error -- )
+symbol: ui-error-hook ! ( error -- )
 
 : ui-error ( error -- )
     ui-error-hook get [ call( error -- ) ] [ die drop ] if* ;

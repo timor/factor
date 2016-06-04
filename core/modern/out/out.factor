@@ -13,7 +13,7 @@ symbol: last-slice
     [ last-slice get [ swap slice-between ] [ slice-before ] if* io:write ]
     [ last-slice namespaces:set ] bi ;
 
-DEFER: write-literal
+defer: write-literal
 GENERIC: write-literal ( obj -- ) ;
 ! M: object write-literal lexed-underlying write ;
 M: string write-literal write ;
@@ -220,7 +220,7 @@ M: compound-sequence-literal write-literal
 : lexable-extra-paths ( -- seq )
     extra-source-paths {
         "resource:extra/brainfuck/brainfuck.factor"  ! EBNF: [[ ]] ;
-        "resource:extra/cuesheet/cuesheet.factor"    ! CHAR: "
+        "resource:extra/cuesheet/cuesheet.factor"    ! char: "
         "resource:extra/fjsc/fjsc.factor"            ! EBNF:
         "resource:extra/emojify/emojify.factor"      ! R/
         "resource:extra/gml/gml.factor"

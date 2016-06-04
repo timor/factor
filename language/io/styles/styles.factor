@@ -110,36 +110,36 @@ M: plain-writer stream-write-table
 M: plain-writer make-cell-stream 2drop <string-writer> ;
 
 ! Font styles
-SYMBOL: plain
-SYMBOL: bold
-SYMBOL: italic
-SYMBOL: bold-italic
+symbol: plain
+symbol: bold
+symbol: italic
+symbol: bold-italic
 
 ! Character styles
-SYMBOL: foreground
-SYMBOL: background
-SYMBOL: font-name
-SYMBOL: font-size
-SYMBOL: font-style
+symbol: foreground
+symbol: background
+symbol: font-name
+symbol: font-size
+symbol: font-style
 
 ! Presentation
-SYMBOL: presented
+symbol: presented
 
 ! Link
-SYMBOL: href
+symbol: href
 
 ! Image
-SYMBOL: image-style
+symbol: image-style
 
 ! Paragraph styles
-SYMBOL: page-color
-SYMBOL: border-color
-SYMBOL: inset
-SYMBOL: wrap-margin
+symbol: page-color
+symbol: border-color
+symbol: inset
+symbol: wrap-margin
 
 ! Table styles
-SYMBOL: table-gap
-SYMBOL: table-border
+symbol: table-gap
+symbol: table-border
 
 CONSTANT: standard-table-style
     H{

@@ -154,7 +154,7 @@ CONSTANT: text "Hello world.\nThis is a test."
 
 { } [ "interactor" get evaluate-input ] unit-test
 
-{ CHAR: H } [ "promise" get 2 seconds ?promise-timeout ] unit-test
+{ char: H } [ "promise" get 2 seconds ?promise-timeout ] unit-test
 
 { } [ <listener-gadget> [ ] with-grafted-gadget ] unit-test
 
@@ -165,10 +165,10 @@ CONSTANT: text "Hello world.\nThis is a test."
 
     [ t ] [ "i" get interactor? ] unit-test
 
-    [ ] [ "SYMBOL:" "i" get set-editor-string ] unit-test
+    [ ] [ "symbol:" "i" get set-editor-string ] unit-test
 
     [ ] [
-        "i" get [ { "SYMBOL:" } parse-lines ] [ go-to-error ] recover
+        "i" get [ { "symbol:" } parse-lines ] [ go-to-error ] recover
     ] unit-test
 
     [ t ] [

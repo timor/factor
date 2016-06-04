@@ -163,7 +163,7 @@ M: object method-layout ;
     "soft-break-layout" soft-break-test check-see
 ] unit-test
 
-DEFER: parse-error-file
+defer: parse-error-file
 
 : another-soft-break-test ( -- str )
     {
@@ -468,7 +468,7 @@ TUPLE: fo { a intersection{ integer fixnum } initial: 0 } ;
 
 : margin-test ( number-of-'a's -- str )
     [
-        [ CHAR: a <string> text "b" text ] with-pprint
+        [ char: a <string> text "b" text ] with-pprint
     ] with-string-writer ;
 
 {

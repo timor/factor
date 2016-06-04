@@ -3,7 +3,7 @@
 USING: tools.test namespaces documents documents.elements ;
 in: document.elements.tests
 
-SYMBOL: doc
+symbol: doc
 <document> doc set
 "123\nabcé" doc get set-doc-string
 

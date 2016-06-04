@@ -95,7 +95,7 @@ $nl
 "These next two examples demonstrate lexical variable bindings in quotations defined with " { $link postpone: [| } ". In this example, the values " { $snippet "5" } " and " { $snippet "3" } " are put on the datastack. When the quotation is called, it takes those values as inputs and binds them respectively to " { $snippet "m" } " and " { $snippet "n" } " before executing the quotation:"
 { $example
     "USING: kernel locals math prettyprint ;"
-    "IN: scratchpad"
+    "in: scratchpad"
     "5 3 [| m n | m n - ] call ."
     "2"
 }
@@ -104,7 +104,7 @@ $nl
 "In this example, the " { $snippet "adder" } " word creates a quotation that closes over its argument " { $snippet "n" } ". When called, the result quotation of " { $snippet "5 adder" } " pulls " { $snippet "3" } " off the datastack and binds it to " { $snippet "m" } ", which is added to the value " { $snippet "5" } " bound to " { $snippet "n" } " in the outer scope of " { $snippet "adder" } ":"
 { $example
     "USING: kernel locals math prettyprint ;"
-    "IN: scratchpad"
+    "in: scratchpad"
     ":: adder ( n -- quot ) [| m | m n + ] ;"
     "3 5 adder call ."
     "8"
@@ -176,7 +176,7 @@ $nl
 { $heading "Object identity" }
 "This feature changes the semantics of literal object identity. An ordinary word containing a literal pushes the same literal on the stack every time it is invoked:"
 { $example
-    "IN: scratchpad"
+    "in: scratchpad"
     "TUPLE: person first-name last-name ;"
     ": ordinary-word-test ( -- tuple )"
     "    T{ person { first-name \"Alan\" } { last-name \"Kay\" } } ;"
@@ -185,8 +185,8 @@ $nl
 }
 "Inside a lexical scope, literals which do not contain lexical variables still behave in the same way:"
 { $example
-    "USE: locals"
-    "IN: scratchpad"
+    "use: locals"
+    "in: scratchpad"
     "TUPLE: person first-name last-name ;"
     ":: locals-word-test ( -- tuple )"
     "    T{ person { first-name \"Alan\" } { last-name \"Kay\" } } ;"
@@ -196,7 +196,7 @@ $nl
 "However, literals with lexical variables in them actually construct a new object:"
 { $example
     "USING: locals splitting ;"
-    "IN: scratchpad"
+    "in: scratchpad"
     "TUPLE: person first-name last-name ;"
     ":: constructor-test ( -- tuple )"
     "    \"Jane Smith\" \" \" split1 :> last :> first"

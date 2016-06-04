@@ -61,9 +61,9 @@ PRIMITIVE: unimplemented ( -- * ) ;
 PRIMITIVE: unwind-native-frames ( -- ) ;
 PRIVATE>
 
-DEFER: dip
-DEFER: 2dip
-DEFER: 3dip
+defer: dip
+defer: 2dip
+defer: 3dip
 
 ! Stack stuff
 : 2over ( x y z -- x y z x y ) pick pick ; inline
@@ -75,7 +75,7 @@ GENERIC: call ( callable -- ) ;
 
 GENERIC: execute ( word -- ) ;
 
-DEFER: if
+defer: if
 
 : ? ( ? true false -- true/false )
     ! 'if' and '?' can be defined in terms of each other

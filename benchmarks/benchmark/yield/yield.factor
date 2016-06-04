@@ -6,4 +6,4 @@ in: benchmark.yield
 : yield-benchmark ( -- )
     100,000 [ yield ] times ;
 
-MAIN: yield-benchmark
+main: yield-benchmark

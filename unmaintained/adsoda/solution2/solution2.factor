@@ -11,7 +11,7 @@ IN: adsoda.solution2
 ! -------------------
 ! correctif solution
 ! ---------------
-SYMBOL: matrix
+symbol: matrix
 : MIN-VAL-adsoda ( -- x ) 0.00000001
 ! 0.000000000001 
 ;

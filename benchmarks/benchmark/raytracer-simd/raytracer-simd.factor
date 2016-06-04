@@ -111,7 +111,7 @@ CONSTANT: initial-hit T{ hit f double-4{ 0.0 0.0 0.0 0.0 } 1/0. }
 : create-center ( c r d -- c2 )
     [ 3.0 12.0 sqrt / * ] dip n*v v+ ; inline no-compile
 
-DEFER: create
+defer: create
 
 : create-step ( level c r d -- scene )
     over [ create-center ] dip 2.0 / [ 1 - ] 2dip create ;
@@ -170,4 +170,4 @@ CONSTANT: create-offsets
 : raytracer-simd-benchmark ( -- )
     run-raytracer-simd "raytracer.pnm" temp-file binary set-file-contents ;
 
-MAIN: raytracer-simd-benchmark
+main: raytracer-simd-benchmark

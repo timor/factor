@@ -338,7 +338,7 @@ USING: html.components html.forms
 xml xml.traversal validators
 furnace furnace.conversations ;
 
-SYMBOL: a
+symbol: a
 
 : test-a ( xml -- value )
     string>xml body>> "input" deep-tag-named "value" attr ;

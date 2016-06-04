@@ -98,7 +98,7 @@ INSTANCE: fried-callable fried
     [ [ [ ] ] [ [ ] (make-curry) but-last ] if-zero ]
     [ shallow-spread>quot swap [ [ ] (make-curry) compose ] unless-zero ] if-empty ;
 
-DEFER: dredge-fry
+defer: dredge-fry
 
 TUPLE: dredge-fry-state
     { in-quot read-only }

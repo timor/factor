@@ -11,13 +11,13 @@ in: cuda.libraries
 VARIANT: cuda-abi
     cuda32 cuda64 ;
 
-SYMBOL: cuda-modules
-SYMBOL: cuda-functions
+symbol: cuda-modules
+symbol: cuda-functions
 
-SYMBOL: cuda-libraries
+symbol: cuda-libraries
 cuda-libraries [ H{ } clone ] initialize
 
-SYMBOL: current-cuda-library
+symbol: current-cuda-library
 
 : ?delete-at ( key assoc -- old/key ? )
     2dup delete-at* [ 2nip t ] [ 2drop f ] if ; inline

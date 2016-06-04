@@ -6,7 +6,7 @@ in: words.symbol
 PREDICATE: symbol < word
     [ def>> ] [ [ ] curry ] bi sequence= ;
 
-M: symbol definer drop \ SYMBOL: f ;
+M: symbol definer drop \ symbol: f ;
 
 M: symbol definition drop f ;
 

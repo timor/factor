@@ -13,8 +13,8 @@ GENERIC: cache-key* ( gadget -- key )
 
 M: texture-gadget cache-key* ;
 
-SYMBOL: textures
-SYMBOL: refcounts
+symbol: textures
+symbol: refcounts
 
 : init-cache ( symbol -- )
     dup get [ drop ] [ H{ } clone swap set-global ] if ;

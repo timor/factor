@@ -6,7 +6,7 @@ QUALIFIED: make
 QUALIFIED-WITH: ui.gadgets.books book
 IN: ui.gadgets.layout
 
-SYMBOL: templates
+symbol: templates
 TUPLE: layout gadget size ; C: <layout> layout
 TUPLE: placeholder < gadget members ;
 : <placeholder> ( -- placeholder ) placeholder new V{ } clone >>members ;

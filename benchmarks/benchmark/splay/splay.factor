@@ -17,4 +17,4 @@ in: benchmark.splay
     [ >splay ] [ randomize 10,000 head ] bi
     change-random keys dup natural-sort assert= ;
 
-MAIN: splay-benchmark
+main: splay-benchmark

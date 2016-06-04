@@ -5,7 +5,7 @@ in: python.syntax
 
 <PRIVATE
 
-SYMBOL: current-context
+symbol: current-context
 
 : with-each-definition ( quot -- )
     scan-token dup ";" = [ 2drop ] [

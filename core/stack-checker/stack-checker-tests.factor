@@ -78,7 +78,7 @@ in: stack-checker.tests
 { 1 2 } [ [ first ] keep second ] must-infer-as
 
 ! Mutual recursion
-DEFER: foe
+defer: foe
 
 : fie ( element obj -- ? )
     dup array? [ foe ] [ eq? ] if ;
@@ -160,19 +160,19 @@ M: real iterate drop ;
 { 3 0 } [ dog ] must-infer-as
 
 ! Regression
-DEFER: monkey
+defer: monkey
 : friend ( a b c -- ) dup [ friend ] [ monkey ] if ;
 : monkey ( a b c -- ) dup [ 3drop ] [ friend ] if ;
 { 3 0 } [ friend ] must-infer-as
 
 ! Regression -- same as above but we infer the second word first
-DEFER: blah2
+defer: blah2
 : blah ( a b c -- ) dup [ blah ] [ blah2 ] if ;
 : blah2 ( a b c -- ) dup [ blah ] [ 3drop ] if ;
 { 3 0 } [ blah2 ] must-infer-as
 
 ! Regression
-DEFER: blah4
+defer: blah4
 : blah3 ( a b c -- )
     dup [ blah3 ] [ dup [ blah4 ] [ blah3 ] if ] if ;
 : blah4 ( a b c -- )
@@ -257,7 +257,7 @@ DEFER: blah4
     [ { [ drop ] [ dup ] } dispatch ] infer
 ] [ word>> \ dispatch eq? ] must-fail-with
 
-DEFER: inline-recursive-2
+defer: inline-recursive-2
 : inline-recursive-1 ( -- ) inline-recursive-2 ;
 : inline-recursive-2 ( -- ) inline-recursive-1 ;
 
@@ -272,11 +272,11 @@ M: string my-hook "a string" ;
 
 { 0 1 } [ my-hook ] must-infer-as
 
-DEFER: deferred-word
+defer: deferred-word
 
 { 1 1 } [ [ deferred-word ] [ 3 ] if ] must-infer-as
 
-DEFER: an-inline-word
+defer: an-inline-word
 
 : normal-word-3 ( -- )
     3 [ [ 2 + ] curry ] an-inline-word call drop ;
@@ -324,11 +324,11 @@ ERROR: custom-error ;
 
 : erg's-inference-bug ( -- ) f dup [ erg's-inference-bug ] when ; inline recursive
 [ [ erg's-inference-bug ] infer ] must-fail
-FORGET: erg's-inference-bug
+forget: erg's-inference-bug
 
 : bad-recursion-3 ( -- ) dup [ [ bad-recursion-3 ] dip ] when ; inline recursive
 [ [ bad-recursion-3 ] infer ] must-fail
-FORGET: bad-recursion-3
+forget: bad-recursion-3
 
 : bad-recursion-4 ( -- ) 4 [ dup call [ rot ] dip swap ] times ; inline recursive
 [ [ [ ] [ 1 2 3 ] over dup bad-recursion-4 ] infer ] must-fail
@@ -352,9 +352,9 @@ FORGET: bad-recursion-3
 
 [ [ unbalanced-retain-usage ] infer ] [ inference-error? ] must-fail-with
 
-FORGET: unbalanced-retain-usage
+forget: unbalanced-retain-usage
 
-DEFER: eee'
+defer: eee'
 : ddd' ( ? -- ) [ f eee' ] when ; inline recursive
 : eee' ( ? -- ) [ swap [ ] ] dip ddd' call ; inline recursive
 
@@ -377,7 +377,7 @@ DEFER: eee'
 
 [ [ exit ] [ 1 2 3 ] if ] must-infer
 
-! Stack effects are required now but FORGET: clears them...
+! Stack effects are required now but forget: clears them...
 : forget-test ( -- ) ;
 
 [ forget-test ] must-infer

@@ -6,10 +6,10 @@ init io.streams.string kernel locals math math.parser db
 namespaces sequences site-watcher.db site-watcher.email ;
 IN: site-watcher
 
-SYMBOL: site-watcher-frequency
+symbol: site-watcher-frequency
 5 minutes site-watcher-frequency set-global
 
-SYMBOL: running-site-watcher
+symbol: running-site-watcher
 [ f running-site-watcher set-global ] "site-watcher" add-startup-hook
 
 <PRIVATE

@@ -123,11 +123,11 @@ M: array gadget-text*
 
 : gadget-text ( gadget -- string ) [ gadget-text* ] "" make ;
 
-DEFER: relayout
+defer: relayout
 
 <PRIVATE
 
-SYMBOL: ui-notify-flag
+symbol: ui-notify-flag
 
 : notify-ui-thread ( -- ) ui-notify-flag get-global raise-flag ;
 
@@ -169,7 +169,7 @@ PRIVATE>
 
 <PRIVATE
 
-SYMBOL: in-layout?
+symbol: in-layout?
 
 GENERIC: dim-changed ( gadget -- ) ;
 

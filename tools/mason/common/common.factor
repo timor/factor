@@ -15,7 +15,7 @@ ERROR: no-host-name ;
 : short-host-name ( -- string )
     host-name "." split1 drop [ no-host-name ] unless* ;
 
-SYMBOL: current-git-id
+symbol: current-git-id
 
 : short-running-process ( command -- )
     ! Give network operations and shell commands at most
@@ -65,7 +65,7 @@ SYMBOL: current-git-id
 : nanos>time ( n -- string )
     1,000,000,000 /i 60 /mod [ 60 /mod ] dip 3array [ pad-00 ] map ":" join ;
 
-SYMBOL: stamp
+symbol: stamp
 
 : build-dir ( -- path ) builds-dir get stamp get append-path ;
 
@@ -92,6 +92,6 @@ CONSTANT: benchmarks-file "benchmarks"
 CONSTANT: benchmark-error-messages-file "benchmark-error-messages"
 CONSTANT: benchmark-error-vocabs-file "benchmark-error-vocabs"
 
-SYMBOL: status-error ! didn't bootstrap, or crashed
-SYMBOL: status-dirty ! bootstrapped but not all tests passed
-SYMBOL: status-clean ! everything good
+symbol: status-error ! didn't bootstrap, or crashed
+symbol: status-dirty ! bootstrapped but not all tests passed
+symbol: status-clean ! everything good

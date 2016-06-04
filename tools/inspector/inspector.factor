@@ -6,7 +6,7 @@ prettyprint.custom prettyprint.sections sequences sets sorting
 summary ;
 in: inspector
 
-SYMBOL: +number-rows+
+symbol: +number-rows+
 
 : print-summary ( obj -- )
     [ safe-summary ] keep write-object ;
@@ -60,13 +60,13 @@ M: tuple error. describe ;
 : :vars ( -- )
     error-continuation get name>> vars-in-scope describe ;
 
-SYMBOL: me
+symbol: me
 
 <PRIVATE
 
-SYMBOL: inspector-stack
+symbol: inspector-stack
 
-SYMBOL: sorted-keys
+symbol: sorted-keys
 
 : reinspect ( obj -- )
     [ me namespaces:set ]

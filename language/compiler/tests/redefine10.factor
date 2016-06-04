@@ -4,7 +4,7 @@ in: compiler.tests.redefine10
 
 ! Mixin redefinition should update predicate call sites
 
-MIXIN: my-mixin
+mixin: my-mixin
 INSTANCE: fixnum my-mixin
 : my-inline-1 ( a -- b ) dup my-mixin instance? [ 1 + ] when ;
 : my-inline-2 ( a -- b ) dup my-mixin? [ 1 + ] when ;

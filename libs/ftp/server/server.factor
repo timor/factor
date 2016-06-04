@@ -11,8 +11,8 @@ sequences simple-tokenizer splitting strings threads
 tools.files unicode ;
 in: ftp.server
 
-SYMBOL: server
-SYMBOL: client
+symbol: server
+symbol: client
 
 TUPLE: ftp-server < threaded-server { serving-directory string } ;
 

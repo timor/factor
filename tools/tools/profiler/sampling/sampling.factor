@@ -11,12 +11,12 @@ PRIMITIVE: (get-samples) ( -- samples/f ) ;
 PRIMITIVE: profiling ( ? -- ) ;
 PRIVATE>
 
-SYMBOL: samples-per-second
+symbol: samples-per-second
 
 samples-per-second [ 1,000 ] initialize
 
 <PRIVATE
-SYMBOL: raw-profile-data
+symbol: raw-profile-data
 CONSTANT: ignore-words
     { signal-handler leaf-signal-handler profiling minor-gc }
 
@@ -208,11 +208,11 @@ PRIVATE>
 : percentage. ( num denom -- )
     [ 100 * ] dip /f "%6.2f" printf ;
 
-DEFER: (profile.)
+defer: (profile.)
 
 :: times. ( node -- )
     node {
-        [ depth>> number>string 4 CHAR: \s pad-head write bl ]
+        [ depth>> number>string 4 char: \s pad-head write bl ]
         [ total-time>> duration. bl ]
         [ [ gc-time>> ] [ total-time>> ] bi percentage. bl ]
         [ [ jit-time>> ] [ total-time>> ] bi percentage. bl ]

@@ -19,4 +19,4 @@ MEMO: (faster-fib) ( m -- n )
         100,000 faster-fib log2 69423 assert=
     ] times ;
 
-MAIN: fib8-benchmark
+main: fib8-benchmark

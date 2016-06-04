@@ -33,7 +33,7 @@ ARTICLE: "wrappers" "Wrappers"
 "Wrapper literal syntax is documented in " { $link "syntax-words" } "."
 { $example
   "IN: scratchpad"
-  "DEFER: my-word"
+  "defer: my-word"
   "\\ my-word name>> ."
   "\"my-word\""
 }

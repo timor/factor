@@ -60,7 +60,7 @@ PRIVATE>
 
 <PRIVATE
 
-SYMBOL: sieve
+symbol: sieve
 
 : initialize-sieve ( n -- )
     0 <repetition> >array sieve set ;

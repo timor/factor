@@ -9,7 +9,7 @@ FROM: specialized-arrays.private => nth-c-ptr direct-like ;
 QUALIFIED: vectors.functor
 in: specialized-vectors
 
-MIXIN: specialized-vector
+mixin: specialized-vector
 
 <PRIVATE
 

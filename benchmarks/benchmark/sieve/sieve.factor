@@ -19,4 +19,4 @@ in: benchmark.sieve
 : sieve-benchmark ( -- )
     100,000,000 sieve 5,761,455 assert= ;
 
-MAIN: sieve-benchmark
+main: sieve-benchmark

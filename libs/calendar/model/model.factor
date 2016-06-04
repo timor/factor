@@ -3,7 +3,7 @@
 USING: calendar namespaces models threads kernel init ;
 in: calendar.model
 
-SYMBOL: time
+symbol: time
 
 : (time-thread) ( -- )
     now time get set-model

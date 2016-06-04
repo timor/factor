@@ -8,13 +8,13 @@ in: compiler.cfg.copy-prop
 
 <PRIVATE
 
-SYMBOL: changed?
+symbol: changed?
 
-SYMBOL: copies
+symbol: copies
 
 ! Initialized per-basic-block; a mapping from inputs to dst for
 ! eliminating redundant ##phi instructions
-SYMBOL: phis
+symbol: phis
 
 : resolve ( vreg -- vreg )
     copies get at ;

@@ -100,4 +100,4 @@ SPECIALIZED-ARRAY: body
 
 : nbody-simd-benchmark ( -- ) 1000000 nbody ;
 
-MAIN: nbody-simd-benchmark
+main: nbody-simd-benchmark

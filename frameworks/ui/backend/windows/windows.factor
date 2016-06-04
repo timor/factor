@@ -374,7 +374,7 @@ CONSTANT: exclude-keys-wm-char
     {
         {
             [ dup LETTER? ]
-            [ shift? caps-lock? xor [ CHAR: a + CHAR: A - ] unless 1string f ]
+            [ shift? caps-lock? xor [ char: a + char: A - ] unless 1string f ]
         }
         { [ dup digit? ] [ 1string f ] }
         [ wm-keydown-codes at t ]
@@ -459,7 +459,7 @@ M: windows-ui-backend (close-window)
 ! mouse is subsequently released outside the NC area, we receive
 ! a [LMR]BUTTONUP message and Factor can get confused. So we
 ! ignore BUTTONUP's that are a result of an NC*BUTTONDOWN.
-SYMBOL: nc-buttons
+symbol: nc-buttons
 
 : handle-wm-ncbutton ( hWnd uMsg wParam lParam -- )
     2drop nip
@@ -551,7 +551,7 @@ SYMBOL: nc-buttons
 : handle-wm-dwmcompositionchanged ( hWnd uMsg wParam lParam -- )
     3drop [ window ] keep ?make-glass ;
 
-SYMBOL: wm-handlers
+symbol: wm-handlers
 
 H{ } clone wm-handlers set-global
 
@@ -600,7 +600,7 @@ add-wm-handler
 [ handle-wm-cancelmode 0 ] WM_CANCELMODE add-wm-handler
 [ handle-wm-mouseleave 0 ] WM_MOUSELEAVE add-wm-handler
 
-SYMBOL: trace-messages?
+symbol: trace-messages?
 
 ! return 0 if you handle the message, else just let DefWindowProc return its val
 : ui-wndproc ( -- object )

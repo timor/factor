@@ -23,4 +23,4 @@ in: tools.cat
 : run-cat ( -- )
     command-line get [ cat-lines ] [ cat-files ] if-empty ;
 
-MAIN: run-cat
+main: run-cat

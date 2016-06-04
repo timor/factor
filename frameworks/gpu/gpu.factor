@@ -9,7 +9,7 @@ TUPLE: gpu-object < identity-tuple handle ;
 VARIANT: gpu-api
     opengl-2 opengl-3 ;
 
-SYMBOL: has-vertex-array-objects?
+symbol: has-vertex-array-objects?
 
 : set-gpu-api ( -- )
     "2.0" require-gl-version

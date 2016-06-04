@@ -5,7 +5,7 @@ in: xmode.tokens
 
 ! Based on org.gjt.sp.jedit.syntax.Token
 <<
-SYMBOL: tokens
+symbol: tokens
 
 {
     "COMMENT1" "COMMENT2" "COMMENT3" "COMMENT4" "DIGIT"

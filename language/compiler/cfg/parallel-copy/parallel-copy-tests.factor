@@ -3,7 +3,7 @@ compiler.cfg.registers namespaces compiler.cfg.instructions
 cpu.architecture ;
 in: compiler.cfg.parallel-copy.tests
 
-SYMBOL: temp
+symbol: temp
 
 : test-parallel-copy ( mapping -- seq )
     3 vreg-counter set-global parallel-copy ;

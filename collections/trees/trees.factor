@@ -33,7 +33,7 @@ TUPLE: node key value left right ;
 : <node> ( key value -- node )
     node new-node ;
 
-SYMBOL: current-side
+symbol: current-side
 
 CONSTANT: left -1
 CONSTANT: right 1
@@ -141,7 +141,7 @@ M: tree clear-assoc
     [ value>> >>value ] bi ;
 
 ! Deletion
-DEFER: delete-node
+defer: delete-node
 
 : (prune-extremity) ( parent node -- new-extremity )
     dup node-link [

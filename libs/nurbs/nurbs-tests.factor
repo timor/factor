@@ -3,7 +3,7 @@ USING: literals math math.functions math.vectors namespaces
 nurbs tools.test ;
 in: nurbs.tests
 
-SYMBOL: test-nurbs
+symbol: test-nurbs
 
 CONSTANT:  √2/2 $[ 0.5 sqrt     ]
 CONSTANT: -√2/2 $[ 0.5 sqrt neg ]

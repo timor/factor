@@ -10,4 +10,4 @@ CONSTANT: my-array { { 1 2 3 } { 4 5 6 } { 7 8 9 } }
     1,000,000 [ my-generic flip drop ] times
     1,000,000 [ my-array flip drop ] times ;
 
-MAIN: flip-benchmark
+main: flip-benchmark

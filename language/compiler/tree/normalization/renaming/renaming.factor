@@ -4,7 +4,7 @@ USING: accessors assocs compiler.tree compiler.tree.combinators
 fry kernel namespaces sequences ;
 in: compiler.tree.normalization.renaming
 
-SYMBOL: rename-map
+symbol: rename-map
 
 : rename-value ( value -- value' )
     [ rename-map get at ] keep or ;

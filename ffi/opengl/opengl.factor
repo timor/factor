@@ -11,7 +11,7 @@ SPECIALIZED-ARRAY: float
 SPECIALIZED-ARRAY: uint
 in: opengl
 
-SYMBOL: gl-scale-factor
+symbol: gl-scale-factor
 
 : gl-color ( color -- ) >rgba-components glColor4d ; inline
 

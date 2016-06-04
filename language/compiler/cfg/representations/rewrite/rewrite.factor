@@ -11,7 +11,7 @@ in: compiler.cfg.representations.rewrite
 ! to rename opearands too.
 
 ! Mapping from vreg,rep pairs to vregs
-SYMBOL: alternatives
+symbol: alternatives
 
 :: (emit-def-conversion) ( dst preferred required -- new-dst' )
     ! If an instruction defines a register with representation 'required',

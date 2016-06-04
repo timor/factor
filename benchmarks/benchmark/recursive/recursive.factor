@@ -35,4 +35,4 @@ HINTS: recursive fixnum ;
 
 : recursive-benchmark ( -- ) 10 recursive ;
 
-MAIN: recursive-benchmark
+main: recursive-benchmark

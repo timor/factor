@@ -75,7 +75,7 @@ FUNCTOR-SYNTAX: singleton:
     scan-param suffix!
     \ define-singleton-class suffix! ;
 
-FUNCTOR-SYNTAX: MIXIN:
+FUNCTOR-SYNTAX: mixin:
     scan-param suffix!
     \ define-mixin-class suffix! ;
 
@@ -102,7 +102,7 @@ FUNCTOR-SYNTAX: :
     parse-declared*
     \ define-declared* suffix! ;
 
-FUNCTOR-SYNTAX: SYMBOL:
+FUNCTOR-SYNTAX: symbol:
     scan-param suffix!
     \ define-symbol suffix! ;
 
@@ -152,7 +152,7 @@ SYNTAX: DEFINES-PRIVATE [ begin-private create-word-in end-private ] (INTERPOLAT
 
 SYNTAX: DEFINES-CLASS [ create-class-in ] (INTERPOLATE) ;
 
-DEFER: ;FUNCTOR delimiter
+defer: ;FUNCTOR delimiter
 
 <PRIVATE
 

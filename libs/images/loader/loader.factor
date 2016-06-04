@@ -9,7 +9,7 @@ ERROR: unknown-image-extension extension ;
 
 <PRIVATE
 
-SYMBOL: types
+symbol: types
 types [ H{ } clone ] initialize
 
 : (image-class) ( type -- class )

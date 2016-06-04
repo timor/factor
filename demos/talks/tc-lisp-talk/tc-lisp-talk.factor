@@ -114,7 +114,7 @@ M: circle perimeter radius>> pi * 2 * ;"
         "The global namespace is just the namespace at the bottom of the namespace stack"
         { "Useful words are " { $link get-global } ", " { $link set-global } }
         "Factor idiom for changing a particular namespace"
-        { $code "SYMBOL: king
+        { $code "symbol: king
 global [ \"Henry VIII\" king set ] with-variables"
         }
         { $code "with-scope" }
@@ -532,4 +532,4 @@ xyz
 : tc-lisp-talk ( -- )
     tc-lisp-slides "TC Lisp talk" slides-window ;
 
-MAIN: tc-lisp-talk
+main: tc-lisp-talk

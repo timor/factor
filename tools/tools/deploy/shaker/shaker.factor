@@ -479,7 +479,7 @@ in: tools.deploy.shaker
     [ quotation? ] [ remain-compiled ] "quotations" compress
     [ quotation? ] instances [ f >>cached-effect f >>cache-counter drop ] each ;
 
-SYMBOL: deploy-vocab
+symbol: deploy-vocab
 
 : [:c] ( -- word ) ":c" "debugger" lookup-word ;
 
@@ -632,7 +632,7 @@ SYMBOL: deploy-vocab
             ] unless
             [ deploy-vocab namespaces:set ] [ require ] [
                 vocab-main [
-                    "Vocabulary has no MAIN: word." print flush 1 exit
+                    "Vocabulary has no main: word." print flush 1 exit
                 ] unless
             ] tri
             strip
@@ -649,4 +649,4 @@ SYMBOL: deploy-vocab
     "deploy-config" get parse-file first
     (deploy) ;
 
-MAIN: do-deploy
+main: do-deploy

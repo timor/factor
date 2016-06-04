@@ -18,4 +18,4 @@ kernel ;
     sbuf-iter
     reverse-iter ;
 
-MAIN: iteration-benchmark
+main: iteration-benchmark

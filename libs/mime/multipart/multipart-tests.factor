@@ -58,7 +58,7 @@ CONSTANT: upload3 "--3f116598c7f0431b9f98148ed235c822\r\nContent-Disposition: fo
     keys natural-sort
 ] unit-test
 
-SYMBOL: mime-test-server
+symbol: mime-test-server
 
 : with-test-server ( quot -- )
     [
@@ -71,7 +71,7 @@ SYMBOL: mime-test-server
     mime-test-server get insecure>> ;
 
 : a-stream ( n -- stream )
-    CHAR: a <string> <string-reader> ;
+    char: a <string> <string-reader> ;
 
 { } [
     [

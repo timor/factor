@@ -77,8 +77,8 @@ UNION: irrelevant ##peek ##replace ##inc ;
         ] if
     ] if ;
 
-SYMBOL: worklist
-SYMBOL: visited
+symbol: worklist
+symbol: visited
 
 : add-to-worklist ( bb -- )
     dup visited get ?adjoin

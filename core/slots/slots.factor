@@ -155,7 +155,7 @@ M: object writer-quot
         [ define-changer ]
     } cleave ;
 
-DEFER: initial-value
+defer: initial-value
 
 GENERIC: initial-value* ( class -- object ? ) ;
 

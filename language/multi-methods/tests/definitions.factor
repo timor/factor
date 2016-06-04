@@ -2,7 +2,7 @@ USING: multi-methods tools.test math sequences namespaces system
 kernel strings words compiler.units quotations ;
 in: multi-methods.tests
 
-DEFER: fake
+defer: fake
 \ fake H{ } clone "multi-methods" set-word-prop
 << ( -- ) \ fake set-stack-effect >>
 
@@ -22,7 +22,7 @@ DEFER: fake
 
     [ ] [ \ fake update-generic ] unit-test
 
-    DEFER: testing
+    defer: testing
 
     [ ] [ \ testing ( -- ) define-generic ] unit-test
 

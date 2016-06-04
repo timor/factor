@@ -7,7 +7,7 @@ accessors arrays alarms quotations combinators fry
 http.server.redirection furnace assocs.lib urls ;
 IN: furnace.callbacks
 
-SYMBOL: responder
+symbol: responder
 
 TUPLE: callback-responder responder callbacks ;
 
@@ -60,7 +60,7 @@ TUPLE: callback cont quot expires alarm responder ;
 : restore-request ( pair -- )
     first3 exit-continuation set request set call ;
 
-SYMBOL: post-refresh-get?
+symbol: post-refresh-get?
 
 : redirect-to-here ( -- )
     ! Force a redirect to the client browser so that the browser
@@ -78,7 +78,7 @@ SYMBOL: post-refresh-get?
         post-refresh-get? on
     ] if ;
 
-SYMBOL: current-show
+symbol: current-show
 
 : store-current-show ( -- )
     ! Store the current continuation in the variable 'current-show'

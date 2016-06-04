@@ -11,17 +11,17 @@ TUPLE: com-wrapper < disposable callbacks vtbls ;
 
 <PRIVATE
 
-SYMBOL: +wrapped-objects+
+symbol: +wrapped-objects+
 +wrapped-objects+ get-global
 [ H{ } +wrapped-objects+ set-global ]
 unless
 
-SYMBOL: +live-wrappers+
+symbol: +live-wrappers+
 +live-wrappers+ get-global
 [ V{ } +live-wrappers+ set-global ]
 unless
 
-SYMBOL: +vtbl-counter+
+symbol: +vtbl-counter+
 +vtbl-counter+ get-global
 [ 0 +vtbl-counter+ set-global ]
 unless

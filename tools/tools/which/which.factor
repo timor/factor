@@ -47,4 +47,4 @@ PRIVATE>
 : run-which ( -- )
     command-line get [ which [ print ] when* ] each ;
 
-MAIN: run-which
+main: run-which

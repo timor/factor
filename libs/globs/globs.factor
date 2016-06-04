@@ -60,7 +60,7 @@ Main = Concatenation End
 ! TODO: make case-fold an option, off by default
 ! TODO: maybe make case-fold an option on regexp
 
-DEFER: glob%
+defer: glob%
 
 : glob-entries ( path -- entries )
     directory-entries [ name>> "." head? ] reject ;

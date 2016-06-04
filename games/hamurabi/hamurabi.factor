@@ -220,7 +220,7 @@ total-births total-deaths ;
     check-starvation ;
 
 : spaces ( n -- )
-    CHAR: \s <string> write ;
+    char: \s <string> write ;
 
 : welcome ( -- )
     32 spaces "HAMURABI" print
@@ -247,4 +247,4 @@ PRIVATE>
         10 [ year ] times finish
     ] [ 2drop ] recover ;
 
-MAIN: hamurabi
+main: hamurabi

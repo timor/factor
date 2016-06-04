@@ -7,8 +7,8 @@ in: rot13
 
 : rot-letter ( ch -- ch )
     {
-        { [ dup letter? ] [ CHAR: a rotate ] }
-        { [ dup LETTER? ] [ CHAR: A rotate ] }
+        { [ dup letter? ] [ char: a rotate ] }
+        { [ dup LETTER? ] [ char: A rotate ] }
         [ ]
     } cond ;
 
@@ -21,4 +21,4 @@ in: rot13
         "Rot13:       " write rot13 print
     ] when* ;
 
-MAIN: rot13-demo
+main: rot13-demo

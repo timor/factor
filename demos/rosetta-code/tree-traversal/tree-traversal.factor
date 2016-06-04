@@ -96,4 +96,4 @@ CONSTANT: example-tree
         [ "levelorder2: " write levelorder2 nl ]
     } 2cleave ;
 
-MAIN: tree-traversal-main
+main: tree-traversal-main

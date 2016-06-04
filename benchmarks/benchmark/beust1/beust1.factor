@@ -9,4 +9,4 @@ in: benchmark.beust1
 : beust1-benchmark ( -- )
     2000000 count-numbers 229050 assert= ;
 
-MAIN: beust1-benchmark
+main: beust1-benchmark

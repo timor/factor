@@ -104,4 +104,4 @@ HINTS: nbody fixnum ;
 
 : nbody-benchmark ( -- ) 1000000 nbody ;
 
-MAIN: nbody-benchmark
+main: nbody-benchmark

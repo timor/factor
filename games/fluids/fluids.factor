@@ -63,7 +63,7 @@ TUPLE: fluids-world < game-world
         0 swap [ allocate-texture-image ] 3keep 2drop
     ] bi ;
 
-SYMBOL: fluid
+symbol: fluid
 
 : integrate ( world -- )
     particles>> 1/60 integrate-particles! drop ;

@@ -6,7 +6,7 @@ in: maze
 
 CONSTANT: line-width 8
 
-SYMBOL: visited
+symbol: visited
 
 : unvisited? ( cell -- ? ) first2 visited get ?nth ?nth ;
 
@@ -61,4 +61,4 @@ M: maze pref-dim* drop { 400 400 } ;
 MAIN-WINDOW: maze-window { { title "Maze" } }
     <maze> >>gadgets ;
 
-MAIN: maze-window
+main: maze-window

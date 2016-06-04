@@ -2,7 +2,7 @@ USING: calendar continuations io kernel libc math namespaces
 threads tools.test unix.ffi unix.process unix.signals ;
 in: unix.signals.tests
 
-SYMBOL: sigusr1-count
+symbol: sigusr1-count
 0 sigusr1-count set-global
 
 CONSTANT: test-sigusr1-handler [ 1 sigusr1-count +@ ]

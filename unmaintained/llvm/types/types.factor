@@ -70,7 +70,7 @@ M: object clean drop ;
 M: enclosing clean f >>cached clean* ;
 
 ! builds the stack of types that uprefs need to refer to
-SYMBOL: types
+symbol: types
 :: push-type ( type quot: ( type -- LLVMTypeRef ) -- LLVMTypeRef )
     type types get push
     type quot call( type -- LLVMTypeRef )
@@ -140,7 +140,7 @@ M: array (tref>)*
     over LLVMGetElementType (tref>) >>type
     swap LLVMGetArrayLength >>size ;
 
-SYMBOL: ...
+symbol: ...
 TUPLE: function < enclosing return params vararg? ;
 : <function> ( ret params var? -- o )
     function new

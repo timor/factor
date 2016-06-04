@@ -7,4 +7,4 @@ in: tools.deploy.test.9
 : indirect-test ( -- )
     10 callback-test int { int } cdecl alien-indirect 11 assert= ;
 
-MAIN: indirect-test
+main: indirect-test

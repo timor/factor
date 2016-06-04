@@ -28,4 +28,4 @@ HINTS: nested-empty-loop fixnum ;
 
 : nested-empty-loop-2-benchmark ( -- ) 7 nested-empty-loop ;
 
-MAIN: nested-empty-loop-2-benchmark
+main: nested-empty-loop-2-benchmark

@@ -9,10 +9,10 @@ splitting strings system vocabs.loader vocabs.parser words
 alien.c-types alien.structs make parser continuations ;
 IN: alien.inline
 
-SYMBOL: c-library
-SYMBOL: library-is-c++
-SYMBOL: linker-args
-SYMBOL: c-strings
+symbol: c-library
+symbol: library-is-c++
+symbol: linker-args
+symbol: c-strings
 
 <PRIVATE
 : cleanup-variables ( -- )

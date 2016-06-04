@@ -4,7 +4,7 @@ USING: kernel math math.ranges math.vectors namespaces
 sequences ;
 in: math.numerical-integration
 
-SYMBOL: num-steps
+symbol: num-steps
 
 180 num-steps set-global
 

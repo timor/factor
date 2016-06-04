@@ -3,8 +3,8 @@ USING: columns combinators combinators.short-circuit generalizations io
 io.styles kernel math math.parser namespaces sequences ;
 in: sudoku
 
-SYMBOL: solutions
-SYMBOL: board
+symbol: solutions
+symbol: board
 
 : pair+ ( a b c d -- a+b c+d ) swapd [ + ] 2bi@ ;
 
@@ -22,7 +22,7 @@ SYMBOL: board
 : board-any? ( n x y -- ? )
     { [ nip row-any? ] [ drop col-any? ] [ box-any? ] } 3|| ;
 
-DEFER: search
+defer: search
 
 : assume ( n x y -- )
     [ >board ] [ [ 1 + ] dip search f ] [ >board ] 2tri ;
@@ -78,4 +78,4 @@ DEFER: search
         { f f 3 6 f f 1 f f }
     } sudoku ;
 
-MAIN: sudoku-demo
+main: sudoku-demo

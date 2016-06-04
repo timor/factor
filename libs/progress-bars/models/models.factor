@@ -5,7 +5,7 @@ kernel math models models.arrow namespaces progress-bars
 threads ui.gadgets.labels ui.gadgets.panes ;
 in: progress-bars.models
 
-SYMBOL: progress-bar
+symbol: progress-bar
 
 : set-progress-bar ( ratio/float -- )
     \ progress-bar get set-model ;
@@ -13,7 +13,7 @@ SYMBOL: progress-bar
 : with-progress-bar ( quot -- )
     [ 0 <model> \ progress-bar ] dip with-variable ; inline
 
-SYMBOL: file-size
+symbol: file-size
 
 : update-file-progress ( -- n )
     tell-input file-size get / [ set-progress-bar ] keep ;

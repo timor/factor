@@ -13,4 +13,4 @@ CUDA-FUNCTION: prefix_sum_block ( uint* in, uint* out, uint n ) ;
         ! { 1 1 1 } { 2 1 } 0 <grid-shared> prefix_sum_block
     ] with-cuda-context ;
 
-MAIN: cuda-prefix-sum
+main: cuda-prefix-sum

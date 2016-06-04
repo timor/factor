@@ -78,8 +78,8 @@ ARTICLE: "irc.client" "IRC Client"
 { $heading "Example:" }
 { $code
   "USING: irc.client irc.client.chats ;"
-  "SYMBOL: bot"
-  "SYMBOL: mychannel"
+  "symbol: bot"
+  "symbol: mychannel"
   "! Create the profile and client objects"
   "\"irc.freenode.org\" irc-port \"mybot123\" f <irc-profile> <irc-client> bot set"
   "! Connect to the server"

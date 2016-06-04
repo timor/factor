@@ -12,4 +12,4 @@ in: snake-game
 : play-snake-game ( -- )
     [ <snake-gadget> <snake-world-attributes> open-status-window ] with-ui ;
 
-MAIN: play-snake-game
+main: play-snake-game

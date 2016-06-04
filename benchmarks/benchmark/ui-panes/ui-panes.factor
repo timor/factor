@@ -4,4 +4,4 @@ in: benchmark.ui-panes
 : ui-panes-benchmark ( -- )
     [ 10000 iota [ number>string print ] each ] make-pane drop ;
 
-MAIN: ui-panes-benchmark
+main: ui-panes-benchmark

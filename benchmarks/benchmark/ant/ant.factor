@@ -54,4 +54,4 @@ C: <point> point
         ] when
     ] until total 148848 assert= ;
 
-MAIN: ant-benchmark
+main: ant-benchmark

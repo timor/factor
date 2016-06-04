@@ -6,7 +6,7 @@ USING: kernel alien io prettyprint sequences
 namespaces arrays math db.mysql.ffi system accessors ;
 IN: db.mysql.lib
 
-SYMBOL: my-conn
+symbol: my-conn
 
 TUPLE: mysql-db handle host user password db port ;
 TUPLE: mysql-statement ;

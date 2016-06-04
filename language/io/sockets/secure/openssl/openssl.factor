@@ -183,7 +183,7 @@ M: openssl-context dispose*
 
 TUPLE: ssl-handle < disposable file handle connected ;
 
-SYMBOL: default-secure-context
+symbol: default-secure-context
 
 : current-secure-context ( -- ctx )
     secure-context get [
@@ -353,7 +353,7 @@ M: ssl-handle dispose*
     "*." ?head [
         {
             [ tail? ]
-            [ [ [ CHAR: . = ] count ] bi@ - 1 <= ]
+            [ [ [ char: . = ] count ] bi@ - 1 <= ]
         } 2&&
     ] [
         =

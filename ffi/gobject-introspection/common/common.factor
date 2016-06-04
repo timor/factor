@@ -3,9 +3,9 @@
 USING: namespaces sequences ;
 in: gobject-introspection.common
 
-SYMBOL: current-namespace-name
+symbol: current-namespace-name
 
-SYMBOL: implement-structs
+symbol: implement-structs
 implement-structs [ V{ } ] initialize
 
 : implement-struct? ( c-type -- ? )

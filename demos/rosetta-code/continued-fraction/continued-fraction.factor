@@ -76,4 +76,4 @@ M: pi cfrac-b
     pi 950 cfrac-estimate 10 decimalize print ;
 PRIVATE>
 
-MAIN: main
+main: main

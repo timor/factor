@@ -28,6 +28,6 @@ GIR: vocab:gtk/Gtk-3.0.gir
 DESTRUCTOR: gtk_widget_destroy
 
 ! <workaround
-FORGET: gtk_im_context_get_preedit_string
+forget: gtk_im_context_get_preedit_string
 FUNCTION: void gtk_im_context_get_preedit_string ( GtkIMContext* imcontext, gchar** str, PangoAttrList** attrs, gint* cursor_pos ) ;
 ! workaround>

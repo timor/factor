@@ -7,13 +7,13 @@ io.styles kernel namespaces quotations see sequences sets
 sorting source-files threads vocabs words ;
 in: tools.crossref
 
-SYMBOL: crossref
+symbol: crossref
 
 GENERIC: uses ( defspec -- seq ) ;
 
 <PRIVATE
 
-SYMBOL: visited
+symbol: visited
 
 GENERIC# quot-uses 1 ( obj set -- ) ;
 

@@ -8,4 +8,4 @@ in: benchmark.mt
 
 : mt-benchmark ( -- ) 10000000 mt-bench ;
 
-MAIN: mt-benchmark
+main: mt-benchmark

@@ -16,4 +16,4 @@ in: benchmark.linked-assocs
 : linked-assocs-benchmark ( -- )
     100 [ (linked-assocs-benchmark) ] times ;
 
-MAIN: linked-assocs-benchmark
+main: linked-assocs-benchmark

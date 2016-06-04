@@ -77,4 +77,4 @@ in: gtk-samples.opengl
 
     gtk_main ;
 
-MAIN: opengl-main
+main: opengl-main

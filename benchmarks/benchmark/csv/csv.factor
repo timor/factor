@@ -7,4 +7,4 @@ in: benchmark.csv
     1,000 200 iota [ number>string ] map <array>
     [ csv>string string>csv ] keep assert= ;
 
-MAIN: csv-benchmark
+main: csv-benchmark

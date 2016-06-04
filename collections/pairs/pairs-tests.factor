@@ -1,7 +1,7 @@
 in: pairs.tests
 USING: namespaces assocs tools.test pairs ;
 
-SYMBOL: blah
+symbol: blah
 
 "blah" blah <pair> "b" set
 

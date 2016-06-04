@@ -50,4 +50,4 @@ CONSTANT: chicago-slides
 : chicago-talk ( -- )
     chicago-slides "Chicago talk" slides-window ;
 
-MAIN: chicago-talk
+main: chicago-talk

@@ -4,16 +4,16 @@ USING: assocs combinators.smart hashtables kernel math namespaces
 sequences vocabs ;
 in: tools.deploy.config
 
-SYMBOL: deploy-name
+symbol: deploy-name
 
-SYMBOL: deploy-ui?
-SYMBOL: deploy-console?
-SYMBOL: deploy-math?
-SYMBOL: deploy-unicode?
-SYMBOL: deploy-threads?
-SYMBOL: deploy-help?
+symbol: deploy-ui?
+symbol: deploy-console?
+symbol: deploy-math?
+symbol: deploy-unicode?
+symbol: deploy-threads?
+symbol: deploy-help?
 
-SYMBOL: deploy-io
+symbol: deploy-io
 
 CONSTANT: deploy-io-options
     {
@@ -26,7 +26,7 @@ CONSTANT: deploy-io-options
 
 : native-io? ( -- ? ) deploy-io get 3 = ;
 
-SYMBOL: deploy-reflection
+symbol: deploy-reflection
 
 CONSTANT: deploy-reflection-options
     {
@@ -44,12 +44,12 @@ CONSTANT: deploy-reflection-options
 : strip-dictionary? ( -- ? ) deploy-reflection get 5 < ;
 : strip-globals? ( -- ? ) deploy-reflection get 6 < ;
 
-SYMBOL: deploy-word-props?
-SYMBOL: deploy-word-defs?
-SYMBOL: deploy-c-types?
+symbol: deploy-word-props?
+symbol: deploy-word-defs?
+symbol: deploy-c-types?
 
-SYMBOL: deploy-vm
-SYMBOL: deploy-image
+symbol: deploy-vm
+symbol: deploy-image
 
 : default-config ( vocab -- assoc )
     vocab-name deploy-name associate H{
@@ -68,7 +68,7 @@ SYMBOL: deploy-image
         { "stop-after-last-window?" t }
     } assoc-union ;
 
-SYMBOL: deploy-directory
+symbol: deploy-directory
 "resource:" deploy-directory set-global
 
 : config>profile ( config -- profile )

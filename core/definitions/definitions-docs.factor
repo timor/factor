@@ -68,7 +68,7 @@ $nl
     "compilation-units"
 }
 "A parsing word to remove definitions:"
-{ $subsections postpone: FORGET: }
+{ $subsections postpone: forget: }
 { $see-also "see" "parser" "source-files" "words" "generic" "help-impl" } ;
 
 ABOUT: "definitions"

@@ -5,7 +5,7 @@ vectors assocs hashtables heaps namespaces ;
 IN: graph-theory
 
 MIXIN: graph
-SYMBOL: visited?
+symbol: visited?
 ERROR: end-search ;
 
 GENERIC: vertices ( graph -- seq ) flushable

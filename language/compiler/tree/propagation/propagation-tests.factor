@@ -774,7 +774,7 @@ M: integer infinite-loop infinite-loop ;
 
 { } [ [ reversed boa slice boa nth-unsafe * ] final-info drop ] unit-test
 
-MIXIN: empty-mixin
+mixin: empty-mixin
 
 { } [ [ { empty-mixin } declare empty-mixin? ] final-info drop ] unit-test
 
@@ -959,7 +959,7 @@ M: f whatever2 ; inline
 { t } [ [ 1 whatever2 at ] { at* hashcode* } inlined? ] unit-test
 { f } [ [ whatever2 at ] { at* hashcode* } inlined? ] unit-test
 
-SYMBOL: not-an-assoc
+symbol: not-an-assoc
 
 { f } [ [ not-an-assoc at ] { at* } inlined? ] unit-test
 

@@ -7,7 +7,7 @@ sequences.private vocabs.generated vocabs.loader vocabs.parser
 words ;
 in: specialized-arrays
 
-MIXIN: specialized-array
+mixin: specialized-array
 
 INSTANCE: specialized-array sequence
 

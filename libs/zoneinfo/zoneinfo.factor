@@ -23,7 +23,7 @@ CONSTANT: zoneinfo-paths
     "vocab:zoneinfo/leapseconds"
 }
 
-SYMBOL: last-zone
+symbol: last-zone
 
 TUPLE: raw-zone name gmt-offset rules/save format until ;
 TUPLE: raw-rule name from to type in on at-time save letters ;
@@ -155,7 +155,7 @@ ERROR: zone-not-found name ;
 : on>value ( n -- n' )
     ! "3", "Thu>=8" always >=, "lastFri"
     {
-        { [ dup 3 swap ?nth CHAR: > = ] [
+        { [ dup 3 swap ?nth char: > = ] [
             3 cut 2 tail [ day-abbreviation3-predicate ] [ string>number ] bi* 2array
         ] }
         { [ dup "last" head? ] [ 4 tail day-abbreviation3-index ] }

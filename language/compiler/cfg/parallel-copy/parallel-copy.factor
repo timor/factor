@@ -56,7 +56,7 @@ PRIVATE>
 
 <PRIVATE
 
-SYMBOL: temp-vregs
+symbol: temp-vregs
 
 : temp-vreg ( rep -- vreg )
     temp-vregs get [ next-vreg-rep ] cache

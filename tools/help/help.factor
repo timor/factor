@@ -142,7 +142,7 @@ M: word set-article-parent swap "help-parent" set-word-prop ;
     [ $title ($blank-line) ]
     [ article-content print-content nl ] bi ;
 
-SYMBOL: help-hook
+symbol: help-hook
 
 help-hook [ [ print-topic ] ] initialize
 

@@ -105,7 +105,7 @@ M: regexp text-matches?
         ] if
     ] if ;
 
-DEFER: get-rules
+defer: get-rules
 
 : get-always-rules ( vector/f ruleset -- vector/f )
     f swap rules>> at ?push-all ;

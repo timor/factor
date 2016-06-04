@@ -154,4 +154,4 @@ M: utf8-gadget render-cairo* ( gadget -- )
     }
     [ new { 256 256 } >>dim gadget. ] each ;
 
-MAIN: samples
+main: samples

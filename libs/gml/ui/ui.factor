@@ -118,4 +118,4 @@ M: gml-editor focusable-child* editor>> ;
 : gml-editor-window ( -- )
     <gml-editor> "Generative Modeling Language" open-window ;
 
-MAIN: gml-editor-window
+main: gml-editor-window

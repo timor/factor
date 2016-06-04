@@ -133,7 +133,7 @@ M: object execute-statement* ( statement type -- )
     dup string? [ (sql-command) ] [ [ (sql-command) ] each ] if ;
 
 ! Transactions
-SYMBOL: in-transaction
+symbol: in-transaction
 
 HOOK: begin-transaction db-connection ( -- ) ;
 HOOK: commit-transaction db-connection ( -- ) ;

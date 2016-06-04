@@ -15,7 +15,7 @@ GENERIC# prompt. 1 ( stream prompt -- ) ;
     manifest get current-vocab>> [ name>> "in: " prepend ] [ "" ] if*
     auto-use? get [ " auto-use" append ] when ;
 
-SYMBOL: prompt-style
+symbol: prompt-style
 H{
     { background T{ rgba f 1 0.7 0.7 1 } }
     { foreground COLOR: black }
@@ -47,7 +47,7 @@ M: object stream-read-quot
 
 : read-quot ( -- quot/f ) input-stream get stream-read-quot ;
 
-SYMBOL: visible-vars
+symbol: visible-vars
 
 : show-var ( var -- ) visible-vars [ swap suffix ] change ;
 
@@ -59,7 +59,7 @@ SYMBOL: visible-vars
 
 : hide-all-vars ( -- ) visible-vars off ;
 
-SYMBOL: error-hook
+symbol: error-hook
 
 : call-error-hook ( error -- )
     error-continuation get error-hook get
@@ -67,15 +67,15 @@ SYMBOL: error-hook
 
 [ drop print-error-and-restarts ] error-hook set-global
 
-SYMBOL: display-stacks?
+symbol: display-stacks?
 
 t display-stacks? set-global
 
-SYMBOL: max-stack-items
+symbol: max-stack-items
 
 10 max-stack-items set-global
 
-SYMBOL: error-summary?
+symbol: error-summary?
 
 t error-summary? set-global
 
@@ -136,7 +136,7 @@ t error-summary? set-global
 
 PRIVATE>
 
-SYMBOL: interactive-vocabs
+symbol: interactive-vocabs
 
 {
     "accessors"
@@ -221,4 +221,4 @@ SYMBOL: interactive-vocabs
 : listener-main ( -- )
     version-info print flush listener ;
 
-MAIN: listener-main
+main: listener-main

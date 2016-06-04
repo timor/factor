@@ -54,7 +54,7 @@ ARTICLE: "deferred" "Deferred words and mutual recursion"
 "Words cannot be referenced before they are defined; that is, source files must order definitions in a strictly bottom-up fashion. This is done to simplify the implementation, facilitate better parse time checking and remove some odd corner cases; it also encourages better coding style."
 $nl
 "Sometimes this restriction gets in the way, for example when defining mutually-recursive words; one way to get around this limitation is to make a forward definition."
-{ $subsections postpone: DEFER: }
+{ $subsections postpone: defer: }
 "The class of deferred word definitions:"
 { $subsections
     deferred
@@ -64,7 +64,7 @@ $nl
 { $subsections undefined }
 "Deferred words are just compound definitions in disguise. The following two lines are equivalent:"
 { $code
-    "DEFER: foo"
+    "defer: foo"
     ": foo ( -- * ) undefined ;"
 } ;
 
@@ -232,15 +232,15 @@ HELP: changed-effect
 { $description "Signals to the compilation unit that the word has changed. It causes all words that depend on it to be recompiled in response." } ;
 
 HELP: deferred
-{ $class-description "The class of deferred words created by " { $link postpone: DEFER: } "." } ;
+{ $class-description "The class of deferred words created by " { $link postpone: defer: } "." } ;
 
-{ deferred postpone: DEFER: } related-words
+{ deferred postpone: defer: } related-words
 
 HELP: undefined
 { $error-description "This error is thrown in two cases, and the debugger's summary message reflects the cause:"
     { $list
         { "A word was executed before being compiled. For example, this can happen if a macro is defined in the same compilation unit where it was used. See " { $link "compilation-units" } " for a discussion." }
-        { "A word defined with " { $link postpone: DEFER: } " was executed. Since this syntax is usually used for mutually-recursive word definitions, executing a deferred word usually indicates a programmer mistake." }
+        { "A word defined with " { $link postpone: defer: } " was executed. Since this syntax is usually used for mutually-recursive word definitions, executing a deferred word usually indicates a programmer mistake." }
     }
 } ;
 
@@ -348,7 +348,7 @@ HELP: constructor-word
 { $notes "This word must be called from inside " { $link with-compilation-unit } "." }
 { $examples { $example "USING: compiler.units prettyprint words ;" "[ \"salmon\" \"scratchpad\" constructor-word ] with-compilation-unit ." "<salmon>" } } ;
 
-{ postpone: FORGET: forget forget* forget-vocab } related-words
+{ postpone: forget: forget forget* forget-vocab } related-words
 
 HELP: target-word
 { $values { "word" word } { "target" word } }

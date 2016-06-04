@@ -52,4 +52,4 @@ TYPED: spectral-norm ( n: fixnum -- norm )
 : spectral-norm-benchmark ( -- )
     2000 spectral-norm number>string print ;
 
-MAIN: spectral-norm-benchmark
+main: spectral-norm-benchmark

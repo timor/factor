@@ -7,7 +7,7 @@ in: compiler.tree.escape-analysis.nodes
 
 GENERIC: escape-analysis* ( node -- ) ;
 
-SYMBOL: next-node
+symbol: next-node
 
 : each-with-next ( ... seq quot: ( ... elt -- ... ) -- ... )
     dupd '[ 1 + _ ?nth next-node set @ ] each-index ; inline

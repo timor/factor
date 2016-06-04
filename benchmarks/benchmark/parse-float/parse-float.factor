@@ -9,4 +9,4 @@ CONSTANT: test-floats $[ 100,000 random-units ]
         [ number>string string>number ] [ 1e-10 ~ t assert= ] bi
     ] each ;
 
-MAIN: parse-float-benchmark
+main: parse-float-benchmark

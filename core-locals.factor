@@ -2,29 +2,29 @@ auto-use
 in: syntax
 USE: delegate.private
 
-<< FORGET: POSTPONE: MACRO: >>
-<< FORGET: POSTPONE: MACRO:: >>
-<< FORGET: POSTPONE: MEMO: >>
-<< FORGET: POSTPONE: MEMO:: >>
-<< FORGET: POSTPONE: M:: >>
-<< FORGET: POSTPONE: IDENTITY-MEMO: >>
-<< FORGET: POSTPONE: IDENTITY-MEMO:: >>
-<< FORGET: POSTPONE: TYPED: >>
-<< FORGET: POSTPONE: TYPED:: >>
+<< forget: POSTPONE: MACRO: >>
+<< forget: POSTPONE: MACRO:: >>
+<< forget: POSTPONE: MEMO: >>
+<< forget: POSTPONE: MEMO:: >>
+<< forget: POSTPONE: M:: >>
+<< forget: POSTPONE: IDENTITY-MEMO: >>
+<< forget: POSTPONE: IDENTITY-MEMO:: >>
+<< forget: POSTPONE: TYPED: >>
+<< forget: POSTPONE: TYPED:: >>
 
-<< FORGET: POSTPONE: '[ >>
-<< FORGET: POSTPONE: :: >>
-<< FORGET: POSTPONE: :> >>
-<< FORGET: _ >>
-<< FORGET: @ >>
-<< FORGET: POSTPONE: [| >>
-<< FORGET: POSTPONE: [let >>
-<< FORGET: POSTPONE: IH{ >>
-<< FORGET: POSTPONE: PROTOCOL: >>
-<< FORGET: POSTPONE: CONSULT: >>
-<< FORGET: POSTPONE: BROADCAST: >>
-<< FORGET: POSTPONE: SLOT-PROTOCOL: >>
-<< FORGET: POSTPONE: HINTS: >>
+<< forget: POSTPONE: '[ >>
+<< forget: POSTPONE: :: >>
+<< forget: POSTPONE: :> >>
+<< forget: _ >>
+<< forget: @ >>
+<< forget: POSTPONE: [| >>
+<< forget: POSTPONE: [let >>
+<< forget: POSTPONE: IH{ >>
+<< forget: POSTPONE: PROTOCOL: >>
+<< forget: POSTPONE: CONSULT: >>
+<< forget: POSTPONE: BROADCAST: >>
+<< forget: POSTPONE: SLOT-PROTOCOL: >>
+<< forget: POSTPONE: HINTS: >>
 
 
 
@@ -92,7 +92,7 @@ SYNTAX: HINTS:
  "/Users/erg/factor/core/locals" t recursive-directory-files
 [ "/Users/erg/factor/core/" ?head drop ] map
 [ "." swap subseq? ] reject
-[ H{ { CHAR: / CHAR: . } } substitute ] map
+[ H{ { char: / char: . } } substitute ] map
 [ vocab-exists? ] filter
 [ reload ] each
 
@@ -102,7 +102,7 @@ SYNTAX: HINTS:
  "/Users/erg/factor/core/stack-checker" t recursive-directory-files
 [ "/Users/erg/factor/core/" ?head drop ] map
 [ "." swap subseq? ] reject
-[ H{ { CHAR: / CHAR: . } } substitute ] map
+[ H{ { char: / char: . } } substitute ] map
 [ vocab-exists? ] filter
 [ reload ] each
 
@@ -130,7 +130,7 @@ MD5 (boot.unix-x86.64.image) = 9fa82ffeeb8eebf763327205a78c4597
  "/Users/erg/factor/core/" t recursive-directory-files
 [ "/Users/erg/factor/core/" ?head drop ] map
 [ "." swap subseq? ] reject
-[ H{ { CHAR: / CHAR: . } } substitute ] map
+[ H{ { char: / char: . } } substitute ] map
 [ vocab-exists? ] filter
 
 
@@ -138,7 +138,7 @@ MD5 (boot.unix-x86.64.image) = 9fa82ffeeb8eebf763327205a78c4597
 string-lines
 [ " " split1 nip ] map
 [ "resource:core/" ?head drop ] map
-[ H{ { CHAR: / CHAR: . } } substitute ] map
+[ H{ { char: / char: . } } substitute ] map
 [ "." split but-last but-last  "." join ] map
 
 2dup diff

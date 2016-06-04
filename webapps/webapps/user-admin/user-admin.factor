@@ -142,7 +142,7 @@ TUPLE: user-admin < dispatcher ;
             URL" $user-admin" <redirect>
         ] >>submit ;
 
-SYMBOL: can-administer-users?
+symbol: can-administer-users?
 
 can-administer-users? define-capability
 

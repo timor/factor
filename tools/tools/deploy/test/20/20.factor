@@ -7,4 +7,4 @@ in: tools.deploy.test.20
 : main ( -- )
     "Factor" test-xml print ;
 
-MAIN: main
+main: main

@@ -78,9 +78,9 @@ TUPLE: range ufirst ulast bfirst blast ;
 : ranges-gb>u ( ranges -- interval-map )
     [ bfirst>> ] [ blast>> ] [ ] >interval-map-by ;
 
-SYMBOL: gb>u
-SYMBOL: u>gb
-SYMBOL: mapping
+symbol: gb>u
+symbol: u>gb
+symbol: mapping
 
 "vocab:io/encodings/gb18030/gb-18030-2000.xml"
 ascii <file-reader> xml>gb-data

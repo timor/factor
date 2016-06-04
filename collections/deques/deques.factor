@@ -52,4 +52,4 @@ ERROR: empty-deque ;
     [ '[ _ pop-back @ ] ]
     2bi until ; inline
 
-MIXIN: deque
+mixin: deque

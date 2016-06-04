@@ -5,7 +5,7 @@ kernel lexer make namespaces parser sequences sets
 splitting vocabs.parser words ;
 in: effects.parser
 
-DEFER: parse-effect
+defer: parse-effect
 
 ERROR: bad-effect ;
 ERROR: invalid-row-variable ;

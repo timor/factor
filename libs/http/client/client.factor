@@ -109,9 +109,9 @@ ERROR: download-failed response ;
     read-response-line
     read-response-header ;
 
-DEFER: (with-http-request)
+defer: (with-http-request)
 
-SYMBOL: redirects
+symbol: redirects
 
 : redirect-url ( request url -- request )
     '[ _ >url derive-url ensure-port ] change-url ;

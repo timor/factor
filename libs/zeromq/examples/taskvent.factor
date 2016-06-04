@@ -41,4 +41,4 @@ in: zeromq.examples.taskvent
         drop
     ] with-destructors ;
 
-MAIN: taskvent
+main: taskvent

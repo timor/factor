@@ -7,8 +7,8 @@ USING: assocs continuations hashtables kernel math namespaces pdf.libhpdf ;
 
 IN: pdf
 
-SYMBOL: pdf
-SYMBOL: page
+symbol: pdf
+symbol: page
 
 ! =========================================================
 ! Error handling routines

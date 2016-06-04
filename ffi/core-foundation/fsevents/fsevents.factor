@@ -162,7 +162,7 @@ C-GLOBAL: void* kCFRunLoopCommonModes
     dup FSEventStreamStop
     unschedule-event-stream ;
 
-SYMBOL: event-stream-callbacks
+symbol: event-stream-callbacks
 
 : event-stream-counter ( -- n )
     \ event-stream-counter counter ;

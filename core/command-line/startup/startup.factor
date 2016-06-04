@@ -10,7 +10,7 @@ in: command-line.startup
 Common arguments:
     -help               print this message and exit
     -i=<image>          load Factor image file <image> (default " write vm-path file-stem write ".image)
-    -run=<vocab>        run the MAIN: entry point of <vocab>
+    -run=<vocab>        run the main: entry point of <vocab>
         -run=listener   run terminal listener
         -run=ui.tools   run Factor development UI
     -e=<code>           evaluate <code>

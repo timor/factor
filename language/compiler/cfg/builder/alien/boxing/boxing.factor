@@ -8,7 +8,7 @@ locals math namespaces sequences system ;
 QUALIFIED-WITH: alien.c-types c
 in: compiler.cfg.builder.alien.boxing
 
-SYMBOL: struct-return-area
+symbol: struct-return-area
 
 ! pairs have shape { rep on-stack? }
 GENERIC: flatten-c-type ( c-type -- pairs ) ;

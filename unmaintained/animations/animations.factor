@@ -4,8 +4,8 @@ USING: kernel shuffle system locals
 prettyprint math io namespaces threads calendar ;
 IN: animations
 
-SYMBOL: last-loop
-SYMBOL: sleep-period
+symbol: last-loop
+symbol: sleep-period
 
 : reset-progress ( -- ) millis last-loop set ;
 ! : my-progress ( -- progress ) millis 

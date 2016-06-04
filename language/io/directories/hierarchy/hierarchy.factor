@@ -29,7 +29,7 @@ PRIVATE>
         bi
     ] [ delete-file ] if ;
 
-DEFER: copy-trees-into
+defer: copy-trees-into
 
 : copy-tree ( from to -- )
     normalize-path

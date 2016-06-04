@@ -76,7 +76,7 @@ ERROR: has-rings face ;
 
 PRIVATE>
 
-MIXIN: point
+mixin: point
 INSTANCE: sequence point
 INSTANCE: number point
 

@@ -18,4 +18,4 @@ in: rosetta-code.web-scraping
     "http://tycho.usno.navy.mil/cgi-bin/timer.pl" http-get nip
     [ "UTC" swap start [ 9 - ] [ 1 - ] bi ] keep subseq print ;
 
-MAIN: web-scraping-main
+main: web-scraping-main

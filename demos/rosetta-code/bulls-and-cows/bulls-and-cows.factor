@@ -87,4 +87,4 @@ TUPLE: bull ;
 
 : bulls-and-cows-main ( -- ) new-number drop narr>nhash main-loop ;
 
-MAIN: bulls-and-cows-main
+main: bulls-and-cows-main

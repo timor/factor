@@ -9,7 +9,7 @@ in: help.topics.tests
 
 { } [ "Test A" { { $subsection { "test" "b" } } } <article> { "test" "a" } add-article ] unit-test
 
-SYMBOL: foo
+symbol: foo
 
 { } [ "Test A" { { $subsection foo } } <article> { "test" "a" } add-article ] unit-test
 

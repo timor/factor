@@ -6,4 +6,4 @@ in: benchmark.tcp-echo2
 : tcp-echo2-benchmark ( -- )
     5,000 1450 tcp-echo-benchmark ;
 
-MAIN: tcp-echo2-benchmark
+main: tcp-echo2-benchmark

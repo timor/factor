@@ -40,14 +40,14 @@ TUPLE: quadtree { bounds rect } point value ll lr ul ur leaf? ;
 
 <PRIVATE
 
-DEFER: (prune)
-DEFER: insert
-DEFER: erase
-DEFER: at-point
-DEFER: quadtree>alist
-DEFER: quadtree-size
-DEFER: node-insert
-DEFER: in-rect*
+defer: (prune)
+defer: insert
+defer: erase
+defer: at-point
+defer: quadtree>alist
+defer: quadtree-size
+defer: node-insert
+defer: in-rect*
 
 : child-dim ( rect -- dim/2 ) dim>> 0.5 v*n ; inline
 : ll-bounds ( rect -- rect' )

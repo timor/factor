@@ -5,7 +5,7 @@ compiler.tree.propagation.copy compiler.tree.propagation.info
 kernel namespaces sequences ;
 in: compiler.tree.propagation.constraints
 
-SYMBOL: constraints
+symbol: constraints
 
 GENERIC: assume* ( constraint -- ) ;
 GENERIC: satisfied? ( constraint -- ? ) ;

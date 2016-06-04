@@ -4,13 +4,13 @@ USING: accessors assocs combinators disjoint-sets fry kernel
 namespaces sequences stack-checker.values ;
 in: compiler.tree.escape-analysis.allocations
 
-SYMBOL: value-classes
+symbol: value-classes
 
 : value-class ( value -- class ) value-classes get at ;
 
 : set-value-class ( class value -- ) value-classes get set-at ;
 
-SYMBOL: allocations
+symbol: allocations
 
 : (allocation) ( -- allocations )
     allocations get ; inline
@@ -24,7 +24,7 @@ SYMBOL: allocations
 : record-allocations ( allocations values -- )
     (allocation) '[ _ set-at ] 2each ;
 
-SYMBOL: slot-accesses
+symbol: slot-accesses
 
 TUPLE: slot-access slot# value ;
 
@@ -33,9 +33,9 @@ C: <slot-access> slot-access
 : record-slot-access ( out slot# in -- )
     <slot-access> swap slot-accesses get set-at ;
 
-SYMBOL: escaping-values
+symbol: escaping-values
 
-SYMBOL: +escaping+
+symbol: +escaping+
 
 : <escaping-values> ( -- disjoint-set )
     <disjoint-set> +escaping+ over add-atom ;
@@ -92,7 +92,7 @@ SYMBOL: +escaping+
 : escaping-value? ( value -- ? )
     escaping-values get (escaping-value?) ;
 
-DEFER: copy-value
+defer: copy-value
 
 : copy-allocation ( allocation -- allocation' )
     {
@@ -116,7 +116,7 @@ DEFER: copy-value
         [ nth swap copy-value ]
     } cond ;
 
-SYMBOL: escaping-allocations
+symbol: escaping-allocations
 
 : compute-escaping-allocations ( -- )
     allocations get escaping-values get

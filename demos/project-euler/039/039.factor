@@ -29,7 +29,7 @@ in: project-euler.039
 ! for non-primitive triples). The answer is just the index that has the highest
 ! number.
 
-SYMBOL: p-count
+symbol: p-count
 
 <PRIVATE
 

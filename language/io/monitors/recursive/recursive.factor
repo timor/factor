@@ -13,7 +13,7 @@ TUPLE: recursive-monitor < monitor children thread ready ;
 
 : notify? ( -- ? ) monitor tget ready>> promise-fulfilled? ;
 
-DEFER: add-child-monitor
+defer: add-child-monitor
 
 : qualify-path ( path -- path' )
     monitor tget path>> prepend-path ;
@@ -40,7 +40,7 @@ DEFER: add-child-monitor
 : remove-child-monitor ( monitor -- )
     monitor tget children>> delete-at* [ dispose ] [ drop ] if ;
 
-SYMBOL: +stop+
+symbol: +stop+
 
 M: recursive-monitor dispose*
     [ [ +stop+ ] dip thread>> send ] [ call-next-method ] bi ;

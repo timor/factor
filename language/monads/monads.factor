@@ -13,7 +13,7 @@ GENERIC# $> 1 ( functor quot -- functor' ) ;
 ! Monads
 
 ! Mixin type for monad singleton classes, used for return/fail only
-MIXIN: monad
+mixin: monad
 
 GENERIC: monad-of ( mvalue -- singleton ) ;
 GENERIC: return ( value singleton -- mvalue ) ;

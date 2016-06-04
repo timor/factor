@@ -8,4 +8,4 @@ in: benchmark.sfmt
 
 : sfmt-benchmark ( -- ) 10000000 sfmt-bench ;
 
-MAIN: sfmt-benchmark
+main: sfmt-benchmark

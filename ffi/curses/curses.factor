@@ -10,7 +10,7 @@ QUALIFIED-WITH: curses.ffi ffi
 
 in: curses
 
-SYMBOL: current-window
+symbol: current-window
 
 CONSTANT: COLOR_BLACK 0
 CONSTANT: COLOR_RED   1
@@ -235,7 +235,7 @@ M: curses-window dispose* ( window -- )
     [ echo>> [ ffi:echo ] [ ffi:noecho ] if curses-error ]
     bi ;
 
-SYMBOL: n-registered-colors
+symbol: n-registered-colors
 
 MEMO: register-color ( fg bg -- n )
     [ n-registered-colors get dup ] 2dip ffi:init_pair curses-error
@@ -328,18 +328,18 @@ PRIVATE>
 : waddch ( ch window -- ) ptr>> (waddch) ;
 : addch ( ch -- ) current-window get waddch ;
 
-: wcnl ( window -- ) [ CHAR: \n ] dip waddch ;
+: wcnl ( window -- ) [ char: \n ] dip waddch ;
 : cnl ( -- ) current-window get wcnl ;
 
 : wcwrite ( string window -- ) ptr>> (wcwrite) ;
 : cwrite ( string -- ) current-window get wcwrite ;
 
 : wcprint ( string window -- )
-    ptr>> [ (wcwrite) ] [ CHAR: \n swap (waddch) ] bi ;
+    ptr>> [ (wcwrite) ] [ char: \n swap (waddch) ] bi ;
 : cprint ( string -- ) current-window get wcprint ;
 
 : wcprintf ( string window -- )
-    ptr>> [ (wcwrite) ] [ CHAR: \n swap (waddch) ]
+    ptr>> [ (wcwrite) ] [ char: \n swap (waddch) ]
     [ (wcrefresh) ] tri ;
 : cprintf ( string -- ) current-window get wcprintf ;
 

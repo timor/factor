@@ -16,13 +16,13 @@ TUPLE: template-lexer < lexer ;
 M: template-lexer skip-word
     [
         {
-            { [ 2dup nth CHAR: " = ] [ drop 1 + ] }
+            { [ 2dup nth char: " = ] [ drop 1 + ] }
             { [ 2dup swap tail-slice "%>" head? ] [ drop 2 + ] }
             [ f skip ]
         } cond
     ] change-lexer-column ;
 
-DEFER: <% delimiter
+defer: <% delimiter
 
 : check-<% ( lexer -- col )
     "<%" swap [ line-text>> ] [ column>> ] bi start* ;

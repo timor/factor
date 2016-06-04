@@ -11,7 +11,7 @@ sequences.deep ;
 QUALIFIED-WITH: bitstreams bs
 IN: images.jpeg
 
-SINGLETON: jpeg-image
+singleton: jpeg-image
 
 TUPLE: loading-jpeg < image
     { headers }

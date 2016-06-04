@@ -18,7 +18,7 @@ CONSTRUCTOR: <toid> toid ( value key -- toid ) ;
 
 FROM: mongodb.tuple => +transient+ +load+ <tuple-index> ;
 
-MIXIN: mdb-persistent
+mixin: mdb-persistent
 
 SLOT: id
 SLOT: _id

@@ -18,7 +18,7 @@ in: vocabs.refresh
         exists?
     ] ?if ;
 
-SYMBOL: changed-vocabs
+symbol: changed-vocabs
 
 : changed-vocab ( vocab -- )
     dup lookup-vocab changed-vocabs get and

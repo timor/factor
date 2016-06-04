@@ -30,7 +30,7 @@ in: compiler.tree.normalization.tests
 
 { } [ [ [ 1 ] [ 2 ] if + * ] test-normalization ] unit-test
 
-DEFER: bbb
+defer: bbb
 : aaa ( obj x -- obj ) dup [ dup [ bbb ] dip aaa ] [ drop ] if ; inline recursive
 : bbb ( obj x -- obj ) [ drop 0 ] dip aaa ; inline recursive
 
@@ -40,7 +40,7 @@ DEFER: bbb
 
 { } [ [ ccc ] test-normalization ] unit-test
 
-DEFER: eee
+defer: eee
 : ddd ( a b -- a b ) eee ; inline recursive
 : eee ( a b -- a b ) swap ddd ; inline recursive
 

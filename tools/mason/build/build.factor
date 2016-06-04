@@ -51,4 +51,4 @@ in: mason.build
     ] [ cleanup-build ] [ ] cleanup
     notify-idle ;
 
-MAIN: do-build
+main: do-build

@@ -10,7 +10,7 @@ in: cursors
 ! basic cursor protocol
 !
 
-MIXIN: cursor
+mixin: cursor
 
 GENERIC: cursor-compatible? ( cursor cursor -- ? ) ;
 GENERIC: cursor-valid? ( cursor -- ? ) ;
@@ -27,17 +27,17 @@ M: cursor cursor-distance-hint 2drop 0 ; inline
 ! cursor iteration
 !
 
-MIXIN: forward-cursor
+mixin: forward-cursor
 INSTANCE: forward-cursor cursor
 
 GENERIC: inc-cursor ( cursor -- cursor' ) ;
 
-MIXIN: bidirectional-cursor
+mixin: bidirectional-cursor
 INSTANCE: bidirectional-cursor forward-cursor
 
 GENERIC: dec-cursor ( cursor -- cursor' ) ;
 
-MIXIN: random-access-cursor
+mixin: random-access-cursor
 INSTANCE: random-access-cursor bidirectional-cursor
 
 GENERIC# cursor+ 1 ( cursor n -- cursor' ) ;
@@ -59,7 +59,7 @@ M: random-access-cursor cursor-distance-hint cursor-distance ; inline
 
 ERROR: invalid-cursor cursor ;
 
-MIXIN: input-cursor
+mixin: input-cursor
 
 GENERIC: cursor-key-value ( cursor -- key value ) ;
 <PRIVATE
@@ -81,7 +81,7 @@ M: input-cursor cursor-key-value
 ! output cursors
 !
 
-MIXIN: output-cursor
+mixin: output-cursor
 
 GENERIC: set-cursor-value ( value cursor -- ) ;
 <PRIVATE
@@ -97,19 +97,19 @@ M: output-cursor set-cursor-value
 ! stream cursors
 !
 
-MIXIN: stream-cursor
+mixin: stream-cursor
 INSTANCE: stream-cursor forward-cursor
 
 M: stream-cursor cursor-compatible? 2drop f ; inline
 M: stream-cursor cursor-valid? drop t ; inline
 M: stream-cursor cursor= 2drop f ; inline
 
-MIXIN: infinite-stream-cursor
+mixin: infinite-stream-cursor
 INSTANCE: infinite-stream-cursor stream-cursor
 
 M: infinite-stream-cursor inc-cursor ; inline
 
-MIXIN: finite-stream-cursor
+mixin: finite-stream-cursor
 INSTANCE: finite-stream-cursor stream-cursor
 
 singleton: end-of-stream
@@ -221,7 +221,7 @@ M: quadratic-cursor dec-cursor
 ! collections
 !
 
-MIXIN: collection
+mixin: collection
 
 GENERIC: begin-cursor ( collection -- cursor ) ;
 GENERIC: end-cursor ( collection -- cursor ) ;
@@ -236,7 +236,7 @@ GENERIC: end-cursor ( collection -- cursor ) ;
 ! containers
 !
 
-MIXIN: container
+mixin: container
 INSTANCE: container collection
 
 : in- ( container quot -- begin end quot' )

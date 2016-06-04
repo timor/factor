@@ -47,4 +47,4 @@ M: object g drop "object" ;
 : dispatch3-benchmark ( -- )
     2000000 objects [ [ g drop ] each ] curry times ;
 
-MAIN: dispatch3-benchmark
+main: dispatch3-benchmark

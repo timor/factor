@@ -3,7 +3,7 @@
 USING: compiler.utilities kernel namespaces ;
 in: compiler.cfg.ssa.destruction.leaders
 
-SYMBOL: leader-map
+symbol: leader-map
 
 : leader ( vreg -- vreg' ) leader-map get compress-path ;
 

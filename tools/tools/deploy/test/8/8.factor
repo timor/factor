@@ -18,4 +18,4 @@ AFTER: my-world end-world drop close-game-input ;
         0 exit
     ] with-ui ;
 
-MAIN: test-game-input
+main: test-game-input

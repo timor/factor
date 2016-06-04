@@ -7,13 +7,13 @@ io.encodings.utf8 io.files io.streams.string kernel literals
 math namespaces sequences strings ;
 in: io.encodings.detect
 
-SYMBOL: default-8bit-encoding
+symbol: default-8bit-encoding
 default-8bit-encoding [ latin1 ] initialize
 
 <PRIVATE
 
 : prolog-tag ( bytes -- string )
-    CHAR: > over index [ 1 + head-slice ] when* >string ;
+    char: > over index [ 1 + head-slice ] when* >string ;
 
 : prolog-encoding ( string -- iana-encoding )
     '[

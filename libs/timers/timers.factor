@@ -35,7 +35,7 @@ TYPED: set-next-timer-time ( timer: timer -- timer )
 TYPED: stop-timer? ( timer: timer -- ? )
     { [ thread>> self eq? not ] [ restart?>> ] } 1|| ; inline
 
-DEFER: call-timer-loop
+defer: call-timer-loop
 
 TYPED: loop-timer ( timer: timer -- )
     nano-count over

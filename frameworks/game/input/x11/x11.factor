@@ -92,7 +92,7 @@ M: x11-game-input-backend read-keyboard
     [ XQueryPointer drop ] with-out-parameters
     [ 4 ndrop ] 3dip ;
 
-SYMBOL: mouse-reset?
+symbol: mouse-reset?
 
 M: x11-game-input-backend read-mouse
     mouse-reset? get [ reset-mouse ] unless

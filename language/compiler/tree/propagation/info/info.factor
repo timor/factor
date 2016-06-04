@@ -48,7 +48,7 @@ CONSTANT: object-info T{ value-info-state f object full-interval }
 
 : <value-info> ( -- info ) \ value-info-state new ; inline
 
-DEFER: <literal-info>
+defer: <literal-info>
 
 : tuple-slot-infos ( tuple -- slots )
     [ tuple-slots ] [ class-of all-slots ] bi
@@ -183,9 +183,9 @@ UNION: fixed-length array byte-array string ;
         [ drop >literal< ]
     } cond ;
 
-DEFER: value-info-intersect
+defer: value-info-intersect
 
-DEFER: (value-info-intersect)
+defer: (value-info-intersect)
 
 : intersect-slot ( info1 info2 -- info )
     {
@@ -226,9 +226,9 @@ DEFER: (value-info-intersect)
         [ literal>> ] bi@ 2dup eql? [ drop t ] [ 2drop f f ] if
     ] [ 2drop f f ] if ;
 
-DEFER: value-info-union
+defer: value-info-union
 
-DEFER: (value-info-union)
+defer: (value-info-union)
 
 : union-slot ( info1 info2 -- info )
     {
@@ -270,7 +270,7 @@ DEFER: (value-info-union)
         [ [ literal>> ] bi@ eql? ]
     } cond ;
 
-DEFER: value-info<=
+defer: value-info<=
 
 : slots<= ( info1 info2 -- ? )
     2dup [ class>> ] bi@ class< [ 2drop t ] [
@@ -286,7 +286,7 @@ DEFER: value-info<=
         [ slots<= ]
     } 2&& ;
 
-SYMBOL: value-infos
+symbol: value-infos
 
 : value-info* ( value -- info ? )
     resolve-copy value-infos get assoc-stack

@@ -8,7 +8,7 @@ TUPLE: link name ;
 
 INSTANCE: link definition-mixin
 
-MIXIN: topic
+mixin: topic
 
 INSTANCE: link topic
 
@@ -30,11 +30,11 @@ M: link summary
     ] "" make ;
 
 ! Help articles
-SYMBOL: articles
+symbol: articles
 
 articles [ H{ } clone ] initialize
 
-SYMBOL: article-xref
+symbol: article-xref
 
 article-xref [ H{ } clone ] initialize
 

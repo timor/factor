@@ -4,7 +4,7 @@ USING: io.encodings.binary io.streams.byte-array kernel
 checksums ;
 in: checksums.stream
 
-MIXIN: stream-checksum
+mixin: stream-checksum
 
 M: stream-checksum checksum-bytes
     [ binary <byte-reader> ] dip checksum-stream ;

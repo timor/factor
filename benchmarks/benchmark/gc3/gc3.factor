@@ -8,4 +8,4 @@ in: benchmark.gc3
     1000000 <hashtable>
     '[ [ number>string ] keep _ set-at ] each ;
 
-MAIN: gc3-benchmark
+main: gc3-benchmark

@@ -362,7 +362,7 @@ CONSTANT: halfLogTwoPi 0.91893853320467274178032973640562
 
 PRIVATE>
 
-DEFER: gamma
+defer: gamma
 
 :: log-gamma ( x -- value )
     x 0 <= [ "Invalid input" throw ] when

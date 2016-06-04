@@ -7,7 +7,7 @@ FROM: memory => gc ;
 
 in: mongodb.benchmark
 
-SYMBOL: collection
+symbol: collection
 
 : get* ( symbol default -- value )
     [ get ] dip or ; inline
@@ -311,4 +311,4 @@ CONSTANT: DOC-LARGE H{ { "base_url" "http://www.example.com/test-me" }
       { { } { index } } run-find-range-bench
     ] with-db ;
 
-MAIN: run-benchmarks
+main: run-benchmarks

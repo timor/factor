@@ -64,4 +64,4 @@ PRIVATE>
 : run-unix-factor ( -- )
     [ readln [ unix-factor t ] [ f ] if* ] loop ;
 
-MAIN: run-unix-factor
+main: run-unix-factor

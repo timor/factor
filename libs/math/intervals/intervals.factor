@@ -5,7 +5,7 @@ USING: accessors kernel sequences arrays math math.order
 combinators combinators.short-circuit generic layouts memoize ;
 in: math.intervals
 
-SYMBOL: empty-interval
+symbol: empty-interval
 
 singleton: full-interval
 
@@ -309,7 +309,7 @@ MEMO: array-capacity-interval ( -- interval )
 
 : interval-2/ ( i1 -- i2 ) -1 [a,a] interval-shift ;
 
-SYMBOL: incomparable
+symbol: incomparable
 
 : left-endpoint-< ( i1 i2 -- ? )
     {

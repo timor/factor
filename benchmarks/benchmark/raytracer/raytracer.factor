@@ -120,7 +120,7 @@ CONSTANT: initial-hit T{ hit f double-array{ 0.0 0.0 0.0 } 1/0. }
 : create-center ( c r d -- c2 )
     [ 3.0 12.0 sqrt / * ] dip n*v v+ ; inline
 
-DEFER: create
+defer: create
 
 : create-step ( level c r d -- scene )
     over [ create-center ] dip 2.0 / [ 1 - ] 2dip create ;
@@ -184,4 +184,4 @@ DEFER: create
 : raytracer-benchmark ( -- )
     run-raytracer "raytracer.pnm" temp-file binary set-file-contents ;
 
-MAIN: raytracer-benchmark
+main: raytracer-benchmark

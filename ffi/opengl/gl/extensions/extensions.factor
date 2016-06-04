@@ -11,8 +11,8 @@ ERROR: unknown-gl-platform ;
     [ unknown-gl-platform ]
 } cond use-vocab >>
 
-SYMBOL: +gl-function-counter+
-SYMBOL: +gl-function-pointers+
+symbol: +gl-function-counter+
+symbol: +gl-function-pointers+
 
 : reset-gl-function-number-counter ( -- )
     0 +gl-function-counter+ set-global ;

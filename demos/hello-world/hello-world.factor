@@ -3,4 +3,4 @@ in: hello-world
 
 : hello ( -- ) "Hello world" print ;
 
-MAIN: hello
+main: hello

@@ -26,7 +26,7 @@ M: glob-expr expand expr>> glob ;
 
 M: factor-expr expand expr>> eval>string ;
 
-DEFER: expansion
+defer: expansion
 
 M: back-quoted-expr expand
   expr>> expr command>> expansion
@@ -66,7 +66,7 @@ M: back-quoted-expr expand
 : prompt ( -- )
     current-directory get write " $ " write flush ;
 
-DEFER: shell
+defer: shell
 
 : handle ( input -- )
     dup { f "exit" } member? [
@@ -82,4 +82,4 @@ DEFER: shell
 
 : ix ( -- ) shell ;
 
-MAIN: ix
+main: ix

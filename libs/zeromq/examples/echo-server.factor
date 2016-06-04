@@ -18,4 +18,4 @@ in: zeromq.examples.echoserver
         ] loop drop
     ] with-destructors ;
 
-MAIN: echo-server
+main: echo-server

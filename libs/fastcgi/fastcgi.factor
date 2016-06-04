@@ -23,12 +23,12 @@ urls.encoding ;
 
 in: fastcgi
 
-SYMBOL: fcgi-server
-SYMBOL: fcgi-role
-SYMBOL: fcgi-flags
-SYMBOL: fcgi-params
-SYMBOL: fcgi-request
-SYMBOL: stdin-data
+symbol: fcgi-server
+symbol: fcgi-role
+symbol: fcgi-flags
+symbol: fcgi-params
+symbol: fcgi-request
+symbol: stdin-data
 
 CONSTANT: fcgi-version 1
 CONSTANT: socket-path "/chroot/web/var/run/factor.sock"

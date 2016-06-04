@@ -5,7 +5,7 @@ summary tools.test tools.test.private ;
 in: tools.test.fuzz
 
 ! Fuzz testing parameters
-SYMBOL: fuzz-test-trials
+symbol: fuzz-test-trials
 fuzz-test-trials [ 100 ] initialize
 
 : fuzz-test-failures* ( trials generator: ( -- ..a ) predicate: ( ..a -- ? ) -- failures )

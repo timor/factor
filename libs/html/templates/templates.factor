@@ -6,7 +6,7 @@ arrays strings html io.streams.string assocs
 quotations xml.data xml.writer xml.syntax ;
 in: html.templates
 
-MIXIN: template
+mixin: template
 
 GENERIC: call-template* ( template -- ) ;
 
@@ -36,7 +36,7 @@ M: no-boilerplate error.
     "get-title and set-title can only be used from within" print
     "a with-boilerplate form" print ;
 
-SYMBOL: title
+symbol: title
 
 : set-title ( string -- )
     title get [ >box ] [ no-boilerplate ] if* ;
@@ -47,7 +47,7 @@ SYMBOL: title
 : write-title ( -- )
     get-title write ;
 
-SYMBOL: style
+symbol: style
 
 : add-style ( string -- )
     "\n" style get push-all
@@ -59,7 +59,7 @@ SYMBOL: style
 : write-style ( -- )
     get-style write ;
 
-SYMBOL: atom-feeds
+symbol: atom-feeds
 
 : add-atom-feed ( title url -- )
     2array atom-feeds get push ;
@@ -78,9 +78,9 @@ SYMBOL: atom-feeds
 : write-atom-feeds ( -- )
     get-atom-feeds write-xml ;
 
-SYMBOL: nested-template?
+symbol: nested-template?
 
-SYMBOL: next-template
+symbol: next-template
 
 : call-next-template ( -- )
     next-template get write ;

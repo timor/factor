@@ -7,4 +7,4 @@ in: editors.vim.generate-syntax
     "misc/vim/syntax/factor.vim" resource-path
     template-convert ;
 
-MAIN: generate-vim-syntax
+main: generate-vim-syntax

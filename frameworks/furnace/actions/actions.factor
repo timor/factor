@@ -17,7 +17,7 @@ html.templates.chloe.syntax
 html.templates.chloe.compiler ;
 in: furnace.actions
 
-SYMBOL: rest
+symbol: rest
 
 TUPLE: action rest init authorize display validate submit ;
 

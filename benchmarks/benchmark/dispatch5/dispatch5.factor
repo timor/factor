@@ -1,7 +1,7 @@
 USING: classes classes.tuple kernel sequences vocabs math ;
 in: benchmark.dispatch5
 
-MIXIN: g
+mixin: g
 
 TUPLE: x1 ;
 INSTANCE: x1 g
@@ -74,4 +74,4 @@ INSTANCE: x30 g
     1000000 a-bunch-of-objects
     [ f [ g? or ] reduce drop ] curry times ;
 
-MAIN: dispatch5-benchmark
+main: dispatch5-benchmark

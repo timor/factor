@@ -41,4 +41,4 @@ M: window-controls-demo-world pref-dim*
             windows push
     ] 2with assoc-each ;
 
-MAIN: window-controls-demo
+main: window-controls-demo

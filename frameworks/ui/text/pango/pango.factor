@@ -27,7 +27,7 @@ MEMO:: (cache-font-description) ( name size bold? italic? -- description )
 
 TUPLE: layout < disposable font string selection layout metrics ink-rect logical-rect image ;
 
-SYMBOL: dpi
+symbol: dpi
 
 72 dpi set-global
 
@@ -120,7 +120,7 @@ SYMBOL: dpi
 : escape-nulls ( str -- str' )
     ! Replace nulls with something else since Pango uses null-terminated
     ! strings
-    H{ { 0 CHAR: zero-width-no-break-space } } substitute ;
+    H{ { 0 char: zero-width-no-break-space } } substitute ;
 
 : unpack-selection ( layout string/selection -- layout )
     dup selection? [
@@ -167,7 +167,7 @@ MEMO: missing-font-metrics ( font -- metrics )
 
 M: layout dispose* layout>> g_object_unref ;
 
-SYMBOL: cached-layouts
+symbol: cached-layouts
 
 : cached-layout ( font string -- layout )
     cached-layouts get-global [ <layout> ] 2cache ;

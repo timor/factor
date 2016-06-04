@@ -47,4 +47,4 @@ M: noise-generator dispose
     timer stop-timer
     engine dispose ;
 
-MAIN: audio-engine-test
+main: audio-engine-test

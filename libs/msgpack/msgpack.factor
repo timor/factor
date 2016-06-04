@@ -9,7 +9,7 @@ sequences strings ;
 
 in: msgpack
 
-DEFER: read-msgpack
+defer: read-msgpack
 
 <PRIVATE
 

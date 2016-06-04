@@ -149,7 +149,7 @@ M: intersection-class see-class*
     class-participants pprint-elements pprint-; block> ;
 
 M: mixin-class see-class*
-    <block \ MIXIN: pprint-word
+    <block \ mixin: pprint-word
     dup pprint-word <block
     dup class-members [
         hard add-line-break

@@ -24,8 +24,8 @@ SPECIALIZED-ARRAY: void*
     over first large-struct? [ "_stret" append ] when
     make-sender dup infer define-declared ;
 
-SYMBOL: message-senders
-SYMBOL: super-message-senders
+symbol: message-senders
+symbol: super-message-senders
 
 message-senders [ H{ } clone ] initialize
 super-message-senders [ H{ } clone ] initialize
@@ -57,7 +57,7 @@ MEMO: <selector> ( name -- sel ) f \ selector-tuple boa ;
 : lookup-selector ( name -- alien )
     <selector> selector ;
 
-SYMBOL: objc-methods
+symbol: objc-methods
 
 objc-methods [ H{ } clone ] initialize
 
@@ -89,7 +89,7 @@ MACRO: (send) ( selector super? -- quot )
 : super-send ( receiver args... selector -- return... ) t (send) ; inline
 
 ! Runtime introspection
-SYMBOL: class-init-hooks
+symbol: class-init-hooks
 
 class-init-hooks [ H{ } clone ] initialize
 
@@ -110,7 +110,7 @@ class-init-hooks [ H{ } clone ] initialize
 : objc-meta-class ( string -- class )
     \ objc_getMetaClass (objc-class) ;
 
-SYMBOL: objc>alien-types
+symbol: objc>alien-types
 
 H{
     { "c" c:char }
@@ -145,7 +145,7 @@ cell {
 } case
 assoc-union objc>alien-types set-global
 
-SYMBOL: objc>struct-types
+symbol: objc>struct-types
 
 H{
     { "_NSPoint" NSPoint }
@@ -162,7 +162,7 @@ H{
 } objc>struct-types set-global
 
 ! The transpose of the above map
-SYMBOL: alien>objc-types
+symbol: alien>objc-types
 
 objc>alien-types get [ swap ] assoc-map
 ! A hack...
@@ -189,7 +189,7 @@ cell {
 assoc-union alien>objc-types set-global
 
 : objc-struct-type ( i string -- ctype )
-    [ CHAR: = ] 2keep index-from swap subseq
+    [ char: = ] 2keep index-from swap subseq
     objc>struct-types get at* [ drop void* ] unless ;
 
 ERROR: no-objc-type name ;
@@ -201,9 +201,9 @@ ERROR: no-objc-type name ;
 : (parse-objc-type) ( i string -- ctype )
     [ [ 1 + ] dip ] [ nth ] 2bi {
         { [ dup "rnNoORV" member? ] [ drop (parse-objc-type) ] }
-        { [ dup CHAR: ^ = ] [ 3drop void* ] }
-        { [ dup CHAR: { = ] [ drop objc-struct-type ] }
-        { [ dup CHAR: [ = ] [ 3drop void* ] }
+        { [ dup char: ^ = ] [ 3drop void* ] }
+        { [ dup char: { = ] [ drop objc-struct-type ] }
+        { [ dup char: [ = ] [ 3drop void* ] }
         [ 2nip decode-type ]
     } cond ;
 

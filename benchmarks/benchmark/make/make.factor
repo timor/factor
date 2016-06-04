@@ -6,7 +6,7 @@ USING: kernel make math sequences ;
 in: benchmark.make
 
 : make-strings ( n -- seq )
-    [ [ CHAR: a , ] times ] "" make ;
+    [ [ char: a , ] times ] "" make ;
 
 : make-arrays ( n -- seq )
     [ iota % ] { } make ;
@@ -20,4 +20,4 @@ in: benchmark.make
         3drop
     ] each ;
 
-MAIN: make-benchmark
+main: make-benchmark

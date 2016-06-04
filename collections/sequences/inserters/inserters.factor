@@ -14,7 +14,7 @@ M: offset-growable virtual@
 M: offset-growable set-length
     [ offset>> + ] [ underlying>> ] bi set-length ; inline
 
-MIXIN: inserter
+mixin: inserter
 M: inserter like
     nip underlying>> ; inline
 M: inserter new-resizable

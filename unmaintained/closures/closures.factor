@@ -1,6 +1,6 @@
 USING: assocs io.pathnames fry namespaces namespaces.private kernel sequences parser hashtables ;
 IN: closures
-SYMBOL: |
+symbol: |
 
 ! Selective Binding
 : delayed-bind-with ( vars quot -- quot' ) '[ _ dup [ get ] map zip >hashtable [ _ bind ] curry ] ;

@@ -9,7 +9,7 @@ IN: dns.server
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-SYMBOL: records-var
+symbol: records-var
 
 : records ( -- records ) records-var get ;
 

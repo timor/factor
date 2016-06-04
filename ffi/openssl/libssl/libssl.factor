@@ -531,7 +531,7 @@ CONSTANT: SSL_SESS_CACHE_NO_INTERNAL
 
 <<
 
-SYMBOL: verify-messages
+symbol: verify-messages
 
 H{ } clone verify-messages set-global
 

@@ -45,4 +45,4 @@ M: string dns-host
 : run-host ( -- )
     command-line get first host ;
 
-MAIN: run-host
+main: run-host

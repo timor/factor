@@ -7,7 +7,7 @@ CONSTANT: FOV $[ 2.0 sqrt 1 + ]
 CONSTANT: MOUSE-MOTION-SCALE 0.5
 CONSTANT: KEY-ROTATE-STEP 10.0
 
-SYMBOL: last-drag-loc
+symbol: last-drag-loc
 
 TUPLE: demo-world < world yaw pitch distance ;
 

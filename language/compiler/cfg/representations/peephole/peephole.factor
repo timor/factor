@@ -9,7 +9,7 @@ in: compiler.cfg.representations.peephole
 
 GENERIC: optimize-insn ( insn -- ) ;
 
-SYMBOL: insn-index
+symbol: insn-index
 
 : here ( -- )
     building get length 1 - insn-index set ;

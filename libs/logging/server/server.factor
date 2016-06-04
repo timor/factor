@@ -16,7 +16,7 @@ in: logging.server
 : log# ( path n -- path' )
     number>string ".log" append append-path ;
 
-SYMBOL: log-files
+symbol: log-files
 
 : open-log-stream ( service -- stream )
     log-path
@@ -38,7 +38,7 @@ SYMBOL: log-files
 : timestamp-header. ( -- )
     "[" write now (timestamp>rfc3339) "] " write ;
 
-: multiline-header ( -- str ) 20 CHAR: - <string> ; foldable
+: multiline-header ( -- str ) 20 char: - <string> ; foldable
 
 : multiline-header. ( -- )
     "[" write multiline-header write "] " write ;

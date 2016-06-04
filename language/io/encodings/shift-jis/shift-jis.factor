@@ -17,12 +17,12 @@ windows-31j "Windows-31J" register-encoding
 
 <PRIVATE
 
-SYMBOL: shift-jis-table
+symbol: shift-jis-table
 
 M: shift-jis <encoder> drop shift-jis-table get-global <encoder> ;
 M: shift-jis <decoder> drop shift-jis-table get-global <decoder> ;
 
-SYMBOL: windows-31j-table
+symbol: windows-31j-table
 
 M: windows-31j <encoder> drop windows-31j-table get-global <encoder> ;
 M: windows-31j <decoder> drop windows-31j-table get-global <decoder> ;

@@ -30,7 +30,7 @@ TUPLE: asides < server-state-manager ;
 : <asides> ( responder -- responder' )
     asides new-server-state-manager ;
 
-SYMBOL: aside-id
+symbol: aside-id
 
 : get-aside ( id -- aside )
     dup [ aside get-state ] when check-session ;

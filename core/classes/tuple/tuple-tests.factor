@@ -630,7 +630,7 @@ M: bogus-hashcode-1 hashcode* 2drop 0 >bignum ;
 
 { } [ T{ bogus-hashcode-2 f T{ bogus-hashcode-1 } } hashcode drop ] unit-test
 
-DEFER: change-slot-test
+defer: change-slot-test
 SLOT: kex
 
 { } [
@@ -658,13 +658,13 @@ SLOT: kex
 { t } [ \ change-slot-test \ kex>> ?lookup-method >boolean ] unit-test
 { f } [ \ change-slot-test \ kex>> ?lookup-method "reading" word-prop ] unit-test
 
-DEFER: redefine-tuple-twice
+defer: redefine-tuple-twice
 
 { } [ "in: classes.tuple.tests TUPLE: redefine-tuple-twice ;" eval( -- ) ] unit-test
 
 { t } [ \ redefine-tuple-twice symbol? ] unit-test
 
-{ } [ "in: classes.tuple.tests DEFER: redefine-tuple-twice" eval( -- ) ] unit-test
+{ } [ "in: classes.tuple.tests defer: redefine-tuple-twice" eval( -- ) ] unit-test
 
 { t } [ \ redefine-tuple-twice deferred? ] unit-test
 
@@ -736,7 +736,7 @@ TUPLE: metaclass-change-subclass < metaclass-change ;
 
 { metaclass-change } [ metaclass-change-subclass superclass-of ] unit-test
 
-{ } [ "in: classes.tuple.tests MIXIN: metaclass-change" eval( -- ) ] unit-test
+{ } [ "in: classes.tuple.tests mixin: metaclass-change" eval( -- ) ] unit-test
 
 { t } [ metaclass-change-subclass tuple-class? ] unit-test
 { tuple } [ metaclass-change-subclass superclass-of ] unit-test
@@ -747,12 +747,12 @@ TUPLE: g < a-g ;
 
 { } [ g new "g" set ] unit-test
 
-{ } [ "in: classes.tuple.tests MIXIN: a-g TUPLE: g ;" eval( -- ) ] unit-test
+{ } [ "in: classes.tuple.tests mixin: a-g TUPLE: g ;" eval( -- ) ] unit-test
 
 { t } [ g new layout-of "g" get layout-of eq? ] unit-test
 
 ! Joe Groff discovered this bug
-DEFER: factor-crashes-anymore
+defer: factor-crashes-anymore
 
 { } [
     "in: classes.tuple.tests
@@ -816,7 +816,7 @@ TUPLE: rclasstest a b ;
 ! initial: should type check
 TUPLE: initial-class ;
 
-DEFER: initial-slot
+defer: initial-slot
 
 { } [ "in: classes.tuple.tests TUPLE: initial-slot { x initial-class } ;" eval( -- ) ] unit-test
 

@@ -7,7 +7,7 @@ in: editors.atom
 singleton: atom-editor
 atom-editor editor-class set-global
 
-SYMBOL: atom-path
+symbol: atom-path
 
 HOOK: find-atom os ( -- path ) ;
 

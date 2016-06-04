@@ -3,7 +3,7 @@
 USING: accessors namespaces assocs kernel io.servers ;
 in: http.server.remapping
 
-SYMBOL: port-remapping
+symbol: port-remapping
 
 : remap-port ( n -- n' )
     [ port-remapping get at ] keep or ;

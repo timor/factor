@@ -7,7 +7,7 @@ IN: modules.rpc-server
 
 <PRIVATE
 TUPLE: rpc-request args vocabspec wordname ;
-SYMBOL: serving-vocabs serving-vocabs [ V{ } clone ] initialize
+symbol: serving-vocabs serving-vocabs [ V{ } clone ] initialize
 
 : getter ( -- ) deserialize dup serving-vocabs get-global index
         [ vocab-words [ stack-effect ] { } assoc-map-as ]

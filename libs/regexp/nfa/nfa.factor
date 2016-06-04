@@ -9,14 +9,14 @@ in: regexp.nfa
 ! but case-insensitive matching should be done by case-folding everything
 ! before processing starts
 
-SYMBOL: option-stack
+symbol: option-stack
 
-SYMBOL: state
+symbol: state
 
 : next-state ( -- state )
     state [ get ] [ inc ] bi ;
 
-SYMBOL: nfa-table
+symbol: nfa-table
 
 : set-each ( keys value hashtable -- )
     '[ _ swap _ set-at ] each ;
@@ -116,10 +116,10 @@ M: not-class modify-class
     class>> modify-class <not-class> ;
 
 MEMO: unix-dot ( -- class )
-    CHAR: \n <not-class> ;
+    char: \n <not-class> ;
 
 MEMO: nonl-dot ( -- class )
-    { CHAR: \n CHAR: \r } <or-class> <not-class> ;
+    { char: \n char: \r } <or-class> <not-class> ;
 
 M: dot modify-class
     drop dotall option? [ t ] [

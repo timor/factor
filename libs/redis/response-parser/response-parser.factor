@@ -3,7 +3,7 @@
 USING: combinators io kernel math math.parser sequences ;
 in: redis.response-parser
 
-DEFER: read-response
+defer: read-response
 
 TUPLE: redis-response message ;
 ERROR: redis-error message ;
@@ -30,11 +30,11 @@ PRIVATE>
 
 : read-response ( -- response )
     readln unclip {
-        { CHAR: : [ string>number ] }
-        { CHAR: + [ handle-response ] }
-        { CHAR: $ [ string>number read-bulk ] }
-        { CHAR: * [ string>number read-multi-bulk ] }
-        { CHAR: - [ handle-error ] }
+        { char: : [ string>number ] }
+        { char: + [ handle-response ] }
+        { char: $ [ string>number read-bulk ] }
+        { char: * [ string>number read-multi-bulk ] }
+        { char: - [ handle-error ] }
     } case ;
 
 : check-response ( -- )

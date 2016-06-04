@@ -135,7 +135,7 @@ MEMO:: d-table ( -- array )
 ! key schedule
 ! expands an 128/192/256 bit key into an 176/208/240 byte schedule
 
-SYMBOL: aes-expand-inner
+symbol: aes-expand-inner
 HOOK: key-expand-round aes-expand-inner  ( temp i -- temp' ) ;
 
 singleton: aes-128-key
@@ -186,7 +186,7 @@ TUPLE: aes-state nrounds key state ;
 : (key-at-nth-round) ( nth aes -- seq )
     [ 4 * dup 4 + ] [ key>> ] bi* <slice> ;
 
-SYMBOL: aes-strategy
+symbol: aes-strategy
 HOOK: (expand-key) aes-strategy ( K Nr -- sched ) ;
 HOOK: (first-round) aes-strategy ( aes -- aes' ) ;
 HOOK: (counter) aes-strategy ( nrounds -- seq ) ;

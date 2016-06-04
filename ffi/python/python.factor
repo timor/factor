@@ -59,7 +59,7 @@ SPECIALIZED-ARRAY: void*
 : py-list>vector ( py-list -- vector )
     dup py-list-size iota [ py-list-get-item ] with V{ } map-as ;
 
-DEFER: >py
+defer: >py
 
 GENERIC: >py ( obj -- py-obj ) ;
 M: string >py
@@ -80,9 +80,9 @@ M: f >py
     drop <none> ;
 
 ! Data marshalling to Factor
-SYMBOL: py-type-dispatch
+symbol: py-type-dispatch
 
-DEFER: py>
+defer: py>
 
 : init-py-type-dispatch ( -- table )
     H{

@@ -52,4 +52,4 @@ in: rosetta-code.hailstone-sequence
     "The hailstone sequence from " write pprint
     " has length " write pprint "." print ;
 
-MAIN: hailstone-main
+main: hailstone-main

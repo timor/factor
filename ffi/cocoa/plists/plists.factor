@@ -14,7 +14,7 @@ in: cocoa.plists
     [ >plist ] [ normalize-path <NSString> ] bi* 0 -> writeToFile:atomically:
     [ "write-plist failed" throw ] unless ;
 
-DEFER: plist>
+defer: plist>
 
 <PRIVATE
 

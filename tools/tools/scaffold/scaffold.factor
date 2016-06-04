@@ -9,8 +9,8 @@ splitting strings system timers unicode urls vocabs
 vocabs.loader vocabs.metadata words words.symbol ;
 in: tools.scaffold
 
-SYMBOL: developer-name
-SYMBOL: using
+symbol: developer-name
+symbol: using
 
 ERROR: not-a-vocab-root string ;
 
@@ -34,7 +34,7 @@ ERROR: not-a-vocab-root string ;
     [ check-root ] [ check-vocab-name ] bi* ;
 
 : replace-vocab-separators ( vocab -- path )
-    path-separator first CHAR: . associate substitute ; inline
+    path-separator first char: . associate substitute ; inline
 
 : vocab-root/vocab>path ( vocab-root vocab -- path )
     check-vocab-root/vocab
@@ -108,7 +108,7 @@ ERROR: not-a-vocab-root string ;
 
 : lookup-type ( string -- object/string ? )
     "/f" ?tail swap
-    "new" ?head drop [ { [ CHAR: ' = ] [ digit? ] } 1|| ] trim-tail
+    "new" ?head drop [ { [ char: ' = ] [ digit? ] } 1|| ] trim-tail
     H{
         { "object" object }
         { "obj" object }
@@ -319,11 +319,11 @@ PRIVATE>
         2drop
     ] if ;
 
-SYMBOL: nested-examples
+symbol: nested-examples
 
 : example-using ( using -- )
     " " join "example-using" [
-        nested-examples get 4 0 ? CHAR: \s <string> "example-indent" [
+        nested-examples get 4 0 ? char: \s <string> "example-indent" [
             "${example-indent}\"Example:\"
 ${example-indent}{ $example \"USING: ${example-using} ;\"
 ${example-indent}    \"\"

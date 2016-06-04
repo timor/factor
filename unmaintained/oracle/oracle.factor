@@ -10,16 +10,16 @@ io.encodings.ascii accessors ;
 
 IN: oracle
 
-SYMBOL: env
-SYMBOL: err
-SYMBOL: srv
-SYMBOL: svc
-SYMBOL: ses
-SYMBOL: stm
-SYMBOL: buf
-SYMBOL: res
+symbol: env
+symbol: err
+symbol: srv
+symbol: svc
+symbol: ses
+symbol: stm
+symbol: buf
+symbol: res
 
-SYMBOL: con
+symbol: con
 
 TUPLE: connection username password db ;
 

@@ -50,7 +50,7 @@ M: string vocab-path ( string -- path/f )
 PRIVATE>
 
 : vocab-dir ( vocab -- dir )
-    vocab-name H{ { CHAR: . CHAR: / } } substitute ;
+    vocab-name H{ { char: . char: / } } substitute ;
 
 : append-vocab-dir ( vocab str/f -- path )
     [ vocab-name "." split ] dip
@@ -137,7 +137,7 @@ PRIVATE>
     ] [
         "The " write vocab-name write
         " vocabulary does not define an entry point." print
-        "To define one, refer to \\ MAIN: help" print
+        "To define one, refer to \\ main: help" print
     ] ?if ;
 
 symbol: blacklist

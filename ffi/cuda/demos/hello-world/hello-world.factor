@@ -23,4 +23,4 @@ CUDA-FUNCTION: helloWorld ( char* string-ptr ) ;
         ] with-destructors
     ] with-each-cuda-device ;
 
-MAIN: cuda-hello-world
+main: cuda-hello-world

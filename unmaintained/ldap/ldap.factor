@@ -8,8 +8,8 @@ ldap.libldap math namespaces sequences ;
 
 IN: ldap
 
-SYMBOL: message
-SYMBOL: ldp
+symbol: message
+symbol: ldp
 
 ! =========================================================
 ! Error interpretation routines

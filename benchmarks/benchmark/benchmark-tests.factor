@@ -4,7 +4,7 @@ in: benchmark.tests
 : dummy-benchmark ( -- )
     ;
 
-MAIN: dummy-benchmark
+main: dummy-benchmark
 
 { "benchmark.tests" } [
     { "benchmark.tests" } [ run-timing-benchmark ] run-benchmarks

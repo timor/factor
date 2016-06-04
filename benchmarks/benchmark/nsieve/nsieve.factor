@@ -33,4 +33,4 @@ in: benchmark.nsieve
 
 : nsieve-benchmark ( -- ) 9 nsieve-main ;
 
-MAIN: nsieve-benchmark
+main: nsieve-benchmark

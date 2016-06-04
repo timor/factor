@@ -1,7 +1,7 @@
 USING: compiler.errors stack-checker.errors tools.test words ;
 in: tools.errors
 
-DEFER: blah
+defer: blah
 
 { } [
     {

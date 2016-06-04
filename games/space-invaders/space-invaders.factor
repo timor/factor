@@ -375,4 +375,4 @@ CONSTANT: rom-info {
         "Space Invaders" <space-invaders> rom-info run-rom
     ] with-ui ;
 
-MAIN: run-invaders
+main: run-invaders

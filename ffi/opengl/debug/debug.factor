@@ -3,7 +3,7 @@ USING: accessors kernel namespaces parser sequences tools.continuations
 ui.backend ui.gadgets.worlds words ;
 in: opengl.debug
 
-SYMBOL: G-world
+symbol: G-world
 
 : G ( -- )
     G-world get set-gl-context ;

@@ -36,7 +36,7 @@ in: project-euler
     print readln string>number ;
 
 : number>euler ( n -- str )
-    number>string 3 CHAR: 0 pad-head ;
+    number>string 3 char: 0 pad-head ;
 
 : solution-path ( n -- str/f )
     number>euler "project-euler." prepend
@@ -56,4 +56,4 @@ PRIVATE>
         drop "That problem has not been solved yet..." print
     ] if ;
 
-MAIN: run-project-euler
+main: run-project-euler

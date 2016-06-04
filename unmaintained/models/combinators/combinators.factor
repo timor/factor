@@ -50,7 +50,7 @@ M: updater-model (model-changed) [ tuck updates>> =
 : updates ( values updates -- model ) [ 2array updater-model <multi-model> ] 2keep
    [ >>values ] [ >>updates ] bi* ;
 
-SYMBOL: switch
+symbol: switch
 TUPLE: switch-model < multi-model original switcher on ;
 M: switch-model (model-changed) 2dup switcher>> =
    [ [ value>> ] dip over switch = [ nip [ original>> ] keep f >>on model-changed ] [ t >>on set-model ] if ]

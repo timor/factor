@@ -11,7 +11,7 @@ sequences sets stack-checker.dependencies stack-checker.errors
 stack-checker.inlining vocabs.loader words ;
 in: compiler
 
-SYMBOL: compiled
+symbol: compiled
 
 : compile? ( word -- ? )
     ! Don't attempt to compile certain words.

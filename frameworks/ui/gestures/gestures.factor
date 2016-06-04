@@ -145,26 +145,26 @@ TUPLE: key-up < key-gesture ;
 ! handler, and that the locations hand-loc and hand-click-loc
 ! are in the co-ordinate system of the world which contains
 ! the gadget in question.
-SYMBOL: hand-gadget
-SYMBOL: hand-world
-SYMBOL: hand-loc
+symbol: hand-gadget
+symbol: hand-world
+symbol: hand-loc
 { 0 0 } hand-loc set-global
 
-SYMBOL: hand-clicked
-SYMBOL: hand-click-loc
-SYMBOL: hand-click#
-SYMBOL: hand-last-button
-SYMBOL: hand-last-time
+symbol: hand-clicked
+symbol: hand-click-loc
+symbol: hand-click#
+symbol: hand-last-button
+symbol: hand-last-time
 0 hand-last-button set-global
 0 hand-last-time set-global
 
-SYMBOL: hand-buttons
+symbol: hand-buttons
 V{ } clone hand-buttons set-global
 
-SYMBOL: scroll-direction
+symbol: scroll-direction
 { 0 0 } scroll-direction set-global
 
-SYMBOL: double-click-timeout
+symbol: double-click-timeout
 300 milliseconds double-click-timeout set-global
 
 : hand-moved? ( -- ? )
@@ -177,7 +177,7 @@ SYMBOL: double-click-timeout
     hand-buttons get-global
     [ first <drag> button-gesture ] unless-empty ;
 
-SYMBOL: drag-timer
+symbol: drag-timer
 
 <box> drag-timer set-global
 

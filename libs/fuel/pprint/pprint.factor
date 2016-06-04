@@ -12,9 +12,9 @@ GENERIC: fuel-pprint ( obj -- ) ;
 <PRIVATE
 
 : fuel-maybe-scape ( ch -- seq )
-    dup "\\\"?#()[]'`;." member? [ CHAR: \ swap 2array ] [ 1array ] if ;
+    dup "\\\"?#()[]'`;." member? [ char: \ swap 2array ] [ 1array ] if ;
 
-SYMBOL: :restarts
+symbol: :restarts
 
 : fuel-restarts ( obj -- seq )
     compute-restarts :restarts prefix ; inline

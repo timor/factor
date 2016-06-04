@@ -7,4 +7,4 @@ in: benchmark.javascript
     "vocab:benchmark/javascript/jquery-1.3.2.min.js"
     utf8 file-contents parse-javascript drop ;
 
-MAIN: javascript-benchmark
+main: javascript-benchmark

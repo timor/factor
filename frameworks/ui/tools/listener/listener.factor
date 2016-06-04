@@ -94,13 +94,13 @@ M: interactor stream-element-type drop +character+ ;
 
 GENERIC: (print-input) ( object -- ) ;
 
-SYMBOL: listener-input-style
+symbol: listener-input-style
 H{
     { font-style bold }
     { foreground $ text-color }
 } listener-input-style set-global
 
-SYMBOL: listener-word-style
+symbol: listener-word-style
 H{
     { font-name "sans-serif" }
     { font-style bold }
@@ -171,14 +171,14 @@ M: interactor stream-read1
     dup interactor-read {
         { [ dup not ] [ 2drop f ] }
         { [ dup empty? ] [ drop stream-read1 ] }
-        { [ dup first empty? ] [ 2drop CHAR: \n ] }
+        { [ dup first empty? ] [ 2drop char: \n ] }
         [ nip first first ]
     } cond ;
 
 M: interactor stream-read-until ( seps stream -- seq sep/f )
     swap '[
         _ interactor-read [
-            "\n" join CHAR: \n suffix
+            "\n" join char: \n suffix
             [ _ member? ] dupd find
             [ [ head ] when* ] dip dup not
         ] [ f f f ] if*

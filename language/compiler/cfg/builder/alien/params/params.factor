@@ -4,7 +4,7 @@ USING: arrays assocs cpu.architecture fry kernel layouts locals
 math math.order namespaces sequences vectors ;
 in: compiler.cfg.builder.alien.params
 
-SYMBOL: stack-params
+symbol: stack-params
 
 GENERIC: alloc-stack-param ( rep -- n ) ;
 

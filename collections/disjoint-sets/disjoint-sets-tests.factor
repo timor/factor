@@ -1,9 +1,9 @@
 USING: tools.test disjoint-sets namespaces slots.private ;
 in: disjoint-sets.tests
 
-SYMBOL: +blah+
+symbol: +blah+
 
-SYMBOL: uf
+symbol: uf
 
 { } [
     <disjoint-set> uf set

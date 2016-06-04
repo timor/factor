@@ -2,12 +2,12 @@
 ! See http://factorcode.org/license.txt for BSD license.
 in: io.files.types
 
-SYMBOL: +regular-file+
-SYMBOL: +directory+
-SYMBOL: +symbolic-link+
-SYMBOL: +character-device+
-SYMBOL: +block-device+
-SYMBOL: +fifo+
-SYMBOL: +socket+
-SYMBOL: +whiteout+
-SYMBOL: +unknown+
+symbol: +regular-file+
+symbol: +directory+
+symbol: +symbolic-link+
+symbol: +character-device+
+symbol: +block-device+
+symbol: +fifo+
+symbol: +socket+
+symbol: +whiteout+
+symbol: +unknown+

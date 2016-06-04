@@ -9,7 +9,7 @@ PRIMITIVE: dispatch-stats ( -- stats ) ;
 PRIMITIVE: reset-dispatch-stats ( -- ) ;
 PRIVATE>
 
-SYMBOL: last-dispatch-stats
+symbol: last-dispatch-stats
 
 : dispatch-stats. ( -- )
     last-dispatch-stats get {

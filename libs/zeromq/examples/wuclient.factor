@@ -22,5 +22,5 @@ in: zeromq.examples.wuclient
         drop
     ] with-destructors ;
 
-MAIN: wuclient
+main: wuclient
 

@@ -27,9 +27,9 @@ TUPLE: conversations < server-state-manager ;
 : <conversations> ( responder -- responder' )
     conversations new-server-state-manager ;
 
-SYMBOL: conversation
+symbol: conversation
 
-SYMBOL: conversation-id
+symbol: conversation-id
 
 : cget ( key -- value )
     conversation get scope-get ;

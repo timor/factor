@@ -56,4 +56,4 @@ in: benchmark.pidigits
 : pidigits-benchmark ( -- )
     2000 pidigits ;
 
-MAIN: pidigits-benchmark
+main: pidigits-benchmark

@@ -16,4 +16,4 @@ in: benchmark.heaps
 : heaps-benchmark ( -- )
     100 [ heap-test ] times ;
 
-MAIN: heaps-benchmark
+main: heaps-benchmark

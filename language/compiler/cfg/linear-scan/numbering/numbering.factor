@@ -12,7 +12,7 @@ in: compiler.cfg.linear-scan.numbering
     0 [ instructions>> [ number-instruction ] each ] reduce
     drop ;
 
-SYMBOL: check-numbering?
+symbol: check-numbering?
 
 ERROR: bad-numbering bb ;
 

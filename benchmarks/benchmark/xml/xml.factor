@@ -9,4 +9,4 @@ in: benchmark.xml
         [ file>xml drop ] each
     ] with-directory-files ;
 
-MAIN: xml-benchmark
+main: xml-benchmark

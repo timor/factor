@@ -29,4 +29,4 @@ in: benchmark.dispatch2
     1000000 sequences
     [ [ first don't-flush-me ] each ] curry times ;
 
-MAIN: dispatch2-benchmark
+main: dispatch2-benchmark

@@ -22,4 +22,4 @@ in: zeromq.examples.echo-client
         ] loop drop
     ] with-destructors ;
 
-MAIN: echo-client
+main: echo-client

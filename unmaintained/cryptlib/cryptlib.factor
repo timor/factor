@@ -10,15 +10,15 @@ namespaces sequences assocs libc alien.c-types alien.accessors continuations ;
 
 IN: cryptlib
 
-SYMBOL: keyset
-SYMBOL: certificate
-SYMBOL: cert-buffer
-SYMBOL: cert-length
-SYMBOL: context
-SYMBOL: envelope
-SYMBOL: bytes-copied
-SYMBOL: pop-buffer
-SYMBOL: session
+symbol: keyset
+symbol: certificate
+symbol: cert-buffer
+symbol: cert-length
+symbol: context
+symbol: envelope
+symbol: bytes-copied
+symbol: pop-buffer
+symbol: session
 
 ! =========================================================
 ! Error-handling routines

@@ -8,7 +8,7 @@ in: gml.runtime
 
 TUPLE: name < identity-tuple { string read-only } ;
 
-SYMBOL: names
+symbol: names
 
 names [ H{ } clone ] initialize
 
@@ -166,7 +166,7 @@ MACRO: outputs ( outputs# -- quot: ( gml outputs... -- gml ) )
 MACRO: gml-primitive ( inputs# outputs# quot: ( registers gml inputs... -- outputs... ) -- quot: ( registers gml -- registers gml ) )
     swap '[ _ inputs @ _ outputs ] ;
 
-SYMBOL: global-dictionary
+symbol: global-dictionary
 
 global-dictionary [ H{ } clone ] initialize
 

@@ -174,7 +174,7 @@ ARTICLE: "escape" "Character escape codes"
 ARTICLE: "syntax-strings" "Character and string syntax"
 "Factor has no distinct character type. Integers representing Unicode code points can be read by specifying a literal character, or an escaped representation thereof."
 { $subsections
-    postpone: CHAR:
+    postpone: char:
     postpone: "
     "escape"
 }
@@ -437,13 +437,13 @@ HELP: ;
     "Parsing words can use this word as a generic end delimiter."
 } ;
 
-HELP: SYMBOL:
-{ $syntax "SYMBOL: word" }
+HELP: symbol:
+{ $syntax "symbol: word" }
 { $values { "word" "a new word to define" } }
 { $description "Defines a new symbol word in the current vocabulary. Symbols push themselves on the stack when executed, and are used to identify variables (see " { $link "namespaces" } ") as well as for storing crufties in word properties (see " { $link "word-props" } ")." }
-{ $examples { $example "use: prettyprint" "in: scratchpad" "SYMBOL: foo\nfoo ." "foo" } } ;
+{ $examples { $example "use: prettyprint" "in: scratchpad" "symbol: foo\nfoo ." "foo" } } ;
 
-{ define-symbol postpone: SYMBOL: postpone: SYMBOLS: } related-words
+{ define-symbol postpone: symbol: postpone: SYMBOLS: } related-words
 
 HELP: SYMBOLS:
 { $syntax "SYMBOLS: words... ;" }
@@ -497,15 +497,15 @@ HELP: \
 { $description "Reads the next word from the input and appends a wrapper holding the word to the parse tree. When the evaluator encounters a wrapper, it pushes the wrapped word literally on the data stack." }
 { $examples "The following two lines are equivalent:" { $code "0 \\ <vector> execute\n0 <vector>" } "If " { $snippet "foo" } " is a symbol, the following two lines are equivalent:" { $code "foo" "\\ foo" } } ;
 
-HELP: DEFER:
-{ $syntax "DEFER: word" }
+HELP: defer:
+{ $syntax "defer: word" }
 { $values { "word" "a new word to define" } }
 { $description "Create a word in the current vocabulary that simply raises an error when executed. Usually, the word will be replaced with a real definition later." }
 { $notes "Due to the way the parser works, words cannot be referenced before they are defined; that is, source files must order definitions in a strictly bottom-up fashion. Mutually-recursive pairs of words can be implemented by " { $emphasis "deferring" } " one of the words in the pair allowing the second word in the pair to parse, then by defining the first word." }
-{ $examples { $code "DEFER: foe\n: fie ... foe ... ;\n: foe ... fie ... ;" } } ;
+{ $examples { $code "defer: foe\n: fie ... foe ... ;\n: foe ... fie ... ;" } } ;
 
-HELP: FORGET:
-{ $syntax "FORGET: word" }
+HELP: forget:
+{ $syntax "forget: word" }
 { $values { "word" word } }
 { $description "Removes the word from its vocabulary, or does nothing if no such word exists. Existing definitions that reference forgotten words will continue to work, but new occurrences of the word will not parse." } ;
 
@@ -589,17 +589,17 @@ HELP: in:
 { $values { "vocabulary" "a new vocabulary name" } }
 { $description "Sets the current vocabulary where new words will be defined, creating the vocabulary first if it does not exist. After the vocabulary has been created, it can be listed in " { $link postpone: use: } " and " { $link postpone: USING: } " declarations." } ;
 
-HELP: CHAR:
-{ $syntax "CHAR: token" }
+HELP: char:
+{ $syntax "char: token" }
 { $values { "token" "a literal character, escape code, or Unicode code point name" } }
 { $description "Adds a Unicode code point to the parse tree." }
 { $examples
     { $code
-        "CHAR: x"
-        "CHAR: \\u000032"
-        "CHAR: \\u{exclamation-mark}"
-        "CHAR: exclamation-mark"
-        "CHAR: ugaritic-letter-samka"
+        "char: x"
+        "char: \\u000032"
+        "char: \\u{exclamation-mark}"
+        "char: exclamation-mark"
+        "char: ugaritic-letter-samka"
     }
 } ;
 
@@ -638,7 +638,7 @@ HELP: (
         "USING: compiler.units kernel math prettyprint random words ;"
         "in: scratchpad"
         ""
-        "SYMBOL: my-dynamic-word"
+        "symbol: my-dynamic-word"
         ""
         "["
         "    my-dynamic-word 2 { [ + ] [ * ] } random curry"
@@ -692,7 +692,7 @@ HELP: HOOK:
     { $example
         "USING: io namespaces ;"
         "in: scratchpad"
-        "SYMBOL: transport"
+        "symbol: transport"
         "TUPLE: land-transport ;"
         "TUPLE: air-transport ;"
         "HOOK: deliver transport ( destination -- )"
@@ -722,8 +722,8 @@ HELP: INTERSECTION:
 { $values { "class" "a new class word to define" } { "participants" "a list of class words separated by whitespace" } }
 { $description "Defines an intersection class. An object is an instance of an intersection class if it is an instance of all of its participants." } ;
 
-HELP: MIXIN:
-{ $syntax "MIXIN: class" }
+HELP: mixin:
+{ $syntax "mixin: class" }
 { $values { "class" "a new class word to define" } }
 { $description "Defines a mixin class. A mixin is similar to a union class, except it has no members initially, and new members can be added with the " { $link postpone: INSTANCE: } " word." }
 { $examples "The " { $link sequence } " and " { $link assoc } " mixin classes." } ;
@@ -824,8 +824,8 @@ HELP: C:
     "In both cases, a word " { $snippet "<color>" } " is defined, which reads three values from the stack and creates a " { $snippet "color" } " instance having these values in the " { $snippet "red" } ", " { $snippet "green" } " and " { $snippet "blue" } " slots, respectively."
 } ;
 
-HELP: MAIN:
-{ $syntax "MAIN: word" }
+HELP: main:
+{ $syntax "main: word" }
 { $values { "word" word } }
 { $description "Defines the main entry point for the current vocabulary and source file. This word will be executed when this vocabulary is passed to " { $link run } " or the source file is passed to " { $link run-script } "." } ;
 

@@ -188,6 +188,11 @@ in: bootstrap.syntax
         scan-token current-vocab create-word
         [ fake-definition ] [ set-last-word ] [ undefined-def define ] tri
     ] define-core-syntax
+    "defer:" [
+        scan-token current-vocab create-word
+        [ fake-definition ] [ set-last-word ] [ undefined-def define ] tri
+    ] define-core-syntax
+
 
     "ALIAS:" [
         scan-new-word scan-word define-alias
@@ -297,6 +302,12 @@ in: bootstrap.syntax
     ] define-core-syntax
 
     "MAIN:" [
+        scan-word
+        dup ( -- ) check-stack-effect
+        [ current-vocab main<< ]
+        [ current-source-file get [ main<< ] [ drop ] if* ] bi
+    ] define-core-syntax
+    "main:" [
         scan-word
         dup ( -- ) check-stack-effect
         [ current-vocab main<< ]

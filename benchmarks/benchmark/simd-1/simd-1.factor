@@ -25,4 +25,4 @@ in: benchmark.simd-1
 : simd-1-benchmark ( -- )
     10 [ 500000 simd-benchmark ] times ;
 
-MAIN: simd-1-benchmark
+main: simd-1-benchmark

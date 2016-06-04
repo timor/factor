@@ -237,7 +237,7 @@ GENERIC: (get-remote-address) ( handle remote -- sockaddr ) ;
         [ <input-port> |dispose ] [ <output-port> |dispose ] bi
     ] with-destructors ;
 
-SYMBOL: bind-local-address
+symbol: bind-local-address
 
 GENERIC: establish-connection ( client-out remote -- ) ;
 
@@ -315,9 +315,9 @@ PRIVATE>
 : <client> ( remote encoding -- stream local )
     [ (client) ] dip swap [ <encoder-duplex> ] dip ;
 
-SYMBOL: local-address
+symbol: local-address
 
-SYMBOL: remote-address
+symbol: remote-address
 
 : with-client ( remote encoding quot -- )
     [

@@ -34,7 +34,7 @@ ARTICLE: "inference-combinators" "Combinator stack effects"
 "The following word calls a quotation twice; the word is declared " { $link postpone: inline } ", since it invokes " { $link call } " on the result of " { $link compose } " on an input parameter:"
 { $code ": twice ( value quot -- result ) dup compose call ; inline" }
 "The following code now passes the stack checker; it would fail were " { $snippet "twice" } " not declared " { $link postpone: inline } ":"
-{ $unchecked-example "USE: math.functions" "[ [ sqrt ] twice ] infer." "( x -- x )" }
+{ $unchecked-example "use: math.functions" "[ [ sqrt ] twice ] infer." "( x -- x )" }
 { $subheading "Defining a combinator for unknown quotations" }
 "In the next example, " { $link postpone: call( } " must be used because the quotation is the result of calling a runtime accessor, and the compiler cannot make any static assumptions about this quotation at all:"
 { $code

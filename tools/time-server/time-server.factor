@@ -16,4 +16,4 @@ in: time-server
 : start-time-server ( -- )
     <time-server> start-server drop ;
 
-MAIN: start-time-server
+main: start-time-server

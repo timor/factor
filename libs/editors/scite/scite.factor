@@ -8,7 +8,7 @@ in: editors.scite
 singleton: scite
 scite editor-class set-global
 
-SYMBOL: scite-path
+symbol: scite-path
 
 HOOK: find-scite-path os ( -- path ) ;
 

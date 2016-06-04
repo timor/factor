@@ -8,4 +8,4 @@ in: benchmark.json
     200 iota [ [ number>string ] keep ] H{ } map>assoc
     1,000 [ >json json> ] times drop ;
 
-MAIN: json-benchmark
+main: json-benchmark

@@ -29,7 +29,7 @@ SYMBOLS: +autoincrement+ +serial+ +unique+ +default+ +null+ +not-null+
 +foreign-id+ +has-many+ +on-update+ +on-delete+ +restrict+ +cascade+
 +set-null+ +set-default+ ;
 
-SYMBOL: IGNORE
+symbol: IGNORE
 
 : filter-ignores ( tuple specs -- specs' )
     [ <mirror> [ nip IGNORE = ] assoc-filter keys ] dip

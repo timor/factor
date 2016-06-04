@@ -4,9 +4,9 @@ USING: accessors arrays assocs combinators.short-circuit fry
 kernel linked-assocs namespaces sequences ui.commands words ;
 in: ui.operations
 
-SYMBOL: +keyboard+
-SYMBOL: +primary+
-SYMBOL: +secondary+
+symbol: +keyboard+
+symbol: +primary+
+symbol: +secondary+
 
 TUPLE: operation predicate command translator listener? ;
 
@@ -30,7 +30,7 @@ M: operation command-word command>> command-word ;
 : operation-gesture ( operation -- gesture )
     command>> +keyboard+ word-prop ;
 
-SYMBOL: operations
+symbol: operations
 
 operations [ <linked-hash> ] initialize
 

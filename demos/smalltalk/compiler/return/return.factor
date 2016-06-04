@@ -5,7 +5,7 @@ fry generalizations kernel locals locals.types locals.rewrite.closures
 namespaces make sequences smalltalk.ast ;
 in: smalltalk.compiler.return
 
-SYMBOL: return-continuation
+symbol: return-continuation
 
 GENERIC: need-return-continuation? ( ast -- ? ) ;
 

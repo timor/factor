@@ -7,7 +7,7 @@ in: editors.geany
 singleton: geany
 geany editor-class set-global
 
-SYMBOL: geany-path
+symbol: geany-path
 
 HOOK: find-geany-path os ( -- path ) ;
 

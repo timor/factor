@@ -38,7 +38,7 @@ TUPLE: vertex-attribute
     { dim             integer         read-only initial: 4 }
     { normalize?      boolean         read-only initial: f } ;
 
-MIXIN: vertex-format
+mixin: vertex-format
 
 TUPLE: shader
     { name word read-only initial: t }
@@ -297,7 +297,7 @@ M: f (verify-feedback-format)
 : c-array-dim ( type dim -- type' )
     dup 1 = [ drop ] [ 2array ] if ;
 
-SYMBOL: padding-no
+symbol: padding-no
 
 : padding-name ( -- name )
     "padding-"
@@ -462,7 +462,7 @@ TUPLE: link-program-error program log ;
     [ dup ] dip [ gl-program-info-log ] [ delete-gl-program ] bi
     replace-log-line-numbers link-program-error boa throw ;
 
-DEFER: <shader-instance>
+defer: <shader-instance>
 
 <PRIVATE
 

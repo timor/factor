@@ -12,4 +12,4 @@ in: benchmark.busy-loop
 : busy-loop-benchmark ( -- )
     1337 [ busy-loop ] [ assert= ] bi ;
 
-MAIN: busy-loop-benchmark
+main: busy-loop-benchmark

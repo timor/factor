@@ -50,7 +50,7 @@ in: alien.parser.tests
 
 TYPEDEF: char char2
 
-SYMBOL: not-c-type
+symbol: not-c-type
 
 CONSTANT: eleven 11
 

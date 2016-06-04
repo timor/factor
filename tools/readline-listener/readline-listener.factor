@@ -7,7 +7,7 @@ in: readline-listener
 
 <PRIVATE
 
-SYMBOL: completions
+symbol: completions
 
 TUPLE: readline-reader { prompt initial: f } ;
 INSTANCE: readline-reader input-stream
@@ -56,4 +56,4 @@ PRIVATE>
     ] set-completion
     readline-reader new [ listener-main ] with-input-stream* ;
 
-MAIN: readline-listener
+main: readline-listener

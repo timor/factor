@@ -7,9 +7,9 @@ lexer locals math namespaces parser sequences splitting
 vocabs.parser words ;
 in: alien.parser
 
-SYMBOL: current-library
+symbol: current-library
 
-DEFER: (parse-c-type)
+defer: (parse-c-type)
 
 ERROR: bad-array-type ;
 
@@ -22,7 +22,7 @@ ERROR: bad-array-type ;
 : (parse-c-type) ( string -- type )
     {
         { [ "*" ?tail ] [ (parse-c-type) <pointer> ] }
-        { [ CHAR: ] over member? ] [ parse-array-type ] }
+        { [ char: ] over member? ] [ parse-array-type ] }
         { [ dup search ] [ parse-word ] }
         [ parse-word ]
     } cond ;
@@ -76,7 +76,7 @@ GENERIC: return-type-name ( type -- name ) ;
 
 M: object return-type-name drop "void" ;
 M: word return-type-name name>> ;
-M: pointer return-type-name to>> return-type-name CHAR: * suffix ;
+M: pointer return-type-name to>> return-type-name char: * suffix ;
 
 : parse-pointers ( type name -- type' name' )
     "*" ?head

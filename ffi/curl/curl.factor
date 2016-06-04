@@ -49,4 +49,4 @@ PRIVATE>
         [ curl-perform ] bi
     ] each ;
 
-MAIN: curl-main
+main: curl-main

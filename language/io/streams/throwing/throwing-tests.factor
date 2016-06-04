@@ -52,7 +52,7 @@ in: io.streams.throwing.tests
     ] with-byte-reader
 ] [ stream-exhausted? ] must-fail-with
 
-{ "asd" CHAR: f } [
+{ "asd" char: f } [
     "asdf" [ [ "f" read-until ] throw-on-eof ] with-string-reader
 ] unit-test
 

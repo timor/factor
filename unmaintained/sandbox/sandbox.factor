@@ -6,7 +6,7 @@ USING: kernel sequences vectors assocs namespaces parser lexer vocabs
 
 IN: sandbox
 
-SYMBOL: whitelist
+symbol: whitelist
 
 : with-sandbox-vocabs ( quot -- )
     "sandbox.syntax" load-vocab vocab-words 1vector

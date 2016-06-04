@@ -5,4 +5,4 @@ in: tools.deploy.test.15
 
 : main ( -- ) command-line get [ print ] each ;
 
-MAIN: main
+main: main

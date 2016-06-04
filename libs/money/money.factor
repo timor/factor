@@ -4,8 +4,8 @@ USING: grouping io kernel lexer math math.functions math.parser
 namespaces sequences splitting ;
 in: money
 
-SYMBOL: currency-token
-CHAR: $ currency-token set-global
+symbol: currency-token
+char: $ currency-token set-global
 
 : dollars/cents ( dollars -- dollars cents )
     100 * 100 /mod round ;
@@ -13,7 +13,7 @@ CHAR: $ currency-token set-global
 : format-money ( dollars cents -- string )
     [ number>string ] bi@
     [ <reversed> 3 group "," join <reversed> ]
-    [ 2 CHAR: 0 pad-head ] bi* "." glue ;
+    [ 2 char: 0 pad-head ] bi* "." glue ;
 
 : money>string ( number -- string )
     dollars/cents format-money currency-token get prefix ;

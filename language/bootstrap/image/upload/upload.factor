@@ -7,8 +7,8 @@ io.files.temp io.files.unique io.launcher io.pathnames kernel
 make math.parser namespaces sequences splitting system ;
 in: bootstrap.image.upload
 
-SYMBOL: upload-images-destination
-SYMBOL: build-images-destination
+symbol: upload-images-destination
+symbol: build-images-destination
 
 : latest-destination ( -- dest )
     upload-images-destination get
@@ -95,4 +95,4 @@ M: windows scp-name "pscp" ;
         upload-build-images
     ] with-resource-directory ;
 
-MAIN: upload-new-images
+main: upload-new-images

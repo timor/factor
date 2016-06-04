@@ -65,4 +65,4 @@ TYPED: spectral-norm ( n: fixnum -- norm )
 : spectral-norm-simd-benchmark ( -- )
     2000 spectral-norm . ;
 
-MAIN: spectral-norm-simd-benchmark
+main: spectral-norm-simd-benchmark

@@ -60,7 +60,7 @@ TUPLE: node value children ;
         2nip
     ] make-node ;
 
-DEFER: (gadget-subtree)
+defer: (gadget-subtree)
 
 : traverse-child ( frompath topath gadget -- )
     [ 2nip ] 3keep

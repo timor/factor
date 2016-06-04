@@ -7,7 +7,7 @@ http.server.dispatchers furnace.actions furnace.auth
 furnace.auth.providers furnace.redirection furnace.utilities ;
 in: furnace.auth.features.recover-password
 
-SYMBOL: lost-password-from
+symbol: lost-password-from
 
 : current-host ( -- string )
     url get host>> host-name or ;

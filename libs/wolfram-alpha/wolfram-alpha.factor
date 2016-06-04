@@ -7,7 +7,7 @@ splitting ui urls.encoding xml xml.data xml.traversal ;
 
 in: wolfram-alpha
 
-SYMBOL: wolfram-api-id
+symbol: wolfram-api-id
 
 ! "XXXXXX-XXXXXXXXXX" wolfram-api-id set-global
 

@@ -31,7 +31,7 @@ in: simple-flat-file
 : data ( filename -- data )
     utf8 file-lines drop-comments [ split-; ] map! ;
 
-SYMBOL: interned
+symbol: interned
 
 : range, ( value key -- )
     swap interned get
@@ -40,7 +40,7 @@ SYMBOL: interned
 : expand-ranges ( assoc -- interval-map )
     [
         [
-            swap CHAR: . over member? [
+            swap char: . over member? [
                 ".." split1 [ hex> ] bi@ 2array
             ] [ hex> ] if range,
         ] assoc-each

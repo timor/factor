@@ -71,4 +71,4 @@ M: collision hashcode* value>> hashcode* 15 bitand ;
     ] times
     drop ;
 
-MAIN: hashtables-benchmark
+main: hashtables-benchmark

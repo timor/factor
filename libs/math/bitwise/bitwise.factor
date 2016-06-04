@@ -78,7 +78,7 @@ MACRO: bitfield ( bitspec -- quot )
 ! bit-count
 <PRIVATE
 
-DEFER: byte-bit-count
+defer: byte-bit-count
 
 <<
 

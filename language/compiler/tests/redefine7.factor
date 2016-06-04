@@ -9,7 +9,7 @@ in: compiler.tests.redefine7
 [ ] [
     "USING: kernel math ;
     in: compiler.tests.redefine7
-    MIXIN: my-mixin
+    mixin: my-mixin
     INSTANCE: fixnum my-mixin
     : my-inline ( a -- b ) dup my-mixin? [ 1 + ] when ;"
     eval( -- )

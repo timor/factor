@@ -9,4 +9,4 @@ in: benchmark.dlists
         [ dup 1 - * 2 / ] bi assert=
     ] each ;
 
-MAIN: dlists-benchmark
+main: dlists-benchmark

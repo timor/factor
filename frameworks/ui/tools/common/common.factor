@@ -6,7 +6,7 @@ ui.pens.solid ui.gadgets.scrollers ui.gadgets.tracks ui.theme
 combinators.short-circuit ;
 in: ui.tools.common
 
-SYMBOL: tool-dims
+symbol: tool-dims
 
 tool-dims [ H{ } clone ] initialize
 

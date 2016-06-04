@@ -6,10 +6,10 @@ strings combinators accessors arrays math
 logging.server logging.parser calendar.format ;
 in: logging.analysis
 
-SYMBOL: word-names
-SYMBOL: errors
-SYMBOL: word-histogram
-SYMBOL: message-histogram
+symbol: word-names
+symbol: errors
+symbol: word-histogram
+symbol: message-histogram
 
 : analyze-entry ( entry -- )
     dup level>> { ERROR CRITICAL } member-eq? [ dup errors get push ] when

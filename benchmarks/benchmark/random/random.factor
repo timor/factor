@@ -6,4 +6,4 @@ in: benchmark.random
         200 random random-unit random-32 3drop
     ] times ;
 
-MAIN: random-benchmark
+main: random-benchmark

@@ -31,9 +31,9 @@ COM-INTERFACE: ISelfReferential IUnknown {d4f45bf8-f720-4701-a09d-e8e341981121}
 { ( this newX -- ) } [ \ IInherited::setX stack-effect ] unit-test
 { ( this mul add -- int ) } [ \ IUnrelated::xMulAdd stack-effect ] unit-test
 
-SYMBOL: +test-wrapper+
-SYMBOL: +guinea-pig-implementation+
-SYMBOL: +orig-wrapped-objects+
+symbol: +test-wrapper+
+symbol: +guinea-pig-implementation+
+symbol: +orig-wrapped-objects+
 
 +wrapped-objects+ get-global clone +orig-wrapped-objects+ set-global
 

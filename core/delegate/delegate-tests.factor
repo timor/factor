@@ -78,7 +78,7 @@ CONSULT: beta hey value>> 1 - ;
 { -1 } [ 1 <hey> two ] unit-test
 { -1 } [ 1 <hey> three ] unit-test
 { -1 } [ 1 <hey> four ] unit-test
-{ } [ "in: delegate.tests FORGET: alpha" eval( -- ) ] unit-test
+{ } [ "in: delegate.tests forget: alpha" eval( -- ) ] unit-test
 { f } [ hey \ one ?lookup-method ] unit-test
 
 TUPLE: slot-protocol-test-1 a b ;
@@ -144,7 +144,7 @@ PROTOCOL: silly-protocol do-me ;
 [ T{ a-tuple } do-me ] [ no-method? ] must-fail-with
 
 ! A slot protocol issue
-DEFER: slot-protocol-test-3
+defer: slot-protocol-test-3
 SLOT: y
 
 { f } [ \ slot-protocol-test-3 \ y>> ?lookup-method >boolean ] unit-test
@@ -179,7 +179,7 @@ TUPLE: slot-protocol-test-3 x y ;"
     <string-reader> "delegate-test-2" parse-stream
 ] unit-test
 
-DEFER: seq-delegate
+defer: seq-delegate
 
 ! See if removing a consultation updates protocol-consult word prop
 { [ ] } [

@@ -28,10 +28,10 @@ ts date time blob factor-blob url ;
     <person>
         swap >>the-id ;
 
-SYMBOL: person1
-SYMBOL: person2
-SYMBOL: person3
-SYMBOL: person4
+symbol: person1
+symbol: person2
+symbol: person3
+symbol: person4
 
 : test-tuples ( -- )
     [ ] [ person recreate-table ] unit-test
@@ -311,7 +311,7 @@ TUPLE: exam id name score ;
 
 : random-exam ( -- exam )
         f
-        6 [ CHAR: a CHAR: z [a,b] random ] replicate >string
+        6 [ char: a char: z [a,b] random ] replicate >string
         100 random
     exam boa ;
 

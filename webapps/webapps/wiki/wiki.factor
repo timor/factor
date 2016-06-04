@@ -35,7 +35,7 @@ IN: webapps.wiki
 
 TUPLE: wiki < dispatcher ;
 
-SYMBOL: can-delete-wiki-articles?
+symbol: can-delete-wiki-articles?
 
 can-delete-wiki-articles? define-capability
 

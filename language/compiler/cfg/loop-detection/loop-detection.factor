@@ -7,7 +7,7 @@ in: compiler.cfg.loop-detection
 
 TUPLE: natural-loop header index ends blocks ;
 
-SYMBOL: loops
+symbol: loops
 
 <PRIVATE
 
@@ -22,7 +22,7 @@ SYMBOLS: visited active ;
 : record-back-edge ( from to -- )
     lookup-header ends>> adjoin ;
 
-DEFER: find-loop-headers
+defer: find-loop-headers
 
 : visit-edge ( from to active -- )
     dupd in?
@@ -50,7 +50,7 @@ DEFER: find-loop-headers
 : process-loop-headers ( -- )
     loops get values [ process-loop-ends ] each ;
 
-SYMBOL: loop-nesting
+symbol: loop-nesting
 
 : compute-loop-nesting ( -- )
     loops get H{ } clone [

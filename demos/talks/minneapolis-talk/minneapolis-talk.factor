@@ -180,4 +180,4 @@ CONSTANT: minneapolis-slides
 : minneapolis-talk ( -- )
     minneapolis-slides "Minneapolis talk" slides-window ;
 
-MAIN: minneapolis-talk
+main: minneapolis-talk

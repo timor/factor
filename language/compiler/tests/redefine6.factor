@@ -10,7 +10,7 @@ in: compiler.tests.redefine6
     "USING: kernel kernel.private ;
     in: compiler.tests.redefine6
     GENERIC: my-generic ( a -- b ) ;
-    MIXIN: my-mixin
+    mixin: my-mixin
     M: my-mixin my-generic drop 0 ;
     : my-inline ( a -- b ) { my-mixin } declare my-generic ;"
     eval( -- )

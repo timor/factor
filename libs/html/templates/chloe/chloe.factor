@@ -89,7 +89,7 @@ COMPONENT: checkbox
 COMPONENT: code
 COMPONENT: xml
 
-SYMBOL: template-cache
+symbol: template-cache
 
 H{ } template-cache set-global
 

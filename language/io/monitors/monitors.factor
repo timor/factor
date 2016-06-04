@@ -27,7 +27,7 @@ M: monitor set-timeout timeout<< ;
 
 <PRIVATE
 
-SYMBOL: monitor-disposed
+symbol: monitor-disposed
 
 PRIVATE>
 
@@ -58,12 +58,12 @@ HOOK: (monitor) io-backend ( path recursive? mailbox -- monitor ) ;
     [ ] [ queue>> ] [ timeout ] tri mailbox-get-timeout
     dup monitor-disposed eq? [ drop already-disposed ] [ nip ] if ;
 
-SYMBOL: +add-file+
-SYMBOL: +remove-file+
-SYMBOL: +modify-file+
-SYMBOL: +rename-file-old+
-SYMBOL: +rename-file-new+
-SYMBOL: +rename-file+
+symbol: +add-file+
+symbol: +remove-file+
+symbol: +modify-file+
+symbol: +rename-file-old+
+symbol: +rename-file-new+
+symbol: +rename-file+
 
 : with-monitor ( path recursive? quot -- )
     [ <monitor> ] dip with-disposal ; inline

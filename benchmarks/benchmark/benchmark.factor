@@ -59,4 +59,4 @@ PRIVATE>
 : timing-benchmarks ( -- )
     run-timing-benchmarks [ timings. ] [ benchmark-errors. ] bi* ;
 
-MAIN: timing-benchmarks
+main: timing-benchmarks

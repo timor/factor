@@ -12,7 +12,7 @@ GENERIC: definition-icon ( definition -- path ) ;
 
 <<
 
-SYMBOL: icons
+symbol: icons
 
 icons [ H{ } clone ] initialize
 

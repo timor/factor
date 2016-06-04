@@ -25,7 +25,7 @@ singleton: openssl
     SSL_load_error_strings
     OpenSSL_add_all_digests ;
 
-SYMBOL: ssl-initialized?
+symbol: ssl-initialized?
 
 : maybe-init-ssl ( -- )
     ssl-initialized? get-global [

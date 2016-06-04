@@ -9,7 +9,7 @@ sequences.deep accessors io.streams.string ;
 ! This is insufficient
 [ [ drop ] each-element ] must-infer
 
-SYMBOL: xml-file
+symbol: xml-file
 [ ] [
     "vocab:xml/tests/test.xml"
     [ file>xml ] with-html-entities xml-file set

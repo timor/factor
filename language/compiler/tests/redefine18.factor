@@ -6,14 +6,14 @@ in: compiler.tests.redefine18
 GENERIC: g1 ( a -- b ) ;
 GENERIC: g2 ( a -- b ) ;
 
-MIXIN: c
+mixin: c
 singleton: a
 INSTANCE: a c
 
 M: c g1 g2 ;
 M: a g2 drop a ;
 
-MIXIN: d
+mixin: d
 INSTANCE: d c
 
 M: d g2 drop d ;
@@ -22,4 +22,4 @@ M: d g2 drop d ;
 
 [ d ] [ "b" "compiler.tests.redefine18" lookup-word g1 ] unit-test
 
-[ ] [ "in: compiler.tests.redefine18 FORGET: b" eval( -- ) ] unit-test
+[ ] [ "in: compiler.tests.redefine18 forget: b" eval( -- ) ] unit-test

@@ -1,11 +1,11 @@
 USING: io.files kernel math namespaces pdf pdf.libhpdf prettyprint sequences ;
 IN: pdf.tests
 
-SYMBOL: font
+symbol: font
 
-SYMBOL: width
-SYMBOL: height
-SYMBOL: twidth
+symbol: width
+symbol: height
+symbol: twidth
 
 : font-list ( -- seq ) {
     "Courier"
@@ -67,7 +67,7 @@ SYMBOL: twidth
     [
         60 height get 105 - page-move-text-pos
 
-        SYMBOL: fontname
+        symbol: fontname
 
         font-list [
 

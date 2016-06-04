@@ -24,4 +24,4 @@ CONSTANT: rom-info {
         "Ballon Bomber" <balloon-bomber> rom-info run-rom
     ] with-ui ;
 
-MAIN: run-balloon
+main: run-balloon

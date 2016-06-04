@@ -6,11 +6,11 @@ math.order math.parser math.parser.private present sequences
 typed ;
 in: calendar.format
 
-: pad-00 ( n -- str ) number>string 2 CHAR: 0 pad-head ;
+: pad-00 ( n -- str ) number>string 2 char: 0 pad-head ;
 
-: pad-0000 ( n -- str ) number>string 4 CHAR: 0 pad-head ;
+: pad-0000 ( n -- str ) number>string 4 char: 0 pad-head ;
 
-: pad-00000 ( n -- str ) number>string 5 CHAR: 0 pad-head ;
+: pad-00000 ( n -- str ) number>string 5 char: 0 pad-head ;
 
 : write-00 ( n -- ) pad-00 write ;
 
@@ -162,16 +162,16 @@ M: timestamp year. ( timestamp -- )
     [ (timestamp>rfc3339) ] with-string-writer ;
 
 : signed-gmt-offset ( dt ch -- dt' )
-    { { CHAR: + [ 1 ] } { CHAR: - [ -1 ] } } case time* ;
+    { { char: + [ 1 ] } { char: - [ -1 ] } } case time* ;
 
 : read-rfc3339-gmt-offset ( ch -- dt )
     {
         { f [ instant ] }
-        { CHAR: Z [ instant ] }
+        { char: Z [ instant ] }
         [
             [
                 read-00 hours
-                read1 { { CHAR: : [ read-00 ] } { f [ 0 ] } } case minutes
+                read1 { { char: : [ read-00 ] } { f [ 0 ] } } case minutes
                 time+
             ] dip signed-gmt-offset
         ]
@@ -192,7 +192,7 @@ M: timestamp year. ( timestamp -- )
     read-ymd
     "Tt \t" expect
     read-hms
-    read1 { { CHAR: . [ read-rfc3339-seconds ] } [ ] } case
+    read1 { { char: . [ read-rfc3339-seconds ] } [ ] } case
     read-rfc3339-gmt-offset
     <timestamp> ;
 
@@ -222,7 +222,7 @@ ERROR: invalid-timestamp-format ;
 : (rfc822>timestamp) ( -- timestamp )
     timestamp new
         "," read-token day-abbreviations3 member? check-timestamp drop
-        read1 CHAR: \s assert=
+        read1 char: \s assert=
         read-sp checked-number >>day
         read-sp month-abbreviations index 1 + check-timestamp >>month
         read-sp checked-number >>year
@@ -241,7 +241,7 @@ ERROR: invalid-timestamp-format ;
 : (cookie-string>timestamp-1) ( -- timestamp )
     timestamp new
         "," read-token check-day-name
-        read1 CHAR: \s assert=
+        read1 char: \s assert=
         "-" read-token checked-number >>day
         "-" read-token month-abbreviations index 1 + check-timestamp >>month
         read-sp checked-number >>year

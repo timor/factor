@@ -6,7 +6,7 @@ literals locals math math.bitwise math.ranges sequences
 sequences.generalizations sequences.private ;
 in: checksums.sha
 
-MIXIN: sha
+mixin: sha
 INSTANCE: sha checksum
 
 singleton: sha1

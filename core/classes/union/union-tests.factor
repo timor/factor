@@ -4,8 +4,8 @@ compiler.units eval io.streams.string kernel math math.private
 parser quotations see sequences slots strings tools.test words ;
 in: classes.union.tests
 
-! DEFER: bah
-! FORGET: bah
+! defer: bah
+! forget: bah
 UNION: bah fixnum alien ;
 { bah } [ \ bah? "predicating" word-prop ] unit-test
 

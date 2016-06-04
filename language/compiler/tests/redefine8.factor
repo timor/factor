@@ -9,7 +9,7 @@ in: compiler.tests.redefine8
 [ ] [
     "USING: kernel math math.order sorting ;
     in: compiler.tests.redefine8
-    MIXIN: my-mixin
+    mixin: my-mixin
     INSTANCE: fixnum my-mixin
     GENERIC: my-generic ( a -- b ) ;
     ! We add the bogus quotation here to hinder inlining

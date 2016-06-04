@@ -69,7 +69,7 @@ SYNTAX: XML-NS:
 : string>doc ( string -- xml )
     t interpolating? [ string>xml ] with-variable ;
 
-DEFER: interpolate-sequence
+defer: interpolate-sequence
 
 : get-interpolated ( interpolated -- quot )
     var>> '[ [ _ of ] keep ] ;

@@ -7,10 +7,10 @@ in: turing
 TUPLE: state sym dir next ;
 
 ! Mapping from symbol/state pairs into new-state tuples
-SYMBOL: states
+symbol: states
 
 ! Halting state
-SYMBOL: halt
+symbol: halt
 
 ! This is a simple program that outputs 5 1's
 H{
@@ -23,19 +23,19 @@ H{
 } states set
 
 ! Current state
-SYMBOL: state
+symbol: state
 
 ! Initial state
 1 state set
 
 ! Position of head on tape
-SYMBOL: position
+symbol: position
 
 ! Initial tape position
 5 position set
 
 ! The tape, a mutable sequence of some kind
-SYMBOL: tape
+symbol: tape
 
 ! Initial tape
 20 0 <array> >vector tape set
@@ -63,7 +63,7 @@ SYMBOL: tape
     ! Print current turing machine state.
     state get .
     tape get .
-    2 position get 2 * + CHAR: \s <string> write "^" print ;
+    2 position get 2 * + char: \s <string> write "^" print ;
 
 : n ( -- )
     ! Do one step and print new state.

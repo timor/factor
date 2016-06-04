@@ -79,7 +79,7 @@ in: compiler.tree.recursive.tests
 
 : blah ( -- value ) f ;
 
-DEFER: a
+defer: a
 
 : b ( -- )
     blah [ b ] [ a ] if ; inline recursive
@@ -107,7 +107,7 @@ DEFER: a
     \ b label-is-loop?
 ] unit-test
 
-DEFER: a'
+defer: a'
 
 : b' ( -- )
     blah [ b' b' ] [ a' ] if ; inline recursive
@@ -139,7 +139,7 @@ DEFER: a'
     \ b' label-is-loop?
 ] unit-test
 
-DEFER: a''
+defer: a''
 
 : b'' ( a -- b )
     a'' ; inline recursive
@@ -178,7 +178,7 @@ DEFER: a''
     \ (each-integer) label-is-loop?
 ] unit-test
 
-DEFER: a'''
+defer: a'''
 
 : b''' ( -- )
     blah [ b''' ] [ a''' b''' ] if ; inline recursive
@@ -191,7 +191,7 @@ DEFER: a'''
     \ a''' label-is-loop?
 ] unit-test
 
-DEFER: b4
+defer: b4
 
 : a4 ( a -- b ) dup [ b4 ] when ; inline recursive
 

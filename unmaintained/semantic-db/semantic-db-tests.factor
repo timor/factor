@@ -3,7 +3,7 @@ kernel math namespaces semantic-db sequences sorting tools.test
 tools.walker ;
 IN: semantic-db.tests
 
-SYMBOL: context
+symbol: context
 
 : db-path "semantic-db-test.db" temp-file ;
 : test-db db-path sqlite-db ;

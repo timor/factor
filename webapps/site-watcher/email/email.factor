@@ -3,7 +3,7 @@
 USING: smtp namespaces accessors kernel arrays site-watcher.db ;
 IN: site-watcher.email
 
-SYMBOL: site-watcher-from
+symbol: site-watcher-from
 site-watcher-from [ "factor-site-watcher@gmail.com" ] initialize
 
 : send-site-email ( watching-site body subject -- )

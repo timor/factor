@@ -20,7 +20,7 @@ M: gml-file-error error.
         [ "• " write print-gml ] each
     ] unless-empty ;
 
-SYMBOL: gml
+symbol: gml
 
 : make-gml ( quot -- gml b-rep )
     [
@@ -66,4 +66,4 @@ SYMBOLS: pre-hook post-hook ;
 : gml-listener ( -- )
     [ (gml-listener) ] make-gml 2drop ;
 
-MAIN: gml-listener
+main: gml-listener

@@ -321,7 +321,7 @@ TUPLE: manifest2 name literals holders definitions definition-assoc namespaces ;
 : manifest>using ( manifest -- seq )
     holders>> holders>using ;
 
-DEFER: load-modern
+defer: load-modern
 : manifest>combined-namespace ( manifest -- namespaces )
     [ manifest>using [ load-modern manifest>own-namespace ] map sift members H{ } clone [ assoc-union ] reduce ]
     [ manifest>own-namespace ] bi assoc-union ;

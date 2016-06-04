@@ -9,7 +9,7 @@ FROM: alien.c-types => int float ;
 SPECIALIZED-ARRAY: float
 in: opengl.textures
 
-SYMBOL: non-power-of-2-textures?
+symbol: non-power-of-2-textures?
 
 : check-extensions ( -- )
     ! ATI frglx driver doesn't implement GL_ARB_texture_non_power_of_two properly.
@@ -264,7 +264,7 @@ SLOT: display-list
 
 GENERIC: draw-scaled-texture ( dim texture -- ) ;
 
-DEFER: make-texture
+defer: make-texture
 
 : (image-format) ( component-order component-type -- internal-format format type )
     [ image-internal-format ] [ image-data-format ] 2bi ;

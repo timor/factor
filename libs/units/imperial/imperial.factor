@@ -63,7 +63,7 @@ ALIAS: perches rods
 
 ! VOLUME
 
-DEFER: imperial-fluid-ounces
+defer: imperial-fluid-ounces
 
 : minims ( n -- dimensioned ) 1/480 * imperial-fluid-ounces ;
 

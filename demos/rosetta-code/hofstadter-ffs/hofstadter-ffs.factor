@@ -24,8 +24,8 @@ in: rosetta-code.hofstadter-ffs
 !    first 960 values of ffs include all the integers from 1 to 1000
 !    exactly once.
 
-SYMBOL: S  V{ 2 } S set
-SYMBOL: R  V{ 1 } R set
+symbol: S  V{ 2 } S set
+symbol: R  V{ 1 } R set
 
 : next ( s r -- news newr )
     2dup [ last ] bi@ + suffix

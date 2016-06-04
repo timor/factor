@@ -30,7 +30,7 @@ in: project-euler.045
 : nth-hexagonal ( n -- m )
     dup 2 * 1 - * ;
 
-DEFER: next-solution
+defer: next-solution
 
 : (next-solution) ( n hexagonal -- hexagonal )
     dup pentagonal? [ nip ] [ drop next-solution ] if ;

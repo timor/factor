@@ -6,7 +6,7 @@ in: math.text.french
 
 <PRIVATE
 
-DEFER: basic
+defer: basic
 
 CONSTANT: literals
     H{ { 0 "zéro" } { 1 "un" } { 2 "deux" } { 3 "trois" } { 4 "quatre" }
@@ -29,7 +29,7 @@ MEMO: units ( -- seq ) ! up to 10^99
 ! The only plurals we have to remove are "quatre-vingts" and "cents",
 ! which are also the only strings ending with "ts".
 : unpluralize ( str -- newstr ) dup "ts" tail? [ but-last ] when ;
-: pluralize ( str -- newstr ) CHAR: s suffix ;
+: pluralize ( str -- newstr ) char: s suffix ;
 
 : space-append ( str1 str2 -- str ) " " glue ;
 

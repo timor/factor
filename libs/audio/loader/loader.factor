@@ -5,7 +5,7 @@ in: audio.loader
 
 ERROR: unknown-audio-extension extension ;
 
-SYMBOL: audio-types
+symbol: audio-types
 audio-types [ H{ } clone ] initialize
 
 : register-audio-extension ( extension quot -- )

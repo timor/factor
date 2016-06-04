@@ -14,7 +14,7 @@ in: memcached
 ! - initial-value for incr/decr
 
 
-SYMBOL: memcached-server
+symbol: memcached-server
 "127.0.0.1" 11211 <inet> memcached-server set-global
 
 : with-memcached ( quot -- )

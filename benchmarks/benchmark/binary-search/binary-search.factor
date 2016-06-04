@@ -13,4 +13,4 @@ primes-under-million drop
     1 1000000 [a,b] [ primes-under-million sorted-member? ] map
     length 1000000 assert= ;
 
-MAIN: binary-search-benchmark
+main: binary-search-benchmark

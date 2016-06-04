@@ -5,10 +5,10 @@ gobject-introspection.common gobject-introspection.repository kernel
 locals namespaces parser sequences sets ;
 in: gobject-introspection.types
 
-SYMBOL: type-infos
+symbol: type-infos
 type-infos [ H{ } ] initialize
 
-SYMBOL: standard-types
+symbol: standard-types
 standard-types [ V{ } ] initialize
 
 TUPLE: type-info c-type ;
@@ -23,7 +23,7 @@ TUPLE: callback-info < type-info ;
 TUPLE: class-info < type-info ;
 TUPLE: interface-info < type-info ;
 
-DEFER: find-type-info
+defer: find-type-info
 
 PREDICATE: none-type < simple-type
     name>> "none" = ;
@@ -70,7 +70,7 @@ PREDICATE: fixed-size-array-type < c-array-type fixed-size>> >boolean ;
 
 : qualified-type-name ( data-type -- name )
     [ name>> ] keep {
-        [ name>> CHAR: . swap member? ]
+        [ name>> char: . swap member? ]
         [ none-type? ]
         [ standard-type? ]
     } 1|| [ qualified-name ] unless ;

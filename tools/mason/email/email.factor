@@ -41,9 +41,9 @@ in: mason.email
 ! coming in, if eg git-daemon goes down on factorcode.org and
 ! it fails pulling every 5 minutes.
 
-SYMBOL: last-email-time
+symbol: last-email-time
 
-SYMBOL: next-email-time
+symbol: next-email-time
 
 : send-email-throttled? ( -- ? )
     ! We sent too many errors. See if its time to send a new

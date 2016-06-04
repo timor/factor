@@ -26,4 +26,4 @@ in: tools.move
         [ 2drop usage ]
     } cond ;
 
-MAIN: run-move
+main: run-move

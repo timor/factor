@@ -11,7 +11,7 @@ TUPLE: log-entry date level word-name message ;
 : string-of ( quot -- parser )
     satisfy repeat0 [ >string ] action ; inline
 
-SYMBOL: multiline
+symbol: multiline
 
 : date-parser ( -- parser )
     [ "]" member? not ] string-of [
@@ -28,7 +28,7 @@ SYMBOL: multiline
 : word-name-parser ( -- parser )
     [ " :" member? not ] string-of ;
 
-SYMBOL: malformed
+symbol: malformed
 
 : malformed-line-parser ( -- parser )
     [ drop t ] string-of

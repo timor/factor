@@ -23,10 +23,10 @@ CONSTANT: standard-layouts {
 
 PRIVATE>
 
-SYMBOL: default-layout
+symbol: default-layout
 "dot" default-layout set-global
 
-SYMBOL: preview-format
+symbol: preview-format
 "png" preview-format set-global
 
 ERROR: unsupported-preview-format preview-format ;
@@ -34,7 +34,7 @@ ERROR: unsupported-preview-format preview-format ;
 M: unsupported-preview-format summary
     drop "Unsupported preview format" ;
 
-SYMBOL: graph-encoding
+symbol: graph-encoding
 utf8 graph-encoding set-global
 
 ERROR: unsupported-encoding graph-encoding ;

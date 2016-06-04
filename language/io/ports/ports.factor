@@ -6,7 +6,7 @@ kernel kernel.private libc locals math math.order math.private
 namespaces sequences strings system ;
 in: io.ports
 
-SYMBOL: default-buffer-size
+symbol: default-buffer-size
 64 1024 * default-buffer-size set-global
 
 TUPLE: port < disposable handle timeout ;

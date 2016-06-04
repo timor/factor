@@ -42,4 +42,4 @@ in: mason
     [ build-loop ] "Build loop" spawn
     stop ;
 
-MAIN: run-mason
+main: run-mason

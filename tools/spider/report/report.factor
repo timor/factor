@@ -5,9 +5,9 @@ math.statistics namespaces sequences sorting xml.syntax
 spider urls html ;
 in: spider.report
 
-SYMBOL: network-failures
-SYMBOL: broken-pages
-SYMBOL: timings
+symbol: network-failures
+symbol: broken-pages
+symbol: timings
 
 : record-broken-page ( url spider-result -- )
     headers>> [ code>> ] [ message>> ] bi 2array 2array
@@ -30,10 +30,10 @@ SYMBOL: timings
 
 CONSTANT: slowest 5
 
-SYMBOL: slowest-pages
-SYMBOL: mean-time
-SYMBOL: median-time
-SYMBOL: time-std
+symbol: slowest-pages
+symbol: mean-time
+symbol: median-time
+symbol: time-std
 
 : process-timings ( -- )
     timings get sort-values

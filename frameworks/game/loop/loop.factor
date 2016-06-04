@@ -19,7 +19,7 @@ TUPLE: game-loop
 GENERIC: tick* ( delegate -- ) ;
 GENERIC: draw* ( tick-slice delegate -- ) ;
 
-DEFER: stop-loop
+defer: stop-loop
 
 TUPLE: game-loop-error-state error game-loop ;
 

@@ -4,7 +4,7 @@ USING: namespaces sequences math.parser kernel macros
 generalizations sequences.generalizations locals ;
 in: nmake
 
-SYMBOL: building-seq
+symbol: building-seq
 : get-building-seq ( n -- seq )
     building-seq get nth ;
 

@@ -40,4 +40,4 @@ HINTS: do-line vector string ;
     reverse-complement-out
     reverse-complement ;
 
-MAIN: reverse-complement-benchmark
+main: reverse-complement-benchmark

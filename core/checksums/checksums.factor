@@ -53,7 +53,7 @@ M: checksum checksum-stream
     [ stream-contents ] dip checksum-bytes ;
 
 M: checksum checksum-lines
-    [ B{ CHAR: \n } join ] dip checksum-bytes ;
+    [ B{ char: \n } join ] dip checksum-bytes ;
 
 : checksum-file ( path checksum -- value )
     ! normalize-path (file-reader) is equivalent to

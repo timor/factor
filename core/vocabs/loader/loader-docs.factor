@@ -63,7 +63,7 @@ $nl
 $nl
 "Application vocabularies can define a main entry point, giving the user a convenient way to run the application:"
 { $subsections
-    postpone: MAIN:
+    postpone: main:
     run
     runnable-vocab
 }
@@ -77,7 +77,7 @@ HELP: load-vocab
 
 HELP: vocab-main
 { $values { "vocab-spec" "a vocabulary specifier" } { "main" word } }
-{ $description "Outputs the main entry point for a vocabulary. The entry point can be executed with " { $link run } " and set with " { $link postpone: MAIN: } "." } ;
+{ $description "Outputs the main entry point for a vocabulary. The entry point can be executed with " { $link run } " and set with " { $link postpone: main: } "." } ;
 
 HELP: vocab-roots
 { $var-description "A sequence of pathname strings to search for vocabularies." } ;
@@ -120,7 +120,7 @@ HELP: require-when
 
 HELP: run
 { $values { "vocab" "a vocabulary specifier" } }
-{ $description "Runs a vocabulary's main entry point. The main entry point is set with the " { $link postpone: MAIN: } " parsing word." } ;
+{ $description "Runs a vocabulary's main entry point. The main entry point is set with the " { $link postpone: main: } " parsing word." } ;
 
 HELP: vocab-source-path
 { $values { "vocab" "a vocabulary specifier" } { "path/f" { $maybe "a pathname string" } } }

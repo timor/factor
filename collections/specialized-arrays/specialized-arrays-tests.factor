@@ -133,7 +133,7 @@ SPECIALIZED-ARRAY: fixed-string
 { "c-array@ int f 100" } [ f 100 <direct-int-array> unparse ] unit-test
 
 ! If the C type doesn't exist, don't generate a vocab
-SYMBOL: __does_not_exist__
+symbol: __does_not_exist__
 
 [
     "

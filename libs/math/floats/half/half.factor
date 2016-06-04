@@ -28,7 +28,7 @@ in: math.floats.half
         ] unless
     ] bi bitor bits>float ;
 
-SYMBOL: half
+symbol: half
 
 <<
 

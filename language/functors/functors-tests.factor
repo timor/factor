@@ -72,7 +72,7 @@ W DEFINES ${W}
 
 WHERE
 
-SYMBOL: W
+symbol: W
 
 ;FUNCTOR
 
@@ -111,7 +111,7 @@ M: integer W 1 + ;
     : some-word ( -- ) ;
     GENERIC: some-generic ( a -- b ) ;
     M: some-tuple some-generic ;
-    SYMBOL: some-symbol" <string-reader> "functors-test" parse-stream
+    symbol: some-symbol" <string-reader> "functors-test" parse-stream
 ] unit-test
 
 : test-redefinition ( -- )
@@ -139,7 +139,7 @@ TUPLE: W-tuple ;
 : W-word ( -- ) ;
 GENERIC: W-generic ( a -- b ) ;
 M: W-tuple W-generic ;
-SYMBOL: W-symbol
+symbol: W-symbol
 
 ;FUNCTOR
 

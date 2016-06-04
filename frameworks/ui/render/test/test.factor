@@ -20,7 +20,7 @@ M: line-test draw-interior
 : message-window ( text -- )
     <label> "Message" open-window ;
 
-SYMBOL: render-output
+symbol: render-output
 
 : twiddle ( bytes -- bytes )
     ! On Windows, white is { 253 253 253 } ?
@@ -72,4 +72,4 @@ M: take-screenshot draw-boundary
 : ui-render-test ( -- )
     <ui-render-test> "Test" open-window ;
 
-MAIN: ui-render-test
+main: ui-render-test

@@ -10,12 +10,12 @@ CONSTANT: bot-channel "#concatenative"
 CONSTANT: default-log-directory "resource:logs/irc"
 CONSTANT: default-nickserv-handle "flogbot2"
 
-SYMBOL: ircbot-log-directory
-SYMBOL: nickserv-handle
-SYMBOL: nickserv-password
+symbol: ircbot-log-directory
+symbol: nickserv-handle
+symbol: nickserv-password
 
-SYMBOL: current-day
-SYMBOL: current-stream
+symbol: current-day
+symbol: current-stream
 
 : bot-profile ( -- obj )
     "irc.freenode.org" 6667
@@ -69,4 +69,4 @@ M: irc-message handle-message [ >log-line ] [ timestamp>> ] bi log-message ;
 
 : logbot ( -- ) start-bot ;
 
-MAIN: logbot
+main: logbot

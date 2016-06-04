@@ -14,4 +14,4 @@ in: benchmark.e-decimals
 : e-decimals-benchmark ( -- )
     5 [ 800 calculate-e-decimals drop ] times ;
 
-MAIN: e-decimals-benchmark
+main: e-decimals-benchmark

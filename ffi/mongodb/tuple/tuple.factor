@@ -40,7 +40,7 @@ SYNTAX: MDBTUPLE:
     [ drop-table ]
     [ ensure-table ] bi ;
 
-DEFER: tuple>query
+defer: tuple>query
 
 <PRIVATE
 

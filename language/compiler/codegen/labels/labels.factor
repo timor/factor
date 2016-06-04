@@ -5,7 +5,7 @@ compiler.constants kernel make math namespaces sequences ;
 in: compiler.codegen.labels
 
 ! Labels
-SYMBOL: label-table
+symbol: label-table
 
 TUPLE: label offset ;
 
@@ -38,7 +38,7 @@ TUPLE: label-fixup-state { label label } { class integer } { offset integer } ;
     bi* ;
 
 ! Binary literals
-SYMBOL: binary-literal-table
+symbol: binary-literal-table
 
 : add-binary-literal ( obj -- label )
     <label> [ 2array binary-literal-table get push ] keep ;

@@ -219,7 +219,7 @@ M: uniform-tuple (bind-uniforms)
     dup "uniform-tuple-slots" word-prop
     [ [ superclass-of all-uniform-tuple-slots ] dip append ] [ drop { } ] if* ;
 
-DEFER: uniform-texture-accessors
+defer: uniform-texture-accessors
 
 : uniform-type-texture-accessors ( uniform-type -- accessors )
     texture-uniform = [ { [ ] } ] [ { } ] if ;
@@ -359,7 +359,7 @@ M: binary-data bind-uniform-vec3 ( index sequence -- ) 1 swap glUniform3fv ; inl
 M: object bind-uniform-vec4 ( index sequence -- ) first4 glUniform4f ; inline
 M: binary-data bind-uniform-vec4 ( index sequence -- ) 1 swap glUniform4fv ; inline
 
-DEFER: [bind-uniform-tuple]
+defer: [bind-uniform-tuple]
 
 :: [bind-uniform-array] ( value>>-quot type texture-unit name dim -- texture-unit' quot )
     { name uniform-index } >quotation :> index-quot

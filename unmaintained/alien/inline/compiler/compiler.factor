@@ -6,8 +6,8 @@ locals make sequences system vocabs.parser words io.directories
 io.pathnames ;
 IN: alien.inline.compiler
 
-SYMBOL: C
-SYMBOL: C++
+symbol: C
+symbol: C++
 
 : inline-libs-directory ( -- path )
     "alien-inline-libs" resource-path dup make-directories ;

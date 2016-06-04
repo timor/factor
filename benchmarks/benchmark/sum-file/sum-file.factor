@@ -16,4 +16,4 @@ in: benchmark.sum-file
         "sum-file.txt" temp-file sum-file 4999950000 assert=
     ] times ;
 
-MAIN: sum-file-benchmark
+main: sum-file-benchmark

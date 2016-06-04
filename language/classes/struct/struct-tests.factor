@@ -16,7 +16,7 @@ SPECIALIZED-ARRAY: int
 SPECIALIZED-ARRAY: ushort
 in: classes.struct.tests
 
-SYMBOL: struct-test-empty
+symbol: struct-test-empty
 
 [ [ struct-test-empty { } define-struct-class ] with-compilation-unit ]
 [ struct-must-have-slots? ] must-fail-with

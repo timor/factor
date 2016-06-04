@@ -13,11 +13,11 @@ in: tools.test
 
 TUPLE: test-failure < source-file-error continuation ;
 
-SYMBOL: +test-failure+
+symbol: +test-failure+
 
 M: test-failure error-type drop +test-failure+ ;
 
-SYMBOL: test-failures
+symbol: test-failures
 
 test-failures [ V{ } clone ] initialize
 
@@ -29,10 +29,10 @@ T{ error-type-holder
    { quot [ test-failures get ] }
 } define-error-type
 
-SYMBOL: verbose-tests?
+symbol: verbose-tests?
 t verbose-tests? set-global
 
-SYMBOL: restartable-tests?
+symbol: restartable-tests?
 t restartable-tests? set-global
 
 : <test-failure> ( error experiment path line# -- test-failure )
@@ -50,7 +50,7 @@ t restartable-tests? set-global
     <test-failure> test-failures get push
     notify-error-observers ;
 
-SYMBOL: current-test-file
+symbol: current-test-file
 
 : file-failure ( error -- )
     [ f current-test-file get ] keep error-line failure ;
@@ -81,7 +81,7 @@ M: did-not-fail summary drop "Did not fail" ;
 
 : experiment-title ( word -- string )
     "(" ?head drop ")" ?tail drop
-    H{ { CHAR: - CHAR: \s } } substitute >title ;
+    H{ { char: - char: \s } } substitute >title ;
 
 MACRO: <experiment> ( word -- quot )
     [ stack-effect in>> length dup ]
@@ -136,7 +136,7 @@ PRIVATE>
         ] recover
     ] with-variable ;
 
-SYMBOL: forget-tests?
+symbol: forget-tests?
 
 <PRIVATE
 
@@ -187,4 +187,4 @@ M: test-failure error. ( error -- )
 : test-main ( -- )
     command-line get [ [ load ] [ test ] bi ] each ;
 
-MAIN: test-main
+main: test-main

@@ -6,7 +6,7 @@ xml.data urls math math.parser combinators
 present fry io.streams.string xml.writer html ;
 in: html.elements
 
-SYMBOL: html
+symbol: html
 
 : write-html ( str -- )
     H{ { html t } } format ;

@@ -7,7 +7,7 @@ threads tools.crossref vocabs vocabs.files vocabs.hierarchy
 vocabs.loader vocabs.metadata words ;
 in: editors
 
-SYMBOL: editor-class
+symbol: editor-class
 
 : available-editors ( -- seq )
     "editors" disk-child-vocab-names ;
@@ -51,7 +51,7 @@ M: cannot-find-source error.
 : edit-file ( path -- )
     0 edit-location ;
 
-DEFER: edit
+defer: edit
 
 <PRIVATE
 

@@ -6,7 +6,7 @@ IN: cfdg.gl
 : get-modelview-matrix ( -- alien )
   GL_MODELVIEW_MATRIX 16 "GLdouble" <c-array> tuck glGetDoublev ;
 
-SYMBOL: modelview-matrix-stack
+symbol: modelview-matrix-stack
 
 : init-modelview-matrix-stack ( -- ) V{ } clone modelview-matrix-stack set ;
 

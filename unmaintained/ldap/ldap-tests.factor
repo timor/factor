@@ -38,8 +38,8 @@ get-ldp LDAP_OPT_PROTOCOL_VERSION LDAP_VERSION3 <int> set-option
 
         get-ldp get-message count-entries .
 
-        SYMBOL: entry
-        SYMBOL: attr
+        symbol: entry
+        symbol: attr
 
         "Attribute: " write
 

@@ -8,4 +8,4 @@ in: benchmark.base64
     20 [ >base64 base64> ] times
     drop ;
 
-MAIN: base64-benchmark
+main: base64-benchmark

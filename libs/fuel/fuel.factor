@@ -27,8 +27,8 @@ in: fuel
 
 <PRIVATE
 
-SYMBOL: :uses
-SYMBOL: :uses-suggestions
+symbol: :uses
+symbol: :uses-suggestions
 
 : is-use-restart ( restart -- ? )
     name>> [ "Use the " head? ] [ " vocabulary" tail? ] bi and ;

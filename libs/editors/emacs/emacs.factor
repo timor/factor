@@ -5,7 +5,7 @@ in: editors.emacs
 singleton: emacsclient
 emacsclient editor-class set-global
 
-SYMBOL: emacsclient-path
+symbol: emacsclient-path
 
 HOOK: find-emacsclient os ( -- path ) ;
 

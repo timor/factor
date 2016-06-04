@@ -165,7 +165,7 @@ M: regexp compile-regexp ( regexp -- regexp )
 M: reverse-regexp compile-regexp ( regexp -- regexp )
     t backwards? [ call-next-method ] with-variable ;
 
-DEFER: compile-next-match
+defer: compile-next-match
 
 : next-initial-word ( i string regexp -- start end string )
     [ compile-next-match ] with-compilation-unit do-next-match ;
@@ -200,9 +200,9 @@ PRIVATE>
 : take-until ( lexer -- string )
     dup skip-blank [
         dupd [
-            [ CHAR: / -rot index-from ] keep
+            [ char: / -rot index-from ] keep
             over [ "Unterminated regexp" throw ] unless
-            2dup [ 1 - ] dip nth CHAR: \\ =
+            2dup [ 1 - ] dip nth char: \\ =
             [ [ [ 1 + ] dip ] when ] keep
         ] loop over [ subseq ] dip 1 +
     ] change-lexer-column ;

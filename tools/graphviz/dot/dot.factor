@@ -30,7 +30,7 @@ M: sequence dot.
 
 : statements. ( sub/graph -- ) statements>> dot. ;
 
-SYMBOL: edgeop
+symbol: edgeop
 
 : with-edgeop ( graph quot -- )
     [

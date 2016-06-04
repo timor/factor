@@ -90,4 +90,4 @@ PRIVATE>
         [ binary file-contents (run-brainfuck) ] each
     ] if-empty ;
 
-MAIN: brainfuck-main
+main: brainfuck-main

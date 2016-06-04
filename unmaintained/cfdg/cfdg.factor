@@ -183,7 +183,7 @@ VAR: start-shape
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-SYMBOL: dlist
+symbol: dlist
 
 ! : build-model-dlist ( -- )
 !   1 glGenLists dlist set
@@ -239,7 +239,7 @@ SYMBOL: dlist
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-SYMBOL: the-slate
+symbol: the-slate
 
 : rebuild ( -- ) delete-dlist the-slate get relayout-1 ;
 

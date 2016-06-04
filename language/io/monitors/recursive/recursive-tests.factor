@@ -8,8 +8,8 @@ singleton: mock-io-backend
 
 TUPLE: mock-counter i ;
 
-SYMBOL: dummy-monitor-created
-SYMBOL: dummy-monitor-disposed
+symbol: dummy-monitor-created
+symbol: dummy-monitor-disposed
 
 TUPLE: dummy-monitor < monitor ;
 

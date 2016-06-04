@@ -28,8 +28,8 @@ GENERIC: copy-clipboard ( string gadget clipboard -- ) ;
 
 M: object copy-clipboard nip set-clipboard-contents ;
 
-SYMBOL: clipboard
-SYMBOL: selection
+symbol: clipboard
+symbol: selection
 
 : gadget-copy ( gadget clipboard -- )
     over gadget-selection?

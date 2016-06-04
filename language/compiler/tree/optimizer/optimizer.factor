@@ -16,7 +16,7 @@ compiler.tree.finalization
 compiler.tree.checker ;
 in: compiler.tree.optimizer
 
-SYMBOL: check-optimizer?
+symbol: check-optimizer?
 
 : ?check ( nodes -- nodes' )
     check-optimizer? get [

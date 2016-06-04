@@ -5,4 +5,4 @@ in: tools.deploy.test.11
 
 : foo ( -- ) "USING: math prettyprint ; 2 2 + ." eval( -- ) ;
 
-MAIN: foo
+main: foo

@@ -51,7 +51,7 @@ TUPLE: live-interval-state
 
 SYMBOLS: from to ;
 
-SYMBOL: live-intervals
+symbol: live-intervals
 
 : vreg>live-interval ( vreg -- live-interval )
     leader live-intervals get [ <live-interval> ] cache ;

@@ -87,4 +87,4 @@ TYPED: yuv>rgb ( rgb: byte-array yuv: yuv-buffer -- )
 : yuv-to-rgb-benchmark ( -- )
     [ fake-data yuv>rgb ] with-destructors ;
 
-MAIN: yuv-to-rgb-benchmark
+main: yuv-to-rgb-benchmark

@@ -4,7 +4,7 @@ source-files.errors tools.test tools.test.fuzz
 tools.test.fuzz.private tools.test.private ;
 in: tools.test.fuzz.tests
 
-SYMBOL: generator-stack
+symbol: generator-stack
 : with-generator-stack ( seq quot -- )
     [ reverse V{ } like generator-stack ] dip with-variable ; inline
 : generate-from-stack ( -- n )

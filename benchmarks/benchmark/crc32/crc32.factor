@@ -7,4 +7,4 @@ in: benchmark.crc32
         crc32 checksum-file drop
     ] times ;
 
-MAIN: crc32-benchmark
+main: crc32-benchmark

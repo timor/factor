@@ -7,7 +7,7 @@ in: ui.text
 
 <PRIVATE
 
-SYMBOL: font-renderer
+symbol: font-renderer
 
 : world-text-handle ( world -- handle )
     dup text-handle>> [ <cache-assoc> >>text-handle ] unless

@@ -15,11 +15,11 @@ in: sequences.extras.tests
 { "foo" } [ "foo" "foobar" longest-subseq ] unit-test
 { "foo" } [ "foobar" "foo" longest-subseq ] unit-test
 
-{ "" "" } [ "" "" CHAR: ? pad-longest ] unit-test
-{ "abc" "def" } [ "abc" "def" CHAR: ? pad-longest ] unit-test
-{ "   " "abc" } [ "" "abc" CHAR: \s pad-longest ] unit-test
-{ "abc" "   " } [ "abc" "" CHAR: \s pad-longest ] unit-test
-{ "abc..." "foobar" } [ "abc" "foobar" CHAR: . pad-longest ] unit-test
+{ "" "" } [ "" "" char: ? pad-longest ] unit-test
+{ "abc" "def" } [ "abc" "def" char: ? pad-longest ] unit-test
+{ "   " "abc" } [ "" "abc" char: \s pad-longest ] unit-test
+{ "abc" "   " } [ "abc" "" char: \s pad-longest ] unit-test
+{ "abc..." "foobar" } [ "abc" "foobar" char: . pad-longest ] unit-test
 
 { { 0 1 0 1 } } [
     { 0 0 0 0 } { 1 3 } over [ 1 + ] change-nths

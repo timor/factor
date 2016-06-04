@@ -69,7 +69,7 @@ FUNCTION: ALboolean alutSleep ( ALfloat duration ) ;
 
 FUNCTION: void alutUnloadWAV ( ALenum format, void* data, ALsizei size, ALsizei frequency ) ;
 
-SYMBOL: init
+symbol: init
 
 : init-openal ( -- )
     init get-global expired? [

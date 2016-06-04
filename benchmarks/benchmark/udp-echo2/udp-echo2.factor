@@ -5,4 +5,4 @@ in: benchmark.udp-echo2
 
 : udp-echo2-benchmark ( -- ) 10,000 1450 udp-echo ;
 
-MAIN: udp-echo2-benchmark
+main: udp-echo2-benchmark

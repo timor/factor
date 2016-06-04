@@ -50,4 +50,4 @@ CONSTANT: words { 24-from-1 24-from-2 24-from-3 24-from-4 }
     words [ "memoize" word-prop assoc-size ] map
     { 1588 5137 4995 10000 } assert= ;
 
-MAIN: backtrack-benchmark
+main: backtrack-benchmark

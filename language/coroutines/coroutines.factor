@@ -4,7 +4,7 @@ USING: kernel hashtables namespaces make continuations quotations
 accessors ;
 in: coroutines
 
-SYMBOL: current-coro
+symbol: current-coro
 
 TUPLE: coroutine resumecc exitcc originalcc ;
 

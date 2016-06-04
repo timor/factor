@@ -62,7 +62,7 @@ TUPLE: avl-node < node balance ;
         [ drop t ] ! balance is -1 or 1, tree is taller
     } cond ;
 
-DEFER: avl-set
+defer: avl-set
 
 : avl-insert ( value key node -- node taller? )
     2dup key>> before? left right ? [

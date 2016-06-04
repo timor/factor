@@ -7,7 +7,7 @@ in: cpu.arm.assembler
 ! Registers
 <<
 
-SYMBOL: registers
+symbol: registers
 
 V{ } registers set-global
 
@@ -51,7 +51,7 @@ PREDICATE: register-class < word register >boolean ;
 PRIVATE>
 
 ! Condition codes
-SYMBOL: cond-code
+symbol: cond-code
 
 : >CC ( n -- )
     cond-code set ;
@@ -96,7 +96,7 @@ PRIVATE>
 ! Data processing instructions
 <PRIVATE
 
-SYMBOL: updates-cond-code
+symbol: updates-cond-code
 
 PRIVATE>
 
@@ -289,8 +289,8 @@ PRIVATE>
 
 ! We might have to simulate these instructions since older ARM
 ! chips don't have them.
-SYMBOL: have-BX?
-SYMBOL: have-BLX?
+symbol: have-BX?
+symbol: have-BLX?
 
 <PRIVATE
 

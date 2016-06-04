@@ -34,8 +34,8 @@ CONSTANT: graphemes 12
 CATEGORY: grapheme-control Zl Zp Cc Cf ;
 : control-class ( ch -- class )
     {
-        { CHAR: \r [ CR ] }
-        { CHAR: \n [ LF ] }
+        { char: \r [ CR ] }
+        { char: \n [ LF ] }
         { 0x200C [ Extend ] }
         { 0x200D [ Extend ] }
         [ drop Control ]
@@ -64,7 +64,7 @@ CATEGORY: spacing Mc ;
 : init-table ( size -- table )
     dup [ f <array> ] curry replicate ;
 
-SYMBOL: table
+symbol: table
 
 : finish-table ( -- table )
     table get [ [ 1 = ] map ] map ;
@@ -139,10 +139,10 @@ define-constant
     word-break-table interval-at wOther or ;
 
 <<
-SYMBOL: check-letter-before
-SYMBOL: check-letter-after
-SYMBOL: check-number-before
-SYMBOL: check-number-after
+symbol: check-letter-before
+symbol: check-letter-after
+symbol: check-number-before
+symbol: check-number-after
 
 : make-word-table ( -- )
     { wCR } { wLF } connect

@@ -5,7 +5,7 @@ compiler.utilities grouping kernel namespaces sequences sets
 stack-checker.branches ;
 in: compiler.tree.propagation.copy
 
-SYMBOL: copies
+symbol: copies
 
 : resolve-copy ( copy -- val ) copies get compress-path ;
 

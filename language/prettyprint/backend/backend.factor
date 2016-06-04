@@ -83,7 +83,7 @@ M: real pprint*
 
 M: float pprint*
     dup fp-nan? [
-        \ NAN: [ fp-nan-payload >hex text ] pprint-prefix
+        \ nan: [ fp-nan-payload >hex text ] pprint-prefix
     ] [
         number-base get {
             { 10 [ number>string text ] }
@@ -100,21 +100,21 @@ M: f pprint* drop \ f pprint-word ;
 ! Strings
 : ch>ascii-escape ( ch -- ch' ? )
     H{
-        { CHAR: \a CHAR: a  }
-        { CHAR: \b CHAR: b  }
-        { CHAR: \e CHAR: e  }
-        { CHAR: \f CHAR: f  }
-        { CHAR: \n CHAR: n  }
-        { CHAR: \r CHAR: r  }
-        { CHAR: \t CHAR: t  }
-        { CHAR: \v CHAR: v  }
-        { CHAR: \0 CHAR: 0  }
-        { CHAR: \\ CHAR: \\ }
-        { CHAR: \" CHAR: \" }
+        { char: \a char: a  }
+        { char: \b char: b  }
+        { char: \e char: e  }
+        { char: \f char: f  }
+        { char: \n char: n  }
+        { char: \r char: r  }
+        { char: \t char: t  }
+        { char: \v char: v  }
+        { char: \0 char: 0  }
+        { char: \\ char: \\ }
+        { char: \" char: \" }
     } ?at ; inline
 
 : unparse-ch ( ch -- )
-    ch>ascii-escape [ CHAR: \\ , , ] [
+    ch>ascii-escape [ char: \\ , , ] [
         dup 32 < [ dup 16 < "\\x0" "\\x" ? % >hex % ] [ , ] if
     ] if ;
 

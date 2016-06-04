@@ -24,7 +24,7 @@ M: c-type-word declarations. drop ;
 GENERIC: pointer-string ( pointer -- string/f ) ;
 M: object pointer-string drop f ;
 M: word pointer-string [ record-vocab ] [ name>> ] bi ;
-M: pointer pointer-string to>> pointer-string [ CHAR: * suffix ] [ f ] if* ;
+M: pointer pointer-string to>> pointer-string [ char: * suffix ] [ f ] if* ;
 
 GENERIC: c-type-string ( c-type -- string ) ;
 

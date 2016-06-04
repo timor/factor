@@ -20,4 +20,4 @@ in: benchmark.udp-echo0
 
 : udp-echo0-benchmark ( -- ) 10,000 1 udp-echo ;
 
-MAIN: udp-echo0-benchmark
+main: udp-echo0-benchmark

@@ -16,7 +16,7 @@ SingleLineComment = "//" (!("\n") .)* "\n" => [[ ignore ]]
 MultiLineComment  = "/*" (!("*/") .)* "*/" => [[ ignore ]]
 Space             = [ \t\r\n] | SingleLineComment | MultiLineComment
 Spaces            = Space* => [[ ignore ]]
-NameFirst         = Letter | "$" => [[ CHAR: $ ]] | "_" => [[ CHAR: _ ]]
+NameFirst         = Letter | "$" => [[ char: $ ]] | "_" => [[ char: _ ]]
 NameRest          = NameFirst | Digit
 iName             = NameFirst NameRest* => [[ first2 swap prefix >string ]]
 Keyword           =  ("break"

@@ -31,4 +31,4 @@ M: gesture-logger user-input*
         "Gesture input" open-window
     ] with-ui ;
 
-MAIN: run-gesture-logger
+main: run-gesture-logger

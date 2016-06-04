@@ -147,7 +147,7 @@ M: stdin dispose*
     ] with-destructors ;
 
 : wait-for-stdin ( stdin -- size )
-    [ control>> CHAR: X over io:stream-write1 io:stream-flush ]
+    [ control>> char: X over io:stream-write1 io:stream-flush ]
     [ size>> ssize_t heap-size swap io:stream-read ssize_t deref ]
     bi ;
 
@@ -185,7 +185,7 @@ M: stdin cancel-operation
         size-read-fd <fd> init-fd <input-port> >>size
         data-read-fd <fd> >>data ;
 
-SYMBOL: dispatch-signal-hook
+symbol: dispatch-signal-hook
 
 dispatch-signal-hook [ [ drop ] ] initialize
 

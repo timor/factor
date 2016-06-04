@@ -10,7 +10,7 @@ ERROR: unknown-models-extension extension ;
 
 <PRIVATE
 
-SYMBOL: types
+symbol: types
 types [ H{ } clone ] initialize
 
 : models-class ( path -- class )

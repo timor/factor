@@ -239,7 +239,7 @@ in: compiler.cfg.builder.tests
 ] unit-test
 
 ! begin-cfg
-SYMBOL: foo
+symbol: foo
 
 { foo } [
     \ foo f begin-cfg word>>

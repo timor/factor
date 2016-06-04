@@ -133,7 +133,7 @@ TUPLE: compose-state i str char after last-class ;
         ] if*
     ] if ; inline
 
-DEFER: compose-iter
+defer: compose-iter
 
 : try-noncombining ( state char -- state )
     [ drop ] [ [ char>> ] dip combine-chars ] 2bi

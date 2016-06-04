@@ -29,8 +29,8 @@ M: assoc-mixin collection-size assoc-size ;
 { 2 } [ H{ { 1 2 } { 2 3 } } collection-size ] unit-test
 
 ! Test mixing in of new classes after the fact
-DEFER: mx1
-FORGET: mx1
+defer: mx1
+forget: mx1
 
 mixin: mx1
 
@@ -56,7 +56,7 @@ use: io.streams.string
         {
             "USING: sequences ;"
             "in: classes.mixin.tests"
-            "MIXIN: mixin-forget-test"
+            "mixin: mixin-forget-test"
             "INSTANCE: sequence mixin-forget-test"
             "GENERIC: mixin-forget-test-g ( x -- y ) ;"
             "M: mixin-forget-test mixin-forget-test-g ;"
@@ -71,7 +71,7 @@ use: io.streams.string
         {
             "USING: hashtables ;"
             "in: classes.mixin.tests"
-            "MIXIN: mixin-forget-test"
+            "mixin: mixin-forget-test"
             "INSTANCE: hashtable mixin-forget-test"
             "GENERIC: mixin-forget-test-g ( x -- y ) ;"
             "M: mixin-forget-test mixin-forget-test-g ;"
@@ -96,11 +96,11 @@ TUPLE: flat-mx-2-1 ; INSTANCE: flat-mx-2-1 flat-mx-2
 
 ! Too eager with reset-class
 
-{ } [ "in: classes.mixin.tests MIXIN: blah singleton: boo INSTANCE: boo blah" <string-reader> "mixin-reset-test" parse-stream drop ] unit-test
+{ } [ "in: classes.mixin.tests mixin: blah singleton: boo INSTANCE: boo blah" <string-reader> "mixin-reset-test" parse-stream drop ] unit-test
 
 { t } [ "blah" "classes.mixin.tests" lookup-word mixin-class? ] unit-test
 
-{ } [ "in: classes.mixin.tests MIXIN: blah" <string-reader> "mixin-reset-test" parse-stream drop ] unit-test
+{ } [ "in: classes.mixin.tests mixin: blah" <string-reader> "mixin-reset-test" parse-stream drop ] unit-test
 
 { t } [ "blah" "classes.mixin.tests" lookup-word mixin-class? ] unit-test
 

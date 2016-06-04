@@ -24,4 +24,4 @@ in: 99-bottles
 : 99-bottles ( -- )
     99 1 [a,b] [ verse ] each last-verse ;
 
-MAIN: 99-bottles
+main: 99-bottles

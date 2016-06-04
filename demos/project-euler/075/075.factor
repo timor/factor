@@ -42,7 +42,7 @@ in: project-euler.075
 ! (to account for non-primitive triples). The answer is just the total number
 ! of indexes that are equal to one.
 
-SYMBOL: p-count
+symbol: p-count
 
 <PRIVATE
 

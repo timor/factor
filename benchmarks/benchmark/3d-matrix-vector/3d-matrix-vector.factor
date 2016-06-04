@@ -24,4 +24,4 @@ TYPED:: mv-matrix ( pitch: float yaw: float location: float-4 -- matrix: matrix4
     ] times
     result . ;
 
-MAIN: 3d-matrix-vector-benchmark
+main: 3d-matrix-vector-benchmark

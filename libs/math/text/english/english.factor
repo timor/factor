@@ -34,7 +34,7 @@ in: math.text.english
         "trigintillion" "untrigintillion" "duotrigintillion"
     } nth ;
 
-SYMBOL: and-needed?
+symbol: and-needed?
 : set-conjunction ( seq -- )
     first { [ 100 < ] [ 0 > ] } 1&& and-needed? set ;
 
@@ -104,7 +104,7 @@ M: float number>text
         [ string>number number>text ]
         [ [ "negative " prepend ] when ] bi*
     ] [
-        [ CHAR: 0 - small-numbers ] { } map-as " " join
+        [ char: 0 - small-numbers ] { } map-as " " join
     ] bi* " point " glue ;
 
 M: complex number>text

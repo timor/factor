@@ -15,9 +15,9 @@ RENAME: join sequences => sjoin
 
 IN: irc.ui
 
-SYMBOL: chat
+symbol: chat
 
-SYMBOL: client
+symbol: client
 
 TUPLE: ui-window < tabbed client ;
 

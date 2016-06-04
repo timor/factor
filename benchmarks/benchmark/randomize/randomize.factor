@@ -6,4 +6,4 @@ CONSTANT: data $[ 10,000,000 iota >array ]
 : randomize-benchmark ( -- )
     data randomize drop ;
 
-MAIN: randomize-benchmark
+main: randomize-benchmark

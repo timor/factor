@@ -6,7 +6,7 @@ namespaces sequences strings continuations x11 x11.xlib
 accessors io.encodings.utf8 literals ;
 in: x11.xim
 
-SYMBOL: xim
+symbol: xim
 
 : (init-xim) ( classname medifier -- im )
     XSetLocaleModifiers [ "XSetLocaleModifiers() failed" throw ] unless

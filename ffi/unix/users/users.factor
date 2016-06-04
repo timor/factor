@@ -44,7 +44,7 @@ PRIVATE>
 : all-user-names ( -- seq )
     all-users [ user-name>> ] map ;
 
-SYMBOL: user-cache
+symbol: user-cache
 
 : <user-cache> ( -- assoc )
     all-users [ [ uid>> ] keep ] H{ } map>assoc ;

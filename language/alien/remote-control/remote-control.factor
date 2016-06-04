@@ -22,4 +22,4 @@ in: alien.remote-control
     \ yield-callback ?callback OBJ-YIELD-CALLBACK set-special-object
     \ sleep-callback ?callback OBJ-SLEEP-CALLBACK set-special-object ;
 
-MAIN: init-remote-control
+main: init-remote-control

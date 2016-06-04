@@ -16,7 +16,7 @@ furnace.auth.providers
 furnace.auth.providers.db ;
 in: furnace.auth
 
-SYMBOL: logged-in-user
+symbol: logged-in-user
 
 : logged-in? ( -- ? )
     logged-in-user get >boolean ;
@@ -50,7 +50,7 @@ M: filter-responder init-user-profile
     current-profile swap change-at
     user-changed ; inline
 
-SYMBOL: capabilities
+symbol: capabilities
 
 V{ } clone capabilities set-global
 

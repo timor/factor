@@ -56,7 +56,7 @@ PRIVATE>
 : blink-caret ( editor -- )
     [ not ] change-blink relayout-1 ;
 
-SYMBOL: blink-interval
+symbol: blink-interval
 
 750 milliseconds blink-interval set-global
 
@@ -170,7 +170,7 @@ M: editor ungraft*
 : selection-start/end ( editor -- start end )
     [ editor-mark ] [ editor-caret ] bi sort-pair ;
 
-SYMBOL: selected-lines
+symbol: selected-lines
 
 TUPLE: selected-line start end first? last? ;
 

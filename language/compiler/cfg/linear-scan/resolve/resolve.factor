@@ -25,13 +25,13 @@ M: location equal?
 M: location hashcode*
     reg>> hashcode* ;
 
-SYMBOL: temp-spills
+symbol: temp-spills
 
 : temp-spill ( rep -- spill-slot )
     rep-size temp-spills get
     [ cfg get stack-frame>> next-spill-slot ] cache ;
 
-SYMBOL: temp-locations
+symbol: temp-locations
 
 : temp-location ( loc -- temp )
     rep>> temp-locations get

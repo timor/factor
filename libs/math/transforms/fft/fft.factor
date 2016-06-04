@@ -6,7 +6,7 @@ in: math.transforms.fft
 
 <PRIVATE
 
-DEFER: (fft)
+defer: (fft)
 
 ! Discrete Fourier Transform
 :: (slow-fft) ( seq inverse? -- seq' )

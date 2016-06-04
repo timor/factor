@@ -5,7 +5,7 @@ sequences ;
 in: lists
 
 ! List Protocol
-MIXIN: list
+mixin: list
 GENERIC: car ( cons -- car ) ;
 GENERIC: cdr ( cons -- cdr ) ;
 GENERIC: nil? ( object -- ?   ) ;

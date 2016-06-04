@@ -7,7 +7,7 @@ multiline xml xml.data xml.writer xml.syntax html.components
 html.templates ;
 in: html.templates.chloe.syntax
 
-SYMBOL: tags
+symbol: tags
 
 tags [ H{ } clone ] initialize
 

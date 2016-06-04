@@ -15,7 +15,7 @@ CONSTANT: @top-right { 2 0 }
 CONSTANT: @bottom-left { 0 2 }
 CONSTANT: @bottom-right { 2 2 }
 
-SYMBOL: name
+symbol: name
 
 : corner-image ( name -- image )
     [ name get "-" ] dip 3append theme-image ;

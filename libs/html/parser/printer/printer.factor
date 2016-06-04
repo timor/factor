@@ -89,9 +89,9 @@ M: src-printer print-closing-tag ( tag -- )
     name>> write
     ">" write ;
 
-SYMBOL: tab-width
-SYMBOL: #indentations
-SYMBOL: tagstack
+symbol: tab-width
+symbol: #indentations
+symbol: tagstack
 
 : prettyprint-html ( vector -- )
     [
@@ -103,7 +103,7 @@ SYMBOL: tagstack
     ] with-scope ;
 
 : tabs ( -- vseq )
-    tab-width get #indentations get 0 max * CHAR: \s <repetition> ;
+    tab-width get #indentations get 0 max * char: \s <repetition> ;
 
 M: html-prettyprinter print-opening-tag ( tag -- )
     name>>

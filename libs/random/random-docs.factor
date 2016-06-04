@@ -26,8 +26,8 @@ HELP: random
         "10 random ."
         "3" }
     { $unchecked-example "USING: random prettyprint ;"
-        "SYMBOL: heads"
-        "SYMBOL: tails"
+        "symbol: heads"
+        "symbol: tails"
         "{ heads tails } random ."
         "heads" }
 } ;

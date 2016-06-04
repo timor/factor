@@ -60,7 +60,7 @@ M: form clone
         ] with-scope
     ] each-index ; inline
 
-SYMBOL: nested-forms
+symbol: nested-forms
 
 : with-form ( name quot -- )
     '[

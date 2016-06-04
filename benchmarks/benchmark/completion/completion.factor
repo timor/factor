@@ -12,4 +12,4 @@ in: benchmark.completion
     ] replicate concat [ name-completions ] keep
     [ length ] bi@ assert= ;
 
-MAIN: completion-benchmark
+main: completion-benchmark

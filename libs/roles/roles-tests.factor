@@ -39,7 +39,7 @@ ROLE-TUPLE: tuning-spork <{ utensil spoon tuning-fork } ;
 
 ! can't combine roles whose slots overlap
 ROLE: bong bowl ;
-SYMBOL: spong
+symbol: spong
 
 [ [ spong { spoon bong } { } define-tuple-class-with-roles ] with-compilation-unit ]
 [ role-slot-overlap? ] must-fail-with
@@ -49,7 +49,7 @@ SYMBOL: spong
 
 ! can't try to inherit multiple tuple classes
 ROLE-TUPLE: tool blade ;
-SYMBOL: knife
+symbol: knife
 
 [ knife { utensil tool } { } define-tuple-class-with-roles ]
 [ multiple-inheritance-attempted? ] must-fail-with

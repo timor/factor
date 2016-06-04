@@ -92,7 +92,7 @@ unit-test
 ! Funny bug
 { 2 } [ "in: parser.tests : \0. ( -- x ) 2 ; \0." eval( -- n ) ] unit-test
 
-DEFER: foo
+defer: foo
 
 "in: parser.tests USING: math prettyprint ; SYNTAX: foo 2 2 + . ;" eval( -- )
 
@@ -182,7 +182,7 @@ DEFER: foo
 { } [
     "a" source-files get delete-at
     2 [
-        "in: parser.tests DEFER: x : y ( -- ) x ; : x ( -- ) y ;"
+        "in: parser.tests defer: x : y ( -- ) x ; : x ( -- ) y ;"
         <string-reader> "a" parse-stream drop
     ] times
 ] unit-test
@@ -299,12 +299,12 @@ DEFER: foo
 ] [ error>> error>> error>> redefine-error? ] must-fail-with
 
 { } [
-    "in: parser.tests TUPLE: class-redef-test ; SYMBOL: class-redef-test"
+    "in: parser.tests TUPLE: class-redef-test ; symbol: class-redef-test"
     <string-reader> "redefining-a-class-2" parse-stream drop
 ] unit-test
 
 [
-    "in: parser.tests TUPLE: class-redef-test ; SYMBOL: class-redef-test : class-redef-test ( -- ) ;"
+    "in: parser.tests TUPLE: class-redef-test ; symbol: class-redef-test : class-redef-test ( -- ) ;"
     <string-reader> "redefining-a-class-3" parse-stream drop
 ] [ error>> error>> error>> redefine-error? ] must-fail-with
 
@@ -319,7 +319,7 @@ DEFER: foo
 ] [ error>> error>> error>> no-word-error? ] must-fail-with
 
 { } [
-    "in: parser.tests TUPLE: class-fwd-test ; SYMBOL: class-fwd-test"
+    "in: parser.tests TUPLE: class-fwd-test ; symbol: class-fwd-test"
     <string-reader> "redefining-a-class-3" parse-stream drop
 ] unit-test
 
@@ -396,17 +396,17 @@ DEFER: foo
 
 2 [
     [ ] [
-        "in: parser.tests DEFER: d-f-s d-f-s SYMBOL: d-f-s d-f-s"
+        "in: parser.tests defer: d-f-s d-f-s symbol: d-f-s d-f-s"
         <string-reader> "d-f-s-test" parse-stream drop
     ] unit-test
 
     [ ] [
-        "in: parser.tests DEFER: d-f-s d-f-s FORGET: d-f-s SYMBOL: d-f-s d-f-s"
+        "in: parser.tests defer: d-f-s d-f-s forget: d-f-s symbol: d-f-s d-f-s"
         <string-reader> "d-f-s-test" parse-stream drop
     ] unit-test
 
     [ ] [
-        "in: parser.tests DEFER: d-f-s d-f-s SYMBOL: d-f-s d-f-s"
+        "in: parser.tests defer: d-f-s d-f-s symbol: d-f-s d-f-s"
         <string-reader> "d-f-s-test" parse-stream drop
     ] unit-test
 ] times
@@ -421,8 +421,8 @@ DEFER: foo
 
 [ ": foo ;" eval( -- ) ] [ error>> error>> no-current-vocab-error? ] must-fail-with
 
-{ 92 } [ "CHAR: \\" eval( -- n ) ] unit-test
-{ 92 } [ "CHAR: \\\\" eval( -- n ) ] unit-test
+{ 92 } [ "char: \\" eval( -- n ) ] unit-test
+{ 92 } [ "char: \\\\" eval( -- n ) ] unit-test
 
 { } [
     {
@@ -451,7 +451,7 @@ DEFER: foo
 
 { } [
     2 [
-        "in: parser.tests DEFER: twice-fails FORGET: twice-fails MIXin: twice-fails"
+        "in: parser.tests defer: twice-fails forget: twice-fails MIXin: twice-fails"
         <string-reader> "twice-fails-test" parse-stream drop
     ] times
 ] unit-test
@@ -474,21 +474,21 @@ DEFER: foo
 
 { t } [ "staging-problem-test-2" "parser.tests" lookup-word >boolean ] unit-test
 
-[ "DEFER: blahy" eval( -- ) ] [ error>> error>> no-current-vocab-error? ] must-fail-with
+[ "defer: blahy" eval( -- ) ] [ error>> error>> no-current-vocab-error? ] must-fail-with
 
 [
-    "in: parser.tests SYNTAX: blahy ; FORGET: blahy" eval( -- )
+    "in: parser.tests SYNTAX: blahy ; forget: blahy" eval( -- )
 ] [
     error>> staging-violation?
 ] must-fail-with
 
 ! Bogus error message
-DEFER: blahy
+defer: blahy
 
 [ "in: parser.tests use: kernel TUPLE: blahy < tuple ; : blahy ( -- ) ; TUPLE: blahy < tuple ; : blahy ( -- ) ;" eval( -- ) ]
 [ error>> error>> def>> \ blahy eq? ] must-fail-with
 
-[ "CHAR: \\u9999999999999" eval( -- n ) ] must-fail
+[ "char: \\u9999999999999" eval( -- n ) ] must-fail
 
 SYMBOLS: a b c ;
 
@@ -496,7 +496,7 @@ SYMBOLS: a b c ;
 { b } [ b ] unit-test
 { c } [ c ] unit-test
 
-DEFER: blah
+defer: blah
 
 { } [ "in: parser.tests GENERIC: blah ( x -- x )" eval( -- ) ; ] unit-test
 { } [ "in: parser.tests SYMBOLS: blah ;" eval( -- ) ] unit-test
@@ -504,7 +504,7 @@ DEFER: blah
 { f } [ \ blah generic? ] unit-test
 { t } [ \ blah symbol? ] unit-test
 
-DEFER: blah1
+defer: blah1
 
 [ "in: parser.tests SINGLETONS: blah1 blah1 blah1 ;" eval( -- ) ]
 [ error>> error>> def>> \ blah1 eq? ]
@@ -554,7 +554,7 @@ EXCLUDE: qualified.tests.bar => x ;
 
 { t } [ "was-once-a-word-bug" "parser.tests" lookup-word >boolean ] unit-test */
 
-! Replace : def with DEFER:
+! Replace : def with defer:
 { [ ] } [
     "in: parser.tests : is-not-deferred ( -- ) ;"
     <string-reader> "is-not-deferred" parse-stream
@@ -564,7 +564,7 @@ EXCLUDE: qualified.tests.bar => x ;
 { f } [ "is-not-deferred" "parser.tests" lookup-word deferred? ] unit-test
 
 { [ ] } [
-    "in: parser.tests DEFER: is-not-deferred"
+    "in: parser.tests defer: is-not-deferred"
     <string-reader> "is-not-deferred" parse-stream
 ] unit-test
 
@@ -573,12 +573,12 @@ EXCLUDE: qualified.tests.bar => x ;
 
 ! Forward-reference resolution case iterated using list in the wrong direction
 { [ ] } [
-    "in: parser.tests.forward-ref-1 DEFER: x DEFER: y"
+    "in: parser.tests.forward-ref-1 defer: x defer: y"
     <string-reader> "forward-ref-1" parse-stream
 ] unit-test
 
 { [ ] } [
-    "in: parser.tests.forward-ref-2 DEFER: x DEFER: y"
+    "in: parser.tests.forward-ref-2 defer: x defer: y"
     <string-reader> "forward-ref-2" parse-stream
 ] unit-test
 

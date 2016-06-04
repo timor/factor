@@ -5,10 +5,10 @@ io.files splitting grouping io.binary math.functions vectors
 quotations combinators io.encodings.binary ;
 in: icfp.2006
 
-SYMBOL: regs
-SYMBOL: arrays
-SYMBOL: finger
-SYMBOL: open-arrays
+symbol: regs
+symbol: arrays
+symbol: finger
+symbol: open-arrays
 
 : reg-val ( m -- n ) regs get nth ;
 

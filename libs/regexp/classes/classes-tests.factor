@@ -8,10 +8,10 @@ in: regexp.classes.tests
 { f } [ { 1 2 } <and-class> ] unit-test
 { T{ or-class f { 1 2 } } } [ { 1 2 } <or-class> ] unit-test
 { 3 } [ { 1 2 } <and-class> 3 2array <or-class> ] unit-test
-{ CHAR: A } [ CHAR: A LETTER-class <primitive-class> 2array <and-class> ] unit-test
-{ CHAR: A } [ LETTER-class <primitive-class> CHAR: A 2array <and-class> ] unit-test
-{ T{ primitive-class { class LETTER-class } } } [ CHAR: A LETTER-class <primitive-class> 2array <or-class> ] unit-test
-{ T{ primitive-class { class LETTER-class } } } [ LETTER-class <primitive-class> CHAR: A 2array <or-class> ] unit-test
+{ char: A } [ char: A LETTER-class <primitive-class> 2array <and-class> ] unit-test
+{ char: A } [ LETTER-class <primitive-class> char: A 2array <and-class> ] unit-test
+{ T{ primitive-class { class LETTER-class } } } [ char: A LETTER-class <primitive-class> 2array <or-class> ] unit-test
+{ T{ primitive-class { class LETTER-class } } } [ LETTER-class <primitive-class> char: A 2array <or-class> ] unit-test
 { t } [ { t 1 } <or-class> ] unit-test
 { t } [ { 1 t } <or-class> ] unit-test
 { f } [ { f 1 } <and-class> ] unit-test
@@ -43,8 +43,8 @@ in: regexp.classes.tests
 { { { 1 t } } } [ { { 1 t } { 2 T{ primitive-class } } } T{ primitive-class } f assoc-answer ] unit-test
 { T{ condition f T{ primitive-class } { 1 2 } { 1 } } } [ { { 1 t } { 2 T{ primitive-class } } } table>condition ] unit-test
 
-SYMBOL: foo
-SYMBOL: bar
+symbol: foo
+symbol: bar
 
 { T{ condition f T{ primitive-class f bar } T{ condition f T{ primitive-class f foo } { 1 3 2 } { 1 3 } } T{ condition f T{ primitive-class f foo } { 1 2 } { 1 } } } } [ { { 1 t } { 3 T{ primitive-class f bar } } { 2 T{ primitive-class f foo } } } table>condition ] unit-test
 

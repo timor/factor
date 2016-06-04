@@ -81,7 +81,7 @@ SYMBOLS: not-loops recursive-nesting ;
         bi
     ] each ;
 
-SYMBOL: changed?
+symbol: changed?
 
 : check-cross-frame-call ( call-site -- )
     label>> dup not-a-loop? [ drop ] [
@@ -126,7 +126,7 @@ SYMBOL: changed?
 
 PRIVATE>
 
-SYMBOL: call-graph
+symbol: call-graph
 
 : analyze-recursive ( nodes -- nodes )
     dup build-call-graph drop

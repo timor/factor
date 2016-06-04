@@ -30,7 +30,7 @@ M: #renaming escape-analysis* inputs/outputs copy-values ;
 M: #introduce escape-analysis*
     out-d>> [ dup declared-class record-param-allocation ] each ;
 
-DEFER: record-literal-allocation
+defer: record-literal-allocation
 
 : make-literal-slots ( seq -- values )
     [ <slot-value> [ swap record-literal-allocation ] keep ] map ;

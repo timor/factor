@@ -5,7 +5,7 @@ furnace furnace.actions furnace.sessions furnace.redirection
 html.components html.forms fry urls ;
 IN: webapps.counter
 
-SYMBOL: count
+symbol: count
 
 TUPLE: counter-app < dispatcher ;
 

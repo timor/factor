@@ -45,7 +45,7 @@ TUPLE: FileArgs
 C: <FileArgs> FileArgs
 
 ! Global variable with assoc mapping overlapped to threads
-SYMBOL: pending-overlapped
+symbol: pending-overlapped
 
 TUPLE: io-callback port thread ;
 
@@ -57,7 +57,7 @@ C: <io-callback> io-callback
 : <master-completion-port> ( -- handle )
     INVALID_HANDLE_VALUE f <completion-port> ;
 
-SYMBOL: master-completion-port
+symbol: master-completion-port
 
 : add-completion ( win32-handle -- win32-handle )
     dup handle>> master-completion-port get-global <completion-port> drop ;
@@ -332,7 +332,7 @@ M: windows root-directory? ( path -- ? )
         { [ dup empty? ] [ drop f ] }
         { [ dup [ path-separator? ] all? ] [ drop t ] }
         { [ dup trim-tail-separators { [ length 2 = ]
-          [ second CHAR: : = ] } 1&& ] [ drop t ] }
+          [ second char: : = ] } 1&& ] [ drop t ] }
         { [ dup unicode-prefix head? ]
           [ trim-tail-separators length unicode-prefix length 2 + = ] }
         [ drop f ]

@@ -5,9 +5,9 @@ compiler.tree.def-use compiler.utilities deques dlists kernel
 namespaces sets stack-checker.branches ;
 in: compiler.tree.dead-code.liveness
 
-SYMBOL: work-list
+symbol: work-list
 
-SYMBOL: live-values
+symbol: live-values
 
 : live-value? ( value -- ? ) live-values get at ;
 

@@ -9,4 +9,4 @@ in: tools.deploy.test.12
 
 : foo ( -- ) 1 2 \ + execute-test 4 [ * ] call-test number>string print ;
 
-MAIN: foo
+main: foo

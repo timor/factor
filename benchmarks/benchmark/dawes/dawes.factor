@@ -13,4 +13,4 @@ in: benchmark.dawes
 : dawes-benchmark ( -- )
     200 make-int-array '[ _ count-ones ] replicate drop ;
 
-MAIN: dawes-benchmark
+main: dawes-benchmark

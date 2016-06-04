@@ -75,7 +75,7 @@ M: model-btn text>> children>> first text>> ;
 
 IN: ui.gadgets.controls
 
-SINGLETON: gadget-monad
+singleton: gadget-monad
 INSTANCE: gadget-monad monad
 INSTANCE: gadget monad
 M: gadget monad-of drop gadget-monad ;

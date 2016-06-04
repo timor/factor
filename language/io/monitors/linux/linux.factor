@@ -8,9 +8,9 @@ sets alien alien.strings alien.c-types vocabs.loader accessors
 system hashtables destructors unix classes.struct literals ;
 in: io.monitors.linux
 
-SYMBOL: watches
+symbol: watches
 
-SYMBOL: inotify
+symbol: inotify
 
 TUPLE: linux-monitor < monitor wd inotify watches ;
 

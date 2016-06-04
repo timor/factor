@@ -48,7 +48,7 @@ ENUM: gdbm-error
 
 : check-error ( ret -- ) 0 = [ gdbm-throw ] unless ;
 
-SYMBOL: current-dbf
+symbol: current-dbf
 
 : dbf ( -- dbf ) current-dbf get ;
 

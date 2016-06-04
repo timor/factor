@@ -2,7 +2,7 @@ USING: assocs compiler.errors compiler.units definitions
 namespaces tools.test words ;
 in: source-files.errors.tests
 
-DEFER: forget-test
+defer: forget-test
 
 { } [ [ \ forget-test [ 1 ] ( -- ) define-declared ] with-compilation-unit ] unit-test
 { t } [ \ forget-test compiler-errors get key? ] unit-test

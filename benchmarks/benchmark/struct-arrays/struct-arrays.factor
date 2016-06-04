@@ -51,4 +51,4 @@ SPECIALIZED-ARRAY: point
 : struct-arrays-benchmark ( -- )
     10 [ 500000 struct-arrays-bench ] times ;
 
-MAIN: struct-arrays-benchmark
+main: struct-arrays-benchmark

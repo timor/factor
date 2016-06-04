@@ -11,7 +11,7 @@ FROM: snake-game.util => relative-loc ;
 
 in: snake-game.ui
 
-SYMBOL: game-textures
+symbol: game-textures
 
 TUPLE: snake-gadget < gadget
     snake-game timer textures ;

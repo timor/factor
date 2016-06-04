@@ -9,7 +9,7 @@ in: compiler.tests.redefine11
 [ ] [
     "USING: kernel math classes arrays ;
     in: compiler.tests.redefine11
-    MIXIN: my-mixin
+    mixin: my-mixin
     INSTANCE: array my-mixin
     INSTANCE: fixnum my-mixin
     GENERIC: my-generic ( a -- b ) ;

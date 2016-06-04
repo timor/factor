@@ -6,7 +6,7 @@ make math math.parser namespaces present random sequences
 sorting strings urls urls.encoding urls.private ;
 in: oauth
 
-SYMBOL: consumer-token
+symbol: consumer-token
 
 TUPLE: token key secret user-data ;
 
@@ -133,7 +133,7 @@ PRIVATE>
 : obtain-access-token ( url params -- token )
     <access-token-request> http-request parse-token ;
 
-SYMBOL: access-token
+symbol: access-token
 
 TUPLE: oauth-request-params < token-params access-token ;
 

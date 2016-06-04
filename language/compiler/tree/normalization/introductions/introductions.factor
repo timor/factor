@@ -4,7 +4,7 @@ USING: accessors compiler.tree kernel math math.order namespaces
 sequences ;
 in: compiler.tree.normalization.introductions
 
-SYMBOL: introductions
+symbol: introductions
 
 GENERIC: count-introductions* ( node -- ) ;
 

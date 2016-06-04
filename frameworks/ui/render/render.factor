@@ -5,9 +5,9 @@ math.rectangles math.vectors namespaces opengl opengl.capabilities
 opengl.gl opengl.textures sequences sets ui.gadgets ui.pens ;
 in: ui.render
 
-SYMBOL: clip
+symbol: clip
 
-SYMBOL: viewport-translation
+symbol: viewport-translation
 
 : flip-rect ( rect -- loc dim )
     rect-bounds [
@@ -51,7 +51,7 @@ GENERIC: draw-gadget* ( gadget -- ) ;
 
 M: gadget draw-gadget* drop ;
 
-SYMBOL: origin
+symbol: origin
 
 { 0 0 } origin set-global
 
@@ -63,18 +63,18 @@ SYMBOL: origin
 GENERIC: draw-children ( gadget -- ) ;
 
 ! For gadget selection
-SYMBOL: selected-gadgets
+symbol: selected-gadgets
 
-SYMBOL: selection-background
+symbol: selection-background
 
 GENERIC: selected-children ( gadget -- assoc/f selection-background ) ;
 
 M: gadget selected-children drop f f ;
 
 ! For text rendering
-SYMBOL: background
+symbol: background
 
-SYMBOL: foreground
+symbol: foreground
 
 GENERIC: gadget-background ( gadget -- color ) ;
 

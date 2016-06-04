@@ -7,13 +7,13 @@ splitting strings vocabs vocabs.parser words ;
 in: prettyprint.sections
 
 ! State
-SYMBOL: position
-SYMBOL: recursion-check
-SYMBOL: pprinter-stack
+symbol: position
+symbol: recursion-check
+symbol: pprinter-stack
 
 ! We record vocabs of all words
-SYMBOL: pprinter-in
-SYMBOL: pprinter-use
+symbol: pprinter-in
+symbol: pprinter-use
 
 TUPLE: pprinter last-newline line-count indent ;
 
@@ -42,7 +42,7 @@ M: maybe vocabulary-name
 : line-limit? ( -- ? )
     line-limit get dup [ pprinter get line-count>> <= ] when ;
 
-: do-indent ( -- ) pprinter get indent>> CHAR: \s <string> write ;
+: do-indent ( -- ) pprinter get indent>> char: \s <string> write ;
 
 : fresh-line ( n -- )
     pprinter get 2dup last-newline>> = [
@@ -64,10 +64,10 @@ M: maybe vocabulary-name
     ] if-zero ;
 
 ! break only if position margin 2 / >
-SYMBOL: soft
+symbol: soft
 
 ! always breaks
-SYMBOL: hard
+symbol: hard
 
 ! Section protocol
 GENERIC: section-fits? ( section -- ? ) ;
@@ -309,8 +309,8 @@ M: colon unindent-first-line? drop t ;
 : chop-break ( seq -- seq )
     [ dup last line-break? ] [ but-last-slice ] while ;
 
-SYMBOL: prev
-SYMBOL: next
+symbol: prev
+symbol: next
 
 : split-groups ( ? -- ) [ t , ] when ;
 

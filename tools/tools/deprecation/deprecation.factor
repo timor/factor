@@ -6,8 +6,8 @@ source-files.errors summary tools.crossref
 tools.crossref.private tools.errors words ;
 in: tools.deprecation
 
-SYMBOL: +deprecation-note+
-SYMBOL: deprecation-notes
+symbol: +deprecation-note+
+symbol: deprecation-notes
 
 deprecation-notes [ H{ } clone ] initialize
 

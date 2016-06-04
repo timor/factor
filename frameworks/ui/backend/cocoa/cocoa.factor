@@ -208,7 +208,7 @@ CLASS: FactorApplicationDelegate < NSObject
 : install-app-delegate ( -- )
     NSApp FactorApplicationDelegate install-delegate ;
 
-SYMBOL: cocoa-startup-hook
+symbol: cocoa-startup-hook
 
 cocoa-startup-hook [
     [ "MiniFactor.nib" load-nib install-app-delegate ]

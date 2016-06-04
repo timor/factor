@@ -3,9 +3,9 @@ in: smalltalk.compiler.lexenv.tests
 
 TUPLE: some-class x y z ;
 
-SYMBOL: fake-self
+symbol: fake-self
 
-SYMBOL: fake-local
+symbol: fake-local
 
 <lexenv>
     some-class >>class

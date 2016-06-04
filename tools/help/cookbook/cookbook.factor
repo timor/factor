@@ -113,9 +113,9 @@ $nl
 
 ARTICLE: "cookbook-variables" "Dynamic variables cookbook"
 "A symbol is a word which pushes itself on the stack when executed. Try it:"
-{ $example "SYMBOL: foo" "foo ." "foo" }
+{ $example "symbol: foo" "foo ." "foo" }
 "Before using a variable, you must define a symbol for it:"
-{ $code "SYMBOL: name" }
+{ $code "symbol: name" }
 "Symbols can be passed to the " { $link get } " and " { $link set } " words to read and write variable values:"
 { $unchecked-example "\"Slava\" name set" "name get print" "Slava" }
 "If you set variables inside a " { $link with-scope } ", their values will be lost after leaving the scope:"
@@ -157,7 +157,7 @@ $nl
     ": accelerate ( -- ) accelerator on ;"
     ": particles ( what -- ) [ (particles) ] each ;"
 }
-"You would have to place the first definition after the two others for the parser to accept the file. If you have a set of mutually recursive words, you can use " { $link POSTPONE: DEFER: } "."
+"You would have to place the first definition after the two others for the parser to accept the file. If you have a set of mutually recursive words, you can use " { $link POSTPONE: defer: } "."
 { $references
     { }
     "word-search"
@@ -171,9 +171,9 @@ ARTICLE: "cookbook-application" "Application cookbook"
 "..."
 ": play-life ( -- ) ... ;"
 ""
-"MAIN: play-life"
+"main: play-life"
 }
-"See " { $link POSTPONE: MAIN: } " for details. The " { $link run } " word loads a vocabulary if necessary, and calls its main entry point; try the following, it's fun:"
+"See " { $link POSTPONE: main: } " for details. The " { $link run } " word loads a vocabulary if necessary, and calls its main entry point; try the following, it's fun:"
 { $code "\"tetris\" run" }
 "Factor can deploy stand-alone executables; they do not have any external dependencies and consist entirely of compiled native machine code:"
 { $code "\"tetris\" deploy-tool" }

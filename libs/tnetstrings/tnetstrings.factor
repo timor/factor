@@ -11,7 +11,7 @@ in: tnetstrings
 : parse-payload ( data -- remain payload payload-type )
     ":" split1 swap string>number cut unclip swapd ;
 
-DEFER: parse-tnetstring
+defer: parse-tnetstring
 
 : parse-list ( data -- value )
     [ { } ] [
@@ -43,13 +43,13 @@ DEFER: parse-tnetstring
 
 : parse-tnetstring ( data -- remain value )
     parse-payload {
-        { CHAR: # [ string>number ] }
-        { CHAR: " [ ] }
-        { CHAR: } [ parse-dict ] }
-        { CHAR: ] [ parse-list ] }
-        { CHAR: ! [ parse-bool ] }
-        { CHAR: ~ [ parse-null ] }
-        { CHAR: , [ ] }
+        { char: # [ string>number ] }
+        { char: " [ ] }
+        { char: } [ parse-dict ] }
+        { char: ] [ parse-list ] }
+        { char: ! [ parse-bool ] }
+        { char: ~ [ parse-null ] }
+        { char: , [ ] }
         [ "Invalid payload type: %c" sprintf throw ]
     } case ;
 
@@ -62,7 +62,7 @@ PRIVATE>
 
 <PRIVATE
 
-DEFER: dump-tnetstring
+defer: dump-tnetstring
 
 : dump ( string type -- string )
     [ [ length ] keep ] dip "%d:%s%s" sprintf ;

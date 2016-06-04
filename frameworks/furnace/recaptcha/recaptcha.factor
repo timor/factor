@@ -9,7 +9,7 @@ in: furnace.recaptcha
 
 TUPLE: recaptcha < filter-responder domain public-key private-key ;
 
-SYMBOL: recaptcha-error
+symbol: recaptcha-error
 
 : <recaptcha> ( responder -- recaptcha )
     recaptcha new

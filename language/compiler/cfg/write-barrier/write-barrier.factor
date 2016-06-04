@@ -7,11 +7,11 @@ in: compiler.cfg.write-barrier
 
 ! This pass must run after GC check insertion and scheduling.
 
-SYMBOL: fresh-allocations
+symbol: fresh-allocations
 
-SYMBOL: mutated-objects
+symbol: mutated-objects
 
-SYMBOL: copies
+symbol: copies
 
 : resolve-copy ( src -- dst )
     copies get ?at drop ;

@@ -18,7 +18,7 @@ in: tools.continuations
 
 PRIVATE>
 
-SYMBOL: break-hook
+symbol: break-hook
 
 : break ( -- )
     current-continuation get-callstack >>call

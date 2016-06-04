@@ -65,4 +65,4 @@ GAME: run-tests {
         { tick-interval-nanos $[ 60 fps ] }
     } ;
 
-MAIN: run-tests
+main: run-tests

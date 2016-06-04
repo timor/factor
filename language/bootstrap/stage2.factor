@@ -6,9 +6,9 @@ parser.notes sequences sets splitting system combinators
 vocabs vocabs.loader ;
 in: bootstrap.stage2
 
-SYMBOL: core-bootstrap-time
+symbol: core-bootstrap-time
 
-SYMBOL: bootstrap-time
+symbol: bootstrap-time
 
 : strip-encodings ( -- )
     os unix? [

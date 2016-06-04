@@ -23,7 +23,7 @@ value connections dependencies ref locked? ;
 : remove-dependency ( dep model -- )
     dependencies>> remove! drop ;
 
-DEFER: add-connection
+defer: add-connection
 
 GENERIC: model-activated ( model -- ) ;
 
@@ -44,7 +44,7 @@ M: model model-activated drop ;
         drop
     ] if ;
 
-DEFER: remove-connection
+defer: remove-connection
 
 : deactivate-model ( model -- )
     dup unref-model zero? [

@@ -1,7 +1,7 @@
 USING: triggers kernel tools.test ;
 IN: triggers.tests
 
-SYMBOL: test-trigger
+symbol: test-trigger
 test-trigger reset-trigger
 : add-test-trigger test-trigger add-trigger ;
 [ ] [ test-trigger call-trigger ] unit-test
