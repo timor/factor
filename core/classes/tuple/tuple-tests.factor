@@ -93,7 +93,7 @@ C: <empty> empty ;
 [ t length ] [ object>> t eq? ] must-fail-with
 
 { "<constructor-test>" }
-[ "in: classes.tuple.test TUPLE: constructor-test ; C: <constructor-test> constructor-test" eval( -- ) last-word name>> ] unit-test
+[ "in: classes.tuple.test TUPLE: constructor-test ; C: <constructor-test> constructor-test ;" eval( -- ) last-word name>> ] unit-test
 
 TUPLE: size-test a b c d ;
 
@@ -106,7 +106,7 @@ GENERIC: <yo-momma> ( a -- b ) ;
 
 TUPLE: yo-momma ;
 
-{ } [ "in: classes.tuple.tests C: <yo-momma> yo-momma" eval( -- ) ] unit-test
+{ } [ "in: classes.tuple.tests C: <yo-momma> yo-momma ;" eval( -- ) ] unit-test
 
 { f } [ \ <yo-momma> generic? ] unit-test
 
@@ -282,7 +282,7 @@ TUPLE: electronic-device ;
 
 { t } [ laptop new computer?' ] unit-test
 
-{ } [ "in: classes.tuple.tests TUPLE: computer < electronic-device cpu ram ; C: <computer> computer C: <laptop> laptop C: <server> server" eval( -- ) ] unit-test
+{ } [ "in: classes.tuple.tests TUPLE: computer < electronic-device cpu ram ; C: <computer> computer ; C: <laptop> laptop ; C: <server> server ;" eval( -- ) ] unit-test
 
 { t } [ laptop new computer?' ] unit-test
 
@@ -300,17 +300,17 @@ TUPLE: electronic-device ;
 { f } [ "server" get laptop? ] unit-test
 { t } [ "server" get server? ] unit-test
 
-{ } [ "in: classes.tuple.tests TUPLE: computer cpu ram ; C: <computer> computer C: <laptop> laptop C: <server> server" eval( -- ) ] unit-test
+{ } [ "in: classes.tuple.tests TUPLE: computer cpu ram ; C: <computer> computer ; C: <laptop> laptop ; C: <server> server ;" eval( -- ) ] unit-test
 
 { f } [ "laptop" get electronic-device? ] unit-test
 { t } [ "laptop" get computer? ] unit-test
 
-{ } [ "in: classes.tuple.tests TUPLE: computer < electronic-device cpu ram disk ; C: <computer> computer C: <laptop> laptop C: <server> server" eval( -- ) ] unit-test
+{ } [ "in: classes.tuple.tests TUPLE: computer < electronic-device cpu ram disk ; C: <computer> computer ; C: <laptop> laptop ; C: <server> server ;" eval( -- ) ] unit-test
 
 test-laptop-slot-values
 test-server-slot-values
 
-{ } [ "in: classes.tuple.tests TUPLE: electronic-device voltage ; C: <computer> computer C: <laptop> laptop C: <server> server" eval( -- ) ] unit-test
+{ } [ "in: classes.tuple.tests TUPLE: electronic-device voltage ; C: <computer> computer ; C: <laptop> laptop ; C: <server> server ;" eval( -- ) ] unit-test
 
 test-laptop-slot-values
 test-server-slot-values
@@ -323,7 +323,7 @@ TUPLE: make-me-some-accessors voltage grounded? ;
 { } [ "laptop" get 220 >>voltage drop ] unit-test
 { } [ "server" get 110 >>voltage drop ] unit-test
 
-{ } [ "in: classes.tuple.tests TUPLE: electronic-device voltage grounded? ; C: <computer> computer" eval( -- ) ] unit-test
+{ } [ "in: classes.tuple.tests TUPLE: electronic-device voltage grounded? ; C: <computer> computer ;" eval( -- ) ] unit-test
 
 test-laptop-slot-values
 test-server-slot-values
@@ -331,7 +331,7 @@ test-server-slot-values
 { 220 } [ "laptop" get voltage>> ] unit-test
 { 110 } [ "server" get voltage>> ] unit-test
 
-{ } [ "in: classes.tuple.tests TUPLE: electronic-device grounded? voltage ; C: <computer> computer C: <laptop> laptop C: <server> server" eval( -- ) ] unit-test
+{ } [ "in: classes.tuple.tests TUPLE: electronic-device grounded? voltage ; C: <computer> computer ; C: <laptop> laptop ; C: <server> server ;" eval( -- ) ] unit-test
 
 test-laptop-slot-values
 test-server-slot-values
@@ -340,7 +340,7 @@ test-server-slot-values
 { 110 } [ "server" get voltage>> ] unit-test
 
 ! Reshaping superclass and subclass simultaneously
-{ } [ "in: classes.tuple.tests TUPLE: electronic-device voltage ; TUPLE: computer < electronic-device cpu ram ; C: <computer> computer C: <laptop> laptop C: <server> server" eval( -- ) ] unit-test
+{ } [ "in: classes.tuple.tests TUPLE: electronic-device voltage ; TUPLE: computer < electronic-device cpu ram ; C: <computer> computer ; C: <laptop> laptop ; C: <server> server ;" eval( -- ) ] unit-test
 
 test-laptop-slot-values
 test-server-slot-values

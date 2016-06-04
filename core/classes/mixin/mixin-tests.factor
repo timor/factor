@@ -40,7 +40,7 @@ INSTANCE: integer mx1 ;
 { f } [ mx1 integer class<= ] unit-test
 { f } [ mx1 number class<= ] unit-test
 
-"in: classes.mixin.tests use: arrays INSTANCE: array mx1" eval( -- ) ;
+"in: classes.mixin.tests use: arrays INSTANCE: array mx1 ;" eval( -- )
 
 { t } [ array mx1 class<= ] unit-test
 { f } [ mx1 number class<= ] unit-test
@@ -57,7 +57,7 @@ use: io.streams.string
             "USING: sequences ;"
             "in: classes.mixin.tests"
             "mixin: mixin-forget-test"
-            "INSTANCE: sequence mixin-forget-test" ;
+            "INSTANCE: sequence mixin-forget-test ;"
             "GENERIC: mixin-forget-test-g ( x -- y ) ;"
             "M: mixin-forget-test mixin-forget-test-g ;"
         } "\n" join <string-reader> "mixin-forget-test"
@@ -72,7 +72,7 @@ use: io.streams.string
             "USING: hashtables ;"
             "in: classes.mixin.tests"
             "mixin: mixin-forget-test"
-            "INSTANCE: hashtable mixin-forget-test" ;
+            "INSTANCE: hashtable mixin-forget-test ;"
             "GENERIC: mixin-forget-test-g ( x -- y ) ;"
             "M: mixin-forget-test mixin-forget-test-g ;"
         } "\n" join <string-reader> "mixin-forget-test"
@@ -96,7 +96,7 @@ TUPLE: flat-mx-2-1 ; INSTANCE: flat-mx-2-1 flat-mx-2 ;
 
 ! Too eager with reset-class
 
-{ } [ "in: classes.mixin.tests mixin: blah singleton: boo INSTANCE: boo blah" <string-reader> "mixin-reset-test" parse-stream drop ] unit-test ;
+{ } [ "in: classes.mixin.tests mixin: blah singleton: boo INSTANCE: boo blah ;" <string-reader> "mixin-reset-test" parse-stream drop ] unit-test
 
 { t } [ "blah" "classes.mixin.tests" lookup-word mixin-class? ] unit-test
 
@@ -110,9 +110,9 @@ mixin: empty-mixin
 
 mixin: move-instance-declaration-mixin
 
-{ } [ "in: classes.mixin.tests.a use: strings use: classes.mixin.tests INSTANCE: string move-instance-declaration-mixin" <string-reader> "move-mixin-test-1" parse-stream drop ] unit-test ;
+{ } [ "in: classes.mixin.tests.a use: strings use: classes.mixin.tests INSTANCE: string move-instance-declaration-mixin ;" <string-reader> "move-mixin-test-1" parse-stream drop ] unit-test
 
-{ } [ "in: classes.mixin.tests.b use: strings use: classes.mixin.tests INSTANCE: string move-instance-declaration-mixin" <string-reader> "move-mixin-test-2" parse-stream drop ] unit-test ;
+{ } [ "in: classes.mixin.tests.b use: strings use: classes.mixin.tests INSTANCE: string move-instance-declaration-mixin ;" <string-reader> "move-mixin-test-2" parse-stream drop ] unit-test
 
 { } [ "in: classes.mixin.tests.a" <string-reader> "move-mixin-test-1" parse-stream drop ] unit-test
 

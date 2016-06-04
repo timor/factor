@@ -77,9 +77,9 @@ M: user-input-tuple send-queued-gesture
     '[ _ \ user-input-tuple queue-gesture ] unless-empty ;
 
 ! Gesture objects
-TUPLE: drag # ;             C: <drag> drag
-TUPLE: button-up mods # ;   C: <button-up> button-up
-TUPLE: button-down mods # ; C: <button-down> button-down
+TUPLE: drag # ;             C: <drag> drag ;
+TUPLE: button-up mods # ;   C: <button-up> button-up ;
+TUPLE: button-down mods # ; C: <button-down> button-down ;
 
 SINGLETONS:
     motion
