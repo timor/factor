@@ -4,7 +4,7 @@ continuations kernel namespaces windows.ole32 libc vocabs
 assocs accessors arrays sequences quotations combinators math
 words compiler.units destructors fry math.parser generalizations
 sets specialized-arrays windows.kernel32 classes.struct ;
-SPECIALIZED-ARRAY: void*
+specialized-array: void*
 in: windows.com.wrapper
 
 TUPLE: com-wrapper < disposable callbacks vtbls ;

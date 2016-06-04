@@ -4,7 +4,7 @@ USING: accessors classes.struct kernel destructors bit-arrays
 sequences assocs specialized-arrays math namespaces
 libc locals fry unix unix.linux.epoll unix.time io.ports
 io.backend.unix io.backend.unix.multiplexers ;
-SPECIALIZED-ARRAY: epoll-event
+specialized-array: epoll-event
 in: io.backend.unix.multiplexers.epoll
 
 TUPLE: epoll-mx < mx events ;

@@ -6,7 +6,7 @@ compiler.codegen.labels compiler.codegen.relocation
 compiler.constants cpu.architecture cpu.x86 cpu.x86.assembler
 cpu.x86.assembler.operands cpu.x86.features kernel layouts locals
 math sequences specialized-arrays system vocabs ;
-SPECIALIZED-ARRAY: uint
+specialized-array: uint
 in: cpu.x86.64
 
 : param-reg ( n -- reg ) int-regs cdecl param-regs at nth ;

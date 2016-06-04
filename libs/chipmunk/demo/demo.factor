@@ -4,7 +4,7 @@ USING: accessors alien alien.c-types alien.data chipmunk.ffi
 classes.struct game.loop game.worlds kernel literals locals
 math method-chains opengl.gl random sequences specialized-arrays
 ui ui.gadgets.worlds ui.pixel-formats ;
-SPECIALIZED-ARRAY: void*
+specialized-array: void*
 in: chipmunk.demo
 
 CONSTANT: image-width      188 ;
@@ -65,7 +65,7 @@ TUPLE: chipmunk-world < game-world
 AFTER: chipmunk-world tick-game-world
     space>> 1.0 60.0 / cpSpaceStep ;
 
-SPECIALIZED-ARRAY: cpContact
+specialized-array: cpContact
 M:: chipmunk-world draw-world* ( world -- )
     1 1 1 0 glClearColor
     GL_COLOR_BUFFER_BIT glClear

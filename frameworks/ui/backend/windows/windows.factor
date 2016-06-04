@@ -14,7 +14,7 @@ accessors math.rectangles math.order calendar ascii sets io.crlf
 io.encodings.utf16n windows.errors literals ui.pixel-formats
 ui.pixel-formats.private memoize classes colors
 specialized-arrays classes.struct ;
-SPECIALIZED-ARRAY: POINT
+specialized-array: POINT
 QUALIFIED-WITH: alien.c-types c ;
 in: ui.backend.windows
 

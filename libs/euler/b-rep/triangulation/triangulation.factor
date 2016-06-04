@@ -4,7 +4,7 @@ opengl.glu sequences specialized-arrays specialized-vectors
 libc destructors alien.data ;
 in: euler.b-rep.triangulation
 
-SPECIALIZED-ARRAY: double
+specialized-array: double
 
 ERROR: triangulated-face-must-be-base ;
 

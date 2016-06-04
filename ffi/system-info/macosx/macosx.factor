@@ -5,7 +5,7 @@ USING: alien alien.c-types alien.data alien.strings alien.syntax
 arrays assocs byte-arrays combinators core-foundation io.binary
 io.encodings.utf8 libc kernel math namespaces sequences
 specialized-arrays system system-info unix ;
-SPECIALIZED-ARRAY: int
+specialized-array: int
 
 in: system-info.macosx
 

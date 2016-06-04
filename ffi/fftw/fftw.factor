@@ -4,8 +4,8 @@
 USING: alien.c-types destructors fftw.ffi fry kernel locals math
 math.functions math.vectors sequences sequences.private
 specialized-arrays ;
-SPECIALIZED-ARRAY: double
-SPECIALIZED-ARRAY: fftw_complex
+specialized-array: double
+specialized-array: fftw_complex
 
 in: fftw
 

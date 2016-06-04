@@ -6,7 +6,7 @@ shuffle alien.libraries generalizations
 specialized-arrays alien.destructors alien.data ;
 FROM: alien.c-types => char double float int short uchar uint
 ushort void ;
-SPECIALIZED-ARRAY: uint
+specialized-array: uint
 in: openal
 
 << "openal" {

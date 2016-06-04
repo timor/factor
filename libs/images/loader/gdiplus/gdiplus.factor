@@ -5,7 +5,7 @@ io kernel libc locals math mime.types namespaces sequences specialized-arrays
 system windows.com windows.gdiplus windows.streams windows.types ;
 in: images.loader.gdiplus
 
-SPECIALIZED-ARRAY: ImageCodecInfo
+specialized-array: ImageCodecInfo
 
 singleton: gdi+-image
 

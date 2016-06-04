@@ -4,9 +4,9 @@ USING: accessors alien.c-types alien.data byte-arrays
 combinators fry grouping images kernel locals math math.vectors
 sequences specialized-arrays math.floats.half ;
 FROM: alien.c-types => float ;
-SPECIALIZED-ARRAY: half
-SPECIALIZED-ARRAY: float
-SPECIALIZED-ARRAY: ushort
+specialized-array: half
+specialized-array: float
+specialized-array: ushort
 in: images.normalization
 
 <PRIVATE

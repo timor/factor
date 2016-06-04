@@ -5,7 +5,7 @@ effects io.backend io.pathnames kernel llvm.core llvm.jit
 llvm.reader llvm.types make namespaces sequences
 specialized-arrays vocabs words ;
 QUALIFIED-WITH: alien.c-types c ;
-SPECIALIZED-ARRAY: c:void*
+specialized-array: c:void*
 in: llvm.invoker
 
 ! get function name, ret type, param types and names

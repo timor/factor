@@ -11,7 +11,7 @@ STRUCT: foo
     { z ushort }
     { w ushort } ;
 
-SPECIALIZED-ARRAY: foo
+specialized-array: foo
 VECTORED-STRUCT: foo
 
 {

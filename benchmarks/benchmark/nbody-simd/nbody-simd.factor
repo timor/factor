@@ -14,7 +14,7 @@ STRUCT: body
 { velocity double-4 }
 { mass double } ;
 
-SPECIALIZED-ARRAY: body
+specialized-array: body
 
 : <body> ( location velocity mass -- body )
     [ days-per-year v*n ] [ solar-mass * ] bi* body <struct-boa> ; inline

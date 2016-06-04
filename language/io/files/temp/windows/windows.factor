@@ -4,7 +4,7 @@ io.files.temp io.pathnames kernel math
 memoize specialized-arrays system windows.errors
 windows.kernel32 windows.ole32 windows.shell32
 windows.types ;
-SPECIALIZED-ARRAY: WCHAR
+specialized-array: WCHAR
 in: io.files.temp.windows
 
 <PRIVATE

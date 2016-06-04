@@ -5,7 +5,7 @@ alien.syntax namespaces alien.c-types sequences vocabs
 shuffle openal openal.alut.backend alien.libraries generalizations
 specialized-arrays alien.destructors ;
 FROM: alien.c-types => float short ;
-SPECIALIZED-ARRAY: uint
+specialized-array: uint
 in: openal.alut
 
 << "alut" {

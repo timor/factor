@@ -9,8 +9,8 @@ method-chains namespaces sequences splitting threads ui ui.gadgets
 ui.gadgets.worlds ui.pixel-formats specialized-arrays
 specialized-vectors literals ;
 FROM: alien.c-types => float ;
-SPECIALIZED-ARRAY: float
-SPECIALIZED-VECTOR: uint
+specialized-array: float
+specialized-vector: uint
 in: gpu.demos.bunny
 
 VERTEX-FORMAT: bunny-vertex
@@ -61,7 +61,7 @@ TUPLE: loading-state
 TUPLE: bunny-world < wasd-world
     bunny sobel loading ;
 
-SPECIALIZED-VECTOR: bunny-vertex-struct
+specialized-vector: bunny-vertex-struct
 
 UNIFORM-TUPLE: bunny-uniforms < mvp-uniforms
     { "light-position" vec3-uniform  f }

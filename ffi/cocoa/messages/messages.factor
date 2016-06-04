@@ -9,7 +9,7 @@ stack-checker strings words ;
 QUALIFIED-WITH: alien.c-types c ;
 in: cocoa.messages
 
-SPECIALIZED-ARRAY: void*
+specialized-array: void*
 
 : make-sender ( signature function -- quot )
     [ over first , f , , second , \ alien-invoke , ] [ ] make ;

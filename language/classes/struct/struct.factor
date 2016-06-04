@@ -12,7 +12,7 @@ specialized-arrays stack-checker.dependencies summary vectors
 vocabs.loader vocabs.parser words ;
 in: classes.struct
 
-SPECIALIZED-ARRAY: uchar
+specialized-array: uchar
 
 ERROR: struct-must-have-slots ;
 

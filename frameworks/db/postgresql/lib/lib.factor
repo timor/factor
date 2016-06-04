@@ -7,8 +7,8 @@ combinators libc calendar.format byte-arrays destructors
 prettyprint accessors strings serialize io.encodings.binary
 io.encodings.utf8 alien.strings io.streams.byte-array summary
 present urls specialized-arrays db.private ;
-SPECIALIZED-ARRAY: uint
-SPECIALIZED-ARRAY: void*
+specialized-array: uint
+specialized-array: void*
 in: db.postgresql.lib
 
 : postgresql-result-error-message ( res -- str/f )

@@ -9,7 +9,7 @@ io.timeouts kernel libc literals locals math math.bitwise namespaces
 sequences specialized-arrays system threads tr vectors windows
 windows.errors windows.handles windows.kernel32 windows.shell32
 windows.time windows.types windows.winsock ;
-SPECIALIZED-ARRAY: ushort
+specialized-array: ushort
 in: io.files.windows
 
 slot: file

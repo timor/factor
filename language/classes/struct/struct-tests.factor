@@ -11,9 +11,9 @@ sequences specialized-arrays specialized-arrays.private
 system tools.test vocabs ;
 FROM: math => float ;
 QUALIFIED-WITH: alien.c-types c ;
-SPECIALIZED-ARRAY: char
-SPECIALIZED-ARRAY: int
-SPECIALIZED-ARRAY: ushort
+specialized-array: char
+specialized-array: int
+specialized-array: ushort
 in: classes.struct.tests
 
 symbol: struct-test-empty
@@ -277,7 +277,7 @@ STRUCT: struct-test-array-slots
 STRUCT: struct-test-optimization
     { x { int 3 } } { y int } ;
 
-SPECIALIZED-ARRAY: struct-test-optimization
+specialized-array: struct-test-optimization
 
 { t } [ [ struct-test-optimization memory>struct y>> ] { memory>struct y>> } inlined? ] unit-test
 { t } [
@@ -469,7 +469,7 @@ CONSULT: struct-test-delegate struct-test-delegator del>> ;
         8 >>b
 ] unit-test
 
-SPECIALIZED-ARRAY: void*
+specialized-array: void*
 
 STRUCT: silly-array-field-test { x int*[3] } ;
 

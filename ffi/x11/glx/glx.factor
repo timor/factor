@@ -5,7 +5,7 @@
 USING: alien alien.c-types alien.syntax x11 x11.xlib x11.syntax
 namespaces make kernel sequences parser words
 specialized-arrays accessors ;
-SPECIALIZED-ARRAY: int
+specialized-array: int
 in: x11.glx
 
 LIBRARY: glx

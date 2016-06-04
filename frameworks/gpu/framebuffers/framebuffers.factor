@@ -4,8 +4,8 @@ combinators destructors gpu gpu.buffers gpu.private gpu.textures
 gpu.textures.private images kernel locals math math.rectangles
 opengl opengl.framebuffers opengl.gl opengl.textures sequences
 specialized-arrays typed ui.gadgets.worlds variants ;
-SPECIALIZED-ARRAY: int
-SPECIALIZED-ARRAY: uint
+specialized-array: int
+specialized-array: uint
 in: gpu.framebuffers
 
 singleton: system-framebuffer

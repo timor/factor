@@ -1,6 +1,6 @@
 USING: alien.c-types sequences kernel math specialized-arrays
 fry ;
-SPECIALIZED-ARRAY: int
+specialized-array: int
 in: benchmark.dawes
 
 ! Phil Dawes's performance problem

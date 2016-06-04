@@ -3,7 +3,7 @@
 USING: kernel io math math.functions math.parser math.vectors
 math.vectors.simd sequences specialized-arrays ;
 QUALIFIED-WITH: alien.c-types c ;
-SPECIALIZED-ARRAY: float-4
+specialized-array: float-4
 in: benchmark.simd-1
 
 : <point> ( n -- float-4 )

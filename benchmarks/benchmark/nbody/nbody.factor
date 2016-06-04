@@ -4,7 +4,7 @@ USING: accessors specialized-arrays fry kernel
 locals math math.constants math.functions math.vectors
 prettyprint combinators.smart sequences hints arrays ;
 FROM: alien.c-types => double ;
-SPECIALIZED-ARRAY: double
+specialized-array: double
 in: benchmark.nbody
 
 : solar-mass ( -- x ) 4 pi sq * ; inline

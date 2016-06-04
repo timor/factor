@@ -4,8 +4,8 @@ combinators gpu kernel literals math math.rectangles opengl
 opengl.gl sequences typed variants specialized-arrays ;
 QUALIFIED-WITH: alien.c-types c ;
 FROM: math => float ;
-SPECIALIZED-ARRAY: c:int
-SPECIALIZED-ARRAY: c:float
+specialized-array: c:int
+specialized-array: c:float
 in: gpu.state
 
 TUPLE: viewport-state

@@ -4,7 +4,7 @@ USING: kernel opengl.gl alien.c-types continuations namespaces
 assocs alien alien.data alien.strings libc opengl math sequences
 combinators macros arrays io.encodings.ascii fry
 specialized-arrays destructors accessors ;
-SPECIALIZED-ARRAY: uint
+specialized-array: uint
 in: opengl.shaders
 
 : with-gl-shader-source-ptr ( string quot -- )

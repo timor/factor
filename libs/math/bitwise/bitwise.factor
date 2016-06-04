@@ -4,7 +4,7 @@ USING: alien alien.c-types alien.data arrays assocs byte-arrays
 combinators combinators.short-circuit fry kernel kernel.private
 layouts macros math math.bits sequences sequences.private
 specialized-arrays words ;
-SPECIALIZED-ARRAY: uchar
+specialized-array: uchar
 in: math.bitwise
 
 ! utilities

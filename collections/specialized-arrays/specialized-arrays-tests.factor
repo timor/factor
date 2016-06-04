@@ -10,7 +10,7 @@ heap-size ;
 FROM: alien.data => little-endian? ;
 in: specialized-arrays.tests
 
-SPECIALIZED-ARRAY: int
+specialized-array: int
 SPECIALIZED-ARRAYS: bool uchar ushort char uint float ulonglong ;
 
 { t } [ { 1 2 3 } int >c-array int-array? ] unit-test
@@ -53,7 +53,7 @@ STRUCT: test-struct
     { x int }
     { y int } ;
 
-SPECIALIZED-ARRAY: test-struct
+specialized-array: test-struct
 
 { 1 } [
     1 test-struct-array{ } new-sequence length
@@ -111,7 +111,7 @@ SPECIALIZED-ARRAY: test-struct
 ! Regression
 STRUCT: fixed-string { text char[64] } ;
 
-SPECIALIZED-ARRAY: fixed-string
+specialized-array: fixed-string
 
 { { ALIEN: 100 ALIEN: 140 ALIEN: 180 ALIEN: 1c0 } } [
     ALIEN: 100 4 <direct-fixed-string-array> [ (underlying)>> ] { } map-as
@@ -140,7 +140,7 @@ symbol: __does_not_exist__
 in: specialized-arrays.tests
 USING: specialized-arrays ;
 
-SPECIALIZED-ARRAY: __does_not_exist__ " eval( -- )
+specialized-array: __does_not_exist__ " eval( -- )
 ] must-fail
 
 { } [
@@ -150,7 +150,7 @@ USING: alien.c-types classes.struct specialized-arrays ;
 
 STRUCT: __does_not_exist__ { x int } ;
 
-SPECIALIZED-ARRAY: __does_not_exist__
+specialized-array: __does_not_exist__
 " eval( -- )
 ] unit-test
 
@@ -169,7 +169,7 @@ SPECIALIZED-ARRAY: __does_not_exist__
 
 STRUCT: struct-resize-test { x int } ;
 
-SPECIALIZED-ARRAY: struct-resize-test
+specialized-array: struct-resize-test
 
 { 40 } [ 10 <struct-resize-test-array> byte-length ] unit-test
 

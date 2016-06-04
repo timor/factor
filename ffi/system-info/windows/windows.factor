@@ -5,7 +5,7 @@ arrays byte-arrays classes.struct combinators kernel math
 namespaces specialized-arrays system
 vocabs.loader windows windows.advapi32
 windows.errors windows.kernel32 words system-info ;
-SPECIALIZED-ARRAY: ushort
+specialized-array: ushort
 in: system-info.windows
 
 : system-info ( -- SYSTEM_INFO )

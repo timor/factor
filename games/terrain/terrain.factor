@@ -10,7 +10,7 @@ ui.gadgets.worlds ui.pixel-formats game.worlds
 math.matrices.simd noise ui.gestures combinators.short-circuit
 destructors grid-meshes math.vectors.simd ;
 QUALIFIED-WITH: alien.c-types c ;
-SPECIALIZED-ARRAY: c:float
+specialized-array: c:float
 in: terrain
 
 CONSTANT: FOV $[ 2.0 sqrt 1 + ] ;

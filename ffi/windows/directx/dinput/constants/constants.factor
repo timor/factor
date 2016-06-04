@@ -4,7 +4,7 @@ alien.syntax kernel system namespaces combinators sequences fry
 math accessors macros words quotations libc continuations
 generalizations splitting locals assocs init specialized-arrays
 classes.struct strings arrays literals sequences.generalizations ;
-SPECIALIZED-ARRAY: DIOBJECTDATAFORMAT
+specialized-array: DIOBJECTDATAFORMAT
 in: windows.directx.dinput.constants
 
 ! Some global variables aren't provided by the DirectInput DLL (they're in the

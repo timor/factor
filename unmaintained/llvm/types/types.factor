@@ -4,7 +4,7 @@ USING: accessors alien.c-types alien.data arrays combinators
 kernel llvm.core locals math.parser math multiline namespaces
 parser peg.ebnf sequences sequences.deep specialized-arrays
 strings vocabs words ;
-SPECIALIZED-ARRAY: void*
+specialized-array: void*
 in: llvm.types
 
 ! Type resolution strategy:

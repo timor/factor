@@ -3,7 +3,7 @@ USING: arrays destructors gpu.buffers gpu.framebuffers gpu.render
 gpu.shaders gpu.state gpu.textures images kernel locals math
 math.rectangles opengl.gl sequences specialized-arrays ;
 FROM: alien.c-types => float ;
-SPECIALIZED-ARRAY: float
+specialized-array: float
 in: gpu.util
 
 CONSTANT: environment-cube-map-mv-matrices

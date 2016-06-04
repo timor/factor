@@ -3,8 +3,8 @@
 USING: accessors alien combinators kernel locals math
 math.ranges openal sequences sequences.merged specialized-arrays ;
 FROM: alien.c-types => short uchar ;
-SPECIALIZED-ARRAY: uchar
-SPECIALIZED-ARRAY: short
+specialized-array: uchar
+specialized-array: short
 in: synth.buffers
 
 TUPLE: buffer sample-freq 8bit? id ;

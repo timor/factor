@@ -8,7 +8,7 @@ locals math math.order openal openal.alut opengl.gl sequences
 specialized-arrays ui ui.gadgets ui.gestures ui.render ;
 QUALIFIED: threads
 QUALIFIED: system
-SPECIALIZED-ARRAY: uchar
+specialized-array: uchar
 in: space-invaders
 
 TUPLE: space-invaders < cpu

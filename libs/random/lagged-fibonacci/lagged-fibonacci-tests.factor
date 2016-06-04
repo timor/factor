@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: fry kernel math.functions random random.lagged-fibonacci
 sequences tools.test specialized-arrays alien.c-types ;
-SPECIALIZED-ARRAY: double
+specialized-array: double
 in: random.lagged-fibonacci.tests
 
 { t } [

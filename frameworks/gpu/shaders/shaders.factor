@@ -10,8 +10,8 @@ specialized-arrays splitting strings tr ui.gadgets.worlds
 variants vectors vocabs vocabs.loader vocabs.parser words
 words.constant math.floats.half typed ;
 QUALIFIED-WITH: alien.c-types c ;
-SPECIALIZED-ARRAY: int
-SPECIALIZED-ARRAY: void*
+specialized-array: int
+specialized-array: void*
 in: gpu.shaders
 
 VARIANT: shader-kind

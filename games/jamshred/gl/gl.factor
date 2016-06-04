@@ -5,7 +5,7 @@ jamshred.player jamshred.tunnel kernel math math.constants
 math.functions math.vectors opengl opengl.gl opengl.glu
 opengl.demo-support sequences specialized-arrays locals ;
 FROM: alien.c-types => float ;
-SPECIALIZED-ARRAY: float
+specialized-array: float
 in: jamshred.gl
 
 CONSTANT: min-vertices 6 ;

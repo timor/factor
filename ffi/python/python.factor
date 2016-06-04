@@ -7,7 +7,7 @@ QUALIFIED: math
 
 ERROR: python-error type message traceback ;
 
-SPECIALIZED-ARRAY: void*
+specialized-array: void*
 
 ! Borrowed from unix.utilities
 : strings>alien ( strings encoding -- array )

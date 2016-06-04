@@ -7,20 +7,20 @@ io.encodings.utf8 kernel libc sequences alien.data
 specialized-arrays strings unix.utilities vocabs.parser
 words libc.private locals generalizations math ;
 FROM: alien.c-types => float short ;
-SPECIALIZED-ARRAY: bool
-SPECIALIZED-ARRAY: char
-SPECIALIZED-ARRAY: double
-SPECIALIZED-ARRAY: float
-SPECIALIZED-ARRAY: int
-SPECIALIZED-ARRAY: long
-SPECIALIZED-ARRAY: longlong
-SPECIALIZED-ARRAY: short
-SPECIALIZED-ARRAY: uchar
-SPECIALIZED-ARRAY: uint
-SPECIALIZED-ARRAY: ulong
-SPECIALIZED-ARRAY: ulonglong
-SPECIALIZED-ARRAY: ushort
-SPECIALIZED-ARRAY: void*
+specialized-array: bool
+specialized-array: char
+specialized-array: double
+specialized-array: float
+specialized-array: int
+specialized-array: long
+specialized-array: longlong
+specialized-array: short
+specialized-array: uchar
+specialized-array: uint
+specialized-array: ulong
+specialized-array: ulonglong
+specialized-array: ushort
+specialized-array: void*
 in: alien.marshall
 
 << primitive-types [ [ void* = ] [ bool = ] bi or not ]

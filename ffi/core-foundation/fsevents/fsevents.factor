@@ -8,9 +8,9 @@ io.encodings.utf8 kernel locals namespaces sequences
 specialized-arrays unix.types ;
 in: core-foundation.fsevents
 
-SPECIALIZED-ARRAY: void*
-SPECIALIZED-ARRAY: uint
-SPECIALIZED-ARRAY: ulonglong
+specialized-array: void*
+specialized-array: uint
+specialized-array: ulonglong
 
 CONSTANT: kFSEventStreamCreateFlagNone 0x00000000 ;
 CONSTANT: kFSEventStreamCreateFlagUseCFTypes 0x00000001 ;

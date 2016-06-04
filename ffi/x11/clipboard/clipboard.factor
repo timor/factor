@@ -3,7 +3,7 @@
 USING: accessors alien.c-types alien.data alien.strings
 classes.struct io.encodings.utf8 kernel namespaces sequences
 specialized-arrays x11 x11.constants x11.xlib ;
-SPECIALIZED-ARRAY: int
+specialized-array: int
 in: x11.clipboard
 
 ! This code was based on by McCLIM's Backends/CLX/port.lisp

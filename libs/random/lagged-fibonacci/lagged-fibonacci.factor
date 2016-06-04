@@ -3,7 +3,7 @@
 USING: accessors alien.c-types alien.data fry kernel literals
 locals math random sequences specialized-arrays namespaces
 sequences.private ;
-SPECIALIZED-ARRAY: double
+specialized-array: double
 in: random.lagged-fibonacci
 
 TUPLE: lagged-fibonacci { u double-array } { pt0 fixnum } { pt1 fixnum } ;

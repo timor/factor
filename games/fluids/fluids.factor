@@ -8,14 +8,14 @@ math.vectors namespaces opengl.gl sequences specialized-arrays
 ui.gadgets.worlds ui.gestures ui.pixel-formats gpu.effects.step
 images.pgm images.ppm alien.data ;
 FROM: alien.c-types => float ;
-SPECIALIZED-ARRAY: float
+specialized-array: float
 in: fluids
 
 STRUCT: particle_t
     { p float[2] }
     { v float[2] }
     { m float    } ;
-SPECIALIZED-ARRAY: particle_t
+specialized-array: particle_t
 
 CONSTANT: gravity { 0.0 -0.1 } ;
 

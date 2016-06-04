@@ -5,7 +5,7 @@ io.files io.files.temp io.encodings.binary kernel math
 math.constants math.functions math.vectors math.parser make
 sequences sequences.private words hints ;
 FROM: alien.c-types => double ;
-SPECIALIZED-ARRAY: double
+specialized-array: double
 in: benchmark.raytracer
 
 ! parameters

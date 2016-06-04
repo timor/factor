@@ -7,7 +7,7 @@ io.files.types kernel libc literals math math.bitwise
 sequences specialized-arrays strings system unix unix.ffi
 unix.groups unix.stat unix.time unix.users vocabs ;
 in: io.files.info.unix
-SPECIALIZED-ARRAY: timeval
+specialized-array: timeval
 
 TUPLE: unix-file-system-info < file-system-info-tuple
 block-size preferred-block-size

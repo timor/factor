@@ -3,7 +3,7 @@ windows.com.wrapper combinators windows.kernel32 windows.ole32
 windows.shell32 kernel accessors windows.types
 prettyprint namespaces ui.tools.listener ui.tools.workspace
 alien.data alien sequences math classes.struct ;
-SPECIALIZED-ARRAY: WCHAR
+specialized-array: WCHAR
 in: windows.dragdrop-listener
 
 : filenames-from-hdrop ( hdrop -- filenames )

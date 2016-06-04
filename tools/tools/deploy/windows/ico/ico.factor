@@ -20,7 +20,7 @@ STRUCT: ico-directory-entry
     { BitsPerPixel WORD  }
     { ImageSize    DWORD }
     { ImageOffset  DWORD } ;
-SPECIALIZED-ARRAY: ico-directory-entry
+specialized-array: ico-directory-entry
 
 STRUCT: group-directory-entry
     { Width        BYTE  }

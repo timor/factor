@@ -1,7 +1,7 @@
 USING: alien.c-types sequences math mirrors splitting grouping
 kernel make assocs alien.syntax columns
 specialized-arrays bit-arrays ;
-SPECIALIZED-ARRAY: double
+specialized-array: double
 in: benchmark.dispatch3
 
 GENERIC: g ( obj -- str ) ;

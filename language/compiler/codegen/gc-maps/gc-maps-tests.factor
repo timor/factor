@@ -4,7 +4,7 @@ compiler.codegen.gc-maps compiler.codegen.relocation cpu.architecture
 cpu.x86 byte-arrays make namespaces kernel layouts math sequences
 specialized-arrays system tools.test ;
 QUALIFIED: vm
-SPECIALIZED-ARRAY: uint
+specialized-array: uint
 in: compiler.codegen.gc-maps.tests
 
 singleton: fake-cpu

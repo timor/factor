@@ -6,7 +6,7 @@ math.order math.parser ogg ogg.vorbis sequences
 specialized-arrays specialized-vectors ;
 QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-ARRAYS: c:float c:void* ;
-SPECIALIZED-VECTOR: c:short
+specialized-vector: c:short
 in: audio.vorbis
 
 TUPLE: vorbis-stream < disposable

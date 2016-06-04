@@ -8,7 +8,7 @@ in: benchmark.struct-arrays
 
 STRUCT: point { x float } { y float } { z float } ;
 
-SPECIALIZED-ARRAY: point
+specialized-array: point
 
 : xyz ( point -- x y z )
     [ x>> ] [ y>> ] [ z>> ] tri ; inline

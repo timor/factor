@@ -3,7 +3,7 @@
 USING: alien.c-types alien.data system kernel unix math sequences
 io.backend.unix io.ports libc specialized-arrays accessors unix.ffi ;
 QUALIFIED: io.pipes
-SPECIALIZED-ARRAY: int
+specialized-array: int
 in: io.pipes.unix
 
 M: unix io.pipes:(pipe) ( -- pair )
