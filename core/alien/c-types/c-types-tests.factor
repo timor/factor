@@ -134,7 +134,7 @@ GENERIC: foo-func ( x -- ) ;
 "IN: alien.c-types.tests
 use: alien.syntax
 use: alien.c-types
-CALLBACK: void foo-func ( )
+CALLBACK: void foo-func ( ) ;
 " eval( -- )
 
 ! generic -> typedef

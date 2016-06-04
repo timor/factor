@@ -19,9 +19,9 @@ STRUCT: ifaddrs
     { ifa_dstaddr sockaddr* }
     { ifa_data void* } ;
 
-FUNCTION: int getifaddrs ( ifaddrs** ifap )
+FUNCTION: int getifaddrs ( ifaddrs** ifap ) ;
 
-FUNCTION: void freeifaddrs ( ifaddrs* ifp )
+FUNCTION: void freeifaddrs ( ifaddrs* ifp ) ;
 
 DESTRUCTOR: freeifaddrs
 

@@ -80,7 +80,7 @@ CONSTANT: eleven 11
     [ "not-word" parse-c-type ] [ error>> no-word-error? ] must-fail-with
 ] with-file-vocabs
 
-FUNCTION: void* alien-parser-function-effect-test ( int *arg1, float arg2 )
+FUNCTION: void* alien-parser-function-effect-test ( int *arg1, float arg2 ) ;
 
 { ( arg1 arg2 -- void* ) } [
     \ alien-parser-function-effect-test "declared-effect" word-prop
@@ -96,7 +96,7 @@ FUNCTION-ALIAS: (alien-parser-function-effect-test) void* alien-parser-function-
 
 { t } [ \ (alien-parser-function-effect-test) inline? ] unit-test
 
-CALLBACK: void* alien-parser-callback-effect-test ( int *arg1 float arg2 )
+CALLBACK: void* alien-parser-callback-effect-test ( int *arg1 float arg2 ) ;
 
 { ( arg1 arg2 -- void* ) } [
     \ alien-parser-callback-effect-test "callback-effect" word-prop

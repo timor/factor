@@ -45,15 +45,15 @@ FUNCTION: HRESULT D3DX11CreateAsyncCompilerProcessor ( LPCSTR pFileName, D3D10_S
 FUNCTION: HRESULT D3DX11CreateAsyncShaderPreprocessProcessor ( LPCSTR pFileName, D3D10_SHADER_MACRO* pDefines, LPD3D10INCLUDE pInclude,
         ID3D10Blob** ppShaderText, ID3D10Blob** ppErrorBuffer, ID3DX11DataProcessor** ppProcessor )
 
-FUNCTION: HRESULT D3DX11CreateAsyncFileLoaderW ( LPCWSTR pFileName, ID3DX11DataLoader** ppDataLoader )
-FUNCTION: HRESULT D3DX11CreateAsyncFileLoaderA ( LPCSTR pFileName, ID3DX11DataLoader** ppDataLoader )
-FUNCTION: HRESULT D3DX11CreateAsyncMemoryLoader ( LPCVOID pData, SIZE_T cbData, ID3DX11DataLoader** ppDataLoader )
-FUNCTION: HRESULT D3DX11CreateAsyncResourceLoaderW ( HMODULE hSrcModule, LPCWSTR pSrcResource, ID3DX11DataLoader** ppDataLoader )
-FUNCTION: HRESULT D3DX11CreateAsyncResourceLoaderA ( HMODULE hSrcModule, LPCSTR pSrcResource, ID3DX11DataLoader** ppDataLoader )
+FUNCTION: HRESULT D3DX11CreateAsyncFileLoaderW ( LPCWSTR pFileName, ID3DX11DataLoader** ppDataLoader ) ;
+FUNCTION: HRESULT D3DX11CreateAsyncFileLoaderA ( LPCSTR pFileName, ID3DX11DataLoader** ppDataLoader ) ;
+FUNCTION: HRESULT D3DX11CreateAsyncMemoryLoader ( LPCVOID pData, SIZE_T cbData, ID3DX11DataLoader** ppDataLoader ) ;
+FUNCTION: HRESULT D3DX11CreateAsyncResourceLoaderW ( HMODULE hSrcModule, LPCWSTR pSrcResource, ID3DX11DataLoader** ppDataLoader ) ;
+FUNCTION: HRESULT D3DX11CreateAsyncResourceLoaderA ( HMODULE hSrcModule, LPCSTR pSrcResource, ID3DX11DataLoader** ppDataLoader ) ;
 
 ALIAS: D3DX11CreateAsyncFileLoader D3DX11CreateAsyncFileLoaderW
 ALIAS: D3DX11CreateAsyncResourceLoader D3DX11CreateAsyncResourceLoaderW
 
-FUNCTION: HRESULT D3DX11CreateAsyncTextureProcessor ( ID3D11Device* pDevice, D3DX11_IMAGE_LOAD_INFO* pLoadInfo, ID3DX11DataProcessor** ppDataProcessor )
-FUNCTION: HRESULT D3DX11CreateAsyncTextureInfoProcessor ( D3DX11_IMAGE_INFO* pImageInfo, ID3DX11DataProcessor** ppDataProcessor )
-FUNCTION: HRESULT D3DX11CreateAsyncShaderResourceViewProcessor ( ID3D11Device* pDevice, D3DX11_IMAGE_LOAD_INFO* pLoadInfo, ID3DX11DataProcessor** ppDataProcessor )
+FUNCTION: HRESULT D3DX11CreateAsyncTextureProcessor ( ID3D11Device* pDevice, D3DX11_IMAGE_LOAD_INFO* pLoadInfo, ID3DX11DataProcessor** ppDataProcessor ) ;
+FUNCTION: HRESULT D3DX11CreateAsyncTextureInfoProcessor ( D3DX11_IMAGE_INFO* pImageInfo, ID3DX11DataProcessor** ppDataProcessor ) ;
+FUNCTION: HRESULT D3DX11CreateAsyncShaderResourceViewProcessor ( ID3D11Device* pDevice, D3DX11_IMAGE_LOAD_INFO* pLoadInfo, ID3DX11DataProcessor** ppDataProcessor ) ;

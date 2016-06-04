@@ -163,13 +163,7 @@ MACRO: inputs ( inputs# -- quot: ( gml -- gml inputs... ) )
 MACRO: outputs ( outputs# -- quot: ( gml outputs... -- gml ) )
     [ 1 + ] keep '[ _ npick operand-stack>> _ pushn ] ;
 
-MACRO: gml-primitive (
-    inputs#
-    outputs#
-    quot: ( registers gml inputs... -- outputs... )
-    --
-    quot: ( registers gml -- registers gml )
-)
+MACRO: gml-primitive ( inputs# outputs# quot: ( registers gml inputs... -- outputs... ) -- quot: ( registers gml -- registers gml ) )
     swap '[ _ inputs @ _ outputs ] ;
 
 SYMBOL: global-dictionary

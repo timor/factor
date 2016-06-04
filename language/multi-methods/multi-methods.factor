@@ -5,7 +5,7 @@ combinators arrays words assocs parser namespaces make
 definitions prettyprint prettyprint.backend prettyprint.custom
 quotations generalizations sequences.generalizations debugger io
 compiler.units kernel.private effects accessors hashtables
-sorting shuffle math.order sets see effects.parser ;
+sorting shuffle math.order sets see effects.parser lexer ;
 FROM: namespaces => set ;
 IN: multi-methods
 
@@ -224,7 +224,7 @@ M: no-method error.
     ] if ;
 
 ! Syntax
-SYNTAX: GENERIC: scan-new-word scan-effect define-generic ;
+SYNTAX: GENERIC: scan-new-word scan-effect ";" expect define-generic ;
 
 : parse-method ( -- quot classes generic )
     parse-definition [ 2 tail ] [ second ] [ first ] tri ;

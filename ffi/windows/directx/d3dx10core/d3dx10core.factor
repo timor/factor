@@ -26,9 +26,9 @@ FUNCTION: HRESULT D3DX10CreateDeviceAndSwapChain (
 
 C-TYPE: ID3D10Device1
 
-FUNCTION: HRESULT D3DX10GetFeatureLevel1 ( ID3D10Device* pDevice, ID3D10Device1** ppDevice1 )
+FUNCTION: HRESULT D3DX10GetFeatureLevel1 ( ID3D10Device* pDevice, ID3D10Device1** ppDevice1 ) ;
 
-FUNCTION: HRESULT D3DX10CheckVersion ( UINT D3DSdkVersion, UINT D3DX10SdkVersion )
+FUNCTION: HRESULT D3DX10CheckVersion ( UINT D3DSdkVersion, UINT D3DX10SdkVersion ) ;
 
 CONSTANT: D3DX10_SPRITE_SORT_TEXTURE              0x01
 CONSTANT: D3DX10_SPRITE_SORT_DEPTH_BACK_TO_FRONT  0x02
@@ -84,7 +84,7 @@ COM-INTERFACE: ID3DX10ThreadPump IUnknown {C93FECFA-6967-478a-ABBC-402D90621FCB}
     HRESULT PurgeAllItems ( )
     HRESULT GetQueueStatus ( UINT* pIoQueue, UINT* pProcessQueue, UINT* pDeviceQueue ) ;
 
-FUNCTION: HRESULT D3DX10CreateThreadPump ( UINT cIoThreads, UINT cProcThreads, ID3DX10ThreadPump** ppThreadPump )
+FUNCTION: HRESULT D3DX10CreateThreadPump ( UINT cIoThreads, UINT cProcThreads, ID3DX10ThreadPump** ppThreadPump ) ;
 
 STRUCT: D3DX10_FONT_DESCA
     { Height          INT               }
@@ -180,7 +180,7 @@ FUNCTION: HRESULT
 
 ALIAS: D3DX10CreateFontIndirect D3DX10CreateFontIndirectW
 
-FUNCTION: HRESULT D3DX10UnsetAllDeviceObjects ( ID3D10Device* pDevice )
+FUNCTION: HRESULT D3DX10UnsetAllDeviceObjects ( ID3D10Device* pDevice ) ;
 
 CONSTANT: D3DERR_INVALIDCALL     0x8876086C
 CONSTANT: D3DERR_WASSTILLDRAWING 0x8876021C

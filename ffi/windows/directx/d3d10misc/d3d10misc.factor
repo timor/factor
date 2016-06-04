@@ -37,4 +37,4 @@ FUNCTION: HRESULT D3D10CreateDeviceAndSwapChain (
     IDXGISwapChain**      ppSwapChain,
     ID3D10Device**        ppDevice )
 
-FUNCTION: HRESULT D3D10CreateBlob ( SIZE_T NumBytes, LPD3D10BLOB* ppBuffer )
+FUNCTION: HRESULT D3D10CreateBlob ( SIZE_T NumBytes, LPD3D10BLOB* ppBuffer ) ;

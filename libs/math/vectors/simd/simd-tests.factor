@@ -132,13 +132,7 @@ TUPLE: simd-test-failure
     optimized-result
     nonintrinsic-result ;
 
-:: check-optimizer (
-    seq
-    test-quot: ( input -- input-quot: ( -- ..v ) code-quot: ( ..v -- result ) )
-    eq-quot: ( resulta resultb -- ? )
-    --
-    failures
-)
+:: check-optimizer ( seq test-quot: ( input -- input-quot: ( -- ..v ) code-quot: ( ..v -- result ) ) eq-quot: ( resulta resultb -- ? ) -- failures )
     ! Use test-quot to generate a bunch of test cases from the
     ! given inputs. Run each test case optimized and
     ! unoptimized. Compare results with eq-quot.

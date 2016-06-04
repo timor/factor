@@ -141,7 +141,7 @@ PRIVATE>
     return function library types names (make-function) ;
 
 : (FUNCTION:) ( -- return function library types names )
-    scan-function-name current-library get scan-c-args ;
+    scan-function-name current-library get scan-c-args ";" expect ;
 
 : callback-quot ( return types abi -- quot )
     '[ [ _ _ _ ] dip alien-callback ] ;

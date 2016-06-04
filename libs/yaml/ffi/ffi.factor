@@ -27,8 +27,7 @@ LIBRARY: libyaml
 !  * @c "X.Y.Z", where @c X is the major version number, @c Y is a minor version
 !  * number, and @c Z is the patch version number.
 !  */
-FUNCTION: c-string
-yaml_get_version_string ( )
+FUNCTION: c-string yaml_get_version_string ( ) ;
 
 ! /**
 !  * Get the library version numbers.
@@ -37,8 +36,7 @@ yaml_get_version_string ( )
 !  * @param[out]      minor   Minor version number.
 !  * @param[out]      patch   Patch version number.
 !  */
-FUNCTION: void
-yaml_get_version ( int *major, int *minor, int *patch )
+FUNCTION: void yaml_get_version ( int *major, int *minor, int *patch ) ;
 
 ! /** @} */
 
@@ -236,8 +234,7 @@ STRUCT: yaml_token_t
 !  * @param[in,out]   token   A token object.
 !  */
 
-FUNCTION: void
-yaml_token_delete ( yaml_token_t *token )
+FUNCTION: void yaml_token_delete ( yaml_token_t *token ) ;
 DESTRUCTOR: yaml_token_delete
 
 ! /** @} */
@@ -353,9 +350,9 @@ STRUCT: yaml_event_t
 !  * @returns @c 1 if the function succeeded, @c 0 on error.
 !  */
 
-FUNCTION: bool
-yaml_stream_start_event_initialize ( yaml_event_t *event,
-        yaml_encoding_t encoding )
+FUNCTION: bool yaml_stream_start_event_initialize (
+    yaml_event_t *event,
+    yaml_encoding_t encoding ) ;
 
 ! /**
 !  * Create the STREAM-END event.
@@ -365,8 +362,7 @@ yaml_stream_start_event_initialize ( yaml_event_t *event,
 !  * @returns @c 1 if the function succeeded, @c 0 on error.
 !  */
 
-FUNCTION: bool
-yaml_stream_end_event_initialize ( yaml_event_t *event )
+FUNCTION: bool yaml_stream_end_event_initialize ( yaml_event_t *event ) ;
 
 ! /**
 !  * Create the DOCUMENT-START event.
@@ -392,7 +388,7 @@ yaml_document_start_event_initialize ( yaml_event_t *event,
         yaml_version_directive_t *version_directive,
         yaml_tag_directive_t *tag_directives_start,
         yaml_tag_directive_t *tag_directives_end,
-        bool implicit )
+        bool implicit ) ;
 
 ! /**
 !  * Create the DOCUMENT-END event.
@@ -407,7 +403,7 @@ yaml_document_start_event_initialize ( yaml_event_t *event,
 !  */
 
 FUNCTION: bool
-yaml_document_end_event_initialize ( yaml_event_t *event, bool implicit )
+yaml_document_end_event_initialize ( yaml_event_t *event, bool implicit ) ;
 
 ! /**
 !  * Create an ALIAS event.
@@ -419,7 +415,7 @@ yaml_document_end_event_initialize ( yaml_event_t *event, bool implicit )
 !  */
 
 FUNCTION: bool
-yaml_alias_event_initialize ( yaml_event_t *event, c-string anchor )
+yaml_alias_event_initialize ( yaml_event_t *event, c-string anchor ) ;
 
 ! /**
 !  * Create a SCALAR event.
@@ -448,7 +444,7 @@ yaml_scalar_event_initialize ( yaml_event_t *event,
         c-string anchor, c-string tag,
         c-string value, int length,
         bool plain_implicit, bool quoted_implicit,
-        yaml_scalar_style_t style )
+        yaml_scalar_style_t style ) ;
 
 ! /**
 !  * Create a SEQUENCE-START event.
@@ -469,7 +465,7 @@ yaml_scalar_event_initialize ( yaml_event_t *event,
 FUNCTION: bool
 yaml_sequence_start_event_initialize ( yaml_event_t *event,
         c-string anchor, c-string tag, bool implicit,
-        yaml_sequence_style_t style )
+        yaml_sequence_style_t style ) ;
 
 ! /**
 !  * Create a SEQUENCE-END event.
@@ -480,7 +476,7 @@ yaml_sequence_start_event_initialize ( yaml_event_t *event,
 !  */
 
 FUNCTION: bool
-yaml_sequence_end_event_initialize ( yaml_event_t *event )
+yaml_sequence_end_event_initialize ( yaml_event_t *event ) ;
 
 ! /**
 !  * Create a MAPPING-START event.
@@ -501,7 +497,7 @@ yaml_sequence_end_event_initialize ( yaml_event_t *event )
 FUNCTION: bool
 yaml_mapping_start_event_initialize ( yaml_event_t *event,
         c-string anchor, c-string tag, bool implicit,
-        yaml_mapping_style_t style )
+        yaml_mapping_style_t style ) ;
 
 ! /**
 !  * Create a MAPPING-END event.
@@ -512,7 +508,7 @@ yaml_mapping_start_event_initialize ( yaml_event_t *event,
 !  */
 
 FUNCTION: bool
-yaml_mapping_end_event_initialize ( yaml_event_t *event )
+yaml_mapping_end_event_initialize ( yaml_event_t *event ) ;
 
 ! /**
 !  * Free any memory allocated for an event object.
@@ -521,7 +517,7 @@ yaml_mapping_end_event_initialize ( yaml_event_t *event )
 !  */
 
 FUNCTION: void
-yaml_event_delete ( yaml_event_t *event )
+yaml_event_delete ( yaml_event_t *event ) ;
 DESTRUCTOR: yaml_event_delete
 
 ! /** @} */
@@ -680,7 +676,7 @@ yaml_document_initialize ( yaml_document_t *document,
         yaml_version_directive_t *version_directive,
         yaml_tag_directive_t *tag_directives_start,
         yaml_tag_directive_t *tag_directives_end,
-        bool start_implicit, bool end_implicit )
+        bool start_implicit, bool end_implicit ) ;
 
 ! /**
 !  * Delete a YAML document and all its nodes.
@@ -689,7 +685,7 @@ yaml_document_initialize ( yaml_document_t *document,
 !  */
 
 FUNCTION: void
-yaml_document_delete ( yaml_document_t *document )
+yaml_document_delete ( yaml_document_t *document ) ;
 DESTRUCTOR: yaml_document_delete
 
 ! /**
@@ -705,7 +701,7 @@ DESTRUCTOR: yaml_document_delete
 !  */
 
 FUNCTION: yaml_node_t*
-yaml_document_get_node ( yaml_document_t *document, int index )
+yaml_document_get_node ( yaml_document_t *document, int index ) ;
 
 ! /**
 !  * Get the root of a YAML document node.
@@ -724,7 +720,7 @@ yaml_document_get_node ( yaml_document_t *document, int index )
 !  */
 
 FUNCTION: yaml_node_t*
-yaml_document_get_root_node ( yaml_document_t *document )
+yaml_document_get_root_node ( yaml_document_t *document ) ;
 
 ! /**
 !  * Create a SCALAR node and attach it to the document.
@@ -743,7 +739,7 @@ yaml_document_get_root_node ( yaml_document_t *document )
 FUNCTION: int
 yaml_document_add_scalar ( yaml_document_t *document,
         c-string tag, c-string value, int length,
-        yaml_scalar_style_t style )
+        yaml_scalar_style_t style ) ;
 
 ! /**
 !  * Create a SEQUENCE node and attach it to the document.
@@ -759,7 +755,7 @@ yaml_document_add_scalar ( yaml_document_t *document,
 
 FUNCTION: int
 yaml_document_add_sequence ( yaml_document_t *document,
-        c-string tag, yaml_sequence_style_t style )
+        c-string tag, yaml_sequence_style_t style ) ;
 
 ! /**
 !  * Create a MAPPING node and attach it to the document.
@@ -775,7 +771,7 @@ yaml_document_add_sequence ( yaml_document_t *document,
 
 FUNCTION: int
 yaml_document_add_mapping ( yaml_document_t *document,
-        c-string tag, yaml_mapping_style_t style )
+        c-string tag, yaml_mapping_style_t style ) ;
 
 ! /**
 !  * Add an item to a SEQUENCE node.
@@ -789,7 +785,7 @@ yaml_document_add_mapping ( yaml_document_t *document,
 
 FUNCTION: bool
 yaml_document_append_sequence_item ( yaml_document_t *document,
-        int sequence, int item )
+        int sequence, int item ) ;
 
 ! /**
 !  * Add a pair of a key and a value to a MAPPING node.
@@ -804,7 +800,7 @@ yaml_document_append_sequence_item ( yaml_document_t *document,
 
 FUNCTION: bool
 yaml_document_append_mapping_pair ( yaml_document_t *document,
-        int mapping, int key, int value )
+        int mapping, int key, int value ) ;
 
 ! /** @} */
 
@@ -832,7 +828,7 @@ yaml_document_append_mapping_pair ( yaml_document_t *document,
 !  */
 
 CALLBACK: bool yaml_read_handler_t ( void *data,  uchar *buffer, size_t size,
-         size_t *size_read )
+         size_t *size_read ) ;
 
 ! /**
 !  * This structure holds information about a potential simple key.
@@ -1047,7 +1043,7 @@ STRUCT: yaml_parser_t
 !  */
 
 FUNCTION: bool
-yaml_parser_initialize ( yaml_parser_t *parser )
+yaml_parser_initialize ( yaml_parser_t *parser ) ;
 
 ! /**
 !  * Destroy a parser.
@@ -1056,7 +1052,7 @@ yaml_parser_initialize ( yaml_parser_t *parser )
 !  */
 
 FUNCTION: void
-yaml_parser_delete ( yaml_parser_t *parser )
+yaml_parser_delete ( yaml_parser_t *parser ) ;
 DESTRUCTOR: yaml_parser_delete
 
 ! /**
@@ -1073,7 +1069,7 @@ DESTRUCTOR: yaml_parser_delete
 
 FUNCTION: void
 yaml_parser_set_input_string ( yaml_parser_t *parser,
-        uchar *input, size_t size )
+        uchar *input, size_t size ) ;
 
 ! /**
 !  * Set a file input.
@@ -1086,7 +1082,7 @@ yaml_parser_set_input_string ( yaml_parser_t *parser,
 !  */
 
 FUNCTION: void
-yaml_parser_set_input_file ( yaml_parser_t *parser, FILE *file )
+yaml_parser_set_input_file ( yaml_parser_t *parser, FILE *file ) ;
 
 ! /**
 !  * Set a generic input handler.
@@ -1099,7 +1095,7 @@ yaml_parser_set_input_file ( yaml_parser_t *parser, FILE *file )
 
 FUNCTION: void
 yaml_parser_set_input ( yaml_parser_t *parser,
-        yaml_read_handler_t *handler, void *data )
+        yaml_read_handler_t *handler, void *data ) ;
 
 ! /**
 !  * Set the source encoding.
@@ -1109,7 +1105,7 @@ yaml_parser_set_input ( yaml_parser_t *parser,
 !  */
 
 FUNCTION: void
-yaml_parser_set_encoding ( yaml_parser_t *parser, yaml_encoding_t encoding )
+yaml_parser_set_encoding ( yaml_parser_t *parser, yaml_encoding_t encoding ) ;
 
 ! /**
 !  * Scan the input stream and produce the next token.
@@ -1133,7 +1129,7 @@ yaml_parser_set_encoding ( yaml_parser_t *parser, yaml_encoding_t encoding )
 !  */
 
 FUNCTION: bool
-yaml_parser_scan ( yaml_parser_t *parser, yaml_token_t *token )
+yaml_parser_scan ( yaml_parser_t *parser, yaml_token_t *token ) ;
 
 ! /**
 !  * Parse the input stream and produce the next parsing event.
@@ -1157,7 +1153,7 @@ yaml_parser_scan ( yaml_parser_t *parser, yaml_token_t *token )
 !  */
 
 FUNCTION: bool
-yaml_parser_parse ( yaml_parser_t *parser, yaml_event_t *event )
+yaml_parser_parse ( yaml_parser_t *parser, yaml_event_t *event ) ;
 
 ! /**
 !  * Parse the input stream and produce the next YAML document.
@@ -1182,7 +1178,7 @@ yaml_parser_parse ( yaml_parser_t *parser, yaml_event_t *event )
 !  */
 
 FUNCTION: bool
-yaml_parser_load ( yaml_parser_t *parser, yaml_document_t *document )
+yaml_parser_load ( yaml_parser_t *parser, yaml_document_t *document ) ;
 
 ! /** @} */
 
@@ -1207,7 +1203,7 @@ yaml_parser_load ( yaml_parser_t *parser, yaml_document_t *document )
 !  * the returned value should be @c 0.
 !  */
 
-CALLBACK: bool yaml_write_handler_t ( void *data, uchar *buffer, size_t size )
+CALLBACK: bool yaml_write_handler_t ( void *data, uchar *buffer, size_t size ) ;
 
 ! /** The emitter states. */
 ENUM: yaml_emitter_state_t
@@ -1406,7 +1402,7 @@ STRUCT: yaml_emitter_t
 !  */
 
 FUNCTION: bool
-yaml_emitter_initialize ( yaml_emitter_t *emitter )
+yaml_emitter_initialize ( yaml_emitter_t *emitter ) ;
 
 ! /**
 !  * Destroy an emitter.
@@ -1415,7 +1411,7 @@ yaml_emitter_initialize ( yaml_emitter_t *emitter )
 !  */
 
 FUNCTION: void
-yaml_emitter_delete ( yaml_emitter_t *emitter )
+yaml_emitter_delete ( yaml_emitter_t *emitter ) ;
 DESTRUCTOR: yaml_emitter_delete
 
 ! /**
@@ -1435,7 +1431,7 @@ DESTRUCTOR: yaml_emitter_delete
 
 FUNCTION: void
 yaml_emitter_set_output_string ( yaml_emitter_t *emitter,
-        uchar *output, size_t size, size_t *size_written )
+        uchar *output, size_t size, size_t *size_written ) ;
 
 ! /**
 !  * Set a file output.
@@ -1448,7 +1444,7 @@ yaml_emitter_set_output_string ( yaml_emitter_t *emitter,
 !  */
 
 FUNCTION: void
-yaml_emitter_set_output_file ( yaml_emitter_t *emitter, FILE *file )
+yaml_emitter_set_output_file ( yaml_emitter_t *emitter, FILE *file ) ;
 
 ! /**
 !  * Set a generic output handler.
@@ -1461,7 +1457,7 @@ yaml_emitter_set_output_file ( yaml_emitter_t *emitter, FILE *file )
 
 FUNCTION: void
 yaml_emitter_set_output ( yaml_emitter_t *emitter,
-        yaml_write_handler_t *handler, void *data )
+        yaml_write_handler_t *handler, void *data ) ;
 
 ! /**
 !  * Set the output encoding.
@@ -1471,7 +1467,7 @@ yaml_emitter_set_output ( yaml_emitter_t *emitter,
 !  */
 
 FUNCTION: void
-yaml_emitter_set_encoding ( yaml_emitter_t *emitter, yaml_encoding_t encoding )
+yaml_emitter_set_encoding ( yaml_emitter_t *emitter, yaml_encoding_t encoding ) ;
 
 ! /**
 !  * Set if the output should be in the "canonical" format as in the YAML
@@ -1482,7 +1478,7 @@ yaml_emitter_set_encoding ( yaml_emitter_t *emitter, yaml_encoding_t encoding )
 !  */
 
 FUNCTION: void
-yaml_emitter_set_canonical ( yaml_emitter_t *emitter, bool canonical )
+yaml_emitter_set_canonical ( yaml_emitter_t *emitter, bool canonical ) ;
 
 ! /**
 !  * Set the intendation increment.
@@ -1492,7 +1488,7 @@ yaml_emitter_set_canonical ( yaml_emitter_t *emitter, bool canonical )
 !  */
 
 FUNCTION: void
-yaml_emitter_set_indent ( yaml_emitter_t *emitter, int indent )
+yaml_emitter_set_indent ( yaml_emitter_t *emitter, int indent ) ;
 
 ! /**
 !  * Set the preferred line width. @c -1 means unlimited.
@@ -1502,7 +1498,7 @@ yaml_emitter_set_indent ( yaml_emitter_t *emitter, int indent )
 !  */
 
 FUNCTION: void
-yaml_emitter_set_width ( yaml_emitter_t *emitter, int width )
+yaml_emitter_set_width ( yaml_emitter_t *emitter, int width ) ;
 
 ! /**
 !  * Set if unescaped non-ASCII characters are allowed.
@@ -1512,7 +1508,7 @@ yaml_emitter_set_width ( yaml_emitter_t *emitter, int width )
 !  */
 
 FUNCTION: void
-yaml_emitter_set_unicode ( yaml_emitter_t *emitter, bool unicode )
+yaml_emitter_set_unicode ( yaml_emitter_t *emitter, bool unicode ) ;
 
 ! /**
 !  * Set the preferred line break.
@@ -1522,7 +1518,7 @@ yaml_emitter_set_unicode ( yaml_emitter_t *emitter, bool unicode )
 !  */
 
 FUNCTION: void
-yaml_emitter_set_break ( yaml_emitter_t *emitter, yaml_break_t line_break )
+yaml_emitter_set_break ( yaml_emitter_t *emitter, yaml_break_t line_break ) ;
 
 ! /**
 !  * Emit an event.
@@ -1539,7 +1535,7 @@ yaml_emitter_set_break ( yaml_emitter_t *emitter, yaml_break_t line_break )
 !  */
 
 FUNCTION: bool
-yaml_emitter_emit ( yaml_emitter_t *emitter, yaml_event_t *event )
+yaml_emitter_emit ( yaml_emitter_t *emitter, yaml_event_t *event ) ;
 
 ! /**
 !  * Start a YAML stream.
@@ -1552,7 +1548,7 @@ yaml_emitter_emit ( yaml_emitter_t *emitter, yaml_event_t *event )
 !  */
 
 FUNCTION: bool
-yaml_emitter_open ( yaml_emitter_t *emitter )
+yaml_emitter_open ( yaml_emitter_t *emitter ) ;
 
 ! /**
 !  * Finish a YAML stream.
@@ -1565,7 +1561,7 @@ yaml_emitter_open ( yaml_emitter_t *emitter )
 !  */
 
 FUNCTION: bool
-yaml_emitter_close ( yaml_emitter_t *emitter )
+yaml_emitter_close ( yaml_emitter_t *emitter ) ;
 
 ! /**
 !  * Emit a YAML document.
@@ -1582,7 +1578,7 @@ yaml_emitter_close ( yaml_emitter_t *emitter )
 !  */
 
 FUNCTION: bool
-yaml_emitter_dump ( yaml_emitter_t *emitter, yaml_document_t *document )
+yaml_emitter_dump ( yaml_emitter_t *emitter, yaml_document_t *document ) ;
 
 ! /**
 !  * Flush the accumulated characters to the output.
@@ -1593,7 +1589,7 @@ yaml_emitter_dump ( yaml_emitter_t *emitter, yaml_document_t *document )
 !  */
 
 FUNCTION: bool
-yaml_emitter_flush ( yaml_emitter_t *emitter )
+yaml_emitter_flush ( yaml_emitter_t *emitter ) ;
 
 ! /** @} */
 

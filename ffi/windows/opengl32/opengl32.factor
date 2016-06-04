@@ -51,9 +51,9 @@ LIBRARY: gl
 ! FUNCTION: int SaveDC( HDC hDC ) ;
 ! FUNCTION: HGDIOBJ SelectObject ( HDC hDC, HGDIOBJ hgdiobj ) ;
 
-FUNCTION: HGLRC wglCreateContext ( HDC hDC )
-FUNCTION: BOOL wglDeleteContext ( HGLRC hRC )
-FUNCTION: BOOL wglMakeCurrent ( HDC hDC, HGLRC hglrc )
+FUNCTION: HGLRC wglCreateContext ( HDC hDC ) ;
+FUNCTION: BOOL wglDeleteContext ( HGLRC hRC ) ;
+FUNCTION: BOOL wglMakeCurrent ( HDC hDC, HGLRC hglrc ) ;
 
 ! WGL_ARB_extensions_string extension
 

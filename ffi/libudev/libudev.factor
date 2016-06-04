@@ -20,7 +20,7 @@ FUNCTION: void udev_unref (
 
 
 
-FUNCTION: udev* udev_new ( )
+FUNCTION: udev* udev_new ( ) ;
 
 
 

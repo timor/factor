@@ -391,7 +391,7 @@ HidP_GetButtonCaps (
    PHIDP_BUTTON_CAPS    ButtonCaps,
    PUSHORT              ButtonCapsLength,
    PHIDP_PREPARSED_DATA PreparsedData
-)
+) ;
 
 FUNCTION: NTSTATUS
 HidP_GetSpecificValueCaps (
@@ -402,7 +402,7 @@ HidP_GetSpecificValueCaps (
    PHIDP_VALUE_CAPS     ValueCaps,
    PUSHORT              ValueCapsLength,
    PHIDP_PREPARSED_DATA PreparsedData
-   )
+) ;
 
 FUNCTION: NTSTATUS
 HidP_GetValueCaps (
@@ -410,7 +410,7 @@ HidP_GetValueCaps (
    PHIDP_VALUE_CAPS     ValueCaps,
    PUSHORT              ValueCapsLength,
    PHIDP_PREPARSED_DATA PreparsedData
-)
+) ;
 
 FUNCTION: NTSTATUS
 HidP_GetExtendedAttributes (

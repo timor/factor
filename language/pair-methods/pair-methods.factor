@@ -36,10 +36,10 @@ ERROR: no-pair-method a b generic ;
     [ drop H{ } clone "pair-generic-methods" set-word-prop ]
     [ drop make-pair-generic ] 2tri ;
 
-: (PAIR-GENERIC:) ( -- ) ;
+: (PAIR-GENERIC:) ( -- )
     scan-new-generic scan-effect define-pair-generic ;
 
-SYNTAX: PAIR-GENERIC: (PAIR-GENERIC:) ; ;
+SYNTAX: PAIR-GENERIC: (PAIR-GENERIC:) ;
 
 : define-pair-method ( a b pair-generic definition -- )
     [ 2array ] 2dip swap

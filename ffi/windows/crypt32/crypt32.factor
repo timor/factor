@@ -100,7 +100,7 @@ TYPEDEF: CERT_CONTEXT* PCCERT_CONTEXT
 ! CertAddStoreToCollection
 ! CertAlgIdToOID
 ! CertCloseServerOcspResponse
-FUNCTION: BOOL CertCloseStore ( HCERTSTORE hCertStore, DWORD dwFlags )
+FUNCTION: BOOL CertCloseStore ( HCERTSTORE hCertStore, DWORD dwFlags ) ;
 ! CertCompareCertificate
 ! CertCompareCertificateName
 ! CertCompareIntegerBlob
@@ -129,7 +129,7 @@ FUNCTION: BOOL CertCloseStore ( HCERTSTORE hCertStore, DWORD dwFlags )
 FUNCTION: PCCERT_CONTEXT CertEnumCertificatesInStore (
     HCERTSTORE     hCertStore,
     PCCERT_CONTEXT pPrevCertContext
-)
+) ;
 ! CertEnumPhysicalStore
 ! CertEnumSubjectInSortedCTL
 ! CertEnumSystemStore
@@ -149,7 +149,7 @@ FUNCTION: PCCERT_CONTEXT CertEnumCertificatesInStore (
 ! CertFreeCertificateChain
 ! CertFreeCertificateChainEngine
 ! CertFreeCertificateChainList
-FUNCTION: BOOL CertFreeCertificateContext ( PCCERT_CONTEXT pCertContext )
+FUNCTION: BOOL CertFreeCertificateContext ( PCCERT_CONTEXT pCertContext ) ;
 ! CertFreeServerOcspResponseContext
 ! CertGetCRLContextProperty
 ! CertGetCRLFromStore
@@ -180,7 +180,7 @@ FUNCTION: BOOL CertFreeCertificateContext ( PCCERT_CONTEXT pCertContext )
 FUNCTION: HCERTSTORE CertOpenSystemStoreW (
     HCRYPTPROV_LEGACY hprov,
     LPTCSTR szSubsystemProtocol
-)
+) ;
 
 ALIAS: CertOpenSystemStore CertOpenSystemStoreW
 

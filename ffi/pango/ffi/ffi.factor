@@ -25,11 +25,9 @@ DESTRUCTOR: pango_layout_iter_free
 ! <workaround
 
 FORGET: pango_layout_line_index_to_x
-FUNCTION: void
-pango_layout_line_index_to_x ( PangoLayoutLine* line, gint index_, gboolean trailing, gint* x_pos )
+FUNCTION: void pango_layout_line_index_to_x ( PangoLayoutLine* line, gint index_, gboolean trailing, gint* x_pos ) ;
 
 FORGET: pango_layout_line_x_to_index
-FUNCTION: gboolean
-pango_layout_line_x_to_index ( PangoLayoutLine* line, gint x_pos, gint* index_, gint* trailing )
+FUNCTION: gboolean pango_layout_line_x_to_index ( PangoLayoutLine* line, gint x_pos, gint* index_, gint* trailing ) ;
 
 ! workaround>

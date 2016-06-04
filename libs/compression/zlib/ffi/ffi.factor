@@ -92,67 +92,67 @@ CONSTANT: Z_DEFLATED 8
 
 CONSTANT: ZLIB_VERSION "1.2.5"
 
-FUNCTION: c-string zlibVersion ( )
+FUNCTION: c-string zlibVersion ( ) ;
 
-FUNCTION: int deflate ( z_streamp strm, int flush )
-FUNCTION: int deflateEnd ( z_streamp strm )
+FUNCTION: int deflate ( z_streamp strm, int flush ) ;
+FUNCTION: int deflateEnd ( z_streamp strm ) ;
 
-FUNCTION: int inflate ( z_streamp strm, int flush )
-FUNCTION: int inflateEnd ( z_streamp strm )
+FUNCTION: int inflate ( z_streamp strm, int flush ) ;
+FUNCTION: int inflateEnd ( z_streamp strm ) ;
 
-FUNCTION: int deflateSetDictionary ( z_streamp strm, Bytef* dictionary, uInt dictLength )
-FUNCTION: int deflateCopy ( z_streamp dest, z_streamp source )
-FUNCTION: int deflateReset ( z_streamp strm )
-FUNCTION: int deflateParams ( z_streamp strm, int level, int strategy )
-FUNCTION: int deflateTune ( z_streamp strm, int good_length, int max_lazy, int nice_length, int max_chain )
-FUNCTION: uLong deflateBound ( z_streamp strm, uLong sourceLen )
-FUNCTION: int deflatePrime ( z_streamp strm, int bits, int value )
-FUNCTION: int deflateSetHeader ( z_streamp strm, gz_headerp head )
+FUNCTION: int deflateSetDictionary ( z_streamp strm, Bytef* dictionary, uInt dictLength ) ;
+FUNCTION: int deflateCopy ( z_streamp dest, z_streamp source ) ;
+FUNCTION: int deflateReset ( z_streamp strm ) ;
+FUNCTION: int deflateParams ( z_streamp strm, int level, int strategy ) ;
+FUNCTION: int deflateTune ( z_streamp strm, int good_length, int max_lazy, int nice_length, int max_chain ) ;
+FUNCTION: uLong deflateBound ( z_streamp strm, uLong sourceLen ) ;
+FUNCTION: int deflatePrime ( z_streamp strm, int bits, int value ) ;
+FUNCTION: int deflateSetHeader ( z_streamp strm, gz_headerp head ) ;
 
-FUNCTION: int inflateSetDictionary ( z_streamp strm, Bytef* dictionary, uInt dictLength )
-FUNCTION: int inflateSync ( z_streamp strm )
-FUNCTION: int inflateCopy ( z_streamp dest, z_streamp source )
-FUNCTION: int inflateReset ( z_streamp strm )
-FUNCTION: int inflateReset2 ( z_streamp strm, int windowBits )
-FUNCTION: int inflatePrime ( z_streamp strm, int bits, int value )
-FUNCTION: long inflateMark ( z_streamp strm )
-FUNCTION: int inflateGetHeader ( z_streamp strm, gz_headerp head )
+FUNCTION: int inflateSetDictionary ( z_streamp strm, Bytef* dictionary, uInt dictLength ) ;
+FUNCTION: int inflateSync ( z_streamp strm ) ;
+FUNCTION: int inflateCopy ( z_streamp dest, z_streamp source ) ;
+FUNCTION: int inflateReset ( z_streamp strm ) ;
+FUNCTION: int inflateReset2 ( z_streamp strm, int windowBits ) ;
+FUNCTION: int inflatePrime ( z_streamp strm, int bits, int value ) ;
+FUNCTION: long inflateMark ( z_streamp strm ) ;
+FUNCTION: int inflateGetHeader ( z_streamp strm, gz_headerp head ) ;
 
-FUNCTION: uLong zlibCompileFlags ( )
+FUNCTION: uLong zlibCompileFlags ( ) ;
 
-FUNCTION: int compress ( Bytef* dest, uLongf* destLen, Bytef* source, uLong sourceLen )
-FUNCTION: int compress2 ( Bytef* dest, uLongf* destLen, Bytef* source, uLong sourceLen, int level )
-FUNCTION: uLong compressBound ( uLong sourceLen )
+FUNCTION: int compress ( Bytef* dest, uLongf* destLen, Bytef* source, uLong sourceLen ) ;
+FUNCTION: int compress2 ( Bytef* dest, uLongf* destLen, Bytef* source, uLong sourceLen, int level ) ;
+FUNCTION: uLong compressBound ( uLong sourceLen ) ;
 
-FUNCTION: int uncompress ( Bytef* dest, uLongf* destLen, Bytef* source, uLong sourceLen )
+FUNCTION: int uncompress ( Bytef* dest, uLongf* destLen, Bytef* source, uLong sourceLen ) ;
 
 TYPEDEF: void* gzFile
 
-FUNCTION: gzFile gzdopen ( int fd, c-string mode )
-FUNCTION: int gzbuffer ( gzFile file, uint size )
-FUNCTION: int gzsetparams ( gzFile file, int level, int strategy )
-FUNCTION: int gzread ( gzFile file, void* buf, uint len )
-FUNCTION: int gzwrite ( gzFile file, void* buf, uint len )
-FUNCTION: int gzputs ( gzFile file, char* s )
-FUNCTION: c-string gzgets ( gzFile file, char* buf, int len )
-FUNCTION: int gzputc ( gzFile file, int c )
-FUNCTION: int gzgetc ( gzFile file )
-FUNCTION: int gzungetc ( int c, gzFile file )
-FUNCTION: int gzflush ( gzFile file, int flush )
-FUNCTION: int gzrewind ( gzFile file )
-FUNCTION: int gzeof ( gzFile file )
-FUNCTION: int gzdirect ( gzFile file )
-FUNCTION: int gzclose ( gzFile file )
-FUNCTION: int gzclose_r ( gzFile file )
-FUNCTION: int gzclose_w ( gzFile file )
-FUNCTION: c-string gzerror ( gzFile file, int* errnum )
-FUNCTION: void gzclearerr ( gzFile file )
+FUNCTION: gzFile gzdopen ( int fd, c-string mode ) ;
+FUNCTION: int gzbuffer ( gzFile file, uint size ) ;
+FUNCTION: int gzsetparams ( gzFile file, int level, int strategy ) ;
+FUNCTION: int gzread ( gzFile file, void* buf, uint len ) ;
+FUNCTION: int gzwrite ( gzFile file, void* buf, uint len ) ;
+FUNCTION: int gzputs ( gzFile file, char* s ) ;
+FUNCTION: c-string gzgets ( gzFile file, char* buf, int len ) ;
+FUNCTION: int gzputc ( gzFile file, int c ) ;
+FUNCTION: int gzgetc ( gzFile file ) ;
+FUNCTION: int gzungetc ( int c, gzFile file ) ;
+FUNCTION: int gzflush ( gzFile file, int flush ) ;
+FUNCTION: int gzrewind ( gzFile file ) ;
+FUNCTION: int gzeof ( gzFile file ) ;
+FUNCTION: int gzdirect ( gzFile file ) ;
+FUNCTION: int gzclose ( gzFile file ) ;
+FUNCTION: int gzclose_r ( gzFile file ) ;
+FUNCTION: int gzclose_w ( gzFile file ) ;
+FUNCTION: c-string gzerror ( gzFile file, int* errnum ) ;
+FUNCTION: void gzclearerr ( gzFile file ) ;
 
-FUNCTION: uLong adler32 ( uLong adler, Bytef* buf, uInt len )
-FUNCTION: uLong crc32 ( uLong crc Bytef* buf, uInt len )
+FUNCTION: uLong adler32 ( uLong adler, Bytef* buf, uInt len ) ;
+FUNCTION: uLong crc32 ( uLong crc Bytef* buf, uInt len ) ;
 
-FUNCTION: int deflateInit_ ( z_streamp strm, int level, c-string version, int stream_size )
-FUNCTION: int inflateInit_ ( z_streamp strm, c-string version, int stream_size )
+FUNCTION: int deflateInit_ ( z_streamp strm, int level, c-string version, int stream_size ) ;
+FUNCTION: int inflateInit_ ( z_streamp strm, c-string version, int stream_size ) ;
 
-FUNCTION: int deflateInit2_ ( z_streamp strm, int level, int method, int windowBits, int memLevel, int strategy, c-string version, int stream_size )
-FUNCTION: int inflateInit2_ ( z_streamp strm, int windowBits, c-string version, int stream_size )
+FUNCTION: int deflateInit2_ ( z_streamp strm, int level, int method, int windowBits, int memLevel, int strategy, c-string version, int stream_size ) ;
+FUNCTION: int inflateInit2_ ( z_streamp strm, int windowBits, c-string version, int stream_size ) ;
