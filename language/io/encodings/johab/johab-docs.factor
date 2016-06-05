@@ -9,4 +9,4 @@ HELP: johab
 ARTICLE: "io.encodings.johab" "Korean Johab encoding"
 { $subsections johab } ;
 
-ABOUT: "io.encodings.johab"
+about: "io.encodings.johab"

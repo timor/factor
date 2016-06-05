@@ -10,4 +10,4 @@ HELP: latin9
 ARTICLE: "io.encodings.8-bit.latin9" "Latin9 encoding"
 "The " { $vocab-link "io.encodings.8-bit.latin9" } " vocabulary provides the " { $link latin9 } " encoding." ;
 
-ABOUT: "io.encodings.8-bit.latin9"
+about: "io.encodings.8-bit.latin9"

@@ -1,7 +1,7 @@
 USING: help.syntax help.markup kernel strings unicode ;
 in: unicode.case
 
-ABOUT: "unicode.case"
+about: "unicode.case"
 
 ARTICLE: "unicode.case" "Case mapping"
 "When considering Unicode in general and not just ASCII or a smaller character set, putting a string in upper case, title case or lower case is slightly more complicated. In most contexts it's best to use the general Unicode routines for case conversion. There is an additional type of casing, case-fold, which is defined as bringing a string into upper case and then lower. This exists because in some cases it is different from simple lower case."

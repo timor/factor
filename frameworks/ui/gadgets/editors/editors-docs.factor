@@ -134,4 +134,4 @@ TIP: "Editor gadgets support undo and redo; press " { $command editor "editing" 
 
 TIP: "Learn the keyboard shortcuts used in " { $link "ui.gadgets.editors" } "." ;
 
-ABOUT: "ui.gadgets.editors"
+about: "ui.gadgets.editors"

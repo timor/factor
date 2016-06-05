@@ -68,7 +68,7 @@ $nl
 "Testing how elements are related:"
 { $subsections all-eq? all-equal? } ;
 
-ABOUT: "grouping"
+about: "grouping"
 
 HELP: groups
 { $class-description "Instances are virtual sequences whose elements are disjoint fixed-length subsequences of an underlying sequence. Groups are mutable and resizable if the underlying sequence is mutable and resizable, respectively."

@@ -89,4 +89,4 @@ ARTICLE: "literals" "Interpolating code results into literal values"
     postpone: ${
 } ;
 
-ABOUT: "literals"
+about: "literals"

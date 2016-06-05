@@ -16,7 +16,7 @@ ARTICLE: "intersections" "Intersection classes"
 }
 "Intersection classes are used to associate a method with objects which are simultaneously instances of multiple different classes, as well as to conveniently define predicates." ;
 
-ABOUT: "intersections"
+about: "intersections"
 
 HELP: define-intersection-class
 { $values { "class" class } { "participants" "a sequence of classes" } }

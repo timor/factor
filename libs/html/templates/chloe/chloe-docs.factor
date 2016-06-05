@@ -296,4 +296,4 @@ ARTICLE: "html.templates.chloe" "Chloe templates"
     "html.templates.chloe.extend"
 } ;
 
-ABOUT: "html.templates.chloe"
+about: "html.templates.chloe"

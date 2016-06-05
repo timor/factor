@@ -13,4 +13,4 @@ ARTICLE: "compiler.tree.propagation"
 "Propagation for read-only tuple slots and array lengths"
 "Propagation of immutable slots and array lengths." ;
 
-ABOUT: "compiler.tree.propagation"
+about: "compiler.tree.propagation"

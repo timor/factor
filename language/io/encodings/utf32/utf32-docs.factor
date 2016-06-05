@@ -11,7 +11,7 @@ ARTICLE: "io.encodings.utf32" "UTF-32 encoding"
     utf32be
 } ;
 
-ABOUT: "io.encodings.utf32"
+about: "io.encodings.utf32"
 
 HELP: utf32le
 { $class-description "The encoding descriptor for UTF-32LE, that is, UTF-32 in little endian, without a byte order mark. Streams can be made which read or write wth this encoding." }

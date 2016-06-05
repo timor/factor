@@ -35,4 +35,4 @@ ARTICLE: "suffix-arrays" "Suffix arrays"
 "Querying suffix arrays:"
 { $subsections query } ;
 
-ABOUT: "suffix-arrays"
+about: "suffix-arrays"

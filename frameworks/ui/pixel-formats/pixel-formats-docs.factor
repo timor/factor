@@ -201,4 +201,4 @@ ARTICLE: "ui.pixel-formats" "Pixel formats"
 }
 ;
 
-ABOUT: "ui.pixel-formats"
+about: "ui.pixel-formats"

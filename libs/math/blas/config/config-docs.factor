@@ -27,4 +27,4 @@ HELP: blas-fortran-abi
 HELP: deploy-blas?
 { $var-description "If set to a true value, the BLAS library will be configured to deploy with applications that use it. To take effect, this variable must be set before any other " { $snippet "math.blas" } " vocabularies are loaded. See " { $link "math.blas.config" } " for details and examples." } ;
 
-ABOUT: "math.blas.config"
+about: "math.blas.config"

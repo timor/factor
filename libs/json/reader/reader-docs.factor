@@ -15,4 +15,4 @@ ARTICLE: "json.reader" "JSON reader"
 "The " { $vocab-link "json.reader" } " vocabulary defines a word for parsing strings in JSON format."
 { $subsections json> read-json-objects } ;
 
-ABOUT: "json.reader"
+about: "json.reader"

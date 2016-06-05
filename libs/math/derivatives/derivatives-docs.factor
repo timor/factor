@@ -8,4 +8,4 @@ ARTICLE: "math.derivatives" "Derivatives"
 { $see-also "math.derivatives.syntax" }
 ;
 
-ABOUT: "math.derivatives"
+about: "math.derivatives"

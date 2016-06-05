@@ -147,4 +147,4 @@ ARTICLE: "alien.endian" "Alien endian-aware types"
     postpone: BE-PACKED-STRUCT:
 } ;
 
-ABOUT: "alien.endian"
+about: "alien.endian"

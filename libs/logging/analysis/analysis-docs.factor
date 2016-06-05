@@ -30,4 +30,4 @@ $nl
     analysis.
 } ;
 
-ABOUT: "logging.analysis"
+about: "logging.analysis"

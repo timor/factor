@@ -622,4 +622,4 @@ ARTICLE: "gpu.state" "GPU state"
     line-state
 } ;
 
-ABOUT: "gpu.state"
+about: "gpu.state"

@@ -57,6 +57,6 @@ ARTICLE: "adsoda.tools" "Tools"
 "Tools to help in building an " { $vocab-link "adsoda" } "-space"
 ;
 
-ABOUT: "adsoda.tools"
+about: "adsoda.tools"
 
 

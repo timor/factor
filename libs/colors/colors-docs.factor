@@ -40,4 +40,4 @@ $nl
 { $vocab-subsection "Grayscale colors" "colors.gray" }
 { $vocab-subsection "HSV colors" "colors.hsv" } ;
 
-ABOUT: "colors"
+about: "colors"

@@ -3,7 +3,7 @@
 USING: help.syntax help.markup math ;
 in: interval-sets
 
-ABOUT: "interval-sets"
+about: "interval-sets"
 
 ARTICLE: "interval-sets" "Interval sets"
 "The " { $vocab-link "interval-sets" } " vocabulary implements an efficient data structure for sets of positive, machine word-sized integers, specified by ranges. The space taken by the data structure is proportional to the number of intervals contained. Membership testing is O(log n), and creation is O(n log n), where n is the number of ranges. Boolean operations are O(n). Interval sets are immutable."

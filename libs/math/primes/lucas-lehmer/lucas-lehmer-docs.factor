@@ -22,4 +22,4 @@ ARTICLE: "math.primes.lucas-lehmer" "Lucas-Lehmer Mersenne Primality test"
 "Run the Lucas-Lehmer test:"
 { $subsections lucas-lehmer } ;
 
-ABOUT: "math.primes.lucas-lehmer"
+about: "math.primes.lucas-lehmer"

@@ -64,4 +64,4 @@ ARTICLE: "compiler.tree.propagation.info" "Value info data type and operations"
   value-infos-union
 } ;
 
-ABOUT: "compiler.tree.propagation.info"
+about: "compiler.tree.propagation.info"

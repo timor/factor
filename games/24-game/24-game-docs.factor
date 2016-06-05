@@ -62,4 +62,4 @@ ARTICLE: "24-game" "The Game of 24"
     make-24
     makes-24?
 } ;
-ABOUT: "24-game"
+about: "24-game"

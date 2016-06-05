@@ -121,4 +121,4 @@ $nl
 { $link ADD } " and " { $link SUB } " variants:"
 { $subsections (%inc) decr-stack-reg incr-stack-reg } ;
 
-ABOUT: "cpu.x86"
+about: "cpu.x86"

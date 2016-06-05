@@ -17,4 +17,4 @@ ARTICLE: "4DNav.space-file-decoder" "Space XMLfile decoder"
 { $vocab-link "4DNav.space-file-decoder" }
 ;
 
-ABOUT: "4DNav.space-file-decoder"
+about: "4DNav.space-file-decoder"

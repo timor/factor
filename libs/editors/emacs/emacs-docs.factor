@@ -23,4 +23,4 @@ ARTICLE: "editors.emacs" "Integration with Emacs"
 
 ;
 
-ABOUT: "editors.emacs"
+about: "editors.emacs"

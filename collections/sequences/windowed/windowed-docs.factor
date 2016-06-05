@@ -33,4 +33,4 @@ ARTICLE: "sequences.windowed" "Windowed sequences"
 "Helper words for creating bounds-checked slices:"
 { $subsections in-bound in-bounds } ;
 
-ABOUT: "sequences.windowed"
+about: "sequences.windowed"

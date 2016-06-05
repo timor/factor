@@ -35,4 +35,4 @@ ARTICLE: "models.product" "Product models"
     <product>
 } ;
 
-ABOUT: "models.product"
+about: "models.product"

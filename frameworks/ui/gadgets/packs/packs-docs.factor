@@ -62,4 +62,4 @@ HELP: pack-pref-dim
     "This word is useful if you are writing your own layout gadget which inherits from " { $link pack } ". This allows you to reuse layout logic while computing gadget sizes using a custom procedure."
 } ;
 
-ABOUT: "ui-pack-layout"
+about: "ui-pack-layout"

@@ -63,4 +63,4 @@ $nl
 "Tables used during code generation:"
 { $subsections literal-table parameter-table relocation-table } ;
 
-ABOUT: "compiler.codegen.relocation"
+about: "compiler.codegen.relocation"

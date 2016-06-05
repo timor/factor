@@ -31,4 +31,4 @@ $nl
     "</t:if>"
 } ;
 
-ABOUT: "furnace.auth.features.recover-password"
+about: "furnace.auth.features.recover-password"

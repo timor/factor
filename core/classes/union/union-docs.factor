@@ -19,7 +19,7 @@ ARTICLE: "unions" "Union classes"
 "Unions are used to define behavior shared between a fixed set of classes, as well as to conveniently define predicates."
 { $see-also "mixins" "tuple-subclassing" } ;
 
-ABOUT: "unions"
+about: "unions"
 
 HELP: define-union-class
 { $values { "class" class } { "members" "a sequence of classes" } }

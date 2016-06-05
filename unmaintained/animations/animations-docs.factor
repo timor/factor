@@ -64,4 +64,4 @@ ARTICLE: "animations" "Animations"
     "used when one's quote runs for a specific number of iterations, instead "
     "of a length of time. If the animation is like most, and is expected to "
     "run for a specific length of time, " { $link animate } " should be used." ;
-ABOUT: "animations"
+about: "animations"

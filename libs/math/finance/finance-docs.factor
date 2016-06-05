@@ -87,4 +87,4 @@ ARTICLE: "math.finance" "Financial math"
 "Calculating payroll over periods of time:"
 { $subsections "time-period-calculations" } ;
 
-ABOUT: "math.finance"
+about: "math.finance"

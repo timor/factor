@@ -23,4 +23,4 @@ HELP: ctags
 { $values { "alist" "ctags" } }
 { $description "Make a sequence of ctags from " { $link all-words } ", sorted by word name." } ;
 
-ABOUT: "ctags"
+about: "ctags"

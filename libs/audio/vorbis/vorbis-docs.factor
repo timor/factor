@@ -45,4 +45,4 @@ ARTICLE: "audio.vorbis" "Ogg Vorbis audio streaming"
     <vorbis-stream>
 } ;
 
-ABOUT: "audio.vorbis"
+about: "audio.vorbis"

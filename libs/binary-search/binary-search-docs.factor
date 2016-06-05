@@ -56,4 +56,4 @@ ARTICLE: "binary-search" "Binary search"
 }
 { $see-also "order-specifiers" "sequences-sorting" } ;
 
-ABOUT: "binary-search"
+about: "binary-search"

@@ -62,4 +62,4 @@ ARTICLE: "url-encoding" "URL encoding and decoding"
 }
 "See " { $url "http://en.wikipedia.org/wiki/Percent-encoding" } " for a description of URL encoding." ;
 
-ABOUT: "url-encoding"
+about: "url-encoding"

@@ -20,7 +20,7 @@ $nl
 "If you don't care about initial capacity, a more elegant way to create a new string buffer is to write:"
 { $code "SBUF\" \" clone" } ;
 
-ABOUT: "sbufs"
+about: "sbufs"
 
 HELP: sbuf
 { $description "The class of resizable character strings. See " { $link "syntax-sbufs" } " for syntax and " { $link "sbufs" } " for general information." } ;

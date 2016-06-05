@@ -12,7 +12,7 @@ ARTICLE: "sequences-merge" "Merging sequences"
     <3merged>
 } ;
 
-ABOUT: "sequences-merge"
+about: "sequences-merge"
 
 HELP: merged
 { $class-description "A virtual sequence which presents a merged view of its underlying elements. New instances are created by calling one of " { $link <merged> } ", " { $link <2merged> } ", or " { $link <3merged> } "." }

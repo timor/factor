@@ -23,4 +23,4 @@ ARTICLE: "ui.gadgets.menus" "Popup menus"
     show-commands-menu
 } ;
 
-ABOUT: "ui.gadgets.menus"
+about: "ui.gadgets.menus"

@@ -99,4 +99,4 @@ $nl
   vregs>regs
 } ;
 
-ABOUT: "compiler.cfg.linear-scan.assignment"
+about: "compiler.cfg.linear-scan.assignment"

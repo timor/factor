@@ -23,4 +23,4 @@ ARTICLE: "concurrency.exchangers" "Object exchange points"
 $nl
 "The vocabulary was modelled after a similar feature in Java's " { $snippet "java.util.concurrent" } " library." ;
 
-ABOUT: "concurrency.exchangers"
+about: "concurrency.exchangers"

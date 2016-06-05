@@ -42,7 +42,7 @@ ARTICLE: "vocabs.metadata" "Vocabulary metadata"
     set-vocab-file-contents
 } ;
 
-ABOUT: "vocabs.metadata"
+about: "vocabs.metadata"
 
 HELP: vocab-file-contents
 { $values { "vocab" "a vocabulary specifier" } { "name" string } { "seq" { $maybe "a sequence of lines" } } }

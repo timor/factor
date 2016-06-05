@@ -25,4 +25,4 @@ $nl
 $nl
 "This implementation of persistent vectors is based on the " { $snippet "clojure.lang.PersistentVector" } " class from Rich Hickey's Clojure language for the JVM (" { $url "http://clojure.org" } ")." ;
 
-ABOUT: "persistent.vectors"
+about: "persistent.vectors"

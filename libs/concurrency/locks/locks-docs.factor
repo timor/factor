@@ -82,4 +82,4 @@ ARTICLE: "concurrency.locks" "Locks"
     "concurrency.locks.rw"
 } ;
 
-ABOUT: "concurrency.locks"
+about: "concurrency.locks"

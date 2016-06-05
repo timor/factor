@@ -22,7 +22,7 @@ $nl
 "A description of an object can be printed without starting the inspector:"
 { $subsections describe } ;
 
-ABOUT: "inspector"
+about: "inspector"
 
 HELP: describe
 { $values { "obj" object } }

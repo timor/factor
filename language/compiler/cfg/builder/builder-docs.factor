@@ -163,4 +163,4 @@ $nl
     end-branch
 } ;
 
-ABOUT: "compiler.cfg.builder"
+about: "compiler.cfg.builder"

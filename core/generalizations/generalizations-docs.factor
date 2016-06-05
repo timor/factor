@@ -316,4 +316,4 @@ ARTICLE: "generalizations" "Generalized shuffle words and combinators"
 }
 "Also see the " { $vocab-link "sequences.generalizations" } " vocabulary for generalized sequence operations." ;
 
-ABOUT: "generalizations"
+about: "generalizations"

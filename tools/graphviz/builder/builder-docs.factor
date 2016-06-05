@@ -42,4 +42,4 @@ $nl
 { $subsections non-graph-error improper-statement-error }
 ;
 
-ABOUT: "graphviz.builder"
+about: "graphviz.builder"

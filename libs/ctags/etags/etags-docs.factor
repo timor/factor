@@ -19,4 +19,4 @@ HELP: write-etags
   }
 } ;
 
-ABOUT: "etags" ;
+about: "etags" ;

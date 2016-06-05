@@ -30,4 +30,4 @@ $nl
   emit-<tuple-boa>
 } ;
 
-ABOUT: "compiler.cfg.intrinsics.allot"
+about: "compiler.cfg.intrinsics.allot"

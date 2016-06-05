@@ -102,7 +102,7 @@ ARTICLE: "math-intervals" "Intervals"
     "math-intervals-compare"
 } ;
 
-ABOUT: "math-intervals"
+about: "math-intervals"
 
 HELP: interval
 { $class-description "An interval represents a set of real numbers between two endpoints; the endpoints can either be included or excluded from the interval."

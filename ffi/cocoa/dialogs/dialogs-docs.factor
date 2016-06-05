@@ -29,4 +29,4 @@ ARTICLE: "cocoa-dialogs" "Cocoa file dialogs"
     save-panel
 } ;
 
-ABOUT: "cocoa-dialogs"
+about: "cocoa-dialogs"

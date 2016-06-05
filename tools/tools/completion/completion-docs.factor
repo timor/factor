@@ -16,7 +16,7 @@ $nl
     rank-completions
 } ;
 
-ABOUT: "tools.completion"
+about: "tools.completion"
 
 HELP: fuzzy
 { $values { "full" string } { "short" string } { "indices" vector } }

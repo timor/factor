@@ -166,4 +166,4 @@ $nl
 "Additional topics:"
 { $subsections "io.pathnames.presentations" "io.pathnames.special" } ;
 
-ABOUT: "io.pathnames"
+about: "io.pathnames"

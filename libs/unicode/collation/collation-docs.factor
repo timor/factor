@@ -17,7 +17,7 @@ ARTICLE: "unicode.collation" "Collation and weak comparison"
     quaternary=
 } ;
 
-ABOUT: "unicode.collation"
+about: "unicode.collation"
 
 HELP: sort-strings
 { $values { "strings" "a sequence of strings" } { "sorted" "the strings in lexicographical order" } }

@@ -29,4 +29,4 @@ $nl
 "E-mailing reports and rotating logs on a daily basis:"
 { $subsections schedule-insomniac } ;
 
-ABOUT: "logging.insomniac"
+about: "logging.insomniac"

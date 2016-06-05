@@ -27,4 +27,4 @@ HELP: inspector
 { $values { "obj" object } }
 { $description "Opens a new inspector window displaying the slots of " { $snippet "obj" } "." } ;
 
-ABOUT: "ui-inspector"
+about: "ui-inspector"

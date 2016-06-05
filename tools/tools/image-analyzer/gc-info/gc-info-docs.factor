@@ -26,4 +26,4 @@ HELP: word>gc-maps
   }
 } ;
 
-ABOUT: "tools.image-analyzer.gc-info"
+about: "tools.image-analyzer.gc-info"

@@ -40,4 +40,4 @@ ARTICLE: "audio" "Audio framework"
 { { $vocab-link "audio.vorbis" } " implements an " { $snippet "audio.engine" } " compatible generator object for decoding Ogg Vorbis audio data from a stream." }
 } ;
 
-ABOUT: "audio"
+about: "audio"

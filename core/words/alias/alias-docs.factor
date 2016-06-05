@@ -9,4 +9,4 @@ $nl
 "Define an alias at run-time:"
 { $subsections define-alias } ;
 
-ABOUT: "words.alias"
+about: "words.alias"

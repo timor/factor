@@ -19,7 +19,7 @@ $nl
 "If you don't care about initial capacity, a more elegant way to create a new byte vector is to write:"
 { $code "BV{ } clone" } ;
 
-ABOUT: "byte-vectors"
+about: "byte-vectors"
 
 HELP: byte-vector
 { $description "The class of resizable byte vectors. See " { $link "byte-vectors" } " for information." } ;

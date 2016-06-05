@@ -8,7 +8,7 @@ $nl
 "Creating a search deque:"
 { $subsections <search-deque> } ;
 
-ABOUT: "search-deques"
+about: "search-deques"
 
 HELP: <search-deque>
 { $values { "assoc" assoc } { "deque" deque } { "search-deque" search-deque } }

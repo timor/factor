@@ -508,4 +508,4 @@ ARTICLE: "L-system" "L-system"
   { "q" "Roll left" }
   { "w" "Roll right" } } ;
 
-ABOUT: "L-system"
+about: "L-system"

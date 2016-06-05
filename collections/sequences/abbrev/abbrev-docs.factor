@@ -25,4 +25,4 @@ ARTICLE: "sequences.abbrev" "Examples of abbrev usage"
 }
 ;
 
-ABOUT: "sequences.abbrev"
+about: "sequences.abbrev"

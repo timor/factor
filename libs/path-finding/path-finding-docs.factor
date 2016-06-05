@@ -106,4 +106,4 @@ ARTICLE: "path-finding" "Path finding using the A* algorithm"
 "Find a path between nodes:"
 { $subsections find-path } ;
 
-ABOUT: "path-finding"
+about: "path-finding"

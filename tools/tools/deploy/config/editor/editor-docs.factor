@@ -26,4 +26,4 @@ HELP: set-deploy-flag
 { $values { "value" object } { "key" object } { "vocab" "a vocabulary specifier" } }
 { $description "Modifies an entry in a vocabulary's deployment configuration on disk." } ;
 
-ABOUT: "deploy-config"
+about: "deploy-config"

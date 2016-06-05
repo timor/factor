@@ -57,7 +57,7 @@ $nl
     "tools.deploy.caveats"
 } ;
 
-ABOUT: "tools.deploy"
+about: "tools.deploy"
 
 HELP: deploy
 { $values { "vocab" "a vocabulary specifier" } }

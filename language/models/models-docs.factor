@@ -164,4 +164,4 @@ $nl
 "Models can override requests to change their value, for example to perform validation:"
 { $subsections set-model } ;
 
-ABOUT: "models"
+about: "models"

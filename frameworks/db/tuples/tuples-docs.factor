@@ -269,4 +269,4 @@ T{ book
     { "Start making and storing objects with " { $link insert-tuple } ", " { $link update-tuple } ", " { $link delete-tuples } ", and " { $link select-tuples } }
 } ;
 
-ABOUT: "db-tuples"
+about: "db-tuples"

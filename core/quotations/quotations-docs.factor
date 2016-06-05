@@ -39,7 +39,7 @@ ARTICLE: "wrappers" "Wrappers"
 }
 { $see-also "combinators" } ;
 
-ABOUT: "quotations"
+about: "quotations"
 
 HELP: callable
 { $class-description "The class whose instances can be passed to " { $link call } ". This includes quotations and composed quotations built up with " { $link curry } " or " { $link compose } "." } ;

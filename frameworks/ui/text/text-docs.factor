@@ -80,4 +80,4 @@ ARTICLE: "text-rendering" "Rendering text"
     draw-string
 } ;
 
-ABOUT: "text-rendering"
+about: "text-rendering"

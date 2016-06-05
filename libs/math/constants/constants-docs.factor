@@ -12,7 +12,7 @@ ARTICLE: "math-constants" "Constants"
     single-epsilon
 } ;
 
-ABOUT: "math-constants"
+about: "math-constants"
 
 HELP: e
 { $values { "e" "base of natural logarithm" } } ;

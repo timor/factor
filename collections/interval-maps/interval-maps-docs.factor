@@ -43,4 +43,4 @@ $nl
     coalesce
 } ;
 
-ABOUT: "interval-maps"
+about: "interval-maps"

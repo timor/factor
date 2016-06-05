@@ -22,3 +22,5 @@ SYNTAX: ARTICLE:
 
 SYNTAX: ABOUT:
     current-vocab scan-object >>help changed-definition ;
+SYNTAX: about:
+    current-vocab scan-object >>help changed-definition ;

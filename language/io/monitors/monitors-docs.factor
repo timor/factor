@@ -120,4 +120,4 @@ $nl
     "    [ t [ watch-loop ] with-monitor ] with-monitors ;"
 } ;
 
-ABOUT: "io.monitors"
+about: "io.monitors"

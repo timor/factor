@@ -391,4 +391,4 @@ ARTICLE: "handbook" "Factor handbook"
 }
 ;
 
-ABOUT: "handbook"
+about: "handbook"

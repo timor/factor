@@ -44,4 +44,4 @@ ARTICLE: "fonts" "Fonts"
 "A data type for font metrics. The " { $vocab-link "fonts" } " vocabulary does not provide any means of computing font metrics, it simply defines a common data type that other vocabularies, such as " { $vocab-link "ui.text" } " may use:"
 { $subsections metrics } ;
 
-ABOUT: "fonts"
+about: "fonts"

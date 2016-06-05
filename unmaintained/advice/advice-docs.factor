@@ -24,4 +24,4 @@ HELP: ad-do-it
 ARTICLE: "advice" "Advice"
 "Advice is a simple way of adding additition functionality to words by adding 'hooks' to a word, which can act before, after, or around the calling of the word." ;
 
-ABOUT: "advice"
+about: "advice"

@@ -96,4 +96,4 @@ $nl
     gl-rect
 } ;
 
-ABOUT: "gl-utilities"
+about: "gl-utilities"

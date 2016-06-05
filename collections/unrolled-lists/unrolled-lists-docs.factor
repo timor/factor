@@ -21,4 +21,4 @@ ARTICLE: "unrolled-lists" "Unrolled lists"
     <hashed-unrolled-list>
 } ;
 
-ABOUT: "unrolled-lists"
+about: "unrolled-lists"

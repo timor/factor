@@ -2,7 +2,7 @@ USING: help.markup help.syntax io kernel
 prettyprint.sections words quotations ;
 in: prettyprint.config
 
-ABOUT: "prettyprint-variables"
+about: "prettyprint-variables"
 
 HELP: tab-size
 { $var-description "Prettyprinter tab size. Indent nesting is always a multiple of the tab size." } ;

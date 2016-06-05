@@ -54,4 +54,4 @@ $nl
 }
 "Note that conversation scope is serialized as part of the session, which means that only serializable objects can be stored there. See " { $link "furnace.sessions.serialize" } " for details." ;
 
-ABOUT: "furnace.conversations"
+about: "furnace.conversations"

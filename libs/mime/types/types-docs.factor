@@ -32,4 +32,4 @@ ARTICLE: "mime.types" "MIME types"
 "Looking up a MIME type:"
 { $subsections mime-type } ;
 
-ABOUT: "mime.types"
+about: "mime.types"

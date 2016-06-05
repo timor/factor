@@ -110,7 +110,7 @@ $nl
 "While " { $link run-file } " can be used interactively in the listener to load user code into the session, this should only be done for quick one-off scripts, and real programs should instead rely on the automatic " { $link "vocabs.loader" } "."
 { $see-also "parsing-words" "definitions" "definition-checking" } ;
 
-ABOUT: "parser"
+about: "parser"
 
 HELP: location
 { $values { "loc" "a " { $snippet "{ path line# }" } " pair" } }

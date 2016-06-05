@@ -8,4 +8,4 @@ HELP: eliminate-dead-code
 ARTICLE: "compiler.cfg.dce" "Dead code elimination"
 "Eliminates dead code." ;
 
-ABOUT: "compiler.cfg.dce"
+about: "compiler.cfg.dce"

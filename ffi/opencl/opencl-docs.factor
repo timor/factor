@@ -243,4 +243,4 @@ ARTICLE: "opencl" "OpenCL"
 }
 ;
 
-ABOUT: "opencl"
+about: "opencl"

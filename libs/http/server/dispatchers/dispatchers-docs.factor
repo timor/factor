@@ -91,4 +91,4 @@ ARTICLE: "http.server.dispatchers" "HTTP dispatchers and virtual hosting"
 { $subsections add-responder }
 "The " { $slot "default" } " slot holds a responder which receives all unrecognized URLs. By default, it responds with 404 messages." ;
 
-ABOUT: "http.server.dispatchers"
+about: "http.server.dispatchers"

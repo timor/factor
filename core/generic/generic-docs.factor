@@ -109,7 +109,7 @@ $nl
 }
 "Generic words specialize behavior based on the class of an object; sometimes behavior needs to be specialized on the object's " { $emphasis "structure" } "; this is known as " { $emphasis "pattern matching" } " and is implemented in the " { $vocab-link "match" } " vocabulary." ;
 
-ABOUT: "generic"
+about: "generic"
 
 HELP: generic
 { $class-description "The class of generic words, documented in " { $link "generic" } "." } ;

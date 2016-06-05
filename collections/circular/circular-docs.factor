@@ -84,4 +84,4 @@ ARTICLE: "circular" "Circular sequences"
 "Iterating over a circular until a stop condition:"
 { $subsections circular-while circular-loop } ;
 
-ABOUT: "circular"
+about: "circular"

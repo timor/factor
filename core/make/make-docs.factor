@@ -61,7 +61,7 @@ $nl
 }
 { $subsections "make-philosophy" } ;
 
-ABOUT: "namespaces-make"
+about: "namespaces-make"
 
 HELP: building
 { $var-description "Temporary mutable growable sequence (or assoc) holding elements accumulated so far by " { $link make } "." } ;

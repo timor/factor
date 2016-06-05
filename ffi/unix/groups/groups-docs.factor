@@ -130,4 +130,4 @@ $nl
     with-effective-group
 } ;
 
-ABOUT: "unix.groups"
+about: "unix.groups"

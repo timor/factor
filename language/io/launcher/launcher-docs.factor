@@ -345,4 +345,4 @@ ARTICLE: "io.launcher" "Operating system processes"
     "io.launcher.timeouts"
 } ;
 
-ABOUT: "io.launcher"
+about: "io.launcher"

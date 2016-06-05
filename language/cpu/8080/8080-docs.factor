@@ -13,4 +13,4 @@ ARTICLE: { "cpu-8080" "cpu-8080" } "Intel 8080 CPU Emulator"
 "the " { $link rom-root } " variable to be set to the path "
 "containing the ROM file's." ;
 
-ABOUT: { "cpu-8080" "cpu-8080" }
+about: { "cpu-8080" "cpu-8080" }

@@ -20,4 +20,4 @@ $nl
 } ;
 
 
-ABOUT: "compiler.cfg.value-numbering.comparisons"
+about: "compiler.cfg.value-numbering.comparisons"

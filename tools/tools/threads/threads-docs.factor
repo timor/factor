@@ -14,4 +14,4 @@ ARTICLE: "tools.threads" "Listing threads"
 "Printing a list of running threads:"
 { $subsections threads. } ;
 
-ABOUT: "tools.threads"
+about: "tools.threads"

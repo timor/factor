@@ -317,7 +317,7 @@ ARTICLE: "ui" "UI framework"
     "ui-backend"
 } ;
 
-ABOUT: "ui"
+about: "ui"
 
 HELP: close-button
 { $description "Asks for a close button to be available for a window. Without a close button, a window cannot be closed by the user and must be closed by the program using " { $link close-window } "." } ;

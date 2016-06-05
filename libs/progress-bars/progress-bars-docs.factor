@@ -16,4 +16,4 @@ ARTICLE: "progress-bars" "Progress bars"
 { $subsections make-progress-bar }
 "The " { $vocab-link "progress-bars.models" } " vocabulary implements a word to display a progress bar that shows how much of a file has been read so far." ;
 
-ABOUT: "progress-bars"
+about: "progress-bars"

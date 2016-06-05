@@ -22,4 +22,4 @@ ARTICLE: "persistent.sequences" "Persistent sequence protocol"
 }
 "The default implementations of the above run in " { $snippet "O(n)" } " time; the " { $vocab-link "persistent.vectors" } " vocabulary provides an implementation of these operations in " { $snippet "O(1)" } " time." ;
 
-ABOUT: "persistent.sequences"
+about: "persistent.sequences"

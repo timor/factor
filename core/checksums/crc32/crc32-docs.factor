@@ -8,4 +8,4 @@ ARTICLE: "checksums.crc32" "CRC32 checksum"
 "The CRC32 checksum algorithm provides a quick but unreliable way to detect changes in data."
 { $subsections crc32 } ;
 
-ABOUT: "checksums.crc32"
+about: "checksums.crc32"

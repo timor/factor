@@ -3,7 +3,7 @@
 USING: help.markup help.syntax assocs ;
 in: xml.entities
 
-ABOUT: "xml.entities"
+about: "xml.entities"
 
 ARTICLE: "xml.entities" "XML entities"
     "When XML is parsed, entities like &foo; are replaced with the characters they represent. A few entities like &amp; and &lt; are defined by default, but more are available, and the set of entities can be customized. Below are some words involved in XML entities, defined in the vocabulary 'entities':"

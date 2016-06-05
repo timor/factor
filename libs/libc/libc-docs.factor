@@ -45,4 +45,4 @@ HELP: |free
 { $description "Marks the object for deallocation in the event of an error at the end of the current " { $link with-destructors } " scope." } ;
 
 ! Defined in alien-docs.factor
-ABOUT: "malloc"
+about: "malloc"

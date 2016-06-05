@@ -30,4 +30,4 @@ $nl
 "To take the element-wise xor of two sequences as if they were sets:"
 { $subsections setwise-xor } ;
 
-ABOUT: "sets.extras"
+about: "sets.extras"

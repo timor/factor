@@ -75,4 +75,4 @@ ARTICLE: "variants" "Algebraic data types"
     match
 } ;
 
-ABOUT: "variants"
+about: "variants"

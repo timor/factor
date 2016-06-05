@@ -69,4 +69,4 @@ ARTICLE: "checksums.fnv1" "Fowler-Noll-Vo checksum"
     fnv1a-1024
 } ;
 
-ABOUT: "checksums.fnv1"
+about: "checksums.fnv1"

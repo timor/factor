@@ -157,4 +157,4 @@ $nl
 "Low-level features:"
 { $subsections "furnace.actions.impl" } ;
 
-ABOUT: "furnace.actions"
+about: "furnace.actions"

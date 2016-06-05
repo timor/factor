@@ -43,4 +43,4 @@ ARTICLE: "channels" "Channels"
 "Receiving a message:"
 { $subsections from } ;
 
-ABOUT: "channels"
+about: "channels"

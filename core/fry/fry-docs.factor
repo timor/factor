@@ -97,4 +97,4 @@ $nl
 { $subsections fry }
 "Fried quotations are an abstraction on top of the " { $link "compositional-combinators" } "; their use is encouraged over the combinators, because often the fry form is shorter and clearer than the combinator form." ;
 
-ABOUT: "fry"
+about: "fry"

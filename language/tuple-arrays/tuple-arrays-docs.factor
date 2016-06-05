@@ -26,4 +26,4 @@ $nl
   "T{ point f 1 2 }"
 } ;
 
-ABOUT: "tuple-arrays"
+about: "tuple-arrays"

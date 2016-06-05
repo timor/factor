@@ -259,7 +259,7 @@ ARTICLE: "syntax" "Syntax"
     "syntax-immediate"
 } ;
 
-ABOUT: "syntax"
+about: "syntax"
 
 HELP: delimiter
 { $syntax ": foo ... ; delimiter" }

@@ -17,4 +17,4 @@ $nl
     { { $image "vocab:ui/tools/error-list/icons/deprecation-note.tiff" } "Deprecated words used" { $link "tools.deprecation" } }
 } ;
 
-ABOUT: "ui.tools.error-list"
+about: "ui.tools.error-list"

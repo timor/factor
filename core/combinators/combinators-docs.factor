@@ -226,7 +226,7 @@ ARTICLE: "combinators" "Combinators"
 "More combinators are defined for working on data structures, such as " { $link "sequences-combinators" } " and " { $link "assocs-combinators" } "."
 { $see-also "quotations" } ;
 
-ABOUT: "combinators"
+about: "combinators"
 
 HELP: call-effect
 { $values { "quot" quotation } { "effect" effect } }

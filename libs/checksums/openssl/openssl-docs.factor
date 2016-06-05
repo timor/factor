@@ -36,4 +36,4 @@ ARTICLE: "checksums.openssl" "OpenSSL checksums"
 "If we use the Factor implementation, we get the same result, just slightly slower:"
 { $example "USING: byte-arrays checksums checksums.sha math.parser ;" "\"hello world\" >byte-array sha1 checksum-bytes bytes>hex-string ." "\"2aae6c35c94fcfb415dbe95f408b9ce91ee846ed\"" } ;
 
-ABOUT: "checksums.openssl"
+about: "checksums.openssl"

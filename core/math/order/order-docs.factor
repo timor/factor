@@ -128,4 +128,4 @@ ARTICLE: "math.order" "Linear order protocol"
 { $subsections "math.order.example" }
 { $see-also "sequences-sorting" } ;
 
-ABOUT: "math.order"
+about: "math.order"

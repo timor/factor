@@ -33,7 +33,7 @@ $nl
     h>b/b
 } ;
 
-ABOUT: "stream-binary"
+about: "stream-binary"
 
 HELP: be>
 { $values { "seq" { $sequence "bytes" } } { "x" "a non-negative integer" } }

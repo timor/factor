@@ -46,4 +46,4 @@ $nl
 }
 "Note that because the walker calls various core library and UI words while rendering its own user interface, setting a breakpoint on a word such as " { $link append } " or " { $link + } " will hang the UI." ;
 
-ABOUT: "breakpoints"
+about: "breakpoints"

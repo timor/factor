@@ -96,4 +96,4 @@ $nl
     $command
 } ;
 
-ABOUT: "ui-commands"
+about: "ui-commands"

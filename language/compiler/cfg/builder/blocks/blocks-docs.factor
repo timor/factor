@@ -102,4 +102,4 @@ $nl
   emit-trivial-call
 } ;
 
-ABOUT: "compiler.cfg.builder.blocks"
+about: "compiler.cfg.builder.blocks"

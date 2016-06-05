@@ -35,7 +35,7 @@ CONSTANT: A_WHOIS char: w ;
 CONSTANT: A_QUERY char: q ;
 CONSTANT: A_GIF char: g ;
 CONSTANT: A_WWW char: w ;
-CONSTANT: A_PLUS_IMAGE char: : ;
+CONSTANT: A_PLUS_IMAGE char: \: ;
 CONSTANT: A_PLUS_MOVIE char: ; ;
 CONSTANT: A_PLUS_SOUND char: < ;
 

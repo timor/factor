@@ -19,7 +19,7 @@ $nl
 "If you don't care about initial capacity, a more elegant way to create a new bit vector is to write:"
 { $code "?V{ } clone" } ;
 
-ABOUT: "bit-vectors"
+about: "bit-vectors"
 
 HELP: bit-vector
 { $description "The class of resizable bit vectors. See " { $link "bit-vectors" } " for information." } ;

@@ -29,4 +29,4 @@ $nl
     with-null-reader
 } ;
 
-ABOUT: "io.streams.null"
+about: "io.streams.null"

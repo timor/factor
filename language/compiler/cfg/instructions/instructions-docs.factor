@@ -498,4 +498,4 @@ $nl
   ##inc
 } ;
 
-ABOUT: "compiler.cfg.instructions"
+about: "compiler.cfg.instructions"

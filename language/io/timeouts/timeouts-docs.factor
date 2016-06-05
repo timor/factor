@@ -37,4 +37,4 @@ ARTICLE: "io.timeouts" "I/O timeout protocol"
 { $subsections with-timeout }
 { $see-also "stream-protocol" "io.launcher" "io.monitors" } ;
 
-ABOUT: "io.timeouts"
+about: "io.timeouts"

@@ -65,4 +65,4 @@ ARTICLE: "sequences.n-based" "N-based sequences"
 }
 ;
 
-ABOUT: "sequences.n-based"
+about: "sequences.n-based"

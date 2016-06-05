@@ -44,4 +44,4 @@ ARTICLE: "http.server.responses" "Canned HTTP responses"
 "New error responses like the above can be created for other error codes too:"
 { $subsections <trivial-response> } ;
 
-ABOUT: "http.server.responses"
+about: "http.server.responses"

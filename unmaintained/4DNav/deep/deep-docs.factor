@@ -28,4 +28,4 @@ ARTICLE: "4DNav.deep" "Deep"
 { $vocab-link "4DNav.deep" }
 ;
 
-ABOUT: "4DNav.deep"
+about: "4DNav.deep"

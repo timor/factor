@@ -36,4 +36,4 @@ ARTICLE: "adsoda.combinators" "Combinators"
 { $vocab-link "adsoda.combinators" }
 ;
 
-ABOUT: "adsoda.combinators"
+about: "adsoda.combinators"

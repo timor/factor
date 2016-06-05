@@ -39,4 +39,4 @@ ARTICLE: "progress-bars.models" "Progress bar models"
 "A progress bar for reading files:"
 { $subsections with-file-reader-progress } ;
 
-ABOUT: "progress-bars.models"
+about: "progress-bars.models"

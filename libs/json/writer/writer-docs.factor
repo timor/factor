@@ -35,4 +35,4 @@ ARTICLE: "json.writer" "JSON writer"
     json-print
 } ;
 
-ABOUT: "json.writer"
+about: "json.writer"

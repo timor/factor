@@ -50,4 +50,4 @@ ARTICLE: "game.worlds" "Game worlds"
 }
 "The standard " { $snippet "world" } " generics " { $link draw-world* } " and " { $link resize-world } " can also be given methods to draw the window contents and handle resize events. The " { $snippet "draw-world*" } " method will be invoked in a tight loop by the game loop to update the screen." ;
 
-ABOUT: "game.worlds"
+about: "game.worlds"

@@ -21,4 +21,4 @@ $nl
   split-range split-ranges
 } ;
 
-ABOUT: "compiler.cfg.linear-scan.ranges"
+about: "compiler.cfg.linear-scan.ranges"

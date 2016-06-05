@@ -448,4 +448,4 @@ ARTICLE: "action-gestures" "Action gestures"
 }
 "Action gestures should be used in place of the above keyboard gestures if possible. For example, on Mac OS X, the standard " { $strong "Edit" } " menu items send action gestures." ;
 
-ABOUT: "ui-gestures"
+about: "ui-gestures"

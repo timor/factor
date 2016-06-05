@@ -47,4 +47,4 @@ $nl
 }
 "Calling " { $link unparent } " to remove a child of an incremental layout is permitted, however the relayout following the removal will not be performed in constant time, because all gadgets following the removed gadget need to be moved." ;
 
-ABOUT: "ui-incremental-layout"
+about: "ui-incremental-layout"

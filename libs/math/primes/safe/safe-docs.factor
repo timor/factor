@@ -36,4 +36,4 @@ ARTICLE: "math.primes.safe" "Safe prime numbers"
     random-safe-prime
 } ;
 
-ABOUT: "math.primes.safe"
+about: "math.primes.safe"

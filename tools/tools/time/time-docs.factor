@@ -12,7 +12,7 @@ ARTICLE: "timing" "Timing code and collecting statistics"
 "You can also read the system clock directly; see " { $link "system" } "."
 { $see-also "tools.profiler.sampling" "tools.annotations" "calendar" } ;
 
-ABOUT: "timing"
+about: "timing"
 
 HELP: benchmark
 { $values { "quot" quotation }

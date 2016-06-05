@@ -15,4 +15,4 @@ ARTICLE: "cocoa-window-utils" "Cocoa window utilities"
     <ViewWindow>
 } ;
 
-ABOUT: "cocoa-window-utils"
+about: "cocoa-window-utils"

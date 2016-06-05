@@ -10,4 +10,4 @@ HELP: ebcdic
 ARTICLE: "io.encodings.8-bit.ebcdic" "EBCDIC encoding"
 "The " { $vocab-link "io.encodings.8-bit.ebcdic" } " vocabulary provides the " { $link ebcdic } " encoding." ;
 
-ABOUT: "io.encodings.8-bit.ebcdic"
+about: "io.encodings.8-bit.ebcdic"

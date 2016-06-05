@@ -12,7 +12,7 @@ ARTICLE: "refs" "References"
 }
 "References are used by the " { $link "ui-inspector" } "." ;
 
-ABOUT: "refs"
+about: "refs"
 
 ARTICLE: "refs-impls" "Reference implementations"
 "References to objects:"

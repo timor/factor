@@ -63,4 +63,4 @@ $nl
 "Pattern replacement:"
 { $subsections match-replace } ;
 
-ABOUT: "match"
+about: "match"

@@ -18,4 +18,4 @@ $nl
 "There is only one primary entry point:"
 { $subsections parse-log } ;
 
-ABOUT: "logging.parser"
+about: "logging.parser"

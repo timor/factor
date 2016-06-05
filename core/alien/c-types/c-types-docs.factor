@@ -181,4 +181,4 @@ $nl
 }
 ;
 
-ABOUT: "c-types-specs"
+about: "c-types-specs"

@@ -93,7 +93,7 @@ ARTICLE: "math-functions" "Mathematical functions"
     "trig-hyp-functions"
 } ;
 
-ABOUT: "math-functions"
+about: "math-functions"
 
 HELP: align
 { $values { "m" integer } { "w" "a power of 2" } { "n" "an integer multiple of " { $snippet "w" } } }

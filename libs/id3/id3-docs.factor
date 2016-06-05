@@ -112,4 +112,4 @@ ARTICLE: "id3" "ID3 tags"
 "Access any frame tag:"
 { $subsections find-id3-frame } ;
 
-ABOUT: "id3"
+about: "id3"

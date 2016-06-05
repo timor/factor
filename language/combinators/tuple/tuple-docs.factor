@@ -41,4 +41,4 @@ ARTICLE: "combinators.tuple" "Tuple-constructing combinators"
     nmake-tuple
 } ;
 
-ABOUT: "combinators.tuple"
+about: "combinators.tuple"

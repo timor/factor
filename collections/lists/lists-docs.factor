@@ -3,7 +3,7 @@
 USING: kernel help.markup help.syntax arrays sequences math quotations ;
 in: lists
 
-ABOUT: "lists"
+about: "lists"
 
 ARTICLE: "lists" "Lists"
 "The " { $vocab-link "lists" } " vocabulary implements linked lists. There are simple strict linked lists, but a generic list protocol allows the implementation of lazy lists as well."

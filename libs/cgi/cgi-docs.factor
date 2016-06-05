@@ -22,4 +22,4 @@ ARTICLE: "cgi" "CGI (Common Gateway Interface)"
 $nl
 { $snippet "Quotation called with wrong stack effect effect ( -- )" } ;
 
-ABOUT: "cgi"
+about: "cgi"

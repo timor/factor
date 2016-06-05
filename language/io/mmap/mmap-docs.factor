@@ -109,4 +109,4 @@ ARTICLE: "io.mmap" "Memory-mapped files"
     "io.mmap.examples"
 } ;
 
-ABOUT: "io.mmap"
+about: "io.mmap"

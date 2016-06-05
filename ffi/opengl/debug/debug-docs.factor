@@ -34,4 +34,4 @@ ARTICLE: "opengl.debug" "Interactive debugging of OpenGL applications"
     gl-break
 } ;
 
-ABOUT: "opengl.debug"
+about: "opengl.debug"

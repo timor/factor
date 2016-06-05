@@ -83,7 +83,7 @@ ARTICLE: "io.servers" "Threaded servers"
 "Additionally, the " { $link local-address } " and "
 { $subsections remote-address } " variables are set, as in " { $link with-client } "." ;
 
-ABOUT: "io.servers"
+about: "io.servers"
 
 HELP: configurable-addrspecs
 { $values { "addrspecs" sequence } { "addrspecs'" sequence } }

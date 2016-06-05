@@ -23,7 +23,7 @@ ARTICLE: "polynomials" "Polynomials"
     2ptrim
 } ;
 
-ABOUT: "polynomials"
+about: "polynomials"
 
 HELP: powers
 { $values { "n" integer } { "x" number } { "seq" sequence } }

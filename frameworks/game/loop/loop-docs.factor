@@ -93,4 +93,4 @@ ARTICLE: "game.loop" "Game loops"
 }
 "The " { $vocab-link "game.worlds" } " vocabulary provides a convenient " { $link world } " subclass that integrates the game loop implementation with UI applications, managing the starting and stopping of the loop for you." ;
 
-ABOUT: "game.loop"
+about: "game.loop"

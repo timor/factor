@@ -30,4 +30,4 @@ HELP: (stack-frame-size)
 ARTICLE: "compiler.cfg.stack-frame" "Stack frames"
 "This vocab contains definitions for constructing stack frames." ;
 
-ABOUT: "compiler.cfg.stack-frame"
+about: "compiler.cfg.stack-frame"

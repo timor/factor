@@ -135,4 +135,4 @@ ARTICLE: "logging" "Logging framework"
     "logging.server"
 } ;
 
-ABOUT: "logging"
+about: "logging"

@@ -218,4 +218,4 @@ ARTICLE: "gpu.shaders" "Shader objects"
     postpone: VERTEX-FORMAT:
 } ;
 
-ABOUT: "gpu.shaders"
+about: "gpu.shaders"

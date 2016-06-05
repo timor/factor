@@ -299,4 +299,4 @@ ARTICLE: "io.files.info.unix" "Unix file attributes"
     "unix-file-ids"
 } ;
 
-ABOUT: "io.files.info.unix"
+about: "io.files.info.unix"

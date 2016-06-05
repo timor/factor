@@ -36,7 +36,7 @@ $nl
 }
 "Additionally, the I/O backend must provide an implementation of the " { $link dispose } " generic word." ;
 
-ABOUT: "io.ports"
+about: "io.ports"
 
 HELP: port
 { $class-description "Instances of this class present a blocking stream interface on top of an underlying non-blocking I/O system, giving the illusion of blocking by yielding the thread which is waiting for input or output." } ;

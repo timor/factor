@@ -225,7 +225,7 @@ $nl
 }
 { $see-also "vocabularies" "vocabs.loader" "definitions" "see" } ;
 
-ABOUT: "words"
+about: "words"
 
 HELP: changed-effect
 { $values { "word" word } }

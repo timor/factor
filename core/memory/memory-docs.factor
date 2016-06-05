@@ -44,4 +44,4 @@ $nl
 "The " { $link "tools.deploy" } " tool creates stripped-down images containing just enough code to run a single application."
 { $see-also "tools.memory" } ;
 
-ABOUT: "images"
+about: "images"

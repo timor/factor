@@ -128,4 +128,4 @@ $nl
 "More topics:"
 { $subsections "smtp-gmail" } ;
 
-ABOUT: "smtp"
+about: "smtp"

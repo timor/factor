@@ -13,4 +13,4 @@ ARTICLE: "furnace.db" "Furnace database support"
 { $subsections <db-persistence> }
 "The " { $vocab-link "furnace.alloy" } " vocabulary combines database persistence with several other features." ;
 
-ABOUT: "furnace.db"
+about: "furnace.db"

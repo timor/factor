@@ -49,4 +49,4 @@ $nl
 $nl
 "execute( uses a similar strategy." ;
 
-ABOUT: "compiler.tree.propagation.call-effect"
+about: "compiler.tree.propagation.call-effect"

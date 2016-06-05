@@ -22,4 +22,4 @@ $nl
 $nl
 "Revisiting Out-of-SSA Translation for Correctness, Code Quality, and Efficiency http://hal.archives-ouvertes.fr/docs/00/34/99/25/PDF/OutSSA-RR.pdf" ;
 
-ABOUT: "compiler.cfg.ssa.interference"
+about: "compiler.cfg.ssa.interference"

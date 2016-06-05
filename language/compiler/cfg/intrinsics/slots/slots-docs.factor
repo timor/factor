@@ -56,4 +56,4 @@ $nl
   emit-slot
 } ;
 
-ABOUT: "compiler.cfg.intrinsics.slots"
+about: "compiler.cfg.intrinsics.slots"

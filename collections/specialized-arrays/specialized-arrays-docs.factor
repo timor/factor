@@ -128,4 +128,4 @@ $nl
 }
 "The " { $vocab-link "specialized-vectors" } " vocabulary provides a resizable version of this abstraction." ;
 
-ABOUT: "specialized-arrays"
+about: "specialized-arrays"

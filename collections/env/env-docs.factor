@@ -10,4 +10,4 @@ ARTICLE: "env" "Accessing the environment via the assoc protocol"
 { $subsections env }
 ;
 
-ABOUT: "env"
+about: "env"

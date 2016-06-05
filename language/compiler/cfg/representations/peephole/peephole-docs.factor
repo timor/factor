@@ -9,4 +9,4 @@ HELP: convert-to-zero-vector?
 ARTICLE: "compiler.cfg.representations.peephole" "Peephole optimizations"
 "Representation selection performs some peephole optimizations when inserting conversions to optimize for a few common cases." ;
 
-ABOUT: "compiler.cfg.representations.peephole"
+about: "compiler.cfg.representations.peephole"

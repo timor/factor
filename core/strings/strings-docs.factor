@@ -24,7 +24,7 @@ $nl
 { $subsections resize-string }
 { $see-also "syntax-strings" "sbufs" "unicode" "io.encodings" } ;
 
-ABOUT: "strings"
+about: "strings"
 
 HELP: string
 { $description "The class of fixed-length character strings. See " { $link "syntax-strings" } " for syntax and " { $link "strings" } " for general information." } ;

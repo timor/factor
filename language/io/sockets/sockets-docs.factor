@@ -99,7 +99,7 @@ ARTICLE: "network-streams" "Networking"
 { $vocab-subsection "Secure sockets (SSL, TLS)" "io.sockets.secure" }
 { $see-also "io.pipes" } ;
 
-ABOUT: "network-streams"
+about: "network-streams"
 
 HELP: local
 { $class-description "Local address specifier for Unix domain sockets on Unix systems. The " { $snippet "path" } " slot holds the path name of the socket. New instances are created by calling " { $link <local> } "." }

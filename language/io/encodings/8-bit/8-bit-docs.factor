@@ -35,4 +35,4 @@ ARTICLE: "io.encodings.8-bit" "Legacy 8-bit encodings"
     { $vocab-link "io.encodings.8-bit.windows-1258" }
 } ;
 
-ABOUT: "io.encodings.8-bit"
+about: "io.encodings.8-bit"

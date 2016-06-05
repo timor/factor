@@ -48,4 +48,4 @@ ARTICLE: "base64" "Base 64 conversions"
     decode-base64
 } ;
 
-ABOUT: "base64"
+about: "base64"

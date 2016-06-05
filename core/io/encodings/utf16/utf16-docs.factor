@@ -11,7 +11,7 @@ ARTICLE: "io.encodings.utf16" "UTF-16 encoding"
     utf16be
 } ;
 
-ABOUT: "io.encodings.utf16"
+about: "io.encodings.utf16"
 
 HELP: utf16le
 { $class-description "The encoding descriptor for UTF-16LE, that is, UTF-16 in little endian, without a byte order mark. Streams can be made which read or write wth this encoding." }

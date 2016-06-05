@@ -35,4 +35,4 @@ HELP: add-mixin-instance
 
 { mixin-class define-mixin-class add-mixin-instance postpone: mixin: postpone: INSTANCE: } related-words
 
-ABOUT: "mixins"
+about: "mixins"

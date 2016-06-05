@@ -50,4 +50,4 @@ ARTICLE: "ui.gadgets.layout" "GUI Layout"
 "For examples using normal layout, see the " { $vocab-link "sudokus" } " demo. "
 "For examples of templating, see the " { $vocab-link "recipes" } " demo. " ;
 
-ABOUT: "ui.gadgets.layout"
+about: "ui.gadgets.layout"

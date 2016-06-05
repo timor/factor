@@ -13,4 +13,4 @@ ARTICLE: "math.partial-dispatch"
 "Partially-dispatched math operations, used by the compiler"
 "Partially-dispatched math operations" ;
 
-ABOUT: "math.partial-dispatch"
+about: "math.partial-dispatch"

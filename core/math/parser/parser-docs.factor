@@ -28,7 +28,7 @@ $nl
 "You can also input literal numbers in a different base (" { $link "syntax-integers" } ")."
 { $see-also "prettyprint-numbers" } ;
 
-ABOUT: "number-strings"
+about: "number-strings"
 
 HELP: >digit
 { $values { "n" "an integer between 0 and 15" } { "ch" "a character" } }

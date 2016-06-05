@@ -50,4 +50,4 @@ HELP: process-block
 ARTICLE: "compiler.cfg.gc-checks" "Garbage collection check insertion"
 "This pass runs after representation selection, since it needs to know which vregs can contain tagged pointers." ;
 
-ABOUT: "compiler.cfg.gc-checks"
+about: "compiler.cfg.gc-checks"

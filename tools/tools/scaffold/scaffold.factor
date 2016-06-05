@@ -224,7 +224,7 @@ M: object add-using ( object -- )
                 [ "{ $vocab-link " write pprint " }" print ] bi
                 ";" print nl
             ]
-            [ "ABOUT: " write unparse print ]
+            [ "about: " write unparse print ]
         } cleave
     ] with-string-writer ;
 

@@ -10,4 +10,4 @@ HELP: euc-kr
 ARTICLE: "io.encodings.euc-kr" "EUC-KR encoding"
 { $subsections euc-kr } ;
 
-ABOUT: "io.encodings.euc-kr"
+about: "io.encodings.euc-kr"

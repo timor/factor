@@ -28,4 +28,4 @@ $nl
 }
 ;
 
-ABOUT: "graphviz.dot"
+about: "graphviz.dot"

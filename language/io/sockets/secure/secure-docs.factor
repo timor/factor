@@ -146,4 +146,4 @@ $nl
     "ssl-errors"
 } ;
 
-ABOUT: "io.sockets.secure"
+about: "io.sockets.secure"

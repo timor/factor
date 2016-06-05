@@ -41,4 +41,4 @@ ARTICLE: "file-types" "File types"
     +unknown+
 } ;
 
-ABOUT: "file-types"
+about: "file-types"

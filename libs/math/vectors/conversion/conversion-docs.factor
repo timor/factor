@@ -69,4 +69,4 @@ ARTICLE: "math.vectors.conversion" "SIMD vector conversion"
     vconvert
 } ;
 
-ABOUT: "math.vectors.conversion"
+about: "math.vectors.conversion"

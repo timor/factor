@@ -17,4 +17,4 @@ ARTICLE: "io.files.temp" "Temporary files"
     with-cache-directory
 } ;
 
-ABOUT: "io.files.temp"
+about: "io.files.temp"

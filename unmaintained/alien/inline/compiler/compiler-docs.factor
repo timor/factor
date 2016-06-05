@@ -75,4 +75,4 @@ ARTICLE: "alien.inline.compiler" "Inline C compiler"
 { $vocab-link "alien.inline.compiler" }
 ;
 
-ABOUT: "alien.inline.compiler"
+about: "alien.inline.compiler"

@@ -62,4 +62,4 @@ $nl
     synopsis*
 } ;
 
-ABOUT: "see"
+about: "see"

@@ -19,4 +19,4 @@ ARTICLE: "method-chains" "Method chaining syntax"
     postpone: BEFORE:
 } ;
 
-ABOUT: "method-chains"
+about: "method-chains"

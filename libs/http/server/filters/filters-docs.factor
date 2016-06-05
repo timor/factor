@@ -9,4 +9,4 @@ ARTICLE: "http.server.filters" "HTTP responder filters"
 { $subsections filter-responder }
 "To use it, simply subclass " { $link filter-responder } ", and call " { $link postpone: call-next-method } " from your " { $link call-responder* } " method to pass control to the wrapped responder." ;
 
-ABOUT: "http.server.filters"
+about: "http.server.filters"

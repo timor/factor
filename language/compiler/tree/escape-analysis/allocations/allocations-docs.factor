@@ -25,4 +25,4 @@ HELP: value-classes
 ARTICLE: "compiler.tree.escape-analysis.allocations" "Tracking memory allocations"
 "Tracks memory allocations and unboxes those which can be determined never escapes." ;
 
-ABOUT: "compiler.tree.escape-analysis.allocations"
+about: "compiler.tree.escape-analysis.allocations"

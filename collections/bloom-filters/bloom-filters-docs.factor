@@ -37,4 +37,4 @@ $nl
     bloom-filter-member?
 } ;
 
-ABOUT: "bloom-filters"
+about: "bloom-filters"

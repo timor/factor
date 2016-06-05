@@ -100,4 +100,4 @@ $nl
 } ;
 
 
-ABOUT: "compiler.cfg.stacks.local"
+about: "compiler.cfg.stacks.local"

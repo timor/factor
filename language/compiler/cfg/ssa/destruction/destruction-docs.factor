@@ -24,4 +24,4 @@ $nl
 "Main entry point:"
 { $subsections destruct-ssa } ;
 
-ABOUT: "compiler.cfg.ssa.destruction"
+about: "compiler.cfg.ssa.destruction"

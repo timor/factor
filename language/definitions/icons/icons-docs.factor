@@ -9,4 +9,4 @@ ARTICLE: "definitions.icons" "Definition icons"
 "Defining new icons:"
 { $subsections postpone: ICON: } ;
 
-ABOUT: "definitions.icons"
+about: "definitions.icons"

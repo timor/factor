@@ -8,4 +8,4 @@ ARTICLE: "checksums.xxhash" "XxHash checksum"
 "xxHash is a non-cryptographic hash function suitable for general hash-based lookup."
 { $subsections xxhash } ;
 
-ABOUT: "checksums.xxhash"
+about: "checksums.xxhash"

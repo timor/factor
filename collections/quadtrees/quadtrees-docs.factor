@@ -18,7 +18,7 @@ ARTICLE: "quadtrees" "Quadtrees"
 "Quadtrees can be used to \"swizzle\" a sequence to improve the locality of spatial data in memory:"
 { $subsections swizzle } ;
 
-ABOUT: "quadtrees"
+about: "quadtrees"
 
 HELP: <quadtree>
 { $values { "bounds" rect } { "quadtree" quadtree } }

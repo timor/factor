@@ -160,4 +160,4 @@ $nl
 }
 "The " { $vocab-link "math.floats.env" } " vocabulary provides functionality for controlling floating point exceptions, rounding modes, and denormal behavior." ;
 
-ABOUT: "floats"
+about: "floats"

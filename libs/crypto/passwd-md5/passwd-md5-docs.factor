@@ -32,4 +32,4 @@ ARTICLE: "crypto.passwd-md5" "MD5 shadow passwords"
 "Authenticating against a shadowed password:"
 { $subsections authenticate-password } ;
 
-ABOUT: "crypto.passwd-md5"
+about: "crypto.passwd-md5"

@@ -30,4 +30,4 @@ $nl
 { $subsections end-aside }
 "Asides are used by " { $vocab-link "furnace.auth.login" } "; when the client requests a protected page, an aside begins and the client is redirected to a login page. Upon a successful login, the aside ends and the client returns to the protected page. If the client directly visits the login page and logs in, there is no current aside, so the client is sent to the default URL passed to " { $link end-aside } ", which in the case of login is the root URL." ;
 
-ABOUT: "furnace.asides"
+about: "furnace.asides"

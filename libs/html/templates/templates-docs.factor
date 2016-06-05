@@ -91,4 +91,4 @@ $nl
     "html.templates.boilerplate"
 } ;
 
-ABOUT: "html.templates"
+about: "html.templates"

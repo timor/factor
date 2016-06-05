@@ -20,7 +20,7 @@ $nl
 }
 { $see-also "prettyprint-numbers" "modular-arithmetic" "bitwise-arithmetic" "integer-functions" "syntax-integers" } ;
 
-ABOUT: "integers"
+about: "integers"
 
 HELP: fixnum
 { $class-description "The class of fixnums, which are fixed-width integers small enough to fit in a machine cell. Because they are not heap-allocated, fixnums do not have object identity. Equality of tagged pointer bit patterns is actually " { $emphasis "value" } " equality for fixnums." } ;

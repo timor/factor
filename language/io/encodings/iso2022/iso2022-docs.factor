@@ -10,4 +10,4 @@ HELP: iso2022
 ARTICLE: "io.encodings.iso2022" "ISO 2022-JP-1 encoding"
 { $subsections iso2022 } ;
 
-ABOUT: "io.encodings.iso2022"
+about: "io.encodings.iso2022"

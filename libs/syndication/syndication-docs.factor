@@ -69,4 +69,4 @@ $nl
 "The " { $vocab-link "furnace.syndication" } " vocabulary builds on top of this vocabulary to enable easy generation of Atom feeds from web applications. The " { $vocab-link "webapps.planet" } " vocabulary is a complete example of a web application which reads and exports feeds."
 { $see-also "urls" } ;
 
-ABOUT: "syndication"
+about: "syndication"

@@ -45,4 +45,4 @@ $nl
 { "See " { $url "http://semver.org/" } " for a detailed description of semantic versioning." }
 ;
 
-ABOUT: { "Versioning" "Semantic Versioning" }
+about: { "Versioning" "Semantic Versioning" }

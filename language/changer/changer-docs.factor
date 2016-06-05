@@ -35,4 +35,4 @@ $nl
     inline-changer
 } ;
 
-ABOUT: "changer"
+about: "changer"

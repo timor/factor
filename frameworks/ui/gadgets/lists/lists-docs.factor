@@ -31,4 +31,4 @@ ARTICLE: "ui.gadgets.lists" "List gadgets"
     list-value
 } ;
 
-ABOUT: "ui.gadgets.lists"
+about: "ui.gadgets.lists"

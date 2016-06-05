@@ -8,4 +8,4 @@ HELP: escape-analysis*
 ARTICLE: "compiler.tree.escape-analysis.nodes"
 "Per-node dispatch for escape analysis" ;
 
-ABOUT: "compiler.tree.escape-analysis.nodes"
+about: "compiler.tree.escape-analysis.nodes"

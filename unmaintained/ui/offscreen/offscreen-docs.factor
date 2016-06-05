@@ -64,4 +64,4 @@ ARTICLE: "ui.offscreen" "Offscreen UI rendering"
     gadget>bitmap
 } ;
 
-ABOUT: "ui.offscreen"
+about: "ui.offscreen"

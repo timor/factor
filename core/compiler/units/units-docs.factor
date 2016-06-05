@@ -39,7 +39,7 @@ $nl
 "Additional topics:"
 { $subsections "compilation-units-internals" } ;
 
-ABOUT: "compilation-units"
+about: "compilation-units"
 
 HELP: bump-effect-counter?
 { $values { "?" boolean } }

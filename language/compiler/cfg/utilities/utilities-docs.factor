@@ -23,4 +23,4 @@ $nl
   slurp/replenish-deque
 } ;
 
-ABOUT: "compiler.cfg.utilities"
+about: "compiler.cfg.utilities"

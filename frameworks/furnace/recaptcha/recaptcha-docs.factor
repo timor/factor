@@ -47,4 +47,4 @@ ARTICLE: "furnace.recaptcha" "Recaptcha support for Furnace"
 "An example:"
 { $subsections "recaptcha-example" } ;
 
-ABOUT: "furnace.recaptcha"
+about: "furnace.recaptcha"

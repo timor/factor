@@ -134,4 +134,4 @@ $nl
     with-effective-user
 } ;
 
-ABOUT: "unix.users"
+about: "unix.users"

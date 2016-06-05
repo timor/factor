@@ -15,4 +15,4 @@ ARTICLE: "math.derivatives.syntax" "Derivative Syntax"
 "The " { $vocab-link "math.derivatives.syntax" } " vocabulary provides the " { $link postpone: DERIVATIVE: } " syntax for specifying the derivative of a word."
 ;
 
-ABOUT: "math.derivatives.syntax"
+about: "math.derivatives.syntax"

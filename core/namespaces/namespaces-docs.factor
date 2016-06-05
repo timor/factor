@@ -62,7 +62,7 @@ $nl
 { $subsections "namespaces.private" }
 "Dynamic variables complement " { $link "locals" } "." ;
 
-ABOUT: "namespaces"
+about: "namespaces"
 
 HELP: get
 { $values { "variable" "a variable, by convention a symbol" } { "value" { $maybe "the value" } } }

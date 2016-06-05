@@ -406,4 +406,4 @@ $nl
 }
 ;
 
-ABOUT: "graphviz.render"
+about: "graphviz.render"

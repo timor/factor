@@ -173,4 +173,4 @@ $nl
 }
 "When using a deque as a queue, the convention is to queue elements with " { $link push-front } " and deque them with " { $link pop-back } "." ;
 
-ABOUT: "deques"
+about: "deques"

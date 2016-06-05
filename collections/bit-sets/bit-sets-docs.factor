@@ -8,7 +8,7 @@ ARTICLE: "bit-sets" "Bit sets"
 "Constructing new bit sets:"
 { $subsection <bit-set> } ;
 
-ABOUT: "bit-sets"
+about: "bit-sets"
 
 HELP: bit-set
 { $class-description "The class of bit-array-based " { $link "sets" } "." } ;

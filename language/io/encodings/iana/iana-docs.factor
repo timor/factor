@@ -1,7 +1,7 @@
 USING: help.syntax help.markup strings ;
 in: io.encodings.iana
 
-ABOUT: "io.encodings.iana"
+about: "io.encodings.iana"
 
 ARTICLE: "io.encodings.iana" "IANA-registered encoding names"
 "The " { $vocab-link "io.encodings.iana" } " vocabulary provides words for accessing the names of encodings and the encoding descriptors corresponding to names." $nl

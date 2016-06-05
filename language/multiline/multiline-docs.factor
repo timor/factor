@@ -49,4 +49,4 @@ ARTICLE: "multiline" "Multiline"
 { $subsections parse-multiline-string }
 ;
 
-ABOUT: "multiline"
+about: "multiline"

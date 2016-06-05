@@ -13,4 +13,4 @@ HELP: split-interval
 ARTICLE: "compiler.cfg.linear-scan.allocation.splitting" "Live interval splitting"
 "This vocab splits live intervals." ;
 
-ABOUT: "compiler.cfg.linear-scan.allocation.splitting"
+about: "compiler.cfg.linear-scan.allocation.splitting"

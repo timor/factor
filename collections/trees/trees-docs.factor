@@ -26,4 +26,4 @@ ARTICLE: "trees" "Binary search trees"
     postpone: TREE{
 } ;
 
-ABOUT: "trees"
+about: "trees"

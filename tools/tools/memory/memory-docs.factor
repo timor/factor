@@ -21,7 +21,7 @@ ARTICLE: "tools.memory" "Object memory tools"
 { $subsections gc }
 { $see-also "images" } ;
 
-ABOUT: "tools.memory"
+about: "tools.memory"
 
 HELP: room.
 { $description "Prints an overview of memory usage broken down by generation and zone." } ;

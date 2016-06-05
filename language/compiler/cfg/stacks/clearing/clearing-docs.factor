@@ -33,4 +33,4 @@ HELP: dangerous-insn?
 } ;
 
 
-ABOUT: "compiler.cfg.stacks.clearing"
+about: "compiler.cfg.stacks.clearing"

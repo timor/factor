@@ -43,4 +43,4 @@ $nl
 }
 { $subsections "http.server.static.extend" } ;
 
-ABOUT: "http.server.static"
+about: "http.server.static"

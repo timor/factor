@@ -3,7 +3,7 @@
 USING: help.syntax help.markup ;
 in: unicode.categories
 
-ABOUT: "unicode.categories"
+about: "unicode.categories"
 
 ARTICLE: "unicode.categories" "Unicode category syntax"
 "There is special syntax sugar for making predicate classes which are unions of Unicode general categories, plus some other code."

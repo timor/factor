@@ -15,7 +15,7 @@ $nl
 "Clearing memoized results:"
 { $subsections reset-memoized } ;
 
-ABOUT: "memoize"
+about: "memoize"
 
 HELP: define-memoized
 { $values { "word" word } { "quot" quotation } { "effect" effect } }

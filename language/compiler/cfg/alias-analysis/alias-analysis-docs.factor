@@ -62,4 +62,4 @@ $nl
   "x[1] = c"
 } ;
 
-ABOUT: "compiler.cfg.alias-analysis"
+about: "compiler.cfg.alias-analysis"

@@ -142,4 +142,4 @@ $nl
     with-denormal-mode
 } ;
 
-ABOUT: "math.floats.env"
+about: "math.floats.env"

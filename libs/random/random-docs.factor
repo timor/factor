@@ -166,4 +166,4 @@ $nl
     random-bits*
 } ;
 
-ABOUT: "random"
+about: "random"

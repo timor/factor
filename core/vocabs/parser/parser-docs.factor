@@ -90,7 +90,7 @@ $nl
     end-private
 } ;
 
-ABOUT: "word-search"
+about: "word-search"
 
 HELP: manifest
 { $var-description "The current manifest. Only set at parse time." }

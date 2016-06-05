@@ -33,4 +33,4 @@ ARTICLE: "audio.loader" "Audio file loader"
 }
 "By default, " { $snippet "audio.loader" } " supports WAV (with the file extension " { $snippet ".wav" } ") and AIFF (with extension " { $snippet ".aif" } " or " { $snippet ".aiff" } ")." ;
 
-ABOUT: "audio.loader"
+about: "audio.loader"

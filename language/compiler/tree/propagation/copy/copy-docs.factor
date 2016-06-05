@@ -16,4 +16,4 @@ ARTICLE: "compiler.tree.propagation.copy"
 "Copy propagation"
 "Two values are copy-equivalent if they are always identical at run-time (\"DS\" relation). This is just a weak form of value numbering." ;
 
-ABOUT: "compiler.tree.propagation.copy"
+about: "compiler.tree.propagation.copy"

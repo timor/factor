@@ -70,4 +70,4 @@ $nl
 { $vocab-subsection "OpenSSL checksums" "checksums.openssl" }
 { $vocab-subsection "Internet checksum" "checksums.internet" } ;
 
-ABOUT: "checksums"
+about: "checksums"

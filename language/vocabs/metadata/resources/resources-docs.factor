@@ -23,4 +23,4 @@ ARTICLE: "vocabs.metadata.resources" "Vocabulary resource metadata"
     expand-vocab-resource-files
 } ;
 
-ABOUT: "vocabs.metadata.resources"
+about: "vocabs.metadata.resources"

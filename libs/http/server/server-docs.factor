@@ -141,4 +141,4 @@ ARTICLE: "http.server" "HTTP server"
 }
 "The " { $vocab-link "furnace" } " framework implements high-level abstractions which make developing web applications much easier than writing responders by hand." ;
 
-ABOUT: "http.server"
+about: "http.server"

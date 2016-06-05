@@ -47,4 +47,4 @@ $nl
 { $subsections define-transform }
 { $see-also "generalizations" "fry" } ;
 
-ABOUT: "macros"
+about: "macros"

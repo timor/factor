@@ -64,4 +64,4 @@ ARTICLE: { "inverse" "intro" } "Invertible quotations"
 } ;
 
 in: inverse
-ABOUT: { "inverse" "intro" }
+about: { "inverse" "intro" }

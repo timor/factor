@@ -13,7 +13,7 @@ ARTICLE: "io.streams.duplex" "Duplex streams"
     with-stream*
 } ;
 
-ABOUT: "io.streams.duplex"
+about: "io.streams.duplex"
 
 HELP: duplex-stream
 { $class-description "A bidirectional stream wrapping an input and output stream." } ;

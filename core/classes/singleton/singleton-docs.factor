@@ -24,4 +24,4 @@ HELP: define-singleton-class
 HELP: singleton-class
 { $class-description "The class of singleton classes." } ;
 
-ABOUT: "singletons"
+about: "singletons"

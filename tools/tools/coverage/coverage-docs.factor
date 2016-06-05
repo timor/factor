@@ -111,4 +111,4 @@ ARTICLE: "tools.coverage" "Coverage tool"
 "Combinators for iterating over words in a vocabulary:"
 { $subsections each-word map-words } ;
 
-ABOUT: "tools.coverage"
+about: "tools.coverage"

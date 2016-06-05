@@ -23,7 +23,7 @@ CONSTANT: manual-substitutions
         { pop* [ pop drop ] }
         { when [ [ ] if ] }
         { >boolean [ f = not ] }
-    }
+    } ;
 
 CONSTANT: trivial-defs
     {
@@ -44,7 +44,7 @@ CONSTANT: trivial-defs
         [ 2dup both-fixnums? ]
         [ [ drop ] prepose ]
         [ 1 0 ? ]
-    }
+    } ;
 
 : lintable-word? ( word -- ? )
     {

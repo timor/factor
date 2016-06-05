@@ -13,4 +13,4 @@ $nl
 $nl
 { $subsections disassemble } ;
 
-ABOUT: "tools.disassembler"
+about: "tools.disassembler"

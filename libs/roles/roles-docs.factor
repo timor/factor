@@ -57,4 +57,4 @@ ARTICLE: "roles" "Roles"
 "Errors with roles:"
 { $subsections multiple-inheritance-attempted role-slot-overlap } ;
 
-ABOUT: "roles"
+about: "roles"

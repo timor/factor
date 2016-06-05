@@ -36,4 +36,4 @@ ARTICLE: "boxes" "Boxes"
 { $subsections ?box }
 "Testing if a box is full can be done by reading the " { $snippet "occupied" } " slot." ;
 
-ABOUT: "boxes"
+about: "boxes"

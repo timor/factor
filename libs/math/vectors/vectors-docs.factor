@@ -187,7 +187,7 @@ ARTICLE: "math-vectors" "Vector operations"
     "math-vectors-misc"
 } ;
 
-ABOUT: "math-vectors"
+about: "math-vectors"
 
 HELP: vneg
 { $values { "v" "a sequence of numbers" } { "w" "a sequence of numbers" } }

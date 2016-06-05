@@ -50,4 +50,4 @@ $nl
     <presentation>
 } ;
 
-ABOUT: "ui.gadgets.presentations"
+about: "ui.gadgets.presentations"

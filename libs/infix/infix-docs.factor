@@ -87,4 +87,4 @@ $nl
 }
 ;
 
-ABOUT: "infix"
+about: "infix"

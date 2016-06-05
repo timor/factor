@@ -37,4 +37,4 @@ ARTICLE: { "space-invaders" "space-invaders" } "Space Invaders Emulator"
 "If you save the Factor image while a game is running, when you restart "
 "the image the game continues where it left off." ;
 
-ABOUT: { "space-invaders" "space-invaders" }
+about: { "space-invaders" "space-invaders" }

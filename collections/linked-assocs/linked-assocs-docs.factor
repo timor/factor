@@ -22,4 +22,4 @@ $nl
     <linked-assoc>
 } ;
 
-ABOUT: "linked-assocs"
+about: "linked-assocs"

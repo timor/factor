@@ -26,4 +26,4 @@ ARTICLE: "models.arrow" "Arrow models"
     <arrow>
 } ;
 
-ABOUT: "models.arrow"
+about: "models.arrow"

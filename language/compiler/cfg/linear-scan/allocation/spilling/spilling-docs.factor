@@ -66,4 +66,4 @@ $nl
 "Splitting live intervals:"
 { $subsections split-for-spill } ;
 
-ABOUT: "compiler.cfg.linear-scan.allocation.spilling"
+about: "compiler.cfg.linear-scan.allocation.spilling"

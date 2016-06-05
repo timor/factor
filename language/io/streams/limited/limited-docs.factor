@@ -44,4 +44,4 @@ ARTICLE: "io.streams.limited" "Limited input streams"
 "Wrap the current " { $link input-stream } " in a limited stream:"
 { $subsections limited-input } ;
 
-ABOUT: "io.streams.limited"
+about: "io.streams.limited"

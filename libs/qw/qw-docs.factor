@@ -16,4 +16,4 @@ ARTICLE: "qw" "Quoted words"
 "Construct an array of strings:"
 { $subsections postpone: qw{ } ;
 
-ABOUT: "qw"
+about: "qw"

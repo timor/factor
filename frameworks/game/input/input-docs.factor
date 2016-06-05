@@ -183,4 +183,4 @@ HELP: released
 
 { pressed released } related-words
 
-ABOUT: "game-input"
+about: "game-input"

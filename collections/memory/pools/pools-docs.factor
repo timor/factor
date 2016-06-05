@@ -75,4 +75,4 @@ ARTICLE: "memory.pools" "Pools"
     free-to-pool
 } ;
 
-ABOUT: "memory.pools"
+about: "memory.pools"

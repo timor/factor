@@ -31,7 +31,7 @@ $nl
 "Bit array literal syntax:"
 { $subsections postpone: ?{ } ;
 
-ABOUT: "bit-arrays"
+about: "bit-arrays"
 
 HELP: ?{
 { $syntax "?{ elements... }" }

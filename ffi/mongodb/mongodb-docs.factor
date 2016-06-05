@@ -24,4 +24,4 @@ ARTICLE: "mongodb" "MongoDB factor integration"
   "" }
 ;
 
-ABOUT: "mongodb"
+about: "mongodb"

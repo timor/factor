@@ -285,4 +285,4 @@ ARTICLE: "combinators.smart" "Smart combinators"
 { $subsections smart-if* smart-when* smart-unless* }
 "New smart combinators can be created by defining " { $link "macros" } " which call " { $link infer } "." ;
 
-ABOUT: "combinators.smart"
+about: "combinators.smart"

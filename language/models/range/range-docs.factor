@@ -63,4 +63,4 @@ ARTICLE: "range-model-protocol" "Range model protocol"
     set-range-max-value
 } ;
 
-ABOUT: "models-range"
+about: "models-range"

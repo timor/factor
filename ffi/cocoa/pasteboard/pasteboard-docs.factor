@@ -20,4 +20,4 @@ ARTICLE: "cocoa-pasteboard-utils" "Cocoa pasteboard utilities"
     set-pasteboard-string
 } ;
 
-ABOUT: "cocoa-pasteboard-utils"
+about: "cocoa-pasteboard-utils"

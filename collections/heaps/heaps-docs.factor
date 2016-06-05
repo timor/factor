@@ -42,7 +42,7 @@ $nl
 "Processing heaps:"
 { $subsections slurp-heap } ;
 
-ABOUT: "heaps"
+about: "heaps"
 
 HELP: <min-heap>
 { $values { "min-heap" min-heap } }

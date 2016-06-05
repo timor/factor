@@ -52,4 +52,4 @@ $nl
 }
 "The " { $vocab-link "concurrency.semaphores" } " vocabulary can be used in conjunction with the above combinators to limit the maximum number of concurrent operations." ;
 
-ABOUT: "concurrency.combinators"
+about: "concurrency.combinators"

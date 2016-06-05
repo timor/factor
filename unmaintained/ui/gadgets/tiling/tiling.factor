@@ -33,7 +33,7 @@ Example:
 
 ;
 
-ABOUT: "ui.gadgets.tiling"
+about: "ui.gadgets.tiling"
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

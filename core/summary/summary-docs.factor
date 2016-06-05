@@ -10,4 +10,4 @@ HELP: summary
 { $contract "Outputs a brief description of the object." }
 { $notes "New methods can be defined by user code. Most often, this is used with error classes so that " { $link "debugger" } " can print friendlier error messages." } ;
 
-ABOUT: "summary"
+about: "summary"

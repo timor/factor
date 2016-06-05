@@ -144,4 +144,4 @@ $nl
 "The order in which records are accessed has nothing to do with the order in which records have been stored. Note that these words can only be used in read-only algorithms since delete operation re-arranges the hash table."
 ;
 
-ABOUT: "gdbm"
+about: "gdbm"

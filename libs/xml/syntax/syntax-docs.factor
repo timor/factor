@@ -3,7 +3,7 @@
 USING: help.markup help.syntax xml.data present ;
 in: xml.syntax
 
-ABOUT: "xml.syntax"
+about: "xml.syntax"
 
 ARTICLE: "xml.syntax" "Syntax extensions for XML"
 "The " { $link "xml.syntax" } " vocabulary defines a number of new parsing words for XML processing."

@@ -9,4 +9,4 @@ $nl
 { $notes "Currently multi-frame GIF images are not supported." }
 ;
 
-ABOUT: "images.gif"
+about: "images.gif"

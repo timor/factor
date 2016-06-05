@@ -32,4 +32,4 @@ ARTICLE: "columns" "Column sequences"
 "A utility word:"
 { $subsections <flipped> } ;
 
-ABOUT: "columns"
+about: "columns"

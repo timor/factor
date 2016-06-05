@@ -212,7 +212,7 @@ ARTICLE: "tools.profiler.sampling" "Sampling profiler"
 top-down profile." }
 ;
 
-ABOUT: "tools.profiler.sampling"
+about: "tools.profiler.sampling"
 
 ! Implementation
 

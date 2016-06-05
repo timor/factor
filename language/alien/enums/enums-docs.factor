@@ -25,4 +25,4 @@ HELP: number>enum
 
 { postpone: ENUM: define-enum enum>number number>enum } related-words
 
-ABOUT: "alien.enums"
+about: "alien.enums"

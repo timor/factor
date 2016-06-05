@@ -23,7 +23,7 @@ ARTICLE: "sequences-split" "Splitting sequences"
 "Replacing subsequences with another subsequence:"
 { $subsections replace } ;
 
-ABOUT: "sequences-split"
+about: "sequences-split"
 
 HELP: split1
 { $values { "seq" sequence } { "subseq" sequence } { "before" "a new sequence" } { "after" "a new sequence" } }

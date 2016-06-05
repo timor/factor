@@ -92,4 +92,4 @@ $nl
     >title
 } ;
 
-ABOUT: "ascii"
+about: "ascii"

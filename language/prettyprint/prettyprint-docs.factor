@@ -188,7 +188,7 @@ $nl
 }
 { $see-also "number-strings" "see" } ;
 
-ABOUT: "prettyprint"
+about: "prettyprint"
 
 HELP: pprint
 { $values { "obj" object } }

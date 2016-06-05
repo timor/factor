@@ -528,4 +528,4 @@ ARTICLE: "peg.ebnf" "EBNF"
 { $subsections "peg.ebnf.tokenizers" }
 ;
 
-ABOUT: "peg.ebnf"
+about: "peg.ebnf"

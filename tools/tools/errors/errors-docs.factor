@@ -47,4 +47,4 @@ $nl
 { $subsections errors. }
 "Batch errors are reported in the " { $link "ui.tools.error-list" } "." ;
 
-ABOUT: "tools.errors"
+about: "tools.errors"

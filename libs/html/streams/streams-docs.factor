@@ -32,4 +32,4 @@ ARTICLE: "html.streams" "HTML streams"
     with-html-writer
 } ;
 
-ABOUT: "html.streams"
+about: "html.streams"

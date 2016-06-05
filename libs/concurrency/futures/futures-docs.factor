@@ -28,4 +28,4 @@ ARTICLE: "concurrency.futures" "Futures"
     ?future-timeout
 } ;
 
-ABOUT: "concurrency.futures"
+about: "concurrency.futures"

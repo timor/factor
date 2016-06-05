@@ -46,4 +46,4 @@ ARTICLE: "z-algorithm" "Z algorithm"
 { $snippet "Θ(n^2)" } " time."
 ;
 
-ABOUT: "z-algorithm"
+about: "z-algorithm"

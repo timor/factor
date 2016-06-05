@@ -464,4 +464,4 @@ $nl
 }
 ;
 
-ABOUT: "graphviz.notation"
+about: "graphviz.notation"

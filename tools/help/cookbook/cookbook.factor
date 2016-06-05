@@ -318,4 +318,4 @@ ARTICLE: "cookbook" "Factor cookbook"
     "cookbook-next"
 } ;
 
-ABOUT: "cookbook"
+about: "cookbook"

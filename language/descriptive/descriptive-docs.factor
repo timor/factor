@@ -29,4 +29,4 @@ $nl
     postpone: DESCRIPTIVE::
 } ;
 
-ABOUT: "descriptive"
+about: "descriptive"

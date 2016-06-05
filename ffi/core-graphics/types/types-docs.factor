@@ -27,4 +27,4 @@ ARTICLE: "core-graphics.types" "Core Graphics types"
     <CGSize>
 } ;
 
-ABOUT: "core-graphics.types"
+about: "core-graphics.types"

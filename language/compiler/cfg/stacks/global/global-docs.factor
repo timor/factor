@@ -22,4 +22,4 @@ ARTICLE: "compiler.cfg.stacks.global" "Global stack analysis"
 { $subsections avail anticip dead live pending }
 "The info they gather is used by " { $link finalize-stack-shuffling } " for optimal insertion of " { $link ##peek } " and " { $link ##replace } " instructions." ;
 
-ABOUT: "compiler.cfg.stacks.global"
+about: "compiler.cfg.stacks.global"

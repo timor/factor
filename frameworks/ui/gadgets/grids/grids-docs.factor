@@ -47,4 +47,4 @@ HELP: grid-remove
 { $errors "Throws an error if the indices are out of bounds." }
 { $side-effects "grid" } ;
 
-ABOUT: "ui-grid-layout"
+about: "ui-grid-layout"

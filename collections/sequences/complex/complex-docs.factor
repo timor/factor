@@ -9,7 +9,7 @@ ARTICLE: "sequences.complex" "Complex virtual sequences"
     <complex-sequence>
 } ;
 
-ABOUT: "sequences.complex"
+about: "sequences.complex"
 
 HELP: complex-sequence
 { $class-description "Sequence wrapper class that transforms a sequence of " { $link real } " number values into a sequence of " { $link complex } " values, treating the underlying sequence as pairs of alternating real and imaginary values."  }

@@ -3,7 +3,7 @@
 USING: help.syntax help.markup io strings xml.data multiline ;
 in: xml.writer
 
-ABOUT: "xml.writer"
+about: "xml.writer"
 
 ARTICLE: "xml.writer" "Writing XML"
 "These words are used to print XML preserving whitespace in text nodes"

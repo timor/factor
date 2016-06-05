@@ -25,4 +25,4 @@ ARTICLE: "compiler.tree.propagation.inlining" "Method inlining and dispatch elim
 "Splicing nodes:"
 { $subsections splicing-call open-code-#call splicing-body } ;
 
-ABOUT: "compiler.tree.propagation.inlining"
+about: "compiler.tree.propagation.inlining"

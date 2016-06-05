@@ -3,7 +3,7 @@
 USING: help.syntax help.markup math sequences ;
 in: math.bits
 
-ABOUT: "math.bits"
+about: "math.bits"
 
 ARTICLE: "math.bits" "Integer virtual sequences"
 "The " { $vocab-link "math.bits" } " vocabulary implements words that represent a positive integer as a virtual sequence of bits in order of ascending significance, e.g. " { $snippet "{ f f f t }" } " is " { $snippet "8" } "."

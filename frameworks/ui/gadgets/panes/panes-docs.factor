@@ -89,4 +89,4 @@ $nl
     make-pane
 } ;
 
-ABOUT: "ui.gadgets.panes"
+about: "ui.gadgets.panes"

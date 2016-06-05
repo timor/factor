@@ -23,4 +23,4 @@ ARTICLE: "ui-book-layout" "Book layouts"
     <empty-book>
 } ;
 
-ABOUT: "ui-book-layout"
+about: "ui-book-layout"

@@ -43,4 +43,4 @@ ARTICLE: "concurrency.distributed" "Distributed message passing"
 "The " { $vocab-link "serialize" } " vocabulary is used to convert Factor objects to byte arrays for transfer over a socket."
 { $subsections "concurrency.distributed.example" } ;
 
-ABOUT: "concurrency.distributed"
+about: "concurrency.distributed"

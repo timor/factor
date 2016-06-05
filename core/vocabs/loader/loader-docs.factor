@@ -69,7 +69,7 @@ $nl
 }
 { $see-also "vocabularies" "parser" "source-files" } ;
 
-ABOUT: "vocabs.loader"
+about: "vocabs.loader"
 
 HELP: load-vocab
 { $values { "name" "a string" } { "vocab" { $maybe hashtable } } }

@@ -87,4 +87,4 @@ ARTICLE: "ui-operations" "Operations"
     $operation
 } ;
 
-ABOUT: "ui-operations"
+about: "ui-operations"

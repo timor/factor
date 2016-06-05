@@ -32,7 +32,7 @@ Example:
 
 ;
 
-ABOUT: "ui.gadgets.plot"
+about: "ui.gadgets.plot"
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

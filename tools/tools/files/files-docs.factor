@@ -14,4 +14,4 @@ ARTICLE: "tools.files" "Files tools"
 "Listing a directory:"
 { $subsections directory. } ;
 
-ABOUT: "tools.files"
+about: "tools.files"

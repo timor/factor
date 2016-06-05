@@ -119,4 +119,4 @@ ARTICLE: "xml.errors" "XML parsing errors"
 $nl
 "Note that, in parsing an XML document, only the first error is reported." ;
 
-ABOUT: "xml.errors"
+about: "xml.errors"

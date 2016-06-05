@@ -53,4 +53,4 @@ $nl
     copy-trees-into
 } ;
 
-ABOUT: "io.directories.hierarchy"
+about: "io.directories.hierarchy"

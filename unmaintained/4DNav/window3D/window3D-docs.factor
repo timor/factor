@@ -9,4 +9,4 @@ ARTICLE: "4DNav.window3D" "Window3D"
 { $vocab-link "4DNav.window3D" }
 ;
 
-ABOUT: "4DNav.window3D"
+about: "4DNav.window3D"

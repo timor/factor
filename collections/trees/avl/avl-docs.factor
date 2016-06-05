@@ -26,4 +26,4 @@ ARTICLE: "trees.avl" "AVL trees"
     postpone: AVL{
 } ;
 
-ABOUT: "trees.avl"
+about: "trees.avl"

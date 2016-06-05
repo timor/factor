@@ -1,4 +1,4 @@
 in: logging.server
 USING: help.syntax ;
 
-ABOUT: "logging.server"
+about: "logging.server"

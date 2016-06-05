@@ -1,7 +1,7 @@
 USING: help.syntax help.markup io byte-arrays quotations ;
 in: io.streams.byte-array
 
-ABOUT: "io.streams.byte-array"
+about: "io.streams.byte-array"
 
 ARTICLE: "io.streams.byte-array" "Byte-array streams"
 "Byte array streams:"

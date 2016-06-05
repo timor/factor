@@ -16,4 +16,4 @@ ARTICLE: "ui.gadgets.labeled" "Labeled gadgets"
     <labeled-gadget>
 } ;
 
-ABOUT: "ui.gadgets.labeled"
+about: "ui.gadgets.labeled"

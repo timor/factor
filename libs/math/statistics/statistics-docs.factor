@@ -365,7 +365,7 @@ ARTICLE: "math.statistics" "Statistics"
 "Computing cumulative sequences:"
 { $subsections "cumulative" } ;
 
-ABOUT: "math.statistics"
+about: "math.statistics"
 
 { var-ddof population-var sample-var } related-words
 { std-ddof population-std sample-std } related-words

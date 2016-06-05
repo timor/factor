@@ -38,4 +38,4 @@ ARTICLE: "models.combinators" "Extending models"
 "Also, it provides methods of manipulating and combining models, expecially useful when programming user interfaces: "
 "The output models of some gadgets (see " { $vocab-link "ui.gadgets.controls" } " ) can be manipulated and used as the input models of others. " ;
 
-ABOUT: "models.combinators"
+about: "models.combinators"

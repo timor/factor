@@ -24,4 +24,4 @@ ARTICLE: "compiler.cfg.linear-scan" "Linear-scan register allocation"
 "Optimization pass entry point:"
 { $subsections linear-scan } ;
 
-ABOUT: "compiler.cfg.linear-scan"
+about: "compiler.cfg.linear-scan"

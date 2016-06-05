@@ -62,4 +62,4 @@ ARTICLE: "ui.gadgets.scrollers" "Scroller gadgets"
     find-scroller
 } ;
 
-ABOUT: "ui.gadgets.scrollers"
+about: "ui.gadgets.scrollers"

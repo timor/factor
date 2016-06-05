@@ -200,4 +200,4 @@ ARTICLE: "classes.struct" "Struct classes"
     "classes.struct.c"
 } ;
 
-ABOUT: "classes.struct"
+about: "classes.struct"

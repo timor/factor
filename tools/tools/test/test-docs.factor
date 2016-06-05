@@ -50,7 +50,7 @@ $nl
     "tools.test.run"
 } ;
 
-ABOUT: "tools.test"
+about: "tools.test"
 
 HELP: unit-test
 { $syntax "{ output } [ input ] unit-test" }

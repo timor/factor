@@ -13,7 +13,7 @@ $nl
 { $subsections make-mirror }
 { $see-also "slots" } ;
 
-ABOUT: "mirrors"
+about: "mirrors"
 
 HELP: mirror
 { $class-description "An associative structure which wraps an object and presents itself as a mapping from slot names to the object's slot values. Mirrors are used to build reflective developer tools."

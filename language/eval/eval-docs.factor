@@ -70,4 +70,4 @@ $nl
 { $subsections "eval-vocabs" eval>string }
 ;
 
-ABOUT: "eval"
+about: "eval"
