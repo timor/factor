@@ -76,7 +76,7 @@ M:: trails-gadget draw-gadget* ( GADGET -- )
     T{ rgba f 1 1 1 0.4 } \ fill-color set   ! White, with some transparency
     T{ rgba f 0 0 0 0   } \ stroke-color set ! no stroke
 
-    COLOR: black gl-clear
+    color: black gl-clear
 
     GADGET points>> [ dot ] each-percent ;
 

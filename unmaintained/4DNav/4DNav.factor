@@ -503,17 +503,17 @@ M: space adsoda-display-model
         <pile>
             0.5 >>align    
             menu-4D add-gadget 
-            COLOR: purple s:<solid> >>interior
+            color: purple s:<solid> >>interior
             "4D movements" <labeled-gadget>
         f track-add
         <pile>
             0.5 >>align
             { 2 2 } >>gap
             menu-3D add-gadget
-            COLOR: purple s:<solid> >>interior
+            color: purple s:<solid> >>interior
             "Camera 3D" <labeled-gadget>
         f track-add      
-        COLOR: gray s:<solid> >>interior
+        color: gray s:<solid> >>interior
  ;
  
 : viewer-windows* ( --  )

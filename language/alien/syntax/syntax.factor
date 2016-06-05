@@ -9,6 +9,7 @@ in: alien.syntax
 SYNTAX: DLL" lexer get skip-blank parse-string dlopen suffix! ;
 
 SYNTAX: ALIEN: 16 scan-base <alien> suffix! ;
+SYNTAX: alien: 16 scan-base <alien> suffix! ;
 
 SYNTAX: BAD-ALIEN <bad-alien> suffix! ;
 

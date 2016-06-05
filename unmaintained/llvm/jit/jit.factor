@@ -19,11 +19,11 @@ TUPLE: jit ee mps ;
 
 : (remove-functions) ( function -- )
     current-jit ee>> value>> over LLVMFreeMachineCodeForFunction
-    LLVMGetNextFunction dup ALIEN: 0 = [ drop ] [ (remove-functions) ] if ;
+    LLVMGetNextFunction dup alien: 0 = [ drop ] [ (remove-functions) ] if ;
 
 : remove-functions ( module -- )
     ! free machine code for each function in module
-    LLVMGetFirstFunction dup ALIEN: 0 = [ drop ] [ (remove-functions) ] if ;
+    LLVMGetFirstFunction dup alien: 0 = [ drop ] [ (remove-functions) ] if ;
 
 : remove-provider ( provider -- )
     current-jit ee>> value>> swap value>> f void* <ref> f void* <ref>

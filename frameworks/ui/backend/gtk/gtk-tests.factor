@@ -5,13 +5,13 @@ in: ui.backend.gtk.tests
 : gdk-key-release-event ( -- event )
     S{ GdkEventKey
        { type 9 }
-       { window ALIEN: 1672900 }
+       { window alien: 1672900 }
        { send_event 0 }
        { time 1332590199 }
        { state 17 }
        { keyval 72 }
        { length 1 }
-       { string ALIEN: 1b25c80 }
+       { string alien: 1b25c80 }
        { hardware_keycode 43 }
        { group 0 }
        { is_modifier 0 }
@@ -20,13 +20,13 @@ in: ui.backend.gtk.tests
 : gdk-key-press-event ( -- event )
     S{ GdkEventKey
        { type 8 }
-       { window ALIEN: 16727e0 }
+       { window alien: 16727e0 }
        { send_event 0 }
        { time 1332864912 }
        { state 16 }
        { keyval 65471 }
        { length 0 }
-       { string ALIEN: 19c9700 }
+       { string alien: 19c9700 }
        { hardware_keycode 68 }
        { group 0 }
        { is_modifier 0 }
@@ -35,13 +35,13 @@ in: ui.backend.gtk.tests
 : gdk-space-key-press-event ( -- event )
     S{ GdkEventKey
        { type 8 }
-       { window ALIEN: 1b66360 }
+       { window alien: 1b66360 }
        { send_event 0 }
        { time 28246628 }
        { state 0 }
        { keyval 32 }
        { length 0 }
-       { string ALIEN: 20233b0 }
+       { string alien: 20233b0 }
        { hardware_keycode 64 }
        { group 0 }
        { is_modifier 1 }

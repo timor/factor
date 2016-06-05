@@ -31,7 +31,7 @@ symbol: language
     [ deep-children>string ] [ attrs>> "href" of ] bi
     wikipedia-url H{
         { font-name "monospace" }
-        { foreground COLOR: blue }
+        { foreground color: blue }
     } [ write-object ] with-style ;
 
 : item. ( tag -- )

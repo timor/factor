@@ -12,8 +12,8 @@ in: processing.shapes
 symbol: fill-color
 symbol: stroke-color
 
-COLOR: black stroke-color set-global
-COLOR: white fill-color set-global
+color: black stroke-color set-global
+color: white fill-color set-global
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

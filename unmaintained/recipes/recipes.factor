@@ -15,9 +15,9 @@ STORED-TUPLE: recipe { title { VARCHAR 100 } } { votes INTEGER } { txt TEXT } { 
 
 : interface ( -- book ) [ 
      [
-        [ $ TOOLBAR $ ] <hbox> COLOR: AliceBlue <solid> >>interior ,
+        [ $ TOOLBAR $ ] <hbox> color: AliceBlue <solid> >>interior ,
         [ "Genres:" <label> , <spacer> $ ALL $ $ GENRES $ ] <hbox>
-            { 5 0 } >>gap COLOR: gray <solid> >>interior ,
+            { 5 0 } >>gap color: gray <solid> >>interior ,
         $ RECIPES $
      ] <vbox> ,
      [
