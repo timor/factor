@@ -1,7 +1,7 @@
 USING: accessors classes.struct continuations kernel kernel.private literals
 math memory sequences system threads.private tools.dispatch.private
 tools.test ;
-QUALIFIED: vm
+qualified: vm
 in: compiler.tests.callstack-overflow
 
 ! This test file is for all callstack overflow-related problems.

@@ -7,11 +7,11 @@ random sequences sequences.generalizations
 tools.image-analyzer.gc-info tools.image-analyzer.utils tools.test vm
 vocabs words ;
 in: tools.image-analyzer.gc-info.tests
-QUALIFIED: cpu.x86.features.private
-QUALIFIED: crypto.aes.utils
-QUALIFIED: effects
-QUALIFIED: gtk-samples.opengl
-QUALIFIED: opencl
+qualified: cpu.x86.features.private
+qualified: crypto.aes.utils
+qualified: effects
+qualified: gtk-samples.opengl
+qualified: opencl
 
 : normal? ( word -- ? )
     { [ generic? ] [ primitive? ] [ inline? ] [ no-compile? ] } 1|| not ;

@@ -3,7 +3,7 @@ formatting fry grouping io io.crlf io.encodings.ascii io.encodings.binary
 io.encodings.string io.encodings.utf7 io.encodings.utf8 io.sockets
 io.sockets.secure io.streams.duplex io.streams.string kernel math math.parser
 sequences splitting strings ;
-QUALIFIED: pcre
+qualified: pcre
 in: imap
 
 ERROR: imap4-error ind data ;

@@ -1,5 +1,5 @@
 USING: assocs graphs kernel namespaces sorting tools.test ;
-QUALIFIED: sets
+qualified: sets
 
 H{ } "g" set
 { 1 2 3 } "v" set

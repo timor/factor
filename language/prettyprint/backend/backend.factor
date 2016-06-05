@@ -7,7 +7,7 @@ hash-sets hashtables io.pathnames io.styles kernel make math
 math.order math.parser namespaces prettyprint.config
 prettyprint.custom prettyprint.sections prettyprint.stylesheet
 quotations sbufs sequences strings vectors words ;
-QUALIFIED: sets
+qualified: sets
 in: prettyprint.backend
 
 M: effect pprint* effect>string text ;

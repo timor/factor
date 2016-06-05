@@ -5,7 +5,7 @@ compiler.cfg.ssa.destruction.leaders compiler.cfg.utilities
 cpu.architecture cpu.x86.assembler.operands kernel math namespaces
 sequences system tools.test ;
 in: compiler.cfg.liveness.tests
-QUALIFIED: sets
+qualified: sets
 
 ! compute-edge-live-in
 { H{ } } [

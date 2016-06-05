@@ -8,7 +8,7 @@ compiler.cfg.renaming.functor compiler.cfg.ssa.destruction.leaders
 compiler.cfg.utilities fry heaps kernel make math namespaces sequences
 ;
 in: compiler.cfg.linear-scan.assignment
-QUALIFIED: sets
+qualified: sets
 
 ! This contains both active and inactive intervals; any interval
 ! such that start <= insn# <= end is in this set.

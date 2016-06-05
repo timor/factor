@@ -148,7 +148,7 @@ ARTICLE: "c-types.ambiguity" "Word name clashes with C types"
   "FUNCTION: float magic_number ( ) ;"
   "magic_number 3.0 + ."
 }
-"The correct solution is to use one of " { $link postpone: FROM: } ", " { $link postpone: QUALIFIED: } " or " { $link postpone: QUALIFIED-WITH: } " to disambiguate word lookup:"
+"The correct solution is to use one of " { $link postpone: FROM: } ", " { $link postpone: qualified: } " or " { $link postpone: QUALIFIED-WITH: } " to disambiguate word lookup:"
 { $code
   "USING: alien.syntax math prettyprint ;"
   "QUALIFIED-WITH: alien.c-types c"

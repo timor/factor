@@ -8,7 +8,7 @@ USING: kernel alien.c-types combinators namespaces make arrays
        ui.gadgets.handler ui.gestures assocs ui.gadgets macros
        specialized-arrays.double ;
 
-QUALIFIED: syntax
+qualified: syntax
 
 in: cfdg
 

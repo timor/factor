@@ -1,5 +1,5 @@
 USING: accessors alien.c-types alien.syntax system vocabs ;
-QUALIFIED: sequences
+qualified: sequences
 in: unix.types
 
 TYPEDEF: uchar u_int8_t ;

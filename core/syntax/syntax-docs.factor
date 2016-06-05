@@ -529,19 +529,19 @@ HELP: USING:
 { $notes "If adding the vocabularies introduces ambiguity, referencing the ambiguous names will throw a " { $link ambiguous-use-error } "." }
 { $errors "Throws an error if one of the vocabularies does not exist." } ;
 
-HELP: QUALIFIED:
-{ $syntax "QUALIFIED: vocab" }
+HELP: qualified:
+{ $syntax "qualified: vocab" }
 { $description "Adds the vocabulary's words, prefixed with the vocabulary name, to the search path." }
 { $notes "If adding the vocabulary introduces ambiguity, the vocabulary will take precedence when resolving any ambiguous names. This is a rare case; for example, suppose a vocabulary " { $snippet "fish" } " defines a word named " { $snippet "go:fishing" } ", and a vocabulary named " { $snippet "go" } " defines a word named " { $snippet "fishing" } ". Then, the following will call the latter word:"
   { $code
   "use: fish"
-  "QUALIFIED: go"
+  "qualified: go"
   "go:fishing"
   }
 }
 { $examples { $example
     "USING: prettyprint ;"
-    "QUALIFIED: math"
+    "qualified: math"
     "1 2 math:+ ."
     "3"
 } } ;

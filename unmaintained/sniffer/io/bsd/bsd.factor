@@ -4,7 +4,7 @@ USING: alien.c-types alien.syntax destructors hexdump io
 io.buffers io.nonblocking io.sockets
 io.unix.backend io.unix.files kernel libc locals math qualified
 sequences io.sniffer.backend ;
-QUALIFIED: unix
+qualified: unix
 in: io.sniffer.bsd
 
 M: unix-io destruct-handle ( obj -- ) unix:close ;

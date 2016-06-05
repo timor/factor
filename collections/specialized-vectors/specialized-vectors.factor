@@ -6,7 +6,7 @@ prettyprint.custom sequences specialized-arrays vocabs.generated
 vocabs.loader vocabs.parser ;
 FROM: sequences.private => nth-unsafe ;
 FROM: specialized-arrays.private => nth-c-ptr direct-like ;
-QUALIFIED: vectors.functor
+qualified: vectors.functor
 in: specialized-vectors
 
 mixin: specialized-vector

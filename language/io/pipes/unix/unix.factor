@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.data system kernel unix math sequences
 io.backend.unix io.ports libc specialized-arrays accessors unix.ffi ;
-QUALIFIED: io.pipes
+qualified: io.pipes
 specialized-array: int
 in: io.pipes.unix
 

@@ -1,7 +1,7 @@
 USING: accessors arrays assocs continuations http.client kernel
 literals math.ranges pcre pcre.ffi pcre.private random sequences
 system tools.test ;
-QUALIFIED: regexp
+qualified: regexp
 in: pcre.tests
 
 { { "Bords" "words" "word" } } [

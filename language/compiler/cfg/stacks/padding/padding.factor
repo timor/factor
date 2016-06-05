@@ -4,7 +4,7 @@ USING: accessors arrays assocs compiler.cfg.dataflow-analysis
 compiler.cfg.instructions compiler.cfg.linearization compiler.cfg.registers
 compiler.cfg.stacks.local fry kernel math math.order namespaces
 sequences ;
-QUALIFIED: sets
+qualified: sets
 in: compiler.cfg.stacks.padding
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

@@ -246,7 +246,7 @@ SYNTAX: M:
     define ;
 
 ! Definition protocol. We qualify core generics here
-QUALIFIED: syntax
+qualified: syntax
 
 syntax:M: generic definer drop \ GENERIC: f ;
 

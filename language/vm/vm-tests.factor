@@ -1,6 +1,6 @@
 USING: accessors classes.struct kernel kernel.private math math.order
 tools.test ;
-QUALIFIED: vm
+qualified: vm
 in: vm.tests
 
 : get-ctx ( -- ctx )

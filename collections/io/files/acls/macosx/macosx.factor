@@ -5,7 +5,7 @@ classes.struct combinators destructors io.backend io.files
 io.files.acls.macosx.ffi kernel libc literals locals math.order
 prettyprint sequences unix unix.ffi unix.groups unix.types
 unix.users ;
-QUALIFIED: io
+qualified: io
 in: io.files.acls.macosx
 
 <PRIVATE

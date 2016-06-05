@@ -5,7 +5,7 @@ byte-arrays classes.struct combinators combinators.short-circuit
 continuations fry grouping io.encodings.utf8 kernel math
 math.parser namespaces sequences splitting strings system unix
 unix.ffi vocabs ;
-QUALIFIED: unix.ffi
+qualified: unix.ffi
 in: unix.users
 
 TUPLE: passwd user-name password uid gid gecos dir shell ;

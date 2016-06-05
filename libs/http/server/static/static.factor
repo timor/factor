@@ -10,7 +10,7 @@ io.files.info io.directories io.pathnames io.encodings.binary
 fry xml.entities destructors urls html xml.syntax
 html.templates.fhtml http http.server http.server.responses
 http.server.redirection xml.writer ;
-QUALIFIED: sets
+qualified: sets
 
 TUPLE: file-responder root hook special index-names allow-listings ;
 

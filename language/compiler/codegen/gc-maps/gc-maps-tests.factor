@@ -3,7 +3,7 @@ compiler.cfg.instructions compiler.cfg.stack-frame compiler.cfg.utilities
 compiler.codegen.gc-maps compiler.codegen.relocation cpu.architecture
 cpu.x86 byte-arrays make namespaces kernel layouts math sequences
 specialized-arrays system tools.test ;
-QUALIFIED: vm
+qualified: vm
 specialized-array: uint
 in: compiler.codegen.gc-maps.tests
 

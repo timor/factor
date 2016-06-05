@@ -1,5 +1,5 @@
 USING: alien alien.syntax eval math tools.test ;
-QUALIFIED: alien.c-types
+qualified: alien.c-types
 in: compiler.tests.redefine24
 
 TYPEDEF: alien.c-types:int type-1 ;

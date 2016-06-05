@@ -3,7 +3,7 @@ hashtables init io.encodings.utf8 kernel namespaces
 python.errors python.ffi python.objects sequences
 specialized-arrays strings vectors ;
 in: python
-QUALIFIED: math
+qualified: math
 
 ERROR: python-error type message traceback ;
 
