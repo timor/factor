@@ -7,35 +7,35 @@ library: advapi32
 CONSTANT: MS_DEF_DH_SCHANNEL_PROV "Microsoft DH Schannel Cryptographic Provider" ;
 
 CONSTANT: MS_DEF_DSS_DH_PROV
-    "Microsoft Base DSS and Diffie-Hellman Cryptographic Provider"
+    "Microsoft Base DSS and Diffie-Hellman Cryptographic Provider" ;
 
 CONSTANT: MS_DEF_DSS_PROV
-    "Microsoft Base DSS Cryptographic Provider"
+    "Microsoft Base DSS Cryptographic Provider" ;
 
 CONSTANT: MS_DEF_PROV
-    "Microsoft Base Cryptographic Provider v1.0"
+    "Microsoft Base Cryptographic Provider v1.0" ;
 
 CONSTANT: MS_DEF_RSA_SCHANNEL_PROV
-    "Microsoft RSA Schannel Cryptographic Provider"
+    "Microsoft RSA Schannel Cryptographic Provider" ;
 
 ! Unsupported (!)
 CONSTANT: MS_DEF_RSA_SIG_PROV
-    "Microsoft RSA Signature Cryptographic Provider"
+    "Microsoft RSA Signature Cryptographic Provider" ;
 
 CONSTANT: MS_ENH_DSS_DH_PROV
-    "Microsoft Enhanced DSS and Diffie-Hellman Cryptographic Provider"
+    "Microsoft Enhanced DSS and Diffie-Hellman Cryptographic Provider" ;
 
 CONSTANT: MS_ENH_RSA_AES_PROV
-    "Microsoft Enhanced RSA and AES Cryptographic Provider"
+    "Microsoft Enhanced RSA and AES Cryptographic Provider" ;
 
 CONSTANT: MS_ENHANCED_PROV
-    "Microsoft Enhanced Cryptographic Provider v1.0"
+    "Microsoft Enhanced Cryptographic Provider v1.0" ;
 
 CONSTANT: MS_SCARD_PROV
-    "Microsoft Base Smart Card Crypto Provider"
+    "Microsoft Base Smart Card Crypto Provider" ;
 
 CONSTANT: MS_STRONG_PROV
-    "Microsoft Strong Cryptographic Provider"
+    "Microsoft Strong Cryptographic Provider" ;
 
 STRUCT: ACL
     { AclRevision BYTE }
@@ -320,7 +320,7 @@ CONSTANT: TOKEN_WRITE
         TOKEN_ADJUST_PRIVILEGES
         TOKEN_ADJUST_GROUPS
         TOKEN_ADJUST_DEFAULT
-    }
+    } ;
 
 CONSTANT: TOKEN_ALL_ACCESS
     flags{
@@ -334,7 +334,7 @@ CONSTANT: TOKEN_ALL_ACCESS
         TOKEN_ADJUST_GROUPS
         TOKEN_ADJUST_SESSIONID
         TOKEN_ADJUST_DEFAULT
-    }
+    } ;
 
 CONSTANT: HKEY_CLASSES_ROOT        0x80000000 ;
 CONSTANT: HKEY_CURRENT_USER        0x80000001 ;
@@ -830,7 +830,7 @@ FUNCTION: BOOL AdjustTokenPrivileges ( HANDLE TokenHandle,
                                PTOKEN_PRIVILEGES NewState,
                                DWORD BufferLength,
                                PTOKEN_PRIVILEGES PreviousState,
-                               PDWORD ReturnLength )
+                               PDWORD ReturnLength ) ;
 
 FUNCTION: BOOL AllocateAndInitializeSid (
                 PSID_IDENTIFIER_AUTHORITY pIdentifierAuthority,
@@ -843,7 +843,7 @@ FUNCTION: BOOL AllocateAndInitializeSid (
                 DWORD dwSubAuthority5,
                 DWORD dwSubAuthority6,
                 DWORD dwSubAuthority7,
-                PSID* pSid )
+                PSID* pSid ) ;
 
 ! : AllocateLocallyUniqueId ;
 ! : AreAllAccessesGranted ;
@@ -953,7 +953,7 @@ FUNCTION: BOOL CryptAcquireContextW ( HCRYPTPROV* phProv,
                                       LPCTSTR pszContainer,
                                       LPCTSTR pszProvider,
                                       DWORD dwProvType,
-                                      DWORD dwFlags )
+                                      DWORD dwFlags ) ;
 
 ALIAS: CryptAcquireContext CryptAcquireContextW ;
 
@@ -1162,7 +1162,7 @@ FUNCTION: BOOL InitializeSecurityDescriptor ( PSECURITY_DESCRIPTOR pSecurityDesc
 ! : LookupPrivilegeValueA ;
 FUNCTION: BOOL LookupPrivilegeValueW ( LPCTSTR lpSystemName,
                                LPCTSTR lpName,
-                               PLUID lpLuid )
+                               PLUID lpLuid ) ;
 ALIAS: LookupPrivilegeValue LookupPrivilegeValueW ;
 
 ! : LookupSecurityDescriptorPartsA ;
@@ -1259,7 +1259,7 @@ ALIAS: LookupPrivilegeValue LookupPrivilegeValueW ;
 
 FUNCTION: BOOL OpenProcessToken ( HANDLE ProcessHandle,
                                   DWORD DesiredAccess,
-                                  PHANDLE TokenHandle )
+                                  PHANDLE TokenHandle ) ;
 ! : OpenSCManagerA ;
 ! : OpenSCManagerW ;
 ! : OpenServiceA ;
@@ -1312,7 +1312,7 @@ FUNCTION: LONG RegDeleteKeyExW (
         LPSECURITY_ATTRIBUTES lpSecurityAttributes,
         PHKEY phkResult,
         LPDWORD lpdwDisposition
-    )
+    ) ;
 
 ALIAS: RegDeleteKeyEx RegDeleteKeyExW ;
 
@@ -1331,7 +1331,7 @@ FUNCTION: LONG RegEnumKeyExW (
         LPTSTR lpClass,
         LPDWORD lpcClass,
         PFILETIME lpftLastWriteTime
-    )
+    ) ;
 ALIAS: RegEnumKeyEx RegEnumKeyExW ;
 
 ! : RegEnumKeyW ;
@@ -1346,7 +1346,7 @@ FUNCTION: LONG RegEnumValueW (
         LPDWORD lpType,
         LPBYTE lpData,
         LPDWORD lpcbData
-    )
+    ) ;
 
 ALIAS: RegEnumValue RegEnumValueW ;
 
@@ -1377,7 +1377,7 @@ FUNCTION: LONG RegQueryInfoKeyW (
         LPDWORD lpcMaxValueLen,
         LPDWORD lpcbSecurityDescriptor,
         PFILETIME lpftLastWriteTime
-    )
+    ) ;
 ALIAS: RegQueryInfoKey RegQueryInfoKeyW ;
 ! : RegQueryMultipleValuesA ;
 ! : RegQueryMultipleValuesW ;

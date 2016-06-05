@@ -22,14 +22,14 @@ CONSTANT: D3DX11_SCAN_DIRECTION_FORWARD  1 ;
 CONSTANT: D3DX11_SCAN_DIRECTION_BACKWARD 2 ;
 TYPEDEF: int D3DX11_SCAN_DIRECTION ;
 
-COM-INTERFACE: ID3DX11Scan IUnknown {5089b68f-e71d-4d38-be8e-f363b95a9405}
+COM-INTERFACE: ID3DX11Scan IUnknown "{5089b68f-e71d-4d38-be8e-f363b95a9405}"
     HRESULT SetScanDirection ( D3DX11_SCAN_DIRECTION Direction )
     HRESULT Scan ( D3DX11_SCAN_DATA_TYPE ElementType, D3DX11_SCAN_OPCODE OpCode, UINT ElementScanSize, ID3D11UnorderedAccessView* pSrc, ID3D11UnorderedAccessView* pDst )
     HRESULT Multiscan ( D3DX11_SCAN_DATA_TYPE ElementType, D3DX11_SCAN_OPCODE OpCode, UINT ElementScanSize, UINT ElementScanPitch, UINT ScanCount, ID3D11UnorderedAccessView* pSrc, ID3D11UnorderedAccessView* pDst ) ;
 
 FUNCTION: HRESULT D3DX11CreateScan ( ID3D11DeviceContext* pDeviceContext, UINT MaxElementScanSize, UINT MaxScanCount, ID3DX11Scan** ppScan ) ;
 
-COM-INTERFACE: ID3DX11SegmentedScan IUnknown {a915128c-d954-4c79-bfe1-64db923194d6}
+COM-INTERFACE: ID3DX11SegmentedScan IUnknown "{a915128c-d954-4c79-bfe1-64db923194d6}"
     HRESULT SetScanDirection ( D3DX11_SCAN_DIRECTION Direction )
     HRESULT SegScan ( D3DX11_SCAN_DATA_TYPE ElementType, D3DX11_SCAN_OPCODE OpCode, UINT ElementScanSize, ID3D11UnorderedAccessView* pSrc, ID3D11UnorderedAccessView* pSrcElementFlags, ID3D11UnorderedAccessView* pDst ) ;
 
@@ -39,7 +39,7 @@ CONSTANT: D3DX11_FFT_MAX_PRECOMPUTE_BUFFERS 4 ;
 CONSTANT: D3DX11_FFT_MAX_TEMP_BUFFERS       4 ;
 CONSTANT: D3DX11_FFT_MAX_DIMENSIONS         32 ;
 
-COM-INTERFACE: ID3DX11FFT IUnknown {b3f7a938-4c93-4310-a675-b30d6de50553}
+COM-INTERFACE: ID3DX11FFT IUnknown "{b3f7a938-4c93-4310-a675-b30d6de50553}"
     HRESULT SetForwardScale ( FLOAT ForwardScale )
     FLOAT GetForwardScale ( )
     HRESULT SetInverseScale ( FLOAT InverseScale )

@@ -40,7 +40,7 @@ TYPEDEF: D3DXFRAME* LPD3DXFRAME ;
 c-type: ID3DXAllocateHierarchy
 TYPEDEF: ID3DXAllocateHierarchy* LPD3DXALLOCATEHIERARCHY ;
 
-COM-INTERFACE: ID3DXAllocateHierarchy f {00000000-0000-0000-0000-000000000000}
+COM-INTERFACE: ID3DXAllocateHierarchy f "{00000000-0000-0000-0000-000000000000}"
     HRESULT CreateFrame ( LPCSTR Name, LPD3DXFRAME* ppNewFrame )
     HRESULT CreateMeshContainer (
         LPCSTR               Name,
@@ -57,7 +57,7 @@ COM-INTERFACE: ID3DXAllocateHierarchy f {00000000-0000-0000-0000-000000000000}
 c-type: ID3DXLoadUserData
 TYPEDEF: ID3DXLoadUserData* LPD3DXLOADUSERDATA ;
 
-COM-INTERFACE: ID3DXLoadUserData f {00000000-0000-0000-0000-000000000000}
+COM-INTERFACE: ID3DXLoadUserData f "{00000000-0000-0000-0000-000000000000}"
     HRESULT LoadTopLevelData ( LPD3DXFILEDATA pXofChildData )
     HRESULT LoadFrameChildData ( LPD3DXFRAME pFrame,
                                  LPD3DXFILEDATA pXofChildData )
@@ -67,7 +67,7 @@ COM-INTERFACE: ID3DXLoadUserData f {00000000-0000-0000-0000-000000000000}
 c-type: ID3DXSaveUserData
 TYPEDEF: ID3DXSaveUserData* LPD3DXSAVEUSERDATA ;
 
-COM-INTERFACE: ID3DXSaveUserData f {00000000-0000-0000-0000-000000000000}
+COM-INTERFACE: ID3DXSaveUserData f "{00000000-0000-0000-0000-000000000000}"
     HRESULT AddFrameChildData (
         D3DXFRAME*           pFrame,
         LPD3DXFILESAVEOBJECT pXofSave,
@@ -90,7 +90,7 @@ CONSTANT: D3DXCALLBACK_SEARCH_FORCE_DWORD                0x7fffffff ;
 c-type: ID3DXAnimationSet
 TYPEDEF: ID3DXAnimationSet* LPD3DXANIMATIONSET ;
 
-COM-INTERFACE: ID3DXAnimationSet IUnknown {698CFB3F-9289-4d95-9A57-33A94B5A65F9}
+COM-INTERFACE: ID3DXAnimationSet IUnknown "{698CFB3F-9289-4d95-9A57-33A94B5A65F9}"
     LPCSTR GetName ( )
     double GetPeriod ( )
     double GetPeriodicPosition ( double Position )
@@ -137,7 +137,7 @@ CONSTANT: D3DXCOMPRESS_FORCE_DWORD 0x7fffffff ;
 c-type: ID3DXKeyframedAnimationSet
 TYPEDEF: ID3DXKeyframedAnimationSet* LPD3DXKEYFRAMEDANIMATIONSET ;
 
-COM-INTERFACE: ID3DXKeyframedAnimationSet ID3DXAnimationSet {FA4E8E3A-9786-407d-8B4C-5995893764AF}
+COM-INTERFACE: ID3DXKeyframedAnimationSet ID3DXAnimationSet "{FA4E8E3A-9786-407d-8B4C-5995893764AF}"
     D3DXPLAYBACK_TYPE GetPlaybackType ( )
     double GetSourceTicksPerSecond ( )
     UINT GetNumScaleKeys ( UINT Animation )
@@ -178,7 +178,7 @@ COM-INTERFACE: ID3DXKeyframedAnimationSet ID3DXAnimationSet {FA4E8E3A-9786-407d-
 c-type: ID3DXCompressedAnimationSet
 TYPEDEF: ID3DXCompressedAnimationSet* LPD3DXCOMPRESSEDANIMATIONSET ;
 
-COM-INTERFACE: ID3DXCompressedAnimationSet ID3DXAnimationSet {6CC2480D-3808-4739-9F88-DE49FACD8D4C}
+COM-INTERFACE: ID3DXCompressedAnimationSet ID3DXAnimationSet "{6CC2480D-3808-4739-9F88-DE49FACD8D4C}"
     D3DXPLAYBACK_TYPE GetPlaybackType ( )
     double GetSourceTicksPerSecond ( )
     HRESULT GetCompressedData ( LPD3DXBUFFER* ppCompressedData )
@@ -231,13 +231,13 @@ TYPEDEF: D3DXEVENTHANDLE* LPD3DXEVENTHANDLE ;
 c-type: ID3DXAnimationCallbackHandler
 TYPEDEF: ID3DXAnimationCallbackHandler* LPD3DXANIMATIONCALLBACKHANDLER ;
 
-COM-INTERFACE: ID3DXAnimationCallbackHandler f {00000000-0000-0000-0000-000000000000}
+COM-INTERFACE: ID3DXAnimationCallbackHandler f "{00000000-0000-0000-0000-000000000000}"
     HRESULT HandleCallback ( UINT Track, LPVOID pCallbackData ) ;
 
 c-type: ID3DXAnimationController
 TYPEDEF: ID3DXAnimationController* LPD3DXANIMATIONCONTROLLER ;
 
-COM-INTERFACE: ID3DXAnimationController IUnknown {AC8948EC-F86D-43e2-96DE-31FC35F96D9E}
+COM-INTERFACE: ID3DXAnimationController IUnknown "{AC8948EC-F86D-43e2-96DE-31FC35F96D9E}"
     UINT GetMaxNumAnimationOutputs ( )
     UINT GetMaxNumAnimationSets ( )
     UINT GetMaxNumTracks ( )
@@ -298,7 +298,7 @@ D3DXLoadMeshHierarchyFromXA
     LPD3DXLOADUSERDATA         pUserDataLoader,
     LPD3DXFRAME*               ppFrameHierarchy,
     LPD3DXANIMATIONCONTROLLER* ppAnimController
-    )
+    ) ;
 
 FUNCTION: HRESULT
 D3DXLoadMeshHierarchyFromXW
@@ -310,7 +310,7 @@ D3DXLoadMeshHierarchyFromXW
     LPD3DXLOADUSERDATA         pUserDataLoader,
     LPD3DXFRAME*               ppFrameHierarchy,
     LPD3DXANIMATIONCONTROLLER* ppAnimController
-    )
+    ) ;
 
 ALIAS: D3DXLoadMeshHierarchyFromX D3DXLoadMeshHierarchyFromXW ;
 
@@ -325,7 +325,7 @@ D3DXLoadMeshHierarchyFromXInMemory
     LPD3DXLOADUSERDATA         pUserDataLoader,
     LPD3DXFRAME*               ppFrameHierarchy,
     LPD3DXANIMATIONCONTROLLER* ppAnimController
-    )
+    ) ;
 
 FUNCTION: HRESULT
 D3DXSaveMeshHierarchyToFileA
@@ -335,7 +335,7 @@ D3DXSaveMeshHierarchyToFileA
     D3DXFRAME*                pFrameRoot,
     LPD3DXANIMATIONCONTROLLER pAnimcontroller,
     LPD3DXSAVEUSERDATA        pUserDataSaver
-    )
+    ) ;
 
 FUNCTION: HRESULT
 D3DXSaveMeshHierarchyToFileW
@@ -345,7 +345,7 @@ D3DXSaveMeshHierarchyToFileW
     D3DXFRAME*                pFrameRoot,
     LPD3DXANIMATIONCONTROLLER pAnimController,
     LPD3DXSAVEUSERDATA        pUserDataSaver
-    )
+    ) ;
 
 ALIAS: D3DXSaveMeshHierarchyToFile D3DXSaveMeshHierarchyToFileW ;
 
@@ -354,34 +354,34 @@ D3DXFrameDestroy
     (
     LPD3DXFRAME             pFrameRoot,
     LPD3DXALLOCATEHIERARCHY pAlloc
-    )
+    ) ;
 
 FUNCTION: HRESULT
 D3DXFrameAppendChild
     (
     LPD3DXFRAME pFrameParent,
     D3DXFRAME*  pFrameChild
-    )
+    ) ;
 
 FUNCTION: LPD3DXFRAME
 D3DXFrameFind
     (
     D3DXFRAME* pFrameRoot,
     LPCSTR     Name
-    )
+    ) ;
 
 FUNCTION: HRESULT
 D3DXFrameRegisterNamedMatrices
     (
     LPD3DXFRAME               pFrameRoot,
     LPD3DXANIMATIONCONTROLLER pAnimController
-    )
+    ) ;
 
 FUNCTION: UINT
 D3DXFrameNumNamedMatrices
     (
     D3DXFRAME* pFrameRoot
-    )
+    ) ;
 
 FUNCTION: HRESULT
 D3DXFrameCalculateBoundingSphere
@@ -389,7 +389,7 @@ D3DXFrameCalculateBoundingSphere
     D3DXFRAME*    pFrameRoot,
     LPD3DXVECTOR3 pObjectCenter,
     FLOAT*        pObjectRadius
-    )
+    ) ;
 
 FUNCTION: HRESULT
 D3DXCreateKeyframedAnimationSet
@@ -401,7 +401,7 @@ D3DXCreateKeyframedAnimationSet
     UINT                         NumCallbackKeys,
     D3DXKEY_CALLBACK*            pCallbackKeys,
     LPD3DXKEYFRAMEDANIMATIONSET* ppAnimationSet
-    )
+    ) ;
 
 FUNCTION: HRESULT
 D3DXCreateCompressedAnimationSet
@@ -413,7 +413,7 @@ D3DXCreateCompressedAnimationSet
     UINT                          NumCallbackKeys,
     D3DXKEY_CALLBACK*             pCallbackKeys,
     LPD3DXCOMPRESSEDANIMATIONSET* ppAnimationSet
-    )
+    ) ;
 
 FUNCTION: HRESULT
 D3DXCreateAnimationController
@@ -423,4 +423,4 @@ D3DXCreateAnimationController
     UINT                       MaxNumTracks,
     UINT                       MaxNumEvents,
     LPD3DXANIMATIONCONTROLLER* ppAnimController
-    )
+    ) ;

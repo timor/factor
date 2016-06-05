@@ -6,17 +6,17 @@ library: d3dx11
 
 FUNCTION: HRESULT D3DX11CheckVersion ( UINT D3DSdkVersion, UINT D3DX11SdkVersion ) ;
 
-COM-INTERFACE: ID3DX11DataLoader f {00000000-0000-0000-0000-000000000000}
+COM-INTERFACE: ID3DX11DataLoader f "{00000000-0000-0000-0000-000000000000}"
     HRESULT Load ( )
     HRESULT Decompress ( void** ppData, SIZE_T* pcBytes )
     HRESULT Destroy ( ) ;
 
-COM-INTERFACE: ID3DX11DataProcessor f {00000000-0000-0000-0000-000000000000}
+COM-INTERFACE: ID3DX11DataProcessor f "{00000000-0000-0000-0000-000000000000}"
     HRESULT Process ( void* pData, SIZE_T cBytes )
     HRESULT CreateDeviceObject ( void** ppDataObject )
     HRESULT Destroy ( ) ;
 
-COM-INTERFACE: ID3DX11ThreadPump IUnknown {C93FECFA-6967-478a-ABBC-402D90621FCB}
+COM-INTERFACE: ID3DX11ThreadPump IUnknown "{C93FECFA-6967-478a-ABBC-402D90621FCB}"
     HRESULT AddWorkItem ( ID3DX11DataLoader* pDataLoader, ID3DX11DataProcessor* pDataProcessor, HRESULT* pHResult, void** ppDeviceObject )
     UINT GetWorkItemCount ( )
     HRESULT WaitForAllItems ( )

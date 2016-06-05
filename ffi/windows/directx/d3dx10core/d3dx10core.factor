@@ -13,7 +13,7 @@ FUNCTION: HRESULT D3DX10CreateDevice (
     D3D10_DRIVER_TYPE DriverType,
     HMODULE           Software,
     UINT              Flags,
-    ID3D10Device**    ppDevice )
+    ID3D10Device**    ppDevice ) ;
 
 FUNCTION: HRESULT D3DX10CreateDeviceAndSwapChain (
     IDXGIAdapter*         pAdapter,
@@ -22,7 +22,7 @@ FUNCTION: HRESULT D3DX10CreateDeviceAndSwapChain (
     UINT                  Flags,
     DXGI_SWAP_CHAIN_DESC* pSwapChainDesc,
     IDXGISwapChain**      ppSwapChain,
-    ID3D10Device**        ppDevice )
+    ID3D10Device**        ppDevice ) ;
 
 c-type: ID3D10Device1
 
@@ -48,7 +48,7 @@ STRUCT: D3DX10_SPRITE
 c-type: ID3DX10Sprite
 TYPEDEF: ID3DX10Sprite* LPD3DX10SPRITE ;
 
-COM-INTERFACE: ID3DX10Sprite IUnknown {BA0B762D-8D28-43ec-B9DC-2F84443B0614}
+COM-INTERFACE: ID3DX10Sprite IUnknown "{BA0B762D-8D28-43ec-B9DC-2F84443B0614}"
     HRESULT Begin ( UINT flags )
     HRESULT DrawSpritesBuffered ( D3DX10_SPRITE* pSprites, UINT cSprites )
     HRESULT Flush ( )
@@ -64,19 +64,19 @@ FUNCTION: HRESULT
     D3DX10CreateSprite (
         ID3D10Device*         pDevice,
         UINT                  cDeviceBufferSize,
-        LPD3DX10SPRITE*       ppSprite )
+        LPD3DX10SPRITE*       ppSprite ) ;
 
-COM-INTERFACE: ID3DX10DataLoader f {00000000-0000-0000-0000-000000000000}
+COM-INTERFACE: ID3DX10DataLoader f "{00000000-0000-0000-0000-000000000000}"
     HRESULT Load ( )
     HRESULT Decompress ( void** ppData, SIZE_T* pcBytes )
     HRESULT Destroy ( ) ;
 
-COM-INTERFACE: ID3DX10DataProcessor f {00000000-0000-0000-0000-000000000000}
+COM-INTERFACE: ID3DX10DataProcessor f "{00000000-0000-0000-0000-000000000000}"
     HRESULT Process ( void* pData, SIZE_T cBytes )
     HRESULT CreateDeviceObject ( void** ppDataObject )
     HRESULT Destroy ( ) ;
 
-COM-INTERFACE: ID3DX10ThreadPump IUnknown {C93FECFA-6967-478a-ABBC-402D90621FCB}
+COM-INTERFACE: ID3DX10ThreadPump IUnknown "{C93FECFA-6967-478a-ABBC-402D90621FCB}""
     HRESULT AddWorkItem ( ID3DX10DataLoader* pDataLoader, ID3DX10DataProcessor* pDataProcessor, HRESULT* pHResult, void** ppDeviceObject )
     UINT GetWorkItemCount ( )
     HRESULT WaitForAllItems ( )
@@ -118,7 +118,7 @@ TYPEDEF: LPD3DX10_FONT_DESCW LPD3DX10_FONT_DESC ;
 c-type: TEXTMETRICA
 c-type: TEXTMETRICW
 
-COM-INTERFACE: ID3DX10Font IUnknown {D79DBB70-5F21-4d36-BBC2-FF525C213CDC}
+COM-INTERFACE: ID3DX10Font IUnknown "{D79DBB70-5F21-4d36-BBC2-FF525C213CDC}""
     HRESULT GetDevice ( ID3D10Device** ppDevice )
     HRESULT GetDescA ( D3DX10_FONT_DESCA* pDesc )
     HRESULT GetDescW ( D3DX10_FONT_DESCW* pDesc )
@@ -147,7 +147,7 @@ FUNCTION: HRESULT
         UINT                    Quality,
         UINT                    PitchAndFamily,
         LPCSTR                  pFaceName,
-        LPD3DX10FONT*           ppFont )
+        LPD3DX10FONT*           ppFont ) ;
 
 FUNCTION: HRESULT
     D3DX10CreateFontW (
@@ -162,7 +162,7 @@ FUNCTION: HRESULT
         UINT                    Quality,
         UINT                    PitchAndFamily,
         LPCWSTR                 pFaceName,
-        LPD3DX10FONT*           ppFont )
+        LPD3DX10FONT*           ppFont ) ;
 
 ALIAS: D3DX10CreateFont D3DX10CreateFontW ;
 
@@ -170,13 +170,13 @@ FUNCTION: HRESULT
     D3DX10CreateFontIndirectA (
         ID3D10Device*             pDevice,
         D3DX10_FONT_DESCA*        pDesc,
-        LPD3DX10FONT*             ppFont )
+        LPD3DX10FONT*             ppFont ) ;
 
 FUNCTION: HRESULT
     D3DX10CreateFontIndirectW (
         ID3D10Device*             pDevice,
         D3DX10_FONT_DESCW*        pDesc,
-        LPD3DX10FONT*             ppFont )
+        LPD3DX10FONT*             ppFont ) ;
 
 ALIAS: D3DX10CreateFontIndirect D3DX10CreateFontIndirectW ;
 

@@ -139,7 +139,7 @@ STRUCT: D3D11_SHADER_INPUT_BIND_DESC
     { Dimension                   D3D10_SRV_DIMENSION           }
     { NumSamples                  UINT                          } ;
 
-COM-INTERFACE: ID3D11ShaderReflectionType f {6E6FFA6A-9BAE-4613-A51E-91652D508C21}
+COM-INTERFACE: ID3D11ShaderReflectionType f "{6E6FFA6A-9BAE-4613-A51E-91652D508C21}"
     HRESULT GetDesc ( D3D11_SHADER_TYPE_DESC* pDesc )
     ID3D11ShaderReflectionType* GetMemberTypeByIndex ( UINT Index )
     ID3D11ShaderReflectionType* GetMemberTypeByName ( LPCSTR Name )
@@ -155,18 +155,18 @@ COM-INTERFACE: ID3D11ShaderReflectionType f {6E6FFA6A-9BAE-4613-A51E-91652D508C2
 c-type: ID3D11ShaderReflectionType
 c-type: ID3D11ShaderReflectionConstantBuffer
 
-COM-INTERFACE: ID3D11ShaderReflectionVariable f {51F23923-F3E5-4BD1-91CB-606177D8DB4C}
+COM-INTERFACE: ID3D11ShaderReflectionVariable f "{51F23923-F3E5-4BD1-91CB-606177D8DB4C}"
     HRESULT GetDesc ( D3D11_SHADER_VARIABLE_DESC* pDesc )
     ID3D11ShaderReflectionType* GetType ( )
     ID3D11ShaderReflectionConstantBuffer* GetBuffer ( )
     UINT GetInterfaceSlot ( UINT uArrayIndex ) ;
 
-COM-INTERFACE: ID3D11ShaderReflectionConstantBuffer f {EB62D63D-93DD-4318-8AE8-C6F83AD371B8}
+COM-INTERFACE: ID3D11ShaderReflectionConstantBuffer f "{EB62D63D-93DD-4318-8AE8-C6F83AD371B8}"
     HRESULT GetDesc ( D3D11_SHADER_BUFFER_DESC* pDesc )
     ID3D11ShaderReflectionVariable* GetVariableByIndex ( UINT Index )
     ID3D11ShaderReflectionVariable* GetVariableByName ( LPCSTR Name ) ;
 
-COM-INTERFACE: ID3D11ShaderReflection IUnknown {17F27486-A342-4D10-8842-AB0874E7F670}
+COM-INTERFACE: ID3D11ShaderReflection IUnknown "{17F27486-A342-4D10-8842-AB0874E7F670}"
     HRESULT GetDesc ( D3D11_SHADER_DESC* pDesc )
     ID3D11ShaderReflectionConstantBuffer* GetConstantBufferByIndex ( UINT Index )
     ID3D11ShaderReflectionConstantBuffer* GetConstantBufferByName ( LPCSTR Name )

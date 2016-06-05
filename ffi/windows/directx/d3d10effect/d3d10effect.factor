@@ -57,7 +57,7 @@ STRUCT: D3D10_STATE_BLOCK_MASK
     { SOBuffers           BYTE    }
     { Predication         BYTE    } ;
 
-COM-INTERFACE: ID3D10StateBlock IUnknown {0803425A-57F5-4dd6-9465-A87570834A08}
+COM-INTERFACE: ID3D10StateBlock IUnknown "{0803425A-57F5-4dd6-9465-A87570834A08}"
     HRESULT Capture ( )
     HRESULT Apply ( )
     HRESULT ReleaseAllDeviceObjects ( )
@@ -95,7 +95,7 @@ STRUCT: D3D10_EFFECT_TYPE_DESC
     { UnpackedSize    UINT                        }
     { Stride          UINT                        } ;
 
-COM-INTERFACE: ID3D10EffectType f {4E9E1DDC-CD9D-4772-A837-00180B9B88FD}
+COM-INTERFACE: ID3D10EffectType f "{4E9E1DDC-CD9D-4772-A837-00180B9B88FD}"
     BOOL IsValid ( )
     HRESULT GetDesc ( D3D10_EFFECT_TYPE_DESC* pDesc )
     ID3D10EffectType* GetMemberTypeByIndex ( UINT Index )
@@ -127,7 +127,7 @@ c-type: ID3D10EffectDepthStencilVariable
 c-type: ID3D10EffectRasterizerVariable
 c-type: ID3D10EffectSamplerVariable
 
-COM-INTERFACE: ID3D10EffectVariable f {AE897105-00E6-45bf-BB8E-281DD6DB8E1B}
+COM-INTERFACE: ID3D10EffectVariable f "{AE897105-00E6-45bf-BB8E-281DD6DB8E1B}"
     BOOL IsValid ( )
     ID3D10EffectType* GetType ( )
     HRESULT GetDesc ( D3D10_EFFECT_VARIABLE_DESC* pDesc )
@@ -155,7 +155,7 @@ COM-INTERFACE: ID3D10EffectVariable f {AE897105-00E6-45bf-BB8E-281DD6DB8E1B}
     HRESULT GetRawValue ( void* pData, UINT Offset, UINT Count ) ;
 TYPEDEF: ID3D10EffectVariable* LPD3D10EFFECTVARIABLE ;
 
-COM-INTERFACE: ID3D10EffectScalarVariable ID3D10EffectVariable {00E48F7B-D2C8-49e8-A86C-022DEE53431F}
+COM-INTERFACE: ID3D10EffectScalarVariable ID3D10EffectVariable "{00E48F7B-D2C8-49e8-A86C-022DEE53431F}"
     HRESULT SetFloat ( float Value )
     HRESULT GetFloat ( float* pValue )
     HRESULT SetFloatArray ( float* pData, UINT Offset, UINT Count )
@@ -170,7 +170,7 @@ COM-INTERFACE: ID3D10EffectScalarVariable ID3D10EffectVariable {00E48F7B-D2C8-49
     HRESULT GetBoolArray ( BOOL* pData, UINT Offset, UINT Count ) ;
 TYPEDEF: ID3D10EffectScalarVariable* LPD3D10EFFECTSCALARVARIABLE ;
 
-COM-INTERFACE: ID3D10EffectVectorVariable ID3D10EffectVariable {62B98C44-1F82-4c67-BCD0-72CF8F217E81}
+COM-INTERFACE: ID3D10EffectVectorVariable ID3D10EffectVariable "{62B98C44-1F82-4c67-BCD0-72CF8F217E81}"
     HRESULT SetBoolVector ( BOOL* pData )
     HRESULT SetIntVector  ( int* pData )
     HRESULT SetFloatVector ( float* pData )
@@ -185,7 +185,7 @@ COM-INTERFACE: ID3D10EffectVectorVariable ID3D10EffectVariable {62B98C44-1F82-4c
     HRESULT GetFloatVectorArray ( float* pData, UINT Offset, UINT Count ) ;
 TYPEDEF: ID3D10EffectVectorVariable* LPD3D10EFFECTVECTORVARIABLE ;
 
-COM-INTERFACE: ID3D10EffectMatrixVariable ID3D10EffectVariable {50666C24-B82F-4eed-A172-5B6E7E8522E0}
+COM-INTERFACE: ID3D10EffectMatrixVariable ID3D10EffectVariable "{50666C24-B82F-4eed-A172-5B6E7E8522E0}"
     HRESULT SetMatrix ( float* pData )
     HRESULT GetMatrix ( float* pData )
     HRESULT SetMatrixArray ( float* pData, UINT Offset, UINT Count )
@@ -197,33 +197,33 @@ COM-INTERFACE: ID3D10EffectMatrixVariable ID3D10EffectVariable {50666C24-B82F-4e
 TYPEDEF: ID3D10EffectMatrixVariable* LPD3D10EFFECTMATRIXVARIABLE ;
 
 
-COM-INTERFACE: ID3D10EffectStringVariable ID3D10EffectVariable {71417501-8DF9-4e0a-A78A-255F9756BAFF}
+COM-INTERFACE: ID3D10EffectStringVariable ID3D10EffectVariable "{71417501-8DF9-4e0a-A78A-255F9756BAFF}"
     HRESULT GetString ( LPCSTR* ppString )
     HRESULT GetStringArray ( LPCSTR* ppStrings, UINT Offset, UINT Count ) ;
 TYPEDEF: ID3D10EffectStringVariable* LPD3D10EFFECTSTRINGVARIABLE ;
 
-COM-INTERFACE: ID3D10EffectShaderResourceVariable ID3D10EffectVariable {C0A7157B-D872-4b1d-8073-EFC2ACD4B1FC}
+COM-INTERFACE: ID3D10EffectShaderResourceVariable ID3D10EffectVariable "{C0A7157B-D872-4b1d-8073-EFC2ACD4B1FC}"
     HRESULT SetResource ( ID3D10ShaderResourceView* pResource )
     HRESULT GetResource ( ID3D10ShaderResourceView** ppResource )
     HRESULT SetResourceArray ( ID3D10ShaderResourceView** ppResources, UINT Offset, UINT Count )
     HRESULT GetResourceArray ( ID3D10ShaderResourceView** ppResources, UINT Offset, UINT Count ) ;
 TYPEDEF: ID3D10EffectShaderResourceVariable* LPD3D10EFFECTSHADERRESOURCEVARIABLE ;
 
-COM-INTERFACE: ID3D10EffectRenderTargetViewVariable ID3D10EffectVariable {28CA0CC3-C2C9-40bb-B57F-67B737122B17}
+COM-INTERFACE: ID3D10EffectRenderTargetViewVariable ID3D10EffectVariable "{28CA0CC3-C2C9-40bb-B57F-67B737122B17}"
     HRESULT SetRenderTarget ( ID3D10RenderTargetView* pResource )
     HRESULT GetRenderTarget ( ID3D10RenderTargetView** ppResource )
     HRESULT SetRenderTargetArray ( ID3D10RenderTargetView** ppResources, UINT Offset, UINT Count )
     HRESULT GetRenderTargetArray ( ID3D10RenderTargetView** ppResources, UINT Offset, UINT Count ) ;
 TYPEDEF: ID3D10EffectRenderTargetViewVariable* LPD3D10EFFECTRENDERTARGETVIEWVARIABLE ;
 
-COM-INTERFACE: ID3D10EffectDepthStencilViewVariable ID3D10EffectVariable {3E02C918-CC79-4985-B622-2D92AD701623}
+COM-INTERFACE: ID3D10EffectDepthStencilViewVariable ID3D10EffectVariable "{3E02C918-CC79-4985-B622-2D92AD701623}"
     HRESULT SetDepthStencil ( ID3D10DepthStencilView* pResource )
     HRESULT GetDepthStencil ( ID3D10DepthStencilView** ppResource )
     HRESULT SetDepthStencilArray ( ID3D10DepthStencilView** ppResources, UINT Offset, UINT Count )
     HRESULT GetDepthStencilArray ( ID3D10DepthStencilView** ppResources, UINT Offset, UINT Count ) ;
 TYPEDEF: ID3D10EffectDepthStencilViewVariable* LPD3D10EFFECTDEPTHSTENCILVIEWVARIABLE ;
 
-COM-INTERFACE: ID3D10EffectConstantBuffer ID3D10EffectVariable {56648F4D-CC8B-4444-A5AD-B5A3D76E91B3}
+COM-INTERFACE: ID3D10EffectConstantBuffer ID3D10EffectVariable "{56648F4D-CC8B-4444-A5AD-B5A3D76E91B3}"
     HRESULT SetConstantBuffer ( ID3D10Buffer* pConstantBuffer )
     HRESULT GetConstantBuffer ( ID3D10Buffer** ppConstantBuffer )
     HRESULT SetTextureBuffer ( ID3D10ShaderResourceView* pTextureBuffer )
@@ -239,7 +239,7 @@ STRUCT: D3D10_EFFECT_SHADER_DESC
     { NumInputSignatureEntries  UINT   }
     { NumOutputSignatureEntries UINT   } ;
 
-COM-INTERFACE: ID3D10EffectShaderVariable ID3D10EffectVariable {80849279-C799-4797-8C33-0407A07D9E06}
+COM-INTERFACE: ID3D10EffectShaderVariable ID3D10EffectVariable "{80849279-C799-4797-8C33-0407A07D9E06}"
     HRESULT GetShaderDesc ( UINT ShaderIndex, D3D10_EFFECT_SHADER_DESC* pDesc )
     HRESULT GetVertexShader ( UINT ShaderIndex, ID3D10VertexShader** ppVS )
     HRESULT GetGeometryShader ( UINT ShaderIndex, ID3D10GeometryShader** ppGS )
@@ -248,22 +248,22 @@ COM-INTERFACE: ID3D10EffectShaderVariable ID3D10EffectVariable {80849279-C799-47
     HRESULT GetOutputSignatureElementDesc ( UINT ShaderIndex, UINT Element, D3D10_SIGNATURE_PARAMETER_DESC* pDesc ) ;
 TYPEDEF: ID3D10EffectShaderVariable* LPD3D10EFFECTSHADERVARIABLE ;
 
-COM-INTERFACE: ID3D10EffectBlendVariable ID3D10EffectVariable {1FCD2294-DF6D-4eae-86B3-0E9160CFB07B}
+COM-INTERFACE: ID3D10EffectBlendVariable ID3D10EffectVariable "{1FCD2294-DF6D-4eae-86B3-0E9160CFB07B}"
     HRESULT GetBlendState ( UINT Index, ID3D10BlendState** ppBlendState )
     HRESULT GetBackingStore ( UINT Index, D3D10_BLEND_DESC* pBlendDesc ) ;
 TYPEDEF: ID3D10EffectBlendVariable* LPD3D10EFFECTBLENDVARIABLE ;
 
-COM-INTERFACE: ID3D10EffectDepthStencilVariable ID3D10EffectVariable {AF482368-330A-46a5-9A5C-01C71AF24C8D}
+COM-INTERFACE: ID3D10EffectDepthStencilVariable ID3D10EffectVariable "{AF482368-330A-46a5-9A5C-01C71AF24C8D}"
     HRESULT GetDepthStencilState ( UINT Index, ID3D10DepthStencilState** ppDepthStencilState )
     HRESULT GetBackingStore ( UINT Index, D3D10_DEPTH_STENCIL_DESC* pDepthStencilDesc ) ;
 TYPEDEF: ID3D10EffectDepthStencilVariable* LPD3D10EFFECTDEPTHSTENCILVARIABLE ;
 
-COM-INTERFACE: ID3D10EffectRasterizerVariable ID3D10EffectVariable {21AF9F0E-4D94-4ea9-9785-2CB76B8C0B34}
+COM-INTERFACE: ID3D10EffectRasterizerVariable ID3D10EffectVariable "{21AF9F0E-4D94-4ea9-9785-2CB76B8C0B34}"
     HRESULT GetRasterizerState ( UINT Index, ID3D10RasterizerState** ppRasterizerState )
     HRESULT GetBackingStore ( UINT Index, D3D10_RASTERIZER_DESC* pRasterizerDesc ) ;
 TYPEDEF: ID3D10EffectRasterizerVariable* LPD3D10EFFECTRASTERIZERVARIABLE ;
 
-COM-INTERFACE: ID3D10EffectSamplerVariable ID3D10EffectVariable {6530D5C7-07E9-4271-A418-E7CE4BD1E480}
+COM-INTERFACE: ID3D10EffectSamplerVariable ID3D10EffectVariable "{6530D5C7-07E9-4271-A418-E7CE4BD1E480}"
     HRESULT GetSampler ( UINT Index, ID3D10SamplerState** ppSampler )
     HRESULT GetBackingStore ( UINT Index, D3D10_SAMPLER_DESC* pSamplerDesc ) ;
 TYPEDEF: ID3D10EffectSamplerVariable* LPD3D10EFFECTSAMPLERVARIABLE ;
@@ -281,7 +281,7 @@ STRUCT: D3D10_PASS_SHADER_DESC
     { pShaderVariable                    ID3D10EffectShaderVariable* }
     { ShaderIndex                        UINT                        } ;
 
-COM-INTERFACE: ID3D10EffectPass f {5CFBEB89-1A06-46e0-B282-E3F9BFA36A54}
+COM-INTERFACE: ID3D10EffectPass f "{5CFBEB89-1A06-46e0-B282-E3F9BFA36A54}"
     BOOL IsValid ( )
     HRESULT GetDesc ( D3D10_PASS_DESC* pDesc )
     HRESULT GetVertexShaderDesc ( D3D10_PASS_SHADER_DESC* pDesc )
@@ -298,7 +298,7 @@ STRUCT: D3D10_TECHNIQUE_DESC
     { Passes         UINT   }
     { Annotations    UINT   } ;
 
-COM-INTERFACE: ID3D10EffectTechnique f {DB122CE8-D1C9-4292-B237-24ED3DE8B175}
+COM-INTERFACE: ID3D10EffectTechnique f "{DB122CE8-D1C9-4292-B237-24ED3DE8B175}"
     BOOL IsValid ( )
     HRESULT GetDesc ( D3D10_TECHNIQUE_DESC* pDesc )
     ID3D10EffectVariable* GetAnnotationByIndex ( UINT Index )
@@ -316,7 +316,7 @@ STRUCT: D3D10_EFFECT_DESC
     { SharedGlobalVariables    UINT }
     { Techniques               UINT } ;
 
-COM-INTERFACE: ID3D10Effect IUnknown {51B0CA8B-EC0B-4519-870D-8EE1CB5017C7}
+COM-INTERFACE: ID3D10Effect IUnknown "{51B0CA8B-EC0B-4519-870D-8EE1CB5017C7}"
     BOOL IsValid ( )
     BOOL IsPool ( )
     HRESULT GetDevice ( ID3D10Device** ppDevice )
@@ -332,18 +332,18 @@ COM-INTERFACE: ID3D10Effect IUnknown {51B0CA8B-EC0B-4519-870D-8EE1CB5017C7}
     BOOL IsOptimized ( ) ;
 TYPEDEF: ID3D10Effect* LPD3D10EFFECT ;
 
-COM-INTERFACE: ID3D10EffectPool IUnknown {9537AB04-3250-412e-8213-FCD2F8677933}
+COM-INTERFACE: ID3D10EffectPool IUnknown "{9537AB04-3250-412e-8213-FCD2F8677933}"
     ID3D10Effect* AsEffect ( ) ;
 TYPEDEF: ID3D10EffectPool* LPD3D10EFFECTPOOL ;
 
 FUNCTION: HRESULT D3D10CompileEffectFromMemory ( void* pData, SIZE_T DataLength, LPCSTR pSrcFileName, D3D10_SHADER_MACRO* pDefines,
     ID3D10Include* pInclude, UINT HLSLFlags, UINT FXFlags,
-    ID3D10Blob** ppCompiledEffect, ID3D10Blob** ppErrors )
+    ID3D10Blob** ppCompiledEffect, ID3D10Blob** ppErrors ) ;
 
 FUNCTION: HRESULT D3D10CreateEffectFromMemory ( void* pData, SIZE_T DataLength, UINT FXFlags, ID3D10Device* pDevice,
-    ID3D10EffectPool* pEffectPool, ID3D10Effect** ppEffect )
+    ID3D10EffectPool* pEffectPool, ID3D10Effect** ppEffect ) ;
 
 FUNCTION: HRESULT D3D10CreateEffectPoolFromMemory ( void* pData, SIZE_T DataLength, UINT FXFlags, ID3D10Device* pDevice,
-    ID3D10EffectPool** ppEffectPool )
+    ID3D10EffectPool** ppEffectPool ) ;
 
 FUNCTION: HRESULT D3D10DisassembleEffect ( ID3D10Effect* pEffect, BOOL EnableColorCode, ID3D10Blob** ppDisassembly ) ;

@@ -5,7 +5,7 @@ in: windows.com
 
 library: ole32
 
-COM-INTERFACE: IUnknown f {00000000-0000-0000-C000-000000000046}
+COM-INTERFACE: IUnknown f "{00000000-0000-0000-C000-000000000046}"
     HRESULT QueryInterface ( REFGUID iid, void** ppvObject )
     ULONG AddRef ( )
     ULONG Release ( ) ;
@@ -14,7 +14,7 @@ c-type: IAdviseSink
 c-type: IEnumFORMATETC
 c-type: IEnumSTATDATA
 
-COM-INTERFACE: IDataObject IUnknown {0000010E-0000-0000-C000-000000000046}
+COM-INTERFACE: IDataObject IUnknown "{0000010E-0000-0000-C000-000000000046}"
     HRESULT GetData ( FORMATETC* pFormatetc, STGMEDIUM* pmedium )
     HRESULT GetDataHere ( FORMATETC* pFormatetc, STGMEDIUM* pmedium )
     HRESULT QueryGetData ( FORMATETC* pFormatetc )
@@ -25,13 +25,13 @@ COM-INTERFACE: IDataObject IUnknown {0000010E-0000-0000-C000-000000000046}
     HRESULT DUnadvise ( DWORD pdwConnection )
     HRESULT EnumDAdvise ( IEnumSTATDATA** ppenumAdvise ) ;
 
-COM-INTERFACE: IDropTarget IUnknown {00000122-0000-0000-C000-000000000046}
+COM-INTERFACE: IDropTarget IUnknown "{00000122-0000-0000-C000-000000000046}"
     HRESULT DragEnter ( IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect )
     HRESULT DragOver ( DWORD grfKeyState, POINTL pt, DWORD* pdwEffect )
     HRESULT DragLeave ( )
     HRESULT Drop ( IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect ) ;
 
-COM-INTERFACE: ISequentialStream IUnknown {0C733A30-2A1C-11CE-ADE5-00AA0044773D}
+COM-INTERFACE: ISequentialStream IUnknown "{0C733A30-2A1C-11CE-ADE5-00AA0044773D}"
     HRESULT Read ( void* pv, ULONG cb, ULONG* pcbRead )
     HRESULT Write ( void* pv, ULONG cb, ULONG* pcbWritten ) ;
 
@@ -67,9 +67,9 @@ CONSTANT: LOCK_WRITE     1 ;
 CONSTANT: LOCK_EXCLUSIVE 2 ;
 CONSTANT: LOCK_ONLYONCE  4 ;
 
-CONSTANT: GUID_NULL GUID: {00000000-0000-0000-0000-000000000000} ;
+CONSTANT: GUID_NULL guid: "{00000000-0000-0000-0000-000000000000}" ;
 
-COM-INTERFACE: IStream ISequentialStream {0000000C-0000-0000-C000-000000000046}
+COM-INTERFACE: IStream ISequentialStream "{0000000C-0000-0000-C000-000000000046}"
     HRESULT Seek ( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition )
     HRESULT SetSize ( ULARGE_INTEGER* libNewSize )
     HRESULT CopyTo ( IStream* pstm, ULARGE_INTEGER cb, ULARGE_INTEGER* pcbRead, ULARGE_INTEGER* pcbWritten )

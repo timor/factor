@@ -86,13 +86,14 @@ SYNTAX: COM-INTERFACE:
     CREATE-C-TYPE
     void* over typedef
     scan-object find-com-interface-definition
-    scan-token string>guid
+    scan-object string>guid
     parse-com-functions
     <com-interface-definition>
     dup save-com-interface-definition
     define-words-for-com-interface ;
 
-SYNTAX: GUID: scan-token string>guid suffix! ;
+SYNTAX: GUID: scan-object string>guid suffix! ;
+SYNTAX: guid: scan-object string>guid suffix! ;
 
 use: vocabs.loader
 

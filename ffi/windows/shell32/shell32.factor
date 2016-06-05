@@ -135,11 +135,11 @@ SINGLETONS:
     +win32-nt-executable+ ;
 
 mixin: windows-executable
-INSTANCE: +dos-executable+ windows-executable        ! mz ;
+INSTANCE: +dos-executable+ windows-executable ;       ! mz
 INSTANCE: +win32-console-executable+ windows-executable ;
-INSTANCE: +win32-vxd-executable+ windows-executable  ! le ;
-INSTANCE: +win32-os2-executable+ windows-executable  ! ne ;
-INSTANCE: +win32-nt-executable+ windows-executable   ! pe ;
+INSTANCE: +win32-vxd-executable+ windows-executable ; ! le
+INSTANCE: +win32-os2-executable+ windows-executable ; ! ne
+INSTANCE: +win32-nt-executable+ windows-executable ;  ! pe
 
 : shell32-directory ( n -- str )
     f swap f SHGFP_TYPE_DEFAULT
@@ -256,13 +256,13 @@ STRUCT: STRRET
     { uType int }
     { value STRRET-union } ;
 
-COM-INTERFACE: IEnumIDList IUnknown {000214F2-0000-0000-C000-000000000046}
+COM-INTERFACE: IEnumIDList IUnknown "{000214F2-0000-0000-C000-000000000046}"
     HRESULT Next ( ULONG celt, LPITEMIDLIST* rgelt, ULONG* pceltFetched )
     HRESULT Skip ( ULONG celt )
     HRESULT Reset ( )
     HRESULT Clone ( IEnumIDList** ppenum ) ;
 
-COM-INTERFACE: IShellFolder IUnknown {000214E6-0000-0000-C000-000000000046}
+COM-INTERFACE: IShellFolder IUnknown "{000214E6-0000-0000-C000-000000000046}"
     HRESULT ParseDisplayName ( HWND hwndOwner, void* pbcReserved, LPOLESTR lpszDisplayName, ULONG* pchEaten, LPITEMIDLIST* ppidl, ULONG* pdwAttributes )
     HRESULT EnumObjects ( HWND hwndOwner, SHCONTF grfFlags, IEnumIDList** ppenumIDList )
     HRESULT BindToObject ( LPCITEMIDLIST pidl, void* pbcReserved, REFGUID riid, void** ppvOut )

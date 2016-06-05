@@ -41,7 +41,7 @@ CONSTANT: WS_OVERLAPPEDWINDOW
         WS_THICKFRAME
         WS_MINIMIZEBOX
         WS_MAXIMIZEBOX
-    }
+    } ;
 
 CONSTANT: WS_POPUPWINDOW flags{ WS_POPUP WS_BORDER WS_SYSMENU } ;
 
@@ -76,10 +76,10 @@ CONSTANT: WS_EX_STATICEDGE        0x00020000 ;
 CONSTANT: WS_EX_APPWINDOW         0x00040000 ;
 
 CONSTANT: WS_EX_OVERLAPPEDWINDOW
-    flags{ WS_EX_WINDOWEDGE WS_EX_CLIENTEDGE }
+    flags{ WS_EX_WINDOWEDGE WS_EX_CLIENTEDGE } ;
 
 CONSTANT: WS_EX_PALETTEWINDOW
-    flags{ WS_EX_WINDOWEDGE WS_EX_TOOLWINDOW WS_EX_TOPMOST }
+    flags{ WS_EX_WINDOWEDGE WS_EX_TOOLWINDOW WS_EX_TOPMOST } ;
 
 CONSTANT: CS_VREDRAW          0x0001 ;
 CONSTANT: CS_HREDRAW          0x0002 ;
@@ -157,16 +157,16 @@ CONSTANT: IDC_IBEAM           32513 ;
 CONSTANT: IDC_WAIT            32514 ;
 CONSTANT: IDC_CROSS           32515 ;
 CONSTANT: IDC_UPARROW         32516 ;
-CONSTANT: IDC_SIZE            32640 ! OBSOLETE: use IDC_SIZEALL ;
-CONSTANT: IDC_ICON            32641 ! OBSOLETE: use IDC_ARROW ;
+CONSTANT: IDC_SIZE            32640 ; ! OBSOLETE: use IDC_SIZEALL ;
+CONSTANT: IDC_ICON            32641 ; ! OBSOLETE: use IDC_ARROW ;
 CONSTANT: IDC_SIZENWSE        32642 ;
 CONSTANT: IDC_SIZENESW        32643 ;
 CONSTANT: IDC_SIZEWE          32644 ;
 CONSTANT: IDC_SIZENS          32645 ;
 CONSTANT: IDC_SIZEALL         32646 ;
-CONSTANT: IDC_NO              32648 ! not in win3.1 ;
+CONSTANT: IDC_NO              32648 ; ! not in win3.1 ;
 CONSTANT: IDC_HAND            32649 ;
-CONSTANT: IDC_APPSTARTING     32650 ! not in win3.1 ;
+CONSTANT: IDC_APPSTARTING     32650 ; ! not in win3.1 ;
 CONSTANT: IDC_HELP            32651 ;
 
 ! Predefined Clipboard Formats
@@ -207,9 +207,9 @@ CONSTANT: CF_GDIOBJLAST 0x3FF ;
 CONSTANT: VK_LBUTTON        0x01 ;
 CONSTANT: VK_RBUTTON        0x02 ;
 CONSTANT: VK_CANCEL         0x03 ;
-CONSTANT: VK_MBUTTON        0x04  ! NOT contiguous with L & RBUTTON ;
-CONSTANT: VK_XBUTTON1       0x05  ! NOT contiguous with L & RBUTTON ;
-CONSTANT: VK_XBUTTON2       0x06  ! NOT contiguous with L & RBUTTON ;
+CONSTANT: VK_MBUTTON        0x04 ; ! NOT contiguous with L & RBUTTON ;
+CONSTANT: VK_XBUTTON1       0x05 ; ! NOT contiguous with L & RBUTTON ;
+CONSTANT: VK_XBUTTON2       0x06 ; ! NOT contiguous with L & RBUTTON ;
 ! 0x07 : unassigned
 CONSTANT: VK_BACK           0x08 ;
 CONSTANT: VK_TAB            0x09 ;
@@ -225,7 +225,7 @@ CONSTANT: VK_PAUSE          0x13 ;
 CONSTANT: VK_CAPITAL        0x14 ;
 
 CONSTANT: VK_KANA           0x15 ;
-CONSTANT: VK_HANGEUL        0x15 ! old name - here for compatibility ;
+CONSTANT: VK_HANGEUL        0x15 ;
 CONSTANT: VK_HANGUL         0x15 ;
 CONSTANT: VK_JUNJA          0x17 ;
 CONSTANT: VK_FINAL          0x18 ;
@@ -349,14 +349,14 @@ CONSTANT: VK_NUMLOCK        0x90 ;
 CONSTANT: VK_SCROLL         0x91 ;
 
 ! NEC PC-9800 kbd definitions
-CONSTANT: VK_OEM_NEC_EQUAL  0x92  ! '=' key on numpad ;
+CONSTANT: VK_OEM_NEC_EQUAL  0x92 ; ! '=' key on numpad
 
 ! Fujitsu/OASYS kbd definitions
-CONSTANT: VK_OEM_FJ_JISHO   0x92  ! 'Dictionary' key ;
-CONSTANT: VK_OEM_FJ_MASSHOU 0x93  ! 'Unregister word' key ;
-CONSTANT: VK_OEM_FJ_TOUROKU 0x94  ! 'Register word' key ;
-CONSTANT: VK_OEM_FJ_LOYA    0x95  ! 'Left OYAYUBI' key ;
-CONSTANT: VK_OEM_FJ_ROYA    0x96  ! 'Right OYAYUBI' key ;
+CONSTANT: VK_OEM_FJ_JISHO   0x92 ; ! 'Dictionary' key
+CONSTANT: VK_OEM_FJ_MASSHOU 0x93 ; ! 'Unregister word' key
+CONSTANT: VK_OEM_FJ_TOUROKU 0x94 ; ! 'Register word' key
+CONSTANT: VK_OEM_FJ_LOYA    0x95 ; ! 'Left OYAYUBI' key
+CONSTANT: VK_OEM_FJ_ROYA    0x96 ; ! 'Right OYAYUBI' key
 
 ! 0x97 - 0x9F : unassigned
 
@@ -392,31 +392,31 @@ CONSTANT: VK_LAUNCH_APP2         0xB7 ;
 
 ! 0xB8 - 0xB9 : reserved
 
-CONSTANT: VK_OEM_1          0xBA  ! ';:' for US ;
-CONSTANT: VK_OEM_PLUS       0xBB  ! '+' any country ;
-CONSTANT: VK_OEM_COMMA      0xBC  ! ',' any country ;
-CONSTANT: VK_OEM_MINUS      0xBD  ! '-' any country ;
-CONSTANT: VK_OEM_PERIOD     0xBE  ! '.' any country ;
-CONSTANT: VK_OEM_2          0xBF  ! '/?' for US ;
-CONSTANT: VK_OEM_3          0xC0  ! '`~' for US ;
+CONSTANT: VK_OEM_1          0xBA ; ! ';:' for US
+CONSTANT: VK_OEM_PLUS       0xBB ; ! '+' any country
+CONSTANT: VK_OEM_COMMA      0xBC ; ! ',' any country
+CONSTANT: VK_OEM_MINUS      0xBD ; ! '-' any country
+CONSTANT: VK_OEM_PERIOD     0xBE ; ! '.' any country
+CONSTANT: VK_OEM_2          0xBF ; ! '/?' for US
+CONSTANT: VK_OEM_3          0xC0 ; ! '`~' for US
 
 ! 0xC1 - 0xD7 : reserved
 
 ! 0xD8 - 0xDA : unassigned
 
-CONSTANT: VK_OEM_4          0xDB !  '[{' for US ;
-CONSTANT: VK_OEM_5          0xDC !  '\|' for US ;
-CONSTANT: VK_OEM_6          0xDD !  ']}' for US ;
-CONSTANT: VK_OEM_7          0xDE !  ''"' for US ;
+CONSTANT: VK_OEM_4          0xDB ; !  '[{' for US
+CONSTANT: VK_OEM_5          0xDC ; !  '\|' for US
+CONSTANT: VK_OEM_6          0xDD ; !  ']}' for US
+CONSTANT: VK_OEM_7          0xDE ; !  ''"' for US
 CONSTANT: VK_OEM_8          0xDF ;
 
 ! 0xE0 : reserved
 
 ! Various extended or enhanced keyboards
-CONSTANT: VK_OEM_AX         0xE1 !  'AX' key on Japanese AX kbd ;
-CONSTANT: VK_OEM_102        0xE2 !  "<>" or "\|" on RT 102-key kbd. ;
-CONSTANT: VK_ICO_HELP       0xE3 !  Help key on ICO ;
-CONSTANT: VK_ICO_00         0xE4 !  00 key on ICO ;
+CONSTANT: VK_OEM_AX         0xE1 ; !  'AX' key on Japanese AX kbd
+CONSTANT: VK_OEM_102        0xE2 ; !  "<>" or "\|" on RT 102-key kbd.
+CONSTANT: VK_ICO_HELP       0xE3 ; !  Help key on ICO
+CONSTANT: VK_ICO_00         0xE4 ; !  00 key on ICO
 
 CONSTANT: VK_PROCESSKEY     0xE5 ;
 

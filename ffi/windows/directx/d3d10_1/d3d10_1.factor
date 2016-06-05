@@ -50,7 +50,7 @@ STRUCT: D3D10_BLEND_DESC1
     { IndependentBlendEnable BOOL                               }
     { RenderTarget           D3D10_RENDER_TARGET_BLEND_DESC1[8] } ;
 
-COM-INTERFACE: ID3D10BlendState1 ID3D10BlendState {EDAD8D99-8A35-4d6d-8566-2EA276CDE161}
+COM-INTERFACE: ID3D10BlendState1 ID3D10BlendState "{EDAD8D99-8A35-4d6d-8566-2EA276CDE161}"
     void GetDesc1 ( D3D10_BLEND_DESC1* pDesc ) ;
 
 STRUCT: D3D10_TEXCUBE_ARRAY_SRV1
@@ -88,14 +88,14 @@ STRUCT: D3D10_SHADER_RESOURCE_VIEW_DESC1
     { ViewDimension D3D10_SRV_DIMENSION1                   }
     { View          D3D10_SHADER_RESOURCE_VIEW_DESC1_UNION } ;
 
-COM-INTERFACE: ID3D10ShaderResourceView1 ID3D10ShaderResourceView {9B7E4C87-342C-4106-A19F-4F2704F689F0}
+COM-INTERFACE: ID3D10ShaderResourceView1 ID3D10ShaderResourceView "{9B7E4C87-342C-4106-A19F-4F2704F689F0}"
     void GetDesc1 ( D3D10_SHADER_RESOURCE_VIEW_DESC1* pDesc ) ;
 
 CONSTANT: D3D10_STANDARD_MULTISAMPLE_PATTERN  0xffffffff ;
 CONSTANT: D3D10_CENTER_MULTISAMPLE_PATTERN    0xfffffffe ;
 TYPEDEF: int D3D10_STANDARD_MULTISAMPLE_QUALITY_LEVELS ;
 
-COM-INTERFACE: ID3D10Device1 ID3D10Device {9B7E4C8F-342C-4106-A19F-4F2704F689F0}
+COM-INTERFACE: ID3D10Device1 ID3D10Device "{9B7E4C8F-342C-4106-A19F-4F2704F689F0}"
     HRESULT CreateShaderResourceView1 (
         ID3D10Resource*                   pResource,
         D3D10_SHADER_RESOURCE_VIEW_DESC1* pDesc,
@@ -114,7 +114,7 @@ FUNCTION: HRESULT D3D10CreateDevice1 (
     UINT                 Flags,
     D3D10_FEATURE_LEVEL1 HardwareLevel,
     UINT                 SDKVersion,
-    ID3D10Device1**      ppDevice )
+    ID3D10Device1**      ppDevice ) ;
 
 FUNCTION: HRESULT D3D10CreateDeviceAndSwapChain1 (
     IDXGIAdapter*         pAdapter,
@@ -125,4 +125,4 @@ FUNCTION: HRESULT D3D10CreateDeviceAndSwapChain1 (
     UINT                  SDKVersion,
     DXGI_SWAP_CHAIN_DESC* pSwapChainDesc,
     IDXGISwapChain**      ppSwapChain,
-    ID3D10Device1**       ppDevice )
+    ID3D10Device1**       ppDevice ) ;

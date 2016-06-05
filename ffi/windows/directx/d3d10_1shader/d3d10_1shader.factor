@@ -143,7 +143,7 @@ STRUCT: D3D10_SHADER_DEBUG_INFO
 c-type: ID3D10ShaderReflection1
 TYPEDEF: ID3D10ShaderReflection1* LPD3D10SHADERREFLECTION1 ;
 
-COM-INTERFACE: ID3D10ShaderReflection1 IUnknown {C3457783-A846-47CE-9520-CEA6F66E7447}
+COM-INTERFACE: ID3D10ShaderReflection1 IUnknown "{C3457783-A846-47CE-9520-CEA6F66E7447}"
     HRESULT GetDesc ( D3D10_SHADER_DESC* pDesc )
     ID3D10ShaderReflectionConstantBuffer* GetConstantBufferByIndex ( UINT Index )
     ID3D10ShaderReflectionConstantBuffer* GetConstantBufferByName ( LPCSTR Name )

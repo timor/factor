@@ -53,29 +53,29 @@ TYPEDEF: IDirectXFileBinary** LPLPDIRECTXFILEBINARY ;
 
 FUNCTION: HRESULT DirectXFileCreate ( LPDIRECTXFILE* lplpDirectXFile ) ;
 
-COM-INTERFACE: IDirectXFile IUnknown {3d82ab40-62da-11cf-ab39-0020af71e433}
+COM-INTERFACE: IDirectXFile IUnknown "{3d82ab40-62da-11cf-ab39-0020af71e433}"
     HRESULT CreateEnumObject ( LPVOID v, DXFILELOADOPTIONS y,
                                LPDIRECTXFILEENUMOBJECT* z )
     HRESULT CreateSaveObject ( LPCSTR v, DXFILEFORMAT y,
                                  LPDIRECTXFILESAVEOBJECT* z )
     HRESULT RegisterTemplates ( LPVOID x, DWORD y ) ;
 
-COM-INTERFACE: IDirectXFileEnumObject IUnknown {3d82ab41-62da-11cf-ab39-0020af71e433}
+COM-INTERFACE: IDirectXFileEnumObject IUnknown "{3d82ab41-62da-11cf-ab39-0020af71e433}"
     HRESULT GetNextDataObject ( LPDIRECTXFILEDATA* x )
     HRESULT GetDataObjectById ( REFGUID x, LPDIRECTXFILEDATA* y )
     HRESULT GetDataObjectByName ( LPCSTR x, LPDIRECTXFILEDATA* y ) ;
 
-COM-INTERFACE: IDirectXFileSaveObject IUnknown {3d82ab42-62da-11cf-ab39-0020af71e433}
+COM-INTERFACE: IDirectXFileSaveObject IUnknown "{3d82ab42-62da-11cf-ab39-0020af71e433}"
     HRESULT SaveTemplates ( DWORD x, GUID** y )
     HRESULT CreateDataObject ( REFGUID x, LPCSTR y, GUID* z,
                                DWORD a, LPVOID b, LPDIRECTXFILEDATA* c )
     HRESULT SaveData ( LPDIRECTXFILEDATA x ) ;
 
-COM-INTERFACE: IDirectXFileObject IUnknown {3d82ab43-62da-11cf-ab39-0020af71e433}
+COM-INTERFACE: IDirectXFileObject IUnknown "{3d82ab43-62da-11cf-ab39-0020af71e433}"
     HRESULT GetName ( LPSTR x, LPDWORD y )
     HRESULT GetId ( LPGUID y ) ;
 
-COM-INTERFACE: IDirectXFileData IDirectXFileObject {3d82ab44-62da-11cf-ab39-0020af71e433}
+COM-INTERFACE: IDirectXFileData IDirectXFileObject "{3d82ab44-62da-11cf-ab39-0020af71e433}"
     HRESULT GetData          ( LPCSTR x, DWORD* y, void** z )
     HRESULT GetType          ( GUID** x )
     HRESULT GetNextObject    ( LPDIRECTXFILEOBJECT* x )
@@ -83,10 +83,10 @@ COM-INTERFACE: IDirectXFileData IDirectXFileObject {3d82ab44-62da-11cf-ab39-0020
     HRESULT AddDataReference ( LPCSTR x, GUID* y )
     HRESULT AddBinaryObject  ( LPCSTR x, GUID* y, LPCSTR z, LPVOID a, DWORD b ) ;
 
-COM-INTERFACE: IDirectXFileDataReference IDirectXFileObject {3d82ab45-62da-11cf-ab39-0020af71e433}
+COM-INTERFACE: IDirectXFileDataReference IDirectXFileObject "{3d82ab45-62da-11cf-ab39-0020af71e433}"
     HRESULT Resolve ( LPDIRECTXFILEDATA* x ) ;
 
-COM-INTERFACE: IDirectXFileBinary IDirectXFileObject {3d82ab46-62da-11cf-ab39-0020af71e433}
+COM-INTERFACE: IDirectXFileBinary IDirectXFileObject "{3d82ab46-62da-11cf-ab39-0020af71e433}"
     HRESULT GetSize      ( DWORD* x )
     HRESULT GetMimeType  ( LPCSTR* x )
     HRESULT Read         ( LPVOID x, DWORD y, LPDWORD z ) ;

@@ -15,7 +15,7 @@ FUNCTION: UINT D3DXGetDriverLevel ( LPDIRECT3DDEVICE9 pDevice ) ;
 c-type: ID3DXBuffer
 TYPEDEF: ID3DXBuffer* LPD3DXBUFFER ;
 
-COM-INTERFACE: ID3DXBuffer IUnknown {8BA5FB08-5195-40e2-AC58-0D989C3A0102}
+COM-INTERFACE: ID3DXBuffer IUnknown "{8BA5FB08-5195-40e2-AC58-0D989C3A0102}"
     LPVOID GetBufferPointer ( )
     DWORD GetBufferSize ( ) ;
 
@@ -32,7 +32,7 @@ CONSTANT: D3DXSPRITE_DO_NOT_ADDREF_TEXTURE        256 ;
 c-type: ID3DXSprite
 TYPEDEF: ID3DXSprite* LPD3DXSPRITE ;
 
-COM-INTERFACE: ID3DXSprite IUnknown {BA0B762D-7D28-43ec-B9DC-2F84443B0614}
+COM-INTERFACE: ID3DXSprite IUnknown "{BA0B762D-7D28-43ec-B9DC-2F84443B0614}"
     HRESULT GetDevice ( LPDIRECT3DDEVICE9* ppDevice )
     HRESULT GetTransform ( D3DXMATRIX* pTransform )
     HRESULT SetTransform ( D3DXMATRIX* pTransform )
@@ -48,7 +48,7 @@ COM-INTERFACE: ID3DXSprite IUnknown {BA0B762D-7D28-43ec-B9DC-2F84443B0614}
 FUNCTION: HRESULT
     D3DXCreateSprite (
         LPDIRECT3DDEVICE9   pDevice,
-        LPD3DXSPRITE*       ppSprite )
+        LPD3DXSPRITE*       ppSprite ) ;
 
 STRUCT: D3DXFONT_DESCA
     { Height          INT               }
@@ -84,7 +84,7 @@ TYPEDEF: ID3DXFont* LPD3DXFONT ;
 c-type: TEXTMETRICA
 c-type: TEXTMETRICW
 
-COM-INTERFACE: ID3DXFont IUnknown {D79DBB70-5F21-4d36-BBC2-FF525C213CDC}
+COM-INTERFACE: ID3DXFont IUnknown "{D79DBB70-5F21-4d36-BBC2-FF525C213CDC}"
     HRESULT GetDevice ( LPDIRECT3DDEVICE9* ppDevice )
     HRESULT GetDescA ( D3DXFONT_DESCA* pDesc )
     HRESULT GetDescW ( D3DXFONT_DESCW* pDesc )
@@ -114,7 +114,7 @@ FUNCTION: HRESULT
         DWORD                   Quality,
         DWORD                   PitchAndFamily,
         LPCSTR                  pFaceName,
-        LPD3DXFONT*             ppFont )
+        LPD3DXFONT*             ppFont ) ;
 
 FUNCTION: HRESULT
     D3DXCreateFontW (
@@ -129,7 +129,7 @@ FUNCTION: HRESULT
         DWORD                   Quality,
         DWORD                   PitchAndFamily,
         LPCWSTR                 pFaceName,
-        LPD3DXFONT*             ppFont )
+        LPD3DXFONT*             ppFont ) ;
 
 ALIAS: D3DXCreateFont D3DXCreateFontW ;
 
@@ -137,13 +137,13 @@ FUNCTION: HRESULT
     D3DXCreateFontIndirectA (
         LPDIRECT3DDEVICE9       pDevice,
         D3DXFONT_DESCA*         pDesc,
-        LPD3DXFONT*             ppFont )
+        LPD3DXFONT*             ppFont ) ;
 
 FUNCTION: HRESULT
     D3DXCreateFontIndirectW (
         LPDIRECT3DDEVICE9       pDevice,
         D3DXFONT_DESCW*         pDesc,
-        LPD3DXFONT*             ppFont )
+        LPD3DXFONT*             ppFont ) ;
 
 ALIAS: D3DXCreateFontIndirect D3DXCreateFontIndirectW ;
 
@@ -158,7 +158,7 @@ TYPEDEF: D3DXRTS_DESC* LPD3DXRTS_DESC ;
 c-type: ID3DXRenderToSurface
 TYPEDEF: ID3DXRenderToSurface* LPD3DXRENDERTOSURFACE ;
 
-COM-INTERFACE: ID3DXRenderToSurface IUnknown {6985F346-2C3D-43b3-BE8B-DAAE8A03D894}
+COM-INTERFACE: ID3DXRenderToSurface IUnknown "{6985F346-2C3D-43b3-BE8B-DAAE8A03D894}"
     HRESULT GetDevice ( LPDIRECT3DDEVICE9* ppDevice )
     HRESULT GetDesc ( D3DXRTS_DESC* pDesc )
     HRESULT BeginScene ( LPDIRECT3DSURFACE9 pSurface, D3DVIEWPORT9* pViewport )
@@ -174,7 +174,7 @@ FUNCTION: HRESULT
         D3DFORMAT               Format,
         BOOL                    DepthStencil,
         D3DFORMAT               DepthStencilFormat,
-        LPD3DXRENDERTOSURFACE*  ppRenderToSurface )
+        LPD3DXRENDERTOSURFACE*  ppRenderToSurface ) ;
 
 STRUCT: D3DXRTE_DESC
     { Size                 UINT      }
@@ -187,7 +187,7 @@ TYPEDEF: D3DXRTE_DESC* LPD3DXRTE_DESC ;
 c-type: ID3DXRenderToEnvMap
 TYPEDEF: ID3DXRenderToEnvMap* LPD3DXRenderToEnvMap ;
 
-COM-INTERFACE: ID3DXRenderToEnvMap IUnknown {313F1B4B-C7B0-4fa2-9D9D-8D380B64385E}
+COM-INTERFACE: ID3DXRenderToEnvMap IUnknown "{313F1B4B-C7B0-4fa2-9D9D-8D380B64385E}"
     HRESULT GetDevice ( LPDIRECT3DDEVICE9* ppDevice )
     HRESULT GetDesc ( D3DXRTE_DESC* pDesc )
     HRESULT BeginCube ( LPDIRECT3DCUBETEXTURE9 pCubeTex )
@@ -207,11 +207,11 @@ FUNCTION: HRESULT
         D3DFORMAT               Format,
         BOOL                    DepthStencil,
         D3DFORMAT               DepthStencilFormat,
-        LPD3DXRenderToEnvMap*   ppRenderToEnvMap )
+        LPD3DXRenderToEnvMap*   ppRenderToEnvMap ) ;
 
 c-type: ID3DXLine
 TYPEDEF: ID3DXLine* LPD3DXLINE ;
-COM-INTERFACE: ID3DXLine IUnknown {D379BA7F-9042-4ac4-9F5E-58192A4C6BD8}
+COM-INTERFACE: ID3DXLine IUnknown "{D379BA7F-9042-4ac4-9F5E-58192A4C6BD8}"
     HRESULT GetDevice ( LPDIRECT3DDEVICE9* ppDevice )
     HRESULT Begin ( )
     HRESULT Draw ( D3DXVECTOR2* pVertexList, DWORD dwVertexListCount, D3DCOLOR Color )
@@ -235,4 +235,4 @@ COM-INTERFACE: ID3DXLine IUnknown {D379BA7F-9042-4ac4-9F5E-58192A4C6BD8}
 FUNCTION: HRESULT
     D3DXCreateLine (
         LPDIRECT3DDEVICE9   pDevice,
-        LPD3DXLINE*         ppLine )
+        LPD3DXLINE*         ppLine ) ;

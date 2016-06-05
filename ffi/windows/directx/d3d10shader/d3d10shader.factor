@@ -166,7 +166,7 @@ CONSTANT: D3D10_INCLUDE_FORCE_DWORD 0x7fffffff ;
 TYPEDEF: int D3D10_INCLUDE_TYPE ;
 TYPEDEF: D3D10_INCLUDE_TYPE* LPD3D10_INCLUDE_TYPE ;
 
-COM-INTERFACE: ID3D10Include f {C530AD7D-9B16-4395-A979-BA2ECFF83ADD}
+COM-INTERFACE: ID3D10Include f "{C530AD7D-9B16-4395-A979-BA2ECFF83ADD}"
     HRESULT Open ( D3D10_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID* ppData, UINT* pBytes )
     HRESULT Close ( LPCVOID pData ) ;
 TYPEDEF: ID3D10Include* LPD3D10INCLUDE ;
@@ -243,22 +243,22 @@ STRUCT: D3D10_SIGNATURE_PARAMETER_DESC
     { Mask            BYTE                          }
     { ReadWriteMask   BYTE                          } ;
 
-COM-INTERFACE: ID3D10ShaderReflectionType f {C530AD7D-9B16-4395-A979-BA2ECFF83ADD}
+COM-INTERFACE: ID3D10ShaderReflectionType f "{C530AD7D-9B16-4395-A979-BA2ECFF83ADD}"
     HRESULT GetDesc ( D3D10_SHADER_TYPE_DESC* pDesc )
     ID3D10ShaderReflectionType* GetMemberTypeByIndex ( UINT Index )
     ID3D10ShaderReflectionType* GetMemberTypeByName ( LPCSTR Name )
     LPCSTR GetMemberTypeName ( UINT Index ) ;
 
-COM-INTERFACE: ID3D10ShaderReflectionVariable f {1BF63C95-2650-405d-99C1-3636BD1DA0A1}
+COM-INTERFACE: ID3D10ShaderReflectionVariable f "{1BF63C95-2650-405d-99C1-3636BD1DA0A1}"
     HRESULT GetDesc ( D3D10_SHADER_VARIABLE_DESC* pDesc )
     ID3D10ShaderReflectionType* GetType ( ) ;
 
-COM-INTERFACE: ID3D10ShaderReflectionConstantBuffer f {66C66A94-DDDD-4b62-A66A-F0DA33C2B4D0}
+COM-INTERFACE: ID3D10ShaderReflectionConstantBuffer f "{66C66A94-DDDD-4b62-A66A-F0DA33C2B4D0}"
     HRESULT GetDesc ( D3D10_SHADER_BUFFER_DESC* pDesc )
     ID3D10ShaderReflectionVariable* GetVariableByIndex ( UINT Index )
     ID3D10ShaderReflectionVariable* GetVariableByName ( LPCSTR Name ) ;
 
-COM-INTERFACE: ID3D10ShaderReflection IUnknown {D40E20B6-F8F7-42ad-AB20-4BAF8F15DFAA}
+COM-INTERFACE: ID3D10ShaderReflection IUnknown "{D40E20B6-F8F7-42ad-AB20-4BAF8F15DFAA}"
     HRESULT GetDesc ( D3D10_SHADER_DESC* pDesc )
     ID3D10ShaderReflectionConstantBuffer* GetConstantBufferByIndex ( UINT Index )
     ID3D10ShaderReflectionConstantBuffer* GetConstantBufferByName ( LPCSTR Name )

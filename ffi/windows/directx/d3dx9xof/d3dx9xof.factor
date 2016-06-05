@@ -48,7 +48,7 @@ TYPEDEF: ID3DXFileData** LPLPD3DXFILEDATA ;
 TYPEDEF: ID3DXFileSaveData* LPD3DXFILESAVEDATA ;
 TYPEDEF: ID3DXFileSaveData** LPLPD3DXFILESAVEDATA ;
 
-COM-INTERFACE: ID3DXFile IUnknown {cef08cf9-7b4f-4429-9624-2a690a933201}
+COM-INTERFACE: ID3DXFile IUnknown "{cef08cf9-7b4f-4429-9624-2a690a933201}"
     HRESULT CreateEnumObject ( LPCVOID x, D3DXF_FILELOADOPTIONS y,
         ID3DXFileEnumObject** z )
     HRESULT CreateSaveObject ( LPCVOID x, D3DXF_FILESAVEOPTIONS y,
@@ -56,13 +56,13 @@ COM-INTERFACE: ID3DXFile IUnknown {cef08cf9-7b4f-4429-9624-2a690a933201}
     HRESULT RegisterTemplates ( LPCVOID x, SIZE_T y )
     HRESULT RegisterEnumTemplates ( ID3DXFileEnumObject* x ) ;
 
-COM-INTERFACE: ID3DXFileSaveObject IUnknown {cef08cfa-7b4f-4429-9624-2a690a933201}
+COM-INTERFACE: ID3DXFileSaveObject IUnknown "{cef08cfa-7b4f-4429-9624-2a690a933201}"
     HRESULT GetFile ( ID3DXFile** x )
     HRESULT AddDataObject ( REFGUID x, LPCSTR y, GUID* z,
         SIZE_T w, LPCVOID a, ID3DXFileSaveData** b )
     HRESULT Save ( ) ;
 
-COM-INTERFACE: ID3DXFileSaveData IUnknown {cef08cfb-7b4f-4429-9624-2a690a933201}
+COM-INTERFACE: ID3DXFileSaveData IUnknown "{cef08cfb-7b4f-4429-9624-2a690a933201}"
     HRESULT GetSave ( ID3DXFileSaveObject** x )
     HRESULT GetName ( LPSTR x, SIZE_T* y )
     HRESULT GetId ( LPGUID x )
@@ -71,14 +71,14 @@ COM-INTERFACE: ID3DXFileSaveData IUnknown {cef08cfb-7b4f-4429-9624-2a690a933201}
         SIZE_T w, LPCVOID a, ID3DXFileSaveData** b )
     HRESULT AddDataReference ( LPCSTR x, GUID* y ) ;
 
-COM-INTERFACE: ID3DXFileEnumObject IUnknown {cef08cfc-7b4f-4429-9624-2a690a933201}
+COM-INTERFACE: ID3DXFileEnumObject IUnknown "{cef08cfc-7b4f-4429-9624-2a690a933201}"
     HRESULT GetFile ( ID3DXFile** x )
     HRESULT GetChildren ( SIZE_T* x )
     HRESULT GetChild ( SIZE_T x, ID3DXFileData** y )
     HRESULT GetDataObjectById ( REFGUID x, ID3DXFileData** y )
     HRESULT GetDataObjectByName ( LPCSTR x, ID3DXFileData** y ) ;
 
-COM-INTERFACE: ID3DXFileData IUnknown {cef08cfd-7b4f-4429-9624-2a690a933201}
+COM-INTERFACE: ID3DXFileData IUnknown "{cef08cfd-7b4f-4429-9624-2a690a933201}"
     HRESULT GetEnum ( ID3DXFileEnumObject** x )
     HRESULT GetName ( LPSTR x, SIZE_T* y )
     HRESULT GetId ( LPGUID x )

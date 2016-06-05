@@ -55,12 +55,12 @@ STRUCT: D3DXFUNCTION_DESC
 c-type: ID3DXEffectPool
 TYPEDEF: ID3DXEffectPool* LPD3DXEFFECTPOOL ;
 
-COM-INTERFACE: ID3DXEffectPool IUnknown {9537AB04-3250-412e-8213-FCD2F8677933} ;
+COM-INTERFACE: ID3DXEffectPool IUnknown "{9537AB04-3250-412e-8213-FCD2F8677933}" ;
 
 c-type: ID3DXBaseEffect
 TYPEDEF: ID3DXBaseEffect* LPD3DXBASEEFFECT ;
 
-COM-INTERFACE: ID3DXBaseEffect IUnknown {017C18AC-103F-4417-8C51-6BF6EF1E56BE}
+COM-INTERFACE: ID3DXBaseEffect IUnknown "{017C18AC-103F-4417-8C51-6BF6EF1E56BE}"
     HRESULT GetDesc ( D3DXEFFECT_DESC* pDesc )
     HRESULT GetParameterDesc ( D3DXHANDLE hParameter, D3DXPARAMETER_DESC* pDesc )
     HRESULT GetTechniqueDesc ( D3DXHANDLE hTechnique, D3DXTECHNIQUE_DESC* pDesc )
@@ -119,7 +119,7 @@ COM-INTERFACE: ID3DXBaseEffect IUnknown {017C18AC-103F-4417-8C51-6BF6EF1E56BE}
 c-type: ID3DXEffectStateManager
 TYPEDEF: ID3DXEffectStateManager* LPD3DXEFFECTSTATEMANAGER ;
 
-COM-INTERFACE: ID3DXEffectStateManager IUnknown {79AAB587-6DBC-4fa7-82DE-37FA1781C5CE}
+COM-INTERFACE: ID3DXEffectStateManager IUnknown "{79AAB587-6DBC-4fa7-82DE-37FA1781C5CE}"
     HRESULT SetTransform ( D3DTRANSFORMSTATETYPE State, D3DMATRIX* pMatrix )
     HRESULT SetMaterial ( D3DMATERIAL9* pMaterial )
     HRESULT SetLight ( DWORD Index, D3DLIGHT9* pLight )
@@ -142,7 +142,7 @@ COM-INTERFACE: ID3DXEffectStateManager IUnknown {79AAB587-6DBC-4fa7-82DE-37FA178
 c-type: ID3DXEffect
 TYPEDEF: ID3DXEffect* LPD3DXEFFECT ;
 
-COM-INTERFACE: ID3DXEffect ID3DXBaseEffect {F6CEB4B3-4E4C-40dd-B883-8D8DE5EA0CD5}
+COM-INTERFACE: ID3DXEffect ID3DXBaseEffect "{F6CEB4B3-4E4C-40dd-B883-8D8DE5EA0CD5}"
     HRESULT GetPool ( LPD3DXEFFECTPOOL* ppPool )
     HRESULT SetTechnique ( D3DXHANDLE hTechnique )
     D3DXHANDLE GetCurrentTechnique ( )
@@ -169,7 +169,7 @@ COM-INTERFACE: ID3DXEffect ID3DXBaseEffect {F6CEB4B3-4E4C-40dd-B883-8D8DE5EA0CD5
 c-type: ID3DXEffectCompiler
 TYPEDEF: ID3DXEffectCompiler* LPD3DXEFFECTCOMPILER ;
 
-COM-INTERFACE: ID3DXEffectCompiler ID3DXBaseEffect {51B8A949-1A31-47e6-BEA0-4B30DB53F1E0}
+COM-INTERFACE: ID3DXEffectCompiler ID3DXBaseEffect "{51B8A949-1A31-47e6-BEA0-4B30DB53F1E0}"
     HRESULT SetLiteral ( D3DXHANDLE hParameter, BOOL Literal )
     HRESULT GetLiteral ( D3DXHANDLE hParameter, BOOL* pLiteral )
     HRESULT CompileEffect ( DWORD Flags, LPD3DXBUFFER* ppEffect, LPD3DXBUFFER* ppErrorMsgs )
@@ -178,7 +178,7 @@ COM-INTERFACE: ID3DXEffectCompiler ID3DXBaseEffect {51B8A949-1A31-47e6-BEA0-4B30
                             LPD3DXCONSTANTTABLE* ppConstantTable ) ;
 
 FUNCTION: HRESULT
-    D3DXCreateEffectPool ( LPD3DXEFFECTPOOL* ppPool )
+    D3DXCreateEffectPool ( LPD3DXEFFECTPOOL* ppPool ) ;
 
 FUNCTION: HRESULT
     D3DXCreateEffectFromFileA (
@@ -189,7 +189,7 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXEFFECTPOOL                pPool,
         LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors )
+        LPD3DXBUFFER*                   ppCompilationErrors ) ;
 
 FUNCTION: HRESULT
     D3DXCreateEffectFromFileW (
@@ -200,7 +200,7 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXEFFECTPOOL                pPool,
         LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors )
+        LPD3DXBUFFER*                   ppCompilationErrors ) ;
 
 ALIAS: D3DXCreateEffectFromFile D3DXCreateEffectFromFileW ;
 
@@ -214,7 +214,7 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXEFFECTPOOL                pPool,
         LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors )
+        LPD3DXBUFFER*                   ppCompilationErrors ) ;
 
 FUNCTION: HRESULT
     D3DXCreateEffectFromResourceW (
@@ -226,7 +226,7 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXEFFECTPOOL                pPool,
         LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors )
+        LPD3DXBUFFER*                   ppCompilationErrors ) ;
 
 ALIAS: D3DXCreateEffectFromResource D3DXCreateEffectFromResourceW ;
 
@@ -240,7 +240,7 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXEFFECTPOOL                pPool,
         LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors )
+        LPD3DXBUFFER*                   ppCompilationErrors ) ;
 
 FUNCTION: HRESULT
     D3DXCreateEffectFromFileExA (
@@ -252,7 +252,7 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXEFFECTPOOL                pPool,
         LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors )
+        LPD3DXBUFFER*                   ppCompilationErrors ) ;
 
 FUNCTION: HRESULT
     D3DXCreateEffectFromFileExW (
@@ -264,7 +264,7 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXEFFECTPOOL                pPool,
         LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors )
+        LPD3DXBUFFER*                   ppCompilationErrors ) ;
 
 ALIAS: D3DXCreateEffectFromFileEx D3DXCreateEffectFromFileExW ;
 
@@ -279,7 +279,7 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXEFFECTPOOL                pPool,
         LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors )
+        LPD3DXBUFFER*                   ppCompilationErrors ) ;
 
 FUNCTION: HRESULT
     D3DXCreateEffectFromResourceExW (
@@ -292,7 +292,7 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXEFFECTPOOL                pPool,
         LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors )
+        LPD3DXBUFFER*                   ppCompilationErrors ) ;
 
 ALIAS: D3DXCreateEffectFromResourceEx D3DXCreateEffectFromResourceExW ;
 
@@ -307,7 +307,7 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXEFFECTPOOL                pPool,
         LPD3DXEFFECT*                   ppEffect,
-        LPD3DXBUFFER*                   ppCompilationErrors )
+        LPD3DXBUFFER*                   ppCompilationErrors ) ;
 
 FUNCTION: HRESULT
     D3DXCreateEffectCompilerFromFileA (
@@ -316,7 +316,7 @@ FUNCTION: HRESULT
         LPD3DXINCLUDE                   pInclude,
         DWORD                           Flags,
         LPD3DXEFFECTCOMPILER*           ppCompiler,
-        LPD3DXBUFFER*                   ppParseErrors )
+        LPD3DXBUFFER*                   ppParseErrors ) ;
 
 FUNCTION: HRESULT
     D3DXCreateEffectCompilerFromFileW (
@@ -325,7 +325,7 @@ FUNCTION: HRESULT
         LPD3DXINCLUDE                   pInclude,
         DWORD                           Flags,
         LPD3DXEFFECTCOMPILER*           ppCompiler,
-        LPD3DXBUFFER*                   ppParseErrors )
+        LPD3DXBUFFER*                   ppParseErrors ) ;
 
 ALIAS: D3DXCreateEffectCompilerFromFile D3DXCreateEffectCompilerFromFileW ;
 
@@ -337,7 +337,7 @@ FUNCTION: HRESULT
         LPD3DXINCLUDE                   pInclude,
         DWORD                           Flags,
         LPD3DXEFFECTCOMPILER*           ppCompiler,
-        LPD3DXBUFFER*                   ppParseErrors )
+        LPD3DXBUFFER*                   ppParseErrors ) ;
 
 FUNCTION: HRESULT
     D3DXCreateEffectCompilerFromResourceW (
@@ -347,7 +347,7 @@ FUNCTION: HRESULT
         LPD3DXINCLUDE                   pInclude,
         DWORD                           Flags,
         LPD3DXEFFECTCOMPILER*           ppCompiler,
-        LPD3DXBUFFER*                   ppParseErrors )
+        LPD3DXBUFFER*                   ppParseErrors ) ;
 
 ALIAS: D3DXCreateEffectCompilerFromResource D3DXCreateEffectCompilerFromResourceW ;
 
@@ -359,10 +359,10 @@ FUNCTION: HRESULT
         LPD3DXINCLUDE                   pInclude,
         DWORD                           Flags,
         LPD3DXEFFECTCOMPILER*           ppCompiler,
-        LPD3DXBUFFER*                   ppParseErrors )
+        LPD3DXBUFFER*                   ppParseErrors ) ;
 
 FUNCTION: HRESULT
     D3DXDisassembleEffect (
         LPD3DXEFFECT pEffect,
         BOOL EnableColorCode,
-        LPD3DXBUFFER* ppDisassembly )
+        LPD3DXBUFFER* ppDisassembly ) ;

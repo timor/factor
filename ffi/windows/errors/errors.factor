@@ -752,7 +752,7 @@ CONSTANT: expected-io-errors
         ERROR_IO_INCOMPLETE
         ERROR_IO_PENDING
         WAIT_TIMEOUT
-    }
+    } ;
 
 : expected-io-error? ( error-code -- ? )
     expected-io-errors member? ;

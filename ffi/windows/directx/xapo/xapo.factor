@@ -48,7 +48,7 @@ STRUCT: XAPO_PROCESS_BUFFER_PARAMETERS
     { BufferFlags                XAPO_BUFFER_FLAGS }
     { ValidFrameCount            UINT32            } ;
 
-COM-INTERFACE: IXAPO IUnknown {A90BC001-E897-E897-55E4-9E4700000000}
+COM-INTERFACE: IXAPO IUnknown "{A90BC001-E897-E897-55E4-9E4700000000}"
     HRESULT GetRegistrationProperties ( XAPO_REGISTRATION_PROPERTIES** ppRegistrationProperties )
     HRESULT IsInputFormatSupported ( WAVEFORMATEX* pOutputFormat, WAVEFORMATEX* pRequestedInputFormat, WAVEFORMATEX** ppSupportedInputFormat )
     HRESULT IsOutputFormatSupported ( WAVEFORMATEX* pInputFormat, WAVEFORMATEX* pRequestedOutputFormat, WAVEFORMATEX** ppSupportedOutputFormat )
@@ -60,6 +60,6 @@ COM-INTERFACE: IXAPO IUnknown {A90BC001-E897-E897-55E4-9E4700000000}
     UINT32 CalcInputFrames ( UINT32 OutputFrameCount )
     UINT32 CalcOutputFrames ( UINT32 InputFrameCount ) ;
 
-COM-INTERFACE: IXAPOParameters IUnknown {A90BC001-E897-E897-55E4-9E4700000001}
+COM-INTERFACE: IXAPOParameters IUnknown "{A90BC001-E897-E897-55E4-9E4700000001}"
     void SetParameters ( void* pParameters, UINT32 ParameterByteSize )
     void GetParameters ( void* pParameters, UINT32 ParameterByteSize ) ;

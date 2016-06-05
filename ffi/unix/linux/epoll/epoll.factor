@@ -20,9 +20,9 @@ FUNCTION: int epoll_ctl ( int epfd, int op, int fd, epoll-event* event ) ;
 
 FUNCTION: int epoll_wait ( int epfd, epoll-event* events, int maxevents, int timeout ) ;
 
-CONSTANT: EPOLL_CTL_ADD 1 ! Add a file decriptor to the interface. ;
-CONSTANT: EPOLL_CTL_DEL 2 ! Remove a file decriptor from the interface. ;
-CONSTANT: EPOLL_CTL_MOD 3 ! Change file decriptor epoll_event structure. ;
+CONSTANT: EPOLL_CTL_ADD 1 ; ! Add a file decriptor to the interface.
+CONSTANT: EPOLL_CTL_DEL 2 ; ! Remove a file decriptor from the interface.
+CONSTANT: EPOLL_CTL_MOD 3 ; ! Change file decriptor epoll_event structure.
 
 CONSTANT: EPOLLIN      0x001 ;
 CONSTANT: EPOLLPRI     0x002 ;

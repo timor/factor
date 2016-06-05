@@ -25,7 +25,7 @@ FUNCTION: DWORD D3DPERF_GetStatus ( ) ;
 
 c-type: IDirect3DDevice9
 
-COM-INTERFACE: IDirect3D9 IUnknown {81BDCBCA-64D4-426d-AE8D-AD0147F4275C}
+COM-INTERFACE: IDirect3D9 IUnknown "{81BDCBCA-64D4-426d-AE8D-AD0147F4275C}""
     HRESULT RegisterSoftwareDevice ( void* pInitializeFunction )
     UINT GetAdapterCount ( )
     HRESULT GetAdapterIdentifier ( UINT Adapter, DWORD Flags, D3DADAPTER_IDENTIFIER9* pIdentifier )
@@ -65,7 +65,7 @@ c-type: IDirect3DDevice9Ex
 c-type: IDirect3DAuthenticatedChannel9
 c-type: IDirect3DCryptoSession9
 
-COM-INTERFACE: IDirect3DDevice9 IUnknown {D0223B96-BF7A-43fd-92BD-A43B0D82B9EB}
+COM-INTERFACE: IDirect3DDevice9 IUnknown "{D0223B96-BF7A-43fd-92BD-A43B0D82B9EB}""
     HRESULT TestCooperativeLevel ( )
     UINT GetAvailableTextureMem ( )
     HRESULT EvictManagedResources ( )
@@ -186,12 +186,12 @@ COM-INTERFACE: IDirect3DDevice9 IUnknown {D0223B96-BF7A-43fd-92BD-A43B0D82B9EB}
 TYPEDEF: IDirect3DDevice9* LPDIRECT3DDEVICE9 ;
 TYPEDEF: IDirect3DDevice9* PDIRECT3DDEVICE9 ;
 
-COM-INTERFACE: IDirect3DStateBlock9 IUnknown {B07C4FE5-310D-4ba8-A23C-4F0F206F218B}
+COM-INTERFACE: IDirect3DStateBlock9 IUnknown "{B07C4FE5-310D-4ba8-A23C-4F0F206F218B}""
     HRESULT GetDevice ( IDirect3DDevice9** ppDevice )
     HRESULT Capture ( )
     HRESULT Apply ( ) ;
 
-COM-INTERFACE: IDirect3DSwapChain9 IUnknown {794950F2-ADFC-458a-905E-10A10B0B503B}
+COM-INTERFACE: IDirect3DSwapChain9 IUnknown "{794950F2-ADFC-458a-905E-10A10B0B503B}"
     HRESULT Present ( RECT* pSourceRect, RECT* pDestRect, HWND hDestWindowOverride, RGNDATA* pDirtyRegion, DWORD dwFlags )
     HRESULT GetFrontBufferData ( IDirect3DSurface9* pDestSurface )
     HRESULT GetBackBuffer ( UINT iBackBuffer, D3DBACKBUFFER_TYPE Type, IDirect3DSurface9** ppBackBuffer )
@@ -203,7 +203,7 @@ COM-INTERFACE: IDirect3DSwapChain9 IUnknown {794950F2-ADFC-458a-905E-10A10B0B503
 TYPEDEF: IDirect3DSwapChain9* LPDIRECT3DSWAPCHAIN9 ;
 TYPEDEF: IDirect3DSwapChain9* PDIRECT3DSWAPCHAIN9 ;
 
-COM-INTERFACE: IDirect3DResource9 IUnknown {05EEC05D-8F7D-4362-B999-D1BAF357C704}
+COM-INTERFACE: IDirect3DResource9 IUnknown "{05EEC05D-8F7D-4362-B999-D1BAF357C704}"
     HRESULT GetDevice ( IDirect3DDevice9** ppDevice )
     HRESULT SetPrivateData ( REFGUID refguid, void* pData, DWORD SizeOfData, DWORD Flags )
     HRESULT GetPrivateData ( REFGUID refguid, void* pData, DWORD* pSizeOfData )
@@ -216,28 +216,28 @@ COM-INTERFACE: IDirect3DResource9 IUnknown {05EEC05D-8F7D-4362-B999-D1BAF357C704
 TYPEDEF: IDirect3DResource9* LPDIRECT3DRESOURCE9 ;
 TYPEDEF: IDirect3DResource9* PDIRECT3DRESOURCE9 ;
 
-COM-INTERFACE: IDirect3DVertexDeclaration9 IUnknown {DD13C59C-36FA-4098-A8FB-C7ED39DC8546}
+COM-INTERFACE: IDirect3DVertexDeclaration9 IUnknown "{DD13C59C-36FA-4098-A8FB-C7ED39DC8546}"
     HRESULT GetDevice ( IDirect3DDevice9** ppDevice )
     HRESULT GetDeclaration ( D3DVERTEXELEMENT9* pElement, UINT* pNumElements ) ;
 
 TYPEDEF: IDirect3DVertexDeclaration9* LPDIRECT3DVERTEXDECLARATION9 ;
 TYPEDEF: IDirect3DVertexDeclaration9* PDIRECT3DVERTEXDECLARATION9 ;
 
-COM-INTERFACE: IDirect3DVertexShader9 IUnknown {EFC5557E-6265-4613-8A94-43857889EB36}
+COM-INTERFACE: IDirect3DVertexShader9 IUnknown "{EFC5557E-6265-4613-8A94-43857889EB36}"
     HRESULT GetDevice ( IDirect3DDevice9** ppDevice )
     HRESULT GetFunction ( void* x, UINT* pSizeOfData ) ;
 
 TYPEDEF: IDirect3DVertexShader9* LPDIRECT3DVERTEXSHADER9 ;
 TYPEDEF: IDirect3DVertexShader9* PDIRECT3DVERTEXSHADER9 ;
 
-COM-INTERFACE: IDirect3DPixelShader9 IUnknown {6D3BDBDC-5B02-4415-B852-CE5E8BCCB289}
+COM-INTERFACE: IDirect3DPixelShader9 IUnknown "{6D3BDBDC-5B02-4415-B852-CE5E8BCCB289}"
     HRESULT GetDevice ( IDirect3DDevice9** ppDevice )
     HRESULT GetFunction ( void* x, UINT* pSizeOfData ) ;
 
 TYPEDEF: IDirect3DPixelShader9* LPDIRECT3DPIXELSHADER9 ;
 TYPEDEF: IDirect3DPixelShader9* PDIRECT3DPIXELSHADER9 ;
 
-COM-INTERFACE: IDirect3DBaseTexture9 IDirect3DResource9 {580CA87E-1D3C-4d54-991D-B7D3E3C298CE}
+COM-INTERFACE: IDirect3DBaseTexture9 IDirect3DResource9 "{580CA87E-1D3C-4d54-991D-B7D3E3C298CE}"
     DWORD SetLOD ( DWORD LODNew )
     DWORD GetLOD ( )
     DWORD GetLevelCount ( )
@@ -248,7 +248,7 @@ COM-INTERFACE: IDirect3DBaseTexture9 IDirect3DResource9 {580CA87E-1D3C-4d54-991D
 TYPEDEF: IDirect3DBaseTexture9* LPDIRECT3DBASETEXTURE9 ;
 TYPEDEF: IDirect3DBaseTexture9* PDIRECT3DBASETEXTURE9 ;
 
-COM-INTERFACE: IDirect3DTexture9 IDirect3DBaseTexture9 {85C31227-3DE5-4f00-9B3A-F11AC38C18B5}
+COM-INTERFACE: IDirect3DTexture9 IDirect3DBaseTexture9 "{85C31227-3DE5-4f00-9B3A-F11AC38C18B5}"
     HRESULT GetLevelDesc ( UINT Level, D3DSURFACE_DESC* pDesc )
     HRESULT GetSurfaceLevel ( UINT Level, IDirect3DSurface9** ppSurfaceLevel )
     HRESULT LockRect ( UINT Level, D3DLOCKED_RECT* pLockedRect, RECT* pRect, DWORD Flags )
@@ -257,7 +257,7 @@ COM-INTERFACE: IDirect3DTexture9 IDirect3DBaseTexture9 {85C31227-3DE5-4f00-9B3A-
 TYPEDEF: IDirect3DTexture9* LPDIRECT3DTEXTURE9 ;
 TYPEDEF: IDirect3DTexture9* PDIRECT3DTEXTURE9 ;
 
-COM-INTERFACE: IDirect3DVolumeTexture9 IDirect3DBaseTexture9 {2518526C-E789-4111-A7B9-47EF328D13E6}
+COM-INTERFACE: IDirect3DVolumeTexture9 IDirect3DBaseTexture9 "{2518526C-E789-4111-A7B9-47EF328D13E6}"
     HRESULT GetLevelDesc ( UINT Level, D3DVOLUME_DESC* pDesc )
     HRESULT GetVolumeLevel ( UINT Level, IDirect3DVolume9** ppVolumeLevel )
     HRESULT LockBox ( UINT Level, D3DLOCKED_BOX* pLockedVolume, D3DBOX* pBox, DWORD Flags )
@@ -267,7 +267,7 @@ COM-INTERFACE: IDirect3DVolumeTexture9 IDirect3DBaseTexture9 {2518526C-E789-4111
 TYPEDEF: IDirect3DVolumeTexture9* LPDIRECT3DVOLUMETEXTURE9 ;
 TYPEDEF: IDirect3DVolumeTexture9* PDIRECT3DVOLUMETEXTURE9 ;
 
-COM-INTERFACE: IDirect3DCubeTexture9 IDirect3DBaseTexture9 {FFF32F81-D953-473a-9223-93D652ABA93F}
+COM-INTERFACE: IDirect3DCubeTexture9 IDirect3DBaseTexture9 "{FFF32F81-D953-473a-9223-93D652ABA93F}"
     HRESULT GetLevelDesc ( UINT Level, D3DSURFACE_DESC* pDesc )
     HRESULT GetCubeMapSurface ( D3DCUBEMAP_FACES FaceType, UINT Level, IDirect3DSurface9** ppCubeMapSurface )
     HRESULT LockRect ( D3DCUBEMAP_FACES FaceType, UINT Level, D3DLOCKED_RECT* pLockedRect, RECT* pRect, DWORD Flags )
@@ -277,7 +277,7 @@ COM-INTERFACE: IDirect3DCubeTexture9 IDirect3DBaseTexture9 {FFF32F81-D953-473a-9
 TYPEDEF: IDirect3DCubeTexture9* LPDIRECT3DCUBETEXTURE9 ;
 TYPEDEF: IDirect3DCubeTexture9* PDIRECT3DCUBETEXTURE9 ;
 
-COM-INTERFACE: IDirect3DVertexBuffer9 IDirect3DResource9 {B64BB1B5-FD70-4df6-BF91-19D0A12455E3}
+COM-INTERFACE: IDirect3DVertexBuffer9 IDirect3DResource9 "{B64BB1B5-FD70-4df6-BF91-19D0A12455E3}"
     HRESULT Lock ( UINT OffsetToLock, UINT SizeToLock, void** ppbData, DWORD Flags )
     HRESULT Unlock ( )
     HRESULT GetDesc ( D3DVERTEXBUFFER_DESC* pDesc ) ;
@@ -285,7 +285,7 @@ COM-INTERFACE: IDirect3DVertexBuffer9 IDirect3DResource9 {B64BB1B5-FD70-4df6-BF9
 TYPEDEF: IDirect3DVertexBuffer9* LPDIRECT3DVERTEXBUFFER9 ;
 TYPEDEF: IDirect3DVertexBuffer9* PDIRECT3DVERTEXBUFFER9 ;
 
-COM-INTERFACE: IDirect3DIndexBuffer9 IDirect3DResource9 {7C9DD65E-D3F7-4529-ACEE-785830ACDE35}
+COM-INTERFACE: IDirect3DIndexBuffer9 IDirect3DResource9 "{7C9DD65E-D3F7-4529-ACEE-785830ACDE35}"
     HRESULT Lock ( UINT OffsetToLock, UINT SizeToLock, void** ppbData, DWORD Flags )
     HRESULT Unlock ( )
     HRESULT GetDesc ( D3DINDEXBUFFER_DESC* pDesc ) ;
@@ -293,7 +293,7 @@ COM-INTERFACE: IDirect3DIndexBuffer9 IDirect3DResource9 {7C9DD65E-D3F7-4529-ACEE
 TYPEDEF: IDirect3DIndexBuffer9* LPDIRECT3DINDEXBUFFER9 ;
 TYPEDEF: IDirect3DIndexBuffer9* PDIRECT3DINDEXBUFFER9 ;
 
-COM-INTERFACE: IDirect3DSurface9 IDirect3DResource9 {0CFBAF3A-9FF6-429a-99B3-A2796AF8B89B}
+COM-INTERFACE: IDirect3DSurface9 IDirect3DResource9 "{0CFBAF3A-9FF6-429a-99B3-A2796AF8B89B}"
     HRESULT GetContainer ( REFIID riid, void** ppContainer )
     HRESULT GetDesc ( D3DSURFACE_DESC* pDesc )
     HRESULT LockRect ( D3DLOCKED_RECT* pLockedRect, RECT* pRect, DWORD Flags )
@@ -304,7 +304,7 @@ COM-INTERFACE: IDirect3DSurface9 IDirect3DResource9 {0CFBAF3A-9FF6-429a-99B3-A27
 TYPEDEF: IDirect3DSurface9* LPDIRECT3DSURFACE9 ;
 TYPEDEF: IDirect3DSurface9* PDIRECT3DSURFACE9 ;
 
-COM-INTERFACE: IDirect3DVolume9 IUnknown {24F416E6-1F67-4aa7-B88E-D33F6F3128A1}
+COM-INTERFACE: IDirect3DVolume9 IUnknown "{24F416E6-1F67-4aa7-B88E-D33F6F3128A1}"
     HRESULT GetDevice ( IDirect3DDevice9** ppDevice )
     HRESULT SetPrivateData ( REFGUID refguid, void* pData, DWORD SizeOfData, DWORD Flags )
     HRESULT GetPrivateData ( REFGUID refguid, void* pData, DWORD* pSizeOfData )
@@ -317,7 +317,7 @@ COM-INTERFACE: IDirect3DVolume9 IUnknown {24F416E6-1F67-4aa7-B88E-D33F6F3128A1}
 TYPEDEF: IDirect3DVolume9* LPDIRECT3DVOLUME9 ;
 TYPEDEF: IDirect3DVolume9* PDIRECT3DVOLUME9 ;
 
-COM-INTERFACE: IDirect3DQuery9 IUnknown {d9771460-a695-4f26-bbd3-27b840b541cc}
+COM-INTERFACE: IDirect3DQuery9 IUnknown "{d9771460-a695-4f26-bbd3-27b840b541cc}"
     HRESULT GetDevice ( IDirect3DDevice9** ppDevice )
     D3DQUERYTYPE GetType ( )
     DWORD GetDataSize ( )
@@ -409,7 +409,7 @@ CONSTANT: D3DERR_PRESENT_STATISTICS_DISJOINT      0x88760884 ;
 
 FUNCTION: HRESULT Direct3DCreate9Ex ( UINT SDKVersion, IDirect3D9Ex** out ) ;
 
-COM-INTERFACE: IDirect3D9Ex IDirect3D9 {02177241-69FC-400C-8FF1-93A44DF6861D}
+COM-INTERFACE: IDirect3D9Ex IDirect3D9 "{02177241-69FC-400C-8FF1-93A44DF6861D}"
     UINT GetAdapterModeCountEx ( UINT Adapter, D3DDISPLAYMODEFILTER* pFilter  )
     HRESULT EnumAdapterModesEx ( UINT Adapter, D3DDISPLAYMODEFILTER* pFilter, UINT Mode, D3DDISPLAYMODEEX* pMode )
     HRESULT GetAdapterDisplayModeEx ( UINT Adapter, D3DDISPLAYMODEEX* pMode, D3DDISPLAYROTATION* pRotation )
@@ -419,7 +419,7 @@ COM-INTERFACE: IDirect3D9Ex IDirect3D9 {02177241-69FC-400C-8FF1-93A44DF6861D}
 TYPEDEF: IDirect3D9Ex* LPDIRECT3D9EX ;
 TYPEDEF: IDirect3D9Ex* PDIRECT3D9EX ;
 
-COM-INTERFACE: IDirect3DDevice9Ex IDirect3DDevice9 {B18B10CE-2649-405a-870F-95F777D4313A}
+COM-INTERFACE: IDirect3DDevice9Ex IDirect3DDevice9 "{B18B10CE-2649-405a-870F-95F777D4313A}"
     HRESULT SetConvolutionMonoKernel ( UINT width, UINT height, float* rows, float* columns )
     HRESULT ComposeRects ( IDirect3DSurface9* pSrc, IDirect3DSurface9* pDst, IDirect3DVertexBuffer9* pSrcRectDescs, UINT NumRects, IDirect3DVertexBuffer9* pDstRectDescs, D3DCOMPOSERECTSOP Operation, int Xoffset, int Yoffset )
     HRESULT PresentEx ( RECT* pSourceRect, RECT* pDestRect, HWND hDestWindowOverride, RGNDATA* pDirtyRegion, DWORD dwFlags )
@@ -439,7 +439,7 @@ COM-INTERFACE: IDirect3DDevice9Ex IDirect3DDevice9 {B18B10CE-2649-405a-870F-95F7
 TYPEDEF: IDirect3DDevice9Ex* LPDIRECT3DDEVICE9EX ;
 TYPEDEF: IDirect3DDevice9Ex* PDIRECT3DDEVICE9EX ;
 
-COM-INTERFACE: IDirect3DSwapChain9Ex IDirect3DSwapChain9 {91886CAF-1C3D-4d2e-A0AB-3E4C7D8D3303}
+COM-INTERFACE: IDirect3DSwapChain9Ex IDirect3DSwapChain9 "{91886CAF-1C3D-4d2e-A0AB-3E4C7D8D3303}"
     HRESULT GetLastPresentCount ( UINT* pLastPresentCount )
     HRESULT GetPresentStats ( D3DPRESENTSTATS* pPresentationStatistics )
     HRESULT GetDisplayModeEx ( D3DDISPLAYMODEEX* pMode, D3DDISPLAYROTATION* pRotation ) ;
@@ -447,13 +447,13 @@ COM-INTERFACE: IDirect3DSwapChain9Ex IDirect3DSwapChain9 {91886CAF-1C3D-4d2e-A0A
 TYPEDEF: IDirect3DSwapChain9Ex* LPDIRECT3DSWAPCHAIN9EX ;
 TYPEDEF: IDirect3DSwapChain9Ex* PDIRECT3DSWAPCHAIN9EX ;
 
-COM-INTERFACE: IDirect3D9ExOverlayExtension IUnknown {187aeb13-aaf5-4c59-876d-e059088c0df8}
+COM-INTERFACE: IDirect3D9ExOverlayExtension IUnknown "{187aeb13-aaf5-4c59-876d-e059088c0df8}"
     HRESULT CheckDeviceOverlayType ( UINT Adapter, D3DDEVTYPE DevType, UINT OverlayWidth, UINT OverlayHeight, D3DFORMAT OverlayFormat, D3DDISPLAYMODEEX* pDisplayMode, D3DDISPLAYROTATION DisplayRotation, D3DOVERLAYCAPS* pOverlayCaps ) ;
 
 TYPEDEF: IDirect3D9ExOverlayExtension* LPDIRECT3D9EXOVERLAYEXTENSION ;
 TYPEDEF: IDirect3D9ExOverlayExtension* PDIRECT3D9EXOVERLAYEXTENSION ;
 
-COM-INTERFACE: IDirect3DDevice9Video IUnknown {26DC4561-A1EE-4ae7-96DA-118A36C0EC95}
+COM-INTERFACE: IDirect3DDevice9Video IUnknown "{26DC4561-A1EE-4ae7-96DA-118A36C0EC95}"
     HRESULT GetContentProtectionCaps ( GUID* pCryptoType, GUID* pDecodeProfile, D3DCONTENTPROTECTIONCAPS* pCaps )
     HRESULT CreateAuthenticatedChannel ( D3DAUTHENTICATEDCHANNELTYPE ChannelType, IDirect3DAuthenticatedChannel9** ppAuthenticatedChannel, HANDLE* pChannelHandle )
     HRESULT CreateCryptoSession ( GUID* pCryptoType, GUID* pDecodeProfile, IDirect3DCryptoSession9** ppCryptoSession, HANDLE* pCryptoHandle ) ;
@@ -461,7 +461,7 @@ COM-INTERFACE: IDirect3DDevice9Video IUnknown {26DC4561-A1EE-4ae7-96DA-118A36C0E
 TYPEDEF: IDirect3DDevice9Video* LPDIRECT3DDEVICE9VIDEO ;
 TYPEDEF: IDirect3DDevice9Video* PDIRECT3DDEVICE9VIDEO ;
 
-COM-INTERFACE: IDirect3DAuthenticatedChannel9 IUnknown {FF24BEEE-DA21-4beb-98B5-D2F899F98AF9}
+COM-INTERFACE: IDirect3DAuthenticatedChannel9 IUnknown "{FF24BEEE-DA21-4beb-98B5-D2F899F98AF9}"
     HRESULT GetCertificateSize ( UINT* pCertificateSize )
     HRESULT GetCertificate ( UINT CertifacteSize, BYTE* ppCertificate )
     HRESULT NegotiateKeyExchange ( UINT DataSize, VOID* pData )
@@ -471,7 +471,7 @@ COM-INTERFACE: IDirect3DAuthenticatedChannel9 IUnknown {FF24BEEE-DA21-4beb-98B5-
 TYPEDEF: IDirect3DAuthenticatedChannel9* LPDIRECT3DAUTHENTICATEDCHANNEL9 ;
 TYPEDEF: IDirect3DAuthenticatedChannel9* PDIRECT3DAUTHENTICATEDCHANNEL9 ;
 
-COM-INTERFACE: IDirect3DCryptoSession9 IUnknown {FA0AB799-7A9C-48ca-8C5B-237E71A54434}
+COM-INTERFACE: IDirect3DCryptoSession9 IUnknown "{FA0AB799-7A9C-48ca-8C5B-237E71A54434}"
     HRESULT GetCertificateSize ( UINT* pCertificateSize )
     HRESULT GetCertificate ( UINT CertifacteSize, BYTE* ppCertificate )
     HRESULT NegotiateKeyExchange ( UINT DataSize, VOID* pData )

@@ -307,10 +307,10 @@ STRUCT: D2D1_FACTORY_OPTIONS
 c-type: ID2D1Factory
 c-type: ID2D1BitmapRenderTarget
 
-COM-INTERFACE: ID2D1Resource IUnknown {2cd90691-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1Resource IUnknown "{2cd90691-12e2-11dc-9fed-001143a055f9}"
     void GetFactory ( ID2D1Factory** factory ) ;
 
-COM-INTERFACE: ID2D1Bitmap ID2D1Resource {a2296057-ea42-4099-983b-539fb6505426}
+COM-INTERFACE: ID2D1Bitmap ID2D1Resource "{a2296057-ea42-4099-983b-539fb6505426}"
     D2D1_SIZE_F GetSize ( )
     D2D1_SIZE_U GetPixelSize ( )
     D2D1_PIXEL_FORMAT GetPixelFormat ( )
@@ -319,19 +319,19 @@ COM-INTERFACE: ID2D1Bitmap ID2D1Resource {a2296057-ea42-4099-983b-539fb6505426}
     HRESULT CopyFromRenderTarget ( D2D1_POINT_2U* destPoint, ID2D1RenderTarget* renderTarget, D2D1_RECT_U* srcRect )
     HRESULT CopyFromMemory ( D2D1_RECT_U* dstRect, void* srcData, UINT32 pitch ) ;
 
-COM-INTERFACE: ID2D1GradientStopCollection ID2D1Resource {2cd906a7-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1GradientStopCollection ID2D1Resource "{2cd906a7-12e2-11dc-9fed-001143a055f9}"
     UINT32 GetGradientStopCount ( )
     void GetGradientStops ( D2D1_GRADIENT_STOP* gradientStops, UINT gradientStopsCount )
     D2D1_GAMMA GetColorInterpolationGamma ( )
     D2D1_EXTEND_MODE GetExtendMode ( ) ;
 
-COM-INTERFACE: ID2D1Brush ID2D1Resource {2cd906a8-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1Brush ID2D1Resource "{2cd906a8-12e2-11dc-9fed-001143a055f9}"
     void SetOpacity ( FLOAT opacity )
     void SetTransform ( D2D1_MATRIX_3X2_F* transform )
     FLOAT GetOpacity ( )
     void GetTransform ( D2D1_MATRIX_3X2_F* transform ) ;
 
-COM-INTERFACE: ID2D1BitmapBrush ID2D1Brush {2cd906aa-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1BitmapBrush ID2D1Brush "{2cd906aa-12e2-11dc-9fed-001143a055f9}"
     void SetExtendModeX ( D2D1_EXTEND_MODE extendModeX )
     void SetExtendModeY ( D2D1_EXTEND_MODE extendModeY )
     void SetInterpolationMode ( D2D1_BITMAP_INTERPOLATION_MODE interpolationMode )
@@ -341,18 +341,18 @@ COM-INTERFACE: ID2D1BitmapBrush ID2D1Brush {2cd906aa-12e2-11dc-9fed-001143a055f9
     D2D1_BITMAP_INTERPOLATION_MODE GetInterpolationMode ( )
     void GetBitmap ( ID2D1Bitmap** bitmap ) ;
 
-COM-INTERFACE: ID2D1SolidColorBrush ID2D1Brush {2cd906a9-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1SolidColorBrush ID2D1Brush "{2cd906a9-12e2-11dc-9fed-001143a055f9}"
     void SetColor ( D2D1_COLOR_F* color )
     D2D1_COLOR_F GetColor ( ) ;
 
-COM-INTERFACE: ID2D1LinearGradientBrush ID2D1Brush {2cd906ab-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1LinearGradientBrush ID2D1Brush "{2cd906ab-12e2-11dc-9fed-001143a055f9}"
     void SetStartPoint ( D2D1_POINT_2F startPoint )
     void SetEndPoint ( D2D1_POINT_2F endPoint )
     D2D1_POINT_2F GetStartPoint ( )
     D2D1_POINT_2F GetEndPoint ( )
     void GetGradientStopCollection ( ID2D1GradientStopCollection** gradientStopCollection ) ;
 
-COM-INTERFACE: ID2D1RadialGradientBrush ID2D1Brush {2cd906ac-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1RadialGradientBrush ID2D1Brush "{2cd906ac-12e2-11dc-9fed-001143a055f9}"
     void SetCenter ( D2D1_POINT_2F center )
     void SetGradientOriginOffset ( D2D1_POINT_2F gradientOriginOffset )
     void SetRadiusX ( FLOAT radiusX )
@@ -363,7 +363,7 @@ COM-INTERFACE: ID2D1RadialGradientBrush ID2D1Brush {2cd906ac-12e2-11dc-9fed-0011
     FLOAT GetRadiusY ( )
     void GetGradientStopCollection ( ID2D1GradientStopCollection** gradientStopCollection ) ;
 
-COM-INTERFACE: ID2D1StrokeStyle ID2D1Resource {2cd9069d-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1StrokeStyle ID2D1Resource "{2cd9069d-12e2-11dc-9fed-001143a055f9}"
     D2D1_CAP_STYLE GetStartCap ( )
     D2D1_CAP_STYLE GetEndCap ( )
     D2D1_CAP_STYLE GetDashCap ( )
@@ -377,7 +377,7 @@ COM-INTERFACE: ID2D1StrokeStyle ID2D1Resource {2cd9069d-12e2-11dc-9fed-001143a05
 c-type: ID2D1SimplifiedGeometrySink
 c-type: ID2D1TessellationSink
 
-COM-INTERFACE: ID2D1Geometry ID2D1Resource {2cd906a1-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1Geometry ID2D1Resource "{2cd906a1-12e2-11dc-9fed-001143a055f9}"
     HRESULT GetBounds ( D2D1_MATRIX_3X2_F* worldTransform, D2D1_RECT_F* bounds )
     HRESULT GetWidenedBounds ( FLOAT strokeWidth, ID2D1StrokeStyle* strokeStyle, D2D1_MATRIX_3X2_F* worldTransform, FLOAT flatteningTolerance, D2D1_RECT_F* bounds )
     HRESULT StrokeContainsPoint ( D2D1_POINT_2F point, FLOAT strokeWidth, ID2D1StrokeStyle* strokeStyle, D2D1_MATRIX_3X2_F* worldTransform, FLOAT flatteningTolerance, BOOL* contains )
@@ -392,25 +392,25 @@ COM-INTERFACE: ID2D1Geometry ID2D1Resource {2cd906a1-12e2-11dc-9fed-001143a055f9
     HRESULT ComputePointAtLength ( FLOAT length, D2D1_MATRIX_3X2_F* worldTransform, FLOAT flatteningTolerance, D2D1_POINT_2F* point, D2D1_POINT_2F* unitTangentVector )
     HRESULT Widen ( FLOAT strokeWidth, ID2D1StrokeStyle* strokeStyle, D2D1_MATRIX_3X2_F* worldTransform, FLOAT flatteningTolerance, ID2D1SimplifiedGeometrySink* geometrySink ) ;
 
-COM-INTERFACE: ID2D1RectangleGeometry ID2D1Geometry {2cd906a2-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1RectangleGeometry ID2D1Geometry "{2cd906a2-12e2-11dc-9fed-001143a055f9}"
     void GetRect ( D2D1_RECT_F* rect ) ;
 
-COM-INTERFACE: ID2D1RoundedRectangleGeometry ID2D1Geometry {2cd906a3-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1RoundedRectangleGeometry ID2D1Geometry "{2cd906a3-12e2-11dc-9fed-001143a055f9}"
     void GetRoundedRect ( D2D1_ROUNDED_RECT* roundedRect ) ;
 
-COM-INTERFACE: ID2D1EllipseGeometry ID2D1Geometry {2cd906a4-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1EllipseGeometry ID2D1Geometry "{2cd906a4-12e2-11dc-9fed-001143a055f9}"
     void GetEllipse ( D2D1_ELLIPSE* ellipse ) ;
 
-COM-INTERFACE: ID2D1GeometryGroup ID2D1Geometry {2cd906a6-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1GeometryGroup ID2D1Geometry "{2cd906a6-12e2-11dc-9fed-001143a055f9}"
     D2D1_FILL_MODE GetFillMode ( )
     UINT32 GetSourceGeometryCount ( )
     void GetSourceGeometries ( ID2D1Geometry** geometries, UINT geometriesCount ) ;
 
-COM-INTERFACE: ID2D1TransformedGeometry ID2D1Geometry {2cd906bb-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1TransformedGeometry ID2D1Geometry "{2cd906bb-12e2-11dc-9fed-001143a055f9}"
     void GetSourceGeometry ( ID2D1Geometry** sourceGeometry )
     void GetTransform ( D2D1_MATRIX_3X2_F* transform ) ;
 
-COM-INTERFACE: ID2D1SimplifiedGeometrySink IUnknown {2cd9069e-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1SimplifiedGeometrySink IUnknown "{2cd9069e-12e2-11dc-9fed-001143a055f9}"
     void SetFillMode ( D2D1_FILL_MODE fillMode )
     void SetSegmentFlags ( D2D1_PATH_SEGMENT vertexFlags )
     void BeginFigure ( D2D1_POINT_2F startPoint, D2D1_FIGURE_BEGIN figureBegin )
@@ -419,32 +419,32 @@ COM-INTERFACE: ID2D1SimplifiedGeometrySink IUnknown {2cd9069e-12e2-11dc-9fed-001
     void EndFigure ( D2D1_FIGURE_END figureEnd )
     HRESULT Close ( ) ;
 
-COM-INTERFACE: ID2D1GeometrySink ID2D1SimplifiedGeometrySink {2cd9069f-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1GeometrySink ID2D1SimplifiedGeometrySink "{2cd9069f-12e2-11dc-9fed-001143a055f9}"
     void AddLine ( D2D1_POINT_2F point )
     void AddBezier ( D2D1_BEZIER_SEGMENT* bezier )
     void AddQuadraticBezier ( D2D1_QUADRATIC_BEZIER_SEGMENT* bezier )
     void AddQuadraticBeziers ( D2D1_QUADRATIC_BEZIER_SEGMENT* beziers, UINT beziersCount )
     void AddArc ( D2D1_ARC_SEGMENT* arc ) ;
 
-COM-INTERFACE: ID2D1TessellationSink IUnknown {2cd906c1-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1TessellationSink IUnknown "{2cd906c1-12e2-11dc-9fed-001143a055f9}"
     void AddTriangles ( D2D1_TRIANGLE* triangles, UINT trianglesCount )
     HRESULT Close ( ) ;
 
-COM-INTERFACE: ID2D1PathGeometry ID2D1Geometry {2cd906a5-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1PathGeometry ID2D1Geometry "{2cd906a5-12e2-11dc-9fed-001143a055f9}"
     HRESULT Open ( ID2D1GeometrySink** geometrySink )
     HRESULT Stream ( ID2D1GeometrySink* geometrySink )
     HRESULT GetSegmentCount ( UINT32* count )
     HRESULT GetFigureCount ( UINT32* count ) ;
 
-COM-INTERFACE: ID2D1Mesh ID2D1Resource {2cd906c2-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1Mesh ID2D1Resource "{2cd906c2-12e2-11dc-9fed-001143a055f9}"
     HRESULT Open ( ID2D1TessellationSink** tessellationSink ) ;
 
-COM-INTERFACE: ID2D1Layer ID2D1Resource {2cd9069b-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1Layer ID2D1Resource "{2cd9069b-12e2-11dc-9fed-001143a055f9}"
     D2D1_SIZE_F GetSize ( ) ;
 
 c-type: IDWriteRenderingParams
 
-COM-INTERFACE: ID2D1DrawingStateBlock ID2D1Resource {28506e39-ebf6-46a1-bb47-fd85565ab957}
+COM-INTERFACE: ID2D1DrawingStateBlock ID2D1Resource "{28506e39-ebf6-46a1-bb47-fd85565ab957}"
     void GetDescription ( D2D1_DRAWING_STATE_DESCRIPTION* stateDescription )
     void SetDescription ( D2D1_DRAWING_STATE_DESCRIPTION* stateDescription )
     void SetTextRenderingParams ( IDWriteRenderingParams* textRenderingParams )
@@ -456,7 +456,7 @@ c-type: IDWriteTextFormat
 c-type: IDWriteTextLayout
 c-type: DWRITE_GLYPH_RUN
 
-COM-INTERFACE: ID2D1RenderTarget ID2D1Resource {2cd90694-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1RenderTarget ID2D1Resource "{2cd90694-12e2-11dc-9fed-001143a055f9}"
     HRESULT CreateBitmap ( D2D1_SIZE_U size, void* srcData, UINT32 pitch, D2D1_BITMAP_PROPERTIES* bitmapProperties, ID2D1Bitmap** bitmap )
     HRESULT CreateBitmapFromWicBitmap ( IWICBitmapSource* wicBitmapSource, D2D1_BITMAP_PROPERTIES* bitmapProperties, ID2D1Bitmap** bitmap )
     HRESULT CreateSharedBitmap ( REFIID riid, void* data, D2D1_BITMAP_PROPERTIES* bitmapProperties, ID2D1Bitmap** bitmap )
@@ -511,22 +511,22 @@ COM-INTERFACE: ID2D1RenderTarget ID2D1Resource {2cd90694-12e2-11dc-9fed-001143a0
     UINT32 GetMaximumBitmapSize ( )
     BOOL IsSupported ( D2D1_RENDER_TARGET_PROPERTIES* renderTargetProperties ) ;
 
-COM-INTERFACE: ID2D1BitmapRenderTarget ID2D1RenderTarget {2cd90695-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1BitmapRenderTarget ID2D1RenderTarget "{2cd90695-12e2-11dc-9fed-001143a055f9}"
     HRESULT GetBitmap ( ID2D1Bitmap** bitmap ) ;
 
-COM-INTERFACE: ID2D1HwndRenderTarget ID2D1RenderTarget {2cd90698-12e2-11dc-9fed-001143a055f9}
+COM-INTERFACE: ID2D1HwndRenderTarget ID2D1RenderTarget "{2cd90698-12e2-11dc-9fed-001143a055f9}"
     D2D1_WINDOW_STATE CheckWindowState ( )
     HRESULT Resize ( D2D1_SIZE_U* pixelSize )
     HWND GetHwnd ( ) ;
 
-COM-INTERFACE: ID2D1GdiInteropRenderTarget IUnknown {e0db51c3-6f77-4bae-b3d5-e47509b35838}
+COM-INTERFACE: ID2D1GdiInteropRenderTarget IUnknown "{e0db51c3-6f77-4bae-b3d5-e47509b35838}"
     HRESULT GetDC ( D2D1_DC_INITIALIZE_MODE mode, HDC* hdc )
     HRESULT ReleaseDC ( RECT* update ) ;
 
-COM-INTERFACE: ID2D1DCRenderTarget ID2D1RenderTarget {1c51bc64-de61-46fd-9899-63a5d8f03950}
+COM-INTERFACE: ID2D1DCRenderTarget ID2D1RenderTarget "{1c51bc64-de61-46fd-9899-63a5d8f03950}"
     HRESULT BindDC ( HDC hDC, RECT* pSubRect ) ;
 
-COM-INTERFACE: ID2D1Factory IUnknown {06152247-6f50-465a-9245-118bfd3b6007}
+COM-INTERFACE: ID2D1Factory IUnknown "{06152247-6f50-465a-9245-118bfd3b6007}"
     HRESULT ReloadSystemMetrics ( )
     void GetDesktopDpi ( FLOAT* dpiX, FLOAT* dpiY )
     HRESULT CreateRectangleGeometry ( D2D1_RECT_F* rectangle, ID2D1RectangleGeometry** rectangleGeometry )
@@ -546,21 +546,21 @@ FUNCTION: HRESULT D2D1CreateFactory (
         D2D1_FACTORY_TYPE     factoryType,
         REFIID                riid,
         D2D1_FACTORY_OPTIONS* pFactoryOptions,
-        void**                ppIFactory )
+        void**                ppIFactory ) ;
 
 FUNCTION: void D2D1MakeRotateMatrix (
         FLOAT              angle,
         D2D1_POINT_2F      center,
-        D2D1_MATRIX_3X2_F* matrix )
+        D2D1_MATRIX_3X2_F* matrix ) ;
 
 FUNCTION: void D2D1MakeSkewMatrix (
         FLOAT              angleX,
         FLOAT              angleY,
         D2D1_POINT_2F      center,
-        D2D1_MATRIX_3X2_F* matrix )
+        D2D1_MATRIX_3X2_F* matrix ) ;
 
 FUNCTION: BOOL D2D1IsMatrixInvertible (
-        D2D1_MATRIX_3X2_F* matrix )
+        D2D1_MATRIX_3X2_F* matrix ) ;
 
 FUNCTION: BOOL D2D1InvertMatrix (
-        D2D1_MATRIX_3X2_F* matrix )
+        D2D1_MATRIX_3X2_F* matrix ) ;

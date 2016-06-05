@@ -638,7 +638,7 @@ STRUCT: D3D11_BOX
 c-type: ID3D11Device
 c-type: ID3D11ClassLinkage
 
-COM-INTERFACE: ID3D11DeviceChild IUnknown {1841e5c8-16b0-489b-bcc8-44cfb0d5deae}
+COM-INTERFACE: ID3D11DeviceChild IUnknown "{1841e5c8-16b0-489b-bcc8-44cfb0d5deae}"
     void GetDevice ( ID3D11Device** ppDevice )
     HRESULT GetPrivateData ( REFGUID guid, UINT* pDataSize, void* pData )
     HRESULT SetPrivateData ( REFGUID guid, UINT DataSize, void* pData )
@@ -684,7 +684,7 @@ STRUCT: D3D11_DEPTH_STENCIL_DESC
     { FrontFace        D3D11_DEPTH_STENCILOP_DESC }
     { BackFace         D3D11_DEPTH_STENCILOP_DESC } ;
 
-COM-INTERFACE: ID3D11DepthStencilState ID3D11DeviceChild {03823efb-8d8f-4e1c-9aa2-f64bb2cbfdf1}
+COM-INTERFACE: ID3D11DepthStencilState ID3D11DeviceChild "{03823efb-8d8f-4e1c-9aa2-f64bb2cbfdf1}"
     void GetDesc ( D3D11_DEPTH_STENCIL_DESC* pDesc ) ;
 
 CONSTANT: D3D11_BLEND_ZERO                1 ;
@@ -735,7 +735,7 @@ STRUCT: D3D11_BLEND_DESC
     { IndependentBlendEnable BOOL }
     { RenderTarget D3D11_RENDER_TARGET_BLEND_DESC[8] } ;
 
-COM-INTERFACE: ID3D11BlendState ID3D11DeviceChild 75b68faa-347d-4159-8f45-a0640f01cd9a
+COM-INTERFACE: ID3D11BlendState ID3D11DeviceChild "{75b68faa-347d-4159-8f45-a0640f01cd9a}"
     void GetDesc ( D3D11_BLEND_DESC* pDesc ) ;
 
 STRUCT: D3D11_RASTERIZER_DESC
@@ -750,7 +750,7 @@ STRUCT: D3D11_RASTERIZER_DESC
     { MultisampleEnable     BOOL            }
     { AntialiasedLineEnable BOOL            } ;
 
-COM-INTERFACE: ID3D11RasterizerState ID3D11DeviceChild {9bb4ab81-ab1a-4d8f-b506-fc04200b6ee7}
+COM-INTERFACE: ID3D11RasterizerState ID3D11DeviceChild "{9bb4ab81-ab1a-4d8f-b506-fc04200b6ee7}"
     void GetDesc ( D3D11_RASTERIZER_DESC* pDesc ) ;
 
 STRUCT: D3D11_SUBRESOURCE_DATA
@@ -763,7 +763,7 @@ STRUCT: D3D11_MAPPED_SUBRESOURCE
     { RowPitch    UINT  }
     { DepthPitch  UINT  } ;
 
-COM-INTERFACE: ID3D11Resource ID3D11DeviceChild {dc8e63f3-d12b-4952-b47b-5e45026a862d}
+COM-INTERFACE: ID3D11Resource ID3D11DeviceChild "{dc8e63f3-d12b-4952-b47b-5e45026a862d}"
     void GetType ( D3D11_RESOURCE_DIMENSION* pResourceDimension )
     void SetEvictionPriority ( UINT EvictionPriority )
     UINT GetEvictionPriority ( ) ;
@@ -776,7 +776,7 @@ STRUCT: D3D11_BUFFER_DESC
     { MiscFlags           UINT        }
     { StructureByteStride UINT        } ;
 
-COM-INTERFACE: ID3D11Buffer ID3D11Resource {48570b85-d1ee-4fcd-a250-eb350722b037}
+COM-INTERFACE: ID3D11Buffer ID3D11Resource "{48570b85-d1ee-4fcd-a250-eb350722b037}"
     void GetDesc ( D3D11_BUFFER_DESC* pDesc ) ;
 
 STRUCT: D3D11_TEXTURE1D_DESC
@@ -789,7 +789,7 @@ STRUCT: D3D11_TEXTURE1D_DESC
     { CPUAccessFlags UINT        }
     { MiscFlags      UINT        } ;
 
-COM-INTERFACE: ID3D11Texture1D ID3D11Resource {f8fb5c27-c6b3-4f75-a4c8-439af2ef564c}
+COM-INTERFACE: ID3D11Texture1D ID3D11Resource "{f8fb5c27-c6b3-4f75-a4c8-439af2ef564c}"
     void GetDesc ( D3D11_TEXTURE1D_DESC* pDesc ) ;
 
 STRUCT: D3D11_TEXTURE2D_DESC
@@ -804,7 +804,7 @@ STRUCT: D3D11_TEXTURE2D_DESC
     { CPUAccessFlags UINT             }
     { MiscFlags      UINT             } ;
 
-COM-INTERFACE: ID3D11Texture2D ID3D11Resource {6f15aaf2-d208-4e89-9ab4-489535d34f9c}
+COM-INTERFACE: ID3D11Texture2D ID3D11Resource "{6f15aaf2-d208-4e89-9ab4-489535d34f9c}"
     void GetDesc ( D3D11_TEXTURE2D_DESC* pDesc ) ;
 
 STRUCT: D3D11_TEXTURE3D_DESC
@@ -818,7 +818,7 @@ STRUCT: D3D11_TEXTURE3D_DESC
     { CPUAccessFlags UINT        }
     { MiscFlags      UINT        } ;
 
-COM-INTERFACE: ID3D11Texture3D ID3D11Resource {037e866e-f56d-4357-a8af-9dabbe6e250e}
+COM-INTERFACE: ID3D11Texture3D ID3D11Resource "{037e866e-f56d-4357-a8af-9dabbe6e250e}"
     void GetDesc ( D3D11_TEXTURE3D_DESC* pDesc ) ;
 
 CONSTANT: D3D11_TEXTURECUBE_FACE_POSITIVE_X   0 ;
@@ -829,7 +829,7 @@ CONSTANT: D3D11_TEXTURECUBE_FACE_POSITIVE_Z   4 ;
 CONSTANT: D3D11_TEXTURECUBE_FACE_NEGATIVE_Z   5 ;
 TYPEDEF: int D3D11_TEXTURECUBE_FACE ;
 
-COM-INTERFACE: ID3D11View ID3D11DeviceChild {839d1216-bb2e-412b-b7f4-a9dbebe08ed1}
+COM-INTERFACE: ID3D11View ID3D11DeviceChild "{839d1216-bb2e-412b-b7f4-a9dbebe08ed1}"
     void GetResource ( ID3D11Resource** ppResource ) ;
 
 UNION-STRUCT: D3D11_BUFFER_SRV_UNION1
@@ -911,7 +911,7 @@ STRUCT: D3D11_SHADER_RESOURCE_VIEW_DESC
     { ViewDimension D3D11_SRV_DIMENSION                   }
     { View          D3D11_SHADER_RESOURCE_VIEW_DESC_UNION } ;
 
-COM-INTERFACE: ID3D11ShaderResourceView ID3D11View {b0e06fe0-8192-4e1a-b1ca-36d7414710b2}
+COM-INTERFACE: ID3D11ShaderResourceView ID3D11View "{b0e06fe0-8192-4e1a-b1ca-36d7414710b2}"
     void GetDesc ( D3D11_SHADER_RESOURCE_VIEW_DESC* pDesc ) ;
 
 UNION-STRUCT: D3D11_BUFFER_RTV_UNION1
@@ -969,7 +969,7 @@ STRUCT: D3D11_RENDER_TARGET_VIEW_DESC
     { ViewDimension D3D11_RTV_DIMENSION                 }
     { View          D3D11_RENDER_TARGET_VIEW_DESC_UNION } ;
 
-COM-INTERFACE: ID3D11RenderTargetView ID3D11View {dfdba067-0b8d-4865-875b-d7b4516cc164}
+COM-INTERFACE: ID3D11RenderTargetView ID3D11View "{dfdba067-0b8d-4865-875b-d7b4516cc164}"
     void GetDesc ( D3D11_RENDER_TARGET_VIEW_DESC* pDesc ) ;
 
 STRUCT: D3D11_TEX1D_DSV
@@ -1013,7 +1013,7 @@ STRUCT: D3D11_DEPTH_STENCIL_VIEW_DESC
     { Flags         UINT                                }
     { View          D3D11_DEPTH_STENCIL_VIEW_DESC_UNION } ;
 
-COM-INTERFACE: ID3D11DepthStencilView ID3D11View {9fdac92a-1876-48c3-afad-25b94f84a9b6}
+COM-INTERFACE: ID3D11DepthStencilView ID3D11View "{9fdac92a-1876-48c3-afad-25b94f84a9b6}"
     void GetDesc ( D3D11_DEPTH_STENCIL_VIEW_DESC* pDesc ) ;
 
 CONSTANT: D3D11_BUFFER_UAV_FLAG_RAW     1 ;
@@ -1061,22 +1061,22 @@ STRUCT: D3D11_UNORDERED_ACCESS_VIEW_DESC
     { View          D3D11_UNORDERED_ACCESS_VIEW_DESC_UNION } ;
 
 
-COM-INTERFACE: ID3D11UnorderedAccessView ID3D11View {28acf509-7f5c-48f6-8611-f316010a6380}
+COM-INTERFACE: ID3D11UnorderedAccessView ID3D11View "{28acf509-7f5c-48f6-8611-f316010a6380}"
     void GetDesc ( D3D11_UNORDERED_ACCESS_VIEW_DESC* pDesc ) ;
 
-COM-INTERFACE: ID3D11VertexShader ID3D11DeviceChild {3b301d64-d678-4289-8897-22f8928b72f3} ;
+COM-INTERFACE: ID3D11VertexShader ID3D11DeviceChild "{3b301d64-d678-4289-8897-22f8928b72f3}" ;
 
-COM-INTERFACE: ID3D11HullShader ID3D11DeviceChild {8e5c6061-628a-4c8e-8264-bbe45cb3d5dd} ;
+COM-INTERFACE: ID3D11HullShader ID3D11DeviceChild "{8e5c6061-628a-4c8e-8264-bbe45cb3d5dd}" ;
 
-COM-INTERFACE: ID3D11DomainShader ID3D11DeviceChild {f582c508-0f36-490c-9977-31eece268cfa} ;
+COM-INTERFACE: ID3D11DomainShader ID3D11DeviceChild "{f582c508-0f36-490c-9977-31eece268cfa}" ;
 
-COM-INTERFACE: ID3D11GeometryShader ID3D11DeviceChild {38325b96-effb-4022-ba02-2e795b70275c} ;
+COM-INTERFACE: ID3D11GeometryShader ID3D11DeviceChild "{38325b96-effb-4022-ba02-2e795b70275c}" ;
 
-COM-INTERFACE: ID3D11PixelShader ID3D11DeviceChild {ea82e40d-51dc-4f33-93d4-db7c9125ae8c} ;
+COM-INTERFACE: ID3D11PixelShader ID3D11DeviceChild "{ea82e40d-51dc-4f33-93d4-db7c9125ae8c}" ;
 
-COM-INTERFACE: ID3D11ComputeShader ID3D11DeviceChild {4f5b196e-c2bd-495e-bd01-1fded38e4969} ;
+COM-INTERFACE: ID3D11ComputeShader ID3D11DeviceChild "{4f5b196e-c2bd-495e-bd01-1fded38e4969}" ;
 
-COM-INTERFACE: ID3D11InputLayout ID3D11DeviceChild {e4819ddc-4cf0-4025-bd26-5de82a3e07b7} ;
+COM-INTERFACE: ID3D11InputLayout ID3D11DeviceChild "{e4819ddc-4cf0-4025-bd26-5de82a3e07b7}" ;
 
 CONSTANT: D3D11_FILTER_MIN_MAG_MIP_POINT                          0x0 ;
 CONSTANT: D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR                   0x1 ;
@@ -1128,7 +1128,7 @@ STRUCT: D3D11_SAMPLER_DESC
     { MinLOD         FLOAT                      }
     { MaxLOD         FLOAT                      } ;
 
-COM-INTERFACE: ID3D11SamplerState ID3D11DeviceChild {da6fea51-564c-4487-9810-f0d0f9b4e3a5}
+COM-INTERFACE: ID3D11SamplerState ID3D11DeviceChild "{da6fea51-564c-4487-9810-f0d0f9b4e3a5}"
     void GetDesc ( D3D11_SAMPLER_DESC* pDesc ) ;
 
 CONSTANT: D3D11_FORMAT_SUPPORT_BUFFER                         0x1 ;
@@ -1170,7 +1170,7 @@ CONSTANT: D3D11_FORMAT_SUPPORT2_UAV_TYPED_LOAD                                0x
 CONSTANT: D3D11_FORMAT_SUPPORT2_UAV_TYPED_STORE                               0x80 ;
 TYPEDEF: int D3D11_FORMAT_SUPPORT2 ;
 
-COM-INTERFACE: ID3D11Asynchronous ID3D11DeviceChild {4b35d0cd-1e15-4258-9c98-1b1333f6dd3b}
+COM-INTERFACE: ID3D11Asynchronous ID3D11DeviceChild "{4b35d0cd-1e15-4258-9c98-1b1333f6dd3b}"
     UINT GetDataSize ( ) ;
 
 CONSTANT: D3D11_ASYNC_GETDATA_DONOTFLUSH 1 ;
@@ -1201,10 +1201,10 @@ STRUCT: D3D11_QUERY_DESC
     { Query     D3D11_QUERY }
     { MiscFlags UINT        } ;
 
-COM-INTERFACE: ID3D11Query ID3D11Asynchronous {d6c00747-87b7-425e-b84d-44d108560afd}
+COM-INTERFACE: ID3D11Query ID3D11Asynchronous "{d6c00747-87b7-425e-b84d-44d108560afd}"
     void GetDesc ( D3D11_QUERY_DESC* pDesc ) ;
 
-COM-INTERFACE: ID3D11Predicate ID3D11Query {9eb576dd-9f77-4d86-81aa-8bab5fe490e2} ;
+COM-INTERFACE: ID3D11Predicate ID3D11Query "{9eb576dd-9f77-4d86-81aa-8bab5fe490e2}" ;
 
 STRUCT: D3D11_QUERY_DATA_TIMESTAMP_DISJOINT
     { Frequency UINT64 }
@@ -1245,7 +1245,7 @@ STRUCT: D3D11_COUNTER_INFO
     { NumSimultaneousCounters    UINT          }
     { NumDetectableParallelUnits BYTE         } ;
 
-COM-INTERFACE: ID3D11Counter ID3D11Asynchronous {6e8c49fb-a371-4770-b440-29086022b741}
+COM-INTERFACE: ID3D11Counter ID3D11Asynchronous "{6e8c49fb-a371-4770-b440-29086022b741}"
     void GetDesc ( D3D11_COUNTER_DESC* pDesc ) ;
 
 CONSTANT: D3D11_STANDARD_MULTISAMPLE_PATTERN 0xffffffff ;
@@ -1266,17 +1266,17 @@ STRUCT: D3D11_CLASS_INSTANCE_DESC
     { BaseSampler              UINT }
     { Created                  BOOL } ;
 
-COM-INTERFACE: ID3D11ClassInstance ID3D11DeviceChild {a6cd7faa-b0b7-4a2f-9436-8662a65797cb}
+COM-INTERFACE: ID3D11ClassInstance ID3D11DeviceChild "{a6cd7faa-b0b7-4a2f-9436-8662a65797cb}"
     void GetClassLinkage ( ID3D11ClassLinkage** ppLinkage )
     void GetDesc ( D3D11_CLASS_INSTANCE_DESC* pDesc )
     void GetInstanceName ( LPSTR pInstanceName, SIZE_T* pBufferLength )
     void GetTypeName ( LPSTR pTypeName, SIZE_T* pBufferLength ) ;
 
-COM-INTERFACE: ID3D11ClassLinkage ID3D11DeviceChild {ddf57cba-9543-46e4-a12b-f207a0fe7fed}
+COM-INTERFACE: ID3D11ClassLinkage ID3D11DeviceChild "{ddf57cba-9543-46e4-a12b-f207a0fe7fed}"
     HRESULT GetClassInstance ( LPCSTR pClassInstanceName, UINT InstanceIndex, ID3D11ClassInstance** ppInstance )
     HRESULT CreateClassInstance ( LPCSTR pClassTypeName, UINT ConstantBufferOffset, UINT ConstantVectorOffset, UINT TextureOffset, UINT SamplerOffset, ID3D11ClassInstance** ppInstance ) ;
 
-COM-INTERFACE: ID3D11CommandList ID3D11DeviceChild {a24bc4d1-769e-43f7-8013-98ff566c18e2}
+COM-INTERFACE: ID3D11CommandList ID3D11DeviceChild "{a24bc4d1-769e-43f7-8013-98ff566c18e2}"
     UINT GetContextFlags ( ) ;
 
 CONSTANT: D3D11_FEATURE_THREADING                 0 ;
@@ -1304,7 +1304,7 @@ STRUCT: D3D11_FEATURE_DATA_FORMAT_SUPPORT2
 STRUCT: D3D11_FEATURE_DATA_D3D10_X_HARDWARE_OPTIONS
     { ComputeShaders_Plus_RawAndStructuredBuffers_Via_Shader_4_x BOOL } ;
 
-COM-INTERFACE: ID3D11DeviceContext ID3D11DeviceChild {c0bfa96c-e089-44fb-8eaf-26f8796190da}
+COM-INTERFACE: ID3D11DeviceContext ID3D11DeviceChild "{c0bfa96c-e089-44fb-8eaf-26f8796190da}"
     void VSSetConstantBuffers ( UINT StartSlot, UINT NumBuffers, ID3D11Buffer** ppConstantBuffers )
     void PSSetShaderResources ( UINT StartSlot, UINT NumViews, ID3D11ShaderResourceView** ppShaderResourceViews )
     void PSSetShader ( ID3D11PixelShader* pPixelShader, ID3D11ClassInstance** ppClassInstances, UINT NumClassInstances )
@@ -1414,7 +1414,7 @@ COM-INTERFACE: ID3D11DeviceContext ID3D11DeviceChild {c0bfa96c-e089-44fb-8eaf-26
     UINT GetContextFlags ( )
     HRESULT FinishCommandList ( BOOL RestoreDeferredContextState, ID3D11CommandList** ppCommandList ) ;
 
-COM-INTERFACE: ID3D11Device IUnknown {db6f6ddb-ac77-4e88-8253-819df9bbf140}
+COM-INTERFACE: ID3D11Device IUnknown "{db6f6ddb-ac77-4e88-8253-819df9bbf140}"
     HRESULT CreateBuffer ( D3D11_BUFFER_DESC* pDesc, D3D11_SUBRESOURCE_DATA* pInitialData, ID3D11Buffer** ppBuffer )
     HRESULT CreateTexture1D ( D3D11_TEXTURE1D_DESC* pDesc, D3D11_SUBRESOURCE_DATA* pInitialData, ID3D11Texture1D** ppTexture1D )
     HRESULT CreateTexture2D ( D3D11_TEXTURE2D_DESC* pDesc, D3D11_SUBRESOURCE_DATA* pInitialData, ID3D11Texture2D** ppTexture2D )
@@ -1475,7 +1475,7 @@ FUNCTION: HRESULT D3D11CreateDevice (
     UINT                  SDKVersion,
     ID3D11Device**        ppDevice,
     D3D_FEATURE_LEVEL*    pFeatureLevel,
-    ID3D11DeviceContext** ppImmediateContext )
+    ID3D11DeviceContext** ppImmediateContext ) ;
 
 FUNCTION: HRESULT D3D11CreateDeviceAndSwapChain (
     IDXGIAdapter*         pAdapter,
@@ -1489,4 +1489,4 @@ FUNCTION: HRESULT D3D11CreateDeviceAndSwapChain (
     IDXGISwapChain**      ppSwapChain,
     ID3D11Device**        ppDevice,
     D3D_FEATURE_LEVEL*    pFeatureLevel,
-    ID3D11DeviceContext** ppImmediateContext )
+    ID3D11DeviceContext** ppImmediateContext ) ;

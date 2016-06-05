@@ -114,21 +114,21 @@ ENUM: DWRITE_FACTORY_TYPE
 
 c-type: IDWriteFontFileStream
 
-COM-INTERFACE: IDWriteFontFileLoader IUnknown {727cad4e-d6af-4c9e-8a08-d695b11caa49}
+COM-INTERFACE: IDWriteFontFileLoader IUnknown "{727cad4e-d6af-4c9e-8a08-d695b11caa49}"
     HRESULT CreateStreamFromKey ( void* fontFileReferenceKey, UINT32 fontFileReferenceKeySize, IDWriteFontFileStream** fontFileStream ) ;
 
-COM-INTERFACE: IDWriteLocalFontFileLoader IDWriteFontFileLoader {b2d9f3ec-c9fe-4a11-a2ec-d86208f7c0a2}
+COM-INTERFACE: IDWriteLocalFontFileLoader IDWriteFontFileLoader "{b2d9f3ec-c9fe-4a11-a2ec-d86208f7c0a2}"
     HRESULT GetFilePathLengthFromKey ( void* fontFileReferenceKey, UINT32 fontFileReferenceKeySize, UINT32* filePathLength )
     HRESULT GetFilePathFromKey ( void* fontFileReferenceKey, UINT32 fontFileReferenceKeySize, WCHAR* filePath, UINT32 filePathSize )
     HRESULT GetLastWriteTimeFromKey ( void* fontFileReferenceKey, UINT32 fontFileReferenceKeySize, FILETIME* lastWriteTime ) ;
 
-COM-INTERFACE: IDWriteFontFileStream IUnknown {6d4865fe-0ab8-4d91-8f62-5dd6be34a3e0}
+COM-INTERFACE: IDWriteFontFileStream IUnknown "{6d4865fe-0ab8-4d91-8f62-5dd6be34a3e0}"
     HRESULT ReadFileFragment ( void** fragmentStart, UINT64 fileOffset, UINT64 fragmentSize, void** fragmentContext )
     void ReleaseFileFragment ( void* fragmentContext )
     HRESULT GetFileSize ( UINT64* fileSize )
     HRESULT GetLastWriteTime ( UINT64* lastWriteTime ) ;
 
-COM-INTERFACE: IDWriteFontFile IUnknown {739d886a-cef5-47dc-8769-1a8b41bebbb0}
+COM-INTERFACE: IDWriteFontFile IUnknown "{739d886a-cef5-47dc-8769-1a8b41bebbb0}"
     HRESULT GetReferenceKey ( void** fontFileReferenceKey, UINT32* fontFileReferenceKeySize )
     HRESULT GetLoader ( IDWriteFontFileLoader** fontFileLoader )
     HRESULT Analyze ( BOOL* isSupportedFontType, DWRITE_FONT_FILE_TYPE* fontFileType, DWRITE_FONT_FACE_TYPE* fontFaceType, UINT32* numberOfFaces ) ;
@@ -155,7 +155,7 @@ STRUCT: DWRITE_MATRIX
     { dx  FLOAT }
     { dy  FLOAT } ;
 
-COM-INTERFACE: IDWriteRenderingParams IUnknown {2f0da53a-2add-47cd-82ee-d9ec34688e75}
+COM-INTERFACE: IDWriteRenderingParams IUnknown "{2f0da53a-2add-47cd-82ee-d9ec34688e75}"
     FLOAT GetGamma ( )
     FLOAT GetEnhancedContrast ( )
     FLOAT GetClearTypeLevel ( )
@@ -166,7 +166,7 @@ c-type: ID2D1SimplifiedGeometrySink
 
 TYPEDEF: ID2D1SimplifiedGeometrySink IDWriteGeometrySink ;
 
-COM-INTERFACE: IDWriteFontFace IUnknown {5f49804d-7024-4d43-bfa9-d25984f53849}
+COM-INTERFACE: IDWriteFontFace IUnknown "{5f49804d-7024-4d43-bfa9-d25984f53849}"
     DWRITE_FONT_FACE_TYPE GetType ( )
     HRESULT GetFiles ( UINT32* numberOfFiles, IDWriteFontFile** fontFiles )
     UINT32 GetIndex ( )
@@ -186,14 +186,14 @@ COM-INTERFACE: IDWriteFontFace IUnknown {5f49804d-7024-4d43-bfa9-d25984f53849}
 c-type: IDWriteFactory
 c-type: IDWriteFontFileEnumerator
 
-COM-INTERFACE: IDWriteFontCollectionLoader IUnknown {cca920e4-52f0-492b-bfa8-29c72ee0a468}
+COM-INTERFACE: IDWriteFontCollectionLoader IUnknown "{cca920e4-52f0-492b-bfa8-29c72ee0a468}"
     HRESULT CreateEnumeratorFromKey ( IDWriteFactory* factory, void* collectionKey, UINT32 collectionKeySize, IDWriteFontFileEnumerator** fontFileEnumerator ) ;
 
-COM-INTERFACE: IDWriteFontFileEnumerator IUnknown {72755049-5ff7-435d-8348-4be97cfa6c7c}
+COM-INTERFACE: IDWriteFontFileEnumerator IUnknown "{72755049-5ff7-435d-8348-4be97cfa6c7c}"
     HRESULT MoveNext ( BOOL* hasCurrentFile )
     HRESULT GetCurrentFontFile ( IDWriteFontFile** fontFile ) ;
 
-COM-INTERFACE: IDWriteLocalizedStrings IUnknown {08256209-099a-4b34-b86d-c22b110e7771}
+COM-INTERFACE: IDWriteLocalizedStrings IUnknown "{08256209-099a-4b34-b86d-c22b110e7771}"
     UINT32 GetCount ( )
     HRESULT FindLocaleName ( WCHAR* localeName, UINT32* index, BOOL* exists )
     HRESULT GetLocaleNameLength ( UINT32 index, UINT32* length )
@@ -204,23 +204,23 @@ COM-INTERFACE: IDWriteLocalizedStrings IUnknown {08256209-099a-4b34-b86d-c22b110
 c-type: IDWriteFontFamily
 c-type: IDWriteFont
 
-COM-INTERFACE: IDWriteFontCollection IUnknown {a84cee02-3eea-4eee-a827-87c1a02a0fcc}
+COM-INTERFACE: IDWriteFontCollection IUnknown "{a84cee02-3eea-4eee-a827-87c1a02a0fcc}"
     UINT32 GetFontFamilyCount ( )
     HRESULT GetFontFamily ( UINT32 index, IDWriteFontFamily** fontFamily )
     HRESULT FindFamilyName ( WCHAR* familyName, UINT32* index, BOOL* exists )
     HRESULT GetFontFromFontFace ( IDWriteFontFace* fontFace, IDWriteFont** font ) ;
 
-COM-INTERFACE: IDWriteFontList IUnknown {1a0d8438-1d97-4ec1-aef9-a2fb86ed6acb}
+COM-INTERFACE: IDWriteFontList IUnknown "{1a0d8438-1d97-4ec1-aef9-a2fb86ed6acb}"
     HRESULT GetFontCollection ( IDWriteFontCollection** fontCollection )
     UINT32 GetFontCount ( )
     HRESULT GetFont ( UINT32 index, IDWriteFont** font ) ;
 
-COM-INTERFACE: IDWriteFontFamily IDWriteFontList {da20d8ef-812a-4c43-9802-62ec4abd7add}
+COM-INTERFACE: IDWriteFontFamily IDWriteFontList "{da20d8ef-812a-4c43-9802-62ec4abd7add}"
     HRESULT GetFamilyNames ( IDWriteLocalizedStrings** names )
     HRESULT GetFirstMatchingFont ( DWRITE_FONT_WEIGHT  weight, DWRITE_FONT_STRETCH stretch, DWRITE_FONT_STYLE style, IDWriteFont** matchingFont )
     HRESULT GetMatchingFonts ( DWRITE_FONT_WEIGHT weight, DWRITE_FONT_STRETCH stretch, DWRITE_FONT_STYLE style, IDWriteFontList** matchingFonts ) ;
 
-COM-INTERFACE: IDWriteFont IUnknown {acd16696-8c14-4f5d-877e-fe3fc1d32737}
+COM-INTERFACE: IDWriteFont IUnknown "{acd16696-8c14-4f5d-877e-fe3fc1d32737}"
     HRESULT GetFontFamily ( IDWriteFontFamily** fontFamily )
     DWRITE_FONT_WEIGHT GetWeight ( )
     DWRITE_FONT_STRETCH GetStretch ( )
@@ -364,7 +364,7 @@ STRUCT: DWRITE_TRIMMING
 c-type: IDWriteTypography
 c-type: IDWriteInlineObject
 
-COM-INTERFACE: IDWriteTextFormat IUnknown {9c906818-31d7-4fd3-a151-7c5e225db55a}
+COM-INTERFACE: IDWriteTextFormat IUnknown "{9c906818-31d7-4fd3-a151-7c5e225db55a}"
     HRESULT SetTextAlignment ( DWRITE_TEXT_ALIGNMENT textAlignment )
     HRESULT SetParagraphAlignment ( DWRITE_PARAGRAPH_ALIGNMENT paragraphAlignment )
     HRESULT SetWordWrapping ( DWRITE_WORD_WRAPPING wordWrapping )
@@ -391,7 +391,7 @@ COM-INTERFACE: IDWriteTextFormat IUnknown {9c906818-31d7-4fd3-a151-7c5e225db55a}
     UINT32 GetLocaleNameLength ( )
     HRESULT GetLocaleName ( WCHAR* localeName, UINT32 nameSize ) ;
 
-COM-INTERFACE: IDWriteTypography IUnknown {55f1112b-1dc2-4b3c-9541-f46894ed85b6}
+COM-INTERFACE: IDWriteTypography IUnknown "{55f1112b-1dc2-4b3c-9541-f46894ed85b6}"
     HRESULT AddFontFeature ( DWRITE_FONT_FEATURE fontFeature )
     UINT32 GetFontFeatureCount ( )
     HRESULT GetFontFeature ( UINT32 fontFeatureIndex, DWRITE_FONT_FEATURE* fontFeature ) ;
@@ -420,7 +420,7 @@ ENUM: DWRITE_NUMBER_SUBSTITUTION_METHOD
     DWRITE_NUMBER_SUBSTITUTION_METHOD_NATIONAL
     DWRITE_NUMBER_SUBSTITUTION_METHOD_TRADITIONAL ;
 
-COM-INTERFACE: IDWriteNumberSubstitution IUnknown {14885CC9-BAB0-4f90-B6ED-5C366A2CD03D} ;
+COM-INTERFACE: IDWriteNumberSubstitution IUnknown "{14885CC9-BAB0-4f90-B6ED-5C366A2CD03D}" ;
 
 STRUCT: DWRITE_SHAPING_TEXT_PROPERTIES
     { data USHORT } ;
@@ -428,20 +428,20 @@ STRUCT: DWRITE_SHAPING_TEXT_PROPERTIES
 STRUCT: DWRITE_SHAPING_GLYPH_PROPERTIES
     { data USHORT } ;
 
-COM-INTERFACE: IDWriteTextAnalysisSource IUnknown {688e1a58-5094-47c8-adc8-fbcea60ae92b}
+COM-INTERFACE: IDWriteTextAnalysisSource IUnknown "{688e1a58-5094-47c8-adc8-fbcea60ae92b}"
     HRESULT GetTextAtPosition ( UINT32 textPosition, WCHAR** textString, UINT32* textLength )
     HRESULT GetTextBeforePosition ( UINT32 textPosition, WCHAR** textString, UINT32* textLength )
     DWRITE_READING_DIRECTION GetParagraphReadingDirection ( )
     HRESULT GetLocaleName ( UINT32 textPosition, UINT32* textLength, WCHAR** localeName )
     HRESULT GetNumberSubstitution ( UINT32 textPosition, UINT32* textLength, IDWriteNumberSubstitution** numberSubstitution ) ;
 
-COM-INTERFACE: IDWriteTextAnalysisSink IUnknown {5810cd44-0ca0-4701-b3fa-bec5182ae4f6}
+COM-INTERFACE: IDWriteTextAnalysisSink IUnknown "{5810cd44-0ca0-4701-b3fa-bec5182ae4f6}"
     HRESULT SetScriptAnalysis ( UINT32 textPosition, UINT32 textLength, DWRITE_SCRIPT_ANALYSIS* scriptAnalysis )
     HRESULT SetLineBreakpoints ( UINT32 textPosition, UINT32 textLength, DWRITE_LINE_BREAKPOINT* lineBreakpoints )
     HRESULT SetBidiLevel ( UINT32 textPosition, UINT32 textLength, BYTE explicitLevel, BYTE resolvedLevel )
     HRESULT SetNumberSubstitution ( UINT32 textPosition, UINT32 textLength, IDWriteNumberSubstitution* numberSubstitution ) ;
 
-COM-INTERFACE: IDWriteTextAnalyzer IUnknown {b7e6163e-7f46-43b4-84b3-e4e6249c365d}
+COM-INTERFACE: IDWriteTextAnalyzer IUnknown "{b7e6163e-7f46-43b4-84b3-e4e6249c365d}"
     HRESULT AnalyzeScript ( IDWriteTextAnalysisSource* analysisSource, UINT32 textPosition, UINT32 textLength, IDWriteTextAnalysisSink* analysisSink )
     HRESULT AnalyzeBidi ( IDWriteTextAnalysisSource* analysisSource, UINT32 textPosition, UINT32 textLength, IDWriteTextAnalysisSink* analysisSink )
     HRESULT AnalyzeNumberSubstitution ( IDWriteTextAnalysisSource* analysisSource, UINT32 textPosition, UINT32 textLength, IDWriteTextAnalysisSink* analysisSink )
@@ -535,24 +535,24 @@ STRUCT: DWRITE_HIT_TEST_METRICS
 
 c-type: IDWriteTextRenderer
 
-COM-INTERFACE: IDWriteInlineObject IUnknown {8339FDE3-106F-47ab-8373-1C6295EB10B3}
+COM-INTERFACE: IDWriteInlineObject IUnknown "{8339FDE3-106F-47ab-8373-1C6295EB10B3}"
     HRESULT Draw ( void* clientDrawingContext, IDWriteTextRenderer* renderer, FLOAT originX, FLOAT originY, BOOL isSideways, BOOL isRightToLeft, IUnknown* clientDrawingEffect )
     HRESULT GetMetrics ( DWRITE_INLINE_OBJECT_METRICS* metrics )
     HRESULT GetOverhangMetrics ( DWRITE_OVERHANG_METRICS* overhangs )
     HRESULT GetBreakConditions ( DWRITE_BREAK_CONDITION* breakConditionBefore, DWRITE_BREAK_CONDITION* breakConditionAfter ) ;
 
-COM-INTERFACE: IDWritePixelSnapping IUnknown {eaf3a2da-ecf4-4d24-b644-b34f6842024b}
+COM-INTERFACE: IDWritePixelSnapping IUnknown "{eaf3a2da-ecf4-4d24-b644-b34f6842024b}"
     HRESULT IsPixelSnappingDisabled ( void* clientDrawingContext, BOOL* isDisabled )
     HRESULT GetCurrentTransform ( void* clientDrawingContext, DWRITE_MATRIX* transform )
     HRESULT GetPixelsPerDip ( void* clientDrawingContext, FLOAT* pixelsPerDip ) ;
 
-COM-INTERFACE: IDWriteTextRenderer IDWritePixelSnapping {ef8a8135-5cc6-45fe-8825-c5a0724eb819}
+COM-INTERFACE: IDWriteTextRenderer IDWritePixelSnapping "{ef8a8135-5cc6-45fe-8825-c5a0724eb819}"
     HRESULT DrawGlyphRun ( void* clientDrawingContext, FLOAT baselineOriginX, FLOAT baselineOriginY, DWRITE_MEASURING_MODE measuringMode, DWRITE_GLYPH_RUN* glyphRun, DWRITE_GLYPH_RUN_DESCRIPTION* glyphRunDescription, IUnknown* clientDrawingEffect )
     HRESULT DrawUnderline ( void* clientDrawingContext, FLOAT baselineOriginX, FLOAT baselineOriginY, DWRITE_UNDERLINE* underline, IUnknown* clientDrawingEffect )
     HRESULT DrawStrikethrough ( void* clientDrawingContext, FLOAT baselineOriginX, FLOAT baselineOriginY, DWRITE_STRIKETHROUGH* strikethrough, IUnknown* clientDrawingEffect )
     HRESULT DrawInlineObject ( void* clientDrawingContext, FLOAT originX, FLOAT originY, IDWriteInlineObject* inlineObject, BOOL isSideways, BOOL isRightToLeft, IUnknown* clientDrawingEffect ) ;
 
-COM-INTERFACE: IDWriteTextLayout IDWriteTextFormat {53737037-6d14-410b-9bfe-0b182bb70961}
+COM-INTERFACE: IDWriteTextLayout IDWriteTextFormat "{53737037-6d14-410b-9bfe-0b182bb70961}"
     HRESULT SetMaxWidth ( FLOAT maxWidth )
     HRESULT SetMaxHeight ( FLOAT maxHeight )
     HRESULT SetFontCollection ( IDWriteFontCollection* fontCollection, DWRITE_TEXT_RANGE textRange )
@@ -593,7 +593,7 @@ COM-INTERFACE: IDWriteTextLayout IDWriteTextFormat {53737037-6d14-410b-9bfe-0b18
     HRESULT HitTestTextPosition ( UINT32 textPosition, BOOL isTrailingHit, FLOAT* pointX, FLOAT* pointY, DWRITE_HIT_TEST_METRICS* hitTestMetrics )
     HRESULT HitTestTextRange ( UINT32 textPosition, UINT32 textLength, FLOAT originX, FLOAT originY, DWRITE_HIT_TEST_METRICS* hitTestMetrics, UINT32 maxHitTestMetricsCount, UINT32* actualHitTestMetricsCount ) ;
 
-COM-INTERFACE: IDWriteBitmapRenderTarget IUnknown {5e5a32a3-8dff-4773-9ff6-0696eab77267}
+COM-INTERFACE: IDWriteBitmapRenderTarget IUnknown "{5e5a32a3-8dff-4773-9ff6-0696eab77267}"
     HRESULT DrawGlyphRun ( FLOAT baselineOriginX, FLOAT baselineOriginY, DWRITE_MEASURING_MODE measuringMode, DWRITE_GLYPH_RUN* glyphRun, IDWriteRenderingParams* renderingParams, COLORREF textColor, RECT* blackBoxRect )
     HDC GetMemoryDC ( )
     FLOAT GetPixelsPerDip ( )
@@ -605,7 +605,7 @@ COM-INTERFACE: IDWriteBitmapRenderTarget IUnknown {5e5a32a3-8dff-4773-9ff6-0696e
 
 c-type: LOGFONTW
 
-COM-INTERFACE: IDWriteGdiInterop IUnknown {1edd9491-9853-4299-898f-6432983b6f3a}
+COM-INTERFACE: IDWriteGdiInterop IUnknown "{1edd9491-9853-4299-898f-6432983b6f3a}"
     HRESULT CreateFontFromLOGFONT ( LOGFONTW* logFont, IDWriteFont** font )
     HRESULT ConvertFontToLOGFONT ( IDWriteFont* font, LOGFONTW* logFont, BOOL* isSystemFont )
     HRESULT ConvertFontFaceToLOGFONT ( IDWriteFontFace* font, LOGFONTW* logFont )
@@ -618,12 +618,12 @@ ENUM: DWRITE_TEXTURE_TYPE
 
 CONSTANT: DWRITE_ALPHA_MAX 255 ;
 
-COM-INTERFACE: IDWriteGlyphRunAnalysis IUnknown {7d97dbf7-e085-42d4-81e3-6a883bded118}
+COM-INTERFACE: IDWriteGlyphRunAnalysis IUnknown "{7d97dbf7-e085-42d4-81e3-6a883bded118}"
     HRESULT GetAlphaTextureBounds ( DWRITE_TEXTURE_TYPE textureType, RECT* textureBounds )
     HRESULT CreateAlphaTexture ( DWRITE_TEXTURE_TYPE textureType, RECT* textureBounds, BYTE* alphaValues, UINT32 bufferSize )
     HRESULT GetAlphaBlendParams ( IDWriteRenderingParams* renderingParams, FLOAT* blendGamma, FLOAT* blendEnhancedContrast, FLOAT* blendClearTypeLevel ) ;
 
-COM-INTERFACE: IDWriteFactory IUnknown {b859ee5a-d838-4b5b-a2e8-1adc7d93db48}
+COM-INTERFACE: IDWriteFactory IUnknown "{b859ee5a-d838-4b5b-a2e8-1adc7d93db48}"
     HRESULT GetSystemFontCollection ( IDWriteFontCollection** fontCollection, BOOL checkForUpdates )
     HRESULT CreateCustomFontCollection ( IDWriteFontCollectionLoader* collectionLoader, void* collectionKey, UINT32 collectionKeySize, IDWriteFontCollection** fontCollection )
     HRESULT RegisterFontCollectionLoader ( IDWriteFontCollectionLoader* fontCollectionLoader )
@@ -649,7 +649,7 @@ COM-INTERFACE: IDWriteFactory IUnknown {b859ee5a-d838-4b5b-a2e8-1adc7d93db48}
 FUNCTION: HRESULT DWriteCreateFactory (
     DWRITE_FACTORY_TYPE factoryType,
     REFIID              iid,
-    IUnknown**          factory )
+    IUnknown**          factory ) ;
 
 CONSTANT: DWRITE_E_FILEFORMAT             0x88985000 ;
 CONSTANT: DWRITE_E_UNEXPECTED             0x88985001 ;

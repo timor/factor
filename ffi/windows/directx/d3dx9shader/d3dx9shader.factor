@@ -104,7 +104,7 @@ TYPEDEF: D3DXCONSTANT_DESC* LPD3DXCONSTANT_DESC ;
 c-type: ID3DXConstantTable
 TYPEDEF: ID3DXConstantTable* LPD3DXCONSTANTTABLE ;
 
-COM-INTERFACE: ID3DXConstantTable IUnknown {AB3C758F-093E-4356-B762-4DB18F1B3A01}
+COM-INTERFACE: ID3DXConstantTable IUnknown "{AB3C758F-093E-4356-B762-4DB18F1B3A01}"
     LPVOID GetBufferPointer ( )
     DWORD GetBufferSize ( )
     HRESULT GetDesc ( D3DXCONSTANTTABLE_DESC* pDesc )
@@ -133,7 +133,7 @@ COM-INTERFACE: ID3DXConstantTable IUnknown {AB3C758F-093E-4356-B762-4DB18F1B3A01
 c-type: ID3DXTextureShader
 TYPEDEF: ID3DXTextureShader* LPD3DXTEXTURESHADER ;
 
-COM-INTERFACE: ID3DXTextureShader IUnknown {3E3D67F8-AA7A-405d-A857-BA01D4758426}
+COM-INTERFACE: ID3DXTextureShader IUnknown "{3E3D67F8-AA7A-405d-A857-BA01D4758426}"
     HRESULT GetFunction ( LPD3DXBUFFER* ppFunction )
     HRESULT GetConstantBuffer ( LPD3DXBUFFER* ppConstantBuffer )
     HRESULT GetDesc ( D3DXCONSTANTTABLE_DESC* pDesc )
@@ -166,7 +166,7 @@ TYPEDEF: D3DXINCLUDE_TYPE* LPD3DXINCLUDE_TYPE ;
 c-type: ID3DXInclude
 TYPEDEF: ID3DXInclude* LPD3DXINCLUDE ;
 
-COM-INTERFACE: ID3DXInclude f {00000000-0000-0000-0000-000000000000}
+COM-INTERFACE: ID3DXInclude f "{00000000-0000-0000-0000-000000000000}"
     HRESULT Open ( D3DXINCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID* ppData, UINT* pBytes )
     HRESULT Close ( LPCVOID pData ) ;
 
@@ -177,7 +177,7 @@ FUNCTION: HRESULT
         LPD3DXINCLUDE                   pInclude,
         DWORD                           Flags,
         LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs )
+        LPD3DXBUFFER*                   ppErrorMsgs ) ;
 
 FUNCTION: HRESULT
     D3DXAssembleShaderFromFileW (
@@ -186,7 +186,7 @@ FUNCTION: HRESULT
         LPD3DXINCLUDE                   pInclude,
         DWORD                           Flags,
         LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs )
+        LPD3DXBUFFER*                   ppErrorMsgs ) ;
 
 ALIAS: D3DXAssembleShaderFromFile D3DXAssembleShaderFromFileW ;
 
@@ -198,7 +198,7 @@ FUNCTION: HRESULT
         LPD3DXINCLUDE                   pInclude,
         DWORD                           Flags,
         LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs )
+        LPD3DXBUFFER*                   ppErrorMsgs ) ;
 
 FUNCTION: HRESULT
     D3DXAssembleShaderFromResourceW (
@@ -208,7 +208,7 @@ FUNCTION: HRESULT
         LPD3DXINCLUDE                   pInclude,
         DWORD                           Flags,
         LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs )
+        LPD3DXBUFFER*                   ppErrorMsgs ) ;
 
 ALIAS: D3DXAssembleShaderFromResource D3DXAssembleShaderFromResourceW ;
 
@@ -220,7 +220,7 @@ FUNCTION: HRESULT
         LPD3DXINCLUDE                   pInclude,
         DWORD                           Flags,
         LPD3DXBUFFER*                   ppShader,
-        LPD3DXBUFFER*                   ppErrorMsgs )
+        LPD3DXBUFFER*                   ppErrorMsgs ) ;
 
 FUNCTION: HRESULT
     D3DXCompileShaderFromFileA (
@@ -232,7 +232,7 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXBUFFER*                   ppShader,
         LPD3DXBUFFER*                   ppErrorMsgs,
-        LPD3DXCONSTANTTABLE*            ppConstantTable )
+        LPD3DXCONSTANTTABLE*            ppConstantTable ) ;
 
 FUNCTION: HRESULT
     D3DXCompileShaderFromFileW (
@@ -244,7 +244,7 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXBUFFER*                   ppShader,
         LPD3DXBUFFER*                   ppErrorMsgs,
-        LPD3DXCONSTANTTABLE*            ppConstantTable )
+        LPD3DXCONSTANTTABLE*            ppConstantTable ) ;
 
 ALIAS: D3DXCompileShaderFromFile D3DXCompileShaderFromFileW ;
 
@@ -259,7 +259,7 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXBUFFER*                   ppShader,
         LPD3DXBUFFER*                   ppErrorMsgs,
-        LPD3DXCONSTANTTABLE*            ppConstantTable )
+        LPD3DXCONSTANTTABLE*            ppConstantTable ) ;
 
 FUNCTION: HRESULT
     D3DXCompileShaderFromResourceW (
@@ -272,7 +272,7 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXBUFFER*                   ppShader,
         LPD3DXBUFFER*                   ppErrorMsgs,
-        LPD3DXCONSTANTTABLE*            ppConstantTable )
+        LPD3DXCONSTANTTABLE*            ppConstantTable ) ;
 
 ALIAS: D3DXCompileShaderFromResource D3DXCompileShaderFromResourceW ;
 
@@ -287,71 +287,71 @@ FUNCTION: HRESULT
         DWORD                           Flags,
         LPD3DXBUFFER*                   ppShader,
         LPD3DXBUFFER*                   ppErrorMsgs,
-        LPD3DXCONSTANTTABLE*            ppConstantTable )
+        LPD3DXCONSTANTTABLE*            ppConstantTable ) ;
 
 FUNCTION: HRESULT
     D3DXDisassembleShader (
         DWORD*                          pShader,
         BOOL                            EnableColorCode,
         LPCSTR                          pComments,
-        LPD3DXBUFFER*                   ppDisassembly )
+        LPD3DXBUFFER*                   ppDisassembly ) ;
 
 FUNCTION: LPCSTR
     D3DXGetPixelShaderProfile (
-        LPDIRECT3DDEVICE9               pDevice )
+        LPDIRECT3DDEVICE9               pDevice ) ;
 
 FUNCTION: LPCSTR
     D3DXGetVertexShaderProfile (
-        LPDIRECT3DDEVICE9               pDevice )
+        LPDIRECT3DDEVICE9               pDevice ) ;
 
 FUNCTION: HRESULT
     D3DXFindShaderComment (
         DWORD*                          pFunction,
         DWORD                           FourCC,
         LPCVOID*                        ppData,
-        UINT*                           pSizeInBytes )
+        UINT*                           pSizeInBytes ) ;
 
 FUNCTION: UINT
     D3DXGetShaderSize (
-        DWORD*                    pFunction )
+        DWORD*                    pFunction ) ;
 
 FUNCTION: DWORD
     D3DXGetShaderVersion (
-        DWORD*                    pFunction )
+        DWORD*                    pFunction ) ;
 
 FUNCTION: HRESULT
     D3DXGetShaderInputSemantics (
         DWORD*                          pFunction,
         D3DXSEMANTIC*                   pSemantics,
-        UINT*                           pCount )
+        UINT*                           pCount ) ;
 
 FUNCTION: HRESULT
     D3DXGetShaderOutputSemantics (
         DWORD*                          pFunction,
         D3DXSEMANTIC*                   pSemantics,
-        UINT*                           pCount )
+        UINT*                           pCount ) ;
 
 FUNCTION: HRESULT
     D3DXGetShaderSamplers (
         DWORD*                          pFunction,
         LPCSTR*                         pSamplers,
-        UINT*                           pCount )
+        UINT*                           pCount ) ;
 
 FUNCTION: HRESULT
     D3DXGetShaderConstantTable (
         DWORD*                          pFunction,
-        LPD3DXCONSTANTTABLE*            ppConstantTable )
+        LPD3DXCONSTANTTABLE*            ppConstantTable ) ;
 
 FUNCTION: HRESULT
     D3DXGetShaderConstantTableEx (
         DWORD*                          pFunction,
         DWORD                           Flags,
-        LPD3DXCONSTANTTABLE*            ppConstantTable )
+        LPD3DXCONSTANTTABLE*            ppConstantTable ) ;
 
 FUNCTION: HRESULT
     D3DXCreateTextureShader (
         DWORD*                          pFunction,
-        LPD3DXTEXTURESHADER*            ppTextureShader )
+        LPD3DXTEXTURESHADER*            ppTextureShader ) ;
 
 FUNCTION: HRESULT
     D3DXPreprocessShaderFromFileA (
@@ -359,7 +359,7 @@ FUNCTION: HRESULT
         D3DXMACRO*                   pDefines,
         LPD3DXINCLUDE                pInclude,
         LPD3DXBUFFER*                ppShaderText,
-        LPD3DXBUFFER*                ppErrorMsgs )
+        LPD3DXBUFFER*                ppErrorMsgs ) ;
 
 FUNCTION: HRESULT
     D3DXPreprocessShaderFromFileW (
@@ -367,7 +367,7 @@ FUNCTION: HRESULT
         D3DXMACRO*                   pDefines,
         LPD3DXINCLUDE                pInclude,
         LPD3DXBUFFER*                ppShaderText,
-        LPD3DXBUFFER*                ppErrorMsgs )
+        LPD3DXBUFFER*                ppErrorMsgs ) ;
 
 ALIAS: D3DXPreprocessShaderFromFile D3DXPreprocessShaderFromFileW ;
 
@@ -378,7 +378,7 @@ FUNCTION: HRESULT
         D3DXMACRO*                   pDefines,
         LPD3DXINCLUDE                pInclude,
         LPD3DXBUFFER*                ppShaderText,
-        LPD3DXBUFFER*                ppErrorMsgs )
+        LPD3DXBUFFER*                ppErrorMsgs ) ;
 
 FUNCTION: HRESULT
     D3DXPreprocessShaderFromResourceW (
@@ -387,7 +387,7 @@ FUNCTION: HRESULT
         D3DXMACRO*                   pDefines,
         LPD3DXINCLUDE                pInclude,
         LPD3DXBUFFER*                ppShaderText,
-        LPD3DXBUFFER*                ppErrorMsgs )
+        LPD3DXBUFFER*                ppErrorMsgs ) ;
 
 ALIAS: D3DXPreprocessShaderFromResource D3DXPreprocessShaderFromResourceW ;
 
@@ -398,7 +398,7 @@ FUNCTION: HRESULT
         D3DXMACRO*                   pDefines,
         LPD3DXINCLUDE                pInclude,
         LPD3DXBUFFER*                ppShaderText,
-        LPD3DXBUFFER*                ppErrorMsgs )
+        LPD3DXBUFFER*                ppErrorMsgs ) ;
 
 STRUCT: D3DXSHADER_CONSTANTTABLE
     { Size         DWORD }

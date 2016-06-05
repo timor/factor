@@ -206,7 +206,7 @@ c-type: IXAudio2SourceVoice
 c-type: IXAudio2SubmixVoice
 c-type: IXAudio2MasteringVoice
 
-COM-INTERFACE: IXAudio2 IUnknown {8bcf1f58-9fe7-4583-8ac6-e2adc465c8bb}
+COM-INTERFACE: IXAudio2 IUnknown "{8bcf1f58-9fe7-4583-8ac6-e2adc465c8bb}"
     HRESULT GetDeviceCount ( UINT32* pCount )
     HRESULT GetDeviceDetails ( UINT32 Index, XAUDIO2_DEVICE_DETAILS* pDeviceDetails )
     HRESULT Initialize ( UINT32 Flags, XAUDIO2_PROCESSOR XAudio2Processor )
@@ -241,7 +241,7 @@ COM-INTERFACE: IXAudio2 IUnknown {8bcf1f58-9fe7-4583-8ac6-e2adc465c8bb}
     void GetPerformanceData ( XAUDIO2_PERFORMANCE_DATA* pPerfData )
     void SetDebugConfiguration ( XAUDIO2_DEBUG_CONFIGURATION* pDebugConfiguration, void* pReserved ) ;
 
-COM-INTERFACE: IXAudio2Voice f {00000000-0000-0000-0000-000000000000}
+COM-INTERFACE: IXAudio2Voice f "{00000000-0000-0000-0000-000000000000}"
     void GetVoiceDetails ( XAUDIO2_VOICE_DETAILS* pVoiceDetails )
     HRESULT SetOutputVoices ( XAUDIO2_VOICE_SENDS* pSendList )
     HRESULT SetEffectChain ( XAUDIO2_EFFECT_CHAIN* pEffectChain )
@@ -284,7 +284,7 @@ COM-INTERFACE: IXAudio2Voice f {00000000-0000-0000-0000-000000000000}
         FLOAT*         pLevelMatrix )
     void DestroyVoice ( ) ;
 
-COM-INTERFACE: IXAudio2SourceVoice IXAudio2Voice {00000000-0000-0000-0000-000000000000}
+COM-INTERFACE: IXAudio2SourceVoice IXAudio2Voice "{00000000-0000-0000-0000-000000000000}"
     HRESULT Start ( UINT32 Flags, UINT32 OperationSet )
     HRESULT Stop ( UINT32 Flags, UINT32 OperationSet )
     HRESULT SubmitSourceBuffer ( XAUDIO2_BUFFER* pBuffer, XAUDIO2_BUFFER_WMA* pBufferWMA )
@@ -296,15 +296,15 @@ COM-INTERFACE: IXAudio2SourceVoice IXAudio2Voice {00000000-0000-0000-0000-000000
     void GetFrequencyRatio ( FLOAT* pRatio )
     HRESULT SetSourceSampleRate ( UINT32 NewSourceSampleRate ) ;
 
-COM-INTERFACE: IXAudio2SubmixVoice IXAudio2Voice {00000000-0000-0000-0000-000000000000} ;
-COM-INTERFACE: IXAudio2MasteringVoice IXAudio2Voice {00000000-0000-0000-0000-000000000000} ;
+COM-INTERFACE: IXAudio2SubmixVoice IXAudio2Voice "{00000000-0000-0000-0000-000000000000}" ;
+COM-INTERFACE: IXAudio2MasteringVoice IXAudio2Voice "{00000000-0000-0000-0000-000000000000}" ;
 
-COM-INTERFACE: IXAudio2EngineCallback f {00000000-0000-0000-0000-000000000000}
+COM-INTERFACE: IXAudio2EngineCallback f "{00000000-0000-0000-0000-000000000000}"
     void OnProcessingPassStart ( )
     void OnProcessingPassEnd ( )
     void OnCriticalError ( HRESULT Error ) ;
 
-COM-INTERFACE: IXAudio2VoiceCallback f {00000000-0000-0000-0000-000000000000}
+COM-INTERFACE: IXAudio2VoiceCallback f "{00000000-0000-0000-0000-000000000000}"
     void OnVoiceProcessingPassStart ( UINT32 BytesRequired )
     void OnVoiceProcessingPassEnd ( )
     void OnStreamEnd ( )

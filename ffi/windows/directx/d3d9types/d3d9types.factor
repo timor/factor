@@ -68,7 +68,7 @@ CONSTANT: D3DCS_ALL
         D3DCS_PLANE3
         D3DCS_PLANE4
         D3DCS_PLANE5
-    }
+    } ;
 
 STRUCT: D3DCLIPSTATUS9
     { ClipUnion        DWORD }

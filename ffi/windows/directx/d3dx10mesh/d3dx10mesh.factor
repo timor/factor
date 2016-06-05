@@ -47,12 +47,12 @@ STRUCT: D3DX10_INTERSECT_INFO
     { Dist       FLOAT } ;
 TYPEDEF: D3DX10_INTERSECT_INFO* LPD3DX10_INTERSECT_INFO ;
 
-COM-INTERFACE: ID3DX10MeshBuffer IUnknown {04B0D117-1041-46b1-AA8A-3952848BA22E}
+COM-INTERFACE: ID3DX10MeshBuffer IUnknown "{04B0D117-1041-46b1-AA8A-3952848BA22E}"
     HRESULT Map ( void** ppData, SIZE_T* pSize )
     HRESULT Unmap ( )
     SIZE_T GetSize ( ) ;
 
-COM-INTERFACE: ID3DX10Mesh IUnknown {4020E5C2-1403-4929-883F-E2E849FAC195}
+COM-INTERFACE: ID3DX10Mesh IUnknown "{4020E5C2-1403-4929-883F-E2E849FAC195}"
     UINT GetFaceCount ( )
     UINT GetVertexCount ( )
     UINT GetVertexBufferCount ( )
@@ -95,7 +95,7 @@ FUNCTION: HRESULT
         UINT                      VertexCount,
         UINT                      FaceCount,
         UINT                      Options,
-        ID3DX10Mesh**             ppMesh        )
+        ID3DX10Mesh**             ppMesh        ) ;
 
 CONSTANT: D3DX10_MESHOPT_COMPACT            0x01000000 ;
 CONSTANT: D3DX10_MESHOPT_ATTR_SORT          0x02000000 ;
@@ -114,7 +114,7 @@ STRUCT: D3DX10_SKINNING_CHANNEL
     { DestOffset            UINT }
     { IsNormal              BOOL } ;
 
-COM-INTERFACE: ID3DX10SkinInfo IUnknown {420BD604-1C76-4a34-A466-E45D0658A32C}
+COM-INTERFACE: ID3DX10SkinInfo IUnknown "{420BD604-1C76-4a34-A466-E45D0658A32C}"
     UINT GetNumVertices ( )
     UINT GetNumBones ( )
     UINT GetMaxBoneInfluences ( )
@@ -135,8 +135,7 @@ COM-INTERFACE: ID3DX10SkinInfo IUnknown {420BD604-1C76-4a34-A466-E45D0658A32C}
 
 TYPEDEF: ID3DX10SkinInfo* LPD3DX10SKININFO ;
 
-FUNCTION: HRESULT
-    D3DX10CreateSkinInfo ( LPD3DX10SKININFO* ppSkinInfo )
+FUNCTION: HRESULT D3DX10CreateSkinInfo ( LPD3DX10SKININFO* ppSkinInfo ) ;
 
 STRUCT: D3DX10_ATTRIBUTE_WEIGHTS
     { Position FLOAT    }

@@ -8,7 +8,7 @@ library: d3d10
 c-type: ID3D10Blob
 TYPEDEF: ID3D10Blob* LPD3D10BLOB ;
 
-COM-INTERFACE: ID3D10Blob IUnknown {8BA5FB08-5195-40e2-AC58-0D989C3A0102}
+COM-INTERFACE: ID3D10Blob IUnknown "{8BA5FB08-5195-40e2-AC58-0D989C3A0102}"
     LPVOID GetBufferPointer ( )
     SIZE_T GetBufferSize ( ) ;
 
@@ -25,7 +25,7 @@ FUNCTION: HRESULT D3D10CreateDevice (
     HMODULE           Software,
     UINT              Flags,
     UINT              SDKVersion,
-    ID3D10Device**    ppDevice )
+    ID3D10Device**    ppDevice ) ;
 
 FUNCTION: HRESULT D3D10CreateDeviceAndSwapChain (
     IDXGIAdapter*         pAdapter,
@@ -35,6 +35,6 @@ FUNCTION: HRESULT D3D10CreateDeviceAndSwapChain (
     UINT                  SDKVersion,
     DXGI_SWAP_CHAIN_DESC* pSwapChainDesc,
     IDXGISwapChain**      ppSwapChain,
-    ID3D10Device**        ppDevice )
+    ID3D10Device**        ppDevice ) ;
 
 FUNCTION: HRESULT D3D10CreateBlob ( SIZE_T NumBytes, LPD3D10BLOB* ppBuffer ) ;

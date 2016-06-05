@@ -35,8 +35,8 @@ TYPEDEF: XID GLXDrawable ;
 TYPEDEF: XID GLXPbuffer ;
 TYPEDEF: XID GLXWindow ;
 TYPEDEF: XID GLXFBConfigID ;
-TYPEDEF: void* GLXContext  ! typedef struct __GLXcontextRec *GLXContext; ;
-TYPEDEF: void* GLXFBConfig ! typedef struct __GLXFBConfigRec *GLXFBConfig; ;
+TYPEDEF: void* GLXContext ; ! typedef struct __GLXcontextRec *GLXContext;
+TYPEDEF: void* GLXFBConfig ; ! typedef struct __GLXFBConfigRec *GLXFBConfig;
 
 X-FUNCTION: XVisualInfo* glXChooseVisual ( Display* dpy, int screen, int* attribList ) ;
 X-FUNCTION: void glXCopyContext ( Display* dpy, GLXContext src, GLXContext dst, ulong mask ) ;
