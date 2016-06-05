@@ -14,4 +14,4 @@ library: atk
     { [ os unix? ] [ "libatk-1.0.so" ] }
 } cond cdecl add-library >>
 
-GIR: vocab:atk/Atk-1.0.gir
+gir: vocab:atk/Atk-1.0.gir

@@ -16,5 +16,5 @@ in: gstreamer.rtsp.ffi
 ! git error (there is _GstRTSPTransport only in .gir)
 c-type: GstRTSPTransport
 
-GIR: vocab:gstreamer/rtsp/GstRtsp-0.10.gir
+gir: vocab:gstreamer/rtsp/GstRtsp-0.10.gir
 

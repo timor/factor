@@ -13,5 +13,5 @@ in: gstreamer.interfaces.ffi
 } cond
 >>
 
-GIR: vocab:gstreamer/interfaces/GstInterfaces-0.10.gir
+gir: vocab:gstreamer/interfaces/GstInterfaces-0.10.gir
 

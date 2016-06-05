@@ -19,4 +19,4 @@ library: gtk.gl
 } cond
 >>
 
-GIR: vocab:gtk/gl/GtkGLExt-1.0.gir
+gir: vocab:gtk/gl/GtkGLExt-1.0.gir

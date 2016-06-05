@@ -14,5 +14,5 @@ in: gstreamer.audio.ffi
 } cond
 >>
 
-GIR: vocab:gstreamer/audio/GstAudio-0.10.gir
+gir: vocab:gstreamer/audio/GstAudio-0.10.gir
 

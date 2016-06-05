@@ -19,4 +19,4 @@ FOREIGN-RECORD-TYPE: cairo.ScaledFont cairo_scaled_font_t
 FOREIGN-ENUM-TYPE: cairo.FontType cairo_font_type_t
 FOREIGN-RECORD-TYPE: cairo.FontOptions cairo_font_options_t
 
-GIR: vocab:pango/cairo/PangoCairo-1.0.gir
+gir: vocab:pango/cairo/PangoCairo-1.0.gir

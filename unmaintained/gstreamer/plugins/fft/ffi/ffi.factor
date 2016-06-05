@@ -13,5 +13,5 @@ in: gstreamer.fft.ffi
 } cond
 >>
 
-GIR: vocab:gstreamer/fft/GstFft-0.10.gir
+gir: vocab:gstreamer/fft/GstFft-0.10.gir
 

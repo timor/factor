@@ -23,5 +23,5 @@ TYPEDEF: void* xmlNodePtr ;
 TYPEDEF: void* xmlDocPtr ;
 TYPEDEF: void* xmlNsPtr ;
 
-GIR: vocab:gstreamer/Gst-0.10.gir
+gir: vocab:gstreamer/Gst-0.10.gir
 

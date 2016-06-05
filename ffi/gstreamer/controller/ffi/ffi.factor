@@ -18,4 +18,4 @@ library: gstreamer.controller
 } cond
 >>
 
-GIR: GstController-0.10.gir
+gir: GstController-0.10.gir

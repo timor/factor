@@ -19,4 +19,4 @@ library: clutter.cally
 } cond
 >>
 
-GIR: Cally-1.0.gir
+gir: Cally-1.0.gir

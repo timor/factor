@@ -34,4 +34,4 @@ FOREIGN-ATOMIc-type: libxml2.NsPtr xmlNsPtr
 
 PRIVATE>
 
-GIR: Gst-0.10.gir
+gir: Gst-0.10.gir

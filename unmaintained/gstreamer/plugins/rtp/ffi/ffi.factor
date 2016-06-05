@@ -12,5 +12,5 @@ in: gstreamer.rtp.ffi
 } cond
 >>
 
-GIR: vocab:gstreamer/rtp/GstRtp-0.10.gir
+gir: vocab:gstreamer/rtp/GstRtp-0.10.gir
 

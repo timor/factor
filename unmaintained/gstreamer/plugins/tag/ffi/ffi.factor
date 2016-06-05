@@ -12,5 +12,5 @@ in: gstreamer.tag.ffi
 } cond
 >>
 
-GIR: vocab:gstreamer/tag/GstTag-0.10.gir
+gir: vocab:gstreamer/tag/GstTag-0.10.gir
 

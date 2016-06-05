@@ -16,7 +16,7 @@ library: gdk.pixbuf
     { [ os unix? ] [ "libgdk_pixbuf-2.0.so" ] }
 } cond cdecl add-library >>
 
-GIR: vocab:gdk/pixbuf/GdkPixbuf-2.0.gir
+gir: vocab:gdk/pixbuf/GdkPixbuf-2.0.gir
 
 ! <workaround incorrect return-values in gir
 

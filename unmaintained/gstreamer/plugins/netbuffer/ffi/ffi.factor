@@ -12,5 +12,5 @@ in: gstreamer.netbuffer.ffi
 } cond
 >>
 
-GIR: vocab:gstreamer/netbuffer/GstNetbuffer-0.10.gir
+gir: vocab:gstreamer/netbuffer/GstNetbuffer-0.10.gir
 

@@ -14,4 +14,4 @@ library: gmodule
     { [ os unix? ] [ "libgmodule-2.0.so" ] }
 } cond cdecl add-library >>
 
-GIR: vocab:gmodule/GModule-2.0.gir
+gir: vocab:gmodule/GModule-2.0.gir

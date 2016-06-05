@@ -13,5 +13,5 @@ in: gstreamer.app.ffi
 } cond
 >>
 
-GIR: vocab:gstreamer/app/GstApp-0.10.gir
+gir: vocab:gstreamer/app/GstApp-0.10.gir
 

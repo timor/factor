@@ -19,4 +19,4 @@ library: clutter.gtk
 } cond
 >>
 
-GIR: GtkClutter-1.0.gir
+gir: GtkClutter-1.0.gir

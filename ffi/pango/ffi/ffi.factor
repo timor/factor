@@ -17,7 +17,7 @@ library: pango
 
 IMPLEMENT-STRUCTS: PangoRectangle ;
 
-GIR: vocab:pango/Pango-1.0.gir
+gir: vocab:pango/Pango-1.0.gir
 
 destructor: pango_font_description_free
 destructor: pango_layout_iter_free

@@ -19,4 +19,4 @@ library: clutter.json
 } cond
 >>
 
-GIR: Json-1.0.gir
+gir: Json-1.0.gir

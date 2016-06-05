@@ -15,5 +15,5 @@ in: gstreamer.video.ffi
 
 IMPLEMENT-STRUCTS: GstVideoRectangle ;
 
-GIR: vocab:gstreamer/video/GstVideo-0.10.gir
+gir: vocab:gstreamer/video/GstVideo-0.10.gir
 

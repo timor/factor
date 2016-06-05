@@ -12,5 +12,5 @@ in: gstreamer.pbutils.ffi
 } cond
 >>
 
-GIR: vocab:gstreamer/pbutils/GstPbutils-0.10.gir
+gir: vocab:gstreamer/pbutils/GstPbutils-0.10.gir
 

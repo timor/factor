@@ -14,4 +14,4 @@ library: gio
     { [ os unix? ] [ "libgio-2.0.so" ] }
 } cond cdecl add-library >>
 
-GIR: vocab:gio/Gio-2.0.gir
+gir: vocab:gio/Gio-2.0.gir

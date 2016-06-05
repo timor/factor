@@ -18,4 +18,4 @@ library: gstreamer.base
 } cond
 >>
 
-GIR: GstBase-0.10.gir
+gir: GstBase-0.10.gir

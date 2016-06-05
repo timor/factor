@@ -12,5 +12,5 @@ in: gstreamer.sdp.ffi
 } cond
 >>
 
-GIR: vocab:gstreamer/sdp/GstSdp-0.10.gir
+gir: vocab:gstreamer/sdp/GstSdp-0.10.gir
 

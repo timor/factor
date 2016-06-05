@@ -18,4 +18,4 @@ library: gdk.gl
 } cond
 >>
 
-GIR: vocab:gdk/gl/GdkGLExt-1.0.gir
+gir: vocab:gdk/gl/GdkGLExt-1.0.gir

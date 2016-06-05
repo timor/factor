@@ -18,4 +18,4 @@ library: gstreamer.net
 } cond
 >>
 
-GIR: GstNet-0.10.gir
+gir: GstNet-0.10.gir
