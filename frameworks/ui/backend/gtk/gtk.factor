@@ -96,14 +96,14 @@ CONSTANT: events-mask
         GDK_KEY_PRESS_MASK
         GDK_KEY_RELEASE_MASK
         GDK_FOCUS_CHANGE_MASK
-    }
+    } ;
 
 CONSTANT: modifiers
     {
         { S+ $ GDK_SHIFT_MASK }
         { C+ $ GDK_CONTROL_MASK }
         { A+ $ GDK_MOD1_MASK }
-    }
+    } ;
 
 CONSTANT: action-key-codes
     H{
@@ -135,7 +135,7 @@ CONSTANT: action-key-codes
         { $ GDK_KEY_F10 "F10" }
         { $ GDK_KEY_F11 "F11" }
         { $ GDK_KEY_F12 "F12" }
-    }
+    } ;
 
 : event-modifiers ( event -- seq )
     state>> modifiers modifier ;
@@ -415,7 +415,7 @@ PIXEL-FORMAT-ATTRIBUTE-TABLE: gl-config-attribs
         { aux-buffers ${ GDK_GL_AUX_BUFFERS } }
         { sample-buffers ${ GDK_GL_SAMPLE_BUFFERS } }
         { samples ${ GDK_GL_SAMPLES } }
-    }
+    } ;
 
 M: gtk-ui-backend (make-pixel-format)
     nip >gl-config-attribs-int-array gdk_gl_config_new ;

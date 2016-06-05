@@ -40,7 +40,7 @@ PIXEL-FORMAT-ATTRIBUTE-TABLE: NSOpenGLPFA { } H{
     { aux-buffers { $ NSOpenGLPFAAuxBuffers } }
     { sample-buffers { $ NSOpenGLPFASampleBuffers } }
     { samples { $ NSOpenGLPFASamples } }
-}
+} ;
 
 M: cocoa-ui-backend (make-pixel-format)
     nip >NSOpenGLPFA-int-array

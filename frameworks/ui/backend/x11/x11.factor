@@ -78,7 +78,7 @@ PIXEL-FORMAT-ATTRIBUTE-TABLE: glx-visual { $ GLX_RGBA } H{
     { aux-buffers { $ GLX_AUX_BUFFERS } }
     { sample-buffers { $ GLX_SAMPLE_BUFFERS } }
     { samples { $ GLX_SAMPLES } }
-}
+} ;
 
 M: x11-ui-backend (make-pixel-format)
     [ drop dpy get scr get ] dip
@@ -100,7 +100,7 @@ CONSTANT: modifiers
         { S+ 0x1 }
         { C+ 0x4 }
         { A+ 0x8 }
-    }
+    } ;
 
 CONSTANT: key-codes
     H{
@@ -145,7 +145,7 @@ CONSTANT: key-codes
         { 0xFFEC f } ! Right super
         { 0xFFED f } ! Left hyper
         { 0xFFEE f } ! Right hyper
-    }
+    } ;
 
 : key-code ( keysym -- keycode action? )
     dup key-codes at* [ nip dup t and ] [ [ 1string ] dip ] if ;

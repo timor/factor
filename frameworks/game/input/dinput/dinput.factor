@@ -275,7 +275,7 @@ CONSTANT: pov-values
     {
         pov-up pov-up-right pov-right pov-down-right
         pov-down pov-down-left pov-left pov-up-left
-    }
+    } ;
 
 : >axis ( long -- float )
     32767 - 32767.0 /f ; inline
