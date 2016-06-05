@@ -1,12 +1,10 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-
 USING: accessors alien alien.c-types alien.data alien.syntax
 byte-vectors combinators.short-circuit core-foundation
 core-foundation.arrays core-foundation.data destructors fry
 io.encodings.string io.encodings.utf8 kernel math math.order
-parser sequences words ;
-
+parser sequences words lexer ;
 in: core-foundation.strings
 
 TYPEDEF: void* CFStringRef ;
@@ -99,6 +97,6 @@ FUNCTION: CFStringRef CFCopyTypeIDDescription ( CFTypeID type_id ) ;
     CFGetTypeID [ CFCopyTypeIDDescription &CFRelease CF>string ] with-destructors ;
 
 SYNTAX: CFSTRING:
-    scan-new-word scan-object
+    scan-new-word scan-object ";" expect
     [ drop ] [ '[ _ [ _ <CFString> ] initialize-alien ] ] 2bi
     ( -- alien ) define-declared ;

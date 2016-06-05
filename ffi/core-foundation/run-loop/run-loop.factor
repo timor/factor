@@ -55,7 +55,7 @@ FUNCTION: void CFRunLoopRemoveTimer (
     CFStringRef mode
 ) ;
 
-CFSTRING: CFRunLoopDefaultMode "kCFRunLoopDefaultMode"
+CFSTRING: CFRunLoopDefaultMode "kCFRunLoopDefaultMode" ;
 
 TUPLE: run-loop-state fds sources timers ;
 
