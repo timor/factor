@@ -74,9 +74,9 @@ PRIVATE>
 
 : string-parser ( -- parser )
     [
-        [ char: " = ] satisfy hide ,
-        [ char: " = not ] satisfy repeat0 ,
-        [ char: " = ] satisfy hide ,
+        [ char: \" = ] satisfy hide ,
+        [ char: \" = not ] satisfy repeat0 ,
+        [ char: \" = ] satisfy hide ,
     ] seq* [ first >string ] action ;
 
 : (range-pattern) ( pattern -- string )

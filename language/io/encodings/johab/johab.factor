@@ -3,4 +3,4 @@
 use: io.encodings.euc
 in: io.encodings.johab
 
-EUC: johab "vocab:io/encodings/johab/johab.txt"
+EUC: johab "vocab:io/encodings/johab/johab.txt" ;

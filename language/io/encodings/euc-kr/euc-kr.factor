@@ -3,6 +3,6 @@
 USING: io.encodings.iana io.encodings.euc ;
 in: io.encodings.euc-kr
 
-EUC: euc-kr "vocab:io/encodings/euc-kr/data/cp949.txt"
+EUC: euc-kr "vocab:io/encodings/euc-kr/data/cp949.txt" ;
 
 euc-kr "EUC-KR" register-encoding

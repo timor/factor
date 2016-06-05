@@ -32,7 +32,7 @@ CONSTANT: share-mode
         FILE_SHARE_READ
         FILE_SHARE_WRITE
         FILE_SHARE_DELETE
-    }
+    } ;
 
 : default-security-attributes ( -- obj )
     SECURITY_ATTRIBUTES <struct>
@@ -332,7 +332,7 @@ M: windows root-directory? ( path -- ? )
         { [ dup empty? ] [ drop f ] }
         { [ dup [ path-separator? ] all? ] [ drop t ] }
         { [ dup trim-tail-separators { [ length 2 = ]
-          [ second char: : = ] } 1&& ] [ drop t ] }
+          [ second char: \: = ] } 1&& ] [ drop t ] }
         { [ dup unicode-prefix head? ]
           [ trim-tail-separators length unicode-prefix length 2 + = ] }
         [ drop f ]

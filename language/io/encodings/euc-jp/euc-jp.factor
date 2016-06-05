@@ -3,6 +3,6 @@
 USING: io.encodings.euc io.encodings.iana ;
 in: io.encodings.euc-jp
 
-EUC: euc-jp "vocab:io/encodings/euc-jp/euc-jp-2000-std.txt"
+EUC: euc-jp "vocab:io/encodings/euc-jp/euc-jp-2000-std.txt" ;
 
 euc-jp "Extended_UNIX_Code_Packed_Format_for_Japanese" register-encoding

@@ -15,29 +15,29 @@ in: compiler.cfg.stacks.global
 : transfer-peeked-locs ( set bb -- set' )
     [ replace-set diff ] [ peek-set union ] bi ;
 
-BACKWARD-ANALYSIS: anticip
+backward-analysis: anticip
 
 M: anticip transfer-set drop transfer-peeked-locs ;
 M: anticip join-sets 2drop refine ;
 
-BACKWARD-ANALYSIS: live
+backward-analysis: live
 
 M: live transfer-set drop transfer-peeked-locs ;
 M: live join-sets 2drop combine ;
 
-FORWARD-ANALYSIS: avail
+forward-analysis: avail
 
 M: avail transfer-set
     drop [ peek-set ] [ replace-set ] bi union union ;
 M: avail join-sets 2drop refine ;
 
-FORWARD-ANALYSIS: pending
+forward-analysis: pending
 
 M: pending transfer-set
     drop replace-set union ;
 M: pending join-sets 2drop refine ;
 
-BACKWARD-ANALYSIS: dead
+backward-analysis: dead
 
 M: dead transfer-set
     drop [ kill-set ] [ replace-set ] bi union union ;
