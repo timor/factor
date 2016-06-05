@@ -22,6 +22,6 @@ library: clutter
 } cond
 >>
 
-FOREIGN-RECORD-TYPE: cairo.Path cairo_path_t
+FOREIGN-RECORD-TYPE: cairo.Path cairo_path_t ;
 
 gir: Clutter-1.0.gir

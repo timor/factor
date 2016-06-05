@@ -28,9 +28,9 @@ TYPEDEF: void* xmlNodePtr ;
 TYPEDEF: void* xmlDocPtr ;
 TYPEDEF: void* xmlNsPtr ;
 
-FOREIGN-ATOMIc-type: libxml2.NodePtr xmlNodePtr
-FOREIGN-ATOMIc-type: libxml2.DocPtr xmlDocPtr
-FOREIGN-ATOMIc-type: libxml2.NsPtr xmlNsPtr
+FOREIGN-ATOMIC-TYPE: libxml2.NodePtr xmlNodePtr ;
+FOREIGN-ATOMIC-TYPE: libxml2.DocPtr xmlDocPtr ;
+FOREIGN-ATOMIC-TYPE: libxml2.NsPtr xmlNsPtr ;
 
 PRIVATE>
 

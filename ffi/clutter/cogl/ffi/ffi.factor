@@ -18,7 +18,7 @@ library: clutter.cogl
 } cond
 >>
 
-FOREIGN-ATOMIc-type: GL.uint GLuint
-FOREIGN-ATOMIc-type: GL.enum GLenum
+FOREIGN-ATOMIC-TYPE: GL.uint GLuint ;
+FOREIGN-ATOMIC-TYPE: GL.enum GLenum ;
 
 gir: Cogl-1.0.gir
