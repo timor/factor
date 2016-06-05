@@ -22,7 +22,7 @@ HELP: height-state>insns
   { $example
     "USING: compiler.cfg.stacks.local prettyprint ;"
     "{ { 0 4 } { 0 -2 } } height-state>insns ."
-    "{ T{ ##inc { loc D: 4 } } T{ ##inc { loc R: -2 } } }"
+    "{ T{ ##inc { loc d: 4 } } T{ ##inc { loc r: -2 } } }"
   }
 } ;
 

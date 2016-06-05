@@ -8,7 +8,7 @@ in: compiler.cfg.stacks.local.tests
 
 ! loc>vreg
 { 1 } [
-    D: 0 loc>vreg
+    d: 0 loc>vreg
 ] cfg-unit-test
 
 ! stack-changes
@@ -18,13 +18,13 @@ in: compiler.cfg.stacks.local.tests
         T{ ##copy { dst 2 } { src 26 } { rep any-rep } }
     }
 } [
-    { { D: 0 25 } { R: 0 26 } } replaces>copy-insns
+    { { d: 0 25 } { r: 0 26 } } replaces>copy-insns
 ] cfg-unit-test
 
 ! replace-loc
 { 80 } [
-    80 D: 77 replace-loc
-    D: 77 peek-loc
+    80 d: 77 replace-loc
+    d: 77 peek-loc
 ] cfg-unit-test
 
 ! end-local-analysis
@@ -40,11 +40,11 @@ in: compiler.cfg.stacks.local.tests
 ] cfg-unit-test
 
 {
-    HS{ D: 3 }
+    HS{ d: 3 }
 } [
     V{ } 137 insns>block
     [ 0 0 rot record-stack-heights ]
-    [ [ 3 D: 3 replace-loc "eh" , end-local-analysis ] V{ } make drop ]
+    [ [ 3 d: 3 replace-loc "eh" , end-local-analysis ] V{ } make drop ]
     [ replace-sets get at ] tri
 ] cfg-unit-test
 
@@ -52,8 +52,8 @@ in: compiler.cfg.stacks.local.tests
 {
     H{ { T{ ds-loc { n 3 } } 7 } }
 } [
-    D: 0 loc>vreg D: 2 loc>vreg 2drop
-    2 D: 2 replace-loc 7 D: 3 replace-loc
+    d: 0 loc>vreg d: 2 loc>vreg 2drop
+    2 d: 2 replace-loc 7 d: 3 replace-loc
     replaces get remove-redundant-replaces
 ] cfg-unit-test
 
@@ -64,7 +64,7 @@ in: compiler.cfg.stacks.local.tests
         "eh"
     }
 } [
-    3 D: 0 replace-loc [
+    3 d: 0 replace-loc [
         "eh" ,
         replaces get height-state get emit-changes
     ] V{ } make
@@ -76,45 +76,45 @@ in: compiler.cfg.stacks.local.tests
     compute-local-kill-set sets:cardinality
 ] unit-test
 
-{ HS{ R: -4 } } [
+{ HS{ r: -4 } } [
     V{ } 0 insns>block 4 4 pick record-stack-heights
     { { 8 0 } { 3 0 } } height-state set
     compute-local-kill-set
 ] unit-test
 
-{ HS{ D: -1 D: -2 } } [
+{ HS{ d: -1 d: -2 } } [
     V{ } 0 insns>block [ 2 0 rot record-stack-heights ] keep
     { { 0 0 } { 0 0 } } height-state set
     compute-local-kill-set
 ] cfg-unit-test
 
 ! translate-local-loc
-{ D: 2 } [
-    D: 3 { { 1 2 } { 3 4 } } translate-local-loc
+{ d: 2 } [
+    d: 3 { { 1 2 } { 3 4 } } translate-local-loc
 ] unit-test
 
 ! height-state
 {
     { { 3 3 } { 0 0 } }
 } [
-    D: 3 inc-stack height-state get
+    d: 3 inc-stack height-state get
 ] cfg-unit-test
 
 {
     { { 5 3 } { 0 0 } }
 } [
     { { 2 0 } { 0 0 } } height-state set
-    D: 3 inc-stack height-state get
+    d: 3 inc-stack height-state get
 ] cfg-unit-test
 
 {
-    { T{ ##inc { loc D: 4 } } T{ ##inc { loc R: -2 } } }
+    { T{ ##inc { loc d: 4 } } T{ ##inc { loc r: -2 } } }
 } [
     { { 0 4  } { 0 -2 } } height-state>insns
 ] unit-test
 
-{ H{ { D: -1 40 } } } [
-    D: 1 inc-stack 40 D: 0 replace-loc replaces get
+{ H{ { d: -1 40 } } } [
+    d: 1 inc-stack 40 d: 0 replace-loc replaces get
 ] cfg-unit-test
 
 ! Compiling these words used to make the compiler hang due to a bug in
