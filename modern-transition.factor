@@ -26,7 +26,17 @@
  } diff
 [ dup . flush vocab>literals ] map-zip
 
+"resource:frameworks" vocabs-from
+{ "ui.theme.switching" "ui.backend.cocoa.views" "ui.backend.cocoa.tools"
+"ui.backend.gtk" "ui.backend.cocoa" "gpu.demos.raytrace" "gpu.demos.bunny"
+"gpu.shaders" "gpu.render" "game.worlds" "ui" "db.postgresql.errors" } diff
+[ dup . flush vocab>literals ] map-zip
 
+"resource:demos" vocabs-from
+{  "talks.vpri-talk" "talks.tc-lisp-talk" "talks.minneapolis-talk" "talks.google-tech-talk"
+ "talks.galois-talk" "talks.otug-talk" "smalltalk.selectors" "smalltalk.parser"
+ "smalltalk.library" "webkit-demo" "bunny.outlined" "project-euler.common" } diff
+[ dup . flush vocab>literals ] map-zip
 
 in: syntax
 
