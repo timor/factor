@@ -5,7 +5,7 @@ words kernel arrays shuffle tools.annotations
 prettyprint.config prettyprint debugger io.streams.string
 splitting continuations effects generalizations parser strings
 quotations fry accessors math assocs math.order
-sequences.generalizations ;
+sequences.generalizations lexer ;
 in: logging
 
 SYMBOLS: DEBUG NOTICE WARNING ERROR CRITICAL ;
@@ -139,7 +139,7 @@ PRIVATE>
 
 SYNTAX: LOG:
     ! Syntax: name level
-    scan-new-word dup scan-word
+    scan-new-word dup scan-word ";" expect
     '[ 1array stack>message _ _ log-message ]
     ( message -- ) define-declared ;
 
