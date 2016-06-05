@@ -67,9 +67,9 @@ $nl
 { $warning "It is unlikely that math support can be safely removed in most nontrivial applications because the library makes extensive use of ratios." } } ;
 
 HELP: deploy-unicode?
-{ $description "Deploy flag. If set, full Unicode " { $link postpone: char: } " syntax is included."
+{ $description "Deploy flag. If set, full Unicode " { $link postpone\ char: } " syntax is included."
 $nl
-"Off by default. If your program needs to use " { $link postpone: char: } " with named characters, enable this flag." } ;
+"Off by default. If your program needs to use " { $link postpone\ char: } " with named characters, enable this flag." } ;
 
 HELP: deploy-threads?
 { $description "Deploy flag. If set, thread support will be included in the final image."

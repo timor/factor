@@ -9,7 +9,7 @@ $nl
 "Memoization is useful in situations where the set of possible inputs is small, but the results are expensive to compute and should be cached. Memoized words should not have any side effects."
 $nl
 "Defining a memoized word at parse time:"
-{ $subsections postpone: MEMO: }
+{ $subsections postpone\ MEMO: }
 "Defining a memoized word at run time:"
 { $subsections define-memoized }
 "Clearing memoized results:"
@@ -30,4 +30,4 @@ HELP: MEMO[
 { $syntax "MEMO[ elements... ]" }
 { $description "Defines the given literal quotation as one which memoizes its outputs given a particular input." } ;
 
-{ define-memoized postpone: MEMO: postpone: MEMO[ } related-words
+{ define-memoized postpone\ MEMO: postpone\ MEMO[ } related-words

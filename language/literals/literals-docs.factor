@@ -57,7 +57,7 @@ HELP: ${
     }
 } ;
 
-{ postpone: $ postpone: $[ postpone: ${ } related-words
+{ postpone\ $ postpone\ $[ postpone\ ${ } related-words
 
 HELP: flags{
 { $values { "values" sequence } }
@@ -84,9 +84,9 @@ ARTICLE: "literals" "Interpolating code results into literal values"
     "{ 5 5 6 8 }"
 }
 { $subsections
-    postpone: $
-    postpone: $[
-    postpone: ${
+    postpone\ $
+    postpone\ $[
+    postpone\ ${
 } ;
 
 about: "literals"

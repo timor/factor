@@ -36,7 +36,7 @@ HELP: $
 
 HELP: with-interface
 { $values { "quot" "quotation that builds a template and inserts into it" } }
-{ $description "Create templates, used with " { $link postpone: $ } } ;
+{ $description "Create templates, used with " { $link postpone\ $ } } ;
 
 ARTICLE: "ui.gadgets.layout" "GUI Layout"
 "Laying out GUIs works the same way as building lists with " { $vocab-link "make" }

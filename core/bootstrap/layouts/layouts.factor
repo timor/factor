@@ -14,7 +14,7 @@ quotations strings words ;
 
 H{
     { fixnum 0 }
-    { postpone: f 1 }
+    { postpone\ f 1 }
     { array 2 }
     { float 3 }
     { quotation 4 }

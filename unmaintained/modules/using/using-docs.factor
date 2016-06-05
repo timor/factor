@@ -1,7 +1,7 @@
 USING: help.syntax help.markup strings modules.using ;
 in: modules.using
 ARTICLE: { "modules.using" "use" } "Using the modules.using vocab"
-"This vocabulary defines " { $link postpone: USING*: } " as an alternative to " { $link postpone: USING: } " which makes qualified imports easier. "
+"This vocabulary defines " { $link postpone\ USING*: } " as an alternative to " { $link postpone\ USING: } " which makes qualified imports easier. "
 "Secondly, it allows loading vocabularies from remote servers, as long as the remote vocabulary can be accessed at compile time. "
 "Finally, the word can treat words in remote vocabularies as remote procedure calls. Any inputs are passed to the imported words as normal, and the result will appear on the stack- the only difference is that the word isn't called locally." ;
 about: { "modules.using" "use" }

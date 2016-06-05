@@ -15,8 +15,8 @@ HELP: BEFORE:
 ARTICLE: "method-chains" "Method chaining syntax"
 "The " { $vocab-link "method-chains" } " vocabulary provides syntax for extending method implementations in class hierarchies."
 { $subsections
-    postpone: AFTER:
-    postpone: BEFORE:
+    postpone\ AFTER:
+    postpone\ BEFORE:
 } ;
 
 about: "method-chains"

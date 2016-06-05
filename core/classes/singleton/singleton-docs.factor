@@ -4,8 +4,8 @@ in: classes.singleton
 ARTICLE: "singletons" "Singleton classes"
 "A singleton is a class with only one instance and with no state."
 { $subsections
-    postpone: singleton:
-    postpone: SINGLETONS:
+    postpone\ singleton:
+    postpone\ SINGLETONS:
     define-singleton-class
 }
 "The set of all singleton classes is itself a class:"
@@ -17,9 +17,9 @@ ARTICLE: "singletons" "Singleton classes"
 HELP: define-singleton-class
 { $values { "word" "a new word" } }
 { $description
-    "Defines a singleton class. This is the run-time equivalent of " { $link postpone: singleton: } "." } ;
+    "Defines a singleton class. This is the run-time equivalent of " { $link postpone\ singleton: } "." } ;
 
-{ postpone: singleton: define-singleton-class } related-words
+{ postpone\ singleton: define-singleton-class } related-words
 
 HELP: singleton-class
 { $class-description "The class of singleton classes." } ;

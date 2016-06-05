@@ -4,7 +4,7 @@ USING: help.markup help.syntax strings colors ;
 HELP: named-color
 { $values { "name" string } { "color" color } }
 { $description "Outputs a named color from the " { $snippet "rgb.txt" } " database." }
-{ $notes "In most cases, " { $link postpone: color: } " should be used instead." }
+{ $notes "In most cases, " { $link postpone\ color: } " should be used instead." }
 { $errors "Throws an error if the color is not listed in " { $snippet "rgb.txt" } "." } ;
 
 HELP: named-colors
@@ -27,7 +27,7 @@ ARTICLE: "colors.constants" "Standard color database"
 { $subsections
     named-color
     named-colors
-    postpone: color:
+    postpone\ color:
 } ;
 
 about: "colors.constants"

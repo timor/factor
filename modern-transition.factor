@@ -45,8 +45,8 @@ USING: classes.tuple.parser classes.builtin ;
 SYNTAX: in: scan-token set-current-vocab ;
 SYNTAX: use: scan-token use-vocab ;
 SYNTAX: unuse: scan-token unuse-vocab ;
-SYNTAX: postpone: scan-word suffix! ;
-SYNTAX: postpone: scan-word suffix! ;
+SYNTAX: postpone\ scan-word suffix! ;
+SYNTAX: postpone\ scan-word suffix! ;
 
 SYNTAX: @inline last-word make-inline ;
 SYNTAX: @recursive last-word make-recursive ;
@@ -91,3 +91,6 @@ SYNTAX: CONSTANT: scan-new-word scan-object ";" expect define-constant ;
 SYNTAX: qualified: scan-token dup add-qualified ;
 
 SYNTAX: QUALIFIED-WITH: scan-token scan-token ";" expect add-qualified ;
+
+SYNTAX: POSTPONE\ scan-word suffix! ;
+SYNTAX: postpone\ scan-word suffix! ;

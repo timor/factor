@@ -31,7 +31,7 @@ ARTICLE: "colors.hex" "HEX colors"
 { $subsections
     hex>rgba
     rgba>hex
-    postpone: hexcolor:
+    postpone\ hexcolor:
 }
 { $see-also "colors" } ;
 

@@ -54,7 +54,7 @@ M: word pprint-class pprint-word ;
     <block swap pprint-word call block> ; inline
 
 M: parsing-word pprint*
-    \ postpone: [ pprint-word ] pprint-prefix ;
+    \ postpone\ [ pprint-word ] pprint-prefix ;
 
 M: word pprint*
     [ pprint-word ] [ ?start-group ] [ ?end-group ] tri ;

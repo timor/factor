@@ -19,7 +19,7 @@ PRIVATE>
 
 PREDICATE: pinned-alien < alien underlying>> not ;
 
-UNION: pinned-c-ptr pinned-alien postpone: f ;
+UNION: pinned-c-ptr pinned-alien postpone\ f ;
 
 GENERIC: element-size ( seq -- n ) ; flushable
 

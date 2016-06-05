@@ -2,29 +2,29 @@ auto-use
 in: syntax
 use: delegate.private
 
-<< forget: postpone: MACRO: >>
-<< forget: postpone: MACRO:: >>
-<< forget: postpone: MEMO: >>
-<< forget: postpone: MEMO:: >>
-<< forget: postpone: M:: >>
-<< forget: postpone: IDENTITY-MEMO: >>
-<< forget: postpone: IDENTITY-MEMO:: >>
-<< forget: postpone: TYPED: >>
-<< forget: postpone: TYPED:: >>
+<< forget: postpone\ MACRO: >>
+<< forget: postpone\ MACRO:: >>
+<< forget: postpone\ MEMO: >>
+<< forget: postpone\ MEMO:: >>
+<< forget: postpone\ M:: >>
+<< forget: postpone\ IDENTITY-MEMO: >>
+<< forget: postpone\ IDENTITY-MEMO:: >>
+<< forget: postpone\ TYPED: >>
+<< forget: postpone\ TYPED:: >>
 
-<< forget: postpone: '[ >>
-<< forget: postpone: :: >>
-<< forget: postpone: :> >>
+<< forget: postpone\ '[ >>
+<< forget: postpone\ :: >>
+<< forget: postpone\ :> >>
 << forget: _ >>
 << forget: @ >>
-<< forget: postpone: [| >>
-<< forget: postpone: [let >>
-<< forget: postpone: IH{ >>
-<< forget: postpone: PROTOCOL: >>
-<< forget: postpone: CONSULT: >>
-<< forget: postpone: BROADCAST: >>
-<< forget: postpone: SLOT-PROTOCOL: >>
-<< forget: postpone: HINTS: >>
+<< forget: postpone\ [| >>
+<< forget: postpone\ [let >>
+<< forget: postpone\ IH{ >>
+<< forget: postpone\ PROTOCOL: >>
+<< forget: postpone\ CONSULT: >>
+<< forget: postpone\ BROADCAST: >>
+<< forget: postpone\ SLOT-PROTOCOL: >>
+<< forget: postpone\ HINTS: >>
 
 
 

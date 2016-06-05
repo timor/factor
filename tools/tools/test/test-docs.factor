@@ -3,16 +3,16 @@ in: tools.test
 
 ARTICLE: "tools.test.write" "Writing unit tests"
 "Assert that a quotation outputs a specific set of values:"
-{ $subsections postpone: unit-test }
+{ $subsections postpone\ unit-test }
 "Assert that a quotation throws an error:"
 { $subsections
-    postpone: must-fail
-    postpone: must-fail-with
+    postpone\ must-fail
+    postpone\ must-fail-with
 }
 "Assert that a quotation or word has a specific static stack effect (see " { $link "inference" } "):"
 { $subsections
-    postpone: must-infer
-    postpone: must-infer-as
+    postpone\ must-infer
+    postpone\ must-infer-as
 }
 "All of the above are used like ordinary words but are actually parsing words. This ensures that parse-time state, namely the line number, can be associated with the test in question, and reported in test failures." ;
 

@@ -140,8 +140,8 @@ in: bootstrap.syntax
     "W{" [ \ } [ first <wrapper> ] parse-literal ] define-core-syntax
     "HS{" [ \ } [ >hash-set ] parse-literal ] define-core-syntax
 
-    "POSTPONE:" [ scan-word suffix! ] define-core-syntax
-    "postpone:" [ scan-word suffix! ] define-core-syntax
+    "POSTPONE\\" [ scan-word suffix! ] define-core-syntax
+    "postpone\\" [ scan-word suffix! ] define-core-syntax
     "\\" [ scan-word <wrapper> suffix! ] define-core-syntax
     "M\\" [ scan-word scan-word lookup-method <wrapper> suffix! ] define-core-syntax
     "inline" [ last-word make-inline ] define-core-syntax

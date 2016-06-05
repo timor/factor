@@ -23,7 +23,7 @@ ARTICLE: "trees" "Binary search trees"
     tree
     <tree>
     >tree
-    postpone: TREE{
+    postpone\ TREE{
 } ;
 
 about: "trees"
