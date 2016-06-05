@@ -35,6 +35,7 @@ frameworks [ V{ } clone ] initialize
 SYNTAX: FRAMEWORK: scan-token [ load-framework ] [ frameworks get push ] bi ;
 
 SYNTAX: IMPORT: scan-token [ ] import-objc-class ;
+SYNTAX: import: scan-token [ ] import-objc-class ;
 
 "Importing Cocoa classes..." print
 

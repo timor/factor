@@ -482,7 +482,7 @@ xyz
 
     }
     { $slide "Cocoa FFI"
-        { $code "IMPORT: NSAlert [
+        { $code "import: NSAlert [
     NSAlert -> new
     [ -> retain ] [
         \"Raptor\" <CFString> &CFRelease

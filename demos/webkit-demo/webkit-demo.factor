@@ -5,7 +5,7 @@ core-graphics.types kernel math.bitwise literals ;
 in: webkit-demo
 
 FRAMEWORK: /System/Library/Frameworks/WebKit.framework
-IMPORT: WebView
+import: WebView
 
 : rect ( -- rect ) 0 0 700 500 <CGRect> ;
 
