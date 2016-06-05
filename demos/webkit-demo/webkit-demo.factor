@@ -4,7 +4,7 @@ USING: cocoa cocoa.application cocoa.types cocoa.classes cocoa.windows
 core-graphics.types kernel math.bitwise literals ;
 in: webkit-demo
 
-FRAMEWORK: /System/Library/Frameworks/WebKit.framework
+framework: /System/Library/Frameworks/WebKit.framework
 import: WebView
 
 : rect ( -- rect ) 0 0 700 500 <CGRect> ;

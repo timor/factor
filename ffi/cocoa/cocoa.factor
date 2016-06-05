@@ -33,6 +33,7 @@ frameworks [ V{ } clone ] initialize
 [ frameworks get [ load-framework ] each ] "cocoa" add-startup-hook
 
 SYNTAX: FRAMEWORK: scan-token [ load-framework ] [ frameworks get push ] bi ;
+SYNTAX: framework: scan-token [ load-framework ] [ frameworks get push ] bi ;
 
 SYNTAX: IMPORT: scan-token [ ] import-objc-class ;
 SYNTAX: import: scan-token [ ] import-objc-class ;

@@ -50,7 +50,7 @@ CONSTANT: QTErrorDeviceNotConnected                         1300 ;
 CONSTANT: QTErrorDeviceInUseByAnotherApplication            1301 ;
 CONSTANT: QTErrorDeviceExcludedByAnotherDevice              1302 ;
 
-FRAMEWORK: /System/Library/Frameworks/QTKit.framework
+framework: /System/Library/Frameworks/QTKit.framework
 
 import: QTCaptureAudioPreviewOutput
 import: QTCaptureConnection
