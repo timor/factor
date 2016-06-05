@@ -61,4 +61,4 @@ CONSTANT: N 5 ;
 ! [ euler265 ] time
 ! Running time: 0.376389019 seconds
 
-SOLUTION: euler265
+solution: euler265

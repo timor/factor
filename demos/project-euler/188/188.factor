@@ -40,4 +40,4 @@ PRIVATE>
 ! [ euler188 ] 100 ave-time
 ! 4 ms ave run time - 0.05 SD (100 trials)
 
-SOLUTION: euler188
+solution: euler188

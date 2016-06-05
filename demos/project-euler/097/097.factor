@@ -28,4 +28,4 @@ in: project-euler.097
 ! [ euler097 ] 100 ave-time
 ! 0 ms ave run timen - 0.22 SD (100 trials)
 
-SOLUTION: euler097
+solution: euler097

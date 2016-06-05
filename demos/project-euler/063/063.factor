@@ -34,4 +34,4 @@ in: project-euler.063
 ! [ euler063 ] 100 ave-time
 ! 0 ms ave run time - 0.0 SD (100 trials)
 
-SOLUTION: euler063
+solution: euler063

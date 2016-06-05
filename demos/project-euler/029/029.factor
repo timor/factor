@@ -34,4 +34,4 @@ in: project-euler.029
 ! [ euler029 ] 100 ave-time
 ! 704 ms ave run time - 28.07 SD (100 trials)
 
-SOLUTION: euler029
+solution: euler029

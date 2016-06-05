@@ -60,4 +60,4 @@ PRIVATE>
 
 ! TODO: generalize to eliminate duplication; use a sequence to specify denominations?
 
-SOLUTION: euler031
+solution: euler031

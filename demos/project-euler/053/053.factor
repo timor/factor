@@ -32,4 +32,4 @@ in: project-euler.053
 ! [ euler053 ] 100 ave-time
 ! 52 ms ave run time - 4.44 SD (100 trials)
 
-SOLUTION: euler053
+solution: euler053

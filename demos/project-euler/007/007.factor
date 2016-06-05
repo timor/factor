@@ -23,4 +23,4 @@ in: project-euler.007
 ! [ euler007 ] 100 ave-time
 ! 5 ms ave run time - 1.13 SD (100 trials)
 
-SOLUTION: euler007
+solution: euler007

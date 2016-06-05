@@ -61,4 +61,4 @@ PRIVATE>
 ! [ euler102 ] 100 ave-time
 ! 12 ms ave run time - 0.92 SD (100 trials)
 
-SOLUTION: euler102
+solution: euler102

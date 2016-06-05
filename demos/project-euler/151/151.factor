@@ -74,4 +74,4 @@ defer: (euler151)
 ! [ euler151 ] 100 ave-time
 ! ? ms run time - 100 trials
 
-SOLUTION: euler151
+solution: euler151

@@ -104,4 +104,4 @@ PRIVATE>
 ! [ euler255 ] gc time
 ! Running time: 37.468911341 seconds
 
-SOLUTION: euler255
+solution: euler255

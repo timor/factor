@@ -63,4 +63,4 @@ PRIVATE>
 ! TODO: set words on sequences are relatively slow; topological sort could be
 ! cleaned up and generalized much better, but it works for this problem
 
-SOLUTION: euler079
+solution: euler079

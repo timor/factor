@@ -73,4 +73,4 @@ in: project-euler.186
 ! [ euler186 ] 10 ave-time
 ! 18572 ms ave run time - 796.87 SD (10 trials)
 
-SOLUTION: euler186
+solution: euler186

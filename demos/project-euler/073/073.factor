@@ -48,4 +48,4 @@ PRIVATE>
 ! [ euler073 ] 10 ave-time
 ! 20506 ms ave run time - 937.07 SD (10 trials)
 
-SOLUTION: euler073
+solution: euler073

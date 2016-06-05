@@ -6,7 +6,7 @@ ui.gadgets.labels ;
 in: lcd
 
 : lcd-digit ( digit row -- str )
-    [ dup char: : = [ drop 10 ] [ char: 0 - ] if ] dip {
+    [ dup char: \: = [ drop 10 ] [ char: 0 - ] if ] dip {
         "  _       _  _       _   _   _   _   _      "
         " | |  |   _| _| |_| |_  |_    | |_| |_|  *  "
         " |_|  |  |_  _|   |  _| |_|   | |_|   |  *  "

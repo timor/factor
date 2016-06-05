@@ -41,4 +41,4 @@ in: project-euler.057
 ! [ euler057 ] 100 ave-time
 ! 1728 ms ave run time - 80.81 SD (100 trials)
 
-SOLUTION: euler057
+solution: euler057

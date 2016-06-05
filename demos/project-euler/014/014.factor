@@ -70,4 +70,4 @@ PRIVATE>
 
 ! TODO: try using memoization
 
-SOLUTION: euler014a
+solution: euler014a
