@@ -527,7 +527,7 @@ xyz
     }
     { $slide "Questions?"
     }
-}
+} ;
 
 : tc-lisp-talk ( -- )
     tc-lisp-slides "TC Lisp talk" slides-window ;

@@ -5,31 +5,31 @@ math.order fry tools.time locals smalltalk.selectors
 smalltalk.ast smalltalk.classes ;
 in: smalltalk.library
 
-SELECTOR: print
-SELECTOR: asString
+selector: print
+selector: asString
 
 M: object selector-print dup present print ;
 M: object selector-asString present ;
 
-SELECTOR: print:
-SELECTOR: nextPutAll:
-SELECTOR: tab
-SELECTOR: nl
+selector: print:
+selector: nextPutAll:
+selector: tab
+selector: nl
 
 M: object selector-print: [ present ] dip stream-print nil ;
 M: object selector-nextPutAll: selector-print: ;
 M: object selector-tab "    " swap selector-print: ;
 M: object selector-nl stream-nl nil ;
 
-SELECTOR: +
-SELECTOR: -
-SELECTOR: *
-SELECTOR: /
-SELECTOR: <
-SELECTOR: >
-SELECTOR: <=
-SELECTOR: >=
-SELECTOR: =
+selector: +
+selector: -
+selector: *
+selector: /
+selector: <
+selector: >
+selector: <=
+selector: >=
+selector: =
 
 M: object selector-+  swap +  ;
 M: object selector--  swap -  ;
@@ -41,26 +41,26 @@ M: object selector-<= swap <= ;
 M: object selector->= swap >= ;
 M: object selector-=  swap =  ;
 
-SELECTOR: min:
-SELECTOR: max:
+selector: min:
+selector: max:
 
 M: object selector-min: min ;
 M: object selector-max: max ;
 
-SELECTOR: ifTrue:
-SELECTOR: ifFalse:
-SELECTOR: ifTrue:ifFalse:
+selector: ifTrue:
+selector: ifFalse:
+selector: ifTrue:ifFalse:
 
 M: object selector-ifTrue: [ call( -- result ) ] [ drop nil ] if ;
 M: object selector-ifFalse: [ drop nil ] [ call( -- result ) ] if ;
 M: object selector-ifTrue:ifFalse: [ drop call( -- result ) ] [ nip call( -- result ) ] if ;
 
-SELECTOR: isNil
+selector: isNil
 
 M: object selector-isNil nil eq? ;
 
-SELECTOR: at:
-SELECTOR: at:put:
+selector: at:
+selector: at:put:
 
 M: sequence selector-at: nth ;
 M: sequence selector-at:put: ( key value receiver -- receiver ) [ swapd set-nth ] keep ;
@@ -68,23 +68,23 @@ M: sequence selector-at:put: ( key value receiver -- receiver ) [ swapd set-nth 
 M: assoc selector-at: at ;
 M: assoc selector-at:put: ( key value receiver -- receiver ) [ swapd set-at ] keep ;
 
-SELECTOR: do:
+selector: do:
 
 M:: object selector-do: ( quot receiver -- nil )
     receiver [ quot call( elt -- result ) drop ] each nil ;
 
-SELECTOR: to:
-SELECTOR: to:do:
+selector: to:
+selector: to:do:
 
 M: object selector-to: swap [a,b] ;
 M:: object selector-to:do: ( to quot from -- nil )
     from to [a,b] [ quot call( i -- result ) drop ] each nil ;
 
-SELECTOR: value
-SELECTOR: value:
-SELECTOR: value:value:
-SELECTOR: value:value:value:
-SELECTOR: value:value:value:value:
+selector: value
+selector: value:
+selector: value:value:
+selector: value:value:value:
+selector: value:value:value:value:
 
 M: object selector-value call( -- result ) ;
 M: object selector-value: call( input -- result ) ;
@@ -92,10 +92,10 @@ M: object selector-value:value: call( input input -- result ) ;
 M: object selector-value:value:value: call( input input input -- result ) ;
 M: object selector-value:value:value:value: call( input input input input -- result ) ;
 
-SELECTOR: new
+selector: new
 
 M: object selector-new new ;
 
-SELECTOR: time
+selector: time
 
 M: object selector-time '[ _ call( -- result ) ] time ;
