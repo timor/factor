@@ -326,18 +326,11 @@ ERROR: colon-word-must-be-all-uppercase-or-lowercase n string word ;
     dup { [ "!" sequence= ] [ "#!" sequence= ] } 1||
     [ take-comment ] [ merge-slice-til-whitespace make-tag-literal ] if ;
 
-! XXX: Allow foo\ or just \?
 ERROR: backslash-expects-whitespace slice ;
 : read-backslash ( n string slice -- n' string obj )
     2over peek-from blank? [
         ! \ foo, M\ foo
-        dup length 1 > [
-            ! M\ foo\
-            merge-slice-til-whitespace make-tag-literal
-        ] [
-            ! \
-            [ skip-blank-from slice-til-whitespace drop dup ] dip 1 cut-slice* backslash-literal make-delimited-literal
-        ] if
+        [ skip-blank-from slice-til-whitespace drop dup ] dip 1 cut-slice* backslash-literal make-delimited-literal
     ] [
         ! M\N
         merge-slice-til-whitespace make-tag-literal

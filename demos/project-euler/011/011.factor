@@ -80,10 +80,10 @@ in: project-euler.011
         length iota [ 0 <repetition> ] map
     ] keep [ <reversed> append ] 2map ;
 
-: diagonal/ ( -- matrix )
+: diagonal-one ( -- matrix )
     horizontal reverse pad-front pad-back flip ;
 
-: diagonal\ ( -- matrix )
+: diagonal-two ( -- matrix )
     horizontal pad-front pad-back flip ;
 
 : max-product ( matrix width -- n )
@@ -94,7 +94,7 @@ PRIVATE>
 
 : euler011 ( -- answer )
     [
-        { [ horizontal ] [ vertical ] [ diagonal/ ] [ diagonal\ ] }
+        { [ horizontal ] [ vertical ] [ diagonal-one ] [ diagonal-two ] }
         [ call( -- matrix ) 4 max-product , ] each
     ] { } make supremum ;
 
