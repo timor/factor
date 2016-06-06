@@ -104,12 +104,12 @@ DEFER: collision-theta
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 :: out-of-bounds? ( PARTICLE -- ? )
-  [let | X      [ PARTICLE pos>> first                    ]
+  let[ | X      [ PARTICLE pos>> first                    ]
          Y      [ PARTICLE pos>> second                   ]
          WIDTH  [ PARTICLE bubble-chamber>> size>> first  ]
          HEIGHT [ PARTICLE bubble-chamber>> size>> second ] |
 
-    [let | LEFT   [ WIDTH  neg ]
+    let[ | LEFT   [ WIDTH  neg ]
            RIGHT  [ WIDTH  2 * ]
            BOTTOM [ HEIGHT neg ]
            TOP    [ HEIGHT 2 * ] |
@@ -313,9 +313,9 @@ METHOD: collide ( <muon> -- )
 
 METHOD: move ( <muon> -- )
 
-  [let | MUON [ ] |
+  let[ | MUON [ ] |
 
-    [let | WIDTH [ MUON bubble-chamber>> size>> first ] |
+    let[ | WIDTH [ MUON bubble-chamber>> size>> first ] |
 
       MUON
 
@@ -363,9 +363,9 @@ METHOD: collide ( <quark> -- )
 
 METHOD: move ( <quark> -- )
 
-  [let | QUARK [ ] |
+  let[ | QUARK [ ] |
 
-    [let | WIDTH [ QUARK bubble-chamber>> size>> first ] |
+    let[ | WIDTH [ QUARK bubble-chamber>> size>> first ] |
 
       QUARK
     

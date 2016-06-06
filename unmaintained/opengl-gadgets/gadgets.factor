@@ -88,7 +88,7 @@ M: texture-gadget ungraft* ( gadget -- )
     pick [ render-bytes ] dip ;
 
 :: four-corners ( dim -- )
-    [let* | w [ dim first ]
+    let[* | w [ dim first ]
             h [ dim second ]
             dim' [ dim dup 2^-bounds [ /f ] 2map ]
             w' [ dim' first ]

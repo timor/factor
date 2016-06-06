@@ -30,7 +30,7 @@ in: easy-help.expand-markup
   LINE contains-markup?
     [
     
-      [let | N [ "{ $" LINE start ] |
+      let[ | N [ "{ $" LINE start ] |
 
         LINE N head
 

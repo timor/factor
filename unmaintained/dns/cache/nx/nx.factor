@@ -17,7 +17,7 @@ in: dns.cache.nx
 : now ( -- seconds ) millis 1000.0 / round >integer ;
 
 :: non-existent-name? ( NAME -- ? )
-   [let | TIME [ NAME nx-cache-at ] |
+   let[ | TIME [ NAME nx-cache-at ] |
      {
        { [ TIME f    = ] [                         f ] }
        { [ TIME now <= ] [ NAME nx-cache-delete-at f ] }
@@ -29,7 +29,7 @@ in: dns.cache.nx
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 :: cache-non-existent-name ( NAME TTL -- )
-   [let | TIME [ TTL now + ] | TIME NAME nx-cache-set-at ] ;
+   let[ | TIME [ TTL now + ] | TIME NAME nx-cache-set-at ] ;
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

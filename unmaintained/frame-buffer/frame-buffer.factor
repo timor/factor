@@ -51,7 +51,7 @@ GENERIC: update-frame-buffer ( <frame-buffer> -- )
 
 :: copy-row ( OLD NEW -- )
   
-  [let | LEN [ OLD NEW min-length ] |
+  let[ | LEN [ OLD NEW min-length ] |
 
     OLD LEN head-slice 0 NEW copy ] ;
 
@@ -76,14 +76,14 @@ M:: <frame-buffer> layout* ( FRAME-BUFFER -- )
     {
       [ FRAME-BUFFER [ rect-dim ] [ last-dim>> ] bi = not ]
       [
-        [let | OLD-PIXELS [ FRAME-BUFFER pixels>>         ]
+        let[ | OLD-PIXELS [ FRAME-BUFFER pixels>>         ]
                OLD-WIDTH  [ FRAME-BUFFER last-dim>> first ] |
 
           FRAME-BUFFER init-frame-buffer-pixels
 
           FRAME-BUFFER update-last-dim
 
-          [let | NEW-PIXELS [ FRAME-BUFFER pixels>>         ]
+          let[ | NEW-PIXELS [ FRAME-BUFFER pixels>>         ]
                  NEW-WIDTH  [ FRAME-BUFFER last-dim>> first ] |
 
             OLD-PIXELS OLD-WIDTH NEW-PIXELS NEW-WIDTH copy-pixels ] ]

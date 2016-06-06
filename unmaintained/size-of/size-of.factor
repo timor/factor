@@ -41,7 +41,7 @@ Example:
 
 :: size-of ( HEADERS TYPE -- n )
 
-  [let | C-FILE   [ "size-of.c" temp-file ]
+  let[ | C-FILE   [ "size-of.c" temp-file ]
          EXE-FILE [ "size-of"   temp-file ]
          INCLUDES [ HEADERS [| FILE | { "#include <" FILE ">" } concat ] map ] |
 

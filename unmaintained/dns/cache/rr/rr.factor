@@ -29,14 +29,14 @@ TUPLE: <entry> time data ;
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 :: cache-get ( OBJ -- rrs/f )
-   [let | ENT [ OBJ cache-at ] |
+   let[ | ENT [ OBJ cache-at ] |
      {
        { [ ENT f =      ] [                  f ] }
        { [ ENT expired? ] [ OBJ cache-delete f ] }
        {
          [ t ]
          [
-           [let | NAME  [ OBJ name>>       ]
+           let[ | NAME  [ OBJ name>>       ]
                   TYPE  [ OBJ type>>       ]
                   CLASS [ OBJ class>>      ]
                   TTL   [ ENT time>> now - ] |
@@ -53,7 +53,7 @@ TUPLE: <entry> time data ;
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 :: cache-add ( RR -- )
-   [let | ENT   [ RR cache-at    ]
+   let[ | ENT   [ RR cache-at    ]
           TIME  [ RR ttl>> now + ]
           RDATA [ RR rdata>>     ] |
      {

@@ -27,30 +27,30 @@ in: locals.tests
 { { 5 6 7 } } [ { 1 2 3 } 4 map-test-2 ] unit-test
 
 :: let-test ( c -- d )
-    [let 1 :> a 2 :> b a b + c + ] ;
+    let[ 1 :> a 2 :> b a b + c + ] ;
 
 { 7 } [ 4 let-test ] unit-test
 
 :: let-test-2 ( a -- a )
-    a [let :> a [let a :> b a ] ] ;
+    a let[ :> a let[ a :> b a ] ] ;
 
 { 3 } [ 3 let-test-2 ] unit-test
 
 :: let-test-3 ( a -- a )
-    a [let :> a [let [ a ] :> b [let 3 :> a b ] ] ] ;
+    a let[ :> a let[ [ a ] :> b let[ 3 :> a b ] ] ] ;
 
 :: let-test-4 ( a -- b )
-    a [let 1 :> a :> b a b 2array ] ;
+    a let[ 1 :> a :> b a b 2array ] ;
 
 { { 1 2 } } [ 2 let-test-4 ] unit-test
 
 :: let-test-5 ( a b -- b )
-    a b [let :> a :> b a b 2array ] ;
+    a b let[ :> a :> b a b 2array ] ;
 
 { { 2 1 } } [ 1 2 let-test-5 ] unit-test
 
 :: let-test-6 ( a -- b )
-    a [let :> a 1 :> b a b 2array ] ;
+    a let[ :> a 1 :> b a b 2array ] ;
 
 { { 2 1 } } [ 2 let-test-6 ] unit-test
 
@@ -72,7 +72,7 @@ in: locals.tests
 { 5 } [ 2 "q" get call ] unit-test
 
 :: write-test-2 ( -- q )
-    [let 0 :> n! [| i | n i + dup n! ] ] ;
+    let[ 0 :> n! [| i | n i + dup n! ] ] ;
 
 write-test-2 "q" set
 
@@ -93,11 +93,11 @@ write-test-2 "q" set
 
 { } [ 1 2 write-test-3 call ] unit-test
 
-:: write-test-4 ( x! -- q ) [ [let 0 :> y! f x! ] ] ;
+:: write-test-4 ( x! -- q ) [ let[ 0 :> y! f x! ] ] ;
 
 { } [ 5 write-test-4 drop ] unit-test
 
-:: let-let-test ( n -- n ) [let n 3 + :> n n ] ;
+:: let-let-test ( n -- n ) let[ n 3 + :> n n ] ;
 
 { 13 } [ 10 let-let-test ] unit-test
 
@@ -135,9 +135,9 @@ M:: string lambda-generic ( a b -- c ) a b lambda-generic-2 ;
 
 { } [ \ lambda-generic see ] unit-test
 
-:: unparse-test-1 ( a -- ) [let 3 :> a! 4 :> b ] ;
+:: unparse-test-1 ( a -- ) let[ 3 :> a! 4 :> b ] ;
 
-{ "[let 3 :> a! 4 :> b ]" } [
+{ "let[ 3 :> a! 4 :> b ]" } [
     \ unparse-test-1 "lambda" word-prop body>> first unparse
 ] unit-test
 
@@ -177,11 +177,11 @@ M:: fixnum next-method-test ( a -- b ) a call-next-method 1 + ;
 
 { 3 0 } [| a b c | ] must-infer-as
 
-{ } [ 1 [let :> a ] ] unit-test
+{ } [ 1 let[ :> a ] ] unit-test
 
-{ 3 } [ 1 [let :> a 3 ] ] unit-test
+{ 3 } [ 1 let[ :> a 3 ] ] unit-test
 
-{ } [ 1 2 [let :> a :> b ] ] unit-test
+{ } [ 1 2 let[ :> a :> b ] ] unit-test
 
 :: a-word-with-locals ( a b -- ) ;
 
@@ -239,10 +239,10 @@ M:: sequence method-with-locals ( a -- y ) a reverse ;
 { t } [ 12 &&-test ] unit-test
 
 :: let-and-cond-test-1 ( -- a )
-    [let 10 :> a
-        [let 20 :> a
+    let[ 10 :> a
+        let[ 20 :> a
             {
-                { [ t ] [ [let 30 :> c a ] ] }
+                { [ t ] [ let[ 30 :> c a ] ] }
             } cond
         ]
     ] ;
@@ -252,8 +252,8 @@ M:: sequence method-with-locals ( a -- y ) a reverse ;
 { 20 } [ let-and-cond-test-1 ] unit-test
 
 :: let-and-cond-test-2 ( -- pair )
-    [let 10 :> A
-        [let 20 :> B
+    let[ 10 :> A
+        let[ 20 :> B
             { { [ t ] [ { A B } ] } } cond
         ]
     ] ;
@@ -266,7 +266,7 @@ M:: sequence method-with-locals ( a -- y ) a reverse ;
 { { 10 20    } } [ 10 20    [| a b   | { a b   } ] call ] unit-test
 { { 10 20 30 } } [ 10 20 30 [| a b c | { a b c } ] call ] unit-test
 
-{ { 10 20 30 } } [ [let 10 :> a 20 :> b 30 :> c { a b c } ] ] unit-test
+{ { 10 20 30 } } [ let[ 10 :> a 20 :> b 30 :> c { a b c } ] ] unit-test
 
 { V{ 10 20 30 } } [ 10 20 30 [| a b c | V{ a b c } ] call ] unit-test
 
@@ -388,7 +388,7 @@ M:: integer lambda-method-forget-test ( a -- b ) a ;
 { 10 } [ 10 [| A | { [ A ] } ] call first call ] unit-test
 
 [
-    "USING: locals fry math ; 1 '[ [let 10 :> A A _ + ] ]"
+    "USING: locals fry math ; 1 '[ let[ 10 :> A A _ + ] ]"
     eval( -- ) call
 ] [ error>> >r/r>-in-fry-error? ] must-fail-with
 
@@ -400,7 +400,7 @@ M:: integer lambda-method-forget-test ( a -- b ) a ;
 { t } [ 3 funny-macro-test ] unit-test
 { f } [ 2 funny-macro-test ] unit-test
 
-[ "use: locals [let" eval( -- ) ] [ error>> unexpected-eof? ] must-fail-with
+[ "use: locals let[" eval( -- ) ] [ error>> unexpected-eof? ] must-fail-with
 [ "use: locals [|" eval( -- ) ] [ error>> unexpected-eof? ] must-fail-with
 
 { 25 } [ 5 [| a | { [ a sq ] } cond ] call ] unit-test
@@ -416,9 +416,9 @@ M:: integer lambda-method-forget-test ( a -- b ) a ;
 
 { 3 } [ 3 [| a | \ a ] call ] unit-test
 
-[ "use: locals [| | { [let 0 :> a a ] } ]" eval( -- ) ] must-fail
+[ "use: locals [| | { let[ 0 :> a a ] } ]" eval( -- ) ] must-fail
 
-[ "use: locals [| | [let 0 :> a! { a! } ] ]" eval( -- ) ] must-fail
+[ "use: locals [| | let[ 0 :> a! { a! } ] ]" eval( -- ) ] must-fail
 
 [ "use: locals [| | { :> a } ]" eval( -- ) ] must-fail
 
@@ -431,13 +431,13 @@ M:: integer lambda-method-forget-test ( a -- b ) a ;
 { 3 } [ 2 [| | :> a! a 1 + a! a ] call ] unit-test
 
 : fry-locals-test-1 ( -- n )
-    [let 6 '[ [let 4 :> A A _ + ] ] call ] ;
+    let[ 6 '[ let[ 4 :> A A _ + ] ] call ] ;
 
 \ fry-locals-test-1 def>> must-infer
 { 10 } [ fry-locals-test-1 ] unit-test
 
 :: fry-locals-test-2 ( -- n )
-    [let 6 '[ [let 4 :> A A _ + ] ] call ] ;
+    let[ 6 '[ let[ 4 :> A A _ + ] ] call ] ;
 
 \ fry-locals-test-2 def>> must-infer
 { 10 } [ fry-locals-test-2 ] unit-test
@@ -455,18 +455,18 @@ M:: integer lambda-method-forget-test ( a -- b ) a ;
 ] unit-test
 
 { 10 } [
-    [| | 0 '[ [let 10 :> A A _ + ] ] call ] call
+    [| | 0 '[ let[ 10 :> A A _ + ] ] call ] call
 ] unit-test
 
 ! littledan found this problem
-{ "bar" } [ [let [let "bar" :> foo foo ] :> a a ] ] unit-test
-{ 10 } [ [let 10 :> a [let a :> b b ] ] ] unit-test
+{ "bar" } [ let[ let[ "bar" :> foo foo ] :> a a ] ] unit-test
+{ 10 } [ let[ 10 :> a let[ a :> b b ] ] ] unit-test
 
-{ { \ + } } [ [let \ + :> x { \ x } ] ] unit-test
+{ { \ + } } [ let[ \ + :> x { \ x } ] ] unit-test
 
-{ { \ + 3 } } [ [let 3 :> a { \ + a } ] ] unit-test
+{ { \ + 3 } } [ let[ 3 :> a { \ + a } ] ] unit-test
 
-{ 3 } [ [let \ + :> a 1 2 [ \ a execute ] ] call ] unit-test
+{ 3 } [ let[ \ + :> a 1 2 [ \ a execute ] ] call ] unit-test
 
 ! erg found this problem
 :: erg's-:>-bug ( n ? -- n ) ? [ n :> n n ] [ n :> b b ] if ;
@@ -493,7 +493,7 @@ M: integer ed's-bug neg ;
 { t } [ \ ed's-test-case word-optimized? ] unit-test
 
 ! multiple bind
-{ 3 1 2 } [ [let 1 2 3 :> ( a b c ) c a b ] ] unit-test
+{ 3 1 2 } [ let[ 1 2 3 :> ( a b c ) c a b ] ] unit-test
 
 ! Test smart combinators and locals interaction
 :: smart-combinator-locals ( a b c -- seq ) [ a b c ] output>array ;

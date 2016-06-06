@@ -10,7 +10,7 @@ CONSULT: assoc-protocol lex-hash hash>> ;
 : pos-or-0 ( neg? -- pos/0 ) dup 0 < [ drop 0 ] when ;
 
 :: prepare-pos ( v i -- c l )
-    [let | n [ i v head-slice ] |
+    let[ | n [ i v head-slice ] |
            v CHAR: \n n last-index -1 or 1 + -
            n [ CHAR: \n = ] count 1 +
     ] ;

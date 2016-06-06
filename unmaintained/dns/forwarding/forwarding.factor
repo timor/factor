@@ -10,24 +10,24 @@ in: dns.forwarding
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 :: query->rrs ( QUERY -- rrs/f )
-   [let | RRS [ QUERY cache-get ] |
+   let[ | RRS [ QUERY cache-get ] |
      RRS
        [ RRS ]
        [
-         [let | NAME  [ QUERY name>>  ]
+         let[ | NAME  [ QUERY name>>  ]
                 TYPE  [ QUERY type>>  ]
                 CLASS [ QUERY class>> ] |
                
-           [let | RRS/CNAME [ T{ query f NAME CNAME CLASS } cache-get ] |
+           let[ | RRS/CNAME [ T{ query f NAME CNAME CLASS } cache-get ] |
 
              RRS/CNAME f =
                [ f ]
                [
-                 [let | RR/CNAME [ RRS/CNAME first ] |
+                 let[ | RR/CNAME [ RRS/CNAME first ] |
             
-                   [let | REAL-NAME [ RR/CNAME rdata>> ] |
+                   let[ | REAL-NAME [ RR/CNAME rdata>> ] |
               
-                     [let | RRS [
+                     let[ | RRS [
                                   T{ query f REAL-NAME TYPE CLASS } query->rrs
                                 ] |
 
@@ -44,9 +44,9 @@ in: dns.forwarding
    ] ;
 
 :: answer-from-cache ( MSG -- msg/f )
-   [let | QUERY [ MSG message-query ] |
+   let[ | QUERY [ MSG message-query ] |
 
-     [let | NX  [ QUERY name>> non-existent-name? ]
+     let[ | NX  [ QUERY name>> non-existent-name? ]
             RRS [ QUERY query->rrs                ] |
 
        {
@@ -66,7 +66,7 @@ in: dns.forwarding
 ! :: cache-message ( MSG -- msg )
 !    MSG rcode>> NAME-ERROR =
 !      [
-!        [let | NAME [ MSG message-query name>> ]
+!        let[ | NAME [ MSG message-query name>> ]
 !               TTL  [ MSG message-soa   ttl>>  ] |
 !          NAME TTL cache-non-existent-name
 !        ]
@@ -80,13 +80,13 @@ in: dns.forwarding
 :: cache-message ( MSG -- msg )
    MSG rcode>> NAME-ERROR =
      [
-       [let | RR/SOA [ MSG
+       let[ | RR/SOA [ MSG
                          authority-section>>
                          [ type>> SOA = ] filter
                        dup empty? [ drop f ] [ first ] if ] |
          RR/SOA
            [
-             [let | NAME [ MSG message-query name>> ]
+             let[ | NAME [ MSG message-query name>> ]
                     TTL  [ MSG message-soa   ttl>>  ] |
                NAME TTL cache-non-existent-name
              ]
@@ -111,7 +111,7 @@ in: dns.forwarding
 
 :: start-server ( ADDR-SPEC SERVERS -- )
 
-  [let | SOCKET [ ADDR-SPEC <datagram> ] |
+  let[ | SOCKET [ ADDR-SPEC <datagram> ] |
 
     [
       SOCKET receive-packet

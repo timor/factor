@@ -38,9 +38,9 @@ DEFER: default-L-parser-values
 
 :: Rx ( ANGLE -- Rx )
   
-  [let | ANGLE [ ANGLE deg>rad ] |
+  let[ | ANGLE [ ANGLE deg>rad ] |
 
-    [let | A [ ANGLE cos     ]
+    let[ | A [ ANGLE cos     ]
            B [ ANGLE sin neg ]
            C [ ANGLE sin     ]
            D [ ANGLE cos     ] |
@@ -53,9 +53,9 @@ DEFER: default-L-parser-values
 
 :: Ry ( ANGLE -- Ry )
   
-  [let | ANGLE [ ANGLE deg>rad ] |
+  let[ | ANGLE [ ANGLE deg>rad ] |
 
-    [let | A [ ANGLE cos     ]
+    let[ | A [ ANGLE cos     ]
            B [ ANGLE sin     ]
            C [ ANGLE sin neg ]
            D [ ANGLE cos     ] |
@@ -68,9 +68,9 @@ DEFER: default-L-parser-values
 
 :: Rz ( ANGLE -- Rz )
   
-  [let | ANGLE [ ANGLE deg>rad ] |
+  let[ | ANGLE [ ANGLE deg>rad ] |
 
-    [let | A [ ANGLE cos     ]
+    let[ | A [ ANGLE cos     ]
            B [ ANGLE sin neg ]
            C [ ANGLE sin     ]
            D [ ANGLE cos     ] |
@@ -304,7 +304,7 @@ TUPLE: <L-system> < gadget
     [
       STRING read-instruction
     
-      [let | REST [ ] NEXT [ ] |
+      let[ | REST [ ] NEXT [ ] |
 
         NEXT 1 head RULES at  NEXT  or  ACCUM push-all
 
@@ -316,7 +316,7 @@ TUPLE: <L-system> < gadget
 
 :: iterate-string ( STRING RULES -- string )
 
-  [let | ACCUM [ STRING length  10 *  <sbuf> ] |
+  let[ | ACCUM [ STRING length  10 *  <sbuf> ] |
 
     STRING RULES ACCUM iterate-string-loop
 
@@ -330,9 +330,9 @@ TUPLE: <L-system> < gadget
     [
       STRING read-instruction
 
-      [let | REST [ ] NEXT [ ] |
+      let[ | REST [ ] NEXT [ ] |
 
-        [let | COMMAND [ NEXT 1 head COMMANDS at ] |
+        let[ | COMMAND [ NEXT 1 head COMMANDS at ] |
 
           COMMAND
             [
@@ -363,7 +363,7 @@ TUPLE: <L-system> < gadget
 
 :: do-camera-look-at ( CAMERA -- )
 
-  [let | EYE   [ CAMERA pos>> ]
+  let[ | EYE   [ CAMERA pos>> ]
          FOCUS [ CAMERA clone 1 step-turtle pos>> ]
          UP    [ CAMERA clone 90 pitch-up 1 step-turtle pos>> CAMERA pos>> v- ]
        |

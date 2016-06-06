@@ -18,7 +18,7 @@ use: delegate.private
 << forget: _ >>
 << forget: @ >>
 << forget: postpone\ [| >>
-<< forget: postpone\ [let >>
+<< forget: postpone\ let[ >>
 << forget: postpone\ IH{ >>
 << forget: postpone\ PROTOCOL: >>
 << forget: postpone\ CONSULT: >>
@@ -47,7 +47,7 @@ SYNTAX: :>
 
 SYNTAX: [| parse-lambda append! ;
 
-SYNTAX: [let parse-let append! ;
+SYNTAX: let[ parse-let append! ;
 
 SYNTAX: MEMO[ parse-quotation dup infer memoize-quot suffix! ;
 

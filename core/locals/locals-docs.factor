@@ -7,14 +7,14 @@ HELP: \ [|
 { $description "A literal quotation with named variable bindings. When the quotation is " { $link call } "ed, it will take values off the datastack and place them into the bindings from left to right. The body may then refer to these bindings. The quotation may also bind to named variables in an enclosing scope to create a closure." }
 { $examples "See " { $link "locals-examples" } "." } ;
 
-HELP: \ [let
-{ $syntax "[let code :> var code :> var code... ]" }
-{ $description "Establishes a new scope for lexical variable bindings. Variables bound with " { $link postpone\ :> } " within the body of the " { $snippet "[let" } " will be lexically scoped to the body of the " { $snippet "[let" } " form." }
+HELP: \ let[
+{ $syntax "let[ code :> var code :> var code... ]" }
+{ $description "Establishes a new scope for lexical variable bindings. Variables bound with " { $link postpone\ :> } " within the body of the " { $snippet "let[" } " will be lexically scoped to the body of the " { $snippet "let[" } " form." }
 { $examples "See " { $link "locals-examples" } "." } ;
 
 HELP: \ :>
 { $syntax ":> var" ":> var!" ":> ( var-1 var-2 ... )" }
-{ $description "Binds one or more new lexical variables. In the " { $snippet ":> var" } " form, the value on the top of the datastack is bound to a new lexical variable named " { $snippet "var" } " and is scoped to the enclosing quotation, " { $link postpone\ [let } " form, or " { $link postpone\ :: } " definition."
+{ $description "Binds one or more new lexical variables. In the " { $snippet ":> var" } " form, the value on the top of the datastack is bound to a new lexical variable named " { $snippet "var" } " and is scoped to the enclosing quotation, " { $link postpone\ let[ } " form, or " { $link postpone\ :: } " definition."
 $nl
 "The " { $snippet ":> ( var-1 ... )" } " form binds multiple variables to the top values of the datastack in right to left order, with the last variable bound to the top of the datastack. These two snippets have the same effect:"
 { $code ":> c :> b :> a" }
@@ -22,10 +22,10 @@ $nl
 $nl
 "If any " { $snippet "var" } " name is followed by an exclamation point (" { $snippet "!" } "), that new variable is mutable. See " { $link "locals-mutable" } " for more information." }
 { $notes
-    "This syntax can only be used inside a lexical scope established by a " { $link postpone\ :: } " definition, " { $link postpone\ [let } " form, or " { $link postpone\ [| } " quotation. Normal quotations have their own lexical scope only if they are inside an outer scope. Definition forms such as " { $link postpone\ : } " do not establish a lexical scope by themselves unless documented otherwise, nor is there a lexical scope available at the top level of source files or in the listener. " { $link postpone\ [let } " can be used to create a lexical scope where one is not otherwise available." }
+    "This syntax can only be used inside a lexical scope established by a " { $link postpone\ :: } " definition, " { $link postpone\ let[ } " form, or " { $link postpone\ [| } " quotation. Normal quotations have their own lexical scope only if they are inside an outer scope. Definition forms such as " { $link postpone\ : } " do not establish a lexical scope by themselves unless documented otherwise, nor is there a lexical scope available at the top level of source files or in the listener. " { $link postpone\ let[ } " can be used to create a lexical scope where one is not otherwise available." }
 { $examples "See " { $link "locals-examples" } "." } ;
 
-{ postpone\ [let postpone\ :> } related-words
+{ postpone\ let[ postpone\ :> } related-words
 
 HELP: \ ::
 { $syntax ":: word ( vars... -- outputs... ) body... ;" }
@@ -78,10 +78,10 @@ in: scratchpad
 "2.0
 -3.0"
 }
-"If you wanted to perform the quadratic formula interactively from the listener, you could use " { $link postpone\ [let } " to provide a scope for the variables:"
+"If you wanted to perform the quadratic formula interactively from the listener, you could use " { $link postpone\ let[ } " to provide a scope for the variables:"
 { $example "USING: locals math math.functions kernel ;
 in: scratchpad
-[let 1.0 :> a 1.0 :> b -6.0 :> c
+let[ 1.0 :> a 1.0 :> b -6.0 :> c
     b sq 4 a c * * - sqrt :> disc
     b neg disc [ + ] [ - ] 2bi [ 2 a * / ] bi@
 ] [ . ] bi@"
@@ -289,7 +289,7 @@ ARTICLE: "locals" "Lexical variables"
 }
 "Lexical scoping and binding forms:"
 { $subsections
-    postpone\ [let
+    postpone\ let[
     postpone\ :>
 }
 "Quotation literals where the inputs are bound to lexical variables:"

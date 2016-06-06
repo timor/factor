@@ -15,7 +15,7 @@ in: dns.resolver
    with-disposal ;
 
 :: send-receive-tcp ( BA SERVER -- ba )
-   [let | BA [ BA length 2 >be BA append ] |
+   let[ | BA [ BA length 2 >be BA append ] |
      SERVER binary
        [
          T{ duration { second 3 } } input-stream get set-timeout
@@ -24,7 +24,7 @@ in: dns.resolver
      with-client                                        ] ;
 
 :: send-receive-server ( BA SERVER -- msg )
-   [let | RESULT [ BA SERVER send-receive-udp parse-message ] |
+   let[ | RESULT [ BA SERVER send-receive-udp parse-message ] |
      RESULT tc>> 1 =
        [ BA SERVER send-receive-tcp parse-message ]
        [ RESULT                                   ]
@@ -34,7 +34,7 @@ in: dns.resolver
 
 :: send-receive-servers ( BA SERVERS -- msg )
    SERVERS empty? [ "send-receive-servers: servers list empty" throw ] when
-   [let | SERVER [ SERVERS random >dns-inet4 ] |
+   let[ | SERVER [ SERVERS random >dns-inet4 ] |
      ! if this throws an error ...
      [ BA SERVER send-receive-server ]
      ! we try with the other servers...
@@ -62,7 +62,7 @@ in: dns.resolver
 
 : dns-ip4 ( name -- ips )
   fully-qualified
-  [let | MSG [ A IN query boa query->message dns-servers ask-servers ] |
+  let[ | MSG [ A IN query boa query->message dns-servers ask-servers ] |
     MSG rcode>> NO-ERROR =
       [ MSG answer-section>> [ type>> A = ] filter [ rdata>> ] map ]
       [ "dns-ip: rcode = " MSG rcode>> unparse append throw        ]

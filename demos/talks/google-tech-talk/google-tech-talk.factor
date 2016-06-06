@@ -272,7 +272,7 @@ CONSTANT: google-slides
     }
     { $slide "Locals and lexical scope"
         { "Define lambda words with " { $link postpone\ :: } }
-        { "Establish bindings with " { $link postpone\ [let } " and " { $snippet "[let*" } }
+        { "Establish bindings with " { $link postpone\ let[ } " and " { $snippet "let[*" } }
         "Mutable bindings with correct semantics"
         { "Named inputs for quotations with " { $link postpone\ [| } }
         "Full closures"

@@ -28,7 +28,7 @@ M: lambda pprint*
     <block body>> pprint-elements block>
     \ ] pprint-word ;
 
-M: let pprint* \ [let pprint-let ;
+M: let pprint* \ let[ pprint-let ;
 
 M: def pprint*
     dup local>> word?
