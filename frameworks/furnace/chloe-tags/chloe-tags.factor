@@ -74,12 +74,12 @@ CHLOE: a
     [
         [ a-attrs ]
         [ compile-children>xml-string ] bi
-        [ <unescaped> [XML <a><-></a> XML] second swap >>attrs ]
+        [ <unescaped> XML[[ <a><-></a> XML]] second swap >>attrs ]
         [xml-code]
     ] compile-with-scope ;
 
 CHLOE: base
-    compile-a-url [ [XML <base href=<->/> XML] ] [xml-code] ;
+    compile-a-url [ XML[[ <base href=<->/> XML]] ] [xml-code] ;
 
 : hidden-nested-fields ( -- xml )
     nested-forms get " " join f like nested-forms-key
@@ -93,7 +93,7 @@ CHLOE: base
         _ render-hidden
         hidden-nested-fields
         form-modifications
-        [XML <div style="display: none;"><-><-><-></div> XML]
+        XML[[ <div style="display: none;"><-><-><-></div> XML]]
     ] [code] ;
 
 : (compile-form-attrs) ( method action -- )
@@ -122,7 +122,7 @@ CHLOE: form
         [ hidden-fields ]
         [ compile-children>xml-string ] tri
         [
-            <unescaped> [XML <form><-><-></form> XML] second
+            <unescaped> XML[[ <form><-><-></form> XML]] second
                 swap >>attrs
             write-xml
         ] [code]

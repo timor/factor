@@ -36,7 +36,7 @@ ARTICLE: { "xml.syntax" "literals" } "XML literals"
 "The following words provide syntax for XML literals:"
 { $subsections
     postpone\ <XML
-    postpone\ [XML
+    postpone\ XML[[
 }
 "These can be used for creating an XML literal, which can be used with variables or a fry-like syntax to interpolate data into XML."
 { $subsections { "xml.syntax" "interpolation" } } ;
@@ -45,18 +45,18 @@ HELP: <XML
 { $syntax "<XML <?xml version=\"1.0\"?><document>...</document> XML>" }
 { $description "This gives syntax for literal XML documents. When evaluated, there is an XML document (" { $link xml } ") on the stack. It can be used for interpolation as well, if interpolation slots are used. For more information about XML interpolation, see " { $link { "xml.syntax" "interpolation" } } "." } ;
 
-HELP: [XML
-{ $syntax "[XML foo <x>...</x> bar <y>...</y> baz XML]" }
+HELP: XML[[
+{ $syntax "XML[[ foo <x>...</x> bar <y>...</y> baz XML]]" }
 { $description "This gives syntax for literal XML documents. When evaluated, there is an XML chunk (" { $link xml-chunk } ") on the stack. For more information about XML interpolation, see " { $link { "xml.syntax" "interpolation" } } "." } ;
 
 ARTICLE: { "xml.syntax" "interpolation" } "XML interpolation syntax"
-"XML interpolation has two forms for each of the words " { $link postpone\ <XML } " and " { $link postpone\ [XML } ": a fry-like form and a locals form. To splice locals in, use the syntax " { $snippet "<-variable->" } ". To splice something in from the stack, in the style of " { $vocab-link "fry" } ", use the syntax " { $snippet "<->" } ". An XML interpolation form may only use one of these styles."
+"XML interpolation has two forms for each of the words " { $link postpone\ <XML } " and " { $link postpone\ XML[[ } ": a fry-like form and a locals form. To splice locals in, use the syntax " { $snippet "<-variable->" } ". To splice something in from the stack, in the style of " { $vocab-link "fry" } ", use the syntax " { $snippet "<->" } ". An XML interpolation form may only use one of these styles."
 $nl
-"These forms can be used where a tag might go, as in " { $snippet "[XML <foo><-></foo> XML]" } " or where an attribute might go, as in " { $snippet "[XML <foo bar=<->/> XML]" } ". When an attribute is spliced in, it is not included if the value is " { $snippet "f" } " and if the value is not a string, the value is put through " { $link present } ". Here is an example of the fry style of XML interpolation:"
+"These forms can be used where a tag might go, as in " { $snippet "XML[[ <foo><-></foo> XML]]" } " or where an attribute might go, as in " { $snippet "XML[[ <foo bar=<->/> XML]]" } ". When an attribute is spliced in, it is not included if the value is " { $snippet "f" } " and if the value is not a string, the value is put through " { $link present } ". Here is an example of the fry style of XML interpolation:"
 { $example
 "USING: splitting xml.writer xml.syntax ;
 \"one two three\" \" \" split
-[ [XML <item><-></item> XML] ] map
+[ XML[[ <item><-></item> XML]] ] map
 <XML <doc><-></doc> XML> pprint-xml"
 
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
@@ -96,12 +96,12 @@ $nl
 { $example "USING: xml.syntax inverse ;
 : dispatch ( xml -- string )
     {
-        { [ [XML <a><-></a> XML] ] [ \"a\" prepend ] }
-        { [ [XML <b><-></b> XML] ] [ \"b\" prepend ] }
-        { [ [XML <b val='yes'/> XML] ] [ \"yes\" ] }
-        { [ [XML <b val=<->/> XML] ] [ \"no\" prepend ] }
+        { [ XML[[ <a><-></a> XML]] ] [ \"a\" prepend ] }
+        { [ XML[[ <b><-></b> XML]] ] [ \"b\" prepend ] }
+        { [ XML[[ <b val='yes'/> XML]] ] [ \"yes\" ] }
+        { [ XML[[ <b val=<->/> XML]] ] [ \"no\" prepend ] }
     } switch ;
-[XML <a>pple</a> XML] dispatch write"
+XML[[ <a>pple</a> XML]] dispatch write"
 "apple" } ;
 
 HELP: XML-NS:

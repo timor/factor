@@ -9,7 +9,7 @@ in: webapps.mason.package
 
 : building ( builder string -- xml )
     swap current-git-id>> git-link
-    [XML <-> for <-> XML] ;
+    XML[[ <-> for <-> XML]] ;
 
 : status-string ( builder -- string )
     dup status>> {

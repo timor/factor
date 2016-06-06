@@ -16,34 +16,34 @@ GENERIC: item>xml ( object -- xml ) ;
 M: integer item>xml
     dup 31 2^ neg 31 2^ 1 - between?
     [ "Integers must fit in 32 bits" throw ] unless
-    [XML <i4><-></i4> XML] ;
+    XML[[ <i4><-></i4> XML]] ;
 
 M: boolean item>xml
-    "1" "0" ? [XML <boolean><-></boolean> XML] ;
+    "1" "0" ? XML[[ <boolean><-></boolean> XML]] ;
 
 M: float item>xml
-    number>string [XML <double><-></double> XML] ;
+    number>string XML[[ <double><-></double> XML]] ;
 
 M: string item>xml
-    [XML <string><-></string> XML] ;
+    XML[[ <string><-></string> XML]] ;
 
 : struct-member ( name value -- tag )
     over string? [ "Struct member name must be string" throw ] unless
     item>xml
-    [XML
+    XML[[
         <member>
             <name><-></name>
             <value><-></value>
         </member>
-    XML] ;
+    XML]] ;
 
 M: hashtable item>xml
     [ struct-member ] { } assoc>map
-    [XML <struct><-></struct> XML] ;
+    XML[[ <struct><-></struct> XML]] ;
 
 M: array item>xml
-    [ item>xml [XML <value><-></value> XML] ] map
-    [XML <array><data><-></data></array> XML] ;
+    [ item>xml XML[[ <value><-></value> XML]] ] map
+    XML[[ <array><data><-></data></array> XML]] ;
 
 TUPLE: base64 string ;
 
@@ -51,11 +51,11 @@ C: <base64> base64 ;
 
 M: base64 item>xml
     string>> >base64
-    [XML <base64><-></base64> XML] ;
+    XML[[ <base64><-></base64> XML]] ;
 
 : params ( seq -- xml )
-    [ item>xml [XML <param><value><-></value></param> XML] ] map
-    [XML <params><-></params> XML] ;
+    [ item>xml XML[[ <param><value><-></value></param> XML]] ] map
+    XML[[ <params><-></params> XML]] ;
 
 : method-call ( name seq -- xml )
     params

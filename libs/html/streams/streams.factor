@@ -72,7 +72,7 @@ MACRO: make-css ( pairs -- str )
 
 : span-tag ( xml style -- xml )
     span-css-style
-    [ swap [XML <span style=<->><-></span> XML] ] unless-empty ; inline
+    [ swap XML[[ <span style=<->><-></span> XML]] ] unless-empty ; inline
 
 : emit-html ( stream quot -- )
     dip data>> push ; inline
@@ -125,7 +125,7 @@ CONSTANT: pre-css "white-space: pre; font-family: monospace; " ;
 
 : div-tag ( xml style -- xml' )
     div-css-style
-    [ swap [XML <div style=<->><-></div> XML] ] unless-empty ;
+    [ swap XML[[ <div style=<->><-></div> XML]] ] unless-empty ;
 
 : format-html-div ( string style stream -- )
     [ [ div-tag ] [ object-link-tag ] bi ] emit-html ;
@@ -159,7 +159,7 @@ M: html-writer stream-format
     format-html-span ;
 
 M: html-writer stream-nl
-    [ [XML <br/> XML] ] emit-html ;
+    [ XML[[ <br/> XML]] ] emit-html ;
 
 M: html-writer make-span-stream
     html-span-stream new-html-sub-stream ;
@@ -173,10 +173,10 @@ M: html-writer make-cell-stream
 M: html-writer stream-write-table
     [
         table-style swap [
-            [ data>> [XML <td valign="top" style=<->><-></td> XML] ] with map
-            [XML <tr><-></tr> XML]
+            [ data>> XML[[ <td valign="top" style=<->><-></td> XML]] ] with map
+            XML[[ <tr><-></tr> XML]]
         ] with map
-        [XML <table style="display: inline-table; border-collapse: collapse;"><-></table> XML]
+        XML[[ <table style="display: inline-table; border-collapse: collapse;"><-></table> XML]]
     ] emit-html ;
 
 M: html-writer dispose drop ;

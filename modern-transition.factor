@@ -9,6 +9,11 @@
  "cocoa.subclassing" "cocoa" "cocoa.apple-script" "gobject-introspection" } diff
 [ dup <vocab-link> . flush vocab>literals ] map-zip
 
+"resource:tools" vocabs-from
+{ "help.syntax" "help.tips" "tools.test" "tools.walker"
+"vocabs.git" } diff
+[ dup <vocab-link> . flush vocab>literals ] map-zip
+
 
 "resource:language" vocabs-from
 { "constructors" "descriptive" "eval" "functors" "literals"

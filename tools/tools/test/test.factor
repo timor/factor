@@ -114,6 +114,11 @@ SYNTAX: TEST:
     [ "(" ")" surround search '[ _ parse-test ] ] bi
     define-syntax ;
 
+SYNTAX: test:
+    scan-token
+    [ create-word-in ]
+    [ "(" ")" surround search '[ _ parse-test ] ] bi
+    define-syntax ;
 >>
 
 : fake-unit-test ( quot -- test-failures )
@@ -164,11 +169,11 @@ PRIVATE>
 : with-test-directory ( ..a quot: ( ..a -- ..b ) -- ..b )
     [ cleanup-unique-directory ] with-temp-directory ; inline
 
-TEST: unit-test
-TEST: must-infer-as
-TEST: must-infer
-TEST: must-fail-with
-TEST: must-fail
+test: unit-test
+test: must-infer-as
+test: must-infer
+test: must-fail-with
+test: must-fail
 
 M: test-failure error. ( error -- )
     {

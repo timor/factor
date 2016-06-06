@@ -173,8 +173,8 @@ PRIVATE>
 SYNTAX: <XML
     "XML>" [ string>doc ] parse-def ;
 
-SYNTAX: [XML
-    "XML]" [ string>chunk ] parse-def ;
+SYNTAX: XML[[
+    "XML]]" [ string>chunk ] parse-def ;
 
 use: vocabs.loader
 

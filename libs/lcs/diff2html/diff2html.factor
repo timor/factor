@@ -11,30 +11,30 @@ GENERIC: diff-line ( obj -- xml ) ;
 
 M: retain diff-line
     item-string
-    [XML <td class="retain"><-></td> XML]
-    dup [XML <tr><-><-></tr> XML] ;
+    XML[[ <td class="retain"><-></td> XML]]
+    dup XML[[ <tr><-><-></tr> XML]] ;
 
 M: insert diff-line
-    item-string [XML
+    item-string XML[[
         <tr>
             <td> </td>
             <td class="insert"><-></td>
         </tr>
-    XML] ;
+    XML]] ;
 
 M: delete diff-line
-    item-string [XML
+    item-string XML[[
         <tr>
             <td class="delete"><-></td>
             <td> </td>
         </tr>
-    XML] ;
+    XML]] ;
 
 : htmlize-diff ( diff -- xml )
     [ diff-line ] map
-    [XML
+    XML[[
         <table width="100%" class="comparison">
             <tr><th>Old</th><th>New</th></tr>
             <->
         </table>
-    XML] ;
+    XML]] ;

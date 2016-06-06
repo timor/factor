@@ -19,7 +19,7 @@ CHLOE: write-title
     drop
     "head" tag-stack get member?
     "title" tag-stack get member? not and
-    [ get-title [XML <title><-></title> XML] ]
+    [ get-title XML[[ <title><-></title> XML]] ]
     [ get-title ] ?
     [xml-code] ;
 
@@ -33,7 +33,7 @@ CHLOE: style
 CHLOE: write-style
     drop [
         get-style
-        [XML <style type="text/css"> <-> </style> XML]
+        XML[[ <style type="text/css"> <-> </style> XML]]
     ] [xml-code] ;
 
 CHLOE: even

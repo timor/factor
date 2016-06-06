@@ -16,23 +16,23 @@ in: codebook
 
 CONSTANT: codebook-style
     {
-        { COMMENT1 [ [XML <i><font color="#555555"><-></font></i> XML] ] }
-        { COMMENT2 [ [XML <i><font color="#555555"><-></font></i> XML] ] }
-        { COMMENT3 [ [XML <i><font color="#555555"><-></font></i> XML] ] }
-        { COMMENT4 [ [XML <i><font color="#555555"><-></font></i> XML] ] }
-        { DIGIT    [ [XML    <font color="#333333"><-></font>     XML] ] }
-        { FUNCTION [ [XML <b><font color="#111111"><-></font></b> XML] ] }
-        { KEYWORD1 [ [XML <b><font color="#111111"><-></font></b> XML] ] }
-        { KEYWORD2 [ [XML <b><font color="#111111"><-></font></b> XML] ] }
-        { KEYWORD3 [ [XML <b><font color="#111111"><-></font></b> XML] ] }
-        { KEYWORD4 [ [XML <b><font color="#111111"><-></font></b> XML] ] }
-        { LABEL    [ [XML <b><font color="#333333"><-></font></b> XML] ] }
-        { LITERAL1 [ [XML    <font color="#333333"><-></font>     XML] ] }
-        { LITERAL2 [ [XML    <font color="#333333"><-></font>     XML] ] }
-        { LITERAL3 [ [XML    <font color="#333333"><-></font>     XML] ] }
-        { LITERAL4 [ [XML    <font color="#333333"><-></font>     XML] ] }
-        { MARKUP   [ [XML <b><font color="#333333"><-></font></b> XML] ] }
-        { OPERATOR [ [XML <b><font color="#111111"><-></font></b> XML] ] }
+        { COMMENT1 [ XML[[ <i><font color="#555555"><-></font></i> XML]] ] }
+        { COMMENT2 [ XML[[ <i><font color="#555555"><-></font></i> XML]] ] }
+        { COMMENT3 [ XML[[ <i><font color="#555555"><-></font></i> XML]] ] }
+        { COMMENT4 [ XML[[ <i><font color="#555555"><-></font></i> XML]] ] }
+        { DIGIT    [ XML[[    <font color="#333333"><-></font>     XML]] ] }
+        { FUNCTION [ XML[[ <b><font color="#111111"><-></font></b> XML]] ] }
+        { KEYWORD1 [ XML[[ <b><font color="#111111"><-></font></b> XML]] ] }
+        { KEYWORD2 [ XML[[ <b><font color="#111111"><-></font></b> XML]] ] }
+        { KEYWORD3 [ XML[[ <b><font color="#111111"><-></font></b> XML]] ] }
+        { KEYWORD4 [ XML[[ <b><font color="#111111"><-></font></b> XML]] ] }
+        { LABEL    [ XML[[ <b><font color="#333333"><-></font></b> XML]] ] }
+        { LITERAL1 [ XML[[    <font color="#333333"><-></font>     XML]] ] }
+        { LITERAL2 [ XML[[    <font color="#333333"><-></font>     XML]] ] }
+        { LITERAL3 [ XML[[    <font color="#333333"><-></font>     XML]] ] }
+        { LITERAL4 [ XML[[    <font color="#333333"><-></font>     XML]] ] }
+        { MARKUP   [ XML[[ <b><font color="#333333"><-></font></b> XML]] ] }
+        { OPERATOR [ XML[[ <b><font color="#111111"><-></font></b> XML]] ] }
         [ drop ]
     }
 
@@ -70,7 +70,7 @@ TUPLE: code-file
 : toc-list ( files -- list )
     [ name>> ] map natural-sort [
         [ file-html-name ] keep
-        [XML <li><a href=<->><-></a></li> XML]
+        XML[[ <li><a href=<->><-></a></li> XML]]
     ] map ;
 
 ! insert zero-width non-joiner between all characters so words can wrap anywhere
@@ -82,7 +82,7 @@ TUPLE: code-file
 : htmlize-tokens ( tokens line# -- html-tokens )
     swap [
         [ str>> zwnj ] [ id>> ] bi codebook-style case
-    ] map [XML <tt><font size="-2" color="#666666"><-></font> <-></tt> XML]
+    ] map XML[[ <tt><font size="-2" color="#666666"><-></font> <-></tt> XML]]
     "\n" 2array ;
 
 : line#>string ( i line#len -- i-string )
@@ -141,10 +141,10 @@ TUPLE: code-file
         name file-html-name :> filename
         i 2 + number>string :> istr
 
-        [XML <navPoint class="book" id=<-filename-> playOrder=<-istr->>
+        XML[[ <navPoint class="book" id=<-filename-> playOrder=<-istr->>
             <navLabel><text><-name-></text></navLabel>
             <content src=<-filename-> />
-        </navPoint> XML]
+        </navPoint> XML]]
     ] map-index :> file-nav-points
 
     <XML <?xml version="1.0" encoding="UTF-8" ?>
@@ -164,10 +164,10 @@ TUPLE: code-file
 
     files [
         name>> file-html-name dup
-        [XML <item id=<-> href=<-> media-type="text/html" /> XML]
+        XML[[ <item id=<-> href=<-> media-type="text/html" /> XML]]
     ] map :> html-manifest
 
-    files [ name>> file-html-name [XML <itemref idref=<-> /> XML] ] map :> html-spine
+    files [ name>> file-html-name XML[[ <itemref idref=<-> /> XML]] ] map :> html-spine
 
     <XML <?xml version="1.0" encoding="UTF-8" ?>
     <package

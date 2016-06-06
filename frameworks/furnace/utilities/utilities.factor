@@ -86,7 +86,7 @@ M: object modify-form drop f ;
 
 : hidden-form-field ( value name -- xml )
     over [
-        [XML <input type="hidden" value=<-> name=<->/> XML]
+        XML[[ <input type="hidden" value=<-> name=<->/> XML]]
     ] [ drop ] if ;
 
 CONSTANT: nested-forms-key "__n" ;

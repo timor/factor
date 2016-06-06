@@ -20,4 +20,4 @@ in: webapps.mason.report
     [ URL" report" ] dip
     [ os>> "os" set-query-param ]
     [ cpu>> "cpu" set-query-param ] bi
-    [XML <a href=<->>Latest build report</a> XML] ;
+    XML[[ <a href=<->>Latest build report</a> XML]] ;

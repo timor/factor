@@ -22,10 +22,10 @@ M: empty-prolog write-xml drop ;
     XML> <empty-prolog> >>prolog ;
 
 : render-error ( message -- xml )
-    [XML <span class="error"><-></span> XML] ;
+    XML[[ <span class="error"><-></span> XML]] ;
 
 : simple-link ( xml url -- xml' )
-    url-encode swap [XML <a href=<->><-></a> XML] ;
+    url-encode swap XML[[ <a href=<->><-></a> XML]] ;
 
 : simple-image ( url -- xml )
-    url-encode [XML <img src=<-> /> XML] ;
+    url-encode XML[[ <img src=<-> /> XML]] ;

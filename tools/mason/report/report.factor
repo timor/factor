@@ -8,7 +8,7 @@ in: mason.report
 
 : git-link ( id -- link )
     [ "http://github.com/factor/factor/commit/" "" prepend-as ] keep
-    [XML <a href=<->><-></a> XML] ;
+    XML[[ <a href=<->><-></a> XML]] ;
 
 : common-report ( -- xml )
     target-os get
@@ -17,7 +17,7 @@ in: mason.report
     disk-usage
     build-dir
     current-git-id get git-link
-    [XML
+    XML[[
     <h1>Build report for <->/<-></h1>
     <table>
     <tr><td>Build machine:</td><td><-></td></tr>
@@ -25,14 +25,14 @@ in: mason.report
     <tr><td>Build directory:</td><td><-></td></tr>
     <tr><td>GIT ID:</td><td><-></td></tr>
     </table>
-    XML] ;
+    XML]] ;
 
 : with-report ( quot -- )
     [ "report" utf8 ] dip
     '[
         common-report
         _ call( -- xml )
-        [XML <html><body><-><-></body></html> XML]
+        XML[[ <html><body><-><-></body></html> XML]]
         write-xml
     ] with-file-writer ; inline
 
@@ -44,13 +44,13 @@ in: mason.report
         error [ error. ] with-string-writer :> error
         file utf8 400 file-tail :> output
 
-        [XML
+        XML[[
         <h2><-what-></h2>
         Build output:
         <pre><-output-></pre>
         Launcher error:
         <pre><-error-></pre>
-        XML]
+        XML]]
     ] with-report
     status-error ;
 
@@ -73,30 +73,30 @@ in: mason.report
         html-help-time-file
     } [
         dup eval-file nanos>time
-        [XML <tr><td><-></td><td><-></td></tr> XML]
-    ] map [XML <h2>Timings</h2> <table><-></table> XML] ;
+        XML[[ <tr><td><-></td><td><-></td></tr> XML]]
+    ] map XML[[ <h2>Timings</h2> <table><-></table> XML]] ;
 
 : error-dump ( heading vocabs-file messages-file -- xml )
     [ eval-file ] dip over empty? [ 3drop f ] [
         [ ]
-        [ [ [XML <li><-></li> XML] ] map [XML <ul><-></ul> XML] ]
+        [ [ XML[[ <li><-></li> XML]] ] map XML[[ <ul><-></ul> XML]] ]
         [ utf8 file-contents ]
         tri*
-        [XML <h1><-></h1> <-> Details: <pre><-></pre> XML]
+        XML[[ <h1><-></h1> <-> Details: <pre><-></pre> XML]]
     ] if ;
 
 : benchmarks-table ( assoc -- xml )
     [
         1,000,000,000 /f
-        [XML <tr><td><-></td><td><-></td></tr> XML]
+        XML[[ <tr><td><-></td><td><-></td></tr> XML]]
     ] { } assoc>map
-    [XML
+    XML[[
         <h2>Benchmarks</h2>
         <table>
             <tr><th>Benchmark</th><th>Time (seconds)</th></tr>
             <->
         </table>
-    XML] ;
+    XML]] ;
 
 : successful-report ( -- )
     [

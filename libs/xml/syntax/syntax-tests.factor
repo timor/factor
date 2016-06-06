@@ -55,7 +55,7 @@ XML-NS: foo http://blah.com
   y
   <foo/>
 </x>" } [
-    [let "one" :> a "two" :> c "y" :> x [XML <-x-> <foo/> XML] :> d
+    [let "one" :> a "two" :> c "y" :> x XML[[ <-x-> <foo/> XML]] :> d
         <XML
             <x> <-a-> <b val=<-c->/> <-d-> </x>
         XML> pprint-xml>string
@@ -75,7 +75,7 @@ XML-NS: foo http://blah.com
   </item>
 </doc>" } [
     "one two three" " " split
-    [ [XML <item><-></item> XML] ] map
+    [ XML[[ <item><-></item> XML]] ] map
     <XML <doc><-></doc> XML> pprint-xml>string
 ] unit-test
 
@@ -85,38 +85,38 @@ XML-NS: foo http://blah.com
   <XML <x number=<-> false=<-> url=<-> string=<-> word=<->/> XML>
   pprint-xml>string  ] unit-test
 
-{ "<x>3</x>" } [ 3 [XML <x><-></x> XML] xml>string ] unit-test
-{ "<x></x>" } [ f [XML <x><-></x> XML] xml>string ] unit-test
+{ "<x>3</x>" } [ 3 XML[[ <x><-></x> XML]] xml>string ] unit-test
+{ "<x></x>" } [ f XML[[ <x><-></x> XML]] xml>string ] unit-test
 
-[ [XML <-> XML] ] must-infer
-[ [XML <foo><-></foo> <bar val=<->/> XML] ] must-infer
+[ XML[[ <-> XML]] ] must-infer
+[ XML[[ <foo><-></foo> <bar val=<->/> XML]] ] must-infer
 
-{ xml-chunk } [ [ [XML <foo/> XML] ] first class-of ] unit-test
+{ xml-chunk } [ [ XML[[ <foo/> XML]] ] first class-of ] unit-test
 { xml } [ [ <XML <foo/> XML> ] first class-of ] unit-test
-{ xml-chunk } [ [ [XML <foo val=<->/> XML] ] third class-of ] unit-test
+{ xml-chunk } [ [ XML[[ <foo val=<->/> XML]] ] third class-of ] unit-test
 { xml } [ [ <XML <foo val=<->/> XML> ] third class-of ] unit-test
-{ 1 } [ [ [XML <foo/> XML] ] length ] unit-test
+{ 1 } [ [ XML[[ <foo/> XML]] ] length ] unit-test
 { 1 } [ [ <XML <foo/> XML> ] length ] unit-test
 
-{ "" } [ [XML XML] concat ] unit-test
+{ "" } [ XML[[ XML]] concat ] unit-test
 
-{ "foo" } [ [XML <a>foo</a> XML] [ [XML <a><-></a> XML] ] undo ] unit-test
-{ "foo" } [ [XML <a bar='foo'/> XML] [ [XML <a bar=<-> /> XML] ] undo ] unit-test
-{ "foo" "baz" } [ [XML <a bar='foo'>baz</a> XML] [ [XML <a bar=<->><-></a> XML] ] undo ] unit-test
+{ "foo" } [ XML[[ <a>foo</a> XML]] [ XML[[ <a><-></a> XML]] ] undo ] unit-test
+{ "foo" } [ XML[[ <a bar='foo'/> XML]] [ XML[[ <a bar=<-> /> XML]] ] undo ] unit-test
+{ "foo" "baz" } [ XML[[ <a bar='foo'>baz</a> XML]] [ XML[[ <a bar=<->><-></a> XML]] ] undo ] unit-test
 
 : dispatch ( xml -- string )
     {
-        { [ [XML <a><-></a> XML] ] [ "a" prepend ] }
-        { [ [XML <b><-></b> XML] ] [ "b" prepend ] }
-        { [ [XML <b val='yes'/> XML] ] [ "byes" ] }
-        { [ [XML <b val=<->/> XML] ] [ "bno" prepend ] }
+        { [ XML[[ <a><-></a> XML]] ] [ "a" prepend ] }
+        { [ XML[[ <b><-></b> XML]] ] [ "b" prepend ] }
+        { [ XML[[ <b val='yes'/> XML]] ] [ "byes" ] }
+        { [ XML[[ <b val=<->/> XML]] ] [ "bno" prepend ] }
     } switch ;
 
-{ "apple" } [ [XML <a>pple</a> XML] dispatch ] unit-test
-{ "banana" } [ [XML <b>anana</b> XML] dispatch ] unit-test
-{ "byes" } [ [XML <b val="yes"/> XML] dispatch ] unit-test
-{ "bnowhere" } [ [XML <b val="where"/> XML] dispatch ] unit-test
-{ "baboon" } [ [XML <b val="something">aboon</b> XML] dispatch ] unit-test
+{ "apple" } [ XML[[ <a>pple</a> XML]] dispatch ] unit-test
+{ "banana" } [ XML[[ <b>anana</b> XML]] dispatch ] unit-test
+{ "byes" } [ XML[[ <b val="yes"/> XML]] dispatch ] unit-test
+{ "bnowhere" } [ XML[[ <b val="where"/> XML]] dispatch ] unit-test
+{ "baboon" } [ XML[[ <b val="something">aboon</b> XML]] dispatch ] unit-test
 { "apple" } [ <XML <a>pple</a> XML> dispatch ] unit-test
 { "apple" } [ <XML <a>pple</a> XML> body>> dispatch ] unit-test
 
@@ -129,7 +129,7 @@ XML-NS: foo http://blah.com
     } switch ;
 
 { "apple" } [ <XML <a>pple</a> XML> dispatch-doc ] unit-test
-{ "apple" } [ [XML <a>pple</a> XML] dispatch-doc ] unit-test
+{ "apple" } [ XML[[ <a>pple</a> XML]] dispatch-doc ] unit-test
 { "apple" } [ <XML <a>pple</a> XML> body>> dispatch-doc ] unit-test
 
 ! Make sure nested XML documents interpolate correctly

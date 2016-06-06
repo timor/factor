@@ -7,7 +7,7 @@ in: xmode.code2html
     [
         [ str>> ] [ id>> ] bi [
             name>> swap
-            [XML <span class=<->><-></span> XML]
+            XML[[ <span class=<->><-></span> XML]]
         ] when*
     ] map ;
 
@@ -21,7 +21,7 @@ in: xmode.code2html
 : default-stylesheet ( -- xml )
     "resource:basis/xmode/code2html/stylesheet.css"
     utf8 file-contents
-    [XML <style><-></style> XML] ;
+    XML[[ <style><-></style> XML]] ;
 
 :: htmlize-stream ( path stream -- xml )
     stream stream-lines

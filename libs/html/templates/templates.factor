@@ -66,13 +66,13 @@ symbol: atom-feeds
 
 : get-atom-feeds ( -- xml )
     atom-feeds get [
-        [XML
+        XML[[
             <link
                 rel="alternate"
                 type="application/atom+xml"
                 title=<->
                 href=<->/>
-        XML]
+        XML]]
     ] { } assoc>map ;
 
 : write-atom-feeds ( -- )

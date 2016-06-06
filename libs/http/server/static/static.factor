@@ -60,14 +60,14 @@ TUPLE: file-responder root hook special index-names allow-listings ;
 
 : file>html ( name -- xml )
     dup link-info directory? [ "/" append ] when
-    dup [XML <li><a href=<->><-></a></li> XML] ;
+    dup XML[[ <li><a href=<->><-></a></li> XML]] ;
 
 : directory>html ( path -- xml )
     [ file-name ]
     [ drop f ]
     [
         [ file-name ] [ [ natural-sort [ file>html ] map ] with-directory-files ] bi
-        [XML <h1><-></h1> <ul><-></ul> XML]
+        XML[[ <h1><-></h1> <ul><-></ul> XML]]
     ] tri
     simple-page ;
 

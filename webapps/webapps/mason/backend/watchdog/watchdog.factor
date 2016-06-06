@@ -5,7 +5,7 @@ mason.email webapps.mason.backend ;
 in: webapps.mason.backend.watchdog
 
 : crashed-builder-body ( crashed-builders -- string content-type )
-    [ os/cpu [XML <li><-></li> XML] ] map
+    [ os/cpu XML[[ <li><-></li> XML]] ] map
     <XML
         <html>
             <body>

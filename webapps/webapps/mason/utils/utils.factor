@@ -7,7 +7,7 @@ webapps.mason.version.data xml.syntax ;
 in: webapps.mason.utils
 
 : link ( url label -- xml )
-    [XML <a href=<->><-></a> XML] ;
+    XML[[ <a href=<->><-></a> XML]] ;
 
 : validate-os/cpu ( -- )
     {
@@ -35,7 +35,7 @@ in: webapps.mason.utils
             ?
         ] [ drop f ] if
     ] bi
-    2array sift [ [XML <li><-></li> XML] ] map [XML <ul><-></ul> XML] ;
+    2array sift [ XML[[ <li><-></li> XML]] ] map XML[[ <ul><-></ul> XML]] ;
 
 : download-url ( string -- string' )
     "http://downloads.factorcode.org/" prepend ;

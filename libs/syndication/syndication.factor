@@ -119,14 +119,14 @@ M: byte-array parse-feed [ bytes>xml xml>feed ] with-html-entities ;
         [ date>> timestamp>rfc3339 ]
         [ description>> ]
     } cleave
-    [XML
+    XML[[
         <entry>
             <title type="html"><-></title>
             <link rel="alternate" href=<-> />
             <published><-></published>
             <content type="html"><-></content>
         </entry>
-    XML] ;
+    XML]] ;
 
 : feed>xml ( feed -- xml )
     [ title>> ]

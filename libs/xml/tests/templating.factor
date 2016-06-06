@@ -3,7 +3,7 @@ accessors xml.data xml.traversal xml.writer generic sequences.deep multiline ;
 in: xml.tests
 
 CONSTANT: sub-tag
-    T{ name f f "sub" "http://littledan.onigirihouse.com/namespaces/replace" }
+    T{ name f f "sub" "http://littledan.onigirihouse.com/namespaces/replace" } ;
 
 symbol: ref-table
 

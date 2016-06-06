@@ -218,7 +218,7 @@ CONSTANT: invalid-url "javascript:alert('Invalid URL in farkup');" ;
 
 : render-code ( string mode -- xml )
     [ string-lines ] dip htmlize-lines
-    [XML <pre><-></pre> XML] ;
+    XML[[ <pre><-></pre> XML]] ;
 
 GENERIC: (write-farkup) ( farkup -- xml ) ;
 
@@ -243,15 +243,15 @@ M: table (write-farkup) "table" farkup-inside ;
 
 : write-link ( href text -- xml )
     [ check-url link-no-follow? get "nofollow" and ] dip
-    [XML <a href=<-> rel=<->><-></a> XML] ;
+    XML[[ <a href=<-> rel=<->><-></a> XML]] ;
 
 : write-image-link ( href text -- xml )
     disable-images? get [
         2drop
-        [XML <strong>Images are not allowed</strong> XML]
+        XML[[ <strong>Images are not allowed</strong> XML]]
     ] [
         [ check-url ] [ f like ] bi*
-        [XML <img src=<-> alt=<->/> XML]
+        XML[[ <img src=<-> alt=<->/> XML]]
     ] if ;
 
 : open-link ( link -- href text )
@@ -267,15 +267,15 @@ M: code (write-farkup)
     [ string>> ] [ mode>> ] bi render-code ;
 
 M: line (write-farkup)
-    drop [XML <hr/> XML] ;
+    drop XML[[ <hr/> XML]] ;
 
 M: line-break (write-farkup)
-    drop [XML <br/> XML] ;
+    drop XML[[ <br/> XML]] ;
 
 M: table-row (write-farkup)
     child>>
-    [ (write-farkup) [XML <td><-></td> XML] ] map
-    [XML <tr><-></tr> XML] ;
+    [ (write-farkup) XML[[ <td><-></td> XML]] ] map
+    XML[[ <tr><-></tr> XML]] ;
 
 M: string (write-farkup) ;
 
