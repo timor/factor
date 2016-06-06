@@ -26,4 +26,4 @@ SYMBOLS: unary binary keyword ;
     bi define-simple-generic ;
 
 SYNTAX: SELECTOR: scan-token selector>generic drop ;
-SYNTAX: selector: scan-token selector>generic drop ;
+SYNTAX: selector\ scan-token selector>generic drop ;
