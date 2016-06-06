@@ -109,7 +109,11 @@ ERROR: staging-violation word ;
     ] when ;
 
 : scan-parsing-word ( -- word )
-    scan-object dup wrapper? [ wrapped>> ] when ;
+    ?scan-token dup "\\" = [
+        drop scan-word
+    ] [
+        parse-word
+    ] if ;
 
 ERROR: classoid-expected object ;
 
