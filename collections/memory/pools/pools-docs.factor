@@ -9,8 +9,8 @@ HELP: <pool>
 }
 { $description "Creates a " { $link pool } " of " { $snippet "size" } " objects of " { $snippet "class" } "." } ;
 
-HELP: POOL:
-{ $syntax "POOL: class size" }
+HELP: \ POOL:
+{ $syntax "POOL: class size ;" }
 { $description "Creates a " { $link pool } " of " { $snippet "size" } " objects of " { $snippet "class" } ", and associates it with the class using " { $link set-class-pool } "." } ;
 
 HELP: class-pool

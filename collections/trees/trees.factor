@@ -209,7 +209,7 @@ M: tree clone dup assoc-clone-like ;
 
 M: tree assoc-like drop dup tree? [ >tree ] unless ;
 
-SYNTAX: TREE{
+SYNTAX: \ TREE{
     \ } [ >tree ] parse-literal ;
 
 M: tree assoc-size count>> ;

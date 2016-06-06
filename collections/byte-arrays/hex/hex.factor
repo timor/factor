@@ -6,7 +6,7 @@ in: byte-arrays.hex
 
 ERROR: odd-length-hex-string string ;
 
-SYNTAX: HEX{
+SYNTAX: \ HEX{
     "}" parse-tokens concat
     [ blank? ] reject
     dup length even? [ odd-length-hex-string ] unless

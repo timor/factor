@@ -16,6 +16,8 @@ SYNTAX: \ FUNCTOR-SYNTAX:
 
 : scan-param ( -- obj ) scan-object literalize ;
 
+: scan-escaped-param ( -- obj ) scan-escaped-word literalize ;
+
 : >string-param ( string -- string/param )
     dup search dup lexical? [ nip ] [ drop ] if ;
 

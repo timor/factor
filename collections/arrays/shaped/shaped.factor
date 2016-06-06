@@ -173,7 +173,7 @@ TUPLE: row-traverser shaped-array index ;
 
 GENERIC: next-index ( object -- index ) ;
 
-SYNTAX: sa{ \ } [ >shaped-array ] parse-literal ;
+SYNTAX: \ sa{ \ } [ >shaped-array ] parse-literal ;
 
 use: prettyprint.custom
 ! M: row-array pprint* shaped-array>array pprint* ;

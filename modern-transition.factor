@@ -4,27 +4,11 @@
 ! lexable-core-paths [ dup . flush path>literals ] map-zip
 
 "resource:language" vocabs-from
-{ "constructors" "descriptive" "eval" "functors" "literals"
-"match" "method-chains" "multi-methods" "multiline"
-"pair-methods" "peg" "promises" "shuffle" "tr" "tuple-arrays"
-"variables" "variants" "alien.data" "alien.endian" "alien.fortran"
-"alien.syntax" "alien.data.map" "classes.struct"
-"classes.struct.vectored" "compiler.codegen" "functors.backend"
-"compiler.cfg.dataflow-analysis" "compiler.cfg.renaming.functor"
-"compiler.cfg.registers" "cpu.8080.emulator" "definitions.icons"
-"compiler.cfg.instructions.syntax" "cpu.x86.assembler.syntax"
-"io.encodings.euc" "peg.ebnf" "prettyprint.stylesheet" "slots.syntax"
- } diff
+{ } diff
 [ dup <vocab-link> . flush vocab>literals ] map-zip
 
 "resource:collections" vocabs-from
-{ "bit-arrays"
-"bit-vectors" "dlists" "linked-assocs" "nibble-arrays"
-"specialized-arrays" "specialized-vectors" "suffix-arrays"
-"trees" "vlists" "arrays.shaped" "byte-arrays.hex"
-"hash-sets.identity" "hash-sets.numbers" "hash-sets.sequences"
-"hashtables.numbers" "hashtables.sequences" "persistent.hashtables"
-"memory.pools" "persistent.vectors" "trees.avl" "trees.splay"
+{ 
 } diff
 [ dup <vocab-link> . flush vocab>literals ] map-zip
 

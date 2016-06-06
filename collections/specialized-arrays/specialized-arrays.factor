@@ -93,7 +93,7 @@ M: A pprint-delims drop \ A{ \ } ;
 
 M: A >pprint-sequence ;
 
-SYNTAX: A{ \ } [ \ T >c-array ] parse-literal ;
+SYNTAX: \ A{ \ } [ \ T >c-array ] parse-literal ;
 
 INSTANCE: A specialized-array ;
 
@@ -168,13 +168,13 @@ M: c-type-word c-array-type?
 
 M: pointer c-array-type? drop void* c-array-type? ;
 
-SYNTAX: SPECIALIZED-ARRAYS:
+SYNTAX: \ SPECIALIZED-ARRAYS:
     ";" [ parse-c-type define-array-vocab use-vocab ] each-token ;
 
-SYNTAX: SPECIALIZED-ARRAY:
+SYNTAX: \ SPECIALIZED-ARRAY:
     scan-c-type define-array-vocab use-vocab ;
 
-SYNTAX: specialized-array:
+SYNTAX: \ specialized-array:
     scan-c-type define-array-vocab use-vocab ;
 
 { "specialized-arrays" "prettyprint" } "specialized-arrays.prettyprint" require-when
