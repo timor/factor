@@ -31,7 +31,7 @@ SYNTAX: !NAME (parse-annotation) \ (NAME) suffix! ;
 : NAMEs. ( -- )
     NAMEs sorted-definitions. ;
 
-;FUNCTOR
+FUNCTOR;
 
 CONSTANT: annotation-tags {
     "XXX" "TODO" "FIXME" "BUG" "REVIEW" "LICENSE"

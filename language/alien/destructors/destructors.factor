@@ -27,6 +27,6 @@ M: F-destructor dispose alien>> F N ndrop ;
 
 : |F ( alien -- alien ) dup <F-destructor> |dispose drop ; inline
 
-;FUNCTOR
+FUNCTOR;
 
 SYNTAX: destructor: scan-word define-destructor ;

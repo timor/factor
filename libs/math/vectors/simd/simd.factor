@@ -329,7 +329,7 @@ c:<c-type>
     A-rep >>rep
 \ A c:typedef
 
-;FUNCTOR
+FUNCTOR;
 
 SYNTAX: SIMD-128:
     scan-token define-simd-128 ;

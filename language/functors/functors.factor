@@ -153,7 +153,7 @@ SYNTAX: DEFINES-PRIVATE [ begin-private create-word-in end-private ] (INTERPOLAT
 
 SYNTAX: DEFINES-CLASS [ create-class-in ] (INTERPOLATE) ;
 
-defer: ;FUNCTOR delimiter
+defer: FUNCTOR; delimiter
 
 <PRIVATE
 
@@ -175,7 +175,7 @@ defer: ;FUNCTOR delimiter
     functor-words [
         "WHERE" parse-bindings drop
         [ swap <def> suffix ] { } assoc>map concat
-        \ ;FUNCTOR parse-until [ ] append-as
+        \ FUNCTOR; parse-until [ ] append-as
         qualified-vocabs pop* ! unuse the bindings
     ] with-lambda-scope ;
 

@@ -55,7 +55,7 @@ PRIVATE>
     *TYPE ; inline
 : unmarshall-TYPE*-free ( alien -- n )
     [ unmarshall-TYPE* ] keep add-malloc free ;
-;FUNCTOR
+FUNCTOR;
 
 SYNTAX: PRIMITIVE-MARSHALLERS:
 ";" parse-tokens [ define-primitive-marshallers ] each ;

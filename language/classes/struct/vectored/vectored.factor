@@ -54,7 +54,7 @@ M: T S>>
 M: T S<<
     [ (n)>> ] [ (vectored)>> S>> ] bi set-nth-unsafe ; inline
 
-;FUNCTOR
+FUNCTOR;
 
 PRIVATE>
 
@@ -111,7 +111,7 @@ M: T-array struct-transpose
     dup length [ nip iota ] [ drop ] [ nip (vectored-T) ] 2tri
     [ [ [ nth ] [ set-nth ] bi-curry* bi ] 2curry each ] keep ; inline
 
-;FUNCTOR
+FUNCTOR;
 
 SYNTAX: VECTORED-STRUCT:
     scan-word define-vectored-struct ;

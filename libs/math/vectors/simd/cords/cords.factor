@@ -72,7 +72,7 @@ SYNTAX: A{ \ } [ >A ] parse-literal ;
     A-rep >>rep
 \ A typedef
 
-;FUNCTOR
+FUNCTOR;
 
 : define-simd-128-cord ( A/2 T -- )
     [ define-specialized-cord ]

@@ -77,7 +77,7 @@ symbol: name-outs
 
 : name-out ( bb -- set ) name-outs get at ;
 
-;FUNCTOR
+FUNCTOR;
 
 ! ! ! Forward dataflow analysis
 
@@ -103,7 +103,7 @@ INSTANCE: name forward-analysis ;
     name run-dataflow-analysis
     [ name-ins set ] [ name-outs set ] bi* ;
 
-;FUNCTOR
+FUNCTOR;
 
 ! ! ! Backward dataflow analysis
 
@@ -129,7 +129,7 @@ INSTANCE: name backward-analysis ;
     \ name run-dataflow-analysis
     [ name-outs set ] [ name-ins set ] bi* ;
 
-;FUNCTOR
+FUNCTOR;
 
 PRIVATE>
 

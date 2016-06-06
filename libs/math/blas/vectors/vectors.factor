@@ -184,7 +184,7 @@ SYNTAX: XVECTOR{ \ } [ >VECTOR ] parse-literal ;
 M: VECTOR pprint-delims
     drop \ XVECTOR{ \ } ;
 
-;FUNCTOR
+FUNCTOR;
 
 
 FUNCTOR: (define-real-blas-vector) ( TYPE T -- )
@@ -205,7 +205,7 @@ M: VECTOR Vnorm
 M: VECTOR Vasum
     (prepare-nrm2) XASUM ;
 
-;FUNCTOR
+FUNCTOR;
 
 
 FUNCTOR: (define-complex-blas-vector) ( TYPE C S -- )
@@ -227,7 +227,7 @@ M: VECTOR Vnorm
 M: VECTOR Vasum
     (prepare-nrm2) XXASUM ;
 
-;FUNCTOR
+FUNCTOR;
 
 
 : define-real-blas-vector ( TYPE T -- )

@@ -296,7 +296,7 @@ SYNTAX: XMATRIX{ \ } [ >MATRIX ] parse-literal ;
 M: MATRIX pprint-delims
     drop \ XMATRIX{ \ } ;
 
-;FUNCTOR
+FUNCTOR;
 
 
 : define-real-blas-matrix ( TYPE T -- )

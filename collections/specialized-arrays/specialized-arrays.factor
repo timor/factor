@@ -103,7 +103,7 @@ M: A vs* [ * \ T c-type-clamp ] 2map ; inline
 
 M: A v*high [ * \ T heap-size neg shift ] 2map ; inline
 
-;FUNCTOR
+FUNCTOR;
 
 : specialized-array-vocab ( c-type -- vocab )
     [

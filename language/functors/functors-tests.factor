@@ -16,7 +16,7 @@ TUPLE: B { value T } ;
 
 C: <B> B ( T -- B ) ;
 
-;FUNCTOR
+FUNCTOR;
 
 \ float define-box
 
@@ -38,7 +38,7 @@ WHERE
 
 : WW ( a -- b ) \ W twice ;
 
-;FUNCTOR
+FUNCTOR;
 
 \ sq wrapper-test
 
@@ -56,7 +56,7 @@ WHERE
 
 : W ( a b -- c ) \ + execute ;
 
-;FUNCTOR
+FUNCTOR;
 
 "blah" wrapper-test-2
 
@@ -74,7 +74,7 @@ WHERE
 
 symbol: W
 
-;FUNCTOR
+FUNCTOR;
 
 "blorgh" symbol-test
 
@@ -94,7 +94,7 @@ GENERIC: W ( a -- b ) ;
 M: object W ;
 M: integer W 1 + ;
 
-;FUNCTOR
+FUNCTOR;
 
 "snurv" generic-test
 
@@ -141,7 +141,7 @@ GENERIC: W-generic ( a -- b ) ;
 M: W-tuple W-generic ;
 symbol: W-symbol
 
-;FUNCTOR
+FUNCTOR;
 
 [ [ ] ] [
     "in: functors.tests
@@ -165,7 +165,7 @@ STRUCT: T-class
     { z TYPE initial: 5 }
     { float { c:float 2 } } ;
 
-;FUNCTOR
+FUNCTOR;
 
 "a-struct" "nemo" c:char 2 define-a-struct
 
@@ -223,7 +223,7 @@ WHERE
 : W ( -- ) ; inline
 : W-W ( -- ) W W ;
 
-;FUNCTOR
+FUNCTOR;
 
 "an-inline-word" define-an-inline-word
 
@@ -245,7 +245,7 @@ TUPLE: T ; final
 
 : W ( -- ) ;
 
-;FUNCTOR
+FUNCTOR;
 
 "a-final-tuple" "a-word" define-a-final-class
 

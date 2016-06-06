@@ -41,7 +41,7 @@ M: T cord-append
     2dup [ T instance? ] both?
     [ T-cord boa ] [ generic-cord boa ] if ; inline
 
-;FUNCTOR
+FUNCTOR;
 
 : cord-map ( cord quot -- cord' )
     [ [ head>> ] dip call ]

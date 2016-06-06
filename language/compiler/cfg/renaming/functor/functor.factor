@@ -83,6 +83,6 @@ insn-classes get [ insn-temp-slots empty? ] reject [
     define
 ] each
 
-;FUNCTOR
+FUNCTOR;
 
 SYNTAX: RENAMING: scan-token scan-object scan-object scan-object ";" expect define-renaming ;

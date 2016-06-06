@@ -32,4 +32,4 @@ M: V equal? over V instance? [ sequence= ] [ 2drop f ] if ;
 
 INSTANCE: V growable ;
 
-;FUNCTOR
+FUNCTOR;

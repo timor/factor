@@ -56,7 +56,7 @@ SYNTAX: V{ \ } [ >V ] parse-literal ;
 INSTANCE: V specialized-vector ;
 INSTANCE: V growable ;
 
-;FUNCTOR
+FUNCTOR;
 
 : specialized-vector-vocab ( c-type -- vocab )
     [

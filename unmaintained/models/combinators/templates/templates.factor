@@ -20,4 +20,4 @@ MACRO: w-n* ( int -- quot ) dup '[ [ _ narray <collection> #1 ] dip [ _ firstn ]
 : w-2* ( a b quot -- mapped ) 2 w-n* ; inline
 : w-3* ( a b c quot -- mapped ) 3 w-n* ; inline
 : w-4* ( a b c d quot -- mapped ) 4 w-n* ; inline
-;FUNCTOR
+FUNCTOR;

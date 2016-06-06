@@ -57,4 +57,4 @@ M: TYPE equal? assoc= ;
 
 M: TYPE hashcode* assoc-hashcode ;
 
-;FUNCTOR
+FUNCTOR;

@@ -81,7 +81,7 @@ M: pixel-format-attribute >PFA
 : >PFA-int-array ( attribute -- int-array )
     [ >PFA ] map concat PERM prepend 0 suffix int >c-array ;
 
-;FUNCTOR
+FUNCTOR;
 
 SYNTAX: PIXEL-FORMAT-ATTRIBUTE-TABLE:
     scan-token scan-object scan-object ";" expect define-pixel-format-attribute-table ;

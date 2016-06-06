@@ -13,4 +13,4 @@ WHERE
 : NAME<=> ( obj1 obj2 -- <=> ) QUOT compare ;
 : NAME>=< ( obj1 obj2 -- >=< ) NAME<=> invert-comparison ;
 
-;FUNCTOR
+FUNCTOR;

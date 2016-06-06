@@ -29,4 +29,4 @@ T-class lookup-c-type
 complex >>boxed-class
 drop
 
-;FUNCTOR
+FUNCTOR;
