@@ -58,7 +58,7 @@ M: word print-stack-effect? drop t ;
 
 M: word synopsis* word-synopsis ;
 
-M: simple-generic synopsis* word-synopsis ;
+M: simple-generic synopsis* word-synopsis ";" text ;
 
 M: standard-generic synopsis*
     {
@@ -67,6 +67,7 @@ M: standard-generic synopsis*
         [ pprint-word ]
         [ dispatch# pprint* ]
         [ stack-effect. ]
+        [ drop ";" text ]
     } cleave ;
 
 M: hook-generic synopsis*
@@ -76,6 +77,7 @@ M: hook-generic synopsis*
         [ pprint-word ]
         [ "combination" word-prop var>> pprint* ]
         [ stack-effect. ]
+        [ drop ";" text ]
     } cleave ;
 
 M: method synopsis*
