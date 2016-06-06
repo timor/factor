@@ -45,7 +45,7 @@ SELF-SLOTS: hsva
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-VAR: color-stack
+var: color-stack
 
 : init-color-stack ( -- ) V{ } clone >color-stack ;
 
@@ -62,7 +62,7 @@ VAR: color-stack
 
 : check-size ( modelview -- num ) { 0 1 4 5 } double-nth* [ abs ] map supremum ;
 
-VAR: threshold
+var: threshold
 
 : iterate? ( -- ? ) get-modelview-matrix check-size threshold> > ;
 
@@ -162,7 +162,7 @@ MACRO: rule ( seq -- quot ) [rule] ;
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-VAR: background
+var: background
 
 : set-initial-background ( -- ) T{ hsva f 0 0 1 1 } clone >self ;
 
@@ -175,9 +175,9 @@ VAR: background
 
 USING: rewrite-closures ;
 
-VAR: viewport ! { left width bottom height }
+var: viewport ! { left width bottom height }
 
-VAR: start-shape
+var: start-shape
 
 : set-initial-color ( -- ) T{ hsva f 0 0 0 1 } clone >self ;
 

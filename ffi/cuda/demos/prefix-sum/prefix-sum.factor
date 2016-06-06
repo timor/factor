@@ -3,7 +3,7 @@
 USING: alien.c-types cuda cuda.contexts cuda.libraries cuda.syntax locals ;
 in: cuda.demos.prefix-sum
 
-CUDA-library: prefix-sum cuda32 "vocab:cuda/demos/prefix-sum/prefix-sum.ptx"
+CUDA-LIBRARY: prefix-sum cuda32 "vocab:cuda/demos/prefix-sum/prefix-sum.ptx" ;
 
 CUDA-FUNCTION: prefix_sum_block ( uint* in, uint* out, uint n ) ;
 

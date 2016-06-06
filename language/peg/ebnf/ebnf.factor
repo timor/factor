@@ -537,18 +537,18 @@ ERROR: could-not-parse-ebnf ;
 
 PRIVATE>
 
-SYNTAX: <EBNF
+SYNTAX: \ EBNF<
     "EBNF>"
     reset-tokenizer parse-multiline-string parse-ebnf main of
     suffix! reset-tokenizer ;
 
-SYNTAX: [EBNF
+SYNTAX: \ EBNF[
     "EBNF]"
     reset-tokenizer parse-multiline-string ebnf>quot nip
     suffix! \ call suffix! reset-tokenizer ;
 
-SYNTAX: EBNF:
-    reset-tokenizer scan-new-word dup ";EBNF" parse-multiline-string
+SYNTAX: \ EBNF:
+    reset-tokenizer scan-new-word dup "EBNF;" parse-multiline-string
     ebnf>quot swapd
     ( input -- ast ) define-declared "ebnf-parser" set-word-prop
     reset-tokenizer ;

@@ -5,7 +5,7 @@ in: 4DNav.turtle
 
 ! replacement of self
 
-VAR: self
+var: self
 
 : with-self ( quot obj -- ) [ >self call ] with-scope ; inline
 

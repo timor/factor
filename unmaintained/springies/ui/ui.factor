@@ -29,9 +29,9 @@ in: springies.ui
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-VAR: slate
+var: slate
 
-VAR: loop
+var: loop
 
 : update-world-size ( -- ) slate> rect-dim >world-size ;
 

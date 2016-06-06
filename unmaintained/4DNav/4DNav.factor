@@ -64,13 +64,13 @@ VALUE: rotation-step
 3 \ translation-step set-value
 5 \ rotation-step set-value
 
-VAR: selected-file-model
-VAR: observer3d 
-VAR: view1 
-VAR: view2
-VAR: view3
-VAR: view4
-VAR: present-space
+var: selected-file-model
+var: observer3d 
+var: view1 
+var: view2
+var: view3
+var: view4
+var: present-space
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

@@ -8,7 +8,7 @@ in: automata
 ! set-rule
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-VAR: rule   VAR: rule-number
+var: rule   var: rule-number
 
 : init-rule ( -- ) 8 <hashtable> >rule ;
 
@@ -70,9 +70,9 @@ VARS: width height ;
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-VAR: bitmap
+var: bitmap
 
-VAR: last-line
+var: last-line
 
 : run-rule ( -- )
   last-line> height> [ drop step-capped-line dup ] map >bitmap >last-line ;
@@ -85,7 +85,7 @@ VAR: last-line
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-! VAR: loop-flag
+! var: loop-flag
 
 ! DEFER: loop
 

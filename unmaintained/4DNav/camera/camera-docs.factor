@@ -47,7 +47,7 @@ $nl
 {
     $unchecked-example
     
-"VAR: my-camera"
+"var: my-camera"
 ": init-my-camera ( -- )"
 "    <turtle> >my-camera"
 "    [ my-camera> >self"

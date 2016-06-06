@@ -13,16 +13,16 @@ in: springies
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-VAR: nodes
-VAR: springs
-VAR: time-slice
-VAR: world-size
+var: nodes
+var: springs
+var: time-slice
+var: world-size
 
 : world-width ( -- width ) world-size> first ;
 
 : world-height ( -- height ) world-size> second ;
 
-VAR: gravity
+var: gravity
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! node

@@ -65,9 +65,9 @@ M: word <c-direct-array>
 M: pointer <c-direct-array>
     drop void* <c-direct-array> ;
 
-SYNTAX: c-array{ \ } [ unclip >c-array ] parse-literal ;
+SYNTAX: \ c-array{ \ } [ unclip >c-array ] parse-literal ;
 
-SYNTAX: c-array@
+SYNTAX: \ c-array@
     scan-object [ scan-object scan-object ] dip
     <c-direct-array> suffix! ;
 

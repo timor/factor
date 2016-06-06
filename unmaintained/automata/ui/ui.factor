@@ -34,7 +34,7 @@ in: automata.ui
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-VAR: slate
+var: slate
 
 ! Call a 'model' quotation with the current 'view'.
 

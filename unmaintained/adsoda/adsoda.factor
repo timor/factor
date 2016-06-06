@@ -37,8 +37,8 @@ tools.walker
 
 in: adsoda
 
-DEFER: combinations
-VAR: pv
+defer: combinations
+var: pv
 
 
 ! -------------------------------------------------------------
