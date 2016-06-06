@@ -17,7 +17,7 @@ CONSTANT: literals
        { 40 "quarante" } { 50 "cinquante" } { 60 "soixante" }
        { 71 "soixante et onze" } { 80 "quatre-vingts" }
        { 81 "quatre-vingt-un" }
-       { 100 "cent" } { 1000 "mille" } }
+       { 100 "cent" } { 1000 "mille" } } ;
 
 MEMO: units ( -- seq ) ! up to 10^99
     { "m" "b" "tr" "quadr" "quint" "sext" "sept" "oct"

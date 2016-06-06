@@ -20,7 +20,7 @@ defer: quoted-field,
     2over stream-read1 swap over =
     [ nip ] [
         {
-            { char: "    [ [ char: " , ] when quoted-field, ] }
+            { char: \"    [ [ char: \" , ] when quoted-field, ] }
             { char: \n   [ ] } ! Error: cr inside string?
             { char: \r   [ ] } ! Error: lf inside string?
             [ [ , drop f maybe-escaped-quote ] when* ]
@@ -45,7 +45,7 @@ defer: quoted-field,
     swap ?trim [ drop ] 2dip ; inline
 
 : field ( delimiter stream field-seps quote-seps -- sep/f field )
-    pick stream-read-until dup char: " = [
+    pick stream-read-until dup char: \" = [
         drop [ drop quoted-field ] [ continue-field ] if-empty
     ] [ [ 3drop ] 2dip swap ?trim ] if ;
 
@@ -89,10 +89,10 @@ PRIVATE>
     '[ dup "\n\"\r" member? [ drop t ] [ _ = ] if ] any? ; inline
 
 : escape-quotes ( cell stream -- )
-    char: " over stream-write1 swap [
+    char: \" over stream-write1 swap [
         [ over stream-write1 ]
-        [ dup char: " = [ over stream-write1 ] [ drop ] if ] bi
-    ] each char: " swap stream-write1 ;
+        [ dup char: \" = [ over stream-write1 ] [ drop ] if ] bi
+    ] each char: \" swap stream-write1 ;
 
 : escape-if-required ( cell delimiter stream -- )
     [ dupd needs-escaping? ] dip

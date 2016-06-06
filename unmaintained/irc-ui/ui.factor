@@ -11,7 +11,7 @@ USING: accessors kernel threads combinators concurrency.mailboxes
        irc.client irc.client.private irc.messages
        irc.ui.commandparser irc.ui.load vocabs.loader classes prettyprint ;
 
-RENAME: join sequences => sjoin
+RENAME: join sequences => sjoin ;
 
 in: irc.ui
 

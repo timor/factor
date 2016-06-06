@@ -28,8 +28,8 @@ HELP: CHLOE:
 { $values { "name" "the tag name" } { "definition" { $quotation ( tag -- ) } } }
 { $description "Defines compilation semantics for the Chloe tag named " { $snippet "tag" } ". The definition body receives a " { $link tag } " on the stack." } ;
 
-HELP: COMPONENT:
-{ $syntax "COMPONENT: name" }
+HELP: component:
+{ $syntax "component: name" }
 { $description "Defines a Chloe tag named " { $snippet "name" } " rendering the HTML component with class word " { $snippet "name" } ". See " { $link "html.components" } "." } ;
 
 HELP: reset-cache
@@ -276,14 +276,14 @@ ARTICLE: "html.templates.chloe.extend.components.example" "An example of a custo
 "Now we define a method on the " { $link render* } " generic word which renders the image using " { $link { "xml.syntax" "literals" } } ":"
 { $code "M: image render* 2drop XML[[ <img src=<-> /> XML]] ;" }
 "Finally, we can define a Chloe component:"
-{ $code "COMPONENT: image" }
+{ $code "component: image" }
 "We can use it as follows, assuming the current form has a value named " { $snippet "image" } ":"
 { $code "<t:image t:name='image' />" } ;
 
 ARTICLE: "html.templates.chloe.extend.components" "Extending Chloe with custom components"
 "Custom HTML components implementing the " { $link render* } " word can be wired up with Chloe using the following syntax from " { $vocab-link "html.templates.chloe.components" } ":"
 { $subsections
-    postpone\ COMPONENT:
+    postpone\ component:
     "html.templates.chloe.extend.components.example"
 } ;
 

@@ -44,7 +44,7 @@ defer: (read-json-string)
 : (read-json-escape) ( stream accum -- accum )
     { sbuf } declare
     over stream-read1 {
-        { char: " [ char: " ] }
+        { char: \" [ char: \" ] }
         { char: \\ [ char: \\ ] }
         { char: / [ char: / ] }
         { char: b [ char: \b ] }
@@ -109,11 +109,11 @@ defer: (read-json-string)
     { object vector object } declare
     {
         { char: \" [ over read-json-string suffix! ] }
-        { char: [  [ json-open-array ] }
+        { char: \[  [ json-open-array ] }
         { char: ,  [ v-over-push ] }
         { char: ]  [ json-close-array ] }
-        { char: {  [ json-open-hash ] }
-        { char: :  [ v-pick-push ] }
+        { char: \{  [ json-open-hash ] }
+        { char: \:  [ v-pick-push ] }
         { char: }  [ json-close-hash ] }
         { char: \s [ ] }
         { char: \t [ ] }

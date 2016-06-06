@@ -30,7 +30,7 @@ PRIVATE>
 
 : read-response ( -- response )
     readln unclip {
-        { char: : [ string>number ] }
+        { char: \: [ string>number ] }
         { char: + [ handle-response ] }
         { char: $ [ string>number read-bulk ] }
         { char: * [ string>number read-multi-bulk ] }

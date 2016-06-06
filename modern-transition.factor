@@ -15,6 +15,19 @@
 [ dup <vocab-link> . flush vocab>literals ] map-zip
 
 
+"resource:collections" vocabs-from
+{ "bit-arrays"
+"bit-vectors" "dlists" "linked-assocs" "nibble-arrays"
+"specialized-arrays" "specialized-vectors" "suffix-arrays"
+"trees" "vlists" "arrays.shaped" "byte-arrays.hex"
+"hash-sets.identity" "hash-sets.numbers" "hash-sets.sequences"
+"hashtables.numbers" "hashtables.sequences" "persistent.hashtables"
+"memory.pools" "persistent.vectors" "trees.avl" "trees.splay"
+} diff
+[ dup <vocab-link> . flush vocab>literals ] map-zip
+
+
+
 "resource:language" vocabs-from
 { "constructors" "descriptive" "eval" "functors" "literals"
 "match" "method-chains" "multi-methods" "multiline"

@@ -8,7 +8,7 @@ in: 4DNav.space-file-decoder
 : decode-number-array ( x -- y )  
     "," split [ string>number ] map ;
 
-TAGS: adsoda-read-model ( tag -- model )
+TAGS: adsoda-read-model ( tag -- model ) ;
 
 TAG: dimension adsoda-read-model 
     children>> first string>number ;

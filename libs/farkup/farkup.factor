@@ -82,9 +82,9 @@ defer: (parse-paragraph)
     ] dip [ (parse-paragraph) cons ] [ 1list ] if* ;
 
 : parse-big-link ( before after -- link rest )
-    dup ?first char: [ =
+    dup ?first char: \[ =
     [ parse-link ]
-    [ [ char: [ suffix ] [ (parse-paragraph) ] bi* ]
+    [ [ char: \[ suffix ] [ (parse-paragraph) ] bi* ]
     if ;
 
 : escape ( before after -- before' after' )
@@ -94,7 +94,7 @@ defer: (parse-paragraph)
     [ nil ] [
         [ "*_^~%[\\" member? ] find-cut [
             {
-                { char: [ [ parse-big-link ] }
+                { char: \[ [ parse-big-link ] }
                 { char: \\ [ escape ] }
                 [ dup delimiter-class parse-delimiter ]
             } case cons
@@ -181,7 +181,7 @@ defer: (parse-paragraph)
     char: # ordered-list parse-list ;
 
 : parse-code ( state -- state' item )
-    dup 1 look char: [ =
+    dup 1 look char: \[ =
     [ unclip-slice make-paragraph ] [
         dup "{" take-until [
             [ nip rest ] dip
@@ -197,7 +197,7 @@ defer: (parse-paragraph)
         { char: _ [ parse-line ] }
         { char: - [ parse-ul ] }
         { char: # [ parse-ol ] }
-        { char: [ [ parse-code ] }
+        { char: \[ [ parse-code ] }
         { f [ rest-slice f ] }
         [ drop unclip-slice make-paragraph ]
     } case ;
@@ -212,7 +212,7 @@ CONSTANT: invalid-url "javascript:alert('Invalid URL in farkup');" ;
         { [ dup empty? ] [ drop invalid-url ] }
         { [ dup [ 127 > ] any? ] [ drop invalid-url ] }
         { [ dup first "/\\" member? ] [ drop invalid-url ] }
-        { [ char: : over member? ] [ dup absolute-url? [ drop invalid-url ] unless ] }
+        { [ char: \: over member? ] [ dup absolute-url? [ drop invalid-url ] unless ] }
         [ relative-link-prefix get prepend "" like url-encode ]
     } cond ;
 

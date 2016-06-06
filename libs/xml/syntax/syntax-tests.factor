@@ -8,7 +8,7 @@ in: xml.syntax.tests
 
 ! TAGS test
 
-TAGS: calculate ( tag -- n )
+TAGS: calculate ( tag -- n ) ;
 
 : calc-2children ( tag -- n n )
     children-tags first2 [ calculate ] dip calculate ;

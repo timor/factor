@@ -526,7 +526,7 @@ qualified: qualified.tests.bar
 QUALIFIED-WITH: qualified.tests.bar p ;
 { 2 } [ p:x ] unit-test
 
-RENAME: x qualified.tests.baz => y
+RENAME: x qualified.tests.baz => y ;
 { 3 } [ y ] unit-test
 
 FROM: qualified.tests.baz => x ;

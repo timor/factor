@@ -20,7 +20,7 @@ ARTICLE: { "xml.syntax" "tags" } "Dispatch on XML tag names"
 { $subsections postpone\ TAG: } ;
 
 HELP: TAGS:
-{ $syntax "TAGS: word" }
+{ $syntax "TAGS: word effect ;" }
 { $values { "word" "a new word to define" } }
 { $description "Creates a new word to which dispatches on XML tag names." }
 { $see-also postpone\ TAG: } ;

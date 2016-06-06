@@ -43,7 +43,7 @@ symbol: tagstack
     char: ' (read-quote) ;
 
 : read-double-quote ( sequence-parser -- string )
-    char: " (read-quote) ;
+    char: \" (read-quote) ;
 
 : read-quote ( sequence-parser -- string )
     dup get+increment char: ' =
@@ -108,7 +108,7 @@ symbol: tagstack
 
 : read-< ( sequence-parser -- string/f )
     advance dup current [
-        char: ! = [ read-bang f ] [ read-tag ] if
+        char: \! = [ read-bang f ] [ read-tag ] if
     ] [
         drop f
     ] if* ;

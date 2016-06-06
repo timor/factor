@@ -74,20 +74,20 @@ CHLOE: validation-errors
 
 CHLOE: if dup if>quot [ swap when ] append process-children ;
 
-COMPONENT: label
-COMPONENT: link
-COMPONENT: inspector
-COMPONENT: comparison
-COMPONENT: html
-COMPONENT: hidden
-COMPONENT: farkup
-COMPONENT: field
-COMPONENT: textarea
-COMPONENT: password
-COMPONENT: choice
-COMPONENT: checkbox
-COMPONENT: code
-COMPONENT: xml
+component: label
+component: link
+component: inspector
+component: comparison
+component: html
+component: hidden
+component: farkup
+component: field
+component: textarea
+component: password
+component: choice
+component: checkbox
+component: code
+component: xml
 
 symbol: template-cache
 

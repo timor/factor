@@ -6,7 +6,7 @@ calendar concurrency.mailboxes classes assocs combinators
 irc.messages.parser irc.client.base irc.client.chats
 irc.client.participants irc.client.internals ;
 EXCLUDE: irc.messages => join ;
-RENAME: join irc.messages => join_
+RENAME: join irc.messages => join_ ;
 in: irc.client.internals.tests
 
 ! Streams for testing

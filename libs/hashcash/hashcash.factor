@@ -26,7 +26,7 @@ in: hashcash
 ! Random salt is formed by ascii characters
 ! between 33 and 126
 : available-chars ( -- seq )
-    33 126 [a,b] [ char: : = ] reject ;
+    33 126 [a,b] [ char: \: = ] reject ;
 
 PRIVATE>
 

@@ -28,7 +28,7 @@ M: no-tag summary
 PRIVATE>
 
 SYNTAX: TAGS:
-    scan-new-word scan-effect
+    scan-new-word scan-effect ";" expect
     [ drop H{ } clone "xtable" set-word-prop ]
     [ define-tags ]
     2bi ;

@@ -40,7 +40,7 @@ in: c.lexer
 
 : take-define-identifier ( sequence-parser -- string )
     skip-whitespace/comments
-    [ current { [ blank? ] [ char: ( = ] } 1|| ] take-until ;
+    [ current { [ blank? ] [ char: \( = ] } 1|| ] take-until ;
 
 :: take-quoted-string ( sequence-parser escape-char quote-char -- string )
     sequence-parser n>> :> start-n

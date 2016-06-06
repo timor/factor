@@ -171,7 +171,7 @@ M: timestamp year. ( timestamp -- )
         [
             [
                 read-00 hours
-                read1 { { char: : [ read-00 ] } { f [ 0 ] } } case minutes
+                read1 { { char: \: [ read-00 ] } { f [ 0 ] } } case minutes
                 time+
             ] dip signed-gmt-offset
         ]

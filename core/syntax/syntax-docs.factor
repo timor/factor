@@ -574,12 +574,12 @@ HELP: EXCLUDE:
     "EXCLUDE: math.parser => bin> hex> ;" "! imports everything but bin> and hex>" } } ;
 
 HELP: RENAME:
-{ $syntax "RENAME: word vocab => new-name" }
+{ $syntax "RENAME: word vocab => new-name ;" }
 { $description "Imports " { $snippet "word" } " from " { $snippet "vocab" } ", but renamed to " { $snippet "new-name" } "." }
 { $notes "If adding the words introduces ambiguity, the words will take precedence when resolving any ambiguous names." }
 { $examples { $example
     "USING: prettyprint ;"
-    "RENAME: + math => -"
+    "RENAME: + math => - ;"
     "2 3 - ."
     "5"
 } } ;

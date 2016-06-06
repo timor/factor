@@ -72,7 +72,7 @@ CONSTANT: ppc-exception-flag>bit
         { +fp-underflow+         0x0800,0000 }
         { +fp-zero-divide+       0x0400,0000 }
         { +fp-inexact+           0x0200,0000 }
-    }
+    } ;
 
 CONSTANT: ppc-fp-traps-bits 0xf8 ;
 CONSTANT: ppc-fp-traps>bit
@@ -82,7 +82,7 @@ CONSTANT: ppc-fp-traps>bit
         { +fp-underflow+         0x20 }
         { +fp-zero-divide+       0x10 }
         { +fp-inexact+           0x08 }
-    }
+    } ;
 
 CONSTANT: ppc-rounding-mode-bits 0x3 ;
 CONSTANT: ppc-rounding-mode>bit
@@ -91,7 +91,7 @@ CONSTANT: ppc-rounding-mode>bit
         { +round-zero+    0x1 }
         { +round-up+      0x2 }
         { +round-down+    0x3 }
-    } >biassoc ]
+    } >biassoc ] ;
 
 CONSTANT: ppc-denormal-mode-bits 0x4 ;
 

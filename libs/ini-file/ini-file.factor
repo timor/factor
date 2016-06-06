@@ -19,11 +19,11 @@ in: ini-file
         { char: t   char: \t }
         { char: v   char: \v }
         { char: '   char: ' }
-        { char: "   char: " }
+        { char: \"   char: \" }
         { char: \\  char: \\ }
         { char: ?   char: ? }
         { char: ;   char: ; }
-        { char: [   char: [ }
+        { char: \[   char: \[ }
         { char: ]   char: ] }
         { char: =   char: = }
     } ?at [ bad-escape ] unless ;
@@ -54,8 +54,8 @@ use: xml.entities
         { char: \\   "\\\\" }
         { char: ?    "\\?"  }
         { char: ;    "\\;"  }
-        { char: [    "\\["  }
-        { char: ]    "\\]"  }
+        { char: \[    "\\["  }
+        { char: \]    "\\]"  }
         { char: =    "\\="  }
     } escape-string-by ;
 
@@ -87,12 +87,12 @@ symbol: option
 : section? ( line -- index/f )
     {
         [ length 1 > ]
-        [ first char: [ = ]
-        [ char: ] swap last-index ]
+        [ first char: \[ = ]
+        [ char: \] swap last-index ]
     } 1&& ;
 
 : line-continues? ( line -- ? )
-    { [ empty? not ] [ last char: \ = ] } 1&& ;
+    { [ empty? not ] [ last char: \\ = ] } 1&& ;
 
 : section, ( -- )
     section get [ , ] when* ;

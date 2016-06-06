@@ -3,12 +3,12 @@
 USING: alien.c-types alien.data byte-arrays combinators
 combinators.smart endian fry hints kernel locals macros math
 math.ranges sequences sequences.generalizations ;
-RENAME: be> io.binary => slow-be>
-RENAME: le> io.binary => slow-le>
-RENAME: signed-be> io.binary => slow-signed-be>
-RENAME: signed-le> io.binary => slow-signed-le>
-RENAME: >be io.binary => >slow-be
-RENAME: >le io.binary => >slow-le
+RENAME: be> io.binary => slow-be> ;
+RENAME: le> io.binary => slow-le> ;
+RENAME: signed-be> io.binary => slow-signed-be> ;
+RENAME: signed-le> io.binary => slow-signed-le> ;
+RENAME: >be io.binary => >slow-be ;
+RENAME: >le io.binary => >slow-le ;
 in: io.binary.fast
 
 ERROR: bad-length bytes n ;

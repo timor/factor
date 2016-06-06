@@ -3,7 +3,7 @@
 USING: accessors math math.order money kernel assocs ;
 in: taxes.usa.fica
 
-: fica-tax-rate ( -- x ) DECIMAL: .062 ; inline
+: fica-tax-rate ( -- x ) decimal: .062 ; inline
 
 ERROR: fica-base-unknown ;
 

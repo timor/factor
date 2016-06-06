@@ -34,7 +34,7 @@ defer: read-bencode
     ] [ ] produce nip >hashtable ;
 
 : read-string ( prefix -- obj )
-    ":" read-until char: : assert= swap prefix
+    ":" read-until char: \: assert= swap prefix
     string>number read ascii decode ;
 
 : read-bencode ( -- obj )

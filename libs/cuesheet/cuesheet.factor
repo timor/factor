@@ -58,7 +58,7 @@ ERROR: unknown-syntax syntax ;
     dup [ char: ; = ] find drop [ head ] when* ;
 
 : trim-quotes ( str -- str' )
-    [ char: " = ] trim ;
+    [ char: \" = ] trim ;
 
 : last-track ( cuesheet -- cuesheet track )
     dup files>> last tracks>> last ;

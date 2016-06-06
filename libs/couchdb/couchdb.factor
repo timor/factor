@@ -71,7 +71,7 @@ CONSTANT: default-uuids-to-cache 100 ;
     default-couch-host default-couch-port <server> ;
 
 : (server-url) ( server -- )
-    "http://" % [ host>> % ] [ char: : , port>> number>string % ] bi char: / , ; inline
+    "http://" % [ host>> % ] [ char: \: , port>> number>string % ] bi char: / , ; inline
 
 : server-url ( server -- url )
     [ (server-url) ] "" make ;

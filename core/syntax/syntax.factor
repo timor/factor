@@ -96,7 +96,7 @@ in: bootstrap.syntax
     ] define-core-syntax
 
     "RENAME:" [
-        scan-token scan-token "=>" expect scan-token add-renamed-word
+        scan-token scan-token "=>" expect scan-token ";" expect add-renamed-word
     ] define-core-syntax
 
     "NAN:" [ 16 scan-base <fp-nan> suffix! ] define-core-syntax

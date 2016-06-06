@@ -85,7 +85,7 @@ ERROR: header-file-missing path ;
 
 : take-define-identifier ( sequence-parser -- string )
     skip-whitespace/comments
-    [ current { [ blank? ] [ char: ( = ] } 1|| ] take-until ;
+    [ current { [ blank? ] [ char: \( = ] } 1|| ] take-until ;
 
 :: handle-define ( preprocessor-state sequence-parser -- )
     sequence-parser take-define-identifier :> ident

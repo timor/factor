@@ -6,7 +6,7 @@ in: vocabs.parser.tests
 [ error>> T{ no-word-in-vocab { word "doesnotexist" } { vocab "kernel" } } = ]
 must-fail-with
 
-[ "RENAME: doesnotexist kernel => newname" eval( -- ) ]
+[ "RENAME: doesnotexist kernel => newname ;" eval( -- ) ]
 [ error>> T{ no-word-in-vocab { word "doesnotexist" } { vocab "kernel" } } = ]
 must-fail-with
 

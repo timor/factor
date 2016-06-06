@@ -40,7 +40,7 @@ CONSTANT: sse-exception-flag>bit
         { +fp-underflow+         0x10 }
         { +fp-zero-divide+       0x04 }
         { +fp-inexact+           0x20 }
-    }
+    } ;
 
 CONSTANT: sse-fp-traps-bits 0x1f80 ;
 CONSTANT: sse-fp-traps>bit
@@ -50,7 +50,7 @@ CONSTANT: sse-fp-traps>bit
         { +fp-underflow+         0x0800 }
         { +fp-zero-divide+       0x0200 }
         { +fp-inexact+           0x1000 }
-    }
+    } ;
 
 CONSTANT: sse-rounding-mode-bits 0x6000 ;
 CONSTANT: sse-rounding-mode>bit
@@ -59,7 +59,7 @@ CONSTANT: sse-rounding-mode>bit
         { +round-down+    0x2000 }
         { +round-up+      0x4000 }
         { +round-zero+    0x6000 }
-    } >biassoc ]
+    } >biassoc ] ;
 
 CONSTANT: sse-denormal-mode-bits 0x8040 ;
 
@@ -99,7 +99,7 @@ CONSTANT: x87-exception>bit
         { +fp-zero-divide+       0x04 }
         { +fp-inexact+           0x20 }
         { +fp-x87-stack-fault+   0x40 }
-    }
+    } ;
 
 CONSTANT: x87-rounding-mode-bits 0x0c00 ;
 CONSTANT: x87-rounding-mode>bit
@@ -108,7 +108,7 @@ CONSTANT: x87-rounding-mode>bit
         { +round-down+    0x0400 }
         { +round-up+      0x0800 }
         { +round-zero+    0x0c00 }
-    } >biassoc ]
+    } >biassoc ] ;
 
 M: x87-env (get-exception-flags) ( register -- exceptions )
     status>> x87-exception>bit mask> ; inline
