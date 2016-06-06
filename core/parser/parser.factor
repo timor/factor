@@ -108,6 +108,9 @@ ERROR: staging-violation word ;
         V{ } clone swap execute-parsing first
     ] when ;
 
+: scan-parsing-word ( -- word )
+    scan-object dup wrapper? [ wrapped>> ] when ;
+
 ERROR: classoid-expected object ;
 
 : scan-class ( -- class )
