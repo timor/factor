@@ -19,7 +19,7 @@ HELP: specialized-def
 { $values { "word" word } { "quot" quotation } }
 { $description "Outputs the definition of a word after it has been split into specialized branches. This is the definition which will actually be compiled by the compiler." } ;
 
-HELP: HINTS:
+HELP: \ HINTS:
 { $values { "defspec" "a word or method" } { "hints..." "a list of sequences of classes or literals" } }
 { $description "Defines specialization hints for a word or a method."
 $nl

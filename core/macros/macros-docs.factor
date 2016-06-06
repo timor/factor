@@ -2,7 +2,7 @@ USING: help.markup help.syntax quotations kernel
 stack-checker.transforms sequences combinators ;
 in: macros
 
-HELP: MACRO:
+HELP: \ MACRO:
 { $syntax "MACRO: word ( inputs... -- quot ) definition... ;" }
 { $description "Defines a macro word. The definition must have stack effect " { $snippet "( inputs... -- quot )" } "." }
 { $notes

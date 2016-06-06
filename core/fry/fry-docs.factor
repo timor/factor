@@ -17,7 +17,7 @@ HELP: fry
 }
 { $examples "See " { $link "fry.examples" } "." } ;
 
-HELP: '[
+HELP: \ '[
 { $syntax "'[ code... ]" }
 { $description "Literal fried quotation. Expands into code which takes values from the stack and substitutes them in place of the fry specifiers " { $link _ } " and " { $link @ } "." }
 { $examples "See " { $link "fry.examples" } "." } ;

@@ -6,7 +6,7 @@ HELP: define-protocol
 { $description "Defines a symbol as a protocol." }
 { $notes "Usually, " { $link postpone\ PROTOCOL: } " should be used instead. This is only for runtime use." } ;
 
-HELP: PROTOCOL:
+HELP: \ PROTOCOL:
 { $syntax "PROTOCOL: protocol-name words... ;" }
 { $description "Defines an explicit protocol, which can be used as a basis for delegation." } ;
 
@@ -17,19 +17,19 @@ HELP: define-consult
 { $description "Defines a class to consult, using the quotation, on the generic words contained in the group." }
 { $notes "Usually, " { $link postpone\ CONSULT: } " should be used instead. This is only for runtime use." } ;
 
-HELP: CONSULT:
+HELP: \ CONSULT:
 { $syntax "CONSULT: group class
     code ;" }
 { $values { "group" "a protocol, generic word or tuple class" } { "class" "a class" } { "code" "code to get the object to which the method should be forwarded" } }
 { $description "Declares that objects of " { $snippet "class" } " will delegate the generic words contained in " { $snippet "group" } " to the object returned by executing " { $snippet "code" } " with the original object as an input." { $snippet "CONSULT:" } " will overwrite any existing methods on " { $snippet "class" } " for the members of " { $snippet "group" } ", but new methods can be added after the " { $snippet "CONSULT:" } " to override the delegation." } ;
 
-HELP: BROADCAST:
+HELP: \ BROADCAST:
 { $syntax "BROADCAST: group class
     code ;" }
 { $values { "group" "a protocol, generic word or tuple class" } { "class" "a class" } { "code" "code to get the object to which the method should be forwarded" } }
 { $description "Declares that objects of " { $snippet "class" } " will delegate the generic words contained in " { $snippet "group" } " to every object in the sequence returned by executing " { $snippet "code" } " with the original object as an input." { $snippet "BROADCAST:" } " will overwrite any existing methods on " { $snippet "class" } " for the members of " { $snippet "group" } ", but new methods can be added after the " { $snippet "BROADCAST:" } " to override the delegation. Every generic word in " { $snippet "group" } " must return no outputs; otherwise, a " { $link broadcast-words-must-have-no-outputs } " error will be raised." } ;
 
-HELP: SLOT-PROTOCOL:
+HELP: \ SLOT-PROTOCOL:
 { $syntax "SLOT-PROTOCOL: protocol-name slots... ;" }
 { $description "Defines a protocol consisting of reader and writer words for the listed slot names." } ;
 

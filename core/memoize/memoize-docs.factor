@@ -21,12 +21,12 @@ HELP: define-memoized
 { $values { "word" word } { "quot" quotation } { "effect" effect } }
 { $description "Defines the given word at run time as one which memoizes its outputs given a particular input." } ;
 
-HELP: MEMO:
+HELP: \ MEMO:
 { $syntax "MEMO: word ( stack -- effect ) definition... ;" }
 { $values { "word" "a new word to define" } { "definition" "a word definition" } }
 { $description "Defines the given word at parse time as one which memoizes its output given a particular input. The stack effect is mandatory." } ;
 
-HELP: MEMO[
+HELP: \ MEMO[
 { $syntax "MEMO[ elements... ]" }
 { $description "Defines the given literal quotation as one which memoizes its outputs given a particular input." } ;
 

@@ -2,17 +2,17 @@ USING: help.syntax help.markup kernel macros prettyprint
 memoize combinators arrays generalizations see ;
 in: locals
 
-HELP: [|
+HELP: \ [|
 { $syntax "[| bindings... | body... ]" }
 { $description "A literal quotation with named variable bindings. When the quotation is " { $link call } "ed, it will take values off the datastack and place them into the bindings from left to right. The body may then refer to these bindings. The quotation may also bind to named variables in an enclosing scope to create a closure." }
 { $examples "See " { $link "locals-examples" } "." } ;
 
-HELP: [let
+HELP: \ [let
 { $syntax "[let code :> var code :> var code... ]" }
 { $description "Establishes a new scope for lexical variable bindings. Variables bound with " { $link postpone\ :> } " within the body of the " { $snippet "[let" } " will be lexically scoped to the body of the " { $snippet "[let" } " form." }
 { $examples "See " { $link "locals-examples" } "." } ;
 
-HELP: :>
+HELP: \ :>
 { $syntax ":> var" ":> var!" ":> ( var-1 var-2 ... )" }
 { $description "Binds one or more new lexical variables. In the " { $snippet ":> var" } " form, the value on the top of the datastack is bound to a new lexical variable named " { $snippet "var" } " and is scoped to the enclosing quotation, " { $link postpone\ [let } " form, or " { $link postpone\ :: } " definition."
 $nl
@@ -27,7 +27,7 @@ $nl
 
 { postpone\ [let postpone\ :> } related-words
 
-HELP: ::
+HELP: \ ::
 { $syntax ":: word ( vars... -- outputs... ) body... ;" }
 { $description "Defines a word with named inputs. The word binds its input values to lexical variables from left to right, then executes the body with those bindings in scope."
 $nl
@@ -37,7 +37,7 @@ $nl
 
 { postpone\ : postpone\ :: } related-words
 
-HELP: MACRO::
+HELP: \ MACRO::
 { $syntax "MACRO:: word ( vars... -- outputs... ) body... ;" }
 { $description "Defines a macro with named inputs. The macro binds its input variables to lexical variables from left to right, then executes the body with those bindings in scope."
 $nl
@@ -47,7 +47,7 @@ $nl
 
 { postpone\ MACRO: postpone\ MACRO:: } related-words
 
-HELP: MEMO::
+HELP: \ MEMO::
 { $syntax "MEMO:: word ( vars... -- outputs... ) body... ;" }
 { $description "Defines a memoized word with named inputs. The word binds its input values to lexical variables from left to right, then executes the body with those bindings in scope."
 $nl
@@ -56,7 +56,7 @@ $nl
 
 { postpone\ MEMO: postpone\ MEMO:: } related-words
 
-HELP: M::
+HELP: \ M::
 { $syntax "M:: class generic ( vars... -- outputs... ) body... ;" }
 { $description "Defines a new method on " { $snippet "generic" } " for " { $snippet "class" } " with named inputs. The method binds its input values to lexical variables from left to right, then executes the body with those bindings in scope."
 $nl

@@ -294,7 +294,7 @@ PRIVATE>
 <PRIVATE
 :: update-related-words ( words -- affected-words )
     words words [| affected word |
-        word "related" [ affected union words ] change-word-prop
+        word dup wrapper? [ wrapped>> ] when "related" [ affected union words ] change-word-prop
     ] reduce ;
 
 :: clear-unrelated-words ( words affected-words -- )
