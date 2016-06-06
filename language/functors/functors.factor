@@ -51,7 +51,7 @@ M: object (fake-quotations>) , ;
     [ parse-definition* ] dip
     suffix! ;
 
-FUNCTOR-SYNTAX: TUPLE:
+FUNCTOR-SYNTAX: \ TUPLE:
     scan-param suffix!
     scan-token {
         { ";" [ tuple suffix! f suffix! ] }
@@ -67,67 +67,67 @@ FUNCTOR-SYNTAX: TUPLE:
 FUNCTOR-SYNTAX: final
     [ last-word make-final ] append! ;
 
-FUNCTOR-SYNTAX: SINGLETON:
+FUNCTOR-SYNTAX: \ SINGLETON:
     scan-param suffix!
     \ define-singleton-class suffix! ;
 
-FUNCTOR-SYNTAX: singleton:
+FUNCTOR-SYNTAX: \ singleton:
     scan-param suffix!
     \ define-singleton-class suffix! ;
 
-FUNCTOR-SYNTAX: MIXIN:
+FUNCTOR-SYNTAX: \ MIXIN:
     scan-param suffix!
     \ define-mixin-class suffix! ;
 
-FUNCTOR-SYNTAX: mixin:
+FUNCTOR-SYNTAX: \ mixin:
     scan-param suffix!
     \ define-mixin-class suffix! ;
 
-FUNCTOR-SYNTAX: M:
+FUNCTOR-SYNTAX: \ M:
     scan-param suffix!
     scan-param suffix!
     [ create-method-in dup \ method set ] append!
     parse-definition*
     \ define* suffix! ;
 
-FUNCTOR-SYNTAX: C:
+FUNCTOR-SYNTAX: \ C:
     scan-param suffix!
     scan-param suffix!
     scan-effect
     [ [ [ boa ] curry ] append! ] dip suffix!
     \ define-declared* suffix! ;
 
-FUNCTOR-SYNTAX: :
+FUNCTOR-SYNTAX: \ :
     scan-param suffix!
     parse-declared*
     \ define-declared* suffix! ;
 
-FUNCTOR-SYNTAX: SYMBOL:
+FUNCTOR-SYNTAX: \ SYMBOL:
     scan-param suffix!
     \ define-symbol suffix! ;
 
-FUNCTOR-SYNTAX: symbol:
+FUNCTOR-SYNTAX: \ symbol:
     scan-param suffix!
     \ define-symbol suffix! ;
 
-FUNCTOR-SYNTAX: SYNTAX:
+FUNCTOR-SYNTAX: \ SYNTAX:
     scan-param suffix!
     parse-definition*
     \ define-syntax suffix! ;
 
-FUNCTOR-SYNTAX: INSTANCE:
+FUNCTOR-SYNTAX: \ INSTANCE:
     scan-param suffix!
     scan-param suffix!
     ";" expect
     \ add-mixin-instance suffix! ;
 
-FUNCTOR-SYNTAX: GENERIC:
+FUNCTOR-SYNTAX: \ GENERIC:
     scan-param suffix!
     scan-effect suffix!
     ";" expect
     \ define-simple-generic* suffix! ;
 
-FUNCTOR-SYNTAX: MACRO:
+FUNCTOR-SYNTAX: \ MACRO:
     scan-param suffix!
     parse-declared*
     \ define-macro suffix! ;
@@ -184,4 +184,4 @@ defer: ;FUNCTOR delimiter
 
 PRIVATE>
 
-SYNTAX: FUNCTOR: (FUNCTOR:) define-declared ;
+SYNTAX: \ FUNCTOR: (FUNCTOR:) define-declared ;

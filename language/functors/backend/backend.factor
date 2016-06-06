@@ -6,8 +6,8 @@ in: functors.backend
 defer: functor-words
 \ functor-words [ H{ } clone ] initialize
 
-SYNTAX: FUNCTOR-SYNTAX:
-    scan-word
+SYNTAX: \ FUNCTOR-SYNTAX:
+    scan-escaped-word
     gensym [ parse-definition define-syntax ] keep
     swap name>> \ functor-words get-global set-at ;
 
