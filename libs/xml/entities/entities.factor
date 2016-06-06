@@ -15,7 +15,7 @@ CONSTANT: quoted-entities-out
     H{
         { char: & "&amp;"  }
         { char: ' "&apos;" }
-        { char: " "&quot;" }
+        { char: \" "&quot;" }
         { char: < "&lt;"   }
     } ;
 
@@ -35,7 +35,7 @@ CONSTANT: entities
         { "gt"    char: >  }
         { "amp"   char: &  }
         { "apos"  char: '  }
-        { "quot"  char: "  }
+        { "quot"  char: \"  }
     } ;
 
 : with-entities ( entities quot -- )

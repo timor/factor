@@ -3,31 +3,6 @@
 ! find . -type f -name '*.factor' -exec sed -i '' 's/\(^CALLBACK:.* (.*)\)/\1 ;/g' {} +
 ! lexable-core-paths [ dup . flush path>literals ] map-zip
 
-"resource:ffi" vocabs-from
-{ "x11.syntax" "windows.com.syntax" "python.syntax" "opengl.gl.extensions"
- "opencl.syntax" "mongodb.tuple" "cuda.syntax" "core-foundation.strings"
- "cocoa.subclassing" "cocoa" "cocoa.apple-script" "gobject-introspection" } diff
-[ dup <vocab-link> . flush vocab>literals ] map-zip
-
-"resource:tools" vocabs-from
-{ "help.syntax" "help.tips" "tools.test" "tools.walker"
-"vocabs.git" } diff
-[ dup <vocab-link> . flush vocab>literals ] map-zip
-
-
-"resource:collections" vocabs-from
-{ "bit-arrays"
-"bit-vectors" "dlists" "linked-assocs" "nibble-arrays"
-"specialized-arrays" "specialized-vectors" "suffix-arrays"
-"trees" "vlists" "arrays.shaped" "byte-arrays.hex"
-"hash-sets.identity" "hash-sets.numbers" "hash-sets.sequences"
-"hashtables.numbers" "hashtables.sequences" "persistent.hashtables"
-"memory.pools" "persistent.vectors" "trees.avl" "trees.splay"
-} diff
-[ dup <vocab-link> . flush vocab>literals ] map-zip
-
-
-
 "resource:language" vocabs-from
 { "constructors" "descriptive" "eval" "functors" "literals"
 "match" "method-chains" "multi-methods" "multiline"
@@ -42,11 +17,50 @@
  } diff
 [ dup <vocab-link> . flush vocab>literals ] map-zip
 
+"resource:collections" vocabs-from
+{ "bit-arrays"
+"bit-vectors" "dlists" "linked-assocs" "nibble-arrays"
+"specialized-arrays" "specialized-vectors" "suffix-arrays"
+"trees" "vlists" "arrays.shaped" "byte-arrays.hex"
+"hash-sets.identity" "hash-sets.numbers" "hash-sets.sequences"
+"hashtables.numbers" "hashtables.sequences" "persistent.hashtables"
+"memory.pools" "persistent.vectors" "trees.avl" "trees.splay"
+} diff
+[ dup <vocab-link> . flush vocab>literals ] map-zip
+
+"resource:ffi" vocabs-from
+{ "x11.syntax" "windows.com.syntax" "python.syntax" "opengl.gl.extensions"
+ "opencl.syntax" "mongodb.tuple" "cuda.syntax" "core-foundation.strings"
+ "cocoa.subclassing" "cocoa" "cocoa.apple-script" "gobject-introspection" } diff
+[ dup <vocab-link> . flush vocab>literals ] map-zip
+
+"resource:libs" vocabs-from
+{ "annotations" "brainfuck" "dice" "infix" "logging"
+"metar" "money" "poker" "qw" "roles" "roman" "slides"
+"svg"  "urls" "xkcd" "calendar.holidays"
+"calendar.holidays.canada" "calendar.holidays.us"
+"colors.constants" "colors.hex" "gml.macros"
+"gml.parser" "gml.runtime" "html.templates.chloe.syntax"
+"infix.tokenizer" "irc.messages.base"
+"math.complex" "math.rectangles" "math.blas.matrices"
+"math.blas.vectors" "math.derivatives.syntax"
+"math.vectors.simd" "math.vectors.simd.cords" "peg.pl0"
+"peg.javascript.parser" "peg.javascript.tokenizer"
+"unicode.categories" "units.reduction" "xml.errors"
+"xml.syntax" "xmode.loader.syntax" "yaml.conversion"
+} diff
+[ dup <vocab-link> . flush vocab>literals ] map-zip
+
 "resource:frameworks" vocabs-from
 { "ui.theme.switching" "ui.backend.cocoa.views" "ui.backend.cocoa.tools"
 "ui.backend.gtk" "ui.backend.cocoa" "gpu.demos.raytrace" "gpu.demos.bunny"
 "gpu.shaders" "gpu.render" "game.worlds" "ui" "db.postgresql.errors" } diff
 [ dup <vocab-link>  . flush vocab>literals ] map-zip
+
+"resource:tools" vocabs-from
+{ "help.syntax" "help.tips" "tools.test" "tools.walker"
+"vocabs.git" } diff
+[ dup <vocab-link> . flush vocab>literals ] map-zip
 
 "resource:demos" vocabs-from
 { "talks.vpri-talk" "talks.tc-lisp-talk" "talks.minneapolis-talk" "talks.google-tech-talk"

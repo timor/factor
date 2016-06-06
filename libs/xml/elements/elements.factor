@@ -132,7 +132,7 @@ defer: make-tag ! Is this unavoidable?
     [ take-external-id ] [ f ] if ;
 
 : take-internal ( -- dtd/f )
-    get-char char: [ eq?
+    get-char char: \[ eq?
     [ next take-internal-subset ] [ f ] if ;
 
 : take-doctype-decl ( -- doctype-decl )
@@ -152,7 +152,7 @@ defer: make-tag ! Is this unavoidable?
 : direct ( -- object )
     get-char {
         { char: - [ take-comment ] }
-        { char: [ [ take-cdata ] }
+        { char: \[ [ take-cdata ] }
         [ drop take-directive ]
     } case ;
 
@@ -166,7 +166,7 @@ defer: make-tag ! Is this unavoidable?
 
 : make-tag ( -- tag )
     get-char {
-        { char: ! [ next direct ] }
+        { char: \! [ next direct ] }
         { char: ? [ next instruct ] }
         { char: - [ next interpolate-tag ] }
         [ drop normal-tag ]
