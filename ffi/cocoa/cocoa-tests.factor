@@ -10,9 +10,9 @@ CLASS: Foo < NSObject
 ;
 
 : test-foo ( -- )
-    Foo -> alloc -> init
-    dup 1.0 2.0 101.0 102.0 <CGRect> -> foo:
-    -> release ;
+    Foo send\ alloc send\ init
+    dup 1.0 2.0 101.0 102.0 <CGRect> send\ foo:
+    send\ release ;
 
 { } [ test-foo ] unit-test
 
@@ -27,9 +27,9 @@ CLASS: Bar < NSObject
 
 { } [
     Bar [
-        -> alloc -> init
-        dup -> bar "x" set
-        -> release
+        send\ alloc send\ init
+        dup send\ bar "x" set
+        send\ release
     ] compile-call
 ] unit-test
 
@@ -47,8 +47,8 @@ CLASS: Bar < NSObject
 
 { 144 } [
     Bar [
-        -> alloc -> init
-        dup 12 -> babb:
-        swap -> release
+        send\ alloc send\ init
+        dup 12 send\ babb:
+        swap send\ release
     ] compile-call
 ] unit-test

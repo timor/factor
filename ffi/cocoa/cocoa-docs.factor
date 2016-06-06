@@ -8,13 +8,25 @@ HELP: ->
 { $description "A sugared form of the following:" }
 { $code "\"selector\" send" } ;
 
+HELP: send\
+{ $syntax "send\ selector" }
+{ $values { "selector" "an Objective C method name" } }
+{ $description "A sugared form of the following:" }
+{ $code "\"selector\" send" } ;
+
 HELP: SUPER->
 { $syntax "-> selector" }
 { $values { "selector" "an Objective C method name" } }
 { $description "A sugared form of the following:" }
 { $code "\"selector\" send-super" } ;
 
-{ send super-send postpone\ -> postpone\ SUPER-> } related-words
+HELP: super-send\
+{ $syntax "-> selector" }
+{ $values { "selector" "an Objective C method name" } }
+{ $description "A sugared form of the following:" }
+{ $code "\"selector\" send-super" } ;
+
+{ send super-send postpone\ -> postpone\ send\ postpone\ SUPER-> postpone\ super-send\ } related-words
 
 HELP: import:
 { $syntax "import: name" }
@@ -31,7 +43,9 @@ $nl
 "Messages can be sent to classes and instances using a pair of parsing words:"
 { $subsections
     postpone\ ->
+    postpone\ send\
     postpone\ SUPER->
+    postpone\ super-send\
 }
 "These parsing words are actually syntax sugar for a pair of ordinary words; they can be used instead of the parsing words if the selector name is dynamically computed:"
 { $subsections

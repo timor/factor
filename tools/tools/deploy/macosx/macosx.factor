@@ -71,9 +71,9 @@ in: tools.deploy.macosx
     deploy-name get ".app" append ;
 
 : show-in-finder ( path -- )
-    [ NSWorkspace -> sharedWorkspace ]
+    [ NSWorkspace send\ sharedWorkspace ]
     [ normalize-path [ <NSString> ] [ parent-directory <NSString> ] bi ] bi*
-    -> selectFile:inFileViewerRootedAtPath: drop ;
+    send\ selectFile:inFileViewerRootedAtPath: drop ;
 
 : ?show-in-finder ( path -- )
     open-directory-after-deploy? get [ show-in-finder ] [ drop ] if ;

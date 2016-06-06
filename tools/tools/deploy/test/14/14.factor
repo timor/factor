@@ -15,8 +15,8 @@ CLASS: Bar < NSObject
 ;
 
 : main ( -- )
-    Bar -> alloc -> init
-    S{ CGRect f S{ CGPoint f 1.0 2.0 } S{ CGSize f 3.0 4.0 } } -> bar:
+    Bar send\ alloc send\ init
+    S{ CGRect f S{ CGPoint f 1.0 2.0 } S{ CGSize f 3.0 4.0 } } send\ bar:
     10.0 assert= ;
 
 main: main

@@ -13,8 +13,13 @@ symbol: sent-messages
     sent-messages (remember-send) ;
 
 SYNTAX: -> scan-token dup remember-send suffix! \ send suffix! ;
+SYNTAX: send\ scan-token dup remember-send suffix! \ send suffix! ;
 
 SYNTAX: SEL:
+    scan-token
+    [ remember-send ]
+    [ <selector> suffix! \ cocoa.messages:selector suffix! ] bi ;
+SYNTAX: sel\
     scan-token
     [ remember-send ]
     [ <selector> suffix! \ cocoa.messages:selector suffix! ] bi ;
@@ -25,6 +30,7 @@ symbol: super-sent-messages
     super-sent-messages (remember-send) ;
 
 SYNTAX: SUPER-> scan-token dup remember-super-send suffix! \ super-send suffix! ;
+SYNTAX: super-send\ scan-token dup remember-super-send suffix! \ super-send suffix! ;
 
 symbol: frameworks
 
