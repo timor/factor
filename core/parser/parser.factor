@@ -108,12 +108,18 @@ ERROR: staging-violation word ;
         V{ } clone swap execute-parsing first
     ] when ;
 
-: scan-parsing-word ( -- word )
+! Allows HELP: \ { ... ; and SYNTAX: \ { ... ;
+: scan-escaped-word-string ( -- string )
     ?scan-token dup "\\" = [
-        drop scan-word
-    ] [
-        parse-word
-    ] if ;
+        drop ?scan-token
+    ] when ;
+
+: scan-escaped-word ( -- word )
+    scan-escaped-word-string parse-word ;
+
+: scan-new-escaped ( -- word )
+    scan-escaped-word-string check-word-name
+    create-word-in dup reset-generic ;
 
 ERROR: classoid-expected object ;
 

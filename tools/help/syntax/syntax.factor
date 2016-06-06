@@ -5,7 +5,7 @@ help.topics kernel math parser sequences vocabs.parser words ;
 in: help.syntax
 
 SYNTAX: HELP:
-    scan-parsing-word bootstrap-word
+    scan-escaped-word bootstrap-word
     [ >link save-location ]
     [ [ \ ; parse-until >array ] dip set-word-help ]
     bi ;
