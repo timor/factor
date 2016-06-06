@@ -202,8 +202,8 @@ ERROR: no-objc-type name ;
     [ [ 1 + ] dip ] [ nth ] 2bi {
         { [ dup "rnNoORV" member? ] [ drop (parse-objc-type) ] }
         { [ dup char: ^ = ] [ 3drop void* ] }
-        { [ dup char: { = ] [ drop objc-struct-type ] }
-        { [ dup char: [ = ] [ 3drop void* ] }
+        { [ dup char: \{ = ] [ drop objc-struct-type ] }
+        { [ dup char: \[ = ] [ 3drop void* ] }
         [ 2nip decode-type ]
     } cond ;
 
