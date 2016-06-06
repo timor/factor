@@ -292,14 +292,18 @@ PRIVATE>
     "See also" $heading $links ;
 
 <PRIVATE
+
+: ?unwrap ( word/wrapper -- word )
+    dup wrapper? [ wrapped>> ] when ;
+
 :: update-related-words ( words -- affected-words )
     words words [| affected word |
-        word dup wrapper? [ wrapped>> ] when "related" [ affected union words ] change-word-prop
+        word ?unwrap "related" [ affected union words ] change-word-prop
     ] reduce ;
 
 :: clear-unrelated-words ( words affected-words -- )
     affected-words words diff
-    [ "related" [ words diff ] change-word-prop ] each ;
+    [ ?unwrap "related" [ words diff ] change-word-prop ] each ;
 
 : notify-related-words ( affected-words -- )
     fast-set notify-definition-observers ;
