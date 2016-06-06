@@ -54,3 +54,6 @@ in: modern.out.tests
 */
 
 ! lexable-paths [ transform-single-line-comment>hash-comment ] rewrite-paths
+
+{ t }
+[ "( a: ( quot: ( b --  c   ) --  d  ) --  e  )" [ [ ] rewrite-string ] keep sequence= ] unit-test

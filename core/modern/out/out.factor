@@ -33,7 +33,7 @@ M: single-matched-literal write-literal
         [ tag>> write ]
         [ seq>> 1 swap nth write-whitespace ]
         [ delimiter>> write ]
-        [ payload>> [ write-literal ] each ] ! don't need write-whitespace here, the recursion does it
+        [ payload>> write-literal ] ! don't need write-whitespace here, the recursion does it
         [ seq>> 3 swap nth lexed-underlying write-whitespace ]
         [ closing-tag>> write ]
     } cleave ;
