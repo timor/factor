@@ -761,13 +761,13 @@ SYMBOLS: $1 $2 $3 $4 ;
     ! is the getter word for that register with stack effect
     ! ( cpu -- value ). The second item is the setter word with
     ! stack effect ( value cpu -- ).
-    <EBNF
+    EBNF<
         main=("A" | "B" | "C" | "D" | "E" | "H" | "L") => [[ register-lookup ]]
     EBNF> ;
 
 : all-flags ( -- parser )
     ! A parser for 16-bit flags.
-    <EBNF
+    EBNF<
         main=("NZ" | "NC" | "PO" | "PE" | "Z" | "C" | "P" | "M") => [[ flag-lookup ]]
     EBNF> ;
 
@@ -777,7 +777,7 @@ SYMBOLS: $1 $2 $3 $4 ;
     ! is the getter word for that register with stack effect
     ! ( cpu -- value ). The second item is the setter word with
     ! stack effect ( value cpu -- ).
-    <EBNF
+    EBNF<
         main=("AF" | "BC" | "DE" | "HL" | "SP") => [[ register-lookup ]]
     EBNF> ;
 

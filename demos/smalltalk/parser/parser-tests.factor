@@ -5,13 +5,13 @@ io.files io.encodings.ascii kernel ;
 
 EBNF: test-Character
 test         = <foreign parse-smalltalk Character>
-;EBNF
+EBNF;
 
 { char: a } [ "a" test-Character ] unit-test
 
 EBNF: test-Comment
 test         = <foreign parse-smalltalk Comment>
-;EBNF
+EBNF;
 
 { T{ ast-comment f "Hello, this is a comment." } }
 [ "\"Hello, this is a comment.\"" test-Comment ]
@@ -23,13 +23,13 @@ unit-test
 
 EBNF: test-Identifier
 test         = <foreign parse-smalltalk Identifier>
-;EBNF
+EBNF;
 
 { "OrderedCollection" } [ "OrderedCollection" test-Identifier ] unit-test
 
 EBNF: test-Literal
 test         = <foreign parse-smalltalk Literal>
-;EBNF
+EBNF;
 
 { nil } [ "nil" test-Literal ] unit-test
 { 123 } [ "123" test-Literal ] unit-test
@@ -78,20 +78,20 @@ test         = <foreign parse-smalltalk Literal>
 
 EBNF: test-FormalBlockArgumentDeclarationList
 test         = <foreign parse-smalltalk FormalBlockArgumentDeclarationList>
-;EBNF
+EBNF;
 
 { V{ "x" "y" "elt" } } [ ":x :y :elt" test-FormalBlockArgumentDeclarationList ] unit-test
 
 EBNF: test-Operand
 test         = <foreign parse-smalltalk Operand>
-;EBNF
+EBNF;
 
 { { 123 15.6 { t f } } } [ "#(123 15.6 (true false))" test-Operand ] unit-test
 { T{ ast-name f "x" } } [ "x" test-Operand ] unit-test
 
 EBNF: test-Expression
 test         = <foreign parse-smalltalk Expression>
-;EBNF
+EBNF;
 
 { self } [ "self" test-Expression ] unit-test
 { { 123 15.6 { t f } } } [ "#(123 15.6 (true false))" test-Expression ] unit-test
@@ -229,7 +229,7 @@ test         = <foreign parse-smalltalk Expression>
 
 EBNF: test-FinalStatement
 test         = <foreign parse-smalltalk FinalStatement>
-;EBNF
+EBNF;
 
 { T{ ast-name f "value" } } [ "value" test-FinalStatement ] unit-test
 { T{ ast-return f T{ ast-name f "value" } } } [ "^value" test-FinalStatement ] unit-test
@@ -237,7 +237,7 @@ test         = <foreign parse-smalltalk FinalStatement>
 
 EBNF: test-LocalVariableDeclarationList
 test         = <foreign parse-smalltalk LocalVariableDeclarationList>
-;EBNF
+EBNF;
 
 { T{ ast-local-variables f { "i" "j" } } } [ " |  i j   |" test-LocalVariableDeclarationList ] unit-test
 

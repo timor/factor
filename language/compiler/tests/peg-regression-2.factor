@@ -10,6 +10,6 @@ Times = .* => [[ "foo" ]]
 
 Regexp = Times:t => [[ t <times> ]]
 
-;EBNF
+EBNF;
 
 [ "foo" ] [ "a" parse-regexp ] unit-test

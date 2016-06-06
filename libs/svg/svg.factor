@@ -76,7 +76,7 @@ wsp = [ \t\r\n]
 transform-list = wsp* transforms?:t wsp*
     => [[ t [ identity-transform ] unless* ]]
 
-;EBNF
+EBNF;
 
 : tag-transform ( tag -- transform )
     "transform" svg-name attr svg-transform>affine-transform ;
@@ -218,7 +218,7 @@ wsp = [ \t\r\n]
 
 svg-path = wsp* moveto-drawto-command-groups?:x wsp* => [[ x ]]
 
-;EBNF
+EBNF;
 
 : tag-d ( tag -- d )
     "d" svg-name attr svg-path>array ;

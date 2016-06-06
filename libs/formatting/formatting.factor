@@ -90,7 +90,7 @@ plain-text = (!("%").)+          => [[ >string ]]
 
 text      = (formats|plain-text)* => [[ ]]
 
-;EBNF
+EBNF;
 
 : printf-quot ( format-string -- format-quot n )
     parse-printf [ [ callable? ] count ] keep [
@@ -191,7 +191,7 @@ plain-text = (!("%").)+          => [[ >string ]]
 
 text      = (formats|plain-text)* => [[ ]]
 
-;EBNF
+EBNF;
 
 PRIVATE>
 

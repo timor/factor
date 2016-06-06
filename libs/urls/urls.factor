@@ -57,7 +57,7 @@ url      = (((protocol "://") => [[ first ]] auth hostname)
            ("?" query               => [[ second ]])?
            ("#" anchor              => [[ second ]])?
 
-;EBNF
+EBNF;
 
 PRIVATE>
 

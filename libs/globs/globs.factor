@@ -45,7 +45,7 @@ End = !(.)
 
 Main = Concatenation End
 
-;EBNF
+EBNF;
 
 : glob-matches? ( input glob -- ? )
     [ >case-fold ] bi@ <glob> matches? ;

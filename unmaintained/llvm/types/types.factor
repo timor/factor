@@ -241,6 +241,6 @@ Type = WhiteSpace T:t WhiteSpace => [[ t ]]
 
 Program = Type
 
-;EBNF
+EBNF;
 
 SYNTAX: TYPE: ";" parse-multiline-string parse-type suffix! ;

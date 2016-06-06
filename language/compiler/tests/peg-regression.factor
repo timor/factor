@@ -18,7 +18,7 @@ M: pipeline-expr blah ;
 
 EBNF: expr
 pipeline = "hello" => [[ ast>pipeline-expr ]]
-;EBNF
+EBNF;
 
 use: tools.test
 

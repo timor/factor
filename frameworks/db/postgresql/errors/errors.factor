@@ -35,7 +35,7 @@ UnknownError = .* => [[ >string <sql-unknown-error> ]]
 
 PostgresqlSqlError = (TableError | DatabaseError | FunctionError | SyntaxError | UnknownError) 
 
-;EBNF
+EBNF;
 
 
 TUPLE: parse-postgresql-location column line text ;
@@ -46,7 +46,7 @@ EBNF: parse-postgresql-line-error
 Line = "LINE " [0-9]+:line ": " .+:sql
     => [[ f line >string string>number sql >string <parse-postgresql-location> ]] 
 
-;EBNF
+EBNF;
 
 :: set-caret-position ( error caret-line -- error )
     caret-line length

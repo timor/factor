@@ -61,4 +61,4 @@ space = " " | "\n" | "\t"
 spaces = space* => [[ drop ignore ]]
 chunk = (!(space) .)+ => [[ >string ]]
 expr = spaces chunk
-;EBNF
+EBNF;

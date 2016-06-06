@@ -10,7 +10,7 @@ s = ':' => [[ drop ignore ]]
 rpc = tokenpart s s tokenpart => [[ first2 remote-vocab ]]
 remote = tokenpart s tokenpart => [[ first2 remote-load ]]
 module = rpc | remote | tokenpart
-;EBNF
+EBNF;
 
 ON-BNF: USING*:
 tokenizer = <foreign factor>

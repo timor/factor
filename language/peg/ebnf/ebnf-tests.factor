@@ -145,142 +145,142 @@ in: peg.ebnf.tests
 ] unit-test
 
 { V{ "a" "b" } } [
-  "ab" [EBNF foo='a' 'b' EBNF]
+  "ab" EBNF[ foo='a' 'b' EBNF]
 ] unit-test
 
 { V{ 1 "b" } } [
-  "ab" [EBNF foo=('a')[[ drop 1 ]] 'b' EBNF]
+  "ab" EBNF[ foo=('a')[[ drop 1 ]] 'b' EBNF]
 ] unit-test
 
 { V{ 1 2 } } [
-  "ab" [EBNF foo=('a') [[ drop 1 ]] ('b') [[ drop 2 ]] EBNF]
+  "ab" EBNF[ foo=('a') [[ drop 1 ]] ('b') [[ drop 2 ]] EBNF]
 ] unit-test
 
 { char: A } [
-  "A" [EBNF foo=[A-Z] EBNF]
+  "A" EBNF[ foo=[A-Z] EBNF]
 ] unit-test
 
 { char: Z } [
-  "Z" [EBNF foo=[A-Z] EBNF]
+  "Z" EBNF[ foo=[A-Z] EBNF]
 ] unit-test
 
 [
-  "0" [EBNF foo=[A-Z] EBNF]
+  "0" EBNF[ foo=[A-Z] EBNF]
 ] must-fail
 
 { char: 0 } [
-  "0" [EBNF foo=[^A-Z] EBNF]
+  "0" EBNF[ foo=[^A-Z] EBNF]
 ] unit-test
 
 [
-  "A" [EBNF foo=[^A-Z] EBNF]
+  "A" EBNF[ foo=[^A-Z] EBNF]
 ] must-fail
 
 [
-  "Z" [EBNF foo=[^A-Z] EBNF]
+  "Z" EBNF[ foo=[^A-Z] EBNF]
 ] must-fail
 
 { V{ "1" "+" "foo" } } [
-  "1+1" [EBNF foo='1' '+' '1' [[ drop "foo" ]] EBNF]
+  "1+1" EBNF[ foo='1' '+' '1' [[ drop "foo" ]] EBNF]
 ] unit-test
 
 { "foo" } [
-  "1+1" [EBNF foo='1' '+' '1' => [[ drop "foo" ]] EBNF]
+  "1+1" EBNF[ foo='1' '+' '1' => [[ drop "foo" ]] EBNF]
 ] unit-test
 
 { "foo" } [
-  "1+1" [EBNF foo='1' '+' '1' => [[ drop "foo" ]] | '1' '-' '1' => [[ drop "bar" ]] EBNF]
+  "1+1" EBNF[ foo='1' '+' '1' => [[ drop "foo" ]] | '1' '-' '1' => [[ drop "bar" ]] EBNF]
 ] unit-test
 
 { "bar" } [
-  "1-1" [EBNF foo='1' '+' '1' => [[ drop "foo" ]] | '1' '-' '1' => [[ drop "bar" ]] EBNF]
+  "1-1" EBNF[ foo='1' '+' '1' => [[ drop "foo" ]] | '1' '-' '1' => [[ drop "bar" ]] EBNF]
 ] unit-test
 
 { 6 } [
-  "4+2" [EBNF num=[0-9] => [[ digit> ]] foo=num:x '+' num:y => [[ x y + ]] EBNF]
+  "4+2" EBNF[ num=[0-9] => [[ digit> ]] foo=num:x '+' num:y => [[ x y + ]] EBNF]
 ] unit-test
 
 { 6 } [
-  "4+2" [EBNF foo=[0-9]:x '+' [0-9]:y => [[ x digit> y digit> + ]] EBNF]
+  "4+2" EBNF[ foo=[0-9]:x '+' [0-9]:y => [[ x digit> y digit> + ]] EBNF]
 ] unit-test
 
 { 10 } [
-  { 1 2 3 4 } [EBNF num=. ?[ number? ]? list=list:x num:y => [[ x y + ]] | num EBNF]
+  { 1 2 3 4 } EBNF[ num=. ?[ number? ]? list=list:x num:y => [[ x y + ]] | num EBNF]
 ] unit-test
 
 [
-  { "a" 2 3 4 } [EBNF num=. ?[ number? ]? list=list:x num:y => [[ x y + ]] | num EBNF]
+  { "a" 2 3 4 } EBNF[ num=. ?[ number? ]? list=list:x num:y => [[ x y + ]] | num EBNF]
 ] must-fail
 
 { 3 } [
-  { 1 2 "a" 4 } [EBNF num=. ?[ number? ]? list=list:x num:y => [[ x y + ]] | num EBNF]
+  { 1 2 "a" 4 } EBNF[ num=. ?[ number? ]? list=list:x num:y => [[ x y + ]] | num EBNF]
 ] unit-test
 
 [
-  "ab" [EBNF -=" " | "\t" | "\n" foo="a" - "b" EBNF]
+  "ab" EBNF[ -=" " | "\t" | "\n" foo="a" - "b" EBNF]
 ] must-fail
 
 { V{ "a" " " "b" } } [
-  "a b" [EBNF -=" " | "\t" | "\n" foo="a" - "b" EBNF]
+  "a b" EBNF[ -=" " | "\t" | "\n" foo="a" - "b" EBNF]
 ] unit-test
 
 { V{ "a" "\t" "b" } } [
-  "a\tb" [EBNF -=" " | "\t" | "\n" foo="a" - "b" EBNF]
+  "a\tb" EBNF[ -=" " | "\t" | "\n" foo="a" - "b" EBNF]
 ] unit-test
 
 { V{ "a" "\n" "b" } } [
-  "a\nb" [EBNF -=" " | "\t" | "\n" foo="a" - "b" EBNF]
+  "a\nb" EBNF[ -=" " | "\t" | "\n" foo="a" - "b" EBNF]
 ] unit-test
 
 { V{ "a" f "b" } } [
-  "ab" [EBNF -=" " | "\t" | "\n" foo="a" (-)? "b" EBNF]
+  "ab" EBNF[ -=" " | "\t" | "\n" foo="a" (-)? "b" EBNF]
 ] unit-test
 
 { V{ "a" " " "b" } } [
-  "a b" [EBNF -=" " | "\t" | "\n" foo="a" (-)? "b" EBNF]
+  "a b" EBNF[ -=" " | "\t" | "\n" foo="a" (-)? "b" EBNF]
 ] unit-test
 
 
 { V{ "a" "\t" "b" } } [
-  "a\tb" [EBNF -=" " | "\t" | "\n" foo="a" (-)? "b" EBNF]
+  "a\tb" EBNF[ -=" " | "\t" | "\n" foo="a" (-)? "b" EBNF]
 ] unit-test
 
 { V{ "a" "\n" "b" } } [
-  "a\nb" [EBNF -=" " | "\t" | "\n" foo="a" (-)? "b" EBNF]
+  "a\nb" EBNF[ -=" " | "\t" | "\n" foo="a" (-)? "b" EBNF]
 ] unit-test
 
 { V{ "a" "b" } } [
-  "ab" [EBNF -=(" " | "\t" | "\n")? => [[ drop ignore ]] foo="a" - "b" EBNF]
+  "ab" EBNF[ -=(" " | "\t" | "\n")? => [[ drop ignore ]] foo="a" - "b" EBNF]
 ] unit-test
 
 { V{ "a" "b" } } [
-  "a\tb" [EBNF -=(" " | "\t" | "\n")? => [[ drop ignore ]] foo="a" - "b" EBNF]
+  "a\tb" EBNF[ -=(" " | "\t" | "\n")? => [[ drop ignore ]] foo="a" - "b" EBNF]
 ] unit-test
 
 { V{ "a" "b" } } [
-  "a\nb" [EBNF -=(" " | "\t" | "\n")? => [[ drop ignore ]] foo="a" - "b" EBNF]
+  "a\nb" EBNF[ -=(" " | "\t" | "\n")? => [[ drop ignore ]] foo="a" - "b" EBNF]
 ] unit-test
 
 [
-  "axb" [EBNF -=(" " | "\t" | "\n")? => [[ drop ignore ]] foo="a" - "b" EBNF]
+  "axb" EBNF[ -=(" " | "\t" | "\n")? => [[ drop ignore ]] foo="a" - "b" EBNF]
 ] must-fail
 
 { V{ V{ 49 } "+" V{ 49 } } } [
   ! Test direct left recursion.
   ! Using packrat, so first part of expr fails, causing 2nd choice to be used
-  "1+1" [EBNF num=([0-9])+ expr=expr "+" num | num EBNF]
+  "1+1" EBNF[ num=([0-9])+ expr=expr "+" num | num EBNF]
 ] unit-test
 
 { V{ V{ V{ 49 } "+" V{ 49 } } "+" V{ 49 } } } [
   ! Test direct left recursion.
   ! Using packrat, so first part of expr fails, causing 2nd choice to be used
-  "1+1+1" [EBNF num=([0-9])+ expr=expr "+" num | num EBNF]
+  "1+1+1" EBNF[ num=([0-9])+ expr=expr "+" num | num EBNF]
 ] unit-test
 
 { V{ V{ V{ 49 } "+" V{ 49 } } "+" V{ 49 } } } [
   ! Test indirect left recursion.
   ! Using packrat, so first part of expr fails, causing 2nd choice to be used
-  "1+1+1" [EBNF num=([0-9])+ x=expr expr=x "+" num | num EBNF]
+  "1+1+1" EBNF[ num=([0-9])+ x=expr expr=x "+" num | num EBNF]
 ] unit-test
 
 { t } [
@@ -310,7 +310,7 @@ MethodName = "m" | "n"
 ExpressionName = Identifier
 Expression = "i" | "j"
 main = Primary
-;EBNF
+EBNF;
 
 { "this" } [
   "this" primary
@@ -333,113 +333,113 @@ main = Primary
 ] unit-test
 
 { V{ V{ "a" "b" } "c" } } [
-  "abc" [EBNF a="a" "b" foo=(a "c") EBNF]
+  "abc" EBNF[ a="a" "b" foo=(a "c") EBNF]
 ] unit-test
 
 { V{ "a" "c" } } [
-  "abc" [EBNF a="a" "b"~ foo=(a "c") EBNF]
+  "abc" EBNF[ a="a" "b"~ foo=(a "c") EBNF]
 ] unit-test
 
 { V{ V{ "a" V{ "b" "b" } } "c" } } [
-  "abbc" [EBNF a=("a" "b"*) foo=(a "c") EBNF]
+  "abbc" EBNF[ a=("a" "b"*) foo=(a "c") EBNF]
 ] unit-test
 
 { V{ "a" "c" } } [
-  "abc" [EBNF a=("a" ("b")~) foo=(a "c") EBNF]
+  "abc" EBNF[ a=("a" ("b")~) foo=(a "c") EBNF]
 ] unit-test
 
 { V{ "a" "c" } } [
-  "abc" [EBNF a=("a" "b"~) foo=(a "c") EBNF]
+  "abc" EBNF[ a=("a" "b"~) foo=(a "c") EBNF]
 ] unit-test
 
 { "c" } [
-  "abc" [EBNF a=("a" "b")~ foo=(a "c") EBNF]
+  "abc" EBNF[ a=("a" "b")~ foo=(a "c") EBNF]
 ] unit-test
 
 { V{ V{ "a" "b" } "c" } } [
-  "abc" [EBNF a="a" "b" foo={a "c"} EBNF]
+  "abc" EBNF[ a="a" "b" foo={a "c"} EBNF]
 ] unit-test
 
 { V{ V{ "a" "b" } "c" } } [
-  "abc" [EBNF a="a" "b" foo=a "c" EBNF]
+  "abc" EBNF[ a="a" "b" foo=a "c" EBNF]
 ] unit-test
 
 [
-  "a bc" [EBNF a="a" "b" foo=(a "c") EBNF]
+  "a bc" EBNF[ a="a" "b" foo=(a "c") EBNF]
 ] must-fail
 
 [
-  "a bc" [EBNF a="a" "b" foo=a "c" EBNF]
+  "a bc" EBNF[ a="a" "b" foo=a "c" EBNF]
 ] must-fail
 
 [
-  "a bc" [EBNF a="a" "b" foo={a "c"} EBNF]
+  "a bc" EBNF[ a="a" "b" foo={a "c"} EBNF]
 ] must-fail
 
 [
-  "ab c" [EBNF a="a" "b" foo=a "c" EBNF]
+  "ab c" EBNF[ a="a" "b" foo=a "c" EBNF]
 ] must-fail
 
 { V{ V{ "a" "b" } "c" } } [
-  "ab c" [EBNF a="a" "b" foo={a "c"} EBNF]
+  "ab c" EBNF[ a="a" "b" foo={a "c"} EBNF]
 ] unit-test
 
 [
-  "ab c" [EBNF a="a" "b" foo=(a "c") EBNF]
+  "ab c" EBNF[ a="a" "b" foo=(a "c") EBNF]
 ] must-fail
 
 [
-  "a b c" [EBNF a="a" "b" foo=a "c" EBNF]
+  "a b c" EBNF[ a="a" "b" foo=a "c" EBNF]
 ] must-fail
 
 [
-  "a b c" [EBNF a="a" "b" foo=(a "c") EBNF]
+  "a b c" EBNF[ a="a" "b" foo=(a "c") EBNF]
 ] must-fail
 
 [
-  "a b c" [EBNF a="a" "b" foo={a "c"} EBNF]
+  "a b c" EBNF[ a="a" "b" foo={a "c"} EBNF]
 ] must-fail
 
 { V{ V{ V{ "a" "b" } "c" } V{ V{ "a" "b" } "c" } } } [
-  "ab cab c" [EBNF a="a" "b" foo={a "c"}* EBNF]
+  "ab cab c" EBNF[ a="a" "b" foo={a "c"}* EBNF]
 ] unit-test
 
 { V{ } } [
-  "ab cab c" [EBNF a="a" "b" foo=(a "c")* EBNF]
+  "ab cab c" EBNF[ a="a" "b" foo=(a "c")* EBNF]
 ] unit-test
 
 { V{ V{ V{ "a" "b" } "c" } V{ V{ "a" "b" } "c" } } } [
-  "ab c ab c" [EBNF a="a" "b" foo={a "c"}* EBNF]
+  "ab c ab c" EBNF[ a="a" "b" foo={a "c"}* EBNF]
 ] unit-test
 
 { V{ V{ "a" "c" } V{ "a" "c" } } } [
-  "ab c ab c" [EBNF a="a" "b"~ foo={a "c"}* EBNF]
+  "ab c ab c" EBNF[ a="a" "b"~ foo={a "c"}* EBNF]
 ] unit-test
 
 { V{ } } [
-  "ab c ab c" [EBNF a="a" "b" foo=(a "c")* EBNF]
+  "ab c ab c" EBNF[ a="a" "b" foo=(a "c")* EBNF]
 ] unit-test
 
 { V{ } } [
-  "ab c ab c" [EBNF a="a" "b" foo=(a "c")* EBNF]
+  "ab c ab c" EBNF[ a="a" "b" foo=(a "c")* EBNF]
 ] unit-test
 
 { V{ "a" "a" "a" } } [
-  "aaa" [EBNF a=('a')* b=!('b') a:x => [[ x ]] EBNF]
+  "aaa" EBNF[ a=('a')* b=!('b') a:x => [[ x ]] EBNF]
 ] unit-test
 
 { t } [
-  "aaa" [EBNF a=('a')* b=!('b') a:x => [[ x ]] EBNF]
-  "aaa" [EBNF a=('a')* b=!('b') (a):x => [[ x ]] EBNF] =
+  "aaa" EBNF[ a=('a')* b=!('b') a:x => [[ x ]] EBNF]
+  "aaa" EBNF[ a=('a')* b=!('b') (a):x => [[ x ]] EBNF] =
 ] unit-test
 
 { V{ "a" "a" "a" } } [
-  "aaa" [EBNF a=('a')* b=a:x => [[ x ]] EBNF]
+  "aaa" EBNF[ a=('a')* b=a:x => [[ x ]] EBNF]
 ] unit-test
 
 { t } [
-  "aaa" [EBNF a=('a')* b=a:x => [[ x ]] EBNF]
-  "aaa" [EBNF a=('a')* b=(a):x => [[ x ]] EBNF] =
+  "aaa" EBNF[ a=('a')* b=a:x => [[ x ]] EBNF]
+  "aaa" EBNF[ a=('a')* b=(a):x => [[ x ]] EBNF] =
 ] unit-test
 
 { t } [
@@ -471,20 +471,20 @@ main = Primary
 <<
 EBNF: parser1 
 foo='a' 
-;EBNF
+EBNF;
 >>
 
 EBNF: parser2
 foo=<foreign parser1 foo> 'b'
-;EBNF
+EBNF;
 
 EBNF: parser3
 foo=<foreign parser1> 'c'
-;EBNF
+EBNF;
 
 EBNF: parser4
 foo=<foreign any-char> 'd'
-;EBNF
+EBNF;
 
 { "a" } [
   "a" parser1
@@ -503,11 +503,11 @@ foo=<foreign any-char> 'd'
 ] unit-test
 
 { } [
- "USING: kernel peg.ebnf ; \"a\\n\" [EBNF foo='a' '\n'  => [[ drop \"\n\" ]] EBNF] drop" eval( -- )
+ "USING: kernel peg.ebnf ; \"a\\n\" EBNF[ foo='a' '\n'  => [[ drop \"\n\" ]] EBNF] drop" eval( -- )
 ] unit-test
 
 [
-  "USING: peg.ebnf ; <EBNF foo='a' foo='b' EBNF>" eval( -- ) drop
+  "USING: peg.ebnf ; EBNF< foo='a' foo='b' EBNF>" eval( -- ) drop
 ] must-fail
 
 { t } [
@@ -518,7 +518,7 @@ foo=<foreign any-char> 'd'
 
 ! Tokenizer tests
 { V{ "a" char: b } } [
-  "ab" [EBNF tokenizer=default foo="a" . EBNF]
+  "ab" EBNF[ tokenizer=default foo="a" . EBNF]
 ] unit-test
 
 TUPLE: ast-number value ;
@@ -539,10 +539,10 @@ Special            =   "("   | ")"   | "{"   | "}"   | "["   | "]"   | ","   | "
                      | "-"   | "*="  | "*"   | "/="  | "/"   | "%="  | "%"   | "&&="
                      | "&&"  | "||=" | "||"  | "."   | "!"
 Tok                = Spaces (Number | Special )
-;EBNF
+EBNF;
 
 { V{ char: 1 T{ ast-number f 23 } ";" char: x } } [
-  "123;x" [EBNF bar = .
+  "123;x" EBNF[ bar = .
                 tokenizer = <foreign a-tokenizer Tok>  foo=.
                 tokenizer=default baz=.
                 main = bar foo foo baz
@@ -550,7 +550,7 @@ Tok                = Spaces (Number | Special )
 ] unit-test
 
 { V{ char: 5 "+" char: 2 } } [
-  "5+2" [EBNF
+  "5+2" EBNF[
           space=(" " | "\n")
           number=[0-9]
           operator=("*" | "+")
@@ -561,7 +561,7 @@ Tok                = Spaces (Number | Special )
 ] unit-test
 
 { V{ char: 5 "+" char: 2 } } [
-  "5 + 2" [EBNF
+  "5 + 2" EBNF[
           space=(" " | "\n")
           number=[0-9]
           operator=("*" | "+")
@@ -572,16 +572,16 @@ Tok                = Spaces (Number | Special )
 ] unit-test
 
 { "++" } [
-  "++--" [EBNF tokenizer=("++" | "--") main="++" EBNF]
+  "++--" EBNF[ tokenizer=("++" | "--") main="++" EBNF]
 ] unit-test
 
 { "\\" } [
-  "\\" [EBNF foo="\\" EBNF]
+  "\\" EBNF[ foo="\\" EBNF]
 ] unit-test
 
-[ "use: peg.ebnf [EBNF EBNF]" eval( -- ) ] must-fail
+[ "use: peg.ebnf EBNF[ EBNF]" eval( -- ) ] must-fail
 
-[ "use: peg.ebnf [EBNF
+[ "use: peg.ebnf EBNF[
     lol = a
     lol = b
   EBNF]" eval( -- )
@@ -592,13 +592,13 @@ Tok                = Spaces (Number | Special )
 {
     { "a" "a" }
 } [
-    EBNF: foo   Bar = "a":a1 "a":a2 => [[ a1 a2 2array ]] ;EBNF
+    EBNF: foo   Bar = "a":a1 "a":a2 => [[ a1 a2 2array ]] EBNF;
     "aa" foo
 ] unit-test
 
 {
     { "a" "a" }
 } [
-    EBNF: foo2   Bar = "a":a-1 "a":a-2 => [[ a-1 a-2 2array ]] ;EBNF
+    EBNF: foo2   Bar = "a":a-1 "a":a-2 => [[ a-1 a-2 2array ]] EBNF;
     "aa" foo2
 ] unit-test
