@@ -7,7 +7,7 @@ CONSTANT: will
     IHS{
         $ the-real-slim-shady
         "marshall mathers"
-    }
+    } ;
 
 : please-stand-up ( set obj -- ? )
     swap in? ;

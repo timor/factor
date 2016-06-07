@@ -113,5 +113,5 @@ M: T-array struct-transpose
 
 FUNCTOR;
 
-SYNTAX: \ VECTORED-STRUCT:
+SYNTAX: \ vectored-struct:
     scan-word define-vectored-struct ;

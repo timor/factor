@@ -81,7 +81,8 @@ SYNTAX: MULTILINE-LITERAL: parse-here suffix! ;
     CONSTANT: foo { MULTILINE-LITERAL:
 bar
 ;
-} foo
+} ;
+    foo
 ] unit-test
 
 ! Make sure parse-here fails if extra crap appears on the first line
@@ -89,6 +90,6 @@ bar
     "CONSTANT: foo { MULTILINE-LITERAL: asdfasfdasdfas
 bar
 ;
-}" eval
+} ;" eval
 ] must-fail
 */

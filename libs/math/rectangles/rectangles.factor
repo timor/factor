@@ -1,14 +1,14 @@
 ! Copyright (C) 2008, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel arrays sequences math math.vectors accessors
-parser ;
+parser lexer ;
 in: math.rectangles
 
 TUPLE: rect { loc initial: { 0 0 } } { dim initial: { 0 0 } } ;
 
 : <rect> ( loc dim -- rect ) rect boa ; inline
 
-SYNTAX: \ RECT: scan-object scan-object <rect> suffix! ;
+SYNTAX: \ RECT: scan-object scan-object ";" expect <rect> suffix! ;
 
 : <zero-rect> ( -- rect ) rect new ; inline
 

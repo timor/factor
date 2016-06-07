@@ -196,7 +196,7 @@ in: bootstrap.syntax
 
 
     "ALIAS:" [
-        scan-new-word scan-word ";" expect define-alias
+        scan-new-escaped scan-escaped-word ";" expect define-alias
     ] define-core-syntax
 
     "CONSTANT:" [

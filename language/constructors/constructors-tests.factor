@@ -50,7 +50,7 @@ TUPLE: a-monster < monster ;
 TUPLE: b-monster < monster ;
 
 <<
-SLOT-CONSTRUCTOR: a-monster
+slot-constructor: a-monster
 >>
 
 : <a-monster> ( name hp max-hp -- obj )

@@ -12,7 +12,7 @@ STRUCT: foo
     { w ushort } ;
 
 specialized-array: foo
-VECTORED-STRUCT: foo
+vectored-struct: foo
 
 {
     T{ vectored-foo

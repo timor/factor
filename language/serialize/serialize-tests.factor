@@ -1,6 +1,5 @@
 ! Copyright (C) 2006 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
-!
 USING: tools.test kernel serialize io io.streams.byte-array
 alien arrays byte-arrays bit-arrays specialized-arrays
 sequences math prettyprint parser classes math.constants
@@ -63,7 +62,7 @@ CONSTANT: objects
         << 1 [ 2 ] curry suffix! >>
         { { "a" "bc" } { "de" "fg" } }
         H{ { "a" "bc" } { "de" "fg" } }
-    }
+    } ;
 
 : check-serialize-1 ( obj -- ? )
     "=====" print

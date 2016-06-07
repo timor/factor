@@ -5,7 +5,7 @@ in: tuple-arrays.tests
 symbol: mat
 TUPLE: foo bar ; final
 C: <foo> foo ;
-TUPLE-ARRAY: foo
+tuple-array: foo
 
 { 2 } [ 2 <foo-array> dup mat set length ] unit-test
 { T{ foo } } [ mat get first ] unit-test
@@ -19,7 +19,7 @@ TUPLE-ARRAY: foo
 { T{ foo f 1 } } [ T{ foo f 1 } 0 mat get [ set-nth ] keep first ] unit-test
 
 TUPLE: baz { bing integer } bong ; final
-TUPLE-ARRAY: baz
+tuple-array: baz
 
 { 0 } [ 1 <baz-array> first bing>> ] unit-test
 { f } [ 1 <baz-array> first bong>> ] unit-test
@@ -27,7 +27,7 @@ TUPLE-ARRAY: baz
 TUPLE: broken x ; final
 : broken ( -- ) ;
 
-TUPLE-ARRAY: broken
+tuple-array: broken
 
 { 100 } [ 100 <broken-array> length ] unit-test
 
@@ -46,7 +46,7 @@ must-fail-with
 ! Empty tuple
 TUPLE: empty-tuple ; final
 
-TUPLE-ARRAY: empty-tuple
+tuple-array: empty-tuple
 
 { 100 } [ 100 <empty-tuple-array> length ] unit-test
 { T{ empty-tuple } } [ 100 <empty-tuple-array> first ] unit-test
@@ -56,7 +56,7 @@ TUPLE-ARRAY: empty-tuple
 ! of crashing Factor
 TUPLE: tuple-to-struct x ; final
 
-TUPLE-ARRAY: tuple-to-struct
+tuple-array: tuple-to-struct
 
 { f } [ tuple-to-struct struct-class? ] unit-test
 

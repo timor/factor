@@ -8,7 +8,7 @@ CONSTANT: will
     IH{
         { $ the-real-slim-shady t }
         { "marshall mathers"    f }
-    }
+    } ;
 
 : please-stand-up ( assoc key -- value )
     of ;
