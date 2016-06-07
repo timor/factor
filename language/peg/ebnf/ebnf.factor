@@ -542,8 +542,8 @@ SYNTAX: \ EBNF<
     reset-tokenizer parse-multiline-string parse-ebnf main of
     suffix! reset-tokenizer ;
 
-SYNTAX: \ EBNF[
-    "EBNF]"
+SYNTAX: \ EBNF{{
+    "}}"
     reset-tokenizer parse-multiline-string ebnf>quot nip
     suffix! \ call suffix! reset-tokenizer ;
 

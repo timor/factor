@@ -16,7 +16,8 @@ XML-NS: inkscape-name http://www.inkscape.org/namespaces/inkscape ;
 
 : degrees ( deg -- rad ) pi * 180.0 / ;
 
-EBNF: svg-transform>affine-transform
+: svg-transform>affine-transform ( string -- obj )
+    EBNF{{
 
 transforms =
     transform:m comma-wsp+ transforms:n => [[ m n a. ]]
@@ -76,7 +77,7 @@ wsp = [ \t\r\n]
 transform-list = wsp* transforms?:t wsp*
     => [[ t [ identity-transform ] unless* ]]
 
-EBNF;
+}} ;
 
 : tag-transform ( tag -- transform )
     "transform" svg-name attr svg-transform>affine-transform ;

@@ -20,8 +20,8 @@ HELP: EBNF<
     }
 } ;
 
-HELP: EBNF[
-{ $syntax "EBNF[ ...ebnf... EBNF]" }
+HELP: EBNF{{
+{ $syntax "EBNF{{ ...ebnf... }}" }
 { $values { "...ebnf..." "EBNF DSL text" } }
 { $description
     "Creates and calls a quotation that parses a string using the syntax "
@@ -33,7 +33,7 @@ HELP: EBNF[
 { $examples
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"ab\" EBNF[ rule=\"a\" \"b\" EBNF] ."
+       "\"ab\" EBNF{{ rule=\"a\" \"b\" }} ."
        "V{ \"a\" \"b\" }"
     }
 } ;
@@ -67,22 +67,22 @@ ARTICLE: "peg.ebnf.strings" "EBNF Rule: Strings"
 { $examples
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"helloworld\" EBNF[ rule=\"hello\" \"world\" EBNF] ."
+       "\"helloworld\" EBNF{{ rule=\"hello\" \"world\" }} ."
        "V{ \"hello\" \"world\" }"
     }
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"AΣ𝄞\" EBNF[ rule='\\x41' '\\u{greek-capital-letter-sigma}' '\\u01D11E' EBNF] ."
+       "\"AΣ𝄞\" EBNF{{ rule='\\x41' '\\u{greek-capital-letter-sigma}' '\\u01D11E' }} ."
        "V{ \"A\" \"Σ\" \"𝄞\" }"
     }
     { $example
        "USING: io peg.ebnf ;"
-       "\"A double quote: \\\"\" EBNF[ rule='A double quote: \"' EBNF] print"
+       "\"A double quote: \\\"\" EBNF{{ rule='A double quote: \"' }} print"
        "A double quote: \""
     }
     { $example
        "USING: io peg.ebnf ;"
-       "\"' and \\\"\" EBNF[ rule=\"' and \\\"\" EBNF] print"
+       "\"' and \\\"\" EBNF{{ rule=\"' and \\\"\" }} print"
        "' and \""
     }
 } ;
@@ -93,7 +93,7 @@ ARTICLE: "peg.ebnf.any" "EBNF Rule: Any"
 { $examples
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"abc\" EBNF[ rule=\"a\" . \"c\" EBNF] ."
+       "\"abc\" EBNF{{ rule=\"a\" . \"c\" }} ."
        "V{ \"a\" 98 \"c\" }"
     }
 } ;
@@ -106,7 +106,7 @@ ARTICLE: "peg.ebnf.sequence" "EBNF Rule: Sequence"
 { $examples
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"abbba\" EBNF[ rule=\"a\" (\"b\")* \"a\" EBNF] ."
+       "\"abbba\" EBNF{{ rule=\"a\" (\"b\")* \"a\" }} ."
        "V{ \"a\" V{ \"b\" \"b\" \"b\" } \"a\" }"
     }
 }
@@ -123,12 +123,12 @@ $nl
 { $examples
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"abcca\" EBNF[ rule=\"a\" (\"b\" | \"c\")* \"a\" EBNF] ."
+       "\"abcca\" EBNF{{ rule=\"a\" (\"b\" | \"c\")* \"a\" }} ."
        "V{ \"a\" V{ \"b\" \"c\" \"c\" } \"a\" }"
     }
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"ab  c\nd \" EBNF[ rule={\"a\" \"b\" \"c\" \"d\"} EBNF] ."
+       "\"ab  c\nd \" EBNF{{ rule={\"a\" \"b\" \"c\" \"d\"} }} ."
        "V{ \"a\" \"b\" \"c\" \"d\" }"
     }
 }
@@ -141,17 +141,17 @@ ARTICLE: "peg.ebnf.choice" "EBNF Rule: Choice"
 { $examples
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"a\" EBNF[ rule=\"a\" | \"b\" | \"c\" EBNF] ."
+       "\"a\" EBNF{{ rule=\"a\" | \"b\" | \"c\" }} ."
        "\"a\""
     }
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"b\" EBNF[ rule=\"a\" | \"b\" | \"c\" EBNF] ."
+       "\"b\" EBNF{{ rule=\"a\" | \"b\" | \"c\" }} ."
        "\"b\""
     }
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"d\" EBNF[ rule=\"a\" | \"b\" | \"c\" EBNF] ."
+       "\"d\" EBNF{{ rule=\"a\" | \"b\" | \"c\" }} ."
        "Peg parsing error at character position 0.\nExpected 'a' or 'b' or 'c'\nGot 'd'"
     }
 }
@@ -164,7 +164,7 @@ ARTICLE: "peg.ebnf.ignore" "EBNF Rule: Ignore"
 { $examples
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"abc\" EBNF[ rule=\"a\" \"b\"~ \"c\" EBNF] ."
+       "\"abc\" EBNF{{ rule=\"a\" \"b\"~ \"c\" }} ."
        "V{ \"a\" \"c\" }"
     }
 }
@@ -177,12 +177,12 @@ ARTICLE: "peg.ebnf.option" "EBNF Rule: Option"
 { $examples
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"abc\" EBNF[ rule=\"a\" \"b\"? \"c\" EBNF] ."
+       "\"abc\" EBNF{{ rule=\"a\" \"b\"? \"c\" }} ."
        "V{ \"a\" \"b\" \"c\" }"
     }
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"ac\" EBNF[ rule=\"a\" \"b\"? \"c\" EBNF] ."
+       "\"ac\" EBNF{{ rule=\"a\" \"b\"? \"c\" }} ."
        "V{ \"a\" f \"c\" }"
     }
 }
@@ -198,7 +198,7 @@ ARTICLE: "peg.ebnf.character-class" "EBNF Rule: Character Class"
 { $examples
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"123\" EBNF[ rule=[0-9]+ EBNF] ."
+       "\"123\" EBNF{{ rule=[0-9]+ }} ."
        "V{ 49 50 51 }"
     }
 }
@@ -211,7 +211,7 @@ ARTICLE: "peg.ebnf.one-or-more" "EBNF Rule: One or more"
 { $examples
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"aab\" EBNF[ rule=\"a\"+ \"b\" EBNF] ."
+       "\"aab\" EBNF{{ rule=\"a\"+ \"b\" }} ."
        "V{ V{ \"a\" \"a\" } \"b\" }"
     }
 }
@@ -224,12 +224,12 @@ ARTICLE: "peg.ebnf.zero-or-more" "EBNF Rule: Zero or more"
 { $examples
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"aab\" EBNF[ rule=\"a\"* \"b\" EBNF] ."
+       "\"aab\" EBNF{{ rule=\"a\"* \"b\" }} ."
        "V{ V{ \"a\" \"a\" } \"b\" }"
     }
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"b\" EBNF[ rule=\"a\"* \"b\" EBNF] ."
+       "\"b\" EBNF{{ rule=\"a\"* \"b\" }} ."
        "V{ V{ } \"b\" }"
     }
 }
@@ -245,7 +245,7 @@ ARTICLE: "peg.ebnf.and" "EBNF Rule: And"
 { $examples
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"ab\" EBNF[ rule=&(\"a\") \"a\" \"b\" EBNF] ."
+       "\"ab\" EBNF{{ rule=&(\"a\") \"a\" \"b\" }} ."
        "V{ \"a\" \"b\" }"
     }
 }
@@ -261,7 +261,7 @@ ARTICLE: "peg.ebnf.not" "EBNF Rule: Not"
 { $examples
     { $example
        "USING: prettyprint peg.ebnf ;"
-       "\"<abcd>\" EBNF[ rule=\"<\" (!(\">\") .)* \">\" EBNF] ."
+       "\"<abcd>\" EBNF{{ rule=\"<\" (!(\">\") .)* \">\" }} ."
        "V{ \"<\" V{ 97 98 99 100 } \">\" }"
     }
 }
@@ -282,12 +282,12 @@ ARTICLE: "peg.ebnf.action" "EBNF Action"
 { $examples
     { $example
        "USING: prettyprint peg.ebnf strings ;"
-       "\"<abcd>\" EBNF[ rule=\"<\" ((!(\">\") .)* => [[ >string ]]) \">\" EBNF] ."
+       "\"<abcd>\" EBNF{{ rule=\"<\" ((!(\">\") .)* => [[ >string ]]) \">\" }} ."
        "V{ \"<\" \"abcd\" \">\" }"
     }
     { $example
        "USING: prettyprint peg.ebnf math.parser ;"
-       "\"123\" EBNF[ rule=[0-9]+ => [[ string>number ]] EBNF] ."
+       "\"123\" EBNF{{ rule=[0-9]+ => [[ string>number ]] }} ."
        "123"
     }
 }
@@ -302,12 +302,12 @@ ARTICLE: "peg.ebnf.semantic-action" "EBNF Semantic Action"
 { $examples
     { $example
        "USING: prettyprint peg.ebnf math math.parser ;"
-       "\"1\" EBNF[ rule=[0-9] ?[ digit> odd? ]? EBNF] ."
+       "\"1\" EBNF{{ rule=[0-9] ?[ digit> odd? ]? }} ."
        "49"
     }
     { $example
        "USING: prettyprint peg.ebnf math math.parser ;"
-       "\"2\" EBNF[ rule=[0-9] ?[ digit> odd? ]? EBNF] ."
+       "\"2\" EBNF{{ rule=[0-9] ?[ digit> odd? ]? }} ."
        "Peg parsing error at character position 0.\nExpected \nGot '2'"
     }
 }
@@ -320,7 +320,7 @@ ARTICLE: "peg.ebnf.variable" "EBNF Variable"
 { $examples
     { $example
        "USING: prettyprint peg.ebnf math.parser ;"
-       "\"1+2\" EBNF[ rule=[0-9]:a \"+\" [0-9]:b => [[ a digit> b digit> + ]] EBNF] ."
+       "\"1+2\" EBNF{{ rule=[0-9]:a \"+\" [0-9]:b => [[ a digit> b digit> + ]] }} ."
        "3"
     }
 }
@@ -490,7 +490,7 @@ ARTICLE: "peg.ebnf" "EBNF"
 "accept the same EBNF syntax. The difference is in how they are used. "
 { $subsections
     \ EBNF<
-    \ EBNF[
+    \ EBNF{{
     \ EBNF:
 }
 "The EBNF syntax is composed of a series of rules of the form:"

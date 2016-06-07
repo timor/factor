@@ -49,7 +49,7 @@ TUPLE: brainfuck pointer memory ;
 : compose-all ( seq -- quot )
     [ ] [ compose ] reduce ;
 
-EBNF: parse-brainfuck
+: parse-brainfuck ( string -- obj ) EBNF{{
 
 inc-ptr  = (">")+  => [[ length '[ _ (>) ] ]]
 dec-ptr  = ("<")+  => [[ length '[ _ (<) ] ]]
@@ -66,7 +66,7 @@ loop  = "[" {loop|ops}+ "]" => [[ second compose-all '[ [ (?) ] _ while ] ]]
 
 code  = (loop|ops|unknown)*  => [[ compose-all ]]
 
-EBNF;
+}} ;
 
 PRIVATE>
 
