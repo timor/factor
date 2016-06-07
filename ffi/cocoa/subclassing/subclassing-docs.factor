@@ -1,7 +1,7 @@
 USING: help.markup help.syntax strings alien hashtables ;
 in: cocoa.subclassing
 
-HELP: CLASS:
+HELP: \ CLASS:
 { $syntax "CLASS: name < superclass protocols... imeth... ;" }
 { $values { "name" "a new class name" } { "superclass" "a superclass name" } { "protocols" "zero or more protocol names" } { "imeth" "instance method definitions using " { $link postpone\ METHOD: } } }
 { $description "Defines a new Objective C class. Instance methods are defined with the " { $link postpone\ METHOD: } " parsing word."
@@ -10,7 +10,7 @@ $nl
 
 { define-objc-class postpone\ CLASS: postpone\ METHOD: } related-words
 
-HELP: METHOD:
+HELP: \ METHOD:
 { $syntax "METHOD: return foo: type1 arg1 bar: type2 arg2 baz: ... [ body ] ;" }
 { $values { "return" "a C type name" } { "type1" "a C type name" } { "arg1" "a local variable name" } { "body" "arbitrary code" } }
 { $description "Defines a method inside of a " { $link postpone\ CLASS: } " form." } ;

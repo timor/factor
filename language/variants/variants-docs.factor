@@ -3,7 +3,7 @@ USING: arrays classes classes.singleton classes.tuple help.markup
 help.syntax kernel multiline slots quotations ;
 in: variants
 
-HELP: VARIANT:
+HELP: \ VARIANT:
 { $syntax "
 VARIANT: class-name
     singleton
@@ -24,7 +24,7 @@ VARIANT: list
     ;
 " } } ;
 
-HELP: VARIANT-MEMBER:
+HELP: \ VARIANT-MEMBER:
 { $description "Defines a new member of a variant class without restricting such definitions to a single statement or source file. The variant class should be listed first, and the class member should follow." }
 { $examples { $code "
 USING: kernel variants ;

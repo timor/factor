@@ -1,7 +1,7 @@
 USING: help.syntax help.markup assocs ;
 in: trees.avl
 
-HELP: AVL{
+HELP: \ AVL{
 { $syntax "AVL{ { key value }... }" }
 { $values { "key" "a key" } { "value" "a value" } }
 { $description "Literal syntax for an AVL tree." } ;

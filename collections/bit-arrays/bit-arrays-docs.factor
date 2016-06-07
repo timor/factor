@@ -33,7 +33,7 @@ $nl
 
 about: "bit-arrays"
 
-HELP: ?{
+HELP: \ ?{
 { $syntax "?{ elements... }" }
 { $values { "elements" "a list of booleans" } }
 { $description "Marks the beginning of a literal bit array. Literal bit arrays are terminated by " { $link postpone\ } } "." }

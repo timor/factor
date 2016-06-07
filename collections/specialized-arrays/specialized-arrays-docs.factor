@@ -1,12 +1,12 @@
 USING: help.markup help.syntax byte-arrays alien math sequences ;
 in: specialized-arrays
 
-HELP: specialized-array:
+HELP: \ specialized-array:
 { $syntax "specialized-array: type" }
 { $values { "type" "a C type" } }
 { $description "Brings a specialized array for holding values of " { $snippet "type" } " into the vocabulary search path. The generated words are documented in " { $link "specialized-array-words" } "." } ;
 
-HELP: SPECIALIZED-ARRAYS:
+HELP: \ SPECIALIZED-ARRAYS:
 { $syntax "SPECIALIZED-ARRAYS: type type type ... ;" }
 { $values { "type" "a C type" } }
 { $description "Brings a set of specialized arrays for holding values of each " { $snippet "type" } " into the vocabulary search path. The generated words are documented in " { $link "specialized-array-words" } "." } ;

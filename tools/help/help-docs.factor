@@ -484,7 +484,7 @@ HELP: $references
 { $description "Prints a heading followed by a series of links." }
 { $notes "This element type is used by the cookbook-style introductory articles in the " { $link "handbook" } "." } ;
 
-HELP: HELP:
+HELP: \ HELP:
 { $syntax "HELP: word content... ;" }
 { $values { "word" "a word" } { "content" "markup elements" } }
 { $description "Defines documentation for a word." }
@@ -499,7 +499,7 @@ HELP: HELP:
     }
 } ;
 
-HELP: ARTICLE:
+HELP: \ ARTICLE:
 { $syntax "ARTICLE: topic title content... ;" }
 { $values { "topic" object } { "title" string } { "content" "markup elements" } }
 { $description "Defines a help article. String topic names are reserved for core documentation. Contributed modules should name articles by arrays, where the first element of an array identifies the module; for example, " { $snippet "{ \"httpd\" \"intro\" }" } "." }
@@ -512,7 +512,7 @@ HELP: ARTICLE:
     }
 } ;
 
-HELP: about:
+HELP: \ about:
 { $syntax "about: article" }
 { $values { "article" "a help article" } }
 { $description "Defines the main documentation article for the current vocabulary." } ;

@@ -2,7 +2,7 @@
 USING: arrays effects help.markup help.syntax locals math quotations words ;
 in: typed
 
-HELP: TYPED:
+HELP: \ TYPED:
 { $syntax
 "TYPED: word ( a b: class ... -- x: class y ... )
     body ;" }
@@ -20,7 +20,7 @@ TYPED: add-floats ( a: float b: float -- c: float )
 1 2+1/2 add-floats ."
 "3.5" } } ;
 
-HELP: TYPED::
+HELP: \ TYPED::
 { $syntax
 "TYPED:: word ( a b: class ... -- x: class y ... )
     body ;" }

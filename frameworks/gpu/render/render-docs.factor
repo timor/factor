@@ -40,7 +40,7 @@ HELP: <multi-index-range>
 }
 { $description "Constructs a " { $link multi-index-range } " tuple." } ;
 
-HELP: UNIFORM-TUPLE:
+HELP: \ UNIFORM-TUPLE:
 { $syntax "UNIFORM-TUPLE: class-name
     { \"slot\" uniform-type dimension }
     { \"slot\" uniform-type dimension }

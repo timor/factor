@@ -26,7 +26,7 @@ HELP: $
     }
 } ;
 
-HELP: $[
+HELP: \ $[
 { $syntax "$[ code ]" }
 { $description "Calls " { $snippet "code" } " at parse time and adds the result(s) to the parser accumulator." }
 { $notes "Since " { $snippet "code" } " is " { $link call } "ed at parse time, it cannot reference any words defined in the same compilation unit." }
@@ -41,7 +41,7 @@ HELP: $[
     }
 } ;
 
-HELP: ${
+HELP: \ ${
 { $syntax "${ code }" }
 { $description "Outputs an array containing the results of executing " { $snippet "code" } " at parse time." }
 { $notes { $snippet "code" } "'s definition is looked up and " { $link call } "ed at parse time, so words that reference words in the current compilation unit cannot be used with " { $snippet "$" } "." }
@@ -57,9 +57,9 @@ HELP: ${
     }
 } ;
 
-{ postpone\ $ postpone\ $[ postpone\ ${ } related-words
+{ \ $  \ $[  \ ${  } related-words
 
-HELP: flags{
+HELP: \ flags{
 { $values { "values" sequence } }
 { $description "Constructs a constant flag value from a sequence of integers or words that output integers. The resulting constant is computed at parse-time, which makes this word as efficient as using a literal integer." }
 { $examples
@@ -84,9 +84,9 @@ ARTICLE: "literals" "Interpolating code results into literal values"
     "{ 5 5 6 8 }"
 }
 { $subsections
-    postpone\ $
-    postpone\ $[
-    postpone\ ${
+    \ $
+    \ $[
+    \ ${
 } ;
 
 about: "literals"

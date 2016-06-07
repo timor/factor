@@ -27,7 +27,7 @@ TIP: "To save time on reloading big libraries such as the " { $vocab-link "furna
 
 TIP: "Use the " { $link leaks. } " combinator to track down resource leaks." ;
 
-HELP: TIP:
+HELP: \ TIP:
 { $syntax "TIP: content ;" }
 { $values { "content" "a markup element" } }
 { $description "Defines a new tip of the day." } ;

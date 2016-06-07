@@ -74,7 +74,7 @@ HELP: log-critical
 { $values { "error" "an error" } { "word" word } }
 { $description "Logs a critical error." } ;
 
-HELP: LOG:
+HELP: \ LOG:
 { $syntax "LOG: name level" }
 { $values { "name" "a new word name" } { "level" "a log level" } }
 { $description "Creates a word with stack effect " { $snippet "( object -- )" } " which logs its input and does nothing else." } ;

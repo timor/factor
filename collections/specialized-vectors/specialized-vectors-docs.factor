@@ -1,17 +1,17 @@
 USING: help.markup help.syntax byte-vectors alien byte-arrays classes.struct ;
 in: specialized-vectors
 
-HELP: specialized-vector:
+HELP: \ specialized-vector:
 { $syntax "specialized-vector: type" }
 { $values { "type" "a C type" } }
 { $description "Brings a specialized vector for holding values of " { $snippet "type" } " into the vocabulary search path. The generated words are documented in " { $link "specialized-vector-words" } "." } ;
 
-HELP: SPECIALIZED-VECTORS:
+HELP: \ SPECIALIZED-VECTORS:
 { $syntax "SPECIALIZED-VECTORS: type type type ... ;" }
 { $values { "type" "a C type" } }
 { $description "Brings a set of specialized vectors for holding values of each " { $snippet "type" } " into the vocabulary search path. The generated words are documented in " { $link "specialized-vector-words" } "." } ;
 
-{ postpone\ specialized-vector: postpone\ SPECIALIZED-VECTORS: } related-words
+{ \ specialized-vector:  \ SPECIALIZED-VECTORS: } related-words
 
 ARTICLE: "specialized-vector-words" "Specialized vector words"
 "The " { $link postpone\ specialized-vector: } " parsing word generates the specialized vector type if it hasn't been generated already, and adds the following words to the vocabulary search path, where " { $snippet "T" } " is the C type in question:"

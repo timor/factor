@@ -1,7 +1,7 @@
 USING: help.syntax help.markup assocs ;
 in: trees
 
-HELP: TREE{
+HELP: \ TREE{
 { $syntax "TREE{ { key value }... }" }
 { $values { "key" "a key" } { "value" "a value" } }
 { $description "Literal syntax for an unbalanced tree." } ;
@@ -23,7 +23,7 @@ ARTICLE: "trees" "Binary search trees"
     tree
     <tree>
     >tree
-    postpone\ TREE{
+    \ TREE{
 } ;
 
 about: "trees"

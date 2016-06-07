@@ -23,7 +23,7 @@ HELP: match-cond
 }
 { $see-also match postpone\ MATCH-VARS: replace-patterns match-replace } ;
 
-HELP: MATCH-VARS:
+HELP: \ MATCH-VARS:
 { $syntax "MATCH-VARS: var ... ;" }
 { $values { "var" "a match variable name beginning with '?'" } }
 { $description "Creates a symbol that can be used in " { $link match } " and " { $link match-cond } " for binding values in the matched sequence. The symbol name is created as a word that is defined to get the value of the symbol out of the current namespace. This can be used in " { $link match-cond } " to retrive the values in the quotation body." }

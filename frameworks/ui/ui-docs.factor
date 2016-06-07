@@ -343,7 +343,7 @@ HELP: textured-background
 HELP: dialog-window
 { $description "Provides a hint to the window manager to create a floating, dialog-style window. Currently, this is only implemented for the GTK backend." } ;
 
-HELP: WINDOW:
+HELP: \ WINDOW:
 { $syntax "WINDOW: window-word { attributes }
     attribute-code ;" }
 { $description "Defines a word for the current vocabulary named " { $snippet "window-word" } " that opens a UI window when run. The " { $snippet "attributes" } " specify the key-value pairs of the window's " { $link world-attributes } ". The " { $snippet "attribute-code" } " is run with the " { $snippet "world-attributes" } " on the stack; this allows the word to construct gadget objects to place in the " { $snippet "gadget" } " slot or set other runtime-dependent world attributes." }
@@ -357,7 +357,7 @@ WINDOW: hello { { title \"Hi\" } }
     \"Hello world\" <label> >>gadgets ;"
 } } ;
 
-HELP: MAIN-WINDOW:
+HELP: \ MAIN-WINDOW:
 { $syntax "MAIN-WINDOW: window-word { attributes }
     attribute-code ;" }
 { $description "Defines a " { $link postpone\ main: } " word for the current vocabulary named " { $snippet "window-word" } " that opens a UI window when the vocabulary is " { $link run } ". The " { $snippet "attributes" } " specify the key-value pairs of the window's " { $link world-attributes } ". The " { $snippet "attribute-code" } " is run with the " { $snippet "world-attributes" } " on the stack; this allows the word to construct gadget objects to place in the " { $snippet "gadget" } " slot or set other runtime-dependent world attributes." }

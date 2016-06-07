@@ -29,15 +29,15 @@ ARTICLE: "alien.fortran-types" "Fortran types"
 }
 "When declaring the parameters of Fortran functions, an output argument can be specified by prefixing an exclamation point to the type name. This will cause the function word to leave the final value of the parameter on the stack." ;
 
-HELP: FUNCTION:
+HELP: \ FUNCTION:
 { $syntax "FUNCTION: RETURN-TYPE NAME ( [!]ARGUMENT-TYPE NAME, ... ) ;" }
 { $description "Declares a Fortran function binding with the given return type and arguments. See " { $link "alien.fortran-types" } " for a list of supported types." } ;
 
-HELP: SUBROUTINE:
+HELP: \ SUBROUTINE:
 { $syntax "SUBROUTINE: NAME ( [!]ARGUMENT-TYPE NAME, ... ) ;" }
 { $description "Declares a Fortran subroutine binding with the given arguments. See " { $link "alien.fortran-types" } " for a list of supported types." } ;
 
-HELP: library:
+HELP: \ library:
 { $syntax "library: name" }
 { $values { "name" "a logical library name" } }
 { $description "Sets the logical library for subsequent " { $link postpone\ FUNCTION: } " and " { $link postpone\ SUBROUTINE: } " definitions. The given library name must have been opened with a previous call to " { $link add-fortran-library } "." } ;
@@ -60,9 +60,9 @@ ARTICLE: "alien.fortran" "Fortran FFI"
     "alien.fortran-types"
     "alien.fortran-abis"
     add-fortran-library
-    postpone\ library:
-    postpone\ FUNCTION:
-    postpone\ SUBROUTINE:
+    \ library:
+    \ FUNCTION:
+    \ SUBROUTINE:
     fortran-invoke
 } ;
 

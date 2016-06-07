@@ -1,11 +1,11 @@
 USING: help.syntax help.markup words ;
 in: descriptive
 
-HELP: DESCRIPTIVE:
+HELP: \ DESCRIPTIVE:
 { $syntax "DESCRIPTIVE: word ( inputs -- outputs ) definition ;" }
 { $description "Defines a word such that, if an error is thrown from within it, that error is wrapped in a " { $link descriptive-error } " with the arguments to that word." } ;
 
-HELP: DESCRIPTIVE::
+HELP: \ DESCRIPTIVE::
 { $syntax "DESCRIPTIVE:: word ( inputs -- outputs ) definition ;" }
 { $description "Defines a word which uses locals such that, if an error is thrown from within it, that error is wrapped in a " { $link descriptive-error } " with the arguments to that word." } ;
 

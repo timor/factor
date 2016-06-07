@@ -3,7 +3,7 @@
 USING: help.markup help.syntax ;
 in: slots.syntax
 
-HELP: slots[
+HELP: \ slots[
 { $description "Outputs several slot values to the stack." }
 { $example "USING: kernel prettyprint slots.syntax ;"
            "in: slots.syntax.example"
@@ -13,7 +13,7 @@ HELP: slots[
 5"
 } ;
 
-HELP: slots{
+HELP: \ slots{
 { $description "Outputs an array of slot values from a tuple." }
 { $example "USING: prettyprint slots.syntax ;"
            "in: slots.syntax.example"
@@ -22,7 +22,7 @@ HELP: slots{
            "{ 3 5 }"
 } ;
 
-HELP: set-slots{
+HELP: \ set-slots{
 { $description "Sets slot values in a tuple from an array." }
 { $example "USING: prettyprint slots.syntax kernel ;"
            "in: slots.syntax.example"
@@ -31,7 +31,7 @@ HELP: set-slots{
            "T{ rectangle { width 3 } { height 5 } }"
 } ;
 
-HELP: set-slots[
+HELP: \ set-slots[
 { $description "Sets slot values in a tuple from the stack." }
 { $example "USING: prettyprint slots.syntax kernel ;"
            "in: slots.syntax.example"
@@ -40,7 +40,7 @@ HELP: set-slots[
            "T{ rectangle { width 3 } { height 5 } }"
 } ;
 
-HELP: copy-slots{
+HELP: \ copy-slots{
 { $description "Copy slots from the first object to the second and return the second object." }
 { $example "USING: prettyprint slots.syntax kernel ;"
            "in: slots.syntax.example"

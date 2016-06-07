@@ -14,7 +14,7 @@ HELP: eval
 { $notes "The code string is parsed and called in a new dynamic scope with an initial vocabulary search path consisting of just the " { $snippet "syntax" } " vocabulary. The evaluated code can use " { $link "word-search-syntax" } " to alter the search path." }
 { $errors "Throws an error if the input is malformed, or if the evaluation itself throws an error." } ;
 
-HELP: eval(
+HELP: \ eval(
 { $syntax "eval( inputs -- outputs )" }
 { $description "Parses Factor source code from the string at the top of the stack, and calls the resulting quotation, which must have the given stack effect." }
 { $notes
@@ -61,7 +61,7 @@ ARTICLE: "eval" "Evaluating strings at run time"
 $nl
 "The main entry point is a parsing word, which wraps a library word:"
 { $subsections
-    postpone\ eval(
+    \ eval(
     eval
 }
 "This pairing is analogous to that of " { $link postpone\ call( } " with " { $link call-effect } "."

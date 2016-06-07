@@ -19,13 +19,13 @@ ARTICLE: { "xml.syntax" "tags" } "Dispatch on XML tag names"
 "and to define a new 'method' for this word, use"
 { $subsections postpone\ TAG: } ;
 
-HELP: TAGS:
+HELP: \ TAGS:
 { $syntax "TAGS: word effect ;" }
 { $values { "word" "a new word to define" } }
 { $description "Creates a new word to which dispatches on XML tag names." }
 { $see-also postpone\ TAG: } ;
 
-HELP: TAG:
+HELP: \ TAG:
 { $syntax "TAG: tag word definition... ;" }
 { $values { "tag" "an XML tag name" } { "word" "an XML process" } }
 { $description "Defines a 'method' on a word created with " { $link postpone\ TAGS: } ". It determines what such a word should do for an argument that is has the given name." }
@@ -41,11 +41,11 @@ ARTICLE: { "xml.syntax" "literals" } "XML literals"
 "These can be used for creating an XML literal, which can be used with variables or a fry-like syntax to interpolate data into XML."
 { $subsections { "xml.syntax" "interpolation" } } ;
 
-HELP: <XML
+HELP: \ <XML
 { $syntax "<XML <?xml version=\"1.0\"?><document>...</document> XML>" }
 { $description "This gives syntax for literal XML documents. When evaluated, there is an XML document (" { $link xml } ") on the stack. It can be used for interpolation as well, if interpolation slots are used. For more information about XML interpolation, see " { $link { "xml.syntax" "interpolation" } } "." } ;
 
-HELP: XML[[
+HELP: \ XML[[
 { $syntax "XML[[ foo <x>...</x> bar <y>...</y> baz XML]]" }
 { $description "This gives syntax for literal XML documents. When evaluated, there is an XML chunk (" { $link xml-chunk } ") on the stack. For more information about XML interpolation, see " { $link { "xml.syntax" "interpolation" } } "." } ;
 
