@@ -66,7 +66,3 @@ M: rect contains-point?
     [ [ loc>> ] dip loc<< ]
     [ [ dim>> ] dip dim<< ]
     2bi ; inline
-
-use: vocabs.loader
-
-{ "math.rectangles" "prettyprint" } "math.rectangles.prettyprint" require-when

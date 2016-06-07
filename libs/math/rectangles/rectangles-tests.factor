@@ -41,6 +41,3 @@ in: math.rectangles.tests
         { 30 30 }
     } rect-containing
 ] unit-test
-
-! Prettyprint for rect{ didn't do nesting check properly
-{ } [ [ rect{ { 1 2 } { 3 4 } } dup >>dim . ] with-string-writer drop ] unit-test
