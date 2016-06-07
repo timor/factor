@@ -357,7 +357,7 @@ CONSTANT: window-controls>decor-flags
         { normal-title-bar $ GDK_DECOR_TITLE }
         { textured-background 0 }
         { dialog-window 0 }
-    }
+    } ;
 
 CONSTANT: window-controls>func-flags
     H{
@@ -369,7 +369,7 @@ CONSTANT: window-controls>func-flags
         { normal-title-bar 0 }
         { textured-background 0 }
         { dialog-window 0 }
-    }
+    } ;
 
 : set-window-hint ( win controls -- )
     {

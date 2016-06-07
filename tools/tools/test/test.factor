@@ -108,13 +108,7 @@ MACRO: <experiment> ( word -- quot )
 
 <<
 
-SYNTAX: TEST:
-    scan-token
-    [ create-word-in ]
-    [ "(" ")" surround search '[ _ parse-test ] ] bi
-    define-syntax ;
-
-SYNTAX: test:
+SYNTAX: \ test:
     scan-token
     [ create-word-in ]
     [ "(" ")" surround search '[ _ parse-test ] ] bi

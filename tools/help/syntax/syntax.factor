@@ -4,7 +4,7 @@ USING: accessors arrays compiler.units definitions help
 help.topics kernel math parser sequences vocabs.parser words ;
 in: help.syntax
 
-SYNTAX: HELP:
+SYNTAX: \ HELP:
     scan-escaped-word bootstrap-word
     [ >link save-location ]
     [ [ \ ; parse-until >array ] dip set-word-help ]
@@ -12,7 +12,7 @@ SYNTAX: HELP:
 
 ERROR: article-expects-name-and-title got ;
 
-SYNTAX: ARTICLE:
+SYNTAX: \ ARTICLE:
     location [
         \ ; parse-until >array
         dup length 2 < [ article-expects-name-and-title ] when
@@ -20,7 +20,5 @@ SYNTAX: ARTICLE:
         over add-article >link
     ] dip remember-definition ;
 
-SYNTAX: ABOUT:
-    current-vocab scan-object >>help changed-definition ;
-SYNTAX: about:
+SYNTAX: \ about:
     current-vocab scan-object >>help changed-definition ;

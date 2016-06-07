@@ -158,14 +158,7 @@ PRIVATE>
 : d-transform ( triple -- new-triple )
     { { -1 -2 -2 } { 2 1 2 } { 2 2 3 } } transform ;
 
-SYNTAX: SOLUTION:
-    scan-word
-    [ name>> "-main" append create-word-in ] keep
-    [ drop current-vocab main<< ]
-    [ [ . ] swap prefix ( -- ) define-declared ]
-    2bi ;
-
-SYNTAX: solution:
+SYNTAX: \ solution:
     scan-word
     [ name>> "-main" append create-word-in ] keep
     [ drop current-vocab main<< ]

@@ -23,20 +23,20 @@ STRUCT: bunny-vertex-struct
     { vertex float-4 }
     { normal float-4 } ;
 
-GLSL-SHADER-FILE: bunny-vertex-shader vertex-shader "bunny.v.glsl"
-GLSL-SHADER-FILE: bunny-fragment-shader fragment-shader "bunny.f.glsl"
+GLSL-SHADER-FILE: bunny-vertex-shader vertex-shader "bunny.v.glsl" ;
+GLSL-SHADER-FILE: bunny-fragment-shader fragment-shader "bunny.f.glsl" ;
 GLSL-PROGRAM: bunny-program
     bunny-vertex-shader bunny-fragment-shader
     bunny-vertex ;
 
-GLSL-SHADER-FILE: window-vertex-shader vertex-shader "window.v.glsl"
+GLSL-SHADER-FILE: window-vertex-shader vertex-shader "window.v.glsl" ;
 
-GLSL-SHADER-FILE: sobel-fragment-shader fragment-shader "sobel.f.glsl"
+GLSL-SHADER-FILE: sobel-fragment-shader fragment-shader "sobel.f.glsl" ;
 GLSL-PROGRAM: sobel-program
     window-vertex-shader sobel-fragment-shader
     window-vertex-format ;
 
-GLSL-SHADER-FILE: loading-fragment-shader fragment-shader "loading.f.glsl"
+GLSL-SHADER-FILE: loading-fragment-shader fragment-shader "loading.f.glsl" ;
 GLSL-PROGRAM: loading-program
     window-vertex-shader loading-fragment-shader
     window-vertex-format ;

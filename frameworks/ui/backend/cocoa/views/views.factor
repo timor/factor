@@ -161,7 +161,7 @@ CONSTANT: selector>action H{
     [ swap world-focus parents-handle-gesture? t ] [ drop f f ] if* ;
 
 CLASS: FactorView < NSOpenGLView
-    COCOA-PROTOCOL: NSTextInput
+    cocoa-protocol: NSTextInput
 
     METHOD: void prepareOpenGL [
         self super-send\ prepareOpenGL

@@ -18,7 +18,7 @@ ERROR: not-in-a-method-error ;
     [ create-method-in ] dip [ define ] [ drop make-inline ] 2bi ;
 
 : scan-new-method ( -- method )
-    scan-class bootstrap-word scan-word create-method-in ;
+    scan-class bootstrap-word scan-escaped-word create-method-in ;
 
 symbol: current-method
 

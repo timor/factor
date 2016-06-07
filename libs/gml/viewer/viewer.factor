@@ -128,8 +128,8 @@ VERTEX-FORMAT: wire-vertex-format
     { f         float-components 1 f }
     { "color"   float-components 4 f } ;
 
-GLSL-SHADER-FILE: gml-viewer-vertex-shader vertex-shader "viewer.v.glsl"
-GLSL-SHADER-FILE: gml-viewer-fragment-shader fragment-shader "viewer.f.glsl"
+GLSL-SHADER-FILE: gml-viewer-vertex-shader vertex-shader "viewer.v.glsl" ;
+GLSL-SHADER-FILE: gml-viewer-fragment-shader fragment-shader "viewer.f.glsl" ;
 GLSL-PROGRAM: gml-viewer-program
     gml-viewer-vertex-shader gml-viewer-fragment-shader
     wire-vertex-format ;

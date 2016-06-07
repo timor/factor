@@ -9,7 +9,7 @@ SYMBOLS: unary binary keyword ;
 : selector-type ( selector -- type )
     {
         { [ dup [ "~!@%&*-+=|\\<>,?/" member? ] all? ] [ binary ] }
-        { [ char: : over member? ] [ keyword ] }
+        { [ char: \: over member? ] [ keyword ] }
         [ unary ]
     } cond nip ;
 
@@ -17,7 +17,7 @@ SYMBOLS: unary binary keyword ;
     dup selector-type {
         { unary [ drop { } ] }
         { binary [ drop { "x" } ] }
-        { keyword [ [ char: : = ] count "x" <array> ] }
+        { keyword [ [ char: \: = ] count "x" <array> ] }
     } case "receiver" suffix { "result" } <effect> ;
 
 : selector>generic ( selector -- generic )
@@ -25,5 +25,4 @@ SYMBOLS: unary binary keyword ;
     [ selector>effect ]
     bi define-simple-generic ;
 
-SYNTAX: SELECTOR: scan-token selector>generic drop ;
-SYNTAX: selector\ scan-token selector>generic drop ;
+SYNTAX: \ selector\ scan-token selector>generic drop ;

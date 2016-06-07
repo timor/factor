@@ -71,7 +71,7 @@ in: cocoa.subclassing
 TUPLE: cocoa-protocol name ;
 C: <cocoa-protocol> cocoa-protocol ;
 
-SYNTAX: \ COCOA-PROTOCOL:
+SYNTAX: \ cocoa-protocol:
     scan-token <cocoa-protocol> suffix! ;
 
 SYNTAX: \ CLASS:

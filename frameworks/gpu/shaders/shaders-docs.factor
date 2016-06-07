@@ -35,7 +35,7 @@ HELP: GLSL-PROGRAM:
 { $notes "Transform feedback requires OpenGL 3.0 or one of the " { $snippet "GL_EXT_transform_feedback" } " or " { $snippet "GL_ARB_transform_feedback" } " extensions." } ;
 
 HELP: GLSL-SHADER-FILE:
-{ $syntax "GLSL-SHADER-FILE: shader-name shader-kind \"filename\"" }
+{ $syntax "GLSL-SHADER-FILE: shader-name shader-kind \"filename\" ;" }
 { $description "Defines a new " { $link shader } " of kind " { $link shader-kind } " named " { $snippet "shader-name" } ". The shader will read its source code from " { $snippet "filename" } " in the current Factor source file's directory." } ;
 
 HELP: GLSL-SHADER:

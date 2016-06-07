@@ -24,22 +24,16 @@
 } diff
 [ dup <vocab-link> . flush vocab>literals ] map-zip
 
-
 "resource:frameworks" vocabs-from
-{ "ui.theme.switching" "ui.backend.cocoa.views" "ui.backend.cocoa.tools"
-"ui.backend.gtk" "ui.backend.cocoa" "gpu.demos.raytrace" "gpu.demos.bunny"
-"gpu.shaders" "gpu.render" "game.worlds" "ui" "db.postgresql.errors" } diff
+{  } diff
 [ dup <vocab-link>  . flush vocab>literals ] map-zip
 
 "resource:tools" vocabs-from
-{ "help.syntax" "help.tips" "tools.test" "tools.walker"
-"vocabs.git" } diff
+{  } diff
 [ dup <vocab-link> . flush vocab>literals ] map-zip
 
 "resource:demos" vocabs-from
-{ "talks.vpri-talk" "talks.tc-lisp-talk" "talks.minneapolis-talk" "talks.google-tech-talk"
- "talks.galois-talk" "talks.otug-talk" "smalltalk.selectors" "smalltalk.parser"
- "smalltalk.library" "bunny.outlined" "project-euler.common" } diff
+{  "bunny.outlined" "smalltalk.library" "talks.tc-lisp-talk" } diff
 [ dup <vocab-link>  . flush vocab>literals ] map-zip
 
 in: syntax
