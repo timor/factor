@@ -1,14 +1,19 @@
 ! Copyright (C) 2008, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: kernel arrays sequences math math.vectors accessors
-parser lexer ;
+USING: accessors arrays combinators.short-circuit kernel lexer
+math math.vectors parser sequences ;
 in: math.rectangles
 
 TUPLE: rect { loc initial: { 0 0 } } { dim initial: { 0 0 } } ;
 
 : <rect> ( loc dim -- rect ) rect boa ; inline
 
-SYNTAX: \ RECT: scan-object scan-object ";" expect <rect> suffix! ;
+ERROR: bad-rectangle object ;
+
+: ensure-rect-shape ( obj -- obj )
+    dup { [ sequence? ] [ length 2 = ] [ first2 [ length 2 = ] bi@ and ] } 1&& [ bad-rectangle ] unless ;
+
+SYNTAX: \ rect{ \ } [ ensure-rect-shape first2 <rect> ] parse-literal ;
 
 : <zero-rect> ( -- rect ) rect new ; inline
 
