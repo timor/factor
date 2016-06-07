@@ -81,7 +81,7 @@ M: irc-message set-irc-command
         [ prefix>> ]
         [ command>> ]
         [ parameters>> " " join ]
-        [ trailing>> dup [ char: : prefix ] when ]
+        [ trailing>> dup [ char: \ : prefix ] when ]
     } cleave 4array sift " " join ;
 
 <PRIVATE
@@ -109,7 +109,7 @@ PRIVATE>
 ! SYNTAX: name string parameters ;
 ! IRC: type "COMMAND" slot1 ...;
 ! IRC: type "COMMAND" slot1 ... : trailing-slot;
-SYNTAX: IRC:
+SYNTAX: \ IRC:
     scan-new-class
     [ scan-object register-irc-message-type ] keep
     ";" parse-tokens

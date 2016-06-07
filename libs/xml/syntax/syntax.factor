@@ -27,17 +27,17 @@ M: no-tag summary
 
 PRIVATE>
 
-SYNTAX: TAGS:
+SYNTAX: \ TAGS:
     scan-new-word scan-effect ";" expect
     [ drop H{ } clone "xtable" set-word-prop ]
     [ define-tags ]
     2bi ;
 
-SYNTAX: TAG:
+SYNTAX: \ TAG:
     scan-token scan-word parse-definition define-tag ;
 
-SYNTAX: XML-NS:
-    scan-new-word scan-token '[ f swap _ <name> ] ( string -- name ) define-memoized ;
+SYNTAX: \ XML-NS:
+    scan-new-word scan-token ";" expect '[ f swap _ <name> ] ( string -- name ) define-memoized ;
 
 <PRIVATE
 
@@ -170,10 +170,10 @@ MACRO: interpolate-xml ( xml -- quot )
 
 PRIVATE>
 
-SYNTAX: <XML
+SYNTAX: \ <XML
     "XML>" [ string>doc ] parse-def ;
 
-SYNTAX: XML[[
+SYNTAX: \ XML[[
     "XML]]" [ string>chunk ] parse-def ;
 
 use: vocabs.loader

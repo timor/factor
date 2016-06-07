@@ -56,17 +56,17 @@ PRIVATE>
 
 <<
 
-SYNTAX: ROMAN-OP:
+SYNTAX: \ ROMAN-OP:
     scan-word [ name>> "roman" prepend create-word-in ] keep
     1quotation '[ _ binary-roman-op ]
-    scan-effect define-declared ;
+    scan-effect ";" expect define-declared ;
 
 >>
 
-ROMAN-OP: + ( x y -- z )
-ROMAN-OP: - ( x y -- z )
-ROMAN-OP: * ( x y -- z )
-ROMAN-OP: /i ( x y -- z )
-ROMAN-OP: /mod ( x y -- z w )
+ROMAN-OP: + ( x y -- z ) ;
+ROMAN-OP: - ( x y -- z ) ;
+ROMAN-OP: * ( x y -- z ) ;
+ROMAN-OP: /i ( x y -- z ) ;
+ROMAN-OP: /mod ( x y -- z w ) ;
 
-SYNTAX: ROMAN: scan-token roman> suffix! ;
+SYNTAX: \ roman: scan-token roman> suffix! ;

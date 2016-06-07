@@ -179,7 +179,7 @@ M: VECTOR n*V+V!
 M: VECTOR n*V!
     (prepare-scal) [ XSCAL ] dip ;
 
-SYNTAX: XVECTOR{ \ } [ >VECTOR ] parse-literal ;
+SYNTAX: \ XVECTOR{ \ } [ >VECTOR ] parse-literal ;
 
 M: VECTOR pprint-delims
     drop \ XVECTOR{ \ } ;

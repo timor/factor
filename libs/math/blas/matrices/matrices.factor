@@ -291,7 +291,7 @@ M: MATRIX n*V(*)V+M!
 M: MATRIX n*V(*)Vconj+M!
     (prepare-ger) [ XGERC ] dip ;
 
-SYNTAX: XMATRIX{ \ } [ >MATRIX ] parse-literal ;
+SYNTAX: \ XMATRIX{ \ } [ >MATRIX ] parse-literal ;
 
 M: MATRIX pprint-delims
     drop \ XMATRIX{ \ } ;

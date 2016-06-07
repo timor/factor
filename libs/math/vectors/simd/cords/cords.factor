@@ -54,7 +54,7 @@ M: A >pprint-sequence ;
 M: A pprint* pprint-object ;
 
 M: A pprint-delims drop \ A{ \ } ;
-SYNTAX: A{ \ } [ >A ] parse-literal ;
+SYNTAX: \ A{ \ } [ >A ] parse-literal ;
 
 <c-type>
     byte-array >>class
@@ -78,20 +78,20 @@ FUNCTOR;
     [ define-specialized-cord ]
     [ create-word-in (define-simd-128-cord) ] 2bi ;
 
-SYNTAX: SIMD-128-CORD:
-    scan-word scan-token define-simd-128-cord ;
+SYNTAX: \ SIMD-128-CORD:
+    scan-word scan-token ";" expect define-simd-128-cord ;
 
 PRIVATE>
 >>
 
-SIMD-128-CORD: char-16     char-32
-SIMD-128-CORD: uchar-16    uchar-32
-SIMD-128-CORD: short-8     short-16
-SIMD-128-CORD: ushort-8    ushort-16
-SIMD-128-CORD: int-4       int-8
-SIMD-128-CORD: uint-4      uint-8
-SIMD-128-CORD: longlong-2  longlong-4
-SIMD-128-CORD: ulonglong-2 ulonglong-4
-SIMD-128-CORD: float-4     float-8
-SIMD-128-CORD: double-2    double-4
+SIMD-128-CORD: char-16     char-32 ;
+SIMD-128-CORD: uchar-16    uchar-32 ;
+SIMD-128-CORD: short-8     short-16 ;
+SIMD-128-CORD: ushort-8    ushort-16 ;
+SIMD-128-CORD: int-4       int-8 ;
+SIMD-128-CORD: uint-4      uint-8 ;
+SIMD-128-CORD: longlong-2  longlong-4 ;
+SIMD-128-CORD: ulonglong-2 ulonglong-4 ;
+SIMD-128-CORD: float-4     float-8 ;
+SIMD-128-CORD: double-2    double-4 ;
 

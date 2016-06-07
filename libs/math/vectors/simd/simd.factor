@@ -312,7 +312,7 @@ M: A length drop N ; inline
 BOA-EFFECT define-inline
 
 M: A pprint-delims drop \ A{ \ } ;
-SYNTAX: A{ \ } [ >A ] parse-literal ;
+SYNTAX: \ A{ \ } [ >A ] parse-literal ;
 
 INSTANCE: A sequence ;
 

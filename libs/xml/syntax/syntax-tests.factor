@@ -34,7 +34,7 @@ TAG: neg calculate
     calc-arith
 ] unit-test
 
-XML-NS: foo http://blah.com
+XML-NS: foo http://blah.com ;
 
 { T{ name { main "bling" } { url "http://blah.com" } } } [ "bling" foo ] unit-test
 

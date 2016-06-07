@@ -10,7 +10,7 @@ ARTICLE: "xml.syntax" "Syntax extensions for XML"
 { $subsections
     { "xml.syntax" "tags" }
     { "xml.syntax" "literals" }
-    postpone\ XML-NS:
+    \ XML-NS:
 } ;
 
 ARTICLE: { "xml.syntax" "tags" } "Dispatch on XML tag names"
@@ -104,6 +104,6 @@ let[
 XML[[ <a>pple</a> XML]] dispatch write"
 "apple" } ;
 
-HELP: XML-NS:
-{ $syntax "XML-NS: name http://url" }
+HELP: \ XML-NS:
+{ $syntax "XML-NS: name http://url ;" }
 { $description "Defines a new word of the given name which constructs XML names in the namespace of the given URL. The names constructed are memoized." } ;
