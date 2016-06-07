@@ -82,7 +82,7 @@ ERROR: no-com-interface interface ;
 
 PRIVATE>
 
-SYNTAX: COM-INTERFACE:
+SYNTAX: \ COM-INTERFACE:
     CREATE-C-TYPE
     void* over typedef
     scan-object find-com-interface-definition
@@ -92,8 +92,7 @@ SYNTAX: COM-INTERFACE:
     dup save-com-interface-definition
     define-words-for-com-interface ;
 
-SYNTAX: GUID: scan-object string>guid suffix! ;
-SYNTAX: guid: scan-object string>guid suffix! ;
+SYNTAX: \ guid: scan-object string>guid suffix! ;
 
 use: vocabs.loader
 

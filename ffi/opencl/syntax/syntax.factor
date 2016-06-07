@@ -4,5 +4,5 @@ USING: classes.parser classes.singleton classes.union kernel lexer
 sequences ;
 in: opencl.syntax
 
-SYNTAX: SINGLETONS-UNION:
+SYNTAX: \ SINGLETONS-UNION:
     scan-new-class ";" parse-tokens [ create-class-in [ define-singleton-class ] keep ] map define-union-class ;

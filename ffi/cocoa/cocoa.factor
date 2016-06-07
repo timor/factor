@@ -13,13 +13,13 @@ symbol: sent-messages
     sent-messages (remember-send) ;
 
 SYNTAX: -> scan-token dup remember-send suffix! \ send suffix! ;
-SYNTAX: send\ scan-token dup remember-send suffix! \ send suffix! ;
+SYNTAX: \ send\ scan-token dup remember-send suffix! \ send suffix! ;
 
-SYNTAX: SEL:
+SYNTAX: \ SEL:
     scan-token
     [ remember-send ]
     [ <selector> suffix! \ cocoa.messages:selector suffix! ] bi ;
-SYNTAX: sel\
+SYNTAX: \ sel\
     scan-token
     [ remember-send ]
     [ <selector> suffix! \ cocoa.messages:selector suffix! ] bi ;
@@ -29,8 +29,8 @@ symbol: super-sent-messages
 : remember-super-send ( selector -- )
     super-sent-messages (remember-send) ;
 
-SYNTAX: SUPER-> scan-token dup remember-super-send suffix! \ super-send suffix! ;
-SYNTAX: super-send\ scan-token dup remember-super-send suffix! \ super-send suffix! ;
+SYNTAX: \ SUPER-> scan-token dup remember-super-send suffix! \ super-send suffix! ;
+SYNTAX: \ super-send\ scan-token dup remember-super-send suffix! \ super-send suffix! ;
 
 symbol: frameworks
 
@@ -38,11 +38,9 @@ frameworks [ V{ } clone ] initialize
 
 [ frameworks get [ load-framework ] each ] "cocoa" add-startup-hook
 
-SYNTAX: FRAMEWORK: scan-token [ load-framework ] [ frameworks get push ] bi ;
-SYNTAX: framework: scan-token [ load-framework ] [ frameworks get push ] bi ;
+SYNTAX: \ framework: scan-token [ load-framework ] [ frameworks get push ] bi ;
 
-SYNTAX: IMPORT: scan-token [ ] import-objc-class ;
-SYNTAX: import: scan-token [ ] import-objc-class ;
+SYNTAX: \ import: scan-token [ ] import-objc-class ;
 
 "Importing Cocoa classes..." print
 

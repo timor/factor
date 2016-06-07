@@ -71,10 +71,10 @@ in: cocoa.subclassing
 TUPLE: cocoa-protocol name ;
 C: <cocoa-protocol> cocoa-protocol ;
 
-SYNTAX: COCOA-PROTOCOL:
+SYNTAX: \ COCOA-PROTOCOL:
     scan-token <cocoa-protocol> suffix! ;
 
-SYNTAX: CLASS:
+SYNTAX: \ CLASS:
     scan-token
     "<" expect
     scan-token
@@ -99,7 +99,7 @@ SYNTAX: CLASS:
     [ [ make-local ] map ] H{ } make
     (parse-lambda) <lambda> ?rewrite-closures first ;
 
-SYNTAX: METHOD:
+SYNTAX: \ METHOD:
     scan-c-type
     parse-selector
     parse-method-body [ swap ] 2dip 4array ";" expect

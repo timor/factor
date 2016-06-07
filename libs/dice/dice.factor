@@ -26,4 +26,4 @@ in: dice
         '[ _ _ random-roll ]
     ] if* ;
 
-SYNTAX: ROLL: scan-token roll-quot append! ;
+SYNTAX: \ roll: scan-token roll-quot append! ;

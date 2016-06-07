@@ -47,7 +47,7 @@ reset-gl-function-number-counter
     names return function-effect
     define-declared ;
 
-SYNTAX: GL-FUNCTION:
+SYNTAX: \ GL-FUNCTION:
     gl-function-calling-convention
     scan-function-name
     "{" expect "}" parse-tokens over suffix

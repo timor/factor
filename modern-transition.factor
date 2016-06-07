@@ -8,30 +8,16 @@
 [ dup <vocab-link> . flush vocab>literals ] map-zip
 
 "resource:collections" vocabs-from
-{ 
+{ "specialized-arrays" "specialized-vectors"
 } diff
 [ dup <vocab-link> . flush vocab>literals ] map-zip
 
 "resource:ffi" vocabs-from
-{ "x11.syntax" "windows.com.syntax" "python.syntax" "opengl.gl.extensions"
- "opencl.syntax" "mongodb.tuple" "cuda.syntax" "core-foundation.strings"
- "cocoa.subclassing" "cocoa" "cocoa.apple-script" "gobject-introspection" } diff
+{ } diff
 [ dup <vocab-link> . flush vocab>literals ] map-zip
 
 "resource:libs" vocabs-from
-{ "annotations" "brainfuck" "dice" "infix" "logging"
-"metar" "money" "poker" "qw" "roles" "roman" "slides"
-"svg"  "urls" "xkcd" "calendar.holidays"
-"calendar.holidays.canada" "calendar.holidays.us"
-"colors.constants" "colors.hex" "gml.macros"
-"gml.parser" "gml.runtime" "html.templates.chloe.syntax"
-"infix.tokenizer" "irc.messages.base"
-"math.complex" "math.rectangles" "math.blas.matrices"
-"math.blas.vectors" "math.derivatives.syntax"
-"math.vectors.simd" "math.vectors.simd.cords" "peg.pl0"
-"peg.javascript.parser" "peg.javascript.tokenizer"
-"unicode.categories" "units.reduction" "xml.errors"
-"xml.syntax" "xmode.loader.syntax" "yaml.conversion"
+{
 } diff
 [ dup <vocab-link> . flush vocab>literals ] map-zip
 

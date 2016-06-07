@@ -11,6 +11,6 @@ in: cocoa.apple-script
     <NSString> send\ initWithSource: send\ autorelease
     f send\ executeAndReturnError: drop ;
 
-SYNTAX: APPLESCRIPT:
-    scan-new-word ";APPLESCRIPT" parse-multiline-string
+SYNTAX: \ APPLESCRIPT:
+    scan-new-word "APPLESCRIPT;" parse-multiline-string
     [ run-apple-script ] curry ( -- ) define-declared ;

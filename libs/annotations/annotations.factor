@@ -24,7 +24,7 @@ NAMEs. DEFINES ${NAME}s.
 WHERE
 
 : (NAME) ( str -- ) drop ; inline
-SYNTAX: !NAME (parse-annotation) \ (NAME) suffix! ;
+SYNTAX: \ !NAME (parse-annotation) \ (NAME) suffix! ;
 
 : NAMEs ( -- usages )
     \ (NAME) (non-annotation-usage) ;
