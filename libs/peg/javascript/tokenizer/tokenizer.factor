@@ -8,7 +8,7 @@ in: peg.javascript.tokenizer
 
 use: prettyprint
 
-EBNF: tokenize-javascript
+: tokenize-javascript ( string -- obj ) EBNF{{
 Letter            = [a-zA-Z]
 Digit             = [0-9]
 Digits            = Digit+
@@ -87,4 +87,4 @@ Special            =   "("    | ")"   | "{"   | "}"   | "["   | "]"   | ","   | 
                      | "^"
 Tok                = Spaces (Name | Keyword | Number | Str | RegExp | Special )
 Toks               = Tok* Spaces
-EBNF;
+}} ;

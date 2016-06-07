@@ -37,7 +37,7 @@ in: formatting
 
 ERROR: unknown-printf-directive ;
 
-EBNF: parse-printf
+: parse-printf ( string -- obj ) EBNF{{
 
 zero      = "0"                  => [[ char: 0 ]]
 char      = "'" (.)              => [[ second ]]
@@ -90,7 +90,7 @@ plain-text = (!("%").)+          => [[ >string ]]
 
 text      = (formats|plain-text)* => [[ ]]
 
-EBNF;
+}} ;
 
 : printf-quot ( format-string -- format-quot n )
     parse-printf [ [ callable? ] count ] keep [
@@ -155,7 +155,7 @@ MACRO: sprintf ( format-string -- quot )
 
 : week-of-year-monday ( timestamp -- n ) 1 week-of-year ; inline
 
-EBNF: parse-strftime
+: parse-strftime ( string -- obj ) EBNF{{
 
 fmt-%     = "%"                  => [[ "%" ]]
 fmt-a     = "a"                  => [[ [ day-of-week day-abbreviation3 ] ]]
@@ -191,7 +191,7 @@ plain-text = (!("%").)+          => [[ >string ]]
 
 text      = (formats|plain-text)* => [[ ]]
 
-EBNF;
+}} ;
 
 PRIVATE>
 

@@ -169,7 +169,7 @@ CONSTANT: galois-slides
         "Some parsing words are more complicated"
     }
     { $slide "Example: printf"
-        { { $link postpone\ EBNF: } ": a complex parsing word" }
+        { { $link \ EBNF{{ } ": a complex parsing word" }
         "Implements a custom syntax for expressing parsers: like OMeta!"
         { "Example: " { $vocab-link "printf-example" } }
         { $code "\"vegan\" \"cheese\" \"%s is not %s\\n\" printf" }

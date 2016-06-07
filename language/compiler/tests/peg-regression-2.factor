@@ -4,12 +4,12 @@ in: compiler.tests.peg-regression-2
 GENERIC: <times> ( times -- term' ) ;
 M: string <times> ;
 
-EBNF: parse-regexp
+: parse-regexp ( string -- obj ) EBNF{{
 
 Times = .* => [[ "foo" ]]
 
 Regexp = Times:t => [[ t <times> ]]
 
-EBNF;
+}} ;
 
 [ "foo" ] [ "a" parse-regexp ] unit-test

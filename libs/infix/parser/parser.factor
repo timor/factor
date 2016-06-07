@@ -4,7 +4,7 @@ USING: infix.ast infix.tokenizer kernel math peg.ebnf sequences
 strings vectors ;
 in: infix.parser
 
-EBNF: parse-infix
+: parse-infix ( string -- obj ) EBNF{{
 Number      = . ?[ ast-number? ]?
 Identifier  = . ?[ string? ]?
 Array       = Identifier:i "[" Sum:s "]" => [[ i s ast-array boa ]]
@@ -29,7 +29,7 @@ Sum         =   Sum:s ("+"|"-"):op Product:p  => [[ s p op ast-op boa ]]
 
 End         = !(.)
 Expression  = Sum End
-EBNF;
+}} ;
 
 : build-infix-ast ( string -- ast )
     tokenize-infix parse-infix ;

@@ -206,7 +206,7 @@ M: up-ref (>tref)
     [ LLVMDumpModule ]
     [ LLVMDisposeModule ] tri ;
 
-EBNF: parse-type
+: parse-type ( string -- obj ) EBNF{{
 
 WhiteSpace = " "*
 
@@ -241,6 +241,6 @@ Type = WhiteSpace T:t WhiteSpace => [[ t ]]
 
 Program = Type
 
-EBNF;
+}} ;
 
-SYNTAX: TYPE: ";" parse-multiline-string parse-type suffix! ;
+SYNTAX: \ TYPE: ";" parse-multiline-string parse-type suffix! ;

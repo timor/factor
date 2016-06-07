@@ -38,26 +38,6 @@ HELP: EBNF{{
     }
 } ;
 
-HELP: EBNF:
-{ $syntax "EBNF: word ...ebnf... EBNF;" }
-{ $values { "word" word } { "...ebnf..." "EBNF DSL text" } }
-{ $description
-    "Defines a word that when called will parse a string using the syntax "
-    "defined with the EBNF DSL. The word has stack effect "
-    { $snippet "( string -- ast )" } " where 'string' is the text to be parsed "
-    "and 'ast' is the resulting abstract syntax tree. If the parsing fails the "
-    "word throws an exception."
-}
-{ $examples
-    { $example
-       "USING: prettyprint peg.ebnf ;"
-       "in: scratchpad"
-       "EBNF: foo rule=\"a\" \"b\" EBNF;"
-       "\"ab\" foo ."
-       "V{ \"a\" \"b\" }"
-    }
-} ;
-
 ARTICLE: "peg.ebnf.strings" "EBNF Rule: Strings"
 "A string in a rule will match that sequence of characters from the input string. "
 "The string is delimited by matching single or double quotes. "
@@ -338,22 +318,22 @@ ARTICLE: "peg.ebnf.foreign-rules" "EBNF Foreign Rules"
 { $examples
     { $code
        "USING: prettyprint peg.ebnf ;"
-       "EBNF: parse-string"
+       ": parse-string ( string -- obj ) EBNF{{"
        "StringBody = (!('\"') .)*"
        "String= '\"' StringBody:b '\"' => [[ b >string ]]"
-       "EBNF;"
-       "EBNF: parse-two-strings"
+       "}} ;"
+       ": parse-two-strings ( string -- obj ) EBNF{{"
        "TwoStrings = <foreign parse-string String> <foreign parse-string String>"
-       "EBNF;"
-       "EBNF: parse-two-strings"
+       "}} ;"
+       ": parse-two-strings ( string -- obj ) EBNF{{"
        "TwoString = <foreign parse-string> <foreign parse-string>"
-       "EBNF;"
+       "}} ;"
     }
     { $code
        ": a-token ( -- parser ) \"a\" token ;"
-       "EBNF: parse-abc"
+       ": parse-abc ( string -- obj ) EBNF{{"
        "abc = <foreign a-token> 'b' 'c'"
-       "EBNF;"
+       "}} ;"
    }
 }
 ;
@@ -364,9 +344,9 @@ ARTICLE: "peg.ebnf.tokenizers" "EBNF Tokenizers"
 "Terminals in a rule match successive characters in the array or string. "
 { $examples
     { $code
-        "EBNF: foo"
+        ": foo ( string -- obj ) EBNF{{"
         "rule = \"++\" \"--\""
-        "EBNF;"
+        "}} ;"
     }
 }
 "This parser when run with the string \"++--\" or the array "
@@ -375,11 +355,11 @@ ARTICLE: "peg.ebnf.tokenizers" "EBNF Tokenizers"
 "between the terminals:"
 { $examples
     { $code
-        "EBNF: foo"
+        ": foo ( string -- obj ) EBNF{{"
         "space = (\" \" | \"\\r\" | \"\\t\" | \"\\n\")"
         "spaces = space* => [[ drop ignore ]]"
         "rule = spaces \"++\" spaces \"--\" spaces"
-        "EBNF;"
+        "}} ;"
     }
 }
 "In a large grammar this gets tedious and makes the grammar hard to read. "
@@ -388,12 +368,12 @@ ARTICLE: "peg.ebnf.tokenizers" "EBNF Tokenizers"
 "might look:"
 { $examples
     { $code
-        "EBNF: foo"
+        ": foo ( string -- obj ) EBNF{{"
         "space = (\" \" | \"\\r\" | \"\\t\" | \"\\n\")"
         "spaces = space* => [[ drop ignore ]]"
         "tokenizer = spaces ( \"++\" | \"--\" )"
         "rule = \"++\" \"--\""
-        "EBNF;"
+        "}} ;"
      }
 }
 "'tokenizer' is the name of a built in rule. Once defined it is called to "
@@ -418,7 +398,7 @@ $nl
         "TUPLE: ast-number value ;"
         "TUPLE: ast-string value ;"
         ""
-        "EBNF: foo-tokenizer"
+        ": foo-tokenizer ( string -- obj ) EBNF{{"
         "space = (\" \" | \"\\r\" | \"\\t\" | \"\\n\")"
         "spaces = space* => [[ drop ignore ]]"
         ""
@@ -427,16 +407,16 @@ $nl
         ""
         "token = spaces ( number | operator )"
         "tokens = token*"
-        "EBNF;"
+        "}} ; @ebnf"
         ""
-        "EBNF: foo"
+        ": foo ( string -- obj ) EBNF{{"
         "tokenizer = <foreign foo-tokenizer token>"
         ""
         "number = . ?[ ast-number? ]? => [[ value>> ]]"
         "string = . ?[ ast-string? ]? => [[ value>> ]]"
         ""
         "rule = string:a number:b \"+\" number:c => [[ a b c + 2array ]]"
-        "EBNF;"
+        "}} ;"
         ""
         "\"123 456 +\" foo-tokenizer ."
         "V{\n    T{ ast-number { value 123 } }\n    T{ ast-number { value 456 } }\n    \"+\"\n}"
@@ -453,7 +433,7 @@ $nl
 "was defined lexically before the rule. This is useful in the JavaScript grammar:"
 { $examples
     { $code
-        "EBNF: javascript"
+        ": javascript ( string -- obj ) EBNF{{"
         "tokenizer         = default"
         "nl                = \"\\r\" \"\\n\" | \"\\n\""
         "tokenizer         = <foreign tokenize-javascript Tok>"
@@ -491,7 +471,6 @@ ARTICLE: "peg.ebnf" "EBNF"
 { $subsections
     \ EBNF<
     \ EBNF{{
-    \ EBNF:
 }
 "The EBNF syntax is composed of a series of rules of the form:"
 { $code

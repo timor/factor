@@ -56,9 +56,9 @@ SYNTAX: ON-BNF:
     main of create-bnf ;
 
 ! Tokenizer like standard factor lexer
-EBNF: factor
+: factor ( string -- obj )  EBNF{{
 space = " " | "\n" | "\t"
 spaces = space* => [[ drop ignore ]]
 chunk = (!(space) .)+ => [[ >string ]]
 expr = spaces chunk
-EBNF;
+}} ;

@@ -552,3 +552,6 @@ SYNTAX: \ EBNF:
     ebnf>quot swapd
     ( input -- ast ) define-declared "ebnf-parser" set-word-prop
     reset-tokenizer ;
+
+SYNTAX: @ebnf
+    words:last-word dup "ebnf-parser" set-word-prop ;

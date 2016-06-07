@@ -96,7 +96,7 @@ TUPLE: elliptical-arc radii x-axis-rotation large-arc? sweep? p relative? ;
 : (set-relative) ( args rel -- args )
     '[ [ _ >>relative? drop ] each ] keep ;
 
-EBNF: svg-path>array
+: svg-path>array ( string -- obj ) EBNF{{
 
 moveto-drawto-command-groups =
     moveto-drawto-command-group:first wsp* moveto-drawto-command-groups:rest
@@ -219,7 +219,7 @@ wsp = [ \t\r\n]
 
 svg-path = wsp* moveto-drawto-command-groups?:x wsp* => [[ x ]]
 
-EBNF;
+}} ;
 
 : tag-d ( tag -- d )
     "d" svg-name attr svg-path>array ;

@@ -126,7 +126,7 @@ ERROR: nonexistent-option name ;
 !       add greedy and nongreedy forms of matching
 ! (once it's all implemented)
 
-EBNF: parse-regexp
+: parse-regexp ( string -- obj ) EBNF{{
 
 CharacterInBracket = !("}") Character
 
@@ -217,4 +217,4 @@ Alternation = Concatenation:c ("|" Concatenation)*:a
 End = !(.)
 
 Main = Alternation End
-EBNF;
+}} ;

@@ -16,9 +16,9 @@ M: pipeline-expr blah ;
 : ast>pipeline-expr ( -- obj )
     pipeline-expr new blah ;
 
-EBNF: expr
+: expr ( string -- obj ) EBNF{{
 pipeline = "hello" => [[ ast>pipeline-expr ]]
-EBNF;
+}} ;
 
 use: tools.test
 

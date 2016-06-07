@@ -17,12 +17,10 @@
 [ dup <vocab-link> . flush vocab>literals ] map-zip
 
 "resource:libs" vocabs-from
-{ "brainfuck" "metar" "svg"
-"gml.parser" "infix.tokenizer"
-"math.blas.matrices" "math.blas.vectors"
+{ "metar" 
+ "math.blas.matrices" "math.blas.vectors"
 "math.vectors.simd" "math.vectors.simd.cords"
-"peg.pl0" "peg.javascript.parser" "peg.javascript.tokenizer"
-"yaml.conversion"
+ "yaml.conversion"
 } diff
 [ dup <vocab-link> . flush vocab>literals ] map-zip
 

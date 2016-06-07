@@ -65,7 +65,7 @@ MEMO: resolved-primitives ( -- seq )
 TUPLE: c++-type name params ptr ;
 C: <c++-type> c++-type ;
 
-EBNF: (parse-c++-type)
+: (parse-c++-type) ( string -- obj ) EBNF{{
 dig  = [0-9]
 alpha = [a-zA-Z]
 alphanum = [1-9a-zA-Z]
@@ -77,7 +77,7 @@ param = "," " "* type " "* => [[ third ]]
 params = "<" " "* type " "* param* ">" => [[ [ 4 swap nth ] [ third ] bi prefix ]]
 
 type = name " "* params? " "* ptr? => [[ { 0 2 4 } [ swap nth ] with map first3 <c++-type> ]]
-EBNF;
+}} ;
 
 : parse-c++-type ( str -- c++-type )
     factorize-type (parse-c++-type) ;

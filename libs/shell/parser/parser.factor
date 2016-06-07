@@ -41,7 +41,7 @@ TUPLE: factor-expr        expr ;
 : ast>factor-expr ( ast -- obj )
     second >string factor-expr boa ;
 
-EBNF: expr
+: expr ( string -- obj ) EBNF{{
 
 space = " "
 
@@ -89,4 +89,4 @@ pipeline = _ command _ (in-file)? _ "|" _ (command _ "|" _)* command _ (to-file 
 
 submission = (pipeline | basic)
 
-EBNF;
+}} ;

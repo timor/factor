@@ -4,13 +4,13 @@ USING: kernel modules.rpc peg peg-lexer peg.ebnf sequences
 strings vocabs.parser ;
 in: modules.using
 
-EBNF: modulize
+: modulize ( string -- obj ) EBNF{{
 tokenpart = (!(':').)+ => [[ >string ]]
 s = ':' => [[ drop ignore ]]
 rpc = tokenpart s s tokenpart => [[ first2 remote-vocab ]]
 remote = tokenpart s tokenpart => [[ first2 remote-load ]]
 module = rpc | remote | tokenpart
-EBNF;
+}} ;
 
 ON-BNF: USING*:
 tokenizer = <foreign factor>
@@ -25,4 +25,4 @@ long = "{" ( from | exclude | rename | qualified-with | qualified ) "}" => [[ dr
 short = modspec => [[ use-vocab ignore ]]
 wordSpec = long | short
 using = wordSpec+ ";" => [[ drop ignore ]]
-;ON-BNF
+ON-BNF;

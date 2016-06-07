@@ -5,7 +5,7 @@ combinators.short-circuit accessors math.parser quoting
 locals ;
 in: db.postgresql.errors
 
-EBNF: parse-postgresql-sql-error
+: parse-postgresql-sql-error ( string -- obj ) EBNF{{
 
 Error = "ERROR:" [ ]+
 
@@ -35,18 +35,18 @@ UnknownError = .* => [[ >string <sql-unknown-error> ]]
 
 PostgresqlSqlError = (TableError | DatabaseError | FunctionError | SyntaxError | UnknownError) 
 
-EBNF;
+}} ;
 
 
 TUPLE: parse-postgresql-location column line text ;
 C: <parse-postgresql-location> parse-postgresql-location ;
 
-EBNF: parse-postgresql-line-error
+: parse-postgresql-line-error ( string -- obj ) EBNF{{
 
 Line = "LINE " [0-9]+:line ": " .+:sql
     => [[ f line >string string>number sql >string <parse-postgresql-location> ]] 
 
-EBNF;
+}} ;
 
 :: set-caret-position ( error caret-line -- error )
     caret-line length

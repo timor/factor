@@ -1,9 +1,9 @@
 USING: peg.ebnf help.syntax help.markup strings ;
 in: peg-lexer
 
-HELP: ON-BNF:
-{ $syntax "ON-BNF: word ... ;ON-BNF" }
-{ $description "Creates a parsing word using a parser for lexer control, adding the resulting ast to the stack.  Parser syntax is as in " { $link postpone\ EBNF: } } ;
+HELP: \ ON-BNF:
+{ $syntax "ON-BNF: word ... ON-BNF;" }
+{ $description "Creates a parsing word using a parser for lexer control, adding the resulting ast to the stack.  Parser syntax is as in " { $link postpone\ EBNF{{ } } ;
 
 HELP: create-bnf
 { $values { "name" string } { "parser" parser } }

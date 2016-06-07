@@ -6,7 +6,7 @@ in: peg.pl0
 
 ! Grammar for PL/0 based on http://en.wikipedia.org/wiki/PL/0
 
-EBNF: pl0
+: pl0 ( string -- obj ) EBNF{{
 
 block       =  { "CONST" ident "=" number { "," ident "=" number }* ";" }?
                { "VAR" ident { "," ident }* ";" }?
@@ -24,4 +24,4 @@ factor      = ident | number | "(" expression ")"
 ident       = (([a-zA-Z])+)   => [[ >string ]]
 number      = ([0-9])+        => [[ string>number ]]
 program     = { block "." }
-EBNF;
+}} ;

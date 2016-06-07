@@ -287,7 +287,7 @@ in: peg.ebnf.tests
   "abcd='9' | ('8'):x => [[ x ]]" ebnf-parser (parse) remaining>> empty?
 ] unit-test
 
-EBNF: primary 
+: primary ( string -- obj ) EBNF{{
 Primary = PrimaryNoNewArray
 PrimaryNoNewArray =  ClassInstanceCreationExpression
                    | MethodInvocation
@@ -310,7 +310,7 @@ MethodName = "m" | "n"
 ExpressionName = Identifier
 Expression = "i" | "j"
 main = Primary
-EBNF;
+}} ;
 
 { "this" } [
   "this" primary
@@ -469,22 +469,22 @@ EBNF;
 ] unit-test
 
 <<
-EBNF: parser1 
+: parser1 ( string -- obj ) EBNF{{
 foo='a' 
-EBNF;
+}} ;
 >>
 
-EBNF: parser2
+: parser2 ( string -- obj ) EBNF{{
 foo=<foreign parser1 foo> 'b'
-EBNF;
+}} ;
 
-EBNF: parser3
+: parser3 ( string -- obj ) EBNF{{
 foo=<foreign parser1> 'c'
-EBNF;
+}} ;
 
-EBNF: parser4
+: parser4 ( string -- obj ) EBNF{{
 foo=<foreign any-char> 'd'
-EBNF;
+}} ;
 
 { "a" } [
   "a" parser1
@@ -523,7 +523,7 @@ EBNF;
 
 TUPLE: ast-number value ;
 
-EBNF: a-tokenizer 
+: a-tokenizer ( string -- obj ) EBNF{{
 Letter            = [a-zA-Z]
 Digit             = [0-9]
 Digits            = Digit+
@@ -539,7 +539,7 @@ Special            =   "("   | ")"   | "{"   | "}"   | "["   | "]"   | ","   | "
                      | "-"   | "*="  | "*"   | "/="  | "/"   | "%="  | "%"   | "&&="
                      | "&&"  | "||=" | "||"  | "."   | "!"
 Tok                = Spaces (Number | Special )
-EBNF;
+}} ;
 
 { V{ char: 1 T{ ast-number f 23 } ";" char: x } } [
   "123;x" EBNF{{ bar = .
@@ -592,13 +592,17 @@ EBNF;
 {
     { "a" "a" }
 } [
-    EBNF: foo   Bar = "a":a1 "a":a2 => [[ a1 a2 2array ]] EBNF;
+    : foo ( string -- obj ) EBNF{{
+        Bar = "a":a1 "a":a2 => [[ a1 a2 2array ]]
+    }} ;
     "aa" foo
 ] unit-test
 
 {
     { "a" "a" }
 } [
-    EBNF: foo2   Bar = "a":a-1 "a":a-2 => [[ a-1 a-2 2array ]] EBNF;
+    : foo2 ( string -- obj ) EBNF{{
+        Bar = "a":a-1 "a":a-2 => [[ a-1 a-2 2array ]]
+    }} ;
     "aa" foo2
 ] unit-test
