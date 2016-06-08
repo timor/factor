@@ -82,7 +82,7 @@ in: bootstrap.syntax
 
     "USING:" [ ";" [ use-vocab ] each-token ] define-core-syntax
 
-    "qualified:" [ scan-token dup add-qualified ] define-core-syntax
+    "QUALIFIED:" [ scan-token dup add-qualified ] define-core-syntax
     "qualified:" [ scan-token dup add-qualified ] define-core-syntax
 
     "QUALIFIED-WITH:" [ scan-token scan-token ";" expect add-qualified ] define-core-syntax
@@ -99,18 +99,9 @@ in: bootstrap.syntax
         scan-token scan-token "=>" expect scan-token ";" expect add-renamed-word
     ] define-core-syntax
 
-    "NAN:" [ 16 scan-base <fp-nan> suffix! ] define-core-syntax
     "nan:" [ 16 scan-base <fp-nan> suffix! ] define-core-syntax
 
     "f" [ f suffix! ] define-core-syntax
-
-    "CHAR:" [
-        lexer get parse-raw [ "token" throw-unexpected-eof ] unless* {
-            { [ dup length 1 = ] [ first ] }
-            { [ "\\" ?head ] [ next-escape >string "" assert= ] }
-            [ name>char-hook get call( name -- char ) ]
-        } cond suffix!
-    ] define-core-syntax
 
     "char:" [
         lexer get parse-raw [ "token" throw-unexpected-eof ] unless* {
@@ -140,7 +131,6 @@ in: bootstrap.syntax
     "W{" [ \ } [ first <wrapper> ] parse-literal ] define-core-syntax
     "HS{" [ \ } [ >hash-set ] parse-literal ] define-core-syntax
 
-    "POSTPONE\\" [ scan-word suffix! ] define-core-syntax
     "postpone\\" [ scan-word suffix! ] define-core-syntax
     "\\" [ scan-word <wrapper> suffix! ] define-core-syntax
     "M\\" [ scan-word scan-word lookup-method <wrapper> suffix! ] define-core-syntax
@@ -189,6 +179,7 @@ in: bootstrap.syntax
         scan-token current-vocab create-word
         [ fake-definition ] [ set-last-word ] [ undefined-def define ] tri
     ] define-core-syntax
+
     "defer:" [
         scan-token current-vocab create-word
         [ fake-definition ] [ set-last-word ] [ undefined-def define ] tri
@@ -313,6 +304,10 @@ in: bootstrap.syntax
         dup ( -- ) check-stack-effect
         [ current-vocab main<< ]
         [ current-source-file get [ main<< ] [ drop ] if* ] bi
+    ] define-core-syntax
+
+    "ARITY:" [
+        scan-escaped-word scan-number "arity" set-word-prop
     ] define-core-syntax
 
     "<<" [

@@ -8,34 +8,40 @@ in: alien.syntax
 
 SYNTAX: \ DLL" lexer get skip-blank parse-string dlopen suffix! ;
 
-SYNTAX: \ ALIEN: 16 scan-base <alien> suffix! ;
 SYNTAX: \ alien: 16 scan-base <alien> suffix! ;
 
 SYNTAX: BAD-ALIEN <bad-alien> suffix! ;
 
 SYNTAX: \ LIBRARY: scan-token current-library set ;
+ARITY: \ LIBRARY: 1
 SYNTAX: \ library: scan-token current-library set ;
+ARITY: \ library: 1
 
 SYNTAX: \ FUNCTION:
     (FUNCTION:) make-function define-inline ;
+ARITY: \ FUNCTION: 4
 
 SYNTAX: \ FUNCTION-ALIAS:
     scan-token create-function
     (FUNCTION:) (make-function) define-inline ;
+ARITY: \ FUNCTION-ALIAS: 4
 
 SYNTAX: \ CALLBACK:
     (CALLBACK:) define-inline ;
 
 SYNTAX: \ TYPEDEF:
     scan-c-type CREATE-C-TYPE ";" expect dup save-location typedef ;
+ARITY: \ TYPEDEF: 2
 
 SYNTAX: \ ENUM:
     parse-enum (define-enum) ;
 
 SYNTAX: \ C-TYPE:
     void CREATE-C-TYPE typedef ;
+ARITY: \ C-TYPE: 2
 SYNTAX: \ c-type:
     void CREATE-C-TYPE typedef ;
+ARITY: \ c-type: 2
 
 SYNTAX: \ &:
     scan-token current-library get '[ _ _ address-of ] append! ;
