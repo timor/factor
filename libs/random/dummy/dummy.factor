@@ -1,5 +1,5 @@
 USING: kernel math accessors random ;
-IN: random.dummy
+in: random.dummy
 
 TUPLE: random-dummy i ;
 C: <random-dummy> random-dummy

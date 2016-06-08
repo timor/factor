@@ -4,7 +4,7 @@ USING: accessors alien alien.c-types alien.data alien.strings
 alien.syntax arrays assocs classes.struct fry io.encodings.ascii
 io.mmap kernel locals math math.intervals sequences
 specialized-arrays strings typed ;
-IN: elf
+in: elf
 
 ! FFI data
 CONSTANT: EI_NIDENT 16

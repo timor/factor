@@ -6,7 +6,7 @@ namespaces parser prettyprint.custom quotations sequences
 sequences.generalizations sequences.private vocabs vocabs.loader
 words math.bitwise ;
 QUALIFIED-WITH: alien.c-types c
-IN: math.vectors.simd
+in: math.vectors.simd
 
 ERROR: bad-simd-length got expected ;
 ERROR: bad-simd-vector obj ;

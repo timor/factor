@@ -1,7 +1,7 @@
 USING: alien.c-types compiler.cfg.builder.alien.boxing
 compiler.cfg.instructions compiler.test cpu.architecture kernel make system
 tools.test ;
-IN: compiler.cfg.builder.alien.boxing.tests
+in: compiler.cfg.builder.alien.boxing.tests
 
 {
     { 1 }

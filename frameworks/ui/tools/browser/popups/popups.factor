@@ -7,7 +7,7 @@ ui.gadgets.glass ui.gadgets.labeled ui.gadgets.search-tables
 ui.gadgets.tables ui.gadgets.wrappers ui.gestures ui.images
 ui.operations ui.pens.solid ui.theme ui.theme.images ;
 FROM: ui.gadgets.wrappers => wrapper ;
-IN: ui.tools.browser.popups
+in: ui.tools.browser.popups
 
 SINGLETON: link-renderer
 

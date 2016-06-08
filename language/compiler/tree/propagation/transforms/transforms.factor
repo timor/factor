@@ -10,7 +10,7 @@ namespaces quotations sequences sequences.generalizations
 sequences.private sets sets.private stack-checker
 stack-checker.dependencies vectors words ;
 FROM: math => float ;
-IN: compiler.tree.propagation.transforms
+in: compiler.tree.propagation.transforms
 
 \ equal? [
     ! If first input has a known type and second input is an

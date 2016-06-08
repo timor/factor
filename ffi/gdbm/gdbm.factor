@@ -4,7 +4,7 @@ USING: accessors alien.c-types alien.data alien.destructors
 alien.enums alien.syntax classes.struct combinators destructors
 fry gdbm.ffi io.backend kernel libc locals math namespaces
 sequences serialize strings ;
-IN: gdbm
+in: gdbm
 
 ENUM: gdbm-role reader writer wrcreat newdb ;
 

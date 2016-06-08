@@ -1,7 +1,7 @@
 USING: accessors http.server http.server.filters io.pools kernel
 mongodb.driver mongodb.connection namespaces ;
 
-IN: furnace.mongodb
+in: furnace.mongodb
 
 TUPLE: mdb-persistence < filter-responder pool ;
 

@@ -7,7 +7,7 @@ compiler.cfg.linear-scan.assignment compiler.cfg.parallel-copy
 compiler.cfg.predecessors compiler.cfg.registers
 compiler.cfg.rpo compiler.cfg.utilities cpu.architecture fry
 kernel locals make namespaces sequences ;
-IN: compiler.cfg.linear-scan.resolve
+in: compiler.cfg.linear-scan.resolve
 
 TUPLE: location
     { reg read-only }

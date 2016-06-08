@@ -4,7 +4,7 @@
 USING: command-line formatting kernel io io.encodings.binary
 io.files namespaces sequences strings ;
 
-IN: tools.cat
+in: tools.cat
 
 : cat-lines ( -- )
     [ print flush ] each-line ;

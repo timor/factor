@@ -3,7 +3,7 @@
 USING: kernel namespaces accessors xml.tokenize xml.data assocs
 xml.errors xml.char-classes combinators.short-circuit splitting
 fry xml.state sequences combinators ascii math make ;
-IN: xml.name
+in: xml.name
 
 ! XML namespace processing: ns = namespace
 

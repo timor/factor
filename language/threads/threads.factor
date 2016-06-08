@@ -5,7 +5,7 @@ USING: accessors alien.private arrays assocs boxes combinators
 continuations continuations.private deques dlists fry hashtables
 heaps init kernel kernel.private math math.order namespaces
 quotations sequences strings system ;
-IN: threads
+in: threads
 
 <PRIVATE
 PRIMITIVE: (set-context) ( obj context -- obj' ) ;

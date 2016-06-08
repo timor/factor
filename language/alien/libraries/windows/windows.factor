@@ -1,5 +1,5 @@
 USING: alien.libraries io.pathnames system windows.errors ;
-IN: alien.libraries.windows
+in: alien.libraries.windows
 
 M: windows >deployed-library-path
     file-name ;

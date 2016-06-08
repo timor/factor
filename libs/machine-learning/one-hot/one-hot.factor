@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays kernel math.statistics math.vectors sequences
 sequences.extras ;
-IN: machine-learning.one-hot
+in: machine-learning.one-hot
 
 : one-hot ( indices features -- array )
     [ 1 ] 2dip

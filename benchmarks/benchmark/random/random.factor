@@ -1,5 +1,5 @@
 USING: kernel math random ;
-IN: benchmark.random
+in: benchmark.random
 
 : random-benchmark ( -- )
     1,000,000 [

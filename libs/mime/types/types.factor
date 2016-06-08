@@ -3,7 +3,7 @@
 USING: io.pathnames io.files io.encodings.ascii
 io.encodings.binary io.encodings.utf8 assocs sequences
 splitting kernel make fry memoize ;
-IN: mime.types
+in: mime.types
 
 MEMO: mime-db ( -- seq )
     "vocab:mime/types/mime.types" ascii file-lines

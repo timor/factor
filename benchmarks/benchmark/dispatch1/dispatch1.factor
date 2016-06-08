@@ -1,5 +1,5 @@
 USING: classes classes.tuple kernel sequences vocabs math ;
-IN: benchmark.dispatch1
+in: benchmark.dispatch1
 
 GENERIC: g ( obj -- obj ) ;
 

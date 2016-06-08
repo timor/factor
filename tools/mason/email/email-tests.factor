@@ -1,4 +1,4 @@
-IN: mason.email.tests
+in: mason.email.tests
 USING: mason.email mason.common mason.config namespaces
 tools.test system ;
 

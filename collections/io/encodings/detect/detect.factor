@@ -5,7 +5,7 @@ io.encodings.ascii io.encodings.binary io.encodings.iana
 io.encodings.string io.encodings.utf16 io.encodings.utf32
 io.encodings.utf8 io.files io.streams.string kernel literals
 math namespaces sequences strings ;
-IN: io.encodings.detect
+in: io.encodings.detect
 
 SYMBOL: default-8bit-encoding
 default-8bit-encoding [ latin1 ] initialize

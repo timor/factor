@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types alien.syntax
 classes.struct gobject-introspection.types kernel parser ;
-IN: gobject-introspection.standard-types
+in: gobject-introspection.standard-types
 
 <<
 TYPEDEF: char gchar

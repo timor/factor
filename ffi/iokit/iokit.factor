@@ -1,7 +1,7 @@
 USING: alien.syntax alien.c-types alien.data core-foundation
 core-foundation.bundles core-foundation.dictionaries system
 combinators kernel sequences io accessors unix.types ;
-IN: iokit
+in: iokit
 
 <<
     os macosx?

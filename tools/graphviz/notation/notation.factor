@@ -5,7 +5,7 @@ kernel present quotations sequences slots words
 graphviz
 graphviz.attributes
 ;
-IN: graphviz.notation
+in: graphviz.notation
 
 <<
 

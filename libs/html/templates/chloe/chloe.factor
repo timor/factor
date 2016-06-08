@@ -5,7 +5,7 @@ html.templates html.templates.chloe.compiler
 html.templates.chloe.components html.templates.chloe.syntax
 io.encodings.utf8 io.files io.files.info kernel logging make
 math namespaces sequences splitting words xml xml.syntax ;
-IN: html.templates.chloe
+in: html.templates.chloe
 
 TUPLE: chloe path ;
 

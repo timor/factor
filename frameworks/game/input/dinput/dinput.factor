@@ -8,7 +8,7 @@ windows.directx.dinput windows.directx.dinput.constants
 windows.kernel32 windows.messages windows.ole32 windows.errors
 windows.user32 classes.struct ;
 SPECIALIZED-ARRAY: DIDEVICEOBJECTDATA
-IN: game.input.dinput
+in: game.input.dinput
 
 CONSTANT: MOUSE-BUFFER-SIZE 16
 

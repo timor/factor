@@ -1,6 +1,6 @@
 USING: help.markup help.syntax kernel ui.gestures quotations
 sequences strings math ;
-IN: game.input
+in: game.input
 
 ARTICLE: "game-input" "Game controller input"
 "The " { $vocab-link "game.input" } " vocabulary provides cross-platform access to game controller devices such as joysticks and gamepads. It also provides an interface for polling raw keyboard and mouse input." $nl

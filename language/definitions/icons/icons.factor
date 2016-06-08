@@ -3,7 +3,7 @@
 USING: assocs classes.predicate fry generic help.topics
 io.pathnames kernel lexer macros namespaces parser sequences
 vocabs words words.constant words.symbol ;
-IN: definitions.icons
+in: definitions.icons
 
 GENERIC: definition-icon ( definition -- path ) ;
 

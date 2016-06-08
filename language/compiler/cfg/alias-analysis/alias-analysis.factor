@@ -5,7 +5,7 @@ compiler.cfg.comparisons compiler.cfg.instructions
 compiler.cfg.representations.preferred compiler.cfg.rpo
 compiler.cfg.utilities cpu.architecture fry kernel locals math
 namespaces sequences sets ;
-IN: compiler.cfg.alias-analysis
+in: compiler.cfg.alias-analysis
 
 ! Local copy propagation
 SYMBOL: copies

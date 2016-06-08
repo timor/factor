@@ -3,7 +3,7 @@
 USING: bootstrap.image io.directories io.directories.hierarchy
 io.files kernel namespaces sequences system ;
 FROM: mason.config => target-os ;
-IN: mason.release.tidy
+in: mason.release.tidy
 
 CONSTANT: cleanup-list {
     "vm"

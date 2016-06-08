@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.data kernel alien alien.syntax shuffle
 openal openal.alut.backend namespaces system generalizations ;
-IN: openal.alut.macosx
+in: openal.alut.macosx
 
 LIBRARY: alut
 

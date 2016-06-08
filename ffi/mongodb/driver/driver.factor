@@ -6,7 +6,7 @@ prettyprint prettyprint.custom prettyprint.sections sequences
 sets splitting strings ;
 FROM: ascii => ascii? ;
 FROM: math.bitwise => set-bit ;
-IN: mongodb.driver
+in: mongodb.driver
 
 TUPLE: mdb-pool < pool mdb ;
 

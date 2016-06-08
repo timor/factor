@@ -3,7 +3,7 @@ compiler.cfg.dataflow-analysis.private compiler.cfg.instructions
 compiler.cfg.linearization compiler.cfg.registers
 compiler.cfg.utilities compiler.cfg.stacks.vacant kernel math sequences sorting
 tools.test vectors ;
-IN: compiler.cfg.stacks.vacant.tests
+in: compiler.cfg.stacks.vacant.tests
 
 ! state>gc-data
 {

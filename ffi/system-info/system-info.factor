@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors io kernel math math.parser sequences system
 vocabs ;
-IN: system-info
+in: system-info
 
 HOOK: os-version os ( -- version ) ;
 HOOK: cpus os ( -- n ) ;

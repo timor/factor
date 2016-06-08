@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: tools.test compression.inflate ;
-IN: compression.inflate.tests
+in: compression.inflate.tests
 
 {
 B{

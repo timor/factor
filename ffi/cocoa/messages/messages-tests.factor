@@ -1,5 +1,5 @@
 USING: alien.c-types cocoa.runtime tools.test ;
-IN: cocoa.messages
+in: cocoa.messages
 
 { "( sender-stub:void() )" }
 [ { void { } } sender-stub-name ] unit-test

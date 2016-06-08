@@ -6,7 +6,7 @@ compiler.cfg.utilities compiler.cfg.value-numbering.graph
 compiler.cfg.value-numbering.math
 compiler.cfg.value-numbering.rewrite cpu.architecture fry kernel
 make math sequences ;
-IN: compiler.cfg.value-numbering.alien
+in: compiler.cfg.value-numbering.alien
 
 M: ##box-displaced-alien rewrite
     dup displacement>> vreg>insn zero-insn?

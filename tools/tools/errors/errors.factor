@@ -3,7 +3,7 @@
 USING: assocs debugger io kernel sequences source-files.errors
 summary accessors continuations make math.parser io.styles namespaces
 compiler.errors prettyprint source-files.errors.debugger command-line ;
-IN: tools.errors
+in: tools.errors
 
 ! Tools for source-files.errors. Used by tools.tests and others
 ! for error reporting

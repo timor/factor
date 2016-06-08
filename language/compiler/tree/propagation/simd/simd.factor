@@ -5,7 +5,7 @@ compiler.tree.propagation.info compiler.tree.propagation.nodes
 continuations cpu.architecture fry kernel layouts math
 math.intervals math.vectors.simd.intrinsics namespaces sequences
 words ;
-IN: compiler.tree.propagation.simd
+in: compiler.tree.propagation.simd
 
 CONSTANT: vector>vector-intrinsics
     {

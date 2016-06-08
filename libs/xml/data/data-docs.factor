@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel sequences strings ;
-IN: xml.data
+in: xml.data
 
 ABOUT: "xml.data"
 

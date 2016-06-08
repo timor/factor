@@ -25,7 +25,7 @@ USING:
     strings
     urls
 ;
-IN: bitcoin.client
+in: bitcoin.client
 
 : bitcoin-server ( -- string )
     \ bitcoin-server get "localhost" or ;

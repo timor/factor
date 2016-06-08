@@ -4,7 +4,7 @@ USING: accessors alien alien.c-types alien.data alien.syntax
 byte-arrays byte-vectors classes.struct combinators
 compression.zlib.ffi continuations destructors fry kernel libc
 math math.functions math.ranges sequences system ;
-IN: compression.zlib
+in: compression.zlib
 
 ERROR: zlib-failed n string ;
 

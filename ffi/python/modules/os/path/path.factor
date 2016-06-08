@@ -1,5 +1,5 @@
 USING: python.syntax ;
-IN: python.modules.os.path
+in: python.modules.os.path
 
 PY-FROM: os.path =>
     basename ( x -- x' )

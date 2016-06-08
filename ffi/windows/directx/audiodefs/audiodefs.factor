@@ -1,6 +1,6 @@
 USING: alien.c-types alien.syntax classes.struct
 windows.kernel32 windows.types ;
-IN: windows.directx.audiodefs
+in: windows.directx.audiodefs
 
 STRUCT: WAVEFORMATEX
     { wFormatTag      WORD  }

@@ -1,5 +1,5 @@
 USING: kernel tools.destructors tools.test destructors namespaces ;
-IN: tools.destructors.tests
+in: tools.destructors.tests
 
 f debug-leaks? set-global
 

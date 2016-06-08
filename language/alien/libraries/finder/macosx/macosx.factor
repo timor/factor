@@ -6,7 +6,7 @@ combinators.short-circuit environment io.files io.files.info
 io.pathnames kernel locals make namespaces sequences splitting
 system ;
 
-IN: alien.libraries.finder.macosx
+in: alien.libraries.finder.macosx
 
 <PRIVATE
 

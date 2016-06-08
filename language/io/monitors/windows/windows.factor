@@ -6,7 +6,7 @@ io.encodings.string io.encodings.utf16n io.files.windows
 io.monitors io.pathnames io.ports kernel literals locals make
 math sequences system threads windows.errors windows.kernel32
 windows.types ;
-IN: io.monitors.windows
+in: io.monitors.windows
 
 : open-directory ( path -- handle )
     normalize-path

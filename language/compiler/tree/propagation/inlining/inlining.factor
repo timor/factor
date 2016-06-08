@@ -6,7 +6,7 @@ compiler.tree.normalization compiler.tree.propagation.info
 compiler.tree.propagation.nodes compiler.tree.recursive generic
 generic.math generic.single generic.standard kernel locals math
 math.partial-dispatch namespaces quotations sequences words ;
-IN: compiler.tree.propagation.inlining
+in: compiler.tree.propagation.inlining
 
 : splicing-call ( #call word -- nodes )
     [ [ in-d>> ] [ out-d>> ] bi ] dip <#call> 1array ;

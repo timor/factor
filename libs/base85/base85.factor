@@ -3,7 +3,7 @@
 USING: base64.private combinators io io.binary
 io.encodings.binary io.streams.byte-array kernel literals math
 namespaces sequences ;
-IN: base85
+in: base85
 
 ERROR: malformed-base85 ;
 

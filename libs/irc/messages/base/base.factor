@@ -3,7 +3,7 @@
 USING: accessors arrays assocs calendar classes.parser classes.tuple
        combinators fry generic.parser kernel lexer
        mirrors namespaces parser sequences splitting strings words ;
-IN: irc.messages.base
+in: irc.messages.base
 
 TUPLE: irc-message line prefix command parameters trailing timestamp sender ;
 TUPLE: unhandled < irc-message ;

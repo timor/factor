@@ -5,7 +5,7 @@ continuations environment io.backend io.backend.unix
 io.files.private io.files.unix io.launcher io.launcher.private
 io.pathnames io.ports kernel libc math namespaces sequences
 simple-tokenizer strings system unix unix.ffi unix.process ;
-IN: io.launcher.unix
+in: io.launcher.unix
 
 : get-arguments ( process -- seq )
     command>> dup string? [ tokenize ] when ;

@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.syntax help.markup peg peg.search words ;
-IN: peg.ebnf
+in: peg.ebnf
 
 HELP: <EBNF
 { $syntax "<EBNF ...ebnf... EBNF>" }

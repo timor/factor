@@ -1,5 +1,5 @@
 USING: help.markup help.syntax io continuations quotations ;
-IN: io.streams.duplex
+in: io.streams.duplex
 
 ARTICLE: "io.streams.duplex" "Duplex streams"
 "Duplex streams combine an input stream and an output stream into a bidirectional stream."

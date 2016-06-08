@@ -1,7 +1,7 @@
 USING: accessors assocs continuations http http.server
 http.server.requests io.encodings.utf8 io.encodings.binary io.streams.string
 kernel math peg sequences tools.test urls ;
-IN: http.server.tests
+in: http.server.tests
 
 { t } [ [ \ + first ] [ <500> ] recover response? ] unit-test
 

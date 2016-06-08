@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: cocoa cocoa.application cocoa.classes
 core-foundation.strings kernel splitting ;
-IN: cocoa.dialogs
+in: cocoa.dialogs
 
 : <NSOpenPanel> ( -- panel )
     NSOpenPanel -> openPanel

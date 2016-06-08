@@ -2,7 +2,7 @@ USING: game.input math math.order kernel macros fry sequences quotations
 arrays windows.directx.xinput combinators accessors windows.types
 game.input.dinput sequences.private namespaces classes.struct
 windows.errors windows.com.syntax alien.strings ;
-IN: game.input.xinput
+in: game.input.xinput
 
 SINGLETON: xinput-game-input-backend
 

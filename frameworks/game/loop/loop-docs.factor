@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: help.markup help.syntax kernel math ui.gadgets.worlds ;
-IN: game.loop
+in: game.loop
 
 HELP: fps
 { $values { "fps" real } { "nanos" integer } }

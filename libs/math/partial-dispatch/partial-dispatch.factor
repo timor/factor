@@ -5,7 +5,7 @@ math.functions math.functions.private sequences parser
 namespaces make assocs quotations arrays generic generic.math
 hashtables effects compiler.units classes.algebra fry
 combinators words ;
-IN: math.partial-dispatch
+in: math.partial-dispatch
 
 PREDICATE: math-partial < word
     "derived-from" word-prop >boolean ;

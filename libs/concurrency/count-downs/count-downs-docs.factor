@@ -1,5 +1,5 @@
 USING: help.markup help.syntax sequences ;
-IN: concurrency.count-downs
+in: concurrency.count-downs
 
 HELP: <count-down>
 { $values { "n" "a non-negative integer" } { "count-down" count-down } }

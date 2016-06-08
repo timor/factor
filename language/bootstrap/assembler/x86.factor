@@ -5,7 +5,7 @@ compiler.constants compiler.units cpu.x86.assembler
 cpu.x86.assembler.operands kernel kernel.private layouts locals
 locals.backend math math.private memory namespaces sequences
 slots.private strings.private vocabs ;
-IN: bootstrap.x86
+in: bootstrap.x86
 
 : temp0/32 ( -- reg )
     temp0 32-bit-version-of ;

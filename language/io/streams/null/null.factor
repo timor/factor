@@ -1,7 +1,7 @@
 ! Copyright (C) 2007, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel io destructors io.streams.plain ;
-IN: io.streams.null
+in: io.streams.null
 
 SINGLETONS: null-reader null-writer ;
 UNION: null-stream null-reader null-writer ;

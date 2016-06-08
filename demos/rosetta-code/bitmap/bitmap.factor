@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays fry kernel math.matrices sequences ;
-IN: rosetta-code.bitmap
+in: rosetta-code.bitmap
 
 ! http://rosettacode.org/wiki/Basic_bitmap_storage
 

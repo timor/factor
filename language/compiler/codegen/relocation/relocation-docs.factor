@@ -1,6 +1,6 @@
 USING: alien byte-arrays byte-vectors compiler.constants cpu.architecture
 help.markup help.syntax make vectors ;
-IN: compiler.codegen.relocation
+in: compiler.codegen.relocation
 
 HELP: add-dlsym-parameters
 { $values { "symbol" byte-array } { "dll" dll } }

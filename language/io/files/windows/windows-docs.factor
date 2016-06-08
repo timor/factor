@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-IN: io.files.windows
+in: io.files.windows
 
 HELP: open-read
 { $values { "path" "a filesystem path" } { "win32-file" "a win32 file-handle" } }

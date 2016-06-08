@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel summary debugger io make math.parser
 prettyprint http http.client accessors ;
-IN: http.client.debugger
+in: http.client.debugger
 
 M: too-many-redirects summary
     drop

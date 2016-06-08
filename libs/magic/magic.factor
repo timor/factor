@@ -3,7 +3,7 @@
 
 USING: destructors io.backend kernel magic.ffi ;
 
-IN: magic
+in: magic
 
 <PRIVATE
 

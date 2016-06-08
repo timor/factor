@@ -2,7 +2,7 @@
 USING: accessors combinators.short-circuit definitions functors
 kernel lexer namespaces parser prettyprint tools.crossref
 sequences words ;
-IN: annotations
+in: annotations
 
 <<
 

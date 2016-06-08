@@ -1,4 +1,4 @@
-IN: colors.constants
+in: colors.constants
 USING: help.markup help.syntax strings colors ;
 
 HELP: named-color

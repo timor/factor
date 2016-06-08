@@ -5,7 +5,7 @@ USING: combinators combinators.short-circuit command-line io
 io.directories io.files io.files.info kernel math namespaces
 sequences ;
 
-IN: tools.copy
+in: tools.copy
 
 : usage ( -- )
     "Usage: copy source ... target" print ;

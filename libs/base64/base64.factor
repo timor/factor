@@ -3,7 +3,7 @@
 USING: arrays combinators fry io io.binary io.encodings.binary
 io.streams.byte-array kernel literals math namespaces sbufs
 sequences ;
-IN: base64
+in: base64
 
 ERROR: malformed-base64 ;
 

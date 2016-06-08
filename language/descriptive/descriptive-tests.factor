@@ -1,6 +1,6 @@
 USING: descriptive kernel math tools.test continuations prettyprint io.streams.string see
 math.ratios ;
-IN: descriptive.tests
+in: descriptive.tests
 
 DESCRIPTIVE: divide ( num denom -- fraction ) / ;
 

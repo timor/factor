@@ -5,7 +5,7 @@ USING: arrays asn1.ldap assocs byte-arrays combinators
 continuations io io.binary io.streams.string kernel math
 math.parser namespaces make pack strings sequences accessors ;
 
-IN: asn1
+in: asn1
 
 <PRIVATE
 

@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: assocs classes help.markup help.syntax kernel math
 quotations strings ;
-IN: combinators.tuple
+in: combinators.tuple
 
 HELP: 2make-tuple
 { $values

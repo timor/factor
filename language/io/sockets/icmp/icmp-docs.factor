@@ -1,7 +1,7 @@
 
 USING: help.markup help.syntax io.sockets ;
 
-IN: io.sockets.icmp
+in: io.sockets.icmp
 
 HELP: icmp
 { $class-description

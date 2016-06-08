@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: alien audio byte-arrays destructors help.markup
 help.syntax kernel math strings ;
-IN: audio.engine
+in: audio.engine
 
 HELP: <audio-engine>
 { $values

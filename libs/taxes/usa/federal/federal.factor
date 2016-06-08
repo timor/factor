@@ -3,7 +3,7 @@
 USING: accessors arrays assocs kernel math math.intervals
 namespaces sequences money math.order taxes.usa.fica
 taxes.usa.medicare taxes.usa taxes.usa.w4 ;
-IN: taxes.usa.federal
+in: taxes.usa.federal
 
 ! http://www.irs.gov/pub/irs-pdf/p15.pdf
 ! Table 7 ANNUAL Payroll Period

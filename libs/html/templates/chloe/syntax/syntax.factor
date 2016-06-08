@@ -5,7 +5,7 @@ assocs splitting words arrays memoize parser lexer io io.files
 io.encodings.utf8 io.streams.string unicode mirrors fry math urls
 multiline xml xml.data xml.writer xml.syntax html.components
 html.templates ;
-IN: html.templates.chloe.syntax
+in: html.templates.chloe.syntax
 
 SYMBOL: tags
 

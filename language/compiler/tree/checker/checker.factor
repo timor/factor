@@ -4,7 +4,7 @@ USING: accessors arrays assocs columns combinators compiler.tree
 compiler.tree.combinators compiler.tree.def-use
 compiler.tree.recursive continuations grouping kernel math
 namespaces sequences sets vectors ;
-IN: compiler.tree.checker
+in: compiler.tree.checker
 
 ! Check some invariants; this can help catch compiler bugs.
 

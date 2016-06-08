@@ -3,7 +3,7 @@
 USING: ascii assocs byte-arrays fry hints kernel lexer math
 math.order parser sequences sequences.private strings summary
 words ;
-IN: tr
+in: tr
 
 ERROR: bad-tr ;
 

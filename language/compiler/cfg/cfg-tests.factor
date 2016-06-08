@@ -1,5 +1,5 @@
 USING: accessors combinators compiler.cfg kernel layouts tools.test ;
-IN: compiler.cfg.tests
+in: compiler.cfg.tests
 
 {
     "word"

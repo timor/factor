@@ -5,7 +5,7 @@ compiler.cfg compiler.cfg.instructions compiler.cfg.predecessors
 compiler.cfg.renaming compiler.cfg.rpo compiler.cfg.utilities
 deques dlists fry kernel locals math namespaces sequences sets
 vectors ;
-IN: compiler.cfg.branch-splitting
+in: compiler.cfg.branch-splitting
 
 : clone-instructions ( insns -- insns' )
     [ clone dup rename-insn-temps ] map ;

@@ -6,7 +6,7 @@ io.encodings.utf8 xml.data xml.errors xml.elements ascii
 xml.entities xml.state xml.autoencoding assocs xml.tokenize
 combinators.short-circuit xml.name splitting
 io.streams.byte-array combinators ;
-IN: xml
+in: xml
 
 <PRIVATE
 

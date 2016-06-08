@@ -5,7 +5,7 @@ USING: arrays assocs combinators environment io kernel
 linked-assocs math.parser regexp sequences splitting strings
 unicode urls.encoding ;
 
-IN: cgi
+in: cgi
 
 <PRIVATE
 

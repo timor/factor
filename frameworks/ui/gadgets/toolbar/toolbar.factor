@@ -4,7 +4,7 @@ USING: accessors assocs classes fry kernel locals ui.baseline-alignment ui.comma
 ui.gadgets ui.gadgets.borders ui.gadgets.buttons
 ui.gadgets.buttons.private ui.gadgets.packs ui.theme
 ui.gadgets.tracks ui.pens ui.pens.solid ;
-IN: ui.gadgets.toolbar
+in: ui.gadgets.toolbar
 
 <PRIVATE
 

@@ -5,7 +5,7 @@ hashtables io irc.client.base irc.client.chats irc.messages kernel namespaces
 strings words.symbol irc.messages.base irc.client.participants fry threads
 combinators irc.messages.parser math ;
 EXCLUDE: sequences => join ;
-IN: irc.client.internals
+in: irc.client.internals
 
 : do-connect ( server port quot: ( host port -- stream ) attempts -- stream/f )
     dup 0 > [

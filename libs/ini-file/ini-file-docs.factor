@@ -3,7 +3,7 @@
 
 USING: assocs hashtables help.syntax help.markup io strings ;
 
-IN: ini-file
+in: ini-file
 
 HELP: read-ini
 { $values { "assoc" assoc } }

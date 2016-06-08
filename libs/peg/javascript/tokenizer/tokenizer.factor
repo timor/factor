@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel sequences strings arrays math.parser peg peg.ebnf peg.javascript.ast ;
-IN: peg.javascript.tokenizer
+in: peg.javascript.tokenizer
 
 ! Grammar for JavaScript. Based on OMeta-JS example from:
 ! http://jarrett.cs.ucla.edu/ometa-js/#JavaScript_Compiler

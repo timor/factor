@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math.functions math.ranges project-euler.common
 sequences math.order ;
-IN: project-euler.056
+in: project-euler.056
 
 ! http://projecteuler.net/index.php?section=problems&id=56
 

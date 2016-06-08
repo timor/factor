@@ -1,5 +1,5 @@
 USING: math kernel debugger namespaces ;
-IN: benchmark.fib5
+in: benchmark.fib5
 
 SYMBOL: n
 : namespace-fib ( m -- n )

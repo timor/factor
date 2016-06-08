@@ -3,7 +3,7 @@
 USING: sequences strings kernel io.encodings.string
 math.order ascii math io io.encodings.utf8 io.streams.string
 combinators.short-circuit math.parser arrays ;
-IN: quoted-printable
+in: quoted-printable
 
 ! This implements RFC 2045 section 6.7
 

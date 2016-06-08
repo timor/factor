@@ -3,7 +3,7 @@
 
 USING: kernel math math.statistics math.vectors sequences ;
 
-IN: math.similarity
+in: math.similarity
 
 : euclidian-similarity ( a b -- n )
     v- norm 1 + recip ;

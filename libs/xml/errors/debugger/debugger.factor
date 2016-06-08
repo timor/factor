@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors debugger io kernel prettyprint sequences
 xml.errors xml.writer ;
-IN: xml.errors.debugger
+in: xml.errors.debugger
 
 M: xml-error error.
     "XML parsing error" print

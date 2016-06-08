@@ -1,7 +1,7 @@
 
 USING: help.syntax help.markup kernel prettyprint sequences strings ;
 
-IN: uuid
+in: uuid
 
 HELP: uuid1
 { $values { "string" "a UUID string" } }

@@ -4,7 +4,7 @@ USING: io io.backend io.directories io.files.info.unix
 io.pathnames kernel namespaces sequences system
 tools.deploy.backend tools.deploy.config
 tools.deploy.config.editor webbrowser ;
-IN: tools.deploy.unix
+in: tools.deploy.unix
 
 : create-app-dir ( vocab bundle-name -- vm )
     copy-vm

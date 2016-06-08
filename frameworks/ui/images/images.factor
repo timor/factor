@@ -3,7 +3,7 @@
 USING: accessors assocs cache combinators images.loader kernel
 memoize namespaces opengl.textures system ui.gadgets.worlds
 vocabs ;
-IN: ui.images
+in: ui.images
 
 TUPLE: image-name path ;
 

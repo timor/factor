@@ -3,7 +3,7 @@
 USING: accessors assocs compiler.tree compiler.tree.combinators
 compiler.tree.def-use compiler.utilities deques dlists kernel
 namespaces sets stack-checker.branches ;
-IN: compiler.tree.dead-code.liveness
+in: compiler.tree.dead-code.liveness
 
 SYMBOL: work-list
 

@@ -1,4 +1,4 @@
-IN: mason.release.branch.tests
+in: mason.release.branch.tests
 USING: mason.release.branch mason.config tools.test namespaces
 system ;
 

@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax io.streams.string ;
-IN: http.server.static
+in: http.server.static
 
 HELP: <file-responder>
 { $values { "root" "a pathname string" } { "hook" { $quotation ( path mime-type -- response ) } } { "responder" file-responder } }

@@ -1,6 +1,6 @@
 USING: help.markup help.syntax io.streams.string strings urls
 calendar xml.data xml.writer present ;
-IN: syndication
+in: syndication
 
 HELP: entry
 { $description "An Atom or RSS feed entry. Has the following slots:"

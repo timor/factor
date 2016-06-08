@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax calendar.unix core-foundation
 core-foundation.time locals ;
-IN: core-foundation.timers
+in: core-foundation.timers
 
 TYPEDEF: void* CFRunLoopTimerRef
 

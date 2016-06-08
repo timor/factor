@@ -1,7 +1,7 @@
 USING: assocs classes help.markup help.syntax io.streams.string
 http http.server.dispatchers http.server.responses
 furnace.redirection strings html.forms ;
-IN: furnace.actions
+in: furnace.actions
 
 HELP: <action>
 { $values { "action" action } }

@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2010 Slava Pestov
 ! See http://factorcode.org/license.txt for BSD license.
 USING: peg.ebnf strings ;
-IN: simple-tokenizer
+in: simple-tokenizer
 
 EBNF: tokenize
 space = [ \t\n\r]

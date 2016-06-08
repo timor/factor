@@ -3,7 +3,7 @@
 USING: accessors combinators combinators.short-circuit
 compiler.cfg.instructions compiler.cfg.value-numbering.graph
 cpu.architecture kernel layouts math ;
-IN: compiler.cfg.value-numbering.rewrite
+in: compiler.cfg.value-numbering.rewrite
 
 ! Outputs f to mean no change
 GENERIC: rewrite ( insn -- insn/f ) ;

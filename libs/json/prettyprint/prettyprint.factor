@@ -3,7 +3,7 @@
 USING: assocs fry hashtables io io.encodings.utf8 io.files
 io.streams.string json.reader json.writer kernel math namespaces
 sequences strings ;
-IN: json.prettyprint
+in: json.prettyprint
 
 <PRIVATE
 SYMBOL: indent-level

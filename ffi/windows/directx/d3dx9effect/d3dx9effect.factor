@@ -3,7 +3,7 @@ windows.com.syntax windows.directx windows.directx.d3d9
 windows.directx.d3d9types windows.directx.d3dx9core
 windows.directx.d3dx9math windows.directx.d3dx9shader
 windows.types ;
-IN: windows.directx.d3dx9effect
+in: windows.directx.d3dx9effect
 
 LIBRARY: d3dx9
 

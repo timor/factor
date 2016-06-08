@@ -5,7 +5,7 @@ db.postgresql.errors db.postgresql.ffi db.postgresql.lib
 db.private db.queries db.tuples db.tuples.private db.types
 destructors kernel make math math.parser namespaces nmake random
 sequences splitting ;
-IN: db.postgresql
+in: db.postgresql
 
 TUPLE: postgresql-db host port pgopts pgtty database username password ;
 

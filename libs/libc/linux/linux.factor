@@ -1,5 +1,5 @@
 USING: alien.c-types alien.syntax destructors kernel system ;
-IN: libc
+in: libc
 
 LIBRARY: libc
 

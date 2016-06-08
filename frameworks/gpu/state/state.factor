@@ -6,7 +6,7 @@ QUALIFIED-WITH: alien.c-types c
 FROM: math => float ;
 SPECIALIZED-ARRAY: c:int
 SPECIALIZED-ARRAY: c:float
-IN: gpu.state
+in: gpu.state
 
 TUPLE: viewport-state
     { rect rect read-only } ;

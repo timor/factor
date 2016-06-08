@@ -1,6 +1,6 @@
 USING: accessors kernel models namespaces tools.test ui.gadgets
 ui.gadgets.buttons ;
-IN: ui.gadgets.buttons.tests
+in: ui.gadgets.buttons.tests
 
 { } [
     2 <model> {

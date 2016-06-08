@@ -1,7 +1,7 @@
 USING: help.markup help.syntax io kernel math parser
 prettyprint sequences vocabs.loader namespaces stack-checker
 help command-line see ;
-IN: help.cookbook
+in: help.cookbook
 
 ARTICLE: "cookbook-syntax" "Basic syntax cookbook"
 "The following is a simple snippet of Factor code:"
@@ -211,7 +211,7 @@ command-line get [
 "The following is a more complicated example, implementing something like the Unix " { $snippet "grep" } " command:"
 { $code "USING: kernel fry io io.files io.encodings.ascii sequences
 regexp command-line namespaces ;
-IN: grep
+in: grep
 
 : grep-lines ( pattern -- )
     '[ dup _ matches? [ print ] [ drop ] if ] each-line ;

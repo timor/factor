@@ -1,7 +1,7 @@
 ! Copyright (c) 2007, 2008 Aaron Schaefer.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel make math sequences sorting project-euler.common ;
-IN: project-euler.009
+in: project-euler.009
 
 ! http://projecteuler.net/index.php?section=problems&id=9
 

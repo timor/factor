@@ -4,7 +4,7 @@
 USING: accessors colors combinators kernel locals math
 math.order ;
 
-IN: colors.hsl
+in: colors.hsl
 
 TUPLE: hsla < color
 { hue read-only }

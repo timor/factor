@@ -1,7 +1,7 @@
 ! Copyright (C) 2012 Alex Vondrak.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: compiler.utilities kernel namespaces ;
-IN: compiler.cfg.ssa.destruction.leaders
+in: compiler.cfg.ssa.destruction.leaders
 
 SYMBOL: leader-map
 

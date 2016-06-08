@@ -3,7 +3,7 @@
 USING: accessors combinators combinators.short-circuit
 compiler.cfg compiler.cfg.predecessors compiler.cfg.rpo
 compiler.cfg.utilities kernel sequences ;
-IN: compiler.cfg.block-joining
+in: compiler.cfg.block-joining
 
 : join-block? ( bb -- ? )
     {

@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel math sequences ;
-IN: persistent.vectors
+in: persistent.vectors
 
 HELP: PV{
 { $syntax "PV{ elements... }" }

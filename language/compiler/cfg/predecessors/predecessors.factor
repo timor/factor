@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs compiler.cfg.rpo compiler.cfg.utilities
 fry kernel sequences ;
-IN: compiler.cfg.predecessors
+in: compiler.cfg.predecessors
 
 <PRIVATE
 

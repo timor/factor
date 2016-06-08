@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs hash-sets kernel locals sequences
 sequences.extras sets ;
-IN: sets.extras
+in: sets.extras
 
 : setwise-xor ( seq1 seq2 -- set )
     [ append members ] [ intersect ] 2bi diff ;

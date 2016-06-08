@@ -6,7 +6,7 @@ continuations.private concurrency.messaging quotations
 kernel.private words sequences.private assocs models
 models.arrow arrays accessors generic generic.single definitions
 make sbufs tools.crossref fry ;
-IN: tools.continuations
+in: tools.continuations
 
 <PRIVATE
 

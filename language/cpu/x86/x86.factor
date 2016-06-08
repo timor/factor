@@ -13,7 +13,7 @@ math.order memory namespaces sequences system vm vocabs ;
 QUALIFIED-WITH: alien.c-types c
 FROM: kernel.private => declare ;
 FROM: math => float ;
-IN: cpu.x86
+in: cpu.x86
 
 ! Add some methods to the assembler to be more useful to the backend
 M: label JMP 0 JMP rc-relative label-fixup ;

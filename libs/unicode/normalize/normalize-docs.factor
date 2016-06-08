@@ -1,5 +1,5 @@
 USING: help.syntax help.markup strings unicode ;
-IN: unicode.normalize
+in: unicode.normalize
 
 ABOUT: "unicode.normalize"
 

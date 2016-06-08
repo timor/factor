@@ -8,7 +8,7 @@ math.functions math.order math.ranges namespaces sequences
 sequences.private sets summary system typed vocabs ;
 QUALIFIED-WITH: alien.c-types c
 QUALIFIED-WITH: sets sets
-IN: random
+in: random
 
 SYMBOL: system-random-generator
 SYMBOL: secure-random-generator

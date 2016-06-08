@@ -3,7 +3,7 @@
 
 USING: combinators kernel locals math math.functions ;
 
-IN: math.approx
+in: math.approx
 
 <PRIVATE
 

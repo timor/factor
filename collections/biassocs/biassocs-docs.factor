@@ -1,4 +1,4 @@
-IN: biassocs
+in: biassocs
 USING: help.markup help.syntax assocs kernel ;
 
 HELP: biassoc

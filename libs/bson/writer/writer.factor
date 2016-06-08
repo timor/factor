@@ -6,7 +6,7 @@ combinators.short-circuit dlists fry hashtables io io.binary
 io.encodings io.encodings.utf8 io.streams.byte-array kernel
 linked-assocs literals math math.parser namespaces quotations
 sequences serialize strings typed vectors words ;
-IN: bson.writer
+in: bson.writer
 
 <PRIVATE
 

@@ -1,6 +1,6 @@
 USING: alien.c-types alien.libraries alien io.encodings.utf8
 io.pathnames system ;
-IN: alien.libraries.unix
+in: alien.libraries.unix
 
 : (dlerror) ( -- string )
     \ c-string f "dlerror" { } alien-invoke ; inline

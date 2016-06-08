@@ -1,5 +1,5 @@
 USING: fonts tools.test ;
-IN: pdf.wrap
+in: pdf.wrap
 
 { "hello,      " "extra spaces" } [
     "hello,      extra spaces" word-split1

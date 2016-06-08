@@ -3,7 +3,7 @@ USING: accessors arrays classes classes.mixin classes.parser
 classes.tuple classes.tuple.parser combinators
 combinators.short-circuit kernel lexer make parser sequences
 sets strings words ;
-IN: roles
+in: roles
 
 ERROR: role-slot-overlap class slots ;
 ERROR: multiple-inheritance-attempted classes ;

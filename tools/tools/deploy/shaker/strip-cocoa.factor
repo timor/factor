@@ -3,7 +3,7 @@
 USING: cocoa cocoa.messages cocoa.application cocoa.nibs assocs
 namespaces kernel kernel.private words compiler.units sequences
 init vocabs memoize accessors ;
-IN: tools.deploy.shaker.cocoa
+in: tools.deploy.shaker.cocoa
 
 : pool ( obj -- obj' ) \ pool get [ ] cache ;
 

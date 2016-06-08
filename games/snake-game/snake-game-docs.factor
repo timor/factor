@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-IN: snake-game
+in: snake-game
 
 ARTICLE: { "snake-game" "about" } "About Snake Game"
 { $heading "About" }

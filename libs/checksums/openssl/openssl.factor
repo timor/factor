@@ -3,7 +3,7 @@
 USING: accessors byte-arrays alien.c-types alien.data kernel
 continuations destructors sequences io openssl openssl.libcrypto
 checksums checksums.stream classes.struct ;
-IN: checksums.openssl
+in: checksums.openssl
 
 ERROR: unknown-digest name ;
 

@@ -1,6 +1,6 @@
 USING: compiler.cfg compiler.cfg.dominance.private help.markup help.syntax
 sequences ;
-IN: compiler.cfg.dominance
+in: compiler.cfg.dominance
 
 HELP: dom-parents
 { $var-description "Maps bb -> idom(bb)" } ;

@@ -4,7 +4,7 @@ kernel specialized-arrays system tools.deploy.libraries
 windows.kernel32 windows.types ;
 FROM: alien.c-types => ushort ;
 SPECIALIZED-ARRAY: ushort
-IN: tools.deploy.libraries.windows
+in: tools.deploy.libraries.windows
 
 M: windows find-library-file
     f DONT_RESOLVE_DLL_REFERENCES LoadLibraryEx [

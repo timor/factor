@@ -1,5 +1,5 @@
 USING: alien sequences alien.libraries alien.libraries.finder ;
-IN: windows.directx
+in: windows.directx
 
 {
     { "dinput"      "dinput8.dll"        stdcall }

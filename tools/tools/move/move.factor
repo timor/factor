@@ -4,7 +4,7 @@
 USING: combinators command-line io io.directories io.files.info
 kernel math namespaces sequences ;
 
-IN: tools.move
+in: tools.move
 
 ! FIXME: better error messages when files don't exist
 

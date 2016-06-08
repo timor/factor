@@ -7,7 +7,7 @@ interpolate io.streams.string kernel lexer locals.parser
 locals.types macros make namespaces parser quotations sequences
 vocabs.parser words words.symbol ;
 
-IN: functors
+in: functors
 
 ! This is a hack
 

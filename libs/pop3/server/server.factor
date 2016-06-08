@@ -5,7 +5,7 @@ destructors fry io io.crlf io.encodings.utf8 io.sockets
 io.sockets.secure.debug io.streams.duplex io.timeouts
 kernel locals math.parser namespaces prettyprint sequences
 splitting threads ;
-IN: pop3.server
+in: pop3.server
 
 ! Mock POP3 server for testing purposes.
 

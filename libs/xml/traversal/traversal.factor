@@ -3,7 +3,7 @@
 USING: accessors kernel namespaces sequences words io assocs
 quotations strings parser lexer arrays xml.data make
 splitting vectors sequences.deep combinators fry memoize ;
-IN: xml.traversal
+in: xml.traversal
 
 : children>string ( tag -- string )
     children>> {

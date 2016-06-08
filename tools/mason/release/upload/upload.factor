@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel mason.common mason.config mason.platform
 namespaces sequences ;
-IN: mason.release.upload
+in: mason.release.upload
 
 : remote-location ( -- dest )
     package-directory get "/" platform 3append ;

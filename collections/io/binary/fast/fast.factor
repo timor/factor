@@ -9,7 +9,7 @@ RENAME: signed-be> io.binary => slow-signed-be>
 RENAME: signed-le> io.binary => slow-signed-le>
 RENAME: >be io.binary => >slow-be
 RENAME: >le io.binary => >slow-le
-IN: io.binary.fast
+in: io.binary.fast
 
 ERROR: bad-length bytes n ;
 

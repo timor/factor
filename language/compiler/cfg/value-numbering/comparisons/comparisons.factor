@@ -6,7 +6,7 @@ compiler.cfg.registers compiler.cfg.value-numbering.graph
 compiler.cfg.value-numbering.math
 compiler.cfg.value-numbering.rewrite cpu.architecture kernel
 math math.order namespaces sequences vectors ;
-IN: compiler.cfg.value-numbering.comparisons
+in: compiler.cfg.value-numbering.comparisons
 
 : fold-compare-imm? ( insn -- ? )
     src1>> vreg>insn literal-insn? ;

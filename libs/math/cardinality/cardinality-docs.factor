@@ -1,7 +1,7 @@
 ! Copyright (C) 2012 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license
 USING: help.markup help.syntax layouts math sequences ;
-IN: math.cardinality
+in: math.cardinality
 
 HELP: trailing-zeros
 { $values { "m" number } { "n" number } }

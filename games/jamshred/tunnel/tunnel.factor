@@ -7,7 +7,7 @@ sequences specialized-arrays vectors ;
 FROM: jamshred.oint => distance ;
 FROM: alien.c-types => float ;
 SPECIALIZED-ARRAY: float
-IN: jamshred.tunnel
+in: jamshred.tunnel
 
 CONSTANT: n-segments 5000
 

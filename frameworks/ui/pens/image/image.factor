@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors fry kernel math opengl sequences ui.images
 ui.pens ;
-IN: ui.pens.image
+in: ui.pens.image
 
 ! Image pen
 TUPLE: image-pen image fill? ;

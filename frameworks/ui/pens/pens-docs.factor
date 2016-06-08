@@ -1,4 +1,4 @@
-IN: ui.pens
+in: ui.pens
 USING: help.markup help.syntax kernel ui.gadgets ;
 
 HELP: draw-interior

@@ -1,6 +1,6 @@
 USING: threads concurrency.messaging kernel
 tools.time math sequences ;
-IN: benchmark.ring
+in: benchmark.ring
 
 SYMBOL: done
 

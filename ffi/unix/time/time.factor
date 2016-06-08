@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types alien.syntax
 classes.struct kernel math unix.types ;
-IN: unix.time
+in: unix.time
 
 STRUCT: timeval
     { sec long }

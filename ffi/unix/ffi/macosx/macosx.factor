@@ -1,7 +1,7 @@
 USING: alien alien.c-types alien.libraries alien.syntax
 classes.struct combinators kernel system unix unix.time
 unix.types vocabs vocabs.loader ;
-IN: unix.ffi
+in: unix.ffi
 
 CONSTANT: MAXPATHLEN 1024
 

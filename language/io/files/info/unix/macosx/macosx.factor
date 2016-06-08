@@ -8,7 +8,7 @@ system unix unix.getfsstat.macosx unix.statfs.macosx
 unix.statvfs.macosx ;
 SPECIALIZED-ARRAY: uint
 SPECIALIZED-ARRAY: statfs64
-IN: io.files.info.unix.macosx
+in: io.files.info.unix.macosx
 
 TUPLE: macosx-file-info < unix-file-info birth-time flags gen ;
 

@@ -4,7 +4,7 @@ USING: accessors assocs fry hashtables kernel namespaces
 regexp.ast regexp.classes regexp.dfa regexp.disambiguate
 regexp.minimize regexp.nfa regexp.transition-tables sequences
 sets vectors ;
-IN: regexp.negation
+in: regexp.negation
 
 CONSTANT: fail-state -1
 

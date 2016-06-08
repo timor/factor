@@ -1,4 +1,4 @@
-IN: mason.report.tests
+in: mason.report.tests
 USING: io.files io.files.temp io.directories io.directories.hierarchy kernel
 mason.report mason.common mason.config namespaces tools.test xml xml.writer ;
 

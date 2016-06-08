@@ -1,6 +1,6 @@
 USING: kernel locals math math.matrices math.order math.vectors
 prettyprint sequences ;
-IN: benchmark.3d-matrix-scalar
+in: benchmark.3d-matrix-scalar
 
 :: p-matrix ( dim fov near far -- matrix )
     dim dup first2 min v/n fov v*n near v*n

@@ -6,7 +6,7 @@ sequences specialized-arrays sequences.private classes.struct
 combinators.short-circuit fry ;
 SPECIALIZED-ARRAY: uint
 SPECIALIZED-ARRAY: uint-4
-IN: random.sfmt
+in: random.sfmt
 
 <PRIVATE
 

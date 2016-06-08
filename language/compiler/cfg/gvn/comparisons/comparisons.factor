@@ -11,7 +11,7 @@ compiler.cfg.gvn.math
 compiler.cfg.gvn.graph
 compiler.cfg.gvn.avail
 compiler.cfg.gvn.rewrite ;
-IN: compiler.cfg.gvn.comparisons
+in: compiler.cfg.gvn.comparisons
 
 ! Optimizations performed here:
 !

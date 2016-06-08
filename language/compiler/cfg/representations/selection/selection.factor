@@ -8,7 +8,7 @@ compiler.cfg.representations.preferred compiler.cfg.rpo
 compiler.cfg.utilities compiler.utilities cpu.architecture
 disjoint-sets fry kernel locals math math.functions namespaces
 sequences sets ;
-IN: compiler.cfg.representations.selection
+in: compiler.cfg.representations.selection
 
 SYMBOL: tagged-vregs
 

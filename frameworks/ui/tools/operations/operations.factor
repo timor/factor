@@ -9,7 +9,7 @@ tools.crossref tools.test tools.time tools.walker ui.commands
 ui.gestures ui.operations ui.tools.browser ui.tools.deploy
 ui.tools.inspector ui.tools.listener ui.tools.traceback vocabs
 vocabs.loader vocabs.parser words ;
-IN: ui.tools.operations
+in: ui.tools.operations
 
 ! Objects
 [ drop t ] \ inspector H{

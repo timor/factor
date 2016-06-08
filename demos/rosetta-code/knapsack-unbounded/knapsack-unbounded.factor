@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators kernel locals math math.order
 math.vectors sequences sequences.product combinators.short-circuit ;
-IN: rosetta-code.knapsack-unbounded
+in: rosetta-code.knapsack-unbounded
 
 ! http://rosettacode.org/wiki/Knapsack_problem/Unbounded
 

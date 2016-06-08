@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license
 USING: kernel sequences math sequences.private strings
 accessors locals fry ;
-IN: circular
+in: circular
 
 TUPLE: circular { seq read-only } { start integer } ;
 

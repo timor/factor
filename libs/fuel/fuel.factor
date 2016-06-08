@@ -5,7 +5,7 @@ fuel.help fuel.xref help.topics io.pathnames kernel namespaces parser
 sequences tools.scaffold vocabs vocabs.files vocabs.hierarchy
 vocabs.loader vocabs.metadata vocabs.parser words ;
 
-IN: fuel
+in: fuel
 
 ! Evaluation
 

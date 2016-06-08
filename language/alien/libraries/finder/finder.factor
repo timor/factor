@@ -1,6 +1,6 @@
 USING: accessors alien.libraries kernel sequences system vocabs
 ;
-IN: alien.libraries.finder
+in: alien.libraries.finder
 
 HOOK: find-library* os ( name -- path/f ) ;
 

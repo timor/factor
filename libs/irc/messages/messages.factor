@@ -4,7 +4,7 @@ USING: kernel fry splitting ascii calendar accessors combinators
 arrays classes.tuple math.order words assocs strings irc.messages.base
 combinators.short-circuit math ;
 EXCLUDE: sequences => join ;
-IN: irc.messages
+in: irc.messages
 
 ! connection
 IRC: pass        "PASS"    password ;

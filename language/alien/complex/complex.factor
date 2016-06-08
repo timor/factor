@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types alien.complex.functor kernel
 sequences ;
-IN: alien.complex
+in: alien.complex
 
 <<
 { "float" "double" } [ dup "complex-" prepend define-complex-type ] each

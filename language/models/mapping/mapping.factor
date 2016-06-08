@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors models kernel assocs ;
-IN: models.mapping
+in: models.mapping
 
 TUPLE: mapping < model assoc ;
 

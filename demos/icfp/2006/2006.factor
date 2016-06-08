@@ -3,7 +3,7 @@
 USING: kernel math sequences kernel.private namespaces arrays io
 io.files splitting grouping io.binary math.functions vectors
 quotations combinators io.encodings.binary ;
-IN: icfp.2006
+in: icfp.2006
 
 SYMBOL: regs
 SYMBOL: arrays

@@ -5,7 +5,7 @@ continuations core-foundation core-foundation.strings
 core-foundation.urls destructors kernel sequences
 specialized-arrays strings unix.ffi ;
 SPECIALIZED-ARRAY: char
-IN: core-foundation.launch-services
+in: core-foundation.launch-services
 
 FUNCTION: OSStatus LSFindApplicationForInfo (
    OSType inCreator,

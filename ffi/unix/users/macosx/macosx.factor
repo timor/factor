@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators accessors kernel unix.users
 system ;
-IN: unix.users.macosx
+in: unix.users.macosx
 
 TUPLE: macosx-passwd < passwd change class expire fields ;
 

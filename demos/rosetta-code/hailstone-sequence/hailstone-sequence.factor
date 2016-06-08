@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays io kernel math math.ranges prettyprint sequences vectors ;
-IN: rosetta-code.hailstone-sequence
+in: rosetta-code.hailstone-sequence
 
 ! http://rosettacode.org/wiki/Hailstone_sequence
 

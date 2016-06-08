@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax io.streams.string kernel
 strings ;
-IN: crypto.passwd-md5
+in: crypto.passwd-md5
 
 HELP: authenticate-password
 { $values

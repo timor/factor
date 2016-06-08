@@ -4,7 +4,7 @@ gpu.shaders gpu.state gpu.textures images kernel locals math
 math.rectangles opengl.gl sequences specialized-arrays ;
 FROM: alien.c-types => float ;
 SPECIALIZED-ARRAY: float
-IN: gpu.util
+in: gpu.util
 
 CONSTANT: environment-cube-map-mv-matrices
     H{

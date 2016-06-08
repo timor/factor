@@ -1,7 +1,7 @@
 USING: kernel tools.test compiler.tree compiler.tree.builder
 compiler.tree.recursive compiler.tree.def-use
 compiler.tree.def-use.simplified accessors sequences sorting classes ;
-IN: compiler.tree.def-use.simplified
+in: compiler.tree.def-use.simplified
 
 { { #call #return } } [
     [ 1 dup reverse ] build-tree compute-def-use

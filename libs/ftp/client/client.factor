@@ -5,7 +5,7 @@ continuations io io.encodings.binary io.encodings.utf8
 io.files io.pathnames io.sockets kernel io.streams.duplex math
 math.parser sequences splitting namespaces strings fry ftp
 ftp.client.listing-parser urls ;
-IN: ftp.client
+in: ftp.client
 
 : (ftp-response-code) ( str -- n )
     3 head string>number ;

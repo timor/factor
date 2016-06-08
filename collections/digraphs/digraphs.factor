@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Alex Chapman
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs hashtables hashtables.private kernel sequences vectors ;
-IN: digraphs
+in: digraphs
 
 TUPLE: digraph < hashtable ;
 

@@ -6,7 +6,7 @@ colors.constants colors.hex combinators formatting fry
 http.client io io.styles json json.reader kernel make math
 math.statistics sequences urls ;
 
-IN: reddit
+in: reddit
 
 <PRIVATE
 

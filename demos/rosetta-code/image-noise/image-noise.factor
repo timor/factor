@@ -2,9 +2,8 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors calendar images images.viewer kernel math
 math.parser models models.arrow random sequences threads timers
-ui ui.gadgets ui.gadgets.labels ui.gadgets.packs
-ui.gadgets.status-bar ui.gadgets.worlds ;
-IN: rosetta-code.image-noise
+ui ui.gadgets ui.gadgets.labels ui.gadgets.packs ;
+in: rosetta-code.image-noise
 
 : bits>pixels ( bits -- bits' pixels )
     [ -1 shift ] [ 1 bitand ] bi 255 * ; inline

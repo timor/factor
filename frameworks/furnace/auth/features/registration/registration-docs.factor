@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel ;
-IN: furnace.auth.features.registration
+in: furnace.auth.features.registration
 
 HELP: allow-registration
 { $values { "realm" "an authentication realm" } }

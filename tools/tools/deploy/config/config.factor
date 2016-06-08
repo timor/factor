@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs combinators.smart hashtables kernel math namespaces
 sequences vocabs ;
-IN: tools.deploy.config
+in: tools.deploy.config
 
 SYMBOL: deploy-name
 

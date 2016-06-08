@@ -7,7 +7,7 @@ compiler.cfg.liveness compiler.cfg.registers
 compiler.cfg.renaming.functor compiler.cfg.ssa.destruction.leaders
 compiler.cfg.utilities fry heaps kernel make math namespaces sequences
 ;
-IN: compiler.cfg.linear-scan.assignment
+in: compiler.cfg.linear-scan.assignment
 QUALIFIED: sets
 
 ! This contains both active and inactive intervals; any interval

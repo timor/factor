@@ -5,7 +5,7 @@ math.vectors.simd math.vectors.simd.intrinsics sequences ;
 FROM: alien.c-types =>
     char uchar short ushort int uint longlong ulonglong
     float double heap-size ;
-IN: math.vectors.conversion
+in: math.vectors.conversion
 
 ERROR: bad-vconvert from-type to-type ;
 ERROR: bad-vconvert-input value expected-type ;

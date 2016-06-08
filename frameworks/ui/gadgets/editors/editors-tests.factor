@@ -3,7 +3,7 @@ tools.test kernel io io.streams.plain definitions namespaces
 ui.gadgets ui.gadgets.grids prettyprint documents ui.gestures
 ui.gadgets.debug models documents.elements ui.gadgets.scrollers
 ui.gadgets.line-support sequences ;
-IN: ui.gadgets.editors.tests
+in: ui.gadgets.editors.tests
 
 { "foo bar" } [
     <editor> "editor" set

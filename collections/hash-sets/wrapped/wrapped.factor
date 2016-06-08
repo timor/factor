@@ -4,7 +4,7 @@
 USING: accessors arrays hash-sets kernel sequences sets
 vocabs.loader ;
 
-IN: hash-sets.wrapped
+in: hash-sets.wrapped
 
 TUPLE: wrapped-key
     { underlying read-only } ;

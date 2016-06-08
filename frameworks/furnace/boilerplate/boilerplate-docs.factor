@@ -1,6 +1,6 @@
 USING: help.markup help.syntax io.streams.string
 http.server.dispatchers ;
-IN: furnace.boilerplate
+in: furnace.boilerplate
 
 HELP: <boilerplate>
 { $values

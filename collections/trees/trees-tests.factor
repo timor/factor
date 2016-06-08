@@ -1,5 +1,5 @@
 USING: trees assocs tools.test kernel sequences ;
-IN: trees.tests
+in: trees.tests
 
 : test-tree ( -- tree )
     TREE{

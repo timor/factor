@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: audio.engine game.loop help.markup help.syntax kernel math method-chains
 ui ui.gadgets.worlds words ;
-IN: game.worlds
+in: game.worlds
 
 HELP: game-attributes
 { $class-description "Extends the " { $link world-attributes } " tuple class with extra attributes for " { $link game-world } "s:" }

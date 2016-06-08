@@ -3,7 +3,7 @@
 
 USING: kernel math namespaces ;
 
-IN: benchmark.namespaces
+in: benchmark.namespaces
 
 SYMBOL: foo
 SYMBOL: bar

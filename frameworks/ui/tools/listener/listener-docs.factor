@@ -2,7 +2,7 @@ USING: help.markup help.syntax help.tips io kernel listener sequences
 ui.commands ui.gadgets.editors ui.gadgets.panes ui.operations
 ui.tools.common ui.tools.listener.completion vocabs vocabs.refresh
 words ;
-IN: ui.tools.listener
+in: ui.tools.listener
 
 HELP: <listener-gadget>
 { $values { "listener" listener-gadget } }

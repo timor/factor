@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel assocs ;
-IN: persistent.assocs
+in: persistent.assocs
 
 GENERIC: new-at ( value key assoc -- assoc' ) ;
 

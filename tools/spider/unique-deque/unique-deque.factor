@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs deques dlists kernel locals ;
-IN: spider.unique-deque
+in: spider.unique-deque
 
 TUPLE: todo-url url depth ;
 

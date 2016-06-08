@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays combinators combinators.short-circuit
 fry kernel kernel.private lists locals math sequences typed ;
-IN: wrap
+in: wrap
 
 ! black is the text length, white is the whitespace length
 TUPLE: element contents black white ;

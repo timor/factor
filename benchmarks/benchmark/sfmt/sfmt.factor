@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: fry kernel math random random.sfmt ;
-IN: benchmark.sfmt
+in: benchmark.sfmt
 
 : sfmt-bench ( n -- )
     >fixnum 0x533d <sfmt-19937> '[ _ random-32* drop ] times ;

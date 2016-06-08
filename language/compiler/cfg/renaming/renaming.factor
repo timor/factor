@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs compiler.cfg.registers
 compiler.cfg.renaming.functor kernel namespaces ;
-IN: compiler.cfg.renaming
+in: compiler.cfg.renaming
 
 SYMBOL: renamings
 

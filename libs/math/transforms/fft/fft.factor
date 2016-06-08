@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays kernel locals math math.constants math.functions
 math.vectors sequences sequences.extras sequences.private ;
-IN: math.transforms.fft
+in: math.transforms.fft
 
 <PRIVATE
 

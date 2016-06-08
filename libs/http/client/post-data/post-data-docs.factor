@@ -1,4 +1,4 @@
-IN: http.client.post-data
+in: http.client.post-data
 USING: http http.client.post-data.private help.markup help.syntax kernel ;
 
 HELP: >post-data

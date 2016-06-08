@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.data namespaces io.binary fry
 kernel math grouping sequences math.bitwise ;
-IN: endian
+in: endian
 
 SINGLETONS: big-endian little-endian ;
 

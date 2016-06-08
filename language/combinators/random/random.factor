@@ -3,7 +3,7 @@
 USING: arrays assocs combinators combinators.short-circuit
 kernel macros math math.order quotations random sequences
 summary ;
-IN: combinators.random
+in: combinators.random
 
 : ifp ( p true false -- ) [ random-unit > ] 2dip if ; inline
 

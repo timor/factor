@@ -10,7 +10,7 @@ kernel.private layouts locals make math math.order namespaces
 namespaces.private parser parser.notes prettyprint quotations
 sequences sequences.private source-files strings system vectors
 vocabs words ;
-IN: bootstrap.image
+in: bootstrap.image
 
 : arch-name ( os cpu -- arch )
     2dup [ windows? ] [ ppc? ] bi* or [

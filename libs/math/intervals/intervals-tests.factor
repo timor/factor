@@ -1,7 +1,7 @@
 USING: math.intervals kernel sequences words math math.order
 arrays prettyprint tools.test random vocabs combinators
 accessors math.constants fry ;
-IN: math.intervals.tests
+in: math.intervals.tests
 
 { empty-interval } [ 2 2 (a,b) ] unit-test
 

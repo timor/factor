@@ -4,7 +4,7 @@ USING: accessors kernel models arrays sequences math math.order
 models.product generalizations sequences.generalizations
 math.functions ;
 FROM: models.product => product ;
-IN: models.range
+in: models.range
 
 TUPLE: range < product ;
 

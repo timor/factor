@@ -1,6 +1,6 @@
 USING: io io.streams.string kernel namespaces make
 pack strings tools.test pack.private ;
-IN: pack.tests
+in: pack.tests
 
 { B{ 1 0 2 0 0 3 0 0 0 4 0 0 0 0 0 0 0 5 } } [
     { 1 2 3 4 5 }

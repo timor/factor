@@ -1,4 +1,4 @@
-IN: io.crlf.tests
+in: io.crlf.tests
 USING: io.crlf tools.test io.streams.string io ;
 
 { "Hello, world." } [ "Hello, world." [ read-crlf ] with-string-reader ] unit-test

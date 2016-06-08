@@ -5,7 +5,7 @@ memoize specialized-arrays system windows.errors
 windows.kernel32 windows.ole32 windows.shell32
 windows.types ;
 SPECIALIZED-ARRAY: WCHAR
-IN: io.files.temp.windows
+in: io.files.temp.windows
 
 <PRIVATE
 

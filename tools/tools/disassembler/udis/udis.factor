@@ -5,7 +5,7 @@ combinators destructors fry kernel layouts libc make math
 math.order math.parser namespaces sequences splitting system
 tools.disassembler.private tools.disassembler.utils tools.memory
 ;
-IN: tools.disassembler.udis
+in: tools.disassembler.udis
 
 << "libudis86" {
     { [ os windows? ] [ "libudis86.dll" ] }

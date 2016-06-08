@@ -4,7 +4,7 @@ USING: accessors alien alien.parser alien.strings arrays assocs
 cocoa.messages cocoa.runtime combinators compiler.units fry
 io.encodings.utf8 kernel lexer locals locals.parser locals.types
 make namespaces parser sequences words ;
-IN: cocoa.subclassing
+in: cocoa.subclassing
 
 : init-method ( method -- sel imp types )
     first3 swap

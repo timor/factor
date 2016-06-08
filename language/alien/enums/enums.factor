@@ -2,7 +2,7 @@
 USING: accessors alien.c-types arrays assocs classes.singleton
 combinators delegate fry kernel macros math parser sequences
 words ;
-IN: alien.enums
+in: alien.enums
 
 <PRIVATE
 TUPLE: enum-c-type base-type members ;

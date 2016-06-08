@@ -4,7 +4,7 @@ USING: accessors arrays assocs classes combinators continuations
 definitions fry http http.server http.server.redirection
 http.server.remapping io.pathnames kernel make namespaces
 sequences splitting strings urls words xml.syntax ;
-IN: furnace.utilities
+in: furnace.utilities
 
 : word>string ( word -- string )
     [ vocabulary>> ] [ name>> ] bi ":" glue ;

@@ -3,7 +3,7 @@
 USING: accessors byte-arrays continuations destructors environment
 io.backend.unix io.files io.files.private io.pathnames io.ports kernel
 libc literals math system unix unix.ffi ;
-IN: io.files.unix
+in: io.files.unix
 
 : (cwd) ( bufsiz -- path )
     [

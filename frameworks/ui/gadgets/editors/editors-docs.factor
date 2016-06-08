@@ -1,7 +1,7 @@
 USING: documents help.markup help.syntax ui.gadgets
 ui.gadgets.scrollers models strings ui.commands sequences
 ui.text colors fonts help.tips ;
-IN: ui.gadgets.editors
+in: ui.gadgets.editors
 
 HELP: editor
 { $class-description "An editor is a control for editing a multi-line passage of text stored in a " { $link document } " model. Editors are crated by calling " { $link <editor> } "."

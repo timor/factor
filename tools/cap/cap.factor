@@ -4,7 +4,7 @@ USING: accessors alien.syntax arrays byte-arrays fry images
 images.normalization images.viewer kernel math math.vectors
 models namespaces opengl opengl.gl sequences ui ui.gadgets
 ui.gadgets.worlds ;
-IN: cap
+in: cap
 
 : screenshot-array ( world -- byte-array )
     dim>> [ first 4 * ] [ second ] bi

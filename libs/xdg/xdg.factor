@@ -3,7 +3,7 @@
 
 USING: environment sequences splitting ;
 
-IN: xdg
+in: xdg
 
 ! http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators fry kernel math math.vectors
 sequences ui.gadgets ui.gadgets.packs ui.gadgets.packs.private ;
-IN: ui.gadgets.tracks
+in: ui.gadgets.tracks
 
 TUPLE: track < pack sizes ;
 

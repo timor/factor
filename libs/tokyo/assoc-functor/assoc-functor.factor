@@ -3,7 +3,7 @@
 USING: accessors alien.c-types alien.data arrays assocs
 destructors fry functors kernel locals sequences serialize
 tokyo.alien.tcutil tokyo.utils vectors ;
-IN: tokyo.assoc-functor
+in: tokyo.assoc-functor
 
 FUNCTOR: define-tokyo-assoc-api ( T N -- )
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax classes.struct cocoa.runtime
 core-graphics.types ;
-IN: cocoa.types
+in: cocoa.types
 
 TYPEDEF: long NSInteger
 TYPEDEF: ulong NSUInteger

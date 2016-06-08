@@ -5,7 +5,7 @@ io.streams.string kernel combinators accessors io.pathnames
 fry sequences arrays locals namespaces io.directories
 assocs math splitting make unicode combinators.short-circuit
 c.lexer ;
-IN: c.preprocessor
+in: c.preprocessor
 
 : initial-library-paths ( -- seq )
     V{ "/usr/include" } clone ;

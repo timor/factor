@@ -3,7 +3,7 @@
 USING: accessors system kernel layouts combinators
 compiler.cfg.builder.alien.boxing sequences arrays math
 alien.c-types cpu.architecture cpu.ppc alien.complex ;
-IN: cpu.ppc.64.linux
+in: cpu.ppc.64.linux
 
 M: linux lr-save 2 cells ;
 

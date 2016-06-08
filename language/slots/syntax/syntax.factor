@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators combinators.smart fry kernel lexer quotations
 sequences sequences.generalizations slots words ;
-IN: slots.syntax
+in: slots.syntax
 
 SYNTAX: slots[
     "]" [ reader-word 1quotation ] map-tokens

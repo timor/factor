@@ -12,7 +12,7 @@ USING:
     ogg
     system
 ;
-IN: ogg.vorbis
+in: ogg.vorbis
 
 <<
 "vorbis" {

@@ -6,7 +6,7 @@ hashtables io io.binary io.directories io.encodings.binary
 io.files kernel math math.parser memoize pack sequences
 sequences.generalizations splitting strings system ;
 
-IN: terminfo
+in: terminfo
 
 ! Reads compiled terminfo files
 ! typically located in /usr/share/terminfo

@@ -6,7 +6,7 @@ math.constants math.order math.ranges math.vectors math.matrices
 sequences shuffle specialized-arrays strings system ;
 QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAY: c:float
-IN: jamshred.player
+in: jamshred.player
 
 TUPLE: player < oint
     { name string }

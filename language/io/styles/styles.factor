@@ -5,7 +5,7 @@ delegate.protocols destructors fry hashtables io
 io.streams.plain io.streams.string kernel make math.order
 namespaces present sequences splitting strings strings.tables
 summary ;
-IN: io.styles
+in: io.styles
 
 GENERIC: stream-format ( str style stream -- ) ;
 GENERIC: make-span-stream ( style stream -- stream' ) ;

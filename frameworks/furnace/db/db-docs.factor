@@ -1,5 +1,5 @@
 USING: help.markup help.syntax db http.server ;
-IN: furnace.db
+in: furnace.db
 
 HELP: <db-persistence>
 { $values

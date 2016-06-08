@@ -3,7 +3,7 @@
 USING: accessors arrays fry kernel make math math.order
 math.rectangles math.vectors sequences strings.tables
 ui.baseline-alignment ui.gadgets ;
-IN: ui.gadgets.grids
+in: ui.gadgets.grids
 
 TUPLE: grid < gadget
 grid

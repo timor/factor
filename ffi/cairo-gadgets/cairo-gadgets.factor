@@ -3,7 +3,7 @@
 USING: sequences math kernel byte-arrays cairo.ffi cairo
 io.backend ui.gadgets accessors opengl.gl arrays fry
 classes ui.render namespaces destructors libc ;
-IN: cairo-gadgets
+in: cairo-gadgets
 
 SYMBOL: current-cairo
 

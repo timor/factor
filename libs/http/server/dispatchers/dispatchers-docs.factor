@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: classes help.markup help.syntax io.streams.string ;
-IN: http.server.dispatchers
+in: http.server.dispatchers
 
 HELP: new-dispatcher
 { $values { "class" class } { "dispatcher" dispatcher } }

@@ -1,4 +1,4 @@
-IN: tuple-arrays
+in: tuple-arrays
 USING: help.markup help.syntax sequences ;
 
 HELP: TUPLE-ARRAY:

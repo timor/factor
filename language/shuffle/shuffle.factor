@@ -3,7 +3,7 @@
 USING: accessors assocs combinators effects.parser fry
 generalizations kernel macros make sequences
 sequences.generalizations ;
-IN: shuffle
+in: shuffle
 
 MACRO: shuffle-effect ( effect -- quot )
     [ in>> H{ } zip-index-as ] [ out>> ] bi

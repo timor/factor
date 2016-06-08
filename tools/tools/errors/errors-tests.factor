@@ -1,5 +1,5 @@
 USING: compiler.errors stack-checker.errors tools.test words ;
-IN: tools.errors
+in: tools.errors
 
 DEFER: blah
 

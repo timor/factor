@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.c-types alien.syntax classes.struct
 windows.kernel32 windows.types alien.libraries ;
-IN: windows.ddk.winusb
+in: windows.ddk.winusb
 
 << "winusb" "winusb.dll" stdcall add-library >>
 LIBRARY: winusb

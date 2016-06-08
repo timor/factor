@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors continuations debugger io io.streams.string
 kernel namespaces prettyprint ui ui.gadgets.worlds ;
-IN: ui.debugger
+in: ui.debugger
 
 : error-alert ( error -- )
     [ "Error" ] dip [ print-error ] with-string-writer

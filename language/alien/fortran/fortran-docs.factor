@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel quotations sequences strings words.symbol classes.struct ;
 QUALIFIED-WITH: alien.syntax c
-IN: alien.fortran
+in: alien.fortran
 
 ARTICLE: "alien.fortran-abis" "Fortran ABIs"
 "Fortran does not have a standard ABI like C does. Factor supports the following Fortran ABIs:"

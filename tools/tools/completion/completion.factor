@@ -6,7 +6,7 @@ io.files.info io.pathnames kernel locals make math math.order
 sequences sequences.private sorting splitting
 splitting.monotonic unicode unicode.data vectors vocabs
 vocabs.hierarchy ;
-IN: tools.completion
+in: tools.completion
 
 <PRIVATE
 

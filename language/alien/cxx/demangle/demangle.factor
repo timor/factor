@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: alien.cxx kernel ;
 QUALIFIED-WITH: alien.cxx.demangle.libstdcxx libstdcxx
-IN: alien.cxx.demangle
+in: alien.cxx.demangle
 
 GENERIC: c++-symbol? ( mangled-name abi -- ? ) ;
 GENERIC: demangle ( mangled-name abi -- c++-name ) ;

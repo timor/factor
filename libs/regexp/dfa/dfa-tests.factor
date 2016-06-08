@@ -1,2 +1,2 @@
 USING: regexp.dfa tools.test ;
-IN: regexp.dfa.tests
+in: regexp.dfa.tests

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: byte-arrays destructors formatting io kernel sequences
 strings zeromq zeromq.ffi ;
-IN: zeromq.examples.hwclient
+in: zeromq.examples.hwclient
 
 : hwclient ( -- )
     [

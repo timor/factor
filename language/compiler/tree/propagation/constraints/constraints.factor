@@ -3,7 +3,7 @@
 USING: accessors arrays assocs classes.algebra
 compiler.tree.propagation.copy compiler.tree.propagation.info
 kernel namespaces sequences ;
-IN: compiler.tree.propagation.constraints
+in: compiler.tree.propagation.constraints
 
 SYMBOL: constraints
 

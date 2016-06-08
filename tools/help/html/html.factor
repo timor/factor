@@ -10,7 +10,7 @@ vocabs vocabs.hierarchy words xml.data xml.syntax xml.traversal
 xml.writer ;
 FROM: io.encodings.ascii => ascii ;
 FROM: ascii => ascii? ;
-IN: help.html
+in: help.html
 
 : escape-char ( ch -- )
     dup ascii? [

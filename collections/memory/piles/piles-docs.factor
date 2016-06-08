@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: alien destructors help.markup help.syntax kernel math ;
-IN: memory.piles
+in: memory.piles
 
 HELP: <pile>
 { $values

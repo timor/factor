@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors calendar combinators.short-circuit fry kernel
 math math.functions quotations system threads typed ;
-IN: timers
+in: timers
 
 TUPLE: timer
     { quot callable initial: [ ] }

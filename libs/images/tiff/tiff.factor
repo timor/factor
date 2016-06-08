@@ -5,7 +5,7 @@ combinators.short-circuit compression.lzw endian fry grouping
 images images.loader io io.binary io.encodings.ascii
 io.encodings.string io.encodings.utf8 io.streams.throwing kernel
 math math.bitwise math.vectors pack sequences ;
-IN: images.tiff
+in: images.tiff
 
 SINGLETON: tiff-image
 

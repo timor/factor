@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: multiline gpu.shaders gpu.shaders.private tools.test ;
-IN: gpu.shaders.tests
+in: gpu.shaders.tests
 
 { "ERROR: foo.factor:20: Bad command or filename
 INFO: foo.factor:30: The operation completed successfully

@@ -5,7 +5,7 @@ continuations fry io io.encodings.utf8 io.files io.launcher
 io.pathnames io.sockets kernel locals make mason.config math
 namespaces parser prettyprint prettyprint.config sequences
 splitting ;
-IN: mason.common
+in: mason.common
 
 : print-timestamp ( string -- )
     now timestamp>string write bl print flush ;

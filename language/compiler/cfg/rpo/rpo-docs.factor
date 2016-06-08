@@ -1,5 +1,5 @@
 USING: compiler.cfg help.markup help.syntax quotations sequences ;
-IN: compiler.cfg.rpo
+in: compiler.cfg.rpo
 
 HELP: number-blocks
 { $values { "blocks" sequence } }

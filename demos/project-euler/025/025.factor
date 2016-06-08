@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.constants math.functions math.parser memoize
     project-euler.common sequences ;
-IN: project-euler.025
+in: project-euler.025
 
 ! http://projecteuler.net/index.php?section=problems&id=25
 

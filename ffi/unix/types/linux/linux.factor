@@ -1,5 +1,5 @@
 USING: alien.syntax alien.c-types ;
-IN: unix.types
+in: unix.types
 
 TYPEDEF: ulonglong __uquad_type
 TYPEDEF: ulong     __ulongword_type

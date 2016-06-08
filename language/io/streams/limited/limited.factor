@@ -4,7 +4,7 @@
 USING: accessors byte-vectors combinators destructors fry io
 io.encodings io.files io.files.info kernel locals math
 namespaces sequences math.order ;
-IN: io.streams.limited
+in: io.streams.limited
 
 TUPLE: limited-stream stream count limit current start stop ;
 INSTANCE: limited-stream input-stream

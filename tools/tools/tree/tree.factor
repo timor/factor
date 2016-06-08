@@ -4,7 +4,7 @@
 USING: accessors command-line continuations formatting io
 io.directories io.files.info io.pathnames kernel locals math
 namespaces sequences sorting ;
-IN: tools.tree
+in: tools.tree
 
 SYMBOL: #files
 SYMBOL: #directories

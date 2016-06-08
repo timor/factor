@@ -1,7 +1,7 @@
 USING: windows.kernel32 windows.ole32 windows.com windows.com.syntax
 alien alien.c-types alien.syntax kernel system namespaces math
 classes.struct windows.types windows.directx ;
-IN: windows.directx.dinput
+in: windows.directx.dinput
 
 LIBRARY: dinput
 

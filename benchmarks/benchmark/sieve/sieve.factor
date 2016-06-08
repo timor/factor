@@ -1,6 +1,6 @@
 USING: bit-arrays kernel locals math math.functions math.ranges
 sequences ;
-IN: benchmark.sieve
+in: benchmark.sieve
 
 :: sieve ( n -- #primes )
     n dup odd? [ 1 + ] when 2/ <bit-array> :> sieve

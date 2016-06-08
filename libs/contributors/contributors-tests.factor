@@ -1,4 +1,4 @@
-IN: contributors.tests
+in: contributors.tests
 USING: contributors tools.test ;
 
 { } [ contributors ] unit-test

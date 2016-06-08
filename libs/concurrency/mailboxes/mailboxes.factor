@@ -3,7 +3,7 @@
 USING: dlists deques threads sequences continuations namespaces
 math quotations words kernel arrays assocs init system
 concurrency.conditions accessors locals fry vocabs.loader ;
-IN: concurrency.mailboxes
+in: concurrency.mailboxes
 
 TUPLE: mailbox { threads dlist } { data dlist } ;
 

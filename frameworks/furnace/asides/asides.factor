@@ -8,7 +8,7 @@ furnace.cache
 furnace.sessions
 furnace.utilities
 furnace.redirection ;
-IN: furnace.asides
+in: furnace.asides
 
 TUPLE: aside < server-state
 session method url post-data ;

@@ -12,7 +12,7 @@
 USING: combinators.short-circuit editors io.launcher
 io.pathnames io.standard-paths kernel make math math.parser
 namespaces sequences system vocabs ;
-IN: editors.textadept
+in: editors.textadept
 
 SINGLETON: textadept
 textadept editor-class set-global

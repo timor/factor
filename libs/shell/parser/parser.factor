@@ -1,7 +1,7 @@
 USING: accessors kernel peg peg.ebnf sequences sequences.deep
 strings ;
 
-IN: shell.parser
+in: shell.parser
 
 TUPLE: basic-expr         command  stdin stdout background ;
 TUPLE: pipeline-expr      commands stdin stdout background ;

@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io kernel math math.parser math.ranges sequences ;
-IN: rosetta-code.multiplication-tables
+in: rosetta-code.multiplication-tables
 
 ! http://rosettacode.org/wiki/Multiplication_tables
 

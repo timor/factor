@@ -5,7 +5,7 @@ compiler.cfg.ssa.destruction compiler.cfg.build-stack-frame
 compiler.cfg.utilities compiler.codegen compiler.units cpu.architecture
 hashtables kernel namespaces sequences tools.test vectors words layouts
 literals math arrays alien.c-types alien.syntax math.private ;
-IN: compiler.tests.low-level-ir
+in: compiler.tests.low-level-ir
 
 : compile-cfg ( cfg -- word )
     gensym [

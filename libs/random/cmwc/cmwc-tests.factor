@@ -3,7 +3,7 @@
 USING: alien.c-types alien.data arrays kernel random random.cmwc
 sequences specialized-arrays tools.test ;
 SPECIALIZED-ARRAY: uint
-IN: random.cmwc.tests
+in: random.cmwc.tests
 
 { } [
     cmwc-4096 [

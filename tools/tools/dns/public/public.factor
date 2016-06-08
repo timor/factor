@@ -1,7 +1,7 @@
 ! Copyright (C) 2013 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel tools.dns ;
-IN: tools.dns.public
+in: tools.dns.public
 
 CONSTANT: google-dns-servers { "8.8.8.8" "8.8.4.4" }
 : google-host ( domain -- ) [ google-dns-servers ] dip dns-host ;

@@ -11,7 +11,7 @@ combinators hashtables hashtables.identity io io.binary
 io.encodings.binary io.encodings.string io.encodings.utf8
 io.streams.byte-array kernel locals math namespaces prettyprint
 quotations sequences sequences.private strings vocabs words ;
-IN: serialize
+in: serialize
 
 GENERIC: (serialize) ( obj -- ) ;
 

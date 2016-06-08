@@ -3,7 +3,7 @@
 USING: io.backend.unix io.backend.unix.multiplexers
 io.files namespaces system x11 x11.xlib x11.io
 accessors threads sequences kernel ;
-IN: x11.io.unix
+in: x11.io.unix
 
 SYMBOL: dpy-fd
 

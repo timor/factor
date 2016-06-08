@@ -5,7 +5,7 @@ checksums.common checksums.stream combinators fry grouping hints
 kernel kernel.private literals locals macros math math.bitwise
 math.functions sequences sequences.private specialized-arrays ;
 SPECIALIZED-ARRAY: uint
-IN: checksums.md5
+in: checksums.md5
 
 SINGLETON: md5
 

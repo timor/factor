@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math.functions math ;
-IN: math.libm
+in: math.libm
 
 ARTICLE: "math.libm" "C standard library math functions"
 "The words in the " { $vocab-link "math.libm" } " vocabulary call C standard library math functions. They are used to implement words in the " { $vocab-link "math.functions" } " vocabulary."

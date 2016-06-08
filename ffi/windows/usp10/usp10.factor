@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax alien.destructors classes.struct
 windows.types ;
-IN: windows.usp10
+in: windows.usp10
 
 LIBRARY: usp10
 

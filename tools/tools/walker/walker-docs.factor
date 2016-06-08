@@ -1,4 +1,4 @@
-IN: tools.walker
+in: tools.walker
 USING: help.syntax help.markup tools.continuations sequences math words ;
 
 HELP: breakpoint

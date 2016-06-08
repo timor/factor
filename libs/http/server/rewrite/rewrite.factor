@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors http.server http.server.dispatchers kernel
 namespaces sequences splitting urls ;
-IN: http.server.rewrite
+in: http.server.rewrite
 
 TUPLE: rewrite param child default ;
 

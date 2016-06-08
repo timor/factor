@@ -4,7 +4,7 @@ USING: assocs compiler.cfg compiler.cfg.def-use
 compiler.cfg.dominance compiler.cfg.instructions
 compiler.cfg.liveness compiler.cfg.rpo kernel math namespaces
 sequences ;
-IN: compiler.cfg.ssa.interference.live-ranges
+in: compiler.cfg.ssa.interference.live-ranges
 
 <PRIVATE
 

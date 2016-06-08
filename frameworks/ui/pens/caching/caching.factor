@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel ;
-IN: ui.pens.caching
+in: ui.pens.caching
 
 ! A pen that caches vertex arrays, etc
 TUPLE: caching-pen last-dim ;

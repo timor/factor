@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel quotations math.order
 sequences ;
-IN: sorting.slots
+in: sorting.slots
 
 HELP: compare-slots
 { $values

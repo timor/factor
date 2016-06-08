@@ -1,5 +1,5 @@
 USING: help.markup help.syntax sequences ;
-IN: bit-vectors
+in: bit-vectors
 
 ARTICLE: "bit-vectors" "Bit vectors"
 "A bit vector is a resizable mutable sequence of bits. Bit vector words are found in the " { $vocab-link "bit-vectors" } " vocabulary."

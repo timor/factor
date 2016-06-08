@@ -3,7 +3,7 @@
 USING: accessors arrays assocs fry
 hashtables io kernel locals math math.order math.parser
 math.ranges multiline sequences bitstreams bit-arrays ;
-IN: compression.huffman
+in: compression.huffman
 
 QUALIFIED-WITH: bitstreams bs
 

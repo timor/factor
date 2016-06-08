@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.syntax help.markup
 threads kernel arrays quotations strings ;
-IN: concurrency.messaging
+in: concurrency.messaging
 
 HELP: send
 { $values { "message" object }

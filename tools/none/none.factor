@@ -1,5 +1,5 @@
 ! Just a dummy shell for the -run switch...
-IN: none
+in: none
 
 : none ( -- ) ;
 

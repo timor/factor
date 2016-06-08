@@ -1,5 +1,5 @@
 USING: help.markup help.syntax byte-arrays alien math sequences ;
-IN: specialized-arrays
+in: specialized-arrays
 
 HELP: SPECIALIZED-ARRAY:
 { $syntax "SPECIALIZED-ARRAY: type" }

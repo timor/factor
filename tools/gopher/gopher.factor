@@ -9,7 +9,7 @@ io.timeouts kernel make math math.parser namespaces present
 prettyprint sequences splitting summary urls urls.encoding
 vocabs ;
 
-IN: gopher
+in: gopher
 
 <PRIVATE
 

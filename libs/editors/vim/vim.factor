@@ -1,6 +1,6 @@
 USING: editors io.standard-paths kernel make math.parser
 namespaces sequences strings ;
-IN: editors.vim
+in: editors.vim
 
 TUPLE: vim ;
 T{ vim } editor-class set-global

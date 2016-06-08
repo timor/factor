@@ -1,4 +1,4 @@
-IN: tools.deploy.test.16
+in: tools.deploy.test.16
 USING: typed sequences math strings io ;
 
 TYPED: typed-test ( x: integer y: string -- ) <repetition> concat print ;

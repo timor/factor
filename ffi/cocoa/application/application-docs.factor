@@ -1,6 +1,6 @@
 USING: debugger quotations help.markup help.syntax strings alien
 core-foundation core-foundation.strings core-foundation.arrays ;
-IN: cocoa.application
+in: cocoa.application
 
 HELP: <NSString>
 { $values { "str" string } { "alien" alien } }

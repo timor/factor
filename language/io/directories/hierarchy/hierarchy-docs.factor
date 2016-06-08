@@ -1,5 +1,5 @@
 USING: help.markup help.syntax quotations io.pathnames ;
-IN: io.directories.hierarchy
+in: io.directories.hierarchy
 
 HELP: directory-tree-files
 { $values { "path" "a pathname string" } { "seq" "a sequence of filenames" } }

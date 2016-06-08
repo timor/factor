@@ -3,7 +3,7 @@
 USING: splitting parser parser.notes compiler.units kernel
 namespaces debugger io.streams.string fry combinators
 effects.parser continuations ;
-IN: eval
+in: eval
 
 : parse-string ( str -- quot )
     [ string-lines parse-lines ] with-compilation-unit ;

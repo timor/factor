@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax http.server.filters kernel
 multiline furnace.actions furnace.alloy furnace.conversations ;
-IN: furnace.recaptcha
+in: furnace.recaptcha
 
 HELP: <recaptcha>
 { $values

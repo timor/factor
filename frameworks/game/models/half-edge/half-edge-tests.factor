@@ -1,6 +1,6 @@
 USING: accessors game.models.half-edge kernel sequences
 tools.test ;
-IN: game.models.half-edge.tests
+in: game.models.half-edge.tests
 
 CONSTANT: cube-edges
     {

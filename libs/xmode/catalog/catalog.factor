@@ -2,7 +2,7 @@ USING: accessors assocs globs io.pathnames kernel memoize
 namespaces regexp sequences sorting splitting strings
 unicode xml xml.data xml.syntax xml.traversal xmode.loader
 xmode.rules xmode.utilities ;
-IN: xmode.catalog
+in: xmode.catalog
 
 TUPLE: mode file file-name-glob first-line-glob ;
 

@@ -4,7 +4,7 @@ USING: accessors assocs classes classes.mixin kernel namespaces
 parser ui.gadgets ui.gadgets.borders
 ui.pens.solid ui.gadgets.scrollers ui.gadgets.tracks ui.theme
 combinators.short-circuit ;
-IN: ui.tools.common
+in: ui.tools.common
 
 SYMBOL: tool-dims
 

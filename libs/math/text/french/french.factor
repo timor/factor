@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays assocs combinators kernel math math.functions
 math.parser math.text.utils memoize sequences ;
-IN: math.text.french
+in: math.text.french
 
 <PRIVATE
 

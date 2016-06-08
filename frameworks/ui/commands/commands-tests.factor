@@ -1,4 +1,4 @@
-IN: ui.commands.tests
+in: ui.commands.tests
 USING: ui.commands ui.gestures tools.test help.markup io
 io.streams.string system kernel ;
 

@@ -1,5 +1,5 @@
 USING: math fry macros eval tools.test ;
-IN: compiler.tests.redefine13
+in: compiler.tests.redefine13
 
 : breakage-word ( a b -- c ) + ;
 

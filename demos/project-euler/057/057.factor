@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.functions math.parser math.ranges project-euler.common
     sequences ;
-IN: project-euler.057
+in: project-euler.057
 
 ! http://projecteuler.net/index.php?section=problems&id=57
 

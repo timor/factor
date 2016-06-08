@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: http.client xml xml.traversal kernel sequences
 math.parser urls accessors locals ;
-IN: yahoo
+in: yahoo
 
 TUPLE: result title url summary ;
 

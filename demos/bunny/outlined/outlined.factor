@@ -4,7 +4,7 @@ opengl.framebuffers opengl.gl opengl.textures opengl.demo-support fry
 opengl.capabilities sequences ui.gadgets combinators accessors
 macros locals ;
 FROM: opengl.demo-support => rect-vertices ;
-IN: bunny.outlined
+in: bunny.outlined
 
 STRING: outlined-pass1-fragment-shader-main-source
 varying vec3 normal;

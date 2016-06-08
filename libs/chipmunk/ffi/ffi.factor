@@ -5,7 +5,7 @@ alien.syntax classes.struct combinators combinators.short-circuit
 kernel math math.order sequences typed specialized-arrays locals
 system ;
 SPECIALIZED-ARRAY: void*
-IN: chipmunk.ffi
+in: chipmunk.ffi
 
 <<
 "chipmunk" {

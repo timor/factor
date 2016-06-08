@@ -8,7 +8,7 @@ compiler.cfg.ssa.interference.live-ranges
 compiler.cfg.utilities
 cpu.architecture kernel namespaces tools.test alien.c-types
 arrays sequences slots ;
-IN: compiler.cfg.ssa.interference.tests
+in: compiler.cfg.ssa.interference.tests
 
 : test-interference ( -- )
     0 get block>cfg

@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math sequences words ;
-IN: math.partial-dispatch
+in: math.partial-dispatch
 
 HELP: define-integer-ops
 { $values { "word" word } { "fix-word" word } { "big-word" word } }

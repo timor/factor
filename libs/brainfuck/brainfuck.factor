@@ -5,7 +5,7 @@ USING: accessors assocs command-line fry io io.encodings.binary
 io.files io.streams.string kernel macros math namespaces
 peg.ebnf prettyprint sequences ;
 
-IN: brainfuck
+in: brainfuck
 
 <PRIVATE
 

@@ -3,7 +3,7 @@
 USING: accessors alien.c-types classes.struct continuations
 glib.ffi io.backend.unix.multiplexers io.thread kernel libc
 literals locals namespaces system threads ui.backend.gtk.io ;
-IN: ui.backend.gtk.io.unix
+in: ui.backend.gtk.io.unix
 
 : prepare ( source timeout -- ? )
     2drop f ;

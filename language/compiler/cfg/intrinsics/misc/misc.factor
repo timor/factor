@@ -5,7 +5,7 @@ compiler.cfg.builder.blocks compiler.cfg.comparisons compiler.cfg.hats
 compiler.cfg.instructions compiler.cfg.stacks compiler.constants
 compiler.tree.propagation.info cpu.architecture kernel layouts math
 namespaces sequences vm ;
-IN: compiler.cfg.intrinsics.misc
+in: compiler.cfg.intrinsics.misc
 
 : emit-tag ( -- )
     [ ^^tagged>integer tag-mask get ^^and-imm ] unary-op ;

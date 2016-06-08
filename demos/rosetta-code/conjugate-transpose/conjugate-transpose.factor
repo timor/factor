@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math.functions math.matrices sequences ;
-IN: rosetta-code.conjugate-transpose
+in: rosetta-code.conjugate-transpose
 
 ! http://rosettacode.org/wiki/Conjugate_transpose
 

@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: opengl.capabilities tools.test ;
-IN: opengl.capabilities.tests
+in: opengl.capabilities.tests
 
 CONSTANT: test-extensions
     {

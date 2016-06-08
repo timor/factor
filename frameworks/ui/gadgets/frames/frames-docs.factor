@@ -1,6 +1,6 @@
 USING: help.syntax help.markup ui.gadgets kernel arrays math help sequences
 quotations classes.tuple ui.gadgets.grids ;
-IN: ui.gadgets.frames
+in: ui.gadgets.frames
 
 ARTICLE: "ui-frame-layout" "Frame layouts"
 "Frames extend " { $link "ui-grid-layout" } " with the ability to give all remaining space to a distinguished filled cell."

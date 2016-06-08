@@ -1,6 +1,6 @@
 USING: byte-arrays compiler.codegen.relocation help.markup help.syntax
 strings ;
-IN: compiler.codegen.labels
+in: compiler.codegen.labels
 
 HELP: binary-literal-table
 { $var-description "A relocation table used during code generation to keep track of binary relocations. Binary literals are stored at the end of the generated assembly code on the code heap." } ;

@@ -4,7 +4,7 @@ USING: accessors command-line continuations fry init io
 io.backend io.files io.monitors io.pathnames kernel namespaces
 prettyprint sequences splitting threads tr vocabs vocabs.cache
 vocabs.loader vocabs.refresh ;
-IN: vocabs.refresh.monitor
+in: vocabs.refresh.monitor
 
 TR: convert-separators "/\\" ".." ;
 

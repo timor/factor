@@ -4,7 +4,7 @@
 USING: accessors colors kernel locals math math.functions
 math.order ;
 
-IN: colors.xyz
+in: colors.xyz
 
 TUPLE: xyza x y z alpha ;
 

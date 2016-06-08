@@ -1,6 +1,6 @@
 USING: definitions io.launcher kernel math math.parser parser
 namespaces prettyprint editors make ;
-IN: editors.textedit
+in: editors.textedit
 
 SINGLETON: textedit
 textedit editor-class set-global

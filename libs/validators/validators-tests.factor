@@ -1,4 +1,4 @@
-IN: validators.tests
+in: validators.tests
 USING: kernel sequences tools.test validators accessors
 namespaces assocs ;
 

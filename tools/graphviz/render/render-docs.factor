@@ -3,7 +3,7 @@
 USING: graphviz help.markup help.syntax images.viewer
 io.encodings.8-bit.latin1 io.encodings.utf8 io.launcher kernel
 strings ;
-IN: graphviz.render
+in: graphviz.render
 
 { cannot-find-graphviz-installation default-graphviz-program ?default-graphviz-program } related-words
 { unsupported-encoding graph-encoding } related-words

@@ -9,7 +9,7 @@ ui ui.gadgets ui.gadgets.worlds ui.gestures ui.render ;
 FROM: snake-game.util => screen-loc ;
 FROM: snake-game.util => relative-loc ;
 
-IN: snake-game.ui
+in: snake-game.ui
 
 SYMBOL: game-textures
 

@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: alien byte-arrays help.markup help.syntax kernel math
 memory ;
-IN: audio
+in: audio
 
 HELP: <audio>
 { $values

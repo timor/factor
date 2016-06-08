@@ -6,7 +6,7 @@ core-foundation core-foundation.arrays core-foundation.run-loop
 core-foundation.strings core-foundation.time destructors init
 io.encodings.utf8 kernel locals namespaces sequences
 specialized-arrays unix.types ;
-IN: core-foundation.fsevents
+in: core-foundation.fsevents
 
 SPECIALIZED-ARRAY: void*
 SPECIALIZED-ARRAY: uint

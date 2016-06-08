@@ -4,7 +4,7 @@
 USING: accessors colors formatting grouping kernel lexer math
 math.parser sequences ;
 
-IN: colors.hex
+in: colors.hex
 
 : hex>rgba ( hex -- rgba )
     2 group [ hex> 255 /f ] map first3 1.0 <rgba> ;

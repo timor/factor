@@ -3,7 +3,7 @@
 USING: deques dlists kernel threads continuations math
 concurrency.conditions combinators.short-circuit accessors
 locals ;
-IN: concurrency.locks
+in: concurrency.locks
 
 ! Simple critical sections
 TUPLE: lock threads owner reentrant? ;

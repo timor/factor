@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel locals math math.ranges math.parser sequences ;
-IN: benchmark.beust2
+in: benchmark.beust2
 
 ! http://crazybob.org/BeustSequence.java.html
 

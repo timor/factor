@@ -2,7 +2,7 @@
 USING: accessors arrays assocs byte-arrays fry images kernel
 locals math math.functions math.order math.vectors namespaces
 sequences sorting ;
-IN: images.atlas
+in: images.atlas
 
 ! sort rects by height/width/whatever
 ! use least power of two greater than k * greatest width for atlas width

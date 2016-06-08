@@ -3,7 +3,7 @@
 USING: models.arrow models.product stack-checker accessors fry
 generalizations sequences.generalizations combinators.smart
 macros kernel ;
-IN: models.arrow.smart
+in: models.arrow.smart
 
 MACRO: <smart-arrow> ( quot -- quot' )
     [ inputs dup ] keep

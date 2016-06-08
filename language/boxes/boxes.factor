@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel accessors ;
-IN: boxes
+in: boxes
 
 TUPLE: box value occupied ;
 

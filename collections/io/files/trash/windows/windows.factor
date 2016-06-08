@@ -6,7 +6,7 @@ alien.syntax classes.struct destructors kernel
 io.encodings.utf16n io.files.trash libc math sequences system
 windows.types ;
 
-IN: io.files.trash.windows
+in: io.files.trash.windows
 
 <PRIVATE
 

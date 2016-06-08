@@ -1,5 +1,5 @@
 USING: alien.c-types alien.syntax ;
-IN: windows.directx.dcommon
+in: windows.directx.dcommon
 
 ENUM: DWRITE_MEASURING_MODE
     DWRITE_MEASURING_MODE_NATURAL

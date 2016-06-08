@@ -6,7 +6,7 @@ locals kernel.private help.vocabs assocs quotations urls
 peg.ebnf tools.annotations tools.crossref help.topics
 math.functions compiler.tree.optimizer compiler.cfg.optimizer
 fry ;
-IN: talks.vpri-talk
+in: talks.vpri-talk
 
 CONSTANT: vpri-slides
 {

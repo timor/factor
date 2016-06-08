@@ -6,7 +6,7 @@ combinators.short-circuit cuda cuda.ffi fry generalizations
 io.backend kernel locals macros math namespaces sequences
 variants vocabs.loader words ;
 QUALIFIED-WITH: alien.c-types c
-IN: cuda.libraries
+in: cuda.libraries
 
 VARIANT: cuda-abi
     cuda32 cuda64 ;

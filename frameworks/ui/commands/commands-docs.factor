@@ -1,7 +1,7 @@
 USING: accessors ui.gestures help.markup help.syntax strings kernel
 hashtables quotations words classes sequences namespaces make
 arrays assocs ;
-IN: ui.commands
+in: ui.commands
 
 HELP: +nullary+
 { $description "A key which may be set in the hashtable passed to " { $link define-command } ". If set to a true value, the command does not take any inputs, and the value passed to " { $link invoke-command } " will be ignored. Otherwise, it takes one input." } ;

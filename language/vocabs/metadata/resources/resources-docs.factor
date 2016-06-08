@@ -1,6 +1,6 @@
 ! (c)2010 Joe Groff bsd license
 USING: help.markup help.syntax kernel ;
-IN: vocabs.metadata.resources
+in: vocabs.metadata.resources
 
 HELP: expand-vocab-resource-files
 { $values

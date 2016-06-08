@@ -1,5 +1,5 @@
 USING: alien.syntax layouts combinators vocabs ;
-IN: unix.stat
+in: unix.stat
 
 cell-bits
 {

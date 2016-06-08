@@ -1,6 +1,6 @@
 USING: continuations help.markup help.syntax io quotations
 strings urls xml.data ;
-IN: html.templates
+in: html.templates
 
 HELP: template
 { $class-description "The class of HTML templates." } ;

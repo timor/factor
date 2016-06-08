@@ -1,6 +1,6 @@
 USING: accessors combinators namespaces sequences system vocabs
 ;
-IN: bootstrap.io
+in: bootstrap.io
 
 "bootstrap.compiler" require
 "bootstrap.threads" require

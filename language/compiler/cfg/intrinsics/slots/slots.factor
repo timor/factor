@@ -5,7 +5,7 @@ combinators.short-circuit compiler.cfg compiler.cfg.builder.blocks
 compiler.cfg.hats compiler.cfg.instructions compiler.cfg.registers
 compiler.cfg.stacks compiler.tree.propagation.info cpu.architecture
 kernel layouts locals math namespaces sequences ;
-IN: compiler.cfg.intrinsics.slots
+in: compiler.cfg.intrinsics.slots
 
 : class-tag ( class -- tag/f )
     builtins get [ class<= ] with find drop ;

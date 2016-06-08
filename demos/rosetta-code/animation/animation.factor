@@ -3,7 +3,7 @@
 USING: accessors timers calendar fonts kernel models sequences ui
 ui.gadgets ui.gadgets.labels ui.gestures ;
 FROM: models => change-model ;
-IN: rosetta-code.animation
+in: rosetta-code.animation
 
 ! http://rosettacode.org/wiki/Animation
 

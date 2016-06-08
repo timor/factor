@@ -6,7 +6,7 @@ continuations debugger effects generic help.crossref help.markup
 help.stylesheet help.topics io io.styles kernel locals make
 namespaces prettyprint sequences sets sorting vocabs words
 words.symbol ;
-IN: help
+in: help
 
 GENERIC: word-help* ( word -- content ) ;
 

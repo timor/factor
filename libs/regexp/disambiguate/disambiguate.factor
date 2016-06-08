@@ -3,7 +3,7 @@
 USING: accessors arrays assocs fry kernel locals math math.bits
 regexp.ast regexp.classes regexp.transition-tables sequences
 sets ;
-IN: regexp.disambiguate
+in: regexp.disambiguate
 
 TUPLE: parts in out ;
 

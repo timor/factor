@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ui.gadgets math ;
-IN: ui.gadgets.borders
+in: ui.gadgets.borders
 
 HELP: border
 { $class-description "A border gadget contains a single child and centers it, with a fixed-width border. Borders are created by calling " { $link <border> } "." } ;

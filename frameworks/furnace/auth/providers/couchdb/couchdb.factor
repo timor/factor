@@ -3,7 +3,7 @@ json.writer kernel mirrors sequences urls urls.encoding
 arrays furnace.auth byte-arrays combinators.short-circuit
 strings continuations combinators base64 make
 locals namespaces ;
-IN: furnace.auth.providers.couchdb
+in: furnace.auth.providers.couchdb
 
 ! !!! Implement the authentication protocol for CouchDB.
 ! !!!

@@ -3,7 +3,7 @@
 USING: xml.tokenize xml.data xml.state kernel sequences ascii
 fry xml.errors combinators hashtables namespaces xml.entities
 strings xml.name ;
-IN: xml.dtd
+in: xml.dtd
 
 : take-decl-contents ( -- first second )
     pass-blank take-word pass-blank ">" take-string ;

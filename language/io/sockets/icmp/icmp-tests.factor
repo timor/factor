@@ -2,7 +2,7 @@
 USING: accessors destructors kernel io.sockets io.sockets.icmp
 sequences tools.test ;
 
-IN: io.sockets.icmp.tests
+in: io.sockets.icmp.tests
 
 { { } } [
     "localhost" <icmp> resolve-host

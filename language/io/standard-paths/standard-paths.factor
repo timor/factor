@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators io.pathnames kernel sequences system
 vocabs ;
-IN: io.standard-paths
+in: io.standard-paths
 
 HOOK: find-native-bundle os ( string -- path ) ;
 

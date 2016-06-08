@@ -4,7 +4,7 @@ USING: concurrency.combinators db db.pools db.sqlite db.tuples
 db.types destructors kernel math random threads tools.test sequences
 io io.pools prettyprint db.postgresql accessors io.files.temp
 namespaces fry system math.parser db.queries assocs ;
-IN: db.tester
+in: db.tester
 
 : postgresql-test-db-name ( -- string )
     cpu name>> "-" "factor-test" 3append

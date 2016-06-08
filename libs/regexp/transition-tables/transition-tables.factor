@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs fry hashtables kernel locals
 regexp.classes sequences sets vectors ;
-IN: regexp.transition-tables
+in: regexp.transition-tables
 
 TUPLE: transition-table transitions start-state final-states ;
 

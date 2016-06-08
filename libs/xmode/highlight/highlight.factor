@@ -6,7 +6,7 @@ io.pathnames io.streams.string io.styles kernel locals see
 sequences splitting strings vocabs vocabs.loader words
 xmode.catalog xmode.marker ;
 
-IN: xmode.highlight
+in: xmode.highlight
 
 <PRIVATE
 

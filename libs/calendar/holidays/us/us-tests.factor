@@ -2,6 +2,6 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: calendar.holidays calendar.holidays.us kernel sequences
 tools.test ;
-IN: calendar.holidays.us.tests
+in: calendar.holidays.us.tests
 
 { 10 } [ 2009 us-federal holidays length ] unit-test

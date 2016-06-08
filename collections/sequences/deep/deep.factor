@@ -1,7 +1,7 @@
 ! Copyright (C) 2007, 2008 Daniel Ehrenberg, Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: sequences kernel strings math fry ;
-IN: sequences.deep
+in: sequences.deep
 
 ! All traversal goes in postorder
 

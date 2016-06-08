@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax io.streams.string strings ;
-IN: tools.files
+in: tools.files
 
 HELP: directory.
 { $values

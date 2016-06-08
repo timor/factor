@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math sequences prettyprint math.parser io
 math.functions math.bitwise combinators.short-circuit ;
-IN: math.floating-point
+in: math.floating-point
 
 : (double-sign) ( bits -- n ) -63 shift ; inline
 : double-sign ( double -- n ) double>bits (double-sign) ;

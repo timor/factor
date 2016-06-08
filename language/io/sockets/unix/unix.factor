@@ -6,7 +6,7 @@ io.backend.unix io.encodings.ascii io.encodings.utf8 io.files
 io.pathnames io.sockets.private kernel libc locals math
 namespaces sequences system unix unix.ffi vocabs ;
 EXCLUDE: io.sockets => accept ;
-IN: io.sockets.unix
+in: io.sockets.unix
 
 : socket-fd ( domain type protocol -- fd )
     socket dup io-error <fd> init-fd |dispose ;

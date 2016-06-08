@@ -4,7 +4,7 @@ USING: accessors assocs combinators effects effects.parser fry
 infix.ast infix.parser kernel locals locals.parser math
 math.functions math.order math.ranges multiline namespaces
 parser quotations sequences summary vocabs.parser words ;
-IN: infix
+in: infix
 
 <PRIVATE
 : prepare-operand ( term -- quot )

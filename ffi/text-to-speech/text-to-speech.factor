@@ -5,7 +5,7 @@ USING: combinators command-line generic io kernel math
 math.text.english namespaces present sequences strings system
 ui.operations vocabs ;
 
-IN: text-to-speech
+in: text-to-speech
 
 ! 1. "say"
 ! 2. festival, freetts, gnuspeech, espeech, flite, etc.

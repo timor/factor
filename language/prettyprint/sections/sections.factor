@@ -4,7 +4,7 @@ USING: accessors classes.maybe combinators
 combinators.short-circuit continuations hashtables io io.styles
 kernel make math namespaces prettyprint.config sequences sets
 splitting strings vocabs vocabs.parser words ;
-IN: prettyprint.sections
+in: prettyprint.sections
 
 ! State
 SYMBOL: position

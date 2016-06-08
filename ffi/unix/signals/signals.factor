@@ -1,7 +1,7 @@
 ! (c)2011 Joe Groff bsd license
 USING: assocs io.backend.unix kernel namespaces sequences
 threads ;
-IN: unix.signals
+in: unix.signals
 
 <PRIVATE
 

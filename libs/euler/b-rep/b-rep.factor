@@ -3,7 +3,7 @@ USING: accessors fry kernel locals sequences sets namespaces
 combinators combinators.short-circuit game.models.half-edge
 math math.vectors math.matrices assocs arrays hashtables ;
 FROM: namespaces => set ;
-IN: euler.b-rep
+in: euler.b-rep
 
 : >index-hash ( seq -- hash ) H{ } zip-index-as ; inline
 

@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Doug Coleman, Daniel Ehrenberg.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators kernel locals math sequences ;
-IN: images
+in: images
 
 SINGLETONS:
     A L LA BGR RGB BGRA RGBA ABGR ARGB RGBX XRGB BGRX XBGR

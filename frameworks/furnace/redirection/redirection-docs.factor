@@ -1,6 +1,6 @@
 USING: help.markup help.syntax io.streams.string quotations urls
 http.server http ;
-IN: furnace.redirection
+in: furnace.redirection
 
 HELP: <redirect-responder>
 { $values { "url" url } { "responder" "a responder" } }

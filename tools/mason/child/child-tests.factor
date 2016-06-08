@@ -1,6 +1,6 @@
 USING: io io.pathnames kernel mason.child mason.config
 namespaces sequences system tools.test ;
-IN: mason.child.tests
+in: mason.child.tests
 
 { { "make" "macosx-x86-32" } } [
     H{

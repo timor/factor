@@ -3,7 +3,7 @@
 ! Based on Slate's src/unfinished/interval.slate by Brian Rice.
 USING: accessors kernel sequences arrays math math.order
 combinators combinators.short-circuit generic layouts memoize ;
-IN: math.intervals
+in: math.intervals
 
 SYMBOL: empty-interval
 

@@ -1,4 +1,4 @@
-IN: help.apropos
+in: help.apropos
 USING: help.markup help.syntax strings help.tips ;
 
 HELP: apropos

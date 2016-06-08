@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: classes kernel help.markup help.syntax sequences
 alien assocs strings math quotations db.private ;
-IN: db
+in: db
 
 HELP: db-connection
 { $description "The " { $snippet "db-connection" } " class is the superclass of all other database classes. It stores a " { $snippet "handle" } " to the database as well as insert, update, and delete queries. Stores the current database object as a dynamic variable." } ;

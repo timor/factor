@@ -3,7 +3,7 @@
 USING: arrays kernel kernel.private math sequences
 sequences.private growable bit-arrays prettyprint.custom
 parser accessors vectors.functor classes.parser ;
-IN: bit-vectors
+in: bit-vectors
 
 << "bit-vector" create-class-in \ bit-array \ <bit-array> define-vector >>
 

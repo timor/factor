@@ -12,7 +12,7 @@ ui.theme ui.gadgets.toolbar ui.gadgets.tracks
 ui.gadgets.viewports ui.gadgets.worlds ui.gestures ui.pens.solid
 ui.render ui.text ui.theme.images ui.tools.common
 ui.tools.browser.history ui.tools.browser.popups unicode vocabs ;
-IN: ui.tools.browser
+in: ui.tools.browser
 
 TUPLE: browser-gadget < tool history scroller search-field popup ;
 

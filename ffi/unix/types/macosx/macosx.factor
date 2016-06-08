@@ -1,5 +1,5 @@
 USING: alien.syntax alien.c-types ;
-IN: unix.types
+in: unix.types
 
 ! Darwin 9.1.0
 

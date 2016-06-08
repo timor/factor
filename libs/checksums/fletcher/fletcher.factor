@@ -4,7 +4,7 @@
 USING: checksums grouping io.binary kernel locals math sequences
 ;
 
-IN: checksums.fletcher
+in: checksums.fletcher
 
 SINGLETON: fletcher-16
 SINGLETON: fletcher-32

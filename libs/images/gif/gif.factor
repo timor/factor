@@ -4,7 +4,7 @@ USING: accessors arrays combinators compression.lzw
 constructors destructors grouping images images.loader io
 io.binary io.buffers io.encodings.string io.encodings.utf8
 kernel make math math.bitwise namespaces sequences ;
-IN: images.gif
+in: images.gif
 
 SINGLETON: gif-image
 "gif" gif-image ?register-image-class

@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors deques dlists fry kernel make math math.order ;
-IN: rosetta-code.hamming
+in: rosetta-code.hamming
 
 ! http://rosettacode.org/wiki/Hamming_numbers#Factor
 

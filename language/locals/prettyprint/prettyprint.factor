@@ -3,7 +3,7 @@
 USING: accessors effects kernel locals locals.definitions
 locals.types prettyprint.backend prettyprint.custom
 prettyprint.sections see sequences words ;
-IN: locals.prettyprint
+in: locals.prettyprint
 
 : pprint-var ( var -- )
     ! Prettyprint a read/write local as its writer, just like

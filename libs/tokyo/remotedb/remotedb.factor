@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Bruno Deferrari
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel tokyo.alien.tcrdb tokyo.assoc-functor ;
-IN: tokyo.remotedb
+in: tokyo.remotedb
 
 << "tcrdb" "remotedb" define-tokyo-assoc-api >>
 

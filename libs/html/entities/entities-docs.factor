@@ -1,5 +1,5 @@
 USING: help.markup help.syntax strings ;
-IN: html.entities
+in: html.entities
 
 HELP: html-escape
 { $values { "str" string } { "newstr" string } }

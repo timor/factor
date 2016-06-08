@@ -1,7 +1,7 @@
 ! Copyright (C) 2007 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax strings ;
-IN: peg.javascript
+in: peg.javascript
 
 HELP: parse-javascript
 { $values

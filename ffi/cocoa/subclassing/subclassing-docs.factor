@@ -1,5 +1,5 @@
 USING: help.markup help.syntax strings alien hashtables ;
-IN: cocoa.subclassing
+in: cocoa.subclassing
 
 HELP: CLASS:
 { $syntax "CLASS: name < superclass protocols... imeth... ;" }

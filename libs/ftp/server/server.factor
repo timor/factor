@@ -9,7 +9,7 @@ io.servers io.sockets io.streams.string io.timeouts
 kernel logging math math.bitwise math.parser namespaces
 sequences simple-tokenizer splitting strings threads
 tools.files unicode ;
-IN: ftp.server
+in: ftp.server
 
 SYMBOL: server
 SYMBOL: client

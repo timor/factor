@@ -1,5 +1,5 @@
 USING: tools.test help kernel ;
-IN: help.tests
+in: help.tests
 
 [ 3 throw ] must-fail
 { } [ :help ] unit-test

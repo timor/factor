@@ -3,7 +3,7 @@
 USING: assocs kernel machine-learning.rebalancing math
 math.statistics math.text.english sequences tools.test
 math.vectors ;
-IN: machine-learning.rebalancing.tests
+in: machine-learning.rebalancing.tests
 
 { t } [
     { 1 1 1 2 } [ [ number>text ] map ] [ ] bi

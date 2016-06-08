@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.c-types alien.libraries alien.syntax
 combinators classes.struct system ;
-IN: compression.snappy.ffi
+in: compression.snappy.ffi
 
 << "snappy" {
     { [ os windows? ] [ "snappy.dll" ] }

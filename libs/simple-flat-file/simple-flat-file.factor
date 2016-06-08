@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: sequences splitting kernel math.parser io.files io.encodings.utf8
 biassocs ascii namespaces arrays make assocs interval-maps sets ;
-IN: simple-flat-file
+in: simple-flat-file
 
 : drop-comments ( seq -- newseq )
     [ "#@" split first ] map harvest ;

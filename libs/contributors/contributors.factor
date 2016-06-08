@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io io.directories io.encodings.utf8 io.launcher io.pathnames
 math.statistics prettyprint sequences sorting system ;
-IN: contributors
+in: contributors
 
 : changelog ( -- authors )
     image-path parent-directory [

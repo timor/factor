@@ -1,6 +1,6 @@
 ! (c)2010 Joe Groff bsd license
 USING: accessors arrays fry kernel locals math sequences ;
-IN: game.models.half-edge
+in: game.models.half-edge
 
 TUPLE: edge < identity-tuple face vertex opposite-edge next-edge ;
 

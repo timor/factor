@@ -3,7 +3,7 @@
 USING: accessors assocs classes classes.tuple classes.tuple.private
 combinators fry hash-sets hashtables kernel math sequences sets slots
 slots.private ;
-IN: mirrors
+in: mirrors
 
 TUPLE: mirror { object read-only } ;
 

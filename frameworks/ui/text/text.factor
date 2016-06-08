@@ -3,7 +3,7 @@
 USING: accessors arrays assocs cache combinators fonts kernel
 math math.order namespaces opengl opengl.gl opengl.textures
 sequences strings system ui.gadgets.worlds vocabs ;
-IN: ui.text
+in: ui.text
 
 <PRIVATE
 

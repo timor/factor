@@ -4,7 +4,7 @@ USING: accessors assocs combinators combinators.short-circuit
 fry kernel kernel.private locals math namespaces regexp.classes
 regexp.transition-tables sequences sequences.private sets
 strings unicode words ;
-IN: regexp.compiler
+in: regexp.compiler
 
 GENERIC: question>quot ( question -- quot ) ;
 

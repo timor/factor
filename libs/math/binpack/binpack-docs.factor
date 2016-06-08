@@ -3,7 +3,7 @@
 
 USING: help.syntax help.markup kernel assocs sequences quotations ;
 
-IN: math.binpack
+in: math.binpack
 
 HELP: binpack
 { $values { "items" sequence } { "#bins" "number of bins" } { "bins" "packed bins" } }

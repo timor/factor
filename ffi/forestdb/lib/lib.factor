@@ -6,7 +6,7 @@ forestdb.ffi fry generalizations io.directories io.encodings.string
 io.encodings.utf8 io.pathnames kernel libc math multiline namespaces
 sequences strings ;
 QUALIFIED: sets
-IN: forestdb.lib
+in: forestdb.lib
 
 /*
 ! Issues

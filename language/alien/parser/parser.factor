@@ -5,7 +5,7 @@ arrays classes classes.parser combinators
 combinators.short-circuit compiler.units effects fry kernel
 lexer locals math namespaces parser sequences splitting
 vocabs.parser words ;
-IN: alien.parser
+in: alien.parser
 
 SYMBOL: current-library
 

@@ -11,7 +11,7 @@ system tools.test vectors vocabs words ;
 FROM: math => float ;
 SPECIALIZED-ARRAY: double
 SPECIALIZED-ARRAY: void*
-IN: compiler.tree.propagation.tests
+in: compiler.tree.propagation.tests
 
 ! Arrays
 { V{ array } } [

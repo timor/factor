@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: kernel namespaces opengl.capabilities opengl.gl variants ;
-IN: gpu
+in: gpu
 
 TUPLE: gpu-object < identity-tuple handle ;
 

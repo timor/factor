@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays math kernel accessors sequences sequences.private
 deques search-deques hashtables ;
-IN: unrolled-lists
+in: unrolled-lists
 
 CONSTANT: unroll-factor 32
 

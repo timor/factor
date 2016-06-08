@@ -5,7 +5,7 @@ USING: accessors alien.c-types alien.data arrays byte-arrays
 classes.struct combinators continuations destructors fry io
 kernel libc math namespaces sequences zeromq.ffi ;
 
-IN: zeromq
+in: zeromq
 
 TUPLE: zmq-error n string ;
 

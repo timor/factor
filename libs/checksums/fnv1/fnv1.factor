@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: checksums classes.singleton kernel math math.ranges
 math.vectors sequences ;
-IN: checksums.fnv1
+in: checksums.fnv1
 
 SINGLETON: fnv1-32
 SINGLETON: fnv1a-32

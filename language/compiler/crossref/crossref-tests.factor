@@ -1,5 +1,5 @@
 USING: compiler.crossref fry kernel sequences tools.test vocabs words ;
-IN: compiler.crossref.tests
+in: compiler.crossref.tests
 
 ! Dependencies of all words should always be satisfied unless we're
 ! in the middle of recompiling something

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays combinators kernel locals math
 math.order sequences sequences.private vectors ;
-IN: binary-search
+in: binary-search
 
 <PRIVATE
 

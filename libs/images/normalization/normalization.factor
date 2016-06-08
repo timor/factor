@@ -7,7 +7,7 @@ FROM: alien.c-types => float ;
 SPECIALIZED-ARRAY: half
 SPECIALIZED-ARRAY: float
 SPECIALIZED-ARRAY: ushort
-IN: images.normalization
+in: images.normalization
 
 <PRIVATE
 

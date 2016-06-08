@@ -3,7 +3,7 @@
 USING: accessors arrays byte-arrays combinators grouping images
 kernel locals math math.order
 math.ranges math.vectors sequences sequences.deep fry ;
-IN: images.processing
+in: images.processing
 
 : coord-matrix ( dim -- m )
     [ iota ] map first2 cartesian-product ;

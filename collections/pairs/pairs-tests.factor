@@ -1,4 +1,4 @@
-IN: pairs.tests
+in: pairs.tests
 USING: namespaces assocs tools.test pairs ;
 
 SYMBOL: blah

@@ -5,7 +5,7 @@ compiler.tree.normalization.introductions
 compiler.tree.normalization.renaming compiler.utilities fry
 kernel math math.order namespaces sequences
 stack-checker.backend stack-checker.branches ;
-IN: compiler.tree.normalization
+in: compiler.tree.normalization
 
 GENERIC: normalize* ( node -- node' ) ;
 

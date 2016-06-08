@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: classes.mixin help.markup help.syntax kernel multiline roles ;
-IN: roles
+in: roles
 
 HELP: ROLE:
 { $syntax "ROLE: name slots... ;

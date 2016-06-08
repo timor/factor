@@ -1,7 +1,7 @@
 ! (c) 2009 Joe Groff, see BSD license
 USING: assocs kernel math.rectangles combinators accessors locals
 math.vectors vectors sequences math combinators.short-circuit arrays fry ;
-IN: quadtrees
+in: quadtrees
 
 TUPLE: quadtree { bounds rect } point value ll lr ul ur leaf? ;
 

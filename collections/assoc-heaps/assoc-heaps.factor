@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs hashtables heaps kernel ;
-IN: assoc-heaps
+in: assoc-heaps
 
 TUPLE: assoc-heap assoc heap ;
 

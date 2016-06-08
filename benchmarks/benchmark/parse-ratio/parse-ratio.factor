@@ -1,6 +1,6 @@
 USING: kernel literals math.parser math.vectors random
 sequences ;
-IN: benchmark.parse-ratio
+in: benchmark.parse-ratio
 
 CONSTANT: test-ratios $[
     200,000 100,000 random-integers

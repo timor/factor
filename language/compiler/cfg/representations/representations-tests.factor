@@ -7,7 +7,7 @@ compiler.cfg.representations.rewrite
 compiler.cfg.comparisons compiler.cfg.utilities
 make ;
 FROM: alien.c-types => char ;
-IN: compiler.cfg.representations
+in: compiler.cfg.representations
 
 { { double-rep double-rep } } [
     T{ ##add-float

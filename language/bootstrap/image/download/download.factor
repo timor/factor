@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs bootstrap.image checksums checksums.md5
 http.client io.files kernel math.parser splitting urls ;
-IN: bootstrap.image.download
+in: bootstrap.image.download
 
 CONSTANT: url URL" http://downloads.factorcode.org/images/latest/"
 

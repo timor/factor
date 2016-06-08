@@ -1,6 +1,6 @@
 USING: kernel.private kernel sequences math combinators
 sequences.private ;
-IN: benchmark.dispatch4
+in: benchmark.dispatch4
 
 : dispatch4 ( n -- val )
     dup {

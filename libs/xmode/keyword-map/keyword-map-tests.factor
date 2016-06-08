@@ -1,4 +1,4 @@
-IN: xmode.keyword-map.tests
+in: xmode.keyword-map.tests
 USING: xmode.keyword-map xmode.tokens
 tools.test namespaces assocs kernel strings ;
 

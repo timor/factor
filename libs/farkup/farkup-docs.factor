@@ -1,5 +1,5 @@
 USING: help.markup help.syntax strings io ;
-IN: farkup
+in: farkup
 
 HELP: convert-farkup
 { $values { "string" string } { "string'" string } }

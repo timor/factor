@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel ;
-IN: furnace.auth.features.deactivate-user
+in: furnace.auth.features.deactivate-user
 
 HELP: allow-deactivation
 { $values { "realm" "an authentication realm" } }

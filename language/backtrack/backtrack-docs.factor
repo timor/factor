@@ -1,7 +1,7 @@
 ! Copyright (c) 2009 Samuel Tardieu.
 ! See See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel quotations sequences ;
-IN: backtrack
+in: backtrack
 
 HELP: fail
 { $description "Signal that the current alternative is not acceptable. This will cause either backtracking to occur, or a failure to be signalled, as explained in the " { $link amb } " word description." }

@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: kernel pair-rocket tools.test ;
-IN: pair-rocket.tests
+in: pair-rocket.tests
 
 { { "a" 1 } } [ "a" => 1 ] unit-test
 { { { "a" } { 1 } } } [ { "a" } => { 1 } ] unit-test

@@ -2,7 +2,7 @@
 USING: accessors arrays assocs classes gml.runtime gml.types
 hashtables io io.styles kernel math math.parser math.vectors.simd
 math.vectors.simd.cords sequences strings colors ;
-IN: gml.printer
+in: gml.printer
 
 GENERIC: write-gml ( obj -- ) ;
 

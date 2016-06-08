@@ -2,7 +2,7 @@
 USING: kernel fry io io.files io.encodings.ascii sequences
 regexp command-line namespaces ;
 
-IN: tools.grep
+in: tools.grep
 
 ! TODO: getopt
 ! TODO: color

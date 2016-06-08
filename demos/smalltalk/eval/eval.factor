@@ -3,7 +3,7 @@
 USING: io.files io.encodings.utf8
 compiler.units smalltalk.parser smalltalk.compiler
 smalltalk.library ;
-IN: smalltalk.eval
+in: smalltalk.eval
 
 : eval-smalltalk ( string -- result )
     [ parse-smalltalk compile-smalltalk ] with-compilation-unit

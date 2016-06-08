@@ -4,7 +4,7 @@ USING: accessors arrays assocs classes combinators
 combinators.short-circuit compiler.units effects.parser fry
 generalizations kernel locals make math math.order namespaces
 quotations sequences sets splitting unicode vectors words ;
-IN: peg
+in: peg
 
 TUPLE: parse-result remaining ast ;
 TUPLE: parse-error position got messages ;

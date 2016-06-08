@@ -1,4 +1,4 @@
-IN: ui.tools.walker
+in: ui.tools.walker
 USING: help.markup help.syntax ui.commands ui.operations
 ui.render tools.walker sequences tools.continuations ;
 

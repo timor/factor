@@ -1,6 +1,6 @@
 ! (c)2010 Joe Groff bsd license
 USING: alien kernel ;
-IN: alien.cxx
+in: alien.cxx
 
 SINGLETONS: g++ visual-c++ ;
 UNION: c++-abi

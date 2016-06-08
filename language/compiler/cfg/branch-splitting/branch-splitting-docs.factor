@@ -1,5 +1,5 @@
 USING: compiler.cfg compiler.cfg.utilities help.markup help.syntax ;
-IN: compiler.cfg.branch-splitting
+in: compiler.cfg.branch-splitting
 
 HELP: clone-basic-block
 { $values { "bb" basic-block } { "bb'" basic-block } }

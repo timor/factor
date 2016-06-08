@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.primes.factors math.ranges
 project-euler.common sequences ;
-IN: project-euler.072
+in: project-euler.072
 
 ! http://projecteuler.net/index.php?section=problems&id=072
 

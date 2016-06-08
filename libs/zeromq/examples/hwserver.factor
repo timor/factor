@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: byte-arrays calendar destructors io kernel strings
 threads zeromq zeromq.ffi ;
-IN: zeromq.examples.hwserver
+in: zeromq.examples.hwserver
 
 : hwserver ( -- )
     [

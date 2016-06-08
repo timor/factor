@@ -4,7 +4,7 @@ USING: command-line compiler.units continuations definitions io
 io.pathnames kernel math math.parser memory namespaces parser
 parser.notes sequences sets splitting system combinators
 vocabs vocabs.loader ;
-IN: bootstrap.stage2
+in: bootstrap.stage2
 
 SYMBOL: core-bootstrap-time
 

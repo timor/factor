@@ -3,7 +3,7 @@
 USING: byte-arrays command-line destructors formatting io kernel
 math math.parser namespaces sequences splitting strings zeromq
 zeromq.ffi ;
-IN: zeromq.examples.wuclient
+in: zeromq.examples.wuclient
 
 : wuclient ( -- )
     [

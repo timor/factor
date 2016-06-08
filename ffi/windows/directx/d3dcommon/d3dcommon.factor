@@ -1,5 +1,5 @@
 USING: alien.c-types alien.syntax ;
-IN: windows.directx.d3dcommon
+in: windows.directx.d3dcommon
 
 CONSTANT: D3D_DRIVER_TYPE_UNKNOWN     0
 CONSTANT: D3D_DRIVER_TYPE_HARDWARE    1

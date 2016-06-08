@@ -1,5 +1,5 @@
 USING: http http.parsers tools.test ;
-IN: http.parsers.tests
+in: http.parsers.tests
 
 { { } } [ "" parse-cookie ] unit-test
 { { } } [ "" parse-set-cookie ] unit-test

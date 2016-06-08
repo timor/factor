@@ -3,7 +3,7 @@
 USING: kernel namespaces combinators.short-circuit vocabs sequences
 compiler.units tools.annotations tools.annotations.private fry words
 opengl calendar accessors ascii ;
-IN: opengl.annotations
+in: opengl.annotations
 
 TUPLE: gl-error-log
     { function word initial: t }

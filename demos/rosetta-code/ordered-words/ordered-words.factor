@@ -3,7 +3,7 @@
 USING: grouping http.client io io.encodings.utf8 io.files
 io.files.temp kernel math memoize sequences sequences.extras
 unicode urls ;
-IN: rosetta-code.ordered-words
+in: rosetta-code.ordered-words
 
 ! http://rosettacode.org/wiki/Ordered_words
 

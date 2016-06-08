@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: classes help.markup help.syntax kernel quotations ;
-IN: math.vectors.conversion
+in: math.vectors.conversion
 
 HELP: bad-vconvert
 { $values

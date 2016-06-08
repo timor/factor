@@ -6,7 +6,7 @@ io.streams.byte-array classes.builtin parser lexer
 classes.predicate classes.union classes.intersection
 classes.singleton classes.tuple help.vocabs math.parser
 accessors definitions sets ;
-IN: help.handbook
+in: help.handbook
 
 ARTICLE: "conventions" "Conventions"
 "Various conventions are used throughout the Factor documentation and source code."

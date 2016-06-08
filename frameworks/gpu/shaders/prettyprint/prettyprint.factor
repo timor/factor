@@ -1,5 +1,5 @@
 USING: accessors debugger gpu.shaders io kernel prettyprint ;
-IN: gpu.shaders.prettyprint
+in: gpu.shaders.prettyprint
 
 M: compile-shader-error error.
     "The GLSL shader " write

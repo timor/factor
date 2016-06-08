@@ -1,7 +1,7 @@
 
 USING: help.syntax help.markup ;
 
-IN: opengl.gl
+in: opengl.gl
 
 ARTICLE: "opengl-low-level" "OpenGL binding"
 { $subsections

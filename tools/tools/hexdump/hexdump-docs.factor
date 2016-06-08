@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel sequences byte-arrays
 strings ;
-IN: tools.hexdump
+in: tools.hexdump
 
 HELP: hexdump.
 { $values { "byte-array" byte-array } }

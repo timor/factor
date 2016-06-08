@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel arrays sequences math math.vectors accessors
 parser ;
-IN: math.rectangles
+in: math.rectangles
 
 TUPLE: rect { loc initial: { 0 0 } } { dim initial: { 0 0 } } ;
 

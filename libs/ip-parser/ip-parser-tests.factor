@@ -1,7 +1,7 @@
 
 USING: kernel sequences tools.test ;
 
-IN: ip-parser
+in: ip-parser
 
 { "0.0.0.1" } [ "1" normalize-ipv4 ] unit-test
 { "1.0.0.2" } [ "1.2" normalize-ipv4 ] unit-test

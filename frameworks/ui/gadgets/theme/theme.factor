@@ -1,7 +1,7 @@
 ! Copyright (C) 2009, 2010 Slava Pestov, Joe Groff.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors io.pathnames sequences ui.images ui.theme ;
-IN: ui.gadgets.theme
+in: ui.gadgets.theme
 
 SLOT: font ! Temporarily necessary to fix Windows bootstrap.
 

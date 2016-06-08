@@ -1,5 +1,5 @@
 USING: help.syntax help.markup words ;
-IN: descriptive
+in: descriptive
 
 HELP: DESCRIPTIVE:
 { $syntax "DESCRIPTIVE: word ( inputs -- outputs ) definition ;" }

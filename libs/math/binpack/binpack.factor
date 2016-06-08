@@ -3,7 +3,7 @@
 
 USING: accessors assocs kernel locals math sequences sorting ;
 
-IN: math.binpack
+in: math.binpack
 
 <PRIVATE
 

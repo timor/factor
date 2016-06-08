@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays assocs fry kernel math math.functions
 math.statistics memoize random sequences sorting ;
-IN: machine-learning.rebalancing
+in: machine-learning.rebalancing
 
 ERROR: probability-sum-not-one seq ;
 

@@ -1,4 +1,4 @@
-IN: json
+in: json
 USING: help.markup help.syntax ;
 
 ARTICLE: "json" "JSON serialization"

@@ -1,5 +1,5 @@
 USING: kernel vocabs summary debugger io ;
-IN: json
+in: json
 
 SINGLETON: json-null
 

@@ -3,7 +3,7 @@
 USING: accessors assocs combinators fry grouping hashtables
 kernel locals math math.parser math.ranges random sequences
 strings io ascii ;
-IN: rosetta-code.bulls-and-cows
+in: rosetta-code.bulls-and-cows
 
 ! http://rosettacode.org/wiki/Bulls_and_cows
 

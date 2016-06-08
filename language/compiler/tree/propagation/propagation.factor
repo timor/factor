@@ -14,7 +14,7 @@ compiler.tree.propagation.recursive
 compiler.tree.propagation.simple
 compiler.tree.propagation.transforms
 kernel namespaces ;
-IN: compiler.tree.propagation
+in: compiler.tree.propagation
 
 : propagate ( nodes -- nodes )
     H{ } clone copies set

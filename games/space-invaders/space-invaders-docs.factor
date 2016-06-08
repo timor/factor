@@ -1,7 +1,7 @@
 ! Copyright (C) 2007 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.syntax help.markup cpu.8080.emulator ;
-IN: space-invaders
+in: space-invaders
 
 HELP: run-invaders
 { $description

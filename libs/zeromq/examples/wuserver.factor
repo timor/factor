@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: byte-arrays calendar destructors formatting kernel math
 namespaces random zeromq zeromq.ffi ;
-IN: zeromq.examples.wuserver
+in: zeromq.examples.wuserver
 
 : wuserver ( -- )
     [

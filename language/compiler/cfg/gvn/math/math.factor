@@ -10,7 +10,7 @@ compiler.cfg.gvn.folding
 compiler.cfg.gvn.graph
 compiler.cfg.gvn.avail
 compiler.cfg.gvn.rewrite ;
-IN: compiler.cfg.gvn.math
+in: compiler.cfg.gvn.math
 
 : f-insn? ( insn -- ? )
     { [ ##load-reference? ] [ obj>> not ] } 1&& ; inline

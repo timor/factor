@@ -4,7 +4,7 @@ USING: accessors assocs calendar calendar.holidays
 calendar.holidays.private combinators combinators.short-circuit
 fry kernel lexer math namespaces parser sequences
 vocabs words ;
-IN: calendar.holidays.us
+in: calendar.holidays.us
 
 SINGLETONS: us us-federal ;
 

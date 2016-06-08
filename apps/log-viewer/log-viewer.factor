@@ -1,5 +1,5 @@
 USING: kernel io io.files io.pathnames io.monitors io.encodings.utf8 ;
-IN: log-viewer
+in: log-viewer
 
 : read-lines ( stream -- )
     dup stream-readln dup

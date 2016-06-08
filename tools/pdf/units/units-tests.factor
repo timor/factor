@@ -3,7 +3,7 @@
 
 USING: pdf.units tools.test ;
 
-IN: pdf.units.tests
+in: pdf.units.tests
 
 { 0 } [ "0" string>points ] unit-test
 { 1 } [ "1" string>points ] unit-test

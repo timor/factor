@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Sam Anklesaria.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays accessors kernel models threads calendar ;
-IN: models.conditional
+in: models.conditional
 
 TUPLE: conditional < model condition thread ;
 

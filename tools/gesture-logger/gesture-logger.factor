@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors io kernel prettyprint colors.constants ui ui.gadgets
 ui.gadgets.panes ui.gadgets.scrollers ui.gestures ui.pens.solid ;
-IN: gesture-logger
+in: gesture-logger
 
 TUPLE: gesture-logger < gadget stream ;
 

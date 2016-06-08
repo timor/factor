@@ -1,7 +1,7 @@
 ! Copyright (c) 2007 Aaron Schaefer, Samuel Tardieu.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: math.primes sequences project-euler.common ;
-IN: project-euler.010
+in: project-euler.010
 
 ! http://projecteuler.net/index.php?section=problems&id=10
 

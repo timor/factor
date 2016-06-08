@@ -3,7 +3,7 @@
 USING: accessors assocs grouping kernel math parser
 persistent.assocs persistent.sequences prettyprint.custom
 sequences sequences.private vectors ;
-IN: vlists
+in: vlists
 
 TUPLE: vlist
 { length array-capacity read-only }

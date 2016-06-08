@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors compiler.cfg.instructions.syntax kernel math
 namespaces ;
-IN: compiler.cfg.instructions
+in: compiler.cfg.instructions
 
 <<
 SYMBOL: insn-classes

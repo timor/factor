@@ -1,7 +1,7 @@
 USING: unicode kernel tools.test sequences
 simple-flat-file io.encodings.utf8 io.files splitting math.parser
 locals math quotations assocs combinators unicode.normalize.private ;
-IN: unicode.normalize.tests
+in: unicode.normalize.tests
 
 { "ab\u000323\u000302cd" } [ "ab\u000302" "\u000323cd" string-append ] unit-test
 

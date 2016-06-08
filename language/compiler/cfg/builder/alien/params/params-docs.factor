@@ -1,5 +1,5 @@
 USING: cpu.architecture help.markup help.syntax math ;
-IN: compiler.cfg.builder.alien.params
+in: compiler.cfg.builder.alien.params
 
 HELP: stack-params
 { $var-description "Count of the number of bytes of stack allocation required to store the current call frames parameters." } ;

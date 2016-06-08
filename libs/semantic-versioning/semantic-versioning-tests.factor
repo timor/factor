@@ -1,6 +1,6 @@
 USING: kernel math.order random semantic-versioning sequences
 sorting tools.test ;
-IN: semantic-versioning.tests
+in: semantic-versioning.tests
 
 {
     {

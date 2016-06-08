@@ -13,7 +13,7 @@ generic hints io kernel macros make match math namespaces
 prettyprint prettyprint.config prettyprint.custom
 prettyprint.sections quotations sequences sequences.private sets
 sorting words ;
-IN: compiler.tree.debugger
+in: compiler.tree.debugger
 
 ! A simple tool for turning tree IR into quotations and
 ! printing reports, for debugging purposes.

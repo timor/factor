@@ -3,7 +3,7 @@
 USING: accessors arrays binary-search combinators concurrency.flags
 deques fry kernel locals make math math.order math.rectangles
 math.vectors models namespaces sequences threads vectors ;
-IN: ui.gadgets
+in: ui.gadgets
 
 ! Values for orientation slot
 CONSTANT: horizontal { 1 0 }

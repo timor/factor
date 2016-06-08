@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math ;
-IN: math.analysis
+in: math.analysis
 
 HELP: gamma
 { $values { "x" number } { "y" number } }

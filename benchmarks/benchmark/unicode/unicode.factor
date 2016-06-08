@@ -1,7 +1,7 @@
 ! Copyright (C) 2012 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math random sequences strings unicode ;
-IN: benchmark.unicode
+in: benchmark.unicode
 
 : crazy-unicode-string ( -- string )
     8 [ 8 0xffff random-integers ] replicate " " join ;

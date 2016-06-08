@@ -5,7 +5,7 @@ layouts locals math math.functions math.order math.private
 multiline sequences sequences.private typed ;
 FROM: math.ranges => [1,b] ;
 
-IN: bloom-filters
+in: bloom-filters
 
 /*
 

@@ -4,7 +4,7 @@ USING: accessors ascii assocs biassocs combinators hashtables
 kernel lists literals math namespaces make multiline openal
 openal.alut parser sequences splitting strings synth
 synth.buffers ;
-IN: morse
+in: morse
 
 ERROR: no-morse-ch ch ;
 

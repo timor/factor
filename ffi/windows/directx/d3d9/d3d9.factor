@@ -1,7 +1,7 @@
 USING: alien.syntax windows.types alien.c-types windows.directx.d3d9types
 windows.com.syntax windows.com windows.directx windows.directx.d3d9caps
 windows.ole32 windows.kernel32 ;
-IN: windows.directx.d3d9
+in: windows.directx.d3d9
 
 LIBRARY: d3d9
 

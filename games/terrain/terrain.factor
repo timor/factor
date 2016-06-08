@@ -11,7 +11,7 @@ math.matrices.simd noise ui.gestures combinators.short-circuit
 destructors grid-meshes math.vectors.simd ;
 QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAY: c:float
-IN: terrain
+in: terrain
 
 CONSTANT: FOV $[ 2.0 sqrt 1 + ]
 CONSTANT: NEAR-PLANE 1/1024.

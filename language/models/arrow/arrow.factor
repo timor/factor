@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel models sequences ;
-IN: models.arrow
+in: models.arrow
 
 TUPLE: arrow < model quot ;
 

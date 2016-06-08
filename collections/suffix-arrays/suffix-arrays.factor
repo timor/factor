@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors binary-search fry kernel math math.order parser
 sequences sets sorting ;
-IN: suffix-arrays
+in: suffix-arrays
 
 <PRIVATE
 

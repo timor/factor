@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs combinators kernel math.order parser
 prettyprint.custom trees trees.private typed ;
-IN: trees.splay
+in: trees.splay
 
 TUPLE: splay < tree ;
 

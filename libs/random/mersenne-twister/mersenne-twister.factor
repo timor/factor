@@ -6,7 +6,7 @@ USING: accessors alien.c-types alien.data fry init kernel math
 math.bitwise namespaces random sequences sequences.private
 specialized-arrays system ;
 SPECIALIZED-ARRAY: uint
-IN: random.mersenne-twister
+in: random.mersenne-twister
 
 <PRIVATE
 

@@ -1,5 +1,5 @@
 USING: compiler.cfg.instructions help.markup help.syntax kernel ;
-IN: compiler.cfg.representations.peephole
+in: compiler.cfg.representations.peephole
 
 HELP: convert-to-zero-vector?
 { $values { "insn" insn } { "?" boolean } }

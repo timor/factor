@@ -1,6 +1,6 @@
 USING: arrays kernel math opengl opengl.gl opengl.glu
 opengl.demo-support ui ui.gadgets ui.render literals accessors ;
-IN: nehe.3
+in: nehe.3
 
 TUPLE: nehe3-gadget < gadget ;
 

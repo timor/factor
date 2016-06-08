@@ -1,6 +1,6 @@
 ! Copyright (C) 2010 Slava Pestov.
 USING: kernel sequences euler.modeling gml.runtime ;
-IN: gml.modeling
+in: gml.modeling
 
 GML: poly2doubleface ( poly mode -- edge )
     {

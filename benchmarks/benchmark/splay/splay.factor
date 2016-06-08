@@ -4,7 +4,7 @@
 USING: arrays assocs kernel math.ranges random sequences sets
 sorting trees.splay ;
 
-IN: benchmark.splay
+in: benchmark.splay
 
 : initial-alist ( n -- alist )
     iota >array randomize dup zip ;

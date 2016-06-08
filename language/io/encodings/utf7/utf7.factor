@@ -3,7 +3,7 @@
 USING: accessors ascii base64 fry grouping.extras io
 io.encodings io.encodings.string io.encodings.utf16 kernel math
 math.functions sequences splitting strings ;
-IN: io.encodings.utf7
+in: io.encodings.utf7
 
 TUPLE: utf7codec dialect buffer ;
 

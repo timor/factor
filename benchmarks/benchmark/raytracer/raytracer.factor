@@ -6,7 +6,7 @@ math.constants math.functions math.vectors math.parser make
 sequences sequences.private words hints ;
 FROM: alien.c-types => double ;
 SPECIALIZED-ARRAY: double
-IN: benchmark.raytracer
+in: benchmark.raytracer
 
 ! parameters
 

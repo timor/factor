@@ -12,7 +12,7 @@ USING:
     sequences
     tools.time
 ;
-IN: cpu.8080.test
+in: cpu.8080.test
 
 : step ( cpu -- )
   ! Run a single 8080 instruction

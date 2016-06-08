@@ -3,7 +3,7 @@
 
 USING: arrays assocs assocs.private kernel math sequences ;
 
-IN: assocs.extras
+in: assocs.extras
 
 : deep-at ( assoc seq -- value/f )
     [ of ] each ; inline

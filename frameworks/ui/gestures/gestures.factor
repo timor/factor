@@ -5,7 +5,7 @@ namespaces make sequences words strings system hashtables math.parser
 math.vectors classes.tuple classes boxes calendar timers combinators
 sets columns fry deques ui.gadgets ui.gadgets.private ascii
 combinators.short-circuit ;
-IN: ui.gestures
+in: ui.gestures
 
 : get-gesture-handler ( gesture gadget -- quot )
     class-of superclasses-of [ "gestures" word-prop ] map assoc-stack ;

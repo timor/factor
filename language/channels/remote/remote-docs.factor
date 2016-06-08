@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: channels concurrency.distributed help.markup help.syntax
 io.servers strings ;
-IN: channels.remote
+in: channels.remote
 
 HELP: <remote-channel>
 { $values { "node" "a node object" }

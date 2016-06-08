@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators.short-circuit kernel math math.constants
 math.functions math.vectors sequences ;
-IN: math.analysis
+in: math.analysis
 
 <PRIVATE
 

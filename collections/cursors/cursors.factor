@@ -4,7 +4,7 @@ generalizations hash-sets hashtables kernel macros math
 math.functions math.order sequences sets ;
 FROM: sequences.private => nth-unsafe set-nth-unsafe ;
 FROM: hashtables.private => tombstone? ;
-IN: cursors
+in: cursors
 
 !
 ! basic cursor protocol

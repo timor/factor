@@ -4,7 +4,7 @@ USING: accessors byte-arrays calendar checksums
 checksums.internet combinators combinators.smart continuations
 destructors io.sockets io.sockets.icmp io.timeouts kernel
 locals pack random sequences system ;
-IN: ping
+in: ping
 
 <PRIVATE
 

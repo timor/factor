@@ -4,7 +4,7 @@
 USING: arrays combinators kernel locals math math.order
 math.private sequences sequences.private strings vectors ;
 
-IN: sorting.quick
+in: sorting.quick
 
 <PRIVATE
 

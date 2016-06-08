@@ -4,7 +4,7 @@ USING: alien alien.c-types alien.enums alien.libraries
 alien.parser fry kernel lexer namespaces parser sequences
 strings.parser vocabs words ;
 << "alien.arrays" require >> ! needed for bootstrap
-IN: alien.syntax
+in: alien.syntax
 
 SYNTAX: DLL" lexer get skip-blank parse-string dlopen suffix! ;
 

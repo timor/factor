@@ -1,6 +1,6 @@
 USING: accessors debugger io kernel math.parser peg prettyprint
 sequences ;
-IN: peg.debugger
+in: peg.debugger
 
 M: parse-error error.
     [

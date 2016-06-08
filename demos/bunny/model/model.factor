@@ -6,7 +6,7 @@ splitting vectors words specialized-arrays alien.data ;
 QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAY: c:float
 SPECIALIZED-ARRAY: c:uint
-IN: bunny.model
+in: bunny.model
 
 : numbers ( str -- seq )
     " " split [ string>number ] map sift ;

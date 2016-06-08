@@ -3,7 +3,7 @@
 USING: accessors classes classes.tuple combinators formatting graphviz
 graphviz.attributes io io.files kernel namespaces sequences splitting
 strings words ;
-IN: graphviz.dot
+in: graphviz.dot
 
 <PRIVATE
 

@@ -1,4 +1,4 @@
-IN: ui.pens.solid
+in: ui.pens.solid
 USING: help.markup help.syntax ui.pens colors ;
 
 HELP: solid

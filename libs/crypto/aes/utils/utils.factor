@@ -3,7 +3,7 @@
 USING: arrays columns combinators generalizations grouping
 kernel locals math math.bitwise prettyprint sequences
 sequences.private ;
-IN: crypto.aes.utils
+in: crypto.aes.utils
 : gb0 ( a -- a0 ) 0xff bitand ; inline
 : gb1 ( a -- a1 ) -8 shift gb0 ; inline
 : gb2 ( a -- a2 ) -16 shift gb0 ; inline

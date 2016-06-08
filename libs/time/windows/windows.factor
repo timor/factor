@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: calendar.windows system time windows.errors
 windows.kernel32 kernel classes.struct calendar ;
-IN: time.windows
+in: time.windows
 
 M: windows set-time
     >gmt

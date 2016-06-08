@@ -3,7 +3,7 @@
 USING: accessors alien alien.accessors byte-arrays fry io.binary
 kernel kernel.private locals math math.bitwise parser
 prettyprint.custom sequences sequences.private ;
-IN: bit-arrays
+in: bit-arrays
 
 TUPLE: bit-array
     { length array-capacity read-only }

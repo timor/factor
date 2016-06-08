@@ -1,6 +1,6 @@
 USING: ui.commands help.markup help.syntax ui.gadgets
 ui.gadgets.presentations ui.operations kernel models classes ;
-IN: ui.gadgets.lists
+in: ui.gadgets.lists
 
 HELP: +secondary+
 { $description "A key which may be set in the hashtable passed to " { $link define-operation } ". If set to a true value, this operation becomes the default operation performed when " { $snippet "RET" } " is pressed in a " { $link list } " gadget where the current selection is a presentation matching the operation's predicate." } ;

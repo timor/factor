@@ -1,6 +1,6 @@
 USING: help.markup help.syntax urls http words kernel
 furnace.sessions furnace.db words.symbol ;
-IN: furnace.conversations
+in: furnace.conversations
 
 HELP: <conversations>
 { $values

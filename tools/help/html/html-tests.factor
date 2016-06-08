@@ -1,6 +1,6 @@
 USING: help.html help.vocabs tools.test help.topics kernel sequences vocabs
 math ;
-IN: help.html.tests
+in: help.html.tests
 
 { } [ "xml" >link help>html drop ] unit-test
 

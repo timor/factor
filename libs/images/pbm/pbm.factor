@@ -4,7 +4,7 @@ USING: accessors arrays ascii bit-arrays byte-arrays combinators
 continuations grouping images images.loader io io.encodings.ascii
 io.encodings.string kernel locals make math math.functions math.parser
 sequences io.streams.throwing ;
-IN: images.pbm
+in: images.pbm
 
 SINGLETON: pbm-image
 "pbm" pbm-image ?register-image-class

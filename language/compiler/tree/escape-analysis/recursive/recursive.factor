@@ -6,7 +6,7 @@ compiler.tree.escape-analysis.allocations
 compiler.tree.escape-analysis.branches
 compiler.tree.escape-analysis.nodes compiler.tree.recursive
 disjoint-sets fry kernel namespaces sequences ;
-IN: compiler.tree.escape-analysis.recursive
+in: compiler.tree.escape-analysis.recursive
 
 : congruent? ( alloc1 alloc2 -- ? )
     {

@@ -3,7 +3,7 @@
 USING: combinators.short-circuit grouping kernel math
 math.functions math.parser math.text.utils namespaces sequences
 splitting ;
-IN: math.text.english
+in: math.text.english
 
 <PRIVATE
 

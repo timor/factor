@@ -1,6 +1,6 @@
 USING: help.markup help.syntax io.files io.buffers kernel openssl.libssl
 strings sequences ;
-IN: io.sockets.secure.openssl
+in: io.sockets.secure.openssl
 
 HELP: subject-name
 { $values { "certificate" "an SSL peer certificate" } { "host" string } }

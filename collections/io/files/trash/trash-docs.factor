@@ -3,7 +3,7 @@
 
 USING: help.markup help.syntax io.files.trash ;
 
-IN: io.files.trash
+in: io.files.trash
 
 HELP: send-to-trash
 { $values { "path" "a file path" } }

@@ -1,7 +1,7 @@
 USING: alien alien.strings arrays assocs byte-arrays
 io.encodings.ascii kernel kernel.private locals math quotations
 sequences sequences.generalizations sequences.private strings words ;
-IN: bootstrap.image.primitives
+in: bootstrap.image.primitives
 
 CONSTANT: all-primitives {
     {

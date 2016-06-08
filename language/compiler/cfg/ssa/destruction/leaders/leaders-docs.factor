@@ -1,5 +1,5 @@
 USING: compiler.cfg.ssa.destruction.coalescing help.markup help.syntax math ;
-IN: compiler.cfg.ssa.destruction.leaders
+in: compiler.cfg.ssa.destruction.leaders
 
 HELP: ?leader
 { $values { "vreg" "vreg" } { "vreg'" "vreg" } }

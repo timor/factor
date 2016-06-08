@@ -4,7 +4,7 @@ USING: accessors arrays classes.tuple classes.tuple.private
 combinators combinators.smart fry functors kernel macros math parser
 sequences sequences.private ;
 FROM: inverse => undo ;
-IN: tuple-arrays
+in: tuple-arrays
 
 ERROR: not-final class ;
 

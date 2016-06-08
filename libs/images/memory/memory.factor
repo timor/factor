@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types alien.data destructors fry images
 kernel libc math sequences ;
-IN: images.memory
+in: images.memory
 
 ! Some code shared by core-graphics and cairo for constructing
 ! images from off-screen graphics contexts. There is probably

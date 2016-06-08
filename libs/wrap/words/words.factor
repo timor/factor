@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors grouping kernel math sequences
 sequences.private splitting.monotonic wrap ;
-IN: wrap.words
+in: wrap.words
 
 TUPLE: wrapping-word key width break? ;
 C: <wrapping-word> wrapping-word

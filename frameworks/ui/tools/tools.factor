@@ -3,7 +3,7 @@
 USING: memory system kernel vocabs.refresh ui.tools.operations
 ui.tools.listener ui.tools.browser ui.tools.common ui.tools.error-list
 ui.tools.walker ui.commands ui.gestures ui ui.private ;
-IN: ui.tools
+in: ui.tools
 
 MAIN: listener-window
 

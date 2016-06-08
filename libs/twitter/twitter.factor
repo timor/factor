@@ -3,7 +3,7 @@
 USING: accessors assocs combinators hashtables http
 http.client json.reader kernel macros make namespaces sequences
 io.sockets.secure fry oauth urls ;
-IN: twitter
+in: twitter
 
 ! Configuration
 SYMBOLS: twitter-source twitter-consumer-token twitter-access-token ;

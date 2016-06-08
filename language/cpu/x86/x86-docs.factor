@@ -1,7 +1,7 @@
 USING: compiler.cfg.registers cpu.x86.assembler
 cpu.x86.assembler.operands.private help.markup help.syntax layouts
 math ;
-IN: cpu.x86
+in: cpu.x86
 
 HELP: %boolean
 { $values

@@ -1,7 +1,7 @@
 ! (c)2012 Joe Groff bsd license
 USING: combinators init io.directories io.pathnames kernel
 namespaces system vocabs ;
-IN: io.files.temp
+in: io.files.temp
 
 HOOK: default-temp-directory os ( -- path ) ;
 

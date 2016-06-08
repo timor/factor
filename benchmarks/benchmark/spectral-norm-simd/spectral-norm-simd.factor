@@ -5,7 +5,7 @@ math.functions math.vectors sequences sequences.private
 prettyprint words typed locals math.vectors.simd
 math.vectors.simd.cords ;
 SPECIALIZED-ARRAYS: double double-4 ;
-IN: benchmark.spectral-norm-simd
+in: benchmark.spectral-norm-simd
 
 :: inner-loop ( u n quot -- seq )
     n 4 /i iota [| i |

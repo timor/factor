@@ -15,7 +15,7 @@ USE: compiler.cfg.value-numbering.misc
 USE: compiler.cfg.value-numbering.rewrite
 USE: compiler.cfg.value-numbering.slots
 
-IN: compiler.cfg.value-numbering
+in: compiler.cfg.value-numbering
 
 GENERIC: process-instruction ( insn -- insn' ) ;
 

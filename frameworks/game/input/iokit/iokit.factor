@@ -4,7 +4,7 @@ combinators.short-circuit core-foundation core-foundation.data
 core-foundation.run-loop core-foundation.strings destructors
 game.input hints iokit iokit.hid kernel locals math namespaces
 sequences vectors ;
-IN: game.input.iokit
+in: game.input.iokit
 
 SINGLETON: iokit-game-input-backend
 

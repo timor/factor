@@ -3,7 +3,7 @@
 
 USING: destructors kernel tools.test ;
 
-IN: zeromq
+in: zeromq
 
 { B{ 0 1 10 33 244 255 } } [
     B{ 0 1 10 33 244 255 } byte-array>zmq-message

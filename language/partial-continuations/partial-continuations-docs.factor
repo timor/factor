@@ -1,4 +1,4 @@
-IN: partial-continuations
+in: partial-continuations
 USING: help.markup help.syntax kernel ;
 
 HELP: breset

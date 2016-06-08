@@ -7,7 +7,7 @@ math.statistics math.vectors generalizations fry arrays
 namespaces system locals literals specialized-arrays ;
 FROM: alien.c-types => int float ;
 SPECIALIZED-ARRAY: float
-IN: opengl.textures
+in: opengl.textures
 
 SYMBOL: non-power-of-2-textures?
 

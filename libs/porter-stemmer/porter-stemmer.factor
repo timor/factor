@@ -1,5 +1,5 @@
 USING: combinators kernel math parser sequences splitting ;
-IN: porter-stemmer
+in: porter-stemmer
 
 : consonant? ( i str -- ? )
     2dup nth dup "aeiou" member? [

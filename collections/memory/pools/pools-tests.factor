@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: kernel memory.pools tools.test ;
-IN: memory.pools.tests
+in: memory.pools.tests
 
 TUPLE: foo x ;
 

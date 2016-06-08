@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel strings ;
-IN: furnace.auth.login
+in: furnace.auth.login
 
 HELP: <login-realm>
 { $values

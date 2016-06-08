@@ -1,4 +1,4 @@
-IN: html.templates.fhtml
+in: html.templates.fhtml
 USING: help.markup help.syntax ;
 
 HELP: <fhtml>

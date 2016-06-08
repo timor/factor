@@ -1,5 +1,5 @@
 USING: byte-arrays help.markup help.syntax kernel math ;
-IN: math.primes.erato
+in: math.primes.erato
 
 HELP: sieve
 { $values { "n" integer } { "sieve" byte-array } }

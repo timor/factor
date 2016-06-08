@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs io io.styles kernel math.order
 math.parser prettyprint sequences sorting system threads ;
-IN: tools.threads
+in: tools.threads
 
 : thread. ( thread -- )
     dup id>> pprint-cell

@@ -1,5 +1,5 @@
 USING: math.functions math.text.english tools.test ;
-IN: math.text.english.tests
+in: math.text.english.tests
 
 { "zero" } [ 0 number>text ] unit-test
 { "twenty-one" } [ 21 number>text ] unit-test

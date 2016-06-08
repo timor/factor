@@ -4,7 +4,7 @@ USING: assocs combinators.smart debugger fry io.encodings.utf8
 io.files io.streams.string kernel literals locals mason.common
 mason.config mason.disk math math.parser namespaces sequences
 xml.syntax xml.writer ;
-IN: mason.report
+in: mason.report
 
 : git-link ( id -- link )
     [ "http://github.com/factor/factor/commit/" "" prepend-as ] keep

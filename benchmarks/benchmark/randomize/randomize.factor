@@ -1,5 +1,5 @@
 USING: arrays kernel literals random sequences ;
-IN: benchmark.randomize
+in: benchmark.randomize
 
 CONSTANT: data $[ 10,000,000 iota >array ]
 

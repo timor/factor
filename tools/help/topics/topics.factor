@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.x
 USING: accessors assocs definitions kernel make namespaces
 prettyprint summary vocabs words ;
-IN: help.topics
+in: help.topics
 
 TUPLE: link name ;
 

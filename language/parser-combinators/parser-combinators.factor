@@ -3,7 +3,7 @@
 USING: lists lists.lazy promises kernel sequences strings math
 arrays splitting quotations combinators namespaces locals
 unicode sequences.deep accessors ;
-IN: parser-combinators
+in: parser-combinators
 
 ! Parser combinator protocol
 GENERIC: parse ( input parser -- list ) ;

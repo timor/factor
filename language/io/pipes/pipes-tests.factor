@@ -3,7 +3,7 @@ io.encodings.binary io.streams.duplex io.encodings io.timeouts
 namespaces continuations tools.test kernel calendar destructors
 accessors debugger math sequences threads
 concurrency.count-downs fry ;
-IN: io.pipes.tests
+in: io.pipes.tests
 
 { "Hello" } [
     utf8 <pipe> [

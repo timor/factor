@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs compiler.tree compiler.tree.combinators
 fry kernel namespaces sequences ;
-IN: compiler.tree.normalization.renaming
+in: compiler.tree.normalization.renaming
 
 SYMBOL: rename-map
 

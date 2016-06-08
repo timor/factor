@@ -1,7 +1,7 @@
 ! Copyright (C) 2013 Charles Alston, John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax io.pathnames sequences strings ;
-IN: spotlight
+in: spotlight
 
 HELP: mdfind
 { $values { "query" string } { "results" sequence } }

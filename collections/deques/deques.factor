@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: fry kernel sequences ;
-IN: deques
+in: deques
 
 GENERIC: push-front* ( obj deque -- node ) ;
 GENERIC: push-back* ( obj deque -- node ) ;

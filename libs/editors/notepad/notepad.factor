@@ -3,7 +3,7 @@
 USING: editors io.launcher kernel io.directories.search.windows
 math.parser namespaces sequences io.files arrays windows.shell32
 io.directories.search ;
-IN: editors.notepad
+in: editors.notepad
 
 SINGLETON: notepad
 notepad editor-class set-global

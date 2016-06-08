@@ -14,7 +14,7 @@ furnace.redirection
 furnace.boilerplate
 furnace.auth.providers
 furnace.auth.providers.db ;
-IN: furnace.auth
+in: furnace.auth
 
 SYMBOL: logged-in-user
 

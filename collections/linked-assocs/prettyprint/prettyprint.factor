@@ -1,6 +1,6 @@
 USING: accessors assocs hashtables kernel linked-assocs
 prettyprint.backend prettyprint.custom ;
-IN: linked-assocs.prettyprint
+in: linked-assocs.prettyprint
 
 PREDICATE: linked-hash < linked-assoc assoc>> hashtable? ;
 

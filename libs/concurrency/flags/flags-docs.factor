@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: calendar concurrency.conditions help.markup help.syntax ;
-IN: concurrency.flags
+in: concurrency.flags
 
 HELP: flag
 { $class-description "A flag allows one thread to notify another when a condition is satisfied." } ;

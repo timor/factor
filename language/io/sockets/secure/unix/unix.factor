@@ -5,7 +5,7 @@ io.files io.sockets.private io.sockets.secure
 io.sockets.secure.openssl io.timeouts kernel math openssl
 openssl.libssl system ;
 FROM: io.ports => shutdown ;
-IN: io.sockets.secure.unix
+in: io.sockets.secure.unix
 
 M: openssl ssl-supported? t ;
 M: openssl ssl-certificate-verification-supported? t ;

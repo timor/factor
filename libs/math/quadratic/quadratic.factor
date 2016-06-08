@@ -1,7 +1,7 @@
 ! Copyright (C) 2007 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel locals math math.functions ;
-IN: math.quadratic
+in: math.quadratic
 
 : monic ( c b a -- c' b' ) [ / ] curry bi@ ;
 

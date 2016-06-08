@@ -2,7 +2,7 @@ USING: assocs compiler.cfg compiler.cfg.builder.blocks
 compiler.cfg.instructions compiler.cfg.stacks.local compiler.tree
 help.markup help.syntax kernel literals math multiline quotations
 sequences vectors words ;
-IN: compiler.cfg.builder
+in: compiler.cfg.builder
 
 <<
 STRING: ex-emit-call

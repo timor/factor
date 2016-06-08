@@ -1,6 +1,6 @@
 USING: accessors io.sockets.secure http.client http.client.private http
 io.streams.string kernel namespaces sequences tools.test urls ;
-IN: http.client.tests
+in: http.client.tests
 
 { "localhost" f } [ "localhost" parse-host ] unit-test
 { "localhost" 8888 } [ "localhost:8888" parse-host ] unit-test

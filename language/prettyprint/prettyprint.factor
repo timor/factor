@@ -5,7 +5,7 @@ continuations generic grouping io io.streams.string io.styles
 kernel make math math.parser namespaces prettyprint.config
 prettyprint.custom prettyprint.sections sequences strings
 vocabs.prettyprint words ;
-IN: prettyprint
+in: prettyprint
 
 : with-use ( obj quot -- )
     t make-pprint (pprint-manifest

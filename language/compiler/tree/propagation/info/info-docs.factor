@@ -1,6 +1,6 @@
 USING: classes compiler.tree help.markup help.syntax kernel math math.intervals
 sequences ;
-IN: compiler.tree.propagation.info
+in: compiler.tree.propagation.info
 
 HELP: interval>literal
 { $values

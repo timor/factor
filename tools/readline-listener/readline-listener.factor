@@ -3,7 +3,7 @@
 USING: accessors assocs colors.constants combinators fry io kernel
 listener readline sequences splitting threads tools.completion
 unicode.data vocabs vocabs.hierarchy ;
-IN: readline-listener
+in: readline-listener
 
 <PRIVATE
 

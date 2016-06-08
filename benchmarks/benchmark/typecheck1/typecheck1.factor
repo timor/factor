@@ -1,5 +1,5 @@
 USING: math kernel accessors ;
-IN: benchmark.typecheck1
+in: benchmark.typecheck1
 
 TUPLE: hello n ;
 

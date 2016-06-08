@@ -11,7 +11,7 @@ USING:
     kernel
     system
 ;
-IN: ogg
+in: ogg
 
 <<
 "ogg" {

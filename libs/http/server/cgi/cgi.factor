@@ -4,7 +4,7 @@ USING: accessors arrays assocs calendar fry http http.server io
 io.encodings io.encodings.binary io.launcher io.streams.duplex
 kernel make math.parser namespaces sequences urls urls.encoding
 ;
-IN: http.server.cgi
+in: http.server.cgi
 
 : cgi-variables ( script-path -- assoc )
     ! This needs some work.

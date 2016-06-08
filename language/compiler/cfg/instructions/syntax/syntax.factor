@@ -3,7 +3,7 @@
 USING: accessors classes.parser classes.tuple combinators
 effects fry kernel lexer make namespaces parser sequences
 splitting words ;
-IN: compiler.cfg.instructions.syntax
+in: compiler.cfg.instructions.syntax
 
 SYMBOLS: def use temp literal ;
 

@@ -4,7 +4,7 @@
 USING: accessors colors combinators kernel locals math
 math.order ;
 
-IN: colors.yuv
+in: colors.yuv
 
 TUPLE: yuva < color
 { y read-only }

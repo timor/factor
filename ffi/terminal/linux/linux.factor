@@ -5,7 +5,7 @@ USING: accessors arrays classes.struct io.streams.c kernel
 math system terminal unix unix.ffi ;
 QUALIFIED-WITH: alien.c-types c
 
-IN: terminal.linux
+in: terminal.linux
 
 <PRIVATE
 

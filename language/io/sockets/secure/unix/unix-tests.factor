@@ -1,4 +1,4 @@
-IN: io.sockets.secure.tests
+in: io.sockets.secure.tests
 USING: accessors kernel namespaces io io.sockets
 io.sockets.secure io.encodings.ascii io.streams.duplex
 io.backend.unix classes words destructors threads tools.test

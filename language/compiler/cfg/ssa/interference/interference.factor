@@ -3,7 +3,7 @@
 USING: accessors arrays combinators combinators.short-circuit
 compiler.cfg.dominance compiler.cfg.ssa.interference.live-ranges
 kernel locals math math.order sequences sorting.slots ;
-IN: compiler.cfg.ssa.interference
+in: compiler.cfg.ssa.interference
 
 TUPLE: vreg-info vreg value def-index bb pre-of color equal-anc-in equal-anc-out ;
 

@@ -6,7 +6,7 @@ cpu.x86.assembler.operands init kernel math math.order
 math.parser memoize namespaces sequences
 specialized-arrays system math.bitwise combinators.smart ;
 SPECIALIZED-ARRAY: uint
-IN: cpu.x86.features
+in: cpu.x86.features
 
 <PRIVATE
 

@@ -8,7 +8,7 @@ compiler.cfg.instructions
 compiler.cfg.instructions.syntax
 compiler.cfg.gvn.graph ;
 FROM: sequences.private => set-array-nth ;
-IN: compiler.cfg.gvn.expressions
+in: compiler.cfg.gvn.expressions
 
 <<
 

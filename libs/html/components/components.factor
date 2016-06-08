@@ -7,7 +7,7 @@ fry locals calendar calendar.format xml.entities xml.data
 validators urls present xml.writer xml.syntax xml
 xmode.code2html lcs.diff2html farkup io.streams.string
 html html.streams html.forms ;
-IN: html.components
+in: html.components
 
 GENERIC: render* ( value name renderer -- xml ) ;
 

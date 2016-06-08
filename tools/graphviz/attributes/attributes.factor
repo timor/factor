@@ -1,7 +1,7 @@
 ! Copyright (C) 2011 Alex Vondrak.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel ;
-IN: graphviz.attributes
+in: graphviz.attributes
 
 TUPLE: graph-attributes
 Damping

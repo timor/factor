@@ -4,7 +4,7 @@
 USING: accessors combinators combinators.short-circuit deques fry
 hashtables kernel kernel.private math math.order parser search-deques
 sequences vocabs.loader ;
-IN: dlists
+in: dlists
 
 TUPLE: dlist-link
 { prev maybe{ dlist-link } }

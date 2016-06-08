@@ -8,7 +8,7 @@ core-graphics.types core-text io.encodings.utf8 kernel literals
 locals math math.rectangles namespaces opengl sequences threads
 ui.gadgets ui.gadgets.private ui.gadgets.worlds ui.gestures
 ui.private unicode ;
-IN: ui.backend.cocoa.views
+in: ui.backend.cocoa.views
 
 : send-mouse-moved ( view event -- )
     [ mouse-location ] [ drop window ] 2bi

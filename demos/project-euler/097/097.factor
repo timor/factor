@@ -1,7 +1,7 @@
 ! Copyright (c) 2008 Aaron Schaefer.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: math math.functions project-euler.common ;
-IN: project-euler.097
+in: project-euler.097
 
 ! http://projecteuler.net/index.php?section=problems&id=97
 

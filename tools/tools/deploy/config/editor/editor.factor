@@ -3,7 +3,7 @@
 USING: assocs io.pathnames kernel parser prettyprint
 prettyprint.config sequences splitting tools.deploy.config
 vocabs.loader vocabs.metadata ;
-IN: tools.deploy.config.editor
+in: tools.deploy.config.editor
 
 : deploy-config-path ( vocab -- string )
     vocab-dir "deploy.factor" append-path ;

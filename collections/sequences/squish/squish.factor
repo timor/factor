@@ -1,6 +1,6 @@
 ! (c)2009 Slava Pestov & Joe Groff, see BSD license
 USING: combinators.short-circuit fry make math kernel sequences ;
-IN: sequences.squish
+in: sequences.squish
 
 : (squish) ( seq quot: ( obj -- ? ) -- )
     2dup call [ '[ _ (squish) ] each ] [ drop , ] if ; inline recursive

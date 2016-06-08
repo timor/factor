@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel arrays namespaces sequences continuations
 destructors io.sockets alien alien.syntax ;
-IN: io.pools
+in: io.pools
 
 TUPLE: pool connections disposed expired ;
 

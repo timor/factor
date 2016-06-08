@@ -4,7 +4,7 @@ USING: accessors arrays assocs combinators fry hashtables io
 kernel locals make math math.matrices math.matrices.elimination
 math.order math.parser math.vectors namespaces prettyprint
 sequences sets shuffle sorting splitting ;
-IN: koszul
+in: koszul
 
 ! Utilities
 : -1^ ( m -- n ) odd? -1 1 ? ;

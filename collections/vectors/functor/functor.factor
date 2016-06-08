@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: classes functors growable kernel math sequences
 sequences.private ;
-IN: vectors.functor
+in: vectors.functor
 
 FUNCTOR: define-vector ( V A <A> -- )
 

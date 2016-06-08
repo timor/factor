@@ -5,7 +5,7 @@ sequences assocs specialized-arrays math namespaces
 libc locals fry unix unix.linux.epoll unix.time io.ports
 io.backend.unix io.backend.unix.multiplexers ;
 SPECIALIZED-ARRAY: epoll-event
-IN: io.backend.unix.multiplexers.epoll
+in: io.backend.unix.multiplexers.epoll
 
 TUPLE: epoll-mx < mx events ;
 

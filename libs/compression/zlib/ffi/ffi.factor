@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.c-types alien.libraries alien.syntax
 classes.struct combinators system ;
-IN: compression.zlib.ffi
+in: compression.zlib.ffi
 
 << "zlib" {
     { [ os windows? ] [ "zlib1.dll" ] }

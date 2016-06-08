@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: infix.ast kernel peg peg.ebnf math.parser sequences
 strings ;
-IN: infix.tokenizer
+in: infix.tokenizer
 
 EBNF: tokenize-infix
 Letter            = [a-zA-Z]

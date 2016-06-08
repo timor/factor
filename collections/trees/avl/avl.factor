@@ -4,7 +4,7 @@ USING: combinators kernel generic math math.functions
 math.parser namespaces io sequences trees shuffle
 assocs parser accessors math.order prettyprint.custom
 trees.private fry ;
-IN: trees.avl
+in: trees.avl
 
 TUPLE: avl < tree ;
 

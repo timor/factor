@@ -3,7 +3,7 @@
 USING: byte-arrays combinators combinators.short-circuit kernel
 math math.bitwise math.parser sequences splitting ;
 
-IN: ip-parser
+in: ip-parser
 
 ERROR: malformed-ipv4 string ;
 

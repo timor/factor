@@ -3,7 +3,7 @@
 USING: accessors arrays assocs combinators
 concurrency.mailboxes fry io kernel make math math.parser
 math.text.english sequences threads ;
-IN: benchmark.chameneos-redux
+in: benchmark.chameneos-redux
 
 SYMBOLS: red yellow blue ;
 

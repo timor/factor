@@ -2,7 +2,7 @@
 USING: accessors kernel math sequences sequences.private
 hashtables assocs locals arrays combinators classes.struct
 math.vectors math.vectors.simd math.vectors.simd.cords ;
-IN: gml.types
+in: gml.types
 
 : true? ( obj -- ? ) 0 number= not ; inline
 : >true ( ? -- 1/0 ) 1 0 ? ; inline

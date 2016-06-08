@@ -1,5 +1,5 @@
 USING: arrays help.markup help.syntax kernel io.files ;
-IN: io.files.info
+in: io.files.info
 
 HELP: file-info
 { $values { "path" "a pathname string" } { "info" file-info-tuple } }

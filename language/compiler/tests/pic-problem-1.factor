@@ -1,5 +1,5 @@
 USING: kernel sequences prettyprint memory tools.test ;
-IN: compiler.tests.pic-problem-1
+in: compiler.tests.pic-problem-1
 
 TUPLE: x ;
 

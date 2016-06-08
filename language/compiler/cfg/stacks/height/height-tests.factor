@@ -1,6 +1,6 @@
 USING: accessors assocs combinators compiler.cfg compiler.cfg.registers
 compiler.cfg.stacks compiler.cfg.stacks.height kernel tools.test ;
-IN: compiler.cfg.stacks.height.tests
+in: compiler.cfg.stacks.height.tests
 
 {
     T{ ds-loc f 4 }

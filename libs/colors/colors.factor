@@ -2,7 +2,7 @@
 ! Copyright (C) 2008 Eduardo Cavazos.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators kernel math ;
-IN: colors
+in: colors
 
 TUPLE: color ;
 

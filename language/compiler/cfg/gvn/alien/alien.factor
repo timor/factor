@@ -11,7 +11,7 @@ compiler.cfg.gvn.math
 compiler.cfg.gvn.graph
 compiler.cfg.gvn.avail
 compiler.cfg.gvn.rewrite ;
-IN: compiler.cfg.gvn.alien
+in: compiler.cfg.gvn.alien
 
 M: ##box-displaced-alien rewrite
     dup displacement>> vreg>insn zero-insn?

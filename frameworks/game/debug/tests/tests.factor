@@ -6,7 +6,7 @@ make math math.constants math.matrices math.parser sequences
 alien.c-types specialized-arrays ui.gadgets.worlds ui.pixel-formats ;
 FROM: alien.c-types => float ;
 SPECIALIZED-ARRAY: float
-IN: game.debug.tests
+in: game.debug.tests
 
 :: clear-screen ( color -- )
     system-framebuffer {

@@ -1,4 +1,4 @@
-IN: html.streams
+in: html.streams
 USING: help.markup help.syntax kernel strings io io.styles
 quotations xml.data ;
 

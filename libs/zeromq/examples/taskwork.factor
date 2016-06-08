@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: byte-arrays calendar destructors formatting io kernel
 math.parser strings threads zeromq zeromq.ffi ;
-IN: zeromq.examples.taskwork
+in: zeromq.examples.taskwork
 
 : taskwork ( -- )
     [

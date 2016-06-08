@@ -1,4 +1,4 @@
-IN: logging.parser
+in: logging.parser
 USING: help.markup help.syntax assocs logging math calendar ;
 
 HELP: parse-log

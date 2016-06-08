@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: accessors kernel namespaces parser sequences tools.continuations
 ui.backend ui.gadgets.worlds words ;
-IN: opengl.debug
+in: opengl.debug
 
 SYMBOL: G-world
 

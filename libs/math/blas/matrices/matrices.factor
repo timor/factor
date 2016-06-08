@@ -11,7 +11,7 @@ SPECIALIZED-ARRAY: float
 SPECIALIZED-ARRAY: double
 SPECIALIZED-ARRAY: complex-float
 SPECIALIZED-ARRAY: complex-double
-IN: math.blas.matrices
+in: math.blas.matrices
 
 TUPLE: blas-matrix-base underlying ld rows cols transpose ;
 

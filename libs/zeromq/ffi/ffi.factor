@@ -5,7 +5,7 @@ USING: alien alien.accessors alien.c-types alien.data
 alien.libraries alien.syntax assocs byte-arrays classes.struct
 combinators kernel literals math system ;
 
-IN: zeromq.ffi
+in: zeromq.ffi
 
 << "zmq" {
     { [ os windows? ] [ "libzmq.dll" ] }

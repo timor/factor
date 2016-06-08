@@ -1,4 +1,4 @@
-IN: tools.deploy.test.6
+in: tools.deploy.test.6
 USING: namespaces math kernel ;
 
 SYMBOL: x

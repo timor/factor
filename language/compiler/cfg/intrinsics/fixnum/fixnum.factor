@@ -5,7 +5,7 @@ compiler.cfg.comparisons compiler.cfg.hats compiler.cfg.instructions
 compiler.cfg.registers compiler.cfg.stacks compiler.cfg.stacks.local
 compiler.tree.propagation.info cpu.architecture fry kernel layouts
 locals math math.intervals namespaces sequences ;
-IN: compiler.cfg.intrinsics.fixnum
+in: compiler.cfg.intrinsics.fixnum
 
 : emit-both-fixnums? ( -- )
     [

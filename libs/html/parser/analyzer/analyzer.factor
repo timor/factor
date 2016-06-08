@@ -3,7 +3,7 @@
 USING: accessors assocs combinators combinators.short-circuit
 fry html.parser http.client io kernel locals math math.statistics
 sequences sets splitting unicode urls urls.encoding shuffle ;
-IN: html.parser.analyzer
+in: html.parser.analyzer
 
 : scrape-html ( url -- response vector )
     http-get parse-html ;

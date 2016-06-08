@@ -6,7 +6,7 @@ furnace.asides
 furnace.actions
 furnace.auth
 furnace.auth.providers ;
-IN: furnace.auth.features.deactivate-user
+in: furnace.auth.features.deactivate-user
 
 : <deactivate-user-action> ( -- action )
     <action>

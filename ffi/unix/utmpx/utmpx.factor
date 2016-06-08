@@ -3,7 +3,7 @@
 USING: accessors alien.c-types alien.data alien.syntax
 continuations io.encodings.string io.encodings.utf8 kernel
 sequences system unix.ffi vocabs ;
-IN: unix.utmpx
+in: unix.utmpx
 
 CONSTANT: EMPTY 0
 CONSTANT: RUN_LVL 1

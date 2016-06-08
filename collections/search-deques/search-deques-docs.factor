@@ -1,4 +1,4 @@
-IN: search-deques
+in: search-deques
 USING: help.markup help.syntax kernel hashtables
 deques assocs ;
 

@@ -5,7 +5,7 @@ generalizations kernel macros math math.order memoize sequences
 sequences.generalizations sequences.private stack-checker
 stack-checker.backend stack-checker.errors stack-checker.values
 stack-checker.visitor words ;
-IN: combinators.smart
+in: combinators.smart
 
 GENERIC: infer-known* ( known -- effect ) ;
 

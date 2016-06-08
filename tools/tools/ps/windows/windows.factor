@@ -4,7 +4,7 @@ io.encodings.string io.encodings.utf16n kernel literals locals
 math sequences strings system tools.ps
 windows.errors windows.handles windows.kernel32 windows.ntdll
 windows.types ;
-IN: tools.ps.windows
+in: tools.ps.windows
 
 : do-snapshot ( snapshot-type -- handle )
     0 CreateToolhelp32Snapshot dup win32-error=0/f ;

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays compiler.cfg compiler.units kernel sequences
 stack-checker tools.test vocabs words ;
-IN: compiler.test
+in: compiler.test
 
 : decompile ( word -- )
     dup def>> 2array 1array t t modify-code-heap ;

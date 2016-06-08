@@ -1,7 +1,7 @@
 ! Copyright (C) 2005, 2009 Daniel Ehrenberg
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax xml.data present ;
-IN: xml.syntax
+in: xml.syntax
 
 ABOUT: "xml.syntax"
 

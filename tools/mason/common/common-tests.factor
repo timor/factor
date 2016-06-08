@@ -1,4 +1,4 @@
-IN: mason.common.tests
+in: mason.common.tests
 USING: prettyprint mason.common mason.config
 namespaces calendar tools.test io.files
 io.files.temp io.encodings.utf8 sequences ;

@@ -6,7 +6,7 @@ combinators.smart destructors io.encodings.string
 io.encodings.utf8 io.sockets io.sockets.private kernel libc
 make refs sequences sequences.extras windows.errors
 windows.kernel32 windows.types windows.winsock fry ;
-IN: windows.iphlpapi
+in: windows.iphlpapi
 
 LIBRARY: iphlpapi
 

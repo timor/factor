@@ -7,7 +7,7 @@ db.postgresql accessors random math.bitwise system
 math.ranges strings urls fry db.tuples.private db.private
 db.tester ;
 FROM: math.ranges => [a,b] ;
-IN: db.tuples.tests
+in: db.tuples.tests
 
 TUPLE: person the-id the-name the-number the-real
 ts date time blob factor-blob url ;

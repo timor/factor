@@ -4,7 +4,7 @@ USING: io io.files io.files.temp io.streams.duplex kernel
 sequences sequences.private strings vectors words memoize
 splitting grouping hints tr continuations io.encodings.ascii
 ascii ;
-IN: benchmark.reverse-complement
+in: benchmark.reverse-complement
 
 TR: trans-map ch>upper "ACGTUMRYKVHDB" "TGCAAKYRMBDHV" ;
 

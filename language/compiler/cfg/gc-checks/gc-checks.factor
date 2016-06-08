@@ -5,7 +5,7 @@ compiler.cfg.instructions compiler.cfg.predecessors
 compiler.cfg.registers compiler.cfg.rpo compiler.cfg.utilities
 cpu.architecture grouping kernel layouts locals make math
 namespaces sequences ;
-IN: compiler.cfg.gc-checks
+in: compiler.cfg.gc-checks
 
 <PRIVATE
 

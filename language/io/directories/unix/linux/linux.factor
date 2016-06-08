@@ -3,7 +3,7 @@
 USING: alien.c-types alien.data classes.struct fry
 io.directories io.directories.unix kernel libc math sequences
 system unix.ffi ;
-IN: io.directories.unix.linux
+in: io.directories.unix.linux
 
 : next-dirent ( DIR* dirent* -- dirent* ? )
     f void* <ref> [

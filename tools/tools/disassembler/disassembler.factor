@@ -3,7 +3,7 @@
 USING: alien alien.data arrays byte-arrays compiler.units
 destructors io kernel libc math quotations sequences
 sequences.private stack-checker system tr vocabs words ;
-IN: tools.disassembler
+in: tools.disassembler
 
 GENERIC: disassemble ( obj -- ) ;
 

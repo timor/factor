@@ -1,7 +1,7 @@
 ! Copyright (C) 2006 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.syntax help.markup parser-combinators ;
-IN: parser-combinators.simple
+in: parser-combinators.simple
 
 HELP: digit-parser
 { $values

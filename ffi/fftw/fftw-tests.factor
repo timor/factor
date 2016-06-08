@@ -1,5 +1,5 @@
 USING: tools.test ;
-IN: fftw
+in: fftw
 
 {
     { C{ 1.5 0.0 } C{ -0.5 0.0 } }

@@ -1,5 +1,5 @@
 USING: math kernel hints prettyprint io combinators ;
-IN: benchmark.recursive
+in: benchmark.recursive
 
 : fib ( m -- n )
     dup 2 <

@@ -3,7 +3,7 @@
 USING: accessors ascii combinators gobject-introspection.common
 gobject-introspection.repository kernel literals math.parser
 sequences splitting xml.data xml.traversal ;
-IN: gobject-introspection.loader
+in: gobject-introspection.loader
 
 : xml>simple-type ( xml -- type )
     [ simple-type new ] dip {

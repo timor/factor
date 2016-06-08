@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays grouping io.encodings.ascii io.files kernel math
 math.parser sequences splitting project-euler.common ;
-IN: project-euler.102
+in: project-euler.102
 
 ! http://projecteuler.net/index.php?section=problems&id=102
 

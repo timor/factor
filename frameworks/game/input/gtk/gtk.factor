@@ -3,7 +3,7 @@
 USING: accessors alien.c-types alien.data alien.syntax assocs
 bit-arrays game.input gdk.ffi generalizations kernel math
 namespaces sequences system x11.xlib ;
-IN: game.input.gtk
+in: game.input.gtk
 
 SINGLETON: gtk-game-input-backend
 

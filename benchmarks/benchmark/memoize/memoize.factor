@@ -1,7 +1,7 @@
 ! Copyright (C) 2012 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math memoize sequences ;
-IN: benchmark.memoize
+in: benchmark.memoize
 
 MEMO: mem0 ( -- ) ;
 MEMO: mem1 ( n -- n ) 1 + ;

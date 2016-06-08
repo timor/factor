@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: classes.tuple help.markup help.syntax kernel math
 quotations sequences stack-checker arrays ;
-IN: combinators.smart
+in: combinators.smart
 
 HELP: input<sequence
 { $values

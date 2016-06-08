@@ -1,7 +1,7 @@
 USING: math definitions help.topics help tools.test sets
 prettyprint parser io.streams.string kernel source-files
 assocs namespaces words io sequences eval accessors see ;
-IN: help.definitions.tests
+in: help.definitions.tests
 
 { } [ \ + >link see ] unit-test
 

@@ -1,7 +1,7 @@
 USING: accessors alien.data alien.libraries classes.struct
 io.encodings.ascii io.encodings.utf8 kernel libc literals
 python.errors python.ffi ;
-IN: python.objects
+in: python.objects
 
 ! The None object
 : (none) ( -- none )

@@ -4,7 +4,7 @@
 USING: cocoa cocoa.application cocoa.classes kernel parser
 multiline words ;
 
-IN: cocoa.apple-script
+in: cocoa.apple-script
 
 : run-apple-script ( str -- )
     [ NSAppleScript -> alloc ] dip

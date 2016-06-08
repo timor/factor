@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors fry kernel locals machine-learning.transformer
 sequences sets sorting sorting.extras ;
-IN: machine-learning.label-encoder
+in: machine-learning.label-encoder
 
 TUPLE: label-encoder classes_ ;
 

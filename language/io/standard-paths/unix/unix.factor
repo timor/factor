@@ -4,7 +4,7 @@ USING: environment fry io io.encodings.binary
 io.encodings.string io.encodings.utf8 io.files io.launcher
 io.pathnames io.standard-paths kernel math sequences splitting
 system ;
-IN: io.standard-paths.unix
+in: io.standard-paths.unix
 
 M: unix find-in-path*
     [ "PATH" os-env ":" split ] dip

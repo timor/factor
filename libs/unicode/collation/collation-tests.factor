@@ -1,7 +1,7 @@
 USING: io io.files splitting grouping unicode
 sequences kernel io.encodings.utf8 math.parser math.order
 tools.test assocs words ;
-IN: unicode.collation.tests
+in: unicode.collation.tests
 
 : parse-test ( -- strings )
     "vocab:unicode/collation/CollationTest_SHIFTED.txt"

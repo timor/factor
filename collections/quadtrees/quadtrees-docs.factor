@@ -1,5 +1,5 @@
 USING: arrays assocs help.markup help.syntax math.rectangles quadtrees quotations sequences ;
-IN: quadtrees
+in: quadtrees
 
 ARTICLE: "quadtrees" "Quadtrees"
 "The " { $snippet "quadtrees" } " vocabulary implements the quadtree data structure in Factor."

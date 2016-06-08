@@ -3,7 +3,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 
 USING: lists lists.lazy math kernel sequences quotations ;
-IN: lists.lazy.examples
+in: lists.lazy.examples
 
 : naturals ( -- list ) 0 lfrom ;
 : positives ( -- list ) 1 lfrom ;

@@ -5,7 +5,7 @@
 USING: alien alien.c-types alien.destructors alien.libraries
 alien.syntax classes.struct combinators literals system
 alien.libraries.finder ;
-IN: yaml.ffi
+in: yaml.ffi
 
 <<
 "libyaml" { "yaml" "yaml-0" "libyaml-0-2" } find-library-from-list cdecl add-library

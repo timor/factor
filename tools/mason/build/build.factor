@@ -4,7 +4,7 @@ USING: arrays calendar combinators continuations io.directories
 io.pathnames kernel mason.child mason.cleanup mason.common
 mason.config mason.docs mason.git mason.notify mason.platform
 mason.release mason.updates namespaces sequences ;
-IN: mason.build
+in: mason.build
 
 : create-build-dir ( -- )
     now datestamp stamp set

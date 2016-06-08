@@ -1,4 +1,4 @@
-IN: search-deques.tests
+in: search-deques.tests
 USING: search-deques tools.test namespaces
 kernel sequences words deques vocabs dlists ;
 

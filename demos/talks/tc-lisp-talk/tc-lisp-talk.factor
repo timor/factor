@@ -3,7 +3,7 @@
 USING: assocs combinators constructors eval help.markup kernel
 multiline namespaces parser sequences sequences.private slides
 vocabs.refresh words fry ;
-IN: talks.tc-lisp-talk
+in: talks.tc-lisp-talk
 
 CONSTANT: tc-lisp-slides
 {
@@ -92,7 +92,7 @@ GENERIC: perimeter ( shape -- x ) ;"
         "In ~/factor/work/shapes/circle/circle.factor"
         { $code "USING: shapes constructors math
 math.constants ;
-IN: shapes.circle
+in: shapes.circle
 
 TUPLE: circle radius ;
 CONSTRUCTOR: <circle> circle ( radius -- obj ) ;

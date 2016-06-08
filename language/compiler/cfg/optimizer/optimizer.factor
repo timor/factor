@@ -12,7 +12,7 @@ compiler.cfg.useless-conditionals
 compiler.cfg.utilities
 compiler.cfg.value-numbering
 kernel sequences ;
-IN: compiler.cfg.optimizer
+in: compiler.cfg.optimizer
 
 : optimize-cfg ( cfg -- )
     {

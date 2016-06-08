@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: assocs help.markup help.syntax kernel math quotations sequences
 sequences.private ;
-IN: sequences.unrolled
+in: sequences.unrolled
 
 HELP: unrolled-collect
 { $values

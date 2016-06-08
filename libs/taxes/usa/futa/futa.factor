@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs kernel math math.intervals
 namespaces sequences money math.order ;
-IN: taxes.usa.futa
+in: taxes.usa.futa
 
 ! Employer tax only, not withheld
 : futa-tax-rate ( -- x ) DECIMAL: .062 ; inline

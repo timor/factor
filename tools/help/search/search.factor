@@ -7,7 +7,7 @@ io.streams.string io.styles kernel math memoize namespaces
 sequences sequences.deep sorting splitting strings unicode
 words ;
 
-IN: help.search
+in: help.search
 
 <PRIVATE
 

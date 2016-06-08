@@ -3,7 +3,7 @@
 USING: accessors alien.accessors alien.strings
 compiler.constants kernel make math math.bitwise memoize
 namespaces sequences ;
-IN: compiler.codegen.relocation
+in: compiler.codegen.relocation
 
 SYMBOL: extra-offset  ! Only used by non-optimizing compiler
 

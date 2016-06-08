@@ -1,4 +1,4 @@
-IN: persistent.sequences
+in: persistent.sequences
 USING: help.markup help.syntax math sequences kernel ;
 
 HELP: new-nth

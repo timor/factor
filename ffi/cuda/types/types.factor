@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: accessors alien.c-types classes.struct kernel math ;
 FROM: alien.c-types => float ;
-IN: cuda.types
+in: cuda.types
 
 STRUCT: char1
     { x char } ;

@@ -3,7 +3,7 @@
 USING: accessors arrays combinators.short-circuit constructors
 fry grouping kernel math math.vectors sequences sequences.deep
 math.order parser assocs math.combinatorics ;
-IN: arrays.shaped
+in: arrays.shaped
 
 : flat? ( array -- ? ) [ sequence? ] any? not ; inline
 

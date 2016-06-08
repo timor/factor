@@ -3,7 +3,7 @@
 
 USING: accessors colors kernel locals math math.order ;
 
-IN: colors.ryb
+in: colors.ryb
 
 TUPLE: ryba < color
     { red read-only }

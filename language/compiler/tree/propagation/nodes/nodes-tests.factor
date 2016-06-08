@@ -1,6 +1,6 @@
 USING: compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.nodes namespaces tools.test ;
-IN: compiler.tree.propagation.nodes.tests
+in: compiler.tree.propagation.nodes.tests
 
 
 {

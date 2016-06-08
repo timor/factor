@@ -1,5 +1,5 @@
 USING: kernel sequences tools.test ;
-IN: sorting.quick
+in: sorting.quick
 
 { { } } [ { } dup natural-sort! ] unit-test
 { { 1 } } [ { 1 } dup natural-sort! ] unit-test

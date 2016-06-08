@@ -4,7 +4,7 @@ USING: accessors assocs colors.constants fry io io.styles kernel
 make namespaces parser prettyprint.backend prettyprint.sections
 prettyprint.stylesheet sequences sorting vocabs vocabs.parser ;
 FROM: io.styles => inset ;
-IN: vocabs.prettyprint
+in: vocabs.prettyprint
 
 : pprint-vocab ( vocab -- )
     [ vocab-name ] [ lookup-vocab vocab-style ] bi styled-text ;

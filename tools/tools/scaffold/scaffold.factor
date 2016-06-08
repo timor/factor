@@ -7,7 +7,7 @@ io.files io.pathnames io.streams.string kernel math math.parser
 namespaces prettyprint quotations sequences sets sorting
 splitting strings system timers unicode urls vocabs
 vocabs.loader vocabs.metadata words words.symbol ;
-IN: tools.scaffold
+in: tools.scaffold
 
 SYMBOL: developer-name
 SYMBOL: using

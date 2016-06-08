@@ -4,7 +4,7 @@ continuations formatting fry generalizations hashtables.identity
 io kernel kernel.private layouts locals math math.parser
 math.statistics math.vectors memory namespaces prettyprint
 sequences sequences.generalizations sets sorting ;
-IN: tools.profiler.sampling
+in: tools.profiler.sampling
 
 <PRIVATE
 PRIMITIVE: (get-samples) ( -- samples/f ) ;

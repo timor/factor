@@ -1,5 +1,5 @@
 USING: assocs help.markup help.syntax vm words ;
-IN: tools.image-analyzer.gc-info
+in: tools.image-analyzer.gc-info
 
 ARTICLE: "tools.image-analyzer.gc-info" "GC maps decoder"
 "A vocab that disassembles words gc maps. It's useful to have when debugging garbage collection issues." ;

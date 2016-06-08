@@ -5,7 +5,7 @@ USING: accessors arrays classes.tuple combinators continuations io
 kernel lexer math prettyprint quotations sequences source-files
 source-files.errors strings words ;
 
-IN: fuel.pprint
+in: fuel.pprint
 
 GENERIC: fuel-pprint ( obj -- ) ;
 

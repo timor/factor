@@ -1,5 +1,5 @@
 USING: kernel tools.test eval words ;
-IN: compiler.tests.redefine18
+in: compiler.tests.redefine18
 
 ! Mixin bug found by Doug
 

@@ -9,7 +9,7 @@ continuations destructors calendar ascii
 combinators.short-circuit literals locals classes.struct
 specialized-arrays alien.data libc windows.shell32 ;
 SPECIALIZED-ARRAY: ushort
-IN: io.files.info.windows
+in: io.files.info.windows
 
 :: round-up-to ( n multiple -- n' )
     n multiple rem [

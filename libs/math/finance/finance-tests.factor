@@ -1,7 +1,7 @@
 USING: kernel math math.functions math.finance sequences
 tools.test ;
 
-IN: math.finance.tests
+in: math.finance.tests
 
 { { 1 2 3 4 5 } } [ { 1 2 3 4 5 } 1 ema ] unit-test
 { { 1+1/2 2+1/2 3+1/2 4+1/2 } } [ { 1 2 3 4 5 } 2 ema ] unit-test

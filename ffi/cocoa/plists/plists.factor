@@ -6,7 +6,7 @@ cocoa.application cocoa.classes cocoa.enumeration combinators
 core-foundation.data core-foundation.strings
 core-foundation.utilities fry io.backend kernel macros math
 quotations sequences ;
-IN: cocoa.plists
+in: cocoa.plists
 
 : >plist ( value -- plist ) >cf -> autorelease ;
 

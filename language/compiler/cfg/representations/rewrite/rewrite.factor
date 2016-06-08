@@ -5,7 +5,7 @@ compiler.cfg.registers compiler.cfg.renaming.functor
 compiler.cfg.representations.conversion
 compiler.cfg.representations.preferred compiler.cfg.rpo kernel
 locals make namespaces sequences ;
-IN: compiler.cfg.representations.rewrite
+in: compiler.cfg.representations.rewrite
 
 ! Insert conversions. This introduces new temporaries, so we need
 ! to rename opearands too.

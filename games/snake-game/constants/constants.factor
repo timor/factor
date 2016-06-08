@@ -1,6 +1,6 @@
 ! Copyright (C) 2015 Your name.
 ! See http://factorcode.org/license.txt for BSD license.
-IN: snake-game.constants
+in: snake-game.constants
 
 SYMBOLS: :left :right :up :down ;
 

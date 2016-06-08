@@ -1,5 +1,5 @@
 auto-use
-IN: syntax
+in: syntax
 USE: delegate.private
 
 << FORGET: POSTPONE: MACRO: >>
@@ -174,4 +174,4 @@ string-lines
 disable-optimizer
 enable-optimizer
     
-IN: scratchpad 1 1 - restarts [ nth f ] change-global  "peg.ebnf" reload continue-restart
+in: scratchpad 1 1 - restarts [ nth f ] change-global  "peg.ebnf" reload continue-restart

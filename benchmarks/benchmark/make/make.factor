@@ -3,7 +3,7 @@
 
 USING: kernel make math sequences ;
 
-IN: benchmark.make
+in: benchmark.make
 
 : make-strings ( n -- seq )
     [ [ CHAR: a , ] times ] "" make ;

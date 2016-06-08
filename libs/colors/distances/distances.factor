@@ -5,7 +5,7 @@ USING: accessors colors colors.lab colors.lch colors.lch.private
 combinators kernel locals math math.functions math.libm
 math.order ;
 
-IN: colors.distances
+in: colors.distances
 
 : rgba-distance ( color1 color2 -- distance )
     [ >rgba ] bi@

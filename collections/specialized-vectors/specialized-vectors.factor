@@ -7,7 +7,7 @@ vocabs.loader vocabs.parser ;
 FROM: sequences.private => nth-unsafe ;
 FROM: specialized-arrays.private => nth-c-ptr direct-like ;
 QUALIFIED: vectors.functor
-IN: specialized-vectors
+in: specialized-vectors
 
 MIXIN: specialized-vector
 

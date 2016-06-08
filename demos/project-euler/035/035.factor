@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.combinatorics math.parser math.primes
     project-euler.common sequences ;
-IN: project-euler.035
+in: project-euler.035
 
 ! http://projecteuler.net/index.php?section=problems&id=35
 

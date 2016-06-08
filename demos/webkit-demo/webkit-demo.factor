@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: cocoa cocoa.application cocoa.types cocoa.classes cocoa.windows
 core-graphics.types kernel math.bitwise literals ;
-IN: webkit-demo
+in: webkit-demo
 
 FRAMEWORK: /System/Library/Frameworks/WebKit.framework
 IMPORT: WebView

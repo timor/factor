@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license
 USING: accessors assocs fry kernel locals sequences
 sequences.rotated sorting ;
-IN: math.transforms.bwt
+in: math.transforms.bwt
 
 ! Semi-efficient versions of Burrows-Wheeler Transform
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors bit-arrays fry kernel math math.bitwise
 sequences sequences.private sets ;
-IN: bit-sets
+in: bit-sets
 
 TUPLE: bit-set { table bit-array read-only } ;
 

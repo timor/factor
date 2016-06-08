@@ -3,7 +3,7 @@ USING: alien.c-types alien.data alien.destructors alien.syntax
 classes.struct kernel math windows.com windows.com.syntax
 windows.kernel32 windows.ole32 windows.types ;
 FROM: alien.c-types => float ;
-IN: windows.gdiplus
+in: windows.gdiplus
 
 LIBRARY: gdiplus
 

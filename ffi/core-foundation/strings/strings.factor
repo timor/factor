@@ -7,7 +7,7 @@ core-foundation.arrays core-foundation.data destructors fry
 io.encodings.string io.encodings.utf8 kernel math math.order
 parser sequences words ;
 
-IN: core-foundation.strings
+in: core-foundation.strings
 
 TYPEDEF: void* CFStringRef
 

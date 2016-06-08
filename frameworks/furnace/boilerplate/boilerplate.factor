@@ -8,7 +8,7 @@ locals
 http.server
 http.server.filters
 furnace.utilities ;
-IN: furnace.boilerplate
+in: furnace.boilerplate
 
 TUPLE: boilerplate < filter-responder template init ;
 

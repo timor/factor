@@ -4,7 +4,7 @@ USING: accessors arrays grouping kernel namespaces present
 sequences strings
 graphviz.attributes
 ;
-IN: graphviz
+in: graphviz
 
 TUPLE: graph
 { id string }

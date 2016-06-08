@@ -1,4 +1,4 @@
-IN: nmake.tests
+in: nmake.tests
 USING: nmake kernel tools.test ;
 
 { } [ [ ] { } nmake ] unit-test

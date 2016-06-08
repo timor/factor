@@ -3,7 +3,7 @@
 USING: alien.c-types alien.data bootstrap.image.private
 destructors io io.directories io.encodings.binary io.files
 kernel locals system ;
-IN: tools.deploy.embed
+in: tools.deploy.embed
 
 :: embed-image ( image executable -- )
     executable binary <file-appender> [| out |

@@ -1,6 +1,6 @@
 USING: locals math math.combinatorics math.matrices.simd
 prettyprint sequences typed ;
-IN: benchmark.matrix-exponential-simd
+in: benchmark.matrix-exponential-simd
 
 TYPED:: e^m4 ( m: matrix4 iterations: fixnum -- e^m: matrix4 )
     zero-matrix4

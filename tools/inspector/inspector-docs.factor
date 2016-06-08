@@ -1,6 +1,6 @@
 USING: help.markup help.syntax kernel classes io io.styles mirrors
 inspector.private ;
-IN: inspector
+in: inspector
 
 ARTICLE: "inspector" "The inspector"
 "The inspector displays a tabular view of an object and adds navigation and editing features. Inspector words are found in the " { $vocab-link "inspector" } " vocabulary."

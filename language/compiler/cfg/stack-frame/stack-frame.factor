@@ -1,7 +1,7 @@
 ! Copyright (C) 2009, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel math namespaces ;
-IN: compiler.cfg.stack-frame
+in: compiler.cfg.stack-frame
 
 TUPLE: stack-frame
     { params integer }

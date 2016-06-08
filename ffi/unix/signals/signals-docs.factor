@@ -1,6 +1,6 @@
 ! (c)2010 Joe Groff bsd license
 USING: help.markup help.syntax kernel ;
-IN: unix.signals
+in: unix.signals
 
 HELP: add-signal-handler
 { $values

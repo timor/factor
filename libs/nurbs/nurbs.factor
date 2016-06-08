@@ -4,7 +4,7 @@ math math.order math.ranges math.vectors
 math.vectors.homogeneous sequences specialized-arrays ;
 FROM: alien.c-types => float ;
 SPECIALIZED-ARRAY: float
-IN: nurbs
+in: nurbs
 
 TUPLE: nurbs-curve
     { order integer }

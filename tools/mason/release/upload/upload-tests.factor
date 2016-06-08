@@ -1,2 +1,2 @@
-IN: mason.release.upload.tests
+in: mason.release.upload.tests
 USING: mason.release.upload tools.test ;

@@ -3,7 +3,7 @@
 USING: accessors arrays calendar combinators fry io io.directories
 io.files.info kernel math math.parser prettyprint sequences system
 vocabs sorting.slots calendar.format ;
-IN: tools.files
+in: tools.files
 
 <PRIVATE
 

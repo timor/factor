@@ -11,7 +11,7 @@ math.ratios namespaces parser prettyprint sequences
 sequences.private slots source-files.errors strings
 strings.parser summary system vocabs vocabs.loader vocabs.parser
 words ;
-IN: debugger
+in: debugger
 
 GENERIC: error-help ( error -- topic ) ;
 

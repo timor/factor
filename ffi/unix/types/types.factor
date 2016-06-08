@@ -1,6 +1,6 @@
 USING: accessors alien.c-types alien.syntax system vocabs ;
 QUALIFIED: sequences
-IN: unix.types
+in: unix.types
 
 TYPEDEF: uchar u_int8_t
 TYPEDEF: ushort u_int16_t

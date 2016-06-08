@@ -1,7 +1,7 @@
 ! Copyright (c) 2008 Eric Mertens.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: circular disjoint-sets kernel math math.ranges sequences project-euler.common ;
-IN: project-euler.186
+in: project-euler.186
 
 ! http://projecteuler.net/index.php?section=problems&id=186
 

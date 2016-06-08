@@ -9,7 +9,7 @@ sequences system windows.errors windows.handles windows.kernel32
 windows.types windows.winsock ;
 
 FROM: namespaces => get ;
-IN: io.sockets.windows
+in: io.sockets.windows
 
 : set-socket-option ( handle level opt -- )
     [ handle>> ] 2dip 1 int <ref> dup byte-length setsockopt socket-error ;

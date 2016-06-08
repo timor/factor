@@ -3,7 +3,7 @@
 USING: arrays ascii byte-arrays byte-vectors command-line
 grouping io io.encodings.binary io.files io.streams.string
 kernel math math.parser namespaces sequences splitting strings ;
-IN: tools.hexdump
+in: tools.hexdump
 
 <PRIVATE
 

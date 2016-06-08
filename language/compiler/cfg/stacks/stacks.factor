@@ -4,7 +4,7 @@ USING: accessors biassocs compiler.cfg.registers
 compiler.cfg.stacks.finalize compiler.cfg.stacks.global
 compiler.cfg.stacks.height compiler.cfg.stacks.local
 compiler.cfg.utilities kernel math namespaces sequences ;
-IN: compiler.cfg.stacks
+in: compiler.cfg.stacks
 
 : begin-stack-analysis ( -- )
     <bihash> locs>vregs set

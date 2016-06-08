@@ -21,7 +21,7 @@ USING:
     xml
     xml.traversal
 ;
-IN: s3
+in: s3
 
 SYMBOL: key-id
 SYMBOL: secret-key

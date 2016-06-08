@@ -4,7 +4,7 @@
 ! Not all functions have been wrapped.
 USING: alien alien.c-types alien.libraries alien.syntax
 combinators system ;
-IN: db.sqlite.ffi
+in: db.sqlite.ffi
 
 << "sqlite" {
     { [ os windows? ] [ "sqlite3.dll" ] }

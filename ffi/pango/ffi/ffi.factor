@@ -3,7 +3,7 @@
 USING: alien alien.c-types alien.destructors alien.libraries
 alien.syntax combinators gobject-introspection
 gobject-introspection.standard-types system vocabs ;
-IN: pango.ffi
+in: pango.ffi
 
 << "gobject.ffi" require >>
 

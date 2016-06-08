@@ -4,7 +4,7 @@ USING: accessors alien alien.data alien.syntax classes.struct
 continuations fry kernel libc literals locals sequences
 windows.advapi32 windows.errors windows.kernel32 windows.types
 alien.c-types ;
-IN: windows.privileges
+in: windows.privileges
 
 TYPEDEF: TOKEN_PRIVILEGES* PTOKEN_PRIVILEGES
 

@@ -3,7 +3,7 @@
 USING: assocs combinators fry grouping http.client io
 io.encodings.binary io.files io.files.temp io.files.unique
 json.reader kernel locals make namespaces sequences urls ;
-IN: google.translate
+in: google.translate
 
 CONSTANT: google-translate-url "http://ajax.googleapis.com/ajax/services/language/translate"
 

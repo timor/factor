@@ -6,7 +6,7 @@ io.files.acls.macosx.ffi kernel libc literals locals math.order
 prettyprint sequences unix unix.ffi unix.groups unix.types
 unix.users ;
 QUALIFIED: io
-IN: io.files.acls.macosx
+in: io.files.acls.macosx
 
 <PRIVATE
 

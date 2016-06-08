@@ -3,7 +3,7 @@
 USING: arrays combinators.short-circuit combinators.smart
 io.directories io.pathnames kernel math math.parser sequences
 sorting sorting.human splitting sets ;
-IN: forestdb.paths
+in: forestdb.paths
 
 CONSTANT: fdb-filename-base "fq"
 

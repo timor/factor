@@ -3,7 +3,7 @@
 USING: arrays destructors fry gpu.framebuffers gpu.render gpu.shaders
 gpu.state gpu.textures gpu.util images kernel locals math
 math.rectangles sequences ;
-IN: gpu.effects.blur
+in: gpu.effects.blur
 
 GLSL-SHADER: blur-fragment-shader fragment-shader
 uniform sampler2D texture;

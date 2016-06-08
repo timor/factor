@@ -4,7 +4,7 @@
 USING: accessors combinators formatting io kernel math
 pdf.values sequences ;
 
-IN: pdf.text
+in: pdf.text
 
 : comment ( string -- ) "% " write print ;
 

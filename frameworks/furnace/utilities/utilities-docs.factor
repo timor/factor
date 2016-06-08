@@ -1,6 +1,6 @@
 USING: assocs help.markup help.syntax kernel
 quotations sequences strings urls xml.data http words ;
-IN: furnace.utilities
+in: furnace.utilities
 
 HELP: adjust-redirect-url
 { $values { "url" url } { "url'" url } }

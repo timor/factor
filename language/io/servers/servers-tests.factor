@@ -2,7 +2,7 @@ USING: accessors arrays calendar concurrency.promises fry io
 io.encodings.ascii io.encodings.utf8 io.servers
 io.servers.private io.sockets kernel namespaces scratchpad
 sequences threads tools.test ;
-IN: io.servers
+in: io.servers
 
 { t } [ ascii <threaded-server> listen-on empty? ] unit-test
 

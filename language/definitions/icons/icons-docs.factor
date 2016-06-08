@@ -1,4 +1,4 @@
-IN: definitions.icons
+in: definitions.icons
 USING: help.markup help.syntax ;
 
 ARTICLE: "definitions.icons" "Definition icons"

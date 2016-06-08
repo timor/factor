@@ -4,7 +4,7 @@
 USING: combinators.short-circuit grouping kernel math
 math.primes sequences ;
 
-IN: math.primes.twins
+in: math.primes.twins
 
 : twin-primes-upto ( n -- seq )
     primes-upto 2 clump [ first2 - abs 2 = ] filter ;

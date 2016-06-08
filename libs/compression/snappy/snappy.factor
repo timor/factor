@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.data byte-arrays compression.snappy.ffi
 kernel sequences ;
-IN: compression.snappy
+in: compression.snappy
 
 ERROR: snappy-error error ;
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays compiler.units definitions help
 help.topics kernel math parser sequences vocabs.parser words ;
-IN: help.syntax
+in: help.syntax
 
 SYNTAX: HELP:
     scan-word bootstrap-word

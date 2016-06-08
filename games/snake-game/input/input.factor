@@ -1,7 +1,7 @@
 ! Copyright (C) 2015 Your name.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs sets snake-game.constants ;
-IN: snake-game.input
+in: snake-game.input
 
 : key-action ( key -- action )
     H{

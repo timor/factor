@@ -6,7 +6,7 @@ xml.data xml.writer io.streams.string combinators xml
 xml.entities.html io.files io http.client namespaces make
 xml.syntax hashtables calendar.format accessors continuations
 urls present byte-arrays ;
-IN: syndication
+in: syndication
 
 : any-tag-named ( tag names -- tag-inside )
     [ f ] 2dip [ tag-named nip dup ] with find 2drop ;

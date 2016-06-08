@@ -5,7 +5,7 @@ kernel locals namespaces quotations sequences
 stack-checker.backend stack-checker.errors
 stack-checker.recursive-state stack-checker.state
 stack-checker.visitor vectors words ;
-IN: compiler.tree.builder
+in: compiler.tree.builder
 
 <PRIVATE
 

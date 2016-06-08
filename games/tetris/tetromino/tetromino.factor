@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel arrays namespaces sequences math math.order
 math.vectors colors colors.constants random ;
-IN: tetris.tetromino
+in: tetris.tetromino
 
 TUPLE: tetromino states colour ;
 

@@ -6,7 +6,7 @@ combinators combinators.short-circuit fonts formatting
 hashtables io kernel make math math.parser sequences strings
 xml.entities ;
 
-IN: pdf.values
+in: pdf.values
 
 <PRIVATE
 

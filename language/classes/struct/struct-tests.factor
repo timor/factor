@@ -14,7 +14,7 @@ QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAY: char
 SPECIALIZED-ARRAY: int
 SPECIALIZED-ARRAY: ushort
-IN: classes.struct.tests
+in: classes.struct.tests
 
 SYMBOL: struct-test-empty
 
@@ -187,14 +187,14 @@ STRUCT: struct-test-string-ptr
 ] unit-test
 
 { "USING: alien.c-types classes.struct ;
-IN: classes.struct.tests
+in: classes.struct.tests
 STRUCT: struct-test-foo
     { x char initial: 0 } { y int initial: 123 } { z bool } ;
 " }
 [ [ struct-test-foo see ] with-string-writer ] unit-test
 
 { "USING: alien.c-types classes.struct ;
-IN: classes.struct.tests
+in: classes.struct.tests
 UNION-STRUCT: struct-test-float-and-bits
     { f float initial: 0.0 } { bits uint initial: 0 } ;
 " }
@@ -499,17 +499,17 @@ PACKED-STRUCT: struct-1-packed { a c:int } ;
 UNION-STRUCT: struct-1-union { a c:int } ;
 
 { "USING: alien.c-types classes.struct ;
-IN: classes.struct.tests
+in: classes.struct.tests
 STRUCT: struct-1 { a int initial: 0 } ;
 " }
 [ \ struct-1 [ see ] with-string-writer ] unit-test
 { "USING: alien.c-types classes.struct ;
-IN: classes.struct.tests
+in: classes.struct.tests
 PACKED-STRUCT: struct-1-packed { a int initial: 0 } ;
 " }
 [ \ struct-1-packed [ see ] with-string-writer ] unit-test
 { "USING: alien.c-types classes.struct ;
-IN: classes.struct.tests
+in: classes.struct.tests
 STRUCT: struct-1-union { a int initial: 0 } ;
 " }
 [ \ struct-1-union [ see ] with-string-writer ] unit-test

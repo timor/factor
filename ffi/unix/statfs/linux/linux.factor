@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax unix.types unix.stat classes.struct ;
-IN: unix.statfs.linux
+in: unix.statfs.linux
 
 STRUCT: statfs64
     { f_type __SWORD_TYPE }

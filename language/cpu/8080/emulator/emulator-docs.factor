@@ -1,7 +1,7 @@
 ! Copyright (C) 2007 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax sequences strings ;
-IN: cpu.8080.emulator
+in: cpu.8080.emulator
 
 HELP: load-rom
 { $values { "filename" string } { "cpu" cpu } }

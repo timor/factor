@@ -4,7 +4,7 @@ USING: accessors arrays assocs combinators
 combinators.short-circuit interval-maps kernel locals
 math.parser memoize peg.ebnf regexp.ast regexp.classes sequences
 sets splitting strings unicode unicode.data unicode.script ;
-IN: regexp.parser
+in: regexp.parser
 
 : allowed-char? ( ch -- ? )
     ".()|[*+?$^" member? not ;

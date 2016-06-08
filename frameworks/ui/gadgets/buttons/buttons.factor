@@ -7,7 +7,7 @@ ui.gadgets.labels ui.gadgets.packs ui.theme ui.gadgets.worlds
 ui.gestures ui.pens ui.pens.image ui.pens.solid ui.pens.tile
 ui.theme.images ;
 FROM: models => change-model ;
-IN: ui.gadgets.buttons
+in: ui.gadgets.buttons
 
 TUPLE: button < border pressed? selected? quot tooltip ;
 

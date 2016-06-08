@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: fry kernel math math.primes.factors math.vectors sequences sets
 project-euler.common ;
-IN: project-euler.203
+in: project-euler.203
 
 ! http://projecteuler.net/index.php?section=problems&id=203
 

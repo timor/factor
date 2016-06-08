@@ -2,7 +2,7 @@ USING: accessors alien.c-types alien.handles euler.b-rep
 game.models.half-edge grouping kernel locals opengl.gl
 opengl.glu sequences specialized-arrays specialized-vectors
 libc destructors alien.data ;
-IN: euler.b-rep.triangulation
+in: euler.b-rep.triangulation
 
 SPECIALIZED-ARRAY: double
 

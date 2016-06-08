@@ -1,4 +1,4 @@
-IN: msxml-to-csv.tests
+in: msxml-to-csv.tests
 USING: msxml-to-csv tools.test csv io.encodings.utf8
 io.files.temp kernel ;
 

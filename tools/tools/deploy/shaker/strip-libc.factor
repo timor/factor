@@ -1,5 +1,5 @@
 USING: libc.private ;
-IN: libc
+in: libc
 
 : malloc ( size -- newalien ) (malloc) check-ptr ;
 

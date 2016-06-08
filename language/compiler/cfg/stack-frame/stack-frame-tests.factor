@@ -1,6 +1,6 @@
 USING: accessors compiler.cfg compiler.cfg.build-stack-frame
 compiler.cfg.stack-frame kernel namespaces tools.test ;
-IN: compiler.cfg.stack-frame.tests
+in: compiler.cfg.stack-frame.tests
 
 {
     112

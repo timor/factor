@@ -1,7 +1,7 @@
 USING: alien.c-types make math sequences splitting grouping
 kernel columns specialized-arrays bit-arrays ;
 SPECIALIZED-ARRAY: double
-IN: benchmark.dispatch2
+in: benchmark.dispatch2
 
 : sequences ( -- seq )
     [

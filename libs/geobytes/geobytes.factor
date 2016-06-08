@@ -3,7 +3,7 @@
 USING: combinators combinators.smart csv io.encodings.8-bit
 math.parser memoize sequences kernel unicode money
 io.encodings.8-bit.latin1 ;
-IN: geobytes
+in: geobytes
 
 ! GeoBytes is not free software.
 ! Please read their license should you choose to use it.

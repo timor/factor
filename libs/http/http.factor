@@ -6,7 +6,7 @@ quotations arrays byte-arrays math.parser calendar
 calendar.format present urls fry io io.encodings
 io.encodings.iana io.encodings.binary io.encodings.utf8 io.crlf
 ascii io.encodings.8-bit.latin1 http.parsers base64 mime.types ;
-IN: http
+in: http
 
 CONSTANT: max-redirects 10
 

@@ -1,4 +1,4 @@
-IN: benchmark.mandel.params
+in: benchmark.mandel.params
 
 CONSTANT: max-color       360
 CONSTANT: zoom-fact       0.8

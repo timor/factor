@@ -3,7 +3,7 @@
 USING: accessors assocs classes.parser classes.predicate fry
 kernel math parser sequences splitting unicode.data
 unicode.data.private ;
-IN: unicode.categories
+in: unicode.categories
 
 ! For use in CATEGORY:
 SYMBOLS: Cn Lu Ll Lt Lm Lo Mn Mc Me Nd Nl No Pc Pd Ps Pe Pi Pf Po Sm Sc Sk So Zs Zl Zp Cc Cf Cs Co | ;

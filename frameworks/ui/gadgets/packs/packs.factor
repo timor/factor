@@ -3,7 +3,7 @@
 USING: accessors arrays combinators fry kernel math math.order
 math.vectors sequences ui.baseline-alignment
 ui.baseline-alignment.private ui.gadgets ;
-IN: ui.gadgets.packs
+in: ui.gadgets.packs
 
 TUPLE: pack < aligned-gadget
 { align initial: 0 } { fill initial: 0 } { gap initial: { 0 0 } } ;

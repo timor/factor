@@ -1,5 +1,5 @@
 USING: math tools.test ;
-IN: math.combinatorics.bits
+in: math.combinatorics.bits
 
 { 0b101 } [ 0b011 next-permutation-bits ] unit-test
 { 0b110 } [ 0b101 next-permutation-bits ] unit-test

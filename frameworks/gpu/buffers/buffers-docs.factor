@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: alien alien.data byte-arrays destructors help.markup help.syntax
 kernel math quotations ;
-IN: gpu.buffers
+in: gpu.buffers
 
 HELP: <buffer-ptr>
 { $values

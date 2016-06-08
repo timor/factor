@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays byte-arrays kernel make math
 math.parser prettyprint sequences smalltalk.ast strings ;
-IN: smalltalk.printer
+in: smalltalk.printer
 
 GENERIC: smalltalk>string ( object -- string ) ;
 

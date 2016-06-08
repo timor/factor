@@ -5,7 +5,7 @@ compiler.cfg.linear-scan.allocation.spilling
 compiler.cfg.linear-scan.allocation.state
 compiler.cfg.linear-scan.live-intervals compiler.cfg.linear-scan.ranges
 compiler.utilities fry heaps kernel locals math namespaces sequences ;
-IN: compiler.cfg.linear-scan.allocation
+in: compiler.cfg.linear-scan.allocation
 
 : active-positions ( new assoc -- )
     swap active-intervals-for [ reg>> 0 2array ] map assoc-union! drop ;

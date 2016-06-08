@@ -4,7 +4,7 @@ USING: accessors arrays combinators combinators.smart
 io.encodings.utf8 io.files kernel math math.order math.parser
 memoize sequences sorting.slots splitting splitting.monotonic
 strings io.pathnames calendar words ;
-IN: unix.linux.proc
+in: unix.linux.proc
 
 ! /proc/*
 

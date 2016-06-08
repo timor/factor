@@ -4,7 +4,7 @@
 USING: assocs continuations hashtables.wrapped namespaces
 prettyprint.config prettyprint.custom ;
 
-IN: hashtables.wrapped.prettyprint
+in: hashtables.wrapped.prettyprint
 
 M: wrapped-hashtable >pprint-sequence >alist ;
 

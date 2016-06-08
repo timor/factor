@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: layouts kernel parser math math.bitwise sequences ;
-IN: persistent.hashtables.config
+in: persistent.hashtables.config
 
 : radix-bits ( -- n ) << cell 4 = 4 5 ? suffix! >> ; foldable
 : radix-mask ( -- n ) radix-bits on-bits ; foldable

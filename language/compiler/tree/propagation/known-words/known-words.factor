@@ -12,7 +12,7 @@ math.parser math.partial-dispatch math.private namespaces sbufs
 sequences slots.private splitting strings strings.private
 vectors words ;
 FROM: alien.c-types => (signed-interval) (unsigned-interval) ;
-IN: compiler.tree.propagation.known-words
+in: compiler.tree.propagation.known-words
 
 { + - * / }
 [ { number number } "input-classes" set-word-prop ] each

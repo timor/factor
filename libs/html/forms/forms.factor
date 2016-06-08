@@ -3,7 +3,7 @@
 USING: kernel accessors strings namespaces assocs hashtables io
 mirrors math fry sequences words continuations
 xml.entities xml.writer xml.syntax ;
-IN: html.forms
+in: html.forms
 
 TUPLE: form errors values validation-failed ;
 

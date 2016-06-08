@@ -1,4 +1,4 @@
-IN: linked-assocs
+in: linked-assocs
 USING: help.markup help.syntax assocs ;
 
 HELP: linked-assoc

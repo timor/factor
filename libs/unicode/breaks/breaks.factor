@@ -4,7 +4,7 @@ USING: accessors arrays assocs combinators fry interval-maps
 kernel literals locals math namespaces parser sequences
 simple-flat-file unicode.categories unicode.data
 unicode.normalize.private words words.constant ;
-IN: unicode.breaks
+in: unicode.breaks
 
 <PRIVATE
 

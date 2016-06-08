@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.functions ;
-IN: crypto.barrett
+in: crypto.barrett
 
 : barrett-mu ( n size -- mu )
     ! Calculates Barrett's reduction parameter mu

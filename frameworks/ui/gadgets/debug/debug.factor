@@ -4,7 +4,7 @@ USING: accessors arrays colors.constants dlists io io.streams.string
 kernel namespaces opengl sequences ui ui.baseline-alignment ui.gadgets
 ui.gadgets.buttons ui.gadgets.labels ui.gadgets.private ui.pens
 ui.render ui.text vectors ;
-IN: ui.gadgets.debug
+in: ui.gadgets.debug
 
 ! We can't print to output-stream here because that might be a pane
 ! stream, and our graft-queue rebinding here would be captured

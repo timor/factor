@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel strings help.markup help.syntax math regexp.parser
 regexp.ast ;
-IN: regexp
+in: regexp
 
 ABOUT: "regexp"
 

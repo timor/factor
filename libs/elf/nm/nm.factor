@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Erik Charlebois.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators elf formatting io.mmap kernel sequences ;
-IN: elf.nm
+in: elf.nm
 
 : print-symbol ( sections symbol -- )
     [ sym>> st_value>> "%016x " printf ]

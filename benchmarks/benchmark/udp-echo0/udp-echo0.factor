@@ -4,7 +4,7 @@
 USING: accessors destructors fry io.binary io.sockets kernel
 sequences ;
 
-IN: benchmark.udp-echo0
+in: benchmark.udp-echo0
 
 : send/recv ( packet server client -- )
     [ 2dup addr>> ] [ send ] bi* receive drop assert= ;

@@ -4,7 +4,7 @@ USING: serialize sequences concurrency.messaging threads io
 io.servers io.encodings.binary assocs init
 arrays namespaces kernel accessors ;
 FROM: io.sockets => host-name <inet> with-client ;
-IN: concurrency.distributed
+in: concurrency.distributed
 
 <PRIVATE
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators.short-circuit editors fry io.standard-paths
 kernel make math.parser namespaces system vocabs ;
-IN: editors.geany
+in: editors.geany
 
 SINGLETON: geany
 geany editor-class set-global

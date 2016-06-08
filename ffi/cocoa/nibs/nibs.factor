@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.data cocoa cocoa.application
 cocoa.classes core-foundation.arrays kernel ;
-IN: cocoa.nibs
+in: cocoa.nibs
 
 : load-nib ( name -- )
     NSBundle

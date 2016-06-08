@@ -1,6 +1,6 @@
 USING: eval tools.test compiler.units vocabs words
 kernel generic.math ;
-IN: compiler.tests.redefine9
+in: compiler.tests.redefine9
 
 ! Mixin redefinition did not recompile all necessary words.
 

@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2010 Slava Pestov
 ! See http://factorcode.org/license.txt for BSD license.
 USING: calendar namespaces models threads kernel init ;
-IN: calendar.model
+in: calendar.model
 
 SYMBOL: time
 

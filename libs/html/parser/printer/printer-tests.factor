@@ -4,7 +4,7 @@ USING:
     namespaces
     strings
     tools.test ;
-IN: html.parser.printer.tests
+in: html.parser.printer.tests
 
 {
     "          "

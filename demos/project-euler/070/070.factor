@@ -4,7 +4,7 @@
 USING: arrays assocs combinators.short-circuit kernel math math.combinatorics
     math.functions math.primes math.ranges project-euler.common sequences ;
 FROM: project-euler.common => permutations? ;
-IN: project-euler.070
+in: project-euler.070
 
 ! http://projecteuler.net/index.php?section=problems&id=70
 

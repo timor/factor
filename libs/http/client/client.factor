@@ -8,7 +8,7 @@ io.files io.pathnames io.sockets io.sockets.secure io.timeouts
 kernel locals math math.order math.parser mime.types namespaces
 present sequences splitting urls vocabs.loader combinators
 environment ;
-IN: http.client
+in: http.client
 
 ERROR: too-many-redirects ;
 ERROR: invalid-proxy proxy ;

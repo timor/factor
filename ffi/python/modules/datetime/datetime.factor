@@ -1,4 +1,4 @@
 USING: python.syntax ;
-IN: python.modules.datetime
+in: python.modules.datetime
 
 PY-FROM: datetime => timedelta ( ** -- timedelta ) ;

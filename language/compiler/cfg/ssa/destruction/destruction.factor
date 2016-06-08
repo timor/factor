@@ -6,7 +6,7 @@ compiler.cfg.parallel-copy compiler.cfg.rpo compiler.cfg.ssa.cssa
 compiler.cfg.ssa.destruction.coalescing compiler.cfg.ssa.destruction.leaders
 compiler.cfg.ssa.interference.live-ranges compiler.cfg.utilities
 kernel make sequences namespaces ;
-IN: compiler.cfg.ssa.destruction
+in: compiler.cfg.ssa.destruction
 
 <PRIVATE
 

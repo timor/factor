@@ -1,7 +1,7 @@
 USING: accessors debugger kernel listener io.servers
 io.encodings.utf8 namespaces ;
 
-IN: tty-server
+in: tty-server
 
 : start-listener ( -- )
     [ [ drop print-error-and-restarts ] error-hook set listener ] with-scope ;

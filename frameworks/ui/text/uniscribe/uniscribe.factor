@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs cache kernel math math.vectors sequences
 fonts namespaces ui.text ui.text.private windows.uniscribe ;
-IN: ui.text.uniscribe
+in: ui.text.uniscribe
 
 SINGLETON: uniscribe-renderer
 

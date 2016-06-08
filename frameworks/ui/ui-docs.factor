@@ -4,7 +4,7 @@ ui.gadgets ui.gadgets.books ui.gadgets.grids ui.gadgets.packs
 ui.gadgets.private ui.gadgets.tracks ui.gadgets.worlds ui.private ui.text
 vocabs.loader ;
 
-IN: ui
+in: ui
 
 HELP: ui-windows
 { $var-description "Global variable holding an association list mapping native window handles to " { $link world } " instances." } ;
@@ -351,7 +351,7 @@ HELP: WINDOW:
 "From the " { $vocab-link "hello-ui" } " vocabulary. Creates a window with the title \"Hi\" containing a label reading \"Hello world\":"
 { $code
 "USING: accessors ui ui.gadgets.labels ;
-IN: hello-ui
+in: hello-ui
 
 WINDOW: hello { { title \"Hi\" } }
     \"Hello world\" <label> >>gadgets ;"
@@ -365,7 +365,7 @@ HELP: MAIN-WINDOW:
 "From the " { $vocab-link "hello-ui" } " vocabulary. Creates a window with the title \"Hi\" containing a label reading \"Hello world\":"
 { $code
 "USING: accessors ui ui.gadgets.labels ;
-IN: hello-ui
+in: hello-ui
 
 MAIN-WINDOW: hello { { title \"Hi\" } }
     \"Hello world\" <label> >>gadgets ;"

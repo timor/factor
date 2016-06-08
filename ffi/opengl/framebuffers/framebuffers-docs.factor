@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math opengl.gl quotations ;
-IN: opengl.framebuffers
+in: opengl.framebuffers
 
 HELP: gen-framebuffer
 { $values { "id" integer } }

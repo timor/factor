@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays combinators io kernel lists locals math
 promises quotations sequences ;
-IN: lists.lazy
+in: lists.lazy
 
 M: promise car force car ;
 

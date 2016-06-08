@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors compiler.cfg.stack-frame kernel layouts math
 namespaces vectors ;
-IN: compiler.cfg
+in: compiler.cfg
 
 TUPLE: basic-block < identity-tuple
     number

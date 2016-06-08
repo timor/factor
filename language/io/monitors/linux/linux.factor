@@ -6,7 +6,7 @@ io.backend.unix io.encodings.utf8 unix.linux.inotify assocs
 namespaces make threads continuations init libc math math.bitwise
 sets alien alien.strings alien.c-types vocabs.loader accessors
 system hashtables destructors unix classes.struct literals ;
-IN: io.monitors.linux
+in: io.monitors.linux
 
 SYMBOL: watches
 

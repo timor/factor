@@ -1,7 +1,7 @@
 ! Copyright (c) 2008 Eric Mertens.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.order sequences splitting project-euler.common ;
-IN: project-euler.117
+in: project-euler.117
 
 ! http://projecteuler.net/index.php?section=problems&id=117
 

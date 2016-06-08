@@ -1,4 +1,4 @@
-IN: logging
+in: logging
 USING: help.markup help.syntax assocs math calendar
 logging.server strings words quotations ;
 

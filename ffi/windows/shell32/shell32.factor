@@ -6,7 +6,7 @@ specialized-arrays
 specialized-arrays.instances.alien.c-types.ushort windows
 windows.com windows.com.syntax windows.kernel32 windows.ole32
 windows.types ;
-IN: windows.shell32
+in: windows.shell32
 
 CONSTANT: CSIDL_DESKTOP 0x00
 CONSTANT: CSIDL_INTERNET 0x01

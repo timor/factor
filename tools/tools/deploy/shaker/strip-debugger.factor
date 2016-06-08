@@ -1,5 +1,5 @@
 USING: continuations namespaces tools.deploy.shaker ;
-IN: debugger
+in: debugger
 
 : error. ( error -- ) original-error get die-with2 ;
 

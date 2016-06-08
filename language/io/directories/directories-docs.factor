@@ -1,6 +1,6 @@
 USING: help.markup help.syntax io.files.private io.pathnames
 quotations ;
-IN: io.directories
+in: io.directories
 
 HELP: cwd
 { $values { "path" "a pathname string" } }

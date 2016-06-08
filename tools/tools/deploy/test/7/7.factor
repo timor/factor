@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math namespaces ;
-IN: tools.deploy.test.7
+in: tools.deploy.test.7
 
 SYMBOL: my-var
 

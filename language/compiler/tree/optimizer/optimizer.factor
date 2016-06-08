@@ -14,7 +14,7 @@ compiler.tree.dead-code
 compiler.tree.modular-arithmetic
 compiler.tree.finalization
 compiler.tree.checker ;
-IN: compiler.tree.optimizer
+in: compiler.tree.optimizer
 
 SYMBOL: check-optimizer?
 

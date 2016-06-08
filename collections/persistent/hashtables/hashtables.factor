@@ -9,7 +9,7 @@ persistent.hashtables.nodes.leaf
 persistent.hashtables.nodes.full
 persistent.hashtables.nodes.bitmap
 persistent.hashtables.nodes.collision ;
-IN: persistent.hashtables
+in: persistent.hashtables
 
 TUPLE: persistent-hash
 { root read-only initial: empty-node }

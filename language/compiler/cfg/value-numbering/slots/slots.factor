@@ -4,7 +4,7 @@ USING: accessors compiler.cfg.instructions
 compiler.cfg.value-numbering.graph
 compiler.cfg.value-numbering.rewrite cpu.architecture fry kernel
 math ;
-IN: compiler.cfg.value-numbering.slots
+in: compiler.cfg.value-numbering.slots
 
 : simplify-slot-addressing? ( insn -- ? )
     complex-addressing?

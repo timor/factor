@@ -1,5 +1,5 @@
 USING: help.markup help.syntax sequences strings ;
-IN: pcre
+in: pcre
 
 ARTICLE: "pcre" "PCRE binding"
 "The " { $vocab-link "pcre" } " vocab implements a simple binding for libpcre, enabling rich regular expression support for Factor applications." $nl

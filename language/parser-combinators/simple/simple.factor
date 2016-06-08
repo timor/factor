@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel strings math sequences lists.lazy words
 math.parser promises parser-combinators unicode ;
-IN: parser-combinators.simple
+in: parser-combinators.simple
 
 : digit-parser ( -- parser )
   [ digit? ] satisfy [ digit> ] <@ ;

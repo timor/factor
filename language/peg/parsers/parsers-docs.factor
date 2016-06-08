@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel math sequences
 unicode strings ;
-IN: peg.parsers
+in: peg.parsers
 
 HELP: 1token
 { $values

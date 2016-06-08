@@ -1,5 +1,5 @@
 USING: help.syntax help.markup ;
-IN: core-foundation.bundles
+in: core-foundation.bundles
 
 HELP: <CFBundle>
 { $values { "string" "a pathname string" } { "bundle" "a " { $snippet "CFBundle" } } }

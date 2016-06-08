@@ -4,7 +4,7 @@ kernel math math.ranges math.vectors.simd opengl opengl.gl sequences
 sequences.product specialized-arrays ;
 FROM: alien.c-types => float ;
 SPECIALIZED-ARRAY: float-4
-IN: grid-meshes
+in: grid-meshes
 
 TUPLE: grid-mesh dim buffer row-length ;
 

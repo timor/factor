@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax namespaces assocs sequences
 kernel combinators ;
-IN: match
+in: match
 
 HELP: match
 { $values { "value1" object } { "value2" object } { "bindings" assoc }

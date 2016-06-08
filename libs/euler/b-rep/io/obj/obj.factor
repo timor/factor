@@ -2,7 +2,7 @@
 USING: accessors assocs combinators euler.b-rep fry
 game.models.half-edge grouping io kernel locals math
 math.parser math.vectors.simd.cords sequences splitting ;
-IN: euler.b-rep.io.obj
+in: euler.b-rep.io.obj
 
 <PRIVATE
 : write-obj-vertex ( vertex -- )

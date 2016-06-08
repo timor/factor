@@ -1,6 +1,6 @@
 USING: help.syntax help.markup kernel math classes classes.tuple
 calendar sequences growable ;
-IN: models
+in: models
 
 HELP: model
 { $class-description "A mutable cell holding a single value. When the value is changed, a sequence of connected objects are notified. Models have the following slots:"

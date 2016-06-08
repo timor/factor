@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: decimals kernel locals math math.combinatorics math.ranges
 sequences ;
-IN: benchmark.e-decimals
+in: benchmark.e-decimals
 
 : D-factorial ( n -- D! )
     iota DECIMAL: 1 [ 0 <decimal> DECIMAL: 1 D+ D* ] reduce ; inline

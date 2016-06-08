@@ -3,7 +3,7 @@
 USING: kernel io.encodings accessors assocs sequences biassocs generic
 math.order simple-flat-file io io.binary byte-arrays locals combinators
 words classes.singleton fry classes.parser parser quotations ;
-IN: io.encodings.euc
+in: io.encodings.euc
 
 TUPLE: euc { table biassoc } ;
 

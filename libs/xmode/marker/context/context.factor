@@ -1,5 +1,5 @@
 USING: accessors kernel xmode.rules ;
-IN: xmode.marker.context
+in: xmode.marker.context
 
 ! Based on org.gjt.sp.jedit.syntax.TokenMarker.LineContext
 TUPLE: line-context

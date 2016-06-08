@@ -4,7 +4,7 @@ USING: accessors assocs combinators combinators.short-circuit
 compiler.cfg.loop-detection compiler.cfg.predecessors
 compiler.cfg.rpo compiler.cfg.utilities deques dlists fry kernel
 make math namespaces sequences sets sorting ;
-IN: compiler.cfg.linearization
+in: compiler.cfg.linearization
 
 ! This is RPO except loops are rotated and unlikely blocks go
 ! at the end. Based on SBCL's src/compiler/control.lisp

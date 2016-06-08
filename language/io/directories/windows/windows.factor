@@ -5,7 +5,7 @@ io.pathnames io.backend io.files.windows destructors
 kernel accessors calendar windows windows.errors
 windows.kernel32 alien.c-types sequences splitting
 fry continuations classes.struct ;
-IN: io.directories.windows
+in: io.directories.windows
 
 M: windows touch-file ( path -- )
     [

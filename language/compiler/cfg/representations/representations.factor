@@ -10,7 +10,7 @@ compiler.cfg.representations.peephole
 compiler.cfg.representations.rewrite
 compiler.cfg.representations.selection
 compiler.cfg.utilities ;
-IN: compiler.cfg.representations
+in: compiler.cfg.representations
 
 : select-representations ( cfg -- )
     {

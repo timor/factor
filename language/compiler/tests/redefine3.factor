@@ -1,7 +1,7 @@
 USING: accessors compiler compiler.units tools.test math parser
 kernel sequences sequences.private classes.mixin generic
 definitions arrays words assocs eval grouping ;
-IN: compiler.tests.redefine3
+in: compiler.tests.redefine3
 
 GENERIC: sheeple ( obj -- x ) ;
 

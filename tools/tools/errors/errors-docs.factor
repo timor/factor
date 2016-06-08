@@ -1,4 +1,4 @@
-IN: tools.errors
+in: tools.errors
 USING: help.markup help.syntax source-files.errors words io
 compiler.errors classes strings ;
 

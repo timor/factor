@@ -4,7 +4,7 @@
 USING: assocs command-line io namespaces regexp sequences
 strings ;
 
-IN: emojify
+in: emojify
 
 CONSTANT: emoji H{
     { ":+1:" "👍" }

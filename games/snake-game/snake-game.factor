@@ -1,7 +1,7 @@
 ! Copyright (C) 2015 Sankaranarayanan Viswanathan
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors sets snake-game.ui ui ui.gadgets.status-bar ui.gadgets.worlds ;
-IN: snake-game
+in: snake-game
 
 : <snake-world-attributes> ( -- world-attributes )
     <world-attributes> "Snake Game" >>title    

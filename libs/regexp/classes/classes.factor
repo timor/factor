@@ -4,7 +4,7 @@ USING: accessors arrays assocs classes combinators
 combinators.short-circuit combinators.smart fry kernel locals
 math math.order sequences sets unicode unicode.data ;
 FROM: ascii => ascii? ;
-IN: regexp.classes
+in: regexp.classes
 
 SINGLETONS: dot letter-class LETTER-class Letter-class digit-class
 alpha-class non-newline-blank-class

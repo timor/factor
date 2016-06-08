@@ -4,7 +4,7 @@ USING: accessors combinators combinators.short-circuit kernel
 layouts math cpu.architecture
 compiler.cfg.instructions
 compiler.cfg.gvn.graph ;
-IN: compiler.cfg.gvn.rewrite
+in: compiler.cfg.gvn.rewrite
 
 ! Outputs f to mean no change
 GENERIC: rewrite ( insn -- insn/f ) ;

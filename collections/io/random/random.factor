@@ -4,7 +4,7 @@
 USING: fry io kernel locals math random sequences
 sequences.private ;
 
-IN: io.random
+in: io.random
 
 <PRIVATE
 

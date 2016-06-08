@@ -4,7 +4,7 @@ USING: bootstrap.image.private compiler.codegen.relocation
 compiler.constants cpu.x86.assembler cpu.x86.assembler.operands
 generic.single.private kernel kernel.private layouts locals math
 math.private namespaces threads.private ;
-IN: bootstrap.x86
+in: bootstrap.x86
 
 4 \ cell set
 

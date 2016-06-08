@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs continuations io.directories kernel
 math.parser sequences splitting system tools.ps unix.linux.proc ;
-IN: tools.ps.linux
+in: tools.ps.linux
 
 ! If cmdline is empty, read the filename from /proc/pid/stat
 : ps-cmdline ( path -- string )

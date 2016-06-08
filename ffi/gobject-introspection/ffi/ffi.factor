@@ -5,7 +5,7 @@ classes.parser classes.struct combinators combinators.short-circuit
 gobject-introspection.repository gobject-introspection.types kernel
 locals make math.parser namespaces parser sequences
 splitting.monotonic vocabs.parser words words.constant ;
-IN: gobject-introspection.ffi
+in: gobject-introspection.ffi
 
 : def-c-type ( c-type-name base-c-type -- )
     swap (CREATE-C-TYPE) typedef ;

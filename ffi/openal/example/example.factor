@@ -1,7 +1,7 @@
 ! Copyright (C) 2007 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: calendar kernel openal openal.alut sequences threads ;
-IN: openal.example
+in: openal.example
 
 : play-hello ( -- )
     init-openal

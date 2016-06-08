@@ -3,7 +3,7 @@
 USING: parser system kernel sequences math math.ranges
 cpu.ppc.assembler combinators compiler.constants
 bootstrap.image.private layouts namespaces ;
-IN: bootstrap.ppc
+in: bootstrap.ppc
 
 4 \ cell set
 big-endian on

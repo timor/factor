@@ -1,7 +1,7 @@
 ! Copyright (C) 2006, 2007, 2008 Alex Chapman
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays kernel math math.vectors sequences tetris.tetromino lists.lazy ;
-IN: tetris.piece
+in: tetris.piece
 
 ! The rotation is an index into the tetromino's states array, and the
 ! position is added to the tetromino's blocks to give them their location on the

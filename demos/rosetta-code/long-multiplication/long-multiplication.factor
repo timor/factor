@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.vectors sequences ;
-IN: rosetta-code.long-multiplication
+in: rosetta-code.long-multiplication
 
 ! http://rosettacode.org/wiki/Long_multiplication
 

@@ -1,5 +1,5 @@
 USING: help.markup help.syntax documents ;
-IN: documents.elements
+in: documents.elements
 
 HELP: prev-elt
 { $values { "loc" "a pair of integers" } { "document" document } { "elt" "an element" } { "newloc" "a pair of integers" } }

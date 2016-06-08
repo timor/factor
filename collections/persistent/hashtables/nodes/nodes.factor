@@ -2,7 +2,7 @@
 
 USING: math arrays kernel sequences
 accessors locals persistent.hashtables.config ;
-IN: persistent.hashtables.nodes
+in: persistent.hashtables.nodes
 
 SINGLETON: empty-node
 

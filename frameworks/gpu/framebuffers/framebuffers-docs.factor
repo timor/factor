@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: alien byte-arrays gpu.buffers gpu.textures help.markup
 help.syntax images kernel math math.rectangles sequences ;
-IN: gpu.framebuffers
+in: gpu.framebuffers
 
 HELP: <color-attachment>
 { $values

@@ -1,7 +1,7 @@
 ! Copyright (C) 2014 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors compiler.cfg.instructions kernel math sequences ;
-IN: compiler.cfg.test-words
+in: compiler.cfg.test-words
 
 : test-not-in-order ( -- nodes )
     V{

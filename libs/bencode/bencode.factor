@@ -1,7 +1,7 @@
 USING: arrays assocs combinators hashtables io
 io.encodings.ascii io.encodings.string io.streams.string kernel
 math math.parser sequences strings ;
-IN: bencode
+in: bencode
 
 GENERIC: >bencode ( obj -- bencode ) ;
 

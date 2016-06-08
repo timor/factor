@@ -6,7 +6,7 @@ USING:
     combinators
     kernel
     system ;
-IN: pcre.ffi
+in: pcre.ffi
 
 << "pcre" {
     { [ os windows? ] [ "pcre.dll" ] }

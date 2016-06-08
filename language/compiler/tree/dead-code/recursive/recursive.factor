@@ -5,7 +5,7 @@ compiler.tree.dead-code.branches
 compiler.tree.dead-code.liveness compiler.tree.dead-code.simple
 compiler.tree.recursive kernel locals sequences
 stack-checker.backend ;
-IN: compiler.tree.dead-code.recursive
+in: compiler.tree.dead-code.recursive
 
 M: #enter-recursive compute-live-values*
     ! If the output of an #enter-recursive is live, then the

@@ -1,5 +1,5 @@
 USING: python.syntax ;
-IN: python.modules.argparse
+in: python.modules.argparse
 
 PY-FROM: argparse => ArgumentParser ( -- self ) ;
 PY-METHODS: ArgumentParser =>

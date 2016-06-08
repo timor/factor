@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs help.markup help.syntax kernel math sequences strings ;
-IN: bitcoin.client
+in: bitcoin.client
 
 HELP: bitcoin-server
 { $values

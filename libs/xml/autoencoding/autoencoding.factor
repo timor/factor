@@ -4,7 +4,7 @@ USING: kernel namespaces xml.name io.encodings.utf8 xml.elements
 io.encodings.utf16 xml.tokenize xml.state math ascii sequences
 io.encodings.string io.encodings combinators accessors
 xml.data io.encodings.iana xml.errors ;
-IN: xml.autoencoding
+in: xml.autoencoding
 
 : decode-stream ( encoding -- )
     spot get [ swap re-decode ] change-stream drop ;

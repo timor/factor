@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math ;
-IN: math.compare
+in: math.compare
 
 HELP: absmin
 { $values { "a" number } { "b" number } { "x" number } }

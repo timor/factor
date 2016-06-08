@@ -1,5 +1,5 @@
 USING: alien.c-types alien.syntax windows.directx windows.ole32 windows.types ;
-IN: windows.directx.d3dcompiler
+in: windows.directx.d3dcompiler
 
 LIBRARY: d3dcompiler
 

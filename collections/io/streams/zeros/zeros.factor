@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators destructors io io.directories
 io.encodings.binary io.files kernel math sequences ;
-IN: io.streams.zeros
+in: io.streams.zeros
 
 TUPLE: zero-stream ;
 

@@ -1,5 +1,5 @@
 USING: help.markup help.syntax io.sockets.secure ;
-IN: io.sockets.secure.debug
+in: io.sockets.secure.debug
 
 HELP: <test-secure-config>
 { $values { "config" secure-config } }

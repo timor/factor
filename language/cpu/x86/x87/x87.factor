@@ -5,7 +5,7 @@ namespaces compiler.codegen.labels compiler.codegen.relocation
 compiler.constants compiler.cfg.comparisons
 compiler.cfg.intrinsics cpu.architecture cpu.x86
 cpu.x86.assembler cpu.x86.assembler.operands ;
-IN: cpu.x86.x87
+in: cpu.x86.x87
 
 ! x87 unit is only used if SSE2 is not available.
 

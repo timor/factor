@@ -4,7 +4,7 @@ USING: assocs fry http.client io.encodings.utf8 io.files
 io.files.temp kernel math math.combinatorics sequences sorting
 strings urls ;
 
-IN: rosettacode.anagrams-deranged
+in: rosettacode.anagrams-deranged
 
 ! http://rosettacode.org/wiki/Anagrams/Deranged_anagrams
 

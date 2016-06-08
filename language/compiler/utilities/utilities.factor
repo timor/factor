@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays assocs fry kernel locals math math.order
 namespaces sequences vectors ;
-IN: compiler.utilities
+in: compiler.utilities
 
 : flattener ( seq quot -- seq vector quot' )
     over length <vector> [

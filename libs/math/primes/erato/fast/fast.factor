@@ -5,7 +5,7 @@ USING: bit-arrays fry kernel kernel.private literals locals math
 math.functions math.private math.ranges math.statistics
 sequences sequences.private ;
 
-IN: math.primes.erato.fast
+in: math.primes.erato.fast
 
 <PRIVATE
 

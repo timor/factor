@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.libraries alien.syntax cairo.ffi combinators
 kernel gobject-introspection system vocabs ;
-IN: pango.cairo.ffi
+in: pango.cairo.ffi
 
 << "pango.ffi" require >>
 

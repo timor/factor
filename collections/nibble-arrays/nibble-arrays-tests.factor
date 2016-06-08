@@ -1,5 +1,5 @@
 USING: nibble-arrays tools.test sequences kernel math ;
-IN: nibble-arrays.tests
+in: nibble-arrays.tests
 
 [ -1 <nibble-array> ] [ T{ bad-array-length f -1 } = ] must-fail-with
 

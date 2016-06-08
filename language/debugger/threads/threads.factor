@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors debugger continuations threads io io.styles
 prettyprint kernel make math.parser namespaces ;
-IN: debugger.threads
+in: debugger.threads
 
 : error-in-thread. ( thread -- )
     "Error in thread " write

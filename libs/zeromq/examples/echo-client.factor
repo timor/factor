@@ -4,7 +4,7 @@
 USING: byte-arrays calendar calendar.format destructors io
 kernel present strings threads zeromq zeromq.ffi ;
 
-IN: zeromq.examples.echo-client
+in: zeromq.examples.echo-client
 
 : echo-client ( -- )
     [

@@ -3,7 +3,7 @@
 
 USING: ini-file tools.test ;
 
-IN: ini-file.tests
+in: ini-file.tests
 
 { H{ } } [ "" string>ini ] unit-test
 

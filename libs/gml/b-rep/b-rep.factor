@@ -3,7 +3,7 @@ USING: accessors euler.b-rep euler.operators
 game.models.half-edge gml.macros gml.printer gml.runtime
 gml.types io io.styles kernel namespaces ;
 FROM: alien.c-types => >c-bool c-bool> ;
-IN: gml.b-rep
+in: gml.b-rep
 
 LOG-GML: makeVEFS ( p1 p2 -- edge ) make-vefs ;
 

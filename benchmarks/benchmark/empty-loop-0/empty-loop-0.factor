@@ -1,5 +1,5 @@
 USING: math math.private kernel sequences ;
-IN: benchmark.empty-loop-0
+in: benchmark.empty-loop-0
 
 : empty-loop-0 ( n -- )
     dup 0 fixnum< [ drop ] [ 1 fixnum-fast empty-loop-0 ] if ;

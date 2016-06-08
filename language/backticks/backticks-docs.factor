@@ -1,5 +1,5 @@
 USING: help.markup help.syntax io.encodings.utf8 strings ;
-IN: backticks
+in: backticks
 
 HELP: `
 { $syntax "` command [args]`" }

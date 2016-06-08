@@ -2,7 +2,7 @@ USING: alien.c-types alien.syntax classes.struct windows.com
 windows.com.syntax windows.directx windows.directx.d2dbasetypes
 windows.directx.dcommon windows.directx.dxgi windows.directx.dxgiformat
 windows.ole32 windows.types ;
-IN: windows.directx.d2d1
+in: windows.directx.d2d1
 
 LIBRARY: d2d1
 

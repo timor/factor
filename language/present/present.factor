@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors effects io.pathnames kernel math math.parser
 sequences strings vocabs words ;
-IN: present
+in: present
 
 GENERIC: present ( object -- string ) ;
 

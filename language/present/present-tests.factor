@@ -1,4 +1,4 @@
-IN: present.tests
+in: present.tests
 USING: kernel math present sequences tools.test vocabs
 vocabs.hierarchy ;
 

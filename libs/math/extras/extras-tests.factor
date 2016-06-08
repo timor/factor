@@ -4,7 +4,7 @@
 USING: arrays kernel math math.extras math.ranges sequences
 tools.test ;
 
-IN: math.extras.test
+in: math.extras.test
 
 { { 1 -1/2 1/6 0 -1/30 0 1/42 0 -1/30 0 } }
 [ 10 iota [ bernoulli ] map ] unit-test

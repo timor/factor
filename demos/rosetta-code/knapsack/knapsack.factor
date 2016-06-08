@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays fry io kernel locals make math
 math.order math.parser math.ranges sequences sorting ;
-IN: rosetta-code.knapsack
+in: rosetta-code.knapsack
 
 ! http://rosettacode.org/wiki/Knapsack_problem/0-1
 

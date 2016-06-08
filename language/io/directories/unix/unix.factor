@@ -5,7 +5,7 @@ classes.struct continuations fry io.backend io.backend.unix
 io.directories io.files io.files.info io.files.info.unix
 io.files.types kernel libc literals math sequences system unix
 unix.ffi vocabs ;
-IN: io.directories.unix
+in: io.directories.unix
 
 CONSTANT: touch-mode flags{ O_WRONLY O_APPEND O_CREAT O_EXCL }
 

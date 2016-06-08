@@ -3,7 +3,7 @@ windows.kernel32 sequences byte-arrays unicode
 io.encodings.string alien.strings arrays literals
 windows.types specialized-arrays math.parser ;
 SPECIALIZED-ARRAY: TCHAR
-IN: windows.errors
+in: windows.errors
 
 CONSTANT: APPLICATION_ERROR_MASK       0x20000000
 CONSTANT: ERROR_SEVERITY_SUCCESS       0x00000000

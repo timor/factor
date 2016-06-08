@@ -1,6 +1,6 @@
 USING: compiler.tree compiler.tree.propagation.info help.markup
 help.syntax quotations sequences words ;
-IN: compiler.tree.propagation.simple
+in: compiler.tree.propagation.simple
 
 HELP: call-outputs-quot
 { $values { "#call" #call } { "word" word } { "infos" sequence } }

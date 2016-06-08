@@ -5,7 +5,7 @@ math accessors macros words quotations libc continuations
 generalizations splitting locals assocs init specialized-arrays
 classes.struct strings arrays literals sequences.generalizations ;
 SPECIALIZED-ARRAY: DIOBJECTDATAFORMAT
-IN: windows.directx.dinput.constants
+in: windows.directx.dinput.constants
 
 ! Some global variables aren't provided by the DirectInput DLL (they're in the
 ! dinput8.lib import library), so we lovingly hand-craft equivalent values here

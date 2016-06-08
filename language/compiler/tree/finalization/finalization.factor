@@ -6,7 +6,7 @@ combinators.short-circuit compiler.tree
 compiler.tree.combinators compiler.tree.late-optimizations fry
 kernel math.partial-dispatch memoize sequences
 stack-checker.dependencies words ;
-IN: compiler.tree.finalization
+in: compiler.tree.finalization
 
 GENERIC: finalize* ( node -- nodes ) ;
 

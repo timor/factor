@@ -1,5 +1,5 @@
 USING: python.syntax ;
-IN: python.modules.os
+in: python.modules.os
 
 PY-FROM: os =>
     getpid ( -- y )

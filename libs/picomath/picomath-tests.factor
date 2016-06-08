@@ -4,7 +4,7 @@
 USING: kernel literals math math.functions math.ranges picomath
 sequences tools.test ;
 
-IN: picomath
+in: picomath
 
 { t } [
     {

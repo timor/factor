@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: models source-files.errors namespaces models.delay init
 kernel calendar ;
-IN: tools.errors.model
+in: tools.errors.model
 
 SYMBOLS: (error-list-model) error-list-model ;
 

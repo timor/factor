@@ -3,7 +3,7 @@
 
 USING: combinators system vocabs ;
 
-IN: io.files.trash
+in: io.files.trash
 
 HOOK: send-to-trash os ( path -- ) ;
 

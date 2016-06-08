@@ -8,7 +8,7 @@ sequences sequences.extras sorting splitting ui.text
 xml.entities ;
 FROM: pdf.canvas => draw-text ;
 
-IN: pdf.layout
+in: pdf.layout
 
 ! TODO: inset, image
 ! Insets:

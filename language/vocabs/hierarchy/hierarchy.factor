@@ -4,7 +4,7 @@ USING: accessors arrays assocs combinators.short-circuit fry
 io.directories io.files io.files.info io.pathnames kernel make
 memoize namespaces sequences sets sorting splitting vocabs
 vocabs.loader vocabs.metadata ;
-IN: vocabs.hierarchy
+in: vocabs.hierarchy
 
 TUPLE: vocab-prefix name ;
 

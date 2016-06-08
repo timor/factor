@@ -4,7 +4,7 @@
 USING: colors fonts cairo.ffi alien alien.c-types kernel accessors
 sequences namespaces fry continuations destructors math images
 images.memory math.rectangles ;
-IN: cairo
+in: cairo
 
 ERROR: cairo-error n message ;
 

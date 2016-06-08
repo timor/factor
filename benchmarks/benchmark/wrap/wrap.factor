@@ -1,7 +1,7 @@
 ! Copyright (C) 2012 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.parser sequences wrap wrap.strings ;
-IN: benchmark.wrap
+in: benchmark.wrap
 
 : wrap-benchmark ( -- )
     1,000 iota [ number>string ] map " " join

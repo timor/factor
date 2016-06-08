@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel splitting base64 namespaces make strings
 http http.server.responses furnace.auth ;
-IN: furnace.auth.basic
+in: furnace.auth.basic
 
 TUPLE: basic-auth-realm < realm ;
 

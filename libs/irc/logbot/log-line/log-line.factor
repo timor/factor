@@ -3,7 +3,7 @@
 USING: accessors irc.messages irc.messages.base kernel make
 combinators ;
 EXCLUDE: sequences => join ;
-IN: irc.logbot.log-line
+in: irc.logbot.log-line
 
 : dot-or-parens ( string -- string )
     [ "." ] [ " (" prepend ")." append ] if-empty ;

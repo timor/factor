@@ -3,7 +3,7 @@
 USING: accessors assocs combinators compiler.cfg.predecessors
 compiler.cfg.rpo deques dlists fry kernel locals math math.order
 namespaces sequences sorting vectors ;
-IN: compiler.cfg.dominance
+in: compiler.cfg.dominance
 
 <PRIVATE
 

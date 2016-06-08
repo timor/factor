@@ -11,7 +11,7 @@ x11 x11.clipboard x11.constants x11.events x11.glx x11.io
 x11.windows x11.xim x11.xlib ;
 FROM: libc => system ;
 SPECIALIZED-ARRAYS: uchar ulong ;
-IN: ui.backend.x11
+in: ui.backend.x11
 
 SINGLETON: x11-ui-backend
 

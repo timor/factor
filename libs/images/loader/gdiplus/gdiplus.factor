@@ -3,7 +3,7 @@ USING: accessors alien alien.c-types alien.data alien.enums alien.strings
 assocs byte-arrays classes.struct destructors grouping images images.loader
 io kernel libc locals math mime.types namespaces sequences specialized-arrays
 system windows.com windows.gdiplus windows.streams windows.types ;
-IN: images.loader.gdiplus
+in: images.loader.gdiplus
 
 SPECIALIZED-ARRAY: ImageCodecInfo
 

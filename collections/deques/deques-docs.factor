@@ -1,6 +1,6 @@
 USING: help.markup help.syntax kernel math sequences
 quotations ;
-IN: deques
+in: deques
 
 HELP: deque-empty?
 { $values { "deque" deque } { "?" boolean } }

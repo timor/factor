@@ -5,7 +5,7 @@ compiler.cfg.linear-scan.allocation.state
 compiler.cfg.linear-scan.live-intervals
 compiler.cfg.linear-scan.ranges fry hints kernel locals math math.order
 namespaces sequences ;
-IN: compiler.cfg.linear-scan.allocation.splitting
+in: compiler.cfg.linear-scan.allocation.splitting
 
 : split-uses ( uses n -- before after )
     [ '[ n>> _ < ] filter ] [ '[ n>> _ > ] filter ] 2bi ;

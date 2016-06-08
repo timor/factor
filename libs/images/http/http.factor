@@ -3,7 +3,7 @@
 USING: accessors assocs combinators.short-circuit http.client
 images.loader images.loader.private images.viewer io.pathnames
 kernel namespaces present sequences strings urls ;
-IN: images.http
+in: images.http
 
 <PRIVATE
 

@@ -1,6 +1,6 @@
 USING: alien.syntax classes.struct gdk.ffi kernel system tools.test
 ui.backend.gtk ui.gestures ;
-IN: ui.backend.gtk.tests
+in: ui.backend.gtk.tests
 
 : gdk-key-release-event ( -- event )
     S{ GdkEventKey

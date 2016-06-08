@@ -1,7 +1,7 @@
 ! Copyright (c) 2009 Guillaume Nargeot.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.functions project-euler.common ;
-IN: project-euler.188
+in: project-euler.188
 
 ! http://projecteuler.net/index.php?section=problems&id=188
 

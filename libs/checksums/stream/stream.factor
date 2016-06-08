@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io.encodings.binary io.streams.byte-array kernel
 checksums ;
-IN: checksums.stream
+in: checksums.stream
 
 MIXIN: stream-checksum
 

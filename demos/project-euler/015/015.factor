@@ -1,7 +1,7 @@
 ! Copyright (c) 2007 Aaron Schaefer.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.combinatorics project-euler.common ;
-IN: project-euler.015
+in: project-euler.015
 
 ! http://projecteuler.net/index.php?section=problems&id=15
 

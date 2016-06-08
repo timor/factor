@@ -4,7 +4,7 @@
 USING: kernel math math.functions math.statistics math.vectors
 sequences sequences.extras ;
 
-IN: math.distances
+in: math.distances
 
 : hamming-distance ( a b -- n )
     [ = not ] 2count ; inline

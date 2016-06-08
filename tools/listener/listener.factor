@@ -6,7 +6,7 @@ fry io io.styles kernel lexer literals locals math math.parser
 namespaces parser parser.notes prettyprint sequences sets
 source-files.errors system vocabs vocabs.loader
 vocabs.parser ;
-IN: listener
+in: listener
 
 GENERIC: stream-read-quot ( stream -- quot/f ) ;
 GENERIC# prompt. 1 ( stream prompt -- ) ;

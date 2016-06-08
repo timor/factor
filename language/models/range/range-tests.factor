@@ -1,4 +1,4 @@
-IN: models.range.tests
+in: models.range.tests
 USING: arrays generic kernel math models namespaces sequences assocs
 tools.test models.range ;
 

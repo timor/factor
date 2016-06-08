@@ -1,7 +1,7 @@
 ! Copyright (C) 2005, 2010 Slava Pestov, Daniel Ehrenberg.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: sequences kernel accessors ;
-IN: columns
+in: columns
 
 ! A column of a matrix
 TUPLE: column seq col ;

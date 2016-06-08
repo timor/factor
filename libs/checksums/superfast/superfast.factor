@@ -5,7 +5,7 @@ USING: accessors alien alien.c-types alien.data byte-arrays
 checksums combinators fry grouping io.binary kernel math
 math.bitwise math.ranges sequences sequences.private ;
 
-IN: checksums.superfast
+in: checksums.superfast
 
 TUPLE: superfast seed ;
 C: <superfast> superfast

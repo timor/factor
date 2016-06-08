@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Daniel Ehrenberg
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax strings byte-arrays io.encodings.string ;
-IN: quoted-printable
+in: quoted-printable
 
 ABOUT: "quoted-printable"
 

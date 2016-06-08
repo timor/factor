@@ -4,7 +4,7 @@ USING: accessors combinators io.directories
 io.directories.hierarchy io.files io.pathnames kernel literals
 locals make mason.common mason.config mason.platform namespaces
 sequences system words ;
-IN: mason.release.archive
+in: mason.release.archive
 
 : base-name ( -- string )
     [ "factor-" % platform % "-" % stamp get % ] "" make ;

@@ -4,7 +4,7 @@ USING: compiler.tree.builder compiler.tree.cleanup
 compiler.tree.dead-code compiler.tree.def-use
 compiler.tree.normalization compiler.tree.propagation
 compiler.tree.recursive namespaces sequences ;
-IN: compiler.tree.late-optimizations
+in: compiler.tree.late-optimizations
 
 : splice-quot ( quot -- nodes )
     [

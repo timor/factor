@@ -6,7 +6,7 @@ math.private math.ranges layouts words vocabs slots.private
 locals locals.backend generic.single.private fry sequences
 threads.private strings.private ;
 FROM: cpu.ppc.assembler => B ;
-IN: bootstrap.ppc
+in: bootstrap.ppc
 
 : jit-call ( string -- )
     dup

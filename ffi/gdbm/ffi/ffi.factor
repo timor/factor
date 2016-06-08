@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.c-types alien.libraries alien.libraries.finder
 alien.syntax classes.struct combinators kernel system ;
-IN: gdbm.ffi
+in: gdbm.ffi
 
 << "libgdbm"
 { "gdbm" "gdbm3" "libgdbm-3" } find-library-from-list

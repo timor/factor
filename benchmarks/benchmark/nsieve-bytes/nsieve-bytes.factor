@@ -1,4 +1,4 @@
-IN: benchmark.nsieve-bytes
+in: benchmark.nsieve-bytes
 USING: math math.parser sequences sequences.private kernel
 byte-arrays make io ;
 

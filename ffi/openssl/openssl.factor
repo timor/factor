@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: init kernel namespaces openssl.libcrypto openssl.libssl
 sequences ;
-IN: openssl
+in: openssl
 
 ! This code is based on http://www.rtfm.com/openssl-examples/
 

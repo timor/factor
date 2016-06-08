@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors math math.order money kernel assocs ;
-IN: taxes.usa.fica
+in: taxes.usa.fica
 
 : fica-tax-rate ( -- x ) DECIMAL: .062 ; inline
 

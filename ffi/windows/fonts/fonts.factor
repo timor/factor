@@ -1,7 +1,7 @@
 USING: assocs memoize locals kernel accessors init fonts math
 combinators system-info.windows windows.errors windows.types
 windows.gdi32 ;
-IN: windows.fonts
+in: windows.fonts
 
 MEMO: windows-fonts ( -- fonts )
     windows-major 6 >=

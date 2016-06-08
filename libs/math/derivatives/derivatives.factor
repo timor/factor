@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.functions math.derivatives.syntax
     math.order math.parser summary accessors make combinators ;
-IN: math.derivatives
+in: math.derivatives
 
 ERROR: undefined-derivative point word ;
 M: undefined-derivative summary

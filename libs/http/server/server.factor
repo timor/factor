@@ -31,7 +31,7 @@ mime.types
 math.order
 xml.writer
 vocabs ;
-IN: http.server
+in: http.server
 
 GENERIC: write-response ( response -- ) ;
 

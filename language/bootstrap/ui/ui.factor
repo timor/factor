@@ -1,6 +1,6 @@
 USING: alien namespaces system combinators kernel sequences
 vocabs ;
-IN: bootstrap.ui
+in: bootstrap.ui
 
 "bootstrap.math" require
 "bootstrap.compiler" require

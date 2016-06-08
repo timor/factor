@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: math.parser http accessors kernel xml.syntax xml.writer
 io io.streams.string io.encodings.utf8 ;
-IN: http.server.responses
+in: http.server.responses
 
 : <content> ( body content-type -- response )
     <response>

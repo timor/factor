@@ -1,5 +1,5 @@
 USING: kernel math math.constants sequences units ;
-IN: units.si
+in: units.si
 
 ! SI Conversions
 ! http://physics.nist.gov/cuu/Units/

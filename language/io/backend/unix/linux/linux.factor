@@ -3,7 +3,7 @@
 USING: kernel system namespaces io.files.unix io.backend
 io.backend.unix io.backend.unix.multiplexers
 io.backend.unix.multiplexers.epoll init ;
-IN: io.backend.unix.linux
+in: io.backend.unix.linux
 
 M: linux init-io ( -- )
     <epoll-mx> mx set-global ;

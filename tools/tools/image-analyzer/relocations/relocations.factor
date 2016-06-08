@@ -1,6 +1,6 @@
 USING: alien.c-types alien.data assocs combinators.smart
 compiler.constants kernel layouts math sequences vm ;
-IN: tools.image-analyzer.relocations
+in: tools.image-analyzer.relocations
 
 CONSTANT: rel-params {
     { 9 1 }

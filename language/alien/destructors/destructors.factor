@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors destructors effects functors generalizations
 kernel parser sequences ;
-IN: alien.destructors
+in: alien.destructors
 
 TUPLE: alien-destructor alien ;
 

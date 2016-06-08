@@ -2,7 +2,7 @@ USING: compiler.test compiler.units tools.test kernel kernel.private
 sequences.private math.private math combinators strings alien
 arrays memory vocabs parser eval quotations compiler.errors
 definitions generic.single ;
-IN: compiler.tests.simple
+in: compiler.tests.simple
 
 ! Test empty word
 [ ] [ [ ] compile-call ] unit-test

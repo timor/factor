@@ -1,5 +1,5 @@
 USING: cpu.x86.assembler.operands.private help.markup help.syntax math ;
-IN: cpu.x86.assembler.operands
+in: cpu.x86.assembler.operands
 
 HELP: indirect
 { $class-description "Tuple that represents an indirect addressing operand. It has the following slots:"

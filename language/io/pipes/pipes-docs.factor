@@ -1,5 +1,5 @@
 USING: help.markup help.syntax continuations destructors io ;
-IN: io.pipes
+in: io.pipes
 
 HELP: pipe
 { $class-description "A low-level pipe. Instances are created by calling " { $link (pipe) } " and closed by calling " { $link dispose } "." } ;

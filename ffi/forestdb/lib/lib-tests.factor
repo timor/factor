@@ -7,7 +7,7 @@ forestdb.ffi forestdb.utils fry generalizations io.directories
 io.encodings.string io.encodings.utf8 io.files.temp io.pathnames
 kernel layouts libc make math math.parser math.ranges multiline
 namespaces sequences system tools.test ;
-IN: forestdb.lib
+in: forestdb.lib
 
 ! Get/set by key/value
 { "val123" } [

@@ -1,6 +1,6 @@
 USING: help.markup help.syntax memory system tools.dispatch
 tools.memory quotations vm ;
-IN: tools.time
+in: tools.time
 
 ARTICLE: "timing" "Timing code and collecting statistics"
 "You can time the execution of a quotation in the listener:"

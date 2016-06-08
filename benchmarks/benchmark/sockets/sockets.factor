@@ -4,7 +4,7 @@ USING: accessors kernel math threads io io.sockets
 io.encodings.ascii io.streams.duplex debugger tools.time
 prettyprint concurrency.count-downs concurrency.promises
 namespaces arrays continuations destructors ;
-IN: benchmark.sockets
+in: benchmark.sockets
 
 SYMBOL: counter
 SYMBOL: server-promise

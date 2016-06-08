@@ -1,7 +1,7 @@
 USING: accessors arrays ascii io io.streams.string kernel make
 math math.vectors random sequences sequences.extras strings
 tools.test vectors vocabs ;
-IN: sequences.extras.tests
+in: sequences.extras.tests
 
 { { "a" "b" "c" "d" "ab" "bc" "cd" "abc" "bcd" "abcd" } } [ "abcd" all-subseqs ] unit-test
 

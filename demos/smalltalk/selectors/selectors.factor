@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays combinators effects generic generic.standard
 kernel sequences words lexer ;
-IN: smalltalk.selectors
+in: smalltalk.selectors
 
 SYMBOLS: unary binary keyword ;
 

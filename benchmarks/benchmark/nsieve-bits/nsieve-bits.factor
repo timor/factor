@@ -1,6 +1,6 @@
 USING: math math.parser sequences sequences.private kernel
 bit-arrays make io math.ranges multiline fry locals ;
-IN: benchmark.nsieve-bits
+in: benchmark.nsieve-bits
 
 : clear-flags ( step i seq -- )
     2dup length >= [

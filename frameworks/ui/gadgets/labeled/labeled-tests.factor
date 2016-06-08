@@ -1,6 +1,6 @@
 USING: accessors sequences tools.test ui.gadgets
 ui.gadgets.labeled ;
-IN: ui.gadgets.labeled.tests
+in: ui.gadgets.labeled.tests
 
 { t } [
     <gadget> "Hey" <labeled-gadget>

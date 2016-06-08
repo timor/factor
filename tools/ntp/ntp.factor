@@ -5,7 +5,7 @@ USING: accessors arrays calendar combinators destructors
 fry formatting kernel io io.sockets math pack random
 sequences ;
 
-IN: ntp
+in: ntp
 
 <PRIVATE
 

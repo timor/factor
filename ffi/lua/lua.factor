@@ -3,7 +3,7 @@
 USING: accessors alien alien.accessors alien.c-types alien.libraries
 alien.syntax classes.struct combinators io.encodings.ascii kernel
 locals math system ;
-IN: lua
+in: lua
 
 << "liblua5.1" {
     { [ os windows? ] [ "lua5.1.dll" ] }

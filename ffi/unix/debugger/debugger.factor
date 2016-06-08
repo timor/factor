@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors debugger io kernel libc prettyprint unix ;
-IN: unix.debugger
+in: unix.debugger
 
 M: libc-error error.
     "Unix system call failed:" print

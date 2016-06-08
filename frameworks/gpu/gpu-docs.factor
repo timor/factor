@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: help.markup help.syntax ui.gadgets.worlds ;
-IN: gpu
+in: gpu
 
 HELP: finish-gpu
 { $description "Waits for all outstanding GPU commands in the current graphics context to complete." } ;

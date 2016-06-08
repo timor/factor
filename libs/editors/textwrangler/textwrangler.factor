@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: editors io.standard-paths kernel make math.parser
 namespaces sequences ;
-IN: editors.textwrangler
+in: editors.textwrangler
 
 ! TextWrangler ships with a program called ``edit`` if you don't download
 ! it from the App Store. Since the App Store version is lacking ``edit``,

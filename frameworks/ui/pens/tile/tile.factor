@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel accessors math.vectors ui.images opengl fry
 combinators ui.pens ;
-IN: ui.pens.tile
+in: ui.pens.tile
 
 ! Tile pen
 TUPLE: tile-pen left center right background foreground ;

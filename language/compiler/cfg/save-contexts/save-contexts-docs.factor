@@ -1,6 +1,6 @@
 USING: compiler.cfg compiler.cfg.instructions help.markup help.syntax
 kernel math memory sequences ;
-IN: compiler.cfg.save-contexts
+in: compiler.cfg.save-contexts
 
 HELP: insert-save-contexts
 { $values { "cfg" cfg } }

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: editors io.pathnames io.standard-paths kernel make
 math.parser namespaces sequences system ;
-IN: editors.atom
+in: editors.atom
 
 SINGLETON: atom-editor
 atom-editor editor-class set-global

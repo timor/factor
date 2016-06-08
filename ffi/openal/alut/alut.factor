@@ -6,7 +6,7 @@ shuffle openal openal.alut.backend alien.libraries generalizations
 specialized-arrays alien.destructors ;
 FROM: alien.c-types => float short ;
 SPECIALIZED-ARRAY: uint
-IN: openal.alut
+in: openal.alut
 
 << "alut" {
         { [ os windows? ]  [ "alut.dll" ] }

@@ -1,4 +1,4 @@
-IN: benchmark.euler150
+in: benchmark.euler150
 USING: kernel project-euler.150 ;
 
 : euler150-benchmark ( -- )

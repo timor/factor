@@ -1,5 +1,5 @@
 USING: ;
-IN: windows.directx.d3dx9
+in: windows.directx.d3dx9
 
 CONSTANT: D3DXERR_CANNOTMODIFYINDEXBUFFER     0x88760B55
 CONSTANT: D3DXERR_INVALIDMESH                 0x88760B56

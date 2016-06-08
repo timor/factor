@@ -1,4 +1,4 @@
-IN: mime.types.tests
+in: mime.types.tests
 USING: mime.types tools.test ;
 
 { "application/postscript" } [ "foo.ps" mime-type ] unit-test

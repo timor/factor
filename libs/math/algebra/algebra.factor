@@ -1,7 +1,7 @@
 ! Copyright (c) 2007 Samuel Tardieu.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.functions sequences fry ;
-IN: math.algebra
+in: math.algebra
 
 : chinese-remainder ( aseq nseq -- x )
     dup product [

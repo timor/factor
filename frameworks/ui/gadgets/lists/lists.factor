@@ -5,7 +5,7 @@ math.rectangles math.vectors models namespaces opengl sequences
 ui.commands ui.gadgets ui.gadgets.labels ui.gadgets.packs
 ui.gadgets.presentations ui.gadgets.scrollers
 ui.gadgets.viewports ui.gestures ui.render ui.theme ;
-IN: ui.gadgets.lists
+in: ui.gadgets.lists
 
 TUPLE: list < pack index presenter color hook ;
 

@@ -9,7 +9,7 @@ compiler.units compiler.utilities continuations definitions fry
 generic generic.single io kernel macros make namespaces
 sequences sets stack-checker.dependencies stack-checker.errors
 stack-checker.inlining vocabs.loader words ;
-IN: compiler
+in: compiler
 
 SYMBOL: compiled
 

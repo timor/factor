@@ -6,7 +6,7 @@ combinators.short-circuit io.backend io.files.info
 io.files.types kernel libc literals math math.bitwise
 sequences specialized-arrays strings system unix unix.ffi
 unix.groups unix.stat unix.time unix.users vocabs ;
-IN: io.files.info.unix
+in: io.files.info.unix
 SPECIALIZED-ARRAY: timeval
 
 TUPLE: unix-file-system-info < file-system-info-tuple

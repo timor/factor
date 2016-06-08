@@ -6,7 +6,7 @@ colors.constants colors.hex combinators concurrency.combinators
 formatting fry hashtables http.client io io.styles json.reader
 kernel make math math.parser sequences ui urls vocabs ;
 
-IN: hacker-news
+in: hacker-news
 
 <PRIVATE
 

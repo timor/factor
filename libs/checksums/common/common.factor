@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.bitwise strings io.binary namespaces
 make grouping byte-arrays ;
-IN: checksums.common
+in: checksums.common
 
 SYMBOL: bytes-read
 

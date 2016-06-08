@@ -1,4 +1,4 @@
-IN: vocabs.files.tests
+in: vocabs.files.tests
 USING: tools.test vocabs.files vocabs arrays grouping ;
 
 { t } [

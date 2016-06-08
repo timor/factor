@@ -1,5 +1,5 @@
 USING: vocabs sequences system combinators ;
-IN: bootstrap.tools
+in: bootstrap.tools
 
 {
     "editors"

@@ -1,5 +1,5 @@
 USING: checksums checksums.crc32 io.encodings.ascii io.files kernel math ;
-IN: benchmark.crc32
+in: benchmark.crc32
 
 : crc32-benchmark ( -- )
     1,000 [

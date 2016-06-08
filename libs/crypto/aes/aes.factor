@@ -5,7 +5,7 @@ USING: accessors arrays assocs combinators crypto.aes.utils
 generalizations grouping kernel locals math math.bitwise
 math.ranges memoize namespaces sequences sequences.private
 sequences.unrolled ;
-IN: crypto.aes
+in: crypto.aes
 
 CONSTANT: AES_BLOCK_SIZE 16
 ! FIPS-197 AES

@@ -3,7 +3,7 @@
 USING: accessors kernel kernel.private math math.private
 math.functions arrays math.functions.private sequences
 sequences.private parser ;
-IN: math.complex
+in: math.complex
 
 <PRIVATE
 
@@ -33,7 +33,7 @@ M: complex sqrt >polar [ sqrt ] [ 2.0 / ] bi* polar> ; inline
 
 PRIVATE>
 
-IN: syntax
+in: syntax
 
 ERROR: malformed-complex obj ;
 

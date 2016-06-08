@@ -3,7 +3,7 @@
 USING: accessors arrays assocs combinators
 combinators.short-circuit kernel make math math.order namespaces
 parser prettyprint.custom random ;
-IN: trees
+in: trees
 
 TUPLE: tree root { count integer } ;
 

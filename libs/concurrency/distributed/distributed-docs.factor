@@ -1,5 +1,5 @@
 USING: help.markup help.syntax concurrency.messaging threads ;
-IN: concurrency.distributed
+in: concurrency.distributed
 
 ARTICLE: "concurrency.distributed.example" "Distributed Concurrency Example"
 "In this example the Factor instance associated with port 9000 will run "

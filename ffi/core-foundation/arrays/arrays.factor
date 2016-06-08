@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax core-foundation fry kernel
 sequences ;
-IN: core-foundation.arrays
+in: core-foundation.arrays
 
 TYPEDEF: void* CFArrayRef
 

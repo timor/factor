@@ -1,6 +1,6 @@
 USING: help.markup help.syntax words alien.c-types assocs
 kernel combinators combinators.private tools.deploy.config ;
-IN: tools.deploy
+in: tools.deploy
 
 ARTICLE: "prepare-deploy" "Preparing to deploy an application"
 "In order to deploy an application as a stand-alone image, the application's vocabulary must first be given a " { $link POSTPONE: MAIN: } " hook. Then, a " { $emphasis "deployment configuration" } " must be created."

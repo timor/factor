@@ -2,7 +2,7 @@ USING: alien.c-types alien.syntax classes.struct math
 windows.com windows.com.syntax windows.directx
 windows.directx.d3d9 windows.directx.d3dx9core
 windows.directx.d3dx9math windows.types ;
-IN: windows.directx.d3dx9shader
+in: windows.directx.d3dx9shader
 
 LIBRARY: d3dx9
 

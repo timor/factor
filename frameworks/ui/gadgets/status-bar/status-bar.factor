@@ -4,7 +4,7 @@ USING: accessors calendar colors.constants fonts kernel models
 models.arrow models.delay sequences summary ui
 ui.gadgets.borders ui.gadgets.labels ui.gadgets.tracks
 ui.gadgets.worlds ui.pens.solid ui.private ui.theme ;
-IN: ui.gadgets.status-bar
+in: ui.gadgets.status-bar
 
 : status-bar-font ( -- font )
     sans-serif-font clone

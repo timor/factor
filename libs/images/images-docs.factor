@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math ;
-IN: images
+in: images
 
 HELP: rowstride
 { $values { "image" image } { "n" integer } }

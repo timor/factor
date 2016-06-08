@@ -1,6 +1,6 @@
 USING: kernel arrays math.vectors sequences math ;
 
-IN: math.points
+in: math.points
 
 <PRIVATE
 

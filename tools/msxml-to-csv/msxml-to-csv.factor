@@ -1,6 +1,6 @@
 USING: io io.files sequences xml xml.traversal
 io.encodings.ascii kernel ;
-IN: msxml-to-csv
+in: msxml-to-csv
 
 : (msxml>csv) ( xml -- table )
     "Table" tag-named

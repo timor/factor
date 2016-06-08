@@ -3,7 +3,7 @@
 
 USING: help.markup help.syntax kernel math math.functions sequences ;
 
-IN: math.extras
+in: math.extras
 
 HELP: bernoulli
 { $values { "p" integer } { "n" rational } }

@@ -1,6 +1,6 @@
 USING: kernel tools.test parser vocabs help.syntax namespaces
 eval accessors ;
-IN: help.syntax.tests
+in: help.syntax.tests
 
 [
     [ "foobar" ] [

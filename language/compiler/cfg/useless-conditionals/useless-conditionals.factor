@@ -3,7 +3,7 @@
 USING: accessors combinators.short-circuit compiler.cfg
 compiler.cfg.instructions compiler.cfg.rpo
 compiler.cfg.utilities kernel sequences vectors ;
-IN: compiler.cfg.useless-conditionals
+in: compiler.cfg.useless-conditionals
 
 : delete-conditional? ( bb -- ? )
     {

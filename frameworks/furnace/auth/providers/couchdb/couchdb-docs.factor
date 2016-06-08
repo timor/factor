@@ -1,5 +1,5 @@
 USING: help.syntax help.markup help.vocabs furnace.auth.providers ;
-IN: furnace.auth.providers.couchdb
+in: furnace.auth.providers.couchdb
 
 HELP: couchdb-auth-provider
 {

@@ -3,7 +3,7 @@
 USING: kernel prettyprint io io.styles colors.constants compiler.units
 fry debugger sequences locals.rewrite.closures smalltalk.ast
 smalltalk.eval smalltalk.printer smalltalk.listener ;
-IN: smalltalk.listener
+in: smalltalk.listener
 
 : eval-interactively ( string -- )
     '[

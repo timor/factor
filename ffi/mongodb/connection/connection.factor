@@ -4,7 +4,7 @@ hashtables io.encodings.binary io.encodings.string
 io.encodings.utf8 io.sockets io.streams.duplex kernel locals
 math math.parser mongodb.cmd mongodb.msg strings
 namespaces sequences splitting ;
-IN: mongodb.connection
+in: mongodb.connection
 
 : md5-checksum ( string -- digest )
     utf8 encode md5 checksum-bytes bytes>hex-string ; inline

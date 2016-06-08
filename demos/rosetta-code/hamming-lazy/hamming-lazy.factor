@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators fry kernel lists lists.lazy locals math ;
-IN: rosetta-code.hamming-lazy
+in: rosetta-code.hamming-lazy
 
 ! http://rosettacode.org/wiki/Hamming_numbers#Factor
 

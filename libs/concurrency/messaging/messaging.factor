@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel kernel.private threads concurrency.mailboxes
 continuations namespaces assocs accessors summary fry ;
-IN: concurrency.messaging
+in: concurrency.messaging
 
 GENERIC: send ( message thread -- ) ;
 

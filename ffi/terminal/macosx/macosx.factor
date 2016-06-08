@@ -6,7 +6,7 @@ kernel math memoize scratchpad system terminal unix unix.ffi ;
 
 QUALIFIED-WITH: alien.c-types c
 
-IN: terminal.macosx
+in: terminal.macosx
 
 <PRIVATE
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: fuel.eval io.streams.string math namespaces random.data sequences
 tools.test ;
-IN: fuel.eval.tests
+in: fuel.eval.tests
 
 ! Make sure prettyprint doesn't limit output.
 

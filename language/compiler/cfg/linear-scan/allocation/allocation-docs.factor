@@ -2,7 +2,7 @@ USING: assocs compiler.cfg.instructions
 compiler.cfg.linear-scan.allocation.state
 compiler.cfg.linear-scan.live-intervals cpu.architecture hashtables
 help.markup help.syntax kernel sequences ;
-IN: compiler.cfg.linear-scan.allocation
+in: compiler.cfg.linear-scan.allocation
 
 HELP: (allocate-registers)
 { $values { "unhandled-min-heap" "stuff" } }

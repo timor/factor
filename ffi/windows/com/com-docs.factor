@@ -1,6 +1,6 @@
 USING: help.markup help.syntax io kernel math quotations
 multiline destructors ;
-IN: windows.com
+in: windows.com
 
 HELP: com-query-interface
 { $values { "interface" "Pointer to a COM interface implementing " { $snippet "IUnknown" } } { "iid" "An interface GUID (IID)" } { "interface'" "Pointer to a COM interface implementing the interface indicated by " { $snippet "iid" } } }

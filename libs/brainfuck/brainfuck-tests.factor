@@ -4,7 +4,7 @@
 USING: brainfuck io.streams.string kernel literals math
 math.parser math.ranges sequences tools.test ;
 
-IN: brainfuck
+in: brainfuck
 
 
 [ "+" run-brainfuck ] must-infer

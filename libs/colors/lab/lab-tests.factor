@@ -4,7 +4,7 @@
 USING: arrays colors kernel locals math.functions math.ranges
 sequences tools.test ;
 
-IN: colors.lab
+in: colors.lab
 
 { t } [
     0.0 1.0 0.1 <range> [| r |

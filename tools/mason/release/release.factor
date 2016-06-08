@@ -3,7 +3,7 @@
 USING: combinators mason.notify mason.release.archive
 mason.release.branch mason.release.dlls mason.release.sign
 mason.release.tidy mason.release.upload ;
-IN: mason.release
+in: mason.release
 
 : release ( -- )
     update-clean-branch

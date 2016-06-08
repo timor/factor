@@ -11,7 +11,7 @@ ui.gadgets.tracks ui.gadgets.worlds ui.gadgets.wrappers
 ui.gestures ui.images ui.operations ui.pens.solid ui.theme
 ui.theme.images ui.tools.common ui.tools.listener.history
 ui.tools.listener.popups vocabs words ;
-IN: ui.tools.listener.completion
+in: ui.tools.listener.completion
 
 ! We don't directly depend on the listener tool but we use a few slots
 SLOT: interactor

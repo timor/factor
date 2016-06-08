@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel arrays namespaces sequences continuations
 io.pools db fry db.private ;
-IN: db.pools
+in: db.pools
 
 TUPLE: db-pool < pool db ;
 

@@ -1,6 +1,6 @@
 USING: assocs debugger hashtables help.markup help.syntax
 kernel quotations sequences math ;
-IN: math.statistics
+in: math.statistics
 
 HELP: geometric-mean
 { $values { "seq" sequence } { "x" "a non-negative real number" } }

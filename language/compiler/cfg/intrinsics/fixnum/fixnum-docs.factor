@@ -1,6 +1,6 @@
 USING: compiler.cfg compiler.cfg.instructions help.markup help.syntax
 layouts math quotations words ;
-IN: compiler.cfg.intrinsics.fixnum
+in: compiler.cfg.intrinsics.fixnum
 
 HELP: fixnum*overflow
 { $values { "x" fixnum } { "y" fixnum } { "z" bignum } }

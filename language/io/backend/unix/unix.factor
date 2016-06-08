@@ -7,7 +7,7 @@ io.ports io.timeouts kernel kernel.private libc locals make math
 namespaces sequences summary system threads unix unix.ffi
 unix.stat unix.types ;
 QUALIFIED: io
-IN: io.backend.unix
+in: io.backend.unix
 
 CONSTANT: file-mode 0o0666
 

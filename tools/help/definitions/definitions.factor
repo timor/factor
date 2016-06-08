@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors definitions help help.syntax help.topics kernel
 prettyprint.backend prettyprint.custom see words ;
-IN: help.definitions
+in: help.definitions
 
 ! Definition protocol implementation
 

@@ -4,7 +4,7 @@
 USING: ascii combinators combinators.short-circuit fry kernel
 math sequences ;
 
-IN: successor
+in: successor
 
 <PRIVATE
 

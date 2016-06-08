@@ -1,7 +1,7 @@
 
 USING: kernel sequences tools.completion ;
 
-IN: benchmark.completion
+in: benchmark.completion
 
 : completion-benchmark ( -- )
     "nth" 25,000 [

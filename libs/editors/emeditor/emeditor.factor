@@ -1,6 +1,6 @@
 USING: editors io.standard-paths kernel make math.parser
 namespaces ;
-IN: editors.emeditor
+in: editors.emeditor
 
 SINGLETON: emeditor
 emeditor editor-class set-global

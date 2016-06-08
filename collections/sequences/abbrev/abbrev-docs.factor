@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Maximilian Lupke.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs help.markup help.syntax sequences ;
-IN: sequences.abbrev
+in: sequences.abbrev
 
 HELP: abbrev
 { $values

@@ -7,7 +7,7 @@ math.parser inspector urls logging combinators.short-circuit
 continuations calendar prettyprint dlists deques locals
 spider.unique-deque combinators concurrency.semaphores
 io.pathnames ;
-IN: spider
+in: spider
 
 TUPLE: spider
     base

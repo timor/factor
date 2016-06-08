@@ -1,6 +1,6 @@
 USING: arrays help.markup help.syntax math math.parser memory quotations
     sequences system tools.time ;
-IN: project-euler.ave-time
+in: project-euler.ave-time
 
 HELP: collect-benchmarks
 { $values { "quot" quotation } { "n" integer } { "seq" sequence } }

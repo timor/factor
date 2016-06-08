@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs compiler.codegen.relocation
 compiler.constants kernel make math namespaces sequences ;
-IN: compiler.codegen.labels
+in: compiler.codegen.labels
 
 ! Labels
 SYMBOL: label-table

@@ -1,6 +1,6 @@
 USING: mason.config mason.platform namespaces tools.test
 strings system ;
-IN: mason.platform.tests
+in: mason.platform.tests
 
 { t } [ platform string? ] unit-test
 

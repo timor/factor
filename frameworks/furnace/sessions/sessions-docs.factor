@@ -1,7 +1,7 @@
 USING: help.markup help.syntax io.streams.string quotations
 strings calendar serialize furnace.db words words.symbol
 kernel ;
-IN: furnace.sessions
+in: furnace.sessions
 
 HELP: <sessions>
 { $values

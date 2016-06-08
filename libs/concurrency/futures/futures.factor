@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: concurrency.promises concurrency.mailboxes kernel arrays
 continuations accessors fry ;
-IN: concurrency.futures
+in: concurrency.futures
 
 : future ( quot -- future )
     <promise> [

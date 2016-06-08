@@ -1,5 +1,5 @@
 USING: help.markup help.syntax http.server.static ;
-IN: http.server.cgi
+in: http.server.cgi
 
 HELP: enable-cgi
 { $values { "responder" file-responder } }

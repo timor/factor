@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien alien.c-types alien.libraries alien.libraries.finder
 alien.syntax classes.struct combinators kernel math system unix.types ;
-IN: curses.ffi
+in: curses.ffi
 
 << "curses" {
     { [ os windows? ]  [ "libcurses.dll" ] }

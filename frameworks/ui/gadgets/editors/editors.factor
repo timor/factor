@@ -11,7 +11,7 @@ ui.gadgets.line-support ui.gadgets.menus ui.gadgets.scrollers
 ui.theme ui.gestures ui.pens.solid ui.render ui.text
 unicode ;
 EXCLUDE: fonts => selection ;
-IN: ui.gadgets.editors
+in: ui.gadgets.editors
 
 TUPLE: editor < line-gadget
 caret-color

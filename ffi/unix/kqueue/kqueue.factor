@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax system sequences vocabs.loader words
 accessors vocabs ;
-IN: unix.kqueue
+in: unix.kqueue
 
 << "unix.kqueue." os name>> append require >>
 

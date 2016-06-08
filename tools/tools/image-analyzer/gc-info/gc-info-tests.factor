@@ -6,7 +6,7 @@ grouping io io.encodings.binary io.streams.byte-array kernel math namespaces
 random sequences sequences.generalizations
 tools.image-analyzer.gc-info tools.image-analyzer.utils tools.test vm
 vocabs words ;
-IN: tools.image-analyzer.gc-info.tests
+in: tools.image-analyzer.gc-info.tests
 QUALIFIED: cpu.x86.features.private
 QUALIFIED: crypto.aes.utils
 QUALIFIED: effects

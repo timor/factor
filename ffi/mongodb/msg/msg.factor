@@ -1,7 +1,7 @@
 USING: accessors assocs hashtables constructors kernel linked-assocs math
 sequences strings ;
 
-IN: mongodb.msg
+in: mongodb.msg
 
 CONSTANT: OP_Reply   1
 CONSTANT: OP_Message 1000

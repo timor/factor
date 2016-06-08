@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors io.backend io.files.info io.files.types
 io.pathnames kernel math namespaces system vocabs ;
-IN: io.files.links
+in: io.files.links
 
 HOOK: make-link os ( target symlink -- ) ;
 

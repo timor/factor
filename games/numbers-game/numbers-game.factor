@@ -1,5 +1,5 @@
 USING: kernel math math.parser random io ;
-IN: numbers-game
+in: numbers-game
 
 : read-number ( -- n ) readln string>number ;
 

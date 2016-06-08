@@ -1,7 +1,7 @@
 ! Copyright (C) 2013 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax classes.struct windows.types ;
-IN: windows.ntdll
+in: windows.ntdll
 
 LIBRARY: ntdll
 

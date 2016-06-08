@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays cocoa.messages cocoa.runtime combinators
 prettyprint combinators.smart ;
-IN: tools.cocoa
+in: tools.cocoa
 
 : method. ( method -- )
     [

@@ -4,7 +4,7 @@ USING: assocs combinators generalizations kernel locals math
 math.functions math.order math.vectors math.ranges sequences
 sequences.private sorting fry arrays grouping sets
 splitting.monotonic ;
-IN: math.statistics
+in: math.statistics
 
 : power-mean ( seq p -- x )
     [ '[ _ ^ ] map-sum ] [ [ length / ] [ recip ^ ] bi* ] 2bi ; inline

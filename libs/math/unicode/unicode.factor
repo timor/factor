@@ -4,7 +4,7 @@
 USING: kernel literals math math.constants math.functions
 memoize sequences sequences.extras sets sets.extras ;
 
-IN: math.unicode
+in: math.unicode
 
 CONSTANT: ½ 1/2
 CONSTANT: ¼ 1/4

@@ -7,7 +7,7 @@ compiler.cfg.optimizer compiler.cfg.utilities continuations formatting graphviz
 graphviz.notation graphviz.render io.directories kernel
 math.parser namespaces prettyprint sequences sorting splitting
 tools.annotations ;
-IN: compiler.cfg.gvn.testing
+in: compiler.cfg.gvn.testing
 
 GENERIC: expr>str ( expr -- str ) ;
 

@@ -3,7 +3,7 @@
 USING: destructors io io.encodings.binary io.files
 io.streams.limited kernel random random.private sequences
 sequences.private ;
-IN: io.streams.random
+in: io.streams.random
 
 TUPLE: random-stream ;
 

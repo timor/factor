@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.data calendar calendar.private
 classes.struct kernel math system libc unix unix.time unix.types ;
-IN: calendar.unix
+in: calendar.unix
 
 : timeval>seconds ( timeval -- seconds )
     [ sec>> ] [ usec>> 1,000,000 / ] bi + ; inline

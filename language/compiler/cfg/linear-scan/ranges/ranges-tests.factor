@@ -1,6 +1,6 @@
 USING: arrays compiler.cfg.linear-scan.ranges fry kernel sequences
 tools.test ;
-IN: compiler.cfg.linear-scan.ranges.tests
+in: compiler.cfg.linear-scan.ranges.tests
 
 ! add-new-range
 {

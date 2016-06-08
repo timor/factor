@@ -1,7 +1,7 @@
 ! Copyright (C) 2015 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel quotations strings ;
-IN: changer
+in: changer
 
 HELP: change:
 { $description "Syntax word for applying a quotation to a tuple slot." }

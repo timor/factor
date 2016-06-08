@@ -3,7 +3,7 @@
 USING: arrays combinators combinators.smart fry generalizations
 kernel macros math quotations sequences locals math.order
 sequences.generalizations sequences.private system ;
-IN: combinators.extras
+in: combinators.extras
 
 : once ( quot -- ) call ; inline
 : twice ( quot -- ) dup [ call ] dip call ; inline

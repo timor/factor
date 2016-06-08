@@ -1,7 +1,7 @@
 ! Copyright (C) 2006 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel help.markup help.syntax arrays sequences math quotations ;
-IN: lists
+in: lists
 
 ABOUT: "lists"
 

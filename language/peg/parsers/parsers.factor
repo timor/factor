@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel make math math.parser math.ranges peg
 peg.private peg.search sequences strings unicode vectors ;
-IN: peg.parsers
+in: peg.parsers
 
 TUPLE: just-parser p1 ;
 

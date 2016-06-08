@@ -3,7 +3,7 @@
 USING: alien.c-types alien.data kernel combinators
 sequences math windows.gdi32 windows.types images
 destructors accessors fry locals classes.struct ;
-IN: windows.offscreen
+in: windows.offscreen
 
 : (bitmap-info) ( dim -- BITMAPINFO )
     [

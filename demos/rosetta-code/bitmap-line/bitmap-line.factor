@@ -3,7 +3,7 @@
 USING: accessors arrays kernel locals math math.functions
 math.ranges math.vectors rosetta-code.bitmap sequences
 ui.gadgets ;
-IN: rosetta-code.bitmap-line
+in: rosetta-code.bitmap-line
 
 ! http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm
 

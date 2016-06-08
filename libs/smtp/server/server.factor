@@ -5,7 +5,7 @@ namespaces io.sockets io.sockets.secure continuations calendar
 io.encodings.ascii io.streams.duplex destructors locals
 concurrency.promises threads accessors smtp.private
 io.sockets.secure.debug io.crlf ;
-IN: smtp.server
+in: smtp.server
 
 ! Mock SMTP server for testing purposes.
 

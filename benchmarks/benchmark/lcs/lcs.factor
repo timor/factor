@@ -1,5 +1,5 @@
 USING: kernel lcs math ;
-IN: benchmark.lcs
+in: benchmark.lcs
 
 : lcs-benchmark ( -- )
     f 50,000 [ drop "sitting" "kitten" levenshtein ] times 3 assert=

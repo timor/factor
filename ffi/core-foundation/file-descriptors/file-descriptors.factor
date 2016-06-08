@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax core-foundation kernel
 literals ;
-IN: core-foundation.file-descriptors
+in: core-foundation.file-descriptors
 
 TYPEDEF: void* CFFileDescriptorRef
 TYPEDEF: int CFFileDescriptorNativeDescriptor

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays kernel lists lists.lazy math.algebra math math.functions
     math.order math.primes.lists math.ranges project-euler.common sequences ;
-IN: project-euler.134
+in: project-euler.134
 
 ! http://projecteuler.net/index.php?section=problems&id=134
 

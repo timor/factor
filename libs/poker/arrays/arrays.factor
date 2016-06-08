@@ -1,6 +1,6 @@
 ! Copyright (c) 2009 Aaron Schaefer.
 ! See http://factorcode.org/license.txt for BSD license.
-IN: poker.arrays
+in: poker.arrays
 
 ! This is a lookup table for all flush hands. A zero means that specific
 ! combination is not possible with this type of hand.

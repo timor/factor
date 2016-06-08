@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors calendar calendar.format io io.encodings.ascii
 io.servers kernel threads ;
-IN: time-server
+in: time-server
 
 : handle-time-client ( -- )
     now timestamp>rfc822 print ;

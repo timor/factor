@@ -5,7 +5,7 @@ combinators combinators.short-circuit fry kernel kernel.private
 layouts macros math math.bits sequences sequences.private
 specialized-arrays words ;
 SPECIALIZED-ARRAY: uchar
-IN: math.bitwise
+in: math.bitwise
 
 ! utilities
 : clear-bit ( x n -- y ) 2^ bitnot bitand ; inline

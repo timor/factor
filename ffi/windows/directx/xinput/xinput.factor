@@ -1,6 +1,6 @@
 USING: alien.c-types alien.syntax classes.struct windows.directx
 windows.kernel32 windows.types ;
-IN: windows.directx.xinput
+in: windows.directx.xinput
 
 LIBRARY: xinput
 

@@ -7,7 +7,7 @@ kernel locals mason.common namespaces parser.notes sequences
 sets sorting source-files.errors system tools.errors tools.test
 tools.time vocabs vocabs.hierarchy.private vocabs.loader
 vocabs.refresh words ;
-IN: mason.test
+in: mason.test
 
 : vocab-heading. ( vocab -- )
     nl

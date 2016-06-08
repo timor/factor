@@ -3,7 +3,7 @@ windows.com.syntax windows.directx windows.directx.d3d9
 windows.directx.d3dx9core windows.directx.d3dx9math
 windows.directx.d3dx9mesh windows.directx.d3dx9xof
 windows.types ;
-IN: windows.directx.d3dx9anim
+in: windows.directx.d3dx9anim
 
 LIBRARY: d3dx9
 

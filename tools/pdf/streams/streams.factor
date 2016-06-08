@@ -4,7 +4,7 @@
 USING: accessors arrays assocs destructors fry io io.styles
 kernel pdf.layout sequences splitting strings ;
 
-IN: pdf.streams
+in: pdf.streams
 
 <PRIVATE
 

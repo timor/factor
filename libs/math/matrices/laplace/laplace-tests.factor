@@ -1,7 +1,7 @@
 ! Copyright (C) 2013 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: tools.test kernel ;
-IN: math.matrices.laplace
+in: math.matrices.laplace
 
 { -2 } [ { { 1 2 } { 3 4 } } determinant ] unit-test
 

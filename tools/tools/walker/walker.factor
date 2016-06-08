@@ -6,7 +6,7 @@ concurrency.messaging quotations kernel.private words
 sequences.private assocs models models.arrow arrays accessors
 generic generic.standard definitions make sbufs
 tools.continuations parser tools.annotations fry ;
-IN: tools.walker
+in: tools.walker
 
 SYMBOL: show-walker-hook ! ( status continuation thread -- )
 
@@ -165,7 +165,7 @@ SYMBOL: +stopped+
     '[ [ _ [ [ break ] when ] ] dip 3append ] annotate ;
 
 ! For convenience
-IN: syntax
+in: syntax
 
 SYNTAX: B \ break suffix! ;
 

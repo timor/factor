@@ -1,7 +1,7 @@
 ! Copyright (c) 2008 Reginald Keith Ford II.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.function-tools math.points math.vectors ;
-IN: math.secant-method
+in: math.secant-method
 
 ! Secant method of approximating roots
 

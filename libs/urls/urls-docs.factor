@@ -1,7 +1,7 @@
 USING: assocs hashtables help.markup help.syntax
 io.streams.string io.files io.pathnames kernel strings present
 math ;
-IN: urls
+in: urls
 
 HELP: url
 { $class-description "The class of URLs. The slots correspond to the standard components of a URL." } ;

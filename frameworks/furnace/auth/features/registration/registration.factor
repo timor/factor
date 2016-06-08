@@ -4,7 +4,7 @@ USING: accessors assocs kernel namespaces validators html.forms urls
 http.server.dispatchers
 furnace.auth furnace.auth.providers furnace.actions
 furnace.redirection ;
-IN: furnace.auth.features.registration
+in: furnace.auth.features.registration
 
 : <register-action> ( -- action )
     <page-action>

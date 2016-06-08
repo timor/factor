@@ -1,4 +1,4 @@
-IN: html.elements.tests
+in: html.elements.tests
 USING: tools.test html.elements io.streams.string ;
 
 { "<a href='h&amp;o'>" }

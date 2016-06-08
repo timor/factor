@@ -4,7 +4,7 @@ USING: accessors ascii assocs byte-arrays combinators fry
 hashtables http http.parsers io io.encodings.binary io.files
 io.files.temp io.files.unique io.streams.string kernel math
 quoting sequences splitting ;
-IN: mime.multipart
+in: mime.multipart
 
 CONSTANT: buffer-size 65536
 CONSTANT: separator-prefix "\r\n--"

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel lists math sequences
 strings ;
-IN: lists.lazy
+in: lists.lazy
 
 ABOUT: "lists.lazy"
 

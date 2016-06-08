@@ -4,7 +4,7 @@ USING: accessors byte-arrays byte-vectors io io.encodings
 io.streams.byte-array io.streams.string kernel locals
 sbufs sequences io.private io.encodings.ascii
 io.encodings.binary io.encodings.private io.encodings.utf8 ;
-IN: io.encodings.string
+in: io.encodings.string
 
 :: decode ( byte-array encoding -- string )
     encoding binary eq? [ byte-array ] [

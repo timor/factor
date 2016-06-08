@@ -4,7 +4,7 @@ USING: accessors assocs combinators destructors fry html io
 io.backend io.pathnames io.styles kernel macros make math
 math.order math.parser namespaces sequences strings words
 splitting xml xml.syntax ;
-IN: html.streams
+in: html.streams
 
 GENERIC: url-of ( object -- url ) ;
 

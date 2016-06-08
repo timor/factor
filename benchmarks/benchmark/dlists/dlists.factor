@@ -1,7 +1,7 @@
 ! Copyright (C) 2012 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license.
 USING: deques dlists kernel math sequences ;
-IN: benchmark.dlists
+in: benchmark.dlists
 
 : dlists-benchmark ( -- )
     5,000 iota [

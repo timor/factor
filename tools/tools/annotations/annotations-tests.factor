@@ -1,7 +1,7 @@
 USING: destructors eval io io.streams.string kernel math memory
 namespaces parser sequences strings tools.annotations
 tools.test tools.time ;
-IN: tools.annotations.tests
+in: tools.annotations.tests
 
 : foo ( -- ) ;
 \ foo watch

@@ -7,7 +7,7 @@ USING: alien.c-types io kernel math math.functions math.parser
 math.vectors sequences sequences.private specialized-arrays
 typed locals ;
 SPECIALIZED-ARRAY: double
-IN: benchmark.spectral-norm
+in: benchmark.spectral-norm
 
 :: inner-loop ( u n quot -- seq )
     n iota [| i |

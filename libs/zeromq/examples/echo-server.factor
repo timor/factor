@@ -3,7 +3,7 @@
 
 USING: destructors io kernel strings zeromq zeromq.ffi ;
 
-IN: zeromq.examples.echoserver
+in: zeromq.examples.echoserver
 
 : echo-server ( -- )
     [

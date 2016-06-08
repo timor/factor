@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs calendar fry kernel locals parser
 sequences vocabs words memoize ;
-IN: calendar.holidays
+in: calendar.holidays
 
 SINGLETONS: all world commonwealth-of-nations ;
 

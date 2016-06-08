@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math sequences ;
-IN: compiler.tree.propagation.copy
+in: compiler.tree.propagation.copy
 
 HELP: compute-phi-equiv
 { $values { "inputs" sequence } { "outputs" sequence } }

@@ -4,7 +4,7 @@
 USING: colors colors.hex grouping kernel lexer math math.parser
 regexp.classes sequences splitting ;
 
-IN: colors.flex-hex
+in: colors.flex-hex
 
 <PRIVATE
 

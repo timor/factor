@@ -3,7 +3,7 @@
 USING: accessors xmode.tokens xmode.keyword-map kernel
 sequences vectors assocs strings memoize unicode
 regexp ;
-IN: xmode.rules
+in: xmode.rules
 
 TUPLE: string-matcher string ignore-case? ;
 

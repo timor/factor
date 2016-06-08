@@ -1,6 +1,6 @@
 USING: compiler.cfg compiler.cfg.linearization compiler.cfg.rpo
 compiler.codegen help.markup help.syntax kernel macros math sequences ;
-IN: compiler.cfg.linearization
+in: compiler.cfg.linearization
 
 HELP: linearization-order
 { $values

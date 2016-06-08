@@ -1,5 +1,5 @@
 USING: images.bitmap images.testing kernel sequences ;
-IN: images.bitmap.tests
+in: images.bitmap.tests
 
 ! "vocab:images/testing/bmp/1bit.bmp" bmp-image decode-test
 ! "vocab:images/testing/bmp/rgb_4bit.bmp" bmp-image decode-test

@@ -1,6 +1,6 @@
 USING: compiler.cfg compiler.cfg.instructions help.markup help.syntax kernel
 layouts math sequences slots.private ;
-IN: compiler.cfg.gc-checks
+in: compiler.cfg.gc-checks
 
 <PRIVATE
 

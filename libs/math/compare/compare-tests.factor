@@ -1,7 +1,7 @@
 USING: kernel math math.compare math.functions sequences
 tools.test ;
 
-IN: math.compare.tests
+in: math.compare.tests
 
 { -1 } [ -1 5 absmin ] unit-test
 { -1 } [ -1 -5 absmin ] unit-test

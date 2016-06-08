@@ -4,7 +4,7 @@ USING: alien.c-types alien.syntax classes.struct colors
 io.encodings.utf16n io.encodings.utf8 kernel math math.bitwise
 math.vectors sequences ;
 FROM: alien.c-types => float short ;
-IN: windows.types
+in: windows.types
 
 TYPEDEF: char                CHAR
 TYPEDEF: uchar               UCHAR

@@ -4,7 +4,7 @@ USING: combinators combinators.short-circuit fry kernel locals
 math math.bitwise math.functions math.order math.primes.erato
 math.primes.erato.private math.primes.miller-rabin math.ranges
 literals random sequences sets vectors ;
-IN: math.primes
+in: math.primes
 
 <PRIVATE
 

@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-IN: help.home
+in: help.home
 
 ARTICLE: "help.home" "Factor documentation"
 { $content "handbook" }

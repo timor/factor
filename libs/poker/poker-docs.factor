@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math sequences strings ;
-IN: poker
+in: poker
 
 HELP: best-holdem-hand
 { $values { "hand" sequence } { "n" integer } { "cards" sequence } }

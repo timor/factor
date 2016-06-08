@@ -1,7 +1,7 @@
 USING: accessors arrays io kernel math namespaces splitting
 prettyprint sequences sorting vectors words inverse summary
 shuffle math.functions sets ;
-IN: units
+in: units
 
 TUPLE: dimensioned value top bot ;
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors compiler.tree kernel math math.order namespaces
 sequences ;
-IN: compiler.tree.normalization.introductions
+in: compiler.tree.normalization.introductions
 
 SYMBOL: introductions
 

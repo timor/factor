@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: classes help.markup help.syntax kernel math ;
-IN: memory.pools
+in: memory.pools
 
 HELP: <pool>
 { $values

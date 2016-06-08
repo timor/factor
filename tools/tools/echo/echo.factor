@@ -3,7 +3,7 @@
 
 USING: command-line io kernel namespaces sequences ;
 
-IN: tools.echo
+in: tools.echo
 
 : -n? ( args -- ? args' )
     [ first "-n" = ] keep over [ rest ] when ;

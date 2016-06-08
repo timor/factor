@@ -5,7 +5,7 @@ USING: assocs combinators combinators.short-circuit formatting
 grouping hashtables io kernel make math math.parser sequences
 splitting strings unicode ;
 
-IN: txon
+in: txon
 
 <PRIVATE
 

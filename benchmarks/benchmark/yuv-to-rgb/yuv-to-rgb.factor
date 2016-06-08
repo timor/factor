@@ -4,7 +4,7 @@ USING: alien.accessors alien.c-types alien.syntax byte-arrays
 destructors generalizations kernel libc locals math math.order
 sequences sequences.private classes.struct accessors alien.data
 typed ;
-IN: benchmark.yuv-to-rgb
+in: benchmark.yuv-to-rgb
 
 STRUCT: yuv-buffer
     { y_width int }

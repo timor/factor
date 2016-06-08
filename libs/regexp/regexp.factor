@@ -4,7 +4,7 @@ USING: accessors combinators kernel kernel.private math sequences
 sequences.private strings sets assocs make lexer namespaces parser
 arrays fry locals regexp.parser splitting sorting regexp.ast
 regexp.negation regexp.compiler compiler.units words math.ranges ;
-IN: regexp
+in: regexp
 
 TUPLE: regexp
     { raw read-only }

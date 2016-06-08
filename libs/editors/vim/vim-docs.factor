@@ -1,6 +1,6 @@
 USING: definitions editors help help.markup help.syntax
 io io.files io.pathnames words ;
-IN: editors.vim
+in: editors.vim
 
 ABOUT: "editors.vim"
 

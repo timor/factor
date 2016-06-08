@@ -2,7 +2,7 @@
 USING: accessors arrays bit-arrays classes
 classes.tuple.private fry kernel locals math parser
 sequences sequences.private vectors words ;
-IN: memory.pools
+in: memory.pools
 
 TUPLE: pool
     prototype

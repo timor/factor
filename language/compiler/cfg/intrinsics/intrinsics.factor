@@ -21,7 +21,7 @@ QUALIFIED: math.libm
 QUALIFIED: math.private
 QUALIFIED: slots.private
 QUALIFIED: strings.private
-IN: compiler.cfg.intrinsics
+in: compiler.cfg.intrinsics
 
 ERROR: inline-intrinsics-not-supported word quot ;
 

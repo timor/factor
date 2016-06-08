@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs kernel namespaces sequences
 stack-checker.visitor vectors ;
-IN: compiler.tree
+in: compiler.tree
 
 TUPLE: node < identity-tuple ;
 

@@ -4,7 +4,7 @@ USING: accessors alien.c-types alien.syntax byte-arrays io
 io.encodings.string io.encodings.utf8 io.streams.byte-array
 libc kernel sequences splitting strings system system-info unix
 unix.linux.proc math ;
-IN: system-info.linux
+in: system-info.linux
 
 FUNCTION-ALIAS: (uname)
     int uname ( c-string buf )

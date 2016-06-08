@@ -7,7 +7,7 @@ USE: compiler.tree.escape-analysis.recursive
 USE: compiler.tree.escape-analysis.branches
 USE: compiler.tree.escape-analysis.simple
 
-IN: compiler.tree.escape-analysis
+in: compiler.tree.escape-analysis
 
 : escape-analysis ( nodes -- nodes )
     init-escaping-values

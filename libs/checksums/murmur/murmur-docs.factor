@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-IN: checksums.murmur
+in: checksums.murmur
 
 HELP: murmur3-32
 { $class-description "MurmurHash3 32-bit checksum algorithm." } ;

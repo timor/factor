@@ -1,6 +1,6 @@
 USING: help.markup help.syntax assocs strings logging
 logging.analysis smtp ;
-IN: logging.insomniac
+in: logging.insomniac
 
 HELP: insomniac-sender
 { $var-description "The originating e-mail address for mailing log reports. Must be set before " { $vocab-link "logging.insomniac" } " is used." } ;

@@ -1,6 +1,6 @@
 USING: accessors http.client http.server io.servers
 io.sockets.secure io.sockets.secure.openssl kernel tools.test ;
-IN: io.sockets.secure.openssl.tests
+in: io.sockets.secure.openssl.tests
 
 { 200 } [ "https://www.google.se" http-get drop code>> ] unit-test
 

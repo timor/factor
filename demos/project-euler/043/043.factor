@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators.short-circuit kernel math math.functions math.combinatorics
     math.ranges project-euler.common sequences sets sorting ;
-IN: project-euler.043
+in: project-euler.043
 
 ! http://projecteuler.net/index.php?section=problems&id=43
 

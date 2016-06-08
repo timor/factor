@@ -1,5 +1,5 @@
 USING: help.markup help.syntax byte-vectors alien byte-arrays classes.struct ;
-IN: specialized-vectors
+in: specialized-vectors
 
 HELP: SPECIALIZED-VECTOR:
 { $syntax "SPECIALIZED-VECTOR: type" }

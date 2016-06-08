@@ -7,7 +7,7 @@ io.encodings.string io.encodings.utf8 io.streams.byte-array
 io.streams.string kernel math math.bitwise math.order namespaces
 sequences strings ;
 
-IN: msgpack
+in: msgpack
 
 DEFER: read-msgpack
 

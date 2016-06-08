@@ -4,7 +4,7 @@ audio.chunked-file classes.struct combinators
 combinators.short-circuit endian io io.binary
 io.encodings.binary io.files kernel locals math sequences
 audio.loader ;
-IN: audio.aiff
+in: audio.aiff
 
 CONSTANT: FORM-MAGIC "FORM"
 CONSTANT: AIFF-MAGIC "AIFF"

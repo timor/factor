@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays io.directories io.directories.hierarchy io.files
 kernel mason.common mason.config mason.platform namespaces ;
-IN: mason.cleanup
+in: mason.cleanup
 
 : compress ( filename -- )
     dup exists? [

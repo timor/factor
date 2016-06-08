@@ -4,7 +4,7 @@
 USING: accessors ascii assocs csv io.encodings.utf8 io.files
 kernel math.parser sequences splitting ;
 
-IN: machine-learning.data-sets
+in: machine-learning.data-sets
 
 TUPLE: data-set data target target-names description
 feature-names ;

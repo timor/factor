@@ -3,7 +3,7 @@
 USING: arrays assocs byte-arrays hash-sets hashtables calendar
 help.markup help.syntax kernel linked-assocs math sequences sets
 strings yaml.ffi yaml.config yaml.conversion ;
-IN: yaml
+in: yaml
 
 HELP: >yaml
 { $values

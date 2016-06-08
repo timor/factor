@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors ui.gadgets.panes ui.gadgets.borders ui io io.styles ;
-IN: hello-unicode
+in: hello-unicode
 
 : <hello-gadget> ( -- gadget )
     [

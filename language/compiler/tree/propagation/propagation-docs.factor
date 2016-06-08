@@ -1,5 +1,5 @@
 USING: help.markup help.syntax literals multiline ;
-IN: compiler.tree.propagation
+in: compiler.tree.propagation
 
 <<
 STRING: propagate-ex

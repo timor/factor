@@ -3,7 +3,7 @@
 USING: kernel tools.test accessors arrays
        irc.messages.parser irc.messages ;
 EXCLUDE: sequences => join ;
-IN: irc.messages.tests
+in: irc.messages.tests
 
 
 ! { "someuser" } [ "someuser!n=user@some.where" parse-name ] unit-test

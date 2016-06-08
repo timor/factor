@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: arrays calendar help.markup help.syntax kernel math
 quotations threads words ;
-IN: tools.profiler.sampling
+in: tools.profiler.sampling
 
 { cross-section flat top-down top-down-max-depth profile profile. } related-words
 { cross-section* flat* top-down* top-down-max-depth* most-recent-profile-data } related-words

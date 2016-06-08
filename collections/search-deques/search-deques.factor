@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs deques kernel ;
-IN: search-deques
+in: search-deques
 
 TUPLE: search-deque assoc deque ;
 

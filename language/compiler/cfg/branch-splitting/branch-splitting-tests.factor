@@ -2,7 +2,7 @@ USING: accessors assocs compiler.cfg.utilities compiler.cfg
 compiler.cfg.branch-splitting compiler.cfg.debugger
 compiler.cfg.predecessors compiler.cfg.rpo compiler.cfg.instructions fry kernel
 tools.test namespaces sequences vectors ;
-IN: compiler.cfg.branch-splitting.tests
+in: compiler.cfg.branch-splitting.tests
 
 : get-predecessors ( cfg -- assoc )
     H{ } clone [ '[ [ predecessors>> ] keep _ set-at ] each-basic-block ] keep ;

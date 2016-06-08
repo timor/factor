@@ -4,7 +4,7 @@ USING: accessors arrays checksums checksums.common combinators
 combinators.smart fry grouping io.binary kernel kernel.private
 literals locals math math.bitwise math.ranges sequences
 sequences.generalizations sequences.private ;
-IN: checksums.sha
+in: checksums.sha
 
 MIXIN: sha
 INSTANCE: sha checksum

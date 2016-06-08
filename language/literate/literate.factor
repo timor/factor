@@ -3,7 +3,7 @@
 USING: accessors combinators.short-circuit compiler.units kernel
 lexer math multiline parser sequences splitting ;
 
-IN: literate
+in: literate
 
 TUPLE: literate-lexer < lexer ;
 

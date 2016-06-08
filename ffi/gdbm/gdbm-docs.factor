@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: gdbm.ffi gdbm.private help.markup help.syntax kernel math
 quotations strings ;
-IN: gdbm
+in: gdbm
 
 HELP: gdbm
 { $class-description "Instance of this class is used as database configuration object. It has following slots:"

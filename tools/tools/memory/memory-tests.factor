@@ -1,6 +1,6 @@
 USING: arrays math memory namespaces parser sequences tools.memory
 tools.memory.private tools.test tools.time ;
-IN: tools.memory.tests
+in: tools.memory.tests
 
 { } [ room. ] unit-test
 { } [ heap-stats. ] unit-test

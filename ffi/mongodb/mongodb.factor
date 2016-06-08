@@ -1,6 +1,6 @@
 USING: vocabs ;
 
-IN: mongodb
+in: mongodb
 
 "mongodb.connection" require
 "mongodb.driver" require

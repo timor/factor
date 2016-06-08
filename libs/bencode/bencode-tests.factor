@@ -1,5 +1,5 @@
 USING: tools.test ;
-IN: bencode
+in: bencode
 
 { "i42e" } [ 42 >bencode ] unit-test
 { "i0e" } [ 0 >bencode ] unit-test

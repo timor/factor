@@ -1,5 +1,5 @@
 USING: tools.test ;
-IN: rosetta-code.balanced-brackets
+in: rosetta-code.balanced-brackets
 
 { t } [ "" balanced? ] unit-test
 { t } [ "[]" balanced? ] unit-test

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel math math.rectangles opengl.gl
 sequences ui ui.gadgets ui.render ;
-IN: rosetta-code.opengl
+in: rosetta-code.opengl
 
 ! http://rosettacode.org/wiki/OpenGL
 

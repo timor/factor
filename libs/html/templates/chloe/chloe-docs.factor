@@ -1,4 +1,4 @@
-IN: html.templates.chloe
+in: html.templates.chloe
 USING: help.markup help.syntax html.components html.forms
 html.templates html.templates.chloe.syntax
 html.templates.chloe.compiler html.templates.chloe.components

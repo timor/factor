@@ -1,4 +1,4 @@
-IN: xmode.catalog.tests
+in: xmode.catalog.tests
 USING: xmode.catalog tools.test hashtables assocs
 kernel sequences io ;
 

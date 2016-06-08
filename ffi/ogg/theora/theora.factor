@@ -12,7 +12,7 @@ USING:
     ogg
     system
 ;
-IN: ogg.theora
+in: ogg.theora
 
 <<
 "theoradec" {

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: calendar io.encodings.utf8 io.files robots tools.test
 urls ;
-IN: robots.tests
+in: robots.tests
 
 {
     { "http://www.chiplist.com/sitemap.txt" }

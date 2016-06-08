@@ -3,7 +3,7 @@
 USING: accessors arrays assocs kernel math math.intervals
 namespaces sequences money math.order usa-cities
 taxes.usa taxes.usa.w4 ;
-IN: taxes.usa.mn
+in: taxes.usa.mn
 
 ! Minnesota
 : mn-single ( -- triples )

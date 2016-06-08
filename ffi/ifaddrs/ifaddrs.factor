@@ -3,7 +3,7 @@
 USING: accessors alien.c-types alien.data alien.destructors
 alien.syntax classes.struct destructors libc sequences sets
 sorting ;
-IN: ifaddrs
+in: ifaddrs
 
 STRUCT: sockaddr
     { sa_len uint8_t }

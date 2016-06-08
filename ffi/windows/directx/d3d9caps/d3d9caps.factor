@@ -1,6 +1,6 @@
 USING: classes.struct windows.types windows.kernel32
 windows.directx.d3d9types alien.c-types ;
-IN: windows.directx.d3d9caps
+in: windows.directx.d3d9caps
 
 STRUCT: D3DVSHADERCAPS2_0
     { Caps                    DWORD }

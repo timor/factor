@@ -1,5 +1,5 @@
 USING: compiler.cfg help.markup help.syntax kernel ;
-IN: compiler.cfg.predecessors
+in: compiler.cfg.predecessors
 
 HELP: needs-predecessors
 { $values { "cfg" cfg } }

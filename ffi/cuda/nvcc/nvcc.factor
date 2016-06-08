@@ -3,7 +3,7 @@
 USING: arrays combinators.smart io.backend io.directories
 io.launcher io.pathnames kernel locals math sequences splitting
 system ;
-IN: cuda.nvcc
+in: cuda.nvcc
 
 HOOK: nvcc-path os ( -- path ) ;
 

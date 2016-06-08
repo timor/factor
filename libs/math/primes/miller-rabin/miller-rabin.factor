@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators kernel locals math math.functions math.ranges
 random sequences ;
-IN: math.primes.miller-rabin
+in: math.primes.miller-rabin
 
 <PRIVATE
 

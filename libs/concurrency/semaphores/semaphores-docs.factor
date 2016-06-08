@@ -1,4 +1,4 @@
-IN: concurrency.semaphores
+in: concurrency.semaphores
 USING: help.markup help.syntax kernel quotations calendar ;
 
 HELP: semaphore

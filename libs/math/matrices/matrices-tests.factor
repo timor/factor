@@ -1,5 +1,5 @@
 USING: math.matrices math.vectors tools.test math kernel ;
-IN: math.matrices.tests
+in: math.matrices.tests
 
 {
     { { 0 } { 0 } { 0 } }

@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Philipp Brüschweiler
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.syntax help.markup math math.functions prettyprint locals sequences ;
-IN: infix
+in: infix
 
 HELP: [infix
 { $syntax "[infix ... infix]" }

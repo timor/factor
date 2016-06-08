@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license
 USING: accessors arrays kernel math sequences
 sequences.private ;
-IN: sequences.zipped
+in: sequences.zipped
 
 TUPLE: zipped
 { keys sequence read-only }

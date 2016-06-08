@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.ranges math.vectors namespaces
 sequences ;
-IN: math.numerical-integration
+in: math.numerical-integration
 
 SYMBOL: num-steps
 

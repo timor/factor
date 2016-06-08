@@ -1,6 +1,6 @@
 USING: accessors kernel ui ui.backend ui.gadgets
 ui.gadgets.worlds ui.pixel-formats ;
-IN: ui.gadgets.worlds.null
+in: ui.gadgets.worlds.null
 
 TUPLE: null-world < world ;
 M: null-world begin-world drop ;

@@ -1,6 +1,6 @@
 USING: accessors alien.syntax continuations debugger kernel
 kernel.private literals namespaces tools.test ;
-IN: debugger.tests
+in: debugger.tests
 
 { } [ [ drop ] [ error. ] recover ] unit-test
 

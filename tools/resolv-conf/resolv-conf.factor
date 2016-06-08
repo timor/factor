@@ -3,7 +3,7 @@
 USING: accessors combinators constructors io.encodings.utf8
 io.files kernel math math.parser sequences splitting
 unicode ;
-IN: resolv-conf
+in: resolv-conf
 
 TUPLE: network ip netmask ;
 CONSTRUCTOR: <network> network ( ip netmask -- network ) ;

@@ -1,7 +1,7 @@
 USING: alien help.markup help.syntax io kernel math quotations
 opengl.gl assocs vocabs.loader sequences accessors colors words
 opengl ;
-IN: opengl.annotations
+in: opengl.annotations
 
 HELP: log-gl-error
 { $values { "function" word } }

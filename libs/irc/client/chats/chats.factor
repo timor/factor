@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors calendar concurrency.mailboxes
 io.encodings.utf8 io.sockets kernel ;
-IN: irc.client.chats
+in: irc.client.chats
 
 CONSTANT: irc-port 6667 ! Default irc port
 

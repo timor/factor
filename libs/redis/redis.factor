@@ -3,7 +3,7 @@
 USING: accessors calendar io io.sockets io.streams.duplex
 io.timeouts kernel redis.command-writer redis.response-parser
 io.encodings.utf8 ;
-IN: redis
+in: redis
 
 ! Connection
 : redis-quit ( -- ) quit flush ;

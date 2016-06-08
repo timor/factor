@@ -4,7 +4,7 @@
 USING: combinators combinators.short-circuit fry kernel math
 math.functions math.primes math.ranges memoize sequences ;
 
-IN: math.factorials
+in: math.factorials
 
 MEMO: factorial ( n -- n! )
     dup 1 > [ [1,b] product ] [ drop 1 ] if ;

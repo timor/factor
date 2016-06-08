@@ -2,7 +2,7 @@
 USING: alien alien.c-types alien.data alien.libraries
 alien.syntax classes.struct kernel math system-info.windows
 windows.types ;
-IN: windows.dwmapi
+in: windows.dwmapi
 
 STRUCT: MARGINS
     { cxLeftWidth    int }

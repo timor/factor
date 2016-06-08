@@ -3,7 +3,7 @@
 
 USING: ascii combinators kernel math math.parser sequences ;
 
-IN: pdf.units
+in: pdf.units
 
 : inch ( n -- n' ) 72.0 * ;
 

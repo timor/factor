@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: editors io.pathnames io.standard-paths kernel make
 namespaces system vocabs ;
-IN: editors.brackets
+in: editors.brackets
 
 SINGLETON: brackets-editor
 brackets-editor editor-class set-global

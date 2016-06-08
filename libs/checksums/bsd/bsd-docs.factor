@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-IN: checksums.bsd
+in: checksums.bsd
 
 HELP: bsd
 { $class-description "BSD checksum algorithm." } ;

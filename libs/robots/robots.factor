@@ -5,7 +5,7 @@ combinators.short-circuit fry globs http.client kernel make
 math.parser multiline namespaces present regexp
 regexp.combinators sequences sets splitting splitting.monotonic
 unicode urls ;
-IN: robots
+in: robots
 
 ! visit-time is GMT, request-rate is pages/second
 ! crawl-rate is seconds

@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Joe Groff.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel multiline sequences ;
-IN: literals
+in: literals
 
 HELP: $
 { $syntax "$ word" }

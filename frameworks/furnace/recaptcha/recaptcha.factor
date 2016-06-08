@@ -5,7 +5,7 @@ html.templates.chloe.compiler html.templates.chloe.syntax
 http.client http.server http.server.filters io.sockets kernel
 locals namespaces sequences splitting urls validators
 xml.syntax furnace.conversations ;
-IN: furnace.recaptcha
+in: furnace.recaptcha
 
 TUPLE: recaptcha < filter-responder domain public-key private-key ;
 

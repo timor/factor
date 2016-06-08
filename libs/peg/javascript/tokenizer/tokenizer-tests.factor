@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 !
 USING: kernel tools.test peg peg.javascript.ast peg.javascript.tokenizer accessors ;
-IN: peg.javascript.tokenizer.tests
+in: peg.javascript.tokenizer.tests
 
 {
   V{

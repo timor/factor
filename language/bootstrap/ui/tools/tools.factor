@@ -1,5 +1,5 @@
 USING: vocabs vocabs.loader ;
-IN: bootstrap.ui.tools
+in: bootstrap.ui.tools
 
 "ui.tools" require
 

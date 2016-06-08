@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: bitstreams byte-arrays classes help.markup help.syntax
 kernel math quotations sequences ;
-IN: compression.lzw
+in: compression.lzw
 
 HELP: gif-lzw-uncompress
 { $values

@@ -1,6 +1,6 @@
 USING: editors io.files io.launcher io.standard-paths kernel
 math.parser namespaces sequences make ;
-IN: editors.ted-notepad
+in: editors.ted-notepad
 
 SINGLETON: ted-notepad
 ted-notepad editor-class set-global

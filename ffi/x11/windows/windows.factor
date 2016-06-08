@@ -4,7 +4,7 @@ USING: accessors alien.c-types alien.data kernel math
 math.bitwise math.vectors namespaces sequences arrays fry
 classes.struct literals x11 x11.xlib x11.constants x11.events
 x11.glx ;
-IN: x11.windows
+in: x11.windows
 
 CONSTANT: create-window-mask
     flags{ CWBackPixel CWBorderPixel CWColormap CWEventMask }

@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: accessors assocs classes.tuple generalizations kernel
 locals quotations sequences ;
-IN: combinators.tuple
+in: combinators.tuple
 
 <PRIVATE
 

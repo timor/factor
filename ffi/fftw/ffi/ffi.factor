@@ -4,7 +4,7 @@
 USING: alien alien.c-types alien.destructors alien.libraries
 alien.libraries.finder alien.syntax combinators kernel system ;
 
-IN: fftw.ffi
+in: fftw.ffi
 
 LIBRARY: fftw3
 

@@ -5,7 +5,7 @@ opengl opengl.gl opengl.textures sequences
 specialized-arrays typed ui.gadgets.worlds variants ;
 FROM: alien.c-types => float ;
 SPECIALIZED-ARRAY: float
-IN: gpu.textures
+in: gpu.textures
 
 TUPLE: texture < gpu-object
     { component-order component-order read-only initial: RGBA }

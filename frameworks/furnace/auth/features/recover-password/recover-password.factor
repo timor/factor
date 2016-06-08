@@ -5,7 +5,7 @@ threads fry urls smtp validators html.forms present http
 http.server.responses http.server.redirection
 http.server.dispatchers furnace.actions furnace.auth
 furnace.auth.providers furnace.redirection furnace.utilities ;
-IN: furnace.auth.features.recover-password
+in: furnace.auth.features.recover-password
 
 SYMBOL: lost-password-from
 

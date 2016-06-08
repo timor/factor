@@ -1,5 +1,5 @@
 USING: help.syntax help.markup ;
-IN: io.encodings.binary
+in: io.encodings.binary
 
 HELP: binary
 { $class-description "Encoding descriptor for binary I/O." } ;

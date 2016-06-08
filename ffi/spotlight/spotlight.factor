@@ -4,7 +4,7 @@ USING: arrays formatting help.stylesheet io io.encodings.utf8
 io.launcher io.pathnames io.styles kernel locals memoize
 namespaces sequences sequences.generalizations splitting
 wrap.strings ;
-IN: spotlight
+in: spotlight
 
 ! -----
 ! TO DO:

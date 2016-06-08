@@ -3,7 +3,7 @@
 USING: kernel base64 checksums.md5 sequences checksums
 locals prettyprint math math.bits grouping io combinators
 fry make combinators.short-circuit math.functions splitting ;
-IN: crypto.passwd-md5
+in: crypto.passwd-md5
 
 <PRIVATE
 

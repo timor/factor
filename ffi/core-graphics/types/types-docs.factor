@@ -1,5 +1,5 @@
 USING: math help.markup help.syntax ;
-IN: core-graphics.types
+in: core-graphics.types
 
 HELP: <CGRect>
 { $values { "x" real } { "y" real } { "w" real } { "h" real } { "rect" "an " { $snippet "CGRect" } } }

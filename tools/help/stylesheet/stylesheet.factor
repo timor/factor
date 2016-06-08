@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs colors.constants fonts fry io.styles kernel literals
 math namespaces sequences ui.theme ;
-IN: help.stylesheet
+in: help.stylesheet
 
 : wrap-margin-full ( -- n )
     42 default-font-size * ;

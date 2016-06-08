@@ -4,7 +4,7 @@ grouping sequences namespaces assocs quotations generalizations
 accessors words macros alien.syntax fry arrays layouts math
 classes.struct windows.kernel32 locals ;
 FROM: alien.parser.private => parse-pointers return-type-name ;
-IN: windows.com.syntax
+in: windows.com.syntax
 
 <PRIVATE
 

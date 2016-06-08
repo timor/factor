@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Sam Anklesaria.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs kernel ui.gadgets.borders ui.gestures ;
-IN: key-handlers
+in: key-handlers
 
 TUPLE: key-handler < border handlers ;
 : <keys> ( gadget -- key-handler ) key-handler new-border { 0 0 } >>size ;

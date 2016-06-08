@@ -7,7 +7,7 @@ math.order math.vectors opengl.gl sequences
 ui ui.gadgets.worlds specialized-arrays audio.engine ;
 FROM: alien.c-types => float ;
 SPECIALIZED-ARRAY: float
-IN: gpu.util.wasd
+in: gpu.util.wasd
 
 UNIFORM-TUPLE: mvp-uniforms
     { "mv_matrix"  mat4-uniform f }

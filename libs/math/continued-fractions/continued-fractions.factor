@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Samuel Tardieu.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.functions sequences vectors ;
-IN: math.continued-fractions
+in: math.continued-fractions
 
 <PRIVATE
 

@@ -1,7 +1,7 @@
 USING: accessors ui.gadgets ui.gadgets.labels namespaces make
 sequences kernel math arrays tools.test io ui.gadgets.panes
 ui.traverse definitions compiler.units ;
-IN: ui.traverse.tests
+in: ui.traverse.tests
 
 M: array children>> ;
 

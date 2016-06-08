@@ -5,7 +5,7 @@ locals
 persistent.sequences
 persistent.hashtables.config
 persistent.hashtables.nodes ;
-IN: persistent.hashtables.nodes.full
+in: persistent.hashtables.nodes.full
 
 M:: full-node (new-at) ( shift value key hashcode full-node -- node' added-leaf )
     full-node nodes>> :> nodes

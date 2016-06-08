@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors compiler.cfg.linearization grouping kernel math
 namespaces sequences ;
-IN: compiler.cfg.linear-scan.numbering
+in: compiler.cfg.linear-scan.numbering
 
 : number-instruction ( n insn -- n' )
     [ insn#<< ] [ drop 2 + ] 2bi ;

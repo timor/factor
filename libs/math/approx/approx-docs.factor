@@ -3,7 +3,7 @@
 
 USING: help.markup help.syntax math math.approx ;
 
-IN: math.approx
+in: math.approx
 
 HELP: approximate
 { $values { "x" ratio } { "epsilon" ratio } { "y" ratio } }

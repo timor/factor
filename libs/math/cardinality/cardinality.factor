@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license
 USING: arrays kernel layouts locals math math.functions
 math.order math.statistics sequences ;
-IN: math.cardinality
+in: math.cardinality
 
 GENERIC: trailing-zeros ( m -- n ) ;
 

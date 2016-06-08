@@ -8,7 +8,7 @@ help.topics io io.pathnames io.styles kernel macros make
 namespaces sequences sorting summary vocabs vocabs.files
 vocabs.hierarchy vocabs.loader vocabs.metadata words
 words.symbol ;
-IN: help.vocabs
+in: help.vocabs
 
 : about ( vocab -- )
     [ require ] [ lookup-vocab help ] bi ;

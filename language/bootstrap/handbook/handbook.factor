@@ -1,4 +1,4 @@
 USING: vocabs.loader vocabs kernel ;
-IN: bootstrap.handbook
+in: bootstrap.handbook
 
 { "bootstrap.handbook" "bootstrap.help" } "help.handbook" require-when

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.c-types alien.libraries alien.syntax kernel
 sequences words system combinators opengl.gl alien.destructors ;
-IN: opengl.glu
+in: opengl.glu
 
 <<
 

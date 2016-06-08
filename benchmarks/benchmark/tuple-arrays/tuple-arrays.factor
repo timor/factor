@@ -1,7 +1,7 @@
 ! Copyright (C) 2009, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel math sequences tuple-arrays ;
-IN: benchmark.tuple-arrays
+in: benchmark.tuple-arrays
 
 TUPLE: point { x float } { y float } { z float } ; final
 

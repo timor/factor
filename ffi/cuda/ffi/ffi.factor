@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: accessors alien alien.c-types alien.libraries alien.syntax
 classes.struct combinators kernel system ;
-IN: cuda.ffi
+in: cuda.ffi
 
 <<
 "cuda" {

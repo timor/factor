@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs boxes kernel math namespaces
 slots.private ;
-IN: refs
+in: refs
 
 MIXIN: ref
 

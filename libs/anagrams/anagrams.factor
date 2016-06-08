@@ -3,7 +3,7 @@
 
 USING: ascii assocs fry io.encodings.ascii io.files kernel math
 math.statistics memoize sequences sequences.extras sorting sets ;
-IN: anagrams
+in: anagrams
 
 : make-anagram-hash ( strings -- assoc )
     [ natural-sort ] collect-by

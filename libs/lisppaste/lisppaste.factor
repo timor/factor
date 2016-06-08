@@ -1,5 +1,5 @@
 USING: arrays kernel xml-rpc ;
-IN: lisppaste
+in: lisppaste
 
 CONSTANT: url "http://www.common-lisp.net:8185/RPC2"
 

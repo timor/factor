@@ -1,7 +1,7 @@
 ! Copyright (C) 2006, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: command-line kernel namespaces ;
-IN: ui.backend
+in: ui.backend
 
 SYMBOL: ui-backend
 

@@ -3,7 +3,7 @@
 USING: alien.c-types ascii assocs combinators combinators.smart
 endian fry io kernel macros math math.statistics math.vectors
 sequences strings ;
-IN: pack
+in: pack
 
 GENERIC: >n-byte-array ( obj n -- byte-array ) ;
 

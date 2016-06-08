@@ -4,7 +4,7 @@ USING: assocs combinators continuations fry help
 help.lint.checks help.topics io kernel namespaces parser
 sequences source-files.errors vocabs.hierarchy vocabs words
 classes locals tools.errors listener ;
-IN: help.lint
+in: help.lint
 
 SYMBOL: lint-failures
 

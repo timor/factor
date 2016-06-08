@@ -1,10 +1,10 @@
 USING: furnace.utilities io.encodings.utf8 io.files io.files.temp kernel
 multiline parser tools.test webapps.counter ;
-IN: furnace.utilities.tests
+in: furnace.utilities.tests
 
 <<
 STRING: dummy-vocab
-IN: dummy-vocab
+in: dummy-vocab
 
 : dummy-word ( -- ) ;
 ;

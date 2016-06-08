@@ -3,7 +3,7 @@
 USING: assocs assocs.extras combinators formatting kernel literals
 locals math math.parser sequences splitting unicode ;
 
-IN: english
+in: english
 
 <PRIVATE
 

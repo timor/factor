@@ -3,7 +3,7 @@
 USING: accessors fry generalizations io io.streams.string kernel
 locals macros make math math.order math.parser multiline
 namespaces present sequences splitting strings vocabs.parser ;
-IN: interpolate
+in: interpolate
 
 <PRIVATE
 

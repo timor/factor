@@ -3,7 +3,7 @@
 USING: kernel continuations destructors io io.encodings
 io.encodings.private io.timeouts io.ports io.styles summary
 accessors delegate delegate.protocols ;
-IN: io.streams.duplex
+in: io.streams.duplex
 
 TUPLE: duplex-stream in out ;
 

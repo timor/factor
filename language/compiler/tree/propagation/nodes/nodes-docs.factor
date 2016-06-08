@@ -1,5 +1,5 @@
 USING: assocs compiler.tree help.markup help.syntax sequences ;
-IN: compiler.tree.propagation.nodes
+in: compiler.tree.propagation.nodes
 
 HELP: annotate-node
 { $values { "node" node } }

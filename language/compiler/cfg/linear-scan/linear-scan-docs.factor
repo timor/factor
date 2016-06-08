@@ -1,5 +1,5 @@
 USING: assocs compiler.cfg help.markup help.syntax ;
-IN: compiler.cfg.linear-scan
+in: compiler.cfg.linear-scan
 
 HELP: admissible-registers
 { $values { "cfg" cfg } { "regs" assoc } }

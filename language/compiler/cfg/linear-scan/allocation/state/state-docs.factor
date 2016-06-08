@@ -3,7 +3,7 @@ compiler.cfg.linear-scan.allocation
 compiler.cfg.linear-scan.live-intervals compiler.cfg.stack-frame
 cpu.architecture heaps help.markup help.syntax kernel math sequences
 vectors ;
-IN: compiler.cfg.linear-scan.allocation.state
+in: compiler.cfg.linear-scan.allocation.state
 
 HELP: activate-intervals
 { $values { "n" integer } }

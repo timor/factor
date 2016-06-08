@@ -5,7 +5,7 @@ combinators combinators.short-circuit continuations fry kernel
 libc make math math.parser mirrors prettyprint.backend
 prettyprint.custom prettyprint.sections see.private sequences
 slots strings summary words ;
-IN: classes.struct.prettyprint
+in: classes.struct.prettyprint
 
 <PRIVATE
 

@@ -1,7 +1,7 @@
 ! Copyright (C) 2006, 2007 Slava Pestov
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax classes.struct ;
-IN: cocoa.runtime
+in: cocoa.runtime
 
 TYPEDEF: void* SEL
 

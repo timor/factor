@@ -12,7 +12,7 @@ ui.tools.inspector ui.gadgets.buttons ui.gadgets.borders ui.gadgets.labels
 ui.gadgets.packs ui.theme ui.gadgets.toolbar ui.gadgets.status-bar
 ui.baseline-alignment ui.images
 compiler.errors tools.errors tools.errors.model ;
-IN: ui.tools.error-list
+in: ui.tools.error-list
 
 CONSTANT: source-file-icon
     T{ image-name f "vocab:ui/tools/error-list/icons/source-file.tiff" }

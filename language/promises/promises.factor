@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays effects fry generalizations kernel math
 namespaces parser effects.parser sequences words ;
-IN: promises
+in: promises
 
 TUPLE: promise quot forced? value ;
 

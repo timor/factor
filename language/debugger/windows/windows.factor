@@ -3,7 +3,7 @@
 USING: accessors assocs debugger io kernel literals math.parser
 namespaces prettyprint sequences system windows.kernel32
 windows.ole32 windows.errors math ;
-IN: debugger.windows
+in: debugger.windows
 
 CONSTANT: seh-names
     H{

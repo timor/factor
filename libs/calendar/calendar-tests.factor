@@ -1,5 +1,5 @@
 USING: accessors kernel math.order random threads tools.test ;
-IN: calendar
+in: calendar
 
 { f } [ 2004 12 32 0   0  0 instant <timestamp> valid-timestamp? ] unit-test
 { f } [ 2004  2 30 0   0  0 instant <timestamp> valid-timestamp? ] unit-test

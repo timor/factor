@@ -2,7 +2,7 @@
 USING: arrays assocs classes classes.tuple.private combinators
 effects.parser generic.parser kernel math math.order parser
 quotations sequences sorting words ;
-IN: pair-methods
+in: pair-methods
 
 ERROR: no-pair-method a b generic ;
 

@@ -4,7 +4,7 @@ compiler.units debugger init io sets
 io.streams.null kernel namespaces prettyprint sequences
 source-files.errors summary tools.crossref
 tools.crossref.private tools.errors words ;
-IN: tools.deprecation
+in: tools.deprecation
 
 SYMBOL: +deprecation-note+
 SYMBOL: deprecation-notes

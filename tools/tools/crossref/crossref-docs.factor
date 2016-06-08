@@ -1,6 +1,6 @@
 USING: assocs help.markup help.syntax kernel math sets
 tools.crossref.private words ;
-IN: tools.crossref
+in: tools.crossref
 
 ARTICLE: "tools.crossref" "Definition cross referencing"
 "Definitions can answer a sequence of definitions they directly depend on:"

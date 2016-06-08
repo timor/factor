@@ -3,7 +3,7 @@
 USING: accessors arrays calendar calendar.format
 io.encodings.utf8 io.files io.streams.string kernel math
 math.parser sequences splitting ascii ;
-IN: subrip-subtitles
+in: subrip-subtitles
 
 ! http://en.wikipedia.org/wiki/SubRip
 ! .srt

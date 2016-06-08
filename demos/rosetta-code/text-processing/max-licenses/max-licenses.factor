@@ -3,7 +3,7 @@
 USING: accessors http.client io io.encodings.ascii io.files
 io.files.temp kernel math math.parser memoize sequences
 splitting urls ;
-IN: rosetta-code.text-processing.max-licenses
+in: rosetta-code.text-processing.max-licenses
 
 ! http://rosettacode.org/wiki/Text_processing/Max_licenses_in_use
 

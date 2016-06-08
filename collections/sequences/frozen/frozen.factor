@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license
 USING: accessors sequences ;
-IN: sequences.frozen
+in: sequences.frozen
 
 TUPLE: frozen { seq read-only } ;
 

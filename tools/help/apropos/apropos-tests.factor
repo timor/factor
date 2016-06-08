@@ -1,4 +1,4 @@
 USING: help.apropos tools.test ;
-IN: help.apropos.tests
+in: help.apropos.tests
 
 { } [ "swp" apropos ] unit-test

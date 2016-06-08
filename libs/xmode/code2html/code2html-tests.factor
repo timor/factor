@@ -1,4 +1,4 @@
-IN: xmode.code2html.tests
+in: xmode.code2html.tests
 USING: xmode.code2html xmode.catalog
 tools.test multiline splitting memoize
 kernel io.streams.string xml.writer ;

@@ -1,6 +1,6 @@
 USING: math math.order kernel arrays byte-arrays sequences
 colors.hsv accessors colors fry benchmark.mandel.params ;
-IN: benchmark.mandel.colors
+in: benchmark.mandel.colors
 
 : scale ( x -- y ) 255 * >fixnum ; inline
 

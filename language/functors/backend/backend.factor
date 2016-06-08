@@ -1,7 +1,7 @@
 USING: accessors arrays assocs classes.tuple generic.standard
 kernel lexer locals.types namespaces parser quotations
 vocabs.parser words ;
-IN: functors.backend
+in: functors.backend
 
 DEFER: functor-words
 \ functor-words [ H{ } clone ] initialize

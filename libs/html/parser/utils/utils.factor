@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel quoting sequences splitting ;
-IN: html.parser.utils
+in: html.parser.utils
 
 : trim1 ( seq ch -- newseq )
     [ [ ?head-slice drop ] [ ?tail-slice drop ] bi ] 2keep drop like ;

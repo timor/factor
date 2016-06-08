@@ -1,5 +1,5 @@
 USING: accessors arrays kernel sequences sequences.modified tools.test ;
-IN: sequences.modified.tests
+in: sequences.modified.tests
 
 { { 2 4 6 } } [ { 1 2 3 } 2 scale ] unit-test
 { { 1 4 3 } } [ { 1 2 3 } 2 <scaled> 8 1 pick set-nth seq>> ] unit-test

@@ -1,5 +1,5 @@
 USING: math.private kernel debugger ;
-IN: benchmark.fib2
+in: benchmark.fib2
 
 : fixnum-fib ( m -- n )
     dup 1 fixnum<= [

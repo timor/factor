@@ -3,7 +3,7 @@
 USING: alien alien.c-types alien.data alien.libraries alien.syntax
 classes.struct combinators system alien.accessors byte-arrays
 kernel ;
-IN: opencl.ffi
+in: opencl.ffi
 
 << "opencl" {
         { [ os windows? ] [ "OpenCL.dll" stdcall ] }

@@ -5,7 +5,7 @@ combinators.short-circuit continuations io.directories
 io.encodings.utf8 io.files io.pathnames kernel make math.parser
 memoize namespaces sequences sets summary system vocabs
 vocabs.loader words ;
-IN: vocabs.metadata
+in: vocabs.metadata
 
 : check-vocab ( vocab -- vocab )
     dup find-vocab-root [ no-vocab ] unless ;

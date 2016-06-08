@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors documents.elements kernel math.rectangles
 math.vectors ui.gadgets.editors ui.gadgets.glass ;
-IN: ui.tools.listener.popups
+in: ui.tools.listener.popups
 
 : caret-loc ( interactor element -- loc )
     [

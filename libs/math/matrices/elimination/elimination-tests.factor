@@ -1,4 +1,4 @@
-IN: math.matrices.elimination.tests
+in: math.matrices.elimination.tests
 USING: kernel math.matrices math.matrices.elimination
 tools.test sequences ;
 

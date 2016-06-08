@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.c-types alien.syntax kernel system combinators
 alien.libraries classes.struct ;
-IN: freetype
+in: freetype
 
 << "freetype" {
     { [ os macosx? ] [ "/usr/X11R6/lib/libfreetype.6.dylib" cdecl add-library ] }

@@ -1,6 +1,6 @@
 USING: tools.test ;
 
-IN: colors.flex-hex
+in: colors.flex-hex
 
 { "00b000" } [ "#zqbttv" flex-hex ] unit-test
 

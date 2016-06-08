@@ -1,5 +1,5 @@
 USING: help.markup help.syntax http io ;
-IN: http.server.requests
+in: http.server.requests
 
 HELP: read-request
 { $values { "request" request } }

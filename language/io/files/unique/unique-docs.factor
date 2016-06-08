@@ -1,6 +1,6 @@
 USING: help.markup help.syntax io.directories io.pathnames
 quotations strings ;
-IN: io.files.unique
+in: io.files.unique
 
 HELP: touch-unique-file
 { $values { "path" "a pathname string" } }

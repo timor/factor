@@ -1,7 +1,7 @@
 USING: assocs continuations help.markup help.syntax http http.server.requests
 io.servers kernel math strings urls vocabs.refresh ;
 USE: html.forms ! needed for $link in param
-IN: http.server
+in: http.server
 
 HELP: trivial-responder
 { $description "The class of trivial responders, which output the same response for every request. New instances are created by calling " { $link <trivial-responder> } "." } ;

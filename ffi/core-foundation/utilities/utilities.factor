@@ -5,7 +5,7 @@ core-foundation.arrays core-foundation.data
 core-foundation.dictionaries core-foundation.numbers
 core-foundation.strings destructors hashtables kernel math
 sequences strings ;
-IN: core-foundation.utilities
+in: core-foundation.utilities
 
 GENERIC: (>cf) ( obj -- cf ) ;
 

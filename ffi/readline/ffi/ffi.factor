@@ -3,7 +3,7 @@
 USING: accessors alien alien.c-types alien.libraries
 alien.syntax classes.struct combinators kernel libc math
 namespaces system unix.types ;
-IN: readline.ffi
+in: readline.ffi
 
 << "readline" {
     { [ os windows? ] [ "readline.dll" ] }

@@ -1,4 +1,4 @@
 USING: tools.ps tools.test ;
-IN: tools.ps.tests
+in: tools.ps.tests
 
 { } [ ps. ] unit-test

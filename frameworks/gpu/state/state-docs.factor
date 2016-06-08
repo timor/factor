@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: help.markup help.syntax kernel math math.rectangles
 sequences ;
-IN: gpu.state
+in: gpu.state
 
 HELP: <blend-mode>
 { $values

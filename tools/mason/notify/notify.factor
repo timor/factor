@@ -3,7 +3,7 @@
 USING: accessors continuations debugger fry http.client io
 io.encodings.utf8 io.files kernel make mason.common mason.config
 mason.email mason.twitter namespaces sequences ;
-IN: mason.notify
+in: mason.notify
 
 : status-notify? ( -- ? )
     status-url get

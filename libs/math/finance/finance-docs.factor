@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 John Benediktsson, Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license
 USING: help.markup help.syntax math sequences ;
-IN: math.finance
+in: math.finance
 
 HELP: sma
 { $values { "seq" sequence } { "n" "number of periods" } { "newseq" sequence } }

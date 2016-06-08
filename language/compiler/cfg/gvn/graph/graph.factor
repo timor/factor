@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2010 Slava Pestov, 2011 Alex Vondrak.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel math namespaces assocs ;
-IN: compiler.cfg.gvn.graph
+in: compiler.cfg.gvn.graph
 
 SYMBOL: input-expr-counter
 

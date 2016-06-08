@@ -1,6 +1,6 @@
 USING: definitions kernel locals.definitions see see.private typed
 words summary make accessors classes prettyprint ;
-IN: typed.prettyprint
+in: typed.prettyprint
 
 PREDICATE: typed-lambda-word < lambda-word
     "typed-word" word-prop >boolean ;

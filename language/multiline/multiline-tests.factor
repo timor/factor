@@ -1,5 +1,5 @@
 USING: eval multiline sequences tools.test ;
-IN: multiline.tests
+in: multiline.tests
 
 STRING: test-it
 foo

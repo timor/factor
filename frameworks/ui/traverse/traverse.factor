@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors namespaces make sequences kernel math arrays io
 ui.gadgets generic combinators fry sets ;
-IN: ui.traverse
+in: ui.traverse
 
 TUPLE: node value children ;
 

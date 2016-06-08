@@ -1,6 +1,6 @@
 USING: help.markup help.syntax strings vocabs.loader
 sequences vocabs ;
-IN: vocabs.hierarchy
+in: vocabs.hierarchy
 
 ARTICLE: "vocabs.hierarchy" "Vocabulary hierarchy tools"
 "These tools operate on all vocabularies found in the current set of " { $link vocab-roots } ", loaded or not. A prefix is the first part of a vocabulary name."

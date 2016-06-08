@@ -1,6 +1,6 @@
 ! (c)2008 Joe Groff, see BSD license etc.
 USING: help.markup help.syntax kernel math sequences ;
-IN: sequences.n-based
+in: sequences.n-based
 
 HELP: <n-based-assoc>
 { $values { "seq" sequence } { "base" integer } { "n-based-assoc" n-based-assoc } }
@@ -8,7 +8,7 @@ HELP: <n-based-assoc>
 { $examples
 { $example "
 USING: assocs prettyprint kernel sequences.n-based ;
-IN: scratchpad
+in: scratchpad
 
 : months ( -- assoc )
     {
@@ -34,7 +34,7 @@ HELP: n-based-assoc
 { $examples
 { $example "
 USING: assocs prettyprint kernel sequences.n-based ;
-IN: scratchpad
+in: scratchpad
 
 : months ( -- assoc )
     {

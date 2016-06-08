@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: assocs help.markup help.syntax quotations sequences ;
-IN: sequences.product
+in: sequences.product
 
 HELP: product-sequence
 { $class-description "A class of virtual sequences that present the cartesian product of their underlying set of sequences. Product sequences are constructed with the " { $link <product-sequence> } " word." }

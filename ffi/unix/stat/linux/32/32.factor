@@ -1,6 +1,6 @@
 USING: kernel alien.c-types alien.syntax math classes.struct
 unix.time unix.types ;
-IN: unix.stat
+in: unix.stat
 
 ! stat64
 STRUCT: stat

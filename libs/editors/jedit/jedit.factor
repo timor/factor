@@ -3,7 +3,7 @@
 USING: combinators.short-circuit editors io.pathnames
 io.standard-paths kernel make math.parser namespaces sequences
 system ;
-IN: editors.jedit
+in: editors.jedit
 
 SINGLETON: jedit
 jedit editor-class set-global

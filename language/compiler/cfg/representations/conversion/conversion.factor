@@ -3,7 +3,7 @@
 USING: arrays byte-arrays combinators compiler.cfg.instructions
 compiler.cfg.registers compiler.constants cpu.architecture
 kernel layouts locals math namespaces ;
-IN: compiler.cfg.representations.conversion
+in: compiler.cfg.representations.conversion
 
 ERROR: bad-conversion dst src dst-rep src-rep ;
 

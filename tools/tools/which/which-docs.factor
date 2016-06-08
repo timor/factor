@@ -3,7 +3,7 @@
 
 USING: help.markup help.syntax kernel strings ;
 
-IN: tools.which
+in: tools.which
 
 HELP: which
 { $values { "command" string } { "file/f" "the first matching path or " { $link f } } }

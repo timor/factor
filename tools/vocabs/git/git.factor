@@ -2,7 +2,7 @@
 USING: fry io io.directories io.encodings.ascii
 io.encodings.utf8 io.launcher io.pathnames kernel lexer
 namespaces parser sequences splitting vocabs vocabs.loader ;
-IN: vocabs.git
+in: vocabs.git
 
 <PRIVATE
 : git-object-id ( filename rev -- id/f )

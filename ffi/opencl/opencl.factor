@@ -5,7 +5,7 @@ byte-arrays combinators combinators.smart destructors
 io.encodings.ascii io.encodings.string kernel libc locals make
 math namespaces opencl.ffi sequences specialized-arrays
 variants ;
-IN: opencl
+in: opencl
 SPECIALIZED-ARRAYS: void* char size_t ;
 
 <PRIVATE

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel sequences models ui.gadgets
 math.rectangles fry ;
-IN: ui.gadgets.books
+in: ui.gadgets.books
 
 TUPLE: book < gadget ;
 

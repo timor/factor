@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Erik Charlebois.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: elf help.markup help.syntax ;
-IN: elf.nm
+in: elf.nm
 
 HELP: elf-nm
 { $values

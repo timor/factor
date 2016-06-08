@@ -4,7 +4,7 @@ io.encodings.utf8 io.ports io.sockets.private io.sockets.secure
 io.sockets.secure.openssl io.sockets.windows kernel libc locals
 math math.order openssl openssl.libcrypto openssl.libssl system
 windows.crypt32 windows.errors windows.time windows.winsock ;
-IN: io.sockets.secure.windows
+in: io.sockets.secure.windows
 
 M: openssl ssl-supported? t ;
 M: openssl ssl-certificate-verification-supported? f ;

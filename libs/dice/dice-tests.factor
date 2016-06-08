@@ -1,5 +1,5 @@
 USING: kernel math tools.test ;
-IN: dice
+in: dice
 
 { [ 1 4 random-roll ] } [ "1d4" roll-quot ] unit-test
 { [ 1 4 random-roll 3 + ] } [ "1d4+3" roll-quot ] unit-test

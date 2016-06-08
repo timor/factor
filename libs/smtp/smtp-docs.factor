@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel quotations help.syntax help.markup
 io.sockets strings calendar io.encodings.utf8 ;
-IN: smtp
+in: smtp
 
 HELP: smtp-config
 { $class-description "An SMTP configuration object, with the following slots:"

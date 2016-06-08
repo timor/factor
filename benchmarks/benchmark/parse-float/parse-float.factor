@@ -1,6 +1,6 @@
 USING: kernel literals math.functions math.parser random
 sequences ;
-IN: benchmark.parse-float
+in: benchmark.parse-float
 
 CONSTANT: test-floats $[ 100,000 random-units ]
 

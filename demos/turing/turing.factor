@@ -1,6 +1,6 @@
 USING: arrays assocs io kernel math namespaces
 prettyprint sequences strings vectors words accessors ;
-IN: turing
+in: turing
 
 ! A turing machine simulator.
 

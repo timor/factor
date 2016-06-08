@@ -4,7 +4,7 @@ hashtables io io.directories io.encodings.ascii
 io.encodings.utf8 io.files io.files.temp io.files.unique
 io.launcher io.launcher.windows io.pathnames kernel math
 namespaces parser sequences splitting system tools.test ;
-IN: io.launcher.windows.tests
+in: io.launcher.windows.tests
 
 [ "hello world" ] [ { "hello" "world" } join-arguments ] unit-test
 

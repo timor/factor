@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: accessors alien alien.c-types alien.handles alien.syntax
 destructors kernel math tools.test ;
-IN: alien.handles.tests
+in: alien.handles.tests
 
 TUPLE: thingy { x integer } ;
 C: <thingy> thingy

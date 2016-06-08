@@ -9,7 +9,7 @@ cpu.architecture fry kernel layouts locals math math.vectors
 math.vectors.simd.intrinsics sequences specialized-arrays ;
 FROM: alien.c-types => heap-size char short int longlong float double ;
 SPECIALIZED-ARRAYS: char uchar short ushort int uint longlong ulonglong float double ;
-IN: compiler.cfg.intrinsics.simd
+in: compiler.cfg.intrinsics.simd
 
 ! compound vector ops
 

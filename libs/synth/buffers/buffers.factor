@@ -5,7 +5,7 @@ math.ranges openal sequences sequences.merged specialized-arrays ;
 FROM: alien.c-types => short uchar ;
 SPECIALIZED-ARRAY: uchar
 SPECIALIZED-ARRAY: short
-IN: synth.buffers
+in: synth.buffers
 
 TUPLE: buffer sample-freq 8bit? id ;
 

@@ -3,7 +3,7 @@
 USING: accessors assocs combinators.short-circuit compiler.cfg.predecessors
 compiler.cfg.rpo compiler.cfg.utilities deques dlists functors kernel lexer
 locals namespaces sequences ;
-IN: compiler.cfg.dataflow-analysis
+in: compiler.cfg.dataflow-analysis
 
 GENERIC: join-sets ( sets bb dfa -- set ) ;
 GENERIC: transfer-set ( in-set bb dfa -- out-set ) ;

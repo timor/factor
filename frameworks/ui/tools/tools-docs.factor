@@ -3,7 +3,7 @@ listener parser prettyprint tools.walker ui.commands
 ui.gadgets.panes ui.gadgets.presentations ui.operations
 ui.tools.operations ui.tools.common vocabs see
 help.tips ;
-IN: ui.tools
+in: ui.tools
 
 ARTICLE: "starting-ui-tools" "Starting the UI tools"
 "The UI tools start automatically where possible:"

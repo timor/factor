@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: xmode.marker.context xmode.rules accessors
 xmode.tokens namespaces make kernel sequences assocs math ;
-IN: xmode.marker.state
+in: xmode.marker.state
 
 ! Based on org.gjt.sp.jedit.syntax.TokenMarker
 

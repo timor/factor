@@ -2,7 +2,7 @@ USING: accessors destructors windows.privileges
 io.files.windows io.mmap io.mmap.private kernel literals locals
 math math.bitwise system windows.errors windows.handles
 windows.kernel32 ;
-IN: io.mmap.windows
+in: io.mmap.windows
 
 : create-file-mapping ( hFile lpAttributes flProtect dwMaximumSizeHigh dwMaximumSizeLow lpName -- HANDLE )
     CreateFileMapping [ win32-error=0/f ] keep <win32-handle> ;

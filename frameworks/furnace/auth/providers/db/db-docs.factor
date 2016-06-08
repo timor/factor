@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-IN: furnace.auth.providers.db
+in: furnace.auth.providers.db
 
 HELP: users-in-db
 { $class-description "Singleton class implementing the database authentication provider." } ;

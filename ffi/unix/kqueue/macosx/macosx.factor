@@ -1,5 +1,5 @@
 USING: alien.c-types alien.syntax classes.struct unix.time ;
-IN: unix.kqueue
+in: unix.kqueue
 
 STRUCT: kevent
     { ident  ulong }

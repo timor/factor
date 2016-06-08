@@ -6,7 +6,7 @@ prettyprint prettyprint.backend prettyprint.config prettyprint.private
 prettyprint.sections see sequences splitting
 strings tools.continuations tools.continuations.private
 tools.test vectors vocabs.parser words ;
-IN: prettyprint.tests
+in: prettyprint.tests
 
 { "4" } [ 4 unparse ] unit-test
 { "4096" } [ 4096 unparse ] unit-test
@@ -228,10 +228,10 @@ DEFER: parse-error-file
     "another-narrow-layout" another-narrow-test check-see
 ] unit-test
 
-IN: prettyprint.tests
+in: prettyprint.tests
 TUPLE: class-see-layout ;
 
-IN: prettyprint.tests
+in: prettyprint.tests
 GENERIC: class-see-layout ( x -- y ) ;
 
 USING: prettyprint.tests ;
@@ -416,7 +416,7 @@ TUPLE: fo { a intersection{ fixnum integer } } ;
 
 {
 "USING: math ;
-IN: prettyprint.tests
+in: prettyprint.tests
 TUPLE: mo { a union{ integer float } initial: 0 } ;
 "
 } [
@@ -425,7 +425,7 @@ TUPLE: mo { a union{ integer float } initial: 0 } ;
 
 {
 "USING: math ;
-IN: prettyprint.tests
+in: prettyprint.tests
 TUPLE: fo { a intersection{ integer fixnum } initial: 0 } ;
 "
 } [

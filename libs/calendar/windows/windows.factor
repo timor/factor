@@ -1,7 +1,7 @@
 USING: calendar namespaces alien.c-types system
 windows.kernel32 kernel math combinators windows.errors
 accessors classes.struct calendar.format math.functions ;
-IN: calendar.windows
+in: calendar.windows
 
 : timestamp>SYSTEMTIME ( timestamp -- SYSTEMTIME )
     {

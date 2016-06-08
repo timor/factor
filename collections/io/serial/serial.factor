@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors destructors io kernel math.parser sequences
 summary system vocabs ;
-IN: io.serial
+in: io.serial
 
 TUPLE: serial-port < disposable stream path baud
     termios iflag oflag cflag lflag ;

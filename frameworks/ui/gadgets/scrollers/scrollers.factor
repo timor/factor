@@ -5,7 +5,7 @@ kernel math.rectangles math.vectors models models.product
 models.range namespaces sequences ui.gadgets ui.gadgets.frames
 ui.gadgets.grids ui.gadgets.private ui.gadgets.sliders
 ui.gadgets.viewports ui.gestures ;
-IN: ui.gadgets.scrollers
+in: ui.gadgets.scrollers
 
 TUPLE: scroller < frame column-header viewport x y follows ;
 

@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: alien alien.destructors assocs kernel math math.bitwise
 namespaces ;
-IN: alien.handles
+in: alien.handles
 
 <PRIVATE
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: math kernel math.constants math.private math.bits
 math.libm combinators fry math.order sequences ;
-IN: math.functions
+in: math.functions
 
 GENERIC: sqrt ( x -- y ) ; foldable
 

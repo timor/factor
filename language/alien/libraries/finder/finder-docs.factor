@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-IN: alien.libraries.finder
+in: alien.libraries.finder
 
 HELP: find-library*
 { $values

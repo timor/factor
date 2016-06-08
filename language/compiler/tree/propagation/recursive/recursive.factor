@@ -6,7 +6,7 @@ compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.nodes compiler.tree.propagation.simple
 kernel locals math math.intervals namespaces sequences ;
 FROM: sequences.private => array-capacity ;
-IN: compiler.tree.propagation.recursive
+in: compiler.tree.propagation.recursive
 
 : check-fixed-point ( node infos1 infos2 -- )
     [ value-info<= ] 2all?

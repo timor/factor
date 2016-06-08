@@ -1,7 +1,7 @@
 ! Copyright (C) 2013 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license
 USING: accessors kernel math math.order sequences ;
-IN: sequences.snipped
+in: sequences.snipped
 
 TUPLE: snipped
 { seq sequence read-only }

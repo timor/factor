@@ -5,7 +5,7 @@ memoize random random.mersenne-twister sequences sequences.private specialized-a
 typed ;
 QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAYS: c:float c:uchar float-4 uchar-16 ;
-IN: noise
+in: noise
 
 : with-seed ( seed quot -- )
     [ <mersenne-twister> ] dip with-random ; inline

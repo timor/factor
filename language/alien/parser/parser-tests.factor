@@ -3,7 +3,7 @@ USING: accessors alien.c-types alien.parser alien.parser.private
 alien.syntax compiler.units continuations debugger eval fry kernel
 lexer namespaces parser sequences sets tools.test vocabs.parser words
 ;
-IN: alien.parser.tests
+in: alien.parser.tests
 
 <<
 

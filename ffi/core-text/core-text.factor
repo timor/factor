@@ -6,7 +6,7 @@ core-foundation.attributed-strings core-foundation.strings
 core-graphics core-graphics.types core-text.fonts destructors
 fonts init kernel locals make math math.functions math.order
 math.vectors memoize namespaces sequences strings ;
-IN: core-text
+in: core-text
 
 TYPEDEF: void* CTLineRef
 

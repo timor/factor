@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators.short-circuit hints kernel math math.order
 sequences strings ;
-IN: ascii
+in: ascii
 
 : ascii? ( ch -- ? ) 0 127 between? ; inline
 : blank? ( ch -- ? ) " \t\n\r" member? ; inline

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types assocs help.markup help.syntax kernel quotations
 sequences strings ;
-IN: tools.coverage
+in: tools.coverage
 
 HELP: <coverage-state>
 { $values

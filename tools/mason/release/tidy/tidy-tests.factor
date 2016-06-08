@@ -1,6 +1,6 @@
 USING: io.directories mason.config mason.release.tidy namespaces
 sequences system tools.test ;
-IN: mason.release.tidy.tests
+in: mason.release.tidy.tests
 
 [ f ] [
     macosx target-os [

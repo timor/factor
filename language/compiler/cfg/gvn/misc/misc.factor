@@ -5,7 +5,7 @@ compiler.cfg.instructions
 compiler.cfg.utilities
 compiler.cfg.gvn.graph
 compiler.cfg.gvn.rewrite ;
-IN: compiler.cfg.gvn.misc
+in: compiler.cfg.gvn.misc
 
 M: ##replace rewrite
     [ loc>> ] [ src>> vreg>insn ] bi

@@ -3,7 +3,7 @@ combinators continuations io kernel libc literals locals
 sequences specialized-arrays windows.com memoize
 windows.com.wrapper windows.kernel32 windows.ole32
 windows.types ;
-IN: windows.streams
+in: windows.streams
 
 SPECIALIZED-ARRAY: uchar
 

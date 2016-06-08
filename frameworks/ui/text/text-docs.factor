@@ -1,4 +1,4 @@
-IN: ui.text
+in: ui.text
 USING: help.markup help.syntax kernel ui.text.private strings math fonts images ;
 
 HELP: flush-layout-cache

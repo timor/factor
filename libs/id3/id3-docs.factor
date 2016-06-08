@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax sequences kernel accessors
 id3.private strings ;
-IN: id3
+in: id3
 
 HELP: mp3>id3
 { $values

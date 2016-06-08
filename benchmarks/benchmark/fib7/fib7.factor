@@ -1,5 +1,5 @@
 USING: kernel locals math math.parser sequences ;
-IN: benchmark.fib7
+in: benchmark.fib7
 
 :: matrix-fib ( m -- n )
     m 0 >= [ m throw ] unless

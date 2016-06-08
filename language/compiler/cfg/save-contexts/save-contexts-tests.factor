@@ -2,7 +2,7 @@ USING: accessors compiler.cfg.debugger
 compiler.cfg.instructions compiler.cfg.registers
 compiler.cfg.save-contexts kernel namespaces tools.test
 cpu.x86.assembler.operands cpu.architecture ;
-IN: compiler.cfg.save-contexts.tests
+in: compiler.cfg.save-contexts.tests
 
 ! insns-needs-save-context?
 { f f t } [

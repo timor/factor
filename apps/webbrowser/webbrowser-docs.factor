@@ -3,7 +3,7 @@
 
 USING: help.markup help.syntax strings webbrowser ;
 
-IN: webbrowser
+in: webbrowser
 
 HELP: open-file
 { $values { "path" string } }

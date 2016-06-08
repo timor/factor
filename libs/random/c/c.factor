@@ -3,7 +3,7 @@
 
 USING: alien.c-types alien.syntax kernel random ;
 
-IN: random.c
+in: random.c
 
 LIBRARY: libc
 

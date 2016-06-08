@@ -3,7 +3,7 @@
 USING: arrays compiler.units fry hashtables help.topics io
 kernel math namespaces sequences sets help.vocabs
 help.apropos vocabs help.markup ;
-IN: help.home
+in: help.home
 
 SYMBOLS: recent-words recent-articles recent-vocabs recent-searches ;
 

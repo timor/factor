@@ -4,7 +4,7 @@ USING: accessors alien.data assocs classes.struct cocoa
 cocoa.runtime cocoa.types destructors fry hashtables kernel libc
 locals sequences specialized-arrays vectors ;
 SPECIALIZED-ARRAY: id
-IN: cocoa.enumeration
+in: cocoa.enumeration
 
 CONSTANT: NS-EACH-BUFFER-SIZE 16
 

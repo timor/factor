@@ -3,7 +3,7 @@ images.loader images.viewer init kernel locals namespaces
 ui.gadgets ui.gadgets.buttons ui.gadgets.panes ;
 FROM: ui.gadgets.buttons.private => border-button-theme ;
 FROM: audio.engine.private => make-engine-current ;
-IN: audio.gadget
+in: audio.gadget
 
 TUPLE: audio-gadget < button
     play-label pause-label

@@ -1,6 +1,6 @@
 USING: tuple-arrays sequences tools.test namespaces kernel
 math accessors classes.tuple eval classes.struct ;
-IN: tuple-arrays.tests
+in: tuple-arrays.tests
 
 SYMBOL: mat
 TUPLE: foo bar ; final

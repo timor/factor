@@ -5,7 +5,7 @@ USING: bootstrap.image checksums checksums.openssl fry io
 io.directories io.encodings.ascii io.encodings.utf8 io.files
 io.files.temp io.files.unique io.launcher io.pathnames kernel
 make math.parser namespaces sequences splitting system ;
-IN: bootstrap.image.upload
+in: bootstrap.image.upload
 
 SYMBOL: upload-images-destination
 SYMBOL: build-images-destination

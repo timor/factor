@@ -1,6 +1,6 @@
 USING: alien alien.c-types cpu.x86.assembler
 cpu.x86.assembler.operands math.floats.env.x86 system ;
-IN: math.floats.env.x86.32
+in: math.floats.env.x86.32
 
 M: x86.32 get-sse-env
     void { void* } cdecl [

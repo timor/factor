@@ -2,7 +2,7 @@ USING: accessors alien alien.c-types alien.syntax arrays assocs
 biassocs classes.struct combinators kernel literals math
 math.bitwise math.floats.env math.floats.env.private system
 cpu.ppc.assembler ;
-IN: math.floats.env.ppc
+in: math.floats.env.ppc
 
 STRUCT: ppc-fpu-env
     { padding uint }

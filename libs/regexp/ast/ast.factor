@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel arrays accessors fry sequences regexp.classes
 math.ranges math ;
-IN: regexp.ast
+in: regexp.ast
 
 TUPLE: negation term ;
 C: <negation> negation

@@ -3,7 +3,7 @@
 USING: accessors alien.c-types assocs combinators.short-circuit
 gobject-introspection.common gobject-introspection.repository kernel
 locals namespaces parser sequences sets ;
-IN: gobject-introspection.types
+in: gobject-introspection.types
 
 SYMBOL: type-infos
 type-infos [ H{ } ] initialize

@@ -8,7 +8,7 @@ system-info.macosx tools.ps unix unix.time unix.types ;
 
 QUALIFIED-WITH: alien.c-types c
 
-IN: tools.ps.macosx
+in: tools.ps.macosx
 
 <PRIVATE
 

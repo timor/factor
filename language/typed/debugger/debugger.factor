@@ -1,7 +1,7 @@
 ! (c)Joe Groff bsd license
 USING: typed compiler.cfg.debugger compiler.tree.debugger
 tools.disassembler words ;
-IN: typed.debugger
+in: typed.debugger
 
 M: typed-word test-builder
     "typed-word" word-prop test-builder ;

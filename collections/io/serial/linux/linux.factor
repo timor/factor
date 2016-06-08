@@ -3,7 +3,7 @@
 USING: accessors classes.struct combinators io.backend.unix
 io.ports io.serial io.streams.duplex kernel libc literals math
 system unix unix.ffi io.serial.linux.ffi ;
-IN: io.serial.linux
+in: io.serial.linux
 
 : fd>duplex-stream ( fd -- duplex-stream )
     <fd> init-fd

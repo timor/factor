@@ -5,7 +5,7 @@ destructors system threads io.backend.unix.multiplexers
 io.backend.unix.multiplexers.kqueue core-foundation
 core-foundation.run-loop core-foundation.file-descriptors ;
 FROM: alien.c-types => void void* ;
-IN: io.backend.unix.multiplexers.run-loop
+in: io.backend.unix.multiplexers.run-loop
 
 TUPLE: run-loop-mx kqueue-mx ;
 

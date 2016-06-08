@@ -1,6 +1,6 @@
 USING: see tools.test io.streams.string math sequences summary
 words ;
-IN: see.tests
+in: see.tests
 
 CONSTANT: test-const 10
 

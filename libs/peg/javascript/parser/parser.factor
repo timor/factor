@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel accessors sequences
 peg peg.ebnf peg.javascript.ast peg.javascript.tokenizer ;
-IN: peg.javascript.parser
+in: peg.javascript.parser
 
 ! Grammar for JavaScript. Based on OMeta-JS example from:
 ! http://jarrett.cs.ucla.edu/ometa-js/#JavaScript_Compiler

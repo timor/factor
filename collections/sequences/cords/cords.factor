@@ -3,7 +3,7 @@
 USING: accessors assocs sequences sorting binary-search fry math
 math.order arrays classes combinators kernel functors locals
 math.functions math.vectors ;
-IN: sequences.cords
+in: sequences.cords
 
 MIXIN: cord
 

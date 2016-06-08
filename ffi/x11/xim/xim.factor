@@ -4,7 +4,7 @@ USING: alien alien.c-types alien.data alien.strings arrays
 byte-arrays hashtables io io.encodings.string kernel math
 namespaces sequences strings continuations x11 x11.xlib
 accessors io.encodings.utf8 literals ;
-IN: x11.xim
+in: x11.xim
 
 SYMBOL: xim
 

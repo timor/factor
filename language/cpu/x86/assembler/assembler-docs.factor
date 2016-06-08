@@ -1,6 +1,6 @@
 USING: compiler.codegen.labels cpu.x86.assembler.private help.markup
 help.syntax kernel math sequences ;
-IN: cpu.x86.assembler
+in: cpu.x86.assembler
 
 HELP: (MOV-I)
 { $values { "dst" "destination" } { "src" "immediate value" } }

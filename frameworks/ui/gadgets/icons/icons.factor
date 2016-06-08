@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel ui.gadgets ui.gadgets.labels ui.images
 ui.pens ui.pens.image ;
-IN: ui.gadgets.icons
+in: ui.gadgets.icons
 
 TUPLE: icon < gadget ;
 
