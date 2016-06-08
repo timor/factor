@@ -5,7 +5,7 @@ combinators.short-circuit constructors continuations fry
 io.encodings.utf8 io.files kernel locals macros make math
 math.order modern.paths modern.slices multiline namespaces
 quotations sequences sequences.extras splitting
-splitting.monotonic strings unicode ;
+splitting.monotonic strings unicode generalizations ;
 in: modern
 
 <<
@@ -112,6 +112,10 @@ M: array collapse-decorators
     collapse-decorators make-compound-literals ;
 
 
+: strict-upper? ( string -- ? )
+    [ { [ char: A char: Z between? ] [ "#:-" member? ] } 1|| ] all? ;
+
+
 ERROR: whitespace-expected-after n string ch ;
 ERROR: expected-more-tokens n string expected ;
 ERROR: string-expected-got-eof n string ;
@@ -212,27 +216,32 @@ MACRO:: read-double-matched ( open-ch -- quot: ( n string tag ch -- n' string se
 
 defer: lex
 defer: lex-factor
-ERROR: lex-expected-but-got-eof n string expected ;
+
+! make lex-top-level and lex-matched
+! lex-top-level lexes til FOO; ; or TAG:, on TAG: leave n' at start of TAG:
+! lex-matched lexes til foo) foo} foo] ) } ] or TAG:, on TAG: throw error
+
+
+ERROR: lex-expected-but-got-eof n string expected nested? ;
 ! For implementing [ { (
-: lex-until ( n string tags -- n' string payload closing )
-    pick [
-        3dup '[
-            [
-                lex-factor dup , [
-                    dup tag-literal? [
-                        ! } gets a chance, but then also full seq { } after recursion...
-                        [ _ ] dip underlying>> '[ _ sequence= ] any? not
-                    ] [
-                        drop t ! loop again?
-                    ] if
+: lex-until ( n string tags nested? -- n' string payload closing )
+    4 npick [ lex-expected-but-got-eof ] unless
+    4dup '[
+        [
+            lex-factor dup , [
+                dup tag-literal? [
+                    ! } gets a chance, but then also full seq { } after recursion...
+                    [ _ ] dip underlying>> '[ _ sequence= ] any? not
+                    _ drop
                 ] [
-                    _ _ _ lex-expected-but-got-eof
-                ] if*
-            ] loop
-        ] { } make unclip-last
-    ] [
-        lex-expected-but-got-eof
-    ] if ;
+                    drop t ! loop again?
+                ] if
+            ] [
+                _ _ _ _ lex-expected-but-got-eof
+            ] if*
+        ] loop
+    ] { } make unclip-last ;
+
 
 MACRO:: read-matched ( ch -- quot: ( n string tag -- n' string slice' ) )
     ch dup matching-delimiter {
@@ -243,7 +252,7 @@ MACRO:: read-matched ( ch -- quot: ( n string tag -- n' string slice' ) )
         n string tag
         2over nth-check-eof {
             { [ dup openstreq member? ] [ ch read-double-matched ] } ! (=( or ((
-            { [ dup blank? ] [ drop dup '[ _ matching-delimiter-string closestr1 2array lex-until ] dip 1 cut-slice* single-matched-literal make-matched-literal ] } ! ( foo )
+            { [ dup blank? ] [ drop dup '[ _ matching-delimiter-string closestr1 2array t lex-until ] dip 1 cut-slice* single-matched-literal make-matched-literal ] } ! ( foo )
             [ drop [ slice-til-whitespace drop ] dip span-slices make-tag-literal ]  ! (foo)
         } cond
     ] ;
@@ -285,7 +294,7 @@ MACRO:: read-matched ( ch -- quot: ( n string tag -- n' string slice' ) )
     ] if ;
 
 : read-til-semicolon ( n string slice -- n' string semi )
-    dup '[ but-last ";" append ";" 2array lex-until ] dip
+    dup '[ but-last ";" append ";" 2array f lex-until ] dip
     1 cut-slice* uppercase-colon-literal make-matched-literal ;
 
 : read-word-or-til-semicolon ( n string slice -- n' string obj )
@@ -298,9 +307,6 @@ MACRO:: read-matched ( ch -- quot: ( n string tag -- n' string slice' ) )
 : read-lowercase-colon ( n string slice -- n' string lowercase-colon )
     [ lex-factor dup ] dip 1 cut-slice*
     lowercase-colon-literal make-delimited-literal ;
-
-: strict-upper? ( string -- ? )
-    [ { [ char: A char: Z between? ] [ "#:-" member? ] } 1|| ] all? ;
 
 ERROR: colon-word-must-be-all-uppercase-or-lowercase n string word ;
 : read-colon ( n string slice -- n' string colon )

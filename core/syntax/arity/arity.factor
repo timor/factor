@@ -1,6 +1,5 @@
 ! Copyright (C) 2016 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: ;
 IN: syntax.arity
 
 ARITY: \ IN: 1
