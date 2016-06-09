@@ -85,6 +85,6 @@ MACRO: interpolate-locals ( str -- quot )
 : interpolate-locals>string ( str -- newstr )
     [ interpolate-locals ] with-string-writer ; inline
 
-SYNTAX: [I
-    "I]" parse-multiline-string
+SYNTAX: I[[
+    "]]" parse-multiline-string
     interpolate-locals-quot append! ;
