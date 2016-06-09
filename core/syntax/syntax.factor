@@ -310,6 +310,10 @@ in: bootstrap.syntax
         scan-escaped-word scan-number "arity" set-word-prop
     ] define-core-syntax
 
+    "LEFT-DECORATOR:" [
+        scan-escaped-word t "left-decorator" set-word-prop
+    ] define-core-syntax
+
     "<<" [
         [
             \ >> parse-until >quotation

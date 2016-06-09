@@ -17,6 +17,7 @@ in: bootstrap.syntax
         "C:"
         "char:"
         "ARITY:"
+        "LEFT-DECORATOR:"
         "DEFER:"
         "defer:"
         "ERROR:"

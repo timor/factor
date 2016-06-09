@@ -37,7 +37,7 @@ load-help? off
     "vocabs.loader" require
 
     "syntax" require
-    "syntax.arity" require
+    "syntax.attributes" require
     "bootstrap.layouts" require
 
     ! need this
