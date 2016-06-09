@@ -10,8 +10,8 @@ specialized-array: double
 in: benchmark.spectral-norm
 
 :: inner-loop ( u n quot -- seq )
-    n iota [| i |
-        n iota 0.0 [| j |
+    n iota |[ i |
+        n iota 0.0 |[ j |
             u i j quot call +
         ] reduce
     ] double-array{ } map-as ; inline

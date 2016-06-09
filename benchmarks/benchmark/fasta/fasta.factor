@@ -77,7 +77,7 @@ TYPED:: make-repeat-fasta ( k: fixnum len: fixnum alu: string -- k': fixnum )
     let[
         :> alu
         0 :> k!
-        [| len | k len alu make-repeat-fasta k! ] split-lines
+        |[ len | k len alu make-repeat-fasta k! ] split-lines
     ] ;
 
 : fasta ( n out -- )

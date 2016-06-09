@@ -23,7 +23,7 @@ singleton: x11-ui-backend
 
 : supported-net-wm-hints ( -- seq )
     { Atom int ulong ulong pointer: Atom }
-    [| type format n-atoms bytes-after atoms |
+    |[ type format n-atoms bytes-after atoms |
         dpy get
         root get
         XA_NET_SUPPORTED
@@ -40,7 +40,7 @@ singleton: x11-ui-backend
         Success assert=
     ]
     with-out-parameters
-    [| type format n-atoms bytes-after atoms |
+    |[ type format n-atoms bytes-after atoms |
         atoms n-atoms ulong <c-direct-array> >array
         atoms XFree
     ] call ;

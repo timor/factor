@@ -25,8 +25,8 @@ in: regexp.minimize
     ! Partition table is sorted-array => ?
     H{ } clone :> out
     transition-table transitions>> keys :> states
-    states [| s1 |
-        states [| s2 |
+    states |[ s1 |
+        states |[ s2 |
             s1 s2 transition-table initially-same?
             [ s1 s2 2array out conjoin ] when
         ] each

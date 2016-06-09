@@ -22,7 +22,7 @@ M: local-writer-in-literal-error summary
 ERROR: :>-outside-lambda-error ;
 
 M: :>-outside-lambda-error summary
-    drop ":> cannot be used outside of let[, [|, or :: forms" ;
+    drop ":> cannot be used outside of let[, |[, or :: forms" ;
 
 ERROR: bad-local args obj ;
 

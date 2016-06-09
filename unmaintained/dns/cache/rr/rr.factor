@@ -41,7 +41,7 @@ TUPLE: <entry> time data ;
                   CLASS [ OBJ class>>      ]
                   TTL   [ ENT time>> now - ] |
              ENT data>>
-               [| RDATA | T{ rr f NAME TYPE CLASS TTL RDATA } ]
+               |[ RDATA | T{ rr f NAME TYPE CLASS TTL RDATA } ]
              map
            ]
          ]

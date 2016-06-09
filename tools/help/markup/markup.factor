@@ -297,7 +297,7 @@ PRIVATE>
     dup wrapper? [ wrapped>> ] when ;
 
 :: update-related-words ( words -- affected-words )
-    words words [| affected word |
+    words words |[ affected word |
         word ?unwrap "related" [ affected union words ] change-word-prop
     ] reduce ;
 

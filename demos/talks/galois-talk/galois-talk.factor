@@ -191,7 +191,7 @@ CONSTANT: galois-slides
         { "Define lambda words with " { $link postpone\ :: } }
         { "Establish bindings with " { $link postpone\ let[ } " and " { $snippet "let[*" } }
         "Mutable bindings with correct semantics"
-        { "Named inputs for quotations with " { $link postpone\ [| } }
+        { "Named inputs for quotations with " { $link postpone\ |[ } }
         "Full closures"
     }
     { $slide "Locals and lexical scope"

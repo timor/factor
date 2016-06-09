@@ -17,7 +17,7 @@ use: delegate.private
 << forget: postpone\ :> >>
 << forget: _ >>
 << forget: @ >>
-<< forget: postpone\ [| >>
+<< forget: postpone\ |[ >>
 << forget: postpone\ let[ >>
 << forget: postpone\ IH{ >>
 << forget: postpone\ PROTOCOL: >>
@@ -45,7 +45,7 @@ SYNTAX: :>
     in-lambda? get [ :>-outside-lambda-error ] unless
     scan-token parse-def suffix! ;
 
-SYNTAX: [| parse-lambda append! ;
+SYNTAX: |[ parse-lambda append! ;
 
 SYNTAX: let[ parse-let append! ;
 

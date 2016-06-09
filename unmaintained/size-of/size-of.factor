@@ -43,7 +43,7 @@ Example:
 
   let[ | C-FILE   [ "size-of.c" temp-file ]
          EXE-FILE [ "size-of"   temp-file ]
-         INCLUDES [ HEADERS [| FILE | { "#include <" FILE ">" } concat ] map ] |
+         INCLUDES [ HEADERS |[ FILE | { "#include <" FILE ">" } concat ] map ] |
 
     {
       "#include <stdio.h>"

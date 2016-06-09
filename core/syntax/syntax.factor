@@ -353,14 +353,6 @@ in: bootstrap.syntax
 
     "execute(" [ \ execute-effect parse-call-paren ] define-core-syntax
 
-    "<<<<<<<" [ version-control-merge-conflict ] define-core-syntax
-    "=======" [ version-control-merge-conflict ] define-core-syntax
-    ">>>>>>>" [ version-control-merge-conflict ] define-core-syntax
-
-    "<<<<<<" [ version-control-merge-conflict ] define-core-syntax
-    "======" [ version-control-merge-conflict ] define-core-syntax
-    ">>>>>>" [ version-control-merge-conflict ] define-core-syntax
-
     "::" [ (::) define-declared ] define-core-syntax
     "M::" [ (M::) define ] define-core-syntax
     "MACRO:" [ (:) define-macro ] define-core-syntax
@@ -377,7 +369,7 @@ in: bootstrap.syntax
         scan-token parse-def suffix!
     ] define-core-syntax
 
-    "[|" [ parse-lambda append! ] define-core-syntax
+    "|[" [ parse-lambda append! ] define-core-syntax
     "let[" [ parse-let append! ] define-core-syntax
     "MEMO[" [ parse-quotation dup infer memoize-quot suffix! ] define-core-syntax
     "'[" [ parse-quotation fry append! ] define-core-syntax

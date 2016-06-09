@@ -47,7 +47,7 @@ symbol: euc-table
     [ flat-file>biassoc ] bi* ;
 
 :: define-recursive-methods ( class data words -- )
-    words [| word |
+    words |[ word |
         class word [ drop data word execute ] define-method
     ] each ;
 

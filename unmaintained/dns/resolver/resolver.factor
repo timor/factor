@@ -11,7 +11,7 @@ in: dns.resolver
 :: send-receive-udp ( BA SERVER -- ba )
    T{ inet4 f f 0 } <datagram>
    T{ duration { second 3 } } over set-timeout
-     [| SOCKET | BA SERVER SOCKET send SOCKET receive drop ]
+     |[ SOCKET | BA SERVER SOCKET send SOCKET receive drop ]
    with-disposal ;
 
 :: send-receive-tcp ( BA SERVER -- ba )
