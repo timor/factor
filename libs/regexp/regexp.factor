@@ -3,7 +3,8 @@
 USING: accessors combinators kernel kernel.private math sequences
 sequences.private strings sets assocs make lexer namespaces parser
 arrays fry locals regexp.parser splitting sorting regexp.ast
-regexp.negation regexp.compiler compiler.units words math.ranges ;
+regexp.negation regexp.compiler compiler.units words math.ranges
+multiline ;
 in: regexp
 
 TUPLE: regexp
@@ -216,7 +217,11 @@ PRIVATE>
 
 PRIVATE>
 
-SYNTAX: R/ parse-regexp ;
+SYNTAX: \ R/ parse-regexp ;
+SYNTAX: \ R[[ "]]" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
+SYNTAX: \ R[=[ "]=]" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
+SYNTAX: \ R(( "))" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
+SYNTAX: \ R{{ "}}" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
 
 use: vocabs.loader
 

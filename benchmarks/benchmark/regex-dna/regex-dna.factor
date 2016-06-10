@@ -7,19 +7,19 @@ in: benchmark.regex-dna
 ! Based on http://shootout.alioth.debian.org/gp4/benchmark.php?test=regexdna&lang=ruby&id=1
 
 : strip-line-breaks ( string -- string' )
-    R/ >.*\n|\n/ "" re-replace ;
+    R[[ >.*\n|\n]] "" re-replace ;
 
 : count-patterns ( string -- )
     {
-        R/ agggtaaa|tttaccct/i
-        R/ [cgt]gggtaaa|tttaccc[acg]/i
-        R/ a[act]ggtaaa|tttacc[agt]t/i
-        R/ ag[act]gtaaa|tttac[agt]ct/i
-        R/ agg[act]taaa|ttta[agt]cct/i
-        R/ aggg[acg]aaa|ttt[cgt]ccct/i
-        R/ agggt[cgt]aa|tt[acg]accct/i
-        R/ agggta[cgt]a|t[acg]taccct/i
-        R/ agggtaa[cgt]|[acg]ttaccct/i
+        R[[ agggtaaa|tttaccct]]i
+        R(( [cgt]gggtaaa|tttaccc[acg]))i
+        R[[ a[act]ggtaaa|tttacc[agt]t]]i
+        R[[ ag[act]gtaaa|tttac[agt]ct]]i
+        R[[ agg[act]taaa|ttta[agt]cct]]i
+        R[[ aggg[acg]aaa|ttt[cgt]ccct]]i
+        R[[ agggt[cgt]aa|tt[acg]accct]]i
+        R[[ agggta[cgt]a|t[acg]taccct]]i
+        R[[ agggtaa[cgt]|[acg]ttaccct]]i
     } [
         [ raw>> write bl ]
         [ count-matches number>string print ]

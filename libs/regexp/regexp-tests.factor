@@ -42,7 +42,7 @@ in: regexp-tests
 ! Off by default.
 { f } [ "\n" "." <regexp> matches? ] unit-test
 { t } [ "\n" "(?s:.)" <regexp> matches? ] unit-test
-{ t } [ "\n" R/ ./s matches? ] unit-test
+{ t } [ "\n" R[[ .]]s matches? ] unit-test
 { f } [ "\n\n" "(?s:.)." <regexp> matches? ] unit-test
 
 { f } [ "" ".+" <regexp> matches? ] unit-test
@@ -60,7 +60,7 @@ in: regexp-tests
 
 { t } [ "/" "\\/" <regexp> matches? ] unit-test
 
-{ t } [ "a" R/ a/i matches? ] unit-test
+{ t } [ "a" R[[ a]]i matches? ] unit-test
 
 { t } [ "" "a|b*|c+|d?" <regexp> matches? ] unit-test
 { t } [ "a" "a|b*|c+|d?" <regexp> matches? ] unit-test
@@ -208,39 +208,39 @@ in: regexp-tests
 { "aaa" } [ "aaacb" "a*" <regexp> first-match >string ] unit-test
 { "aa" } [ "aaacb" "aa?" <regexp> first-match >string ] unit-test
 
-{ t } [ "aaa" R/ AAA/i matches? ] unit-test
-{ f } [ "aax" R/ AAA/i matches? ] unit-test
-{ t } [ "aaa" R/ A*/i matches? ] unit-test
-{ f } [ "aaba" R/ A*/i matches? ] unit-test
-{ t } [ "b" R/ [AB]/i matches? ] unit-test
-{ f } [ "c" R/ [AB]/i matches? ] unit-test
-{ t } [ "c" R/ [A-Z]/i matches? ] unit-test
-{ f } [ "3" R/ [A-Z]/i matches? ] unit-test
+{ t } [ "aaa" R[[ AAA]]i matches? ] unit-test
+{ f } [ "aax" R[[ AAA]]i matches? ] unit-test
+{ t } [ "aaa" R[[ A*]]i matches? ] unit-test
+{ f } [ "aaba" R[[ A*]]i matches? ] unit-test
+{ t } [ "b" R{{ [AB]}}i matches? ] unit-test
+{ f } [ "c" R{{ [AB]}}i matches? ] unit-test
+{ t } [ "c" R{{ [A-Z]}}i matches? ] unit-test
+{ f } [ "3" R{{ [A-Z]}}i matches? ] unit-test
 
 { t } [ "a" "(?i:a)" <regexp> matches? ] unit-test
 { t } [ "a" "(?i:a)" <regexp> matches? ] unit-test
 { t } [ "A" "(?i:a)" <regexp> matches? ] unit-test
 { t } [ "A" "(?i:a)" <regexp> matches? ] unit-test
 
-{ t } [ "a" R/ (?-i:a)/i matches? ] unit-test
-{ t } [ "a" R/ (?-i:a)/i matches? ] unit-test
-{ f } [ "A" R/ (?-i:a)/i matches? ] unit-test
-{ f } [ "A" R/ (?-i:a)/i matches? ] unit-test
+{ t } [ "a" R{{ (?-i:a)}}i matches? ] unit-test
+{ t } [ "a" R{{ (?-i:a)}}i matches? ] unit-test
+{ f } [ "A" R{{ (?-i:a)}}i matches? ] unit-test
+{ f } [ "A" R{{ (?-i:a)}}i matches? ] unit-test
 
 { f } [ "A" "[a-z]" <regexp> matches? ] unit-test
-{ t } [ "A" R/ [a-z]/i matches? ] unit-test
+{ t } [ "A" R{{ [a-z]}}i matches? ] unit-test
 
 { f } [ "A" "\\p{Lower}" <regexp> matches? ] unit-test
-{ t } [ "A" R/ \p{Lower}/i matches? ] unit-test
+{ t } [ "A" R[[ \p{Lower}]]i matches? ] unit-test
 
-{ t } [ "abc" R/ abc/r matches? ] unit-test
-{ t } [ "abc" R/ a[bB][cC]/r matches? ] unit-test
+{ t } [ "abc" R{{ abc}}r matches? ] unit-test
+{ t } [ "abc" R{{ a[bB][cC]}}r matches? ] unit-test
 
-{ t } [ 3 "xabc" R/ abc/r match-index-from >boolean ] unit-test
-{ t } [ 3 "xabc" R/ a[bB][cC]/r match-index-from >boolean ] unit-test
+{ t } [ 3 "xabc" R{{ abc}}r match-index-from >boolean ] unit-test
+{ t } [ 3 "xabc" R{{ a[bB][cC]}}r match-index-from >boolean ] unit-test
 
-{ 2 } [ 0 "llamallol" R/ ll/ match-index-from ] unit-test
-{ 5 } [ 8 "lolmallol" R/ lol/r match-index-from ] unit-test
+{ 2 } [ 0 "llamallol" R{{ ll}} match-index-from ] unit-test
+{ 5 } [ 8 "lolmallol" R{{ lol}}r match-index-from ] unit-test
 
 { t } [ "s@f" "[a-z.-]@[a-z]" <regexp> matches? ] unit-test
 { f } [ "a" "[a-z.-]@[a-z]" <regexp> matches? ] unit-test
@@ -274,66 +274,66 @@ in: regexp-tests
 { "b" } [ "aaaaaaaaaaaaaaaaaaaaaaab" "((a*)*b)*b" <regexp> first-match >string ] unit-test
 
 { T{ slice { from 5 } { to 10 } { seq "hellohello" } } }
-[ "hellohello" R/ hello/r first-match ]
+[ "hellohello" R{{ hello}}r first-match ]
 unit-test
 
 { { "1" "2" "3" "4" } }
-[ "1ABC2DEF3GHI4" R/ [A-Z]+/ re-split [ >string ] map ] unit-test
+[ "1ABC2DEF3GHI4" R{{ [A-Z]+}} re-split [ >string ] map ] unit-test
 
 { { "1" "2" "3" "4" "" } }
-[ "1ABC2DEF3GHI4JK" R/ [A-Z]+/ re-split [ >string ] map ] unit-test
+[ "1ABC2DEF3GHI4JK" R{{ [A-Z]+}} re-split [ >string ] map ] unit-test
 
-{ { "" } } [ "" R/ =/ re-split [ >string ] map ] unit-test
+{ { "" } } [ "" R{{ =}} re-split [ >string ] map ] unit-test
 
-{ { "a" "" } } [ "a=" R/ =/ re-split [ >string ] map ] unit-test
+{ { "a" "" } } [ "a=" R{{ =}} re-split [ >string ] map ] unit-test
 
-{ { "he" "o" } } [ "hello" R/ l+/ re-split [ >string ] map ] unit-test
+{ { "he" "o" } } [ "hello" R{{ l+}} re-split [ >string ] map ] unit-test
 
-{ { "h" "llo" } } [ "hello" R/ e+/ re-split [ >string ] map ] unit-test
+{ { "h" "llo" } } [ "hello" R{{ e+}} re-split [ >string ] map ] unit-test
 
-{ { "" "h" "" "l" "l" "o" "" } } [ "hello" R/ e*/ re-split [ >string ] map ] unit-test
+{ { "" "h" "" "l" "l" "o" "" } } [ "hello" R{{ e*}} re-split [ >string ] map ] unit-test
 
 { { { 0 5 "hellohello" } { 5 10 "hellohello" } } }
-[ "hellohello" R/ hello/ [ 3array ] map-matches ]
+[ "hellohello" R{{ hello}} [ 3array ] map-matches ]
 unit-test
 
 { { { 5 10 "hellohello" } { 0 5 "hellohello" } } }
-[ "hellohello" R/ hello/r [ 3array ] map-matches ]
+[ "hellohello" R{{ hello}}r [ 3array ] map-matches ]
 unit-test
 
 { { "ABC" "DEF" "GHI" } }
-[ "1ABC2DEF3GHI4" R/ [A-Z]+/ all-matching-subseqs ] unit-test
+[ "1ABC2DEF3GHI4" R{{ [A-Z]+}} all-matching-subseqs ] unit-test
 
-{ { "ee" "e" } } [ "heellohello" R/ e+/ all-matching-subseqs ] unit-test
-{ { "e" "ee" } } [ "heellohello" R/ e+/r all-matching-subseqs ] unit-test
+{ { "ee" "e" } } [ "heellohello" R{{ e+}} all-matching-subseqs ] unit-test
+{ { "e" "ee" } } [ "heellohello" R{{ e+}}r all-matching-subseqs ] unit-test
 
-{ 3 } [ "1ABC2DEF3GHI4" R/ [A-Z]+/ count-matches ] unit-test
+{ 3 } [ "1ABC2DEF3GHI4" R{{ [A-Z]+}} count-matches ] unit-test
 
-{ 3 } [ "1ABC2DEF3GHI4" R/ [A-Z]+/r count-matches ] unit-test
+{ 3 } [ "1ABC2DEF3GHI4" R{{ [A-Z]+}}r count-matches ] unit-test
 
-{ 1 } [ "" R/ / count-matches ] unit-test
+{ 1 } [ "" R{{ }} count-matches ] unit-test
 
-{ 1 } [ "" R/ /r count-matches ] unit-test
+{ 1 } [ "" R{{ }}r count-matches ] unit-test
 
-{ 0 } [ "123" R/ [A-Z]+/ count-matches ] unit-test
+{ 0 } [ "123" R{{ [A-Z]+}} count-matches ] unit-test
 
-{ 0 } [ "123" R/ [A-Z]+/r count-matches ] unit-test
+{ 0 } [ "123" R{{ [A-Z]+}}r count-matches ] unit-test
 
-{ 6 } [ "hello" R/ e*/ count-matches ] unit-test
+{ 6 } [ "hello" R{{ e*}} count-matches ] unit-test
 
-{ 6 } [ "hello" R/ e*/r count-matches ] unit-test
+{ 6 } [ "hello" R{{ e*}}r count-matches ] unit-test
 
-{ 11 } [ "hello world" R/ l*/ count-matches ] unit-test
+{ 11 } [ "hello world" R{{ l*}} count-matches ] unit-test
 
-{ 11 } [ "hello world" R/ l*/r count-matches ] unit-test
+{ 11 } [ "hello world" R{{ l*}}r count-matches ] unit-test
 
-{ 1 } [ "hello" R/ e+/ count-matches ] unit-test
+{ 1 } [ "hello" R{{ e+}} count-matches ] unit-test
 
-{ 2 } [ "hello world" R/ l+/r count-matches ] unit-test
+{ 2 } [ "hello world" R{{ l+}}r count-matches ] unit-test
 
-{ "1.2.3.4." } [ "1ABC2DEF3GHI4JK" R/ [A-Z]+/ "." re-replace ] unit-test
-{ "XhXXlXlXoX XwXoXrXlXdX" } [ "hello world" R/ e*/ "X" re-replace ] unit-test
-{ "-- title --" } [ "== title ==" R/ =/ "-" re-replace ] unit-test
+{ "1.2.3.4." } [ "1ABC2DEF3GHI4JK" R{{ [A-Z]+}} "." re-replace ] unit-test
+{ "XhXXlXlXoX XwXoXrXlXdX" } [ "hello world" R{{ e*}} "X" re-replace ] unit-test
+{ "-- title --" } [ "== title ==" R{{ =}} "-" re-replace ] unit-test
 
 { "" } [ "ab" "a(?!b)" <regexp> first-match >string ] unit-test
 { "a" } [ "ac" "a(?!b)" <regexp> first-match >string ] unit-test
@@ -349,124 +349,124 @@ unit-test
 { f } [ "foobxr" "foo(?=bar)" <regexp> first-match ] unit-test
 
 ! Bug in parsing word
-{ t } [ "a" R/ a/ matches? ] unit-test
+{ t } [ "a" R{{ a}} matches? ] unit-test
 
 ! Testing negation
-{ f } [ "a" R/ (?~a)/ matches? ] unit-test
-{ t } [ "aa" R/ (?~a)/ matches? ] unit-test
-{ t } [ "bb" R/ (?~a)/ matches? ] unit-test
-{ t } [ "" R/ (?~a)/ matches? ] unit-test
+{ f } [ "a" R{{ (?~a)}} matches? ] unit-test
+{ t } [ "aa" R{{ (?~a)}} matches? ] unit-test
+{ t } [ "bb" R{{ (?~a)}} matches? ] unit-test
+{ t } [ "" R{{ (?~a)}} matches? ] unit-test
 
-{ f } [ "a" R/ (?~a+|b)/ matches? ] unit-test
-{ f } [ "aa" R/ (?~a+|b)/ matches? ] unit-test
-{ t } [ "bb" R/ (?~a+|b)/ matches? ] unit-test
-{ f } [ "b" R/ (?~a+|b)/ matches? ] unit-test
-{ t } [ "" R/ (?~a+|b)/ matches? ] unit-test
+{ f } [ "a" R{{ (?~a+|b)}} matches? ] unit-test
+{ f } [ "aa" R{{ (?~a+|b)}} matches? ] unit-test
+{ t } [ "bb" R{{ (?~a+|b)}} matches? ] unit-test
+{ f } [ "b" R{{ (?~a+|b)}} matches? ] unit-test
+{ t } [ "" R{{ (?~a+|b)}} matches? ] unit-test
 
 ! Intersecting classes
-{ t } [ "ab" R/ ac|\p{Lower}b/ matches? ] unit-test
-{ t } [ "ab" R/ ac|[a-z]b/ matches? ] unit-test
-{ t } [ "ac" R/ ac|\p{Lower}b/ matches? ] unit-test
-{ t } [ "ac" R/ ac|[a-z]b/ matches? ] unit-test
-{ t } [ "ac" R/ [a-zA-Z]c|\p{Lower}b/ matches? ] unit-test
-{ t } [ "ab" R/ [a-zA-Z]c|\p{Lower}b/ matches? ] unit-test
-{ t } [ "πb" R/ [a-zA-Z]c|\p{Lower}b/ matches? ] unit-test
-{ f } [ "πc" R/ [a-zA-Z]c|\p{Lower}b/ matches? ] unit-test
-{ f } [ "Ab" R/ [a-zA-Z]c|\p{Lower}b/ matches? ] unit-test
+{ t } [ "ab" R{{ ac|\p{Lower}b}} matches? ] unit-test
+{ t } [ "ab" R{{ ac|[a-z]b}} matches? ] unit-test
+{ t } [ "ac" R{{ ac|\p{Lower}b}} matches? ] unit-test
+{ t } [ "ac" R{{ ac|[a-z]b}} matches? ] unit-test
+{ t } [ "ac" R{{ [a-zA-Z]c|\p{Lower}b}} matches? ] unit-test
+{ t } [ "ab" R{{ [a-zA-Z]c|\p{Lower}b}} matches? ] unit-test
+{ t } [ "πb" R{{ [a-zA-Z]c|\p{Lower}b}} matches? ] unit-test
+{ f } [ "πc" R{{ [a-zA-Z]c|\p{Lower}b}} matches? ] unit-test
+{ f } [ "Ab" R{{ [a-zA-Z]c|\p{Lower}b}} matches? ] unit-test
 
-{ t } [ "aaaa" R/ .*a./ matches? ] unit-test
+{ t } [ "aaaa" R{{ .*a.}} matches? ] unit-test
 
-{ f } [ "ab" R/ (?~ac|\p{Lower}b)/ matches? ] unit-test
-{ f } [ "ab" R/ (?~ac|[a-z]b)/ matches? ] unit-test
-{ f } [ "ac" R/ (?~ac|\p{Lower}b)/ matches? ] unit-test
-{ f } [ "ac" R/ (?~ac|[a-z]b)/ matches? ] unit-test
-{ f } [ "ac" R/ (?~[a-zA-Z]c|\p{Lower}b)/ matches? ] unit-test
-{ f } [ "ab" R/ (?~[a-zA-Z]c|\p{Lower}b)/ matches? ] unit-test
-{ f } [ "πb" R/ (?~[a-zA-Z]c|\p{Lower}b)/ matches? ] unit-test
-{ t } [ "πc" R/ (?~[a-zA-Z]c|\p{Lower}b)/ matches? ] unit-test
-{ t } [ "Ab" R/ (?~[a-zA-Z]c|\p{Lower}b)/ matches? ] unit-test
+{ f } [ "ab" R{{ (?~ac|\p{Lower}b)}} matches? ] unit-test
+{ f } [ "ab" R{{ (?~ac|[a-z]b)}} matches? ] unit-test
+{ f } [ "ac" R{{ (?~ac|\p{Lower}b)}} matches? ] unit-test
+{ f } [ "ac" R{{ (?~ac|[a-z]b)}} matches? ] unit-test
+{ f } [ "ac" R{{ (?~[a-zA-Z]c|\p{Lower}b)}} matches? ] unit-test
+{ f } [ "ab" R{{ (?~[a-zA-Z]c|\p{Lower}b)}} matches? ] unit-test
+{ f } [ "πb" R{{ (?~[a-zA-Z]c|\p{Lower}b)}} matches? ] unit-test
+{ t } [ "πc" R{{ (?~[a-zA-Z]c|\p{Lower}b)}} matches? ] unit-test
+{ t } [ "Ab" R{{ (?~[a-zA-Z]c|\p{Lower}b)}} matches? ] unit-test
 
 ! DFA is compiled when needed, or when literal
 { regexp-initial-word } [ "foo" <regexp> dfa>> ] unit-test
-{ f } [ R/ foo/ dfa>> \ regexp-initial-word = ] unit-test
+{ f } [ R{{ foo}} dfa>> \ regexp-initial-word = ] unit-test
 
-{ t } [ "a" R/ ^a/ matches? ] unit-test
-{ f } [ "\na" R/ ^a/ matches? ] unit-test
-{ f } [ "\r\na" R/ ^a/ matches? ] unit-test
-{ f } [ "\ra" R/ ^a/ matches? ] unit-test
+{ t } [ "a" R{{ ^a}} matches? ] unit-test
+{ f } [ "\na" R{{ ^a}} matches? ] unit-test
+{ f } [ "\r\na" R{{ ^a}} matches? ] unit-test
+{ f } [ "\ra" R{{ ^a}} matches? ] unit-test
 
-{ 1 } [ "a" R/ ^a/ count-matches ] unit-test
-{ 0 } [ "\na" R/ ^a/ count-matches ] unit-test
-{ 0 } [ "\r\na" R/ ^a/ count-matches ] unit-test
-{ 0 } [ "\ra" R/ ^a/ count-matches ] unit-test
+{ 1 } [ "a" R{{ ^a}} count-matches ] unit-test
+{ 0 } [ "\na" R{{ ^a}} count-matches ] unit-test
+{ 0 } [ "\r\na" R{{ ^a}} count-matches ] unit-test
+{ 0 } [ "\ra" R{{ ^a}} count-matches ] unit-test
 
-{ t } [ "a" R/ a$/ matches? ] unit-test
-{ f } [ "a\n" R/ a$/ matches? ] unit-test
-{ f } [ "a\r" R/ a$/ matches? ] unit-test
-{ f } [ "a\r\n" R/ a$/ matches? ] unit-test
+{ t } [ "a" R{{ a$}} matches? ] unit-test
+{ f } [ "a\n" R{{ a$}} matches? ] unit-test
+{ f } [ "a\r" R{{ a$}} matches? ] unit-test
+{ f } [ "a\r\n" R{{ a$}} matches? ] unit-test
 
-{ 1 } [ "a" R/ a$/ count-matches ] unit-test
-{ 0 } [ "a\n" R/ a$/ count-matches ] unit-test
-{ 0 } [ "a\r" R/ a$/ count-matches ] unit-test
-{ 0 } [ "a\r\n" R/ a$/ count-matches ] unit-test
+{ 1 } [ "a" R{{ a$}} count-matches ] unit-test
+{ 0 } [ "a\n" R{{ a$}} count-matches ] unit-test
+{ 0 } [ "a\r" R{{ a$}} count-matches ] unit-test
+{ 0 } [ "a\r\n" R{{ a$}} count-matches ] unit-test
 
-{ t } [ "a" R/ a$|b$/ matches? ] unit-test
-{ t } [ "b" R/ a$|b$/ matches? ] unit-test
-{ f } [ "ab" R/ a$|b$/ matches? ] unit-test
-{ t } [ "ba" R/ ba$|b$/ matches? ] unit-test
+{ t } [ "a" R{{ a$|b$}} matches? ] unit-test
+{ t } [ "b" R{{ a$|b$}} matches? ] unit-test
+{ f } [ "ab" R{{ a$|b$}} matches? ] unit-test
+{ t } [ "ba" R{{ ba$|b$}} matches? ] unit-test
 
-{ t } [ "a" R/ \Aa/ matches? ] unit-test
-{ f } [ "\na" R/ \Aaa/ matches? ] unit-test
-{ f } [ "\r\na" R/ \Aa/ matches? ] unit-test
-{ f } [ "\ra" R/ \Aa/ matches? ] unit-test
+{ t } [ "a" R{{ \Aa}} matches? ] unit-test
+{ f } [ "\na" R{{ \Aaa}} matches? ] unit-test
+{ f } [ "\r\na" R{{ \Aa}} matches? ] unit-test
+{ f } [ "\ra" R{{ \Aa}} matches? ] unit-test
 
-{ t } [ "a" R/ \Aa/m matches? ] unit-test
-{ f } [ "\na" R/ \Aaa/m matches? ] unit-test
-{ f } [ "\r\na" R/ \Aa/m matches? ] unit-test
-{ f } [ "\ra" R/ \Aa/m matches? ] unit-test
-{ 0 } [ "\ra" R/ \Aa/m count-matches ] unit-test
+{ t } [ "a" R{{ \Aa}}m matches? ] unit-test
+{ f } [ "\na" R{{ \Aaa}}m matches? ] unit-test
+{ f } [ "\r\na" R{{ \Aa}}m matches? ] unit-test
+{ f } [ "\ra" R{{ \Aa}}m matches? ] unit-test
+{ 0 } [ "\ra" R{{ \Aa}}m count-matches ] unit-test
 
-{ f } [ "\r\n\n\n\nam" R/ ^am/m matches? ] unit-test
-{ 1 } [ "\r\n\n\n\nam" R/ ^am/m count-matches ] unit-test
+{ f } [ "\r\n\n\n\nam" R{{ ^am}}m matches? ] unit-test
+{ 1 } [ "\r\n\n\n\nam" R{{ ^am}}m count-matches ] unit-test
 
-{ t } [ "a" R/ \Aa\z/m matches? ] unit-test
-{ f } [ "a\n" R/ \Aa\z/m matches? ] unit-test
+{ t } [ "a" R{{ \Aa\z}}m matches? ] unit-test
+{ f } [ "a\n" R{{ \Aa\z}}m matches? ] unit-test
 
-{ f } [ "a\r\n" R/ \Aa\Z/m matches? ] unit-test
-{ f } [ "a\n" R/ \Aa\Z/m matches? ] unit-test
-{ 1 } [ "a\r\n" R/ \Aa\Z/m count-matches ] unit-test
-{ 1 } [ "a\n" R/ \Aa\Z/m count-matches ] unit-test
+{ f } [ "a\r\n" R{{ \Aa\Z}}m matches? ] unit-test
+{ f } [ "a\n" R{{ \Aa\Z}}m matches? ] unit-test
+{ 1 } [ "a\r\n" R{{ \Aa\Z}}m count-matches ] unit-test
+{ 1 } [ "a\n" R{{ \Aa\Z}}m count-matches ] unit-test
 
-{ t } [ "a" R/ \Aa\Z/m matches? ] unit-test
-{ f } [ "\na" R/ \Aaa\Z/m matches? ] unit-test
-{ f } [ "\r\na" R/ \Aa\Z/m matches? ] unit-test
-{ f } [ "\ra" R/ \Aa\Z/m matches? ] unit-test
+{ t } [ "a" R{{ \Aa\Z}}m matches? ] unit-test
+{ f } [ "\na" R{{ \Aaa\Z}}m matches? ] unit-test
+{ f } [ "\r\na" R{{ \Aa\Z}}m matches? ] unit-test
+{ f } [ "\ra" R{{ \Aa\Z}}m matches? ] unit-test
 
-{ 1 } [ "a" R/ \Aa\Z/m count-matches ] unit-test
-{ 0 } [ "\na" R/ \Aaa\Z/m count-matches ] unit-test
-{ 0 } [ "\r\na" R/ \Aa\Z/m count-matches ] unit-test
-{ 0 } [ "\ra" R/ \Aa\Z/m count-matches ] unit-test
+{ 1 } [ "a" R{{ \Aa\Z}}m count-matches ] unit-test
+{ 0 } [ "\na" R{{ \Aaa\Z}}m count-matches ] unit-test
+{ 0 } [ "\r\na" R{{ \Aa\Z}}m count-matches ] unit-test
+{ 0 } [ "\ra" R{{ \Aa\Z}}m count-matches ] unit-test
 
-{ t } [ "a" R/ ^a/m matches? ] unit-test
-{ f } [ "\na" R/ ^a/m matches? ] unit-test
-{ 1 } [ "\na" R/ ^a/m count-matches ] unit-test
-{ 1 } [ "\r\na" R/ ^a/m count-matches ] unit-test
-{ 1 } [ "\ra" R/ ^a/m count-matches ] unit-test
+{ t } [ "a" R{{ ^a}}m matches? ] unit-test
+{ f } [ "\na" R{{ ^a}}m matches? ] unit-test
+{ 1 } [ "\na" R{{ ^a}}m count-matches ] unit-test
+{ 1 } [ "\r\na" R{{ ^a}}m count-matches ] unit-test
+{ 1 } [ "\ra" R{{ ^a}}m count-matches ] unit-test
 
-{ t } [ "a" R/ a$/m matches? ] unit-test
-{ f } [ "a\n" R/ a$/m matches? ] unit-test
-{ 1 } [ "a\n" R/ a$/m count-matches ] unit-test
-{ 1 } [ "a\r" R/ a$/m count-matches ] unit-test
-{ 1 } [ "a\r\n" R/ a$/m count-matches ] unit-test
+{ t } [ "a" R{{ a$}}m matches? ] unit-test
+{ f } [ "a\n" R{{ a$}}m matches? ] unit-test
+{ 1 } [ "a\n" R{{ a$}}m count-matches ] unit-test
+{ 1 } [ "a\r" R{{ a$}}m count-matches ] unit-test
+{ 1 } [ "a\r\n" R{{ a$}}m count-matches ] unit-test
 
 { f } [ "foobxr" "foo\\z" <regexp> first-match ] unit-test
 { 3 } [ "foo" "foo\\z" <regexp> first-match length ] unit-test
 
-{ t } [ "a foo b" R/ foo/ re-contains? ] unit-test
-{ f } [ "a bar b" R/ foo/ re-contains? ] unit-test
-{ t } [ "foo" R/ foo/ re-contains? ] unit-test
+{ t } [ "a foo b" R{{ foo}} re-contains? ] unit-test
+{ f } [ "a bar b" R{{ foo}} re-contains? ] unit-test
+{ t } [ "foo" R{{ foo}} re-contains? ] unit-test
 
-{ { "foo" "fxx" "fab" } } [ "fab fxx foo" R/ f../r all-matching-subseqs ] unit-test
+{ { "foo" "fxx" "fab" } } [ "fab fxx foo" R{{ f..}}r all-matching-subseqs ] unit-test
 
 { t } [ "foo" "\\bfoo\\b" <regexp> re-contains? ] unit-test
 { t } [ "afoob" "\\Bfoo\\B" <regexp> re-contains? ] unit-test
@@ -506,71 +506,71 @@ unit-test
 
 { 3 } [ "caba" "(?<=b)a" <regexp> first-match from>> ] unit-test
 
-{ t } [ "\ra" R/ .^a/ms matches? ] unit-test
-{ f } [ "\ra" R/ .^a/mds matches? ] unit-test
-{ t } [ "\na" R/ .^a/ms matches? ] unit-test
-{ t } [ "\na" R/ .^a/mds matches? ] unit-test
+{ t } [ "\ra" R{{ .^a}}ms matches? ] unit-test
+{ f } [ "\ra" R{{ .^a}}mds matches? ] unit-test
+{ t } [ "\na" R{{ .^a}}ms matches? ] unit-test
+{ t } [ "\na" R{{ .^a}}mds matches? ] unit-test
 
-{ t } [ "a\r" R/ a$./ms matches? ] unit-test
-{ f } [ "a\r" R/ a$./mds matches? ] unit-test
-{ t } [ "a\n" R/ a$./ms matches? ] unit-test
-{ t } [ "a\n" R/ a$./mds matches? ] unit-test
+{ t } [ "a\r" R{{ a$.}}ms matches? ] unit-test
+{ f } [ "a\r" R{{ a$.}}mds matches? ] unit-test
+{ t } [ "a\n" R{{ a$.}}ms matches? ] unit-test
+{ t } [ "a\n" R{{ a$.}}mds matches? ] unit-test
 
 ! Unicode categories
-{ t } [ "a" R/ \p{L}/ matches? ] unit-test
-{ t } [ "A" R/ \p{L}/ matches? ] unit-test
-{ f } [ " " R/ \p{L}/ matches? ] unit-test
-{ f } [ "a" R/ \P{L}/ matches? ] unit-test
-{ f } [ "A" R/ \P{L}/ matches? ] unit-test
-{ t } [ " " R/ \P{L}/ matches? ] unit-test
+{ t } [ "a" R(( \p{L})) matches? ] unit-test
+{ t } [ "A" R(( \p{L})) matches? ] unit-test
+{ f } [ " " R(( \p{L})) matches? ] unit-test
+{ f } [ "a" R(( \P{L})) matches? ] unit-test
+{ f } [ "A" R(( \P{L})) matches? ] unit-test
+{ t } [ " " R(( \P{L})) matches? ] unit-test
 
-{ t } [ "a" R/ \p{Ll}/ matches? ] unit-test
-{ f } [ "A" R/ \p{Ll}/ matches? ] unit-test
-{ f } [ " " R/ \p{Ll}/ matches? ] unit-test
-{ f } [ "a" R/ \P{Ll}/ matches? ] unit-test
-{ t } [ "A" R/ \P{Ll}/ matches? ] unit-test
-{ t } [ " " R/ \P{Ll}/ matches? ] unit-test
+{ t } [ "a" R(( \p{Ll})) matches? ] unit-test
+{ f } [ "A" R(( \p{Ll})) matches? ] unit-test
+{ f } [ " " R(( \p{Ll})) matches? ] unit-test
+{ f } [ "a" R(( \P{Ll})) matches? ] unit-test
+{ t } [ "A" R(( \P{Ll})) matches? ] unit-test
+{ t } [ " " R(( \P{Ll})) matches? ] unit-test
 
-{ t } [ "a" R/ \p{script=Latin}/ matches? ] unit-test
-{ f } [ " " R/ \p{script=Latin}/ matches? ] unit-test
-{ f } [ "a" R/ \P{script=Latin}/ matches? ] unit-test
-{ t } [ " " R/ \P{script=Latin}/ matches? ] unit-test
+{ t } [ "a" R(( \p{script=Latin})) matches? ] unit-test
+{ f } [ " " R(( \p{script=Latin})) matches? ] unit-test
+{ f } [ "a" R(( \P{script=Latin})) matches? ] unit-test
+{ t } [ " " R(( \P{script=Latin})) matches? ] unit-test
 
 ! These should be case-insensitive
-{ f } [ " " R/ \p{l}/ matches? ] unit-test
-{ f } [ "a" R/ \P{l}/ matches? ] unit-test
-{ f } [ "a" R/ \P{ll}/ matches? ] unit-test
-{ t } [ " " R/ \P{LL}/ matches? ] unit-test
-{ f } [ "a" R/ \P{sCriPt = latin}/ matches? ] unit-test
-{ t } [ " " R/ \P{SCRIPT = laTIn}/ matches? ] unit-test
+{ f } [ " " R(( \p{l})) matches? ] unit-test
+{ f } [ "a" R(( \P{l})) matches? ] unit-test
+{ f } [ "a" R(( \P{ll})) matches? ] unit-test
+{ t } [ " " R(( \P{LL})) matches? ] unit-test
+{ f } [ "a" R(( \P{sCriPt = latin})) matches? ] unit-test
+{ t } [ " " R(( \P{SCRIPT = laTIn})) matches? ] unit-test
 
 ! Logical operators
-{ t } [ "a" R/ [\p{script=latin}\p{lower}]/ matches? ] unit-test
-{ t } [ "π" R/ [\p{script=latin}\p{lower}]/ matches? ] unit-test
-{ t } [ "A" R/ [\p{script=latin}\p{lower}]/ matches? ] unit-test
-{ f } [ "3" R/ [\p{script=latin}\p{lower}]/ matches? ] unit-test
+{ t } [ "a" R(( [\p{script=latin}\p{lower}])) matches? ] unit-test
+{ t } [ "π" R(( [\p{script=latin}\p{lower}])) matches? ] unit-test
+{ t } [ "A" R(( [\p{script=latin}\p{lower}])) matches? ] unit-test
+{ f } [ "3" R(( [\p{script=latin}\p{lower}])) matches? ] unit-test
 
-{ t } [ "a" R/ [\p{script=latin}||\p{lower}]/ matches? ] unit-test
-{ t } [ "π" R/ [\p{script=latin}||\p{lower}]/ matches? ] unit-test
-{ t } [ "A" R/ [\p{script=latin}||\p{lower}]/ matches? ] unit-test
-{ f } [ "3" R/ [\p{script=latin}||\p{lower}]/ matches? ] unit-test
+{ t } [ "a" R(( [\p{script=latin}||\p{lower}])) matches? ] unit-test
+{ t } [ "π" R(( [\p{script=latin}||\p{lower}])) matches? ] unit-test
+{ t } [ "A" R(( [\p{script=latin}||\p{lower}])) matches? ] unit-test
+{ f } [ "3" R(( [\p{script=latin}||\p{lower}])) matches? ] unit-test
 
-{ t } [ "a" R/ [\p{script=latin}&&\p{lower}]/ matches? ] unit-test
-{ f } [ "π" R/ [\p{script=latin}&&\p{lower}]/ matches? ] unit-test
-{ f } [ "A" R/ [\p{script=latin}&&\p{lower}]/ matches? ] unit-test
-{ f } [ "3" R/ [\p{script=latin}&&\p{lower}]/ matches? ] unit-test
+{ t } [ "a" R(( [\p{script=latin}&&\p{lower}])) matches? ] unit-test
+{ f } [ "π" R(( [\p{script=latin}&&\p{lower}])) matches? ] unit-test
+{ f } [ "A" R(( [\p{script=latin}&&\p{lower}])) matches? ] unit-test
+{ f } [ "3" R(( [\p{script=latin}&&\p{lower}])) matches? ] unit-test
 
-{ f } [ "a" R/ [\p{script=latin}~~\p{lower}]/ matches? ] unit-test
-{ t } [ "π" R/ [\p{script=latin}~~\p{lower}]/ matches? ] unit-test
-{ t } [ "A" R/ [\p{script=latin}~~\p{lower}]/ matches? ] unit-test
-{ f } [ "3" R/ [\p{script=latin}~~\p{lower}]/ matches? ] unit-test
+{ f } [ "a" R(( [\p{script=latin}~~\p{lower}])) matches? ] unit-test
+{ t } [ "π" R(( [\p{script=latin}~~\p{lower}])) matches? ] unit-test
+{ t } [ "A" R(( [\p{script=latin}~~\p{lower}])) matches? ] unit-test
+{ f } [ "3" R(( [\p{script=latin}~~\p{lower}])) matches? ] unit-test
 
-{ f } [ "a" R/ [\p{script=latin}--\p{lower}]/ matches? ] unit-test
-{ f } [ "π" R/ [\p{script=latin}--\p{lower}]/ matches? ] unit-test
-{ t } [ "A" R/ [\p{script=latin}--\p{lower}]/ matches? ] unit-test
-{ f } [ "3" R/ [\p{script=latin}--\p{lower}]/ matches? ] unit-test
+{ f } [ "a" R(( [\p{script=latin}--\p{lower}])) matches? ] unit-test
+{ f } [ "π" R(( [\p{script=latin}--\p{lower}])) matches? ] unit-test
+{ t } [ "A" R(( [\p{script=latin}--\p{lower}])) matches? ] unit-test
+{ f } [ "3" R(( [\p{script=latin}--\p{lower}])) matches? ] unit-test
 
-{ t } [ " " R/ \P{alpha}/ matches? ] unit-test
-{ f } [ "" R/ \P{alpha}/ matches? ] unit-test
-{ f } [ "a " R/ \P{alpha}/ matches? ] unit-test
-{ f } [ "a" R/ \P{alpha}/ matches? ] unit-test
+{ t } [ " " R(( \P{alpha})) matches? ] unit-test
+{ f } [ "" R(( \P{alpha})) matches? ] unit-test
+{ f } [ "a " R(( \P{alpha})) matches? ] unit-test
+{ f } [ "a" R(( \P{alpha})) matches? ] unit-test

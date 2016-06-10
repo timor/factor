@@ -2350,7 +2350,7 @@ CONSTANT: html5 H{
     "#" ?head [ numeric-charref ] [ named-charref ] if ;
 
 CONSTANT: re-charref
-R/ &(#[0-9]+|#[xX][0-9a-fA-F]+|[^\t\n\f <&#;]{1,32});?/ ;
+R[[ &(#[0-9]+|#[xX][0-9a-fA-F]+|[^\t\n\f <&#;]{1,32});?]] ;
 
 PRIVATE>
 

@@ -134,7 +134,7 @@ CONSTANT: galois-slides
         "Implemented with library code"
         { $code "use: regexp" }
         { $code "\"ababbc\" \"[ab]+c\" <regexp> matches? ." }
-        { $code "\"ababbc\" R/ [ab]+c/ matches? ." }
+        { $code "\"ababbc\" R[[ [ab]+c]] matches? ." }
     }
     { $slide "Example: memoization"
         { "Memoization with " { $link postpone\ MEMO: } }

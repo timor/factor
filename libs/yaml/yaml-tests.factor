@@ -482,8 +482,8 @@ CONSTANT: nested-merge-obj H{
 ${ nested-merge-obj } [ $ nested-merge-str yaml> ] unit-test
 ${ nested-merge-obj } [ $ nested-merge-obj >yaml yaml> ] unit-test
 
-CONSTANT: recursive-merge-str "--- &A ;
-<<: *A"
+CONSTANT: recursive-merge-str "--- &A
+<<: *A" ;
 CONSTANT: recursive-merge-obj H{ } ;
 
 ${ recursive-merge-obj } [ $ recursive-merge-str yaml> ] unit-test

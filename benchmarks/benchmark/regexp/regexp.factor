@@ -9,8 +9,8 @@ in: benchmark.regexp
     20,000 iota [ number>string ] map
     200 iota [ 1 + char: a <string> ] map
     '[
-        _ R/ \d+/ [ matches? ] curry all? t assert=
-        _ R/ [a]+/ [ matches? ] curry all? t assert=
+        _ R[[ \d+]] [ matches? ] curry all? t assert=
+        _ R[[ [a]+]] [ matches? ] curry all? t assert=
     ] times ;
 
 main: regexp-benchmark

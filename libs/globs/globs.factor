@@ -7,10 +7,10 @@ unicode ;
 in: globs
 
 : not-path-separator ( -- sep )
-    os windows? R/ [^\\/\\]/ R/ [^\\/]/ ? ; foldable
+    os windows? R{{ [^\\/\\]}} R{{ [^\\/]}} ? ; foldable
 
 : wild-path-separator ( -- sep )
-    os windows? R/ [^\\/\\][\\/\\]|[^\\/\\]/ R/ [^\\/][\\/]|[^\\/]/ ? ; foldable
+    os windows? R{{ [^\\/\\][\\/\\]|[^\\/\\]}} R{{ [^\\/][\\/]|[^\\/]}} ? ; foldable
 
 : <glob> ( string -- obj ) EBNF{{
 

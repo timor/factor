@@ -14,7 +14,7 @@ in: text-analysis
     [ [ blank? ] trim ] map harvest ;
 
 : split-paragraphs ( str -- seq )
-    R/ \r?\n\r?\n/ re-split trimmed ;
+    R[[ \r?\n\r?\n]] re-split trimmed ;
 
 <<
 CONSTANT: ABBREVIATIONS {
@@ -39,7 +39,7 @@ CONSTANT: ABBREVIATIONS {
 : split-sentences ( str -- seq )
 
     ! Mark end of sentences with EOS marker
-    R/ ((?:[\.?!]|[\r\n]+)(?:\"|\'|\)|\]|\})?)(\s+)/
+    R[[ ((?:[\.?!]|[\r\n]+)(?:\"|\'|\)|\]|\})?)(\s+)]]
     [ [ ".?!\r\n\"')]}" member? not ] cut-when "\x01" glue ]
     re-replace-with
 
@@ -63,46 +63,46 @@ CONSTANT: ABBREVIATIONS {
     "\x01" split trimmed ;
 
 CONSTANT: sub-syllable {
-    R/ [^aeiou]e$/ ! give, love, bone, done, ride ...
-    R/ [aeiou](?:([cfghklmnprsvwz])\1?|ck|sh|[rt]ch)e[ds]$/
+    R[[ [^aeiou]e$]] ! give, love, bone, done, ride ...
+    R[[ [aeiou](?:([cfghklmnprsvwz])\1?|ck|sh|[rt]ch)e[ds]$]]
     ! (passive) past participles and 3rd person sing present verbs:
     ! bared, liked, called, tricked, bashed, matched
 
-    R/ .e(?:ly|less(?:ly)?|ness?|ful(?:ly)?|ments?)$/
+    R[[ .e(?:ly|less(?:ly)?|ness?|ful(?:ly)?|ments?)$]]
     ! nominal, adjectival and adverbial derivatives from -e$ roots:
     ! absolutely, nicely, likeness, basement, hopeless
     ! hopeful, tastefully, wasteful
 
-    R/ ion/ ! action, diction, fiction
-    R/ [ct]ia[nl]/ ! special(ly), initial, physician, christian
-    R/ [^cx]iou/ ! illustrious, NOT spacious, gracious, anxious, noxious
-    R/ sia$/ ! amnesia, polynesia
-    R/ .gue$/ ! dialogue, intrigue, colleague
+    R{{ ion}} ! action, diction, fiction
+    R{{ [ct]ia[nl]}} ! special(ly), initial, physician, christian
+    R{{ [^cx]iou}} ! illustrious, NOT spacious, gracious, anxious, noxious
+    R{{ sia$}} ! amnesia, polynesia
+    R{{ .gue$}} ! dialogue, intrigue, colleague
 } ;
 
 CONSTANT: add-syllable {
-    R/ i[aiou]/ ! alias, science, phobia
-    R/ [dls]ien/ ! salient, gradient, transient
-    R/ [aeiouym]ble$/ ! -Vble, plus -mble
-    R/ [aeiou]{3}/ ! agreeable
-    R/ ^mc/ ! mcwhatever
-    R/ ism$/ ! sexism, racism
-    R/ (?:([^aeiouy])\1|ck|mp|ng)le$/ ! bubble, cattle, cackle, sample, angle
-    R/ dnt$/ ! couldn/t
-    R/ [aeiou]y[aeiou]/ ! annoying, layer
+    R{{ i[aiou]}} ! alias, science, phobia
+    R{{ [dls]ien}} ! salient, gradient, transient
+    R{{ [aeiouym]ble$}} ! -Vble, plus -mble
+    R(( [aeiou]{3})) ! agreeable
+    R{{ ^mc}} ! mcwhatever
+    R{{ ism$}} ! sexism, racism
+    R{{ (?:([^aeiouy])\1|ck|mp|ng)le$}} ! bubble, cattle, cackle, sample, angle
+    R{{ dnt$}} ! couldn/t
+    R{{ [aeiou]y[aeiou]}} ! annoying, layer
 } ;
 
 : syllables ( str -- n )
     dup length 1 = [ drop 1 ] [
         >lower char: . swap remove
-        [ R/ [aeiouy]+/ count-matches ]
+        [ R{{ [aeiouy]+}} count-matches ]
         [ sub-syllable [ matches? ] with count - ]
         [ add-syllable [ matches? ] with count + ] tri
         1 max
     ] if ;
 
 : split-words ( str -- words )
-    R/ \b([a-z][a-z\-']*)\b/i all-matching-subseqs ;
+    R{{ \b([a-z][a-z\-']*)\b}}i all-matching-subseqs ;
 
 TUPLE: text-analysis #paragraphs #sentences #chars #words
 #syllables #complex-words #unique-words #difficult-words ;
