@@ -4,7 +4,7 @@ USING: accessors binary-search fry kernel math math.order parser
 sequences sets sorting ;
 in: suffix-arrays
 
-<PRIVATE
+PRIVATE<
 
 : suffixes ( string -- suffixes-seq )
     dup length iota [ tail-slice ] with map ;

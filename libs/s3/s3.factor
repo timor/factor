@@ -26,7 +26,7 @@ in: s3
 symbol: key-id
 symbol: secret-key
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: s3-request path mime-type date method headers  bucket data ;
 
@@ -87,7 +87,7 @@ PRIVATE>
 
 TUPLE: bucket name date ;
 
-<PRIVATE
+PRIVATE<
 
 : (buckets) ( xml -- seq )
     "Buckets" tag-named
@@ -100,14 +100,14 @@ PRIVATE>
 : buckets ( -- seq )
     f "/" H{ } clone s3-get nip >string string>xml (buckets) ;
 
-<PRIVATE
+PRIVATE<
 : bucket-url ( bucket -- string )
     [ "http://" % % ".s3.amazonaws.com/" % ] "" make ;
 PRIVATE>
 
 TUPLE: key name last-modified size ;
 
-<PRIVATE
+PRIVATE<
 : (keys) ( xml -- seq )
     "Contents" tags-named [
         [ "Key" tag-named children>string ]

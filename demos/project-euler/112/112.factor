@@ -31,7 +31,7 @@ in: project-euler.112
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : bouncy? ( n -- ? )
     number>digits dup natural-sort

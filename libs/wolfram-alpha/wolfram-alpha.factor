@@ -11,7 +11,7 @@ symbol: wolfram-api-id
 
 ! "XXXXXX-XXXXXXXXXX" wolfram-api-id set-global
 
-<PRIVATE
+PRIVATE<
 
 : query ( query -- xml )
     url-encode wolfram-api-id get-global

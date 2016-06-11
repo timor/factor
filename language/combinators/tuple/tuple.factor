@@ -3,7 +3,7 @@ USING: accessors assocs classes.tuple generalizations kernel
 locals quotations sequences ;
 in: combinators.tuple
 
-<PRIVATE
+PRIVATE<
 
 :: (tuple-slot-quot) ( slot assoc n -- quot )
     slot name>> assoc at [

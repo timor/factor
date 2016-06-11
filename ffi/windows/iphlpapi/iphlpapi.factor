@@ -401,7 +401,7 @@ FUNCTION: DWORD GetNetworkParams ( PFIXED_INFO pFixedInfo, PULONG pOutBufLen ) ;
 ! second struct starts at 720h
 
 
-<PRIVATE
+PRIVATE<
 
 : loop-list ( obj -- seq )
     [ [ dup [ Next>> ] when ] keep ] loop>array nip ;

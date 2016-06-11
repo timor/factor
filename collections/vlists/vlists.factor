@@ -15,7 +15,7 @@ M: vlist length length>> ;
 
 M: vlist nth-unsafe vector>> nth-unsafe ;
 
-<PRIVATE
+PRIVATE<
 
 : >vlist< ( vlist -- len vec )
     [ length>> ] [ vector>> ] bi ; inline

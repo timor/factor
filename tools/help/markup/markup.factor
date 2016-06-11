@@ -168,7 +168,7 @@ ALIAS: $slot $snippet ;
 
 ! Some links
 
-<PRIVATE
+PRIVATE<
 
 : write-link ( string object -- )
     link-style get [ write-object ] with-style ;
@@ -291,7 +291,7 @@ PRIVATE>
 : $see-also ( topics -- )
     "See also" $heading $links ;
 
-<PRIVATE
+PRIVATE<
 
 : ?unwrap ( word/wrapper -- word )
     dup wrapper? [ wrapped>> ] when ;

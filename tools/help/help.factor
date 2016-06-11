@@ -72,7 +72,7 @@ M: word article-title
         append
     ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : (word-help) ( word -- element )
     [

@@ -42,7 +42,7 @@ in: spotlight
 : attr|| ( attr1 attr2 -- string )
     " || " glue ;
 
-<PRIVATE
+PRIVATE<
 
 : run-process-output ( command -- seq )
     utf8 [ lines ] with-process-reader ;

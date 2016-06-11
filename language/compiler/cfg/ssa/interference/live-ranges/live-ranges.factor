@@ -6,7 +6,7 @@ compiler.cfg.liveness compiler.cfg.rpo kernel math namespaces
 sequences ;
 in: compiler.cfg.ssa.interference.live-ranges
 
-<PRIVATE
+PRIVATE<
 
 SYMBOLS: local-def-indices local-kill-indices ;
 

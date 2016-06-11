@@ -9,7 +9,7 @@ in: windows.com.wrapper
 
 TUPLE: com-wrapper < disposable callbacks vtbls ;
 
-<PRIVATE
+PRIVATE<
 
 symbol: +wrapped-objects+
 +wrapped-objects+ get-global

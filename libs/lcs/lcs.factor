@@ -3,7 +3,7 @@ kernel locals make math math.order sequences sequences.private
 typed ;
 in: lcs
 
-<PRIVATE
+PRIVATE<
 
 : levenshtein-step ( insert delete change same? -- next )
     [ [ 1 + ] bi@ ] 2dip [ 1 + ] unless min min ;
@@ -43,7 +43,7 @@ TUPLE: retain item ;
 TUPLE: delete item ;
 TUPLE: insert item ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: trace-state old new table i j ;
 

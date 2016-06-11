@@ -25,7 +25,7 @@ TUPLE: paragraph < aligned-gadget margin wrapped ;
     horizontal >>orientation
     swap >>margin ;
 
-<PRIVATE
+PRIVATE<
 
 : gadget>word ( gadget -- word )
     [ ] [ pref-dim first ] [ word-break? ] tri <wrapping-word> ;

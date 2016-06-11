@@ -5,7 +5,7 @@ compiler.cfg.rpo deques dlists fry kernel locals math math.order
 namespaces sequences sorting vectors ;
 in: compiler.cfg.dominance
 
-<PRIVATE
+PRIVATE<
 
 symbol: dom-parents
 
@@ -13,7 +13,7 @@ PRIVATE>
 
 : dom-parent ( bb -- bb' ) dom-parents get at ;
 
-<PRIVATE
+PRIVATE<
 
 : set-idom ( idom bb -- changed? )
     dom-parents get maybe-set-at ;
@@ -43,7 +43,7 @@ PRIVATE>
 
 : dom-children ( bb -- seq ) dom-childrens get at ;
 
-<PRIVATE
+PRIVATE<
 
 : compute-dom-children ( dom-parents -- dom-childrens )
     H{ } clone [ '[ 2dup eq? [ 2drop ] [ _ push-at ] if ] assoc-each ] keep
@@ -57,7 +57,7 @@ PRIVATE>
 
 : maxpre-of ( bb -- n ) [ maxpreorder get at ] [ 1/0. ] if* ;
 
-<PRIVATE
+PRIVATE<
 
 : (compute-dfs) ( n bb -- n )
     [ 1 + ] dip

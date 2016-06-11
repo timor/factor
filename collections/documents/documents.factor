@@ -72,7 +72,7 @@ CONSTANT: doc-start { 0 0 } ;
 : doc-end ( document -- loc )
     [ last-line# ] keep line-end ;
 
-<PRIVATE
+PRIVATE<
 
 : (doc-range) ( from to line# document -- slice )
     [ start/end-on-line ] 2keep doc-line <slice> ;
@@ -186,7 +186,7 @@ PRIVATE>
 : clear-doc ( document -- )
     [ "" ] dip set-doc-string ;
 
-<PRIVATE
+PRIVATE<
 
 : undo/redo-edit ( edit document string-quot to-quot -- )
     '[ [ _ [ from>> ] _ tri ] dip set-doc-range ] with-undo ; inline

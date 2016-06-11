@@ -10,7 +10,7 @@ math.functions continuations ;
 FROM: alien.c-types => uchar ;
 in: id3
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: genres
     {

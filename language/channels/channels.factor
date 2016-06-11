@@ -14,7 +14,7 @@ TUPLE: channel receivers senders ;
 GENERIC: to ( value channel -- ) ;
 GENERIC: from ( channel -- value ) ;
 
-<PRIVATE
+PRIVATE<
 
 : wait ( channel -- )
     [ self ] dip senders>> push

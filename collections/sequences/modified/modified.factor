@@ -53,7 +53,7 @@ C: <summed> summed ;
 
 M: summed length seqs>> longest length ;
 
-<PRIVATE
+PRIVATE<
 : ?+ ( x/f y/f -- sum )
     ! addition that treats f as 0
     [

@@ -7,7 +7,7 @@ USING: kernel accessors sequences sequences.private destructors math namespaces
 
 in: ecdsa
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: ec-key handle ;
 

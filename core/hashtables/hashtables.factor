@@ -9,7 +9,7 @@ TUPLE: hashtable
     { deleted array-capacity }
     { array array } ;
 
-<PRIVATE
+PRIVATE<
 
 : wrap ( i array -- n )
     length>> 1 fixnum-fast fixnum-bitand ; inline
@@ -150,7 +150,7 @@ M: hashtable set-at
     [ 2dup hash@ set-nth-pair ] keep
     hashtable boa ; inline
 
-<PRIVATE
+PRIVATE<
 
 : collect-pairs ( hash quot: ( key value -- elt ) -- seq )
     [ [ array>> 0 swap ] [ assoc-size f <array> ] bi ] dip swap [

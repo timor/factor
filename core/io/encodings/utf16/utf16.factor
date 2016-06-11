@@ -14,7 +14,7 @@ singleton: utf16
 
 ERROR: missing-bom ;
 
-<PRIVATE
+PRIVATE<
 
 ! UTF-16BE decoding
 

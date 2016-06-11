@@ -272,7 +272,7 @@ defer: make-texture
 : image-format ( image -- internal-format format type )
     [ component-order>> ] [ component-type>> ] bi (image-format) ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: single-texture < disposable image dim loc texture-coords texture display-list ;
 

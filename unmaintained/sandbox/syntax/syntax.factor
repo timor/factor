@@ -4,7 +4,7 @@
 USING: kernel sequences assocs namespaces lexer vocabs.parser sandbox ;
 in: sandbox.syntax
 
-<PRIVATE
+PRIVATE<
 
 ERROR: sandbox-error vocab ;
 

@@ -36,7 +36,7 @@ M: gadget viewport-column-header drop f ;
     ] keep
     2dup control-value = [ 2drop ] [ set-control-value ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : do-mouse-scroll ( scroller -- )
     scroll-direction get-global

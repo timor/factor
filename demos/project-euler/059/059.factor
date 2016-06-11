@@ -49,7 +49,7 @@ in: project-euler.059
 ! NOTE: This technique would probably not work well in all cases, but luckily
 ! it did for this particular problem.
 
-<PRIVATE
+PRIVATE<
 
 : source-059 ( -- seq )
     "resource:extra/project-euler/059/cipher1.txt"

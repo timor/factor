@@ -9,7 +9,7 @@ symbol: delimiter
 
 char: , delimiter set-global
 
-<PRIVATE
+PRIVATE<
 
 MEMO: field-delimiters ( delimiter -- field-seps quote-seps )
     [ "\r\n" swap prefix ] [ "\r\"\n" swap prefix ] bi ; inline
@@ -83,7 +83,7 @@ PRIVATE>
 : with-delimiter ( ch quot -- )
     [ delimiter ] dip with-variable ; inline
 
-<PRIVATE
+PRIVATE<
 
 : needs-escaping? ( cell delimiter -- ? )
     '[ dup "\n\"\r" member? [ drop t ] [ _ = ] if ] any? ; inline

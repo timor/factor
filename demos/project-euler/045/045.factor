@@ -25,7 +25,7 @@ in: project-euler.045
 ! All hexagonal numbers are also triangle numbers, so iterate through hexagonal
 ! numbers until you find one that is pentagonal as well.
 
-<PRIVATE
+PRIVATE<
 
 : nth-hexagonal ( n -- m )
     dup 2 * 1 - * ;

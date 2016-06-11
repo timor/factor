@@ -6,7 +6,7 @@ in: slots.macros
 
 ! Fundamental accessors
 
-<PRIVATE
+PRIVATE<
 : define-slot ( name -- )
     [ define-protocol-slot ] with-compilation-unit ;
 PRIVATE>

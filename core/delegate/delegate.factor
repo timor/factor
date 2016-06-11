@@ -9,7 +9,7 @@ in: delegate
 
 ERROR: broadcast-words-must-have-no-outputs group ;
 
-<PRIVATE
+PRIVATE<
 
 : protocol-words ( protocol -- words )
     "protocol-words" word-prop ;
@@ -117,7 +117,7 @@ M: consultation forget*
     [ unconsult-methods ] [ unregister-consult ] bi ;
 
 ! Protocols
-<PRIVATE
+PRIVATE<
 
 : forget-all-methods ( classes words -- )
     [ first ?lookup-method forget ] cartesian-each ;

@@ -12,7 +12,7 @@ in: sorting
 ! 2) first phase (interchanging pairs x[i], x[i+1] where
 ! x[i] > x[i+1]) is handled specially
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: merge-state
 { seq    array }
@@ -145,7 +145,7 @@ PRIVATE>
 : inv-sort-with ( seq quot: ( elt -- key ) -- sortedseq )
     [ compare invert-comparison ] curry sort ; inline
 
-<PRIVATE
+PRIVATE<
 
 : check-bounds ( alist n -- alist )
     [ swap bounds-check 2drop ] curry dupd each ; inline

@@ -18,7 +18,7 @@ M: assoc >bencode
     [ [ >bencode ] bi@ append ] { } assoc>map concat
     "d" "e" surround ;
 
-<PRIVATE
+PRIVATE<
 
 defer: read-bencode
 

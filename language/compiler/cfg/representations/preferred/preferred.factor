@@ -16,7 +16,7 @@ M: insn defs-vreg-reps drop { } ;
 M: insn temp-vreg-reps drop { } ;
 M: insn uses-vreg-reps drop { } ;
 
-<PRIVATE
+PRIVATE<
 
 : rep-getter-quot ( rep -- quot )
     {

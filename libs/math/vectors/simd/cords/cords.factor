@@ -6,7 +6,7 @@ classes ;
 in: math.vectors.simd.cords
 
 <<
-<PRIVATE
+PRIVATE<
 
 FUNCTOR: (define-simd-128-cord) ( A/2 A -- )
 

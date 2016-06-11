@@ -15,7 +15,7 @@ singleton: windows-31j
 
 windows-31j "Windows-31J" register-encoding
 
-<PRIVATE
+PRIVATE<
 
 symbol: shift-jis-table
 

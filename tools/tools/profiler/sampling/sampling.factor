@@ -6,7 +6,7 @@ math.statistics math.vectors memory namespaces prettyprint
 sequences sequences.generalizations sets sorting ;
 in: tools.profiler.sampling
 
-<PRIVATE
+PRIVATE<
 PRIMITIVE: (get-samples) ( -- samples/f ) ;
 PRIMITIVE: profiling ( ? -- ) ;
 PRIVATE>
@@ -15,7 +15,7 @@ symbol: samples-per-second
 
 samples-per-second [ 1,000 ] initialize
 
-<PRIVATE
+PRIVATE<
 symbol: raw-profile-data
 CONSTANT: ignore-words
     { signal-handler leaf-signal-handler profiling minor-gc } ;
@@ -74,7 +74,7 @@ TUPLE: profile-node
     total-time gc-time jit-time foreign-time foreign-thread-time children
     depth ;
 
-<PRIVATE
+PRIVATE<
 
 : collect-threads ( samples -- by-thread )
     [ sample-thread ] collect-by ;
@@ -139,7 +139,7 @@ PRIVATE>
 : top-down ( -- tree )
     most-positive-fixnum top-down-max-depth ;
 
-<PRIVATE
+PRIVATE<
 
 :: counts+at ( key assoc sample -- )
     key assoc [ zero-counts or sample sample-counts-slice v+ ] change-at ;
@@ -168,7 +168,7 @@ PRIVATE>
 : flat ( -- flat )
     most-recent-profile-data flat* ;
 
-<PRIVATE
+PRIVATE<
 
 : nth-or-last ( n seq -- elt )
     [ drop f ] [
@@ -194,7 +194,7 @@ PRIVATE>
 : cross-section ( depth -- tree )
     most-recent-profile-data cross-section* ;
 
-<PRIVATE
+PRIVATE<
 
 : depth. ( depth -- )
     [ "  " write ] times ;

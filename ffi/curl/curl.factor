@@ -8,7 +8,7 @@ namespaces present sequences ;
 
 in: curl
 
-<PRIVATE
+PRIVATE<
 
 destructor: curl_easy_cleanup
 

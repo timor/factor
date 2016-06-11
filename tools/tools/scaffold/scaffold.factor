@@ -14,7 +14,7 @@ symbol: using
 
 ERROR: not-a-vocab-root string ;
 
-<PRIVATE
+PRIVATE<
 
 : vocab-root? ( string -- ? )
     trim-tail-separators
@@ -296,7 +296,7 @@ PRIVATE>
 
 : scaffold-work ( string -- ) "resource:work" swap scaffold-vocab ;
 
-<PRIVATE
+PRIVATE<
 
 : tests-file-string ( vocab -- string )
     [

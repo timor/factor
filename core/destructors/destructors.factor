@@ -10,7 +10,7 @@ ERROR: already-unregistered disposable ;
 
 symbol: debug-leaks?
 
-<PRIVATE
+PRIVATE<
 
 slot: continuation
 
@@ -61,7 +61,7 @@ M: disposable dispose
 : with-disposal ( object quot -- )
     over [ dispose ] curry [ ] cleanup ; inline
 
-<PRIVATE
+PRIVATE<
 
 symbol: always-destructors
 

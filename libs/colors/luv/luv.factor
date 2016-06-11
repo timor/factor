@@ -10,7 +10,7 @@ TUPLE: luva l u v alpha ;
 
 C: <luva> luva ;
 
-<PRIVATE
+PRIVATE<
 
 :: xyz-to-uv ( x y z -- u v )
     x y 15 * z 3 * + + :> d

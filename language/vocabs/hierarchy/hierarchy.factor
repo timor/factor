@@ -12,7 +12,7 @@ C: <vocab-prefix> vocab-prefix ;
 
 M: vocab-prefix vocab-name name>> ;
 
-<PRIVATE
+PRIVATE<
 
 : visible-dirs ( seq -- seq' )
     [
@@ -111,7 +111,7 @@ MEMO: all-disk-vocabs-recursive ( -- assoc )
 : disk-child-vocab-names ( prefix -- seq )
     disk-vocabs-for-prefix filter-vocabs [ vocab-name ] map! ;
 
-<PRIVATE
+PRIVATE<
 
 : collect-vocabs ( quot -- seq )
     [ all-disk-vocabs-recursive filter-vocabs ] dip
@@ -133,7 +133,7 @@ PRIVATE>
 : disk-vocabs-in-root ( root -- seq )
     "" disk-vocabs-in-root/prefix ;
 
-<PRIVATE
+PRIVATE<
 
 : vocabs-to-load ( root prefix -- seq )
     disk-vocabs-in-root/prefix

@@ -7,7 +7,7 @@ namespaces math compiler.units accessors classes.singleton
 classes.mixin io.encodings.iana fry simple-flat-file lexer ;
 in: io.encodings.8-bit
 
-<PRIVATE
+PRIVATE<
 
 : encoding-file ( file-name -- stream )
     "vocab:io/encodings/8-bit/" ".TXT" surround ;

@@ -31,7 +31,7 @@ CATEGORY: 1.1name-char
 HINTS: name-start? { object fixnum } ;
 HINTS: name-char? { object fixnum } ;
 
-<PRIVATE
+PRIVATE<
 
 : 1.0-text? ( char -- ? )
     ! 1.0:

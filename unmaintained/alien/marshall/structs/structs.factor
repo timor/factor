@@ -6,7 +6,7 @@ kernel libc locals parser quotations sequences slots words
 alien.structs lexer vocabs.parser fry effects alien.data ;
 in: alien.marshall.structs
 
-<PRIVATE
+PRIVATE<
 : define-struct-accessor ( class name quot -- )
     [ "accessors" create create-method dup make-inline ] dip define ;
 

@@ -21,7 +21,7 @@ in: project-euler.062
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : cube ( n -- n^3 ) 3 ^ ; inline
 : >key ( n -- k ) cube number>digits natural-sort ; inline

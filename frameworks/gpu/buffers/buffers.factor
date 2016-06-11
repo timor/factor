@@ -23,7 +23,7 @@ TUPLE: buffer < gpu-object
     { usage-pattern buffer-usage-pattern }
     { kind buffer-kind } ;
 
-<PRIVATE
+PRIVATE<
 
 : gl-buffer-usage ( buffer -- usage )
     [ upload-pattern>> ] [ usage-pattern>> ] bi 2array {

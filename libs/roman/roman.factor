@@ -7,7 +7,7 @@ sequences sequences.private splitting.monotonic stack-checker
 strings unicode words ;
 in: roman
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: roman-digits
     { "m" "cm" "d" "cd" "c" "xc" "l" "xl" "x" "ix" "v" "iv" "i" } ;
@@ -46,7 +46,7 @@ PRIVATE>
 : roman> ( str -- n )
     >lower [ roman>= ] monotonic-split [ (roman>) ] map-sum ;
 
-<PRIVATE
+PRIVATE<
 
 MACRO: binary-roman-op ( quot -- quot' )
     [ inputs ] [ ] [ outputs ] tri

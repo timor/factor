@@ -15,7 +15,7 @@ TUPLE: regexp
 
 TUPLE: reverse-regexp < regexp ;
 
-<PRIVATE
+PRIVATE<
 
 M: lookahead question>quot ! Returns ( index string -- ? )
     term>> ast>dfa dfa>shortest-word '[ f _ execute ] ;
@@ -49,7 +49,7 @@ PRIVATE>
     match-index-from
     [ = ] [ drop f ] if* ;
 
-<PRIVATE
+PRIVATE<
 
 : search-range ( i string reverse? -- seq )
     [ drop -1 ] [ length ] if [a,b] ; inline
@@ -112,7 +112,7 @@ PRIVATE>
 : count-matches ( string regexp -- n )
     [ 0 ] 2dip [ 3drop 1 + ] each-match ;
 
-<PRIVATE
+PRIVATE<
 
 :: (re-split) ( string regexp quot: ( from to seq -- slice ) -- new-slices )
     0 string regexp |[ end start end' string |
@@ -147,7 +147,7 @@ PRIVATE>
         ] each-match string [ length ] [ <slice-unsafe> ] bi ,
     ] { } make concat ;
 
-<PRIVATE
+PRIVATE<
 
 : get-ast ( regexp -- ast )
     [ parse-tree>> ] [ options>> ] bi <with-options> ;
@@ -196,7 +196,7 @@ PRIVATE>
 
 : <regexp> ( string -- regexp ) "" <optioned-regexp> ;
 
-<PRIVATE
+PRIVATE<
 
 : take-until ( lexer -- string )
     dup skip-blank [

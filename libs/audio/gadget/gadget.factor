@@ -9,7 +9,7 @@ TUPLE: audio-gadget < button
     play-label pause-label
     audio audio-clip state ;
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: play-label-image-path "vocab:audio/gadget/play.png" ;
 CONSTANT: pause-label-image-path "vocab:audio/gadget/pause.png" ;

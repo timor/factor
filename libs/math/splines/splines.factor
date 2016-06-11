@@ -6,7 +6,7 @@ ui.render arrays grouping math.vectors assocs
 ui.gestures ;
 in: math.splines
 
-<PRIVATE
+PRIVATE<
 :: bernstein-polynomial-ith ( n i -- p )
     n i nCk { 0 1 } i p^ { 1 -1 } n i - p^ p* n*p ;
 
@@ -63,7 +63,7 @@ PRIVATE>
         hermite-polynomial
     ] map ;
 
-<PRIVATE
+PRIVATE<
 : (cubic-hermite-spline) ( point-in-out-triplets -- polynomials-sequence )
     2 clump [
         first2 [ first2 ] [ [ first ] [ third ] bi ] bi* <cubic-hermite-curve>

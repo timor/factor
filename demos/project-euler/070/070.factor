@@ -40,7 +40,7 @@ in: project-euler.070
 
 ! ...so we can compute φ(n) more efficiently.
 
-<PRIVATE
+PRIVATE<
 
 ! NOTE: ±1000 is an arbitrary range
 : likely-prime-factors ( -- seq )

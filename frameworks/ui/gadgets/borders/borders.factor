@@ -25,7 +25,7 @@ TUPLE: border < aligned-gadget
 M: border pref-dim*
     dup gadget-child pref-dim border-pref-dim ;
 
-<PRIVATE
+PRIVATE<
 
 : border-major-dim ( border -- dim )
     [ dim>> ] [ size>> 2 v*n ] bi v- ;

@@ -62,7 +62,7 @@ FUNCTOR;
         [ [ tail>> ] bi@ quot call ] 2bi combine call
     ] [ fallback call ] if ; inline
 
-<PRIVATE
+PRIVATE<
 : split-shuffle ( shuf -- sh uf )
     dup length 2 /i cut* ; foldable
 PRIVATE>

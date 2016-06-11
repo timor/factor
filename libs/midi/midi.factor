@@ -88,7 +88,7 @@ CONSTANT: smpte-framerate H{
     { 3 30 }
 } ;
 
-<PRIVATE
+PRIVATE<
 
 : read-number ( -- number )
     0 [ 7 bit? ] [
@@ -243,7 +243,7 @@ PRIVATE>
 : file>midi ( path -- midi )
     binary [ read-midi ] with-file-reader ;
 
-<PRIVATE
+PRIVATE<
 
 : write-number ( n -- )
     [ 0x7f bitand ] keep

@@ -8,7 +8,7 @@ INSTANCE: complex-sequence sequence ;
 : <complex-sequence> ( sequence -- complex-sequence )
     complex-sequence boa ; inline
 
-<PRIVATE
+PRIVATE<
 
 : complex@ ( n seq -- n' seq' )
     [ 1 shift ] [ seq>> ] bi* ; inline

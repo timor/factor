@@ -11,7 +11,7 @@ in: ui.gadgets.buttons
 
 TUPLE: button < border pressed? selected? quot tooltip ;
 
-<PRIVATE
+PRIVATE<
 
 : find-button ( gadget -- button )
     [ button? ] find-parent ;
@@ -98,7 +98,7 @@ M: button-pen pen-background
 M: button-pen pen-foreground
     lookup-button-pen pen-foreground ;
 
-<PRIVATE
+PRIVATE<
 
 : align-left ( button -- button )
     { 0 1/2 } >>align ; inline
@@ -119,7 +119,7 @@ PRIVATE>
 : <roll-button> ( label quot: ( button -- ) -- button )
     <button> roll-button-theme ;
 
-<PRIVATE
+PRIVATE<
 
 : <border-button-state-pen> ( prefix background foreground -- pen )
     [
@@ -162,7 +162,7 @@ repeat-button H{
     ! the mouse is held down.
     repeat-button new-button border-button-theme ;
 
-<PRIVATE
+PRIVATE<
 
 : <checkmark-pen> ( -- pen )
     "checkbox" theme-image <image-pen>
@@ -194,7 +194,7 @@ TUPLE: checkbox < button ;
 M: checkbox model-changed
     swap value>> >>selected? relayout-1 ;
 
-<PRIVATE
+PRIVATE<
 
 : <radio-pen> ( -- pen )
     "radio" theme-image <image-pen>

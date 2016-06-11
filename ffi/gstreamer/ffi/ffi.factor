@@ -20,7 +20,7 @@ library: gstreamer
 } cond
 >>
 
-<PRIVATE
+PRIVATE<
 
 ! types from libxml2
 

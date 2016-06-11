@@ -33,7 +33,7 @@ M: f >url drop <url> ;
 
 M: url >url ;
 
-<PRIVATE
+PRIVATE<
 
 : parse-url ( string -- obj ) EBNF{{
 
@@ -90,7 +90,7 @@ M: pathname >url string>> >url ;
 
 : relative-url? ( url -- ? ) protocol>> not ;
 
-<PRIVATE
+PRIVATE<
 
 : unparse-username-password ( url -- )
     dup username>> dup [
@@ -142,7 +142,7 @@ PRIVATE>
         [ [ "/" split1-last drop "/" ] dip 3append ]
     } cond ;
 
-<PRIVATE
+PRIVATE<
 
 : derive-port ( url base -- url' )
     over relative-url? [ [ port>> ] either? ] [ drop port>> ] if ;

@@ -41,7 +41,7 @@ in: project-euler.011
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : horizontal ( -- matrix )
     {

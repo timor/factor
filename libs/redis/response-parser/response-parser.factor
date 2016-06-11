@@ -11,7 +11,7 @@ ERROR: redis-error message ;
 : <redis-response> ( message -- redis-response )
     redis-response boa ;
 
-<PRIVATE
+PRIVATE<
 
 : read-bulk ( n -- bytes )
     dup 0 < [ drop f ] [ read 2 read drop ] if ;

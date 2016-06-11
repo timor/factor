@@ -1,7 +1,7 @@
 USING: kernel locals math sequences sequences.private ;
 in: sorting.insertion
 
-<PRIVATE
+PRIVATE<
 
 :: insert ( ... seq quot: ( ... elt -- ... elt' ) n -- ... )
     n zero? [

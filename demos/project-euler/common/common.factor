@@ -38,7 +38,7 @@ in: project-euler.common
 : perfect-square? ( n -- ? )
     dup sqrt mod zero? ;
 
-<PRIVATE
+PRIVATE<
 
 : count-digits ( n -- byte-array )
     10 <byte-array> [

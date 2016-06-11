@@ -23,7 +23,7 @@ TUPLE: loading-jpeg < image
 
 { "jpg" "jpeg" } [ jpeg-image ?register-image-class ] each
 
-<PRIVATE
+PRIVATE<
 
 : <loading-jpeg> ( headers bitstream -- image )
     loading-jpeg new swap >>bitstream swap >>headers ;

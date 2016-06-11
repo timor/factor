@@ -3,7 +3,7 @@
 USING: combinators fry kernel macros math sequences ;
 in: tools.coverage.testvocab
 
-<PRIVATE
+PRIVATE<
 
 : testifprivate ( ? -- ) [ ] [ ] if ;
 

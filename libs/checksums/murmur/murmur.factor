@@ -18,7 +18,7 @@ CONSTANT: r2 13 ;
 CONSTANT: m 5 ;
 CONSTANT: n 0xe6546b64 ;
 
-<PRIVATE
+PRIVATE<
 
 : (hash-chunk) ( k -- k' )
     c1 w* r1 bitroll-32 c2 w* ; inline

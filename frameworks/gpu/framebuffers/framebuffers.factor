@@ -15,7 +15,7 @@ TUPLE: renderbuffer < gpu-object
     { component-type component-type initial: ubyte-components }
     { samples integer initial: 0 } ;
 
-<PRIVATE
+PRIVATE<
 
 : get-framebuffer-int ( enum -- value )
     GL_RENDERBUFFER swap 0 int <ref>
@@ -134,7 +134,7 @@ TYPED: framebuffer-attachment-at ( framebuffer: framebuffer
         { stencil-attachment [ stencil-attachment>> ] }
     } match ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: framebuffer-handle ( framebuffer -- handle ) ;
 

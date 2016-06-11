@@ -430,7 +430,7 @@ FUNCTION: void GdiplusShutdown ( ULONG_PTR x ) ;
 TYPEDEF: DWORD ARGB ;
 TYPEDEF: INT PixelFormat ;
 
-<PRIVATE
+PRIVATE<
 : pixel-format-constant ( n m l -- format )
     [ ] [ 8 shift ] [ ] tri* bitor bitor ; inline
 PRIVATE>

@@ -22,7 +22,7 @@ SYNTAX: \ HOLIDAY-NAME:
 
 GENERIC: holidays ( n singleton -- seq ) ;
 
-<PRIVATE
+PRIVATE<
 
 : (holidays) ( singleton -- seq )
     all-words swap '[ "holiday" word-prop _ swap key? ] filter ;

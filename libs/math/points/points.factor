@@ -2,7 +2,7 @@ USING: kernel arrays math.vectors sequences math ;
 
 in: math.points
 
-<PRIVATE
+PRIVATE<
 
 : X ( x -- point )      0   0 3array ;
 : Y ( y -- point ) 0 swap   0 3array ;

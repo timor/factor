@@ -6,7 +6,7 @@ math.order namespaces sequences ;
 
 in: uu
 
-<PRIVATE
+PRIVATE<
 
 ERROR: bad-length seq ;
 

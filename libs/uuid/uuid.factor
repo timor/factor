@@ -5,7 +5,7 @@ checksums.sha io.binary kernel math math.parser math.ranges
 random sequences strings system unicode ;
 in: uuid
 
-<PRIVATE
+PRIVATE<
 
 : (timestamp) ( -- time_high time_mid time_low )
     ! 0x01b21dd213814000L is the number of 100-ns intervals

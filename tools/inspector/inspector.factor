@@ -11,7 +11,7 @@ symbol: +number-rows+
 : print-summary ( obj -- )
     [ safe-summary ] keep write-object ;
 
-<PRIVATE
+PRIVATE<
 
 : sort-unparsed-keys ( assoc -- alist )
     >alist dup keys
@@ -62,7 +62,7 @@ M: tuple error. describe ;
 
 symbol: me
 
-<PRIVATE
+PRIVATE<
 
 symbol: inspector-stack
 

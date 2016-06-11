@@ -138,7 +138,7 @@ TUPLE: image
 : rowstride ( image -- n )
     [ dim>> first ] [ bytes-per-pixel ] bi * ;
 
-<PRIVATE
+PRIVATE<
 
 :: pixel@ ( x y w image -- start end bitmap )
     image dim>> first y * x + :> start

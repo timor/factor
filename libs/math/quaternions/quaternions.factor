@@ -10,7 +10,7 @@ in: math.quaternions
 : q- ( u v -- u-v )
     v- ; inline
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: (q*sign) ( q -- q' ) ;
 M: object (q*sign) { -1 1 1 1 } v* ; inline
@@ -55,7 +55,7 @@ M: object qconjugate ( u -- u' )
 
 ! Euler angles
 
-<PRIVATE
+PRIVATE<
 
 : (euler) ( theta exemplar shuffle -- q )
     swap

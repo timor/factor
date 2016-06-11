@@ -8,7 +8,7 @@ make math macros multiline combinators.short-circuit sorting fry
 unicode effects ;
 in: xml.syntax
 
-<PRIVATE
+PRIVATE<
 
 ERROR: no-tag name word ;
 
@@ -39,7 +39,7 @@ SYNTAX: \ TAG:
 SYNTAX: \ XML-NS:
     scan-new-word scan-token ";" expect '[ f swap _ <name> ] ( string -- name ) define-memoized ;
 
-<PRIVATE
+PRIVATE<
 
 : each-attrs ( attrs quot -- )
     [ values [ interpolated? ] filter ] dip each ; inline

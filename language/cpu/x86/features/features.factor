@@ -8,7 +8,7 @@ specialized-arrays system math.bitwise combinators.smart ;
 specialized-array: uint
 in: cpu.x86.features
 
-<PRIVATE
+PRIVATE<
 
 : return-reg ( -- reg ) int-regs return-regs at first ;
 

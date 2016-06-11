@@ -24,7 +24,7 @@ TUPLE: win-base hDC hRC ;
 TUPLE: win < win-base hWnd world title ;
 C: <win> win ;
 
-<PRIVATE
+PRIVATE<
 
 PIXEL-FORMAT-ATTRIBUTE-TABLE: WGL_ARB { $ WGL_SUPPORT_OPENGL_ARB 1 } H{
     { double-buffered { $ WGL_DOUBLE_BUFFER_ARB 1 } }

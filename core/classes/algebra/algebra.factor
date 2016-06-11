@@ -7,7 +7,7 @@ in: classes.algebra
 
 defer: sort-classes
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: anonymous-union { members read-only } ;
 
@@ -120,7 +120,7 @@ symbol: +incomparable+
         [ +incomparable+ ]
     } cond 2nip ;
 
-<PRIVATE
+PRIVATE<
 
 : superclass<= ( first second -- ? )
     swap superclass-of [ swap class<= ] [ drop f ] if* ;

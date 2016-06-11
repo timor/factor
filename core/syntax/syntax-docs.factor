@@ -829,15 +829,15 @@ HELP: \ main:
 { $values { "word" word } }
 { $description "Defines the main entry point for the current vocabulary and source file. This word will be executed when this vocabulary is passed to " { $link run } " or the source file is passed to " { $link run-script } "." } ;
 
-HELP: <PRIVATE
-{ $syntax "<PRIVATE ... PRIVATE>" }
+HELP: PRIVATE<
+{ $syntax "PRIVATE< ... PRIVATE>" }
 { $description "Begins a block of private word definitions. Private word definitions are placed in the current vocabulary name, suffixed with " { $snippet ".private" } "." }
 { $notes
     "The following is an example of usage:"
     { $code
         "in: factorial"
         ""
-        "<PRIVATE"
+        "PRIVATE<"
         ""
         ": (fac) ( accum n -- n! )"
         "    dup 1 <= [ drop ] [ [ * ] keep 1 - (fac) ] if ;"
@@ -860,10 +860,10 @@ HELP: <PRIVATE
 } ;
 
 HELP: PRIVATE>
-{ $syntax "<PRIVATE ... PRIVATE>" }
+{ $syntax "PRIVATE< ... PRIVATE>" }
 { $description "Ends a block of private word definitions." } ;
 
-{ \ <PRIVATE \ PRIVATE> } related-words
+{ \ PRIVATE< \ PRIVATE> } related-words
 
 HELP: <<
 { $syntax "<< ... >>" }

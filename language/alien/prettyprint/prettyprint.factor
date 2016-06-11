@@ -20,7 +20,7 @@ M: c-type-word definer drop \ c-type: f ;
 M: c-type-word definition drop f ;
 M: c-type-word declarations. drop ;
 
-<PRIVATE
+PRIVATE<
 GENERIC: pointer-string ( pointer -- string/f ) ;
 M: object pointer-string drop f ;
 M: word pointer-string [ record-vocab ] [ name>> ] bi ;

@@ -193,7 +193,7 @@ CONSULT: tag xml body>> ;
 
 CONSULT: name xml body>> ;
 
-<PRIVATE
+PRIVATE<
 : tag>xml ( xml tag -- newxml )
     [ [ prolog>> ] [ before>> ] [ after>> ] tri ] dip
     swap <xml> ;

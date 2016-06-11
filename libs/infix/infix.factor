@@ -6,7 +6,7 @@ math.functions math.order math.ranges multiline namespaces
 parser quotations sequences summary vocabs.parser words ;
 in: infix
 
-<PRIVATE
+PRIVATE<
 : prepare-operand ( term -- quot )
     dup callable? [ 1quotation ] unless ;
 
@@ -120,7 +120,7 @@ PRIVATE>
 SYNTAX: \ infix[[
     "]]" parse-infix-quotation suffix! \ call suffix! ;
 
-<PRIVATE
+PRIVATE<
 
 : (INFIX::) ( -- word def effect )
     [

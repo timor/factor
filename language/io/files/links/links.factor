@@ -23,7 +23,7 @@ symbol: symlink-depth
 
 ERROR: too-many-symlinks path n ;
 
-<PRIVATE
+PRIVATE<
 
 : (follow-links) ( n path -- path' )
     over 0 = [ symlink-depth get too-many-symlinks ] when

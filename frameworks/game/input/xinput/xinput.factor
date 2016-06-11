@@ -8,7 +8,7 @@ singleton: xinput-game-input-backend
 
 xinput-game-input-backend game-input-backend set-global
 
-<PRIVATE
+PRIVATE<
 : >axis ( short -- float )
     32768 /f ; inline
 : >trigger ( byte -- float )

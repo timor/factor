@@ -13,7 +13,7 @@ in: memcached.tests
     [ 5 seconds input-stream get set-timeout ] prepose
     memcached:with-memcached ; inline
 
-<PRIVATE
+PRIVATE<
 
 : not-found? ( quot -- )
     [ key-not-found? ] must-fail-with ;

@@ -5,7 +5,7 @@ USING: kernel fry splitting ascii accessors combinators
        irc.messages.base sequences ;
 in: irc.messages.parser
 
-<PRIVATE
+PRIVATE<
 : split-at-first ( seq separators -- before after )
     dupd '[ _ member? ] find [ cut rest ] [ swap ] if ;
 

@@ -32,7 +32,7 @@ in: project-euler.058
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: PERCENT_PRIME 0.1 ;
 

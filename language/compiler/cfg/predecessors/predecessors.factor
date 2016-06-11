@@ -4,7 +4,7 @@ USING: accessors assocs compiler.cfg.rpo compiler.cfg.utilities
 fry kernel sequences ;
 in: compiler.cfg.predecessors
 
-<PRIVATE
+PRIVATE<
 
 : update-predecessors ( bb -- )
     dup successors>> [ predecessors>> push ] with each ;

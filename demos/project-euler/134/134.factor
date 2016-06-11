@@ -28,7 +28,7 @@ in: project-euler.134
 : next-power-of-10 ( m -- n )
     10 swap log10 ceiling >integer ^ ; foldable
 
-<PRIVATE
+PRIVATE<
 
 ! Compute S for a given pair (p1, p2) -- that is the smallest positive
 ! number such that X = p1 [npt] and X = 0 [p2] (npt being the smallest

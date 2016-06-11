@@ -25,7 +25,7 @@ GENERIC: render* ( value name renderer -- xml ) ;
 : render ( name renderer -- )
     render>xml write-xml ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: write-nested ( obj -- ) ;
 

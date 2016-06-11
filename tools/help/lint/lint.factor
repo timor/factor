@@ -25,7 +25,7 @@ T{ error-type-holder
 
 M: help-lint-error error-type drop +help-lint-failure+ ;
 
-<PRIVATE
+PRIVATE<
 
 : <help-lint-error> ( error topic -- help-lint-error )
     \ help-lint-error <definition-error> ;
@@ -37,7 +37,7 @@ PRIVATE>
     [ [ [ <help-lint-error> ] keep ] dip set-at ] [ delete-at drop ] if
     notify-error-observers ;
 
-<PRIVATE
+PRIVATE<
 
 :: check-something ( topic quot -- )
     [ quot call( -- ) f ] [ ] recover

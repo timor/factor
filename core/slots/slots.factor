@@ -7,7 +7,7 @@ kernel.private make math quotations sequences sequences.private
 slots.private strings words ;
 in: slots
 
-<PRIVATE
+PRIVATE<
 PRIMITIVE: set-slot ( value obj n -- ) ;
 PRIMITIVE: slot ( obj m -- value ) ;
 PRIVATE>

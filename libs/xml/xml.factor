@@ -8,7 +8,7 @@ combinators.short-circuit xml.name splitting
 io.streams.byte-array combinators ;
 in: xml
 
-<PRIVATE
+PRIVATE<
 
 : add-child ( object -- )
     xml-stack get last second push ;
@@ -128,7 +128,7 @@ TUPLE: pull-xml scope ;
         ] if text-now? namespaces:set
     ] with-variables ;
 
-<PRIVATE
+PRIVATE<
 
 : done? ( -- ? )
     xml-stack get length 1 = ;
@@ -145,7 +145,7 @@ PRIVATE>
 : pull-elem ( pull -- xml-elem/f )
     [ init-xml-stack (pull-elem) ] with-scope ;
 
-<PRIVATE
+PRIVATE<
 
 : call-under ( quot object -- quot )
     swap [ call ] keep ; inline

@@ -40,7 +40,7 @@ M: mdb-error pprint* ( obj -- )
 : >pwd-digest ( user password -- digest )
     "mongo" swap 3array ":" join md5-checksum ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: <mdb-cursor> ( id mdb-query-msg/mdb-getmore-msg -- mdb-cursor ) ;
 
@@ -133,7 +133,7 @@ M: mdb-collection create-collection ( collection -- )
     namespaces-collection
     H{ } clone <mdb-query-msg> send-query-plain objects>> ;
 
-<PRIVATE
+PRIVATE<
 
 : ensure-valid-collection-name ( collection -- )
     [
@@ -264,7 +264,7 @@ M: string validate.
 M: mdb-collection validate.
     name>> validate. ;
 
-<PRIVATE
+PRIVATE<
 
 : send-message-check-error ( message -- )
     send-message lasterror [ mdb-error ] when* ;

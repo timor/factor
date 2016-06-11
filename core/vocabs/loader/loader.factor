@@ -39,7 +39,7 @@ root-cache [ H{ } clone ] initialize
 
 ERROR: not-found-in-roots path ;
 
-<PRIVATE
+PRIVATE<
 
 : find-root-for ( path -- path/f )
     vocab-roots get [ prepend-path exists? ] with find nip ;
@@ -79,7 +79,7 @@ symbol: load-help?
 symbol: check-vocab-hook
 check-vocab-hook [ [ drop ] ] initialize
 
-<PRIVATE
+PRIVATE<
 
 symbol: require-when-vocabs
 require-when-vocabs [ HS{ } clone ] initialize
@@ -145,7 +145,7 @@ symbol: blacklist
 : require-all ( vocabs -- )
     V{ } clone blacklist [ [ require ] each ] with-variable ;
 
-<PRIVATE
+PRIVATE<
 
 : add-to-blacklist ( error vocab -- )
     vocab-name blacklist get [ set-at ] [ 2drop ] if* ;

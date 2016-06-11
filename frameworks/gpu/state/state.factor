@@ -138,7 +138,7 @@ UNION: gpu-state
     blend-state
     mask-state ;
 
-<PRIVATE
+PRIVATE<
 
 : gl-triangle-face ( triangle-face -- face )
     {

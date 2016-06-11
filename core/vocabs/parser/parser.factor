@@ -52,7 +52,7 @@ C: <extra-words> extra-words ;
 
 ERROR: no-word-in-vocab word vocab ;
 
-<PRIVATE
+PRIVATE<
 
 : (from) ( vocab words -- vocab words words' vocab )
     2dup swap load-vocab ;
@@ -180,7 +180,7 @@ TUPLE: ambiguous-use-error name words ;
 : <ambiguous-use-error> ( name words -- error restarts )
     [ ambiguous-use-error boa ] [ word-restarts ] bi ;
 
-<PRIVATE
+PRIVATE<
 
 : (vocab-search) ( name assocs -- words )
     [ words>> (lookup) ] with map sift ;
@@ -212,7 +212,7 @@ PRIVATE>
 : search ( name -- word/f )
     manifest get search-manifest ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: update ( search-path-elt -- valid? ) ;
 

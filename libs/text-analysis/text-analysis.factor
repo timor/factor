@@ -8,7 +8,7 @@ unicode ;
 
 in: text-analysis
 
-<PRIVATE
+PRIVATE<
 
 : trimmed ( seq -- seq )
     [ [ blank? ] trim ] map harvest ;

@@ -33,7 +33,7 @@ in: project-euler.038
 ! starting with 9 would produce 8 or 11 digits, and a 3-digit number starting
 ! with 9 would produce 7 or 11 digits.
 
-<PRIVATE
+PRIVATE<
 
 : (concat-product) ( accum n multiplier -- m )
     pick length 8 > [

@@ -14,7 +14,7 @@ C: <oint> oint ;
 : rotation-quaternion ( theta axis -- quaternion )
     swap 2 / dup cos swap sin rot n*v first3 rect> [ rect> ] dip 2array ;
 
-<PRIVATE
+PRIVATE<
 
 ! inline old math.quaternions to get this to work, eww.
 

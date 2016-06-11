@@ -46,7 +46,7 @@ M: set clear-set [ members ] keep [ delete ] curry each ;
 
 M: set set-like drop ; inline
 
-<PRIVATE
+PRIVATE<
 
 : ?members ( set -- seq )
     dup sequence? [ members ] unless ; inline
@@ -58,7 +58,7 @@ PRIVATE>
 
 M: set union [ (union) ] keep set-like ;
 
-<PRIVATE
+PRIVATE<
 
 : tester ( set -- quot )
     fast-set [ in? ] curry ; inline
@@ -84,7 +84,7 @@ M: set diff [ (diff) ] keep set-like ;
 M: set intersects?
     small/large sequence/tester any? ;
 
-<PRIVATE
+PRIVATE<
 
 : (subset?) ( set1 set2 -- ? )
     sequence/tester all? ; inline
@@ -103,7 +103,7 @@ M: set duplicates drop f ;
 
 M: set all-unique? drop t ;
 
-<PRIVATE
+PRIVATE<
 
 : (pruned) ( elt set accum -- )
     2over ?adjoin [ nip push ] [ 3drop ] if ; inline

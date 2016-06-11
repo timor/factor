@@ -11,7 +11,7 @@ C: <image-name> image-name ;
 
 MEMO: cached-image ( image-name -- image ) path>> load-image ;
 
-<PRIVATE
+PRIVATE<
 
 : image-texture-cache ( world -- texture-cache )
     [ [ <cache-assoc> ] unless* ] change-images images>> ;

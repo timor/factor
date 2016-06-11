@@ -7,7 +7,7 @@ stack-checker.recursive-state stack-checker.state
 stack-checker.visitor vectors words ;
 in: compiler.tree.builder
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: (build-tree) ( quot -- ) ;
 

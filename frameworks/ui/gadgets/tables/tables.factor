@@ -62,7 +62,7 @@ rows ;
 
 : <table> ( rows renderer -- table ) table new-table ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: cell-dim ( font cell -- width height padding ) ;
 GENERIC: draw-cell ( font cell -- ) ;
@@ -231,7 +231,7 @@ PRIVATE>
     [ (selected-row) ] [ renderer>> ] bi
     swap [ row-value t ] [ 2drop f f ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : show-row-summary ( table n -- )
     over nth-row
@@ -329,7 +329,7 @@ PRIVATE>
 : row-action? ( table -- ? )
     single-click?>> hand-click# get 2 = or ;
 
-<PRIVATE
+PRIVATE<
 
 : table-button-up ( table -- )
     dup [ mouse-row ] keep valid-line? [
@@ -342,7 +342,7 @@ PRIVATE>
     over validate-line
     [ (select-row) ] [ show-row-summary ] 2bi ;
 
-<PRIVATE
+PRIVATE<
 
 : prev/next-row ( table n -- )
     [ dup selection-index>> value>> ] dip

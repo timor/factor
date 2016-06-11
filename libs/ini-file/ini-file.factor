@@ -7,7 +7,7 @@ namespaces quoting sequences splitting strings strings.parser ;
 
 in: ini-file
 
-<PRIVATE
+PRIVATE<
 
 : escape ( ch -- ch' )
     H{

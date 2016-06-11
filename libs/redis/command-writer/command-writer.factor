@@ -4,7 +4,7 @@ USING: arrays assocs formatting io io.crlf kernel math
 math.parser sequences strings locals ;
 in: redis.command-writer
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: write-resp ( value -- ) ;
 

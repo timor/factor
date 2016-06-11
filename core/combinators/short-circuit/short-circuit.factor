@@ -2,7 +2,7 @@ USING: arrays combinators fry generalizations kernel macros
 math sequences ;
 in: combinators.short-circuit
 
-<PRIVATE
+PRIVATE<
 
 MACRO: keeping ( n quot -- quot' )
     swap dup 1 +
@@ -20,7 +20,7 @@ MACRO: n&& ( quots n -- quot )
     ] [ '[ _ nnip ] suffix 1array ] bi
     [ cond ] 3append ;
 
-<PRIVATE
+PRIVATE<
 
 : unoptimized-&& ( quots quot -- ? )
     [ [ call dup ] ] dip call [ nip ] prepose [ f ] 2dip all? swap and ; inline
@@ -42,7 +42,7 @@ MACRO: n|| ( quots n -- quot )
     ] [ '[ drop _ ndrop t ] [ f ] 2array suffix 1array ] bi
     [ cond ] 3append ;
 
-<PRIVATE
+PRIVATE<
 
 : unoptimized-|| ( quots quot -- ? )
     [ [ call ] ] dip call map-find drop ; inline

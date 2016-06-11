@@ -7,7 +7,7 @@ splitting xml.entities ;
 
 in: text-to-pdf
 
-<PRIVATE
+PRIVATE<
 
 : pdf-string ( str -- str' )
     H{

@@ -20,7 +20,7 @@ uidls messages ;
 
 TUPLE: message # uidl headers from to subject size ;
 
-<PRIVATE
+PRIVATE<
 
 : stream ( -- duplex-stream ) account stream>> ;
 

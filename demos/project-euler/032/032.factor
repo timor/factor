@@ -24,7 +24,7 @@ in: project-euler.032
 
 ! Generate all pandigital numbers and then check if they fit the identity
 
-<PRIVATE
+PRIVATE<
 
 : source-032 ( -- seq )
     9 factorial iota [
@@ -60,7 +60,7 @@ PRIVATE>
 ! Generate all reasonable multiplicand/multiplier pairs, then multiply and see
 ! if the equation is pandigital
 
-<PRIVATE
+PRIVATE<
 
 ! multiplicand/multiplier/product
 : mmp ( x y -- n )

@@ -33,7 +33,7 @@ in: project-euler.014
 
 ! Brute force
 
-<PRIVATE
+PRIVATE<
 
 : next-collatz ( n -- n )
     dup even? [ 2 / ] [ 3 * 1 + ] if ;
@@ -53,7 +53,7 @@ PRIVATE>
 ! ALTERNATE SOLUTIONS
 ! -------------------
 
-<PRIVATE
+PRIVATE<
 
 : worth-calculating? ( n -- ? )
     1 - 3 { [ divisor? ] [ / even? ] } 2&& ;

@@ -39,7 +39,7 @@ in: bitcoin.client
 : bitcoin-password ( -- string )
     \ bitcoin-password get ;
 
-<PRIVATE
+PRIVATE<
 
 : bitcoin-url ( -- url )
     <url>

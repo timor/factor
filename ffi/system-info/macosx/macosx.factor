@@ -9,7 +9,7 @@ specialized-array: int
 
 in: system-info.macosx
 
-<PRIVATE
+PRIVATE<
 
 TYPEDEF: SInt16 OSErr ;
 TYPEDEF: UInt32 OSType ;

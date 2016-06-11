@@ -8,7 +8,7 @@ in: unicode.categories
 ! For use in CATEGORY:
 SYMBOLS: Cn Lu Ll Lt Lm Lo Mn Mc Me Nd Nl No Pc Pd Ps Pe Pi Pf Po Sm Sc Sk So Zs Zl Zp Cc Cf Cs Co | ;
 
-<PRIVATE
+PRIVATE<
 
 : [category] ( categories code -- quot )
     '[ integer>fixnum-strict dup category# _ member? [ drop t ] _ if ] ;

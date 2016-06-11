@@ -14,7 +14,7 @@ GENERIC: heap-delete ( entry heap -- ) ;
 GENERIC: heap-empty? ( heap -- ? ) ;
 GENERIC: heap-size ( heap -- n ) ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: heap { data vector } ;
 
@@ -47,7 +47,7 @@ M: heap heap-empty? ( heap -- ? )
 M: heap heap-size ( heap -- n )
     data>> length ; inline
 
-<PRIVATE
+PRIVATE<
 
 : left ( n -- m )
     { fixnum } declare 1 fixnum-shift-fast 1 fixnum+fast ; inline
@@ -90,7 +90,7 @@ PRIVATE>
 M: heap heap-peek ( heap -- value key )
     data-first >entry< ;
 
-<PRIVATE
+PRIVATE<
 
 :: sift-down ( heap from to -- )
     to heap data-nth :> tmp
@@ -118,7 +118,7 @@ M: heap heap-push*
 : heap-push-all ( assoc heap -- )
     '[ swap _ heap-push ] assoc-each ;
 
-<PRIVATE
+PRIVATE<
 
 :: sift-up ( heap n -- )
     heap heap-size  :> end
@@ -161,7 +161,7 @@ ERROR: bad-heap-delete ;
 M: bad-heap-delete summary
     drop "Invalid entry passed to heap-delete" ;
 
-<PRIVATE
+PRIVATE<
 
 : entry>index ( entry heap -- n )
     over heap>> eq? [ bad-heap-delete ] unless

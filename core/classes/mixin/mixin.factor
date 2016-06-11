@@ -25,7 +25,7 @@ ERROR: check-mixin-class-error class ;
         check-mixin-class-error
     ] unless ;
 
-<PRIVATE
+PRIVATE<
 
 : redefine-mixin-class ( class members -- )
     [ (define-union-class) ]
@@ -95,7 +95,7 @@ TUPLE: mixin-instance class mixin ;
 
 C: <mixin-instance> mixin-instance ;
 
-<PRIVATE
+PRIVATE<
 
 : >mixin-instance< ( mixin-instance -- class mixin )
     [ class>> ] [ mixin>> ] bi ; inline

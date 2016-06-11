@@ -35,7 +35,7 @@ in: project-euler.190
 
 ! xi = i * (2 / (m+1)) = 2*i/(m+1)
 
-<PRIVATE
+PRIVATE<
 
 : PI ( seq quot -- n )
     [ * ] compose 1 swap reduce ; inline

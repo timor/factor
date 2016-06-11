@@ -11,7 +11,7 @@ vocabs ;
 
 in: gopher
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: A_TEXT char: 0 ;
 CONSTANT: A_MENU char: 1 ;
@@ -63,7 +63,7 @@ ERROR: not-a-gopher-url url ;
         _ gopher-get
     ] with-client ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: gopher-link type name selector host port ;
 

@@ -5,7 +5,7 @@ in: make
 
 symbol: building
 
-<PRIVATE
+PRIVATE<
 
 : make-sequence ( quot exemplar -- seq )
     [

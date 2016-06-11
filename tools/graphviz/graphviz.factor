@@ -27,7 +27,7 @@ head
 
 ! Constructors
 
-<PRIVATE
+PRIVATE<
 
 : anon-id ( -- id )
     \ anon-id counter present "_anonymous_" prepend ; inline

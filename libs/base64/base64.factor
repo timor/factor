@@ -7,7 +7,7 @@ in: base64
 
 ERROR: malformed-base64 ;
 
-<PRIVATE
+PRIVATE<
 
 <<
 CONSTANT: alphabet
@@ -60,7 +60,7 @@ PRIVATE>
 : encode-base64-lines ( -- )
     input-stream get 0 (encode-base64) ;
 
-<PRIVATE
+PRIVATE<
 
 : read1-ignoring ( ignoring stream -- ch )
     dup stream-read1 pick dupd member?

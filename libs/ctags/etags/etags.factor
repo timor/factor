@@ -8,7 +8,7 @@ io.encodings.ascii io.files kernel make math math.parser present
 sequences sorting strings vocabs ;
 in: ctags.etags
 
-<PRIVATE
+PRIVATE<
 
 : etag-hash ( alist -- hash )
     H{ } clone [

@@ -30,7 +30,7 @@ CONSTRUCTOR: <resolv.conf> resolv.conf ( -- resolv.conf )
     V{ } clone >>lookup
     <options> >>options ;
 
-<PRIVATE
+PRIVATE<
 
 : trim-blanks ( string -- string' ) [ blank? ] trim ;
 

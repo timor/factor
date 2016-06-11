@@ -14,7 +14,7 @@ TUPLE: timer
     restart?
     thread ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: >nanoseconds ( obj -- duration/f ) ;
 M: f >nanoseconds ;
@@ -101,7 +101,7 @@ PRIVATE>
         dup thread>> [ nip interrupt ] [ start-timer ] if*
     ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : (start-timer) ( quot start-duration interval-duration -- timer )
     <timer> [ start-timer ] keep ; inline

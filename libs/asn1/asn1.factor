@@ -7,7 +7,7 @@ math.parser namespaces make pack strings sequences accessors ;
 
 in: asn1
 
-<PRIVATE
+PRIVATE<
 
 : (>128-ber) ( n -- )
     dup 0 > [

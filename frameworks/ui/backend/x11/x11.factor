@@ -380,7 +380,7 @@ M: x11-ui-backend (with-ui) ( quot -- )
 M: x11-ui-backend beep ( -- )
     dpy get 100 XBell drop ;
 
-<PRIVATE
+PRIVATE<
 : escape-' ( string -- string' )
     [ dup char: ' = [ drop "'\\''" ] [ 1string ] if ] { } map-as concat ;
 

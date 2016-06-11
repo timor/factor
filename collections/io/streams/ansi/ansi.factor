@@ -7,7 +7,7 @@ math.vectors namespaces sequences strings strings.tables ;
 
 in: io.streams.ansi
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: colors H{
 

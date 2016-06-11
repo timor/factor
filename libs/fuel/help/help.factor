@@ -8,7 +8,7 @@ summary vocabs vocabs.hierarchy vocabs.metadata vocabs.parser
 words ;
 in: fuel.help
 
-<PRIVATE
+PRIVATE<
 
 : fuel-find-word ( name -- word/f )
     { [ search ] [ '[ name>> _ = ] all-words swap find nip ] } 1|| ;

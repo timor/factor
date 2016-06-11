@@ -472,7 +472,7 @@ M: listener-gadget graft*
 M: listener-gadget ungraft*
     [ com-end ] [ call-next-method ] bi ;
 
-<PRIVATE
+PRIVATE<
 
 :: make-font-style ( family size -- assoc )
     H{ } clone

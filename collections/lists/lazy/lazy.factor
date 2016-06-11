@@ -135,7 +135,7 @@ C: <lazy-filter> lazy-filter ;
 : lfilter ( list quot: ( elt -- ? ) -- result )
     over nil? [ 2drop nil ] [ <lazy-filter> <memoized-cons> ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : car-filtered? ( lazy-filter -- ? )
     [ cons>> car ] [ quot>> ] bi call( elt -- ? ) ;
@@ -239,7 +239,7 @@ C: <lazy-concat> lazy-concat ;
 
 defer: lconcat
 
-<PRIVATE
+PRIVATE<
 
 : (lconcat) ( car cdr -- list )
     over nil? [ nip lconcat ] [ <lazy-concat> ] if ;
@@ -281,7 +281,7 @@ M: lazy-concat nil?
 
 defer: lmerge
 
-<PRIVATE
+PRIVATE<
 
 :: (lmerge) ( list1 list2 -- result )
     [ list1 car ]

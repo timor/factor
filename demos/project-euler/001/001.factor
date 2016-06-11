@@ -20,7 +20,7 @@ in: project-euler.001
 
 ! Inclusion-exclusion principle
 
-<PRIVATE
+PRIVATE<
 
 : sum-divisible-by ( target n -- m )
     [ /i dup 1 + * ] keep * 2 /i ;

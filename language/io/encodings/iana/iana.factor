@@ -5,7 +5,7 @@ splitting sequences io namespaces sets
 io.encodings.ascii io.encodings.utf8 io.encodings.utf16 ;
 in: io.encodings.iana
 
-<PRIVATE
+PRIVATE<
 symbol: n>e-table
 symbol: e>n-table
 symbol: aliases
@@ -17,7 +17,7 @@ PRIVATE>
 : encoding>name ( encoding -- name )
     e>n-table get-global at ;
 
-<PRIVATE
+PRIVATE<
 : parse-iana ( file -- synonym-set )
     utf8 file-lines { "" } split [
         [ " " split ] map

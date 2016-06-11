@@ -13,7 +13,7 @@ in: math.vectors.simd.intrinsics
 
 : assert-positive ( x -- y ) ;
 
-<PRIVATE
+PRIVATE<
 
 : >bitwise-vector-rep ( rep -- rep' )
     {

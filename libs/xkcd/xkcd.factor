@@ -9,7 +9,7 @@ ui wrap.strings ;
 
 in: xkcd
 
-<PRIVATE
+PRIVATE<
 
 : comic-image ( url -- image )
     http-get nip

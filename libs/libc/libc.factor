@@ -49,7 +49,7 @@ ERROR: libc-error errno message ;
 
 : io-error ( n -- ) 0 < [ throw-errno ] when ;
 
-<PRIVATE
+PRIVATE<
 
 ! We stick malloc-ptr instances in the global disposables set
 TUPLE: malloc-ptr value continuation ;
@@ -77,7 +77,7 @@ ERROR: realloc-error ptr size ;
 M: realloc-error summary
     drop "Memory reallocation failed" ;
 
-<PRIVATE
+PRIVATE<
 
 : add-malloc ( alien -- alien )
     dup <malloc-ptr> register-disposable ;

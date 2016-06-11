@@ -4,7 +4,7 @@ USING: classes classes.algebra.private classes.predicate
 classes.predicate.private kernel sequences words ;
 in: classes.singleton
 
-<PRIVATE
+PRIVATE<
 
 : singleton-predicate-quot ( class -- quot ) [ eq? ] curry ;
 

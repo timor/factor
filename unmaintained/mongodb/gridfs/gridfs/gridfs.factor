@@ -15,7 +15,7 @@ TUPLE: gridfs
     { chunks string } ;
 
 
-<PRIVATE
+PRIVATE<
 
 : gridfs> ( -- gridfs )
     gridfs get ; inline
@@ -50,7 +50,7 @@ TUPLE: entry
     { metadata hashtable }
     { md5 string } ;
 
-<PRIVATE
+PRIVATE<
 
 : id>base64 ( id -- str )
     [ a>> >hex ] [ b>> >hex ] bi 
@@ -69,7 +69,7 @@ PRIVATE>
     <oid> >>id 0 >>length default-chunk-size >>chunk-size 
     now >>created ; inline
 
-<PRIVATE 
+PRIVATE< 
 
 TUPLE: chunk 
     { id oid }
@@ -200,7 +200,7 @@ PRIVATE>
 : entry-contents ( entry -- bytearray )
     <gridfs-input-stream> stream-contents ;
 
-<PRIVATE
+PRIVATE<
 
 : load-chunk ( stream -- chunk/f )
     [ entry>> id>> "files_id" associate ]

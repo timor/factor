@@ -9,7 +9,7 @@ TUPLE: disjoint-set
 { ranks hashtable read-only }
 { counts hashtable read-only } ;
 
-<PRIVATE
+PRIVATE<
 
 : add-count ( p a disjoint-set -- )
     counts>> [ at '[ _ + ] ] [ swap change-at ] bi ; inline
@@ -35,7 +35,7 @@ M:: disjoint-set representative ( a disjoint-set -- p )
         ] keep
     ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : representatives ( a b disjoint-set -- r r )
     '[ _ representative ] bi@ ; inline

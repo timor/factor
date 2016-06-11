@@ -10,7 +10,7 @@ GENERIC: cost ( from to astar -- n ) ;
 GENERIC: heuristic ( from to astar -- n ) ;
 GENERIC: neighbours ( node astar -- seq ) ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: (astar) astar goal origin in-open-set open-set ;
 

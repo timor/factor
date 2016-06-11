@@ -58,7 +58,7 @@ CATEGORY: math Sm | "Other_Math" property? ;
 : last-grapheme-from ( end str -- i )
     swap head-slice last-grapheme ;
 
-<PRIVATE
+PRIVATE<
 
 : >pieces ( str quot: ( str -- i ) -- graphemes )
     [ dup empty? not ] swap '[ dup @ cut-slice swap ] produce nip ; inline
@@ -79,7 +79,7 @@ PRIVATE>
 : >words ( str -- words )
     [ first-word ] >pieces ;
 
-<PRIVATE
+PRIVATE<
 
 : nth-next ( i str -- str[i-1] str[i] )
     [ [ 1 - ] keep ] dip '[ _ nth ] bi@ ;
@@ -117,7 +117,7 @@ HINTS: >lower string ;
 
 HINTS: >upper string ;
 
-<PRIVATE
+PRIVATE<
 
 : (>title) ( string -- title )
     locale>upper
@@ -168,7 +168,7 @@ HINTS: string-append string string ;
     nfd string>graphemes graphemes>weights
     filter-ignorable weights>bytes ;
 
-<PRIVATE
+PRIVATE<
 
 : insensitive= ( str1 str2 levels-removed -- ? )
     [

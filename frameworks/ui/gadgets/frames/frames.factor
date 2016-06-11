@@ -6,7 +6,7 @@ in: ui.gadgets.frames
 
 TUPLE: frame < grid filled-cell ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: glue < gadget ;
 

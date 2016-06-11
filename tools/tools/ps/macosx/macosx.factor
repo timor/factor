@@ -10,7 +10,7 @@ QUALIFIED-WITH: alien.c-types c ;
 
 in: tools.ps.macosx
 
-<PRIVATE
+PRIVATE<
 
 : system-type ( -- str ) { 1 1 } sysctl-query-string ;
 : system-release ( -- str ) { 1 2 } sysctl-query-string ;

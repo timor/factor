@@ -25,7 +25,7 @@ GENERIC: remove-coverage ( object -- ) ;
 
 GENERIC: reset-coverage ( object -- ) ;
 
-<PRIVATE
+PRIVATE<
 
 : private-vocab-name ( string -- string' )
     ".private" ?tail drop ".private" append ;
@@ -105,7 +105,7 @@ M: word coverage.
 M: sequence coverage.
     [ first2 pair-coverage. ] each ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: count-callables ( object -- n ) ;
 

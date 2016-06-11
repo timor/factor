@@ -6,7 +6,7 @@ in: math.transforms.haar
 
 ! Haar Wavelet Transform -- http://dmr.ath.cx/gfx/haar/
 
-<PRIVATE
+PRIVATE<
 
 : averages ( seq -- seq' )
     [ mean ] map ;

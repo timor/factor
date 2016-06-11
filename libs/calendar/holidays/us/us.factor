@@ -8,7 +8,7 @@ in: calendar.holidays.us
 
 SINGLETONS: us us-federal ;
 
-<PRIVATE
+PRIVATE<
 
 : adjust-federal-holiday ( timestamp -- timestamp' )
     {

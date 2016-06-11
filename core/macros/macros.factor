@@ -4,7 +4,7 @@ USING: accessors combinators compiler.units definitions effects
 effects.parser fry kernel memoize words ;
 in: macros
 
-<PRIVATE
+PRIVATE<
 
 : real-macro-effect ( effect -- effect' )
     in>> { "quot" } <effect> ;

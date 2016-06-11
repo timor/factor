@@ -20,7 +20,7 @@ in: io.directories.search
 : with-qualified-directory-entries ( path quot -- )
     '[ "" qualified-directory-entries @ ] with-directory ; inline
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: directory-iterator
 { path string }

@@ -5,7 +5,7 @@ continuations destructors fry io io.styles kernel namespaces
 prettyprint sequences sets sorting ;
 in: tools.destructors
 
-<PRIVATE
+PRIVATE<
 
 : class-tally ( set -- assoc' )
     H{ } clone [

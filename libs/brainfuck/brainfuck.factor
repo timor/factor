@@ -7,7 +7,7 @@ peg.ebnf prettyprint sequences ;
 
 in: brainfuck
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: brainfuck pointer memory ;
 
@@ -76,7 +76,7 @@ MACRO: run-brainfuck ( code -- quot )
 : get-brainfuck ( code -- result )
     [ run-brainfuck ] with-string-writer ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (run-brainfuck) ( code -- )
     [ <brainfuck> ] dip parse-brainfuck call( x -- x ) drop flush ;

@@ -24,7 +24,7 @@ in: project-euler.049
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : collect-permutations ( seq -- seq )
     [ V{ } clone ] [ dup ] bi* [

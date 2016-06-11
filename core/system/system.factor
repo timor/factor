@@ -34,7 +34,7 @@ UNION: unix macosx linux ;
 
 : vm-compile-time ( -- string ) \ vm-compile-time get-global ;
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: string>cpu-hash H{
     { "x86.32" x86.32 }

@@ -59,7 +59,7 @@ GENERIC: children-on ( rect gadget -- seq ) ;
 
 M: gadget children-on nip children>> ;
 
-<PRIVATE
+PRIVATE<
 
 :: (fast-children-on) ( point axis children quot -- i )
     children [
@@ -125,7 +125,7 @@ M: array gadget-text*
 
 defer: relayout
 
-<PRIVATE
+PRIVATE<
 
 symbol: ui-notify-flag
 
@@ -167,7 +167,7 @@ PRIVATE>
 
 : hide-gadget ( gadget -- ) f >>visible? drop ;
 
-<PRIVATE
+PRIVATE<
 
 symbol: in-layout?
 
@@ -216,7 +216,7 @@ GENERIC: ungraft* ( gadget -- ) ;
 
 M: gadget ungraft* drop ;
 
-<PRIVATE
+PRIVATE<
 
 : graft-queue ( -- dlist )
     \ graft-queue get [ "UI not running" throw ] unless* ;
@@ -321,7 +321,7 @@ M: gadget remove-gadget 2drop ;
     not-in-layout
     [ (clear-gadget) ] [ relayout ] bi ;
 
-<PRIVATE
+PRIVATE<
 
 : (add-gadget) ( child parent -- )
     {
@@ -355,7 +355,7 @@ PRIVATE>
 : screen-loc ( gadget -- loc )
     parents { 0 0 } [ loc>> v+ ] reduce ;
 
-<PRIVATE
+PRIVATE<
 
 : (screen-rect) ( gadget -- loc ext )
     dup parent>> [

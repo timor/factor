@@ -7,7 +7,7 @@ in: classes.predicate
 PREDICATE: predicate-class < class
     "metaclass" word-prop predicate-class eq? ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: predicate-quot ( class -- quot ) ;
 

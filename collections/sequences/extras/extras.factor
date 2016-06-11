@@ -91,7 +91,7 @@ in: sequences.extras
 : push-if* ( ..a elt quot: ( ..a elt -- ..b obj/f ) accum -- ..b )
     [ call ] dip [ push ] [ drop ] if* ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (index-selector-as) ( quot length exampler -- selector accum )
     new-resizable [ [ push-if-index ] 2curry ] keep ; inline
@@ -222,7 +222,7 @@ ERROR: underlying-mismatch slice1 slice2 ;
 : all-rotations ( seq -- seq' )
     dup length iota [ rotate ] with map ;
 
-<PRIVATE
+PRIVATE<
 
 : (appender-for) ( quot length exemplar -- appender accum )
     new-resizable [ [ push-all ] curry compose ] keep ; inline
@@ -262,7 +262,7 @@ PRIVATE>
 : map-harvest ( ... seq quot: ( ... elt -- ... newelt ) -- ... newseq )
     [ empty? not ] map-filter ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (setup-each-from) ( i seq -- n quot )
     [ length over [-] swap ] keep '[ _ + _ nth-unsafe ] ; inline
@@ -278,7 +278,7 @@ PRIVATE>
 : map-from ( ... seq quot: ( ... elt -- ... newelt ) i -- ... newseq )
     pick map-from-as ; inline
 
-<PRIVATE
+PRIVATE<
 
 : push-map-if ( ..a elt filter-quot: ( ..a elt -- ..b ? ) map-quot: ( ..a elt -- ..b newelt ) accum -- ..b )
     [ keep over ] 2dip [ when ] dip rot [ push ] [ 2drop ] if ; inline
@@ -372,7 +372,7 @@ PRIVATE>
 : map-index! ( ... seq quot: ( ... elt index -- ... newelt ) -- ... seq )
     over [ [ (each-index) ] dip collect ] keep ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (2each-index) ( seq1 seq2 quot -- n quot' )
     [ setup-2each [ keep ] curry ] dip compose ; inline
@@ -422,7 +422,7 @@ INSTANCE: odds immutable-sequence ;
 : arg-min ( seq -- n )
     <enum> [ second-unsafe ] infimum-by first ;
 
-<PRIVATE
+PRIVATE<
 
 : push-index-if ( ..a elt i quot: ( ..a elt -- ..b ? ) accum -- ..b )
     [ dip ] dip rot [ push ] [ 2drop ] if ; inline
@@ -457,7 +457,7 @@ PRIVATE>
 : loop>array ( quot -- seq )
    { } loop>sequence ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (reverse) ( seq -- newseq )
     dup [ length ] keep new-sequence
@@ -491,7 +491,7 @@ PRIVATE>
         ]
     ] keep dup branch? [ drop f ] unless make ;
 
-<PRIVATE
+PRIVATE<
 
 : (map-find-index) ( seq quot find-quot -- result i elt )
     [ [ f ] 2dip [ [ nip ] 2dip call dup ] curry ] dip call
@@ -554,7 +554,7 @@ PRIVATE>
 : each-index-from ( ... seq quot: ( ... elt index -- ... ) i -- ... )
     -rot (each-index) (each-integer) ; inline
 
-<PRIVATE
+PRIVATE<
 
 : select-by* ( ... seq quot: ( ... elt -- ... x ) compare: ( obj1 obj2 -- ? ) -- ... i elt )
     [

@@ -63,7 +63,7 @@ ERROR: unexpected want got ;
 
 GENERIC: skip-blank ( lexer -- ) ;
 
-<PRIVATE
+PRIVATE<
 
 : shebang? ( lexer -- lexer ? )
     dup line>> 1 = [

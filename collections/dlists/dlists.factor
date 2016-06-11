@@ -189,7 +189,7 @@ M: dlist clear-deque
 M: dlist clone
     <dlist> [ '[ _ push-back ] dlist-each ] keep ;
 
-<PRIVATE
+PRIVATE<
 
 : (push-before-node) ( obj dlist-node -- new-dlist-node )
     [ [ prev>> ] keep <dlist-node> dup ] keep

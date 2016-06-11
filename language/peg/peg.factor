@@ -314,7 +314,7 @@ symbol: delayed
 : parse ( input parser -- ast )
     (parse) ast>> ;
 
-<PRIVATE
+PRIVATE<
 
 : next-id ( -- n )
     ! Return the next unique id for a parser

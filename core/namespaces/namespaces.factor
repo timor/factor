@@ -4,7 +4,7 @@ USING: accessors arrays assocs hashtables kernel kernel.private
 math sequences vectors ;
 in: namespaces
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: global-hashtable
     { boxes hashtable read-only } ;

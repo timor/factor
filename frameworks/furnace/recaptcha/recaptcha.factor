@@ -19,7 +19,7 @@ M: recaptcha call-responder*
     dup recaptcha set
     responder>> call-responder ;
 
-<PRIVATE
+PRIVATE<
 
 : (render-recaptcha) ( url -- xml )
     dup

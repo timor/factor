@@ -8,7 +8,7 @@ xml.entities ;
 
 in: pdf.values
 
-<PRIVATE
+PRIVATE<
 
 : escape-string ( str -- str' )
     H{

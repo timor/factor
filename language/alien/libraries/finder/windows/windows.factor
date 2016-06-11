@@ -7,7 +7,7 @@ sequences splitting system system-info.windows ;
 
 in: alien.libraries.finder.windows
 
-<PRIVATE
+PRIVATE<
 
 : search-paths ( -- seq )
     "resource:" normalize-path

@@ -10,7 +10,7 @@ in: mongodb.operations
 
 M: byte-vector byte-length length ;
 
-<PRIVATE
+PRIVATE<
 
 PREDICATE: mdb-reply-op < integer OP_Reply = ;
 PREDICATE: mdb-query-op < integer OP_Query = ;
@@ -79,7 +79,7 @@ PRIVATE>
         [ ] [ opcode>> ] bi (read-message)
     ] with-scope ;
 
-<PRIVATE
+PRIVATE<
 
 : (write-message) ( message quot -- )
     [ connection-buffer dup ] 2dip

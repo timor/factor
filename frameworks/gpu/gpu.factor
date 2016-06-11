@@ -4,7 +4,7 @@ in: gpu
 
 TUPLE: gpu-object < identity-tuple handle ;
 
-<PRIVATE
+PRIVATE<
 
 VARIANT: gpu-api
     opengl-2 opengl-3 ;

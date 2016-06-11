@@ -10,7 +10,7 @@ M: ascii encode-char
     drop
     over 127 <= [ stream-write1 ] [ encode-error ] if ; inline
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: ascii> ( string -- byte-array ) ;
 

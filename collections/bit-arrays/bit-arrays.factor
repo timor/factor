@@ -9,7 +9,7 @@ TUPLE: bit-array
     { length array-capacity read-only }
     { underlying byte-array read-only } ;
 
-<PRIVATE
+PRIVATE<
 
 : n>byte ( m -- n ) -3 shift ; inline
 

@@ -12,7 +12,7 @@ PREDICATE: math-class < class
         number bootstrap-word class<=
     ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : bootstrap-words ( classes -- classes' )
     [ bootstrap-word ] map ;
@@ -47,7 +47,7 @@ ERROR: no-math-method left right generic ;
 : default-math-method ( generic -- quot )
     [ no-math-method ] curry [ ] like ;
 
-<PRIVATE
+PRIVATE<
 
 : (math-method) ( generic class -- quot )
     over ?lookup-method
@@ -69,7 +69,7 @@ PRIVATE>
         2drop object-method
     ] if ;
 
-<PRIVATE
+PRIVATE<
 
 symbol: generic-word
 

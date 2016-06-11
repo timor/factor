@@ -55,7 +55,7 @@ in: project-euler.065
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : (e-frac) ( -- seq )
     2 lfrom [

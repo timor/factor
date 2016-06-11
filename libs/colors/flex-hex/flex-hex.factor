@@ -6,7 +6,7 @@ regexp.classes sequences splitting ;
 
 in: colors.flex-hex
 
-<PRIVATE
+PRIVATE<
 
 : hex-only ( str -- str' )
     [ dup hex-digit? [ drop char: 0 ] unless ] map ;

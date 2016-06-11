@@ -102,7 +102,7 @@ M: unix stat>file-info ( stat -- file-info )
 M: unix stat>type ( stat -- type )
     st_mode>> n>file-type ;
 
-<PRIVATE
+PRIVATE<
 
 : stat-mode ( path -- mode )
     normalize-path file-status st_mode>> ;
@@ -185,7 +185,7 @@ CONSTANT: ALL-EXECUTE   0o0000111 ;
 : remove-file-permissions ( path n -- )
     over file-permissions [ bitnot ] dip bitand set-file-permissions ;
 
-<PRIVATE
+PRIVATE<
 
 : timestamp>timeval ( timestamp -- timeval )
     unix-1970 time- duration>microseconds make-timeval ;
@@ -264,7 +264,7 @@ M: string set-file-group ( path string -- )
         [ drop char: - ]
     } case ;
 
-<PRIVATE
+PRIVATE<
 
 : file-type>executable ( directory-entry -- string )
     name>> any-execute? "*" "" ? ;
@@ -284,7 +284,7 @@ PRIVATE>
         [ drop file-type>executable ]
     } case ;
 
-<PRIVATE
+PRIVATE<
 
 : access? ( path mode -- ? )
     [ normalize-path ] [ access ] bi* 0 < [

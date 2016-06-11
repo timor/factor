@@ -13,7 +13,7 @@ TUPLE: station cccc name state country latitude longitude ;
 
 C: <station> station ;
 
-<PRIVATE
+PRIVATE<
 
 ERROR: bad-location str ;
 
@@ -66,7 +66,7 @@ MEMO: all-stations ( -- seq )
 : find-by-state ( state -- stations )
     all-stations swap '[ state>> _ = ] filter ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: metar-report type station timestamp modifier wind
 visibility rvr weather sky-condition temperature dew-point
@@ -589,7 +589,7 @@ M: string metar.
     [ metar <metar-report> metar-report. ]
     [ drop "%s METAR not found\n" printf ] recover ;
 
-<PRIVATE
+PRIVATE<
 
 : parse-wind-shear ( str -- str' )
     "WS" ?head drop "/" split1

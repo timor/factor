@@ -57,7 +57,7 @@ M: struct >c-ptr
 : read-struct ( class -- struct )
     [ heap-size read ] [ memory>struct ] bi ;
 
-<PRIVATE
+PRIVATE<
 
 : init-struct ( class with-prototype: ( prototype -- alien ) sans-prototype: ( class -- alien ) -- alien )
     '[ dup struct-prototype _ _ ?if ] keep memory>struct ; inline
@@ -86,7 +86,7 @@ MACRO: <struct-boa> ( class -- quot: ( ... -- struct ) )
         ] bi
     ] [ ] output>sequence ;
 
-<PRIVATE
+PRIVATE<
 : pad-struct-slots ( values class -- values' class )
     [ struct-slots [ initial>> ] map over length tail append ] keep ;
 
@@ -180,7 +180,7 @@ M: struct-c-type base-type ;
         [ return-struct-in-registers? not ]
     } cond ;
 
-<PRIVATE
+PRIVATE<
 : struct-slot-values-quot ( class -- quot )
     struct-slots
     [ name>> reader-word 1quotation ] map
@@ -250,7 +250,7 @@ M: struct binary-zero? binary-object uchar <c-direct-array> [ 0 = ] all? ; inlin
 
 ! class definition
 
-<PRIVATE
+PRIVATE<
 : struct-needs-prototype? ( class -- ? )
     struct-slots [ initial>> binary-zero? ] all? not ;
 
@@ -332,7 +332,7 @@ M: struct-class reset-class
 
 symbol: bits:
 
-<PRIVATE
+PRIVATE<
 
 :: set-bits ( slot-spec n -- slot-spec )
     struct-bit-slot-spec new
@@ -362,7 +362,7 @@ PRIVATE>
     [ [ >>type ] [ struct-slot-class init-slot-class ] bi ]
     [ [ dup empty? ] [ peel-off-struct-attributes ] until drop ] tri* ;
 
-<PRIVATE
+PRIVATE<
 : parse-struct-slot ( -- slot )
     scan-token scan-c-type \ } parse-until <struct-slot-spec> ;
 
@@ -395,7 +395,7 @@ SYNTAX: \ S@
 
 ! functor support
 
-<PRIVATE
+PRIVATE<
 : scan-c-type* ( -- c-type/param )
     scan-token dup "{" = [ drop \ } parse-until >array ] [ search ] if ;
 

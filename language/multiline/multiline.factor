@@ -6,7 +6,7 @@ in: multiline
 
 ERROR: bad-heredoc identifier ;
 
-<PRIVATE
+PRIVATE<
 
 : rest-of-line ( lexer -- seq )
     [ line-text>> ] [ column>> ] bi tail ;
@@ -37,7 +37,7 @@ SYNTAX: \ STRING:
     parse-here 1quotation
     ( -- string ) define-inline ;
 
-<PRIVATE
+PRIVATE<
 
 :: (scan-multiline-string) ( i end lexer -- j )
     lexer line-text>> :> text

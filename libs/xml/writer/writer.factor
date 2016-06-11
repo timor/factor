@@ -9,7 +9,7 @@ symbol: sensitive-tags
 symbol: indenter
 "  " indenter set-global
 
-<PRIVATE
+PRIVATE<
 
 symbol: xml-pprint?
 symbol: indentation
@@ -45,7 +45,7 @@ PRIVATE>
 : print-name ( name -- )
     name>string write ;
 
-<PRIVATE
+PRIVATE<
 
 : write-quoted ( string -- )
     char: " write1 write char: " write1 ;
@@ -60,7 +60,7 @@ PRIVATE>
 
 GENERIC: write-xml ( xml -- ) ;
 
-<PRIVATE
+PRIVATE<
 
 M: string write-xml
     escape-string xml-pprint? get [

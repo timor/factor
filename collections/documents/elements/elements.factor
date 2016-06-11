@@ -18,7 +18,7 @@ GENERIC: next-elt ( loc document elt -- newloc ) ;
 
 singleton: char-elt
 
-<PRIVATE
+PRIVATE<
 
 : prev ( loc document quot: ( loc document -- loc ) -- loc )
     {
@@ -53,7 +53,7 @@ M: one-char-elt prev-elt 2drop ;
 
 M: one-char-elt next-elt 2drop ;
 
-<PRIVATE
+PRIVATE<
 
 : blank-at? ( n seq -- n seq ? )
     2dup ?nth blank? ;

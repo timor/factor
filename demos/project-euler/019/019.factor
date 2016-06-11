@@ -42,7 +42,7 @@ in: project-euler.019
 ! ALTERNATE SOLUTIONS
 ! -------------------
 
-<PRIVATE
+PRIVATE<
 
 : start-date ( -- timestamp )
     1901 1 1 <date> ;

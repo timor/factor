@@ -25,7 +25,7 @@ M: monitor timeout timeout>> ;
 
 M: monitor set-timeout timeout<< ;
 
-<PRIVATE
+PRIVATE<
 
 symbol: monitor-disposed
 

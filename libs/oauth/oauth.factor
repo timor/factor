@@ -15,7 +15,7 @@ TUPLE: token key secret user-data ;
         swap >>secret
         swap >>key ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: token-params
 consumer-token
@@ -89,7 +89,7 @@ TUPLE: request-token-params < token-params
 : <request-token-params> ( -- params )
     request-token-params new-token-params ;
 
-<PRIVATE
+PRIVATE<
 
 :: <token-request> ( url consumer-token request-token params -- request )
     url "POST" consumer-token request-token params sign-params
@@ -113,7 +113,7 @@ TUPLE: access-token-params < token-params request-token verifier ;
 : <access-token-params> ( -- params )
     access-token-params new-token-params ;
 
-<PRIVATE
+PRIVATE<
 
 : make-access-token-params ( params -- assoc )
     [
@@ -141,7 +141,7 @@ TUPLE: oauth-request-params < token-params access-token ;
     oauth-request-params new-token-params
         access-token get >>access-token ;
 
-<PRIVATE
+PRIVATE<
 
 :: signed-oauth-request-params ( request params -- params )
     request url>>

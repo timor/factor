@@ -54,7 +54,7 @@ ERROR: not-a-month ;
 M: not-a-month summary
     drop "Months are indexed starting at 1" ;
 
-<PRIVATE
+PRIVATE<
 
 : check-month ( n -- n )
     [ not-a-month ] when-zero ;
@@ -194,7 +194,7 @@ M: integer leap-year? ( year -- ? )
 M: timestamp leap-year? ( timestamp -- ? )
     year>> leap-year? ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: +year ( timestamp x -- timestamp ) ;
 GENERIC: +month ( timestamp x -- timestamp ) ;
@@ -370,7 +370,7 @@ M: timestamp time-
 : before ( duration -- -duration )
     -1 time* ;
 
-<PRIVATE
+PRIVATE<
 
 : -slots ( obj1 obj2 quot -- n obj1 obj2 )
     [ bi@ - ] curry 2keep ; inline
@@ -479,7 +479,7 @@ M: timestamp day-name day-of-week day-names nth ;
 : end-of-month ( timestamp -- new-timestamp )
     [ midnight ] [ days-in-month ] bi >>day ;
 
-<PRIVATE
+PRIVATE<
 
 : day-offset ( timestamp m -- new-timestamp n )
     over day-of-week - ; inline

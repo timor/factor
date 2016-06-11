@@ -6,7 +6,7 @@ io.files.info io.launcher kernel sequences sets splitting system
 unicode ;
 in: alien.libraries.finder.linux
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: mach-map {
     { ppc.64 { "libc6" "64bit" } }

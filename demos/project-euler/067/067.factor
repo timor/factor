@@ -35,7 +35,7 @@ in: project-euler.067
 ! Propagate from bottom to top the longest cumulative path as is done in
 ! problem 18.
 
-<PRIVATE
+PRIVATE<
 
 : source-067 ( -- seq )
     "resource:extra/project-euler/067/triangle.txt"

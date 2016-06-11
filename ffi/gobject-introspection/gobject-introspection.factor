@@ -15,7 +15,7 @@ M: gir-not-found summary
     "\n\nUse the existing path or declare GIR_DIRS environment variable"
     3append ;
 
-<PRIVATE
+PRIVATE<
 
 : system-gir-dirs ( -- dirs )
     "XDG_DATA_DIRS" os-env "/usr/local/share/:/usr/share/" or

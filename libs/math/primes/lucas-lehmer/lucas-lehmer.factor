@@ -6,7 +6,7 @@ in: math.primes.lucas-lehmer
 
 ERROR: invalid-lucas-lehmer-candidate obj ;
 
-<PRIVATE
+PRIVATE<
 
 : do-lucas-lehmer ( p -- ? )
     [ drop 4 ] [ 2 - ] [ 2^ 1 - ] tri

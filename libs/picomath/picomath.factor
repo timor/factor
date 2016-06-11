@@ -6,7 +6,7 @@ math.functions sequences ;
 
 in: picomath
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: a1  0.254829592 ;
 CONSTANT: a2 -0.284496736 ;
@@ -39,7 +39,7 @@ PRIVATE>
     x x neg * e^ * 1 swap - :> y
     sign y * 1 + 2 / ;
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: lf {
     0.000000000000000
@@ -318,7 +318,7 @@ PRIVATE>
     x -1.0 <= [ "argument must be > -1" throw ] when
     x abs 1e-4 > [ 1.0 x + log ] [ -0.5 x * 1.0 + x * ] if ;
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: c0 2.515517 ;
 CONSTANT: c1 0.802853 ;
@@ -341,7 +341,7 @@ PRIVATE>
     [ p log -2.0 * sqrt rational-approximation neg ]
     [ p 1.0 - log -2.0 * sqrt rational-approximation ] if ;
 
-<PRIVATE
+PRIVATE<
 
 ! Abramowitz and Stegun 6.1.41
 ! Asymptotic series should be good to at least 11 or 12 figures
@@ -372,7 +372,7 @@ defer: gamma
         x 0.5 - x log * x - halfLogTwoPi + series +
     ] if ;
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: GAMMA 0.577215664901532860606512090 ; ! Euler's gamma constant
 

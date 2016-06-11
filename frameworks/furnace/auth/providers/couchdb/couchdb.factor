@@ -36,7 +36,7 @@ TUPLE: couchdb-auth-provider
     { prefix string initial: "user_reservation_" }
     { field-map assoc initial: { } } ;
 
-<PRIVATE
+PRIVATE<
 
 ! >json does weird things for mirrors, so we copy the mirror into
 ! a real hashtable before serializing it.

@@ -56,7 +56,7 @@ M: login-realm modify-form ( responder -- xml/f )
     permit-id get [ delete-permit ] when*
     URL" $realm" end-aside ;
 
-<PRIVATE
+PRIVATE<
 
 symbol: description
 symbol: capabilities

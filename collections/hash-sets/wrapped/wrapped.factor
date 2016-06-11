@@ -14,7 +14,7 @@ TUPLE: wrapped-hash-set
 
 GENERIC: wrap-key ( key wrapped-hash -- wrapped-key ) ;
 
-<PRIVATE
+PRIVATE<
 
 : wrapper@ ( key wrapped-hash -- wrapped-key hash-set )
     [ wrap-key ] [ nip underlying>> ] 2bi ; inline

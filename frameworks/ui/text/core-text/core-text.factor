@@ -9,7 +9,7 @@ in: ui.text.core-text
 
 singleton: core-text-renderer
 
-<PRIVATE
+PRIVATE<
 
 : unscale ( m -- n )
     retina? get-global [ 2.0 / ] when ; inline

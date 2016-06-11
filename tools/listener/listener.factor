@@ -79,7 +79,7 @@ symbol: error-summary?
 
 t error-summary? set-global
 
-<PRIVATE
+PRIVATE<
 
 : title. ( string -- )
     H{ { foreground T{ rgba f 0.3 0.3 0.3 1 } } } format nl ;

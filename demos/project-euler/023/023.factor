@@ -33,7 +33,7 @@ in: project-euler.023
 ! The upper limit can be dropped to 20161 which reduces our search space
 ! and every even number > 46 can be expressed as a sum of two abundants
 
-<PRIVATE
+PRIVATE<
 
 : source-023 ( -- seq )
     46 [1,b] 47 20161 2 <range> append ;

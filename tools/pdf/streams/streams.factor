@@ -6,7 +6,7 @@ kernel pdf.layout sequences splitting strings ;
 
 in: pdf.streams
 
-<PRIVATE
+PRIVATE<
 
 ! FIXME: what about "proper" tab support?
 

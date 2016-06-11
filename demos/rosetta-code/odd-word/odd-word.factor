@@ -39,7 +39,7 @@ in: rosetta-code.odd-word
 ! Test case: work on both the "life" example given above, and
 ! the text we,are;not,in,kansas;any,more.
 
-<PRIVATE
+PRIVATE<
 ! Save current continuation.
 : savecc ( -- continuation/f )
     [ ] callcc1 ; inline

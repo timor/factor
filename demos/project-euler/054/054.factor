@@ -67,7 +67,7 @@ in: project-euler.054
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : source-054 ( -- seq )
     "resource:extra/project-euler/054/poker.txt" ascii file-lines

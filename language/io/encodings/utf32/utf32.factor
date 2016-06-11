@@ -16,7 +16,7 @@ singleton: utf32
 
 utf32 "UTF-32" register-encoding
 
-<PRIVATE
+PRIVATE<
 
 ! Decoding
 

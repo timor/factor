@@ -8,7 +8,7 @@ specialized-array: uint
 specialized-array: uint-4
 in: random.sfmt
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: state-multiplier 1812433253 ;
 

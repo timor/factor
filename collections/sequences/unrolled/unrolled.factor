@@ -4,7 +4,7 @@ compiler.tree.propagation.transforms fry generalizations kernel
 locals math sequences sequences.private ;
 in: sequences.unrolled
 
-<PRIVATE
+PRIVATE<
 : (unrolled-each-integer) ( quot n -- )
     swap '[ _ call( i -- ) ] each-integer ;
 
@@ -32,7 +32,7 @@ ERROR: unrolled-bounds-error
 ERROR: unrolled-2bounds-error
     xseq yseq unroll-length ;
 
-<PRIVATE
+PRIVATE<
 : unrolled-bounds-check ( seq len quot -- seq len quot )
     2over swap length > [ 2over unrolled-bounds-error ] when ; inline
 

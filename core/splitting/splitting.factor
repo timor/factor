@@ -4,7 +4,7 @@ USING: arrays kernel math sbufs sequences sequences.private
 strings ;
 in: splitting
 
-<PRIVATE
+PRIVATE<
 
 : ?chomp ( seq begin tester chopper -- newseq ? )
     [ [ 2dup ] dip call ] dip
@@ -25,7 +25,7 @@ PRIVATE>
 : ?tail-slice ( seq end -- newseq ? )
     [ tail? ] [ head-slice* ] ?chomp ;
 
-<PRIVATE
+PRIVATE<
 
 : (split1) ( seq subseq snip-quot -- before after )
     [
@@ -55,7 +55,7 @@ PRIVATE>
 : replace ( seq old new -- new-seq )
     pick [ [ split-subseq ] dip ] dip join-as ;
 
-<PRIVATE
+PRIVATE<
 
 : (split1-when) ( ... seq quot: ( ... elt -- ... ? ) snip-quot -- ... before-slice after-slice )
     [ dupd find drop ] dip [ swap [ dup 1 + ] dip ] prepose [ f ] if* ; inline
@@ -76,7 +76,7 @@ PRIVATE>
     [ <reversed> ] bi@ split1-slice [ <reversed> ] bi@
     [ f ] [ swap ] if-empty ;
 
-<PRIVATE
+PRIVATE<
 
 : (split) ( seq quot: ( ... elt -- ... ? ) slice-quot -- pieces )
     [ 0 ] 3dip pick [

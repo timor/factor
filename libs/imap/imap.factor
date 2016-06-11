@@ -32,7 +32,7 @@ CONSTANT: IMAP4_SSL_PORT 993 ;
         read-hms " " expect readln parse-rfc822-gmt-offset <timestamp>
     ] with-string-reader  ;
 
-<PRIVATE
+PRIVATE<
 
 : >utf7imap4 ( str -- str' )
     utf7imap4 encode >string ;

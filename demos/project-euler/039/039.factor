@@ -31,7 +31,7 @@ in: project-euler.039
 
 symbol: p-count
 
-<PRIVATE
+PRIVATE<
 
 : max-p ( -- n )
     p-count get length ;

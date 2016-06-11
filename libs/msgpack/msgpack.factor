@@ -11,7 +11,7 @@ in: msgpack
 
 defer: read-msgpack
 
-<PRIVATE
+PRIVATE<
 
 : read-array ( n -- obj )
     [ read-msgpack ] replicate ;
@@ -73,7 +73,7 @@ ERROR: cannot-convert obj ;
 
 GENERIC: write-msgpack ( obj -- ) ;
 
-<PRIVATE
+PRIVATE<
 
 M: +msgpack-nil+ write-msgpack drop 0xc0 write1 ;
 

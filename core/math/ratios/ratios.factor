@@ -6,7 +6,7 @@ in: math.ratios
 : 2>fraction ( a/b c/d -- a c b d )
     [ >fraction ] bi@ swapd ; inline
 
-<PRIVATE
+PRIVATE<
 
 : fraction> ( a b -- a/b )
     dup 1 number= [ drop ] [ ratio boa ] if ; inline

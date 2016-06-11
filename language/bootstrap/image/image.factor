@@ -33,7 +33,7 @@ CONSTANT: image-names
         "windows-x86.64" "unix-x86.64"
     } ;
 
-<PRIVATE
+PRIVATE<
 
 ! Object cache; we only consider numbers equal if they have the
 ! same type

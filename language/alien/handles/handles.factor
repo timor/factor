@@ -3,7 +3,7 @@ USING: alien alien.destructors assocs kernel math math.bitwise
 namespaces ;
 in: alien.handles
 
-<PRIVATE
+PRIVATE<
 
 SYMBOLS: alien-handle-counter alien-handles ;
 

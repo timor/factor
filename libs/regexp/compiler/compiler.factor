@@ -11,7 +11,7 @@ GENERIC: question>quot ( question -- quot ) ;
 symbol: shortest?
 symbol: backwards?
 
-<PRIVATE
+PRIVATE<
 
 M: t question>quot drop [ 2drop t ] ;
 M: f question>quot drop [ 2drop f ] ;

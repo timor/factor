@@ -42,7 +42,7 @@ in: project-euler.055
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : add-reverse ( n -- m )
     dup number>digits reverse digits>number + ;

@@ -7,7 +7,7 @@ unicode urls.encoding ;
 
 in: cgi
 
-<PRIVATE
+PRIVATE<
 
 : (query-string) ( string -- assoc )
     query>assoc [ nip ] assoc-filter [

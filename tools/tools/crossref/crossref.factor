@@ -11,7 +11,7 @@ symbol: crossref
 
 GENERIC: uses ( defspec -- seq ) ;
 
-<PRIVATE
+PRIVATE<
 
 symbol: visited
 
@@ -135,7 +135,7 @@ M: f smart-usage drop \ f smart-usage ;
 
 : vocab-usage. ( vocab -- ) vocab-usage vocabs. ;
 
-<PRIVATE
+PRIVATE<
 
 singleton: invalidate-crossref
 

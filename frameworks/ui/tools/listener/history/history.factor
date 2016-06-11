@@ -9,7 +9,7 @@ TUPLE: history document elements index ;
 : <history> ( document -- history )
     V{ } clone 0 history boa ;
 
-<PRIVATE
+PRIVATE<
 
 : push-if-not-last ( elt seq -- )
     2dup ?last = [ 2drop ] [ push ] if ;
@@ -28,7 +28,7 @@ PRIVATE>
         ] keep
     ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : set-element ( elt history -- )
     [ index>> ] [ elements>> ] bi set-nth ;

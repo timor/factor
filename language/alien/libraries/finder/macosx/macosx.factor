@@ -8,7 +8,7 @@ system ;
 
 in: alien.libraries.finder.macosx
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: framework-info location name shortname version suffix ;
 

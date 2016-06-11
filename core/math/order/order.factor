@@ -15,7 +15,7 @@ GENERIC: <=> ( obj1 obj2 -- <=> ) ;
 
 : >=< ( obj1 obj2 -- >=< ) <=> invert-comparison ; inline
 
-<PRIVATE
+PRIVATE<
 
 ! Defining a math generic for comparison forces a single math
 ! promotion, and speeds up comparisons on numbers.

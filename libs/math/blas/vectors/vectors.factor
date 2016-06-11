@@ -25,7 +25,7 @@ GENERIC: Vasum ( x -- sum ) ;
 GENERIC: Vswap ( x y -- x=y y=x ) ;
 GENERIC: Viamax ( x -- max-i ) ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: (blas-vector-like) ( data length inc exemplar -- vector ) ;
 

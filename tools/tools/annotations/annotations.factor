@@ -6,7 +6,7 @@ namespaces prettyprint quotations sequences sequences.deep
 sequences.generalizations sorting summary tools.time words ;
 in: tools.annotations
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: (reset) ( word -- ) ;
 
@@ -30,7 +30,7 @@ M: cannot-annotate-twice summary drop "Cannot annotate a word twice" ;
 
 PREDICATE: annotated < word "unannotated-def" word-prop >boolean ;
 
-<PRIVATE
+PRIVATE<
 
 : check-annotate-twice ( word -- word )
     dup annotated? [ cannot-annotate-twice ] when ;
@@ -68,7 +68,7 @@ PRIVATE>
 : deep-annotate ( word quot -- )
     [ (deep-annotate) ] with-compilation-unit ;
 
-<PRIVATE
+PRIVATE<
 
 :: trace-quot ( word effect quot str -- quot' )
     effect quot call :> values
@@ -95,7 +95,7 @@ PRIVATE>
 : watch ( word -- )
     dup '[ [ _ ] dip (watch) ] annotate ;
 
-<PRIVATE
+PRIVATE<
 
 : (watch-vars) ( word vars quot -- newquot )
    '[
@@ -118,7 +118,7 @@ word-timing [ H{ } clone ] initialize
 : reset-word-timing ( -- )
     word-timing get clear-assoc ;
 
-<PRIVATE
+PRIVATE<
 
 : (add-timing) ( def word -- def' )
     '[

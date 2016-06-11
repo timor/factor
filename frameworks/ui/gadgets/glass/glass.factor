@@ -10,7 +10,7 @@ GENERIC: hide-glass-hook ( gadget -- ) ;
 
 M: gadget hide-glass-hook drop ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: glass < gadget visible-rect owner ;
 
@@ -55,7 +55,7 @@ PRIVATE>
 
 slot: popup
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: popup < wrapper owner ;
 

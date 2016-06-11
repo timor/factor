@@ -38,7 +38,7 @@ M: presentation ungraft*
 MEMO: selected-pen-boundary ( -- button-pen )
     roll-button-rollover-border <solid> dup dup f f <button-pen> ;
 
-<PRIVATE
+PRIVATE<
 : setup-presentation ( presentation -- presentation )
     selected-pen-boundary >>boundary ;
 PRIVATE>

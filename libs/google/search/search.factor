@@ -7,7 +7,7 @@ io.styles json.reader kernel sequences urls wrap.strings ;
 
 in: google.search
 
-<PRIVATE
+PRIVATE<
 
 : search-url ( query -- url )
     URL" http://ajax.googleapis.com/ajax/services/search/web"
@@ -26,7 +26,7 @@ PRIVATE>
     { "responseData" "results" } deep-at
     [ \ search-result from-slots ] map ;
 
-<PRIVATE
+PRIVATE<
 
 : write-heading ( str -- )
     H{

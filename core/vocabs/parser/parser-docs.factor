@@ -43,14 +43,14 @@ $nl
 "In practice, a small set of guidelines helps avoid name clashes:"
 { $list
   "Keep vocabularies small"
-  { "Hide internal words using " { $link postpone\ <PRIVATE } }
+  { "Hide internal words using " { $link postpone\ PRIVATE< } }
   { "Make good use of " { $link postpone\ FROM: } ", " { $link postpone\ qualified: } " or " { $link postpone\ QUALIFIED-WITH: } }
 } ;
 
 ARTICLE: "word-search-private" "Private words"
 "Words which only serve as implementation detail should be defined in a private code block. Words in a private code blocks get defined in a vocabulary whose name is the name of the current vocabulary suffixed with " { $snippet ".private" } ". Privacy is not enforced by the system; private words can be called from other vocabularies, and from the listener. However, this should be avoided where possible."
 { $subsections
-    postpone\ <PRIVATE
+    postpone\ PRIVATE<
     postpone\ PRIVATE>
 } ;
 
@@ -125,7 +125,7 @@ HELP: current-vocab
 
 HELP: begin-private
 { $description "Begins a block of private word definitions. Private word definitions are placed in the current vocabulary name, suffixed with " { $snippet ".private" } "." }
-{ $notes "This word is used to implement " { $link postpone\ <PRIVATE } "." } ;
+{ $notes "This word is used to implement " { $link postpone\ PRIVATE< } "." } ;
 
 HELP: end-private
 { $description "Ends a block of private word definitions." }

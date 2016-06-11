@@ -8,7 +8,7 @@ kernel make math math.parser sequences ui urls vocabs ;
 
 in: hacker-news
 
-<PRIVATE
+PRIVATE<
 
 : hacker-news-recent-ids ( -- seq )
     "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty"

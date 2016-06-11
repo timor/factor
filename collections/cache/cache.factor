@@ -9,7 +9,7 @@ TUPLE: cache-assoc < disposable assoc max-age ;
 : <cache-assoc> ( -- cache )
     cache-assoc new-disposable H{ } clone >>assoc 10 >>max-age ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: cache-entry value age ;
 

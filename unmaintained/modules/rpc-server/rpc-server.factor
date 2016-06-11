@@ -5,7 +5,7 @@ io.encodings.binary io.servers.connection kernel namespaces
 sequences serialize sets threads vocabs vocabs.parser init io ;
 in: modules.rpc-server
 
-<PRIVATE
+PRIVATE<
 TUPLE: rpc-request args vocabspec wordname ;
 symbol: serving-vocabs serving-vocabs [ V{ } clone ] initialize
 

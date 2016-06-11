@@ -5,7 +5,7 @@ math.functions arrays math.functions.private sequences
 sequences.private parser ;
 in: math.complex
 
-<PRIVATE
+PRIVATE<
 
 M: real real-part ; inline
 M: real imaginary-part drop 0 ; inline

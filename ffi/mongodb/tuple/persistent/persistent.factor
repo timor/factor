@@ -12,7 +12,7 @@ GENERIC: tuple>selector ( tuple -- selector ) ;
 
 defer: assoc>tuple
 
-<PRIVATE
+PRIVATE<
 
 : mdbinfo>tuple-class ( tuple-info -- class )
    [ first ] keep second lookup-word ; inline

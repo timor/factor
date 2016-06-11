@@ -49,7 +49,7 @@ INSTANCE: tail-clumps immutable-sequence ;
 : group-as ( seq n exemplar -- array )
     [ <groups> ] dip [ like ] curry map ;
 
-<PRIVATE
+PRIVATE<
 
 : (group-by) ( groups elt key -- groups )
     pick [ t ] [ last first dupd = not ] if-empty [

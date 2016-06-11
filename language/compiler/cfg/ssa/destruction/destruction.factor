@@ -8,7 +8,7 @@ compiler.cfg.ssa.interference.live-ranges compiler.cfg.utilities
 kernel make sequences namespaces ;
 in: compiler.cfg.ssa.destruction
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: cleanup-insn ( insn -- ) ;
 

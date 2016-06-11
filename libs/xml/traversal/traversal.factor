@@ -35,7 +35,7 @@ in: xml.traversal
 : tags-named ( tag name/string -- tags-seq )
     assure-name '[ _ swap tag-named? ] { } filter-as ;
 
-<PRIVATE
+PRIVATE<
 
 : prepare-deep ( xml name/string -- tag name/string )
     [ dup xml? [ body>> ] when ] [ assure-name ] bi* ;

@@ -8,7 +8,7 @@ in: morse
 
 ERROR: no-morse-ch ch ;
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: dot-char char: . ;
 CONSTANT: dash-char char: - ;
@@ -84,7 +84,7 @@ CONSTANT: morse-code-table $[
 : morse>ch ( str -- ch )
     morse-code-table value-at char-gap-char or ;
 
-<PRIVATE
+PRIVATE<
 
 : word>morse ( str -- morse )
     [ ch>morse ] { } map-as " " join ;
@@ -114,7 +114,7 @@ PRIVATE>
 
 SYNTAX: MORSE[[ "]]" parse-multiline-string morse> suffix! ;
 
-<PRIVATE
+PRIVATE<
 
 SYMBOLS: source dot-buffer dash-buffer intra-char-gap-buffer letter-gap-buffer ;
 

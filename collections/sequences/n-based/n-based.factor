@@ -6,7 +6,7 @@ in: sequences.n-based
 TUPLE: n-based-assoc seq base ;
 C: <n-based-assoc> n-based-assoc ;
 
-<PRIVATE
+PRIVATE<
 
 : n-based@ ( key assoc -- n seq )
     [ base>> - ] [ nip seq>> ] 2bi ;

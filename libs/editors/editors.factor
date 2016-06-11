@@ -53,7 +53,7 @@ M: cannot-find-source error.
 
 defer: edit
 
-<PRIVATE
+PRIVATE<
 
 : public-vocab-name ( vocab-spec -- name )
     vocab-name ".private" ?tail drop ;

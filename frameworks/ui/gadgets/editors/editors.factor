@@ -18,7 +18,7 @@ caret-color
 caret mark
 focused? blink blink-timer ;
 
-<PRIVATE
+PRIVATE<
 
 : <loc> ( -- loc ) { 0 0 } <model> ;
 
@@ -41,7 +41,7 @@ PRIVATE>
 : <editor> ( -- editor )
     editor new-editor ;
 
-<PRIVATE
+PRIVATE<
 
 : activate-editor-model ( editor model -- )
     [ add-connection ]
@@ -153,7 +153,7 @@ M: editor ungraft*
         ] keep scroll>rect
     ] [ drop ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : draw-caret? ( editor -- ? )
     { [ focused?>> ] [ blink>> ] } 1&& ;
@@ -221,7 +221,7 @@ M: editor baseline font>> font-metrics ascent>> ;
 
 M: editor cap-height font>> font-metrics cap-height>> ;
 
-<PRIVATE
+PRIVATE<
 
 : contents-changed ( model editor -- )
     [ [ nip caret>> ] [ drop ] 2bi '[ _ validate-loc ] (change-model) ]
@@ -514,7 +514,7 @@ TUPLE: multiline-editor < editor ;
 
 : next-line ( editor -- ) line-elt editor-next ;
 
-<PRIVATE
+PRIVATE<
 
 : page-elt ( editor -- editor element ) dup visible-lines 1 - <page-elt> ;
 
@@ -538,7 +538,7 @@ PRIVATE>
 : change-selection ( editor quot -- )
     '[ gadget-selection @ ] [ user-input* drop ] bi ; inline
 
-<PRIVATE
+PRIVATE<
 
 : join-lines ( string -- string' )
     "\n" split
@@ -604,7 +604,7 @@ TUPLE: source-editor < multiline-editor ;
 ! Fields wrap an editor
 TUPLE: field < border editor min-cols max-cols ;
 
-<PRIVATE
+PRIVATE<
 
 : field-theme ( gadget -- gadget )
     { 2 2 } >>size
@@ -652,7 +652,7 @@ TUPLE: action-editor < editor default-text ;
 : <action-editor> ( -- editor )
     action-editor new-editor ;
 
-<PRIVATE
+PRIVATE<
 
 : draw-default-text? ( editor -- ? )
     { [ default-text>> ] [ model>> doc-string empty? ] } 1&& ;

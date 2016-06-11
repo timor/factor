@@ -15,7 +15,7 @@ in: serialize
 
 GENERIC: (serialize) ( obj -- ) ;
 
-<PRIVATE
+PRIVATE<
 
 ! Variable holding a assoc of objects already serialized
 symbol: serialized

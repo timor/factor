@@ -7,7 +7,7 @@ math.order math.ranges memoize namespaces sequences
 sequences.private sorting strings vectors ;
 in: math.combinatorics
 
-<PRIVATE
+PRIVATE<
 
 ! Specialized version of nths-unsafe for performance
 : (nths-unsafe) ( indices seq -- seq' )
@@ -40,7 +40,7 @@ MEMO: factorial ( n -- n! )
 
 ! Factoradic-based permutation methodology
 
-<PRIVATE
+PRIVATE<
 
 : factoradic ( n -- factoradic )
     0 [ over 0 > ] [ 1 + [ /mod ] keep swap ] produce reverse! 2nip ;
@@ -98,7 +98,7 @@ INSTANCE: k-permutations immutable-sequence ;
 
 defer: next-permutation
 
-<PRIVATE
+PRIVATE<
 
 : permutations-quot ( seq quot -- seq quot' )
     [ [ permutation-iota ] [ length iota >array ] [ ] tri ] dip
@@ -131,7 +131,7 @@ PRIVATE>
 : inverse-permutation ( seq -- permutation )
     <enum> sort-values keys ;
 
-<PRIVATE
+PRIVATE<
 
 : cut-point ( seq -- n )
     [ last ] keep [ [ > ] keep swap ] find-last drop nip ; inline
@@ -158,7 +158,7 @@ PRIVATE>
 
 ! Combinadic-based combination methodology
 
-<PRIVATE
+PRIVATE<
 
 ! "Algorithm 515: Generation of a Vector from the Lexicographical Index"
 ! Buckles, B. P., and Lybanon, M. ACM
@@ -195,7 +195,7 @@ M: combinations hashcode* tuple-hashcode ;
 
 INSTANCE: combinations immutable-sequence ;
 
-<PRIVATE
+PRIVATE<
 
 : find-max-index ( seq n -- i )
     over length - '[ _ + >= ] find-index drop ; inline
@@ -249,7 +249,7 @@ PRIVATE>
 : all-subsets ( seq -- subsets )
     dup length [0,b] [ all-combinations ] with map concat ;
 
-<PRIVATE
+PRIVATE<
 
 : (selections) ( seq n -- selections )
     [ dup [ 1sequence ] curry { } map-as dup ] [ 1 - ] bi* [

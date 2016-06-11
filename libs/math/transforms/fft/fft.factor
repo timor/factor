@@ -4,7 +4,7 @@ USING: arrays kernel locals math math.constants math.functions
 math.vectors sequences sequences.extras sequences.private ;
 in: math.transforms.fft
 
-<PRIVATE
+PRIVATE<
 
 defer: (fft)
 

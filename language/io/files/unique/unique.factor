@@ -5,7 +5,7 @@ io.directories.hierarchy io.pathnames kernel locals namespaces
 random.data sequences system vocabs ;
 in: io.files.unique
 
-<PRIVATE
+PRIVATE<
 
 HOOK: (touch-unique-file) io-backend ( path -- ) ;
 
@@ -20,7 +20,7 @@ symbol: unique-retries
 10 unique-length set-global
 10 unique-retries set-global
 
-<PRIVATE
+PRIVATE<
 
 : random-file-name ( -- string )
     unique-length get random-string ;

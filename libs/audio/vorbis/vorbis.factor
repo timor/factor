@@ -29,7 +29,7 @@ ERROR: ogg-error code ;
 ERROR: vorbis-error code ;
 ERROR: no-vorbis-in-ogg ;
 
-<PRIVATE
+PRIVATE<
 : init-vorbis ( vorbis-stream -- )
     [ sync-state>> ogg_sync_init drop ]
     [ info>> vorbis_info_init ]

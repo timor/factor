@@ -12,7 +12,7 @@ PRIMITIVE: bits>float ( n -- x ) ;
 PRIMITIVE: double>bits ( x -- n ) ;
 PRIMITIVE: float>bits ( x -- n ) ;
 
-<PRIVATE
+PRIVATE<
 PRIMITIVE: bignum* ( x y -- z ) ;
 PRIMITIVE: bignum+ ( x y -- z ) ;
 PRIMITIVE: bignum- ( x y -- z ) ;
@@ -125,7 +125,7 @@ GENERIC# bit? 1 ( x n -- ? ) ; foldable
 
 GENERIC: abs ( x -- y ) ; foldable
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: (log2) ( x -- n ) ; foldable
 
@@ -188,7 +188,7 @@ M: real >rect 0 ; inline
 
 M: complex >rect [ real-part ] [ imaginary-part ] bi ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (gcd) ( b a x y -- a d )
     swap [
@@ -204,7 +204,7 @@ PRIVATE>
 
 MATH: simple-gcd ( x y -- d ) ; foldable
 
-<PRIVATE
+PRIVATE<
 
 : fixnum-gcd ( x y -- d ) { fixnum fixnum } declare gcd nip ;
 
@@ -245,7 +245,7 @@ GENERIC: prev-float ( m -- n ) ;
 : align ( m w -- n )
     1 - [ + ] keep bitnot bitand ; inline
 
-<PRIVATE
+PRIVATE<
 
 : iterate-prep ( n quot -- i n quot ) [ 0 ] 2dip ; inline
 

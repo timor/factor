@@ -41,7 +41,7 @@ M: object limit-stream ( stream limit -- stream' )
 
 ERROR: limit-exceeded n stream ;
 
-<PRIVATE
+PRIVATE<
 
 : adjust-current-limit ( n stream -- n' stream )
     2dup [ + ] change-current
@@ -95,7 +95,7 @@ M: limited-stream stream-read-unsafe
 M: limited-stream stream-read-partial-unsafe
     [ stream-read-partial-unsafe ] maybe-read-unsafe ;
 
-<PRIVATE
+PRIVATE<
 
 : (read-until) ( stream seps buf -- stream seps buf sep/f )
     3dup [ [ stream-read1 dup ] dip member-eq? ] dip

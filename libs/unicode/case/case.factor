@@ -7,7 +7,7 @@ in: unicode.case
 
 symbol: locale ! Just casing locale, or overall?
 
-<PRIVATE
+PRIVATE<
 
 : i-dot? ( locale -- ? )
     { "tr" "az" } member? ; inline

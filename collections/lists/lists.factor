@@ -48,7 +48,7 @@ M: object nil? drop f ;
 
 : lnth ( n list -- elt ) swap [ cdr ] times car ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (leach) ( list quot -- cdr quot )
     [ [ car ] dip call ] [ [ cdr ] dip ] 2bi ; inline

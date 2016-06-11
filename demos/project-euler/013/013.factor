@@ -116,7 +116,7 @@ in: project-euler.013
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : source-013 ( -- seq )
     {

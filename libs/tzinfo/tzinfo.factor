@@ -8,7 +8,7 @@ math.order sequences strings ;
 
 in: tzinfo
 
-<PRIVATE
+PRIVATE<
 
 STRUCT: tzhead
     { tzh_reserved char[16] }

@@ -7,7 +7,7 @@ kernel locals namespaces quotations random sequences serialize
 tools.test ;
 in: images.testing
 
-<PRIVATE
+PRIVATE<
 
 : fig-name ( path -- newpath )
     [ parent-directory normalize-path ]

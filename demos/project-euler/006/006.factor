@@ -24,7 +24,7 @@ in: project-euler.006
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : sum-of-squares ( seq -- n )
     0 [ sq + ] reduce ;

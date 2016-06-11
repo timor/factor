@@ -7,7 +7,7 @@ cpu.architecture grouping kernel layouts locals make math
 namespaces sequences ;
 in: compiler.cfg.gc-checks
 
-<PRIVATE
+PRIVATE<
 
 : insert-gc-check? ( bb -- ? )
     dup kill-block?>>

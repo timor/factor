@@ -12,7 +12,7 @@ ERROR: >r/r>-in-fry-error ;
 
 GENERIC: fry ( quot -- quot' ) ;
 
-<PRIVATE
+PRIVATE<
 
 : check-fry ( quot -- quot )
     dup { load-local load-locals get-local drop-locals } intersect

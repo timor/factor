@@ -9,7 +9,7 @@ ui.backend ui.gadgets ui.gadgets.private ui.gadgets.worlds
 ui.gestures ui.render vectors vocabs.parser words ;
 in: ui
 
-<PRIVATE
+PRIVATE<
 
 ! Assoc mapping aliens to gadgets
 symbol: ui-windows
@@ -149,7 +149,7 @@ PRIVATE>
 : ui-running? ( -- ? )
     \ ui-running get-global ;
 
-<PRIVATE
+PRIVATE<
 
 : update-ui-loop ( -- )
     ! Note the logic: if update-ui fails, we open an error window

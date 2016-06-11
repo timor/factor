@@ -30,7 +30,7 @@ M: c-type-word underlying-type
 M: pointer underlying-type
     drop void* ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: nth-c-ptr ( n seq -- displaced-alien ) ;
 GENERIC: direct-like ( alien len exemplar -- seq ) ;

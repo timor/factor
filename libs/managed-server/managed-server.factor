@@ -36,7 +36,7 @@ M: managed-server handle-client-disconnect ;
 
 ERROR: no-such-client username ;
 
-<PRIVATE
+PRIVATE<
 
 : (send-client) ( managed-client seq -- )
     [ output-stream>> ] dip '[ _ print flush ] with-output-stream* ;
@@ -52,7 +52,7 @@ PRIVATE>
 : send-everyone-else ( seq -- )
     [ everyone-else-streams ] dip '[ _ (send-client) ] each ;
 
-<PRIVATE
+PRIVATE<
 
 : <managed-client> ( username -- managed-client )
     managed-client new

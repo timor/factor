@@ -19,7 +19,7 @@ ERROR: yaml-undefined-anchor anchor anchors ;
 ERROR: yaml-unexpected-event actual expected ;
 ERROR: yaml-no-document ;
 
-<PRIVATE
+PRIVATE<
 
 : yaml-initialize-assert-ok ( ? -- )
     [ libyaml-initialize-error ] unless ;
@@ -230,7 +230,7 @@ PRIVATE>
 : scalar-value ( obj -- obj' )
     dup hashtable? [ ?apply-default-key ] when ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: apply-merge-keys ( already-applied-set obj -- obj' ) ;
 : ?apply-merge-keys ( set obj -- obj' )
@@ -293,7 +293,7 @@ PRIVATE>
         [ [ ?parse-yaml-doc ] 2curry [ ] produce nip ] 2bi
     ] with-destructors ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: yaml-anchors objects new-objects next-anchor ;
 

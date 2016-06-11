@@ -7,7 +7,7 @@ tools.files.private unix.stat math fry macros combinators.smart
 io tools.files math.order prettyprint ;
 in: tools.files.unix
 
-<PRIVATE
+PRIVATE<
 
 : unix-execute>string ( str bools -- str' )
     swap {

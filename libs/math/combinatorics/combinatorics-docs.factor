@@ -102,7 +102,7 @@ HELP: each-combination
 { $description "Applies the quotation to each combination of " { $snippet "seq" } " choosing " { $snippet "k" } " elements, in order." } ;
 
 
-<PRIVATE
+PRIVATE<
 HELP: factoradic
 { $values { "n" integer } { "factoradic" sequence } }
 { $description "Converts a positive integer " { $snippet "n" } " to factoradic form.  The factoradic of an integer is its representation based on a mixed radix numerical system that corresponds to the values of " { $snippet "n" } " factorial." }

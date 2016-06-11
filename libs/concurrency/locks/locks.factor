@@ -14,7 +14,7 @@ TUPLE: lock threads owner reentrant? ;
 : <reentrant-lock> ( -- lock )
     <dlist> f t lock boa ;
 
-<PRIVATE
+PRIVATE<
 
 : acquire-lock ( lock timeout -- )
     over owner>>
@@ -54,7 +54,7 @@ TUPLE: rw-lock readers writers reader# writer ;
 : <rw-lock> ( -- lock )
     <dlist> <dlist> 0 f rw-lock boa ;
 
-<PRIVATE
+PRIVATE<
 
 : add-reader ( lock -- )
     [ 1 + ] change-reader# drop ;

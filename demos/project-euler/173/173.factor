@@ -22,7 +22,7 @@ in: project-euler.173
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : laminae ( upper -- n )
     4 / dup sqrt [1,b] 0 rot [ over /i - - ] curry reduce ;

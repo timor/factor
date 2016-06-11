@@ -8,7 +8,7 @@ compiler.cfg.ssa.construction.tdmsc deques dlists fry kernel
 math namespaces sequences sets ;
 in: compiler.cfg.ssa.construction
 
-<PRIVATE
+PRIVATE<
 
 symbol: defs
 

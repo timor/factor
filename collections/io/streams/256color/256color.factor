@@ -8,7 +8,7 @@ sequences sequences.extras strings strings.tables ;
 
 in: io.streams.256color
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: intensities { 0x00 0x5F 0x87 0xAF 0xD7 0xFF } ;
 

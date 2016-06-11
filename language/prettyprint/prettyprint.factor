@@ -52,7 +52,7 @@ in: prettyprint
 : .s ( -- ) get-datastack stack. ;
 : .r ( -- ) get-retainstack stack. ;
 
-<PRIVATE
+PRIVATE<
 
 symbol: =>
 

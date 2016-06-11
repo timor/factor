@@ -13,7 +13,7 @@ defer: stream>assoc
 
 ERROR: unknown-bson-type type msg ;
 
-<PRIVATE
+PRIVATE<
 
 defer: read-elements
 

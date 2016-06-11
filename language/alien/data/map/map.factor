@@ -6,7 +6,7 @@ sequences.generalizations sequences.private ;
 FROM: alien.arrays => array-length ;
 in: alien.data.map
 
-<PRIVATE
+PRIVATE<
 
 : <displaced-direct-array> ( displacement bytes length type -- direct-array )
     [ <displaced-alien> ] 2dip <c-direct-array> ; inline

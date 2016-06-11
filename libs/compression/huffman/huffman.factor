@@ -7,7 +7,7 @@ in: compression.huffman
 
 QUALIFIED-WITH: bitstreams bs ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: huffman-code
     { value fixnum }

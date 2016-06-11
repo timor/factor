@@ -7,7 +7,7 @@ sequences sequences.private ;
 
 in: math.primes.erato.fast
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: wheel-2-3-5-7 $[
     11 dup 210 + [a,b] [

@@ -4,7 +4,7 @@ USING: accessors arrays assocs kernel locals math math.order
 math.ranges sequences sequences.private z-algorithm ;
 in: boyer-moore
 
-<PRIVATE
+PRIVATE<
 
 :: (normal-suffixes) ( i zs ss -- )
     i zs nth-unsafe ss

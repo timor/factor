@@ -3,7 +3,7 @@ USING: assocs io.backend.unix kernel namespaces sequences
 threads ;
 in: unix.signals
 
-<PRIVATE
+PRIVATE<
 
 symbol: signal-handlers
 

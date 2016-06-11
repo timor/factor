@@ -8,7 +8,7 @@ in: ui.gadgets.packs
 TUPLE: pack < aligned-gadget
 { align initial: 0 } { fill initial: 0 } { gap initial: { 0 0 } } ;
 
-<PRIVATE
+PRIVATE<
 
 : (packed-dims) ( gadget sizes -- list )
     swap [ dim>> ] [ fill>> ] bi '[ _ over v- _ v*n v+ ] map ;
@@ -59,7 +59,7 @@ PRIVATE>
 
 : <shelf> ( -- pack ) horizontal <pack> ;
 
-<PRIVATE
+PRIVATE<
 
 : gap-dim ( pack -- dim )
     [ gap>> ] [ children>> length 1 [-] ] bi v*n ;

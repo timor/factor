@@ -76,7 +76,7 @@ TYPED: buffer-write1 ( byte: fixnum buffer: buffer -- )
     [ [ ptr>> ] [ fill>> ] bi set-alien-unsigned-1 ]
     [ 1 swap buffer+ ] bi ; inline
 
-<PRIVATE
+PRIVATE<
 
 : search-buffer-until ( pos fill ptr seps -- n )
     [ iota ] 2dip

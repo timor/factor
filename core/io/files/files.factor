@@ -5,7 +5,7 @@ io.encodings io.encodings.utf8 io.files.private io.pathnames
 kernel kernel.private namespaces sequences splitting system ;
 in: io.files
 
-<PRIVATE
+PRIVATE<
 PRIMITIVE: (exists?) ( path -- ? ) ;
 PRIVATE>
 
@@ -74,7 +74,7 @@ HOOK: (file-appender) io-backend ( path -- stream ) ;
     normalize-path native-string>alien (exists?) ;
 
 ! Current directory
-<PRIVATE
+PRIVATE<
 
 HOOK: cd io-backend ( path -- ) ;
 

@@ -11,7 +11,7 @@ TUPLE: db-connection
     update-statements
     delete-statements ;
 
-<PRIVATE
+PRIVATE<
 
 : new-db-connection ( class -- obj )
     new

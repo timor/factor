@@ -14,7 +14,7 @@ os windows? [
     [ gdi+-image register-image-class ] each
 ] when
 
-<PRIVATE
+PRIVATE<
 
 : <GpRect> ( x y w h -- rect )
     GpRect <struct-boa> ; inline

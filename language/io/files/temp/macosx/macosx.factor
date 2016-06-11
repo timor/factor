@@ -4,7 +4,7 @@ cocoa.types core-foundation.strings io.directories io.files
 io.files.temp io.pathnames kernel sequences system ;
 in: io.files.temp.macosx
 
-<PRIVATE
+PRIVATE<
 
 FUNCTION: id NSTemporaryDirectory ( ) ;
 

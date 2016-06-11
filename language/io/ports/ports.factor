@@ -47,7 +47,7 @@ ERROR: not-a-c-ptr object ;
 : check-c-ptr ( c-ptr -- c-ptr )
     dup c-ptr? [ not-a-c-ptr ] unless ; inline
 
-<PRIVATE
+PRIVATE<
 
 : read-step ( count port -- count ptr/f )
     {
@@ -79,7 +79,7 @@ M: input-port stream-read-partial-unsafe
 M: input-port stream-read-unsafe
     [ check-c-ptr swap ] dip prepare-read 0 read-loop ;
 
-<PRIVATE
+PRIVATE<
 
 : read-until-step ( seps port -- byte-array/f sep/f )
     dup wait-to-read [ 2drop f f ] [
@@ -120,7 +120,7 @@ INSTANCE: output-port file-writer ;
 
 HOOK: (wait-to-write) io-backend ( port -- ) ;
 
-<PRIVATE
+PRIVATE<
 
 : port-flush ( port -- )
     dup buffer>> buffer-empty?
@@ -140,7 +140,7 @@ M: output-port stream-write1
     1 over wait-to-write
     buffer>> buffer-write1 ; inline
 
-<PRIVATE
+PRIVATE<
 
 :: port-write ( c-ptr n-remaining port -- )
     port buffer>> :> buffer
@@ -169,7 +169,7 @@ HOOK: can-seek-handle? os ( handle -- ? ) ;
 
 HOOK: handle-length os ( handle -- n/f ) ;
 
-<PRIVATE
+PRIVATE<
 
 : port-tell ( port -- tell-handle buffer-length )
     [ handle>> tell-handle ] [ buffer>> buffer-length ] bi ; inline
@@ -182,7 +182,7 @@ M: input-port stream-tell
 M: output-port stream-tell
     check-disposed port-tell + ;
 
-<PRIVATE
+PRIVATE<
 
 :: do-seek-relative ( n seek-type stream -- n seek-type stream )
     ! seek-relative needs special handling here, because of the

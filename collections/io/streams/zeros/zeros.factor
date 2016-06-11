@@ -21,7 +21,7 @@ M: zero-stream dispose drop ;
 
 INSTANCE: zero-stream input-stream ;
 
-<PRIVATE
+PRIVATE<
 
 : (zero-file) ( n path -- )
     binary

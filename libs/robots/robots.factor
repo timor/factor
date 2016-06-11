@@ -24,7 +24,7 @@ TUPLE: robots site sitemap rules rules-quot ;
 TUPLE: rules user-agents allows disallows
 visit-time request-rate crawl-delay unknowns ;
 
-<PRIVATE
+PRIVATE<
 
 : >robots.txt-url ( url -- url' )
     >url URL" robots.txt" derive-url ;

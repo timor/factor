@@ -70,7 +70,7 @@ CONSTRUCTOR: <mdb-connection> mdb-connection ( instance -- mdb-connection ) ;
 : send-cmd ( cmd -- result )
     [ cmd-collection ] [ assoc>> ] bi send-query-1result ; inline
 
-<PRIVATE
+PRIVATE<
 
 : get-nonce ( -- nonce )
     getnonce-cmd make-cmd send-cmd

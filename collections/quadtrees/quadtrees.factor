@@ -38,7 +38,7 @@ TUPLE: quadtree { bounds rect } point value ll lr ul ur leaf? ;
 : map-quadrant ( node quot: ( child-node -- x ) -- array )
     each-quadrant 4array ; inline
 
-<PRIVATE
+PRIVATE<
 
 defer: (prune)
 defer: insert

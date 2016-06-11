@@ -6,7 +6,7 @@ in: unrolled-lists
 
 CONSTANT: unroll-factor 32 ;
 
-<PRIVATE
+PRIVATE<
 
 mixin: ?node
 INSTANCE: f ?node ;
@@ -28,7 +28,7 @@ TUPLE: unrolled-list
 
 ERROR: empty-unrolled-list list ;
 
-<PRIVATE
+PRIVATE<
 
 M: unrolled-list deque-empty?
     dup [ front>> ] [ back>> ] bi dup [

@@ -13,7 +13,7 @@ BUILTIN: word
 PRIMITIVE: word-code ( word -- start end ) ;
 PRIMITIVE: word-optimized? ( word -- ? ) ;
 
-<PRIVATE
+PRIVATE<
 PRIMITIVE: (word) ( name vocab hashcode -- word ) ;
 PRIVATE>
 
@@ -50,7 +50,7 @@ M: word definition def>> ;
 : change-word-prop ( ..a word prop quot: ( ..a value -- ..b newvalue ) -- ..b )
     [ swap props>> ] dip change-at ; inline
 
-<PRIVATE
+PRIVATE<
 
 : caller ( callstack -- word ) callstack>array <reversed> third ;
 

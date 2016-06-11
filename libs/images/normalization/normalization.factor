@@ -9,7 +9,7 @@ specialized-array: float
 specialized-array: ushort
 in: images.normalization
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: don't-care 127 ;
 CONSTANT: fill-value 255 ;

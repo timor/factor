@@ -13,7 +13,7 @@ library: xinput2
 ! *********
 ! * XI2.h *
 ! *********
-<PRIVATE
+PRIVATE<
 : mask-index   ( event -- n ) -3 shift ;
 : bitmask ( event -- n ) 7 bitand 2^ ;
 PRIVATE>

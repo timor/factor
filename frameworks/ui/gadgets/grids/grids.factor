@@ -17,7 +17,7 @@ grid
 : <grid> ( children -- grid )
     grid new-grid ;
 
-<PRIVATE
+PRIVATE<
 
 : grid@ ( grid pair -- col# row )
     swap [ first2 ] [ grid>> ] bi* nth ;
@@ -33,7 +33,7 @@ PRIVATE>
 
 : grid-remove ( grid pair -- grid ) [ <gadget> ] dip grid-add ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: grid-cell pref-dim baseline cap-height ;
 

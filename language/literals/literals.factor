@@ -3,7 +3,7 @@ USING: accessors combinators continuations fry kernel lexer
 math parser quotations sequences vectors words words.alias ;
 in: literals
 
-<PRIVATE
+PRIVATE<
 
 ! Use def>> call so that CONSTANT:s defined in the same file can
 ! be called

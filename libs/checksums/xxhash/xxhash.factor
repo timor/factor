@@ -17,7 +17,7 @@ TUPLE: xxhash seed ;
 
 C: <xxhash> xxhash ;
 
-<PRIVATE
+PRIVATE<
 
 :: native-mapper ( from to bytes c-type -- seq )
     from to bytes <slice>

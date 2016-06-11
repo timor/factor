@@ -21,7 +21,7 @@ in: project-euler.052
 
 ! Analysis shows the number must be odd, divisible by 3, and larger than 123456
 
-<PRIVATE
+PRIVATE<
 
 : map-nx ( n x -- seq )
     iota [ 1 + * ] with map ; inline

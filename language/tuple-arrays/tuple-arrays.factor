@@ -8,7 +8,7 @@ in: tuple-arrays
 
 ERROR: not-final class ;
 
-<PRIVATE
+PRIVATE<
 
 MACRO: boa-unsafe ( class -- quot ) tuple-layout '[ _ <tuple-boa> ] ;
 

@@ -6,7 +6,7 @@ math.private sequences sequences.private strings vectors ;
 
 in: sorting.quick
 
-<PRIVATE
+PRIVATE<
 
 :: quicksort ( seq from to quot: ( obj1 obj2 -- <=> ) -- )
     from to < [

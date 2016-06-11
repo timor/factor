@@ -14,7 +14,7 @@ in: colors.distances
     [ [ green>> ] bi@ - sq ] 2tri
     + + sqrt ;
 
-<PRIVATE
+PRIVATE<
 
 :: mean-hue ( h1 h2 -- mh )
     h2 h1 - abs 180 > [

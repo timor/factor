@@ -35,7 +35,7 @@ in: project-euler.116
 ! ways(n,i) = ways(n-i,i) + ways(n-1,i)
 ! solution(n) = ways(n,1) - 1 + ways(n,2) - 1 + ways(n,3) - 1
 
-<PRIVATE
+PRIVATE<
 
 : nth* ( n seq -- elt/0 )
     [ length swap - 1 - ] keep ?nth 0 or ;

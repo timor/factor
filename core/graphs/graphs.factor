@@ -3,7 +3,7 @@
 USING: assocs kernel sequences sets ;
 in: graphs
 
-<PRIVATE
+PRIVATE<
 
 : nest ( vertex graph -- edges )
     [ drop HS{ } clone ] cache ; inline
@@ -16,7 +16,7 @@ PRIVATE>
 : remove-vertex ( vertex edges graph -- )
     [ at delete ] curry with each ; inline
 
-<PRIVATE
+PRIVATE<
 
  : (closure) ( vertex set quot: ( vertex -- edges ) -- )
      2over ?adjoin [

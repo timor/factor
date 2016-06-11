@@ -22,7 +22,7 @@ in: project-euler.009
 
 ! Algorithm adapted from http://www.friesian.com/pythag.com
 
-<PRIVATE
+PRIVATE<
 
 : next-pq ( p1 q1 -- p2 q2 )
     ! p > q and both are odd integers

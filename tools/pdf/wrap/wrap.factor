@@ -5,7 +5,7 @@ USING: kernel fry make math sequences ui.text unicode wrap ;
 
 in: pdf.wrap
 
-<PRIVATE
+PRIVATE<
 
 : word-index ( string -- n/f )
     dup [ blank? ] find drop [
@@ -17,7 +17,7 @@ PRIVATE>
 : word-split1 ( string -- before after/f )
     dup word-index [ cut ] [ f ] if* ;
 
-<PRIVATE
+PRIVATE<
 
 : word-split, ( string -- )
     [ word-split1 [ , ] [ dup empty? not ] bi* ] loop drop ;
@@ -27,7 +27,7 @@ PRIVATE>
 : word-split ( string -- seq )
     [ word-split, ] { } make ;
 
-<PRIVATE
+PRIVATE<
 
 : string>elements ( string font -- elements )
     [ word-split ] dip '[

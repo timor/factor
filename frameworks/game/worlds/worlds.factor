@@ -30,7 +30,7 @@ M: game-world tick*
 M: game-world draw*
     swap >>tick-slice relayout-1 yield ;
 
-<PRIVATE
+PRIVATE<
 
 : open-game-audio-engine ( game-world -- audio-engine )
     {

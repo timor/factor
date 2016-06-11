@@ -9,7 +9,7 @@ in: classes.union
 PREDICATE: union-class < class
     "metaclass" word-prop union-class eq? ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: union-of-builtins? ( class -- ? ) ;
 

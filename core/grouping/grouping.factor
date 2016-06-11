@@ -6,7 +6,7 @@ in: grouping
 
 ERROR: groups-error seq n ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: group@ ( n groups -- from to seq ) ;
 
@@ -60,7 +60,7 @@ M: clumps group@
 : <clumps> ( seq n -- clumps )
     clumps new-groups ; inline
 
-<PRIVATE
+PRIVATE<
 
 : map-like ( seq n quot -- seq )
     2keep drop '[ _ like ] map ; inline

@@ -3,7 +3,7 @@
 USING: fry kernel math sequences splitting strings wrap ;
 in: wrap.strings
 
-<PRIVATE
+PRIVATE<
 
 : split-lines ( string -- elements-lines )
     string-lines [
@@ -25,7 +25,7 @@ PRIVATE>
 : wrap-string ( string width -- newstring )
     wrap-lines join-lines ;
 
-<PRIVATE
+PRIVATE<
 
 : make-indent ( indent -- indent' )
     dup string? [ char: \s <string> ] unless ; inline

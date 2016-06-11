@@ -27,7 +27,7 @@ in: project-euler.033
 
 ! Through analysis, you only need to check fractions fitting the pattern ax/xb
 
-<PRIVATE
+PRIVATE<
 
 : source-033 ( -- seq )
     10 99 [a,b] dup cartesian-product concat [ first2 < ] filter ;

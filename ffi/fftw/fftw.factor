@@ -9,7 +9,7 @@ specialized-array: fftw_complex
 
 in: fftw
 
-<PRIVATE
+PRIVATE<
 
 : <fftw-array> ( length -- array )
     [ fftw_complex heap-size * fftw_malloc &fftw_free ] keep

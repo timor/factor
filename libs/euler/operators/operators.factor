@@ -48,7 +48,7 @@ ERROR: has-rings face ;
 : make-b-rep ( quot -- b-rep )
     <b-rep> [ swap with-b-rep ] [ finish-b-rep ] [ ] tri ; inline
 
-<PRIVATE
+PRIVATE<
 
 :: make-loop ( vertex face -- edge )
     b-rep get new-edge :> edge
@@ -105,7 +105,7 @@ TYPED:: make-ev-one ( edge: b-edge point: point -- edge: b-edge )
 
     e1' ;
 
-<PRIVATE
+PRIVATE<
 
 :: subdivide-vertex-cycle ( e1 e2 v -- )
     e1 e2 eq? [
@@ -144,7 +144,7 @@ TYPED:: make-ev ( e1: b-edge e2: b-edge point: point -- edge: b-edge )
     e1 e2 eq?
     [ e1 point make-ev-one ] [ e1 e2 point (make-ev) ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : subdivide-edge-cycle ( face e1 e2 -- )
     2dup eq? [ 3drop ] [

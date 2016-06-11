@@ -4,7 +4,7 @@ game.models.half-edge grouping io kernel locals math
 math.parser math.vectors.simd.cords sequences splitting ;
 in: euler.b-rep.io.obj
 
-<PRIVATE
+PRIVATE<
 : write-obj-vertex ( vertex -- )
     "v " write
     position>> 3 head-slice [ bl ] [ number>string write ] interleave nl ;
@@ -21,7 +21,7 @@ PRIVATE>
     vertices [ write-obj-vertex ] each
     b-rep faces>> [ vx-indices write-obj-face ] each ;
 
-<PRIVATE
+PRIVATE<
 :: reconstruct-face ( face-vertices vertices -- face edges )
     face new
         dup >>base-face

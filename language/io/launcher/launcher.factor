@@ -70,7 +70,7 @@ symbol: processes
 
 HOOK: (wait-for-processes) io-backend ( -- ? ) ;
 
-<PRIVATE
+PRIVATE<
 
 symbol: wait-flag
 
@@ -191,7 +191,7 @@ M: object run-pipeline-element
         ] with-destructors
     ] 3bi wait-for-process ;
 
-<PRIVATE
+PRIVATE<
 
 : <process-with-pipe> ( desc -- process pipe )
     >process (pipe) |dispose [ >>pipe ] keep ;
@@ -220,7 +220,7 @@ PRIVATE>
 : with-process-reader ( desc encoding quot -- )
     with-process-reader* check-success ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (process-writer) ( desc encoding -- stream process )
     [
@@ -246,7 +246,7 @@ PRIVATE>
 : with-process-writer ( desc encoding quot -- )
     with-process-writer* check-success ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (process-stream) ( desc encoding -- stream process )
     [
@@ -292,7 +292,7 @@ M: output-process-error error.
     [ [ stream-contents ] [ dup (wait-for-process) ] bi* ] with-timeout
     0 = [ 2drop ] [ output-process-error ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : notify-exit ( process status -- )
     >>status

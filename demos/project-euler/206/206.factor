@@ -21,7 +21,7 @@ in: project-euler.206
 ! the only way to get the last digits to be 900, is for our answer to end in
 ! 30 or 70.
 
-<PRIVATE
+PRIVATE<
 
 ! 1020304050607080900 sqrt, rounded up to the nearest 30 ending
 CONSTANT: lo 1010101030 ;

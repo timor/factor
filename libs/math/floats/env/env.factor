@@ -48,7 +48,7 @@ UNION: fp-denormal-mode
     +denormal-keep+
     +denormal-flush+ ;
 
-<PRIVATE
+PRIVATE<
 
 HOOK: (fp-env-registers) cpu ( -- registers ) ;
 

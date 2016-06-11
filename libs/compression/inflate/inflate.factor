@@ -7,7 +7,7 @@ sequences sorting memoize combinators.short-circuit byte-arrays ;
 QUALIFIED-WITH: bitstreams bs ;
 in: compression.inflate
 
-<PRIVATE
+PRIVATE<
 
 ERROR: bad-zlib-data ;
 ERROR: bad-zlib-header ;

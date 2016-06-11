@@ -15,7 +15,7 @@ slot: i
 : sequence-read1 ( stream -- elt/f )
     dup >sequence-stream< dupd ?nth [ 1 + swap i<< ] dip ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (sequence-read-length) ( n buf stream -- buf count )
     [ underlying>> length ] [ i>> ] bi - rot min ; inline
@@ -52,7 +52,7 @@ PRIVATE>
     dup >sequence-stream< bounds-check?
     [ (sequence-read-unsafe) ] [ 3drop 0 ] if ; inline
 
-<PRIVATE
+PRIVATE<
 
 : find-separator ( seps stream -- sep/f n )
     >sequence-stream< rot [ member? ] curry

@@ -5,7 +5,7 @@ USING: combinators kernel kernel.private math math.order
 math.private ;
 in: math.integers
 
-<PRIVATE
+PRIVATE<
 
 : fixnum-min ( x y -- z ) [ fixnum< ] most ; foldable
 : fixnum-max ( x y -- z ) [ fixnum> ] most ; foldable

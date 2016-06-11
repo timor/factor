@@ -15,7 +15,7 @@ in: hashcash
 ! And the reference implementation (in python):
 ! http://www.gnosis.cx/download/gnosis/util/hashcash.py
 
-<PRIVATE
+PRIVATE<
 
 ! Return a string with today's date in the form YYMMDD
 : get-date ( -- str )
@@ -46,7 +46,7 @@ TUPLE: hashcash version bits date resource ext salt suffix ;
 M: hashcash string>>
     tuple-slots [ present ] map ":" join ;
 
-<PRIVATE
+PRIVATE<
 
 : sha1-checksum ( str -- bytes )
     openssl-sha1 checksum-bytes ; inline

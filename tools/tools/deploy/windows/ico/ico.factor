@@ -4,7 +4,7 @@ math sequences specialized-arrays splitting
 windows.kernel32 windows.types ;
 in: tools.deploy.windows.ico
 
-<PRIVATE
+PRIVATE<
 
 STRUCT: ico-header
     { Reserved WORD }

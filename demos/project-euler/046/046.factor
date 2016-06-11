@@ -28,7 +28,7 @@ in: project-euler.046
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : perfect-squares ( n -- seq )
     2 /i sqrt >integer [1,b] [ sq ] map ;

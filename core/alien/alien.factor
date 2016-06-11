@@ -13,7 +13,7 @@ PRIMITIVE: <displaced-alien> ( displacement c-ptr -- alien ) ;
 PRIMITIVE: alien-address ( c-ptr -- addr ) ;
 PRIMITIVE: free-callback ( alien -- ) ;
 
-<PRIVATE
+PRIVATE<
 PRIMITIVE: current-callback ( -- n ) ;
 PRIVATE>
 
@@ -103,7 +103,7 @@ ERROR: alien-assembly-error code ;
 : alien-assembly ( args... return parameters abi quot -- return... )
     dup alien-assembly-error ;
 
-<PRIVATE
+PRIVATE<
 
 ! Callbacks are registered in a global hashtable. Note that they
 ! are also pinned in a special callback area, so clearing this

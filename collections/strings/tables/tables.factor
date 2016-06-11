@@ -3,7 +3,7 @@
 USING: kernel sequences fry math.order math.ranges splitting ;
 in: strings.tables
 
-<PRIVATE
+PRIVATE<
 
 : format-row ( seq -- seq )
     dup longest length '[ _ "" pad-tail ] map! ;

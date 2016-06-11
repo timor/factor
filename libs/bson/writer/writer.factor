@@ -8,7 +8,7 @@ linked-assocs literals math math.parser namespaces quotations
 sequences serialize strings typed vectors words ;
 in: bson.writer
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: INT32-SIZE 4 ;
 CONSTANT: INT64-SIZE 8 ;
@@ -32,7 +32,7 @@ TYPED: with-length ( quot -- bytes-written: integer start-index: integer )
 : with-length-prefix-excl ( quot: ( .. -- .. ) -- )
     [ 4 - ] (with-length-prefix) ; inline
 
-<PRIVATE
+PRIVATE<
 
 : write-le ( x n -- )
     iota [ nth-byte write1 ] with each ; inline

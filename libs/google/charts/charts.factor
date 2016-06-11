@@ -17,7 +17,7 @@ background foreground margin bar-width ;
         320 >>width
         240 >>height ;
 
-<PRIVATE
+PRIVATE<
 
 : x,y ( seq -- str ) [ present ] map "," join ;
 
@@ -68,7 +68,7 @@ PRIVATE>
 : <formula> ( str -- chart )
     [ "tx" <chart> ] dip 1array chl f >>width f >>height ;
 
-<PRIVATE
+PRIVATE<
 
 : chart>url ( chart -- url )
     [ URL" http://chart.googleapis.com/chart" ] dip {

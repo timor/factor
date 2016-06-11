@@ -4,7 +4,7 @@ USING: combinators.short-circuit kernel math math.constants
 math.functions math.vectors sequences ;
 in: math.analysis
 
-<PRIVATE
+PRIVATE<
 
 ! http://www.rskey.org/gamma.htm  "Lanczos Approximation"
 ! n=6: error ~ 3 x 10^-11

@@ -37,7 +37,7 @@ in: project-euler.203
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : iterate ( n initial quot -- results )
     swapd '[ @ dup ] replicate nip ; inline

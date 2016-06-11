@@ -63,7 +63,7 @@ ERROR: bad-log-message-parameters msg word level ;
 
 ! Aspect-oriented programming idioms
 
-<PRIVATE
+PRIVATE<
 
 : stack>message ( obj -- inputs>message )
     dup array? [ dup length 1 = [ first ] when ] when

@@ -62,7 +62,7 @@ name>char-hook [
         [ escape swap ]
     } case ;
 
-<PRIVATE
+PRIVATE<
 
 : (unescape-string) ( accum str i/f -- accum )
     { sbuf object object } declare
@@ -81,7 +81,7 @@ PRIVATE>
         [ [ length <sbuf> ] keep ] dip (unescape-string)
     ] when* "" like ;
 
-<PRIVATE
+PRIVATE<
 
 : lexer-subseq ( i lexer -- before )
     { fixnum lexer } declare

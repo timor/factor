@@ -64,7 +64,7 @@ M: windows link-descr
         { C++ [ { "-lstdc++" "-mno-cygwin" "-shared" "-o" } ] }
     } case ;
 
-<PRIVATE
+PRIVATE<
 : src-suffix ( lang -- str )
     {
         { C [ ".c" ] }

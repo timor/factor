@@ -3,7 +3,7 @@ help help.markup help.topics kernel sequences sorting vocabs
 words combinators.smart tools.crossref ;
 in: annotations
 
-<PRIVATE
+PRIVATE<
 : comment-word ( base -- word ) "!" prepend "annotations" lookup-word ;
 : comment-usage-word ( base -- word ) "s" append "annotations" lookup-word ;
 : comment-usage.-word ( base -- word ) "s." append "annotations" lookup-word ;

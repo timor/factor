@@ -16,7 +16,7 @@ os linux? [
     [ gtk-image register-image-class ] each
 ] when
 
-<PRIVATE
+PRIVATE<
 
 : image-data ( GdkPixbuf -- data )
     {

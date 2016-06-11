@@ -15,7 +15,7 @@ TUPLE: hsva < color
 
 C: <hsva> hsva ;
 
-<PRIVATE
+PRIVATE<
 
 : Hi ( hsv -- Hi ) hue>> 60 / floor 6 mod ; inline
 
@@ -42,7 +42,7 @@ M: hsva >rgba ( hsva -- rgba )
         } case
     ] [ alpha>> ] bi <rgba> ; inline
 
-<PRIVATE
+PRIVATE<
 
 : sort-triple ( a b c -- d e f )
     sort-pair [ sort-pair ] dip sort-pair ;

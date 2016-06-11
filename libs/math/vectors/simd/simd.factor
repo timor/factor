@@ -12,7 +12,7 @@ ERROR: bad-simd-length got expected ;
 ERROR: bad-simd-vector obj ;
 
 <<
-<PRIVATE
+PRIVATE<
 ! Primitive SIMD constructors
 
 GENERIC: new-underlying ( underlying seq -- seq' ) ;
@@ -24,7 +24,7 @@ GENERIC: new-underlying ( underlying seq -- seq' ) ;
 PRIVATE>
 >>
 
-<PRIVATE
+PRIVATE<
 
 ! Helper for boolean vector literals
 
@@ -56,7 +56,7 @@ M: object simd-element-type drop f ;
 M: object simd-rep drop f ;
 
 <<
-<PRIVATE
+PRIVATE<
 
 defer: simd-construct-op
 
@@ -259,7 +259,7 @@ M: simd-128 distance v- norm ; inline
 M: simd-128 >pprint-sequence ;
 M: simd-128 pprint* pprint-object ;
 
-<PRIVATE
+PRIVATE<
 
 ! SIMD concrete type functor
 

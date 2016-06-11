@@ -8,7 +8,7 @@ in: math.hashcodes
 
 GENERIC: number-hashcode ( x -- h ) ;
 
-<PRIVATE
+PRIVATE<
 
 : P ( -- x )
     cell-bits 64 = 61 31 ? 2^ 1 - ; inline foldable

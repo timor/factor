@@ -7,7 +7,7 @@ in: io.encodings.euc
 
 TUPLE: euc { table biassoc } ;
 
-<PRIVATE
+PRIVATE<
 
 : byte? ( ch -- ? )
     0x0 0xff between? ;

@@ -5,7 +5,7 @@ effects.parser fry hashtables.identity kernel kernel.private
 math sequences sequences.private words ;
 in: memoize
 
-<PRIVATE
+PRIVATE<
 
 ! We can't use n*quot, narray and firstn from generalizations because
 ! they're macros, and macros use memoize!

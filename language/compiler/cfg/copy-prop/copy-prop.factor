@@ -6,7 +6,7 @@ compiler.cfg.renaming compiler.cfg.rpo compiler.cfg.utilities
 fry grouping kernel namespaces sequences ;
 in: compiler.cfg.copy-prop
 
-<PRIVATE
+PRIVATE<
 
 symbol: changed?
 

@@ -26,7 +26,7 @@ in: project-euler.215
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: block two three ;
 TUPLE: end { ways integer } ;

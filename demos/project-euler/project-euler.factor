@@ -29,7 +29,7 @@ USING: definitions io io.files io.pathnames kernel math math.parser
     project-euler.206 project-euler.215 project-euler.255 project-euler.265 ;
 in: project-euler
 
-<PRIVATE
+PRIVATE<
 
 : problem-prompt ( -- n )
     "Which problem number from Project Euler would you like to solve?"

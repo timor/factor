@@ -4,7 +4,7 @@ USING: combinators.short-circuit kernel math math.functions
 math.primes random ;
 in: math.primes.safe
 
-<PRIVATE
+PRIVATE<
 
 : safe-prime-candidate? ( n -- ? )
     1 + 6 divisor? ;

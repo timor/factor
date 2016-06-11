@@ -11,7 +11,7 @@ in: bootstrap.syntax
         "("
         ":"
         ";"
-        "<PRIVATE"
+        "PRIVATE<"
         "B{"
         "BV{"
         "C:"

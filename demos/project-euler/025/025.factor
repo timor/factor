@@ -41,7 +41,7 @@ in: project-euler.025
 MEMO: fib ( m -- n )
     dup 1 > [ [ 1 - fib ] [ 2 - fib ] bi + ] when ;
 
-<PRIVATE
+PRIVATE<
 
 : (digit-fib) ( n term -- term )
     2dup fib number>string length > [ 1 + (digit-fib) ] [ nip ] if ;
@@ -65,7 +65,7 @@ PRIVATE>
 ! The nth Fibonacci number is Phi**n / sqrt(5) rounded to the nearest integer
 ! Thus we need we need "Phi**n / sqrt(5) > 10**999", and we just solve for n
 
-<PRIVATE
+PRIVATE<
 
 : digit-fib* ( n -- term )
     1 - 5 log10 2 / + phi log10 / ceiling >integer ;

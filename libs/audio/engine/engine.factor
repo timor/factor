@@ -112,7 +112,7 @@ ERROR: audio-context-not-available device-name ;
 : <standard-audio-engine> ( -- engine )
     f 16 <audio-engine> ;
 
-<PRIVATE
+PRIVATE<
 
 : make-engine-current ( audio-engine -- )
     al-context>> alcMakeContextCurrent drop ; inline

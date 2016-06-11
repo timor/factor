@@ -20,7 +20,7 @@ M: number epsilon-part>> drop 0 ;
 : unpack-dual ( dual -- ordinary-part epsilon-part )
     [ ordinary-part>> ] [ epsilon-part>> ] bi ;
 
-<PRIVATE
+PRIVATE<
 
 : input-length ( word -- n ) stack-effect in>> length ;
 

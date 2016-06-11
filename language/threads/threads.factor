@@ -7,7 +7,7 @@ heaps init kernel kernel.private math math.order namespaces
 quotations sequences strings system ;
 in: threads
 
-<PRIVATE
+PRIVATE<
 PRIMITIVE: (set-context) ( obj context -- obj' ) ;
 PRIMITIVE: (set-context-and-delete) ( obj context -- * ) ;
 PRIMITIVE: (sleep) ( nanos -- ) ;
@@ -87,7 +87,7 @@ TUPLE: thread
 : thread-registered? ( thread -- ? )
     id>> threads key? ;
 
-<PRIVATE
+PRIVATE<
 
 : register-thread ( thread -- )
     dup id>> threads set-at ;
@@ -146,7 +146,7 @@ PRIVATE>
 
 defer: stop
 
-<PRIVATE
+PRIVATE<
 
 : schedule-sleep ( thread dt -- )
     dupd sleep-queue heap-push* >>sleep-entry drop ;
@@ -236,7 +236,7 @@ M: real sleep
     '[ _ set-datastack @ ]
     "Thread" spawn drop ;
 
-<PRIVATE
+PRIVATE<
 
 : init-thread-state ( -- )
     H{ } clone OBJ-THREADS set-special-object

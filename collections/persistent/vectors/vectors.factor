@@ -5,7 +5,7 @@ combinators combinators.short-circuit parser prettyprint.custom
 persistent.sequences ;
 in: persistent.vectors
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: node { children array } { level fixnum } ;
 
@@ -20,7 +20,7 @@ TUPLE: persistent-vector
 
 M: persistent-vector length count>> ;
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: node-size 32 ;
 

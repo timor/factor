@@ -6,7 +6,7 @@ math sequences ;
 
 in: successor
 
-<PRIVATE
+PRIVATE<
 
 : carry ( elt last first -- ? elt' )
     '[ _ > dup _ ] keep ? ;

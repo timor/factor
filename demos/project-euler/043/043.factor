@@ -33,7 +33,7 @@ in: project-euler.043
 ! Brute force generating all the pandigitals then checking 3-digit divisiblity
 ! properties...this is very slow!
 
-<PRIVATE
+PRIVATE<
 
 : subseq-divisible? ( n index seq -- ? )
     [ 1 - dup 3 + ] dip subseq digits>number swap divisor? ;
@@ -70,7 +70,7 @@ PRIVATE>
 ! overlap and still have all unique digits. When done with that, add whatever
 ! missing digit is needed to make the number pandigital.
 
-<PRIVATE
+PRIVATE<
 
 : candidates ( n -- seq )
     1000 over <range> [ number>digits 3 0 pad-head ] map [ all-unique? ] filter ;

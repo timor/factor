@@ -17,7 +17,7 @@ symbol: error-continuation
 symbol: error-thread
 symbol: restarts
 
-<PRIVATE
+PRIVATE<
 
 : (get-catchstack) ( -- catchstack )
     CONTEXT-OBJ-CATCHSTACK context-object { vector } declare ; inline
@@ -47,7 +47,7 @@ C: <continuation> continuation ;
     get-datastack get-callstack get-retainstack get-namestack get-catchstack
     <continuation> ;
 
-<PRIVATE
+PRIVATE<
 
 ERROR: not-a-continuation object ;
 
@@ -64,7 +64,7 @@ PRIVATE>
 
 : callcc1 ( quot -- obj ) [ ] ifcc ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (continue) ( continuation -- * )
     [
@@ -107,7 +107,7 @@ symbol: return-continuation
 
 GENERIC: compute-restarts ( error -- seq ) ;
 
-<PRIVATE
+PRIVATE<
 
 : save-error ( error -- )
     [ error set-global ]
@@ -195,7 +195,7 @@ M: condition compute-restarts
         { } assoc>map
     ] bi append ;
 
-<PRIVATE
+PRIVATE<
 
 : init-error-handler ( -- )
     init-catchstack

@@ -8,7 +8,7 @@ in: math.rectangles.positioning
 ! Some geometry code for positioning popups and menus
 ! in a semi-intelligent manner
 
-<PRIVATE
+PRIVATE<
 
 : adjust-visible-rect ( visible-rect popup-dim screen-dim -- visible-rect' )
     [ drop clone ] dip '[ _ vmin ] change-loc ;

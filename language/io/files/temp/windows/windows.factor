@@ -7,7 +7,7 @@ windows.types ;
 specialized-array: WCHAR
 in: io.files.temp.windows
 
-<PRIVATE
+PRIVATE<
 
 : get-temp-directory ( -- path )
     MAX_PATH 1 + dup WCHAR <c-array> [ GetTempPath ] keep

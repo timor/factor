@@ -53,7 +53,7 @@ ERROR: invalid-size size ;
 ERROR: invalid-error-rate error-rate ;
 ERROR: invalid-capacity capacity ;
 
-<PRIVATE
+PRIVATE<
 
 :: bits-to-satisfy-error-rate ( hashes error objects -- size )
     objects hashes * neg error hashes recip ^ 1 swap - log /
@@ -104,7 +104,7 @@ PRIVATE>
     0 ! initially empty
     bloom-filter boa ;
 
-<PRIVATE
+PRIVATE<
 
 ! See "Bloom Filters in Probabilistic Verification" by Peter C.
 ! Dillinger and Panagiotis Manolios, section 5.2, "Enhanced

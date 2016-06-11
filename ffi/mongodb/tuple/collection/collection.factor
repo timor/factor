@@ -24,7 +24,7 @@ slot: id
 slot: _id
 slot: _mfd
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: MDB_COLLECTION     "mongodb_collection" ;
 CONSTANT: MDB_SLOTDEF_MAP    "mongodb_slot_map" ;
@@ -57,7 +57,7 @@ GENERIC: mdb-slot-map  ( tuple -- assoc ) ;
 
 GENERIC: mdb-index-map ( tuple -- sequence ) ;
 
-<PRIVATE
+PRIVATE<
 
 
 : (mdb-collection) ( class -- mdb-collection )
@@ -143,7 +143,7 @@ M: tuple-class mdb-index-map
 M: mdb-collection mdb-index-map
     classes>> [ mdb-index-map ] map assoc-combine ;
 
-<PRIVATE
+PRIVATE<
 
 : collection-map ( -- assoc )
     mdb-persistent MDB_COLLECTION_MAP word-prop

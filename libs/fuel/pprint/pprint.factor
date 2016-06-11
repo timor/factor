@@ -9,7 +9,7 @@ in: fuel.pprint
 
 GENERIC: fuel-pprint ( obj -- ) ;
 
-<PRIVATE
+PRIVATE<
 
 : fuel-maybe-scape ( ch -- seq )
     dup "\\\"?#()[]'`;." member? [ char: \ swap 2array ] [ 1array ] if ;

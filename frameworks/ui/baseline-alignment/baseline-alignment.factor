@@ -34,7 +34,7 @@ M: aligned-gadget cap-height
         [ drop ] [ dupd cap-height<< ] if
     ] ?if ;
 
-<PRIVATE
+PRIVATE<
 
 ! Text has ascent/descent/cap-height slots, graphics does not.
 TUPLE: gadget-metrics height ascent descent cap-height ;

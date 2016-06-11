@@ -7,7 +7,7 @@ QUALIFIED-WITH: alien.c-types c ;
 
 in: terminal.linux
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: TIOCGWINSZ 0x5413 ;
 

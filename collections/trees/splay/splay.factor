@@ -9,7 +9,7 @@ TUPLE: splay < tree ;
 : <splay> ( -- tree )
     \ splay new-tree ;
 
-<PRIVATE
+PRIVATE<
 
 TYPED: rotate-right ( node: node -- node )
     dup left>> [ >>left ] change-right ;

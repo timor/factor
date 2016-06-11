@@ -37,7 +37,7 @@ in: project-euler.124
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : rad ( n -- n )
     unique-factors product ; inline

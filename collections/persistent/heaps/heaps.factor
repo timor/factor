@@ -3,7 +3,7 @@ assocs namespaces sequences ;
 in: persistent.heaps
 ! These are minheaps
 
-<PRIVATE
+PRIVATE<
 TUPLE: branch value prio left right ;
 TUPLE: empty-heap ;
 
@@ -25,7 +25,7 @@ PRIVATE>
 : empty-pheap ( -- * )
     "Attempt to delete from an empty heap" throw ;
 
-<PRIVATE
+PRIVATE<
 : remove-left ( heap -- value prio newheap )
     dup [ left>> ] [ right>> ] bi [ pheap-empty? ] both?
     [ [ value>> ] [ prio>> ] bi <persistent-heap> ]
@@ -70,7 +70,7 @@ GENERIC: pheap-push ( value prio heap -- newheap ) ;
 M: empty-heap pheap-push
     drop <singleton-heap> ;
 
-<PRIVATE
+PRIVATE<
 : push-top ( value prio heap -- newheap )
     [ [ value>> ] [ prio>> ] [ right>> ] tri pheap-push ]
     [ left>> ] bi <branch> ;

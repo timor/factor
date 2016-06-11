@@ -10,7 +10,7 @@ TUPLE: xyza x y z alpha ;
 
 C: <xyza> xyza ;
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: xyz_epsilon 216/24389 ;
 CONSTANT: xyz_kappa 24389/27 ;
@@ -41,7 +41,7 @@ M: object >xyza >rgba >xyza ;
 
 M: xyza >xyza ; inline
 
-<PRIVATE
+PRIVATE<
 
 : invert-rgb-compand ( v -- v' )
     dup 0.04045 <= [ 12.92 / ] [ 0.055 + 1.055 / 2.4 ^ ] if ;

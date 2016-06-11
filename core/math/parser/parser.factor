@@ -5,7 +5,7 @@ layouts make math math.private sbufs sequences sequences.private
 strings strings.private ;
 in: math.parser
 
-<PRIVATE
+PRIVATE<
 PRIMITIVE: (format-float) ( n fill width precision format locale -- byte-array ) ;
 PRIVATE>
 
@@ -24,7 +24,7 @@ PRIVATE>
 
 ERROR: invalid-radix radix ;
 
-<PRIVATE
+PRIVATE<
 
 ! magnitude is used only for floats to avoid
 ! expensive computations when we know that
@@ -379,7 +379,7 @@ PRIVATE>
 : dec> ( str -- n/f ) 10 base> ; inline
 : hex> ( str -- n/f ) 16 base> ; inline
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: TENS B{
     48 48 48 48 48 48 48 48 48 48 49 49 49 49 49 49 49 49 49 49
@@ -487,7 +487,7 @@ M: ratio >base
         [ drop "+" glue ]
     } case ;
 
-<PRIVATE
+PRIVATE<
 
 : (fix-float) ( str-no-exponent -- newstr )
     char: . over member? [ ".0" append ] unless ; inline

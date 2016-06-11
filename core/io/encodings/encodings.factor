@@ -17,7 +17,7 @@ GENERIC: decode-char ( stream encoding -- char/f ) ;
 
 GENERIC: decode-until ( seps stream encoding -- string/f sep/f ) ;
 
-<PRIVATE
+PRIVATE<
 
 ! If the stop? branch is taken convert the sbuf to a string
 ! If sep is present, returns ``string sep'' (string can be "")
@@ -38,7 +38,7 @@ M: object decode-until (decode-until) ;
 
 CONSTANT: replacement-char 0xfffd ;
 
-<PRIVATE
+PRIVATE<
 
 : string>byte-array-fast ( string -- byte-array )
     { string } declare ! aux>> must be f
@@ -89,7 +89,7 @@ ERROR: encode-error ;
 
 M: object <decoder> f decoder boa ; inline
 
-<PRIVATE
+PRIVATE<
 
 : cr+ ( stream -- ) t >>cr drop ; inline
 

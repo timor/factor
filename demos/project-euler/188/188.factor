@@ -27,7 +27,7 @@ in: project-euler.188
 ! Using modular exponentiation.
 ! http://en.wikipedia.org/wiki/Modular_exponentiation
 
-<PRIVATE
+PRIVATE<
 
 : hyper-exp-mod ( a b m -- e )
     1 rot [ [ 2dup ] dip swap ^mod ] times 2nip ;

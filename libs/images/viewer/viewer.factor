@@ -8,7 +8,7 @@ ui.gadgets.worlds ui.render ;
 in: images.viewer
 
 TUPLE: image-gadget < gadget image texture ;
-<PRIVATE
+PRIVATE<
 M: image-gadget pref-dim* image>> [ image-dim ] [ { 640 480 } ] if* ;
 
 : (image-gadget-texture) ( gadget -- texture )
@@ -31,7 +31,7 @@ M: image-gadget draw-gadget* ( gadget -- )
 M: image-gadget ungraft* [ dup find-gl-context delete-current-texture ] [ 2drop ] recover ;
 PRIVATE>
 TUPLE: image-control < image-gadget image-updated? ;
-<PRIVATE
+PRIVATE<
 
 : (bind-2d-texture) ( texture-id -- )
     [ GL_TEXTURE_2D ] dip glBindTexture ;
@@ -104,7 +104,7 @@ M: model set-image [ value>> >>image drop ] [ >>model ] 2bi ;
 
 : image. ( object -- ) <image-gadget> gadget. ;
 
-<PRIVATE
+PRIVATE<
 M: image-control graft* start-control ;
 M: image-control ungraft* [ stop-control ] [ call-next-method ] bi ;
 PRIVATE>

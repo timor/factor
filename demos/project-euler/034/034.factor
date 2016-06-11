@@ -28,7 +28,7 @@ in: project-euler.034
 ! So there can't be any 7 digit solutions starting with 21 or 20, and therefore
 ! our numbers must be less that 2000000.
 
-<PRIVATE
+PRIVATE<
 
 : digit-factorial ( n -- n! )
     { 1 1 2 6 24 120 720 5040 40320 362880 } nth ;

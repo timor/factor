@@ -10,7 +10,7 @@ in: io.encodings.detect
 symbol: default-8bit-encoding
 default-8bit-encoding [ latin1 ] initialize
 
-<PRIVATE
+PRIVATE<
 
 : prolog-tag ( bytes -- string )
     char: > over index [ 1 + head-slice ] when* >string ;

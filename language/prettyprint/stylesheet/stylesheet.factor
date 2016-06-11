@@ -5,7 +5,7 @@ combinators.short-circuit hashtables io.styles kernel literals
 namespaces sequences words words.symbol ;
 in: prettyprint.stylesheet
 
-<PRIVATE
+PRIVATE<
 
 { postpone\ USING: postpone\ use: postpone\ in: }
 [

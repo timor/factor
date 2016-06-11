@@ -4,7 +4,7 @@ USING: help.markup help.syntax kernel quotations sequences
 strings alien alien.c-types alien.data math byte-arrays ;
 in: alien.marshall
 
-<PRIVATE
+PRIVATE<
 : $memory-note ( arg -- )
     drop "This word returns a pointer to unmanaged memory."
     print-element ;

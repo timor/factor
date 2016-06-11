@@ -7,7 +7,7 @@ math.order math.parser math.ranges memoize namespaces sequences
 sets simple-flat-file sorting splitting strings.parser ;
 in: unicode.data
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: simple-lower H{ } ;
 CONSTANT: simple-upper H{ } ;
@@ -48,7 +48,7 @@ CONSTANT: categories {
     "Cc" "Cf" "Cs" "Co"
 } ;
 
-<PRIVATE
+PRIVATE<
 
 MEMO: categories-map ( -- hashtable )
     categories <enum> [ swap ] H{ } assoc-map-as ;
@@ -72,7 +72,7 @@ PRIVATE>
 : category ( char -- category )
     category# categories nth ;
 
-<PRIVATE
+PRIVATE<
 
 ! Loading data from UnicodeData.txt
 
@@ -162,7 +162,7 @@ TUPLE: code-point lower title upper ;
 
 C: <code-point> code-point ;
 
-<PRIVATE
+PRIVATE<
 
 : set-code-point ( seq -- )
     4 head [ multihex ] map first4

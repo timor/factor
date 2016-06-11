@@ -6,7 +6,7 @@ math math.parser sequences splitting strings ;
 
 in: tnetstrings
 
-<PRIVATE
+PRIVATE<
 
 : parse-payload ( data -- remain payload payload-type )
     ":" split1 swap string>number cut unclip swapd ;
@@ -60,7 +60,7 @@ PRIVATE>
         "Had trailing junk: %s" sprintf throw
     ] unless-empty ;
 
-<PRIVATE
+PRIVATE<
 
 defer: dump-tnetstring
 

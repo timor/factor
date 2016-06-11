@@ -26,7 +26,7 @@ TUPLE: script-string < disposable font string metrics ssa size image ;
     swap ! iX
     { int int } [ ScriptStringXtoCP check-ole32-error ] with-out-parameters ;
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: ssa-dwFlags flags{ SSA_GLYPHS SSA_FALLBACK SSA_TAB } ;
 

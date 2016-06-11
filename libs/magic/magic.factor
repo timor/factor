@@ -5,7 +5,7 @@ USING: destructors io.backend kernel magic.ffi ;
 
 in: magic
 
-<PRIVATE
+PRIVATE<
 
 : check-magic-error ( magic num -- )
     -1 = [ magic_error throw ] [ drop ] if ;

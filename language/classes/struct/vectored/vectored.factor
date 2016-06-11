@@ -4,7 +4,7 @@ functors kernel locals macros math parser quotations sequences
 sequences.private slots specialized-arrays words ;
 in: classes.struct.vectored
 
-<PRIVATE
+PRIVATE<
 
 : array-class-of ( type -- array-type )
     [ define-array-vocab ] [ name>> "-array" append swap lookup-word ] bi ;

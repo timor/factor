@@ -19,7 +19,7 @@ M: matrix4 length drop 4 ; inline
 M: matrix4 nth-unsafe columns>> nth-unsafe ; inline
 M: matrix4 new-sequence 2drop matrix4 (struct) ; inline
 
-<PRIVATE
+PRIVATE<
 
 : columns ( a -- a1 a2 a3 a4 )
     columns>> first4 ; inline

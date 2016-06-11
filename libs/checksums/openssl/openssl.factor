@@ -17,7 +17,7 @@ INSTANCE: openssl-checksum stream-checksum ;
 
 C: <openssl-checksum> openssl-checksum ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: evp-md-context < disposable handle ;
 

@@ -48,7 +48,7 @@ in: project-euler.255
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 ! same as produce, but outputs the sum instead of the sequence of results
 : produce-sum ( id pred quot -- sum )

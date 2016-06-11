@@ -4,7 +4,7 @@ USING: arrays combinators fry kernel macros make math math.bits
 math.order math.vectors sequences splitting vectors ;
 in: math.polynomials
 
-<PRIVATE
+PRIVATE<
 
 : 2pad-head ( p q n -- p q ) [ 0 pad-head ] curry bi@ ;
 : 2pad-tail ( p q n -- p q ) [ 0 pad-tail ] curry bi@ ;
@@ -48,7 +48,7 @@ ERROR: negative-power-polynomial p n ;
 : p^ ( p n -- p^n )
     dup 0 >= [ (p^) ] [ negative-power-polynomial ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : p/mod-setup ( p p -- p p n )
     2ptrim
@@ -70,7 +70,7 @@ PRIVATE>
     p/mod-setup [ [ (p/mod) ] times ] V{ } make
     reverse nip swap 2ptrim pextend ;
 
-<PRIVATE
+PRIVATE<
 
 : (pgcd) ( b a y x -- a d )
     dup V{ 0 } p= [

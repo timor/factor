@@ -16,7 +16,7 @@ ERROR: no-types-specified word effect ;
 PREDICATE: typed-gensym < word "typed-gensym" word-prop >boolean ;
 PREDICATE: typed-word < word "typed-word" word-prop >boolean ;
 
-<PRIVATE
+PRIVATE<
 
 : unboxable-tuple-class? ( type -- ? )
     {

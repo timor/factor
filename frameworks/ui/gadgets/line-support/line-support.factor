@@ -83,7 +83,7 @@ GENERIC: draw-line ( line index gadget -- ) ;
         [ _ draw-line ] with-translation
     ] each-slice-index ;
 
-<PRIVATE
+PRIVATE<
 
 : clamp ( dim unit min max -- dim' )
     [ -1/0. or * ] [ 1/.0 or * ] bi-curry* bi

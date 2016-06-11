@@ -28,7 +28,7 @@ in: rosetta-code.text-processing.max-licenses
 
 TUPLE: maxlicense max-count current-count times ;
 
-<PRIVATE
+PRIVATE<
 
 : <maxlicense> ( -- max ) -1 0 V{ } clone \ maxlicense boa ; inline
 

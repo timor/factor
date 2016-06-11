@@ -22,7 +22,7 @@ in: project-euler.076
 ! ways(_,0) = 0
 ! ways(n,i) = ways(n-i,i) + ways(n,i-1)
 
-<PRIVATE
+PRIVATE<
 
 : init ( n -- table )
     [1,b] [ 0 2array 0 ] H{ } map>assoc

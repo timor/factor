@@ -56,7 +56,7 @@ M: graph delete-edge
     [ '[ _ _ 3dup adj? [ delete-edge* ] [ 3drop ] if ] each ]
     [ delete-blank-vertex ] 2tri ;
 
-<PRIVATE
+PRIVATE<
 
 : search-wrap ( quot graph -- ? )
     [ [ graph set ] [ vertices [ f 2array ] map >hashtable visited? set ] bi

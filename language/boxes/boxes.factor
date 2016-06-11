@@ -18,7 +18,7 @@ ERROR: box-empty box ;
 : check-box ( box -- box )
     dup occupied>> [ box-empty ] unless ; inline
 
-<PRIVATE
+PRIVATE<
 
 : box-unsafe> ( box -- value )
     [ f ] change-value f >>occupied drop ; inline

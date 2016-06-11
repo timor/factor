@@ -35,7 +35,7 @@ in: project-euler.008
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : source-008 ( -- str )
     {

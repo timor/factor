@@ -24,7 +24,7 @@ HOOK: (pipe) io-backend ( -- pipe ) ;
         ] dip <encoder-duplex>
     ] with-destructors ;
 
-<PRIVATE
+PRIVATE<
 
 : ?reader ( handle/f -- stream )
     [ <input-port> &dispose ] [ input-stream get ] if* ;

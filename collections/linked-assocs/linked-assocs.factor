@@ -17,7 +17,7 @@ M: linked-assoc assoc-size assoc>> assoc-size ;
 M: linked-assoc at*
     assoc>> at* [ [ obj>> second-unsafe ] when ] keep ;
 
-<PRIVATE
+PRIVATE<
 
 : (delete-at) ( key assoc dlist -- )
     '[ at [ _ delete-node ] when* ] [ delete-at ] 2bi ; inline
@@ -27,7 +27,7 @@ PRIVATE>
 M: linked-assoc delete-at
     [ assoc>> ] [ dlist>> ] bi (delete-at) ;
 
-<PRIVATE
+PRIVATE<
 
 : add-to-dlist ( value key dlist -- node )
     [ swap 2array ] dip push-back* ; inline

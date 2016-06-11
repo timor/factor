@@ -7,7 +7,7 @@ strings ;
 
 in: html.entities
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: html-escapes {
     { char: & "&amp;" }
@@ -31,7 +31,7 @@ PRIVATE>
         [ dup next-escape dup ] [ escape, ] while 2drop ,
     ] { } make dup length 1 > [ concat ] [ first ] if ;
 
-<PRIVATE
+PRIVATE<
 
 ! see http://www.w3.org/TR/html5/syntax.html#tokenizing-character-references
 

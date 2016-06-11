@@ -8,7 +8,7 @@ kernel locals make namespaces sequences summary system threads
 unicode vocabs webbrowser words ;
 in: graphviz.render
 
-<PRIVATE
+PRIVATE<
 
 ! "Layout Commands" from http://graphviz.org/Documentation.php
 CONSTANT: standard-layouts {
@@ -56,7 +56,7 @@ M: cannot-find-graphviz-installation summary
     default-graphviz-program
     [ cannot-find-graphviz-installation ] unless* ;
 
-<PRIVATE
+PRIVATE<
 
 : try-graphviz-command ( path format layout -- )
     [
@@ -87,7 +87,7 @@ PRIVATE>
 : graphviz* ( graph path format -- )
     default-layout get-global graphviz ;
 
-<PRIVATE
+PRIVATE<
 
 : try-preview-command ( from-path to-path -- )
     [
@@ -137,7 +137,7 @@ PRIVATE>
 : preview-open ( graph -- )
     [ open-file 1 seconds sleep ] with-preview ;
 
-<PRIVATE
+PRIVATE<
 
 ! http://graphviz.org/content/output-formats
 CONSTANT: standard-formats {

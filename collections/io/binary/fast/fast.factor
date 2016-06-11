@@ -41,7 +41,7 @@ MACRO: reassemble-le ( n -- quot ) le-range reassemble-bytes ;
 HINTS: n-be> { byte-array object } ;
 HINTS: n-le> { byte-array object } ;
 
-<PRIVATE
+PRIVATE<
 : if-endian ( endian bytes-quot seq-quot -- )
     [
         compute-native-endianness =

@@ -6,7 +6,7 @@ math.order sbufs sequences sorting.insertion strings
 unicode.data vectors ;
 in: unicode.normalize
 
-<PRIVATE
+PRIVATE<
 ! Conjoining Jamo behavior
 
 CONSTANT: hangul-base 0xac00 ;

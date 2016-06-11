@@ -9,7 +9,7 @@ in: combinators
 ! the optimizing compiler. See stack-checker.transforms and
 ! compiler.tree.propagation.call-effect
 
-<PRIVATE
+PRIVATE<
 
 : call-effect-unsafe ( quot effect -- ) drop call ;
 
@@ -125,7 +125,7 @@ ERROR: no-case object ;
         [ \ drop prefix ] bi*
     ] assoc-map reverse! alist>quot ;
 
-<PRIVATE
+PRIVATE<
 
 : (distribute-buckets) ( buckets pair keys -- )
     dup t eq? [

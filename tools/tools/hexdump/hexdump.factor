@@ -5,7 +5,7 @@ grouping io io.encodings.binary io.files io.streams.string
 kernel math math.parser namespaces sequences splitting strings ;
 in: tools.hexdump
 
-<PRIVATE
+PRIVATE<
 
 : write-header ( len -- )
     "Length: " write

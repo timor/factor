@@ -14,7 +14,7 @@ symbol: library-is-c++
 symbol: linker-args
 symbol: c-strings
 
-<PRIVATE
+PRIVATE<
 : cleanup-variables ( -- )
     { c-library library-is-c++ linker-args c-strings }
     [ off ] each ;

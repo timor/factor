@@ -4,7 +4,7 @@ USING: accessors arrays fry kernel locals math namespaces
 sequences sequences.private sorting ;
 in: splitting.monotonic
 
-<PRIVATE
+PRIVATE<
 
 :: monotonic-split-impl ( seq quot slice-quot n -- pieces )
     V{ 0 } clone :> accum

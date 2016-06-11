@@ -27,7 +27,7 @@ in: project-euler.028
 
 ! For a square sized n by n, the sum of corners is 4n² - 6n + 6
 
-<PRIVATE
+PRIVATE<
 
 : sum-corners ( n -- sum )
     dup 1 = [ [ sq 4 * ] [ 6 * ] bi - 6 + ] unless ;

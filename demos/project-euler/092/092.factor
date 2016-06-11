@@ -26,7 +26,7 @@ in: project-euler.092
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : next-link ( n -- m )
     number>digits [ sq ] map-sum ;

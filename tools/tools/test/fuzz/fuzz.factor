@@ -16,7 +16,7 @@ fuzz-test-trials [ 100 ] initialize
 : fuzz-test-failures ( generator: ( -- ..a ) predicate: ( ..a -- ? ) -- failures )
     [ fuzz-test-trials get ] 2dip fuzz-test-failures* ; inline
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: fuzz-test-failure failures predicate trials ;
 

@@ -18,7 +18,7 @@ singleton: sha-256
 INSTANCE: sha-224 sha ;
 INSTANCE: sha-256 sha ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: sha1-state < checksum-state
 { K array }

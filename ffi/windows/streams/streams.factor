@@ -7,7 +7,7 @@ in: windows.streams
 
 specialized-array: uchar
 
-<PRIVATE
+PRIVATE<
 
 : with-hresult ( quot: ( -- result ) -- result )
     [ drop E_FAIL ] recover ; inline

@@ -6,7 +6,7 @@ sequences.private ;
 
 in: io.random
 
-<PRIVATE
+PRIVATE<
 
 : each-numbered-line ( ... quot: ( ... line number -- ... ) -- ... )
     [ 1 ] dip '[ swap [ @ ] [ 1 + ] bi ] each-line drop ; inline

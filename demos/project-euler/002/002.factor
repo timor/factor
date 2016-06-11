@@ -20,7 +20,7 @@ in: project-euler.002
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : (fib-upto) ( seq n limit -- seq )
     2dup <= [ [ suffix! dup 2 tail* sum ] dip (fib-upto) ] [ 2drop ] if ;
@@ -51,7 +51,7 @@ PRIVATE>
 ! 0 ms ave run time - 0.2 SD (100 trials)
 
 
-<PRIVATE
+PRIVATE<
 
 : next-fibs ( x y -- y x+y )
     [ nip ] [ + ] 2bi ;

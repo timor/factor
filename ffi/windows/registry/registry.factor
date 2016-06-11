@@ -61,7 +61,7 @@ CONSTANT: registry-value-max-length 16384 ;
     [ hkey close-key ]
     [ ] cleanup ; inline
 
-<PRIVATE
+PRIVATE<
 
 : grow-buffer ( byte-array -- byte-array' )
     length 2 * <byte-array> ;

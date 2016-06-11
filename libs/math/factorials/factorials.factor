@@ -105,7 +105,7 @@ ALIAS: pochhammer rising-factorial ;
 : exponential-factorial ( n -- m )
     dup 1 > [ [1,b] 1 [ swap ^ ] reduce ] [ drop 1 ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : -prime? ( n quot: ( n -- m ) -- ? )
     [ 1 1 [ pick over - 1 <= ] ] dip

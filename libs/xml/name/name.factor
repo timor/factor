@@ -53,7 +53,7 @@ symbol: ns-stack
         } 2&&
     ] if-empty ;
 
-<PRIVATE
+PRIVATE<
 
 : valid-name-start? ( str -- ? )
     [ f ] [ version-1.0? swap first name-start? ] if-empty ;

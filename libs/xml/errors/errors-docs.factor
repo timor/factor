@@ -3,7 +3,7 @@
 USING: help.markup help.syntax ;
 in: xml.errors
 
-<PRIVATE
+PRIVATE<
 
 : $xml-error ( element -- )
     "Bad XML document for the error" $heading $code ;

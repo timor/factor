@@ -3,7 +3,7 @@
 USING: help.markup help.syntax kernel strings effects quotations ;
 in: alien.inline
 
-<PRIVATE
+PRIVATE<
 : $binding-note ( x -- )
     drop
     { "This word requires that certain variables are correctly bound. "

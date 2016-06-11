@@ -14,7 +14,7 @@ M: linked-set in? assoc>> key? ;
 M: linked-set clear-set
     [ assoc>> clear-assoc ] [ dlist>> clear-deque ] bi ;
 
-<PRIVATE
+PRIVATE<
 
 : (delete-at) ( key assoc dlist -- )
     '[ at [ _ delete-node ] when* ] [ delete-at ] 2bi ; inline

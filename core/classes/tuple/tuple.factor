@@ -7,7 +7,7 @@ make math math.private memory namespaces quotations
 sequences sequences.private slots slots.private strings words ;
 in: classes.tuple
 
-<PRIVATE
+PRIVATE<
 PRIMITIVE: <tuple> ( layout -- tuple ) ;
 PRIMITIVE: <tuple-boa> ( slots... layout -- tuple ) ;
 PRIVATE>
@@ -43,7 +43,7 @@ ERROR: no-slot name tuple ;
 PREDICATE: immutable-tuple-class < tuple-class
     all-slots [ read-only>> ] all? ;
 
-<PRIVATE
+PRIVATE<
 
 : tuple-layout ( class -- layout )
     "layout" word-prop ;
@@ -130,7 +130,7 @@ M: class final-class? drop t ;
 
 M: object final-class? drop f ;
 
-<PRIVATE
+PRIVATE<
 
 : tuple-predicate-quot/1 ( class -- quot )
     ! Fast path for tuples with no superclass

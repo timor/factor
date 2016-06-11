@@ -12,7 +12,7 @@ in: vocabs.prettyprint
 : pprint-in ( vocab -- )
     [ \ in: pprint-word pprint-vocab ] with-pprint ;
 
-<PRIVATE
+PRIVATE<
 
 : sort-vocabs ( seq -- seq' )
     [ vocab-name ] sort-with ;

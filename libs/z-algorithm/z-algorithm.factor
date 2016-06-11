@@ -7,7 +7,7 @@ in: z-algorithm
 : lcp ( seq1 seq2 -- n )
     [ min-length dup ] 2keep mismatch-unsafe [ nip ] when* ;
 
-<PRIVATE
+PRIVATE<
 
 :: out-of-zbox ( seq Z l r k -- seq Z l r )
     seq k tail-slice seq lcp :> Zk

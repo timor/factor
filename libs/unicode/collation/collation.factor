@@ -6,7 +6,7 @@ math.parser namespaces sequences simple-flat-file splitting
 strings unicode.data ;
 in: unicode.collation
 
-<PRIVATE
+PRIVATE<
 
 symbol: ducet
 

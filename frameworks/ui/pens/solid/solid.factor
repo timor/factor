@@ -13,7 +13,7 @@ M: solid recompute-pen
     [ [ { 0 0 } ] dip (rect-vertices) >>boundary-vertices ]
     bi drop ;
 
-<PRIVATE
+PRIVATE<
 
 : (solid) ( gadget pen -- )
     [ compute-pen ] [ color>> gl-color ] bi ;

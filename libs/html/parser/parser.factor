@@ -11,7 +11,7 @@ singleton: text
 singleton: dtd
 singleton: comment
 
-<PRIVATE
+PRIVATE<
 
 symbol: tagstack
 

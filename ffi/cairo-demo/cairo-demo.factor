@@ -41,7 +41,7 @@ M: cairo-demo-gadget pref-dim* drop { 384 256 } ;
 
 ERROR: no-cairo-t ;
 
-<PRIVATE
+PRIVATE<
 
 : draw-hello-world ( gadget -- )
     cairo-t>> [ no-cairo-t ] unless*

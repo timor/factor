@@ -52,7 +52,7 @@ TUPLE: grid
 : <grid-shared-stream> ( dim-grid dim-block shared-size stream -- grid )
     grid boa ; inline
 
-<PRIVATE
+PRIVATE<
 GENERIC: block-dim ( block-size -- x y z ) ; foldable
 M: integer block-dim 1 1 ; inline
 M: sequence block-dim
@@ -108,7 +108,7 @@ ERROR: no-cuda-library name ;
         ]
     } 2cleave ; inline
 
-<PRIVATE
+PRIVATE<
 : make-param-buffer ( function size -- buffer size )
     [ cuda-param-size ] [ (byte-array) ] [ ] tri ; inline
 

@@ -5,7 +5,7 @@ locals prettyprint math math.bits grouping io combinators
 fry make combinators.short-circuit math.functions splitting ;
 in: crypto.passwd-md5
 
-<PRIVATE
+PRIVATE<
 
 : lookup-table ( n -- nth )
     "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" nth ; inline

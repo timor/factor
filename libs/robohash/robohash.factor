@@ -5,7 +5,7 @@ USING: images.http kernel sequences urls urls.encoding ;
 
 in: robohash
 
-<PRIVATE
+PRIVATE<
 
 : robohash-url ( str -- url )
     url-encode "http://robohash.org/" prepend >url ;

@@ -62,7 +62,7 @@ ERROR: invalid-cursor cursor ;
 mixin: input-cursor
 
 GENERIC: cursor-key-value ( cursor -- key value ) ;
-<PRIVATE
+PRIVATE<
 GENERIC: cursor-key-value-unsafe ( cursor -- key value ) ;
 PRIVATE>
 M: input-cursor cursor-key-value-unsafe cursor-key-value ; inline
@@ -84,7 +84,7 @@ M: input-cursor cursor-key-value
 mixin: output-cursor
 
 GENERIC: set-cursor-value ( value cursor -- ) ;
-<PRIVATE
+PRIVATE<
 GENERIC: set-cursor-value-unsafe ( value cursor -- ) ;
 PRIVATE>
 M: output-cursor set-cursor-value-unsafe set-cursor-value ; inline
@@ -303,7 +303,7 @@ M: sequence-cursor set-cursor-value [ n>> ] [ seq>> ] bi set-nth ; inline
 TUPLE: hash-set-cursor
     { hash-set hash-set read-only }
     { n fixnum read-only } ;
-<PRIVATE
+PRIVATE<
 C: <hash-set-cursor> hash-set-cursor ;
 PRIVATE>
 
@@ -323,7 +323,7 @@ M: hash-set-cursor cursor= ( cursor cursor -- ? )
 M: hash-set-cursor cursor-distance-hint ( cursor cursor -- n )
     nip hash-set>> cardinality ; inline
 
-<PRIVATE
+PRIVATE<
 : (inc-hash-set-cursor) ( array n -- n' )
     [ 2dup swap { [ length < ] [ nth-unsafe tombstone? ] } 2&& ] [ 1 + ] while nip ; inline
 PRIVATE>
@@ -441,7 +441,7 @@ M: forward-cursor new-sequence-cursor
 TUPLE: hashtable-cursor
     { hashtable hashtable read-only }
     { n fixnum read-only } ;
-<PRIVATE
+PRIVATE<
 C: <hashtable-cursor> hashtable-cursor ;
 PRIVATE>
 
@@ -461,7 +461,7 @@ M: hashtable-cursor cursor= ( cursor cursor -- ? )
 M: hashtable-cursor cursor-distance-hint ( cursor cursor -- n )
     nip hashtable>> assoc-size ; inline
 
-<PRIVATE
+PRIVATE<
 : (inc-hashtable-cursor) ( array n -- n' )
     [ 2dup swap { [ length < ] [ nth-unsafe tombstone? ] } 2&& ] [ 2 + ] while nip ; inline
 PRIVATE>

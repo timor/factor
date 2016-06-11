@@ -26,7 +26,7 @@ in: rosetta-code.count-the-coins
 ! many ways are there to make change for $1000? (note: the answer
 ! is larger than 232).
 
-<PRIVATE
+PRIVATE<
 
 :: (make-change) ( cents coins -- ways )
     cents 1 + 0 <array> :> ways

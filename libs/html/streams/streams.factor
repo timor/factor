@@ -13,7 +13,7 @@ M: object url-of drop f ;
 TUPLE: html-writer data ;
 INSTANCE: html-writer output-stream ;
 
-<PRIVATE
+PRIVATE<
 
 : new-html-writer ( class -- html-writer )
     new V{ } clone >>data ; inline

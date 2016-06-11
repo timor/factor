@@ -4,7 +4,7 @@ in: typed.namespaces
 
 ERROR: variable-type-error variable value type ;
 
-<PRIVATE
+PRIVATE<
 
 MACRO: declare1 ( type -- quot: ( value -- value ) )
     1array '[ _ declare ] ;

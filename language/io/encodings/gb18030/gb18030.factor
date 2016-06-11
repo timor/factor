@@ -11,7 +11,7 @@ singleton: gb18030
 
 gb18030 "GB18030" register-encoding
 
-<PRIVATE
+PRIVATE<
 
 ! GB to mean GB18030 is a terrible abuse of notation
 

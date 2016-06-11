@@ -8,7 +8,7 @@ splitting.monotonic unicode unicode.data vectors vocabs
 vocabs.hierarchy ;
 in: tools.completion
 
-<PRIVATE
+PRIVATE<
 
 : smart-index-from ( obj i seq -- n/f )
     rot [ ch>lower ] [ ch>upper ] bi
@@ -31,7 +31,7 @@ PRIVATE>
 : runs ( seq -- newseq )
     [ 1 - = ] monotonic-split-slice ;
 
-<PRIVATE
+PRIVATE<
 
 : score-1 ( i full -- n )
     {
@@ -93,7 +93,7 @@ PRIVATE>
 : strings-matching ( str seq -- seq' )
     dup zip completions keys ;
 
-<PRIVATE
+PRIVATE<
 
 : directory-paths ( directory -- alist )
     dup '[
@@ -111,7 +111,7 @@ PRIVATE>
     dup { [ exists? ] [ file-info directory? ] } 1&&
     [ directory-paths completions ] [ 2drop { } ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : (complete-single-vocab?) ( str -- ? )
     { "in:" "use:" "unuse:" "qualified:" "QUALIFIED-WITH:" }
@@ -136,7 +136,7 @@ PRIVATE>
 : complete-vocab? ( tokens -- ? )
     { [ complete-single-vocab? ] [ complete-vocab-list? ] } 1|| ;
 
-<PRIVATE
+PRIVATE<
 
 : complete-token? ( tokens token -- ? )
     over last empty? [

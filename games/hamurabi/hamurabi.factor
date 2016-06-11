@@ -7,7 +7,7 @@ math.order math.parser math.ranges random sequences strings ;
 
 in: hamurabi
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: game year population births deaths stores harvest yield
 plague acres eaten cost feed planted birth-factor rat-factor

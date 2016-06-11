@@ -18,7 +18,7 @@ SYMBOLS:
     GUID_SysMouseEm2_malloced GUID_SysKeyboardEm_malloced GUID_SysKeyboardEm2_malloced
     c_dfDIKeyboard c_dfDIKeyboard_HID c_dfDIMouse2 c_dfDIJoystick2 ;
 
-<PRIVATE
+PRIVATE<
 
 : initialize ( variable quot -- )
     call swap set-global ; inline

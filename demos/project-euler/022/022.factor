@@ -25,7 +25,7 @@ in: project-euler.022
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : source-022 ( -- seq )
     "resource:extra/project-euler/022/names.txt"

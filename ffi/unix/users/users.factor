@@ -13,7 +13,7 @@ TUPLE: passwd user-name password uid gid gecos dir shell ;
 HOOK: new-passwd os ( -- passwd ) ;
 HOOK: passwd>new-passwd os ( passwd -- new-passwd ) ;
 
-<PRIVATE
+PRIVATE<
 
 M: unix new-passwd ( -- passwd )
     passwd new ;
@@ -107,7 +107,7 @@ GENERIC: set-effective-user ( string/id -- ) ;
 : with-effective-user ( string/id/f quot -- )
     over [ (with-effective-user) ] [ nip call ] if ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (set-real-user) ( id -- )
     [ unix.ffi:setuid ] unix-system-call drop ; inline

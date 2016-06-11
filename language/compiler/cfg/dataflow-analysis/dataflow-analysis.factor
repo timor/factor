@@ -12,7 +12,7 @@ GENERIC: successors ( bb dfa -- seq ) ;
 GENERIC: predecessors ( bb dfa -- seq ) ;
 GENERIC: ignore-block? ( bb dfa -- ? ) ;
 
-<PRIVATE
+PRIVATE<
 
 mixin: dataflow-analysis
 

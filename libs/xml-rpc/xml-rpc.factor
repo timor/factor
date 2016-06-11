@@ -170,7 +170,7 @@ TAG: array xml>item
         ] [ "Bad main tag name" server-error ] if
     ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : xml-post-data ( xml -- post-data )
     xml>string utf8 encode "text/xml" <post-data> swap >>data ;

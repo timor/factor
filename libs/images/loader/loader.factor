@@ -7,7 +7,7 @@ in: images.loader
 
 ERROR: unknown-image-extension extension ;
 
-<PRIVATE
+PRIVATE<
 
 symbol: types
 types [ H{ } clone ] initialize

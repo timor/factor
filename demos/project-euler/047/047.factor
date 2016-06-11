@@ -29,7 +29,7 @@ in: project-euler.047
 
 ! Brute force, not sure why it's incredibly slow compared to other languages
 
-<PRIVATE
+PRIVATE<
 
 : (consecutive) ( count goal test -- n )
     2over = [
@@ -58,7 +58,7 @@ PRIVATE>
 ! Use a sieve to generate prime factor counts up to an arbitrary limit, then
 ! look for a repetition of the specified number of factors.
 
-<PRIVATE
+PRIVATE<
 
 symbol: sieve
 

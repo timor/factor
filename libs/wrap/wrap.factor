@@ -8,7 +8,7 @@ in: wrap
 TUPLE: element contents black white ;
 C: <element> element ;
 
-<PRIVATE
+PRIVATE<
 
 : element-length ( element -- n )
     [ black>> ] [ white>> ] bi + ; inline

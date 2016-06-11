@@ -21,7 +21,7 @@ CONSTANT: atlas-padding 1 ;
 
 ERROR: atlas-image-formats-dont-match images ;
 
-<PRIVATE
+PRIVATE<
 
 : width  ( dim -- width  ) first  atlas-padding + ; inline
 : height ( dim -- height ) second atlas-padding + ; inline

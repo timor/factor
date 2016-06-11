@@ -78,7 +78,7 @@ MEMO: output-index ( program-instance output-name -- index )
 : vertex-format-attributes ( vertex-format -- attributes )
     "vertex-format-attributes" word-prop ; inline
 
-<PRIVATE
+PRIVATE<
 
 TR: hyphens>underscores "-" "_" ;
 
@@ -383,7 +383,7 @@ M: vertex-array-object dispose
 : ?>buffer ( buffer/ptr -- buffer )
     dup buffer? [ buffer>> ] unless ; inline
 
-<PRIVATE
+PRIVATE<
 
 : normalize-vertex-formats ( vertex-formats -- vertex-formats' )
     [ first2 [ ?>buffer-ptr ] dip 2array ] map ; inline
@@ -464,7 +464,7 @@ TUPLE: link-program-error program log ;
 
 defer: <shader-instance>
 
-<PRIVATE
+PRIVATE<
 
 : valid-handle? ( handle -- ? )
     { [ ] [ zero? not ] } 1&& ;
@@ -575,7 +575,7 @@ TYPED: <shader-instance> ( shader: shader -- instance: shader-instance )
 TYPED: <program-instance> ( program: program -- instance: program-instance )
     [ find-program-instance dup world get ] keep instances>> set-at ;
 
-<PRIVATE
+PRIVATE<
 
 : old-instances ( name -- instances )
     dup constant? [

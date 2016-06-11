@@ -77,7 +77,7 @@ TUPLE: texture-parameters
     { base-level integer initial: 0 }
     { max-level integer initial: 1000 } ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: texture-object ( texture-data-target -- texture ) ;
 M: cube-map-face texture-object
@@ -309,7 +309,7 @@ TYPED: read-compressed-texture ( tdt: texture-data-target level: integer -- byte
     [ read-texture ] 2tri
     f image boa ; inline
 
-<PRIVATE
+PRIVATE<
 : bind-texture ( texture -- gl-target )
     [ texture-gl-target dup ] [ handle>> ] bi glBindTexture ; inline
 PRIVATE>
@@ -334,7 +334,7 @@ TYPED: set-texture-parameters ( texture: texture parameters: texture-parameters 
         [ [ GL_TEXTURE_MAX_LEVEL ] dip max-level>> glTexParameteri ]
     } 2cleave ;
 
-<PRIVATE
+PRIVATE<
 
 : <texture> ( component-order component-type parameters class -- texture )
     '[ [ gen-texture ] 2dip _ boa dup window-resource ] dip

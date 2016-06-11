@@ -6,7 +6,7 @@ sequences splitting ;
 
 in: wake-on-lan
 
-<PRIVATE
+PRIVATE<
 
 : mac-address-bytes ( mac-address -- byte-array )
     ":-" split [ hex> ] B{ } map-as ;

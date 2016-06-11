@@ -13,7 +13,7 @@ TUPLE: sqlite-db path ;
     sqlite-db new
         swap >>path ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: sqlite-db-connection < db-connection ;
 

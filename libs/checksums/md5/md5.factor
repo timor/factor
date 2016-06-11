@@ -23,7 +23,7 @@ TUPLE: md5-state < checksum-state
 
 M: md5 initialize-checksum-state drop <md5-state> ;
 
-<PRIVATE
+PRIVATE<
 
 : update-md5 ( md5 -- )
     [ state>> ] [ old-state>> [ w+ ] 2map dup clone ] [ ] tri

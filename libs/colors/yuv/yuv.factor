@@ -14,7 +14,7 @@ TUPLE: yuva < color
 
 C: <yuva> yuva ;
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: Wr 0.299 ;
 CONSTANT: Wb 0.114 ;

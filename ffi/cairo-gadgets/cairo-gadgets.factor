@@ -10,7 +10,7 @@ symbol: current-cairo
 : cr ( -- cairo )
     current-cairo get ;
 
-<PRIVATE
+PRIVATE<
 
 : width>stride ( width -- stride ) 4 * ;
 

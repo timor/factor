@@ -9,7 +9,7 @@ in: images.pbm
 singleton: pbm-image
 "pbm" pbm-image ?register-image-class
 
-<PRIVATE
+PRIVATE<
 : read-token ( -- token )
     [
         read1 dup blank?

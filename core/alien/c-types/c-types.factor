@@ -193,7 +193,7 @@ CONSTANT: primitive-types
 
 : c-bool> ( int -- ? ) 0 = not ; inline
 
-<PRIVATE
+PRIVATE<
 
 : 8-byte-alignment ( c-type -- c-type )
     {

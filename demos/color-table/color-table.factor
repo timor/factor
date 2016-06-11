@@ -9,7 +9,7 @@ in: color-table
 ! ui.gadgets.tables demo
 singleton: color-renderer
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: full-block-string $[ 10 char: full-block <string> ] ;
 

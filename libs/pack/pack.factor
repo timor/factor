@@ -28,7 +28,7 @@ M: string >n-byte-array ( n string -- byte-array ) heap-size >n-byte-array ;
 : write-double ( n -- byte-array ) double>bits 8 >n-byte-array ;
 : write-c-string ( byte-array -- byte-array ) { 0 } B{ } append-as ;
 
-<PRIVATE
+PRIVATE<
 
 : expand-pack-format ( str -- str' )
     f swap [
@@ -113,7 +113,7 @@ MACRO: pack ( str -- quot )
 : pack-le ( seq str -- seq )
     '[ _ _ pack ] with-little-endian ; inline
 
-<PRIVATE
+PRIVATE<
 
 : start/end ( seq -- seq1 seq2 )
     [ cum-sum0 dup ] keep v+ ; inline
@@ -138,7 +138,7 @@ MACRO: unpack ( str -- quot )
 
 ERROR: packed-read-fail str bytes ;
 
-<PRIVATE
+PRIVATE<
 
 : read-packed-bytes ( str -- bytes )
     dup packed-length [ read dup length ] keep =

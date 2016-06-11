@@ -25,7 +25,7 @@ C: <pane-stream> pane-stream ;
 
 M: pane-stream stream-element-type drop +character+ ;
 
-<PRIVATE
+PRIVATE<
 
 : clear-selection ( pane -- pane )
     f >>caret f >>mark ; inline
@@ -194,7 +194,7 @@ M: pane-control model-changed ( model pane-control -- )
         swap >>quot
         swap >>model ;
 
-<PRIVATE
+PRIVATE<
 
 ! Character styles
 

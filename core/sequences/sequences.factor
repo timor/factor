@@ -67,7 +67,7 @@ M: immutable-sequence set-nth immutable ;
 
 INSTANCE: immutable-sequence sequence ;
 
-<PRIVATE
+PRIVATE<
 
 : array-nth ( n array -- elt )
     swap 2 fixnum+fast slot ; inline
@@ -115,7 +115,7 @@ M: iota-tuple nth-unsafe drop ; inline
 
 INSTANCE: iota-tuple immutable-sequence ;
 
-<PRIVATE
+PRIVATE<
 
 : first-unsafe ( seq -- first ) 0 swap nth-unsafe ; inline
 : second-unsafe ( seq -- second ) 1 swap nth-unsafe ; inline
@@ -228,7 +228,7 @@ ERROR: slice-error from to seq ;
     2dup length > [ slice-error ] when
     2over > [ slice-error ] when ; inline
 
-<PRIVATE
+PRIVATE<
 
 : <slice-unsafe> ( from to seq -- slice )
     dup slice? [ collapse-slice ] when slice boa ; inline
@@ -274,7 +274,7 @@ M: repetition nth-unsafe nip elt>> ; inline
 
 INSTANCE: repetition immutable-sequence ;
 
-<PRIVATE
+PRIVATE<
 
 ERROR: integer-length-expected obj ;
 
@@ -348,7 +348,7 @@ M: immutable-sequence clone-like like ; inline
 
 : push-all ( src dst -- ) [ length ] [ copy ] bi ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (append) ( seq1 seq2 accum -- accum )
     [ [ over length ] dip copy-unsafe ]
@@ -386,7 +386,7 @@ PRIVATE>
 
 : max-length ( seq1 seq2 -- n ) [ length ] bi@ max ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (setup-each) ( seq -- n quot )
     [ length check-length ] keep [ nth-unsafe ] curry ; inline
@@ -549,7 +549,7 @@ PRIVATE>
 : push-if ( ..a elt quot: ( ..a elt -- ..b ? ) accum -- ..b )
     [ keep ] dip rot [ push ] [ 2drop ] if ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (selector-as) ( quot length exemplar -- selector accum )
     new-resizable [ [ push-if ] 2curry ] keep ; inline
@@ -635,7 +635,7 @@ PRIVATE>
 : last-index-from ( obj i seq -- n )
     rot [ = ] curry find-last-from drop ;
 
-<PRIVATE
+PRIVATE<
 
 : (indices) ( elt i obj accum -- )
     [ swap [ = ] dip ] dip [ push ] 2curry when ; inline
@@ -646,7 +646,7 @@ PRIVATE>
     swap V{ } clone
     [ [ (indices) ] 2curry each-index ] keep ;
 
-<PRIVATE
+PRIVATE<
 
 : nths-unsafe ( indices seq -- seq' )
     [ [ nth-unsafe ] curry ] keep map-as ;
@@ -677,7 +677,7 @@ PRIVATE>
 : harvest ( seq -- newseq )
     [ empty? ] reject ;
 
-<PRIVATE
+PRIVATE<
 
 : mismatch-unsafe ( n seq1 seq2 -- i )
     [ 2nth-unsafe = not ] 2curry find-integer ; inline
@@ -700,7 +700,7 @@ ERROR: assert-sequence got expected ;
 : assert-sequence= ( a b -- )
     2dup sequence= [ 2drop ] [ assert-sequence ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : sequence-hashcode-step ( oldhash newpart -- newhash )
     integer>fixnum swap [
@@ -721,7 +721,7 @@ M: slice equal? over slice? [ sequence= ] [ 2drop f ] if ;
     2over =
     [ 3drop ] [ [ nth swap ] [ set-nth ] bi ] if ; inline
 
-<PRIVATE
+PRIVATE<
 
 : move-unsafe ( to from seq -- )
     2over =
@@ -768,7 +768,7 @@ PRIVATE>
     [ length 1 - ] keep
     over 0 < [ bounds-error ] [ nth-unsafe ] if ; inline
 
-<PRIVATE
+PRIVATE<
 
 : last-unsafe ( seq -- elt )
     [ length 1 - ] [ nth-unsafe ] bi ; inline
@@ -781,7 +781,7 @@ PRIVATE>
 
 : pop* ( seq -- ) [ length 1 - ] [ shorten ] bi ;
 
-<PRIVATE
+PRIVATE<
 
 : move-backward ( shift from to seq -- )
     2over = [
@@ -878,7 +878,7 @@ M: repetition sum-lengths
 : concat ( seq -- newseq )
     [ { } ] [ dup first concat-as ] if-empty ;
 
-<PRIVATE
+PRIVATE<
 
 : joined-length ( seq glue -- n )
     [ [ sum-lengths ] [ length 1 [-] ] bi ] dip length * + ;
@@ -941,7 +941,7 @@ PRIVATE>
 : halves ( seq -- first-slice second-slice )
     dup midpoint@ cut-slice ; inline
 
-<PRIVATE
+PRIVATE<
 
 : nth2-unsafe ( n seq -- a b )
     [ nth-unsafe ] [ [ 1 + ] dip nth-unsafe ] 2bi ; inline
@@ -976,7 +976,7 @@ PRIVATE>
 : cut* ( seq n -- before after )
     [ head* ] [ tail* ] 2bi ;
 
-<PRIVATE
+PRIVATE<
 
 : (start) ( subseq seq n length -- subseq seq ? )
     [
@@ -1014,7 +1014,7 @@ PRIVATE>
     [ [ 2dup [ first ] bi@ ] dip [ call ] keep ] dip compose
     [ -rot ] dip 1 2each-from ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (map-find) ( seq quot find-quot -- result elt )
     [ [ f ] 2dip [ [ nip ] dip call dup ] curry ] dip call
@@ -1031,7 +1031,7 @@ PRIVATE>
 : unclip-last-slice ( seq -- butlast-slice last )
     [ but-last-slice ] [ last-unsafe ] bi ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (trim-head) ( seq quot -- seq n )
     over [ [ not ] compose find drop ] dip swap
@@ -1087,7 +1087,7 @@ M: repetition sum [ elt>> ] [ length>> ] bi * ; inline
 : cartesian-product ( seq1 seq2 -- newseq )
     [ { } 2sequence ] cartesian-map ;
 
-<PRIVATE
+PRIVATE<
 
 : select-by ( ... seq quot: ( ... elt -- ... x ) compare: ( obj1 obj2 -- ? ) -- ... elt )
     [
@@ -1113,7 +1113,7 @@ PRIVATE>
 ! cannot express that an array is an array of arrays yet, and
 ! this word happens to be performance-critical since the compiler
 ! itself uses it. Optimizing it like this reduced compile time.
-<PRIVATE
+PRIVATE<
 
 : generic-flip ( matrix -- newmatrix )
     [

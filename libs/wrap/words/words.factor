@@ -7,7 +7,7 @@ in: wrap.words
 TUPLE: wrapping-word key width break? ;
 C: <wrapping-word> wrapping-word ;
 
-<PRIVATE
+PRIVATE<
 
 : words-length ( words -- length )
     [ width>> ] map-sum ;

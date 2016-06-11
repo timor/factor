@@ -5,7 +5,7 @@ locals macros make math math.order math.parser multiline
 namespaces present sequences splitting strings vocabs.parser ;
 in: interpolate
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: named-var name ;
 

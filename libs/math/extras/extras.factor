@@ -11,7 +11,7 @@ sequences.private sets sorting sorting.extras ;
 
 in: math.extras
 
-<PRIVATE
+PRIVATE<
 
 defer: stirling
 
@@ -31,7 +31,7 @@ MEMO: stirling ( n k -- x )
 
 defer: bernoulli
 
-<PRIVATE
+PRIVATE<
 
 : (bernoulli) ( p -- n )
     [ iota ] [ 1 + ] bi [
@@ -46,7 +46,7 @@ MEMO: bernoulli ( p -- n )
 : chi2 ( actual expected -- n )
     0 [ dup 0 > [ [ - sq ] keep / + ] [ 2drop ] if ] 2reduce ;
 
-<PRIVATE
+PRIVATE<
 
 : df-check ( df -- )
     even? [ "odd degrees of freedom" throw ] unless ;
@@ -59,7 +59,7 @@ PRIVATE>
 : chi2P ( chi df -- p )
     dup df-check [ 2.0 / ] [ 2 /i ] bi* (chi2P) 1.0 min ;
 
-<PRIVATE
+PRIVATE<
 
 : check-jacobi ( m -- m )
     dup { [ integer? ] [ 0 > ] [ odd? ] } 1&&
@@ -83,7 +83,7 @@ PRIVATE>
         [ [ mod' ] keep ] dip
     ] until [ nip 1 = ] dip 0 ? ;
 
-<PRIVATE
+PRIVATE<
 
 : check-legendere ( m -- m )
     dup prime? [ "modulus must be prime positive integer" throw ] unless ;
@@ -167,7 +167,7 @@ PRIVATE>
 : cum-reduce ( seq identity quot: ( prev elt -- next ) -- result cum-result )
     [ dup rot ] dip dup '[ _ curry dip dupd @ ] each ; inline
 
-<PRIVATE
+PRIVATE<
 
 :: (gini) ( seq -- x )
     seq natural-sort :> sorted
@@ -210,7 +210,7 @@ PRIVATE>
 : digitize) ( seq bins -- seq' )
     '[ _ bisect-right ] map ;
 
-<PRIVATE
+PRIVATE<
 
 : steps ( a b length -- a b step )
     [ 2dup swap - ] dip / ; inline
@@ -290,7 +290,7 @@ M: real round-away-from-zero
         ] reduce nip max
     ] if ; inline
 
-<PRIVATE
+PRIVATE<
 
 : kahan+ ( c sum elt -- c' sum' )
     rot - 2dup + [ -rot [ - ] bi@ ] keep ; inline

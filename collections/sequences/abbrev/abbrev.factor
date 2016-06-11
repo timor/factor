@@ -3,7 +3,7 @@
 USING: arrays assocs fry kernel math.ranges sequences ;
 in: sequences.abbrev
 
-<PRIVATE
+PRIVATE<
 
 : prefixes ( seq -- prefixes )
     dup length [1,b] [ head ] with map ;

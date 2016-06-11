@@ -29,7 +29,7 @@ symbol: library-fortran-abis
 symbol: fortran-abi
 library-fortran-abis [ H{ } clone ] initialize
 
-<PRIVATE
+PRIVATE<
 
 : lowercase-name-with-underscore ( name -- name' )
     >lower "_" append ;

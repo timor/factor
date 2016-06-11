@@ -11,7 +11,7 @@ feature-names ;
 
 C: <data-set> data-set ;
 
-<PRIVATE
+PRIVATE<
 
 : load-file ( name -- contents )
     "resource:extra/machine-learning/data-sets/" prepend

@@ -51,7 +51,7 @@ M: f pdf-render 2drop f ;
 
 GENERIC: pdf-width ( canvas obj -- n ) ;
 
-<PRIVATE
+PRIVATE<
 
 : (pdf-layout) ( page obj -- page )
     [ dup ] [
@@ -82,7 +82,7 @@ M: div pdf-width
     items>> [ dupd pdf-width ] map nip supremum ;
 
 
-<PRIVATE
+PRIVATE<
 
 : convert-string ( str -- str' )
     {

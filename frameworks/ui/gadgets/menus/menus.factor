@@ -19,7 +19,7 @@ M:: object <menu-item> ( target hook command -- button )
         hide-glass
     ] <roll-button> ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: separator-pen color ;
 

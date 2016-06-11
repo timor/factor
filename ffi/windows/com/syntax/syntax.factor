@@ -6,7 +6,7 @@ classes.struct windows.kernel32 locals ;
 FROM: alien.parser.private => parse-pointers return-type-name ;
 in: windows.com.syntax
 
-<PRIVATE
+PRIVATE<
 
 MACRO: com-invoke ( n return parameters -- quot )
     [ 2nip length ] 3keep

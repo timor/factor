@@ -6,7 +6,7 @@ sequences.private ;
 
 in: sorting.bubble
 
-<PRIVATE
+PRIVATE<
 
 :: (bubble-sort!) ( seq quot: ( obj1 obj2 -- <=> ) -- )
     seq length 1 - [

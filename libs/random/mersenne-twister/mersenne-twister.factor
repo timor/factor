@@ -8,7 +8,7 @@ specialized-arrays system ;
 specialized-array: uint
 in: random.mersenne-twister
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: mersenne-twister { seq uint-array } { i fixnum } ;
 

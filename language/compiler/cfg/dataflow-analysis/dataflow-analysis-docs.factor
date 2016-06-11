@@ -29,7 +29,7 @@ HELP: join-sets
 { $see-also transfer-set } ;
 
 
-<PRIVATE
+PRIVATE<
 
 HELP: run-dataflow-analysis
 { $values

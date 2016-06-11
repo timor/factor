@@ -2,7 +2,7 @@ USING: kernel sequences math stack-checker effects accessors
 macros fry combinators.short-circuit ;
 in: combinators.short-circuit.smart
 
-<PRIVATE
+PRIVATE<
 
 ERROR: cannot-determine-arity ;
 

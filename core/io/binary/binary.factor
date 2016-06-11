@@ -11,7 +11,7 @@ in: io.binary
 
 : nth-byte ( x n -- b ) -8 * shift mask-byte ; inline
 
-<PRIVATE
+PRIVATE<
 
 : map-bytes ( x seq -- byte-array )
     [ nth-byte ] with B{ } map-as ; inline
@@ -31,7 +31,7 @@ PRIVATE>
 : h>b/b ( h -- b1 b2 )
     [ mask-byte ] [ -8 shift mask-byte ] bi ;
 
-<PRIVATE
+PRIVATE<
 
 : signed> ( x seq -- n )
     length 8 * 2dup 1 - bit? [ 2^ - ] [ drop ] if ; inline

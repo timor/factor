@@ -8,7 +8,7 @@ in: ui.gadgets.tabbed
 
 TUPLE: tabbed-gadget < track tabs book ;
 
-<PRIVATE
+PRIVATE<
 
 : <lip> ( -- gadget )
     "active-tab-lip" theme-image <icon> ;

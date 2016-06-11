@@ -9,7 +9,7 @@ TUPLE: range
 { length read-only }
 { step read-only } ;
 
-<PRIVATE
+PRIVATE<
 
 : sign/mod ( x y -- z w )
     [ [ /i ] 2keep pick * - ] keep 0 < [ neg ] when ; inline
@@ -34,7 +34,7 @@ INSTANCE: range immutable-sequence ;
 
 M: range sum [ length ] [ first ] [ last ] tri + * 2 / ;
 
-<PRIVATE
+PRIVATE<
 
 : twiddle ( a b -- a b step ) 2dup > -1 1 ? ; inline
 

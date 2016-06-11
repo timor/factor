@@ -12,7 +12,7 @@ TUPLE: postgresql-db host port pgopts pgtty database username password ;
 : <postgresql-db> ( -- postgresql-db )
     postgresql-db new ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: postgresql-db-connection < db-connection ;
 : <postgresql-db-connection> ( handle -- db-connection )

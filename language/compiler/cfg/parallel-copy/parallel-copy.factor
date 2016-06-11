@@ -6,7 +6,7 @@ dlists fry kernel locals make namespaces sequences ;
 qualified: sets
 in: compiler.cfg.parallel-copy
 
-<PRIVATE
+PRIVATE<
 
 SYMBOLS: locs preds to-do ready ;
 
@@ -54,7 +54,7 @@ PRIVATE>
 : parallel-copy ( mapping -- insns )
     [ next-vreg '[ drop _ ] [ any-rep ##copy, ] parallel-mapping ] { } make ;
 
-<PRIVATE
+PRIVATE<
 
 symbol: temp-vregs
 

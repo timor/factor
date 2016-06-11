@@ -32,7 +32,7 @@ TUPLE: game-loop-error-state error game-loop ;
 : fps ( fps -- nanos )
     [ 1,000,000,000 ] dip /i ; inline
 
-<PRIVATE
+PRIVATE<
 
 : last-tick-percent-offset ( loop -- float )
     [ draw-timer>> iteration-start-nanos>> nano-count swap - ]

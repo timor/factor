@@ -29,7 +29,7 @@ in: project-euler.150
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 ! sequence helper functions
 

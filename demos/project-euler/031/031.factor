@@ -24,7 +24,7 @@ in: project-euler.031
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : 1p ( m -- n )
     drop 1 ;

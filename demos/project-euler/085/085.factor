@@ -21,7 +21,7 @@ in: project-euler.085
 
 ! A grid measuring x by y contains x * (x + 1) * y * (x + 1) / 4 rectangles.
 
-<PRIVATE
+PRIVATE<
 
 : distance ( m -- n )
     2000000 - abs ; inline

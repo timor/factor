@@ -8,7 +8,7 @@ in: random.lagged-fibonacci
 
 TUPLE: lagged-fibonacci { u double-array } { pt0 fixnum } { pt1 fixnum } ;
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: p-r 1278 ;
 CONSTANT: q-r 417 ;

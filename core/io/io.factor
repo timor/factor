@@ -106,7 +106,7 @@ symbol: error-stream
 : each-morsel ( ..a handler: ( ..a data -- ..b ) reader: ( ..b -- ..a data ) -- ..a )
     [ dup ] compose swap while drop ; inline
 
-<PRIVATE
+PRIVATE<
 
 : stream-exemplar ( stream -- exemplar )
     stream-element-type +byte+ = B{ } "" ? ; inline
@@ -222,7 +222,7 @@ CONSTANT: each-block-size 65536 ;
 
 ! Default implementations of stream operations in terms of read1/write1
 
-<PRIVATE
+PRIVATE<
 
 : read-loop ( buf stream n i -- count )
      2dup = [ nip nip nip ] [

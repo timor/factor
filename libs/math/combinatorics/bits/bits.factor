@@ -7,7 +7,7 @@ in: math.combinatorics.bits
     [ dup 1 - bitor 1 + dup ] keep
     [ dup neg bitand ] bi@ /i 2/ 1 - bitor ;
 
-<PRIVATE
+PRIVATE<
 
 : permutation-bits-quot ( bit-count bits quot -- n pred body )
     [ [ on-bits dup '[ dup _ >= ] ] [ on-bits ] bi* ] dip swap

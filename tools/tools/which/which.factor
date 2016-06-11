@@ -7,7 +7,7 @@ kernel namespaces sequences sets splitting system unicode ;
 
 in: tools.which
 
-<PRIVATE
+PRIVATE<
 
 : executable? ( path -- ? )
     {

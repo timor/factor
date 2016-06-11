@@ -5,7 +5,7 @@ in: math.newtons-method
 
 ! Newton's method of approximating roots
 
-<PRIVATE
+PRIVATE<
 
 : newton-step ( x function -- x2 )
     dupd [ call ] [ derivative ] 2bi / - ; inline

@@ -4,7 +4,7 @@ USING: regexp sequences kernel regexp.negation regexp.ast
 accessors fry regexp.classes strings ;
 in: regexp.combinators
 
-<PRIVATE
+PRIVATE<
 
 : modify-regexp ( regexp raw-quot tree-quot -- new-regexp )
     [ '[ raw>> @ ] ]

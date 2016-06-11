@@ -13,7 +13,7 @@ PREDICATE: change-tracking-tuple-class < tuple-class
 
 : filter-changed ( sequence -- sequence' ) [ changed? ] filter ; inline
 
-<PRIVATE
+PRIVATE<
 
 M: change-tracking-tuple-class writer-quot ( class slot-spec -- quot )
     [ call-next-method ]

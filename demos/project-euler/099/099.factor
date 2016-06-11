@@ -28,7 +28,7 @@ in: project-euler.099
 
 ! Use logarithms to make the calculations necessary more manageable.
 
-<PRIVATE
+PRIVATE<
 
 : source-099 ( -- seq )
     "resource:extra/project-euler/099/base_exp.txt"

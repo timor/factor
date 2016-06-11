@@ -39,7 +39,7 @@ ERROR: no-parent-directory path ;
         ] when
     ] unless ;
 
-<PRIVATE
+PRIVATE<
 
 : head-path-separator? ( path1 ? -- ?' )
     [

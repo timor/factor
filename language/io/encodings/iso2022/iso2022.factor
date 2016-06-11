@@ -7,7 +7,7 @@ in: io.encodings.iso2022
 
 singleton: iso2022
 
-<PRIVATE
+PRIVATE<
 
 symbol: jis201
 symbol: jis208

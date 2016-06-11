@@ -12,7 +12,7 @@ symbol: group-cache
 
 GENERIC: group-struct ( obj -- group/f ) ;
 
-<PRIVATE
+PRIVATE<
 
 : group-members ( group-struct -- seq )
     gr_mem>> utf8 alien>strings ;
@@ -61,7 +61,7 @@ ERROR: no-group string ;
 : ?group-id ( string -- id )
     dup group-struct [ nip gr_gid>> ] [ no-group ] if* ;
 
-<PRIVATE
+PRIVATE<
 
 : >groups ( byte-array n -- groups )
     [ 4 grouping:group ] dip head-slice [ uint deref group-name ] map ;
@@ -127,7 +127,7 @@ GENERIC: set-effective-group ( obj -- ) ;
 : with-effective-group ( string/id/f quot -- )
     over [ (with-effective-group) ] [ nip call ] if ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (set-real-group) ( id -- )
     [ unix.ffi:setgid ] unix-system-call drop ; inline

@@ -32,7 +32,7 @@ in: urls.encoding
         [ "-._~" member? ]
     } 1|| ; foldable
 
-<PRIVATE
+PRIVATE<
 
 : push-utf8 ( ch -- )
     1string utf8 encode
@@ -49,7 +49,7 @@ PRIVATE>
 : url-encode-full ( str -- encoded )
     [ unreserved? ] (url-encode) ;
 
-<PRIVATE
+PRIVATE<
 
 : url-decode-hex ( index str -- )
     2dup length 2 - >= [
@@ -77,7 +77,7 @@ PRIVATE>
 : query-decode ( str -- decoded )
     "+" split "%20" join url-decode ;
 
-<PRIVATE
+PRIVATE<
 
 : add-query-param ( value key assoc -- )
     [

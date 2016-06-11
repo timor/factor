@@ -38,7 +38,7 @@ in: project-euler.069
 
 ! Brute force
 
-<PRIVATE
+PRIVATE<
 
 : totient-ratio ( n -- m )
     dup totient / ;
@@ -60,7 +60,7 @@ PRIVATE>
 ! high. Hence we need a number that has the most factors. A number with the
 ! most unique factors would have fewer relatively prime.
 
-<PRIVATE
+PRIVATE<
 
 : primorial ( n -- m )
     {

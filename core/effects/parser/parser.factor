@@ -14,7 +14,7 @@ ERROR: stack-effect-omits-dashes ;
 
 symbol: effect-var
 
-<PRIVATE
+PRIVATE<
 : end-token? ( end token -- token ? ) [ nip ] [ = ] 2bi ; inline
 : effect-opener? ( token -- token ? ) dup { f "(" "--" } member? ; inline
 : effect-closer? ( token -- token ? ) dup ")" sequence= ; inline

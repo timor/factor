@@ -10,7 +10,7 @@ in: checksums.superfast
 TUPLE: superfast seed ;
 C: <superfast> superfast ;
 
-<PRIVATE
+PRIVATE<
 
 : (main-loop) ( hash n -- hash' )
     [ 16 bits ] [ -16 shift ] bi

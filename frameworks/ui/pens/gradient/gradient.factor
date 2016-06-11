@@ -12,7 +12,7 @@ TUPLE: gradient < caching-pen colors last-vertices last-colors ;
 
 : <gradient> ( colors -- gradient ) gradient new swap >>colors ;
 
-<PRIVATE
+PRIVATE<
 
 :: gradient-vertices ( direction dim colors -- seq )
     direction dim v* dim over v- swap

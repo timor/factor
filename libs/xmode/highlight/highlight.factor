@@ -8,7 +8,7 @@ xmode.catalog xmode.marker ;
 
 in: xmode.highlight
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: STYLES H{
     { "NULL"     H{ { foreground hexcolor: 000000 } } }

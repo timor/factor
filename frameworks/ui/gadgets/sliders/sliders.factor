@@ -22,7 +22,7 @@ TUPLE: slider < track elevator thumb saved line ;
 
 : slide-by-line ( amount slider -- ) [ line>> * ] keep slide-by ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: elevator < gadget direction ;
 

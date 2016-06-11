@@ -5,7 +5,7 @@ concurrency.futures fry generalizations kernel macros sequences
 sequences.private sequences.product ;
 in: concurrency.combinators
 
-<PRIVATE
+PRIVATE<
 
 : (parallel-each) ( n quot -- )
     [ <count-down> ] dip keep await ; inline
@@ -31,7 +31,7 @@ PRIVATE>
 : parallel-filter ( seq quot: ( elt -- ? ) -- newseq )
     over [ selector [ parallel-each ] dip ] dip like ; inline
 
-<PRIVATE
+PRIVATE<
 
 : [future] ( quot -- quot' ) '[ _ curry future ] ; inline
 
@@ -60,7 +60,7 @@ PRIVATE>
 : parallel-cartesian-map ( seq1 seq2 quot: ( elt1 elt2 -- newelt ) -- newseq )
     [ 2array ] dip [ first2-unsafe ] prepose parallel-product-map ;
 
-<PRIVATE
+PRIVATE<
 
 : (parallel-spread) ( n -- spread-array )
     [ ?future ] <repetition> ; inline

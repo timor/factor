@@ -54,7 +54,7 @@ ERROR: bit-range-error x high low ;
     '[ _ at ] map 0 [ bitor ] reduce ;
 
 ! bitfield
-<PRIVATE
+PRIVATE<
 
 GENERIC: (bitfield-quot) ( spec -- quot ) ;
 
@@ -76,7 +76,7 @@ MACRO: bitfield ( bitspec -- quot )
     ] if-empty ;
 
 ! bit-count
-<PRIVATE
+PRIVATE<
 
 defer: byte-bit-count
 

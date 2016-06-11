@@ -10,7 +10,7 @@ SYMBOLS: twitter-source twitter-consumer-token twitter-access-token ;
 
 twitter-source [ "factor" ] initialize
 
-<PRIVATE
+PRIVATE<
 
 : with-twitter-oauth ( quot -- )
     [
@@ -45,7 +45,7 @@ PRIVATE>
         obtain-access-token
     ] with-twitter-oauth ;
 
-<PRIVATE
+PRIVATE<
 
 ! Utilities
 MACRO: keys-boa ( keys class -- quot )
@@ -87,7 +87,7 @@ TUPLE: twitter-user
     protected?
     followers-count ;
 
-<PRIVATE
+PRIVATE<
 
 : <twitter-user> ( assoc -- user )
     {
@@ -125,7 +125,7 @@ TUPLE: twitter-user
 PRIVATE>
 
 ! Updates
-<PRIVATE
+PRIVATE<
 
 : update-post-data ( update -- assoc )
     [
@@ -151,7 +151,7 @@ PRIVATE>
     "1.1/account/verify_credentials.json" twitter-request ;
 
 ! Timelines
-<PRIVATE
+PRIVATE<
 
 : timeline ( url -- tweets )
     status-url <get-request>

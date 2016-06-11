@@ -11,7 +11,7 @@ in: combinators.random
 
 : unlessp ( p false -- ) [ [ ] ] dip ifp ; inline
 
-<PRIVATE
+PRIVATE<
 
 : with-drop ( quot -- quot' ) [ drop ] prepend ; inline
 

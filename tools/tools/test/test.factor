@@ -43,7 +43,7 @@ t restartable-tests? set-global
         swap >>error
         error-continuation get >>continuation ;
 
-<PRIVATE
+PRIVATE<
 
 : failure ( error experiment path line# -- )
     "--> test failed!" print
@@ -137,7 +137,7 @@ PRIVATE>
 
 symbol: forget-tests?
 
-<PRIVATE
+PRIVATE<
 
 : forget-tests ( files -- )
     forget-tests? get

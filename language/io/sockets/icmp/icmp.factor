@@ -11,7 +11,7 @@ in: io.sockets.icmp
     { [ os unix? ] [ "unix.ffi" ] }
 } cond use-vocab >>
 
-<PRIVATE
+PRIVATE<
 
 MEMO: IPPROTO_ICMP4 ( -- protocol )
     "icmp" getprotobyname proto>> ;

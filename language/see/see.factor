@@ -43,7 +43,7 @@ M: word print-stack-effect? drop t ;
     [ print-stack-effect? ] [ stack-effect ] bi and
     [ pprint-effect ] when* ;
 
-<PRIVATE
+PRIVATE<
 
 : seeing-word ( word -- )
     vocabulary>> dup [ lookup-vocab ] when pprinter-in namespaces:set ;

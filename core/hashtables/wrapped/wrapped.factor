@@ -13,7 +13,7 @@ TUPLE: wrapped-hashtable
 
 GENERIC: wrap-key ( key wrapped-hash -- wrapped-key ) ;
 
-<PRIVATE
+PRIVATE<
 
 : wrapper@ ( key wrapped-hash -- wrapped-key hash )
     [ wrap-key ] [ nip underlying>> ] 2bi ; inline

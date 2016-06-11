@@ -6,7 +6,7 @@ ui.gadgets.buttons.private ui.gadgets.packs ui.theme
 ui.gadgets.tracks ui.pens ui.pens.solid ;
 in: ui.gadgets.toolbar
 
-<PRIVATE
+PRIVATE<
 
 : <toolbar-button-pen> ( -- pen )
     toolbar-background <solid> dup

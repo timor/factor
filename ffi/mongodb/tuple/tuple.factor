@@ -42,7 +42,7 @@ SYNTAX: \ MDBTUPLE:
 
 defer: tuple>query
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: id-selector ( object -- selector ) ;
 

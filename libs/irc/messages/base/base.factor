@@ -35,7 +35,7 @@ GENERIC: process-irc-prefix ( irc-message -- ) ;
 M: irc-message process-irc-prefix
     drop ;
 
-<PRIVATE
+PRIVATE<
 : [slot-setter] ( mirror -- quot )
     '[ [ _ set-at ] [ drop ] if* ] ; inline
 PRIVATE>
@@ -84,7 +84,7 @@ M: irc-message set-irc-command
         [ trailing>> dup [ char: \ : prefix ] when ]
     } cleave 4array sift " " join ;
 
-<PRIVATE
+PRIVATE<
 : ?define-irc-parameters ( class slot-names -- )
     dup empty? not [
         [ \ irc-parameter-slots create-method-in ] dip

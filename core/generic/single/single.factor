@@ -6,7 +6,7 @@ hashtables kernel layouts make math namespaces quotations
 sequences words ;
 in: generic.single
 
-<PRIVATE
+PRIVATE<
 PRIMITIVE: inline-cache-miss ( generic methods index cache -- ) ;
 PRIMITIVE: inline-cache-miss-tail ( generic methods index cache -- ) ;
 PRIMITIVE: lookup-method ( object methods -- method ) ;

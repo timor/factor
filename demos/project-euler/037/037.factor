@@ -22,7 +22,7 @@ in: project-euler.037
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : r-trunc? ( n -- ? )
     10 /i dup 0 > [

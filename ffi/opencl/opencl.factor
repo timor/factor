@@ -8,7 +8,7 @@ variants ;
 in: opencl
 SPECIALIZED-ARRAYS: void* char size_t ;
 
-<PRIVATE
+PRIVATE<
 
 ERROR: cl-error err ;
 
@@ -165,7 +165,7 @@ C: <cl-buffer-range> cl-buffer-range ;
 
 SYMBOLS: cl-current-context cl-current-queue cl-current-device ;
 
-<PRIVATE
+PRIVATE<
 
 : (current-cl-context) ( -- cl-context )
     cl-current-context get ; inline

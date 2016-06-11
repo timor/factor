@@ -5,7 +5,7 @@ in: math.secant-method
 
 ! Secant method of approximating roots
 
-<PRIVATE
+PRIVATE<
 
 : secant-solution ( x1 x2 function -- solution )
     [ eval ] curry bi@ linear-solution ;

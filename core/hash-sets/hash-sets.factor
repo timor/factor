@@ -12,7 +12,7 @@ TUPLE: hash-set
     { deleted array-capacity }
     { array array } ;
 
-<PRIVATE
+PRIVATE<
 
 : hash@ ( key array -- i )
     [ hashcode >fixnum ] dip wrap ; inline
@@ -138,7 +138,7 @@ INSTANCE: hash-set set ;
 
 ! Overrides for performance
 
-<PRIVATE
+PRIVATE<
 
 : and-tombstones ( quot: ( elt -- ? ) -- quot: ( elt -- ? ) )
     [ if ] curry [ dup tombstone? [ drop t ] ] prepose ; inline

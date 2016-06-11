@@ -187,7 +187,7 @@ arc "arc"
 TUPLE: relation-definition relate id-word unrelate related? subjects objects ;
 C: <relation-definition> relation-definition ;
 
-<PRIVATE
+PRIVATE<
 
 : default-word-name ( relate-word-name word-type -- name>> )
     {

@@ -12,7 +12,7 @@ symbol: include-vocabs
 
 exclude-vocabs { "math" "accessors" } swap set-global
 
-<PRIVATE
+PRIVATE<
 
 : callstack-depth ( callstack -- n )
     callstack>array midpoint@ ;

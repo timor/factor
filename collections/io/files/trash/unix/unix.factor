@@ -11,7 +11,7 @@ in: io.files.trash.unix
 
 ! Implements the FreeDesktop.org Trash Specification 0.7
 
-<PRIVATE
+PRIVATE<
 
 : top-directory? ( path -- ? )
     dup ".." append-path [ link-status ] bi@

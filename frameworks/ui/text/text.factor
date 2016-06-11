@@ -5,7 +5,7 @@ math math.order namespaces opengl opengl.gl opengl.textures
 sequences strings system ui.gadgets.worlds vocabs ;
 in: ui.text
 
-<PRIVATE
+PRIVATE<
 
 symbol: font-renderer
 
@@ -51,7 +51,7 @@ HOOK: line-metrics font-renderer ( font string -- metrics ) ;
 
 HOOK: string>image font-renderer ( font string -- image loc ) ;
 
-<PRIVATE
+PRIVATE<
 
 : string-empty? ( obj -- ? )
     dup selection? [ string>> ] when empty? ;

@@ -5,7 +5,7 @@ USING: accessors assocs kernel locals math sequences sorting ;
 
 in: math.binpack
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: bin items total ;
 

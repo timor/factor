@@ -5,7 +5,7 @@ USING: combinators kernel locals math math.functions ;
 
 in: math.approx
 
-<PRIVATE
+PRIVATE<
 
 :: (simplest) ( n d n' d' -- val ) ! assumes 0 < n/d < n'/d'
     n  d  /mod :> ( q  r  )

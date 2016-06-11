@@ -6,7 +6,7 @@ arrays namespaces kernel accessors ;
 FROM: io.sockets => host-name <inet> with-client ;
 in: concurrency.distributed
 
-<PRIVATE
+PRIVATE<
 
 : registered-remote-threads ( -- hash )
    \ registered-remote-threads get-global ;

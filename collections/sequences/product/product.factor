@@ -12,7 +12,7 @@ INSTANCE: product-sequence sequence ;
 
 M: product-sequence length lengths>> product ;
 
-<PRIVATE
+PRIVATE<
 
 : ns ( n lengths -- ns )
     [ /mod ] map nip ;

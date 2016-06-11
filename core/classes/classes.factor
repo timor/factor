@@ -14,7 +14,7 @@ mixin: classoid
 INSTANCE: class classoid ;
 INSTANCE: defining-class classoid ;
 
-<PRIVATE
+PRIVATE<
 
 symbol: class<=-cache
 symbol: class-not-cache
@@ -142,7 +142,7 @@ M: class implementors implementors-map get at members ;
 
 M: sequence implementors [ implementors ] gather ;
 
-<PRIVATE
+PRIVATE<
 
 : update-map+ ( class -- )
     dup class-uses update-map get add-vertex ;

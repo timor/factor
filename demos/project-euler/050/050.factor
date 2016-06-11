@@ -39,7 +39,7 @@ in: project-euler.050
 !    repeat steps 5-7...otherwise, you've found the longest sum of consecutive
 !    primes!
 
-<PRIVATE
+PRIVATE<
 
 :: sum-upto ( seq limit -- length sum )
     0 seq [ + dup limit > ] find

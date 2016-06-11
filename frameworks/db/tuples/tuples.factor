@@ -19,7 +19,7 @@ HOOK: <count-statement> db-connection ( query -- statement ) ;
 HOOK: query>statement db-connection ( query -- statement ) ;
 HOOK: insert-tuple-set-key db-connection ( tuple statement -- ) ;
 
-<PRIVATE
+PRIVATE<
 
 symbol: sql-counter
 

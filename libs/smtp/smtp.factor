@@ -54,7 +54,7 @@ TUPLE: email
 
 : <email> ( -- email ) email new ; inline
 
-<PRIVATE
+PRIVATE<
 
 : command ( string -- ) write crlf flush ;
 

@@ -25,7 +25,7 @@ in: project-euler.117
 ! ways(i) = 1 | i <= 0
 ! ways(i) = ways(i-4) + ways(i-3) + ways(i-2) + ways(i-1)
 
-<PRIVATE
+PRIVATE<
 
 : next ( seq -- )
     [ 4 short tail* sum ] keep push ;

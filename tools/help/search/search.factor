@@ -9,7 +9,7 @@ words ;
 
 in: help.search
 
-<PRIVATE
+PRIVATE<
 
 : search-words ( str -- seq )
     >lower "-" split [ [ blank? ] split-when ] map concat ;

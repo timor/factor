@@ -5,7 +5,7 @@ graphviz.attributes io io.files kernel namespaces sequences splitting
 strings words ;
 in: graphviz.dot
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: dot. ( obj -- ) ;
 

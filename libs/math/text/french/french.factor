@@ -4,7 +4,7 @@ USING: arrays assocs combinators kernel math math.functions
 math.parser math.text.utils memoize sequences ;
 in: math.text.french
 
-<PRIVATE
+PRIVATE<
 
 defer: basic
 

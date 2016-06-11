@@ -4,7 +4,7 @@ combinators delegate fry kernel macros math parser sequences
 words ;
 in: alien.enums
 
-<PRIVATE
+PRIVATE<
 TUPLE: enum-c-type base-type members ;
 C: <enum-c-type> enum-c-type ;
 CONSULT: c-type-protocol enum-c-type
@@ -15,7 +15,7 @@ GENERIC: enum>number ( enum -- number ) ; foldable
 M: integer enum>number ;
 M: word enum>number "enum-value" word-prop ;
 
-<PRIVATE
+PRIVATE<
 : enum-boxer ( members -- quot )
     [ first2 swap '[ _ ] 2array ]
     { } map-as [ ] suffix '[ _ case ] ;
@@ -33,7 +33,7 @@ M: enum-c-type c-type-setter
 : define-enum-value ( class value -- )
     enum>number "enum-value" set-word-prop ;
 
-<PRIVATE
+PRIVATE<
 
 : define-enum-members ( members -- )
     [ first define-singleton-class ] each ;

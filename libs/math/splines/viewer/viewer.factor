@@ -5,7 +5,7 @@ math.splines opengl.gl sequences ui.gadgets ui.gadgets.panes ui.render
 arrays ;
 in: math.splines.viewer
 
-<PRIVATE
+PRIVATE<
 : eval-polynomials ( polynomials-seq n -- xy-sequence )
     [
         [ 1 + iota ] keep [

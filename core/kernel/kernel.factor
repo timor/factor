@@ -31,7 +31,7 @@ PRIMITIVE: <wrapper> ( obj -- wrapper ) ;
 PRIMITIVE: die ( -- ) ;
 PRIMITIVE: callstack>array ( callstack -- array ) ;
 
-<PRIVATE
+PRIVATE<
 PRIMITIVE: (call) ( quot -- ) ;
 PRIMITIVE: (execute) ( word -- ) ;
 PRIMITIVE: (identity-hashcode) ( obj -- code ) ;
@@ -196,7 +196,7 @@ defer: if
     swap compose ; inline
 
 ! Curried cleavers
-<PRIVATE
+PRIVATE<
 
 : [curry] ( quot -- quot' ) [ curry ] curry ; inline
 
@@ -301,7 +301,7 @@ ERROR: assert got expect ;
 
 : assert= ( a b -- ) 2dup = [ 2drop ] [ assert ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : declare ( spec -- ) drop ;
 

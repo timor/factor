@@ -11,7 +11,7 @@ TUPLE: avl < tree ;
 : <avl> ( -- tree )
     avl new-tree ; inline
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: avl-node < node balance ;
 

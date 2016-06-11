@@ -16,7 +16,7 @@ TUPLE: rsa modulus private-key public-key ;
 
 C: <rsa> rsa ;
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: public-key 65537 ;
 

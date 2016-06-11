@@ -26,7 +26,7 @@ REGISTERS: 80 ST0 ST1 ST2 ST3 ST4 ST5 ST6 ST7 ;
 PREDICATE: register < word
     "register" word-prop ;
 
-<PRIVATE
+PRIVATE<
 
 PREDICATE: register-8 < register
     "register-size" word-prop 8 = ;

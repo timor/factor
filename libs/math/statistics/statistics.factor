@@ -41,7 +41,7 @@ in: math.statistics
 : contraharmonic-mean ( seq -- x )
     [ sum-of-squares ] [ sum ] bi / ; inline
 
-<PRIVATE
+PRIVATE<
 
 : trim-points ( p seq -- from to seq  )
     [ length [ * >integer ] keep over - ] keep ;
@@ -58,7 +58,7 @@ PRIVATE>
     [ [ 1 - ] dip nth <array> ] 3tri
     surround mean ;
 
-<PRIVATE
+PRIVATE<
 
 :: kth-object-impl ( seq k nth-quot exchange-quot quot: ( x y -- ? ) -- elt )
     ! Wirth's method, Algorithm's + Data structues = Programs p. 84
@@ -208,7 +208,7 @@ PRIVATE>
 : trimean ( seq -- x )
     quartile first3 [ 2 * ] dip + + 4 / ;
 
-<PRIVATE
+PRIVATE<
 
 : (sequence>assoc) ( seq map-quot insert-quot assoc -- assoc )
     [ swap curry compose each ] keep ; inline
@@ -302,7 +302,7 @@ ALIAS: std sample-std ;
 
 : sample-ste ( seq -- x ) 1 ste-ddof ;
 
-<PRIVATE
+PRIVATE<
 : r-sum-diffs ( x-mean y-mean x-seq y-seq -- (r) )
     ! finds sigma((xi-mean(x))(yi-mean(y))
     0 [ [ [ pick ] dip swap - ] bi@ * + ] 2reduce 2nip ;

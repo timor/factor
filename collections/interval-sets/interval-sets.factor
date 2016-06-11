@@ -9,7 +9,7 @@ in: interval-sets
 
 TUPLE: interval-set { array uint-array read-only } ;
 
-<PRIVATE
+PRIVATE<
 
 ERROR: not-an-interval-set obj ;
 
@@ -24,7 +24,7 @@ PRIVATE>
         even? [ >= ] [ 1 - <= ] if
     ] [ 2drop f ] if* ;
 
-<PRIVATE
+PRIVATE<
 
 : spec>pairs ( sequence -- intervals )
     [ dup number? [ dup 2array ] when ] map ;
@@ -65,7 +65,7 @@ PRIVATE>
     spec>pairs sort-keys
     >intervals make-intervals ;
 
-<PRIVATE
+PRIVATE<
 
 :: or-step ( set1 set2 -- set1' set2' )
     set1 first ,
@@ -92,7 +92,7 @@ PRIVATE>
     [ combine-or ] uint-array{ } make
     make-intervals ;
 
-<PRIVATE
+PRIVATE<
 
 : prefix-0 ( seq -- 0seq )
     0 over ?nth zero? [ rest ] [ 0 prefix ] if ;

@@ -5,7 +5,7 @@ io.streams.string json.reader json.writer kernel math namespaces
 sequences strings ;
 in: json.prettyprint
 
-<PRIVATE
+PRIVATE<
 symbol: indent-level
 CONSTANT: nspaces 2 ;
 

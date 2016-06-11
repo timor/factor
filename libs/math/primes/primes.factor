@@ -6,7 +6,7 @@ math.primes.erato.private math.primes.miller-rabin math.ranges
 literals random sequences sets vectors ;
 in: math.primes
 
-<PRIVATE
+PRIVATE<
 
 : look-in-bitmap ( n -- ? )
     integer>fixnum $[ 8,999,999 sieve ] marked-unsafe? ; inline
@@ -33,7 +33,7 @@ PRIVATE>
         next-odd [ dup prime? ] [ 2 + ] until
     ] if ; foldable
 
-<PRIVATE
+PRIVATE<
 
 : <primes-range> ( low high -- range )
     [ 3 max dup even? [ 1 + ] when ] dip 2 <range> ;

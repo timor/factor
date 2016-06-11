@@ -356,7 +356,7 @@ ERROR: mismatched-terminator n string slice ;
 : ?blank? ( ch/f -- blank/f )
     { [ blank? ] [ f = ] } 1|| ;
 
-<PRIVATE
+PRIVATE<
 ! work on underlying, index is on the @
 ! @foo
 : left-decorator? ( obj -- ? )

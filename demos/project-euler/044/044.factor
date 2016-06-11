@@ -26,7 +26,7 @@ in: project-euler.044
 
 ! Brute force using a cartesian product and an arbitrarily chosen limit.
 
-<PRIVATE
+PRIVATE<
 
 : nth-pentagonal ( n -- seq )
     dup 3 * 1 - * 2 /i ; inline

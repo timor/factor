@@ -8,7 +8,7 @@ in: grid-meshes
 
 TUPLE: grid-mesh dim buffer row-length ;
 
-<PRIVATE
+PRIVATE<
 
 : vertex-array-row ( range z0 z1 -- vertices )
     '[ _ _ [ 0.0 swap 1.0 float-4-boa ] bi-curry@ bi ]

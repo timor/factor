@@ -174,7 +174,7 @@ CONSTANT: KEY_F0        0o410 ; /* Function keys.  Space for 64 */
 ERROR: curses-failed ;
 ERROR: unsupported-curses-terminal ;
 
-<PRIVATE
+PRIVATE<
 
 : >BOOLEAN ( ? -- TRUE/FALSE ) ffi:TRUE ffi:FALSE ? ; inline
 
@@ -213,7 +213,7 @@ TUPLE: curses-window < disposable
 M: curses-window dispose* ( window -- )
     ptr>> ffi:delwin curses-error ;
 
-<PRIVATE
+PRIVATE<
 
 : window-params ( window -- lines columns y x )
     { [ lines>> ] [ columns>> ] [ y>> ] [ x>> ] } cleave ;
@@ -280,7 +280,7 @@ PRIVATE>
         ] [ ffi:endwin curses-error ] [ ] cleanup
     ] with-destructors ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (wcrefresh) ( window-ptr -- )
     ffi:wrefresh curses-error ; inline
@@ -404,7 +404,7 @@ TUPLE: mouse-event
     shift
     ctrl ;
 
-<PRIVATE
+PRIVATE<
 
 : substate-n ( bstate n -- substate )
     [ 1 + ffi:NCURSES_BUTTON_RELEASED ffi:NCURSES_MOUSE_MASK 1 - bitand ] keep

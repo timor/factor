@@ -14,7 +14,7 @@ in: benchmark
 : find-benchmark-vocabs ( -- seq )
     "benchmark" disk-child-vocab-names [ find-vocab-root ] filter ;
 
-<PRIVATE
+PRIVATE<
 
 : write-header ( str -- )
     "=== %s\n" printf ;

@@ -16,7 +16,7 @@ in: cocoa.plists
 
 defer: plist>
 
-<PRIVATE
+PRIVATE<
 
 : (plist-NSNumber>) ( NSNumber -- number )
     dup send\ doubleValue dup >integer =

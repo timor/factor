@@ -6,7 +6,7 @@ destructors io.sockets io.sockets.icmp io.timeouts kernel
 locals pack random sequences system ;
 in: ping
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: echo type identifier sequence data ;
 

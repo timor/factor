@@ -8,7 +8,7 @@ in: images.memory
 ! images from off-screen graphics contexts. There is probably
 ! no reason to call it directly.
 
-<PRIVATE
+PRIVATE<
 
 : bitmap-size ( dim -- n ) product uint heap-size * ;
 

@@ -345,7 +345,7 @@ M: windows root-directory? ( path -- ? )
 
 TR: normalize-separators "/" "\\" ;
 
-<PRIVATE
+PRIVATE<
 
 : unc-path? ( string -- ? )
     [ "//" head? ] [ "\\\\" head? ] bi or ;
@@ -361,7 +361,7 @@ M: windows normalize-path ( string -- string' )
         prepend-prefix
     ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : windows-file-size ( path -- size )
     normalize-path 0 WIN32_FILE_ATTRIBUTE_DATA <struct>

@@ -12,7 +12,7 @@ symbol: site-watcher-frequency
 symbol: running-site-watcher
 [ f running-site-watcher set-global ] "site-watcher" add-startup-hook
 
-<PRIVATE
+PRIVATE<
 
 : check-sites ( seq -- )
     [

@@ -6,7 +6,7 @@ simple-flat-file unicode.categories unicode.data
 unicode.normalize.private words words.constant ;
 in: unicode.breaks
 
-<PRIVATE
+PRIVATE<
 
 ! Grapheme breaks
 <<

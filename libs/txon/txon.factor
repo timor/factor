@@ -7,7 +7,7 @@ splitting strings unicode ;
 
 in: txon
 
-<PRIVATE
+PRIVATE<
 
 : decode-value ( string -- string' )
     "\\`" "`" replace ;
@@ -56,7 +56,7 @@ PRIVATE>
 : txon> ( string -- object )
     parse-txon dup length 1 = [ first ] when ;
 
-<PRIVATE
+PRIVATE<
 
 : encode-value ( string -- string' )
     "`" "\\`" replace ;

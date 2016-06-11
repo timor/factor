@@ -7,7 +7,7 @@ prettyprint quotations sequences sequences.deep slots.private
 splitting stack-checker vocabs words words.alias ;
 in: lint
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: manual-substitutions
     H{

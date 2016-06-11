@@ -27,7 +27,7 @@ in: project-euler.042
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : source-042 ( -- seq )
     "resource:extra/project-euler/042/words.txt"
@@ -58,7 +58,7 @@ PRIVATE>
 
 ! Use the inverse function of n * (n + 1) / 2 and test if the result is an integer
 
-<PRIVATE
+PRIVATE<
 
 : triangle? ( n -- ? )
     8 * 1 + sqrt 1 - 2 / 1 mod zero? ;

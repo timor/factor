@@ -6,7 +6,7 @@ in: compression.snappy
 
 ERROR: snappy-error error ;
 
-<PRIVATE
+PRIVATE<
 
 : check-snappy ( ret -- )
     dup SNAPPY_OK = [ drop ] [ snappy-error ] if ;

@@ -157,7 +157,7 @@ FUNCTION: CGError CGWarpMouseCursorPosition ( CGPoint newCursorPosition ) ;
 
 FUNCTION: uint GetCurrentButtonState ( ) ;
 
-<PRIVATE
+PRIVATE<
 
 : bitmap-flags ( -- n )
     kCGImageAlphaPremultipliedFirst kCGBitmapByteOrder32Host bitor ;

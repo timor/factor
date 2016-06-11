@@ -6,7 +6,7 @@ core-foundation io.encodings.utf8 io.files.trash kernel system ;
 
 in: io.files.trash.macosx
 
-<PRIVATE
+PRIVATE<
 
 STRUCT: FSRef
     { hidden UInt8[80] } ;

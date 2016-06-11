@@ -14,7 +14,7 @@ TUPLE: track < pack sizes ;
 
 : <track> ( orientation -- track ) track new-track ;
 
-<PRIVATE
+PRIVATE<
 
 : normalized-sizes ( track -- seq )
     sizes>> dup sift sum '[ dup [ _ / ] when ] map ;

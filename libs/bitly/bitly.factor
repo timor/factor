@@ -6,7 +6,7 @@ in: bitly
 
 SYMBOLS: bitly-api-user bitly-api-key ;
 
-<PRIVATE
+PRIVATE<
 
 : <bitly-url> ( path -- url )
     "http://api.bitly.com/v3/" prepend >url

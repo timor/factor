@@ -13,7 +13,7 @@ TUPLE: ryba < color
 
 C: <ryba> ryba ;
 
-<PRIVATE
+PRIVATE<
 
 : normalized ( a b c quot: ( a b c -- a' b' c' ) -- a' b' c' )
     [ 3dup min min ] dip over

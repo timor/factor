@@ -28,7 +28,7 @@ GENERIC# string>alien 1 ( string encoding -- byte-array ) ;
 
 M: c-ptr string>alien drop ;
 
-<PRIVATE
+PRIVATE<
 
 : fast-string? ( string encoding -- ? )
     swap aux>> not [ { ascii utf8 } member-eq? ] [ drop f ] if ; inline

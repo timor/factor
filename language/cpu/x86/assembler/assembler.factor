@@ -8,7 +8,7 @@ in: cpu.x86.assembler
 
 ! A postfix assembler for x86-32 and x86-64.
 
-<PRIVATE
+PRIVATE<
 
 : reg-code ( reg -- n ) "register" word-prop 7 bitand ;
 
@@ -206,7 +206,7 @@ GENERIC: POP ( op -- ) ;
 M: register POP f 0x58 short-operand ;
 M: operand POP { 0b000 f 0x8f } 1-operand ;
 
-<PRIVATE
+PRIVATE<
 
 : zero-extendable? ( imm -- ? )
     1 32 2^ 1 - between? ;
@@ -271,7 +271,7 @@ GENERIC: CALL ( op -- ) ;
 M: integer CALL 0xe8 , 4, ;
 M: operand CALL { 0b010 t 0xff } 1-operand ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC# JUMPcc 1 ( addr opcode -- ) ;
 M: integer JUMPcc extended-opcode, 4, ;
@@ -396,7 +396,7 @@ M: operand   BTS ( value n -- ) swap { 0x0f 0xab } (2-operand) ;
 : CDQ ( -- ) 0x99 , ;
 : CQO ( -- ) 0x48 , CDQ ;
 
-<PRIVATE
+PRIVATE<
 
 :: (SHIFT) ( dst src op -- )
     src CL eq? [
@@ -487,7 +487,7 @@ PRIVATE>
 
 ERROR: bad-x87-operands ;
 
-<PRIVATE
+PRIVATE<
 
 :: (x87-op) ( operand opcode reg -- )
     opcode ,
@@ -580,7 +580,7 @@ PRIVATE>
 
 ! SSE multimedia instructions
 
-<PRIVATE
+PRIVATE<
 
 : direction-bit-sse ( dst src op1 -- dst' src' op1' )
     pick register-128? [ swapd 0b1 bitor ] unless ;
@@ -724,7 +724,7 @@ ALIAS: MOVLHPS MOVHPS ;
 
 : PEXTRB     ( dest src imm -- ) { 0x3a 0x14 } 0x66 3-operand-mr-sse ;
 
-<PRIVATE
+PRIVATE<
 : (PEXTRW-sse1) ( dest src imm -- ) 0xc5 0x66 3-operand-rm-sse ;
 : (PEXTRW-sse4) ( dest src imm -- ) { 0x3a 0x15 } 0x66 3-operand-mr-sse ;
 PRIVATE>
@@ -817,7 +817,7 @@ ALIAS: PINSRQ PINSRD ;
 : MOVQ       ( dest src -- )
     { { 0x7e 0xf3 } { 0xd6 0x66 } } 2-operand-rm-mr-sse* ;
 
-<PRIVATE
+PRIVATE<
 
 : 2shuffler ( indexes/mask -- mask )
     dup integer? [ first2 { 1 0 } bitfield ] unless ;
@@ -830,7 +830,7 @@ PRIVATE>
 : PSHUFLW    ( dest src imm -- ) 4shuffler 0x70 0xf2 3-operand-rm-sse ;
 : PSHUFHW    ( dest src imm -- ) 4shuffler 0x70 0xf3 3-operand-rm-sse ;
 
-<PRIVATE
+PRIVATE<
 
 : (PSRLW-imm) ( dest imm -- ) 0b010 0x71 0x66 2-operand-sse-shift ;
 : (PSRAW-imm) ( dest imm -- ) 0b100 0x71 0x66 2-operand-sse-shift ;

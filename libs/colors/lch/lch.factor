@@ -10,7 +10,7 @@ TUPLE: LCHuv l c h alpha ;
 
 C: <LCHuv> LCHuv ;
 
-<PRIVATE
+PRIVATE<
 
 : deg>rad ( degrees -- radians )
     pi * 180 / ; inline

@@ -40,7 +40,7 @@ register: R15
 ALIAS: SL R10 ; ALIAS: FP R11 ; ALIAS: IP R12 ;
 ALIAS: SP R13 ; ALIAS: LR R14 ; ALIAS: PC R15 ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: register ( register -- n ) ;
 M: word register "register" word-prop ;
@@ -77,7 +77,7 @@ symbol: cond-code
 : AL ( -- ) 0b1110 >CC ;
 : NV ( -- ) 0b1111 >CC ;
 
-<PRIVATE
+PRIVATE<
 
 : (insn) ( n -- ) CC> 28 shift bitor , ;
 
@@ -94,7 +94,7 @@ PRIVATE>
 : BL ( target -- ) 1 (B) ;
 
 ! Data processing instructions
-<PRIVATE
+PRIVATE<
 
 symbol: updates-cond-code
 
@@ -104,7 +104,7 @@ PRIVATE>
 
 : S> ( -- ? ) updates-cond-code [ f ] change ;
 
-<PRIVATE
+PRIVATE<
 
 : sinsn ( bitspec -- )
     bitfield S> [ 20 2^ bitor ] when (insn) ; inline
@@ -131,7 +131,7 @@ C: <IMM> IMM ;
 TUPLE: shifter Rm by shift ;
 C: <shifter> shifter ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: shifter-op ( shifter-op -- n ) ;
 
@@ -152,7 +152,7 @@ PRIVATE>
 M: register-class shifter-op 0 <LSL> shifter-op ;
 M: integer shifter-op 0 <IMM> shifter-op ;
 
-<PRIVATE
+PRIVATE<
 
 : addr1 ( Rd Rn shifter-op opcode -- )
     {
@@ -179,7 +179,7 @@ PRIVATE>
 : MVN ( Rd shifter-op -- ) [ f ] dip 0b1111 addr1 ;
 
 ! These always update the condition code flags
-<PRIVATE
+PRIVATE<
 
 : (CMP) ( Rn shifter-op opcode -- ) [ f ] 3dip S addr1 ;
 
@@ -191,7 +191,7 @@ PRIVATE>
 : CMN ( Rn shifter-op -- ) 0b1011 (CMP) ;
 
 ! Multiply instructions
-<PRIVATE
+PRIVATE<
 
 : (MLA) ( Rd Rm Rs Rn a -- )
     {
@@ -243,7 +243,7 @@ PRIVATE>
 ! Status register acess instructions
 
 ! Load and store instructions
-<PRIVATE
+PRIVATE<
 
 GENERIC: addressing-mode-2 ( addressing-mode -- n ) ;
 
@@ -292,7 +292,7 @@ PRIVATE>
 symbol: have-BX?
 symbol: have-BLX?
 
-<PRIVATE
+PRIVATE<
 
 GENERIC# (BX) 1 ( Rm l -- ) ;
 
@@ -315,7 +315,7 @@ PRIVATE>
 : BLX ( Rm -- ) have-BLX? get [ 1 (BX) ] [ LR PC MOV BX ] if ;
 
 ! More load and store instructions
-<PRIVATE
+PRIVATE<
 
 GENERIC: addressing-mode-3 ( addressing-mode -- n ) ;
 

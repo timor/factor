@@ -24,7 +24,7 @@ in: project-euler.040
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : (concat-upto) ( n limit str -- str )
     2dup length > [

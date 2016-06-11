@@ -8,7 +8,7 @@ vocabs.hierarchy words ;
 
 in: fuel.xref
 
-<PRIVATE
+PRIVATE<
 
 : normalize-loc ( pair/f -- path line )
     [ first2 [ absolute-path ] dip ] [ f f ] if* ;

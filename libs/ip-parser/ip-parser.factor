@@ -9,7 +9,7 @@ ERROR: malformed-ipv4 string ;
 
 ERROR: bad-ipv4-component string ;
 
-<PRIVATE
+PRIVATE<
 
 : octal? ( str -- ? )
     { [ "0" = not ] [ "0" head? ] [ "0x" head? not ] } 1&& ;
@@ -56,7 +56,7 @@ ERROR: bad-ipv4-embedded-prefix obj ;
 
 ERROR: more-than-8-components ;
 
-<PRIVATE
+PRIVATE<
 
 : ipv6-component ( str -- n )
     dup hex> [ nip ] [ bad-ipv6-component ] if* ;

@@ -5,7 +5,7 @@ io.encodings.binary io.files io.streams.byte-array kernel
 locals math math.vectors memoize sequences ;
 in: checksums.hmac
 
-<PRIVATE
+PRIVATE<
 
 : opad ( checksum-state -- seq ) block-size>> 0x5c <array> ;
 

@@ -6,7 +6,7 @@ in: interval-maps
 
 TUPLE: interval-map { array array read-only } ;
 
-<PRIVATE
+PRIVATE<
 
 ALIAS: start first-unsafe ;
 ALIAS: end second-unsafe ;

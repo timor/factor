@@ -17,7 +17,7 @@ in: project-euler.015
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : grid-paths ( n -- n )
     dup 2 * swap nCk ;

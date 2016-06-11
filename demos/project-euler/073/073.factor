@@ -30,7 +30,7 @@ in: project-euler.073
 ! the next fraction until the denominator is as close to 1000000 as possible
 ! without going over.
 
-<PRIVATE
+PRIVATE<
 
 :: (euler073) ( counter limit lo hi -- counter' )
     lo hi mediant :> m

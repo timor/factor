@@ -9,7 +9,7 @@ FROM: alien.c-types => float ;
 SPECIALIZED-ARRAYS: float uint ;
 in: game.debug
 
-<PRIVATE
+PRIVATE<
 ! Vertex shader for debug shapes
 GLSL-SHADER: debug-shapes-vertex-shader vertex-shader
 uniform   mat4 u_mvp_matrix;

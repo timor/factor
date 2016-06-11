@@ -119,7 +119,7 @@ M: array c-type-unboxer-quot drop [ >c-ptr ] ;
 
 ERROR: local-allocation-error ;
 
-<PRIVATE
+PRIVATE<
 
 : (local-allot) ( size align -- alien ) local-allocation-error ;
 

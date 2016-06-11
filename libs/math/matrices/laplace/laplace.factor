@@ -4,7 +4,7 @@ USING: accessors arrays fry kernel locals math math.matrices
 math.vectors sequences sequences.private ;
 in: math.matrices.laplace
 
-<PRIVATE
+PRIVATE<
 
 : 2x2-determinant ( matrix -- x )
     first2 [ first2 ] bi@ -rot [ * ] 2bi@ - ;

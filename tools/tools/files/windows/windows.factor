@@ -5,7 +5,7 @@ kernel math.parser sequences splitting system tools.files
 generalizations tools.files.private io.files.info math.order ;
 in: tools.files.windows
 
-<PRIVATE
+PRIVATE<
 
 M: windows (directory.) ( entries -- lines )
     <listing-tool>

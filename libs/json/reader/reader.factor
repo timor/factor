@@ -6,7 +6,7 @@ math.parser namespaces sbufs sequences sequences.private strings
 vectors ;
 in: json.reader
 
-<PRIVATE
+PRIVATE<
 
 ERROR: not-a-json-number string ;
 

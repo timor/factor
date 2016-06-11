@@ -8,7 +8,7 @@ math.statistics sequences urls ;
 
 in: reddit
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: page url data before after ;
 
@@ -75,7 +75,7 @@ PRIVATE>
 : story>author-url ( story -- url )
     "author" of "http://reddit.com/user/" prepend >url ;
 
-<PRIVATE
+PRIVATE<
 
 : write-title ( title url -- )
     '[

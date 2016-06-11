@@ -4,7 +4,7 @@ io.files.info io.pathnames kernel regexp sequences vocabs.loader
 vocabs.metadata ;
 in: vocabs.metadata.resources
 
-<PRIVATE
+PRIVATE<
 
 : (expand-vocab-resource) ( resource-path -- filenames )
     dup file-info directory?

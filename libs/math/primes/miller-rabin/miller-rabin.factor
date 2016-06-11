@@ -4,7 +4,7 @@ USING: combinators kernel locals math math.functions math.ranges
 random sequences ;
 in: math.primes.miller-rabin
 
-<PRIVATE
+PRIVATE<
 
 :: (miller-rabin) ( n trials -- ? )
     n 1 - :> n-1

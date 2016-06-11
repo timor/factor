@@ -13,7 +13,7 @@ PRIMITIVE: jit-compile ( quot -- ) ;
 PRIMITIVE: quotation-code ( quot -- start end ) ;
 PRIMITIVE: quotation-compiled? ( quot -- ? ) ;
 
-<PRIVATE
+PRIVATE<
 PRIMITIVE: array>quotation ( array -- quot ) ;
 
 : uncurry ( curry -- obj quot )

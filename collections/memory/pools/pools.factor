@@ -16,7 +16,7 @@ TUPLE: pool
 : pool-size ( pool -- size )
     objects>> length ;
 
-<PRIVATE
+PRIVATE<
 
 :: copy-tuple ( from to -- to )
     from tuple-size :> size

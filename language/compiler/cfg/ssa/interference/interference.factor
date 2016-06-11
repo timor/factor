@@ -15,7 +15,7 @@ TUPLE: vreg-info vreg value def-index bb pre-of color equal-anc-in equal-anc-out
         bb pre-of >>pre-of
         vreg bb def-index >>def-index ;
 
-<PRIVATE
+PRIVATE<
 
 ! Our dominance pass computes dominance information on a
 ! per-basic block level. Rig up a more fine-grained dominance

@@ -5,7 +5,7 @@ io.directories io.pathnames io.files.info io.files.types
 io.files.links io.backend make ;
 in: io.directories.hierarchy
 
-<PRIVATE
+PRIVATE<
 
 : directory-tree-files% ( path prefix -- )
     [ dup directory-entries ] dip '[

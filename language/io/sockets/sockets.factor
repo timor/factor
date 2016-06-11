@@ -19,7 +19,7 @@ in: io.sockets
 GENERIC# with-port 1 ( addrspec port -- addrspec ) ;
 
 ! Addressing
-<PRIVATE
+PRIVATE<
 
 GENERIC: protocol ( addrspec -- n ) ;
 
@@ -73,7 +73,7 @@ slot: port
 
 TUPLE: ipv4 { host maybe{ string } read-only } ;
 
-<PRIVATE
+PRIVATE<
 
 ERROR: invalid-ipv4 host reason ;
 
@@ -141,7 +141,7 @@ TUPLE: ipv6
 { host maybe{ string } read-only }
 { scope-id integer read-only } ;
 
-<PRIVATE
+PRIVATE<
 
 ERROR: invalid-ipv6 host reason ;
 
@@ -157,7 +157,7 @@ PRIVATE>
 M: ipv6 inet-ntop ( data addrspec -- str )
     drop 16 memory>byte-array 2 <groups> [ be> >hex ] map ":" join ;
 
-<PRIVATE
+PRIVATE<
 
 : ipv6-bytes ( seq -- bytes )
     [ 2 >be ] { } map-as B{ } concat-as ;
@@ -220,7 +220,7 @@ M: inet6 protocol drop 0 ;
 
 ERROR: addrinfo-error n string ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: (get-local-address) ( handle remote -- sockaddr ) ;
 

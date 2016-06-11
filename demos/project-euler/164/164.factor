@@ -15,7 +15,7 @@ in: project-euler.164
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : next-keys ( key -- keys )
     [ last ] [ 10 swap sum - iota ] bi [ 2array ] with map ;

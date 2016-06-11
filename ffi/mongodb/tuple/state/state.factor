@@ -3,7 +3,7 @@ words classes.tuple slots generic ;
 
 in: mongodb.tuple.state
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: MDB_TUPLE_INFO       "_mfd_t_info" ;
 

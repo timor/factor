@@ -5,7 +5,7 @@ listener readline sequences splitting threads tools.completion
 unicode.data vocabs vocabs.hierarchy ;
 in: readline-listener
 
-<PRIVATE
+PRIVATE<
 
 symbol: completions
 

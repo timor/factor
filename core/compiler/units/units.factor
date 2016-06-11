@@ -16,7 +16,7 @@ TUPLE: redefine-error def ;
 : throw-redefine-error ( definition -- )
     redefine-error boa throw-continue ;
 
-<PRIVATE
+PRIVATE<
 
 : add-once ( key set -- )
     dupd ?adjoin [ drop ] [ throw-redefine-error ] if ;
@@ -114,7 +114,7 @@ GENERIC: always-bump-effect-counter? ( defspec -- ? ) ;
 
 M: object always-bump-effect-counter? drop f ;
 
-<PRIVATE
+PRIVATE<
 
 : changed-vocabs ( set -- vocabs )
     members [ word? ] filter

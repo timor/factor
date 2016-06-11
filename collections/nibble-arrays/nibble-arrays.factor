@@ -8,7 +8,7 @@ TUPLE: nibble-array
 { length array-capacity read-only }
 { underlying byte-array read-only } ;
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: nibble 0b1111 ;
 

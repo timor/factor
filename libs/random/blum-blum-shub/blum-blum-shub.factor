@@ -6,7 +6,7 @@ in: random.blum-blum-shub
 ! return low bit of x+1
 TUPLE: blum-blum-shub x n ;
 
-<PRIVATE
+PRIVATE<
 
 : generate-bbs-prime ( numbits -- p )
     dup random-prime dup 4 mod 3 =

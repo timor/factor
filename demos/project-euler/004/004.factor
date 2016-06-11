@@ -18,7 +18,7 @@ in: project-euler.004
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : source-004 ( -- seq )
     100 999 [a,b] [ 10 divisor? ] reject ;

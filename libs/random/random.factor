@@ -45,7 +45,7 @@ M: f random-32* ( obj -- * ) no-random-number-generator ;
 : random-bytes ( n -- byte-array )
     random-generator get random-bytes* ;
 
-<PRIVATE
+PRIVATE<
 
 :: (random-bits) ( numbits obj -- n )
     numbits 32 > [
@@ -66,7 +66,7 @@ PRIVATE>
 : random-bits* ( numbits -- n )
     1 - [ random-bits ] keep set-bit ;
 
-<PRIVATE
+PRIVATE<
 
 : next-power-of-2-bits ( m -- numbits )
     dup 2 <= [ drop 1 ] [ 1 - log2 1 + ] if ; inline
@@ -144,7 +144,7 @@ ERROR: too-many-samples seq n ;
 : with-secure-random ( quot -- )
     secure-random-generator get swap with-random ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (uniform-random-float) ( min max obj -- n )
     [ random-32* ] keep random-32* [ >float ] bi@
@@ -159,7 +159,7 @@ PRIVATE>
 
 M: float random [ f ] [ 0.0 swap uniform-random-float ] if-zero ;
 
-<PRIVATE
+PRIVATE<
 
 : (random-unit) ( obj -- n )
     [ 0.0 1.0 ] dip (uniform-random-float) ; inline
@@ -175,7 +175,7 @@ PRIVATE>
 : random-integers ( length n -- sequence )
     random-generator get '[ _ _ (random-integer) ] replicate ;
 
-<PRIVATE
+PRIVATE<
 
 : (cos-random-float) ( -- n )
     0. 2pi uniform-random-float cos ;
@@ -203,7 +203,7 @@ PRIVATE>
 : pareto-random-float ( k alpha -- n )
     [ random-unit ] dip recip ^ /f ;
 
-<PRIVATE
+PRIVATE<
 
 :: (gamma-random-float>1) ( alpha beta -- n )
     ! Uses R.C.H. Cheng, "The generation of Gamma
@@ -296,7 +296,7 @@ PRIVATE>
         rnd (random-unit) 0.5 > [ + ] [ - ] if
     ] if ;
 
-<PRIVATE
+PRIVATE<
 
 :: (triangular-random-float) ( low high mode -- n )
     mode low - high low - / :> c!

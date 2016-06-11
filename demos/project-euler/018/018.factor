@@ -51,7 +51,7 @@ in: project-euler.018
 ! Propagate from bottom to top the longest cumulative path. This
 ! is very efficient and will be reused in problem 67.
 
-<PRIVATE
+PRIVATE<
 
 : source-018 ( -- triangle )
     {

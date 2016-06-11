@@ -295,7 +295,7 @@ T{ doc
         ] curry loop
     ] with-destructors ; inline
 
-<PRIVATE
+PRIVATE<
 
 : collector-when-as ( quot exemplar -- quot' vec )
     [ length ] keep new-resizable [ [ over [ push ] [ 2drop ] if ] curry compose ] keep ; inline

@@ -11,7 +11,7 @@ in: specialized-vectors
 
 mixin: specialized-vector
 
-<PRIVATE
+PRIVATE<
 
 FUNCTOR: define-vector ( T -- )
 

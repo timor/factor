@@ -7,7 +7,7 @@ prettyprint.custom prettyprint.sections see.private sequences
 slots strings summary words ;
 in: classes.struct.prettyprint
 
-<PRIVATE
+PRIVATE<
 
 : struct-definer-word ( class -- word )
     struct-slots

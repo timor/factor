@@ -2,7 +2,7 @@ USING: hints kernel math sequences strings ;
 
 in: splitting.extras
 
-<PRIVATE
+PRIVATE<
 
 : (split*) ( seq quot: ( ... elt -- ... ? ) slice-quot -- pieces )
     [ 0 ] 3dip pick [
@@ -33,7 +33,7 @@ PRIVATE>
     [ [ [ 1 ] when-zero cut-slice swap ] [ f swap ] if* ] compose
     compose produce nip ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (split-harvest) ( seq quot: ( ... elt -- ... ? ) slice-quot -- pieces )
     [ [ [ not ] compose find drop 0 or ] 2keep ] dip [

@@ -8,7 +8,7 @@ TUPLE: mapped-file < disposable address handle length ;
 
 ERROR: bad-mmap-size n ;
 
-<PRIVATE
+PRIVATE<
 
 HOOK: (mapped-file-reader) os ( path length -- address handle ) ;
 HOOK: (mapped-file-r/w) os ( path length -- address handle ) ;
@@ -43,7 +43,7 @@ M: mapped-file dispose* ( mmap -- ) close-mapped-file ;
 : with-mapped-file-reader ( path quot -- )
     [ <mapped-file-reader> ] dip with-disposal ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (with-mapped-array) ( c-type quot -- )
     [ [ <mapped-array> ] curry ] dip compose with-disposal ; inline

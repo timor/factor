@@ -31,7 +31,7 @@ in: project-euler.081
 
 ! Shortest path problem solved using Dijkstra algorithm.
 
-<PRIVATE
+PRIVATE<
 
 : source-081 ( -- matrix )
     "resource:extra/project-euler/081/matrix.txt"

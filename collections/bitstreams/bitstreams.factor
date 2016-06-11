@@ -83,7 +83,7 @@ GENERIC: poke ( value n bitstream -- ) ;
 : read ( n bitstream -- value )
     [ peek ] [ seek ] 2bi ; inline
 
-<PRIVATE
+PRIVATE<
 
 ERROR: not-enough-widthed-bits widthed n ;
 

@@ -5,7 +5,7 @@ io.files.info kernel math math.parser prettyprint sequences system
 vocabs sorting.slots calendar.format ;
 in: tools.files
 
-<PRIVATE
+PRIVATE<
 
 : dir-or-size ( file-info -- str )
     dup directory? [

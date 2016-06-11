@@ -7,7 +7,7 @@ in: base85
 
 ERROR: malformed-base85 ;
 
-<PRIVATE
+PRIVATE<
 
 <<
 CONSTANT: alphabet
@@ -38,7 +38,7 @@ PRIVATE>
 : encode-base85-lines ( -- )
     input-stream get 0 (encode-base85) ;
 
-<PRIVATE
+PRIVATE<
 
 : decode5 ( seq -- )
     0 [ [ 85 * ] [ base85>ch ] bi* + ] reduce 4 >be

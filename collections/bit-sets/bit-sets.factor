@@ -27,7 +27,7 @@ M: bit-set delete
 ! If you do binary set operations with a bit-set, it's expected
 ! that the other thing can also be represented as a bit-set
 ! of the same length.
-<PRIVATE
+PRIVATE<
 
 ERROR: check-bit-set-failed ;
 
@@ -62,7 +62,7 @@ M: bit-set subset?
 M: bit-set members
     table>> [ length iota ] keep '[ _ nth-unsafe ] filter ;
 
-<PRIVATE
+PRIVATE<
 
 : bit-set-like ( set bit-set -- bit-set' )
     ! Throws an error if there are keys that can't be put

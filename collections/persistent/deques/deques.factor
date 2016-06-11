@@ -7,7 +7,7 @@ in: persistent.deques
 ! In a pathological case, if there are m modified versions from the
 !   same source, it could take O(m) amortized time per update.
 
-<PRIVATE
+PRIVATE<
 : split-reverse ( list -- back-reversed front )
     dup llength 2/ lcut lreverse swap ;
 PRIVATE>
@@ -16,7 +16,7 @@ TUPLE: deque { front read-only } { back read-only } ;
 : <deque> ( -- deque )
     T{ deque f +nil+ +nil+ } ;
 
-<PRIVATE
+PRIVATE<
 : flip ( deque -- newdeque )
     [ back>> ] [ front>> ] bi deque boa ;
 
@@ -27,7 +27,7 @@ PRIVATE>
 : deque-empty? ( deque -- ? )
     { [ front>> nil? ] [ back>> nil? ] } 1&& ;
 
-<PRIVATE
+PRIVATE<
 : push ( item deque -- newdeque )
     [ front>> cons ] [ back>> ] bi deque boa ; inline
 PRIVATE>
@@ -38,7 +38,7 @@ PRIVATE>
 : push-back ( deque item -- newdeque )
     swap [ push ] flipped ;
 
-<PRIVATE
+PRIVATE<
 : remove ( deque -- item newdeque )
     [ front>> car ] [ [ front>> cdr ] [ back>> ] bi deque boa ] bi ; inline
 

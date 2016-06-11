@@ -27,7 +27,7 @@ GENERIC: n*V(*)V+M! ( alpha x y A -- A=alpha*x(*)y+A ) ;
 GENERIC: n*V(*)Vconj+M! ( alpha x y A -- A=alpha*x(*)yconj+A ) ;
 GENERIC: n*M.M+n*M! ( alpha A B beta C -- C=alpha*A.B+beta*C ) ;
 
-<PRIVATE
+PRIVATE<
 
 : (blas-transpose) ( matrix -- integer )
     transpose>> [ "T" ] [ "N" ] if ;

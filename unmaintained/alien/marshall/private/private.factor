@@ -37,7 +37,7 @@ marshall-TYPE**-free DEFINES marshall-${TYPE}**-free
 unmarshall-TYPE* DEFINES unmarshall-${TYPE}*
 unmarshall-TYPE*-free DEFINES unmarshall-${TYPE}*-free
 WHERE
-<PRIVATE
+PRIVATE<
 : (marshall-TYPE*) ( n/seq -- alien )
     [ <TYPE> malloc-byte-array ]
     [ >TYPE-array malloc-underlying ]
@@ -45,7 +45,7 @@ WHERE
 PRIVATE>
 : marshall-TYPE* ( n/seq -- alien )
     [ (marshall-TYPE*) ] ptr-pass-through ;
-<PRIVATE
+PRIVATE<
 : (marshall-TYPE**) ( seq -- alien )
     [ marshall-TYPE* ] void*-array{ } map-as malloc-underlying ;
 PRIVATE>

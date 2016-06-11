@@ -45,7 +45,7 @@ fetched-in parsed-html links processed-in fetched-at ;
         swap >>depth
         swap >>url ; inline
 
-<PRIVATE
+PRIVATE<
 
 : apply-filters ( links spider -- links' )
     filters>> [

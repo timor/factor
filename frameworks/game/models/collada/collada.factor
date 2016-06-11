@@ -15,7 +15,7 @@ singleton: collada-models
 ERROR: missing-attr tag attr ;
 ERROR: missing-child tag child-name ;
 
-<PRIVATE
+PRIVATE<
 TUPLE: source semantic offset data ;
 SYMBOLS: up-axis unit-ratio ;
 

@@ -5,7 +5,7 @@ images.loader images.loader.private images.viewer io.pathnames
 kernel namespaces present sequences strings urls ;
 in: images.http
 
-<PRIVATE
+PRIVATE<
 
 : content-type ( response -- type/f )
     content-type>> dup "image/" head?

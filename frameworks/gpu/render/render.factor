@@ -113,7 +113,7 @@ TUPLE: uniform-tuple ;
 
 ERROR: invalid-uniform-type uniform ;
 
-<PRIVATE
+PRIVATE<
 
 : gl-index-type ( index-type -- gl-index-type )
     {
@@ -539,7 +539,7 @@ PRIVATE>
 SYNTAX: \ UNIFORM-TUPLE:
     parse-uniform-tuple-definition define-uniform-tuple ;
 
-<PRIVATE
+PRIVATE<
 
 : bind-unnamed-output-attachments ( framebuffer attachments -- )
     [ gl-attachment ] with map

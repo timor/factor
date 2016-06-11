@@ -53,7 +53,7 @@ Main = Concatenation End
 : glob-pattern? ( string -- ? )
     [ "\\*?[{" member? ] any? ;
 
-<PRIVATE
+PRIVATE<
 
 ! TODO: simplify
 ! TODO: handle two more test cases

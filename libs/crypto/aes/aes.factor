@@ -16,7 +16,7 @@ CONSTANT: FIPS-197 {
     { 256 14 } ! aes-256 -- Key(8) Block(4) Rounds(14)
 } ;
 
-<PRIVATE
+PRIVATE<
 
 : (nrounds) ( byte-array -- rounds )
     length 8 * FIPS-197 at ;

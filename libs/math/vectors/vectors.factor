@@ -47,7 +47,7 @@ M: object v* [ * ] 2map ; inline
 
 GENERIC: v*high ( u v -- w ) ;
 
-<PRIVATE
+PRIVATE<
 : (h+) ( v -- w ) 2 <groups> [ first2 + ] map ;
 PRIVATE>
 
@@ -99,7 +99,7 @@ M: object vsqrt [ >float fsqrt ] map ; inline
 GENERIC: vsad ( u v -- n ) ;
 M: object vsad [ - abs ] [ + ] 2map-reduce ; inline
 
-<PRIVATE
+PRIVATE<
 
 : bitandn ( x y -- z ) [ bitnot ] dip bitand ; inline
 
@@ -249,7 +249,7 @@ M: object distance [ - absq ] [ + ] 2map-reduce sqrt ; inline
 : set-axis ( u v axis -- w )
     [ [ zero? 2over ? ] dip swap nth ] map-index 2nip ;
 
-<PRIVATE
+PRIVATE<
 
 : 2tetra@ ( p q r s t u v w quot -- )
     dup [ [ 2bi@ ] curry 4dip ] dip 2bi@ ; inline

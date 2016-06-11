@@ -8,7 +8,7 @@ INSTANCE: complex-components sequence ;
 : <complex-components> ( sequence -- complex-components )
     complex-components boa ; inline
 
-<PRIVATE
+PRIVATE<
 
 : complex-components@ ( n seq -- remainder n' seq' )
     [ [ 1 bitand ] [ -1 shift ] bi ] [ seq>> ] bi* ; inline

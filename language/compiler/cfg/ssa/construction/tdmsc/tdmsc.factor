@@ -10,7 +10,7 @@ in: compiler.cfg.ssa.construction.tdmsc
 
 ! http://portal.acm.org/citation.cfm?id=1065887.1065890
 
-<PRIVATE
+PRIVATE<
 
 SYMBOLS: merge-sets levels again? ;
 

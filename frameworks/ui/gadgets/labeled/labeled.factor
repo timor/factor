@@ -8,7 +8,7 @@ in: ui.gadgets.labeled
 
 TUPLE: labeled-gadget < track content color ;
 
-<PRIVATE
+PRIVATE<
 
 M: labeled-gadget focusable-child* content>> ;
 

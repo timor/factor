@@ -70,7 +70,7 @@ in: bootstrap.syntax
     "IN:" [ scan-token set-current-vocab ] define-core-syntax
     "in:" [ scan-token set-current-vocab ] define-core-syntax
 
-    "<PRIVATE" [ begin-private ] define-core-syntax
+    "PRIVATE<" [ begin-private ] define-core-syntax
 
     "PRIVATE>" [ end-private ] define-core-syntax
 

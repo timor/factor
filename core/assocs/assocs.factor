@@ -27,7 +27,7 @@ M: assoc assoc-like drop ; inline
 : maybe-set-at ( value key assoc -- changed? )
     3dup at* [ = [ 3drop f ] [ set-at t ] if ] [ 2drop set-at t ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : (assoc-each) ( assoc quot -- seq quot' )
     [ >alist ] dip [ first2 ] prepose ; inline

@@ -7,7 +7,7 @@ sequences channels match concurrency.messaging
 concurrency.distributed threads accessors ;
 in: channels.remote
 
-<PRIVATE
+PRIVATE<
 
 : remote-channels ( -- hash )
     \ remote-channels get-global ;
@@ -22,7 +22,7 @@ PRIVATE>
 : unpublish ( id -- )
     remote-channels delete-at ;
 
-<PRIVATE
+PRIVATE<
 
 MATCH-VARS: ?from ?tag ?id ?value ;
 
@@ -52,7 +52,7 @@ TUPLE: remote-channel node id ;
 
 C: <remote-channel> remote-channel ;
 
-<PRIVATE
+PRIVATE<
 
 : send-message ( message remote-channel -- value )
     node>> "remote-channels" <remote-thread>

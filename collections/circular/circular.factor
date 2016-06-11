@@ -9,7 +9,7 @@ TUPLE: circular { seq read-only } { start integer } ;
 : <circular> ( seq -- circular )
     0 circular boa ; inline
 
-<PRIVATE
+PRIVATE<
 
 : circular-wrap ( n circular -- n circular )
     [ start>> + ] keep
@@ -42,7 +42,7 @@ TUPLE: growing-circular < circular { length integer } ;
 
 M: growing-circular length length>> ; inline
 
-<PRIVATE
+PRIVATE<
 
 : full? ( circular -- ? )
     [ length ] [ seq>> length ] bi = ; inline
@@ -62,7 +62,7 @@ TUPLE: circular-iterator
 : <circular-iterator> ( circular -- obj )
     0 -1 circular-iterator boa ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (circular-while) ( ... iterator quot: ( ... obj -- ... ? ) -- ... )
     [ [ [ n>> ] [ circular>> ] bi nth ] dip call ] 2keep

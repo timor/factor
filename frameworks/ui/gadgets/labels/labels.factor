@@ -14,7 +14,7 @@ slot: string
 M: label string>> ( label -- string )
     text>> dup string? [ "\n" join ] unless ; inline
 
-<PRIVATE
+PRIVATE<
 
 PREDICATE: string-array < array [ string? ] all? ;
 
@@ -51,7 +51,7 @@ M: label string<< ( string label -- )
 M: label pref-dim*
     >label< text-dim ;
 
-<PRIVATE
+PRIVATE<
 
 : label-metrics ( label -- metrics )
     >label< dup string? [ first ] unless line-metrics ;
@@ -64,7 +64,7 @@ M: label baseline*
 M: label cap-height*
     label-metrics cap-height>> round ;
 
-<PRIVATE
+PRIVATE<
 
 : label-background ( label -- color )
     gadget-background [ background get ] unless* ; inline
@@ -97,7 +97,7 @@ M: array >label <label> ;
 M: object >label ;
 M: f >label drop <gadget> ;
 
-<PRIVATE
+PRIVATE<
 
 : label-on-left/right ( -- track )
     horizontal <track>

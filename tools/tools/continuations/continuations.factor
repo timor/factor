@@ -8,7 +8,7 @@ models.arrow arrays accessors generic generic.single definitions
 make sbufs tools.crossref fry ;
 in: tools.continuations
 
-<PRIVATE
+PRIVATE<
 
 : after-break ( object -- )
     {
@@ -29,7 +29,7 @@ symbol: break-hook
 
 GENERIC: add-breakpoint ( quot -- quot' ) ;
 
-<PRIVATE
+PRIVATE<
 
 M: callable add-breakpoint
     dup [ break ] head? [ \ break prefix ] unless ;

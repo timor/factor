@@ -5,7 +5,7 @@ USING: assocs kernel sequences ;
 
 in: flip-text
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: CHARS H{
     { char: A   0x2200 }

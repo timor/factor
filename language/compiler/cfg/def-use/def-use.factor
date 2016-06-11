@@ -58,7 +58,7 @@ M: ##callback-outputs uses-vregs
 
 ! Generate defs-vregs, uses-vregs and temp-vregs for everything
 ! else
-<PRIVATE
+PRIVATE<
 
 : slot-array-quot ( slots -- quot )
     [ reader-word 1quotation ] map dup length {

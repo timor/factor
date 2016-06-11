@@ -9,7 +9,7 @@ TUPLE: natural-loop header index ends blocks ;
 
 symbol: loops
 
-<PRIVATE
+PRIVATE<
 
 : <natural-loop> ( header index -- loop )
     HS{ } clone HS{ } clone natural-loop boa ;

@@ -52,7 +52,7 @@ ERROR: unknown-datatype datatype ;
 
 ERROR: unknown-syntax syntax ;
 
-<PRIVATE
+PRIVATE<
 
 : trim-comments ( str -- str' )
     dup [ char: ; = ] find drop [ head ] when* ;

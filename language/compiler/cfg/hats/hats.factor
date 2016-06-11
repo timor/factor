@@ -8,7 +8,7 @@ in: compiler.cfg.hats
 
 <<
 
-<PRIVATE
+PRIVATE<
 
 : hat-name ( insn -- word )
     name>> "##" ?head drop "^^" prepend create-word-in ;

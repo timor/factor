@@ -5,7 +5,7 @@ math.primes math.ranges sequences sequences.product sorting
 io math.parser ;
 in: math.primes.factors
 
-<PRIVATE
+PRIVATE<
 
 : count-factor ( n d -- n' c )
     [ 1 ] 2dip [ /i ] keep

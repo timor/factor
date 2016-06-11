@@ -23,7 +23,7 @@ in: project-euler.036
 
 ! Only check odd numbers since the binary number must begin and end with 1
 
-<PRIVATE
+PRIVATE<
 
 : both-bases? ( n -- ? )
     { [ palindrome? ] [ >bin dup reverse = ] } 1&& ;

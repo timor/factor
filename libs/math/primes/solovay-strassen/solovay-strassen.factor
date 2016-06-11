@@ -6,7 +6,7 @@ math.extras.private math.functions math.ranges random sequences ;
 
 in: math.primes.solovay-strassen
 
-<PRIVATE
+PRIVATE<
 
 :: (solovay-strassen) ( n numtrials -- ? )
     numtrials iota [

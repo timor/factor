@@ -11,7 +11,7 @@ in: mason.git
     { "git" "show" } utf8 [ lines ] with-process-reader
     first " " split second ;
 
-<PRIVATE
+PRIVATE<
 
 : git-clone-cmd ( -- cmd )
     {

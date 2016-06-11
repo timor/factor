@@ -42,7 +42,7 @@ ENUM: gdbm-error
     gdbm-illegal-option ;
 
 
-<PRIVATE
+PRIVATE<
 
 : gdbm-throw ( -- * ) gdbm_errno gdbm-error number>enum throw ;
 

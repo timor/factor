@@ -66,7 +66,7 @@ M: pi cfrac-b
     "0" <repetition> concat     ! push padding zeros
     fraction 4array concat ;
 
-<PRIVATE
+PRIVATE<
 : main ( -- )
     " Square root of 2: " write
     sqrt2 50 cfrac-estimate 30 decimalize print

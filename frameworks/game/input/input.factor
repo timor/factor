@@ -29,7 +29,7 @@ HOOK: reset-mouse game-input-backend ( -- ) ;
 : game-input-opened? ( -- ? )
     game-input-opened get zero? not ;
 
-<PRIVATE
+PRIVATE<
 
 M: f (reset-game-input) ;
 

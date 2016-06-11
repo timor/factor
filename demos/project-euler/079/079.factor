@@ -24,7 +24,7 @@ in: project-euler.079
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : source-079 ( -- seq )
     "resource:extra/project-euler/079/keylog.txt" ascii file-lines ;

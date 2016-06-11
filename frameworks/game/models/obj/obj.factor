@@ -12,7 +12,7 @@ in: game.models.obj
 singleton: obj-models
 "obj" ascii obj-models register-models-class
 
-<PRIVATE
+PRIVATE<
 SYMBOLS: vp vt vn current-model current-material material-dictionary models ;
 
 TUPLE: material

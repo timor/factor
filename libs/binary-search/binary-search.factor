@@ -4,7 +4,7 @@ USING: accessors arrays combinators kernel locals math
 math.order sequences sequences.private vectors ;
 in: binary-search
 
-<PRIVATE
+PRIVATE<
 
 :: (search) ( seq from to quot: ( elt -- <=> ) -- i elt )
     from to + 2/ :> midpoint@

@@ -47,7 +47,7 @@ MEMO: make-cipher-list ( -- string )
 
 TUPLE: openssl-context < secure-context aliens sessions ;
 
-<PRIVATE
+PRIVATE<
 
 : bn-bytes-needed ( num -- bytes-required )
     log2 1 + 8 / ceiling ;

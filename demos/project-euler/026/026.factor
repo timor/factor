@@ -31,7 +31,7 @@ in: project-euler.026
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : source-026 ( -- seq )
     999 primes-upto [ recip ] map ;
@@ -51,7 +51,7 @@ PRIVATE>
 : period-length ( a/b -- n )
     dup recurring-period? [ denominator 10 swap mult-order ] [ drop 0 ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : max-period ( seq -- elt n )
     dup [ period-length ] map dup supremum

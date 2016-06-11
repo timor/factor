@@ -7,7 +7,7 @@ pdf.streams sequences sets strings ;
 
 in: help.pdf
 
-<PRIVATE
+PRIVATE<
 
 : next-articles ( str -- seq )
     lookup-article content>> [ array? ] filter

@@ -154,7 +154,7 @@ ERROR: not-absolute-path ;
         [ first Letter? ]
     } 1&& [ 2 head "\\" append ] [ not-absolute-path ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : (file-system-info) ( path -- file-system-info )
     dup [ volume-information ] [ file-system-space ] bi

@@ -31,7 +31,7 @@ ERROR: server-not-running threaded-server ;
 
 ERROR: server-already-running threaded-server ;
 
-<PRIVATE
+PRIVATE<
 
 : must-be-running ( threaded-server -- threaded-server )
     dup running-servers get in? [ server-not-running ] unless ;
@@ -67,7 +67,7 @@ PRIVATE>
 
 GENERIC: handle-client* ( threaded-server -- ) ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: >insecure ( obj -- obj ) ;
 
@@ -222,7 +222,7 @@ PRIVATE>
         [ ] cleanup
     ] call ; inline
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: connect-addr ( addrspec -- addrspec ) ;
 

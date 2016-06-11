@@ -1,7 +1,7 @@
 USING: accessors assocs hashtables kernel linked-assocs strings ;
 in: mongodb.cmd
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: mongodb-cmd
     { name string }

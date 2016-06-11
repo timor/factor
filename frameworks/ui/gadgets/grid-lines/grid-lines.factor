@@ -8,7 +8,7 @@ TUPLE: grid-lines color ;
 
 C: <grid-lines> grid-lines ;
 
-<PRIVATE
+PRIVATE<
 
 :: (compute-grid-lines) ( grid n ns orientation -- seq )
     grid gap>> :> gap

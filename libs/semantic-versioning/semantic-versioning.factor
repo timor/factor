@@ -4,7 +4,7 @@ USING: arrays ascii kernel math math.order math.parser sequences
 sorting.human splitting ;
 in: semantic-versioning
 
-<PRIVATE
+PRIVATE<
 
 : number<=> ( obj1 obj2 -- <=> )
     [ [ zero? ] trim-tail-slice ] bi@ <=> ;

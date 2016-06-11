@@ -15,7 +15,7 @@ in: peg.ebnf
 
 ERROR: no-rule rule parser ;
 
-<PRIVATE
+PRIVATE<
 
 : lookup-rule ( rule parser -- rule' )
         2dup rule [ 2nip ] [ no-rule ] if* ;

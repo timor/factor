@@ -9,7 +9,7 @@ TUPLE: call-site tail? node label ;
 : recursive-phi-in ( #enter-recursive -- seq )
     [ label>> calls>> [ node>> in-d>> ] map ] [ in-d>> ] bi suffix ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: call-graph-node tail? label children calls ;
 

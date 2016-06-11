@@ -7,7 +7,7 @@ sequences ;
 
 in: ntp
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: REQUEST B{ 0x1b 0 0 0 0 0 0 0
                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0

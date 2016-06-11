@@ -7,7 +7,7 @@ interpolate locals effects io strings make vocabs.parser words
 generic fry quotations ;
 in: alien.cxx
 
-<PRIVATE
+PRIVATE<
 : class-mixin ( str -- word )
     create-class-in [ define-mixin-class ] keep ;
 

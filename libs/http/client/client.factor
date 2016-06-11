@@ -20,7 +20,7 @@ ERROR: download-failed response ;
 : check-response ( response -- response )
     dup code>> success? [ download-failed ] unless ;
 
-<PRIVATE
+PRIVATE<
 
 : authority-uri ( url -- str )
     [ host>> ] [ port>> number>string ] bi ":" glue ;

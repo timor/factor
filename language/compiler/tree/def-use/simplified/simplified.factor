@@ -9,7 +9,7 @@ in: compiler.tree.def-use.simplified
 ! A 'real' usage is a usage of a value that is not a #renaming.
 TUPLE: real-usage value node ;
 
-<PRIVATE
+PRIVATE<
 
 SYMBOLS: visited accum ;
 

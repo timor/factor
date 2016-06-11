@@ -29,7 +29,7 @@ MACRO: checkpoint ( quot -- quot' )
 : number-from ( from -- from+n )
     [ 1 + number-from ] checkpoint ;
 
-<PRIVATE
+PRIVATE<
 
 : preserve ( quot var -- ) [ get [ call ] dip ] keep set ; inline
 

@@ -30,7 +30,7 @@ in: project-euler.030
 ! n * 9^5 = 10^n  when n ≈ 5.513
 ! 10^5.513 ≈ 325537
 
-<PRIVATE
+PRIVATE<
 
 : sum-fifth-powers ( n -- sum )
     number>digits [ 5 ^ ] map-sum ;

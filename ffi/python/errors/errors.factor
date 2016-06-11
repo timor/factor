@@ -3,7 +3,7 @@ destructors.private kernel namespaces python.ffi sequences vocabs.loader
 words ;
 in: python.errors
 
-<PRIVATE
+PRIVATE<
 
 : get-error ( -- ptype pvalue ptraceback )
     { void* void* void* } [ PyErr_Fetch ] with-out-parameters ;

@@ -8,7 +8,7 @@ specialized-array: double
 
 ERROR: triangulated-face-must-be-base ;
 
-<PRIVATE
+PRIVATE<
 
 : tess-begin ( -- callback )
     |[ primitive-type vertices-h |

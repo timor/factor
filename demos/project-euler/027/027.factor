@@ -43,7 +43,7 @@ in: project-euler.027
 !        b - a >= 1
 !            a < b
 
-<PRIVATE
+PRIVATE<
 
 : source-027 ( -- seq )
     1000 iota [ prime? ] filter [ dup [ neg ] map append ] keep

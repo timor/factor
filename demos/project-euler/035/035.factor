@@ -21,7 +21,7 @@ in: project-euler.035
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : source-035 ( -- seq )
     1000000 primes-upto [ number>digits ] map ;

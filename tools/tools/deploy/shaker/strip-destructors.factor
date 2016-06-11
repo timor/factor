@@ -1,7 +1,7 @@
 use: kernel
 in: destructors
 
-<PRIVATE
+PRIVATE<
 
 : register-disposable ( obj -- ) drop ; inline
 

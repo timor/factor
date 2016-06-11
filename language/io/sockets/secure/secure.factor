@@ -74,7 +74,7 @@ HOOK: check-certificate secure-socket-backend ( host handle -- ) ;
 
 PREDICATE: secure-inet < secure addrspec>> inet? ;
 
-<PRIVATE
+PRIVATE<
 
 M: secure-inet (client)
     [

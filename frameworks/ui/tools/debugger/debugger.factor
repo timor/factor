@@ -15,7 +15,7 @@ in: ui.tools.debugger
 
 TUPLE: debugger < track error restarts restart-hook restart-list continuation ;
 
-<PRIVATE
+PRIVATE<
 
 singleton: restart-renderer
 

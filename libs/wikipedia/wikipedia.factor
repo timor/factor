@@ -16,7 +16,7 @@ symbol: language
 : with-language ( str quot -- )
     language swap with-variable ; inline
 
-<PRIVATE
+PRIVATE<
 
 : wikipedia-url ( path -- url )
     language get swap "http://%s.wikipedia.org/wiki/%s" sprintf >url ;

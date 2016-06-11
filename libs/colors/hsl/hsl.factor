@@ -14,7 +14,7 @@ TUPLE: hsla < color
 
 C: <hsla> hsla ;
 
-<PRIVATE
+PRIVATE<
 
 : value ( p q t -- value )
     dup 0 < [ 1.0 + ] when

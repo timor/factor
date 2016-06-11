@@ -12,7 +12,7 @@ in: poker
 !     http://www.suffecool.net/poker/evaluator.html
 !     http://www.senzee5.com/2006/06/some-perfect-hash.html
 
-<PRIVATE
+PRIVATE<
 
 ! Bitfield Format for Card Values:
 

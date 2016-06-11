@@ -8,7 +8,7 @@ in: game.models.loader
 
 ERROR: unknown-models-extension extension ;
 
-<PRIVATE
+PRIVATE<
 
 symbol: types
 types [ H{ } clone ] initialize

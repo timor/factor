@@ -16,7 +16,7 @@ M: real sqrt
         [ 0 ] dip [ dup even? ] [ [ 1 + ] [ 2/ ] bi* ] while
     ] if ; inline
 
-<PRIVATE
+PRIVATE<
 
 : (^fixnum) ( z w -- z^w )
     [ 1 ] 2dip
@@ -69,7 +69,7 @@ M: real e^ >float e^ ; inline
 
 M: complex e^ >rect [ e^ ] dip polar> ; inline
 
-<PRIVATE
+PRIVATE<
 
 : ^mag ( w abs arg -- magnitude )
     [ >float-rect swap ]
@@ -196,7 +196,7 @@ M: real log >float log ; inline
 
 M: complex log >polar [ flog ] dip rect> ; inline
 
-<PRIVATE
+PRIVATE<
 
 : most-negative-finite-float ( -- x )
     -0x1.ffff,ffff,ffff,fp1023 >integer ; inline

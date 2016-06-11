@@ -15,7 +15,7 @@ M: descriptive-error error.
     "Error:" print
     underlying>> error. ;
 
-<PRIVATE
+PRIVATE<
 
 : rethrower ( word inputs -- quot )
     [ length ] keep [ [ narray ] dip swap 2array flip ] 2curry

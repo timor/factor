@@ -5,7 +5,7 @@ math.functions math.parser math.text.utils namespaces sequences
 splitting ;
 in: math.text.english
 
-<PRIVATE
+PRIVATE<
 
 : small-numbers ( n -- str )
     {

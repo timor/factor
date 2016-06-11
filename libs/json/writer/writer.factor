@@ -40,7 +40,7 @@ M: t stream-json-print
 M: json-null stream-json-print
     [ drop "null" ] [ stream-write ] bi* ;
 
-<PRIVATE
+PRIVATE<
 
 : json-print-generic-escape-surrogate-pair ( stream char -- stream )
     0x10000 - [ encode-first ] [ encode-second ] bi
@@ -116,7 +116,7 @@ M: sequence stream-json-print
     pick '[ _ stream-json-print ] interleave
     char: ] swap stream-write1 ;
 
-<PRIVATE
+PRIVATE<
 
 TR: json-friendly "-" "_" ;
 

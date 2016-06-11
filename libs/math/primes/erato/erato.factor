@@ -5,7 +5,7 @@ math.functions math.order math.private math.ranges sequences
 sequences.private ;
 in: math.primes.erato
 
-<PRIVATE
+PRIVATE<
 
 ! This is a compressed Sieve of Eratosthenes that uses the
 ! 2-3-5 wheel to check groups of 8 candidates starting with

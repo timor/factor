@@ -25,7 +25,7 @@ in: fuel
 
 ! Loading files
 
-<PRIVATE
+PRIVATE<
 
 symbol: :uses
 symbol: :uses-suggestions

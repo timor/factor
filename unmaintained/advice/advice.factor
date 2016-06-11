@@ -12,7 +12,7 @@ SYMBOLS: before after around advised in-advice? ;
 
 DEFER: make-advised
 
-<PRIVATE
+PRIVATE<
 : init-around-co ( quot -- coroutine )
     \ coreset suffix cocreate ;
 PRIVATE>

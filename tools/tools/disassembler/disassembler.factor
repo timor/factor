@@ -7,7 +7,7 @@ in: tools.disassembler
 
 GENERIC: disassemble ( obj -- ) ;
 
-<PRIVATE
+PRIVATE<
 
 symbol: disassembler-backend
 

@@ -10,7 +10,7 @@ ERROR: bad-tr ;
 M: bad-tr summary
     drop "TR: can only be used with ASCII characters" ;
 
-<PRIVATE
+PRIVATE<
 
 : tr-nth ( n mapping -- ch ) nth-unsafe 127 bitand ; inline
 

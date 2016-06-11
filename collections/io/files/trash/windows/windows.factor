@@ -8,7 +8,7 @@ windows.types ;
 
 in: io.files.trash.windows
 
-<PRIVATE
+PRIVATE<
 
 library: shell32
 

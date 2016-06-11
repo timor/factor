@@ -5,7 +5,7 @@ locals math math.parser sequences splitting unicode ;
 
 in: english
 
-<PRIVATE
+PRIVATE<
 
 <<
 ! Irregular pluralizations

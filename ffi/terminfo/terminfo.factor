@@ -11,7 +11,7 @@ in: terminfo
 ! Reads compiled terminfo files
 ! typically located in /usr/share/terminfo
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: MAGIC 0o432 ;
 
@@ -82,7 +82,7 @@ MEMO: terminfo-names ( -- names )
         [ directory-files ] map concat
     ] with-directory-files ;
 
-<PRIVATE
+PRIVATE<
 
 CONSTANT: boolean-names {
     "auto_left_margin" "auto_right_margin" "no_esc_ctlc"

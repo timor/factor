@@ -7,7 +7,7 @@ in: math.finance
 : sma ( seq n -- newseq )
     clump [ mean ] map ;
 
-<PRIVATE
+PRIVATE<
 
 : weighted ( prev elt a -- newelt )
     [ 1 swap - * ] [ * ] bi-curry bi* + ; inline

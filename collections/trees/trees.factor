@@ -7,7 +7,7 @@ in: trees
 
 TUPLE: tree root { count integer } ;
 
-<PRIVATE
+PRIVATE<
 
 : new-tree ( class -- tree )
     new
@@ -21,7 +21,7 @@ PRIVATE>
 
 INSTANCE: tree assoc ;
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: node key value left right ;
 

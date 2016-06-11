@@ -29,7 +29,7 @@ in: project-euler.148
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : sum-1toN ( n -- sum )
     dup 1 + * 2/ ; inline

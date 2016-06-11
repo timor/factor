@@ -7,7 +7,7 @@ in: quoted-printable
 
 ! This implements RFC 2045 section 6.7
 
-<PRIVATE
+PRIVATE<
 
 : assure-small ( ch -- ch )
     dup 256 <
@@ -43,7 +43,7 @@ PRIVATE>
     [ char>quoted ] { } map-as
     divide-lines "=\r\n" join ;
 
-<PRIVATE
+PRIVATE<
 
 : read-char ( byte -- ch )
     dup char: = = [

@@ -3,7 +3,7 @@
 USING: kernel math math.functions sequences vectors ;
 in: math.continued-fractions
 
-<PRIVATE
+PRIVATE<
 
 : split-float ( f -- d i )
     dup >integer [ - ] keep ;

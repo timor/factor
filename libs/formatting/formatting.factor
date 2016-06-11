@@ -8,7 +8,7 @@ sequences.generalizations strings unicode vectors ;
 FROM: math.parser.private => format-float ;
 in: formatting
 
-<PRIVATE
+PRIVATE<
 
 : compose-all ( seq -- quot )
     [ ] [ compose ] reduce ; inline
@@ -120,7 +120,7 @@ MACRO: sprintf ( format-string -- quot )
 : vsprintf ( seq format-string -- result )
     [ vprintf ] with-string-writer ; inline
 
-<PRIVATE
+PRIVATE<
 
 : pad-00 ( n -- string )
     number>string 2 char: 0 pad-head ; inline

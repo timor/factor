@@ -9,7 +9,7 @@ PRIMITIVE: gc ( -- ) ;
 PRIMITIVE: minor-gc ( -- ) ;
 PRIMITIVE: size ( obj -- n ) ;
 
-<PRIVATE
+PRIVATE<
 PRIMITIVE: (save-image) ( path1 path2 then-die? -- ) ;
 PRIVATE>
 

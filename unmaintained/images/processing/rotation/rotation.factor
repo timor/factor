@@ -7,7 +7,7 @@ in: images.processing.rotation
 
 ERROR: unsupported-rotation degrees ;
 
-<PRIVATE
+PRIVATE<
 
 : rotate-90 ( seq^3 -- seq^3 ) flip [ reverse ] map ;
 : rotate-180 ( seq^3 -- seq^3 ) reverse [ reverse ] map ;

@@ -31,7 +31,7 @@ in: project-euler.175
 ! SOLUTION
 ! --------
 
-<PRIVATE
+PRIVATE<
 
 : add-bits ( vec n b -- )
     over zero? [

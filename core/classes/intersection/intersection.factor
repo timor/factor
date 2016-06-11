@@ -8,7 +8,7 @@ in: classes.intersection
 PREDICATE: intersection-class < class
     "metaclass" word-prop intersection-class eq? ;
 
-<PRIVATE
+PRIVATE<
 
 : intersection-predicate-quot ( members -- quot )
     [

@@ -8,7 +8,7 @@ unix.users ;
 qualified: io
 in: io.files.acls.macosx
 
-<PRIVATE
+PRIVATE<
 
 : unix-id>string ( byte-array id-type -- string )
     {

@@ -9,7 +9,7 @@ in: graphviz.notation
 
 <<
 
-<PRIVATE
+PRIVATE<
 
 ! GENERIC# =attr 1 ( graphviz-obj val -- graphviz-obj' )
 ! M: edge/node =attr

@@ -4,7 +4,7 @@ USING: io io.servers kernel math tty-server ;
 
 in: fuel.remote
 
-<PRIVATE
+PRIVATE<
 
 : print-banner ( -- )
     "Starting server. Connect with 'M-x connect-to-factor' in Emacs"

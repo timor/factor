@@ -5,7 +5,7 @@ io.styles kernel listener namespaces prettyprint.stylesheet
 sequences ui.theme ui.tools.listener vocabs.prettyprint words ;
 in: ui.theme.switching
 
-<PRIVATE
+PRIVATE<
 
 : update-style ( style color elt -- )
     '[ _ _ rot ?set-at ] change-global ;

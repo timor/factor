@@ -4,7 +4,7 @@ io.encodings.utf8 io.launcher io.pathnames kernel lexer
 namespaces parser sequences splitting vocabs vocabs.loader ;
 in: vocabs.git
 
-<PRIVATE
+PRIVATE<
 : git-object-id ( filename rev -- id/f )
     [ [ parent-directory ] [ file-name ] bi ] dip swap '[
         { "git" "ls-tree" } _ suffix _ suffix ascii [

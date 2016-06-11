@@ -30,7 +30,7 @@ ERROR: value-not-numeric ;
 ERROR: unknown-command ;
 ERROR: out-of-memory ;
 
-<PRIVATE
+PRIVATE<
 
 ! Commands
 CONSTANT: GET      0x00 ;

@@ -10,7 +10,7 @@ TUPLE: measured-stream stream size ;
 
 C: <measured-stream> measured-stream ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: (set-post-data-headers) ( header data -- header ) ;
 
@@ -29,7 +29,7 @@ PRIVATE>
     [ data>> (set-post-data-headers) ]
     [ content-type>> "content-type" pick set-at ] bi ;
 
-<PRIVATE
+PRIVATE<
 
 GENERIC: (write-post-data) ( data -- ) ;
 

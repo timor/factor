@@ -3,7 +3,7 @@
 USING: ascii kernel sequences tr ;
 in: soundex
 
-<PRIVATE
+PRIVATE<
 
 TR: soundex-digits
     "AEHIOUWYBFPVCGJKQSXZDTLMNR"

@@ -14,7 +14,7 @@ ERROR: malformed-regexp expr error ;
 
 ERROR: pcre-error value ;
 
-<PRIVATE
+PRIVATE<
 
 : replace-all ( seq subseqs new -- seq )
     swapd '[ _ replace ] reduce ;

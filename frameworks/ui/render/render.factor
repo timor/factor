@@ -84,7 +84,7 @@ GENERIC: gadget-foreground ( gadget -- color ) ;
 
 M: gadget gadget-foreground dup interior>> pen-foreground ;
 
-<PRIVATE
+PRIVATE<
 
 : draw-selection-background ( gadget -- )
     selection-background get background namespaces:set

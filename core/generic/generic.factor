@@ -32,7 +32,7 @@ ERROR: method-lookup-failed class generic ;
 : lookup-method ( class generic -- method )
     2dup ?lookup-method [ 2nip ] [ method-lookup-failed ] if* ;
 
-<PRIVATE
+PRIVATE<
 
 : interesting-class? ( class1 class2 -- ? )
     {

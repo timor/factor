@@ -13,7 +13,7 @@ M: growable length length>> ; inline
 M: growable nth-unsafe underlying>> nth-unsafe ; inline
 M: growable set-nth-unsafe underlying>> set-nth-unsafe ; inline
 
-<PRIVATE
+PRIVATE<
 
 : push-unsafe ( elt seq -- )
     [ length integer>fixnum ] keep

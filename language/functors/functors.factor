@@ -11,7 +11,7 @@ in: functors
 
 ! This is a hack
 
-<PRIVATE
+PRIVATE<
 
 TUPLE: fake-call-next-method ;
 
@@ -156,7 +156,7 @@ SYNTAX: DEFINES-CLASS [ create-class-in ] (INTERPOLATE) ;
 
 defer: FUNCTOR; delimiter
 
-<PRIVATE
+PRIVATE<
 
 : parse-binding ( end -- pair/f )
     scan-token {

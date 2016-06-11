@@ -9,7 +9,7 @@ in: compiler.cfg.linearization
 ! This is RPO except loops are rotated and unlikely blocks go
 ! at the end. Based on SBCL's src/compiler/control.lisp
 
-<PRIVATE
+PRIVATE<
 
 SYMBOLS: loop-heads visited ;
 

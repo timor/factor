@@ -8,7 +8,7 @@ parser prettyprint sequences sequences.generalizations sorting
 splitting strings system vm words hints hashtables ;
 in: tools.memory
 
-<PRIVATE
+PRIVATE<
 PRIMITIVE: (callback-room) ( -- allocator-room ) ;
 PRIMITIVE: (code-blocks) ( -- array ) ;
 PRIMITIVE: (code-room) ( -- allocator-room ) ;
@@ -75,7 +75,7 @@ PRIVATE>
         [ misc-room. ]
     } cleave ;
 
-<PRIVATE
+PRIVATE<
 
 : heap-stat-step ( obj counts sizes -- )
     [ [ class-of ] dip inc-at ]
@@ -104,7 +104,7 @@ PRIVATE>
     [ ] [ disable-gc-events drop ] cleanup
     disable-gc-events [ gc-event memory>struct ] map ; inline
 
-<PRIVATE
+PRIVATE<
 
 : gc-op-string ( op -- string )
     {
@@ -212,7 +212,7 @@ TUPLE: code-block
 
 TUPLE: code-blocks { blocks groups } { cache hashtable } ;
 
-<PRIVATE
+PRIVATE<
 
 : code-block-type ( n -- type )
     { +unoptimized+ +optimized+ +profiling+ +pic+ } nth ;
@@ -269,7 +269,7 @@ INSTANCE: code-blocks immutable-sequence ;
     dup in-code-heap?
     [ \ code-blocks get (lookup-return-address) ] [ drop f ] if ;
 
-<PRIVATE
+PRIVATE<
 
 : code-block-stats ( code-blocks -- counts sizes )
     H{ } clone H{ } clone

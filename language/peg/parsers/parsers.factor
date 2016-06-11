@@ -35,7 +35,7 @@ M: just-parser (compile) ( parser -- quot )
 
 : any-char ( -- parser ) [ drop t ] satisfy ;
 
-<PRIVATE
+PRIVATE<
 
 : flatten-vectors ( pair -- vector )
     first2 append! ;

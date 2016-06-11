@@ -10,7 +10,7 @@ in: math.vectors.conversion
 ERROR: bad-vconvert from-type to-type ;
 ERROR: bad-vconvert-input value expected-type ;
 
-<PRIVATE
+PRIVATE<
 
 : float-type? ( c-type -- ? )
     { float double } member-eq? ;
