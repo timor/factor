@@ -16,6 +16,7 @@ TUPLE: lexer generator ;
 TUPLE: tag-lexer < lexer ; ! default, if nothing else matches, add one with regexp for c-style names etc
 TUPLE: dquote-lexer < lexer delimiter escape ignore-whitespace? ; ! ``close`` slot someday to allow ` '
 TUPLE: matched-lexer < lexer delimiter double-char ; ! ``close`` slot someday, to allow `` ''
+TUPLE: less-than-lexer < lexer delimiter double-char ; ! ``close`` slot someday, to allow `` ''
 TUPLE: backtick-lexer < lexer delimiter ;
 TUPLE: backslash-lexer < lexer delimiter payload-exception? ; ! payload-exception is \n words
 TUPLE: line-comment-lexer < lexer delimiter word-name-exception? ; ! escape-newline-exception? (like C)
@@ -35,6 +36,7 @@ TUPLE: decorator-literal < literal delimiter payload ;
 TUPLE: dquote-literal < delimited-literal ;
 TUPLE: single-matched-literal < matched-literal ;
 TUPLE: double-matched-literal < matched-literal ;
+TUPLE: less-than-literal < single-matched-literal ;
 TUPLE: uppercase-colon-literal < single-matched-literal ;
 TUPLE: lowercase-colon-literal < delimited-literal ;
 ! TUPLE: standalone-colon-literal < delimited-literal ; ! :foo
@@ -113,13 +115,16 @@ M: array collapse-decorators
 
 
 : strict-upper? ( string -- ? )
-    [ { [ char: A char: Z between? ] [ char: 0 char: 9 between? ] [ "#:-" member? ] } 1|| ] all? ;
+    [ { [ char: A char: Z between? ] [ char: 0 char: 9 between? ] [ "#:-<" member? ] } 1|| ] all? ;
 
 : whitespace/f? ( ch -- ? )
     { char: \s char: \r char: \n f } member? ; inline
 
 : trailing-upper-after-colon ( string -- ? )
     dup [ length 2 - ] keep [ char: \: = ] find-last-from [ 1 + tail ] [ 2drop f ] if ;
+
+: trailing-upper-after-less-than ( string -- ? )
+    dup [ length 2 - ] keep [ char: < = ] find-last-from [ 1 + tail ] [ 2drop f ] if ;
 
 : scoped-upper? ( string -- ? )
     dup length 1 > [
@@ -323,7 +328,20 @@ MACRO:: read-matched ( ch -- quot: ( n string tag -- n' string slice' ) )
         { [ dup length 1 = ] [ read-upper-colon ] }
         { [ dup { [ ":" head? ] [ ":" tail? ] } 1&& ] [ make-tag-literal ] }
         { [ dup ":" tail? ] [ dup scoped-upper? [ read-upper-colon ] [ read-lower-colon ] if ] }
-        { [ dup ":" head? ] [ ":foo" throw ] } ! :foo( ... )
+        { [ dup ":" head? ] [ make-tag-literal ] } ! :foo( ... )
+        [ make-tag-literal ]
+    } cond ;
+
+
+
+: read-upper-less-than ( n string slice -- n string less-than )
+    dup [ trailing-upper-after-less-than [ but-last ">" append 1array ] [ ">" 1array ] if* f lex-until ] dip
+    1 cut-slice* less-than-literal make-matched-literal ;
+
+: read-less-than ( n string slice -- n string less-than )
+    merge-slice-til-whitespace {
+        { [ dup length 1 = ] [ make-tag-literal ] } ! "<"
+        { [ dup "<" tail? ] [ dup scoped-upper? [ read-upper-less-than ] [ make-tag-literal ] if ] } ! FOO< or foo<
         [ make-tag-literal ]
     } cond ;
 
@@ -427,6 +445,7 @@ CONSTANT: factor-lexing-rules {
     T{ matched-lexer { generator read-bracket } { delimiter char: \[ } }
     T{ matched-lexer { generator read-brace } { delimiter char: \{ } }
     T{ matched-lexer { generator read-paren } { delimiter char: \( } }
+    T{ less-than-lexer { generator read-less-than } { delimiter char: < } }
     
     T{ terminator-lexer { generator read-terminator } { delimiter char: ; } }
     T{ terminator-lexer { generator read-terminator } { delimiter char: ] } }
