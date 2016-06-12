@@ -113,8 +113,21 @@ M: array collapse-decorators
 
 
 : strict-upper? ( string -- ? )
-    [ { [ char: A char: Z between? ] [ "#:-" member? ] } 1|| ] all? ;
+    [ { [ char: A char: Z between? ] [ char: 0 char: 9 between? ] [ "#:-" member? ] } 1|| ] all? ;
 
+: whitespace/f? ( ch -- ? )
+    { char: \s char: \r char: \n f } member? ; inline
+
+: trailing-upper-after-colon ( string -- ? )
+    dup [ length 2 - ] keep [ char: \: = ] find-last-from [ 1 + tail ] [ 2drop f ] if ;
+
+: scoped-upper? ( string -- ? )
+    dup length 1 > [
+        [ [ length 2 - ] keep [ char: \: = ] find-last-from ] keep
+        swap [ swap tail strict-upper? ] [ 2drop f ] if
+    ] [
+        drop f
+    ] if ;
 
 ERROR: whitespace-expected-after n string ch ;
 ERROR: expected-more-tokens n string expected ;
@@ -155,10 +168,10 @@ ERROR: mismatched-closing opening closing ;
         tag closing [ dup tag-literal? [ lexed-underlying ] when ] bi@ ?span-slices >>underlying
         opening-delimiter >string >>delimiter
         dup single-matched-literal? [
-            closing tag>> length 1 > [
-                tag opening-delimiter append
-                matching-delimiter-string closing tag>> sequence= [ opening-delimiter closing tag>> mismatched-closing ] unless
-            ] when
+            ! closing tag>> length 1 > [
+            !    tag opening-delimiter append
+            !    matching-delimiter-string closing tag>> sequence= [ opening-delimiter closing tag>> mismatched-closing ] unless
+            ! ] when
             closing tag>> >>closing-tag
         ] when
         tag opening-delimiter payload closing 4array >>seq ; inline
@@ -293,39 +306,27 @@ MACRO:: read-matched ( ch -- quot: ( n string tag -- n' string slice' ) )
         [ slice-til-eol drop dup ] dip 1 cut-slice* line-comment-literal make-delimited-literal
     ] if ;
 
-: read-til-semicolon ( n string slice -- n' string semi )
-    dup '[ but-last ";" append ";" 2array f lex-until ] dip
+
+
+
+: read-upper-colon ( n string string' -- n string obj )
+    dup [ trailing-upper-after-colon [ but-last ";" append ";" 2array ] [ ";" 1array ] if* f lex-until ] dip
     1 cut-slice* uppercase-colon-literal make-matched-literal ;
 
-: read-word-or-til-semicolon ( n string slice -- n' string obj )
-    2over next-char-from* "\s\r\n" member? [
-        read-til-semicolon
-    ] [
-        merge-slice-til-whitespace make-tag-literal
-    ] if ;
-
-: read-lowercase-colon ( n string slice -- n' string lowercase-colon )
+: read-lower-colon ( n string string' -- n string obj )
     [ lex-factor dup ] dip 1 cut-slice*
     lowercase-colon-literal make-delimited-literal ;
 
-ERROR: colon-word-must-be-all-uppercase-or-lowercase n string word ;
-: read-colon ( n string slice -- n' string colon )
-    dup length 1 = [
-        dup prev-char-from-slice { char: \s char: \r char: \n f } member? [
-            dup next-char-from-slice { char: \s char: \r char: \n f } member? [
-                read-til-semicolon
-            ] [
-                merge-slice-til-whitespace make-tag-literal
-            ] if
-        ] [
-            read-lowercase-colon
-        ] if
-    ] [
-        {
-            { [ dup strict-upper? ] [ read-til-semicolon ] }
-            [ read-lowercase-colon ]
-        } cond
-    ] if ;
+! : foo: :foo foo:bar foo:BAR: foo:bar: :foo:
+: read-colon ( n string slice -- n string colon )
+    merge-slice-til-whitespace {
+        { [ dup length 1 = ] [ read-upper-colon ] }
+        { [ dup { [ ":" head? ] [ ":" tail? ] } 1&& ] [ make-tag-literal ] }
+        { [ dup ":" tail? ] [ dup scoped-upper? [ read-upper-colon ] [ read-lower-colon ] if ] }
+        { [ dup ":" head? ] [ ":foo" throw ] } ! :foo( ... )
+        [ make-tag-literal ]
+    } cond ;
+
 
 ! Words like append! and suffix! are allowed for now.
 : read-exclamation ( n string slice -- n' string obj )
@@ -406,6 +407,7 @@ symbol: lexing-delimiters
     [ [ delimiter>> ] [ generator>> 1quotation ] bi ] { } map>assoc ;
 >>
 
+! 0 "HI: ;" slice-til-either -> 3 "HI: ;" "HI:" CHAR: \:
 MACRO: rules>call-lexer ( seq -- quot: ( n/f string -- n'/f string literal ) )
     [ lexer-rules>delimiters ]
     [
