@@ -181,7 +181,7 @@ ERROR: mismatched-closing opening closing ;
             !    tag opening-delimiter append
             !    matching-delimiter-string closing tag>> sequence= [ opening-delimiter closing tag>> mismatched-closing ] unless
             ! ] when
-            closing tag>> >>closing-tag
+            closing dup [ tag>> ] when >>closing-tag
         ] when
         tag opening-delimiter payload closing 4array >>seq ; inline
 
@@ -261,15 +261,25 @@ ERROR: unnestable-form n string obj ;
         ] loop
     ] { } make unclip-last ; inline
 
+
 : lex-until-top ( n string tags -- n' string payload closing )
-    3 npick [ lex-expected-but-got-eof ] unless
-    3dup '[
+    '[
         [
-            lex-factor
-            [ _ _ _ lex-expected-but-got-eof ] unless*
-            dup , dup tag-literal? [ underlying>> _ [ sequence= ] with any? not ] [ drop t ] if
+            lex-factor [
+                dup tag-literal? [
+                    dup underlying>> scoped-upper? [ ! end here, start anew
+                        underlying>> length swap [ - ] dip f , f ! no loop
+                    ] [
+                        dup , underlying>> _ [ sequence= ] with any? not
+                    ] if
+                ] [
+                    , t
+                ] if
+            ] [
+                f , f
+            ] if*
         ] loop
-    ] { } make unclip-last ; inline
+    ] { } make unclip-last ;
 
 
 
@@ -322,11 +332,10 @@ MACRO:: read-matched ( ch -- quot: ( n string tag -- n' string slice' ) )
 
 ! : foo: :foo foo:bar foo:BAR: foo:bar: :foo:
 : read-colon ( n string slice -- n string colon )
-B
     merge-slice-til-whitespace {
         { [ dup length 1 = ] [ read-upper-colon ] }
         { [ dup { [ ":" head? ] [ ":" tail? ] } 1&& ] [ make-tag-literal ] }
-        { [ dup ":" tail? ] [ B dup scoped-upper? [ read-upper-colon ] [ read-lower-colon ] if ] }
+        { [ dup ":" tail? ] [ dup scoped-upper? [ read-upper-colon ] [ read-lower-colon ] if ] }
         { [ dup ":" head? ] [ make-tag-literal ] } ! :foo( ... )
         [ make-tag-literal ]
     } cond ;
@@ -420,18 +429,7 @@ PRIVATE>
         [ make-tag-literal ]
     } cond ;
 
-symbol: lexing-delimiters
-
-: add-lexing-delimiter ( rule -- )
-    [ ] [ delimiter>> ] bi lexing-delimiters get set-once-at ;
-
 <<
-: lexer-rules>hashtable ( seq -- obj )
-    H{ } clone lexing-delimiters [
-        [ add-lexing-delimiter ] each
-        lexing-delimiters get
-    ] with-variable ;
-
 : lexer-rules>delimiters ( seq -- string )
     [ delimiter>> ] "" map-as ;
 
