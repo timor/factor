@@ -67,7 +67,7 @@ forget: another-forgotten
 defer: deferred
 [ deferred ] [ T{ undefined-word f deferred } = ] must-fail-with
 
-[ "in: words.tests defer: not-compiled << not-compiled >>" eval( -- ) ]
+[ "in: words.tests defer: not-compiled COMPILE< not-compiled COMPILE>" eval( -- ) ]
 [ error>> [ undefined-word? ] [ word>> name>> "not-compiled" = ] bi and ] must-fail-with
 
 { } [ "in: words.tests forget: not-compiled" eval( -- ) ] unit-test
@@ -85,7 +85,7 @@ defer: deferred
     [ forget ] with-compilation-unit
 ] when*
 
-[ "in: words.tests : undef-test ( -- ) ; << undef-test >>" eval( -- ) ]
+[ "in: words.tests : undef-test ( -- ) ; COMPILE< undef-test COMPILE>" eval( -- ) ]
 [ error>> undefined-word? ] must-fail-with
 
 { } [

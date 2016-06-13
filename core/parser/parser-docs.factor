@@ -278,7 +278,7 @@ HELP: staging-violation
 { $values { "word" word } }
 { $description "Throws a " { $link staging-violation } " error." }
 { $error-description "Thrown by the parser if a parsing word is used in the same compilation unit as where it was defined; see " { $link "compilation-units" } "." }
-{ $notes "One possible workaround is to use the " { $link postpone\ << } " word to execute code at parse time. However, executing words defined in the same source file at parse time is still prohibited." } ;
+{ $notes "One possible workaround is to use the " { $link \ COMPILE< } " word to execute code at parse time. However, executing words defined in the same source file at parse time is still prohibited." } ;
 
 HELP: auto-use?
 { $var-description "If set to a true value, the behavior of the parser when encountering an unknown word name is changed. If only one loaded vocabulary has a word with this name, instead of throwing an error, the parser adds the vocabulary to the search path and prints a parse note. Off by default." }

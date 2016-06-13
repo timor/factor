@@ -3,7 +3,7 @@ locals.parser namespaces parser prettyprint sequences sorting
 tools.test vocabs vocabs.parser ;
 in: locals.parser.tests
 
-! XXX: remove the << and >> below and make test-all pass
+! XXX: remove the COMPILE< and COMPILE> below and make test-all pass
 
 COMPILE<
 ! (::)

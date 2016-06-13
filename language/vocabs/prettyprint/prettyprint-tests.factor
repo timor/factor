@@ -5,7 +5,7 @@ in: vocabs.prettyprint.tests
 : manifest-test-1 ( -- string )
     "USING: kernel namespaces vocabs.parser vocabs.prettyprint ;
 
-    << manifest get pprint-manifest >>" ;
+    COMPILE< manifest get pprint-manifest COMPILE>" ;
 
 {
 "USING: kernel namespaces vocabs.parser vocabs.prettyprint ;"
@@ -16,7 +16,7 @@ in: vocabs.prettyprint.tests
     "USING: kernel namespaces vocabs.parser vocabs.prettyprint ;
     in: vocabs.prettyprint.tests
 
-    << manifest get pprint-manifest >>" ;
+    COMPILE< manifest get pprint-manifest COMPILE>" ;
 
 {
 "USING: kernel namespaces vocabs.parser vocabs.prettyprint ;
@@ -32,7 +32,7 @@ in: vocabs.prettyprint.tests"
     EXCLUDE: parser => run-file ;
     in: vocabs.prettyprint.tests
 
-    << manifest get pprint-manifest >>" ;
+    COMPILE< manifest get pprint-manifest COMPILE>" ;
 
 {
 "USING: kernel namespaces vocabs.parser vocabs.prettyprint ;

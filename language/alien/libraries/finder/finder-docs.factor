@@ -18,7 +18,7 @@ HELP: find-library
 { $description
   "Used to load libraries whose exact filenames is not known in advance:"
   { $code
-    "<< \"sqlite\" \"sqlite3\" find-library cdecl add-library >>"
+    "COMPILE< \"sqlite\" \"sqlite3\" find-library cdecl add-library COMPILE>"
   }
-  "Note the parse time evaluation with " { $link postpone\ << } "."
+  "Note the parse time evaluation with " { $link \ COMPILE< } "."
 } ;

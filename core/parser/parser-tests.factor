@@ -466,7 +466,7 @@ defer: foo
 { t } [ "staging-problem-test-2" "parser.tests" lookup-word >boolean ] unit-test
 
 { [ ] } [
-    "in: parser.tests << : staging-problem-test-1 ( -- a ) 1 ; >> : staging-problem-test-2 ( -- a ) staging-problem-test-1 ;"
+    "in: parser.tests COMPILE< : staging-problem-test-1 ( -- a ) 1 ; COMPILE> : staging-problem-test-2 ( -- a ) staging-problem-test-1 ;"
     <string-reader> "staging-problem-test" parse-stream
 ] unit-test
 
@@ -539,7 +539,7 @@ EXCLUDE: qualified.tests.bar => x ;
 
 ! Two similar bugs
 
-! Replace : def with something in << COMPILE>
+! Replace : def with something in COMPILE< COMPILE>
 /* { [ ] } [
     "in: parser.tests : was-once-a-word-bug ( -- ) ;"
     <string-reader> "was-once-a-word-test" parse-stream
@@ -548,7 +548,7 @@ EXCLUDE: qualified.tests.bar => x ;
 { t } [ "was-once-a-word-bug" "parser.tests" lookup-word >boolean ] unit-test
 
 { [ ] } [
-    "in: parser.tests use: words << \"was-once-a-word-bug\" \"parser.tests\" create-word [ ] ( -- ) define-declared >>"
+    "in: parser.tests use: words COMPILE< \"was-once-a-word-bug\" \"parser.tests\" create-word [ ] ( -- ) define-declared COMPILE>"
     <string-reader> "was-once-a-word-test" parse-stream
 ] unit-test
 

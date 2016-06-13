@@ -145,7 +145,7 @@ FUNCTOR;
 
 [ [ ] ] [
     "in: functors.tests
-    << \"some\" redefine-test >>" <string-reader> "functors-test" parse-stream
+    COMPILE< \"some\" redefine-test COMPILE>" <string-reader> "functors-test" parse-stream
 ] unit-test
 
 test-redefinition

@@ -884,7 +884,7 @@ HELP: call-next-method
 
 { \ call-next-method (call-next-method) next-method } related-words
 
-{ \ << \ >> } related-words
+{ \ COMPILE< \ COMPILE> } related-words
 
 HELP: \ call(
 { $syntax "call( stack -- effect )" }
