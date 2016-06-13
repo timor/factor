@@ -127,7 +127,7 @@ M: array collapse-decorators
     dup [ length 2 - ] keep [ char: < = ] find-last-from [ 1 + tail ] [ drop ] if ;
 
 : scoped-upper? ( string -- ? )
-    dup ":" tail? [
+    dup { [ ":" tail? ] [ "<" tail? ] } 1|| [
         dup length 1 > [
             [ [ length 2 - ] keep [ char: \: = ] find-last-from ] keep
            swap [ swap tail strict-upper? ] [ nip strict-upper? ] if
@@ -248,7 +248,7 @@ ERROR: lex-expected-but-got-eof n string quot ;
 
 ERROR: unnestable-form n string obj ;
 ! For implementing [ { (
-: lex-until-nested ( n string tags -- n' string payload closing )
+: lex-until ( top? n string tags -- top?' n' string payload closing )
     3 npick [ lex-expected-but-got-eof ] unless
     3dup '[
         [
@@ -261,29 +261,7 @@ ERROR: unnestable-form n string obj ;
         ] loop
     ] { } make unclip-last ; inline
 
-
-: lex-until-top ( n string tags -- n' string payload closing )
-    '[
-        [
-            lex-factor [
-                dup tag-literal? [
-                    dup underlying>> scoped-upper? [ ! end here, start anew
-                        underlying>> length swap [ - ] dip f , f ! no loop
-                    ] [
-                        dup , underlying>> _ [ sequence= ] with any? not
-                    ] if
-                ] [
-                    , t
-                ] if
-            ] [
-                f , f
-            ] if*
-        ] loop
-    ] { } make unclip-last ;
-
-
-
-MACRO:: read-matched ( ch -- quot: ( n string tag -- n' string slice' ) )
+MACRO:: read-matched ( ch -- quot: ( top? n string tag -- top?' n' string slice' ) )
     ch dup matching-delimiter {
         [ drop "=" swap prefix ]
         [ nip 1string ]
@@ -292,14 +270,14 @@ MACRO:: read-matched ( ch -- quot: ( n string tag -- n' string slice' ) )
         n string tag
         2over nth-check-eof {
             { [ dup openstreq member? ] [ ch read-double-matched ] } ! (=( or ((
-            { [ dup blank? ] [ drop dup '[ _ matching-delimiter-string closestr1 2array lex-until-nested ] dip 1 cut-slice* single-matched-literal make-matched-literal ] } ! ( foo )
+            { [ dup blank? ] [ drop dup '[ _ matching-delimiter-string closestr1 2array lex-until ] dip 1 cut-slice* single-matched-literal make-matched-literal ] } ! ( foo )
             [ drop [ slice-til-whitespace drop ] dip span-slices make-tag-literal ]  ! (foo)
         } cond
     ] ;
 
-: read-bracket ( n string slice -- n' string slice' ) char: \[ read-matched ;
-: read-brace ( n string slice -- n' string slice' ) char: \{ read-matched ;
-: read-paren ( n string slice -- n' string slice' ) char: \( read-matched ;
+: read-bracket ( top? n string slice -- top?' n' string slice' ) char: \[ read-matched ;
+: read-brace ( top? n string slice -- top?' n' string slice' ) char: \{ read-matched ;
+: read-paren ( top? n string slice -- top?' n' string slice' ) char: \( read-matched ;
 
 : read-string-payload ( n string -- n' string )
     over [
@@ -322,16 +300,16 @@ MACRO:: read-matched ( ch -- quot: ( n string tag -- n' string slice' ) )
 
 
 
-: read-upper-colon ( n string string' -- n string obj )
-    dup [ scoped-colon-name [ but-last ";" append ";" 2array ] [ ";" 1array ] if* lex-until-top ] dip
+: read-upper-colon ( top? n string string' -- top?' n' string obj )
+    dup [ scoped-colon-name [ but-last ";" append ";" 2array ] [ ";" 1array ] if* lex-until ] dip
     1 cut-slice* uppercase-colon-literal make-matched-literal ;
 
-: read-lower-colon ( n string string' -- n string obj )
+: read-lower-colon ( top?' n string string' -- top?' n' string obj )
     [ lex-factor dup ] dip 1 cut-slice*
     lowercase-colon-literal make-delimited-literal ;
 
 ! : foo: :foo foo:bar foo:BAR: foo:bar: :foo:
-: read-colon ( n string slice -- n string colon )
+: read-colon ( top? n string slice -- top?' n' string colon )
     merge-slice-til-whitespace {
         { [ dup length 1 = ] [ read-upper-colon ] }
         { [ dup { [ ":" head? ] [ ":" tail? ] } 1&& ] [ make-tag-literal ] }
@@ -342,11 +320,11 @@ MACRO:: read-matched ( ch -- quot: ( n string tag -- n' string slice' ) )
 
 
 
-: read-upper-less-than ( n string slice -- n string less-than )
-    dup [ scoped-less-than-name [ but-last ">" append 1array ] [ ">" 1array ] if* lex-until-top ] dip
+: read-upper-less-than ( top? n string slice -- top?' n' string less-than )
+    dup [ scoped-less-than-name [ but-last ">" append 1array ] [ ">" 1array ] if* lex-until ] dip
     1 cut-slice* less-than-literal make-matched-literal ;
 
-: read-less-than ( n string slice -- n string less-than )
+: read-less-than ( top? n string slice -- top?' n' string less-than )
     merge-slice-til-whitespace {
         { [ dup length 1 = ] [ make-tag-literal ] } ! "<"
         { [ dup "<" tail? ] [ dup scoped-upper? [ read-upper-less-than ] [ make-tag-literal ] if ] } ! FOO< or foo<
@@ -386,7 +364,7 @@ ERROR: backslash-expects-whitespace slice ;
 
 ! If the slice is 0 width, we stopped on whitespace.
 ! Advance the index and read again!
-: read-token-or-whitespace ( n string slice -- n' string slice )
+: read-token-or-whitespace ( top? n string slice -- top?' n' string slice )
     [ [ 1 + ] dip lex-factor ]
     [ make-tag-literal ] if-empty ;
 
@@ -437,7 +415,7 @@ PRIVATE>
 >>
 
 ! 0 "HI: ;" slice-til-either -> 3 "HI: ;" "HI:" CHAR: \:
-MACRO: rules>call-lexer ( seq -- quot: ( n/f string -- n'/f string literal ) )
+MACRO: rules>call-lexer ( seq -- quot: ( top? n/f string -- top?' n'/f string literal ) )
     [ lexer-rules>delimiters ]
     [
         lexer-rules>assoc
@@ -468,11 +446,11 @@ CONSTANT: factor-lexing-rules {
     T{ whitespace-lexer { generator read-token-or-whitespace } { delimiter char: \n } }
 } ;
 
-: lex-factor ( n/f string -- n'/f string literal )
+: lex-factor ( top? n/f string -- top?' n'/f string literal )
     factor-lexing-rules rules>call-lexer ;
 
 : string>literals ( string -- sequence )
-    [ 0 ] dip [ lex-factor ] loop>array 2nip postprocess-lexed ;
+    [ t 0 ] dip [ lex-factor ] loop>array nip 2nip postprocess-lexed ;
 
 : path>literals ( path -- sequence )
     utf8 file-contents string>literals ;
@@ -480,9 +458,6 @@ CONSTANT: factor-lexing-rules {
 : vocab>literals ( vocab -- sequence )
     ".private" ?tail drop
     modern-source-path path>literals ;
-
-! : lex-core ( -- assoc )
-!    core-bootstrap-vocabs [ [ vocab>literals ] [ nip ] recover ] map-zip ;
 
 
 ! What a lexer body looks like, produced by make-lexer
