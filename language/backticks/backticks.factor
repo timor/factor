@@ -4,7 +4,7 @@ USING: fry io io.encodings.utf8 interpolate io.launcher
 multiline sequences ;
 in: backticks
 
-SYNTAX: `
+SYNTAX: \ `
     "`" parse-multiline-string '[
         _ interpolate>string
         utf8 [ contents ] with-process-reader
