@@ -120,17 +120,17 @@ M: array collapse-decorators
 : whitespace/f? ( ch -- ? )
     { char: \s char: \r char: \n f } member? ; inline
 
-: trailing-upper-after-colon ( string -- ? )
-    dup [ length 2 - ] keep [ char: \: = ] find-last-from [ 1 + tail ] [ 2drop f ] if ;
+: scoped-colon-name ( string -- string' )
+    dup [ length 2 - ] keep [ char: \: = ] find-last-from [ 1 + tail ] [ drop ] if ;
 
-: trailing-upper-after-less-than ( string -- ? )
-    dup [ length 2 - ] keep [ char: < = ] find-last-from [ 1 + tail ] [ 2drop f ] if ;
+: scoped-less-than-name ( string -- string' )
+    dup [ length 2 - ] keep [ char: < = ] find-last-from [ 1 + tail ] [ drop ] if ;
 
 : scoped-upper? ( string -- ? )
     dup ":" tail? [
         dup length 1 > [
             [ [ length 2 - ] keep [ char: \: = ] find-last-from ] keep
-           swap [ swap tail strict-upper? ] [ 2drop f ] if
+           swap [ swap tail strict-upper? ] [ nip strict-upper? ] if
         ] [
             drop t
         ] if
@@ -313,7 +313,7 @@ MACRO:: read-matched ( ch -- quot: ( n string tag -- n' string slice' ) )
 
 
 : read-upper-colon ( n string string' -- n string obj )
-    dup [ trailing-upper-after-colon [ but-last ";" append ";" 2array ] [ ";" 1array ] if* lex-until-top ] dip
+    dup [ scoped-colon-name [ but-last ";" append ";" 2array ] [ ";" 1array ] if* lex-until-top ] dip
     1 cut-slice* uppercase-colon-literal make-matched-literal ;
 
 : read-lower-colon ( n string string' -- n string obj )
@@ -326,7 +326,7 @@ B
     merge-slice-til-whitespace {
         { [ dup length 1 = ] [ read-upper-colon ] }
         { [ dup { [ ":" head? ] [ ":" tail? ] } 1&& ] [ make-tag-literal ] }
-        { [ dup ":" tail? ] [ dup scoped-upper? [ read-upper-colon ] [ read-lower-colon ] if ] }
+        { [ dup ":" tail? ] [ B dup scoped-upper? [ read-upper-colon ] [ read-lower-colon ] if ] }
         { [ dup ":" head? ] [ make-tag-literal ] } ! :foo( ... )
         [ make-tag-literal ]
     } cond ;
@@ -334,7 +334,7 @@ B
 
 
 : read-upper-less-than ( n string slice -- n string less-than )
-    dup [ trailing-upper-after-less-than [ but-last ">" append 1array ] [ ">" 1array ] if* lex-until-top ] dip
+    dup [ scoped-less-than-name [ but-last ">" append 1array ] [ ">" 1array ] if* lex-until-top ] dip
     1 cut-slice* less-than-literal make-matched-literal ;
 
 : read-less-than ( n string slice -- n string less-than )
