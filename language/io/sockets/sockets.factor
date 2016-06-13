@@ -11,10 +11,10 @@ sequences sequences.private splitting strings summary system
 vocabs vocabs.parser ip-parser ip-parser.private random ;
 in: io.sockets
 
-<< {
+COMPILE< {
     { [ os windows? ] [ "windows.winsock" ] }
     { [ os unix? ] [ "unix.ffi" ] }
-} cond use-vocab >>
+} cond use-vocab COMPILE>
 
 GENERIC# with-port 1 ( addrspec port -- addrspec ) ;
 

@@ -120,4 +120,4 @@ FUNCTION: int system ( c-string command ) ;
 destructor: free
 
 ! For libc.linux, libc.windows, libc.macosx...
-<< "libc." os name>> append require >>
+COMPILE< "libc." os name>> append require COMPILE>

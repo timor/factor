@@ -21,7 +21,7 @@ FUNCTION: void this_does_not_exist ( ) ;
     ! clone f >>message
 ] unit-test
 
-<< "no_such_library" "no_such_library" cdecl add-library >>
+COMPILE< "no_such_library" "no_such_library" cdecl add-library COMPILE>
 
 library: no_such_library
 

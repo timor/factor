@@ -69,4 +69,4 @@ C-FUNCTION: char* breakme ( )
     return not a string;
 ;
 
-<< [ compile-c-library ] must-fail >>
+COMPILE< [ compile-c-library ] must-fail COMPILE>

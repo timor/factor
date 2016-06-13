@@ -3,7 +3,7 @@
 USING: accessors kernel tokyo.alien.tcrdb tokyo.assoc-functor ;
 in: tokyo.remotedb
 
-<< "tcrdb" "remotedb" define-tokyo-assoc-api >>
+COMPILE< "tcrdb" "remotedb" define-tokyo-assoc-api COMPILE>
 
 : <tokyo-remotedb> ( host port -- tokyo-remotedb )
     [ tcrdbnew dup ] 2dip tcrdbopen drop

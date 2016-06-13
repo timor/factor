@@ -532,7 +532,7 @@ STRUCT: some-accessors { aaa uint } { bbb int } ;
 { f } [ \ some-accessors \ clone ?lookup-method ] unit-test
 { f } [ \ some-accessors \ struct-slot-values ?lookup-method ] unit-test
 
-<< \ some-accessors forget >>
+COMPILE< \ some-accessors forget COMPILE>
 
 ! hashcode tests
 { 0 } [ struct-test-equality-1 new hashcode ] unit-test

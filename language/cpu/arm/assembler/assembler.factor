@@ -5,7 +5,7 @@ namespaces sequences words words.symbol parser ;
 in: cpu.arm.assembler
 
 ! Registers
-<<
+COMPILE<
 
 symbol: registers
 
@@ -18,7 +18,7 @@ SYNTAX: register:
     [ registers get push ]
     tri ;
 
->>
+COMPILE>
 
 register: R0
 register: R1

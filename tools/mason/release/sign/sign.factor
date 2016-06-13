@@ -4,7 +4,7 @@ USING: io.backend io.pathnames kernel literals locals
 mason.common namespaces sequences system ;
 in: mason.release.sign
 
-<<
+COMPILE<
 ! Two cases to allow signing in mason or in the UI
 : make-factor-path ( path -- path )
     build-dir [
@@ -24,7 +24,7 @@ M: macosx cert-path
 
 M: windows cert-path
     home "config/FactorSPC.pfx" append-path ;
->>
+COMPILE>
 
 HOOK: sign-factor-app os ( -- ) ;
 

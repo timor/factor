@@ -36,13 +36,13 @@ symbol: header-bits
 
 ! We do this in its own compilation unit so that they can be
 ! folded below
-<<
+COMPILE<
 : cell ( -- n ) OBJ-CELL-SIZE special-object ; foldable
 
 : (fixnum-bits) ( m -- n ) tag-bits get - ; foldable
 
 : (first-bignum) ( m -- n ) (fixnum-bits) 1 - 2^ ; foldable
->>
+COMPILE>
 
 : cells ( m -- n ) cell * ; inline
 

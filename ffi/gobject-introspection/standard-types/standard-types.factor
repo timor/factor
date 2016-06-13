@@ -4,7 +4,7 @@ USING: accessors alien.c-types alien.syntax
 classes.struct gobject-introspection.types kernel parser ;
 in: gobject-introspection.standard-types
 
-<<
+COMPILE<
 TYPEDEF: char gchar ;
 TYPEDEF: uchar guchar ;
 TYPEDEF: short gshort ;
@@ -41,7 +41,7 @@ int lookup-c-type clone
 "gboolean" create-word-in typedef
 
 STRUCT: longdouble { data char[10] } ;
->>
+COMPILE>
 
 gchar "gchar" register-standard-type
 guchar "guchar" register-standard-type

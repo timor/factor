@@ -3,6 +3,6 @@
 USING: kernel parser sequences ;
 in: bootstrap.x86
 
-<< "vocab:bootstrap/assembler/x86.unix.factor" parse-file suffix! >> call
-<< "vocab:bootstrap/assembler/x86.32.factor" parse-file suffix! >> call
-<< "vocab:bootstrap/assembler/x86.factor" parse-file suffix! >> call
+COMPILE< "vocab:bootstrap/assembler/x86.unix.factor" parse-file suffix! COMPILE> call
+COMPILE< "vocab:bootstrap/assembler/x86.32.factor" parse-file suffix! COMPILE> call
+COMPILE< "vocab:bootstrap/assembler/x86.factor" parse-file suffix! COMPILE> call

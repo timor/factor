@@ -7,7 +7,7 @@ in: english
 
 PRIVATE<
 
-<<
+COMPILE<
 ! Irregular pluralizations
 CONSTANT: singular-to-plural H{
 
@@ -91,7 +91,7 @@ CONSTANT: singular-to-plural H{
     { "louse" "lice" }
     { "mouse" "mice" }
 } ;
->>
+COMPILE>
 
 CONSTANT: plural-to-singular $[ singular-to-plural assoc-invert ] ;
 

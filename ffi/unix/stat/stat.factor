@@ -21,7 +21,7 @@ STRUCT: fsid
 TYPEDEF: fsid __fsid_t ;
 TYPEDEF: fsid fsid_t ;
 
-<< "unix.stat." os name>> append require >>
+COMPILE< "unix.stat." os name>> append require COMPILE>
 
 : file-status ( pathname -- stat )
     \ stat <struct> [ [ stat-func ] unix-system-call drop ] keep ;

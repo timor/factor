@@ -127,7 +127,7 @@ M: blas-vector-base virtual@
 : arg>float ( f -- f ) ; inline
 : arg>double ( f -- f ) ; inline
 
-<<
+COMPILE<
 
 FUNCTOR: (define-blas-vector) ( TYPE T -- )
 
@@ -242,7 +242,7 @@ double "D" define-real-blas-vector
 complex-float  "C" "S" define-complex-blas-vector
 complex-double "Z" "D" define-complex-blas-vector
 
->>
+COMPILE>
 
 M: blas-vector-base >pprint-sequence ;
 M: blas-vector-base pprint* pprint-object ;

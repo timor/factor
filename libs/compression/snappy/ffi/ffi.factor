@@ -4,11 +4,11 @@ USING: alien alien.c-types alien.libraries alien.syntax
 combinators classes.struct system ;
 in: compression.snappy.ffi
 
-<< "snappy" {
+COMPILE< "snappy" {
     { [ os windows? ] [ "snappy.dll" ] }
     { [ os macosx? ] [ "libsnappy.dylib" ] }
     { [ os unix? ] [ "libsnappy.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 library: snappy
 

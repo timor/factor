@@ -11,7 +11,7 @@ in: math.vectors.simd
 ERROR: bad-simd-length got expected ;
 ERROR: bad-simd-vector obj ;
 
-<<
+COMPILE<
 PRIVATE<
 ! Primitive SIMD constructors
 
@@ -22,7 +22,7 @@ GENERIC: new-underlying ( underlying seq -- seq' ) ;
 : change-underlying ( seq quot -- seq' )
     '[ underlying>> @ ] keep new-underlying ; inline
 PRIVATE>
->>
+COMPILE>
 
 PRIVATE<
 
@@ -55,7 +55,7 @@ GENERIC: simd-with ( n exemplar -- v ) ;
 M: object simd-element-type drop f ;
 M: object simd-rep drop f ;
 
-<<
+COMPILE<
 PRIVATE<
 
 defer: simd-construct-op
@@ -125,9 +125,9 @@ defer: simd-construct-op
     } case ; inline
 
 PRIVATE>
->>
+COMPILE>
 
-<<
+COMPILE<
 
 ! SIMD vectors as sequences
 
@@ -336,7 +336,7 @@ SYNTAX: SIMD-128:
 
 PRIVATE>
 
->>
+COMPILE>
 
 ! SIMD instances
 

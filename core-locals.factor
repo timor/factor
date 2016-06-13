@@ -2,29 +2,29 @@ auto-use
 in: syntax
 use: delegate.private
 
-<< forget: postpone\ MACRO: >>
-<< forget: postpone\ MACRO:: >>
-<< forget: postpone\ MEMO: >>
-<< forget: postpone\ MEMO:: >>
-<< forget: postpone\ M:: >>
-<< forget: postpone\ IDENTITY-MEMO: >>
-<< forget: postpone\ IDENTITY-MEMO:: >>
-<< forget: postpone\ TYPED: >>
-<< forget: postpone\ TYPED:: >>
+COMPILE< forget: postpone\ MACRO: COMPILE>
+COMPILE< forget: postpone\ MACRO:: COMPILE>
+COMPILE< forget: postpone\ MEMO: COMPILE>
+COMPILE< forget: postpone\ MEMO:: COMPILE>
+COMPILE< forget: postpone\ M:: COMPILE>
+COMPILE< forget: postpone\ IDENTITY-MEMO: COMPILE>
+COMPILE< forget: postpone\ IDENTITY-MEMO:: COMPILE>
+COMPILE< forget: postpone\ TYPED: COMPILE>
+COMPILE< forget: postpone\ TYPED:: COMPILE>
 
-<< forget: postpone\ '[ >>
-<< forget: postpone\ :: >>
-<< forget: postpone\ :> >>
-<< forget: _ >>
-<< forget: @ >>
-<< forget: postpone\ |[ >>
-<< forget: postpone\ let[ >>
-<< forget: postpone\ IH{ >>
-<< forget: postpone\ PROTOCOL: >>
-<< forget: postpone\ CONSULT: >>
-<< forget: postpone\ BROADCAST: >>
-<< forget: postpone\ SLOT-PROTOCOL: >>
-<< forget: postpone\ HINTS: >>
+COMPILE< forget: postpone\ '[ COMPILE>
+COMPILE< forget: postpone\ :: COMPILE>
+COMPILE< forget: postpone\ :> COMPILE>
+COMPILE< forget: _ COMPILE>
+COMPILE< forget: @ COMPILE>
+COMPILE< forget: postpone\ |[ COMPILE>
+COMPILE< forget: postpone\ let[ COMPILE>
+COMPILE< forget: postpone\ IH{ COMPILE>
+COMPILE< forget: postpone\ PROTOCOL: COMPILE>
+COMPILE< forget: postpone\ CONSULT: COMPILE>
+COMPILE< forget: postpone\ BROADCAST: COMPILE>
+COMPILE< forget: postpone\ SLOT-PROTOCOL: COMPILE>
+COMPILE< forget: postpone\ HINTS: COMPILE>
 
 
 

@@ -35,7 +35,7 @@ defer: start-walker-thread
 : walk ( quot -- quot' )
     \ break prefix [ break rethrow ] recover ;
 
-<< \ walk t "no-compile" set-word-prop >>
+COMPILE< \ walk t "no-compile" set-word-prop COMPILE>
 
 break-hook [
     [

@@ -10,7 +10,7 @@ GENERIC: definition-icon ( definition -- path ) ;
 : definition-icon-path ( string -- string' )
     "vocab:definitions/icons/" prepend-path ".png" append ;
 
-<<
+COMPILE<
 
 symbol: icons
 
@@ -26,7 +26,7 @@ icons [ H{ } clone ] initialize
 
 SYNTAX: \ ICON: scan-word scan-token ";" expect define-icon ;
 
->>
+COMPILE>
 
 ICON: predicate-class class-predicate-word ;
 ICON: generic generic-word ;

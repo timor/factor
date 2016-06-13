@@ -5,15 +5,15 @@ alien.syntax combinators gobject-introspection
 gobject-introspection.standard-types system vocabs ;
 in: pango.ffi
 
-<< "gobject.ffi" require >>
+COMPILE< "gobject.ffi" require COMPILE>
 
 library: pango
 
-<< "pango" {
+COMPILE< "pango" {
     { [ os windows? ] [ "libpango-1.0-0.dll" ] }
     { [ os macosx? ] [ "libpango-1.0.dylib" ] }
     { [ os unix? ] [ "libpango-1.0.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 IMPLEMENT-STRUCTS: PangoRectangle ;
 

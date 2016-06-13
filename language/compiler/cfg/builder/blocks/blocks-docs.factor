@@ -2,7 +2,7 @@ USING: compiler.cfg compiler.cfg.stacks.local compiler.tree help.markup
 help.syntax literals make math multiline quotations sequences ;
 in: compiler.cfg.builder.blocks
 
-<<
+COMPILE<
 STRING: ex-emit-trivial-block
 USING: compiler.cfg.builder.blocks make prettyprint ;
 begin-stack-analysis <basic-block> dup set-basic-block [ gensym ##call, drop ] emit-trivial-block predecessors>> first .
@@ -25,7 +25,7 @@ T{ basic-block
     }
 }
 ;
->>
+COMPILE>
 
 HELP: begin-basic-block
 { $values { "block" basic-block } { "block'" basic-block } }

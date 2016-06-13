@@ -4,7 +4,7 @@ compiler.units ;
 in: xmode.tokens
 
 ! Based on org.gjt.sp.jedit.syntax.Token
-<<
+COMPILE<
 symbol: tokens
 
 {
@@ -15,7 +15,7 @@ symbol: tokens
 } [
     dup create-word-in dup define-symbol
 ] H{ } map>assoc tokens set-global
->>
+COMPILE>
 
 : string>token ( string -- id ) tokens get at ;
 

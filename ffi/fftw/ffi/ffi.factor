@@ -8,11 +8,11 @@ in: fftw.ffi
 
 library: fftw3
 
-<< "fftw3" {
+COMPILE< "fftw3" {
     { [ os windows? ] [ "libfftw3-3.dll" ] }
     { [ os macosx? ] [ "libfftw3.dylib" ] }
     { [ os unix? ] [ "libfftw3.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 TYPEDEF: double[2] fftw_complex ;
 

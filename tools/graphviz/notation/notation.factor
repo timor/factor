@@ -7,7 +7,7 @@ graphviz.attributes
 ;
 in: graphviz.notation
 
-<<
+COMPILE<
 
 PRIVATE<
 
@@ -67,7 +67,7 @@ graph graph-attributes define-=attrs
 edge edge-attributes define-=attrs
 node node-attributes define-=attrs
 
->>
+COMPILE>
 
 ALIAS: -> add-edge ;
 ALIAS: -- add-edge ;

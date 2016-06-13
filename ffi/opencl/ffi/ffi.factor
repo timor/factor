@@ -5,11 +5,11 @@ classes.struct combinators system alien.accessors byte-arrays
 kernel ;
 in: opencl.ffi
 
-<< "opencl" {
+COMPILE< "opencl" {
         { [ os windows? ] [ "OpenCL.dll" stdcall ] }
         { [ os macosx? ] [ "/System/Library/Frameworks/OpenCL.framework/OpenCL" cdecl ] }
         { [ os unix? ] [ "libOpenCL.so" cdecl ] }
-    } cond add-library >>
+    } cond add-library COMPILE>
 library: opencl
 
 ! cl_platform.h

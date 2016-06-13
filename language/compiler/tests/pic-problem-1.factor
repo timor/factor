@@ -7,7 +7,7 @@ M: x length drop 0 ;
 
 INSTANCE: x sequence ;
 
-<< gc >>
+COMPILE< gc COMPILE>
 
 CONSTANT: blah T{ x } ;
 

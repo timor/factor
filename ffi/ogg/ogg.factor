@@ -13,7 +13,7 @@ USING:
 ;
 in: ogg
 
-<<
+COMPILE<
 "ogg" {
     { [ os windows? ]  [ "ogg.dll" ] }
     { [ os macosx? ] [ "libogg.0.dylib" ] }
@@ -21,7 +21,7 @@ in: ogg
 } cond cdecl add-library
 
 "ogg" deploy-library
->>
+COMPILE>
 
 library: ogg
 

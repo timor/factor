@@ -40,12 +40,12 @@ ENUM: colores { rojo red } { verde green } { azul blue } { colorado rojo } ;
 
 SYMBOLS: couleurs rouge vert bleu jaune azure ;
 
-<< \ couleurs int {
+COMPILE< \ couleurs int {
     { rouge red }
     { vert green }
     { bleu blue }
     { jaune 14 }
     { azure bleu }
-} define-enum >>
+} define-enum COMPILE>
 
 { { 0 3 4 14 4 } } [ { rouge vert bleu jaune azure } [ enum>number ] map ] unit-test

@@ -14,7 +14,7 @@ USING:
 ;
 in: ogg.theora
 
-<<
+COMPILE<
 "theoradec" {
     { [ os windows? ]  [ "theoradec.dll" ] }
     { [ os macosx? ] [ "libtheoradec.0.dylib" ] }
@@ -26,7 +26,7 @@ in: ogg.theora
     { [ os macosx? ] [ "libtheoraenc.0.dylib" ] }
     { [ os unix? ]   [ "libtheoraenc.so" ] }
 } cond cdecl add-library
->>
+COMPILE>
 
 CONSTANT: TH-EFAULT      -1 ;
 CONSTANT: TH-EINVAL     -10 ;

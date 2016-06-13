@@ -4,9 +4,9 @@ USING: alien alien.c-types alien.libraries alien.libraries.finder
 alien.syntax classes.struct combinators kernel system ;
 in: gdbm.ffi
 
-<< "libgdbm"
+COMPILE< "libgdbm"
 { "gdbm" "gdbm3" "libgdbm-3" } find-library-from-list
-cdecl add-library >>
+cdecl add-library COMPILE>
 
 library: libgdbm
 

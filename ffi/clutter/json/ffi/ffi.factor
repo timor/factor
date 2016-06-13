@@ -4,19 +4,19 @@ USING: alien alien.libraries alien.syntax combinators
 gobject-introspection kernel system vocabs ;
 in: clutter.json.ffi
 
-<<
+COMPILE<
 "gobject.ffi" require
 "gio.ffi" require
->>
+COMPILE>
 
 library: clutter.json
 
-<<
+COMPILE<
 "clutter.json" {
     { [ os windows? ] [ drop ] }
     { [ os macosx? ] [ drop ] }
     { [ os unix? ] [ "libclutter-glx-1.0.so" cdecl add-library ] }
 } cond
->>
+COMPILE>
 
 gir: Json-1.0.gir

@@ -34,9 +34,9 @@ symbol: xim
     XNResourceClass over 0 XCreateIC
     [ "XCreateIC() failed" throw ] unless* ;
 
-<<
+COMPILE<
 CONSTANT: buf-size 100 ;
->>
+COMPILE>
 
 CONSTANT: buf $[ buf-size <byte-array> ] ;
 

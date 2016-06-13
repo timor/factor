@@ -6,7 +6,7 @@ in: calendar.holidays
 
 SINGLETONS: all world commonwealth-of-nations ;
 
-<<
+COMPILE<
 SYNTAX: \ HOLIDAY:
     scan-new-word
     dup "holiday" word-prop [
@@ -18,7 +18,7 @@ SYNTAX: \ HOLIDAY-NAME:
     let[ scan-word "holiday" word-prop :> holidays scan-word :> name scan-object :> value
     ";" expect
     value name holidays set-at ] ;
->>
+COMPILE>
 
 GENERIC: holidays ( n singleton -- seq ) ;
 

@@ -49,9 +49,9 @@ TUPLE: a-monster < monster ;
 
 TUPLE: b-monster < monster ;
 
-<<
+COMPILE<
 slot-constructor: a-monster
->>
+COMPILE>
 
 : <a-monster> ( name hp max-hp -- obj )
     2dup +

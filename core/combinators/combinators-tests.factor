@@ -254,7 +254,7 @@ CONSTANT: case-const-2 2 ;
 
 defer: corner-case-1
 
-<< \ corner-case-1 2 [ + ] curry 1array [ case ] curry ( a -- b ) define-declared >>
+COMPILE< \ corner-case-1 2 [ + ] curry 1array [ case ] curry ( a -- b ) define-declared COMPILE>
 
 { t } [ \ corner-case-1 word-optimized? ] unit-test
 

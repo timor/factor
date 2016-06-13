@@ -80,7 +80,7 @@ PRIVATE<
 
 defer: byte-bit-count
 
-<<
+COMPILE<
 
 \ byte-bit-count
 256 iota [
@@ -90,7 +90,7 @@ defer: byte-bit-count
 
 \ byte-bit-count make-inline
 
->>
+COMPILE>
 
 GENERIC: (bit-count) ( x -- n ) ;
 

@@ -7,11 +7,11 @@ combinators kernel literals math system ;
 
 in: zeromq.ffi
 
-<< "zmq" {
+COMPILE< "zmq" {
     { [ os windows? ] [ "libzmq.dll" ] }
     { [ os macosx? ] [ "libzmq.dylib" ] }
     { [ os unix? ] [ "libzmq.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 library: zmq
 
@@ -28,7 +28,7 @@ FUNCTION: void zmq_version ( int* major, int* minor, int* patch ) ;
 
 ! A number random enough not to collide with different errno ranges on
 ! different OSes. The assumption is that error_t is at least 32-bit type.
-<< CONSTANT: ZMQ_HAUSNUMERO 156384712 ; >>
+COMPILE< CONSTANT: ZMQ_HAUSNUMERO 156384712 ; COMPILE>
 
 ! Native 0MQ error codes.
 CONSTANT: EFSM $[ ZMQ_HAUSNUMERO 51 + ] ;

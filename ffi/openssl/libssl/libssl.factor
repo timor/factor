@@ -8,11 +8,11 @@ sequences system words ;
 
 in: openssl.libssl
 
-<< "libssl" {
+COMPILE< "libssl" {
     { [ os windows? ] [ "libssl-38.dll" ] }
     { [ os macosx? ] [ "libssl.dylib" ] }
     { [ os unix? ] [ "libssl.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 CONSTANT: X509_FILETYPE_PEM       1 ;
 CONSTANT: X509_FILETYPE_ASN1      2 ;
@@ -529,7 +529,7 @@ CONSTANT: SSL_SESS_CACHE_NO_INTERNAL
 ! x509_vfy.h
 ! ===============================================
 
-<<
+COMPILE<
 
 symbol: verify-messages
 
@@ -544,7 +544,7 @@ SYNTAX: X509_V_:
     [ verify-messages get set-at ]
     2bi ;
 
->>
+COMPILE>
 
 X509_V_: OK 0
 X509_V_: ERR_UNABLE_TO_GET_ISSUER_CERT 2
@@ -601,10 +601,10 @@ CONSTANT: NID_issuer_alt_name   86 ;
 ! are placed in libcrypto-37.dll
 ! ===============================================
 
-<< os windows? [
+COMPILE< os windows? [
     "libssl-windows"
     [ "libcrypto-37.dll" cdecl add-library ] [ current-library set ] bi
-] when >>
+] when COMPILE>
 
 ! x509.h
 FUNCTION: int X509_NAME_get_text_by_NID ( X509_NAME* name, int nid, void* buf, int len ) ;

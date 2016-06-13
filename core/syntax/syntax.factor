@@ -53,7 +53,7 @@ in: bootstrap.syntax
     dup [ define-fry-specifier ] curry each ; 
 
 [
-    { "]" "}" ";" ">>" } [ define-delimiter ] each
+    { "]" "}" ";" ">>" "COMPILE>" } [ define-delimiter ] each
 
     { "_" "@" } define-fry-specifiers
     ! "@" [ "Only valid inside a fry" throw ] ( -- * ) define-fry-specifier
@@ -319,6 +319,14 @@ in: bootstrap.syntax
             \ >> parse-until >quotation
         ] with-nested-compilation-unit call( -- )
     ] define-core-syntax
+
+    "COMPILE<" [
+        [
+            \ COMPILE> parse-until >quotation
+        ] with-nested-compilation-unit call( -- )
+    ] define-core-syntax
+
+
 
     "call-next-method" [
         current-method get [

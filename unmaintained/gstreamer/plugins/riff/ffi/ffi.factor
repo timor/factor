@@ -6,13 +6,13 @@ gobject-introspection glib.ffi gmodule.ffi gobject.ffi ;
 EXCLUDE: alien.c-types => pointer ;
 in: gstreamer.ffi
 
-<<
+COMPILE<
 "gstreamer" {
     { [ os winnt? ] [ drop ] }
     { [ os macosx? ] [ drop ] }
     { [ os unix? ] [ "libgstreamer-0.10.so" cdecl add-library ] }
 } cond
->>
+COMPILE>
 
 TYPEDEF: gpointer GstClockID ;
 TYPEDEF: guint64 GstClockTime ;

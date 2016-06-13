@@ -42,9 +42,9 @@ main: majn
  slot: komba
 
 ! ! SYNTAX
-<<
+COMPILE<
 SYNTAX: ID-SYNTAX ;
->>
+COMPILE>
 
 ID-SYNTAX ID-SYNTAX
 

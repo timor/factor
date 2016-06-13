@@ -22,7 +22,7 @@ STRUCT: DWM_BLURBEHIND
 : full-window-margins ( -- MARGINS )
     -1 -1 -1 -1 <MARGINS> ; inline
 
-<< "dwmapi" "dwmapi.dll" stdcall add-library >>
+COMPILE< "dwmapi" "dwmapi.dll" stdcall add-library COMPILE>
 
 library: dwmapi
 

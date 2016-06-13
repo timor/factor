@@ -4,7 +4,7 @@ USING: sorting.functor regexp kernel accessors sequences
 unicode ;
 in: sorting.title
 
-<< "title" [
+COMPILE< "title" [
     >lower dup R[[ ^(the|a|an|el|la|los|las|il) ]] first-match
     [ to>> tail-slice ] when*
-] define-sorting >>
+] define-sorting COMPILE>

@@ -4,13 +4,13 @@ USING: alien alien.libraries combinators kernel system
 gobject-introspection glib.ffi gstreamer.ffi ;
 in: gstreamer.pbutils.ffi
 
-<<
+COMPILE<
 "gstreamer.pbutils" {
     { [ os winnt? ] [ drop ] }
     { [ os macosx? ] [ drop ] }
     { [ os unix? ] [ "libgstpbutils-0.10.so" cdecl add-library ] }
 } cond
->>
+COMPILE>
 
 gir: vocab:gstreamer/pbutils/GstPbutils-0.10.gir
 

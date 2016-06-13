@@ -1,6 +1,5 @@
 USING: accessors arrays kernel models models.product monads
 sequences sequences.extras shuffle ;
-FROM: syntax => >> ;
 in: models.combinators
 
 TUPLE: multi-model < model important? ;
@@ -102,4 +101,4 @@ M: (when-model) (model-changed) [ quot>> ] 2keep
 : with-self ( quot: ( model -- model ) -- model ) [ f <basic> dup ] dip call swap [ add-dependency ] keep ; inline
 
 use: models.combinators.templates
-<< { "$>" "<$" "fmap" } [ fmaps ] each >>
+COMPILE< { "$>" "<$" "fmap" } [ fmaps ] each COMPILE>

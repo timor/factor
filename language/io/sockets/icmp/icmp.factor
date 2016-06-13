@@ -6,10 +6,10 @@ io.sockets.private memoize sequences system vocabs.parser ;
 
 in: io.sockets.icmp
 
-<< {
+COMPILE< {
     { [ os windows? ] [ "windows.winsock" ] }
     { [ os unix? ] [ "unix.ffi" ] }
-} cond use-vocab >>
+} cond use-vocab COMPILE>
 
 PRIVATE<
 

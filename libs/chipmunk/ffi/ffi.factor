@@ -7,7 +7,7 @@ system ;
 specialized-array: void*
 in: chipmunk.ffi
 
-<<
+COMPILE<
 "chipmunk" {
     { [ os windows? ] [ "chipmunk.dll" ] }
     { [ os macosx? ] [ "libchipmunk.dylib"  ] }
@@ -15,7 +15,7 @@ in: chipmunk.ffi
 } cond cdecl add-library
 
 "chipmunk" deploy-library
->>
+COMPILE>
 library: chipmunk
 
 ! chipmunk_types.h

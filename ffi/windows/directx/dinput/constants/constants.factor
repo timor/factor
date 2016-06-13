@@ -23,7 +23,7 @@ PRIVATE<
 : initialize ( variable quot -- )
     call swap set-global ; inline
 
-<<
+COMPILE<
 
 GENERIC: array-base-type ( c-type -- c-type' ) ;
 M: object array-base-type ;
@@ -68,7 +68,7 @@ M: array array-base-type first ;
         [ ] tri
     ] ;
 
->>
+COMPILE>
 
 MACRO: <DIDATAFORMAT> ( dwFlags dwDataSize struct rgodf-array -- alien )
     [ DIDATAFORMAT heap-size DIOBJECTDATAFORMAT heap-size ] 4 ndip

@@ -49,10 +49,10 @@ in: kernel.tests
 
 : overflow-r ( -- ) 3 load-local overflow-r ;
 
-<<
+COMPILE<
 { overflow-d (overflow-d-alt) overflow-d-alt overflow-r }
 [ t "no-compile" set-word-prop ] each
->>
+COMPILE>
 
 [ overflow-d ] [
     2 head ${ KERNEL-ERROR ERROR-DATASTACK-OVERFLOW } =
@@ -125,7 +125,7 @@ in: kernel.tests
 ! Doesn't compile; important
 : foo ( a -- b ) ;
 
-<< \ foo t "no-compile" set-word-prop >>
+COMPILE< \ foo t "no-compile" set-word-prop COMPILE>
 
 [ drop foo ] must-fail
 { } [ :c ] unit-test

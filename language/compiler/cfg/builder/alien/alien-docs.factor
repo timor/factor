@@ -3,7 +3,7 @@ compiler.cfg.instructions compiler.tree help.markup help.syntax
 literals make multiline sequences stack-checker.alien strings ;
 in: compiler.cfg.builder.alien
 
-<<
+COMPILE<
 STRING: ex-caller-return
 USING: compiler.cfg.builder.alien make prettyprint ;
 [
@@ -15,7 +15,7 @@ USING: compiler.cfg.builder.alien make prettyprint ;
     T{ ##box-alien { dst 116 } { src 1 } { temp 115 } }
 }
 ;
->>
+COMPILE>
 
 HELP: caller-linkage
 { $values

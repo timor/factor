@@ -2,13 +2,13 @@ USING: alien alien.c-types alien.libraries alien.syntax
 classes.struct combinators system unix.types ;
 in: llvm.clang.ffi
 
-<<
+COMPILE<
 "libclang" {
     { [ os macosx?  ] [ "libclang.dylib" ] }
     { [ os windows? ] [ "clang.dll"      ] }
     { [ os unix?    ] [ "/usrlibclang.so"    ] }
 } cond cdecl add-library
->>
+COMPILE>
 library: libclang
 
 c-type: CXTranslationUnitImpl

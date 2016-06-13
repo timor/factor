@@ -132,7 +132,7 @@ TUPLE: sequence-parser sequence n ;
         sequence-parser [ n + ] change-n drop
     ] if ;
 
-<< "length" [ length ] define-sorting >>
+COMPILE< "length" [ length ] define-sorting COMPILE>
 
 : sort-tokens ( seq -- seq' )
     { length>=< <=> } sort-by ;

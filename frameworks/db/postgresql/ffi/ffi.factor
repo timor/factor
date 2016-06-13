@@ -5,11 +5,11 @@ USING: alien alien.c-types alien.libraries alien.syntax
 combinators system ;
 in: db.postgresql.ffi
 
-<< "postgresql" {
+COMPILE< "postgresql" {
     { [ os windows? ] [ "libpq.dll" ] }
     { [ os macosx? ] [ "libpq.dylib" ] }
     { [ os unix? ] [ "libpq.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 ! ConnSatusType
 CONSTANT: CONNECTION_OK                     0x0 ;

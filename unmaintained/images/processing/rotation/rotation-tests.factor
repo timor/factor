@@ -14,12 +14,12 @@ in: images.processing.rotation.tests
 : end-of-last-row ( seq^2 -- item ) last-row last ;
 : first-of-last-row ( seq^2 -- item ) last-row first ;
 
-<<
+COMPILE<
 
 : clone-image ( image -- new-image )
     clone [ clone ] change-bitmap ;
 
->>
+COMPILE>
 
 : pasted-image ( -- image )
     "vocab:images/processing/rotation/test-bitmaps/PastedImage.bmp"

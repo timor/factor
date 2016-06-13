@@ -6,20 +6,20 @@ gobject-introspection.standard-types kernel pango.ffi system
 vocabs ;
 in: gtk.ffi
 
-<<
+COMPILE<
 "atk.ffi" require
 "gdk.ffi" require
->>
+COMPILE>
 
 library: gtk
 
-<<
+COMPILE<
 "gtk" {
     { [ os windows? ] [ "libgtk-win32-2.0-0.dll" cdecl add-library ] }
     { [ os linux? ] [ "libgtk-x11-2.0.so" cdecl add-library ] }
     [ drop ]
 } cond
->>
+COMPILE>
 
 IMPLEMENT-STRUCTS: GtkTreeIter ;
 

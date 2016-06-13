@@ -7,11 +7,11 @@ tools.disassembler.private tools.disassembler.utils tools.memory
 ;
 in: tools.disassembler.udis
 
-<< "libudis86" {
+COMPILE< "libudis86" {
     { [ os windows? ] [ "libudis86.dll" ] }
     { [ os macosx? ] [ "libudis86.dylib" ] }
     { [ os unix? ] [ "libudis86.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 library: libudis86
 

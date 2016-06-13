@@ -6,7 +6,7 @@ compiler.cfg.registers compiler.constants effects kernel layouts
 math namespaces parser sequences splitting words ;
 in: compiler.cfg.hats
 
-<<
+COMPILE<
 
 PRIVATE<
 
@@ -39,7 +39,7 @@ insn-classes get [
     [ define-hat ] [ drop ] if
 ] each
 
->>
+COMPILE>
 
 : ^^load-literal ( obj -- dst )
     dup fixnum? [ ^^load-integer ] [ ^^load-reference ] if ;

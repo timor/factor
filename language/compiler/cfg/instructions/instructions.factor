@@ -4,10 +4,10 @@ USING: accessors compiler.cfg.instructions.syntax kernel math
 namespaces ;
 in: compiler.cfg.instructions
 
-<<
+COMPILE<
 symbol: insn-classes
 V{ } clone insn-classes set-global
->>
+COMPILE>
 
 : new-insn ( ... class -- insn ) f swap boa ; inline
 

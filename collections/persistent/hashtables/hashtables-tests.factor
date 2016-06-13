@@ -12,7 +12,7 @@ tools.test kernel locals namespaces random math.ranges sequences fry ;
 
 ! We have to define these first so that they're compiled before
 ! the below hashtables are parsed...
-<<
+COMPILE<
 
 TUPLE: hash-0-a ;
 
@@ -22,7 +22,7 @@ TUPLE: hash-0-b ;
 
 M: hash-0-b hashcode* 2drop 0 ;
 
->>
+COMPILE>
 
 { } [
     PH{ }

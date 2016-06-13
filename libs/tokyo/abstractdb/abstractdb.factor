@@ -3,7 +3,7 @@
 USING: accessors kernel tokyo.alien.tcadb tokyo.assoc-functor ;
 in: tokyo.abstractdb
 
-<< "tcadb" "abstractdb" define-tokyo-assoc-api >>
+COMPILE< "tcadb" "abstractdb" define-tokyo-assoc-api COMPILE>
 
 : <tokyo-abstractdb> ( name -- tokyo-abstractdb )
     tcadbnew [ swap tcadbopen drop ] keep

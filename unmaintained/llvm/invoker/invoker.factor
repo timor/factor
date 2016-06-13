@@ -54,4 +54,4 @@ TUPLE: function name alien return params ;
     [ normalize-path ] [ file-name ] bi
     [ load-into-jit ] keep install-module ;
 
-<< "alien.llvm" create-vocab drop >>
+COMPILE< "alien.llvm" create-vocab drop COMPILE>

@@ -10,13 +10,13 @@ FROM: byte-arrays => >byte-array ;
 FROM: kernel => ? = 2drop bi bi* dup if keep nip object over swap tri with ;
 FROM: math => <= - shift ;
 
-<<
+COMPILE<
 ! For the two annoying structs that differ on 32 and 64 bit.
 cpu x86.32?
 "tools.image-analyzer.vm.32"
 "tools.image-analyzer.vm.64"
 ? use-vocab
->>
+COMPILE>
 
 : array>string ( array -- str )
     0 suffix >byte-array alien>native-string ;

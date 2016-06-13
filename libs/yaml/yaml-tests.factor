@@ -468,7 +468,7 @@ ${ construct-merge-obj } [ $ construct-merge-obj2 >yaml yaml> ] unit-test
 ! More merge tests
 ! see http://sourceforge.net/p/yaml/mailman/message/12308050
 CONSTANT: nested-merge-str "foo: 1
-<<:
+COMPILE<:
   bar: 2
   <<:
     baz: 3" ;
@@ -483,7 +483,7 @@ ${ nested-merge-obj } [ $ nested-merge-str yaml> ] unit-test
 ${ nested-merge-obj } [ $ nested-merge-obj >yaml yaml> ] unit-test
 
 CONSTANT: recursive-merge-str "--- &A
-<<: *A" ;
+COMPILE<: *A" ;
 CONSTANT: recursive-merge-obj H{ } ;
 
 ${ recursive-merge-obj } [ $ recursive-merge-str yaml> ] unit-test

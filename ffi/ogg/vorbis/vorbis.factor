@@ -14,7 +14,7 @@ USING:
 ;
 in: ogg.vorbis
 
-<<
+COMPILE<
 "vorbis" {
     { [ os windows? ]  [ "vorbis.dll" ] }
     { [ os macosx? ] [ "libvorbis.0.dylib" ] }
@@ -22,7 +22,7 @@ in: ogg.vorbis
 } cond cdecl add-library
 
 "vorbis" deploy-library
->>
+COMPILE>
 
 library: vorbis
 

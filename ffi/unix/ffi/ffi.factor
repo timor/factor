@@ -5,7 +5,7 @@ alien.syntax classes.struct sequences system unix.time
 unix.types vocabs ;
 in: unix.ffi
 
-<< "unix.ffi." os name>> append require >>
+COMPILE< "unix.ffi." os name>> append require COMPILE>
 
 CONSTANT: PROT_NONE   0 ;
 CONSTANT: PROT_READ   1 ;

@@ -4,14 +4,14 @@ USING: alien alien.libraries alien.syntax combinators
 gobject-introspection kernel system vocabs ;
 in: atk.ffi
 
-<< "gobject.ffi" require >>
+COMPILE< "gobject.ffi" require COMPILE>
 
 library: atk
 
-<< "atk" {
+COMPILE< "atk" {
     { [ os windows? ] [ "libatk-1.0-0.dll" ] }
     { [ os macosx? ] [ "libatk-1.0.dylib" ] }
     { [ os unix? ] [ "libatk-1.0.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 gir: vocab:atk/Atk-1.0.gir

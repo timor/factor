@@ -245,7 +245,7 @@ M: blas-matrix-base equal?
         [ [ Mcols ] bi@ [ = ] 2all? ]
     } 2&& ;
 
-<<
+COMPILE<
 
 FUNCTOR: (define-blas-matrix) ( TYPE T U C -- )
 
@@ -309,7 +309,7 @@ double         "D" define-real-blas-matrix
 complex-float  "C" define-complex-blas-matrix
 complex-double "Z" define-complex-blas-matrix
 
->>
+COMPILE>
 
 M: blas-matrix-base >pprint-sequence Mrows ;
 M: blas-matrix-base pprint* pprint-object ;

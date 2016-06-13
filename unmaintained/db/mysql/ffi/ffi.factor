@@ -5,11 +5,11 @@
 USING: alien alien.syntax combinators kernel system ;
 in: db.mysql.ffi
 
-<< "mysql" {
+COMPILE< "mysql" {
     { [ os winnt? ] [ "libmySQL.dll" stdcall ] }
     { [ os macosx? ] [ "libmysqlclient.14.dylib" cdecl ] }
     { [ os unix? ] [ "libmysqlclient.so.14" cdecl ] }
-} cond add-library >>
+} cond add-library COMPILE>
 
 library: mysql
 

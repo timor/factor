@@ -6,16 +6,16 @@ in: gobject.ffi
 
 ! these two are needed for the definition of GError and others.
 ! otherwise we generate GError and some others in this vocab as well.
-<< "glib.ffi" require >>
+COMPILE< "glib.ffi" require COMPILE>
 use: glib.ffi
 
 library: gobject
 
-<< "gobject" {
+COMPILE< "gobject" {
     { [ os windows? ] [ "libgobject-2.0-0.dll" ] }
     { [ os macosx? ] [ "libgobject-2.0.dylib" ] }
     { [ os unix? ] [ "libgobject-2.0.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 IMPLEMENT-STRUCTS: GValue GParamSpecVariant ;
 

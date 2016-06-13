@@ -64,7 +64,7 @@ GENERIC: uncompiled-generic-test ( a -- b ) ;
 
 M: integer uncompiled-generic-test 1 + ;
 
-<< [ uncompiled-generic-test ] [ jit-compile ] [ suffix! ] bi >>
+COMPILE< [ uncompiled-generic-test ] [ jit-compile ] [ suffix! ] bi COMPILE>
 "q" set
 
 { 4 } [ 3 "q" get call ] unit-test

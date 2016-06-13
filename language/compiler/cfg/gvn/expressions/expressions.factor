@@ -10,7 +10,7 @@ compiler.cfg.gvn.graph ;
 FROM: sequences.private => set-array-nth ;
 in: compiler.cfg.gvn.expressions
 
-<<
+COMPILE<
 
 GENERIC: >expr ( insn -- expr ) ;
 
@@ -57,7 +57,7 @@ insn-classes get
     define->expr-method
 ] each
 
->>
+COMPILE>
 
 TUPLE: integer-expr value ;
 

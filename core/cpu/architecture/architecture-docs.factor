@@ -4,7 +4,7 @@ cpu.x86.assembler.operands help.markup help.syntax kernel layouts
 literals math multiline sequences strings system vm words ;
 in: cpu.architecture
 
-<<
+COMPILE<
 STRING: ex-%allot
 USING: cpu.architecture make ;
 [ RAX 40 tuple RCX %allot ] B{ } make disassemble
@@ -71,7 +71,7 @@ init-relocation [ RAX RBX 3 -14 RCX RDX %write-barrier ] B{ } make disassemble
 000000000143f97c: 48ba0000000000000000  mov rdx, 0x0
 000000000143f986: 48c60411c0            mov byte [rcx+rdx], 0xc0
 ;
->>
+COMPILE>
 
 HELP: %alien-invoke
 { $values

@@ -30,7 +30,7 @@ in: math.floats.half
 
 symbol: half
 
-<<
+COMPILE<
 
 <c-type>
     float >>class
@@ -43,4 +43,4 @@ symbol: half
     [ >float ] >>unboxer-quot
 \ half typedef
 
->>
+COMPILE>

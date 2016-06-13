@@ -539,7 +539,7 @@ EXCLUDE: qualified.tests.bar => x ;
 
 ! Two similar bugs
 
-! Replace : def with something in << >>
+! Replace : def with something in << COMPILE>
 /* { [ ] } [
     "in: parser.tests : was-once-a-word-bug ( -- ) ;"
     <string-reader> "was-once-a-word-test" parse-stream

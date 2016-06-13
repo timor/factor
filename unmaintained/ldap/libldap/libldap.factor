@@ -9,11 +9,11 @@ USING: alien alien.syntax combinators kernel system ;
 
 in: ldap.libldap
 
-<< "libldap" {
+COMPILE< "libldap" {
     { [ win32? ]  [ "libldap.dll" stdcall ] }
     { [ macosx? ] [ "libldap.dylib" cdecl ] }
     { [ unix? ]   [ "libldap.so" cdecl ] }
-} cond add-library >>
+} cond add-library COMPILE>
  
 : LDAP_VERSION1     1 ; inline
 : LDAP_VERSION2     2 ; inline 

@@ -8,13 +8,13 @@ FROM: kernel => ? boa bi dup keep nip swap ;
 FROM: layouts => data-alignment ;
 FROM: math => + - * align neg shift ;
 
-<<
+COMPILE<
 ! For the two annoying structs that differ on 32 and 64 bit.
 cpu x86.32?
 "tools.image-analyzer.vm.32"
 "tools.image-analyzer.vm.64"
 ? use-vocab
->>
+COMPILE>
 
 : tag>class ( tag -- class )
     {

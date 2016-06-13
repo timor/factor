@@ -9,7 +9,7 @@ in: unicode.breaks
 PRIVATE<
 
 ! Grapheme breaks
-<<
+COMPILE<
 CONSTANT: Any 0 ;
 CONSTANT: L 1 ;
 CONSTANT: V 2 ;
@@ -97,13 +97,13 @@ symbol: table
 graphemes init-table table
 [ make-grapheme-table finish-table ] with-variable
 define-constant
->>
+COMPILE>
 
 : grapheme-break? ( class1 class2 -- ? )
     grapheme-table nth nth not ;
 
 ! Word breaks
-<<
+COMPILE<
 CONSTANT: wOther 0 ;
 CONSTANT: wCR 1 ;
 CONSTANT: wLF 2 ;
@@ -133,12 +133,12 @@ CONSTANT: word-break-classes H{
 load-interval-file dup array>>
 [ 2 swap [ word-break-classes at ] change-nth ] each
 define-constant
->>
+COMPILE>
 
 : word-break-prop ( char -- word-break-prop )
     word-break-table interval-at wOther or ;
 
-<<
+COMPILE<
 symbol: check-letter-before
 symbol: check-letter-after
 symbol: check-number-before
@@ -166,7 +166,7 @@ symbol: check-number-after
 unicode-words init-table table
 [ make-word-table finish-word-table ] with-variable
 define-constant
->>
+COMPILE>
 
 : word-table-nth ( class1 class2 -- ? )
     word-table nth nth ;

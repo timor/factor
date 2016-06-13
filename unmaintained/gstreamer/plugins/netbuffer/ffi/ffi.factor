@@ -4,13 +4,13 @@ USING: alien alien.libraries combinators kernel system
 gobject-introspection glib.ffi ;
 in: gstreamer.netbuffer.ffi
 
-<<
+COMPILE<
 "gstreamer.netbuffer" {
     { [ os winnt? ] [ drop ] }
     { [ os macosx? ] [ drop ] }
     { [ os unix? ] [ "libgstnetbuffer-0.10.so" cdecl add-library ] }
 } cond
->>
+COMPILE>
 
 gir: vocab:gstreamer/netbuffer/GstNetbuffer-0.10.gir
 

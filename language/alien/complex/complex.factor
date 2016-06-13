@@ -4,12 +4,12 @@ USING: accessors alien.c-types alien.complex.functor kernel
 sequences ;
 in: alien.complex
 
-<<
+COMPILE<
 { "float" "double" } [ dup "complex-" prepend define-complex-type ] each
->>
+COMPILE>
 
-<<
+COMPILE<
 ! This overrides the fact that small structures are never returned
 ! in registers on Linux running on 32-bit x86.
 \ complex-float lookup-c-type t >>return-in-registers? drop
->>
+COMPILE>

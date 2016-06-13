@@ -87,4 +87,4 @@ PRIVATE>
     [ break ] [ end drop ] surround
     with-variable ;
 
-<< \ trace t "no-compile" set-word-prop >>
+COMPILE< \ trace t "no-compile" set-word-prop COMPILE>

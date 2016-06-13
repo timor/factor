@@ -4,15 +4,15 @@ USING: alien alien.libraries alien.syntax cairo.ffi combinators
 kernel gobject-introspection system vocabs ;
 in: pango.cairo.ffi
 
-<< "pango.ffi" require >>
+COMPILE< "pango.ffi" require COMPILE>
 
 library: pango.cairo
 
-<< "pango.cairo" {
+COMPILE< "pango.cairo" {
     { [ os windows? ] [ "libpangocairo-1.0-0.dll" ] }
     { [ os macosx? ] [ "libpangocairo-1.0.dylib" ] }
     { [ os unix? ] [ "libpangocairo-1.0.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 FOREIGN-RECORD-TYPE: cairo.Context cairo_t ;
 FOREIGN-RECORD-TYPE: cairo.ScaledFont cairo_scaled_font_t ;

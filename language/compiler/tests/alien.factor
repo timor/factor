@@ -18,7 +18,7 @@ in: compiler.tests.alien
 [ [ void* { "int" } cdecl alien-indirect ] infer ] must-fail
 [ [ void* { int } cdecl { } alien-callback ] infer ] must-fail
 
-<<
+COMPILE<
 : libfactor-ffi-tests-path ( -- string )
     "resource:" absolute-path
     {
@@ -34,7 +34,7 @@ in: compiler.tests.alien
 "f-stdcall" libfactor-ffi-tests-path stdcall add-library
 
 "f-fastcall" libfactor-ffi-tests-path fastcall add-library
->>
+COMPILE>
 
 library: f-cdecl
 

@@ -3,7 +3,7 @@ words kernel multiline parser io.streams.string generic ;
 QUALIFIED-WITH: alien.c-types c ;
 in: functors.tests
 
-<<
+COMPILE<
 
 FUNCTOR: define-box ( T -- )
 
@@ -20,7 +20,7 @@ FUNCTOR;
 
 \ float define-box
 
->>
+COMPILE>
 
 { 1 0 } [ define-box ] must-infer-as
 
@@ -28,7 +28,7 @@ FUNCTOR;
 
 : twice ( word -- )
     [ execute ] [ execute ] bi ; inline
-<<
+COMPILE<
 
 FUNCTOR: wrapper-test ( W -- )
 
@@ -42,11 +42,11 @@ FUNCTOR;
 
 \ sq wrapper-test
 
->>
+COMPILE>
 
 [ 16 ] [ 2 sqsq ] unit-test
 
-<<
+COMPILE<
 
 FUNCTOR: wrapper-test-2 ( W -- )
 
@@ -60,11 +60,11 @@ FUNCTOR;
 
 "blah" wrapper-test-2
 
->>
+COMPILE>
 
 [ 4 ] [ 1 3 blah ] unit-test
 
-<<
+COMPILE<
 
 FUNCTOR: symbol-test ( W -- )
 
@@ -78,11 +78,11 @@ FUNCTOR;
 
 "blorgh" symbol-test
 
->>
+COMPILE>
 
 [ blorgh ] [ blorgh ] unit-test
 
-<<
+COMPILE<
 
 FUNCTOR: generic-test ( W -- )
 
@@ -98,7 +98,7 @@ FUNCTOR;
 
 "snurv" generic-test
 
->>
+COMPILE>
 
 [ 2   ] [ 1   snurv ] unit-test
 [ 3.0 ] [ 3.0 snurv ] unit-test
@@ -150,7 +150,7 @@ FUNCTOR;
 
 test-redefinition
 
-<<
+COMPILE<
 
 FUNCTOR: define-a-struct ( T NAME TYPE N -- )
 
@@ -169,7 +169,7 @@ FUNCTOR;
 
 "a-struct" "nemo" c:char 2 define-a-struct
 
->>
+COMPILE>
 
 [
     {
@@ -211,7 +211,7 @@ FUNCTOR;
     }
 ] [ a-struct struct-slots ] unit-test
 
-<<
+COMPILE<
 
 FUNCTOR: define-an-inline-word ( W -- )
 
@@ -227,12 +227,12 @@ FUNCTOR;
 
 "an-inline-word" define-an-inline-word
 
->>
+COMPILE>
 
 [ t ] [ \ an-inline-word inline? ] unit-test
 [ f ] [ \ an-inline-word-an-inline-word inline? ] unit-test
 
-<<
+COMPILE<
 
 FUNCTOR: define-a-final-class ( T W -- )
 
@@ -249,6 +249,6 @@ FUNCTOR;
 
 "a-final-tuple" "a-word" define-a-final-class
 
->>
+COMPILE>
 
 [ t ] [ a-final-tuple final-class? ] unit-test

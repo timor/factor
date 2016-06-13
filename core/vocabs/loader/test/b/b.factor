@@ -1,6 +1,6 @@
 USING: namespaces ;
 in: vocabs.loader.test.b
 
-<< global [ "count-me" inc ] with-variables >>
+COMPILE< global [ "count-me" inc ] with-variables COMPILE>
 
 : fred ( -- ) bob ;

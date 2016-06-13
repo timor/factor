@@ -6,7 +6,7 @@ USING: kernel accessors continuations lexer vocabs vocabs.parser
 
 in: sandbox.tests
 
-<< "sandbox.syntax" load-vocab drop >>
+COMPILE< "sandbox.syntax" load-vocab drop COMPILE>
 use: sandbox.syntax.private
 
 : run-script ( x lines -- y )

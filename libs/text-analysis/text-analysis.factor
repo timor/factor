@@ -16,7 +16,7 @@ PRIVATE<
 : split-paragraphs ( str -- seq )
     R[[ \r?\n\r?\n]] re-split trimmed ;
 
-<<
+COMPILE<
 CONSTANT: ABBREVIATIONS {
     "jr" "mr" "mrs" "ms" "dr" "prof" "sr" "sen" "rep" "rev"
     "gov" "atty" "supt" "det" "rev" "col','gen" "lt" "cmdr"
@@ -34,7 +34,7 @@ CONSTANT: ABBREVIATIONS {
 
     "ave" "bld" "blvd" "cl" "ct" "cres" "dr" "rd" "st" ! streets
 } ;
->>
+COMPILE>
 
 : split-sentences ( str -- seq )
 

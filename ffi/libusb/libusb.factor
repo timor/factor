@@ -7,11 +7,11 @@ system unix.time unix.types ;
 FROM: alien.c-types => short ;
 in: libusb
 
-<< "libusb" {
+COMPILE< "libusb" {
         { [ os windows? ] [ "libusb-1.0.dll" ] }
         { [ os macosx? ] [ "libusb-1.0.dylib"  ] }
         { [ os unix?  ] [ "libusb-1.0.so" ] }
-    } cond cdecl add-library >>
+    } cond cdecl add-library COMPILE>
 library: libusb
 
 : libusb_cpu_to_le16 ( x -- y )

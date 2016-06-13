@@ -4,12 +4,12 @@ math arrays assocs continuations lexer fry locals vocabs.parser ;
 in: opengl.gl.extensions
 
 ERROR: unknown-gl-platform ;
-<< {
+COMPILE< {
     { [ os windows? ] [ "opengl.gl.windows" ] }
     { [ os macosx? ]  [ "opengl.gl.macosx" ] }
     { [ os unix? ] [ "opengl.gl.gtk" ] }
     [ unknown-gl-platform ]
-} cond use-vocab >>
+} cond use-vocab COMPILE>
 
 symbol: +gl-function-counter+
 symbol: +gl-function-pointers+

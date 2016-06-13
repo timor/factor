@@ -5,7 +5,7 @@ prettyprint.custom quotations sequences sequences.cords words
 classes ;
 in: math.vectors.simd.cords
 
-<<
+COMPILE<
 PRIVATE<
 
 FUNCTOR: (define-simd-128-cord) ( A/2 A -- )
@@ -82,7 +82,7 @@ SYNTAX: \ SIMD-128-CORD:
     scan-word scan-token ";" expect define-simd-128-cord ;
 
 PRIVATE>
->>
+COMPILE>
 
 SIMD-128-CORD: char-16     char-32 ;
 SIMD-128-CORD: uchar-16    uchar-32 ;

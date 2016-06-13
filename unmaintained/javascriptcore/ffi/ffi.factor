@@ -5,7 +5,7 @@ classes.struct combinators io.encodings.utf16n
 io.encodings.utf8 kernel system ;
 in: javascriptcore.ffi
 
-<<
+COMPILE<
 "javascriptcore" {
     { [ os macosx? ] [
         "/System/Library/Frameworks/JavaScriptCore.framework/Versions/Current/JavaScriptCore" cdecl add-library
@@ -14,7 +14,7 @@ in: javascriptcore.ffi
     ! { [ os unix? ]  [ "libsqlite3.so" ] }
     [ drop ]
 } cond
->>
+COMPILE>
 
 library: javascriptcore
 

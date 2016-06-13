@@ -5,7 +5,7 @@ classes.struct locals sequences x11.syntax x11.xlib ;
 EXCLUDE: math => float ;
 in: x11.xinput2.ffi
 
-<< "xinput2" "libXi.so" cdecl add-library >>
+COMPILE< "xinput2" "libXi.so" cdecl add-library COMPILE>
 
 library: xinput2
 

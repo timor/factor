@@ -16,7 +16,7 @@ symbol: G-world
     [ break ] dip
     set-gl-context ;
 
-<< \ gl-break t "break?" set-word-prop >>
+COMPILE< \ gl-break t "break?" set-word-prop COMPILE>
 
 SYNTAX: GB
     \ gl-break suffix! ;

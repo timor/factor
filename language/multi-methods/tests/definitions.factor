@@ -4,7 +4,7 @@ in: multi-methods.tests
 
 defer: fake
 \ fake H{ } clone "multi-methods" set-word-prop
-<< ( -- ) \ fake set-stack-effect >>
+COMPILE< ( -- ) \ fake set-stack-effect COMPILE>
 
 [
     [ "fake-{ }" ] [ { } \ fake method-word-name ] unit-test

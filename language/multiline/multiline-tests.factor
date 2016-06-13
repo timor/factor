@@ -72,9 +72,9 @@ xyz
 ] unit-test
 
 /*
-<<
+COMPILE<
 SYNTAX: MULTILINE-LITERAL: parse-here suffix! ;
->>
+COMPILE>
 
 { { "bar" } }
 [

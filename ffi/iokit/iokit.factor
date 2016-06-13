@@ -3,11 +3,11 @@ core-foundation.bundles core-foundation.dictionaries system
 combinators kernel sequences io accessors unix.types ;
 in: iokit
 
-<<
+COMPILE<
     os macosx?
     [ "/System/Library/Frameworks/IOKit.framework" load-framework ]
     when
->>
+COMPILE>
 
 CONSTANT: kIOKitBuildVersionKey   "IOKitBuildVersion" ;
 CONSTANT: kIOKitDiagnosticsKey   "IOKitDiagnostics" ;

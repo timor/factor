@@ -4,7 +4,7 @@ help.markup help.syntax kernel literals math multiline quotations
 sequences vectors words ;
 in: compiler.cfg.builder
 
-<<
+COMPILE<
 STRING: ex-emit-call
 USING: compiler.cfg.builder compiler.cfg.builder.blocks compiler.cfg.stacks
 kernel make prettyprint ;
@@ -43,7 +43,7 @@ H{
     { 92 T{ ds-loc } }
 }
 ;
->>
+COMPILE>
 
 HELP: build-cfg
 { $values { "nodes" sequence } { "word" word } { "procedures" sequence } }

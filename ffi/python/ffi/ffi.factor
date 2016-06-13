@@ -4,9 +4,9 @@ system ;
 in: python.ffi
 
 ! << "python" { "3.0" "3" "2.7" "2.6" } ! Python 3 has a different api, enable someday
-<< "python"
+COMPILE< "python"
 { "python2.7" "python2.6" "python27" "python26" } find-library-from-list
-cdecl add-library >>
+cdecl add-library COMPILE>
 
 ! Functions that return borrowed references needs to be called like this:
 ! Py_Func dup Py_IncRef &Py_DecRef

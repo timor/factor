@@ -117,7 +117,7 @@ M: ##epilogue generate-insn
 
 ! Some meta-programming to generate simple code generators, where
 ! the instruction is unpacked and then a %word is called
-<<
+COMPILE<
 
 : insn-slot-quot ( spec -- quot )
     name>> reader-word 1quotation ;
@@ -132,7 +132,7 @@ SYNTAX: \ CODEGEN:
     scan-word [ \ generate-insn create-method-in ] keep scan-word ";" expect
     codegen-method-body define ;
 
->>
+COMPILE>
 
 CODEGEN: ##load-integer %load-immediate ;
 CODEGEN: ##load-tagged %load-immediate ;
@@ -277,13 +277,13 @@ CODEGEN: ##spill %spill ;
 CODEGEN: ##reload %reload ;
 
 ! Conditional branches
-<<
+COMPILE<
 
 SYNTAX: \ CONDITIONAL:
     scan-word [ \ generate-conditional-insn create-method-in ] keep scan-word ";" expect
     codegen-method-body define ;
 
->>
+COMPILE>
 
 CONDITIONAL: ##compare-branch %compare-branch ;
 CONDITIONAL: ##compare-imm-branch %compare-imm-branch ;

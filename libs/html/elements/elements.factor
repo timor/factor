@@ -14,7 +14,7 @@ symbol: html
 : print-html ( str -- )
     write-html "\n" write-html ;
 
-<<
+COMPILE<
 
 CONSTANT: elements-vocab "html.elements" ;
 
@@ -125,4 +125,4 @@ CONSTANT: elements-vocab "html.elements" ;
     "nofollow" "alt" "target"
 ] [ define-attribute-word ] each
 
->>
+COMPILE>

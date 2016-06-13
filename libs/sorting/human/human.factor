@@ -42,5 +42,5 @@ M: alphanum <=>
         <=>
     ] if ;
 
-<< "human" [ find-numbers [ <alphanum> ] map ] define-sorting >>
-<< "humani" [ find-numbers [ <alphanum-insensitive> ] map ] define-sorting >>
+COMPILE< "human" [ find-numbers [ <alphanum> ] map ] define-sorting COMPILE>
+COMPILE< "humani" [ find-numbers [ <alphanum-insensitive> ] map ] define-sorting COMPILE>

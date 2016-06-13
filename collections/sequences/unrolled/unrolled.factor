@@ -8,9 +8,9 @@ PRIVATE<
 : (unrolled-each-integer) ( quot n -- )
     swap '[ _ call( i -- ) ] each-integer ;
 
-<< \ (unrolled-each-integer) [
+COMPILE< \ (unrolled-each-integer) [
     iota [ '[ _ swap call( i -- ) ] ] [ ] map-as '[ _ cleave ]
-] 1 define-partial-eval >>
+] 1 define-partial-eval COMPILE>
 
 : (unrolled-collect) ( quot into -- quot' )
     '[ dup @ swap _ set-nth-unsafe ] ; inline

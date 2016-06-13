@@ -31,7 +31,7 @@ in: modern.compiler
         ! over changed-definition
         ! swap def>> first swapd set-at
     ! ] with-definition ;
-! >>
+! COMPILE>
 
 
 TUPLE: holder literal ;

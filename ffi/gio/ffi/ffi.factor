@@ -4,14 +4,14 @@ USING: alien alien.libraries alien.syntax combinators
 gobject-introspection kernel system vocabs ;
 in: gio.ffi
 
-<< "gobject.ffi" require >>
+COMPILE< "gobject.ffi" require COMPILE>
 
 library: gio
 
-<< "gio" {
+COMPILE< "gio" {
     { [ os windows? ] [ "libgio-2.0-0.dll" ] }
     { [ os macosx? ] [ "libgio-2.0.dylib" ] }
     { [ os unix? ] [ "libgio-2.0.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 gir: vocab:gio/Gio-2.0.gir

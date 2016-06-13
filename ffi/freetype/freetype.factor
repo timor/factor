@@ -4,11 +4,11 @@ USING: alien alien.c-types alien.syntax kernel system combinators
 alien.libraries classes.struct ;
 in: freetype
 
-<< "freetype" {
+COMPILE< "freetype" {
     { [ os macosx? ] [ "/usr/X11R6/lib/libfreetype.6.dylib" cdecl add-library ] }
     { [ os windows? ] [ "freetype6.dll" cdecl add-library ] }
     { [ t ] [ drop ] }
-} cond >>
+} cond COMPILE>
 
 library: freetype
 

@@ -4,21 +4,21 @@ USING: alien alien.c-types alien.libraries alien.syntax combinators
 gobject-introspection kernel system vocabs ;
 in: gstreamer.ffi
 
-<<
+COMPILE<
 "glib.ffi" require
 "gobject.ffi" require
 "gmodule.ffi" require
->>
+COMPILE>
 
 library: gstreamer
 
-<<
+COMPILE<
 "gstreamer" {
     { [ os windows? ] [ drop ] }
     { [ os macosx? ] [ drop ] }
     { [ os unix? ] [ "libgstreamer-0.10.so" cdecl add-library ] }
 } cond
->>
+COMPILE>
 
 PRIVATE<
 

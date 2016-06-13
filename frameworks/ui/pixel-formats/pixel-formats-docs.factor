@@ -3,11 +3,11 @@ vocabs vocabs.parser words namespaces ;
 in: ui.pixel-formats
 
 ! break circular dependency
-<<
+COMPILE<
     "ui.gadgets.worlds" create-vocab drop
     "world" "ui.gadgets.worlds" create-word drop
     "ui.gadgets.worlds" vocab-words-assoc use-words
->>
+COMPILE>
 
 ARTICLE: "ui.pixel-formats-attributes" "Pixel format attributes"
 "The following pixel format attributes can be requested and queried of " { $link pixel-format } "s. Binary attributes are represented by the presence of a symbol in an attribute sequence:"

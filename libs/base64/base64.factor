@@ -9,7 +9,7 @@ ERROR: malformed-base64 ;
 
 PRIVATE<
 
-<<
+COMPILE<
 CONSTANT: alphabet
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" ;
 
@@ -17,7 +17,7 @@ CONSTANT: alphabet
     dup supremum 1 + f <array> [
         '[ swap _ set-nth ] each-index
     ] keep ;
->>
+COMPILE>
 
 : ch>base64 ( ch -- ch )
     alphabet nth ; inline

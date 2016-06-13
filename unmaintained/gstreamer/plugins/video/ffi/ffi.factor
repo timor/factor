@@ -5,13 +5,13 @@ system
 gobject-introspection glib.ffi gobject.ffi gstreamer.ffi ;
 in: gstreamer.video.ffi
 
-<<
+COMPILE<
 "gstreamer.video" {
     { [ os winnt? ] [ drop ] }
     { [ os macosx? ] [ drop ] }
     { [ os unix? ] [ "libgstvideo-0.10.so" cdecl add-library ] }
 } cond
->>
+COMPILE>
 
 IMPLEMENT-STRUCTS: GstVideoRectangle ;
 

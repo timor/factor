@@ -76,9 +76,9 @@ M: integer test-7 + ;
 
 ! Indirect dependency on an unoptimized word
 : test-9 ( -- ) ;
-<< symbol: quot
+COMPILE< symbol: quot
 [ test-9 ] quot set-global
-MACRO: test-10 ( -- quot ) quot get ; >>
+MACRO: test-10 ( -- quot ) quot get ; COMPILE>
 : test-11 ( -- ) test-10 ;
 
 [ ] [ test-11 ] unit-test

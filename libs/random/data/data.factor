@@ -4,10 +4,10 @@ USING: combinators combinators.random effects.parser kernel
 literals math random sequences ;
 in: random.data
 
-<<
+COMPILE<
 CONSTANT: digits-count 10 ;
 CONSTANT: letters-count 26 ;
->>
+COMPILE>
 
 : random-digit ( -- ch )
     digits-count random char: 0 + ;

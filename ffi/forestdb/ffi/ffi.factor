@@ -6,7 +6,7 @@ in: forestdb.ffi
 
 ! Functions with LIBFDB_API are exported.
 
-<< "forestdb" dup find-library cdecl add-library >>
+COMPILE< "forestdb" dup find-library cdecl add-library COMPILE>
 
 library: forestdb
 

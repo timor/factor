@@ -6,20 +6,20 @@ gobject-introspection gobject-introspection.standard-types
 kernel system vocabs vocabs.loader ;
 in: gdk.ffi
 
-<<
+COMPILE<
 "pango.ffi" require
 "gdk.pixbuf.ffi" require
->>
+COMPILE>
 
 library: gdk
 
-<<
+COMPILE<
 "gdk" {
     { [ os windows? ] [ "libgdk-win32-2.0-0.dll" cdecl add-library ] }
     { [ os macosx? ] [ drop ] }
     { [ os unix? ] [ "libgdk-x11-2.0.so" cdecl add-library ] }
 } cond
->>
+COMPILE>
 
 ! <workaround these types are from cairo 1.10
 STRUCT: cairo_rectangle_int_t

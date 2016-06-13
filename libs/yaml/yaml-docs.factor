@@ -159,7 +159,7 @@ ARTICLE: "yaml-keys" "Special mapping keys"
 { $example "USING: yaml prettyprint ;
 \"
 foo: 1
-<<:
+COMPILE<:
   bar: 2
   <<:
     baz: 3

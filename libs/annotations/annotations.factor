@@ -4,7 +4,7 @@ kernel lexer namespaces parser prettyprint tools.crossref
 sequences words ;
 in: annotations
 
-<<
+COMPILE<
 
 : (parse-annotation) ( accum -- accum )
     lexer get [ line-text>> suffix! ] [ next-line ] bi ;
@@ -40,4 +40,4 @@ CONSTANT: annotation-tags {
 
 annotation-tags [ define-annotation ] each
 
->>
+COMPILE>

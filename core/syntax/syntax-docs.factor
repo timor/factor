@@ -30,7 +30,7 @@ ARTICLE: "syntax-immediate" "Parse time evaluation"
 "Code can be evaluated at parse time. This is a rarely-used feature; one use-case is " { $link "loading-libs" } ", where you want to execute some code before the words in a source file are compiled."
 { $subsections
     \ <<
-    \ >>
+    \ COMPILE>
 } ;
 
 ARTICLE: "syntax-integers" "Integer syntax"
@@ -870,7 +870,7 @@ HELP: <<
 { $description "Evaluates some code at parse time." }
 { $notes "Calling words defined in the same source file at parse time is prohibited; see compilation unit as where it was defined; see " { $link "compilation-units" } "." } ;
 
-HELP: >>
+HELP: COMPILE>
 { $syntax ">>" }
 { $description "Marks the end of a parse time code block." } ;
 

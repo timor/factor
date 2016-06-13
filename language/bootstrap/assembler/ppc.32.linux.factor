@@ -69,5 +69,5 @@ CONSTANT: frame-reg 31 ;
 : param-size ( -- n ) 32 ;
 : saved-int-regs-size ( -- n ) 96 ;
 
-<< "vocab:bootstrap/assembler/ppc.factor" parse-file suffix! >>
+COMPILE< "vocab:bootstrap/assembler/ppc.factor" parse-file suffix! COMPILE>
 call

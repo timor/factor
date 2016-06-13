@@ -196,7 +196,7 @@ FUNCTOR;"
     }
     { $slide "Example of sorting functor"
         { $code "USING: sorting.functor ;
-<< \"length\" [ length ] define-sorting >>"
+COMPILE< \"length\" [ length ] define-sorting >>"
         }
         { $code
             "{ { 1 2 3 } { 1 2 } { 1 } }

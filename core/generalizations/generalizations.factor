@@ -10,7 +10,7 @@ in: generalizations
 ! the input parameters, e.g. n.
 ! If math is done, the word needs to be a macro so the math can
 ! be done at compile-time.
-<<
+COMPILE<
 
 ALIAS: n*quot (n*quot) ;
 
@@ -19,7 +19,7 @@ MACRO: call-n ( n -- quot )
 
 : repeat ( n obj quot -- ) swapd times ; inline
 
->>
+COMPILE>
 
 MACRO: nsum ( n -- quot )
     1 - [ + ] n*quot ;

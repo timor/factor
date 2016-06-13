@@ -31,7 +31,7 @@ FROM: kernel.private => declare ;
 : is-gml ( registers gml obj -- registers gml obj )
     { array gml object } declare ; inline
 
-<<
+COMPILE<
 
 : (EXEC:) ( quot -- method def )
     scan-word \ (exec) create-method-in
@@ -41,7 +41,7 @@ SYNTAX: \ EXEC: [ parse-definition ] (EXEC:) define ;
 
 SYNTAX: \ EXEC:: [ [ parse-definition ] parse-locals-definition drop ] (EXEC:) define ;
 
->>
+COMPILE>
 
 ! Literals
 EXEC: object over push-operand ;

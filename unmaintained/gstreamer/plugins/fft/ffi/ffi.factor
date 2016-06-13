@@ -5,13 +5,13 @@ system
 gobject-introspection glib.ffi gstreamer.ffi ;
 in: gstreamer.fft.ffi
 
-<<
+COMPILE<
 "gstreamer.fft" {
     { [ os winnt? ] [ drop ] }
     { [ os macosx? ] [ drop ] }
     { [ os unix? ] [ "libgstfft-0.10.so" cdecl add-library ] }
 } cond
->>
+COMPILE>
 
 gir: vocab:gstreamer/fft/GstFft-0.10.gir
 

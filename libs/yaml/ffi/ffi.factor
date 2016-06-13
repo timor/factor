@@ -7,9 +7,9 @@ alien.syntax classes.struct combinators literals system
 alien.libraries.finder ;
 in: yaml.ffi
 
-<<
+COMPILE<
 "libyaml" { "yaml" "yaml-0" "libyaml-0-2" } find-library-from-list cdecl add-library
->>
+COMPILE>
 
 c-type: FILE
 

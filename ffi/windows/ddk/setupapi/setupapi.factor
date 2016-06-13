@@ -5,7 +5,7 @@ classes.struct alien alien.c-types windows.errors windows.ole32
 windows.advapi32 alien.libraries ;
 in: windows.ddk.setupapi
 
-<< "setupapi" "setupapi.dll" stdcall add-library >>
+COMPILE< "setupapi" "setupapi.dll" stdcall add-library COMPILE>
 library: setupapi
 
 TYPEDEF: DWORDLONG SP_LOG_TOKEN ;

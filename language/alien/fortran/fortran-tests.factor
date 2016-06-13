@@ -8,7 +8,7 @@ QUALIFIED-WITH: alien.c-types c ;
 QUALIFIED-WITH: alien.syntax s ;
 in: alien.fortran.tests
 
-<< intel-unix-abi "(alien.fortran-tests)" (add-fortran-library) >>
+COMPILE< intel-unix-abi "(alien.fortran-tests)" (add-fortran-library) COMPILE>
 library: (alien.fortran-tests)
 STRUCT: fortran_test_record
     { FOO int }

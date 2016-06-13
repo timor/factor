@@ -9,10 +9,10 @@ ERROR: malformed-base85 ;
 
 PRIVATE<
 
-<<
+COMPILE<
 CONSTANT: alphabet
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_`{|}~\";" ;
->>
+COMPILE>
 : ch>base85 ( ch -- ch )
     alphabet nth ; inline
 

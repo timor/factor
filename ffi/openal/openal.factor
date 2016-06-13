@@ -9,15 +9,15 @@ ushort void ;
 specialized-array: uint
 in: openal
 
-<< "openal" {
+COMPILE< "openal" {
         { [ os windows? ]  [ "OpenAL32.dll" ] }
         { [ os macosx? ] [
             "/System/Library/Frameworks/OpenAL.framework/OpenAL"
         ] }
         { [ os unix?  ]  [ "libopenal.so" ] }
-    } cond cdecl add-library >>
+    } cond cdecl add-library COMPILE>
 
-<< os unix? [ "openal" deploy-library ] unless >>
+COMPILE< os unix? [ "openal" deploy-library ] unless COMPILE>
 
 library: openal
 

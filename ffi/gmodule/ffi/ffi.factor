@@ -4,14 +4,14 @@ USING: alien alien.libraries alien.syntax combinators
 gobject-introspection kernel system vocabs ;
 in: gmodule.ffi
 
-<< "glib.ffi" require >>
+COMPILE< "glib.ffi" require COMPILE>
 
 library: gmodule
 
-<< "gmodule" {
+COMPILE< "gmodule" {
     { [ os windows? ] [ "libgmodule-2.0-0.dll" ] }
     { [ os macosx? ] [ "libgmodule-2.0.dylib" ] }
     { [ os unix? ] [ "libgmodule-2.0.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 gir: vocab:gmodule/GModule-2.0.gir

@@ -468,11 +468,11 @@ main = Primary
   "foo=!(keyword) name:n => [[ n ]]" rule-parser parse =
 ] unit-test
 
-<<
+COMPILE<
 : parser1 ( string -- obj ) EBNF{{
 foo='a' 
 }} ;
->>
+COMPILE>
 
 : parser2 ( string -- obj ) EBNF{{
 foo=<foreign parser1 foo> 'b'

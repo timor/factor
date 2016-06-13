@@ -4,11 +4,11 @@ USING: accessors alien alien.c-types alien.libraries alien.libraries.finder
 alien.syntax classes.struct combinators kernel math system unix.types ;
 in: curses.ffi
 
-<< "curses" {
+COMPILE< "curses" {
     { [ os windows? ]  [ "libcurses.dll" ] }
     { [ os macosx? ] [ "libcurses.dylib" ] }
     { [ os unix?  ]  [ "ncursesw" find-library ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 c-type: SCREEN
 TYPEDEF: void* va_list ;

@@ -6,7 +6,7 @@ combinators kernel sequences system ;
 
 in: llvm.core
 
-<<
+COMPILE<
 : add-llvm-library ( name -- )
     dup {
         { [ os macosx? ] [ "lib" ".dylib" surround ] }
@@ -16,7 +16,7 @@ in: llvm.core
 
 { "LLVMSystem" "LLVMSupport" "LLVMCore" "LLVMBitReader" }
 [ add-llvm-library ] each
->>
+COMPILE>
 
 ! llvm-c/Core.h
 

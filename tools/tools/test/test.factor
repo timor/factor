@@ -106,14 +106,14 @@ MACRO: <experiment> ( word -- quot )
     lexer get line>> suffix!
     \ experiment suffix! ; inline
 
-<<
+COMPILE<
 
 SYNTAX: \ test:
     scan-token
     [ create-word-in ]
     [ "(" ")" surround search '[ _ parse-test ] ] bi
     define-syntax ;
->>
+COMPILE>
 
 : fake-unit-test ( quot -- test-failures )
     [

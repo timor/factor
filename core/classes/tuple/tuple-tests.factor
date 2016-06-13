@@ -811,7 +811,7 @@ TUPLE: rclasstest a b ;
 { f } [ \ rclasstest \ b>> ?lookup-method ] unit-test
 { f } [ \ rclasstest \ b<< ?lookup-method ] unit-test
 
-<< \ rclasstest forget >>
+COMPILE< \ rclasstest forget COMPILE>
 
 ! initial: should type check
 TUPLE: initial-class ;

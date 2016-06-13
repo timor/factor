@@ -4,7 +4,7 @@ tools.test ;
 in: gobject-introspection.ffi.tests
 
 ! callback
-<<
+COMPILE<
 
 {
     T{ return
@@ -31,4 +31,4 @@ in: gobject-introspection.ffi.tests
     "none" f simple-type boa "none" return boa return-c-type
 ] unit-test
 
->>
+COMPILE>

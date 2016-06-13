@@ -7,7 +7,7 @@ math namespaces quotations sequences sequences.private sets
 slots words ;
 in: compiler.cfg.value-numbering.expressions
 
-<<
+COMPILE<
 
 GENERIC: >expr ( insn -- expr ) ;
 
@@ -54,7 +54,7 @@ insn-classes get
     define->expr-method
 ] each
 
->>
+COMPILE>
 
 TUPLE: integer-expr value ;
 

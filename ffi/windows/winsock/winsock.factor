@@ -8,10 +8,10 @@ windows.errors windows.kernel32 windows.types ;
 FROM: alien.c-types => short ;
 in: windows.winsock
 
-<<
+COMPILE<
 ! Some differences between Win32 and Win64
 cpu x86.64? "windows.winsock.64" "windows.winsock.32" ? use-vocab
->>
+COMPILE>
 
 TYPEDEF: int* SOCKET ;
 

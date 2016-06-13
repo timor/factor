@@ -5,7 +5,7 @@ in: locals.parser.tests
 
 ! XXX: remove the << and >> below and make test-all pass
 
-<<
+COMPILE<
 ! (::)
 {
     "dobiedoo"
@@ -26,7 +26,7 @@ in: locals.parser.tests
         qualified-vocabs last words>> keys "um" swap member?
     ] with-compilation-unit
 ] unit-test
->>
+COMPILE>
 
 ! check-local-name
 { "hello" } [
@@ -58,7 +58,7 @@ in: locals.parser.tests
     [ locals>> [ name>> ] map ] [ keys ] bi*
 ] unit-test
 
-<<
+COMPILE<
 {
     "V{ 99 :> kkk kkk }"
 } [
@@ -69,4 +69,4 @@ in: locals.parser.tests
         ] with-lexer
     ] with-compilation-unit unparse
 ] unit-test
->>
+COMPILE>

@@ -2,7 +2,7 @@ USING: tools.test classes.mixin compiler.units arrays kernel.private
 strings sequences vocabs definitions kernel ;
 in: compiler.tests.redefine17
 
-<< "compiler.tests.redefine17" vocab-words forget-all >>
+COMPILE< "compiler.tests.redefine17" vocab-words forget-all COMPILE>
 
 GENERIC: bong ( a -- b ) ;
 

@@ -8,15 +8,15 @@ FROM: alien.c-types => float short ;
 specialized-array: uint
 in: openal.alut
 
-<< "alut" {
+COMPILE< "alut" {
         { [ os windows? ]  [ "alut.dll" ] }
         { [ os macosx? ] [
             "/System/Library/Frameworks/OpenAL.framework/OpenAL"
         ] }
         { [ os unix?  ]  [ "libalut.so" ] }
-    } cond cdecl add-library >>
+    } cond cdecl add-library COMPILE>
 
-<< os macosx? [ "alut" deploy-library ] unless >>
+COMPILE< os macosx? [ "alut" deploy-library ] unless COMPILE>
 
 library: alut
 

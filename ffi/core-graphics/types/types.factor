@@ -6,7 +6,7 @@ FROM: alien.c-types => float ;
 in: core-graphics.types
 
 symbol: CGFloat
-<< cell 4 = float double ? \ CGFloat typedef >>
+COMPILE< cell 4 = float double ? \ CGFloat typedef COMPILE>
 
 STRUCT: CGPoint
     { x CGFloat }

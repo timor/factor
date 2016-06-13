@@ -68,7 +68,7 @@ M: object add-breakpoint ;
 : (step-into-call-next-method) ( method -- )
     next-method-quot (step-into-quotation) ;
 
-<< {
+COMPILE< {
     (step-into-quotation)
     (step-into-dip)
     (step-into-2dip)
@@ -78,7 +78,7 @@ M: object add-breakpoint ;
     (step-into-execute)
     (step-into-continuation)
     (step-into-call-next-method)
-} [ t "no-compile" set-word-prop ] each >>
+} [ t "no-compile" set-word-prop ] each COMPILE>
 
 : >innermost-frame< ( callstack -- n quot )
     [ innermost-frame-scan 1 + ] [ innermost-frame-executing ] bi ;

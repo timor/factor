@@ -5,11 +5,11 @@ alien.syntax classes.struct combinators io.encodings.ascii kernel
 locals math system ;
 in: lua
 
-<< "liblua5.1" {
+COMPILE< "liblua5.1" {
     { [ os windows? ] [ "lua5.1.dll" ] }
     { [ os macosx? ] [ "liblua5.1.dylib"  ] }
     { [ os unix? ] [ "liblua5.1.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 library: liblua5.1
 

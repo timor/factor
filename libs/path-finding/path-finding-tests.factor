@@ -11,7 +11,7 @@ in: path-finding.tests
 !   - going down costs 1 point
 !   - going left or right costs 2 points
 
-<<
+COMPILE<
 
 TUPLE: maze < astar ;
 
@@ -45,7 +45,7 @@ M: maze cost
 
 : test1 ( to -- path considered )
     { 1 1 } swap maze new [ find-path ] [ considered ] bi ;
->>
+COMPILE>
 
 ! Existing path from s to f
 {
@@ -93,7 +93,7 @@ M: maze cost
 !     A ---> D ---------> E ---> F
 !       (2)       (1)       (1)
 
-<<
+COMPILE<
 
 ! In this version, we will use the quotations-aware version through <astar>.
 
@@ -107,7 +107,7 @@ MEMO: routes ( -- hash ) $[ { "ABD" "BC" "C" "DCE" "ECF" } [ unclip swap 2array 
 
 : test2 ( fromto -- path considered )
     first2 [ n ] [ c ] [ 2drop 0 ] <astar> [ find-path ] [ considered natural-sort >string ] bi ;
->>
+COMPILE>
 
 ! Check path from A to C -- all nodes but F must have been examined
 { "ADC" "ABCDE" } [ "AC" test2 [ >string ] dip ] unit-test
@@ -121,7 +121,7 @@ MEMO: routes ( -- hash ) $[ { "ABD" "BC" "C" "DCE" "ECF" } [ unclip swap 2array 
 { f } [ "FA" first2 routes <bfs> find-path ] unit-test
 { "DC" } [ "DC" first2 routes <bfs> find-path >string ] unit-test
 
-<<
+COMPILE<
 
 ! Build the costs as expected by the dijkstra word.
 
@@ -131,7 +131,7 @@ MEMO: costs ( -- costs )
 : test3 ( fromto -- path considered )
     first2 costs <dijkstra> [ find-path ] [ considered natural-sort >string ] bi ;
 
->>
+COMPILE>
 
 ! Check path from A to C -- all nodes but F must have been examined
 { "ADC" "ABCDE" } [ "AC" test3 [ >string ] dip ] unit-test

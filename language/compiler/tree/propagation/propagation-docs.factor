@@ -1,7 +1,7 @@
 USING: help.markup help.syntax literals multiline ;
 in: compiler.tree.propagation
 
-<<
+COMPILE<
 STRING: propagate-ex
 USING: compiler.tree.builder compiler.tree.propagation math prettyprint ;
 [ 3 + ] build-tree propagate third .
@@ -43,7 +43,7 @@ T{ #call
     }
 }
 ;
->>
+COMPILE>
 
 HELP: propagate
 { $values { "nodes" "a sequence of nodes" } }

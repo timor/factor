@@ -3,11 +3,11 @@ alien.syntax combinators io.sockets.secure system unix.types ;
 
 in: libtls.ffi
 
-<< "libtls" {
+COMPILE< "libtls" {
     { [ os windows? ] [ "libtls-10.dll" ] }
     { [ os macosx? ] [ "libtls.dylib" ] }
     { [ os unix? ] [ "libtls.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 c-type: tls_config
 c-type: tls_ctx

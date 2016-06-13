@@ -4,7 +4,7 @@ USING: alien.c-types alien.syntax system sequences vocabs.loader words
 accessors vocabs ;
 in: unix.kqueue
 
-<< "unix.kqueue." os name>> append require >>
+COMPILE< "unix.kqueue." os name>> append require COMPILE>
 
 FUNCTION: int kqueue ( ) ;
 

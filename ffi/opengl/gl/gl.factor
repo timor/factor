@@ -627,11 +627,11 @@ CONSTANT: GL_CLIENT_ALL_ATTRIB_BITS         0xFFFFFFFF ;
 
 library: gl
 
-<<
+COMPILE<
 os linux? [
     "gl" "libGL.so" cdecl add-library
 ] when
->>
+COMPILE>
 
 ! Miscellaneous
 
@@ -1125,7 +1125,7 @@ FUNCTION: void glLoadName ( GLuint name ) ;
 FUNCTION: void glPushName ( GLuint name ) ;
 FUNCTION: void glPopName ( ) ;
 
-<< reset-gl-function-number-counter >>
+COMPILE< reset-gl-function-number-counter COMPILE>
 
 ! OpenGL 1.2
 

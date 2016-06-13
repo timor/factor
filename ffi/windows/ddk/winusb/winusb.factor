@@ -4,7 +4,7 @@ USING: alien alien.c-types alien.syntax classes.struct
 windows.kernel32 windows.types alien.libraries ;
 in: windows.ddk.winusb
 
-<< "winusb" "winusb.dll" stdcall add-library >>
+COMPILE< "winusb" "winusb.dll" stdcall add-library COMPILE>
 library: winusb
 
 TYPEDEF: PVOID WINUSB_INTERFACE_HANDLE ;

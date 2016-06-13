@@ -4,14 +4,14 @@ USING: alien alien.c-types alien.libraries alien.syntax kernel
 llvm.core sequences ;
 in: llvm.engine
 
-<<
+COMPILE<
 {
     "LLVMExecutionEngine" "LLVMTarget" "LLVMAnalysis" "LLVMipa"
     "LLVMTransformUtils" "LLVMScalarOpts" "LLVMCodeGen"
     "LLVMAsmPrinter" "LLVMSelectionDAG" "LLVMX86CodeGen"
     "LLVMJIT" "LLVMInterpreter"
 } [ add-llvm-library ] each
->>
+COMPILE>
 
 ! llvm-c/ExecutionEngine.h
 

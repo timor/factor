@@ -2,7 +2,7 @@ USING: furnace.utilities io.encodings.utf8 io.files io.files.temp kernel
 multiline parser tools.test webapps.counter ;
 in: furnace.utilities.tests
 
-<<
+COMPILE<
 STRING: dummy-vocab
 in: dummy-vocab
 
@@ -10,7 +10,7 @@ in: dummy-vocab
 ;
 
 dummy-vocab "dummy.factor" temp-file [ utf8 set-file-contents ] keep run-file
->>
+COMPILE>
 
 { t } [
     use: dummy-vocab

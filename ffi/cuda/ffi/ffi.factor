@@ -3,13 +3,13 @@ USING: accessors alien alien.c-types alien.libraries alien.syntax
 classes.struct combinators kernel system ;
 in: cuda.ffi
 
-<<
+COMPILE<
 "cuda" {
     { [ os windows? ] [ "nvcuda.dll" stdcall ] }
     { [ os macosx? ] [ "/usr/local/cuda/lib/libcuda.dylib" cdecl ] }
     { [ os unix? ] [ "libcuda.so" cdecl ] }
 } cond add-library
->>
+COMPILE>
 
 library: cuda
 
@@ -28,14 +28,14 @@ TYPEDEF: void* CUgraphicsResource ;
 
 SYMBOLS: CUdouble CUlonglong CUulonglong ;
 
-<<
+COMPILE<
 : always-8-byte-align ( c-type -- c-type )
     8 >>align 8 >>align-first ;
 
 longlong  lookup-c-type clone always-8-byte-align \ CUlonglong  typedef
 ulonglong lookup-c-type clone always-8-byte-align \ CUulonglong typedef
 double    lookup-c-type clone always-8-byte-align \ CUdouble    typedef
->>
+COMPILE>
 
 STRUCT: CUuuid
     { bytes char[16] } ;

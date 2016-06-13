@@ -4,7 +4,7 @@ USING: alien alien.c-types alien.libraries alien.syntax kernel
 sequences words system combinators opengl.gl alien.destructors ;
 in: opengl.glu
 
-<<
+COMPILE<
 
 os {
     { [ dup macosx? ] [ drop ] }
@@ -12,7 +12,7 @@ os {
     { [ dup unix? ] [ drop "glu" "libGLU.so.1" cdecl add-library ] }
 } cond
 
->>
+COMPILE>
 
 library: glu
 

@@ -4,8 +4,8 @@ USING: interval-maps namespaces parser simple-flat-file
 words.constant ;
 in: unicode.script
 
-<<
+COMPILE<
 "script-table" create-word-in
 "vocab:unicode/script/Scripts.txt" load-interval-file
 define-constant
->>
+COMPILE>

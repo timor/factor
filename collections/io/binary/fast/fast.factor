@@ -16,7 +16,7 @@ ERROR: bad-length bytes n ;
 : check-length ( bytes n -- bytes n )
     2dup [ length ] dip > [ bad-length ] when ; inline
 
-<<
+COMPILE<
 : be-range ( n -- range )
     1 - 8 * 0 -8 <range> ; inline
 
@@ -30,7 +30,7 @@ ERROR: bad-length bytes n ;
 MACRO: reassemble-be ( n -- quot ) be-range reassemble-bytes ;
 
 MACRO: reassemble-le ( n -- quot ) le-range reassemble-bytes ;
->>
+COMPILE>
 
 :: n-be> ( bytes n -- x )
     bytes n check-length drop n firstn-unsafe n reassemble-be ; inline

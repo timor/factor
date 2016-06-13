@@ -57,9 +57,9 @@ M: float mod fmod ; inline
 
 ! fsqrt has an intrinsic so we don't actually want to inline it
 ! unconditionally
-<<
+COMPILE<
 \ fsqrt f "inline" set-word-prop
->>
+COMPILE>
 
 ! Windows doesn't have these...
 FUNCTION-ALIAS: flog1+

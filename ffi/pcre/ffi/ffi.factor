@@ -8,11 +8,11 @@ USING:
     system ;
 in: pcre.ffi
 
-<< "pcre" {
+COMPILE< "pcre" {
     { [ os windows? ] [ "pcre.dll" ] }
     { [ os macosx? ] [ "libpcre.dylib" ] }
     { [ os unix? ] [ "libpcre.so" ] }
-} cond cdecl add-library >>
+} cond cdecl add-library COMPILE>
 
 library: pcre
 

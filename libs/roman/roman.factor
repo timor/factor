@@ -54,14 +54,14 @@ MACRO: binary-roman-op ( quot -- quot' )
 
 PRIVATE>
 
-<<
+COMPILE<
 
 SYNTAX: \ ROMAN-OP:
     scan-word [ name>> "roman" prepend create-word-in ] keep
     1quotation '[ _ binary-roman-op ]
     scan-effect ";" expect define-declared ;
 
->>
+COMPILE>
 
 ROMAN-OP: + ( x y -- z ) ;
 ROMAN-OP: - ( x y -- z ) ;

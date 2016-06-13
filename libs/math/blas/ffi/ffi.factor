@@ -2,12 +2,12 @@ USING: alien.fortran kernel math.blas.config namespaces ;
 FROM: alien.libraries => deploy-library ;
 in: math.blas.ffi
 
-<<
+COMPILE<
 "blas" blas-library blas-fortran-abi [ get ] bi@
 add-fortran-library
 
 deploy-blas? get [ "blas" deploy-library ] when
->>
+COMPILE>
 
 library: blas
 

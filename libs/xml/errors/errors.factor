@@ -5,7 +5,7 @@ classes.tuple.private combinators generalizations kernel math
 namespaces parser sequences vocabs.loader words xml.state ;
 in: xml.errors
 
-<<
+COMPILE<
 
 PREDICATE: generated-xml-error < tuple class-of "xml-error-class" word-prop ;
 
@@ -29,7 +29,7 @@ SYNTAX: \ XML-ERROR:
     parse-tuple-definition pick save-location
     define-xml-error-class ;
 
->>
+COMPILE>
 
 XML-ERROR: expected should-be was ;
 

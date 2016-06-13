@@ -8,7 +8,7 @@ quotations sequences sequences.extras splitting
 splitting.monotonic strings unicode generalizations ;
 in: modern
 
-<<
+COMPILE<
 ! Base rules, everything should have a generator macro
 TUPLE: lexer generator ;
 
@@ -52,7 +52,7 @@ TUPLE: right-decorator-literal < decorator-literal ;
 
 TUPLE: compound-sequence-literal sequence ;
 CONSTRUCTOR: <compound-sequence-literal> compound-sequence-literal ( sequence -- obj ) ;
->>
+COMPILE>
 
 GENERIC: lexed-underlying ( obj -- slice ) ;
 M: f lexed-underlying ;
@@ -132,7 +132,7 @@ M: array collapse-decorators
             [ [ length 2 - ] keep [ char: \: = ] find-last-from ] keep
            swap [ swap tail strict-upper? ] [ nip strict-upper? ] if
         ] [
-            drop t
+            "<" sequence= not
         ] if
     ] [
         drop f
@@ -406,13 +406,13 @@ PRIVATE>
         [ make-tag-literal ]
     } cond ;
 
-<<
+COMPILE<
 : lexer-rules>delimiters ( seq -- string )
     [ delimiter>> ] "" map-as ;
 
 : lexer-rules>assoc ( seq -- seq' )
     [ [ delimiter>> ] [ generator>> 1quotation ] bi ] { } map>assoc ;
->>
+COMPILE>
 
 ! 0 "HI: ;" slice-til-either -> 3 "HI: ;" "HI:" CHAR: \:
 MACRO: rules>call-lexer ( seq -- quot: ( top? n/f string -- top?' n'/f string literal ) )

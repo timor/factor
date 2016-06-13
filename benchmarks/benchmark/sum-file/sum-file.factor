@@ -2,11 +2,11 @@ USING: io io.encodings.ascii io.files io.files.temp math
 math.parser kernel sequences ;
 in: benchmark.sum-file
 
-<<
+COMPILE<
 "sum-file.txt" temp-file ascii [
     100000 iota [ number>string print ] each
 ] with-file-writer
->>
+COMPILE>
 
 : sum-file ( file -- n )
     ascii [ 0 [ string>number + ] each-line ] with-file-reader ;
