@@ -387,9 +387,8 @@ ERROR: backslash-expects-whitespace slice ;
 ! If the slice is 0 width, we stopped on whitespace.
 ! Advance the index and read again!
 : read-token-or-whitespace ( n string slice -- n' string slice )
-    dup length 0 =
-    [ drop [ 1 + ] dip lex-factor ]
-    [ make-tag-literal ] if ;
+    [ [ 1 + ] dip lex-factor ]
+    [ make-tag-literal ] if-empty ;
 
 ERROR: mismatched-terminator n string slice ;
 : read-terminator ( n string slice -- n' string slice )
