@@ -11,20 +11,20 @@ in: stack-checker.row-polymorphism
     [ meta-d length inner-d-index set call ] dip
     inner-d-index get [ min inner-d-index set ] keep ; inline
 
-:: (effect-here) ( inner-d old-meta-d-length old-input-count -- effect )
+:: effect-here ( inner-d old-meta-d-length old-input-count -- effect )
     old-meta-d-length inner-d - input-count get old-input-count - +
     terminated? get [ [ 0 ] [ meta-d length inner-d - ] if [ "x" <array> ] bi@ ] keep
     <terminated-effect> ; inline
 
 : with-effect-here ( quot -- effect )
     meta-d length input-count get
-    [ with-inner-d ] 2dip (effect-here) ; inline
+    [ with-inner-d ] 2dip effect-here ; inline
 
-: (diff-variable) ( diff variable vars -- diff' )
+: diff-variable ( diff variable vars -- diff' )
     [ key? ] [ [ at - ] 2curry ] [ [ set-at 0 ] 2curry ] 2tri if ;
 
 : (check-variable) ( actual-count declared-count variable vars -- diff ? )
-    [ - ] 2dip dupd [ (diff-variable) t ] 2curry [ dup 0 <= ] if ;
+    [ - ] 2dip dupd [ diff-variable t ] 2curry [ dup 0 <= ] if ;
 
 : adjust-variable ( diff var vars -- )
     pick 0 >= [ at+ ] [ 3drop ] if ; inline
@@ -35,36 +35,36 @@ in: stack-checker.row-polymorphism
 
 
 :: unify-variables ( in-diff in-ok? in-var out-diff out-ok? out-var vars -- ? )
-    { [ in-ok? ] [ out-ok? ] [ in-diff out-diff = ] }  0 n&&  dup [
+    { [ in-ok? ] [ out-ok? ] [ in-diff out-diff = ] } 0&&  dup [
         in-var  [ in-diff  swap vars adjust-variable ] when*
         out-var [ out-diff swap vars adjust-variable ] when*
     ] when ;
 
 ! A bit of a hack. If the declared effect is one-sided monomorphic and the actual effect is a
 ! shallow subtype of the root effect, adjust it here
-:: (balance-actual-depth) ( declared actual -- depth/f )
+:: balance-actual-depth ( declared actual -- depth/f )
     {
         { [ {
             [ declared in-var>> ]
             [ declared out-var>> not ]
             [ actual out>> length declared out>> length < ]
-        } 0 n&& ] [ declared out>> length actual out>> length - ] }
+        } 0&& ] [ declared out>> length actual out>> length - ] }
         { [ {
             [ declared in-var>> not ]
             [ declared out-var>> ]
             [ actual in>> length declared in>> length < ]
-        } 0 n&& ] [ declared in>> length actual in>> length - ] }
+        } 0&& ] [ declared in>> length actual in>> length - ] }
         [ f ]
     } cond ;
 
-: (balance-by) ( effect n -- effect' )
+: balance-by ( effect n -- effect' )
     "x" <array> swap
     [ in>> append ]
     [ out>> append ]
     [ nip terminated?>> ] 2tri <terminated-effect> ;
 
 : balance-actual ( declared actual -- declared actual' )
-    2dup (balance-actual-depth) [ (balance-by) ] when* ;
+    2dup balance-actual-depth [ balance-by ] when* ;
 
 : (check-variables) ( vars declared actual -- ? )
     balance-actual
