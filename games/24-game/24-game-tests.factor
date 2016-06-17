@@ -1,4 +1,5 @@
-USING: 24-game io.streams.string kernel math sequences tools.test ;
+USING: 24-game io.streams.string kernel math sequences
+tools.test ;
 in: 24-game.tests
 
 { t } [ make-24 first4 makes-24? ] unit-test

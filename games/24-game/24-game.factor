@@ -1,8 +1,7 @@
 ! Copyright © 2008 Reginald Keith Ford II
 ! 24, the Factor game!
-USING: accessors backtrack combinators continuations io kernel
-math math.parser prettyprint quotations random sequences shuffle
-;
+USING: accessors backtrack combinators continuations formatting
+io kernel math prettyprint quotations random sequences shuffle ;
 in: 24-game
 
 : nop ( -- ) ;
