@@ -65,7 +65,7 @@ gc
 
     {
         unify-variables
-        (balance-actual-depth)
+        balance-actual-depth
     } compile-unoptimized
 
     {

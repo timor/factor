@@ -12,7 +12,7 @@ lexer locals.errors locals.parser macros math memoize namespaces
 parser quotations sbufs sequences slots source-files splitting
 stack-checker strings strings.parser strings.parser.private
 typed vectors vocabs vocabs.parser words words.alias
-words.constant words.symbol delegate.private hints ;
+words.constant words.symbol delegate.private hints multiline ;
 in: bootstrap.syntax
 
 ! These words are defined as a top-level form, instead of with
@@ -57,6 +57,18 @@ in: bootstrap.syntax
 
     { "_" "@" } define-fry-specifiers
     ! "@" [ "Only valid inside a fry" throw ] ( -- * ) define-fry-specifier
+
+     "![[" [
+        "]]" parse-multiline-string drop
+    ] define-core-syntax
+
+     "![=[" [
+        "]=]" parse-multiline-string drop
+    ] define-core-syntax
+
+     "![==[" [
+        "]==]" parse-multiline-string drop
+    ] define-core-syntax
 
     "PRIMITIVE:" [
         current-vocab name>>
