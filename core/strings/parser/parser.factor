@@ -20,18 +20,37 @@ ERROR: bad-escape char ;
         { char: v  char: \v }
         { char: \s char: \s }
         { char: 0  char: \0 }
+        { char: \/ char: \/ }
         { char: \\ char: \\ }
+        { char: \| char: \| }
+        { char: \? char: \? }
         { char: \: char: \: }
         { char: \; char: \; }
+        { char: \' char: \' }
         { char: \" char: \" }
-        { char: \{ char: \{ }
-        { char: \} char: \} }
         { char: \[ char: \[ }
         { char: \] char: \] }
+        { char: \{ char: \{ }
+        { char: \} char: \} }
+        { char: \< char: \< }
+        { char: \> char: \> }
+        { char: \` char: \` }
+        { char: \~ char: \~ }
+        { char: \! char: \! }
+        { char: \@ char: \@ }
+        { char: \# char: \# }
+        { char: \$ char: \$ }
+        { char: \% char: \% }
+        { char: \^ char: \^ }
+        { char: \& char: \& }
+        { char: \* char: \* }
         { char: \( char: \( }
         { char: \) char: \) }
-        { char: \! char: \! }
-        { char: \` char: \` }
+        { char: \_ char: \_ }
+        { char: \- char: \- }
+        { char: \+ char: \+ }
+        { char: \= char: \= }
+        { char: \, char: \, }
     } ?at [ bad-escape ] unless ;
 
 symbol: name>char-hook
