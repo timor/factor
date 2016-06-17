@@ -29,11 +29,11 @@ CONSTRUCTOR: <modern-lexer> modern-lexer ( string -- obj )
         f string f f
     ] if ; inline
 
-:: lex-til-either ( lexer tokens -- lexer slice/f ch/f )
+:: lex-til-either ( lexer tokens -- n'/f string' slice/f ch/f )
     lexer >lexer< tokens slice-til-either :> ( n' string' slice ch )
     lexer
-        n' >>n
-    slice ch ;
+        n' >>n drop
+    n' string' slice ch ;
 
 
 :: slice-til-separator-inclusive ( n string tokens -- n' string slice/f ch/f )
@@ -42,11 +42,13 @@ CONSTRUCTOR: <modern-lexer> modern-lexer ( string -- obj )
     n n' string ?<slice>
     ch ; inline
 
-:: lex-til-separator-inclusive ( lexer tokens -- lexer slice/f ch/f )
+:: lex-til-separator-inclusive ( lexer tokens -- n' string' slice/f ch/f )
     lexer >lexer< tokens slice-til-separator-inclusive :> ( n' string' slice ch )
+
     lexer
-        n' >>n
-    slice ch ;
+        n' >>n drop
+
+    n' string' slice ch ;
 
 
 : slice-til-separator-exclusive ( n string tokens -- n' string slice/f ch/f )
@@ -54,11 +56,11 @@ CONSTRUCTOR: <modern-lexer> modern-lexer ( string -- obj )
         [ [ 1 - ] change-to ] dip
     ] when ;
 
-:: lex-til-separator-exclusive ( lexer tokens -- lexer slice/f ch/f )
+:: lex-til-separator-exclusive ( lexer tokens -- n'/f string' slice/f ch/f )
     lexer >lexer< tokens slice-til-separator-exclusive :> ( n' string' slice ch )
     lexer
-        n' >>n
-    slice ch ;
+        n' >>n drop
+    n' string' slice ch ;
 
 ! Don't include the whitespace in the slice
 :: slice-til-whitespace ( n string -- n'/f string slice/f ch/f )
@@ -71,15 +73,15 @@ CONSTRUCTOR: <modern-lexer> modern-lexer ( string -- obj )
         f string f f
     ] if ; inline
 
-:: lex-til-whitespace ( lexer -- lexer slice/f ch/f )
+:: lex-til-whitespace ( lexer -- n'/f string slice/f ch/f )
     lexer >lexer< slice-til-whitespace :> ( n' string' slice ch )
     lexer
-        n' >>n
-    slice ch ;
+        n' >>n drop
+    n' string' slice ch ;
 
 
-: merge-lex-til-whitespace ( lexer slice --  lexer slice' )
-    [ lex-til-whitespace drop ] dip merge-slices ;
+: merge-lex-til-whitespace ( lexer slice --  slice' )
+    [ lex-til-whitespace drop 2nip ] dip merge-slices ;
 
 
 :: slice-til-eol ( n string -- n'/f string slice/f ch/f )
@@ -92,11 +94,11 @@ CONSTRUCTOR: <modern-lexer> modern-lexer ( string -- obj )
         f string f f
     ] if ; inline
 
-:: lex-til-eol ( lexer -- lexer slice/f ch/f )
+:: lex-til-eol ( lexer -- n' string' slice/f ch/f )
     lexer >lexer< slice-til-eol :> ( n' string' slice ch )
     lexer
-        n' >>n
-    slice ch ;
+        n' >>n drop
+    n' string' slice ch ;
 
 
 ERROR: subseq-expected-but-got-eof n string expected ;
@@ -108,8 +110,8 @@ ERROR: subseq-expected-but-got-eof n string expected ;
     n n' string ?<slice>
     n' dup search length + string ?<slice> ;
 
-:: lex-til-string ( lexer search -- lexer payload closing )
+:: lex-til-string ( lexer search -- n'/f string' payload closing )
     lexer >lexer< search slice-til-string :> ( n' string' payload closing )
     lexer
-        n' >>n
-    payload closing ;
+        n' >>n drop
+    n' string' payload closing ;

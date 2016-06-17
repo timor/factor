@@ -3,11 +3,11 @@
 USING: kernel modern.lexer sequences tools.test ;
 in: modern.lexer.tests
 
-{ T{ slice f 0 8 "dinosaur" } f } [
-    "dinosaur" <modern-lexer> lex-til-whitespace [ drop ] 2dip
-] unit-test
+! { T{ slice f 0 8 "dinosaur" } f } [
+!    "dinosaur" <modern-lexer> lex-til-whitespace
+! ] unit-test
 
-{ f f } [
-    "dinosaur" <modern-lexer>
-    [ lex-til-whitespace 3drop ] [ lex-til-whitespace ] bi [ drop ] 2dip
-] unit-test
+! { f f } [
+!     "dinosaur" <modern-lexer>
+!     [ lex-til-whitespace 2drop ] [ lex-til-whitespace ] bi
+! ] unit-test
