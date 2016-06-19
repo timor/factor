@@ -5,7 +5,7 @@ combinators.short-circuit constructors continuations fry
 io.encodings.utf8 io.files kernel locals macros make math
 math.order modern.paths modern.slices multiline namespaces
 quotations sequences sequences.extras splitting modern.lexer
-splitting.monotonic strings unicode generalizations ;
+splitting.monotonic strings unicode generalizations shuffle ;
 in: modern
 
 COMPILE<
@@ -243,22 +243,22 @@ defer: lex-factor
 ! lex-matched lexes til foo) foo} foo] ) } ] or TAG:, on TAG: throw error
 
 
-ERROR: lex-expected-but-got-eof n string quot ;
+ERROR: lex-expected-but-got-eof lexer tags ;
 
 ERROR: unnestable-form n string obj ;
 ! For implementing [ { (
 : lex-until ( lexer tags -- payload closing )
-    ! 3 npick [ lex-expected-but-got-eof ] unless
-    '[
+    ! over lexer-found-eof? [ "more tokens expected" throw ] when
+    2dup '[
         [
             _ lex-factor [
-                ! [ _ _ _ lex-expected-but-got-eof ] unless*
                 dup tag-literal? [
                     dup ,
                     underlying>> ! { [ dup scoped-upper? ] [ 4 npick 0 > ] } 0&& [ unnestable-form ] when
                     _ [ sequence= ] with any? not
                 ] [ , t ] if
             ] [
+                _ _ lex-expected-but-got-eof
                 f , f
             ] if*
         ] loop
@@ -273,9 +273,12 @@ MACRO:: read-matched ( ch -- quot: ( lexer tag -- slice' ) )
     |[ lexer tag |
         lexer tag
         over lexer-nth-check-eof {
-           { [ dup openstreq member? ] [ ch read-double-matched ] } ! (=( or ((
-           { [ dup blank? ] [ drop dup '[ _ matching-delimiter-string closestr1 2array lex-until ] dip 1 cut-slice* single-matched-literal make-matched-literal ] } ! ( foo )
-           [ drop [ lex-til-whitespace drop 2nip ] dip span-slices make-tag-literal ]  ! (foo)
+            { [ dup openstreq member? ] [ ch read-double-matched ] } ! (=( or ((
+            { [ dup blank? ] [
+                drop dup '[ _ matching-delimiter-string closestr1 2dup = [ drop 1array ] [ 2array ] if lex-until ] dip
+                1 cut-slice* single-matched-literal make-matched-literal
+            ] } ! ( foo )
+            [ drop [ lex-til-whitespace drop 2nip ] dip span-slices make-tag-literal ]  ! (foo)
         } cond
     ] ;
 
