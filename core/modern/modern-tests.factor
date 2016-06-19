@@ -22,18 +22,21 @@ in: modern.tests
 { 2 } [ "{=={abc}==} {=={cba}==}" string>literals length ] unit-test
 { 2 } [ "(==(abc)==) (==(cba)==)" string>literals length ] unit-test
 
-{ 1 } [ "hex`abc" string>literals length ] unit-test
-{ 2 } [ "hex`abc hex`cba" string>literals length ] unit-test
-{ 2 } [ "hex\"abc\" hex\"cba\"" string>literals length ] unit-test
-{ 2 } [ "hex[[abc]] hex[[cba]]" string>literals length ] unit-test
-{ 2 } [ "hex{{abc}} hex{{cba}}" string>literals length ] unit-test
-{ 2 } [ "hex((abc)) hex((cba))" string>literals length ] unit-test
-{ 2 } [ "hex[=[abc]=] hex[=[cba]=]" string>literals length ] unit-test
-{ 2 } [ "hex{={abc}=} hex{={cba}=}" string>literals length ] unit-test
-{ 2 } [ "hex(=(abc)=) hex(=(cba)=)" string>literals length ] unit-test
-{ 2 } [ "hex[==[abc]==] hex[==[cba]==]" string>literals length ] unit-test
-{ 2 } [ "hex{=={abc}==} hex{=={cba}==}" string>literals length ] unit-test
-{ 2 } [ "hex(==(abc)==) hex(==(cba)==)" string>literals length ] unit-test
+: literal-test ( string -- n string string string )
+    string>literals [ length ] [ first [ tag>> ] [ delimiter>> ] [ payload>> ] tri ] bi ;
+
+{ 1 "hex" "`" "abc" } [ "hex`abc" literal-test ] unit-test
+{ 2 "hex" "`" "abc" } [ "hex`abc hex`cba" literal-test ] unit-test
+{ 2 "hex" "\"" "abc" } [ "hex\"abc\" hex\"cba\"" literal-test ] unit-test
+{ 2 "hex" "[[" "abc" } [ "hex[[abc]] hex[[cba]]" literal-test ] unit-test
+{ 2 "hex" "{{" "abc" } [ "hex{{abc}} hex{{cba}}" literal-test ] unit-test
+{ 2 "hex" "((" "abc" } [ "hex((abc)) hex((cba))" literal-test ] unit-test
+{ 2 "hex" "[=[" "abc" } [ "hex[=[abc]=] hex[=[cba]=]" literal-test ] unit-test
+{ 2 "hex" "{={" "abc" } [ "hex{={abc}=} hex{={cba}=}" literal-test ] unit-test
+{ 2 "hex" "(=(" "abc" } [ "hex(=(abc)=) hex(=(cba)=)" literal-test ] unit-test
+{ 2 "hex" "[==[" "abc" } [ "hex[==[abc]==] hex[==[cba]==]" literal-test ] unit-test
+{ 2 "hex" "{=={" "abc" } [ "hex{=={abc}==} hex{=={cba}==}" literal-test ] unit-test
+{ 2 "hex" "(==(" "abc" } [ "hex(==(abc)==) hex(==(cba)==)" literal-test ] unit-test
 
 
 { 1 } [ "[ ]" string>literals length ] unit-test
