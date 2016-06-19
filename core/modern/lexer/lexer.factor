@@ -1,7 +1,7 @@
 ! Copyright (C) 2016 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors constructors kernel math sequences
-sequences.extras slots.syntax ;
+sequences.extras slots.syntax unicode ;
 in: modern.lexer
 
 TUPLE: modern-lexer n string stack ;
@@ -10,6 +10,16 @@ CONSTRUCTOR: <modern-lexer> modern-lexer ( string -- obj )
     V{ } clone >>stack ; inline
 
 : >lexer< ( lexer -- n string ) slots[ n string ] ;
+
+: ?lexer-nth ( lexer -- obj )
+    >lexer< over [ ?nth ] [ 2drop f ] if ;
+
+ERROR: unexpected-end n string ;
+: nth-check-eof ( n string -- nth )
+    2dup ?nth [ 2nip ] [ unexpected-end ] if* ; inline
+
+: lexer-nth-check-eof ( lexer -- nth )
+    >lexer< nth-check-eof ;
 
 :: slice-til-either ( n string tokens -- n'/f string slice/f ch/f )
     n [
@@ -115,3 +125,14 @@ ERROR: subseq-expected-but-got-eof n string expected ;
     lexer
         n' >>n drop
     n' string' payload closing ;
+
+
+: find-from* ( ... n seq quot: ( ... elt -- ... ? ) -- ... i elt ? )
+    [ find-from ] keep
+    pick [ drop t ] [ length -rot nip f ] if ; inline
+
+: skip-blank-from ( n string -- n' string )
+    [ [ blank? not ] find-from* 2drop ] keep ; inline
+
+: skip-blanks ( lexer -- lexer )
+    dup >lexer< skip-blank-from drop >>n ; inline
