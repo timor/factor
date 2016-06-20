@@ -113,9 +113,9 @@ M: array collapse-decorators
 : postprocess-lexed ( seq -- seq' )
     collapse-decorators make-compound-literals ;
 
-
+! foo:bar-baz09:
 : strict-upper? ( string -- ? )
-    [ { [ char: A char: Z between? ] [ char: 0 char: 9 between? ] [ "#:-<" member? ] } 1|| ] all? ;
+    [ { [ char: A char: Z between? ] [ char: 0 char: 9 between? ] [ ":-#" member? ] } 1|| ] all? ;
 
 : whitespace/f? ( ch -- ? )
     { char: \s char: \r char: \n f } member? ; inline
@@ -126,22 +126,17 @@ M: array collapse-decorators
 : scoped-less-than-name ( string -- string' )
     dup [ length 2 - ] keep [ char: < = ] find-last-from [ 1 + tail ] [ drop ] if ;
 
-: top-level-name? ( string -- ? )
-    dup { [ ":" tail? ] [ "<" tail? ] } 1|| [
-        dup length 1 > [
-            [ [ ":<" member? ] trim-tail [ char: \: = ] find-last ] keep
-            swap [ swap tail strict-upper? ] [ nip strict-upper? ] if
-        ] [
-            "<" sequence= not
-        ] if
-    ] [
-        drop f
-    ] if ;
+: trim-top-level ( string -- string' )
+    {
+        { [ dup "<" tail? ] [ but-last ] }
+        { [ dup ":" tail? ] [ [ char: \: = ] trim-tail ] }
+        [ ]
+    } cond ;
 
 : top-level-colon? ( string -- ? )
     dup ":" tail? [
         dup length 1 > [
-            [ [ char: \: = ] trim-tail [ char: \: = ] find-last ] keep
+            [ trim-top-level [ char: \: = ] find-last ] keep
             swap [ swap tail strict-upper? ] [ nip strict-upper? ] if
         ] [
             ":" sequence=
@@ -152,6 +147,7 @@ M: array collapse-decorators
 
 : top-level-less-than? ( string -- ? )
     dup "<" tail? [
+        but-last
         dup length 1 > [
             [ [ char: \: = ] find-last ] keep
             swap [ swap tail strict-upper? ] [ nip strict-upper? ] if
@@ -161,6 +157,9 @@ M: array collapse-decorators
     ] [
         drop f
     ] if ;
+
+: top-level-name? ( string -- ? )
+    { [ top-level-colon? ] [ top-level-less-than? ] } 1|| ;
 
 ERROR: no-start-delimiter lexer opening ;
 :: delimiters-match? ( lexer opening closing -- ? )
