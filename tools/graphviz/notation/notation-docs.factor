@@ -4,10 +4,10 @@ USING: graphviz graphviz.attributes help.markup help.syntax
 kernel present sequences ;
 in: graphviz.notation
 
-{ add-edge [add-edge -- ~-- [-- } related-words
-{ add-edge [add-edge -> ~-> [-> } related-words
+{ add-edge \ add-edge[ -- ~-- \ --[ } related-words
+{ add-edge \ add-edge[ -> ~-> \ ->[ } related-words
 {
-    [add-node [add-edge [-- [-> [node [edge [graph ];
+    \ add-node[ \ add-edge[ \ --[ \ ->[ \ node[ \ edge[ \ graph[
 } related-words
 
 HELP: --
@@ -78,13 +78,13 @@ HELP: ->
 }
 ;
 
-HELP: [--
+HELP: --[
 { $values
     { "tail" object }
     { "head" object }
     { "edge" edge }
 }
-{ $description "Shorthand for " { $link <edge> } " to be used with " { $link ]; } " and attribute-setting generic words (see " { $link { "graphviz.notation" "=attrs" } } ") so that undirected " { $link graph } "s read more like graphs in the DOT language." }
+{ $description "Shorthand for " { $link <edge> } " to be used with attribute-setting generic words (see " { $link { "graphviz.notation" "=attrs" } } ") so that undirected " { $link graph } "s read more like graphs in the DOT language." }
 { $examples
   "Instead of writing"
   { $code
@@ -94,24 +94,24 @@ HELP: [--
   "it looks better to write"
   { $code
     "<graph>"
-    "    1 2 [-- \"red\" =color ];"
+    "    1 2 --[ \"red\" =color ]"
   }
   "Compare this with the DOT language, where you'd write"
   { $code
     "graph {"
-    "    1 -- 2 [ color=\"red\" ];"
+    "    1 -- 2 [ color=\"red\" ]"
     "}"
   }
 }
 ;
 
-HELP: [->
+HELP: ->[
 { $values
     { "tail" object }
     { "head" object }
     { "edge" edge }
 }
-{ $description "Shorthand for " { $link <edge> } " to be used with " { $link ]; } " and attribute-setting generic words (see " { $link { "graphviz.notation" "=attrs" } } ") so that directed " { $link graph } "s read more like digraphs in the DOT language." }
+{ $description "Shorthand for " { $link <edge> } " to be used with attribute-setting generic words (see " { $link { "graphviz.notation" "=attrs" } } ") so that directed " { $link graph } "s read more like digraphs in the DOT language." }
 { $examples
   "Instead of writing"
   { $code
@@ -121,34 +121,24 @@ HELP: [->
   "it looks better to write"
   { $code
     "<digraph>"
-    "    1 2 [-> \"red\" =color ];"
+    "    1 2 ->[ \"red\" =color ]"
   }
   "Compare this with the DOT language, where you'd write"
   { $code
     "digraph {"
-    "    1 -> 2 [ color=\"red\" ];"
+    "    1 -> 2 [ color=\"red\" ]"
     "}"
   }
 }
 ;
 
-HELP: ];
-{ $values
-    { "graph" { $or graph subgraph } }
-    { "statement" object }
-    { "graph'" { $or graph subgraph } }
-}
-{ $description "Synonym for " { $link add } " meant to be the \"other half\" of various " { $vocab-link "graphviz.notation" } " words like " { $links [add-edge [add-node [graph } ", etc." }
-{ $examples "Refer to the documentation for the complementary words listed below." }
-;
-
-HELP: [add-edge
+HELP: add-edge[
 { $values
     { "tail" object }
     { "head" object }
     { "edge" edge }
 }
-{ $description "Shorthand for " { $link <edge> } " to be used with " { $link ]; } " and attribute-setting generic words (see " { $link { "graphviz.notation" "=attrs" } } ") so that setting an " { $link edge } "'s " { $slot "attributes" } " reads more like the equivalent in the DOT language." }
+{ $description "Shorthand for " { $link <edge> } " to be used with attribute-setting generic words (see " { $link { "graphviz.notation" "=attrs" } } ") so that setting an " { $link edge } "'s " { $slot "attributes" } " reads more like the equivalent in the DOT language." }
 { $examples
   "Instead of writing"
   { $code
@@ -158,25 +148,25 @@ HELP: [add-edge
   "it looks better to write"
   { $code
     "<graph>"
-    "    1 2 [add-edge \"red\" =color ];"
+    "    1 2 add-edge[ \"red\" =color ]"
   }
   "Compare this with the DOT language, where you'd write"
   { $code
     "graph {"
-    "    1 -- 2 [ color=\"red\" ];"
+    "    1 -- 2 [ color=\"red\" ]"
     "}"
   }
   $nl
-  "This has the advantage over " { $link [-- } " and " { $link [-> } " of reading nicely for both directed " { $emphasis "and" } " undirected " { $link graph } "s."
+  "This has the advantage over " { $link \ --[ } " and " { $link \ ->[ } " of reading nicely for both directed " { $emphasis "and" } " undirected " { $link graph } "s."
 }
 ;
 
-HELP: [add-node
+HELP: add-node[
 { $values
     { "id" object }
     { "node" node }
 }
-{ $description "Shorthand for " { $link <node> } " to be used with " { $link ]; } " and attribute-setting generic words (see " { $link { "graphviz.notation" "=attrs" } } ") so that setting a " { $link node } "'s " { $slot "attributes" } " reads more like the equivalent in the DOT language." }
+{ $description "Shorthand for " { $link <node> } " to be used with and attribute-setting generic words (see " { $link { "graphviz.notation" "=attrs" } } ") so that setting a " { $link node } "'s " { $slot "attributes" } " reads more like the equivalent in the DOT language." }
 { $examples
   "Instead of writing"
   { $code
@@ -186,22 +176,22 @@ HELP: [add-node
   "it looks better to write"
   { $code
     "<graph>"
-    "    \"foo\" [add-node \"red\" =color ];"
+    "    \"foo\" add-node[ \"red\" =color ]"
   }
   "Compare this with the DOT language, where you'd write"
   { $code
     "graph {"
-    "    foo [ color=\"red\" ];"
+    "    foo [ color=\"red\" ]"
     "}"
   }
 }
 ;
 
-HELP: [edge
+HELP: edge[
 { $values
         { "attrs" edge-attributes }
 }
-{ $description "Shorthand for " { $link <edge-attributes> } " to be used with " { $link ]; } " and attribute-setting generic words (see " { $link { "graphviz.notation" "=attrs" } } ") so that adding " { $link edge-attributes } " to a " { $link graph } " or " { $link subgraph } " reads more like the equivalent in the DOT language." }
+{ $description "Shorthand for " { $link <edge-attributes> } " to be used with and attribute-setting generic words (see " { $link { "graphviz.notation" "=attrs" } } ") so that adding " { $link edge-attributes } " to a " { $link graph } " or " { $link subgraph } " reads more like the equivalent in the DOT language." }
 { $examples
   "Instead of writing"
   { $code
@@ -211,22 +201,22 @@ HELP: [edge
   "it looks better to write"
   { $code
     "<graph>"
-    "    [edge \"red\" =color ];"
+    "    edge[ \"red\" =color ]"
   }
   "Compare this with the DOT language, where you'd write"
   { $code
     "graph {"
-    "    [edge color=\"red\" ];"
+    "    edge[ color=\"red\" ]"
     "}"
   }
 }
 ;
 
-HELP: [graph
+HELP: graph[
 { $values
         { "attrs" graph-attributes }
 }
-{ $description "Shorthand for " { $link <graph-attributes> } " to be used with " { $link ]; } " and attribute-setting generic words (see " { $link { "graphviz.notation" "=attrs" } } ") so that adding " { $link graph-attributes } " to a " { $link graph } " or " { $link subgraph } " reads more like the equivalent in the DOT language." }
+{ $description "Shorthand for " { $link <graph-attributes> } " to be used with and attribute-setting generic words (see " { $link { "graphviz.notation" "=attrs" } } ") so that adding " { $link graph-attributes } " to a " { $link graph } " or " { $link subgraph } " reads more like the equivalent in the DOT language." }
 { $notes "This word is rendered redundant by the " { $link graph } " and " { $link subgraph } " methods defined by " { $vocab-link "graphviz.notation" } " for setting attributes. Sometimes it still might look better to delineate certain attribute-setting code." }
 { $examples
   "Instead of writing"
@@ -237,12 +227,12 @@ HELP: [graph
   "it looks better to write"
   { $code
     "<graph>"
-    "    [graph \"LR\" =rankdir \"blah\" =label ];"
+    "    graph[ \"LR\" =rankdir \"blah\" =label ]"
   }
   "Compare this with the DOT language, where you'd write"
   { $code
     "graph {"
-    "    [graph rankdir=\"LR\" label=\"blah\" ];"
+    "    graph[ rankdir=\"LR\" label=\"blah\" ]"
     "}"
   }
   $nl
@@ -262,11 +252,11 @@ HELP: [graph
 }
 ;
 
-HELP: [node
+HELP: node[
 { $values
         { "attrs" node-attributes }
 }
-{ $description "Shorthand for " { $link <node-attributes> } " to be used with " { $link ]; } " and attribute-setting generic words (see " { $link { "graphviz.notation" "=attrs" } } ") so that adding " { $link node-attributes } " to a " { $link graph } " or " { $link subgraph } " reads more like the equivalent in the DOT language." }
+{ $description "Shorthand for " { $link <node-attributes> } " to be used with and attribute-setting generic words (see " { $link { "graphviz.notation" "=attrs" } } ") so that adding " { $link node-attributes } " to a " { $link graph } " or " { $link subgraph } " reads more like the equivalent in the DOT language." }
 { $examples
   "Instead of writing"
   { $code
@@ -276,12 +266,12 @@ HELP: [node
   "it looks better to write"
   { $code
     "<graph>"
-    "    [node \"red\" =color ];"
+    "    node[ \"red\" =color ]"
   }
   "Compare this with the DOT language, where you'd write"
   { $code
     "graph {"
-    "    [node color=\"red\" ];"
+    "    node[ color=\"red\" ]"
     "}"
   }
 }
@@ -418,29 +408,24 @@ ARTICLE: { "graphviz.notation" "synonyms" } "Aliases that resemble DOT code"
 $nl
 "Notation for edges without attributes:"
 { $subsections
-    --
-    ->
-    ~--
-    ~->
+    \ --
+    \ ->
+    \ ~--
+    \ ~->
 }
 "Notation for nodes/edges with local attributes:"
 { $subsections
-    [add-node
-    [add-edge
-    [--
-    [->
+    \ add-node[
+    \ add-edge[
+    \ --[
+    \ ->[
 }
 "Notation for global attributes:"
 { $subsections
-    [node
-    [edge
-    [graph
-}
-"Word to \"close off\" notation for attributes:"
-{ $subsections
-    ];
-}
-;
+    \ node[
+    \ edge[
+    \ graph[
+} ;
 
 ARTICLE: "graphviz.notation" "Graphviz notation"
 "The " { $vocab-link "graphviz.notation" } " vocabulary provides words for building " { $link graph } "s in a way that looks similar to the DOT language (see " { $url "http://graphviz.org/content/dot-language" } ")."
