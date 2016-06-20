@@ -251,7 +251,7 @@ ERROR: unnestable-form n string obj ;
     ! over lexer-found-eof? [ "more tokens expected" throw ] when
     2dup '[
         [
-            _ lex-factor [
+            _ B lex-factor [
                 dup tag-literal? [
                     dup ,
                     underlying>> ! { [ dup scoped-upper? ] [ 4 npick 0 > ] } 0&& [ unnestable-form ] when
@@ -275,8 +275,10 @@ MACRO:: read-matched ( ch -- quot: ( lexer tag -- slice' ) )
         over lexer-nth-check-eof {
             { [ dup openstreq member? ] [ ch read-double-matched ] } ! (=( or ((
             { [ dup blank? ] [
-                drop dup '[ _ matching-delimiter-string closestr1 2dup = [ drop 1array ] [ 2array ] if lex-until ] dip
-                1 cut-slice* single-matched-literal make-matched-literal
+                drop dup '[
+                    _ matching-delimiter-string closestr1
+                    2dup = [ drop 1array ] [ 2array ] if lex-until
+                ] dip 1 cut-slice* single-matched-literal make-matched-literal
             ] } ! ( foo )
             [ drop [ lex-til-whitespace drop 2nip ] dip span-slices make-tag-literal ]  ! (foo)
         } cond
@@ -301,7 +303,6 @@ MACRO:: read-matched ( ch -- quot: ( lexer tag -- slice' ) )
 :: read-string ( lexer tag -- seq )
     lexer n>> :> n
     lexer read-string-payload :> ( n' string slice )
-    ! n' string
     n' [ n string string-expected-got-eof ] unless
     n n' 1 - string <slice> >string
     n' 1 - n' string <slice>
@@ -312,8 +313,9 @@ MACRO:: read-matched ( ch -- quot: ( lexer tag -- slice' ) )
 ERROR: cannot-nest-upper-colon n string string' ;
 : read-upper-colon ( lexer string' -- obj )
     ! 4 npick 0 > [ cannot-nest-upper-colon ] when
-    dup [ scoped-colon-name [ but-last ";" append ";" 2array ] [ ";" 1array ] if* lex-until ] dip
-    1 cut-slice* uppercase-colon-literal make-matched-literal ;
+    dup [
+        [ but-last ";" append ";" 2array ] [ ";" 1array ] if* lex-until
+    ] dip 1 cut-slice* uppercase-colon-literal make-matched-literal ;
 
 : read-lower-colon ( lexer string' -- obj )
     [ lex-factor dup ] dip 1 cut-slice*
