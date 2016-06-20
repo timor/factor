@@ -99,7 +99,7 @@ M: uppercase-colon-literal write-literal
         [ seq>> 1 swap nth write-whitespace ]
         [ delimiter>> write ]
         [ payload>> [ write-literal ] each ] ! don't need write-whitespace here, the recursion does it
-        [ seq>> 3 swap nth lexed-underlying [ write-whitespace ] when* ]
+        [ seq>> 3 swap nth [ lexed-underlying [ write-whitespace ] when* ] when* ]
         [ closing-tag>> [ write ] when* ]
     } cleave ;
 
