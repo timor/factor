@@ -196,4 +196,3 @@ ERROR: subseq-expected-but-got-eof n string expected ;
     dup length 1 = [
         -1 modify-to [ 1 - ] 2dip
     ] unless ;
-

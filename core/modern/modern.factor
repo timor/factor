@@ -33,7 +33,7 @@ TUPLE: matched-literal < tag-literal delimiter payload closing-tag ;
 TUPLE: delimited-literal < tag-literal delimiter payload ;
 TUPLE: decorator-literal < literal delimiter payload ;
 
-TUPLE: dquote-literal < delimited-literal ;
+TUPLE: dquote-literal < matched-literal ;
 TUPLE: single-matched-literal < matched-literal ;
 TUPLE: double-matched-literal < matched-literal ;
 TUPLE: less-than-literal < single-matched-literal ;
@@ -210,12 +210,11 @@ ERROR: closing-delimiter-required opening-delimiter ;
         payload postprocess-lexed opening-delimiter "\"" = [ split-double-dash ] unless >>payload
         tag closing [ dup tag-literal? [ lexed-underlying ] when ] bi@ ?span-slices >>underlying
         opening-delimiter >string >>delimiter
-        dup single-matched-literal? [
-            closing dup [ tag>> ] when >>closing-tag
-        ] when
+
+        closing dup tag-literal? [ tag>> ] when >string >>closing-tag
+
         ! PRIVATE< PRIVATE>
         dup less-than-literal? [
-            closing dup [ tag>> ] when >>closing-tag
             closing f = [ opening-delimiter closing-delimiter-required ] when
         ] when
         tag opening-delimiter payload closing 4array >>seq ; inline
@@ -394,7 +393,8 @@ ERROR: closing-tag-required lexer tag ;
 
 : take-comment ( lexer slice -- comment )
     over ?lexer-nth char: \[ = [
-        [ [ 1 + ] change-n ] dip over ?lexer-nth read-double-matched-bracket
+        [ [ 1 + ] change-n ] [ 1 modify-to ] bi*
+        over ?lexer-nth read-double-matched-bracket
     ] [
         [ lex-til-eol drop 2nip dup ] dip 1 cut-slice* line-comment-literal make-delimited-literal
     ] if ;

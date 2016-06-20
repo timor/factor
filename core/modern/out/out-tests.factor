@@ -63,3 +63,12 @@ in: modern.out.tests
 
 { t } [ [=[ [ dup 0 > [ number>string ] [ drop "No more" ] if ]]=] rewrite-same-string ] unit-test
 { t } [ [=[ [[omg]]]=] rewrite-same-string ] unit-test
+
+{ t } [ "lol[[]]" rewrite-same-string ] unit-test
+{ t } [ "![[]]" rewrite-same-string ] unit-test
+{ t } [ "lol[[abc]]" rewrite-same-string ] unit-test
+{ t } [ "![[abc]]" rewrite-same-string ] unit-test
+{ t } [ "lol[==[]==]" rewrite-same-string ] unit-test
+{ t } [ "![==[]==]" rewrite-same-string ] unit-test
+{ t } [ "lol[==[abc]==]" rewrite-same-string ] unit-test
+{ t } [ "![==[abc]==]" rewrite-same-string ] unit-test
