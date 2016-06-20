@@ -104,3 +104,7 @@ in: modern.tests
 
 { 1 } [ "postpone\\ main:" string>literals length ] unit-test
 { 1 } [ "char: \\!" string>literals length ] unit-test
+
+
+{ 1 } [ "HI< OMG: BYE< BYE> HI>" string>literals length ] unit-test
+{ 1 } [ "HI< OMG: ; BYE< BYE> HI>" string>literals length ] unit-test

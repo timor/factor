@@ -204,6 +204,7 @@ ERROR: string-expected-got-eof n string ;
         delimiter >string >>delimiter
         tag delimiter payload 3array >>seq ; inline
 
+ERROR: closing-delimiter-required opening-delimiter ;
 :: make-matched-literal ( payload closing tag opening-delimiter class -- literal )
     class new
         tag >string >>tag
@@ -212,6 +213,11 @@ ERROR: string-expected-got-eof n string ;
         opening-delimiter >string >>delimiter
         dup single-matched-literal? [
             closing dup [ tag>> ] when >>closing-tag
+        ] when
+        ! PRIVATE< PRIVATE>
+        dup less-than-literal? [
+            closing dup [ tag>> ] when >>closing-tag
+            closing f = [ opening-delimiter closing-delimiter-required ] when
         ] when
         tag opening-delimiter payload closing 4array >>seq ; inline
 
@@ -367,13 +373,12 @@ ERROR: cannot-nest-upper-colon n string string' ;
 ERROR: closing-tag-required lexer tag ;
 
 :: read-upper-less-than ( lexer slice -- less-than/f )
-    lexer peek-tag top-level-less-than? [
+    lexer peek-tag top-level-colon? [
         lexer slice roll-back-lexer f
     ] [
         lexer slice [
-            lexer slice scoped-less-than-name
-            [ but-last ">" append 1array ] [ ">" 1array ] if* lex-until
-            dup [ lexer slice >string closing-tag-required ] unless
+            lexer slice scoped-less-than-name but-last ">" append 1array lex-until
+            ! dup [ lexer slice >string closing-tag-required ] unless
             slice 1 cut-slice* less-than-literal make-matched-literal
         ] with-tag
     ] if ;
