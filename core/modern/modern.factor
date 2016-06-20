@@ -150,6 +150,19 @@ M: array collapse-decorators
         drop f
     ] if ;
 
+: top-level-less-than? ( string -- ? )
+    dup "<" tail? [
+        dup length 1 > [
+            [ [ char: \: = ] find-last ] keep
+            swap [ swap tail strict-upper? ] [ nip strict-upper? ] if
+        ] [
+            "<" sequence=
+        ] if
+    ] [
+        drop f
+    ] if ;
+
+
 ERROR: whitespace-expected-after n string ch ;
 ERROR: expected-more-tokens n string expected ;
 ERROR: string-expected-got-eof n string ;
@@ -260,18 +273,15 @@ ERROR: lex-expected-but-got-eof lexer tags ;
 ERROR: unnestable-form n string obj ;
 ! For implementing [ { (
 : lex-until ( lexer tags -- payload closing )
-    ! over lexer-found-eof? [ "more tokens expected" throw ] when
     '[
         [
             _ lex-factor [
                 dup tag-literal? [
                     dup ,
-                    underlying>> ! { [ dup top-level-name? ] [ 4 npick 0 > ] } 0&& [ unnestable-form ] when
-                    _ [ sequence= ] with any? not
+                    underlying>> _ [ sequence= ] with any? not
                 ] [ , t ] if
             ] [
                 f , f
-                ! _ _ over lexer-eof? [ lex-expected-but-got-eof ] [ 2drop f , f ] if
             ] if*
         ] loop
     ] { } make unclip-last ; inline
@@ -324,16 +334,14 @@ MACRO:: read-matched ( ch -- quot: ( lexer tag -- slice' ) )
 
 ERROR: cannot-nest-upper-colon n string string' ;
 : read-upper-colon ( lexer string' -- obj/f )
-    ! 4 npick 0 > [ cannot-nest-upper-colon ] when
     over peek-tag top-level-colon? [
-        ! roll back, nested upper
         roll-back-lexer f
     ] [
-        2dup push-tag [
+        2dup [
             dup [
                 [ but-last ";" append ";" 2array ] [ ";" 1array ] if* lex-until
             ] dip 1 cut-slice* uppercase-colon-literal make-matched-literal
-        ] 2keep drop pop-tag drop
+        ] with-tag
     ] if ;
 
 : read-lower-colon ( lexer string' -- obj )
@@ -352,10 +360,19 @@ ERROR: cannot-nest-upper-colon n string string' ;
     } cond ;
 
 
+ERROR: closing-tag-required lexer tag ;
 
-: read-upper-less-than ( lexer slice -- less-than )
-    dup [ scoped-less-than-name [ but-last ">" append 1array ] [ ">" 1array ] if* lex-until ] dip
-    1 cut-slice* less-than-literal make-matched-literal ;
+:: read-upper-less-than ( lexer slice -- less-than/f )
+    lexer peek-tag top-level-less-than? [
+        lexer slice roll-back-lexer f
+    ] [
+        lexer slice [
+            lexer slice scoped-less-than-name
+            [ but-last ">" append 1array ] [ ">" 1array ] if* lex-until
+            dup [ lexer slice >string closing-tag-required ] unless
+            slice 1 cut-slice* less-than-literal make-matched-literal
+        ] with-tag
+    ] if ;
 
 : read-less-than ( lexer slice -- less-than )
     dupd merge-lex-til-whitespace {

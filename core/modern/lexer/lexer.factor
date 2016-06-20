@@ -23,8 +23,11 @@ CONSTRUCTOR: <modern-lexer> modern-lexer ( string -- obj )
 : peek-tag ( lexer -- tag )
     stack>> ?last ;
 
-: pop-tag ( lexer -- tag )
-    stack>> [ f ] [ pop ] if-empty ;
+: pop-tag ( lexer -- )
+    stack>> pop drop ;
+
+: with-tag ( lexer tag quot -- )
+    [ [ push-tag ] dip call ] 3keep 2drop pop-tag ; inline
 
 : roll-back-lexer ( lexer slice -- )
     from>> >>n drop ;
