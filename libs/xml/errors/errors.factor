@@ -90,9 +90,9 @@ XML-ERROR: unclosed-quote ;
 
 XML-ERROR: quoteless-attr ;
 
-XML-ERROR: attr-w/< ;
+XML-ERROR: attr-w/lt ;
 
-XML-ERROR: text-w/]]> ;
+XML-ERROR: text-w/terminator ;
 
 XML-ERROR: duplicate-attr key values ;
 

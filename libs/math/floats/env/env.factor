@@ -110,7 +110,7 @@ CONSTANT: vm-error-exception-flag>bit
         { +fp-underflow+         0x04 }
         { +fp-zero-divide+       0x08 }
         { +fp-inexact+           0x10 }
-    }
+    } ;
 
 PRIVATE>
 

@@ -124,11 +124,11 @@ M: unclosed-quote error.
 M: quoteless-attr error.
     call-next-method "Attribute lacks quotes around value" print ;
 
-M: attr-w/< error.
+M: attr-w/lt error.
     call-next-method
     "Attribute value contains literal <" print ;
 
-M: text-w/]]> error.
+M: text-w/terminator error.
     call-next-method
     "Text node contains ']]>'" print ;
 

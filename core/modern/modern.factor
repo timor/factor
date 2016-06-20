@@ -537,3 +537,14 @@ CONSTANT: factor-lexing-rules {
         ! { char: \n [ read-token-or-whitespace ] }
         ! { f [ f like dup [ make-tag-literal ] when ] }
     ! } case ; inline
+
+![[
+
+vocab-roots get [ vocabs-from reject-some-paths ] map concat
+{
+    "specialized-arrays" "specialized-vectors"
+    "math.blas.matrices" "math.blas.vectors" "math.vectors.simd"
+    "math.vectors.simd.cords"
+} diff
+[ modern-source-path dup <pathname> . path>literals  ] map-zip
+]]

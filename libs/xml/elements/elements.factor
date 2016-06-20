@@ -8,7 +8,7 @@ in: xml.elements
 
 : take-interpolated ( quot -- interpolated )
     interpolating? get [
-        drop get-char char: > eq?
+        drop get-char char: \> eq?
         [ next f ]
         [ "->" take-string [ blank? ] trim ]
         if <interpolated>
@@ -29,7 +29,7 @@ in: xml.elements
 
 : parse-attr ( -- array )
     parse-name pass-blank "=" expect pass-blank
-    get-char char: < eq?
+    get-char char: \< eq?
     [ "<-" expect interpolate-quote ]
     [ t parse-quote* ] if 2array ;
 
@@ -109,9 +109,9 @@ defer: make-tag ! Is this unavoidable?
 
 : dtd-loop ( -- )
     pass-blank get-char {
-        { char: ] [ next ] }
-        { char: % [ expand-pe ] }
-        { char: < [
+        { char: \] [ next ] }
+        { char: \% [ expand-pe ] }
+        { char: \< [
             next make-tag dup dtd-acceptable?
             [ bad-doctype ] unless , dtd-loop
         ] }
@@ -151,7 +151,7 @@ defer: make-tag ! Is this unavoidable?
 
 : direct ( -- object )
     get-char {
-        { char: - [ take-comment ] }
+        { char: \- [ take-comment ] }
         { char: \[ [ take-cdata ] }
         [ drop take-directive ]
     } case ;
@@ -167,7 +167,7 @@ defer: make-tag ! Is this unavoidable?
 : make-tag ( -- tag )
     get-char {
         { char: \! [ next direct ] }
-        { char: ? [ next instruct ] }
-        { char: - [ next interpolate-tag ] }
+        { char: \? [ next instruct ] }
+        { char: \- [ next interpolate-tag ] }
         [ drop normal-tag ]
     } case ;

@@ -117,16 +117,16 @@ HINTS: next* { spot } ;
         [ swap push-all ] [ no-entity ] ?if
     ] ?if ;
 
-: take-; ( -- string )
+: take-semi ( -- string )
     next ";" take-to next ;
 
 : parse-entity ( accum -- )
-    take-; "#" ?head [
+    take-semi "#" ?head [
         "x" ?head 16 10 ? base> swap push
     ] [ parse-named-entity ] if ;
 
 : parse-pe ( accum -- )
-    take-; dup pe-table get at
+    take-semi dup pe-table get at
     [ swap push-all ] [ no-entity ] ?if ;
 
 :: (parse-char) ( quot: ( ch -- ? ) accum spot -- )
@@ -134,11 +134,11 @@ HINTS: next* { spot } ;
     {
         { [ char not ] [ ] }
         { [ char quot call ] [ spot next* ] }
-        { [ char char: & eq? ] [
+        { [ char char: \& eq? ] [
             accum parse-entity
             quot accum spot (parse-char)
         ] }
-        { [ char char: % eq? [ in-dtd? get ] [ f ] if ] [
+        { [ char char: \% eq? [ in-dtd? get ] [ f ] if ] [
             accum parse-pe
             quot accum spot (parse-char)
         ] }
@@ -152,20 +152,20 @@ HINTS: next* { spot } ;
 : parse-char ( quot: ( ch -- ? ) -- seq )
     512 <sbuf> [ spot get (parse-char) ] keep "" like ; inline
 
-: assure-no-]]> ( pos char -- pos' )
-    "]]>" next-matching dup 2 > [ text-w/]]> ] when ; inline
+: assure-no-terminator ( pos char -- pos' )
+    "]]>" next-matching dup 2 > [ text-w/terminatorl ] when ; inline
 
 :: parse-text ( -- string )
     depth get zero? :> no-text
     0 :> pos!
     |[ char |
-        pos char assure-no-]]> pos!
+        pos char assure-no-terminator pos!
         no-text [
-            char blank? char char: < eq? or [
+            char blank? char char: \< eq? or [
                 char 1string t pre/post-content
             ] unless
         ] when
-        char char: < eq?
+        char char: \< eq?
     ] parse-char ;
 
 : close ( -- )
@@ -177,7 +177,7 @@ HINTS: next* { spot } ;
 : (parse-quote) ( <-disallowed? ch -- string )
     swap '[
         dup _ eq? [ drop t ]
-        [ char: < eq? _ and [ attr-w/< ] [ f ] if ] if
+        [ char: \< eq? _ and [ attr-w/lt ] [ f ] if ] if
     ] parse-char normalize-quote get-char
     [ unclosed-quote ] unless ; inline
 
