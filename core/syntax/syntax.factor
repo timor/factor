@@ -214,7 +214,7 @@ in: bootstrap.syntax
         [ simple-combination ] (GENERIC:)
     ] define-core-syntax
 
-    "GENERIC#" [
+    "GENERIC#:" [
         [ scan-number <standard-combination> ] (GENERIC:)
     ] define-core-syntax
 

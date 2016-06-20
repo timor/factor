@@ -15,7 +15,7 @@ PRIVATE<
 
 symbol: visited
 
-GENERIC# quot-uses 1 ( obj set -- ) ;
+GENERIC#: quot-uses 1 ( obj set -- ) ;
 
 M: object quot-uses 2drop ;
 

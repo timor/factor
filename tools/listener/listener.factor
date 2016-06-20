@@ -9,7 +9,7 @@ vocabs.parser ;
 in: listener
 
 GENERIC: stream-read-quot ( stream -- quot/f ) ;
-GENERIC# prompt. 1 ( stream prompt -- ) ;
+GENERIC#: prompt. 1 ( stream prompt -- ) ;
 
 : prompt ( -- str )
     manifest get current-vocab>> [ name>> "in: " prepend ] [ "" ] if*

@@ -90,4 +90,4 @@ PRIVATE>
 
 GENERIC: world-pixel-format-attributes ( world -- attributes ) ;
 
-GENERIC# check-world-pixel-format 1 ( world pixel-format -- ) ;
+GENERIC#: check-world-pixel-format 1 ( world pixel-format -- ) ;

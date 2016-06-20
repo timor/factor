@@ -24,7 +24,7 @@ in: bootstrap.syntax
         "ERROR:"
         "FORGET:"
         "forget:"
-        "GENERIC#"
+        "GENERIC#:"
         "GENERIC:"
         "HOOK:"
         "H{"

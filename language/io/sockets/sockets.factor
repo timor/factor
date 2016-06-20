@@ -16,7 +16,7 @@ COMPILE< {
     { [ os unix? ] [ "unix.ffi" ] }
 } cond use-vocab COMPILE>
 
-GENERIC# with-port 1 ( addrspec port -- addrspec ) ;
+GENERIC#: with-port 1 ( addrspec port -- addrspec ) ;
 
 ! Addressing
 PRIVATE<
