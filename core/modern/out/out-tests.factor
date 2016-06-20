@@ -61,4 +61,5 @@ in: modern.out.tests
 { t } [ "<{ ptx-2op-instruction ptx-float-ftz }" rewrite-same-string ] unit-test
 { t } [ "foo<{ ptx-2op-instruction ptx-float-ftz }" rewrite-same-string ] unit-test
 
-{ t } [ [[ [ dup 0 > [ number>string ] [ drop "No more" ] if ] ]] [ ] rewrite-same-string ] unit-test
+{ t } [ [=[ [ dup 0 > [ number>string ] [ drop "No more" ] if ]]=] rewrite-same-string ] unit-test
+{ t } [ [=[ [[omg]]]=] rewrite-same-string ] unit-test

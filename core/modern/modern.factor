@@ -254,12 +254,14 @@ MACRO:: read-double-matched ( open-ch -- quot: ( lexer tag ch -- seq ) )
                 opening matching-delimiter-string :> needle
 
                 lexer needle lex-til-string :> ( n'' string'' payload closing )
-                payload >string closing tag but-last-slice opening double-matched-literal make-matched-literal
+                payload closing tag but-last-slice opening double-matched-literal make-matched-literal
+                [ >string ] change-payload
             ] }
             { open-ch [
                 tag 1 cut-slice* swap tag! 1 modify-to :> opening
                 lexer [ 1 + ] change-n closestr2 lex-til-string :> ( n' string' payload closing )
-                payload >string closing tag opening double-matched-literal make-matched-literal
+                payload closing tag opening double-matched-literal make-matched-literal
+                [ >string ] change-payload
             ] }
             [ [ tag openstr2 lexer ] dip long-opening-mismatch ]
         } case
@@ -337,7 +339,8 @@ MACRO:: read-matched ( ch -- quot: ( lexer tag -- slice' ) )
     n' [ n string string-expected-got-eof ] unless
     n n' 1 - string <slice>
     n' 1 - n' string <slice>
-    tag 1 cut-slice* dquote-literal make-matched-literal ;
+    tag 1 cut-slice* dquote-literal make-matched-literal
+    [ >string ] change-payload ;
 
 
 
