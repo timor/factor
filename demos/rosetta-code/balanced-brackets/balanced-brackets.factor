@@ -27,7 +27,7 @@ in: rosetta-code.balanced-brackets
     str [
         {
             { char: \[ [ 1 ] }
-            { char: ] [ -1 ] }
+            { char: \] [ -1 ] }
             [ drop 0 ]
         } case counter + counter!
         counter 0 < [ f ok! ] when

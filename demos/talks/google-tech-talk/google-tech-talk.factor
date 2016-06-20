@@ -175,9 +175,9 @@ CONSTANT: google-slides
         "We define a mixin class for shapes, and add our existing data types as instances:"
         { $code
             "mixin: shape"
-            "INSTANCE: rectangle shape" ;
-            "INSTANCE: circle shape" ;
-            "INSTANCE: triangle shape" ;
+            "INSTANCE: rectangle shape"
+            "INSTANCE: circle shape"
+            "INSTANCE: triangle shape"
         }
     }
     { $slide "Object system"
@@ -210,7 +210,7 @@ CONSTANT: google-slides
         { $code
             "TUPLE: parallelogram ... ;"
             ""
-            "INSTANCE: parallelogram shape" ;
+            "INSTANCE: parallelogram shape"
             ""
             "M: parallelogram area ... ;"
             ""

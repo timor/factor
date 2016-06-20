@@ -543,7 +543,9 @@ vocab-roots get [ vocabs-from reject-some-paths ] map concat
 {
     "specialized-arrays" "specialized-vectors"
     "math.blas.matrices" "math.blas.vectors" "math.vectors.simd"
-    "math.vectors.simd.cords" "game.debug"
+    "math.vectors.simd.cords" "game.debug" "gpu.util" "gpu.effects.blur"
+    "gpu.effects.step" "model-viewer" "terrain.shaders" "spheres"
+    "bunny.cel-shaded" "bunny.outlined"
 } diff
 [ modern-source-path dup <pathname> . path>literals ] map-zip
 ]]
