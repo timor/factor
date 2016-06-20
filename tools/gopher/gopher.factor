@@ -23,7 +23,7 @@ CONSTANT: A_UUENCODED char: 6 ;
 CONSTANT: A_INDEX char: 7 ;
 CONSTANT: A_TELNET char: 8 ;
 CONSTANT: A_BINARY char: 9 ;
-CONSTANT: A_DUPLICATE char: + ;
+CONSTANT: A_DUPLICATE char: \+ ;
 CONSTANT: A_SOUND char: s ;
 CONSTANT: A_EVENT char: e ;
 CONSTANT: A_CALENDAR char: c ;
@@ -36,8 +36,8 @@ CONSTANT: A_QUERY char: q ;
 CONSTANT: A_GIF char: g ;
 CONSTANT: A_WWW char: w ;
 CONSTANT: A_PLUS_IMAGE char: \: ;
-CONSTANT: A_PLUS_MOVIE char: ; ;
-CONSTANT: A_PLUS_SOUND char: < ;
+CONSTANT: A_PLUS_MOVIE char: \; ;
+CONSTANT: A_PLUS_SOUND char: \< ;
 
 : gopher-get ( selector -- item-type byte-array )
     "/" split1 "" or
