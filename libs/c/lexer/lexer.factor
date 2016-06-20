@@ -69,7 +69,7 @@ in: c.lexer
     } case ;
 
 : take-token ( sequence-parser -- string/f )
-    char: \ char: " take-token* ;
+    char: \ char: \" take-token* ;
 
 : c-identifier-begin? ( ch -- ? )
     char: a char: z [a,b]

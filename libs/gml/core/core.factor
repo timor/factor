@@ -39,7 +39,7 @@ GML: count ( -- n ) dup operand-stack>> length ;
 GML: counttomark ( -- n ) dup [ operand-stack>> length ] [ find-marker ] bi - ;
 
 ! Arrays
-GML: ] ( -- array )
+GML: \ ] ( -- array )
     dup
     [ [ operand-stack>> ] [ find-marker ] bi pop-slice { } like ]
     [ operand-stack>> pop* ]
@@ -146,12 +146,12 @@ GML:: map ( array proc -- )
     :> gml
     marker gml push-operand
     gml array proc proc>quot1 each
-    gml-] ;
+    execute\ gml-] ;
 GML:: twomap ( array1 array2 proc -- )
     :> gml
     marker gml push-operand
     gml array1 array2 proc proc>quot2 2each
-    gml-] ;
+    execute\ gml-] ;
 
 ! Extensions to real GML
 GML: print ( obj -- ) print-gml ;

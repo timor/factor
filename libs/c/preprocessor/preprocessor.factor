@@ -73,8 +73,8 @@ ERROR: header-file-missing path ;
 
 : handle-include ( preprocessor-state sequence-parser -- )
     skip-whitespace/comments advance dup previous {
-        { char: < [ char: > take-until-object read-standard-include ] }
-        { char: " [ char: " take-until-object read-local-include ] }
+        { char: \< [ char: \> take-until-object read-standard-include ] }
+        { char: \" [ char: \" take-until-object read-local-include ] }
         [ bad-include-line ]
     } case ;
 
@@ -165,7 +165,7 @@ ERROR: header-file-missing path ;
     ] if ;
 
 : preprocess-line ( preprocessor-state sequence-parser -- )
-    skip-whitespace/comments dup current char: # =
+    skip-whitespace/comments dup current char: \# =
     [ parse-directive-line ]
     [ swap processing-disabled?>> [ drop ] [ write-full nl ] if ] if ;
 

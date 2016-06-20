@@ -74,13 +74,13 @@ CONSTANT: CHARS H{
     { char: \"   0x201E }
     { char: \.   0x02D9 }
     { char: \;   0x061B }
-    { char: \[   char: ]   }
-    { char: \(   char: )   }
-    { char: \{   char: }   }
+    { char: \[   char: \]   }
+    { char: \(   char: \)   }
+    { char: \{   char: \}   }
     { char: \?   0x00BF }
     { char: \!   0x00A1 }
-    { char: \'   char: ,   }
-    { char: \<   char: >   }
+    { char: \'   char: \,   }
+    { char: \<   char: \>   }
     { char: \_   0x203E }
     { 0x203F 0x2040 }
     { 0x2045 0x2046 }

@@ -25,11 +25,11 @@ in: simple-flat-file
 : flat-file>biassoc ( filename -- biassoc )
     utf8 file-lines process-codetable-lines >biassoc ;
 
-: split-; ( line -- array )
+: split-semi ( line -- array )
     ";" split [ [ blank? ] trim ] map! ;
 
 : data ( filename -- data )
-    utf8 file-lines drop-comments [ split-; ] map! ;
+    utf8 file-lines drop-comments [ split-semi ] map! ;
 
 symbol: interned
 
@@ -40,7 +40,7 @@ symbol: interned
 : expand-ranges ( assoc -- interval-map )
     [
         [
-            swap char: . over member? [
+            swap char: \. over member? [
                 ".." split1 [ hex> ] bi@ 2array
             ] [ hex> ] if range,
         ] assoc-each

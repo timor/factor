@@ -107,6 +107,7 @@ in: bootstrap.syntax
         "read-only"
         "call("
         "execute("
+        "execute\\"
         "\""
         "P\""
         "SBUF\""

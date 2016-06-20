@@ -180,7 +180,7 @@ global-dictionary [ H{ } clone ] initialize
     primitive-effect define-declared ;
 
 : scan-gml-name ( -- word name )
-    scan-token [ "gml-" prepend create-word-in ] keep ;
+    scan-escaped-word-string [ "gml-" prepend create-word-in ] keep ;
 
 : (GML:) ( -- word name effect def )
     scan-gml-name scan-effect parse-definition ;

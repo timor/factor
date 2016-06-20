@@ -373,6 +373,8 @@ in: bootstrap.syntax
 
     "execute(" [ \ execute-effect parse-call-paren ] define-core-syntax
 
+    "execute\\" [ scan-word suffix! ] define-core-syntax
+
     "::" [ (::) define-declared ] define-core-syntax
     "M::" [ (M::) define ] define-core-syntax
     "MACRO:" [ (:) define-macro ] define-core-syntax
