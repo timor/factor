@@ -507,7 +507,7 @@ foo=<foreign any-char> 'd'
 ] unit-test
 
 [
-  "USING: peg.ebnf ; EBNF< foo='a' foo='b' EBNF>" eval( -- ) drop
+  "USING: peg.ebnf ; EBNF-MAIN{{ foo='a' foo='b' }}" eval( -- ) drop
 ] must-fail
 
 { t } [
