@@ -162,6 +162,15 @@ M: array collapse-decorators
         drop f
     ] if ;
 
+: delimiters-match? ( opening closing -- ? )
+    [
+        1 cut* over empty? [
+            nip matching-delimiter-string 1array
+        ] [
+            matching-delimiter-string [ append ] [ nip ] 2bi 2array
+        ] if
+    ] dip '[ _ sequence= ] any? ;
+
 
 ERROR: whitespace-expected-after n string ch ;
 ERROR: expected-more-tokens n string expected ;
@@ -194,7 +203,6 @@ ERROR: string-expected-got-eof n string ;
         delimiter >string >>delimiter
         tag delimiter payload 3array >>seq ; inline
 
-ERROR: mismatched-closing opening closing ;
 :: make-matched-literal ( payload closing tag opening-delimiter class -- literal )
     class new
         tag >string >>tag
@@ -202,11 +210,6 @@ ERROR: mismatched-closing opening closing ;
         tag closing [ dup tag-literal? [ lexed-underlying ] when ] bi@ ?span-slices >>underlying
         opening-delimiter >string >>delimiter
         dup single-matched-literal? [
-            closing dup [ tag>> ] when length 1 > [
-                tag opening-delimiter append
-                matching-delimiter-string closing dup [ tag>> ] when sequence=
-                [ opening-delimiter closing tag>> mismatched-closing ] unless
-            ] when
             closing dup [ tag>> ] when >>closing-tag
         ] when
         tag opening-delimiter payload closing 4array >>seq ; inline
@@ -306,9 +309,9 @@ MACRO:: read-matched ( ch -- quot: ( lexer tag -- slice' ) )
         } cond
     ] ;
 
-: read-bracket ( lexer slice -- slice' ) char: \[ read-matched ;
-: read-brace ( lexer slice -- slice' ) char: \{ read-matched ;
-: read-paren ( lexer slice -- slice' ) char: \( read-matched ;
+: read-bracket ( lexer slice -- slice' ) 2dup [ char: \[ read-matched ] with-tag ;
+: read-brace ( lexer slice -- slice' ) 2dup [ char: \{ read-matched ] with-tag ;
+: read-paren ( lexer slice -- slice' ) 2dup [ char: \( read-matched ] with-tag ;
 
 :: read-string-payload ( lexer -- n' string slice )
     lexer dup ?lexer-nth [
@@ -418,10 +421,13 @@ ERROR: backslash-expects-whitespace slice ;
     [ [ 1 + ] change-n lex-factor ]
     [ nip make-tag-literal ] if-empty ;
 
-ERROR: mismatched-terminator n string slice ;
+ERROR: mismatched-terminator lexer slice ;
 : read-terminator ( lexer slice -- slice )
-    nip
-    terminator-literal make-tag-class-literal ;
+    2dup [ peek-tag ] dip delimiters-match? [
+        nip terminator-literal make-tag-class-literal
+    ] [
+        mismatched-terminator
+    ] if ;
 
 : ?blank? ( ch/f -- blank/f )
     { [ blank? ] [ f = ] } 1|| ;
