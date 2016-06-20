@@ -108,3 +108,15 @@ in: modern.tests
 
 { 1 } [ "HI< OMG: BYE< BYE> HI>" string>literals length ] unit-test
 { 1 } [ "HI< OMG: ; BYE< BYE> HI>" string>literals length ] unit-test
+
+{ 1 t "<" }
+[
+    "<{ ptx-2op-instruction ptx-float-ftz }" string>literals
+    [ length ] [ first single-matched-literal? ] [ first tag>> ] tri
+] unit-test
+
+{ 1 t "foo<" }
+[
+    "foo<{ ptx-2op-instruction ptx-float-ftz }" string>literals
+    [ length ] [ first single-matched-literal? ] [ first tag>> ] tri
+] unit-test

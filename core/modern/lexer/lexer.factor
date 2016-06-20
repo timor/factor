@@ -4,7 +4,7 @@ USING: accessors constructors kernel math sequences
 sequences.extras slots.syntax unicode ;
 in: modern.lexer
 
-TUPLE: modern-lexer n string stack ;
+TUPLE: modern-lexer n string partial stack ;
 CONSTRUCTOR: <modern-lexer> modern-lexer ( string -- obj )
     0 >>n
     V{ } clone >>stack ; inline
@@ -58,10 +58,18 @@ ERROR: unexpected-end n string ;
     ] if ; inline
 
 :: lex-til-either ( lexer tokens -- n'/f string' slice/f ch/f )
-    lexer >lexer< tokens slice-til-either :> ( n' string' slice ch )
+    lexer >lexer<
+    lexer partial>> :> partial
+    partial [
+        [ 1 - ] dip
+        f lexer partial<<
+    ] when
+    tokens slice-til-either :> ( n' string' slice ch )
     lexer
         n' >>n drop
-    n' string' slice ch ;
+    n' string'
+    slice partial [ merge-slices ] when*
+    ch ;
 
 
 :: slice-til-separator-inclusive ( n string tokens -- n' string slice/f ch/f )

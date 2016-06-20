@@ -384,9 +384,8 @@ ERROR: closing-tag-required lexer tag ;
 
 : read-less-than ( lexer slice -- less-than )
     dupd merge-lex-til-whitespace {
-        { [ dup length 1 = ] [ nip make-tag-literal ] } ! "<"
         { [ dup "<" tail? ] [ dup top-level-name? [ read-upper-less-than ] [ nip make-tag-literal ] if ] } ! FOO< or foo<
-        [ nip make-tag-literal ]
+        [ >>partial lex-factor ]
     } cond ;
 
 

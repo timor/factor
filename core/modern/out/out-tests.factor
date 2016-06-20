@@ -57,3 +57,6 @@ in: modern.out.tests
 
 { t }
 [ "( a: ( quot: ( b --  c   ) --  d  ) --  e  )" [ [ ] rewrite-string ] keep sequence= ] unit-test
+
+{ t } [ "<{ ptx-2op-instruction ptx-float-ftz }" rewrite-same-string ] unit-test
+{ t } [ "foo<{ ptx-2op-instruction ptx-float-ftz }" rewrite-same-string ] unit-test
