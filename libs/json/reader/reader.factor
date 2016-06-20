@@ -110,11 +110,11 @@ defer: (read-json-string)
     {
         { char: \" [ over read-json-string suffix! ] }
         { char: \[  [ json-open-array ] }
-        { char: ,  [ v-over-push ] }
-        { char: ]  [ json-close-array ] }
+        { char: \,  [ v-over-push ] }
+        { char: \]  [ json-close-array ] }
         { char: \{  [ json-open-hash ] }
         { char: \:  [ v-pick-push ] }
-        { char: }  [ json-close-hash ] }
+        { char: \}  [ json-close-hash ] }
         { char: \s [ ] }
         { char: \t [ ] }
         { char: \r [ ] }

@@ -74,11 +74,11 @@ in: math.extras.test
 { 17/160 } [ { 80 60 10 20 30 } normalized-herfindahl ] unit-test
 
 { { 0 5 1 2 2 } } [
-    { -10 10 2 2.5 3 } { 1 2 3 4 5 } digitize]
+    { -10 10 2 2.5 3 } { 1 2 3 4 5 } digitize-left
 ] unit-test
 
 { { 0 5 2 2 3 } } [
-    { -10 10 2 2.5 3 } { 1 2 3 4 5 } digitize)
+    { -10 10 2 2.5 3 } { 1 2 3 4 5 } digitize-right
 ] unit-test
 
 {

@@ -204,10 +204,10 @@ PRIVATE>
 : unique-indices ( seq -- unique indices )
     [ members ] keep over dup length iota H{ } zip-as '[ _ at ] map ;
 
-: digitize] ( seq bins -- seq' )
+: digitize-left ( seq bins -- seq' )
     '[ _ bisect-left ] map ;
 
-: digitize) ( seq bins -- seq' )
+: digitize-right ( seq bins -- seq' )
     '[ _ bisect-right ] map ;
 
 PRIVATE<
@@ -218,7 +218,7 @@ PRIVATE<
 PRIVATE>
 
 : linspace[a,b) ( a b length -- seq )
-    steps ,b) <range> ;
+    steps (,b) <range> ;
 
 : linspace[a,b] ( a b length -- seq )
     {
