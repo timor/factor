@@ -335,7 +335,7 @@ MACRO:: read-matched ( ch -- quot: ( lexer tag -- slice' ) )
     lexer n>> :> n
     lexer read-string-payload :> ( n' string slice )
     n' [ n string string-expected-got-eof ] unless
-    n n' 1 - string <slice> >string
+    n n' 1 - string <slice>
     n' 1 - n' string <slice>
     tag 1 cut-slice* dquote-literal make-matched-literal ;
 
@@ -548,4 +548,15 @@ vocab-roots get [ vocabs-from reject-some-paths ] map concat
     "bunny.cel-shaded" "bunny.outlined"
 } diff
 [ modern-source-path dup <pathname> . path>literals ] map-zip
+
+vocab-roots get [ vocabs-from reject-some-paths ] map concat
+{
+    "specialized-arrays" "specialized-vectors"
+    "math.blas.matrices" "math.blas.vectors" "math.vectors.simd"
+    "math.vectors.simd.cords" "game.debug" "gpu.util" "gpu.effects.blur"
+    "gpu.effects.step" "model-viewer" "terrain.shaders" "spheres" 
+    "bunny.cel-shaded" "bunny.outlined"
+} diff
+[ modern-source-path ] map
+[ ] rewrite-paths
 ]]
