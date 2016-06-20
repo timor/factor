@@ -23,7 +23,7 @@ MACRO: marshall-x* ( num-quot seq-quot -- alien )
 : malloc-underlying ( obj -- alien )
     underlying>> malloc-byte-array ;
 
-FUNCTOR: define-primitive-marshallers ( TYPE -- )
+FUNCTOR< define-primitive-marshallers ( TYPE -- )
 <TYPE> IS <${TYPE}>
 *TYPE IS *${TYPE}
 >TYPE-array IS >${TYPE}-array
@@ -55,7 +55,7 @@ PRIVATE>
     *TYPE ; inline
 : unmarshall-TYPE*-free ( alien -- n )
     [ unmarshall-TYPE* ] keep add-malloc free ;
-FUNCTOR;
+FUNCTOR>
 
 SYNTAX: PRIMITIVE-MARSHALLERS:
 ";" parse-tokens [ define-primitive-marshallers ] each ;
