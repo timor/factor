@@ -126,13 +126,25 @@ M: array collapse-decorators
 : scoped-less-than-name ( string -- string' )
     dup [ length 2 - ] keep [ char: < = ] find-last-from [ 1 + tail ] [ drop ] if ;
 
-: scoped-upper? ( string -- ? )
+: top-level-name? ( string -- ? )
     dup { [ ":" tail? ] [ "<" tail? ] } 1|| [
         dup length 1 > [
             [ [ ":<" member? ] trim-tail [ char: \: = ] find-last ] keep
             swap [ swap tail strict-upper? ] [ nip strict-upper? ] if
         ] [
             "<" sequence= not
+        ] if
+    ] [
+        drop f
+    ] if ;
+
+: top-level-colon? ( string -- ? )
+    dup ":" tail? [
+        dup length 1 > [
+            [ [ char: \: = ] trim-tail [ char: \: = ] find-last ] keep
+            swap [ swap tail strict-upper? ] [ nip strict-upper? ] if
+        ] [
+            ":" sequence=
         ] if
     ] [
         drop f
@@ -249,17 +261,17 @@ ERROR: unnestable-form n string obj ;
 ! For implementing [ { (
 : lex-until ( lexer tags -- payload closing )
     ! over lexer-found-eof? [ "more tokens expected" throw ] when
-    2dup '[
+    '[
         [
-            _ B lex-factor [
+            _ lex-factor [
                 dup tag-literal? [
                     dup ,
-                    underlying>> ! { [ dup scoped-upper? ] [ 4 npick 0 > ] } 0&& [ unnestable-form ] when
+                    underlying>> ! { [ dup top-level-name? ] [ 4 npick 0 > ] } 0&& [ unnestable-form ] when
                     _ [ sequence= ] with any? not
                 ] [ , t ] if
             ] [
-                _ _ lex-expected-but-got-eof
                 f , f
+                ! _ _ over lexer-eof? [ lex-expected-but-got-eof ] [ 2drop f , f ] if
             ] if*
         ] loop
     ] { } make unclip-last ; inline
@@ -311,11 +323,18 @@ MACRO:: read-matched ( ch -- quot: ( lexer tag -- slice' ) )
 
 
 ERROR: cannot-nest-upper-colon n string string' ;
-: read-upper-colon ( lexer string' -- obj )
+: read-upper-colon ( lexer string' -- obj/f )
     ! 4 npick 0 > [ cannot-nest-upper-colon ] when
-    dup [
-        [ but-last ";" append ";" 2array ] [ ";" 1array ] if* lex-until
-    ] dip 1 cut-slice* uppercase-colon-literal make-matched-literal ;
+    over peek-tag top-level-colon? [
+        ! roll back, nested upper
+        roll-back-lexer f
+    ] [
+        2dup push-tag [
+            dup [
+                [ but-last ";" append ";" 2array ] [ ";" 1array ] if* lex-until
+            ] dip 1 cut-slice* uppercase-colon-literal make-matched-literal
+        ] 2keep drop pop-tag drop
+    ] if ;
 
 : read-lower-colon ( lexer string' -- obj )
     [ lex-factor dup ] dip 1 cut-slice*
@@ -327,7 +346,7 @@ ERROR: cannot-nest-upper-colon n string string' ;
         { [ dup length 1 = ] [ read-upper-colon ] }
         { [ dup [ char: \: = ] all? ] [ read-upper-colon ] }
         { [ dup { [ ":" head? ] [ ":" tail? ] } 1&& ] [ nip make-tag-literal ] }
-        { [ dup ":" tail? ] [ dup scoped-upper? [ read-upper-colon ] [ read-lower-colon ] if ] }
+        { [ dup ":" tail? ] [ dup top-level-name? [ read-upper-colon ] [ read-lower-colon ] if ] }
         { [ dup ":" head? ] [ nip make-tag-literal ] } ! :foo( ... )
         [ nip make-tag-literal ]
     } cond ;
@@ -341,7 +360,7 @@ ERROR: cannot-nest-upper-colon n string string' ;
 : read-less-than ( lexer slice -- less-than )
     dupd merge-lex-til-whitespace {
         { [ dup length 1 = ] [ nip make-tag-literal ] } ! "<"
-        { [ dup "<" tail? ] [ dup scoped-upper? [ read-upper-less-than ] [ nip make-tag-literal ] if ] } ! FOO< or foo<
+        { [ dup "<" tail? ] [ dup top-level-name? [ read-upper-less-than ] [ nip make-tag-literal ] if ] } ! FOO< or foo<
         [ nip make-tag-literal ]
     } cond ;
 

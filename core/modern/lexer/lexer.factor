@@ -14,6 +14,21 @@ CONSTRUCTOR: <modern-lexer> modern-lexer ( string -- obj )
 : ?lexer-nth ( lexer -- obj )
     >lexer< over [ ?nth ] [ 2drop f ] if ;
 
+: lexer-eof? ( lexer -- obj )
+    n>> >boolean ;
+
+: push-tag ( lexer tag -- )
+    swap stack>> push ;
+
+: peek-tag ( lexer -- tag )
+    stack>> ?last ;
+
+: pop-tag ( lexer -- tag )
+    stack>> [ f ] [ pop ] if-empty ;
+
+: roll-back-lexer ( lexer slice -- )
+    from>> >>n drop ;
+
 ERROR: unexpected-end n string ;
 : nth-check-eof ( n string -- nth )
     2dup ?nth [ 2nip ] [ unexpected-end ] if* ; inline
