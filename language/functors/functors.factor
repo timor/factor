@@ -134,7 +134,7 @@ FUNCTOR-SYNTAX: \ MACRO:
     \ define-macro suffix! ;
 
 FUNCTOR-SYNTAX: inline [ last-word make-inline ] append! ;
-FUNCTOR-SYNTAX: @inline [ last-word make-inline ] append! ;
+FUNCTOR-SYNTAX: \ @inline [ last-word make-inline ] append! ;
 
 FUNCTOR-SYNTAX: call-next-method T{ fake-call-next-method } suffix! ;
 
@@ -154,7 +154,7 @@ SYNTAX: DEFINES-PRIVATE [ begin-private create-word-in end-private ] (INTERPOLAT
 
 SYNTAX: DEFINES-CLASS [ create-class-in ] (INTERPOLATE) ;
 
-defer: FUNCTOR; delimiter
+defer: \ FUNCTOR> delimiter
 
 PRIVATE<
 
@@ -185,4 +185,4 @@ PRIVATE<
 
 PRIVATE>
 
-SYNTAX: \ FUNCTOR: (FUNCTOR:) define-declared ;
+SYNTAX: \ FUNCTOR< (FUNCTOR:) define-declared ;

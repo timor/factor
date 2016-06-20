@@ -68,7 +68,7 @@ M: rename pprint-qualified ( rename -- )
 
 PRIVATE>
 
-: (pprint-manifest ( manifest -- quots )
+: pprint-manifest-begin ( manifest -- quots )
     [
         [ search-vocabs>> [ '[ _ pprint-using ] , ] unless-empty ]
         [ qualified-vocabs>> filter-interesting [ '[ _ pprint-qualified ] , ] each ]
@@ -76,11 +76,11 @@ PRIVATE>
         tri
     ] { } make ;
 
-: pprint-manifest) ( quots -- )
+: pprint-manifest-end ( quots -- )
     [ nl ] [ call( -- ) ] interleave ;
 
 : pprint-manifest ( manifest -- )
-    (pprint-manifest pprint-manifest) ;
+    pprint-manifest-begin pprint-manifest-end ;
 
 CONSTANT: manifest-style H{
     { page-color color: FactorLightTan }

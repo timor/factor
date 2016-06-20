@@ -64,7 +64,7 @@ name>char-hook [
 
 : unicode-escape ( str -- ch str' )
     "{" ?head-slice [
-        char: } over index cut-slice [
+        char: \} over index cut-slice [
             dup hex> [
                 nip
             ] [

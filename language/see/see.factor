@@ -126,7 +126,7 @@ M: word declarations.
         postpone\ flushable
     } [ declaration. ] with each ;
 
-: pprint-; ( -- ) \ ; pprint-word ;
+: pprint-semi ( -- ) \ ; pprint-word ;
 
 M: object see*
     [
@@ -143,12 +143,12 @@ GENERIC: see-class* ( word -- ) ;
 M: union-class see-class*
     <colon \ UNION: pprint-word
     dup pprint-word
-    class-members pprint-elements pprint-; block> ;
+    class-members pprint-elements pprint-semi block> ;
 
 M: intersection-class see-class*
     <colon \ INTERSECTION: pprint-word
     dup pprint-word
-    class-participants pprint-elements pprint-; block> ;
+    class-participants pprint-elements pprint-semi block> ;
 
 M: mixin-class see-class*
     <block \ mixin: pprint-word
@@ -165,7 +165,7 @@ M: predicate-class see-class*
     dup superclass-of pprint-word
     <block
     "predicate-definition" word-prop pprint-elements
-    pprint-; block> block> ;
+    pprint-semi block> block> ;
 
 M: singleton-class see-class* ( class -- )
     \ singleton: pprint-word pprint-word ;
@@ -211,7 +211,7 @@ M: tuple-class see-class*
     {
         [ pprint-word ]
         [ superclass. ]
-        [ <block "slots" word-prop [ pprint-slot ] each block> pprint-; ]
+        [ <block "slots" word-prop [ pprint-slot ] each block> pprint-semi ]
         [ tuple-declarations. ]
     } cleave
     block> ;
@@ -222,7 +222,7 @@ M: builtin-class see-class*
     <block
     \ BUILTIN: pprint-word
     [ pprint-word ]
-    [ <block "slots" word-prop [ pprint-slot ] each pprint-; block> ] bi
+    [ <block "slots" word-prop [ pprint-slot ] each pprint-semi block> ] bi
     block> ;
 
 : see-class ( class -- )
@@ -245,7 +245,7 @@ M: error-class see-class*
     {
         [ pprint-word ]
         [ superclass. ]
-        [ <block "slots" word-prop [ name>> pprint-slot-name ] each block> pprint-; ]
+        [ <block "slots" word-prop [ name>> pprint-slot-name ] each block> pprint-semi ]
         [ tuple-declarations. ]
     } cleave
     block> ;

@@ -188,12 +188,12 @@ in: bootstrap.syntax
     ] define-core-syntax
 
     "DEFER:" [
-        scan-token current-vocab create-word
+        scan-new-escaped
         [ fake-definition ] [ set-last-word ] [ undefined-def define ] tri
     ] define-core-syntax
 
     "defer:" [
-        scan-token current-vocab create-word
+        scan-new-escaped
         [ fake-definition ] [ set-last-word ] [ undefined-def define ] tri
     ] define-core-syntax
 

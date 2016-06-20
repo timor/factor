@@ -162,14 +162,15 @@ M: array collapse-decorators
         drop f
     ] if ;
 
-: delimiters-match? ( opening closing -- ? )
-    [
-        1 cut* over empty? [
-            nip matching-delimiter-string 1array
-        ] [
-            matching-delimiter-string [ append ] [ nip ] 2bi 2array
-        ] if
-    ] dip '[ _ sequence= ] any? ;
+ERROR: no-start-delimiter lexer opening ;
+:: delimiters-match? ( lexer opening closing -- ? )
+    opening empty? [ lexer opening closing no-start-delimiter ] when
+
+    opening 1 cut* over empty? [
+        nip matching-delimiter-string 1array
+    ] [
+        matching-delimiter-string [ append ] [ nip ] 2bi 2array
+    ] if closing '[ _ sequence= ] any? ;
 
 
 ERROR: whitespace-expected-after n string ch ;
@@ -423,7 +424,7 @@ ERROR: backslash-expects-whitespace slice ;
 
 ERROR: mismatched-terminator lexer slice ;
 : read-terminator ( lexer slice -- slice )
-    2dup [ peek-tag ] dip delimiters-match? [
+    2dup [ dup peek-tag ] dip delimiters-match? [
         nip terminator-literal make-tag-class-literal
     ] [
         mismatched-terminator
@@ -483,21 +484,21 @@ MACRO: rules>call-lexer ( seq -- quot: ( lexer string -- literal ) )
 
 CONSTANT: factor-lexing-rules {
     T{ line-comment-lexer { generator read-exclamation } { delimiter char: \! } }
-    T{ backtick-lexer { generator read-backtick } { delimiter char: ` } }
+    T{ backtick-lexer { generator read-backtick } { delimiter char: \` } }
     T{ backslash-lexer { generator read-backslash } { delimiter char: \\ } }
     T{ dquote-lexer { generator read-string } { delimiter char: \" } { escape char: \\ } }
-    T{ decorator-lexer { generator read-decorator } { delimiter char: @ } }
+    T{ decorator-lexer { generator read-decorator } { delimiter char: \@ } }
     
     T{ colon-lexer { generator read-colon } { delimiter char: \: } }
-    T{ less-than-lexer { generator read-less-than } { delimiter char: < } }
+    T{ less-than-lexer { generator read-less-than } { delimiter char: \< } }
     T{ matched-lexer { generator read-bracket } { delimiter char: \[ } }
     T{ matched-lexer { generator read-brace } { delimiter char: \{ } }
     T{ matched-lexer { generator read-paren } { delimiter char: \( } }
     
-    T{ terminator-lexer { generator read-terminator } { delimiter char: ; } }
-    T{ terminator-lexer { generator read-terminator } { delimiter char: ] } }
-    T{ terminator-lexer { generator read-terminator } { delimiter char: } } }
-    T{ terminator-lexer { generator read-terminator } { delimiter char: ) } }
+    T{ terminator-lexer { generator read-terminator } { delimiter char: \; } }
+    T{ terminator-lexer { generator read-terminator } { delimiter char: \] } }
+    T{ terminator-lexer { generator read-terminator } { delimiter char: \} } }
+    T{ terminator-lexer { generator read-terminator } { delimiter char: \) } }
     
     T{ whitespace-lexer { generator read-token-or-whitespace } { delimiter char: \s } }
     T{ whitespace-lexer { generator read-token-or-whitespace } { delimiter char: \r } }

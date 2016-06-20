@@ -544,6 +544,15 @@ PRIVATE>
         [ drop first4-unsafe ]
     } case ;
 
+! : ?head* ( seq n -- headseq ) from-end short head ;
+! : ?tail* ( seq n -- tailseq ) from-end short tail ;
+! : ?cut* ( seq n -- before after ) [ ?head* ] [ ?tail* ] 2bi ;
+
+! : ?head-slice* ( seq n -- slice ) from-end ?head-slice ; inline
+! : ?tail-slice* ( seq n -- slice ) from-end ?tail-slice ; inline
+! : ?head*-as ( seq n exemplar -- seq' ) [ ?head-slice* ] [ like ] bi* ; inline
+! : ?tail*-as ( seq n exemplar -- seq' ) [ ?tail-slice* ] [ like ] bi* ; inline
+
 : cut-when ( ... seq quot: ( ... elt -- ... ? ) -- ... before after )
     [ find drop ] 2keep drop swap
     [ cut ] [ f over like ] if* ; inline

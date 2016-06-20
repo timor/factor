@@ -8,8 +8,8 @@ vocabs.prettyprint words ;
 in: prettyprint
 
 : with-use ( obj quot -- )
-    t make-pprint (pprint-manifest
-    [ pprint-manifest) ] [ [ drop nl ] unless-empty ] bi
+    t make-pprint pprint-manifest-begin
+    [ pprint-manifest-end ] [ [ drop nl ] unless-empty ] bi
     do-pprint ; inline
 
 : with-in ( obj quot -- )

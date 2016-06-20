@@ -38,19 +38,19 @@ PRIVATE<
 
 : twiddle ( a b -- a b step ) 2dup > -1 1 ? ; inline
 
-: (a, ( a b step -- a' b' step ) dup [ + ] curry 2dip ; inline
+: (a,) ( a b step -- a' b' step ) dup [ + ] curry 2dip ; inline
 
-: ,b) ( a b step -- a' b' step ) dup [ - ] curry dip ; inline
+: (,b) ( a b step -- a' b' step ) dup [ - ] curry dip ; inline
 
 PRIVATE>
 
 : [a,b] ( a b -- range ) twiddle <range> ; inline
 
-: (a,b] ( a b -- range ) twiddle (a, <range> ; inline
+: (a,b] ( a b -- range ) twiddle (a,) <range> ; inline
 
-: [a,b) ( a b -- range ) twiddle ,b) <range> ; inline
+: [a,b) ( a b -- range ) twiddle (,b) <range> ; inline
 
-: (a,b) ( a b -- range ) twiddle (a, ,b) <range> ; inline
+: (a,b) ( a b -- range ) twiddle (a,) (,b) <range> ; inline
 
 : [0,b] ( b -- range ) 0 swap [a,b] ; inline
 
