@@ -19,7 +19,7 @@ PRIVATE<
         { char: \t   "\\t"  }
         { char: \\   "\\\\" }
         { char: \(    "\\("  }
-        { char: )    "\\)"  }
+        { char: \)    "\\)"  }
     } escape-string-by ;
 
 PRIVATE>

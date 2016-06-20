@@ -201,9 +201,9 @@ M: cocoa-ui-backend system-alert
         } cleave
     ] [ 2drop ] if* ;
 
-CLASS: FactorApplicationDelegate < NSObject
+CLASS< FactorApplicationDelegate < NSObject
     METHOD: void applicationDidUpdate: id obj [ reset-thread-timer ] ;
-;
+CLASS>
 
 : install-app-delegate ( -- )
     NSApp FactorApplicationDelegate install-delegate ;

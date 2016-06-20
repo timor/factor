@@ -18,7 +18,7 @@ PRIVATE<
         { char: \t   "\\t"  }
         { char: \\   "\\\\" }
         { char: \(    "\\("  }
-        { char: )    "\\)"  }
+        { char: \)    "\\)"  }
     } escape-string-by "(" ")" surround ;
 
 : pdf-object ( str n -- str' )

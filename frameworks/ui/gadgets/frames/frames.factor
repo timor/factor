@@ -17,17 +17,17 @@ M: glue pref-dim* drop { 0 0 } ;
 : <frame-grid> ( cols rows -- grid )
     swap '[ _ [ <glue> ] replicate ] replicate ;
 
-: (fill- ( frame grid-layout quot1 quot2 -- pref-dim gap filled-cell dims )
+: fill- ( frame grid-layout quot1 quot2 -- pref-dim gap filled-cell dims )
     [ '[ [ dim>> ] [ gap>> ] [ filled-cell>> ] tri _ tri@ ] dip ] dip call ; inline
 
 : available-space ( pref-dim gap dims -- avail )
     length 1 + * [-] ; inline
 
-: -center) ( pref-dim gap filled-cell dims -- )
+: -center ( pref-dim gap filled-cell dims -- )
     [ nip available-space ]
     [ [ remove-nth sum [-] ] [ set-nth ] 2bi ] 2bi ; inline
 
-: (fill-center) ( frame grid-layout quot1 quot2 -- ) (fill- -center) ; inline
+: (fill-center) ( frame grid-layout quot1 quot2 -- ) fill- -center ; inline
 
 : fill-center ( frame grid-layout -- )
     [ [ first ] [ column-widths>> ] (fill-center) ]

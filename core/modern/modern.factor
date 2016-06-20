@@ -539,12 +539,11 @@ CONSTANT: factor-lexing-rules {
     ! } case ; inline
 
 ![[
-
 vocab-roots get [ vocabs-from reject-some-paths ] map concat
 {
     "specialized-arrays" "specialized-vectors"
     "math.blas.matrices" "math.blas.vectors" "math.vectors.simd"
-    "math.vectors.simd.cords"
+    "math.vectors.simd.cords" "game.debug"
 } diff
-[ modern-source-path dup <pathname> . path>literals  ] map-zip
+[ modern-source-path dup <pathname> . path>literals ] map-zip
 ]]

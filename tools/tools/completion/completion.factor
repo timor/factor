@@ -125,11 +125,11 @@ PRIVATE<
         [ 2 tail* ?first (complete-single-vocab?) ] [ drop f ] if
     ] if ;
 
-: chop-; ( seq -- seq' )
+: chop-semi ( seq -- seq' )
     { ";" } split1-last [ ] [ ] ?if ;
 
 : complete-vocab-list? ( tokens -- ? )
-    chop-; 1 short head* "USING:" swap member? ;
+    chop-semi 1 short head* "USING:" swap member? ;
 
 PRIVATE>
 

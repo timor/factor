@@ -51,7 +51,7 @@ CONSTANT: key-lbracket 0x002f ;
 CONSTANT: key-rbracket 0x0030 ;
 CONSTANT: key-\ 0x0031 ;
 CONSTANT: key-#-non-us 0x0032 ;
-CONSTANT: key-; 0x0033 ;
+CONSTANT: key-semi 0x0033 ;
 CONSTANT: key-' 0x0034 ;
 CONSTANT: key-backtick 0x0035 ;
 CONSTANT: key-, 0x0036 ;
