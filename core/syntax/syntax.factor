@@ -70,6 +70,19 @@ in: bootstrap.syntax
         "]==]" parse-multiline-string drop
     ] define-core-syntax
 
+
+     "[[" [
+        "]]" parse-multiline-string suffix!
+    ] define-core-syntax
+
+     "[=[" [
+        "]=]" parse-multiline-string suffix!
+    ] define-core-syntax
+
+     "[==[" [
+        "]==]" parse-multiline-string suffix!
+    ] define-core-syntax
+
     "PRIMITIVE:" [
         current-vocab name>>
         scan-word scan-effect ";" expect ensure-primitive

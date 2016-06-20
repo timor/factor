@@ -3,8 +3,8 @@
 USING: help.syntax help.markup peg peg.search words ;
 in: peg.ebnf
 
-HELP: EBNF<
-{ $syntax "EBNF<...ebnf... EBNF>" }
+HELP: EBNF-MAIN{{
+{ $syntax "EBNF-MAIN{{ ...ebnf... }}" }
 { $values { "...ebnf..." "EBNF DSL text" } }
 { $description
     "Creates a " { $vocab-link "peg" }
@@ -15,7 +15,7 @@ HELP: EBNF<
 { $examples
     { $example
        "USING: kernel prettyprint peg.ebnf peg.search ;"
-       "\"abcdab\" EBNF< rule=\"a\" \"b\" => [[ drop \"foo\" ]] EBNF> replace ."
+       "\"abcdab\" EBNF-MAIN{{ rule=\"a\" \"b\" => [[ drop \"foo\" ]] }} replace ."
        "\"foocdfoo\""
     }
 } ;
@@ -469,7 +469,7 @@ ARTICLE: "peg.ebnf" "EBNF"
 "EBNF syntax. It provides three parsing words described below. These words all "
 "accept the same EBNF syntax. The difference is in how they are used. "
 { $subsections
-    \ EBNF<
+    \ EBNF-MAIN{{
     \ EBNF{{
 }
 "The EBNF syntax is composed of a series of rules of the form:"
