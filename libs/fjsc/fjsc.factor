@@ -33,7 +33,7 @@ TUPLE: ast-hashtable elements ;
         {
             [ blank? not ]
             [ char: \" = not ]
-            [ char: ; = not ]
+            [ char: \; = not ]
             [ LETTER? not ]
             [ letter? not ]
             [ identifier-middle? not ]

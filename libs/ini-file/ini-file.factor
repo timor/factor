@@ -18,14 +18,14 @@ PRIVATE<
         { char: r   char: \r }
         { char: t   char: \t }
         { char: v   char: \v }
-        { char: '   char: ' }
+        { char: \'   char: \' }
         { char: \"   char: \" }
-        { char: \\  char: \\ }
-        { char: ?   char: ? }
-        { char: ;   char: ; }
+        { char: \\   char: \\ }
+        { char: \?   char: \? }
+        { char: \;   char: \; }
         { char: \[   char: \[ }
-        { char: ]   char: ] }
-        { char: =   char: = }
+        { char: \]   char: \] }
+        { char: \=   char: \= }
     } ?at [ bad-escape ] unless ;
 
 : (unescape-string) ( str -- )
@@ -49,14 +49,14 @@ use: xml.entities
         { char: \r   "\\r"  }
         { char: \t   "\\t"  }
         { 0x0b    "\\v"  }
-        { char: '    "\\'"  }
-        { char: "    "\\\"" }
+        { char: \'    "\\'"  }
+        { char: \"    "\\\"" }
         { char: \\   "\\\\" }
-        { char: ?    "\\?"  }
-        { char: ;    "\\;"  }
+        { char: \?    "\\?"  }
+        { char: \;    "\\;"  }
         { char: \[    "\\["  }
         { char: \]    "\\]"  }
-        { char: =    "\\="  }
+        { char: \=    "\\="  }
     } escape-string-by ;
 
 : space? ( ch -- ? )

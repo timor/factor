@@ -69,19 +69,19 @@ CONSTANT: CHARS H{
     { char: 7   0x2C62 }
     ! { char: 8   char: 8 }
     { char: 9   char: 6   }
-    { char: &   0x214B }
+    { char: \&   0x214B }
     { char: \!   0x00A1 }
     { char: \"   0x201E }
-    { char: .   0x02D9 }
-    { char: ;   0x061B }
+    { char: \.   0x02D9 }
+    { char: \;   0x061B }
     { char: \[   char: ]   }
     { char: \(   char: )   }
     { char: \{   char: }   }
-    { char: ?   0x00BF }
+    { char: \?   0x00BF }
     { char: \!   0x00A1 }
-    { char: '   char: ,   }
-    { char: <   char: >   }
-    { char: _   0x203E }
+    { char: \'   char: ,   }
+    { char: \<   char: >   }
+    { char: \_   0x203E }
     { 0x203F 0x2040 }
     { 0x2045 0x2046 }
     { 0x2234 0x2235 }

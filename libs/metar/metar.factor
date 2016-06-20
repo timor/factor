@@ -41,7 +41,7 @@ ERROR: bad-location str ;
 
 : stations-data ( -- seq )
     URL" http://weather.noaa.gov/data/nsd_cccc.txt"
-    http-get nip char: ; [ string>csv ] with-delimiter ;
+    http-get nip char: \; [ string>csv ] with-delimiter ;
 
 PRIVATE>
 
