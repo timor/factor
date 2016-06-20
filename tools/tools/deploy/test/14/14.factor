@@ -4,7 +4,7 @@ USING: accessors classes.struct cocoa cocoa.classes
 cocoa.runtime cocoa.subclassing cocoa.types core-graphics.types
 kernel math ;
 FROM: alien.c-types => float ;
-in: tools.deploy.test.14
+IN: tools.deploy.test.14
 
 CLASS< Bar < NSObject
     METHOD: float bar: NSRect rect [

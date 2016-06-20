@@ -1,7 +1,7 @@
 USING: accessors alien alien.c-types alien.data combinators.short-circuit
 destructors.private kernel namespaces python.ffi sequences vocabs.loader
 words ;
-in: python.errors
+IN: python.errors
 
 PRIVATE<
 

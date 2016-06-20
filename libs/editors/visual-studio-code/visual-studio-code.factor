@@ -3,7 +3,7 @@
 USING: combinators.extras combinators.short-circuit editors
 generalizations io.files io.pathnames io.standard-paths kernel
 make math.parser memoize namespaces sequences system tools.which ;
-in: editors.visual-studio-code
+IN: editors.visual-studio-code
 
 ! Command line arguments
 ! https://code.visualstudio.com/docs/editor/codebasics#_additional-command-line-arguments

@@ -3,7 +3,7 @@
 USING: math kernel accessors http.server http.server.dispatchers
 furnace furnace.actions furnace.sessions furnace.redirection
 html.components html.forms fry urls ;
-in: webapps.counter
+IN: webapps.counter
 
 symbol: count
 

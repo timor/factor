@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors fry kernel locals math math.order
 math.statistics sequences sequences.private ;
-in: sequences.windowed
+IN: sequences.windowed
 
 TUPLE: windowed-sequence
     { sequence sequence read-only }

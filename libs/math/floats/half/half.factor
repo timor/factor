@@ -2,7 +2,7 @@
 USING: accessors alien.accessors alien.c-types alien.data
 alien.syntax kernel math math.order ;
 FROM: math => float ;
-in: math.floats.half
+IN: math.floats.half
 
 : half>bits ( float -- bits )
     float>bits

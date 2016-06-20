@@ -1,6 +1,6 @@
 USING: alien.c-types alien.syntax classes.struct
 windows.directx.dxgiformat windows.types ;
-in: windows.directx.dxgitype
+IN: windows.directx.dxgitype
 
 CONSTANT: DXGI_STATUS_OCCLUDED 0x087a0001 ;
 CONSTANT: DXGI_STATUS_CLIPPED 0x087a0002 ;

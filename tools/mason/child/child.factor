@@ -5,7 +5,7 @@ combinators.short-circuit continuations fry io.directories
 io.launcher io.pathnames kernel macros make mason.config
 mason.notify mason.platform mason.report namespaces quotations
 sequences splitting system ;
-in: mason.child
+IN: mason.child
 
 ! Make sure we call the build directory's factor.cmd
 : nmake-cmd ( -- args )

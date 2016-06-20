@@ -4,7 +4,7 @@
 USING: accessors alien alien.accessors alien.data byte-arrays
 combinators destructors kernel libc math math.order math.private
 sequences sequences.private typed ;
-in: io.buffers
+IN: io.buffers
 
 TUPLE: buffer
 { size fixnum }

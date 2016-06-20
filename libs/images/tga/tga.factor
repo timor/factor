@@ -4,7 +4,7 @@ USING: accessors images images.loader io io.binary kernel
 locals math sequences io.encodings.ascii io.encodings.string
 calendar math.ranges math.parser colors arrays hashtables
 ui.pixel-formats combinators continuations io.streams.throwing ;
-in: images.tga
+IN: images.tga
 
 singleton: tga-image
 "tga" tga-image ?register-image-class

@@ -6,7 +6,7 @@ kernel math math.order math.statistics memoize namespaces sequences sets
 sorting tools.completion tools.crossref vocabs vocabs.parser
 vocabs.hierarchy words ;
 
-in: fuel.xref
+IN: fuel.xref
 
 PRIVATE<
 

@@ -4,7 +4,7 @@ USING: alien alien.c-types alien.destructors alien.libraries
 alien.syntax combinators gobject-introspection
 gobject-introspection.standard-types kernel pango.ffi system
 vocabs ;
-in: gtk.ffi
+IN: gtk.ffi
 
 COMPILE<
 "atk.ffi" require

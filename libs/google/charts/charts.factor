@@ -6,7 +6,7 @@ http.client images.http images.loader images.loader.private
 images.viewer kernel math math.order present sequences splitting
 urls ;
 
-in: google.charts
+IN: google.charts
 
 TUPLE: chart type width height title data data-scale labels
 background foreground margin bar-width ;

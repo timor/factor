@@ -12,7 +12,7 @@ vectors ;
 FROM: math.matrices => m.v ;
 FROM: models => change-model ;
 SPECIALIZED-VECTORS: ushort float-4 ;
-in: gml.viewer
+IN: gml.viewer
 
 CONSTANT: neutral-edge-color float-4{ 1 1 1 1 } ;
 CONSTANT: neutral-face-color float-4{ 1 1 1 1 } ;

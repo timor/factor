@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Daniel Ehrenberg
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel accessors math lists sequences combinators.short-circuit ;
-in: persistent.deques
+IN: persistent.deques
 
 ! Amortized O(1) push/pop on both ends for single-threaded access
 ! In a pathological case, if there are m modified versions from the

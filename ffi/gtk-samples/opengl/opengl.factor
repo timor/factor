@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.strings gdk.gl.ffi gobject.ffi gtk.ffi gtk.gl.ffi
 io.encodings.utf8 kernel locals opengl.gl ;
-in: gtk-samples.opengl
+IN: gtk-samples.opengl
 
 ! This sample is based on
 ! http://code.valaide.org/content/simple-opengl-sample-using-gtkglext

@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors namespaces assocs kernel io.servers ;
-in: http.server.remapping
+IN: http.server.remapping
 
 symbol: port-remapping
 

@@ -5,7 +5,7 @@ words quotations arrays combinators sequences math.vectors
 io.styles prettyprint vocabs sorting io generic
 math.statistics math.order locals.types
 locals.definitions ;
-in: reports.noise
+IN: reports.noise
 
 : badness ( word -- n )
     H{

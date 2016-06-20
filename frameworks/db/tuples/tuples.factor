@@ -5,7 +5,7 @@ classes.tuple words sequences slots math accessors
 math.parser io prettyprint continuations
 destructors mirrors sets db.types db.private fry
 combinators.short-circuit db.errors ;
-in: db.tuples
+IN: db.tuples
 
 HOOK: create-sql-statement db-connection ( class -- object ) ;
 HOOK: drop-sql-statement db-connection ( class -- object ) ;

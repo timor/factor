@@ -3,7 +3,7 @@
 USING: accessors arrays calendar colors.constants kernel
 locals math math.constants math.functions math.rectangles
 math.vectors opengl sequences system timers ui ui.gadgets ui.render ;
-in: rosetta-code.animate-pendulum
+IN: rosetta-code.animate-pendulum
 
 ! http://rosettacode.org/wiki/Animate_a_pendulum
 

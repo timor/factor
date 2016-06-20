@@ -3,7 +3,7 @@ io.streams.byte-array kernel math sequences
 tools.image-analyzer.code-heap-reader
 tools.image-analyzer.data-heap-reader tools.image-analyzer.utils
 tools.image-analyzer.vm ;
-in: tools.image-analyzer
+IN: tools.image-analyzer
 
 TUPLE: image header heap ;
 

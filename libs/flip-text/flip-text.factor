@@ -3,7 +3,7 @@
 
 USING: assocs kernel sequences ;
 
-in: flip-text
+IN: flip-text
 
 PRIVATE<
 

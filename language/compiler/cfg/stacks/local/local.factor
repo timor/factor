@@ -4,7 +4,7 @@ USING: accessors assocs compiler.cfg.instructions
 compiler.cfg.parallel-copy compiler.cfg.registers
 compiler.cfg.stacks.height hash-sets kernel make math math.order
 namespaces sequences sets ;
-in: compiler.cfg.stacks.local
+IN: compiler.cfg.stacks.local
 
 : current-height ( state -- ds rs )
     first2 [ first ] bi@ ;

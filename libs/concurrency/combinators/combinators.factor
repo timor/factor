@@ -3,7 +3,7 @@
 USING: arrays assocs combinators concurrency.count-downs
 concurrency.futures fry generalizations kernel macros sequences
 sequences.private sequences.product ;
-in: concurrency.combinators
+IN: concurrency.combinators
 
 PRIVATE<
 

@@ -3,7 +3,7 @@
 USING: alien alien.c-types alien.syntax kernel windows.types
 math multiline classes.struct alien.data arrays literals ;
 QUALIFIED-WITH: alien.c-types c ;
-in: windows.kernel32
+IN: windows.kernel32
 
 : lo-word ( wparam -- lo ) c:short <ref> c:short deref ; inline
 : hi-word ( wparam -- hi ) -16 shift lo-word ; inline

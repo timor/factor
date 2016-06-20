@@ -6,7 +6,7 @@ io.encodings.binary io.encodings.string io.encodings.utf8
 io.files io.streams.byte-array io.streams.peek kernel literals
 make math sequences sequences.generalizations ;
 
-in: midi
+IN: midi
 
 ! TODO: sometimes track length not specified
 ! TODO: parse division

@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: formatting io kernel math math.parser sequences ;
-in: rosetta-code.menu
+IN: rosetta-code.menu
 
 ! http://rosettacode.org/wiki/Menu
 

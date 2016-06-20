@@ -3,7 +3,7 @@
 USING: accessors alien.data assocs bit-arrays fry
 io.backend.unix io.backend.unix.multiplexers kernel layouts
 locals math math.order sequences unix.ffi unix.time ;
-in: io.backend.unix.multiplexers.select
+IN: io.backend.unix.multiplexers.select
 
 TUPLE: select-mx < mx read-fdset write-fdset ;
 

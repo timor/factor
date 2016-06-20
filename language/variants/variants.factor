@@ -3,7 +3,7 @@ USING: accessors arrays classes classes.mixin classes.parser
 classes.singleton classes.tuple classes.tuple.parser
 classes.union combinators inverse kernel lexer macros make
 parser quotations sequences slots splitting words ;
-in: variants
+IN: variants
 
 PREDICATE: variant-class < mixin-class "variant?" word-prop ;
 

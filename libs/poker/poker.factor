@@ -5,7 +5,7 @@ USING: arrays ascii assocs combinators fry kernel lexer locals
 math math.bitwise math.combinatorics math.order math.statistics
 poker.arrays random sequences sequences.extras
 sequences.product splitting strings ;
-in: poker
+IN: poker
 
 ! The algorithm used is based on Cactus Kev's Poker Hand Evaluator with
 ! the Senzee Perfect Hash Optimization:

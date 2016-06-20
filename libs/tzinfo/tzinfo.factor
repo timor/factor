@@ -6,7 +6,7 @@ assocs calendar classes.struct combinators hashtables io
 io.binary io.encodings.binary io.files kernel locals math
 math.order sequences strings ;
 
-in: tzinfo
+IN: tzinfo
 
 PRIVATE<
 

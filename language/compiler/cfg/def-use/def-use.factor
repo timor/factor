@@ -4,7 +4,7 @@ USING: accessors arrays assocs combinators compiler.cfg
 compiler.cfg.instructions compiler.cfg.instructions.syntax
 compiler.cfg.rpo compiler.units fry generic kernel namespaces
 quotations sequences sequences.generalizations sets slots words ;
-in: compiler.cfg.def-use
+IN: compiler.cfg.def-use
 
 ! Utilities for iterating over instruction operands
 

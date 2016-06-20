@@ -3,7 +3,7 @@
 USING: accessors calendar.format calendar.model fonts fry
 grouping kernel math models.arrow namespaces sequences ui
 ui.gadgets.labels ;
-in: lcd
+IN: lcd
 
 : lcd-digit ( digit row -- str )
     [ dup char: \: = [ drop 10 ] [ char: 0 - ] if ] dip {

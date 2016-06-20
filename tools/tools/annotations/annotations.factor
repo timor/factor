@@ -4,7 +4,7 @@ USING: accessors arrays assocs compiler.units effects fry
 generalizations generic inspector io kernel locals macros math
 namespaces prettyprint quotations sequences sequences.deep
 sequences.generalizations sorting summary tools.time words ;
-in: tools.annotations
+IN: tools.annotations
 
 PRIVATE<
 

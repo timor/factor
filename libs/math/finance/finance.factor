@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: fry grouping kernel math math.statistics math.vectors
 sequences ;
-in: math.finance
+IN: math.finance
 
 : sma ( seq n -- newseq )
     clump [ mean ] map ;

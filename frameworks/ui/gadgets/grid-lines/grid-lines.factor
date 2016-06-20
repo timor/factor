@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs fry kernel locals math math.vectors
 opengl sequences ui.gadgets ui.gadgets.grids.private ui.pens ;
-in: ui.gadgets.grid-lines
+IN: ui.gadgets.grid-lines
 
 TUPLE: grid-lines color ;
 

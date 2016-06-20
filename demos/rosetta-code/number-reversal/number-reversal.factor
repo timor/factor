@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: formatting io kernel math math.parser math.ranges
 namespaces random sequences strings ;
-in: rosetta-code.number-reversal
+IN: rosetta-code.number-reversal
 
 ! http://rosettacode.org/wiki/Number_reversal_game
 

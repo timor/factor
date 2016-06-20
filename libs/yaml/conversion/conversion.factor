@@ -4,7 +4,7 @@ USING: accessors assocs base64 byte-arrays combinators
 combinators.extras hash-sets kernel linked-assocs math
 math.parser regexp sequences strings yaml.ffi
 calendar calendar.format ;
-in: yaml.conversion
+IN: yaml.conversion
 
 ! http://yaml.org/type/
 CONSTANT: YAML_MERGE_TAG "tag:yaml.org,2002:merge" ;

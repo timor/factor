@@ -5,7 +5,7 @@ USING: accessors alien.c-types alien.syntax byte-arrays classes.struct
 combinators.short-circuit combinators.smart generalizations kernel
 libc locals math sequences sequences.generalizations strings system
 unix.ffi vocabs.loader ;
-in: unix
+IN: unix
 
 ERROR: unix-system-call-error args errno message word ;
 

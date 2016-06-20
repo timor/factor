@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: accessors arrays assocs kernel locals math sequences
 sequences.private ;
-in: sequences.product
+IN: sequences.product
 
 TUPLE: product-sequence { sequences array read-only } { lengths array read-only } ;
 

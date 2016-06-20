@@ -1,6 +1,6 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-in: io.files.types
+IN: io.files.types
 
 symbol: +regular-file+
 symbol: +directory+

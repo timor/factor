@@ -1,5 +1,5 @@
 USING: concurrency.flags kernel math namespaces timers ;
-in: benchmark.timers
+IN: benchmark.timers
 
 symbol: loop-flag
 symbol: loop-count

@@ -4,7 +4,7 @@ USING: accessors arrays assocs checksums checksums.crc32
 compiler.units continuations definitions io.encodings.utf8
 io.files io.pathnames kernel namespaces sequences sets
 source-files.errors strings words ;
-in: source-files
+IN: source-files
 
 symbol: source-files
 

@@ -1,7 +1,7 @@
 USING: alien alien.c-types alien.destructors alien.libraries
 alien.libraries.finder alien.syntax assocs classes.struct kernel sequences
 system ;
-in: python.ffi
+IN: python.ffi
 
 ! COMPILE< "python" { "3.0" "3" "2.7" "2.6" } ! Python 3 has a different api, enable someday
 COMPILE< "python"

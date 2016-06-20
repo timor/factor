@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel accessors random math.parser locals
 sequences math ;
-in: furnace.auth.providers
+IN: furnace.auth.providers
 
 TUPLE: user
 username realname

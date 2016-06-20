@@ -5,7 +5,7 @@ furnace.conversations furnace.recaptcha furnace.redirection
 html.templates.chloe.compiler http.server
 http.server.dispatchers http.server.responses io.streams.string
 kernel urls xml.syntax ;
-in: furnace.recaptcha.example
+IN: furnace.recaptcha.example
 
 TUPLE: recaptcha-app < dispatcher recaptcha ;
 

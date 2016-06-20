@@ -3,7 +3,7 @@
 USING: accessors arrays combinators definitions generic
 generic.single generic.single.private kernel layouts make math
 namespaces quotations sequences words ;
-in: generic.standard
+IN: generic.standard
 
 ERROR: bad-dispatch-position # ;
 

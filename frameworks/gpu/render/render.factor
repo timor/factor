@@ -12,7 +12,7 @@ vocabs.parser words math.vectors.simd ;
 FROM: math => float ;
 QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-ARRAYS: c:float c:int c:uchar c:ushort c:uint c:void* ;
-in: gpu.render
+IN: gpu.render
 
 VARIANT: uniform-type
     bool-uniform

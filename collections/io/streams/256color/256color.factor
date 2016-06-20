@@ -6,7 +6,7 @@ formatting fry io io.streams.string io.styles kernel locals
 math math.functions math.ranges math.vectors namespaces
 sequences sequences.extras strings strings.tables ;
 
-in: io.streams.256color
+IN: io.streams.256color
 
 PRIVATE<
 

@@ -1,7 +1,7 @@
 ! Copyright (C) 2003, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel namespaces ;
-in: prettyprint.config
+IN: prettyprint.config
 
 ! Configuration
 symbol: tab-size

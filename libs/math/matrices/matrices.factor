@@ -4,7 +4,7 @@ USING: accessors arrays columns kernel locals math math.bits
 math.functions math.order math.vectors sequences
 sequences.private fry math.statistics grouping
 combinators.short-circuit math.ranges combinators.smart ;
-in: math.matrices
+IN: math.matrices
 
 ! Matrices
 : make-matrix ( m n quot -- matrix )

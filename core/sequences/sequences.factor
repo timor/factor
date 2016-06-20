@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel kernel.private math math.order
 math.private slots.private ;
-in: sequences
+IN: sequences
 
 mixin: sequence
 

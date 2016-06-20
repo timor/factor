@@ -9,7 +9,7 @@ sequences.generalizations specialized-arrays system words ;
 FROM: alien.c-types => float ;
 specialized-array: float
 specialized-array: uint
-in: opengl
+IN: opengl
 
 symbol: gl-scale-factor
 

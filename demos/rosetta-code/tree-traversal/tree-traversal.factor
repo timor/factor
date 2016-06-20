@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators deques dlists fry io kernel
 math.parser ;
-in: rosetta-code.tree-traversal
+IN: rosetta-code.tree-traversal
 
 ! http://rosettacode.org/wiki/Tree_traversal
 

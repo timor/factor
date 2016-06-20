@@ -2,7 +2,7 @@
 ! 24, the Factor game!
 USING: accessors backtrack combinators continuations formatting
 io kernel math prettyprint quotations random sequences shuffle ;
-in: 24-game
+IN: 24-game
 
 : nop ( -- ) ;
 

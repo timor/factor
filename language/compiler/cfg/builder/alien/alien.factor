@@ -7,7 +7,7 @@ compiler.cfg.hats compiler.cfg.instructions compiler.cfg.registers
 compiler.cfg.stacks compiler.cfg.stacks.local compiler.errors
 compiler.tree cpu.architecture fry kernel layouts make math namespaces
 sequences sequences.generalizations words ;
-in: compiler.cfg.builder.alien
+IN: compiler.cfg.builder.alien
 
 : with-param-regs* ( quot -- reg-values stack-values )
     '[

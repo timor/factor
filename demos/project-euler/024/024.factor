@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math.combinatorics project-euler.common
 sequences ;
-in: project-euler.024
+IN: project-euler.024
 
 ! http://projecteuler.net/index.php?section=problems&id=24
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators.short-circuit kernel math math.functions
 math.primes random ;
-in: math.primes.safe
+IN: math.primes.safe
 
 PRIVATE<
 

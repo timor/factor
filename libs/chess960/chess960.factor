@@ -1,5 +1,5 @@
 USING: math.ranges kernel random sequences arrays combinators ;
-in: chess960
+IN: chess960
 
 SYMBOLS: pawn rook knight bishop queen king ;
 

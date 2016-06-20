@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs init io io.encodings io.encodings.utf8 kernel
 namespaces system ;
-in: io.backend
+IN: io.backend
 
 symbol: io-backend
 

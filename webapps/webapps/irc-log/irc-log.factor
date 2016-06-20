@@ -3,7 +3,7 @@
 USING: calendar kernel http.server.dispatchers prettyprint
 sequences formatting furnace.actions html.forms accessors
 furnace.redirection ;
-in: webapps.irc-log
+IN: webapps.irc-log
 
 TUPLE: irclog-app < dispatcher ;
 

@@ -4,7 +4,7 @@ USING: accessors arrays assocs byte-arrays classes
 classes.algebra classes.tuple classes.tuple.private combinators
 combinators.short-circuit compiler.tree.propagation.info kernel
 math sequences slots.private strings words ;
-in: compiler.tree.propagation.slots
+IN: compiler.tree.propagation.slots
 
 : sequence-constructor? ( word -- ? )
     { <array> <byte-array> (byte-array) <string> } member-eq? ;

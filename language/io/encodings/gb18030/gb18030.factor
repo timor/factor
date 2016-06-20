@@ -5,7 +5,7 @@ math.parser sequences combinators assocs locals accessors math arrays
 byte-arrays ascii io.files biassocs math.order namespaces
 combinators.short-circuit io.binary io.encodings.iana ;
 FROM: io.encodings.ascii => ascii ;
-in: io.encodings.gb18030
+IN: io.encodings.gb18030
 
 singleton: gb18030
 

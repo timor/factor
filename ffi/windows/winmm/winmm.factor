@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax byte-arrays formatting kernel
 math windows.types ;
-in: windows.winmm
+IN: windows.winmm
 
 library: winmm
 

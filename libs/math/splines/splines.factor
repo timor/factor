@@ -4,7 +4,7 @@ USING: accessors combinators kernel locals math math.combinatorics
 math.polynomials opengl.gl sequences ui.gadgets ui.gadgets.panes
 ui.render arrays grouping math.vectors assocs
 ui.gestures ;
-in: math.splines
+IN: math.splines
 
 PRIVATE<
 :: bernstein-polynomial-ith ( n i -- p )

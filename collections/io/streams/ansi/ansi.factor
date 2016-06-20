@@ -5,7 +5,7 @@ USING: accessors arrays assocs destructors formatting fry io
 io.streams.string io.styles kernel math math.functions
 math.vectors namespaces sequences strings strings.tables ;
 
-in: io.streams.ansi
+IN: io.streams.ansi
 
 PRIVATE<
 

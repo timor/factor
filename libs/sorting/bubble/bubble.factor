@@ -4,7 +4,7 @@
 USING: kernel locals math math.order math.ranges sequences
 sequences.private ;
 
-in: sorting.bubble
+IN: sorting.bubble
 
 PRIVATE<
 

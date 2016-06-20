@@ -1,7 +1,7 @@
 ! Copyright (C) 2007-2009 Samuel Tardieu.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel lists.lazy math math.primes ;
-in: math.primes.lists
+IN: math.primes.lists
 
 : lprimes ( -- list ) 2 [ next-prime ] lfrom-by ;
 

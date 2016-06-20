@@ -7,7 +7,7 @@ io.files.temp io.files.types io.files.unique io.launcher
 io.pathnames kernel locals math math.parser namespaces sequences
 sorting strings system unicode xml.syntax xml.writer
 xmode.catalog xmode.marker xmode.tokens ;
-in: codebook
+IN: codebook
 
 ! Usage: "my/source/tree" codebook
 ! Writes tree.opf, tree.ncx, and tree.html to a temporary directory

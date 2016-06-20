@@ -3,7 +3,7 @@
 USING: environment fry io.directories.search.windows io.files
 io.pathnames io.standard-paths kernel sequences splitting
 system unicode ;
-in: io.standard-paths.windows
+IN: io.standard-paths.windows
 
 M: windows find-in-applications
     >lower

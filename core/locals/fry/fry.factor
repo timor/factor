@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors fry fry.private generalizations kernel
 locals.types sequences ;
-in: locals.fry
+IN: locals.fry
 
 ! Support for mixing locals with fry
 

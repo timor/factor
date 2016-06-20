@@ -1,7 +1,7 @@
 USING: assocs combinators fry kernel linked-assocs math
 sequences ;
 
-in: benchmark.linked-assocs
+IN: benchmark.linked-assocs
 
 : (linked-assocs-benchmark) ( -- )
     10,000 iota <linked-hash> {

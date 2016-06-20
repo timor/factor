@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: hashtables kernel assocs accessors math arrays sequences ;
-in: pairs
+IN: pairs
 
 TUPLE: pair value key hash ;
 

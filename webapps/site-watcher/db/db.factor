@@ -3,7 +3,7 @@
 USING: accessors continuations db db.sqlite db.tuples db.types
 io.directories io.files.temp kernel io.streams.string calendar
 debugger combinators.smart sequences arrays ;
-in: site-watcher.db
+IN: site-watcher.db
 
 TUPLE: account account-name email twitter sms ;
 

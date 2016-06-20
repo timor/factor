@@ -3,7 +3,7 @@
 USING: accessors assocs combinators combinators.short-circuit
 compiler.tree compiler.utilities kernel locals namespaces
 sequences stack-checker.inlining ;
-in: compiler.tree.combinators
+IN: compiler.tree.combinators
 
 :: each-node ( ... nodes quot: ( ... node -- ... ) -- ... )
     nodes [

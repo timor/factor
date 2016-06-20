@@ -5,7 +5,7 @@ combinators.smart compression.huffman fry hashtables io.binary
 kernel literals locals math math.bitwise math.order math.ranges
 sequences sorting memoize combinators.short-circuit byte-arrays ;
 QUALIFIED-WITH: bitstreams bs ;
-in: compression.inflate
+IN: compression.inflate
 
 PRIVATE<
 

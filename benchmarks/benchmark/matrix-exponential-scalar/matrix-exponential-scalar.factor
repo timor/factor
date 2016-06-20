@@ -1,6 +1,6 @@
 USING: locals math math.combinatorics math.matrices
 prettyprint sequences typed ;
-in: benchmark.matrix-exponential-scalar
+IN: benchmark.matrix-exponential-scalar
 
 :: e^m ( m iterations -- e^m )
     {

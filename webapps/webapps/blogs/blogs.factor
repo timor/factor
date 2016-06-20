@@ -12,7 +12,7 @@ furnace.auth
 furnace.auth.login
 furnace.boilerplate
 furnace.syndication ;
-in: webapps.blogs
+IN: webapps.blogs
 
 TUPLE: blogs < dispatcher ;
 

@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel models sequences ;
-in: models.product
+IN: models.product
 
 TUPLE: product < model ;
 

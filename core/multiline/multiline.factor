@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators kernel lexer locals make math
 namespaces parser quotations sequences words ;
-in: multiline
+IN: multiline
 
 ERROR: bad-heredoc identifier ;
 

@@ -1,6 +1,6 @@
 ! Copyright (c) 2007 Samuel Tardieu.
 ! See http://factorcode.org/license.txt for BSD license.
-in: project-euler.169
+IN: project-euler.169
 USING: combinators kernel math math.functions memoize project-euler.common ;
 
 ! http://projecteuler.net/index.php?section=problems&id=169

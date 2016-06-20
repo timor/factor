@@ -9,7 +9,7 @@ SPECIALIZED-ARRAYS:
     c:char c:short c:int c:longlong
     c:uchar c:ushort c:uint c:ulonglong
     c:float c:double ;
-in: math.vectors.simd.intrinsics
+IN: math.vectors.simd.intrinsics
 
 : assert-positive ( x -- y ) ;
 

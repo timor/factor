@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Alex Chapman
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors io.pathnames kernel openal openal.alut sequences ;
-in: jamshred.sound
+IN: jamshred.sound
 
 TUPLE: sounds bang ;
 

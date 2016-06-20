@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: alien.libraries io.pathnames io.pathnames.private kernel
 system vocabs ;
-in: tools.deploy.libraries
+IN: tools.deploy.libraries
 
 HOOK: find-library-file os ( file -- path ) ;
 

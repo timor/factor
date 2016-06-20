@@ -1,6 +1,6 @@
 USING: calendar game.input threads ui ui.gadgets.worlds kernel
 method-chains system ;
-in: tools.deploy.test.8
+IN: tools.deploy.test.8
 
 TUPLE: my-world < world ;
 

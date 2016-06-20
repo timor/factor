@@ -3,7 +3,7 @@
 USING: accessors generic generic.parser generic.standard
 graphviz graphviz.attributes kernel parser present quotations
 sequences slots words ;
-in: graphviz.notation
+IN: graphviz.notation
 
 COMPILE<
 

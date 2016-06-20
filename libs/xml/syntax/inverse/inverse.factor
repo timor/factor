@@ -4,7 +4,7 @@ USING: accessors arrays assocs combinators
 combinators.short-circuit fry generalizations inverse kernel
 namespaces sequences sequences.generalizations sorting strings
 unicode xml.data xml.syntax xml.syntax.private ;
-in: xml.syntax.inverse
+IN: xml.syntax.inverse
 
 : remove-blanks ( seq -- newseq )
     [ { [ string? not ] [ [ blank? ] all? not ] } 1|| ] filter ;

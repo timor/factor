@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: namespaces make kernel assocs sequences fry
 io.files io.encodings.binary xml.state ;
-in: xml.entities
+IN: xml.entities
 
 CONSTANT: entities-out
     H{

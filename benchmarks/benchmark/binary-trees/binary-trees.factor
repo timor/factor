@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel math math.ranges math.order math.parser
 io locals sequences ;
-in: benchmark.binary-trees
+IN: benchmark.binary-trees
 
 TUPLE: tree-node item left right ;
 

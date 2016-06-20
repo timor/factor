@@ -1,6 +1,6 @@
 USING: accessors calendar db db.sqlite db.tuples db.types
 io.files.temp kernel urls ;
-in: tools.deploy.test.17
+IN: tools.deploy.test.17
 
 TUPLE: person name birthday homepage occupation ;
 

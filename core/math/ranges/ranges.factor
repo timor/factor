@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors classes.tuple kernel math math.order sequences
 sequences.private ;
-in: math.ranges
+IN: math.ranges
 
 TUPLE: range
 { from read-only }

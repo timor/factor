@@ -8,7 +8,7 @@ io.backend.unix cocoa io.encodings.utf8 io.backend
 cocoa.application cocoa.classes cocoa.plists
 combinators vocabs.metadata vocabs.loader ;
 QUALIFIED-WITH: tools.deploy.unix unix ;
-in: tools.deploy.macosx
+IN: tools.deploy.macosx
 
 : bundle-dir ( -- dir )
     running.app?

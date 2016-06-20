@@ -1,5 +1,5 @@
 USING: kernel math prettyprint units units.si inverse ;
-in: units.imperial
+IN: units.imperial
 
 ! LENGTH
 

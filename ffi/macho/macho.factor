@@ -6,7 +6,7 @@ combinators.short-circuit io.encodings.ascii io.encodings.string
 kernel literals make math sequences specialized-arrays typed
 fry io.mmap formatting locals splitting io.binary arrays ;
 FROM: alien.c-types => short ;
-in: macho
+IN: macho
 
 ! FFI data
 TYPEDEF: int       integer_t ;

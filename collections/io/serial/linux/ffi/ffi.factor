@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax assocs classes.struct
 io.serial kernel system ;
-in: io.serial.linux.ffi
+IN: io.serial.linux.ffi
 
 CONSTANT: NCCS 32 ;
 

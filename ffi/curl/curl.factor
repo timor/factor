@@ -6,7 +6,7 @@ alien.syntax command-line curl.ffi destructors io
 io.encodings.string io.encodings.utf8 io.streams.c kernel math
 namespaces present sequences ;
 
-in: curl
+IN: curl
 
 PRIVATE<
 

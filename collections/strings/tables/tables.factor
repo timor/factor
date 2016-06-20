@@ -1,7 +1,7 @@
 ! Copyright (C) 2009, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel sequences fry math.order math.ranges splitting ;
-in: strings.tables
+IN: strings.tables
 
 PRIVATE<
 

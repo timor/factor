@@ -5,7 +5,7 @@ sequences.private
 persistent.sequences
 persistent.hashtables.config
 persistent.hashtables.nodes ;
-in: persistent.hashtables.nodes.bitmap
+IN: persistent.hashtables.nodes.bitmap
 
 : index ( bit bitmap -- n ) [ 1 - ] dip bitand bit-count ; inline
 

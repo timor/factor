@@ -8,7 +8,7 @@ fry namespaces combinators.smart splitting io.encodings.ascii
 arrays io.files.info io.directories.search literals
 math.functions continuations ;
 FROM: alien.c-types => uchar ;
-in: id3
+IN: id3
 
 PRIVATE<
 

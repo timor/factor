@@ -5,7 +5,7 @@ assocs alien alien.data alien.strings libc opengl math sequences
 combinators macros arrays io.encodings.ascii fry
 specialized-arrays destructors accessors ;
 specialized-array: uint
-in: opengl.shaders
+IN: opengl.shaders
 
 : with-gl-shader-source-ptr ( string quot -- )
     swap ascii malloc-string [ void* <ref> swap call ] keep free ; inline

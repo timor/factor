@@ -1,5 +1,5 @@
 USING: alien.c-types alien.syntax ;
-in: windows.directx.dxgiformat
+IN: windows.directx.dxgiformat
 
 CONSTANT: DXGI_FORMAT_UNKNOWN 0 ;
 CONSTANT: DXGI_FORMAT_R32G32B32A32_TYPELESS 1 ;

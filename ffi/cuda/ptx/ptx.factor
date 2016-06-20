@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: accessors arrays combinators io io.streams.string kernel
 math math.parser roles sequences strings variants words ;
-in: cuda.ptx
+IN: cuda.ptx
 
 UNION: dim integer sequence ;
 

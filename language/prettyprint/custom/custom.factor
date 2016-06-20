@@ -1,6 +1,6 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-in: prettyprint.custom
+IN: prettyprint.custom
 
 GENERIC: pprint* ( obj -- ) ;
 GENERIC: pprint-object ( obj -- ) ;

@@ -4,7 +4,7 @@
 USING: accessors command-line formatting io io.monitors
 io.pathnames kernel namespaces sequences ;
 
-in: file-monitor
+IN: file-monitor
 
 : file-monitor-loop ( monitor -- )
     dup next-change [ changed>> ] [ path>> ] bi

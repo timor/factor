@@ -5,7 +5,7 @@ kernel xml.syntax mason.platform mason.report present
 sequences webapps.mason webapps.mason.report
 webapps.mason.backend webapps.mason.utils ;
 FROM: webapps.mason.version.files => platform ;
-in: webapps.mason.package
+IN: webapps.mason.package
 
 : building ( builder string -- xml )
     swap current-git-id>> git-link

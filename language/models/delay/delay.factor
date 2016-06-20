@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors fry kernel models timers ;
-in: models.delay
+IN: models.delay
 
 TUPLE: delay < model model timeout timer ;
 

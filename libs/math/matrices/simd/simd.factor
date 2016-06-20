@@ -8,7 +8,7 @@ FROM: sequences.private => nth-unsafe ;
 FROM: math.quaternions.private => (q*sign) ;
 QUALIFIED-WITH: alien.c-types c ;
 specialized-array: float-4
-in: math.matrices.simd
+IN: math.matrices.simd
 
 STRUCT: matrix4
     { columns float-4[4] } ;

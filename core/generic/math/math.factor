@@ -3,7 +3,7 @@
 USING: arrays assocs classes classes.algebra combinators
 definitions generic kernel kernel.private math math.order
 math.private namespaces quotations sequences words ;
-in: generic.math
+IN: generic.math
 
 PREDICATE: math-class < class
     dup null bootstrap-word eq? [

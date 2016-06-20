@@ -15,7 +15,7 @@ html.components
 html.templates.chloe
 html.templates.chloe.syntax
 html.templates.chloe.compiler ;
-in: furnace.actions
+IN: furnace.actions
 
 symbol: rest
 

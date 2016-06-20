@@ -4,7 +4,7 @@ USING: accessors arrays assocs compiler.cfg.def-use
 compiler.cfg.instructions compiler.cfg.instructions.syntax fry
 functors generic.parser kernel lexer namespaces parser sequences
 sets slots words ;
-in: compiler.cfg.renaming.functor
+IN: compiler.cfg.renaming.functor
 
 ! Like compiler.cfg.def-use, but for changing operands
 

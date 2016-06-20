@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.c-types alien.libraries alien.syntax combinators
 gobject-introspection kernel system vocabs ;
-in: gstreamer.ffi
+IN: gstreamer.ffi
 
 COMPILE<
 "glib.ffi" require

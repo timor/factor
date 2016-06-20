@@ -3,7 +3,7 @@
 USING: fry io.encodings.ascii io.files locals kernel math
 math.order math.parser math.ranges sequences splitting
 project-euler.common ;
-in: project-euler.081
+IN: project-euler.081
 
 ! http://projecteuler.net/index.php?section=problems&id=081
 

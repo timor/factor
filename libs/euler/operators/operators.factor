@@ -2,7 +2,7 @@
 USING: accessors combinators fry kernel locals namespaces
 game.models.half-edge euler.b-rep sequences typed math
 math.vectors ;
-in: euler.operators
+IN: euler.operators
 
 ERROR: edges-not-incident ;
 

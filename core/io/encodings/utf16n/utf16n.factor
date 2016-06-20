@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io.encodings io.encodings.utf16 kernel alien.accessors ;
-in: io.encodings.utf16n
+IN: io.encodings.utf16n
 
 ! Native-order UTF-16
 

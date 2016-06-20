@@ -2,7 +2,7 @@
 USING: accessors alien alien.c-types alien.data arrays byte-arrays
 combinators destructors gpu kernel locals math opengl opengl.gl
 typed ui.gadgets.worlds variants ;
-in: gpu.buffers
+IN: gpu.buffers
 
 VARIANT: buffer-upload-pattern
     stream-upload static-upload dynamic-upload ;

@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: deques threads kernel arrays sequences timers fry ;
-in: concurrency.conditions
+IN: concurrency.conditions
 
 : notify-1 ( deque -- )
     dup deque-empty? [ drop ] [ pop-back resume-now ] if ; inline

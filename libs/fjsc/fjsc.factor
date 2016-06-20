@@ -4,7 +4,7 @@ USING: accessors kernel peg strings sequences math math.parser
 namespaces make words quotations arrays hashtables io
 io.streams.string assocs ascii peg.parsers words.symbol
 combinators.short-circuit ;
-in: fjsc
+IN: fjsc
 
 TUPLE: ast-number value ;
 TUPLE: ast-identifier value vocab ;

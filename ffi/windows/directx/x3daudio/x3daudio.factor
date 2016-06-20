@@ -1,6 +1,6 @@
 USING: alien.c-types alien.syntax classes.struct windows.directx
 windows.directx.d3dx10math windows.types ;
-in: windows.directx.x3daudio
+IN: windows.directx.x3daudio
 
 library: x3daudio
 

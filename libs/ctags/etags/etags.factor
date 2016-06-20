@@ -6,7 +6,7 @@
 USING: arrays assocs ctags.private fry io.backend
 io.encodings.ascii io.files kernel make math math.parser present
 sequences sorting strings vocabs ;
-in: ctags.etags
+IN: ctags.etags
 
 PRIVATE<
 

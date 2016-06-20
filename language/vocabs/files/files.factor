@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io.directories io.files io.pathnames kernel make
 sequences vocabs vocabs.loader ;
-in: vocabs.files
+IN: vocabs.files
 
 : vocab-tests-path ( vocab -- path )
     dup "-tests.factor" append-vocab-dir vocab-append-path ;

@@ -1,7 +1,7 @@
 USING: alien.c-types alien.data alien.strings alien.syntax
 destructors file-picker gobject-introspection.standard-types
 gtk.ffi io.encodings.string io.encodings.utf8 kernel system ;
-in: file-picker.linux
+IN: file-picker.linux
 
 PRIVATE<
 

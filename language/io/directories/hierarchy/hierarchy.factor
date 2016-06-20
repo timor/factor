@@ -3,7 +3,7 @@
 USING: accessors arrays kernel sequences combinators fry
 io.directories io.pathnames io.files.info io.files.types
 io.files.links io.backend make ;
-in: io.directories.hierarchy
+IN: io.directories.hierarchy
 
 PRIVATE<
 

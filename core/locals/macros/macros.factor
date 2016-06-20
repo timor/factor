@@ -1,7 +1,7 @@
 ! Copyright (C) 2007, 2009 Slava Pestov, Eduardo Cavazos.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs kernel locals.types macros.expander fry ;
-in: locals.macros
+IN: locals.macros
 
 M: lambda expand-macros clone [ expand-macros ] change-body ;
 

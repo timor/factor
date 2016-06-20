@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors destructors io io.encodings io.streams.sequence
 kernel math sbufs sequences sequences.private strings ;
-in: io.streams.string
+IN: io.streams.string
 
 ! Readers
 TUPLE: string-reader { underlying string read-only } { i array-capacity } ;

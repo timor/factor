@@ -1,7 +1,7 @@
 ! Copyright (C) 2013 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license
 USING: accessors kernel math sequences sequences.private ;
-in: sequences.shifted
+IN: sequences.shifted
 
 TUPLE: shifted
 { underlying read-only }

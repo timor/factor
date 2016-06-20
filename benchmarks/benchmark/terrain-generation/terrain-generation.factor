@@ -1,7 +1,7 @@
 ! (c)Joe Groff bsd license
 USING: accessors kernel math.vectors.simd terrain.generation ;
 FROM: alien.c-types => float ;
-in: benchmark.terrain-generation
+IN: benchmark.terrain-generation
 
 : terrain-generation-benchmark ( -- )
     <terrain> float-4{ 0 0 0 1 } terrain-segment

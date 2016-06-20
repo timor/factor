@@ -3,7 +3,7 @@ USING: alien.syntax arrays assocs biassocs combinators
 combinators.short-circuit continuations generalizations kernel
 literals locals math math.bitwise sequences sets system
 vocabs ;
-in: math.floats.env
+IN: math.floats.env
 
 SINGLETONS:
     +fp-invalid-operation+

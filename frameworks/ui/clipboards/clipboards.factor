@@ -3,7 +3,7 @@
 
 USING: kernel accessors ui.gadgets ui.gestures namespaces ;
 
-in: ui.clipboards
+IN: ui.clipboards
 
 ! Two text transfer buffers
 

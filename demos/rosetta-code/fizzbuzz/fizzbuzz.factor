@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io kernel math math.functions math.parser math.ranges
 sequences ;
-in: rosetta-code.fizzbuzz
+IN: rosetta-code.fizzbuzz
 
 : fizz ( n -- str ) 3 divisor? "Fizz" "" ? ;
 

@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math prettyprint sequences ;
-in: rosetta-code.hofstadter-q
+IN: rosetta-code.hofstadter-q
 
 ! http://rosettacode.org/wiki/Hofstadter_Q_sequence
 

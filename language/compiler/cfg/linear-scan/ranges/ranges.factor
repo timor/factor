@@ -1,5 +1,5 @@
 USING: accessors arrays fry grouping kernel math math.order sequences ;
-in: compiler.cfg.linear-scan.ranges
+IN: compiler.cfg.linear-scan.ranges
 
 ! Range utilities
 : intersect-range ( r1 r2 -- n/f )

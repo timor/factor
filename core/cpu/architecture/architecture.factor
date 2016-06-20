@@ -4,7 +4,7 @@ USING: accessors arrays assocs generic kernel kernel.private
 math math.order memory namespaces make sequences layouts system
 hashtables classes alien byte-arrays combinators words sets fry
 ;
-in: cpu.architecture
+IN: cpu.architecture
 
 ! Representations -- these are like low-level types
 

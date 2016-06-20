@@ -1,5 +1,5 @@
 USING: kernel listener system vocabs ;
-in: fuel.listener
+IN: fuel.listener
 
 HOOK: fuel-pty-setup os ( -- ) ;
 

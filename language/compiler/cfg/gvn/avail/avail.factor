@@ -9,7 +9,7 @@ compiler.cfg.gvn.graph
 compiler.cfg.predecessors
 compiler.cfg.renaming.functor
 compiler.cfg.rpo ;
-in: compiler.cfg.gvn.avail
+IN: compiler.cfg.gvn.avail
 
 : defined ( bb -- vregs )
     instructions>> [ defs-vregs ] map concat unique ;

@@ -3,7 +3,7 @@
 
 USING: io.files io.styles kernel pdf.layout sequences splitting ;
 
-in: pdf
+IN: pdf
 
 : text-to-pdf ( str -- pdf )
     string-lines [

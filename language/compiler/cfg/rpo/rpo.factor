@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors compiler.cfg fry kernel make namespaces
 sequences sets ;
-in: compiler.cfg.rpo
+IN: compiler.cfg.rpo
 
 : post-order-traversal ( visited bb -- visited )
     dup pick ?adjoin [

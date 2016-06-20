@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs compiler.cfg.dataflow-analysis compiler.cfg.stacks.local
 kernel namespaces sequences sets ;
-in: compiler.cfg.stacks.global
+IN: compiler.cfg.stacks.global
 
 : peek-set ( bb -- assoc ) peek-sets get at ;
 : replace-set ( bb -- assoc ) replace-sets get at ;

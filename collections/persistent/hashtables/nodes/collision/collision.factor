@@ -5,7 +5,7 @@ locals persistent.sequences
 persistent.hashtables.config
 persistent.hashtables.nodes
 persistent.hashtables.nodes.leaf ;
-in: persistent.hashtables.nodes.collision
+IN: persistent.hashtables.nodes.collision
 
 : find-index ( key hashcode collision-node -- n leaf-node )
     leaves>> -rot '[ [ _ _ ] dip matching-key? ] find ; inline

@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: accessors debugger io kernel make math.parser
 prettyprint source-files.errors summary ;
-in: source-files.errors.debugger
+IN: source-files.errors.debugger
 
 CONSTANT: +listener-input+ "<Listener input>" ;
 

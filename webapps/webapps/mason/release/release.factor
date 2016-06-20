@@ -3,7 +3,7 @@
 USING: accessors furnace.actions html.forms io.pathnames kernel
 mason.platform mason.report sequences webapps.mason
 webapps.mason.backend webapps.mason.utils ;
-in: webapps.mason.release
+IN: webapps.mason.release
 
 : release-link ( builder -- xml )
     last-release>> [ download-url ] [ file-name ] bi link ;

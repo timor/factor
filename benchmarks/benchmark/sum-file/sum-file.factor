@@ -1,6 +1,6 @@
 USING: io io.encodings.ascii io.files io.files.temp math
 math.parser kernel sequences ;
-in: benchmark.sum-file
+IN: benchmark.sum-file
 
 COMPILE<
 "sum-file.txt" temp-file ascii [

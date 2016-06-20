@@ -3,7 +3,7 @@
 USING: accessors timers bit-arrays calendar game.input io
 io.binary io.encodings.binary io.files kernel literals math
 namespaces system threads ;
-in: key-logger
+IN: key-logger
 
 CONSTANT: frequency $[ 1/30 seconds ] ;
 

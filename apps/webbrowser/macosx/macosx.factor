@@ -3,7 +3,7 @@
 
 USING: arrays io.launcher kernel present system webbrowser ;
 
-in: webbrowser.macosx
+IN: webbrowser.macosx
 
 M: macosx open-file ( path -- )
     present "open" swap 2array run-detached drop ;

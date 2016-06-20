@@ -6,7 +6,7 @@ compiler.tree.propagation.inlining compiler.units continuations
 effects fry kernel kernel.private namespaces quotations
 sequences stack-checker stack-checker.dependencies
 stack-checker.transforms words ;
-in: compiler.tree.propagation.call-effect
+IN: compiler.tree.propagation.call-effect
 
 TUPLE: inline-cache value counter ;
 

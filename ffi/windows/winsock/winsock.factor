@@ -6,7 +6,7 @@ io.encodings.utf16n kernel literals math math.bitwise
 math.parser sequences system vocabs.parser windows.com.syntax
 windows.errors windows.kernel32 windows.types ;
 FROM: alien.c-types => short ;
-in: windows.winsock
+IN: windows.winsock
 
 COMPILE<
 ! Some differences between Win32 and Win64

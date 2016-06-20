@@ -5,7 +5,7 @@ USING: accessors furnace.actions http.server
 http.server.dispatchers http.server.responses http.server.static
 kernel namespaces ;
 
-in: webapps.benchmark
+IN: webapps.benchmark
 
 : <hello-action> ( -- action )
     <page-action>

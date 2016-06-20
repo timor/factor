@@ -3,7 +3,7 @@
 ! For legacy OpenGL and extensions, use opengl.gl
 
 QUALIFIED-WITH: opengl.gl gl ;
-in: opengl.gl3
+IN: opengl.gl3
 
 ALIAS: GL_DEPTH_BUFFER_BIT gl:GL_DEPTH_BUFFER_BIT ;
 ALIAS: GL_STENCIL_BUFFER_BIT gl:GL_STENCIL_BUFFER_BIT ;

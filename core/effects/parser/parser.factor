@@ -3,7 +3,7 @@
 USING: accessors arrays combinators continuations effects
 kernel lexer make namespaces parser sequences sets
 splitting vocabs.parser words ;
-in: effects.parser
+IN: effects.parser
 
 defer: parse-effect
 

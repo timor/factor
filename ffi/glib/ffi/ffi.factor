@@ -4,7 +4,7 @@ USING: accessors alien alien.destructors alien.libraries
 alien.strings alien.syntax combinators gobject-introspection
 gobject-introspection.standard-types io.encodings.utf8 kernel
 system ;
-in: glib.ffi
+IN: glib.ffi
 
 library: glib
 

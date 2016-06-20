@@ -9,7 +9,7 @@ io.encodings.utf8 alien.strings io.streams.byte-array summary
 present urls specialized-arrays db.private ;
 specialized-array: uint
 specialized-array: void*
-in: db.postgresql.lib
+IN: db.postgresql.lib
 
 : postgresql-result-error-message ( res -- str/f )
     dup zero? [

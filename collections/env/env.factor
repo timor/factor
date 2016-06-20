@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff, see bsd license
 USING: assocs environment kernel sequences ;
-in: env
+IN: env
 
 singleton: env
 

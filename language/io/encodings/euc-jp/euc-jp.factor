@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Daniel Ehrenberg
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io.encodings.euc io.encodings.iana ;
-in: io.encodings.euc-jp
+IN: io.encodings.euc-jp
 
 EUC: euc-jp "vocab:io/encodings/euc-jp/euc-jp-2000-std.txt" ;
 

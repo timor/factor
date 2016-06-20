@@ -3,7 +3,7 @@
 USING: combinators.short-circuit editors io.pathnames
 io.standard-paths kernel make math.parser namespaces sequences
 system ;
-in: editors.sublime
+IN: editors.sublime
 
 singleton: sublime
 sublime editor-class set-global

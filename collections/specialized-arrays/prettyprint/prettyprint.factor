@@ -3,7 +3,7 @@
 USING: accessors alien.data kernel prettyprint.backend
 prettyprint.sections prettyprint.custom
 specialized-arrays ;
-in: specialized-arrays.prettyprint
+IN: specialized-arrays.prettyprint
 
 : pprint-direct-array ( direct-array -- )
     \ c-array@ [

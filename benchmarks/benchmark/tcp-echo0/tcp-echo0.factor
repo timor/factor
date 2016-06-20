@@ -3,7 +3,7 @@
 USING: accessors byte-arrays io io.encodings.binary io.servers
 io.sockets kernel math memoize namespaces sequences fry literals
 locals formatting ;
-in: benchmark.tcp-echo0
+IN: benchmark.tcp-echo0
 
 ! Max size here is 26 2^ 1 - because array-capacity limits on 32bit platforms
 CONSTANT: test-size0 $[ 23 2^ 1 - ] ;

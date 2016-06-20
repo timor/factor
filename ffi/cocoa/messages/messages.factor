@@ -7,7 +7,7 @@ io.encodings.utf8 kernel layouts libc locals macros make math
 memoize namespaces quotations sequences specialized-arrays
 stack-checker strings words ;
 QUALIFIED-WITH: alien.c-types c ;
-in: cocoa.messages
+IN: cocoa.messages
 
 specialized-array: void*
 

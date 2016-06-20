@@ -3,7 +3,7 @@
 USING: accessors assocs combinators.short-circuit compiler.cfg
 compiler.cfg.predecessors compiler.cfg.utilities deques dlists fry kernel
 namespaces sequences sets ;
-in: compiler.cfg.loop-detection
+IN: compiler.cfg.loop-detection
 
 TUPLE: natural-loop header index ends blocks ;
 

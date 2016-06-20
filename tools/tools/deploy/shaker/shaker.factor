@@ -13,7 +13,7 @@ vocabs.loader.private classes.builtin slots.private grouping
 command-line io.pathnames memoize namespaces.private
 hashtables locals source-files ;
 qualified: classes.private
-in: tools.deploy.shaker
+IN: tools.deploy.shaker
 
 ! This file is some hairy shit.
 

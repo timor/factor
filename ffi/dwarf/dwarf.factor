@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Erik Charlebois.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: ;
-in: dwarf
+IN: dwarf
 
 CONSTANT: DW_TAG_array_type               0x01 ;
 CONSTANT: DW_TAG_class_type               0x02 ;

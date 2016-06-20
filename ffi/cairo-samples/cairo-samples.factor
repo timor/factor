@@ -8,7 +8,7 @@ io.backend kernel alien.c-types libc namespaces
 cairo-gadgets ui.gadgets accessors specialized-arrays
 classes.struct ;
 specialized-array: double
-in: cairo-samples
+IN: cairo-samples
 
 TUPLE: arc-gadget < cairo-gadget ;
 M:: arc-gadget render-cairo* ( gadget -- )

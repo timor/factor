@@ -4,7 +4,7 @@ USING: accessors calendar continuations debugger io
 io.directories io.sockets io.streams.string kernel mason.build
 mason.config mason.disk mason.email mason.notify mason.updates
 namespaces prettyprint threads ;
-in: mason
+IN: mason
 
 : heartbeat-loop ( -- )
     notify-heartbeat

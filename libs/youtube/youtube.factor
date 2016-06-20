@@ -4,7 +4,7 @@
 USING: assocs http.client kernel make math.order sequences
 splitting urls urls.encoding ;
 
-in: youtube
+IN: youtube
 
 TUPLE: encoding extension resolution video-codec profile
 video-bitrate audio-codec audio-bitrate ;

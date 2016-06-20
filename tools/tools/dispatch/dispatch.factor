@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel namespaces prettyprint classes.struct
 vm tools.dispatch.private ;
-in: tools.dispatch
+IN: tools.dispatch
 
 PRIVATE<
 PRIMITIVE: dispatch-stats ( -- stats ) ;

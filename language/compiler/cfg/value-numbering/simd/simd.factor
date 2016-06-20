@@ -7,7 +7,7 @@ compiler.cfg.value-numbering.math
 compiler.cfg.value-numbering.rewrite cpu.architecture
 generalizations grouping io.binary kernel locals make math
 sequences ;
-in: compiler.cfg.value-numbering.simd
+IN: compiler.cfg.value-numbering.simd
 
 ! Some lame constant folding for SIMD intrinsics. Eventually this
 ! should be redone completely.

@@ -7,7 +7,7 @@ compiler.tree.escape-analysis.simple compiler.tree.propagation
 compiler.utilities fry kernel kernel.private math namespaces
 sequences slots.private stack-checker.branches
 stack-checker.values vectors ;
-in: compiler.tree.tuple-unboxing
+IN: compiler.tree.tuple-unboxing
 
 GENERIC: unbox-tuples* ( node -- node/nodes ) ;
 

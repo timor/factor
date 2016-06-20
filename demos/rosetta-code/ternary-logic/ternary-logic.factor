@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators kernel ;
-in: rosetta-code.ternary-logic
+IN: rosetta-code.ternary-logic
 
 ! http://rosettacode.org/wiki/Ternary_logic
 

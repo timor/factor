@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: fry io kernel math math.functions math.order sequences
 splitting strings ;
-in: rosetta.align-columns
+IN: rosetta.align-columns
 
 ! http://rosettacode.org/wiki/Align_columns
 

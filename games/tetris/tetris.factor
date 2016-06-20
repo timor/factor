@@ -5,7 +5,7 @@ math.parser namespaces sequences system tetris.game tetris.gl ui.gadgets
 ui.gadgets.labels ui.gadgets.worlds ui.gadgets.status-bar ui.gestures
 ui.render ui ;
 FROM: tetris.game => level>> ;
-in: tetris
+IN: tetris
 
 TUPLE: tetris-gadget < gadget { tetris tetris } { timer } ;
 

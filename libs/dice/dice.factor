@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license
 USING: fry kernel lexer macros math math.parser namespaces
 random random.private sequences splitting ;
-in: dice
+IN: dice
 
 : (random-roll) ( #dice #sides obj -- n )
     [ 0 ] 3dip '[ _ _ (random-integer) + 1 + ] times ;

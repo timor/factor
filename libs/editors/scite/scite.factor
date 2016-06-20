@@ -3,7 +3,7 @@
 ! clemens.hofreither@gmx.net
 USING: editors io.standard-paths kernel make math.parser
 namespaces sequences system ;
-in: editors.scite
+IN: editors.scite
 
 singleton: scite
 scite editor-class set-global

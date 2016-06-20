@@ -4,7 +4,7 @@ USING: accessors assocs classes classes.tuple effects
 effects.parser fry kernel lexer locals macros parser
 sequences sequences.generalizations sets vocabs vocabs.parser
 words alien.parser ;
-in: constructors
+IN: constructors
 
 : all-slots-assoc ( class -- slots )
     superclasses-of [

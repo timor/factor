@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators kernel sequences words
 quotations ;
-in: locals.types
+IN: locals.types
 
 TUPLE: lambda vars body ;
 

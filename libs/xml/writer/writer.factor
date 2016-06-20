@@ -3,7 +3,7 @@
 USING: hashtables kernel math namespaces sequences strings
 assocs combinators io io.streams.string accessors
 xml.data wrap.strings xml.entities unicode fry ;
-in: xml.writer
+IN: xml.writer
 
 symbol: sensitive-tags
 symbol: indenter

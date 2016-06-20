@@ -3,7 +3,7 @@
 USING: kernel accessors locals math arrays namespaces make
 persistent.hashtables.config
 persistent.hashtables.nodes ;
-in: persistent.hashtables.nodes.leaf
+IN: persistent.hashtables.nodes.leaf
 
 : matching-key? ( key hashcode leaf-node -- ? )
     [ nip ] [ hashcode>> eq? ] 2bi

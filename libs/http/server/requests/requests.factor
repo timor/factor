@@ -2,7 +2,7 @@ USING: accessors combinators continuations http http.parsers io io.crlf
 io.encodings io.encodings.binary io.streams.limited kernel math math.order
 math.parser namespaces sequences splitting urls urls.encoding ;
 FROM: mime.multipart => parse-multipart ;
-in: http.server.requests
+IN: http.server.requests
 
 ERROR: request-error ;
 

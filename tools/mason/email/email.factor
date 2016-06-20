@@ -3,7 +3,7 @@
 USING: accessors calendar combinators continuations debugger fry
 io kernel make mason.common mason.config mason.platform
 math.order namespaces sequences smtp ;
-in: mason.email
+IN: mason.email
 
 : mason-email ( body content-type subject -- )
     '[

@@ -5,7 +5,7 @@ hashtables urls html.forms html.components html.templates.chloe http.server
 http.server.dispatchers furnace furnace.boilerplate furnace.auth
 furnace.actions furnace.redirection furnace.db furnace.auth.login
 webapps.utils ;
-in: webapps.todo
+IN: webapps.todo
 
 TUPLE: todo-list < dispatcher ;
 

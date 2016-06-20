@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel ;
-in: ui.pens
+IN: ui.pens
 
 GENERIC: draw-interior ( gadget pen -- ) ;
 

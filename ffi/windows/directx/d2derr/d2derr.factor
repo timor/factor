@@ -1,5 +1,5 @@
 USING: ;
-in: windows.directx.d2derr
+IN: windows.directx.d2derr
 
 CONSTANT: D2DERR_UNSUPPORTED_PIXEL_FORMAT            0x88982f80 ;
 CONSTANT: D2DERR_INSUFFICIENT_BUFFER                 0x80007007a ;

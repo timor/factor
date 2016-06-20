@@ -3,7 +3,7 @@
 
 USING: cpu.x86.features kernel random ;
 
-in: random.rdrand
+IN: random.rdrand
 
 singleton: rdrand
 

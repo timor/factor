@@ -5,7 +5,7 @@ combinators continuations db db.errors db.private db.tuples
 db.tuples.private db.types destructors kernel make math
 math.bitwise math.intervals math.parser namespaces nmake
 prettyprint random sequences shuffle strings words fry ;
-in: db.queries
+IN: db.queries
 
 GENERIC: where ( specs obj -- ) ;
 

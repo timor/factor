@@ -5,7 +5,7 @@ compiler.tree compiler.tree.dead-code.liveness
 compiler.tree.propagation.info fry kernel locals math math.private
 namespaces sequences stack-checker.backend stack-checker.dependencies
 words ;
-in: compiler.tree.dead-code.simple
+IN: compiler.tree.dead-code.simple
 
 : flushable-call? ( #call -- ? )
     dup word>> dup flushable? [

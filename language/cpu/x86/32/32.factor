@@ -8,7 +8,7 @@ cpu.x86 cpu.x86.assembler cpu.x86.assembler.operands
 cpu.x86.features kernel layouts locals make math namespaces
 sequences specialized-arrays system vocabs ;
 specialized-array: uint
-in: cpu.x86.32
+IN: cpu.x86.32
 
 : x86-float-regs ( -- seq )
     "cpu.x86.sse" lookup-vocab

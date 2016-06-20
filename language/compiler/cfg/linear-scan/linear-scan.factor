@@ -6,7 +6,7 @@ compiler.cfg.linear-scan.live-intervals
 compiler.cfg.linear-scan.numbering
 compiler.cfg.linear-scan.resolve compiler.cfg.utilities cpu.architecture
 kernel sequences ;
-in: compiler.cfg.linear-scan
+IN: compiler.cfg.linear-scan
 
 : admissible-registers ( cfg -- regs )
     machine-registers swap frame-pointer?>> [

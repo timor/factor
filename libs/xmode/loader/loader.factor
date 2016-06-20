@@ -1,7 +1,7 @@
 USING: accessors assocs kernel math.parser namespaces sequences
 xml xml.data xml.syntax xml.traversal xmode.keyword-map
 xmode.loader.syntax xmode.rules xmode.tokens xmode.utilities ;
-in: xmode.loader
+IN: xmode.loader
 
 ! Based on org.gjt.sp.jedit.XModeHandler
 

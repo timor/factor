@@ -4,7 +4,7 @@ USING: io.files io.files.temp io words alien kernel math.parser
 alien.syntax io.launcher assocs arrays sequences namespaces make
 system math io.encodings.ascii accessors tools.disassembler
 tools.disassembler.private locals ;
-in: tools.disassembler.gdb
+IN: tools.disassembler.gdb
 
 singleton: gdb-disassembler
 

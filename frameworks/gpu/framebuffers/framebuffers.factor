@@ -6,7 +6,7 @@ opengl opengl.framebuffers opengl.gl opengl.textures sequences
 specialized-arrays typed ui.gadgets.worlds variants ;
 specialized-array: int
 specialized-array: uint
-in: gpu.framebuffers
+IN: gpu.framebuffers
 
 singleton: system-framebuffer
 

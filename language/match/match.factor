@@ -5,7 +5,7 @@
 USING: assocs classes classes.tuple combinators kernel lexer
 macros make namespaces parser quotations sequences summary words
 ;
-in: match
+IN: match
 
 symbol: _
 

@@ -3,7 +3,7 @@
 USING: accessors assocs combinators continuations kernel
 kernel.private lexer math math.parser namespaces sbufs sequences
 splitting strings ;
-in: strings.parser
+IN: strings.parser
 
 ERROR: bad-escape char ;
 

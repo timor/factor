@@ -1,7 +1,7 @@
 USING: arrays kernel math opengl opengl.gl opengl.glu
 opengl.demo-support ui ui.gadgets ui.render ui.pixel-formats
 threads accessors calendar literals ;
-in: nehe.5
+IN: nehe.5
 
 TUPLE: nehe5-gadget < gadget rtri rquad thread quit? ;
 CONSTANT: width 256 ;

@@ -3,7 +3,7 @@
 
 USING: kernel fry make math sequences ui.text unicode wrap ;
 
-in: pdf.wrap
+IN: pdf.wrap
 
 PRIVATE<
 

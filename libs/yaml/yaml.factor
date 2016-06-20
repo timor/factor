@@ -7,7 +7,7 @@ hashtables hashtables.identity io.encodings.string
 io.encodings.utf8 kernel libc linked-assocs locals make math
 math.parser namespaces sequences sets strings yaml.config
 yaml.conversion yaml.ffi hash-sets.identity ;
-in: yaml
+IN: yaml
 
 ERROR: libyaml-parser-error
     error problem problem_offset

@@ -11,7 +11,7 @@ specialized-vectors literals ;
 FROM: alien.c-types => float ;
 specialized-array: float
 specialized-vector: uint
-in: gpu.demos.bunny
+IN: gpu.demos.bunny
 
 VERTEX-FORMAT: bunny-vertex
     { "vertex" float-components 3 f }

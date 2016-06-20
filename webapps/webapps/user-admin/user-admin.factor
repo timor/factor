@@ -15,7 +15,7 @@ furnace.redirection
 furnace.utilities
 http.server
 http.server.dispatchers ;
-in: webapps.user-admin
+IN: webapps.user-admin
 
 TUPLE: user-admin < dispatcher ;
 

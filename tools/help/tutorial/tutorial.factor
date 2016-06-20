@@ -1,7 +1,7 @@
 USING: help.markup help.syntax ui.commands ui.operations
 editors vocabs.loader kernel sequences prettyprint tools.test
 vocabs.refresh strings unicode ui.tools.browser ui.tools.common ;
-in: help.tutorial
+IN: help.tutorial
 
 ARTICLE: "first-program-start" "Creating a vocabulary for your first program"
 "Factor source code is organized into " { $link "vocabularies" } ". Before we can write our first program, we must create a vocabulary for it."

@@ -3,7 +3,7 @@
 USING: alien.c-types alien.syntax core-foundation
 core-foundation.dictionaries core-foundation.strings
 core-foundation.utilities destructors kernel ;
-in: core-foundation.attributed-strings
+IN: core-foundation.attributed-strings
 
 TYPEDEF: void* CFAttributedStringRef ;
 

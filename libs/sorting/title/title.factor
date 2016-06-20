@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: sorting.functor regexp kernel accessors sequences
 unicode ;
-in: sorting.title
+IN: sorting.title
 
 COMPILE< "title" [
     >lower dup R[[ ^(the|a|an|el|la|los|las|il) ]] first-match

@@ -6,7 +6,7 @@ compiler.cfg.instructions compiler.cfg.registers
 compiler.cfg.renaming.functor compiler.cfg.rpo
 compiler.cfg.ssa.construction.tdmsc deques dlists fry kernel
 math namespaces sequences sets ;
-in: compiler.cfg.ssa.construction
+IN: compiler.cfg.ssa.construction
 
 PRIVATE<
 

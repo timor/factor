@@ -5,7 +5,7 @@ hashtables ;
 FROM: mongodb.driver => find ;
 FROM: memory => gc ;
 
-in: mongodb.benchmark
+IN: mongodb.benchmark
 
 symbol: collection
 

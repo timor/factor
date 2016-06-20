@@ -5,7 +5,7 @@ debugger io io.directories io.directories.hierarchy
 io.encodings.utf8 io.files io.launcher io.sockets
 io.streams.string kernel mason.common mason.email sequences
 splitting ;
-in: mason.git
+IN: mason.git
 
 : git-id ( -- id )
     { "git" "show" } utf8 [ lines ] with-process-reader

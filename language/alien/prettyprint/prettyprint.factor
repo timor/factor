@@ -5,7 +5,7 @@ alien.strings alien.c-types alien.parser alien.syntax arrays
 assocs effects math.parser prettyprint prettyprint.backend
 prettyprint.custom prettyprint.sections definitions see
 see.private sequences strings words ;
-in: alien.prettyprint
+IN: alien.prettyprint
 
 M: alien pprint*
     {

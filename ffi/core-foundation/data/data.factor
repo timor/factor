@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax core-foundation kernel
 sequences ;
-in: core-foundation.data
+IN: core-foundation.data
 
 TYPEDEF: void* CFDataRef ;
 TYPEDEF: void* CFSetRef ;

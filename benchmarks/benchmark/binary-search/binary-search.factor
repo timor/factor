@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: binary-search kernel math.primes math.ranges memoize
 prettyprint sequences ;
-in: benchmark.binary-search
+IN: benchmark.binary-search
 
 MEMO: primes-under-million ( -- seq ) 1000000 primes-upto ;
 

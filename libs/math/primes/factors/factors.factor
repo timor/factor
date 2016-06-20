@@ -3,7 +3,7 @@
 USING: arrays assocs combinators kernel make math math.functions
 math.primes math.ranges sequences sequences.product sorting
 io math.parser ;
-in: math.primes.factors
+IN: math.primes.factors
 
 PRIVATE<
 

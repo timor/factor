@@ -4,7 +4,7 @@ USING: accessors ascii assocs combinators
 combinators.short-circuit kernel make math namespaces regexp
 sequences strings xmode.marker.state xmode.rules xmode.tokens
 xmode.utilities ;
-in: xmode.marker
+IN: xmode.marker
 
 ! Next two words copied from parser-combinators
 ! Just like head?, but they optionally ignore case

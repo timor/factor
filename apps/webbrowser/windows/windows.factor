@@ -4,7 +4,7 @@
 USING: kernel present system webbrowser windows.shell32
 windows.user32 ;
 
-in: webbrowser.windows
+IN: webbrowser.windows
 
 M: windows open-file ( path -- )
     [ f "open" ] dip present f f

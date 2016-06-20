@@ -4,7 +4,7 @@
 USING: accessors combinators colors colors.gray kernel math
 math.order ;
 
-in: colors.cmyk
+IN: colors.cmyk
 
 TUPLE: cmyka < color
 { cyan read-only }

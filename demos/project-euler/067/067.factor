@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io.files math.parser namespaces project-euler.common
 io.encodings.ascii sequences splitting ;
-in: project-euler.067
+IN: project-euler.067
 
 ! http://projecteuler.net/index.php?section=problems&id=67
 

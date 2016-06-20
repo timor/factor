@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: editors io.standard-paths kernel make math.parser
 namespaces ;
-in: editors.etexteditor
+IN: editors.etexteditor
 
 singleton: etexteditor
 etexteditor editor-class set-global

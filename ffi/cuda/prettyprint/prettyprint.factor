@@ -2,7 +2,7 @@ USING: accessors alien.prettyprint combinators
 combinators.short-circuit cuda.libraries cuda.syntax definitions
 effects kernel prettyprint.backend prettyprint.sections see
 see.private sequences words ;
-in: cuda.prettyprint
+IN: cuda.prettyprint
 
 PREDICATE: cuda-function-word < word
     def>> { [ length 14 = ] [ last \ cuda-invoke eq? ] } 1&& ;

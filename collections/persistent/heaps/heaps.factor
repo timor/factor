@@ -1,6 +1,6 @@
 USING: kernel accessors locals combinators math arrays
 assocs namespaces sequences ;
-in: persistent.heaps
+IN: persistent.heaps
 ! These are minheaps
 
 PRIVATE<

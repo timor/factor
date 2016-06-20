@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel locals math math.vectors math.matrices
 namespaces sequences fry sorting ;
-in: math.matrices.elimination
+IN: math.matrices.elimination
 
 symbol: matrix
 

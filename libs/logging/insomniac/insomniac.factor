@@ -4,7 +4,7 @@ USING: logging.analysis logging.server logging smtp kernel
 io.files io.streams.string namespaces make timers assocs
 io.encodings.utf8 accessors calendar sequences locals ;
 qualified: io.sockets
-in: logging.insomniac
+IN: logging.insomniac
 
 symbol: insomniac-sender
 symbol: insomniac-recipients

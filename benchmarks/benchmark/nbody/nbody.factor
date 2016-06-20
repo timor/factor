@@ -5,7 +5,7 @@ locals math math.constants math.functions math.vectors
 prettyprint combinators.smart sequences hints arrays ;
 FROM: alien.c-types => double ;
 specialized-array: double
-in: benchmark.nbody
+IN: benchmark.nbody
 
 : solar-mass ( -- x ) 4 pi sq * ; inline
 CONSTANT: days-per-year 365.24 ;

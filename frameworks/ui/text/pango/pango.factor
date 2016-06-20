@@ -5,7 +5,7 @@ cache cairo cairo.ffi classes.struct combinators destructors fonts fry
 gobject.ffi init io.encodings.utf8 kernel locals math math.rectangles
 math.vectors memoize namespaces pango.cairo.ffi pango.ffi sequences
 ui.text ui.text.private ;
-in: ui.text.pango
+IN: ui.text.pango
 
 : pango>float ( n -- x ) PANGO_SCALE /f ; inline
 : float>pango ( x -- n ) PANGO_SCALE * >integer ; inline

@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel namespaces assocs accessors words sequences classes.tuple ;
-in: smalltalk.classes
+IN: smalltalk.classes
 
 symbol: classes
 

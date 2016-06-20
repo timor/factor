@@ -5,7 +5,7 @@ USING: accessors arrays assocs help help.markup help.topics
 io.encodings.utf8 io.files io.pathnames kernel pdf pdf.layout
 pdf.streams sequences sets strings ;
 
-in: help.pdf
+IN: help.pdf
 
 PRIVATE<
 

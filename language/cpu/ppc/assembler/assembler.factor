@@ -1,7 +1,7 @@
 ! Copyright (C) 2011 Erik Charlebois.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel namespaces words math math.order locals math.bitwise io.binary make ;
-in: cpu.ppc.assembler
+IN: cpu.ppc.assembler
 
 ! This vocabulary implements the V2.06B Power ISA found at http://www.power.org.
 ! The names are standard and the operand order is the same as in the specification,

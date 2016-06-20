@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays combinators kernel make math math.bitwise
 namespaces sequences words words.symbol parser ;
-in: cpu.arm.assembler
+IN: cpu.arm.assembler
 
 ! Registers
 COMPILE<

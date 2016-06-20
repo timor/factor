@@ -1,5 +1,5 @@
 USING: combinators kernel math memoize ;
-in: benchmark.fib8
+IN: benchmark.fib8
 
 MEMO: (faster-fib) ( m -- n )
     dup 1 > [

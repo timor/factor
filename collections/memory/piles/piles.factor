@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: accessors alien alien.c-types alien.data destructors kernel libc math ;
-in: memory.piles
+IN: memory.piles
 
 TUPLE: pile
     { underlying c-ptr }

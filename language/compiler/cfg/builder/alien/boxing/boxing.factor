@@ -6,7 +6,7 @@ compiler.cfg.instructions compiler.cfg.intrinsics.allot
 compiler.cfg.registers cpu.architecture fry kernel layouts
 locals math namespaces sequences system ;
 QUALIFIED-WITH: alien.c-types c ;
-in: compiler.cfg.builder.alien.boxing
+IN: compiler.cfg.builder.alien.boxing
 
 symbol: struct-return-area
 

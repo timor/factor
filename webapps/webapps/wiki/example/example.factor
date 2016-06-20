@@ -2,7 +2,7 @@ USING: accessors calendar db db.tuples furnace.alloy
 furnace.recaptcha.example http.server io.directories
 io.encodings.ascii io.files io.servers kernel namespaces sequences
 splitting webapps.utils webapps.wiki websites.concatenative ;
-in: webapps.wiki.example
+IN: webapps.wiki.example
 
 : wiki-db ( -- db )
     "wiki.db" <temp-sqlite-db> ;

@@ -7,7 +7,7 @@ specialized-arrays specialized-vectors ;
 QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-ARRAYS: c:float c:void* ;
 specialized-vector: c:short
-in: audio.vorbis
+IN: audio.vorbis
 
 TUPLE: vorbis-stream < disposable
     stream

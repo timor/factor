@@ -5,7 +5,7 @@ compiler.cfg.instructions compiler.cfg.instructions.syntax
 compiler.cfg.value-numbering.graph generic.parser kernel make
 math namespaces quotations sequences sequences.private sets
 slots words ;
-in: compiler.cfg.value-numbering.expressions
+IN: compiler.cfg.value-numbering.expressions
 
 COMPILE<
 

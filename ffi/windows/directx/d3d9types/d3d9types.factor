@@ -1,6 +1,6 @@
 USING: alien.syntax windows.types classes.struct math alien.c-types
 math.bitwise kernel locals windows.kernel32 literals ;
-in: windows.directx.d3d9types
+IN: windows.directx.d3d9types
 
 TYPEDEF: DWORD D3DCOLOR ;
 

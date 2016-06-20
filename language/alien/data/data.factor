@@ -4,7 +4,7 @@ arrays byte-arrays combinators combinators.short-circuit
 cpu.architecture fry generalizations io io.streams.memory kernel
 libc locals macros math math.functions parser sequences
 stack-checker.dependencies summary words ;
-in: alien.data
+IN: alien.data
 
 : <ref> ( value c-type -- c-ptr )
     [ heap-size (byte-array) ] keep

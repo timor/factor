@@ -3,14 +3,14 @@ combinators continuations fry kernel mongodb.driver sequences strings
 vectors words combinators.smart literals memoize slots constructors
 hashtables ;
 
-in: mongodb.tuple
+IN: mongodb.tuple
 
 SINGLETONS: +transient+ +load+ +user-defined-key+ ;
 
 : <tuple-index> ( name key -- index-spec )
     index-spec new swap >>key swap >>name ;
 
-in: mongodb.tuple.collection
+IN: mongodb.tuple.collection
 
 TUPLE: toid key value ;
 

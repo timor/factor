@@ -7,7 +7,7 @@ images.viewer images.viewer.prettyprint io kernel parser
 prettyprint.custom prettyprint.sections regexp sequences strings
 ui wrap.strings ;
 
-in: xkcd
+IN: xkcd
 
 PRIVATE<
 

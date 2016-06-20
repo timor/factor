@@ -6,7 +6,7 @@ kernel locals math mongodb.msg namespaces sequences uuid bson.writer.private ;
 FROM: mongodb.connection => connection-buffer ;
 FROM: alien => byte-length ;
 
-in: mongodb.operations
+IN: mongodb.operations
 
 M: byte-vector byte-length length ;
 

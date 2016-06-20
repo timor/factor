@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: destructors kernel kernel.private math namespaces
 sequences sequences.private ;
-in: io
+IN: io
 
 SYMBOLS: +byte+ +character+ ;
 

@@ -4,7 +4,7 @@
 ! Based on X.h
 
 USING: alien alien.c-types alien.syntax math x11.xlib ;
-in: x11.constants
+IN: x11.constants
 
 TYPEDEF: ulong Mask ;
 

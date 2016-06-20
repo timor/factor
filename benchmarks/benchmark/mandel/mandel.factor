@@ -4,7 +4,7 @@ USING: io kernel math math.functions sequences prettyprint
 io.files io.files.temp io.encodings io.encodings.ascii
 io.encodings.binary fry benchmark.mandel.params
 benchmark.mandel.colors ;
-in: benchmark.mandel
+IN: benchmark.mandel
 
 : x-scale ( -- x ) width  200000 zoom-fact * / ; inline
 : y-scale ( -- y ) height 150000 zoom-fact * / ; inline

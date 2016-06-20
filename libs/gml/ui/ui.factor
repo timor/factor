@@ -7,7 +7,7 @@ ui.gadgets.frames ui.gadgets.grids ui.gadgets.labels
 ui.gadgets.packs ui.gadgets.scrollers ui.gadgets.worlds
 ui.gadgets.tables ui.gadgets.labeled unicode ;
 FROM: gml => gml ;
-in: gml.ui
+IN: gml.ui
 
 singleton: stack-entry-renderer
 

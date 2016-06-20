@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs continuations destructors fry kernel
 make math sequences ;
-in: cache
+IN: cache
 
 TUPLE: cache-assoc < disposable assoc max-age ;
 

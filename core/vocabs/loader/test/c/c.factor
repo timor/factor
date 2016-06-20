@@ -1,4 +1,4 @@
-in: vocabs.loader.test.c
+IN: vocabs.loader.test.c
 
 GENERIC: foo
 M: foo

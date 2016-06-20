@@ -1,6 +1,6 @@
 USING: alien.c-types alien.syntax classes.struct windows.com
 windows.directx windows.ole32 windows.types ;
-in: windows.directx.xapofx
+IN: windows.directx.xapofx
 
 library: xapofx
 

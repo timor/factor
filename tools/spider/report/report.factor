@@ -3,7 +3,7 @@
 USING: accessors arrays assocs combinators kernel math
 math.statistics namespaces sequences sorting xml.syntax
 spider urls html ;
-in: spider.report
+IN: spider.report
 
 symbol: network-failures
 symbol: broken-pages

@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel continuations fry words ;
-in: db.errors
+IN: db.errors
 
 ERROR: db-error ;
 TUPLE: sql-error location ;

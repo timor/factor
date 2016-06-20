@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.c-types alien.libraries alien.syntax
 combinators kernel tokyo.alien.tchdb tokyo.alien.tcutil ;
-in: tokyo.alien.tcbdb
+IN: tokyo.alien.tcbdb
 
 library: tokyocabinet
 

@@ -6,7 +6,7 @@ help.markup.private help.topics help.vocabs io io.streams.string
 kernel listener make namespaces parser prettyprint see sequences
 summary vocabs vocabs.hierarchy vocabs.metadata vocabs.parser
 words ;
-in: fuel.help
+IN: fuel.help
 
 PRIVATE<
 

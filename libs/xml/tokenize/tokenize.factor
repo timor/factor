@@ -4,7 +4,7 @@ USING: namespaces xml.state kernel sequences accessors
 xml.char-classes xml.errors math io sbufs fry strings ascii
 xml.entities assocs splitting math.parser
 locals combinators combinators.short-circuit arrays hints ;
-in: xml.tokenize
+IN: xml.tokenize
 
 ! * Basic utility words
 

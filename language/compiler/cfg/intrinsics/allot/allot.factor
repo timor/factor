@@ -5,7 +5,7 @@ compiler.cfg.builder.blocks compiler.cfg.hats
 compiler.cfg.instructions compiler.cfg.registers compiler.cfg.stacks
 compiler.constants compiler.tree.propagation.info cpu.architecture fry
 kernel layouts locals math math.order namespaces sequences ;
-in: compiler.cfg.intrinsics.allot
+IN: compiler.cfg.intrinsics.allot
 
 : ##set-slots, ( regs obj class -- )
     '[ _ swap 1 + _ type-number ##set-slot-imm, ] each-index ;

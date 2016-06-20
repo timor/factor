@@ -3,7 +3,7 @@
 
 USING: images.http kernel sequences urls urls.encoding ;
 
-in: robohash
+IN: robohash
 
 PRIVATE<
 

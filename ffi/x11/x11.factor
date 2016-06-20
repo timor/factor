@@ -4,7 +4,7 @@ USING: alien.strings continuations io
 io.encodings.ascii kernel namespaces x11.xlib x11.io
 vocabs vocabs.loader ;
 FROM: alien.c-types => c-bool> ;
-in: x11
+IN: x11
 
 symbol: dpy
 symbol: scr

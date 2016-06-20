@@ -1,6 +1,6 @@
 USING: accessors kernel math math.parser prettyprint sequences
 splitting tools.memory ;
-in: tools.disassembler.utils
+IN: tools.disassembler.utils
 
 : 0x- ( str -- str' ) "0x" prepend ;
 

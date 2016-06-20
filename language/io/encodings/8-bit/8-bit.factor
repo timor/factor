@@ -5,7 +5,7 @@ sequences hashtables io.encodings.ascii generic parser
 classes.tuple words words.symbol io io.files splitting
 namespaces math compiler.units accessors classes.singleton
 classes.mixin io.encodings.iana fry simple-flat-file lexer ;
-in: io.encodings.8-bit
+IN: io.encodings.8-bit
 
 PRIVATE<
 

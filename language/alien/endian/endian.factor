@@ -5,7 +5,7 @@ classes.struct.private combinators compiler.units endian fry
 generalizations kernel macros math math.bitwise namespaces
 sequences slots words ;
 QUALIFIED-WITH: alien.c-types c ;
-in: alien.endian
+IN: alien.endian
 
 ERROR: invalid-signed-conversion n ;
 

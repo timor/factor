@@ -5,7 +5,7 @@ assocs byte-arrays classes.struct combinators cuda
 cuda.contexts cuda.ffi cuda.libraries fry io io.encodings.utf8
 kernel locals math math.order math.parser namespaces
 prettyprint sequences ;
-in: cuda.devices
+IN: cuda.devices
 
 : #cuda-devices ( -- n )
     { int } [ cuDeviceGetCount cuda-error ] with-out-parameters ;

@@ -3,7 +3,7 @@
 USING: assocs checksums checksums.md5 http.client json.reader
 kernel locals math.parser namespaces sequences strings system
 urls ;
-in: marvel
+IN: marvel
 
 ! http://developer.marvel.com/docs
 ! Register for an api key.

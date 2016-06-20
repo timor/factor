@@ -4,7 +4,7 @@
 USING: command-line io io.encodings.utf8 io.files kernel
 namespaces sets sequences ;
 
-in: tools.uniq
+IN: tools.uniq
 
 : uniq-lines ( -- )
     f [

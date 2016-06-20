@@ -3,7 +3,7 @@
 USING: alien alien.c-types alien.libraries alien.syntax
 combinators kernel system tokyo.alien.tchdb tokyo.alien.tcutil
 tokyo.alien.tctdb classes.struct ;
-in: tokyo.alien.tcrdb
+IN: tokyo.alien.tcrdb
 
 COMPILE< "tokyotyrant" {
     { [ os macosx? ] [ "libtokyotyrant.dylib" ] }

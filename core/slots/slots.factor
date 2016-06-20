@@ -5,7 +5,7 @@ classes.algebra classes.algebra.private classes.maybe
 combinators generic generic.standard hashtables kernel
 kernel.private make math quotations sequences sequences.private
 slots.private strings words ;
-in: slots
+IN: slots
 
 PRIVATE<
 PRIMITIVE: set-slot ( value obj n -- ) ;

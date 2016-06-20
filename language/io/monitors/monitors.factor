@@ -3,7 +3,7 @@
 USING: accessors concurrency.mailboxes continuations destructors
 fry io.backend io.timeouts kernel namespaces sequences system
 vocabs ;
-in: io.monitors
+IN: io.monitors
 
 HOOK: init-monitors io-backend ( -- ) ;
 

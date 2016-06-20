@@ -1,5 +1,5 @@
 USING: accessors math kernel debugger ;
-in: benchmark.fib4
+IN: benchmark.fib4
 
 TUPLE: box { i read-only } ;
 

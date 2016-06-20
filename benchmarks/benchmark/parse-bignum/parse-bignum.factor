@@ -1,5 +1,5 @@
 USING: kernel math math.parser sequences ;
-in: benchmark.parse-bignum
+IN: benchmark.parse-bignum
 
 : parse-bignum-benchmark ( -- )
     3000 iota [

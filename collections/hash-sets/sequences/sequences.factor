@@ -4,7 +4,7 @@
 USING: accessors combinators hash-sets hash-sets.wrapped kernel
 parser sequences sets vocabs.loader ;
 
-in: hash-sets.sequences
+IN: hash-sets.sequences
 
 TUPLE: sequence-wrapper < wrapped-key ;
 

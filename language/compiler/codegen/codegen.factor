@@ -8,7 +8,7 @@ compiler.codegen.relocation compiler.constants cpu.architecture
 fry generic.parser kernel layouts locals make math namespaces
 parser quotations sequences sequences.generalizations slots
 words lexer ;
-in: compiler.codegen
+IN: compiler.codegen
 
 symbol: insn-counts
 

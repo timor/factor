@@ -1,5 +1,5 @@
 USING: alien.syntax classes.struct windows.types ;
-in: windows.directx.d3dx10math
+IN: windows.directx.d3dx10math
 
 STRUCT: D3DVECTOR
     { x FLOAT }

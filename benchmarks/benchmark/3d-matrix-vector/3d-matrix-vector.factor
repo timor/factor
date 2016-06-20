@@ -1,7 +1,7 @@
 USING: kernel locals math math.matrices.simd math.order math.vectors
 math.vectors.simd prettyprint sequences typed ;
 QUALIFIED-WITH: alien.c-types c ;
-in: benchmark.3d-matrix-vector
+IN: benchmark.3d-matrix-vector
 
 : v2min ( xy -- xx )
     dup { 1 0 2 3 } vshuffle vmin ; inline

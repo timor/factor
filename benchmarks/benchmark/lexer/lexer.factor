@@ -3,7 +3,7 @@
 
 USING: io.encodings.ascii io.files kernel lexer math ;
 
-in: benchmark.lexer
+IN: benchmark.lexer
 
 : lexer-benchmark ( -- )
     10,000 "vocab:math/math.factor" ascii file-lines [

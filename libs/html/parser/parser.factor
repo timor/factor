@@ -3,7 +3,7 @@
 USING: accessors arrays hashtables sequences.parser
 html.parser.utils kernel namespaces sequences make math
 unicode combinators.short-circuit quoting fry ;
-in: html.parser
+IN: html.parser
 
 TUPLE: tag name attributes text closing? ;
 

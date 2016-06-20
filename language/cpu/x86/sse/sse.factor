@@ -5,7 +5,7 @@ compiler.cfg.intrinsics cpu.architecture cpu.x86 cpu.x86.assembler
 cpu.x86.assembler.operands cpu.x86.features fry kernel locals macros
 math math.vectors quotations sequences system ;
 QUALIFIED-WITH: alien.c-types c ;
-in: cpu.x86.sse
+IN: cpu.x86.sse
 
 ! Scalar floating point with SSE2
 M: x86 %load-float c:float <ref> float-rep %load-vector ;

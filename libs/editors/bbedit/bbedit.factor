@@ -1,5 +1,5 @@
 USING: editors kernel make namespaces ;
-in: editors.bbedit
+IN: editors.bbedit
 
 singleton: bbedit
 bbedit editor-class set-global

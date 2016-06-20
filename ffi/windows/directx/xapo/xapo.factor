@@ -1,7 +1,7 @@
 USING: alien.c-types alien.syntax classes.struct windows.com
 windows.com.syntax windows.directx.audiodefs windows.kernel32
 windows.types ;
-in: windows.directx.xapo
+IN: windows.directx.xapo
 
 CONSTANT: XAPO_MIN_CHANNELS 1 ;
 CONSTANT: XAPO_MAX_CHANNELS 64 ;

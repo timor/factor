@@ -1,6 +1,6 @@
 USING: editors editors.vim io.pathnames io.standard-paths kernel
 namespaces ;
-in: editors.macvim
+IN: editors.macvim
 
 TUPLE: macvim < vim ;
 T{ macvim } editor-class set-global

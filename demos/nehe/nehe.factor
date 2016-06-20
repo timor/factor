@@ -1,6 +1,6 @@
 USING: ui.gadgets.buttons ui.gadgets.packs ui.gadgets ui
 nehe.2 nehe.3 nehe.4 nehe.5 kernel accessors ;
-in: nehe
+IN: nehe
 
 MAIN-WINDOW: nehe-window { { title "Nehe Examples" } }
     <filled-pile>

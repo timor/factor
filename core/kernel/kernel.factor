@@ -1,7 +1,7 @@
 ! Copyright (C) 2004, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel.private slots.private math.private ;
-in: kernel
+IN: kernel
 
 BUILTIN: callstack ;
 BUILTIN: tuple ;

@@ -6,7 +6,7 @@ core-foundation.strings core-foundation.time
 core-foundation.timers destructors init kernel math namespaces
 sequences threads ;
 FROM: calendar.unix => system-micros ;
-in: core-foundation.run-loop
+IN: core-foundation.run-loop
 
 CONSTANT: kCFRunLoopRunFinished 1 ;
 CONSTANT: kCFRunLoopRunStopped 2 ;

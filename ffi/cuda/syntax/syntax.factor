@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.parser cuda.libraries fry kernel lexer namespaces
 parser ;
-in: cuda.syntax
+IN: cuda.syntax
 
 SYNTAX: \ CUDA-LIBRARY:
     scan-token scan-word scan-object ";" expect

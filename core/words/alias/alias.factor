@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors definitions effects kernel quotations
 sequences words ;
-in: words.alias
+IN: words.alias
 
 PREDICATE: alias < word "alias" word-prop ;
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.destructors alien.syntax
 classes.struct ;
-in: core-foundation
+IN: core-foundation
 
 TYPEDEF: void* CFTypeRef ;
 

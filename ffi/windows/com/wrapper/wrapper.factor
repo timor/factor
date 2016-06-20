@@ -5,7 +5,7 @@ assocs accessors arrays sequences quotations combinators math
 words compiler.units destructors fry math.parser generalizations
 sets specialized-arrays windows.kernel32 classes.struct ;
 specialized-array: void*
-in: windows.com.wrapper
+IN: windows.com.wrapper
 
 TUPLE: com-wrapper < disposable callbacks vtbls ;
 

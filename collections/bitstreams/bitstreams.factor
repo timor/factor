@@ -3,7 +3,7 @@
 USING: accessors byte-arrays byte-vectors
 combinators.short-circuit fry io.binary kernel locals math
 math.bitwise sequences sequences.private ;
-in: bitstreams
+IN: bitstreams
 
 TUPLE: widthed
 { bits integer read-only }

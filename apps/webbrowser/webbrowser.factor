@@ -4,7 +4,7 @@
 USING: accessors combinators.short-circuit io.pathnames
 sequences strings system ui.operations urls vocabs ;
 
-in: webbrowser
+IN: webbrowser
 
 HOOK: open-file os ( path -- ) ;
 

@@ -6,7 +6,7 @@ generalizations generic grouping io io.styles kernel make math
 math.order math.parser math.statistics memory layouts namespaces
 parser prettyprint sequences sequences.generalizations sorting
 splitting strings system vm words hints hashtables ;
-in: tools.memory
+IN: tools.memory
 
 PRIVATE<
 PRIMITIVE: (callback-room) ( -- allocator-room ) ;

@@ -3,7 +3,7 @@
 USING: accessors arrays combinators continuations io kernel
 kernel.private math math.parser namespaces sequences
 sequences.private source-files.errors strings vectors ;
-in: lexer
+IN: lexer
 
 TUPLE: lexer
 { text array }

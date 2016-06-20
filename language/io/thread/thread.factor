@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2011 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: continuations init io.backend kernel namespaces threads ;
-in: io.thread
+IN: io.thread
 
 ! The Cocoa and Gtk UI backend stops the I/O thread and takes
 ! over completely.

@@ -1,7 +1,7 @@
 ! Copyright (C) 2005, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: fry help.markup help.topics kernel math sequences ;
-in: help.crossref
+IN: help.crossref
 
 : article-links ( topic elements -- seq )
     [ article-content ] dip collect-elements ;

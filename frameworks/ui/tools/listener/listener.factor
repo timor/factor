@@ -15,7 +15,7 @@ ui.pens.solid ui.theme.images ui.tools.browser ui.tools.common
 ui.tools.debugger ui.tools.error-list ui.tools.listener.completion
 ui.tools.listener.history ui.tools.listener.popups vocabs
 vocabs.loader vocabs.parser vocabs.refresh words ;
-in: ui.tools.listener
+IN: ui.tools.listener
 
 TUPLE: interactor < source-editor
     output history flag mailbox thread waiting token-model word-model popup ;

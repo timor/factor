@@ -1,5 +1,5 @@
 USING: accessors kernel locals math math.parser peg.ebnf ;
-in: rosetta-code.arithmetic-evaluation
+IN: rosetta-code.arithmetic-evaluation
 
 ! http://rosettacode.org/wiki/Arithmetic_evaluation
 

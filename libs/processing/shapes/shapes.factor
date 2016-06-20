@@ -1,7 +1,7 @@
 USING: alien.c-types alien.data arrays colors.constants grouping
 kernel locals math math.vectors namespaces opengl opengl.gl
 opengl.glu sequences sequences.generalizations shuffle ;
-in: processing.shapes
+IN: processing.shapes
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

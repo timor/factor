@@ -1,7 +1,7 @@
 ! Copyright (C) 2016 Nicolas Pénet.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: colors colors.constants colors.hex namespaces ;
-in: ui.theme
+IN: ui.theme
 
 symbol: theme
 

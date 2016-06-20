@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs definitions kernel namespaces
 sequences sorting splitting strings ;
-in: vocabs
+IN: vocabs
 
 symbol: dictionary
 

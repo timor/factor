@@ -2,7 +2,7 @@ USING: accessors alien.c-types alien.data arrays assocs
 bit-arrays.private classes.struct fry grouping io io.encodings.binary
 io.streams.byte-array kernel math math.statistics sequences
 sequences.repeating splitting tools.image-analyzer.utils vm ;
-in: tools.image-analyzer.gc-info
+IN: tools.image-analyzer.gc-info
 
 ! Utils
 : read-ints ( count -- seq )

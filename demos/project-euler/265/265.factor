@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: generalizations kernel math math.functions project-euler.common
 sequences sets ;
-in: project-euler.265
+IN: project-euler.265
 
 ! http://projecteuler.net/index.php?section=problems&id=265
 

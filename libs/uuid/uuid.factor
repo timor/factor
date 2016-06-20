@@ -3,7 +3,7 @@
 USING: byte-arrays calendar checksums checksums.md5
 checksums.sha io.binary kernel math math.parser math.ranges
 random sequences strings system unicode ;
-in: uuid
+IN: uuid
 
 PRIVATE<
 

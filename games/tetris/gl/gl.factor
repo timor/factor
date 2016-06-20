@@ -3,7 +3,7 @@
 USING: accessors arrays combinators kernel math math.vectors
 namespaces opengl opengl.gl sequences tetris.board tetris.game
 tetris.piece ui.render tetris.tetromino ui.gadgets colors ;
-in: tetris.gl
+IN: tetris.gl
 
 ! OpenGL rendering for tetris
 

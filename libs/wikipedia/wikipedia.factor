@@ -8,7 +8,7 @@ kernel make namespaces regexp sequences splitting urls
 wrap.strings xml xml.data xml.traversal ;
 FROM: xml.data => tag? ;
 
-in: wikipedia
+IN: wikipedia
 
 symbol: language
 "en" language set-global

@@ -3,7 +3,7 @@
 USING: accessors arrays classes.struct combinators
 combinators.short-circuit kernel math.order namespaces
 x11 x11.xlib ;
-in: x11.events
+IN: x11.events
 
 GENERIC: expose-event ( event window -- ) ;
 

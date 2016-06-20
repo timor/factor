@@ -4,7 +4,7 @@ USING: accessors alien byte-arrays classes.algebra combinators
 compiler.cfg.instructions compiler.cfg.instructions.syntax
 compiler.cfg.registers compiler.constants effects kernel layouts
 math namespaces parser sequences splitting words ;
-in: compiler.cfg.hats
+IN: compiler.cfg.hats
 
 COMPILE<
 

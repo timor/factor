@@ -1,4 +1,4 @@
-in: tools.deploy.restage
+IN: tools.deploy.restage
 USING: bootstrap.stage2 namespaces memory ;
 
 : restage ( -- )

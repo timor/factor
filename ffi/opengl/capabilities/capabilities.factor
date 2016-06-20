@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays fry kernel make math.order math.parser opengl.gl
 sequences sets splitting strings system ;
-in: opengl.capabilities
+IN: opengl.capabilities
 
 : (require-gl) ( thing require-quot make-error-quot -- )
     [ dupd call [ drop ] ] dip '[ _ " " make throw ] if ; inline

@@ -1,5 +1,5 @@
 USING: kernel math math.constants msgpack sequences ;
-in: benchmark.msgpack
+IN: benchmark.msgpack
 
 : pack-sum ( seq -- n )
     [ >msgpack msgpack> ] map-sum ;

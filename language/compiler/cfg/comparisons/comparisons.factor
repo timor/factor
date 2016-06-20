@@ -1,7 +1,7 @@
 ! Copyright (C) 2009, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs math.order sequences ;
-in: compiler.cfg.comparisons
+IN: compiler.cfg.comparisons
 
 symbol: +unordered+
 

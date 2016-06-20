@@ -3,7 +3,7 @@
 USING: accessors classes classes.tuple combinators.short-circuit
 compiler.tree compiler.tree.propagation.info kernel math
 sequences ;
-in: compiler.tree.escape-analysis.check
+IN: compiler.tree.escape-analysis.check
 
 GENERIC: run-escape-analysis* ( node -- ? ) ;
 

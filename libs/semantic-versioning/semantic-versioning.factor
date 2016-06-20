@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays ascii kernel math math.order math.parser sequences
 sorting.human splitting ;
-in: semantic-versioning
+IN: semantic-versioning
 
 PRIVATE<
 

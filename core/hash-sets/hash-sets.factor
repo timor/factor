@@ -5,7 +5,7 @@ USING: accessors arrays combinators growable.private hash-sets
 hashtables.private kernel kernel.private math math.private
 sequences sequences.private sets sets.private slots.private
 vectors ;
-in: hash-sets
+IN: hash-sets
 
 TUPLE: hash-set
     { count array-capacity }

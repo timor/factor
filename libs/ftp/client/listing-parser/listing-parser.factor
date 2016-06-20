@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators io.files.types kernel math.parser
 sequences splitting ;
-in: ftp.client.listing-parser
+IN: ftp.client.listing-parser
 
 : ch>file-type ( ch -- type )
     {

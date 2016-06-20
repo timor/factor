@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors fry kernel math math.order sequences ui.gadgets
 ui.gadgets.grids ui.gadgets.grids.private ;
-in: ui.gadgets.frames
+IN: ui.gadgets.frames
 
 TUPLE: frame < grid filled-cell ;
 

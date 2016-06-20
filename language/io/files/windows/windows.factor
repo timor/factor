@@ -10,7 +10,7 @@ sequences specialized-arrays system threads tr vectors windows
 windows.errors windows.handles windows.kernel32 windows.shell32
 windows.time windows.types windows.winsock ;
 specialized-array: ushort
-in: io.files.windows
+IN: io.files.windows
 
 slot: file
 

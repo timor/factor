@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: infix.ast infix.tokenizer kernel math peg.ebnf sequences
 strings vectors ;
-in: infix.parser
+IN: infix.parser
 
 : parse-infix ( string -- obj ) EBNF{{
 Number      = . ?[ ast-number? ]?

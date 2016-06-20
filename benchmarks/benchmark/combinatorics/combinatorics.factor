@@ -4,7 +4,7 @@
 USING: combinators kernel math math.combinatorics math.ranges
 sequences ;
 
-in: benchmark.combinatorics
+IN: benchmark.combinatorics
 
 : bench-combinations ( n -- )
     [1,b] dup clone [

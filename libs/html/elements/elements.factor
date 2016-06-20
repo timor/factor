@@ -4,7 +4,7 @@ USING: io io.styles kernel namespaces prettyprint quotations
 sequences strings words xml.entities compiler.units effects
 xml.data urls math math.parser combinators
 present fry io.streams.string xml.writer html ;
-in: html.elements
+IN: html.elements
 
 symbol: html
 

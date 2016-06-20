@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays assocs hashtables kernel math math.functions
 project-euler.common sequences sorting ;
-in: project-euler.062
+IN: project-euler.062
 
 ! http://projecteuler.net/index.php?section=problems&id=062
 

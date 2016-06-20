@@ -2,7 +2,7 @@ USING: accessors alien alien.data alien.c-types classes.struct
 combinators io.backend kernel locals
 math sequences specialized-arrays splitting
 windows.kernel32 windows.types ;
-in: tools.deploy.windows.ico
+IN: tools.deploy.windows.ico
 
 PRIVATE<
 

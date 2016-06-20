@@ -1,7 +1,7 @@
 USING: xmode.tokens xmode.marker xmode.catalog kernel io io.files
 sequences words io.encodings.utf8 namespaces xml.entities accessors
 xml.syntax locals xml.writer ;
-in: xmode.code2html
+IN: xmode.code2html
 
 : htmlize-tokens ( tokens -- xml )
     [

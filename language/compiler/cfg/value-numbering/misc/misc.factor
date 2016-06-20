@@ -3,7 +3,7 @@
 USING: accessors compiler.cfg.instructions
 compiler.cfg.value-numbering.graph
 compiler.cfg.value-numbering.rewrite cpu.architecture kernel ;
-in: compiler.cfg.value-numbering.misc
+IN: compiler.cfg.value-numbering.misc
 
 M: ##replace rewrite
     [ loc>> ] [ src>> vreg>insn ] bi

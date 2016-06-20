@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: math kernel io.encodings combinators io io.encodings.utf16
 sequences io.binary io.encodings.iana ;
-in: io.encodings.utf32
+IN: io.encodings.utf32
 
 singleton: utf32be
 

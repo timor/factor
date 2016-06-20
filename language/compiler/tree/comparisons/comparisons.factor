@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs combinators math math.intervals math.order ;
-in: compiler.tree.comparisons
+IN: compiler.tree.comparisons
 
 ! Some utilities for working with comparison operations.
 

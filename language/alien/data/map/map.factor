@@ -4,7 +4,7 @@ byte-arrays combinators effects.parser fry generalizations grouping kernel
 lexer locals macros make math math.ranges parser sequences
 sequences.generalizations sequences.private ;
 FROM: alien.arrays => array-length ;
-in: alien.data.map
+IN: alien.data.map
 
 PRIVATE<
 

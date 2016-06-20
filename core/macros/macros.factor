@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators compiler.units definitions effects
 effects.parser fry kernel memoize words ;
-in: macros
+IN: macros
 
 PRIVATE<
 

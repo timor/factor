@@ -5,7 +5,7 @@ compiler.cfg.instructions compiler.cfg.predecessors compiler.cfg.rpo
 compiler.cfg.stacks.global compiler.cfg.stacks.height
 compiler.cfg.stacks.local compiler.cfg.utilities fry kernel
 locals make math sequences sets ;
-in: compiler.cfg.stacks.finalize
+IN: compiler.cfg.stacks.finalize
 
 :: inserting-peeks ( from to -- set )
     to anticip-in

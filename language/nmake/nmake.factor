@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: namespaces sequences math.parser kernel macros
 generalizations sequences.generalizations locals ;
-in: nmake
+IN: nmake
 
 symbol: building-seq
 : get-building-seq ( n -- seq )

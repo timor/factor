@@ -9,7 +9,7 @@ math.ranges math.ranges.private math.statistics math.vectors
 memoize parser random sequences sequences.extras
 sequences.private sets sorting sorting.extras ;
 
-in: math.extras
+IN: math.extras
 
 PRIVATE<
 

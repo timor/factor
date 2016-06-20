@@ -4,7 +4,7 @@ USING: assocs compiler.cfg.instructions compiler.cfg.registers
 compiler.cfg.ssa.destruction.leaders cpu.architecture deques
 dlists fry kernel locals make namespaces sequences ;
 qualified: sets
-in: compiler.cfg.parallel-copy
+IN: compiler.cfg.parallel-copy
 
 PRIVATE<
 

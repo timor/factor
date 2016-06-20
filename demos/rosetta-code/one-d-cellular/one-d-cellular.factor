@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: bit-arrays io kernel locals math sequences ;
-in: rosetta-code.one-d-cellular
+IN: rosetta-code.one-d-cellular
 
 ! http://rosettacode.org/wiki/One-dimensional_cellular_automata
 

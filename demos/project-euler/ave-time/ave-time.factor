@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators.smart formatting fry io kernel macros math math.functions
 math.statistics memory sequences tools.time ;
-in: project-euler.ave-time
+IN: project-euler.ave-time
 
 MACRO: collect-benchmarks ( quot n -- seq )
     swap '[ _ [ [ [ _ nullary ] preserving ] gc benchmark 6 10^ / ] replicate ] ;

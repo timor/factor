@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel math math.ranges project-euler.common
 sequences locals ;
-in: project-euler.085
+IN: project-euler.085
 
 ! http://projecteuler.net/index.php?section=problems&id=85
 

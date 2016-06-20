@@ -16,7 +16,7 @@ ui.pixel-formats.private memoize classes colors
 specialized-arrays classes.struct ;
 specialized-array: POINT
 QUALIFIED-WITH: alien.c-types c ;
-in: ui.backend.windows
+IN: ui.backend.windows
 
 singleton: windows-ui-backend
 

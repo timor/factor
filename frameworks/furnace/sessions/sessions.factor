@@ -6,7 +6,7 @@ continuations fry calendar combinators combinators.short-circuit
 destructors io.sockets db db.tuples db.types
 http http.server http.server.dispatchers http.server.filters
 furnace.cache furnace.scopes furnace.utilities ;
-in: furnace.sessions
+IN: furnace.sessions
 
 TUPLE: session < scope user-agent client ;
 

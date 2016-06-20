@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays kernel math math.order sequences
 sequences.private ;
-in: sequences.merged
+IN: sequences.merged
 
 TUPLE: merged seqs ;
 C: <merged> merged ;

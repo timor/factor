@@ -2,7 +2,7 @@
 USING: combinators combinators.short-circuit
 compiler.tree.propagation.transforms fry generalizations kernel
 locals math sequences sequences.private ;
-in: sequences.unrolled
+IN: sequences.unrolled
 
 PRIVATE<
 : (unrolled-each-integer) ( quot n -- )

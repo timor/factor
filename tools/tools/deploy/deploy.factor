@@ -3,7 +3,7 @@
 USING: combinators command-line kernel namespaces sequences
 system tools.deploy.backend tools.deploy.config.editor vocabs
 vocabs.loader ;
-in: tools.deploy
+IN: tools.deploy
 
 ERROR: no-vocab-main vocab ;
 

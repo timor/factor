@@ -9,7 +9,7 @@ furnace.scopes
 furnace.sessions
 furnace.utilities
 furnace.redirection ;
-in: furnace.conversations
+IN: furnace.conversations
 
 TUPLE: conversation < scope session ;
 

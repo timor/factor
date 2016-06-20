@@ -1,7 +1,7 @@
 USING: accessors arrays assocs compiler.cfg.instructions
 compiler.cfg.linearization compiler.cfg.stacks.padding fry kernel math
 sequences ;
-in: compiler.cfg.stacks.vacant
+IN: compiler.cfg.stacks.vacant
 
 : vacant>bits ( vacant --  bits )
     [ { } ] [

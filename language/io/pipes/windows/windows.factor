@@ -5,7 +5,7 @@ destructors io io.files.windows io.pipes
 io.ports kernel libc literals make math.bitwise math.parser
 namespaces random sequences system windows windows.errors
 windows.kernel32 windows.types ;
-in: io.pipes.windows
+IN: io.pipes.windows
 
 ! This code is based on
 ! http://twistedmatrix.com/trac/browser/trunk/twisted/internet/iocpreactor/process.py

@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: backtrack continuations kernel prettyprint sequences ;
-in: rosetta-code.amb
+IN: rosetta-code.amb
 
 ! http://rosettacode.org/wiki/Amb
 

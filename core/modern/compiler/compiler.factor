@@ -5,7 +5,7 @@ combinators.short-circuit definitions effects effects.parser fry
 graphs io.pathnames kernel lexer locals math math.statistics
 memoize modern multiline parser quotations sequences
 sequences.extras sets splitting strings unicode words ;
-in: modern.compiler
+IN: modern.compiler
 
 : vocab>core2-path ( vocab -- path )
     ".private" ?tail drop

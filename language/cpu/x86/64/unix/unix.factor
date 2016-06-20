@@ -5,7 +5,7 @@ kernel layouts system alien.c-types classes.struct
 cpu.architecture cpu.x86.assembler cpu.x86.assembler.operands
 cpu.x86 cpu.x86.64 compiler.cfg.builder.alien
 compiler.cfg.builder.alien.boxing compiler.cfg.registers ;
-in: cpu.x86.64.unix
+IN: cpu.x86.64.unix
 
 M: x86.64 param-regs
     drop {

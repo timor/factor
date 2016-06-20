@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays classes combinators kernel make math
 math.order math.parser sequences sequences.private strings words ;
-in: effects
+IN: effects
 
 TUPLE: effect
 { in array read-only }

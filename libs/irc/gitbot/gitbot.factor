@@ -3,7 +3,7 @@
 USING: calendar debugger fry io io.encodings.utf8 io.launcher
 irc.client irc.client.chats kernel make mason.common mason.git
 math namespaces sequences threads timers ;
-in: irc.gitbot
+IN: irc.gitbot
 
 symbol: nickserv-handle
 symbol: nickserv-password

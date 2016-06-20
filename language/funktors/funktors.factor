@@ -1,7 +1,7 @@
 USING: accessors effects.parser eval grouping interpolate kernel
 multiline namespaces parser sequences sets splitting
 vocabs.parser words ;
-in: funktors
+IN: funktors
 
 SYNTAX: \ factor[[ "]]" parse-multiline-string
     manifest get search-vocab-names>>

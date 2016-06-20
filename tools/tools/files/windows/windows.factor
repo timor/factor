@@ -3,7 +3,7 @@
 USING: accessors calendar.format combinators io.files
 kernel math.parser sequences splitting system tools.files
 generalizations tools.files.private io.files.info math.order ;
-in: tools.files.windows
+IN: tools.files.windows
 
 PRIVATE<
 

@@ -5,7 +5,7 @@ fry hashtables io io.crlf io.encodings.utf8 io.sockets
 io.streams.duplex io.timeouts kernel make math math.parser
 math.ranges namespaces prettyprint sequences splitting
 strings ;
-in: pop3
+IN: pop3
 
 TUPLE: pop3-account
 # host port timeout user pwd stream capa count list

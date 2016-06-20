@@ -1,7 +1,7 @@
 USING: accessors assocs combinators html.parser
 html.parser.utils io io.streams.string kernel math math.order
 namespaces sequences strings unicode ;
-in: html.parser.printer
+IN: html.parser.printer
 
 TUPLE: html-printer ;
 TUPLE: text-printer < html-printer ;

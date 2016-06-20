@@ -5,7 +5,7 @@ USING: accessors assocs colors.constants combinators fonts fry
 io io.styles kernel math math.order pdf.text pdf.wrap sequences
 ui.text ;
 
-in: pdf.canvas
+IN: pdf.canvas
 
 TUPLE: margin left right top bottom ;
 

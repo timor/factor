@@ -3,7 +3,7 @@
 USING: accessors alien.accessors byte-arrays kernel
 kernel.private math math.private sequences sequences.private
 slots.private ;
-in: strings
+IN: strings
 
 BUILTIN: string { length array-capacity read-only initial: 0 } aux ;
 

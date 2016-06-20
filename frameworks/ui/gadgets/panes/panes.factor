@@ -12,7 +12,7 @@ ui.gadgets.tracks ui.gestures ui.images ui.pens.solid ui.render
 ui.theme ui.traverse ;
 FROM: io.styles => foreground background ;
 FROM: ui.gadgets.wrappers => <wrapper> ;
-in: ui.gadgets.panes
+IN: ui.gadgets.panes
 
 TUPLE: pane < track
 output current input last-line prototype scrolls?

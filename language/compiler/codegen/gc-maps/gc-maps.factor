@@ -3,7 +3,7 @@
 USING: accessors arrays assocs bit-arrays classes.tuple
 compiler.codegen.relocation cpu.architecture fry kernel layouts make math
 math.order namespaces sequences ;
-in: compiler.codegen.gc-maps
+IN: compiler.codegen.gc-maps
 
 SYMBOLS: return-addresses gc-maps ;
 

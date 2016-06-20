@@ -4,7 +4,7 @@ USING: accessors assocs classes.tuple combinators.short-circuit
 effects.parser fry generalizations gml.runtime kernel
 kernel.private lexer locals macros namespaces parser
 prettyprint sequences system words ;
-in: gml.macros
+IN: gml.macros
 
 TUPLE: macro macro-id timestamp log ;
 

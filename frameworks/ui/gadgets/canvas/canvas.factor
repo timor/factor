@@ -3,7 +3,7 @@
 USING: ui.backend ui.gadgets ui.gadgets.worlds ui.pens.solid opengl
 opengl.gl kernel namespaces classes.tuple colors colors.constants
 accessors ;
-in: ui.gadgets.canvas
+IN: ui.gadgets.canvas
 
 TUPLE: canvas < gadget dlist ;
 

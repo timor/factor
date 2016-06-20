@@ -4,7 +4,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.c-types alien.destructors alien.libraries
 alien.syntax assocs classes.struct combinators kernel system ;
-in: cairo.ffi
+IN: cairo.ffi
 
 ! Adapted from cairo.h, version 1.8.10
 

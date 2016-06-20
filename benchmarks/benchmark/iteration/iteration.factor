@@ -1,4 +1,4 @@
-in: benchmark.iteration
+IN: benchmark.iteration
 USING: sequences vectors arrays strings sbufs math math.vectors
 kernel ;
 

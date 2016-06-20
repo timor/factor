@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Daniel Ehrenberg
 ! See http://factorcode.org/license.txt for BSD license.
 USING: sequences kernel math accessors sequences.private ;
-in: math.bits
+IN: math.bits
 
 TUPLE: bits { number read-only } { length read-only } ;
 C: <bits> bits ;

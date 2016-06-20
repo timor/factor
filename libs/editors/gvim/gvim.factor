@@ -1,6 +1,6 @@
 USING: editors.vim io.backend io.standard-paths kernel
 namespaces system vocabs editors ;
-in: editors.gvim
+IN: editors.gvim
 
 ! This code builds on the code in editors.vim; see there for
 ! more information.

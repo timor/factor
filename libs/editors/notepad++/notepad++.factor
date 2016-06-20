@@ -1,6 +1,6 @@
 USING: editors io.standard-paths kernel make math.parser
 namespaces sequences ;
-in: editors.notepad++
+IN: editors.notepad++
 
 singleton: notepad++
 notepad++ editor-class set-global

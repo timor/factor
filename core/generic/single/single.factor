@@ -4,7 +4,7 @@ USING: accessors arrays assocs classes classes.algebra
 combinators combinators.private definitions effects generic
 hashtables kernel layouts make math namespaces quotations
 sequences words ;
-in: generic.single
+IN: generic.single
 
 PRIVATE<
 PRIMITIVE: inline-cache-miss ( generic methods index cache -- ) ;

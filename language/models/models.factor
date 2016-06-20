@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors generic kernel math sequences arrays assocs
 calendar math.order continuations fry ;
-in: models
+IN: models
 
 TUPLE: model < identity-tuple
 value connections dependencies ref locked? ;

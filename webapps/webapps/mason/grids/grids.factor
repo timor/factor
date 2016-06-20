@@ -4,7 +4,7 @@ USING: accessors assocs db.tuples furnace.actions
 furnace.utilities http.server.responses kernel locals sequences
 splitting urls xml.syntax xml.writer webapps.mason.backend
 webapps.mason.version.data webapps.mason.utils ;
-in: webapps.mason.grids
+IN: webapps.mason.grids
 
 : render-grid-cell ( cpu os quot -- xml )
     call( cpu os -- url label )

@@ -3,7 +3,7 @@
 USING: assocs fonts fry hashtables help.stylesheet help.tips
 io.styles kernel listener namespaces prettyprint.stylesheet
 sequences ui.theme ui.tools.listener vocabs.prettyprint words ;
-in: ui.theme.switching
+IN: ui.theme.switching
 
 PRIVATE<
 

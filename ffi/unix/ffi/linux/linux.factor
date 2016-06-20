@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax classes.struct unix.time
 unix.types ;
-in: unix.ffi
+IN: unix.ffi
 
 CONSTANT: MAXPATHLEN 1024 ;
 

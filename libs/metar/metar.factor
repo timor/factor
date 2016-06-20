@@ -7,7 +7,7 @@ http.client io io.encodings.ascii io.files io.styles kernel math
 math.extras math.parser memoize regexp sequences sorting.human
 splitting strings urls wrap.strings ;
 
-in: metar
+IN: metar
 
 TUPLE: station cccc name state country latitude longitude ;
 

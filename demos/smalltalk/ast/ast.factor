@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: strings arrays memoize kernel sequences accessors combinators ;
-in: smalltalk.ast
+IN: smalltalk.ast
 
 SINGLETONS: nil self super ;
 

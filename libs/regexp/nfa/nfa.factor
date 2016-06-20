@@ -3,7 +3,7 @@
 USING: accessors arrays assocs combinators.short-circuit fry
 kernel locals math memoize namespaces regexp.ast regexp.classes
 regexp.transition-tables sequences sets unicode vectors ;
-in: regexp.nfa
+IN: regexp.nfa
 
 ! This uses unicode for ch>upper and ch>lower
 ! but case-insensitive matching should be done by case-folding everything

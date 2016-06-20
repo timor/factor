@@ -4,7 +4,7 @@
 USING: accessors combinators compiler.units html.templates io
 io.encodings.utf8 io.files kernel lexer math namespaces parser
 parser.notes quotations sequences splitting vocabs.parser ;
-in: html.templates.fhtml
+IN: html.templates.fhtml
 
 ! We use a custom lexer so that %> ends a token even if not
 ! followed by whitespace

@@ -1,6 +1,6 @@
 USING: editors io.standard-paths kernel make math.parser
 namespaces ;
-in: editors.editplus
+IN: editors.editplus
 
 singleton: editplus
 editplus editor-class set-global

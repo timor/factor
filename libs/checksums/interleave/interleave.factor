@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs checksums grouping kernel locals math sequences ;
-in: checksums.interleave
+IN: checksums.interleave
 
 : seq>2seq ( seq -- seq1 seq2 )
     ! { abcdefgh } -> { aceg } { bdfh }

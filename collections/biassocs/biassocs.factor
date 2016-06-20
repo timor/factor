@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel assocs accessors summary hashtables ;
-in: biassocs
+IN: biassocs
 
 TUPLE: biassoc from to ;
 

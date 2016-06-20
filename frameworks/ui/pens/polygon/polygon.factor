@@ -4,7 +4,7 @@ USING: accessors alien.c-types alien.data colors help.markup
 help.syntax kernel opengl opengl.gl sequences math.vectors
 ui.gadgets ui.pens specialized-arrays ;
 specialized-array: float
-in: ui.pens.polygon
+IN: ui.pens.polygon
 
 ! Polygon pen
 TUPLE: polygon color

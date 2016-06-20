@@ -4,7 +4,7 @@ USING: accessors arrays assocs combinators compiler.cfg
 compiler.cfg.instructions compiler.cfg.linear-scan.live-intervals
 compiler.cfg.linear-scan.ranges compiler.cfg.registers cpu.architecture fry
 heaps kernel math math.order namespaces sequences ;
-in: compiler.cfg.linear-scan.allocation.state
+IN: compiler.cfg.linear-scan.allocation.state
 
 symbol: progress
 

@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io.backend calendar threads kernel ;
-in: x11.io
+IN: x11.io
 
 HOOK: init-x-io io-backend ( -- ) ;
 

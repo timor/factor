@@ -5,7 +5,7 @@ io.directories io.encodings.binary io.files io.files.links
 io.pathnames io.streams.byte-array io.streams.string kernel
 math math.parser namespaces sequences strings summary
 typed ;
-in: tar
+IN: tar
 
 CONSTANT: zero-checksum 256 ;
 CONSTANT: block-size 512 ;

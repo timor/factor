@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: http.client io kernel math sequences ;
-in: rosetta-code.web-scraping
+IN: rosetta-code.web-scraping
 
 ! http://rosettacode.org/wiki/Web_scraping
 

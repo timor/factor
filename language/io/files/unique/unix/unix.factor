@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io.backend.unix io.files.unique.private literals system
 unix unix.ffi ;
-in: io.files.unique.unix
+IN: io.files.unique.unix
 
 CONSTANT: open-unique-flags flags{ O_RDWR O_CREAT O_EXCL } ;
 

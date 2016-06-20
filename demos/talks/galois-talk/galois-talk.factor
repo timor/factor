@@ -6,7 +6,7 @@ locals kernel.private help.vocabs assocs quotations
 urls peg.ebnf tools.annotations tools.crossref
 help.topics math.functions compiler.tree.optimizer
 compiler.cfg.optimizer fry ;
-in: talks.galois-talk
+IN: talks.galois-talk
 
 CONSTANT: galois-slides
 {

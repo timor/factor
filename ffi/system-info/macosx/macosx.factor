@@ -7,7 +7,7 @@ io.encodings.utf8 libc kernel math namespaces sequences
 specialized-arrays system system-info unix ;
 specialized-array: int
 
-in: system-info.macosx
+IN: system-info.macosx
 
 PRIVATE<
 

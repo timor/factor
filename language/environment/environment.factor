@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs combinators continuations init kernel sequences
 splitting system vocabs vocabs.loader ;
-in: environment
+IN: environment
 
 HOOK: os-env os ( key -- value ) ;
 

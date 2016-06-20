@@ -1,7 +1,7 @@
 ! Copyright (C) 2006, 2007, 2008 Alex Chapman
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays kernel math sequences tetris.piece ;
-in: tetris.board
+IN: tetris.board
 
 TUPLE: board { width integer } { height integer } rows ;
 

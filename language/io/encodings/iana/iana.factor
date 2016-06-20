@@ -3,7 +3,7 @@
 USING: kernel strings io.files assocs
 splitting sequences io namespaces sets
 io.encodings.ascii io.encodings.utf8 io.encodings.utf16 ;
-in: io.encodings.iana
+IN: io.encodings.iana
 
 PRIVATE<
 symbol: n>e-table

@@ -3,7 +3,7 @@
 
 USING: assocs fry heaps kernel sequences vectors ;
 
-in: sorting.heap
+IN: sorting.heap
 
 : heapsort-with ( seq quot: ( elt -- key ) -- sorted-seq )
     [

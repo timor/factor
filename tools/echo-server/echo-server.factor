@@ -3,7 +3,7 @@
 
 USING: accessors kernel io io.encodings.binary io.servers ;
 
-in: echo-server
+IN: echo-server
 
 : echo-loop ( -- )
     1024 read-partial [ write flush echo-loop ] when* ;

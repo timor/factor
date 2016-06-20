@@ -5,7 +5,7 @@ sequences concurrency.messaging locals continuations threads
 namespaces namespaces.private make assocs accessors io strings
 prettyprint math math.parser words effects summary io.styles classes
 generic.math combinators.short-circuit kernel.private quotations ;
-in: tools.trace
+IN: tools.trace
 
 symbol: exclude-vocabs
 symbol: include-vocabs

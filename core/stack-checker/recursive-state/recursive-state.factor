@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel namespaces
 stack-checker.recursive-state.tree ;
-in: stack-checker.recursive-state
+IN: stack-checker.recursive-state
 
 TUPLE: recursive-state quotations inline-words ;
 

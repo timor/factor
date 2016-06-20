@@ -4,7 +4,7 @@ USING: accessors ascii assocs combinators formatting fry
 hashtables io io.encodings.utf16.private io.streams.string json
 kernel locals math math.parser mirrors namespaces sequences
 strings tr words ;
-in: json.writer
+IN: json.writer
 
 symbol: json-allow-fp-special?
 f json-allow-fp-special? set-global

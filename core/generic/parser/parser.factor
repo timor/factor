@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays combinators effects.parser generic
 kernel namespaces parser quotations sequences words lexer ;
-in: generic.parser
+IN: generic.parser
 
 ERROR: not-in-a-method-error ;
 

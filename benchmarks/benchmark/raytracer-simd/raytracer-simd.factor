@@ -5,7 +5,7 @@ USING: arrays accessors generalizations io io.files io.files.temp
 io.encodings.binary kernel math math.constants math.functions
 math.vectors math.vectors.simd math.vectors.simd.cords
 math.parser make sequences words combinators ;
-in: benchmark.raytracer-simd
+IN: benchmark.raytracer-simd
 
 COMPILE< SYNTAX: no-compile last-word t "no-compile" set-word-prop ; COMPILE>
 

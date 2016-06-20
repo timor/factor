@@ -5,7 +5,7 @@ compiler.tree.combinators compiler.tree.propagation.branches
 compiler.tree.propagation.info compiler.utilities fry kernel layouts
 math math.intervals math.partial-dispatch math.private namespaces
 sequences stack-checker.branches stack-checker.dependencies words ;
-in: compiler.tree.cleanup
+IN: compiler.tree.cleanup
 
 GENERIC: delete-node ( node -- ) ;
 

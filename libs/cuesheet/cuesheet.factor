@@ -4,7 +4,7 @@
 USING: accessors ascii combinators io io.encodings.utf8 io.files
 io.streams.string kernel math.parser sequences splitting ;
 
-in: cuesheet
+IN: cuesheet
 
 TUPLE: cuesheet catalog cdtextfile files flags remarks performer
 songwriter title ;

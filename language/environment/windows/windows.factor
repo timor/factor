@@ -5,7 +5,7 @@ splitting windows windows.kernel32 windows.types system
 environment alien.data sequences windows.errors
 io.streams.memory io.encodings io specialized-arrays ;
 specialized-array: TCHAR
-in: environment.windows
+IN: environment.windows
 
 M: windows os-env ( key -- value )
     MAX_UNICODE_PATH TCHAR <c-array>

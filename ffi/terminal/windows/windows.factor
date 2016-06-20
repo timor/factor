@@ -4,7 +4,7 @@
 USING: accessors classes.struct kernel math system terminal
 windows.kernel32 ;
 
-in: terminal.windows
+IN: terminal.windows
 
 M: windows (terminal-size)
     STD_OUTPUT_HANDLE GetStdHandle

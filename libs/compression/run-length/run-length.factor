@@ -3,7 +3,7 @@
 USING: accessors arrays combinators grouping kernel locals math
 math.matrices math.order multiline sequences.parser sequences
 tools.continuations ;
-in: compression.run-length
+IN: compression.run-length
 
 : run-length-uncompress ( byte-array -- byte-array' )
     2 group [ first2 <array> ] map B{ } concat-as ;

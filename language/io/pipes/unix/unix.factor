@@ -4,7 +4,7 @@ USING: alien.c-types alien.data system kernel unix math sequences
 io.backend.unix io.ports libc specialized-arrays accessors unix.ffi ;
 qualified: io.pipes
 specialized-array: int
-in: io.pipes.unix
+IN: io.pipes.unix
 
 M: unix io.pipes:(pipe) ( -- pair )
     2 int <c-array>

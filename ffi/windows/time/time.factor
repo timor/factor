@@ -3,7 +3,7 @@
 USING: accessors alien alien.c-types calendar calendar.private
 classes.struct kernel math math.bitwise namespaces
 windows.errors windows.handles windows.kernel32 windows.types ;
-in: windows.time
+IN: windows.time
 
 : >64bit ( lo hi -- n )
     32 shift bitor ; inline

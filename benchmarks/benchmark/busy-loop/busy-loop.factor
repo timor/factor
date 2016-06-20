@@ -1,6 +1,6 @@
 USING: kernel math ;
 
-in: benchmark.busy-loop
+IN: benchmark.busy-loop
 
 : busy-loop ( x -- n )
     1,000 [

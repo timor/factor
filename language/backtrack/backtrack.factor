@@ -4,7 +4,7 @@
 USING: assocs combinators continuations fry kernel macros math
 namespaces quotations sequences summary ;
 
-in: backtrack
+IN: backtrack
 
 symbol: failure
 

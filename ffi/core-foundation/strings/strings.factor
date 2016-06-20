@@ -5,7 +5,7 @@ byte-vectors combinators.short-circuit core-foundation
 core-foundation.arrays core-foundation.data destructors fry
 io.encodings.string io.encodings.utf8 kernel math math.order
 parser sequences words lexer ;
-in: core-foundation.strings
+IN: core-foundation.strings
 
 TYPEDEF: void* CFStringRef ;
 

@@ -2,7 +2,7 @@ USING: alien alien.c-types alien.data arrays assocs command-line fry
 hashtables init io.encodings.utf8 kernel namespaces
 python.errors python.ffi python.objects sequences
 specialized-arrays strings vectors ;
-in: python
+IN: python
 qualified: math
 
 ERROR: python-error type message traceback ;

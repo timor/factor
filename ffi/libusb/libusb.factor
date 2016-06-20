@@ -5,7 +5,7 @@ alien.syntax classes.struct combinators endian io.binary
 kernel locals math sequences specialized-arrays
 system unix.time unix.types ;
 FROM: alien.c-types => short ;
-in: libusb
+IN: libusb
 
 COMPILE< "libusb" {
         { [ os windows? ] [ "libusb-1.0.dll" ] }

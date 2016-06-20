@@ -2,7 +2,7 @@
 USING: alien.c-types alien.syntax cocoa.plists cocoa.runtime
 cocoa.types core-foundation.strings io.directories io.files
 io.files.temp io.pathnames kernel sequences system ;
-in: io.files.temp.macosx
+IN: io.files.temp.macosx
 
 PRIVATE<
 

@@ -4,7 +4,7 @@
 USING: arrays assocs combinators formatting hashtables kernel
 math math.parser sequences splitting strings ;
 
-in: tnetstrings
+IN: tnetstrings
 
 PRIVATE<
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays kernel namespaces make openal openal.alut sequences
 synth synth.buffers ;
-in: synth.example
+IN: synth.example
 
 : play-sine-wave ( freq seconds sample-freq -- )
     init-openal

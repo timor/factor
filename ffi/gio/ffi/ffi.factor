@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.libraries alien.syntax combinators
 gobject-introspection kernel system vocabs ;
-in: gio.ffi
+IN: gio.ffi
 
 COMPILE< "gobject.ffi" require COMPILE>
 

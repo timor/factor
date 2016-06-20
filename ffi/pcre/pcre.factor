@@ -6,7 +6,7 @@ alien.enums alien.strings arrays assocs combinators fry
 io.encodings.string io.encodings.utf8 kernel literals math
 math.bitwise pcre.ffi sequences splitting strings ;
 qualified: regexp
-in: pcre
+IN: pcre
 
 ERROR: bad-option what ;
 

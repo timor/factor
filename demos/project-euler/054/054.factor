@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays io.encodings.ascii io.files kernel math.order poker
     project-euler.common sequences ;
-in: project-euler.054
+IN: project-euler.054
 
 ! http://projecteuler.net/index.php?section=problems&id=54
 

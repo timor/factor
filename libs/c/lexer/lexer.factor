@@ -4,7 +4,7 @@ USING: accessors combinators combinators.short-circuit
 generalizations kernel locals math.order math.ranges
 sequences.parser sequences sequences.generalizations
 sorting.functor sorting.slots unicode ;
-in: c.lexer
+IN: c.lexer
 
 : take-c-comment ( sequence-parser -- seq/f )
     [

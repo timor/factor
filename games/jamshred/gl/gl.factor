@@ -6,7 +6,7 @@ math.functions math.vectors opengl opengl.gl opengl.glu
 opengl.demo-support sequences specialized-arrays locals ;
 FROM: alien.c-types => float ;
 specialized-array: float
-in: jamshred.gl
+IN: jamshred.gl
 
 CONSTANT: min-vertices 6 ;
 CONSTANT: max-vertices 32 ;

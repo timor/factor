@@ -1,5 +1,5 @@
 USING: math kernel kernel.private slots.private ;
-in: benchmark.typecheck3
+IN: benchmark.typecheck3
 
 TUPLE: hello n ;
 

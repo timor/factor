@@ -1,7 +1,7 @@
 USING: accessors continuations fry http.client images.loader
 images.loader.private images.viewer io io.styles kernel memoize
 prettyprint sequences twitter assocs ;
-in: twitter.prettyprint
+IN: twitter.prettyprint
 
 MEMO: load-http-image ( url -- image/f )
     '[ _

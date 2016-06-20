@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays calendar io io.backend io.encodings.utf8
 io.launcher ;
-in: build-support
+IN: build-support
 
 : build-make-target ( -- string )
     <process>

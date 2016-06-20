@@ -3,7 +3,7 @@
 USING: accessors calendar db db.sqlite db.tuples db.types kernel
 math math.order sequences combinators.short-circuit
 io.pathnames ;
-in: webapps.mason.backend
+IN: webapps.mason.backend
 
 CONSTANT: +idle+ "idle" ;
 CONSTANT: +starting+ "starting" ;

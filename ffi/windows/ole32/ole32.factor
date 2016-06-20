@@ -4,7 +4,7 @@ math.order namespaces make math.parser windows.kernel32
 combinators locals specialized-arrays literals splitting
 grouping classes.struct combinators.smart ;
 specialized-array: uchar
-in: windows.ole32
+IN: windows.ole32
 
 library: ole32
 

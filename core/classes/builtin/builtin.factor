@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: classes classes.algebra.private classes.private kernel
 kernel.private make namespaces sequences words ;
-in: classes.builtin
+IN: classes.builtin
 
 symbol: builtins
 

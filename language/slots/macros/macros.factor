@@ -2,7 +2,7 @@
 USING: combinators compiler.units fry generalizations kernel
 locals macros math quotations sequences sequences.generalizations
 slots vectors ;
-in: slots.macros
+IN: slots.macros
 
 ! Fundamental accessors
 

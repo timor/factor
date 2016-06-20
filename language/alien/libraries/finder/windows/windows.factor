@@ -5,7 +5,7 @@ USING: alien.libraries.finder arrays combinators.short-circuit
 environment io.backend io.files io.files.info io.pathnames kernel
 sequences splitting system system-info.windows ;
 
-in: alien.libraries.finder.windows
+IN: alien.libraries.finder.windows
 
 PRIVATE<
 

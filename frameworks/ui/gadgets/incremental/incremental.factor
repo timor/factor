@@ -3,7 +3,7 @@
 USING: accessors combinators grouping kernel math math.vectors
 namespaces sequences threads ui.gadgets ui.gadgets.packs
 ui.gadgets.private ;
-in: ui.gadgets.incremental
+IN: ui.gadgets.incremental
 
 TUPLE: incremental < pack cursor ;
 

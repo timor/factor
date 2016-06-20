@@ -1,5 +1,5 @@
 USING: python.syntax ;
-in: python.modules.sys
+IN: python.modules.sys
 
 PY-FROM: sys =>
     path ( -- seq )

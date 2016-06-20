@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs combinators fry grouping kernel namespaces
 sequences sets stack-checker.dependencies words ;
-in: compiler.crossref
+IN: compiler.crossref
 
 symbol: compiled-crossref
 

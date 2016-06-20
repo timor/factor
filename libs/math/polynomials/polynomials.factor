@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays combinators fry kernel macros make math math.bits
 math.order math.vectors sequences splitting vectors ;
-in: math.polynomials
+IN: math.polynomials
 
 PRIVATE<
 

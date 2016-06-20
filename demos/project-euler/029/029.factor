@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: hashtables kernel math.functions math.ranges project-euler.common
     sequences sets ;
-in: project-euler.029
+IN: project-euler.029
 
 ! http://projecteuler.net/index.php?section=problems&id=29
 

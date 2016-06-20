@@ -6,7 +6,7 @@ opengl.glu processing.shapes sequences sequences.generalizations
 shuffle threads ui ui.gadgets ui.gestures ui.render ;
 FROM: multi-methods => GENERIC: METHOD: ;
 FROM: syntax => M: ;
-in: pong
+IN: pong
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !

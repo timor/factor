@@ -12,7 +12,7 @@ ui.backend.gtk.io ui.clipboards ui.event-loop ui.gadgets
 ui.gadgets.private ui.gadgets.worlds ui.gestures
 ui.pixel-formats ui.pixel-formats.private ui.private
 vocabs.loader ;
-in: ui.backend.gtk
+IN: ui.backend.gtk
 
 singleton: gtk-ui-backend
 

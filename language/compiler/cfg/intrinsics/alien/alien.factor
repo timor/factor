@@ -5,7 +5,7 @@ combinators.short-circuit compiler.cfg compiler.cfg.builder.blocks
 compiler.cfg.hats compiler.cfg.instructions compiler.cfg.stacks
 compiler.tree.propagation.info cpu.architecture fry kernel locals math
 namespaces sequences ;
-in: compiler.cfg.intrinsics.alien
+IN: compiler.cfg.intrinsics.alien
 
 : emit-<displaced-alien>? ( node -- ? )
     node-input-infos {

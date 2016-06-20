@@ -3,7 +3,7 @@
 USING: combinators.short-circuit math math.order math.parser
 kernel sequences sequences.deep peg peg.parsers assocs arrays
 hashtables strings namespaces make ascii ;
-in: http.parsers
+IN: http.parsers
 
 : except ( quot -- parser )
     [ not ] compose satisfy ; inline

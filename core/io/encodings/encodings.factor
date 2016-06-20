@@ -3,7 +3,7 @@
 USING: accessors byte-arrays combinators destructors io
 io.streams.plain kernel kernel.private math namespaces sbufs
 sequences sequences.private splitting strings strings.private ;
-in: io.encodings
+IN: io.encodings
 
 ! The encoding descriptor protocol
 

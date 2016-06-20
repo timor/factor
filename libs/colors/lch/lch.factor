@@ -4,7 +4,7 @@
 USING: accessors colors colors.lab colors.luv colors.xyz kernel
 locals math math.constants math.functions math.libm ;
 
-in: colors.lch
+IN: colors.lch
 
 TUPLE: LCHuv l c h alpha ;
 

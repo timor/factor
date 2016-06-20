@@ -6,7 +6,7 @@ kernel locals namespaces splitting sequences system
 tools.deploy.backend tools.deploy.config
 tools.deploy.config.editor tools.deploy.windows.ico
 vocabs.loader vocabs.metadata windows.shell32 windows.user32 ;
-in: tools.deploy.windows
+IN: tools.deploy.windows
 
 CONSTANT: app-icon-resource-id "APPICON" ;
 

@@ -2,7 +2,7 @@ USING: accessors arrays combinators fry grouping kernel macros math
 math.ranges sequences sequences.generalizations
 sequences.private vectors ;
 
-in: grouping.extras
+IN: grouping.extras
 
 : 2clump-map-as ( seq quot: ( elt1 elt2 -- newelt ) exemplar -- seq' )
     [ dup 1 short tail-slice ] 2dip 2map-as ; inline

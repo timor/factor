@@ -5,7 +5,7 @@ combinators.short-circuit compiler.cfg.instructions
 compiler.cfg.registers compiler.cfg.representations.rewrite
 compiler.cfg.representations.selection cpu.architecture kernel
 layouts locals make math namespaces sequences ;
-in: compiler.cfg.representations.peephole
+IN: compiler.cfg.representations.peephole
 
 GENERIC: optimize-insn ( insn -- ) ;
 

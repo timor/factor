@@ -1,6 +1,6 @@
 ! (c)2010 Joe Groff bsd license
 USING: accessors fry growable kernel locals math sequences ;
-in: sequences.inserters
+IN: sequences.inserters
 
 TUPLE: offset-growable { underlying read-only } { offset read-only } ;
 C: <offset-growable> offset-growable ;

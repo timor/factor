@@ -4,7 +4,7 @@ USING: accessors arrays colors.constants combinators fonts fry
 kernel make math.functions models namespaces sequences splitting
 strings ui.baseline-alignment ui.gadgets ui.gadgets.tracks
 ui.pens.solid ui.render ui.text ui.theme.images ;
-in: ui.gadgets.labels
+IN: ui.gadgets.labels
 
 ! A label gadget draws a string.
 TUPLE: label < aligned-gadget text font ;

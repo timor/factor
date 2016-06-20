@@ -3,6 +3,6 @@
 
 USING: hashtables.numbers kernel prettyprint.custom ;
 
-in: hashtables.numbers
+IN: hashtables.numbers
 
 M: number-hashtable pprint-delims drop \ NH{ \ } ;

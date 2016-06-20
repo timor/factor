@@ -4,7 +4,7 @@ USING: kernel io math math.functions math.parser math.vectors
 math.vectors.simd sequences specialized-arrays ;
 QUALIFIED-WITH: alien.c-types c ;
 specialized-array: float-4
-in: benchmark.simd-1
+IN: benchmark.simd-1
 
 : <point> ( n -- float-4 )
     >float [ sin ] [ cos 3 * ] [ sin sq 2 / ] tri

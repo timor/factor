@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators.short-circuit kernel math math.order
 sequences ;
-in: progress-bars
+IN: progress-bars
 
 ERROR: invalid-percent x ;
 

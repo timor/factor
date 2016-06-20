@@ -5,7 +5,7 @@ sequences.private strings sets assocs make lexer namespaces parser
 arrays fry locals regexp.parser splitting sorting regexp.ast
 regexp.negation regexp.compiler compiler.units words math.ranges
 multiline ;
-in: regexp
+IN: regexp
 
 TUPLE: regexp
     { raw read-only }

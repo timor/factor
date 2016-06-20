@@ -5,7 +5,7 @@ sequences continuations sequences.deep prettyprint
 words namespaces slots slots.private classes mirrors
 classes.tuple combinators calendar.format classes.singleton
 accessors quotations random db.private ;
-in: db.types
+IN: db.types
 
 HOOK: persistent-table db-connection ( -- hash ) ;
 HOOK: compound db-connection ( string obj -- hash ) ;

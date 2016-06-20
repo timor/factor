@@ -5,7 +5,7 @@ USING: assocs combinators.short-circuit kernel make math
 math.order math.parser math.ranges regexp sequences splitting
 strings ;
 
-in: html.entities
+IN: html.entities
 
 PRIVATE<
 

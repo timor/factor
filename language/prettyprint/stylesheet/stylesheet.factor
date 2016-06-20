@@ -3,7 +3,7 @@
 USING: assocs colors colors.constants combinators
 combinators.short-circuit hashtables io.styles kernel literals
 namespaces sequences words words.symbol ;
-in: prettyprint.stylesheet
+IN: prettyprint.stylesheet
 
 PRIVATE<
 

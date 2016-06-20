@@ -3,7 +3,7 @@
 USING: kernel present io math sequences assocs math.ranges
 math.order fry tools.time locals smalltalk.selectors
 smalltalk.ast smalltalk.classes ;
-in: smalltalk.library
+IN: smalltalk.library
 
 selector\ print
 selector\ asString

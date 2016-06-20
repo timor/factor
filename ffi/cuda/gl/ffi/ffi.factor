@@ -1,6 +1,6 @@
 ! (c)2010 Joe Groff bsd license
 USING: alien.c-types alien.syntax cuda.ffi opengl.gl ;
-in: cuda.gl.ffi
+IN: cuda.gl.ffi
 
 library: cuda
 

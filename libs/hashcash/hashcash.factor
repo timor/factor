@@ -3,7 +3,7 @@
 USING: accessors byte-arrays calendar calendar.format checksums
 checksums.openssl classes.tuple fry kernel make math math.functions
 math.parser math.ranges present random sequences splitting strings ;
-in: hashcash
+IN: hashcash
 
 ! Hashcash implementation
 ! Reference materials listed below:

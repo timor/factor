@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators io kernel lists math math.parser
 sequences splitting ;
-in: rpn
+IN: rpn
 
 SINGLETONS: add-insn sub-insn mul-insn div-insn ;
 TUPLE: push-insn value ;

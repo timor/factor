@@ -8,7 +8,7 @@ core-foundation.urls core-foundation.utilities
 core-graphics.types destructors fry images images.memory kernel
 libc math opengl.gl sequences ;
 
-in: core-graphics
+IN: core-graphics
 
 TYPEDEF: int CGImageAlphaInfo ;
 CONSTANT: kCGImageAlphaNone 0 ;

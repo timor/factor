@@ -4,7 +4,7 @@
 ! Lunar Rescue: http://www.mamedb.com/game/lrescue
 !
 USING: kernel space-invaders ui ;
-in: lunar-rescue
+IN: lunar-rescue
 
 TUPLE: lunar-rescue < space-invaders ;
 

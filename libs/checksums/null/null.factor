@@ -1,5 +1,5 @@
 USING: checksums kernel ;
-in: checksums.null
+IN: checksums.null
 
 singleton: null
 

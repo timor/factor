@@ -5,7 +5,7 @@ images.normalization images.viewer io io.backend io.directories
 io.encodings.binary io.files io.pathnames io.streams.byte-array
 kernel locals namespaces quotations random sequences serialize
 tools.test ;
-in: images.testing
+IN: images.testing
 
 PRIVATE<
 

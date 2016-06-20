@@ -4,7 +4,7 @@ USING: accessors peg peg.parsers memoize kernel sequences
 logging arrays words strings vectors io io.files
 io.encodings.utf8 namespaces make combinators logging.server
 calendar calendar.format assocs prettyprint ;
-in: logging.parser
+IN: logging.parser
 
 TUPLE: log-entry date level word-name message ;
 

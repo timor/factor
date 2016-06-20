@@ -1,7 +1,7 @@
 ! Copyright (C) 2012 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license
 USING: accessors kernel math sequences ;
-in: sequences.rotated
+IN: sequences.rotated
 
 TUPLE: rotated
 { seq read-only }

@@ -3,7 +3,7 @@
 USING: accessors byte-arrays combinators destructors growable
 io io.private io.streams.plain kernel math math.order sequences
 sequences.private strings ;
-in: io.streams.sequence
+IN: io.streams.sequence
 
 ! Readers
 slot: underlying

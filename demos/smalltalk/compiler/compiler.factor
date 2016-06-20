@@ -6,7 +6,7 @@ sequences.generalizations sets smalltalk.ast smalltalk.classes
 smalltalk.compiler.assignment smalltalk.compiler.lexenv
 smalltalk.compiler.return smalltalk.selectors splitting vocabs
 words ;
-in: smalltalk.compiler
+IN: smalltalk.compiler
 
 GENERIC: compile-ast ( lexenv ast -- quot ) ;
 

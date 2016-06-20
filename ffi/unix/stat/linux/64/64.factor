@@ -1,6 +1,6 @@
 USING: kernel alien.c-types alien.syntax math classes.struct
 unix.time unix.types ;
-in: unix.stat
+IN: unix.stat
 
 ! Ubuntu 7.10 64-bit
 

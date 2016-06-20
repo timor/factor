@@ -1,7 +1,7 @@
 ! Copyright (C) 2005, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel ui.gadgets ui.baseline-alignment ;
-in: ui.gadgets.wrappers
+IN: ui.gadgets.wrappers
 
 TUPLE: wrapper < gadget ;
 

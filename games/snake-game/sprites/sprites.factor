@@ -4,7 +4,7 @@ USING: accessors arrays assocs byte-vectors formatting fry
 images images.loader kernel locals make math math.vectors
 opengl.textures sequences ;
 
-in: snake-game.sprites
+IN: snake-game.sprites
 
 : new-image-like ( image w h -- image )
     [ clone ] 2dip

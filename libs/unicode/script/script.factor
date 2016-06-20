@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: interval-maps namespaces parser simple-flat-file
 words.constant ;
-in: unicode.script
+IN: unicode.script
 
 COMPILE<
 "script-table" create-word-in

@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: accessors classes classes.tuple fry kernel sequences slots ;
-in: classes.tuple.change-tracking
+IN: classes.tuple.change-tracking
 
 TUPLE: change-tracking-tuple
     { changed? boolean } ;

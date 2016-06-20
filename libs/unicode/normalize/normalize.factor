@@ -4,7 +4,7 @@ USING: accessors arrays ascii combinators
 combinators.short-circuit hints kernel locals make math
 math.order sbufs sequences sorting.insertion strings
 unicode.data vectors ;
-in: unicode.normalize
+IN: unicode.normalize
 
 PRIVATE<
 ! Conjoining Jamo behavior

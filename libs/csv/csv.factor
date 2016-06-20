@@ -3,7 +3,7 @@
 USING: combinators fry io io.files io.streams.string kernel
 make math memoize namespaces sbufs sequences sequences.private
 unicode ;
-in: csv
+IN: csv
 
 symbol: delimiter
 

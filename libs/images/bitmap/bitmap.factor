@@ -8,7 +8,7 @@ math.bitwise sequences specialized-arrays summary
 io.streams.throwing ;
 QUALIFIED-WITH: bitstreams b ;
 SPECIALIZED-ARRAYS: uint ushort ;
-in: images.bitmap
+IN: images.bitmap
 
 ! http://www.fileformat.info/format/bmp/egff.htm
 ! http://www.digicamsoft.com/bmp/bmp.html

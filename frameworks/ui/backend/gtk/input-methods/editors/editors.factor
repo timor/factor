@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel sequences ui.backend.gtk.input-methods
 ui.gadgets.editors ;
-in: ui.backend.gtk.input-methods.editors
+IN: ui.backend.gtk.input-methods.editors
 
 M: editor support-input-methods? drop t ;
 

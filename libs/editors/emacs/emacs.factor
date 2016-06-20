@@ -1,6 +1,6 @@
 USING: combinators.short-circuit editors io.standard-paths
 kernel make math.parser namespaces sequences system ;
-in: editors.emacs
+IN: editors.emacs
 
 singleton: emacsclient
 emacsclient editor-class set-global

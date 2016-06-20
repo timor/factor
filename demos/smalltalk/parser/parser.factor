@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: peg peg.ebnf smalltalk.ast sequences sequences.deep strings
 math.parser kernel arrays byte-arrays math assocs accessors ;
-in: smalltalk.parser
+IN: smalltalk.parser
 
 ! :mode=text:noTabs=true:
 

@@ -5,7 +5,7 @@ namespaces opengl sequences sorting ui.commands ui.gadgets
 ui.gadgets.buttons ui.gadgets.glass ui.gadgets.packs
 ui.gadgets.worlds ui.gestures ui.operations
 ui.pens ui.pens.solid ui.theme ui.tools.common ;
-in: ui.gadgets.menus
+IN: ui.gadgets.menus
 
 : show-menu ( owner menu -- )
     [ find-world ] dip hand-loc get-global { 0 0 } <rect> show-glass ;

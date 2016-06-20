@@ -1,7 +1,7 @@
 USING: alien.c-types alien.syntax windows.directx
 windows.directx.d3d9 windows.directx.d3dx9core
 windows.directx.d3dx9mesh windows.types ;
-in: windows.directx.d3dx9shape
+IN: windows.directx.d3dx9shape
 
 library: d3dx9
 

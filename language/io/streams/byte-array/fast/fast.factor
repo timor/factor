@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien byte-vectors io kernel libc math sequences ;
-in: io.streams.byte-array.fast
+IN: io.streams.byte-array.fast
 
 ! This is split off from io.streams.byte-array because it uses
 ! memcpy, which is a non-core word that only works after the

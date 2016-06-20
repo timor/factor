@@ -3,7 +3,7 @@
 USING: alien alien.c-types alien.syntax parser namespaces
 kernel math windows.types generalizations math.bitwise
 classes.struct literals windows.kernel32 system accessors ;
-in: windows.user32
+IN: windows.user32
 
 ! HKL for ActivateKeyboardLayout
 CONSTANT: HKL_PREV 0 ;

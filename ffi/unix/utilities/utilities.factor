@@ -3,7 +3,7 @@
 USING: alien alien.c-types alien.data alien.strings
 combinators.short-circuit fry kernel layouts sequences accessors
 specialized-arrays ;
-in: unix.utilities
+IN: unix.utilities
 
 specialized-array: void*
 

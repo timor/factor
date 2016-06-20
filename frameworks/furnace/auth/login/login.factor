@@ -11,7 +11,7 @@ furnace.utilities
 furnace.redirection
 furnace.conversations
 furnace.auth.login.permits ;
-in: furnace.auth.login
+IN: furnace.auth.login
 
 symbol: permit-id
 

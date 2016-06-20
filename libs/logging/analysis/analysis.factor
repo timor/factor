@@ -4,7 +4,7 @@ USING: kernel sequences namespaces words assocs logging sorting
 prettyprint io io.styles io.files io.encodings.utf8
 strings combinators accessors arrays math
 logging.server logging.parser calendar.format ;
-in: logging.analysis
+IN: logging.analysis
 
 symbol: word-names
 symbol: errors

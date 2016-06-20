@@ -3,7 +3,7 @@
 USING: accessors destructors io.backend.unix io.mmap
 io.mmap.private kernel libc literals locals system unix
 unix.ffi ;
-in: io.mmap.unix
+IN: io.mmap.unix
 
 :: mmap-open ( path length prot flags open-mode -- alien fd )
     [

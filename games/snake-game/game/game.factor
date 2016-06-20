@@ -3,7 +3,7 @@
 USING: accessors arrays combinators kernel make math random
 sequences sets snake-game.constants snake-game.util sorting ;
 
-in: snake-game.game
+IN: snake-game.game
 
 TUPLE: snake-game
     snake snake-loc snake-dir food-loc

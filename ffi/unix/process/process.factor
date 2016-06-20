@@ -1,6 +1,6 @@
 USING: alien.c-types alien.data alien.syntax io.encodings.utf8
 kernel libc math sequences unix unix.types unix.utilities ;
-in: unix.process
+IN: unix.process
 
 ! Low-level Unix process launching utilities. These are used
 ! to implement io.launcher on Unix. User code should use

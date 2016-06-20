@@ -3,7 +3,7 @@
 USING: accessors kernel locals math math.order math.polynomials
 math.splines opengl.gl sequences ui.gadgets ui.gadgets.panes ui.render
 arrays ;
-in: math.splines.viewer
+IN: math.splines.viewer
 
 PRIVATE<
 : eval-polynomials ( polynomials-seq n -- xy-sequence )

@@ -11,7 +11,7 @@ namespaces prettyprint sequences system vm words ;
 QUALIFIED-WITH: alien.c-types c ;
 FROM: cpu.ppc.assembler => B ;
 FROM: math => float ;
-in: cpu.ppc
+IN: cpu.ppc
 
 ! PowerPC register assignments:
 ! r0: reserved for function prolog/epilogues

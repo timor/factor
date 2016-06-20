@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs kernel namespaces ;
-in: compiler.cfg.value-numbering.graph
+IN: compiler.cfg.value-numbering.graph
 
 symbol: input-expr-counter
 

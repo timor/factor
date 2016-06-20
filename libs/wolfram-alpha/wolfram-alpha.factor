@@ -5,7 +5,7 @@ USING: accessors colors.constants formatting http http.client
 images.gif images.http io io.styles kernel namespaces sequences
 splitting ui urls.encoding xml xml.data xml.traversal ;
 
-in: wolfram-alpha
+IN: wolfram-alpha
 
 symbol: wolfram-api-id
 

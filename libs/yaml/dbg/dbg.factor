@@ -5,7 +5,7 @@ combinators continuations destructors io io.backend
 io.encodings.ascii io.encodings.string io.encodings.utf8
 io.launcher kernel libc locals math.parser prettyprint sequences
 yaml.ffi yaml.private ;
-in: yaml.dbg
+IN: yaml.dbg
 
 : event. ( event -- )
     dup [ data>> ] [ type>> ] bi* {

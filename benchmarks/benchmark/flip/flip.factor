@@ -1,7 +1,7 @@
 ! Copyright (C) 2012 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math sequences ;
-in: benchmark.flip
+IN: benchmark.flip
 
 CONSTANT: my-generic { { 1 2 3 } V{ 4 5 6 } "ABC" } ;
 CONSTANT: my-array { { 1 2 3 } { 4 5 6 } { 7 8 9 } } ;

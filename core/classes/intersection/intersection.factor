@@ -3,7 +3,7 @@
 USING: accessors assocs classes classes.algebra
 classes.algebra.private classes.builtin classes.private
 combinators kernel make sequences words ;
-in: classes.intersection
+IN: classes.intersection
 
 PREDICATE: intersection-class < class
     "metaclass" word-prop intersection-class eq? ;

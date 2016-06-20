@@ -1,7 +1,7 @@
 ! (c) Joe Groff, see license for details
 USING: accessors combinators continuations fry kernel lexer
 math parser quotations sequences vectors words words.alias ;
-in: literals
+IN: literals
 
 PRIVATE<
 

@@ -1,5 +1,5 @@
 USING: arrays editors io.standard-paths kernel namespaces ;
-in: editors.wordpad
+IN: editors.wordpad
 
 singleton: wordpad
 wordpad editor-class set-global

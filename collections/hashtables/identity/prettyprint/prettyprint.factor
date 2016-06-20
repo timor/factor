@@ -3,6 +3,6 @@
 
 USING: hashtables.identity kernel prettyprint.custom ;
 
-in: hashtables.identity.prettyprint
+IN: hashtables.identity.prettyprint
 
 M: identity-hashtable pprint-delims drop \ IH{ \ } ;

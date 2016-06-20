@@ -3,7 +3,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays combinators.short-circuit kernel
 locals math math.vectors random sequences ;
-in: boids.simulation
+IN: boids.simulation
 
 CONSTANT: width 512 ;
 CONSTANT: height 512 ;

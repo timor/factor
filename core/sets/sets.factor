@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Daniel Ehrenberg
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs hashtables kernel math sequences vectors ;
-in: sets
+IN: sets
 
 ! Set protocol
 mixin: set

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.c-types alien.syntax words ;
 FROM: math => float mod ;
-in: math.libm
+IN: math.libm
 
 library: libm
 

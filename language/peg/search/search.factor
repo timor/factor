@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators continuations io io.streams.string kernel
 math memoize namespaces peg sequences strings ;
-in: peg.search
+IN: peg.search
 
 : stream-tree-write ( object stream -- )
     {

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs fry kernel namespaces quotations
 sequences stack-checker.errors stack-checker.recursive-state ;
-in: stack-checker.values
+IN: stack-checker.values
 
 : <value> ( -- value ) \ <value> counter ;
 

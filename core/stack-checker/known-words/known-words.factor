@@ -26,7 +26,7 @@ stack-checker.dependencies
 stack-checker.recursive-state
 stack-checker.row-polymorphism ;
 QUALIFIED-WITH: generic.single.private gsp ;
-in: stack-checker.known-words
+IN: stack-checker.known-words
 
 : infer-special ( word -- )
     [ current-word set ] [ "special" word-prop call( -- ) ] bi ;

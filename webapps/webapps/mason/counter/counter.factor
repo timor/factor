@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors furnace.actions http.server.responses
 webapps.mason.backend math.parser ;
-in: webapps.mason.counter
+IN: webapps.mason.counter
 
 : <counter-action> ( -- action )
     <action>

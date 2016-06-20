@@ -4,7 +4,7 @@ USING: accessors assocs columns combinators compiler.tree
 compiler.tree.dead-code.liveness compiler.tree.dead-code.simple
 fry kernel namespaces sequences stack-checker.backend
 stack-checker.branches ;
-in: compiler.tree.dead-code.branches
+IN: compiler.tree.dead-code.branches
 
 M: #if mark-live-values* look-at-inputs ;
 

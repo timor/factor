@@ -5,7 +5,7 @@ io.backend io.encodings.utf8 io.files.info io.files.info.unix
 io.pathnames kernel libc math math.parser sequences splitting
 strings system unix.statfs.linux unix.statvfs.linux ;
 FROM: csv => delimiter ;
-in: io.files.info.unix.linux
+IN: io.files.info.unix.linux
 
 TUPLE: linux-file-system-info < unix-file-system-info
 namelen ;

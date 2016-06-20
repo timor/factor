@@ -3,7 +3,7 @@
 USING: arrays ascii assocs combinators combinators.short-circuit
 fry io.encodings.string io.encodings.utf8 kernel linked-assocs
 make math math.parser present sequences splitting strings ;
-in: urls.encoding
+IN: urls.encoding
 
 : url-quotable? ( ch -- ? )
     {

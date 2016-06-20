@@ -4,7 +4,7 @@ USING: alien.c-types alien.data alien.syntax combinators
 core-foundation kernel math ;
 QUALIFIED-WITH: alien.c-types c ;
 FROM: math => float ;
-in: core-foundation.numbers
+IN: core-foundation.numbers
 
 TYPEDEF: void* CFNumberRef ;
 

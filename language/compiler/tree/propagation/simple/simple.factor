@@ -7,7 +7,7 @@ compiler.tree.propagation.constraints compiler.tree.propagation.info
 compiler.tree.propagation.inlining compiler.tree.propagation.nodes
 compiler.tree.propagation.slots continuations fry kernel
 math.intervals sequences stack-checker.dependencies words ;
-in: compiler.tree.propagation.simple
+IN: compiler.tree.propagation.simple
 
 M: #introduce propagate-before
     out-d>> [ object-info swap set-value-info ] each ;

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel system sequences combinators
 vocabs vocabs.loader io.files.types math ;
-in: io.files.info
+IN: io.files.info
 
 ! File info
 TUPLE: file-info-tuple type size size-on-disk permissions created modified

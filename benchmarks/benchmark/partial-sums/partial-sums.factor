@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: make math math.functions kernel io io.styles prettyprint
 combinators hints fry sequences ;
-in: benchmark.partial-sums
+IN: benchmark.partial-sums
 
 ! Helper words
 : summing-integers ( n quot -- y ) [ 0.0 ] [ iota ] [ ] tri* '[ 1 + @ + ] each ; inline

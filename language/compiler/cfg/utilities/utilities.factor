@@ -3,7 +3,7 @@
 USING: accessors arrays assocs combinators.short-circuit compiler.cfg
 compiler.cfg.instructions compiler.cfg.rpo cpu.architecture deques fry
 heaps kernel locals macros math sequences sets ;
-in: compiler.cfg.utilities
+IN: compiler.cfg.utilities
 
 : block>cfg ( bb -- cfg )
     f f rot <cfg> ;

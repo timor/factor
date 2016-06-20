@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors calendar classes.struct kernel libc math
 system time unix unix.time ;
-in: time.unix
+IN: time.unix
 
 : timestamp>timezone ( timestamp -- timezone )
     gmt-offset>> duration>minutes 1 \ timezone <struct-boa> ; inline

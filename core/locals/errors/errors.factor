@@ -1,7 +1,7 @@
 ! Copyright (C) 2007, 2008 Slava Pestov, Eduardo Cavazos.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel summary ;
-in: locals.errors
+IN: locals.errors
 
 ERROR: >r/r>-in-lambda-error ;
 

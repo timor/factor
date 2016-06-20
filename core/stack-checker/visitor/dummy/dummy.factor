@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: stack-checker.visitor kernel ;
-in: stack-checker.visitor.dummy
+IN: stack-checker.visitor.dummy
 
 M: f child-visitor f ;
 M: f #introduce, drop ;

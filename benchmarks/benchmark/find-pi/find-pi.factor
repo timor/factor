@@ -1,7 +1,7 @@
 ! Copyright (C) 2012 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel locals math ;
-in: benchmark.find-pi
+IN: benchmark.find-pi
 
 :: find-pi-to ( accuracy -- n approx )
     1 4 [

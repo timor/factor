@@ -5,7 +5,7 @@ db.queries db.sqlite.errors db.sqlite.ffi db.sqlite.lib
 db.tuples db.tuples.private db.types destructors interpolate
 kernel locals math math.parser namespaces nmake random sequences
 sequences.deep ;
-in: db.sqlite
+IN: db.sqlite
 
 TUPLE: sqlite-db path ;
 

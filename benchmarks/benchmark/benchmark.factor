@@ -3,7 +3,7 @@
 USING: arrays assocs continuations debugger formatting fry help.markup
 io io.styles kernel math memory prettyprint sequences
 tools.profiler.sampling tools.test tools.time vocabs.hierarchy vocabs.loader ;
-in: benchmark
+IN: benchmark
 
 : run-timing-benchmark ( vocab -- time )
     5 swap '[ gc [ _ run ] benchmark ] replicate infimum ;

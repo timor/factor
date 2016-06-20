@@ -1,6 +1,6 @@
 USING: kernel.private kernel sequences math combinators
 sequences.private ;
-in: benchmark.dispatch6
+IN: benchmark.dispatch6
 
 : dispatch6 ( n -- val )
     {

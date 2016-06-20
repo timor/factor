@@ -1,7 +1,7 @@
 USING: accessors assocs classes.struct io locals math.bitwise
 namespaces system tools.image-analyzer.utils tools.image-analyzer.vm
 vm vocabs.parser ;
-in: tools.image-analyzer.data-heap-reader
+IN: tools.image-analyzer.data-heap-reader
 FROM: alien.c-types => uchar heap-size ;
 FROM: arrays => 2array ;
 FROM: kernel => ? boa bi dup keep nip swap ;

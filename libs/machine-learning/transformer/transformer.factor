@@ -1,7 +1,7 @@
 ! Copyright (C) 2012 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: ;
-in: machine-learning.transformer
+IN: machine-learning.transformer
 
 GENERIC: fit-y ( y transformer -- ) ;
 GENERIC: transform-y ( y transformer -- y' ) ;

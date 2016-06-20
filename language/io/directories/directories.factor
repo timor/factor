@@ -3,7 +3,7 @@
 USING: accessors combinators combinators.short-circuit
 continuations destructors fry io io.backend io.encodings.binary
 io.files io.pathnames kernel namespaces sequences system vocabs ;
-in: io.directories
+IN: io.directories
 
 : set-current-directory ( path -- )
     absolute-path current-directory set ;

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays assocs cpu.architecture fry kernel layouts locals
 math math.order namespaces sequences vectors ;
-in: compiler.cfg.builder.alien.params
+IN: compiler.cfg.builder.alien.params
 
 symbol: stack-params
 

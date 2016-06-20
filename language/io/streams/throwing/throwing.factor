@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors destructors io kernel locals namespaces
 sequences fry math ;
-in: io.streams.throwing
+IN: io.streams.throwing
 
 ERROR: stream-exhausted n stream word ;
 

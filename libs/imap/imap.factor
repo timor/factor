@@ -4,7 +4,7 @@ io.encodings.string io.encodings.utf7 io.encodings.utf8 io.sockets
 io.sockets.secure io.streams.duplex io.streams.string kernel math math.parser
 sequences splitting strings ;
 qualified: pcre
-in: imap
+IN: imap
 
 ERROR: imap4-error ind data ;
 

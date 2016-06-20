@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Anton Gorenko.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: namespaces sequences ;
-in: gobject-introspection.common
+IN: gobject-introspection.common
 
 symbol: current-namespace-name
 

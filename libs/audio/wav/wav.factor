@@ -4,7 +4,7 @@ combinators.short-circuit io io.binary io.encodings.binary
 io.files io.streams.byte-array kernel locals math
 sequences alien alien.data classes.struct accessors
 audio.chunked-file audio.loader ;
-in: audio.wav
+IN: audio.wav
 
 CONSTANT: RIFF-MAGIC "RIFF" ;
 CONSTANT: WAVE-MAGIC "WAVE" ;

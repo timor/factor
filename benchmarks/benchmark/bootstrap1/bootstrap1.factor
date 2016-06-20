@@ -1,4 +1,4 @@
 USING: bootstrap.image ;
-in: benchmark.bootstrap1
+IN: benchmark.bootstrap1
 
 main: make-images

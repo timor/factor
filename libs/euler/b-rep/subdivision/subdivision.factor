@@ -2,7 +2,7 @@ USING: accessors arrays assocs euler.b-rep
 game.models.half-edge kernel locals math math.vectors
 math.vectors.simd.cords sequences sets typed fry ;
 FROM: sequences.private => nth-unsafe set-nth-unsafe ;
-in: euler.b-rep.subdivision
+IN: euler.b-rep.subdivision
 
 : <vertex> ( position -- vertex ) vertex new swap >>position ; inline
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel sequences unicode.categories math math.order
 combinators hints combinators.short-circuit ;
-in: xml.char-classes
+IN: xml.char-classes
 
 CATEGORY: 1.0name-start
     Ll Lu Lo Lt Nl | {

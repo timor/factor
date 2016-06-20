@@ -4,7 +4,7 @@ USING: accessors arrays assocs
 compiler.cfg.linear-scan.allocation
 compiler.cfg.linear-scan.live-intervals fry kernel math
 namespaces prettyprint sequences strings ;
-in: compiler.cfg.linear-scan.debugger
+IN: compiler.cfg.linear-scan.debugger
 
 : check-linear-scan ( live-intervals machine-registers -- )
     [

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators combinators.smart io kernel math math.parser
 math.ranges sequences ascii ;
-in: 99-bottles
+IN: 99-bottles
 
 : bottles ( n -- number string )
     [ dup 0 > [ number>string ] [ drop "No more" ] if ]

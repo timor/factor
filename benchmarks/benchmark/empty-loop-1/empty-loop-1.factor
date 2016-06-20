@@ -1,5 +1,5 @@
 USING: math math.private kernel sequences ;
-in: benchmark.empty-loop-1
+IN: benchmark.empty-loop-1
 
 : empty-loop-1 ( n -- )
     [ drop ] each-integer ;

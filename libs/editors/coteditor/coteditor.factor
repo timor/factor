@@ -1,6 +1,6 @@
 USING: editors io.pathnames io.standard-paths kernel make
 math.parser namespaces ;
-in: editors.coteditor
+IN: editors.coteditor
 
 singleton: coteditor
 coteditor editor-class set-global

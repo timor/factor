@@ -3,7 +3,7 @@
 USING: kernel fry splitting ascii accessors combinators
        arrays classes.tuple math.order words assocs
        irc.messages.base sequences ;
-in: irc.messages.parser
+IN: irc.messages.parser
 
 PRIVATE<
 : split-at-first ( seq separators -- before after )

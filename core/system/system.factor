@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs continuations init io kernel kernel.private make
 math math.parser namespaces sequences ;
-in: system
+IN: system
 
 PRIMITIVE: (exit) ( n -- * ) ;
 PRIMITIVE: nano-count ( -- ns ) ;

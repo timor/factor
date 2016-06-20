@@ -3,7 +3,7 @@
 USING: accessors arrays fry kernel math math.order sequences
 ui.baseline-alignment ui.gadgets ui.gadgets.labels
 ui.gadgets.packs.private ui.render wrap.words ;
-in: ui.gadgets.paragraphs
+IN: ui.gadgets.paragraphs
 
 mixin: word-break
 

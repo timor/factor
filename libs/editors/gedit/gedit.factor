@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: editors io.launcher io.standard-paths kernel make
 math.parser namespaces sequences ;
-in: editors.gedit
+IN: editors.gedit
 
 singleton: gedit
 gedit editor-class set-global

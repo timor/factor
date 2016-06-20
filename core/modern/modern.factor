@@ -6,7 +6,7 @@ io.encodings.utf8 io.files kernel locals macros make math
 math.order modern.paths modern.slices multiline namespaces
 quotations sequences sequences.extras splitting modern.lexer
 splitting.monotonic strings unicode generalizations shuffle ;
-in: modern
+IN: modern
 
 COMPILE<
 ! Base rules, everything should have a generator macro

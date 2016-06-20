@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs combinators fry hashtables
 irc.client.base irc.client.chats kernel sequences splitting ;
-in: irc.client.participants
+IN: irc.client.participants
 
 TUPLE: participant nick operator voice ;
 : <participant> ( name -- participant )

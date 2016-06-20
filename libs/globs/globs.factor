@@ -4,7 +4,7 @@ USING: accessors arrays combinators combinators.short-circuit
 io.directories io.files io.files.info io.pathnames kernel locals
 make peg.ebnf regexp regexp.combinators sequences strings system
 unicode ;
-in: globs
+IN: globs
 
 : not-path-separator ( -- sep )
     os windows? R{{ [^\\/\\]}} R{{ [^\\/]}} ? ; foldable

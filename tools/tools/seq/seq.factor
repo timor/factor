@@ -4,7 +4,7 @@
 USING: combinators command-line io kernel math.order math.parser
 math.ranges namespaces sequences ;
 
-in: tools.seq
+IN: tools.seq
 
 : usage ( -- )
     "Usage: seq [first [incr]] last" print ;

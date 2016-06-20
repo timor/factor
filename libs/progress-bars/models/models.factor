@@ -3,7 +3,7 @@
 USING: accessors calendar fonts fry io io.files io.files.info
 kernel math models models.arrow namespaces progress-bars
 threads ui.gadgets.labels ui.gadgets.panes ;
-in: progress-bars.models
+IN: progress-bars.models
 
 symbol: progress-bar
 

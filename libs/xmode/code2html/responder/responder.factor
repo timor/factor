@@ -3,7 +3,7 @@
 USING: io io.files io.pathnames io.encodings.utf8 namespaces
 http.server http.server.responses http.server.static http
 xmode.code2html kernel sequences accessors fry ;
-in: xmode.code2html.responder
+IN: xmode.code2html.responder
 
 : <sources> ( root -- responder )
     [

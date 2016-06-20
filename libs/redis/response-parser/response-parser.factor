@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Bruno Deferrari
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators io kernel math math.parser sequences ;
-in: redis.response-parser
+IN: redis.response-parser
 
 defer: read-response
 

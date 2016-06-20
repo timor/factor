@@ -7,7 +7,7 @@ stack-checker strings strings.parser summary unicode
 vocabs.parser words ;
 FROM: vocabs.parser => search ;
 FROM: peg.search => replace ;
-in: peg.ebnf
+IN: peg.ebnf
 
 : rule ( name word -- parser )
     ! Given an EBNF word produced from EBNF: return the EBNF rule

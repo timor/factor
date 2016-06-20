@@ -5,7 +5,7 @@ USING: arrays assocs combinators combinators.short-circuit
 formatting hashtables io io.streams.string kernel make math
 namespaces quoting sequences splitting strings strings.parser ;
 
-in: ini-file
+IN: ini-file
 
 PRIVATE<
 

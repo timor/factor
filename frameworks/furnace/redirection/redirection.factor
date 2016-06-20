@@ -3,7 +3,7 @@
 USING: kernel accessors combinators namespaces fry urls http
 http.server http.server.redirection http.server.responses
 http.server.remapping http.server.filters furnace.utilities ;
-in: furnace.redirection
+IN: furnace.redirection
 
 : <redirect> ( url -- response )
     adjust-redirect-url request get method>> {

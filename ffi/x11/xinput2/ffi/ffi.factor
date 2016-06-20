@@ -3,7 +3,7 @@
 USING: alien alien.c-types alien.libraries alien.syntax
 classes.struct locals sequences x11.syntax x11.xlib ;
 EXCLUDE: math => float ;
-in: x11.xinput2.ffi
+IN: x11.xinput2.ffi
 
 COMPILE< "xinput2" "libXi.so" cdecl add-library COMPILE>
 

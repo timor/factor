@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.accessors kernel math sequences
 sequences.private ;
-in: byte-arrays
+IN: byte-arrays
 
 BUILTIN: byte-array
 { length array-capacity read-only initial: 0 } ;

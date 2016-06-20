@@ -1,5 +1,5 @@
 USING: kernel sequences math math.functions vectors ;
-in: benchmark.stack
+IN: benchmark.stack
 
 : stack-loop ( vec -- )
     1000 [

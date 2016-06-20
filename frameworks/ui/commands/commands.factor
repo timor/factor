@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs fry help.markup kernel make quotations
 sequences splitting tr ui.gestures unicode words ;
-in: ui.commands
+IN: ui.commands
 
 symbol: +nullary+
 symbol: +listener+

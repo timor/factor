@@ -5,7 +5,7 @@ compiler.cfg.linear-scan compiler.cfg.representations
 compiler.cfg.save-contexts compiler.cfg.ssa.destruction
 compiler.cfg.stacks.clearing compiler.cfg.stacks.vacant compiler.cfg.utilities
 compiler.cfg.write-barrier ;
-in: compiler.cfg.finalization
+IN: compiler.cfg.finalization
 
 : finalize-cfg ( cfg -- )
     {

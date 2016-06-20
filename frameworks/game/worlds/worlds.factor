@@ -2,7 +2,7 @@
 USING: accessors audio.engine combinators concurrency.promises
 destructors game.input game.loop kernel math parser sequences
 threads ui ui.gadgets ui.gadgets.worlds vocabs.parser words.constant ;
-in: game.worlds
+IN: game.worlds
 
 TUPLE: game-world < world
     game-loop

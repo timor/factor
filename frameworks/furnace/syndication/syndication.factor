@@ -3,7 +3,7 @@
 USING: accessors kernel sequences fry combinators syndication
 http.server.responses http.server.redirection furnace.actions
 furnace.utilities io.encodings.utf8 ;
-in: furnace.syndication
+IN: furnace.syndication
 
 GENERIC: feed-entry-title ( object -- string ) ;
 

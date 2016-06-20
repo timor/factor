@@ -1,7 +1,7 @@
 ! Copyright (C) 2013 John Benediktsson.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: checksums kernel math sequences ;
-in: checksums.bsd
+IN: checksums.bsd
 
 singleton: bsd
 

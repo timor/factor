@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: grouping io kernel lexer math math.functions math.parser
 namespaces sequences splitting ;
-in: money
+IN: money
 
 symbol: currency-token
 char: $ currency-token set-global

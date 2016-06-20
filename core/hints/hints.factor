@@ -6,7 +6,7 @@ generic.standard hashtables io.binary io.encodings
 io.streams.string kernel kernel.private math math.parser
 namespaces parser sbufs sequences sequences.private splitting
 splitting.private strings vectors words ;
-in: hints
+IN: hints
 
 GENERIC: specializer-predicate ( spec -- quot ) ;
 

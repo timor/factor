@@ -8,7 +8,7 @@ io.encodings.string io.encodings.utf8 io.sockets
 io.sockets.secure io.timeouts kernel logging make math.order
 math.parser namespaces prettyprint random sequences sets
 splitting strings words ;
-in: smtp
+IN: smtp
 
 TUPLE: smtp-config domain server tls? { read-timeout duration } auth ;
 

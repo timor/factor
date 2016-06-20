@@ -3,7 +3,7 @@
 
 USING: accessors colors colors.xyz kernel locals math ;
 
-in: colors.xyy
+IN: colors.xyy
 
 TUPLE: xyYa x y Y alpha ;
 

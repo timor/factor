@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax classes.struct kernel
 literals math.order sequences unix.types ;
-in: io.files.acls.macosx.ffi
+IN: io.files.acls.macosx.ffi
 
 TYPEDEF: uint acl_type_t ;
 TYPEDEF: uint acl_perm_t ;

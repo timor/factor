@@ -3,7 +3,7 @@
 USING: accessors colors colors.constants combinators kernel
 math.rectangles math.vectors namespaces opengl opengl.capabilities
 opengl.gl opengl.textures sequences sets ui.gadgets ui.pens ;
-in: ui.render
+IN: ui.render
 
 symbol: clip
 

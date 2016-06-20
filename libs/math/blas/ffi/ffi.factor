@@ -1,6 +1,6 @@
 USING: alien.fortran kernel math.blas.config namespaces ;
 FROM: alien.libraries => deploy-library ;
-in: math.blas.ffi
+IN: math.blas.ffi
 
 COMPILE<
 "blas" blas-library blas-fortran-abi [ get ] bi@

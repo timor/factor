@@ -1,7 +1,7 @@
 ! Copyright (c) 2008 Eric Mertens.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.functions sequences project-euler.common ;
-in: project-euler.100
+IN: project-euler.100
 
 ! http://projecteuler.net/index.php?section=problems&id=100
 

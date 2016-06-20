@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs continuations continuations.private kernel
 kernel.private namespaces ;
-in: init
+IN: init
 
 symbol: startup-hooks
 symbol: shutdown-hooks

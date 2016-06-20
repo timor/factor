@@ -1,7 +1,7 @@
 USING: alien.c-types sequences kernel math specialized-arrays
 fry ;
 specialized-array: int
-in: benchmark.dawes
+IN: benchmark.dawes
 
 ! Phil Dawes's performance problem
 

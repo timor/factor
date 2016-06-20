@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays kernel locals math math.order
 sequences sequences.private shuffle ;
-in: sequences.modified
+IN: sequences.modified
 
 TUPLE: modified ;
 

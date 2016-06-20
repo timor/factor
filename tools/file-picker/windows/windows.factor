@@ -3,7 +3,7 @@ alien.syntax classes.struct destructors file-picker
 io.encodings.string io.encodings.utf8 kernel libc literals math
 system windows windows.kernel32 windows.shell32 windows.types
 windows.user32 ;
-in: file-picker.windows
+IN: file-picker.windows
 library: shell32
 
 TYPEDEF: void* PIDLIST_ABSOLUTE ;

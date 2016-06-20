@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays fry kernel locals math math.matrices
 math.vectors sequences sequences.private ;
-in: math.matrices.laplace
+IN: math.matrices.laplace
 
 PRIVATE<
 

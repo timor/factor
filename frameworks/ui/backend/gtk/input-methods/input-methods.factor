@@ -1,7 +1,7 @@
 ! Copyright (C) 2011 Anton Gorenko.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel ui.gadgets ;
-in: ui.backend.gtk.input-methods
+IN: ui.backend.gtk.input-methods
 
 GENERIC: support-input-methods? ( gadget -- ? ) ;
 GENERIC: cursor-surrounding ( gadget -- text cursor-pos ) ;

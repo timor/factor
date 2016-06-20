@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors colors.constants combinators kernel math
 namespaces ;
-in: fonts
+IN: fonts
 
 CONSTANT: default-serif-font-name "serif" ;
 CONSTANT: default-sans-serif-font-name "sans-serif" ;

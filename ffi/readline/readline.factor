@@ -3,7 +3,7 @@
 USING: alien.data alien.libraries alien.strings compiler.units
 destructors fry io.encodings.utf8 kernel libc sequences words ;
 qualified: readline.ffi
-in: readline
+IN: readline
 
 : readline ( prompt -- str )
     [

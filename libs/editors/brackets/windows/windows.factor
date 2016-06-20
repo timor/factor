@@ -5,7 +5,7 @@ editors.brackets kernel make math.parser namespaces quotations
 sequences system windows.advapi32 windows.registry
 windows.registry.private windows.types windows.errors ;
 
-in: editors.brackets.windows
+IN: editors.brackets.windows
 
 M: windows brackets-path
     HKEY_LOCAL_MACHINE

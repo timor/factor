@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: ascii grouping kernel math.parser sequences
 strings.parser lexer math ;
-in: byte-arrays.hex
+IN: byte-arrays.hex
 
 ERROR: odd-length-hex-string string ;
 

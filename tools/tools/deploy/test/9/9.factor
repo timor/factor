@@ -1,5 +1,5 @@
 USING: alien alien.c-types kernel math ;
-in: tools.deploy.test.9
+IN: tools.deploy.test.9
 
 : callback-test ( -- callback )
     int { int } cdecl [ 1 + ] alien-callback ;

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs combinators definitions graphs kernel
 make namespaces quotations sequences sets words words.symbol ;
-in: classes
+IN: classes
 
 ERROR: bad-inheritance class superclass ;
 

@@ -15,7 +15,7 @@ alien.strings alien.syntax classes.struct math math.bitwise words
 sequences namespaces continuations io io.encodings.ascii x11.syntax
 literals ;
 FROM: alien.c-types => short ;
-in: x11.xlib
+IN: x11.xlib
 
 library: xlib
 

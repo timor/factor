@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs combinators grouping kernel locals math
 math.parser math.ranges memoize sequences ;
-in: benchmark.hashtables
+IN: benchmark.hashtables
 
 MEMO: strings ( -- str )
     0 100 [a,b) 1 [ + ] accumulate* [ number>string ] map ;

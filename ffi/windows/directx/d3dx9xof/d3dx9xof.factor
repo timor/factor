@@ -1,6 +1,6 @@
 USING: alien.syntax classes.struct windows.com windows.com.syntax
 windows.directx windows.kernel32 windows.ole32 windows.types ;
-in: windows.directx.d3dx9xof
+IN: windows.directx.d3dx9xof
 
 library: d3dx9
 

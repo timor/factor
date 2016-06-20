@@ -1,7 +1,7 @@
 ! Copyright (C) 2005, 2008 Chris Double, Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors concurrency.mailboxes kernel continuations ;
-in: concurrency.promises
+IN: concurrency.promises
 
 TUPLE: promise mailbox ;
 

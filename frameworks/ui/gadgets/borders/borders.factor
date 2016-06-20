@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors fry kernel math math.rectangles math.vectors
 sequences ui.baseline-alignment ui.gadgets ;
-in: ui.gadgets.borders
+IN: ui.gadgets.borders
 
 TUPLE: border < aligned-gadget
 { size initial: { 0 0 } }

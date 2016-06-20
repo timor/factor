@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs command-line fry kernel namespaces
 source-files.errors summary ;
-in: compiler.errors
+IN: compiler.errors
 
 symbol: +compiler-error+
 symbol: compiler-errors

@@ -1,7 +1,7 @@
 ! Copyright (C) 2007 Elie CHAFTARI
 ! See http://factorcode.org/license.txt for BSD license.
 
-in: asn1.ldap
+IN: asn1.ldap
 
 CONSTANT: SearchScope_BaseObject      0 ;
 CONSTANT: SearchScope_SingleLevel     1 ;

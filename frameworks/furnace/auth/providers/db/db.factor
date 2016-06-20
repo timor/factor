@@ -3,7 +3,7 @@
 USING: db db.tuples db.types accessors
 furnace.auth.providers kernel continuations
 classes.singleton ;
-in: furnace.auth.providers.db
+IN: furnace.auth.providers.db
 
 user "USERS"
 {

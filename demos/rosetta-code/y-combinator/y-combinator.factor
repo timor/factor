@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators fry kernel locals math ;
-in: rosetta-code.y-combinator
+IN: rosetta-code.y-combinator
 
 ! http://rosettacode.org/wiki/Y_combinator
 

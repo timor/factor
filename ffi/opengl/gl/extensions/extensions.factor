@@ -1,7 +1,7 @@
 USING: alien alien.syntax alien.parser combinators
 kernel parser sequences system words namespaces hashtables init
 math arrays assocs continuations lexer fry locals vocabs.parser ;
-in: opengl.gl.extensions
+IN: opengl.gl.extensions
 
 ERROR: unknown-gl-platform ;
 COMPILE< {

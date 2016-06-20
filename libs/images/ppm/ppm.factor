@@ -3,7 +3,7 @@
 USING: accessors ascii combinators images images.loader io
 io.encodings.ascii io.encodings.string kernel locals make math
 math.parser sequences io.streams.throwing ;
-in: images.ppm
+IN: images.ppm
 
 singleton: ppm-image
 "ppm" ppm-image ?register-image-class

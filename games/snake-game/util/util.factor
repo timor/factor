@@ -3,7 +3,7 @@
 USING: arrays assocs combinators kernel math sequences
 snake-game.constants ;
 
-in: snake-game.util
+IN: snake-game.util
 
 : screen-loc ( loc -- loc )
     [ snake-game-cell-size * ] map ;

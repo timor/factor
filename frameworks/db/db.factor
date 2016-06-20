@@ -3,7 +3,7 @@
 USING: arrays assocs classes continuations destructors kernel math
 namespaces sequences classes.tuple words strings
 tools.walker accessors combinators fry db.errors ;
-in: db
+IN: db
 
 TUPLE: db-connection
     handle

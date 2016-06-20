@@ -1,7 +1,7 @@
 USING: arrays kernel math opengl opengl.gl opengl.glu
 opengl.demo-support ui ui.gadgets ui.render ui.pixel-formats
 literals accessors ;
-in: nehe.2
+IN: nehe.2
 
 TUPLE: nehe2-gadget < gadget ;
 

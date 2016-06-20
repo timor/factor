@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax cocoa cocoa.classes
 cocoa.runtime core-foundation.strings kernel sequences ;
-in: cocoa.application
+IN: cocoa.application
 
 : <NSString> ( str -- alien ) <CFString> send\ autorelease ;
 

@@ -6,7 +6,7 @@ io.files kernel literals math math.functions math.order
 multiline regexp sequences sequences.extras sets splitting
 unicode ;
 
-in: text-analysis
+IN: text-analysis
 
 PRIVATE<
 

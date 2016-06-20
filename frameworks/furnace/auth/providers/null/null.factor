@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: furnace.auth.providers kernel ;
-in: furnace.auth.providers.null
+IN: furnace.auth.providers.null
 
 singleton: no-users
 

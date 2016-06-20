@@ -8,7 +8,7 @@ furnace.sessions
 furnace.conversations
 furnace.auth.providers
 furnace.auth.login.permits ;
-in: furnace.alloy
+IN: furnace.alloy
 
 CONSTANT: state-classes { session aside conversation permit } ;
 

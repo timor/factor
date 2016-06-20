@@ -4,7 +4,7 @@ USING: accessors arrays assocs combinators kernel lexer make
 namespaces parser sequences splitting xml.data xml.syntax
 xml.syntax.private xml.traversal xmode.rules xmode.tokens
 xmode.utilities ;
-in: xmode.loader.syntax
+IN: xmode.loader.syntax
 
 ! Rule tag parsing utilities
 : (parse-rule-tag) ( rule-set tag specs class -- )

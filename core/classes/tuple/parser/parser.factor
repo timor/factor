@@ -3,7 +3,7 @@
 USING: accessors arrays assocs classes.parser classes.tuple
 combinators kernel lexer make parser parser.notes sequences
 sets slots ;
-in: classes.tuple.parser
+IN: classes.tuple.parser
 
 : slot-names ( slots -- seq )
     [ dup array? [ first ] when ] map ;

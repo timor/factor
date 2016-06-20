@@ -6,7 +6,7 @@ unicode.categories unicode.collation unicode.collation.private
 unicode.data unicode.data.private unicode.normalize.private
 unicode.script ;
 
-in: unicode
+IN: unicode
 
 CATEGORY: blank Zs Zl Zp | "\r\n\t" member? ;
 

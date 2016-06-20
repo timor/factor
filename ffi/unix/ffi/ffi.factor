@@ -3,7 +3,7 @@
 USING: accessors alien alien.c-types alien.data alien.libraries
 alien.syntax classes.struct sequences system unix.time
 unix.types vocabs ;
-in: unix.ffi
+IN: unix.ffi
 
 COMPILE< "unix.ffi." os name>> append require COMPILE>
 

@@ -6,7 +6,7 @@ locals memoize sequences.deep xml.data xml.state xml namespaces
 present arrays generalizations sequences.generalizations strings
 make math macros multiline combinators.short-circuit sorting fry
 unicode effects ;
-in: xml.syntax
+IN: xml.syntax
 
 PRIVATE<
 

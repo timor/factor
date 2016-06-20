@@ -3,7 +3,7 @@
 USING: combinators.short-circuit kernel locals namespaces sbufs
 sequences splitting unicode.categories unicode.data ;
 qualified: ascii
-in: unicode.case
+IN: unicode.case
 
 symbol: locale ! Just casing locale, or overall?
 

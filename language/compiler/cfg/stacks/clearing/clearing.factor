@@ -1,7 +1,7 @@
 USING: accessors arrays assocs combinators.short-circuit
 compiler.cfg.instructions compiler.cfg.registers compiler.cfg.rpo
 compiler.cfg.stacks compiler.cfg.stacks.padding kernel math sequences ;
-in: compiler.cfg.stacks.clearing
+IN: compiler.cfg.stacks.clearing
 
 : state>clears ( state -- clears )
     [ second ] map { ds-loc rs-loc } [ swap create-locs ] 2map concat

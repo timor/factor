@@ -1,7 +1,7 @@
 ! Copyright (c) 2008 Eric Mertens.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel locals math project-euler.common ;
-in: project-euler.215
+IN: project-euler.215
 
 ! http://projecteuler.net/index.php?section=problems&id=215
 

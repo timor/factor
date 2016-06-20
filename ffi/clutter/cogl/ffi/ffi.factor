@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.libraries alien.syntax combinators
 gobject-introspection kernel opengl.gl system vocabs ;
-in: clutter.cogl.ffi
+IN: clutter.cogl.ffi
 
 COMPILE<
 "gobject.ffi" require

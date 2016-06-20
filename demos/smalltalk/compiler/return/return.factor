@@ -3,7 +3,7 @@
 USING: accessors arrays combinators.short-circuit continuations
 fry generalizations kernel locals locals.types locals.rewrite.closures
 namespaces make sequences smalltalk.ast ;
-in: smalltalk.compiler.return
+IN: smalltalk.compiler.return
 
 symbol: return-continuation
 

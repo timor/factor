@@ -3,7 +3,7 @@
 USING: ascii assocs byte-arrays destructors fry
 io.encodings.binary io.files io.pathnames io.streams.byte-array
 kernel namespaces strings ;
-in: images.loader
+IN: images.loader
 
 ERROR: unknown-image-extension extension ;
 

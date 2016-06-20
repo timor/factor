@@ -4,7 +4,7 @@ USING: accessors alien.c-types arrays assocs binary-search
 combinators fry grouping kernel locals make math math.order
 sequences sequences.private sorting specialized-arrays ;
 specialized-array: uint
-in: interval-sets
+IN: interval-sets
 ! Sets of positive integers
 
 TUPLE: interval-set { array uint-array read-only } ;

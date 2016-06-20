@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators fry kernel locals math
 math.primes combinators.short-circuit ;
-in: math.primes.lucas-lehmer
+IN: math.primes.lucas-lehmer
 
 ERROR: invalid-lucas-lehmer-candidate obj ;
 

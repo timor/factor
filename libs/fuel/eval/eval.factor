@@ -4,7 +4,7 @@ USING: accessors arrays continuations debugger fuel.pprint io
 io.streams.string kernel listener namespaces prettyprint.config sequences
 vocabs.parser ;
 
-in: fuel.eval
+IN: fuel.eval
 
 TUPLE: fuel-status manifest restarts ;
 

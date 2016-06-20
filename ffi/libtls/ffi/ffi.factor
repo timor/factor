@@ -1,7 +1,7 @@
 USING: alien alien.c-types alien.destructors alien.libraries
 alien.syntax combinators io.sockets.secure system unix.types ;
 
-in: libtls.ffi
+IN: libtls.ffi
 
 COMPILE< "libtls" {
     { [ os windows? ] [ "libtls-10.dll" ] }

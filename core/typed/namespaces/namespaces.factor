@@ -1,6 +1,6 @@
 USING: arrays classes fry kernel kernel.private locals macros
 namespaces ;
-in: typed.namespaces
+IN: typed.namespaces
 
 ERROR: variable-type-error variable value type ;
 

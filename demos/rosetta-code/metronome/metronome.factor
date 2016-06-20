@@ -4,7 +4,7 @@ USING: accessors calendar circular colors.constants colors.hsv
 command-line continuations io kernel math math.parser namespaces
 openal.example sequences system timers ui ui.gadgets
 ui.pens.solid ;
-in: rosetta-code.metronome
+IN: rosetta-code.metronome
 
 : bpm>duration ( bpm -- duration ) 60 swap / seconds ;
 

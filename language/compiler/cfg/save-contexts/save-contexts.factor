@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: compiler.cfg.instructions compiler.cfg.registers compiler.cfg.rpo
 cpu.architecture kernel sequences ;
-in: compiler.cfg.save-contexts
+IN: compiler.cfg.save-contexts
 
 UNION: context-modifier ##phi ##inc ##callback-inputs ;
 

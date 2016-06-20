@@ -7,7 +7,7 @@ compiler.cfg.intrinsics compiler.cfg.registers
 compiler.cfg.stacks compiler.cfg.stacks.local compiler.tree
 compiler.cfg.utilities cpu.architecture fry kernel locals make math
 namespaces sequences words ;
-in: compiler.cfg.builder
+IN: compiler.cfg.builder
 
 symbol: procedures
 symbol: loops

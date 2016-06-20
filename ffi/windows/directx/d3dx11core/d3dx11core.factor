@@ -1,6 +1,6 @@
 USING: alien.syntax windows.directx windows.types windows.com.syntax
 alien.c-types windows.com windows.directx.d3d11 ;
-in: windows.directx.d3dx11core
+IN: windows.directx.d3dx11core
 
 library: d3dx11
 

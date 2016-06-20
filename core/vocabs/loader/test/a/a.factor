@@ -1,5 +1,5 @@
 USING: namespaces parser ;
-in: vocabs.loader.test.a
+IN: vocabs.loader.test.a
 
 COMPILE< global [ "count-me" inc ] with-variables COMPILE>
 

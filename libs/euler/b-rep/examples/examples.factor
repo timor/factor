@@ -1,6 +1,6 @@
 USING: accessors assocs euler.b-rep game.models.half-edge
 kernel locals math.vectors.simd.cords sequences ;
-in: euler.b-rep.examples
+IN: euler.b-rep.examples
 
 CONSTANT: valid-cube-b-rep
     T{ b-rep

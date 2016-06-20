@@ -1,7 +1,7 @@
 ! Based on http://www.ffconsultancy.com/ocaml/sudoku/index.html
 USING: columns combinators combinators.short-circuit generalizations io
 io.styles kernel math math.parser namespaces sequences ;
-in: sudoku
+IN: sudoku
 
 symbol: solutions
 symbol: board

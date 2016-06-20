@@ -8,7 +8,7 @@ math.order math.parser namespaces prettyprint.config
 prettyprint.custom prettyprint.sections prettyprint.stylesheet
 quotations sbufs sequences strings vectors words ;
 qualified: sets
-in: prettyprint.backend
+IN: prettyprint.backend
 
 M: effect pprint* effect>string text ;
 

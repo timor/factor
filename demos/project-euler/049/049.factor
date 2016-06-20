@@ -3,7 +3,7 @@
 USING: arrays byte-arrays fry kernel math math.combinatorics math.functions
     math.parser math.primes project-euler.common sequences sets ;
 FROM: project-euler.common => permutations? ;
-in: project-euler.049
+IN: project-euler.049
 
 ! http://projecteuler.net/index.php?section=problems&id=49
 

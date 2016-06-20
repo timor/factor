@@ -4,7 +4,7 @@ io.encodings.ascii io.files locals kernel math sequences
 sequences.private specialized-arrays strings typed alien.data ;
 QUALIFIED-WITH: alien.c-types c ;
 specialized-array: c:double
-in: benchmark.fasta
+IN: benchmark.fasta
 
 CONSTANT: IM 139968 ;
 CONSTANT: IA 3877 ;

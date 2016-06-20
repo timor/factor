@@ -1,6 +1,6 @@
 ! Copyright (C) 2006 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
-in: partial-continuations
+IN: partial-continuations
 USING: kernel continuations arrays sequences quotations ;
 
 : breset ( quot -- )

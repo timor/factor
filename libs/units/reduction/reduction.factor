@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs combinators continuations fry kernel lexer locals
 math math.functions math.order math.parser sequences splitting ;
-in: units.reduction
+IN: units.reduction
 
 CONSTANT: storage-suffixes { "B" "K" "M" "G" "T" "P" "E" "Z" "Y" } ;
 

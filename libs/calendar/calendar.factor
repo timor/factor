@@ -4,7 +4,7 @@ USING: accessors arrays classes.tuple combinators
 combinators.short-circuit kernel locals math math.functions
 math.order sequences summary system vocabs vocabs.loader
 assocs ;
-in: calendar
+IN: calendar
 
 HOOK: gmt-offset os ( -- hours minutes seconds ) ;
 

@@ -2,7 +2,7 @@ USING: alien.syntax alien.c-types classes.struct windows.types
 windows.directx.d3d10shader windows.directx.d3d10
 windows.directx.d3d11 windows.com windows.com.syntax
 windows.directx.d3dcommon ;
-in: windows.directx.d3d11shader
+IN: windows.directx.d3d11shader
 
 library: d3d11
 

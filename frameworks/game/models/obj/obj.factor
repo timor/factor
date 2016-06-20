@@ -7,7 +7,7 @@ game.models game.models.util gpu.shaders images game.models.loader
 prettyprint specialized-arrays make ;
 QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-ARRAYS: c:float c:uint ;
-in: game.models.obj
+IN: game.models.obj
 
 singleton: obj-models
 "obj" ascii obj-models register-models-class

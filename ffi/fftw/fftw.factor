@@ -7,7 +7,7 @@ specialized-arrays ;
 specialized-array: double
 specialized-array: fftw_complex
 
-in: fftw
+IN: fftw
 
 PRIVATE<
 

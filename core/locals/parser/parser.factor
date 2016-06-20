@@ -4,7 +4,7 @@ USING: accessors arrays assocs combinators continuations
 effects.parser fry generic.parser kernel lexer locals.errors
 locals.rewrite.closures locals.types make namespaces parser
 quotations sequences splitting vocabs.parser words ;
-in: locals.parser
+IN: locals.parser
 
 symbol: in-lambda?
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: system kernel math namespaces io prettyprint tools.memory
 tools.dispatch ;
-in: tools.time
+IN: tools.time
 
 : benchmark ( quot -- runtime )
     nano-count [ call nano-count ] dip - ; inline

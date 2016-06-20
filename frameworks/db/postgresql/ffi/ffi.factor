@@ -3,7 +3,7 @@
 ! tested on debian linux with postgresql 8.1
 USING: alien alien.c-types alien.libraries alien.syntax
 combinators system ;
-in: db.postgresql.ffi
+IN: db.postgresql.ffi
 
 COMPILE< "postgresql" {
     { [ os windows? ] [ "libpq.dll" ] }

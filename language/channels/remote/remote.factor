@@ -5,7 +5,7 @@
 USING: kernel init namespaces assocs arrays random
 sequences channels match concurrency.messaging
 concurrency.distributed threads accessors ;
-in: channels.remote
+IN: channels.remote
 
 PRIVATE<
 

@@ -3,7 +3,7 @@
 USING: accessors alien.c-types alien.data arrays kernel game.input
 namespaces math classes bit-arrays system sequences vectors
 x11 x11.xlib assocs generalizations ;
-in: game.input.x11
+IN: game.input.x11
 
 singleton: x11-game-input-backend
 

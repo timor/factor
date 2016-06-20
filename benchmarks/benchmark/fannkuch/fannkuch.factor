@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel fry math math.combinatorics math.order sequences
 io prettyprint ;
-in: benchmark.fannkuch
+IN: benchmark.fannkuch
 
 : count ( quot: ( -- ? ) -- n )
     ! Call quot until it returns false, return number of times

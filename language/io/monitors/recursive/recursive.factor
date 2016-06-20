@@ -5,7 +5,7 @@ destructors combinators kernel threads concurrency.messaging
 concurrency.mailboxes concurrency.promises io.files io.files.info
 io.directories io.pathnames io.monitors io.monitors.private
 debugger fry ;
-in: io.monitors.recursive
+IN: io.monitors.recursive
 
 ! Simulate recursive monitors on platforms that don't have them
 

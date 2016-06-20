@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs hashtables kernel kernel.private
 math sequences vectors ;
-in: namespaces
+IN: namespaces
 
 PRIVATE<
 

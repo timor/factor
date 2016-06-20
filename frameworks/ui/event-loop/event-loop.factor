@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: calendar combinators deques kernel namespaces sequences
 threads ui.backend ui.gadgets.private ui.private ;
-in: ui.event-loop
+IN: ui.event-loop
 
 : event-loop? ( -- ? )
     {

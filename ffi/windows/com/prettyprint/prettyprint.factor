@@ -2,6 +2,6 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: windows.kernel32 windows.ole32 prettyprint.custom
 prettyprint.sections sequences ;
-in: windows.com.prettyprint
+IN: windows.com.prettyprint
 
 M: GUID pprint* guid>string "guid: " prepend text ;

@@ -3,7 +3,7 @@
 USING: accessors arrays assocs classes classes.private
 combinators kernel make math math.order namespaces sequences
 sets sorting vectors words ;
-in: classes.algebra
+IN: classes.algebra
 
 defer: sort-classes
 

@@ -2,7 +2,7 @@
 USING: accessors alien.c-types classes.struct game.loop
 game.loop.private kernel sequences specialized-vectors
 tools.time.struct ;
-in: game.loop.benchmark
+IN: game.loop.benchmark
 
 STRUCT: game-loop-benchmark
     { benchmark-data-pair benchmark-data-pair }

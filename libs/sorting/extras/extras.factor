@@ -1,6 +1,6 @@
 USING: arrays assocs kernel kernel.private locals math
 math.order sequences sequences.extras sequences.private sorting ;
-in: sorting.extras
+IN: sorting.extras
 
 : argsort ( seq quot: ( obj1 obj2 -- <=> ) -- sortedseq )
     [ zip-index ] dip

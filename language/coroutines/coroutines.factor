@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel hashtables namespaces make continuations quotations
 accessors ;
-in: coroutines
+IN: coroutines
 
 symbol: current-coro
 

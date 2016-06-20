@@ -8,7 +8,7 @@ namespaces sequences unix.ffi ;
 
 QUALIFIED-WITH: curses.ffi ffi ;
 
-in: curses
+IN: curses
 
 symbol: current-window
 

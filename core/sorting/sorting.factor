@@ -3,7 +3,7 @@
 USING: accessors arrays assocs growable.private hashtables
 kernel kernel.private math math.order sequences
 sequences.private vectors ;
-in: sorting
+IN: sorting
 
 ! Optimized merge-sort:
 !

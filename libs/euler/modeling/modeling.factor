@@ -2,7 +2,7 @@
 USING: accessors combinators fry kernel locals math.vectors
 namespaces sets sequences game.models.half-edge euler.b-rep
 euler.operators math ;
-in: euler.modeling
+IN: euler.modeling
 
 : (polygon>double-face) ( polygon -- edge )
     [ first2 make-vefs ] keep

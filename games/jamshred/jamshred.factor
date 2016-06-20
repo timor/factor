@@ -4,7 +4,7 @@ USING: accessors arrays calendar jamshred.game jamshred.gl
 jamshred.player jamshred.log kernel math math.constants
 math.rectangles math.vectors namespaces sequences threads ui
 ui.backend ui.gadgets ui.gadgets.worlds ui.gestures ui.render ;
-in: jamshred
+IN: jamshred
 
 TUPLE: jamshred-gadget < gadget { jamshred jamshred } last-hand-loc ;
 

@@ -6,7 +6,7 @@ continuations db.types calendar.format serialize
 io.streams.byte-array byte-arrays io.encodings.binary
 io.backend db.errors present urls io.encodings.utf8
 io.encodings.string accessors shuffle io db.private ;
-in: db.sqlite.lib
+IN: db.sqlite.lib
 
 ERROR: sqlite-error < db-error n string ;
 ERROR: sqlite-sql-error < sql-error n string ;

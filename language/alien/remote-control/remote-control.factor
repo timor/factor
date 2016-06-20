@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.c-types alien.data eval io.encodings.utf8
 kernel kernel.private threads words ;
-in: alien.remote-control
+IN: alien.remote-control
 
 : eval-callback ( -- callback )
     void* { c-string } cdecl

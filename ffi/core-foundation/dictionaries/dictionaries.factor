@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types alien.data alien.syntax assocs
 core-foundation kernel sequences specialized-arrays ;
-in: core-foundation.dictionaries
+IN: core-foundation.dictionaries
 
 specialized-array: void*
 

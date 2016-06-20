@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: accessors assocs hashtables hashtables.wrapped kernel
 parser vocabs.loader ;
-in: hashtables.identity
+IN: hashtables.identity
 
 TUPLE: identity-wrapper < wrapped-key identity-hashcode ;
 

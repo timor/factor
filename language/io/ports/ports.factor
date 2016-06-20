@@ -4,7 +4,7 @@ USING: accessors alien byte-arrays combinators destructors hints
 io io.backend io.buffers io.encodings io.files io.timeouts
 kernel kernel.private libc locals math math.order math.private
 namespaces sequences strings system ;
-in: io.ports
+IN: io.ports
 
 symbol: default-buffer-size
 64 1024 * default-buffer-size set-global

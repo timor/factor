@@ -5,7 +5,7 @@ compiler.cfg.stacks compiler.cfg.stacks.local
 compiler.tree.propagation.info cpu.architecture fry
 generalizations kernel locals macros make math quotations
 sequences sequences.generalizations ;
-in: compiler.cfg.intrinsics.simd.backend
+IN: compiler.cfg.intrinsics.simd.backend
 
 ! Selection of implementation based on available CPU instructions
 

@@ -3,7 +3,7 @@
 USING: io.files io.encodings.ascii sequences generalizations
 math.parser combinators kernel memoize csv summary
 words accessors math.order binary-search combinators.smart ;
-in: usa-cities
+IN: usa-cities
 
 SINGLETONS: AK AL AR AS AZ CA CO CT DC DE FL GA HI IA ID IL IN
 KS KY LA MA MD ME MI MN MO MS MT NC ND NE NH NJ NM NV NY OH OK

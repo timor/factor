@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: hashtables http.client io.files.temp io.pathnames kernel
 mason.common mason.config namespaces sequences ;
-in: mason.docs
+IN: mason.docs
 
 : make-docs-archive ( -- )
     [

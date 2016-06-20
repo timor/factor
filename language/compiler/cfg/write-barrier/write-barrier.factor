@@ -3,7 +3,7 @@
 USING: accessors assocs combinators.short-circuit
 compiler.cfg.instructions compiler.cfg.rpo kernel namespaces
 sequences sets ;
-in: compiler.cfg.write-barrier
+IN: compiler.cfg.write-barrier
 
 ! This pass must run after GC check insertion and scheduling.
 

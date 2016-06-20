@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors calendar.unix combinators kernel system
 unix.ffi unix.utmpx ;
-in: unix.utmpx.linux
+IN: unix.utmpx.linux
 
 M: linux utmpx>utmpx-record ( utmpx -- utmpx-record )
     [ new-utmpx-record ] dip {

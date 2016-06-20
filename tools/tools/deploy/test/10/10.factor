@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: prettyprint ;
-in: tools.deploy.test.10
+IN: tools.deploy.test.10
 
 : main ( -- ) C{ 0 1 } pprint ;
 

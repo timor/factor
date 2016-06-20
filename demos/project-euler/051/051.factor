@@ -29,7 +29,7 @@
 USING: assocs kernel math math.combinatorics math.functions
 math.parser math.primes namespaces project-euler.common
 sequences sets strings grouping math.ranges arrays fry math.order ;
-in: project-euler.051
+IN: project-euler.051
 PRIVATE<
 symbol: family-count
 symbol: large-families

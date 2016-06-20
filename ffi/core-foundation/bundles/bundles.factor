@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax core-foundation
 core-foundation.urls kernel sequences ;
-in: core-foundation.bundles
+IN: core-foundation.bundles
 
 TYPEDEF: void* CFBundleRef ;
 

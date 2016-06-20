@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays kernel locals math math.functions math.vectors
 rosetta-code.bitmap rosetta-code.bitmap-line sequences ;
-in: rosetta-code.bitmap-bezier
+IN: rosetta-code.bitmap-bezier
 
 ! http://rosettacode.org/wiki/Bitmap/Bézier_curves/Cubic
 

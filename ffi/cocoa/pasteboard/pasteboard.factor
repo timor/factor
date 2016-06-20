@@ -3,7 +3,7 @@
 USING: alien.accessors arrays cocoa cocoa.application
 core-foundation.arrays core-foundation.strings kernel sequences
 ;
-in: cocoa.pasteboard
+IN: cocoa.pasteboard
 
 CONSTANT: NSStringPboardType "NSStringPboardType" ;
 

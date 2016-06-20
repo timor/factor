@@ -6,7 +6,7 @@ sequences slots words locals effects.parser
 locals.parser macros stack-checker.dependencies
 classes.maybe classes.algebra ;
 FROM: classes.tuple.private => tuple-layout ;
-in: typed
+IN: typed
 
 ERROR: type-mismatch-error value expected-type word expected-types ;
 ERROR: input-mismatch-error < type-mismatch-error ;

@@ -5,7 +5,7 @@ combinators.short-circuit continuations fry io kernel
 kernel.private locals.backend make math math.private namespaces
 prettyprint quotations sequences sequences.deep slots.private
 splitting stack-checker vocabs words words.alias ;
-in: lint
+IN: lint
 
 PRIVATE<
 

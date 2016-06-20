@@ -4,7 +4,7 @@
 USING: accessors colors colors.xyz colors.xyz.private kernel
 locals math math.functions ;
 
-in: colors.lab
+IN: colors.lab
 
 TUPLE: laba l a b alpha ;
 

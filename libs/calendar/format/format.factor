@@ -4,7 +4,7 @@ USING: accessors arrays calendar calendar.format.macros
 combinators io io.streams.string kernel math math.functions
 math.order math.parser math.parser.private present sequences
 typed ;
-in: calendar.format
+IN: calendar.format
 
 : pad-00 ( n -- str ) number>string 2 char: 0 pad-head ;
 

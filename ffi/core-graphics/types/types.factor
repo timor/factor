@@ -3,7 +3,7 @@
 USING: accessors alien.c-types alien.syntax arrays
 classes.struct kernel layouts math math.rectangles ;
 FROM: alien.c-types => float ;
-in: core-graphics.types
+IN: core-graphics.types
 
 symbol: CGFloat
 COMPILE< cell 4 = float double ? \ CGFloat typedef COMPILE>

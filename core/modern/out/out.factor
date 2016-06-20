@@ -5,7 +5,7 @@ combinators.smart continuations fry io io.encodings.utf8
 io.files io.streams.string kernel modern modern.paths
 modern.slices multiline namespaces prettyprint sequences sets
 splitting strings arrays ;
-in: modern.out
+IN: modern.out
 
 symbol: last-slice
 

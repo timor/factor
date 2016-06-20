@@ -12,7 +12,7 @@ USING:
     ogg
     system
 ;
-in: ogg.vorbis
+IN: ogg.vorbis
 
 COMPILE<
 "vorbis" {

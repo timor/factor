@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs fry kernel locals regexp.ast
 regexp.classes regexp.transition-tables sequences sets vectors ;
-in: regexp.dfa
+IN: regexp.dfa
 
 : find-delta ( states transition nfa -- new-states )
     transitions>> '[ _ swap _ at at ] gather sift ;

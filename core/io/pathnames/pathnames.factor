@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators io.backend kernel math math.order
 namespaces sequences splitting strings system ;
-in: io.pathnames
+IN: io.pathnames
 
 symbol: current-directory
 

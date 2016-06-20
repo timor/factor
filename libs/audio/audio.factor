@@ -1,6 +1,6 @@
 ! (c)2010 Joe Groff bsd license
 USING: accessors alien arrays combinators kernel math openal ;
-in: audio
+IN: audio
 
 TUPLE: audio
     { channels integer }

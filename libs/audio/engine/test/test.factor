@@ -4,7 +4,7 @@ destructors io kernel locals math math.functions math.ranges specialized-arrays
 sequences random math.vectors ;
 FROM: alien.c-types => short ;
 specialized-array: short
-in: audio.engine.test
+IN: audio.engine.test
 
 TUPLE: noise-generator ;
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel arrays strings math.parser sequences
 peg peg.ebnf peg.parsers memoize math accessors ;
-in: peg.expr
+IN: peg.expr
 
 : expr ( string -- obj ) EBNF{{
 number   = ([0-9])+         => [[ string>number ]]

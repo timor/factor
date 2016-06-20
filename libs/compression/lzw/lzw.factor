@@ -3,7 +3,7 @@
 USING: accessors combinators io kernel math math.order
 namespaces sequences vectors ;
 QUALIFIED-WITH: bitstreams bs ;
-in: compression.lzw
+IN: compression.lzw
 
 TUPLE: lzw
 input

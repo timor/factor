@@ -3,7 +3,7 @@
 
 USING: checksums grouping io.binary kernel math sequences ;
 
-in: checksums.internet
+IN: checksums.internet
 
 singleton: internet ! RFC 1071
 

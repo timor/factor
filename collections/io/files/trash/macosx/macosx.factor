@@ -4,7 +4,7 @@
 USING: alien.c-types alien.strings alien.syntax classes.struct
 core-foundation io.encodings.utf8 io.files.trash kernel system ;
 
-in: io.files.trash.macosx
+IN: io.files.trash.macosx
 
 PRIVATE<
 

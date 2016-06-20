@@ -5,7 +5,7 @@ core-text.fonts kernel hashtables namespaces sequences ui.text
 ui.text.private destructors combinators core-foundation
 core-foundation.strings math math.vectors init colors
 colors.constants cache arrays images ;
-in: ui.text.core-text
+IN: ui.text.core-text
 
 singleton: core-text-renderer
 

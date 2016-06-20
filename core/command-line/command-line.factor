@@ -4,7 +4,7 @@ USING: accessors alien.strings assocs continuations fry init
 io.encodings.utf8 io.files io.pathnames kernel kernel.private
 namespaces parser parser.notes sequences source-files
 source-files.errors splitting system vocabs.loader ;
-in: command-line
+IN: command-line
 
 symbol: user-init-errors
 symbol: +user-init-error+

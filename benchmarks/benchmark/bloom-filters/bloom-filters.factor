@@ -1,6 +1,6 @@
 USING: bloom-filters kernel math sequences ;
 
-in: benchmark.bloom-filters
+IN: benchmark.bloom-filters
 
 : insert-data ( bloom-filter -- bloom-filter )
     100 [ 2,000 iota [ over bloom-filter-insert ] each ] times ;

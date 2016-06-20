@@ -1,5 +1,5 @@
 USING: alien.c-types classes.struct ;
-in: windows.winsock.32
+IN: windows.winsock.32
 
 STRUCT: servent
     { name c-string }

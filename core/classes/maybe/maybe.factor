@@ -3,7 +3,7 @@
 USING: accessors arrays classes classes.algebra
 classes.algebra.private classes.private classes.union.private
 kernel words ;
-in: classes.maybe
+IN: classes.maybe
 
 TUPLE: maybe { class classoid initial: object read-only } ;
 

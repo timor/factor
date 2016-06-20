@@ -12,7 +12,7 @@ windows.errors windows.handles windows.kernel32 windows.types
 combinators.short-circuit ;
 specialized-array: ushort
 specialized-array: void*
-in: io.launcher.windows
+IN: io.launcher.windows
 
 TUPLE: CreateProcess-args
        lpApplicationName

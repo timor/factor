@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel math ;
-in: taxes.usa.w4
+IN: taxes.usa.w4
 
 ! Each employee fills out a w4
 TUPLE: w4 year allowances married? ;

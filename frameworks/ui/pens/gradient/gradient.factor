@@ -5,7 +5,7 @@ locals math math.vectors opengl opengl.gl sequences
 specialized-arrays ui.pens ui.pens.caching ;
 FROM: alien.c-types => float ;
 specialized-array: float
-in: ui.pens.gradient
+IN: ui.pens.gradient
 
 ! Gradient pen
 TUPLE: gradient < caching-pen colors last-vertices last-colors ;

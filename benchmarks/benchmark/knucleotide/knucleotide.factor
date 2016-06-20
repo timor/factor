@@ -4,7 +4,7 @@ USING: ascii kernel io io.files splitting strings
 io.encodings.ascii hashtables sequences assocs math
 math.statistics namespaces math.parser combinators arrays
 sorting formatting grouping fry ;
-in: benchmark.knucleotide
+IN: benchmark.knucleotide
 
 CONSTANT: knucleotide-in "vocab:benchmark/knucleotide/knucleotide-input.txt" ;
 

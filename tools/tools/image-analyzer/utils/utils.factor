@@ -1,7 +1,7 @@
 USING: accessors alien alien.c-types alien.data arrays bit-arrays classes
 continuations destructors fry io io.streams.throwing kernel locals
 math namespaces sequences words ;
-in: tools.image-analyzer.utils
+IN: tools.image-analyzer.utils
 
 : class-heap-size ( instance -- n )
     class-of heap-size ;

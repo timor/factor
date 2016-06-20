@@ -5,7 +5,7 @@ validators urls html.forms http.server.dispatchers
 furnace.auth
 furnace.asides
 furnace.actions ;
-in: furnace.auth.features.edit-profile
+IN: furnace.auth.features.edit-profile
 
 : <edit-profile-action> ( -- action )
     <page-action>

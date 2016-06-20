@@ -5,7 +5,7 @@ classes.struct combinators destructors fonts init io.encodings.string
 io.encodings.utf16n kernel literals locals math namespaces sequences
 windows.errors windows.fonts windows.gdi32 windows.offscreen
 windows.ole32 windows.types windows.usp10 ;
-in: windows.uniscribe
+IN: windows.uniscribe
 
 TUPLE: script-string < disposable font string metrics ssa size image ;
 

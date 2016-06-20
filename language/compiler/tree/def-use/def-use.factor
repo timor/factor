@@ -3,7 +3,7 @@
 USING: accessors assocs compiler.tree compiler.tree.combinators
 fry kernel namespaces sequences stack-checker.branches ;
 qualified: sets
-in: compiler.tree.def-use
+IN: compiler.tree.def-use
 
 symbol: def-use
 

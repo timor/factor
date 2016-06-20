@@ -2,7 +2,7 @@ USING: accessors assocs bson.constants bson.writer combinators
 combinators.short-circuit constructors continuations fry
 hashtables kernel linked-assocs mirrors mongodb.tuple.collection
 mongodb.tuple.state namespaces sequences words ;
-in: mongodb.tuple.persistent
+IN: mongodb.tuple.persistent
 
 SYMBOLS: object-map ;
 

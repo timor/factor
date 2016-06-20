@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors fry kernel make math math.order math.parser
 sequences sorting.functor strings unicode ;
-in: sorting.human
+IN: sorting.human
 
 : cut-find ( sequence pred -- before after )
     [ drop ] [ find drop ] 2bi dup [ cut ] when ; inline

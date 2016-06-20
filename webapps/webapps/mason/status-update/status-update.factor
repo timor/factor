@@ -3,7 +3,7 @@
 USING: accessors calendar combinators db.tuples furnace.actions
 furnace.redirection html.forms http.server.responses io kernel
 namespaces validators webapps.mason.utils webapps.mason.backend ;
-in: webapps.mason.status-update
+IN: webapps.mason.status-update
 
 : find-builder ( host-name os cpu -- builder )
     builder new

@@ -1,6 +1,6 @@
 USING: hints kernel math sequences strings ;
 
-in: splitting.extras
+IN: splitting.extras
 
 PRIVATE<
 

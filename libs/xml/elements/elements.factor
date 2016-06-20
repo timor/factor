@@ -4,7 +4,7 @@ USING: kernel namespaces xml.tokenize xml.state xml.name
 xml.data accessors arrays make xml.char-classes fry assocs sequences
 math xml.errors sets combinators io.encodings io.encodings.iana
 unicode xml.dtd strings xml.entities ;
-in: xml.elements
+IN: xml.elements
 
 : take-interpolated ( quot -- interpolated )
     interpolating? get [

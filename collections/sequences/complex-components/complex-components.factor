@@ -1,6 +1,6 @@
 USING: accessors kernel math math.functions combinators
 sequences sequences.private ;
-in: sequences.complex-components
+IN: sequences.complex-components
 
 TUPLE: complex-components seq ;
 INSTANCE: complex-components sequence ;

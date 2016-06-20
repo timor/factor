@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2011 Eduardo Cavazos, Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: calendar io.pathnames kernel namespaces system ;
-in: mason.config
+IN: mason.config
 
 ! (Optional) Location for build directories
 symbol: builds-dir

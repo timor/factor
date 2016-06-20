@@ -1,5 +1,5 @@
 USING: python.syntax ;
-in: python.modules.__builtin__
+IN: python.modules.__builtin__
 
 PY-FROM: __builtin__ =>
     callable ( obj -- ? )

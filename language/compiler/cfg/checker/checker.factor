@@ -1,7 +1,7 @@
 ! Copyright (C) 2009, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors compiler.cfg.rpo kernel sequences ;
-in: compiler.cfg.checker
+IN: compiler.cfg.checker
 
 ERROR: bad-successors ;
 

@@ -4,7 +4,7 @@ locals.parser macros math math.ranges memoize parser sequences
 sequences.private strings strings.parser lexer namespaces
 vectors words generalizations sequences.generalizations
 effects.parser gml.types ;
-in: gml.runtime
+IN: gml.runtime
 
 TUPLE: name < identity-tuple { string read-only } ;
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors io.files.info io.pathnames kernel mason.config
 math math.parser namespaces sequences ;
-in: mason.disk
+IN: mason.disk
 
 : gb ( -- n ) 30 2^ ; inline
 

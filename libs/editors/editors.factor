@@ -5,7 +5,7 @@ definitions io io.launcher io.pathnames kernel namespaces
 prettyprint sequences source-files.errors splitting strings
 threads tools.crossref vocabs vocabs.files vocabs.hierarchy
 vocabs.loader vocabs.metadata words ;
-in: editors
+IN: editors
 
 symbol: editor-class
 

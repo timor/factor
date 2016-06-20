@@ -4,7 +4,7 @@ USING: accessors assocs combinators combinators.short-circuit
 combinators.smart fry io.encodings.utf8 io.files kernel
 math.parser math.statistics memoize namespaces sequences
 splitting unicode calendar arrays ;
-in: zoneinfo
+IN: zoneinfo
 
 CONSTANT: zoneinfo-paths
 {

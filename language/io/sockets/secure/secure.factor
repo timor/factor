@@ -3,7 +3,7 @@
 USING: accessors alien.libraries calendar combinators delegate
 destructors io io.sockets io.sockets.private kernel memoize
 namespaces present sequences summary system vocabs ;
-in: io.sockets.secure
+IN: io.sockets.secure
 
 symbol: secure-socket-timeout
 

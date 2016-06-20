@@ -4,7 +4,7 @@
 USING: fry grouping interval-sets kernel math random sequences
 sorting ;
 
-in: benchmark.interval-sets
+IN: benchmark.interval-sets
 
 : interval-sets-benchmark ( -- )
     10,000 [ random-32 ] replicate natural-sort

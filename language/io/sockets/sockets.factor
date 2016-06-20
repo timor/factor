@@ -9,7 +9,7 @@ io.encodings.binary io.pathnames io.ports io.streams.duplex
 kernel locals math math.parser memoize namespaces present
 sequences sequences.private splitting strings summary system
 vocabs vocabs.parser ip-parser ip-parser.private random ;
-in: io.sockets
+IN: io.sockets
 
 COMPILE< {
     { [ os windows? ] [ "windows.winsock" ] }

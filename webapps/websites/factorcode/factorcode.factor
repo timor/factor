@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors http.server http.server.dispatchers
 http.server.static kernel namespaces sequences ;
-in: websites.factorcode
+IN: websites.factorcode
 
 : <factor-website> ( -- website )
     <dispatcher>

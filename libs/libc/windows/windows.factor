@@ -1,6 +1,6 @@
 USING: alien.c-types alien.strings alien.syntax destructors
 io.encodings.utf8 kernel libc system ;
-in: libc
+IN: libc
 
 library: libc
 

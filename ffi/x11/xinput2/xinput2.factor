@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.data combinators kernel namespaces
 x11 x11.constants x11.xinput2.ffi ;
-in: x11.xinput2
+IN: x11.xinput2
 
 : (xi2-available?) ( display -- ? )
     2 0 [ int <ref> ] bi@

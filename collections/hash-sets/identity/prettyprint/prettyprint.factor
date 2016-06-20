@@ -3,6 +3,6 @@
 
 USING: hash-sets.identity kernel prettyprint.custom ;
 
-in: hash-sets.identity.prettyprint
+IN: hash-sets.identity.prettyprint
 
 M: identity-hash-set pprint-delims drop \ IHS{ \ } ;

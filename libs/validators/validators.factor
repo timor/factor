@@ -3,7 +3,7 @@
 USING: arrays assocs classes continuations hashtables kernel
 make math math.functions math.parser math.ranges namespaces
 quotations regexp sequences sets unicode words xmode.catalog ;
-in: validators
+IN: validators
 
 : v-checkbox ( str -- ? )
     >lower "on" = ;

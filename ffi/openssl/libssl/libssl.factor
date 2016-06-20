@@ -6,7 +6,7 @@ alien.syntax assocs classes.struct combinators kernel lexer
 literals namespaces openssl.libcrypto parser quotations
 sequences system words ;
 
-in: openssl.libssl
+IN: openssl.libssl
 
 COMPILE< "libssl" {
     { [ os windows? ] [ "libssl-38.dll" ] }

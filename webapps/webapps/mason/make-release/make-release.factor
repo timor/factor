@@ -3,7 +3,7 @@
 USING: accessors furnace.actions html.forms
 http.server.responses validators webapps.mason.backend
 webapps.mason.version ;
-in: webapps.mason.make-release
+IN: webapps.mason.make-release
 
 : <make-release-action> ( -- action )
     <action>

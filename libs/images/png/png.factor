@@ -6,7 +6,7 @@ io.encodings.8-bit.latin1 io.encodings.ascii io.encodings.binary
 io.encodings.string io.streams.byte-array io.streams.throwing kernel
 locals math math.bitwise math.functions sequences sorting splitting ;
 qualified: bitstreams
-in: images.png
+IN: images.png
 
 singleton: png-image
 "png" png-image ?register-image-class

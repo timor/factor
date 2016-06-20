@@ -3,7 +3,7 @@
 USING: accessors alien combinators combinators.short-circuit
 destructors io io.ports io.private kernel locals math namespaces
 sequences vectors ;
-in: io.streams.peek
+IN: io.streams.peek
 
 TUPLE: peek-stream stream peeked ;
 INSTANCE: peek-stream input-stream ;

@@ -6,7 +6,7 @@ compiler.cfg.instructions
 compiler.cfg.gvn.graph
 compiler.cfg.gvn.avail
 compiler.cfg.gvn.rewrite ;
-in: compiler.cfg.gvn.slots
+IN: compiler.cfg.gvn.slots
 
 : simplify-slot-addressing? ( insn -- ? )
     complex-addressing? [

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.data alien.syntax combinators
 generalizations kernel openal openal.alut.backend ;
-in: openal.alut.other
+IN: openal.alut.other
 
 library: alut
 

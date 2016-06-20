@@ -1,7 +1,7 @@
 ! Copyright (C) 2007, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs kernel kernel.private math math.order namespaces ;
-in: layouts
+IN: layouts
 
 symbol: data-alignment
 

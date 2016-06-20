@@ -4,7 +4,7 @@
 USING: arrays destructors io.sockets kernel math.parser
 sequences splitting ;
 
-in: wake-on-lan
+IN: wake-on-lan
 
 PRIVATE<
 

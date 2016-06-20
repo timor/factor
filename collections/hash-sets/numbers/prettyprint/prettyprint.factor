@@ -3,6 +3,6 @@
 
 USING: hash-sets.numbers kernel prettyprint.custom ;
 
-in: hash-sets.numbers.prettyprint
+IN: hash-sets.numbers.prettyprint
 
 M: number-hash-set pprint-delims drop \ NHS{ \ } ;

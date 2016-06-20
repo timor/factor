@@ -4,7 +4,7 @@ USING: accessors alien.c-types alien.data alien.syntax arrays assocs
 combinators destructors gdk.pixbuf.ffi glib.ffi gobject.ffi grouping images
 images.loader io kernel locals math sequences system
 specialized-arrays unicode ;
-in: images.loader.gtk
+IN: images.loader.gtk
 specialized-array: uchar
 
 singleton: gtk-image

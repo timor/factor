@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors constructors kernel math sequences
 sequences.extras slots.syntax unicode ;
-in: modern.lexer
+IN: modern.lexer
 
 TUPLE: modern-lexer n string partial stack ;
 CONSTRUCTOR: <modern-lexer> modern-lexer ( string -- obj )

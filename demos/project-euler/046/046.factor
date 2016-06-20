@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.functions math.primes math.ranges
 sequences project-euler.common math.bitwise ;
-in: project-euler.046
+IN: project-euler.046
 
 ! http://projecteuler.net/index.php?section=problems&id=46
 

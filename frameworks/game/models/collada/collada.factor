@@ -7,7 +7,7 @@ combinators images gpu.shaders io make game.models game.models.util
 io.encodings.ascii game.models.loader specialized-arrays ;
 QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-ARRAYS: c:float c:uint ;
-in: game.models.collada
+IN: game.models.collada
 
 singleton: collada-models
 "dae" ascii collada-models register-models-class

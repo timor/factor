@@ -3,7 +3,7 @@
 
 USING: formatting io.launcher system text-to-speech ;
 
-in: text-to-speech.macosx
+IN: text-to-speech.macosx
 
 M: macosx speak-text
     "say \"%s\"" sprintf try-process ;

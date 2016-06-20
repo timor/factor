@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien arrays byte-arrays kernel layouts literals math
 quotations sequences strings words ;
-in: compiler.constants
+IN: compiler.constants
 
 CONSTANT: card-bits 8 ;
 CONSTANT: deck-bits 18 ;

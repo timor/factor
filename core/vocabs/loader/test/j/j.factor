@@ -1,3 +1,3 @@
 USING: vocabs ;
-in: vocabs.loader.test.j
+IN: vocabs.loader.test.j
 "vocabs.loader.test.k" require

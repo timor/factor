@@ -3,7 +3,7 @@
 USING: accessors arrays combinators compiler.tree
 compiler.tree.combinators compiler.tree.propagation.info fry
 hashtables kernel math math.partial-dispatch sequences words ;
-in: compiler.tree.identities
+IN: compiler.tree.identities
 
 : define-identities ( word identities -- )
     [ integer-derived-ops dup empty? f assert= ] dip

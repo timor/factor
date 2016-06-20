@@ -4,7 +4,7 @@ locals.types namespaces parser quotations see sequences slots
 words ;
 FROM: kernel.private => declare ;
 FROM: help.markup.private => link-effect? ;
-in: variables
+IN: variables
 
 PREDICATE: variable < word
     "variable-setter" word-prop >boolean ;

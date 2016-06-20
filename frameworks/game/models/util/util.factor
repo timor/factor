@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Erik Charlebois.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: sequences accessors kernel locals assocs ;
-in: game.models.util
+IN: game.models.util
 
 TUPLE: indexed-seq dseq iseq rassoc ;
 INSTANCE: indexed-seq sequence ;

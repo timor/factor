@@ -7,7 +7,7 @@ strings sbufs math.functions macros sequences.private
 combinators mirrors splitting combinators.smart
 combinators.short-circuit fry words.symbol generalizations
 sequences.generalizations classes ;
-in: inverse
+IN: inverse
 
 ERROR: fail ;
 M: fail summary drop "Matching failed" ;

@@ -3,7 +3,7 @@
 USING: accessors alien alien.strings assocs compiler.errors
 io.backend kernel namespaces destructors sequences strings
 system io.pathnames fry combinators vocabs ;
-in: alien.libraries
+IN: alien.libraries
 
 PRIMITIVE: dll-valid? ( dll -- ? ) ;
 PRIMITIVE: (dlopen) ( path -- dll ) ;

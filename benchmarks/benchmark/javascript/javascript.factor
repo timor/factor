@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io.encodings.utf8 io.files kernel peg.javascript ;
-in: benchmark.javascript
+IN: benchmark.javascript
 
 : javascript-benchmark ( -- )
     "vocab:benchmark/javascript/jquery-1.3.2.min.js"

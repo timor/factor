@@ -1,5 +1,5 @@
 USING: accessors assocs hashtables kernel linked-assocs strings ;
-in: mongodb.cmd
+IN: mongodb.cmd
 
 PRIVATE<
 

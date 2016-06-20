@@ -3,7 +3,7 @@
 USING: arrays ascii assocs hashtables io.encodings.ascii io.files kernel math
     math.parser namespaces make sequences sequences.private sorting
     splitting grouping strings sets accessors project-euler.common ;
-in: project-euler.059
+IN: project-euler.059
 
 ! http://projecteuler.net/index.php?section=problems&id=59
 

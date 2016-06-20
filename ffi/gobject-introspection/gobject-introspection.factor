@@ -5,7 +5,7 @@ gobject-introspection.ffi gobject-introspection.loader
 gobject-introspection.types io io.files io.pathnames kernel lexer
 locals make namespaces parser sequences splitting summary vocabs
 vocabs.parser xml ;
-in: gobject-introspection
+IN: gobject-introspection
 
 ERROR: gir-not-found name paths ;
 

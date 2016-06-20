@@ -4,7 +4,7 @@ USING: accessors assocs continuations forestdb.ffi forestdb.lib
 fry io.directories io.files.temp io.files.unique
 io.files.unique.private io.pathnames kernel locals math.parser
 math.ranges namespaces sequences splitting ;
-in: forestdb.utils
+IN: forestdb.utils
 
 : fdb-test-config-seqtree-auto ( -- config )
     fdb_get_default_config

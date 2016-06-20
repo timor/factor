@@ -6,7 +6,7 @@ namespaces quotations sequences stack-checker.backend
 stack-checker.dependencies stack-checker.state
 stack-checker.visitor strings words ;
 FROM: kernel.private => declare ;
-in: stack-checker.alien
+IN: stack-checker.alien
 
 TUPLE: alien-node-params
 return parameters

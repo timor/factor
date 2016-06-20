@@ -5,7 +5,7 @@ USING: accessors alien alien.c-types alien.data byte-arrays
 checksums fry grouping io.binary kernel math math.bitwise
 math.ranges sequences ;
 
-in: checksums.murmur
+IN: checksums.murmur
 
 TUPLE: murmur3-32 seed ;
 

@@ -7,7 +7,7 @@ destructors dlists fry init kernel lexer make math
 math.functions namespaces parser sequences sets strings threads
 ui.backend ui.gadgets ui.gadgets.private ui.gadgets.worlds
 ui.gestures ui.render vectors vocabs.parser words ;
-in: ui
+IN: ui
 
 PRIVATE<
 

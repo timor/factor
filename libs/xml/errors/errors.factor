@@ -3,7 +3,7 @@
 USING: accessors classes classes.tuple classes.tuple.parser
 classes.tuple.private combinators generalizations kernel math
 namespaces parser sequences vocabs.loader words xml.state ;
-in: xml.errors
+IN: xml.errors
 
 COMPILE<
 

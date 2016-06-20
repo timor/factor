@@ -3,7 +3,7 @@
 
 USING: arrays io.launcher kernel present system webbrowser ;
 
-in: webbrowser.linux
+IN: webbrowser.linux
 
 M: linux open-file ( path -- )
     present "xdg-open" swap 2array run-detached drop ;

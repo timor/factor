@@ -1,6 +1,6 @@
 USING: alien.c-types alien.syntax classes.struct unix.time
 unix.types ;
-in: unix.stat
+IN: unix.stat
 
 ! Mac OS X
 

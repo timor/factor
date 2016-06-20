@@ -5,7 +5,7 @@ math.order assocs io.encodings io.binary fry strings math
 io.encodings.ascii arrays byte-arrays accessors splitting
 math.parser biassocs io.encodings.iana namespaces
 locals multiline combinators simple-flat-file ;
-in: io.encodings.shift-jis
+IN: io.encodings.shift-jis
 
 singleton: shift-jis
 

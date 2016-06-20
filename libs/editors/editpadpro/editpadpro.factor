@@ -1,6 +1,6 @@
 USING: combinators.short-circuit editors io.standard-paths
 kernel make math.parser namespaces sequences ;
-in: editors.editpadpro
+IN: editors.editpadpro
 
 singleton: editpadpro
 editpadpro editor-class set-global

@@ -1,5 +1,5 @@
 USING: kernel math.parser sequences ;
-in: benchmark.parse-fixnum
+IN: benchmark.parse-fixnum
 
 : parse-fixnum-benchmark ( -- )
     2,000,000 iota [

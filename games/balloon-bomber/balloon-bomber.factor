@@ -4,7 +4,7 @@
 ! Balloon Bomber: http://www.mamedb.com/game/ballbomb
 !
 USING: kernel space-invaders ui ;
-in: balloon-bomber
+IN: balloon-bomber
 
 TUPLE: balloon-bomber < space-invaders ;
 

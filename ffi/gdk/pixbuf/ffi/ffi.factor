@@ -4,7 +4,7 @@ USING: alien alien.c-types alien.data alien.libraries
 alien.syntax combinators gio.ffi glib.ffi gobject-introspection
 gobject-introspection.standard-types kernel libc sequences
 system vocabs ;
-in: gdk.pixbuf.ffi
+IN: gdk.pixbuf.ffi
 
 COMPILE< "gio.ffi" require COMPILE>
 

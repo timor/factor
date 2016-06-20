@@ -3,7 +3,7 @@
 USING: accessors byte-arrays combinators kernel kernel.private
 layouts make math math.private sbufs sequences sequences.private
 strings strings.private ;
-in: math.parser
+IN: math.parser
 
 PRIVATE<
 PRIMITIVE: (format-float) ( n fill width precision format locale -- byte-array ) ;

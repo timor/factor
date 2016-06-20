@@ -5,7 +5,7 @@ classes.struct game.loop game.worlds kernel literals locals
 math method-chains opengl.gl random sequences specialized-arrays
 ui ui.gadgets.worlds ui.pixel-formats ;
 specialized-array: void*
-in: chipmunk.demo
+IN: chipmunk.demo
 
 CONSTANT: image-width      188 ;
 CONSTANT: image-height     35 ;

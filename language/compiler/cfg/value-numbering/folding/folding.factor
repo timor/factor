@@ -4,7 +4,7 @@ USING: accessors compiler.cfg.instructions
 compiler.cfg.value-numbering.graph
 compiler.cfg.value-numbering.rewrite kernel layouts math
 math.bitwise ;
-in: compiler.cfg.value-numbering.folding
+IN: compiler.cfg.value-numbering.folding
 
 : binary-constant-fold? ( insn -- ? )
     src1>> vreg>insn ##load-integer? ; inline

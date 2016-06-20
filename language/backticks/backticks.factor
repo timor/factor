@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license
 USING: fry io io.encodings.utf8 interpolate io.launcher
 multiline sequences ;
-in: backticks
+IN: backticks
 
 SYNTAX: \ `
     "`" parse-multiline-string '[

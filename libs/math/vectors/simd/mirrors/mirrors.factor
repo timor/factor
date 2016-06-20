@@ -1,2 +1,2 @@
 USING: math.vectors.simd mirrors ;
-in: math.vectors.simd.mirrors
+IN: math.vectors.simd.mirrors

@@ -6,7 +6,7 @@ kernel namespaces fry db.types db.tuples urls validators
 html.components html.forms http http.server.dispatchers furnace
 furnace.actions furnace.boilerplate furnace.redirection
 furnace.utilities continuations ;
-in: webapps.wee-url
+IN: webapps.wee-url
 
 TUPLE: wee-url < dispatcher ;
 

@@ -1,5 +1,5 @@
 USING: kernel locals math sequences sequences.private ;
-in: sorting.insertion
+IN: sorting.insertion
 
 PRIVATE<
 

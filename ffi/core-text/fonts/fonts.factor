@@ -4,7 +4,7 @@ USING: accessors alien.c-types alien.syntax assocs combinators
 core-foundation core-foundation.dictionaries
 core-foundation.strings core-graphics.types destructors fonts
 init kernel locals math memoize unix.types ;
-in: core-text.fonts
+IN: core-text.fonts
 
 TYPEDEF: void* CTFontRef ;
 TYPEDEF: void* CTFontDescriptorRef ;

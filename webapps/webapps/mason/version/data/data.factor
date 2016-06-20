@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors calendar db db.tuples db.types kernel locals
 webapps.mason.version.files sequences ;
-in: webapps.mason.version.data
+IN: webapps.mason.version.data
 
 TUPLE: release
 host-name os cpu

@@ -3,7 +3,7 @@
 USING: alien.data calendar calendar.unix classes.struct
 io.files.info.unix.private kernel libc system time unix
 unix.time ;
-in: time.macosx
+IN: time.macosx
 
 M: macosx adjust-time-monotonic
     timestamp>timeval

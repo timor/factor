@@ -5,7 +5,7 @@ USING: accessors command-line concurrency.messaging http.server
 http.server.cgi http.server.static io io.pathnames io.servers
 kernel logging.server namespaces sequences threads ;
 
-in: file-server
+IN: file-server
 
 : file-server-logging ( quot -- )
     [

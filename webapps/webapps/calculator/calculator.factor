@@ -3,7 +3,7 @@
 USING: furnace furnace.actions furnace.redirection
 http.server.dispatchers html.forms validators urls accessors
 math kernel io.directories fry ;
-in: webapps.calculator
+IN: webapps.calculator
 
 TUPLE: calculator < dispatcher ;
 

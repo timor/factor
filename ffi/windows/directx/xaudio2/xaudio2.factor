@@ -1,7 +1,7 @@
 USING: alien.c-types alien.syntax classes.struct math
 windows.com windows.com.syntax windows.directx
 windows.directx.audiodefs windows.types ;
-in: windows.directx.xaudio2
+IN: windows.directx.xaudio2
 
 library: xaudio2
 

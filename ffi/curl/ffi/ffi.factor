@@ -2,7 +2,7 @@ USING: alien alien.c-types alien.enums alien.libraries
 alien.syntax classes.struct combinators kernel math
 system words ;
 
-in: curl.ffi
+IN: curl.ffi
 
 COMPILE< "curl" {
     { [ os macosx? ] [ "libcurl.dylib" ] }

@@ -3,7 +3,7 @@
 USING: accessors compiler.cfg.instructions compiler.cfg.linearization
 compiler.cfg.rpo compiler.cfg.stack-frame cpu.architecture kernel layouts
 locals math math.order namespaces sequences ;
-in: compiler.cfg.build-stack-frame
+IN: compiler.cfg.build-stack-frame
 
 SYMBOLS: param-area-size allot-area-size allot-area-align ;
 

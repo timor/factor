@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs json.reader json.writer kernel math math.parser
 sequences ;
-in: benchmark.json
+IN: benchmark.json
 
 : json-benchmark ( -- )
     200 iota [ [ number>string ] keep ] H{ } map>assoc

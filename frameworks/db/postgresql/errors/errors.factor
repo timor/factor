@@ -3,7 +3,7 @@
 USING: kernel db.errors peg.ebnf strings sequences math
 combinators.short-circuit accessors math.parser quoting
 locals ;
-in: db.postgresql.errors
+IN: db.postgresql.errors
 
 : parse-postgresql-sql-error ( string -- obj ) EBNF{{
 

@@ -3,7 +3,7 @@ models sequences sets ui
 ui.gadgets ui.gadgets.buttons ui.gadgets.labeled
 ui.gadgets.tracks ui.gadgets.labels ui.gadgets.glass
 math.rectangles cocoa.dialogs ;
-in: merger
+IN: merger
 
 MAIN-WINDOW: merger-window {
         { title "Merging" }

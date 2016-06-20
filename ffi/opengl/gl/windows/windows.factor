@@ -1,5 +1,5 @@
 USING: alien alien.c-types alien.syntax kernel windows.types ;
-in: opengl.gl.windows
+IN: opengl.gl.windows
 
 library: gl
 

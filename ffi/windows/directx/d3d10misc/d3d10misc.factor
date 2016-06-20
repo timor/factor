@@ -1,7 +1,7 @@
 USING: alien.c-types alien.syntax windows.com windows.com.syntax
 windows.directx windows.directx.d3d10 windows.directx.dxgi
 windows.types ;
-in: windows.directx.d3d10misc
+IN: windows.directx.d3d10misc
 
 library: d3d10
 

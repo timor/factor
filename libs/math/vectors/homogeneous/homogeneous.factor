@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: kernel math math.vectors sequences ;
-in: math.vectors.homogeneous
+IN: math.vectors.homogeneous
 
 : (homogeneous-xyz) ( h -- xyz )
     but-last ; inline

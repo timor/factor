@@ -4,7 +4,7 @@
 USING: calendar combinators formatting kernel make math
 math.parser sequences ;
 
-in: calendar.elapsed
+IN: calendar.elapsed
 
 GENERIC: elapsed-time ( seconds -- string ) ;
 

@@ -5,7 +5,7 @@ USING: kernel math math.functions math.derivatives accessors
     sequences arrays assocs generalizations fry make
     combinators.smart help help.markup ;
 
-in: math.dual
+IN: math.dual
 
 TUPLE: dual ordinary-part epsilon-part ;
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 !
 USING: cpu.8080.emulator tools.time ;
-in: cpu.8080
+IN: cpu.8080
 
 INSTRUCTION: NOP          ; opcode: 00 cycles: 04
 INSTRUCTION: LD   BC,nn   ; opcode: 01 cycles: 10

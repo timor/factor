@@ -3,7 +3,7 @@
 USING: accessors concurrency.mailboxes destructors
 irc.client.base irc.client.chats irc.client.internals kernel
 namespaces sequences ;
-in: irc.client
+IN: irc.client
 
 : connect-irc ( irc-client -- )
     [ (connect-irc) (do-login) spawn-irc ] with-irc ;

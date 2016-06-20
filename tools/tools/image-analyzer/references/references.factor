@@ -5,7 +5,7 @@
 USING: accessors arrays byte-arrays fry kernel layouts math
 math.bitwise math.order sequences sets slots.syntax
 tools.image-analyzer.relocations ;
-in: tools.image-analyzer.references
+IN: tools.image-analyzer.references
 QUALIFIED-WITH: tools.image-analyzer.vm vm ;
 
 ! Edges in the heap

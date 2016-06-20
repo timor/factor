@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax math math.bitwise classes.struct
 literals ;
-in: unix.linux.inotify
+IN: unix.linux.inotify
 
 STRUCT: inotify-event
     { wd int }

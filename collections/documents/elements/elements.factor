@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays combinators documents fry kernel math sequences
 accessors unicode combinators.short-circuit ;
-in: documents.elements
+IN: documents.elements
 
 GENERIC: prev-elt ( loc document elt -- newloc ) ;
 GENERIC: next-elt ( loc document elt -- newloc ) ;

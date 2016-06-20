@@ -1,6 +1,6 @@
 USING: kernel math sequences namespaces math.primes
 math.functions accessors random ;
-in: random.blum-blum-shub
+IN: random.blum-blum-shub
 
 ! Blum Blum Shub, n = pq, x_i+1 = x_i ^ 2 mod n
 ! return low bit of x+1

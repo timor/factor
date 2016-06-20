@@ -14,7 +14,7 @@ compiler.cfg.gvn.math
 compiler.cfg.gvn.graph
 compiler.cfg.gvn.avail
 compiler.cfg.gvn.rewrite ;
-in: compiler.cfg.gvn.simd
+IN: compiler.cfg.gvn.simd
 
 ! Some lame constant folding for SIMD intrinsics. Eventually this
 ! should be redone completely.

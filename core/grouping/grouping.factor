@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators fry kernel math math.order
 sequences sequences.private ;
-in: grouping
+IN: grouping
 
 ERROR: groups-error seq n ;
 

@@ -4,7 +4,7 @@ USING: assocs combinators fry io io.encodings.utf8 io.files
 io.streams.string json kernel kernel.private math math.order
 math.parser namespaces sbufs sequences sequences.private strings
 vectors ;
-in: json.reader
+IN: json.reader
 
 PRIVATE<
 

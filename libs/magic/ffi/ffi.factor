@@ -4,7 +4,7 @@
 USING: alien alien.c-types alien.destructors alien.libraries
 alien.syntax combinators kernel literals system ;
 
-in: magic.ffi
+IN: magic.ffi
 
 COMPILE< "magic" {
     { [ os macosx? ] [ "libmagic.dylib" ] }

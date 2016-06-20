@@ -5,7 +5,7 @@ destructors images images.loader io.pathnames kernel locals math
 models opengl.gl opengl.textures opengl.textures.private
 sequences strings ui ui.gadgets ui.gadgets.panes
 ui.gadgets.worlds ui.render ;
-in: images.viewer
+IN: images.viewer
 
 TUPLE: image-gadget < gadget image texture ;
 PRIVATE<

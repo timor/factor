@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel assocs math math.parser memoize io.encodings.utf8
 io.files lexer parser colors sequences splitting ascii ;
-in: colors.constants
+IN: colors.constants
 
 PRIVATE<
 

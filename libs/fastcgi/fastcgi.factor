@@ -21,7 +21,7 @@ io.streams.byte-array kernel locals math namespaces pack
 prettyprint sequences sequences.deep strings threads
 urls.encoding ;
 
-in: fastcgi
+IN: fastcgi
 
 symbol: fcgi-server
 symbol: fcgi-role

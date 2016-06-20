@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: math.primes kernel math math.functions namespaces
 sequences accessors ;
-in: crypto.rsa
+IN: crypto.rsa
 
 ! The private key is the only secret.
 

@@ -5,7 +5,7 @@ USING: assocs calendar combinators environment formatting
 grouping io io.files kernel make math math.ranges sequences
 splitting xml.entities ;
 
-in: text-to-pdf
+IN: text-to-pdf
 
 PRIVATE<
 

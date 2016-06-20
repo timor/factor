@@ -3,7 +3,7 @@
 USING: accessors arrays assocs definitions hashtables kernel
 kernel.private math math.order namespaces quotations sequences
 slots.private strings vocabs ;
-in: words
+IN: words
 
 BUILTIN: word
 { hashcode fixnum initial: 0 } name vocabulary

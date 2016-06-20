@@ -5,7 +5,7 @@
 USING: alien alien.c-types alien.libraries alien.syntax
 io.encodings.ascii kernel opengl.gl.extensions system ;
 FROM: alien.c-types => short ;
-in: opengl.gl
+IN: opengl.gl
 
 TYPEDEF: uint    GLenum ;
 TYPEDEF: uchar   GLboolean ;

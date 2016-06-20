@@ -9,7 +9,7 @@ ui.gadgets.worlds ui.gestures ui.pixel-formats gpu.effects.step
 images.pgm images.ppm alien.data ;
 FROM: alien.c-types => float ;
 specialized-array: float
-in: fluids
+IN: fluids
 
 STRUCT: particle_t
     { p float[2] }

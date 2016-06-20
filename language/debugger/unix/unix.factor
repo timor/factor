@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: debugger io kernel math prettyprint sequences system
 io.launcher.unix accessors strings ;
-in: debugger.unix
+IN: debugger.unix
 
 CONSTANT: signal-names
 {

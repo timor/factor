@@ -1,7 +1,7 @@
 USING: alien.syntax windows.directx windows.directx.d3d10
 windows.directx.d3d10misc windows.directx.d3d10shader
 windows.directx.d3dx10core windows.types ;
-in: windows.directx.d3dx10async
+IN: windows.directx.d3dx10async
 
 library: d3dx10
 

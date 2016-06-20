@@ -1,6 +1,6 @@
 USING: accessors alien.c-types alien.syntax classes.struct
 kernel sequences system unix vocabs ;
-in: unix.stat
+IN: unix.stat
 
 ! File Types
 

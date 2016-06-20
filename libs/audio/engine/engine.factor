@@ -5,7 +5,7 @@ destructors generalizations kernel literals locals math openal
 sequences sequences.generalizations specialized-arrays strings ;
 QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-ARRAYS: c:float c:uchar c:uint ;
-in: audio.engine
+IN: audio.engine
 
 TUPLE: audio-source
     { position initial: { 0.0 0.0 0.0 } }

@@ -3,7 +3,7 @@ USING: gml.types gml.printer gml.runtime math math.ranges
 continuations combinators arrays kernel vectors accessors
 prettyprint fry sequences assocs locals hashtables grouping
 sorting models ;
-in: gml.core
+IN: gml.core
 
 ! Tokens
 GML: cvx ( array -- proc ) { } <proc> ;

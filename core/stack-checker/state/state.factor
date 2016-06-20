@@ -4,7 +4,7 @@ USING: assocs arrays namespaces sequences kernel definitions
 math effects accessors words fry classes.algebra
 compiler.units stack-checker.values stack-checker.visitor
 stack-checker.errors ;
-in: stack-checker.state
+IN: stack-checker.state
 
 symbol: terminated?
 

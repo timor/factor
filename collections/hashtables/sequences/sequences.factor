@@ -4,7 +4,7 @@
 USING: accessors assocs combinators hashtables
 hashtables.wrapped kernel parser sequences vocabs.loader ;
 
-in: hashtables.sequences
+IN: hashtables.sequences
 
 TUPLE: sequence-wrapper < wrapped-key ;
 

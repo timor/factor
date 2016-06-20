@@ -2,7 +2,7 @@ USING: alien.c-types alien.data accessors assocs classes
 destructors functors kernel lexer math parser sequences
 specialized-arrays ui.backend words ;
 specialized-array: int
-in: ui.pixel-formats
+IN: ui.pixel-formats
 
 SYMBOLS:
     double-buffered

@@ -3,7 +3,7 @@
 USING: kernel kernel.private locals math math.bitwise
 math.functions math.order math.private math.ranges sequences
 sequences.private ;
-in: math.primes.erato
+IN: math.primes.erato
 
 PRIVATE<
 

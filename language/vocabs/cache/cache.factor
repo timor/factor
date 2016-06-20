@@ -3,7 +3,7 @@
 USING: assocs fry kernel namespaces memoize init sequences vocabs
 vocabs.hierarchy vocabs.loader vocabs.metadata vocabs.refresh
 words ;
-in: vocabs.cache
+IN: vocabs.cache
 
 : reset-cache ( vocab -- )
     vocab-name

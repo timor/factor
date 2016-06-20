@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math sequences fry ;
-in: crypto.xor
+IN: crypto.xor
 
 : mod-nth ( n seq -- elt ) [ length mod ] [ nth ] bi ;
 

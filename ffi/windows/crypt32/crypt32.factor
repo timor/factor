@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.syntax classes.struct windows.kernel32
 windows.types ;
-in: windows.crypt32
+IN: windows.crypt32
 
 library: crypt32
 

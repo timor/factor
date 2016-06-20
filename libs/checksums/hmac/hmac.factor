@@ -3,7 +3,7 @@
 USING: accessors arrays checksums combinators fry io io.binary
 io.encodings.binary io.files io.streams.byte-array kernel
 locals math math.vectors memoize sequences ;
-in: checksums.hmac
+IN: checksums.hmac
 
 PRIVATE<
 

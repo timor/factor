@@ -3,7 +3,7 @@
 USING: concurrency.promises models tools.walker tools.continuations
 kernel sequences concurrency.messaging locals continuations threads
 namespaces namespaces.private assocs accessors ;
-in: tools.walker.debug
+IN: tools.walker.debug
 
 :: test-walker ( quot -- data )
     <promise> :> p

@@ -7,7 +7,7 @@ io.encodings.utf8 io.sockets io.sockets.private
 io.streams.byte-array io.timeouts kernel make math math.bitwise
 math.parser namespaces random sequences slots.syntax splitting
 system vectors vocabs strings ascii ;
-in: dns
+IN: dns
 
 : with-input-seek ( n seek-type quot -- )
     tell-input [

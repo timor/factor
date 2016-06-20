@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.c-types alien.libraries alien.syntax
 fry kernel sequences unix.types ;
-in: libudev
+IN: libudev
 
 COMPILE< "libudev" "libudev.so" cdecl add-library COMPILE>
 

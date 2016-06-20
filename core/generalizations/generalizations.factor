@@ -4,7 +4,7 @@
 USING: kernel kernel.private sequences sequences.private math
 combinators macros math.order math.ranges quotations fry effects
 memoize.private arrays ;
-in: generalizations
+IN: generalizations
 
 ! These words can be inline combinators the word does no math on
 ! the input parameters, e.g. n.

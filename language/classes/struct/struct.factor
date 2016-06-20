@@ -10,7 +10,7 @@ generic.parser io kernel kernel.private lexer libc locals macros
 math math.order parser quotations sequences slots slots.private
 specialized-arrays stack-checker.dependencies summary vectors
 vocabs.loader vocabs.parser words ;
-in: classes.struct
+IN: classes.struct
 
 specialized-array: uchar
 

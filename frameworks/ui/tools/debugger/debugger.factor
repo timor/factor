@@ -11,7 +11,7 @@ ui.gadgets.tracks ui.gadgets.toolbar ui.gadgets.scrollers
 ui.gadgets.borders ui.gadgets.status-bar ui.theme.images
 ui.tools.traceback ui.tools.inspector ui.tools.browser
 ui.tools.common ;
-in: ui.tools.debugger
+IN: ui.tools.debugger
 
 TUPLE: debugger < track error restarts restart-hook restart-list continuation ;
 

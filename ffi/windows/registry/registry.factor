@@ -4,7 +4,7 @@ USING: alien.c-types byte-arrays kernel locals sequences
 windows.advapi32 windows.errors math windows
 windows.kernel32 windows.time accessors alien.data
 windows.types classes.struct continuations ;
-in: windows.registry
+IN: windows.registry
 
 ERROR: open-key-failed key subkey mode error-string ;
 ERROR: create-key-failed hKey lpSubKey lpClass dwOptions

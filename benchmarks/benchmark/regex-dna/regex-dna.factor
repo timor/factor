@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors io io.encodings.ascii io.files kernel sequences
 assocs math.parser namespaces regexp benchmark.knucleotide ;
-in: benchmark.regex-dna
+IN: benchmark.regex-dna
 
 ! Based on http://shootout.alioth.debian.org/gp4/benchmark.php?test=regexdna&lang=ruby&id=1
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays kernel math math.ranges
     namespaces project-euler.common sequences ;
-in: project-euler.075
+IN: project-euler.075
 
 ! http://projecteuler.net/index.php?section=problems&id=75
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.c-types alien.syntax core-foundation
 core-foundation.strings kernel ;
-in: core-foundation.urls
+IN: core-foundation.urls
 
 CONSTANT: kCFURLPOSIXPathStyle 0 ;
 

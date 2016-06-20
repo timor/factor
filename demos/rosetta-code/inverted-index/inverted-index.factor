@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs fry io.encodings.utf8 io.files kernel sequences
 sets splitting vectors ;
-in: rosetta-code.inverted-index
+IN: rosetta-code.inverted-index
 
 ! http://rosettacode.org/wiki/Inverted_index
 

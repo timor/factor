@@ -6,7 +6,7 @@ prettyprint.config prettyprint debugger io.streams.string
 splitting continuations effects generalizations parser strings
 quotations fry accessors math assocs math.order
 sequences.generalizations lexer ;
-in: logging
+IN: logging
 
 SYMBOLS: DEBUG NOTICE WARNING ERROR CRITICAL ;
 

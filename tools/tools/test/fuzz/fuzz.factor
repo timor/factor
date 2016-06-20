@@ -2,7 +2,7 @@
 USING: accessors combinators.smart fry io kernel make math
 math.parser namespaces prettyprint random sequences strings
 summary tools.test tools.test.private ;
-in: tools.test.fuzz
+IN: tools.test.fuzz
 
 ! Fuzz testing parameters
 symbol: fuzz-test-trials

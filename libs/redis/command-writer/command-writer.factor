@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays assocs formatting io io.crlf kernel math
 math.parser sequences strings locals ;
-in: redis.command-writer
+IN: redis.command-writer
 
 PRIVATE<
 

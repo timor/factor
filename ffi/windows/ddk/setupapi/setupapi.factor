@@ -3,7 +3,7 @@
 USING: literals windows.kernel32 math alien.syntax windows.types
 classes.struct alien alien.c-types windows.errors windows.ole32
 windows.advapi32 alien.libraries ;
-in: windows.ddk.setupapi
+IN: windows.ddk.setupapi
 
 COMPILE< "setupapi" "setupapi.dll" stdcall add-library COMPILE>
 library: setupapi

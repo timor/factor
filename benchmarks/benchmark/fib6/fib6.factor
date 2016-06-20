@@ -1,5 +1,5 @@
 USING: math kernel alien alien.c-types ;
-in: benchmark.fib6
+IN: benchmark.fib6
 
 : fib ( x -- y )
     int { int } cdecl [

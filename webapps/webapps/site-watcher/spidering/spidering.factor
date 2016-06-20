@@ -3,7 +3,7 @@
 USING: accessors furnace.actions furnace.auth
 furnace.redirection html.forms validators webapps.site-watcher.common
 site-watcher.db site-watcher.spider kernel urls sequences ;
-in: webapps.site-watcher.spidering
+IN: webapps.site-watcher.spidering
 
 CONSTANT: site-list-url URL" $site-watcher-app/spider-list" ;
 

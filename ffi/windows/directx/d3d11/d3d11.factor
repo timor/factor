@@ -2,7 +2,7 @@ USING: alien.syntax alien.c-types classes.struct windows.types
 windows.directx.dxgiformat windows.com.syntax windows.com windows.ole32
 windows.directx.dxgitype windows.directx.dxgi windows.directx.d3dcommon
 windows.directx ;
-in: windows.directx.d3d11
+IN: windows.directx.d3d11
 
 library: d3d11
 

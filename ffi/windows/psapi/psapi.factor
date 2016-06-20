@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.syntax windows.types ;
-in: windows.psapi
+IN: windows.psapi
 
 library: psapi
 

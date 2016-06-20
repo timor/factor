@@ -3,7 +3,7 @@
 USING: accessors assocs concurrency.mailboxes io kernel namespaces
 strings words.symbol irc.client.chats irc.messages ;
 EXCLUDE: sequences => join ;
-in: irc.client.base
+IN: irc.client.base
 
 symbol: current-irc-client
 

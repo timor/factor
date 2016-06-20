@@ -3,7 +3,7 @@
 USING: sequences kernel accessors math math.vectors
 math.rectangles math.order arrays locals fry
 combinators.short-circuit ;
-in: math.rectangles.positioning
+IN: math.rectangles.positioning
 
 ! Some geometry code for positioning popups and menus
 ! in a semi-intelligent manner

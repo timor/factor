@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors fry io io.encodings io.streams.null kernel
 namespaces timers ;
-in: io.timeouts
+IN: io.timeouts
 
 GENERIC: timeout ( obj -- dt/f ) ;
 GENERIC: set-timeout ( dt/f obj -- ) ;

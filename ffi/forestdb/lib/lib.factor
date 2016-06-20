@@ -7,7 +7,7 @@ generalizations io.encodings.string io.encodings.utf8
 io.pathnames kernel libc math multiline namespaces sequences
 strings ;
 qualified: sets
-in: forestdb.lib
+IN: forestdb.lib
 
 /*
 ! Issues

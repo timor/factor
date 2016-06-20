@@ -3,7 +3,7 @@
 USING: accessors assocs compiler.tree compiler.tree.def-use
 compiler.utilities grouping kernel namespaces sequences sets
 stack-checker.branches ;
-in: compiler.tree.propagation.copy
+IN: compiler.tree.propagation.copy
 
 symbol: copies
 

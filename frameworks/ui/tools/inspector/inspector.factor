@@ -9,7 +9,7 @@ ui.gadgets.tracks ui.gestures ui.gadgets.buttons
 ui.gadgets.tables ui.theme ui.gadgets.toolbar
 ui.gadgets.status-bar ui.gadgets.labeled ui.tools.common ui
 combinators ui.gadgets.worlds ui.theme.images ;
-in: ui.tools.inspector
+IN: ui.tools.inspector
 
 TUPLE: inspector-gadget < tool table ;
 

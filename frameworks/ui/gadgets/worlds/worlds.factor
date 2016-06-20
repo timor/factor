@@ -6,7 +6,7 @@ destructors fry kernel literals math models namespaces opengl
 opengl.capabilities opengl.gl opengl.textures sequences strings
 ui.backend ui.gadgets ui.gadgets.tracks ui.gestures ui.pixel-formats
 ui.render ;
-in: ui.gadgets.worlds
+IN: ui.gadgets.worlds
 
 SYMBOLS:
     close-button

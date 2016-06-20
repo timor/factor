@@ -4,7 +4,7 @@ USING: alien alien.c-types alien.destructors alien.libraries
 alien.syntax cairo.ffi classes.struct combinators
 gobject-introspection gobject-introspection.standard-types
 kernel system vocabs vocabs.loader ;
-in: gdk.ffi
+IN: gdk.ffi
 
 COMPILE<
 "pango.ffi" require

@@ -7,7 +7,7 @@ specialized-arrays alien.destructors alien.data ;
 FROM: alien.c-types => char double float int short uchar uint
 ushort void ;
 specialized-array: uint
-in: openal
+IN: openal
 
 COMPILE< "openal" {
         { [ os windows? ]  [ "OpenAL32.dll" ] }

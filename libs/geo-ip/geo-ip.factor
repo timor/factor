@@ -4,7 +4,7 @@ USING: accessors arrays assocs combinators combinators.smart csv
 grouping http.client interval-maps io.encodings.ascii io.files
 io.files.temp io.launcher io.pathnames ip-parser kernel math
 math.parser memoize sequences strings ;
-in: geo-ip
+IN: geo-ip
 
 : db-path ( -- path ) "IpToCountry.csv" cache-file ;
 

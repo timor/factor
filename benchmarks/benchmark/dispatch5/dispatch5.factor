@@ -1,5 +1,5 @@
 USING: classes classes.tuple kernel sequences vocabs math ;
-in: benchmark.dispatch5
+IN: benchmark.dispatch5
 
 mixin: g
 

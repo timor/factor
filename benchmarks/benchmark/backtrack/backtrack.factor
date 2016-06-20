@@ -3,7 +3,7 @@
 USING: backtrack shuffle math math.ranges quotations locals fry
 kernel words io memoize macros prettyprint sequences assocs
 combinators namespaces ;
-in: benchmark.backtrack
+IN: benchmark.backtrack
 
 ! This was suggested by Dr_Ford. Compute the number of quadruples
 ! (a,b,c,d) with 1 <= a,b,c,d <= 10 such that we can make 24 by

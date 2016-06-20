@@ -3,7 +3,7 @@
 USING: arrays combinators.smart environment fry
 io.directories.search io.pathnames kernel sequences
 sets windows.shell32 ;
-in: io.directories.search.windows
+IN: io.directories.search.windows
 
 : program-files-directories ( -- array )
     [

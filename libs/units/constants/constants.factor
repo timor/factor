@@ -1,5 +1,5 @@
 ! USING: kernel math si-units ;
-in: units.constants
+IN: units.constants
 
 ! From: http://physics.nist.gov/constants
 

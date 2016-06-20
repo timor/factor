@@ -4,7 +4,7 @@ USING: accessors arrays assocs combinators fry io.pathnames
 io.sockets io.sockets.secure kernel lexer linked-assocs make
 math.parser namespaces peg.ebnf present sequences splitting
 strings strings.parser urls.encoding vocabs.loader ;
-in: urls
+IN: urls
 
 TUPLE: url protocol username password host port path query anchor ;
 

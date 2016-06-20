@@ -1,7 +1,7 @@
 USING: alien.c-types alien.syntax classes.struct windows.com
 windows.com.syntax windows.directx windows.directx.xaudio2
 windows.kernel32 windows.types ;
-in: windows.directx.xact3
+IN: windows.directx.xact3
 
 library: xactengine
 

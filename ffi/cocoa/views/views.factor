@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays cocoa core-graphics.types kernel math
 sequences ;
-in: cocoa.views
+IN: cocoa.views
 
 CONSTANT: NSOpenGLPFAAllRenderers 1 ;
 CONSTANT: NSOpenGLPFADoubleBuffer 5 ;

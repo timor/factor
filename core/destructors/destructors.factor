@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs continuations init kernel namespaces
 sequences sets ;
-in: destructors
+IN: destructors
 
 symbol: disposables
 

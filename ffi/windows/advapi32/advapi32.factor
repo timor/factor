@@ -1,6 +1,6 @@
 USING: alien.c-types alien.syntax classes.struct kernel
 literals math math.bitwise windows.kernel32 windows.types ;
-in: windows.advapi32
+IN: windows.advapi32
 
 library: advapi32
 

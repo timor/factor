@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io.directories kernel make mason.common mason.config
 mason.platform namespaces sequences ;
-in: mason.release.branch
+IN: mason.release.branch
 
 : branch-name ( -- string ) "clean-" platform append ;
 

@@ -9,7 +9,7 @@ quotations see sequences sequences.private sets slots sorting
 splitting strings urls vectors vocabs vocabs.loader words
 words.symbol ;
 FROM: prettyprint.sections => with-pprint ;
-in: help.markup
+IN: help.markup
 
 PREDICATE: simple-element < array
     [ t ] [ first word? not ] if-empty ;

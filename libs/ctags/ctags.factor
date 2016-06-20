@@ -6,7 +6,7 @@
 
 USING: assocs definitions io.backend io.encodings.ascii io.files
 kernel make math.parser present sequences sorting vocabs ;
-in: ctags
+IN: ctags
 
 PRIVATE<
 

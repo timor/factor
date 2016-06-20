@@ -3,7 +3,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel xml.data xml.writer xml.syntax 
 urls.encoding ;
-in: html
+IN: html
 
 TUPLE: empty-prolog < prolog ;
 M: empty-prolog write-xml drop ;

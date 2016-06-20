@@ -3,7 +3,7 @@
 USING: accessors assocs compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
 kernel sequences ;
-in: compiler.tree.propagation.nodes
+IN: compiler.tree.propagation.nodes
 
 GENERIC: propagate-before ( node -- ) ;
 

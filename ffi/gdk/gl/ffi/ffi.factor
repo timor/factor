@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.libraries alien.syntax combinators
 gobject-introspection kernel system vocabs vocabs.loader ;
-in: gdk.gl.ffi
+IN: gdk.gl.ffi
 
 COMPILE<
 "gdk.ffi" require

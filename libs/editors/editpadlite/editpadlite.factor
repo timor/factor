@@ -1,6 +1,6 @@
 USING: combinators.short-circuit editors io.standard-paths
 kernel make namespaces ;
-in: editors.editpadlite
+IN: editors.editpadlite
 
 singleton: editpadlite
 editpadlite editor-class set-global

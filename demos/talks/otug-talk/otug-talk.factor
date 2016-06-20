@@ -7,7 +7,7 @@ tools.annotations tools.crossref help.topics math.functions
 compiler.tree.optimizer compiler.cfg.optimizer fry
 ui.gadgets.panes tetris tetris.game combinators generalizations
 multiline sequences.private ;
-in: talks.otug-talk
+IN: talks.otug-talk
 
 : $tetris ( element -- )
     drop [ <default-tetris> <tetris-gadget> gadget. ] ($block) ;

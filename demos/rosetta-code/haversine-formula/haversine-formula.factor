@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays kernel math math.constants math.functions
 math.vectors sequences ;
-in: rosetta-code.haversine-formula
+IN: rosetta-code.haversine-formula
 
 ! http://rosettacode.org/wiki/Haversine_formula
 

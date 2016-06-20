@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.libraries alien.syntax combinators
 gobject-introspection kernel system vocabs ;
-in: clutter.cally.ffi
+IN: clutter.cally.ffi
 
 COMPILE<
 "atk.ffi" require

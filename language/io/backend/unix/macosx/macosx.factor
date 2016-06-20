@@ -4,7 +4,7 @@ USING: init io.backend io.backend.unix
 io.backend.unix.multiplexers io.backend.unix.multiplexers.kqueue
 io.backend.unix.multiplexers.run-loop namespaces system vocabs ;
 COMPILE< "io.files.unix" require COMPILE> ! needed for deploy
-in: io.backend.unix.macosx
+IN: io.backend.unix.macosx
 
 singleton: macosx-kqueue
 

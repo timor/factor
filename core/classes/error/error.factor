@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors classes.private classes.tuple
 classes.tuple.private combinators kernel parser sequences words ;
-in: classes.error
+IN: classes.error
 
 PREDICATE: error-class < tuple-class
     "error-class" word-prop ;

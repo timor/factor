@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: regexp sequences kernel regexp.negation regexp.ast
 accessors fry regexp.classes strings ;
-in: regexp.combinators
+IN: regexp.combinators
 
 PRIVATE<
 

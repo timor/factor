@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs binary-search grouping kernel
 locals make math math.order sequences sequences.private sorting ;
-in: interval-maps
+IN: interval-maps
 
 TUPLE: interval-map { array array read-only } ;
 

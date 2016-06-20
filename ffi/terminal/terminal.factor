@@ -4,7 +4,7 @@
 USING: accessors arrays environment kernel math math.parser
 sequences system vocabs ;
 
-in: terminal
+IN: terminal
 
 HOOK: (terminal-size) os ( -- columns lines ) ;
 

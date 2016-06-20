@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io.backend io.pathnames kernel literals locals
 mason.common namespaces sequences system ;
-in: mason.release.sign
+IN: mason.release.sign
 
 COMPILE<
 ! Two cases to allow signing in mason or in the UI

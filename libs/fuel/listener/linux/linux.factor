@@ -1,6 +1,6 @@
 USING: accessors fuel.listener io.serial.linux io.serial.linux.ffi
 kernel libc math.bitwise sequences system ;
-in: fuel.listener.linux
+IN: fuel.listener.linux
 
 : flush-termios ( termios fileno -- )
     TCSAFLUSH rot tcsetattr io-error ;

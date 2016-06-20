@@ -2,7 +2,7 @@
 USING: arrays fry globs io.directories io.directories.hierarchy
 io.files.info io.pathnames kernel regexp sequences vocabs.loader
 vocabs.metadata ;
-in: vocabs.metadata.resources
+IN: vocabs.metadata.resources
 
 PRIVATE<
 

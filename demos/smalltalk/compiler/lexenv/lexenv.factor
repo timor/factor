@@ -3,7 +3,7 @@
 USING: assocs kernel accessors quotations slots words
 sequences namespaces combinators combinators.short-circuit
 summary smalltalk.classes ;
-in: smalltalk.compiler.lexenv
+IN: smalltalk.compiler.lexenv
 
 ! local-readers: assoc string => word
 ! local-writers: assoc string => word

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs bootstrap.image kernel mason.config
 namespaces sequences ;
-in: mason.platform
+IN: mason.platform
 
 : (platform) ( os cpu -- string )
     H{ { char: . char: - } } substitute "-" glue ;

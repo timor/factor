@@ -3,7 +3,7 @@
 USING: accessors assocs compiler.cfg.def-use
 compiler.cfg.instructions compiler.cfg.rpo disjoint-sets fry
 kernel namespaces sequences ;
-in: compiler.cfg.representations.coalescing
+IN: compiler.cfg.representations.coalescing
 
 ! Find all strongly connected components in the graph where the
 ! edges are ##phi or ##copy vreg uses

@@ -4,7 +4,7 @@
 USING: io io.streams.string kernel locals make math math.bitwise
 math.order namespaces sequences ;
 
-in: uu
+IN: uu
 
 PRIVATE<
 

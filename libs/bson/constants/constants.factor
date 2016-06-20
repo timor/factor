@@ -3,7 +3,7 @@
 USING: accessors assocs calendar combinators
 combinators.short-circuit constructors kernel linked-assocs
 math math.bitwise random strings uuid ;
-in: bson.constants
+IN: bson.constants
 
 : <objid> ( -- objid )
    uuid1 ; inline

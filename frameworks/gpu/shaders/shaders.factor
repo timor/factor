@@ -12,7 +12,7 @@ words.constant math.floats.half typed ;
 QUALIFIED-WITH: alien.c-types c ;
 specialized-array: int
 specialized-array: void*
-in: gpu.shaders
+IN: gpu.shaders
 
 VARIANT: shader-kind
     vertex-shader fragment-shader geometry-shader ;

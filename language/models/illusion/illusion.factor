@@ -1,5 +1,5 @@
 USING: accessors inverse kernel models models.arrow ;
-in: models.illusion
+IN: models.illusion
 
 TUPLE: illusion < arrow ;
 

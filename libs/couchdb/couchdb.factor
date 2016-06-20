@@ -4,7 +4,7 @@ USING: accessors arrays assocs continuations debugger hashtables http
 http.client io io.encodings.string io.encodings.utf8 json.reader
 json.writer kernel locals make math math.parser namespaces sequences
 strings urls urls.encoding vectors ;
-in: couchdb
+IN: couchdb
 
 ! NOTE: This code only works with the latest couchdb (0.9.*), because old
 ! versions didn't provide the /_uuids feature which this code relies on when

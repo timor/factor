@@ -4,7 +4,7 @@ USING: accessors alien.c-types fry kernel locals math
 math.constants math.functions math.vectors math.vectors.simd
 math.vectors.simd.cords math.parser combinators.smart sequences
 hints classes.struct specialized-arrays io ;
-in: benchmark.nbody-simd
+IN: benchmark.nbody-simd
 
 : solar-mass ( -- x ) 4 pi sq * ; inline
 CONSTANT: days-per-year 365.24 ;

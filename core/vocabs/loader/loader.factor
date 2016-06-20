@@ -3,7 +3,7 @@
 USING: accessors arrays assocs continuations definitions init
 io io.files io.pathnames kernel make namespaces parser
 sequences sets splitting strings vocabs words ;
-in: vocabs.loader
+IN: vocabs.loader
 
 symbol: vocab-roots
 

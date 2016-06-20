@@ -1,6 +1,6 @@
 USING: editors io.files io.launcher kernel math.parser
 namespaces sequences windows.shell32 make io.pathnames ;
-in: editors.notepad2
+IN: editors.notepad2
 
 singleton: notepad2
 notepad2 editor-class set-global

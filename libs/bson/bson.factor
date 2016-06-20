@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: vocabs ;
 
-in: bson
+IN: bson
 
 "bson.reader" require
 "bson.writer" require

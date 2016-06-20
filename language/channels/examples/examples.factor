@@ -4,7 +4,7 @@
 ! Examples of using channels
 USING: kernel threads channels math namespaces
 locals sequences ;
-in: channels.examples
+IN: channels.examples
 
 : (counter) ( channel n -- )
     [ swap to ] 2keep 1 + (counter) ;

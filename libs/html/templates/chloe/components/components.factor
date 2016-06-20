@@ -5,7 +5,7 @@ classes.tuple classes.singleton namespaces
 html.components
 html.templates.chloe.compiler
 html.templates.chloe.syntax ;
-in: html.templates.chloe.components
+IN: html.templates.chloe.components
 
 : render-quot ( -- quot )
     string-context? get

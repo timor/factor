@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors destructors kernel windows.errors
 windows.kernel32 windows.types ;
-in: windows.handles
+IN: windows.handles
 
 TUPLE: win32-handle < disposable handle ;
 

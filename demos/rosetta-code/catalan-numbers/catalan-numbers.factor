@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math sequences ;
-in: rosetta-code.catalan-numbers
+IN: rosetta-code.catalan-numbers
 
 ! http://rosettacode.org/wiki/Catalan_numbers
 

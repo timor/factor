@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors compiler.cfg.registers kernel math ;
-in: compiler.cfg.stacks.height
+IN: compiler.cfg.stacks.height
 
 : record-stack-heights ( ds-height rs-height bb -- )
     [ rs-height<< ] keep ds-height<< ;

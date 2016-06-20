@@ -3,7 +3,7 @@
 USING: accessors assocs biassocs byte-arrays combinators
 combinators.short-circuit io io.binary io.encodings kernel
 literals locals math namespaces sequences simple-flat-file ;
-in: io.encodings.iso2022
+IN: io.encodings.iso2022
 
 singleton: iso2022
 

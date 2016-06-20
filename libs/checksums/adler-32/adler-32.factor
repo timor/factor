@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: checksums classes.singleton kernel math math.ranges
 math.vectors sequences ;
-in: checksums.adler-32
+IN: checksums.adler-32
 
 singleton: adler-32
 

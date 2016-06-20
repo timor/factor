@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Niklas Waern.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: math ;
-in: x11.xinput2.constants
+IN: x11.xinput2.constants
 
 ! From XI2.h
 

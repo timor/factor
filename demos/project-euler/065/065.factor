@@ -1,7 +1,7 @@
 ! Copyright (c) 2009 Guillaume Nargeot.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math lists lists.lazy project-euler.common sequences ;
-in: project-euler.065
+IN: project-euler.065
 
 ! http://projecteuler.net/index.php?section=problems&id=065
 

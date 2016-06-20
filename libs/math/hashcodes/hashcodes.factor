@@ -4,7 +4,7 @@
 USING: combinators kernel layouts math math.bitwise
 math.floating-point math.functions ;
 
-in: math.hashcodes
+IN: math.hashcodes
 
 GENERIC: number-hashcode ( x -- h ) ;
 

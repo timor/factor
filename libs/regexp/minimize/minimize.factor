@@ -3,7 +3,7 @@
 USING: accessors arrays assocs combinators.short-circuit fry
 hashtables kernel locals math regexp.classes
 regexp.transition-tables sequences sets sorting ;
-in: regexp.minimize
+IN: regexp.minimize
 
 : table>state-numbers ( table -- assoc )
     transitions>> keys <enum> [ swap ] H{ } assoc-map-as ;

@@ -5,7 +5,7 @@ compiler.units continuations definitions effects io
 io.encodings.utf8 io.files kernel lexer math.parser namespaces
 parser.notes quotations sequences sets slots source-files
 vectors vocabs vocabs.parser words words.symbol ;
-in: parser
+IN: parser
 
 : location ( -- loc )
     current-source-file get lexer get line>> 2dup and

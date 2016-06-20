@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays kernel sequences sets smalltalk.ast ;
-in: smalltalk.compiler.assignment
+IN: smalltalk.compiler.assignment
 
 GENERIC: assigned-locals ( ast -- seq ) ;
 

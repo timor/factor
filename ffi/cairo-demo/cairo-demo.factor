@@ -10,7 +10,7 @@ USING: cairo.ffi math math.constants byte-arrays kernel ui
 ui.render combinators ui.gadgets opengl.gl accessors
 namespaces opengl sequences ;
 
-in: cairo-demo
+IN: cairo-demo
 
 : make-image-array ( -- array )
     384 256 4 * * <byte-array> ;

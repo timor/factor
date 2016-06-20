@@ -6,7 +6,7 @@ accessors prettyprint fry sequences assocs locals hashtables
 grouping sorting classes.struct math.vectors.simd
 math.vectors.simd.cords random random.mersenne-twister
 system namespaces ;
-in: gml.coremath
+IN: gml.coremath
 
 ! :: gml-scalar-op ( a b scalar-quot mixed-quot vector-quot -- c )
 !     {

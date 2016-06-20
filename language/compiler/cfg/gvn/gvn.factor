@@ -20,7 +20,7 @@ compiler.cfg.gvn.rewrite
 compiler.cfg.gvn.slots
 compiler.cfg.gvn.misc
 compiler.cfg.gvn.expressions ;
-in: compiler.cfg.gvn
+IN: compiler.cfg.gvn
 
 GENERIC: simplify ( insn -- insn' ) ;
 

@@ -8,7 +8,7 @@ io.files io.pathnames io.ports io.sockets io.sockets.secure
 io.timeouts kernel libc locals math math.functions math.order
 math.parser memoize namespaces openssl openssl.libcrypto
 openssl.libssl random sequences sets splitting unicode ;
-in: io.sockets.secure.openssl
+IN: io.sockets.secure.openssl
 
 GENERIC: ssl-method ( symbol -- method ) ;
 M: TLSv1 ssl-method drop TLSv1_method ;

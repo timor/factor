@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators kernel locals math math.functions
 math.order sequences ui.gadgets ;
-in: ui.baseline-alignment
+IN: ui.baseline-alignment
 
 symbol: +baseline+
 

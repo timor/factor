@@ -6,7 +6,7 @@ kernel macros math math.functions math.parser namespaces
 peg.ebnf present prettyprint quotations sequences
 sequences.generalizations strings unicode vectors ;
 FROM: math.parser.private => format-float ;
-in: formatting
+IN: formatting
 
 PRIVATE<
 

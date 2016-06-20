@@ -4,7 +4,7 @@ USING: accessors arrays combinators combinators.short-circuit
 continuations effects fry generalizations kernel make math
 namespaces quotations sequences sequences.private vectors words
 ;
-in: macros.expander
+IN: macros.expander
 
 GENERIC: expand-macros ( quot -- quot' ) ;
 

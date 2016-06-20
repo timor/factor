@@ -3,7 +3,7 @@ kernel locals math math.order math.vectors namespaces opengl
 processing.shapes sequences threads ui ui.gadgets ui.gestures
 ui.render ;
 
-in: trails
+IN: trails
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

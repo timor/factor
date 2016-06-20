@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Daniel Ehrenberg.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io.encodings kernel ;
-in: io.encodings.binary
+IN: io.encodings.binary
 
 singleton: binary
 M: binary <encoder> drop ; inline

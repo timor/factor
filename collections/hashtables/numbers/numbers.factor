@@ -5,7 +5,7 @@ USING: accessors assocs combinators hashtables
 hashtables.wrapped kernel math math.hashcodes parser
 vocabs.loader ;
 
-in: hashtables.numbers
+IN: hashtables.numbers
 
 TUPLE: number-wrapper < wrapped-key ;
 

@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: heaps math sequences kernel ;
-in: benchmark.heaps
+IN: benchmark.heaps
 
 : data ( -- seq )
     1 6000 [ 13 + 79 * 13591 mod dup ] replicate nip ;

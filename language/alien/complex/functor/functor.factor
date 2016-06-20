@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien alien.c-types classes.struct functors
 kernel math math.functions quotations ;
-in: alien.complex.functor
+IN: alien.complex.functor
 
 FUNCTOR< define-complex-type ( N T -- )
 

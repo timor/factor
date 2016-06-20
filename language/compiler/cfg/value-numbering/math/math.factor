@@ -6,7 +6,7 @@ compiler.cfg.utilities compiler.cfg.value-numbering.folding
 compiler.cfg.value-numbering.graph
 compiler.cfg.value-numbering.rewrite cpu.architecture fry kernel
 layouts locals make math ;
-in: compiler.cfg.value-numbering.math
+IN: compiler.cfg.value-numbering.math
 
 : f-insn? ( insn -- ? )
     { [ ##load-reference? ] [ obj>> not ] } 1&& ; inline

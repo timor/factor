@@ -4,7 +4,7 @@
 USING: combinators kernel locals math math.extras
 math.extras.private math.functions math.ranges random sequences ;
 
-in: math.primes.solovay-strassen
+IN: math.primes.solovay-strassen
 
 PRIVATE<
 

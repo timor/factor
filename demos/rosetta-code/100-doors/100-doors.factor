@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: bit-arrays formatting fry kernel math math.ranges
 sequences ;
-in: rosetta-code.100-doors
+IN: rosetta-code.100-doors
 
 ! http://rosettacode.org/wiki/100_doors
 

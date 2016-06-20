@@ -1,6 +1,6 @@
 USING: alien.c-types alien.syntax classes.struct windows.com windows.com.syntax
 windows.directx windows.directx.d3d11 windows.types ;
-in: windows.directx.d3dcsx
+IN: windows.directx.d3dcsx
 
 library: d3dcsx
 

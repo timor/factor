@@ -1,5 +1,5 @@
 USING: ;
-in: windows.directx.d3dx11
+IN: windows.directx.d3dx11
 
 CONSTANT: D3DX11_ERR_CANNOT_MODIFY_INDEX_BUFFER 0x88760B54 ;
 CONSTANT: D3DX11_ERR_INVALID_MESH               0x88760B55 ;

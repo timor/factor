@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types alien.parser prettyprint
 sequences summary ;
-in: alien.debugger
+IN: alien.debugger
 
 M: no-c-type summary name>> unparse "“" "” is not a C type" surround ;
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators.short-circuit kernel locals math
 sequences ;
-in: lists
+IN: lists
 
 ! List Protocol
 mixin: list

@@ -21,7 +21,7 @@ graphviz.notation
 graphviz.render
 ;
 FROM: compiler.cfg.linearization => number-blocks ;
-in: compiler.cfg.graphviz
+IN: compiler.cfg.graphviz
 
 : left-justify ( str -- str' )
     string-lines "\\l" join ;

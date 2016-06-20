@@ -5,7 +5,7 @@ USING: accessors arrays assocs byte-arrays combinators fry
 io io.encodings.binary io.sockets kernel make math math.parser
 namespaces pack random sequences strings ;
 
-in: memcached
+IN: memcached
 
 ! TODO:
 ! - quiet commands

@@ -3,7 +3,7 @@
 USING: accessors alien.accessors alien.c-types alien.strings
 arrays compiler.units cpu.architecture fry io.encodings.binary
 io.encodings.utf8 kernel math sequences words ;
-in: alien.arrays
+IN: alien.arrays
 
 INSTANCE: array value-type ;
 

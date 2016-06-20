@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs hashtables kernel math namespaces words
 windows.types vocabs sequences ;
-in: windows.messages
+IN: windows.messages
 
 symbol: windows-messages
 

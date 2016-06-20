@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: bootstrap.image.download http.client init kernel
 mason.config mason.git mason.platform math.parser namespaces ;
-in: mason.updates
+IN: mason.updates
 
 TUPLE: sources git-id boot-image counter ;
 

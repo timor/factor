@@ -1,6 +1,6 @@
 USING: editors io.standard-paths kernel make math.parser
 namespaces sequences ;
-in: editors.textpad
+IN: editors.textpad
 
 singleton: textpad
 textpad editor-class set-global

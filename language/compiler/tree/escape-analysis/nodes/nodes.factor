@@ -3,7 +3,7 @@
 USING: compiler.tree.def-use
 compiler.tree.escape-analysis.allocations fry kernel math
 namespaces sequences ;
-in: compiler.tree.escape-analysis.nodes
+IN: compiler.tree.escape-analysis.nodes
 
 GENERIC: escape-analysis* ( node -- ) ;
 

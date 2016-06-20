@@ -4,7 +4,7 @@
 USING: accessors arrays combinators generic kernel io.sockets
 io.sockets.private memoize sequences system vocabs.parser ;
 
-in: io.sockets.icmp
+IN: io.sockets.icmp
 
 COMPILE< {
     { [ os windows? ] [ "windows.winsock" ] }

@@ -4,7 +4,7 @@
 USING: accessors arrays ascii kernel locals math random
 sequences sequences.extras vectors ;
 
-in: enigma
+IN: enigma
 
 : <alphabet> ( -- seq )
     26 iota >array ;

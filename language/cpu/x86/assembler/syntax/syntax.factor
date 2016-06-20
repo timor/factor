@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel words words.symbol sequences lexer parser fry
 namespaces combinators assocs math ;
-in: cpu.x86.assembler.syntax
+IN: cpu.x86.assembler.syntax
 
 symbol: registers
 

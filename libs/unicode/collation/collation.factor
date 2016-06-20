@@ -4,7 +4,7 @@ USING: accessors arrays assocs combinators
 combinators.short-circuit kernel locals make math math.order
 math.parser namespaces sequences simple-flat-file splitting
 strings unicode.data ;
-in: unicode.collation
+IN: unicode.collation
 
 PRIVATE<
 

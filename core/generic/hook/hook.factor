@@ -3,7 +3,7 @@
 USING: accessors definitions generic generic.single kernel
 kernel.private namespaces quotations sequences words ;
 QUALIFIED-WITH: generic.single.private gsp ;
-in: generic.hook
+IN: generic.hook
 
 TUPLE: hook-combination < single-combination var ;
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.private compiler.utilities kernel namespaces
 stack-checker.alien threads threads.private ;
-in: compiler.threads
+IN: compiler.threads
 
 [ yield ] yield-hook set-global
 

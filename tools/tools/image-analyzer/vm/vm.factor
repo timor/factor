@@ -1,5 +1,5 @@
 USING: alien.c-types assocs classes.struct kernel kernel.private vm ;
-in: tools.image-analyzer.vm
+IN: tools.image-analyzer.vm
 
 ! These structs and words correspond to vm/image.hpp
 STRUCT: image-header

@@ -21,7 +21,7 @@ http.server.redirection
 http.server.responses
 io.streams.string
 furnace.utilities ;
-in: furnace.chloe-tags
+IN: furnace.chloe-tags
 
 ! Chloe tags
 : parse-query-attr ( string -- assoc )

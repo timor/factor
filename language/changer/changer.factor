@@ -1,7 +1,7 @@
 ! Copyright (C) 2015 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: fry kernel lexer macros quotations sequences words ;
-in: changer
+IN: changer
 
 MACRO: inline-changer ( name -- quot' )
     [ ">>" append ] [ ">>" prepend ] bi

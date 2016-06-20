@@ -5,7 +5,7 @@ io.encodings.utf8 io.files io.files.temp io.launcher io.pathnames
 kernel locals make namespaces prettyprint sequences splitting system
 tools.deploy.config tools.deploy.config.editor tools.deploy.embed
 tools.deploy.libraries vocabs.loader vocabs.metadata.resources ;
-in: tools.deploy.backend
+IN: tools.deploy.backend
 
 : copy-vm ( executable bundle-name -- vm-path )
     prepend-path vm-path over copy-file ;

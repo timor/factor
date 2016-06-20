@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays kernel math.primes.factors
 math.ranges project-euler.common sequences sorting ;
-in: project-euler.124
+IN: project-euler.124
 
 ! http://projecteuler.net/index.php?section=problems&id=124
 

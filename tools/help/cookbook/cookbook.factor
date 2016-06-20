@@ -1,7 +1,7 @@
 USING: help.markup help.syntax io kernel math parser
 prettyprint sequences vocabs.loader namespaces stack-checker
 help command-line see ;
-in: help.cookbook
+IN: help.cookbook
 
 ARTICLE: "cookbook-syntax" "Basic syntax cookbook"
 "The following is a simple snippet of Factor code:"

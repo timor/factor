@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel accessors opengl math colors ui.pens ui.pens.caching ;
-in: ui.pens.solid
+IN: ui.pens.solid
 
 TUPLE: solid < caching-pen color interior-vertices boundary-vertices ;
 

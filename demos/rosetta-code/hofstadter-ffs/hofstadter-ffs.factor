@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math namespaces sequences ;
-in: rosetta-code.hofstadter-ffs
+IN: rosetta-code.hofstadter-ffs
 
 ! These two sequences of positive integers are defined as:
 !   R(1) = 1 ; S(1) = 1

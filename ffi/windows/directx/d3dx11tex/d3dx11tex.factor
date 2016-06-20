@@ -1,7 +1,7 @@
 USING: alien.c-types alien.syntax classes.struct
 windows.directx windows.directx.d3d10misc windows.directx.d3d11
 windows.directx.d3dx11core windows.directx.dxgiformat windows.types ;
-in: windows.directx.d3dx11tex
+IN: windows.directx.d3dx11tex
 
 library: d3dx11
 

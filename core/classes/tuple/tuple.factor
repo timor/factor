@@ -5,7 +5,7 @@ classes.algebra.private classes.builtin classes.private
 combinators definitions effects generic kernel kernel.private
 make math math.private memory namespaces quotations
 sequences sequences.private slots slots.private strings words ;
-in: classes.tuple
+IN: classes.tuple
 
 PRIVATE<
 PRIMITIVE: <tuple> ( layout -- tuple ) ;

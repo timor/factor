@@ -1,5 +1,5 @@
 USING: alien.syntax classes.struct windows.types ;
-in: windows.directx.d2dbasetypes
+IN: windows.directx.d2dbasetypes
 
 STRUCT: D3DCOLORVALUE
     { r FLOAT }

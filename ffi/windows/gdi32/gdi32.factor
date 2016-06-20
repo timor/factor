@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien alien.c-types alien.syntax alien.destructors
 kernel windows.types math.bitwise literals ;
-in: windows.gdi32
+IN: windows.gdi32
 
 CONSTANT: BI_RGB 0 ;
 CONSTANT: BI_RLE8 1 ;

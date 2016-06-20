@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs fry hashtables kernel locals math
 sequences ;
-in: disjoint-sets
+IN: disjoint-sets
 
 TUPLE: disjoint-set
 { parents hashtable read-only }

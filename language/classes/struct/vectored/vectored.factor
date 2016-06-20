@@ -2,7 +2,7 @@
 USING: accessors classes.struct classes.tuple combinators fry
 functors kernel locals macros math parser quotations sequences
 sequences.private slots specialized-arrays words ;
-in: classes.struct.vectored
+IN: classes.struct.vectored
 
 PRIVATE<
 

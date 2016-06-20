@@ -4,7 +4,7 @@ USING: compiler.tree.dead-code.branches
 compiler.tree.dead-code.liveness
 compiler.tree.dead-code.recursive
 compiler.tree.dead-code.simple ;
-in: compiler.tree.dead-code
+IN: compiler.tree.dead-code
 
 : remove-dead-code ( nodes -- nodes )
     init-dead-code

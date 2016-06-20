@@ -1,7 +1,7 @@
 ! Copyright (C) 2014 Jon Harper.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel namespaces sequences ;
-in: yaml.config
+IN: yaml.config
 
 ! Configuration
 ! The following are libyaml's emitter configuration options

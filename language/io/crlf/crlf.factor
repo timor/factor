@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Daniel Ehrenberg, Slava Pestov
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io kernel sequences splitting ;
-in: io.crlf
+IN: io.crlf
 
 : crlf ( -- )
     "\r\n" write ;

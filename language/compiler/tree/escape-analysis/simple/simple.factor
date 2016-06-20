@@ -6,7 +6,7 @@ compiler.tree.escape-analysis.allocations
 compiler.tree.escape-analysis.nodes
 compiler.tree.propagation.info kernel math namespaces sequences
 slots.private ;
-in: compiler.tree.escape-analysis.simple
+IN: compiler.tree.escape-analysis.simple
 
 M: #declare escape-analysis* drop ;
 

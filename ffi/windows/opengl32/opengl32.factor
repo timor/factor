@@ -3,7 +3,7 @@
 USING: alien alien.c-types alien.syntax parser namespaces kernel
 math math.bitwise windows.types init assocs splitting
 sequences libc opengl.gl opengl.gl.extensions opengl.gl.windows ;
-in: windows.opengl32
+IN: windows.opengl32
 
 CONSTANT: LPD_TYPE_RGBA        0 ;
 CONSTANT: LPD_TYPE_COLORINDEX  1 ;

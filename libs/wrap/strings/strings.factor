@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Daniel Ehrenberg
 ! See http://factorcode.org/license.txt for BSD license.
 USING: fry kernel math sequences splitting strings wrap ;
-in: wrap.strings
+IN: wrap.strings
 
 PRIVATE<
 

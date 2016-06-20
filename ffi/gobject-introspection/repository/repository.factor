@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Anton Gorenko.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: ;
-in: gobject-introspection.repository
+IN: gobject-introspection.repository
 
 TUPLE: repository
     namespace ;

@@ -4,7 +4,7 @@
 USING: accessors arrays assocs fry kernel kernel.private locals
 math math.order math.private sequences sequences.private summary
 vectors ;
-in: heaps
+IN: heaps
 
 GENERIC: heap-push* ( value key heap -- entry ) ;
 GENERIC: heap-peek ( heap -- value key ) ;

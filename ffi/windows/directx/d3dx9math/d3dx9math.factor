@@ -1,6 +1,6 @@
 USING: math classes.struct windows.types alien.syntax windows.directx.d3d9types
 windows.com.syntax windows.com windows.directx windows.directx.d3d9 ;
-in: windows.directx.d3dx9math
+IN: windows.directx.d3dx9math
 
 library: d3dx9
 

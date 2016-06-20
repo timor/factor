@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io kernel math sequences ;
-in: rosetta-code.sierpinski-triangle
+IN: rosetta-code.sierpinski-triangle
 
 ! http://rosettacode.org/wiki/Sierpinski_triangle
 

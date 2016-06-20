@@ -3,7 +3,7 @@
 USING: accessors combinators.smart io.files kernel sequences
 splitting vocabs.files vocabs.hierarchy vocabs.loader
 vocabs.metadata sets ;
-in: modern.paths
+IN: modern.paths
 
 : modern-if-available ( path -- path' )
     dup ".factor" ?tail [

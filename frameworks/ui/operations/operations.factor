@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs combinators.short-circuit fry
 kernel linked-assocs namespaces sequences ui.commands words ;
-in: ui.operations
+IN: ui.operations
 
 symbol: +keyboard+
 symbol: +primary+

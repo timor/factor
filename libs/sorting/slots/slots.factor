@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov, Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays fry kernel math.order sequences sorting ;
-in: sorting.slots
+IN: sorting.slots
 
 : execute-comparator ( obj1 obj2 word -- <=>/f )
     execute( obj1 obj2 -- <=> ) dup +eq+ eq? [ drop f ] when ;

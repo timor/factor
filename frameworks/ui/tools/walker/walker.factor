@@ -7,7 +7,7 @@ ui.commands ui.gadgets ui.gadgets.buttons ui.gadgets.labels
 ui.gadgets.status-bar ui.theme ui.gadgets.toolbar
 ui.gadgets.tracks ui.gestures ui.pens.solid ui.tools.browser
 ui.tools.common ui.tools.listener ui.tools.traceback ;
-in: ui.tools.walker
+IN: ui.tools.walker
 
 TUPLE: walker-gadget < tool
 status continuation thread

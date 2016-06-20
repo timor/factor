@@ -7,7 +7,7 @@ namespaces namespaces.private quotations quotations.private
 sbufs sequences sequences.private splitting system vectors
 vocabs vocabs.loader words stack-checker.row-polymorphism ;
 FROM: compiler => enable-optimizer ;
-in: bootstrap.compiler
+IN: bootstrap.compiler
 
 ! Don't bring this in when deploying, since it will store a
 ! reference to 'eval' in a global variable

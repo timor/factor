@@ -1,6 +1,6 @@
 ! Copyright (C) 2010 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: dns system windows.iphlpapi ;
-in: dns.windows
+IN: dns.windows
 
 M: windows initial-dns-servers dns-server-ips ;

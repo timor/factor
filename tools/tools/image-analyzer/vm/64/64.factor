@@ -1,5 +1,5 @@
 USING: alien.c-types classes.struct vm ;
-in: tools.image-analyzer.vm.64
+IN: tools.image-analyzer.vm.64
 
 STRUCT: boxed-float
     { header cell_t }

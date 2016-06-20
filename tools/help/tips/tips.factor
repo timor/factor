@@ -3,7 +3,7 @@
 USING: accessors arrays colors.constants definitions help.markup
 help.stylesheet io io.styles kernel literals namespaces parser
 random sequences ui.theme ;
-in: help.tips
+IN: help.tips
 
 symbol: tips
 

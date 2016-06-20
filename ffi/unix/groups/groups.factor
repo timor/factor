@@ -4,7 +4,7 @@ USING: accessors alien.c-types alien.data assocs byte-arrays
 classes.struct combinators continuations fry grouping
 io.encodings.utf8 kernel math math.parser namespaces sequences
 strings unix unix.ffi unix.users unix.utilities ;
-in: unix.groups
+IN: unix.groups
 
 TUPLE: group id name passwd members ;
 

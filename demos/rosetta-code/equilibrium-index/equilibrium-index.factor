@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.vectors sequences ;
-in: rosetta-code.equilibrium-index
+IN: rosetta-code.equilibrium-index
 
 ! http://rosettacode.org/wiki/Equilibrium_index
 

@@ -1,4 +1,4 @@
-in: tools.deploy.test.3
+IN: tools.deploy.test.3
 USING: io.encodings.ascii io.encodings.string system kernel ;
 
 : deploy-test-3 ( -- )

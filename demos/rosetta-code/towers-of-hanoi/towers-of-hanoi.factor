@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: formatting kernel locals math ;
-in: rosetta-code.towers-of-hanoi
+IN: rosetta-code.towers-of-hanoi
 
 ! http://rosettacode.org/wiki/Towers_of_Hanoi
 

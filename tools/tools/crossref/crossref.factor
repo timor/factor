@@ -5,7 +5,7 @@ generic generic.single hash-sets.identity hashtables help
 help.crossref help.markup help.topics init io io.pathnames
 io.styles kernel namespaces quotations see sequences sets
 sorting source-files threads vocabs words ;
-in: tools.crossref
+IN: tools.crossref
 
 symbol: crossref
 

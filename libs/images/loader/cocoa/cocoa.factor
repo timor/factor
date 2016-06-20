@@ -4,7 +4,7 @@ USING: accessors cocoa cocoa.classes core-foundation
 core-foundation.data core-foundation.urls core-graphics
 core-graphics.private core-graphics.types destructors
 images.loader io kernel locals math sequences system ;
-in: images.loader.cocoa
+IN: images.loader.cocoa
 
 singleton: ns-image
 

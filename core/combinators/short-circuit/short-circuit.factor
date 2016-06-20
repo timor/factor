@@ -1,6 +1,6 @@
 USING: arrays combinators fry generalizations kernel macros
 math sequences ;
-in: combinators.short-circuit
+IN: combinators.short-circuit
 
 PRIVATE<
 

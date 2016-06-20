@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors io io.crlf kernel sequences ;
-in: ftp
+IN: ftp
 
 SYMBOLS: +active+ +passive+ ;
 

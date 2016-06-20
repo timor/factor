@@ -1,5 +1,5 @@
 USING: kernel logging ;
-in: jamshred.log
+IN: jamshred.log
 
 LOG: (jamshred-log) DEBUG ;
 

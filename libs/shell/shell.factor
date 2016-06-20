@@ -2,7 +2,7 @@ USING: accessors continuations debugger environment eval globs
 io io.directories io.encodings.utf8 io.launcher io.pathnames
 io.pipes kernel namespaces sequences sequences.deep shell.parser
 splitting words ;
-in: shell
+IN: shell
 
 : cd ( args -- )
     [ home ] [ first ] if-empty set-current-directory ;

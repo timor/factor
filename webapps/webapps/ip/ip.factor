@@ -3,7 +3,7 @@
 USING: accessors furnace.actions http.server
 http.server.dispatchers html.forms io.sockets
 namespaces prettyprint kernel ;
-in: webapps.ip
+IN: webapps.ip
 
 TUPLE: ip-app < dispatcher ;
 

@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel prettyprint sequences arrays math math.vectors ;
-in: rosetta-code.raycasting
+IN: rosetta-code.raycasting
 
 
 ! http://rosettacode.org/wiki/Ray-casting_algorithm

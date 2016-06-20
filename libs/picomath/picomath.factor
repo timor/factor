@@ -4,7 +4,7 @@
 USING: combinators kernel locals math math.constants
 math.functions sequences ;
 
-in: picomath
+IN: picomath
 
 PRIVATE<
 

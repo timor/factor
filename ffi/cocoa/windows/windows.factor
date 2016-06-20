@@ -1,7 +1,7 @@
 ! Copyright (C) 2006, 2007 Slava Pestov
 ! See http://factorcode.org/license.txt for BSD license.
 USING: cocoa cocoa.classes kernel math ;
-in: cocoa.windows
+IN: cocoa.windows
 
 ! Window styles
 CONSTANT: NSBorderlessWindowMask           0 ;

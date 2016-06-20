@@ -6,7 +6,7 @@ compiler.cfg.linear-scan.allocation.state
 compiler.cfg.linear-scan.live-intervals
 compiler.cfg.linear-scan.ranges compiler.utilities fry kernel
 linked-assocs locals math namespaces sequences ;
-in: compiler.cfg.linear-scan.allocation.spilling
+IN: compiler.cfg.linear-scan.allocation.spilling
 
 : trim-before-ranges ( live-interval -- )
     dup last-use n>> 1 + swap [ fix-upper-bound ] change-ranges drop ;

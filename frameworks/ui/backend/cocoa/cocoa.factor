@@ -11,7 +11,7 @@ memory namespaces sequences threads ui colors ui.backend
 ui.backend.cocoa.views ui.clipboards ui.gadgets
 ui.gadgets.worlds ui.pixel-formats ui.pixel-formats.private
 ui.private words.symbol ;
-in: ui.backend.cocoa
+IN: ui.backend.cocoa
 
 TUPLE: window-handle view window ;
 

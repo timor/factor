@@ -5,7 +5,7 @@ USING: kernel accessors sequences sequences.private destructors math namespaces
        locals openssl openssl.libcrypto byte-arrays bit-arrays.private
        alien.c-types alien.destructors alien.data ;
 
-in: ecdsa
+IN: ecdsa
 
 PRIVATE<
 

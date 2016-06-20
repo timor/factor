@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays colors combinators fry kernel locals
 math math.functions random sequences sorting ;
-in: colors.hsv
+IN: colors.hsv
 
 ! h [0,360)
 ! s [0,1]

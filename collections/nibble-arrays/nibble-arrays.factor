@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: math kernel sequences sequences.private byte-arrays
 alien prettyprint.custom parser accessors locals ;
-in: nibble-arrays
+IN: nibble-arrays
 
 TUPLE: nibble-array
 { length array-capacity read-only }

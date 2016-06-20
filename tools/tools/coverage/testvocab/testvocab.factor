@@ -1,7 +1,7 @@
 ! Copyright (C) 2014 Jon Harper.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators fry kernel macros math sequences ;
-in: tools.coverage.testvocab
+IN: tools.coverage.testvocab
 
 PRIVATE<
 

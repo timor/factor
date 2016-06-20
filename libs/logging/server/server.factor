@@ -5,7 +5,7 @@ concurrency.messaging continuations debugger destructors init io
 io.directories io.encodings.utf8 io.files io.pathnames kernel
 locals math math.parser math.ranges namespaces sequences
 strings threads ;
-in: logging.server
+IN: logging.server
 
 : log-root ( -- string )
     \ log-root get-global [ "logs" resource-path ] unless* ;

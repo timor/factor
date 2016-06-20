@@ -8,7 +8,7 @@ io.encodings.utf8 kernel lexer locals macros math math.parser
 namespaces opengl.gl.extensions parser prettyprint quotations
 sequences words ;
 QUALIFIED-WITH: alien.c-types c ;
-in: cuda
+IN: cuda
 
 ERROR: cuda-error-state code ;
 

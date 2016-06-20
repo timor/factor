@@ -29,7 +29,7 @@ webapps.mason
 webapps.mason.backend
 webapps.mason.backend.watchdog
 websites.factorcode ;
-in: websites.concatenative
+IN: websites.concatenative
 
 : website-db ( -- db ) home "website.db" append-path <sqlite-db> ;
 

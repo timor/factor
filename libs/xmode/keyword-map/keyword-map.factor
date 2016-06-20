@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel strings assocs sequences hashtables
 sorting unicode sets ;
-in: xmode.keyword-map
+IN: xmode.keyword-map
 
 ! Based on org.gjt.sp.jedit.syntax.KeywordMap
 TUPLE: keyword-map no-word-sep ignore-case? assoc ;

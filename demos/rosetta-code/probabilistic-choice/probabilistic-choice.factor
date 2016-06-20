@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays assocs combinators.random formatting fry kernel
 macros math quotations sequences ;
-in: rosettacode.probabilistic-choice
+IN: rosettacode.probabilistic-choice
 
 ! http://rosettacode.org/wiki/Probabilistic_choice
 

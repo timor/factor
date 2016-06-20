@@ -3,7 +3,7 @@
 USING: alien.strings continuations init io io.backend
 io.encodings io.encodings.utf8 io.files.private io.pathnames
 kernel kernel.private namespaces sequences splitting system ;
-in: io.files
+IN: io.files
 
 PRIVATE<
 PRIMITIVE: (exists?) ( path -- ? ) ;

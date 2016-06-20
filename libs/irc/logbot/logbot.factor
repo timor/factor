@@ -4,7 +4,7 @@ USING: accessors calendar calendar.format destructors fry io
 io.directories io.encodings.utf8 io.files io.pathnames
 irc.client irc.client.chats irc.logbot.log-line splitting
 irc.messages.base kernel make namespaces sequences threads ;
-in: irc.logbot
+IN: irc.logbot
 
 CONSTANT: bot-channel "#concatenative" ;
 CONSTANT: default-log-directory "resource:logs/irc" ;

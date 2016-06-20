@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays fry kernel math math.parser regexp sequences
 strings ;
-in: benchmark.regexp
+IN: benchmark.regexp
 
 : regexp-benchmark ( -- )
     200

@@ -1,7 +1,7 @@
 ! Copyright (C) 2016 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io.directories kernel sequences system ;
-in: mason.release.dlls
+IN: mason.release.dlls
 
 HOOK: dll-list os ( -- seq ) ;
 

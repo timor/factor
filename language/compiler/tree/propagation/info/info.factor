@@ -6,7 +6,7 @@ classes.tuple.private combinators combinators.short-circuit
 compiler.tree.propagation.copy compiler.utilities kernel layouts math
 math.intervals namespaces sequences sequences.private strings
 words ;
-in: compiler.tree.propagation.info
+IN: compiler.tree.propagation.info
 
 : false-class? ( class -- ? ) \ f class<= ;
 

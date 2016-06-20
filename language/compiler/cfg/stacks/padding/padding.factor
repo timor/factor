@@ -5,7 +5,7 @@ compiler.cfg.instructions compiler.cfg.linearization compiler.cfg.registers
 compiler.cfg.stacks.local fry kernel math math.order namespaces
 sequences ;
 qualified: sets
-in: compiler.cfg.stacks.padding
+IN: compiler.cfg.stacks.padding
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! !! Stack

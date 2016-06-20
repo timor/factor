@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel math math.ranges sequences locals hints ;
-in: benchmark.nested-empty-loop-2
+IN: benchmark.nested-empty-loop-2
 
 : times ( seq quot -- ) [ drop ] prepose each ; inline
 

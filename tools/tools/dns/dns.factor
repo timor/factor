@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays command-line dns fry io kernel math.parser
 namespaces sequences strings ;
-in: tools.dns
+IN: tools.dns
 
 : a-line. ( host ip -- )
     [ write " has address " write ] [ print ] bi* ;

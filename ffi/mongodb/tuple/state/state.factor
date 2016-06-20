@@ -1,7 +1,7 @@
 USING: classes kernel accessors sequences fry assocs mongodb.tuple.collection
 words classes.tuple slots generic ;
 
-in: mongodb.tuple.state
+IN: mongodb.tuple.state
 
 PRIVATE<
 

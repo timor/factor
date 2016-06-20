@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays combinators kernel locals math math.functions
 math.libm math.order math.vectors sequences ;
-in: math.quaternions
+IN: math.quaternions
 
 : q+ ( u v -- u+v )
     v+ ; inline

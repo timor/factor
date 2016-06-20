@@ -4,7 +4,7 @@ USING: accessors kernel math.rectangles
 math.rectangles.positioning namespaces ui.gadgets
 ui.gadgets.worlds ui.gadgets.wrappers ui.gestures vectors ;
 FROM: ui.gadgets.wrappers => wrapper ;
-in: ui.gadgets.glass
+IN: ui.gadgets.glass
 
 GENERIC: hide-glass-hook ( gadget -- ) ;
 

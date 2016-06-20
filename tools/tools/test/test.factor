@@ -9,7 +9,7 @@ source-files.errors.debugger splitting stack-checker summary
 tools.errors unicode vocabs vocabs.files vocabs.metadata
 vocabs.parser words ;
 FROM: vocabs.hierarchy => load ;
-in: tools.test
+IN: tools.test
 
 TUPLE: test-failure < source-file-error continuation ;
 

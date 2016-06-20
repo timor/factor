@@ -1,5 +1,5 @@
 USING: alien.c-types classes.struct windows.types ;
-in: windows.directx.xaudio2fx
+IN: windows.directx.xaudio2fx
 
 CONSTANT: XAUDIO2FX_DEBUG 1 ;
 

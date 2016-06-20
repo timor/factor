@@ -3,7 +3,7 @@ USING: accessors timers alien.c-types calendar classes.struct
 continuations destructors fry kernel math math.order memory
 namespaces sequences system ui ui.gadgets.worlds vm
 vocabs.loader arrays locals ;
-in: game.loop
+IN: game.loop
 
 TUPLE: game-loop
     { tick-interval-nanos integer read-only }

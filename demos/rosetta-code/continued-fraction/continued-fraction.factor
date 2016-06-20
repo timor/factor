@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays combinators io kernel locals math math.functions
 math.ranges prettyprint sequences ;
-in: rosetta-code.continued-fraction
+IN: rosetta-code.continued-fraction
 
 ! http://rosettacode.org/wiki/Continued_fraction
 

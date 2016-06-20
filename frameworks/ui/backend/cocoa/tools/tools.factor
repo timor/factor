@@ -7,7 +7,7 @@ locals memory namespaces system ui.backend.cocoa
 ui.theme.switching ui.tools.browser ui.tools.listener
 vocabs.refresh ;
 FROM: alien.c-types => int void ;
-in: ui.backend.cocoa.tools
+IN: ui.backend.cocoa.tools
 
 : finder-run-files ( alien -- )
     CF>string-array listener-run-files

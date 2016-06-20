@@ -6,7 +6,7 @@ namespaces specialized-arrays system
 vocabs.loader windows windows.advapi32
 windows.errors windows.kernel32 words system-info ;
 specialized-array: ushort
-in: system-info.windows
+IN: system-info.windows
 
 : system-info ( -- SYSTEM_INFO )
     SYSTEM_INFO <struct> [ GetSystemInfo ] keep ;

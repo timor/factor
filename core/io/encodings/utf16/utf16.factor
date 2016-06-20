@@ -4,7 +4,7 @@ USING: accessors byte-arrays combinators io io.binary
 io.encodings kernel math math.private namespaces sbufs
 sequences sequences.private splitting strings strings.private
 vectors ;
-in: io.encodings.utf16
+IN: io.encodings.utf16
 
 singleton: utf16be
 

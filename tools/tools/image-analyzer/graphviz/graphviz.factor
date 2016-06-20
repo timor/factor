@@ -4,7 +4,7 @@ USING: accessors alien.strings assocs classes fry graphviz
 graphviz.attributes graphviz.notation math.bitwise sequences
 sets system tools.image-analyzer.references tools.image-analyzer.vm
 vocabs.parser ;
-in: tools.image-analyzer.graphviz
+IN: tools.image-analyzer.graphviz
 FROM: arrays => 1array 2array ;
 FROM: byte-arrays => >byte-array ;
 FROM: kernel => ? = 2drop bi bi* dup if keep nip object over swap tri with ;

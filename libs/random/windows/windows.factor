@@ -2,7 +2,7 @@ USING: accessors alien.data byte-arrays continuations
 destructors init kernel literals locals namespaces random
 sequences windows.advapi32 windows.errors windows.handles
 windows.types ;
-in: random.windows
+IN: random.windows
 
 TUPLE: windows-crypto-context < win32-handle provider type ;
 

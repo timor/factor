@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff, see BSD license
 USING: accessors arrays combinators combinators.short-circuit kernel math math.vectors
 math.functions sequences ;
-in: math.affine-transforms
+IN: math.affine-transforms
 
 TUPLE: affine-transform { x read-only } { y read-only } { origin read-only } ;
 C: <affine-transform> affine-transform ;

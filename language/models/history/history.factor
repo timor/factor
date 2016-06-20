@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel locals models sequences ;
-in: models.history
+IN: models.history
 
 TUPLE: history < model back forward ;
 

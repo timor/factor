@@ -4,7 +4,7 @@ USING: accessors colors.constants colors.hex combinators
 combinators.smart formatting kernel literals models
 sorting.human sorting.slots strings ui ui.gadgets.scrollers
 ui.gadgets.tables ;
-in: color-table
+IN: color-table
 
 ! ui.gadgets.tables demo
 singleton: color-renderer

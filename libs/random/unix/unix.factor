@@ -3,7 +3,7 @@
 USING: alien.c-types io io.files kernel namespaces random
 io.encodings.binary init accessors system destructors
 hints math ;
-in: random.unix
+IN: random.unix
 
 TUPLE: unix-random reader ;
 

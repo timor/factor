@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: ascii kernel math.ranges math.text.english sequences
 project-euler.common ;
-in: project-euler.017
+IN: project-euler.017
 
 ! http://projecteuler.net/index.php?section=problems&id=17
 

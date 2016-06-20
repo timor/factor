@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: http.server accessors ;
-in: http.server.filters
+IN: http.server.filters
 
 TUPLE: filter-responder responder ;
 

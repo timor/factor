@@ -5,7 +5,7 @@ combinators combinators.short-circuit io io.binary io.encodings
 io.encodings.binary io.encodings.utf8 io.files
 io.streams.byte-array kernel locals math namespaces sequences
 sequences.extras serialize strings typed vectors ;
-in: bson.reader
+IN: bson.reader
 
 symbol: state
 

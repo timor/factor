@@ -1,4 +1,4 @@
-in: vocabs.laoder.test.f
+IN: vocabs.laoder.test.f
 use: vocabs
 
 "vocabs.loader.test.g" require

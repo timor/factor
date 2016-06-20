@@ -3,7 +3,7 @@
 USING: combinators continuations curses io io.encodings.string
 io.encodings.utf8 io.streams.plain kernel listener make math
 namespaces sequences ;
-in: curses.listener
+IN: curses.listener
 
 : print-scratchpad ( -- )
     COLOR_BLACK COLOR_RED ccolor

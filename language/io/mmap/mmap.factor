@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types alien.data combinators
 destructors io.backend io.files.info kernel math system vocabs ;
-in: io.mmap
+IN: io.mmap
 
 TUPLE: mapped-file < disposable address handle length ;
 

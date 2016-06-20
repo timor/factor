@@ -1,7 +1,7 @@
 ! Copyright (C) 2006, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs kernel namespaces sequences sets ;
-in: definitions
+IN: definitions
 
 mixin: definition-mixin
 

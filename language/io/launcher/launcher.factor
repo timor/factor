@@ -7,7 +7,7 @@ io.encodings io.encodings.utf8 io.pipes io.pipes.private
 io.ports io.streams.duplex io.timeouts kernel namespaces
 prettyprint sequences strings system threads vocabs ;
 
-in: io.launcher
+IN: io.launcher
 
 TUPLE: process < identity-tuple
 

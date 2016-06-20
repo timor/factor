@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel lcs sequences strings xml.syntax
 xml.writer ;
-in: lcs.diff2html
+IN: lcs.diff2html
 
 GENERIC: diff-line ( obj -- xml ) ;
 

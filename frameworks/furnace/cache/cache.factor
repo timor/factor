@@ -4,7 +4,7 @@ USING: kernel accessors math.intervals
 system calendar fry
 random db db.tuples db.types
 http.server.filters ;
-in: furnace.cache
+IN: furnace.cache
 
 TUPLE: server-state id expires ;
 

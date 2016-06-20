@@ -5,7 +5,7 @@
 USING: accessors alien alien.c-types alien.destructors
 alien.syntax destructors destructors.private kernel math
 namespaces sequences sets summary system vocabs ;
-in: libc
+IN: libc
 
 HOOK: strerror os ( errno -- str ) ;
 

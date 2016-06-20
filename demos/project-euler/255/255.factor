@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays io kernel locals math math.functions math.parser math.ranges
     namespaces prettyprint project-euler.common sequences threads ;
-in: project-euler.255
+IN: project-euler.255
 
 ! http://projecteuler.net/index.php?section=problems&id=255
 

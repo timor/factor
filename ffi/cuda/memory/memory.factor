@@ -5,7 +5,7 @@ byte-arrays cuda cuda.ffi destructors fry io.encodings.string
 io.encodings.utf8 kernel locals math namespaces sequences
 strings ;
 QUALIFIED-WITH: alien.c-types c ;
-in: cuda.memory
+IN: cuda.memory
 
 : cuda-malloc ( n -- ptr )
     [ { CUdeviceptr } ] dip

@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs kernel math namespaces parser sequences ;
-in: compiler.cfg.registers
+IN: compiler.cfg.registers
 
 symbol: vreg-counter
 

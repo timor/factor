@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators combinators.random effects.parser kernel
 literals math random sequences ;
-in: random.data
+IN: random.data
 
 COMPILE<
 CONSTANT: digits-count 10 ;

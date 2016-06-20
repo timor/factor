@@ -2,7 +2,7 @@
 USING: accessors arrays fry kernel math math.order math.vectors
 namespaces opengl.gl random sequences ui ui.gadgets
 ui.gadgets.canvas ui.render ;
-in: maze
+IN: maze
 
 CONSTANT: line-width 8 ;
 

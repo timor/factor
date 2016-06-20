@@ -1,6 +1,6 @@
 USING: alien.fortran combinators kernel math namespaces
 sequences system system-info ;
-in: math.blas.config
+IN: math.blas.config
 
 SYMBOLS: blas-library blas-fortran-abi deploy-blas? ;
 

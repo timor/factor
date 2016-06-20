@@ -3,7 +3,7 @@ combinators.smart fry grouping images kernel math
 math.matrices.simd math.order math.vectors noise random
 sequences math.vectors.simd typed ;
 FROM: alien.c-types => float uchar ;
-in: terrain.generation
+IN: terrain.generation
 
 CONSTANT: terrain-segment-size { 512 512 } ;
 CONSTANT: terrain-segment-size-vector float-4{ 512.0 512.0 1.0 1.0 } ;

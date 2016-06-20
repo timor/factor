@@ -3,7 +3,7 @@
 USING: io.backend io.monitors
 core-foundation.fsevents continuations kernel sequences
 namespaces arrays system locals accessors destructors fry ;
-in: io.monitors.macosx
+IN: io.monitors.macosx
 
 TUPLE: macosx-monitor < monitor handle ;
 

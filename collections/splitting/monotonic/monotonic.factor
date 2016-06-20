@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays fry kernel locals math namespaces
 sequences sequences.private sorting ;
-in: splitting.monotonic
+IN: splitting.monotonic
 
 PRIVATE<
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs fry kernel locals math math.private
 sequences sequences.extras sequences.private unicode ;
-in: modern.slices
+IN: modern.slices
 
 : matching-delimiter ( ch -- ch' )
     H{

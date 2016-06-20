@@ -3,7 +3,7 @@
 USING: arrays kernel sequences sequences.deep splitting
 accessors fry locals combinators namespaces lists lists.lazy
 shuffle ;
-in: monads
+IN: monads
 
 ! Functors
 GENERIC#: fmap 1 ( functor quot -- functor' ) ;

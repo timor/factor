@@ -2,7 +2,7 @@ USING: accessors arrays bunny.cel-shaded bunny.fixed-pipeline
 bunny.model bunny.outlined destructors kernel math opengl.demo-support
 opengl.gl sequences ui ui.gadgets ui.gadgets.worlds ui.gestures
 ui.render words ui.pixel-formats ;
-in: bunny
+IN: bunny
 
 TUPLE: bunny-world < demo-world model-triangles geom draw-seq draw-n ;
 

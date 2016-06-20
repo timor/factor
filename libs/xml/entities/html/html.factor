@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs io.encodings.binary io.files kernel namespaces sequences
 xml xml.entities accessors xml.state ;
-in: xml.entities.html
+IN: xml.entities.html
 
 symbol: html-entities
 

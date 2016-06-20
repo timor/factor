@@ -1,7 +1,7 @@
 ! Copyright (c) 2012 Anonymous
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel make math math.parser sequences ;
-in: rosetta-code.look-and-say
+IN: rosetta-code.look-and-say
 
 ! http://rosettacode.org/wiki/Look-and-say_sequence
 

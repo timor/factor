@@ -4,7 +4,7 @@ USING: accessors timers arrays calendar combinators
 combinators.smart continuations debugger http.client fry
 init io.streams.string kernel locals math math.parser db
 namespaces sequences site-watcher.db site-watcher.email ;
-in: site-watcher
+IN: site-watcher
 
 symbol: site-watcher-frequency
 5 minutes site-watcher-frequency set-global

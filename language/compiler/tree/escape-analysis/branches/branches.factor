@@ -5,7 +5,7 @@ compiler.tree.escape-analysis.allocations
 compiler.tree.escape-analysis.nodes
 compiler.tree.propagation.branches grouping kernel sequences
 stack-checker.branches ;
-in: compiler.tree.escape-analysis.branches
+IN: compiler.tree.escape-analysis.branches
 
 M: #branch escape-analysis*
     [ in-d>> add-escaping-values ]

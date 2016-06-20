@@ -5,7 +5,7 @@ destructors io.backend.unix libc kernel math.bitwise sequences
 specialized-arrays unix unix.kqueue unix.time assocs
 io.backend.unix.multiplexers classes.struct literals ;
 specialized-array: kevent
-in: io.backend.unix.multiplexers.kqueue
+IN: io.backend.unix.multiplexers.kqueue
 
 TUPLE: kqueue-mx < mx events ;
 

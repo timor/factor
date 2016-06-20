@@ -7,7 +7,7 @@ mongodb.tuple.persistent mongodb.tuple.state strings ;
 FROM: mongodb.driver => update delete find count ;
 FROM: mongodb.tuple.persistent => assoc>tuple ;
 
-in: mongodb.tuple
+IN: mongodb.tuple
 
 SYNTAX: \ MDBTUPLE:
     parse-tuple-definition

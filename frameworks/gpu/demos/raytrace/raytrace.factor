@@ -4,7 +4,7 @@ generalizations gpu gpu.render gpu.shaders gpu.util gpu.util.wasd
 kernel literals math math.libm math.matrices math.order math.vectors
 method-chains sequences ui ui.gadgets ui.gadgets.worlds
 ui.pixel-formats audio.engine audio.loader locals ;
-in: gpu.demos.raytrace
+IN: gpu.demos.raytrace
 
 GLSL-SHADER-FILE: raytrace-vertex-shader vertex-shader "raytrace.v.glsl" ;
 GLSL-SHADER-FILE: raytrace-fragment-shader fragment-shader "raytrace.f.glsl" ;

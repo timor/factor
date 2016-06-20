@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io io.servers kernel math tty-server ;
 
-in: fuel.remote
+IN: fuel.remote
 
 PRIVATE<
 

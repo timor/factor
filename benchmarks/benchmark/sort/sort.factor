@@ -1,5 +1,5 @@
 USING: assocs kernel literals math random sequences sorting ;
-in: benchmark.sort
+IN: benchmark.sort
 
 CONSTANT: numbers-to-sort $[ 300,000 200 random-integers ] ;
 CONSTANT: alist-to-sort $[ 1,000 iota dup zip ] ;

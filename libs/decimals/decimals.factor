@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators.short-circuit kernel lexer locals
 math math.functions math.order math.parser sequences splitting ;
-in: decimals
+IN: decimals
 
 TUPLE: decimal { mantissa read-only } { exponent read-only } ;
 

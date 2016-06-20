@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors continuations concurrency.mailboxes
 concurrency.messaging kernel system threads ;
-in: tools.deploy.test.22
+IN: tools.deploy.test.22
 
 : linked-error-test ( -- )
     [ "Linked" throw ] "Test" spawn-linked drop

@@ -3,7 +3,7 @@
 USING: accessors assocs byte-arrays byte-vectors continuations
 continuations.private init kernel kernel.private math namespaces
 sequences ;
-in: alien
+IN: alien
 
 BUILTIN: alien { underlying c-ptr read-only initial: f } expired ;
 BUILTIN: dll { path byte-array read-only initial: B{ } } ;

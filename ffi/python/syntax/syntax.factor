@@ -1,7 +1,7 @@
 USING: accessors arrays combinators effects effects.parser fry generalizations
 kernel lexer locals math namespaces parser python python.ffi python.objects
 sequences sequences.generalizations vocabs.parser words ;
-in: python.syntax
+IN: python.syntax
 
 PRIVATE<
 

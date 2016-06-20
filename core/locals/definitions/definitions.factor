@@ -3,7 +3,7 @@
 USING: accessors definitions effects generic kernel locals
 macros memoize words
 locals.types sequences make quotations ;
-in: locals.definitions
+IN: locals.definitions
 
 PREDICATE: lambda-word < word "lambda" word-prop >boolean ;
 

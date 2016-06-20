@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs continuations definitions init io
 kernel math math.parser namespaces sequences sorting ;
-in: source-files.errors
+IN: source-files.errors
 
 GENERIC: error-file ( error -- file ) ;
 GENERIC: error-line ( error -- line ) ;

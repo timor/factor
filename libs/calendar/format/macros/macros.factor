@@ -1,6 +1,6 @@
 USING: macros kernel words quotations io sequences combinators
 continuations ;
-in: calendar.format.macros
+IN: calendar.format.macros
 
 MACRO: formatted ( spec -- quot )
     [

@@ -3,7 +3,7 @@
 USING: combinators continuations fry io.backend io.directories
 io.directories.hierarchy io.pathnames kernel locals namespaces
 random.data sequences system vocabs ;
-in: io.files.unique
+IN: io.files.unique
 
 PRIVATE<
 

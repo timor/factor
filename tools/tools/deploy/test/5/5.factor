@@ -1,4 +1,4 @@
-in: tools.deploy.test.5
+IN: tools.deploy.test.5
 USING: accessors urls io.encodings.ascii io.files math.parser
 io.files.temp http.client kernel ;
 

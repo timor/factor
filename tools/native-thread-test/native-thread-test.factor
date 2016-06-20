@@ -3,7 +3,7 @@
 USING: alien.c-types alien.strings alien.syntax io
 io.encodings.utf8 io.files kernel sequences system threads
 unix.utilities ;
-in: native-thread-test
+IN: native-thread-test
 
 FUNCTION: void* start_standalone_factor_in_new_thread ( int argc, c-string* argv ) ;
 

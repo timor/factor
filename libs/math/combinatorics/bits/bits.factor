@@ -1,7 +1,7 @@
 ! Copyright (C) 2013 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license
 USING: fry kernel math math.bitwise sequences ;
-in: math.combinatorics.bits
+IN: math.combinatorics.bits
 
 : next-permutation-bits ( v -- w )
     [ dup 1 - bitor 1 + dup ] keep

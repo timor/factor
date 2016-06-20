@@ -1,6 +1,6 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-in: furnace
+IN: furnace
 
 use: vocabs
 "furnace.actions" require

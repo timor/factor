@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: alien.c-types alien.data continuations cuda cuda.ffi
 cuda.libraries alien.destructors fry kernel namespaces ;
-in: cuda.contexts
+IN: cuda.contexts
 
 : set-up-cuda-context ( -- )
     H{ } clone cuda-modules set-global

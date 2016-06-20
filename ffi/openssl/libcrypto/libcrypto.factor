@@ -8,7 +8,7 @@
 USING: alien alien.c-types alien.destructors alien.libraries
 alien.syntax classes.struct combinators system ;
 
-in: openssl.libcrypto
+IN: openssl.libcrypto
 
 COMPILE< "libcrypto" {
     { [ os windows? ] [ "libcrypto-37.dll" ] }

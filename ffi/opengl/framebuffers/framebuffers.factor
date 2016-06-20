@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: opengl opengl.gl combinators continuations kernel
 alien.c-types alien.data ;
-in: opengl.framebuffers
+IN: opengl.framebuffers
 
 : gen-framebuffer ( -- id )
     [ glGenFramebuffers ] (gen-gl-object) ;

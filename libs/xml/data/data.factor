@@ -4,7 +4,7 @@ USING: kernel sequences sequences.private assocs arrays
 delegate.protocols delegate vectors accessors multiline
 macros words quotations combinators slots fry strings
 combinators.short-circuit ;
-in: xml.data
+IN: xml.data
 
 TUPLE: interpolated var ;
 C: <interpolated> interpolated ;
