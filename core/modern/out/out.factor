@@ -101,16 +101,21 @@ M: line-comment-literal write-literal
     } cleave ;
 
 
+: adding-semi? ( obj -- ? )
+    { [ seq>> 3 swap ?nth not ] [ closing-tag>> ] } 1&& ;
+
+: removing-semi? ( obj -- ? )
+    { [ seq>> 3 swap ?nth ] [ closing-tag>> not ] } 1&& ;
 
 
 : nice-semi-needed? ( obj -- ? )
     {
-        [ seq>> 3 swap ?nth not ]
-        [ closing-tag>> ]
+        [ { [ adding-semi? ] [ removing-semi? ] } 1|| ]
         [ payload>> [ line-comment-literal? ] last? ]
     } 1&& ;
 
 : write-uppercase-colon-literal-nice ( obj -- )
+B
     {
         [ seq>> 0 swap nth write-whitespace ]
         [ tag>> write ]
