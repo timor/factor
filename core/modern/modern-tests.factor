@@ -123,3 +123,7 @@ in: modern.tests
 
 { 1 }
 [ "PRIVATE< OMG:  PRIVATE>" string>literals length ] unit-test
+
+{ t } [ "=>" string>literals first tag-literal? ] unit-test
+{ t } [ ">>" string>literals first tag-literal? ] unit-test
+{ t } [ "<<" string>literals first tag-literal? ] unit-test

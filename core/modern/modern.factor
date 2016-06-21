@@ -115,8 +115,11 @@ M: array collapse-decorators
     collapse-decorators make-compound-literals ;
 
 ! foo:bar-baz09:
+: strict-upper-letter? ( ch -- ? )
+    { [ char: A char: Z between? ] [ char: 0 char: 9 between? ] [ ":-#" member? ] } 1|| ;
+
 : strict-upper? ( string -- ? )
-    [ { [ char: A char: Z between? ] [ char: 0 char: 9 between? ] [ ":-#" member? ] } 1|| ] all? ;
+    [ strict-upper-letter? ] all? ;
 
 : whitespace/f? ( ch -- ? )
     { char: \s char: \r char: \n f } member? ; inline
@@ -153,20 +156,20 @@ M: array collapse-decorators
             [ [ char: \: = ] find-last ] keep
             swap [ swap tail strict-upper? ] [ nip strict-upper? ] if
         ] [
-            "<" sequence=
+            [ char: \< = ] all? not
         ] if
     ] [
         drop f
     ] if ;
 
 : top-level-greater-than? ( string -- ? )
-    dup { [ ">" tail? ] [ length 1 > ] } 1&& [
+    dup { [ ">" tail? ] [ length 1 > ] [ first char: A char: Z between? ] } 1&& [
         but-last
         dup length 1 > [
             [ [ char: \: = ] find-last ] keep
             swap [ swap tail strict-upper? ] [ nip strict-upper? ] if
         ] [
-            ">" sequence=
+            [ char: \> = ] all? not
         ] if
     ] [
         drop f
