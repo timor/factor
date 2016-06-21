@@ -824,12 +824,12 @@ HELP: \ C:
     "In both cases, a word " { $snippet "<color>" } " is defined, which reads three values from the stack and creates a " { $snippet "color" } " instance having these values in the " { $snippet "red" } ", " { $snippet "green" } " and " { $snippet "blue" } " slots, respectively."
 } ;
 
-HELP: \ main:
-{ $syntax "main: word" }
+HELP: \ MAIN:
+{ $syntax "MAIN: word" }
 { $values { "word" word } }
 { $description "Defines the main entry point for the current vocabulary and source file. This word will be executed when this vocabulary is passed to " { $link run } " or the source file is passed to " { $link run-script } "." } ;
 
-HELP: PRIVATE<
+HELP: \ PRIVATE<
 { $syntax "PRIVATE< ... PRIVATE>" }
 { $description "Begins a block of private word definitions. Private word definitions are placed in the current vocabulary name, suffixed with " { $snippet ".private" } "." }
 { $notes
@@ -859,18 +859,18 @@ HELP: PRIVATE<
     }
 } ;
 
-HELP: PRIVATE>
+HELP: \ PRIVATE>
 { $syntax "PRIVATE< ... PRIVATE>" }
 { $description "Ends a block of private word definitions." } ;
 
 { \ PRIVATE< \ PRIVATE> } related-words
 
-HELP: <<
+HELP: \ <<
 { $syntax "<< ... >>" }
 { $description "Evaluates some code at parse time." }
 { $notes "Calling words defined in the same source file at parse time is prohibited; see compilation unit as where it was defined; see " { $link "compilation-units" } "." } ;
 
-HELP: COMPILE>
+HELP: \ COMPILE>
 { $syntax ">>" }
 { $description "Marks the end of a parse time code block." } ;
 

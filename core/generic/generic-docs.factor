@@ -126,7 +126,7 @@ HELP: define-generic
 { $description "Defines a generic word. A method combination is an object which responds to the " { $link perform-combination } " generic word." }
 { $contract "The method combination quotation is called each time the generic word has to be updated (for example, when a method is added), and thus must be side-effect free." } ;
 
-HELP: M\
+HELP: \ M\
 { $syntax "M\\ class generic" }
 { $description "Pushes a method on the stack." }
 { $examples { $code "M\\ fixnum + see" } { $code "USING: ui.gadgets.editors ui.render ;" "M\\ editor draw-gadget* edit" } } ;
