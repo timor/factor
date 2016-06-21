@@ -51,7 +51,7 @@ M: macosx os-version
 
 ! See /usr/include/sys/sysctl.h for constants
 
-library: libc
+LIBRARY: libc
 FUNCTION: int sysctl ( int* name, uint namelen, void* oldp, size_t* oldlenp, void* newp, size_t newlen ) ;
 
 : (sysctl-query) ( name namelen oldp oldlenp -- oldp )

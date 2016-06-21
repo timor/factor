@@ -9,7 +9,7 @@ COMPILE< "curl" {
     { [ os unix? ] [ "libcurl.so" ] }
 } cond cdecl add-library COMPILE>
 
-library: curl
+LIBRARY: curl
 
 ! curl.h
 

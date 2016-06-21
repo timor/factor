@@ -3,7 +3,7 @@
 USING: alien.syntax windows.types ;
 IN: windows.psapi
 
-library: psapi
+LIBRARY: psapi
 
 FUNCTION: BOOL EnumDeviceDrivers ( LPVOID* lpImageBase, DWORD cb, LPDWORD lpcbNeeded ) ;
 

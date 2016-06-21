@@ -24,7 +24,7 @@ COMPILE<
 "vorbis" deploy-library
 COMPILE>
 
-library: vorbis
+LIBRARY: vorbis
 
 STRUCT: vorbis-info
     { version int  }

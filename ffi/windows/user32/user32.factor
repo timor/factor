@@ -1007,7 +1007,7 @@ STRUCT: DEVMODE
 TYPEDEF: DEVMODE* PDEVMODE ;
 TYPEDEF: DEVMODE* LPDEVMODE ;
 
-library: user32
+LIBRARY: user32
 
 FUNCTION: HKL ActivateKeyboardLayout ( HKL hkl, UINT Flags ) ;
 FUNCTION: BOOL AdjustWindowRect ( LPRECT lpRect, DWORD dwStyle, BOOL bMenu ) ;

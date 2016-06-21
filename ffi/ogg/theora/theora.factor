@@ -109,7 +109,7 @@ STRUCT: th-huff-code
     { nbits int }
 ;
 
-library: theoradec
+LIBRARY: theoradec
 FUNCTION: c-string th_version_string ( ) ;
 FUNCTION: uint th_version_number ( ) ;
 FUNCTION: longlong th_granule_frame ( void* encdec, longlong granpos ) ;
@@ -144,7 +144,7 @@ CONSTANT: TH-RATECTL-CAP-UNDERFOW 4 ;
 
 TYPEDEF: void* th-enc-ctx ;
 
-library: theoraenc
+LIBRARY: theoraenc
 FUNCTION: th-enc-ctx* th_encode_alloc ( th-info* info ) ;
 FUNCTION: int th_encode_ctl ( th-enc-ctx* enc, int req, void* buf, int buf_sz ) ;
 FUNCTION: int th_encode_flushheader ( th-enc-ctx* enc, th-comment* comments, ogg-packet* op ) ;
@@ -171,7 +171,7 @@ STRUCT: th-stripe-callback
 TYPEDEF: void* th-dec-ctx ;
 TYPEDEF: void* th-setup-info ;
 
-library: theoradec
+LIBRARY: theoradec
 FUNCTION: int th_decode_headerin ( th-info* info, th-comment* tc, th-setup-info** setup, ogg-packet* op ) ;
 FUNCTION: th-dec-ctx* th_decode_alloc ( th-info* info, th-setup-info* setup ) ;
 FUNCTION: void th_setup_free ( th-setup-info* setup ) ;

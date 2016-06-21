@@ -10,7 +10,7 @@ COMPILE<
 "gmodule.ffi" require
 COMPILE>
 
-library: gstreamer
+LIBRARY: gstreamer
 
 COMPILE<
 "gstreamer" {

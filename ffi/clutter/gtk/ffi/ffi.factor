@@ -9,7 +9,7 @@ COMPILE<
 "gtk.ffi" require
 COMPILE>
 
-library: clutter.gtk
+LIBRARY: clutter.gtk
 
 COMPILE<
 "clutter.gtk" {

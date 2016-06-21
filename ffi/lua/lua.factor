@@ -11,7 +11,7 @@ COMPILE< "liblua5.1" {
     { [ os unix? ] [ "liblua5.1.so" ] }
 } cond cdecl add-library COMPILE>
 
-library: liblua5.1
+LIBRARY: liblua5.1
 
 ! luaconf.h
 TYPEDEF: double LUA_NUMBER ;
@@ -43,7 +43,7 @@ CONSTANT: LUA_ERRSYNTAX 3 ;
 CONSTANT: LUA_ERRMEM    4 ;
 CONSTANT: LUA_ERRERR    5 ;
 
-c-type: lua_State
+C-TYPE: lua_State
 
 CALLBACK: int lua_CFunction ( lua_State* L ) ;
 CALLBACK: char* lua_Reader ( lua_State* L, void* ud, size_t* sz ) ;
@@ -175,7 +175,7 @@ CONSTANT: LUA_HOOKTAILRET 4 ;
 : LUA_MASKLINE ( n -- n ) LUA_HOOKLINE shift ; inline
 : LUA_MASKCOUNT ( n -- n ) LUA_HOOKCOUNT shift ; inline
 
-c-type: lua_Debug
+C-TYPE: lua_Debug
 CALLBACK: void lua_Hook ( lua_State* L, lua_Debug* ar ) ;
 
 FUNCTION: int lua_getstack ( lua_State* L, int level, lua_Debug* ar ) ;

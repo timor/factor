@@ -3,9 +3,9 @@ windows.directx windows.directx.d3d10 windows.directx.dxgi
 windows.types ;
 IN: windows.directx.d3d10misc
 
-library: d3d10
+LIBRARY: d3d10
 
-c-type: ID3D10Blob
+C-TYPE: ID3D10Blob
 TYPEDEF: ID3D10Blob* LPD3D10BLOB ;
 
 COM-INTERFACE: ID3D10Blob IUnknown "{8BA5FB08-5195-40e2-AC58-0D989C3A0102}"

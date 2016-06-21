@@ -9,7 +9,7 @@ IN: gobject.ffi
 COMPILE< "glib.ffi" require COMPILE>
 use: glib.ffi
 
-library: gobject
+LIBRARY: gobject
 
 COMPILE< "gobject" {
     { [ os windows? ] [ "libgobject-2.0-0.dll" ] }
@@ -29,7 +29,7 @@ forget: G_IO_ERR
 forget: G_IO_HUP
 forget: G_IO_NVAL
 
-destructor: g_object_unref
+DESTRUCTOR: g_object_unref
 
 CONSTANT: G_TYPE_INVALID $[ 0 2 shift ] ;
 CONSTANT: G_TYPE_NONE $[ 1 2 shift ] ;

@@ -4,10 +4,10 @@ USING: alien alien.c-types alien.libraries alien.syntax
 combinators kernel tokyo.alien.tcutil ;
 IN: tokyo.alien.tchdb
 
-library: tokyocabinet
+LIBRARY: tokyocabinet
 
-c-type: TCXSTR
-c-type: TCHDB
+C-TYPE: TCXSTR
+C-TYPE: TCHDB
 
 CONSTANT: HDBFOPEN  1 ;
 CONSTANT: HDBFFATAL 2 ;

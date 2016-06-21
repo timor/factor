@@ -8,7 +8,7 @@ COMPILE<
 "gstreamer.ffi" require
 COMPILE>
 
-library: gstreamer.net
+LIBRARY: gstreamer.net
 
 COMPILE<
 "gstreamer.net" {

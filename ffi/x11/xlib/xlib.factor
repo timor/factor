@@ -17,7 +17,7 @@ literals ;
 FROM: alien.c-types => short ;
 IN: x11.xlib
 
-library: xlib
+LIBRARY: xlib
 
 TYPEDEF: ulong XID ;
 TYPEDEF: XID Window ;
@@ -32,12 +32,12 @@ TYPEDEF: XID KeySym ;
 TYPEDEF: ulong Atom ;
 
 TYPEDEF: c-string XPointer ;
-c-type: Screen
+C-TYPE: Screen
 TYPEDEF: void* GC ;
-c-type: Visual
-c-type: XExtData
-c-type: XFontProp
-c-type: XComposeStatus
+C-TYPE: Visual
+C-TYPE: XExtData
+C-TYPE: XFontProp
+C-TYPE: XComposeStatus
 TYPEDEF: void* XIM ;
 TYPEDEF: void* XIC ;
 
@@ -281,7 +281,7 @@ X-FUNCTION: int XFreePixmap ( Display* display, Pixmap pixmap ) ;
 
 ! 5.2 - Creating, Recoloring, and Freeing Cursors
 
-c-type: XColor
+C-TYPE: XColor
 X-FUNCTION: Cursor XCreatePixmapCursor ( Display* display, Pixmap source, Pixmap mask, XColor* foreground_color, XColor* background_color, uint x, uint y ) ;
 X-FUNCTION: int XFreeCursor ( Display* display, Cursor cursor ) ;
 

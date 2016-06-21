@@ -79,7 +79,7 @@ CONSTANT: ERROR_FILE_NOT_FOUND 2 ;
 CONSTANT: SHGFP_TYPE_CURRENT 0 ;
 CONSTANT: SHGFP_TYPE_DEFAULT 1 ;
 
-library: shell32
+LIBRARY: shell32
 
 FUNCTION: HRESULT SHGetFolderPathW ( HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwReserved, LPTSTR pszPath ) ;
 ALIAS: SHGetFolderPath SHGetFolderPathW ;

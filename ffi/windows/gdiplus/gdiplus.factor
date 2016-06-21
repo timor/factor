@@ -5,12 +5,12 @@ windows.kernel32 windows.ole32 windows.types ;
 FROM: alien.c-types => float ;
 IN: windows.gdiplus
 
-library: gdiplus
+LIBRARY: gdiplus
 
 FUNCTION: void* GdipAlloc ( SIZE_T size ) ;
 FUNCTION: void GdipFree ( void* mem ) ;
 
-destructor: GdipFree
+DESTRUCTOR: GdipFree
 
 TYPEDEF: float REAL ;
 
@@ -915,34 +915,34 @@ STRUCT: ColorMap
     { oldColor GpColor }
     { newColor GpColor } ;
 
-c-type: GpGraphics
-c-type: GpPen
-c-type: GpBrush
-c-type: GpHatch
-c-type: GpSolidFill
-c-type: GpPath
-c-type: GpMatrix
-c-type: GpPathIterator
-c-type: GpCustomLineCap
-c-type: GpAdjustableArrowCap
-c-type: GpImage
-c-type: GpMetafile
-c-type: GpImageAttributes
-c-type: GpCachedBitmap
-c-type: GpBitmap
-c-type: GpPathGradient
-c-type: GpLineGradient
-c-type: GpTexture
-c-type: GpFont
-c-type: GpFontCollection
-c-type: GpFontFamily
-c-type: GpStringFormat
-c-type: GpRegion
-c-type: CGpEffect
+C-TYPE: GpGraphics
+C-TYPE: GpPen
+C-TYPE: GpBrush
+C-TYPE: GpHatch
+C-TYPE: GpSolidFill
+C-TYPE: GpPath
+C-TYPE: GpMatrix
+C-TYPE: GpPathIterator
+C-TYPE: GpCustomLineCap
+C-TYPE: GpAdjustableArrowCap
+C-TYPE: GpImage
+C-TYPE: GpMetafile
+C-TYPE: GpImageAttributes
+C-TYPE: GpCachedBitmap
+C-TYPE: GpBitmap
+C-TYPE: GpPathGradient
+C-TYPE: GpLineGradient
+C-TYPE: GpTexture
+C-TYPE: GpFont
+C-TYPE: GpFontCollection
+C-TYPE: GpFontFamily
+C-TYPE: GpStringFormat
+C-TYPE: GpRegion
+C-TYPE: CGpEffect
 
 ! dummy out other windows types we don't care to define yet
-c-type: LOGFONTA
-c-type: LOGFONTW
+C-TYPE: LOGFONTA
+C-TYPE: LOGFONTW
 
 FUNCTION: GpStatus GdipCreateAdjustableArrowCap ( REAL x, REAL x, BOOL x, GpAdjustableArrowCap** x ) ;
 FUNCTION: GpStatus GdipGetAdjustableArrowCapFillState ( GpAdjustableArrowCap* x, BOOL* x ) ;
@@ -1631,4 +1631,4 @@ CONSTANT: standard-gdi+-startup-input
 : stop-gdi+ ( token -- )
     GdiplusShutdown ;
 
-destructor: stop-gdi+
+DESTRUCTOR: stop-gdi+

@@ -6,7 +6,7 @@ windows.advapi32 alien.libraries ;
 IN: windows.ddk.setupapi
 
 COMPILE< "setupapi" "setupapi.dll" stdcall add-library COMPILE>
-library: setupapi
+LIBRARY: setupapi
 
 TYPEDEF: DWORDLONG SP_LOG_TOKEN ;
 TYPEDEF: DWORDLONG* PSP_LOG_TOKEN ;
@@ -60,7 +60,7 @@ CONSTANT: TXTLOG_VENDOR           0x80000000 ;
 
 TYPEDEF: void* HPROPSHEETPAGE ;
 TYPEDEF: void* HIMAGELIST ;
-c-type: DEVPROPKEY
+C-TYPE: DEVPROPKEY
 TYPEDEF: ULONG DEVPROPTYPE ;
 TYPEDEF: DEVPROPTYPE* PDEVPROPTYPE ;
 TYPEDEF: void* LPPROPSHEETHEADERA ;

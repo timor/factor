@@ -3,13 +3,13 @@ windows.directx.d3d10misc windows.directx.d3d10shader
 windows.directx.d3dx10core windows.types ;
 IN: windows.directx.d3dx10async
 
-library: d3dx10
+LIBRARY: d3dx10
 
-c-type: ID3DX10ThreadPump
-c-type: ID3D10EffectPool
-c-type: D3DX10_IMAGE_LOAD_INFO
-c-type: D3DX10_IMAGE_INFO
-c-type: ID3D10Effect
+C-TYPE: ID3DX10ThreadPump
+C-TYPE: ID3D10EffectPool
+C-TYPE: D3DX10_IMAGE_LOAD_INFO
+C-TYPE: D3DX10_IMAGE_INFO
+C-TYPE: ID3D10Effect
 
 FUNCTION: HRESULT D3DX10CompileFromFileA ( LPCSTR pSrcFile, D3D10_SHADER_MACRO* pDefines, LPD3D10INCLUDE pInclude,
         LPCSTR pFunctionName, LPCSTR pProfile, UINT Flags1, UINT Flags2, ID3DX10ThreadPump* pPump, ID3D10Blob** ppShader, ID3D10Blob** ppErrorMsgs, HRESULT* pHResult ) ;

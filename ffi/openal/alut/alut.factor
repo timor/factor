@@ -18,7 +18,7 @@ COMPILE< "alut" {
 
 COMPILE< os macosx? [ "alut" deploy-library ] unless COMPILE>
 
-library: alut
+LIBRARY: alut
 
 CONSTANT: ALUT_API_MAJOR_VERSION 1 ;
 CONSTANT: ALUT_API_MINOR_VERSION 1 ;

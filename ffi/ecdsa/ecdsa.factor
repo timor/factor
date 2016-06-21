@@ -21,9 +21,9 @@ M: ec-key dispose
 : ec-key-handle ( -- handle )
     ec-key get dup handle>> [ nip ] [ already-disposed ] if* ;
 
-destructor: BN_clear_free
+DESTRUCTOR: BN_clear_free
 
-destructor: EC_POINT_clear_free
+DESTRUCTOR: EC_POINT_clear_free
 
 PRIVATE>
 

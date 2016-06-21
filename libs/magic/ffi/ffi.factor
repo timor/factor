@@ -11,7 +11,7 @@ COMPILE< "magic" {
     { [ os unix? ] [ "libmagic.so" ] }
 } cond cdecl add-library COMPILE>
 
-library: magic
+LIBRARY: magic
 
 CONSTANT: MAGIC_NONE 0x000000 ;
 CONSTANT: MAGIC_DEBUG 0x000001 ;
@@ -52,4 +52,4 @@ FUNCTION: int magic_compile ( magic_t magic, c-string path ) ;
 FUNCTION: int magic_check ( magic_t magic, c-string path ) ;
 FUNCTION: int magic_errno ( magic_t magic ) ;
 
-destructor: magic_close
+DESTRUCTOR: magic_close

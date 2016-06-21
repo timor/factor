@@ -3,7 +3,7 @@ windows.com.syntax windows.directx.dcommon windows.kernel32
 windows.ole32 windows.types windows.directx ;
 IN: windows.directx.dwrite
 
-library: dwrite
+LIBRARY: dwrite
 
 ENUM: DWRITE_FONT_FILE_TYPE
     DWRITE_FONT_FILE_TYPE_UNKNOWN
@@ -112,7 +112,7 @@ ENUM: DWRITE_FACTORY_TYPE
     DWRITE_FACTORY_TYPE_SHARED
     DWRITE_FACTORY_TYPE_ISOLATED ;
 
-c-type: IDWriteFontFileStream
+C-TYPE: IDWriteFontFileStream
 
 COM-INTERFACE: IDWriteFontFileLoader IUnknown "{727cad4e-d6af-4c9e-8a08-d695b11caa49}"
     HRESULT CreateStreamFromKey ( void* fontFileReferenceKey, UINT32 fontFileReferenceKeySize, IDWriteFontFileStream** fontFileStream ) ;
@@ -162,7 +162,7 @@ COM-INTERFACE: IDWriteRenderingParams IUnknown "{2f0da53a-2add-47cd-82ee-d9ec346
     DWRITE_PIXEL_GEOMETRY GetPixelGeometry ( )
     DWRITE_RENDERING_MODE GetRenderingMode ( ) ;
 
-c-type: ID2D1SimplifiedGeometrySink
+C-TYPE: ID2D1SimplifiedGeometrySink
 
 TYPEDEF: ID2D1SimplifiedGeometrySink IDWriteGeometrySink ;
 
@@ -183,8 +183,8 @@ COM-INTERFACE: IDWriteFontFace IUnknown "{5f49804d-7024-4d43-bfa9-d25984f53849}"
     HRESULT GetGdiCompatibleMetrics ( FLOAT emSize, FLOAT pixelsPerDip, DWRITE_MATRIX* transform, DWRITE_FONT_METRICS* fontFaceMetrics )
     HRESULT GetGdiCompatibleGlyphMetrics ( FLOAT emSize, FLOAT pixelsPerDip, DWRITE_MATRIX* transform, BOOL useGdiNatural, USHORT* glyphIndices, UINT32 glyphCount, DWRITE_GLYPH_METRICS* glyphMetrics, BOOL isSideways ) ;
 
-c-type: IDWriteFactory
-c-type: IDWriteFontFileEnumerator
+C-TYPE: IDWriteFactory
+C-TYPE: IDWriteFontFileEnumerator
 
 COM-INTERFACE: IDWriteFontCollectionLoader IUnknown "{cca920e4-52f0-492b-bfa8-29c72ee0a468}"
     HRESULT CreateEnumeratorFromKey ( IDWriteFactory* factory, void* collectionKey, UINT32 collectionKeySize, IDWriteFontFileEnumerator** fontFileEnumerator ) ;
@@ -201,8 +201,8 @@ COM-INTERFACE: IDWriteLocalizedStrings IUnknown "{08256209-099a-4b34-b86d-c22b11
     HRESULT GetStringLength ( UINT32 index, UINT32* length )
     HRESULT GetString ( UINT32 index, WCHAR* stringBuffer, UINT32 size ) ;
 
-c-type: IDWriteFontFamily
-c-type: IDWriteFont
+C-TYPE: IDWriteFontFamily
+C-TYPE: IDWriteFont
 
 COM-INTERFACE: IDWriteFontCollection IUnknown "{a84cee02-3eea-4eee-a827-87c1a02a0fcc}"
     UINT32 GetFontFamilyCount ( )
@@ -361,8 +361,8 @@ STRUCT: DWRITE_TRIMMING
     { delimiter      UINT32                      }
     { delimiterCount UINT32                      } ;
 
-c-type: IDWriteTypography
-c-type: IDWriteInlineObject
+C-TYPE: IDWriteTypography
+C-TYPE: IDWriteInlineObject
 
 COM-INTERFACE: IDWriteTextFormat IUnknown "{9c906818-31d7-4fd3-a151-7c5e225db55a}"
     HRESULT SetTextAlignment ( DWRITE_TEXT_ALIGNMENT textAlignment )
@@ -533,7 +533,7 @@ STRUCT: DWRITE_HIT_TEST_METRICS
     { isText       BOOL   }
     { isTrimmed    BOOL   } ;
 
-c-type: IDWriteTextRenderer
+C-TYPE: IDWriteTextRenderer
 
 COM-INTERFACE: IDWriteInlineObject IUnknown "{8339FDE3-106F-47ab-8373-1C6295EB10B3}"
     HRESULT Draw ( void* clientDrawingContext, IDWriteTextRenderer* renderer, FLOAT originX, FLOAT originY, BOOL isSideways, BOOL isRightToLeft, IUnknown* clientDrawingEffect )
@@ -603,7 +603,7 @@ COM-INTERFACE: IDWriteBitmapRenderTarget IUnknown "{5e5a32a3-8dff-4773-9ff6-0696
     HRESULT GetSize ( SIZE* size )
     HRESULT Resize ( UINT32 width, UINT32 height ) ;
 
-c-type: LOGFONTW
+C-TYPE: LOGFONTW
 
 COM-INTERFACE: IDWriteGdiInterop IUnknown "{1edd9491-9853-4299-898f-6432983b6f3a}"
     HRESULT CreateFontFromLOGFONT ( LOGFONTW* logFont, IDWriteFont** font )

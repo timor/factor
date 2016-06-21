@@ -19,7 +19,7 @@ COMPILE< "openal" {
 
 COMPILE< os unix? [ "openal" deploy-library ] unless COMPILE>
 
-library: openal
+LIBRARY: openal
 
 TYPEDEF: char ALboolean ;
 TYPEDEF: char ALchar ;
@@ -178,8 +178,8 @@ FUNCTION: void alDopplerVelocity ( ALfloat value ) ;
 FUNCTION: void alSpeedOfSound ( ALfloat value ) ;
 FUNCTION: void alDistanceModel ( ALenum distanceModel ) ;
 
-c-type: ALCdevice
-c-type: ALCcontext
+C-TYPE: ALCdevice
+C-TYPE: ALCcontext
 TYPEDEF: char ALCboolean ;
 TYPEDEF: char ALCchar ;
 TYPEDEF: int ALCenum ;
@@ -244,8 +244,8 @@ FUNCTION: void alcCaptureStart ( ALCdevice* device ) ;
 FUNCTION: void alcCaptureStop ( ALCdevice* device ) ;
 FUNCTION: void alcCaptureSamples ( ALCdevice* device, void* buf, ALCsizei samps ) ;
 
-destructor: alcCloseDevice*
-destructor: alcDestroyContext
+DESTRUCTOR: alcCloseDevice*
+DESTRUCTOR: alcDestroyContext
 
 : gen-sources ( size -- seq )
     dup uint <c-array> [ alGenSources ] keep ;

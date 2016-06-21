@@ -29,10 +29,10 @@ TYPEDEF: __uint64_t rlim_t ;
 TYPEDEF: uint32_t id_t ;
 TYPEDEF: long clockid_t ;
 
-c-type: DIR
-c-type: FILE
-c-type: rlimit
-c-type: rusage
-c-type: sockaddr
+C-TYPE: DIR
+C-TYPE: FILE
+C-TYPE: rlimit
+C-TYPE: rusage
+C-TYPE: sockaddr
 
 "unix.types." os name>> sequences:append require

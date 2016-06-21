@@ -4,7 +4,7 @@ USING: alien.c-types alien.data alien.syntax combinators
 generalizations kernel openal openal.alut.backend ;
 IN: openal.alut.other
 
-library: alut
+LIBRARY: alut
 
 FUNCTION: void alutLoadWAVFile ( c-string fileName, ALenum* format, void** data, ALsizei* size, ALsizei* frequency, ALboolean* looping ) ;
 

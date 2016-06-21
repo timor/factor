@@ -6,7 +6,7 @@ IN: pango.cairo.ffi
 
 COMPILE< "pango.ffi" require COMPILE>
 
-library: pango.cairo
+LIBRARY: pango.cairo
 
 COMPILE< "pango.cairo" {
     { [ os windows? ] [ "libpangocairo-1.0-0.dll" ] }

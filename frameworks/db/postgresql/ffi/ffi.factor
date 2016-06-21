@@ -59,19 +59,19 @@ TYPEDEF: int PostgresPollingStatusType ;
 TYPEDEF: int PGTransactionStatusType ;
 TYPEDEF: int PGVerbosity ;
 
-c-type: PGconn
-c-type: PGresult
-c-type: PGcancel
+C-TYPE: PGconn
+C-TYPE: PGresult
+C-TYPE: PGcancel
 TYPEDEF: uint Oid ;
 TYPEDEF: char pqbool ;
-c-type: PQconninfoOption
-c-type: PGnotify
-c-type: PQArgBlock
-c-type: PQprintOpt
-c-type: SSL
-c-type: FILE
+C-TYPE: PQconninfoOption
+C-TYPE: PGnotify
+C-TYPE: PQArgBlock
+C-TYPE: PQprintOpt
+C-TYPE: SSL
+C-TYPE: FILE
 
-library: postgresql
+LIBRARY: postgresql
 
 ! Exported functions of libpq
 

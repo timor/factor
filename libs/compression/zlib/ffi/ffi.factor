@@ -10,7 +10,7 @@ COMPILE< "zlib" {
     { [ os unix? ] [ "libz.so" ] }
 } cond cdecl add-library COMPILE>
 
-library: zlib
+LIBRARY: zlib
 
 TYPEDEF: void Bytef ;
 TYPEDEF: ulong uLongf ;

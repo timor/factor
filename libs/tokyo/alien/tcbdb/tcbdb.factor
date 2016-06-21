@@ -4,7 +4,7 @@ USING: alien alien.c-types alien.libraries alien.syntax
 combinators kernel tokyo.alien.tchdb tokyo.alien.tcutil ;
 IN: tokyo.alien.tcbdb
 
-library: tokyocabinet
+LIBRARY: tokyocabinet
 
 TYPEDEF: void* TCBDB ;
 

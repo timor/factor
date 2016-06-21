@@ -5,7 +5,7 @@ IN: file-picker.linux
 
 PRIVATE<
 
-library: gtk
+LIBRARY: gtk
 
 FUNCTION: GtkWidget* gtk_file_chooser_dialog_new (
     gchar* title,

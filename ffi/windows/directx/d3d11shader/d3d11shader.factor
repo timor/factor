@@ -4,7 +4,7 @@ windows.directx.d3d11 windows.com windows.com.syntax
 windows.directx.d3dcommon ;
 IN: windows.directx.d3d11shader
 
-library: d3d11
+LIBRARY: d3d11
 
 CONSTANT: D3D11_SHVER_PIXEL_SHADER    0 ;
 CONSTANT: D3D11_SHVER_VERTEX_SHADER   1 ;
@@ -152,8 +152,8 @@ COM-INTERFACE: ID3D11ShaderReflectionType f "{6E6FFA6A-9BAE-4613-A51E-91652D508C
     HRESULT IsOfType ( ID3D11ShaderReflectionType* pType )
     HRESULT ImplementsInterface ( ID3D11ShaderReflectionType* pBase ) ;
 
-c-type: ID3D11ShaderReflectionType
-c-type: ID3D11ShaderReflectionConstantBuffer
+C-TYPE: ID3D11ShaderReflectionType
+C-TYPE: ID3D11ShaderReflectionConstantBuffer
 
 COM-INTERFACE: ID3D11ShaderReflectionVariable f "{51F23923-F3E5-4BD1-91CB-606177D8DB4C}"
     HRESULT GetDesc ( D3D11_SHADER_VARIABLE_DESC* pDesc )

@@ -23,7 +23,7 @@ FUNCTION: int getifaddrs ( ifaddrs** ifap ) ;
 
 FUNCTION: void freeifaddrs ( ifaddrs* ifp ) ;
 
-destructor: freeifaddrs
+DESTRUCTOR: freeifaddrs
 
 : interface-names ( -- ifaddrs )
     [

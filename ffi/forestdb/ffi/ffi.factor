@@ -8,7 +8,7 @@ IN: forestdb.ffi
 
 COMPILE< "forestdb" dup find-library cdecl add-library COMPILE>
 
-library: forestdb
+LIBRARY: forestdb
 
 ! Begin fdb_types.h
 

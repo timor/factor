@@ -5,7 +5,7 @@ windows.directx.d3dx9math windows.directx.d3dx9shader
 windows.types ;
 IN: windows.directx.d3dx9effect
 
-library: d3dx9
+LIBRARY: d3dx9
 
 CONSTANT: D3DXFX_DONOTSAVESTATE         1 ;
 CONSTANT: D3DXFX_DONOTSAVESHADERSTATE   2 ;
@@ -52,12 +52,12 @@ STRUCT: D3DXFUNCTION_DESC
     { Name        LPCSTR }
     { Annotations UINT   } ;
 
-c-type: ID3DXEffectPool
+C-TYPE: ID3DXEffectPool
 TYPEDEF: ID3DXEffectPool* LPD3DXEFFECTPOOL ;
 
 COM-INTERFACE: ID3DXEffectPool IUnknown "{9537AB04-3250-412e-8213-FCD2F8677933}" ;
 
-c-type: ID3DXBaseEffect
+C-TYPE: ID3DXBaseEffect
 TYPEDEF: ID3DXBaseEffect* LPD3DXBASEEFFECT ;
 
 COM-INTERFACE: ID3DXBaseEffect IUnknown "{017C18AC-103F-4417-8C51-6BF6EF1E56BE}"
@@ -116,7 +116,7 @@ COM-INTERFACE: ID3DXBaseEffect IUnknown "{017C18AC-103F-4417-8C51-6BF6EF1E56BE}"
     HRESULT GetVertexShader ( D3DXHANDLE hParameter, LPDIRECT3DVERTEXSHADER9* ppVShader )
     HRESULT SetArrayRange ( D3DXHANDLE hParameter, UINT uStart, UINT uEnd ) ;
 
-c-type: ID3DXEffectStateManager
+C-TYPE: ID3DXEffectStateManager
 TYPEDEF: ID3DXEffectStateManager* LPD3DXEFFECTSTATEMANAGER ;
 
 COM-INTERFACE: ID3DXEffectStateManager IUnknown "{79AAB587-6DBC-4fa7-82DE-37FA1781C5CE}"
@@ -139,7 +139,7 @@ COM-INTERFACE: ID3DXEffectStateManager IUnknown "{79AAB587-6DBC-4fa7-82DE-37FA17
     HRESULT SetPixelShaderConstantI ( UINT RegisterIndex, INT* pConstantData, UINT RegisterCount )
     HRESULT SetPixelShaderConstantB ( UINT RegisterIndex, BOOL* pConstantData, UINT RegisterCount ) ;
 
-c-type: ID3DXEffect
+C-TYPE: ID3DXEffect
 TYPEDEF: ID3DXEffect* LPD3DXEFFECT ;
 
 COM-INTERFACE: ID3DXEffect ID3DXBaseEffect "{F6CEB4B3-4E4C-40dd-B883-8D8DE5EA0CD5}"
@@ -166,7 +166,7 @@ COM-INTERFACE: ID3DXEffect ID3DXBaseEffect "{F6CEB4B3-4E4C-40dd-B883-8D8DE5EA0CD
     HRESULT CloneEffect ( LPDIRECT3DDEVICE9 pDevice, LPD3DXEFFECT* ppEffect )
     HRESULT SetRawValue ( D3DXHANDLE hParameter, LPCVOID pData, UINT ByteOffset, UINT Bytes ) ;
 
-c-type: ID3DXEffectCompiler
+C-TYPE: ID3DXEffectCompiler
 TYPEDEF: ID3DXEffectCompiler* LPD3DXEFFECTCOMPILER ;
 
 COM-INTERFACE: ID3DXEffectCompiler ID3DXBaseEffect "{51B8A949-1A31-47e6-BEA0-4B30DB53F1E0}"

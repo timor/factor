@@ -11,9 +11,9 @@ cdecl add-library COMPILE>
 ! Functions that return borrowed references needs to be called like this:
 ! Py_Func dup Py_IncRef &Py_DecRef
 
-library: python
+LIBRARY: python
 
-c-type: PyObject
+C-TYPE: PyObject
 
 ! Methods
 CONSTANT: METH_OLDARGS  0x0000 ;
@@ -25,7 +25,7 @@ CONSTANT: METH_CLASS    0x0010 ;
 CONSTANT: METH_STATIC   0x0020 ;
 CONSTANT: METH_COEXIST  0x0040 ;
 
-c-type: PyCFunction
+C-TYPE: PyCFunction
 
 STRUCT: PyMethodDef
     { ml_name c-string }
@@ -144,7 +144,7 @@ FUNCTION: int PyType_Check ( PyObject* obj ) ;
 ! Reference counting
 FUNCTION: void Py_IncRef ( PyObject* o ) ;
 FUNCTION: void Py_DecRef ( PyObject* o ) ;
-destructor: Py_DecRef
+DESTRUCTOR: Py_DecRef
 
 ! Reflection
 FUNCTION: c-string PyEval_GetFuncName ( PyObject* func ) ;

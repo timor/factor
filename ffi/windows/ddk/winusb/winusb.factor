@@ -5,7 +5,7 @@ windows.kernel32 windows.types alien.libraries ;
 IN: windows.ddk.winusb
 
 COMPILE< "winusb" "winusb.dll" stdcall add-library COMPILE>
-library: winusb
+LIBRARY: winusb
 
 TYPEDEF: PVOID WINUSB_INTERFACE_HANDLE ;
 TYPEDEF: WINUSB_INTERFACE_HANDLE* PWINUSB_INTERFACE_HANDLE ;

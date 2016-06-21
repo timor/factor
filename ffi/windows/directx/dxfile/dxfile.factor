@@ -2,7 +2,7 @@ USING: alien.syntax alien.c-types classes.struct windows.com
 windows.com.syntax windows.kernel32 windows.ole32 windows.types ;
 IN: windows.directx.dxfile
 
-library: d3dxof
+LIBRARY: d3dxof
 
 TYPEDEF: DWORD DXFILEFORMAT ;
 
@@ -29,25 +29,25 @@ STRUCT: DXFILELOADMEMORY
     { dSize    DWORD  } ;
 TYPEDEF: DXFILELOADMEMORY* LPDXFILELOADMEMORY ;
 
-c-type: IDirectXFile
+C-TYPE: IDirectXFile
 TYPEDEF: IDirectXFile* LPDIRECTXFILE ;
 TYPEDEF: IDirectXFile** LPLPDIRECTXFILE ;
-c-type: IDirectXFileEnumObject
+C-TYPE: IDirectXFileEnumObject
 TYPEDEF: IDirectXFileEnumObject* LPDIRECTXFILEENUMOBJECT ;
 TYPEDEF: IDirectXFileEnumObject** LPLPDIRECTXFILEENUMOBJECT ;
-c-type: IDirectXFileSaveObject
+C-TYPE: IDirectXFileSaveObject
 TYPEDEF: IDirectXFileSaveObject* LPDIRECTXFILESAVEOBJECT ;
 TYPEDEF: IDirectXFileSaveObject** LPLPDIRECTXFILESAVEOBJECT ;
-c-type: IDirectXFileObject
+C-TYPE: IDirectXFileObject
 TYPEDEF: IDirectXFileObject* LPDIRECTXFILEOBJECT ;
 TYPEDEF: IDirectXFileObject** LPLPDIRECTXFILEOBJECT ;
-c-type: IDirectXFileData
+C-TYPE: IDirectXFileData
 TYPEDEF: IDirectXFileData* LPDIRECTXFILEDATA ;
 TYPEDEF: IDirectXFileData** LPLPDIRECTXFILEDATA ;
-c-type: IDirectXFileDataReference
+C-TYPE: IDirectXFileDataReference
 TYPEDEF: IDirectXFileDataReference* LPDIRECTXFILEDATAREFERENCE ;
 TYPEDEF: IDirectXFileDataReference** LPLPDIRECTXFILEDATAREFERENCE ;
-c-type: IDirectXFileBinary
+C-TYPE: IDirectXFileBinary
 TYPEDEF: IDirectXFileBinary* LPDIRECTXFILEBINARY ;
 TYPEDEF: IDirectXFileBinary** LPLPDIRECTXFILEBINARY ;
 

@@ -9,7 +9,7 @@ IN: libc
 
 HOOK: strerror os ( errno -- str ) ;
 
-library: factor
+LIBRARY: factor
 
 FUNCTION-ALIAS: errno int err_no ( ) ;
 
@@ -21,7 +21,7 @@ FUNCTION-ALIAS: set-errno void set_err_no ( int err-no ) ;
 : preserve-errno ( quot -- )
     errno [ call ] dip set-errno ; inline
 
-library: libc
+LIBRARY: libc
 
 FUNCTION-ALIAS: (malloc)
     void* malloc ( size_t size ) ;
@@ -117,7 +117,7 @@ FUNCTION: size_t strlen ( c-string alien ) ;
 
 FUNCTION: int system ( c-string command ) ;
 
-destructor: free
+DESTRUCTOR: free
 
 ! For libc.linux, libc.windows, libc.macosx...
 COMPILE< "libc." os name>> append require COMPILE>

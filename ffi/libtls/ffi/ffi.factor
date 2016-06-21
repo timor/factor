@@ -9,10 +9,10 @@ COMPILE< "libtls" {
     { [ os unix? ] [ "libtls.so" ] }
 } cond cdecl add-library COMPILE>
 
-c-type: tls_config
-c-type: tls_ctx
+C-TYPE: tls_config
+C-TYPE: tls_ctx
 
-library: libtls
+LIBRARY: libtls
 
 FUNCTION: int tls_init ( ) ;
 FUNCTION: c-string tls_error ( tls_ctx* ctx ) ;
@@ -66,5 +66,5 @@ FUNCTION: ssize_t tls_read ( tls_ctx* ctx, void* buf, size_t buflen ) ;
 FUNCTION: ssize_t tls_write ( tls_ctx* ctx, void* buf, size_t buflen ) ;
 FUNCTION: int tls_close ( tls_ctx* ctx ) ;
 
-destructor: tls_config_free
-destructor: tls_free
+DESTRUCTOR: tls_config_free
+DESTRUCTOR: tls_free

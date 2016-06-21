@@ -4,7 +4,7 @@ windows.directx.d3dx10async windows.directx.dxgiformat
 windows.types ;
 IN: windows.directx.d3dx10tex
 
-library: d3dx10
+LIBRARY: d3dx10
 
 CONSTANT: D3DX10_FILTER_NONE             0x00000001 ;
 CONSTANT: D3DX10_FILTER_POINT            0x00000002 ;

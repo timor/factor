@@ -3,7 +3,7 @@ windows.com.syntax windows.directx windows.directx.d3d10
 windows.directx.d3d10shader windows.types ;
 IN: windows.directx.d3d10_1shader
 
-library: d3d10_1
+LIBRARY: d3d10_1
 
 CONSTANT: D3D10_SHADER_DEBUG_REG_INPUT              0 ;
 CONSTANT: D3D10_SHADER_DEBUG_REG_OUTPUT             1 ;
@@ -140,7 +140,7 @@ STRUCT: D3D10_SHADER_DEBUG_INFO
     { UintOffset        UINT }
     { StringOffset      UINT } ;
 
-c-type: ID3D10ShaderReflection1
+C-TYPE: ID3D10ShaderReflection1
 TYPEDEF: ID3D10ShaderReflection1* LPD3D10SHADERREFLECTION1 ;
 
 COM-INTERFACE: ID3D10ShaderReflection1 IUnknown "{C3457783-A846-47CE-9520-CEA6F66E7447}"

@@ -3,16 +3,16 @@ windows.ole32 windows.types continuations kernel alien.syntax
 libc destructors accessors alien.data classes.struct windows.kernel32 ;
 IN: windows.com
 
-library: ole32
+LIBRARY: ole32
 
 COM-INTERFACE: IUnknown f "{00000000-0000-0000-C000-000000000046}"
     HRESULT QueryInterface ( REFGUID iid, void** ppvObject )
     ULONG AddRef ( )
     ULONG Release ( ) ;
 
-c-type: IAdviseSink
-c-type: IEnumFORMATETC
-c-type: IEnumSTATDATA
+C-TYPE: IAdviseSink
+C-TYPE: IEnumFORMATETC
+C-TYPE: IEnumSTATDATA
 
 COM-INTERFACE: IDataObject IUnknown "{0000010E-0000-0000-C000-000000000046}"
     HRESULT GetData ( FORMATETC* pFormatetc, STGMEDIUM* pmedium )
@@ -99,4 +99,4 @@ ERROR: null-com-release ;
 : with-com-interface ( interface quot -- )
     over [ com-release ] curry [ ] cleanup ; inline
 
-destructor: com-release
+DESTRUCTOR: com-release

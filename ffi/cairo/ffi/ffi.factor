@@ -14,7 +14,7 @@ COMPILE< "cairo" {
     { [ os unix? ] [ "libcairo.so" ] }
 } cond cdecl add-library COMPILE>
 
-library: cairo
+LIBRARY: cairo
 
 FUNCTION: int cairo_version ( ) ;
 FUNCTION: c-string cairo_version_string ( ) ;
@@ -92,7 +92,7 @@ FUNCTION: cairo_t* cairo_reference ( cairo_t* cr ) ;
 
 FUNCTION: void cairo_destroy ( cairo_t* cr ) ;
 
-destructor: cairo_destroy
+DESTRUCTOR: cairo_destroy
 
 FUNCTION: uint cairo_get_reference_count ( cairo_t* cr ) ;
 
@@ -614,7 +614,7 @@ FUNCTION: void cairo_surface_finish ( cairo_surface_t* surface ) ;
 
 FUNCTION: void cairo_surface_destroy ( cairo_surface_t* surface ) ;
 
-destructor: cairo_surface_destroy
+DESTRUCTOR: cairo_surface_destroy
 
 FUNCTION: uint cairo_surface_get_reference_count ( cairo_surface_t* surface ) ;
 

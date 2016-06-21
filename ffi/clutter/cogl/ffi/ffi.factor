@@ -8,7 +8,7 @@ COMPILE<
 "gobject.ffi" require
 COMPILE>
 
-library: clutter.cogl
+LIBRARY: clutter.cogl
 
 COMPILE<
 "clutter.cogl" {

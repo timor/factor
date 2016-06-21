@@ -6,7 +6,7 @@ IN: atk.ffi
 
 COMPILE< "gobject.ffi" require COMPILE>
 
-library: atk
+LIBRARY: atk
 
 COMPILE< "atk" {
     { [ os windows? ] [ "libatk-1.0-0.dll" ] }

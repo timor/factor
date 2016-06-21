@@ -12,7 +12,7 @@ COMPILE<
 "clutter.json.ffi" require
 COMPILE>
 
-library: clutter
+LIBRARY: clutter
 
 COMPILE<
 "clutter" {

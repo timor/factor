@@ -8,7 +8,7 @@ COMPILE<
 "gstreamer.ffi" require
 COMPILE>
 
-library: gstreamer.controller
+LIBRARY: gstreamer.controller
 
 COMPILE<
 "gstreamer.controller" {

@@ -3,7 +3,7 @@ windows.directx.d3d9 windows.directx.d3dx9core
 windows.directx.d3dx9mesh windows.types ;
 IN: windows.directx.d3dx9shape
 
-library: d3dx9
+LIBRARY: d3dx9
 
 TYPEDEF: void* LPGLYPHMETRICSFLOAT ;
 

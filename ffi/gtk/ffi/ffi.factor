@@ -11,7 +11,7 @@ COMPILE<
 "gdk.ffi" require
 COMPILE>
 
-library: gtk
+LIBRARY: gtk
 
 COMPILE<
 "gtk" {
@@ -25,7 +25,7 @@ IMPLEMENT-STRUCTS: GtkTreeIter ;
 
 gir: vocab:gtk/Gtk-3.0.gir
 
-destructor: gtk_widget_destroy
+DESTRUCTOR: gtk_widget_destroy
 
 ! <workaround
 forget: gtk_im_context_get_preedit_string

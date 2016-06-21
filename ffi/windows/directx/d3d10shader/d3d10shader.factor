@@ -3,7 +3,7 @@ windows.com.syntax windows.directx.d3d10 windows.directx.d3d10misc
 windows.types windows.directx ;
 IN: windows.directx.d3d10shader
 
-library: d3d10
+LIBRARY: d3d10
 
 CONSTANT: D3D10_SHADER_DEBUG                          1 ;
 CONSTANT: D3D10_SHADER_SKIP_VALIDATION                2 ;

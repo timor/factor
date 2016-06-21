@@ -4,7 +4,7 @@ USING: alien.c-types alien.syntax byte-arrays formatting kernel
 math windows.types ;
 IN: windows.winmm
 
-library: winmm
+LIBRARY: winmm
 
 TYPEDEF: int MCIERROR ;
 

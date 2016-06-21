@@ -4,7 +4,7 @@ USING: alien.c-types alien.syntax alien.destructors classes.struct
 windows.types ;
 IN: windows.usp10
 
-library: usp10
+LIBRARY: usp10
 
 STRUCT: SCRIPT_CONTROL
     { flags DWORD } ;
@@ -57,8 +57,8 @@ CONSTANT: SCRIPT_JUSTIFFY_RESERVED4 15 ;
 STRUCT: SCRIPT_VISATTR
     { flags WORD } ;
 
-c-type: SCRIPT_CACHE
-c-type: ABC
+C-TYPE: SCRIPT_CACHE
+C-TYPE: ABC
 
 FUNCTION: HRESULT ScriptShape (
     HDC hdc,
@@ -266,7 +266,7 @@ FUNCTION: HRESULT ScriptStringFree (
     SCRIPT_STRING_ANALYSIS* pssa
 ) ;
 
-destructor: ScriptStringFree
+DESTRUCTOR: ScriptStringFree
 
 FUNCTION: SIZE* ScriptString_pSize ( SCRIPT_STRING_ANALYSIS ssa ) ;
 

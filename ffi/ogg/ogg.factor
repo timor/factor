@@ -23,7 +23,7 @@ COMPILE<
 "ogg" deploy-library
 COMPILE>
 
-library: ogg
+LIBRARY: ogg
 
 STRUCT: oggpack-buffer
     { endbyte long }

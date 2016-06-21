@@ -10,7 +10,7 @@ COMPILE< "snappy" {
     { [ os unix? ] [ "libsnappy.so" ] }
 } cond cdecl add-library COMPILE>
 
-library: snappy
+LIBRARY: snappy
 
 ENUM: snappy_status SNAPPY_OK SNAPPY_INVALID_INPUT SNAPPY_BUFFER_TOO_SMALL ;
 

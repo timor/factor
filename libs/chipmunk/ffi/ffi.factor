@@ -16,7 +16,7 @@ COMPILE<
 
 "chipmunk" deploy-library
 COMPILE>
-library: chipmunk
+LIBRARY: chipmunk
 
 ! chipmunk_types.h
 TYPEDEF: double cpFloat ;
@@ -192,7 +192,7 @@ FUNCTION: cpVect cpBBClampVect ( cpBB bb, cpVect v ) ;
 FUNCTION: cpVect cpBBWrapVect ( cpBB bb, cpVect v ) ;
 
 ! cpBody.h
-c-type: cpBody
+C-TYPE: cpBody
 CALLBACK: void cpBodyVelocityFunc ( cpBody* body, cpVect gravity, cpFloat damping, cpFloat dt ) ;
 CALLBACK: void cpBodyPositionFunc ( cpBody* body, cpFloat dt ) ;
 
@@ -341,8 +341,8 @@ CALLBACK: cpFloat cpSpaceHashSegmentQueryFunc ( void* obj1, void* obj2, void* da
 FUNCTION: void cpSpaceHashSegmentQuery ( cpSpaceHash* hash, void* obj, cpVect a, cpVect b, cpFloat t_exit, cpSpaceHashSegmentQueryFunc func, void* data ) ;
 
 ! cpShape.h
-c-type: cpShape
-c-type: cpShapeClass
+C-TYPE: cpShape
+C-TYPE: cpShapeClass
 
 STRUCT: cpSegmentQueryInfo
     { shape cpShape* }
@@ -461,9 +461,9 @@ TYPED: cpPolyShapeContainsVertPartial ( poly: cpPolyShape v: cpVect n: cpVect --
     ] 2curry [ max ] reduce 0.0 <= ; inline
 
 ! cpArbiter.h
-c-type: cpArbiter
-c-type: cpSpace
-c-type: cpCollisionHandler
+C-TYPE: cpArbiter
+C-TYPE: cpSpace
+C-TYPE: cpCollisionHandler
 
 STRUCT: cpContact
     { p      cpVect      }
@@ -544,8 +544,8 @@ FUNCTION: int cpCollideShapes ( cpShape* a, cpShape* b, cpContact** arr ) ;
 
 ! cpConstraint.h
 
-c-type: cpConstraintClass
-c-type: cpConstraint
+C-TYPE: cpConstraintClass
+C-TYPE: cpConstraint
 
 CALLBACK: void cpConstraintPreStepFunction ( cpConstraint* constraint, cpFloat dt, cpFloat dt_inv ) ;
 CALLBACK: void cpConstraintApplyImpulseFunction ( cpConstraint* constraint ) ;
@@ -760,7 +760,7 @@ FUNCTION: cpSimpleMotor* cpSimpleMotorInit ( cpSimpleMotor* joint, cpBody* a, cp
 FUNCTION: cpConstraint* cpSimpleMotorNew ( cpBody* a, cpBody* b, cpFloat rate ) ;
 
 ! cpSpace.h
-c-type: cpSpace
+C-TYPE: cpSpace
 
 CALLBACK: int cpCollisionBeginFunc ( cpArbiter* arb, cpSpace* space, void* data ) ;
 CALLBACK: int cpCollisionPreSolveFunc ( cpArbiter* arb, cpSpace* space, void* data ) ;

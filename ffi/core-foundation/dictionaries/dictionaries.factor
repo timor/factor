@@ -8,8 +8,8 @@ SPECIALIZED-ARRAY: void*
 
 TYPEDEF: void* CFDictionaryRef ;
 TYPEDEF: void* CFMutableDictionaryRef ;
-c-type: CFDictionaryKeyCallBacks
-c-type: CFDictionaryValueCallBacks
+C-TYPE: CFDictionaryKeyCallBacks
+C-TYPE: CFDictionaryValueCallBacks
 
 FUNCTION: CFDictionaryRef CFDictionaryCreate (
    CFAllocatorRef allocator,

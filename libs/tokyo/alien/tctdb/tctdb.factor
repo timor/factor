@@ -4,11 +4,11 @@ USING: alien alien.c-types alien.libraries alien.syntax
 combinators kernel tokyo.alien.tchdb tokyo.alien.tcutil ;
 IN: tokyo.alien.tctdb
 
-library: tokyocabinet
+LIBRARY: tokyocabinet
 
-c-type: TDBIDX
-c-type: TCTDB
-c-type: TCMAP
+C-TYPE: TDBIDX
+C-TYPE: TCTDB
+C-TYPE: TCMAP
 
 CONSTANT: TDBFOPEN  HDBFOPEN ;
 CONSTANT: TDBFFATAL HDBFFATAL ;
@@ -34,8 +34,8 @@ CONSTANT: TDBITOPT  9998 ;
 CONSTANT: TDBITVOID 9999 ;
 CONSTANT: TDBITKEEP 16777216 ;
 
-c-type: TDBCOND
-c-type: TDBQRY
+C-TYPE: TDBCOND
+C-TYPE: TDBQRY
 
 CONSTANT: TDBQCSTREQ   0 ;
 CONSTANT: TDBQCSTRINC  1 ;

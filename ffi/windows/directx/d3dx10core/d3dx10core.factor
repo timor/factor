@@ -4,7 +4,7 @@ windows.directx.d3d10misc windows.directx.d3dx10math
 windows.directx.dxgi windows.gdi32 windows.types ;
 IN: windows.directx.d3dx10core
 
-library: d3dx10
+LIBRARY: d3dx10
 
 CONSTANT: D3DX10_SDK_VERSION 42 ;
 
@@ -24,7 +24,7 @@ FUNCTION: HRESULT D3DX10CreateDeviceAndSwapChain (
     IDXGISwapChain**      ppSwapChain,
     ID3D10Device**        ppDevice ) ;
 
-c-type: ID3D10Device1
+C-TYPE: ID3D10Device1
 
 FUNCTION: HRESULT D3DX10GetFeatureLevel1 ( ID3D10Device* pDevice, ID3D10Device1** ppDevice1 ) ;
 
@@ -45,7 +45,7 @@ STRUCT: D3DX10_SPRITE
     { pTexture            ID3D10ShaderResourceView* }
     { TextureIndex        UINT                      } ;
 
-c-type: ID3DX10Sprite
+C-TYPE: ID3DX10Sprite
 TYPEDEF: ID3DX10Sprite* LPD3DX10SPRITE ;
 
 COM-INTERFACE: ID3DX10Sprite IUnknown "{BA0B762D-8D28-43ec-B9DC-2F84443B0614}"

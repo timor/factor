@@ -8,7 +8,7 @@ COMPILE< "libgdbm"
 { "gdbm" "gdbm3" "libgdbm-3" } find-library-from-list
 cdecl add-library COMPILE>
 
-library: libgdbm
+LIBRARY: libgdbm
 
 C-GLOBAL: c-string gdbm_version ;
 
@@ -25,7 +25,7 @@ CONSTANT: GDBM_COALESCEBLKS 5 ;
 
 STRUCT: datum { dptr char* } { dsize int } ;
 
-c-type: _GDBM_FILE
+C-TYPE: _GDBM_FILE
 TYPEDEF: _GDBM_FILE* GDBM_FILE ;
 
 CALLBACK: void fatal_func_cb ( ) ;

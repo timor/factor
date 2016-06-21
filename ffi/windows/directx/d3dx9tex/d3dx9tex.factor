@@ -4,7 +4,7 @@ windows.directx.d3dx9core windows.directx.d3dx9shader
 windows.types ;
 IN: windows.directx.d3dx9tex
 
-library: d3dx9
+LIBRARY: d3dx9
 
 : D3DX_FILTER_NONE             ( -- n ) 1 0 shift ; inline
 : D3DX_FILTER_POINT            ( -- n ) 2 0 shift ; inline

@@ -10,7 +10,7 @@ COMPILE< "freetype" {
     { [ t ] [ drop ] }
 } cond COMPILE>
 
-library: freetype
+LIBRARY: freetype
 
 TYPEDEF: uchar FT_Byte ;
 TYPEDEF: void* FT_Bytes ;
@@ -38,8 +38,8 @@ TYPEDEF: long FT_F26Dot6 ;
 FUNCTION: FT_Error FT_Init_FreeType ( void* library ) ;
 
 ! circular reference between glyph and face
-c-type: face
-c-type: glyph
+C-TYPE: face
+C-TYPE: glyph
 
 STRUCT: glyph
     { library void* }
@@ -166,7 +166,7 @@ STRUCT: FT_Bitmap
     { palette_mode char }
     { palette void* } ;
 
-c-type: FT_Face
+C-TYPE: FT_Face
 
 FUNCTION: FT_Error FT_New_Face ( void* library, FT_Char* font, FT_Long index, face* face ) ;
 

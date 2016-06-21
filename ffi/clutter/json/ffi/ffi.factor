@@ -9,7 +9,7 @@ COMPILE<
 "gio.ffi" require
 COMPILE>
 
-library: clutter.json
+LIBRARY: clutter.json
 
 COMPILE<
 "clutter.json" {

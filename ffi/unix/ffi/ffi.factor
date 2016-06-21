@@ -48,7 +48,7 @@ CONSTANT: SHUT_RD     0 ;
 CONSTANT: SHUT_WR     1 ;
 CONSTANT: SHUT_RDWR   2 ;
 
-library: libc
+LIBRARY: libc
 
 STRUCT: group
     { gr_name c-string }

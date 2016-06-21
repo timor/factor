@@ -14,13 +14,13 @@ os {
 
 COMPILE>
 
-library: glu
+LIBRARY: glu
 
 ! These are defined as structs in glu.h, but we only ever use pointers to them
-c-type: GLUnurbs
-c-type: GLUquadric
-c-type: GLUtesselator
-c-type: GLubyte
+C-TYPE: GLUnurbs
+C-TYPE: GLUquadric
+C-TYPE: GLUtesselator
+C-TYPE: GLubyte
 TYPEDEF: void* GLUfuncptr ;
 
 ! StringName
@@ -202,7 +202,7 @@ CONSTANT: GLU_TESS_WINDING_POSITIVE          100132 ;
 CONSTANT: GLU_TESS_WINDING_NEGATIVE          100133 ;
 CONSTANT: GLU_TESS_WINDING_ABS_GEQ_TWO       100134 ;
 
-library: glu
+LIBRARY: glu
 
 FUNCTION: void gluBeginCurve ( GLUnurbs* nurb ) ;
 FUNCTION: void gluBeginPolygon ( GLUtesselator* tess ) ;
@@ -267,9 +267,9 @@ FUNCTION: GLint gluUnProject ( GLdouble winX, GLdouble winY, GLdouble winZ, GLdo
 ! FUNCTION: GLboolean gluCheckExtension ( GLubyte* extName, GLubyte* extString ) ;
 ! FUNCTION: GLint gluUnProject4 ( GLdouble winX, GLdouble winY, GLdouble winZ, GLdouble clipW, GLdouble* model, GLdouble* proj, GLint* view, GLdouble nearVal, GLdouble farVal, GLdouble* objX, GLdouble* objY, GLdouble* objZ, GLdouble* objW ) ;
 
-destructor: gluDeleteNurbsRenderer
-destructor: gluDeleteQuadric
-destructor: gluDeleteTess
+DESTRUCTOR: gluDeleteNurbsRenderer
+DESTRUCTOR: gluDeleteQuadric
+DESTRUCTOR: gluDeleteTess
 
 CALLBACK: void GLUtessBeginCallback ( GLenum type ) ;
 CALLBACK: void GLUtessBeginDataCallback ( GLenum type, void* data ) ;

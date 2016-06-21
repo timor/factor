@@ -1,14 +1,14 @@
 USING: alien.c-types alien.syntax windows.directx windows.ole32 windows.types ;
 IN: windows.directx.d3dcompiler
 
-library: d3dcompiler
+LIBRARY: d3dcompiler
 
-c-type: D3D_SHADER_MACRO
-c-type: ID3DBlob
+C-TYPE: D3D_SHADER_MACRO
+C-TYPE: ID3DBlob
 TYPEDEF: ID3DBlob* LPD3DBLOB ;
-c-type: ID3DInclude
+C-TYPE: ID3DInclude
 TYPEDEF: ID3DInclude* LPD3DINCLUDE ;
-c-type: ID3D10Effect
+C-TYPE: ID3D10Effect
 
 FUNCTION: HRESULT D3DCompile (
     LPCVOID           pSrcData,

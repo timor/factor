@@ -11,9 +11,9 @@ COMPILE<
 "libyaml" { "yaml" "yaml-0" "libyaml-0-2" } find-library-from-list cdecl add-library
 COMPILE>
 
-c-type: FILE
+C-TYPE: FILE
 
-library: libyaml
+LIBRARY: libyaml
 
 ! /**
 !  * @defgroup version Version Information
@@ -235,7 +235,7 @@ STRUCT: yaml_token_t
 !  */
 
 FUNCTION: void yaml_token_delete ( yaml_token_t *token ) ;
-destructor: yaml_token_delete
+DESTRUCTOR: yaml_token_delete
 
 ! /** @} */
 
@@ -518,7 +518,7 @@ yaml_mapping_end_event_initialize ( yaml_event_t *event ) ;
 
 FUNCTION: void
 yaml_event_delete ( yaml_event_t *event ) ;
-destructor: yaml_event_delete
+DESTRUCTOR: yaml_event_delete
 
 ! /** @} */
 
@@ -686,7 +686,7 @@ yaml_document_initialize ( yaml_document_t *document,
 
 FUNCTION: void
 yaml_document_delete ( yaml_document_t *document ) ;
-destructor: yaml_document_delete
+DESTRUCTOR: yaml_document_delete
 
 ! /**
 !  * Get a node of a YAML document.
@@ -1053,7 +1053,7 @@ yaml_parser_initialize ( yaml_parser_t *parser ) ;
 
 FUNCTION: void
 yaml_parser_delete ( yaml_parser_t *parser ) ;
-destructor: yaml_parser_delete
+DESTRUCTOR: yaml_parser_delete
 
 ! /**
 !  * Set a string input.
@@ -1412,7 +1412,7 @@ yaml_emitter_initialize ( yaml_emitter_t *emitter ) ;
 
 FUNCTION: void
 yaml_emitter_delete ( yaml_emitter_t *emitter ) ;
-destructor: yaml_emitter_delete
+DESTRUCTOR: yaml_emitter_delete
 
 ! /**
 !  * Set a string output.

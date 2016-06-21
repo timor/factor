@@ -4,7 +4,7 @@ USING: alien.c-types alien.data kernel alien alien.syntax shuffle
 openal openal.alut.backend namespaces system generalizations ;
 IN: openal.alut.macosx
 
-library: alut
+LIBRARY: alut
 
 FUNCTION: void alutLoadWAVFile ( c-string fileName, ALenum* format, void** data, ALsizei* size, ALsizei* frequency ) ;
 

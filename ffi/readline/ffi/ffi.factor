@@ -11,7 +11,7 @@ COMPILE< "readline" {
     { [ os unix? ] [ "libreadline.so" ] }
 } cond cdecl add-library COMPILE>
 
-library: readline
+LIBRARY: readline
 
 TYPEDEF: void* histdata_t ;
 

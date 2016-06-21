@@ -10,9 +10,9 @@ IN: curl
 
 PRIVATE<
 
-destructor: curl_easy_cleanup
+DESTRUCTOR: curl_easy_cleanup
 
-destructor: fclose
+DESTRUCTOR: fclose
 
 : check-code ( code -- )
     CURLE_OK assert= ;

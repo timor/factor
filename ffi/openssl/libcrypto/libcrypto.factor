@@ -46,7 +46,7 @@ CONSTANT: BIO_C_SET_FILENAME        108 ;
 CONSTANT: BIO_C_SET_SSL             109 ;
 CONSTANT: BIO_C_GET_SSL             110 ;
 
-library: libcrypto
+LIBRARY: libcrypto
 
 ! ===============================================
 ! crypto.h
@@ -130,8 +130,8 @@ FUNCTION: void* BIO_f_buffer ( ) ;
 
 CONSTANT: EVP_MAX_MD_SIZE 64 ;
 
-c-type: EVP_MD
-c-type: ENGINE
+C-TYPE: EVP_MD
+C-TYPE: ENGINE
 
 STRUCT: EVP_MD_CTX
     { digest EVP_MD* }
@@ -206,7 +206,7 @@ FUNCTION: void* BN_bin2bn ( void* s, int len, void* ret ) ;
 FUNCTION: int BN_bn2bin ( void* a, void* to ) ;
 
 FUNCTION: void BN_clear_free ( void* a ) ;
-destructor: BN_clear_free
+DESTRUCTOR: BN_clear_free
 
 ! ===============================================
 ! ec.h

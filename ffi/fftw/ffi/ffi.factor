@@ -6,7 +6,7 @@ alien.libraries.finder alien.syntax combinators kernel system ;
 
 IN: fftw.ffi
 
-library: fftw3
+LIBRARY: fftw3
 
 COMPILE< "fftw3" {
     { [ os windows? ] [ "libfftw3-3.dll" ] }
@@ -40,4 +40,4 @@ FUNCTION: void fftw_execute ( fftw_plan p ) ;
 
 FUNCTION: void fftw_free ( void* p ) ;
 
-destructor: fftw_free
+DESTRUCTOR: fftw_free

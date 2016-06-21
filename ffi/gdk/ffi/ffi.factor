@@ -11,7 +11,7 @@ COMPILE<
 "gdk.pixbuf.ffi" require
 COMPILE>
 
-library: gdk
+LIBRARY: gdk
 
 COMPILE<
 "gdk" {
@@ -25,7 +25,7 @@ COMPILE>
 STRUCT: cairo_rectangle_int_t
     { x int } { y int } { width int } { height int } ;
 
-c-type: cairo_region_t
+C-TYPE: cairo_region_t
 ! workaround>
 
 FOREIGN-RECORD-TYPE: cairo.RectangleInt cairo_rectangle_int_t ;
@@ -38,7 +38,7 @@ FOREIGN-ENUM-TYPE: cairo.Content cairo_content_t ;
 
 gir: vocab:gdk/Gdk-3.0.gir
 
-destructor: gdk_cursor_unref
+DESTRUCTOR: gdk_cursor_unref
 
 STRUCT: GdkEventButton
     { type GdkEventType }

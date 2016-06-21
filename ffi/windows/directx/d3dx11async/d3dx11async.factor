@@ -3,7 +3,7 @@ windows.directx.d3d10shader windows.directx.d3d11
 windows.directx.d3dx11core windows.directx.d3dx11tex windows.types ;
 IN: windows.directx.d3dx11async
 
-library: d3dx11
+LIBRARY: d3dx11
 
 FUNCTION: HRESULT D3DX11CompileFromFileA ( LPCSTR pSrcFile, D3D10_SHADER_MACRO* pDefines, LPD3D10INCLUDE pInclude,
         LPCSTR pFunctionName, LPCSTR pProfile, UINT Flags1, UINT Flags2, ID3DX11ThreadPump* pPump, ID3D10Blob** ppShader, ID3D10Blob** ppErrorMsgs, HRESULT* pHResult ) ;

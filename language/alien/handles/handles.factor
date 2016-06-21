@@ -32,7 +32,7 @@ PRIVATE>
 : release-alien-handle ( int -- )
     alien-handles get-global delete-at ; inline
 
-destructor: release-alien-handle
+DESTRUCTOR: release-alien-handle
 
 : <alien-handle-ptr> ( object -- void* )
     <alien-handle> <alien> ; inline
@@ -45,4 +45,4 @@ destructor: release-alien-handle
 : release-alien-handle-ptr ( alien -- )
     alien-address release-alien-handle ; inline
 
-destructor: release-alien-handle-ptr
+DESTRUCTOR: release-alien-handle-ptr

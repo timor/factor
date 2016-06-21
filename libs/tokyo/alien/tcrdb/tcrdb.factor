@@ -11,9 +11,9 @@ COMPILE< "tokyotyrant" {
     { [ os windows? ] [ "tokyotyrant.dll" ] }
 } cond cdecl add-library COMPILE>
 
-library: tokyotyrant
+LIBRARY: tokyotyrant
 
-c-type: TCRDB
+C-TYPE: TCRDB
 ! STRUCT: TCRDB
 !     { mmtx pthread_mutex_t }
 !     { eckey pthread_key_t }
@@ -94,7 +94,7 @@ CONSTANT: RDBITOPT     TDBITOPT ;
 CONSTANT: RDBITVOID    TDBITVOID ;
 CONSTANT: RDBITKEEP    TDBITKEEP ;
 
-c-type: RDBQRY
+C-TYPE: RDBQRY
 ! STRUCT: RDBQRY
 !     { rdb TCRDB* }
 !     { args TCLIST* } ;

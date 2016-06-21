@@ -3,14 +3,14 @@ windows.com.syntax windows.com windows.directx windows.directx.d3d9caps
 windows.ole32 windows.kernel32 ;
 IN: windows.directx.d3d9
 
-library: d3d9
+LIBRARY: d3d9
 
 CONSTANT: DIRECT3D_VERSION         0x0900 ;
 
 CONSTANT: D3D_SDK_VERSION   32 ;
 CONSTANT: D3D9b_SDK_VERSION 31 ;
 
-c-type: IDirect3D9
+C-TYPE: IDirect3D9
 
 FUNCTION: IDirect3D9* Direct3DCreate9 ( UINT SDKVersion ) ;
 
@@ -23,7 +23,7 @@ FUNCTION: BOOL D3DPERF_QueryRepeatFrame ( ) ;
 FUNCTION: void D3DPERF_SetOptions ( DWORD dwOptions ) ;
 FUNCTION: DWORD D3DPERF_GetStatus ( ) ;
 
-c-type: IDirect3DDevice9
+C-TYPE: IDirect3DDevice9
 
 COM-INTERFACE: IDirect3D9 IUnknown "{81BDCBCA-64D4-426d-AE8D-AD0147F4275C}""
     HRESULT RegisterSoftwareDevice ( void* pInitializeFunction )

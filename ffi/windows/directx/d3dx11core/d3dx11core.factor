@@ -2,7 +2,7 @@ USING: alien.syntax windows.directx windows.types windows.com.syntax
 alien.c-types windows.com windows.directx.d3d11 ;
 IN: windows.directx.d3dx11core
 
-library: d3dx11
+LIBRARY: d3dx11
 
 FUNCTION: HRESULT D3DX11CheckVersion ( UINT D3DSdkVersion, UINT D3DX11SdkVersion ) ;
 

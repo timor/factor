@@ -11,7 +11,7 @@ COMPILE<
 } cond add-library
 COMPILE>
 
-library: cuda
+LIBRARY: cuda
 
 TYPEDEF: uint CUdeviceptr ;
 TYPEDEF: int CUdevice ;

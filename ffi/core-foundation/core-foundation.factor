@@ -40,4 +40,4 @@ FUNCTION: CFTypeRef CFRetain ( CFTypeRef cf ) ;
 
 FUNCTION: void CFRelease ( CFTypeRef cf ) ;
 
-destructor: CFRelease
+DESTRUCTOR: CFRelease

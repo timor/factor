@@ -1269,7 +1269,7 @@ CONSTANT: NTM_DSIG 0x00200000 ;
 
 CONSTANT: GGI_MARK_NONEXISTING_GLYPHS 1 ;
 
-library: gdi32
+LIBRARY: gdi32
 
 ! FUNCTION: AbortDoc
 ! FUNCTION: AbortPath
@@ -1415,11 +1415,11 @@ FUNCTION: HBRUSH CreateSolidBrush ( COLORREF colorref ) ;
 ! FUNCTION: DdEntry9
 ! FUNCTION: DeleteColorSpace
 FUNCTION: BOOL DeleteDC ( HDC hdc ) ;
-destructor: DeleteDC
+DESTRUCTOR: DeleteDC
 ! FUNCTION: DeleteEnhMetaFile
 ! FUNCTION: DeleteMetaFile
 FUNCTION: BOOL DeleteObject ( HGDIOBJ hObject ) ;
-destructor: DeleteObject
+DESTRUCTOR: DeleteObject
 FUNCTION: int DescribePixelFormat ( HDC hdc, int iPixelFormat, UINT nBytes, PIXELFORMATDESCRIPTOR* ppfd ) ;
 ! FUNCTION: DeviceCapabilitiesExA
 ! FUNCTION: DeviceCapabilitiesExW

@@ -9,7 +9,7 @@ COMPILE<
 "clutter.ffi" require
 COMPILE>
 
-library: clutter.cally
+LIBRARY: clutter.cally
 
 COMPILE<
 "clutter.cally" {

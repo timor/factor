@@ -6,7 +6,7 @@ gobject-introspection.standard-types io.encodings.utf8 kernel
 system ;
 IN: glib.ffi
 
-library: glib
+LIBRARY: glib
 
 COMPILE< "glib" {
     { [ os windows? ] [ "libglib-2.0-0.dll" ] }
@@ -31,8 +31,8 @@ CONSTANT: G_MAXUINT64 0xffffffffffffffff ;
 
 gir: vocab:glib/GLib-2.0.gir
 
-destructor: g_source_unref
-destructor: g_free
+DESTRUCTOR: g_source_unref
+DESTRUCTOR: g_free
 
 CALLBACK: gboolean GSourceFuncsPrepareFunc ( GSource* source, gint* timeout_ ) ;
 CALLBACK: gboolean GSourceFuncsCheckFunc ( GSource* source ) ;

@@ -1,7 +1,7 @@
 USING: alien.c-types alien.syntax destructors kernel system ;
 IN: libc
 
-library: libc
+LIBRARY: libc
 
 CONSTANT: EPERM 1 ;
 CONSTANT: ENOENT 2 ;

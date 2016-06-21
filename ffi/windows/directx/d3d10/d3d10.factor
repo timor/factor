@@ -3,7 +3,7 @@ windows.directx windows.directx.dxgiformat windows.com.syntax
 windows.com windows.ole32 windows.directx.dxgitype ;
 IN: windows.directx.d3d10
 
-library: d3d10
+LIBRARY: d3d10
 
 CONSTANT: D3D10_16BIT_INDEX_STRIP_CUT_VALUE                                    0xffff ;
 CONSTANT: D3D10_32BIT_INDEX_STRIP_CUT_VALUE                                    0xffffffff ;
@@ -382,7 +382,7 @@ STRUCT: D3D10_BOX
     { bottom UINT }
     { back   UINT } ;
 
-c-type: ID3D10Device
+C-TYPE: ID3D10Device
 COM-INTERFACE: ID3D10DeviceChild IUnknown "{9B7E4C00-342C-4106-A19F-4F2704F689F0}"
     void GetDevice ( ID3D10Device** ppDevice )
     HRESULT GetPrivateData ( LPGUID guid, UINT* pDataSize, void* pData )

@@ -13,7 +13,7 @@ COMPILE< "libudis86" {
     { [ os unix? ] [ "libudis86.so" ] }
 } cond cdecl add-library COMPILE>
 
-library: libudis86
+LIBRARY: libudis86
 
 TYPEDEF: void ud ;
 

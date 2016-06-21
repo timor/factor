@@ -2,7 +2,7 @@ USING: alien.c-types alien.syntax classes.struct windows.com
 windows.directx windows.ole32 windows.types ;
 IN: windows.directx.xapofx
 
-library: xapofx
+LIBRARY: xapofx
 
 CONSTANT: FXEQ_MIN_FRAMERATE 22000 ;
 CONSTANT: FXEQ_MAX_FRAMERATE 48000 ;

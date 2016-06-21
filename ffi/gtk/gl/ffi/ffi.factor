@@ -9,7 +9,7 @@ COMPILE<
 "gdk.gl.ffi" require
 COMPILE>
 
-library: gtk.gl
+LIBRARY: gtk.gl
 
 COMPILE<
 "gtk.gl" {

@@ -7,7 +7,7 @@ IN: pango.ffi
 
 COMPILE< "gobject.ffi" require COMPILE>
 
-library: pango
+LIBRARY: pango
 
 COMPILE< "pango" {
     { [ os windows? ] [ "libpango-1.0-0.dll" ] }
@@ -19,8 +19,8 @@ IMPLEMENT-STRUCTS: PangoRectangle ;
 
 gir: vocab:pango/Pango-1.0.gir
 
-destructor: pango_font_description_free
-destructor: pango_layout_iter_free
+DESTRUCTOR: pango_font_description_free
+DESTRUCTOR: pango_layout_iter_free
 
 ! <workaround
 

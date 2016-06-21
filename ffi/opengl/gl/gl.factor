@@ -24,7 +24,7 @@ TYPEDEF: double  GLclampd ;
 TYPEDEF: longlong  GLint64 ;
 TYPEDEF: ulonglong GLuint64 ;
 TYPEDEF: void*     GLsync ;
-c-type: GLvoid
+C-TYPE: GLvoid
 
 TYPEDEF: c-string[ascii] GLstring ;
 
@@ -625,7 +625,7 @@ CONSTANT: GL_CLIENT_VERTEX_ARRAY_BIT        0x00000002 ;
 CONSTANT: GL_ALL_CLIENT_ATTRIB_BITS         0xFFFFFFFF ;
 CONSTANT: GL_CLIENT_ALL_ATTRIB_BITS         0xFFFFFFFF ;
 
-library: gl
+LIBRARY: gl
 
 COMPILE<
 os linux? [

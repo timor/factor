@@ -14,7 +14,7 @@ COMPILE< "pcre" {
     { [ os unix? ] [ "libpcre.so" ] }
 } cond cdecl add-library COMPILE>
 
-library: pcre
+LIBRARY: pcre
 
 CONSTANT: PCRE_CASELESS           0x00000001 ;
 CONSTANT: PCRE_MULTILINE          0x00000002 ;

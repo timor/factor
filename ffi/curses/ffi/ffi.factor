@@ -10,7 +10,7 @@ COMPILE< "curses" {
     { [ os unix?  ]  [ "ncursesw" find-library ] }
 } cond cdecl add-library COMPILE>
 
-c-type: SCREEN
+C-TYPE: SCREEN
 TYPEDEF: void* va_list ;
 
 TYPEDEF: uint chtype ;
@@ -81,7 +81,7 @@ STRUCT: MEVENT
     { x int } { y int } { z int }
     { bstate mmask_t } ;
 
-library: curses
+LIBRARY: curses
 
 C-GLOBAL: void* stdscr ;
 

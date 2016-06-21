@@ -12,7 +12,7 @@ COMPILE< "libusb" {
         { [ os macosx? ] [ "libusb-1.0.dylib"  ] }
         { [ os unix?  ] [ "libusb-1.0.so" ] }
     } cond cdecl add-library COMPILE>
-library: libusb
+LIBRARY: libusb
 
 : libusb_cpu_to_le16 ( x -- y )
     2 >native-endian le> ; inline
@@ -172,9 +172,9 @@ STRUCT: libusb_control_setup
 
 : LIBUSB_CONTROL_SETUP_SIZE ( -- x ) libusb_control_setup heap-size ; inline
 
-c-type: libusb_context
-c-type: libusb_device
-c-type: libusb_device_handle
+C-TYPE: libusb_context
+C-TYPE: libusb_device
+C-TYPE: libusb_device_handle
 
 ENUM: libusb_error
     { LIBUSB_SUCCESS             0 }
@@ -212,7 +212,7 @@ STRUCT: libusb_iso_packet_descriptor
     { status        libusb_transfer_status } ;
 SPECIALIZED-ARRAY: libusb_iso_packet_descriptor
 
-c-type: libusb_transfer
+C-TYPE: libusb_transfer
 
 CALLBACK: void libusb_transfer_cb_fn ( libusb_transfer* transfer ) ;
 

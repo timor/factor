@@ -69,11 +69,11 @@ FUNCTION: CGImageRef CGBitmapContextCreateImage (
 
 FUNCTION: void CGColorSpaceRelease ( CGColorSpaceRef ref ) ;
 
-destructor: CGColorSpaceRelease
+DESTRUCTOR: CGColorSpaceRelease
 
 FUNCTION: void CGContextRelease ( CGContextRef ref ) ;
 
-destructor: CGContextRelease
+DESTRUCTOR: CGContextRelease
 
 FUNCTION: void CGContextSetRGBStrokeColor (
    CGContextRef c,

@@ -4,7 +4,7 @@ windows.directx.dxgitype windows.directx.dxgi windows.directx.d3dcommon
 windows.directx ;
 IN: windows.directx.d3d11
 
-library: d3d11
+LIBRARY: d3d11
 
 CONSTANT: D3D11_16BIT_INDEX_STRIP_CUT_VALUE   0xffff ;
 CONSTANT: D3D11_32BIT_INDEX_STRIP_CUT_VALUE   0xffffffff ;
@@ -635,8 +635,8 @@ STRUCT: D3D11_BOX
     { bottom UINT }
     { back   UINT } ;
 
-c-type: ID3D11Device
-c-type: ID3D11ClassLinkage
+C-TYPE: ID3D11Device
+C-TYPE: ID3D11ClassLinkage
 
 COM-INTERFACE: ID3D11DeviceChild IUnknown "{1841e5c8-16b0-489b-bcc8-44cfb0d5deae}"
     void GetDevice ( ID3D11Device** ppDevice )

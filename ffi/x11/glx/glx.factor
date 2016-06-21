@@ -8,7 +8,7 @@ specialized-arrays accessors ;
 SPECIALIZED-ARRAY: int
 IN: x11.glx
 
-library: glx
+LIBRARY: glx
 
 ! Visual Config Attributes (glXGetConfig, glXGetFBConfigAttrib)
 CONSTANT: GLX_USE_GL 1 ; ! support GLX rendering ;

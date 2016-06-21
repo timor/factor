@@ -4,7 +4,7 @@ windows.directx.dcommon windows.directx.dxgi windows.directx.dxgiformat
 windows.ole32 windows.types ;
 IN: windows.directx.d2d1
 
-library: d2d1
+LIBRARY: d2d1
 
 CONSTANT: D2D1_INVALID_TAG 0xffffffffffffffff ;
 CONSTANT: D2D1_DEFAULT_FLATTENING_TOLERANCE 0.25 ;
@@ -217,9 +217,9 @@ CONSTANT: D2D1_LAYER_OPTIONS_INITIALIZE_FOR_CLEARTYPE 0x00000001 ;
 CONSTANT: D2D1_LAYER_OPTIONS_FORCE_DWORD              0xffffffff ;
 TYPEDEF: int D2D1_LAYER_OPTIONS ;
 
-c-type: ID2D1Geometry
-c-type: ID2D1Brush
-c-type: ID2D1RenderTarget
+C-TYPE: ID2D1Geometry
+C-TYPE: ID2D1Brush
+C-TYPE: ID2D1RenderTarget
 
 STRUCT: D2D1_LAYER_PARAMETERS
     { contentBounds     D2D1_RECT_F         }
@@ -304,8 +304,8 @@ TYPEDEF: int D2D1_FACTORY_TYPE ;
 STRUCT: D2D1_FACTORY_OPTIONS
     { debugLevel D2D1_DEBUG_LEVEL } ;
 
-c-type: ID2D1Factory
-c-type: ID2D1BitmapRenderTarget
+C-TYPE: ID2D1Factory
+C-TYPE: ID2D1BitmapRenderTarget
 
 COM-INTERFACE: ID2D1Resource IUnknown "{2cd90691-12e2-11dc-9fed-001143a055f9}"
     void GetFactory ( ID2D1Factory** factory ) ;
@@ -374,8 +374,8 @@ COM-INTERFACE: ID2D1StrokeStyle ID2D1Resource "{2cd9069d-12e2-11dc-9fed-001143a0
     UINT32 GetDashesCount ( )
     void GetDashes ( FLOAT* dashes, UINT dashesCount ) ;
 
-c-type: ID2D1SimplifiedGeometrySink
-c-type: ID2D1TessellationSink
+C-TYPE: ID2D1SimplifiedGeometrySink
+C-TYPE: ID2D1TessellationSink
 
 COM-INTERFACE: ID2D1Geometry ID2D1Resource "{2cd906a1-12e2-11dc-9fed-001143a055f9}"
     HRESULT GetBounds ( D2D1_MATRIX_3X2_F* worldTransform, D2D1_RECT_F* bounds )
@@ -442,7 +442,7 @@ COM-INTERFACE: ID2D1Mesh ID2D1Resource "{2cd906c2-12e2-11dc-9fed-001143a055f9}"
 COM-INTERFACE: ID2D1Layer ID2D1Resource "{2cd9069b-12e2-11dc-9fed-001143a055f9}"
     D2D1_SIZE_F GetSize ( ) ;
 
-c-type: IDWriteRenderingParams
+C-TYPE: IDWriteRenderingParams
 
 COM-INTERFACE: ID2D1DrawingStateBlock ID2D1Resource "{28506e39-ebf6-46a1-bb47-fd85565ab957}"
     void GetDescription ( D2D1_DRAWING_STATE_DESCRIPTION* stateDescription )
@@ -450,11 +450,11 @@ COM-INTERFACE: ID2D1DrawingStateBlock ID2D1Resource "{28506e39-ebf6-46a1-bb47-fd
     void SetTextRenderingParams ( IDWriteRenderingParams* textRenderingParams )
     void GetTextRenderingParams ( IDWriteRenderingParams** textRenderingParams ) ;
 
-c-type: IWICBitmapSource
-c-type: IWICBitmap
-c-type: IDWriteTextFormat
-c-type: IDWriteTextLayout
-c-type: DWRITE_GLYPH_RUN
+C-TYPE: IWICBitmapSource
+C-TYPE: IWICBitmap
+C-TYPE: IDWriteTextFormat
+C-TYPE: IDWriteTextLayout
+C-TYPE: DWRITE_GLYPH_RUN
 
 COM-INTERFACE: ID2D1RenderTarget ID2D1Resource "{2cd90694-12e2-11dc-9fed-001143a055f9}"
     HRESULT CreateBitmap ( D2D1_SIZE_U size, void* srcData, UINT32 pitch, D2D1_BITMAP_PROPERTIES* bitmapProperties, ID2D1Bitmap** bitmap )

@@ -4,7 +4,7 @@ USING: alien.syntax classes.struct windows.kernel32
 windows.types ;
 IN: windows.crypt32
 
-library: crypt32
+LIBRARY: crypt32
 
 TYPEDEF: HANDLE HCERTSTORE ;
 TYPEDEF: ULONG_PTR HCRYPTPROV ;

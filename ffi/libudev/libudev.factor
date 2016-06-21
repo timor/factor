@@ -6,9 +6,9 @@ IN: libudev
 
 COMPILE< "libudev" "libudev.so" cdecl add-library COMPILE>
 
-library: libudev
+LIBRARY: libudev
 
-c-type: udev
+C-TYPE: udev
 
 FUNCTION: udev* udev_ref ( udev* udev ) ;
 
@@ -40,7 +40,7 @@ FUNCTION: void* udev_get_userdata ( udev* udev ) ;
 
 FUNCTION: void udev_set_userdata ( udev* udev, void* userdata ) ;
 
-c-type: udev_list_entry
+C-TYPE: udev_list_entry
 
 FUNCTION: udev_list_entry* udev_list_entry_get_next ( udev_list_entry* list_entry ) ;
 
@@ -69,7 +69,7 @@ FUNCTION: c-string udev_list_entry_get_value (
 : udev-list-entries ( first_entry -- seq )
     [ ] collector [ udev_list_entry_foreach ] dip ;
 
-c-type: udev_device
+C-TYPE: udev_device
 
 FUNCTION: udev_device* udev_device_ref (
     udev_device* udev_device ) ;
@@ -175,7 +175,7 @@ FUNCTION: c-string udev_device_get_sysattr_value (
     udev_device* udev_device,
     c-string sysattr ) ;
 
-c-type: udev_monitor
+C-TYPE: udev_monitor
 
 FUNCTION: udev_monitor* udev_monitor_ref (
     udev_monitor* udev_monitor ) ;
@@ -242,7 +242,7 @@ FUNCTION: int udev_monitor_filter_remove (
 
 
 
-c-type: udev_enumerate
+C-TYPE: udev_enumerate
 
 FUNCTION: udev_enumerate* udev_enumerate_ref (
     udev_enumerate* udev_enumerate ) ;
@@ -324,7 +324,7 @@ FUNCTION: udev_list_entry* udev_enumerate_get_list_entry (
 
 
 
-c-type: udev_queue
+C-TYPE: udev_queue
 
 FUNCTION: udev_queue* udev_queue_ref (
     udev_queue* udev_queue ) ;

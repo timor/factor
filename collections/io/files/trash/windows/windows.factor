@@ -10,7 +10,7 @@ IN: io.files.trash.windows
 
 PRIVATE<
 
-library: shell32
+LIBRARY: shell32
 
 TYPEDEF: WORD FILEOP_FLAGS ;
 

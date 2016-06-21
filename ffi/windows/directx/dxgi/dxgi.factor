@@ -3,7 +3,7 @@ windows.directx.dxgiformat windows.directx.dxgitype windows.kernel32
 windows.ole32 windows.types windows.directx ;
 IN: windows.directx.dxgi
 
-library: dxgi
+LIBRARY: dxgi
 
 CONSTANT: DXGI_CPU_ACCESS_NONE 0 ;
 CONSTANT: DXGI_CPU_ACCESS_DYNAMIC 1 ;
@@ -119,7 +119,7 @@ COM-INTERFACE: IDXGISurface1 IDXGISurface "{4AE63092-6327-4c1b-80AE-BFE12EA32B86
 HRESULT GetDC ( BOOL Discard, HDC* phdc )
 HRESULT ReleaseDC ( RECT* pDirtyRect ) ;
 
-c-type: IDXGIOutput
+C-TYPE: IDXGIOutput
 COM-INTERFACE: IDXGIAdapter IDXGIObject "{2411e7e1-12ac-4ccf-bd14-9798e8534dc0}"
 HRESULT EnumOutputs ( UINT Output, IDXGIOutput** ppOutput )
 HRESULT GetDesc ( DXGI_ADAPTER_DESC* pDesc )

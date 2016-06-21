@@ -2,7 +2,7 @@ USING: math classes.struct windows.types alien.syntax windows.directx.d3d9types
 windows.com.syntax windows.com windows.directx windows.directx.d3d9 ;
 IN: windows.directx.d3dx9math
 
-library: d3dx9
+LIBRARY: d3dx9
 
 CONSTANT: D3DX_PI    3.141592654 ;
 CONSTANT: D3DX_1BYPI 0.318309886 ;
@@ -85,7 +85,7 @@ STRUCT: D3DXCOLOR
     { a FLOAT } ;
 TYPEDEF: D3DXCOLOR* LPD3DXCOLOR ;
 
-c-type: ID3DXMatrixStack
+C-TYPE: ID3DXMatrixStack
 TYPEDEF: ID3DXMatrixStack* LPD3DXMATRIXSTACK ;
 
 COM-INTERFACE: ID3DXMatrixStack IUnknown "{C7885BA7-F990-4fe7-922D-8515E477DD85}"

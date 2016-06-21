@@ -4,7 +4,7 @@ windows.directx.d3d9 windows.directx.d3dx9core
 windows.directx.d3dx9math windows.types ;
 IN: windows.directx.d3dx9shader
 
-library: d3dx9
+LIBRARY: d3dx9
 
 : D3DXSHADER_DEBUG                          ( -- n ) 1 0 shift ; inline
 : D3DXSHADER_SKIPVALIDATION                 ( -- n ) 1 1 shift ; inline
@@ -101,7 +101,7 @@ STRUCT: D3DXCONSTANT_DESC
     { DefaultValue  LPCVOID             } ;
 TYPEDEF: D3DXCONSTANT_DESC* LPD3DXCONSTANT_DESC ;
 
-c-type: ID3DXConstantTable
+C-TYPE: ID3DXConstantTable
 TYPEDEF: ID3DXConstantTable* LPD3DXCONSTANTTABLE ;
 
 COM-INTERFACE: ID3DXConstantTable IUnknown "{AB3C758F-093E-4356-B762-4DB18F1B3A01}"
@@ -130,7 +130,7 @@ COM-INTERFACE: ID3DXConstantTable IUnknown "{AB3C758F-093E-4356-B762-4DB18F1B3A0
     HRESULT SetMatrixTransposeArray ( LPDIRECT3DDEVICE9 pDevice, D3DXHANDLE hConstant, D3DXMATRIX* pMatrix, UINT Count )
     HRESULT SetMatrixTransposePointerArray ( LPDIRECT3DDEVICE9 pDevice, D3DXHANDLE hConstant, D3DXMATRIX** ppMatrix, UINT Count ) ;
 
-c-type: ID3DXTextureShader
+C-TYPE: ID3DXTextureShader
 TYPEDEF: ID3DXTextureShader* LPD3DXTEXTURESHADER ;
 
 COM-INTERFACE: ID3DXTextureShader IUnknown "{3E3D67F8-AA7A-405d-A857-BA01D4758426}"
@@ -163,7 +163,7 @@ ENUM: D3DXINCLUDE_TYPE
     D3DXINC_SYSTEM ;
 TYPEDEF: D3DXINCLUDE_TYPE* LPD3DXINCLUDE_TYPE ;
 
-c-type: ID3DXInclude
+C-TYPE: ID3DXInclude
 TYPEDEF: ID3DXInclude* LPD3DXINCLUDE ;
 
 COM-INTERFACE: ID3DXInclude f "{00000000-0000-0000-0000-000000000000}"

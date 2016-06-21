@@ -13,7 +13,7 @@ COMPILE< "zmq" {
     { [ os unix? ] [ "libzmq.so" ] }
 } cond cdecl add-library COMPILE>
 
-library: zmq
+LIBRARY: zmq
 
 !
 ! 0MQ versioning support.
