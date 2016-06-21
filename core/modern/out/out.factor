@@ -12,9 +12,17 @@ symbol: last-slice
 : replace-whitespace ( string -- string' )
     [ dup blank? [ drop char: \s ] unless ] map ;
 
+: replace-first-whitespace ( string -- string' )
+    dup [ "\r\n" member? ] find drop [
+        tail replace-whitespace
+    ] when* ;
+
 : write-whitespace ( obj -- )
     [ last-slice get [ swap slice-between ] [ slice-before ] if* replace-whitespace io:write ]
-    ! [ last-slice get [ swap slice-between replace-whitespace io:write ] [ drop ] if* ]
+    [ last-slice namespaces:set ] bi ;
+
+: write-first-whitespace ( obj -- )
+    [ last-slice get [ swap slice-between ] [ slice-before ] if* replace-first-whitespace io:write ]
     [ last-slice namespaces:set ] bi ;
 
 defer: write-literal
@@ -27,13 +35,13 @@ M: array write-literal [ write-literal ] each ;
 
 M: tag-literal write-literal
     {
-        [ seq>> 0 swap nth write-whitespace ]
+        [ seq>> 0 swap nth write-first-whitespace ]
         [ tag>> write ]
     } cleave ;
 
 M: single-matched-literal write-literal
     {
-        [ seq>> 0 swap nth write-whitespace ]
+        [ seq>> 0 swap nth write-first-whitespace ]
         [ tag>> write ]
         [ seq>> 1 swap nth write-whitespace ]
         [ delimiter>> write ]
@@ -44,7 +52,7 @@ M: single-matched-literal write-literal
 
 M: double-matched-literal write-literal
     {
-        [ seq>> 0 swap nth write-whitespace ]
+        [ seq>> 0 swap nth write-first-whitespace ]
         [ tag>> io:write ]
         [ seq>> 1 swap nth write-whitespace ]
         [ delimiter>> io:write ]
@@ -56,7 +64,7 @@ M: double-matched-literal write-literal
 
 M: dquote-literal write-literal
     {
-        [ seq>> 0 swap nth write-whitespace ]
+        [ seq>> 0 swap nth write-first-whitespace ]
         [ tag>> io:write ]
         [ seq>> 1 swap nth write-whitespace ]
         [ delimiter>> io:write ]
@@ -68,7 +76,7 @@ M: dquote-literal write-literal
 
 M: backtick-literal write-literal
     {
-        [ seq>> 0 swap nth write-whitespace ]
+        [ seq>> 0 swap nth write-first-whitespace ]
         [ tag>> io:write ]
         [ seq>> 1 swap nth write-whitespace ]
         [ delimiter>> io:write ]
@@ -78,7 +86,7 @@ M: backtick-literal write-literal
 
 M: backslash-literal write-literal
     {
-        [ seq>> 0 swap nth write-whitespace ]
+        [ seq>> 0 swap nth write-first-whitespace ]
         [ tag>> io:write ]
         [ seq>> 1 swap nth write-whitespace ]
         [ delimiter>> io:write ]
@@ -88,7 +96,7 @@ M: backslash-literal write-literal
 
 M: line-comment-literal write-literal
     {
-        [ seq>> 0 swap nth write-whitespace ]
+        [ seq>> 0 swap nth write-first-whitespace ]
         [ tag>> io:write ]
         [ seq>> 1 swap nth write-whitespace ]
         [ delimiter>> io:write ]
@@ -98,18 +106,18 @@ M: line-comment-literal write-literal
 
 M: uppercase-colon-literal write-literal
     {
-        [ seq>> 0 swap nth write-whitespace ]
+        [ seq>> 0 swap nth write-first-whitespace ]
         [ tag>> write ]
         [ seq>> 1 swap nth write-whitespace ]
         [ delimiter>> write ]
         [ payload>> [ write-literal ] each ] ! don't need write-whitespace here, the recursion does it
-        [ seq>> 3 swap nth [ lexed-underlying [ write-whitespace ] when* ] when* ]
+        [ seq>> 3 swap ?nth [ lexed-underlying [ write-whitespace ] when* ] when* ]
         [ closing-tag>> [ write ] when* ]
     } cleave ;
 
 M: lowercase-colon-literal write-literal
     {
-        [ seq>> 0 swap nth write-whitespace ]
+        [ seq>> 0 swap nth write-first-whitespace ]
         [ tag>> io:write ]
         [ seq>> 1 swap nth write-whitespace ]
         [ delimiter>> io:write ]
@@ -118,7 +126,7 @@ M: lowercase-colon-literal write-literal
 
 M: left-decorator-literal write-literal
     {
-        [ seq>> 0 swap nth write-whitespace ]
+        [ seq>> 0 swap nth write-first-whitespace ]
         [ delimiter>> io:write ]
         [ payload>> write-literal ] ! don't need write-whitespace here, the recursion does it
     } cleave ;
