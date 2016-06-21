@@ -4,13 +4,17 @@ USING: accessors combinators combinators.short-circuit
 combinators.smart continuations fry io io.encodings.utf8
 io.files io.streams.string kernel modern modern.paths
 modern.slices multiline namespaces prettyprint sequences sets
-splitting strings arrays ;
+splitting strings arrays unicode ;
 IN: modern.out
 
 symbol: last-slice
 
+: replace-whitespace ( string -- string' )
+    [ dup blank? [ drop char: \s ] unless ] map ;
+
 : write-whitespace ( obj -- )
-    [ last-slice get [ swap slice-between ] [ slice-before ] if* io:write ]
+    ! [ last-slice get [ swap slice-between ] [ slice-before ] if* io:write ]
+    [ last-slice get [ swap slice-between replace-whitespace io:write ] [ drop ] if* ]
     [ last-slice namespaces:set ] bi ;
 
 defer: write-literal
