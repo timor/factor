@@ -1,11 +1,12 @@
 ! Copyright (C) 2016 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors combinators combinators.short-circuit
+USING: accessors arrays combinators combinators.short-circuit
 combinators.smart continuations fry io io.encodings.utf8
 io.files io.streams.string kernel modern modern.paths
-modern.slices multiline namespaces prettyprint sequences sets
-splitting strings arrays unicode ;
-IN: modern.out
+modern.slices multiline namespaces prettyprint sequences
+sequences.extras sets splitting splitting.monotonic strings
+unicode ;
+in: modern.out
 
 symbol: last-slice
 
@@ -30,6 +31,9 @@ M: tag-literal write-literal
         [ seq>> 0 swap nth write-whitespace ]
         [ tag>> write ]
     } cleave ;
+
+: split-last ( seq quot -- head tail )
+    '[ drop @ ] monotonic-split unclip-last [ concat ] dip ; inline
 
 M: single-matched-literal write-literal
     {
@@ -96,7 +100,32 @@ M: line-comment-literal write-literal
         [ payload>> io:write ]
     } cleave ;
 
-M: uppercase-colon-literal write-literal
+
+
+
+: nice-semi-needed? ( obj -- ? )
+    {
+        [ seq>> 3 swap ?nth not ]
+        [ closing-tag>> ]
+        [ payload>> [ line-comment-literal? ] last? ]
+    } 1&& ;
+
+: write-uppercase-colon-literal-nice ( obj -- )
+    {
+        [ seq>> 0 swap nth write-whitespace ]
+        [ tag>> write ]
+        [ seq>> 1 swap nth write-whitespace ]
+        [ delimiter>> write ]
+        [
+            dup payload>> [ line-comment-literal? ] split-last
+            [ drop nip write-literal ]
+            [ 2drop closing-tag>> [ write ] when* ]
+            [ 2nip write-literal ] 3tri
+        ]
+        [ seq>> 3 swap nth lexed-underlying [ write-whitespace ] when* ]
+    } cleave ;
+
+: write-uppercase-colon-literal-vanilla ( obj -- )
     {
         [ seq>> 0 swap nth write-whitespace ]
         [ tag>> write ]
@@ -106,6 +135,14 @@ M: uppercase-colon-literal write-literal
         [ seq>> 3 swap ?nth [ lexed-underlying [ write-whitespace ] when* ] when* ]
         [ closing-tag>> [ write ] when* ]
     } cleave ;
+
+M: uppercase-colon-literal write-literal
+    dup nice-semi-needed? [
+        write-uppercase-colon-literal-nice
+    ] [
+        write-uppercase-colon-literal-vanilla
+    ] if ;
+
 
 M: lowercase-colon-literal write-literal
     {
