@@ -2,12 +2,12 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays bit-arrays fry kernel kernel.private
 layouts locals math math.functions math.order math.private
-multiline sequences sequences.private typed ;
+sequences sequences.private typed ;
 FROM: math.ranges => [1,b] ;
 
 IN: bloom-filters
 
-/*
+![[
 
 TODO:
 
@@ -41,7 +41,7 @@ TODO:
   objects the filter is sized for?  The filter will continue to
   work, just not very well.
 
-*/
+]]
 
 TUPLE: bloom-filter
 { #hashes fixnum read-only }

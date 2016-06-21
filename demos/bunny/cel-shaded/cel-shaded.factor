@@ -3,7 +3,7 @@ multiline opengl opengl.shaders opengl.capabilities opengl.gl
 sequences accessors combinators ;
 in: bunny.cel-shaded
 
-STRING: vertex-shader-source
+CONSTANT: vertex-shader-source [[
 varying vec3 position, normal, viewer;
 
 void
@@ -15,10 +15,9 @@ main()
     normal = gl_Normal;
     viewer = vec3(0, 0, 1) * gl_NormalMatrix;
 }
+]] ;
 
-;
-
-STRING: cel-shaded-fragment-shader-lib-source
+CONSTANT: cel-shaded-fragment-shader-lib-source [[
 varying vec3 position, normal, viewer;
 uniform vec3 light_direction;
 uniform vec4 color;
@@ -46,10 +45,9 @@ cel_light()
     float s = cel(pow(max(dot(-reflection, viewer), 0.0), shininess));
     return ad * color + vec4(vec3(s), 0);
 }
+]] ;
 
-;
-
-STRING: cel-shaded-fragment-shader-main-source
+CONSTANT: cel-shaded-fragment-shader-main-source [[
 vec4 cel_light();
 
 void
@@ -57,8 +55,7 @@ main()
 {
     gl_FragColor = cel_light();
 }
-
-;
+]] ;
 
 TUPLE: bunny-cel-shaded program ;
 

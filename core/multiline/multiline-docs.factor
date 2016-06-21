@@ -1,10 +1,6 @@
 USING: help.markup help.syntax strings ;
 in: multiline
 
-HELP: \ STRING:
-{ $syntax "STRING: name\nfoo\n;" }
-{ $description "Forms a multiline string literal, or 'here document' stored in the word called name. A semicolon is used to signify the end, and that semicolon must be on a line by itself, not preceeded or followed by any whitespace. The string will have newlines in between lines but not at the end, unless there is a blank line before the semicolon." } ;
-
 HELP: /*
 { $syntax "/* comment */" }
 { $description "Provides C-like comments that can span multiple lines. One caveat is that " { $snippet "/*" } " and " { $snippet "*/" } " are still tokens and must not appear in the comment text itself." }
@@ -40,7 +36,6 @@ HELP: parse-multiline-string
 ARTICLE: "multiline" "Multiline"
 "Multiline strings:"
 { $subsections
-    postpone\ STRING:
     postpone\ HEREDOC:
 }
 "Multiline comments:"

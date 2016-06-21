@@ -3,11 +3,11 @@ multiline parser tools.test webapps.counter ;
 in: furnace.utilities.tests
 
 COMPILE<
-STRING: dummy-vocab
-in: dummy-vocab
+CONSTANT: dummy-vocab [[
+IN: dummy-vocab
 
 : dummy-word ( -- ) ;
-;
+]] ;
 
 dummy-vocab "dummy.factor" temp-file [ utf8 set-file-contents ] keep run-file
 COMPILE>

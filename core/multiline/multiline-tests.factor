@@ -1,11 +1,9 @@
 USING: eval multiline sequences tools.test ;
 in: multiline.tests
 
-STRING: test-it
-foo
+CONSTANT: test-it [[ foo
 bar
-
-;
+]] ;
 
 { "foo\nbar\n" } [ test-it ] unit-test
 

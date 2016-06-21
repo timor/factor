@@ -2,12 +2,12 @@ USING: help.markup help.syntax literals multiline sequences splitting ;
 in: compiler.cfg.instructions.syntax
 
 COMPILE<
-STRING: parse-insn-slot-specs-code
+CONSTANT: parse-insn-slot-specs-code [[
 USING: compiler.cfg.instructions.syntax prettyprint splitting ;
 "use: src/int-rep temp: temp/int-rep" " " split parse-insn-slot-specs .
-;
+]] ;
 
-STRING: parse-insn-slot-specs-result
+CONSTANT: parse-insn-slot-specs-result [[
 {
     T{ insn-slot-spec
         { type use }
@@ -20,7 +20,7 @@ STRING: parse-insn-slot-specs-result
         { rep int-rep }
     }
 }
-;
+]] ;
 COMPILE>
 
 HELP: parse-insn-slot-specs

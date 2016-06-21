@@ -32,11 +32,6 @@ ERROR: text-found-before-eol string ;
         (parse-here)
     ] "" make but-last ;
 
-SYNTAX: \ STRING:
-    scan-new-word
-    parse-here 1quotation
-    ( -- string ) define-inline ;
-
 PRIVATE<
 
 :: (scan-multiline-string) ( i end lexer -- j )
