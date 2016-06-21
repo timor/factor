@@ -4,8 +4,8 @@ USING: cocoa cocoa.application cocoa.types cocoa.classes cocoa.windows
 core-graphics.types kernel math.bitwise literals ;
 IN: webkit-demo
 
-framework: /System/Library/Frameworks/WebKit.framework
-import: WebView
+FRAMEWORK: /System/Library/Frameworks/WebKit.framework
+IMPORT: WebView
 
 : rect ( -- rect ) 0 0 700 500 <CGRect> ;
 

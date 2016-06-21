@@ -50,31 +50,31 @@ CONSTANT: QTErrorDeviceNotConnected                         1300 ;
 CONSTANT: QTErrorDeviceInUseByAnotherApplication            1301 ;
 CONSTANT: QTErrorDeviceExcludedByAnotherDevice              1302 ;
 
-framework: /System/Library/Frameworks/QTKit.framework
+FRAMEWORK: /System/Library/Frameworks/QTKit.framework
 
-import: QTCaptureAudioPreviewOutput
-import: QTCaptureConnection
-import: QTCaptureDecompressedAudioOutput
-import: QTCaptureDecompressedVideoOutput
-import: QTCaptureDevice
-import: QTCaptureDeviceInput
-import: QTCaptureFileOutput
-import: QTCaptureInput
-import: QTCaptureLayer
-import: QTCaptureMovieFileOutput
-import: QTCaptureOutput
-import: QTCaptureSession
-import: QTCaptureVideoPreviewOutput
-import: QTCaptureView
-import: QTCompressionOptions
-import: QTDataReference
-import: QTFormatDescription
-import: QTMedia
-import: QTMovie
-import: QTMovieLayer
-import: QTMovieView
-import: QTSampleBuffer
-import: QTTrack
+IMPORT: QTCaptureAudioPreviewOutput
+IMPORT: QTCaptureConnection
+IMPORT: QTCaptureDecompressedAudioOutput
+IMPORT: QTCaptureDecompressedVideoOutput
+IMPORT: QTCaptureDevice
+IMPORT: QTCaptureDeviceInput
+IMPORT: QTCaptureFileOutput
+IMPORT: QTCaptureInput
+IMPORT: QTCaptureLayer
+IMPORT: QTCaptureMovieFileOutput
+IMPORT: QTCaptureOutput
+IMPORT: QTCaptureSession
+IMPORT: QTCaptureVideoPreviewOutput
+IMPORT: QTCaptureView
+IMPORT: QTCompressionOptions
+IMPORT: QTDataReference
+IMPORT: QTFormatDescription
+IMPORT: QTMedia
+IMPORT: QTMovie
+IMPORT: QTMovieLayer
+IMPORT: QTMovieView
+IMPORT: QTSampleBuffer
+IMPORT: QTTrack
 
 : <movie> ( filename -- movie )
     QTMovie swap <NSString> f -> movieWithFile:error: -> retain ;
