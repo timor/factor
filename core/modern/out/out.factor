@@ -13,8 +13,8 @@ symbol: last-slice
     [ dup blank? [ drop char: \s ] unless ] map ;
 
 : write-whitespace ( obj -- )
-    ! [ last-slice get [ swap slice-between ] [ slice-before ] if* io:write ]
-    [ last-slice get [ swap slice-between replace-whitespace io:write ] [ drop ] if* ]
+    [ last-slice get [ swap slice-between ] [ slice-before ] if* replace-whitespace io:write ]
+    ! [ last-slice get [ swap slice-between replace-whitespace io:write ] [ drop ] if* ]
     [ last-slice namespaces:set ] bi ;
 
 defer: write-literal

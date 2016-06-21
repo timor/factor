@@ -2,11 +2,12 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs assocs.extras combinators
 combinators.short-circuit constructors continuations fry
-io.encodings.utf8 io.files kernel locals macros make math
-math.order modern.paths modern.slices multiline namespaces
-quotations sequences sequences.extras splitting modern.lexer
-splitting.monotonic strings unicode generalizations shuffle ;
-IN: modern
+generalizations io.encodings.utf8 io.files kernel locals macros
+make math math.order modern.lexer modern.paths modern.slices
+multiline namespaces quotations sequences sequences.extras
+shuffle splitting splitting.extras splitting.monotonic strings
+unicode ;
+in: modern
 
 COMPILE<
 ! Base rules, everything should have a generator macro
@@ -103,7 +104,7 @@ M: array collapse-decorators
     ] map ;
 
 : split-double-dash ( seq -- seqs )
-    dup [ { [ tag-literal? ] [ tag>> "--" = ] } 1&& ] split-when
+    dup [ { [ tag-literal? ] [ tag>> "--" = ] } 1&& ] split*-when
     dup length 1 > [
         nip <compound-sequence-literal>
     ] [
