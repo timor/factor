@@ -7,7 +7,7 @@ make math math.order modern.lexer modern.paths modern.slices
 multiline namespaces quotations sequences sequences.extras
 shuffle splitting splitting.extras splitting.monotonic strings
 unicode ;
-in: modern
+IN: modern
 
 COMPILE<
 ! Base rules, everything should have a generator macro

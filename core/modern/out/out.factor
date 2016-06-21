@@ -6,7 +6,7 @@ io.files io.streams.string kernel modern modern.paths
 modern.slices multiline namespaces prettyprint sequences
 sequences.extras sets splitting splitting.monotonic strings
 unicode ;
-in: modern.out
+IN: modern.out
 
 SYMBOL: last-slice
 
