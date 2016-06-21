@@ -6,8 +6,8 @@ source-files.errors summary tools.crossref
 tools.crossref.private tools.errors words ;
 IN: tools.deprecation
 
-symbol: +deprecation-note+
-symbol: deprecation-notes
+SYMBOL: +deprecation-note+
+SYMBOL: deprecation-notes
 
 deprecation-notes [ H{ } clone ] initialize
 
@@ -59,7 +59,7 @@ M: deprecated-usages error.
     " uses these deprecated words:" write nl
     usages>> [ "    " write pprint nl ] each ;
 
-singleton: deprecation-observer
+SINGLETON: deprecation-observer
 
 : initialize-deprecation-notes ( -- )
     [

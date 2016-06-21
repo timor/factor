@@ -207,7 +207,7 @@ M:: streaming-audio-clip (update-audio-clip) ( audio-clip -- )
 
 PRIVATE>
 
-defer: update-audio
+DEFER: update-audio
 
 : start-audio* ( audio-engine -- )
     dup al-sources>> [ drop ] [

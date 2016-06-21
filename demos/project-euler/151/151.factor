@@ -35,7 +35,7 @@ IN: project-euler.151
 ! SOLUTION
 ! --------
 
-symbol: table
+SYMBOL: table
 
 : (pick-sheet) ( seq i -- newseq )
     [
@@ -47,7 +47,7 @@ symbol: table
         } case
     ] curry map-index ;
 
-defer: (euler151)
+DEFER: (euler151)
 
 : pick-sheet ( seq i -- res )
     2dup swap nth dup zero? [

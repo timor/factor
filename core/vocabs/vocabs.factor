@@ -4,7 +4,7 @@ USING: accessors assocs definitions kernel namespaces
 sequences sorting splitting strings ;
 IN: vocabs
 
-symbol: dictionary
+SYMBOL: dictionary
 
 TUPLE: vocab < identity-tuple
 name words
@@ -12,9 +12,9 @@ main help
 source-loaded? docs-loaded? ;
 
 ! sources-loaded? slot is one of these three
-symbol: +parsing+
-symbol: +running+
-symbol: +done+
+SYMBOL: +parsing+
+SYMBOL: +running+
+SYMBOL: +done+
 
 : <vocab> ( name -- vocab )
     vocab new
@@ -71,7 +71,7 @@ M: object vocab-main lookup-vocab vocab-main ;
 
 M: f vocab-main ;
 
-symbol: vocab-observers
+SYMBOL: vocab-observers
 
 GENERIC: vocab-changed ( vocab obj -- ) ;
 
@@ -132,7 +132,7 @@ M: object >vocab-link dup lookup-vocab [ ] [ <vocab-link> ] ?if ;
 
 M: vocab-spec forget* forget-vocab ;
 
-symbol: require-hook
+SYMBOL: require-hook
 
 PREDICATE: runnable-vocab < vocab
     vocab-main >boolean ;

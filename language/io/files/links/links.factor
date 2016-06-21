@@ -18,7 +18,7 @@ os unix? [ "io.files.links.unix" require ] when
 : follow-link ( path -- path' )
     [ parent-directory ] [ read-link ] bi append-path ;
 
-symbol: symlink-depth
+SYMBOL: symlink-depth
 10 symlink-depth set-global
 
 ERROR: too-many-symlinks path n ;

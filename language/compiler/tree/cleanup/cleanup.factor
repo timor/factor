@@ -117,7 +117,7 @@ M: #call cleanup-tree*
         [ 2drop ]
     } case ;
 
-symbol: live-branches
+SYMBOL: live-branches
 
 : cleanup-children ( #branch -- )
     [ [ cleanup-tree ] map ] change-children drop ;

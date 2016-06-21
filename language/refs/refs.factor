@@ -4,7 +4,7 @@ USING: accessors assocs boxes kernel math namespaces
 slots.private ;
 IN: refs
 
-mixin: ref
+MIXIN: ref
 
 GENERIC: get-ref ( ref -- obj ) ;
 GENERIC: set-ref ( obj ref -- ) ;

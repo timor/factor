@@ -7,7 +7,7 @@ IN: compiler.cfg.instructions.syntax
 
 SYMBOLS: def use temp literal ;
 
-symbol: scalar-rep
+SYMBOL: scalar-rep
 
 TUPLE: insn-slot-spec type name rep ;
 

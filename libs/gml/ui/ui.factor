@@ -9,7 +9,7 @@ ui.gadgets.tables ui.gadgets.labeled unicode ;
 FROM: gml => gml ;
 IN: gml.ui
 
-singleton: stack-entry-renderer
+SINGLETON: stack-entry-renderer
 
 M: stack-entry-renderer row-columns
     drop [ write-gml ] with-string-writer 1array ;
@@ -118,4 +118,4 @@ M: gml-editor focusable-child* editor>> ;
 : gml-editor-window ( -- )
     <gml-editor> "Generative Modeling Language" open-window ;
 
-main: gml-editor-window
+MAIN: gml-editor-window

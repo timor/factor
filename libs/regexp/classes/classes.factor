@@ -141,7 +141,7 @@ TUPLE: and-class { seq read-only } ;
 M: and-class class-member?
     seq>> [ class-member? ] with all? ; inline
 
-defer: substitute
+DEFER: substitute
 
 : flatten ( seq class -- newseq )
     '[ dup _ instance? [ seq>> ] [ 1array ] if ] map concat ; inline
@@ -301,7 +301,7 @@ M: not-class substitute [ <not-class> ] bi@ answer ;
 : assoc-answers ( table questions answer -- new-table )
     '[ _ assoc-answer ] each ;
 
-defer: make-condition
+DEFER: make-condition
 
 : (make-condition) ( table questions question -- condition )
     [ 2nip ]

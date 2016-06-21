@@ -4,7 +4,7 @@ destructors fry gpu gpu.buffers images kernel locals math
 opengl opengl.gl opengl.textures sequences
 specialized-arrays typed ui.gadgets.worlds variants ;
 FROM: alien.c-types => float ;
-specialized-array: float
+SPECIALIZED-ARRAY: float
 IN: gpu.textures
 
 TUPLE: texture < gpu-object

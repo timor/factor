@@ -3,7 +3,7 @@ USING: accessors timers audio audio.engine audio.loader calendar
 destructors io kernel locals math math.functions math.ranges specialized-arrays
 sequences random math.vectors ;
 FROM: alien.c-types => short ;
-specialized-array: short
+SPECIALIZED-ARRAY: short
 IN: audio.engine.test
 
 TUPLE: noise-generator ;
@@ -47,4 +47,4 @@ M: noise-generator dispose
     timer stop-timer
     engine dispose ;
 
-main: audio-engine-test
+MAIN: audio-engine-test

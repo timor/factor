@@ -35,7 +35,7 @@ ENUM: dns-opcode QUERY IQUERY STATUS ;
 ENUM: dns-rcode NO-ERROR FORMAT-ERROR SERVER-FAILURE
 NAME-ERROR NOT-IMPLEMENTED REFUSED ;
 
-symbol: dns-servers
+SYMBOL: dns-servers
 
 : add-dns-server ( string -- )
     dns-servers get push ;

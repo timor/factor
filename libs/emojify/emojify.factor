@@ -878,4 +878,4 @@ CONSTANT: emoji H{
         [ bl ] [ emojify write ] interleave
     ] if-empty ;
 
-main: emojify-main
+MAIN: emojify-main

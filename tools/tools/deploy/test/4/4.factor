@@ -4,4 +4,4 @@ IN: tools.deploy.test.4
 : deploy-test-4 ( -- )
     "xyzthg" \ latin7 encode drop ;
 
-main: deploy-test-4
+MAIN: deploy-test-4

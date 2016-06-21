@@ -5,7 +5,7 @@ USING: cpu.x86.features kernel random ;
 
 IN: random.rdrand
 
-singleton: rdrand
+SINGLETON: rdrand
 
 M: rdrand random-32* drop rdrand32 ;
 

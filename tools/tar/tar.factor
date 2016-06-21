@@ -10,7 +10,7 @@ IN: tar
 CONSTANT: zero-checksum 256 ;
 CONSTANT: block-size 512 ;
 
-symbol: to-link
+SYMBOL: to-link
 
 : save-link ( link -- )
     to-link get push ;

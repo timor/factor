@@ -3,28 +3,28 @@
 USING: accessors assocs kernel namespaces sequences sets ;
 IN: definitions
 
-mixin: definition-mixin
+MIXIN: definition-mixin
 
 ERROR: no-compilation-unit definition ;
 
 : add-to-unit ( key set -- )
     [ adjoin ] [ no-compilation-unit ] if* ;
 
-symbol: changed-definitions
+SYMBOL: changed-definitions
 
 : changed-definition ( defspec -- )
     changed-definitions get add-to-unit ;
 
-symbol: maybe-changed
+SYMBOL: maybe-changed
 
 : changed-conditionally ( class -- )
     maybe-changed get add-to-unit ;
 
-symbol: changed-effects
+SYMBOL: changed-effects
 
-symbol: outdated-generics
+SYMBOL: outdated-generics
 
-symbol: new-words
+SYMBOL: new-words
 
 : new-word ( word -- )
     new-words get add-to-unit ;
@@ -37,7 +37,7 @@ GENERIC: set-where ( loc defspec -- ) ;
 
 GENERIC: forget* ( defspec -- ) ;
 
-symbol: forgotten-definitions
+SYMBOL: forgotten-definitions
 
 : forgotten-definition ( defspec -- )
     forgotten-definitions get add-to-unit ;

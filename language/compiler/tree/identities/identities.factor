@@ -9,7 +9,7 @@ IN: compiler.tree.identities
     [ integer-derived-ops dup empty? f assert= ] dip
     '[ _ "identities" set-word-prop ] each ;
 
-symbol: X
+SYMBOL: X
 
 \ + {
     { { X 0 } drop }

@@ -54,7 +54,7 @@ IN: prettyprint
 
 PRIVATE<
 
-symbol: =>
+SYMBOL: =>
 
 \ =>
 { { foreground color: white } { background color: black } }
@@ -129,7 +129,7 @@ PRIVATE>
 
 : pprint-cell ( obj -- ) [ pprint-short ] with-cell ;
 
-symbol: pprint-string-cells?
+SYMBOL: pprint-string-cells?
 
 : simple-table. ( values -- )
     standard-table-style [

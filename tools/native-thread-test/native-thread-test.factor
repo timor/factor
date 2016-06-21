@@ -21,4 +21,4 @@ FUNCTION: void* start_standalone_factor_in_new_thread ( int argc, c-string* argv
 : test-thread ( -- )
     "/tmp/hello" utf8 [ "hello!\n" write ] with-file-appender 5000000 sleep ;
 
-main: test-thread
+MAIN: test-thread

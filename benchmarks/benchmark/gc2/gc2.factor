@@ -4,7 +4,7 @@ USING: arrays byte-arrays kernel namespaces sequences math memory ;
 IN: benchmark.gc2
 
 ! Runs slowly if clean cards are not unmarked.
-symbol: oldies
+SYMBOL: oldies
 
 : make-old-objects ( -- )
     1000000 [ 1 f <array> ] replicate oldies set gc
@@ -21,4 +21,4 @@ symbol: oldies
         50000 [ age ] times
     ] with-scope ;
 
-main: gc2-benchmark
+MAIN: gc2-benchmark

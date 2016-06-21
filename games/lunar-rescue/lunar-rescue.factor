@@ -25,4 +25,4 @@ CONSTANT: rom-info {
         "Lunar Rescue" <lunar-rescue> rom-info run-rom
     ] with-ui ;
 
-main: run-lunar
+MAIN: run-lunar

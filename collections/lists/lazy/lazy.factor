@@ -35,7 +35,7 @@ M: lazy-cons-state nil? car nil? ;
 
 TUPLE: memoized-cons original car cdr nil? ;
 
-symbol: +not-memoized+
+SYMBOL: +not-memoized+
 
 : <memoized-cons> ( cons -- memoized-cons )
     +not-memoized+ +not-memoized+ +not-memoized+
@@ -237,7 +237,7 @@ TUPLE: lazy-concat car cdr ;
 
 C: <lazy-concat> lazy-concat ;
 
-defer: lconcat
+DEFER: lconcat
 
 PRIVATE<
 
@@ -279,7 +279,7 @@ M: lazy-concat nil?
     [ [ [ first2 ] prepose ] map ] [ [ first2 ] prepose ] bi*
     [ [ lcartesian-product* ] dip [ lfilter ] each ] dip lmap-lazy ;
 
-defer: lmerge
+DEFER: lmerge
 
 PRIVATE<
 

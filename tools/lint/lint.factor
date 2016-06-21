@@ -221,8 +221,8 @@ CONSTANT: trivial-defs
 : load-definitions ( words -- hash )
     H{ } clone [ '[ dup def>> _ (load-definitions) ] each ] keep ;
 
-symbol: lint-definitions
-symbol: lint-definitions-keys
+SYMBOL: lint-definitions
+SYMBOL: lint-definitions-keys
 
 : reload-definitions ( -- )
     ! Load lintable and non-ignored definitions

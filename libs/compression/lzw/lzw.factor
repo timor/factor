@@ -78,7 +78,7 @@ M: gif-lzw increment-code-size [ 1 + 12 min ] change-code-size ;
 : end-of-information? ( lzw code -- ? ) swap end-of-information-code>> = ;
 : clear-code? ( lzw code -- ? ) swap clear-code>> = ;
 
-defer: handle-clear-code
+DEFER: handle-clear-code
 : lzw-process-next-code ( lzw quot: ( lzw code -- ) -- )
     [ lzw-read ] dip {
         { [ 2over end-of-information? ] [ 3drop ] }
@@ -86,7 +86,7 @@ defer: handle-clear-code
         [ call( lzw code -- ) ]
     } cond ; inline
 
-defer: lzw-uncompress-char
+DEFER: lzw-uncompress-char
 : handle-clear-code ( lzw -- )
     reset-lzw-uncompress
     [

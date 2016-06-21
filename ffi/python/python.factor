@@ -7,7 +7,7 @@ qualified: math
 
 ERROR: python-error type message traceback ;
 
-specialized-array: void*
+SPECIALIZED-ARRAY: void*
 
 ! Borrowed from unix.utilities
 : strings>alien ( strings encoding -- array )
@@ -59,7 +59,7 @@ specialized-array: void*
 : py-list>vector ( py-list -- vector )
     dup py-list-size iota [ py-list-get-item ] with V{ } map-as ;
 
-defer: >py
+DEFER: >py
 
 GENERIC: >py ( obj -- py-obj ) ;
 M: string >py
@@ -80,9 +80,9 @@ M: f >py
     drop <none> ;
 
 ! Data marshalling to Factor
-symbol: py-type-dispatch
+SYMBOL: py-type-dispatch
 
-defer: py>
+DEFER: py>
 
 : init-py-type-dispatch ( -- table )
     H{

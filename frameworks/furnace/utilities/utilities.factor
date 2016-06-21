@@ -122,7 +122,7 @@ CONSTANT: nested-forms-key "__n" ;
         { "POST" [ post-client-state ] }
     } case ;
 
-symbol: exit-continuation
+SYMBOL: exit-continuation
 
 : exit-with ( value -- * )
     exit-continuation get continue-with ;

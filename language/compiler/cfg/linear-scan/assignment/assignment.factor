@@ -12,8 +12,8 @@ qualified: sets
 
 ! This contains both active and inactive intervals; any interval
 ! such that start <= insn# <= end is in this set.
-symbol: pending-interval-heap
-symbol: pending-interval-assoc
+SYMBOL: pending-interval-heap
+SYMBOL: pending-interval-assoc
 
 : insert-spill ( live-interval -- )
     [ reg>> ] [ spill-rep>> ] [ spill-to>> ] tri ##spill, ;
@@ -39,9 +39,9 @@ symbol: pending-interval-assoc
 : vregs>regs ( assoc -- assoc' )
     [ vreg>reg ] assoc-map ;
 
-symbol: unhandled-intervals
+SYMBOL: unhandled-intervals
 
-symbol: machine-live-ins
+SYMBOL: machine-live-ins
 
 : machine-live-in ( bb -- assoc )
     machine-live-ins get at ;
@@ -49,7 +49,7 @@ symbol: machine-live-ins
 : compute-live-in ( bb -- )
     [ live-in vregs>regs ] keep machine-live-ins get set-at ;
 
-symbol: machine-edge-live-ins
+SYMBOL: machine-edge-live-ins
 
 : machine-edge-live-in ( predecessor bb -- assoc )
     machine-edge-live-ins get at at ;
@@ -58,7 +58,7 @@ symbol: machine-edge-live-ins
     [ edge-live-ins get at [ vregs>regs ] assoc-map ] keep
     machine-edge-live-ins get set-at ;
 
-symbol: machine-live-outs
+SYMBOL: machine-live-outs
 
 : machine-live-out ( bb -- assoc )
     machine-live-outs get at ;

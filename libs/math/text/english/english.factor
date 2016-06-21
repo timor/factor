@@ -34,7 +34,7 @@ PRIVATE<
         "trigintillion" "untrigintillion" "duotrigintillion"
     } nth ;
 
-symbol: and-needed?
+SYMBOL: and-needed?
 : set-conjunction ( seq -- )
     first { [ 100 < ] [ 0 > ] } 1&& and-needed? set ;
 

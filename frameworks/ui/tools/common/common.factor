@@ -6,7 +6,7 @@ ui.pens.solid ui.gadgets.scrollers ui.gadgets.tracks ui.theme
 combinators.short-circuit ;
 IN: ui.tools.common
 
-symbol: tool-dims
+SYMBOL: tool-dims
 
 tool-dims [ H{ } clone ] initialize
 
@@ -26,7 +26,7 @@ M: tool layout*
     [ [ dim>> ] [ class-of ] bi set-tool-dim ]
     bi ;
 
-slot: scroller
+SLOT: scroller
 
 : com-page-up ( tool -- )
     scroller>> scroll-up-page ;

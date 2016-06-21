@@ -9,10 +9,10 @@ io.timeouts kernel libc literals locals math math.bitwise namespaces
 sequences specialized-arrays system threads tr vectors windows
 windows.errors windows.handles windows.kernel32 windows.shell32
 windows.time windows.types windows.winsock ;
-specialized-array: ushort
+SPECIALIZED-ARRAY: ushort
 IN: io.files.windows
 
-slot: file
+SLOT: file
 
 : CreateFile-flags ( DWORD -- DWORD )
     flags{ FILE_FLAG_BACKUP_SEMANTICS FILE_FLAG_OVERLAPPED } bitor ;
@@ -45,7 +45,7 @@ TUPLE: FileArgs
 C: <FileArgs> FileArgs ;
 
 ! Global variable with assoc mapping overlapped to threads
-symbol: pending-overlapped
+SYMBOL: pending-overlapped
 
 TUPLE: io-callback port thread ;
 
@@ -57,7 +57,7 @@ C: <io-callback> io-callback ;
 : <master-completion-port> ( -- handle )
     INVALID_HANDLE_VALUE f <completion-port> ;
 
-symbol: master-completion-port
+SYMBOL: master-completion-port
 
 : add-completion ( win32-handle -- win32-handle )
     dup handle>> master-completion-port get-global <completion-port> drop ;
@@ -281,7 +281,7 @@ SYMBOLS: +read-only+ +hidden+ +system+
 +sparse-file+ +reparse-point+ +compressed+ +offline+
 +not-content-indexed+ +encrypted+ ;
 
-slot: attributes
+SLOT: attributes
 
 : read-only? ( file-info -- ? )
     attributes>> +read-only+ swap member? ;

@@ -6,7 +6,7 @@ IN: stack-checker.values
 
 : <value> ( -- value ) \ <value> counter ;
 
-symbol: known-values
+SYMBOL: known-values
 
 : init-known-values ( -- )
     H{ } clone known-values set ;
@@ -90,9 +90,9 @@ M: composed (literal-value?)
 M: composed (literal)
     >composed< [ compose ] curried/composed-literal ;
 
-singleton: input-parameter
+SINGLETON: input-parameter
 
-symbol: current-word
+SYMBOL: current-word
 
 M: input-parameter (input-value?) drop t ;
 

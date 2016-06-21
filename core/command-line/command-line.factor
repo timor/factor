@@ -6,8 +6,8 @@ namespaces parser parser.notes sequences source-files
 source-files.errors splitting system vocabs.loader ;
 IN: command-line
 
-symbol: user-init-errors
-symbol: +user-init-error+
+SYMBOL: user-init-errors
+SYMBOL: +user-init-error+
 
 TUPLE: user-init-error error path line# asset ;
 
@@ -18,9 +18,9 @@ M: user-init-error error-file path>> ;
 M: user-init-error error-line line#>> ;
 M: user-init-error error-type drop +user-init-error+ ;
 
-symbol: executable
-symbol: script
-symbol: command-line
+SYMBOL: executable
+SYMBOL: script
+SYMBOL: command-line
 
 : (command-line) ( -- args )
     OBJ-ARGS special-object sift [ alien>native-string ] map ;
@@ -84,7 +84,7 @@ symbol: command-line
     unclip executable set
     (parse-command-line) ;
 
-symbol: main-vocab-hook
+SYMBOL: main-vocab-hook
 
 : main-vocab ( -- vocab )
     embedded? [

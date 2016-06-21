@@ -7,13 +7,13 @@ IN: html.parser
 
 TUPLE: tag name attributes text closing? ;
 
-singleton: text
-singleton: dtd
-singleton: comment
+SINGLETON: text
+SINGLETON: dtd
+SINGLETON: comment
 
 PRIVATE<
 
-symbol: tagstack
+SYMBOL: tagstack
 
 : push-tag ( tag -- )
     tagstack get push ;

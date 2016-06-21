@@ -4,7 +4,7 @@ USING: assocs hashtables kernel math sequences vectors ;
 IN: sets
 
 ! Set protocol
-mixin: set
+MIXIN: set
 
 GENERIC: adjoin ( elt set -- ) ;
 GENERIC: ?adjoin ( elt set -- ? ) ;

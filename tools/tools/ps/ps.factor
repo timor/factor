@@ -10,4 +10,4 @@ HOOK: ps os ( -- assoc ) ;
 : ps. ( -- )
     ps sort-keys { "PID" "CMD" } prefix simple-table. ;
 
-main: ps.
+MAIN: ps.

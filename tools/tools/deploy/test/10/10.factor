@@ -5,4 +5,4 @@ IN: tools.deploy.test.10
 
 : main ( -- ) C{ 0 1 } pprint ;
 
-main: main
+MAIN: main

@@ -20,13 +20,13 @@ C: <bad-fortran-abi> bad-fortran-abi ;
 
 ERROR: invalid-fortran-type type ;
 
-defer: fortran-sig>c-sig
-defer: fortran-ret-type>c-type
-defer: fortran-arg-type>c-type
-defer: fortran-name>symbol-name
+DEFER: fortran-sig>c-sig
+DEFER: fortran-ret-type>c-type
+DEFER: fortran-arg-type>c-type
+DEFER: fortran-name>symbol-name
 
-symbol: library-fortran-abis
-symbol: fortran-abi
+SYMBOL: library-fortran-abis
+SYMBOL: fortran-abi
 library-fortran-abis [ H{ } clone ] initialize
 
 PRIVATE<

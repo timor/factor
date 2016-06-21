@@ -1,7 +1,7 @@
 USING: alien.c-types alien.data accessors assocs classes
 destructors functors kernel lexer math parser sequences
 specialized-arrays ui.backend words ;
-specialized-array: int
+SPECIALIZED-ARRAY: int
 IN: ui.pixel-formats
 
 SYMBOLS:

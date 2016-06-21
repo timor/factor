@@ -2,7 +2,7 @@ USING: editors io.standard-paths kernel make math.parser
 namespaces ;
 IN: editors.ultraedit
 
-singleton: ultraedit
+SINGLETON: ultraedit
 ultraedit editor-class set-global
 
 : ultraedit-path ( -- path )

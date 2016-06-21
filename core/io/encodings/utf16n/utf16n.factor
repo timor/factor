@@ -5,7 +5,7 @@ IN: io.encodings.utf16n
 
 ! Native-order UTF-16
 
-singleton: utf16n
+SINGLETON: utf16n
 
 : choose-utf16-endian ( -- descriptor )
     B{ 1 0 0 0 } 0 alien-unsigned-4 1 = utf16le utf16be ? ; foldable

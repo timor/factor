@@ -102,7 +102,7 @@ PRIVATE>
 M: script-string dispose*
     ssa>> void* <ref> ScriptStringFree check-ole32-error ;
 
-symbol: cached-script-strings
+SYMBOL: cached-script-strings
 
 : cached-script-string ( font string -- script-string )
     cached-script-strings get-global [ <script-string> ] 2cache ;

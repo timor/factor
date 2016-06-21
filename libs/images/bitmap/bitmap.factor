@@ -13,7 +13,7 @@ IN: images.bitmap
 ! http://www.fileformat.info/format/bmp/egff.htm
 ! http://www.digicamsoft.com/bmp/bmp.html
 
-singleton: bmp-image
+SINGLETON: bmp-image
 "bmp" bmp-image ?register-image-class
 
 : write2 ( n -- ) 2 >le write ;

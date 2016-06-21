@@ -11,7 +11,7 @@ IN: editors.textwrangler
 
 ! Note that launching with ``open -a`` does not support line numbers.
 
-singleton: textwrangler
+SINGLETON: textwrangler
 textwrangler editor-class set-global
 
 M: textwrangler editor-command

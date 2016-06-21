@@ -7,7 +7,7 @@ ui.gadgets.tables ;
 IN: color-table
 
 ! ui.gadgets.tables demo
-singleton: color-renderer
+SINGLETON: color-renderer
 
 PRIVATE<
 

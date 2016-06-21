@@ -166,7 +166,7 @@ M: integer frexp
         ] [ 1 + ] bi [ * ] dip
     ] if-zero ; inline
 
-defer: copysign
+DEFER: copysign
 
 GENERIC#: ldexp 1 ( x exp -- y ) ;
 

@@ -15,4 +15,4 @@ TYPED:: e^m4 ( m: matrix4 iterations: fixnum -- e^m: matrix4 )
     ] times
     result . ;
 
-main: matrix-exponential-simd-benchmark
+MAIN: matrix-exponential-simd-benchmark

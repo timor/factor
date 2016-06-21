@@ -19,7 +19,7 @@ CONSTANT: crc32-table V{ } ;
     mask-byte crc32-table nth-unsafe
     swap -8 shift bitxor ; inline
 
-singleton: crc32
+SINGLETON: crc32
 
 INSTANCE: crc32 checksum ;
 

@@ -1,7 +1,7 @@
 USING: checksums kernel ;
 IN: checksums.null
 
-singleton: null
+SINGLETON: null
 
 INSTANCE: null checksum ;
 

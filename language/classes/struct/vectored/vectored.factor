@@ -42,8 +42,8 @@ MACRO: (vectored-element>) ( struct-class -- quot: ( elt -- struct ) )
     [ struct-slots [ name>> reader-word 1quotation ] map ] keep
     '[ _ cleave _ <struct-boa> ] ;
 
-slot: (n)
-slot: (vectored)
+SLOT: (n)
+SLOT: (vectored)
 
 FUNCTOR< define-vectored-accessors ( S>> S<< T -- )
 

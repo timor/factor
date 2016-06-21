@@ -135,11 +135,11 @@ MEMO:: d-table ( -- array )
 ! key schedule
 ! expands an 128/192/256 bit key into an 176/208/240 byte schedule
 
-symbol: aes-expand-inner
+SYMBOL: aes-expand-inner
 HOOK: key-expand-round aes-expand-inner  ( temp i -- temp' ) ;
 
-singleton: aes-128-key
-singleton: aes-256-key
+SINGLETON: aes-128-key
+SINGLETON: aes-256-key
 
 : (add-rcon) ( word rcon-ndx -- word' )
     (rcon-nth) [ rotword subword ] dip bitxor ;
@@ -186,7 +186,7 @@ TUPLE: aes-state nrounds key state ;
 : (key-at-nth-round) ( nth aes -- seq )
     [ 4 * dup 4 + ] [ key>> ] bi* <slice> ;
 
-symbol: aes-strategy
+SYMBOL: aes-strategy
 HOOK: (expand-key) aes-strategy ( K Nr -- sched ) ;
 HOOK: (first-round) aes-strategy ( aes -- aes' ) ;
 HOOK: (counter) aes-strategy ( nrounds -- seq ) ;
@@ -194,8 +194,8 @@ HOOK: (round) aes-strategy ( state -- ) ;
 HOOK: (add-key) aes-strategy ( aes -- aes' ) ;
 HOOK: (final-round) aes-strategy ( aes -- aes' ) ;
 
-singleton: aes-decrypt
-singleton: aes-encrypt
+SINGLETON: aes-decrypt
+SINGLETON: aes-encrypt
 
 
 ! rotates the 2nd row left by one element

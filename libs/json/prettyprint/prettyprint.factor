@@ -6,7 +6,7 @@ sequences strings ;
 IN: json.prettyprint
 
 PRIVATE<
-symbol: indent-level
+SYMBOL: indent-level
 CONSTANT: nspaces 2 ;
 
 GENERIC: pprint-json* ( obj -- ) ;

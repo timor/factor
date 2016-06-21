@@ -36,7 +36,7 @@ INSTANCE: interactor input-stream ;
         [ thread>> dup [ thread-registered? ] when ]
     } 1&& not ;
 
-slot: manifest
+SLOT: manifest
 
 M: interactor manifest>>
     dup interactor-busy? [ drop f ] [
@@ -94,13 +94,13 @@ M: interactor stream-element-type drop +character+ ;
 
 GENERIC: (print-input) ( object -- ) ;
 
-symbol: listener-input-style
+SYMBOL: listener-input-style
 H{
     { font-style bold }
     { foreground $ text-color }
 } listener-input-style set-global
 
-symbol: listener-word-style
+SYMBOL: listener-word-style
 H{
     { font-name "sans-serif" }
     { font-style bold }

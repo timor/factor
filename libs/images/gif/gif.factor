@@ -6,7 +6,7 @@ io.binary io.buffers io.encodings.string io.encodings.utf8
 kernel make math math.bitwise namespaces sequences ;
 IN: images.gif
 
-singleton: gif-image
+SINGLETON: gif-image
 "gif" gif-image ?register-image-class
 
 TUPLE: loading-gif

@@ -4,7 +4,7 @@ USING: classes classes.algebra.private classes.private kernel
 kernel.private make namespaces sequences words ;
 IN: classes.builtin
 
-symbol: builtins
+SYMBOL: builtins
 
 PREDICATE: builtin-class < class
     "metaclass" word-prop builtin-class eq? ;

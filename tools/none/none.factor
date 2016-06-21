@@ -3,4 +3,4 @@ IN: none
 
 : none ( -- ) ;
 
-main: none
+MAIN: none

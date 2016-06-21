@@ -4,9 +4,9 @@ USING: assocs init io io.encodings io.encodings.utf8 kernel
 namespaces system ;
 IN: io.backend
 
-symbol: io-backend
+SYMBOL: io-backend
 
-singleton: c-io-backend
+SINGLETON: c-io-backend
 
 io-backend [ c-io-backend ] initialize
 

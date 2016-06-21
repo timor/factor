@@ -43,7 +43,7 @@ MEMO: (load-mode) ( name -- rule-sets )
         "text" (load-mode)
     ] if* ;
 
-symbol: rule-sets
+SYMBOL: rule-sets
 
 : no-such-rule-set ( name -- * )
     "No such rule set: " prepend throw ;
@@ -52,7 +52,7 @@ symbol: rule-sets
     dup "::" split1 [ swap (load-mode) ] [ rule-sets get ] if*
     [ at* [ nip ] [ drop no-such-rule-set ] if ] keep swap ;
 
-defer: finalize-rule-set
+DEFER: finalize-rule-set
 
 : resolve-delegate ( rule -- )
     dup delegate>> dup string? [

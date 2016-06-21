@@ -21,4 +21,4 @@ IN: benchmark.matrix-exponential-scalar
     ] times
     result . ;
 
-main: matrix-exponential-scalar-benchmark
+MAIN: matrix-exponential-scalar-benchmark

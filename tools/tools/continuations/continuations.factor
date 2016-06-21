@@ -18,7 +18,7 @@ PRIVATE<
 
 PRIVATE>
 
-symbol: break-hook
+SYMBOL: break-hook
 
 : break ( -- )
     current-continuation get-callstack >>call

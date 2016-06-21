@@ -10,10 +10,10 @@ CONSTANT: default-monospace-font-name "monospace" ;
 
 CONSTANT: default-font-size 12 ;
 
-symbol: default-font-foreground-color
+SYMBOL: default-font-foreground-color
 color: black default-font-foreground-color set-global
 
-symbol: default-font-background-color
+SYMBOL: default-font-background-color
 color: white default-font-background-color set-global
 
 TUPLE: font name size bold? italic? foreground background ;

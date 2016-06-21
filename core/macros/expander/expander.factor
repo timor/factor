@@ -8,7 +8,7 @@ IN: macros.expander
 
 GENERIC: expand-macros ( quot -- quot' ) ;
 
-symbol: stack
+SYMBOL: stack
 
 : begin ( -- )
     V{ } clone stack set ;

@@ -40,7 +40,7 @@ TUPLE: utf7codec dialect buffer ;
 M: utf7codec encode-string ( str stream codec -- )
     swapd encode-utf7-string swap stream-write ;
 
-defer: emit-char
+DEFER: emit-char
 
 : decode-chunk ( dialect -- ch buffer )
     dup first2 swap [ second read-until drop ] [ first2 swap replace ] bi*

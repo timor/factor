@@ -82,4 +82,4 @@ TUPLE: active-object timer function state previous-time ;
     0.5 seconds sleep
     [ output . ] [ destroy ] bi ;
 
-main: active-test
+MAIN: active-test

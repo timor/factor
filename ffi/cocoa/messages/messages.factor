@@ -9,7 +9,7 @@ stack-checker strings words ;
 QUALIFIED-WITH: alien.c-types c ;
 IN: cocoa.messages
 
-specialized-array: void*
+SPECIALIZED-ARRAY: void*
 
 : make-sender ( signature function -- quot )
     [ over first , f , , second , \ alien-invoke , ] [ ] make ;
@@ -24,8 +24,8 @@ specialized-array: void*
     over first large-struct? [ "_stret" append ] when
     make-sender dup infer define-declared ;
 
-symbol: message-senders
-symbol: super-message-senders
+SYMBOL: message-senders
+SYMBOL: super-message-senders
 
 message-senders [ H{ } clone ] initialize
 super-message-senders [ H{ } clone ] initialize
@@ -57,7 +57,7 @@ MEMO: <selector> ( name -- sel ) f \ selector-tuple boa ;
 : lookup-selector ( name -- alien )
     <selector> selector ;
 
-symbol: objc-methods
+SYMBOL: objc-methods
 
 objc-methods [ H{ } clone ] initialize
 
@@ -89,7 +89,7 @@ MACRO: (send) ( selector super? -- quot )
 : super-send ( receiver args... selector -- return... ) t (send) ; inline
 
 ! Runtime introspection
-symbol: class-init-hooks
+SYMBOL: class-init-hooks
 
 class-init-hooks [ H{ } clone ] initialize
 
@@ -110,7 +110,7 @@ class-init-hooks [ H{ } clone ] initialize
 : objc-meta-class ( string -- class )
     \ objc_getMetaClass (objc-class) ;
 
-symbol: objc>alien-types
+SYMBOL: objc>alien-types
 
 H{
     { "c" c:char }
@@ -145,7 +145,7 @@ cell {
 } case
 assoc-union objc>alien-types set-global
 
-symbol: objc>struct-types
+SYMBOL: objc>struct-types
 
 H{
     { "_NSPoint" NSPoint }
@@ -162,7 +162,7 @@ H{
 } objc>struct-types set-global
 
 ! The transpose of the above map
-symbol: alien>objc-types
+SYMBOL: alien>objc-types
 
 objc>alien-types get [ swap ] assoc-map
 ! A hack...

@@ -17,7 +17,7 @@ PREDICATE: highlighted-word < word [ parsing-word? ] [ delimiter? ] bi or ;
 
 PRIVATE>
 
-symbol: base-word-style
+SYMBOL: base-word-style
 H{ } base-word-style set-global
 
 GENERIC: word-style ( word -- style ) ;
@@ -26,7 +26,7 @@ M: word word-style
     [ presented base-word-style get clone [ set-at ] keep ]
     [ "word-style" word-prop ] bi assoc-union! ;
 
-symbol: highlighted-word-style
+SYMBOL: highlighted-word-style
 H{
     { foreground color: DarkSlateGray }
 } highlighted-word-style set-global
@@ -34,7 +34,7 @@ H{
 M: highlighted-word word-style
     call-next-method highlighted-word-style get assoc-union! ;
 
-symbol: base-string-style
+SYMBOL: base-string-style
 H{
     { foreground color: LightSalmon4 }
 } base-string-style set-global
@@ -42,7 +42,7 @@ H{
 : string-style ( str -- style )
     presented base-string-style get clone [ set-at ] keep ;
 
-symbol: base-vocab-style
+SYMBOL: base-vocab-style
 H{
     { foreground color: gray35 }
 } base-vocab-style set-global
@@ -50,7 +50,7 @@ H{
 : vocab-style ( vocab -- style )
     presented base-vocab-style get clone [ set-at ] keep ;
 
-symbol: stack-effect-style
+SYMBOL: stack-effect-style
 H{
     { foreground color: FactorDarkGreen }
     { font-style plain }

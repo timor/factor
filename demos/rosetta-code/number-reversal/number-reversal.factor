@@ -20,7 +20,7 @@ IN: rosetta-code.number-reversal
     char: 1 char: 9 [a,b] [ 1string ] map dup clone randomize
     [ 2dup = ] [ randomize ] while ;
 
-symbol: trials
+SYMBOL: trials
 
 : prompt ( jumbled -- n )
     trials get "#%2d: " printf

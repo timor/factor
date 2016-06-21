@@ -48,4 +48,4 @@ IN: rosetta-code.one-d-cellular
     ?{ f t t t f t t f t f t f t f t f f t f f }
     10 [ dup print-cellular step ] times print-cellular ;
 
-main: main-cellular
+MAIN: main-cellular

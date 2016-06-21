@@ -4,10 +4,10 @@ USING: combinators.short-circuit editors fry io.standard-paths
 kernel make math.parser namespaces system vocabs ;
 IN: editors.geany
 
-singleton: geany
+SINGLETON: geany
 geany editor-class set-global
 
-symbol: geany-path
+SYMBOL: geany-path
 
 HOOK: find-geany-path os ( -- path ) ;
 

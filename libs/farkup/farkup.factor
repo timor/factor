@@ -6,10 +6,10 @@ xml.data arrays strings vectors xml.writer io.streams.string locals
 unicode ;
 IN: farkup
 
-symbol: relative-link-prefix
-symbol: disable-images?
-symbol: link-no-follow?
-symbol: line-breaks?
+SYMBOL: relative-link-prefix
+SYMBOL: disable-images?
+SYMBOL: link-no-follow?
+SYMBOL: line-breaks?
 
 TUPLE: heading1 child ;
 TUPLE: heading2 child ;
@@ -41,7 +41,7 @@ TUPLE: line-break ;
 ! _foo*bar_baz*bing works like <i>foo*bar</i>baz<b>bing</b>
 ! I could support overlapping, but there's not a good use case for it.
 
-defer: (parse-paragraph)
+DEFER: (parse-paragraph)
 
 : parse-paragraph ( string -- seq )
     (parse-paragraph) list>array ;

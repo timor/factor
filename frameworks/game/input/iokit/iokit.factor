@@ -6,7 +6,7 @@ game.input hints iokit iokit.hid kernel locals math namespaces
 sequences vectors ;
 IN: game.input.iokit
 
-singleton: iokit-game-input-backend
+SINGLETON: iokit-game-input-backend
 
 SYMBOLS: +hid-manager+ +keyboard-state+ +mouse-state+ +controller-states+ ;
 

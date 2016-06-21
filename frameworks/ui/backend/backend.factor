@@ -3,7 +3,7 @@
 USING: command-line kernel namespaces ;
 IN: ui.backend
 
-symbol: ui-backend
+SYMBOL: ui-backend
 
 HOOK: set-title ui-backend ( string world -- ) ;
 

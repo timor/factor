@@ -6,10 +6,10 @@ combinators images images.tessellation grouping sequences math
 math.statistics math.vectors generalizations fry arrays
 namespaces system locals literals specialized-arrays ;
 FROM: alien.c-types => int float ;
-specialized-array: float
+SPECIALIZED-ARRAY: float
 IN: opengl.textures
 
-symbol: non-power-of-2-textures?
+SYMBOL: non-power-of-2-textures?
 
 : check-extensions ( -- )
     ! ATI frglx driver doesn't implement GL_ARB_texture_non_power_of_two properly.
@@ -258,13 +258,13 @@ M: float-11-11-10-components (component-type>type)
 : image-data-format ( component-order component-type -- gl-format gl-type )
     [ (component-order>format) ] [ (component-type>type) ] 2bi ;
 
-slot: display-list
+SLOT: display-list
 
 : draw-texture ( texture -- ) display-list>> [ glCallList ] when* ;
 
 GENERIC: draw-scaled-texture ( dim texture -- ) ;
 
-defer: make-texture
+DEFER: make-texture
 
 : (image-format) ( component-order component-type -- internal-format format type )
     [ image-internal-format ] [ image-data-format ] 2bi ;

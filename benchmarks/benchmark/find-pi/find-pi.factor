@@ -13,4 +13,4 @@ IN: benchmark.find-pi
 : find-pi-benchmark ( -- )
     0.0005 find-pi-to drop 4001 assert= ;
 
-main: find-pi-benchmark
+MAIN: find-pi-benchmark

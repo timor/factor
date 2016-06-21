@@ -8,7 +8,7 @@ namespaces sequences sets ;
 IN: compiler.cfg.alias-analysis
 
 ! Local copy propagation
-symbol: copies
+SYMBOL: copies
 
 : resolve ( vreg -- vreg ) copies get ?at drop ;
 
@@ -16,15 +16,15 @@ symbol: copies
     [ src>> resolve ] [ dst>> ] bi copies get set-at ; inline
 
 ! Map vregs -> alias classes
-symbol: vregs>acs
+SYMBOL: vregs>acs
 
 ! Map alias classes -> sequence of vregs
-symbol: acs>vregs
+SYMBOL: acs>vregs
 
 ! Alias class for objects which are loaded from the data stack
 ! or other object slots. We pessimistically assume that they
 ! can all alias each other.
-symbol: heap-ac
+SYMBOL: heap-ac
 
 : ac>vregs ( ac -- vregs )
     acs>vregs get [ drop V{ } clone ] cache ;
@@ -53,13 +53,13 @@ symbol: heap-ac
     ] if ;
 
 ! Map vregs -> slot# -> vreg
-symbol: live-slots
+SYMBOL: live-slots
 
 ! Maps vreg -> slot# -> insn# of last store or f
-symbol: recent-stores
+SYMBOL: recent-stores
 
 ! A set of insn#s of dead stores
-symbol: dead-stores
+SYMBOL: dead-stores
 
 : dead-store ( insn# -- ) dead-stores get adjoin ;
 
@@ -97,7 +97,7 @@ ERROR: vreg-not-new vreg ;
         value slot# vreg load-constant-slot
     ] [ vreg record-computed-slot ] if ;
 
-symbol: ac-counter
+SYMBOL: ac-counter
 
 : next-ac ( -- n )
     ac-counter [ dup 1 + ] change ;

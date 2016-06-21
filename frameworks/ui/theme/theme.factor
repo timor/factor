@@ -3,7 +3,7 @@
 USING: colors colors.constants colors.hex namespaces ;
 IN: ui.theme
 
-symbol: theme
+SYMBOL: theme
 
 HOOK: toolbar-background theme ( -- color ) ;
 HOOK: toolbar-button-pressed-background theme ( -- color ) ;
@@ -91,7 +91,7 @@ HOOK: labeled-border-color theme ( -- color ) ;
 
 HOOK: table-border-color theme ( -- color ) ;
 
-singleton: light-theme
+SINGLETON: light-theme
 theme [ light-theme ] initialize
 
 M: light-theme toolbar-background color: grey95 ;
@@ -180,7 +180,7 @@ M: light-theme labeled-border-color color: grey85 ;
 
 M: light-theme table-border-color color: FactorTan ;
 
-singleton: dark-theme
+SINGLETON: dark-theme
 
 M: dark-theme toolbar-background color: solarized-base02 ;
 M: dark-theme toolbar-button-pressed-background color: solarized-base0 ;

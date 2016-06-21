@@ -16,7 +16,7 @@ IN: logging.server
 : log# ( path n -- path' )
     number>string ".log" append append-path ;
 
-symbol: log-files
+SYMBOL: log-files
 
 : open-log-stream ( service -- stream )
     log-path

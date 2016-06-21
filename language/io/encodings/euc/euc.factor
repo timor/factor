@@ -40,7 +40,7 @@ M:: euc decode-char ( stream encoding -- char/f )
 : define-method ( class word definition -- )
     [ create-method ] dip define ;
 
-symbol: euc-table
+SYMBOL: euc-table
 
 : setup-euc ( word file-name -- singleton-class biassoc )
     [ dup define-singleton-class ]

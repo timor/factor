@@ -3,7 +3,7 @@ USING: assocs benchmark.reverse-complement byte-arrays fry io
 io.encodings.ascii io.files locals kernel math sequences
 sequences.private specialized-arrays strings typed alien.data ;
 QUALIFIED-WITH: alien.c-types c ;
-specialized-array: c:double
+SPECIALIZED-ARRAY: c:double
 IN: benchmark.fasta
 
 CONSTANT: IM 139968 ;
@@ -104,4 +104,4 @@ TYPED:: make-repeat-fasta ( k: fixnum len: fixnum alu: string -- k': fixnum )
 
 : fasta-benchmark ( -- ) 2500000 reverse-complement-in fasta ;
 
-main: fasta-benchmark
+MAIN: fasta-benchmark

@@ -5,9 +5,9 @@ USING: kernel math namespaces ;
 
 IN: benchmark.namespaces
 
-symbol: foo
-symbol: bar
-symbol: baz
+SYMBOL: foo
+SYMBOL: bar
+SYMBOL: baz
 
 : namespaces-benchmark ( -- )
     200 [
@@ -26,4 +26,4 @@ symbol: baz
         ] with-variable
     ] times ;
 
-main: namespaces-benchmark
+MAIN: namespaces-benchmark

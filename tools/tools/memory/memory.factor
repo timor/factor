@@ -171,7 +171,7 @@ TUPLE: gc-stats collections times ;
 
 PRIVATE>
 
-symbol: gc-events
+SYMBOL: gc-events
 
 : gc-event. ( event -- )
     {
@@ -230,8 +230,8 @@ PRIVATE<
 : <code-blocks> ( seq -- code-blocks )
     6 <groups> H{ } clone \ code-blocks boa ;
 
-symbol: code-heap-start
-symbol: code-heap-end
+SYMBOL: code-heap-start
+SYMBOL: code-heap-end
 
 : in-code-heap? ( address -- ? )
     code-heap-start get code-heap-end get between? ;

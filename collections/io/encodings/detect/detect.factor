@@ -7,7 +7,7 @@ io.encodings.utf8 io.files io.streams.string kernel literals
 math namespaces sequences strings ;
 IN: io.encodings.detect
 
-symbol: default-8bit-encoding
+SYMBOL: default-8bit-encoding
 default-8bit-encoding [ latin1 ] initialize
 
 PRIVATE<

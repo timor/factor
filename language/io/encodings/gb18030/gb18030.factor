@@ -7,7 +7,7 @@ combinators.short-circuit io.binary io.encodings.iana ;
 FROM: io.encodings.ascii => ascii ;
 IN: io.encodings.gb18030
 
-singleton: gb18030
+SINGLETON: gb18030
 
 gb18030 "GB18030" register-encoding
 
@@ -78,9 +78,9 @@ TUPLE: range ufirst ulast bfirst blast ;
 : ranges-gb>u ( ranges -- interval-map )
     [ bfirst>> ] [ blast>> ] [ ] >interval-map-by ;
 
-symbol: gb>u
-symbol: u>gb
-symbol: mapping
+SYMBOL: gb>u
+SYMBOL: u>gb
+SYMBOL: mapping
 
 "vocab:io/encodings/gb18030/gb-18030-2000.xml"
 ascii <file-reader> xml>gb-data

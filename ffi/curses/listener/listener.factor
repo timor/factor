@@ -37,7 +37,7 @@ IN: curses.listener
         curses-stream-readln
     ] if ;
 
-singleton: curses-listener-stream
+SINGLETON: curses-listener-stream
 
 INSTANCE: curses-listener-stream input-stream ;
 INSTANCE: curses-listener-stream output-stream ;
@@ -67,4 +67,4 @@ INSTANCE: curses-listener-stream plain-writer ;
 : test-listener ( -- )
     [ run-listener ] with-global ;
 
-main: run-listener
+MAIN: run-listener

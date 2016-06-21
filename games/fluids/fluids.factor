@@ -8,14 +8,14 @@ math.vectors namespaces opengl.gl sequences specialized-arrays
 ui.gadgets.worlds ui.gestures ui.pixel-formats gpu.effects.step
 images.pgm images.ppm alien.data ;
 FROM: alien.c-types => float ;
-specialized-array: float
+SPECIALIZED-ARRAY: float
 IN: fluids
 
 STRUCT: particle_t
     { p float[2] }
     { v float[2] }
     { m float    } ;
-specialized-array: particle_t
+SPECIALIZED-ARRAY: particle_t
 
 CONSTANT: gravity { 0.0 -0.1 } ;
 
@@ -63,7 +63,7 @@ TUPLE: fluids-world < game-world
         0 swap [ allocate-texture-image ] 3keep 2drop
     ] bi ;
 
-symbol: fluid
+SYMBOL: fluid
 
 : integrate ( world -- )
     particles>> 1/60 integrate-particles! drop ;

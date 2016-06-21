@@ -8,7 +8,7 @@ IN: xml.name
 ! XML namespace processing: ns = namespace
 
 ! A stack of hashtables
-symbol: ns-stack
+SYMBOL: ns-stack
 
 : attrs>ns ( attrs-alist -- hash )
     ! this should check to make sure URIs are valid

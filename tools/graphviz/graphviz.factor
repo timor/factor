@@ -58,7 +58,7 @@ PRIVATE>
 : <node> ( id -- node )
     present <node-attributes> node boa ;
 
-defer: add-nodes
+DEFER: add-nodes
 
 : <edge> ( tail head -- edge )
     [

@@ -42,4 +42,4 @@ CONSTANT: knucleotide-in "vocab:benchmark/knucleotide/knucleotide-input.txt" ;
     ascii [ read-input ] with-file-reader
     process-input ;
 
-main: knucleotide-benchmark
+MAIN: knucleotide-benchmark

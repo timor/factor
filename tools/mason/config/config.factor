@@ -4,110 +4,110 @@ USING: calendar io.pathnames kernel namespaces system ;
 IN: mason.config
 
 ! (Optional) Location for build directories
-symbol: builds-dir
+SYMBOL: builds-dir
 
 builds-dir get-global [
     home "builds" append-path builds-dir set-global
 ] unless
 
 ! Who sends build report e-mails.
-symbol: builder-from
+SYMBOL: builder-from
 
 ! Who receives build report e-mails.
-symbol: builder-recipients
+SYMBOL: builder-recipients
 
 ! (Optional) CPU architecture to build for.
-symbol: target-cpu
+SYMBOL: target-cpu
 
 target-cpu get-global [ cpu target-cpu set-global ] unless
 
 ! (Optional) OS to build for.
-symbol: target-os
+SYMBOL: target-os
 
 target-os get-global [ os target-os set-global ] unless
 
 ! (Optional) Architecture variant suffix.
-symbol: target-variant
+SYMBOL: target-variant
 
 ! (Optional) Additional bootstrap flags.
-symbol: boot-flags
+SYMBOL: boot-flags
 
 ! Keep test-log around?
-symbol: builder-debug
+SYMBOL: builder-debug
 
 ! URL for counter notifications.
-symbol: counter-url
+SYMBOL: counter-url
 
 counter-url [ "http://builds.factorcode.org/counter" ] initialize
 
 ! URL for status notifications.
-symbol: status-url
+SYMBOL: status-url
 
 status-url [ "http://builds.factorcode.org/status-update" ] initialize
 
 ! Password for status notifications.
-symbol: status-secret
+SYMBOL: status-secret
 
-symbol: upload-docs?
+SYMBOL: upload-docs?
 
 ! The below are only needed if upload-docs? is true.
 
 ! Host to upload docs to
-symbol: docs-host
+SYMBOL: docs-host
 
 ! Username to log in.
-symbol: docs-username
+SYMBOL: docs-username
 
 ! Directory to upload docs to.
-symbol: docs-directory
+SYMBOL: docs-directory
 
 ! URL to notify server about new docs
-symbol: docs-update-url
+SYMBOL: docs-update-url
 
 docs-update-url [ "http://builds.factorcode.org/docs-update" ] initialize
 
 ! Boolean. Do we upload package binaries?
-symbol: upload-package?
+SYMBOL: upload-package?
 
 ! Host to upload binary package to.
-symbol: package-host
+SYMBOL: package-host
 
 ! Username to log in.
-symbol: package-username
+SYMBOL: package-username
 
 ! Directory with binary packages.
-symbol: package-directory
+SYMBOL: package-directory
 
 ! Boolean. Do we update the clean branch?
-symbol: update-clean-branch?
+SYMBOL: update-clean-branch?
 
 ! The below are only needed if update-clean-branch? is true.
 
 ! Host with clean git repo.
-symbol: branch-host
+SYMBOL: branch-host
 
 ! Username to log in.
-symbol: branch-username
+SYMBOL: branch-username
 
 ! Directory with git repo.
-symbol: branch-directory
+SYMBOL: branch-directory
 
 ! Host to upload clean image to.
-symbol: image-host
+SYMBOL: image-host
 
 ! Username to log in.
-symbol: image-username
+SYMBOL: image-username
 
 ! Directory with clean images.
-symbol: image-directory
+SYMBOL: image-directory
 
 ! Upload timeout
-symbol: upload-timeout
+SYMBOL: upload-timeout
 1 hours upload-timeout set-global
 
 ! Optional: override ssh and scp command names
-symbol: scp-command
+SYMBOL: scp-command
 scp-command [ "scp" ] initialize
 
-symbol: ssh-command
+SYMBOL: ssh-command
 ssh-command [ "ssh" ] initialize

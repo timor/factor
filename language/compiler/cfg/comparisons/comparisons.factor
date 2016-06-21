@@ -3,7 +3,7 @@
 USING: assocs math.order sequences ;
 IN: compiler.cfg.comparisons
 
-symbol: +unordered+
+SYMBOL: +unordered+
 
 SYMBOLS:
     cc<  cc<=  cc=  cc>  cc>=  cc<>  cc<>=

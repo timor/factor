@@ -3,7 +3,7 @@ USING: alien.data alien.strings byte-arrays
 kernel specialized-arrays system tools.deploy.libraries
 windows.kernel32 windows.types ;
 FROM: alien.c-types => ushort ;
-specialized-array: ushort
+SPECIALIZED-ARRAY: ushort
 IN: tools.deploy.libraries.windows
 
 M: windows find-library-file

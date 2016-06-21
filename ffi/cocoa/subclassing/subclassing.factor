@@ -74,7 +74,7 @@ C: <cocoa-protocol> cocoa-protocol ;
 SYNTAX: \ cocoa-protocol:
     scan-token <cocoa-protocol> suffix! ;
 
-defer: \ CLASS> delimiter
+DEFER: \ CLASS> delimiter
 
 SYNTAX: \ CLASS<
     scan-token

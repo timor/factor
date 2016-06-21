@@ -4,7 +4,7 @@ USING: accessors kernel kernel.private math math.order
 math.private slots.private ;
 IN: sequences
 
-mixin: sequence
+MIXIN: sequence
 
 GENERIC: length ( seq -- n ) ; flushable
 GENERIC: set-length ( n seq -- ) ;
@@ -59,7 +59,7 @@ M: integer bounds-check? ( n seq -- ? )
 : bounds-check ( n seq -- n seq )
     2dup bounds-check? [ bounds-error ] unless ; inline
 
-mixin: immutable-sequence
+MIXIN: immutable-sequence
 
 ERROR: immutable element index sequence ;
 
@@ -188,7 +188,7 @@ PRIVATE>
     [ length 1 - ] keep over 0 <
     [ 2drop f ] [ nth-unsafe ] if ; inline
 
-mixin: virtual-sequence
+MIXIN: virtual-sequence
 GENERIC: virtual-exemplar ( seq -- seq' ) ;
 GENERIC: virtual@ ( n seq -- n' seq' ) ;
 

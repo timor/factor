@@ -6,7 +6,7 @@ IN: math.text.french
 
 PRIVATE<
 
-defer: basic
+DEFER: basic
 
 CONSTANT: literals
     H{ { 0 "zéro" } { 1 "un" } { 2 "deux" } { 3 "trois" } { 4 "quatre" }

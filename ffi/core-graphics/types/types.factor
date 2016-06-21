@@ -5,7 +5,7 @@ classes.struct kernel layouts math math.rectangles ;
 FROM: alien.c-types => float ;
 IN: core-graphics.types
 
-symbol: CGFloat
+SYMBOL: CGFloat
 COMPILE< cell 4 = float double ? \ CGFloat typedef COMPILE>
 
 STRUCT: CGPoint

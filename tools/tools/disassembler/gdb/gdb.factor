@@ -6,7 +6,7 @@ system math io.encodings.ascii accessors tools.disassembler
 tools.disassembler.private locals ;
 IN: tools.disassembler.gdb
 
-singleton: gdb-disassembler
+SINGLETON: gdb-disassembler
 
 : in-file ( -- path ) "gdb-in.txt" temp-file ;
 

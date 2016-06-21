@@ -6,4 +6,4 @@ IN: benchmark.parse-fixnum
         [ number>string string>number ] [ assert= ] bi
     ] each ;
 
-main: parse-fixnum-benchmark
+MAIN: parse-fixnum-benchmark

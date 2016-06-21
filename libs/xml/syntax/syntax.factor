@@ -69,7 +69,7 @@ PRIVATE<
 : string>doc ( string -- xml )
     t interpolating? [ string>xml ] with-variable ;
 
-defer: interpolate-sequence
+DEFER: interpolate-sequence
 
 : get-interpolated ( interpolated -- quot )
     var>> '[ [ _ of ] keep ] ;

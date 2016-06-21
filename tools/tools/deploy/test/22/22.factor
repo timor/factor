@@ -9,4 +9,4 @@ IN: tools.deploy.test.22
     [ receive drop 1 ] [ error>> "Linked" = 0 1 ? ] recover
     exit ;
 
-main: linked-error-test
+MAIN: linked-error-test

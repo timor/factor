@@ -3,7 +3,7 @@ math kernel sequences windows.errors windows.types io accessors
 math.order namespaces make math.parser windows.kernel32
 combinators locals specialized-arrays literals splitting
 grouping classes.struct combinators.smart ;
-specialized-array: uchar
+SPECIALIZED-ARRAY: uchar
 IN: windows.ole32
 
 library: ole32

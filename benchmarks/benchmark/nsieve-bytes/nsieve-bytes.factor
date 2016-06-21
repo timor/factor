@@ -32,4 +32,4 @@ byte-arrays make io ;
 
 : nsieve-bytes-benchmark ( -- ) 9 nsieve-main ;
 
-main: nsieve-bytes-benchmark
+MAIN: nsieve-bytes-benchmark

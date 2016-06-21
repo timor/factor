@@ -20,7 +20,7 @@ IN: webapps.planet
 
 TUPLE: planet < dispatcher ;
 
-symbol: can-administer-planet?
+SYMBOL: can-administer-planet?
 
 can-administer-planet? define-capability
 

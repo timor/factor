@@ -5,7 +5,7 @@ compiler.codegen.labels cpu.architecture cpu.x86.assembler
 cpu.x86.assembler.operands init kernel math math.order
 math.parser memoize namespaces sequences
 specialized-arrays system math.bitwise combinators.smart ;
-specialized-array: uint
+SPECIALIZED-ARRAY: uint
 IN: cpu.x86.features
 
 PRIVATE<

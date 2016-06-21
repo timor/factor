@@ -6,10 +6,10 @@ prettyprint concurrency.count-downs concurrency.promises
 namespaces arrays continuations destructors ;
 IN: benchmark.sockets
 
-symbol: counter
-symbol: server-promise
-symbol: server
-symbol: port
+SYMBOL: counter
+SYMBOL: server-promise
+SYMBOL: server
+SYMBOL: port
 
 CONSTANT: number-of-requests 1000 ;
 
@@ -69,4 +69,4 @@ CONSTANT: number-of-requests 1000 ;
     40 clients
     100 clients ;
 
-main: sockets-benchmark
+MAIN: sockets-benchmark

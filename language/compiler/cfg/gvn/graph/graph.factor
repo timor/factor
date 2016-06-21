@@ -3,28 +3,28 @@
 USING: accessors kernel math namespaces assocs ;
 IN: compiler.cfg.gvn.graph
 
-symbol: input-expr-counter
+SYMBOL: input-expr-counter
 
 ! assoc mapping vregs to value numbers
 ! this is the identity on canonical representatives
-symbol: vregs>vns
+SYMBOL: vregs>vns
 
 ! assoc mapping expressions to value numbers
-symbol: exprs>vns
+SYMBOL: exprs>vns
 
 ! assoc mapping value numbers to instructions
-symbol: vns>insns
+SYMBOL: vns>insns
 
 ! assoc mapping each value number to a sequence of vregs
 ! sharing that value number (i.e., the congruence class)
-symbol: vns>vregs
+SYMBOL: vns>vregs
 
 ! boolean to track whether vregs>vns changes
-symbol: changed?
+SYMBOL: changed?
 
 ! boolean to track when it's safe to alter the CFG in a rewrite
 ! method (i.e., after vregs>vns stops changing)
-symbol: final-iteration?
+SYMBOL: final-iteration?
 
 : vn>insn ( vn -- insn ) vns>insns get at ;
 

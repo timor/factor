@@ -4,7 +4,7 @@ USING: accessors arrays kernel math sequences sequences.private
 vectors ;
 IN: assocs
 
-mixin: assoc
+MIXIN: assoc
 
 GENERIC: at* ( key assoc -- value/f ? ) ;
 GENERIC: value-at* ( value assoc -- key/f ? ) ;

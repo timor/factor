@@ -197,10 +197,10 @@ TUPLE: code-file
 : write-dest-file ( xml name ext -- )
     append utf8 [ write-xml ] with-file-writer ;
 
-symbol: kindlegen-path
+SYMBOL: kindlegen-path
 kindlegen-path [ "kindlegen" ] initialize
 
-symbol: codebook-output-path
+SYMBOL: codebook-output-path
 codebook-output-path [ "resource:codebooks" ] initialize
 
 : kindlegen ( path -- )

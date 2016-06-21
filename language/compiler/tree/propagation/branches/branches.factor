@@ -41,7 +41,7 @@ M: #dispatch live-branches
 : live-children ( #branch -- children )
     [ children>> ] [ live-branches>> ] bi select-children ;
 
-symbol: infer-children-data
+SYMBOL: infer-children-data
 
 : copy-value-info ( -- )
     value-infos [ H{ } clone suffix ] change
@@ -51,7 +51,7 @@ symbol: infer-children-data
     value-infos off
     constraints off ;
 
-defer: collect-variables
+DEFER: collect-variables
 
 : infer-children ( node -- )
     [ live-children ] [ child-constraints ] bi [
@@ -81,7 +81,7 @@ defer: collect-variables
 : merge-value-infos ( infos outputs -- )
     [ [ value-infos-union ] map ] dip set-value-infos ;
 
-symbol: condition-value
+SYMBOL: condition-value
 
 : collect-variables ( -- hash )
     {

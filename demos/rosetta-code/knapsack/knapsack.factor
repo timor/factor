@@ -100,4 +100,4 @@ CONSTANT: limit 400 ;
     natural-sort
     [ "   " write print ] each ;
 
-main: knapsack-main
+MAIN: knapsack-main

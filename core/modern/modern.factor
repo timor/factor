@@ -287,8 +287,8 @@ MACRO:: read-double-matched ( open-ch -- quot: ( lexer tag ch -- seq ) )
 : read-double-matched-bracket ( lexer tag ch -- seq ) char: \[ read-double-matched ;
 : read-double-matched-brace ( lexer tag ch -- seq ) char: \{ read-double-matched ;
 
-defer: lex
-defer: lex-factor
+DEFER: lex
+DEFER: lex-factor
 
 ! make lex-top-level and lex-matched
 ! lex-top-level lexes til FOO; ; or TAG:, on TAG: leave n' at start of TAG:

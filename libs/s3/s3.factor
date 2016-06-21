@@ -23,8 +23,8 @@ USING:
 ;
 IN: s3
 
-symbol: key-id
-symbol: secret-key
+SYMBOL: key-id
+SYMBOL: secret-key
 
 PRIVATE<
 

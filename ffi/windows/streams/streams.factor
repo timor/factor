@@ -5,7 +5,7 @@ windows.com.wrapper windows.kernel32 windows.ole32
 windows.types ;
 IN: windows.streams
 
-specialized-array: uchar
+SPECIALIZED-ARRAY: uchar
 
 PRIVATE<
 

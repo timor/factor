@@ -20,7 +20,7 @@ ERROR: not-in-a-method-error ;
 : scan-new-method ( -- method )
     scan-class bootstrap-word scan-escaped-word create-method-in ;
 
-symbol: current-method
+SYMBOL: current-method
 
 : with-method-definition ( method quot -- )
     over current-method set call current-method off ; inline

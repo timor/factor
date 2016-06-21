@@ -49,4 +49,4 @@ M: byte-vector hexdump. hexdump-bytes ;
 : hexdump-main ( -- )
     command-line get [ hexdump-file ] each ;
 
-main: hexdump-main
+MAIN: hexdump-main

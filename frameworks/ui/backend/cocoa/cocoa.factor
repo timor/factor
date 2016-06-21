@@ -17,7 +17,7 @@ TUPLE: window-handle view window ;
 
 C: <window-handle> window-handle ;
 
-singleton: cocoa-ui-backend
+SINGLETON: cocoa-ui-backend
 
 PIXEL-FORMAT-ATTRIBUTE-TABLE: NSOpenGLPFA { } H{
     { double-buffered { $ NSOpenGLPFADoubleBuffer } }
@@ -208,7 +208,7 @@ CLASS>
 : install-app-delegate ( -- )
     NSApp FactorApplicationDelegate install-delegate ;
 
-symbol: cocoa-startup-hook
+SYMBOL: cocoa-startup-hook
 
 cocoa-startup-hook [
     [ "MiniFactor.nib" load-nib install-app-delegate ]

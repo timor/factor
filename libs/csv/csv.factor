@@ -5,7 +5,7 @@ make math memoize namespaces sbufs sequences sequences.private
 unicode ;
 IN: csv
 
-symbol: delimiter
+SYMBOL: delimiter
 
 char: , delimiter set-global
 
@@ -14,7 +14,7 @@ PRIVATE<
 MEMO: field-delimiters ( delimiter -- field-seps quote-seps )
     [ "\r\n" swap prefix ] [ "\r\"\n" swap prefix ] bi ; inline
 
-defer: quoted-field,
+DEFER: quoted-field,
 
 : maybe-escaped-quote ( delimeter stream quoted? -- delimiter stream sep/f )
     2over stream-read1 swap over =

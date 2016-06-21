@@ -449,7 +449,7 @@ M: cpu reset
         0 swap (load-rom)
     ] with-file-reader ;
 
-symbol: rom-root
+SYMBOL: rom-root
 
 : rom-dir ( -- string )
     rom-root get [
@@ -1368,8 +1368,8 @@ SYMBOLS: $1 $2 $3 $4 ;
     ! assembly quotations.
     8080-generator-parser parse ;
 
-symbol: last-instruction
-symbol: last-opcode
+SYMBOL: last-instruction
+SYMBOL: last-opcode
 
 : parse-instructions ( list -- )
     ! Process the list of strings, which should make

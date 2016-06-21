@@ -10,7 +10,7 @@ QUALIFIED-WITH: curses.ffi ffi ;
 
 IN: curses
 
-symbol: current-window
+SYMBOL: current-window
 
 CONSTANT: COLOR_BLACK 0 ;
 CONSTANT: COLOR_RED   1 ;
@@ -235,7 +235,7 @@ PRIVATE<
     [ echo>> [ ffi:echo ] [ ffi:noecho ] if curses-error ]
     bi ;
 
-symbol: n-registered-colors
+SYMBOL: n-registered-colors
 
 MEMO: register-color ( fg bg -- n )
     [ n-registered-colors get dup ] 2dip ffi:init_pair curses-error

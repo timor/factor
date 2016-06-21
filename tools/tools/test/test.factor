@@ -13,11 +13,11 @@ IN: tools.test
 
 TUPLE: test-failure < source-file-error continuation ;
 
-symbol: +test-failure+
+SYMBOL: +test-failure+
 
 M: test-failure error-type drop +test-failure+ ;
 
-symbol: test-failures
+SYMBOL: test-failures
 
 test-failures [ V{ } clone ] initialize
 
@@ -29,10 +29,10 @@ T{ error-type-holder
    { quot [ test-failures get ] }
 } define-error-type
 
-symbol: verbose-tests?
+SYMBOL: verbose-tests?
 t verbose-tests? set-global
 
-symbol: restartable-tests?
+SYMBOL: restartable-tests?
 t restartable-tests? set-global
 
 : <test-failure> ( error experiment path line# -- test-failure )
@@ -50,7 +50,7 @@ PRIVATE<
     <test-failure> test-failures get push
     notify-error-observers ;
 
-symbol: current-test-file
+SYMBOL: current-test-file
 
 : file-failure ( error -- )
     [ f current-test-file get ] keep error-line failure ;
@@ -135,7 +135,7 @@ PRIVATE>
         ] recover
     ] with-variable ;
 
-symbol: forget-tests?
+SYMBOL: forget-tests?
 
 PRIVATE<
 
@@ -186,4 +186,4 @@ M: test-failure error. ( error -- )
 : test-main ( -- )
     command-line get [ [ load ] [ test ] bi ] each ;
 
-main: test-main
+MAIN: test-main

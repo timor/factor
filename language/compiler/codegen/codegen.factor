@@ -10,14 +10,14 @@ parser quotations sequences sequences.generalizations slots
 words lexer ;
 IN: compiler.codegen
 
-symbol: insn-counts
+SYMBOL: insn-counts
 
 H{ } clone insn-counts set-global
 
 GENERIC: generate-insn ( insn -- ) ;
 
 ! Control flow
-symbol: labels
+SYMBOL: labels
 
 : lookup-label ( bb -- label )
     labels get [ drop <label> ] cache ;

@@ -24,7 +24,7 @@ ERROR: not-a-json-number string ;
 : json-expect ( token stream -- )
     [ dup length ] [ stream-read ] bi* = [ json-error ] unless ; inline
 
-defer: (read-json-string)
+DEFER: (read-json-string)
 
 : decode-utf16-surrogate-pair ( hex1 hex2 -- char )
     [ 0x3ff bitand ] bi@ [ 10 shift ] dip bitor 0x10000 + ;

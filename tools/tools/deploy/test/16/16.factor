@@ -5,4 +5,4 @@ TYPED: typed-test ( x: integer y: string -- ) <repetition> concat print ;
 
 : typed-main ( -- ) 3 "hi" typed-test ;
 
-main: typed-main
+MAIN: typed-main

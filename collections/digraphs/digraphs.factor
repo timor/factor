@@ -32,7 +32,7 @@ TUPLE: vertex value edges ;
 : unvisited? ( unvisited key -- ? ) swap key? ;
 : visited ( unvisited key -- ) swap delete-at ;
 
-defer: (topological-sort)
+DEFER: (topological-sort)
 : visit-children ( seq unvisited key -- seq unvisited )
     over children [ (topological-sort) ] each ;
 

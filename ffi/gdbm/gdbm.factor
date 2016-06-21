@@ -48,7 +48,7 @@ PRIVATE<
 
 : check-error ( ret -- ) 0 = [ gdbm-throw ] unless ;
 
-symbol: current-dbf
+SYMBOL: current-dbf
 
 : dbf ( -- dbf ) current-dbf get ;
 

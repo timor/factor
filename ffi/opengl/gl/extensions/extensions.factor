@@ -11,8 +11,8 @@ COMPILE< {
     [ unknown-gl-platform ]
 } cond use-vocab COMPILE>
 
-symbol: +gl-function-counter+
-symbol: +gl-function-pointers+
+SYMBOL: +gl-function-counter+
+SYMBOL: +gl-function-pointers+
 
 : reset-gl-function-number-counter ( -- )
     0 +gl-function-counter+ set-global ;

@@ -8,18 +8,18 @@ generic generic.standard definitions make sbufs
 tools.continuations parser tools.annotations fry ;
 IN: tools.walker
 
-symbol: show-walker-hook ! ( status continuation thread -- )
+SYMBOL: show-walker-hook ! ( status continuation thread -- )
 
 ! Thread local in thread being walked
-symbol: walker-thread
+SYMBOL: walker-thread
 
 ! Thread local in walker thread
-symbol: walking-thread
-symbol: walker-status
-symbol: walker-continuation
-symbol: walker-history
+SYMBOL: walking-thread
+SYMBOL: walker-status
+SYMBOL: walker-continuation
+SYMBOL: walker-history
 
-defer: start-walker-thread
+DEFER: start-walker-thread
 
 : get-walker-thread ( -- status continuation thread )
     walker-thread tget [
@@ -46,18 +46,18 @@ break-hook [
 ] initialize
 
 ! Messages sent to walker thread
-symbol: step
-symbol: step-out
-symbol: step-into
-symbol: step-all
-symbol: step-into-all
-symbol: step-back
-symbol: abandon
-symbol: call-in
+SYMBOL: step
+SYMBOL: step-out
+SYMBOL: step-into
+SYMBOL: step-all
+SYMBOL: step-into-all
+SYMBOL: step-back
+SYMBOL: abandon
+SYMBOL: call-in
 
-symbol: +running+
-symbol: +suspended+
-symbol: +stopped+
+SYMBOL: +running+
+SYMBOL: +suspended+
+SYMBOL: +stopped+
 
 : status ( -- symbol )
     walker-status tget value>> ;

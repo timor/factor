@@ -5,4 +5,4 @@ IN: benchmark.gc1
 
 : gc1-benchmark ( -- ) 600000 iota [ >bignum 1 + ] map drop ;
 
-main: gc1-benchmark
+MAIN: gc1-benchmark

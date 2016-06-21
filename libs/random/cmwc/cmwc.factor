@@ -3,7 +3,7 @@
 USING: accessors alien.c-types alien.data arrays fry kernel
 locals math math.bitwise random sequences sequences.private
 specialized-arrays ;
-specialized-array: uint
+SPECIALIZED-ARRAY: uint
 IN: random.cmwc
 
 ! Multiply-with-carry RNG

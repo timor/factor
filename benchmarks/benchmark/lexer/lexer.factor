@@ -10,4 +10,4 @@ IN: benchmark.lexer
         <lexer> [ parse-token ] curry loop
     ] curry times ;
 
-main: lexer-benchmark
+MAIN: lexer-benchmark

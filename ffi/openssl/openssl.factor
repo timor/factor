@@ -6,7 +6,7 @@ IN: openssl
 
 ! This code is based on http://www.rtfm.com/openssl-examples/
 
-singleton: openssl
+SINGLETON: openssl
 
 : (ssl-error-string) ( n -- string )
     ERR_clear_error f ERR_error_string ;
@@ -25,7 +25,7 @@ singleton: openssl
     SSL_load_error_strings
     OpenSSL_add_all_digests ;
 
-symbol: ssl-initialized?
+SYMBOL: ssl-initialized?
 
 : maybe-init-ssl ( -- )
     ssl-initialized? get-global [

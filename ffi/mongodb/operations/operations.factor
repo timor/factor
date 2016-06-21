@@ -22,7 +22,7 @@ PREDICATE: mdb-killcursors-op < integer OP_KillCursors = ;
 
 CONSTANT: MSG-HEADER-SIZE 16 ;
 
-symbol: msg-bytes-read
+SYMBOL: msg-bytes-read
 
 : bytes-read> ( -- integer )
     msg-bytes-read get ; inline

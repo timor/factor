@@ -7,4 +7,4 @@ IN: tools.deploy.test.13
 
 : main ( -- ) "x.z" regexp-test "X" "Y" ? print ;
 
-main: main
+MAIN: main

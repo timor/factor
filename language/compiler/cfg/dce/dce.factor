@@ -6,16 +6,16 @@ compiler.cfg.rpo kernel namespaces sequences sets ;
 IN: compiler.cfg.dce
 
 ! Maps vregs to sequences of vregs
-symbol: liveness-graph
+SYMBOL: liveness-graph
 
 ! vregs which participate in side effects and thus are always live
-symbol: live-vregs
+SYMBOL: live-vregs
 
 : live-vreg? ( vreg -- ? )
     live-vregs get in? ;
 
 ! vregs which are the result of an allocation
-symbol: allocations
+SYMBOL: allocations
 
 : allocation? ( vreg -- ? )
     allocations get in? ;

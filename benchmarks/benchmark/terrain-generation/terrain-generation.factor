@@ -7,4 +7,4 @@ IN: benchmark.terrain-generation
     <terrain> float-4{ 0 0 0 1 } terrain-segment
     dim>> { 512 512 } assert= ;
 
-main: terrain-generation-benchmark
+MAIN: terrain-generation-benchmark

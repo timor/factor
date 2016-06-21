@@ -10,8 +10,8 @@ specialized-arrays splitting strings tr ui.gadgets.worlds
 variants vectors vocabs vocabs.loader vocabs.parser words
 words.constant math.floats.half typed ;
 QUALIFIED-WITH: alien.c-types c ;
-specialized-array: int
-specialized-array: void*
+SPECIALIZED-ARRAY: int
+SPECIALIZED-ARRAY: void*
 IN: gpu.shaders
 
 VARIANT: shader-kind
@@ -38,7 +38,7 @@ TUPLE: vertex-attribute
     { dim             integer         read-only initial: 4 }
     { normalize?      boolean         read-only initial: f } ;
 
-mixin: vertex-format
+MIXIN: vertex-format
 
 TUPLE: shader
     { name word read-only initial: t }
@@ -297,7 +297,7 @@ M: f (verify-feedback-format)
 : c-array-dim ( type dim -- type' )
     dup 1 = [ drop ] [ 2array ] if ;
 
-symbol: padding-no
+SYMBOL: padding-no
 
 : padding-name ( -- name )
     "padding-"
@@ -462,7 +462,7 @@ TUPLE: link-program-error program log ;
     [ dup ] dip [ gl-program-info-log ] [ delete-gl-program ] bi
     replace-log-line-numbers link-program-error boa throw ;
 
-defer: <shader-instance>
+DEFER: <shader-instance>
 
 PRIVATE<
 

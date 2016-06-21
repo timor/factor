@@ -14,4 +14,4 @@ IN: rosetta-code.fizzbuzz
 : fizzbuzz-main ( -- )
     100 [1,b] [ fizzbuzz print ] each ;
 
-main: fizzbuzz-main
+MAIN: fizzbuzz-main

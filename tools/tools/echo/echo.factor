@@ -14,4 +14,4 @@ IN: tools.echo
 : run-echo ( -- )
     command-line get [ nl ] [ echo-args ] if-empty ;
 
-main: run-echo
+MAIN: run-echo

@@ -3,7 +3,7 @@
 USING: kernel io ;
 IN: io.streams.plain
 
-mixin: plain-writer
+MIXIN: plain-writer
 
 M: plain-writer stream-nl
     char: \n swap stream-write1 ;

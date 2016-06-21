@@ -7,7 +7,7 @@ IN: compiler.cfg.representations.coalescing
 
 ! Find all strongly connected components in the graph where the
 ! edges are ##phi or ##copy vreg uses
-symbol: components
+SYMBOL: components
 
 : init-components ( cfg components -- )
     '[

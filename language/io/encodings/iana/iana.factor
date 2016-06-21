@@ -6,9 +6,9 @@ io.encodings.ascii io.encodings.utf8 io.encodings.utf16 ;
 IN: io.encodings.iana
 
 PRIVATE<
-symbol: n>e-table
-symbol: e>n-table
-symbol: aliases
+SYMBOL: n>e-table
+SYMBOL: e>n-table
+SYMBOL: aliases
 PRIVATE>
 
 : name>encoding ( name -- encoding )

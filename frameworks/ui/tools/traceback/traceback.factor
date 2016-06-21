@@ -15,7 +15,7 @@ TUPLE: stack-entry object string ;
     dup [ unparse-short ] [ drop error-in-pprint ] recover
     stack-entry boa ;
 
-singleton: stack-entry-renderer
+SINGLETON: stack-entry-renderer
 
 M: stack-entry-renderer row-columns drop string>> 1array ;
 

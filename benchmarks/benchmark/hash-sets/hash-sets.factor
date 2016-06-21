@@ -27,4 +27,4 @@ CONSTANT: test-sets $[
 : hash-sets-benchmark ( -- )
     test-sets bench-sets ;
 
-main: hash-sets-benchmark
+MAIN: hash-sets-benchmark

@@ -36,7 +36,7 @@ TYPED: link-left ( left right key node: node -- left right key node )
 : rcmp ( key node -- key node <=> )
     2dup right>> key>> <=> ; inline
 
-defer: (splay)
+DEFER: (splay)
 
 TYPED: splay-left ( left right key node: node -- left right key node )
     dup left>> [

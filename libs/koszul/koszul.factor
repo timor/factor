@@ -21,7 +21,7 @@ IN: koszul
 : canonicalize ( assoc -- assoc' )
     [ nip zero? ] assoc-reject ;
 
-symbol: terms
+SYMBOL: terms
 
 : with-terms ( quot -- hash )
     [
@@ -98,7 +98,7 @@ symbol: terms
     ] H{ } make canonicalize ;
 
 ! Differential
-symbol: boundaries
+SYMBOL: boundaries
 
 : d= ( value basis -- )
     boundaries [ ?set-at ] change ;
@@ -107,7 +107,7 @@ symbol: boundaries
 
 : dx.y ( x y -- vec ) [ get-boundary ] dip wedge ;
 
-defer: (d)
+DEFER: (d)
 
 : x.dy ( x y -- vec ) (d) wedge -1 alt*n ;
 

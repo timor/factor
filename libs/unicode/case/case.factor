@@ -5,7 +5,7 @@ sequences splitting unicode.categories unicode.data ;
 qualified: ascii
 IN: unicode.case
 
-symbol: locale ! Just casing locale, or overall?
+SYMBOL: locale ! Just casing locale, or overall?
 
 PRIVATE<
 

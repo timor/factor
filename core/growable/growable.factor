@@ -4,10 +4,10 @@ USING: accessors kernel math math.private sequences
 sequences.private ;
 IN: growable
 
-mixin: growable
+MIXIN: growable
 
-slot: length
-slot: underlying
+SLOT: length
+SLOT: underlying
 
 M: growable length length>> ; inline
 M: growable nth-unsafe underlying>> nth-unsafe ; inline

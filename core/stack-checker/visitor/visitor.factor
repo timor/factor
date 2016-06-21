@@ -3,7 +3,7 @@
 USING: kernel arrays namespaces ;
 IN: stack-checker.visitor
 
-symbol: stack-visitor
+SYMBOL: stack-visitor
 
 HOOK: child-visitor stack-visitor ( -- visitor ) ;
 

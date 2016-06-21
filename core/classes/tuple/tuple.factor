@@ -211,7 +211,7 @@ PRIVATE<
 : apply-slot-permutation ( old-values triples -- new-values )
     [ first3 update-slot ] with map ;
 
-symbol: outdated-tuples
+SYMBOL: outdated-tuples
 
 : permute-slots ( old-values layout -- new-values )
     [ first all-slots ] [ outdated-tuples get at ] bi

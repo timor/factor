@@ -6,7 +6,7 @@ math.order math.quadratic math.ranges math.vectors random
 sequences specialized-arrays vectors ;
 FROM: jamshred.oint => distance ;
 FROM: alien.c-types => float ;
-specialized-array: float
+SPECIALIZED-ARRAY: float
 IN: jamshred.tunnel
 
 CONSTANT: n-segments 5000 ;

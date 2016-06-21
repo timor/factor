@@ -7,4 +7,4 @@ IN: benchmark.empty-loop-1
 : empty-loop-1-benchmark ( -- )
     50000000 empty-loop-1 ;
 
-main: empty-loop-1-benchmark
+MAIN: empty-loop-1-benchmark

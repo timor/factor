@@ -4,7 +4,7 @@ USING: accessors assocs hashtables kernel math namespaces words
 windows.types vocabs sequences ;
 IN: windows.messages
 
-symbol: windows-messages
+SYMBOL: windows-messages
 
 "windows.messages" vocab-words
 [ name>> "windows-message" head? ] reject

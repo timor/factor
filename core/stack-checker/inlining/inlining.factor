@@ -38,8 +38,8 @@ loop? ;
     [ quotation-param? [ copy-value ] [ drop <value> ] if ] 2map
     [ length make-values ] dip append ;
 
-symbol: enter-in
-symbol: enter-out
+SYMBOL: enter-in
+SYMBOL: enter-out
 
 : prepare-stack ( word -- )
     required-stack-effect in>>

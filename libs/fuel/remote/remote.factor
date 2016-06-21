@@ -18,4 +18,4 @@ PRIVATE>
 : fuel-start-remote-listener* ( -- ) f fuel-start-remote-listener ;
 
 ! Remote connection
-main: fuel-start-remote-listener*
+MAIN: fuel-start-remote-listener*

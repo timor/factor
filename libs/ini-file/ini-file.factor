@@ -81,8 +81,8 @@ use: xml.entities
 : cleanup-string ( str -- str' )
     unspace unquote unescape-string ;
 
-symbol: section
-symbol: option
+SYMBOL: section
+SYMBOL: option
 
 : section? ( line -- index/f )
     {

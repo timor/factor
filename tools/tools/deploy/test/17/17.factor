@@ -28,4 +28,4 @@ person "PEOPLE" {
         assert=
     ] with-db ;
 
-main: db-deploy-test
+MAIN: db-deploy-test

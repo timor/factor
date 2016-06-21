@@ -4,7 +4,7 @@ USING: alien alien.c-types alien.data arrays assocs byte-arrays
 combinators combinators.short-circuit fry kernel kernel.private
 layouts macros math math.bits sequences sequences.private
 specialized-arrays words ;
-specialized-array: uchar
+SPECIALIZED-ARRAY: uchar
 IN: math.bitwise
 
 ! utilities
@@ -78,7 +78,7 @@ MACRO: bitfield ( bitspec -- quot )
 ! bit-count
 PRIVATE<
 
-defer: byte-bit-count
+DEFER: byte-bit-count
 
 COMPILE<
 

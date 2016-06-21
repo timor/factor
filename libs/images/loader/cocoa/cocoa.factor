@@ -6,7 +6,7 @@ core-graphics.private core-graphics.types destructors
 images.loader io kernel locals math sequences system ;
 IN: images.loader.cocoa
 
-singleton: ns-image
+SINGLETON: ns-image
 
 os macosx? [
     { "png" "tif" "tiff" "gif" "jpg" "jpeg" "bmp" "ico" }

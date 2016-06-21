@@ -4,7 +4,7 @@ USING: accessors alien.c-types alien.data alien.syntax assocs
 core-foundation kernel sequences specialized-arrays ;
 IN: core-foundation.dictionaries
 
-specialized-array: void*
+SPECIALIZED-ARRAY: void*
 
 TYPEDEF: void* CFDictionaryRef ;
 TYPEDEF: void* CFMutableDictionaryRef ;

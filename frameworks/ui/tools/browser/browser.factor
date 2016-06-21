@@ -249,4 +249,4 @@ browser-gadget "fonts" f {
     { T{ key-down f { A+ } "-" } com-font-size-minus }
 } define-command-map
 
-main: browser-window
+MAIN: browser-window

@@ -567,4 +567,4 @@ CONSTANT: google-slides
 : google-talk ( -- )
     google-slides "Google Tech talk" slides-window ;
 
-main: google-talk
+MAIN: google-talk

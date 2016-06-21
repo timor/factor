@@ -60,8 +60,8 @@ SYMBOLS: $doc-path $next-link $prev-link ;
 : fuel-vocab-help-root-heading ( root -- element )
     [ "Children from " prepend ] [ "Other children" ] if* \ $heading swap 2array ;
 
-symbol: vocab-list
-symbol: describe-words
+SYMBOL: vocab-list
+SYMBOL: describe-words
 
 : fuel-vocab-help-table ( vocabs -- element )
     [ fuel-vocab-help-row ] map vocab-list prefix ;

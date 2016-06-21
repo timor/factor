@@ -64,7 +64,7 @@ CATEGORY: spacing Mc ;
 : init-table ( size -- table )
     dup [ f <array> ] curry replicate ;
 
-symbol: table
+SYMBOL: table
 
 : finish-table ( -- table )
     table get [ [ 1 = ] map ] map ;
@@ -139,10 +139,10 @@ COMPILE>
     word-break-table interval-at wOther or ;
 
 COMPILE<
-symbol: check-letter-before
-symbol: check-letter-after
-symbol: check-number-before
-symbol: check-number-after
+SYMBOL: check-letter-before
+SYMBOL: check-letter-after
+SYMBOL: check-number-before
+SYMBOL: check-number-after
 
 : make-word-table ( -- )
     { wCR } { wLF } connect

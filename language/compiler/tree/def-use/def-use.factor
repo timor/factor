@@ -5,7 +5,7 @@ fry kernel namespaces sequences stack-checker.branches ;
 qualified: sets
 IN: compiler.tree.def-use
 
-symbol: def-use
+SYMBOL: def-use
 
 TUPLE: definition value node uses ;
 

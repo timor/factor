@@ -23,7 +23,7 @@ GENERIC: cfrac-a ( n cfrac -- a ) ;
 GENERIC: cfrac-b ( n cfrac -- b ) ;
 
 ! square root of 2
-singleton: sqrt2
+SINGLETON: sqrt2
 M: sqrt2 cfrac-a
     ! If n is 1, then a_n is 1, else a_n is 2.
     drop { { 1 [ 1 ] } [ drop 2 ] } case ;
@@ -32,7 +32,7 @@ M: sqrt2 cfrac-b
     2drop 1 ;
 
 ! Napier's constant
-singleton: napier
+SINGLETON: napier
 M: napier cfrac-a
     ! If n is 1, then a_n is 2, else a_n is n - 1.
     drop { { 1 [ 2 ] } [ 1 - ] } case ;
@@ -40,7 +40,7 @@ M: napier cfrac-b
     ! If n is 1, then b_n is 1, else b_n is n - 1.
     drop { { 1 [ 1 ] } [ 1 - ] } case ;
 
-singleton: pi
+SINGLETON: pi
 M: pi cfrac-a
     ! If n is 1, then a_n is 3, else a_n is 6.
     drop { { 1 [ 3 ] } [ drop 6 ] } case ;
@@ -76,4 +76,4 @@ PRIVATE<
     pi 950 cfrac-estimate 10 decimalize print ;
 PRIVATE>
 
-main: main
+MAIN: main

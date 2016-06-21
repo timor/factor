@@ -247,4 +247,4 @@ PRIVATE>
         10 [ year ] times finish
     ] [ 2drop ] recover ;
 
-main: hamurabi
+MAIN: hamurabi

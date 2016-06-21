@@ -53,7 +53,7 @@ PRIVATE<
 TUPLE: yaml-alias anchor ;
 C: <yaml-alias> yaml-alias ;
 
-symbol: anchors
+SYMBOL: anchors
 
 : ?register-anchor ( obj event -- obj )
     dupd anchor>> [ anchors get set-at ] [ drop ] if* ;
@@ -121,8 +121,8 @@ TUPLE: factor_yaml_event_t type data start_mark end_mark ;
 : next-event ( parser event -- event )
     [ yaml_parser_parse_asserted ] [ &yaml_event_delete ] bi ;
 
-defer: parse-sequence
-defer: parse-mapping
+DEFER: parse-sequence
+DEFER: parse-mapping
 
 : (parse-sequence) ( parser event prev-event -- obj )
     data>> sequence_start>> [ [ 2drop f ] dip ?register-anchor drop ]
@@ -374,7 +374,7 @@ M: assoc (replace-anchors)
 ! use this to have several buffers if it can be interrupted.
 ! For now, only do operations on strings that are in memory
 ! so we don't need to be reentrant.
-symbol: yaml-write-buffer
+SYMBOL: yaml-write-buffer
 : yaml-write-handler ( -- alien )
     [
         memory>byte-array yaml-write-buffer get-global

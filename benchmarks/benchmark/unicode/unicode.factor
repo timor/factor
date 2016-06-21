@@ -12,4 +12,4 @@ IN: benchmark.unicode
         ! [ >lower ] [ >upper ] bi append
     ] times drop ;
 
-main: unicode-benchmark
+MAIN: unicode-benchmark

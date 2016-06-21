@@ -5,7 +5,7 @@ io.backend ui.gadgets accessors opengl.gl arrays fry
 classes ui.render namespaces destructors libc ;
 IN: cairo-gadgets
 
-symbol: current-cairo
+SYMBOL: current-cairo
 
 : cr ( -- cairo )
     current-cairo get ;

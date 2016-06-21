@@ -35,4 +35,4 @@ IN: benchmark.beust2
     5000000000 [ i 1 + i! ] count-numbers
     i 7063290 assert= ;
 
-main: beust2-benchmark
+MAIN: beust2-benchmark

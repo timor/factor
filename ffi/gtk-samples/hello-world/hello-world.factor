@@ -43,4 +43,4 @@ IN: gtk-samples.hello-world
 
     gtk_main ;
 
-main: hello-world-main
+MAIN: hello-world-main

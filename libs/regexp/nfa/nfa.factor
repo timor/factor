@@ -9,14 +9,14 @@ IN: regexp.nfa
 ! but case-insensitive matching should be done by case-folding everything
 ! before processing starts
 
-symbol: option-stack
+SYMBOL: option-stack
 
-symbol: state
+SYMBOL: state
 
 : next-state ( -- state )
     state [ get ] [ inc ] bi ;
 
-symbol: nfa-table
+SYMBOL: nfa-table
 
 : set-each ( keys value hashtable -- )
     '[ _ swap _ set-at ] each ;

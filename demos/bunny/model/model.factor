@@ -4,8 +4,8 @@ locals math math.matrices math.parser math.vectors opengl
 opengl.capabilities opengl.gl opengl.demo-support sequences
 splitting vectors words specialized-arrays alien.data ;
 QUALIFIED-WITH: alien.c-types c ;
-specialized-array: c:float
-specialized-array: c:uint
+SPECIALIZED-ARRAY: c:float
+SPECIALIZED-ARRAY: c:uint
 IN: bunny.model
 
 : numbers ( str -- seq )

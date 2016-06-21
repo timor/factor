@@ -5,14 +5,14 @@ IN: yaml.config
 
 ! Configuration
 ! The following are libyaml's emitter configuration options
-symbol: emitter-canonical
-symbol: emitter-indent
-symbol: emitter-width
-symbol: emitter-unicode
-symbol: emitter-line-break
+SYMBOL: emitter-canonical
+SYMBOL: emitter-indent
+SYMBOL: emitter-width
+SYMBOL: emitter-unicode
+SYMBOL: emitter-line-break
 
 ! Set this value to keep libyaml's default
-symbol: +libyaml-default+
+SYMBOL: +libyaml-default+
 
 {
     emitter-canonical
@@ -23,16 +23,16 @@ symbol: +libyaml-default+
 ! But Factor is unicode-friendly by default
 t emitter-unicode set-global
 
-symbol: implicit-tags
+SYMBOL: implicit-tags
 t implicit-tags set-global
 
-symbol: implicit-start
-symbol: implicit-end
+SYMBOL: implicit-start
+SYMBOL: implicit-end
 t implicit-start set-global
 t implicit-end set-global
 
 ! By default, give the simplest representation of the document
-symbol: merge
-symbol: value
+SYMBOL: merge
+SYMBOL: value
 t merge set-global
 t value set-global

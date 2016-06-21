@@ -12,7 +12,7 @@ PRIVATE<
 : encoding-file ( file-name -- stream )
     "vocab:io/encodings/8-bit/" ".TXT" surround ;
 
-symbol: 8-bit-encodings
+SYMBOL: 8-bit-encodings
 8-bit-encodings [ H{ } clone ] initialize
 
 TUPLE: 8-bit { biassoc biassoc read-only } ;
@@ -32,7 +32,7 @@ M: 8-bit decode-char
     [ 2drop f ]
     if ;
 
-mixin: 8-bit-encoding
+MIXIN: 8-bit-encoding
 
 M: 8-bit-encoding <encoder>
     8-bit-encodings get-global at <encoder> ;

@@ -5,7 +5,7 @@ IN: io.thread
 
 ! The Cocoa and Gtk UI backend stops the I/O thread and takes
 ! over completely.
-symbol: io-thread-running?
+SYMBOL: io-thread-running?
 
 TUPLE: io-thread < thread ;
 

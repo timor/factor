@@ -73,7 +73,7 @@ UNION: explicit-inverse normal-inverse math-inverse pop-inverse ;
 
 ERROR: no-recursive-inverse ;
 
-symbol: visited
+SYMBOL: visited
 
 : flattenable? ( object -- ? )
     { [ word? ] [ primitive? not ] [
@@ -168,7 +168,7 @@ ERROR: missing-literal ;
     2curry
 ] define-pop-inverse
 
-defer: __
+DEFER: __
 \ __ [ drop ] define-inverse
 
 : both ( object object -- object )

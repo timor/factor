@@ -1,8 +1,8 @@
 ! Copyright (C) 2004, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 IN: http.server.static
-defer: file-responder ! necessary for cgi-docs
-defer: <static> ! necessary for cgi-docs
+DEFER: file-responder ! necessary for cgi-docs
+DEFER: <static> ! necessary for cgi-docs
 USING: calendar kernel math math.order math.parser namespaces
 parser sequences strings assocs hashtables debugger mime.types
 sorting logging calendar.format accessors splitting io io.files

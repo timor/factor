@@ -41,8 +41,8 @@ IN: benchmark.regex-dna
         { R/ Y/ "(c|t)" }
     } [ re-replace ] assoc-each ;
 
-symbol: ilen
-symbol: clen
+SYMBOL: ilen
+SYMBOL: clen
 
 : regex-dna ( file -- )
     ascii file-contents dup length ilen set
@@ -57,4 +57,4 @@ symbol: clen
 : regex-dna-benchmark ( -- )
     knucleotide-in regex-dna ;
 
-main: regex-dna-benchmark
+MAIN: regex-dna-benchmark

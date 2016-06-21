@@ -71,4 +71,4 @@ CONSTANT: (operators) { + - * / rot swap q } ;
 
 : 24-game ( -- ) make-24 play-24 ;
 
-main: 24-game
+MAIN: 24-game

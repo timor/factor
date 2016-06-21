@@ -339,4 +339,4 @@ var price = (order == null ? null : order.price);" }
 : otug-talk ( -- )
       otug-slides "OTUG talk" slides-window ;
 
-main: otug-talk
+MAIN: otug-talk

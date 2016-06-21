@@ -4,7 +4,7 @@ USING: grouping io kernel lexer math math.functions math.parser
 namespaces sequences splitting ;
 IN: money
 
-symbol: currency-token
+SYMBOL: currency-token
 char: $ currency-token set-global
 
 : dollars/cents ( dollars -- dollars cents )

@@ -4,7 +4,7 @@ USING: alien.c-types alien.data alien.syntax classes.struct
 continuations core-foundation core-foundation.strings
 core-foundation.urls destructors kernel sequences
 specialized-arrays strings unix.ffi ;
-specialized-array: char
+SPECIALIZED-ARRAY: char
 IN: core-foundation.launch-services
 
 FUNCTION: OSStatus LSFindApplicationForInfo (

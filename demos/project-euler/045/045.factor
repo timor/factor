@@ -30,7 +30,7 @@ PRIVATE<
 : nth-hexagonal ( n -- m )
     dup 2 * 1 - * ;
 
-defer: next-solution
+DEFER: next-solution
 
 : (next-solution) ( n hexagonal -- hexagonal )
     dup pentagonal? [ nip ] [ drop next-solution ] if ;

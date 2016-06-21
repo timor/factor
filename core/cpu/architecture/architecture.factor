@@ -10,7 +10,7 @@ IN: cpu.architecture
 
 ! Unknown representation; this is used for ##copy instructions which
 ! get eliminated later
-singleton: any-rep
+SINGLETON: any-rep
 
 ! Integer registers can contain data with one of these three representations
 ! tagged-rep: tagged pointer or fixnum

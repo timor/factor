@@ -8,7 +8,7 @@ IN: benchmark.struct-arrays
 
 STRUCT: point { x float } { y float } { z float } ;
 
-specialized-array: point
+SPECIALIZED-ARRAY: point
 
 : xyz ( point -- x y z )
     [ x>> ] [ y>> ] [ z>> ] tri ; inline
@@ -51,4 +51,4 @@ specialized-array: point
 : struct-arrays-benchmark ( -- )
     10 [ 500000 struct-arrays-bench ] times ;
 
-main: struct-arrays-benchmark
+MAIN: struct-arrays-benchmark

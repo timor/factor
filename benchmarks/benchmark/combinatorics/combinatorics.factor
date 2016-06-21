@@ -27,4 +27,4 @@ IN: benchmark.combinatorics
 : combinatorics-benchmark ( -- )
     15 bench-combinations 8 bench-permutations ;
 
-main: combinatorics-benchmark
+MAIN: combinatorics-benchmark

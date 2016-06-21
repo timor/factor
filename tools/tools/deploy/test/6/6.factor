@@ -1,13 +1,13 @@
 IN: tools.deploy.test.6
 USING: namespaces math kernel ;
 
-symbol: x
+SYMBOL: x
 
-symbol: y
+SYMBOL: y
 
 : deploy-test-6 ( -- )
     1 x set-global
     2 y set-global
     x get-global y get-global + 3 assert= ;
 
-main: deploy-test-6
+MAIN: deploy-test-6

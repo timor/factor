@@ -5,7 +5,7 @@ ui.baseline-alignment ui.gadgets ui.gadgets.labels
 ui.gadgets.packs.private ui.render wrap.words ;
 IN: ui.gadgets.paragraphs
 
-mixin: word-break
+MIXIN: word-break
 
 ! A word break gadget
 TUPLE: word-break-gadget < label ;

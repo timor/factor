@@ -4,7 +4,7 @@ USING: accessors combinators io.backend kernel math math.order
 namespaces sequences splitting strings system ;
 IN: io.pathnames
 
-symbol: current-directory
+SYMBOL: current-directory
 
 : path-separator? ( ch -- ? ) os windows? "/\\" "/" ? member? ;
 

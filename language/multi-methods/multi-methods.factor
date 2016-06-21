@@ -13,11 +13,11 @@ IN: multi-methods
 : canonicalize-specializer-0 ( specializer -- specializer' )
     [ \ f or ] map ;
 
-symbol: args
+SYMBOL: args
 
-symbol: hooks
+SYMBOL: hooks
 
-symbol: total
+SYMBOL: total
 
 : canonicalize-specializer-1 ( specializer -- specializer' )
     [

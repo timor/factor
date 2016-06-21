@@ -11,4 +11,4 @@ IN: benchmark.fib6
 
 : fib6-benchmark ( -- ) 32 fib drop ;
 
-main: fib6-benchmark
+MAIN: fib6-benchmark

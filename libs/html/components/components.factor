@@ -38,12 +38,12 @@ PRIVATE>
 : render-string ( name renderer -- )
     render>xml write-nested ;
 
-singleton: label
+SINGLETON: label
 
 M: label render*
     2drop present ;
 
-singleton: hidden
+SINGLETON: hidden
 
 M: hidden render*
     drop XML-CHUNK[[ <input value=<-> name=<-> type="hidden"/> ]] ;
@@ -176,23 +176,23 @@ M: farkup render*
     ] with-scope ;
 
 ! Inspector component
-singleton: inspector
+SINGLETON: inspector
 
 M: inspector render*
     2drop [ describe ] with-html-writer ;
 
 ! Diff component
-singleton: comparison
+SINGLETON: comparison
 
 M: comparison render*
     2drop htmlize-diff ;
 
 ! HTML component
-singleton: html
+SINGLETON: html
 
 M: html render* 2drop dup string? [ <unescaped> ] when ;
 
 ! XML component
-singleton: xml
+SINGLETON: xml
 
 M: xml render* 2drop ;

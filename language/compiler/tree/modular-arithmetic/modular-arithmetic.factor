@@ -46,7 +46,7 @@ cell 8 = [
 
 ! Values which only have their low-order bits used. This set starts out
 ! big and is gradually refined.
-symbol: modular-values
+SYMBOL: modular-values
 
 : modular-value? ( value -- ? )
     modular-values get in? ;
@@ -55,7 +55,7 @@ symbol: modular-values
     modular-values get adjoin ;
 
 ! Values which are known to be fixnums.
-symbol: fixnum-values
+SYMBOL: fixnum-values
 
 : fixnum-value? ( value -- ? )
     fixnum-values get in? ;
@@ -115,7 +115,7 @@ M: #call only-reads-low-order?
 
 M: node only-reads-low-order? drop f ;
 
-symbol: changed?
+SYMBOL: changed?
 
 : only-used-as-low-order? ( value -- ? )
     actually-used-by [ node>> only-reads-low-order? ] all? ;

@@ -25,4 +25,4 @@ IN: tools.uniq
         uniq-file
     ] if* ;
 
-main: run-uniq
+MAIN: run-uniq

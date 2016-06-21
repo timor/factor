@@ -5,14 +5,14 @@ assocs combinators io io.streams.string accessors
 xml.data wrap.strings xml.entities unicode fry ;
 IN: xml.writer
 
-symbol: sensitive-tags
-symbol: indenter
+SYMBOL: sensitive-tags
+SYMBOL: indenter
 "  " indenter set-global
 
 PRIVATE<
 
-symbol: xml-pprint?
-symbol: indentation
+SYMBOL: xml-pprint?
+SYMBOL: indentation
 
 : sensitive? ( tag -- ? )
     sensitive-tags get swap '[ _ names-match? ] any? ;

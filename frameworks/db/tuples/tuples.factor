@@ -21,7 +21,7 @@ HOOK: insert-tuple-set-key db-connection ( tuple statement -- ) ;
 
 PRIVATE<
 
-symbol: sql-counter
+SYMBOL: sql-counter
 
 : next-sql-counter ( -- str )
     sql-counter [ inc ] [ get ] bi number>string ;

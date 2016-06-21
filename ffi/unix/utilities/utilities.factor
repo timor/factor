@@ -5,7 +5,7 @@ combinators.short-circuit fry kernel layouts sequences accessors
 specialized-arrays ;
 IN: unix.utilities
 
-specialized-array: void*
+SPECIALIZED-ARRAY: void*
 
 : more? ( alien -- ? )
     { [ ] [ void* deref ] } 1&& ;

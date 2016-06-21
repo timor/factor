@@ -10,13 +10,13 @@ IN: webapps.mason.version.files
 : remote-directory ( string -- string' )
     [ package-directory get ] dip "/" glue ;
 
-slot: os
-slot: cpu
+SLOT: os
+SLOT: cpu
 
 : platform ( builder -- string )
     [ os>> ] [ cpu>> ] bi (platform) ;
 
-slot: last-release
+SLOT: last-release
 
 : binary-package-name ( builder -- string )
     [ [ platform % "/" % ] [ last-release>> % ] bi ] "" make

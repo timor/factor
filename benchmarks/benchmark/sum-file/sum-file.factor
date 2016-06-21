@@ -16,4 +16,4 @@ COMPILE>
         "sum-file.txt" temp-file sum-file 4999950000 assert=
     ] times ;
 
-main: sum-file-benchmark
+MAIN: sum-file-benchmark

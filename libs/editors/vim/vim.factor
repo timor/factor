@@ -5,13 +5,13 @@ IN: editors.vim
 TUPLE: vim ;
 T{ vim } editor-class set-global
 
-symbol: vim-path
+SYMBOL: vim-path
 
 HOOK: find-vim-path editor-class ( -- path ) ;
 
 HOOK: vim-ui? editor-class ( -- ? ) ;
 
-symbol: vim-tabs?
+SYMBOL: vim-tabs?
 
 M: vim vim-ui? f ;
 

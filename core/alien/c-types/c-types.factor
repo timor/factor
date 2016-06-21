@@ -15,7 +15,7 @@ SYMBOLS:
     float double
     void* bool ;
 
-singleton: void
+SINGLETON: void
 
 TUPLE: abstract-c-type
     { class class initial: object }
@@ -115,7 +115,7 @@ GENERIC: heap-size ( name -- size ) ;
 
 M: abstract-c-type heap-size size>> ;
 
-mixin: value-type
+MIXIN: value-type
 
 MACRO: alien-value ( c-type -- quot: ( c-ptr offset -- value ) )
     [ c-type-getter ] [ c-type-boxer-quot ] bi append ;

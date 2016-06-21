@@ -5,4 +5,4 @@ IN: tools.deploy.test.18
 
 : main ( -- ) image-path show ;
 
-main: main
+MAIN: main

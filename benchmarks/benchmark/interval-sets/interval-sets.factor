@@ -11,4 +11,4 @@ IN: benchmark.interval-sets
     2 <groups> <interval-set>
     3,000,000 swap '[ random-32 _ in? drop ] times ;
 
-main: interval-sets-benchmark
+MAIN: interval-sets-benchmark

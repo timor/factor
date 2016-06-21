@@ -183,7 +183,7 @@ M: openssl-context dispose*
 
 TUPLE: ssl-handle < disposable file handle connected ;
 
-symbol: default-secure-context
+SYMBOL: default-secure-context
 
 : current-secure-context ( -- ctx )
     secure-context get [

@@ -6,4 +6,4 @@ IN: benchmark.parse-bignum
         2^ [ number>string string>number ] [ assert= ] bi
     ] each ;
 
-main: parse-bignum-benchmark
+MAIN: parse-bignum-benchmark

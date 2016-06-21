@@ -134,9 +134,9 @@ M: word integer-op-input-classes
     [ nip length 1 = ] assoc-filter
     [ first ] assoc-map % ;
 
-symbol: math-ops
+SYMBOL: math-ops
 
-symbol: fast-math-ops
+SYMBOL: fast-math-ops
 
 : math-op ( word left right -- word' ? )
     3array math-ops get at* ;

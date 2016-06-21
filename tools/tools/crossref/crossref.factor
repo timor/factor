@@ -7,13 +7,13 @@ io.styles kernel namespaces quotations see sequences sets
 sorting source-files threads vocabs words ;
 IN: tools.crossref
 
-symbol: crossref
+SYMBOL: crossref
 
 GENERIC: uses ( defspec -- seq ) ;
 
 PRIVATE<
 
-symbol: visited
+SYMBOL: visited
 
 GENERIC#: quot-uses 1 ( obj set -- ) ;
 
@@ -137,7 +137,7 @@ M: f smart-usage drop \ f smart-usage ;
 
 PRIVATE<
 
-singleton: invalidate-crossref
+SINGLETON: invalidate-crossref
 
 M: invalidate-crossref definitions-changed
     2drop crossref global delete-at ;

@@ -49,4 +49,4 @@ IN: rosetta-code.gray-code
         [ >bin ] [ gray-decode ] bi 4array .
     ] each ;
 
-main: gray-code-main
+MAIN: gray-code-main

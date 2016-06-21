@@ -3,7 +3,7 @@ kernel lexer locals.types namespaces parser quotations
 vocabs.parser words ;
 IN: functors.backend
 
-defer: functor-words
+DEFER: functor-words
 \ functor-words [ H{ } clone ] initialize
 
 SYNTAX: \ FUNCTOR-SYNTAX:

@@ -4,15 +4,15 @@ USING: kernel namespaces ;
 IN: prettyprint.config
 
 ! Configuration
-symbol: tab-size
-symbol: margin
-symbol: nesting-limit
-symbol: length-limit
-symbol: line-limit
-symbol: number-base
-symbol: string-limit?
-symbol: boa-tuples?
-symbol: c-object-pointers?
+SYMBOL: tab-size
+SYMBOL: margin
+SYMBOL: nesting-limit
+SYMBOL: length-limit
+SYMBOL: line-limit
+SYMBOL: number-base
+SYMBOL: string-limit?
+SYMBOL: boa-tuples?
+SYMBOL: c-object-pointers?
 
 4 tab-size set-global
 64 margin set-global

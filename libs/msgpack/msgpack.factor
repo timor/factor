@@ -9,7 +9,7 @@ sequences strings ;
 
 IN: msgpack
 
-defer: read-msgpack
+DEFER: read-msgpack
 
 PRIVATE<
 
@@ -24,7 +24,7 @@ PRIVATE<
 
 PRIVATE>
 
-singleton: +msgpack-nil+
+SINGLETON: +msgpack-nil+
 
 ERROR: unknown-format n ;
 

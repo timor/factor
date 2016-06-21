@@ -25,4 +25,4 @@ IN: tools.copy
         [ 2drop usage ]
     } cond ;
 
-main: run-copy
+MAIN: run-copy

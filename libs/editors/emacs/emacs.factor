@@ -2,10 +2,10 @@ USING: combinators.short-circuit editors io.standard-paths
 kernel make math.parser namespaces sequences system ;
 IN: editors.emacs
 
-singleton: emacsclient
+SINGLETON: emacsclient
 emacsclient editor-class set-global
 
-symbol: emacsclient-path
+SYMBOL: emacsclient-path
 
 HOOK: find-emacsclient os ( -- path ) ;
 

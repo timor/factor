@@ -6,7 +6,7 @@ compiler.cfg.linear-scan.ranges compiler.cfg.registers cpu.architecture fry
 heaps kernel math math.order namespaces sequences ;
 IN: compiler.cfg.linear-scan.allocation.state
 
-symbol: progress
+SYMBOL: progress
 
 : check-unhandled ( live-interval -- )
     live-interval-start progress get <= [ "check-unhandled" throw ] when ; inline
@@ -14,7 +14,7 @@ symbol: progress
 : check-handled ( live-interval -- )
     live-interval-end progress get > [ "check-handled" throw ] when ; inline
 
-symbol: unhandled-min-heap
+SYMBOL: unhandled-min-heap
 
 GENERIC: interval/sync-point-key ( interval/sync-point -- key ) ;
 
@@ -27,9 +27,9 @@ M: sync-point interval/sync-point-key
 : >unhandled-min-heap ( intervals/sync-points -- min-heap )
     [ [ interval/sync-point-key ] keep 2array ] map >min-heap ;
 
-symbol: registers
+SYMBOL: registers
 
-symbol: active-intervals
+SYMBOL: active-intervals
 
 : active-intervals-for ( live-interval -- seq )
     interval-reg-class active-intervals get at ;
@@ -43,7 +43,7 @@ symbol: active-intervals
 : assign-free-register ( new registers -- )
     pop >>reg add-active ;
 
-symbol: inactive-intervals
+SYMBOL: inactive-intervals
 
 : inactive-intervals-for ( live-interval -- seq )
     interval-reg-class inactive-intervals get at ;
@@ -54,7 +54,7 @@ symbol: inactive-intervals
 : delete-inactive ( live-interval -- )
     dup inactive-intervals-for remove-eq! drop ;
 
-symbol: handled-intervals
+SYMBOL: handled-intervals
 
 : add-handled ( live-interval -- )
     [ check-handled ] [ handled-intervals get push ] bi ;
@@ -64,7 +64,7 @@ symbol: handled-intervals
 : finish ( n live-interval -- keep? )
     nip add-handled f ;
 
-symbol: check-allocation?
+SYMBOL: check-allocation?
 
 ERROR: register-already-used live-interval ;
 
@@ -119,7 +119,7 @@ ERROR: register-already-used live-interval ;
 : next-spill-slot ( size stack-frame -- spill-slot )
     [ swap [ align dup ] [ + ] bi ] change-spill-area-size drop <spill-slot> ;
 
-symbol: spill-slots
+SYMBOL: spill-slots
 
 : assign-spill-slot ( coalesced-vreg rep -- spill-slot )
     rep-size spill-slots get [

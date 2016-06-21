@@ -25,4 +25,4 @@ IN: numbers-game
 : numbers-game ( -- )
     guess-banner number-to-guess numbers-game-loop ;
 
-main: numbers-game
+MAIN: numbers-game

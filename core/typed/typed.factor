@@ -79,7 +79,7 @@ PRIVATE<
     [ output-mismatch-error ] word types make-unboxer
     quot prepose ;
 
-defer: make-boxer
+DEFER: make-boxer
 
 : boxer ( type -- quot )
     dup unboxable-tuple-class?

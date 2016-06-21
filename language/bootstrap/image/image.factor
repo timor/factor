@@ -72,7 +72,7 @@ M: eq-wrapper equal?
 M: eq-wrapper hashcode*
     nip obj>> identity-hashcode ;
 
-symbol: objects
+SYMBOL: objects
 
 : cache-eql-object ( obj quot -- value )
     [ <eql-wrapper> objects get ] dip '[ obj>> @ ] cache ; inline
@@ -97,9 +97,9 @@ CONSTANT: header-size 10 ;
 
 CONSTANT: data-heap-size-offset 3 ;
 
-symbol: sub-primitives
+SYMBOL: sub-primitives
 
-symbol: special-objects
+SYMBOL: special-objects
 
 :: jit-conditional ( test-quot false-quot -- )
     [ 0 test-quot call ] B{ } make length :> len
@@ -140,12 +140,12 @@ symbol: special-objects
     ] dip
     sub-primitives get set-at ;
 
-symbol: bootstrapping-image
+SYMBOL: bootstrapping-image
 
 ! Image output format
-symbol: big-endian
+SYMBOL: big-endian
 
-symbol: architecture
+SYMBOL: architecture
 
 H{ } clone special-objects set-global
 

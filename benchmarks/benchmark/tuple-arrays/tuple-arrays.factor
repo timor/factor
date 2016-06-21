@@ -16,4 +16,4 @@ TUPLE-ARRAY: point
         ] map [ z>> ] map-sum
     ] map-sum 0x1.312dp21 assert= ;
 
-main: tuple-arrays-benchmark
+MAIN: tuple-arrays-benchmark

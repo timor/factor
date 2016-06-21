@@ -6,11 +6,11 @@ sequences sequences.private splitting strings strings.private
 vectors ;
 IN: io.encodings.utf16
 
-singleton: utf16be
+SINGLETON: utf16be
 
-singleton: utf16le
+SINGLETON: utf16le
 
-singleton: utf16
+SINGLETON: utf16
 
 ERROR: missing-bom ;
 

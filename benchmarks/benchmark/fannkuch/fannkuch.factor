@@ -32,4 +32,4 @@ IN: benchmark.fannkuch
 : fannkuch-benchmark ( -- )
     9 fannkuch ;
 
-main: fannkuch-benchmark
+MAIN: fannkuch-benchmark

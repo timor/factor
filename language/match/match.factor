@@ -7,7 +7,7 @@ macros make namespaces parser quotations sequences summary words
 ;
 IN: match
 
-symbol: _
+SYMBOL: _
 
 : define-match-var ( name -- )
     create-word-in

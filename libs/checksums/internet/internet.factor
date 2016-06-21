@@ -5,7 +5,7 @@ USING: checksums grouping io.binary kernel math sequences ;
 
 IN: checksums.internet
 
-singleton: internet ! RFC 1071
+SINGLETON: internet ! RFC 1071
 
 INSTANCE: internet checksum ;
 

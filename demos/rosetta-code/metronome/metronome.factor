@@ -67,4 +67,4 @@ M: metronome-gadget pref-dim* drop { 200 200 } ;
 : metronome-main ( -- )
      [ [ metronome-cmdline metronome-ui ] [ drop metronome-usage 1 exit ] recover ] with-ui ;
 
-main: metronome-main
+MAIN: metronome-main

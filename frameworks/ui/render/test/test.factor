@@ -7,7 +7,7 @@ ui.gadgets.labels ui.gadgets.buttons ui.pens ui.pens.solid ui.render
 ui opengl opengl.gl colors.constants images images.loader ;
 IN: ui.render.test
 
-singleton: line-test
+SINGLETON: line-test
 
 M: line-test draw-interior
     2drop { 0 0 } { 0 10 } gl-line ;
@@ -20,7 +20,7 @@ M: line-test draw-interior
 : message-window ( text -- )
     <label> "Message" open-window ;
 
-symbol: render-output
+SYMBOL: render-output
 
 : twiddle ( bytes -- bytes )
     ! On Windows, white is { 253 253 253 } ?
@@ -72,4 +72,4 @@ M: take-screenshot draw-boundary
 : ui-render-test ( -- )
     <ui-render-test> "Test" open-window ;
 
-main: ui-render-test
+MAIN: ui-render-test

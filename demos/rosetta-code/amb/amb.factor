@@ -40,4 +40,4 @@ CONSTANT: words {
 : search ( -- )
     words select dup sentence-match? [ " " join ] [ fail ] if . ;
 
-main: search
+MAIN: search

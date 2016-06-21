@@ -121,7 +121,7 @@ TUPLE: alien-callback-params < alien-node-params xt ;
 
 GENERIC: wrap-callback-quot ( params quot -- quot' ) ;
 
-symbol: wait-for-callback-hook
+SYMBOL: wait-for-callback-hook
 
 wait-for-callback-hook [ [ drop ] ] initialize
 

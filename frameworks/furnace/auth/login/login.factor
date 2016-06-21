@@ -13,7 +13,7 @@ furnace.conversations
 furnace.auth.login.permits ;
 IN: furnace.auth.login
 
-symbol: permit-id
+SYMBOL: permit-id
 
 : permit-id-key ( realm -- string )
     bytes>hex-string "__p_" prepend ;
@@ -58,8 +58,8 @@ M: login-realm modify-form ( responder -- xml/f )
 
 PRIVATE<
 
-symbol: description
-symbol: capabilities
+SYMBOL: description
+SYMBOL: capabilities
 
 PRIVATE>
 

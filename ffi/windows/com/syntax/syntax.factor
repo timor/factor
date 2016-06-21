@@ -21,7 +21,7 @@ C: <com-interface-definition> com-interface-definition ;
 TUPLE: com-function-definition return name parameter-types parameter-names ;
 C: <com-function-definition> com-function-definition ;
 
-symbol: +com-interface-definitions+
+SYMBOL: +com-interface-definitions+
 +com-interface-definitions+ get-global
 [ H{ } +com-interface-definitions+ set-global ]
 unless

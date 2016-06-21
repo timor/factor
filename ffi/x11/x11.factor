@@ -6,9 +6,9 @@ vocabs vocabs.loader ;
 FROM: alien.c-types => c-bool> ;
 IN: x11
 
-symbol: dpy
-symbol: scr
-symbol: root
+SYMBOL: dpy
+SYMBOL: scr
+SYMBOL: root
 
 : init-locale ( -- )
    LC_ALL "" setlocale [ "setlocale() failed" print flush ] unless

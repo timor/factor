@@ -21,4 +21,4 @@ IN: rot13
         "Rot13:       " write rot13 print
     ] when* ;
 
-main: rot13-demo
+MAIN: rot13-demo

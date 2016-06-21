@@ -14,11 +14,11 @@ accessors math.rectangles math.order calendar ascii sets io.crlf
 io.encodings.utf16n windows.errors literals ui.pixel-formats
 ui.pixel-formats.private memoize classes colors
 specialized-arrays classes.struct ;
-specialized-array: POINT
+SPECIALIZED-ARRAY: POINT
 QUALIFIED-WITH: alien.c-types c ;
 IN: ui.backend.windows
 
-singleton: windows-ui-backend
+SINGLETON: windows-ui-backend
 
 TUPLE: win-base hDC hRC ;
 TUPLE: win < win-base hWnd world title ;
@@ -459,7 +459,7 @@ M: windows-ui-backend (close-window)
 ! mouse is subsequently released outside the NC area, we receive
 ! a [LMR]BUTTONUP message and Factor can get confused. So we
 ! ignore BUTTONUP's that are a result of an NC*BUTTONDOWN.
-symbol: nc-buttons
+SYMBOL: nc-buttons
 
 : handle-wm-ncbutton ( hWnd uMsg wParam lParam -- )
     2drop nip
@@ -551,7 +551,7 @@ symbol: nc-buttons
 : handle-wm-dwmcompositionchanged ( hWnd uMsg wParam lParam -- )
     3drop [ window ] keep ?make-glass ;
 
-symbol: wm-handlers
+SYMBOL: wm-handlers
 
 H{ } clone wm-handlers set-global
 
@@ -600,7 +600,7 @@ add-wm-handler
 [ handle-wm-cancelmode 0 ] WM_CANCELMODE add-wm-handler
 [ handle-wm-mouseleave 0 ] WM_MOUSELEAVE add-wm-handler
 
-symbol: trace-messages?
+SYMBOL: trace-messages?
 
 ! return 0 if you handle the message, else just let DefWindowProc return its val
 : ui-wndproc ( -- object )

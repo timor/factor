@@ -4,7 +4,7 @@ USING: accessors alien.c-types alien.data combinators
 destructors io.backend.unix libc kernel math.bitwise sequences
 specialized-arrays unix unix.kqueue unix.time assocs
 io.backend.unix.multiplexers classes.struct literals ;
-specialized-array: kevent
+SPECIALIZED-ARRAY: kevent
 IN: io.backend.unix.multiplexers.kqueue
 
 TUPLE: kqueue-mx < mx events ;

@@ -4,7 +4,7 @@ USING: accessors alien alien.c-types alien.data alien.libraries
 alien.syntax classes.struct combinators combinators.short-circuit
 kernel math math.order sequences typed specialized-arrays locals
 system ;
-specialized-array: void*
+SPECIALIZED-ARRAY: void*
 IN: chipmunk.ffi
 
 COMPILE<
@@ -23,7 +23,7 @@ TYPEDEF: double cpFloat ;
 STRUCT: cpVect
     { x cpFloat }
     { y cpFloat } ;
-specialized-array: cpVect
+SPECIALIZED-ARRAY: cpVect
 
 TYPEDEF: uint cpHashValue ;
 TYPEDEF: void* cpDataPointer ;
@@ -424,7 +424,7 @@ TYPED: cpSegmentQueryHitDist ( start: cpVect end: cpVect info: cpSegmentQueryInf
 STRUCT: cpPolyShapeAxis
     { n cpVect  }
     { d cpFloat } ;
-specialized-array: cpPolyShapeAxis
+SPECIALIZED-ARRAY: cpPolyShapeAxis
 
 STRUCT: cpPolyShape
     { shape    cpShape          }

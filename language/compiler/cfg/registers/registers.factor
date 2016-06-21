@@ -3,7 +3,7 @@
 USING: assocs kernel math namespaces parser sequences ;
 IN: compiler.cfg.registers
 
-symbol: vreg-counter
+SYMBOL: vreg-counter
 
 : next-vreg ( -- vreg )
     vreg-counter counter ;
@@ -11,7 +11,7 @@ symbol: vreg-counter
 : reset-vreg-counter ( -- )
     0 vreg-counter set-global ;
 
-symbol: representations
+SYMBOL: representations
 
 ERROR: bad-vreg vreg ;
 

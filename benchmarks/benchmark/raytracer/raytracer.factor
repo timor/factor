@@ -5,7 +5,7 @@ io.files io.files.temp io.encodings.binary kernel math
 math.constants math.functions math.vectors math.parser make
 sequences sequences.private words hints ;
 FROM: alien.c-types => double ;
-specialized-array: double
+SPECIALIZED-ARRAY: double
 IN: benchmark.raytracer
 
 ! parameters
@@ -120,7 +120,7 @@ CONSTANT: initial-hit T{ hit f double-array{ 0.0 0.0 0.0 } 1/0. } ;
 : create-center ( c r d -- c2 )
     [ 3.0 12.0 sqrt / * ] dip n*v v+ ; inline
 
-defer: create
+DEFER: create
 
 : create-step ( level c r d -- scene )
     over [ create-center ] dip 2.0 / [ 1 - ] 2dip create ;
@@ -184,4 +184,4 @@ defer: create
 : raytracer-benchmark ( -- )
     run-raytracer "raytracer.pnm" temp-file binary set-file-contents ;
 
-main: raytracer-benchmark
+MAIN: raytracer-benchmark

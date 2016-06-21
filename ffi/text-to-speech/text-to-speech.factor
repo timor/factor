@@ -35,4 +35,4 @@ M: integer speak number>text speak-text ;
         " " join speak
     ] if-empty ;
 
-main: speak-main
+MAIN: speak-main

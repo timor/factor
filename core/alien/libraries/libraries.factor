@@ -19,7 +19,7 @@ PRIMITIVE: (dlsym-raw) ( name dll -- alien ) ;
 
 HOOK: dlerror os ( -- message/f ) ;
 
-symbol: libraries
+SYMBOL: libraries
 
 libraries [ H{ } clone ] initialize
 
@@ -89,7 +89,7 @@ M: library dispose dll>> [ dispose ] when* ;
     2dup load-library dlsym-raw
     [ 2nip ] [ no-such-symbol ] if* ;
 
-symbol: deploy-libraries
+SYMBOL: deploy-libraries
 
 deploy-libraries [ V{ } clone ] initialize
 

@@ -48,7 +48,7 @@ PRIMITIVE: context-object-for ( n context -- obj ) ;
 
 PRIVATE>
 
-symbol: initial-thread
+SYMBOL: initial-thread
 
 TUPLE: thread
     { name string }
@@ -144,7 +144,7 @@ PRIVATE>
         ] change-sleep-entry dup resume
     ] when drop ;
 
-defer: stop
+DEFER: stop
 
 PRIVATE<
 

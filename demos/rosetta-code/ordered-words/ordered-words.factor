@@ -29,4 +29,4 @@ MEMO: word-list ( -- seq )
     word-list [ ordered-word? ] filter
     all-longest [ print ] each ;
 
-main: ordered-words-main
+MAIN: ordered-words-main

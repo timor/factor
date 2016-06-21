@@ -8,7 +8,7 @@ IN: unicode.collation
 
 PRIVATE<
 
-symbol: ducet
+SYMBOL: ducet
 
 TUPLE: weight primary secondary tertiary ignorable? ;
 

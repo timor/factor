@@ -38,8 +38,8 @@ M: fdb-file-handle dispose*
     handle>> fdb_close fdb-check-error ;
 
 
-symbol: current-fdb-file-handle
-symbol: current-fdb-kvs-handle
+SYMBOL: current-fdb-file-handle
+SYMBOL: current-fdb-kvs-handle
 
 : get-file-handle ( -- handle )
     current-fdb-file-handle get handle>> ;

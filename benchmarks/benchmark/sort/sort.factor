@@ -8,4 +8,4 @@ CONSTANT: alist-to-sort $[ 1,000 iota dup zip ] ;
     10 [ numbers-to-sort natural-sort drop ] times
     5,000 [ alist-to-sort sort-keys drop ] times ;
 
-main: sort-benchmark
+MAIN: sort-benchmark

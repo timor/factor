@@ -8,10 +8,10 @@ IN: managed-server.chat
 
 TUPLE: chat-server < managed-server ;
 
-symbol: commands
+SYMBOL: commands
 commands [ H{ } clone ] initialize
 
-symbol: chat-docs
+SYMBOL: chat-docs
 chat-docs [ H{ } clone ] initialize
 
 CONSTANT: line-beginning "-!- " ;

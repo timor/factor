@@ -13,7 +13,7 @@ GENERIC#: $> 1 ( functor quot -- functor' ) ;
 ! Monads
 
 ! Mixin type for monad singleton classes, used for return/fail only
-mixin: monad
+MIXIN: monad
 
 GENERIC: monad-of ( mvalue -- singleton ) ;
 GENERIC: return ( value singleton -- mvalue ) ;
@@ -43,7 +43,7 @@ M: monad fmap over '[ @ _ return ] bind ;
 : do ( quots -- result ) unclip [ call( -- mvalue ) ] curry dip [ bind ] each ;
 
 ! Identity
-singleton: identity-monad
+SINGLETON: identity-monad
 INSTANCE:  identity-monad monad ;
 
 TUPLE: identity value ;
@@ -59,10 +59,10 @@ M: identity >>= value>> '[ _ swap call( x -- y ) ] ;
 : run-identity ( identity -- value ) value>> ;
 
 ! Maybe
-singleton: maybe-monad
+SINGLETON: maybe-monad
 INSTANCE:  maybe-monad monad ;
 
-singleton: nothing
+SINGLETON: nothing
 
 TUPLE: just value ;
 C: <just> just ;
@@ -82,7 +82,7 @@ M: just    >>= value>> '[ _ swap call( x -- y ) ] ;
     pick nothing? [ 2nip call ] [ drop [ value>> ] dip call ] if ; inline
 
 ! Either
-singleton: either-monad
+SINGLETON: either-monad
 INSTANCE:  either-monad monad ;
 
 TUPLE: left value ;
@@ -106,7 +106,7 @@ M: right >>= value>> '[ _ swap call( x -- y ) ] ;
     [ [ value>> ] [ left? ] bi ] 2dip if ; inline
 
 ! Arrays
-singleton: array-monad
+SINGLETON: array-monad
 INSTANCE:  array-monad monad ;
 INSTANCE:  array monad ;
 
@@ -118,7 +118,7 @@ M: array monad-of drop array-monad ;
 M: array >>= '[ _ swap map concat ] ;
 
 ! List
-singleton: list-monad
+SINGLETON: list-monad
 INSTANCE:  list-monad monad ;
 INSTANCE:  list monad ;
 
@@ -130,7 +130,7 @@ M: list monad-of drop list-monad ;
 M: list >>= '[ _ swap lmap-lazy lconcat ] ;
 
 ! State
-singleton: state-monad
+SINGLETON: state-monad
 INSTANCE:  state-monad monad ;
 
 TUPLE: state quot ;
@@ -155,7 +155,7 @@ M: state >>= '[ _ swap '[ _ mcall first2 @ mcall ] <state> ] ;
 : return-st ( value -- mvalue ) state-monad return ;
 
 ! Reader
-singleton: reader-monad
+SINGLETON: reader-monad
 INSTANCE:  reader-monad monad ;
 
 TUPLE: reader quot ;
@@ -175,7 +175,7 @@ M: reader >>= '[ _ swap '[ dup _ mcall @ mcall ] <reader> ] ;
 : local ( reader quot -- reader' ) swap '[ @ _ mcall ] <reader> ;
 
 ! Writer
-singleton: writer-monad
+SINGLETON: writer-monad
 INSTANCE:  writer-monad monad ;
 
 TUPLE: writer value log ;

@@ -8,22 +8,22 @@ cpu.architecture deques dlists fry kernel locals namespaces
 sequences sets ;
 IN: compiler.cfg.liveness
 
-symbol: live-ins
+SYMBOL: live-ins
 
 : live-in ( bb -- set )
     live-ins get at ;
 
-symbol: live-outs
+SYMBOL: live-outs
 
 : live-out ( bb -- set )
     live-outs get at ;
 
-symbol: edge-live-ins
+SYMBOL: edge-live-ins
 
 : edge-live-in ( predecessor basic-block -- set )
     edge-live-ins get at at ;
 
-symbol: base-pointers
+SYMBOL: base-pointers
 
 GENERIC: visit-insn ( live-set insn -- ) ;
 
@@ -38,7 +38,7 @@ GENERIC: visit-insn ( live-set insn -- ) ;
 M: vreg-insn visit-insn ( live-set insn -- )
     [ kill-defs ] [ gen-uses ] 2bi ;
 
-defer: lookup-base-pointer
+DEFER: lookup-base-pointer
 
 GENERIC: lookup-base-pointer* ( vreg insn -- vreg/f ) ;
 

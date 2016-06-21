@@ -4,7 +4,7 @@ USING: cocoa.messages compiler.units core-foundation.bundles
 hashtables init io kernel lexer namespaces sequences vocabs ;
 IN: cocoa
 
-symbol: sent-messages
+SYMBOL: sent-messages
 
 : (remember-send) ( selector variable -- )
     [ dupd ?set-at ] change-global ;
@@ -24,7 +24,7 @@ SYNTAX: \ sel\
     [ remember-send ]
     [ <selector> suffix! \ cocoa.messages:selector suffix! ] bi ;
 
-symbol: super-sent-messages
+SYMBOL: super-sent-messages
 
 : remember-super-send ( selector -- )
     super-sent-messages (remember-send) ;
@@ -32,7 +32,7 @@ symbol: super-sent-messages
 SYNTAX: \ SUPER-> scan-token dup remember-super-send suffix! \ super-send suffix! ;
 SYNTAX: \ super-send\ scan-token dup remember-super-send suffix! \ super-send suffix! ;
 
-symbol: frameworks
+SYMBOL: frameworks
 
 frameworks [ V{ } clone ] initialize
 

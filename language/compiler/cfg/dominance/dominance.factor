@@ -7,7 +7,7 @@ IN: compiler.cfg.dominance
 
 PRIVATE<
 
-symbol: dom-parents
+SYMBOL: dom-parents
 
 PRIVATE>
 
@@ -37,7 +37,7 @@ PRIVATE<
     reverse-post-order
     unclip dup set-idom drop '[ _ iterate ] loop ;
 
-symbol: dom-childrens
+SYMBOL: dom-childrens
 
 PRIVATE>
 

@@ -10,18 +10,18 @@ PREDICATE: class < word "class" word-prop ;
 
 PREDICATE: defining-class < word "defining-class" word-prop ;
 
-mixin: classoid
+MIXIN: classoid
 INSTANCE: class classoid ;
 INSTANCE: defining-class classoid ;
 
 PRIVATE<
 
-symbol: class<=-cache
-symbol: class-not-cache
-symbol: classes-intersect-cache
-symbol: class-and-cache
-symbol: class-or-cache
-symbol: next-method-quot-cache
+SYMBOL: class<=-cache
+SYMBOL: class-not-cache
+SYMBOL: classes-intersect-cache
+SYMBOL: class-and-cache
+SYMBOL: class-or-cache
+SYMBOL: next-method-quot-cache
 
 : init-caches ( -- )
     H{ } clone class<=-cache namespaces:set
@@ -39,9 +39,9 @@ symbol: next-method-quot-cache
     class-or-cache get clear-assoc
     next-method-quot-cache get clear-assoc ;
 
-symbol: update-map
+SYMBOL: update-map
 
-symbol: implementors-map
+SYMBOL: implementors-map
 
 GENERIC: class-name ( class -- string ) ;
 

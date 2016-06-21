@@ -10,9 +10,9 @@ disjoint-sets fry kernel locals math math.functions namespaces
 sequences sets ;
 IN: compiler.cfg.representations.selection
 
-symbol: tagged-vregs
+SYMBOL: tagged-vregs
 
-symbol: vreg-reps
+SYMBOL: vreg-reps
 
 : handle-def ( vreg rep -- )
     swap vreg>scc vreg-reps get
@@ -43,7 +43,7 @@ M: insn (collect-vreg-reps) drop ;
     HS{ } clone tagged-vregs namespaces:set
     [ [ (collect-vreg-reps) ] each-non-phi ] each-basic-block ;
 
-symbol: possibilities
+SYMBOL: possibilities
 
 : possible-reps ( vreg reps -- vreg reps )
     { tagged-rep } union
@@ -57,7 +57,7 @@ symbol: possibilities
 ! For every vreg, compute the cost of keeping it in every possible
 ! representation.
 
-symbol: costs
+SYMBOL: costs
 
 : init-costs ( -- )
     possibilities get [ [ 0 ] H{ } map>assoc ] assoc-map costs namespaces:set ;

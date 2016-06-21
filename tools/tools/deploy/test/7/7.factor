@@ -3,7 +3,7 @@
 USING: kernel math namespaces ;
 IN: tools.deploy.test.7
 
-symbol: my-var
+SYMBOL: my-var
 
 GENERIC: my-generic ( x -- b ) ;
 
@@ -15,4 +15,4 @@ M: fixnum my-generic call-next-method my-var get call( a -- b ) ;
     [ 1 + ] my-var set-global
     12 my-generic 145 assert= ;
 
-main: test-7
+MAIN: test-7

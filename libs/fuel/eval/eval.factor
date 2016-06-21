@@ -8,19 +8,19 @@ IN: fuel.eval
 
 TUPLE: fuel-status manifest restarts ;
 
-symbol: fuel-status-stack
+SYMBOL: fuel-status-stack
 V{ } clone fuel-status-stack set-global
 
-symbol: fuel-eval-error
+SYMBOL: fuel-eval-error
 f fuel-eval-error set-global
 
-symbol: fuel-eval-result
+SYMBOL: fuel-eval-result
 f fuel-eval-result set-global
 
-symbol: fuel-eval-output
+SYMBOL: fuel-eval-output
 f fuel-eval-result set-global
 
-symbol: fuel-eval-res-flag
+SYMBOL: fuel-eval-res-flag
 t fuel-eval-res-flag set-global
 
 : fuel-eval-restartable? ( -- ? )

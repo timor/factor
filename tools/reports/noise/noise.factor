@@ -150,4 +150,4 @@ M: lambda-word word-noise-factor
     "NOISY VOCABS:" print
     noisy-vocabs 80 head noise. ;
 
-main: noise-report
+MAIN: noise-report

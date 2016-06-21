@@ -10,7 +10,7 @@ TUPLE: coverage-state < identity-tuple executed? ;
 
 C: <coverage-state> coverage-state ;
 
-symbol: covered
+SYMBOL: covered
 
 : flag-covered ( coverage -- )
     covered get-global [ t >>executed? ] when drop ;

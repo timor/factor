@@ -8,7 +8,7 @@ IN: compiler.cfg.ssa.destruction.coalescing
 : zip-scalar ( scalar seq -- pairs )
     [ 2array ] with map ;
 
-symbol: class-element-map
+SYMBOL: class-element-map
 
 : value-of ( vreg -- value )
     dup insn-of dup ##tagged>integer? [ nip src>> ] [ drop ] if ;

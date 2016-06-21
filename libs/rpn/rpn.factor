@@ -42,4 +42,4 @@ M: push-insn eval-insn value>> swons ;
     "RPN> " write flush
     readln [ rpn-parse rpn-eval print-stack rpn ] when* ;
 
-main: rpn
+MAIN: rpn

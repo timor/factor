@@ -185,7 +185,7 @@ M: stdin cancel-operation
         size-read-fd <fd> init-fd <input-port> >>size
         data-read-fd <fd> >>data ;
 
-symbol: dispatch-signal-hook
+SYMBOL: dispatch-signal-hook
 
 dispatch-signal-hook [ [ drop ] ] initialize
 

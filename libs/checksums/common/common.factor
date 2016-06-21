@@ -4,7 +4,7 @@ USING: kernel math math.bitwise strings io.binary namespaces
 make grouping byte-arrays ;
 IN: checksums.common
 
-symbol: bytes-read
+SYMBOL: bytes-read
 
 : calculate-pad-length ( length -- length' )
     [ 56 < 55 119 ? ] keep - ;

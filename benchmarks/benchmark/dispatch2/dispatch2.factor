@@ -1,6 +1,6 @@
 USING: alien.c-types make math sequences splitting grouping
 kernel columns specialized-arrays bit-arrays ;
-specialized-array: double
+SPECIALIZED-ARRAY: double
 IN: benchmark.dispatch2
 
 : sequences ( -- seq )
@@ -29,4 +29,4 @@ IN: benchmark.dispatch2
     1000000 sequences
     [ [ first don't-flush-me ] each ] curry times ;
 
-main: dispatch2-benchmark
+MAIN: dispatch2-benchmark

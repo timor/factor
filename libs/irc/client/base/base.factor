@@ -5,7 +5,7 @@ strings words.symbol irc.client.chats irc.messages ;
 EXCLUDE: sequences => join ;
 IN: irc.client.base
 
-symbol: current-irc-client
+SYMBOL: current-irc-client
 
 : irc> ( -- irc-client ) current-irc-client get ;
 : stream> ( -- stream ) irc> stream>> ;

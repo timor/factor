@@ -97,9 +97,9 @@ M: #call node>quot word>> , ;
 
 M: #call-recursive node>quot label>> id>> , ;
 
-defer: nodes>quot
+DEFER: nodes>quot
 
-defer: label
+DEFER: label
 
 M: #recursive node>quot
     [ label>> id>> literalize , ]
@@ -134,11 +134,11 @@ M: callable optimized.
     build-tree optimize-tree nodes>quot
     f length-limit [ . ] with-variable ;
 
-symbol: words-called
-symbol: generics-called
-symbol: methods-called
-symbol: intrinsics-called
-symbol: node-count
+SYMBOL: words-called
+SYMBOL: generics-called
+SYMBOL: methods-called
+SYMBOL: intrinsics-called
+SYMBOL: node-count
 
 : make-report ( word/quot -- assoc )
     [

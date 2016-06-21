@@ -103,7 +103,7 @@ IN: xml.elements
     depth get zero? [ bad-cdata ] when
     "[CDATA[" expect "]]>" take-string ;
 
-defer: make-tag ! Is this unavoidable?
+DEFER: make-tag ! Is this unavoidable?
 
 : expand-pe ( -- ) ; ! Make this run the contents of the pe within a DOCTYPE
 

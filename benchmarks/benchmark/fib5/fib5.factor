@@ -1,7 +1,7 @@
 USING: math kernel debugger namespaces ;
 IN: benchmark.fib5
 
-symbol: n
+SYMBOL: n
 : namespace-fib ( m -- n )
     [
         n set
@@ -16,4 +16,4 @@ symbol: n
 
 : fib5-benchmark ( -- ) 30 namespace-fib 1346269 assert= ;
 
-main: fib5-benchmark
+MAIN: fib5-benchmark

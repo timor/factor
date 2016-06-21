@@ -17,9 +17,9 @@ C: <spot> spot ;
 : set-version ( string -- )
     spot get swap "1.0" = >>version-1.0? drop ; inline
 
-symbol: xml-stack
-symbol: depth
-symbol: interpolating?
-symbol: in-dtd?
-symbol: pe-table
-symbol: extra-entities
+SYMBOL: xml-stack
+SYMBOL: depth
+SYMBOL: interpolating?
+SYMBOL: in-dtd?
+SYMBOL: pe-table
+SYMBOL: extra-entities

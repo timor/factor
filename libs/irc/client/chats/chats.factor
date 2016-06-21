@@ -10,7 +10,7 @@ TUPLE: irc-chat in-messages client ;
 TUPLE: irc-server-chat  < irc-chat ;
 TUPLE: irc-channel-chat < irc-chat name password participants clear-participants ;
 TUPLE: irc-nick-chat    < irc-chat name ;
-symbol: +server-chat+
+SYMBOL: +server-chat+
 
 : <irc-server-chat> ( -- irc-server-chat )
      irc-server-chat new

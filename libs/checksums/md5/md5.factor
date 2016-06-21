@@ -4,10 +4,10 @@ USING: accessors alien.c-types alien.data byte-arrays checksums
 checksums.common checksums.stream combinators fry grouping hints
 kernel kernel.private literals locals macros math math.bitwise
 math.functions sequences sequences.private specialized-arrays ;
-specialized-array: uint
+SPECIALIZED-ARRAY: uint
 IN: checksums.md5
 
-singleton: md5
+SINGLETON: md5
 
 INSTANCE: md5 stream-checksum ;
 

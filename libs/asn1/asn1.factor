@@ -62,7 +62,7 @@ PRIVATE>
         }
      } ;
 
-symbol: elements
+SYMBOL: elements
 
 TUPLE: element syntax id tag tagclass encoding contentlength newobj objtype ;
 
@@ -108,9 +108,9 @@ ERROR: unsupported-tag-encoding id ;
         ] when*
     ] each ;
 
-defer: read-ber
+DEFER: read-ber
 
-symbol: end
+SYMBOL: end
 
 : (read-array) ( -- )
     elements get id>> [
@@ -186,7 +186,7 @@ M: bignum >ber ( n -- byte-array )
 ! Universal octet-string has tag number 4, we should however
 ! still be able to assign an arbitrary code number.
 ! >ber words should be called within a with-ber.
-symbol: tagnum
+SYMBOL: tagnum
 
 TUPLE: tag value ;
 

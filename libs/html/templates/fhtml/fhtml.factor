@@ -22,7 +22,7 @@ M: template-lexer skip-word
         } cond
     ] change-lexer-column ;
 
-defer: <% delimiter
+DEFER: <% delimiter
 
 : check-<% ( lexer -- col )
     "<%" swap [ line-text>> ] [ column>> ] bi start* ;

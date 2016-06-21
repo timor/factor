@@ -26,4 +26,4 @@ MACRO: mconcat ( seq -- quot ) concat ;
 
 : untested ( -- ) ;
 
-symbol: not-a-coverage-word
+SYMBOL: not-a-coverage-word

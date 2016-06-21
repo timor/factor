@@ -4,8 +4,8 @@ USING: accessors assocs command-line fry kernel namespaces
 source-files.errors summary ;
 IN: compiler.errors
 
-symbol: +compiler-error+
-symbol: compiler-errors
+SYMBOL: +compiler-error+
+SYMBOL: compiler-errors
 
 compiler-errors [ H{ } clone ] initialize
 
@@ -13,8 +13,8 @@ TUPLE: compiler-error < source-file-error ;
 
 M: compiler-error error-type drop +compiler-error+ ;
 
-symbol: +linkage-error+
-symbol: linkage-errors
+SYMBOL: +linkage-error+
+SYMBOL: linkage-errors
 
 linkage-errors [ H{ } clone ] initialize
 

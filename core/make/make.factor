@@ -3,7 +3,7 @@
 USING: assocs kernel sequences namespaces ;
 IN: make
 
-symbol: building
+SYMBOL: building
 
 PRIVATE<
 

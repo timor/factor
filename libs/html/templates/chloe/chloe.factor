@@ -89,7 +89,7 @@ component: checkbox
 component: code
 component: xml
 
-symbol: template-cache
+SYMBOL: template-cache
 
 H{ } template-cache set-global
 

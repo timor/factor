@@ -53,7 +53,7 @@ TUPLE: ast-hashtable elements ;
     ] action ;
 
 
-defer: expression-parser
+DEFER: expression-parser
 
 : effect-name-parser ( -- parser )
     [

@@ -23,7 +23,7 @@ CONSTANT: zoneinfo-paths
     "vocab:zoneinfo/leapseconds"
 } ;
 
-symbol: last-zone
+SYMBOL: last-zone
 
 TUPLE: raw-zone name gmt-offset rules/save format until ;
 TUPLE: raw-rule name from to type in on at-time save letters ;

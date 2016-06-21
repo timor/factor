@@ -56,4 +56,4 @@ PRIVATE>
         drop "That problem has not been solved yet..." print
     ] if ;
 
-main: run-project-euler
+MAIN: run-project-euler

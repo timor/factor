@@ -4,7 +4,7 @@ USING: accessors io kernel lexer math.parser namespaces
 source-files ;
 IN: parser.notes
 
-symbol: parser-quiet?
+SYMBOL: parser-quiet?
 
 t parser-quiet? set-global
 

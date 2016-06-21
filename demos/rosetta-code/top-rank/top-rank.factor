@@ -64,4 +64,4 @@ CONSTANT: employees {
         nl
     ] assoc-each ;
 
-main: top-rank-main
+MAIN: top-rank-main

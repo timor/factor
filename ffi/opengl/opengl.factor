@@ -7,11 +7,11 @@ combinators.smart continuations fry init io kernel locals macros
 math math.parser namespaces opengl.gl sequences
 sequences.generalizations specialized-arrays system words ;
 FROM: alien.c-types => float ;
-specialized-array: float
-specialized-array: uint
+SPECIALIZED-ARRAY: float
+SPECIALIZED-ARRAY: uint
 IN: opengl
 
-symbol: gl-scale-factor
+SYMBOL: gl-scale-factor
 
 : gl-color ( color -- ) >rgba-components glColor4d ; inline
 

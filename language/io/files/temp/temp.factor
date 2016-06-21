@@ -5,7 +5,7 @@ IN: io.files.temp
 
 HOOK: default-temp-directory os ( -- path ) ;
 
-symbol: current-temp-directory
+SYMBOL: current-temp-directory
 
 : temp-directory ( -- path )
     current-temp-directory get ;
@@ -18,7 +18,7 @@ symbol: current-temp-directory
 
 HOOK: default-cache-directory os ( -- path ) ;
 
-symbol: current-cache-directory
+SYMBOL: current-cache-directory
 
 : cache-directory ( -- path )
     current-cache-directory get ;

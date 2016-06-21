@@ -36,7 +36,7 @@ GENERIC: error-type ( error -- type ) ;
         [ where [ first2 [ >>path ] [ >>line# ] bi* ] when* ] bi
         swap >>error ; inline
 
-symbol: error-types
+SYMBOL: error-types
 
 error-types [ V{ } clone ] initialize
 
@@ -66,7 +66,7 @@ error-types [ V{ } clone ] initialize
 
 GENERIC: errors-changed ( observer -- ) ;
 
-symbol: error-observers
+SYMBOL: error-observers
 
 [
     V{ } clone error-observers set-global

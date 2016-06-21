@@ -74,4 +74,4 @@ M: x30 g ;
     1000000 a-bunch-of-objects
     [ [ g drop ] each ] curry times ;
 
-main: dispatch1-benchmark
+MAIN: dispatch1-benchmark

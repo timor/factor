@@ -8,9 +8,9 @@ io.encodings.utf8 kernel locals namespaces sequences
 specialized-arrays unix.types ;
 IN: core-foundation.fsevents
 
-specialized-array: void*
-specialized-array: uint
-specialized-array: ulonglong
+SPECIALIZED-ARRAY: void*
+SPECIALIZED-ARRAY: uint
+SPECIALIZED-ARRAY: ulonglong
 
 CONSTANT: kFSEventStreamCreateFlagNone 0x00000000 ;
 CONSTANT: kFSEventStreamCreateFlagUseCFTypes 0x00000001 ;
@@ -162,7 +162,7 @@ C-GLOBAL: void* kCFRunLoopCommonModes ;
     dup FSEventStreamStop
     unschedule-event-stream ;
 
-symbol: event-stream-callbacks
+SYMBOL: event-stream-callbacks
 
 : event-stream-counter ( -- n )
     \ event-stream-counter counter ;

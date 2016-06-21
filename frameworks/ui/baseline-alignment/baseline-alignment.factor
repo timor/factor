@@ -4,7 +4,7 @@ USING: accessors combinators kernel locals math math.functions
 math.order sequences ui.gadgets ;
 IN: ui.baseline-alignment
 
-symbol: +baseline+
+SYMBOL: +baseline+
 
 TUPLE: aligned-gadget < gadget baseline cap-height ;
 

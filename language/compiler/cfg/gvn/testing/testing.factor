@@ -56,7 +56,7 @@ M: object expr>str unparse ;
     basic-block# add-node[ "bold" =style ]
     ;
 
-symbol: iteration
+SYMBOL: iteration
 
 : iteration-dir ( -- path )
     iteration get number>string "gvn-iter" prepend ;

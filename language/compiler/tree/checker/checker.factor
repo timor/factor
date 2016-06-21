@@ -64,9 +64,9 @@ ERROR: check-node-error node error ;
         tri
     ] [ check-node-error ] recover ;
 
-symbol: datastack
-symbol: retainstack
-symbol: terminated?
+SYMBOL: datastack
+SYMBOL: retainstack
+SYMBOL: terminated?
 
 GENERIC: check-stack-flow* ( node -- ) ;
 
@@ -144,7 +144,7 @@ M: #terminate check-stack-flow*
     [ check-terminate-in-d ]
     [ check-terminate-in-r ] bi ;
 
-symbol: branch-out
+SYMBOL: branch-out
 
 : check-branch ( nodes -- stack )
     [

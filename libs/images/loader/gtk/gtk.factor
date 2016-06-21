@@ -5,9 +5,9 @@ combinators destructors gdk.pixbuf.ffi glib.ffi gobject.ffi grouping images
 images.loader io kernel locals math sequences system
 specialized-arrays unicode ;
 IN: images.loader.gtk
-specialized-array: uchar
+SPECIALIZED-ARRAY: uchar
 
-singleton: gtk-image
+SINGLETON: gtk-image
 
 os linux? [
     ! Explicit type initialization needed for glib < 2.36.

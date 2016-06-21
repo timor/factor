@@ -109,9 +109,9 @@ PRIVATE<
     read-response-line
     read-response-header ;
 
-defer: (with-http-request)
+DEFER: (with-http-request)
 
-symbol: redirects
+SYMBOL: redirects
 
 : redirect-url ( request url -- request )
     '[ _ >url derive-url ensure-port ] change-url ;

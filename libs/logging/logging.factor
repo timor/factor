@@ -10,7 +10,7 @@ IN: logging
 
 SYMBOLS: DEBUG NOTICE WARNING ERROR CRITICAL ;
 
-symbol: log-level
+SYMBOL: log-level
 
 log-level [ DEBUG ] initialize
 
@@ -34,7 +34,7 @@ ERROR: undefined-log-level ;
 : send-to-log-server ( array string -- )
     prefix "log-server" get send ;
 
-symbol: log-service
+SYMBOL: log-service
 
 ERROR: bad-log-message-parameters msg word level ;
 

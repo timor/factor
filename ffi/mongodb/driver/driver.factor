@@ -67,7 +67,7 @@ M: mdb-getmore-msg update-query
       [ [ cursor>> ] dip <mdb-cursor> ] 2bi
     ] [ 2drop f ] if ;
 
-defer: send-query
+DEFER: send-query
 
 GENERIC: verify-query-result ( mdb-result-msg mdb-query-msg/mdb-getmore-msg -- mdb-result-msg mdb-query-msg/mdb-getmore-msg ) ;
 

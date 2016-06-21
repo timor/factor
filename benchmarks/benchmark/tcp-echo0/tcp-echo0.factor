@@ -53,4 +53,4 @@ M: tcp-echo handle-client*
 : tcp-echo0-benchmark ( -- )
     4 test-size0 tcp-echo-benchmark ;
 
-main: tcp-echo0-benchmark
+MAIN: tcp-echo0-benchmark

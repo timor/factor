@@ -3,9 +3,9 @@
 USING: kernel kernel.private math ;
 IN: math.order
 
-symbol: +lt+
-symbol: +eq+
-symbol: +gt+
+SYMBOL: +lt+
+SYMBOL: +eq+
+SYMBOL: +gt+
 
 : invert-comparison ( <=> -- >=< )
     ! Can't use case, index or nth here

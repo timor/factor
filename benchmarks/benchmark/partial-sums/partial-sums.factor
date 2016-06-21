@@ -41,4 +41,4 @@ HINTS: partial-sums fixnum ;
 : partial-sums-benchmark ( -- )
     2500000 partial-sums simple-table. ;
 
-main: partial-sums-benchmark
+MAIN: partial-sums-benchmark

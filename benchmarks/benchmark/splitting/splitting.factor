@@ -10,4 +10,4 @@ IN: benchmark.splitting
         2dup split-slice drop
     ] times 2drop ;
 
-main: splitting-benchmark
+MAIN: splitting-benchmark

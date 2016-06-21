@@ -5,10 +5,10 @@ USING: editors io.standard-paths kernel make math.parser
 namespaces sequences system ;
 IN: editors.scite
 
-singleton: scite
+SINGLETON: scite
 scite editor-class set-global
 
-symbol: scite-path
+SYMBOL: scite-path
 
 HOOK: find-scite-path os ( -- path ) ;
 

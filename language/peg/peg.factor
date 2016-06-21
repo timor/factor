@@ -16,7 +16,7 @@ M: parser hashcode* id>> hashcode* ;
 C: <parse-result> parse-result ;
 C: <parse-error>  parse-error ;
 
-symbol: error-stack
+SYMBOL: error-stack
 
 : merge-overlapping-errors ( a b -- c )
     dupd [ messages>> ] bi@ union [ [ position>> ] [ got>> ] bi ] dip
@@ -45,7 +45,7 @@ symbol: error-stack
 : add-error ( position got message -- )
     <parse-error> error-stack get push ;
 
-symbol: ignore
+SYMBOL: ignore
 
 : packrat ( id -- cache )
     ! The packrat cache is a mapping of parser-id->cache.
@@ -56,10 +56,10 @@ symbol: ignore
     ! parser.
     \ packrat get [ drop H{ } clone ] cache ;
 
-symbol: pos
-symbol: input
-symbol: fail
-symbol: lrstack
+SYMBOL: pos
+SYMBOL: input
+SYMBOL: fail
+SYMBOL: lrstack
 
 : heads ( -- cache )
     ! A mapping from position->peg-head. It maps a
@@ -285,7 +285,7 @@ GENERIC: (compile) ( peg -- quot ) ;
 : compile-parser-quot ( parser -- quot )
     compile-parser [ execute-parser ] curry ;
 
-symbol: delayed
+SYMBOL: delayed
 
 : fixup-delayed ( -- )
     ! Work through all delayed parsers and recompile their

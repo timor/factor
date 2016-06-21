@@ -31,8 +31,8 @@ math.parser math.primes namespaces project-euler.common
 sequences sets strings grouping math.ranges arrays fry math.order ;
 IN: project-euler.051
 PRIVATE<
-symbol: family-count
-symbol: large-families
+SYMBOL: family-count
+SYMBOL: large-families
 : reset-globals ( -- )
     H{ } clone family-count namespaces:set
     H{ } clone large-families namespaces:set ;

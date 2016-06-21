@@ -9,7 +9,7 @@ IN: compiler.tree.normalization
 
 GENERIC: normalize* ( node -- node' ) ;
 
-symbol: introduction-stack
+SYMBOL: introduction-stack
 
 : pop-introduction ( -- value )
     introduction-stack [ unclip-last swap ] change ;
@@ -20,7 +20,7 @@ symbol: introduction-stack
 M: #introduce normalize*
     out-d>> [ length pop-introductions ] keep add-renamings f ;
 
-symbol: remaining-introductions
+SYMBOL: remaining-introductions
 
 M: #branch normalize*
     [

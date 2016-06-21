@@ -9,7 +9,7 @@ ui.operations ui.pens.solid ui.theme ui.theme.images ;
 FROM: ui.gadgets.wrappers => wrapper ;
 IN: ui.tools.browser.popups
 
-singleton: link-renderer
+SINGLETON: link-renderer
 
 M: link-renderer row-columns
     drop first2 [ definition-icon <image-name> ] dip 2array ;
@@ -39,7 +39,7 @@ links-popup H{
     { T{ key-down f f "ESC" } [ hide-glass ] }
 } set-gestures
 
-slot: model
+SLOT: model
 
 : show-links-popup ( browser-gadget quot title -- )
     [ dup model>> ] 2dip <links-popup>

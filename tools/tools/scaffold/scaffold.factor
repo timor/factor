@@ -9,8 +9,8 @@ splitting strings system timers unicode urls vocabs
 vocabs.loader vocabs.metadata words words.symbol ;
 IN: tools.scaffold
 
-symbol: developer-name
-symbol: using
+SYMBOL: developer-name
+SYMBOL: using
 
 ERROR: not-a-vocab-root string ;
 
@@ -319,7 +319,7 @@ PRIVATE>
         2drop
     ] if ;
 
-symbol: nested-examples
+SYMBOL: nested-examples
 
 : example-using ( using -- )
     " " join "example-using" [

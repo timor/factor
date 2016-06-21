@@ -5,7 +5,7 @@ ui.tools.listener ui.tools.browser ui.tools.common ui.tools.error-list
 ui.tools.walker ui.commands ui.gestures ui ui.private ;
 IN: ui.tools
 
-main: listener-window
+MAIN: listener-window
 
 \ refresh-all H{ { +nullary+ t } { +listener+ t } } define-command
 

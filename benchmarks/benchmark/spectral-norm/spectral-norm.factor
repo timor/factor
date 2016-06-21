@@ -6,7 +6,7 @@
 USING: alien.c-types io kernel math math.functions math.parser
 math.vectors sequences sequences.private specialized-arrays
 typed locals ;
-specialized-array: double
+SPECIALIZED-ARRAY: double
 IN: benchmark.spectral-norm
 
 :: inner-loop ( u n quot -- seq )
@@ -52,4 +52,4 @@ TYPED: spectral-norm ( n: fixnum -- norm )
 : spectral-norm-benchmark ( -- )
     2000 spectral-norm number>string print ;
 
-main: spectral-norm-benchmark
+MAIN: spectral-norm-benchmark

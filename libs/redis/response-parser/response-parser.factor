@@ -3,7 +3,7 @@
 USING: combinators io kernel math math.parser sequences ;
 IN: redis.response-parser
 
-defer: read-response
+DEFER: read-response
 
 TUPLE: redis-response message ;
 ERROR: redis-error message ;

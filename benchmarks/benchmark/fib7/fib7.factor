@@ -20,4 +20,4 @@ IN: benchmark.fib7
         100,000 matrix-fib log2 69423 assert=
     ] times ;
 
-main: fib7-benchmark
+MAIN: fib7-benchmark

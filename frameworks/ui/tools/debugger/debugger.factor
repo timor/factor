@@ -17,7 +17,7 @@ TUPLE: debugger < track error restarts restart-hook restart-list continuation ;
 
 PRIVATE<
 
-singleton: restart-renderer
+SINGLETON: restart-renderer
 
 M: restart-renderer row-columns
     drop [ name>> ] [ "Abort" ] if* "• " prepend 1array ;

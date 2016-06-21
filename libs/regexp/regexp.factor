@@ -166,7 +166,7 @@ M: regexp compile-regexp ( regexp -- regexp )
 M: reverse-regexp compile-regexp ( regexp -- regexp )
     t backwards? [ call-next-method ] with-variable ;
 
-defer: compile-next-match
+DEFER: compile-next-match
 
 : next-initial-word ( i string regexp -- start end string )
     [ compile-next-match ] with-compilation-unit do-next-match ;

@@ -4,18 +4,18 @@ USING: checksums classes.singleton kernel math math.ranges
 math.vectors sequences ;
 IN: checksums.fnv1
 
-singleton: fnv1-32
-singleton: fnv1a-32
-singleton: fnv1-64
-singleton: fnv1a-64
-singleton: fnv1-128
-singleton: fnv1a-128
-singleton: fnv1-256
-singleton: fnv1a-256
-singleton: fnv1-512
-singleton: fnv1a-512
-singleton: fnv1-1024
-singleton: fnv1a-1024
+SINGLETON: fnv1-32
+SINGLETON: fnv1a-32
+SINGLETON: fnv1-64
+SINGLETON: fnv1a-64
+SINGLETON: fnv1-128
+SINGLETON: fnv1a-128
+SINGLETON: fnv1-256
+SINGLETON: fnv1a-256
+SINGLETON: fnv1-512
+SINGLETON: fnv1a-512
+SINGLETON: fnv1-1024
+SINGLETON: fnv1a-1024
 
 CONSTANT: fnv1-32-prime 16777619 ;
 CONSTANT: fnv1-64-prime 1099511628211 ;

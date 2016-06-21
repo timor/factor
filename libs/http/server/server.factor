@@ -94,13 +94,13 @@ M: raw-response write-full-response ( request response -- )
 
 : post-request? ( -- ? ) request get method>> "POST" = ;
 
-symbol: responder-nesting
+SYMBOL: responder-nesting
 
-symbol: main-responder
+SYMBOL: main-responder
 
-symbol: development?
+SYMBOL: development?
 
-symbol: benchmark?
+SYMBOL: benchmark?
 
 ! path is a sequence of path component strings
 GENERIC: call-responder* ( path responder -- response ) ;
@@ -166,7 +166,7 @@ LOG: httpd-header NOTICE ;
         { "POST" [ post-data>> params>> ] }
     } case ;
 
-symbol: params
+SYMBOL: params
 
 : param ( name -- value )
     params get at ;
@@ -219,7 +219,7 @@ LOG: httpd-benchmark DEBUG ;
 
 TUPLE: http-server < threaded-server ;
 
-symbol: request-limit
+SYMBOL: request-limit
 
 request-limit [ 64 1024 * ] initialize
 

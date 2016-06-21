@@ -12,7 +12,7 @@ IN: ui
 PRIVATE<
 
 ! Assoc mapping aliens to gadgets
-symbol: ui-windows
+SYMBOL: ui-windows
 
 : window ( handle -- world ) ui-windows get-global at ;
 
@@ -133,7 +133,7 @@ M: world ungraft*
     redraw-worlds
     send-queued-gestures ;
 
-symbol: ui-thread
+SYMBOL: ui-thread
 
 : ui-running ( quot -- )
     t \ ui-running set-global

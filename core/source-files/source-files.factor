@@ -6,7 +6,7 @@ io.files io.pathnames kernel namespaces sequences sets
 source-files.errors strings words ;
 IN: source-files
 
-symbol: source-files
+SYMBOL: source-files
 
 TUPLE: source-file
 { path string }
@@ -52,7 +52,7 @@ M: pathname forget*
         new-definitions get [ union ] 2map
     ] change-definitions drop ;
 
-symbol: current-source-file
+SYMBOL: current-source-file
 
 : wrap-source-file-error ( error -- * )
     current-source-file get rollback-source-file

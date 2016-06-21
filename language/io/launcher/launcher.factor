@@ -31,27 +31,27 @@ killed
 
 pipe ;
 
-symbol: +closed+
-symbol: +stdout+
+SYMBOL: +closed+
+SYMBOL: +stdout+
 
 TUPLE: appender path ;
 
 C: <appender> appender ;
 
-symbol: +prepend-environment+
-symbol: +replace-environment+
-symbol: +append-environment+
+SYMBOL: +prepend-environment+
+SYMBOL: +replace-environment+
+SYMBOL: +append-environment+
 
-symbol: +lowest-priority+
-symbol: +low-priority+
-symbol: +normal-priority+
-symbol: +high-priority+
-symbol: +highest-priority+
-symbol: +realtime-priority+
+SYMBOL: +lowest-priority+
+SYMBOL: +low-priority+
+SYMBOL: +normal-priority+
+SYMBOL: +high-priority+
+SYMBOL: +highest-priority+
+SYMBOL: +realtime-priority+
 
-symbol: +same-group+
-symbol: +new-group+
-symbol: +new-session+
+SYMBOL: +same-group+
+SYMBOL: +new-group+
+SYMBOL: +new-session+
 
 : <process> ( -- process )
     process new
@@ -66,13 +66,13 @@ symbol: +new-session+
     handle>> >boolean ;
 
 ! Non-blocking process exit notification facility
-symbol: processes
+SYMBOL: processes
 
 HOOK: (wait-for-processes) io-backend ( -- ? ) ;
 
 PRIVATE<
 
-symbol: wait-flag
+SYMBOL: wait-flag
 
 : wait-loop ( -- )
     processes get assoc-empty?

@@ -8,7 +8,7 @@ TUPLE: tetromino states colour ;
 
 C: <tetromino> tetromino ;
 
-symbol: tetrominoes
+SYMBOL: tetrominoes
 
 {
   [

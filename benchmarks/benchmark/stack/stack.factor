@@ -16,4 +16,4 @@ IN: benchmark.stack
     V{ 123456 } clone stack-loop
     20000 <vector> 123456 over set-first stack-loop ;
 
-main: stack-benchmark
+MAIN: stack-benchmark

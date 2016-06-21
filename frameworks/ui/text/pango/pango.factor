@@ -27,7 +27,7 @@ MEMO:: (cache-font-description) ( name size bold? italic? -- description )
 
 TUPLE: layout < disposable font string selection layout metrics ink-rect logical-rect image ;
 
-symbol: dpi
+SYMBOL: dpi
 
 72 dpi set-global
 
@@ -167,7 +167,7 @@ MEMO: missing-font-metrics ( font -- metrics )
 
 M: layout dispose* layout>> g_object_unref ;
 
-symbol: cached-layouts
+SYMBOL: cached-layouts
 
 : cached-layout ( font string -- layout )
     cached-layouts get-global [ <layout> ] 2cache ;
@@ -178,7 +178,7 @@ symbol: cached-layouts
 : layout>image ( layout -- image )
     dup image>> [ dup draw-layout >>image ] unless image>> ;
 
-singleton: pango-renderer
+SINGLETON: pango-renderer
 
 M: pango-renderer string-dim
     [ " " string-dim { 0 1 } v* ]

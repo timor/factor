@@ -5,7 +5,7 @@ gpu.framebuffers gpu.util.wasd game.debug kernel literals locals
 make math math.constants math.matrices math.parser sequences
 alien.c-types specialized-arrays ui.gadgets.worlds ui.pixel-formats ;
 FROM: alien.c-types => float ;
-specialized-array: float
+SPECIALIZED-ARRAY: float
 IN: game.debug.tests
 
 :: clear-screen ( color -- )
@@ -65,4 +65,4 @@ GAME: run-tests {
         { tick-interval-nanos $[ 60 fps ] }
     } ;
 
-main: run-tests
+MAIN: run-tests

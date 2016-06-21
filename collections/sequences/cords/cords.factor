@@ -5,7 +5,7 @@ math.order arrays classes combinators kernel functors locals
 math.functions math.vectors ;
 IN: sequences.cords
 
-mixin: cord
+MIXIN: cord
 
 TUPLE: generic-cord
     { head read-only } { tail read-only } ; final

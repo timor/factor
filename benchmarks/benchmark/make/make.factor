@@ -20,4 +20,4 @@ IN: benchmark.make
         3drop
     ] each ;
 
-main: make-benchmark
+MAIN: make-benchmark

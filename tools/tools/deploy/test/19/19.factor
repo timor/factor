@@ -8,4 +8,4 @@ IN: tools.deploy.test.19
     ! LICENSE.txt.
     "vocab:local-license.txt" ascii file-contents write ;
 
-main: main
+MAIN: main

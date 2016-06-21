@@ -4,7 +4,7 @@ USING: assocs compiler.cfg.registers
 compiler.cfg.renaming.functor kernel namespaces ;
 IN: compiler.cfg.renaming
 
-symbol: renamings
+SYMBOL: renamings
 
 : rename-value ( vreg -- vreg' )
     renamings get ?at drop ;

@@ -355,4 +355,4 @@ CONSTANT: jvm-summit-slides
 : jvm-summit-talk ( -- )
     jvm-summit-slides "JVM Summit talk" slides-window ;
 
-main: jvm-summit-talk
+MAIN: jvm-summit-talk

@@ -3,7 +3,7 @@
 USING: kernel namespaces assocs accessors words sequences classes.tuple ;
 IN: smalltalk.classes
 
-symbol: classes
+SYMBOL: classes
 
 classes [ H{ } clone ] initialize
 

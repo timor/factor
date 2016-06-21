@@ -116,4 +116,4 @@ M: method word-vocabulary "method-generic" word-prop word-vocabulary ;
         do-compile-errors
     ] with-directory ;
 
-main: do-all
+MAIN: do-all

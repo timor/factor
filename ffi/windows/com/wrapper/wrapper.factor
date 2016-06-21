@@ -4,24 +4,24 @@ continuations kernel namespaces windows.ole32 libc vocabs
 assocs accessors arrays sequences quotations combinators math
 words compiler.units destructors fry math.parser generalizations
 sets specialized-arrays windows.kernel32 classes.struct ;
-specialized-array: void*
+SPECIALIZED-ARRAY: void*
 IN: windows.com.wrapper
 
 TUPLE: com-wrapper < disposable callbacks vtbls ;
 
 PRIVATE<
 
-symbol: +wrapped-objects+
+SYMBOL: +wrapped-objects+
 +wrapped-objects+ get-global
 [ H{ } +wrapped-objects+ set-global ]
 unless
 
-symbol: +live-wrappers+
+SYMBOL: +live-wrappers+
 +live-wrappers+ get-global
 [ V{ } +live-wrappers+ set-global ]
 unless
 
-symbol: +vtbl-counter+
+SYMBOL: +vtbl-counter+
 +vtbl-counter+ get-global
 [ 0 +vtbl-counter+ set-global ]
 unless

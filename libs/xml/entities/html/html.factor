@@ -4,7 +4,7 @@ USING: assocs io.encodings.binary io.files kernel namespaces sequences
 xml xml.entities accessors xml.state ;
 IN: xml.entities.html
 
-symbol: html-entities
+SYMBOL: html-entities
 
 : read-entities-file ( file -- table )
     file>dtd entities>> ;

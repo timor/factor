@@ -24,7 +24,7 @@ PRIVATE<
 : parse-name ( string -- remain name )
     ":`" split1 swap decode-value ;
 
-defer: name/values
+DEFER: name/values
 
 : (parse-value) ( string -- values )
     decode-value string-lines

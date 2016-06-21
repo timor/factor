@@ -19,4 +19,4 @@ CLASS>
     S{ CGRect f S{ CGPoint f 1.0 2.0 } S{ CGSize f 3.0 4.0 } } send\ bar:
     10.0 assert= ;
 
-main: main
+MAIN: main

@@ -6,7 +6,7 @@ locals.rewrite.closures locals.types make namespaces parser
 quotations sequences splitting vocabs.parser words ;
 IN: locals.parser
 
-symbol: in-lambda?
+SYMBOL: in-lambda?
 
 : ?rewrite-closures ( form -- form' )
     in-lambda? get [ 1array ] [ rewrite-closures ] if ;
@@ -29,7 +29,7 @@ ERROR: invalid-local-name name ;
 : parse-local-defs ( -- words assoc )
     "|" parse-tokens make-locals ;
 
-singleton: lambda-parser
+SINGLETON: lambda-parser
 
 : with-lambda-scope ( assoc reader-quot: ( -- quot ) -- quot )
     '[

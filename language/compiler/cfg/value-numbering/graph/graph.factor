@@ -3,13 +3,13 @@
 USING: assocs kernel namespaces ;
 IN: compiler.cfg.value-numbering.graph
 
-symbol: input-expr-counter
+SYMBOL: input-expr-counter
 
-symbol: vregs>vns
+SYMBOL: vregs>vns
 
-symbol: exprs>vns
+SYMBOL: exprs>vns
 
-symbol: vns>insns
+SYMBOL: vns>insns
 
 : vn>insn ( vn -- insn ) vns>insns get at ;
 

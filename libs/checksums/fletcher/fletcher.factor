@@ -6,9 +6,9 @@ USING: checksums grouping io.binary kernel locals math sequences
 
 IN: checksums.fletcher
 
-singleton: fletcher-16
-singleton: fletcher-32
-singleton: fletcher-64
+SINGLETON: fletcher-16
+SINGLETON: fletcher-32
+SINGLETON: fletcher-64
 
 INSTANCE: fletcher-16 checksum ;
 INSTANCE: fletcher-32 checksum ;

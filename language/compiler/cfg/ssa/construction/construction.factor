@@ -10,9 +10,9 @@ IN: compiler.cfg.ssa.construction
 
 PRIVATE<
 
-symbol: defs
+SYMBOL: defs
 
-symbol: defs-multi
+SYMBOL: defs-multi
 
 GENERIC: compute-insn-defs ( bb insn -- ) ;
 
@@ -32,7 +32,7 @@ M: vreg-insn compute-insn-defs
         [ compute-insn-defs ] with each
     ] simple-analysis ;
 
-symbol: inserting-phis
+SYMBOL: inserting-phis
 
 : <##phi> ( vreg bb -- ##phi )
     predecessors>> over '[ _ ] H{ } map>assoc ##phi new-insn ;
@@ -48,9 +48,9 @@ symbol: inserting-phis
     defs-multi get members
     defs get '[ dup _ at compute-phis-for ] each ;
 
-symbol: phis
+SYMBOL: phis
 
-symbol: used-vregs
+SYMBOL: used-vregs
 
 SYMBOLS: stacks pushed ;
 
@@ -126,7 +126,7 @@ M: vreg-insn rename-insn
     init-renaming entry>> rename-in-block ;
 
 ! Live phis
-symbol: live-phis
+SYMBOL: live-phis
 
 : live-phi? ( ##phi -- ? )
     dst>> live-phis get in? ;

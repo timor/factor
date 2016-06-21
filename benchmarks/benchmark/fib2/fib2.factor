@@ -10,4 +10,4 @@ IN: benchmark.fib2
 
 : fib2-benchmark ( -- ) 34 fixnum-fib 9227465 assert= ;
 
-main: fib2-benchmark
+MAIN: fib2-benchmark

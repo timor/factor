@@ -13,4 +13,4 @@ IN: benchmark.regexp
         _ R[[ [a]+]] [ matches? ] curry all? t assert=
     ] times ;
 
-main: regexp-benchmark
+MAIN: regexp-benchmark

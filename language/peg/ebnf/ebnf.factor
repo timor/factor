@@ -191,7 +191,7 @@ C: <ebnf> ebnf ;
         ] choice* ,
     ] seq* [ first ] action ;
 
-defer: action-parser
+DEFER: action-parser
 
 : element-parser ( -- parser )
     [
@@ -203,7 +203,7 @@ defer: action-parser
         (element-parser) ,
     ] choice* ;
 
-defer: choice-parser
+DEFER: choice-parser
 
 : grouped ( quot suffix -- parser )
     ! Parse a group of choices, with a suffix indicating
@@ -340,9 +340,9 @@ defer: choice-parser
 
 GENERIC: (transform) ( ast -- parser ) ;
 
-symbol: parser
-symbol: main
-symbol: ignore-ws
+SYMBOL: parser
+SYMBOL: main
+SYMBOL: ignore-ws
 
 : transform ( ast -- object )
     H{ } clone dup dup [

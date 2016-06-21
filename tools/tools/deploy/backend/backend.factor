@@ -73,7 +73,7 @@ ERROR: can't-deploy-library-file library ;
 : run-factor ( vm-path flags -- )
     swap prefix dup . run-with-output ; inline
 
-defer: ?make-staging-image
+DEFER: ?make-staging-image
 
 : make-staging-image ( profile -- )
     dup [ but-last ?make-staging-image ] unless-empty
@@ -122,7 +122,7 @@ defer: ?make-staging-image
     vm image vocab config make-deploy-image
     image vm embed-image ;
 
-symbol: open-directory-after-deploy?
+SYMBOL: open-directory-after-deploy?
 t open-directory-after-deploy? set-global
 
 HOOK: deploy* os ( vocab -- ) ;

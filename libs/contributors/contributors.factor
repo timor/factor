@@ -15,4 +15,4 @@ IN: contributors
     sort-values <reversed>
     simple-table. ;
 
-main: contributors
+MAIN: contributors

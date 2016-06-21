@@ -7,15 +7,15 @@ io.streams.byte-array kernel locals math namespaces sequences
 sequences.extras serialize strings typed vectors ;
 IN: bson.reader
 
-symbol: state
+SYMBOL: state
 
-defer: stream>assoc
+DEFER: stream>assoc
 
 ERROR: unknown-bson-type type msg ;
 
 PRIVATE<
 
-defer: read-elements
+DEFER: read-elements
 
 : read-int32 ( -- int32 )
     4 read signed-le> ; inline

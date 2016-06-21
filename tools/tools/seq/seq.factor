@@ -20,4 +20,4 @@ IN: tools.seq
         [ 2drop usage ]
     } case ;
 
-main: run-seq
+MAIN: run-seq

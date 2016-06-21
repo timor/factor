@@ -11,11 +11,11 @@ IN: continuations
         swap [ set-datastack ] dip
     ] ( stack quot -- new-stack ) call-effect-unsafe ;
 
-symbol: original-error
-symbol: error
-symbol: error-continuation
-symbol: error-thread
-symbol: restarts
+SYMBOL: original-error
+SYMBOL: error
+SYMBOL: error-continuation
+SYMBOL: error-thread
+SYMBOL: restarts
 
 PRIVATE<
 
@@ -97,7 +97,7 @@ PRIVATE>
 : continue ( continuation -- * )
     f swap continue-with ;
 
-symbol: return-continuation
+SYMBOL: return-continuation
 
 : with-return ( quot -- )
     [ return-continuation ] dip [ with-variable ] 2curry callcc0 ; inline
@@ -117,14 +117,14 @@ PRIVATE>
 
 GENERIC: error-in-thread ( error thread -- * ) ;
 
-symbol: thread-error-hook ! ( error thread -- * )
+SYMBOL: thread-error-hook ! ( error thread -- * )
 
 M: object error-in-thread
     thread-error-hook get-global call( error thread -- * ) ;
 
 : in-callback? ( -- ? ) CONTEXT-OBJ-IN-CALLBACK-P context-object ;
 
-symbol: callback-error-hook ! ( error -- * )
+SYMBOL: callback-error-hook ! ( error -- * )
 
 : rethrow ( error -- * )
     dup save-error

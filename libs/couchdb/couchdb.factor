@@ -10,7 +10,7 @@ IN: couchdb
 ! versions didn't provide the /_uuids feature which this code relies on when
 ! creating new documents.
 
-symbol: couch
+SYMBOL: couch
 : with-couch ( db quot -- )
     couch swap with-variable ; inline
 

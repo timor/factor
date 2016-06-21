@@ -19,7 +19,7 @@ M: parsing-word stack-effect drop ( parsed -- parsed ) ;
 : create-word-in ( str -- word )
     current-vocab create-word dup set-last-word dup save-location ;
 
-symbol: auto-use?
+SYMBOL: auto-use?
 
 : auto-use ( -- ) auto-use? on ;
 
@@ -142,7 +142,7 @@ ERROR: classoid-expected object ;
 : parse-until ( end -- vec )
     100 <vector> swap (parse-until) ;
 
-symbol: quotation-parser
+SYMBOL: quotation-parser
 
 HOOK: parse-quotation quotation-parser ( -- quot ) ;
 
@@ -165,7 +165,7 @@ ERROR: bad-number ;
 : scan-base ( base -- n )
     scan-token swap base> [ bad-number ] unless* ;
 
-symbol: bootstrap-syntax
+SYMBOL: bootstrap-syntax
 
 : with-file-vocabs ( quot -- )
     [
@@ -174,7 +174,7 @@ symbol: bootstrap-syntax
         call
     ] with-manifest ; inline
 
-symbol: print-use-hook
+SYMBOL: print-use-hook
 
 print-use-hook [ [ ] ] initialize
 

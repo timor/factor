@@ -20,7 +20,7 @@ GENERIC: row-value ( row renderer -- object ) ;
 GENERIC: row-color ( row renderer -- color ) ;
 GENERIC: row-value? ( value row renderer -- ? ) ;
 
-singleton: trivial-renderer
+SINGLETON: trivial-renderer
 
 M: object prototype-row drop { "" } ;
 M: object column-alignment drop f ;

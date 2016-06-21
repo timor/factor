@@ -7,4 +7,4 @@ IN: benchmark.wrap
     1,000 iota [ number>string ] map " " join
     100 [ dup 80 wrap-string drop ] times drop ;
 
-main: wrap-benchmark
+MAIN: wrap-benchmark

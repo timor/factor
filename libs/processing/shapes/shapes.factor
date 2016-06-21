@@ -9,8 +9,8 @@ IN: processing.shapes
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-symbol: fill-color
-symbol: stroke-color
+SYMBOL: fill-color
+SYMBOL: stroke-color
 
 color: black stroke-color set-global
 color: white fill-color set-global

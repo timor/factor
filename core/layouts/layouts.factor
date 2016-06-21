@@ -3,19 +3,19 @@
 USING: assocs kernel kernel.private math math.order namespaces ;
 IN: layouts
 
-symbol: data-alignment
+SYMBOL: data-alignment
 
-symbol: tag-mask
+SYMBOL: tag-mask
 
-symbol: tag-bits
+SYMBOL: tag-bits
 
-symbol: num-types
+SYMBOL: num-types
 
-symbol: type-numbers
+SYMBOL: type-numbers
 
-symbol: mega-cache-size
+SYMBOL: mega-cache-size
 
-symbol: header-bits
+SYMBOL: header-bits
 
 : type-number ( class -- n )
     type-numbers get at ;

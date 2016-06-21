@@ -20,11 +20,11 @@ IN: html.templates.chloe.compiler
         [ t ]
     } cond nip ;
 
-symbol: string-buffer
+SYMBOL: string-buffer
 
-symbol: tag-stack
+SYMBOL: tag-stack
 
-defer: compile-element
+DEFER: compile-element
 
 : compile-children ( tag -- )
     [ compile-element ] each ;
@@ -75,7 +75,7 @@ defer: compile-element
     name>string [write]
     ">" [write] ;
 
-symbol: string-context?
+SYMBOL: string-context?
 
 ERROR: tag-not-allowed-here ;
 

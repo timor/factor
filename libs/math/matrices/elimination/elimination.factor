@@ -4,7 +4,7 @@ USING: kernel locals math math.vectors math.matrices
 namespaces sequences fry sorting ;
 IN: math.matrices.elimination
 
-symbol: matrix
+SYMBOL: matrix
 
 : with-matrix ( matrix quot -- )
     matrix swap [ matrix get ] compose with-variable ; inline

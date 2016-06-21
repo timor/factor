@@ -142,4 +142,4 @@ M: joystick-demo-gadget ungraft*
         get-controllers [ joystick-window ] each
     ] with-ui ;
 
-main: joystick-demo
+MAIN: joystick-demo

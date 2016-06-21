@@ -5,14 +5,14 @@ kernel lexer make namespaces parser sequences sets
 splitting vocabs.parser words ;
 IN: effects.parser
 
-defer: parse-effect
+DEFER: parse-effect
 
 ERROR: bad-effect ;
 ERROR: invalid-row-variable ;
 ERROR: row-variable-can't-have-type ;
 ERROR: stack-effect-omits-dashes ;
 
-symbol: effect-var
+SYMBOL: effect-var
 
 PRIVATE<
 : end-token? ( end token -- token ? ) [ nip ] [ = ] 2bi ; inline

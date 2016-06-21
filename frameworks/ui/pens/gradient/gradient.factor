@@ -4,7 +4,7 @@ USING: accessors alien.data arrays colors combinators kernel
 locals math math.vectors opengl opengl.gl sequences
 specialized-arrays ui.pens ui.pens.caching ;
 FROM: alien.c-types => float ;
-specialized-array: float
+SPECIALIZED-ARRAY: float
 IN: ui.pens.gradient
 
 ! Gradient pen

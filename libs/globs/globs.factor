@@ -60,7 +60,7 @@ PRIVATE<
 ! TODO: make case-fold an option, off by default
 ! TODO: maybe make case-fold an option on regexp
 
-defer: glob%
+DEFER: glob%
 
 : glob-entries ( path -- entries )
     directory-entries [ name>> "." head? ] reject ;

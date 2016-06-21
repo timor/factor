@@ -7,9 +7,9 @@ lexer locals math namespaces parser sequences splitting
 vocabs.parser words ;
 IN: alien.parser
 
-symbol: current-library
+SYMBOL: current-library
 
-defer: (parse-c-type)
+DEFER: (parse-c-type)
 
 ERROR: bad-array-type ;
 

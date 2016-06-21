@@ -6,4 +6,4 @@ IN: benchmark.fib3
 
 : fib3-benchmark ( -- ) 34 fib 9227465 assert= ;
 
-main: fib3-benchmark
+MAIN: fib3-benchmark

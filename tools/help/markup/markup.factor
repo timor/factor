@@ -14,10 +14,10 @@ IN: help.markup
 PREDICATE: simple-element < array
     [ t ] [ first word? not ] if-empty ;
 
-symbol: last-element
-symbol: span
-symbol: block
-symbol: blank-line
+SYMBOL: last-element
+SYMBOL: span
+SYMBOL: block
+SYMBOL: blank-line
 
 : last-span? ( -- ? ) last-element get span eq? ;
 : last-block? ( -- ? ) last-element get block eq? ;

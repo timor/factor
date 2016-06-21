@@ -43,7 +43,7 @@ M: slice >c-ptr
     [ [ from>> ] [ element-size ] bi * ] [ seq>> >c-ptr ] bi
     <displaced-alien> ; inline
 
-slot: underlying
+SLOT: underlying
 
 M: object >c-ptr underlying>> ; inline
 
@@ -109,7 +109,7 @@ PRIVATE<
 ! are also pinned in a special callback area, so clearing this
 ! hashtable will not reclaim callbacks. It should only be
 ! cleared on startup.
-symbol: callbacks
+SYMBOL: callbacks
 
 [ H{ } clone callbacks set-global ] "alien" add-startup-hook
 

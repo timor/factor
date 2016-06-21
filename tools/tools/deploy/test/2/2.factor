@@ -3,4 +3,4 @@ USING: calendar calendar.format ;
 
 : deploy-test-2 ( -- ) now (timestamp>string) ;
 
-main: deploy-test-2
+MAIN: deploy-test-2

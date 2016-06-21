@@ -7,7 +7,7 @@ FROM: classes.tuple.private => tuple-layout ;
 IN: stack-checker.dependencies
 
 ! Words that the current quotation depends on
-symbol: dependencies
+SYMBOL: dependencies
 
 SYMBOLS: effect-dependency conditional-dependency definition-dependency ;
 
@@ -53,7 +53,7 @@ M: pointer add-depends-on-c-type
     to>> add-depends-on-c-type ;
 
 ! Generic words that the current quotation depends on
-symbol: generic-dependencies
+SYMBOL: generic-dependencies
 
 : ?class-or ( class class/f -- class' )
     [ class-or ] when* ;
@@ -64,7 +64,7 @@ symbol: generic-dependencies
 
 ! Conditional dependencies are re-evaluated when classes change;
 ! if any fail, the word is recompiled
-symbol: conditional-dependencies
+SYMBOL: conditional-dependencies
 
 GENERIC: satisfied? ( dependency -- ? ) ;
 

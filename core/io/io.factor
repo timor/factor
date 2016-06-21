@@ -34,9 +34,9 @@ GENERIC: stream-length ( stream -- n/f ) ;
     [ stream-write ] [ stream-nl ] bi ; inline
 
 ! Default streams
-mixin: input-stream
-mixin: output-stream
-symbol: error-stream
+MIXIN: input-stream
+MIXIN: output-stream
+SYMBOL: error-stream
 
 : readln ( -- str/f ) input-stream get stream-readln ; inline
 : read1 ( -- elt ) input-stream get stream-read1 ; inline

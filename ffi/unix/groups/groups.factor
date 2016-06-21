@@ -8,7 +8,7 @@ IN: unix.groups
 
 TUPLE: group id name passwd members ;
 
-symbol: group-cache
+SYMBOL: group-cache
 
 GENERIC: group-struct ( obj -- group/f ) ;
 

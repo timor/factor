@@ -4,7 +4,7 @@ USING: accessors byte-arrays io io.encodings
 io.encodings.private kernel math sequences strings ;
 IN: io.encodings.ascii
 
-singleton: ascii
+SINGLETON: ascii
 
 M: ascii encode-char
     drop

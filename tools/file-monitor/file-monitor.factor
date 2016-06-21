@@ -15,4 +15,4 @@ IN: file-monitor
     dup "Monitoring %s\n" printf flush
     [ t [ file-monitor-loop ] with-monitor ] with-monitors ;
 
-main: file-monitor-main
+MAIN: file-monitor-main

@@ -4,7 +4,7 @@ USING: alien.strings fry io.encodings.utf16n kernel
 splitting windows windows.kernel32 windows.types system
 environment alien.data sequences windows.errors
 io.streams.memory io.encodings io specialized-arrays ;
-specialized-array: TCHAR
+SPECIALIZED-ARRAY: TCHAR
 IN: environment.windows
 
 M: windows os-env ( key -- value )

@@ -6,7 +6,7 @@ namespaces quotations sequences summary ;
 
 IN: backtrack
 
-symbol: failure
+SYMBOL: failure
 
 ERROR: amb-failure ;
 

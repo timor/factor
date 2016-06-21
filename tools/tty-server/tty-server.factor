@@ -16,4 +16,4 @@ IN: tty-server
 : run-tty-server ( -- )
     9999 <tty-server> start-server drop ;
 
-main: run-tty-server
+MAIN: run-tty-server

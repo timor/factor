@@ -31,7 +31,7 @@ FUNCTION: double CTLineGetTypographicBounds ( CTLineRef line, CGFloat* ascent, C
 
 FUNCTION: CGRect CTLineGetImageBounds ( CTLineRef line, CGContextRef context ) ;
 
-symbol: retina?
+SYMBOL: retina?
 
 ERROR: not-a-string object ;
 
@@ -163,7 +163,7 @@ render-loc render-dim ;
 
 M: line dispose* line>> CFRelease ;
 
-symbol: cached-lines
+SYMBOL: cached-lines
 
 : cached-line ( font string -- line )
     cached-lines get-global [ <line> ] 2cache ;

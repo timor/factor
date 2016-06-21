@@ -16,4 +16,4 @@ MEMO: mem4 ( n n n n -- n ) + + + ;
         ] each
     ] times ;
 
-main: memoize-benchmark
+MAIN: memoize-benchmark

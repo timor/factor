@@ -5,7 +5,7 @@ IN: unix.signals
 
 PRIVATE<
 
-symbol: signal-handlers
+SYMBOL: signal-handlers
 
 signal-handlers [ H{ } ] initialize
 

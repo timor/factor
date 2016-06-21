@@ -73,7 +73,7 @@ M: callable splicing-nodes splicing-body ;
     dupd inlining-math-method eliminate-dispatch ;
 
 ! Method body inlining
-symbol: history
+SYMBOL: history
 
 : already-inlined? ( obj -- ? ) history get member-eq? ;
 

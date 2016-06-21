@@ -1,6 +1,6 @@
 USING: alien.c-types sequences kernel math specialized-arrays
 fry ;
-specialized-array: int
+SPECIALIZED-ARRAY: int
 IN: benchmark.dawes
 
 ! Phil Dawes's performance problem
@@ -13,4 +13,4 @@ IN: benchmark.dawes
 : dawes-benchmark ( -- )
     200 make-int-array '[ _ count-ones ] replicate drop ;
 
-main: dawes-benchmark
+MAIN: dawes-benchmark

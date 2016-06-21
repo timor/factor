@@ -5,9 +5,9 @@ io io.files io.pathnames kernel make namespaces parser
 sequences sets splitting strings vocabs words ;
 IN: vocabs.loader
 
-symbol: vocab-roots
+SYMBOL: vocab-roots
 
-symbol: add-vocab-root-hook
+SYMBOL: add-vocab-root-hook
 
 [
     V{
@@ -34,7 +34,7 @@ symbol: add-vocab-root-hook
     [ vocab-roots get adjoin ]
     [ add-vocab-root-hook get-global call( root -- ) ] bi ;
 
-symbol: root-cache
+SYMBOL: root-cache
 root-cache [ H{ } clone ] initialize
 
 ERROR: not-found-in-roots path ;
@@ -73,18 +73,18 @@ PRIVATE>
 : vocab-docs-path ( vocab -- path/f )
     dup "-docs.factor" append-vocab-dir vocab-append-path ;
 
-symbol: load-help?
+SYMBOL: load-help?
 
 ! Defined by vocabs.metadata
-symbol: check-vocab-hook
+SYMBOL: check-vocab-hook
 check-vocab-hook [ [ drop ] ] initialize
 
 PRIVATE<
 
-symbol: require-when-vocabs
+SYMBOL: require-when-vocabs
 require-when-vocabs [ HS{ } clone ] initialize
 
-symbol: require-when-table
+SYMBOL: require-when-table
 require-when-table [ V{ } clone ] initialize
 
 : load-conditional-requires ( vocab -- )
@@ -140,7 +140,7 @@ PRIVATE>
         "To define one, refer to \\ main: help" print
     ] ?if ;
 
-symbol: blacklist
+SYMBOL: blacklist
 
 : require-all ( vocabs -- )
     V{ } clone blacklist [ [ require ] each ] with-variable ;

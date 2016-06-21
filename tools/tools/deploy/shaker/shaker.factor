@@ -479,7 +479,7 @@ IN: tools.deploy.shaker
     [ quotation? ] [ remain-compiled ] "quotations" compress
     [ quotation? ] instances [ f >>cached-effect f >>cache-counter drop ] each ;
 
-symbol: deploy-vocab
+SYMBOL: deploy-vocab
 
 : [:c] ( -- word ) ":c" "debugger" lookup-word ;
 
@@ -649,4 +649,4 @@ symbol: deploy-vocab
     "deploy-config" get parse-file first
     (deploy) ;
 
-main: do-deploy
+MAIN: do-deploy

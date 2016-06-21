@@ -79,7 +79,7 @@ M: insn visit-insn ( state insn -- state' )
 
 forward-analysis: padding
 
-symbol: stack-record
+SYMBOL: stack-record
 
 : register-stack-state ( state insn -- )
     insn#>> stack-record get set-at ;

@@ -63,7 +63,7 @@ IN: compiler.cfg.graphviz
     [ number>string prepend svg ]
     tri* ;
 
-symbol: passes
+SYMBOL: passes
 
 : watch-pass ( cfg pass pass# -- cfg' )
     [ perform-pass ] 3keep draw-cfg ;

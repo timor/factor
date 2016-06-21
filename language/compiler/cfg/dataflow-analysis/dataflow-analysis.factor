@@ -14,7 +14,7 @@ GENERIC: ignore-block? ( bb dfa -- ? ) ;
 
 PRIVATE<
 
-mixin: dataflow-analysis
+MIXIN: dataflow-analysis
 
 : <dfa-worklist> ( cfg dfa -- queue )
     block-order <hashed-dlist> [ push-all-front ] keep ;
@@ -67,13 +67,13 @@ name-out DEFINES ${name}-out
 
 WHERE
 
-singleton: name
+SINGLETON: name
 
-symbol: name-ins
+SYMBOL: name-ins
 
 : name-in ( bb -- set ) name-ins get at ;
 
-symbol: name-outs
+SYMBOL: name-outs
 
 : name-out ( bb -- set ) name-outs get at ;
 
@@ -81,7 +81,7 @@ FUNCTOR>
 
 ! ! ! Forward dataflow analysis
 
-mixin: forward-analysis
+MIXIN: forward-analysis
 INSTANCE: forward-analysis dataflow-analysis ;
 
 M: forward-analysis block-order  drop reverse-post-order ;
@@ -107,7 +107,7 @@ FUNCTOR>
 
 ! ! ! Backward dataflow analysis
 
-mixin: backward-analysis
+MIXIN: backward-analysis
 INSTANCE: backward-analysis dataflow-analysis ;
 
 M: backward-analysis block-order  drop post-order ;

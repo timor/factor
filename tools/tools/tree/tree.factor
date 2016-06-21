@@ -6,8 +6,8 @@ io.directories io.files.info io.pathnames kernel locals math
 namespaces sequences sorting ;
 IN: tools.tree
 
-symbol: #files
-symbol: #directories
+SYMBOL: #files
+SYMBOL: #directories
 
 : indent ( indents -- )
     unclip-last-slice
@@ -20,7 +20,7 @@ symbol: #directories
 : write-file ( entry indents -- )
     write-name #files [ 1 + ] change-global ;
 
-defer: write-tree
+DEFER: write-tree
 
 : write-dir ( entry indents -- )
     [ write-name ] [
@@ -57,4 +57,4 @@ defer: write-tree
         [ tree ] each
     ] if-empty ;
 
-main: run-tree
+MAIN: run-tree

@@ -4,10 +4,10 @@ USING: editors io.pathnames io.standard-paths kernel make
 math.parser namespaces sequences system ;
 IN: editors.atom
 
-singleton: atom-editor
+SINGLETON: atom-editor
 atom-editor editor-class set-global
 
-symbol: atom-path
+SYMBOL: atom-path
 
 HOOK: find-atom os ( -- path ) ;
 

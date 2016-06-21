@@ -22,7 +22,7 @@ IN: help.stylesheet
 : font-size-span ( -- n )
     13/12 default-font-size * >integer ;
 
-symbol: default-span-style
+SYMBOL: default-span-style
 H{
     { font-name $ default-sans-serif-font-name }
     { font-size $ font-size-span }
@@ -30,24 +30,24 @@ H{
     { font-style plain }
 } default-span-style set-global
 
-symbol: default-block-style
+SYMBOL: default-block-style
 H{
     { wrap-margin $ wrap-margin-full }
 } default-block-style set-global
 
-symbol: link-style
+SYMBOL: link-style
 H{
     { foreground $ link-color }
     { font-style bold }
 } link-style set-global
 
-symbol: emphasis-style
+SYMBOL: emphasis-style
 H{ { font-style italic } } emphasis-style set-global
 
-symbol: strong-style
+SYMBOL: strong-style
 H{ { font-style bold } } strong-style set-global
 
-symbol: title-style
+SYMBOL: title-style
 H{
     { font-name $ default-sans-serif-font-name }
     { font-size $ font-size-title }
@@ -58,13 +58,13 @@ H{
     { inset { 5 5 } }
 } title-style set-global
 
-symbol: help-path-style
+SYMBOL: help-path-style
 H{
     { font-size $ default-font-size }
     { table-gap { 5 5 } }
 } help-path-style set-global
 
-symbol: heading-style
+SYMBOL: heading-style
 H{
     { font-name $ default-sans-serif-font-name }
     { font-size $ font-size-heading }
@@ -72,46 +72,46 @@ H{
     { foreground $ heading-color }
 } heading-style set-global
 
-symbol: subsection-style
+SYMBOL: subsection-style
 H{
     { font-name $ default-sans-serif-font-name }
     { font-size $ font-size-subsection }
     { font-style bold }
 } subsection-style set-global
 
-symbol: snippet-style
+SYMBOL: snippet-style
 H{
     { font-name $ default-monospace-font-name }
     { font-size $ default-font-size }
     { foreground $ snippet-color }
 } snippet-style set-global
 
-symbol: code-char-style
+SYMBOL: code-char-style
 H{
     { font-name $ default-monospace-font-name }
     { font-size $ default-font-size }
 } code-char-style set-global
 
-symbol: code-style
+SYMBOL: code-style
 H{
     { page-color $ code-background-color }
     { inset { 5 5 } }
     { wrap-margin f }
 } code-style set-global
 
-symbol: output-style
+SYMBOL: output-style
 H{
     { font-style bold }
     { foreground $ output-color }
 } output-style set-global
 
-symbol: url-style
+SYMBOL: url-style
 H{
     { font-name $ default-monospace-font-name }
     { foreground $ link-color }
 } url-style set-global
 
-symbol: warning-style
+SYMBOL: warning-style
 H{
     { page-color $ warning-background-color }
     { border-color $ warning-border-color }
@@ -119,7 +119,7 @@ H{
     { wrap-margin $ wrap-margin-full }
 } warning-style set-global
 
-symbol: deprecated-style
+SYMBOL: deprecated-style
 H{
     { page-color $ warning-background-color }
     { border-color $ warning-border-color }
@@ -127,21 +127,21 @@ H{
     { wrap-margin $ wrap-margin-full }
 } deprecated-style set-global
 
-symbol: table-content-style
+SYMBOL: table-content-style
 H{
     { wrap-margin $ wrap-margin-table-content }
 } table-content-style set-global
 
-symbol: table-style
+SYMBOL: table-style
 H{
     { table-gap { 5 5 } }
     { table-border $ line-color }
 } table-style set-global
 
-symbol: list-style
+SYMBOL: list-style
 H{ { table-gap { 10 2 } } } list-style set-global
 
-symbol: bullet
+SYMBOL: bullet
 "• " bullet set-global
 
 : adjust-help-font-size ( delta -- )

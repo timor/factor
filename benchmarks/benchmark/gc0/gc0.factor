@@ -7,4 +7,4 @@ IN: benchmark.gc0
 
 : gc0-benchmark ( -- ) f 60000000 [ allocate nip ] times drop ;
 
-main: gc0-benchmark
+MAIN: gc0-benchmark

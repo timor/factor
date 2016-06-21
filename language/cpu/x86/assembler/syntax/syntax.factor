@@ -4,7 +4,7 @@ USING: kernel words words.symbol sequences lexer parser fry
 namespaces combinators assocs math ;
 IN: cpu.x86.assembler.syntax
 
-symbol: registers
+SYMBOL: registers
 
 registers [ H{ } clone ] initialize
 

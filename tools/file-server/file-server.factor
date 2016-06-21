@@ -36,4 +36,4 @@ IN: file-server
         8080 httpd wait-for-server
     ] file-server-logging ;
 
-main: file-server-main
+MAIN: file-server-main

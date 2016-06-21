@@ -15,9 +15,9 @@ M: simple-lint-error summary message>> ;
 
 M: simple-lint-error error. summary print ;
 
-symbol: vocabs-quot
-symbol: all-vocabs-list
-symbol: vocab-articles
+SYMBOL: vocabs-quot
+SYMBOL: all-vocabs-list
+SYMBOL: vocab-articles
 
 : check-example ( element -- )
     [

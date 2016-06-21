@@ -5,7 +5,7 @@ help.stylesheet io io.styles kernel literals namespaces parser
 random sequences ui.theme ;
 IN: help.tips
 
-symbol: tips
+SYMBOL: tips
 
 tips [ V{ } clone ] initialize
 
@@ -27,7 +27,7 @@ SYNTAX: \ TIP:
 
 : a-tip ( -- tip ) tips get random ;
 
-symbol: tip-of-the-day-style
+SYMBOL: tip-of-the-day-style
 H{
     { page-color $ tip-background-color }
     { inset { 5 5 } }

@@ -16,7 +16,7 @@ TUPLE: inline-cache value counter ;
 : update-inline-cache ( word/quot ic -- )
     swap >>value effect-counter >>counter drop ; inline
 
-singleton: +unknown+
+SINGLETON: +unknown+
 
 GENERIC: cached-effect ( quot -- effect ) ;
 

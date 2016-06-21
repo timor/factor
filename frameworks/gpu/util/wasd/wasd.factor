@@ -6,7 +6,7 @@ locals math math.constants math.functions math.matrices
 math.order math.vectors opengl.gl sequences
 ui ui.gadgets.worlds specialized-arrays audio.engine ;
 FROM: alien.c-types => float ;
-specialized-array: float
+SPECIALIZED-ARRAY: float
 IN: gpu.util.wasd
 
 UNIFORM-TUPLE: mvp-uniforms

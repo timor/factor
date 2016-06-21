@@ -20,4 +20,4 @@ IN: benchmark.3d-matrix-scalar
     ] times
     result . ;
 
-main: 3d-matrix-scalar-benchmark
+MAIN: 3d-matrix-scalar-benchmark

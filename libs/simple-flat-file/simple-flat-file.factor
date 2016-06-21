@@ -31,7 +31,7 @@ IN: simple-flat-file
 : data ( filename -- data )
     utf8 file-lines drop-comments [ split-semi ] map! ;
 
-symbol: interned
+SYMBOL: interned
 
 : range, ( value key -- )
     swap interned get

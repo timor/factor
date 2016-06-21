@@ -18,7 +18,7 @@ M: #phi compute-live-values*
     ! corresponding inputs are live too.
     [ out-d>> ] [ phi-in-d>> ] bi look-at-phi ;
 
-symbol: if-node
+SYMBOL: if-node
 
 M: #branch remove-dead-code*
     [ [ [ (remove-dead-code) ] map ] change-children ]

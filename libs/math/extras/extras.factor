@@ -13,7 +13,7 @@ IN: math.extras
 
 PRIVATE<
 
-defer: stirling
+DEFER: stirling
 
 : (stirling) ( n k -- x )
     [ [ 1 - ] bi@ stirling ]
@@ -29,7 +29,7 @@ MEMO: stirling ( n k -- x )
 :: ramanujan ( x -- y )
     pi sqrt x e / x ^ * x 8 * 4 + x * 1 + x * 1/30 + 1/6 ^ * ;
 
-defer: bernoulli
+DEFER: bernoulli
 
 PRIVATE<
 

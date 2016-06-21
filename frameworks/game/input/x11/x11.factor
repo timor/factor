@@ -5,7 +5,7 @@ namespaces math classes bit-arrays system sequences vectors
 x11 x11.xlib assocs generalizations ;
 IN: game.input.x11
 
-singleton: x11-game-input-backend
+SINGLETON: x11-game-input-backend
 
 x11-game-input-backend game-input-backend set-global
 
@@ -92,7 +92,7 @@ M: x11-game-input-backend read-keyboard
     [ XQueryPointer drop ] with-out-parameters
     [ 4 ndrop ] 3dip ;
 
-symbol: mouse-reset?
+SYMBOL: mouse-reset?
 
 M: x11-game-input-backend read-mouse
     mouse-reset? get [ reset-mouse ] unless

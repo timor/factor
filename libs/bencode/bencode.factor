@@ -20,7 +20,7 @@ M: assoc >bencode
 
 PRIVATE<
 
-defer: read-bencode
+DEFER: read-bencode
 
 : read-integer ( -- obj )
     "e" read-until char: e assert= string>number ;

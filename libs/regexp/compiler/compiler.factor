@@ -8,8 +8,8 @@ IN: regexp.compiler
 
 GENERIC: question>quot ( question -- quot ) ;
 
-symbol: shortest?
-symbol: backwards?
+SYMBOL: shortest?
+SYMBOL: backwards?
 
 PRIVATE<
 

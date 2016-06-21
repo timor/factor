@@ -9,7 +9,7 @@ STRUCT: game-loop-benchmark
     { tick# ulonglong }
     { frame# ulonglong } ;
 
-specialized-vector: game-loop-benchmark
+SPECIALIZED-VECTOR: game-loop-benchmark
 
 : <game-loop-benchmark> ( benchmark-data-pair tick frame -- obj )
     \ game-loop-benchmark <struct>

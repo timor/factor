@@ -6,19 +6,19 @@ kernel locals math math.parser mirrors namespaces sequences
 strings tr words ;
 IN: json.writer
 
-symbol: json-allow-fp-special?
+SYMBOL: json-allow-fp-special?
 f json-allow-fp-special? set-global
 
-symbol: json-friendly-keys?
+SYMBOL: json-friendly-keys?
 t json-friendly-keys? set-global
 
-symbol: json-coerce-keys?
+SYMBOL: json-coerce-keys?
 t json-coerce-keys? set-global
 
-symbol: json-escape-slashes?
+SYMBOL: json-escape-slashes?
 f json-escape-slashes? set-global
 
-symbol: json-escape-unicode?
+SYMBOL: json-escape-unicode?
 f json-escape-unicode? set-global
 
 ! Writes the object out to a stream in JSON format

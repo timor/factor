@@ -54,7 +54,7 @@ ERROR: bad-escape char ;
         { char: \, char: \, }
     } ?at [ bad-escape ] unless ;
 
-symbol: name>char-hook
+SYMBOL: name>char-hook
 
 name>char-hook [
     [ "Unicode support not available" throw ]
@@ -138,7 +138,7 @@ PRIVATE<
     [ column>> ] [ line-text>> ] bi
     [ "\"\\" member? ] find-from ;
 
-defer: (parse-string)
+DEFER: (parse-string)
 
 : parse-found-token ( accum lexer i elt -- )
     { sbuf lexer fixnum fixnum } declare

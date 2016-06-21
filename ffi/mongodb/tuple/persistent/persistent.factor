@@ -10,7 +10,7 @@ GENERIC: tuple>assoc ( tuple -- assoc ) ;
 
 GENERIC: tuple>selector ( tuple -- selector ) ;
 
-defer: assoc>tuple
+DEFER: assoc>tuple
 
 PRIVATE<
 

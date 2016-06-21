@@ -36,4 +36,4 @@ CONSTANT: window-style
 : run-webkit-demo ( -- )
     [ webkit-demo ] cocoa-app ;
 
-main: run-webkit-demo
+MAIN: run-webkit-demo

@@ -12,4 +12,4 @@ IN: benchmark.msgpack
     500,000 "hello" <repetition> pack-sum-lengths 2,500,000 assert=
     500,000 pi <repetition> pack-sum 0x1.7f7ec53a9f04ap20 assert= ;
 
-main: msgpack-benchmark
+MAIN: msgpack-benchmark

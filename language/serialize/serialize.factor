@@ -18,7 +18,7 @@ GENERIC: (serialize) ( obj -- ) ;
 PRIVATE<
 
 ! Variable holding a assoc of objects already serialized
-symbol: serialized
+SYMBOL: serialized
 
 : add-object ( obj -- )
     ! Add an object to the sequence of already serialized
@@ -160,9 +160,9 @@ M: wrapper (serialize) ( obj -- )
     char: W write1
     wrapped>> (serialize) ;
 
-defer: (deserialize)
+DEFER: (deserialize)
 
-symbol: deserialized
+SYMBOL: deserialized
 
 : intern-object ( obj -- )
     deserialized get push ;

@@ -14,7 +14,7 @@ STRUCT: body
 { velocity double-4 }
 { mass double } ;
 
-specialized-array: body
+SPECIALIZED-ARRAY: body
 
 : <body> ( location velocity mass -- body )
     [ days-per-year v*n ] [ solar-mass * ] bi* body <struct-boa> ; inline
@@ -100,4 +100,4 @@ specialized-array: body
 
 : nbody-simd-benchmark ( -- ) 1000000 nbody ;
 
-main: nbody-simd-benchmark
+MAIN: nbody-simd-benchmark

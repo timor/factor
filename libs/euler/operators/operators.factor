@@ -76,7 +76,7 @@ PRIVATE<
 
 PRIVATE>
 
-mixin: point
+MIXIN: point
 INSTANCE: sequence point ;
 INSTANCE: number point ;
 

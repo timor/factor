@@ -3,7 +3,7 @@
 USING: accessors alien.c-types alien.data colors help.markup
 help.syntax kernel opengl opengl.gl sequences math.vectors
 ui.gadgets ui.pens specialized-arrays ;
-specialized-array: float
+SPECIALIZED-ARRAY: float
 IN: ui.pens.polygon
 
 ! Polygon pen

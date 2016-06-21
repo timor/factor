@@ -17,7 +17,7 @@ C: <literal-bind> literal-bind ;
 
 TUPLE: generator-bind slot-name key generator-singleton type ;
 C: <generator-bind> generator-bind ;
-singleton: random-id-generator
+SINGLETON: random-id-generator
 
 TUPLE: low-level-binding value ;
 C: <low-level-binding> low-level-binding ;
@@ -29,7 +29,7 @@ SYMBOLS: +autoincrement+ +serial+ +unique+ +default+ +null+ +not-null+
 +foreign-id+ +has-many+ +on-update+ +on-delete+ +restrict+ +cascade+
 +set-null+ +set-default+ ;
 
-symbol: IGNORE
+SYMBOL: IGNORE
 
 : filter-ignores ( tuple specs -- specs' )
     [ <mirror> [ nip IGNORE = ] assoc-filter keys ] dip

@@ -12,7 +12,7 @@ specialized-arrays stack-checker.dependencies summary vectors
 vocabs.loader vocabs.parser words ;
 IN: classes.struct
 
-specialized-array: uchar
+SPECIALIZED-ARRAY: uchar
 
 ERROR: struct-must-have-slots ;
 
@@ -35,7 +35,7 @@ TUPLE: struct-bit-slot-spec < struct-slot-spec
 PREDICATE: struct-class < tuple-class
     superclass-of \ struct eq? ;
 
-slot: fields
+SLOT: fields
 
 : struct-slots ( struct-class -- slots )
     "c-type" word-prop fields>> ;
@@ -330,7 +330,7 @@ M: struct-class reset-class
         [ call-next-method ]
     } cleave ;
 
-symbol: bits:
+SYMBOL: \ bits:
 
 PRIVATE<
 

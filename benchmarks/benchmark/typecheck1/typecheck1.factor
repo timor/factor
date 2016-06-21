@@ -7,4 +7,4 @@ TUPLE: hello n ;
 
 : typecheck1-benchmark ( -- ) 0 hello boa foo 2drop ;
 
-main: typecheck1-benchmark
+MAIN: typecheck1-benchmark

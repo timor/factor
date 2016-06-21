@@ -24,7 +24,7 @@ IN: webapps.pastebin
 
 TUPLE: pastebin < dispatcher ;
 
-symbol: can-delete-pastes?
+SYMBOL: can-delete-pastes?
 
 can-delete-pastes? define-capability
 

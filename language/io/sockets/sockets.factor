@@ -69,7 +69,7 @@ M: local present path>> "Unix domain socket: " prepend ;
 
 M: local protocol drop 0 ;
 
-slot: port
+SLOT: port
 
 TUPLE: ipv4 { host maybe{ string } read-only } ;
 
@@ -237,7 +237,7 @@ GENERIC: (get-remote-address) ( handle remote -- sockaddr ) ;
         [ <input-port> |dispose ] [ <output-port> |dispose ] bi
     ] with-destructors ;
 
-symbol: bind-local-address
+SYMBOL: bind-local-address
 
 GENERIC: establish-connection ( client-out remote -- ) ;
 
@@ -315,9 +315,9 @@ PRIVATE>
 : <client> ( remote encoding -- stream local )
     [ (client) ] dip swap [ <encoder-duplex> ] dip ;
 
-symbol: local-address
+SYMBOL: local-address
 
-symbol: remote-address
+SYMBOL: remote-address
 
 : with-client ( remote encoding quot -- )
     [

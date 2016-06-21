@@ -26,4 +26,4 @@ ERROR: no-vocab-main vocab ;
 : deploy-main ( -- )
     command-line get [ [ require ] [ deploy ] bi ] each ;
 
-main: deploy-main
+MAIN: deploy-main

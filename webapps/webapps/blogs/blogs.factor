@@ -16,7 +16,7 @@ IN: webapps.blogs
 
 TUPLE: blogs < dispatcher ;
 
-symbol: can-administer-blogs?
+SYMBOL: can-administer-blogs?
 
 can-administer-blogs? define-capability
 

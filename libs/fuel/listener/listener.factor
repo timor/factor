@@ -10,4 +10,4 @@ os linux? [ "fuel.listener.linux" require ] when
 : fuel-listener ( -- )
     fuel-pty-setup listener-main ;
 
-main: fuel-listener
+MAIN: fuel-listener

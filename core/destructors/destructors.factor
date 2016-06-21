@@ -4,15 +4,15 @@ USING: accessors assocs continuations init kernel namespaces
 sequences sets ;
 IN: destructors
 
-symbol: disposables
+SYMBOL: disposables
 
 ERROR: already-unregistered disposable ;
 
-symbol: debug-leaks?
+SYMBOL: debug-leaks?
 
 PRIVATE<
 
-slot: continuation
+SLOT: continuation
 
 : register-disposable ( obj -- )
     debug-leaks? get-global [ current-continuation >>continuation ] when
@@ -63,9 +63,9 @@ M: disposable dispose
 
 PRIVATE<
 
-symbol: always-destructors
+SYMBOL: always-destructors
 
-symbol: error-destructors
+SYMBOL: error-destructors
 
 : do-always-destructors ( -- )
     always-destructors get <reversed> dispose-each ;

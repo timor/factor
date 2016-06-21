@@ -11,7 +11,7 @@ sequences sets stack-checker.dependencies stack-checker.errors
 stack-checker.inlining vocabs.loader words ;
 IN: compiler
 
-symbol: compiled
+SYMBOL: compiled
 
 : compile? ( word -- ? )
     ! Don't attempt to compile certain words.
@@ -135,7 +135,7 @@ M: word combinator? inline? ;
         } cleave
     ] with-return ;
 
-singleton: optimizing-compiler
+SINGLETON: optimizing-compiler
 
 M: optimizing-compiler update-call-sites ( class generic -- words )
     ! Words containing call sites with inferred type 'class'

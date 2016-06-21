@@ -16,7 +16,7 @@ GENERIC: next-elt ( loc document elt -- newloc ) ;
 : set-elt-string ( string loc document elt -- )
     [ prev/next-elt ] [ drop ] 2bi set-doc-range ;
 
-singleton: char-elt
+SINGLETON: char-elt
 
 PRIVATE<
 
@@ -47,7 +47,7 @@ M: char-elt prev-elt
 M: char-elt next-elt
     drop [ [ first-grapheme-from ] modify-col ] next ;
 
-singleton: one-char-elt
+SINGLETON: one-char-elt
 
 M: one-char-elt prev-elt 2drop ;
 
@@ -69,7 +69,7 @@ PRIVATE<
 
 PRIVATE>
 
-singleton: one-word-elt
+SINGLETON: one-word-elt
 
 M: one-word-elt prev-elt
     drop
@@ -79,14 +79,14 @@ M: one-word-elt next-elt
     drop
     [ f next-word ] modify-col ;
 
-singleton: word-start-elt
+SINGLETON: word-start-elt
 
 M: word-start-elt prev-elt
     drop one-word-elt prev-elt ;
 
 M: word-start-elt next-elt 2drop ;
 
-singleton: word-elt
+SINGLETON: word-elt
 
 M: word-elt prev-elt
     drop
@@ -98,7 +98,7 @@ M: word-elt next-elt
     [ [ blank-at? next-word ] modify-col ]
     next ;
 
-singleton: one-line-elt
+SINGLETON: one-line-elt
 
 M: one-line-elt prev-elt
     2drop first 0 2array ;
@@ -121,7 +121,7 @@ M: page-elt next-elt
 
 CONSTANT: line-elt T{ page-elt f 1 } ;
 
-singleton: doc-elt
+SINGLETON: doc-elt
 
 M: doc-elt prev-elt 3drop { 0 0 } ;
 

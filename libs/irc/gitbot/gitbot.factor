@@ -5,8 +5,8 @@ irc.client irc.client.chats kernel make mason.common mason.git
 math namespaces sequences threads timers ;
 IN: irc.gitbot
 
-symbol: nickserv-handle
-symbol: nickserv-password
+SYMBOL: nickserv-handle
+SYMBOL: nickserv-password
 
 : bot-profile ( -- obj )
     "irc.freenode.org" 6667
@@ -62,4 +62,4 @@ M: object handle-message drop ;
     start-bot
     '[ _ check-for-updates ] 5 minutes every drop ;
 
-main: bot
+MAIN: bot

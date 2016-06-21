@@ -4,7 +4,7 @@ USING: editors io.launcher io.standard-paths kernel make
 math.parser namespaces sequences ;
 IN: editors.gedit
 
-singleton: gedit
+SINGLETON: gedit
 gedit editor-class set-global
 
 : gedit-path ( -- path )

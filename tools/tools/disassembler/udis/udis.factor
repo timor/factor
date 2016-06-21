@@ -54,7 +54,7 @@ FUNCTION: c-string ud_lookup_mnemonic ( int c ) ;
 : with-ud ( ..a quot: ( ..a ud -- ..b ) -- ..b )
     [ [ [ <ud> ] dip call ] with-destructors ] with-code-blocks ; inline
 
-singleton: udis-disassembler
+SINGLETON: udis-disassembler
 
 : buf/len ( from to -- buf len ) [ drop <alien> ] [ swap - ] 2bi ;
 

@@ -40,7 +40,7 @@ CONSTANT: default-library-fallback {
     "/usr/lib"
 } ;
 
-symbol: dyld-environment
+SYMBOL: dyld-environment
 
 : dyld-env ( name -- seq )
     dyld-environment get [ at ] [ os-env ] if* ;
@@ -60,7 +60,7 @@ symbol: dyld-environment
         file-name "DYLD_LIBRARY_PATH" dyld-paths paths%
     ] { } make ;
 
-symbol: dyld-executable-path
+SYMBOL: dyld-executable-path
 
 : dyld-executable-path-search ( name -- seq )
     "@executable_path/" ?head dyld-executable-path get and [

@@ -26,7 +26,7 @@ PRIVATE<
 
 MATCH-VARS: ?from ?tag ?id ?value ;
 
-symbol: no-channel
+SYMBOL: no-channel
 TUPLE: to-message id value ;
 TUPLE: from-message id ;
 

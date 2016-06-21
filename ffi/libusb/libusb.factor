@@ -210,7 +210,7 @@ STRUCT: libusb_iso_packet_descriptor
     { length        uint                   }
     { actual_length uint                   }
     { status        libusb_transfer_status } ;
-specialized-array: libusb_iso_packet_descriptor
+SPECIALIZED-ARRAY: libusb_iso_packet_descriptor
 
 c-type: libusb_transfer
 

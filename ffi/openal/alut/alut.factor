@@ -5,7 +5,7 @@ alien.syntax namespaces alien.c-types sequences vocabs
 shuffle openal openal.alut.backend alien.libraries generalizations
 specialized-arrays alien.destructors ;
 FROM: alien.c-types => float short ;
-specialized-array: uint
+SPECIALIZED-ARRAY: uint
 IN: openal.alut
 
 COMPILE< "alut" {
@@ -69,7 +69,7 @@ FUNCTION: ALboolean alutSleep ( ALfloat duration ) ;
 
 FUNCTION: void alutUnloadWAV ( ALenum format, void* data, ALsizei size, ALsizei frequency ) ;
 
-symbol: init
+SYMBOL: init
 
 : init-openal ( -- )
     init get-global expired? [

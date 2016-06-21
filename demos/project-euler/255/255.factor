@@ -68,7 +68,7 @@ PRIVATE<
 : next-multiple ( a multiple -- next )
     [ [ 1 - ] dip /i 1 + ] keep * ;
 
-defer: iteration#
+DEFER: iteration#
 ! Gives the number of iterations when xk+1 has the same value for all a<=i<=n
 :: (iteration#) ( i xi a b -- # )
     a xi xk+1 dup xi =

@@ -59,7 +59,7 @@ CFSTRING: CFRunLoopDefaultMode "kCFRunLoopDefaultMode" ;
 
 TUPLE: run-loop-state fds sources timers ;
 
-symbol: run-loop
+SYMBOL: run-loop
 
 : <run-loop> ( -- run-loop )
     V{ } clone V{ } clone V{ } clone \ run-loop-state boa ;
@@ -101,7 +101,7 @@ symbol: run-loop
         V{ } clone
     ] change-timers drop ;
 
-symbol: thread-timer
+SYMBOL: thread-timer
 [ f thread-timer set-global ]
 "core-foundation.run-loop" add-startup-hook
 

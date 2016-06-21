@@ -71,7 +71,7 @@ PRIVATE>
 
 PRIVATE<
 
-symbol: generic-word
+SYMBOL: generic-word
 
 : make-math-method-table ( classes quot: ( ... class -- ... quot ) -- alist )
     [ bootstrap-words ] dip
@@ -109,7 +109,7 @@ symbol: generic-word
 
 PRIVATE>
 
-singleton: math-combination
+SINGLETON: math-combination
 
 M: math-combination make-default-method
     drop default-math-method ;

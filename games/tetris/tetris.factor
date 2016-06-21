@@ -66,4 +66,4 @@ M: tetris-gadget ungraft* ( gadget -- )
         "Tetris" open-status-window
     ] with-ui ;
 
-main: tetris-window
+MAIN: tetris-window

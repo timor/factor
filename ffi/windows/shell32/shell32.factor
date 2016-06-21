@@ -134,7 +134,7 @@ SINGLETONS:
     +win32-os2-executable+
     +win32-nt-executable+ ;
 
-mixin: windows-executable
+MIXIN: windows-executable
 INSTANCE: +dos-executable+ windows-executable ;       ! mz
 INSTANCE: +win32-console-executable+ windows-executable ;
 INSTANCE: +win32-vxd-executable+ windows-executable ; ! le

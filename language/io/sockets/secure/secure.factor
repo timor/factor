@@ -5,11 +5,11 @@ destructors io io.sockets io.sockets.private kernel memoize
 namespaces present sequences summary system vocabs ;
 IN: io.sockets.secure
 
-symbol: secure-socket-timeout
+SYMBOL: secure-socket-timeout
 
 1 minutes secure-socket-timeout set-global
 
-symbol: secure-socket-backend
+SYMBOL: secure-socket-backend
 
 HOOK: ssl-supported? secure-socket-backend ( -- ? ) ;
 HOOK: ssl-certificate-verification-supported? secure-socket-backend ( -- ? ) ;

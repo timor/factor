@@ -7,8 +7,8 @@ prettyprint math math.parser words effects summary io.styles classes
 generic.math combinators.short-circuit kernel.private quotations ;
 IN: tools.trace
 
-symbol: exclude-vocabs
-symbol: include-vocabs
+SYMBOL: exclude-vocabs
+SYMBOL: include-vocabs
 
 exclude-vocabs { "math" "accessors" } swap set-global
 
@@ -17,7 +17,7 @@ PRIVATE<
 : callstack-depth ( callstack -- n )
     callstack>array midpoint@ ;
 
-symbol: end
+SYMBOL: end
 
 : include? ( vocab -- ? )
     include-vocabs get [ member? ] [ drop t ] if* ;

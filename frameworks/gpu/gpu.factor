@@ -9,7 +9,7 @@ PRIVATE<
 VARIANT: gpu-api
     opengl-2 opengl-3 ;
 
-symbol: has-vertex-array-objects?
+SYMBOL: has-vertex-array-objects?
 
 : set-gpu-api ( -- )
     "2.0" require-gl-version

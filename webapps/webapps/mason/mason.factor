@@ -12,7 +12,7 @@ IN: webapps.mason
 
 TUPLE: mason-app < dispatcher ;
 
-symbol: build-engineer?
+SYMBOL: build-engineer?
 
 build-engineer? define-capability
 

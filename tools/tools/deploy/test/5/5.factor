@@ -7,4 +7,4 @@ io.files.temp http.client kernel ;
     "port-number" temp-file ascii file-contents string>number >>port
     http-get 2drop ;
 
-main: deploy-test-5
+MAIN: deploy-test-5

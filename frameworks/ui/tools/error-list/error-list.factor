@@ -34,7 +34,7 @@ TUPLE: error-list-gadget < tool
 visible-errors source-file error
 error-toggle source-file-table error-table error-display ;
 
-singleton: source-file-renderer
+SINGLETON: source-file-renderer
 
 M: source-file-renderer row-columns
     drop first2 [
@@ -75,7 +75,7 @@ M: source-file-renderer filled-column drop 1 ;
         t >>selection-required?
         error-list source-file>> >>selection ;
 
-singleton: error-renderer
+SINGLETON: error-renderer
 
 M: error-renderer row-columns
     drop [

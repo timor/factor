@@ -186,10 +186,10 @@ IN: bootstrap.syntax
     ] define-core-syntax
 
     "SYMBOL:" [
-        scan-new-word define-symbol
+        scan-new-escaped define-symbol
     ] define-core-syntax
     "symbol:" [
-        scan-new-word define-symbol
+        scan-new-escaped define-symbol
     ] define-core-syntax
 
     "SYMBOLS:" [

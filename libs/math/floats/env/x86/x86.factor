@@ -88,7 +88,7 @@ M: sse-env (set-denormal-mode) ( register mode -- register' )
         } case
     ] curry change-mxcsr ; inline
 
-singleton: +fp-x87-stack-fault+
+SINGLETON: +fp-x87-stack-fault+
 
 CONSTANT: x87-exception-bits 0x7f ;
 CONSTANT: x87-exception>bit

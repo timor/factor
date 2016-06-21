@@ -30,7 +30,7 @@ ERROR: bad-request-line < request-error parse-error ;
 : read-request-header ( request -- request )
     read-header >>header ;
 
-symbol: upload-limit
+SYMBOL: upload-limit
 
 upload-limit [ 200,000,000 ] initialize
 

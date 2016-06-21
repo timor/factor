@@ -12,4 +12,4 @@ CONSTANT: test-ratios $[
         [ number>string string>number ] [ assert= ] bi
     ] each ;
 
-main: parse-ratio-benchmark
+MAIN: parse-ratio-benchmark

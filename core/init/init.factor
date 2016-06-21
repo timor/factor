@@ -4,8 +4,8 @@ USING: assocs continuations continuations.private kernel
 kernel.private namespaces ;
 IN: init
 
-symbol: startup-hooks
-symbol: shutdown-hooks
+SYMBOL: startup-hooks
+SYMBOL: shutdown-hooks
 
 startup-hooks [ V{ } clone ] initialize
 shutdown-hooks [ V{ } clone ] initialize

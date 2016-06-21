@@ -1,7 +1,7 @@
 USING: alien.c-types sequences math mirrors splitting grouping
 kernel make assocs alien.syntax columns
 specialized-arrays bit-arrays ;
-specialized-array: double
+SPECIALIZED-ARRAY: double
 IN: benchmark.dispatch3
 
 GENERIC: g ( obj -- str ) ;
@@ -47,4 +47,4 @@ M: object g drop "object" ;
 : dispatch3-benchmark ( -- )
     2000000 objects [ [ g drop ] each ] curry times ;
 
-main: dispatch3-benchmark
+MAIN: dispatch3-benchmark

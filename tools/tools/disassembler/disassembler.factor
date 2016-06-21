@@ -9,7 +9,7 @@ GENERIC: disassemble ( obj -- ) ;
 
 PRIVATE<
 
-symbol: disassembler-backend
+SYMBOL: disassembler-backend
 
 HOOK: disassemble* disassembler-backend ( from to -- lines ) ;
 

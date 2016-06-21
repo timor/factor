@@ -11,7 +11,7 @@ PRIVATE<
 : parse-payload ( data -- remain payload payload-type )
     ":" split1 swap string>number cut unclip swapd ;
 
-defer: parse-tnetstring
+DEFER: parse-tnetstring
 
 : parse-list ( data -- value )
     [ { } ] [
@@ -62,7 +62,7 @@ PRIVATE>
 
 PRIVATE<
 
-defer: dump-tnetstring
+DEFER: dump-tnetstring
 
 : dump ( string type -- string )
     [ [ length ] keep ] dip "%d:%s%s" sprintf ;

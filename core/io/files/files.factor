@@ -9,9 +9,9 @@ PRIVATE<
 PRIMITIVE: (exists?) ( path -- ? ) ;
 PRIVATE>
 
-symbol: +retry+ ! just try the operation again without blocking
-symbol: +input+
-symbol: +output+
+SYMBOL: +retry+ ! just try the operation again without blocking
+SYMBOL: +input+
+SYMBOL: +output+
 
 ! Returns an event to wait for which will ensure completion of
 ! this request
@@ -20,8 +20,8 @@ GENERIC: refill ( port handle -- event/f ) ;
 
 HOOK: wait-for-fd io-backend ( handle event -- ) ;
 
-mixin: file-reader
-mixin: file-writer
+MIXIN: file-reader
+MIXIN: file-writer
 
 M: file-reader stream-element-type drop +byte+ ; inline
 M: file-writer stream-element-type drop +byte+ ; inline

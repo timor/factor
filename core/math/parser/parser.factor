@@ -192,12 +192,12 @@ CONSTANT: min-magnitude-2 -1074 ;
 : <float-parse> ( i number-parse n -- float-parse i number-parse n )
      [ drop nip [ radix>> ] [ magnitude>> ] bi [ 0 f ] dip float-parse boa ] 3keep ; inline
 
-defer: parse-exponent-digit
-defer: parse-mantissa-digit
-defer: parse-denom-digit
-defer: parse-num-digit
-defer: parse-pos-digit
-defer: parse-neg-digit
+DEFER: parse-exponent-digit
+DEFER: parse-mantissa-digit
+DEFER: parse-denom-digit
+DEFER: parse-num-digit
+DEFER: parse-pos-digit
+DEFER: parse-neg-digit
 
 : parse-exponent-digit-or-punc ( float-parse i number-parse n char -- float-parse n/f )
     {

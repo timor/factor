@@ -89,9 +89,9 @@ M: src-printer print-closing-tag ( tag -- )
     name>> write
     ">" write ;
 
-symbol: tab-width
-symbol: #indentations
-symbol: tagstack
+SYMBOL: tab-width
+SYMBOL: #indentations
+SYMBOL: tagstack
 
 : prettyprint-html ( vector -- )
     [

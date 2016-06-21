@@ -2,7 +2,7 @@
 USING: assocs environment kernel sequences ;
 IN: env
 
-singleton: env
+SINGLETON: env
 
 INSTANCE: env assoc ;
 

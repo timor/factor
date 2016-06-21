@@ -26,7 +26,7 @@ M: callable count-inputs [ count-inputs ] map-sum ;
 M: fry-specifier count-inputs drop 1 ;
 M: object count-inputs drop 0 ;
 
-mixin: fried
+MIXIN: fried
 PREDICATE: fried-callable < callable
     count-inputs 0 > ;
 INSTANCE: fried-callable fried ;
@@ -98,7 +98,7 @@ INSTANCE: fried-callable fried ;
     [ [ [ ] ] [ [ ] (make-curry) but-last ] if-zero ]
     [ shallow-spread>quot swap [ [ ] (make-curry) compose ] unless-zero ] if-empty ;
 
-defer: dredge-fry
+DEFER: dredge-fry
 
 TUPLE: dredge-fry-state
     { in-quot read-only }

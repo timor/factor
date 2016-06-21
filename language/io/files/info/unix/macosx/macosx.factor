@@ -6,8 +6,8 @@ io.encodings.utf8 io.files io.files.info io.files.info.unix
 io.files.unix libc kernel math sequences specialized-arrays
 system unix unix.getfsstat.macosx unix.statfs.macosx
 unix.statvfs.macosx ;
-specialized-array: uint
-specialized-array: statfs64
+SPECIALIZED-ARRAY: uint
+SPECIALIZED-ARRAY: statfs64
 IN: io.files.info.unix.macosx
 
 TUPLE: macosx-file-info < unix-file-info birth-time flags gen ;

@@ -9,8 +9,8 @@ compiler.cfg.utilities cpu.architecture fry kernel locals make math
 namespaces sequences words ;
 IN: compiler.cfg.builder
 
-symbol: procedures
-symbol: loops
+SYMBOL: procedures
+SYMBOL: loops
 
 : begin-cfg ( word label -- cfg )
     H{ } clone loops set

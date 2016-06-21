@@ -101,7 +101,7 @@ M: closer process
 
 ! * Views of XML
 
-symbol: text-now?
+SYMBOL: text-now?
 
 : collect-variables ( -- hash )
     {

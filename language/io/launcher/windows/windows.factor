@@ -10,8 +10,8 @@ namespaces prettyprint sequences specialized-arrays splitting
 splitting.monotonic strings system threads windows
 windows.errors windows.handles windows.kernel32 windows.types
 combinators.short-circuit ;
-specialized-array: ushort
-specialized-array: void*
+SPECIALIZED-ARRAY: ushort
+SPECIALIZED-ARRAY: void*
 IN: io.launcher.windows
 
 TUPLE: CreateProcess-args

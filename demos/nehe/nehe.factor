@@ -10,4 +10,4 @@ MAIN-WINDOW: nehe-window { { title "Nehe Examples" } }
         "Nehe 5" [ drop run5 ] <border-button> add-gadget
         >>gadgets ;
 
-main: nehe-window
+MAIN: nehe-window

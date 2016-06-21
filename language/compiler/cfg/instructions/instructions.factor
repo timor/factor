@@ -5,7 +5,7 @@ namespaces ;
 IN: compiler.cfg.instructions
 
 COMPILE<
-symbol: insn-classes
+SYMBOL: insn-classes
 V{ } clone insn-classes set-global
 COMPILE>
 

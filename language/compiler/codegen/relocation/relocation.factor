@@ -5,7 +5,7 @@ compiler.constants kernel make math math.bitwise memoize
 namespaces sequences ;
 IN: compiler.codegen.relocation
 
-symbol: extra-offset  ! Only used by non-optimizing compiler
+SYMBOL: extra-offset  ! Only used by non-optimizing compiler
 
 : compiled-offset ( -- n )
     building get length extra-offset get + ;
@@ -19,16 +19,16 @@ symbol: extra-offset  ! Only used by non-optimizing compiler
 : align-code ( n -- )
     alignment (align-code) ;
 
-symbol: parameter-table
+SYMBOL: parameter-table
 
 : add-parameter ( obj -- ) parameter-table get push ;
 
 ! Literal table
-symbol: literal-table
+SYMBOL: literal-table
 
 : add-literal ( obj -- ) literal-table get push ;
 
-symbol: relocation-table
+SYMBOL: relocation-table
 
 : push-uint ( value vector -- )
     ! If we ever revive PowerPC support again, this needs to be

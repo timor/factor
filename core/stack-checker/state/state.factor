@@ -6,21 +6,21 @@ compiler.units stack-checker.values stack-checker.visitor
 stack-checker.errors ;
 IN: stack-checker.state
 
-symbol: terminated?
+SYMBOL: terminated?
 
-symbol: input-count
-symbol: inner-d-index
+SYMBOL: input-count
+SYMBOL: inner-d-index
 
-defer: commit-literals
+DEFER: commit-literals
 
-symbol: (meta-d)
-symbol: (meta-r)
+SYMBOL: (meta-d)
+SYMBOL: (meta-r)
 
 : meta-d ( -- stack ) commit-literals (meta-d) get ;
 
 : meta-r ( -- stack ) (meta-r) get ;
 
-symbol: literals
+SYMBOL: literals
 
 : (push-literal) ( obj -- )
     dup <literal> make-known

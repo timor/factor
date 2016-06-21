@@ -14,8 +14,8 @@ PRIVATE>
 : touch-unique-file ( path -- )
     normalize-path (touch-unique-file) ;
 
-symbol: unique-length
-symbol: unique-retries
+SYMBOL: unique-length
+SYMBOL: unique-retries
 
 10 unique-length set-global
 10 unique-retries set-global

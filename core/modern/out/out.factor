@@ -8,7 +8,7 @@ sequences.extras sets splitting splitting.monotonic strings
 unicode ;
 in: modern.out
 
-symbol: last-slice
+SYMBOL: last-slice
 
 : replace-whitespace ( string -- string' )
     dup [ "\r\n" member? ] find drop [ tail ] when*
@@ -18,7 +18,7 @@ symbol: last-slice
     [ last-slice get [ swap slice-between ] [ slice-before ] if* replace-whitespace io:write ]
     [ last-slice namespaces:set ] bi ;
 
-defer: write-literal
+DEFER: write-literal
 GENERIC: write-literal ( obj -- ) ;
 ! M: object write-literal lexed-underlying write ;
 M: string write-literal write ;

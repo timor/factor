@@ -10,7 +10,7 @@ FROM: xml.data => tag? ;
 
 IN: wikipedia
 
-symbol: language
+SYMBOL: language
 "en" language set-global
 
 : with-language ( str quot -- )

@@ -4,11 +4,11 @@ combinators destructors gpu gpu.buffers gpu.private gpu.textures
 gpu.textures.private images kernel locals math math.rectangles
 opengl opengl.framebuffers opengl.gl opengl.textures sequences
 specialized-arrays typed ui.gadgets.worlds variants ;
-specialized-array: int
-specialized-array: uint
+SPECIALIZED-ARRAY: int
+SPECIALIZED-ARRAY: uint
 IN: gpu.framebuffers
 
-singleton: system-framebuffer
+SINGLETON: system-framebuffer
 
 TUPLE: renderbuffer < gpu-object
     { component-order component-order initial: RGBA }

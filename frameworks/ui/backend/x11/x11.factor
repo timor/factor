@@ -13,7 +13,7 @@ FROM: libc => system ;
 SPECIALIZED-ARRAYS: uchar ulong ;
 IN: ui.backend.x11
 
-singleton: x11-ui-backend
+SINGLETON: x11-ui-backend
 
 : XA_NET_SUPPORTED ( -- atom ) "_NET_SUPPORTED" x-atom ;
 : XA_NET_WM_NAME ( -- atom ) "_NET_WM_NAME" x-atom ;

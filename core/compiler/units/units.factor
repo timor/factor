@@ -8,8 +8,8 @@ IN: compiler.units
 
 PRIMITIVE: modify-code-heap ( alist update-existing? reset-pics? -- ) ;
 
-symbol: old-definitions
-symbol: new-definitions
+SYMBOL: old-definitions
+SYMBOL: new-definitions
 
 TUPLE: redefine-error def ;
 
@@ -42,7 +42,7 @@ PRIVATE>
         new-definitions get [ in? ] with any? not
     ] [ drop f ] if ;
 
-symbol: compiler-impl
+SYMBOL: compiler-impl
 
 HOOK: update-call-sites compiler-impl ( class generic -- words ) ;
 
@@ -84,7 +84,7 @@ M: f process-forgotten-words drop ;
 
 : <definitions> ( -- pair ) { HS{ } HS{ } } [ clone ] map ;
 
-symbol: definition-observers
+SYMBOL: definition-observers
 
 GENERIC: definitions-changed ( set obj -- ) ;
 

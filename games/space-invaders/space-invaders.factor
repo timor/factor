@@ -8,7 +8,7 @@ locals math math.order openal openal.alut opengl.gl sequences
 specialized-arrays ui ui.gadgets ui.gestures ui.render ;
 qualified: threads
 qualified: system
-specialized-array: uchar
+SPECIALIZED-ARRAY: uchar
 IN: space-invaders
 
 TUPLE: space-invaders < cpu
@@ -375,4 +375,4 @@ CONSTANT: rom-info {
         "Space Invaders" <space-invaders> rom-info run-rom
     ] with-ui ;
 
-main: run-invaders
+MAIN: run-invaders

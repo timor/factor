@@ -8,7 +8,7 @@ IN: irc.messages.base
 TUPLE: irc-message line prefix command parameters trailing timestamp sender ;
 TUPLE: unhandled < irc-message ;
 
-symbol: string-irc-type-mapping
+SYMBOL: string-irc-type-mapping
 string-irc-type-mapping [ H{ } clone ] initialize
 
 : register-irc-message-type ( type string -- )

@@ -2,7 +2,7 @@ USING: threads concurrency.messaging kernel
 tools.time math sequences ;
 IN: benchmark.ring
 
-symbol: done
+SYMBOL: done
 
 : tunnel ( process -- process )
     receive 2dup swap send done eq? [ tunnel ] unless ;
@@ -24,4 +24,4 @@ symbol: done
 : ring-benchmark ( -- )
     1000 1000 ring-bench ;
 
-main: ring-benchmark
+MAIN: ring-benchmark

@@ -39,7 +39,7 @@ ifs elifs elses ;
         V{ } clone >>elifs
         V{ } clone >>elses ;
 
-defer: preprocess-file
+DEFER: preprocess-file
 
 ERROR: unknown-c-preprocessor sequence-parser name ;
 

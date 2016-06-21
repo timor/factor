@@ -5,19 +5,19 @@ combinators.short-circuit io io.binary io.encodings kernel
 literals locals math namespaces sequences simple-flat-file ;
 IN: io.encodings.iso2022
 
-singleton: iso2022
+SINGLETON: iso2022
 
 PRIVATE<
 
-symbol: jis201
-symbol: jis208
-symbol: jis212
+SYMBOL: jis201
+SYMBOL: jis208
+SYMBOL: jis212
 
 "vocab:io/encodings/iso2022/201.txt" flat-file>biassoc jis201 set-global
 "vocab:io/encodings/iso2022/208.txt" flat-file>biassoc jis208 set-global
 "vocab:io/encodings/iso2022/212.txt" flat-file>biassoc jis212 set-global
 
-symbol: ascii
+SYMBOL: ascii
 128 iota dup zip >biassoc ascii set-global
 
 TUPLE: iso2022-state type ;

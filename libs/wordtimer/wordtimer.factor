@@ -3,8 +3,8 @@ math.statistics namespaces prettyprint sequences sorting
 tools.annotations tools.time vocabs ;
 IN: wordtimer
 
-symbol: *wordtimes*
-symbol: *calling*
+SYMBOL: *wordtimes*
+SYMBOL: *calling*
 
 : reset-word-timer ( -- )
     H{ } clone *wordtimes* set-global

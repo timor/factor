@@ -9,4 +9,4 @@ IN: benchmark.e-ratios
 : e-ratios-benchmark ( -- )
     5 [ 300 calculate-e-ratios drop ] times ;
 
-main: e-ratios-benchmark
+MAIN: e-ratios-benchmark

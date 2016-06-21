@@ -5,7 +5,7 @@ sequences ;
 IN: lists
 
 ! List Protocol
-mixin: list
+MIXIN: list
 GENERIC: car ( cons -- car ) ;
 GENERIC: cdr ( cons -- cdr ) ;
 GENERIC: nil? ( object -- ?   ) ;
@@ -18,7 +18,7 @@ M: cons-state car ( cons -- car ) car>> ;
 
 M: cons-state cdr ( cons -- cdr ) cdr>> ;
 
-singleton: +nil+
+SINGLETON: +nil+
 M: +nil+ nil? drop t ;
 M: object nil? drop f ;
 

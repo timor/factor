@@ -57,7 +57,7 @@ TYPED: write-cstring ( string: string -- )
 TYPED: write-header ( name: string object type: integer -- object )
     write1 [ write-cstring ] dip ; inline
 
-defer: write-pair
+DEFER: write-pair
 
 TYPED: write-byte-array ( binary: byte-array -- )
     [ length write-int32 ]

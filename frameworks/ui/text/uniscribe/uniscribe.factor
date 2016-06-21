@@ -4,7 +4,7 @@ USING: accessors assocs cache kernel math math.vectors sequences
 fonts namespaces ui.text ui.text.private windows.uniscribe ;
 IN: ui.text.uniscribe
 
-singleton: uniscribe-renderer
+SINGLETON: uniscribe-renderer
 
 M: uniscribe-renderer string-dim
     [ " " string-dim { 0 1 } v* ]

@@ -28,4 +28,4 @@ IN: tools.grep
         ] if-empty
     ] if-empty ;
 
-main: run-grep
+MAIN: run-grep

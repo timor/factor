@@ -87,7 +87,7 @@ ERROR: invalid-primitive vocabulary word effect ;
 : target-word ( word -- target )
     [ name>> ] [ vocabulary>> ] bi lookup-word ;
 
-symbol: bootstrapping?
+SYMBOL: bootstrapping?
 
 : if-bootstrapping ( true false -- )
     [ bootstrapping? get ] 2dip if ; inline

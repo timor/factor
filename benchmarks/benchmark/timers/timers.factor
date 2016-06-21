@@ -1,9 +1,9 @@
 USING: concurrency.flags kernel math namespaces timers ;
 IN: benchmark.timers
 
-symbol: loop-flag
-symbol: loop-count
-symbol: loop-max
+SYMBOL: loop-flag
+SYMBOL: loop-count
+SYMBOL: loop-max
 
 : inner-loop ( -- )
     loop-count counter loop-max get-global > [
@@ -21,4 +21,4 @@ symbol: loop-max
 : timers-benchmark ( -- )
     20,000 [ outer-loop ] [ loop-max get-global assert= ] bi ;
 
-main: timers-benchmark
+MAIN: timers-benchmark

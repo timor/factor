@@ -6,8 +6,8 @@ sequences.private strings ;
 IN: io.streams.sequence
 
 ! Readers
-slot: underlying
-slot: i
+SLOT: underlying
+SLOT: i
 
 : >sequence-stream< ( stream -- i underlying )
     [ i>> ] [ underlying>> ] bi ; inline

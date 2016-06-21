@@ -3,7 +3,7 @@
 USING: accessors alien.c-types arrays assocs binary-search
 combinators fry grouping kernel locals make math math.order
 sequences sequences.private sorting specialized-arrays ;
-specialized-array: uint
+SPECIALIZED-ARRAY: uint
 IN: interval-sets
 ! Sets of positive integers
 

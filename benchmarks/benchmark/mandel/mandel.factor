@@ -34,4 +34,4 @@ IN: benchmark.mandel
 : mandel-benchmark ( -- )
     "mandel.ppm" temp-file binary [ ppm-header render ] with-file-writer ;
 
-main: mandel-benchmark
+MAIN: mandel-benchmark
