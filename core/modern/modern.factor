@@ -228,7 +228,7 @@ ERROR: closing-delimiter-required opening-delimiter ;
         tag closing [ dup tag-literal? [ lexed-underlying ] when ] bi@ ?span-slices >>underlying
         opening-delimiter >string >>delimiter
 
-        closing dup tag-literal? [ tag>> ] when >string >>closing-tag
+        closing dup tag-literal? [ tag>> ] when >string f like >>closing-tag
 
         ! PRIVATE< PRIVATE>
         dup less-than-literal? [
