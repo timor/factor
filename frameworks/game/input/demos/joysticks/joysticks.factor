@@ -32,7 +32,7 @@ CONSTANT: pov-polygons
         { pov-down-left  { { 67 90 } { 60 90 } { 60 83 } } }
         { pov-left       { { 65 70 } { 60 75 } { 65 80 } } }
         { pov-up-left    { { 67 60 } { 60 60 } { 60 67 } } }
-    }
+    } ;
 
 : <indicator-gadget> ( color -- indicator )
     indicator-polygon <polygon-gadget> ;

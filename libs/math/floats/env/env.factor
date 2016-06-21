@@ -26,7 +26,7 @@ CONSTANT: all-fp-exceptions
         +fp-underflow+
         +fp-zero-divide+
         +fp-inexact+
-    }
+    } ;
 
 SINGLETONS:
     +round-nearest+

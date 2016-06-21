@@ -18,7 +18,7 @@ CONSTANT: light
         -0.8017837257372732
         0.5345224838248488
         0.0
-    }
+    } ;
 
 CONSTANT: oversampling 4 ;
 
@@ -122,7 +122,7 @@ CONSTANT: create-offsets
         double-4{ 1.0 1.0 -1.0 0.0 }
         double-4{ -1.0 1.0 1.0 0.0 }
         double-4{ 1.0 1.0 1.0 0.0 }
-    }
+    } ;
 
 : create-bound ( c r -- sphere ) 3.0 * <sphere> ;
 

@@ -35,7 +35,7 @@ CONSTANT: IUB
         { char: V 0.02 }
         { char: W 0.02 }
         { char: Y 0.02 }
-    }
+    } ;
 
 CONSTANT: homo-sapiens
     {
@@ -43,7 +43,7 @@ CONSTANT: homo-sapiens
         { char: c 0.1979883004921 }
         { char: g 0.1975473066391 }
         { char: t 0.3015094502008 }
-    }
+    } ;
 
 TYPED: make-cumulative ( freq -- chars: byte-array floats: double-array )
     [ keys >byte-array ]
