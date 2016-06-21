@@ -366,17 +366,17 @@ TYPEDEF: ACCEL* LPACCEL ;
 TYPEDEF: DWORD COLORREF ;
 TYPEDEF: DWORD* LPCOLORREF ;
 
-: RGB ( r g b -- COLORREF )
+: rgb ( r g b -- COLORREF )
     { 16 8 0 } bitfield ; inline
-: >RGB< ( COLORREF -- r g b )
+: >rgb< ( COLORREF -- r g b )
     [           0xff bitand ]
     [  -8 shift 0xff bitand ]
     [ -16 shift 0xff bitand ] tri ;
 
-: color>RGB ( color -- COLORREF )
-    >rgba-components drop [ 255 * >integer ] tri@ RGB ;
-: RGB>color ( COLORREF -- color )
-    >RGB< [ 1/255. * >float ] tri@ 1.0 <rgba> ;
+: color>rgb ( color -- COLORREF )
+    >rgba-components drop [ 255 * >integer ] tri@ rgb ;
+: rgb>color ( COLORREF -- color )
+    >rgb< [ 1/255. * >float ] tri@ 1.0 <rgba> ;
 
 STRUCT: TEXTMETRICW
     { tmHeight LONG }

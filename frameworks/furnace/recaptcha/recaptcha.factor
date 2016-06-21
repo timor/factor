@@ -23,7 +23,7 @@ PRIVATE<
 
 : (render-recaptcha) ( url -- xml )
     dup
-    XML[[
+    XML-CHUNK[[
         <script type="text/javascript"
            src=<->>
         </script>
@@ -36,7 +36,7 @@ PRIVATE<
            <input type="hidden" name="recaptcha_response_field"
                value="manual_challenge"/>
         </noscript>
-    XML]] ;
+    ]] ;
 
 : recaptcha-url ( secure? -- ? )
     "https" "http" ? "://www.google.com/recaptcha/api/challenge" append

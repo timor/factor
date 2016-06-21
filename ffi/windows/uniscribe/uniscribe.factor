@@ -48,8 +48,8 @@ CONSTANT: ssa-dwFlags flags{ SSA_GLYPHS SSA_FALLBACK SSA_TAB } ;
     [ check-ole32-error ] [ |ScriptStringFree void* deref ] bi* ;
 
 : set-dc-colors ( dc font -- )
-    [ background>> color>RGB SetBkColor drop ]
-    [ foreground>> color>RGB SetTextColor drop ] 2bi ;
+    [ background>> color>rgb SetBkColor drop ]
+    [ foreground>> color>rgb SetTextColor drop ] 2bi ;
 
 : selection-start/end ( script-string -- iMinSel iMaxSel )
     string>> dup selection? [ [ start>> ] [ end>> ] bi ] [ drop 0 0 ] if ;

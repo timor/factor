@@ -1,11 +1,11 @@
 USING: compiler.tree help.markup help.syntax kernel ;
 in: compiler.tree.debugger
 
-HELP: >R
+HELP: >r
 { $description "Symbol in the debugger to show that the top datastack item is moved to the retainstack." } ;
 
-HELP: R>
-{ $description "Symbol in the debugger to show that the top retainstack item os moved to the datastack." } ;
+HELP: r>
+{ $description "Symbol in the debugger to show that the top retainstack item is moved to the datastack." } ;
 
 HELP: #>r?
 { $values { "#shuffle" #shuffle } { "?" boolean } }

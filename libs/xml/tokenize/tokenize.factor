@@ -153,7 +153,7 @@ HINTS: next* { spot } ;
     512 <sbuf> [ spot get (parse-char) ] keep "" like ; inline
 
 : assure-no-terminator ( pos char -- pos' )
-    "]]>" next-matching dup 2 > [ text-w/terminatorl ] when ; inline
+    "]]>" next-matching dup 2 > [ text-w/terminator ] when ; inline
 
 :: parse-text ( -- string )
     depth get zero? :> no-text

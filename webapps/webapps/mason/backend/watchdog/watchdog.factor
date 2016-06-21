@@ -5,8 +5,8 @@ mason.email webapps.mason.backend ;
 IN: webapps.mason.backend.watchdog
 
 : crashed-builder-body ( crashed-builders -- string content-type )
-    [ os/cpu XML[[ <li><-></li> XML]] ] map
-    <XML
+    [ os/cpu XML-CHUNK[[ <li><-></li> ]] ] map
+    XML-DOC[[
         <html>
             <body>
                 <p>Machines which are not sending heartbeats:</p>
@@ -14,7 +14,7 @@ IN: webapps.mason.backend.watchdog
                 <a href="http://builds.factorcode.org/dashboard">Dashboard</a>
             </body>
         </html>
-    XML> xml>string
+    ]] xml>string
     "text/html" ;
 
 : s ( n before after -- string )

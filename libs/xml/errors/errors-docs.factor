@@ -75,11 +75,11 @@ HELP: bad-cdata
 { $class-description "Describes the error where CDATA is used outside of the main tag of an XML document." }
 { $xml-error "<x>y</x>\n<![CDATA[]]>" } ;
 
-HELP: text-w/]]>
+HELP: text-w/terminator
 { $class-description "Describes the error where a text node contains the literal string " { $snippet "]]>" } " which is disallowed." }
 { $xml-error "<x>Here's some text: ]]> there it was</x>" } ;
 
-HELP: attr-w/<
+HELP: attr-w/lt
 { $class-description "Describes the error where an attribute value contains the literal character " { $snippet "<" } " which is disallowed." }
 { $xml-error "<x value='bar<baz'/>" } ;
 
@@ -111,8 +111,8 @@ ARTICLE: "xml.errors" "XML parsing errors"
     unexpected-end
     duplicate-attr
     bad-cdata
-    text-w/]]>
-    attr-w/<
+    text-w/terminator
+    attr-w/lt
     misplaced-directive
 }
 "Additionally, most of these errors are a kind of " { $link xml-error } " which provides more information about where the error occurred."

@@ -53,33 +53,33 @@ PRIVATE>
 ! Condition codes
 symbol: cond-code
 
-: >CC ( n -- )
+: n>CC ( n -- )
     cond-code set ;
 
-: CC> ( -- n )
+: CC>n ( -- n )
     ! Default value is 0b1110 AL (= always)
     cond-code [ f ] change 0b1110 or ;
 
-: EQ ( -- ) 0b0000 >CC ;
-: NE ( -- ) 0b0001 >CC ;
-: CS ( -- ) 0b0010 >CC ;
-: CC ( -- ) 0b0011 >CC ;
-: LO ( -- ) 0b0100 >CC ;
-: PL ( -- ) 0b0101 >CC ;
-: VS ( -- ) 0b0110 >CC ;
-: VC ( -- ) 0b0111 >CC ;
-: HI ( -- ) 0b1000 >CC ;
-: LS ( -- ) 0b1001 >CC ;
-: GE ( -- ) 0b1010 >CC ;
-: LT ( -- ) 0b1011 >CC ;
-: GT ( -- ) 0b1100 >CC ;
-: LE ( -- ) 0b1101 >CC ;
-: AL ( -- ) 0b1110 >CC ;
-: NV ( -- ) 0b1111 >CC ;
+: EQ ( -- ) 0b0000 n>CC ;
+: NE ( -- ) 0b0001 n>CC ;
+: CS ( -- ) 0b0010 n>CC ;
+: CC ( -- ) 0b0011 n>CC ;
+: LO ( -- ) 0b0100 n>CC ;
+: PL ( -- ) 0b0101 n>CC ;
+: VS ( -- ) 0b0110 n>CC ;
+: VC ( -- ) 0b0111 n>CC ;
+: HI ( -- ) 0b1000 n>CC ;
+: LS ( -- ) 0b1001 n>CC ;
+: GE ( -- ) 0b1010 n>CC ;
+: LT ( -- ) 0b1011 n>CC ;
+: GT ( -- ) 0b1100 n>CC ;
+: LE ( -- ) 0b1101 n>CC ;
+: AL ( -- ) 0b1110 n>CC ;
+: NV ( -- ) 0b1111 n>CC ;
 
 PRIVATE<
 
-: (insn) ( n -- ) CC> 28 shift bitor , ;
+: (insn) ( n -- ) CC>n 28 shift bitor , ;
 
 : insn ( bitspec -- ) bitfield (insn) ; inline
 
@@ -102,12 +102,12 @@ PRIVATE>
 
 : S ( -- ) updates-cond-code on ;
 
-: S> ( -- ? ) updates-cond-code [ f ] change ;
+: S>? ( -- ? ) updates-cond-code [ f ] change ;
 
 PRIVATE<
 
 : sinsn ( bitspec -- )
-    bitfield S> [ 20 2^ bitor ] when (insn) ; inline
+    bitfield S>? [ 20 2^ bitor ] when (insn) ; inline
 
 GENERIC#: shift-imm/reg 2 ( shift-imm/Rs Rm shift -- n ) ;
 

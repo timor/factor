@@ -10,13 +10,13 @@ in: compiler.tree.modular-arithmetic.tests
 : test-modular-arithmetic ( quot -- quot' )
     cleaned-up-tree nodes>quot ;
 
-{ [ >R >fixnum R> >fixnum fixnum+fast ] }
+{ [ >r >fixnum r> >fixnum fixnum+fast ] }
 [ [ { integer integer } declare + >fixnum ] test-modular-arithmetic ] unit-test
 
 { [ +-integer-integer dup >fixnum ] }
 [ [ { integer integer } declare + dup >fixnum ] test-modular-arithmetic ] unit-test
 
-{ [ >R >fixnum R> >fixnum fixnum+fast 4 fixnum*fast ] }
+{ [ >r >fixnum r> >fixnum fixnum+fast 4 fixnum*fast ] }
 [ [ { integer integer } declare + 4 * >fixnum ] test-modular-arithmetic ] unit-test
 
 TUPLE: declared-fixnum { x fixnum } ;
@@ -144,7 +144,7 @@ TUPLE: declared-fixnum { x fixnum } ;
 { [ drop 0 ] }
 [ [ >integer 1 mod ] test-modular-arithmetic ] unit-test
 
-{ [ >fixnum 255 >R R> fixnum-bitand ] }
+{ [ >fixnum 255 >r r> fixnum-bitand ] }
 [ [ >integer 256 rem ] test-modular-arithmetic ] unit-test
 
 { t } [
