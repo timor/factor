@@ -120,3 +120,6 @@ in: modern.tests
     "foo<{ ptx-2op-instruction ptx-float-ftz }" string>literals
     [ length ] [ first single-matched-literal? ] [ first tag>> ] tri
 ] unit-test
+
+{ 1 }
+[ "PRIVATE< OMG:  PRIVATE>" string>literals length ] unit-test

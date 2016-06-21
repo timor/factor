@@ -159,6 +159,19 @@ M: array collapse-decorators
         drop f
     ] if ;
 
+: top-level-greater-than? ( string -- ? )
+    dup { [ ">" tail? ] [ length 1 > ] } 1&& [
+        but-last
+        dup length 1 > [
+            [ [ char: \: = ] find-last ] keep
+            swap [ swap tail strict-upper? ] [ nip strict-upper? ] if
+        ] [
+            ">" sequence=
+        ] if
+    ] [
+        drop f
+    ] if ;
+
 : top-level-name? ( string -- ? )
     { [ top-level-colon? ] [ top-level-less-than? ] } 1|| ;
 
@@ -342,8 +355,6 @@ MACRO:: read-matched ( ch -- quot: ( lexer tag -- slice' ) )
     tag 1 cut-slice* dquote-literal make-matched-literal
     [ >string ] change-payload ;
 
-
-
 ERROR: cannot-nest-upper-colon n string string' ;
 : read-upper-colon ( lexer string' -- obj/f )
     over peek-tag top-level-colon? [
@@ -430,11 +441,22 @@ ERROR: backslash-expects-whitespace slice ;
     [ nip make-tag-literal ] if-empty ;
 
 ERROR: mismatched-terminator lexer slice ;
-: read-terminator ( lexer slice -- slice )
+: read-terminator ( lexer slice -- slice/f )
     2dup [ dup peek-tag ] dip delimiters-match? [
         nip terminator-literal make-tag-class-literal
     ] [
-        mismatched-terminator
+        roll-back-lexer f
+    ] if ;
+
+: gt-terminator ( lexer slice -- slice/f )
+    dupd merge-lex-til-whitespace dup top-level-greater-than? [
+        2dup [ dup peek-tag ] dip delimiters-match? [
+            nip terminator-literal make-tag-class-literal
+        ] [
+            roll-back-lexer f
+        ] if
+    ] [
+        nip make-tag-literal
     ] if ;
 
 : ?blank? ( ch/f -- blank/f )
@@ -506,6 +528,7 @@ CONSTANT: factor-lexing-rules {
     T{ terminator-lexer { generator read-terminator } { delimiter char: \] } }
     T{ terminator-lexer { generator read-terminator } { delimiter char: \} } }
     T{ terminator-lexer { generator read-terminator } { delimiter char: \) } }
+    T{ terminator-lexer { generator gt-terminator } { delimiter char: \> } }
     
     T{ whitespace-lexer { generator read-token-or-whitespace } { delimiter char: \s } }
     T{ whitespace-lexer { generator read-token-or-whitespace } { delimiter char: \r } }
