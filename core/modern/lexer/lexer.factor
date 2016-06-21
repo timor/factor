@@ -57,18 +57,19 @@ ERROR: unexpected-end n string ;
         f string f f
     ] if ; inline
 
+! ":foo" with partial>> slot broke this
 :: lex-til-either ( lexer tokens -- n'/f string' slice/f ch/f )
     lexer >lexer<
     lexer partial>> :> partial
     partial [
-        [ 1 - ] dip
+        [ dup [ 1 - ] when ] dip
         f lexer partial<<
     ] when
     tokens slice-til-either :> ( n' string' slice ch )
     lexer
         n' >>n drop
     n' string'
-    slice partial [ merge-slices ] when*
+    slice partial 2dup and [ merge-slices ] [ or ] if
     ch ;
 
 

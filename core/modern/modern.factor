@@ -381,7 +381,7 @@ ERROR: cannot-nest-upper-colon n string string' ;
         { [ dup [ char: \: = ] all? ] [ read-upper-colon ] }
         { [ dup { [ ":" head? ] [ ":" tail? ] } 1&& ] [ nip make-tag-literal ] }
         { [ dup ":" tail? ] [ dup top-level-name? [ read-upper-colon ] [ read-lower-colon ] if ] }
-        { [ dup ":" head? ] [ nip make-tag-literal ] } ! :foo( ... )
+        { [ dup ":" head? ] [ >>partial lex-factor ] } ! :foo( ... )
         [ nip make-tag-literal ]
     } cond ;
 

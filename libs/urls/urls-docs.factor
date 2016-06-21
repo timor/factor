@@ -35,7 +35,7 @@ HELP: >url
     }
 } ;
 
-HELP: URL"
+HELP: \ URL"
 { $syntax "URL\" url...\"" }
 { $description "URL literal syntax." }
 { $examples
@@ -189,7 +189,7 @@ $nl
 "URLs can be converted back to strings using the " { $link present } " word."
 $nl
 "URL literal syntax:"
-{ $subsections postpone\ URL" }
+{ $subsections \ URL" }
 "Manipulating URLs:"
 { $subsections
     derive-url

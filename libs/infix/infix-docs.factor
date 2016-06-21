@@ -3,7 +3,7 @@
 USING: help.syntax help.markup math math.functions prettyprint locals sequences ;
 in: infix
 
-HELP: infix[[
+HELP: \ infix[[
 { $syntax "infix[[ ... ]]" }
 { $description "Parses the infix code inside the brackets, converts it to stack code and executes it." }
 { $examples

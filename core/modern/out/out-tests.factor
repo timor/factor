@@ -72,3 +72,5 @@ in: modern.out.tests
 { t } [ "![==[]==]" rewrite-same-string ] unit-test
 { t } [ "lol[==[abc]==]" rewrite-same-string ] unit-test
 { t } [ "![==[abc]==]" rewrite-same-string ] unit-test
+
+{ t } [ "( :union{ fixnum bignum } -- )" rewrite-same-string ] unit-test

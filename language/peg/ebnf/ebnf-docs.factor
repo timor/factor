@@ -3,7 +3,7 @@
 USING: help.syntax help.markup peg peg.search words ;
 in: peg.ebnf
 
-HELP: EBNF-MAIN{{
+HELP: \ EBNF-MAIN{{
 { $syntax "EBNF-MAIN{{ ...ebnf... }}" }
 { $values { "...ebnf..." "EBNF DSL text" } }
 { $description
@@ -20,7 +20,7 @@ HELP: EBNF-MAIN{{
     }
 } ;
 
-HELP: EBNF{{
+HELP: \ EBNF{{
 { $syntax "EBNF{{ ...ebnf... }}" }
 { $values { "...ebnf..." "EBNF DSL text" } }
 { $description
