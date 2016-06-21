@@ -49,7 +49,7 @@ CONSTANT: key-- 0x002d ;
 CONSTANT: key-= 0x002e ;
 CONSTANT: key-lbracket 0x002f ;
 CONSTANT: key-rbracket 0x0030 ;
-CONSTANT: key-\ 0x0031 ;
+CONSTANT: key-backslash 0x0031 ;
 CONSTANT: key-#-non-us 0x0032 ;
 CONSTANT: key-semi 0x0033 ;
 CONSTANT: key-' 0x0034 ;
