@@ -6,7 +6,7 @@ generalizations io.encodings.utf8 io.files kernel locals macros
 make math math.order modern.lexer modern.paths modern.slices
 multiline namespaces quotations sequences sequences.extras
 shuffle splitting splitting.extras splitting.monotonic strings
-unicode ;
+unicode vocabs.loader ;
 IN: modern
 
 COMPILE<
@@ -549,7 +549,7 @@ CONSTANT: factor-lexing-rules {
 
 : vocab>literals ( vocab -- sequence )
     ".private" ?tail drop
-    modern-source-path path>literals ;
+    vocab-source-path path>literals ;
 
 
 ! What a lexer body looks like, produced by make-lexer

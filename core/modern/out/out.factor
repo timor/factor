@@ -211,14 +211,7 @@ M: compound-sequence-literal write-literal
     [ string>literals ] dip '[ _ map-literals ] map write-modern-string ; inline
 
 : rewrite-paths ( seq quot -- ) '[ _ rewrite-path ] each ; inline
-: lexable-core-paths ( -- seq ) core-source-paths ;
-: lexable-basis-paths ( -- seq )
-    basis-source-paths {
-    } diff ;
 
-: lexable-extra-paths ( -- seq )
-    extra-source-paths {
-    } diff ;
 
 /*
 ! These work except they use pegs/ebnf, grep for [[ ]]
@@ -231,13 +224,6 @@ M: compound-sequence-literal write-literal
 	modified:   extra/rosetta-code/arithmetic-evaluation/arithmetic-evaluation.factor
 	modified:   extra/shell/parser/parser.factor
 */
-
-: lexable-paths ( -- seq )
-    [
-        lexable-core-paths
-        lexable-basis-paths
-        lexable-extra-paths
-    ] append-outputs ;
 
 : paren-word>tick-word ( string -- string' )
     dup [ "(" ?head drop ")" ?tail drop "'" append ] [ ] if ;
@@ -259,7 +245,6 @@ M: compound-sequence-literal write-literal
     ] when ;
 
 : transform-source ( quot -- )
-    lexable-paths swap rewrite-paths ; inline
+    all-paths swap rewrite-paths ; inline
 
-: transform-core ( quot -- )
-    lexable-core-paths swap rewrite-paths ; inline
+! : transform-core ( quot -- ) lexable-core-paths swap rewrite-paths ; inline
