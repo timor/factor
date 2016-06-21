@@ -150,7 +150,7 @@ M: array collapse-decorators
     ] if ;
 
 : top-level-less-than? ( string -- ? )
-    dup "<" tail? [
+    dup { [ "<" tail? ] [ length 1 > ] [ first char: A char: Z between? ] } 1&& [
         but-last
         dup length 1 > [
             [ [ char: \: = ] find-last ] keep
