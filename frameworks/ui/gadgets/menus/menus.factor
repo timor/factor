@@ -47,7 +47,7 @@ M: ---- <menu-item>
     <menu-items>
     { 0 3 } >>gap
     margins
-    menu-border-color <solid> >>boundary 
+    menu-border-color <solid> >>boundary
     menu-background <solid> >>interior ;
 
 : <commands-menu> ( target hook commands -- menu )

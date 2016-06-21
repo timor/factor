@@ -14,7 +14,7 @@ FUNCTION: udev* udev_ref ( udev* udev ) ;
 
 FUNCTION: void udev_unref ( udev* udev ) ;
 
-FUNCTION: udev* udev_new ( ) ; 
+FUNCTION: udev* udev_new ( ) ;
 
 CALLBACK: void udev_set_log_fn_callback (
     udev* udev

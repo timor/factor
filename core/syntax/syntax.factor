@@ -50,7 +50,7 @@ IN: bootstrap.syntax
 
 : define-fry-specifiers ( names -- )
     [ define-dummy-fry ] map
-    dup [ define-fry-specifier ] curry each ; 
+    dup [ define-fry-specifier ] curry each ;
 
 [
     { "]" "}" ";" ">>" "COMPILE>" } [ define-delimiter ] each

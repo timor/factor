@@ -282,7 +282,7 @@ ERROR: word-expects-name-effect-body payload ;
     [ first2 ensure-stack-effect ] [ 2 tail ] bi ;
 
 : body>quotation ( body namespace -- quot )
-    2drop [ ] 
+    2drop [ ]
     ;
 
 M:: word' definition>quotation ( namespace name definition -- quot )

@@ -14,7 +14,7 @@ SYMBOLS:
     software-rendered
     backing-store
     multisampled
-    supersampled 
+    supersampled
     sample-alpha
     color-float ;
 

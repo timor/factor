@@ -40,7 +40,7 @@ slot: scroller
 : com-scroll-down ( tool -- )
     scroller>> scroll-down-line ;
 
-: margins ( child -- border ) 
+: margins ( child -- border )
     { 9 9 } <filled-border> ;
 
 : with-lines ( track -- track )
