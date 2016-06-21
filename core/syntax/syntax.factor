@@ -58,28 +58,28 @@ IN: bootstrap.syntax
     { "_" "@" } define-fry-specifiers
     ! "@" [ "Only valid inside a fry" throw ] ( -- * ) define-fry-specifier
 
-     "![[" [
+    "![[" [
         "]]" parse-multiline-string drop
     ] define-core-syntax
 
-     "![=[" [
+    "![=[" [
         "]=]" parse-multiline-string drop
     ] define-core-syntax
 
-     "![==[" [
+    "![==[" [
         "]==]" parse-multiline-string drop
     ] define-core-syntax
 
 
-     "[[" [
+    "[[" [
         "]]" parse-multiline-string suffix!
     ] define-core-syntax
 
-     "[=[" [
+    "[=[" [
         "]=]" parse-multiline-string suffix!
     ] define-core-syntax
 
-     "[==[" [
+    "[==[" [
         "]==]" parse-multiline-string suffix!
     ] define-core-syntax
 
