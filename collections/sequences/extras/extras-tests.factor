@@ -227,4 +227,3 @@ in: sequences.extras.tests
 
 { }
 [ "test:" all-words [ name>> over prepend ] map-zip 2drop ] unit-test
-

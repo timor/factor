@@ -32,4 +32,3 @@ specialized-array: int
     ] must-fail
 
 ] with-test-directory
-

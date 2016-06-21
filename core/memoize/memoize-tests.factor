@@ -40,4 +40,3 @@ unit-test
     [ MEMO[ seconds sleep ] each ] benchmark
     0.18e9 0.25e9 between?
 ] unit-test
-
