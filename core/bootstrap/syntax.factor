@@ -14,6 +14,7 @@ IN: bootstrap.syntax
         "![[" "![=[" "![==["
         "[[" "[=[" "[==["
         "factor[[" "factor[=[" "factor[==["
+        "factor\""
         "PRIVATE<"
         "B{"
         "BV{"

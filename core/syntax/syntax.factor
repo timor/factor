@@ -83,6 +83,11 @@ IN: bootstrap.syntax
         "]==]" parse-multiline-string suffix!
     ] define-core-syntax
 
+    ! Different from parse-multiline-string
+    "factor\"" [
+        lexer get skip-blank parse-string suffix!
+    ] define-core-syntax
+
     "factor[[" [
         "]]" parse-multiline-string suffix!
     ] define-core-syntax
