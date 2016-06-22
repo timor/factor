@@ -6,7 +6,7 @@ ARTICLE: "etags" "Etags file"
 { $subsections
     etags
     write-etags
-}
+} ;
 
 HELP: write-etags
 { $values { "path" string } }

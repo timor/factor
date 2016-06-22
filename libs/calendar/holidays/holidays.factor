@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs calendar fry kernel locals parser
-sequences vocabs words memoize ;
+sequences vocabs words memoize lexer ;
 IN: calendar.holidays
 
 SINGLETONS: all world commonwealth-of-nations ;
