@@ -630,7 +630,7 @@ M: bogus-hashcode-1 hashcode* 2drop 0 >bignum ;
 
 { } [ T{ bogus-hashcode-2 f T{ bogus-hashcode-1 } } hashcode drop ] unit-test
 
-defer: change-slot-test
+DEFER: change-slot-test
 slot: kex
 
 { } [
@@ -658,7 +658,7 @@ slot: kex
 { t } [ \ change-slot-test \ kex>> ?lookup-method >boolean ] unit-test
 { f } [ \ change-slot-test \ kex>> ?lookup-method "reading" word-prop ] unit-test
 
-defer: redefine-tuple-twice
+DEFER: redefine-tuple-twice
 
 { } [ "in: classes.tuple.tests TUPLE: redefine-tuple-twice ;" eval( -- ) ] unit-test
 
@@ -752,7 +752,7 @@ TUPLE: g < a-g ;
 { t } [ g new layout-of "g" get layout-of eq? ] unit-test
 
 ! Joe Groff discovered this bug
-defer: factor-crashes-anymore
+DEFER: factor-crashes-anymore
 
 { } [
     "in: classes.tuple.tests
@@ -816,7 +816,7 @@ COMPILE< \ rclasstest forget COMPILE>
 ! initial: should type check
 TUPLE: initial-class ;
 
-defer: initial-slot
+DEFER: initial-slot
 
 { } [ "in: classes.tuple.tests TUPLE: initial-slot { x initial-class } ;" eval( -- ) ] unit-test
 

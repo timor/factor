@@ -92,7 +92,7 @@ unit-test
 ! Funny bug
 { 2 } [ "IN: parser.tests : \0. ( -- x ) 2 ; \0." eval( -- n ) ] unit-test
 
-defer: foo
+DEFER: foo
 
 "IN: parser.tests USING: math prettyprint ; SYNTAX: foo 2 2 + . ;" eval( -- )
 
@@ -483,7 +483,7 @@ defer: foo
 ] must-fail-with
 
 ! Bogus error message
-defer: blahy
+DEFER: blahy
 
 [ "IN: parser.tests USE: kernel TUPLE: blahy < tuple ; : blahy ( -- ) ; TUPLE: blahy < tuple ; : blahy ( -- ) ;" eval( -- ) ]
 [ error>> error>> def>> \ blahy eq? ] must-fail-with
@@ -496,7 +496,7 @@ SYMBOLS: a b c ;
 { b } [ b ] unit-test
 { c } [ c ] unit-test
 
-defer: blah
+DEFER: blah
 
 { } [ "IN: parser.tests GENERIC: blah ( x -- x ) ;" eval( -- ) ] unit-test
 { } [ "IN: parser.tests SYMBOLS: blah ;" eval( -- ) ] unit-test
@@ -504,7 +504,7 @@ defer: blah
 { f } [ \ blah generic? ] unit-test
 { t } [ \ blah symbol? ] unit-test
 
-defer: blah1
+DEFER: blah1
 
 [ "IN: parser.tests SINGLETONS: blah1 blah1 blah1 ;" eval( -- ) ]
 [ error>> error>> def>> \ blah1 eq? ]

@@ -144,7 +144,7 @@ PROTOCOL: silly-protocol do-me ;
 [ T{ a-tuple } do-me ] [ no-method? ] must-fail-with
 
 ! A slot protocol issue
-defer: slot-protocol-test-3
+DEFER: slot-protocol-test-3
 slot: y
 
 { f } [ \ slot-protocol-test-3 \ y>> ?lookup-method >boolean ] unit-test
@@ -179,7 +179,7 @@ TUPLE: slot-protocol-test-3 x y ;"
     <string-reader> "delegate-test-2" parse-stream
 ] unit-test
 
-defer: seq-delegate
+DEFER: seq-delegate
 
 ! See if removing a consultation updates protocol-consult word prop
 { [ ] } [

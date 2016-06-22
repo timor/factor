@@ -43,7 +43,7 @@ C: <color> color ;
 [ bad-new-test ] must-fail
 
 ! Corner case if macro expansion calls 'infer', found by Doug
-defer: smart-combo
+DEFER: smart-combo
 
 \ smart-combo [ infer [ ] curry ] 1 define-transform
 

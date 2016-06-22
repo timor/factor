@@ -12,7 +12,7 @@ IN: words.tests
 
 { t } [ t loaded-vocab-names [ vocab-words [ word? and ] each ] each ] unit-test
 
-defer: plist-test
+DEFER: plist-test
 
 { t } [
     \ plist-test t "sample-property" set-word-prop
@@ -64,7 +64,7 @@ forget: another-forgotten
 : another-forgotten ( -- ) ;
 
 ! Make sure that undefined words throw proper errors
-defer: deferred
+DEFER: deferred
 [ deferred ] [ T{ undefined-word f deferred } = ] must-fail-with
 
 [ "in: words.tests defer: not-compiled COMPILE< not-compiled COMPILE>" eval( -- ) ]

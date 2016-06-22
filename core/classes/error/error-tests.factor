@@ -13,7 +13,7 @@ ERROR: error-class-test a b c ;
 [ "in: classes.error.tests ERROR: error-x ; : error-x 3 ;" eval( -- ) ]
 [ error>> error>> redefine-error? ] must-fail-with
 
-defer: error-y
+DEFER: error-y
 
 { } [ [ \ error-y dup class? [ forget-class ] [ drop ] if ] with-compilation-unit ] unit-test
 

@@ -29,7 +29,7 @@ M: assoc-mixin collection-size assoc-size ;
 { 2 } [ H{ { 1 2 } { 2 3 } } collection-size ] unit-test
 
 ! Test mixing in of new classes after the fact
-defer: mx1
+DEFER: mx1
 forget: mx1
 
 mixin: mx1

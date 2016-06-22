@@ -163,7 +163,7 @@ M: object method-layout ;
     "soft-break-layout" soft-break-test check-see
 ] unit-test
 
-defer: parse-error-file
+DEFER: parse-error-file
 
 : another-soft-break-test ( -- str )
     {

@@ -252,7 +252,7 @@ CONSTANT: case-const-2 2 ;
 { "plus" } [ \ + test-case-7 ] unit-test
 { "plus" } [ \ + \ test-case-7 def>> call ] unit-test
 
-defer: corner-case-1
+DEFER: corner-case-1
 
 COMPILE< \ corner-case-1 2 [ + ] curry 1array [ case ] curry ( a -- b ) define-declared COMPILE>
 

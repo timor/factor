@@ -52,7 +52,7 @@ observer add-definition-observer
 
 0 counter set-global
 
-defer: nesting-test
+DEFER: nesting-test
 
 { } [ "in: compiler.units.tests COMPILE< : nesting-test ( -- ) ; COMPILE>" eval( -- ) ] unit-test
 

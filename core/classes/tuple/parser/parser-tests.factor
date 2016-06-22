@@ -48,7 +48,7 @@ TUPLE: test-8 { b integer read-only } ;
 
 { t } [ "b" test-8 "slots" word-prop slot-named read-only>> ] unit-test
 
-defer: foo
+DEFER: foo
 
 [ "IN: classes.tuple.parser.tests TUPLE: foo < test-1 < ;" eval( -- ) ]
 [ error>> invalid-slot-name? ]

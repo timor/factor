@@ -72,7 +72,7 @@ STRUCT: forward { x backward* } ;
 { t } [ forward lookup-c-type struct-c-type? ] unit-test
 { t } [ backward lookup-c-type struct-c-type? ] unit-test
 
-defer: struct-redefined
+DEFER: struct-redefined
 
 { f }
 [

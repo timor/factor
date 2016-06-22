@@ -147,7 +147,7 @@ M:: string lambda-generic ( a b -- c ) a b lambda-generic-2 ;
     \ unparse-test-3 "lambda" word-prop body>> first unparse
 ] unit-test
 
-defer: xyzzy
+DEFER: xyzzy
 
 { } [
     "in: locals.tests use: math GENERIC: xyzzy ( a -- b ) ; M: integer xyzzy ;"
