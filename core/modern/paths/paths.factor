@@ -3,7 +3,7 @@
 USING: accessors combinators.smart io.files kernel namespaces
 sequences sets splitting vocabs.files vocabs.hierarchy
 vocabs.loader vocabs.metadata ;
-in: modern.paths
+IN: modern.paths
 
 : vocabs-from ( root -- vocabs )
     "" disk-vocabs-in-root/prefix
@@ -72,7 +72,7 @@ in: modern.paths
     {
         "specialized-arrays" "specialized-vectors"
         "math.blas.matrices" "math.blas.vectors" "math.vectors.simd"
-        "math.vectors.simd.cords" "game.debug" "gpu.util" "gpu.effects.blur"
+        "math.vectors.simd.cords"
     } ;
 
 

@@ -7,7 +7,7 @@ literals locals make math math.constants math.functions
 math.vectors sequences specialized-arrays typed ui.text fry ;
 FROM: alien.c-types => float ;
 SPECIALIZED-ARRAYS: float uint ;
-in: game.debug
+IN: game.debug
 
 PRIVATE<
 ! Vertex shader for debug shapes

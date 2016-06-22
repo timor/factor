@@ -3,7 +3,7 @@ opengl.shaders opengl.framebuffers opengl.capabilities multiline
 ui.gadgets accessors sequences ui.render ui math locals arrays
 generalizations combinators ui.gadgets.worlds
 literals ui.pixel-formats ;
-in: spheres
+IN: spheres
 
 CONSTANT: plane-vertex-shader [[
 varying vec3 object_position;

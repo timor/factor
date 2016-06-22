@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: destructors gpu.render gpu.shaders gpu.state gpu.textures
 gpu.util images kernel locals math.rectangles ;
-in: gpu.effects.step
+IN: gpu.effects.step
 
 GLSL-SHADER: step-fragment-shader fragment-shader [[
 const vec4 luminance = vec4(0.3, 0.59, 0.11, 0.0);

@@ -14,7 +14,7 @@ prettyprint images.tga literals ;
 FROM: alien.c-types => float ;
 specialized-array: float
 specialized-vector: uint
-in: model-viewer
+IN: model-viewer
 
 GLSL-SHADER: obj-vertex-shader vertex-shader [[
 uniform mat4 mv_matrix;
