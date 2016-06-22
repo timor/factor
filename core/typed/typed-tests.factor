@@ -67,7 +67,7 @@ TYPED: unboxy ( in: unboxable -- out: unboxable2 )
 [
 "
 USING: kernel math ;
-in: typed.tests
+IN: typed.tests
 
 TUPLE: unboxable
     { x fixnum read-only }
@@ -77,7 +77,7 @@ TUPLE: unboxable
 
 "
 USING: accessors kernel math ;
-in: typed.tests
+IN: typed.tests
 T{ unboxable f 12 3 4.0 } unboxy xy>>
 " eval( -- xy )
 ] unit-test
@@ -128,7 +128,7 @@ TYPED: recompile-fail ( a: subclass -- ? ) buh get eq? ;
 
 { f } [ subclass new [ buh set ] [ recompile-fail ] bi ] unit-test
 
-{ } [ "in: typed.tests TUPLE: subclass < superclass { y read-only } ;" eval( -- ) ] unit-test
+{ } [ "IN: typed.tests TUPLE: subclass < superclass { y read-only } ;" eval( -- ) ] unit-test
 
 { t } [ subclass new [ buh set ] [ recompile-fail ] bi ] unit-test
 
@@ -185,5 +185,5 @@ TYPED: typed-intersection ( x: intersection{ integer bignum } -- ? ) >boolean ;
 [ 0 typed-intersection ] [ input-mismatch-error? ] must-fail-with
 
 [
-    "in: test123 use: typed TYPED: foo ( x -- y ) ;" eval( -- )
+    "IN: test123 use: typed TYPED: foo ( x -- y ) ;" eval( -- )
 ] [ error>> no-types-specified? ] must-fail-with

@@ -12,7 +12,7 @@ HELP: \ TYPED:
 "A version of " { $link + } " specialized for floats, converting other real number types:"
 { $example
 "USING: math prettyprint typed ;
-in: scratchpad
+IN: scratchpad
 
 TYPED: add-floats ( a: float b: float -- c: float )
     + ;
@@ -30,7 +30,7 @@ HELP: \ TYPED::
 "A version of the quadratic formula specialized for floats, converting other real number types:"
 { $example
 "USING: kernel math math.libm prettyprint typed ;
-in: scratchpad
+IN: scratchpad
 
 TYPED:: quadratic-roots ( a: float b: float c: float -- q1: float q2: float )
     b neg

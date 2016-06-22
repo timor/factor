@@ -178,7 +178,7 @@ ARTICLE: "ui-backend" "Developing UI backends"
 ARTICLE: "ui-backend-init" "UI initialization and the event loop"
 "An UI backend is required to define a method on the " { $link (with-ui) } " word. This word should contain backend initialization, together with some boilerplate:"
 { $code
-    "in: shells"
+    "IN: shells"
     ""
     ": ui"
     "    ... backend-specific initialization ..."
@@ -351,7 +351,7 @@ HELP: \ WINDOW:
 "From the " { $vocab-link "hello-ui" } " vocabulary. Creates a window with the title \"Hi\" containing a label reading \"Hello world\":"
 { $code
 "USING: accessors ui ui.gadgets.labels ;
-in: hello-ui
+IN: hello-ui
 
 WINDOW: hello { { title \"Hi\" } }
     \"Hello world\" <label> >>gadgets ;"
@@ -365,7 +365,7 @@ HELP: \ MAIN-WINDOW:
 "From the " { $vocab-link "hello-ui" } " vocabulary. Creates a window with the title \"Hi\" containing a label reading \"Hello world\":"
 { $code
 "USING: accessors ui ui.gadgets.labels ;
-in: hello-ui
+IN: hello-ui
 
 MAIN-WINDOW: hello { { title \"Hi\" } }
     \"Hello world\" <label> >>gadgets ;"

@@ -8,7 +8,7 @@ HELP: <n-based-assoc>
 { $examples
 { $example "
 USING: assocs prettyprint kernel sequences.n-based ;
-in: scratchpad
+IN: scratchpad
 
 : months ( -- assoc )
     {
@@ -34,7 +34,7 @@ HELP: n-based-assoc
 { $examples
 { $example "
 USING: assocs prettyprint kernel sequences.n-based ;
-in: scratchpad
+IN: scratchpad
 
 : months ( -- assoc )
     {

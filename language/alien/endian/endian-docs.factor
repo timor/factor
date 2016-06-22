@@ -13,7 +13,7 @@ HELP: \ BE-PACKED-STRUCT:
     "BE-PACKED-STRUCT: s1 { a char[7] } { b int } ;"
     "\\ s1 see"
     "USING: alien.c-types alien.endian classes.struct ;
-in: scratchpad
+IN: scratchpad
 STRUCT: s1 { a char[7] } { b be32 initial: 0 } ;"
 } ;
 
@@ -26,7 +26,7 @@ HELP: \ BE-STRUCT:
     "BE-STRUCT: s1 { a int } { b le32 } ;"
     "\\ s1 see"
     "USING: alien.c-types alien.endian classes.struct ;
-in: scratchpad
+IN: scratchpad
 STRUCT: s1 { a be32 initial: 0 } { b le32 initial: 0 } ;"
 } ;
 
@@ -39,7 +39,7 @@ HELP: \ LE-PACKED-STRUCT:
     "LE-PACKED-STRUCT: s1 { a char[7] } { b int } ;"
     "\\ s1 see"
     "USING: alien.c-types alien.endian classes.struct ;
-in: scratchpad
+IN: scratchpad
 STRUCT: s1 { a char[7] } { b int initial: 0 } ;"
 } ;
 
@@ -52,7 +52,7 @@ HELP: \ LE-STRUCT:
     "LE-STRUCT: s1 { a int } { b be32 } ;"
     "\\ s1 see"
     "USING: alien.c-types alien.endian classes.struct ;
-in: scratchpad
+IN: scratchpad
 STRUCT: s1 { a int initial: 0 } { b be32 initial: 0 } ;"
 } ;
 

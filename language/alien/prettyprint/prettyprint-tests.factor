@@ -7,7 +7,7 @@ CONSTANT: FOO 10 ;
 FUNCTION: int function_test ( float x, int[4][FOO] y, char* z, ushort *w ) ;
 
 { "USING: alien.c-types alien.syntax ;
-in: alien.prettyprint.tests
+IN: alien.prettyprint.tests
 FUNCTION: int function_test
     ( float x, int[4][FOO] y, char* z, ushort* w ) ;
 " } [
@@ -18,7 +18,7 @@ FUNCTION-ALIAS: function-test int function_test
     ( float x, int[4][FOO] y, char* z, ushort *w ) ;
 
 { "USING: alien.c-types alien.syntax ;
-in: alien.prettyprint.tests
+IN: alien.prettyprint.tests
 FUNCTION-ALIAS: function-test int function_test
     ( float x, int[4][FOO] y, char* z, ushort* w ) ;
 " } [
@@ -29,14 +29,14 @@ TYPEDEF: c-string[ascii] string-typedef ;
 TYPEDEF: char[1][2][3] array-typedef ;
 
 { "USING: alien.c-types alien.syntax ;
-in: alien.prettyprint.tests
+IN: alien.prettyprint.tests
 TYPEDEF: c-string[ascii] string-typedef ;
 " } [
     [ \ string-typedef see ] with-string-writer
 ] unit-test
 
 { "USING: alien.c-types alien.syntax ;
-in: alien.prettyprint.tests
+IN: alien.prettyprint.tests
 TYPEDEF: char[1][2][3] array-typedef ;
 " } [
     [ \ array-typedef see ] with-string-writer
@@ -45,7 +45,7 @@ TYPEDEF: char[1][2][3] array-typedef ;
 c-type: opaque-c-type
 
 { "USING: alien.syntax ;
-in: alien.prettyprint.tests
+IN: alien.prettyprint.tests
 c-type: opaque-c-type
 " } [
     [ \ opaque-c-type see ] with-string-writer
@@ -54,7 +54,7 @@ c-type: opaque-c-type
 TYPEDEF: pointer: int pint ;
 
 { "USING: alien.c-types alien.syntax ;
-in: alien.prettyprint.tests
+IN: alien.prettyprint.tests
 TYPEDEF: int* pint ;
 " } [
     [ \ pint see ] with-string-writer
@@ -65,7 +65,7 @@ TYPEDEF: int* pint ;
 CALLBACK: void callback-test ( int x, float[4] y ) ;
 
 { "USING: alien.c-types alien.syntax ;
-in: alien.prettyprint.tests
+IN: alien.prettyprint.tests
 CALLBACK: void callback-test ( int x, float[4] y ) ;
 " } [
     [ \ callback-test see ] with-string-writer

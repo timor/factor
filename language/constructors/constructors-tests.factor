@@ -69,7 +69,7 @@ COMPILE>
 
 [
     "use: constructors
-in: constructors.tests
+IN: constructors.tests
 TUPLE: foo a b ;
 CONSTRUCTOR: <foo> foo ( a a -- obj )" eval( -- )
 ] [
@@ -78,7 +78,7 @@ CONSTRUCTOR: <foo> foo ( a a -- obj )" eval( -- )
 
 [
     "use: constructors
-in: constructors.tests
+IN: constructors.tests
 TUPLE: foo a b ;
 CONSTRUCTOR: <foo> foo ( a c -- obj )" eval( -- )
 ] [

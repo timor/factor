@@ -69,12 +69,12 @@ unit-test
 
 : foo ( a -- b ) dup * ; inline
 
-{ "USING: kernel math ;\nin: prettyprint.tests\n: foo ( a -- b ) dup * ; inline\n" }
+{ "USING: kernel math ;\nIN: prettyprint.tests\n: foo ( a -- b ) dup * ; inline\n" }
 [ [ \ foo see ] with-string-writer ] unit-test
 
 : bar ( x -- y ) 2 + ;
 
-{ "USING: math ;\nin: prettyprint.tests\n: bar ( x -- y ) 2 + ;\n" }
+{ "USING: math ;\nIN: prettyprint.tests\n: bar ( x -- y ) 2 + ;\n" }
 [ [ \ bar see ] with-string-writer ] unit-test
 
 : blah ( a a a a a a a a a a a a a a a a a a a a -- )
@@ -151,7 +151,7 @@ M: object method-layout ;
 : soft-break-test ( -- str )
     {
         "USING: kernel math sequences strings ;"
-        "in: prettyprint.tests"
+        "IN: prettyprint.tests"
         ": soft-break-layout ( x y -- ? )"
         "    over string? ["
         "        over hashcode over hashcode number="
@@ -168,7 +168,7 @@ DEFER: parse-error-file
 : another-soft-break-test ( -- str )
     {
         "USING: make sequences ;"
-        "in: prettyprint.tests"
+        "IN: prettyprint.tests"
         ": another-soft-break-layout ( node -- quot )"
         "    parse-error-file"
         "    [ <reversed> \"hello world foo\" suffix ] [ ] make ;"
@@ -182,7 +182,7 @@ DEFER: parse-error-file
 : string-layout ( -- str )
     {
         "USING: accessors debugger io kernel ;"
-        "in: prettyprint.tests"
+        "IN: prettyprint.tests"
         ": string-layout-test ( error -- )"
         "    \"Expected \" write dup want>> expected>string write"
         "    \" but got \" write got>> expected>string print ;"
@@ -196,7 +196,7 @@ DEFER: parse-error-file
 : narrow-test ( -- array )
     {
         "USING: arrays combinators continuations kernel sequences ;"
-        "in: prettyprint.tests"
+        "IN: prettyprint.tests"
         ": narrow-layout ( obj1 obj2 -- obj3 )"
         "    {"
         "        { [ dup continuation? ] [ append ] }"
@@ -211,7 +211,7 @@ DEFER: parse-error-file
 
 : another-narrow-test ( -- array )
     {
-        "in: prettyprint.tests"
+        "IN: prettyprint.tests"
         ": another-narrow-layout ( -- obj )"
         "    H{"
         "        { 1 2 }"
@@ -239,10 +239,10 @@ M: class-see-layout class-see-layout ;
 
 {
     {
-        "in: prettyprint.tests"
+        "IN: prettyprint.tests"
         "TUPLE: class-see-layout ;"
         ""
-        "in: prettyprint.tests"
+        "IN: prettyprint.tests"
         "GENERIC: class-see-layout ( x -- y ) ;"
         ""
     }
@@ -264,7 +264,7 @@ M: class-see-layout class-see-layout ;
 
 ! Regression
 { t } [
-    "in: prettyprint.tests\nGENERIC: generic-decl-test ( a -- b ) ; flushable\n"
+    "IN: prettyprint.tests\nGENERIC: generic-decl-test ( a -- b ) ; flushable\n"
     dup eval( -- )
     "generic-decl-test" "prettyprint.tests" lookup-word
     [ see ] with-string-writer =
@@ -292,13 +292,13 @@ M: f generic-see-test-with-f ;
 
 PREDICATE: predicate-see-test < integer even? ;
 
-{ "USING: math ;\nin: prettyprint.tests\nPREDICATE: predicate-see-test < integer even? ;\n" } [
+{ "USING: math ;\nIN: prettyprint.tests\nPREDICATE: predicate-see-test < integer even? ;\n" } [
     [ \ predicate-see-test see ] with-string-writer
 ] unit-test
 
 INTERSECTION: intersection-see-test sequence number ;
 
-{ "USING: math sequences ;\nin: prettyprint.tests\nINTERSECTION: intersection-see-test sequence number ;\n" } [
+{ "USING: math sequences ;\nIN: prettyprint.tests\nINTERSECTION: intersection-see-test sequence number ;\n" } [
     [ \ intersection-see-test see ] with-string-writer
 ] unit-test
 
@@ -322,7 +322,7 @@ TUPLE: tuple-with-declared-slot { x integer } ;
 {
     {
         "USING: math ;"
-        "in: prettyprint.tests"
+        "IN: prettyprint.tests"
         "TUPLE: tuple-with-declared-slot { x integer initial: 0 } ;"
         ""
     }
@@ -334,7 +334,7 @@ TUPLE: tuple-with-read-only-slot { x read-only } ;
 
 {
     {
-        "in: prettyprint.tests"
+        "IN: prettyprint.tests"
         "TUPLE: tuple-with-read-only-slot { x read-only } ;"
         ""
     }
@@ -346,7 +346,7 @@ TUPLE: tuple-with-initial-slot { x initial: 123 } ;
 
 {
     {
-        "in: prettyprint.tests"
+        "IN: prettyprint.tests"
         "TUPLE: tuple-with-initial-slot { x initial: 123 } ;"
         ""
     }
@@ -359,7 +359,7 @@ TUPLE: tuple-with-initial-declared-slot { x integer initial: 123 } ;
 {
     {
         "USING: math ;"
-        "in: prettyprint.tests"
+        "IN: prettyprint.tests"
         "TUPLE: tuple-with-initial-declared-slot"
         "    { x integer initial: 123 } ;"
         ""
@@ -372,7 +372,7 @@ TUPLE: final-tuple ; final
 
 {
     {
-        "in: prettyprint.tests"
+        "IN: prettyprint.tests"
         "TUPLE: final-tuple ; final"
         ""
     }
@@ -416,7 +416,7 @@ TUPLE: fo { a intersection{ fixnum integer } } ;
 
 {
 "USING: math ;
-in: prettyprint.tests
+IN: prettyprint.tests
 TUPLE: mo { a union{ integer float } initial: 0 } ;
 "
 } [
@@ -425,7 +425,7 @@ TUPLE: mo { a union{ integer float } initial: 0 } ;
 
 {
 "USING: math ;
-in: prettyprint.tests
+IN: prettyprint.tests
 TUPLE: fo { a intersection{ integer fixnum } initial: 0 } ;
 "
 } [

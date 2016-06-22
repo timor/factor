@@ -64,7 +64,7 @@ $nl
         "USING: accessors alien.c-types alien.data
 classes.struct kernel math math.functions
 prettyprint ;
-in: scratchpad
+IN: scratchpad
 
 STRUCT: test-point { x int } { y int } ;
 

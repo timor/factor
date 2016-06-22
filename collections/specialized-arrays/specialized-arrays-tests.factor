@@ -137,7 +137,7 @@ symbol: __does_not_exist__
 
 [
     "
-in: specialized-arrays.tests
+IN: specialized-arrays.tests
 USING: specialized-arrays ;
 
 specialized-array: __does_not_exist__ " eval( -- )
@@ -145,7 +145,7 @@ specialized-array: __does_not_exist__ " eval( -- )
 
 { } [
     "
-in: specialized-arrays.tests
+IN: specialized-arrays.tests
 USING: alien.c-types classes.struct specialized-arrays ;
 
 STRUCT: __does_not_exist__ { x int } ;
@@ -180,7 +180,7 @@ specialized-array: struct-resize-test
 
 { { 10 20 30 } } [ { 10 20 30 } struct-resize-test-usage ] unit-test
 
-{ } [ "in: specialized-arrays.tests use: classes.struct use: alien.c-types STRUCT: struct-resize-test { x int } { y int } ;" eval( -- ) ] unit-test
+{ } [ "IN: specialized-arrays.tests use: classes.struct use: alien.c-types STRUCT: struct-resize-test { x int } { y int } ;" eval( -- ) ] unit-test
 
 { 80 } [ 10 <struct-resize-test-array> byte-length ] unit-test
 

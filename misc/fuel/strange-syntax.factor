@@ -5,7 +5,7 @@
 ! syntax highlighting and it breaks, things will be badly hightlighted
 ! here.
 USING: alien.syntax kernel math ;
-in: strange-syntax
+IN: strange-syntax
 
 TUPLE: a-tuple slot1 slot2 { slot3 integer } ;
   TUPLE: second-one ;

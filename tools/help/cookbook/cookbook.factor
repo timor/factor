@@ -148,7 +148,7 @@ $nl
 { $code "USING: arrays kernel math ;" }
 "New words go into the " { $vocab-link "scratchpad" } " vocabulary by default. You can change this with " { $link postpone\ in: } ":"
 { $code
-    "in: time-machine"
+    "IN: time-machine"
     ": time-travel ( when what -- ) frob fizz flap ;"
 }
 "Note that words must be defined before being referenced. The following is generally invalid:"
@@ -167,7 +167,7 @@ $nl
 
 ARTICLE: "cookbook-application" "Application cookbook"
 "Vocabularies can define a main entry point:"
-{ $code "in: game-of-life"
+{ $code "IN: game-of-life"
 "..."
 ": play-life ( -- ) ... ;"
 ""
@@ -211,7 +211,7 @@ command-line get [
 "The following is a more complicated example, implementing something like the Unix " { $snippet "grep" } " command:"
 { $code "USING: kernel fry io io.files io.encodings.ascii sequences
 regexp command-line namespaces ;
-in: grep
+IN: grep
 
 : grep-lines ( pattern -- )
     '[ dup _ matches? [ print ] [ drop ] if ] each-line ;

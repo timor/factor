@@ -36,7 +36,7 @@
 {  "bunny.outlined" "smalltalk.library" "talks.tc-lisp-talk" } diff
 [ dup <vocab-link>  . flush vocab>literals ] map-zip
 
-in: syntax
+IN: syntax
 
 USING: classes.tuple.parser classes.builtin ;
 

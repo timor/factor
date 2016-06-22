@@ -14,13 +14,13 @@ IN: vocabs.prettyprint.tests
 
 : manifest-test-2 ( -- string )
     "USING: kernel namespaces vocabs.parser vocabs.prettyprint ;
-    in: vocabs.prettyprint.tests
+    IN: vocabs.prettyprint.tests
 
     COMPILE< manifest get pprint-manifest COMPILE>" ;
 
 {
 "USING: kernel namespaces vocabs.parser vocabs.prettyprint ;
-in: vocabs.prettyprint.tests"
+IN: vocabs.prettyprint.tests"
 }
 [ [ manifest-test-2 eval( -- ) ] with-string-writer ] unit-test
 
@@ -30,7 +30,7 @@ in: vocabs.prettyprint.tests"
     qualified: system
     QUALIFIED-WITH: assocs a ;
     EXCLUDE: parser => run-file ;
-    in: vocabs.prettyprint.tests
+    IN: vocabs.prettyprint.tests
 
     COMPILE< manifest get pprint-manifest COMPILE>" ;
 
@@ -40,7 +40,7 @@ FROM: math => + - ;
 qualified: system
 QUALIFIED-WITH: assocs a ;
 EXCLUDE: parser => run-file ;
-in: vocabs.prettyprint.tests"
+IN: vocabs.prettyprint.tests"
 }
 [ [ manifest-test-3 eval( -- ) ] with-string-writer ] unit-test
 
