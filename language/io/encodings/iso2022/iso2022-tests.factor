@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: io.encodings.string io.encodings.iso2022 tools.test
 io.encodings.iso2022.private literals strings byte-arrays ;
-in: io.encodings.iso2022
+IN: io.encodings.iso2022
 
 { "hello" } [ "hello" >byte-array iso2022 decode ] unit-test
 { "hello" } [ "hello" iso2022 encode >string ] unit-test

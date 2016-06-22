@@ -1,7 +1,7 @@
 USING: io io.files io.streams.string io.encodings.utf8
 html.templates html.templates.fhtml kernel
 tools.test sequences parser splitting prettyprint ;
-in: html.templates.fhtml.tests
+IN: html.templates.fhtml.tests
 
 : test-template ( path -- ? )
     "vocab:html/templates/fhtml/test/"

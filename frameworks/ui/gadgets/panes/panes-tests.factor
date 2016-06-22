@@ -3,7 +3,7 @@ kernel sequences io io.styles io.streams.string tools.test
 prettyprint definitions help help.syntax help.markup
 help.stylesheet splitting ui.gadgets.debug models math summary
 inspector accessors help.topics see fry ;
-in: ui.gadgets.panes.tests
+IN: ui.gadgets.panes.tests
 
 : #children ( -- n ) "pane" get children>> length ;
 

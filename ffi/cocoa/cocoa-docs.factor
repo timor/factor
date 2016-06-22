@@ -1,6 +1,6 @@
 USING: cocoa.messages help.markup help.syntax strings
 alien core-foundation ;
-in: cocoa
+IN: cocoa
 
 HELP: \ ->
 { $syntax "-> selector" }

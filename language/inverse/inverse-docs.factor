@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel quotations words ;
-in: inverse
+IN: inverse
 
 HELP: [undo]
 { $values { "quot" quotation } { "undo" "the inverse of the quotation" } }
@@ -63,5 +63,5 @@ ARTICLE: { "inverse" "intro" } "Invertible quotations"
     switch
 } ;
 
-in: inverse
+IN: inverse
 about: { "inverse" "intro" }

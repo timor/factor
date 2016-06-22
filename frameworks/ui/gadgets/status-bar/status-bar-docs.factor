@@ -1,6 +1,6 @@
 USING: help.markup help.syntax models strings
 ui.gadgets ui.gadgets.worlds ui ;
-in: ui.gadgets.status-bar
+IN: ui.gadgets.status-bar
 
 HELP: show-status
 { $values { "string/f" string } { "gadget" gadget } }

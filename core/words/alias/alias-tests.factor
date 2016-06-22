@@ -1,5 +1,5 @@
 USING: effects eval math tools.test ;
-in: words.alias.tests
+IN: words.alias.tests
 
 ALIAS: foo + ;
 { } [ "in: words.alias.tests CONSTANT: foo 5" eval( -- ) ] unit-test

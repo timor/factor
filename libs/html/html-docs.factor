@@ -1,5 +1,5 @@
 USING: help.markup help.syntax strings xml.data ;
-in: html
+IN: html
 
 HELP: simple-page
 { $values { "title" string } { "head" "XML data" } { "body" "XML data" }

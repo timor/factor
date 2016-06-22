@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel sequences ;
-in: compiler.tree.propagation.constraints
+IN: compiler.tree.propagation.constraints
 
 HELP: class-constraint
 { $class-description "A class constraint." } ;

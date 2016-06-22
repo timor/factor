@@ -1,6 +1,6 @@
 USING: kernel tools.test trees trees.avl math random sequences
 assocs accessors trees.avl.private trees.private ;
-in: trees.avl.tests
+IN: trees.avl.tests
 
 { "key1" 0 "key2" 0 } [
     T{ avl-node f "key1" f f T{ avl-node f "key2" f f 1 } 2 }

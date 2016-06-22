@@ -8,7 +8,7 @@ literals math namespaces sequences system tools.test ;
 ! need cfg simd loaded for some tests
 use: compiler.cfg.value-numbering.simd
 QUALIFIED-WITH: alien.c-types c ;
-in: compiler.cfg.value-numbering.tests
+IN: compiler.cfg.value-numbering.tests
 
 : trim-temps ( insns -- insns )
     [

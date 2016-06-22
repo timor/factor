@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel quotations io ;
-in: tools.test
+IN: tools.test
 
 ARTICLE: "tools.test.write" "Writing unit tests"
 "Assert that a quotation outputs a specific set of values:"

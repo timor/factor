@@ -1,6 +1,6 @@
 USING: help.markup help.syntax kernel math models sequences
 strings ;
-in: documents
+IN: documents
 
 HELP: +col
 { $values { "loc" "a pair of integers" } { "n" integer } { "newloc" "a pair of integers" } }

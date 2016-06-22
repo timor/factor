@@ -1,5 +1,5 @@
 USING: help.markup help.syntax sequences ;
-in: sorting.extras
+IN: sorting.extras
 
 HELP: map-sort
 { $values { "seq" sequence } { "quot" { $quotation ( ... elt -- ... key ) } } { "sortedseq" "a new sorted sequence" } }

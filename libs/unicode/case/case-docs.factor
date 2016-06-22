@@ -1,5 +1,5 @@
 USING: help.syntax help.markup kernel strings unicode ;
-in: unicode.case
+IN: unicode.case
 
 about: "unicode.case"
 

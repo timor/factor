@@ -1,5 +1,5 @@
 USING: help.markup help.syntax memory sequences vm ;
-in: tools.memory
+IN: tools.memory
 
 ARTICLE: "tools.memory" "Object memory tools"
 "You can print object heap status information:"

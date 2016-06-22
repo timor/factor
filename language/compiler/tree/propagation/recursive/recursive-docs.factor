@@ -1,7 +1,7 @@
 USING: classes compiler.tree compiler.tree.propagation.info
 compiler.tree.propagation.nodes help.markup help.syntax math.intervals
 sequences ;
-in: compiler.tree.propagation.recursive
+IN: compiler.tree.propagation.recursive
 
 HELP: counter-class
 { $values { "interval" interval } { "class" class } { "class'" class } }

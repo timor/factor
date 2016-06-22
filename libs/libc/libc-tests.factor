@@ -1,4 +1,4 @@
-in: libc.tests
+IN: libc.tests
 USING: destructors kernel libc libc.private namespaces
 tools.test ;
 

@@ -1,6 +1,6 @@
 USING: arrays kernel math math.order random sequences
 tools.test ;
-in: sorting.extras
+IN: sorting.extras
 
 { { 0 2 1 } } [ { 10 30 20 } [ <=> ] argsort ] unit-test
 { { 2 0 1 } } [

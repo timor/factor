@@ -1,5 +1,5 @@
 USING: assocs compiler.tree help.markup help.syntax kernel ;
-in: compiler.tree.finalization
+IN: compiler.tree.finalization
 
 ARTICLE: "compiler.tree.finalization" "Final pass cleans up high-level IR"
 "This is a late-stage optimization. See the vocab " { $vocab-link "compiler.tree.late-optimizations" } "."

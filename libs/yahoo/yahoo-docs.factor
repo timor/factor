@@ -1,5 +1,5 @@
 USING: help.syntax help.markup ;
-in: yahoo
+IN: yahoo
 
 HELP: yahoo-search
 { $values { "search" search } { "seq" "sequence of arrays of length 3" } }

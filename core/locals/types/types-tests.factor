@@ -1,5 +1,5 @@
 USING: accessors compiler.units kernel locals.types tools.test words ;
-in: locals.types.test
+IN: locals.types.test
 
 { t } [
     [ "hello" <local> ] with-compilation-unit "local?" word-prop

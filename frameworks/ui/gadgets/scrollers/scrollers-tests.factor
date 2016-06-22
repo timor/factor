@@ -4,7 +4,7 @@ ui.gadgets.labels ui.gadgets.grids ui.gadgets.sliders math
 math.vectors arrays sequences ui.gadgets.debug math.rectangles
 accessors ui.gadgets.buttons ui.gadgets.packs
 ui.gadgets.scrollers.private ;
-in: ui.gadgets.scrollers.tests
+IN: ui.gadgets.scrollers.tests
 
 { } [
     <gadget> "g" set

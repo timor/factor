@@ -1,4 +1,4 @@
-in: gml.tests
+IN: gml.tests
 USING: accessors combinators gml tools.test kernel sequences euler.b-rep ;
 
 { } [ [ "vocab:gml/test-core.gml" run-gml-file ] make-gml 2drop ] unit-test

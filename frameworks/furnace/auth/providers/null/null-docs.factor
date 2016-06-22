@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-in: furnace.auth.providers.null
+IN: furnace.auth.providers.null
 
 HELP: no-users
 { $class-description "Singleton class implementing the dummy authentication provider." } ;

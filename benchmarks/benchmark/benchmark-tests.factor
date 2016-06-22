@@ -1,5 +1,5 @@
 USING: benchmark kernel sequences tools.test ;
-in: benchmark.tests
+IN: benchmark.tests
 
 : dummy-benchmark ( -- )
     ;

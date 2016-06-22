@@ -1,6 +1,6 @@
 USING: arrays generic kernel math models namespaces sequences assocs
 tools.test models.arrow accessors ;
-in: models.arrow.tests
+IN: models.arrow.tests
 
 3 <model> "x" set
 "x" get [ 2 * ] <arrow> dup "z" set

@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-in: io.files.temp
+IN: io.files.temp
 
 ARTICLE: "io.files.temp" "Temporary files"
 "Pathnames relative to the system's temporary file directory:"

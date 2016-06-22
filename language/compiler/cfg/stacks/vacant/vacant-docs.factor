@@ -1,6 +1,6 @@
 USING: compiler.cfg compiler.cfg.instructions compiler.cfg.stacks.padding
 help.markup help.syntax sequences strings ;
-in: compiler.cfg.stacks.vacant
+IN: compiler.cfg.stacks.vacant
 
 ARTICLE: "compiler.cfg.stacks.vacant" "Uninitialized/overinitialized stack location analysis"
 "Consider the following sequence of instructions:"

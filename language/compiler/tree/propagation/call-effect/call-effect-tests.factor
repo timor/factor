@@ -4,7 +4,7 @@ USING: accessors combinators combinators.private compiler.tree
 compiler.tree.propagation.call-effect compiler.units math effects kernel
 compiler.tree.builder compiler.tree.optimizer compiler.tree.debugger sequences
 eval fry kernel.private tools.test ;
-in: compiler.tree.propagation.call-effect.tests
+IN: compiler.tree.propagation.call-effect.tests
 
 ! cached-effect
 { t } [ [ + ] cached-effect ( a b -- c ) effect= ] unit-test

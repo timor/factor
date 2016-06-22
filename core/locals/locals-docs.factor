@@ -1,6 +1,6 @@
 USING: help.syntax help.markup kernel macros prettyprint
 memoize combinators arrays generalizations see ;
-in: locals
+IN: locals
 
 HELP: \ |[
 { $syntax "|[ bindings... | body... ]" }

@@ -1,4 +1,4 @@
-in: stack-checker.transforms
+IN: stack-checker.transforms
 USING: help.markup help.syntax combinators words kernel ;
 
 HELP: define-transform

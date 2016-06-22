@@ -1,5 +1,5 @@
 USING: kernel sequences tools.test ;
-in: sorting.heap
+IN: sorting.heap
 
 { { } } [ { } heapsort ] unit-test
 { { 1 } } [ { 1 } heapsort ] unit-test

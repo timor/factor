@@ -1,5 +1,5 @@
 USING: classes.singleton io.streams.string kernel see tools.test ;
-in: classes.singleton.tests
+IN: classes.singleton.tests
 
 { } [ singleton: bzzt ] unit-test
 { t } [ bzzt bzzt? ] unit-test

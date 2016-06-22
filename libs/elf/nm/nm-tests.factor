@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: elf.nm io io.streams.string kernel literals multiline strings
 system tools.test ;
-in: elf.nm.tests
+IN: elf.nm.tests
 
 CONSTANT: validation-output [[
 0000000000000000 absolute         init.c

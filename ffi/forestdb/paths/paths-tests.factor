@@ -1,7 +1,7 @@
 ! Copyright (C) 2014 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: forestdb.paths kernel tools.test ;
-in: forestdb.paths.tests
+IN: forestdb.paths.tests
 
 { "1.fq.0" } [ "0.fq.0" next-vnode-name ] unit-test
 { "1.fq.0" } [ "0.fq.1" next-vnode-name ] unit-test

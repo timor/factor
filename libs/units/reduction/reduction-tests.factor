@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators fry kernel locals math math.functions
 math.order math.parser sequences tools.test ;
-in: units.reduction
+IN: units.reduction
 
 { "0Bi" } [ 0 n>storage ] unit-test
 { "0B" } [ 0 n>Storage ] unit-test

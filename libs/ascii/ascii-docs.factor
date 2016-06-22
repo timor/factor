@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel strings ;
-in: ascii
+IN: ascii
 
 HELP: blank?
 { $values { "ch" "a character" } { "?" boolean } }

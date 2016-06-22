@@ -1,6 +1,6 @@
 ! Copyright (C) 2005 Chris Double, 2007 Clemens Hofreither, 2008 James Cash.
 USING: help.markup help.syntax kernel ;
-in: coroutines
+IN: coroutines
 
 HELP: cocreate
 { $values { "quot" { $quotation ( value -- ) } } { "co" coroutine } }

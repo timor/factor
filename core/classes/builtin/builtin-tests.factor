@@ -1,5 +1,5 @@
 USING: accessors kernel memory sequences tools.test words ;
-in: classes.builtin.tests
+IN: classes.builtin.tests
 
 { f } [
     [ word? ] instances

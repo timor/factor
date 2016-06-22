@@ -1,5 +1,5 @@
 USING: help.markup help.syntax sequences ;
-in: math.transforms.haar
+IN: math.transforms.haar
 
 HELP: haar
 { $values { "seq" sequence } { "seq'" sequence } }

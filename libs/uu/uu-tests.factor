@@ -1,5 +1,5 @@
 USING: kernel tools.test ;
-in: uu
+IN: uu
 
 CONSTANT: plain
 "The smooth-scaled python crept over the sleeping dog" ;

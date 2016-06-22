@@ -3,7 +3,7 @@
 !
 USING: kernel tools.test peg peg.ebnf peg.ebnf.private peg.pl0
        sequences accessors ;
-in: peg.pl0.tests
+IN: peg.pl0.tests
 
 { t } [
   "CONST foo = 1;" "block" \ pl0 rule (parse) remaining>> empty?

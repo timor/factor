@@ -1,5 +1,5 @@
 USING: arrays help.markup help.syntax math kernel sequences ;
-in: source-files.errors
+IN: source-files.errors
 
 HELP: error-type-holder
 { $description "A definition of a class of errors"

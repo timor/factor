@@ -1,5 +1,5 @@
 USING: tools.test kernel accessors ;
-in: calendar.format.macros
+IN: calendar.format.macros
 
 { 2 } [ { [ 2 ] } attempt-all-quots ] unit-test
 

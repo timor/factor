@@ -1,6 +1,6 @@
 USING: compiler.tree effects help.markup help.syntax quotations sequences
 stack-checker.values stack-checker.visitor ;
-in: stack-checker.state
+IN: stack-checker.state
 
 HELP: terminated?
 { $var-description "Did the current control-flow path throw an error?" } ;

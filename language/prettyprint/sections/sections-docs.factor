@@ -1,6 +1,6 @@
 USING: hashtables help.markup help.syntax io kernel math
 prettyprint.config quotations strings ;
-in: prettyprint.sections
+IN: prettyprint.sections
 
 HELP: position
 { $var-description "The prettyprinter's current character position." } ;

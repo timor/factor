@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays graphviz.attributes help.markup
 help.syntax kernel present sequences strings ;
-in: graphviz
+IN: graphviz
 
 { subgraph <subgraph> <anon> <cluster> } related-words
 { graph <graph> <digraph> <strict-graph> <strict-digraph> } related-words

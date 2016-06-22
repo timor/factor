@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: arrays effects help.markup help.syntax locals math quotations words ;
-in: typed
+IN: typed
 
 HELP: \ TYPED:
 { $syntax

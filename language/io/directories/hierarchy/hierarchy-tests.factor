@@ -1,6 +1,6 @@
 USING: io.directories io.directories.hierarchy kernel
 sequences tools.test ;
-in: io.directories.hierarchy.tests
+IN: io.directories.hierarchy.tests
 
 { { "classes/tuple/tuple.factor" } } [
     "resource:core" [

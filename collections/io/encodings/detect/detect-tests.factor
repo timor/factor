@@ -3,7 +3,7 @@ USING: byte-arrays byte-arrays.hex io.encodings.8-bit.koi8-r
 io.encodings.8-bit.latin1 io.encodings.binary
 io.encodings.detect io.encodings.utf16 io.encodings.utf32
 io.encodings.utf8 namespaces tools.test ;
-in: io.encodings.detect.tests
+IN: io.encodings.detect.tests
 
 ! UTF encodings with BOMs
 { utf16be } [ HEX{ FEFF 0031 0032 0033 } detect-byte-array ] unit-test

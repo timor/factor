@@ -3,4 +3,4 @@
 
 USING: pdf tools.test ;
 
-in: pdf.tests
+IN: pdf.tests

@@ -1,6 +1,6 @@
 USING: assocs compiler.cfg compiler.cfg.instructions help.markup help.syntax
 sequences ;
-in: compiler.cfg.def-use
+IN: compiler.cfg.def-use
 
 HELP: compute-defs
 { $values { "cfg" cfg } }

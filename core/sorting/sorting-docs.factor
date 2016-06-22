@@ -1,6 +1,6 @@
 USING: help.markup help.syntax kernel words math
 sequences math.order ;
-in: sorting
+IN: sorting
 
 ARTICLE: "sequences-sorting" "Sorting sequences"
 "The " { $vocab-link "sorting" } " vocabulary implements the merge-sort algorithm. It runs in " { $snippet "O(n log n)" } " time, and is a " { $emphasis "stable" } " sort, meaning that the order of equal elements is preserved."

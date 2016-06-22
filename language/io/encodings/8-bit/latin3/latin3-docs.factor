@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax ;
-in: io.encodings.8-bit.latin3
+IN: io.encodings.8-bit.latin3
 
 HELP: latin3
 { $var-description "This is the ISO-8859-3 encoding, also called Latin-3: South European. It is an 8-bit superset of ASCII and provides the characters necessary for Turkish, Maltese and Esperanto." }

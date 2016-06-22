@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ui.commands kernel ;
-in: ui.gadgets.tables
+IN: ui.gadgets.tables
 
 ARTICLE: "ui.gadgets.tables.renderers" "Table row renderer protocol"
 "Table gadgets use a row renderer to display rows and do a few other things."

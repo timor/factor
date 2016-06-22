@@ -1,7 +1,7 @@
 ! (c)2011 Joe Groff bsd license
 USING: alien.data destructors io io.streams.memory kernel libc
 tools.test ;
-in: io.streams.memory.tests
+IN: io.streams.memory.tests
 
 { 1 2 3 } [
     B{ 1 2 3 } <memory-stream>

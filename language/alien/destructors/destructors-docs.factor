@@ -1,4 +1,4 @@
-in: alien.destructors
+IN: alien.destructors
 USING: help.markup help.syntax alien destructors ;
 
 HELP: \ DESTRUCTOR:

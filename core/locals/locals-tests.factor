@@ -4,7 +4,7 @@ accessors generic eval combinators combinators.short-circuit
 combinators.short-circuit.smart math.order math.functions
 definitions compiler.units fry lexer words.symbol see multiline
 combinators.smart ;
-in: locals.tests
+IN: locals.tests
 
 :: foo ( a b -- a a ) a a ;
 

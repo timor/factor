@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: environment io.standard-paths io.standard-paths.unix
 sequences tools.test ;
-in: io.standard-paths.unix.tests
+IN: io.standard-paths.unix.tests
 
 { f } [ "" find-in-path ] unit-test
 { t } [

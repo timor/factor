@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: help.markup help.syntax multiline ;
-in: pair-rocket
+IN: pair-rocket
 
 HELP: =>
 { $syntax "a => b" }

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel math.order quotations
 sequences strings ;
-in: sorting.human
+IN: sorting.human
 
 HELP: find-numbers
 { $values

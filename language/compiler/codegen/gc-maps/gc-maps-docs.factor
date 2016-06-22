@@ -1,6 +1,6 @@
 USING: bit-arrays byte-arrays compiler.cfg compiler.cfg.instructions
 compiler.cfg.stack-frame help.markup help.syntax kernel math sequences ;
-in: compiler.codegen.gc-maps
+IN: compiler.codegen.gc-maps
 
 HELP: emit-gc-info-bitmaps
 { $values

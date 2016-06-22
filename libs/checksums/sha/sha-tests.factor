@@ -1,7 +1,7 @@
 USING: arrays checksums checksums.sha checksums.sha.private
 io.encodings.binary io.streams.byte-array kernel math.parser
 sequences tools.test ;
-in: checksums.sha.tests
+IN: checksums.sha.tests
 
 : test-checksum ( text identifier -- checksum )
     checksum-bytes bytes>hex-string ;

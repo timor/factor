@@ -1,4 +1,4 @@
-in: ui.gadgets.line-support
+IN: ui.gadgets.line-support
 USING: help.markup help.syntax ;
 
 ARTICLE: "ui.gadgets.line-support" "Gadget line support"

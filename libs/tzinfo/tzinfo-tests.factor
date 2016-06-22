@@ -1,6 +1,6 @@
 USING: calendar formatting kernel tools.test ;
 
-in: tzinfo
+IN: tzinfo
 
 {
     "Sun Oct 27 01:00:00 2002"

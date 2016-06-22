@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax io.streams.string kernel strings
 urls lcs inspector present io ;
-in: html.components
+IN: html.components
 
 HELP: checkbox
 { $class-description "Checkbox components render a boolean value. The " { $slot "label" } " slot must be set to a string." } ;

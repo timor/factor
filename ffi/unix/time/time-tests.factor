@@ -1,7 +1,7 @@
 
 USING: classes.struct tools.test unix.time ;
 
-in: unix.time
+IN: unix.time
 
 { S{ timeval f 0 0 } } [ 0 make-timeval ] unit-test
 { S{ timeval f 1 234567 } } [ 1,234,567 make-timeval ] unit-test

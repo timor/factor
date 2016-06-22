@@ -3,7 +3,7 @@
 USING: help.markup help.crossref help.stylesheet help.topics help.syntax
 definitions io prettyprint summary arrays math sequences vocabs strings
 see xml.data hashtables assocs ;
-in: game.models.util
+IN: game.models.util
 
 HELP: indexed-seq
 { $class-description "A sequence described by a sequence of unique elements and a sequence of indices. The sequence can only be appended to. An associative map is used as a reverse lookup table when appending." } ;

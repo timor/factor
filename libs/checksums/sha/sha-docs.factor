@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-in: checksums.sha
+IN: checksums.sha
 
 HELP: sha-224
 { $class-description "SHA-224 checksum algorithm." } ;

@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel math sequences ;
-in: math.primes
+IN: math.primes
 
 { next-prime prime? } related-words
 

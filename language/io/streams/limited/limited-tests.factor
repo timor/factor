@@ -4,7 +4,7 @@ io.encodings.string io.encodings.utf8 io.files io.pipes
 io.streams.byte-array io.streams.duplex io.streams.limited io.streams.string
 kernel namespaces strings tools.test system
 io.encodings.8-bit.latin1 ;
-in: io.streams.limited.tests
+IN: io.streams.limited.tests
 
 { } [
     "hello world\nhow are you today\nthis is a very long line indeed"

@@ -1,4 +1,4 @@
-in: opengl.textures
+IN: opengl.textures
 USING: help.markup help.syntax opengl.gl opengl.textures.private math alien images ;
 
 HELP: gen-texture

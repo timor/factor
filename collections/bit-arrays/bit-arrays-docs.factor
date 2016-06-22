@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math sequences ;
-in: bit-arrays
+IN: bit-arrays
 
 ARTICLE: "bit-arrays" "Bit arrays"
 "Bit array are a fixed-size mutable sequences (" { $link "sequence-protocol" } ") whose elements are either " { $link t } " or " { $link f } ". Each element only uses one bit of storage, hence the name."

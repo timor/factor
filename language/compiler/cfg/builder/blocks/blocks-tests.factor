@@ -2,7 +2,7 @@ USING: accessors compiler.cfg compiler.cfg.builder.blocks
 compiler.cfg.instructions compiler.cfg.stacks.local
 compiler.cfg.utilities compiler.test kernel namespaces sequences
 tools.test ;
-in: compiler.cfg.builder.blocks.tests
+IN: compiler.cfg.builder.blocks.tests
 
 ! (begin-basic-block)
 { 20 } [

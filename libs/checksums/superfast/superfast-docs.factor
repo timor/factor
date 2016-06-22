@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-in: checksums.superfast
+IN: checksums.superfast
 
 HELP: superfast
 { $class-description "SuperFastHash checksum algorithm." } ;

@@ -1,7 +1,7 @@
 
 USING: enigma kernel math sequences sorting tools.test ;
 
-in: enigma.tests
+IN: enigma.tests
 
 { t } [ <reflector> natural-sort 26 iota sequence= ] unit-test
 

@@ -1,6 +1,6 @@
 USING: tools.test math.rectangles prettyprint io.streams.string
 kernel accessors ;
-in: math.rectangles.tests
+IN: math.rectangles.tests
 
 { rect{ { 10 10 } { 20 20 } } }
 [

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays assocs help.markup help.syntax kernel math
 sequences strings ;
-in: pop3
+IN: pop3
 
 HELP: <pop3-account>
 { $values

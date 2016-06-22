@@ -1,5 +1,5 @@
 USING: help.markup help.syntax sequences ;
-in: columns
+IN: columns
 
 HELP: column
 { $class-description "A virtual sequence which presents a fixed column of a matrix represented as a sequence of rows. New instances can be created by calling " { $link <column> } "." } ;

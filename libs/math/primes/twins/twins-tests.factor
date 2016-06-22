@@ -3,7 +3,7 @@
 
 USING: tools.test ;
 
-in: math.primes.twins
+IN: math.primes.twins
 
 { { } } [ 3 twin-primes-upto ] unit-test
 { { V{ 3 5 } V{ 5 7 } V{ 11 13 } } } [ 13 twin-primes-upto ] unit-test

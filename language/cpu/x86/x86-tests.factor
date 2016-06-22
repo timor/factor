@@ -3,7 +3,7 @@ compiler.cfg.registers compiler.codegen.gc-maps
 compiler.codegen.relocation cpu.architecture cpu.x86 cpu.x86.assembler
 cpu.x86.assembler.operands cpu.x86.features kernel kernel.private
 layouts make math math.libm namespaces sequences system tools.test ;
-in: cpu.x86.tests
+IN: cpu.x86.tests
 
 { } [
     [ { float } declare fsqrt ]

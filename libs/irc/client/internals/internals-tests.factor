@@ -7,7 +7,7 @@ irc.messages.parser irc.client.base irc.client.chats
 irc.client.participants irc.client.internals ;
 EXCLUDE: irc.messages => join ;
 RENAME: join irc.messages => join_ ;
-in: irc.client.internals.tests
+IN: irc.client.internals.tests
 
 ! Streams for testing
 TUPLE: mb-writer lines last-line disposed ;

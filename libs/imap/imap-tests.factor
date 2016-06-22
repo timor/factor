@@ -4,7 +4,7 @@ imap.private io.streams.duplex kernel math math.parser math.ranges
 namespaces random sequences sets sorting uuid
 splitting strings system tools.test memoize combinators.smart ;
 FROM: pcre => findall ;
-in: imap.tests
+IN: imap.tests
 
 : random-ascii ( n -- str )
     [ char: a char: z [a,b] random ] "" replicate-as ;

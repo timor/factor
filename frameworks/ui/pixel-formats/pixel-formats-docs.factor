@@ -1,6 +1,6 @@
 USING: destructors help.markup help.syntax kernel math sequences
 vocabs vocabs.parser words namespaces ;
-in: ui.pixel-formats
+IN: ui.pixel-formats
 
 ! break circular dependency
 COMPILE<

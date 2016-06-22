@@ -1,6 +1,6 @@
 USING: accessors arrays generic.single kernel math
 math.functions slots tools.test words ;
-in: slots.tests
+IN: slots.tests
 
 TUPLE: r/w-test foo ;
 

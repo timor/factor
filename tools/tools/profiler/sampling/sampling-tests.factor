@@ -1,7 +1,7 @@
 USING: byte-arrays calendar kernel math memory namespaces parser
 random sequences threads tools.profiler.sampling
 tools.profiler.sampling.private tools.test ;
-in: tools.profiler.sampling.tests
+IN: tools.profiler.sampling.tests
 
 ! Make sure the profiler doesn't blow up the VM
 TUPLE: boom ;

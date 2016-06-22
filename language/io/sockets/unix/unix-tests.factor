@@ -1,6 +1,6 @@
 USING: accessors io.encodings.binary io.sockets kernel
 tools.test ;
-in: io.sockets.unix
+IN: io.sockets.unix
 
 [
     T{ inet f "127.0.0.1" 5000 } binary [ ] with-client

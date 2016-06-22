@@ -1,6 +1,6 @@
 USING: images accessors kernel tools.test literals math.ranges
 byte-arrays ;
-in: images.tessellation
+IN: images.tessellation
 
 ! Check an invariant we depend on
 { t } [

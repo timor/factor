@@ -2,7 +2,7 @@ USING: accessors continuations io.directories
 io.directories.hierarchy io.encodings.ascii io.files
 io.files.info io.files.temp io.files.unique io.pathnames kernel
 namespaces sequences strings tools.test ;
-in: io.files.unique.tests
+IN: io.files.unique.tests
 
 { 123 } [
     [

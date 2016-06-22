@@ -1,6 +1,6 @@
 USING: byte-arrays classes.tuple.private compiler.cfg compiler.tree
 help.markup help.syntax ;
-in: compiler.cfg.intrinsics.allot
+IN: compiler.cfg.intrinsics.allot
 
 HELP: emit-<byte-array>
 { $values

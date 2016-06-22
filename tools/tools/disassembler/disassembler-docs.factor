@@ -1,4 +1,4 @@
-in: tools.disassembler
+IN: tools.disassembler
 USING: help.markup help.syntax sequences.private ;
 
 HELP: disassemble

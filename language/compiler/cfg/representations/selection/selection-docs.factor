@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math sequences ;
-in: compiler.cfg.representations.selection
+IN: compiler.cfg.representations.selection
 
 HELP: costs
 { $var-description "Maps vreg to representation to cost." } ;

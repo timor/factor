@@ -5,7 +5,7 @@ python.modules.os python.modules.os.path python.modules.sys
 python.modules.time python.objects python.syntax sets splitting tools.test
 unicode ;
 QUALIFIED-WITH: sequences s ;
-in: python.syntax.tests
+IN: python.syntax.tests
 
 : py-test ( result quot -- )
     '[ _ with-destructors ] unit-test ; inline

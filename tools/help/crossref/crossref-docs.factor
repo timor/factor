@@ -1,5 +1,5 @@
 USING: help.topics help.syntax help.markup ;
-in: help.crossref
+IN: help.crossref
 
 HELP: article-children
 { $values { "topic" "an article name or a word" } { "seq" "a new sequence" } }

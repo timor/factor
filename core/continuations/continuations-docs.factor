@@ -1,6 +1,6 @@
 USING: continuations.private help.markup help.syntax kernel
 kernel.private lexer namespaces quotations sequences vectors ;
-in: continuations
+IN: continuations
 
 ARTICLE: "errors-restartable" "Restartable errors"
 "Support for restartable errors is built on top of the basic error handling facility. The following words signals recoverable errors:"

@@ -1,4 +1,4 @@
-in: simple-tokenizer.tests
+IN: simple-tokenizer.tests
 USING: simple-tokenizer tools.test ;
 
 [ "" tokenize ] must-fail

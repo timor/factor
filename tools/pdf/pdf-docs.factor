@@ -3,7 +3,7 @@
 
 USING: help.markup help.syntax strings ;
 
-in: pdf
+IN: pdf
 
 HELP: text-to-pdf
 { $values { "str" string } { "pdf" string } }

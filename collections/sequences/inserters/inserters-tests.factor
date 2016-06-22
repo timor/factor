@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: assocs kernel sequences sequences.inserters tools.test
 unicode ;
-in: sequences.inserters.tests
+IN: sequences.inserters.tests
 
 { V{ 1 2 "Three" "Four" "Five" } } [
     { "three" "four" "five" }

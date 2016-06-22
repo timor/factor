@@ -1,6 +1,6 @@
 USING: help.markup help.syntax kernel math prettyprint.config
 prettyprint.custom sequences strings words ;
-in: prettyprint.backend
+IN: prettyprint.backend
 
 about: "prettyprint-extension"
 

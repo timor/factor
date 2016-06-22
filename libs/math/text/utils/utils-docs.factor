@@ -1,5 +1,5 @@
 USING: help.markup help.syntax sequences ;
-in: math.text.utils
+IN: math.text.utils
 
 HELP: digit-groups
 { $values { "n" "a positive integer" } { "k" "a positive integer" } { "seq" sequence } }

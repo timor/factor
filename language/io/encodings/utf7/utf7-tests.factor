@@ -1,6 +1,6 @@
 USING: io.encodings.string io.encodings.utf7 kernel sequences strings
 tools.test ;
-in: io.encodings.utf7.tests
+IN: io.encodings.utf7.tests
 
 {
     {

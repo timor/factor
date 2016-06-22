@@ -2,7 +2,7 @@ USING: arrays assocs classes classes.algebra classes.mixin
 compiler.units definitions eval hashtables io.streams.string
 kernel math parser sequences source-files strings tools.test
 vectors words ;
-in: classes.mixin.tests
+IN: classes.mixin.tests
 
 ! Test mixins
 mixin: sequence-mixin

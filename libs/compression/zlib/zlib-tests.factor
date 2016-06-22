@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors kernel tools.test compression.zlib classes ;
 QUALIFIED-WITH: compression.zlib.ffi ffi ;
-in: compression.zlib.tests
+IN: compression.zlib.tests
 
 : compress-me ( -- byte-array ) B{ 1 2 3 4 5 } ;
 

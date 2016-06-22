@@ -1,7 +1,7 @@
 USING: alien.c-types alien.data arrays io io.encodings.ascii
 io.encodings.binary io.encodings.utf8 io.streams.byte-array
 kernel math specialized-arrays strings tools.test ;
-in: io.streams.byte-array.tests
+IN: io.streams.byte-array.tests
 specialized-array: int
 
 { B{ } } [ B{ } binary [ contents ] with-byte-reader ] unit-test

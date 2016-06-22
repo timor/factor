@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math sequences sets ;
-in: hash-sets
+IN: hash-sets
 
 ARTICLE: "hash-sets" "Hash sets"
 "The " { $vocab-link "hash-sets" } " vocabulary implements hashtable-like sets. Hash sets form a class:"

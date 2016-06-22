@@ -1,7 +1,7 @@
 ! Copyright (C) 2013 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: math sequences sets.extras tools.test ;
-in: sets.extras.tests
+IN: sets.extras.tests
 
 { { } } [ { } { } setwise-xor ] unit-test
 { { 1 } } [ { 1 } { } setwise-xor ] unit-test

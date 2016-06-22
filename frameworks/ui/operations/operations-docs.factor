@@ -1,7 +1,7 @@
 USING: ui.commands help.markup help.syntax ui.gadgets words
 kernel hashtables strings classes quotations sequences
 ui.gestures ;
-in: ui.operations
+IN: ui.operations
 
 : $operations ( element -- )
     >quotation call( -- obj )

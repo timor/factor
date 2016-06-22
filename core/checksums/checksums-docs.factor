@@ -1,5 +1,5 @@
 USING: byte-arrays help.markup help.syntax sequences strings ;
-in: checksums
+IN: checksums
 
 HELP: checksum
 { $class-description "The class of checksum algorithms." } ;

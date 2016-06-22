@@ -1,7 +1,7 @@
 USING: accessors continuations debugger eval io kernel
 kernel.private math memory namespaces sequences tools.test
 vectors words ;
-in: continuations.tests
+IN: continuations.tests
 
 : (callcc1-test) ( n obj -- n' obj )
     [ 1 - dup ] dip ?push

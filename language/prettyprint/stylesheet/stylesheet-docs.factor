@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Keith Lazuka.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel strings words ;
-in: prettyprint.stylesheet
+IN: prettyprint.stylesheet
 
 HELP: effect-style
 { $values

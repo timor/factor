@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax io.streams.string sequences
 math kernel quotations ;
-in: circular
+IN: circular
 
 HELP: <circular-string>
 { $values

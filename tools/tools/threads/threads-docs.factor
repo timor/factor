@@ -1,4 +1,4 @@
-in: tools.threads
+IN: tools.threads
 USING: help.markup help.syntax threads ;
 
 HELP: threads.

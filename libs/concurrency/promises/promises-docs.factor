@@ -1,7 +1,7 @@
 ! Copyright (C) 2005, 2008 Chris Double, Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: calendar help.markup help.syntax kernel ;
-in: concurrency.promises
+IN: concurrency.promises
 
 HELP: promise
 { $class-description "The class of write-once promises." } ;

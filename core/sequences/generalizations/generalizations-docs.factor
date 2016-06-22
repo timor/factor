@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: help.syntax help.markup kernel sequences quotations
 math arrays combinators ;
-in: sequences.generalizations
+IN: sequences.generalizations
 
 HELP: nsequence
 { $values { "n" integer } { "seq" "an exemplar" } }

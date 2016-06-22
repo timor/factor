@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-in: io.encodings.utf7
+IN: io.encodings.utf7
 
 HELP: utf7
 { $values { "utf7codec" utf7codec } }

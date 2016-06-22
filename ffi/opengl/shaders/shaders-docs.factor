@@ -1,6 +1,6 @@
 USING: help.markup help.syntax io kernel math quotations
 opengl.gl multiline assocs strings ;
-in: opengl.shaders
+IN: opengl.shaders
 
 HELP: gl-shader
 { $class-description { $snippet "gl-shader" } " is a predicate class comprising values returned by OpenGL to represent shader objects. The following words are provided for creating and manipulating these objects:"

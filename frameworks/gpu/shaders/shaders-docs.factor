@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: classes classes.struct gpu.buffers help.markup help.syntax
 images kernel math multiline quotations sequences strings words ;
-in: gpu.shaders
+IN: gpu.shaders
 
 HELP: <program-instance>
 { $values

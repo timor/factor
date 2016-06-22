@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: tools.test generalizations kernel math arrays sequences
 sequences.generalizations ascii fry math.parser io io.streams.string ;
-in: sequences.generalizations.tests
+IN: sequences.generalizations.tests
 
 { 1 2 3 4 } [ { 1 2 3 4 } 4 firstn ] unit-test
 { { 1 2 3 4 } } [ 1 2 3 4 { f f f f } [ 4 set-firstn ] keep ] unit-test

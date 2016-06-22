@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-in: colors.yuv
+IN: colors.yuv
 
 HELP: yuva
 { $class-description "The class of YUV colors with an alpha channel." } ;

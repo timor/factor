@@ -6,7 +6,7 @@ kernel.private literals math math.constants memory namespaces
 parser parser.notes see sequences sequences.private slots
 splitting strings threads tools.test vectors vocabs words
 words.symbol ;
-in: classes.tuple.tests
+IN: classes.tuple.tests
 
 TUPLE: rect x y w h ;
 : <rect> ( x y w h -- rect ) rect boa ;

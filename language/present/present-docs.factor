@@ -1,4 +1,4 @@
-in: present
+IN: present
 USING: help.markup help.syntax kernel strings ;
 
 ARTICLE: "present" "Converting objects to human-readable strings"

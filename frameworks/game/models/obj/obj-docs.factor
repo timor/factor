@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs game.models.obj.private help.markup help.syntax
 io.pathnames kernel sequences strings ;
-in: game.models.obj
+IN: game.models.obj
 
 about: "game.models.obj"
 

@@ -1,7 +1,7 @@
 
 USING: help.syntax help.markup kernel prettyprint sequences strings ;
 
-in: formatting
+IN: formatting
 
 HELP: printf
 { $values { "format-string" string } }

@@ -1,5 +1,5 @@
 USING: help.markup help.syntax strings ui.gadgets models ;
-in: ui.gadgets.labels
+IN: ui.gadgets.labels
 
 HELP: label
 { $class-description "A label displays a piece of text, either a single line string or an array of line strings. Labels are created by calling " { $link <label> } "." } ;

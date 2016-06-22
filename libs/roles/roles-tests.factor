@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: accessors classes.tuple compiler.units kernel qw roles sequences
 tools.test ;
-in: roles.tests
+IN: roles.tests
 
 ROLE: fork tines ;
 ROLE: spoon bowl ;

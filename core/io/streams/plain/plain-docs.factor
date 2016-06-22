@@ -1,5 +1,5 @@
 USING: help.markup help.syntax io ;
-in: io.streams.plain
+IN: io.streams.plain
 
 about: "io.streams.plain"
 

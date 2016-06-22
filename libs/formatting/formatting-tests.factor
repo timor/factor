@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license
 USING: calendar kernel formatting tools.test system ;
-in: formatting.tests
+IN: formatting.tests
 
 [ "%s" printf ] must-infer
 [ "%s" sprintf ] must-infer

@@ -1,6 +1,6 @@
 ! (c)2010 Joe Groff bsd license
 USING: assocs hashtables.identity kernel literals tools.test ;
-in: hashtables.identity.tests
+IN: hashtables.identity.tests
 
 CONSTANT: the-real-slim-shady "marshall mathers" ;
 

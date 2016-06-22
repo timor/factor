@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: graphviz graphviz.attributes help.markup help.syntax
 kernel present sequences ;
-in: graphviz.notation
+IN: graphviz.notation
 
 { add-edge \ add-edge[ -- ~-- \ --[ } related-words
 { add-edge \ add-edge[ -> ~-> \ ->[ } related-words

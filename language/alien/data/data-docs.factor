@@ -2,7 +2,7 @@ USING: alien alien.c-types help.syntax help.markup libc
 kernel.private byte-arrays math strings hashtables alien.syntax
 alien.strings sequences io.encodings.string debugger destructors
 vocabs.loader classes.struct quotations kernel ;
-in: alien.data
+IN: alien.data
 
 HELP: >c-array
 { $values { "seq" sequence } { "c-type" "a C type" } { "array" byte-array } }

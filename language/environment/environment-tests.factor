@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel namespaces prettyprint system tools.test
 environment strings sequences ;
-in: environment.tests
+IN: environment.tests
 
 { } [ os-envs . ] unit-test
 

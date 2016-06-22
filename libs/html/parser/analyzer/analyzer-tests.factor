@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: html.parser html.parser.analyzer kernel math sequences tools.test ;
-in: html.parser.analyzer.tests
+IN: html.parser.analyzer.tests
 
 { 0 3 }
 [ 1 { 3 5 7 9 11 } [ odd? ] find-nth ] unit-test

@@ -1,7 +1,7 @@
 ! Copyright (C) 2011 Erik Charlebois.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax vocabs.loader ;
-in: readline-listener
+IN: readline-listener
 
 HELP: readline-listener
 { $description "Invokes a listener that uses libreadline for editing, history and word completion." } ;

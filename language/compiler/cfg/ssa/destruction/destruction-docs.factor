@@ -1,7 +1,7 @@
 USING: compiler.cfg compiler.cfg.instructions
 compiler.cfg.ssa.destruction.private compiler.cfg.ssa.destruction.leaders
 compiler.cfg.ssa.interference help.markup help.syntax kernel sequences ;
-in: compiler.cfg.ssa.destruction
+IN: compiler.cfg.ssa.destruction
 
 HELP: cleanup-cfg
 { $values { "cfg" cfg } }

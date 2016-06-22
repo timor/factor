@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-in: shuffle
+IN: shuffle
 
 HELP: spin  $complex-shuffle ;
 HELP: roll  $complex-shuffle ;

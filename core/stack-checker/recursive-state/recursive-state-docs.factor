@@ -1,5 +1,5 @@
 USING: compiler.tree effects help.markup help.syntax kernel math quotations ;
-in: stack-checker.recursive-state
+IN: stack-checker.recursive-state
 
 HELP: recursive-quotation?
 { $values { "quot" quotation } { "?" boolean } }

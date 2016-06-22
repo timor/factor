@@ -1,5 +1,5 @@
 USING: arrays help.markup help.syntax kernel math ;
-in: 24-game
+IN: 24-game
 
 HELP: 24-game
 { $description "Starts the game!" }

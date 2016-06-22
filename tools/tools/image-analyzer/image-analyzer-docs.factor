@@ -1,5 +1,5 @@
 USING: assocs help.markup help.syntax sequences strings ;
-in: tools.image-analyzer
+IN: tools.image-analyzer
 
 HELP: load-image
 { $values

@@ -1,7 +1,7 @@
 
 USING: tools.test ;
 
-in: rosetta-code.raycasting
+IN: rosetta-code.raycasting
 
 CONSTANT: square { { -2 -1 } { 1 -2 } { 2 1 } { -1 2 } } ;
 

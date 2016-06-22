@@ -1,5 +1,5 @@
 USING: assocs compiler.cfg help.markup help.syntax ;
-in: compiler.cfg.stacks.padding
+IN: compiler.cfg.stacks.padding
 
 HELP: initial-state
 { $description "Initially the stack bottom is at 0 for both the data and retain stacks and no replaces have been registered." } ;

@@ -1,6 +1,6 @@
 USING: accessors concurrency.flags help.markup help.syntax kernel
 math.rectangles models strings ui.gadgets.private ;
-in: ui.gadgets
+IN: ui.gadgets
 
 HELP: <gadget>
 { $values { "gadget" "a new " { $link gadget } } }

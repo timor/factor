@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel words ;
-in: classes.singleton
+IN: classes.singleton
 
 ARTICLE: "singletons" "Singleton classes"
 "A singleton is a class with only one instance and with no state."

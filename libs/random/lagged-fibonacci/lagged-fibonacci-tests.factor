@@ -3,7 +3,7 @@
 USING: fry kernel math.functions random random.lagged-fibonacci
 sequences tools.test specialized-arrays alien.c-types ;
 specialized-array: double
-in: random.lagged-fibonacci.tests
+IN: random.lagged-fibonacci.tests
 
 { t } [
     3 <lagged-fibonacci> [

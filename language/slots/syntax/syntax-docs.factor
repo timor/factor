@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax ;
-in: slots.syntax
+IN: slots.syntax
 
 HELP: \ slots[
 { $description "Outputs several slot values to the stack." }

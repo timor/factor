@@ -5,7 +5,7 @@ compiler.cfg.debugger
 compiler.cfg.representations.coalescing
 compiler.cfg.utilities
 tools.test ;
-in: compiler.cfg.representations.coalescing.tests
+IN: compiler.cfg.representations.coalescing.tests
 
 : test-scc ( -- )
     0 get block>cfg compute-components ;

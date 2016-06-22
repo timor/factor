@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors calendar combinators.short-circuit
 constructors eval kernel math strings tools.test ;
-in: constructors.tests
+IN: constructors.tests
 
 TUPLE: stock-spread stock spread timestamp ;
 

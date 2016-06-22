@@ -1,7 +1,7 @@
 USING: compiler.units.private definitions help.markup help.syntax kernel
 kernel.private parser quotations sequences source-files stack-checker.errors
 words ;
-in: compiler.units
+IN: compiler.units
 
 ARTICLE: "compilation-units-internals" "Compilation units internals"
 "These words do not need to be called directly, and only serve to support the implementation."

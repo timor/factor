@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math sequences ;
-in: math.primes.factors
+IN: math.primes.factors
 
 { divisors factors group-factors unique-factors } related-words
 

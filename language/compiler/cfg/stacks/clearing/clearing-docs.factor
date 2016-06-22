@@ -1,6 +1,6 @@
 USING: compiler.cfg compiler.cfg.instructions help.markup
 help.syntax kernel sequences strings ;
-in: compiler.cfg.stacks.clearing
+IN: compiler.cfg.stacks.clearing
 
 ARTICLE: "compiler.cfg.stacks.clearing" "Uninitialized stack location clearing"
 "A compiler pass that inserts " { $link ##replace-imm } " instructions front of unsafe " { $link ##peek } " instructions in the " { $link cfg } ". Consider the following sequence of instructions."

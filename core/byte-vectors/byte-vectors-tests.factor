@@ -1,6 +1,6 @@
 USING: byte-vectors math prettyprint sequences tools.test
 vectors ;
-in: byte-vectors.tests
+IN: byte-vectors.tests
 
 { 0 } [ 123 <byte-vector> length ] unit-test
 

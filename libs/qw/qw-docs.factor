@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: help.markup help.syntax multiline ;
-in: qw
+IN: qw
 
 HELP: \ qw{
 { $syntax "qw{ lorem ipsum }" }

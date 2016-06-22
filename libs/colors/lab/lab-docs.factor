@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-in: colors.lab
+IN: colors.lab
 
 HELP: laba
 { $class-description "The class of CIE 1976 LAB (commonly called CIELAB) colors with an alpha channel." } ;

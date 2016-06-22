@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax images images.viewer kernel
 quotations strings ;
-in: images.testing
+IN: images.testing
 
 HELP: decode-test
 { $values

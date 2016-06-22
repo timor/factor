@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: concurrency.promises namespaces kernel pop3 pop3.server
 sequences tools.test accessors calendar ;
-in: pop3.tests
+IN: pop3.tests
 
 FROM: pop3 => count delete ;
 

@@ -1,5 +1,5 @@
 USING: compiler.cfg.instructions help.markup help.syntax kernel ;
-in: compiler.cfg.value-numbering.math
+IN: compiler.cfg.value-numbering.math
 
 HELP: diagonal?
 { $values { "insn" insn } { "?" boolean } }

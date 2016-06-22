@@ -4,7 +4,7 @@ accessors io.sockets io.servers prettyprint
 io.streams.string io.files io.files.temp io.directories
 splitting destructors sequences db db.tuples db.sqlite
 continuations urls math.parser furnace furnace.utilities ;
-in: furnace.sessions.tests
+IN: furnace.sessions.tests
 
 : with-session ( session quot -- )
     [

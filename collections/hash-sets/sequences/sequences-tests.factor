@@ -4,7 +4,7 @@
 USING: hash-sets.sequences kernel literals sequences sets
 tools.test ;
 
-in: hash-sets.sequences.tests
+IN: hash-sets.sequences.tests
 
 { t } [ 0 4 "asdf" <slice> SHS{ "asdf" } in? ] unit-test
 

@@ -1,6 +1,6 @@
 USING: help.markup help.syntax math math.private
 math.ratios.private math.functions ;
-in: math.ratios
+IN: math.ratios
 
 ARTICLE: "rationals" "Rational numbers"
 { $subsections ratio }

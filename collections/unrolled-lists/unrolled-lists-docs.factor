@@ -1,4 +1,4 @@
-in: unrolled-lists
+IN: unrolled-lists
 USING: help.markup help.syntax hashtables search-deques dlists
 deques ;
 

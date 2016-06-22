@@ -1,7 +1,7 @@
 ! Copyright (C) 2012 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license
 USING: strings tools.test ;
-in: sequences.rotated
+IN: sequences.rotated
 
 { "fasd" } [ "asdf" -1 <rotated> >string ] unit-test
 { "sdfa" } [ "asdf" 1 <rotated> >string ] unit-test

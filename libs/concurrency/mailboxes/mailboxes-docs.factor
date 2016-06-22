@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel arrays calendar ;
-in: concurrency.mailboxes
+IN: concurrency.mailboxes
 
 HELP: <mailbox>
 { $values { "mailbox" mailbox } }

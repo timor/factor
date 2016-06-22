@@ -1,5 +1,5 @@
 USING: help.markup help.syntax io.streams.string kernel sequences strings urls syndication calendar ;
-in: furnace.syndication
+IN: furnace.syndication
 
 HELP: <feed-action>
 { $values { "action" feed-action } }

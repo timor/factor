@@ -1,5 +1,5 @@
 USING: help.syntax help.markup io byte-arrays quotations ;
-in: io.streams.byte-array
+IN: io.streams.byte-array
 
 about: "io.streams.byte-array"
 

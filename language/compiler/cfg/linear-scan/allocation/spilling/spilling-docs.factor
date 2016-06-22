@@ -1,7 +1,7 @@
 USING: compiler.cfg.linear-scan
 compiler.cfg.linear-scan.allocation.state
 compiler.cfg.linear-scan.live-intervals help.markup help.syntax math ;
-in: compiler.cfg.linear-scan.allocation.spilling
+IN: compiler.cfg.linear-scan.allocation.spilling
 
 HELP: assign-spill
 { $values { "live-interval" live-interval-state } }

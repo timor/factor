@@ -1,5 +1,5 @@
 USING: digraphs kernel sequences tools.test ;
-in: digraphs.tests
+IN: digraphs.tests
 
 : test-digraph ( -- digraph )
     <digraph>

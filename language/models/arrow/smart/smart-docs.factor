@@ -1,4 +1,4 @@
-in: models.arrow.smart
+IN: models.arrow.smart
 USING: help.syntax help.markup models.product ;
 
 HELP: <smart-arrow>

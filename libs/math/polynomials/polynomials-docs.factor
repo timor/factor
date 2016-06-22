@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel math sequences ;
-in: math.polynomials
+IN: math.polynomials
 
 ARTICLE: "polynomials" "Polynomials"
 "A polynomial is a vector with the highest powers on the right:"

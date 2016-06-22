@@ -4,7 +4,7 @@ compiler.cfg.instructions compiler.cfg.registers compiler.test
 compiler.tree.builder compiler.tree.optimizer cpu.architecture
 cpu.x86.assembler cpu.x86.assembler.operands kernel make namespaces
 sequences system tools.test words ;
-in: compiler.cfg.builder.alien.tests
+IN: compiler.cfg.builder.alien.tests
 
 ! unboxing ints is only needed on 32bit archs
 cpu x86.32?

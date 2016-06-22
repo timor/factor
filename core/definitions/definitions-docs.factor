@@ -1,6 +1,6 @@
 USING: generic hash-sets help.markup help.syntax words math source-files
 parser quotations compiler.units ;
-in: definitions
+IN: definitions
 
 ARTICLE: "definition-protocol" "Definition protocol"
 "A common protocol is used to build generic tools for working with all definitions."

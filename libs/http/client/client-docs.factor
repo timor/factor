@@ -2,7 +2,7 @@ USING: http help.markup help.syntax io.pathnames io.streams.string
 io.encodings.binary kernel urls
 urls.encoding byte-arrays strings assocs sequences destructors
 http.client.post-data.private io.encodings.8-bit.latin1 ;
-in: http.client
+IN: http.client
 
 HELP: download-failed
 { $error-description "Thrown by " { $link http-request } " if the server returns a status code other than 200. The " { $slot "response" } " slot can be inspected for the underlying cause of the problem." } ;

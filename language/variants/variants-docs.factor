@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: arrays classes classes.singleton classes.tuple help.markup
 help.syntax kernel multiline slots quotations ;
-in: variants
+IN: variants
 
 HELP: \ VARIANT:
 { $syntax "

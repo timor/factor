@@ -1,6 +1,6 @@
 USING: io.streams.string io kernel arrays namespaces make
 tools.test ;
-in: io.streams.string.tests
+IN: io.streams.string.tests
 
 { "" } [ "" [ contents ] with-string-reader ] unit-test
 

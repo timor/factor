@@ -3,7 +3,7 @@
 USING: help.markup help.syntax kernel sequences
 sequences.private namespaces math quotations assocs.private
 sets ;
-in: assocs
+IN: assocs
 
 ARTICLE: "alists" "Association lists"
 "An " { $emphasis "association list" } ", abbreviated " { $emphasis "alist" } ", is an association represented as a sequence where all elements are key/value pairs. The " { $link sequence } " mixin is an instance of the " { $link assoc } " mixin, hence all sequences support the " { $link "assocs-protocol" } " in this way."

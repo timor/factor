@@ -5,7 +5,7 @@ USING:
     openssl.libssl
     sequences
     tools.test ;
-in: openssl.libssl.tests
+IN: openssl.libssl.tests
 
 : all-opts ( -- opts )
     {

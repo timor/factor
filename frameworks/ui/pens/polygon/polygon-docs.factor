@@ -1,5 +1,5 @@
 USING: colors help.markup help.syntax ui.pens ;
-in: ui.pens.polygon
+IN: ui.pens.polygon
 
 HELP: polygon
 { $class-description "A class implementing the " { $link draw-boundary } " and " { $link draw-interior } " generic words to draw a solid outline or a solid filled polygon, respectively. Instances of " { $link polygon } " have two slots:"

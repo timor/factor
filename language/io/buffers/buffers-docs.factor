@@ -1,6 +1,6 @@
 USING: alien byte-arrays destructors help.markup help.syntax
 kernel math ;
-in: io.buffers
+IN: io.buffers
 
 ARTICLE: "buffers" "Locked I/O buffers"
 "I/O buffers are first-in-first-out queues of bytes."

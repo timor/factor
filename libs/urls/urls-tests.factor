@@ -1,6 +1,6 @@
 USING: accessors arrays assocs io.sockets io.sockets.secure
 kernel linked-assocs present prettyprint tools.test urls ;
-in: urls.tests
+IN: urls.tests
 
 CONSTANT: urls
     {

@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math strings ;
-in: math.text.french
+IN: math.text.french
 
 HELP: number>text
 { $values { "n" integer } { "str" string } }

@@ -1,4 +1,4 @@
-in: tools.continuations
+IN: tools.continuations
 USING: help.markup help.syntax ;
 
 HELP: break

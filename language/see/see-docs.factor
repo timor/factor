@@ -1,6 +1,6 @@
 USING: classes definitions generic help.markup help.syntax
 prettyprint.sections sequences strings words ;
-in: see
+IN: see
 
 HELP: synopsis
 { $values { "defspec" "a definition specifier" } { "str" string } }

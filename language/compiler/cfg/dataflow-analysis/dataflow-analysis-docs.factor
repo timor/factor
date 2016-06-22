@@ -1,5 +1,5 @@
 USING: classes compiler.cfg help.markup help.syntax sequences ;
-in: compiler.cfg.dataflow-analysis
+IN: compiler.cfg.dataflow-analysis
 
 HELP: predecessors
 { $values { "bb" basic-block } { "dfa" "a dataflow analysis symbol" } { "seq" sequence } }

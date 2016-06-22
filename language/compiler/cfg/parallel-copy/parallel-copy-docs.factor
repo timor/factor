@@ -1,7 +1,7 @@
 USING: assocs arrays compiler.cfg compiler.cfg.instructions
 compiler.cfg.parallel-copy.private compiler.cfg.registers
 help.markup help.syntax kernel math quotations sequences ;
-in: compiler.cfg.parallel-copy
+IN: compiler.cfg.parallel-copy
 
 HELP: process-to-do
 { $values { "b" object } { "temp" quotation } { "quot" quotation } }

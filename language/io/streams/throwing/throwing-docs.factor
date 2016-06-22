@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax io kernel quotations words
 math ;
-in: io.streams.throwing
+IN: io.streams.throwing
 
 HELP: stream-exhausted
 { $values

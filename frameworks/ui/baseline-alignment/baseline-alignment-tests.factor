@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: tools.test math kernel sets generic
 ui.baseline-alignment ui.baseline-alignment.private ;
-in: ui.baseline-alignment.tests
+IN: ui.baseline-alignment.tests
 
 ! Test baseline calculations
 { 10 0 } [ 0 10 0 10 combine-metrics ] unit-test

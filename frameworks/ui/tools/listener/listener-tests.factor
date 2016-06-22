@@ -3,7 +3,7 @@ documents io kernel lexer listener math namespaces parser quotations
 sequences threads tools.test ui.gadgets.debug ui.gadgets.editors
 ui.gadgets.panes ui.gestures ui.tools.common ui.tools.listener
 vocabs.parser ;
-in: ui.tools.listener.tests
+IN: ui.tools.listener.tests
 
 [
     [ ] [ <interactor> <pane> <pane-stream> >>output "interactor" set ] unit-test

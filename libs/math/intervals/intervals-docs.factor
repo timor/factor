@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel math math.order ;
-in: math.intervals
+IN: math.intervals
 
 ARTICLE: "math-intervals-new" "Creating intervals"
 "Standard constructors:"

@@ -2,7 +2,7 @@ USING: alien.accessors alien.c-types alien.libraries alien.strings
 alien.syntax byte-arrays cpu.x86 eval help.markup help.syntax io
 io.backend io.encodings.utf16n io.encodings.utf8 kernel math
 quotations sequences system ;
-in: alien
+IN: alien
 
 HELP: callee-cleanup?
 { $values { "abi" abi } { "?" boolean } }

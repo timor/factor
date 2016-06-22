@@ -1,4 +1,4 @@
-in: disjoint-sets
+IN: disjoint-sets
 USING: help.markup help.syntax kernel assocs math ;
 
 HELP: <disjoint-set>

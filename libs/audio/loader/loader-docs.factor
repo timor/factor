@@ -1,6 +1,6 @@
 ! (c)2010 Joe Groff bsd license
 USING: audio help.markup help.syntax kernel quotations strings ;
-in: audio.loader
+IN: audio.loader
 
 HELP: read-audio
 { $values

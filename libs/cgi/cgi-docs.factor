@@ -1,7 +1,7 @@
 ! Copyright (C) 2009-2012 John Benediktsson
 ! See http://factorcode.org/license.txt for BSD license
 USING: assocs help.markup help.syntax ;
-in: cgi
+IN: cgi
 
 HELP: <cgi-form>
 { $values { "assoc" assoc } }

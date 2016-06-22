@@ -1,6 +1,6 @@
 USING: alien destructors help.markup help.syntax python python.throwing
 quotations ;
-in: python
+IN: python
 
 HELP: py-initialize
 { $description "Initializes the python binding. This word must be called before any other words in the api can be used" } ;

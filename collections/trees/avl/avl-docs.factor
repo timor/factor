@@ -1,5 +1,5 @@
 USING: help.syntax help.markup assocs ;
-in: trees.avl
+IN: trees.avl
 
 HELP: \ AVL{
 { $syntax "AVL{ { key value }... }" }

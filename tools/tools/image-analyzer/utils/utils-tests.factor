@@ -1,6 +1,6 @@
 USING: io io.encodings.binary io.streams.byte-array
 tools.image-analyzer.utils tools.test ;
-in: tools.image-analyzer.utils.tests
+IN: tools.image-analyzer.utils.tests
 
 {
     B{ 5 6 7 8 }

@@ -1,6 +1,6 @@
 USING: help.markup help.syntax kernel strings ui.gadgets
 ui.gestures ;
-in: ui.clipboards
+IN: ui.clipboards
 
 HELP: clipboard
 { $var-description "Global variable holding the system clipboard. By convention, text should only be copied to the clipboard via an explicit user action, for example by pressing " { $snippet "C+c" } "." }

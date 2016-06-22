@@ -1,7 +1,7 @@
 ! Copyright (C) 2014 Jon Harper.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel strings ;
-in: yaml.conversion
+IN: yaml.conversion
 
 HELP: yaml-merge
 { $var-description "Represents a !!merge key in a yaml document." } ;

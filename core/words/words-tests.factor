@@ -1,7 +1,7 @@
 USING: accessors arrays compiler.units definitions eval generic
 io.streams.string kernel math namespaces parser sequences
 tools.test vocabs words words.symbol ;
-in: words.tests
+IN: words.tests
 
 { 4 } [
     [

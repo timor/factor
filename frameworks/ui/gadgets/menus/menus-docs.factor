@@ -1,6 +1,6 @@
 USING: ui.gadgets help.markup help.syntax ui.gadgets.worlds
 kernel ;
-in: ui.gadgets.menus
+IN: ui.gadgets.menus
 
 HELP: <commands-menu>
 { $values { "target" object } { "hook" { $quotation ( button -- ) } } { "commands" "a sequence of commands" } { "menu" "a new " { $link gadget } } }

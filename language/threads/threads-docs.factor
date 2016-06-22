@@ -1,7 +1,7 @@
 USING: help.markup help.syntax kernel kernel.private io
 threads.private init quotations strings assocs heaps boxes
 namespaces deques dlists system ;
-in: threads
+IN: threads
 
 ARTICLE: "threads-start/stop" "Starting and stopping threads"
 "Spawning new threads:"

@@ -1,4 +1,4 @@
-in: tools.dispatch
+IN: tools.dispatch
 USING: help.markup help.syntax vm quotations ;
 
 HELP: last-dispatch-stats

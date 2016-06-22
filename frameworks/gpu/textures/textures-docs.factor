@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: alien byte-arrays classes gpu.buffers help.markup help.syntax
 images kernel math ;
-in: gpu.textures
+IN: gpu.textures
 
 HELP: +X
 { $class-description "This " { $link cube-map-axis } " references the positive X face of a " { $link texture-cube-map } "." } ;

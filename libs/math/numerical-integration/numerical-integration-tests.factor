@@ -1,6 +1,6 @@
 USING: kernel math.numerical-integration tools.test math
 math.constants math.functions ;
-in: math.numerical-integration.tests
+IN: math.numerical-integration.tests
 
 { 50 } [ 0 10 [ ] integrate-simpson ] unit-test
 { 1000/3 } [ 0 10 [ sq ] integrate-simpson ] unit-test

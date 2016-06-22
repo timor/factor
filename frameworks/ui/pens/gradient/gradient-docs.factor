@@ -1,4 +1,4 @@
-in: ui.pens.gradient
+IN: ui.pens.gradient
 USING: help.markup help.syntax ui.pens colors ;
 
 HELP: gradient

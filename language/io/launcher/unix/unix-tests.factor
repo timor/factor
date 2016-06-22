@@ -4,7 +4,7 @@ io.encodings.ascii io.encodings.binary io.encodings.utf8
 io.files io.launcher io.launcher.unix io.streams.duplex
 io.timeouts kernel libc locals math namespaces sequences threads
 tools.test unix.process ;
-in: io.launcher.unix.tests
+IN: io.launcher.unix.tests
 
 
 [

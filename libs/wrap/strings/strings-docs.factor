@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Daniel Ehrenberg
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.syntax help.markup strings math ;
-in: wrap.strings
+IN: wrap.strings
 
 about: "wrap.strings"
 

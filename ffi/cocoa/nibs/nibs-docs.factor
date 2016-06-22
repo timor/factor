@@ -1,5 +1,5 @@
 USING: help.markup help.syntax sequences strings ;
-in: cocoa.nibs
+IN: cocoa.nibs
 
 HELP: load-nib
 { $values { "name" string } }

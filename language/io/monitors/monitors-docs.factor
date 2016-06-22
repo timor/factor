@@ -1,4 +1,4 @@
-in: io.monitors
+IN: io.monitors
 USING: concurrency.mailboxes destructors help.markup help.syntax
 kernel quotations ;
 

@@ -1,5 +1,5 @@
 USING: compiler.tree help.markup help.syntax kernel ;
-in: compiler.tree.debugger
+IN: compiler.tree.debugger
 
 HELP: >r
 { $description "Symbol in the debugger to show that the top datastack item is moved to the retainstack." } ;

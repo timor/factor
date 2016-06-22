@@ -3,7 +3,7 @@
 
 USING: help.syntax help.markup brainfuck strings ;
 
-in: brainfuck
+IN: brainfuck
 
 HELP: run-brainfuck
 { $values { "code" string } }

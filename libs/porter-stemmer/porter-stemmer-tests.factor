@@ -1,4 +1,4 @@
-in: porter-stemmer.tests
+IN: porter-stemmer.tests
 USING: arrays io kernel porter-stemmer sequences tools.test
 io.files io.encodings.utf8 ;
 

@@ -1,4 +1,4 @@
-in: python.syntax
+IN: python.syntax
 USING: hashtables python.syntax help.markup help.syntax ;
 
 HELP: \ PY-FROM:

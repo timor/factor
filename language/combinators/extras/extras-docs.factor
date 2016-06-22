@@ -1,6 +1,6 @@
 USING: combinators help.markup help.syntax ;
 
-in: combinators.extras
+IN: combinators.extras
 
 HELP: cond-case
 { $values { "assoc" "a sequence of quotation pairs and an optional quotation" } }

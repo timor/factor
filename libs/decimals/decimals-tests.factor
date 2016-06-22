@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: continuations decimals grouping kernel kernel.private literals
 locals math math.functions math.order random tools.test ;
-in: decimals.tests
+IN: decimals.tests
 
 { t } [
     decimal: 12.34 decimal: 00012.34000 =

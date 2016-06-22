@@ -1,5 +1,5 @@
 USING: help.syntax help.markup math sequences strings ;
-in: xml-rpc
+IN: xml-rpc
 
 HELP: send-rpc
 { $values { "rpc" "an RPC data type" } { "xml" "an XML document" } }

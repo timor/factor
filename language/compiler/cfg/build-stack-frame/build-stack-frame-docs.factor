@@ -1,6 +1,6 @@
 USING: assocs compiler.cfg compiler.cfg.instructions compiler.cfg.stack-frame
 help.markup help.syntax kernel ;
-in: compiler.cfg.build-stack-frame
+IN: compiler.cfg.build-stack-frame
 
 HELP: compute-stack-frame
 { $values { "cfg" cfg } { "stack-frame/f" stack-frame } }

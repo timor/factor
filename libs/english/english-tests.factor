@@ -1,5 +1,5 @@
 use: tools.test
-in: english
+IN: english
 
 { "record" } [ "records" singularize ] unit-test
 { "FOOT" } [ "FEET" singularize ] unit-test

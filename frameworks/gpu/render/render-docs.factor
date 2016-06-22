@@ -10,7 +10,7 @@ specialized-array: int
 specialized-array: uint
 specialized-array: ulong
 specialized-array: void*
-in: gpu.render
+IN: gpu.render
 
 HELP: <index-elements>
 { $values

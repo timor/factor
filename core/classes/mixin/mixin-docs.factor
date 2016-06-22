@@ -1,6 +1,6 @@
 USING: help.markup help.syntax help words compiler.units
 classes sequences ;
-in: classes.mixin
+IN: classes.mixin
 
 ARTICLE: "mixins" "Mixin classes"
 "An object is an instance of a union class if it is an instance of one of its members. In this respect, mixin classes are identical to union classes. However, mixin classes have the additional property that they are " { $emphasis "open" } "; new classes can be added to the mixin after the original definition of the mixin."

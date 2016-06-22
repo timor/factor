@@ -1,6 +1,6 @@
 USING: accessors debugger kernel system tools.test vocabs
 vocabs.parser ;
-in: vocabs.metadata
+IN: vocabs.metadata
 
 : wrong-platform-vocab-name ( -- name )
     os windows? "unix" "windows" ? ;

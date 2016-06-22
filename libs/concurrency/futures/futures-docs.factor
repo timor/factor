@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: concurrency.promises concurrency.messaging kernel arrays
 continuations help.markup help.syntax quotations calendar ;
-in: concurrency.futures
+IN: concurrency.futures
 
 HELP: future
 { $values { "quot" { $quotation ( -- value ) } } { "future" future } }

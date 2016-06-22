@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: literals math math.functions math.vectors namespaces
 nurbs tools.test ;
-in: nurbs.tests
+IN: nurbs.tests
 
 symbol: test-nurbs
 

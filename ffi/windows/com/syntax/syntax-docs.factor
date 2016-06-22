@@ -1,5 +1,5 @@
 USING: help.markup help.syntax io kernel math quotations ;
-in: windows.com.syntax
+IN: windows.com.syntax
 
 HELP: \ guid:
 { $syntax "guid: \"{01234567-89ab-cdef-0123-456789abcdef}\"" }

@@ -1,6 +1,6 @@
 USING: io.streams.string kernel math sequences tools.test ;
 
-in: msgpack
+IN: msgpack
 
 {
     {

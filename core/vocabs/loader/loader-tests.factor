@@ -2,7 +2,7 @@ USING: accessors compiler.units continuations debugger
 definitions eval io.streams.string kernel math namespaces parser
 prettyprint sequences sets source-files tools.test vocabs
 vocabs.files vocabs.loader vocabs.parser vocabs.refresh words ;
-in: vocabs.loader.tests
+IN: vocabs.loader.tests
 
 ! This vocab should not exist, but just in case...
 { } [
@@ -17,13 +17,13 @@ in: vocabs.loader.tests
 { t }
 [ "kernel" >vocab-link "kernel" lookup-vocab = ] unit-test
 
-in: vocabs.loader.test.2
+IN: vocabs.loader.test.2
 
 : hello ( -- ) ;
 
 main: hello
 
-in: vocabs.loader.tests
+IN: vocabs.loader.tests
 
 { } [
     "vocabs.loader.test.2" run

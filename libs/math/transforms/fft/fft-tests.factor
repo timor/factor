@@ -1,5 +1,5 @@
 USING: math.vectors tools.test ;
-in: math.transforms.fft
+IN: math.transforms.fft
 
 ! even lengths
 

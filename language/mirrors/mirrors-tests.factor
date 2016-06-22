@@ -1,6 +1,6 @@
 USING: mirrors tools.test assocs kernel arrays accessors words
 namespaces math slots parser eval ;
-in: mirrors.tests
+IN: mirrors.tests
 
 TUPLE: foo bar baz ;
 

@@ -1,7 +1,7 @@
 USING: accessors assocs compiler.units kernel lexer locals.backend
 locals.parser namespaces parser prettyprint sequences sorting
 tools.test vocabs vocabs.parser ;
-in: locals.parser.tests
+IN: locals.parser.tests
 
 ! XXX: remove the COMPILE< and COMPILE> below and make test-all pass
 

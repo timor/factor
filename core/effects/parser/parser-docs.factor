@@ -1,4 +1,4 @@
-in: effects.parser
+IN: effects.parser
 USING: strings effects help.markup help.syntax ;
 
 HELP: parse-effect

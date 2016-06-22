@@ -1,7 +1,7 @@
 
 USING: assocs.extras kernel sequences tools.test ;
 
-in: assocs.extras
+IN: assocs.extras
 
 { f } [ f { } deep-at ] unit-test
 { f } [ f { "foo" } deep-at ] unit-test

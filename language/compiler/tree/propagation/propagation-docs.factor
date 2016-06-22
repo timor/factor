@@ -1,5 +1,5 @@
 USING: help.markup help.syntax literals multiline ;
-in: compiler.tree.propagation
+IN: compiler.tree.propagation
 
 COMPILE<
 CONSTANT: propagate-ex [[

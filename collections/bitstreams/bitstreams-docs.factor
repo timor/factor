@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel strings math byte-arrays accessors ;
-in: bitstreams
+IN: bitstreams
 
 
 

@@ -1,7 +1,7 @@
 USING: kernel money tools.test
 taxes.usa taxes.usa.federal taxes.usa.mn
 calendar taxes.usa.w4 usa-cities math.finance ;
-in: taxes.usa.tests
+IN: taxes.usa.tests
 
 {
     426 23

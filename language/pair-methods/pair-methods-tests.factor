@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: accessors pair-methods classes kernel sequences tools.test ;
-in: pair-methods.tests
+IN: pair-methods.tests
 
 TUPLE: thang ;
 

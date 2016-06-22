@@ -1,6 +1,6 @@
 USING: help.markup help.syntax kernel math quotations regexp
 strings ;
-in: validators
+IN: validators
 
 HELP: v-checkbox
 { $values { "str" string } {  "?" boolean } }

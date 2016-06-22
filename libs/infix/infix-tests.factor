@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: infix infix.private kernel locals math math.functions
 tools.test ;
-in: infix.tests
+IN: infix.tests
 
 { 0 } [ infix[[ 0 ]] ] unit-test
 { 0.5 } [ infix[[ 3.0/6 ]] ] unit-test

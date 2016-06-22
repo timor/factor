@@ -6,7 +6,7 @@ sequences math prettyprint parser classes math.constants
 io.encodings.binary random assocs serialize.private alien.c-types
 combinators.short-circuit literals ;
 specialized-array: double
-in: serialize.tests
+IN: serialize.tests
 
 : (test-serialize-cell) ( n -- ? )
     dup

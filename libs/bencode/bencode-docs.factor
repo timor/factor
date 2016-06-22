@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel strings ;
-in: bencode
+IN: bencode
 
 HELP: >bencode
 { $values { "obj" object } { "bencode" string } }

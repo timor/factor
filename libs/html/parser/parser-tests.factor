@@ -1,5 +1,5 @@
 USING: html.parser kernel tools.test ;
-in: html.parser.tests
+IN: html.parser.tests
 
 {
     V{ T{ tag f "html" H{ } f f } }

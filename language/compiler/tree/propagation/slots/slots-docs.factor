@@ -1,5 +1,5 @@
 USING: compiler.tree.propagation.info help.markup help.syntax kernel math ;
-in: compiler.tree.propagation.slots
+IN: compiler.tree.propagation.slots
 
 HELP: literal-info-slot
 { $values

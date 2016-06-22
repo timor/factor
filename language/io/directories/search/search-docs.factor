@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel quotations sequences ;
-in: io.directories.search
+IN: io.directories.search
 
 HELP: each-file
 { $values

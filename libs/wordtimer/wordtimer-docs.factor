@@ -1,6 +1,6 @@
 USING: help.syntax help.markup kernel prettyprint sequences
 quotations words strings ;
-in: wordtimer
+IN: wordtimer
 
 HELP: reset-word-timer
 { $description "resets the global wordtimes datastructure. Must be called before calling any word-timer annotated code"

@@ -1,5 +1,5 @@
 USING: help.syntax help.markup kernel arrays assocs ;
-in: persistent.heaps
+IN: persistent.heaps
 
 HELP: <persistent-heap>
 { $values { "heap" "a persistent heap" } }

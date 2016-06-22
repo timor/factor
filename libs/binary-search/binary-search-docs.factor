@@ -1,4 +1,4 @@
-in: binary-search
+IN: binary-search
 USING: help.markup help.syntax sequences kernel math.order ;
 
 HELP: search

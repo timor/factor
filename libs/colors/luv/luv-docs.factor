@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-in: colors.luv
+IN: colors.luv
 
 HELP: luva
 { $class-description "The class of CIE 1976 LUV (commonly called CIELUV) colors with an alpha channel." } ;

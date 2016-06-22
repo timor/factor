@@ -3,7 +3,7 @@
 
 USING: colors help.markup help.syntax strings ;
 
-in: colors.hex
+IN: colors.hex
 
 HELP: hex>rgba
 { $values { "hex" string } { "rgba" color } }

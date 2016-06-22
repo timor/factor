@@ -1,5 +1,5 @@
 USING: compiler.tree.debugger math tools.test typed.namespaces ;
-in: typed.namespaces.tests
+IN: typed.namespaces.tests
 
 symbol: pi
 

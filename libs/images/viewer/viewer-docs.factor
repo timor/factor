@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel strings io.pathnames images
 models opengl.textures classes ui.gadgets ;
-in: images.viewer
+IN: images.viewer
 
 HELP: <image-gadget>
 { $values

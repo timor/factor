@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-in: colors.yiq
+IN: colors.yiq
 
 HELP: yiqa
 { $class-description "The class of YIQ (Y, In-Place, Quadrature) colors with an alpha channel. All slots store values in the interval " { $snippet "[0,1]" } "." } ;

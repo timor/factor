@@ -1,6 +1,6 @@
 USING: math hashtables accessors kernel words hints
 compiler.tree.debugger tools.test ;
-in: hints.tests
+IN: hints.tests
 
 ! Regression
 GENERIC: blahblah ( a b c -- ) ;

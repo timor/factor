@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel math sequences ;
-in: base64
+IN: base64
 
 HELP: >base64
 { $values { "seq" sequence } { "base64" "a string of base64 characters" } }

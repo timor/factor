@@ -14,7 +14,7 @@ QUALIFIED-WITH: alien.c-types c ;
 specialized-array: char
 specialized-array: int
 specialized-array: ushort
-in: classes.struct.tests
+IN: classes.struct.tests
 
 symbol: struct-test-empty
 

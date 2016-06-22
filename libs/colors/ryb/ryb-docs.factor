@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-in: colors.ryb
+IN: colors.ryb
 
 HELP: ryba
 { $class-description "The class of RYB (Red, Yellow, Blue) colors with an alpha channel. All slots store values in the interval " { $snippet "[0,1]" } "." } ;

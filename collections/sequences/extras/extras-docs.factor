@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel math sequences ;
-in: sequences.extras
+IN: sequences.extras
 
 HELP: 2count
 { $values

@@ -5,7 +5,7 @@ cpu.x86 byte-arrays make namespaces kernel layouts math sequences
 specialized-arrays system tools.test ;
 qualified: vm
 specialized-array: uint
-in: compiler.codegen.gc-maps.tests
+IN: compiler.codegen.gc-maps.tests
 
 singleton: fake-cpu
 

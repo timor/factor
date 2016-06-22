@@ -1,6 +1,6 @@
 USING: bootstrap.image.private byte-arrays help.markup help.syntax
 io.pathnames math quotations sequences strings words ;
-in: bootstrap.image
+IN: bootstrap.image
 
 HELP: architecture
 { $var-description "Bootstrap architecture name" } ;

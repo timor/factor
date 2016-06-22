@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: kernel math tools.test variants slots ;
-in: variants.tests
+IN: variants.tests
 
 VARIANT: list
     nil

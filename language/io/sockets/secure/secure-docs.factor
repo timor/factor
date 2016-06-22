@@ -1,5 +1,5 @@
 USING: io help.markup help.syntax calendar quotations strings io.sockets ;
-in: io.sockets.secure
+IN: io.sockets.secure
 
 HELP: secure-socket-timeout
 { $var-description "Timeout for operations not associated with a constructed port instance, such as SSL handshake and shutdown. Represented as a " { $link duration } "." } ;

@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Keith Lazuka.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel sequences ;
-in: images.gif
+IN: images.gif
 
 ARTICLE: "images.gif" "GIF Image Loader"
 { $vocab-link "images.gif" }

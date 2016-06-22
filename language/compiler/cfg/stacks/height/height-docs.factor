@@ -1,5 +1,5 @@
 USING: compiler.cfg compiler.cfg.registers help.markup help.syntax math ;
-in: compiler.cfg.stacks.height
+IN: compiler.cfg.stacks.height
 
 HELP: record-stack-heights
 { $values { "ds-height" number } { "rs-height" number } { "bb" basic-block } }

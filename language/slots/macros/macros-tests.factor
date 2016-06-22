@@ -1,6 +1,6 @@
 ! (c) 2011 Joe Groff bsd license
 USING: kernel math slots.macros tools.test ;
-in: slots.macros.tests
+IN: slots.macros.tests
 
 TUPLE: foo a b c ;
 

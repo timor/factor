@@ -1,7 +1,7 @@
 USING: accessors combinators io.directories io.files.temp
 io.files.windows io.pathnames kernel math sequences tools.test
 windows.kernel32 ;
-in: io.directories.windows.tests
+IN: io.directories.windows.tests
 
 { { +read-only+ +archive+ } } [
     "read-only.file" temp-file {

@@ -1,6 +1,6 @@
 USING: help.markup help.syntax strings generic vectors assocs
 math make ;
-in: tools.completion
+IN: tools.completion
 
 ARTICLE: "tools.completion" "Fuzzy completion"
 "Various developer tools make use of a general-purpose fuzzy completion algorithm."

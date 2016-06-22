@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax io.streams.string urls
 multiline spider.private quotations ;
-in: spider
+IN: spider
 
 HELP: <spider>
 { $values

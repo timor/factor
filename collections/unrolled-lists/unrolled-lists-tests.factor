@@ -1,6 +1,6 @@
 USING: unrolled-lists tools.test deques kernel sequences
 random prettyprint grouping math ;
-in: unrolled-lists.tests
+IN: unrolled-lists.tests
 
 { 1 } [ <unrolled-list> 1 over push-front pop-front ] unit-test
 { 1 } [ <unrolled-list> 1 over push-front pop-back ] unit-test

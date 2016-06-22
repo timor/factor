@@ -3,7 +3,7 @@
 
 USING: arrays kernel grouping math sequences tools.test ;
 
-in: math.hashcodes
+IN: math.hashcodes
 
 { t } [
     12 dup >bignum 12.0 12 0 complex boa 4array

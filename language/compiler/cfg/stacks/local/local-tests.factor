@@ -4,7 +4,7 @@ compiler.cfg.utilities compiler.test cpu.architecture kernel
 kernel.private make math namespaces sequences.private slots.private
 tools.test ;
 qualified: sets
-in: compiler.cfg.stacks.local.tests
+IN: compiler.cfg.stacks.local.tests
 
 ! loc>vreg
 { 1 } [

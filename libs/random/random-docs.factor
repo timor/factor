@@ -1,6 +1,6 @@
 USING: arrays help.markup help.syntax kernel math quotations
 sequences ;
-in: random
+IN: random
 
 HELP: seed-random
 { $values

@@ -1,5 +1,5 @@
 USING: tools.test ;
-in: webbrowser
+IN: webbrowser
 
 { t } [ "http://reddit.com" url-string? ] unit-test
 { t } [ "https://reddit.com" url-string? ] unit-test

@@ -1,4 +1,4 @@
-in: ui.tools.error-list
+IN: ui.tools.error-list
 USING: help.markup help.syntax ui.tools.common ui.commands ;
 
 ARTICLE: "ui.tools.error-list" "UI error list tool"

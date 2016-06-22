@@ -1,4 +1,4 @@
-in: core-foundation.arrays.tests
+IN: core-foundation.arrays.tests
 USING: core-foundation core-foundation.arrays
 core-foundation.strings destructors sequences tools.test ;
 

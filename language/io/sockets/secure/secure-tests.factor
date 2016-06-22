@@ -1,4 +1,4 @@
-in: io.sockets.secure.tests
+IN: io.sockets.secure.tests
 USING: accessors io.sockets io.sockets.secure io.sockets.secure.debug
 kernel system tools.test ;
 

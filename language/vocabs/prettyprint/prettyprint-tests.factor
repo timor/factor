@@ -1,6 +1,6 @@
 USING: vocabs.prettyprint vocabs.prettyprint.private tools.test
 io.streams.string eval ;
-in: vocabs.prettyprint.tests
+IN: vocabs.prettyprint.tests
 
 : manifest-test-1 ( -- string )
     "USING: kernel namespaces vocabs.parser vocabs.prettyprint ;

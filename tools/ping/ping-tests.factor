@@ -1,6 +1,6 @@
 USING: continuations destructors io.sockets kernel math.order
 ping system system-info tools.test ;
-in: ping.tests
+IN: ping.tests
 
 ! { 5 1 } is xp
 : test-ping? ( -- ? )

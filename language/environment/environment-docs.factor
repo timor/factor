@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs help.markup help.syntax io.streams.string
 libc sequences strings ;
-in: environment
+IN: environment
 
 HELP: (os-envs)
 { $values

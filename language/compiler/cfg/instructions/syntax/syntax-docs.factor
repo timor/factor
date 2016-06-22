@@ -1,5 +1,5 @@
 USING: help.markup help.syntax literals multiline sequences splitting ;
-in: compiler.cfg.instructions.syntax
+IN: compiler.cfg.instructions.syntax
 
 COMPILE<
 CONSTANT: parse-insn-slot-specs-code [[

@@ -1,6 +1,6 @@
 USING: help.markup help.syntax io kernel
 prettyprint.sections words quotations ;
-in: prettyprint.config
+IN: prettyprint.config
 
 about: "prettyprint-variables"
 

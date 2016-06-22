@@ -1,4 +1,4 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: tools.test ui.pens.solid ;
-in: ui.pens.solid.tests
+IN: ui.pens.solid.tests

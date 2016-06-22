@@ -1,5 +1,5 @@
 USING: tools.test ;
-in: cuesheet
+IN: cuesheet
 
 {
     T{ cuesheet

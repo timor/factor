@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel sequences ;
-in: math.vectors.simd.intrinsics
+IN: math.vectors.simd.intrinsics
 
 HELP: (simd-select)
 { $values { "a" object } { "n" object } { "rep" object } { "x" object } }

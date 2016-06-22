@@ -1,4 +1,4 @@
-in: ui.gadgets.search-tables.tests
+IN: ui.gadgets.search-tables.tests
 USING: ui.gadgets.search-tables ui.gadgets.tables ui.gadgets models
 arrays sequences tools.test ;
 

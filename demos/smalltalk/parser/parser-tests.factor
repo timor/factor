@@ -1,4 +1,4 @@
-in: smalltalk.parser.tests
+IN: smalltalk.parser.tests
 USING: smalltalk.parser smalltalk.ast
 peg.ebnf tools.test accessors
 io.files io.encodings.ascii kernel ;

@@ -1,6 +1,6 @@
 USING: random sequences tools.test kernel math math.constants
 math.functions sets grouping random.private math.statistics ;
-in: random.tests
+IN: random.tests
 
 { 4 } [ 4 random-bytes length ] unit-test
 { 7 } [ 7 random-bytes length ] unit-test

@@ -1,6 +1,6 @@
 USING: compiler.tree help.markup help.syntax kernel math sequences
 strings ;
-in: compiler.tree.dead-code.simple
+IN: compiler.tree.dead-code.simple
 
 HELP: dead-flushable-call?
 { $values { "#call" #call } { "?" boolean } }

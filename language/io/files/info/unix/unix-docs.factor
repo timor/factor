@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: calendar help.markup help.syntax io.files.info kernel
 math strings ;
-in: io.files.info.unix
+IN: io.files.info.unix
 
 HELP: add-file-permissions
 { $values

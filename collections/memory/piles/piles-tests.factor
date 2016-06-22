@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: accessors alien destructors kernel math
 memory.piles tools.test ;
-in: memory.piles.tests
+IN: memory.piles.tests
 
 { 25 } [
     [

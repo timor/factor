@@ -1,5 +1,5 @@
 USING: pcre sequences tools.deploy.backend tools.test ;
-in: tools.deploy.backend.tests
+IN: tools.deploy.backend.tests
 
 : complete-match? ( str regexp -- ? )
     "^" "$" surround matches? ;

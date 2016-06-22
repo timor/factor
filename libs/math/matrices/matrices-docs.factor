@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math sequences ;
-in: math.matrices
+IN: math.matrices
 
 HELP: zero-matrix
 { $values { "m" integer } { "n" integer } { "matrix" sequence } }

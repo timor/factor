@@ -1,6 +1,6 @@
 USING: help.markup help.syntax kernel math math.order
 sequences quotations math.functions.private math.constants ;
-in: math.functions
+IN: math.functions
 
 ARTICLE: "integer-functions" "Integer functions"
 { $subsections

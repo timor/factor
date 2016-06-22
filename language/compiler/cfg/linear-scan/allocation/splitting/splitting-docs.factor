@@ -1,6 +1,6 @@
 USING: compiler.cfg.linear-scan.live-intervals help.markup help.syntax
 math ;
-in: compiler.cfg.linear-scan.allocation.splitting
+IN: compiler.cfg.linear-scan.allocation.splitting
 
 HELP: split-interval
 { $values

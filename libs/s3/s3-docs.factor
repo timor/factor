@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: assocs help.markup help.syntax kernel strings ;
-in: s3
+IN: s3
 
 HELP: buckets
 { $values

@@ -2,7 +2,7 @@ USING: assocs compiler.cfg compiler.cfg.builder compiler.cfg.optimizer
 compiler.errors compiler.tree.builder compiler.tree.optimizer
 compiler.units compiler.codegen help.markup help.syntax io
 parser quotations sequences words ;
-in: compiler
+IN: compiler
 
 HELP: enable-optimizer
 { $description "Enables the optimizing compiler." } ;

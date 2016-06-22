@@ -1,6 +1,6 @@
 USING: kernel tools.test math namespaces prettyprint
 sequences inspector io.streams.string ;
-in: inspector.tests
+IN: inspector.tests
 
 [ 1 2 3 ] describe
 f describe

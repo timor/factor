@@ -1,6 +1,6 @@
 USING: compiler.cfg.instructions compiler.cfg.stacks.finalize
 help.markup help.syntax ;
-in: compiler.cfg.stacks.global
+IN: compiler.cfg.stacks.global
 
 HELP: avail
 { $class-description "A stack location is available at a location if all paths from the entry block to the location load the location into a register." } ;

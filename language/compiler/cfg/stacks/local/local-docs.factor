@@ -1,7 +1,7 @@
 USING: assocs compiler.cfg compiler.cfg.instructions
 compiler.cfg.registers hash-sets hashtables help.markup help.syntax
 sequences ;
-in: compiler.cfg.stacks.local
+IN: compiler.cfg.stacks.local
 
 HELP: emit-changes
 { $values { "replaces" sequence } { "state" sequence } }

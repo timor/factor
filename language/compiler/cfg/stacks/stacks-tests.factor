@@ -1,7 +1,7 @@
 USING: accessors arrays assocs combinators compiler.cfg.registers
 compiler.cfg.stacks compiler.cfg.stacks.local compiler.test kernel literals
 namespaces tools.test ;
-in: compiler.cfg.stacks.tests
+IN: compiler.cfg.stacks.tests
 
 {
     H{ { d: 1 4 } { d: 2 3 } { d: 0 5 } }

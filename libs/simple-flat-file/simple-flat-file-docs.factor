@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Daniel Ehrenberg
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.syntax help.markup strings biassocs arrays ;
-in: simple-flat-file
+IN: simple-flat-file
 
 about: "simple-flat-file"
 

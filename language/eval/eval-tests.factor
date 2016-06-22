@@ -1,5 +1,5 @@
 USING: eval tools.test ;
-in: eval.tests
+IN: eval.tests
 
 { 4 } [ "use: math 2 2 +" eval( -- result ) ] unit-test
 [ "use: math 2 2 +" eval( -- ) ] must-fail

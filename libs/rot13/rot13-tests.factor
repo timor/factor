@@ -1,7 +1,7 @@
 
 USING: tools.test ;
 
-in: rot13
+IN: rot13
 
 { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" } [
     "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm" rot13

@@ -3,7 +3,7 @@
 
 USING: kernel math.distances math.functions tools.test ;
 
-in: math.distances.tests
+IN: math.distances.tests
 
 { 1 } [ "hello" "jello" hamming-distance ] unit-test
 

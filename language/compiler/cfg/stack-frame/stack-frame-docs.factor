@@ -1,5 +1,5 @@
 USING: compiler.cfg.instructions cpu.x86 help.markup help.syntax layouts math ;
-in: compiler.cfg.stack-frame
+IN: compiler.cfg.stack-frame
 
 HELP: stack-frame
 { $class-description "Counts of, among other things, how much stack a compiled word needs. The stack frame is organized in the following fashion:"

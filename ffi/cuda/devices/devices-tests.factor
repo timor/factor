@@ -1,6 +1,6 @@
 ! (c)2010 Joe Groff bsd license
 USING: cuda.devices tools.test ;
-in: cuda.devices.tests
+IN: cuda.devices.tests
 
 { 1  5 100 } [  5 20 100 10 (distribute-jobs) ] unit-test
 { 2  5 100 } [ 10 20 100 10 (distribute-jobs) ] unit-test

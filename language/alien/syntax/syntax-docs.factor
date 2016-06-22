@@ -1,4 +1,4 @@
-in: alien.syntax
+IN: alien.syntax
 USING: alien alien.c-types alien.enums alien.libraries classes.struct
 help.markup help.syntax see ;
 

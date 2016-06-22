@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel strings ;
-in: cocoa.pasteboard
+IN: cocoa.pasteboard
 
 HELP: pasteboard-string?
 { $values { "pasteboard" "an " { $snippet "NSPasteBoard" } } { "?" boolean } }

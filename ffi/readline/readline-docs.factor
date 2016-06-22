@@ -3,7 +3,7 @@
 USING: arrays help.markup help.syntax math
 sequences.private vectors strings kernel math.order layouts
 quotations generic.single ;
-in: readline
+IN: readline
 
 HELP: readline
 { $values

@@ -1,4 +1,4 @@
-in: method-chains.tests
+IN: method-chains.tests
 USING: method-chains tools.test arrays strings sequences kernel namespaces ;
 
 GENERIC: testing ( a b -- c ) ;

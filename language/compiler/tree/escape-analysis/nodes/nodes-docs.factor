@@ -1,5 +1,5 @@
 USING: compiler.tree help.markup help.syntax ;
-in: compiler.tree.escape-analysis.nodes
+IN: compiler.tree.escape-analysis.nodes
 
 HELP: escape-analysis*
 { $values { "node" node } }

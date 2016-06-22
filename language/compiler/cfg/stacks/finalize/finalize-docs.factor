@@ -1,5 +1,5 @@
 USING: assocs compiler.cfg help.markup help.syntax ;
-in: compiler.cfg.stacks.finalize
+IN: compiler.cfg.stacks.finalize
 
 HELP: inserting-peeks
 { $values { "from" basic-block } { "to" basic-block } { "set" assoc } }

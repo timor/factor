@@ -1,7 +1,7 @@
 ! (c)Joe Groff bsd license
 USING: alien classes classes.struct.private help.markup help.syntax
 kernel libc math sequences ;
-in: classes.struct
+IN: classes.struct
 
 HELP: <struct-boa>
 { $values

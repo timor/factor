@@ -1,5 +1,5 @@
 USING: kernel math tools.test units.imperial inverse ;
-in: units.imperial.tests
+IN: units.imperial.tests
 
 { 1 } [ 12 inches [ feet ] undo ] unit-test
 { 12 } [ 1 feet [ inches ] undo ] unit-test

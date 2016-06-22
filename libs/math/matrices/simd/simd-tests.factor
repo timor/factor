@@ -4,7 +4,7 @@ literals math.constants math.functions specialized-arrays tools.test ;
 QUALIFIED-WITH: alien.c-types c ;
 FROM: math.matrices => m~ ;
 specialized-array: float-4
-in: math.matrices.simd.tests
+IN: math.matrices.simd.tests
 
 {
     S{ matrix4 f

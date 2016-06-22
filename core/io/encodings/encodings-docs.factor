@@ -1,5 +1,5 @@
 USING: help.markup help.syntax io quotations math sequences strings ;
-in: io.encodings
+IN: io.encodings
 
 HELP: <encoder>
 { $values { "stream" "an output stream" }

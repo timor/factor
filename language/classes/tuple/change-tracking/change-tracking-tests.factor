@@ -1,5 +1,5 @@
 USING: classes.tuple.change-tracking tools.test strings accessors kernel continuations ;
-in: classes.tuple.change-tracking.tests
+IN: classes.tuple.change-tracking.tests
 
 TUPLE: resource < change-tracking-tuple
     { pathname string } ;

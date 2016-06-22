@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ui.theme ;
-in: ui.theme.switching
+IN: ui.theme.switching
 
 HELP: switch-theme
 { $values { "theme" "theme" } }

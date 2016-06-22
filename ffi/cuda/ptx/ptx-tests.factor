@@ -1,5 +1,5 @@
 USING: cuda.ptx io.streams.string tools.test ;
-in: cuda.ptx.tests
+IN: cuda.ptx.tests
 
 { "	.version 2.0
 	.target sm_20

@@ -1,4 +1,4 @@
-in: checksums.openssl
+IN: checksums.openssl
 USING: checksums help.syntax help.markup ;
 
 HELP: openssl-checksum

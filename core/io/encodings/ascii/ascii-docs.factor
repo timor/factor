@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-in: io.encodings.ascii
+IN: io.encodings.ascii
 
 HELP: ascii
 { $class-description "ASCII encoding descriptor." } ;

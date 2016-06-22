@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: help.markup help.syntax kernel words ;
-in: tools.deprecation
+IN: tools.deprecation
 
 HELP: :deprecations
 { $description "Prints all deprecation notes." } ;

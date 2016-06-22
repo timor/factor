@@ -3,7 +3,7 @@
 USING: calendar eval generalizations io.streams.string kernel
 math math.order memoize namespaces parser prettyprint see
 sequences threads tools.test tools.time ;
-in: memoize.tests
+IN: memoize.tests
 
 MEMO: fib ( m -- n )
     dup 1 <= [ drop 1 ] [ dup 1 - fib swap 2 - fib + ] if ;

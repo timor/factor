@@ -1,5 +1,5 @@
 USING: help.markup help.syntax sequences words ;
-in: help.lint.checks
+IN: help.lint.checks
 
 HELP: check-example
 { $values { "element" sequence } }

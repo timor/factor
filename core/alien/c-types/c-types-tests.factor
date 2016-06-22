@@ -2,7 +2,7 @@ USING: accessors alien.c-types alien.syntax classes
 classes.struct compiler.units eval io.encodings.ascii kernel
 math.constants tools.test ;
 FROM: alien.c-types => short ;
-in: alien.c-types.tests
+IN: alien.c-types.tests
 
 CONSTANT: xyz 123 ;
 

@@ -1,5 +1,5 @@
 USING: bit-vectors kernel math sequences tools.test vectors ;
-in: bit-vectors.tests
+IN: bit-vectors.tests
 
 { 0 } [ 123 <bit-vector> length ] unit-test
 

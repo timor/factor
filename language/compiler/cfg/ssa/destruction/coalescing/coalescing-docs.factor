@@ -1,7 +1,7 @@
 USING: compiler.cfg compiler.cfg.instructions
 compiler.cfg.ssa.destruction.leaders compiler.cfg.ssa.interference
 help.markup help.syntax kernel make sequences ;
-in: compiler.cfg.ssa.destruction.coalescing
+IN: compiler.cfg.ssa.destruction.coalescing
 
 HELP: class-element-map
 { $var-description "Maps leaders to equivalence class elements which are sequences of " { $link vreg-info } " instances." } ;

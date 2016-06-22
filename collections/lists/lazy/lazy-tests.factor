@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: destructors io io.encodings.utf8 io.files kernel lists
 lists.lazy math sequences tools.test ;
-in: lists.lazy.tests
+IN: lists.lazy.tests
 
 { { 1 2 3 4 } } [
   { 1 2 3 4 } >list list>array

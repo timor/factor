@@ -1,5 +1,5 @@
 USING: help.markup help.syntax sequences ;
-in: math.transforms.fft
+IN: math.transforms.fft
 
 HELP: fft
 { $values { "seq" sequence } { "seq'" sequence } }

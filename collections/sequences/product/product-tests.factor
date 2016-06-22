@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: arrays kernel make sequences sequences.product tools.test ;
-in: sequences.product.tests
+IN: sequences.product.tests
 
 
 { { { 0 "a" } { 1 "a" } { 2 "a" } { 0 "b" } { 1 "b" } { 2 "b" } } }

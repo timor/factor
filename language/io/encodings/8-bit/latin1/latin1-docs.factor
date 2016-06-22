@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax ;
-in: io.encodings.8-bit.latin1
+IN: io.encodings.8-bit.latin1
 
 HELP: latin1
 { $var-description "This is the ISO-8859-1 encoding, also called Latin-1: Western European. It is an 8-bit superset of ASCII which is the default for a mimetype starting with 'text' and provides the characters necessary for most western European languages." }

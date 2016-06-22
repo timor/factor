@@ -1,6 +1,6 @@
 USING: classes compiler.tree.propagation.info help.markup
 help.syntax kernel math math.intervals ;
-in: compiler.tree.propagation.known-words
+IN: compiler.tree.propagation.known-words
 
 HELP: binary-op-class
 { $values { "info1" value-info-state } { "info2" value-info-state } { "newclass" class } }

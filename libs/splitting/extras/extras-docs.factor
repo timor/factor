@@ -1,5 +1,5 @@
 USING: help.markup help.syntax sequences splitting strings ;
-in: splitting.extras
+IN: splitting.extras
 
 HELP: split*-when
 { $values { "seq" sequence } { "quot" { $quotation ( ... elt -- ... ? ) } } { "pieces" "a new array" } }

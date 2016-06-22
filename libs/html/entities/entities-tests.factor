@@ -1,5 +1,5 @@
 USING: tools.test ;
-in: html.entities
+IN: html.entities
 
 { "&" } [ "&amp;" html-unescape ] unit-test
 { "a" } [ "&#x61" html-unescape ] unit-test

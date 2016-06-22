@@ -2,7 +2,7 @@ USING: compiler.cfg.instructions compiler.cfg.rpo
 compiler.cfg.stack-frame compiler.tree cpu.x86.assembler.operands
 help.markup help.syntax kernel math namespaces sequences vectors words
 ;
-in: compiler.cfg
+IN: compiler.cfg
 
 HELP: basic-block
 { $class-description

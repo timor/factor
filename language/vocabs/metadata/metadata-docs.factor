@@ -1,5 +1,5 @@
 USING: help.markup help.syntax strings ;
-in: vocabs.metadata
+IN: vocabs.metadata
 
 ARTICLE: "vocabs.metadata" "Vocabulary metadata"
 "Vocabulary directories can contain text files with metadata:"

@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: destructors help.markup help.syntax quotations sequences ;
-in: tools.destructors
+IN: tools.destructors
 
 HELP: disposables.
 { $description "Print the number of disposable objects of each class." } ;

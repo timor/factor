@@ -1,6 +1,6 @@
 USING: kernel namespaces stack-checker.backend stack-checker.values
 tools.test ;
-in: stack-checker.values.tests
+IN: stack-checker.values.tests
 
 { H{ { 3 input-parameter } } } [
     init-known-values

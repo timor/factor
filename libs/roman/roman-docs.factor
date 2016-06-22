@@ -1,7 +1,7 @@
 ! Copyright (C) 2008 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax kernel math strings ;
-in: roman
+IN: roman
 
 HELP: >roman
 { $values { "n" integer } { "str" string } }

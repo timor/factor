@@ -3,7 +3,7 @@
 
 USING: flip-text tools.test ;
 
-in: flip-text.tests
+IN: flip-text.tests
 
 {
     "068Ɫ95ᔭƐᄅ⇂zʎxʍʌnʇsɹbdouɯʃʞɾᴉɥᵷɟǝpɔqɐZ⅄XMΛՈ⊥SᴚΌԀONW⅂KᒋIH⅁ℲƎᗡϽ𐐒∀"

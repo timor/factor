@@ -1,4 +1,4 @@
-in: tools.trace.tests
+IN: tools.trace.tests
 USING: tools.trace tools.test tools.continuations kernel math combinators
 sequences ;
 

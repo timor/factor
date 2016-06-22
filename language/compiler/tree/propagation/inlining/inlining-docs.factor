@@ -1,5 +1,5 @@
 USING: compiler.tree help.markup help.syntax kernel quotations words ;
-in: compiler.tree.propagation.inlining
+IN: compiler.tree.propagation.inlining
 
 HELP: (do-inlining)
 { $values { "#call" #call } { "word" word } { "?" boolean } }

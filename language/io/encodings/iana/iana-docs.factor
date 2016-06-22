@@ -1,5 +1,5 @@
 USING: help.syntax help.markup strings ;
-in: io.encodings.iana
+IN: io.encodings.iana
 
 about: "io.encodings.iana"
 

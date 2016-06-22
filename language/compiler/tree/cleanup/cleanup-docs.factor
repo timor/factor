@@ -1,5 +1,5 @@
 USING: compiler.tree help.markup help.syntax kernel sequences ;
-in: compiler.tree.cleanup
+IN: compiler.tree.cleanup
 
 HELP: >copy
 { $values { "node" node } { "#copy" #copy } }

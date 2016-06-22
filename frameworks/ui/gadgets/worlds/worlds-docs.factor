@@ -1,6 +1,6 @@
 USING: destructors help.markup help.syntax math models strings
 ui.backend ui.gadgets ui.gestures ui.render ;
-in: ui.gadgets.worlds
+IN: ui.gadgets.worlds
 
 HELP: user-input
 { $values { "string" string } { "world" world } }

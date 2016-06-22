@@ -1,5 +1,5 @@
 USING: effects generic.single help.markup help.syntax math words ;
-in: generic.parser
+IN: generic.parser
 
 HELP: generic-effect
 { $values { "word" word } { "effect" effect } }

@@ -1,5 +1,5 @@
 USING: help help.topics help.markup help.syntax io strings ;
-in: help.vocabs
+IN: help.vocabs
 
 ARTICLE: "vocab-tags" "Vocabulary tags"
 { $all-tags } ;

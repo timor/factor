@@ -1,7 +1,7 @@
 USING: alien byte-arrays compiler.cfg compiler.cfg.instructions
 compiler.codegen.labels compiler.codegen.relocation cpu.architecture hashtables
 help.markup help.syntax literals make multiline sequences ;
-in: compiler.codegen
+IN: compiler.codegen
 
 COMPILE<
 CONSTANT: generate-ex [[

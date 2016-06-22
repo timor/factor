@@ -1,6 +1,6 @@
 USING: accessors compiler.cfg.instructions compiler.cfg.stacks.finalize
 compiler.cfg.utilities kernel sequences tools.test ;
-in: compiler.cfg.stacks.finalize.tests
+IN: compiler.cfg.stacks.finalize.tests
 
 {
     T{ ##branch f f }

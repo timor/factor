@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Jose Antonio Ortega Ruiz.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: fuel.help.private help help.topics sequences tools.test ;
-in: fuel.help.tests
+IN: fuel.help.tests
 
 {
     {

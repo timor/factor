@@ -1,4 +1,4 @@
-in: colors
+IN: colors
 USING: accessors help.markup help.syntax ;
 
 HELP: color

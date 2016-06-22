@@ -3,7 +3,7 @@
 
 USING: hash-sets.numbers kernel sets tools.test ;
 
-in: hash-sets.numbers.tests
+IN: hash-sets.numbers.tests
 
 { t } [ 1.5 NHS{ 3/2 } in? ] unit-test
 

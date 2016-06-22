@@ -1,7 +1,7 @@
 USING: generic help.markup help.syntax kernel kernel.private
 namespaces sequences words arrays help effects math
 layouts classes.private classes compiler.units ;
-in: classes.intersection
+IN: classes.intersection
 
 ARTICLE: "intersections" "Intersection classes"
 "An object is an instance of a intersection class if it is an instance of all of its participants."

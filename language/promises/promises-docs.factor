@@ -1,7 +1,7 @@
 ! Copyright (C) 2006 Chris Double.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax ;
-in: promises
+IN: promises
 
 HELP: <promise>
 { $values { "quot" { $quotation ( -- x ) } } { "promise" "a promise object" } }

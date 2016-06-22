@@ -1,6 +1,6 @@
 USING: help.markup help.syntax strings byte-arrays alien libc
 debugger io.encodings.string sequences ;
-in: alien.strings
+IN: alien.strings
 
 HELP: string>alien
 { $values { "string" string } { "encoding" "an encoding descriptor" } { "byte-array" byte-array } }

@@ -1,6 +1,6 @@
 USING: accessors continuations glib.ffi images.loader
 io.files.temp kernel sequences system tools.test ;
-in: images.loader.tests
+IN: images.loader.tests
 
 : open-png-image ( -- image )
     "vocab:images/testing/png/basi0g01.png" load-image ;

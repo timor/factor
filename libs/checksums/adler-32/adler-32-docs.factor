@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-in: checksums.adler-32
+IN: checksums.adler-32
 
 HELP: adler-32
 { $class-description "Adler-32 checksum algorithm." } ;

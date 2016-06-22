@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff, see bsd license
 USING: help.markup help.syntax ;
-in: env
+IN: env
 
 HELP: env
 { $class-description "A singleton that implements the " { $link "assocs-protocol" } " over " { $link "environment" } "." } ;

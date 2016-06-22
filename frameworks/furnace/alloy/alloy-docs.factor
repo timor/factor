@@ -1,5 +1,5 @@
 USING: help.markup help.syntax db ;
-in: furnace.alloy
+IN: furnace.alloy
 
 HELP: init-furnace-tables
 { $description "Initializes database tables used by asides, conversations and session management. This word must be invoked inside a " { $link with-db } " scope." } ;

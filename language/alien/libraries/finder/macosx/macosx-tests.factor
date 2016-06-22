@@ -2,7 +2,7 @@
 USING: alien.libraries.finder
 alien.libraries.finder.macosx.private sequences tools.test ;
 
-in: alien.libraries.finder.macosx
+IN: alien.libraries.finder.macosx
 
 {
     {

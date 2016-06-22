@@ -6,7 +6,7 @@ USING:
     splitting
     strings
     tools.test ;
-in: openssl.libcrypto.tests
+IN: openssl.libcrypto.tests
 
 { t } [ "factorcode.org:80" BIO_new_connect bio_st? ] unit-test
 

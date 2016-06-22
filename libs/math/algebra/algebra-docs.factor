@@ -1,5 +1,5 @@
 USING: help.markup help.syntax math ;
-in: math.algebra
+IN: math.algebra
 
 HELP: chinese-remainder
 { $values { "aseq" "a sequence of integers" } { "nseq" "a sequence of positive integers" } { "x" integer } }

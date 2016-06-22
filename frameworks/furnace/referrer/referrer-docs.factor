@@ -1,6 +1,6 @@
 USING: help.markup help.syntax io.streams.string
 furnace.utilities ;
-in: furnace.referrer
+IN: furnace.referrer
 
 HELP: <check-form-submissions>
 { $values

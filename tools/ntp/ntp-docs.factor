@@ -3,7 +3,7 @@
 
 USING: help.syntax help.markup ntp ntp.private strings ;
 
-in: ntp
+IN: ntp
 
 HELP: <ntp>
 { $values { "host" string } { "ntp" ntp } }

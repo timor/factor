@@ -1,6 +1,6 @@
 USING: compiler.cfg.instructions cpu.architecture help.markup help.syntax
 math ;
-in: compiler.cfg.registers
+IN: compiler.cfg.registers
 
 HELP: vreg-counter
 { $var-description "Virtual registers, used by CFG and machine IRs, are just integers." } ;

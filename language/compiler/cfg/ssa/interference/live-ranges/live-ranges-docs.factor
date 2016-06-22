@@ -1,7 +1,7 @@
 USING: compiler.cfg compiler.cfg.instructions
 compiler.cfg.ssa.interference.live-ranges.private help.markup
 help.syntax math ;
-in: compiler.cfg.ssa.interference.live-ranges
+IN: compiler.cfg.ssa.interference.live-ranges
 
 HELP: compute-live-ranges
 { $values { "cfg" cfg } }

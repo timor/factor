@@ -5,7 +5,7 @@ math specialized-arrays alien.c-types math.order alien opencl tools.test
 accessors arrays destructors kernel namespaces alien.data ;
 FROM: alien.c-types => float ;
 specialized-array: float
-in: opencl.tests
+IN: opencl.tests
 
 CONSTANT: kernel-source [[
 __kernel void square(

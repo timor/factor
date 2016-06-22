@@ -2,7 +2,7 @@ USING: ui.gadgets.packs ui.gadgets.packs.private
 ui.gadgets.labels ui.gadgets ui.gadgets.debug ui.render
 ui.baseline-alignment kernel namespaces tools.test math.parser
 sequences math.rectangles accessors math ;
-in: ui.gadgets.packs.tests
+IN: ui.gadgets.packs.tests
 
 { t } [
     { 0 0 } { 100 100 } <rect> clip set

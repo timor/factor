@@ -1,5 +1,5 @@
 USING: tools.test disjoint-sets namespaces slots.private ;
-in: disjoint-sets.tests
+IN: disjoint-sets.tests
 
 symbol: +blah+
 

@@ -1,6 +1,6 @@
 USING: help.markup help.syntax kernel math math.functions
 sequences ;
-in: math.vectors
+IN: math.vectors
 
 ARTICLE: "math-vectors-arithmetic" "Vector arithmetic"
 "Vector/vector binary operations:"

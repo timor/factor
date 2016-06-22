@@ -4,7 +4,7 @@ compiler.cfg.liveness compiler.cfg.registers
 compiler.cfg.ssa.destruction.leaders compiler.cfg.utilities
 cpu.architecture cpu.x86.assembler.operands kernel math namespaces
 sequences system tools.test ;
-in: compiler.cfg.liveness.tests
+IN: compiler.cfg.liveness.tests
 qualified: sets
 
 ! compute-edge-live-in

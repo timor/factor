@@ -1,5 +1,5 @@
 USING: furnace.recaptcha.private tools.test urls ;
-in: furnace.recaptcha.tests
+IN: furnace.recaptcha.tests
 
 {
     URL" http://www.google.com/recaptcha/api/challenge"

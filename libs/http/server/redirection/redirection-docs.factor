@@ -1,5 +1,5 @@
 USING: help.markup help.syntax urls strings http ;
-in: http.server.redirection
+IN: http.server.redirection
 
 HELP: relative-to-request
 { $values { "url" "a " { $link url } " or " { $link string } } { "url'" "a " { $link url } " or " { $link string } } }

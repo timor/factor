@@ -1,6 +1,6 @@
 USING: help.markup help.syntax kernel effects sequences
 sequences.private words combinators ;
-in: stack-checker.errors
+IN: stack-checker.errors
 
 HELP: do-not-compile
 { $error-description "Thrown when inference encounters a macro being applied to a value which is not known to be a literal. Such code needs changes before it can compile and run. See " { $link "inference-combinators" } " and " { $link "inference-escape" } " for details." }

@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: compiler.test compiler.tree.debugger kernel make math.parser sequences
 sequences.unrolled tools.test ;
-in: sequences.unrolled.tests
+IN: sequences.unrolled.tests
 
 { { "0" "1" "2" } } [ { 0 1 2 } 3 [ number>string ] unrolled-map ] unit-test
 { { "0" "1" "2" } } [ { 0 1 2 } [ 3 [ number>string ] unrolled-map ] compile-call ] unit-test

@@ -1,6 +1,6 @@
 USING: ui.gadgets.packs help.markup help.syntax ui.gadgets
 arrays kernel quotations classes.tuple ;
-in: ui.gadgets.tracks
+IN: ui.gadgets.tracks
 
 ARTICLE: "ui-track-layout" "Track layouts"
 "Track gadgets are like " { $link "ui-pack-layout" } " except each child is resized to a fixed multiple of the track's dimension."

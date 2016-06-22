@@ -1,6 +1,6 @@
 USING: help.markup help.syntax io.streams.string urls
 furnace.redirection http furnace.sessions furnace.db ;
-in: furnace.asides
+IN: furnace.asides
 
 HELP: <asides>
 { $values

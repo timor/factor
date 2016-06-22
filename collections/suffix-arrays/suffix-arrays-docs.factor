@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays help.markup help.syntax io.streams.string
 sequences strings math suffix-arrays.private ;
-in: suffix-arrays
+IN: suffix-arrays
 
 HELP: >suffix-array
 { $values

@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: tools.test strings.tables ;
-in: strings.tables.tests
+IN: strings.tables.tests
 
 { { } } [ { } format-table ] unit-test
 

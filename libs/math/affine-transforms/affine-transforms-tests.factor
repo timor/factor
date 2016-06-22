@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff, see BSD license
 USING: arrays kernel literals tools.test math math.affine-transforms
 math.constants math.functions ;
-in: math.affine-transforms.tests
+IN: math.affine-transforms.tests
 
 { { 7.25 4.25 } } [
     { 0.75 0.75 } { 0.75 -0.75 } { 5.0 5.0 } <affine-transform>

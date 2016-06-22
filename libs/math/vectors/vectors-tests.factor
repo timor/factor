@@ -1,4 +1,4 @@
-in: math.vectors.tests
+IN: math.vectors.tests
 USING: math.vectors tools.test kernel specialized-arrays compiler
 kernel.private alien.c-types math.functions ;
 specialized-array: int

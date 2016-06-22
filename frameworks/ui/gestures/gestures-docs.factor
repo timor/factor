@@ -1,6 +1,6 @@
 USING: hashtables help.markup help.syntax kernel strings system
 ui.gadgets ui.gadgets.worlds ;
-in: ui.gestures
+IN: ui.gestures
 
 HELP: set-gestures
 { $values { "class" "a class word" } { "hash" hashtable } }

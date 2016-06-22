@@ -1,5 +1,5 @@
 USING: help.markup help.syntax ;
-in: checksums.fletcher
+IN: checksums.fletcher
 
 HELP: fletcher-16
 { $class-description "Fletcher's 16-bit checksum algorithm." } ;

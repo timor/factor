@@ -3,7 +3,7 @@ compiler.cfg.intrinsics.fixnum compiler.cfg.linear-scan.assignment
 compiler.cfg.liveness compiler.cfg.ssa.destruction compiler.cfg.value-numbering
 compiler.codegen.gc-maps cpu.architecture help.markup help.syntax kernel
 layouts math sequences slots.private system vm ;
-in: compiler.cfg.instructions
+IN: compiler.cfg.instructions
 
 HELP: ##alien-invoke
 { $class-description

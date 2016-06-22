@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: core-foundation.strings core-foundation tools.test kernel
 strings ;
-in: core-foundation
+IN: core-foundation
 
 { } [ "Hello" <CFString> CFRelease ] unit-test
 { "Hello" } [ "Hello" <CFString> [ CF>string ] [ CFRelease ] bi ] unit-test

@@ -1,5 +1,5 @@
 USING: help.markup help.syntax literals sequences strings ;
-in: vocabs.files
+IN: vocabs.files
 
 HELP: vocab-tests-path
 { $values { "vocab" "a vocabulary specifier" } { "path" "pathname string to test file" } }

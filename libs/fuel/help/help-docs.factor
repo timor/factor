@@ -1,5 +1,5 @@
 USING: fuel.help.private help.markup help.syntax strings ;
-in: fuel.help
+IN: fuel.help
 
 HELP: fuel-find-word
 { $values { "name" string } { "word/f" "word or f" } }

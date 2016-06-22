@@ -1,6 +1,6 @@
 USING: assocs compiler.tree.debugger kernel namespaces
 tools.test ;
-in: namespaces.tests
+IN: namespaces.tests
 
 H{ } clone "test-namespace" set
 

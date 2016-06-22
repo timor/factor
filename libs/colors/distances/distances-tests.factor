@@ -1,5 +1,5 @@
 USING: colors combinators tools.test ;
-in: colors.distances
+IN: colors.distances
 
 {
     0x1.05d584e1086dep6 ! 65.45851470579098

@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: audio.engine destructors help.markup help.syntax
 io.files kernel math strings ;
-in: audio.vorbis
+IN: audio.vorbis
 
 HELP: <vorbis-stream>
 { $values

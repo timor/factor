@@ -1,5 +1,5 @@
 USING: alien gdk.ffi gtk.ffi help.markup help.syntax kernel ;
-in: ui.backend.gtk
+IN: ui.backend.gtk
 
 HELP: configure-im
 { $values { "win" GtkWindow } { "im" GtkIMContext } }

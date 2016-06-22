@@ -1,4 +1,4 @@
-in: persistent.hashtables.tests
+IN: persistent.hashtables.tests
 USING: persistent.hashtables persistent.assocs hashtables assocs
 tools.test kernel locals namespaces random math.ranges sequences fry ;
 

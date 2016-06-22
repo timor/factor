@@ -1,6 +1,6 @@
 USING: help.markup help.syntax
 kernel kernel.private prettyprint sequences.private sequences ;
-in: arrays
+IN: arrays
 
 ARTICLE: "arrays-unsafe" "Unsafe array operations"
 "These two words are used internally by the Factor implementation. User code should never need to call them; instead use " { $link nth } " and " { $link set-nth } "."

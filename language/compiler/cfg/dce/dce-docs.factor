@@ -1,5 +1,5 @@
 USING: compiler.cfg help.markup help.syntax math sequences ;
-in: compiler.cfg.dce
+IN: compiler.cfg.dce
 
 HELP: eliminate-dead-code
 { $values { "cfg" cfg } }

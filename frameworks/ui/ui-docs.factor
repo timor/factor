@@ -4,7 +4,7 @@ ui.gadgets ui.gadgets.books ui.gadgets.grids ui.gadgets.packs
 ui.gadgets.private ui.gadgets.tracks ui.gadgets.worlds ui.private ui.text
 vocabs.loader ;
 
-in: ui
+IN: ui
 
 HELP: ui-windows
 { $var-description "Global variable holding an association list mapping native window handles to " { $link world } " instances." } ;

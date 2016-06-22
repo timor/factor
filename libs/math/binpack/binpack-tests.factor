@@ -3,7 +3,7 @@
 
 USING: kernel tools.test sequences ;
 
-in: math.binpack
+IN: math.binpack
 
 { { V{ } } } [ { } 1 binpack ] unit-test
 

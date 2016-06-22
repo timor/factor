@@ -1,4 +1,4 @@
-in: io.pools
+IN: io.pools
 USING: help.markup help.syntax destructors quotations ;
 
 HELP: pool

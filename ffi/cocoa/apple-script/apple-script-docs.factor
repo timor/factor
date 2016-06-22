@@ -1,6 +1,6 @@
 USING: help.markup help.syntax strings ;
 
-in: cocoa.apple-script
+IN: cocoa.apple-script
 
 HELP: run-apple-script
 { $values { "str" string } }

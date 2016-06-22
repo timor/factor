@@ -1,6 +1,6 @@
 USING: assocs help.markup help.syntax io.streams.string sequences strings present math kernel byte-arrays urls
 calendar ;
-in: http
+IN: http
 
 HELP: <request>
 { $values { "request" request } }

@@ -1,5 +1,5 @@
 USING: help.syntax help.markup strings unicode ;
-in: unicode.breaks
+IN: unicode.breaks
 
 about: "unicode.breaks"
 

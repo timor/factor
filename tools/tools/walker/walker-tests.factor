@@ -3,7 +3,7 @@ math.private namespaces prettyprint sequences tools.test
 continuations math.parser threads arrays tools.walker.debug
 generic.single sequences.private kernel.private
 tools.continuations accessors words combinators ;
-in: tools.walker.tests
+IN: tools.walker.tests
 
 { { } } [
     [ ] test-walker

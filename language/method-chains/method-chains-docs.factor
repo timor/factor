@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: help.markup help.syntax ;
-in: method-chains
+IN: method-chains
 
 HELP: \ AFTER:
 { $syntax "AFTER: class generic

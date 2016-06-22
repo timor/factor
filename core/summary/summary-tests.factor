@@ -1,5 +1,5 @@
 USING: combinators continuations kernel summary tools.test ;
-in: summary.tests
+IN: summary.tests
 
 { "array with 2 elements" } [ { 1 2 } summary ] unit-test
 { "string with 5 characters" } [ "hello" summary ] unit-test

@@ -1,6 +1,6 @@
 USING: alien help.markup help.syntax io kernel math quotations
 opengl.gl assocs vocabs.loader sequences accessors colors words ;
-in: opengl
+IN: opengl
 
 HELP: gl-color
 { $values { "color" color } }

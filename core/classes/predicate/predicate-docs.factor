@@ -1,7 +1,7 @@
 USING: generic help.markup help.syntax kernel kernel.private
 namespaces sequences words arrays layouts help effects math
 classes.private classes compiler.units ;
-in: classes.predicate
+IN: classes.predicate
 
 ARTICLE: "predicates" "Predicate classes"
 "Predicate classes allow fine-grained control over method dispatch."

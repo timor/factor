@@ -1,4 +1,4 @@
-in: http.server.rewrite
+IN: http.server.rewrite
 USING: help.syntax help.markup http.server ;
 
 HELP: rewrite

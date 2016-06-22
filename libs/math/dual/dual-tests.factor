@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: tools.test math.dual kernel accessors math math.functions
     math.constants ;
-in: math.dual.tests
+IN: math.dual.tests
 
 { 0.0 1.0 } [ 0 1 <dual> dsin unpack-dual ] unit-test
 { 1.0 0.0 } [ 0 1 <dual> dcos unpack-dual ] unit-test

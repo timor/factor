@@ -1,6 +1,6 @@
 ! (c)2010 Joe Groff bsd license
 USING: sorting tools.test vocabs.metadata.resources ;
-in: vocabs.metadata.resources.tests
+IN: vocabs.metadata.resources.tests
 
 { { "bar" "bas" "foo" } }
 [ "vocabs.metadata.resources.test.1" vocab-resource-files natural-sort ] unit-test

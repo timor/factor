@@ -1,6 +1,6 @@
 USING: namespaces math partial-continuations tools.test
 kernel sequences fry ;
-in: partial-continuations.tests
+IN: partial-continuations.tests
 
 symbol: sum
 

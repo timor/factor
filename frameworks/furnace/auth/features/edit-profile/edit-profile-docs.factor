@@ -1,5 +1,5 @@
 USING: help.markup help.syntax kernel ;
-in: furnace.auth.features.edit-profile
+IN: furnace.auth.features.edit-profile
 
 HELP: allow-edit-profile
 { $values { "realm" "an authentication realm" } }

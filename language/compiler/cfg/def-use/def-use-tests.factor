@@ -4,7 +4,7 @@ USING: kernel tools.test accessors vectors sequences namespaces
 arrays compiler.cfg.def-use compiler.cfg compiler.cfg.debugger
 compiler.cfg.instructions compiler.cfg.registers compiler.cfg.utilities
 cpu.architecture ;
-in: compiler.cfg.def-use.tests
+IN: compiler.cfg.def-use.tests
 
 ! compute-insns
 {

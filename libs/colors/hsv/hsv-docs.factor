@@ -1,4 +1,4 @@
-in: colors.hsv
+IN: colors.hsv
 USING: help.markup help.syntax ;
 
 HELP: hsva

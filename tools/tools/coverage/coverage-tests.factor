@@ -3,7 +3,7 @@
 USING: arrays kernel sequences sorting tools.coverage
 tools.coverage.private tools.coverage.testvocab tools.coverage.testvocab.child
 tools.coverage.testvocab.private tools.test vocabs.loader ;
-in: tools.coverage.tests
+IN: tools.coverage.tests
 
 { "foo.private" } [ "foo" private-vocab-name ] unit-test
 { "foo.private" } [ "foo.private" private-vocab-name ] unit-test

@@ -4,7 +4,7 @@ compiler.cfg.linear-scan.allocation.state
 compiler.cfg.linear-scan.live-intervals compiler.cfg.liveness
 compiler.cfg.registers heaps help.markup help.syntax math quotations
 sequences ;
-in: compiler.cfg.linear-scan.assignment
+IN: compiler.cfg.linear-scan.assignment
 
 HELP: add-pending
 { $values { "live-interval" live-interval-state } }

@@ -1,6 +1,6 @@
 USING: compiler.cfg compiler.tree help.markup help.syntax
 kernel.private ;
-in: compiler.cfg.intrinsics.misc
+IN: compiler.cfg.intrinsics.misc
 
 HELP: emit-context-object
 { $values

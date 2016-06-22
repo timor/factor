@@ -1,5 +1,5 @@
 USING: kernel strings tools.test ;
-in: base85
+IN: base85
 
 { t } [ "Hello, world" dup >base85 base85> >string = ] unit-test
 

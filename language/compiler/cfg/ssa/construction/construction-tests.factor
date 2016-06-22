@@ -4,7 +4,7 @@ compiler.cfg.predecessors compiler.cfg.ssa.construction assocs
 compiler.cfg.registers compiler.cfg.ssa.construction.private
 compiler.cfg.utilities cpu.architecture kernel namespaces sequences tools.test
 vectors ;
-in: compiler.cfg.ssa.construction.tests
+IN: compiler.cfg.ssa.construction.tests
 
 ! insert-phi-later
 {

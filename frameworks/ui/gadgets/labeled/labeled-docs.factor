@@ -1,6 +1,6 @@
 USING: ui.gadgets help.markup help.syntax strings models
 ui.gadgets.panes ;
-in: ui.gadgets.labeled
+IN: ui.gadgets.labeled
 
 HELP: labeled-gadget
 { $class-description "A labeled gadget can be created by calling " { $link <labeled-gadget> } "." } ;

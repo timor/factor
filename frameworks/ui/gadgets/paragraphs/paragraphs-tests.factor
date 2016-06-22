@@ -1,4 +1,4 @@
-in: ui.gadgets.paragraphs.tests
+IN: ui.gadgets.paragraphs.tests
 USING: ui.gadgets.paragraphs ui.gadgets.paragraphs.private
 ui.gadgets ui.gadgets.debug accessors tools.test namespaces
 sequences kernel ;

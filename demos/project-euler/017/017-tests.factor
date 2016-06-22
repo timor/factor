@@ -1,4 +1,4 @@
 USING: project-euler.017 tools.test ;
-in: project-euler.017.tests
+IN: project-euler.017.tests
 
 { 21124 } [ euler017 ] unit-test

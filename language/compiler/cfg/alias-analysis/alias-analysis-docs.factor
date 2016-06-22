@@ -1,5 +1,5 @@
 USING: compiler.cfg.instructions help.markup help.syntax kernel ;
-in: compiler.cfg.alias-analysis
+IN: compiler.cfg.alias-analysis
 
 HELP: useless-compare?
 { $values

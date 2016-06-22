@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: help.markup help.syntax ;
-in: io.encodings.8-bit.latin8
+IN: io.encodings.8-bit.latin8
 
 HELP: latin8
 { $var-description "This is the ISO-8859-14 encoding, also called Latin-8: Celtic. It is an 8-bit superset of ASCII designed for Celtic languages like Gaelic and Breton." }

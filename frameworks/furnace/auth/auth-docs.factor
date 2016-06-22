@@ -2,7 +2,7 @@ USING: assocs classes help.markup help.syntax kernel
 quotations strings words words.symbol furnace.auth.providers.db
 checksums.sha furnace.auth.providers math byte-arrays
 http ;
-in: furnace.auth
+IN: furnace.auth
 
 HELP: <protected>
 { $values

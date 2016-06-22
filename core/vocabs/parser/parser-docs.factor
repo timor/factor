@@ -1,6 +1,6 @@
 USING: assocs continuations help.markup help.syntax parser sequences strings
 words vocabs ;
-in: vocabs.parser
+IN: vocabs.parser
 
 ARTICLE: "word-search-errors" "Word lookup errors"
 "If the parser cannot not find a word in the current vocabulary search path, it attempts to look for the word in all loaded vocabularies."

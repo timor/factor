@@ -6,7 +6,7 @@ generalizations io.encodings.ascii kernel macros
 macros.expander namespaces sequences shuffle tools.test vocabs.parser ;
 QUALIFIED-WITH: alien.c-types c ;
 QUALIFIED-WITH: alien.syntax s ;
-in: alien.fortran.tests
+IN: alien.fortran.tests
 
 COMPILE< intel-unix-abi "(alien.fortran-tests)" (add-fortran-library) COMPILE>
 library: (alien.fortran-tests)

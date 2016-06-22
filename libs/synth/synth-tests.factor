@@ -1,6 +1,6 @@
 USING: synth tools.test ;
 
-in: synth.tests
+IN: synth.tests
 
 {
     {

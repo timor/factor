@@ -1,5 +1,5 @@
 USING: hashtables help.markup help.syntax math quotations sequences words ;
-in: stack-checker.values
+IN: stack-checker.values
 
 HELP: curried
 { $class-description "Result of curry." } ;

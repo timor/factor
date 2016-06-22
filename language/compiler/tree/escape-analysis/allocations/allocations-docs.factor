@@ -1,5 +1,5 @@
 USING: compiler.tree disjoint-sets help.markup help.syntax ;
-in: compiler.tree.escape-analysis.allocations
+IN: compiler.tree.escape-analysis.allocations
 
 HELP: allocations
 { $var-description "A map from values to one of the following:"

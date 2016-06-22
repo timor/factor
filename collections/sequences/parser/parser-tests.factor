@@ -1,5 +1,5 @@
 USING: tools.test sequences.parser unicode kernel accessors ;
-in: sequences.parser.tests
+IN: sequences.parser.tests
 
 { "hello" }
 [ "hello" [ take-rest ] parse-sequence ] unit-test

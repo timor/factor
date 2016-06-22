@@ -1,6 +1,6 @@
 USING: help.markup help.syntax quotations kernel
 stack-checker.transforms sequences combinators ;
-in: macros
+IN: macros
 
 HELP: \ MACRO:
 { $syntax "MACRO: word ( inputs... -- quot ) definition... ;" }

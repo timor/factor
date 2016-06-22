@@ -1,4 +1,4 @@
-in: io.timeouts
+IN: io.timeouts
 USING: help.markup help.syntax math kernel calendar ;
 
 HELP: timeout
