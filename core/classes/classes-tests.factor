@@ -1,7 +1,7 @@
 USING: assocs classes classes.private compiler.units definitions
 eval generic io.streams.string kernel math multiline namespaces
 parser sequences sets sorting tools.test vocabs words ;
-in: classes.tests
+IN: classes.tests
 
 { t } [ 3 object instance? ] unit-test
 { t } [ 3 fixnum instance? ] unit-test
@@ -26,11 +26,10 @@ M: method-forget-class method-forget-test ;
 ] unit-test
 
 ! Long-standing problem
-use: multiline
 
 ! So the user has some code...
 { } [
-    "in: classes.test.a
+    "IN: classes.test.a
     GENERIC: g ( a -- b ) ;
     TUPLE: x ;
     M: x g ;
@@ -40,16 +39,16 @@ use: multiline
 
 ! Note that q inlines M: x g ;
 { } [
-    "in: classes.test.b
-    use: classes.test.a
-    use: kernel
+    "IN: classes.test.b
+    USE: classes.test.a
+    USE: kernel
     : q ( -- b ) z new g ;" <string-reader>
     "class-intersect-no-method-b" parse-stream drop
 ] unit-test
 
 ! Now, the user removes the z class and adds a method,
 { } [
-    "in: classes.test.a
+    "IN: classes.test.a
     GENERIC: g ( a -- b ) ;
     TUPLE: x ;
     M: x g ;
@@ -60,17 +59,17 @@ use: multiline
 
 ! And changes the definition of q
 { } [
-    "in: classes.test.b
-    use: classes.test.a
-    use: kernel
+    "IN: classes.test.b
+    USE: classes.test.a
+    USE: kernel
     : q ( -- b ) j new g ;" <string-reader>
     "class-intersect-no-method-b" parse-stream drop
 ] unit-test
 
 ! Similar problem, but with anonymous classes
 { } [
-    "in: classes.test.c
-    use: kernel
+    "IN: classes.test.c
+    USE: kernel
     GENERIC: g ( a -- b ) ;
     M: object g ;
     TUPLE: z ;" <string-reader>
@@ -78,17 +77,17 @@ use: multiline
 ] unit-test
 
 { } [
-    "in: classes.test.d
-    use: classes.test.c
-    use: kernel
+    "IN: classes.test.d
+    USE: classes.test.c
+    USE: kernel
     : q ( a -- b ) dup z? [ g ] unless ;" <string-reader>
     "class-intersect-no-method-d" parse-stream drop
 ] unit-test
 
 ! Now, the user removes the z class and adds a method,
 { } [
-    "in: classes.test.c
-    use: kernel
+    "IN: classes.test.c
+    USE: kernel
     GENERIC: g ( a -- b ) ;
     M: object g ;
     TUPLE: j ;
@@ -109,6 +108,6 @@ TUPLE: forgotten-predicate-test ;
 
 GENERIC: generic-predicate? ( a -- b ) ;
 
-{ } [ "in: classes.tests TUPLE: generic-predicate ;" eval( -- ) ] unit-test
+{ } [ "IN: classes.tests TUPLE: generic-predicate ;" eval( -- ) ] unit-test
 
 { f } [ \ generic-predicate? generic? ] unit-test

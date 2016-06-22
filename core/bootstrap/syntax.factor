@@ -1,8 +1,8 @@
 ! Copyright (C) 2007, 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: words words.symbol sequences vocabs kernel
-compiler.units multiline ;
-in: bootstrap.syntax
+compiler.units ;
+IN: bootstrap.syntax
 
 [
     "syntax" create-vocab drop

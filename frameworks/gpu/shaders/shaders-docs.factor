@@ -39,11 +39,11 @@ HELP: \ GLSL-SHADER-FILE:
 { $description "Defines a new " { $link shader } " of kind " { $link shader-kind } " named " { $snippet "shader-name" } ". The shader will read its source code from " { $snippet "filename" } " in the current Factor source file's directory." } ;
 
 HELP: \ GLSL-SHADER:
-{ $syntax "GLSL-SHADER: shader-name shader-kind
+{ $syntax "GLSL-SHADER: shader-name shader-kind [[
 
 shader source
 
-;" }
+]] ;" }
 { $description "Defines a new " { $link shader } " of kind " { $link shader-kind } " named " { $snippet "shader-name" } ". The shader will read its source code from the current Factor source file between the " { $snippet "GLSL-SHADER:" } " line and the first subsequent line with a single semicolon on it." } ;
 
 HELP: \ VERTEX-FORMAT:

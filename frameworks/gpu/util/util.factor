@@ -46,7 +46,7 @@ CONSTANT: environment-cube-map-mv-matrices
         } }
     } ;
 
-GLSL-SHADER: window-vertex-shader vertex-shader
+GLSL-SHADER: window-vertex-shader vertex-shader [[
 attribute vec2 vertex;
 varying vec2 texcoord;
 void main()
@@ -54,16 +54,16 @@ void main()
     texcoord = vertex * vec2(0.5) + vec2(0.5);
     gl_Position = vec4(vertex, 0.0, 1.0);
 }
-;
+]] ;
 
-GLSL-SHADER: window-fragment-shader fragment-shader
+GLSL-SHADER: window-fragment-shader fragment-shader [[
 uniform sampler2D texture;
 varying vec2 texcoord;
 void main()
 {
     gl_FragColor = texture2D(texture, texcoord);
 }
-;
+]] ;
 
 VERTEX-FORMAT: window-vertex-format
     { "vertex" float-components 2 f } ;
@@ -73,7 +73,7 @@ UNIFORM-TUPLE: window-uniforms
 
 GLSL-PROGRAM: window-program window-vertex-shader window-fragment-shader window-vertex-format ;
 
-GLSL-SHADER: window-point-vertex-shader vertex-shader
+GLSL-SHADER: window-point-vertex-shader vertex-shader [[
 uniform float point_size;
 attribute vec2 vertex;
 void main()
@@ -81,16 +81,16 @@ void main()
     gl_Position  = vec4(vertex, 0.0, 1.0);
     gl_PointSize = point_size;
 }
-;
+]] ;
 
-GLSL-SHADER: window-point-fragment-shader fragment-shader
+GLSL-SHADER: window-point-fragment-shader fragment-shader [[
 #version 120
 uniform sampler2D texture;
 void main()
 {
     gl_FragColor = texture2D(texture, gl_PointCoord);
 }
-;
+]] ;
 
 UNIFORM-TUPLE: window-point-uniforms
     { "texture"    texture-uniform f }
