@@ -552,7 +552,6 @@ CONSTANT: factor-lexing-rules {
     ".private" ?tail drop
     vocab-source-path path>literals ;
 
-
 ! What a lexer body looks like, produced by make-lexer
 ! : lex ( n/f string -- n'/f string literal )
     ! "!`\\\"[{(\s\r\n" slice-til-either {
@@ -568,26 +567,3 @@ CONSTANT: factor-lexing-rules {
         ! { char: \n [ read-token-or-whitespace ] }
         ! { f [ f like dup [ make-tag-literal ] when ] }
     ! } case ; inline
-
-![[
-vocab-roots get [ vocabs-from reject-some-paths ] map concat
-{
-    "specialized-arrays" "specialized-vectors"
-    "math.blas.matrices" "math.blas.vectors" "math.vectors.simd"
-    "math.vectors.simd.cords" "game.debug" "gpu.util" "gpu.effects.blur"
-    "gpu.effects.step" "model-viewer" "terrain.shaders" "spheres"
-    "bunny.cel-shaded" "bunny.outlined"
-} diff
-[ modern-source-path dup <pathname> . path>literals ] map-zip
-
-vocab-roots get [ vocabs-from reject-some-paths ] map concat
-{
-    "specialized-arrays" "specialized-vectors"
-    "math.blas.matrices" "math.blas.vectors" "math.vectors.simd"
-    "math.vectors.simd.cords" "game.debug" "gpu.util" "gpu.effects.blur"
-    "gpu.effects.step" "model-viewer" "terrain.shaders" "spheres" 
-    "bunny.cel-shaded" "bunny.outlined"
-} diff
-[ modern-source-path ] map
-[ ] rewrite-paths
-]]
