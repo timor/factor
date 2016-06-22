@@ -19,4 +19,4 @@ IN: zeromq.examples.hwclient
         ] each drop
     ] with-destructors ;
 
-main: hwclient
+MAIN: hwclient

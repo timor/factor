@@ -182,7 +182,7 @@ DEFER: foo
 { } [
     "a" source-files get delete-at
     2 [
-        "IN: parser.tests defer: x : y ( -- ) x ; : x ( -- ) y ;"
+        "IN: parser.tests DEFER: x : y ( -- ) x ; : x ( -- ) y ;"
         <string-reader> "a" parse-stream drop
     ] times
 ] unit-test
@@ -396,17 +396,17 @@ DEFER: foo
 
 2 [
     [ ] [
-        "IN: parser.tests defer: d-f-s d-f-s SYMBOL: d-f-s d-f-s"
+        "IN: parser.tests DEFER: d-f-s d-f-s SYMBOL: d-f-s d-f-s"
         <string-reader> "d-f-s-test" parse-stream drop
     ] unit-test
 
     [ ] [
-        "IN: parser.tests defer: d-f-s d-f-s FORGET: d-f-s SYMBOL: d-f-s d-f-s"
+        "IN: parser.tests DEFER: d-f-s d-f-s FORGET: d-f-s SYMBOL: d-f-s d-f-s"
         <string-reader> "d-f-s-test" parse-stream drop
     ] unit-test
 
     [ ] [
-        "IN: parser.tests defer: d-f-s d-f-s SYMBOL: d-f-s d-f-s"
+        "IN: parser.tests DEFER: d-f-s d-f-s SYMBOL: d-f-s d-f-s"
         <string-reader> "d-f-s-test" parse-stream drop
     ] unit-test
 ] times
@@ -474,10 +474,10 @@ DEFER: foo
 
 { t } [ "staging-problem-test-2" "parser.tests" lookup-word >boolean ] unit-test
 
-[ "defer: blahy" eval( -- ) ] [ error>> error>> no-current-vocab-error? ] must-fail-with
+[ "DEFER: blahy" eval( -- ) ] [ error>> error>> no-current-vocab-error? ] must-fail-with
 
 [
-    "IN: parser.tests SYNTAX: blahy ; forget: blahy" eval( -- )
+    "IN: parser.tests SYNTAX: blahy ; FORGET: blahy" eval( -- )
 ] [
     error>> staging-violation?
 ] must-fail-with
@@ -554,7 +554,7 @@ EXCLUDE: qualified.tests.bar => x ;
 
 { t } [ "was-once-a-word-bug" "parser.tests" lookup-word >boolean ] unit-test */
 
-! Replace : def with defer:
+! Replace : def with DEFER:
 { [ ] } [
     "IN: parser.tests : is-not-deferred ( -- ) ;"
     <string-reader> "is-not-deferred" parse-stream
@@ -564,7 +564,7 @@ EXCLUDE: qualified.tests.bar => x ;
 { f } [ "is-not-deferred" "parser.tests" lookup-word deferred? ] unit-test
 
 { [ ] } [
-    "IN: parser.tests defer: is-not-deferred"
+    "IN: parser.tests DEFER: is-not-deferred"
     <string-reader> "is-not-deferred" parse-stream
 ] unit-test
 
@@ -573,12 +573,12 @@ EXCLUDE: qualified.tests.bar => x ;
 
 ! Forward-reference resolution case iterated using list in the wrong direction
 { [ ] } [
-    "IN: parser.tests.forward-ref-1 defer: x defer: y"
+    "IN: parser.tests.forward-ref-1 DEFER: x DEFER: y"
     <string-reader> "forward-ref-1" parse-stream
 ] unit-test
 
 { [ ] } [
-    "IN: parser.tests.forward-ref-2 defer: x defer: y"
+    "IN: parser.tests.forward-ref-2 DEFER: x DEFER: y"
     <string-reader> "forward-ref-2" parse-stream
 ] unit-test
 
@@ -631,7 +631,7 @@ EXCLUDE: qualified.tests.bar => x ;
 ] with-file-vocabs
 
 ! Test cases for #183
-[ "singleton: 33" <string-reader> "class identifier test" parse-stream ]
+[ "SINGLETON: 33" <string-reader> "class identifier test" parse-stream ]
 [ error>> lexer-error? ] must-fail-with
 
 [ ": 44 ( -- ) ;" <string-reader> "word identifier test" parse-stream ]

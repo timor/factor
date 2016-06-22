@@ -21,7 +21,7 @@ IN: tools.completion
 { t } [ { "USE:" "A" } complete-vocab? ] unit-test
 { t } [ { "USE:" "" } complete-vocab? ] unit-test
 { f } [ { "USE:" } complete-vocab? ] unit-test
-{ t } [ { "unuse:" "A" } complete-vocab? ] unit-test
+{ t } [ { "UNUSE: "A" } complete-vocab? ] unit-test
 { t } [ { "QUALIFIED:" "A" } complete-vocab? ] unit-test
 { t } [ { "QUALIFIED-WITH:" "A" } complete-vocab? ] unit-test
 { t } [ { "USING:" "A" "B" "C" } complete-vocab? ] unit-test

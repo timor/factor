@@ -42,7 +42,7 @@ USING: classes.tuple.parser classes.builtin ;
 
 SYNTAX: in: scan-token set-current-vocab ;
 SYNTAX: use: scan-token use-vocab ;
-SYNTAX: unuse: scan-token unuse-vocab ;
+SYNTAX: UNUSE: scan-token unuse-vocab ;
 SYNTAX: postpone\ scan-word suffix! ;
 SYNTAX: postpone\ scan-word suffix! ;
 
@@ -56,11 +56,11 @@ SYNTAX: @final last-word make-final ;
 
 SYNTAX: symbol: scan-new-word define-symbol ;
 SYNTAX: singleton: scan-new-class define-singleton-class ;
-SYNTAX: mixin: scan-new-class define-mixin-class ;
+SYNTAX: MIXIN: scan-new-class define-mixin-class ;
 
-SYNTAX: forget: scan-object forget ;
+SYNTAX: FORGET: scan-object forget ;
 
-SYNTAX: main:
+SYNTAX: MAIN:
     scan-word dup ( -- ) check-stack-effect
     [ current-vocab main<< ]
     [ current-source-file get [ main<< ] [ drop ] if* ] bi ;
@@ -75,7 +75,7 @@ SYNTAX: char:
         [ name>char-hook get ( name -- char ) call-effect ]
     } cond suffix! ;
 
-SYNTAX: defer:
+SYNTAX: DEFER:
     scan-token current-vocab create-word
     [ fake-definition ] [ set-last-word ]
     [ undefined-def define ] tri ;
@@ -86,7 +86,7 @@ SYNTAX: PRIMITIVE:
 
 SYNTAX: CONSTANT: scan-new-word scan-object ";" expect define-constant ;
 
-SYNTAX: qualified: scan-token dup add-qualified ;
+SYNTAX: QUALIFIED: scan-token dup add-qualified ;
 
 SYNTAX: QUALIFIED-WITH: scan-token scan-token ";" expect add-qualified ;
 

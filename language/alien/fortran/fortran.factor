@@ -448,7 +448,7 @@ SYNTAX: \ FUNCTION:
     scan-token current-library get scan-token ")" parse-tokens
     [ "()" subseq? ] reject ";" expect define-fortran-function ;
 
-SYNTAX: \ library:
+SYNTAX: \ LIBRARY:
     scan-token
     [ current-library set ]
     [ set-fortran-abi ] bi ;

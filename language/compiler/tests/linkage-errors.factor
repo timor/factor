@@ -23,7 +23,7 @@ FUNCTION: void this_does_not_exist ( ) ;
 
 COMPILE< "no_such_library" "no_such_library" cdecl add-library COMPILE>
 
-library: no_such_library
+LIBRARY: no_such_library
 
 FUNCTION: void no_such_function ( ) ;
 

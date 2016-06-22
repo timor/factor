@@ -36,7 +36,7 @@ COMPILE<
 "f-fastcall" libfactor-ffi-tests-path fastcall add-library
 COMPILE>
 
-library: f-cdecl
+LIBRARY: f-cdecl
 
 FUNCTION: void ffi_test_0 ( ) ;
 [ ] [ ffi_test_0 ] unit-test

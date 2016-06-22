@@ -18,4 +18,4 @@ COMPILE<
 } cond
 COMPILE>
 
-gir: GstNet-0.10.gir
+GIR: GstNet-0.10.gir

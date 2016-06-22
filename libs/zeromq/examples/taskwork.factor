@@ -34,4 +34,4 @@ IN: zeromq.examples.taskwork
         drop
     ] with-destructors ;
 
-main: taskwork
+MAIN: taskwork

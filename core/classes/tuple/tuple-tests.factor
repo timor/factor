@@ -631,10 +631,10 @@ M: bogus-hashcode-1 hashcode* 2drop 0 >bignum ;
 { } [ T{ bogus-hashcode-2 f T{ bogus-hashcode-1 } } hashcode drop ] unit-test
 
 DEFER: change-slot-test
-slot: kex
+SLOT: kex
 
 { } [
-    "IN: classes.tuple.tests USING: kernel accessors ; TUPLE: change-slot-test ; slot: kex M: change-slot-test kex>> drop 3 ;"
+    "IN: classes.tuple.tests USING: kernel accessors ; TUPLE: change-slot-test ; SLOT: kex M: change-slot-test kex>> drop 3 ;"
     <string-reader> "change-slot-test" parse-stream
     drop
 ] unit-test
@@ -650,7 +650,7 @@ slot: kex
 { t } [ \ change-slot-test \ kex>> ?lookup-method >boolean ] unit-test
 
 { } [
-    "IN: classes.tuple.tests USING: kernel accessors ; TUPLE: change-slot-test ; slot: kex M: change-slot-test kex>> drop 3 ;"
+    "IN: classes.tuple.tests USING: kernel accessors ; TUPLE: change-slot-test ; SLOT: kex M: change-slot-test kex>> drop 3 ;"
     <string-reader> "change-slot-test" parse-stream
     drop
 ] unit-test
@@ -664,7 +664,7 @@ DEFER: redefine-tuple-twice
 
 { t } [ \ redefine-tuple-twice symbol? ] unit-test
 
-{ } [ "IN: classes.tuple.tests defer: redefine-tuple-twice" eval( -- ) ] unit-test
+{ } [ "IN: classes.tuple.tests DEFER: redefine-tuple-twice" eval( -- ) ] unit-test
 
 { t } [ \ redefine-tuple-twice deferred? ] unit-test
 
@@ -736,7 +736,7 @@ TUPLE: metaclass-change-subclass < metaclass-change ;
 
 { metaclass-change } [ metaclass-change-subclass superclass-of ] unit-test
 
-{ } [ "IN: classes.tuple.tests mixIN: metaclass-change" eval( -- ) ] unit-test
+{ } [ "IN: classes.tuple.tests MIXIN: metaclass-change" eval( -- ) ] unit-test
 
 { t } [ metaclass-change-subclass tuple-class? ] unit-test
 { tuple } [ metaclass-change-subclass superclass-of ] unit-test
@@ -747,7 +747,7 @@ TUPLE: g < a-g ;
 
 { } [ g new "g" set ] unit-test
 
-{ } [ "IN: classes.tuple.tests mixIN: a-g TUPLE: g ;" eval( -- ) ] unit-test
+{ } [ "IN: classes.tuple.tests MIXIN: a-g TUPLE: g ;" eval( -- ) ] unit-test
 
 { t } [ g new layout-of "g" get layout-of eq? ] unit-test
 

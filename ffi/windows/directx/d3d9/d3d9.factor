@@ -44,26 +44,26 @@ COM-INTERFACE: IDirect3D9 IUnknown "{81BDCBCA-64D4-426d-AE8D-AD0147F4275C}""
 TYPEDEF: IDirect3D9* LPDIRECT3D9 ;
 TYPEDEF: IDirect3D9* PDIRECT3D9 ;
 
-c-type: IDirect3DSurface9
-c-type: RGNDATA
-c-type: IDirect3DBaseTexture9
-c-type: PALETTEENTRY
-c-type: IDirect3DVertexBuffer9
-c-type: IDirect3DVertexDeclaration9
-c-type: IDirect3DVertexShader9
-c-type: IDirect3DIndexBuffer9
-c-type: IDirect3DPixelShader9
-c-type: IDirect3DSwapChain9
-c-type: IDirect3DTexture9
-c-type: IDirect3DVolumeTexture9
-c-type: IDirect3DCubeTexture9
-c-type: IDirect3DStateBlock9
-c-type: IDirect3DQuery9
-c-type: IDirect3DVolume9
-c-type: IDirect3D9Ex
-c-type: IDirect3DDevice9Ex
-c-type: IDirect3DAuthenticatedChannel9
-c-type: IDirect3DCryptoSession9
+C-TYPE: IDirect3DSurface9
+C-TYPE: RGNDATA
+C-TYPE: IDirect3DBaseTexture9
+C-TYPE: PALETTEENTRY
+C-TYPE: IDirect3DVertexBuffer9
+C-TYPE: IDirect3DVertexDeclaration9
+C-TYPE: IDirect3DVertexShader9
+C-TYPE: IDirect3DIndexBuffer9
+C-TYPE: IDirect3DPixelShader9
+C-TYPE: IDirect3DSwapChain9
+C-TYPE: IDirect3DTexture9
+C-TYPE: IDirect3DVolumeTexture9
+C-TYPE: IDirect3DCubeTexture9
+C-TYPE: IDirect3DStateBlock9
+C-TYPE: IDirect3DQuery9
+C-TYPE: IDirect3DVolume9
+C-TYPE: IDirect3D9Ex
+C-TYPE: IDirect3DDevice9Ex
+C-TYPE: IDirect3DAuthenticatedChannel9
+C-TYPE: IDirect3DCryptoSession9
 
 COM-INTERFACE: IDirect3DDevice9 IUnknown "{D0223B96-BF7A-43fd-92BD-A43B0D82B9EB}""
     HRESULT TestCooperativeLevel ( )

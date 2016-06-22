@@ -498,14 +498,14 @@ HELP: \ \
 { $examples "The following two lines are equivalent:" { $code "0 \\ <vector> execute\n0 <vector>" } "If " { $snippet "foo" } " is a symbol, the following two lines are equivalent:" { $code "foo" "\\ foo" } } ;
 
 HELP: \ DEFER:
-{ $syntax "defer: word" }
+{ $syntax "DEFER: word" }
 { $values { "word" "a new word to define" } }
 { $description "Create a word in the current vocabulary that simply raises an error when executed. Usually, the word will be replaced with a real definition later." }
 { $notes "Due to the way the parser works, words cannot be referenced before they are defined; that is, source files must order definitions in a strictly bottom-up fashion. Mutually-recursive pairs of words can be implemented by " { $emphasis "deferring" } " one of the words in the pair allowing the second word in the pair to parse, then by defining the first word." }
-{ $examples { $code "defer: foe\n: fie ... foe ... ;\n: foe ... fie ... ;" } } ;
+{ $examples { $code "DEFER: foe\n: fie ... foe ... ;\n: foe ... fie ... ;" } } ;
 
 HELP: \ FORGET:
-{ $syntax "forget: word" }
+{ $syntax "FORGET: word" }
 { $values { "word" word } }
 { $description "Removes the word from its vocabulary, or does nothing if no such word exists. Existing definitions that reference forgotten words will continue to work, but new occurrences of the word will not parse." } ;
 

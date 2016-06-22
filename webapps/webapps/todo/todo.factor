@@ -139,4 +139,4 @@ furnace.alloy ;
     todo-db start-expiring
     run-test-httpd ;
 
-MAin: run-todo
+MAIN: run-todo

@@ -40,4 +40,4 @@ USING: db.sqlite furnace.alloy namespaces ;
         main-responder set-global
     8080 httpd drop ;
 
-MAin: run-counter
+MAIN: run-counter

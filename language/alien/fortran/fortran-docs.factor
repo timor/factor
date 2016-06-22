@@ -37,14 +37,14 @@ HELP: \ SUBROUTINE:
 { $syntax "SUBROUTINE: NAME ( [!]ARGUMENT-TYPE NAME, ... ) ;" }
 { $description "Declares a Fortran subroutine binding with the given arguments. See " { $link "alien.fortran-types" } " for a list of supported types." } ;
 
-HELP: \ library:
-{ $syntax "library: name" }
+HELP: \ LIBRARY:
+{ $syntax "LIBRARY: name" }
 { $values { "name" "a logical library name" } }
 { $description "Sets the logical library for subsequent " { $link postpone\ FUNCTION: } " and " { $link postpone\ SUBROUTINE: } " definitions. The given library name must have been opened with a previous call to " { $link add-fortran-library } "." } ;
 
 HELP: add-fortran-library
 { $values { "name" string } { "soname" string } { "fortran-abi" symbol } }
-{ $description "Opens the shared library in the file specified by " { $snippet "soname" } " under the logical name " { $snippet "name" } " so that it may be used in subsequent " { $link postpone\ library: } " and " { $link fortran-invoke } " calls. Functions and subroutines from the library will be defined using the specified " { $snippet "fortran-abi" } ", which must be one of the supported " { $link "alien.fortran-abis" } "." }
+{ $description "Opens the shared library in the file specified by " { $snippet "soname" } " under the logical name " { $snippet "name" } " so that it may be used in subsequent " { $link postpone\ LIBRARY: } " and " { $link fortran-invoke } " calls. Functions and subroutines from the library will be defined using the specified " { $snippet "fortran-abi" } ", which must be one of the supported " { $link "alien.fortran-abis" } "." }
 ;
 
 HELP: fortran-invoke
@@ -60,7 +60,7 @@ ARTICLE: "alien.fortran" "Fortran FFI"
     "alien.fortran-types"
     "alien.fortran-abis"
     add-fortran-library
-    \ library:
+    \ LIBRARY:
     \ FUNCTION:
     \ SUBROUTINE:
     fortran-invoke

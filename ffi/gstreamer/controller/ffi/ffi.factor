@@ -18,4 +18,4 @@ COMPILE<
 } cond
 COMPILE>
 
-gir: GstController-0.10.gir
+GIR: GstController-0.10.gir

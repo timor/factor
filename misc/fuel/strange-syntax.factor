@@ -26,7 +26,7 @@ TUPLE: a-tuple slot1 slot2 { slot3 integer } ;
 ! : do-"that" ( x -- y ) ;
 
 ! ! C-TYPE
-c-type: cairo_snurface_t
+C-TYPE: cairo_snurface_t
 
 ! ! CHAR
 : stuff-with-chars ( -- K \n )
@@ -36,10 +36,10 @@ c-type: cairo_snurface_t
 ! ! MAIN
 : majn ( -- ) ;
 
-main: majn
+MAIN: majn
 
 ! ! SLOT
- slot: komba
+ SLOT: komba
 
 ! ! SYNTAX
 COMPILE<

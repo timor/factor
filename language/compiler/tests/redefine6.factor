@@ -8,9 +8,9 @@ IN: compiler.tests.redefine6
 
 [ ] [
     "USING: kernel kernel.private ;
-    in: compiler.tests.redefine6
+    IN: compiler.tests.redefine6
     GENERIC: my-generic ( a -- b ) ;
-    mixin: my-mixin
+    MIXIN: my-mixin
     M: my-mixin my-generic drop 0 ;
     : my-inline ( a -- b ) { my-mixin } declare my-generic ;"
     eval( -- )
@@ -18,7 +18,7 @@ IN: compiler.tests.redefine6
 
 [ ] [
     "USING: kernel ;
-    in: compiler.tests.redefine6
+    IN: compiler.tests.redefine6
     TUPLE: my-tuple ;
     M: my-tuple my-generic drop 1 ;
     INSTANCE: my-tuple my-mixin ;"

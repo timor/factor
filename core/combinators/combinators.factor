@@ -23,7 +23,7 @@ PRIVATE>
 
 ERROR: wrong-values quot call-site ;
 
-! We can't use: effects here so we forward reference slots instead
+! We can't USE: effects here so we forward reference slots instead
 SLOT: in
 SLOT: out
 SLOT: terminated?

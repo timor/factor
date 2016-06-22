@@ -44,4 +44,4 @@ IN: webapps.wiki.example
     wiki-db start-expiring
     run-test-httpd ;
 
-MAin: run-wiki
+MAIN: run-wiki

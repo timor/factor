@@ -21,7 +21,7 @@ IN: html.templates.fhtml.tests
 [
     [ ] [
         "<%
-            in: html.templates.fhtml.tests
+            IN: html.templates.fhtml.tests
             : test-word ( -- ) ;
             %>" parse-template drop
     ] unit-test

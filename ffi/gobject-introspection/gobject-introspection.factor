@@ -53,7 +53,7 @@ PRIVATE<
 
 PRIVATE>
 
-SYNTAX: \ gir: scan-token define-gir-vocab ;
+SYNTAX: \ GIR: scan-token define-gir-vocab ;
 
 SYNTAX: \ IMPLEMENT-STRUCTS:
     ";" parse-tokens

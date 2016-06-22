@@ -254,7 +254,7 @@ M: f generic-forget-test ;
     M: boii jeah* jeah ;" eval( -- )
 
     "IN: generic.standard.tests
-    forget: boii" eval( -- )
+    FORGET: boii" eval( -- )
 
     "IN: generic.standard.tests
     TUPLE: boii ;
@@ -393,12 +393,12 @@ GENERIC: move-method-generic ( a -- b ) ;
 
 { { string } } [ \ move-method-generic order ] unit-test
 
-! forget: on method wrappers
+! FORGET: on method wrappers
 GENERIC: forget-test ( a -- b ) ;
 
 M: integer forget-test 3 + ;
 
-{ } [ "IN: generic.standard.tests USE: math forget: M\\ integer forget-test" eval( -- ) ] unit-test
+{ } [ "IN: generic.standard.tests USE: math FORGET: M\\ integer forget-test" eval( -- ) ] unit-test
 
 { { } } [
     \ + effect-dependencies-of keys [ method? ] filter

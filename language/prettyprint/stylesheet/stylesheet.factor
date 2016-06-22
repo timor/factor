@@ -7,7 +7,7 @@ IN: prettyprint.stylesheet
 
 PRIVATE<
 
-{ postpone\ USING: postpone\ use: postpone\ in: }
+{ postpone\ USING: postpone\ USE: postpone\ IN: }
 [
     { { foreground color: gray35 } }
     "word-style" set-word-prop

@@ -5,7 +5,7 @@ IN: classes.mixin
 ARTICLE: "mixins" "Mixin classes"
 "An object is an instance of a union class if it is an instance of one of its members. In this respect, mixin classes are identical to union classes. However, mixin classes have the additional property that they are " { $emphasis "open" } "; new classes can be added to the mixin after the original definition of the mixin."
 { $subsections
-    postpone\ mixin:
+    postpone\ MIXIN:
     postpone\ INSTANCE:
     define-mixin-class
     add-mixin-instance
@@ -23,7 +23,7 @@ HELP: mixin-class
 
 HELP: define-mixin-class
 { $values { "class" word } }
-{ $description "Defines a mixin class. This is the run time equivalent of " { $link postpone\ mixin: } "." }
+{ $description "Defines a mixin class. This is the run time equivalent of " { $link postpone\ MIXIN: } "." }
 { $notes "This word must be called from inside " { $link with-compilation-unit } "." }
 { $side-effects "class" } ;
 
@@ -33,6 +33,6 @@ HELP: add-mixin-instance
 { $notes "This word must be called from inside " { $link with-compilation-unit } "." }
 { $side-effects "class" } ;
 
-{ mixin-class define-mixin-class add-mixin-instance postpone\ mixin: postpone\ INSTANCE: } related-words
+{ mixin-class define-mixin-class add-mixin-instance postpone\ MIXIN: postpone\ INSTANCE: } related-words
 
 ABOUT: "mixins"

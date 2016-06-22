@@ -23,4 +23,4 @@ IN: zeromq.examples.tasksink
         drop
     ] with-destructors ;
 
-main: tasksink
+MAIN: tasksink

@@ -58,19 +58,19 @@ GENERIC: testing ( a -- b ) ;
 : forgotten ( -- ) ;
 : another-forgotten ( -- ) ;
 
-forget: forgotten
+FORGET: forgotten
 
-forget: another-forgotten
+FORGET: another-forgotten
 : another-forgotten ( -- ) ;
 
 ! Make sure that undefined words throw proper errors
 DEFER: deferred
 [ deferred ] [ T{ undefined-word f deferred } = ] must-fail-with
 
-[ "IN: words.tests defer: not-compiled COMPILE< not-compiled COMPILE>" eval( -- ) ]
+[ "IN: words.tests DEFER: not-compiled COMPILE< not-compiled COMPILE>" eval( -- ) ]
 [ error>> [ undefined-word? ] [ word>> name>> "not-compiled" = ] bi and ] must-fail-with
 
-{ } [ "IN: words.tests forget: not-compiled" eval( -- ) ] unit-test
+{ } [ "IN: words.tests FORGET: not-compiled" eval( -- ) ] unit-test
 
 { } [ [ "no-loc" "words.tests" create-word drop ] with-compilation-unit ] unit-test
 { f } [ "no-loc" "words.tests" lookup-word where ] unit-test

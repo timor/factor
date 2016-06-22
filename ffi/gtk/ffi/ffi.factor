@@ -23,11 +23,11 @@ COMPILE>
 
 IMPLEMENT-STRUCTS: GtkTreeIter ;
 
-gir: vocab:gtk/Gtk-3.0.gir
+GIR: vocab:gtk/Gtk-3.0.gir
 
 DESTRUCTOR: gtk_widget_destroy
 
 ! <workaround
-forget: gtk_im_context_get_preedit_string
+FORGET: gtk_im_context_get_preedit_string
 FUNCTION: void gtk_im_context_get_preedit_string ( GtkIMContext* imcontext, gchar** str, PangoAttrList** attrs, gint* cursor_pos ) ;
 ! workaround>

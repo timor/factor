@@ -146,7 +146,7 @@ $nl
 }
 "Typically a source file will refer to words in multiple vocabularies, and they can all be added to the search path in one go:"
 { $code "USING: arrays kernel math ;" }
-"New words go into the " { $vocab-link "scratchpad" } " vocabulary by default. You can change this with " { $link postpone\ in: } ":"
+"New words go into the " { $vocab-link "scratchpad" } " vocabulary by default. You can change this with " { $link postpone\ IN: } ":"
 { $code
     "IN: time-machine"
     ": time-travel ( when what -- ) frob fizz flap ;"
@@ -157,7 +157,7 @@ $nl
     ": accelerate ( -- ) accelerator on ;"
     ": particles ( what -- ) [ (particles) ] each ;"
 }
-"You would have to place the first definition after the two others for the parser to accept the file. If you have a set of mutually recursive words, you can use " { $link postpone\ defer: } "."
+"You would have to place the first definition after the two others for the parser to accept the file. If you have a set of mutually recursive words, you can use " { $link postpone\ DEFER: } "."
 { $references
     { }
     "word-search"
@@ -171,9 +171,9 @@ ARTICLE: "cookbook-application" "Application cookbook"
 "..."
 ": play-life ( -- ) ... ;"
 ""
-"main: play-life"
+"MAIN: play-life"
 }
-"See " { $link postpone\ main: } " for details. The " { $link run } " word loads a vocabulary if necessary, and calls its main entry point; try the following, it's fun:"
+"See " { $link postpone\ MAIN: } " for details. The " { $link run } " word loads a vocabulary if necessary, and calls its main entry point; try the following, it's fun:"
 { $code "\"tetris\" run" }
 "Factor can deploy stand-alone executables; they do not have any external dependencies and consist entirely of compiled native machine code:"
 { $code "\"tetris\" deploy-tool" }

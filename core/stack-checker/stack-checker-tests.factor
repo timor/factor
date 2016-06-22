@@ -324,11 +324,11 @@ ERROR: custom-error ;
 
 : erg's-inference-bug ( -- ) f dup [ erg's-inference-bug ] when ; inline recursive
 [ [ erg's-inference-bug ] infer ] must-fail
-forget: erg's-inference-bug
+FORGET: erg's-inference-bug
 
 : bad-recursion-3 ( -- ) dup [ [ bad-recursion-3 ] dip ] when ; inline recursive
 [ [ bad-recursion-3 ] infer ] must-fail
-forget: bad-recursion-3
+FORGET: bad-recursion-3
 
 : bad-recursion-4 ( -- ) 4 [ dup call [ rot ] dip swap ] times ; inline recursive
 [ [ [ ] [ 1 2 3 ] over dup bad-recursion-4 ] infer ] must-fail
@@ -352,7 +352,7 @@ forget: bad-recursion-3
 
 [ [ unbalanced-retain-usage ] infer ] [ inference-error? ] must-fail-with
 
-forget: unbalanced-retain-usage
+FORGET: unbalanced-retain-usage
 
 DEFER: eee'
 : ddd' ( ? -- ) [ f eee' ] when ; inline recursive
@@ -377,7 +377,7 @@ DEFER: eee'
 
 [ [ exit ] [ 1 2 3 ] if ] must-infer
 
-! Stack effects are required now but forget: clears them...
+! Stack effects are required now but FORGET: clears them...
 : forget-test ( -- ) ;
 
 [ forget-test ] must-infer

@@ -19,4 +19,4 @@ COMPILE<
 } cond
 COMPILE>
 
-gir: Json-1.0.gir
+GIR: Json-1.0.gir

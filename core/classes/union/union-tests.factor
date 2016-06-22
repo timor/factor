@@ -4,8 +4,8 @@ compiler.units eval io.streams.string kernel math math.private
 parser quotations see sequences slots strings tools.test words ;
 IN: classes.union.tests
 
-! defer: bah
-! forget: bah
+! DEFER: bah
+! FORGET: bah
 UNION: bah fixnum alien ;
 { bah } [ \ bah? "predicating" word-prop ] unit-test
 
@@ -65,7 +65,7 @@ UNION: redefine-bug-2 redefine-bug-1 quotation ;
 
 ! Too eager with reset-class
 
-{ } [ "IN: classes.union.tests singleton: foo UNION: blah foo ;" <string-reader> "union-reset-test" parse-stream drop ] unit-test
+{ } [ "IN: classes.union.tests SINGLETON: foo UNION: blah foo ;" <string-reader> "union-reset-test" parse-stream drop ] unit-test
 
 { t } [ "blah" "classes.union.tests" lookup-word union-class? ] unit-test
 

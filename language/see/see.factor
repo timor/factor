@@ -151,7 +151,7 @@ M: intersection-class see-class*
     class-participants pprint-elements pprint-semi block> ;
 
 M: mixin-class see-class*
-    <block \ mixin: pprint-word
+    <block \ MIXIN: pprint-word
     dup pprint-word <block
     dup class-members [
         hard add-line-break
@@ -168,7 +168,7 @@ M: predicate-class see-class*
     pprint-semi block> block> ;
 
 M: singleton-class see-class* ( class -- )
-    \ singleton: pprint-word pprint-word ;
+    \ SINGLETON: pprint-word pprint-word ;
 
 GENERIC: pprint-slot-name ( object -- ) ;
 

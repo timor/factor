@@ -18,4 +18,4 @@ IN: zeromq.examples.hwserver
         ] while drop
     ] with-destructors ;
 
-main: hwserver
+MAIN: hwserver

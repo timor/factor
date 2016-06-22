@@ -42,11 +42,11 @@ TYPEDEF: char[1][2][3] array-typedef ;
     [ \ array-typedef see ] with-string-writer
 ] unit-test
 
-c-type: opaque-c-type
+C-TYPE: opaque-c-type
 
 { "USING: alien.syntax ;
 IN: alien.prettyprint.tests
-c-type: opaque-c-type
+C-TYPE: opaque-c-type
 " } [
     [ \ opaque-c-type see ] with-string-writer
 ] unit-test

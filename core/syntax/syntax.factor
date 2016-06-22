@@ -83,6 +83,18 @@ IN: bootstrap.syntax
         "]==]" parse-multiline-string suffix!
     ] define-core-syntax
 
+    "factor[[" [
+        "]]" parse-multiline-string suffix!
+    ] define-core-syntax
+
+    "factor[=[" [
+        "]=]" parse-multiline-string suffix!
+    ] define-core-syntax
+
+    "factor[==[" [
+        "]==]" parse-multiline-string suffix!
+    ] define-core-syntax
+
     "PRIMITIVE:" [
         current-vocab name>>
         scan-word scan-effect ";" expect ensure-primitive
@@ -93,22 +105,18 @@ IN: bootstrap.syntax
     ] define-core-syntax
 
     "IN:" [ scan-token set-current-vocab ] define-core-syntax
-    "in:" [ scan-token set-current-vocab ] define-core-syntax
 
     "PRIVATE<" [ begin-private ] define-core-syntax
 
     "PRIVATE>" [ end-private ] define-core-syntax
 
     "USE:" [ scan-token use-vocab ] define-core-syntax
-    "use:" [ scan-token use-vocab ] define-core-syntax
 
     "UNUSE:" [ scan-token unuse-vocab ] define-core-syntax
-    "unuse:" [ scan-token unuse-vocab ] define-core-syntax
 
     "USING:" [ ";" [ use-vocab ] each-token ] define-core-syntax
 
     "QUALIFIED:" [ scan-token dup add-qualified ] define-core-syntax
-    "qualified:" [ scan-token dup add-qualified ] define-core-syntax
 
     "QUALIFIED-WITH:" [ scan-token scan-token ";" expect add-qualified ] define-core-syntax
 
@@ -188,9 +196,6 @@ IN: bootstrap.syntax
     "SYMBOL:" [
         scan-new-escaped define-symbol
     ] define-core-syntax
-    "symbol:" [
-        scan-new-escaped define-symbol
-    ] define-core-syntax
 
     "SYMBOLS:" [
         ";" [ create-word-in [ reset-generic ] [ define-symbol ] bi ] each-token
@@ -201,11 +206,6 @@ IN: bootstrap.syntax
     ] define-core-syntax
 
     "DEFER:" [
-        scan-escaped-word-string current-vocab create-word
-        [ fake-definition ] [ set-last-word ] [ undefined-def define ] tri
-    ] define-core-syntax
-
-    "defer:" [
         scan-escaped-word-string current-vocab create-word
         [ fake-definition ] [ set-last-word ] [ undefined-def define ] tri
     ] define-core-syntax
@@ -254,9 +254,6 @@ IN: bootstrap.syntax
     "MIXIN:" [
         scan-new-class define-mixin-class
     ] define-core-syntax
-    "mixin:" [
-        scan-new-class define-mixin-class
-    ] define-core-syntax
 
     "INSTANCE:" [
         location [
@@ -275,9 +272,6 @@ IN: bootstrap.syntax
     "SINGLETON:" [
         scan-new-class define-singleton-class
     ] define-core-syntax
-    "singleton:" [
-        scan-new-class define-singleton-class
-    ] define-core-syntax
 
     "TUPLE:" [
         parse-tuple-definition define-tuple-class
@@ -291,9 +285,6 @@ IN: bootstrap.syntax
     ] define-core-syntax
 
     "SLOT:" [
-        scan-token define-protocol-slot
-    ] define-core-syntax
-    "slot:" [
         scan-token define-protocol-slot
     ] define-core-syntax
 
@@ -310,21 +301,12 @@ IN: bootstrap.syntax
     "FORGET:" [
         scan-object forget
     ] define-core-syntax
-    "forget:" [
-        scan-object forget
-    ] define-core-syntax
 
     "(" [
         ")" parse-effect suffix!
     ] define-core-syntax
 
     "MAIN:" [
-        scan-word
-        dup ( -- ) check-stack-effect
-        [ current-vocab main<< ]
-        [ current-source-file get [ main<< ] [ drop ] if* ] bi
-    ] define-core-syntax
-    "main:" [
         scan-word
         dup ( -- ) check-stack-effect
         [ current-vocab main<< ]

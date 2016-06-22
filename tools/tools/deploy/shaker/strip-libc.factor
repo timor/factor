@@ -9,6 +9,6 @@ IN: libc
 
 : free ( alien -- ) (free) ;
 
-forget: malloc-ptr
+FORGET: malloc-ptr
 
-forget: <malloc-ptr>
+FORGET: <malloc-ptr>

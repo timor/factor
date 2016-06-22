@@ -10,7 +10,7 @@ IN: vocabs.prettyprint
     [ vocab-name ] [ lookup-vocab vocab-style ] bi styled-text ;
 
 : pprint-in ( vocab -- )
-    [ \ in: pprint-word pprint-vocab ] with-pprint ;
+    [ \ IN: pprint-word pprint-vocab ] with-pprint ;
 
 PRIVATE<
 
@@ -30,7 +30,7 @@ GENERIC: pprint-qualified ( qualified -- ) ;
 M: qualified pprint-qualified ( qualified -- )
     [
         dup [ vocab>> vocab-name ] [ prefix>> ] bi = [
-            \ qualified: pprint-word
+            \ QUALIFIED: pprint-word
             vocab>> pprint-vocab
         ] [
             \ QUALIFIED-WITH: pprint-word

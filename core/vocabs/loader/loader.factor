@@ -137,7 +137,7 @@ PRIVATE>
     ] [
         "The " write vocab-name write
         " vocabulary does not define an entry point." print
-        "To define one, refer to \\ main: help" print
+        "To define one, refer to \\ MAIN: help" print
     ] ?if ;
 
 SYMBOL: blacklist

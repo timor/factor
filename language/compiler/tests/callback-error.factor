@@ -14,7 +14,7 @@ IN: compiler.tests.callback-error
 
 [ ] [
     " USING: alien alien.c-types alien.syntax kernel ;
-    in: scratchpad
+    IN: scratchpad
     
     : callback-death ( -- callback )
         void { } cdecl [ \"Error!\" throw ] alien-callback ;
@@ -31,7 +31,7 @@ IN: compiler.tests.callback-error
 
 [ ] [
     "USING: alien alien.c-types alien.syntax kernel threads ;
-    in: scratchpad
+    IN: scratchpad
     
     : callback-death ( -- callback )
         void { } cdecl [ \"Error!\" throw ] alien-callback ;

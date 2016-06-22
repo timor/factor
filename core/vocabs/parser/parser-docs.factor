@@ -27,12 +27,12 @@ ARTICLE: "word-search-syntax" "Syntax to control word lookup"
     \ RENAME:
 }
 "Removing vocabularies from the search path:"
-{ $subsections \ unuse: }
-"In the listener, the " { $vocab-link "scratchpad" } " is the default vocabulary for new word definitions. In source files, there is no default vocabulary. Defining words before declaring a vocabulary with " { $link \ in: } " results in an error."
-{ $subsections \ in: } ;
+{ $subsections \ UNUSE: }
+"In the listener, the " { $vocab-link "scratchpad" } " is the default vocabulary for new word definitions. In source files, there is no default vocabulary. Defining words before declaring a vocabulary with " { $link \ IN: } " results in an error."
+{ $subsections \ IN: } ;
 
 ARTICLE: "word-search-semantics" "Resolution of ambiguous word names"
-"There is a distinction between parsing words which perform “open” imports versus “closed” imports. An open import introduces all words from a vocabulary as identifiers, except possibly a finite set of exclusions. The " { $link \ USE: } ", " { $link \ USING: } " and " { $link \ EXCLUDE: } " words perform open imports. A closed import only adds a fixed set of identifiers. The " { $link \ FROM: } ", " { $link \ RENAME: } ", " { $link \ QUALIFIED: } " and " { $link \ QUALIFIED-WITH: } " words perform closed imports. Note that the latter two are considered as closed imports, due to the fact that all identifiers they introduce are unambiguously qualified with a prefix. The " { $link \ in: } " parsing word also performs a closed import of the newly-created vocabulary."
+"There is a distinction between parsing words which perform “open” imports versus “closed” imports. An open import introduces all words from a vocabulary as identifiers, except possibly a finite set of exclusions. The " { $link \ USE: } ", " { $link \ USING: } " and " { $link \ EXCLUDE: } " words perform open imports. A closed import only adds a fixed set of identifiers. The " { $link \ FROM: } ", " { $link \ RENAME: } ", " { $link \ QUALIFIED: } " and " { $link \ QUALIFIED-WITH: } " words perform closed imports. Note that the latter two are considered as closed imports, due to the fact that all identifiers they introduce are unambiguously qualified with a prefix. The " { $link \ IN: } " parsing word also performs a closed import of the newly-created vocabulary."
 $nl
 "When the parser encounters a reference to a word, it first searches the closed imports, in order. Closed imports are searched from the most recent to least recent. If the word could not be found this way, it searches open imports. Unlike closed imports, with open imports, the order does not matter -- instead, if more than one vocabulary defines a word with this name, an error is thrown."
 { $subsections ambiguous-use-error }
@@ -79,7 +79,7 @@ $nl
     add-words-from
     add-words-excluding
 }
-"Words used to implement " { $link \ in: } ":"
+"Words used to implement " { $link \ IN: } ":"
 { $subsections
     current-vocab
     set-current-vocab
@@ -113,10 +113,10 @@ HELP: <no-word-error>
 HELP: set-current-vocab
 { $values { "name" string } }
 { $description "Sets the current vocabulary where new words will be defined, creating the vocabulary first if it does not exist." }
-{ $notes "This word is used to implement " { $link \ in: } "." } ;
+{ $notes "This word is used to implement " { $link \ IN: } "." } ;
 
 HELP: no-current-vocab
-{ $error-description "Thrown when a new word is defined in a source file that does not have an " { $link \ in: } " form." } ;
+{ $error-description "Thrown when a new word is defined in a source file that does not have an " { $link \ IN: } " form." } ;
 
 HELP: current-vocab
 { $values { "vocab" vocab } }
@@ -139,7 +139,7 @@ HELP: use-vocab
 HELP: unuse-vocab
 { $values { "vocab" "a vocabulary specifier" } }
 { $description "Removes a vocabulary from the current manifest." }
-{ $notes "This word is used to implement " { $link \ unuse: } "." } ;
+{ $notes "This word is used to implement " { $link \ UNUSE: } "." } ;
 
 HELP: add-qualified
 { $values { "vocab" "a vocabulary specifier" } { "prefix" string } }

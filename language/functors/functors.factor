@@ -71,15 +71,7 @@ FUNCTOR-SYNTAX: \ SINGLETON:
     scan-param suffix!
     \ define-singleton-class suffix! ;
 
-FUNCTOR-SYNTAX: \ singleton:
-    scan-param suffix!
-    \ define-singleton-class suffix! ;
-
 FUNCTOR-SYNTAX: \ MIXIN:
-    scan-param suffix!
-    \ define-mixin-class suffix! ;
-
-FUNCTOR-SYNTAX: \ mixin:
     scan-param suffix!
     \ define-mixin-class suffix! ;
 

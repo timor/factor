@@ -16,7 +16,7 @@ M: alien pprint*
 
 M: dll pprint* dll-path dup "DLL\" " "\"" pprint-string ;
 
-M: c-type-word definer drop \ c-type: f ;
+M: c-type-word definer drop \ C-TYPE: f ;
 M: c-type-word definition drop f ;
 M: c-type-word declarations. drop ;
 
@@ -66,7 +66,7 @@ M: typedef-word synopsis*
     ] if-empty ;
 
 : pprint-library ( library -- )
-    [ \ library: [ text ] pprint-prefix ] when* ;
+    [ \ LIBRARY: [ text ] pprint-prefix ] when* ;
 
 : pprint-function ( word quot -- )
     [ def>> first pprint-c-type ]

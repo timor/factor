@@ -9,7 +9,7 @@ QUALIFIED-WITH: alien.syntax s ;
 IN: alien.fortran.tests
 
 COMPILE< intel-unix-abi "(alien.fortran-tests)" (add-fortran-library) COMPILE>
-library: (alien.fortran-tests)
+LIBRARY: (alien.fortran-tests)
 STRUCT: fortran_test_record
     { FOO int }
     { BAR double[2] }

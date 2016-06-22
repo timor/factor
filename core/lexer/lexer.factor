@@ -85,7 +85,7 @@ GENERIC: skip-word ( lexer -- ) ;
 
 M: lexer skip-word
     [
-        2dup nth char: " eq? [ drop 1 + ] [ f skip ] if
+        2dup nth char: \" eq? [ drop 1 + ] [ f skip ] if
     ] change-lexer-column ;
 
 : still-parsing? ( lexer -- ? )
@@ -109,7 +109,7 @@ M: lexer skip-word
         [ (parse-raw) ] [ dup next-line parse-raw ] if
     ] [ drop f ] if ;
 
-defer: parse-token
+DEFER: parse-token
 
 : skip-comments ( lexer str -- str' )
     dup "!" = [

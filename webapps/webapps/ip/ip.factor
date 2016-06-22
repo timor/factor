@@ -20,4 +20,4 @@ TUPLE: ip-app < dispatcher ;
     <ip-app> main-responder set-global
     8080 httpd drop ;
 
-MAin: run-ip-app
+MAIN: run-ip-app

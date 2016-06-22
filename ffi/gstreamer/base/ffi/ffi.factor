@@ -18,4 +18,4 @@ COMPILE<
 } cond
 COMPILE>
 
-gir: GstBase-0.10.gir
+GIR: GstBase-0.10.gir

@@ -46,4 +46,4 @@ USING: db.sqlite furnace.alloy namespaces http.server ;
 : run-calculator-main ( -- )
     8080 run-calculator ;
 
-MAin: run-calculator-main
+MAIN: run-calculator-main

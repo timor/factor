@@ -30,7 +30,7 @@ M: assoc-mixin collection-size assoc-size ;
 
 ! Test mixing in of new classes after the fact
 DEFER: mx1
-forget: mx1
+FORGET: mx1
 
 MIXIN: mx1
 

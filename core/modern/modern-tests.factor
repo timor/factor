@@ -102,7 +102,8 @@ IN: modern.tests
 { 1 } [ "( :integer )" string>literals length ] unit-test
 
 
-{ 1 } [ "postpone\\ main:" string>literals length ] unit-test
+{ 1 } [ "postpone\\ MAIN:" string>literals length ] unit-test
+{ 1 } [ "postpone\\ char:" string>literals length ] unit-test
 { 1 } [ "char: \\!" string>literals length ] unit-test
 
 

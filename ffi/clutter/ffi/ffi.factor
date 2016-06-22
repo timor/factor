@@ -24,4 +24,4 @@ COMPILE>
 
 FOREIGN-RECORD-TYPE: cairo.Path cairo_path_t ;
 
-gir: Clutter-1.0.gir
+GIR: Clutter-1.0.gir

@@ -47,4 +47,4 @@ TUPLE: help-webapp < dispatcher ;
         main-responder set-global
     8080 httpd drop ;
 
-MAin: run-help-webapp
+MAIN: run-help-webapp

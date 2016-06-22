@@ -21,4 +21,4 @@ COMPILE>
 FOREIGN-ATOMIC-TYPE: GL.uint GLuint ;
 FOREIGN-ATOMIC-TYPE: GL.enum GLenum ;
 
-gir: Cogl-1.0.gir
+GIR: Cogl-1.0.gir

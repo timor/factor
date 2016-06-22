@@ -11,17 +11,17 @@ IN: compiler.tree.builder.tests
 
 [ \ bad-recursion-1 build-tree ] [ inference-error? ] must-fail-with
 
-forget: bad-recursion-1
+FORGET: bad-recursion-1
 
 : bad-recursion-2 ( obj -- obj )
     dup [ dup first swap second bad-recursion-2 ] [ ] if ;
 
 [ \ bad-recursion-2 build-tree ] [ inference-error? ] must-fail-with
 
-forget: bad-recursion-2
+FORGET: bad-recursion-2
 
 : bad-bin ( a b -- ) 5 [ 5 bad-bin bad-bin 5 ] [ 2drop ] if ;
 
 [ \ bad-bin build-tree ] [ inference-error? ] must-fail-with
 
-forget: bad-bin
+FORGET: bad-bin

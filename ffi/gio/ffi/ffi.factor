@@ -14,4 +14,4 @@ COMPILE< "gio" {
     { [ os unix? ] [ "libgio-2.0.so" ] }
 } cond cdecl add-library COMPILE>
 
-gir: vocab:gio/Gio-2.0.gir
+GIR: vocab:gio/Gio-2.0.gir

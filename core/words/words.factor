@@ -67,7 +67,7 @@ TUPLE: undefined-word word ;
     [ undefined f ] ;
 
 PREDICATE: deferred < word def>> undefined-def = ;
-M: deferred definer drop \ defer: f ;
+M: deferred definer drop \ DEFER: f ;
 M: deferred definition drop f ;
 
 PREDICATE: primitive < word "primitive" word-prop ;

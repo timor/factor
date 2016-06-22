@@ -19,4 +19,4 @@ COMPILE<
 } cond
 COMPILE>
 
-gir: vocab:gtk/gl/GtkGLExt-1.0.gir
+GIR: vocab:gtk/gl/GtkGLExt-1.0.gir

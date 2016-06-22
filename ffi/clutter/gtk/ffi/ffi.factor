@@ -19,4 +19,4 @@ COMPILE<
 } cond
 COMPILE>
 
-gir: GtkClutter-1.0.gir
+GIR: GtkClutter-1.0.gir

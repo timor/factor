@@ -413,7 +413,7 @@ STRUCT: self-referent
     ] with-destructors
 ] unit-test
 
-c-type: forward-referent
+C-TYPE: forward-referent
 STRUCT: backward-referent
     { x forward-referent* }
     { y int } ;

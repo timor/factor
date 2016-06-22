@@ -174,7 +174,7 @@ CONSTANT: google-slides
     { $slide "Object system"
         "We define a mixin class for shapes, and add our existing data types as instances:"
         { $code
-            "mixin: shape"
+            "MIXIN: shape"
             "INSTANCE: rectangle shape"
             "INSTANCE: circle shape"
             "INSTANCE: triangle shape"

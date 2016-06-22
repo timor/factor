@@ -16,14 +16,14 @@ COMPILE< "gdk.pixbuf" {
     { [ os unix? ] [ "libgdk_pixbuf-2.0.so" ] }
 } cond cdecl add-library COMPILE>
 
-gir: vocab:gdk/pixbuf/GdkPixbuf-2.0.gir
+GIR: vocab:gdk/pixbuf/GdkPixbuf-2.0.gir
 
 ! <workaround incorrect return-values in gir
 
-forget: gdk_pixbuf_get_pixels
+FORGET: gdk_pixbuf_get_pixels
 FUNCTION: guint8* gdk_pixbuf_get_pixels ( GdkPixbuf* pixbuf ) ;
 
-forget: gdk_pixbuf_new_from_data
+FORGET: gdk_pixbuf_new_from_data
 FUNCTION: GdkPixbuf* gdk_pixbuf_new_from_data ( guint8* data,
                                                 GdkColorspace colorspace,
                                                 gboolean has_alpha,
@@ -34,7 +34,7 @@ FUNCTION: GdkPixbuf* gdk_pixbuf_new_from_data ( guint8* data,
                                                 GdkPixbufDestroyNotify destroy_fn,
                                                 gpointer destroy_fn_data ) ;
 
-forget: gdk_pixbuf_save_to_bufferv
+FORGET: gdk_pixbuf_save_to_bufferv
 FUNCTION: gboolean gdk_pixbuf_save_to_bufferv ( GdkPixbuf* pixbuf,
                                                 guint8** data,
                                                 gsize* buffer_size,

@@ -31,4 +31,4 @@ TUPLE: benchmark-dispatcher < dispatcher ;
 !   * static content
 !     http://localhost:8080/static/readme.html
 
-MAin: run-benchmark-webapp
+MAIN: run-benchmark-webapp

@@ -185,5 +185,5 @@ TYPED: typed-intersection ( x: intersection{ integer bignum } -- ? ) >boolean ;
 [ 0 typed-intersection ] [ input-mismatch-error? ] must-fail-with
 
 [
-    "IN: test123 use: typed TYPED: foo ( x -- y ) ;" eval( -- )
+    "IN: test123 USE: typed TYPED: foo ( x -- y ) ;" eval( -- )
 ] [ error>> no-types-specified? ] must-fail-with

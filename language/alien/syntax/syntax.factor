@@ -14,8 +14,6 @@ SYNTAX: BAD-ALIEN <bad-alien> suffix! ;
 
 SYNTAX: \ LIBRARY: scan-token current-library set ;
 ARITY: \ LIBRARY: 1
-SYNTAX: \ library: scan-token current-library set ;
-ARITY: \ library: 1
 
 SYNTAX: \ FUNCTION:
     (FUNCTION:) make-function define-inline ;
@@ -39,9 +37,6 @@ SYNTAX: \ ENUM:
 SYNTAX: \ C-TYPE:
     void CREATE-C-TYPE typedef ;
 ARITY: \ C-TYPE: 2
-SYNTAX: \ c-type:
-    void CREATE-C-TYPE typedef ;
-ARITY: \ c-type: 2
 
 SYNTAX: \ &:
     scan-token current-library get '[ _ _ address-of ] append! ;

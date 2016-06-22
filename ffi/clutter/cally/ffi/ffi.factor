@@ -19,4 +19,4 @@ COMPILE<
 } cond
 COMPILE>
 
-gir: Cally-1.0.gir
+GIR: Cally-1.0.gir
