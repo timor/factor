@@ -34,7 +34,7 @@ can-administer-blogs? define-capability
 
 TUPLE: entity id author date content ;
 
-GENERIC: entity-url ( entity -- url )
+GENERIC: entity-url ( entity -- url ) ;
 
 M: entity feed-entry-url entity-url ;
 

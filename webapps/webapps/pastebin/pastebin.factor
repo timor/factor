@@ -44,7 +44,7 @@ entity f
     { "contents" "CONTENTS" TEXT +not-null+ }
 } define-persistent
 
-GENERIC: entity-url ( entity -- url )
+GENERIC: entity-url ( entity -- url ) ;
 
 M: entity feed-entry-title summary>> ;
 

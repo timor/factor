@@ -28,17 +28,17 @@ IN: benchmark.regex-dna
 
 : do-replacements ( string -- string' )
     {
-        { R/ B/ "(c|g|t)" }
-        { R/ D/ "(a|g|t)" }
-        { R/ H/ "(a|c|t)" }
-        { R/ K/ "(g|t)" }
-        { R/ M/ "(a|c)" }
-        { R/ N/ "(a|c|g|t)" }
-        { R/ R/ "(a|g)" }
-        { R/ S/ "(c|t)" }
-        { R/ V/ "(a|c|g)" }
-        { R/ W/ "(a|t)" }
-        { R/ Y/ "(c|t)" }
+        { R[[ B]] "(c|g|t)" }
+        { R[[ D]] "(a|g|t)" }
+        { R[[ H]] "(a|c|t)" }
+        { R[[ K]] "(g|t)" }
+        { R[[ M]] "(a|c)" }
+        { R[[ N]] "(a|c|g|t)" }
+        { R[[ R]] "(a|g)" }
+        { R[[ S]] "(c|t)" }
+        { R[[ V]] "(a|c|g)" }
+        { R[[ W]] "(a|t)" }
+        { R[[ Y]] "(c|t)" }
     } [ re-replace ] assoc-each ;
 
 SYMBOL: ilen
