@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs calendar continuations destructors io
 io.encodings.binary io.servers io.sockets
-io.streams.duplex fry kernel locals math math.ranges 
+io.streams.duplex fry kernel locals math math.ranges
 namespaces prettyprint random sequences sets splitting threads
 tools.continuations ;
 IN: managed-server
