@@ -452,7 +452,8 @@ ERROR: mismatched-terminator lexer slice ;
     ] if ;
 
 : gt-terminator ( lexer slice -- slice/f )
-    dup top-level-greater-than? [
+    2dup peek-merge-til-whitespace
+    top-level-greater-than? [
         2dup [ dup peek-tag ] dip delimiters-match? [
             nip terminator-literal make-tag-class-literal
         ] [

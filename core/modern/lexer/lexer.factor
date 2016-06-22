@@ -116,10 +116,17 @@ ERROR: unexpected-end n string ;
         n' >>n drop
     n' string' slice ch ;
 
+! rollback only n, other state is not rolled back
+:: with-lexer-rollback ( lexer quot -- )
+    lexer n>> :> n
+    lexer quot call lexer n >>n drop ; inline
+
 
 : merge-lex-til-whitespace ( lexer slice --  slice' )
     [ lex-til-whitespace drop 2nip ] dip merge-slices ;
 
+: peek-merge-til-whitespace ( lexer slice -- slice' )
+    '[ _ merge-lex-til-whitespace ] with-lexer-rollback ;
 
 :: slice-til-eol ( n string -- n'/f string slice/f ch/f )
     n [

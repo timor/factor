@@ -81,3 +81,5 @@ in: modern.out.tests
 
 { t } [ "->[ ]" rewrite-same-string ] unit-test
 { t } [ "abc>[ ]" rewrite-same-string ] unit-test
+{ t } [ "CC>n" rewrite-same-string ] unit-test
+{ t } [ "CC>CC" rewrite-same-string ] unit-test
