@@ -69,7 +69,7 @@ CONSTANT: i5 $[
 { t } [ 8 i5 in? ] unit-test
 { f } [ 9 i5 in? ] unit-test
 
-CONSTANT: i6 $[ ;
+CONSTANT: i6 $[
     { { 2 5 } } <interval-set>
     { { 4 8 } } <interval-set>
     <interval-and> ] ;
