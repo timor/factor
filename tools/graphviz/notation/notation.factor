@@ -77,7 +77,7 @@ SYNTAX: \ node[ parse-quotation '[ <node-attributes> @ add ] append! ;
 SYNTAX: \ edge[ parse-quotation '[ <edge-attributes> @ add ] append! ;
 
 SYNTAX: \ add-node[ parse-quotation '[ <node> @ add ] append! ;
-SYNTAX: \ add-edge[ parse-quotation '[ <node> @ add ] append! ;
+SYNTAX: \ add-edge[ parse-quotation '[ <edge> @ add ] append! ;
 SYNTAX: \ ->[ parse-quotation '[ <edge> @ add ] append! ;
 SYNTAX: \ --[ parse-quotation '[ <edge> @ add ] append! ;
 
