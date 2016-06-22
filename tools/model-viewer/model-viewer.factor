@@ -12,8 +12,8 @@ specialized-vectors fry sequences.deep destructors math.bitwise opengl.gl
 game.models game.models.obj game.models.loader game.models.collada
 prettyprint images.tga literals ;
 FROM: alien.c-types => float ;
-specialized-array: float
-specialized-vector: uint
+SPECIALIZED-ARRAY: float
+SPECIALIZED-VECTOR: uint
 IN: model-viewer
 
 GLSL-SHADER: obj-vertex-shader vertex-shader [[

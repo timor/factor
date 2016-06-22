@@ -1,7 +1,7 @@
 USING: kernel tools.test windows.ole32 alien.c-types
 classes.struct specialized-arrays windows.kernel32
 windows.com.syntax ;
-specialized-array: uchar
+SPECIALIZED-ARRAY: uchar
 IN: windows.ole32.tests
 
 [ t ] [

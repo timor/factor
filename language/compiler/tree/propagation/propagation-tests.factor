@@ -9,8 +9,8 @@ math.order math.private quotations sequences sequences.private sets
 slots.private sorting specialized-arrays strings strings.private
 system tools.test vectors vocabs words ;
 FROM: math => float ;
-specialized-array: double
-specialized-array: void*
+SPECIALIZED-ARRAY: double
+SPECIALIZED-ARRAY: void*
 IN: compiler.tree.propagation.tests
 
 ! Arrays

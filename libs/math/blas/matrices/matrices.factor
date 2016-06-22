@@ -7,10 +7,10 @@ sequences sequences.merged sequences.private shuffle
 parser prettyprint.backend prettyprint.custom ascii
 specialized-arrays ;
 FROM: alien.c-types => float ;
-specialized-array: float
-specialized-array: double
-specialized-array: complex-float
-specialized-array: complex-double
+SPECIALIZED-ARRAY: float
+SPECIALIZED-ARRAY: double
+SPECIALIZED-ARRAY: complex-float
+SPECIALIZED-ARRAY: complex-double
 IN: math.blas.matrices
 
 TUPLE: blas-matrix-base underlying ld rows cols transpose ;

@@ -1,7 +1,7 @@
 USING: alien.c-types alien.data io io.encodings.ascii io.files
 io.pathnames io.streams.c kernel math specialized-arrays
 strings tools.test ;
-specialized-array: int
+SPECIALIZED-ARRAY: int
 
 [
     ! Writing strings to ascii streams

@@ -1,7 +1,7 @@
 IN: specialized-vectors.tests
 USING: specialized-arrays specialized-vectors
 tools.test kernel sequences alien.c-types ;
-specialized-array: float
+SPECIALIZED-ARRAY: float
 SPECIALIZED-VECTORS: float double ;
 
 { 3 } [ double-vector{ 1 2 } 3 suffix! length ] unit-test

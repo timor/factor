@@ -9,7 +9,7 @@ quotations math.constants compiler.units splitting math.matrices
 math.vectors.simd.cords alien.data ;
 FROM: math.vectors.simd.intrinsics => alien-vector set-alien-vector ;
 QUALIFIED-WITH: alien.c-types c ;
-specialized-array: c:float
+SPECIALIZED-ARRAY: c:float
 IN: math.vectors.simd.tests
 
 ! Test type propagation

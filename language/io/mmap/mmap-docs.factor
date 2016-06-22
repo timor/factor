@@ -48,7 +48,7 @@ HELP: with-mapped-array
 { $examples
     { $unchecked-example
         "USING: alien.c-types io.mmap prettyprint specialized-arrays ;"
-        "specialized-array: uint"
+        "SPECIALIZED-ARRAY: uint"
 "resource:LICENSE.txt\" uint [
     [ . ] each
 ] with-mapped-array"
@@ -69,7 +69,7 @@ ARTICLE: "io.mmap.arrays" "Working with memory-mapped data"
 { $subsections <mapped-array> }
 "Additionally, files may be opened with two combinators which take a c-type as input:"
 { $subsections with-mapped-array with-mapped-array-reader }
-"The appropriate specialized array type must first be generated with " { $link postpone\ specialized-array: } "."
+"The appropriate specialized array type must first be generated with " { $link \ SPECIALIZED-ARRAY: } "."
 $nl
 "Data can also be read and written from the " { $link mapped-file } " by applying low-level alien words to the " { $slot "address" } " slot. This approach is not recommended, though, since in most cases the compiler will generate efficient code for specialized array usage. See " { $link "reading-writing-memory" } " for a description of low-level memory access primitives." ;
 
@@ -77,7 +77,7 @@ ARTICLE: "io.mmap.examples" "Memory-mapped file examples"
 "Convert a file of 4-byte cells from little to big endian or vice versa, by directly mapping it into memory and operating on it with sequence words:"
 { $code
     "USING: alien.c-types grouping io.mmap sequences" "specialized-arrays ;"
-    "specialized-array: char"
+    "SPECIALIZED-ARRAY: char"
     ""
     "\"mydata.dat\" char ["
     "    4 <groups>"
@@ -87,7 +87,7 @@ ARTICLE: "io.mmap.examples" "Memory-mapped file examples"
 "Normalize a file containing packed quadruples of floats:"
 { $code
     "USING: kernel io.mmap math.vectors math.vectors.simd" "sequences specialized-arrays ;"
-    "specialized-array: float-4"
+    "SPECIALIZED-ARRAY: float-4"
     ""
     "\"mydata.dat\" float-4 ["
     "    [ normalize ] map! drop"

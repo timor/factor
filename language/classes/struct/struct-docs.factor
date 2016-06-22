@@ -135,7 +135,7 @@ ARTICLE: "classes.struct.examples" "Struct class examples"
 "Creating a new instance with slots initialized from the stack:"
 { $code
     "USING: libc specialized-arrays alien.data ;"
-    "specialized-array: char"
+    "SPECIALIZED-ARRAY: char"
     ""
     "42"
     "\"Hello, chicken.\" char >c-array"

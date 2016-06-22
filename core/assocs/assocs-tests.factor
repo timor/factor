@@ -1,8 +1,7 @@
 USING: alien.c-types assocs kernel make math namespaces
 sequences specialized-arrays tools.test ;
 IN: assocs.tests
-specialized-array: double
-IN: assocs.tests
+SPECIALIZED-ARRAY: double
 
 { t } [ H{ } dup assoc-subset? ] unit-test
 { f } [ H{ { 1 3 } } H{ } assoc-subset? ] unit-test

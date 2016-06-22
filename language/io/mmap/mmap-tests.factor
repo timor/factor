@@ -3,7 +3,7 @@ io.encodings.ascii io.files io.mmap kernel locals math sequences
 sequences.private specialized-arrays
 specialized-arrays.instances.alien.c-types.uint tools.test ;
 
-specialized-array: uint
+SPECIALIZED-ARRAY: uint
 
 |[ path |
     "12345" path ascii set-file-contents

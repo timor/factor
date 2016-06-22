@@ -27,7 +27,7 @@ os windows? cpu x86.64? and [
 
 STRUCT: foo { a c:int } { b c:void* } { c c:bool } ;
 
-specialized-array: foo
+SPECIALIZED-ARRAY: foo
 
 { t } [ 0 binary-zero? ] unit-test
 { f } [ 1 binary-zero? ] unit-test

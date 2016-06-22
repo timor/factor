@@ -3,7 +3,7 @@
 USING: accessors arrays jamshred.oint jamshred.tunnel kernel
 math.vectors sequences specialized-arrays tools.test
 alien.c-types ;
-specialized-array: float
+SPECIALIZED-ARRAY: float
 IN: jamshred.tunnel.tests
 
 : test-segment-oint ( -- oint )

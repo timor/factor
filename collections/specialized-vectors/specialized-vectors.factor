@@ -83,7 +83,7 @@ SYNTAX: \ SPECIALIZED-VECTORS:
         [ define-vector-vocab use-vocab ] bi
     ] each-token ;
 
-SYNTAX: \ specialized-vector:
+SYNTAX: \ SPECIALIZED-VECTOR:
     scan-c-type
     [ define-array-vocab use-vocab ]
     [ define-vector-vocab use-vocab ] bi ;

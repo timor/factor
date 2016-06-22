@@ -109,7 +109,7 @@ TYPEDEF: int alien-parser-test-int ; ! reasonably unique name...
 
 { "OK!" } [
     [
-        "USE: specialized-arrays specialized-array: alien-parser-test-int" eval( -- )
+        "USE: specialized-arrays SPECIALIZED-ARRAY: alien-parser-test-int" eval( -- )
         ! after restart, we end up here
         "OK!"
     ] [ :1 ] recover

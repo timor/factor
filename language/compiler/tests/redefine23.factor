@@ -3,7 +3,7 @@ USING: classes.struct specialized-arrays alien.c-types sequences
 compiler.units vocabs tools.test specialized-arrays.private ;
 
 STRUCT: my-struct { x int } ;
-specialized-array: my-struct
+SPECIALIZED-ARRAY: my-struct
 : my-word ( a -- b ) iota [ my-struct <struct-boa> ] my-struct-array{ } map-as ;
 
 [ ] [

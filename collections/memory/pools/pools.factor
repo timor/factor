@@ -1,7 +1,7 @@
 ! (c)2009 Joe Groff bsd license
 USING: accessors arrays bit-arrays classes
 classes.tuple.private fry kernel locals math parser
-sequences sequences.private vectors words ;
+sequences sequences.private vectors words lexer ;
 IN: memory.pools
 
 TUPLE: pool

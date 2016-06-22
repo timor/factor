@@ -1,7 +1,7 @@
 IN: math.vectors.tests
 USING: math.vectors tools.test kernel specialized-arrays compiler
 kernel.private alien.c-types math.functions ;
-specialized-array: int
+SPECIALIZED-ARRAY: int
 
 { { 1 2 3 } } [ 1/2 { 2 4 6 } n*v ] unit-test
 { { 1 2 3 } } [ { 2 4 6 } 1/2 v*n ] unit-test

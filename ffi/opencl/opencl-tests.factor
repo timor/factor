@@ -4,7 +4,7 @@ USING: locals io.encodings.ascii io.encodings.string sequences
 math specialized-arrays alien.c-types math.order alien opencl tools.test
 accessors arrays destructors kernel namespaces alien.data ;
 FROM: alien.c-types => float ;
-specialized-array: float
+SPECIALIZED-ARRAY: float
 IN: opencl.tests
 
 CONSTANT: kernel-source [[

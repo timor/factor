@@ -1,6 +1,6 @@
 USING: accessors alien.c-types alien.syntax math.floats.half kernel
 math tools.test specialized-arrays alien.data classes.struct ;
-specialized-array: half
+SPECIALIZED-ARRAY: half
 IN: math.floats.half.tests
 
 { 0x0000 } [  0.0  half>bits ] unit-test

@@ -1,7 +1,7 @@
 ! (c)2010 Joe Groff bsd license
 USING: accessors arrays combinators definitions fry kernel
 locals.types namespaces parser quotations see sequences slots
-words ;
+words lexer ;
 FROM: kernel.private => declare ;
 FROM: help.markup.private => link-effect? ;
 IN: variables

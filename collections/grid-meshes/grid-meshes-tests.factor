@@ -1,7 +1,7 @@
 IN: grid-meshes.tests
 USING: alien.c-types alien.data grid-meshes grid-meshes.private
 specialized-arrays tools.test ;
-specialized-array: float
+SPECIALIZED-ARRAY: float
 
 {
     float-array{

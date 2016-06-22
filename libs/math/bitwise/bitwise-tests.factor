@@ -1,7 +1,7 @@
 USING: accessors math math.bitwise tools.test kernel words
 specialized-arrays alien.c-types alien.data math.vectors.simd
 sequences destructors libc literals classes.struct ;
-specialized-array: int
+SPECIALIZED-ARRAY: int
 IN: math.bitwise.tests
 
 { 0 } [ 1 0 0 bitroll ] unit-test
@@ -37,8 +37,8 @@ STRUCT: bit-count-struct { a uint } ;
 { 2 } [ S{ bit-count-struct { a 3 } } bit-count ] unit-test
 
 
-specialized-array: uint
-specialized-array: uint-4
+SPECIALIZED-ARRAY: uint
+SPECIALIZED-ARRAY: uint-4
 
 { 1 } [ uint-4{ 1 0 0 0 } bit-count ] unit-test
 

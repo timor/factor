@@ -5,11 +5,11 @@ help.syntax images kernel math sequences
 specialized-arrays strings ;
 QUALIFIED-WITH: alien.c-types c ;
 QUALIFIED-WITH: math m ;
-specialized-array: c:float
-specialized-array: int
-specialized-array: uint
-specialized-array: ulong
-specialized-array: void*
+SPECIALIZED-ARRAY: c:float
+SPECIALIZED-ARRAY: int
+SPECIALIZED-ARRAY: uint
+SPECIALIZED-ARRAY: ulong
+SPECIALIZED-ARRAY: void*
 IN: gpu.render
 
 HELP: <index-elements>

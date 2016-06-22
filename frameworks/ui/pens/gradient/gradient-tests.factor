@@ -1,6 +1,6 @@
 USING: tools.test ui.pens.gradient ui.pens.gradient.private
 colors.constants specialized-arrays alien.c-types ;
-specialized-array: float
+SPECIALIZED-ARRAY: float
 IN: ui.pens.gradient.tests
 
 {

@@ -8,7 +8,7 @@ specialized-arrays system threads tools.test vocabs ;
 FROM: specialized-arrays.private => specialized-array-vocab ;
 IN: io.files.tests
 
-specialized-array: int
+SPECIALIZED-ARRAY: int
 
 { } [
     [ ascii <file-appender> dispose ] with-test-file
@@ -99,7 +99,7 @@ specialized-array: int
 ] with-test-file
 
 STRUCT: pt { x uint } { y uint } ;
-specialized-array: pt
+SPECIALIZED-ARRAY: pt
 
 CONSTANT: pt-array-1
     pt-array{ S{ pt f 1 1 } S{ pt f 2 2 } S{ pt f 3 3 } } ;

@@ -7,8 +7,8 @@ math.private memory namespaces namespaces.private random parser quotations
 sequences slots.private specialized-arrays stack-checker stack-checker.errors
 system threads tools.test words ;
 FROM: alien.c-types => float short ;
-specialized-array: float
-specialized-array: char
+SPECIALIZED-ARRAY: float
+SPECIALIZED-ARRAY: char
 IN: compiler.tests.alien
 
 ! Make sure that invalid inputs don't pass the stack checker
