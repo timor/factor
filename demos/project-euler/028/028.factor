@@ -43,4 +43,4 @@ PRIVATE>
 ! [ euler028 ] 100 ave-time
 ! 0 ms ave run time - 0.39 SD (100 trials)
 
-solution: euler028
+SOLUTION: euler028

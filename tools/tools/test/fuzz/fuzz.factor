@@ -38,4 +38,4 @@ M: fuzz-test-failure summary
 
 PRIVATE>
 
-test: fuzz-test
+TEST: fuzz-test

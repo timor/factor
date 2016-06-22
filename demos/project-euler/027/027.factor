@@ -72,4 +72,4 @@ PRIVATE>
 
 ! TODO: generalize max-consecutive/max-product (from #26) into a new word
 
-solution: euler027
+SOLUTION: euler027

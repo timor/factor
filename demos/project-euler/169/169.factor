@@ -39,4 +39,4 @@ MEMO: fn ( n -- x )
 ! [ euler169 ] 100 ave-time
 ! 0 ms ave run time - 0.2 SD (100 trials)
 
-solution: euler169
+SOLUTION: euler169

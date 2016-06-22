@@ -81,4 +81,4 @@ PRIVATE>
 : euler051 ( -- answer )
     2 (euler051) ;
 
-solution: euler051
+SOLUTION: euler051

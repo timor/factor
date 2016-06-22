@@ -60,4 +60,4 @@ PRIVATE>
 ! array in the way of the sieve of eratosthene would scale
 ! better on bigger values.
 
-solution: euler124
+SOLUTION: euler124

@@ -93,4 +93,4 @@ PRIVATE>
 ! TODO: I don't like that you have to specify the upper bound, maybe try making
 ! this lazy so it could also short-circuit when it finds the answer?
 
-solution: euler047a
+SOLUTION: euler047a

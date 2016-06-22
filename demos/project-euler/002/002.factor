@@ -77,4 +77,4 @@ PRIVATE>
 ! [ euler002b ] 100 ave-time
 ! 0 ms ave run time - 0.0 SD (100 trials)
 
-solution: euler002b
+SOLUTION: euler002b

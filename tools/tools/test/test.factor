@@ -108,7 +108,7 @@ MACRO: <experiment> ( word -- quot )
 
 COMPILE<
 
-SYNTAX: \ test:
+SYNTAX: \ TEST:
     scan-token
     [ create-word-in ]
     [ "(" ")" surround search '[ _ parse-test ] ] bi
@@ -163,11 +163,11 @@ PRIVATE>
 : with-test-directory ( ..a quot: ( ..a -- ..b ) -- ..b )
     [ cleanup-unique-directory ] with-temp-directory ; inline
 
-test: unit-test
-test: must-infer-as
-test: must-infer
-test: must-fail-with
-test: must-fail
+TEST: unit-test
+TEST: must-infer-as
+TEST: must-infer
+TEST: must-fail-with
+TEST: must-fail
 
 M: test-failure error. ( error -- )
     {

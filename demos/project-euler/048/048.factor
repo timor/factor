@@ -23,4 +23,4 @@ IN: project-euler.048
 ! [ euler048 ] 100 ave-time
 ! 276 ms run / 1 ms GC ave time - 100 trials
 
-solution: euler048
+SOLUTION: euler048

@@ -55,4 +55,4 @@ PRIVATE>
 ! [ euler175 ] 100 ave-time
 ! 0 ms ave run time - 0.31 SD (100 trials)
 
-solution: euler175
+SOLUTION: euler175

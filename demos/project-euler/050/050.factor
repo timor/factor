@@ -85,4 +85,4 @@ PRIVATE>
 ! [ euler050 ] 100 ave-time
 ! 291 ms run / 20.6 ms GC ave time - 100 trials
 
-solution: euler050
+SOLUTION: euler050

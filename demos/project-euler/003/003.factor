@@ -22,4 +22,4 @@ IN: project-euler.003
 ! [ euler003 ] 100 ave-time
 ! 1 ms ave run time - 0.49 SD (100 trials)
 
-solution: euler003
+SOLUTION: euler003

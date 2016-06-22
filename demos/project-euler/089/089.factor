@@ -45,4 +45,4 @@ IN: project-euler.089
 ! [ euler089 ] 100 ave-time
 ! 14 ms ave run time - 0.27 SD (100 trials)
 
-solution: euler089
+SOLUTION: euler089

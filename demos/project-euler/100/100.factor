@@ -32,4 +32,4 @@ IN: project-euler.100
 ! [ euler100 ] 100 ave-time
 ! 0 ms ave run time - 0.14 SD (100 trials)
 
-solution: euler100
+SOLUTION: euler100

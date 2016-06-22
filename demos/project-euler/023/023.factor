@@ -55,4 +55,4 @@ PRIVATE>
 ! [ euler023 ] time
 ! 2.15542 seconds
 
-solution: euler023
+SOLUTION: euler023
