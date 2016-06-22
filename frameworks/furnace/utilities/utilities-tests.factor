@@ -13,7 +13,7 @@ dummy-vocab "dummy.factor" temp-file [ utf8 set-file-contents ] keep run-file
 COMPILE>
 
 { t } [
-    use: dummy-vocab
+    USE: dummy-vocab
     { dummy-word "index" } resolve-template-path "index" temp-file =
 ] unit-test
 

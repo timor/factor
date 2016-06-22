@@ -21,8 +21,8 @@ IN: cairo-demo
 
 TUPLE: cairo-demo-gadget < gadget image-array cairo-t ;
 
-use: io
-use: formatting
+USE: io
+USE: formatting
 
 M: cairo-demo-gadget draw-gadget* ( gadget -- )
     0 0 glRasterPos2i

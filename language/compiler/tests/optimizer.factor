@@ -342,7 +342,7 @@ TUPLE: some-tuple x ;
 [ 0 ] [ 1234 [ { fixnum } declare -64 shift ] compile-call ] unit-test
 
 ! Loop detection problem found by doublec
-symbol: counter
+SYMBOL: counter
 
 DEFER: loop-bbb
 

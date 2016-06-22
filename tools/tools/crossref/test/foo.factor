@@ -1,4 +1,4 @@
-use: tools.crossref.tests
-use: kernel
+USE: tools.crossref.tests
+USE: kernel
 
 1 2 foo drop

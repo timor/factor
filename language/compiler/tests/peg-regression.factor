@@ -20,7 +20,7 @@ M: pipeline-expr blah ;
 pipeline = "hello" => [[ ast>pipeline-expr ]]
 }} ;
 
-use: tools.test
+USE: tools.test
 
 [ t ] [ \ expr word-optimized? ] unit-test
 [ t ] [ \ ast>pipeline-expr word-optimized? ] unit-test

@@ -26,9 +26,9 @@ UNION: x1 a1 b1 ;
 UNION: y1 a1 c1 ;
 UNION: z1 b1 c1 ;
 
-singleton: sa
-singleton: sb
-singleton: sc
+SINGLETON: sa
+SINGLETON: sb
+SINGLETON: sc
 
 INTERSECTION: empty-intersection ;
 
@@ -36,7 +36,7 @@ INTERSECTION: generic-class generic class ;
 
 UNION: union-with-one-member a ;
 
-mixin: mixin-with-one-member
+MIXIN: mixin-with-one-member
 INSTANCE: union-with-one-member mixin-with-one-member ;
 
 ! class<=
@@ -127,7 +127,7 @@ INSTANCE: union-with-one-member mixin-with-one-member ;
 { t } [ a union-with-one-member class<= ] unit-test
 { f } [ union-with-one-member class-not integer class<= ] unit-test
 
-mixin: empty-mixin
+MIXIN: empty-mixin
 
 { f } [ empty-mixin class-not null class<= ] unit-test
 { f } [ empty-mixin null class<= ] unit-test
@@ -334,7 +334,7 @@ mixin: empty-mixin
     ] unit-test
 ] times
 
-singleton: xxx
+SINGLETON: xxx
 UNION: yyy xxx ;
 
 { { yyy xxx } } [ { xxx yyy } sort-classes ] unit-test

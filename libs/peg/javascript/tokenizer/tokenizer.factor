@@ -6,7 +6,7 @@ IN: peg.javascript.tokenizer
 ! Grammar for JavaScript. Based on OMeta-JS example from:
 ! http://jarrett.cs.ucla.edu/ometa-js/#JavaScript_Compiler
 
-use: prettyprint
+USE: prettyprint
 
 : tokenize-javascript ( string -- obj ) EBNF{{
 Letter            = [a-zA-Z]

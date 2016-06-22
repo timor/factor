@@ -2,7 +2,7 @@ USING: arrays generic generic.single growable kernel math
 namespaces sequences strings tools.test vectors words ;
 IN: generic.hook.tests
 
-symbol: my-var
+SYMBOL: my-var
 HOOK: my-hook my-var ( -- x ) ;
 
 M: integer my-hook "an integer" ;

@@ -1,4 +1,4 @@
-use: io
+USE: io
 IN: hello-world
 
 : hello ( -- ) "Hello world" print ;

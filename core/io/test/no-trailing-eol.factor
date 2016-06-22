@@ -1,4 +1,4 @@
 IN: io.tests
-use: math
+USE: math
 : foo ( -- x ) 2 2 + ;
 forget: foo

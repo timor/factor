@@ -72,7 +72,7 @@ W DEFINES ${W}
 
 WHERE
 
-symbol: W
+SYMBOL: W
 
 FUNCTOR>
 
@@ -139,7 +139,7 @@ TUPLE: W-tuple ;
 : W-word ( -- ) ;
 GENERIC: W-generic ( a -- b ) ;
 M: W-tuple W-generic ;
-symbol: W-symbol
+SYMBOL: W-symbol
 
 FUNCTOR>
 

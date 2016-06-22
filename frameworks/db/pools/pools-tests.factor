@@ -7,7 +7,7 @@ io.directories namespaces accessors kernel math destructors ;
 { 1 0 } [ [ ] with-pooled-db ] must-infer-as
 
 ! Test behavior after image save/load
-use: db.sqlite
+USE: db.sqlite
 
 [ "pool-test.db" temp-file delete-file ] ignore-errors
 

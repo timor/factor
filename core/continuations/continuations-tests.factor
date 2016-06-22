@@ -62,8 +62,8 @@ COMPILE< { don't-compile-me foo bar } [ t "no-compile" set-word-prop ] each COMP
 
 { 1 } [ "c" get innermost-frame-scan ] unit-test
 
-symbol: always-counter
-symbol: error-counter
+SYMBOL: always-counter
+SYMBOL: error-counter
 
 H{
     { always-counter 0 }

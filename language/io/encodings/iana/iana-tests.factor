@@ -7,7 +7,7 @@ IN: io.encodings.iana.tests
 { "UTF-8" } [ utf8 encoding>name ] unit-test
 
 ! We will never implement EBCDIC-FI-SE-A
-singleton: ebcdic-fisea
+SINGLETON: ebcdic-fisea
 ebcdic-fisea "EBCDIC-FI-SE-A" register-encoding
 { ebcdic-fisea } [ "EBCDIC-FI-SE-A" name>encoding ] unit-test
 { ebcdic-fisea } [ "csEBCDICFISEA" name>encoding ] unit-test

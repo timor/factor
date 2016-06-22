@@ -1,7 +1,7 @@
 USING: kernel namespaces interval-maps tools.test ;
 IN: interval-maps.test
 
-symbol: test
+SYMBOL: test
 
 { } [ { { { 4 8 } 3 } { 1 2 } } <interval-map> test set ] unit-test
 { 3 } [ 5 test get interval-at ] unit-test

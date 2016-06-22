@@ -132,7 +132,7 @@ TUPLE: color red green blue ;
     ] with-string-writer
 ] unit-test
 
-singleton: link-test
+SINGLETON: link-test
 
 M: link-test link-title drop "<Link Title>" ;
 

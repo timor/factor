@@ -5,13 +5,13 @@ vectors words ;
 IN: classes.mixin.tests
 
 ! Test mixins
-mixin: sequence-mixin
+MIXIN: sequence-mixin
 
 INSTANCE: array sequence-mixin ;
 INSTANCE: vector sequence-mixin ;
 INSTANCE: slice sequence-mixin ;
 
-mixin: assoc-mixin
+MIXIN: assoc-mixin
 
 INSTANCE: hashtable assoc-mixin ;
 
@@ -32,7 +32,7 @@ M: assoc-mixin collection-size assoc-size ;
 DEFER: mx1
 forget: mx1
 
-mixin: mx1
+MIXIN: mx1
 
 INSTANCE: integer mx1 ;
 
@@ -47,7 +47,7 @@ INSTANCE: integer mx1 ;
 
 [ \ mx1 forget ] with-compilation-unit
 
-use: io.streams.string
+USE: io.streams.string
 
 2 [
     [ "mixin-forget-test" forget-source ] with-compilation-unit
@@ -84,12 +84,12 @@ use: io.streams.string
 ] times
 
 ! Method flattening interfered with mixin update
-mixin: flat-mx-1
+MIXIN: flat-mx-1
 TUPLE: flat-mx-1-1 ; INSTANCE: flat-mx-1-1 flat-mx-1 ;
 TUPLE: flat-mx-1-2 ; INSTANCE: flat-mx-1-2 flat-mx-1 ;
 TUPLE: flat-mx-1-3 ; INSTANCE: flat-mx-1-3 flat-mx-1 ;
 TUPLE: flat-mx-1-4 ; INSTANCE: flat-mx-1-4 flat-mx-1 ;
-mixin: flat-mx-2     INSTANCE: flat-mx-2 flat-mx-1 ;
+MIXIN: flat-mx-2     INSTANCE: flat-mx-2 flat-mx-1 ;
 TUPLE: flat-mx-2-1 ; INSTANCE: flat-mx-2-1 flat-mx-2 ;
 
 { t } [ T{ flat-mx-2-1 } flat-mx-1? ] unit-test
@@ -104,11 +104,11 @@ TUPLE: flat-mx-2-1 ; INSTANCE: flat-mx-2-1 flat-mx-2 ;
 
 { t } [ "blah" "classes.mixin.tests" lookup-word mixin-class? ] unit-test
 
-mixin: empty-mixin
+MIXIN: empty-mixin
 
 { f } [ "hi" empty-mixin? ] unit-test
 
-mixin: move-instance-declaration-mixin
+MIXIN: move-instance-declaration-mixin
 
 { } [ "in: classes.mixin.tests.a use: strings use: classes.mixin.tests INSTANCE: string move-instance-declaration-mixin ;" <string-reader> "move-mixin-test-1" parse-stream drop ] unit-test
 
@@ -118,18 +118,18 @@ mixin: move-instance-declaration-mixin
 
 { { string } } [ move-instance-declaration-mixin class-members ] unit-test
 
-mixin: silly-mixin
-symbol: not-a-class
+MIXIN: silly-mixin
+SYMBOL: not-a-class
 
 [ [ \ not-a-class \ silly-mixin add-mixin-instance ] with-compilation-unit ] must-fail
 
-symbol: not-a-mixin
+SYMBOL: not-a-mixin
 TUPLE: a-class ;
 
 [ [ \ a-class \ not-a-mixin add-mixin-instance ] with-compilation-unit ] must-fail
 
 ! Changing a mixin member's metaclass should not remove it from the mixin
-mixin: metaclass-change-mixin
+MIXIN: metaclass-change-mixin
 TUPLE: metaclass-change ;
 INSTANCE: metaclass-change metaclass-change-mixin ;
 

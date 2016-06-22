@@ -43,8 +43,8 @@ IN: regexp.classes.tests
 { { { 1 t } } } [ { { 1 t } { 2 T{ primitive-class } } } T{ primitive-class } f assoc-answer ] unit-test
 { T{ condition f T{ primitive-class } { 1 2 } { 1 } } } [ { { 1 t } { 2 T{ primitive-class } } } table>condition ] unit-test
 
-symbol: foo
-symbol: bar
+SYMBOL: foo
+SYMBOL: bar
 
 { T{ condition f T{ primitive-class f bar } T{ condition f T{ primitive-class f foo } { 1 3 2 } { 1 3 } } T{ condition f T{ primitive-class f foo } { 1 2 } { 1 } } } } [ { { 1 t } { 3 T{ primitive-class f bar } } { 2 T{ primitive-class f foo } } } table>condition ] unit-test
 

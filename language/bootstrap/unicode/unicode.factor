@@ -1,1 +1,1 @@
-use: unicode
+USE: unicode

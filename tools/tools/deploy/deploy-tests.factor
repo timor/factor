@@ -82,7 +82,7 @@ os macosx? [
 USING: http.client http.server http.server.dispatchers
 http.server.responses http.server.static io.servers ;
 
-singleton: quit-responder
+SINGLETON: quit-responder
 
 M: quit-responder call-responder*
     2drop stop-this-server "Goodbye" <html-content> ;

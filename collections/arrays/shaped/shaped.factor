@@ -175,7 +175,7 @@ GENERIC: next-index ( object -- index ) ;
 
 SYNTAX: \ sa{ \ } [ >shaped-array ] parse-literal ;
 
-use: prettyprint.custom
+USE: prettyprint.custom
 ! M: row-array pprint* shaped-array>array pprint* ;
 ! M: col-array pprint* shaped-array>array flip pprint* ;
 M: shaped-array pprint-delims drop \ sa{ \ } ;

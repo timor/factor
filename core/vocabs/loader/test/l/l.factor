@@ -1,4 +1,4 @@
 IN: vocabs.loader.test.l
-use: kernel
+USE: kernel
 
 "Oops" throw

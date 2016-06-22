@@ -5,7 +5,7 @@ IN: xml.tests
 CONSTANT: sub-tag
     T{ name f f "sub" "http://littledan.onigirihouse.com/namespaces/replace" } ;
 
-symbol: ref-table
+SYMBOL: ref-table
 
 GENERIC: (r-ref) ( xml -- ) ;
 M: tag (r-ref)

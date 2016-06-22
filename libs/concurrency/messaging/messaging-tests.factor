@@ -32,10 +32,10 @@ IN: concurrency.messaging.tests
 ] [ error>> "crash" = ] must-fail-with
 
 MATCH-VARS: ?from ?to ?value ;
-symbol: increment
-symbol: decrement
-symbol: value
-symbol: exit
+SYMBOL: increment
+SYMBOL: decrement
+SYMBOL: value
+SYMBOL: exit
 
 : counter ( value -- value ? )
     receive {

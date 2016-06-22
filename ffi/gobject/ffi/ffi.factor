@@ -7,7 +7,7 @@ IN: gobject.ffi
 ! these two are needed for the definition of GError and others.
 ! otherwise we generate GError and some others in this vocab as well.
 COMPILE< "glib.ffi" require COMPILE>
-use: glib.ffi
+USE: glib.ffi
 
 LIBRARY: gobject
 

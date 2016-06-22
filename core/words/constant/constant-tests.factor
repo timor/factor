@@ -15,6 +15,6 @@ CONSTANT: c { 1 2 3 } ;
 
 { { 1 2 3 } } [ c ] unit-test
 
-symbol: foo
+SYMBOL: foo
 
 { f } [ \ foo constant? ] unit-test

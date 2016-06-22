@@ -119,7 +119,7 @@ DEFER: foe
 
 { 1 0 } [ nested-when* ] must-infer-as
 
-symbol: sym-test
+SYMBOL: sym-test
 
 { 0 1 } [ sym-test ] must-infer-as
 
@@ -264,7 +264,7 @@ DEFER: inline-recursive-2
 { 0 0 } [ inline-recursive-1 ] must-infer-as
 
 ! Hooks
-symbol: my-var
+SYMBOL: my-var
 HOOK: my-hook my-var ( -- x ) ;
 
 M: integer my-hook "an integer" ;

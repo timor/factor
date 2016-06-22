@@ -42,7 +42,7 @@ ERROR: malformed-complex obj ;
 
 SYNTAX: \ C{ \ } [ parse-complex ] parse-literal ;
 
-use: prettyprint.custom
+USE: prettyprint.custom
 
 M: complex pprint* pprint-object ;
 M: complex pprint-delims drop \ C{ \ } ;

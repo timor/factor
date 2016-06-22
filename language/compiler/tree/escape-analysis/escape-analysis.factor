@@ -3,9 +3,9 @@
 USING: compiler.tree.escape-analysis.allocations
 compiler.tree.escape-analysis.nodes kernel namespaces ;
 
-use: compiler.tree.escape-analysis.recursive
-use: compiler.tree.escape-analysis.branches
-use: compiler.tree.escape-analysis.simple
+USE: compiler.tree.escape-analysis.recursive
+USE: compiler.tree.escape-analysis.branches
+USE: compiler.tree.escape-analysis.simple
 
 IN: compiler.tree.escape-analysis
 

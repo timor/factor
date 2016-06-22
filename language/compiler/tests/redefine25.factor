@@ -2,7 +2,7 @@ USING: tools.test compiler.units classes.mixin definitions
 kernel kernel.private ;
 IN: compiler.tests.redefine25
 
-mixin: empty-mixin
+MIXIN: empty-mixin
 
 : empty-mixin-test-1 ( a -- ? ) empty-mixin? ;
 

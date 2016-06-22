@@ -58,7 +58,7 @@ CONSTANT: upload3 "--3f116598c7f0431b9f98148ed235c822\r\nContent-Disposition: fo
     keys natural-sort
 ] unit-test
 
-symbol: mime-test-server
+SYMBOL: mime-test-server
 
 : with-test-server ( quot -- )
     [

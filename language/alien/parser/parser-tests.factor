@@ -50,7 +50,7 @@ COMPILE>
 
 TYPEDEF: char char2 ;
 
-symbol: not-c-type
+SYMBOL: not-c-type
 
 CONSTANT: eleven 11 ;
 

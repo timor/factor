@@ -3,8 +3,8 @@ IN: compiler.tests.redefine19
 
 GENERIC: g ( a -- b ) ;
 
-mixin: m1 M: m1 g drop 1 ;
-mixin: m2 M: m2 g drop 2 ;
+MIXIN: m1 M: m1 g drop 1 ;
+MIXIN: m2 M: m2 g drop 2 ;
 
 TUPLE: c ;
 

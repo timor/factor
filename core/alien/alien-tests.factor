@@ -72,7 +72,7 @@ cell 8 = [
 
 { "( displaced alien )" } [ 1 B{ 1 2 3 } <displaced-alien> unparse ] unit-test
 
-symbol: initialize-test
+SYMBOL: initialize-test
 
 f initialize-test set-global
 
@@ -91,7 +91,7 @@ f initialize-test set-global
 : produce-until-error ( quot -- error seq )
     '[ [ @ t ] [ f ] recover ] [ ] produce ; inline
 
-symbol: foo
+SYMBOL: foo
 
 : fill-and-free-callback-heap ( -- )
     [ \ foo 33 <callback> ] produce-until-error nip [ free-callback ] each ;

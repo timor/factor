@@ -1,4 +1,4 @@
-use: kernel
+USE: kernel
 IN: destructors
 
 PRIVATE<

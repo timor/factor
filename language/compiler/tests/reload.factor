@@ -1,4 +1,4 @@
-use: vocabs.loader
+USE: vocabs.loader
 IN: compiler.tests.reload
 
 ! "parser" reload

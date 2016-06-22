@@ -94,6 +94,6 @@ SYNTAX: \ COM-INTERFACE:
 
 SYNTAX: \ guid: scan-object string>guid suffix! ;
 
-use: vocabs.loader
+USE: vocabs.loader
 
 { "windows.com" "prettyprint" } "windows.com.prettyprint" require-when

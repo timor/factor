@@ -4,12 +4,12 @@ concurrency.mailboxes tools.test destructors io.files.info
 io.pathnames io.files.temp io.directories.hierarchy fry ;
 IN: io.monitors.recursive.tests
 
-singleton: mock-io-backend
+SINGLETON: mock-io-backend
 
 TUPLE: mock-counter i ;
 
-symbol: dummy-monitor-created
-symbol: dummy-monitor-disposed
+SYMBOL: dummy-monitor-created
+SYMBOL: dummy-monitor-disposed
 
 TUPLE: dummy-monitor < monitor ;
 

@@ -14,7 +14,7 @@ H{ } clone "test-namespace" set
 [ H{ } clone [ f "some-global" set "some-global" get ] with-variables ]
 unit-test
 
-symbol: test-initialize
+SYMBOL: test-initialize
 
 f test-initialize set-global
 
@@ -28,7 +28,7 @@ test-initialize [ 5 ] initialize
 
 { 5 } [ test-initialize get-global ] unit-test
 
-symbol: toggle-test
+SYMBOL: toggle-test
 { f } [ toggle-test get ] unit-test
 { t } [ toggle-test [ toggle ] [ get ] bi ] unit-test
 { f } [ toggle-test [ toggle ] [ get ] bi ] unit-test

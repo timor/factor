@@ -223,6 +223,6 @@ SYNTAX: \ R[=[ "]=]" parse-multiline-string lexer get parse-noblank-token <optio
 SYNTAX: \ R(( "))" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
 SYNTAX: \ R{{ "}}" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
 
-use: vocabs.loader
+USE: vocabs.loader
 
 { "prettyprint" "regexp" } "regexp.prettyprint" require-when

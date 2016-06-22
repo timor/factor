@@ -176,6 +176,6 @@ SYNTAX: \ XML-DOC[[
 SYNTAX: \ XML-CHUNK[[
     "]]" [ string>chunk ] parse-def ;
 
-use: vocabs.loader
+USE: vocabs.loader
 
 { "xml.syntax" "inverse" } "xml.syntax.inverse" require-when

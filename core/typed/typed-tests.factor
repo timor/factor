@@ -97,7 +97,7 @@ TYPED: no-inputs-unboxable-output ( -- out: unboxable3 )
 
 { f } [ no-inputs-unboxable-output no-inputs-unboxable-output eq? ] unit-test
 
-symbol: buh
+SYMBOL: buh
 
 TYPED: no-outputs ( x: integer -- )
     buh set ;
@@ -142,7 +142,7 @@ TYPED: flush-test ( s: symbol -- ? ) on t ; flushable
 : flush-print-1 ( symbol -- ) flush-test drop ;
 : flush-print-2 ( symbol -- ) flush-test . ;
 
-symbol: a-symbol
+SYMBOL: a-symbol
 
 { f } [
     f a-symbol [

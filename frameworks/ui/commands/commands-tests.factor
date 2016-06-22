@@ -16,7 +16,7 @@ io.streams.string system kernel ;
 
 { [ com-test-2 ] } [ 3 \ com-test-2 command-quot ] unit-test
 
-symbol: testing
+SYMBOL: testing
 
 testing "testing" "hey" {
     { T{ key-down f { C+ } "x" } com-test-1 }

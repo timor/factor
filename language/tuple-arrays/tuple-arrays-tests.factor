@@ -2,7 +2,7 @@ USING: tuple-arrays sequences tools.test namespaces kernel
 math accessors classes.tuple eval classes.struct ;
 IN: tuple-arrays.tests
 
-symbol: mat
+SYMBOL: mat
 TUPLE: foo bar ; final
 C: <foo> foo ;
 tuple-array: foo

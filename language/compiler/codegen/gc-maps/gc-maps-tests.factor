@@ -7,7 +7,7 @@ QUALIFIED: vm
 specialized-array: uint
 IN: compiler.codegen.gc-maps.tests
 
-singleton: fake-cpu
+SINGLETON: fake-cpu
 
 fake-cpu \ cpu set
 
@@ -73,7 +73,7 @@ M: fake-cpu gc-root-offset ;
 { t } [ "result" get "expect" get = ] unit-test
 
 ! Fix the gc root offset calculations
-singleton: linux-x86.64
+SINGLETON: linux-x86.64
 M: linux-x86.64 reserved-stack-space 0 ;
 M: linux-x86.64 gc-root-offset
     n>> spill-offset cell + cell /i ;

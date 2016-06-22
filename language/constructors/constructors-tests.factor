@@ -9,7 +9,7 @@ TUPLE: stock-spread stock spread timestamp ;
 CONSTRUCTOR: <stock-spread> stock-spread ( stock spread -- stock-spread )
    now >>timestamp ;
 
-symbol: AAPL
+SYMBOL: AAPL
 
 { t } [
     AAPL 1234 <stock-spread>

@@ -1,7 +1,7 @@
 USING: compiler.tree.debugger math tools.test typed.namespaces ;
 IN: typed.namespaces.tests
 
-symbol: pi
+SYMBOL: pi
 
 [ 22/7 pi float typed-set ] [ variable-type-error? ] must-fail-with
 

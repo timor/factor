@@ -1,6 +1,6 @@
 USING: assocs continuations help.markup help.syntax http http.server.requests
 io.servers kernel math strings urls vocabs.refresh ;
-use: html.forms ! needed for $link in param
+USE: html.forms ! needed for $link in param
 IN: http.server
 
 HELP: trivial-responder

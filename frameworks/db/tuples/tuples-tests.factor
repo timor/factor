@@ -28,10 +28,10 @@ ts date time blob factor-blob url ;
     <person>
         swap >>the-id ;
 
-symbol: person1
-symbol: person2
-symbol: person3
-symbol: person4
+SYMBOL: person1
+SYMBOL: person2
+SYMBOL: person3
+SYMBOL: person4
 
 : test-tuples ( -- )
     [ ] [ person recreate-table ] unit-test

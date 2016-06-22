@@ -10,7 +10,7 @@ M: array bong ;
 
 M: string bong length ;
 
-mixin: mixin
+MIXIN: mixin
 
 INSTANCE: array mixin ;
 
@@ -24,11 +24,11 @@ INSTANCE: array mixin ;
 
 [ 0 ] [ "" blah ] unit-test
 
-mixin: mixin1
+MIXIN: mixin1
 
 INSTANCE: string mixin1 ;
 
-mixin: mixin2
+MIXIN: mixin2
 
 GENERIC: billy ( a -- b ) ;
 

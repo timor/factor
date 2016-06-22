@@ -1,5 +1,5 @@
 IN: namespaces
-use: kernel-internals
+USE: kernel-internals
 : with-variables ( ns quot -- )
   swap >n call n> drop ;
 

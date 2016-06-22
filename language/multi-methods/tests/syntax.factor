@@ -8,11 +8,11 @@ multi-methods:GENERIC: first-test ( -- ) ;
 
 [ t ] [ \ first-test generic? ] unit-test
 
-mixin: thing
+MIXIN: thing
 
-singleton: paper    INSTANCE: paper thing ;
-singleton: scissors INSTANCE: scissors thing ;
-singleton: rock     INSTANCE: rock thing ;
+SINGLETON: paper    INSTANCE: paper thing ;
+SINGLETON: scissors INSTANCE: scissors thing ;
+SINGLETON: rock     INSTANCE: rock thing ;
 
 multi-methods:GENERIC: beats? ( obj1 obj2 -- ? ) ;
 
@@ -33,7 +33,7 @@ METHOD: beats? { thing thing } 2drop f ;
 [ t ] [ { beats? paper scissors } method-spec? ] unit-test
 [ ] [ { beats? paper scissors } see ] unit-test
 
-symbol: some-var
+SYMBOL: some-var
 
 multi-methods:GENERIC: hook-test ( obj -- obj ) ;
 
@@ -52,7 +52,7 @@ METHOD: hook-test { hashtable { some-var number } } assoc-size ;
 [ t ] [ error get no-method? ] unit-test
 [ { H{ } "error" } ] [ error get arguments>> ] unit-test
 
-mixin: busted
+MIXIN: busted
 
 TUPLE: busted-1 ;
 TUPLE: busted-2 ; INSTANCE: busted-2 busted ;

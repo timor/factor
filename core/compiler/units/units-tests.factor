@@ -30,11 +30,11 @@ IN: compiler.units.tests
 ] unit-test
 
 ! Check that we notify observers
-singleton: observer
+SINGLETON: observer
 
 observer add-definition-observer
 
-symbol: counter
+SYMBOL: counter
 
 0 counter set-global
 

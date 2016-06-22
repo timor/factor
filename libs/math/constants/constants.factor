@@ -1,6 +1,6 @@
 ! Copyright (C) 2004, 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-use: math
+USE: math
 IN: math.constants
 
 : e ( -- e ) 2.7182818284590452354 ; inline

@@ -45,7 +45,7 @@ H{ } clone [
 
 { f } [ gensym gensym = ] unit-test
 
-symbol: a-symbol
+SYMBOL: a-symbol
 { t } [ \ a-symbol symbol? ] unit-test
 
 ! See if redefining a generic as a colon def clears some

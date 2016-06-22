@@ -38,7 +38,7 @@ PRIVATE<
 : unescape-string ( str -- str' )
     [ (unescape-string) ] "" make ;
 
-use: xml.entities
+USE: xml.entities
 
 : escape-string ( str -- str' )
     H{

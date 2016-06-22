@@ -191,7 +191,7 @@ M: vector silly "z" ;
 { "zz" } [ 123 <reversed> silly nip ] unit-test
 
 ! Typo
-symbol: not-a-tuple-class
+SYMBOL: not-a-tuple-class
 
 ! Missing check
 [ not-a-tuple-class boa ] must-fail

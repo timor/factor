@@ -1122,7 +1122,7 @@ PRIVATE<
     ] keep
     [ [ nth-unsafe ] with { } map-as ] curry { } map-as ; inline
 
-use: arrays
+USE: arrays
 
 : array-length ( array -- len )
     { array } declare length>> ; inline

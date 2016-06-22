@@ -1059,7 +1059,7 @@ M: ppc immediate-arithmetic? ( n -- ? ) -32768 32767 between? ;
 M: ppc immediate-bitwise?    ( n -- ? ) 0 65535 between? ;
 M: ppc immediate-store?      ( n -- ? ) immediate-comparand? ;
 
-use: vocabs
+USE: vocabs
 {
     { [ os linux? ] [
         {

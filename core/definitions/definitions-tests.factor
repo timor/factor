@@ -4,15 +4,15 @@ IN: definitions.tests
 
 GENERIC: some-generic ( a -- b ) ;
 
-use: arrays
+USE: arrays
 
 M: array some-generic ;
 
-use: bit-arrays
+USE: bit-arrays
 
 M: bit-array some-generic ;
 
-use: byte-arrays
+USE: byte-arrays
 
 M: byte-array some-generic ;
 

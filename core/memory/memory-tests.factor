@@ -66,7 +66,7 @@ IN: memory.tests
 ! allocation filled up the heap past the high water mark, this
 ! promotion might trigger heap growth, even if most of those
 ! large objects are unreachable.
-symbol: foo
+SYMBOL: foo
 
 { } [
     gc
@@ -84,7 +84,7 @@ symbol: foo
 
 ! Perform one gc cycle. Then increase the stack height by 100 and
 ! force a gc cycle again.
-symbol: foo-var
+SYMBOL: foo-var
 
 : perform ( -- )
     { 1 2 3 } { 4 5 6 } <effect> drop ;

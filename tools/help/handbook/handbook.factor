@@ -120,7 +120,7 @@ ARTICLE: "numbers" "Numbers"
     "math-intervals"
 } ;
 
-use: io.buffers
+USE: io.buffers
 
 ARTICLE: "collections" "Collections"
 { $heading "Sequences" }
