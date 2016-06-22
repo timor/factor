@@ -28,7 +28,7 @@ CONSTANT: google-slides
     }
     { $slide "Example: factorial"
         "Lame example, but..."
-        { $code "use: math.ranges" ": factorial ( n -- n! )" "    1 [a,b] product ;" }
+        { $code "USE: math.ranges" ": factorial ( n -- n! )" "    1 [a,b] product ;" }
         { $code "100 factorial ." }
     }
     { $slide "Example: sending an e-mail"
@@ -114,7 +114,7 @@ CONSTANT: google-slides
         { $code "GENERIC: area ( shape -- n ) ;" }
         "Two methods:"
         { $code
-            "use: math.constants"
+            "USE: math.constants"
             ""
             "M: rectangle area"
             "    [ width>> ] [ height>> ] bi * ;"
@@ -246,12 +246,12 @@ CONSTANT: google-slides
     }
     { $slide "Unicode strings"
         "Unicode-aware case conversion, char classes, collation, word breaks, and so on..."
-        { $code "use: unicode" "\"ß\" >upper ." }
+        { $code "USE: unicode" "\"ß\" >upper ." }
     }
     { $slide "Unicode strings"
         "All external byte I/O is encoded/decoded"
         "ASCII, UTF8, UTF16, EBCDIC..."
-        { $code "use: io.encodings.utf8" "\"document.txt\" utf8" "[ readln ] with-file-reader" }
+        { $code "USE: io.encodings.utf8" "\"document.txt\" utf8" "[ readln ] with-file-reader" }
         { "Binary I/O is supported as well with the " { $link binary } " encoding" }
     }
     { $slide "Associative mappings"
@@ -349,7 +349,7 @@ CONSTANT: google-slides
     }
     { $slide "Example: file system monitors"
         { $code
-            "use: io.monitors"
+            "USE: io.monitors"
             ""
             ": forever ( quot -- ) '[ @ t ] loop ; inline"
             ""

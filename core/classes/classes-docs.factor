@@ -75,7 +75,7 @@ HELP: class
 HELP: class-of
 { $values { "object" object } { "class" class } }
 { $description "Outputs an object's canonical class. While an object may be an instance of more than one class, the canonical class is either its built-in class, or if the object is a tuple, its tuple class." }
-{ $examples { $example "USING: classes prettyprint ;" "1.0 class-of ." "float" } { $example "USING: classes prettyprint ;" "in: scratchpad" "TUPLE: point x y z ;\nT{ point f 1 2 3 } class-of ." "point" } } ;
+{ $examples { $example "USING: classes prettyprint ;" "1.0 class-of ." "float" } { $example "USING: classes prettyprint ;" "IN: scratchpad" "TUPLE: point x y z ;\nT{ point f 1 2 3 } class-of ." "point" } } ;
 
 HELP: classes
 { $values { "seq" "a sequence of class words" } }

@@ -10,14 +10,14 @@ ERROR: error-class-test a b c ;
 { "( a b c -- * )" } [ \ error-class-test stack-effect effect>string ] unit-test
 { f } [ \ error-class-test "inline" word-prop ] unit-test
 
-[ "in: classes.error.tests ERROR: error-x ; : error-x 3 ;" eval( -- ) ]
+[ "IN: classes.error.tests ERROR: error-x ; : error-x 3 ;" eval( -- ) ]
 [ error>> error>> redefine-error? ] must-fail-with
 
 DEFER: error-y
 
 { } [ [ \ error-y dup class? [ forget-class ] [ drop ] if ] with-compilation-unit ] unit-test
 
-{ } [ "in: classes.error.tests GENERIC: error-y ( a -- b ) ;" eval( -- ) ] unit-test
+{ } [ "IN: classes.error.tests GENERIC: error-y ( a -- b ) ;" eval( -- ) ] unit-test
 
 { f } [ \ error-y tuple-class? ] unit-test
 
@@ -25,7 +25,7 @@ DEFER: error-y
 
 { t } [ \ error-y generic? ] unit-test
 
-{ } [ "in: classes.error.tests ERROR: error-y ;" eval( -- ) ] unit-test
+{ } [ "IN: classes.error.tests ERROR: error-y ;" eval( -- ) ] unit-test
 
 { t } [ \ error-y tuple-class? ] unit-test
 

@@ -91,7 +91,7 @@ SYMBOLS: out-path err-path ;
     out-path get-global ascii file-lines first
 ] unit-test
 
-[ "in: scratchpad " ] [
+[ "IN: scratchpad " ] [
     <process>
         console-vm-path "-run=listener" 2array >>command
         +closed+ >>stdin
@@ -224,14 +224,14 @@ SYMBOLS: out-path err-path ;
     out-path get-global utf8 file-contents
 ] unit-test
 
-[ "in: scratchpad " ] [
+[ "IN: scratchpad " ] [
     console-vm-path "-run=listener" 2array
-    ascii [ "use: system 0 exit" print flush lines last ] with-process-stream
+    ascii [ "USE: system 0 exit" print flush lines last ] with-process-stream
 ] unit-test
 
 [ ] [
     console-vm-path "-run=listener" 2array
-    ascii [ "use: system 0 exit" print ] with-process-writer
+    ascii [ "USE: system 0 exit" print ] with-process-writer
 ] unit-test
 
 [ ] [

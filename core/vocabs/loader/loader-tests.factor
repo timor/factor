@@ -21,7 +21,7 @@ IN: vocabs.loader.test.2
 
 : hello ( -- ) ;
 
-main: hello
+MAIN: hello
 
 IN: vocabs.loader.tests
 
@@ -54,7 +54,7 @@ IN: vocabs.loader.tests
 { 2 } [ "count-me" get-global ] unit-test
 
 [
-    "in: vocabs.loader.test.a v-l-t-a-hello"
+    "IN: vocabs.loader.test.a v-l-t-a-hello"
     <string-reader>
     "resource:core/vocabs/loader/test/a/a.factor"
     parse-stream
@@ -136,7 +136,7 @@ IN: vocabs.loader.tests
 forget-junk
 
 { { } } [
-    "in: xabbabbja" eval( -- ) "xabbabbja" vocab-files
+    "IN: xabbabbja" eval( -- ) "xabbabbja" vocab-files
 ] unit-test
 
 [ "xabbabbja" forget-vocab ] with-compilation-unit

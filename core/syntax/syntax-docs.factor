@@ -437,8 +437,8 @@ HELP: \ ;
     "Parsing words can use this word as a generic end delimiter."
 } ;
 
-HELP: \ symbol:
-{ $syntax "symbol: word" }
+HELP: \ SYMBOL:
+{ $syntax "SYMBOL: word" }
 { $values { "word" "a new word to define" } }
 { $description "Defines a new symbol word in the current vocabulary. Symbols push themselves on the stack when executed, and are used to identify variables (see " { $link "namespaces" } ") as well as for storing crufties in word properties (see " { $link "word-props" } ")." }
 { $examples { $example "USE: prettyprint" "in: scratchpad" "symbol: foo\nfoo ." "foo" } } ;
@@ -451,8 +451,8 @@ HELP: \ SYMBOLS:
 { $description "Creates a new symbol for every token until the " { $snippet ";" } "." }
 { $examples { $example "USING: prettyprint ;" "in: scratchpad" "SYMBOLS: foo bar baz ;\nfoo . bar . baz ." "foo\nbar\nbaz" } } ;
 
-HELP: \ singleton:
-{ $syntax "singleton: class" }
+HELP: \ SINGLETON:
+{ $syntax "SINGLETON: class" }
 { $values
     { "class" "a new singleton to define" }
 }
@@ -497,14 +497,14 @@ HELP: \ \
 { $description "Reads the next word from the input and appends a wrapper holding the word to the parse tree. When the evaluator encounters a wrapper, it pushes the wrapped word literally on the data stack." }
 { $examples "The following two lines are equivalent:" { $code "0 \\ <vector> execute\n0 <vector>" } "If " { $snippet "foo" } " is a symbol, the following two lines are equivalent:" { $code "foo" "\\ foo" } } ;
 
-HELP: \ defer:
+HELP: \ DEFER:
 { $syntax "defer: word" }
 { $values { "word" "a new word to define" } }
 { $description "Create a word in the current vocabulary that simply raises an error when executed. Usually, the word will be replaced with a real definition later." }
 { $notes "Due to the way the parser works, words cannot be referenced before they are defined; that is, source files must order definitions in a strictly bottom-up fashion. Mutually-recursive pairs of words can be implemented by " { $emphasis "deferring" } " one of the words in the pair allowing the second word in the pair to parse, then by defining the first word." }
 { $examples { $code "defer: foe\n: fie ... foe ... ;\n: foe ... fie ... ;" } } ;
 
-HELP: \ forget:
+HELP: \ FORGET:
 { $syntax "forget: word" }
 { $values { "word" word } }
 { $description "Removes the word from its vocabulary, or does nothing if no such word exists. Existing definitions that reference forgotten words will continue to work, but new occurrences of the word will not parse." } ;
@@ -516,8 +516,8 @@ HELP: \ USE:
 { $notes "If adding the vocabulary introduces ambiguity, referencing the ambiguous names will throw a " { $link ambiguous-use-error } "." }
 { $errors "Throws an error if the vocabulary does not exist or could not be loaded." } ;
 
-HELP: \ unuse:
-{ $syntax "unuse: vocabulary" }
+HELP: \ UNUSE:
+{ $syntax "UNUSE: vocabulary" }
 { $values { "vocabulary" "a vocabulary name" } }
 { $description "Removes a vocabulary from the search path." }
 { $errors "Throws an error if the vocabulary does not exist." } ;

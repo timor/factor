@@ -38,7 +38,7 @@ $nl
 "One reason to save a custom image is if you find yourself loading the same libraries in every Factor session; some libraries take a little while to compile, so saving an image with those libraries loaded can save you a lot of time."
 $nl
 "For example, to save an image with the web framework loaded,"
-{ $code "use: furnace" "save" }
+{ $code "USE: furnace" "save" }
 "New images can be created from scratch:"
 { $subsections "bootstrap.image" }
 "The " { $link "tools.deploy" } " tool creates stripped-down images containing just enough code to run a single application."

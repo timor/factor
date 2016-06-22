@@ -8,8 +8,8 @@ IN: compiler.tests.redefine8
 
 [ ] [
     "USING: kernel math math.order sorting ;
-    in: compiler.tests.redefine8
-    mixin: my-mixin
+    IN: compiler.tests.redefine8
+    MIXIN: my-mixin
     INSTANCE: fixnum my-mixin ;
     GENERIC: my-generic ( a -- b ) ;
     ! We add the bogus quotation here to hinder inlining
@@ -19,8 +19,8 @@ IN: compiler.tests.redefine8
 ] unit-test
 
 [ ] [
-    "use: math
-    in: compiler.tests.redefine8
+    "USE: math
+    IN: compiler.tests.redefine8
     INSTANCE: float my-mixin ;"
     eval( -- )
 ] unit-test

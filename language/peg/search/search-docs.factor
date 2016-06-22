@@ -10,7 +10,7 @@ HELP: tree-write
     "Write the object to the standard output stream, unless "
     "it is an array, in which case recurse through the array "
     "writing each object to the stream." }
-{ $example "use: peg.search" "{ 65 \"bc\" { 68 \"ef\" } } tree-write" "AbcDef" } ;
+{ $example "USE: peg.search" "{ 65 \"bc\" { 68 \"ef\" } } tree-write" "AbcDef" } ;
 
 HELP: search
 { $values

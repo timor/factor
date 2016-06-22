@@ -579,9 +579,9 @@ Tok                = Spaces (Number | Special )
   "\\" EBNF{{ foo="\\" }}
 ] unit-test
 
-[ "use: peg.ebnf EBNF{{ }}" eval( -- ) ] must-fail
+[ "USE: peg.ebnf EBNF{{ }}" eval( -- ) ] must-fail
 
-[ "use: peg.ebnf EBNF{{
+[ "USE: peg.ebnf EBNF{{
     lol = a
     lol = b
   }}" eval( -- )

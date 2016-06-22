@@ -146,9 +146,9 @@ $nl
 "Here is an array containing the " { $link f } " class:"
 { $example "{ postpone\ f } ." "{ postpone\ f }" }
 "The " { $link f } " object is an instance of the " { $link f } " class:"
-{ $example "use: classes" "f class-of ." "postpone\ f" }
+{ $example "USE: classes" "f class-of ." "postpone\ f" }
 "The " { $link f } " class is an instance of " { $link word } ":"
-{ $example "use: classes" "\\ f class-of ." "word" }
+{ $example "USE: classes" "\\ f class-of ." "word" }
 "On the other hand, " { $link t } " is just a word, and there is no class which it is a unique instance of."
 { $example "t \\ t eq? ." "t" }
 "Many words which search collections confuse the case of no element being present with an element being found equal to " { $link f } ". If this distinction is important, there is usually an alternative word which can be used; for example, compare " { $link at } " with " { $link at* } "." ;
@@ -301,7 +301,7 @@ HELP: to-fixed-point
 { $examples
     { $example
         "USING: combinators kernel math prettyprint sequences ;"
-        "in: scratchpad"
+        "IN: scratchpad"
         ": flatten ( sequence -- sequence' )"
         "    \"flatten\" over index"
         "    [ [ 1 + swap nth ] [ nip dup 2 + ] [ drop ] 2tri replace-slice ] when* ;"
@@ -356,7 +356,7 @@ HELP: case
 { $examples
     { $example
         "USING: combinators io kernel ;"
-        "in: scratchpad"
+        "IN: scratchpad"
         "SYMBOLS: yes no maybe ;"
         "maybe {"
         "    { yes [ ] } ! Do nothing"

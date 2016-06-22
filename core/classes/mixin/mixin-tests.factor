@@ -40,7 +40,7 @@ INSTANCE: integer mx1 ;
 { f } [ mx1 integer class<= ] unit-test
 { f } [ mx1 number class<= ] unit-test
 
-"in: classes.mixin.tests use: arrays INSTANCE: array mx1 ;" eval( -- )
+"IN: classes.mixin.tests USE: arrays INSTANCE: array mx1 ;" eval( -- )
 
 { t } [ array mx1 class<= ] unit-test
 { f } [ mx1 number class<= ] unit-test
@@ -55,8 +55,8 @@ USE: io.streams.string
     [ ] [
         {
             "USING: sequences ;"
-            "in: classes.mixin.tests"
-            "mixin: mixin-forget-test"
+            "IN: classes.mixin.tests"
+            "MIXIN: mixin-forget-test"
             "INSTANCE: sequence mixin-forget-test ;"
             "GENERIC: mixin-forget-test-g ( x -- y ) ;"
             "M: mixin-forget-test mixin-forget-test-g ;"
@@ -70,8 +70,8 @@ USE: io.streams.string
     [ ] [
         {
             "USING: hashtables ;"
-            "in: classes.mixin.tests"
-            "mixin: mixin-forget-test"
+            "IN: classes.mixin.tests"
+            "MIXIN: mixin-forget-test"
             "INSTANCE: hashtable mixin-forget-test ;"
             "GENERIC: mixin-forget-test-g ( x -- y ) ;"
             "M: mixin-forget-test mixin-forget-test-g ;"
@@ -96,11 +96,11 @@ TUPLE: flat-mx-2-1 ; INSTANCE: flat-mx-2-1 flat-mx-2 ;
 
 ! Too eager with reset-class
 
-{ } [ "in: classes.mixin.tests mixin: blah singleton: boo INSTANCE: boo blah ;" <string-reader> "mixin-reset-test" parse-stream drop ] unit-test
+{ } [ "IN: classes.mixin.tests MIXIN: blah SINGLETON: boo INSTANCE: boo blah ;" <string-reader> "mixin-reset-test" parse-stream drop ] unit-test
 
 { t } [ "blah" "classes.mixin.tests" lookup-word mixin-class? ] unit-test
 
-{ } [ "in: classes.mixin.tests mixin: blah" <string-reader> "mixin-reset-test" parse-stream drop ] unit-test
+{ } [ "IN: classes.mixin.tests MIXIN: blah" <string-reader> "mixin-reset-test" parse-stream drop ] unit-test
 
 { t } [ "blah" "classes.mixin.tests" lookup-word mixin-class? ] unit-test
 
@@ -110,11 +110,11 @@ MIXIN: empty-mixin
 
 MIXIN: move-instance-declaration-mixin
 
-{ } [ "in: classes.mixin.tests.a use: strings use: classes.mixin.tests INSTANCE: string move-instance-declaration-mixin ;" <string-reader> "move-mixin-test-1" parse-stream drop ] unit-test
+{ } [ "IN: classes.mixin.tests.a USE: strings USE: classes.mixin.tests INSTANCE: string move-instance-declaration-mixin ;" <string-reader> "move-mixin-test-1" parse-stream drop ] unit-test
 
-{ } [ "in: classes.mixin.tests.b use: strings use: classes.mixin.tests INSTANCE: string move-instance-declaration-mixin ;" <string-reader> "move-mixin-test-2" parse-stream drop ] unit-test
+{ } [ "IN: classes.mixin.tests.b USE: strings USE: classes.mixin.tests INSTANCE: string move-instance-declaration-mixin ;" <string-reader> "move-mixin-test-2" parse-stream drop ] unit-test
 
-{ } [ "in: classes.mixin.tests.a" <string-reader> "move-mixin-test-1" parse-stream drop ] unit-test
+{ } [ "IN: classes.mixin.tests.a" <string-reader> "move-mixin-test-1" parse-stream drop ] unit-test
 
 { { string } } [ move-instance-declaration-mixin class-members ] unit-test
 
@@ -139,7 +139,7 @@ M: metaclass-change-mixin metaclass-change-generic ;
 
 { T{ metaclass-change } } [ T{ metaclass-change } metaclass-change-generic ] unit-test
 
-{ } [ "in: classes.mixin.tests use: math UNION: metaclass-change integer ;" eval( -- ) ] unit-test
+{ } [ "IN: classes.mixin.tests USE: math UNION: metaclass-change integer ;" eval( -- ) ] unit-test
 
 { 0 } [ 0 metaclass-change-generic ] unit-test
 

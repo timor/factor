@@ -133,7 +133,7 @@ HELP: <clumps>
     "Running averages:"
     { $example
         "USING: grouping sequences math prettyprint kernel ;"
-        "in: scratchpad"
+        "IN: scratchpad"
         "CONSTANT: share-price { 13/50 51/100 13/50 1/10 4/5 17/20 33/50 3/25 19/100 3/100 }"
         ""
         "share-price 4 <clumps> [ [ sum ] [ length ] bi / ] map ."

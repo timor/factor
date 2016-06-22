@@ -141,7 +141,7 @@ $nl
 { $code "\"Hello world\" print" }
 "The " { $link print } " word is contained inside the " { $vocab-link "io" } " vocabulary, which is available in the listener but must be explicitly added to the search path in source files:"
 { $code
-    "use: io"
+    "USE: io"
     "\"Hello world\" print"
 }
 "Typically a source file will refer to words in multiple vocabularies, and they can all be added to the search path in one go:"
@@ -234,7 +234,7 @@ command-line get [
 "You can run it like so,"
 { $code "./factor grep.factor '.*hello.*' myfile.txt" }
 "You'll notice this script takes a while to start. This is because it is loading and compiling the " { $vocab-link "regexp" } " vocabulary every time. To speed up startup, load the vocabulary into your image, and save the image:"
-{ $code "use: regexp" "save" }
+{ $code "USE: regexp" "save" }
 "Now, the " { $snippet "grep.factor" } " script will start up much faster. See " { $link "images" } " for details."
 { $heading "Executable scripts" }
 "It is also possible to make executable scripts. A Factor file can begin with a 'shebang' like the following:"

@@ -64,7 +64,7 @@ CONSTANT: vpri-slides
         { $code "GENERIC: area ( shape -- n ) ;" }
         "Two methods:"
         { $code
-            "use: math.constants"
+            "USE: math.constants"
             ""
             "M: rectangle area"
             "    [ width>> ] [ height>> ] bi * ;"

@@ -7,6 +7,6 @@ IN: compiler.tests.redefine4
 
 [ "" ] [ [ declaration-test ] with-string-writer ] unit-test
 
-[ ] [ "in: compiler.tests.redefine4 use: io : declaration-test-1 ( -- a ) \"X\" write f ;" eval( -- ) ] unit-test
+[ ] [ "IN: compiler.tests.redefine4 USE: io : declaration-test-1 ( -- a ) \"X\" write f ;" eval( -- ) ] unit-test
 
 [ "X" ] [ [ declaration-test ] with-string-writer ] unit-test

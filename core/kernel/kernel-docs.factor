@@ -214,7 +214,7 @@ HELP: execute
 { $values { "word" word } }
 { $description "Executes a word. Words which " { $link execute } " an input parameter must be declared " { $link postpone\ inline } " so that a caller which passes in a literal word can have a static stack effect." }
 { $examples
-    { $example "USING: kernel io words ;" "in: scratchpad" ": twice ( word -- ) dup execute execute ; inline\n: hello ( -- ) \"Hello\" print ;\n\\ hello twice" "Hello\nHello" }
+    { $example "USING: kernel io words ;" "IN: scratchpad" ": twice ( word -- ) dup execute execute ; inline\n: hello ( -- ) \"Hello\" print ;\n\\ hello twice" "Hello\nHello" }
 } ;
 
 { execute postpone\ execute( } related-words
@@ -632,7 +632,7 @@ $nl
 { $examples
     { $example
         "USING: kernel math prettyprint sequences ;"
-        "in: scratchpad"
+        "IN: scratchpad"
         ""
         "CONSTANT: american-cities {"
         "    \"San Francisco\""
@@ -660,7 +660,7 @@ $nl
     "Notice how in this example, the same value is tested by the conditional, and then used in the true branch; the false branch does not need to drop the value because of how " { $link if* } " works:"
     { $example
         "USING: assocs io kernel math.parser ;"
-        "in: scratchpad"
+        "IN: scratchpad"
         ""
         ": curry-price ( meat -- price )
     {

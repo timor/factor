@@ -350,7 +350,7 @@ about: "tuples"
 
 HELP: tuple-class
 { $class-description "The class of tuple class words." }
-{ $examples { $example "USING: classes.tuple prettyprint ;" "in: scratchpad" "TUPLE: name title first last ;" "name tuple-class? ." "t" } } ;
+{ $examples { $example "USING: classes.tuple prettyprint ;" "IN: scratchpad" "TUPLE: name title first last ;" "name tuple-class? ." "t" } } ;
 
 HELP: tuple=
 { $values { "tuple1" tuple } { "tuple2" tuple } { "?" boolean } }
@@ -437,7 +437,7 @@ HELP: new
 { $examples
     { $example
         "USING: kernel prettyprint ;"
-        "in: scratchpad"
+        "IN: scratchpad"
         "TUPLE: employee number name department ;"
         "employee new ."
         "T{ employee }"

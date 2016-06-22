@@ -68,7 +68,7 @@ COMPILE>
 { 18 } [ "Phil" 11 11 <b-monster> stop>> ] unit-test
 
 [
-    "use: constructors
+    "USE: constructors
 IN: constructors.tests
 TUPLE: foo a b ;
 CONSTRUCTOR: <foo> foo ( a a -- obj )" eval( -- )
@@ -77,7 +77,7 @@ CONSTRUCTOR: <foo> foo ( a a -- obj )" eval( -- )
 ] must-fail-with
 
 [
-    "use: constructors
+    "USE: constructors
 IN: constructors.tests
 TUPLE: foo a b ;
 CONSTRUCTOR: <foo> foo ( a c -- obj )" eval( -- )

@@ -8,16 +8,16 @@ IN: compiler.tests.redefine7
 
 [ ] [
     "USING: kernel math ;
-    in: compiler.tests.redefine7
-    mixin: my-mixin
+    IN: compiler.tests.redefine7
+    MIXIN: my-mixin
     INSTANCE: fixnum my-mixin ;
     : my-inline ( a -- b ) dup my-mixin? [ 1 + ] when ;"
     eval( -- )
 ] unit-test
 
 [ ] [
-    "use: math
-    in: compiler.tests.redefine7
+    "USE: math
+    IN: compiler.tests.redefine7
     INSTANCE: float my-mixin ;"
     eval( -- )
 ] unit-test

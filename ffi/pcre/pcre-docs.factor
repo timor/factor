@@ -26,7 +26,7 @@ HELP: findall
 { $description "Finds all matches of the given regexp in the string. Matches is sequence of associative array where the key is the name of the capturing group, or f to denote the full match." }
 { $examples
   { $code
-    "use: pcre"
+    "USE: pcre"
     "\"foobar\" \"(?<ch1>\\\\w)(?<ch2>\\\\w)\" findall ."
     "{"
     "    { { f \"fo\" } { \"ch1\" \"f\" } { \"ch2\" \"o\" } }"

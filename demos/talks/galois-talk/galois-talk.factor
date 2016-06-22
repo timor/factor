@@ -68,7 +68,7 @@ CONSTANT: galois-slides
         { $code "GENERIC: area ( shape -- n ) ;" }
         "Two methods:"
         { $code
-            "use: math.constants"
+            "USE: math.constants"
             ""
             "M: rectangle area"
             "    [ width>> ] [ height>> ] bi * ;"
@@ -132,7 +132,7 @@ CONSTANT: galois-slides
         { $vocab-link "regexp" }
         "Pre-compiles regexp at parse time"
         "Implemented with library code"
-        { $code "use: regexp" }
+        { $code "USE: regexp" }
         { $code "\"ababbc\" \"[ab]+c\" <regexp> matches? ." }
         { $code "\"ababbc\" R[[ [ab]+c]] matches? ." }
     }

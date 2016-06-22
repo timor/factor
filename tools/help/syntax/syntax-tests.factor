@@ -4,12 +4,12 @@ IN: help.syntax.tests
 
 [
     [ "foobar" ] [
-        "in: help.syntax.tests use: help.syntax about: \"foobar\"" eval( -- )
+        "IN: help.syntax.tests USE: help.syntax about: \"foobar\"" eval( -- )
         "help.syntax.tests" lookup-vocab vocab-help
     ] unit-test
 
     [ { "foobar" } ] [
-        "in: help.syntax.tests use: help.syntax about: { \"foobar\" }" eval( -- )
+        "IN: help.syntax.tests USE: help.syntax about: { \"foobar\" }" eval( -- )
         "help.syntax.tests" lookup-vocab vocab-help
     ] unit-test
 

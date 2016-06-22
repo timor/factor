@@ -80,7 +80,7 @@ CONSTANT: minneapolis-slides
     STRIP-TEASE:
         $slide "An example"
         { $code
-            "use: math.constants"
+            "USE: math.constants"
             "GENERIC: area ( shape -- meters^2 ) ;"
             "M: square area square-dimension sq ;"
             "M: circle area circle-radius sq pi * ;"
@@ -117,7 +117,7 @@ CONSTANT: minneapolis-slides
     }
     { $slide "Memoization"
         { $code
-            "use: memoize"
+            "USE: memoize"
             ""
             "MEMO: fib ( x -- y )"
             "    dup 1 > ["

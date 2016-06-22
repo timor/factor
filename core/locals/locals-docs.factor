@@ -185,7 +185,7 @@ $nl
 }
 "Inside a lexical scope, literals which do not contain lexical variables still behave in the same way:"
 { $example
-    "use: locals"
+    "USE: locals"
     "IN: scratchpad"
     "TUPLE: person first-name last-name ;"
     ":: locals-word-test ( -- tuple )"

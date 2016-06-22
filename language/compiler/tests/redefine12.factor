@@ -15,6 +15,6 @@ M: object g drop t ;
 
 TUPLE: jeah ;
 
-[ ] [ "use: kernel in: compiler.tests.redefine12 M: jeah g drop f ;" eval( -- ) ] unit-test
+[ ] [ "USE: kernel in: compiler.tests.redefine12 M: jeah g drop f ;" eval( -- ) ] unit-test
 
 [ f ] [ T{ jeah } h ] unit-test

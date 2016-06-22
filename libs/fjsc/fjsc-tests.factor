@@ -41,11 +41,11 @@ IN: fjsc.tests
 ] unit-test
 
 { T{ ast-expression f V{ T{ ast-use f "foo" } } } } [
-  "use: foo" statement-parser parse
+  "USE: foo" statement-parser parse
 ] unit-test
 
 { T{ ast-expression f V{ T{ ast-in f "foo" } } } } [
-  "in: foo" statement-parser parse
+  "IN: foo" statement-parser parse
 ] unit-test
 
 { T{ ast-expression f V{ T{ ast-using f V{ "foo" "bar" }  } } } } [

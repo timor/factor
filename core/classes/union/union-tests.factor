@@ -9,7 +9,7 @@ IN: classes.union.tests
 UNION: bah fixnum alien ;
 { bah } [ \ bah? "predicating" word-prop ] unit-test
 
-{ "USING: alien math ;\nin: classes.union.tests\nUNION: bah fixnum alien ;\n" }
+{ "USING: alien math ;\nIN: classes.union.tests\nUNION: bah fixnum alien ;\n" }
 [ [ \ bah see ] with-string-writer ] unit-test
 
 ! Test redefinition of classes
@@ -23,13 +23,13 @@ M: union-1 generic-update-test drop "union-1" ;
 { t } [ union-1 number class<= ] unit-test
 { "union-1" } [ 1.0 generic-update-test ] unit-test
 
-"in: classes.union.tests use: math use: arrays UNION: union-1 rational array ;" eval( -- )
+"IN: classes.union.tests USE: math USE: arrays UNION: union-1 rational array ;" eval( -- )
 
 { t } [ bignum union-1 class<= ] unit-test
 { f } [ union-1 number class<= ] unit-test
 { "union-1" } [ { 1.0 } generic-update-test ] unit-test
 
-"in: classes.union.tests use: math PREDICATE: union-1 < integer even? ;" eval( -- )
+"IN: classes.union.tests USE: math PREDICATE: union-1 < integer even? ;" eval( -- )
 
 { f } [ union-1 union-class? ] unit-test
 { t } [ union-1 predicate-class? ] unit-test
@@ -57,7 +57,7 @@ UNION: redefine-bug-2 redefine-bug-1 quotation ;
 { t } [ fixnum redefine-bug-2 class<= ] unit-test
 { t } [ quotation redefine-bug-2 class<= ] unit-test
 
-{ } [ "in: classes.union.tests use: math UNION: redefine-bug-1 bignum ;" eval( -- ) ] unit-test
+{ } [ "IN: classes.union.tests USE: math UNION: redefine-bug-1 bignum ;" eval( -- ) ] unit-test
 
 { t } [ bignum redefine-bug-1 class<= ] unit-test
 { f } [ fixnum redefine-bug-2 class<= ] unit-test
@@ -65,13 +65,13 @@ UNION: redefine-bug-2 redefine-bug-1 quotation ;
 
 ! Too eager with reset-class
 
-{ } [ "in: classes.union.tests singleton: foo UNION: blah foo ;" <string-reader> "union-reset-test" parse-stream drop ] unit-test
+{ } [ "IN: classes.union.tests singleton: foo UNION: blah foo ;" <string-reader> "union-reset-test" parse-stream drop ] unit-test
 
 { t } [ "blah" "classes.union.tests" lookup-word union-class? ] unit-test
 
 { t } [ "foo?" "classes.union.tests" lookup-word predicate? ] unit-test
 
-{ } [ "in: classes.union.tests use: math UNION: blah integer ;" <string-reader> "union-reset-test" parse-stream drop ] unit-test
+{ } [ "IN: classes.union.tests USE: math UNION: blah integer ;" <string-reader> "union-reset-test" parse-stream drop ] unit-test
 
 { t } [ "blah" "classes.union.tests" lookup-word union-class? ] unit-test
 
@@ -97,11 +97,11 @@ M: a-union test-generic ;
 
 { t } [ \ integer? def>> \ fixnum-bitand swap member? ] unit-test
 
-{ } [ "in: classes.union.tests use: math UNION: fast-union-1 fixnum ; UNION: fast-union-2 fast-union-1 bignum ;" eval( -- ) ] unit-test
+{ } [ "IN: classes.union.tests USE: math UNION: fast-union-1 fixnum ; UNION: fast-union-2 fast-union-1 bignum ;" eval( -- ) ] unit-test
 
 { t } [ "fast-union-2?" "classes.union.tests" lookup-word def>> \ fixnum-bitand swap member? ] unit-test
 
-{ } [ "in: classes.union.tests use: vectors UNION: fast-union-1 vector ;" eval( -- ) ] unit-test
+{ } [ "IN: classes.union.tests USE: vectors UNION: fast-union-1 vector ;" eval( -- ) ] unit-test
 
 { f } [ "fast-union-2?" "classes.union.tests" lookup-word def>> \ fixnum-bitand swap member? ] unit-test
 
@@ -131,12 +131,12 @@ PREDICATE: numba-ova-10 < union{ float integer }
 { f } [ 5.75 numba-ova-10? ] unit-test
 
 ! Issue #420 lol
-[ "in: issue-420 UNION: omg omg ;" eval( -- ) ]
+[ "IN: issue-420 UNION: omg omg ;" eval( -- ) ]
 [ error>> cannot-reference-self? ] must-fail-with
 
 IN: issue-420
 UNION: a ;
 UNION: b a ;
 
-[ "in: issue-420 UNION: a b ;" eval( -- ) ]
+[ "IN: issue-420 UNION: a b ;" eval( -- ) ]
 [ error>> cannot-reference-self? ] must-fail-with

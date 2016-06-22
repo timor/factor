@@ -63,7 +63,7 @@ must-fail-with
 must-fail-with
 
 2 [
-    [ "IN: classes.tuple.parser.tests use: alien TUPLE: foo { slot dll } ;" eval( -- ) ]
+    [ "IN: classes.tuple.parser.tests USE: alien TUPLE: foo { slot dll } ;" eval( -- ) ]
     [ error>> bad-initial-value? ]
     must-fail-with
 
@@ -71,14 +71,14 @@ must-fail-with
 ] times
 
 2 [
-    [ "IN: classes.tuple.parser.tests use: arrays TUPLE: foo { slot array initial: 5 } ;" eval( -- ) ]
+    [ "IN: classes.tuple.parser.tests USE: arrays TUPLE: foo { slot array initial: 5 } ;" eval( -- ) ]
     [ error>> bad-initial-value? ]
     must-fail-with
 
     [ f ] [ \ foo tuple-class? ] unit-test
 ] times
 
-[ "IN: classes.tuple.parser.tests use: arrays TUPLE: foo slot { slot array } ;" eval( -- ) ]
+[ "IN: classes.tuple.parser.tests USE: arrays TUPLE: foo slot { slot array } ;" eval( -- ) ]
 [ error>> duplicate-slot-names? ]
 must-fail-with
 
@@ -102,7 +102,7 @@ TUPLE: parsing-corner-case x ;
 
 { T{ parsing-corner-case f 3 } } [
     {
-        "use: classes.tuple.parser.tests"
+        "USE: classes.tuple.parser.tests"
         "T{ parsing-corner-case"
         "    f"
         "    3"
@@ -112,7 +112,7 @@ TUPLE: parsing-corner-case x ;
 
 { T{ parsing-corner-case f 3 } } [
     {
-        "use: classes.tuple.parser.tests"
+        "USE: classes.tuple.parser.tests"
         "T{ parsing-corner-case"
         "    { x 3 }"
         "}"
@@ -121,7 +121,7 @@ TUPLE: parsing-corner-case x ;
 
 { T{ parsing-corner-case f 3 } } [
     {
-        "use: classes.tuple.parser.tests"
+        "USE: classes.tuple.parser.tests"
         "T{ parsing-corner-case {"
         "    x 3 }"
         "}"
@@ -131,14 +131,14 @@ TUPLE: parsing-corner-case x ;
 
 [
     {
-        "use: classes.tuple.parser.tests T{ parsing-corner-case"
+        "USE: classes.tuple.parser.tests T{ parsing-corner-case"
         "    { x 3 }"
     } "\n" join eval( -- tuple )
 ] [ error>> unexpected-eof? ] must-fail-with
 
 [
     {
-        "use: classes.tuple.parser.tests T{ parsing-corner-case {"
+        "USE: classes.tuple.parser.tests T{ parsing-corner-case {"
         "    x 3 }"
     } "\n" join eval( -- tuple )
 ] [ error>> unexpected-eof? ] must-fail-with

@@ -393,7 +393,7 @@ $nl
     { $example
         "USING: prettyprint peg peg.ebnf kernel math.parser strings"
         "accessors math arrays ;"
-        "in: scratchpad"
+        "IN: scratchpad"
         ""
         "TUPLE: ast-number value ;"
         "TUPLE: ast-string value ;"

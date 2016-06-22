@@ -5,7 +5,7 @@ HELP: breakpoint
 { $values { "word" word } }
 { $description "Annotates a word definition to enter the single stepper when executed." }
 { $examples
-    { $unchecked-example "use: tools.walker \\ sq breakpoint"
+    { $unchecked-example "USE: tools.walker \\ sq breakpoint"
         ""
     }
 } ;
@@ -16,7 +16,7 @@ HELP: breakpoint-if
 { $examples
     "Break if the input to sq is 3:"
     { $unchecked-example
-        "use: tools.walker \\ sq [ dup 3 = ] breakpoint-if"
+        "USE: tools.walker \\ sq [ dup 3 = ] breakpoint-if"
         ""
     }
 } ;

@@ -15,14 +15,14 @@ IN: tools.completion
     "" { "a" "b" "c" "d" "e" "f" "g" } dup zip completions keys
 ] unit-test
 
-{ f } [ { "use:" "A" "B" "C" } complete-vocab? ] unit-test
-{ f } [ { "use:" "A" "B" } complete-vocab? ] unit-test
-{ f } [ { "use:" "A" "" } complete-vocab? ] unit-test
-{ t } [ { "use:" "A" } complete-vocab? ] unit-test
-{ t } [ { "use:" "" } complete-vocab? ] unit-test
-{ f } [ { "use:" } complete-vocab? ] unit-test
+{ f } [ { "USE:" "A" "B" "C" } complete-vocab? ] unit-test
+{ f } [ { "USE:" "A" "B" } complete-vocab? ] unit-test
+{ f } [ { "USE:" "A" "" } complete-vocab? ] unit-test
+{ t } [ { "USE:" "A" } complete-vocab? ] unit-test
+{ t } [ { "USE:" "" } complete-vocab? ] unit-test
+{ f } [ { "USE:" } complete-vocab? ] unit-test
 { t } [ { "unuse:" "A" } complete-vocab? ] unit-test
-{ t } [ { "qualified:" "A" } complete-vocab? ] unit-test
+{ t } [ { "QUALIFIED:" "A" } complete-vocab? ] unit-test
 { t } [ { "QUALIFIED-WITH:" "A" } complete-vocab? ] unit-test
 { t } [ { "USING:" "A" "B" "C" } complete-vocab? ] unit-test
 { f } [ { "USING:" "A" "B" "C" ";" } complete-vocab? ] unit-test

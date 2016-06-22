@@ -5,7 +5,7 @@ HELP: 24-game
 { $description "Starts the game!" }
 { $examples
     { $unchecked-example
-        "use: 24-game"
+        "USE: 24-game"
         "24-game"
         "{ 8 2 1 2 }\n"
         "Commands: { + - * / rot swap q }\n"

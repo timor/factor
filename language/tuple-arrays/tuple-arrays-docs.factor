@@ -18,8 +18,8 @@ $nl
 { $subsections postpone\ TUPLE-ARRAY: }
 "An example:"
 { $example
-  "use: tuple-arrays"
-  "in: scratchpad"
+  "USE: tuple-arrays"
+  "IN: scratchpad"
   "TUPLE: point x y ; final"
   "TUPLE-ARRAY: point"
   "{ T{ point f 1 2 } T{ point f 1 3 } T{ point f 2 3 } } >point-array first short."

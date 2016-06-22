@@ -186,11 +186,11 @@ ARTICLE: "encodings-introduction" "An introduction to encodings"
 "Constructors for streams which deal with bytes usually take an encoding as an explicit parameter. For example, to open a text file for reading whose contents are in UTF-8, use the following"
 { $code "\"file.txt\" utf8 <file-reader>" }
 "If there is an error in the encoded stream, a replacement character (0xFFFD) will be inserted. To throw an exception upon error, use a strict encoding as follows"
-{ $code "use: io.encodings.strict" "\"file.txt\" utf8 strict <file-reader>" }
+{ $code "USE: io.encodings.strict" "\"file.txt\" utf8 strict <file-reader>" }
 "In a similar way, encodings can be specified when opening a file for writing."
-{ $code "use: io.encodings.ascii" "\"file.txt\" ascii <file-writer>" }
+{ $code "USE: io.encodings.ascii" "\"file.txt\" ascii <file-writer>" }
 "An encoding is also needed for some words that don't return streams, such as " { $link file-contents } ", for example"
-{ $code "use: io.encodings.utf16" "\"file.txt\" utf16 file-contents" }
+{ $code "USE: io.encodings.utf16" "\"file.txt\" utf16 file-contents" }
 "Encoding descriptors are also used by " { $link "io.streams.byte-array" } " and taken by combinators like " { $link with-file-writer } " and " { $link with-byte-reader } " which deal with streams. It is " { $emphasis "not" } " used with " { $link "io.streams.string" } " because these deal with abstract text."
 $nl
 "When the " { $link binary } " encoding is used, a " { $link byte-array } " is expected for writing and returned for reading, since the stream deals with bytes. All other encodings deal with strings, since they are used to represent text." ;

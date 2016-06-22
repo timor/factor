@@ -332,7 +332,7 @@ STRUCT: struct-that's-a-word { x int } ;
 
 ! Interactive parsing of struct slot definitions
 [
-    "use: classes.struct IN: classes.struct.tests STRUCT: unexpected-eof-test" <string-reader>
+    "USE: classes.struct IN: classes.struct.tests STRUCT: unexpected-eof-test" <string-reader>
     "struct-class-test-1" parse-stream
 ] [ error>> error>> unexpected-eof? ] must-fail-with
 
@@ -346,7 +346,7 @@ STRUCT: struct-that's-a-word { x int } ;
 
 ! S{ with non-struct type
 [
-    "use: classes.struct IN: classes.struct.tests TUPLE: not-a-struct ; S{ not-a-struct }"
+    "USE: classes.struct IN: classes.struct.tests TUPLE: not-a-struct ; S{ not-a-struct }"
     eval( -- value )
 ] [ error>> no-method? ] must-fail-with
 

@@ -152,7 +152,7 @@ M\\ actor advance optimized."
 }
 "The " { $vocab-link "compiler.cfg.debugger" } " vocabulary can give a lower-level picture of the generated code, that includes register assignments and other low-level details. To look at low-level optimizer output, call " { $snippet "regs." } " on a word or quotation:"
 { $code
-"use: compiler.tree.debugger
+"USE: compiler.tree.debugger
 
 M\\ actor advance regs." }
 "Example of a high-performance algorithms that use SIMD primitives can be found in the following vocabularies:"

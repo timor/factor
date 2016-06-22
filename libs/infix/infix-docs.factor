@@ -9,14 +9,14 @@ HELP: \ infix[[
 { $examples
     { $example
         "USING: infix prettyprint ;"
-        "in: scratchpad"
+        "IN: scratchpad"
         "infix[[ 8+2*3 ]] ."
         "14"
     } $nl
     { $link \ infix[[ } " isn't that useful by itself, as it can only access literal numbers and no variables. It is designed to be used together with locals; for example with " { $link postpone\ :: } " :"
     { $example
         "USING: infix locals math.functions prettyprint ;"
-        "in: scratchpad"
+        "IN: scratchpad"
         ":: quadratic-equation ( a b c -- z- z+ )"
         "    infix[[ (-b-sqrt(b*b-4*a*c)) / (2*a) ]]"
         "    infix[[ (-b+sqrt(b*b-4*a*c)) / (2*a) ]] ;"
@@ -42,7 +42,7 @@ ARTICLE: "infix" "Infix notation"
 }
 "The standard precedence rules apply: Grouping with parentheses before " { $snippet "*" } ", " { $snippet "/" } "and " { $snippet "%" } " before " { $snippet "+" } " and " { $snippet "-" } "."
 { $example
-    "use: infix"
+    "USE: infix"
     "infix[[ 5-40/10*2 ]] ."
     "-3"
 }

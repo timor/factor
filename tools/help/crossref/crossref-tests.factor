@@ -5,7 +5,7 @@ help.syntax ;
 IN: help.crossref.tests
 
 { } [
-    "in: help.crossref.tests USING: help.syntax help.markup ; : foo ( -- ) ; HELP: foo \"foo is great\" ; ARTICLE: \"foo\" \"Foo\" { $subsection foo } ;" eval( -- )
+    "IN: help.crossref.tests USING: help.syntax help.markup ; : foo ( -- ) ; HELP: foo \"foo is great\" ; ARTICLE: \"foo\" \"Foo\" { $subsection foo } ;" eval( -- )
 ] unit-test
 
 { $subsection } [
@@ -24,32 +24,32 @@ IN: help.crossref.tests
 ] unit-test
 
 { } [
-    "in: help.crossref.tests USING: help.syntax help.markup ; : bar ( -- ) ; HELP: bar \"bar is great\" ; ARTICLE: \"bar\" \"Bar\" { $subsection bar } ;" eval( -- )
+    "IN: help.crossref.tests USING: help.syntax help.markup ; : bar ( -- ) ; HELP: bar \"bar is great\" ; ARTICLE: \"bar\" \"Bar\" { $subsection bar } ;" eval( -- )
 ] unit-test
 
 { } [
-    "in: ayy use: help.syntax ARTICLE: \"b\" \"B\" ;"
+    "IN: ayy USE: help.syntax ARTICLE: \"b\" \"B\" ;"
     <string-reader> "ayy" parse-stream drop
 ] unit-test
 
 { } [
-    "in: azz use: help.syntax use: help.markup ARTICLE: \"a\" \"A\" { $subsection \"b\" } ;"
+    "IN: azz USE: help.syntax USE: help.markup ARTICLE: \"a\" \"A\" { $subsection \"b\" } ;"
     <string-reader> "ayy" parse-stream drop
 ] unit-test
 
 { } [
-    "in: ayy use: help.syntax ARTICLE: \"c\" \"C\" ;"
+    "IN: ayy USE: help.syntax ARTICLE: \"c\" \"C\" ;"
     <string-reader> "ayy" parse-stream drop
 ] unit-test
 
 { } [
-    "in: azz use: help.syntax use: help.markup ARTICLE: \"a\" \"A\" { $subsection \"c\" } ;"
+    "IN: azz USE: help.syntax USE: help.markup ARTICLE: \"a\" \"A\" { $subsection \"c\" } ;"
     <string-reader> "ayy" parse-stream drop
 ] unit-test
 
 { } [
     [
-        "in: azz use: help.syntax use: help.markup ARTICLE: \"yyy\" \"YYY\" ; ARTICLE: \"xxx\" \"XXX\" { $subsection \"yyy\" } ; ARTICLE: \"yyy\" \"YYY\" ;"
+        "IN: azz USE: help.syntax USE: help.markup ARTICLE: \"yyy\" \"YYY\" ; ARTICLE: \"xxx\" \"XXX\" { $subsection \"yyy\" } ; ARTICLE: \"yyy\" \"YYY\" ;"
         <string-reader> "parent-test" parse-stream drop
     ] [ :1 ] recover
 ] unit-test

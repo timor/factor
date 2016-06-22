@@ -32,14 +32,14 @@ tuple-array: broken
 { 100 } [ 100 <broken-array> length ] unit-test
 
 ! Can't define a tuple array for a non-tuple class
-[ "in: tuple-arrays.tests USING: tuple-arrays words ; TUPLE-ARRAY: word" eval( -- ) ]
+[ "IN: tuple-arrays.tests USING: tuple-arrays words ; TUPLE-ARRAY: word" eval( -- ) ]
 [ error>> not-a-tuple? ]
 must-fail-with
 
 ! Can't define a tuple array for a non-final class
 TUPLE: non-final x ;
 
-[ "in: tuple-arrays.tests use: tuple-arrays TUPLE-ARRAY: non-final" eval( -- ) ]
+[ "IN: tuple-arrays.tests USE: tuple-arrays TUPLE-ARRAY: non-final" eval( -- ) ]
 [ error>> not-final? ]
 must-fail-with
 
@@ -62,7 +62,7 @@ tuple-array: tuple-to-struct
 
 ! This shouldn't crash
 { } [
-    "in: tuple-arrays.tests
+    "IN: tuple-arrays.tests
     USING: alien.c-types classes.struct ;
     STRUCT: tuple-to-struct { x int } ;"
     eval( -- )

@@ -239,8 +239,8 @@ t"
 }
 
 { $subheading "Using variables:" }
-{ $example "use: namespaces \"http://localhost:3128\" \"http.proxy\" set ! or set-global" "" }
-{ $example "use: namespaces \"http://localhost:3128\" \"http.proxy\" [ ] with-variable" "" }
+{ $example "USE: namespaces \"http://localhost:3128\" \"http.proxy\" set ! or set-global" "" }
+{ $example "USE: namespaces \"http://localhost:3128\" \"http.proxy\" [ ] with-variable" "" }
 
 { $subheading "Manually making the request:" }
 { $example "USING: http http.client urls ; URL\" http://localhost:3128\" <request> proxy-url<<" "" }

@@ -24,7 +24,7 @@ HELP: command-name
 { $examples
     { $example
         "USING: io ui.commands ;"
-        "in: scratchpad"
+        "IN: scratchpad"
         ": com-my-command ( -- ) ;"
         "\\ com-my-command command-name write"
         "My Command"

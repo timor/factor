@@ -51,7 +51,7 @@ SYMBOL: a-symbol
 ! See if redefining a generic as a colon def clears some
 ! word props.
 GENERIC: testing ( a -- b ) ;
-"in: words.tests : testing ( -- ) ;" eval( -- )
+"IN: words.tests : testing ( -- ) ;" eval( -- )
 
 { f } [ \ testing generic? ] unit-test
 
@@ -67,45 +67,45 @@ forget: another-forgotten
 DEFER: deferred
 [ deferred ] [ T{ undefined-word f deferred } = ] must-fail-with
 
-[ "in: words.tests defer: not-compiled COMPILE< not-compiled COMPILE>" eval( -- ) ]
+[ "IN: words.tests defer: not-compiled COMPILE< not-compiled COMPILE>" eval( -- ) ]
 [ error>> [ undefined-word? ] [ word>> name>> "not-compiled" = ] bi and ] must-fail-with
 
-{ } [ "in: words.tests forget: not-compiled" eval( -- ) ] unit-test
+{ } [ "IN: words.tests forget: not-compiled" eval( -- ) ] unit-test
 
 { } [ [ "no-loc" "words.tests" create-word drop ] with-compilation-unit ] unit-test
 { f } [ "no-loc" "words.tests" lookup-word where ] unit-test
 
-{ } [ "in: words.tests : no-loc-2 ( -- ) ;" eval( -- ) ] unit-test
+{ } [ "IN: words.tests : no-loc-2 ( -- ) ;" eval( -- ) ] unit-test
 { f } [ "no-loc-2" "words.tests" lookup-word where ] unit-test
 
-{ } [ "in: words.tests : test-last ( -- ) ;" eval( -- ) ] unit-test
+{ } [ "IN: words.tests : test-last ( -- ) ;" eval( -- ) ] unit-test
 { "test-last" } [ last-word name>> ] unit-test
 
 "undef-test" "words.tests" lookup-word [
     [ forget ] with-compilation-unit
 ] when*
 
-[ "in: words.tests : undef-test ( -- ) ; COMPILE< undef-test COMPILE>" eval( -- ) ]
+[ "IN: words.tests : undef-test ( -- ) ; COMPILE< undef-test COMPILE>" eval( -- ) ]
 [ error>> undefined-word? ] must-fail-with
 
 { } [
-    "in: words.tests GENERIC: symbol-generic ( x -- x ) ;" eval( -- )
+    "IN: words.tests GENERIC: symbol-generic ( x -- x ) ;" eval( -- )
 ] unit-test
 
 { } [
-    "in: words.tests symbol: symbol-generic" eval( -- )
+    "IN: words.tests symbol: symbol-generic" eval( -- )
 ] unit-test
 
 { t } [ "symbol-generic" "words.tests" lookup-word symbol? ] unit-test
 { f } [ "symbol-generic" "words.tests" lookup-word generic? ] unit-test
 
 { } [
-    "in: words.tests GENERIC: symbol-generic ( a -- b ) ;" <string-reader>
+    "IN: words.tests GENERIC: symbol-generic ( a -- b ) ;" <string-reader>
     "symbol-generic-test" parse-stream drop
 ] unit-test
 
 { } [
-    "in: words.tests TUPLE: symbol-generic ;" <string-reader>
+    "IN: words.tests TUPLE: symbol-generic ;" <string-reader>
     "symbol-generic-test" parse-stream drop
 ] unit-test
 
@@ -113,14 +113,14 @@ DEFER: deferred
 { f } [ "symbol-generic" "words.tests" lookup-word generic? ] unit-test
 
 ! Regressions
-{ } [ "in: words.tests : decl-forget-test ( -- ) ; foldable" eval( -- ) ] unit-test
+{ } [ "IN: words.tests : decl-forget-test ( -- ) ; foldable" eval( -- ) ] unit-test
 { t } [ "decl-forget-test" "words.tests" lookup-word "foldable" word-prop ] unit-test
-{ } [ "in: words.tests : decl-forget-test ( -- ) ;" eval( -- ) ] unit-test
+{ } [ "IN: words.tests : decl-forget-test ( -- ) ;" eval( -- ) ] unit-test
 { f } [ "decl-forget-test" "words.tests" lookup-word "foldable" word-prop ] unit-test
 
-{ } [ "in: words.tests : decl-forget-test ( -- ) ; flushable" eval( -- ) ] unit-test
+{ } [ "IN: words.tests : decl-forget-test ( -- ) ; flushable" eval( -- ) ] unit-test
 { t } [ "decl-forget-test" "words.tests" lookup-word "flushable" word-prop ] unit-test
-{ } [ "in: words.tests : decl-forget-test ( -- ) ;" eval( -- ) ] unit-test
+{ } [ "IN: words.tests : decl-forget-test ( -- ) ;" eval( -- ) ] unit-test
 { f } [ "decl-forget-test" "words.tests" lookup-word "flushable" word-prop ] unit-test
 
 { { } }

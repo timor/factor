@@ -150,14 +150,14 @@ M:: string lambda-generic ( a b -- c ) a b lambda-generic-2 ;
 DEFER: xyzzy
 
 { } [
-    "in: locals.tests use: math GENERIC: xyzzy ( a -- b ) ; M: integer xyzzy ;"
+    "IN: locals.tests USE: math GENERIC: xyzzy ( a -- b ) ; M: integer xyzzy ;"
     <string-reader> "lambda-generic-test" parse-stream drop
 ] unit-test
 
 { 10 } [ 10 xyzzy ] unit-test
 
 { } [
-    "in: locals.tests use: math use: locals GENERIC: xyzzy ( a -- b ) ; M:: integer xyzzy ( n -- x ) ; 5"
+    "IN: locals.tests USE: math USE: locals GENERIC: xyzzy ( a -- b ) ; M:: integer xyzzy ( n -- x ) ; 5"
     <string-reader> "lambda-generic-test" parse-stream drop
 ] unit-test
 
@@ -185,7 +185,7 @@ M:: fixnum next-method-test ( a -- b ) a call-next-method 1 + ;
 
 :: a-word-with-locals ( a b -- ) ;
 
-CONSTANT: new-definition "USING: math ;\nin: locals.tests\n: a-word-with-locals ( -- x ) 2 3 + ;\n" ;
+CONSTANT: new-definition "USING: math ;\nIN: locals.tests\n: a-word-with-locals ( -- x ) 2 3 + ;\n" ;
 
 { } [ new-definition eval( -- ) ] unit-test
 
@@ -400,8 +400,8 @@ M:: integer lambda-method-forget-test ( a -- b ) a ;
 { t } [ 3 funny-macro-test ] unit-test
 { f } [ 2 funny-macro-test ] unit-test
 
-[ "use: locals let[" eval( -- ) ] [ error>> unexpected-eof? ] must-fail-with
-[ "use: locals |[" eval( -- ) ] [ error>> unexpected-eof? ] must-fail-with
+[ "USE: locals let[" eval( -- ) ] [ error>> unexpected-eof? ] must-fail-with
+[ "USE: locals |[" eval( -- ) ] [ error>> unexpected-eof? ] must-fail-with
 
 { 25 } [ 5 |[ a | { [ a sq ] } cond ] call ] unit-test
 { 25 } [ 5 |[ | { |[ a | a sq ] } ] call first call ] unit-test
@@ -416,13 +416,13 @@ M:: integer lambda-method-forget-test ( a -- b ) a ;
 
 { 3 } [ 3 |[ a | \ a ] call ] unit-test
 
-[ "use: locals |[ | { let[ 0 :> a a ] } ]" eval( -- ) ] must-fail
+[ "USE: locals |[ | { let[ 0 :> a a ] } ]" eval( -- ) ] must-fail
 
-[ "use: locals |[ | let[ 0 :> a! { a! } ] ]" eval( -- ) ] must-fail
+[ "USE: locals |[ | let[ 0 :> a! { a! } ] ]" eval( -- ) ] must-fail
 
-[ "use: locals |[ | { :> a } ]" eval( -- ) ] must-fail
+[ "USE: locals |[ | { :> a } ]" eval( -- ) ] must-fail
 
-[ "use: locals 3 :> a" eval( -- ) ] must-fail
+[ "USE: locals 3 :> a" eval( -- ) ] must-fail
 
 { 3 } [ 3 |[ | :> a a ] call ] unit-test
 

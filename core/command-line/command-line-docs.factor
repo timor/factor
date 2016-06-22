@@ -131,7 +131,7 @@ ARTICLE: "rc-files" "Running code on startup"
 $nl
 "If you are unsure where the files should be located, evaluate the following code:"
 { $code
-    "use: command-line"
+    "USE: command-line"
     "\".factor-rc\" rc-path print"
     "\".factor-boot-rc\" rc-path print"
 }

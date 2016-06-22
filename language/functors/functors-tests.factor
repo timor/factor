@@ -105,13 +105,13 @@ COMPILE>
 
 ! Does replacing an ordinary word with a functor-generated one work?
 [ [ ] ] [
-    "in: functors.tests
+    "IN: functors.tests
 
     TUPLE: some-tuple ;
     : some-word ( -- ) ;
     GENERIC: some-generic ( a -- b ) ;
     M: some-tuple some-generic ;
-    symbol: some-symbol" <string-reader> "functors-test" parse-stream
+    SYMBOL: some-symbol" <string-reader> "functors-test" parse-stream
 ] unit-test
 
 : test-redefinition ( -- )
@@ -144,7 +144,7 @@ SYMBOL: W-symbol
 FUNCTOR>
 
 [ [ ] ] [
-    "in: functors.tests
+    "IN: functors.tests
     COMPILE< \"some\" redefine-test COMPILE>" <string-reader> "functors-test" parse-stream
 ] unit-test
 
