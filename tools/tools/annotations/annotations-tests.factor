@@ -34,7 +34,7 @@ M: object another-generic ;
 
 \ another-generic watch
 
-{ } [ "in: tools.annotations.tests GENERIC: another-generic ( a -- b )" eval( -- ) ; ] unit-test
+{ } [ "in: tools.annotations.tests GENERIC: another-generic ( a -- b ) ;" eval( -- ) ] unit-test
 
 { } [ \ another-generic reset ] unit-test
 

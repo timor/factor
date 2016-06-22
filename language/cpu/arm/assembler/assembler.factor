@@ -11,7 +11,7 @@ SYMBOL: registers
 
 V{ } registers set-global
 
-SYNTAX: register:
+SYNTAX: \ REGISTER:
     scan-new-word
     [ define-symbol ]
     [ registers get length "register" set-word-prop ]
@@ -20,22 +20,22 @@ SYNTAX: register:
 
 COMPILE>
 
-register: R0
-register: R1
-register: R2
-register: R3
-register: R4
-register: R5
-register: R6
-register: R7
-register: R8
-register: R9
-register: R10
-register: R11
-register: R12
-register: R13
-register: R14
-register: R15
+REGISTER: R0
+REGISTER: R1
+REGISTER: R2
+REGISTER: R3
+REGISTER: R4
+REGISTER: R5
+REGISTER: R6
+REGISTER: R7
+REGISTER: R8
+REGISTER: R9
+REGISTER: R10
+REGISTER: R11
+REGISTER: R12
+REGISTER: R13
+REGISTER: R14
+REGISTER: R15
 
 ALIAS: SL R10 ; ALIAS: FP R11 ; ALIAS: IP R12 ;
 ALIAS: SP R13 ; ALIAS: LR R14 ; ALIAS: PC R15 ;
