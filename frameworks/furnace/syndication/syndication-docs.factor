@@ -74,4 +74,4 @@ ARTICLE: "furnace.syndication" "Furnace Atom syndication support"
     "furnace.syndication.protocol"
 } ;
 
-about: "furnace.syndication"
+ABOUT: "furnace.syndication"

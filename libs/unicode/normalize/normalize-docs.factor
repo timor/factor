@@ -1,7 +1,7 @@
 USING: help.syntax help.markup strings unicode ;
 IN: unicode.normalize
 
-about: "unicode.normalize"
+ABOUT: "unicode.normalize"
 
 ARTICLE: "unicode.normalize" "Unicode normalization"
 "The " { $vocab-link "unicode.normalize" } " vocabulary defines words for normalizing Unicode strings."

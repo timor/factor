@@ -18,4 +18,4 @@ ARTICLE: "models.arrow.smart" "Smart arrow models"
 "The " { $vocab-link "models.arrow.smart" } " vocabulary generalizes arrows to arbitrary input arity. They're called “smart” because they resemble " { $link "combinators.smart" } "."
 { $subsections <smart-arrow> } ;
 
-about: "models.arrow.smart"
+ABOUT: "models.arrow.smart"

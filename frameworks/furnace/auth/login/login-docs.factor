@@ -22,4 +22,4 @@ ARTICLE: "furnace.auth.login" "Login authentication"
     "<t:button t:action=\"$login-realm/logout\">Logout</t:button>"
 } ;
 
-about: "furnace.auth.login"
+ABOUT: "furnace.auth.login"

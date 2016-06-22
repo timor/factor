@@ -33,4 +33,4 @@ HELP: loc
 ARTICLE: "compiler.cfg.registers" "Virtual single-assignment registers"
 "Virtual register assignment." ;
 
-about: "compiler.cfg.registers"
+ABOUT: "compiler.cfg.registers"

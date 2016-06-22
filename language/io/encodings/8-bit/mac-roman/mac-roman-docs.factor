@@ -10,4 +10,4 @@ HELP: mac-roman
 ARTICLE: "io.encodings.8-bit.mac-roman" "Mac Roman encoding"
 "The " { $vocab-link "io.encodings.8-bit.mac-roman" } " vocabulary provides the " { $link mac-roman } " encoding." ;
 
-about: "io.encodings.8-bit.mac-roman"
+ABOUT: "io.encodings.8-bit.mac-roman"

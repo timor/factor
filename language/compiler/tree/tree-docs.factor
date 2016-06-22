@@ -101,4 +101,4 @@ ARTICLE: "compiler.tree" "High-level optimizer operating on lexical tree SSA IR"
   #return-recursive
 } ;
 
-about: "compiler.tree"
+ABOUT: "compiler.tree"

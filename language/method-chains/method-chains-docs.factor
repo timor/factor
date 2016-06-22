@@ -19,4 +19,4 @@ ARTICLE: "method-chains" "Method chaining syntax"
     \ BEFORE:
 } ;
 
-about: "method-chains"
+ABOUT: "method-chains"

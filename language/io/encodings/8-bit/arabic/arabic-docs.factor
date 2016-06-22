@@ -10,4 +10,4 @@ HELP: latin/arabic
 ARTICLE: "io.encodings.8-bit.arabic" "Arabic encoding"
 "The " { $vocab-link "io.encodings.8-bit.arabic" }  " vocabulary provides the " { $link latin/arabic } " encoding." ;
 
-about: "io.encodings.8-bit.arabic"
+ABOUT: "io.encodings.8-bit.arabic"

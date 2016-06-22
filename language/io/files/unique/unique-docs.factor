@@ -56,4 +56,4 @@ ARTICLE: "io.files.unique" "Unique files"
     cleanup-unique-directory
 } ;
 
-about: "io.files.unique"
+ABOUT: "io.files.unique"

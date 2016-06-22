@@ -346,7 +346,7 @@ $nl
 { $subsections "tuple-redefinition" }
 "Tuple literal syntax is documented in " { $link "syntax-tuples" } "." ;
 
-about: "tuples"
+ABOUT: "tuples"
 
 HELP: tuple-class
 { $class-description "The class of tuple class words." }

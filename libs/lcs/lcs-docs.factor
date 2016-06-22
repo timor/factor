@@ -36,4 +36,4 @@ ARTICLE: "lcs" "LCS, diffing and distance"
     retain
 } ;
 
-about: "lcs"
+ABOUT: "lcs"

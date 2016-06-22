@@ -81,4 +81,4 @@ ARTICLE: "network-icmp" "ICMP"
     <icmp6>
 } ;
 
-about: "network-icmp"
+ABOUT: "network-icmp"

@@ -34,4 +34,4 @@ ARTICLE: "furnace.boilerplate" "Furnace boilerplate support"
 }
 { $see-also "html.templates.chloe.tags.boilerplate" } ;
 
-about: "furnace.boilerplate"
+ABOUT: "furnace.boilerplate"

@@ -10,4 +10,4 @@ ARTICLE: "furnace.auth.providers.db" "Database authentication provider"
 "The authentication provider class:"
 { $subsections users-in-db } ;
 
-about: "furnace.auth.providers.db"
+ABOUT: "furnace.auth.providers.db"

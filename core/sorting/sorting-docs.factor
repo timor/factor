@@ -20,7 +20,7 @@ $nl
     sort-values
 } ;
 
-about: "sequences-sorting"
+ABOUT: "sequences-sorting"
 
 HELP: sort
 { $values { "seq" sequence } { "quot" { $quotation ( obj1 obj2 -- <=> ) } } { "sortedseq" "a new sorted sequence" } }

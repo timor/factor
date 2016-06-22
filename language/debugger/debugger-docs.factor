@@ -32,7 +32,7 @@ ARTICLE: "debugger" "The debugger"
 $nl
 "Note that in Factor, the debugger is a tool for printing and inspecting errors, not for walking through code. For the latter, see " { $link "ui-walker" } "." ;
 
-about: "debugger"
+ABOUT: "debugger"
 
 HELP: :error
 { $description "Prints the most recent error. Used for interactive debugging." } ;

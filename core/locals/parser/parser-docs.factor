@@ -24,4 +24,4 @@ $nl
 "Parsers for word and method definitions:"
 { $subsections (::) (M::) } ;
 
-about: "locals.parser"
+ABOUT: "locals.parser"

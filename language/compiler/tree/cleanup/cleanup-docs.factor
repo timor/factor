@@ -32,4 +32,4 @@ $nl
 { $subsections cleanup-tree }
 "Each node type implements its own method on the " { $link cleanup-tree* } " generic." ;
 
-about: "compiler.tree.cleanup"
+ABOUT: "compiler.tree.cleanup"

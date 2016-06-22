@@ -321,4 +321,4 @@ ARTICLE: "gpu.framebuffers" "Framebuffer objects"
     copy-framebuffer
 } ;
 
-about: "gpu.framebuffers"
+ABOUT: "gpu.framebuffers"

@@ -8,4 +8,4 @@ HELP: vreg-immediate-arithmetic?
 ARTICLE: "compiler.cfg.value-numbering.rewrite" "Value numbering utilities"
 "Value numbering utilities" ;
 
-about: "compiler.cfg.value-numbering.rewrite"
+ABOUT: "compiler.cfg.value-numbering.rewrite"

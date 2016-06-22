@@ -8,4 +8,4 @@ HELP: run-escape-analysis?
 ARTICLE: "compiler.tree.escape-analysis.check"
 "Skipping escape analysis pass for code which does not allocate" ;
 
-about: "compiler.tree.escape-analysis.check"
+ABOUT: "compiler.tree.escape-analysis.check"

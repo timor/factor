@@ -3,7 +3,7 @@
 USING: help.markup help.syntax xml.data sequences strings ;
 IN: xml.traversal
 
-about: "xml.traversal"
+ABOUT: "xml.traversal"
 
 ARTICLE: "xml.traversal" "Utilities for traversing XML"
     "The " { $vocab-link "xml.traversal" } " vocabulary provides utilities for traversing an XML DOM tree and viewing the contents of a single tag. The following words are defined:"

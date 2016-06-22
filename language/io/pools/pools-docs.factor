@@ -62,4 +62,4 @@ $nl
     <datagram-pool>
 } ;
 
-about: "io.pools"
+ABOUT: "io.pools"

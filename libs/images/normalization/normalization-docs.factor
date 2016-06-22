@@ -28,4 +28,4 @@ $nl
 "Convert an image's pixel layout to match an arbitrary " { $link component-order } ":"
 { $subsections reorder-components } ;
 
-about: "images.normalization"
+ABOUT: "images.normalization"

@@ -14,4 +14,4 @@ HELP: bad-request-line
 ARTICLE: "http.server.requests" "Deserializing HTTP requests"
 "The " { $vocab-link "http.server.requests" } " reads requests from the " { $link input-stream } " and creates " { $link request } " tuples." ;
 
-about: "http.server.requests"
+ABOUT: "http.server.requests"

@@ -121,4 +121,4 @@ ARTICLE: "roman" "Roman numerals"
     roman/mod
 } ;
 
-about: "roman"
+ABOUT: "roman"

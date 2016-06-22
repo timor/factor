@@ -1,7 +1,7 @@
 USING: classes.singleton help.markup help.syntax init kernel math ;
 IN: system
 
-about: "system"
+ABOUT: "system"
 
 ARTICLE: "system" "System interface"
 { $subsections

@@ -34,7 +34,7 @@ $nl
     all-authors
 } ;
 
-about: "vocabs.hierarchy"
+ABOUT: "vocabs.hierarchy"
 
 HELP: load
 { $values { "prefix" string } }

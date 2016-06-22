@@ -84,7 +84,7 @@ ARTICLE: "element-types" "Element types"
 } ;
 
 IN: help.markup
-about: "element-types"
+ABOUT: "element-types"
 
 ARTICLE: "writing-help" "Writing documentation"
 "By convention, documentation is written in files whose names end with " { $snippet "-docs.factor" } ". Vocabulary documentation should be placed in the same directory as the vocabulary source code; see " { $link "vocabs.loader" } "."
@@ -158,7 +158,7 @@ ARTICLE: "help" "Help system"
 } ;
 
 IN: help
-about: "help"
+ABOUT: "help"
 
 HELP: $title
 { $values { "topic" "a help article name or a word" } }

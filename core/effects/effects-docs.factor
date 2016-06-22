@@ -115,7 +115,7 @@ ARTICLE: "effects-variables" "Stack effect row variables"
 { $synopsis if* }
 "Stack effect variables can only occur as the first input or first output of a stack effect; names starting in " { $snippet ".." } " cause a syntax error if they occur elsewhere in the effect. For words that are not " { $link postpone\ inline } ", effect variables are currently ignored by the stack checker." ;
 
-about: "effects"
+ABOUT: "effects"
 
 HELP: effect
 { $class-description "An object representing a stack effect. Holds a sequence of inputs, a sequence of outputs and a flag indicating if an error is thrown unconditionally." } ;

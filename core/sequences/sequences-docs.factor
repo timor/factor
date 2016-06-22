@@ -2009,4 +2009,4 @@ $nl
 "Implementing sequence combinators:"
 { $subsections "sequences-combinator-implementation" } ;
 
-about: "sequences"
+ABOUT: "sequences"

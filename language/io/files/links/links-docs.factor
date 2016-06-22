@@ -59,4 +59,4 @@ ARTICLE: "io.files.links" "Symbolic links"
 "Not all operating systems support symbolic links."
 { $see-also link-info } ;
 
-about: "io.files.links"
+ABOUT: "io.files.links"

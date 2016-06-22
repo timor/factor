@@ -95,4 +95,4 @@ ARTICLE: "irc.client" "IRC Client"
 }
   ;
 
-about: "irc.client"
+ABOUT: "irc.client"

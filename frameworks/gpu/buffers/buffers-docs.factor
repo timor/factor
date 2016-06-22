@@ -255,4 +255,4 @@ ARTICLE: "gpu.buffers" "Buffer objects"
     with-mapped-buffer-array
 } ;
 
-about: "gpu.buffers"
+ABOUT: "gpu.buffers"

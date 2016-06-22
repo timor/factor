@@ -3,7 +3,7 @@
 USING: help.syntax help.markup math kernel ;
 IN: wrap.words
 
-about: "wrap.words"
+ABOUT: "wrap.words"
 
 ARTICLE: "wrap.words" "Word object wrapping"
 "The " { $vocab-link "wrap.words" } " vocabulary implements word wrapping on abstract word objects, which have certain properties making it a more suitable input representation than strings."

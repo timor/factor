@@ -9,4 +9,4 @@ $nl
 "Define an constant at run-time:"
 { $subsections define-constant } ;
 
-about: "words.constant"
+ABOUT: "words.constant"

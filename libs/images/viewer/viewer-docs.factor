@@ -100,4 +100,4 @@ $nl
 image. image-window }
 
 ;
-about: "images.viewer"
+ABOUT: "images.viewer"

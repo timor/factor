@@ -44,4 +44,4 @@ $nl
 }
 ;
 
-about: "uuid"
+ABOUT: "uuid"

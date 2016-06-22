@@ -10,4 +10,4 @@ HELP: latin/hebrew
 ARTICLE: "io.encodings.8-bit.hebrew" "Hebrew encoding"
 "The " { $vocab-link "io.encodings.8-bit.hebrew" } " vocabulary provides the " { $link latin/hebrew } " encoding." ;
 
-about: "io.encodings.8-bit.hebrew"
+ABOUT: "io.encodings.8-bit.hebrew"

@@ -106,7 +106,7 @@ $nl
 "Continuations serve as the building block for a number of higher-level abstractions, such as " { $link "errors" } " and " { $link "threads" } "."
 { $subsections "continuations.private" } ;
 
-about: "continuations"
+ABOUT: "continuations"
 
 HELP: (get-catchstack)
 { $values { "catchstack" "a vector of continuations" } }

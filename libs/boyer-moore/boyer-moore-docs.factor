@@ -56,4 +56,4 @@ ARTICLE: "boyer-moore" "The Boyer-Moore algorithm"
 { $snippet "O(m)" } " time."
 ;
 
-about: "boyer-moore"
+ABOUT: "boyer-moore"

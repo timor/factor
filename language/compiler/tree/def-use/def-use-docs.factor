@@ -8,4 +8,4 @@ HELP: node-defs-values
 ARTICLE: "compiler.tree.def-use" "Def/use chain construction"
 "Def/use chain construction" ;
 
-about: "compiler.tree.def-use"
+ABOUT: "compiler.tree.def-use"

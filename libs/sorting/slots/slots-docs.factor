@@ -45,4 +45,4 @@ ARTICLE: "sorting.slots" "Sorting by slots"
     sort-values-by
 } ;
 
-about: "sorting.slots"
+ABOUT: "sorting.slots"

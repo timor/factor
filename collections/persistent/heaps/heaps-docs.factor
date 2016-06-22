@@ -59,4 +59,4 @@ ARTICLE: "persistent-heaps" "Persistent heaps"
     pheap>values
 } ;
 
-about: "persistent-heaps"
+ABOUT: "persistent-heaps"

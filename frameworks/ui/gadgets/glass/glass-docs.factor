@@ -55,4 +55,4 @@ $nl
     pass-to-popup
 } ;
 
-about: "ui.gadgets.glass"
+ABOUT: "ui.gadgets.glass"

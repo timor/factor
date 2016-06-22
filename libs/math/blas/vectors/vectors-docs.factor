@@ -40,7 +40,7 @@ ARTICLE: "math.blas.vectors" "BLAS interface vector operations"
     postpone\ zvector{
 } ;
 
-about: "math.blas.vectors"
+ABOUT: "math.blas.vectors"
 
 HELP: blas-vector-base
 { $class-description "The base class for all BLAS vector types. Objects of this type should not be created directly; instead, instantiate one of the typed subclasses:"

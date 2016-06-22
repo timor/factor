@@ -66,4 +66,4 @@ ARTICLE: "alien.fortran" "Fortran FFI"
     fortran-invoke
 } ;
 
-about: "alien.fortran"
+ABOUT: "alien.fortran"

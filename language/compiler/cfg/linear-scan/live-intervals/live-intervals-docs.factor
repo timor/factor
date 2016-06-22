@@ -142,4 +142,4 @@ $nl
 } ;
 
 
-about: "compiler.cfg.linear-scan.live-intervals"
+ABOUT: "compiler.cfg.linear-scan.live-intervals"

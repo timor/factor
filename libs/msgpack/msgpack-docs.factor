@@ -30,4 +30,4 @@ ARTICLE: "msgpack" "MessagePack"
     >msgpack
 } ;
 
-about: "msgpack"
+ABOUT: "msgpack"

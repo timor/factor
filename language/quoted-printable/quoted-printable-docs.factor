@@ -3,7 +3,7 @@
 USING: help.markup help.syntax strings byte-arrays io.encodings.string ;
 IN: quoted-printable
 
-about: "quoted-printable"
+ABOUT: "quoted-printable"
 
 ARTICLE: "quoted-printable" "Quoted printable encoding"
 "The " { $vocab-link "quoted-printable" } " vocabulary implements RFC 2045 part 6.7, providing words for reading and generating quotable printed text."

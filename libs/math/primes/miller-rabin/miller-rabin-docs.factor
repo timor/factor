@@ -27,4 +27,4 @@ ARTICLE: "math.primes.miller-rabin" "Miller-Rabin probabilistic primality test"
     miller-rabin*
 } ;
 
-about: "math.primes.miller-rabin"
+ABOUT: "math.primes.miller-rabin"

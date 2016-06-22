@@ -29,4 +29,4 @@ ARTICLE: "unix.signals" "Signal handlers"
 { $subsections add-signal-handler remove-signal-handler }
 ;
 
-about: "unix.signals"
+ABOUT: "unix.signals"

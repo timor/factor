@@ -23,4 +23,4 @@ $nl
     "</t:if>"
 } ;
 
-about: "furnace.auth.features.deactivate-user"
+ABOUT: "furnace.auth.features.deactivate-user"

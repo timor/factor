@@ -68,4 +68,4 @@ ARTICLE: "timers" "Timers"
 "A recurring timer with an initial delay:"
 { $subsections delayed-every } ;
 
-about: "timers"
+ABOUT: "timers"

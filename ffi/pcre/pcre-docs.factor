@@ -36,4 +36,4 @@ HELP: findall
   }
 } ;
 
-about: "pcre"
+ABOUT: "pcre"

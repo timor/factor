@@ -32,4 +32,4 @@ ARTICLE: "ui.gadgets.status-bar" "Status bars and mouse-over help"
 }
 { $link "ui.gadgets.presentations" } " use the status bar to display object summary." ;
 
-about: "ui.gadgets.status-bar"
+ABOUT: "ui.gadgets.status-bar"

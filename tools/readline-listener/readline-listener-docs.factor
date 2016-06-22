@@ -14,4 +14,4 @@ $nl
 { $code "\"readline-listener\" run" }
 ;
 
-about: "readline-listener"
+ABOUT: "readline-listener"

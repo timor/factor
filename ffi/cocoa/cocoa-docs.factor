@@ -72,4 +72,4 @@ $nl
     "cocoa-window-utils"
 } ;
 
-about: "cocoa"
+ABOUT: "cocoa"

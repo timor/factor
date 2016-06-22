@@ -147,4 +147,4 @@ ARTICLE: "sequences.generalizations" "Generalized sequence words"
     nproduce-as
 } ;
 
-about: "sequences.generalizations"
+ABOUT: "sequences.generalizations"

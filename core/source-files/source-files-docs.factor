@@ -20,7 +20,7 @@ $nl
 { $subsections reset-checksums }
 "The " { $link pathname } " class implements the definition protocol by working with the corresponding source file; see " { $link "definitions" } "." ;
 
-about: "source-files"
+ABOUT: "source-files"
 
 HELP: source-files
 { $var-description "An assoc mapping pathname strings to " { $link source-file } " instances, representing loaded source files." } ;

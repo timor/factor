@@ -306,4 +306,4 @@ ARTICLE: "gpu.render" "Rendering"
 { $subsections postpone\ UNIFORM-TUPLE: }
 ;
 
-about: "gpu.render"
+ABOUT: "gpu.render"

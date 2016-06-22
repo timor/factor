@@ -43,4 +43,4 @@ $nl
     lower-flag
 } ;
 
-about: "concurrency.flags"
+ABOUT: "concurrency.flags"

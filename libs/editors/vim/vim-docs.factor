@@ -2,7 +2,7 @@ USING: definitions editors help help.markup help.syntax
 io io.files io.pathnames words ;
 IN: editors.vim
 
-about: "editors.vim"
+ABOUT: "editors.vim"
 
 ARTICLE: "editors.vim" "Vim support"
 "The " { $link vim-path } " variable contains the name of the vim executable. The default " { $link vim-path } " is " { $snippet "\"vim\"" } ". Which is not very useful, as it starts vim in the same terminal where you started factor."

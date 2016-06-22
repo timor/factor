@@ -55,7 +55,7 @@ ARTICLE: "hashtables.utilities" "Hashtable utilities"
     ?set-at
 } ;
 
-about: "hashtables"
+ABOUT: "hashtables"
 
 HELP: hashtable
 { $description "The class of hashtables. See " { $link "syntax-hashtables" } " for syntax and " { $link "hashtables" } " for general information." } ;

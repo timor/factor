@@ -42,7 +42,7 @@ $nl
 { $subsections forget-vocab }
 { $see-also "words" "vocabs.loader" "word-search" } ;
 
-about: "vocabularies"
+ABOUT: "vocabularies"
 
 HELP: dictionary
 { $var-description "Holds a hashtable mapping vocabulary names to vocabularies." } ;

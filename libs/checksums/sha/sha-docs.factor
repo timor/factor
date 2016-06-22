@@ -17,4 +17,4 @@ ARTICLE: "checksums.sha" "SHA-2 checksum"
 "SHA-1 checksum:"
 { $subsections sha1 } ;
 
-about: "checksums.sha"
+ABOUT: "checksums.sha"

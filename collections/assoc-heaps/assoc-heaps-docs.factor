@@ -31,4 +31,4 @@ ARTICLE: "assoc-heaps" "Associative heaps"
     <unique-max-heap>
 } ;
 
-about: "assoc-heaps"
+ABOUT: "assoc-heaps"

@@ -934,4 +934,4 @@ $nl
 { $subsections { "graphviz" "gallery" } }
 ;
 
-about: "graphviz"
+ABOUT: "graphviz"

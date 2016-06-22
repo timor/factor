@@ -62,4 +62,4 @@ ARTICLE: "ui.gadgets.buttons" "Button gadgets"
 "Button constructors take " { $emphasis "label specifiers" } " as input. A label specifier is either a string, an array of strings, a gadget or " { $link f } "."
 { $see-also <command-button> "ui-commands" } ;
 
-about: "ui.gadgets.buttons"
+ABOUT: "ui.gadgets.buttons"

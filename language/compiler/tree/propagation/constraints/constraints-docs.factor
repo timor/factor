@@ -31,4 +31,4 @@ $nl
 "Utilities:"
 { $subsections t--> f--> } ;
 
-about: "compiler.tree.propagation.constraints"
+ABOUT: "compiler.tree.propagation.constraints"

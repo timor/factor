@@ -14,4 +14,4 @@ HELP: recursive-phi-infos
 ARTICLE: "compiler.tree.propagation.recursive" "Propagation for inline recursive combinators"
 "This vocab implements the " { $link propagate-before } ", " { $link annotate-node } " and " { $link propagate-around } " words for recursive tree nodes." ;
 
-about: "compiler.tree.propagation.recursive"
+ABOUT: "compiler.tree.propagation.recursive"

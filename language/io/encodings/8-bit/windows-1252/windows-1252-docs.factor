@@ -10,4 +10,4 @@ HELP: windows-1252
 ARTICLE: "io.encodings.8-bit.windows-1252" "Windows 1252 encoding"
 "The " { $vocab-link "io.encodings.8-bit.windows-1252" } " vocabulary provides the " { $link windows-1252 } " encoding." ;
 
-about: "io.encodings.8-bit.windows-1252"
+ABOUT: "io.encodings.8-bit.windows-1252"

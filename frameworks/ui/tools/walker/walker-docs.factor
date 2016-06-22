@@ -34,4 +34,4 @@ $nl
 { $command-map walker-gadget "toolbar" }
 { $command-map walker-gadget "multitouch" } ;
 
-about: "ui-walker"
+ABOUT: "ui-walker"

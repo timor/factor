@@ -41,4 +41,4 @@ ARTICLE: "io.streams.throwing" "Throwing exceptions on stream exhaustion"
 "The exception itself:"
 { $subsections stream-exhausted } ;
 
-about: "io.streams.throwing"
+ABOUT: "io.streams.throwing"

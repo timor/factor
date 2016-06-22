@@ -95,4 +95,4 @@ ARTICLE: "splitting.monotonic" "Splitting trending sequences"
     trends
 } ;
 
-about: "splitting.monotonic"
+ABOUT: "splitting.monotonic"

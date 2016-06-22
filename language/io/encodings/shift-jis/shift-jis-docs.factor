@@ -10,7 +10,7 @@ ARTICLE: "io.encodings.shift-jis" "Shift JIS"
     windows-31j
 } ;
 
-about: "io.encodings.shift-jis"
+ABOUT: "io.encodings.shift-jis"
 
 HELP: windows-31j
 { $class-description "The encoding descriptor Windows-31J, which is sometimes informally called Shift JIS. This is based on Code Page 932." }

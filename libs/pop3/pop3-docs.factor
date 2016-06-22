@@ -309,4 +309,4 @@ $nl
 }
 { $notes "If you change your mind at any point, you can call " { $link reset } " to reset the status of all messages to not be deleted." } ;
 
-about: "pop3"
+ABOUT: "pop3"

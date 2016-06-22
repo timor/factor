@@ -41,4 +41,4 @@ ARTICLE: "tips-of-the-day" "Tips of the day"
 "All tips defined so far:"
 { $subsections "all-tips-of-the-day" } ;
 
-about: "tips-of-the-day"
+ABOUT: "tips-of-the-day"

@@ -20,4 +20,4 @@ ARTICLE: "elf.nm" "ELF nm"
 { $subsections elf-nm }
 ;
 
-about: "elf.nm"
+ABOUT: "elf.nm"

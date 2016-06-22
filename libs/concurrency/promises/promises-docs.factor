@@ -38,4 +38,4 @@ ARTICLE: "concurrency.promises" "Promises"
     ?promise-timeout
 } ;
 
-about: "concurrency.promises"
+ABOUT: "concurrency.promises"

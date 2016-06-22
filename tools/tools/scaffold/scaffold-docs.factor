@@ -140,4 +140,4 @@ ARTICLE: "tools.scaffold" "Scaffold tool"
 }
 ;
 
-about: "tools.scaffold"
+ABOUT: "tools.scaffold"

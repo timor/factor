@@ -15,4 +15,4 @@ ARTICLE: "ui.gadgets.borders" "Border gadgets"
     <border>
 } ;
 
-about: "ui.gadgets.borders"
+ABOUT: "ui.gadgets.borders"

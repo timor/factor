@@ -6,7 +6,7 @@ see xml.data hashtables assocs game.models.collada.private game.models
 game.models.util ;
 IN: game.models.collada
 
-about: "game.models.collada"
+ABOUT: "game.models.collada"
 
 ARTICLE: "game.models.collada" "Conversion of COLLADA assets"
 "The " { $vocab-link "game.models.collada" } " vocabulary implements words for converting COLLADA assets to data suitable for use with OpenGL. See the COLLADA documentation at " { $url "http://collada.org" } "." ;

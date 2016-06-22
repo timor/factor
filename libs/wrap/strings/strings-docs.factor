@@ -3,7 +3,7 @@
 USING: help.syntax help.markup strings math ;
 IN: wrap.strings
 
-about: "wrap.strings"
+ABOUT: "wrap.strings"
 
 ARTICLE: "wrap.strings" "String word wrapping"
 "The " { $vocab-link "wrap.strings" } " vocabulary implements word wrapping for simple strings, assumed to be in monospace font."

@@ -39,4 +39,4 @@ ARTICLE: "furnace.alloy" "Furnace alloy responder"
 "Start a timer to expire asides, conversations and sessions:"
 { $subsections start-expiring } ;
 
-about: "furnace.alloy"
+ABOUT: "furnace.alloy"

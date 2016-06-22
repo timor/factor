@@ -84,4 +84,4 @@ ARTICLE: "io.files.info" "File system meta-data"
     file-executable?
 } ;
 
-about: "io.files.info"
+ABOUT: "io.files.info"

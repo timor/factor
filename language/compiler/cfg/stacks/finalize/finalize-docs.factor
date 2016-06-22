@@ -29,4 +29,4 @@ HELP: visit-edge
 ARTICLE: "compiler.cfg.stacks.finalize" "Stack finalization"
 "This pass inserts peeks and replaces." ;
 
-about: "compiler.cfg.stacks.finalize"
+ABOUT: "compiler.cfg.stacks.finalize"

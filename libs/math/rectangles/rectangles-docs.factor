@@ -74,4 +74,4 @@ ARTICLE: "math.rectangles" "Rectangles"
 "A utility word:"
 { $subsections offset-rect } ;
 
-about: "math.rectangles"
+ABOUT: "math.rectangles"

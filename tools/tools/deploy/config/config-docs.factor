@@ -26,7 +26,7 @@ ARTICLE: "deploy-flags" "Deployment flags"
     deploy-io
 } ;
 
-about: "deploy-flags"
+ABOUT: "deploy-flags"
 
 HELP: deploy-name
 { $description "Deploy setting. The name of the executable."

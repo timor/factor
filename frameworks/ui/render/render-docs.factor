@@ -53,4 +53,4 @@ ARTICLE: "ui-paint-coord" "The UI co-ordinate system"
 { $subsections origin }
 "Gadgets must not draw outside of their bounding box, however clipping is not enforced by default, for performance reasons. This can be changed by setting the " { $slot "clipped?" } " slot to " { $link t } " in the gadget's constructor." ;
 
-about: "ui-paint"
+ABOUT: "ui-paint"

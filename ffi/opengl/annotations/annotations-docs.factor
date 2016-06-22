@@ -40,4 +40,4 @@ ARTICLE: "opengl.annotations" "OpenGL error reporting"
     reset-gl-functions
 } ;
 
-about: "opengl.annotations"
+ABOUT: "opengl.annotations"

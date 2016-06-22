@@ -35,4 +35,4 @@ $nl
     bytes>object
 } ;
 
-about: "serialize"
+ABOUT: "serialize"

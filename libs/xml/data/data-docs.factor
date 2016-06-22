@@ -1,7 +1,7 @@
 USING: help.markup help.syntax kernel sequences strings ;
 IN: xml.data
 
-about: "xml.data"
+ABOUT: "xml.data"
 
 ARTICLE: "xml.data" "XML data types"
 "The " { $vocab-link "xml.data" } " vocabulary defines a simple document object model for XML. Everything is simply a tuple and can be manipulated as such."

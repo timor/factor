@@ -114,7 +114,7 @@ $nl
 }
 { $see-also "accessors" "mirrors" } ;
 
-about: "slots"
+ABOUT: "slots"
 
 HELP: slot-spec
 { $class-description "A slot specification. The " { $snippet "\"slots\"" } " word property of " { $link builtin-class } " and " { $link tuple-class } " instances holds sequences of slot specifications."

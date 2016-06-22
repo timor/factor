@@ -35,4 +35,4 @@ ARTICLE: "sorting.human" "Human-friendly sorting"
 "Splitting a string into substrings and integers:"
 { $subsections find-numbers } ;
 
-about: "sorting.human"
+ABOUT: "sorting.human"

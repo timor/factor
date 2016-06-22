@@ -88,6 +88,6 @@ HELP: merge
 
 HELP: value
 { $var-description "If false, deserialized yaml documents will contain instances of " { $link yaml-value } " for !!value keys and the value associated with this key will replace the enclosing mapping. You can then call scalar-value on such a mapping to get the default value."  } ;
-about: "yaml-config"
+ABOUT: "yaml-config"
 { yaml-merge merge } related-words
 { yaml-value value } related-words

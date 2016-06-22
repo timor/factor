@@ -25,7 +25,7 @@ $nl
 "If you don't care about initial capacity, an elegant way to create a new vector is to write:"
 { $code "V{ } clone" } ;
 
-about: "vectors"
+ABOUT: "vectors"
 
 HELP: vector
 { $description "The class of resizable vectors. See " { $link "syntax-vectors" } " for syntax and " { $link "vectors" } " for general information." } ;

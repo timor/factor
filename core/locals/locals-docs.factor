@@ -303,4 +303,4 @@ ARTICLE: "locals" "Lexical variables"
 }
 "Lexical variables complement " { $link "namespaces" } "." ;
 
-about: "locals"
+ABOUT: "locals"

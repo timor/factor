@@ -19,4 +19,4 @@ $nl
 { $vocab-subsection "Unicode data tables" "unicode.data" }
 { $see-also "ascii" "io.encodings" } ;
 
-about: "unicode"
+ABOUT: "unicode"

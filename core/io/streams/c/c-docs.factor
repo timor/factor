@@ -25,7 +25,7 @@ ARTICLE: "io.streams.c" "ANSI C streams"
     stderr-handle
 } ;
 
-about: "io.streams.c"
+ABOUT: "io.streams.c"
 
 HELP: <c-reader>
 { $values { "handle" "a C FILE* handle" } { "stream" "a new stream" } }

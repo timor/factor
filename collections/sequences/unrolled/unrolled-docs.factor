@@ -93,4 +93,4 @@ $nl
     unrolled-collect
 } ;
 
-about: "sequences.unrolled"
+ABOUT: "sequences.unrolled"

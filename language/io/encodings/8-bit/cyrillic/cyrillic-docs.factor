@@ -10,4 +10,4 @@ HELP: latin/cyrillic
 ARTICLE: "io.encodings.8-bit.cyrillic" "Cyrillic encoding"
 "The " { $vocab-link "io.encodings.8-bit.cyrillic" } " vocabulary provides the " { $link latin/cyrillic } " encoding." ;
 
-about: "io.encodings.8-bit.cyrillic"
+ABOUT: "io.encodings.8-bit.cyrillic"

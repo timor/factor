@@ -36,4 +36,4 @@ $nl
 $nl
 "http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.49.9683" ;
 
-about: "compiler.cfg.ssa.construction"
+ABOUT: "compiler.cfg.ssa.construction"

@@ -146,4 +146,4 @@ ARTICLE: "formatting" "Formatted printing"
     strftime
 } ;
 
-about: "formatting"
+ABOUT: "formatting"

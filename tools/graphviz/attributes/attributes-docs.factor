@@ -48,4 +48,4 @@ $nl
 { $subsections <node-attributes> <edge-attributes> <graph-attributes> }
 ;
 
-about: "graphviz.attributes"
+ABOUT: "graphviz.attributes"

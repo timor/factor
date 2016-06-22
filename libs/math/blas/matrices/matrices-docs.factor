@@ -103,7 +103,7 @@ ARTICLE: "math.blas.matrices" "BLAS interface matrix operations"
 } ;
 
 
-about: "math.blas.matrices"
+ABOUT: "math.blas.matrices"
 
 HELP: blas-matrix-base
 { $class-description "The base class for all BLAS matrix types. Objects of this type should not be created directly; instead, instantiate one of the typed subclasses:"

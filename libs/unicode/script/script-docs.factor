@@ -3,7 +3,7 @@
 USING: help.syntax help.markup strings unicode ;
 IN: unicode.script
 
-about: "unicode.script"
+ABOUT: "unicode.script"
 
 ARTICLE: "unicode.script" "Unicode script properties"
 "The unicode standard gives every character a script. Note that this is different from a language, and that it is non-trivial to detect language from a string. To get the script of a character, use"

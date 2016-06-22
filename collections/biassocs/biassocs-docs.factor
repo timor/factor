@@ -38,4 +38,4 @@ $nl
 "Converting existing assocs to biassocs:"
 { $subsections >biassoc } ;
 
-about: "biassocs"
+ABOUT: "biassocs"

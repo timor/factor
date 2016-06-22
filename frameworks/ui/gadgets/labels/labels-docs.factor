@@ -26,7 +26,7 @@ $nl
 "Label specifiers are used by buttons, checkboxes and radio buttons:"
 { $subsections >label } ;
 
-about: "ui.gadgets.labels"
+ABOUT: "ui.gadgets.labels"
 
 HELP: >label
 { $values { "obj" "a label specifier" } { "gadget" "a new " { $link gadget } } }

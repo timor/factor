@@ -3,7 +3,7 @@
 USING: help.syntax help.markup kernel math strings unicode ;
 IN: unicode.data
 
-about: "unicode.data"
+ABOUT: "unicode.data"
 
 ARTICLE: "unicode.data" "Unicode data tables"
 "The " { $vocab-link "unicode.data" } " vocabulary contains core Unicode data tables and code for parsing this from files. The following words access these data tables."

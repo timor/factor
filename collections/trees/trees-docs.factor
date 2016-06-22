@@ -26,4 +26,4 @@ ARTICLE: "trees" "Binary search trees"
     \ TREE{
 } ;
 
-about: "trees"
+ABOUT: "trees"

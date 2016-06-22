@@ -195,4 +195,4 @@ ARTICLE: "io.directories" "Directory manipulation"
     "io.directories.hierarchy"
 } ;
 
-about: "io.directories"
+ABOUT: "io.directories"

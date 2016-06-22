@@ -311,4 +311,4 @@ ARTICLE: "db-custom-database-combinators" "Custom database combinators"
     swap with-db ; inline"
 } ;
 
-about: "db"
+ABOUT: "db"

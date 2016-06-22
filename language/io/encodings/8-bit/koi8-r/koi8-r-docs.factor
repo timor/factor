@@ -10,4 +10,4 @@ HELP: koi8-r
 ARTICLE: "io.encodings.8-bit.koi8-r" "KOI8-R encoding"
 "The " { $vocab-link "io.encodings.8-bit.koi8-r" } " vocabulary provides the " { $link koi8-r } " encoding." ;
 
-about: "io.encodings.8-bit.koi8-r"
+ABOUT: "io.encodings.8-bit.koi8-r"

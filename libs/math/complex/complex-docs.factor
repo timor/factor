@@ -28,4 +28,4 @@ $nl
 HELP: complex
 { $class-description "The class of complex numbers with non-zero imaginary part." } ;
 
-about: "complex-numbers"
+ABOUT: "complex-numbers"

@@ -142,7 +142,7 @@ $nl
 { $subsections "inference-escape" }
 { $see-also "effects" "tools.inference" "tools.errors" } ;
 
-about: "inference"
+ABOUT: "inference"
 
 HELP: inference-error
 { $values { "class" class } }

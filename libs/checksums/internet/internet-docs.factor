@@ -8,4 +8,4 @@ ARTICLE: "checksums.internet" "Internet checksum"
 "The internet checksum algorithm implements RFC1071 (" { $url "http://www.ietf.org/rfc/rfc1141.txt" } ")."
 { $subsections internet } ;
 
-about: "checksums.internet"
+ABOUT: "checksums.internet"

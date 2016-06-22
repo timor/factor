@@ -117,4 +117,4 @@ ARTICLE: "xml" "XML parser"
 { $vocab-subsection "Utilities for traversing XML" "xml.traversal" }
 { $vocab-subsection "Syntax extensions for XML" "xml.syntax" } ;
 
-about: "xml"
+ABOUT: "xml"

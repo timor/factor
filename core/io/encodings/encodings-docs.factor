@@ -152,4 +152,4 @@ ARTICLE: "io.encodings" "I/O encodings"
 }
 { $see-also "encodings-introduction" } ;
 
-about: "io.encodings"
+ABOUT: "io.encodings"

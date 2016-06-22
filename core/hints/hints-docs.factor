@@ -45,4 +45,4 @@ $nl
     }
 } ;
 
-about: "hints"
+ABOUT: "hints"

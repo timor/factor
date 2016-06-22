@@ -8,4 +8,4 @@ $nl
 $nl
 "We also delete empty stack shuffles and copies to facilitate tail call optimization in the code generator." ;
 
-about: "compiler.tree.finalization"
+ABOUT: "compiler.tree.finalization"

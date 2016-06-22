@@ -521,4 +521,4 @@ $nl
 }
 { $see-also "integers" "rationals" "floats" "complex-numbers" } ;
 
-about: "arithmetic"
+ABOUT: "arithmetic"

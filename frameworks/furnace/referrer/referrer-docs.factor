@@ -18,4 +18,4 @@ ARTICLE: "furnace.referrer" "Form submission referrer checking"
     same-host?
 } ;
 
-about: "furnace.referrer"
+ABOUT: "furnace.referrer"

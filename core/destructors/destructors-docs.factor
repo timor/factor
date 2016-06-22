@@ -110,4 +110,4 @@ ARTICLE: "destructors" "Deterministic resource disposal"
 }
 { $see-also "tools.destructors" } ;
 
-about: "destructors"
+ABOUT: "destructors"

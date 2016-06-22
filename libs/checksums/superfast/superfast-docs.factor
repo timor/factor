@@ -9,4 +9,4 @@ ARTICLE: "checksums.superfast" "SuperFastHash checksum"
 { $url "http://www.azillionmonkeys.com/qed/hash.html" }
 { $subsections superfast } ;
 
-about: "checksums.superfast"
+ABOUT: "checksums.superfast"

@@ -11,7 +11,7 @@ ARTICLE: "sets" "Sets"
 }
 { $subsections "set-operations" "set-implementations" } ;
 
-about: "sets"
+ABOUT: "sets"
 
 ARTICLE: "set-operations" "Operations on sets"
 "To test if an object is a member of a set:"

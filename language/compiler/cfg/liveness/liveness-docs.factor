@@ -86,4 +86,4 @@ $nl
   visit-gc-root
 } ;
 
-about: "compiler.cfg.liveness"
+ABOUT: "compiler.cfg.liveness"

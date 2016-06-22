@@ -31,4 +31,4 @@ $nl
 { $subsections dom-children dom-parent } ;
 
 
-about: "compiler.cfg.dominance"
+ABOUT: "compiler.cfg.dominance"

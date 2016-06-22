@@ -16,4 +16,4 @@ ARTICLE: "ui.gadgets.grid-lines" "Grid lines"
     <grid-lines>
 } ;
 
-about: "ui.gadgets.grid-lines"
+ABOUT: "ui.gadgets.grid-lines"

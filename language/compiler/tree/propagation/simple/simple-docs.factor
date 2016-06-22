@@ -19,4 +19,4 @@ ARTICLE: "compiler.tree.propagation.simple"
 "Propagation for straight-line code"
 "Propagation for straight-line code" ;
 
-about: "compiler.tree.propagation.simple"
+ABOUT: "compiler.tree.propagation.simple"

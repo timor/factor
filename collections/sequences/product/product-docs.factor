@@ -70,4 +70,4 @@ ARTICLE: "sequences.product" "Product sequences"
     product-each
 } ;
 
-about: "sequences.product"
+ABOUT: "sequences.product"

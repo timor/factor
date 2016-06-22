@@ -109,4 +109,4 @@ HELP: check-fixup
 
 ARTICLE: "compiler.codegen" "Code generation from MR (machine representation)" "Code generators for cfg instructions." ;
 
-about: "compiler.codegen"
+ABOUT: "compiler.codegen"

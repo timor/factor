@@ -15,7 +15,7 @@ $nl
 { $subsections closure }
 "Directed graphs are used to maintain cross-referencing information for " { $link "definitions" } "." ;
 
-about: "graphs"
+ABOUT: "graphs"
 
 HELP: add-vertex
 { $values { "vertex" object } { "edges" sequence } { "graph" "an " { $link assoc } " mapping vertices to " { $link hash-set } " of edges" } }

@@ -46,4 +46,4 @@ $nl
 "Pipelines of coroutines and processes:"
 { $subsections run-pipeline } ;
 
-about: "io.pipes"
+ABOUT: "io.pipes"

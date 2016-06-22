@@ -14,4 +14,4 @@ ARTICLE: "checksums.fletcher" "Fletcher's checksum"
 "The Fletcher checksum is an algorithm for computing a position-dependent checksum devised by John G. Fletcher at Lawrence Livermore Labs in the late 1970s."
 { $subsections fletcher-16 fletcher-32 fletcher-64 } ;
 
-about: "checksums.fletcher"
+ABOUT: "checksums.fletcher"

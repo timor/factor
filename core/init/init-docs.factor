@@ -50,4 +50,4 @@ ARTICLE: "init" "Initialization and startup"
 "When quitting Factor, shutdown hooks are called:"
 { $subsection do-shutdown-hooks } ;
 
-about: "init"
+ABOUT: "init"

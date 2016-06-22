@@ -17,4 +17,4 @@ HELP: string>symbol
 $nl
 "On all platforms, symbols are ASCII strings." } ;
 
-about: "c-strings"
+ABOUT: "c-strings"

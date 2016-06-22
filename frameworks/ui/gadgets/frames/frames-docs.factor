@@ -23,4 +23,4 @@ HELP: <frame>
 
 { grid frame } related-words
 
-about: "ui-frame-layout"
+ABOUT: "ui-frame-layout"

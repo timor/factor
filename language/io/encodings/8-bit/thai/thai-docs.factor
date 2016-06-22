@@ -10,4 +10,4 @@ HELP: latin/thai
 ARTICLE: "io.encodings.8-bit.thai" "Thai encoding"
 "The " { $vocab-link "io.encodings.8-bit.thai" }  " vocabulary provides the " { $link latin/thai } " encoding." ;
 
-about: "io.encodings.8-bit.thai"
+ABOUT: "io.encodings.8-bit.thai"

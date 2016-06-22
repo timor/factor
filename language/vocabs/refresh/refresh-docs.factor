@@ -27,4 +27,4 @@ $nl
     refresh-all
 } ;
 
-about: "vocabs.refresh"
+ABOUT: "vocabs.refresh"

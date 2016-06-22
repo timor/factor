@@ -10,4 +10,4 @@ HELP: present
 { $contract "Outputs a human-readable string from an object." }
 { $notes "New methods can be defined by user code. Most often, this is done so that the object can be used with various words in the " { $vocab-link "html.components" } " or " { $vocab-link "urls" } " vocabularies." } ;
 
-about: "present"
+ABOUT: "present"

@@ -8,4 +8,4 @@ ARTICLE: "colors.gray" "Grayscale colors"
     <gray>
 } ;
 
-about: "colors.gray"
+ABOUT: "colors.gray"

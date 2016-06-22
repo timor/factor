@@ -661,4 +661,4 @@ ARTICLE: "months" "Month operations"
     month-abbreviations
 } ;
 
-about: "calendar"
+ABOUT: "calendar"

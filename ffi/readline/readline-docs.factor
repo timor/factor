@@ -32,4 +32,4 @@ ARTICLE: "readline" "Readline"
 "To set a completion hook:"
 { $subsections set-completion } ;
 
-about: "readline"
+ABOUT: "readline"

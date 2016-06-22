@@ -118,4 +118,4 @@ $nl
 }
 ;
 
-about: "s3"
+ABOUT: "s3"

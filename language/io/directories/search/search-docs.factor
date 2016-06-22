@@ -106,4 +106,4 @@ ARTICLE: "io.directories.search" "Searching directories"
     find-by-extensions
 } ;
 
-about: "io.directories.search"
+ABOUT: "io.directories.search"

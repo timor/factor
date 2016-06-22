@@ -9,7 +9,7 @@ ARTICLE: "sequences.complex-components" "Complex component virtual sequences"
     <complex-components>
 } ;
 
-about: "sequences.complex-components"
+ABOUT: "sequences.complex-components"
 
 HELP: complex-components
 { $class-description "Sequence wrapper class that transforms a sequence of " { $link complex } " number values into a sequence of " { $link real } " values, interleaving the real and imaginary parts of the complex values in the original sequence." }

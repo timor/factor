@@ -40,7 +40,7 @@ $nl
 "Arrays can be accessed without bounds checks in a pointer unsafe way."
 { $subsections "arrays-unsafe" } ;
 
-about: "arrays"
+ABOUT: "arrays"
 
 HELP: array
 { $description "The class of fixed-length arrays. See " { $link "syntax-arrays" } " for syntax and " { $link "arrays" } " for general information." } ;

@@ -20,4 +20,4 @@ $nl
   vregs>vns
 } ;
 
-about: "compiler.cfg.value-numbering.graph"
+ABOUT: "compiler.cfg.value-numbering.graph"

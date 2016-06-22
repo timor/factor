@@ -73,4 +73,4 @@ ARTICLE: "http.server.rewrite" "URL rewrite responders"
     <vhost-rewrite>
 } ;
 
-about: "http.server.rewrite"
+ABOUT: "http.server.rewrite"

@@ -63,4 +63,4 @@ $nl
 "Main entry point:"
 { $subsections allocate-registers } ;
 
-about: "compiler.cfg.linear-scan.allocation"
+ABOUT: "compiler.cfg.linear-scan.allocation"

@@ -37,4 +37,4 @@ ARTICLE: "furnace.auth.providers.couchdb" "CouchDB Authentication Provider"
     "Password hashes are base64 encoded."
  ;
 
-about: "furnace.auth.providers.couchdb"
+ABOUT: "furnace.auth.providers.couchdb"

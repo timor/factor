@@ -13,7 +13,7 @@ ARTICLE: "io.streams.string" "String streams"
     with-string-writer
 } ;
 
-about: "io.streams.string"
+ABOUT: "io.streams.string"
 
 HELP: <string-writer>
 { $values { "stream" "an output stream" } }

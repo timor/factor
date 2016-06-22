@@ -133,4 +133,4 @@ ARTICLE: "layouts" "VM memory layouts"
     "layouts-bootstrap"
 } ;
 
-about: "layouts"
+ABOUT: "layouts"

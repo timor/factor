@@ -88,4 +88,4 @@ $nl
     "concurrency-exceptions"
 } ;
 
-about: "concurrency.messaging"
+ABOUT: "concurrency.messaging"

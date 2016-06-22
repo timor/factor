@@ -61,4 +61,4 @@ ARTICLE: "sequences.deep" "Deep sequence combinators"
 "A utility word to collapse nested subsequences:"
 { $subsections flatten } ;
 
-about: "sequences.deep"
+ABOUT: "sequences.deep"

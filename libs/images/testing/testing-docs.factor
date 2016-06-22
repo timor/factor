@@ -95,4 +95,4 @@ $nl
 { $notes "This vocabulary is only intended for implementors of image encoders and image decoders. If you are an end-user, you are in the wrong place :-)" }
 ;
 
-about: "images.testing"
+ABOUT: "images.testing"

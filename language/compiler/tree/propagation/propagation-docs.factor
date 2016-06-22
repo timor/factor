@@ -54,4 +54,4 @@ HELP: propagate
 ARTICLE: "compiler.tree.propagation" "Class, interval, constant propagation"
 "This pass must be run after " { $vocab-link "compiler.tree.normalization" } "." ;
 
-about: "compiler.tree.propagation"
+ABOUT: "compiler.tree.propagation"

@@ -60,4 +60,4 @@ $nl
   emit-callback-return
 } ;
 
-about: "compiler.cfg.builder.alien"
+ABOUT: "compiler.cfg.builder.alien"

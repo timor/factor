@@ -16,4 +16,4 @@ $nl
 
 TIP: "Generate stand-alone applications from vocabularies with the " { $link "ui.tools.deploy" } "." ;
 
-about: "ui.tools.deploy"
+ABOUT: "ui.tools.deploy"

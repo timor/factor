@@ -20,7 +20,7 @@ ARTICLE: "tools.crossref" "Definition cross referencing"
 }
 { $see-also "definitions" "words" "see" } ;
 
-about: "tools.crossref"
+ABOUT: "tools.crossref"
 
 HELP: uses
 { $values { "defspec" "a definition specifier" } { "seq" "a sequence of definition specifiers" } }

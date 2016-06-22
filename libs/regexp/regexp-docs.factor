@@ -4,7 +4,7 @@ USING: kernel strings help.markup help.syntax math regexp.parser
 regexp.ast ;
 IN: regexp
 
-about: "regexp"
+ABOUT: "regexp"
 
 ARTICLE: "regexp" "Regular expressions"
 "The " { $vocab-link "regexp" } " vocabulary provides word for creating and using regular expressions."

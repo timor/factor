@@ -29,7 +29,7 @@ $nl
 "Search deque implementation:"
 { $subsections <hashed-dlist> } ;
 
-about: "dlists"
+ABOUT: "dlists"
 
 HELP: <dlist>
 { $values { "list" dlist } }

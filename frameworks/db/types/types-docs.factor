@@ -182,4 +182,4 @@ ARTICLE: "db.types" "Database types"
 "Factor URLs:"
 { $subsections URL } ;
 
-about: "db.types"
+ABOUT: "db.types"

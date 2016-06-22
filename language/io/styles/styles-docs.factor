@@ -187,7 +187,7 @@ ARTICLE: "io.styles" "Formatted output"
     "styles"
 } ;
 
-about: "io.styles"
+ABOUT: "io.styles"
 
 HELP: plain
 { $description "A value for the " { $link font-style } " character style denoting plain text." } ;

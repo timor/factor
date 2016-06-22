@@ -37,7 +37,7 @@ ARTICLE: "io.files" "Reading and writing files"
     with-file-appender
 } ;
 
-about: "io.files"
+ABOUT: "io.files"
 
 HELP: <file-reader>
 { $values { "path" "a pathname string" } { "encoding" "an encoding descriptor" } { "stream" "an input stream" } }

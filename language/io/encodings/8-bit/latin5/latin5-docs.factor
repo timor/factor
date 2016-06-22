@@ -10,4 +10,4 @@ HELP: latin5
 ARTICLE: "io.encodings.8-bit.latin5" "Latin5 encoding"
 "The " { $vocab-link "io.encodings.8-bit.latin5" }  " vocabulary provides the " { $link latin5 } " encoding." ;
 
-about: "io.encodings.8-bit.latin5"
+ABOUT: "io.encodings.8-bit.latin5"

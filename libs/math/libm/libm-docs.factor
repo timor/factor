@@ -33,7 +33,7 @@ ARTICLE: "math.libm" "C standard library math functions"
     fsqrt
 } ;
 
-about: "math.libm"
+ABOUT: "math.libm"
 
 HELP: facos
 { $values { "x" real } { "double" real } }

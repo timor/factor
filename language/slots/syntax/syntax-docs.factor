@@ -61,4 +61,4 @@ ARTICLE: "slots.syntax" "Slots syntax sugar"
 "Setting slots from an array:"
 { $subsections postpone\ set-slots{ postpone\ set{ } ;
 
-about: "slots.syntax"
+ABOUT: "slots.syntax"

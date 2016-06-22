@@ -13,4 +13,4 @@ ARTICLE: "furnace.auth.providers.assoc" "In-memory authentication provider"
 }
 "The " { $slot "assoc" } " slot of the " { $link users-in-memory } " tuple maps usernames to checksums of passwords." ;
 
-about: "furnace.auth.providers.assoc"
+ABOUT: "furnace.auth.providers.assoc"

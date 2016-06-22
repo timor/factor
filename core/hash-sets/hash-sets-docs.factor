@@ -8,7 +8,7 @@ ARTICLE: "hash-sets" "Hash sets"
 { $subsections <hash-set> >hash-set }
 "The syntax for hash sets is described in " { $link "syntax-hash-sets" } "." ;
 
-about: "hash-sets"
+ABOUT: "hash-sets"
 
 HELP: hash-set
 { $class-description "The class of hashtable-like sets. These implement the " { $link set } " mixin." } ;

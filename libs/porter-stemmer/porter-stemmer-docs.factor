@@ -73,4 +73,4 @@ $nl
     step5
 } ;
 
-about: "porter-stemmer"
+ABOUT: "porter-stemmer"

@@ -47,4 +47,4 @@ ARTICLE: "ui.gadgets.sliders" "Slider gadgets"
 }
 "Since sliders are controls the value can be get and set by via the " { $snippet "model" } " slot. " ;
 
-about: "ui.gadgets.sliders"
+ABOUT: "ui.gadgets.sliders"

@@ -73,4 +73,4 @@ ARTICLE: "math.primes" "Prime numbers"
 "Make a sequence of random prime numbers:"
 { $subsections unique-primes } ;
 
-about: "math.primes"
+ABOUT: "math.primes"

@@ -21,4 +21,4 @@ ARTICLE: "partial-continuations" "Partial continuations"
     bshift
 } ;
 
-about: "partial-continuations"
+ABOUT: "partial-continuations"

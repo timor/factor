@@ -30,4 +30,4 @@ ARTICLE: "tools.destructors" "Destructor tools"
 }
 { $see-also "destructors" } ;
 
-about: "tools.destructors"
+ABOUT: "tools.destructors"

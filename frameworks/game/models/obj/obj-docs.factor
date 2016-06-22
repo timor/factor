@@ -4,7 +4,7 @@ USING: assocs game.models.obj.private help.markup help.syntax
 io.pathnames kernel sequences strings ;
 IN: game.models.obj
 
-about: "game.models.obj"
+ABOUT: "game.models.obj"
 
 ARTICLE: "game.models.obj" "Conversion of Wavefront OBJ assets"
 "The " { $vocab-link "game.models.obj" } " vocabulary implements words for converting Wavefront OBJ assets to data suitable for use with OpenGL." ;

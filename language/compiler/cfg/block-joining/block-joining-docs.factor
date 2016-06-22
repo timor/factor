@@ -18,4 +18,4 @@ HELP: join-blocks
 ARTICLE: "compiler.cfg.block-joining" "Block Joining"
 "Joining blocks that are not calls and are connected by a single CFG edge. This pass does not update " { $link ##phi } " nodes and should therefore only run before stack analysis or after ##phi node elimination." ;
 
-about: "compiler.cfg.block-joining"
+ABOUT: "compiler.cfg.block-joining"

@@ -63,4 +63,4 @@ ARTICLE: "csv" "Comma-separated-values parsing and writing"
 "Writing to a stream:"
 { $subsections write-csv write-row } ;
 
-about: "csv"
+ABOUT: "csv"

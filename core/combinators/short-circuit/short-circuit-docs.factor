@@ -71,4 +71,4 @@ ARTICLE: "combinators.short-circuit" "Short-circuit combinators"
 }
 ;
 
-about: "combinators.short-circuit"
+ABOUT: "combinators.short-circuit"

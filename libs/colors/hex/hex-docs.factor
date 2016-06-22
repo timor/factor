@@ -35,4 +35,4 @@ ARTICLE: "colors.hex" "HEX colors"
 }
 { $see-also "colors" } ;
 
-about: "colors.hex"
+ABOUT: "colors.hex"

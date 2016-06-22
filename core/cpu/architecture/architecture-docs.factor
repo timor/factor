@@ -403,4 +403,4 @@ $nl
 "Spilling:"
 { $subsections gc-root-offset } ;
 
-about: "cpu.architecture"
+ABOUT: "cpu.architecture"

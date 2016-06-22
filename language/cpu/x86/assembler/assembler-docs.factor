@@ -57,4 +57,4 @@ $nl
 "SSE instructions:"
 { $subsections PEXTRB } ;
 
-about: "cpu.x86.assembler"
+ABOUT: "cpu.x86.assembler"

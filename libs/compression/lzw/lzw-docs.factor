@@ -80,4 +80,4 @@ $nl
 { $subsections "compression.lzw.differences" }
 ;
 
-about: "compression.lzw"
+ABOUT: "compression.lzw"

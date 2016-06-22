@@ -251,4 +251,4 @@ t"
 }
 ;
 
-about: "http"
+ABOUT: "http"

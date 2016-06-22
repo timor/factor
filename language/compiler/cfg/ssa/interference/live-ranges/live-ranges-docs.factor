@@ -15,4 +15,4 @@ ARTICLE: "compiler.cfg.ssa.interference.live-ranges"
 "Live ranges for interference testing"
 "Live ranges for interference testing" ;
 
-about: "compiler.cfg.ssa.interference.live-ranges"
+ABOUT: "compiler.cfg.ssa.interference.live-ranges"

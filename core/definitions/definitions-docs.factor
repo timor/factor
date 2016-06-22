@@ -71,7 +71,7 @@ $nl
 { $subsections postpone\ forget: }
 { $see-also "see" "parser" "source-files" "words" "generic" "help-impl" } ;
 
-about: "definitions"
+ABOUT: "definitions"
 
 HELP: changed-effects
 { $var-description "A set that contains all words whose stack effects have changed in the compilation unit." } ;

@@ -47,4 +47,4 @@ ARTICLE: "spider" "Spider"
 "Running the spider:"
 { $subsections run-spider } ;
 
-about: "spider"
+ABOUT: "spider"

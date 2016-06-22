@@ -21,4 +21,4 @@ $nl
     "{ { 8080 80 } { 8443 443 } } port-remapping set-global"
 } ;
 
-about: "http.server.remapping"
+ABOUT: "http.server.remapping"

@@ -112,4 +112,4 @@ $nl
 { $subsections render* }
 "Custom components can emit HTML using the " { $vocab-link "xml.syntax" } " vocabulary." ;
 
-about: "html.components"
+ABOUT: "html.components"

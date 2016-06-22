@@ -11,4 +11,4 @@ ARTICLE: "compiler.cfg.comparisons" "Comparison conditions"
   cc-o
 } ;
 
-about: "compiler.cfg.comparisons"
+ABOUT: "compiler.cfg.comparisons"

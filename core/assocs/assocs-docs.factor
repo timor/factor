@@ -196,7 +196,7 @@ $nl
     "assocs-conversions"
 } ;
 
-about: "assocs"
+ABOUT: "assocs"
 
 HELP: assoc
 { $class-description "A mixin class whose instances are associative mappings. Custom implementations of the assoc protocol should be declared as instances of this mixin for all assoc functionality to work correctly:"

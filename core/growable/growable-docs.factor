@@ -16,7 +16,7 @@ $nl
 { $subsections resize }
 { $link "vectors" } " and " { $link "sbufs" } " are implemented using the resizable sequence facility." ;
 
-about: "growable"
+ABOUT: "growable"
 
 HELP: capacity
 { $values { "seq" "a vector or string buffer" } { "n" "the capacity of the sequence" } }

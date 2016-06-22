@@ -68,7 +68,7 @@ $nl
     "thread-impl"
 } ;
 
-about: "threads"
+ABOUT: "threads"
 
 HELP: thread
 { $class-description "A thread. The slots are as follows:"

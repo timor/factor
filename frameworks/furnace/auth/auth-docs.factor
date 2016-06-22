@@ -199,4 +199,4 @@ $nl
 "A concrete example."
 { $subsections "furnace.auth.example" } ;
 
-about: "furnace.auth"
+ABOUT: "furnace.auth"

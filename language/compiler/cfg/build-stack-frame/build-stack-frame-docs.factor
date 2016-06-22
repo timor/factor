@@ -22,4 +22,4 @@ HELP: finalize-stack-frame
 ARTICLE: "compiler.cfg.build-stack-frame" "Computing stack frame size and layout"
 "The " { $vocab-link "compiler.cfg.build-stack-frame" } " vocab builds stack frames for cfg:s." ;
 
-about: "compiler.cfg.build-stack-frame"
+ABOUT: "compiler.cfg.build-stack-frame"

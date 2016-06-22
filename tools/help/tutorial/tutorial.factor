@@ -204,4 +204,4 @@ $nl
     "first-program-extend"
 } ;
 
-about: "first-program"
+ABOUT: "first-program"

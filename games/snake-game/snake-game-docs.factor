@@ -22,4 +22,4 @@ ARTICLE: { "snake-game" "about" } "About Snake Game"
 HELP: play-snake-game
 { $description "Starts the game!" } ;
 
-about: { "snake-game" "about" }
+ABOUT: { "snake-game" "about" }

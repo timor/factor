@@ -76,7 +76,7 @@ $nl
 "The listener's mechanism for reading multi-line expressions from the input stream can be called from user code:"
 { $subsections read-quot } ;
 
-about: "listener"
+ABOUT: "listener"
 
 HELP: read-quot
 { $values { "quot/f" "a parsed quotation, or " { $link f } " indicating end of file" } }

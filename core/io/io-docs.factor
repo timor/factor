@@ -518,4 +518,4 @@ ARTICLE: "streams" "Streams"
 }
 { $see-also "io.streams.string" "io.streams.plain" "io.streams.duplex" } ;
 
-about: "streams"
+ABOUT: "streams"

@@ -10,4 +10,4 @@ HELP: latin/greek
 ARTICLE: "io.encodings.8-bit.greek" "Greek encoding"
 "The " { $vocab-link "io.encodings.8-bit.greek" }  " vocabulary provides the " { $link latin/greek } " encoding." ;
 
-about: "io.encodings.8-bit.greek"
+ABOUT: "io.encodings.8-bit.greek"

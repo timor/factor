@@ -77,4 +77,4 @@ ARTICLE: "concurrency.semaphores" "Counting semaphores"
     with-semaphore-timeout
 } ;
 
-about: "concurrency.semaphores"
+ABOUT: "concurrency.semaphores"

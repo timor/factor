@@ -11,4 +11,4 @@ HELP: leader-map
 
 ARTICLE: "compiler.cfg.ssa.destruction.leaders" "Leader book-keeping" "This vocab defines words for getting the leaders of vregs." ;
 
-about: "compiler.cfg.ssa.destruction.leaders"
+ABOUT: "compiler.cfg.ssa.destruction.leaders"

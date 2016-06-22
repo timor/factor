@@ -72,4 +72,4 @@ $nl
     "ui.gadgets.tables.example"
 } ;
 
-about: "ui.gadgets.tables"
+ABOUT: "ui.gadgets.tables"

@@ -10,4 +10,4 @@ ARTICLE: "furnace.json" "Furnace JSON support"
 "The " { $vocab-link "furnace.json" } " vocabulary provides a utility word for serving HTTP responses with JSON content."
 { $subsections <json-content> } ;
 
-about: "furnace.json"
+ABOUT: "furnace.json"

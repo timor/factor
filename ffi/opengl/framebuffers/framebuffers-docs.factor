@@ -31,4 +31,4 @@ HELP: with-framebuffer
 { $values { "id" "The id of a framebuffer object." } { "quot" quotation } }
 { $description "Binds framebuffer " { $snippet "id" } " for drawing in the dynamic extent of " { $snippet "quot" } ", restoring the window framebuffer when finished." } ;
 
-about: "gl-utilities"
+ABOUT: "gl-utilities"

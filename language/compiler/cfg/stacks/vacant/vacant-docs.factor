@@ -35,4 +35,4 @@ HELP: vacant>bits
   }
 } ;
 
-about: "compiler.cfg.stacks.vacant"
+ABOUT: "compiler.cfg.stacks.vacant"

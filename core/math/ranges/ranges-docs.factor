@@ -25,4 +25,4 @@ $nl
 { $code "100 1 [a,b] product" }
 "A range can be converted into a concrete sequence using a word such as " { $link >array } ". In most cases this is unnecessary since ranges implement the sequence protocol already. It is necessary if a mutable sequence is needed, for use with words such as " { $link set-nth } " or " { $link map! } "." ;
 
-about: "math.ranges"
+ABOUT: "math.ranges"

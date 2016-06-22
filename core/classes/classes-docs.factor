@@ -67,7 +67,7 @@ $nl
 }
 { $see-also "class-index" } ;
 
-about: "classes"
+ABOUT: "classes"
 
 HELP: class
 { $class-description "The class of all class words." } ;

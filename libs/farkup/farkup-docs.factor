@@ -55,4 +55,4 @@ $nl
     "farkup-ast"
 } ;
 
-about: "farkup"
+ABOUT: "farkup"

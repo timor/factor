@@ -135,4 +135,4 @@ ARTICLE: "document-locs" "Document locations"
     validate-loc
 } ;
 
-about: "documents"
+ABOUT: "documents"

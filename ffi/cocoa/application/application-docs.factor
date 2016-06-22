@@ -51,4 +51,4 @@ ARTICLE: "cocoa-application-utils" "Cocoa application utilities"
     with-cocoa
 } ;
 
-about: "cocoa-application-utils"
+ABOUT: "cocoa-application-utils"

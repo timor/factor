@@ -67,4 +67,4 @@ $nl
   defs
 } ;
 
-about: "compiler.cfg.def-use"
+ABOUT: "compiler.cfg.def-use"

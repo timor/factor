@@ -269,4 +269,4 @@ t emitter-unicode set
 { >yaml >yaml-docs } related-words
 { yaml> yaml-docs> } related-words
 
-about: "yaml"
+ABOUT: "yaml"

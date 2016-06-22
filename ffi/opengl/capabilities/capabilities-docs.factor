@@ -62,4 +62,4 @@ HELP: require-gl-version-or-extensions
 
 { require-gl-version require-glsl-version require-gl-extensions require-gl-version-or-extensions has-gl-version? has-glsl-version? has-gl-extensions? has-gl-version-or-extensions? gl-version glsl-version gl-extensions } related-words
 
-about: "gl-utilities"
+ABOUT: "gl-utilities"

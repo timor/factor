@@ -25,4 +25,4 @@ ARTICLE: "http.server.redirection" "HTTP responder redirection"
 { $subsections relative-to-request }
 "The " { $vocab-link "furnace.redirection" } " vocabulary provides a higher-level implementation of this. The " { $vocab-link "furnace.conversations" } " vocabulary allows state to be maintained between redirects." ;
 
-about: "http.server.redirection"
+ABOUT: "http.server.redirection"

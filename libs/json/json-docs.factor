@@ -7,4 +7,4 @@ ARTICLE: "json" "JSON serialization"
     "json.writer"
 } ;
 
-about: "json"
+ABOUT: "json"

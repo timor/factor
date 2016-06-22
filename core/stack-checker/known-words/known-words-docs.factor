@@ -29,4 +29,4 @@ HELP: infer-special
 ARTICLE: "stack-checker.known-words" "Extra properties for special words"
 "This vocab adds properties for words that are handled specially by the compiler. Such as " { $link curry } " and " { $link dip } "." ;
 
-about: "stack-checker.known-words"
+ABOUT: "stack-checker.known-words"

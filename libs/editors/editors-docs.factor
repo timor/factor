@@ -14,7 +14,7 @@ $nl
 "If a syntax error was thrown while loading a source file, you can jump to the location of the error in your editor:"
 { $subsections :edit } ;
 
-about: "editor"
+ABOUT: "editor"
 
 HELP: edit
 { $values { "object" object } }

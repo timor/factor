@@ -108,4 +108,4 @@ ARTICLE: "environment" "Environment variables"
 
 } ;
 
-about: "environment"
+ABOUT: "environment"

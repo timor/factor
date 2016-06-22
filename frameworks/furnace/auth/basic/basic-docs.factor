@@ -15,4 +15,4 @@ ARTICLE: "furnace.auth.basic" "Basic authentication"
     <basic-auth-realm>
 } ;
 
-about: "furnace.auth.basic"
+ABOUT: "furnace.auth.basic"

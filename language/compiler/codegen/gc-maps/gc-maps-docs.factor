@@ -84,4 +84,4 @@ $nl
 "Main entry point:"
 { $subsections emit-gc-maps } ;
 
-about: "compiler.codegen.gc-maps"
+ABOUT: "compiler.codegen.gc-maps"

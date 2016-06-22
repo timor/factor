@@ -2,7 +2,7 @@ USING: help.markup help.syntax kernel math prettyprint.config
 prettyprint.custom sequences strings words ;
 IN: prettyprint.backend
 
-about: "prettyprint-extension"
+ABOUT: "prettyprint-extension"
 
 HELP: pprint-word
 { $values { "word" word } }

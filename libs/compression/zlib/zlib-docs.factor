@@ -24,4 +24,4 @@ ARTICLE: "compression.zlib" "Compression (ZLIB)"
     uncompress
 } ;
 
-about: "compression.zlib"
+ABOUT: "compression.zlib"

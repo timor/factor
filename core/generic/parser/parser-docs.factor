@@ -7,4 +7,4 @@ HELP: generic-effect
 
 ARTICLE: "generic.parser" "Utilities for generic word and method defining parsing words" "This vocab creates method words." ;
 
-about: "generic.parser"
+ABOUT: "generic.parser"

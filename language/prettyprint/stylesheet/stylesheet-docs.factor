@@ -41,4 +41,4 @@ ARTICLE: "prettyprint.stylesheet" "Prettyprinter stylesheet"
 }
 ;
 
-about: "prettyprint.stylesheet"
+ABOUT: "prettyprint.stylesheet"

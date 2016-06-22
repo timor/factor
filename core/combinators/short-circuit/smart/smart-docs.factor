@@ -35,4 +35,4 @@ $nl
 "Generalized OR:"
 { $subsections || } ;
 
-about: "combinators.short-circuit.smart"
+ABOUT: "combinators.short-circuit.smart"

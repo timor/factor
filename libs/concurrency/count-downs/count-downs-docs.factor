@@ -24,4 +24,4 @@ ARTICLE: "concurrency.count-downs" "Count-down latches"
 }
 "The vocabulary was modelled after a similar feature in Java's " { $snippet "java.util.concurrent" } " library." ;
 
-about: "concurrency.count-downs"
+ABOUT: "concurrency.count-downs"

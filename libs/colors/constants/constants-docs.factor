@@ -30,4 +30,4 @@ ARTICLE: "colors.constants" "Standard color database"
     postpone\ color:
 } ;
 
-about: "colors.constants"
+ABOUT: "colors.constants"

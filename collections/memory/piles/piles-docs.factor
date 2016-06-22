@@ -63,4 +63,4 @@ ARTICLE: "memory.piles" "Piles"
 }
 "An example of the utility of piles is in video games. For example, the game Abuse was scripted with a Lisp dialect. In order to avoid stalls from traditional GC or heap-based allocators, the Abuse Lisp VM would allocate values from a preallocated pile over the course of a frame, and release the entire pile at the end of the frame." ;
 
-about: "memory.piles"
+ABOUT: "memory.piles"

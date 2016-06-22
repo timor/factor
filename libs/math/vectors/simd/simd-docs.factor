@@ -202,4 +202,4 @@ ARTICLE: "math.vectors.simd" "Hardware vector arithmetic (SIMD)"
     "math.vectors.simd.intrinsics"
 } ;
 
-about: "math.vectors.simd"
+ABOUT: "math.vectors.simd"

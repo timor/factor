@@ -13,4 +13,4 @@ ARTICLE: "help.home" "Factor documentation"
 }
 ;
 
-about: "help.home"
+ABOUT: "help.home"

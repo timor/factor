@@ -97,4 +97,4 @@ TIP: "Scroll the listener from the keyboard by pressing " { $command listener-ga
 
 TIP: "Press " { $command tool "common" refresh-all } " or run " { $link refresh-all } " to reload changed source files from disk. " ;
 
-about: "ui-listener"
+ABOUT: "ui-listener"

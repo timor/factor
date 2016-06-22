@@ -61,4 +61,4 @@ $nl
 { $snippet "\"myhost.com\" 9001 <node> 123456 <remote-channel>\n\"hello\" over to" }
 ;
 
-about: { "remote-channels" "remote-channels" }
+ABOUT: { "remote-channels" "remote-channels" }

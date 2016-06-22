@@ -58,4 +58,4 @@ $nl
     "furnace.sessions.serialize"
 } ;
 
-about: "furnace.sessions"
+ABOUT: "furnace.sessions"

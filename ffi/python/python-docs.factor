@@ -54,4 +54,4 @@ $nl
 { $code "\"C:/python27-64bit/\" \"PYTHONHOME\" set-os-env" }
 { $warning "All code that calls Python words should always be wrapped in a " { $link with-destructors } " context. The reason is that the words add references to Pythons internal memory heap which are removed when the destructors trigger." } ;
 
-about: "python"
+ABOUT: "python"

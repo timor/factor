@@ -33,4 +33,4 @@ ARTICLE: "compiler.cfg.intrinsics.fixnum" "Generating instructions for fixnum ar
   emit-fixnum-overflow-op
 } ;
 
-about: "compiler.cfg.intrinsics.fixnum"
+ABOUT: "compiler.cfg.intrinsics.fixnum"

@@ -29,4 +29,4 @@ $nl
     { "ensures that help topics actually render (this catches broken links, improper nesting, etc)" }
 } ;
 
-about: "help.lint"
+ABOUT: "help.lint"

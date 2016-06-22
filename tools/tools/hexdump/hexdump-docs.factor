@@ -20,4 +20,4 @@ ARTICLE: "tools.hexdump" "Hexdump"
 "Write the hexdump to the output stream:"
 { $subsections hexdump. } ;
 
-about: "tools.hexdump"
+ABOUT: "tools.hexdump"

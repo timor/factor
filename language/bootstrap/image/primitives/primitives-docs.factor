@@ -23,4 +23,4 @@ ARTICLE: "bootstrap.image.primitives" "Bootstrap primitives"
 $nl
 { $link all-primitives } " is an assoc where all primitives are declared. See that constant for a description of the format." ;
 
-about: "bootstrap.image.primitives"
+ABOUT: "bootstrap.image.primitives"

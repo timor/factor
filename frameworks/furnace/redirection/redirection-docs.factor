@@ -60,4 +60,4 @@ $nl
     "furnace.redirection.secure"
 } ;
 
-about: "furnace.redirection"
+ABOUT: "furnace.redirection"

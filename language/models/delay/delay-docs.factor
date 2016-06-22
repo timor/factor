@@ -35,4 +35,4 @@ ARTICLE: "models-delay" "Delay models"
     <delay>
 } ;
 
-about: "models-delay"
+ABOUT: "models-delay"

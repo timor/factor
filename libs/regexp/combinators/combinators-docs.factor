@@ -3,7 +3,7 @@
 USING: help.syntax help.markup regexp strings ;
 IN: regexp.combinators
 
-about: "regexp.combinators"
+ABOUT: "regexp.combinators"
 
 ARTICLE: "regexp.combinators.intro" "Regular expression combinator rationale"
 "Regular expression combinators are useful when part of the regular expression contains user input. For example, given a sequence of strings on the stack, a regular expression which matches any one of them can be constructed:"

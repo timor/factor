@@ -480,4 +480,4 @@ $nl
     "math-bitfields"
 } ;
 
-about: "math.bitwise"
+ABOUT: "math.bitwise"

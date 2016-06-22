@@ -37,4 +37,4 @@ $nl
 }
 "These variables may contain clipboard protocol implementations which transfer data to and from the native system clipboard. However an UI backend may leave one or both of these variables in their default state, which is a trivial clipboard implementation internal to the Factor UI." ;
 
-about: "clipboard-protocol"
+ABOUT: "clipboard-protocol"

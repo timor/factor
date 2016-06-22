@@ -98,4 +98,4 @@ HELP: with-gl-program
 { $values { "program" "A " { $link gl-program } " object" } { "quot" "A quotation with stack effect " { $snippet "( program -- )" } } }
 { $description "Enables " { $snippet "program" } " for all OpenGL calls made in the dynamic extent of " { $snippet "quot" } ". " { $snippet "program" } " is left on the top of the stack when " { $snippet "quot" } " is called. The fixed-function pipeline is restored at the end of " { $snippet "quot" } "." } ;
 
-about: "gl-utilities"
+ABOUT: "gl-utilities"

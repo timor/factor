@@ -12,4 +12,4 @@ ARTICLE: "tools.deprecation" "Deprecation tracking"
     :deprecations
 } ;
 
-about: "tools.deprecation"
+ABOUT: "tools.deprecation"

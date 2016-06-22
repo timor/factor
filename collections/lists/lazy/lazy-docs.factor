@@ -4,7 +4,7 @@ USING: help.markup help.syntax kernel lists math sequences
 strings ;
 IN: lists.lazy
 
-about: "lists.lazy"
+ABOUT: "lists.lazy"
 
 ARTICLE: "lists.lazy" "Lazy lists"
 "The " { $vocab-link "lists.lazy" } " vocabulary implements lazy lists and standard operations to manipulate them."

@@ -22,7 +22,7 @@ $nl
     "Certain internal words, such as words in the " { $vocab-link "math" } ", " { $vocab-link "sequences" } " and UI vocabularies, cannot be annotated, since the annotated code may end up recursively invoking the word in question. This may crash or hang Factor. It is safest to only define annotations on your own words."
 } ;
 
-about: "tools.annotations"
+ABOUT: "tools.annotations"
 
 HELP: annotate
 { $values { "word" word } { "quot" { $quotation ( old-def -- new-def ) } } }

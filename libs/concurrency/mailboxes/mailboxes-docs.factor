@@ -78,4 +78,4 @@ ARTICLE: "concurrency.mailboxes" "Mailboxes"
     while-mailbox-empty
 } ;
 
-about: "concurrency.mailboxes"
+ABOUT: "concurrency.mailboxes"

@@ -15,7 +15,7 @@ ARTICLE: "predicates" "Predicate classes"
     predicate-class?
 } ;
 
-about: "predicates"
+ABOUT: "predicates"
 
 HELP: define-predicate-class
 { $values { "class" class } { "superclass" class } { "definition" { $quotation ( superclass -- ? ) } } }

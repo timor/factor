@@ -50,4 +50,4 @@ $nl
 "The bootstrap process can be customized with command-line switches."
 { $see-also "runtime-cli-args" "bootstrap-cli-args" } ;
 
-about: "bootstrap.image"
+ABOUT: "bootstrap.image"

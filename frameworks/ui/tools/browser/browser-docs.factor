@@ -13,4 +13,4 @@ ARTICLE: "ui-browser" "UI browser"
 { $command-map browser-gadget "multi-touch" }
 "Browsers are instances of " { $link browser-gadget } "." ;
 
-about: "ui-browser"
+ABOUT: "ui-browser"

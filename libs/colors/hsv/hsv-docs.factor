@@ -12,4 +12,4 @@ ARTICLE: "colors.hsv" "HSV colors"
 }
 { $see-also "colors" } ;
 
-about: "colors.hsv"
+ABOUT: "colors.hsv"

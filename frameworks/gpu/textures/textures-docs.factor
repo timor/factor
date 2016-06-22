@@ -385,4 +385,4 @@ ARTICLE: "gpu.textures" "Texture objects"
     read-compressed-texture-to
 } ;
 
-about: "gpu.textures"
+ABOUT: "gpu.textures"

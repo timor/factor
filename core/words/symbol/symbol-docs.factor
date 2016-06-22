@@ -29,4 +29,4 @@ ARTICLE: "words.symbol" "Symbols"
     ": foo ( -- value ) \\ foo ;"
 } ;
 
-about: "words.symbol"
+ABOUT: "words.symbol"

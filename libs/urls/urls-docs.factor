@@ -205,4 +205,4 @@ $nl
 "Utility words used by the URL implementation:"
 { $subsections "url-utilities" } ;
 
-about: "urls"
+ABOUT: "urls"

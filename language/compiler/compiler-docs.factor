@@ -52,7 +52,7 @@ $nl
     "compiler-impl"
 } ;
 
-about: "compiler"
+ABOUT: "compiler"
 
 HELP: frontend
 { $values { "word" word } { "tree" sequence } }

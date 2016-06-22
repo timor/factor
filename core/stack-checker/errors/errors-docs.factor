@@ -165,4 +165,4 @@ ARTICLE: "inference-errors" "Stack checker errors"
     missing-effect
 } ;
 
-about: "inference-errors"
+ABOUT: "inference-errors"

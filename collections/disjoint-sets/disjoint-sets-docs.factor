@@ -59,4 +59,4 @@ $nl
 { $subsections equate }
 "Additionally, disjoint sets implement the " { $link clone } " generic word." ;
 
-about: "disjoint-sets"
+ABOUT: "disjoint-sets"

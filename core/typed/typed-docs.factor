@@ -74,4 +74,4 @@ $nl
     output-mismatch-error
 } ;
 
-about: "typed"
+ABOUT: "typed"

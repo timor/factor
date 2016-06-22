@@ -21,4 +21,4 @@ $nl
 "Generating " { $link ##copy } " instructions:"
 { $subsections parallel-copy parallel-copy-rep } ;
 
-about: "compiler.cfg.parallel-copy"
+ABOUT: "compiler.cfg.parallel-copy"

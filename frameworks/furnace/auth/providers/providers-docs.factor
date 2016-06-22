@@ -44,4 +44,4 @@ $nl
     update-user
 } ;
 
-about: "furnace.auth.providers.protocol"
+ABOUT: "furnace.auth.providers.protocol"

@@ -20,4 +20,4 @@ ARTICLE: "objc-subclassing" "Subclassing Objective C classes"
 { $subsections \ CLASS< \ METHOD: }
 "Objective C class definitions are saved in the image. If the image is saved and Factor is restarted with the saved image, custom class definitions are made available to the Objective C runtime when they are first accessed from within Factor." ;
 
-about: "objc-subclassing"
+ABOUT: "objc-subclassing"

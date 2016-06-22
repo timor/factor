@@ -21,7 +21,7 @@ $nl
 }
 { $see-also "syntax-ratios" } ;
 
-about: "rationals"
+ABOUT: "rationals"
 
 HELP: ratio
 { $class-description "The class of rational numbers with denominator not equal to 1." } ;

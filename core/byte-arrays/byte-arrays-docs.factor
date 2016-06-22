@@ -25,7 +25,7 @@ $nl
 "Resizing byte arrays:"
 { $subsections resize-byte-array } ;
 
-about: "byte-arrays"
+ABOUT: "byte-arrays"
 
 HELP: byte-array
 { $description "The class of byte arrays. See " { $link "syntax-byte-arrays" } " for syntax and " { $link "byte-arrays" } " for general information." } ;

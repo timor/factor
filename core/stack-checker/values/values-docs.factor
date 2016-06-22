@@ -42,4 +42,4 @@ $nl
   set-known
 } ;
 
-about: "stack-checker.values"
+ABOUT: "stack-checker.values"

@@ -102,4 +102,4 @@ $nl
     rt-safepoint
 } ;
 
-about: "compiler.constants"
+ABOUT: "compiler.constants"

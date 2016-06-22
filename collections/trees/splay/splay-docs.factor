@@ -26,4 +26,4 @@ ARTICLE: "trees.splay" "Splay trees"
     postpone\ SPLAY{
 } ;
 
-about: "trees.splay"
+ABOUT: "trees.splay"

@@ -13,4 +13,4 @@ $nl
 "The entire syntax of an FHTML template can be summarized as thus: text outside of " { $snippet "<%" } " and " { $snippet "%>" } " is rendered literally. Text inside " { $snippet "<%" } " and " { $snippet "%>" } " is interpreted as Factor source code."
 { $subsections <fhtml> } ;
 
-about: "html.templates.fhtml"
+ABOUT: "html.templates.fhtml"

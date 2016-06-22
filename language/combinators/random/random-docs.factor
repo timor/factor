@@ -117,4 +117,4 @@ $nl
     execute-random
 } ;
 
-about: "combinators.random"
+ABOUT: "combinators.random"

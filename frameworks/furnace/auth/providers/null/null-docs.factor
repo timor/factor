@@ -7,4 +7,4 @@ HELP: no-users
 ARTICLE: "furnace.auth.providers.null" "Dummy authentication provider"
 "The " { $vocab-link "furnace.auth.providers.null" } " vocabulary implements an authentication provider which refuses all authentication requests. It is only useful for testing purposes." ;
 
-about: "furnace.auth.providers.null"
+ABOUT: "furnace.auth.providers.null"

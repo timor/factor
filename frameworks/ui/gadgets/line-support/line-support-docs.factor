@@ -34,4 +34,4 @@ $nl
     y>line
 } ;
 
-about: "ui.gadgets.line-support"
+ABOUT: "ui.gadgets.line-support"

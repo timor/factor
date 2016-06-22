@@ -368,4 +368,4 @@ $nl
     "embedding"
 } ;
 
-about: "alien"
+ABOUT: "alien"

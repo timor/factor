@@ -58,4 +58,4 @@ $nl
 }
 "The " { $vocab-link "specialized-arrays" } " vocabulary provides a fixed-length version of this abstraction." ;
 
-about: "specialized-vectors"
+ABOUT: "specialized-vectors"
