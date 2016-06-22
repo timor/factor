@@ -417,7 +417,7 @@ ERROR: closing-tag-required lexer tag ;
 ! Words like append! and suffix! are allowed for now.
 : read-exclamation ( lexer slice -- obj )
     dup { [ "!" sequence= ] [ "#!" sequence= ] } 1||
-    [ take-comment ] [ merge-lex-til-whitespace make-tag-literal ] if ;
+    [ take-comment ] [ >>partial [ 1 + ] change-n lex-factor ] if ;
 
 
 : read-backtick ( lexer opening -- obj )

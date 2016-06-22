@@ -74,3 +74,7 @@ in: modern.out.tests
 { t } [ "![==[abc]==]" rewrite-same-string ] unit-test
 
 { t } [ "( :union{ fixnum bignum } -- )" rewrite-same-string ] unit-test
+{ t } [ "data-map!( int -- float[2] )" rewrite-same-string ] unit-test
+{ t } [ "a!" rewrite-same-string ] unit-test
+{ t } [ "!" rewrite-same-string ] unit-test
+{ t } [ "!a" rewrite-same-string ] unit-test
