@@ -42,7 +42,7 @@ ARTICLE: "syntax-integers" "Integer syntax"
 }
 "Integers are entered in base 10 unless prefixed with a base-changing prefix. " { $snippet "0x" } " begins a hexadecimal literal, " { $snippet "0o" } " an octal literal, and " { $snippet "0b" } " a binary literal. A sign, if any, goes before the base prefix."
 { $example
-    "use: prettyprint"
+    "USE: prettyprint"
     "10 ."
     "0b10 ."
     "-0o10 ."
@@ -150,7 +150,7 @@ ARTICLE: "syntax-words" "Word syntax"
     \ \
     \ postpone\
 }
-"The implementation of the " { $link postpone\ \ } " word is discussed in detail in " { $link "reading-ahead" } ". Words are documented in " { $link "words" } "." ;
+"The implementation of the " { $link \ \ } " word is discussed in detail in " { $link "reading-ahead" } ". Words are documented in " { $link "words" } "." ;
 
 ARTICLE: "escape" "Character escape codes"
 { $table
@@ -174,57 +174,57 @@ ARTICLE: "escape" "Character escape codes"
 ARTICLE: "syntax-strings" "Character and string syntax"
 "Factor has no distinct character type. Integers representing Unicode code points can be read by specifying a literal character, or an escaped representation thereof."
 { $subsections
-    postpone\ char:
-    postpone\ "
+    \ char:
+    \ "
     "escape"
 }
 "Strings are documented in " { $link "strings" } "." ;
 
 ARTICLE: "syntax-sbufs" "String buffer syntax"
-{ $subsections postpone\ SBUF" }
+{ $subsections \ SBUF" }
 "String buffers are documented in " { $link "sbufs" } "." ;
 
 ARTICLE: "syntax-arrays" "Array syntax"
 { $subsections
-    postpone\ {
-    postpone\ }
+    \ {
+    \ }
 }
 "Arrays are documented in " { $link "arrays" } "." ;
 
 ARTICLE: "syntax-vectors" "Vector syntax"
-{ $subsections postpone\ V{ }
+{ $subsections \ V{ }
 "Vectors are documented in " { $link "vectors" } "." ;
 
 ARTICLE: "syntax-hashtables" "Hashtable syntax"
-{ $subsections postpone\ H{ }
+{ $subsections \ H{ }
 "Hashtables are documented in " { $link "hashtables" } "." ;
 
 ARTICLE: "syntax-hash-sets" "Hash set syntax"
-{ $subsections postpone\ HS{ }
+{ $subsections \ HS{ }
 "Hashtables are documented in " { $link "hash-sets" } "." ;
 
 ARTICLE: "syntax-tuples" "Tuple syntax"
-{ $subsections postpone\ T{ }
+{ $subsections \ T{ }
 "Tuples are documented in " { $link "tuples" } "." ;
 
 ARTICLE: "syntax-quots" "Quotation syntax"
 { $subsections
-    postpone\ [
-    postpone\ ]
+    \ [
+    \ ]
 }
 "Quotations are documented in " { $link "quotations" } "." ;
 
 ARTICLE: "syntax-byte-arrays" "Byte array syntax"
-{ $subsections postpone\ B{ }
+{ $subsections \ B{ }
 "Byte arrays are documented in " { $link "byte-arrays" } "." ;
 
 ARTICLE: "syntax-pathnames" "Pathname syntax"
-{ $subsections postpone\ P" }
+{ $subsections \ P" }
 "Pathnames are documented in " { $link "io.pathnames" } "." ;
 
 ARTICLE: "syntax-effects" "Stack effect syntax"
 "Note that this is " { $emphasis "not" } " syntax to declare stack effects of words. This pushes an " { $link effect } " instance on the stack for reflection, for use with words such as " { $link define-declared } ", " { $link call-effect } " and " { $link execute-effect } "."
-{ $subsections postpone\ ( }
+{ $subsections \ ( }
 { $see-also "effects" "inference" "tools.inference" } ;
 
 ARTICLE: "syntax-literals" "Literals"
@@ -273,7 +273,7 @@ HELP: deprecated
 HELP: \ SYNTAX:
 { $syntax "SYNTAX: foo ... ;" }
 { $description "Defines a parsing word." }
-{ $examples "In the below example, the " { $snippet "world" } " word is never called, however its body references a parsing word which executes immediately:" { $example "use: io" "in: scratchpad" "<< SYNTAX: HELLO \"Hello parser!\" print ; >>\n: world ( -- ) HELLO ;" "Hello parser!" } } ;
+{ $examples "In the below example, the " { $snippet "world" } " word is never called, however its body references a parsing word which executes immediately:" { $example "USE: io" "in: scratchpad" "<< SYNTAX: HELLO \"Hello parser!\" print ; >>\n: world ( -- ) HELLO ;" "Hello parser!" } } ;
 
 HELP: inline
 { $syntax ": foo ... ; inline" }
@@ -288,7 +288,7 @@ HELP: inline
 HELP: recursive
 { $syntax ": foo ... ; recursive" }
 { $description "Declares the most recently defined word as a recursive word." }
-{ $notes "This declaration is only required for " { $link postpone\ inline } " words which call themselves. See " { $link "inference-recursive-combinators" } "." } ;
+{ $notes "This declaration is only required for " { $link \ inline } " words which call themselves. See " { $link "inference-recursive-combinators" } "." } ;
 
 HELP: foldable
 { $syntax ": foo ... ; foldable" }
@@ -349,31 +349,31 @@ $nl
 HELP: \ {
 { $syntax "{ elements... }" }
 { $values { "elements" "a list of objects" } }
-{ $description "Marks the beginning of a literal array. Literal arrays are terminated by " { $link postpone\ } } "." }
+{ $description "Marks the beginning of a literal array. Literal arrays are terminated by " { $link \ } } "." }
 { $examples { $code "{ 1 2 3 }" } } ;
 
 HELP: \ V{
 { $syntax "V{ elements... }" }
 { $values { "elements" "a list of objects" } }
-{ $description "Marks the beginning of a literal vector. Literal vectors are terminated by " { $link postpone\ } } "." }
+{ $description "Marks the beginning of a literal vector. Literal vectors are terminated by " { $link \ } } "." }
 { $examples { $code "V{ 1 2 3 }" } } ;
 
 HELP: \ B{
 { $syntax "B{ elements... }" }
 { $values { "elements" "a list of integers" } }
-{ $description "Marks the beginning of a literal byte array. Literal byte arrays are terminated by " { $link postpone\ } } "." }
+{ $description "Marks the beginning of a literal byte array. Literal byte arrays are terminated by " { $link \ } } "." }
 { $examples { $code "B{ 1 2 3 }" } } ;
 
 HELP: \ H{
 { $syntax "H{ { key value }... }" }
 { $values { "key" object } { "value" object } }
-{ $description "Marks the beginning of a literal hashtable, given as a list of two-element arrays holding key/value pairs. Literal hashtables are terminated by " { $link postpone\ } } "." }
+{ $description "Marks the beginning of a literal hashtable, given as a list of two-element arrays holding key/value pairs. Literal hashtables are terminated by " { $link \ } } "." }
 { $examples { $code "H{ { \"tuna\" \"fish\" } { \"jalapeno\" \"vegetable\" } }" } } ;
 
 HELP: \ HS{
 { $syntax "HS{ members ... }" }
 { $values { "members" "a list of objects" } }
-{ $description "Marks the beginning of a literal hash set, given as a list of its members. Literal hashtables are terminated by " { $link postpone\ } } "." }
+{ $description "Marks the beginning of a literal hash set, given as a list of its members. Literal hashtables are terminated by " { $link \ } } "." }
 { $examples { $code "HS{ 3 \"foo\" }" } } ;
 
 HELP: \ C{
@@ -400,12 +400,12 @@ $nl
 { $code "T{ vector }" }
 "A BOA-form tuple:"
 { $code
-    "use: colors"
+    "USE: colors"
     "T{ rgba f 1.0 0.0 0.5 }"
 }
 "An assoc-form tuple equal to the above:"
 { $code
-    "use: colors"
+    "USE: colors"
     "T{ rgba { red 1.0 } { green 0.0 } { blue 0.5 } }"
 } } ;
 
@@ -441,7 +441,7 @@ HELP: \ symbol:
 { $syntax "symbol: word" }
 { $values { "word" "a new word to define" } }
 { $description "Defines a new symbol word in the current vocabulary. Symbols push themselves on the stack when executed, and are used to identify variables (see " { $link "namespaces" } ") as well as for storing crufties in word properties (see " { $link "word-props" } ")." }
-{ $examples { $example "use: prettyprint" "in: scratchpad" "symbol: foo\nfoo ." "foo" } } ;
+{ $examples { $example "USE: prettyprint" "in: scratchpad" "symbol: foo\nfoo ." "foo" } } ;
 
 { define-symbol \ symbol: \ SYMBOLS: } related-words
 
@@ -460,7 +460,7 @@ HELP: \ singleton:
     "Defines a new singleton class. The class word itself is the sole instance of the singleton class."
 }
 { $examples
-    { $example "USING: classes.singleton kernel io ;" "in: singleton-demo" "use: prettyprint\nsingleton: foo\nGENERIC: bar ( obj -- ) ;\nM: foo bar drop \"a foo!\" print ;\nfoo bar" "a foo!" }
+    { $example "USING: classes.singleton kernel io ;" "in: singleton-demo" "USE: prettyprint\nsingleton: foo\nGENERIC: bar ( obj -- ) ;\nM: foo bar drop \"a foo!\" print ;\nfoo bar" "a foo!" }
 } ;
 
 HELP: \ SINGLETONS:
@@ -509,8 +509,8 @@ HELP: \ forget:
 { $values { "word" word } }
 { $description "Removes the word from its vocabulary, or does nothing if no such word exists. Existing definitions that reference forgotten words will continue to work, but new occurrences of the word will not parse." } ;
 
-HELP: \ use:
-{ $syntax "use: vocabulary" }
+HELP: \ USE:
+{ $syntax "USE: vocabulary" }
 { $values { "vocabulary" "a vocabulary name" } }
 { $description "Adds a new vocabulary to the search path, loading it first if necessary." }
 { $notes "If adding the vocabulary introduces ambiguity, referencing the ambiguous names will throw a " { $link ambiguous-use-error } "." }
@@ -529,26 +529,26 @@ HELP: \ USING:
 { $notes "If adding the vocabularies introduces ambiguity, referencing the ambiguous names will throw a " { $link ambiguous-use-error } "." }
 { $errors "Throws an error if one of the vocabularies does not exist." } ;
 
-HELP: \ qualified:
-{ $syntax "qualified: vocab" }
+HELP: \ QUALIFIED:
+{ $syntax "QUALIFIED: vocab" }
 { $description "Adds the vocabulary's words, prefixed with the vocabulary name, to the search path." }
 { $notes "If adding the vocabulary introduces ambiguity, the vocabulary will take precedence when resolving any ambiguous names. This is a rare case; for example, suppose a vocabulary " { $snippet "fish" } " defines a word named " { $snippet "go:fishing" } ", and a vocabulary named " { $snippet "go" } " defines a word named " { $snippet "fishing" } ". Then, the following will call the latter word:"
   { $code
-  "use: fish"
-  "qualified: go"
+  "USE: fish"
+  "QUALIFIED: go"
   "go:fishing"
   }
 }
 { $examples { $example
     "USING: prettyprint ;"
-    "qualified: math"
+    "QUALIFIED: math"
     "1 2 math:+ ."
     "3"
 } } ;
 
 HELP: \ QUALIFIED-WITH:
 { $syntax "QUALIFIED-WITH: vocab word-prefix ;" }
-{ $description "Like " { $link \ qualified: } " but uses " { $snippet "word-prefix" } " as prefix." }
+{ $description "Like " { $link \ QUALIFIED: } " but uses " { $snippet "word-prefix" } " as prefix." }
 { $examples { $example
     "USING: prettyprint ;"
     "QUALIFIED-WITH: math m ;"
@@ -584,10 +584,10 @@ HELP: \ RENAME:
     "5"
 } } ;
 
-HELP: \ in:
-{ $syntax "in: vocabulary" }
+HELP: \ IN:
+{ $syntax "IN: vocabulary" }
 { $values { "vocabulary" "a new vocabulary name" } }
-{ $description "Sets the current vocabulary where new words will be defined, creating the vocabulary first if it does not exist. After the vocabulary has been created, it can be listed in " { $link \ use: } " and " { $link \ USING: } " declarations." } ;
+{ $description "Sets the current vocabulary where new words will be defined, creating the vocabulary first if it does not exist. After the vocabulary has been created, it can be listed in " { $link \ USE: } " and " { $link \ USING: } " declarations." } ;
 
 HELP: \ char:
 { $syntax "char: token" }
@@ -609,11 +609,11 @@ HELP: \ "
 { $description "Reads from the input string until the next occurrence of " { $snippet "\"" } ", and appends the resulting string to the parse tree. String literals can span multiple lines. Various special characters can be read by inserting " { $link "escape" } "." }
 { $examples
     "A string with an escaped newline in it:"
-    { $example "use: io" "\"Hello\\nworld\" print" "Hello\nworld" }
+    { $example "USE: io" "\"Hello\\nworld\" print" "Hello\nworld" }
     "A string with an actual newline in it:"
-    { $example "use: io" "\"Hello\nworld\" print" "Hello\nworld" }
+    { $example "USE: io" "\"Hello\nworld\" print" "Hello\nworld" }
     "A string with a named Unicode code point:"
-    { $example "use: io" "\"\\u{greek-capital-letter-sigma}\" print" "\u{greek-capital-letter-sigma}" }
+    { $example "USE: io" "\"\\u{greek-capital-letter-sigma}\" print" "\u{greek-capital-letter-sigma}" }
 } ;
 
 HELP: \ SBUF"
@@ -636,7 +636,7 @@ HELP: \ (
 { $examples
     { $example
         "USING: compiler.units kernel math prettyprint random words ;"
-        "in: scratchpad"
+        "IN: scratchpad"
         ""
         "symbol: my-dynamic-word"
         ""
@@ -658,7 +658,7 @@ HELP: \ nan:
 { $description "Adds a floating point Not-a-Number literal to the parse tree." }
 { $examples
     { $example
-        "use: prettyprint"
+        "USE: prettyprint"
         "nan: 80000deadbeef ."
         "nan: 80000deadbeef"
     }
@@ -691,8 +691,8 @@ HELP: \ HOOK:
 { $examples
     { $example
         "USING: io namespaces ;"
-        "in: scratchpad"
-        "symbol: transport"
+        "IN: scratchpad"
+        "SYMBOL: transport"
         "TUPLE: land-transport ;"
         "TUPLE: air-transport ;"
         "HOOK: deliver transport ( destination -- )"
@@ -722,8 +722,8 @@ HELP: \ INTERSECTION:
 { $values { "class" "a new class word to define" } { "participants" "a list of class words separated by whitespace" } }
 { $description "Defines an intersection class. An object is an instance of an intersection class if it is an instance of all of its participants." } ;
 
-HELP: \ mixin:
-{ $syntax "mixin: class" }
+HELP: \ MIXIN:
+{ $syntax "MIXIN: class" }
 { $values { "class" "a new class word to define" } }
 { $description "Defines a mixin class. A mixin is similar to a union class, except it has no members initially, and new members can be added with the " { $link \ INSTANCE: } " word." }
 { $examples "The " { $link sequence } " and " { $link assoc } " mixin classes." } ;
@@ -789,8 +789,8 @@ HELP: read-only
 
 { \ initial: \ read-only } related-words
 
-HELP: \ slot:
-{ $syntax "slot: name" }
+HELP: \ SLOT:
+{ $syntax "SLOT: name" }
 { $values { "name" "a slot name" } }
 { $description "Defines a protocol slot; that is, defines the accessor words for a slot named " { $snippet "slot" } " without associating it with any specific tuple." } ;
 

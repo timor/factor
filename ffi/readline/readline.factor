@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien.data alien.libraries alien.strings compiler.units
 destructors fry io.encodings.utf8 kernel libc sequences words ;
-qualified: readline.ffi
+QUALIFIED: readline.ffi
 IN: readline
 
 : readline ( prompt -- str )

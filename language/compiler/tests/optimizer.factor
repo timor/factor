@@ -250,7 +250,7 @@ HINTS: recursive-inline-hang array ;
 
 [ t ] [ \ recursive-inline-hang-1 word-optimized? ] unit-test
 
-defer: recursive-inline-hang-3
+DEFER: recursive-inline-hang-3
 
 : recursive-inline-hang-2 ( a -- a )
     dup array? [ recursive-inline-hang-3 ] when ;
@@ -344,7 +344,7 @@ TUPLE: some-tuple x ;
 ! Loop detection problem found by doublec
 symbol: counter
 
-defer: loop-bbb
+DEFER: loop-bbb
 
 : loop-aaa ( -- )
     counter inc counter get 2 < [ loop-bbb ] when ; inline recursive

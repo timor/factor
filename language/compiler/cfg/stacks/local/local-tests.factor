@@ -3,7 +3,7 @@ compiler.cfg.stacks.height compiler.cfg.stacks.local
 compiler.cfg.utilities compiler.test cpu.architecture kernel
 kernel.private make math namespaces sequences.private slots.private
 tools.test ;
-qualified: sets
+QUALIFIED: sets
 IN: compiler.cfg.stacks.local.tests
 
 ! loc>vreg

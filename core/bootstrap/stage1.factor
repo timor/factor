@@ -4,7 +4,7 @@ USING: assocs hash-sets hashtables hashtables.identity
 hashtables.wrapped init io io.files kernel kernel.private make
 memory namespaces parser parser.notes sequences system vocabs
 vocabs.loader vocabs.hierarchy ;
-qualified: bootstrap.image.private
+QUALIFIED: bootstrap.image.private
 IN: bootstrap.stage1
 
 "Bootstrap stage 1..." print flush

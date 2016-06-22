@@ -4,7 +4,7 @@ USING: cpu.x86.assembler cpu.x86.assembler.operands kernel
 layouts parser sequences ;
 IN: bootstrap.x86
 
-defer: stack-reg
+DEFER: stack-reg
 
 : stack-frame-size ( -- n ) 8 bootstrap-cells ;
 : nv-regs ( -- seq ) { RBX RSI RDI R12 R13 R14 R15 } ;

@@ -3,7 +3,7 @@ compiler.cfg.registers compiler.cfg.ssa.destruction.coalescing
 compiler.cfg.ssa.destruction.leaders compiler.cfg.ssa.interference
 compiler.cfg.utilities cpu.architecture grouping kernel make
 namespaces random sequences tools.test ;
-qualified: sets
+QUALIFIED: sets
 IN: compiler.cfg.ssa.destruction.coalescing.tests
 
 ! eliminatable-copy?

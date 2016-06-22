@@ -1,7 +1,7 @@
 USING: compiler.units words tools.test math kernel ;
 IN: compiler.tests.redefine15
 
-defer: word-1
+DEFER: word-1
 
 : word-2 ( a -- b ) word-1 ;
 

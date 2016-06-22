@@ -6,8 +6,8 @@ USING: accessors alien.c-types alien.data arrays
 combinators cpu.8080 cpu.8080.emulator io.pathnames kernel
 locals math math.order openal openal.alut opengl.gl sequences
 specialized-arrays ui ui.gadgets ui.gestures ui.render ;
-qualified: threads
-qualified: system
+QUALIFIED: threads
+QUALIFIED: system
 SPECIALIZED-ARRAY: uchar
 IN: space-invaders
 

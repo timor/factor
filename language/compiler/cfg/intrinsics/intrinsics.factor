@@ -6,21 +6,21 @@ compiler.cfg.intrinsics.fixnum compiler.cfg.intrinsics.float
 compiler.cfg.intrinsics.misc compiler.cfg.intrinsics.slots
 compiler.cfg.intrinsics.strings compiler.cfg.stacks
 cpu.architecture kernel words ;
-qualified: alien
-qualified: alien.accessors
-qualified: alien.c-types
-qualified: alien.data.private
-qualified: arrays
-qualified: byte-arrays
-qualified: classes.tuple.private
-qualified: kernel.private
-qualified: math.bitwise.private
-qualified: math.floats.private
-qualified: math.integers.private
-qualified: math.libm
-qualified: math.private
-qualified: slots.private
-qualified: strings.private
+QUALIFIED: alien
+QUALIFIED: alien.accessors
+QUALIFIED: alien.c-types
+QUALIFIED: alien.data.private
+QUALIFIED: arrays
+QUALIFIED: byte-arrays
+QUALIFIED: classes.tuple.private
+QUALIFIED: kernel.private
+QUALIFIED: math.bitwise.private
+QUALIFIED: math.floats.private
+QUALIFIED: math.integers.private
+QUALIFIED: math.libm
+QUALIFIED: math.private
+QUALIFIED: slots.private
+QUALIFIED: strings.private
 IN: compiler.cfg.intrinsics
 
 ERROR: inline-intrinsics-not-supported word quot ;

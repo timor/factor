@@ -121,7 +121,7 @@ IN: compiler.tests.simple
 
 [ 5 ] [ after-if-test ] unit-test
 
-defer: countdown-b
+DEFER: countdown-b
 
 : countdown-a ( n -- ) dup 0 eq? [ drop ] [ 1 fixnum- countdown-b ] if ;
 : countdown-b ( n -- ) dup 0 eq? [ drop ] [ 1 fixnum- countdown-a ] if ;
@@ -213,7 +213,7 @@ M: integer single-combination-test drop ;
 [ 2 3 ] [ 2 3 4 single-combination-test ] unit-test
 [ 2 f ] [ 2 3 f single-combination-test ] unit-test
 
-defer: single-combination-test-2
+DEFER: single-combination-test-2
 
 : single-combination-test-4 ( obj -- obj )
     dup [ single-combination-test-2 ] when ;

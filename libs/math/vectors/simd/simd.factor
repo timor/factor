@@ -58,7 +58,7 @@ M: object simd-rep drop f ;
 COMPILE<
 PRIVATE<
 
-defer: simd-construct-op
+DEFER: simd-construct-op
 
 ! Unboxers for SIMD operations
 : if-both-vectors ( a b rep t f -- )

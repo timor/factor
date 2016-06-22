@@ -519,8 +519,8 @@ IN: qualified.tests.bar
 IN: qualified.tests.baz
 : x ( -- a ) 3 ;
 
-qualified: qualified.tests.foo
-qualified: qualified.tests.bar
+QUALIFIED: qualified.tests.foo
+QUALIFIED: qualified.tests.bar
 { 1 2 3 } [ qualified.tests.foo:x qualified.tests.bar:x x ] unit-test
 
 QUALIFIED-WITH: qualified.tests.bar p ;
