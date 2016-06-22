@@ -165,10 +165,10 @@ CONSTANT: text "Hello world.\nThis is a test." ;
 
     [ t ] [ "i" get interactor? ] unit-test
 
-    [ ] [ "symbol:" "i" get set-editor-string ] unit-test
+    [ ] [ "SYMBOL:" "i" get set-editor-string ] unit-test
 
     [ ] [
-        "i" get [ { "symbol:" } parse-lines ] [ go-to-error ] recover
+        "i" get [ { "SYMBOL:" } parse-lines ] [ go-to-error ] recover
     ] unit-test
 
     [ t ] [

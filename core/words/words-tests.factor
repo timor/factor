@@ -93,7 +93,7 @@ DEFER: deferred
 ] unit-test
 
 { } [
-    "IN: words.tests symbol: symbol-generic" eval( -- )
+    "IN: words.tests SYMBOL: symbol-generic" eval( -- )
 ] unit-test
 
 { t } [ "symbol-generic" "words.tests" lookup-word symbol? ] unit-test

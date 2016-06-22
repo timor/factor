@@ -273,7 +273,7 @@ HELP: deprecated
 HELP: \ SYNTAX:
 { $syntax "SYNTAX: foo ... ;" }
 { $description "Defines a parsing word." }
-{ $examples "In the below example, the " { $snippet "world" } " word is never called, however its body references a parsing word which executes immediately:" { $example "USE: io" "in: scratchpad" "<< SYNTAX: HELLO \"Hello parser!\" print ; >>\n: world ( -- ) HELLO ;" "Hello parser!" } } ;
+{ $examples "In the below example, the " { $snippet "world" } " word is never called, however its body references a parsing word which executes immediately:" { $example "USE: io" "IN: scratchpad" "<< SYNTAX: HELLO \"Hello parser!\" print ; >>\n: world ( -- ) HELLO ;" "Hello parser!" } } ;
 
 HELP: inline
 { $syntax ": foo ... ; inline" }
@@ -441,15 +441,15 @@ HELP: \ SYMBOL:
 { $syntax "SYMBOL: word" }
 { $values { "word" "a new word to define" } }
 { $description "Defines a new symbol word in the current vocabulary. Symbols push themselves on the stack when executed, and are used to identify variables (see " { $link "namespaces" } ") as well as for storing crufties in word properties (see " { $link "word-props" } ")." }
-{ $examples { $example "USE: prettyprint" "in: scratchpad" "symbol: foo\nfoo ." "foo" } } ;
+{ $examples { $example "USE: prettyprint" "IN: scratchpad" "SYMBOL: foo\nfoo ." "foo" } } ;
 
-{ define-symbol \ symbol: \ SYMBOLS: } related-words
+{ define-symbol \ SYMBOL: \ SYMBOLS: } related-words
 
 HELP: \ SYMBOLS:
 { $syntax "SYMBOLS: words... ;" }
 { $values { "words" { $sequence "new words to define" } } }
 { $description "Creates a new symbol for every token until the " { $snippet ";" } "." }
-{ $examples { $example "USING: prettyprint ;" "in: scratchpad" "SYMBOLS: foo bar baz ;\nfoo . bar . baz ." "foo\nbar\nbaz" } } ;
+{ $examples { $example "USING: prettyprint ;" "IN: scratchpad" "SYMBOLS: foo bar baz ;\nfoo . bar . baz ." "foo\nbar\nbaz" } } ;
 
 HELP: \ SINGLETON:
 { $syntax "SINGLETON: class" }
@@ -460,7 +460,7 @@ HELP: \ SINGLETON:
     "Defines a new singleton class. The class word itself is the sole instance of the singleton class."
 }
 { $examples
-    { $example "USING: classes.singleton kernel io ;" "in: singleton-demo" "USE: prettyprint\nsingleton: foo\nGENERIC: bar ( obj -- ) ;\nM: foo bar drop \"a foo!\" print ;\nfoo bar" "a foo!" }
+    { $example "USING: classes.singleton kernel io ;" "IN: singleton-demo" "USE: prettyprint\nSINGLETON: foo\nGENERIC: bar ( obj -- ) ;\nM: foo bar drop \"a foo!\" print ;\nfoo bar" "a foo!" }
 } ;
 
 HELP: \ SINGLETONS:
@@ -474,7 +474,7 @@ HELP: \ ALIAS:
 { $description "Creates a new inlined word that calls the existing word." }
 { $examples
     { $example "USING: prettyprint sequences ;"
-               "in: alias.test"
+               "IN: alias.test"
                "ALIAS: sequence-nth nth"
                "0 { 10 20 30 } sequence-nth ."
                "10"
@@ -638,7 +638,7 @@ HELP: \ (
         "USING: compiler.units kernel math prettyprint random words ;"
         "IN: scratchpad"
         ""
-        "symbol: my-dynamic-word"
+        "SYMBOL: my-dynamic-word"
         ""
         "["
         "    my-dynamic-word 2 { [ + ] [ * ] } random curry"
@@ -835,7 +835,7 @@ HELP: \ PRIVATE<
 { $notes
     "The following is an example of usage:"
     { $code
-        "in: factorial"
+        "IN: factorial"
         ""
         "PRIVATE<"
         ""
@@ -848,12 +848,12 @@ HELP: \ PRIVATE<
     }
     "The above is equivalent to:"
     { $code
-        "in: factorial.private"
+        "IN: factorial.private"
         ""
         ": (fac) ( accum n -- n! )"
         "    dup 1 <= [ drop ] [ [ * ] keep 1 - (fac) ] if ;"
         ""
-        "in: factorial"
+        "IN: factorial"
         ""
         ": fac ( n -- n! ) 1 swap (fac) ;"
     }
@@ -902,7 +902,7 @@ HELP: \ execute(
 { $description "Calls the word on the top of the stack, asserting that it has the given stack effect. The word does not need to be known at compile time." }
 { $examples
   { $code
-    "in: scratchpad"
+    "IN: scratchpad"
     ""
     ": eat ( -- ) ; : sleep ( -- ) ; : hack ( -- ) ;"
     "{ eat sleep hack } [ execute( -- ) ] each"

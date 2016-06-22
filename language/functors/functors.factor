@@ -106,11 +106,7 @@ FUNCTOR-SYNTAX: \ SYMBOL:
     scan-param suffix!
     \ define-symbol suffix! ;
 
-FUNCTOR-SYNTAX: \ symbol:
-    scan-param suffix!
-    \ define-symbol suffix! ;
-
-! Handles SYNTAX: \ foo:
+! Handles SYNTAX: \ FOO:
 FUNCTOR-SYNTAX: \ SYNTAX:
     scan-escaped-param suffix!
     parse-definition*

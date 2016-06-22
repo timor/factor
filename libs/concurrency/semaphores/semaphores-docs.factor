@@ -32,7 +32,7 @@ HELP: with-semaphore
 ARTICLE: "concurrency.semaphores.examples" "Semaphore examples"
 "A use-case would be a batch processing server which runs a large number of jobs which perform calculations but then need to fire off expensive external processes or perform heavy network I/O. While for most of the time, the threads can all run in parallel, it might be desired that the expensive operation is not run by more than 10 threads at once, to avoid thrashing swap space or saturating the network. This can be accomplished with a counting semaphore:"
 { $code
-    "symbol: expensive-section"
+    "SYMBOL: expensive-section"
     "requests"
     "10 <semaphore> '["
     "    ..."

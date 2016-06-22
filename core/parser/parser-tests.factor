@@ -299,12 +299,12 @@ DEFER: foo
 ] [ error>> error>> error>> redefine-error? ] must-fail-with
 
 { } [
-    "IN: parser.tests TUPLE: class-redef-test ; symbol: class-redef-test"
+    "IN: parser.tests TUPLE: class-redef-test ; SYMBOL: class-redef-test"
     <string-reader> "redefining-a-class-2" parse-stream drop
 ] unit-test
 
 [
-    "IN: parser.tests TUPLE: class-redef-test ; symbol: class-redef-test : class-redef-test ( -- ) ;"
+    "IN: parser.tests TUPLE: class-redef-test ; SYMBOL: class-redef-test : class-redef-test ( -- ) ;"
     <string-reader> "redefining-a-class-3" parse-stream drop
 ] [ error>> error>> error>> redefine-error? ] must-fail-with
 
@@ -319,7 +319,7 @@ DEFER: foo
 ] [ error>> error>> error>> no-word-error? ] must-fail-with
 
 { } [
-    "IN: parser.tests TUPLE: class-fwd-test ; symbol: class-fwd-test"
+    "IN: parser.tests TUPLE: class-fwd-test ; SYMBOL: class-fwd-test"
     <string-reader> "redefining-a-class-3" parse-stream drop
 ] unit-test
 
@@ -396,17 +396,17 @@ DEFER: foo
 
 2 [
     [ ] [
-        "IN: parser.tests defer: d-f-s d-f-s symbol: d-f-s d-f-s"
+        "IN: parser.tests defer: d-f-s d-f-s SYMBOL: d-f-s d-f-s"
         <string-reader> "d-f-s-test" parse-stream drop
     ] unit-test
 
     [ ] [
-        "IN: parser.tests defer: d-f-s d-f-s forget: d-f-s symbol: d-f-s d-f-s"
+        "IN: parser.tests defer: d-f-s d-f-s FORGET: d-f-s SYMBOL: d-f-s d-f-s"
         <string-reader> "d-f-s-test" parse-stream drop
     ] unit-test
 
     [ ] [
-        "IN: parser.tests defer: d-f-s d-f-s symbol: d-f-s d-f-s"
+        "IN: parser.tests defer: d-f-s d-f-s SYMBOL: d-f-s d-f-s"
         <string-reader> "d-f-s-test" parse-stream drop
     ] unit-test
 ] times
@@ -451,7 +451,7 @@ DEFER: foo
 
 { } [
     2 [
-        "IN: parser.tests defer: twice-fails forget: twice-fails mixIN: twice-fails"
+        "IN: parser.tests DEFER: twice-fails FORGET: twice-fails MIXIN: twice-fails"
         <string-reader> "twice-fails-test" parse-stream drop
     ] times
 ] unit-test

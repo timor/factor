@@ -246,7 +246,7 @@ ARTICLE: "tuple-examples" "Tuple examples"
 { $code
     "TUPLE: check to amount number ;"
     ""
-    "symbol: checks"
+    "SYMBOL: checks"
     ""
     ": <check> ( to amount -- check )"
     "    checks counter check boa ;"

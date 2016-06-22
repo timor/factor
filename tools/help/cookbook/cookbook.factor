@@ -113,9 +113,9 @@ $nl
 
 ARTICLE: "cookbook-variables" "Dynamic variables cookbook"
 "A symbol is a word which pushes itself on the stack when executed. Try it:"
-{ $example "symbol: foo" "foo ." "foo" }
+{ $example "SYMBOL: foo" "foo ." "foo" }
 "Before using a variable, you must define a symbol for it:"
-{ $code "symbol: name" }
+{ $code "SYMBOL: name" }
 "Symbols can be passed to the " { $link get } " and " { $link set } " words to read and write variable values:"
 { $unchecked-example "\"Slava\" name set" "name get print" "Slava" }
 "If you set variables inside a " { $link with-scope } ", their values will be lost after leaving the scope:"

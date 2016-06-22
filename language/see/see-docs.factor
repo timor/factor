@@ -35,8 +35,8 @@ HELP: definer
     }
     { $example "USING: definitions prettyprint ;"
                "IN: scratchpad"
-               "symbol: foo \\ foo definer . ."
-               "f\npostpone\ symbol:"
+               "SYMBOL: foo \\ foo definer . ."
+               "f\npostpone\ SYMBOL:"
     }
 }
 { $notes "This word is used in the implementation of " { $link see } "." } ;

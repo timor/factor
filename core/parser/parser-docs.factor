@@ -36,9 +36,9 @@ $nl
 { $see-also postpone\ { postpone\ H{ postpone\ V{ postpone\ W{ postpone\ T{ postpone\ } } ;
 
 ARTICLE: "defining-words" "Defining words"
-"Defining words add definitions to the dictionary without modifying the parse tree. The simplest example is the " { $link postpone\ symbol: } " word."
-{ $see postpone\ symbol: }
-"The key factor in the definition of " { $link postpone\ symbol: } " is " { $link scan-new } ", which reads a token from the input and creates a word with that name. This word is then passed to " { $link define-symbol } "."
+"Defining words add definitions to the dictionary without modifying the parse tree. The simplest example is the " { $link postpone\ SYMBOL: } " word."
+{ $see postpone\ SYMBOL: }
+"The key factor in the definition of " { $link postpone\ SYMBOL: } " is " { $link scan-new } ", which reads a token from the input and creates a word with that name. This word is then passed to " { $link define-symbol } "."
 { $subsections
     scan-new
     scan-new-word

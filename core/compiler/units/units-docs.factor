@@ -104,7 +104,7 @@ $nl
   "Manually creating a word using the non-optimizing compiler:"
   { $example
     "USING: compiler.units io ;"
-    "IN: test symbol: foo"
+    "IN: test SYMBOL: foo"
     "{ { foo [ \"hello!\" write nl ] } } t t modify-code-heap foo"
     "hello!"
   }
