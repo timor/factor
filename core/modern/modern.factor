@@ -506,7 +506,7 @@ COMPILE<
     [ [ delimiter>> ] [ generator>> 1quotation ] bi ] { } map>assoc ;
 COMPILE>
 
-! 0 "HI: ;" slice-til-either -> 3 "HI: ;" "HI:" CHAR: \:
+! 0 "HI: ;" slice-til-either -> 3 "HI: ;" "HI:" char: \:
 MACRO: rules>call-lexer ( seq -- quot: ( lexer string -- literal ) )
     [ lexer-rules>delimiters ]
     [

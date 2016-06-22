@@ -1,6 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: layouts kernel parser math math.bitwise sequences ;
+USING: layouts kernel parser math math.bitwise sequences
+literals ;
 IN: persistent.hashtables.config
 
 CONSTANT: radix-bits $[ cell 4 = 4 5 ? ] ;

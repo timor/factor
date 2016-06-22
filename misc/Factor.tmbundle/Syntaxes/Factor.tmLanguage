@@ -252,7 +252,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(^|(?&lt;=\s))CHAR:\s+[^\s]+(\s|$)</string>
+			<string>(^|(?&lt;=\s))char:\s+[^\s]+(\s|$)</string>
 			<key>name</key>
 			<string>constant.character.factor</string>
 		</dict>

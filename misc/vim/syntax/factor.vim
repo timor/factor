@@ -86,7 +86,7 @@ syn match   factorIn            /\<IN:\s\+\S\+\>/
 syn match   factorUse           /\<USE:\s\+\S\+\>/
 syn match   factorUnuse         /\<UNUSE:\s\+\S\+\>/
 
-syn match   factorChar          /\<CHAR:\s\+\S\+\>/
+syn match   factorChar          /\<char:\s\+\S\+\>/
 
 syn match   factorBackslash     /\<\\\>\s\+\S\+\>/
 syn match   factorMBackslash    /\<M\\\>\s\+\S\+\s\+\S\+\>/

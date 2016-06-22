@@ -5,7 +5,7 @@ byte-arrays classes.struct combinators constructors
 continuations destructors forestdb.ffi forestdb.paths fry
 generalizations io.encodings.string io.encodings.utf8
 io.pathnames kernel libc math namespaces sequences
-strings ;
+strings io.directories ;
 QUALIFIED: sets
 IN: forestdb.lib
 

@@ -18,9 +18,9 @@ short-url "SHORT_URLS" {
 } define-persistent
 
 : letter-bank ( -- seq )
-    CHAR: a CHAR: z [a,b]
-    CHAR: A CHAR: Z [a,b]
-    CHAR: 1 CHAR: 0 [a,b]
+    char: a char: z [a,b]
+    char: A char: Z [a,b]
+    char: 1 char: 0 [a,b]
     3append ; foldable
 
 : random-url ( -- string )

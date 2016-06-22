@@ -132,7 +132,7 @@ patterns: [
     name: "constant.language.factor"
   }
   {
-    match: "(^|(?<=\\s))CHAR:\\s+[^\\s]+(\\s|$)"
+    match: "(^|(?<=\\s))char:\\s+[^\\s]+(\\s|$)"
     name: "constant.character.factor"
   }
   {
