@@ -1,6 +1,6 @@
 USING: eval tools.test compiler.units vocabs words
 kernel classes.mixin arrays ;
-in: compiler.tests.folding
+IN: compiler.tests.folding
 
 ! Calls to generic words were not folded away.
 

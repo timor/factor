@@ -8,7 +8,7 @@ specialized-array: float
 specialized-array: double
 specialized-array: complex-float
 specialized-array: complex-double
-in: math.blas.vectors
+IN: math.blas.vectors
 
 TUPLE: blas-vector-base underlying length inc ;
 

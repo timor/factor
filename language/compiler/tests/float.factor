@@ -4,7 +4,7 @@ specialized-arrays sequences math.functions layouts literals ;
 QUALIFIED-WITH: alien.c-types c ;
 specialized-array: c:float
 specialized-array: c:double
-in: compiler.tests.float
+IN: compiler.tests.float
 
 [ 3.0 1 2 3 ] [ 1.0 2.0 [ float+ 1 2 3 ] compile-call ] unit-test
 

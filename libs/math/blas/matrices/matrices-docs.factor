@@ -1,5 +1,5 @@
 USING: alien byte-arrays help.markup help.syntax math math.blas.vectors sequences strings ;
-in: math.blas.matrices
+IN: math.blas.matrices
 
 ARTICLE: "math.blas-summary" "Basic Linear Algebra Subroutines (BLAS) interface"
 "Factor provides an interface to high-performance vector and matrix math routines available in implementations of the BLAS math library. A set of specialized types are provided for handling packed, unboxed vector data:"

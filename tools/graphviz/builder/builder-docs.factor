@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: alien graphviz graphviz.attributes graphviz.ffi
 help.markup help.syntax kernel ;
-in: graphviz.builder
+IN: graphviz.builder
 
 HELP: build-alien
 { $values

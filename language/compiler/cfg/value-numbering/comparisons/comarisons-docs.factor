@@ -1,5 +1,5 @@
 USING: compiler.cfg.instructions help.markup help.syntax kernel ;
-in: compiler.cfg.value-numbering.comparisons
+IN: compiler.cfg.value-numbering.comparisons
 
 HELP: >test-branch
 { $values { "insn" insn } { "insn'" ##test-branch } }

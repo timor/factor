@@ -1,5 +1,5 @@
 USING: tools.test xml.tokenize xml.state io.streams.string kernel io strings ascii ;
-in: xml.test.state
+IN: xml.test.state
 
 : string-parse ( str quot -- )
     [ <string-reader> ] dip with-state ; inline

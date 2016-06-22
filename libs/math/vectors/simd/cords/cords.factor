@@ -3,7 +3,7 @@ cpu.architecture effects functors generalizations kernel lexer
 math math.vectors.simd math.vectors.simd.intrinsics parser
 prettyprint.custom quotations sequences sequences.cords words
 classes ;
-in: math.vectors.simd.cords
+IN: math.vectors.simd.cords
 
 COMPILE<
 PRIVATE<

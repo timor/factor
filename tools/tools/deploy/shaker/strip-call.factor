@@ -1,13 +1,13 @@
 ! Copyright (C) 2009 Slava Pestov
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators.private kernel ;
-in: combinators
+IN: combinators
 
 : call-effect ( word effect -- ) call-effect-unsafe ;
 
 : execute-effect ( word effect -- ) execute-effect-unsafe ;
 
-in: compiler.tree.propagation.call-effect
+IN: compiler.tree.propagation.call-effect
 
 : call-effect-unsafe? ( quot effect -- ? ) 2drop t ; inline
 

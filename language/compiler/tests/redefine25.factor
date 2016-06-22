@@ -1,6 +1,6 @@
 USING: tools.test compiler.units classes.mixin definitions
 kernel kernel.private ;
-in: compiler.tests.redefine25
+IN: compiler.tests.redefine25
 
 mixin: empty-mixin
 

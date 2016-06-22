@@ -1,7 +1,7 @@
 USING: classes.tuple.private cpu.architecture help.markup
 help.syntax kernel.private math math.vectors math.vectors.simd.intrinsics
 sequences ;
-in: math.vectors.simd
+IN: math.vectors.simd
 
 ARTICLE: "math.vectors.simd.intro" "Introduction to SIMD support"
 "Modern CPUs support a form of data-level parallelism, where arithmetic operations on fixed-size short vectors can be done on all components in parallel. This is known as single-instruction-multiple-data (SIMD)."

@@ -5,7 +5,7 @@ byte-arrays classes combinators fry functors kernel lexer locals
 make math math.vectors parser prettyprint.custom sequences
 sequences.private vocabs.generated vocabs.loader vocabs.parser
 words ;
-in: specialized-arrays
+IN: specialized-arrays
 
 mixin: specialized-array
 

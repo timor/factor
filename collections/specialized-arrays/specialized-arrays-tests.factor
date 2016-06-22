@@ -8,7 +8,7 @@ FROM: specialized-arrays.private => specialized-array-vocab ;
 FROM: alien.c-types => int float bool uchar char float ulonglong ushort uint
 heap-size ;
 FROM: alien.data => little-endian? ;
-in: specialized-arrays.tests
+IN: specialized-arrays.tests
 
 specialized-array: int
 SPECIALIZED-ARRAYS: bool uchar ushort char uint float ulonglong ;

@@ -1,6 +1,6 @@
 USING: kernel math.blas.matrices math.blas.vectors
 sequences tools.test ;
-in: math.blas.matrices.tests
+IN: math.blas.matrices.tests
 
 ! clone
 

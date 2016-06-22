@@ -1,5 +1,5 @@
 use: kernel
-in: destructors
+IN: destructors
 
 PRIVATE<
 

@@ -1,5 +1,5 @@
 USING: sequences xml kernel arrays xml.traversal io.files tools.test ;
-in: xml.tests
+IN: xml.tests
 
 : assemble-data ( tag -- 3array )
     { "URL" "snippet" "title" }

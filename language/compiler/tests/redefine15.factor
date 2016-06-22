@@ -1,5 +1,5 @@
 USING: compiler.units words tools.test math kernel ;
-in: compiler.tests.redefine15
+IN: compiler.tests.redefine15
 
 defer: word-1
 

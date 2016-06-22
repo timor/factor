@@ -1,5 +1,5 @@
 USING: kernel tools.test eval ;
-in: compiler.tests.redefine12
+IN: compiler.tests.redefine12
 
 ! A regression that came about when fixing the
 ! 'no method on classes-intersect?' bug

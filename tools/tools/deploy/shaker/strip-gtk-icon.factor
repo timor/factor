@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel tools.deploy.shaker literals namespaces
 vocabs.loader io.pathnames io.files io.encodings.binary ;
-in: ui.backend.gtk
+IN: ui.backend.gtk
 
 CONSTANT: get-icon-data
     $[

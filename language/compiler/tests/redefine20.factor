@@ -1,4 +1,4 @@
-in: compiler.tests.redefine20
+IN: compiler.tests.redefine20
 USING: kernel sequences compiler.units definitions classes.mixin
 tools.test ;
 

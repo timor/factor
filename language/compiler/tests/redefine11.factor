@@ -1,6 +1,6 @@
 USING: eval tools.test compiler.units vocabs words
 kernel classes.mixin arrays ;
-in: compiler.tests.redefine11
+IN: compiler.tests.redefine11
 
 ! Mixin redefinition did not recompile all necessary words.
 

@@ -1,5 +1,5 @@
 USING: io.streams.string kernel tools.test eval ;
-in: compiler.tests.redefine4
+IN: compiler.tests.redefine4
 
 : declaration-test-1 ( -- a ) 3 ; flushable
 

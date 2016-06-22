@@ -9,7 +9,7 @@ system threads tools.test words ;
 FROM: alien.c-types => float short ;
 specialized-array: float
 specialized-array: char
-in: compiler.tests.alien
+IN: compiler.tests.alien
 
 ! Make sure that invalid inputs don't pass the stack checker
 [ [ void { } "cdecl" alien-indirect ] infer ] must-fail

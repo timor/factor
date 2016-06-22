@@ -3,7 +3,7 @@
 USING: accessors combinators.smart io.directories.search
 io.files kernel namespaces sequences sets splitting vocabs.files
 vocabs.hierarchy vocabs.loader vocabs.metadata ;
-in: modern.paths
+IN: modern.paths
 
 : vocabs-from ( root -- vocabs )
     "" disk-vocabs-in-root/prefix

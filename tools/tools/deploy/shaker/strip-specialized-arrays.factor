@@ -1,4 +1,4 @@
-in: specialized-arrays
+IN: specialized-arrays
 
 ERROR: cannot-define-array-in-deployed-app type ;
 
