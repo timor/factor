@@ -20,5 +20,5 @@ SYNTAX: \ ARTICLE:
         over add-article >link
     ] dip remember-definition ;
 
-SYNTAX: \ about:
+SYNTAX: \ ABOUT:
     current-vocab scan-object >>help changed-definition ;

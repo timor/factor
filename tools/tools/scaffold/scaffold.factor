@@ -81,7 +81,7 @@ PRIVATE<
     [
         scaffold-copyright
         "USING: ;" print
-        "in: " write print
+        "IN: " write print
     ] with-string-writer ;
 
 : set-scaffold-main-file ( vocab path -- )
@@ -217,14 +217,14 @@ M: object add-using ( object -- )
 : docs-file-string ( vocab -- str2 )
     [
         {
-            [ "in: " write print nl ]
+            [ "IN: " write print nl ]
             [ interesting-words. ]
             [
                 [ "ARTICLE: " write unparse dup write bl print ]
                 [ "{ $vocab-link " write pprint " }" print ] bi
                 ";" print nl
             ]
-            [ "about: " write unparse print ]
+            [ "ABOUT: " write unparse print ]
         } cleave
     ] with-string-writer ;
 
@@ -302,7 +302,7 @@ PRIVATE<
     [
         scaffold-copyright
         "USING: tools.test " write dup write " ;" print
-        "in: " write write ".tests" print
+        "IN: " write write ".tests" print
     ] with-string-writer ;
 
 : set-scaffold-tests-file ( vocab path -- )

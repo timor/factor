@@ -95,7 +95,7 @@ $nl
     postpone\ HELP:
 }
 "A parsing word defines the main help article for a vocabulary:"
-{ $subsections postpone\ about: }
+{ $subsections \ ABOUT: }
 "The " { $emphasis "content" } " in both cases is a " { $emphasis "markup element" } ", a recursive structure taking one of the following forms:"
 { $list
     { "a string," }
@@ -512,11 +512,11 @@ HELP: \ ARTICLE:
     }
 } ;
 
-HELP: \ about:
-{ $syntax "about: article" }
+HELP: \ ABOUT:
+{ $syntax "ABOUT: article" }
 { $values { "article" "a help article" } }
 { $description "Defines the main documentation article for the current vocabulary." } ;
 
 HELP: vocab-help
 { $values { "vocab-spec" "a vocabulary specifier" } { "help" "a help article" } }
-{ $description "Outputs the main help article for a vocabulary. The main help article can be set with " { $link postpone\ about: } "." } ;
+{ $description "Outputs the main help article for a vocabulary. The main help article can be set with " { $link \ ABOUT: } "." } ;
