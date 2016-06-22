@@ -78,3 +78,6 @@ in: modern.out.tests
 { t } [ "a!" rewrite-same-string ] unit-test
 { t } [ "!" rewrite-same-string ] unit-test
 { t } [ "!a" rewrite-same-string ] unit-test
+
+{ t } [ "->[ ]" rewrite-same-string ] unit-test
+{ t } [ "abc>[ ]" rewrite-same-string ] unit-test

@@ -452,14 +452,14 @@ ERROR: mismatched-terminator lexer slice ;
     ] if ;
 
 : gt-terminator ( lexer slice -- slice/f )
-    dupd merge-lex-til-whitespace dup top-level-greater-than? [
+    dup top-level-greater-than? [
         2dup [ dup peek-tag ] dip delimiters-match? [
             nip terminator-literal make-tag-class-literal
         ] [
             roll-back-lexer f
         ] if
     ] [
-        nip make-tag-literal
+        >>partial [ 1 + ] change-n lex-factor
     ] if ;
 
 : ?blank? ( ch/f -- blank/f )
