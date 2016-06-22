@@ -20,4 +20,3 @@ in: zeromq.examples.hwclient
     ] with-destructors ;
 
 main: hwclient
-

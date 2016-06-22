@@ -1,13 +1,13 @@
 USING: accessors compiler compiler.units tools.test math parser
 kernel sequences sequences.private classes.mixin generic
 definitions arrays words assocs eval grouping ;
-in: compiler.tests.redefine3
+IN: compiler.tests.redefine3
 
 GENERIC: sheeple ( obj -- x ) ;
 
 M: object sheeple drop "sheeple" ; inline
 
-mixin: empty-mixin
+MIXIN: empty-mixin ;
 
 M: empty-mixin sheeple drop "wake up" ; inline
 
@@ -21,7 +21,7 @@ M: empty-mixin sheeple drop "wake up" ; inline
 [ t ] [ object \ sheeple lookup-method \ sheeple-test compiled-use? ] unit-test
 [ f ] [ empty-mixin \ sheeple lookup-method \ sheeple-test compiled-use? ] unit-test
 
-[ ] [ "in: compiler.tests.redefine3 use: arrays INSTANCE: array empty-mixin" eval( -- ) ] unit-test ;
+[ ] [ "IN: compiler.tests.redefine3 USE: arrays INSTANCE: array empty-mixin ;" eval( -- ) ] unit-test
 
 [ "wake up" ] [ sheeple-test ] unit-test
 [ f ] [ object \ sheeple lookup-method \ sheeple-test compiled-use? ] unit-test

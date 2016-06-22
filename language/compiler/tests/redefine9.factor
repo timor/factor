@@ -22,7 +22,7 @@ in: compiler.tests.redefine9
     "use: math
     in: compiler.tests.redefine9
     TUPLE: my-tuple ;
-    INSTANCE: my-tuple my-mixin" ;
+    INSTANCE: my-tuple my-mixin ;"
     eval( -- )
 ] unit-test
 

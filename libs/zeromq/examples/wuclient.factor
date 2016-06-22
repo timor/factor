@@ -23,4 +23,3 @@ in: zeromq.examples.wuclient
     ] with-destructors ;
 
 main: wuclient
-

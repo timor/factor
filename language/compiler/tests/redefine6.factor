@@ -21,7 +21,7 @@ in: compiler.tests.redefine6
     in: compiler.tests.redefine6
     TUPLE: my-tuple ;
     M: my-tuple my-generic drop 1 ;
-    INSTANCE: my-tuple my-mixin" ;
+    INSTANCE: my-tuple my-mixin ;"
     eval( -- )
 ] unit-test
 

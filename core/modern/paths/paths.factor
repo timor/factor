@@ -1,9 +1,9 @@
 ! Copyright (C) 2015 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors combinators.smart io.files kernel namespaces
-sequences sets splitting vocabs.files vocabs.hierarchy
-vocabs.loader vocabs.metadata ;
-IN: modern.paths
+USING: accessors combinators.smart io.directories.search
+io.files kernel namespaces sequences sets splitting vocabs.files
+vocabs.hierarchy vocabs.loader vocabs.metadata ;
+in: modern.paths
 
 : vocabs-from ( root -- vocabs )
     "" disk-vocabs-in-root/prefix
@@ -89,5 +89,5 @@ IN: modern.paths
     ] { } append-outputs-as reject-some-paths filter-exists ;
 
 : all-paths ( -- seq )
-    vocab-roots get [ [ ".factor" tail? ] find-all-files ] map
+    vocab-roots get [ [ ".factor" tail? ] find-all-files ] map concat
     reject-some-paths ;
