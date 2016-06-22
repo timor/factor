@@ -81,9 +81,13 @@ IN: modern.paths
         vocab-roots get [ vocabs-from ] map concat
     ] { } append-outputs-as ;
 
-: all-paths ( -- seq )
+: all-vocab-paths ( -- seq )
     [
         all-vocabs less-core-test-vocabs
         unsupported-vocabs diff
         [ modern-source-paths ] [ modern-docs-paths ] [ modern-tests-paths ] tri
     ] { } append-outputs-as reject-some-paths filter-exists ;
+
+: all-paths ( -- seq )
+    vocab-roots get [ [ ".factor" tail? ] find-all-files ] map
+    reject-some-paths ;
