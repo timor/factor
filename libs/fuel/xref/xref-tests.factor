@@ -1,6 +1,6 @@
 USING: arrays definitions fuel.xref fuel.xref.private io.pathnames kernel math
 sequences sets tools.test ;
-qualified: tools.crossref
+QUALIFIED: tools.crossref
 IN: fuel.xref.tests
 
 { t } [

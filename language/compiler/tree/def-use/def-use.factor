@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs compiler.tree compiler.tree.combinators
 fry kernel namespaces sequences stack-checker.branches ;
-qualified: sets
+QUALIFIED: sets
 IN: compiler.tree.def-use
 
 SYMBOL: def-use

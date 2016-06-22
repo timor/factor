@@ -7,7 +7,7 @@ make alien.c-types alien.data combinators.short-circuit math.order
 math.libm math.parser math.functions alien.syntax memory
 stack-checker ;
 FROM: math => float ;
-qualified: namespaces.private
+QUALIFIED: namespaces.private
 IN: compiler.tests.codegen
 
 ! Originally, this file did black box testing of templating

@@ -12,7 +12,7 @@ tools.deploy.config combinators combinators.private classes
 vocabs.loader.private classes.builtin slots.private grouping
 command-line io.pathnames memoize namespaces.private
 hashtables locals source-files ;
-qualified: classes.private
+QUALIFIED: classes.private
 IN: tools.deploy.shaker
 
 ! This file is some hairy shit.
