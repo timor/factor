@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors fry html.parser html.parser.analyzer
 http.client kernel tools.time sets assocs sequences
-concurrency.combinators io threads namespaces math multiline
+concurrency.combinators io threads namespaces math
 math.parser inspector urls logging combinators.short-circuit
 continuations calendar prettyprint dlists deques locals
 spider.unique-deque combinators concurrency.semaphores

@@ -1,5 +1,5 @@
 USING: kernel furnace.actions io.crlf validators tools.test math math.parser
-multiline namespaces http io.streams.string http.server http.server.requests
+namespaces http io.streams.string http.server http.server.requests
 sequences splitting accessors ;
 IN: furnace.actions.tests
 

@@ -1,6 +1,6 @@
 ! Copyright (C) 2008 Joe Groff.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: help.markup help.syntax kernel multiline sequences ;
+USING: help.markup help.syntax kernel sequences ;
 IN: literals
 
 HELP: $

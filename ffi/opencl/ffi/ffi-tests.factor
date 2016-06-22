@@ -1,6 +1,6 @@
 ! Copyright (C) 2010 Erik Charlebois.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: tools.test opencl.ffi multiline locals kernel io.encodings.ascii
+USING: tools.test opencl.ffi locals kernel io.encodings.ascii
 io.encodings.string sequences libc alien.c-types destructors math
 specialized-arrays alien.data math.order alien ;
 FROM: alien.c-types => float ;

@@ -1,7 +1,7 @@
 ! Copyright (C) 2009 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors math.order sorting.slots tools.test
-arrays sequences kernel assocs multiline sorting.functor ;
+arrays sequences kernel assocs sorting.functor ;
 IN: sorting.literals.tests
 
 TUPLE: sort-test a b c tuple2 ;

@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types arrays classes.struct fry kernel
-literals locals make math math.bitwise multiline sequences
+literals locals make math math.bitwise sequences
 slots.syntax ui.backend.windows vocabs.loader windows.errors
 windows.gdi32 windows.kernel32 windows.types windows.user32
 ui.gadgets.worlds ;

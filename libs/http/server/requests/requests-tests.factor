@@ -1,7 +1,7 @@
 USING: accessors assocs continuations http http.client
 http.client.private http.server http.server.requests io.crlf
 io.streams.limited io.streams.string linked-assocs kernel math
-math.parser multiline namespaces peg sequences splitting
+math.parser namespaces peg sequences splitting
 tools.test urls ;
 IN: http.server.requests.tests
 

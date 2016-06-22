@@ -1,5 +1,5 @@
 USING: help.markup help.syntax io kernel math quotations
-opengl.gl multiline assocs strings ;
+opengl.gl assocs strings ;
 IN: opengl.shaders
 
 HELP: gl-shader

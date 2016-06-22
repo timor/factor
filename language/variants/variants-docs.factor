@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff bsd license
 USING: arrays classes classes.singleton classes.tuple help.markup
-help.syntax kernel multiline slots quotations ;
+help.syntax kernel slots quotations ;
 IN: variants
 
 HELP: \ VARIANT:

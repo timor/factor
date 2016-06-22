@@ -3,7 +3,7 @@ multiline namespaces parser sequences sets splitting
 vocabs.parser words ;
 IN: funktors
 
-SYNTAX: \ factor[[ "]]" parse-multiline-string
+SYNTAX: \ funktor[[ "]]" parse-multiline-string
     manifest get search-vocab-names>>
     { "syntax" } diff members
     current-vocab name>> ".private" ?tail drop ".private" append suffix

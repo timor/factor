@@ -1,6 +1,6 @@
 USING: alien alien.libraries compiler.cfg compiler.cfg.builder
 compiler.cfg.instructions compiler.tree help.markup help.syntax
-literals make multiline sequences stack-checker.alien strings ;
+literals make sequences stack-checker.alien strings ;
 IN: compiler.cfg.builder.alien
 
 COMPILE<

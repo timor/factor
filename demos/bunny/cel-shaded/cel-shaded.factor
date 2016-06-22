@@ -1,5 +1,5 @@
 USING: arrays bunny.model continuations destructors kernel
-multiline opengl opengl.shaders opengl.capabilities opengl.gl
+opengl opengl.shaders opengl.capabilities opengl.gl
 sequences accessors combinators ;
 IN: bunny.cel-shaded
 

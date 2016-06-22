@@ -1,4 +1,4 @@
-USING: help.markup help.syntax literals multiline ;
+USING: help.markup help.syntax literals ;
 IN: compiler.tree.propagation
 
 COMPILE<

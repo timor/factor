@@ -1,6 +1,6 @@
 ! Copyright (C) 2010 Erik Charlebois.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: multiline locals io.encodings.ascii io.encodings.string sequences
+USING: locals io.encodings.ascii io.encodings.string sequences
 math specialized-arrays alien.c-types math.order alien opencl tools.test
 accessors arrays destructors kernel namespaces alien.data ;
 FROM: alien.c-types => float ;

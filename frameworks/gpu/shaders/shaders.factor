@@ -4,7 +4,7 @@ arrays assocs byte-arrays classes.mixin classes.parser
 classes.singleton classes.struct combinators combinators.short-circuit
 definitions destructors fry generic.parser gpu gpu.buffers gpu.private
 gpu.state hashtables images io.encodings.ascii io.files io.pathnames
-kernel lexer literals locals math math.parser memoize multiline namespaces
+kernel lexer literals locals math math.parser memoize namespaces
 opengl opengl.gl opengl.shaders parser quotations sequences
 specialized-arrays splitting strings tr ui.gadgets.worlds
 variants vectors vocabs vocabs.loader vocabs.parser words

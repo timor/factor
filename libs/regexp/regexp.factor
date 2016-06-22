@@ -1,10 +1,9 @@
 ! Copyright (C) 2008, 2009 Doug Coleman, Daniel Ehrenberg.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors combinators kernel kernel.private math sequences
-sequences.private strings sets assocs make lexer namespaces parser
-arrays fry locals regexp.parser splitting sorting regexp.ast
-regexp.negation regexp.compiler compiler.units words math.ranges
-multiline ;
+USING: accessors arrays compiler.units kernel kernel.private
+lexer make math math.ranges multiline namespaces regexp.ast
+regexp.compiler regexp.negation regexp.parser sequences
+sequences.private splitting strings words ;
 IN: regexp
 
 TUPLE: regexp
@@ -217,12 +216,10 @@ PRIVATE<
 
 PRIVATE>
 
-SYNTAX: \ R/ parse-regexp ;
 SYNTAX: \ R[[ "]]" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
 SYNTAX: \ R[=[ "]=]" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
 SYNTAX: \ R(( "))" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
 SYNTAX: \ R{{ "}}" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
 
 USE: vocabs.loader
-
 { "prettyprint" "regexp" } "regexp.prettyprint" require-when

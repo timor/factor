@@ -1,5 +1,5 @@
 ! (c)2009 Joe Groff bsd license
-USING: help.markup help.syntax multiline ;
+USING: help.markup help.syntax ;
 IN: qw
 
 HELP: \ qw{

@@ -3,7 +3,7 @@
 
 USING: accessors combinators formatting fry io.encodings.ascii
 io.files kernel literals math math.functions math.order
-multiline regexp sequences sequences.extras sets splitting
+regexp sequences sequences.extras sets splitting
 unicode ;
 
 IN: text-analysis

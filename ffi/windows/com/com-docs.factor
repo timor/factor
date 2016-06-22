@@ -1,5 +1,5 @@
 USING: help.markup help.syntax io kernel math quotations
-multiline destructors ;
+destructors ;
 IN: windows.com
 
 HELP: com-query-interface

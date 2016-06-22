@@ -1,6 +1,6 @@
 ! (c)2009 Joe Groff, see BSD license
 USING: accessors literals math math.affine-transforms
-math.functions multiline sequences svg tools.test xml
+math.functions sequences svg tools.test xml
 xml.traversal ;
 IN: svg.tests
 
@@ -94,7 +94,7 @@ ${
     T{ elliptical-arc f { 5.0 6.0 } 7.0 t f { 8.0 9.0 } f }
 } } [
     "
-    M 1.0,+1 3,-10e-1  l 2 2, 2 -2, 2 2   v -9 1 H 9 8  z 
+    M 1.0,+1 3,-10e-1  l 2 2, 2 -2, 2 2   v -9 1 H 9 8  z
     M 0 0  C -4.0 0.0 -8.0 4.0 -8.0 8.0  -8.0 4.0 -12.0 8.0 -16.0 8.0
     s 0.0,2.0 2.0,0.0
     Q -2 0 0 -2 -3. 0 0 3

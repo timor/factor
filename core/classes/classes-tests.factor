@@ -1,5 +1,5 @@
 USING: assocs classes classes.private compiler.units definitions
-eval generic io.streams.string kernel math multiline namespaces
+eval generic io.streams.string kernel math namespaces
 parser sequences sets sorting tools.test vocabs words ;
 IN: classes.tests
 

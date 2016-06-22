@@ -4,7 +4,7 @@ USING: accessors arrays assocs assocs.extras combinators
 combinators.short-circuit constructors continuations fry
 generalizations io.encodings.utf8 io.files kernel locals macros
 make math math.order modern.lexer modern.paths modern.slices
-multiline namespaces quotations sequences sequences.extras
+namespaces quotations sequences sequences.extras
 shuffle splitting splitting.extras splitting.monotonic strings
 unicode vocabs.loader ;
 IN: modern

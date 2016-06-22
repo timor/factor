@@ -1,5 +1,5 @@
 USING: classes.struct classes.tuple functors tools.test math
-words kernel multiline parser io.streams.string generic ;
+words kernel parser io.streams.string generic ;
 QUALIFIED-WITH: alien.c-types c ;
 IN: functors.tests
 

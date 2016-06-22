@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs calendar.format combinators
 combinators.short-circuit fry globs http.client kernel make
-math.parser multiline namespaces present regexp
+math.parser namespaces present regexp
 regexp.combinators sequences sets splitting splitting.monotonic
 unicode urls ;
 IN: robots

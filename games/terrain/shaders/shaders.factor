@@ -1,4 +1,4 @@
-USING: multiline ;
+USING: ;
 IN: terrain.shaders
 
 CONSTANT: sky-vertex-shader [[

@@ -5,7 +5,7 @@ alien.syntax arrays assocs classes.struct combinators
 combinators.short-circuit constructors continuations destructors
 forestdb.ffi forestdb.utils fry generalizations io.directories
 io.encodings.string io.encodings.utf8 io.files.temp io.pathnames
-kernel layouts libc make math math.parser math.ranges multiline
+kernel layouts libc make math math.parser math.ranges
 namespaces sequences system tools.test ;
 IN: forestdb.lib
 
@@ -135,7 +135,7 @@ IN: forestdb.lib
 
 ! Snapshots
 
-/*
+![[
 { 5 5 } [
     [
         5 set-kv-n
@@ -145,10 +145,10 @@ IN: forestdb.lib
         ] with-forestdb-snapshot
     ] with-forestdb-test-manual
 ] unit-test
-*/
+]]
 
 
-/*
+![[
 ! Snapshots can only occur on commits. If you commit five keys at once,
 ! and then try to open a snapshot on the second key, it should fail.
 
@@ -243,7 +243,7 @@ IN: forestdb.lib
     ] with-forestdb-tester
 ] unit-test
 
-*/
+]]
 
 
 ! Iterators test

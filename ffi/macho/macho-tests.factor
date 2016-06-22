@@ -1,7 +1,7 @@
 ! Copyright (C) 2010 Erik Charlebois.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien io io.streams.string kernel literals macho
-multiline sequences strings system tools.test ;
+sequences strings system tools.test ;
 IN: macho.tests
 
 CONSTANT: validation-output [[

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs fry
 hashtables io kernel locals math math.order math.parser
-math.ranges multiline sequences bitstreams bit-arrays ;
+math.ranges sequences bitstreams bit-arrays ;
 IN: compression.huffman
 
 QUALIFIED-WITH: bitstreams bs ;

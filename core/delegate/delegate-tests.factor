@@ -1,6 +1,6 @@
 USING: delegate kernel arrays tools.test words math definitions
 compiler.units parser generic prettyprint io.streams.string
-accessors eval multiline generic.single delegate.protocols
+accessors eval generic.single delegate.protocols
 delegate.private assocs see make ;
 IN: delegate.tests
 
@@ -39,7 +39,7 @@ M: hello bing hello-test ;
 { H{ { goodbye T{ consultation f baz goodbye [ these>> ] } } } } [ baz protocol-consult ] unit-test
 { H{ } } [ bee protocol-consult ] unit-test
 
-{ "USING: delegate ;\nIN: delegate.tests\nPROTOCOL: baz foo bar { whoa 1 } ; inline\n" } [ [ baz see ] with-string-writer ] unit-test
+{ "IN: delegate.tests\nPROTOCOL: baz foo bar { whoa 1 } ; inline\n" } [ [ baz see ] with-string-writer ] unit-test
 
 GENERIC: one ( a -- b ) ;
 M: integer one ;

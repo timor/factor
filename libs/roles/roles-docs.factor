@@ -1,5 +1,5 @@
 ! (c)2009 Joe Groff bsd license
-USING: classes.mixin help.markup help.syntax kernel multiline roles ;
+USING: classes.mixin help.markup help.syntax kernel roles ;
 IN: roles
 
 HELP: \ ROLE:

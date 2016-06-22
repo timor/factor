@@ -1,5 +1,5 @@
 USING: compiler.cfg compiler.cfg.stacks.local compiler.tree help.markup
-help.syntax literals make math multiline quotations sequences ;
+help.syntax literals make math quotations sequences ;
 IN: compiler.cfg.builder.blocks
 
 COMPILE<

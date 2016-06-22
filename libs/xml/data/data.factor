@@ -1,7 +1,7 @@
 ! Copyright (C) 2005, 2009 Daniel Ehrenberg
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel sequences sequences.private assocs arrays
-delegate.protocols delegate vectors accessors multiline
+delegate.protocols delegate vectors accessors
 macros words quotations combinators slots fry strings
 combinators.short-circuit ;
 IN: xml.data

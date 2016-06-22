@@ -1,5 +1,5 @@
 USING: furnace.utilities io.encodings.utf8 io.files io.files.temp kernel
-multiline parser tools.test webapps.counter ;
+parser tools.test webapps.counter ;
 IN: furnace.utilities.tests
 
 COMPILE<

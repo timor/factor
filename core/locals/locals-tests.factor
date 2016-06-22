@@ -2,7 +2,7 @@ USING: locals math sequences tools.test hashtables words kernel
 namespaces arrays strings prettyprint io.streams.string parser
 accessors generic eval combinators combinators.short-circuit
 combinators.short-circuit.smart math.order math.functions
-definitions compiler.units fry lexer words.symbol see multiline
+definitions compiler.units fry lexer words.symbol see
 combinators.smart ;
 IN: locals.tests
 
@@ -361,7 +361,7 @@ ERROR: punned-class x ;
 { 4 } [ 12 littledan-cond-problem-1 ] unit-test
 { "howdy" } [ 0 littledan-cond-problem-1 ] unit-test
 
-/*
+![[
 :: littledan-case-problem-3 ( a quot -- b )
     a {
         { t [ a not ] }
@@ -377,7 +377,7 @@ ERROR: punned-class x ;
     [ 1 + ] littledan-case-problem-3 ;
 
 \ littledan-case-problem-4 def>> must-infer
-*/
+]]
 
 GENERIC: lambda-method-forget-test ( a -- b ) ;
 

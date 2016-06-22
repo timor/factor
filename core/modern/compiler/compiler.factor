@@ -3,7 +3,7 @@
 USING: accessors arrays assocs classes.mixin combinators
 combinators.short-circuit definitions effects effects.parser fry
 graphs io.pathnames kernel lexer locals math math.statistics
-memoize modern multiline parser quotations sequences
+memoize modern parser quotations sequences
 sequences.extras sets splitting strings unicode words ;
 IN: modern.compiler
 
@@ -16,22 +16,24 @@ IN: modern.compiler
 : filter-using ( using -- using' )
     { "accessors" "threads.private" "threads" } diff ;
 
-!  <<
-! SYNTAX: STRING-DISPATCH:
-    ! [
-        ! scan-new-word scan-effect
-        ! H{ } clone over [ in>> but-last ] [ out>> ] bi <effect>
-        ! '[ _ ?at [ throw ] unless _ call-effect ]
-        ! swap
-    ! ] with-definition define-declared ;
+![[
+COMPILE<
+SYNTAX: STRING-DISPATCH:
+    [
+        scan-new-word scan-effect
+        H{ } clone over [ in>> but-last ] [ out>> ] bi <effect>
+        '[ _ ?at [ throw ] unless _ call-effect ]
+        swap
+    ] with-definition define-declared ;
 
-! SYNTAX: STRING-M:
-    ! [
-        ! scan-token scan-word parse-definition
-        ! over changed-definition
-        ! swap def>> first swapd set-at
-    ! ] with-definition ;
-! COMPILE>
+SYNTAX: STRING-M:
+    [
+        scan-token scan-word parse-definition
+        over changed-definition
+        swap def>> first swapd set-at
+    ] with-definition ;
+COMPILE>
+]]
 
 
 TUPLE: holder literal ;
@@ -356,7 +358,7 @@ MEMO: load-modern ( name -- literals )
     load-modern [ holders>using [ load-modern ] map ] closure ;
 
 
-/*
+![[
 "sequences" load-modern
 [ holder>definitions ] map sift
 [ dup array? [ [ name>> ] map ] [ name>> ] if ] map flatten
@@ -368,4 +370,4 @@ clear
 definitions>> [ define'? ] filter
 [ holder>> word'? ] filter
 first
-*/
+]]

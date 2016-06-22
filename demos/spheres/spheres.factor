@@ -1,5 +1,5 @@
 USING: kernel opengl opengl.demo-support opengl.gl opengl.textures
-opengl.shaders opengl.framebuffers opengl.capabilities multiline
+opengl.shaders opengl.framebuffers opengl.capabilities
 ui.gadgets accessors sequences ui.render ui math locals arrays
 generalizations combinators ui.gadgets.worlds
 literals ui.pixel-formats ;

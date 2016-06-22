@@ -8,6 +8,6 @@ HELP: run-apple-script
 { $notes "Currently, return values are unsupported." } ;
 
 HELP: \ APPLESCRIPT:
-{ $syntax "APPLESCRIPT: word ...applescript... APPLESCRIPT;" }
+{ $syntax "APPLESCRIPT: word [[ ...applescript ... ]]" }
 { $values { "word" "a new word to define" } { "...applescript..." "AppleScript source text" } }
 { $description "Defines a word that when called will run the provided uncompiled AppleScript.  The word has stack effect " { $snippet "( -- )" } " due to return values being currently unsupported." } ;

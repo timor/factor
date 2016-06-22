@@ -1,4 +1,4 @@
-USING: help.markup help.syntax literals multiline sequences splitting ;
+USING: help.markup help.syntax literals sequences splitting ;
 IN: compiler.cfg.instructions.syntax
 
 COMPILE<
