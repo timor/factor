@@ -444,7 +444,7 @@ $nl
         "String             = . ?[ ast-string? ]?   => [[ value>> ]]"
         "RegExp             = . ?[ ast-regexp? ]?   => [[ value>> ]]"
         "SpacesNoNl         = (!(nl) Space)* => [[ ignore ]]"
-        "Sc                 = SpacesNoNl (nl | &(\"}\") | End)| \";\""
+        "Sc                 = SpacesNoNl (nl | &(\"}\") | End)| \";\" }} ;"
     }
 }
 "Here the rule 'nl' is defined using the default tokenizer of sequential "
