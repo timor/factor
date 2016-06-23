@@ -59,7 +59,7 @@ DEFER: in-rect*
 : ur-bounds ( rect -- rect' )
     [ [ loc>> ] [ dim>> { 0.5 0.5 } v* ] bi v+ ] [ child-dim ] bi <rect> ;
 
-: {quadrants} ( node -- quadrants )
+: node>quadrants ( node -- quadrants )
     { [ ll>> ] [ lr>> ] [ ul>> ] [ ur>> ] } cleave 4array ;
 
 : add-subnodes ( node -- node )
@@ -130,7 +130,7 @@ DEFER: in-rect*
     } case ;
 
 : collapseable? ( node -- {point,value}/f )
-    {quadrants} { [ [ leaf?>> ] all? ] [ ?leaf ] } 1&& ;
+    node>quadrants { [ [ leaf?>> ] all? ] [ ?leaf ] } 1&& ;
 
 : remove-subnodes ( node -- leaf ) f >>ll f >>lr f >>ul f >>ur t >>leaf? ;
 
@@ -162,7 +162,7 @@ DEFER: in-rect*
 
 : leaf= ( a b -- ? ) [ [ point>> ] [ value>> ] bi 2array ] same? ;
 
-: node= ( a b -- ? ) [ {quadrants} ] same? ;
+: node= ( a b -- ? ) [ node>quadrants ] same? ;
 
 : (tree=) ( a b -- ? ) dup leaf?>> [ leaf= ] [ node= ] if ;
 
