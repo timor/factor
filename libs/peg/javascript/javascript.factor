@@ -4,4 +4,4 @@ USING: kernel accessors peg.javascript.tokenizer peg.javascript.parser ;
 IN: peg.javascript
 
 : parse-javascript ( string -- ast )
-  javascript ;
+    javascript ;
