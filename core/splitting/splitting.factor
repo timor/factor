@@ -98,6 +98,9 @@ PRIVATE>
 : split ( seq separators -- pieces )
     [ member? ] curry split-when ; inline
 
+: ?split ( seq separators -- pieces/seq )
+    split dup length 1 = [ first ] when ; inline
+
 : split-slice ( seq separators -- pieces )
     [ member? ] curry split-when-slice ; inline
 
