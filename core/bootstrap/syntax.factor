@@ -11,6 +11,7 @@ IN: bootstrap.syntax
         "("
         ":"
         ";"
+        "--"
         "![[" "![=[" "![==["
         "[[" "[=[" "[==["
         "factor[[" "factor[=[" "factor[==["
