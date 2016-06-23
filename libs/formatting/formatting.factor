@@ -37,7 +37,7 @@ PRIVATE<
 
 ERROR: unknown-printf-directive ;
 
-: parse-printf ( string -- obj ) EBNF{{
+EBNF: parse-printf [=[
 
 zero      = "0"                  => [[ char: 0 ]]
 char      = "'" (.)              => [[ second ]]
@@ -90,7 +90,7 @@ plain-text = (!("%").)+          => [[ >string ]]
 
 text      = (formats|plain-text)* => [[ ]]
 
-}} ;
+]=] ;
 
 : printf-quot ( format-string -- format-quot n )
     parse-printf [ [ callable? ] count ] keep [

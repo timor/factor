@@ -5,7 +5,7 @@ combinators.short-circuit accessors math.parser quoting
 locals ;
 IN: db.postgresql.errors
 
-: parse-postgresql-sql-error ( string -- obj ) EBNF{{
+EBNF: parse-postgresql-sql-error [=[
 
 Error = "ERROR:" [ ]+
 
@@ -35,7 +35,7 @@ UnknownError = .* => [[ >string <sql-unknown-error> ]]
 
 PostgresqlSqlError = (TableError | DatabaseError | FunctionError | SyntaxError | UnknownError) 
 
-}} ;
+]=] ;
 
 
 TUPLE: parse-postgresql-location column line text ;

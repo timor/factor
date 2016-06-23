@@ -4,7 +4,7 @@ USING: infix.ast kernel peg peg.ebnf math.parser sequences
 strings ;
 IN: infix.tokenizer
 
-: tokenize-infix ( string -- obj ) EBNF{{
+EBNF: tokenize-infix [=[
 Letter            = [a-zA-Z]
 Digit             = [0-9]
 Digits            = Digit+
@@ -21,4 +21,4 @@ Special           =   [+*/%(),] | "-" => [[ char: - ]]
 Tok               = Spaces (Name | Number | Special )
 End               = !(.)
 Toks              = Tok* Spaces End
-}} ;
+]=] ;

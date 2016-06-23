@@ -18,7 +18,7 @@ IN: peg.javascript.parser
 ! This operates a character at a time. Using this 'nl' in the parser
 ! allows us to detect newlines when we need to for the semicolon
 ! insertion rule, but ignore it in all other places.
-: javascript ( string -- obj ) EBNF{{
+EBNF: javascript [=[
 tokenizer         = default
 nl                = "\r\n" | "\n"
 
@@ -197,4 +197,4 @@ SrcElem            =   "function" Name:n FuncRest:f                  => [[ n f a
                      | Stmt
 SrcElems           = SrcElem*                                      => [[ ast-begin boa ]]
 TopLevel           = SrcElems Spaces
-}} ;
+]=] ;

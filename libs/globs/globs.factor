@@ -12,7 +12,7 @@ IN: globs
 : wild-path-separator ( -- sep )
     os windows? R{{ [^\\/\\][\\/\\]|[^\\/\\]}} R{{ [^\\/][\\/]|[^\\/]}} ? ; foldable
 
-: <glob> ( string -- obj ) EBNF{{
+EBNF: <glob> [=[
 
 Character = "\\" .:c => [[ c 1string <literal> ]]
           | !(","|"}") . => [[ 1string <literal> ]]
@@ -45,7 +45,7 @@ End = !(.)
 
 Main = Concatenation End
 
-}} ;
+]=] ;
 
 : glob-matches? ( input glob -- ? )
     [ >case-fold ] bi@ <glob> matches? ;

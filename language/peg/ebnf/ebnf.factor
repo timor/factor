@@ -4,7 +4,7 @@ USING: accessors assocs combinators combinators.short-circuit
 effects kernel make math math.parser multiline namespaces parser
 peg peg.parsers quotations sequences sequences.deep splitting
 stack-checker strings strings.parser summary unicode
-vocabs.parser words ;
+vocabs.parser words lexer ;
 FROM: vocabs.parser => search ;
 FROM: peg.search => replace ;
 IN: peg.ebnf
@@ -558,7 +558,7 @@ SYNTAX: \ EBNF((
     suffix! \ call suffix! reset-tokenizer ;
 
 SYNTAX: \ EBNF:
-    reset-tokenizer scan-new-word dup "EBNF;" parse-multiline-string
+    reset-tokenizer scan-new-word dup scan-object ";" expect
     ebnf>quot swapd
     ( input -- ast ) define-declared "ebnf-parser" set-word-prop
     reset-tokenizer ;

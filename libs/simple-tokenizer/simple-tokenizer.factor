@@ -3,11 +3,11 @@
 USING: peg.ebnf strings ;
 IN: simple-tokenizer
 
-: tokenize ( string -- obj ) EBNF{{
+EBNF: tokenize [=[
 space = [ \t\n\r]
 escaped-char = "\\" .:ch => [[ ch ]]
 quoted = '"' (escaped-char | [^"])*:a '"' => [[ a ]]
 unquoted = (escaped-char | [^ \t\n\r"])+
 argument = (quoted | unquoted) => [[ >string ]]
 command = space* (argument:a space* => [[ a ]])+:c !(.) => [[ c ]]
-}} ;
+]=] ;

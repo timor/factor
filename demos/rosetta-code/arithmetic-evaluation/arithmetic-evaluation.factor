@@ -34,7 +34,7 @@ TUPLE: sub < operator ;   C: <sub> sub ;
 TUPLE: mul < operator ;   C: <mul> mul ;
 TUPLE: div < operator ;   C: <div> div ;
 
-: expr-ast ( string -- obj ) EBNF{{
+EBNF: expr-ast [=[
 spaces   = [\n\t ]*
 digit    = [0-9]
 number   = (digit)+                         => [[ string>number ]]
@@ -51,7 +51,7 @@ exp      =   exp:a spaces "+" fac:b         => [[ a b <add> ]]
            | fac
 
 main     = exp:e spaces !(.)                => [[ e ]]
-}} ;
+]=] ;
 
 GENERIC: eval-ast ( ast -- result ) ;
 

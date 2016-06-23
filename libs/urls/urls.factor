@@ -35,7 +35,7 @@ M: url >url ;
 
 PRIVATE<
 
-: parse-url ( string -- obj ) EBNF{{
+EBNF: parse-url [=[
 
 protocol = [a-z+]+                  => [[ url-decode ]]
 username = [^/:@#?]+                => [[ url-decode ]]
@@ -57,7 +57,7 @@ url      = (((protocol "://") => [[ first ]] auth hostname)
            ("?" query               => [[ second ]])?
            ("#" anchor              => [[ second ]])?
 
-}} ;
+]=] ;
 
 PRIVATE>
 

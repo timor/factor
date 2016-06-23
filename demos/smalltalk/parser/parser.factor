@@ -13,7 +13,7 @@ ERROR: bad-number str ;
 : check-number ( str -- n )
     >string dup string>number [ ] [ bad-number ] ?if ;
 
-: parse-smalltalk ( string -- obj ) EBNF{{
+EBNF: parse-smalltalk [=[
 
 Character = .
 WhitespaceCharacter = [ \t\n\r]
@@ -225,4 +225,4 @@ End = !(.)
 
 Program = TopLevelForm End
 
-}} ;
+]=] ;

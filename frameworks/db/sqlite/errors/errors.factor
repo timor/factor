@@ -14,7 +14,7 @@ SINGLETONS: table-exists table-missing ;
         { table-exists [ <sql-table-exists> ] }
     } case ;
 
-: parse-sqlite-sql-error ( string -- obj ) EBNF{{
+EBNF: parse-sqlite-sql-error [=[
 
 TableMessage = " already exists" => [[ table-exists ]]
 
@@ -25,4 +25,4 @@ SqliteError =
       => [[ table >string <sql-table-missing> ]]
     | .*:error
       => [[ error >string <unparsed-sqlite-error> ]]
-}} ;
+]=] ;

@@ -52,7 +52,7 @@ ERROR: bad-vector-length seq n ;
         [ bad-vector-length ]
     } case ;
 
-: parse-gml ( string -- obj ) EBNF{{
+EBNF: parse-gml [=[
 
 Letter = [a-zA-Z]
 Digit = [0-9]
@@ -124,4 +124,4 @@ Tokens = Token* => [[ [ comment? ] reject ]]
 
 Program = Tokens Spaces !(.) => [[ parse-proc ]]
 
-}} ;
+]=] ;

@@ -16,8 +16,7 @@ XML-NS: inkscape-name http://www.inkscape.org/namespaces/inkscape ;
 
 : degrees ( deg -- rad ) pi * 180.0 / ;
 
-: svg-transform>affine-transform ( string -- obj )
-    EBNF{{
+EBNF: svg-transform>affine-transform [=[
 
 transforms =
     transform:m comma-wsp+ transforms:n => [[ m n a. ]]
@@ -77,7 +76,7 @@ wsp = [ \t\r\n]
 transform-list = wsp* transforms?:t wsp*
     => [[ t [ identity-transform ] unless* ]]
 
-}} ;
+]=] ;
 
 : tag-transform ( tag -- transform )
     "transform" svg-name attr svg-transform>affine-transform ;
@@ -96,7 +95,7 @@ TUPLE: elliptical-arc radii x-axis-rotation large-arc? sweep? p relative? ;
 : (set-relative) ( args rel -- args )
     '[ [ _ >>relative? drop ] each ] keep ;
 
-: svg-path>array ( string -- obj ) EBNF{{
+EBNF: svg-path>array [=[
 
 moveto-drawto-command-groups =
     moveto-drawto-command-group:first wsp* moveto-drawto-command-groups:rest
@@ -219,7 +218,7 @@ wsp = [ \t\r\n]
 
 svg-path = wsp* moveto-drawto-command-groups?:x wsp* => [[ x ]]
 
-}} ;
+]=] ;
 
 : tag-d ( tag -- d )
     "d" svg-name attr svg-path>array ;
