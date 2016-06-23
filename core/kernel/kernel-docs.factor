@@ -638,7 +638,7 @@ $nl
         "    \"San Francisco\""
         "    \"Los Angeles\""
         "    \"New York\""
-        "}"
+        "} ;"
         ""
         ": add-tax ( price city -- price' )"
         "    american-cities member? [ 1.1 * ] unless ;"

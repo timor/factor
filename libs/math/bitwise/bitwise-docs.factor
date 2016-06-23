@@ -136,7 +136,7 @@ HELP: symbols>flags
         "    { resize-handles 8 }"
         "    { small-title-bar 16 }"
         "    { normal-title-bar 32 }"
-        "}"
+        "} ;"
         "{ resize-handles close-button small-title-bar } window-controls>flags symbols>flags ."
         "25"
     }

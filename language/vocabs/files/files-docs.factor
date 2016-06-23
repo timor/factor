@@ -23,9 +23,9 @@ HELP: vocab-files
     $[
         {
             "{"
-            "    \"resource:core/alien/libraries/libraries.factor\""
-            "    \"resource:core/alien/libraries/libraries-docs.factor\""
-            "    \"resource:core/alien/libraries/libraries-tests.factor\""
+            "    \"vocab:alien/libraries/libraries.factor\""
+            "    \"vocab:alien/libraries/libraries-docs.factor\""
+            "    \"vocab:alien/libraries/libraries-tests.factor\""
             "}"
         } "\n" join
     ]
@@ -42,15 +42,15 @@ HELP: vocab-tests
     $[
         {
             "{"
-            "    \"resource:basis/xml/tests/cdata.factor\""
-            "    \"resource:basis/xml/tests/encodings.factor\""
-            "    \"resource:basis/xml/tests/funny-dtd.factor\""
-            "    \"resource:basis/xml/tests/soap.factor\""
-            "    \"resource:basis/xml/tests/state-parser-tests.factor\""
-            "    \"resource:basis/xml/tests/templating.factor\""
-            "    \"resource:basis/xml/tests/test.factor\""
-            "    \"resource:basis/xml/tests/xmltest.factor\""
-            "    \"resource:basis/xml/tests/xmode-dtd.factor\""
+            "    \"vocab:xml/tests/cdata.factor\""
+            "    \"vocab:xml/tests/encodings.factor\""
+            "    \"vocab:xml/tests/funny-dtd.factor\""
+            "    \"vocab:xml/tests/soap.factor\""
+            "    \"vocab:xml/tests/state-parser-tests.factor\""
+            "    \"vocab:xml/tests/templating.factor\""
+            "    \"vocab:xml/tests/test.factor\""
+            "    \"vocab:xml/tests/xmltest.factor\""
+            "    \"vocab:xml/tests/xmode-dtd.factor\""
             "}"
         } "\n" join
     ]

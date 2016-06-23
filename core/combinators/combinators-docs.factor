@@ -119,7 +119,7 @@ $nl
 "Quotations also implement the sequence protocol, and can be manipulated with sequence words; see " { $link "quotations" } ". However, such runtime quotation manipulation will not be optimized by the optimizing compiler." ;
 
 ARTICLE: "booleans" "Booleans"
-"In Factor, any object that is not " { $link f } " has a true value, and " { $link f } " has a false value. The " { $link t } " object is the canonical true value."
+"In Factor, any object that is not " { $link postpone\ f } " has a true value, and " { $link postpone\ f } " has a false value. The " { $link t } " object is the canonical true value."
 { $subsections f t }
 "A union class of the above:"
 { $subsections boolean }
@@ -133,25 +133,25 @@ ARTICLE: "booleans" "Booleans"
 }
 "Boolean values are most frequently used for " { $link "conditionals" } "."
 { $heading "The f object and f class" }
-"The " { $link f } " object is the unique instance of the " { $link f } " class; the two are distinct objects. The latter is also a parsing word which adds the " { $link f } " object to the parse tree at parse time. To refer to the class itself you must use " { $link postpone\ postpone\ } " or " { $link postpone\ \ } " to prevent the parsing word from executing."
+"The " { $link postpone\ f } " object is the unique instance of the " { $link postpone\ f } " class; the two are distinct objects. The latter is also a parsing word which adds the " { $link postpone\ f } " object to the parse tree at parse time. To refer to the class itself you must use " { $link \ postpone\ } " or " { $link \ \ } " to prevent the parsing word from executing."
 $nl
-"Here is the " { $link f } " object:"
+"Here is the " { $link \ f } " object:"
 { $example "f ." "f" }
-"Here is the " { $link f } " class:"
-{ $example "\\ f ." "postpone\ f" }
+"Here is the " { $link \ f } " class:"
+{ $example "\\ f ." "postpone\\ f" }
 "They are not equal:"
 { $example "f \\ f = ." "f" }
-"Here is an array containing the " { $link f } " object:"
+"Here is an array containing the " { $link \ f } " object:"
 { $example "{ f } ." "{ f }" }
-"Here is an array containing the " { $link f } " class:"
-{ $example "{ postpone\ f } ." "{ postpone\ f }" }
-"The " { $link f } " object is an instance of the " { $link f } " class:"
-{ $example "USE: classes" "f class-of ." "postpone\ f" }
-"The " { $link f } " class is an instance of " { $link word } ":"
+"Here is an array containing the " { $link \ f } " class:"
+{ $example "{ postpone\\ f } ." "{ postpone\\ f }" }
+"The " { $link postpone\ f } " object is an instance of the " { $link postpone\ f } " class:"
+{ $example "USE: classes" "f class-of ." "postpone\\ f" }
+"The " { $link postpone\ f } " class is an instance of " { $link word } ":"
 { $example "USE: classes" "\\ f class-of ." "word" }
 "On the other hand, " { $link t } " is just a word, and there is no class which it is a unique instance of."
 { $example "t \\ t eq? ." "t" }
-"Many words which search collections confuse the case of no element being present with an element being found equal to " { $link f } ". If this distinction is important, there is usually an alternative word which can be used; for example, compare " { $link at } " with " { $link at* } "." ;
+"Many words which search collections confuse the case of no element being present with an element being found equal to " { $link postpone\ f } ". If this distinction is important, there is usually an alternative word which can be used; for example, compare " { $link at } " with " { $link at* } "." ;
 
 ARTICLE: "conditionals-boolean-equivalence" "Expressing conditionals with boolean logic"
 "Certain simple conditional forms can be expressed in a simpler manner using boolean logic."

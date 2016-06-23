@@ -62,8 +62,8 @@ HELP: translate-local-loc
 { $examples
   { $example
     "USING: compiler.cfg.stacks.local compiler.cfg.registers compiler.cfg.debugger namespaces prettyprint ;"
-    "D: 7 { { 3 0 } { 0 0 } } translate-local-loc ."
-    "D: 4"
+    "d: 7 { { 3 0 } { 0 0 } } translate-local-loc ."
+    "d: 4"
   }
 }
 { $see-also height-state } ;

@@ -469,13 +469,13 @@ HELP: \ SINGLETONS:
 { $description "Creates a new singleton for every token until the " { $snippet ";" } "." } ;
 
 HELP: \ ALIAS:
-{ $syntax "ALIAS: new-word existing-word" }
+{ $syntax "ALIAS: new-word existing-word ;" }
 { $values { "new-word" word } { "existing-word" word } }
 { $description "Creates a new inlined word that calls the existing word." }
 { $examples
     { $example "USING: prettyprint sequences ;"
                "IN: alias.test"
-               "ALIAS: sequence-nth nth"
+               "ALIAS: sequence-nth nth ;"
                "0 { 10 20 30 } sequence-nth ."
                "10"
     }
@@ -685,7 +685,7 @@ HELP: \ MATH:
 { $description "Defines a new generic word which uses the " { $link math-combination } " method combination." } ;
 
 HELP: \ HOOK:
-{ $syntax "HOOK: word variable ( stack -- effect )" }
+{ $syntax "HOOK: word variable ( stack -- effect ) ;" }
 { $values { "word" "a new word to define" } { "variable" word } }
 { $description "Defines a new hook word in the current vocabulary. Hook words are generic words which dispatch on the value of a variable, so methods are defined with " { $link \ M: } ". Hook words differ from other generic words in that the dispatch value is removed from the stack before the chosen method is called." }
 { $examples
@@ -695,7 +695,7 @@ HELP: \ HOOK:
         "SYMBOL: transport"
         "TUPLE: land-transport ;"
         "TUPLE: air-transport ;"
-        "HOOK: deliver transport ( destination -- )"
+        "HOOK: deliver transport ( destination -- ) ;"
         "M: land-transport deliver \"Land delivery to \" write print ;"
         "M: air-transport deliver \"Air delivery to \" write print ;"
         "T{ air-transport } transport set"
