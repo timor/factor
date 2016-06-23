@@ -66,14 +66,14 @@ ERROR: unexpected-end n string ;
     n n' string ?<slice>
     ch ; inline
 
-:: slice-until' ( n string quot -- n' string slice/f ch/f )
+:: (slice-until) ( n string quot -- n' string slice/f ch/f )
     n string quot find-from :> ( n' ch )
     n' string
     n n' string ?<slice>
     ch ; inline
 
 : slice-until ( n string quot -- n' string slice/f )
-    slice-until' drop ; inline
+    (slice-until) drop ; inline
 
 :: slice-til-not-whitespace ( n string -- n' string slice/f ch/f )
     n string [ "\s\r\n" member? not ] find-from :> ( n' ch )
@@ -100,7 +100,7 @@ ERROR: unexpected-end n string ;
         n string string empty-slice-end f
     ] if ; inline
 
-:: merge-slice-til-eol-slash'' ( n string -- n' string slice/f ch/f )
+:: ((merge-slice-til-eol-slash)) ( n string -- n' string slice/f ch/f )
     n [
         n string '[ "\r\n\\" member? ] find-from :> ( n' ch )
         n' string
@@ -128,11 +128,11 @@ ERROR: unexpected-end n string ;
 : ?nth' ( n/f string/f -- obj/f )
     over [ ?nth ] [ 2drop f ] if ;
 
-:: merge-slice-til-eol-slash' ( n string slice -- n' string slice/f ch/f )
-    n string merge-slice-til-eol-slash'' :> ( n' string' slice' ch' )
+:: (merge-slice-til-eol-slash) ( n string slice -- n' string slice/f ch/f )
+    n string ((merge-slice-til-eol-slash)) :> ( n' string' slice' ch' )
     ch' char: \ = [
         n' 1 + string' ?nth' "\r\n" member? [
-            n' 2 + string' slice slice' span-slices merge-slice-til-eol-slash'
+            n' 2 + string' slice slice' span-slices (merge-slice-til-eol-slash)
         ] [
             "omg" throw
         ] if
@@ -142,7 +142,7 @@ ERROR: unexpected-end n string ;
 
 ! Supports \ at eol (with no space after it)
 : slice-til-eol-slash ( n string -- n' string slice/f ch/f )
-    2dup empty-slice-from merge-slice-til-eol-slash' ;
+    2dup empty-slice-from (merge-slice-til-eol-slash) ;
 
 :: slice-til-separator-inclusive ( n string tokens -- n' string slice/f ch/f )
     n string '[ tokens member? ] find-from [ dup [ 1 + ] when ] dip  :> ( n' ch )
