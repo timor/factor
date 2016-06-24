@@ -12,14 +12,14 @@ PRIVATE<
 : decode-value ( string -- string' )
     "\\`" "`" replace ;
 
-: `? ( ch1 ch2 -- ? )
-    [ char: \ = not ] [ char: ` = ] bi* and ;
+: unescaped-backtick? ( ch1 ch2 -- ? )
+    [ char: \ = not ] [ char: ` = ] bi* and ; inline
 
-: (find-`) ( string -- n/f )
-    2 clump [ first2 `? ] find drop [ 1 + ] [ f ] if* ;
+: (find-escaped-backtick) ( string -- n/f )
+    2 clump [ first2 unescaped-backtick? ] find drop [ 1 + ] [ f ] if* ;
 
-: find-` ( string -- n/f )
-    dup ?first char: ` = [ drop 0 ] [ (find-`) ] if ;
+: find-escaped-backtick ( string -- n/f )
+    dup ?first char: \` = [ drop 0 ] [ (find-escaped-backtick) ] if ;
 
 : parse-name ( string -- remain name )
     ":`" split1 swap decode-value ;
@@ -31,7 +31,7 @@ DEFER: name/values
     [ "" ] [ dup length 1 = [ first ] when ] if-empty ;
 
 : parse-value ( string -- remain value )
-    dup find-` [
+    dup find-escaped-backtick [
         dup 1 - pick ?nth char: \: =
         [ drop name/values ] [ cut swap (parse-value) ] if
         [ rest [ blank? ] trim-head ] dip
