@@ -216,6 +216,9 @@ PRIVATE<
 
 PRIVATE>
 
+SYNTAX: \ R`` "``" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
+SYNTAX: \ R``` "```" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
+SYNTAX: \ R```` "````" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
 SYNTAX: \ R[[ "]]" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
 SYNTAX: \ R[=[ "]=]" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
 SYNTAX: \ R(( "))" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
