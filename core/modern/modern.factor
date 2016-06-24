@@ -566,8 +566,8 @@ CONSTANT: factor-lexing-rules {
 ! What a lexer body looks like, produced by make-lexer
 ! : lex ( n/f string -- n'/f string literal )
     ! "!`\\\"[{(\s\r\n" slice-til-either {
-        ! { char: ! [ read-exclamation ] }
-        ! { char: ` [ read-backtick ] }
+        ! { char: \! [ read-exclamation ] }
+        ! { char: \` [ read-backtick ] }
         ! { char: \ [ read-backslash ] }
         ! { char: \" [ read-string ] }
         ! { char: \[ [ read-bracket ] }

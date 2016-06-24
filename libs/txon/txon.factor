@@ -13,7 +13,7 @@ PRIVATE<
     "\\`" "`" replace ;
 
 : unescaped-backtick? ( ch1 ch2 -- ? )
-    [ char: \ = not ] [ char: ` = ] bi* and ; inline
+    [ char: \ = not ] [ char: \` = ] bi* and ; inline
 
 : (find-escaped-backtick) ( string -- n/f )
     2 clump [ first2 unescaped-backtick? ] find drop [ 1 + ] [ f ] if* ;
@@ -45,7 +45,7 @@ DEFER: name/values
     ":`" over subseq? [ (name=value) ] [ f swap ] if ;
 
 : name/values ( string -- remain terms )
-    [ dup { [ empty? not ] [ first char: ` = not ] } 1&& ]
+    [ dup { [ empty? not ] [ first char: \` = not ] } 1&& ]
     [ name=value ] produce assoc-combine ;
 
 : parse-txon ( string -- objects )
