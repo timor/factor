@@ -1,8 +1,8 @@
 ! Copyright (C) 2008, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: splitting parser parser.notes compiler.units kernel
-namespaces debugger io.streams.string fry combinators
-effects.parser continuations ;
+USING: combinators compiler.units continuations debugger
+effects.parser io.streams.string kernel kernel.private multiline
+namespaces parser parser.notes sequences splitting ;
 IN: eval
 
 : parse-string ( str -- quot )
@@ -15,6 +15,10 @@ IN: eval
     [ (eval) ] with-file-vocabs ; inline
 
 SYNTAX: \ eval( \ eval parse-call-paren ;
+
+SYNTAX: \ eval[[
+    "]]" parse-multiline-string
+    '[ get-datastack _ parse-string with-datastack set-datastack ] append! ;
 
 : (eval>string) ( str -- output )
     [
