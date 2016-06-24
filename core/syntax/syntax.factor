@@ -87,6 +87,23 @@ IN: bootstrap.syntax
         "]==]" parse-multiline-string suffix!
     ] define-core-syntax
 
+
+    "`" [
+        scan-token suffix!
+    ] define-core-syntax
+
+    "``" [
+        "``" parse-multiline-string suffix!
+    ] define-core-syntax
+
+    "```" [
+        "```" parse-multiline-string suffix!
+    ] define-core-syntax
+
+    "````" [
+        "````" parse-multiline-string suffix!
+    ] define-core-syntax
+
     ! Different from parse-multiline-string
     "factor\"" [
         lexer get skip-blank parse-string suffix!
@@ -427,4 +444,5 @@ IN: bootstrap.syntax
         [ subwords [ changed-definition ] each ]
         [ parse-definition { } like set-specializer ] tri
     ] define-core-syntax
+
 ] with-compilation-unit
