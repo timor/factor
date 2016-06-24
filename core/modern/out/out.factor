@@ -131,11 +131,8 @@ M: line-comment-literal write-literal
             [ 2nip write-literal ] 3tri
         ]
         [
-            [ seq>> 3 swap ?nth ] [ closing-tag>> ] bi 2dup and
-            ! inserting ;
-            [ write-whitespace-nice ]
-            ! removing ;
-            [ drop [ tag>> length 1 + last-slice swap '[ _ modify-to ] change ] when* ] if
+            seq>> 3 swap ?nth
+            [ tag>> length 1 + last-slice swap '[ _ modify-to ] change ] when*
         ]
     } cleave ;
 
@@ -146,7 +143,10 @@ M: line-comment-literal write-literal
         [ seq>> 1 swap nth write-whitespace ]
         [ delimiter>> write ]
         [ payload>> [ write-literal ] each ] ! don't need write-whitespace here, the recursion does it
-        [ [ seq>> 3 swap ?nth ] [ closing-tag>> ] bi 2dup and [ drop [ lexed-underlying [ write-whitespace ] when* ] when* ] [ 2drop ] if ]
+        [
+            seq>> 3 swap ?nth
+            [ lexed-underlying [ write-whitespace ] when* ] when*
+        ]
         [ closing-tag>> [ write ] when* ]
     } cleave ;
 
