@@ -55,9 +55,7 @@ IN: bootstrap.syntax
 [
     { "]" "}" ";" ">>" "COMPILE>" } [ define-delimiter ] each
 
-    "--" [
-        "--" "syntax" lookup-word suffix!
-    ] define-core-syntax
+    "--" "syntax" lookup-word define-symbol
 
     { "_" "@" } define-fry-specifiers
     ! "@" [ "Only valid inside a fry" throw ] ( -- * ) define-fry-specifier
