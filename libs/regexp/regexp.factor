@@ -216,13 +216,18 @@ PRIVATE<
 
 PRIVATE>
 
-SYNTAX: \ R`` "``" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
-SYNTAX: \ R``` "```" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
-SYNTAX: \ R```` "````" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
-SYNTAX: \ R[[ "]]" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
-SYNTAX: \ R[=[ "]=]" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
-SYNTAX: \ R(( "))" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
-SYNTAX: \ R{{ "}}" parse-multiline-string lexer get parse-noblank-token <optioned-regexp> compile-next-match suffix! ;
+: parse-optioned-regexp ( accum string -- accum )
+    parse-multiline-string lexer get
+    parse-noblank-token <optioned-regexp> compile-next-match
+    suffix! ;
+
+SYNTAX: \ R`` "``" parse-optioned-regexp ;
+SYNTAX: \ R``` "```" parse-optioned-regexp ;
+SYNTAX: \ R```` "````" parse-optioned-regexp ;
+SYNTAX: \ R[[ "]]" parse-optioned-regexp ;
+SYNTAX: \ R[=[ "]=]" parse-optioned-regexp ;
+SYNTAX: \ R(( "))" parse-optioned-regexp ;
+SYNTAX: \ R{{ "}}" parse-optioned-regexp ;
 
 USE: vocabs.loader
 { "prettyprint" "regexp" } "regexp.prettyprint" require-when
