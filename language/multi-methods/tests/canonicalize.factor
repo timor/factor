@@ -41,7 +41,7 @@ CONSTANT: example-1
         { { { cpu x86 } { os linux } } "a" }
         { { { cpu ppc } } "b" }
         { { string { os windows } } "c" }
-    }
+    } ;
 
 [
     {
