@@ -115,7 +115,6 @@ M: line-comment-literal write-literal
     } 1&& ;
 
 : write-uppercase-colon-literal-nice ( obj -- )
-B
     {
         [ seq>> 0 swap nth write-whitespace ]
         [ tag>> write ]
@@ -127,7 +126,7 @@ B
             [ 2drop closing-tag>> [ write ] when* ]
             [ 2nip write-literal ] 3tri
         ]
-        [ seq>> 3 swap nth lexed-underlying [ write-whitespace ] when* ]
+        [ [ seq>> 3 swap ?nth ] [ closing-tag>> ] bi 2dup and [ drop [ lexed-underlying [ write-whitespace ] when* ] when* ] [ 2drop ] if ]
     } cleave ;
 
 : write-uppercase-colon-literal-vanilla ( obj -- )
