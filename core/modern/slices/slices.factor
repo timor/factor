@@ -182,6 +182,16 @@ ERROR: subseq-expected-but-got-eof n string expected ;
     n n' string ?<slice>
     n' dup search length + string ?<slice> ;
 
+ERROR: char-expected-but-got-eof n string expected ;
+
+:: slice-til-not-char ( n string slice char --  n' string found )
+    n string [ char = not ] find-from drop :> n'
+    n' [ n string char char-expected-but-got-eof ] unless
+    B
+    n'
+    string
+    slice from>> n' string ?<slice> ;
+
 : modify-from ( slice n -- slice' )
     '[ from>> _ + ] [ to>> ] [ seq>> ] tri <slice> ;
 

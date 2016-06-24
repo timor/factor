@@ -5,8 +5,8 @@ combinators.short-circuit constructors continuations fry
 generalizations io.encodings.utf8 io.files kernel locals macros
 make math math.order modern.lexer modern.paths modern.slices
 namespaces quotations sequences sequences.extras
-shuffle splitting splitting.extras splitting.monotonic strings
-unicode vocabs.loader ;
+sequences.private shuffle splitting splitting.extras
+splitting.monotonic strings unicode vocabs.loader ;
 IN: modern
 
 COMPILE<
@@ -42,8 +42,8 @@ TUPLE: uppercase-colon-literal < single-matched-literal ;
 TUPLE: lowercase-colon-literal < delimited-literal ;
 ! TUPLE: standalone-colon-literal < delimited-literal ; ! :foo
 TUPLE: backtick-literal < delimited-literal ;
-TUPLE: backslash-literal < delimited-literal ;
-TUPLE: semicolon-literal < delimited-literal ;
+TUPLE: matched-backtick-literal < double-matched-literal ;
+TUPLE: backslash-literal < single-matched-literal ;
 TUPLE: line-comment-literal < delimited-literal ;
 TUPLE: terminator-literal < tag-literal ;
 TUPLE: whitespace-literal < tag-literal ;
@@ -419,13 +419,24 @@ ERROR: closing-tag-required lexer tag ;
     dup { [ "!" sequence= ] [ "#!" sequence= ] } 1||
     [ take-comment ] [ >>partial [ 1 + ] change-n lex-factor ] if ;
 
+: count-head ( seq quot -- n )
+    (trim-head) [ length ] dip - ; inline
 
-: read-backtick ( lexer opening -- obj )
-    [
-        lex-til-whitespace drop 2nip
-        dup
-    ] dip 1 cut-slice* backtick-literal make-delimited-literal ;
+: count-tail ( seq quot -- n )
+    (trim-tail) [ length ] dip - ; inline
 
+:: read-backtick ( lexer slice -- obj )
+    lexer slice char: \` lex-til-not-char 2nip :> tag-opening
+    tag-opening [ char: \` = ] count-tail :> count
+    tag-opening count cut-slice* :> ( tag opening )
+    count 1 > [
+        lexer opening lex-til-string :> ( n' string' payload closing )
+        payload closing tag opening matched-backtick-literal make-matched-literal
+        [ >string ] change-payload
+    ] [
+        lexer lex-til-whitespace drop 2nip
+        dup slice 1 cut-slice* backtick-literal make-delimited-literal
+    ] if ;
 
 ERROR: backslash-expects-whitespace slice ;
 : read-backslash ( lexer slice -- obj )

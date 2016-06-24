@@ -83,3 +83,10 @@ IN: modern.out.tests
 { t } [ "abc>[ ]" rewrite-same-string ] unit-test
 { t } [ "CC>n" rewrite-same-string ] unit-test
 { t } [ "CC>CC" rewrite-same-string ] unit-test
+
+{ t } [ "`omg" rewrite-same-string ] unit-test
+{ t } [ "``omg``" rewrite-same-string ] unit-test
+{ t } [ "```omg```" rewrite-same-string ] unit-test
+{ t } [ "lol`omg" rewrite-same-string ] unit-test
+{ t } [ "lol``omg``" rewrite-same-string ] unit-test
+{ t } [ "lol```omg```" rewrite-same-string ] unit-test

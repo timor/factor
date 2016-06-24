@@ -170,3 +170,18 @@ ERROR: subseq-expected-but-got-eof n string expected ;
 
 : skip-blanks ( lexer -- lexer )
     dup >lexer< skip-blank-from drop >>n ; inline
+
+ERROR: char-expected-but-got-eof n string expected ;
+
+:: slice-til-not-char ( n string slice char --  n' string found )
+    n string [ char = not ] find-from drop :> n'
+    n' [ n string char char-expected-but-got-eof ] unless
+    n'
+    string
+    slice from>> n' string ?<slice> ;
+
+:: lex-til-not-char ( lexer slice char -- n'/f string' found )
+    lexer >lexer< slice char slice-til-not-char :> ( n' string' found )
+    lexer
+        n' >>n drop
+    n' string' found ;
