@@ -5,7 +5,7 @@ combinators.smart continuations fry io io.encodings.utf8
 io.files io.streams.string kernel modern modern.paths
 modern.slices namespaces prettyprint sequences
 sequences.extras sets splitting splitting.monotonic strings
-unicode ;
+unicode math ;
 IN: modern.out
 
 SYMBOL: last-slice
@@ -17,6 +17,13 @@ SYMBOL: last-slice
 : write-whitespace ( obj -- )
     [ last-slice get [ swap slice-between ] [ slice-before ] if* replace-whitespace io:write ]
     [ last-slice namespaces:set ] bi ;
+
+: write-whitespace-nice ( obj tag -- )
+    [
+        [ last-slice get [ swap slice-between ] [ slice-before ] if* replace-whitespace ] dip
+        length modify-from io:write
+    ] [ drop last-slice namespaces:set ] 2bi ;
+
 
 DEFER: write-literal
 GENERIC: write-literal ( obj -- ) ;
@@ -33,7 +40,7 @@ M: tag-literal write-literal
     } cleave ;
 
 : split-last ( seq quot -- head tail )
-    '[ drop @ ] monotonic-split unclip-last [ concat ] dip ; inline
+    [ count-tail ] 2keep drop swap cut* ; inline
 
 M: single-matched-literal write-literal
     {
@@ -107,13 +114,10 @@ M: line-comment-literal write-literal
 : removing-semi? ( obj -- ? )
     { [ seq>> 3 swap ?nth ] [ closing-tag>> not ] } 1&& ;
 
+: changing-semi? ( obj -- ? )
+    { [ adding-semi? ] [ removing-semi? ] } 1|| ;
 
-: nice-semi-needed? ( obj -- ? )
-    {
-        [ { [ adding-semi? ] [ removing-semi? ] } 1|| ]
-        [ payload>> [ line-comment-literal? ] last? ]
-    } 1&& ;
-
+! either adding or removing a semi
 : write-uppercase-colon-literal-nice ( obj -- )
     {
         [ seq>> 0 swap nth write-whitespace ]
@@ -126,7 +130,13 @@ M: line-comment-literal write-literal
             [ 2drop closing-tag>> [ write ] when* ]
             [ 2nip write-literal ] 3tri
         ]
-        [ [ seq>> 3 swap ?nth ] [ closing-tag>> ] bi 2dup and [ drop [ lexed-underlying [ write-whitespace ] when* ] when* ] [ 2drop ] if ]
+        [
+            [ seq>> 3 swap ?nth ] [ closing-tag>> ] bi 2dup and
+            ! inserting ;
+            [ write-whitespace-nice ]
+            ! removing ;
+            [ drop [ tag>> length 1 + last-slice swap '[ _ modify-to ] change ] when* ] if
+        ]
     } cleave ;
 
 : write-uppercase-colon-literal-vanilla ( obj -- )
@@ -141,7 +151,7 @@ M: line-comment-literal write-literal
     } cleave ;
 
 M: uppercase-colon-literal write-literal
-    dup nice-semi-needed? [
+    dup changing-semi? [
         write-uppercase-colon-literal-nice
     ] [
         write-uppercase-colon-literal-vanilla

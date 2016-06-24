@@ -90,3 +90,34 @@ IN: modern.out.tests
 { t } [ "lol`omg" rewrite-same-string ] unit-test
 { t } [ "lol``omg``" rewrite-same-string ] unit-test
 { t } [ "lol```omg```" rewrite-same-string ] unit-test
+
+! name = "CONSTANT" etc
+:: insert-closing-semi ( tag name -- tag )
+    tag dup { [ uppercase-colon-literal? ] [ tag>> name sequence= ] [ closing-tag>> not ] } 1&& [
+        " ;" >>closing-tag
+    ] when ;
+
+:: remove-closing-semi ( tag name -- tag )
+    tag dup { [ uppercase-colon-literal? ] [ tag>> name sequence= ] [ closing-tag>> ";" sequence= ] } 1&& [
+        f >>closing-tag
+    ] when ;
+
+{ "CONSTANT: XYBitmap 0 ; ! depth 1, XYFormat" } [
+    "CONSTANT: XYBitmap 0 ! depth 1, XYFormat" [
+        "CONSTANT" insert-closing-semi
+    ] rewrite-string
+] unit-test
+
+{ "CONSTANT: XYBitmap 0 ! depth 1, XYFormat" } [
+    "CONSTANT: XYBitmap 0 ; ! depth 1, XYFormat" [
+        "CONSTANT" remove-closing-semi
+    ] rewrite-string
+] unit-test
+
+{ "CONSTANT: base { 3 4 5 } ;" } [
+    "CONSTANT: base { 3 4 5 } ;" [
+        "CONSTANT" remove-closing-semi
+    ] rewrite-string [
+        "CONSTANT" insert-closing-semi
+    ] rewrite-string
+] unit-test
