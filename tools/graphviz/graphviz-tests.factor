@@ -103,22 +103,22 @@ SYMBOLS: supported-layouts supported-formats ;
             "filled" =style
             "lightgrey" =color
             node[ "filled" =style "white" =color ]
-            { "a0" "a1" "a2" "a3" } ~->
+            { "a0" "a1" "a2" "a3" } ~-->
             "process #1" =label
         add
         1 <cluster>
             node[ "filled" =style ]
-            { "b0" "b1" "b2" "b3" } ~->
+            { "b0" "b1" "b2" "b3" } ~-->
             "process #2" =label
             "blue" =color
         add
-        "start" "a0" ->
-        "start" "b0" ->
-        "a1" "b3" ->
-        "b2" "a3" ->
-        "a3" "a0" ->
-        "a3" "end" ->
-        "b3" "end" ->
+        "start" "a0" -->
+        "start" "b0" -->
+        "a1" "b3" -->
+        "b2" "a3" -->
+        "a3" "a0" -->
+        "a3" "end" -->
+        "b3" "end" -->
         "start" add-node[ "Mdiamond" =shape ]
         "end" add-node[ "Msquare" =shape ]
     ;
@@ -139,7 +139,7 @@ SYMBOLS: supported-layouts supported-formats ;
     edge[ "invis" =style ]
     0 add-node[ "invis" =style "none" =shape ]
     16 iota [
-        [ 0 -- ] [ colored-circle add ] bi
+        [ 0 --- ] [ colored-circle add ] bi
     ] each ;
 
 : dfa-example ( -- graph )
@@ -149,20 +149,20 @@ SYMBOLS: supported-layouts supported-formats ;
         node[ "doublecircle" =shape ]
         { "LR_0" "LR_3" "LR_4" "LR_8" } add-nodes
         node[ "circle" =shape ]
-        "LR_0" "LR_2" ->[ "SS(B)" =label ]
-        "LR_0" "LR_1" ->[ "SS(S)" =label ]
-        "LR_1" "LR_3" ->[ "S($end)" =label ]
-        "LR_2" "LR_6" ->[ "SS(b)" =label ]
-        "LR_2" "LR_5" ->[ "SS(a)" =label ]
-        "LR_2" "LR_4" ->[ "S(A)" =label ]
-        "LR_5" "LR_7" ->[ "S(b)" =label ]
-        "LR_5" "LR_5" ->[ "S(a)" =label ]
-        "LR_6" "LR_6" ->[ "S(b)" =label ]
-        "LR_6" "LR_5" ->[ "S(a)" =label ]
-        "LR_7" "LR_8" ->[ "S(b)" =label ]
-        "LR_7" "LR_5" ->[ "S(a)" =label ]
-        "LR_8" "LR_6" ->[ "S(b)" =label ]
-        "LR_8" "LR_5" ->[ "S(a)" =label ]
+        "LR_0" "LR_2" -->[ "SS(B)" =label ]
+        "LR_0" "LR_1" -->[ "SS(S)" =label ]
+        "LR_1" "LR_3" -->[ "S($end)" =label ]
+        "LR_2" "LR_6" -->[ "SS(b)" =label ]
+        "LR_2" "LR_5" -->[ "SS(a)" =label ]
+        "LR_2" "LR_4" -->[ "S(A)" =label ]
+        "LR_5" "LR_7" -->[ "S(b)" =label ]
+        "LR_5" "LR_5" -->[ "S(a)" =label ]
+        "LR_6" "LR_6" -->[ "S(b)" =label ]
+        "LR_6" "LR_5" -->[ "S(a)" =label ]
+        "LR_7" "LR_8" -->[ "S(b)" =label ]
+        "LR_7" "LR_5" -->[ "S(a)" =label ]
+        "LR_8" "LR_6" -->[ "S(b)" =label ]
+        "LR_8" "LR_5" -->[ "S(a)" =label ]
     ;
 
 : record-example ( -- graph )
@@ -210,23 +210,23 @@ SYMBOLS: supported-layouts supported-formats ;
             "<f0> 0xf7fc43e0| | |1" =label
         ]
 
-        "node0" "node1"   ->[ "f0" =tailport "f0" =headport ]
-        "node0" "node2"   ->[ "f1" =tailport "f0" =headport ]
-        "node1" "node3"   ->[ "f0" =tailport "f0" =headport ]
-        "node1" "node4"   ->[ "f1" =tailport "f0" =headport ]
-        "node1" "node5"   ->[ "f2" =tailport "f0" =headport ]
-        "node4" "node3"   ->[ "f0" =tailport "f0" =headport ]
-        "node4" "node6"   ->[ "f1" =tailport "f0" =headport ]
-        "node4" "node10"  ->[ "f2" =tailport "f0" =headport ]
-        "node6" "node3"   ->[ "f0" =tailport "f0" =headport ]
-        "node6" "node7"   ->[ "f1" =tailport "f0" =headport ]
-        "node6" "node9"   ->[ "f2" =tailport "f0" =headport ]
-        "node7" "node3"   ->[ "f0" =tailport "f0" =headport ]
-        "node7" "node1"   ->[ "f1" =tailport "f0" =headport ]
-        "node7" "node8"   ->[ "f2" =tailport "f0" =headport ]
-        "node10" "node11" ->[ "f1" =tailport "f0" =headport ]
-        "node10" "node12" ->[ "f2" =tailport "f0" =headport ]
-        "node11" "node1"  ->[ "f2" =tailport "f0" =headport ]
+        "node0" "node1"   -->[ "f0" =tailport "f0" =headport ]
+        "node0" "node2"   -->[ "f1" =tailport "f0" =headport ]
+        "node1" "node3"   -->[ "f0" =tailport "f0" =headport ]
+        "node1" "node4"   -->[ "f1" =tailport "f0" =headport ]
+        "node1" "node5"   -->[ "f2" =tailport "f0" =headport ]
+        "node4" "node3"   -->[ "f0" =tailport "f0" =headport ]
+        "node4" "node6"   -->[ "f1" =tailport "f0" =headport ]
+        "node4" "node10"  -->[ "f2" =tailport "f0" =headport ]
+        "node6" "node3"   -->[ "f0" =tailport "f0" =headport ]
+        "node6" "node7"   -->[ "f1" =tailport "f0" =headport ]
+        "node6" "node9"   -->[ "f2" =tailport "f0" =headport ]
+        "node7" "node3"   -->[ "f0" =tailport "f0" =headport ]
+        "node7" "node1"   -->[ "f1" =tailport "f0" =headport ]
+        "node7" "node8"   -->[ "f2" =tailport "f0" =headport ]
+        "node10" "node11" -->[ "f1" =tailport "f0" =headport ]
+        "node10" "node12" -->[ "f2" =tailport "f0" =headport ]
+        "node11" "node1"  -->[ "f2" =tailport "f0" =headport ]
     ;
 
 :: with-global-value ( value variable quot -- )

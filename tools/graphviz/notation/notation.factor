@@ -67,10 +67,10 @@ node node-attributes define-=attrs
 
 COMPILE>
 
-ALIAS: -> add-edge ;
-ALIAS: -- add-edge ;
-ALIAS: ~-> add-path ;
-ALIAS: ~-- add-path ;
+ALIAS: --> add-edge ;
+ALIAS: --- add-edge ;
+ALIAS: ~--> add-path ;
+ALIAS: ~--- add-path ;
 
 SYNTAX: \ graph[ parse-quotation '[ <graph-attributes> @ add ] append! ;
 SYNTAX: \ node[ parse-quotation '[ <node-attributes> @ add ] append! ;
@@ -78,8 +78,8 @@ SYNTAX: \ edge[ parse-quotation '[ <edge-attributes> @ add ] append! ;
 
 SYNTAX: \ add-node[ parse-quotation '[ <node> @ add ] append! ;
 SYNTAX: \ add-edge[ parse-quotation '[ <edge> @ add ] append! ;
-SYNTAX: \ ->[ parse-quotation '[ <edge> @ add ] append! ;
-SYNTAX: \ --[ parse-quotation '[ <edge> @ add ] append! ;
+SYNTAX: \ -->[ parse-quotation '[ <edge> @ add ] append! ;
+SYNTAX: \ ---[ parse-quotation '[ <edge> @ add ] append! ;
 
 ! FIXME:
 ! Can't really do add-path[ & add-nodes[ this way, since they

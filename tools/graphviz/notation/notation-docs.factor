@@ -4,13 +4,19 @@ USING: graphviz graphviz.attributes help.markup help.syntax
 kernel present sequences ;
 IN: graphviz.notation
 
-{ add-edge \ add-edge[ -- ~-- \ --[ } related-words
-{ add-edge \ add-edge[ -> ~-> \ ->[ } related-words
+{ add-edge \ add-edge[ --- ~--- \ ---[ } related-words
+{ add-edge \ add-edge[ --> ~--> \ -->[ } related-words
 {
-    \ add-node[ \ add-edge[ \ --[ \ ->[ \ node[ \ edge[ \ graph[
+    \ add-node[
+    \ add-edge[
+    \ ---[
+    \ -->[
+    \ node[
+    \ edge[
+    \ graph[
 } related-words
 
-HELP: --
+HELP: ---
 { $values
     { "graph" { $or graph subgraph } }
     { "tail" object }
@@ -29,9 +35,9 @@ HELP: --
     "it looks better to write"
     { $code
         "<graph>"
-        "    1 2 --"
-        "    3 4 --"
-        "    5 6 --"
+        "    1 2 ---"
+        "    3 4 ---"
+        "    5 6 ---"
     }
     "Compare this with the DOT language, where you'd write"
     { $code
@@ -44,7 +50,7 @@ HELP: --
 }
 ;
 
-HELP: ->
+HELP: -->
 { $values
     { "graph" { $or graph subgraph } }
     { "tail" object }
@@ -63,9 +69,9 @@ HELP: ->
     "it looks better to write"
     { $code
         "<digraph>"
-        "    1 2 ->"
-        "    3 4 ->"
-        "    5 6 ->"
+        "    1 2 -->"
+        "    3 4 -->"
+        "    5 6 -->"
     }
     "Compare this with the DOT language, where you'd write"
     { $code
@@ -78,7 +84,7 @@ HELP: ->
 }
 ;
 
-HELP: --[
+HELP: ---[
 { $values
     { "tail" object }
     { "head" object }
@@ -94,7 +100,7 @@ HELP: --[
   "it looks better to write"
   { $code
     "<graph>"
-    "    1 2 --[ \"red\" =color ]"
+    "    1 2 ---[ \"red\" =color ]"
   }
   "Compare this with the DOT language, where you'd write"
   { $code
@@ -105,7 +111,7 @@ HELP: --[
 }
 ;
 
-HELP: ->[
+HELP: -->[
 { $values
     { "tail" object }
     { "head" object }
@@ -157,7 +163,7 @@ HELP: add-edge[
     "}"
   }
   $nl
-  "This has the advantage over " { $link \ --[ } " and " { $link \ ->[ } " of reading nicely for both directed " { $emphasis "and" } " undirected " { $link graph } "s."
+  "This has the advantage over " { $link \ ---[ } " and " { $link \ -->[ } " of reading nicely for both directed " { $emphasis "and" } " undirected " { $link graph } "s."
 }
 ;
 
@@ -277,7 +283,7 @@ HELP: node[
 }
 ;
 
-HELP: ~--
+HELP: ~---
 { $values
     { "graph" { $or graph subgraph } }
     { "nodes" sequence }
@@ -288,9 +294,9 @@ HELP: ~--
     "Instead of writing"
     { $code
       "<graph>"
-      "    1 2 --"
-      "    2 3 --"
-      "    3 4 --"
+      "    1 2 ---"
+      "    2 3 ---"
+      "    3 4 ---"
     }
     "you can write"
     { $code
@@ -300,13 +306,13 @@ HELP: ~--
     "whereas in the DOT language you'd write"
     { $code
       "graph {"
-      "    1 -- 2 -- 3 -- 4"
+      "    1 --- 2 --- 3 --- 4"
       "}"
     }
 }
 ;
 
-HELP: ~->
+HELP: ~-->
 { $values
     { "graph" { $or graph subgraph } }
     { "nodes" sequence }
@@ -324,7 +330,7 @@ HELP: ~->
     "you can write"
     { $code
       "<digraph>"
-      "    { 1 2 3 4 } ~->"
+      "    { 1 2 3 4 } ~-->"
     }
     "whereas in the DOT language you'd write"
     { $code
@@ -408,17 +414,17 @@ ARTICLE: { "graphviz.notation" "synonyms" } "Aliases that resemble DOT code"
 $nl
 "Notation for edges without attributes:"
 { $subsections
-    \ --
-    \ ->
-    \ ~--
-    \ ~->
+    \ ---
+    \ -->
+    \ ~---
+    \ ~-->
 }
 "Notation for nodes/edges with local attributes:"
 { $subsections
     \ add-node[
     \ add-edge[
-    \ --[
-    \ ->[
+    \ ---[
+    \ -->[
 }
 "Notation for global attributes:"
 { $subsections
