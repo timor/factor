@@ -137,7 +137,7 @@ B
         [ seq>> 1 swap nth write-whitespace ]
         [ delimiter>> write ]
         [ payload>> [ write-literal ] each ] ! don't need write-whitespace here, the recursion does it
-        [ seq>> 3 swap ?nth [ lexed-underlying [ write-whitespace ] when* ] when* ]
+        [ [ seq>> 3 swap ?nth ] [ closing-tag>> ] bi 2dup and [ drop [ lexed-underlying [ write-whitespace ] when* ] when* ] [ 2drop ] if ]
         [ closing-tag>> [ write ] when* ]
     } cleave ;
 
