@@ -1,5 +1,5 @@
 USING: accessors assocs continuations fry hashtables kernel make
-math namespaces sequences tools.test ;
+math namespaces sequences tools.test eval ;
 
 { H{ } } [ { } [ dup ] H{ } map>assoc ] unit-test
 
@@ -124,6 +124,9 @@ H{ } "x" set
 
 ! non-integer capacity not allowed
 [ 0.75 <hashtable> ] must-fail
+
+[ "H{ 1 }" eval( str -- obj ) ] must-fail
+[ "H{ 1 2 -- 3 }" eval( str -- obj ) ] must-fail
 
 ! Another crash discovered by erg
 { } [
