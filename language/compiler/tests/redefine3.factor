@@ -7,7 +7,7 @@ GENERIC: sheeple ( obj -- x ) ;
 
 M: object sheeple drop "sheeple" ; inline
 
-MIXIN: empty-mixin ;
+MIXIN: empty-mixin
 
 M: empty-mixin sheeple drop "wake up" ; inline
 
