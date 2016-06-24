@@ -27,7 +27,7 @@ SYNTAX: \ ABOUT:
 COMPILE<
 SYNTAX: \ HELP-SYNTAX:
     scan-new-escaped scan-word ";" expect
-    '[ \ } parse-until >array _ prefix suffix! ] define-syntax ;
+    '[ \ } parse-until split-dashes >array _ prefix suffix! ] define-syntax ;
 COMPILE>
 
 HELP-SYNTAX: \ $breadcrumbs{ $breadcrumbs ;

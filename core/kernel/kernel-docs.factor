@@ -12,7 +12,7 @@ HELP: WIN-EXCEPTION-HANDLER
 $description{ "This special object is an " $link{ alien } " containing a pointer to the processes global exception handler. Only applicable on " $link{ windows } "." } ;
 
 HELP: eq?
-$values{ { "obj1" object } { "obj2" object } { "?" boolean } }
+$values{ "obj1" object -- "obj2" object -- "?" boolean }
 $description{ "Tests if two references point at the same object." } ;
 
 HELP: drop  $shuffle ;
@@ -76,7 +76,7 @@ HELP: leaf-signal-handler
 $description{ "A word called by the VM when a VM error occurs." } ;
 
 HELP: hashcode*
-$values{ { "depth" integer } { "obj" object } { "code" fixnum } }
+$values{ "depth" integer -- "obj" object -- "code" fixnum }
 $contract{ "Outputs the hashcode of an object. The hashcode operation must satisfy the following properties:"
 $list{
     { "If two objects are equal under " $link{ = } ", they must have equal hashcodes." }
@@ -97,7 +97,7 @@ $description{ "Outputs the identity hashcode of an object. The identity hashcode
 { hashcode hashcode* identity-hashcode } related-words
 
 HELP: =
-$values{ { "obj1" object } { "obj2" object } { "?" boolean } }
+$values{ "obj1" object -- "obj2" object -- "?" boolean }
 $description{
     "Tests if two objects are equal. If " $snippet{ "obj1" } " and " $snippet{ "obj2" } " point to the same object, outputs " $link{ t } ". Otherwise, calls the " $link{ equal? } " generic word."
 }
@@ -141,11 +141,11 @@ $examples{
 } ;
 
 HELP: clone
-$values{ { "obj" object } { "cloned" "a new object" } }
+$values{ "obj" object -- "cloned" "a new object" }
 $contract{ "Outputs a new object equal to the given object. This is not guaranteed to actually copy the object; it does nothing with immutable objects, and does not copy words either. However, sequences and tuples can be cloned to obtain a shallow copy of the original." } ;
 
 HELP: ?
-$values{ { "?" "a generalized boolean" } { "true" object } { "false" object } { "true/false" { $snippet{ "true" } " or " $snippet{ "false" } } } }
+$values{ "?" "a generalized boolean" -- "true" object -- "false" object -- "true/false" { $snippet{ "true" } " or " $snippet{ "false" } } }
 $description{ "Chooses between two values depending on the boolean value of " $snippet{ "cond" } "." } ;
 
 HELP: boolean

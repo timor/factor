@@ -56,7 +56,7 @@ IN: bootstrap.syntax
     { "]" "}" ";" ">>" "COMPILE>" } [ define-delimiter ] each
 
     "--" [
-        "--" define-symbol
+        "--" "syntax" lookup-word suffix!
     ] define-core-syntax
 
     { "_" "@" } define-fry-specifiers
@@ -181,14 +181,14 @@ IN: bootstrap.syntax
     ] define-core-syntax
 
     "[" [ parse-quotation suffix! ] define-core-syntax
-    "{" [ \ } [ >array ] parse-literal ] define-core-syntax
-    "V{" [ \ } [ >vector ] parse-literal ] define-core-syntax
+    "{" [ \ } [ split-dashes >array ] parse-literal ] define-core-syntax
+    "V{" [ \ } [ split-dashes >vector ] parse-literal ] define-core-syntax
     "B{" [ \ } [ >byte-array ] parse-literal ] define-core-syntax
     "BV{" [ \ } [ >byte-vector ] parse-literal ] define-core-syntax
-    "H{" [ \ } [ parse-hashtable ] parse-literal ] define-core-syntax
+    "H{" [ \ } [ split-dashes parse-hashtable ] parse-literal ] define-core-syntax
     "T{" [ parse-tuple-literal suffix! ] define-core-syntax
     "W{" [ \ } [ first <wrapper> ] parse-literal ] define-core-syntax
-    "HS{" [ \ } [ >hash-set ] parse-literal ] define-core-syntax
+    "HS{" [ \ } [ split-dashes >hash-set ] parse-literal ] define-core-syntax
 
     "postpone\\" [ scan-word suffix! ] define-core-syntax
     "\\" [ scan-word <wrapper> suffix! ] define-core-syntax

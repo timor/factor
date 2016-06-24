@@ -99,7 +99,10 @@ PRIVATE>
     [ member? ] curry split-when ; inline
 
 : ?split ( seq separators -- pieces/seq )
-    split dup length 1 = [ first ] when ; inline
+    split dup length 1 = [ first ] [ [ >array ] map ] if ; inline
+
+: split-dashes ( seq -- seq/seq' )
+    { -- } ?split ; inline
 
 : split-slice ( seq separators -- pieces )
     [ member? ] curry split-when-slice ; inline
