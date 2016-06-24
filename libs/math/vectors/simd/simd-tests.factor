@@ -52,7 +52,7 @@ CONSTANT: simd-classes
         ulonglong-2
         float-4
         double-2
-    }
+    } ;
 
 SYMBOLS: -> +vector+ +any-vector+ +scalar+ +boolean+ +nonnegative+ +literal+ ;
 
@@ -115,7 +115,7 @@ CONSTANT: vector-words
         { v> { +vector+ +vector+ -> +vector+ } }
         { v>= { +vector+ +vector+ -> +vector+ } }
         { vunordered? { +vector+ +vector+ -> +vector+ } }
-    }
+    } ;
 
 : vector-word-inputs ( schema -- seq ) { -> } split first ;
 
