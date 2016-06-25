@@ -758,25 +758,25 @@ CONSTANT: D3DSHADER_ADDRMODE_FORCE_DWORD 0x7fffffff ;
 CONSTANT: D3DVS_SWIZZLE_SHIFT     16 ;
 CONSTANT: D3DVS_SWIZZLE_MASK      0x00FF0000 ;
 
-CONSTANT: D3DVS_X_X $[ 0 16 shift ] ;
-CONSTANT: D3DVS_X_Y $[ 1 16 shift ] ;
-CONSTANT: D3DVS_X_Z $[ 2 16 shift ] ;
-CONSTANT: D3DVS_X_W $[ 3 16 shift ] ;
+CONSTANT: D3DVS_X_X $$[ 0 16 shift ] ;
+CONSTANT: D3DVS_X_Y $$[ 1 16 shift ] ;
+CONSTANT: D3DVS_X_Z $$[ 2 16 shift ] ;
+CONSTANT: D3DVS_X_W $$[ 3 16 shift ] ;
 
-CONSTANT: D3DVS_Y_X $[ 0 16 2 + shift ] ;
-CONSTANT: D3DVS_Y_Y $[ 1 16 2 + shift ] ;
-CONSTANT: D3DVS_Y_Z $[ 2 16 2 + shift ] ;
-CONSTANT: D3DVS_Y_W $[ 3 16 2 + shift ] ;
+CONSTANT: D3DVS_Y_X $$[ 0 16 2 + shift ] ;
+CONSTANT: D3DVS_Y_Y $$[ 1 16 2 + shift ] ;
+CONSTANT: D3DVS_Y_Z $$[ 2 16 2 + shift ] ;
+CONSTANT: D3DVS_Y_W $$[ 3 16 2 + shift ] ;
 
-CONSTANT: D3DVS_Z_X $[ 0 16 4 + shift ] ;
-CONSTANT: D3DVS_Z_Y $[ 1 16 4 + shift ] ;
-CONSTANT: D3DVS_Z_Z $[ 2 16 4 + shift ] ;
-CONSTANT: D3DVS_Z_W $[ 3 16 4 + shift ] ;
+CONSTANT: D3DVS_Z_X $$[ 0 16 4 + shift ] ;
+CONSTANT: D3DVS_Z_Y $$[ 1 16 4 + shift ] ;
+CONSTANT: D3DVS_Z_Z $$[ 2 16 4 + shift ] ;
+CONSTANT: D3DVS_Z_W $$[ 3 16 4 + shift ] ;
 
-CONSTANT: D3DVS_W_X $[ 0 16 6 + shift ] ;
-CONSTANT: D3DVS_W_Y $[ 1 16 6 + shift ] ;
-CONSTANT: D3DVS_W_Z $[ 2 16 6 + shift ] ;
-CONSTANT: D3DVS_W_W $[ 3 16 6 + shift ] ;
+CONSTANT: D3DVS_W_X $$[ 0 16 6 + shift ] ;
+CONSTANT: D3DVS_W_Y $$[ 1 16 6 + shift ] ;
+CONSTANT: D3DVS_W_Z $$[ 2 16 6 + shift ] ;
+CONSTANT: D3DVS_W_W $$[ 3 16 6 + shift ] ;
 
 CONSTANT: D3DVS_NOSWIZZLE flags{ D3DVS_X_X D3DVS_Y_Y D3DVS_Z_Z D3DVS_W_W } ;
 
@@ -786,20 +786,20 @@ CONSTANT: D3DSP_SRCMOD_SHIFT      24 ;
 CONSTANT: D3DSP_SRCMOD_MASK       0x0F000000 ;
 
 TYPEDEF: int D3DSHADER_PARAM_SRCMOD_TYPE ;
-CONSTANT: D3DSPSM_NONE    $[ 0 24 shift ] ;
-CONSTANT: D3DSPSM_NEG     $[ 1 24 shift ] ;
-CONSTANT: D3DSPSM_BIAS    $[ 2 24 shift ] ;
-CONSTANT: D3DSPSM_BIASNEG $[ 3 24 shift ] ;
-CONSTANT: D3DSPSM_SIGN    $[ 4 24 shift ] ;
-CONSTANT: D3DSPSM_SIGNNEG $[ 5 24 shift ] ;
-CONSTANT: D3DSPSM_COMP    $[ 6 24 shift ] ;
-CONSTANT: D3DSPSM_X2      $[ 7 24 shift ] ;
-CONSTANT: D3DSPSM_X2NEG   $[ 8 24 shift ] ;
-CONSTANT: D3DSPSM_DZ      $[ 9 24 shift ] ;
-CONSTANT: D3DSPSM_DW      $[ 10 24 shift ] ;
-CONSTANT: D3DSPSM_ABS     $[ 11 24 shift ] ;
-CONSTANT: D3DSPSM_ABSNEG  $[ 12 24 shift ] ;
-CONSTANT: D3DSPSM_NOT     $[ 13 24 shift ] ;
+CONSTANT: D3DSPSM_NONE    $$[ 0 24 shift ] ;
+CONSTANT: D3DSPSM_NEG     $$[ 1 24 shift ] ;
+CONSTANT: D3DSPSM_BIAS    $$[ 2 24 shift ] ;
+CONSTANT: D3DSPSM_BIASNEG $$[ 3 24 shift ] ;
+CONSTANT: D3DSPSM_SIGN    $$[ 4 24 shift ] ;
+CONSTANT: D3DSPSM_SIGNNEG $$[ 5 24 shift ] ;
+CONSTANT: D3DSPSM_COMP    $$[ 6 24 shift ] ;
+CONSTANT: D3DSPSM_X2      $$[ 7 24 shift ] ;
+CONSTANT: D3DSPSM_X2NEG   $$[ 8 24 shift ] ;
+CONSTANT: D3DSPSM_DZ      $$[ 9 24 shift ] ;
+CONSTANT: D3DSPSM_DW      $$[ 10 24 shift ] ;
+CONSTANT: D3DSPSM_ABS     $$[ 11 24 shift ] ;
+CONSTANT: D3DSPSM_ABSNEG  $$[ 12 24 shift ] ;
+CONSTANT: D3DSPSM_NOT     $$[ 13 24 shift ] ;
 CONSTANT: D3DSPSM_FORCE_DWORD 0x7fffffff ;
 
 : D3DPS_VERSION ( major minor -- n )

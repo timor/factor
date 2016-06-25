@@ -5,7 +5,7 @@ io.binary io.encodings.binary io.files kernel literals math
 namespaces system threads ;
 IN: key-logger
 
-CONSTANT: frequency $[ 1/30 seconds ] ;
+CONSTANT: frequency $$[ 1/30 seconds ] ;
 
 CONSTANT: path "resource:key-log.txt" ;
 

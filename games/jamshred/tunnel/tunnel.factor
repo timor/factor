@@ -24,7 +24,7 @@ C: <segment> segment ;
     { 100 100 100 } [ random 100 / >float ] map first3 1.0 <rgba> ;
 
 CONSTANT: tunnel-segment-distance 0.4 ;
-CONSTANT: random-rotation-angle $[ pi 20 / ] ;
+CONSTANT: random-rotation-angle $$[ pi 20 / ] ;
 
 : random-segment ( previous-segment -- segment )
     clone dup random-rotation-angle random-turn

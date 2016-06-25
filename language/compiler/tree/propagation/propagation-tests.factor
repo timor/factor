@@ -29,7 +29,7 @@ IN: compiler.tree.propagation.tests
 {
     T{ value-info-state
        { class integer }
-       { interval $[ array-capacity-interval ] }
+       { interval $$[ array-capacity-interval ] }
     }
 } [
     [ dup "foo" <array> drop ] final-info first
@@ -64,7 +64,7 @@ IN: compiler.tree.propagation.tests
 ] unit-test
 
 {
-    V{ $[
+    V{ $$[
         integer-array-capacity <class-info>
         integer <class-info>
     ] }

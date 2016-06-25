@@ -56,7 +56,7 @@ HELP: procedures
 HELP: make-input-map
 { $values { "#shuffle" #shuffle } { "assoc" assoc } }
 { $description "Creates an " { $link assoc } " that maps input values to the shuffle operation to stack locations." }
-{ $examples { $unchecked-example $[ ex-make-input-map ] } } ;
+{ $examples { $unchecked-example $$[ ex-make-input-map ] } } ;
 
 HELP: emit-call
 { $values
@@ -72,7 +72,7 @@ HELP: emit-call
 }
 { $examples
   "In this example, a call to a dummy word is emitted which pushes three items onto the stack."
-  { $unchecked-example $[ ex-emit-call ] }
+  { $unchecked-example $$[ ex-emit-call ] }
 }
 { $see-also call-height } ;
 

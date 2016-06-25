@@ -11,7 +11,7 @@ IN: debugger.tests
     T{ test-failure
        { error
          {
-             $[ KERNEL-ERROR ]
+             $$[ KERNEL-ERROR ]
              10
              {
                  B{
@@ -36,7 +36,7 @@ IN: debugger.tests
        { asset { "Unit Test" [ ] [ dup ] } }
        { path "resource:basis/game/input/input-tests.factor" }
        { line# 6 }
-       { continuation $[ current-continuation ] }
+       { continuation $$[ current-continuation ] }
     } error.
 ] unit-test
 

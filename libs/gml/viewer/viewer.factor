@@ -305,7 +305,7 @@ M: gml-viewer-world wasd-mouse-scale drag?>> -1/600. 0.0 ? ;
             { use-game-input? t }
             { use-audio-engine? f }
             { pref-dim { 1024 768 } }
-            { tick-interval-nanos $[ 30 fps ] }
+            { tick-interval-nanos $$[ 30 fps ] }
         } open-window*
         _ >>model
         _ >>selected

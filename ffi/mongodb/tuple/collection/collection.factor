@@ -97,7 +97,7 @@ PRIVATE<
 PRIVATE>
 
 : MDB_ADDON_SLOTS ( -- slots )
-   { $[ MDB_OID_FIELD MDB_META_FIELD ] } ; inline
+   { $$[ MDB_OID_FIELD MDB_META_FIELD ] } ; inline
 
 : link-class ( collection class -- )
     over classes>>

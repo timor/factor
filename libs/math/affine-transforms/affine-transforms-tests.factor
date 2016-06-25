@@ -48,8 +48,8 @@ IN: math.affine-transforms.tests
     { 5.0 10.0 } <translation>
 ] unit-test
 
-{ $[ pi  0.25 * cos ] $[ pi 0.25 * sin ] }
-{ $[ pi -0.25 * sin ] $[ pi 0.25 * cos ] }
+{ $$[ pi  0.25 * cos ] $$[ pi 0.25 * sin ] }
+{ $$[ pi -0.25 * sin ] $$[ pi 0.25 * cos ] }
 { 0.0 0.0 } <affine-transform> 1array [
     pi 0.25 * <rotation>
 ] unit-test

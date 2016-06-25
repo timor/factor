@@ -117,7 +117,7 @@ CONSTANT: window-control>styleMask
         { minimize-button $ NSMiniaturizableWindowMask }
         { maximize-button 0 }
         { resize-handles $ NSResizableWindowMask }
-        { small-title-bar $[ NSTitledWindowMask NSUtilityWindowMask bitor ] }
+        { small-title-bar $$[ NSTitledWindowMask NSUtilityWindowMask bitor ] }
         { textured-background $ NSTexturedBackgroundWindowMask }
         { normal-title-bar $ NSTitledWindowMask }
         { dialog-window $ NSTitledWindowMask }

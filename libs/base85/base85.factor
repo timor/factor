@@ -17,7 +17,7 @@ COMPILE>
     alphabet nth ; inline
 
 : base85>ch ( ch -- ch )
-    $[ alphabet alphabet-inverse ] nth
+    $$[ alphabet alphabet-inverse ] nth
     [ malformed-base85 ] unless* ; inline
 
 : encode4 ( seq -- seq' )

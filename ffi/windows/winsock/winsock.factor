@@ -435,7 +435,7 @@ CONSTANT: WSAID_CONNECTEX guid: "{25a207b9-ddf3-4660-8ee9-76e58c74063e}" ;
 ERROR: winsock-exception n string ;
 
 : winsock-expected-error? ( n -- ? )
-    ${ ERROR_IO_PENDING ERROR_SUCCESS WSA_IO_PENDING } member? ;
+    $${ ERROR_IO_PENDING ERROR_SUCCESS WSA_IO_PENDING } member? ;
 
 : (maybe-winsock-exception) ( n -- winsock-exception/f )
     ! ! WSAStartup returns the error code 'n' directly

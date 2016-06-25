@@ -56,7 +56,7 @@ TUPLE: triplets-count primitives total ;
 : next-triplet ( triplet T -- triplet' ) [ 1array ] [ m. ] bi* first ;
 
 : candidates-triplets ( seed -- candidates )
-    ${ T1 T2 T3 } [ next-triplet ] with map ;
+    $${ T1 T2 T3 } [ next-triplet ] with map ;
 
 : add-triplets ( current-triples limit triplet -- stop )
     sum 2dup > [

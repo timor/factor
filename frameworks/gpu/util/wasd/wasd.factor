@@ -13,8 +13,8 @@ UNIFORM-TUPLE: mvp-uniforms
     { "mv_matrix"  mat4-uniform f }
     { "p_matrix"   mat4-uniform f } ;
 
-CONSTANT: -pi/2 $[ pi -2.0 / ] ;
-CONSTANT:  pi/2 $[ pi  2.0 / ] ;
+CONSTANT: -pi/2 $$[ pi -2.0 / ] ;
+CONSTANT:  pi/2 $$[ pi  2.0 / ] ;
 
 TUPLE: wasd-world < game-world location yaw pitch p-matrix ;
 

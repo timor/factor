@@ -18,7 +18,7 @@ CONSTANT: unknown-char char: ? ;
 
 PRIVATE>
 
-CONSTANT: morse-code-table $[
+CONSTANT: morse-code-table $$[
     H{
         { char: a ".-"    }
         { char: b "-..."  }

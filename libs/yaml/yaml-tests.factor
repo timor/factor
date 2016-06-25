@@ -45,9 +45,9 @@ CONSTANT: test-represented-string "--- !!seq
 ...
 " ;
 
-${ test-obj } [ $ test-string yaml> ] unit-test
-${ test-represented-string } [ $ test-obj >yaml ] unit-test
-${ test-represented-string } [ $ test-represented-string yaml> >yaml ] unit-test
+$${ test-obj } [ $ test-string yaml> ] unit-test
+$${ test-represented-string } [ $ test-obj >yaml ] unit-test
+$${ test-represented-string } [ $ test-represented-string yaml> >yaml ] unit-test
 
 ! Non-scalar key
 CONSTANT: complex-key H{ { { "foo" } "bar" } } ;
@@ -58,7 +58,7 @@ CONSTANT: complex-key-represented "--- !!map
 ...
 " ;
 
-${ complex-key } [ $ complex-key-represented yaml> ] unit-test
+$${ complex-key } [ $ complex-key-represented yaml> ] unit-test
 
 ! Multiple docs
 CONSTANT: test-docs "--- !!str a
@@ -73,9 +73,9 @@ CONSTANT: test-docs "--- !!str a
 " ;
 CONSTANT: test-objs { "a" { "b" "c" } H{ { "d" "e" } } } ;
 
-${ test-objs } [ $ test-docs yaml-docs> ] unit-test
-${ test-docs } [ $ test-objs >yaml-docs ] unit-test
-${ test-docs } [ $ test-docs yaml-docs> >yaml-docs ] unit-test
+$${ test-objs } [ $ test-docs yaml-docs> ] unit-test
+$${ test-docs } [ $ test-objs >yaml-docs ] unit-test
+$${ test-docs } [ $ test-docs yaml-docs> >yaml-docs ] unit-test
 
 ! Misc types
 CONSTANT: test-types { 1 t f 1.0 } ;
@@ -87,8 +87,8 @@ CONSTANT: test-represented-types "--- !!seq
 ...
 " ;
 
-${ test-types } [ $ test-represented-types yaml> ] unit-test
-${ test-types } [ $ test-types >yaml yaml> ] unit-test
+$${ test-types } [ $ test-represented-types yaml> ] unit-test
+$${ test-types } [ $ test-types >yaml yaml> ] unit-test
 
 
 ! Anchors
@@ -105,8 +105,8 @@ CONSTANT: test-anchors-obj {
   "1" "1" { "1" "2" } { "1" "2" } H{ { "1" "one" } } H{ { "1" "one" } }
 } ;
 
-${ test-anchors-obj } [ $ test-anchors yaml> ] unit-test
-${ test-anchors-obj } [ $ test-anchors-obj >yaml yaml> ] unit-test
+$${ test-anchors-obj } [ $ test-anchors yaml> ] unit-test
+$${ test-anchors-obj } [ $ test-anchors-obj >yaml yaml> ] unit-test
 ! and test indentity
 { t } [ $ test-anchors yaml> 2 group [ all-eq? ] all? ] unit-test
 { t } [ $ test-anchors yaml> >yaml yaml> 2 group [ all-eq? ] all? ] unit-test
@@ -122,8 +122,8 @@ CONSTANT: fancy-anchors-obj {
   { "foo" } HS{ { "foo" } } HS{ { "foo" } }
 } ;
 
-${ fancy-anchors-obj } [ $ fancy-anchors yaml> ] unit-test
-${ fancy-anchors-obj } [ $ fancy-anchors-obj >yaml yaml> ] unit-test
+$${ fancy-anchors-obj } [ $ fancy-anchors yaml> ] unit-test
+$${ fancy-anchors-obj } [ $ fancy-anchors-obj >yaml yaml> ] unit-test
 
 ! Simple Recursive output
 : simple-recursive-list ( -- obj )
@@ -134,9 +134,9 @@ CONSTANT: simple-recursive-list-anchored T{ yaml-anchor f "0" {
 CONSTANT: simple-recursive-list-yaml "&0
 - *0" ;
 
-${ simple-recursive-list-anchored } [ simple-recursive-list replace-identities ] unit-test
-${ simple-recursive-list-anchored } [ $ simple-recursive-list-yaml yaml> replace-identities ] unit-test
-${ simple-recursive-list-anchored } [ simple-recursive-list >yaml yaml> replace-identities ] unit-test
+$${ simple-recursive-list-anchored } [ simple-recursive-list replace-identities ] unit-test
+$${ simple-recursive-list-anchored } [ $ simple-recursive-list-yaml yaml> replace-identities ] unit-test
+$${ simple-recursive-list-anchored } [ simple-recursive-list >yaml yaml> replace-identities ] unit-test
 
 ! many recursive outputs
 : many-recursive-objects ( -- obj )
@@ -148,7 +148,7 @@ CONSTANT: many-recursive-objects-anchored {
   T{ yaml-anchor f "3" { T{ yaml-alias f "3" } } }
 } ;
 
-${ many-recursive-objects-anchored } [ many-recursive-objects replace-identities ] unit-test
+$${ many-recursive-objects-anchored } [ many-recursive-objects replace-identities ] unit-test
 
 ! Advanced recursive outputs
 :: transitive-recursive-objects ( -- obj )
@@ -161,7 +161,7 @@ CONSTANT: transitive-recursive-objects-anchored T{ yaml-anchor f "0" {
   H{ { HS{ T{ yaml-alias f "0" } } T{ yaml-alias f "0" } } }
 } } ;
 
-${ transitive-recursive-objects-anchored } [ transitive-recursive-objects replace-identities ] unit-test
+$${ transitive-recursive-objects-anchored } [ transitive-recursive-objects replace-identities ] unit-test
 
 
 ! Lifted from pyyaml
@@ -190,8 +190,8 @@ ${ transitive-recursive-objects-anchored } [ transitive-recursive-objects replac
 !     n: is a string
 ! " ;
 !
-! ${ construct-bool-obj } [ $ construct-bool-str yaml> ] unit-test
-! ${ construct-bool-obj } [ $ construct-bool-obj >yaml yaml> ] unit-test
+! $${ construct-bool-obj } [ $ construct-bool-str yaml> ] unit-test
+! $${ construct-bool-obj } [ $ construct-bool-obj >yaml yaml> ] unit-test
 
 ! !!!!!!!!!!!!!!!
 ! construct-int
@@ -213,8 +213,8 @@ ${ transitive-recursive-objects-anchored } [ transitive-recursive-objects replac
 ! sexagesimal: 190:20:30
 ! " ;
 !
-! ${ construct-int-obj } [ $ construct-int-str yaml> ] unit-test
-! ${ construct-int-obj } [ $ construct-int-obj >yaml yaml> ] unit-test
+! $${ construct-int-obj } [ $ construct-int-str yaml> ] unit-test
+! $${ construct-int-obj } [ $ construct-int-obj >yaml yaml> ] unit-test
 
 ! !!!!!!!!!!!!!!!
 ! construct-map
@@ -235,8 +235,8 @@ Block style: !!map
 Flow style: !!map { Clark: Evans, Brian: Ingerson, Oren: Ben-Kiki }
 " ;
 
-${ construct-map-obj } [ $ construct-map-str yaml> ] unit-test
-${ construct-map-obj } [ $ construct-map-obj >yaml yaml> ] unit-test
+$${ construct-map-obj } [ $ construct-map-str yaml> ] unit-test
+$${ construct-map-obj } [ $ construct-map-obj >yaml yaml> ] unit-test
 
 ! !!!!!!!!!!!!!!!
 ! construct-null
@@ -276,9 +276,9 @@ sparse:
   - Null
 " ;
 
-${ construct-null-obj } [ $ construct-null-str yaml-docs> ] unit-test
+$${ construct-null-obj } [ $ construct-null-str yaml-docs> ] unit-test
 ! TODO Decide what to do with null -> f -> false
-! ${ construct-null-obj } [ $ construct-null-obj >yaml-docs yaml-docs> ] unit-test
+! $${ construct-null-obj } [ $ construct-null-obj >yaml-docs yaml-docs> ] unit-test
 
 ! !!!!!!!!!!!!!!!
 ! construct-seq
@@ -303,8 +303,8 @@ Flow style: !!seq [ Mercury, Venus, Earth, Mars,      # Rocks
                     Pluto ]                           # Overrated
 " ;
 
-${ construct-seq-obj } [ $ construct-seq-str yaml> ] unit-test
-${ construct-seq-obj } [ $ construct-seq-obj >yaml yaml> ] unit-test
+$${ construct-seq-obj } [ $ construct-seq-str yaml> ] unit-test
+$${ construct-seq-obj } [ $ construct-seq-obj >yaml yaml> ] unit-test
 
 ! !!!!!!!!!!!!!!!
 ! construct-set
@@ -333,8 +333,8 @@ baseball players: !!set
 baseball teams: !!set { Boston Red Sox, Detroit Tigers, New York Yankees }
 " ;
 
-${ construct-set-obj } [ $ construct-set-str yaml> ] unit-test
-${ construct-set-obj } [ $ construct-set-obj >yaml yaml> ] unit-test
+$${ construct-set-obj } [ $ construct-set-str yaml> ] unit-test
+$${ construct-set-obj } [ $ construct-set-obj >yaml yaml> ] unit-test
 
 ! !!!!!!!!!!!!!!!
 ! construct-binary
@@ -401,8 +401,8 @@ description:
  The binary value above is a tiny arrow encoded as a gif image.
 " ;
 
-${ construct-binary-obj } [ $ construct-binary-str yaml> ] unit-test
-${ construct-binary-obj } [ $ construct-binary-obj >yaml yaml> ] unit-test
+$${ construct-binary-obj } [ $ construct-binary-str yaml> ] unit-test
+$${ construct-binary-obj } [ $ construct-binary-obj >yaml yaml> ] unit-test
 
 ! !!!!!!!!!!!!!!!
 ! construct-merge
@@ -462,8 +462,8 @@ CONSTANT: construct-merge-str "---
   label: center/big
 " ;
 
-${ construct-merge-obj } [ $ construct-merge-str yaml> ] unit-test
-${ construct-merge-obj } [ $ construct-merge-obj2 >yaml yaml> ] unit-test
+$${ construct-merge-obj } [ $ construct-merge-str yaml> ] unit-test
+$${ construct-merge-obj } [ $ construct-merge-obj2 >yaml yaml> ] unit-test
 
 ! More merge tests
 ! see http://sourceforge.net/p/yaml/mailman/message/12308050
@@ -479,15 +479,15 @@ CONSTANT: nested-merge-obj H{
   { "baz" 3 }
 } ;
 
-${ nested-merge-obj } [ $ nested-merge-str yaml> ] unit-test
-${ nested-merge-obj } [ $ nested-merge-obj >yaml yaml> ] unit-test
+$${ nested-merge-obj } [ $ nested-merge-str yaml> ] unit-test
+$${ nested-merge-obj } [ $ nested-merge-obj >yaml yaml> ] unit-test
 
 CONSTANT: recursive-merge-str "--- &A
 COMPILE<: *A" ;
 CONSTANT: recursive-merge-obj H{ } ;
 
-${ recursive-merge-obj } [ $ recursive-merge-str yaml> ] unit-test
-${ recursive-merge-obj } [ $ recursive-merge-obj >yaml yaml> ] unit-test
+$${ recursive-merge-obj } [ $ recursive-merge-str yaml> ] unit-test
+$${ recursive-merge-obj } [ $ recursive-merge-obj >yaml yaml> ] unit-test
 
 ! Compare with pyyaml
 ! >>> print yaml.load("&1 {1: 2, 2: 3, 3: {4: 5, <<: *1}}")
@@ -522,8 +522,8 @@ CONSTANT: recursive-merge-obj3 H{
   recursive-merge-obj2 >yaml yaml> recursive-merge-obj2
   [ replace-identities ] bi@ =
 ] unit-test
-${ recursive-merge-obj3 } [ $ recursive-merge-str3 yaml> ] unit-test
-${ recursive-merge-obj3 } [ $ recursive-merge-obj3 >yaml yaml> ] unit-test
+$${ recursive-merge-obj3 } [ $ recursive-merge-str3 yaml> ] unit-test
+$${ recursive-merge-obj3 } [ $ recursive-merge-obj3 >yaml yaml> ] unit-test
 
 ! Serializing merge
 CONSTANT: serialize-merge-obj H{
@@ -531,9 +531,9 @@ CONSTANT: serialize-merge-obj H{
 } ;
 
 CONSTANT: serialize-merge-obj2 H{ { 1 2 } } ;
-${ serialize-merge-obj2 } [ $ serialize-merge-obj >yaml yaml> ] unit-test
+$${ serialize-merge-obj2 } [ $ serialize-merge-obj >yaml yaml> ] unit-test
 f merge [
-  ${ serialize-merge-obj } [ $ serialize-merge-obj >yaml yaml> ] unit-test
+  $${ serialize-merge-obj } [ $ serialize-merge-obj >yaml yaml> ] unit-test
 ] with-variable
 
 ! !!!!!!!!!!!!!!!
@@ -541,14 +541,14 @@ f merge [
 CONSTANT: construct-omap-obj H{
   {
     "Bestiary"
-    $[ <linked-hash> {
+    $$[ <linked-hash> {
         { "aardvark" "African pig-like ant eater. Ugly." }
         { "anteater" "South-American ant eater. Two species." }
         { "anaconda" "South-American constrictor snake. Scaly." }
     } assoc-union! ]
   } {
     "Numbers"
-    $[ <linked-hash> {
+    $$[ <linked-hash> {
         { "one" 1 }
         { "two" 2 }
         { "three" 3 }
@@ -566,8 +566,8 @@ Bestiary: !!omap
 Numbers: !!omap [ one: 1, two: 2, three : 3 ]
 " ;
 
-${ construct-omap-obj } [ $ construct-omap-str yaml> ] unit-test
-${ construct-omap-obj } [ construct-omap-obj >yaml yaml> ] unit-test
+$${ construct-omap-obj } [ $ construct-omap-str yaml> ] unit-test
+$${ construct-omap-obj } [ construct-omap-obj >yaml yaml> ] unit-test
 
 ! !!!!!!!!!!!!!!!
 ! construct-pairs
@@ -610,8 +610,8 @@ CONSTANT: construct-pairs-obj-roundtripped H{
   }
 } ;
 
-${ construct-pairs-obj } [ $ construct-pairs-str yaml> ] unit-test
-${ construct-pairs-obj } [ $ construct-pairs-obj >yaml yaml> ] unit-test
+$${ construct-pairs-obj } [ $ construct-pairs-str yaml> ] unit-test
+$${ construct-pairs-obj } [ $ construct-pairs-obj >yaml yaml> ] unit-test
 
 ! !!!!!!!!!!!!!!!
 ! construct-timestamp
@@ -689,8 +689,8 @@ date (00:00:00Z): 2002-12-14
 crazy: 2002-2-4   \t\t \t 1:02:59.123 \t\t +10:23
 " ;
 
-${ construct-timestamp-obj } [ $ construct-timestamp-str yaml> ] unit-test
-${ construct-timestamp-obj } [ $ construct-timestamp-obj >yaml yaml> ] unit-test
+$${ construct-timestamp-obj } [ $ construct-timestamp-str yaml> ] unit-test
+$${ construct-timestamp-obj } [ $ construct-timestamp-obj >yaml yaml> ] unit-test
 
 ! !!!!!!!!!!!!!!!
 ! construct-value
@@ -720,12 +720,12 @@ link with:
     version: 2.3
 " ;
 
-${ construct-value-safe-obj } [ $ construct-value-str yaml-docs> ] unit-test
-${ construct-value-safe-obj } [ $ construct-value-safe-obj >yaml-docs yaml-docs> ] unit-test
+$${ construct-value-safe-obj } [ $ construct-value-str yaml-docs> ] unit-test
+$${ construct-value-safe-obj } [ $ construct-value-safe-obj >yaml-docs yaml-docs> ] unit-test
 f value [
-  ${ construct-value-unsafe-obj } [ $ construct-value-str yaml-docs> ] unit-test
-  ${ construct-value-unsafe-obj } [ $ construct-value-unsafe-obj >yaml-docs yaml-docs> ] unit-test
-  ${ construct-value-safe-obj } [
+  $${ construct-value-unsafe-obj } [ $ construct-value-str yaml-docs> ] unit-test
+  $${ construct-value-unsafe-obj } [ $ construct-value-unsafe-obj >yaml-docs yaml-docs> ] unit-test
+  $${ construct-value-safe-obj } [
     $ construct-value-str yaml-docs> [
      dup "link with" swap [ [ scalar-value ] map ] change-at
     ] map
@@ -737,9 +737,9 @@ CONSTANT: serialize-value-obj H{
   { T{ yaml-value } 1 }
 } ;
 CONSTANT: serialize-value-obj2 1 ;
-${ serialize-value-obj2 } [ $ serialize-value-obj >yaml yaml> ] unit-test
+$${ serialize-value-obj2 } [ $ serialize-value-obj >yaml yaml> ] unit-test
 f value [
-  ${ serialize-value-obj } [ $ serialize-value-obj >yaml yaml> ] unit-test
+  $${ serialize-value-obj } [ $ serialize-value-obj >yaml yaml> ] unit-test
 ] with-variable
 
 ! !!!!!!!!!!!!!!!

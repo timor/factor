@@ -145,7 +145,7 @@ HELP: try-process
   { $unchecked-example
     "USING: continuations io.launcher prettyprint ;"
     "[ \"i-dont-exist\" try-process ] [ ] recover ."
-    $[
+    $$[
         {
             "T{ process-failed"
             "    { process"

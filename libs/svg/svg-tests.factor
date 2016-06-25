@@ -4,27 +4,27 @@ math.functions sequences svg tools.test xml
 xml.traversal ;
 IN: svg.tests
 
-${ { 1.0 2.25 } { -3.0 4.0 } { 5.5 0.5 } <affine-transform> } [
+$${ { 1.0 2.25 } { -3.0 4.0 } { 5.5 0.5 } <affine-transform> } [
     "matrix ( 1 +2.25 -3  , 0.4e+1  ,5.5, 5e-1 )" svg-transform>affine-transform
 ] unit-test
 
-${ { 1.0 0.0 } { 0.0 1.0 } { 5.0 10.0 } <affine-transform> } [
+$${ { 1.0 0.0 } { 0.0 1.0 } { 5.0 10.0 } <affine-transform> } [
     "translate(5.0, 1e1 )" svg-transform>affine-transform
 ] unit-test
 
-${ { 1.0 0.0 } { 0.0 1.0 } { 5.0 10.0 } <affine-transform> } [
+$${ { 1.0 0.0 } { 0.0 1.0 } { 5.0 10.0 } <affine-transform> } [
     "translate( 5.0  1e+1)" svg-transform>affine-transform
 ] unit-test
 
-${ { 2.0 0.0 } { 0.0 2.0 } { 0.0 0.0 } <affine-transform> } [
+$${ { 2.0 0.0 } { 0.0 2.0 } { 0.0 0.0 } <affine-transform> } [
     "scale(2.0)" svg-transform>affine-transform
 ] unit-test
 
-${ { 2.0 0.0 } { 0.0 4.0 } { 0.0 0.0 } <affine-transform> } [
+$${ { 2.0 0.0 } { 0.0 4.0 } { 0.0 0.0 } <affine-transform> } [
     "scale(2.0 4.0)" svg-transform>affine-transform
 ] unit-test
 
-${ { 2.0 0.0 } { 0.0 4.0 } { 0.0 0.0 } <affine-transform> } [
+$${ { 2.0 0.0 } { 0.0 4.0 } { 0.0 0.0 } <affine-transform> } [
     "scale(2.0 4.0)" svg-transform>affine-transform
 ] unit-test
 
@@ -40,24 +40,24 @@ ${ { 2.0 0.0 } { 0.0 4.0 } { 0.0 0.0 } <affine-transform> } [
 
 { t } [
     "rotate(30)" svg-transform>affine-transform
-    { $[ 0.75 sqrt ] 0.5            }
-    { -0.5           $[ 0.75 sqrt ] }
+    { $$[ 0.75 sqrt ] 0.5            }
+    { -0.5           $$[ 0.75 sqrt ] }
     {  0.0           0.0            } <affine-transform>
     0.001 a~
 ] unit-test
 
 { t } [
     "rotate(30 1.0,2.0)" svg-transform>affine-transform
-    { $[  30 degrees cos ] $[ 30 degrees sin ] }
-    { $[ -30 degrees sin ] $[ 30 degrees cos ] } {
-        $[ 1.0 30 degrees cos 1.0 * - 30 degrees sin 2.0 * + ]
-        $[ 2.0 30 degrees cos 2.0 * - 30 degrees sin 1.0 * - ]
+    { $$[  30 degrees cos ] $$[ 30 degrees sin ] }
+    { $$[ -30 degrees sin ] $$[ 30 degrees cos ] } {
+        $$[ 1.0 30 degrees cos 1.0 * - 30 degrees sin 2.0 * + ]
+        $$[ 2.0 30 degrees cos 2.0 * - 30 degrees sin 1.0 * - ]
     } <affine-transform> 0.001 a~
 ] unit-test
 
-${
-    { $[  30 degrees cos ] $[ 30 degrees sin ] }
-    { $[ -30 degrees sin ] $[ 30 degrees cos ] }
+$${
+    { $$[  30 degrees cos ] $$[ 30 degrees sin ] }
+    { $$[ -30 degrees sin ] $$[ 30 degrees cos ] }
     { 1.0 2.0 } <affine-transform>
 } [
     "translate(1 2) rotate(30)" svg-transform>affine-transform

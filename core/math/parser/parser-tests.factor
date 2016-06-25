@@ -257,7 +257,7 @@ unit-test
 { -15.5 } [ "-f.8p0" hex> ] unit-test
 { 62.0 } [ "f.8p2" hex> ] unit-test
 { 3.875 } [ "f.8p-2" hex> ] unit-test
-{ $[ 1 bits>double ] } [ "1.0p-1074" hex> ] unit-test
+{ $$[ 1 bits>double ] } [ "1.0p-1074" hex> ] unit-test
 { 0.0 } [ "1.0p-1075" hex> ] unit-test
 { 1/0. } [ "1.0p1024" hex> ] unit-test
 { -1/0. } [ "-1.0p1024" hex> ] unit-test
@@ -274,7 +274,7 @@ unit-test
 { -15.5 } [ "-1111.1p0" bin> ] unit-test
 { 62.0 } [ "1111.1p2" bin> ] unit-test
 { 3.875 } [ "1111.1p-2" bin> ] unit-test
-{ $[ 1 bits>double ] } [ "1.0p-1074" bin> ] unit-test
+{ $$[ 1 bits>double ] } [ "1.0p-1074" bin> ] unit-test
 { 0.0 } [ "1.0p-1075" bin> ] unit-test
 { 1/0. } [ "1.0p1024" bin> ] unit-test
 { -1/0. } [ "-1.0p1024" bin> ] unit-test
@@ -291,7 +291,7 @@ unit-test
 { -15.5 } [ "-17.4p0" oct> ] unit-test
 { 62.0 } [ "17.4p2" oct> ] unit-test
 { 3.875 } [ "17.4p-2" oct> ] unit-test
-{ $[ 1 bits>double ] } [ "1.0p-1074" oct> ] unit-test
+{ $$[ 1 bits>double ] } [ "1.0p-1074" oct> ] unit-test
 { 0.0 } [ "1.0p-1075" oct> ] unit-test
 { 1/0. } [ "1.0p1024" oct> ] unit-test
 { -1/0. } [ "-1.0p1024" oct> ] unit-test

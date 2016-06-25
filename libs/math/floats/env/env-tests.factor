@@ -107,7 +107,7 @@ set-default-fp-env
 ] unit-test
 
 : fp-trap-error? ( error -- ? )
-    2 head ${ KERNEL-ERROR ERROR-FP-TRAP } = ;
+    2 head $${ KERNEL-ERROR ERROR-FP-TRAP } = ;
 
 : test-traps ( traps inputs quot -- quot' fail-quot )
     append '[ _ _ with-fp-traps ] [ fp-trap-error? ] ;

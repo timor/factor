@@ -33,7 +33,7 @@ H{ } clone representations set
 {
     {
         T{ ##allot f 2 16 float 4 }
-        T{ ##store-memory-imm f 1 2 $[ float-offset ] double-rep f }
+        T{ ##store-memory-imm f 1 2 $$[ float-offset ] double-rep f }
     }
 } [
     [
@@ -43,7 +43,7 @@ H{ } clone representations set
 
 {
     {
-        T{ ##load-memory-imm f 2 1 $[ float-offset ] double-rep f }
+        T{ ##load-memory-imm f 2 1 $$[ float-offset ] double-rep f }
     }
 } [
     [
@@ -204,7 +204,7 @@ V{
 {
     V{
         T{ ##peek f 4 d: 0 }
-        T{ ##sar-imm f 1 4 $[ tag-bits get ] }
+        T{ ##sar-imm f 1 4 $$[ tag-bits get ] }
         T{ ##branch }
     }
 } [ 1 get instructions>> ] unit-test
@@ -269,11 +269,11 @@ V{
 
 { } [ test-representations ] unit-test
 
-{ T{ ##load-tagged f 1 $[ 1 tag-fixnum ] } }
+{ T{ ##load-tagged f 1 $$[ 1 tag-fixnum ] } }
 [ 1 get instructions>> first ]
 unit-test
 
-{ T{ ##load-tagged f 2 $[ 2 tag-fixnum ] } }
+{ T{ ##load-tagged f 2 $$[ 2 tag-fixnum ] } }
 [ 2 get instructions>> first ]
 unit-test
 
@@ -415,7 +415,7 @@ cpu x86.32? [
 ! Converting a ##load-integer into a ##load-tagged
 {
     V{
-        T{ ##load-tagged f 1 $[ 100 tag-fixnum ] }
+        T{ ##load-tagged f 1 $$[ 100 tag-fixnum ] }
         T{ ##replace f 1 d: 0 }
     }
 } [
@@ -433,7 +433,7 @@ cpu x86.32? [
         T{ ##peek f 1 d: 0 }
         T{ ##sar-imm f 2 1 1 }
         T{ ##add f 4 2 2 }
-        T{ ##shl-imm f 3 4 $[ tag-bits get ] }
+        T{ ##shl-imm f 3 4 $$[ tag-bits get ] }
         T{ ##replace f 3 d: 0 }
     }
 } [
@@ -450,9 +450,9 @@ cpu x86.32? [
 {
     V{
         T{ ##peek f 1 d: 0 }
-        T{ ##shl-imm f 2 1 $[ 10 tag-bits get - ] }
+        T{ ##shl-imm f 2 1 $$[ 10 tag-bits get - ] }
         T{ ##add f 4 2 2 }
-        T{ ##shl-imm f 3 4 $[ tag-bits get ] }
+        T{ ##shl-imm f 3 4 $$[ tag-bits get ] }
         T{ ##replace f 3 d: 0 }
     }
 } [
@@ -469,13 +469,13 @@ cpu x86.32? [
         T{ ##peek f 1 d: 0 }
         T{ ##copy f 2 1 int-rep }
         T{ ##add f 5 2 2 }
-        T{ ##shl-imm f 3 5 $[ tag-bits get ] }
+        T{ ##shl-imm f 3 5 $$[ tag-bits get ] }
         T{ ##replace f 3 d: 0 }
     }
 } [
     V{
         T{ ##peek f 1 d: 0 }
-        T{ ##shl-imm f 2 1 $[ tag-bits get ] }
+        T{ ##shl-imm f 2 1 $$[ tag-bits get ] }
         T{ ##add f 3 2 2 }
         T{ ##replace f 3 d: 0 }
     } test-peephole
@@ -485,7 +485,7 @@ cpu x86.32? [
 {
     V{
         T{ ##load-integer f 1 100 }
-        T{ ##shl-imm f 2 1 $[ 3 tag-bits get + ] }
+        T{ ##shl-imm f 2 1 $$[ 3 tag-bits get + ] }
         T{ ##replace f 2 d: 0 }
     }
 } [
@@ -537,8 +537,8 @@ cpu x86.32? [
 {
     V{
         T{ ##peek f 1 d: 0 }
-        T{ ##sar-imm f 7 1 $[ 3 tag-bits get + ] }
-        T{ ##shl-imm f 2 7 $[ tag-bits get ] }
+        T{ ##sar-imm f 7 1 $$[ 3 tag-bits get + ] }
+        T{ ##shl-imm f 2 7 $$[ tag-bits get ] }
         T{ ##replace f 2 d: 0 }
     }
 } [
@@ -556,7 +556,7 @@ cpu x86.32? [
     V{
         T{ ##load-integer f 1 100 }
         T{ ##sar-imm f 7 1 3 }
-        T{ ##shl-imm f 2 7 $[ tag-bits get ] }
+        T{ ##shl-imm f 2 7 $$[ tag-bits get ] }
         T{ ##replace f 2 d: 0 }
     }
 } [
@@ -572,7 +572,7 @@ cpu x86.32? [
 {
     V{
         T{ ##peek f 0 d: 0 }
-        T{ ##sar-imm f 1 0 $[ 3 tag-bits get + ] }
+        T{ ##sar-imm f 1 0 $$[ 3 tag-bits get + ] }
         T{ ##load-integer f 3 100 }
         T{ ##load-integer f 4 100 }
         T{ ##store-memory f 1 3 4 0 0 int-rep char }
@@ -639,7 +639,7 @@ cpu x86.32? [
         T{ ##sar-imm f 2 1 3 }
         T{ ##load-integer f 3 100 }
         T{ ##add f 7 2 3 }
-        T{ ##shl-imm f 4 7 $[ tag-bits get ] }
+        T{ ##shl-imm f 4 7 $$[ tag-bits get ] }
         T{ ##replace f 4 d: 0 }
     }
 } [
@@ -657,7 +657,7 @@ cpu x86.32? [
 {
     V{
         T{ ##peek f 1 d: 0 }
-        T{ ##add-imm f 2 1 $[ 100 tag-fixnum ] }
+        T{ ##add-imm f 2 1 $$[ 100 tag-fixnum ] }
         T{ ##replace f 2 d: 0 }
     }
 } [
@@ -691,15 +691,15 @@ cpu x86.64? [
     [
         V{
             T{ ##peek f 0 d: 0 }
-            T{ ##sar-imm f 5 0 $[ tag-bits get ] }
-            T{ ##add-imm f 6 5 $[ 30 2^ ] }
-            T{ ##shl-imm f 2 6 $[ tag-bits get ] }
+            T{ ##sar-imm f 5 0 $$[ tag-bits get ] }
+            T{ ##add-imm f 6 5 $$[ 30 2^ ] }
+            T{ ##shl-imm f 2 6 $$[ tag-bits get ] }
             T{ ##replace f 2 d: 0 }
         }
     ] [
         V{
             T{ ##peek f 0 d: 0 }
-            T{ ##add-imm f 2 0 $[ 30 2^ ] }
+            T{ ##add-imm f 2 0 $$[ 30 2^ ] }
             T{ ##replace f 2 d: 0 }
         } test-peephole
     ] unit-test
@@ -707,14 +707,14 @@ cpu x86.64? [
     [
         V{
             T{ ##load-integer f 0 100 }
-            T{ ##mul-imm f 7 0 $[ 30 2^ ] }
-            T{ ##shl-imm f 1 7 $[ tag-bits get ] }
+            T{ ##mul-imm f 7 0 $$[ 30 2^ ] }
+            T{ ##shl-imm f 1 7 $$[ tag-bits get ] }
             T{ ##replace f 1 d: 0 }
         }
     ] [
         V{
             T{ ##load-integer f 0 100 }
-            T{ ##mul-imm f 1 0 $[ 30 2^ ] }
+            T{ ##mul-imm f 1 0 $$[ 30 2^ ] }
             T{ ##replace f 1 d: 0 }
         } test-peephole
     ] unit-test
@@ -741,9 +741,9 @@ cpu x86.64? [
     V{
         T{ ##peek f 0 d: 0 }
         T{ ##peek f 1 d: 1 }
-        T{ ##sar-imm f 5 1 $[ tag-bits get ] }
+        T{ ##sar-imm f 5 1 $$[ tag-bits get ] }
         T{ ##add-imm f 2 5 30 }
-        T{ ##mul-imm f 3 2 $[ 100 tag-fixnum ] }
+        T{ ##mul-imm f 3 2 $$[ 100 tag-fixnum ] }
         T{ ##replace f 3 d: 0 }
     }
 } [
@@ -821,7 +821,7 @@ cpu x86.64? [
     V{
         T{ ##peek f 0 d: 0 }
         T{ ##peek f 1 d: 1 }
-        T{ ##compare-integer-imm-branch f 0 $[ 10 tag-fixnum ] cc= }
+        T{ ##compare-integer-imm-branch f 0 $$[ 10 tag-fixnum ] cc= }
     }
 } [
     V{
@@ -835,7 +835,7 @@ cpu x86.64? [
     V{
         T{ ##peek f 0 d: 0 }
         T{ ##peek f 1 d: 1 }
-        T{ ##test-imm-branch f 0 $[ 10 tag-fixnum ] cc= }
+        T{ ##test-imm-branch f 0 $$[ 10 tag-fixnum ] cc= }
     }
 } [
     V{
@@ -889,7 +889,7 @@ cpu x86.64? [
     V{
         T{ ##peek f 0 d: 0 }
         T{ ##not f 3 0 }
-        T{ ##xor-imm f 1 3 $[ tag-mask get ] }
+        T{ ##xor-imm f 1 3 $$[ tag-mask get ] }
         T{ ##replace f 1 d: 0 }
     }
 } [

@@ -24,7 +24,7 @@ IN: compiler.tree.propagation.recursive.tests
     integer generalize-counter-interval
 ] unit-test
 
-{ T{ interval f { 0 t } { $[ max-array-capacity ] t } } } [
+{ T{ interval f { 0 t } { $$[ max-array-capacity ] t } } } [
     T{ interval f { 1 t } { 1 t } }
     T{ interval f { 0 t } { 0 t } }
     fixnum generalize-counter-interval
@@ -36,7 +36,7 @@ IN: compiler.tree.propagation.recursive.tests
     integer generalize-counter-interval
 ] unit-test
 
-{ T{ interval f { $[ most-negative-fixnum ] t } { 10 t } } } [
+{ T{ interval f { $$[ most-negative-fixnum ] t } { 10 t } } } [
     T{ interval f { -1 t } { -1 t } }
     T{ interval f { 10 t } { 10 t } }
     fixnum generalize-counter-interval
@@ -62,7 +62,7 @@ IN: compiler.tree.propagation.recursive.tests
     integer generalize-counter-interval
 ] unit-test
 
-{ $[ fixnum-interval ] } [
+{ $$[ fixnum-interval ] } [
     T{ interval f { -5 t } { 3 t } }
     T{ interval f { 2 t } { 11 t } }
     fixnum generalize-counter-interval

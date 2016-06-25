@@ -20,7 +20,7 @@ sequences tools.test vectors ;
 [ cell-bits cell log2 - 2^ f <array> ] must-fail
 ! To big for a fixnum #1045
 [ 67 2^ 3 <array> ] [
-    ${ KERNEL-ERROR ERROR-OUT-OF-FIXNUM-RANGE 147573952589676412928 f }
+    $${ KERNEL-ERROR ERROR-OUT-OF-FIXNUM-RANGE 147573952589676412928 f }
     =
 ] must-fail-with
 

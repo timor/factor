@@ -70,7 +70,7 @@ cpu x86.64? [
 ] unit-test
 
 ! assign-spill-slot
-${
+$${
     cpu x86.32?
     H{
         { { 3 4 } T{ spill-slot { n 32 } } }
@@ -98,8 +98,8 @@ ${
 
 {
     H{
-        { { 55 $[ cell ] } T{ spill-slot } }
-        { { 44 $[ cell ] } T{ spill-slot { n $[ cell ] } } }
+        { { 55 $$[ cell ] } T{ spill-slot } }
+        { { 44 $$[ cell ] } T{ spill-slot { n $$[ cell ] } } }
     }
 } [
     H{ } clone spill-slots set
@@ -121,7 +121,7 @@ ${
 ] unit-test
 
 ! align-spill-area
-${ cell } [
+$${ cell } [
     3 { } insns>cfg stack-frame>> [ align-spill-area ] keep
     spill-area-align>>
 ] unit-test
@@ -154,7 +154,7 @@ ${ cell } [
     T{ spill-slot f 8 }
     T{ stack-frame
        { spill-area-size 16 }
-       { spill-area-align $[ cell ] }
+       { spill-area-align $$[ cell ] }
     }
 } [
     { } insns>cfg stack-frame>> [ '[ 8 _ next-spill-slot ] twice ] keep

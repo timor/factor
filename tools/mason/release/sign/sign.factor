@@ -31,7 +31,7 @@ HOOK: sign-factor-app os ( -- ) ;
 M: object sign-factor-app ;
 
 M:: macosx sign-factor-app ( -- )
-    ${
+    $${
         "codesign" "--force" "--sign"
         "Developer ID Application"
         cert-path
@@ -42,7 +42,7 @@ M:: macosx sign-factor-app ( -- )
 M:: windows sign-factor-app ( -- )
     { "factor.com" "factor.exe" } [
         [
-            ${
+            $${
                 "signtool" "sign"
                 "/v"
                 "/f" cert-path

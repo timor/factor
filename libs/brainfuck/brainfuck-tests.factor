@@ -70,7 +70,7 @@ IN: brainfuck
 
 ! Squares of numbers from 0 to 100
 
-${ 100 [0,b] [ dup * number>string ] map "\n" join "\n" append }
+$${ 100 [0,b] [ dup * number>string ] map "\n" join "\n" append }
 [
     "
     ++++[>+++++<-]>[<+++++>-]+<+[

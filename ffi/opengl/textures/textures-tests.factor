@@ -17,23 +17,23 @@ IN: opengl.textures.tests
     [ [ image new swap >>dim ] map ] map image-locs
 ] unit-test
 
-${ GL_RGBA8 GL_RGBA GL_UNSIGNED_BYTE }
+$${ GL_RGBA8 GL_RGBA GL_UNSIGNED_BYTE }
 [ RGBA ubyte-components (image-format) ] unit-test
 
-${ GL_RGBA8 GL_BGRA GL_UNSIGNED_BYTE }
+$${ GL_RGBA8 GL_BGRA GL_UNSIGNED_BYTE }
 [ BGRA ubyte-components (image-format) ] unit-test
 
-${ GL_RGBA8 GL_BGRA GL_UNSIGNED_INT_8_8_8_8_REV }
+$${ GL_RGBA8 GL_BGRA GL_UNSIGNED_INT_8_8_8_8_REV }
 [ ARGB ubyte-components (image-format) ] unit-test
 
-${ GL_RGBA32F GL_RGBA GL_FLOAT }
+$${ GL_RGBA32F GL_RGBA GL_FLOAT }
 [ RGBA float-components (image-format) ] unit-test
 
-${ GL_RGBA32UI GL_BGRA_INTEGER GL_UNSIGNED_INT }
+$${ GL_RGBA32UI GL_BGRA_INTEGER GL_UNSIGNED_INT }
 [ BGRA uint-integer-components (image-format) ] unit-test
 
-${ GL_RGB9_E5 GL_RGB GL_UNSIGNED_INT_5_9_9_9_REV }
+$${ GL_RGB9_E5 GL_RGB GL_UNSIGNED_INT_5_9_9_9_REV }
 [ BGR u-9-9-9-e5-components (image-format) ] unit-test
 
-${ GL_R11F_G11F_B10F GL_RGB GL_UNSIGNED_INT_10F_11F_11F_REV }
+$${ GL_R11F_G11F_B10F GL_RGB GL_UNSIGNED_INT_10F_11F_11F_REV }
 [ BGR float-11-11-10-components (image-format) ] unit-test

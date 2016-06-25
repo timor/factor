@@ -26,8 +26,8 @@ HELP: $
     }
 } ;
 
-HELP: \ $[
-{ $syntax "$[ code ]" }
+HELP: \ $$[
+{ $syntax "$$[ code ]" }
 { $description "Calls " { $snippet "code" } " at parse time and adds the result(s) to the parser accumulator." }
 { $notes "Since " { $snippet "code" } " is " { $link call } "ed at parse time, it cannot reference any words defined in the same compilation unit." }
 { $examples
@@ -36,13 +36,13 @@ HELP: \ $[
         "IN: scratchpad"
         ""
         "<< CONSTANT: five 5 >>"
-        "{ $[ five dup 1 + dup 2 + ] } ."
+        "{ $$[ five dup 1 + dup 2 + ] } ."
         "{ 5 6 8 }"
     }
 } ;
 
-HELP: \ ${
-{ $syntax "${ code }" }
+HELP: \ $${
+{ $syntax "$${ code }" }
 { $description "Outputs an array containing the results of executing " { $snippet "code" } " at parse time." }
 { $notes { $snippet "code" } "'s definition is looked up and " { $link call } "ed at parse time, so words that reference words in the current compilation unit cannot be used with " { $snippet "$" } "." }
 { $examples
@@ -52,12 +52,12 @@ HELP: \ ${
         ""
         "CONSTANT: five 5"
         "CONSTANT: six 6"
-        "${ five six 7 } ."
+        "$${ five six 7 } ."
         "{ 5 6 7 }"
     }
 } ;
 
-{ \ $  \ $[  \ ${  } related-words
+{ \ $  \ $$[  \ $${  } related-words
 
 HELP: \ flags{
 { $values { "values" sequence } }
@@ -80,13 +80,13 @@ ARTICLE: "literals" "Interpolating code results into literal values"
     "IN: scratchpad"
     ""
     "<< CONSTANT: five 5 >>"
-    "{ $ five $[ five dup 1 + dup 2 + ] } ."
+    "{ $ five $$[ five dup 1 + dup 2 + ] } ."
     "{ 5 5 6 8 }"
 }
 { $subsections
     \ $
-    \ $[
-    \ ${
+    \ $$[
+    \ $${
 } ;
 
 ABOUT: "literals"

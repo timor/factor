@@ -4,7 +4,7 @@ math math.combinatorics sequences sets ;
 
 IN: benchmark.hash-sets
 
-CONSTANT: test-sets $[
+CONSTANT: test-sets $$[
     { 10 100 1,000 10,000 50,000 100,000 }
     [ iota >hash-set ] map dup append
 ] ;

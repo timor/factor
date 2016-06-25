@@ -99,7 +99,7 @@ PRIVATE<
     STG_E_INVALIDFUNCTION ;
 
 CONSTANT: stream-wrapper
-    $[
+    $$[
         {
             { IStream {
                 [ IStream-read ]

@@ -32,7 +32,7 @@ ERROR: decimal-test-failure D1 D2 quot ;
     1000 [
         drop
         [ [ 100 D/ ] [ /f ] test-decimal-op ]
-        [ ${ KERNEL-ERROR ERROR-DIVIDE-BY-ZERO f f } = ] recover
+        [ $${ KERNEL-ERROR ERROR-DIVIDE-BY-ZERO f f } = ] recover
     ] all-integers?
 ] unit-test
 

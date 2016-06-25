@@ -747,7 +747,7 @@ ERROR: windows-error n string ;
     dup INVALID_HANDLE_VALUE = [ throw-win32-error ] when ;
 
 CONSTANT: expected-io-errors
-    ${
+    $${
         ERROR_SUCCESS
         ERROR_IO_INCOMPLETE
         ERROR_IO_PENDING

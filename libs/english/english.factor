@@ -93,7 +93,7 @@ CONSTANT: singular-to-plural H{
 } ;
 COMPILE>
 
-CONSTANT: plural-to-singular $[ singular-to-plural assoc-invert ] ;
+CONSTANT: plural-to-singular $$[ singular-to-plural assoc-invert ] ;
 
 :: match-case ( master disciple -- master' )
     {

@@ -60,7 +60,7 @@ IN: math.matrices.simd.tests
 } [ float-4{ 3.0 4.0 2.0 0.0 } translation-matrix4 ] unit-test
 
 { t } [
-    float-4{ $[ 1/2. sqrt ] 0.0 $[ 1/2. sqrt ] 0.0 } pi rotation-matrix4
+    float-4{ $$[ 1/2. sqrt ] 0.0 $$[ 1/2. sqrt ] 0.0 } pi rotation-matrix4
     S{ matrix4 f
         float-4-array{
             float-4{  0.0  0.0  1.0 0.0 }
@@ -269,9 +269,9 @@ IN: math.matrices.simd.tests
     0.0 pi 0.25 * 0.0 euler4 q>matrix4
     S{ matrix4 f
         float-4-array{
-            float-4{ $[ 1/2. sqrt ] 0.0 $[ 1/2. sqrt neg ] 0.0 }
+            float-4{ $$[ 1/2. sqrt ] 0.0 $$[ 1/2. sqrt neg ] 0.0 }
             float-4{ 0.0            1.0 0.0                0.0 }
-            float-4{ $[ 1/2. sqrt ] 0.0 $[ 1/2. sqrt     ] 0.0 }
+            float-4{ $$[ 1/2. sqrt ] 0.0 $$[ 1/2. sqrt     ] 0.0 }
             float-4{ 0.0            0.0 0.0                1.0 }
         }
     }

@@ -51,8 +51,8 @@ M: ppc vector-regs ( -- reg-class )
 
 M: ppc machine-registers ( -- assoc )
     {
-        { int-regs $[ 3 12 [a,b] 17 29 [a,b] append ] }
-        { float-regs $[ 0 29 [a,b] ] }
+        { int-regs $$[ 3 12 [a,b] 17 29 [a,b] append ] }
+        { float-regs $$[ 0 29 [a,b] ] }
     } ;
 
 M: ppc frame-reg ( -- reg ) 31 ;

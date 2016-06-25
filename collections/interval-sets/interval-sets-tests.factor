@@ -7,7 +7,7 @@ IN: interval-sets.tests
 { f } [ 0 T{ interval-set } in? ] unit-test
 { f } [ 2 T{ interval-set } in? ] unit-test
 
-CONSTANT: i1 $[
+CONSTANT: i1 $$[
     { { 3 4 } } <interval-set> ] ;
 
 { f } [ 2 i1 in? ] unit-test
@@ -15,7 +15,7 @@ CONSTANT: i1 $[
 { t } [ 4 i1 in? ] unit-test
 { f } [ 5 i1 in? ] unit-test
 
-CONSTANT: i2 $[
+CONSTANT: i2 $$[
     { { 3 4 } } <interval-set>
     0x10FFFF <interval-not> ] ; ! unicode-max
 
@@ -24,7 +24,7 @@ CONSTANT: i2 $[
 { f } [ 4 i2 in? ] unit-test
 { t } [ 5 i2 in? ] unit-test
 
-CONSTANT: i3 $[
+CONSTANT: i3 $$[
     { { 2 4 } } <interval-set>
     { { 6 8 } } <interval-set>
     <interval-or> ] ;
@@ -39,7 +39,7 @@ CONSTANT: i3 $[
 { t } [ 8 i3 in? ] unit-test
 { f } [ 9 i3 in? ] unit-test
 
-CONSTANT: i4 $[
+CONSTANT: i4 $$[
     { { 2 4 } } <interval-set>
     { { 6 8 } } <interval-set>
     <interval-and> ] ;
@@ -54,7 +54,7 @@ CONSTANT: i4 $[
 { f } [ 8 i4 in? ] unit-test
 { f } [ 9 i4 in? ] unit-test
 
-CONSTANT: i5 $[
+CONSTANT: i5 $$[
     { { 2 5 } } <interval-set>
     { { 4 8 } } <interval-set>
     <interval-or> ] ;
@@ -69,7 +69,7 @@ CONSTANT: i5 $[
 { t } [ 8 i5 in? ] unit-test
 { f } [ 9 i5 in? ] unit-test
 
-CONSTANT: i6 $[
+CONSTANT: i6 $$[
     { { 2 5 } } <interval-set>
     { { 4 8 } } <interval-set>
     <interval-and> ] ;

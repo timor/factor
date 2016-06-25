@@ -31,10 +31,10 @@ FUNCTION: void zmq_version ( int* major, int* minor, int* patch ) ;
 COMPILE< CONSTANT: ZMQ_HAUSNUMERO 156384712 ; COMPILE>
 
 ! Native 0MQ error codes.
-CONSTANT: EFSM $[ ZMQ_HAUSNUMERO 51 + ] ;
-CONSTANT: ENOCOMPATPROTO $[ ZMQ_HAUSNUMERO 52 + ] ;
-CONSTANT: ETERM $[ ZMQ_HAUSNUMERO 53 + ] ;
-CONSTANT: EMTHREAD $[ ZMQ_HAUSNUMERO 54 + ] ;
+CONSTANT: EFSM $$[ ZMQ_HAUSNUMERO 51 + ] ;
+CONSTANT: ENOCOMPATPROTO $$[ ZMQ_HAUSNUMERO 52 + ] ;
+CONSTANT: ETERM $$[ ZMQ_HAUSNUMERO 53 + ] ;
+CONSTANT: EMTHREAD $$[ ZMQ_HAUSNUMERO 54 + ] ;
 
 ! This function retrieves the errno as it is known to 0MQ library. The goal
 ! of this function is to make the code 100% portable, including where 0MQ

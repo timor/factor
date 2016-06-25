@@ -122,13 +122,13 @@ IN: compiler.cfg.intrinsics.slots.tests
            { src 1 }
            { obj 2 }
            { slot 3 }
-           { scale $[ cell log2 ] }
+           { scale $$[ cell log2 ] }
            { tag 2 }
         }
         T{ ##write-barrier
            { src 2 }
            { slot 3 }
-           { scale $[ cell log2 ] }
+           { scale $$[ cell log2 ] }
            { tag 2 }
            { temp1 4 }
            { temp2 5 }

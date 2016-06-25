@@ -48,7 +48,7 @@ IN: compiler.tests.low-level-ir
 ! one of the sources
 [ t ] [
     V{
-        T{ ##load-tagged f 1 $[ 2 cell log2 shift array type-number - ] }
+        T{ ##load-tagged f 1 $$[ 2 cell log2 shift array type-number - ] }
         T{ ##load-reference f 0 { t f t } }
         T{ ##slot f 0 0 1 0 0 }
     } compile-test-bb
@@ -57,13 +57,13 @@ IN: compiler.tests.low-level-ir
 [ t ] [
     V{
         T{ ##load-reference f 0 { t f t } }
-        T{ ##slot-imm f 0 0 2 $[ array type-number ] }
+        T{ ##slot-imm f 0 0 2 $$[ array type-number ] }
     } compile-test-bb
 ] unit-test
 
 [ t ] [
     V{
-        T{ ##load-tagged f 1 $[ 2 cell log2 shift array type-number - ] }
+        T{ ##load-tagged f 1 $$[ 2 cell log2 shift array type-number - ] }
         T{ ##load-reference f 0 { t f t } }
         T{ ##set-slot f 0 0 1 0 0 }
     } compile-test-bb
@@ -73,7 +73,7 @@ IN: compiler.tests.low-level-ir
 [ t ] [
     V{
         T{ ##load-reference f 0 { t f t } }
-        T{ ##set-slot-imm f 0 0 2 $[ array type-number ] }
+        T{ ##set-slot-imm f 0 0 2 $$[ array type-number ] }
     } compile-test-bb
     dup first eq?
 ] unit-test
@@ -110,21 +110,21 @@ IN: compiler.tests.low-level-ir
 
 [ -1 ] [
     V{
-        T{ ##load-tagged f 1 $[ -1 tag-fixnum ] }
+        T{ ##load-tagged f 1 $$[ -1 tag-fixnum ] }
         T{ ##convert-integer f 0 1 char }
     } compile-test-bb
 ] unit-test
 
 [ -1 ] [
     V{
-        T{ ##load-tagged f 1 $[ -1 9 2^ bitxor tag-fixnum ] }
+        T{ ##load-tagged f 1 $$[ -1 9 2^ bitxor tag-fixnum ] }
         T{ ##convert-integer f 0 1 char }
     } compile-test-bb
 ] unit-test
 
-[ $[ 255 tag-bits get neg shift ] ] [
+[ $$[ 255 tag-bits get neg shift ] ] [
     V{
-        T{ ##load-tagged f 1 $[ -1 9 2^ bitxor tag-fixnum ] }
+        T{ ##load-tagged f 1 $$[ -1 9 2^ bitxor tag-fixnum ] }
         T{ ##convert-integer f 0 1 uchar }
     } compile-test-bb
 ] unit-test

@@ -1521,14 +1521,14 @@ cpu x86? [
     {
         T{ ##peek f 0 d: 0 }
         T{ ##shl-imm f 1 0 10 }
-        T{ ##shl-imm f 2 1 $[ cell-bits 1 - ] }
+        T{ ##shl-imm f 2 1 $$[ cell-bits 1 - ] }
         T{ ##replace f 2 d: 0 }
     }
 } [
     {
         T{ ##peek f 0 d: 0 }
         T{ ##shl-imm f 1 0 10 }
-        T{ ##shl-imm f 2 1 $[ cell-bits 1 - ] }
+        T{ ##shl-imm f 2 1 $$[ cell-bits 1 - ] }
         T{ ##replace f 2 d: 0 }
     } value-numbering-step
 ] unit-test
@@ -1553,14 +1553,14 @@ cpu x86? [
     {
         T{ ##peek f 0 d: 0 }
         T{ ##sar-imm f 1 0 10 }
-        T{ ##sar-imm f 2 1 $[ cell-bits 1 - ] }
+        T{ ##sar-imm f 2 1 $$[ cell-bits 1 - ] }
         T{ ##replace f 2 d: 0 }
     }
 } [
     {
         T{ ##peek f 0 d: 0 }
         T{ ##sar-imm f 1 0 10 }
-        T{ ##sar-imm f 2 1 $[ cell-bits 1 - ] }
+        T{ ##sar-imm f 2 1 $$[ cell-bits 1 - ] }
         T{ ##replace f 2 d: 0 }
     } value-numbering-step
 ] unit-test
@@ -1585,14 +1585,14 @@ cpu x86? [
     {
         T{ ##peek f 0 d: 0 }
         T{ ##shr-imm f 1 0 10 }
-        T{ ##shr-imm f 2 1 $[ cell-bits 1 - ] }
+        T{ ##shr-imm f 2 1 $$[ cell-bits 1 - ] }
         T{ ##replace f 2 d: 0 }
     }
 } [
     {
         T{ ##peek f 0 d: 0 }
         T{ ##shr-imm f 1 0 10 }
-        T{ ##shr-imm f 2 1 $[ cell-bits 1 - ] }
+        T{ ##shr-imm f 2 1 $$[ cell-bits 1 - ] }
         T{ ##replace f 2 d: 0 }
     } value-numbering-step
 ] unit-test
@@ -2133,7 +2133,7 @@ cell 8 = [
 {
     {
         T{ ##load-reference f 1 f }
-        T{ ##load-integer f 2 $[ \ f type-number ] }
+        T{ ##load-integer f 2 $$[ \ f type-number ] }
         T{ ##copy f 3 2 any-rep }
     }
 } [
@@ -2147,8 +2147,8 @@ cell 8 = [
 {
     {
         T{ ##load-integer f 1 100 }
-        T{ ##load-integer f 2 $[ 100 tag-fixnum ] }
-        T{ ##load-integer f 3 $[ 100 tag-fixnum 1 + ] }
+        T{ ##load-integer f 2 $$[ 100 tag-fixnum ] }
+        T{ ##load-integer f 3 $$[ 100 tag-fixnum 1 + ] }
     }
 } [
     {
@@ -2868,14 +2868,14 @@ cpu x86? [
             T{ ##peek f 0 d: 0 }
             T{ ##peek f 1 d: 1 }
             T{ ##add-imm f 2 1 2 }
-            T{ ##slot f 3 0 1 $[ cell log2 ] $[ 7 2 cells - ] }
+            T{ ##slot f 3 0 1 $$[ cell log2 ] $$[ 7 2 cells - ] }
         }
     ] [
         V{
             T{ ##peek f 0 d: 0 }
             T{ ##peek f 1 d: 1 }
             T{ ##add-imm f 2 1 2 }
-            T{ ##slot f 3 0 2 $[ cell log2 ] 7 }
+            T{ ##slot f 3 0 2 $$[ cell log2 ] 7 }
         } value-numbering-step
     ] unit-test
 ] when
@@ -3040,7 +3040,7 @@ cpu x86?
 ] unit-test
 
 ! Scale fusion on ##load/store-memory
-${
+$${
     cpu x86?
     V{
         T{ ##peek f 0 d: 0 }

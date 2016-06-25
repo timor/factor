@@ -11,18 +11,18 @@ CONSTANT: stylesheet
         { default-span-style
             H{
                 { font-name $ default-sans-serif-font-name }
-                { font-size $[ default-font-size 3 * ] }
+                { font-size $$[ default-font-size 3 * ] }
             }
         }
         { default-block-style
             H{
-                { wrap-margin $[ default-font-size 92 * ] }
+                { wrap-margin $$[ default-font-size 92 * ] }
             }
         }
         { code-char-style
             H{
                 { font-name $ default-monospace-font-name }
-                { font-size $[ default-font-size 3 * ] }
+                { font-size $$[ default-font-size 3 * ] }
             }
         }
         { code-style
@@ -33,16 +33,16 @@ CONSTANT: stylesheet
         { snippet-style
             H{
                 { font-name $ default-monospace-font-name }
-                { font-size $[ default-font-size 3 * ] }
+                { font-size $$[ default-font-size 3 * ] }
                 { foreground T{ rgba f 0.1 0.1 0.4 1 } }
             }
         }
         { table-content-style
-            H{ { wrap-margin $[ default-font-size 83 * ] } }
+            H{ { wrap-margin $$[ default-font-size 83 * ] } }
         }
         { list-style
             H{
-                { table-gap ${ default-font-size 5/6 *
+                { table-gap $${ default-font-size 5/6 *
                                default-font-size 10/6 * }
                 }
             }
@@ -53,7 +53,7 @@ CONSTANT: stylesheet
     [
         H{
             { font-name $ default-sans-serif-font-name }
-            { font-size $[ default-font-size 4 * ] }
+            { font-size $$[ default-font-size 4 * ] }
         } format
     ] ($block) ;
 
@@ -70,7 +70,7 @@ CONSTANT: stylesheet
     [
         <gadget>
             divider-interior >>interior
-            ${ default-font-size 67 * default-font-size 5/6 * } >>dim
+            $${ default-font-size 67 * default-font-size 5/6 * } >>dim
             { 1 0 } >>orientation
         gadget.
     ] ($block) ;

@@ -29,7 +29,7 @@ PRIVATE<
     [ state>> ] [ old-state>> [ w+ ] 2map dup clone ] [ ] tri
     [ old-state<< ] [ state<< ] bi ; inline
 
-CONSTANT: T $[
+CONSTANT: T $$[
     80 iota [ sin abs 32 2^ * >integer ] uint-array{ } map-as
 ] ;
 

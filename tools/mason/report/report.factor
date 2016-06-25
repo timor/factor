@@ -64,7 +64,7 @@ IN: mason.report
     "test-log" "Tests failed" failed-report ;
 
 : timings-table ( -- xml )
-    ${
+    $${
         boot-time-file
         load-time-file
         test-time-file
@@ -133,7 +133,7 @@ IN: mason.report
     ] with-report ;
 
 : build-clean? ( -- ? )
-    ${
+    $${
         load-all-vocabs-file
         test-all-vocabs-file
         help-lint-vocabs-file

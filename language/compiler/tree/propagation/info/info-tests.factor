@@ -72,12 +72,12 @@ TUPLE: test-tuple { x read-only } ;
 
 ! refine-value-info
 {
-    $[ fixnum array-capacity-interval <class/interval-info> ]
+    $$[ fixnum array-capacity-interval <class/interval-info> ]
 } [
     H{ { 1234 1234 } } copies set
     {
         H{
-            { 1234 $[ fixnum <class-info> ] }
+            { 1234 $$[ fixnum <class-info> ] }
         }
     } value-infos set
     integer array-capacity-interval <class/interval-info> 1234
@@ -219,7 +219,7 @@ TUPLE: tup2 < tup1 bar ;
 {
     T{ value-info-state
        { class array-capacity }
-       { interval $[ array-capacity-interval ] }
+       { interval $$[ array-capacity-interval ] }
     }
 } [
     <value-info> -100 100 [a,b] >>interval array-capacity >>class
@@ -227,7 +227,7 @@ TUPLE: tup2 < tup1 bar ;
 ] unit-test
 
 ! wrap-interval
-${
+$${
     full-interval
     empty-interval
     fixnum-interval

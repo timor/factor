@@ -14,24 +14,24 @@ COMPILE>
 
 { { 6 6 6 7 } } [ { $ six-six-six 7 } ] unit-test
 
-{ { 8 8 8 } } [ { $[ six-six-six [ 2 + ] tri@ ] } ] unit-test
+{ { 8 8 8 } } [ { $$[ six-six-six [ 2 + ] tri@ ] } ] unit-test
 
-{ { 0.5 2.0 } } [ { $[ 1.0 2.0 / ] 2.0 } ] unit-test
+{ { 0.5 2.0 } } [ { $$[ 1.0 2.0 / ] 2.0 } ] unit-test
 
-{ { 1.0 { 0.5 1.5 } 4.0 } } [ { 1.0 { $[ 1.0 2.0 / ] 1.5 } $[ 2.0 2.0 * ] } ] unit-test
+{ { 1.0 { 0.5 1.5 } 4.0 } } [ { 1.0 { $$[ 1.0 2.0 / ] 1.5 } $$[ 2.0 2.0 * ] } ] unit-test
 
 CONSTANT: constant-a 3 ;
 
-{ { 3 10 "ftw" } } [ ${ constant-a 10 "ftw" } ] unit-test
-{ { 4 } } [ ${ 1 constant-a + } ] unit-test
-{ { 3 } } [ ${ 1 2 + } ] unit-test
-{ { 1 2 \ + } } [ ${ 1 2 \ + } ] unit-test
-{ { 4 } } [ ${ 1 2 + 1 + } ] unit-test
-{ { 1 3 } } [ ${ 1 2 1 + } ] unit-test
+{ { 3 10 "ftw" } } [ $${ constant-a 10 "ftw" } ] unit-test
+{ { 4 } } [ $${ 1 constant-a + } ] unit-test
+{ { 3 } } [ $${ 1 2 + } ] unit-test
+{ { 1 2 \ + } } [ $${ 1 2 \ + } ] unit-test
+{ { 4 } } [ $${ 1 2 + 1 + } ] unit-test
+{ { 1 3 } } [ $${ 1 2 1 + } ] unit-test
 
 : sixty-nine ( -- a b ) 6 9 ;
 
-{ { 6 9 } } [ ${ sixty-nine } ] unit-test
+{ { 6 9 } } [ $${ sixty-nine } ] unit-test
 
 CONSTANT: a 1 ;
 CONSTANT: b 2 ;

@@ -23,7 +23,7 @@ delete-staging-images
 { { "Hello world" } } [
     H{
         { open-directory-after-deploy? f }
-        { deploy-directory $[ temp-directory ] }
+        { deploy-directory $$[ temp-directory ] }
     } [
         "hello-world" deploy
         "hello-world" deploy-path 1array

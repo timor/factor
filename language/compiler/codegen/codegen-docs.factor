@@ -72,7 +72,7 @@ HELP: generate
 }
 { $examples
   "A small quotation is compiled and then disassembled:"
-  { $unchecked-example $[ generate-ex generate-ex-answer ] }
+  { $unchecked-example $$[ generate-ex generate-ex-answer ] }
 } ;
 
 HELP: generate-insn

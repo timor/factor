@@ -212,7 +212,7 @@ UNION-STRUCT: struct-test-float-and-bits
         { name "y" }
         { offset 4 }
         { initial 123 }
-        { class $[ cell 4 = integer fixnum ? ] }
+        { class $$[ cell 4 = integer fixnum ? ] }
         { type int }
     }
     T{ struct-slot-spec
@@ -236,7 +236,7 @@ UNION-STRUCT: struct-test-float-and-bits
         { name "bits" }
         { offset 0 }
         { type uint }
-        { class $[ cell 4 = integer fixnum ? ] }
+        { class $$[ cell 4 = integer fixnum ? ] }
         { initial 0 }
     }
 } } [ struct-test-float-and-bits lookup-c-type fields>> ] unit-test

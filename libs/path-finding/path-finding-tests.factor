@@ -16,7 +16,7 @@ COMPILE<
 TUPLE: maze < astar ;
 
 : reachable? ( pos -- ? )
-    first2 [ 2 * 5 + ] [ 2 + ] bi* $[
+    first2 [ 2 * 5 + ] [ 2 + ] bi* $$[
 "    0 1 2 3 4 5 6 7 8 9
 
   0  X X X X X X X X X X
@@ -97,7 +97,7 @@ COMPILE<
 
 ! In this version, we will use the quotations-aware version through <astar>.
 
-MEMO: routes ( -- hash ) $[ { "ABD" "BC" "C" "DCE" "ECF" } [ unclip swap 2array ] map >hashtable ] ;
+MEMO: routes ( -- hash ) $$[ { "ABD" "BC" "C" "DCE" "ECF" } [ unclip swap 2array ] map >hashtable ] ;
 
 : n ( pos -- neighbours )
     routes at ;

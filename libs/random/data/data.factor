@@ -19,7 +19,7 @@ COMPILE>
 : random-Letter ( -- ch )
     { random-LETTER  random-letter } execute-random ;
 
-CONSTANT: digit-probability $[ letters-count 2 * digits-count / 1 + recip ] ;
+CONSTANT: digit-probability $$[ letters-count 2 * digits-count / 1 + recip ] ;
 : random-ch ( -- ch )
     {
       { $ digit-probability [ random-digit ] }

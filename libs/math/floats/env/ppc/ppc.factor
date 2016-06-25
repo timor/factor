@@ -86,7 +86,7 @@ CONSTANT: ppc-fp-traps>bit
 
 CONSTANT: ppc-rounding-mode-bits 0x3 ;
 CONSTANT: ppc-rounding-mode>bit
-    $[ H{
+    $$[ H{
         { +round-nearest+ 0x0 }
         { +round-zero+    0x1 }
         { +round-up+      0x2 }

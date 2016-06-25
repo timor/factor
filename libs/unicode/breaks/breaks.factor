@@ -178,7 +178,7 @@ COMPILE>
     ] [ t ] if ;
 
 : (format/extended?) ( class -- ? )
-    ${ wExtend wFormat } member? ; inline
+    $${ wExtend wFormat } member? ; inline
 
 : format/extended? ( ch -- ? )
     word-break-prop (format/extended?) ;
@@ -212,7 +212,7 @@ COMPILE>
 :: word-break-next ( old-class new-char i str -- next-class ? )
     new-char word-break-prop :> new-class
     new-class (format/extended?)
-    [ old-class dup ${ wCR wLF wNewline } member? ] [
+    [ old-class dup $${ wCR wLF wNewline } member? ] [
         new-class old-class over word-table-nth
         [ str i 1 - ] dip word-break?
     ] if ;

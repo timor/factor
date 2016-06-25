@@ -275,7 +275,7 @@ IN: compiler.cfg.alias-analysis.tests
         T{ ##allot f 1 16 byte-array }
         T{ ##load-reference f 2 10 }
         T{ ##box-displaced-alien f 3 2 1 4 byte-array }
-        T{ ##slot-imm f 5 3 1 $[ alien type-number ] }
+        T{ ##slot-imm f 5 3 1 $$[ alien type-number ] }
         T{ ##compare f 6 5 1 cc= }
     }
 } [
@@ -283,7 +283,7 @@ IN: compiler.cfg.alias-analysis.tests
         T{ ##allot f 1 16 byte-array }
         T{ ##load-reference f 2 10 }
         T{ ##box-displaced-alien f 3 2 1 4 byte-array }
-        T{ ##slot-imm f 5 3 1 $[ alien type-number ] }
+        T{ ##slot-imm f 5 3 1 $$[ alien type-number ] }
         T{ ##compare f 6 5 1 cc= }
     } test-alias-analysis
 ] unit-test

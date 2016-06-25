@@ -9,7 +9,7 @@ IN: math.primes.erato.fast
 
 PRIVATE<
 
-CONSTANT: wheel-2-3-5-7 $[
+CONSTANT: wheel-2-3-5-7 $$[
     11 dup 210 + [a,b] [
         { 2 3 5 7 } [ divisor? ] with any? not
     ] B{ } filter-as differences

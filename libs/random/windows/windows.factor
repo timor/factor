@@ -58,12 +58,12 @@ M: windows-crypto-context random-bytes* ( n windows-crypto-context -- bytes )
 
 [
     {
-        ${ MS_ENHANCED_PROV PROV_RSA_FULL }
-        ${ MS_DEF_PROV PROV_RSA_FULL }
+        $${ MS_ENHANCED_PROV PROV_RSA_FULL }
+        $${ MS_DEF_PROV PROV_RSA_FULL }
     } try-crypto-providers system-random-generator set-global
 
     {
-        ${ MS_STRONG_PROV PROV_RSA_FULL }
-        ${ MS_ENH_RSA_AES_PROV PROV_RSA_AES }
+        $${ MS_STRONG_PROV PROV_RSA_FULL }
+        $${ MS_ENH_RSA_AES_PROV PROV_RSA_AES }
     } try-crypto-providers secure-random-generator set-global
 ] "random.windows" add-startup-hook

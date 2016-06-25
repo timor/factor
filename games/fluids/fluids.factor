@@ -108,7 +108,7 @@ GAME: fluids {
     { pixel-format-attributes {
         windowed double-buffered T{ depth-bits { value 24 } } } }
     { pref-dim { 1024 768 } }
-    { tick-interval-nanos $[ 60 fps ] }
+    { tick-interval-nanos $$[ 60 fps ] }
 } ;
 
 fluids-world H{

@@ -9,7 +9,7 @@ IN: math.primes
 PRIVATE<
 
 : look-in-bitmap ( n -- ? )
-    integer>fixnum $[ 8,999,999 sieve ] marked-unsafe? ; inline
+    integer>fixnum $$[ 8,999,999 sieve ] marked-unsafe? ; inline
 
 : (prime?) ( n -- ? )
     dup 8,999,999 <= [ look-in-bitmap ] [ miller-rabin ] if ;

@@ -30,5 +30,5 @@ HELP: parse-insn-slot-specs
 }
 { $description "Parses a sequence of tokens into a sequence of instruction slot specifiers." }
 { $examples
-  { $example $[ parse-insn-slot-specs-code parse-insn-slot-specs-result ] }
+  { $example $$[ parse-insn-slot-specs-code parse-insn-slot-specs-result ] }
 } ;

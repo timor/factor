@@ -64,7 +64,7 @@ HELP: emit-trivial-block
   { "block'" basic-block }
 }
 { $description "Combinator that emits a new trivial block, constructed by calling the supplied quotation. The quotation should not end the current block -- only add instructions to it." }
-{ $examples { $unchecked-example $[ ex-emit-trivial-block ] } } ;
+{ $examples { $unchecked-example $$[ ex-emit-trivial-block ] } } ;
 
 HELP: end-branch
 { $values

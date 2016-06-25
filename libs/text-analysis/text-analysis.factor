@@ -44,17 +44,17 @@ COMPILE>
     re-replace-with
 
     ! Fix ellipsis marks
-    $[ "(\\.\\.\\.*)\x01" <regexp> ] [ but-last-slice ]
+    $$[ "(\\.\\.\\.*)\x01" <regexp> ] [ but-last-slice ]
     re-replace-with
 
     ! Fix e.g, i.e. marks
-    $[
+    $$[
         "(?:\\s(?:(?:(?:\\w\\.){2,}\\w?)|(?:\\w\\.\\w)))\x01(\\s+[a-z0-9])"
         <regexp>
     ] [ [ 1 = ] cut-when append ] re-replace-with
 
     ! Fix abbreviations
-    $[
+    $$[
         ABBREVIATIONS "|" join "(" ")\\.\x01" surround
         "i" <optioned-regexp>
     ] [ char: . over index head ] re-replace-with

@@ -98,7 +98,7 @@ HELP: %allot
 { $description "Emits machine code for allocating memory." }
 { $examples
   "In this example 40 bytes is allocated and a tagged pointer to the memory is put in " { $link RAX } ":"
-  { $unchecked-example $[ ex-%allot ] }
+  { $unchecked-example $$[ ex-%allot ] }
 } ;
 
 HELP: %and-imm
@@ -126,7 +126,7 @@ HELP: %box-alien
   { "temp" "temporary register" }
 }
 { $description "Emits machine code for boxing an alien value. If the alien is not a NULL pointer, then five " { $link cells } " will be allocated in the nursery space to wrap the object. See vm/layouts.hpp for details." }
-{ $examples { $unchecked-example $[ ex-%box-alien ] } }
+{ $examples { $unchecked-example $$[ ex-%box-alien ] } }
 { $see-also ##box-alien %allot } ;
 
 HELP: %call
@@ -136,12 +136,12 @@ HELP: %call
 HELP: %context
 { $values { "dst" "a register symbol" } }
 { $description "Emits machine code for putting a pointer to the context field of the " { $link vm } " in a register." }
-{ $examples { $unchecked-example $[ ex-%context ] } } ;
+{ $examples { $unchecked-example $$[ ex-%context ] } } ;
 
 HELP: %copy
 { $values { "dst" "destination" } { "src" "source" } { "rep" representation } }
 { $description "Emits code copying a value from a register, arbitrary memory location or " { $link spill-slot } " to a destination." }
-{ $examples { $unchecked-example $[ ex-%copy ] } } ;
+{ $examples { $unchecked-example $$[ ex-%copy ] } } ;
 
 HELP: %dispatch
 { $values { "src" "a register symbol" } { "temp" "a register symbol" } }
@@ -219,12 +219,12 @@ HELP: %replace-imm
 
 HELP: %safepoint
 { $description "Emits a safe point to the current code sequence being generated." }
-{ $examples { $unchecked-example $[ ex-%safepoint ] } } ;
+{ $examples { $unchecked-example $$[ ex-%safepoint ] } } ;
 
 HELP: %save-context
 { $values { "temp1" "a register symbol" } { "temp2" "a register symbol" } }
 { $description "Emits machine code for saving pointers to the callstack, datastack and retainstack in the current context field struct." }
-{ $examples { $unchecked-example $[ ex-%save-context ] } } ;
+{ $examples { $unchecked-example $$[ ex-%save-context ] } } ;
 
 HELP: %set-slot
 { $values
@@ -293,7 +293,7 @@ HELP: %write-barrier
   { "temp2" "a register symbol" }
 }
 { $description "Generates code for the " { $link ##write-barrier } " instruction." }
-{ $examples { $unchecked-example $[ ex-%write-barrier ] } } ;
+{ $examples { $unchecked-example $$[ ex-%write-barrier ] } } ;
 
 HELP: double-2-rep
 { $var-description "Representation for a pair of doubles." } ;

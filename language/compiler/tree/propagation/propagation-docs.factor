@@ -48,7 +48,7 @@ COMPILE>
 HELP: propagate
 { $values { "nodes" "a sequence of nodes" } }
 { $description "Performs the propagation pass of the AST optimization. All nodes info slots are initialized here." }
-{ $examples { $unchecked-example $[ propagate-ex ] }
+{ $examples { $unchecked-example $$[ propagate-ex ] }
 } ;
 
 ARTICLE: "compiler.tree.propagation" "Class, interval, constant propagation"

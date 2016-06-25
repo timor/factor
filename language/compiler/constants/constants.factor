@@ -71,7 +71,7 @@ CONSTANT: rt-inline-cache-miss 14 ;
 CONSTANT: rt-safepoint 15 ;
 
 : rc-absolute? ( n -- ? )
-    ${
+    $${
         $ rc-absolute-ppc-2/2
         $ rc-absolute-cell
         $ rc-absolute

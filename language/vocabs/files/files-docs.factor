@@ -20,7 +20,7 @@ HELP: vocab-files
   { $example
     "USING: prettyprint vocabs.files ; "
     "\"alien.libraries\" vocab-files ."
-    $[
+    $$[
         {
             "{"
             "    \"vocab:alien/libraries/libraries.factor\""
@@ -39,7 +39,7 @@ HELP: vocab-tests
   { $example
     "USING: prettyprint sorting vocabs.files ; "
     "\"xml\" vocab-tests natural-sort ."
-    $[
+    $$[
         {
             "{"
             "    \"vocab:xml/tests/cdata.factor\""

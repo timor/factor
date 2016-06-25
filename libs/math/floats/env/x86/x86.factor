@@ -54,7 +54,7 @@ CONSTANT: sse-fp-traps>bit
 
 CONSTANT: sse-rounding-mode-bits 0x6000 ;
 CONSTANT: sse-rounding-mode>bit
-    $[ H{
+    $$[ H{
         { +round-nearest+ 0x0000 }
         { +round-down+    0x2000 }
         { +round-up+      0x4000 }
@@ -103,7 +103,7 @@ CONSTANT: x87-exception>bit
 
 CONSTANT: x87-rounding-mode-bits 0x0c00 ;
 CONSTANT: x87-rounding-mode>bit
-    $[ H{
+    $$[ H{
         { +round-nearest+ 0x0000 }
         { +round-down+    0x0400 }
         { +round-up+      0x0800 }

@@ -2,7 +2,7 @@ USING: kernel literals math.functions math.parser random
 sequences ;
 IN: benchmark.parse-float
 
-CONSTANT: test-floats $[ 100,000 random-units ] ;
+CONSTANT: test-floats $$[ 100,000 random-units ] ;
 
 : parse-float-benchmark ( -- )
     test-floats [

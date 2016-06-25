@@ -254,7 +254,7 @@ IN: regexp-tests
     <regexp> drop
 ] unit-test
 
-{ } [ "(\\$[\\p{XDigit}]|[\\p{Digit}])" <regexp> drop ] unit-test
+{ } [ "(\\$$[\\p{XDigit}]|[\\p{Digit}])" <regexp> drop ] unit-test
 
 ! Comment inside a regular expression
 { t } [ "ac" "a(?#boo)c" <regexp> matches? ] unit-test

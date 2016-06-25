@@ -126,7 +126,7 @@ M: windows link-info ( path -- info )
         ] if
     ] if-zero ;
 
-CONSTANT: path-length $[ MAX_PATH 1 + ] ;
+CONSTANT: path-length $$[ MAX_PATH 1 + ] ;
 
 : volume-information ( normalized-path -- volume-name volume-serial max-component flags type )
     { { ushort path-length } DWORD DWORD DWORD { ushort path-length } }

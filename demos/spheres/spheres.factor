@@ -134,7 +134,7 @@ M: spheres-world distance-step
         GL_TEXTURE_CUBE_MAP GL_TEXTURE_WRAP_S GL_CLAMP glTexParameteri
         GL_TEXTURE_CUBE_MAP GL_TEXTURE_WRAP_T GL_CLAMP glTexParameteri
         GL_TEXTURE_CUBE_MAP GL_TEXTURE_WRAP_R GL_CLAMP glTexParameteri
-        ${
+        $${
             GL_TEXTURE_CUBE_MAP_POSITIVE_X
             GL_TEXTURE_CUBE_MAP_POSITIVE_Y
             GL_TEXTURE_CUBE_MAP_POSITIVE_Z

@@ -221,8 +221,8 @@ PRIVATE<
 
 : read-chunk ( -- chunk )
     4 read 4 read be> read swap {
-        { $[ "MThd" >byte-array ] [ <midi-header> ] }
-        { $[ "MTrk" >byte-array ] [ <midi-track> ] }
+        { $$[ "MThd" >byte-array ] [ <midi-header> ] }
+        { $$[ "MTrk" >byte-array ] [ <midi-track> ] }
         [ swap <midi-chunk> ]
     } case ;
 
@@ -382,13 +382,13 @@ M: midi-event write-event
 GENERIC: write-chunk ( chunk -- ) ;
 
 M: midi-header write-chunk
-    $[ "MThd" >byte-array ] write
-    $[ 6 4 >be ] write
+    $$[ "MThd" >byte-array ] write
+    $$[ 6 4 >be ] write
     [ format>> ] [ #chunks>> ] [ division>> ] tri
     [ 2 >be write ] tri@ ;
 
 M: midi-track write-chunk
-    $[ "MTrk" >byte-array ] write
+    $$[ "MTrk" >byte-array ] write
     binary [
         events>> f swap [ write-event ] each drop
     ] with-byte-writer

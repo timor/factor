@@ -546,12 +546,12 @@ must-fail-with
 
 [ 444444444444444444444444444444444444444444444444433333 >bignum "asdf" declared-types boa ]
 [
-    ${ KERNEL-ERROR ERROR-OUT-OF-FIXNUM-RANGE
+    $${ KERNEL-ERROR ERROR-OUT-OF-FIXNUM-RANGE
        444444444444444444444444444444444444444444444444433333 f } =
 ] must-fail-with
 
 ! Check bignum coercer
-TUPLE: bignum-coercer { n bignum initial: $[ 0 >bignum ] } ;
+TUPLE: bignum-coercer { n bignum initial: $$[ 0 >bignum ] } ;
 
 { 13 bignum } [ 13.5 bignum-coercer boa n>> dup class-of ] unit-test
 

@@ -103,7 +103,7 @@ MACRO: <DIDATAFORMAT> ( dwFlags dwDataSize struct rgodf-array -- alien )
 : define-joystick-format-constant ( -- )
     c_dfDIJoystick2 [
         DIDF_ABSAXIS
-        $[ DIJOYSTATE2 heap-size ]
+        $$[ DIJOYSTATE2 heap-size ]
         DIJOYSTATE2 {
             { GUID_XAxis_malloced  "lX"           0 { DIDFT_OPTIONAL DIDFT_AXIS   DIDFT_ANYINSTANCE } 0 }
             { GUID_YAxis_malloced  "lY"           0 { DIDFT_OPTIONAL DIDFT_AXIS   DIDFT_ANYINSTANCE } 0 }
@@ -275,7 +275,7 @@ MACRO: <DIDATAFORMAT> ( dwFlags dwDataSize struct rgodf-array -- alien )
 : define-mouse-format-constant ( -- )
     c_dfDIMouse2 [
         DIDF_RELAXIS
-        $[ DIMOUSESTATE2 heap-size ]
+        $$[ DIMOUSESTATE2 heap-size ]
         DIMOUSESTATE2 {
             { GUID_XAxis_malloced  "lX"         0 {                DIDFT_ANYINSTANCE DIDFT_AXIS   } 0 }
             { GUID_YAxis_malloced  "lY"         0 {                DIDFT_ANYINSTANCE DIDFT_AXIS   } 0 }

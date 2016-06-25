@@ -23,7 +23,7 @@ COMPILE>
     alphabet nth ; inline
 
 : base64>ch ( ch -- ch )
-    $[ alphabet alphabet-inverse 0 char: = pick set-nth ] nth
+    $$[ alphabet alphabet-inverse 0 char: = pick set-nth ] nth
     [ malformed-base64 ] unless* ; inline
 
 : (write-lines) ( column byte-array -- column' )

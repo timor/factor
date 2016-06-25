@@ -132,7 +132,7 @@ TUPLE: ole32-error code message ;
     [ 16 memory>byte-array ] same? ;
 
 CONSTANT: GUID-STRING-LENGTH
-    $[ "{01234567-89ab-cdef-0123-456789abcdef}" length ] ;
+    $$[ "{01234567-89ab-cdef-0123-456789abcdef}" length ] ;
 
 : string>guid ( string -- guid )
     "{-}" split harvest

@@ -13,7 +13,7 @@ QUALIFIED-WITH: alien.c-types c ;
 SPECIALIZED-ARRAY: c:float
 IN: terrain
 
-CONSTANT: FOV $[ 2.0 sqrt 1 + ] ;
+CONSTANT: FOV $$[ 2.0 sqrt 1 + ] ;
 CONSTANT: NEAR-PLANE 1/1024. ;
 CONSTANT: FAR-PLANE 2.0 ;
 CONSTANT: PLAYER-START-LOCATION float-4{ 0.5 0.51 0.5 1.0 } ;
@@ -298,5 +298,5 @@ GAME: terrain-game {
         { use-game-input? t }
         { grab-input? t }
         { pref-dim { 1024 768 } }
-        { tick-interval-nanos $[ 60 fps ] }
+        { tick-interval-nanos $$[ 60 fps ] }
     } ;

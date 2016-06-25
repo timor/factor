@@ -46,7 +46,7 @@ PRIVATE>
 ! SIMD base type
 
 TUPLE: simd-128
-    { underlying byte-array read-only initial: $[ 16 <byte-array> ] } ;
+    { underlying byte-array read-only initial: $$[ 16 <byte-array> ] } ;
 
 GENERIC: simd-element-type ( obj -- c-type ) ;
 GENERIC: simd-rep ( simd -- rep ) ;

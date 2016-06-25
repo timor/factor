@@ -16,7 +16,7 @@ HELP: build-sub-tree
     ! The out-d numbers are unpredicable.
     "USING: compiler.tree.builder math prettyprint ;"
     "{ \"x\" } { \"y\" } [ 4 * ] build-sub-tree ."
-    $[
+    $$[
         {
             "V{"
             "    T{ #push { literal 4 } { out-d { 1 } } }"

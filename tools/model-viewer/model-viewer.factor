@@ -217,7 +217,7 @@ M: model-world apply-world-attributes
              { windowed double-buffered }
            }
            { pref-dim { 1024 768 } }
-           { tick-interval-nanos $[ 60 fps ] }
+           { tick-interval-nanos $$[ 60 fps ] }
            { use-game-input? t }
            { model-path model-path }
         }
