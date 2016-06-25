@@ -87,19 +87,19 @@ IN: bootstrap.syntax
 
 
     "`" [
-        scan-token suffix!
+        lexer get parse-spaceless-payload suffix!
     ] define-core-syntax
 
     "``" [
-        "``" parse-multiline-string suffix!
+        "``" parse-multiline-string-new suffix!
     ] define-core-syntax
 
     "```" [
-        "```" parse-multiline-string suffix!
+        "```" parse-multiline-string-new suffix!
     ] define-core-syntax
 
     "````" [
-        "````" parse-multiline-string suffix!
+        "````" parse-multiline-string-new suffix!
     ] define-core-syntax
 
     ! Different from parse-multiline-string

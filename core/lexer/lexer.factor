@@ -52,10 +52,27 @@ ERROR: unexpected want got ;
 : forbid-tab ( c -- c )
     [ char: \t eq? [ "[space]" "[tab]" unexpected ] when ] keep ; inline
 
-: skip ( i seq ? -- n )
-    over length [
-        [ swap forbid-tab char: \s eq? xor ] curry find-from drop
-    ] dip or ; inline
+: skip-whitespace ( i seq -- n )
+    [
+        [ forbid-tab char: \s eq? not ] find-from drop
+    ] keep length or ; inline
+
+:: skip-meat ( i seq -- n )
+    i seq
+    [
+        [ forbid-tab "\s\"\`" member? ] find-from
+        dup char: \` = [
+            drop seq [ char: \` eq? not ] find-from drop
+        ] [
+            dup char: \" = [ drop 1 + ] [ drop ] if
+        ] if
+        ! Can't use case here because bootstrap breaks after the dots.
+        ! {
+        !    { char: \` [ seq [ char: \` eq? not ] find-from drop ] }
+        !    { char: \" [ 1 + ] }
+        !    [ drop ]
+        ! } case
+    ] keep length or ; inline
 
 : change-lexer-column ( ..a lexer quot: ( ..a col line -- ..b newcol ) -- ..b )
     [ check-lexer [ column>> ] [ line-text>> ] bi ] prepose
@@ -78,14 +95,14 @@ M: lexer skip-blank
     shebang? [
         [ nip length ] change-lexer-column
     ] [
-        [ t skip ] change-lexer-column
+        [ skip-whitespace ] change-lexer-column
     ] if ;
 
 GENERIC: skip-word ( lexer -- ) ;
 
 M: lexer skip-word
     [
-        2dup nth char: \" eq? [ drop 1 + ] [ f skip ] if
+        skip-meat
     ] change-lexer-column ;
 
 : still-parsing? ( lexer -- ? )
@@ -101,6 +118,13 @@ M: lexer skip-word
         [ column>> ]
         [ line-text>> ]
     } cleave subseq ;
+
+: parse-spaceless-payload ( lexer -- str/f )
+    dup still-parsing? [
+        (parse-raw)
+    ] [
+        drop f
+    ] if ;
 
 : parse-raw ( lexer -- str/f )
     dup still-parsing? [

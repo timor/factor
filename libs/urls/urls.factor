@@ -2,8 +2,8 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs combinators fry io.pathnames
 io.sockets io.sockets.secure kernel lexer linked-assocs make
-math.parser namespaces peg.ebnf present sequences splitting
-strings strings.parser urls.encoding vocabs.loader ;
+math.parser multiline namespaces peg.ebnf present sequences
+splitting strings strings.parser urls.encoding vocabs.loader ;
 IN: urls
 
 TUPLE: url protocol username password host port path query anchor ;
@@ -187,5 +187,9 @@ PRIVATE>
 
 ! Literal syntax
 SYNTAX: \ URL" lexer get skip-blank parse-string >url suffix! ;
+SYNTAX: \ url" "\"" parse-multiline-string-new >url suffix! ;
+
+SYNTAX: \ url` lexer get (parse-raw) >url suffix! ;
+SYNTAX: \ url`` "``" parse-multiline-string-new >url suffix! ;
 
 { "urls" "prettyprint" } "urls.prettyprint" require-when

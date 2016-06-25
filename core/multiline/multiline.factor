@@ -26,7 +26,14 @@ PRIVATE<
 
 PRIVATE>
 
-: parse-multiline-string ( end-text -- str )
+
+: parse-multiline-string-old ( end-text -- str )
     lexer get 1 (parse-multiline-string) ;
+
+: parse-multiline-string-new ( end-text -- str )
+    lexer get 0 (parse-multiline-string) ;
+
+: parse-multiline-string ( end-text -- str )
+    parse-multiline-string-old ;
 
 SYNTAX: /* "*/" parse-multiline-string drop ;

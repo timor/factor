@@ -37,7 +37,7 @@ HELP: swapd $complex-shuffle ;
 
 HELP: get-datastack
 $values{ { "array" array } }
-$description { "Outputs an array containing a copy of the data stack contents right before the call to this word, with the top of the stack at the end of the array." } ;
+$description{ "Outputs an array containing a copy of the data stack contents right before the call to this word, with the top of the stack at the end of the array." } ;
 
 HELP: set-datastack
 $values{ { "array" array } }
