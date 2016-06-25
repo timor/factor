@@ -588,7 +588,7 @@ ERROR: not-a-day-abbreviation string ;
 : beginning-of-week ( timestamp -- new-timestamp )
     midnight sunday ;
 
-: o'clock ( timestamp n -- new-timestamp )
+: oclock ( timestamp n -- new-timestamp )
     [ midnight ] dip >>hour ;
 
 ERROR: twelve-hour-expected n ;
@@ -597,10 +597,10 @@ ERROR: twelve-hour-expected n ;
     dup 0 12 between? [ twelve-hour-expected ] unless ;
 
 : am ( timestamp n -- new-timestamp )
-    check-twelve-hour o'clock ;
+    check-twelve-hour oclock ;
 
 : pm ( timestamp n -- new-timestamp )
-    check-twelve-hour 12 + o'clock ;
+    check-twelve-hour 12 + oclock ;
 
 GENERIC: beginning-of-year ( object -- new-timestamp ) ;
 M: timestamp beginning-of-year beginning-of-month 1 >>month ;
