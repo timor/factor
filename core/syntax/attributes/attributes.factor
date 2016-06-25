@@ -2,6 +2,8 @@
 ! See http://factorcode.org/license.txt for BSD license.
 IN: syntax.arity
 
+ARITY: \ DEFER: 1
+ARITY: \ FORGET: 1
 ARITY: \ IN: 1
 ARITY: \ USE: 1
 ARITY: \ UNUSE: 1
@@ -16,7 +18,6 @@ ARITY: \ ARITY: 2
 ARITY: \ C: 2
 ARITY: \ CONSTANT: 2
 ARITY: \ INSTANCE: 2
-
 ARITY: \ GENERIC: 2
 ARITY: \ PRIMITIVE: 2
 
