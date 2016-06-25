@@ -20,19 +20,19 @@ SYMBOL: class-element-map
     2dup swap leader-map get set-at coalesce-elements ;
 
 : vregs-interfere? ( vreg1 vreg2 -- merged/f ? )
-    class-element-map get '[ _ at ] bi@ sets-interfere? ;
+    class-element-map get $[ _ at ] bi@ sets-interfere? ;
 
-ERROR: vregs-shouldn't-interfere vreg1 vreg2 ;
+ERROR: vregs-shouldnt-interfere vreg1 vreg2 ;
 
 : try-eliminate-copy ( follower leader must? -- )
     -rot leaders 2dup = [ 3drop ] [
         2dup vregs-interfere? [
-            drop rot [ vregs-shouldn't-interfere ] [ 2drop ] if
+            drop rot [ vregs-shouldnt-interfere ] [ 2drop ] if
         ] [ -rot coalesce-vregs drop ] if
     ] if ;
 
 : try-eliminate-copies ( pairs must? -- )
-    '[ first2 _ try-eliminate-copy ] each ;
+    $[ first2 _ try-eliminate-copy ] each ;
 
 : initial-leaders ( insns -- leaders )
     [ [ defs-vregs ] [ temp-vregs ] bi append ] map concat unique ;

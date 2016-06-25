@@ -57,8 +57,8 @@ DEFER: (parse-paragraph)
     [ [ cut-half-slice ] [ f ] if* ] dip ; inline
 
 : parse-delimiter ( string delimiter class -- paragraph )
-    [ '[ _ = ] find-cut drop ] dip
-    '[ parse-paragraph _ new swap >>child ]
+    [ $[ _ = ] find-cut drop ] dip
+    $[ parse-paragraph _ new swap >>child ]
     [ (parse-paragraph) ] bi* cons ;
 
 : delimiter-class ( delimiter -- class )
@@ -104,7 +104,7 @@ DEFER: (parse-paragraph)
 : look ( state i -- char ) swap first ?nth ;
 
 : take-lines ( state char -- state' lines )
-    dupd '[ ?first _ = not ] find drop
+    dupd $[ ?first _ = not ] find drop
     [ cut-slice ] [ f ] if* swap ;
 
 :: (take-until) ( state delimiter accum -- string/f state' )
@@ -148,7 +148,7 @@ DEFER: (parse-paragraph)
 
 : coalesce ( rows -- rows' )
     V{ } clone [
-        '[
+        $[
             _ dup ?last ?last char: \\ =
             [ [ pop "|" rot 3append ] keep ] when
             push

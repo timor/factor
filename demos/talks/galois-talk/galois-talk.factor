@@ -43,7 +43,7 @@ CONSTANT: galois-slides
         { $code "10 dup 0 < [ 1 - ] [ 1 + ] if ." }
         { $code "{ -1 1 -2 0 3 } [ 0 max ] map ." }
         "Partial application:"
-        { $code ": clamp ( seq n -- seq' ) '[ _ max ] map ;" "{ -1 1 -2 0 3 } 0 clamp" }
+        { $code ": clamp ( seq n -- seq' ) $[ _ max ] map ;" "{ -1 1 -2 0 3 } 0 clamp" }
     }
     { $slide "Object system"
         "CLOS with single dispatch"
@@ -219,11 +219,11 @@ CONSTANT: galois-slides
         "In the base image, only 59 words out of 13,000 use locals"
     }
     { $slide "More about partial application"
-        { { $link postpone\ '[ } " is \"fry syntax\"" }
-        { $code "'[ _ + ] == [ + ] curry" }
-        { $code "'[ @ t ] == [ t ] compose" }
-        { $code "'[ _ nth @ ] == [ [ nth ] curry ] dip compose" }
-        { $code "'[ [ _ ] dip nth ] == [ [ ] curry dip nth ] curry" }
+        { { $link postpone\ $[ } " is \"fry syntax\"" }
+        { $code "$[ _ + ] == [ + ] curry" }
+        { $code "$[ @ t ] == [ t ] compose" }
+        { $code "$[ _ nth @ ] == [ [ nth ] curry ] dip compose" }
+        { $code "$[ [ _ ] dip nth ] == [ [ ] curry dip nth ] curry" }
         { "Fry and locals desugar to " { $link curry } ", " { $link compose } }
     }
     { $slide "Help system"

@@ -8,7 +8,7 @@ namespaces sequences ;
 IN: compiler.cfg.linear-scan.allocation.splitting
 
 : split-uses ( uses n -- before after )
-    [ '[ n>> _ < ] filter ] [ '[ n>> _ > ] filter ] 2bi ;
+    [ $[ n>> _ < ] filter ] [ $[ n>> _ > ] filter ] 2bi ;
 
 ERROR: splitting-too-early ;
 

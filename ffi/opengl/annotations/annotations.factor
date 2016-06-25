@@ -36,7 +36,7 @@ gl-error-log [ V{ } clone ] initialize
     [ gl-functions [ (reset) ] each ] with-compilation-unit ;
 
 : throw-gl-errors ( -- )
-    [ '[ @ _ (gl-error) ] ] annotate-gl-functions ;
+    [ $[ @ _ (gl-error) ] ] annotate-gl-functions ;
 
 : log-gl-errors ( -- )
-    [ '[ @ _ log-gl-error ] ] annotate-gl-functions ;
+    [ $[ @ _ log-gl-error ] ] annotate-gl-functions ;

@@ -107,7 +107,7 @@ M: f >insecure ;
 M: threaded-server handle-client* handler>> call( -- ) ;
 
 : handle-client ( client remote local -- )
-    '[
+    $[
         _ _ log-connection
         threaded-server get
         [ timeout>> timeouts ] [ handle-client* ] bi
@@ -121,7 +121,7 @@ M: threaded-server handle-client* handler>> call( -- ) ;
 
 : (accept-connection) ( server -- )
     [ accept ] [ addr>> ] bi
-    [ '[ _ _ _ handle-client ] ]
+    [ $[ _ _ _ handle-client ] ]
     [ drop client-thread-name ] 2bi
     spawn drop ;
 
@@ -138,7 +138,7 @@ M: threaded-server handle-client* handler>> call( -- ) ;
     [ accept-connection ] [ accept-loop ] bi ;
 
 : start-accept-loop ( threaded-server server -- )
-    '[ _ accept-loop ] with-existing-secure-context ;
+    $[ _ accept-loop ] with-existing-secure-context ;
 
 \ start-accept-loop NOTICE add-error-logging
 
@@ -160,7 +160,7 @@ ERROR: no-ports-configured threaded-server ;
 
 : (make-servers) ( theaded-server addrspecs -- servers )
     swap encoding>>
-    '[ [ _ <server> |dispose ] map ] with-destructors ;
+    $[ [ _ <server> |dispose ] map ] with-destructors ;
 
 : set-servers ( threaded-server -- threaded-server )
     dup [
@@ -184,7 +184,7 @@ PRIVATE>
                 dup add-running-server
                 dup servers>>
                 [
-                    [ '[ _ _ [ start-accept-loop ] with-disposal ] ]
+                    [ $[ _ _ [ start-accept-loop ] with-disposal ] ]
                     [ server-thread-name ] 2bi spawn drop
                 ] with each
             ] with-logging
@@ -216,7 +216,7 @@ PRIVATE>
 
 : with-threaded-server ( threaded-server quot -- )
     [ start-server ] dip over
-    '[
+    $[
         [ _ threaded-server _ with-variable ]
         [ _ stop-server ]
         [ ] cleanup
@@ -253,7 +253,7 @@ PRIVATE>
     running-servers get-global members ;
 
 : get-servers-named ( string -- sequence )
-    [ all-servers ] dip '[ name>> _ = ] filter ;
+    [ all-servers ] dip $[ name>> _ = ] filter ;
 
 : servers. ( -- )
     all-servers [ server. ] each ;

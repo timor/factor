@@ -48,7 +48,7 @@ IN: alien.data.map.tests
     ] data-map( float-4[4] -- uchar-16 ) ; inline
 
 : float-pixels>byte-pixels* ( floats scale bias -- bytes )
-    '[
+    $[
         [ _ 255.0 * v*n _ 255.0 * v+n float-4 int-4 vconvert ] 4 napply
         [ int-4 short-8 vconvert ] 2bi@
         short-8 uchar-16 vconvert

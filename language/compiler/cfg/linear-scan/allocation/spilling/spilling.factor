@@ -66,11 +66,11 @@ ERROR: bad-live-ranges interval ;
 
 : find-next-use ( live-interval new -- n )
     [ uses>> ] [ live-interval-start ] bi*
-    '[ [ spill-slot?>> not ] [ n>> ] bi _ >= and ] find nip
+    $[ [ spill-slot?>> not ] [ n>> ] bi _ >= and ] find nip
     [ n>> ] [ 1/0. ] if* ;
 
 : find-use-positions ( live-intervals new assoc -- )
-    '[ [ _ find-next-use ] [ reg>> ] bi _ add-use-position ] each ;
+    $[ [ _ find-next-use ] [ reg>> ] bi _ add-use-position ] each ;
 
 : active-positions ( new assoc -- )
     [ [ active-intervals-for ] keep ] dip
@@ -79,7 +79,7 @@ ERROR: bad-live-ranges interval ;
 : inactive-positions ( new assoc -- )
     [
         [ inactive-intervals-for ] keep
-        [ '[ _ intervals-intersect? ] filter ] keep
+        [ $[ _ intervals-intersect? ] filter ] keep
     ] dip
     find-use-positions ;
 
@@ -100,7 +100,7 @@ ERROR: bad-live-ranges interval ;
 
 :: spill-intersecting-active ( new reg -- )
     new active-intervals-for [ [ reg>> reg = ] find swap dup ] keep
-    '[ _ remove-nth! drop new live-interval-start spill ] [ 2drop ] if ;
+    $[ _ remove-nth! drop new live-interval-start spill ] [ 2drop ] if ;
 
 :: spill-intersecting-inactive ( new reg -- )
     new inactive-intervals-for [
@@ -121,7 +121,7 @@ ERROR: bad-live-ranges interval ;
 
 : spill-partially-available ( new pair -- )
     [ second 1 - split-for-spill [ add-unhandled ] when* ] keep
-    '[ _ spill-available ] when* ;
+    $[ _ spill-available ] when* ;
 
 : assign-blocked-register ( live-interval -- )
     dup spill-status {

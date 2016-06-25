@@ -22,15 +22,15 @@ IN: rosetta-code.y-combinator
 ! functions or lambda expressions.
 
 : Y ( quot -- quot )
-    '[ [ dup call call ] curry @ ] dup call ; inline
+    $[ [ dup call call ] curry @ ] dup call ; inline
 
 ! factorial sequence
 : almost-fac ( quot -- quot )
-    '[ dup zero? [ drop 1 ] [ dup 1 - @ * ] if ] ;
+    $[ dup zero? [ drop 1 ] [ dup 1 - @ * ] if ] ;
 
 ! fibonacci sequence
 : almost-fib ( quot -- quot )
-    '[ dup 2 >= [ 1 2 [ - @ ] bi-curry@ bi + ] when ] ;
+    $[ dup 2 >= [ 1 2 [ - @ ] bi-curry@ bi + ] when ] ;
 
 ! Ackermann–Péter function
 :: almost-ack ( quot -- quot )

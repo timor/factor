@@ -6,18 +6,18 @@ PRIVATE<
 
 MACRO: keeping ( n quot -- quot' )
     swap dup 1 +
-    '[ _ _ nkeep _ nrot ] ;
+    $[ _ _ nkeep _ nrot ] ;
 
 PRIVATE>
 
 MACRO: n&& ( quots n -- quot )
     [
         [ [ f ] ] 2dip swap [
-            [ '[ drop _ _ keeping dup not ] ]
-            [ drop '[ drop _ ndrop f ] ]
+            [ $[ drop _ _ keeping dup not ] ]
+            [ drop $[ drop _ ndrop f ] ]
             2bi 2array
         ] with map
-    ] [ '[ _ nnip ] suffix 1array ] bi
+    ] [ $[ _ nnip ] suffix 1array ] bi
     [ cond ] 3append ;
 
 PRIVATE<
@@ -35,11 +35,11 @@ PRIVATE>
 MACRO: n|| ( quots n -- quot )
     [
         [ [ f ] ] 2dip swap [
-            [ '[ drop _ _ keeping dup ] ]
-            [ drop '[ _ nnip ] ]
+            [ $[ drop _ _ keeping dup ] ]
+            [ drop $[ _ nnip ] ]
             2bi 2array
         ] with map
-    ] [ '[ drop _ ndrop t ] [ f ] 2array suffix 1array ] bi
+    ] [ $[ drop _ ndrop t ] [ f ] 2array suffix 1array ] bi
     [ cond ] 3append ;
 
 PRIVATE<

@@ -19,7 +19,7 @@ PRIVATE<
 
 : compute-tr ( quot from to -- mapping )
     [ 128 iota ] 3dip zip
-    '[ [ _ call( x -- y ) _ at ] keep or ] B{ } map-as ; inline
+    $[ [ _ call( x -- y ) _ at ] keep or ] B{ } map-as ; inline
 
 : tr-hints ( word -- )
     { { byte-array } { string } } set-specializer ;
@@ -28,13 +28,13 @@ PRIVATE<
     create-word-in dup tr-hints ;
 
 : tr-quot ( mapping -- quot )
-    '[ [ dup ascii? [ _ tr-nth ] when ] map ] ;
+    $[ [ dup ascii? [ _ tr-nth ] when ] map ] ;
 
 : define-tr ( word mapping -- )
     tr-quot ( seq -- translated ) define-declared ;
 
 : fast-tr-quot ( mapping -- quot )
-    '[ [ _ tr-nth ] map! drop ] ;
+    $[ [ _ tr-nth ] map! drop ] ;
 
 : define-fast-tr ( word mapping -- )
     fast-tr-quot ( seq -- ) define-declared ;

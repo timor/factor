@@ -5,7 +5,7 @@ tools.test namespaces sequences vectors ;
 IN: compiler.cfg.branch-splitting.tests
 
 : get-predecessors ( cfg -- assoc )
-    H{ } clone [ '[ [ predecessors>> ] keep _ set-at ] each-basic-block ] keep ;
+    H{ } clone [ $[ [ predecessors>> ] keep _ set-at ] each-basic-block ] keep ;
 
 : check-predecessors ( cfg -- )
     [ get-predecessors ]

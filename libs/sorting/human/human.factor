@@ -11,7 +11,7 @@ IN: sorting.human
     [ cut-find ] keep [ not ] compose cut-find ; inline
 
 : find-sequences ( sequence pred quot -- sequences )
-    '[
+    $[
         [
             _ cut3 [
                 [ , ]

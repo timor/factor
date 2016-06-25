@@ -36,14 +36,14 @@ ERROR: multiple-defs-error ;
     def-use get (def-value) ;
 
 : def-values ( node values -- )
-    def-use get '[ _ (def-value) ] with each ;
+    def-use get $[ _ (def-value) ] with each ;
 
 : used-by ( value -- nodes ) def-of uses>> ;
 
 : use-value ( node value -- ) used-by push ;
 
 : use-values ( node values -- )
-    def-use get '[ _ (def-of) uses>> push ] with each ;
+    def-use get $[ _ (def-of) uses>> push ] with each ;
 
 : defined-by ( value -- node ) def-of node>> ;
 

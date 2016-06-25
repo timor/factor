@@ -18,7 +18,7 @@ PRIVATE<
     [ vocab-name ] sort-with ;
 
 : pprint-using ( seq -- )
-    "syntax" lookup-vocab '[ _ = ] reject
+    "syntax" lookup-vocab $[ _ = ] reject
     sort-vocabs [
         \ USING: pprint-word
         [ pprint-vocab ] each
@@ -70,9 +70,9 @@ PRIVATE>
 
 : pprint-manifest-begin ( manifest -- quots )
     [
-        [ search-vocabs>> [ '[ _ pprint-using ] , ] unless-empty ]
-        [ qualified-vocabs>> filter-interesting [ '[ _ pprint-qualified ] , ] each ]
-        [ current-vocab>> [ '[ _ pprint-in ] , ] when* ]
+        [ search-vocabs>> [ $[ _ pprint-using ] , ] unless-empty ]
+        [ qualified-vocabs>> filter-interesting [ $[ _ pprint-qualified ] , ] each ]
+        [ current-vocab>> [ $[ _ pprint-in ] , ] when* ]
         tri
     ] { } make ;
 

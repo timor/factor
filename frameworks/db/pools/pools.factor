@@ -17,4 +17,4 @@ M: db-pool make-connection ( pool -- conn )
     db>> db-open ;
 
 : with-pooled-db ( pool quot -- )
-    '[ db-connection _ with-variable ] with-pooled-connection ; inline
+    $[ db-connection _ with-variable ] with-pooled-connection ; inline

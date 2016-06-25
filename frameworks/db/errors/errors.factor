@@ -44,7 +44,7 @@ TUPLE: sql-database-exists < sql-error message ;
     f swap sql-database-exists boa ;
 
 : ignore-error ( quot word -- )
-    '[ dup @ [ drop ] [ rethrow ] if ] recover ; inline
+    $[ dup @ [ drop ] [ rethrow ] if ] recover ; inline
 
 : ignore-table-exists ( quot -- )
     [ sql-table-exists? ] ignore-error ; inline

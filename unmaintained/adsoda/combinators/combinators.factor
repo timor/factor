@@ -41,5 +41,5 @@ in: adsoda.combinators
 
 : map-but ( seq i quot -- seq )
     ! quot : ( seq x -- seq )
-    '[ _ = [ @ ] unless ] map-index ; inline
+    $[ _ = [ @ ] unless ] map-index ; inline
 

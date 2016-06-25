@@ -42,7 +42,7 @@ IN: io.servers
     ascii <threaded-server>
         5 >>max-connections
         0 >>insecure
-    start-server [ '[ _ wait-for-server ] in-thread ] [ stop-server ] bi
+    start-server [ $[ _ wait-for-server ] in-thread ] [ stop-server ] bi
 ] unit-test
 
 ipv6-supported? [

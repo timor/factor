@@ -85,7 +85,7 @@ IN: smtp.tests
             [ to>> [ extract-email ] map ]
             [ from>> extract-email ]
             ! To get the smtp server to clean up itself
-            [ '[ _ send-email ] ignore-errors ]
+            [ $[ _ send-email ] ignore-errors ]
         } cleave
     ] with-test-smtp-config
 ] unit-test

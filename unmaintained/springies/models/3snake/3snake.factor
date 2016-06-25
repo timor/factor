@@ -161,7 +161,7 @@ times
 ! : go* ( quot -- )
 !   [ [ [ springies-window* 1000 sleep % ] with-scope ] with-ui ] bake call ;
 
-: go* ( quot -- ) '[ [ springies-window* 1000 sleep @ ] with-scope ] with-ui ;
+: go* ( quot -- ) $[ [ springies-window* 1000 sleep @ ] with-scope ] with-ui ;
 
 ! : go ( -- ) [ [ springies-window* 1000 sleep model ] with-scope ] with-ui ;
 

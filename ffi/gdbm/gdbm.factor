@@ -147,7 +147,7 @@ PRIVATE>
 : gdbm-file-descriptor ( -- desc ) dbf gdbm_fdesc ;
 
 : with-gdbm ( gdbm quot -- )
-    '[
+    $[
         _ gdbm-open &gdbm-close current-dbf
         _ with-variable
     ] with-destructors ; inline

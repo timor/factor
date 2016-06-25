@@ -63,7 +63,7 @@ TYPED: terrain-segment ( terrain: terrain at: float-4 -- image )
 
 : mipmap ( pixels quot: ( aa ab ba bb -- c ) -- pixels' )
     [ [ 2 <groups> ] map 2 <groups> ] dip
-    '[ first2 [ [ first2 ] bi@ @ ] 2map ] map ; inline
+    $[ first2 [ [ first2 ] bi@ @ ] 2map ] map ; inline
 
 : group-pixels ( bitmap dim -- scanlines )
     [ 4 <groups> ] [ first <groups> ] bi* ;

@@ -128,7 +128,7 @@ PRIVATE>
 
 : define-array-vocab ( type -- vocab )
     underlying-type
-    [ specialized-array-vocab ] [ '[ _ define-array ] ] bi
+    [ specialized-array-vocab ] [ $[ _ define-array ] ] bi
     generate-vocab ;
 
 ERROR: specialized-array-vocab-not-loaded c-type ;

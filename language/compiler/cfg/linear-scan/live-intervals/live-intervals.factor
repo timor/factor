@@ -100,23 +100,23 @@ UNION: clobber-insn
 
 M: vreg-insn compute-live-intervals* ( insn -- )
     dup insn#>>
-    [ [ defs-vregs ] dip '[ _ f record-def ] each ]
-    [ [ uses-vregs* ] dip '[ _ f record-use ] each ]
-    [ [ temp-vregs ] dip '[ _ record-temp ] each ]
+    [ [ defs-vregs ] dip $[ _ f record-def ] each ]
+    [ [ uses-vregs* ] dip $[ _ f record-use ] each ]
+    [ [ temp-vregs ] dip $[ _ record-temp ] each ]
     2tri ;
 
 M: clobber-insn compute-live-intervals* ( insn -- )
     dup insn#>>
-    [ [ defs-vregs ] dip '[ _ f record-def ] each ]
-    [ [ uses-vregs* ] dip '[ _ t record-use ] each ]
-    [ [ temp-vregs ] dip '[ _ record-temp ] each ]
+    [ [ defs-vregs ] dip $[ _ f record-def ] each ]
+    [ [ uses-vregs* ] dip $[ _ t record-use ] each ]
+    [ [ temp-vregs ] dip $[ _ record-temp ] each ]
     2tri ;
 
 M: hairy-clobber-insn compute-live-intervals* ( insn -- )
     dup insn#>>
-    [ [ defs-vregs ] dip '[ _ t record-def ] each ]
-    [ [ uses-vregs* ] dip '[ _ t record-use ] each ]
-    [ [ temp-vregs ] dip '[ _ record-temp ] each ]
+    [ [ defs-vregs ] dip $[ _ t record-def ] each ]
+    [ [ uses-vregs* ] dip $[ _ t record-use ] each ]
+    [ [ temp-vregs ] dip $[ _ record-temp ] each ]
     2tri ;
 
 : handle-live-out ( bb -- )

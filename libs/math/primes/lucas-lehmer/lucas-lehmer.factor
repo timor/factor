@@ -10,7 +10,7 @@ PRIVATE<
 
 : do-lucas-lehmer ( p -- ? )
     [ drop 4 ] [ 2 - ] [ 2^ 1 - ] tri
-    '[ sq 2 - _ mod ] times 0 = ;
+    $[ sq 2 - _ mod ] times 0 = ;
 
 : lucas-lehmer-guard ( obj -- obj )
     dup { [ integer? ] [ 0 > ] } 1&&

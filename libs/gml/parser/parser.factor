@@ -60,7 +60,7 @@ Digits = Digit+
 
 Sign = ('+' => [[ first ]]|'-' => [[ first ]])?
 
-StopChar = ('('|')'|'['|']'|'{'|'}'|'/'|'/'|';'|':'|'!'|'.')
+StopChar = ('('|')'|$['|']'|'{'|'}'|'/'|'/'|';'|':'|'!'|'.')
 
 Space = [ \t\n\r]
 
@@ -85,7 +85,7 @@ Name = NameChar+ => [[ >string ]]
 
 Comment = ('%' (!(Newline) .)* (Newline|!(.))) => [[ <comment> ]]
 
-ArrayStart = '[' => [[ marker ]]
+ArrayStart = $[' => [[ marker ]]
 
 ArrayEnd = ']' => [[ exec" ]" ]]
 

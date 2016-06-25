@@ -50,7 +50,7 @@ C: <terminfo-header> terminfo-header ;
 
 : read-strings ( header -- strings )
     [ #strings>> read-shorts ] [ string-bytes>> read ] bi
-    '[ [ _ string-offset ] [ f ] if* ] map ;
+    $[ [ _ string-offset ] [ f ] if* ] map ;
 
 TUPLE: terminfo names booleans numbers strings ;
 

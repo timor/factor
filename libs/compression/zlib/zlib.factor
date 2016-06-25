@@ -49,7 +49,7 @@ ERROR: zlib-failed n string ;
 
 : uncompress ( byte-array -- byte-array' )
     [ length 5 [0,b) [ 2^ * ] with map ] keep
-    '[ _ (uncompress) ] attempt-all ;
+    $[ _ (uncompress) ] attempt-all ;
 
 
 : zlib-inflate-init ( -- z_stream_s )

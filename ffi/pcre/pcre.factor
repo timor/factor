@@ -17,7 +17,7 @@ ERROR: pcre-error value ;
 PRIVATE<
 
 : replace-all ( seq subseqs new -- seq )
-    swapd '[ _ replace ] reduce ;
+    swapd $[ _ replace ] reduce ;
 
 : split-subseqs ( seq subseqs -- seqs )
     dup first [ replace-all ] keep split-subseq [ >string ] map harvest ;

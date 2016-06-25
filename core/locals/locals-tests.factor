@@ -388,7 +388,7 @@ M:: integer lambda-method-forget-test ( a -- b ) a ;
 { 10 } [ 10 |[ A | { [ A ] } ] call first call ] unit-test
 
 [
-    "USING: locals fry math ; 1 '[ let[ 10 :> A A _ + ] ]"
+    "USING: locals fry math ; 1 $[ let[ 10 :> A A _ + ] ]"
     eval( -- ) call
 ] [ error>> >r/r>-in-fry-error? ] must-fail-with
 
@@ -431,31 +431,31 @@ M:: integer lambda-method-forget-test ( a -- b ) a ;
 { 3 } [ 2 |[ | :> a! a 1 + a! a ] call ] unit-test
 
 : fry-locals-test-1 ( -- n )
-    let[ 6 '[ let[ 4 :> A A _ + ] ] call ] ;
+    let[ 6 $[ let[ 4 :> A A _ + ] ] call ] ;
 
 \ fry-locals-test-1 def>> must-infer
 { 10 } [ fry-locals-test-1 ] unit-test
 
 :: fry-locals-test-2 ( -- n )
-    let[ 6 '[ let[ 4 :> A A _ + ] ] call ] ;
+    let[ 6 $[ let[ 4 :> A A _ + ] ] call ] ;
 
 \ fry-locals-test-2 def>> must-infer
 { 10 } [ fry-locals-test-2 ] unit-test
 
-{ 1 } [ 3 4 |[ | '[ [ _ swap - ] call ] call ] call ] unit-test
+{ 1 } [ 3 4 |[ | $[ [ _ swap - ] call ] call ] call ] unit-test
 { -1 } [ 3 4 |[ | |[ a | a - ] call ] call ] unit-test
 { -1 } [ 3 4 |[ | |[ a | a - ] curry call ] call ] unit-test
 { -1 } [ 3 4 |[ a | a - ] curry call ] unit-test
-{ 1 } [ 3 4 |[ | '[ |[ a | _ a - ] call ] call ] call ] unit-test
-{ -1 } [ 3 4 |[ | '[ |[ a | a _ - ] call ] call ] call ] unit-test
+{ 1 } [ 3 4 |[ | $[ |[ a | _ a - ] call ] call ] call ] unit-test
+{ -1 } [ 3 4 |[ | $[ |[ a | a _ - ] call ] call ] call ] unit-test
 
 { { 1 2 3 4 } } [
     1 3 2 4
-    |[ | '[ |[ a b | a _ b _ 4array ] call ] call ] call
+    |[ | $[ |[ a b | a _ b _ 4array ] call ] call ] call
 ] unit-test
 
 { 10 } [
-    |[ | 0 '[ let[ 10 :> A A _ + ] ] call ] call
+    |[ | 0 $[ let[ 10 :> A A _ + ] ] call ] call
 ] unit-test
 
 ! littledan found this problem
@@ -475,7 +475,7 @@ M:: integer lambda-method-forget-test ( a -- b ) a ;
 
 { 3 } [ 3 t erg's-:>-bug ] unit-test
 
-:: erg's-:>-bug-2 ( n ? -- n ) ? n '[ _ :> n n ] [ n :> b b ] if ;
+:: erg's-:>-bug-2 ( n ? -- n ) ? n $[ _ :> n n ] [ n :> b b ] if ;
 
 { 3 } [ 3 f erg's-:>-bug-2 ] unit-test
 

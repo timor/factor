@@ -13,7 +13,7 @@ IN: concurrency.conditions
     ! Add an timer which removes the current thread from the
     ! queue, and resumes it, passing it a value of t.
     [
-        [ self swap push-front* ] keep '[
+        [ self swap push-front* ] keep $[
             _ _
             [ delete-node ] [ drop node-value ] 2bi
             t swap resume-with

@@ -217,7 +217,7 @@ ARTICLE: "locals-fry" "Lexical variables and fry"
 "Lexical variables integrate with " { $link "fry" } " so that mixing variables with fried quotations gives intuitive results."
 $nl
 "The following two code snippets are equivalent:"
-{ $code "'[ sq _ + ]" }
+{ $code "$[ sq _ + ]" }
 { $code "[ [ sq ] dip + ] curry" }
 "The semantics of " { $link dip } " and " { $link curry } " are such that the first example behaves as if the top of the stack as “inserted” in the “hole” in the quotation's second element."
 $nl
@@ -228,8 +228,8 @@ $nl
 { $code "3 |[ a b | a b - ] curry" }
 { $code "|[ a | a 3 - ]" }
 "Because of this, the behavior of " { $snippet "fry" } " changes when applied to such a quotation to ensure that fry conceptually behaves the same as with normal quotations, placing the fried values “underneath” the variable bindings. Thus, the following snippets are no longer equivalent:"
-{ $code "'[ |[ a | _ a - ] ]" }
-{ $code "'[ |[ a | a - ] curry ] call" }
+{ $code "$[ |[ a | _ a - ] ]" }
+{ $code "$[ |[ a | a - ] curry ] call" }
 "Instead, the first line above expands into something like the following:"
 { $code "[ [ swap |[ a | a - ] ] curry call ]" }
 $nl
@@ -241,7 +241,7 @@ ARTICLE: "locals-limitations" "Limitations of lexical variables"
 "The expansion of a macro cannot reference lexical variables bound in the outer scope. For example, the following macro is invalid:"
 { $code "MACRO:: twice ( quot -- ) [ quot call quot call ] ;" }
 "The following is fine, though:"
-{ $code "MACRO:: twice ( quot -- ) quot quot '[ @ @ ] ;" }
+{ $code "MACRO:: twice ( quot -- ) quot quot $[ @ @ ] ;" }
 { $heading "Static stack effect inference and macros" }
 "A macro will only expand at compile-time if all of its inputs are literal. Likewise, the word containing the macro will only have a static stack effect and compile successfully if the macro's inputs are literal. When lexical variables are used in a macro's literal arguments, there is an additional restriction: The literals must immediately precede the macro call lexically."
 $nl

@@ -23,7 +23,7 @@ PRIVATE>
     [ 16 / ceiling swap <repetition> concat ] keep
     head-slice append
     password [ length make-bits ] [ first ] bi
-    '[ char: \0 _ ? ] "" map-as append
+    $[ char: \0 _ ? ] "" map-as append
     md5 checksum-bytes :> final!
 
     1000 iota [
@@ -45,4 +45,4 @@ PRIVATE>
     "$" split harvest first3 [ "$" dup surround ] 2dip ;
 
 : authenticate-password ( shadow password -- ? )
-    '[ parse-shadow-password drop _ passwd-md5 ] keep = ;
+    $[ parse-shadow-password drop _ passwd-md5 ] keep = ;

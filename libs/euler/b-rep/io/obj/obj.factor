@@ -11,7 +11,7 @@ PRIVATE<
 
 : write-obj-face ( face vx-indices -- )
     "f" write
-    [ edge>> ] dip '[ bl vertex>> _ at 1 + number>string write ] each-face-edge nl ;
+    [ edge>> ] dip $[ bl vertex>> _ at 1 + number>string write ] each-face-edge nl ;
 PRIVATE>
 
 :: write-obj ( b-rep -- )
@@ -62,7 +62,7 @@ PRIVATE<
     dup 0 >= [ nip 1 - ] [ [ length ] dip + ] if ;
 
 : parse-face ( line vertices -- vertices )
-    [ " " split ] dip '[ _ parse-face-index ] map ;
+    [ " " split ] dip $[ _ parse-face-index ] map ;
 
 : read-face ( line vertices faces -- )
     [ parse-face ] dip push ;

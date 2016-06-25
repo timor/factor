@@ -23,14 +23,14 @@ INSTANCE: limited-stream input-stream ;
 GENERIC#: limit-stream 1 ( stream limit -- stream' ) ;
 
 M: decoder limit-stream ( stream limit -- stream' )
-    '[ stream>> _ limit-stream ] [ code>> ] [ cr>> ] tri
+    $[ stream>> _ limit-stream ] [ code>> ] [ cr>> ] tri
     decoder boa ; inline
 
 M: object limit-stream ( stream limit -- stream' )
     <limited-stream> ;
 
 : limited-input ( limit -- )
-    [ input-stream ] dip '[ _ limit-stream ] change ;
+    [ input-stream ] dip $[ _ limit-stream ] change ;
 
 : with-limited-stream ( stream limit quot -- )
     [ limit-stream ] dip call ; inline
@@ -48,7 +48,7 @@ PRIVATE<
     [ current>> ] [ stop>> ] bi >
     [
         dup [ current>> ] [ stop>> ] bi -
-        '[ _ - ] dip
+        $[ _ - ] dip
     ] when ; inline
 
 : adjust-count-limit ( n stream -- n' stream )
@@ -56,7 +56,7 @@ PRIVATE<
     [ count>> ] [ limit>> ] bi >
     [
         dup [ count>> ] [ limit>> ] bi -
-        '[ _ - ] dip
+        $[ _ - ] dip
         dup limit>> >>count
     ] when ; inline
 

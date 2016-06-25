@@ -11,5 +11,5 @@ IN: alien.cxx.scaffold
 
 : c++-library-symbols ( file abi -- symbols )
     [ library-symbols ] dip
-    [ '[ _ c++-symbol? ] filter ]
-    [ '[ dup _ demangle ] H{ } map>assoc ] bi ;
+    [ $[ _ c++-symbol? ] filter ]
+    [ $[ dup _ demangle ] H{ } map>assoc ] bi ;

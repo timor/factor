@@ -17,21 +17,21 @@ SYMBOL: current-context
 
 : gather-args-quot ( in-effect -- quot )
     dup ?last "**" = [
-        but-last length '[ [ _ narray array>py-tuple ] dip ]
+        but-last length $[ [ _ narray array>py-tuple ] dip ]
     ] [
-        length '[ _ narray array>py-tuple f ]
+        length $[ _ narray array>py-tuple f ]
     ] if ;
 
 : unpack-value-quot ( out-effect -- quot )
     length {
         { 0 [ [ drop ] ] }
         { 1 [ [ ] ] }
-        [ '[ py-tuple>array _ firstn ] ]
+        [ $[ py-tuple>array _ firstn ] ]
     } case ;
 
 : make-function-quot ( obj-quot effect -- quot )
     [ in>> gather-args-quot ] [ out>> unpack-value-quot ] bi
-    swapd '[ @ @ -rot call-object-full @ ] ;
+    swapd $[ @ @ -rot call-object-full @ ] ;
 
 : make-factor-words ( module name prefix? -- call-word obj-word )
     [ [ ":" glue ] [ ":$" glue ] 2bi ] [ nip dup "$" prepend ] if
@@ -42,18 +42,18 @@ SYMBOL: current-context
 
 :: add-function ( name effect module prefix? -- )
     module name prefix? make-factor-words :> ( call-word obj-word )
-    obj-word module name '[ _ _ import-getattr ] ( -- o ) define-inline
+    obj-word module name $[ _ _ import-getattr ] ( -- o ) define-inline
     call-word obj-word def>> effect make-function-quot effect define-inline ;
 
 : make-method-quot ( name effect -- quot )
     [ in>> rest gather-args-quot ] [ out>> unpack-value-quot ] bi swapd
-    '[ @ rot _ getattr -rot call-object-full @ ] ;
+    $[ @ rot _ getattr -rot call-object-full @ ] ;
 
 : method-callable ( name effect -- )
     [ dup create-word-in swap ] dip [ make-method-quot ] keep define-inline ;
 
 : method-object ( name -- )
-    [ "$" prepend create-word-in ] [ '[ _ getattr ] ] bi
+    [ "$" prepend create-word-in ] [ $[ _ getattr ] ] bi
     { "obj" } { "obj'" } <effect> define-inline ;
 
 : add-method ( name effect -- )

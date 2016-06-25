@@ -264,7 +264,7 @@ PRIVATE>
 : with-curses ( window quot -- )
     curses-ok? [ unsupported-curses-terminal ] unless
     [
-        '[
+        $[
             ffi:initscr curses-pointer-error
             >>ptr
             {

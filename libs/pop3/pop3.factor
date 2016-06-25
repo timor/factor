@@ -90,12 +90,12 @@ TUPLE: raw-source top headers content ;
 PRIVATE>
 
 : >user ( name -- )
-    [ stream ] dip '[
+    [ stream ] dip $[
         "USER " _ append command
     ] with-stream* ;
 
 : >pwd ( password -- )
-    [ stream ] dip '[
+    [ stream ] dip $[
         "PASS " _ append command
     ] with-stream* ;
 
@@ -127,7 +127,7 @@ PRIVATE>
     (list) account list>> split-map ;
 
 : uidl ( message# -- uidl )
-    [ stream ] dip '[
+    [ stream ] dip $[
         "UIDL " _ number>string append command-and-uidl
     ] with-stream* ;
 
@@ -136,7 +136,7 @@ PRIVATE>
 
 : top ( message# #lines -- seq )
     <raw-source> raw-source set
-    [ stream ] 2dip '[
+    [ stream ] 2dip $[
         "TOP " _ number>string append " "
         append _ number>string append
         command
@@ -166,13 +166,13 @@ PRIVATE>
     } cleave raw headers>> associate-split ;
 
 : retrieve ( message# -- seq )
-    [ stream ] dip '[
+    [ stream ] dip $[
         "RETR " _ number>string append command
         readlns dup raw content<<
     ] with-stream* ;
 
 : delete ( message# -- )
-    [ stream ] dip '[
+    [ stream ] dip $[
         "DELE " _ number>string append command
     ] with-stream* ;
 

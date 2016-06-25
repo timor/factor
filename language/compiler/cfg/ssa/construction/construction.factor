@@ -35,7 +35,7 @@ M: vreg-insn compute-insn-defs
 SYMBOL: inserting-phis
 
 : <##phi> ( vreg bb -- ##phi )
-    predecessors>> over '[ _ ] H{ } map>assoc ##phi new-insn ;
+    predecessors>> over $[ _ ] H{ } map>assoc ##phi new-insn ;
 
 : insert-phi-later ( vreg bb -- )
     [ <##phi> ] keep inserting-phis get push-at ;
@@ -46,7 +46,7 @@ SYMBOL: inserting-phis
 : compute-phis ( -- )
     H{ } clone inserting-phis namespaces:set
     defs-multi get members
-    defs get '[ dup _ at compute-phis-for ] each ;
+    defs get $[ dup _ at compute-phis-for ] each ;
 
 SYMBOL: phis
 
@@ -100,13 +100,13 @@ M: vreg-insn rename-insn
 
 : rename-successor-phis ( succ bb -- )
     [ inserting-phis get at ] dip
-    '[ _ rename-successor-phi ] each ;
+    $[ _ rename-successor-phi ] each ;
 
 : rename-successors-phis ( bb -- )
-    [ successors>> ] keep '[ _ rename-successor-phis ] each ;
+    [ successors>> ] keep $[ _ rename-successor-phis ] each ;
 
 : pop-stacks ( -- )
-    pushed get members stacks get '[ _ at pop* ] each ;
+    pushed get members stacks get $[ _ at pop* ] each ;
 
 : rename-in-block ( bb -- )
     HS{ } clone pushed namespaces:set

@@ -45,7 +45,7 @@ M: interactor manifest>>
     ] if ;
 
 : vocab-exists? ( name -- ? )
-    '[ _ { [ lookup-vocab ] [ find-vocab-root ] } 1|| ] [ drop f ] recover ;
+    $[ _ { [ lookup-vocab ] [ find-vocab-root ] } 1|| ] [ drop f ] recover ;
 
 GENERIC: (word-at-caret) ( token completion-mode -- obj ) ;
 
@@ -54,7 +54,7 @@ M: vocab-completion (word-at-caret)
 
 M: word-completion (word-at-caret)
     manifest>> [
-        '[ _ _ search-manifest ] [ drop f ] recover
+        $[ _ _ search-manifest ] [ drop f ] recover
     ] [ drop f ] if* ;
 
 M: char-completion (word-at-caret) 2drop f ;
@@ -68,7 +68,7 @@ M: color-completion (word-at-caret) 2drop f ;
 
 : <word-model> ( interactor -- model )
     [ token-model>> 1/3 seconds <delay> ]
-    [ '[ _ word-at-caret ] ] bi
+    [ $[ _ word-at-caret ] ] bi
     <arrow> ;
 
 : <interactor> ( -- gadget )
@@ -176,7 +176,7 @@ M: interactor stream-read1
     } cond ;
 
 M: interactor stream-read-until ( seps stream -- seq sep/f )
-    swap '[
+    swap $[
         _ interactor-read [
             "\n" join char: \n suffix
             [ _ member? ] dupd find
@@ -287,7 +287,7 @@ M: string listener-input
 
 : call-listener ( quot command -- )
     get-ready-listener
-    '[ _ _ _ dup wait-for-listener (call-listener) ]
+    $[ _ _ _ dup wait-for-listener (call-listener) ]
     "Listener call" spawn drop ;
 
 M: listener-command invoke-command ( target command -- )
@@ -302,7 +302,7 @@ M: listener-operation invoke-command ( target command -- )
 
 : listener-run-files ( seq -- )
     [
-        '[ _ [ run-file ] each ]
+        $[ _ [ run-file ] each ]
         \ listener-run-files
         call-listener
     ] unless-empty ;
@@ -342,7 +342,7 @@ M: object accept-completion-hook 2drop ;
     over recall-previous go-to-error ;
 
 : make-restart-hook-quot ( error interactor -- quot )
-    over '[
+    over $[
         dup hide-glass
         _ do-recall? [ _ _ recall-lexer-error ] when
     ] ;
@@ -361,7 +361,7 @@ M: object accept-completion-hook 2drop ;
     pick <debugger-popup> one-line-elt swap show-listener-popup ;
 
 : try-parse ( lines -- quot/f )
-    [ parse-lines-interactive ] [ nip '[ _ rethrow ] ] recover ;
+    [ parse-lines-interactive ] [ nip $[ _ rethrow ] ] recover ;
 
 M: interactor stream-read-quot ( stream -- quot/f )
     dup interactor-yield dup array? [
@@ -409,7 +409,7 @@ interactor "completion" f {
 : listener-thread ( listener -- )
     dup listener-streams [
         [ com-browse ] help-hook set
-        '[ [ _ input>> ] 2dip debugger-popup ] error-hook set
+        $[ [ _ input>> ] 2dip debugger-popup ] error-hook set
         error-summary? off
         introduction.
         listener
@@ -418,7 +418,7 @@ interactor "completion" f {
     ] with-input-output+error-streams* ;
 
 : start-listener-thread ( listener -- )
-    '[
+    $[
         _
         [ input>> register-self ]
         [ listener-thread ]

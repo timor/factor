@@ -86,10 +86,10 @@ TUPLE: gl-error-tuple function code string ;
     [ glDisableClientState ] each ; inline
 
 MACRO: all-enabled ( seq quot -- quot )
-    [ words>values ] dip '[ _ _ (all-enabled) ] ;
+    [ words>values ] dip $[ _ _ (all-enabled) ] ;
 
 MACRO: all-enabled-client-state ( seq quot -- quot )
-    [ words>values ] dip '[ _ _ (all-enabled-client-state) ] ;
+    [ words>values ] dip $[ _ _ (all-enabled-client-state) ] ;
 
 : do-matrix ( quot -- )
     glPushMatrix call glPopMatrix ; inline
@@ -177,7 +177,7 @@ MACRO: all-enabled-client-state ( seq quot -- quot )
     quot [ binding 0 glBindBuffer ] [ ] cleanup ; inline
 
 : with-array-element-buffers ( array-buffer element-buffer quot -- )
-    [ GL_ELEMENT_ARRAY_BUFFER ] 2dip '[
+    [ GL_ELEMENT_ARRAY_BUFFER ] 2dip $[
         GL_ARRAY_BUFFER swap _ with-gl-buffer
     ] with-gl-buffer ; inline
 
@@ -208,12 +208,12 @@ MACRO: all-enabled-client-state ( seq quot -- quot )
     [ length ] [ uint >c-array ] bi glDrawBuffers ;
 
 MACRO: set-draw-buffers ( buffers -- quot )
-    words>values '[ _ (set-draw-buffers) ] ;
+    words>values $[ _ (set-draw-buffers) ] ;
 
 : gen-dlist ( -- id ) 1 glGenLists ;
 
 : make-dlist ( type quot -- id )
-    [ gen-dlist ] 2dip '[ _ glNewList @ glEndList ] keep ; inline
+    [ gen-dlist ] 2dip $[ _ glNewList @ glEndList ] keep ; inline
 
 : gl-translate ( point -- ) first2 0.0 glTranslated ;
 

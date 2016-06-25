@@ -28,7 +28,7 @@ IN: compiler.cfg.branch-splitting
 
 : update-predecessor-successors ( copies old-bb -- )
     [ predecessors>> swap ] keep
-    '[ [ _ ] dip update-successors ] 2each ;
+    $[ [ _ ] dip update-successors ] 2each ;
 
 :: update-successor-predecessor ( copies old-bb succ -- )
     succ predecessors>> dup >array :> ( preds preds' )

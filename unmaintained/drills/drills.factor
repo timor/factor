@@ -16,8 +16,8 @@ SYMBOLS: it startLength ;
 : show ( model -- gadget ) dup it set-global [ random ] <arrow>
    { [ [ first ] card ]
      [ [ second ] card ]
-     [ '[ |<< it get _ model-changed ] "No" op ]
-          [ '[ |<< [ it get [
+     [ $[ |<< it get _ model-changed ] "No" op ]
+          [ $[ |<< [ it get [
         _ value>> swap remove
         [ [ it get go-back ] "Drill Complete" alert return ] when-empty
      ] change-model ] with-return ] "Yes" op ]

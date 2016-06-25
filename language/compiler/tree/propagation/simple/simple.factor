@@ -91,8 +91,8 @@ ERROR: invalid-outputs #call infos ;
     } 2&& ;
 
 : (fold-call) ( #call word -- info )
-    [ [ out-d>> ] [ in-d>> [ value-info literal>> ] map ] bi ] [ '[ _ execute ] ] bi*
-    '[ _ _ with-datastack [ <literal-info> ] map nip ]
+    [ [ out-d>> ] [ in-d>> [ value-info literal>> ] map ] bi ] [ $[ _ execute ] ] bi*
+    $[ _ _ with-datastack [ <literal-info> ] map nip ]
     [ drop length [ object-info ] replicate ]
     recover ;
 
@@ -101,7 +101,7 @@ ERROR: invalid-outputs #call infos ;
 
 : predicate-output-infos/literal ( info class -- info )
     [ literal>> ] dip
-    '[ _ _ instance? <literal-info> ]
+    $[ _ _ instance? <literal-info> ]
     [ drop object-info ]
     recover ;
 

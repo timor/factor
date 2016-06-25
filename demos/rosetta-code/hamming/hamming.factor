@@ -37,14 +37,14 @@ TUPLE: hamming-iterator 2s 3s 5s ;
     dup [ 2s>> ] [ 3s>> ] [ 5s>> ] tri
     3dup [ peek-front ] tri@ min min
     [
-        '[
+        $[
             dup peek-front _ =
             [ pop-front* ] [ drop ] if
         ] tri@
     ] [ swap enqueue ] [ ] tri ;
 
 : next-n ( hamming-iterator n -- seq )
-    swap '[ _ [ _ next , ] times ] { } make ;
+    swap $[ _ [ _ next , ] times ] { } make ;
 
 : nth-from-now ( hamming-iterator n -- m )
-    1 - over '[ _ next drop ] times next ;
+    1 - over $[ _ next drop ] times next ;

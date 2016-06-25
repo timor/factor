@@ -63,7 +63,7 @@ M: clumps group@
 PRIVATE<
 
 : map-like ( seq n quot -- seq )
-    2keep drop '[ _ like ] map ; inline
+    2keep drop $[ _ like ] map ; inline
 
 PRIVATE>
 
@@ -77,7 +77,7 @@ PRIVATE>
             [ first2-unsafe ] dip call
         ] [
             [ [ first-unsafe 1 ] [ (setup-each) ] bi ] dip
-            '[ @ _ keep swap ] (all-integers?) nip
+            $[ @ _ keep swap ] (all-integers?) nip
         ] if
     ] if ; inline
 

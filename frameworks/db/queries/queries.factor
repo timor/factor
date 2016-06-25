@@ -213,4 +213,4 @@ M: db-connection <count-statement> ( query -- statement )
     "create database " ";" surround sql-command ;
 
 : ensure-database ( string -- )
-    '[ _ create-database ] ignore-database-exists ;
+    $[ _ create-database ] ignore-database-exists ;

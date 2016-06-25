@@ -193,11 +193,11 @@ CONSTANT: names-buf-length 16384 ;
 : find-volumes ( -- array )
     find-first-volume
     [
-        '[
+        $[
             [ _ find-next-volume dup ] [ ] produce nip
             swap prefix
         ]
-    ] [ '[ _ FindVolumeClose win32-error=0/f ] ] bi [ ] cleanup ;
+    ] [ $[ _ FindVolumeClose win32-error=0/f ] ] bi [ ] cleanup ;
 
 ! Windows may return a volume which looks up to path ""
 ! For now, treat it like there is not a volume here

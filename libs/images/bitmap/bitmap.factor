@@ -241,12 +241,12 @@ GENERIC: bitmap>component-order* ( loading-bitmap header -- object ) ;
 : color-lookup3 ( loading-bitmap -- seq )
     [ color-index>> >array ]
     [ color-palette>> 3 <groups> ] bi
-    '[ _ nth ] map concat ;
+    $[ _ nth ] map concat ;
 
 : color-lookup4 ( loading-bitmap -- seq )
     [ color-index>> >array ]
     [ color-palette>> 4 <groups> [ 3 head-slice ] map ] bi
-    '[ _ nth ] map concat ;
+    $[ _ nth ] map concat ;
 
 ! os2v1 is 3bytes each, all others are 3 + 1 unused
 : color-lookup ( loading-bitmap -- seq )
@@ -265,7 +265,7 @@ M: v4-header bitmap>component-order* drop advanced-bitmap>component-order ;
 M: v5-header bitmap>component-order* drop advanced-bitmap>component-order ;
 
 : uncompress-bitfield ( seq masks -- bytes' )
-    '[
+    $[
         _ [
             [ bitand ] [ bit-count ] [ log2 ] tri - shift
         ] with map
@@ -310,7 +310,7 @@ M: unsupported-bitfield-widths summary
     set-bitfield-widths
     dup header>> bit-count>> {
         { 16 [
-            dup bitfields>> '[
+            dup bitfields>> $[
                 ushort cast-array _ uncompress-bitfield
             ] change-color-index
         ] }
@@ -329,7 +329,7 @@ M: os2-header uncompress-bitmap* ( loading-bitmap header -- loading-bitmap' )
     drop ;
 
 : do-run-length-uncompress ( loading-bitmap word -- loading-bitmap )
-    dupd '[
+    dupd $[
         _ header>> [ width>> ] [ height>> ] bi
         _ execute
     ] change-color-index ; inline

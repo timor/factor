@@ -19,7 +19,7 @@ TUPLE: edge < identity-tuple face vertex opposite-edge next-edge ;
     [ 0 [ drop 1 + ] ] dip (reduce) ; inline
 
 : edge-loop ( ..a edge quot: ( ..a edge -- ..b ) next-edge-quot: ( ..b edge -- ..a edge' ) -- ..a )
-    pick '[ _ _ bi dup _ eq? not ] loop drop ; inline
+    pick $[ _ _ bi dup _ eq? not ] loop drop ; inline
 
 ! iterate over related edges
 

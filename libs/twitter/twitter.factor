@@ -49,7 +49,7 @@ PRIVATE<
 
 ! Utilities
 MACRO: keys-boa ( keys class -- quot )
-    [ [ '[ _ of ] ] map ] dip '[ _ cleave _ boa ] ;
+    [ [ $[ _ of ] ] map ] dip $[ _ cleave _ boa ] ;
 
 ! Twitter requests
 : status-url ( string -- url )

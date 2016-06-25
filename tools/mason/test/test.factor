@@ -23,7 +23,7 @@ IN: mason.test
 : require-all-no-restarts ( vocabs -- failures )
     V{ } clone blacklist [
         V{ } clone [
-            '[
+            $[
                 [ require ]
                 [ swap vocab-name _ set-at ] recover
             ] each
@@ -35,7 +35,7 @@ IN: mason.test
 
 : load-no-restarts ( prefix -- failures )
     [ vocab-roots get ] dip
-    '[ _ load-from-root-no-restarts ] map concat ;
+    $[ _ load-from-root-no-restarts ] map concat ;
 
 : do-load ( -- )
     "" load-no-restarts

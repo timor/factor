@@ -144,7 +144,7 @@ M: and-class class-member?
 DEFER: substitute
 
 : flatten ( seq class -- newseq )
-    '[ dup _ instance? [ seq>> ] [ 1array ] if ] map concat ; inline
+    $[ dup _ instance? [ seq>> ] [ 1array ] if ] map concat ; inline
 
 :: sequence>instance ( seq empty class -- instance )
     seq length {
@@ -184,11 +184,11 @@ TUPLE: class-partition integers not-integers simples not-simples and or other ;
     dup
     [ simples>> ] [ not-simples>> ] [ or>> ] tri
     3append and-class boa
-    '[ [ class>> _ class-member? ] filter ] change-not-integers ;
+    $[ [ class>> _ class-member? ] filter ] change-not-integers ;
 
 : answer-ors ( partition -- partition' )
     dup [ not-integers>> ] [ not-simples>> ] [ simples>> ] tri 3append
-    '[ [ _ [ t substitute ] each ] map ] change-or ;
+    $[ [ _ [ t substitute ] each ] map ] change-or ;
 
 : contradiction? ( partition -- ? )
     {
@@ -207,7 +207,7 @@ TUPLE: class-partition integers not-integers simples not-simples and or other ;
     dup and-class flatten partition-classes
     dup integers>> length {
         { 0 [ nip make-and-class ] }
-        { 1 [ integers>> first [ '[ _ swap class-member? ] all? ] keep and ] }
+        { 1 [ integers>> first [ $[ _ swap class-member? ] all? ] keep and ] }
         [ 3drop f ]
     } case ;
 
@@ -215,11 +215,11 @@ TUPLE: class-partition integers not-integers simples not-simples and or other ;
     dup
     [ simples>> ] [ not-simples>> ] [ and>> ] tri
     3append or-class boa
-    '[ [ _ class-member? ] reject ] change-integers ;
+    $[ [ _ class-member? ] reject ] change-integers ;
 
 : answer-ands ( partition -- partition' )
     dup [ integers>> ] [ not-simples>> ] [ simples>> ] tri 3append
-    '[ [ _ [ f substitute ] each ] map ] change-and ;
+    $[ [ _ [ f substitute ] each ] map ] change-and ;
 
 : tautology? ( partition -- ? )
     {
@@ -240,7 +240,7 @@ TUPLE: class-partition integers not-integers simples not-simples and or other ;
         { 0 [ nip make-or-class ] }
         { 1 [
             not-integers>> first
-            [ class>> '[ _ swap class-member? ] any? ] keep or
+            [ class>> $[ _ swap class-member? ] any? ] keep or
         ] }
         [ 3drop t ]
     } case ;
@@ -280,7 +280,7 @@ M:: object answer ( class from to -- new-class )
     class from = to class ? ;
 
 : replace-compound ( class from to -- seq )
-    [ seq>> ] 2dip '[ _ _ answer ] map ;
+    [ seq>> ] 2dip $[ _ _ answer ] map ;
 
 M: and-class answer
     replace-compound <and-class> ;
@@ -296,10 +296,10 @@ M: object substitute answer ;
 M: not-class substitute [ <not-class> ] bi@ answer ;
 
 : assoc-answer ( table question answer -- new-table )
-    '[ _ _ substitute ] assoc-map sift-values ;
+    $[ _ _ substitute ] assoc-map sift-values ;
 
 : assoc-answers ( table questions answer -- new-table )
-    '[ _ assoc-answer ] each ;
+    $[ _ assoc-answer ] each ;
 
 DEFER: make-condition
 
@@ -329,7 +329,7 @@ M: object class>questions 1array ;
 : condition-map ( condition quot: ( obj -- obj' ) -- new-condition )
     over condition? [
         [ [ question>> ] [ yes>> ] [ no>> ] tri ] dip
-        '[ _ condition-map ] bi@ <condition>
+        $[ _ condition-map ] bi@ <condition>
     ] [ call ] if ; inline recursive
 
 : condition-states ( condition -- states )
@@ -339,4 +339,4 @@ M: object class>questions 1array ;
     ] [ 1array ] if ;
 
 : condition-at ( condition assoc -- new-condition )
-    '[ _ at ] condition-map ;
+    $[ _ at ] condition-map ;

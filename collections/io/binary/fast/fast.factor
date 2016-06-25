@@ -24,8 +24,8 @@ COMPILE<
     1 - 8 * 0 swap 8 <range> ; inline
 
 : reassemble-bytes ( range -- quot )
-    [ [ [ ] ] [ '[ _ shift ] ] if-zero ] map
-    '[ [ _ spread ] [ bitor ] reduce-outputs ] ; inline
+    [ [ [ ] ] [ $[ _ shift ] ] if-zero ] map
+    $[ [ _ spread ] [ bitor ] reduce-outputs ] ; inline
 
 MACRO: reassemble-be ( n -- quot ) be-range reassemble-bytes ;
 

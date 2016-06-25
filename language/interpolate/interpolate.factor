@@ -51,18 +51,18 @@ TUPLE: anon-var ;
 
     args [
         dup named-var? [
-            name>> quot call '[ _ @ present write ]
+            name>> quot call $[ _ @ present write ]
         ] [
             dup stack-var? [
-                n>> '[ _ npick present write ]
+                n>> $[ _ npick present write ]
             ] [
-                '[ _ write ]
+                $[ _ write ]
             ] if
         ] if
     ] map concat
 
     vars [
-        '[ _ ndrop ] append
+        $[ _ ndrop ] append
     ] when* ; inline
 
 PRIVATE>

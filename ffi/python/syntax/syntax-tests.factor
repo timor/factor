@@ -8,7 +8,7 @@ QUALIFIED-WITH: sequences s ;
 IN: python.syntax.tests
 
 : py-test ( result quot -- )
-    '[ _ with-destructors ] unit-test ; inline
+    $[ _ with-destructors ] unit-test ; inline
 
 { t } [ getpid py> integer? ] py-test
 
@@ -41,7 +41,7 @@ IN: python.syntax.tests
     H{ { "foo" 33 } { "bar" 44 } } >py
     [ "foo" py-dict-get-item-string getrefcount py> ]
     [
-        '[
+        $[
             500 [ _ "foo" py-dict-get-item-string drop ] times
         ] with-destructors
     ]

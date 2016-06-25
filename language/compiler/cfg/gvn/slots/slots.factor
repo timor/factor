@@ -17,7 +17,7 @@ IN: compiler.cfg.gvn.slots
     dup simplify-slot-addressing? [
         clone dup slot>> vreg>insn
         [ src1>> >>slot ]
-        [ src2>> over scale>> '[ _ _ shift - ] change-tag ]
+        [ src2>> over scale>> $[ _ _ shift - ] change-tag ]
         bi
     ] [ drop f ] if ;
 

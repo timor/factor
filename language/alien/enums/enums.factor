@@ -17,8 +17,8 @@ M: word enum>number "enum-value" word-prop ;
 
 PRIVATE<
 : enum-boxer ( members -- quot )
-    [ first2 swap '[ _ ] 2array ]
-    { } map-as [ ] suffix '[ _ case ] ;
+    [ first2 swap $[ _ ] 2array ]
+    { } map-as [ ] suffix $[ _ case ] ;
 PRIVATE>
 
 MACRO: number>enum ( enum-c-type -- quot )
@@ -28,7 +28,7 @@ M: enum-c-type c-type-boxed-class drop object ;
 M: enum-c-type c-type-boxer-quot members>> enum-boxer ;
 M: enum-c-type c-type-unboxer-quot drop [ enum>number ] ;
 M: enum-c-type c-type-setter
-   [ enum>number ] swap base-type>> c-type-setter '[ _ 2dip @ ] ;
+   [ enum>number ] swap base-type>> c-type-setter $[ _ 2dip @ ] ;
 
 : define-enum-value ( class value -- )
     enum>number "enum-value" set-word-prop ;

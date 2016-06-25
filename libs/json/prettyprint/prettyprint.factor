@@ -50,7 +50,7 @@ M: hashtable pprint-json*
 PRIVATE>
 
 : pprint-json ( obj -- )
-    [ 0 indent-level ] dip '[ _ pprint-json* ] with-variable ;
+    [ 0 indent-level ] dip $[ _ pprint-json* ] with-variable ;
 
 : pprint-json>path ( json path -- ) utf8 [ pprint-json ] with-file-writer ;
 : pprint-json>string ( json -- string ) [ pprint-json ] with-string-writer ;

@@ -25,7 +25,7 @@ GENERIC: holidays ( n singleton -- seq ) ;
 PRIVATE<
 
 : (holidays) ( singleton -- seq )
-    all-words swap '[ "holiday" word-prop _ swap key? ] filter ;
+    all-words swap $[ "holiday" word-prop _ swap key? ] filter ;
 
 M: object holidays
     (holidays) [ execute( timestamp -- timestamp' ) ] with map ;
@@ -37,11 +37,11 @@ M: all holidays
     all-words [ "holiday" word-prop key? ] with filter ;
 
 : holiday? ( timestamp/n singleton -- ? )
-    [ holidays ] [ drop ] 2bi '[ _ same-day? ] any? ;
+    [ holidays ] [ drop ] 2bi $[ _ same-day? ] any? ;
 
 : holiday-assoc ( timestamp singleton -- assoc )
     (holidays) swap
-    '[ [ _ swap execute( ts -- ts' ) >gmt midnight ] keep ] { } map>assoc ;
+    $[ [ _ swap execute( ts -- ts' ) >gmt midnight ] keep ] { } map>assoc ;
 
 : holiday-name ( singleton word -- string/f )
     "holiday" word-prop at ;
@@ -50,8 +50,8 @@ M: all holidays
     [
         [ >gmt midnight ] dip
         [ drop ] [ holiday-assoc ] 2bi swap
-        '[ drop _ same-day? ] assoc-filter values
-    ] keep '[ _ swap "holiday" word-prop at ] map ;
+        $[ drop _ same-day? ] assoc-filter values
+    ] keep $[ _ swap "holiday" word-prop at ] map ;
 
 HOLIDAY: armistice-day november 11 >>day ;
 HOLIDAY-NAME: armistice-day world "Armistice Day" ;

@@ -298,16 +298,16 @@ M: binary-data >uniform-uint-array ; inline
 M: object >uniform-float-array c:float >c-array ; inline
 M: binary-data >uniform-float-array ; inline
 
-M: object >uniform-bvec-array '[ _ head-slice [ >c-bool ] int-array{ } map-as ] map concat ; inline
+M: object >uniform-bvec-array $[ _ head-slice [ >c-bool ] int-array{ } map-as ] map concat ; inline
 M: binary-data >uniform-bvec-array drop ; inline
 
-M: object >uniform-ivec-array '[ _ head ] map int-array{ } concat-as ; inline
+M: object >uniform-ivec-array $[ _ head ] map int-array{ } concat-as ; inline
 M: binary-data >uniform-ivec-array drop ; inline
 
-M: object >uniform-uvec-array '[ _ head ] map uint-array{ } concat-as ; inline
+M: object >uniform-uvec-array $[ _ head ] map uint-array{ } concat-as ; inline
 M: binary-data >uniform-uvec-array drop ; inline
 
-M: object >uniform-vec-array '[ _ head ] map float-array{ } concat-as ; inline
+M: object >uniform-vec-array $[ _ head ] map float-array{ } concat-as ; inline
 M: binary-data >uniform-vec-array drop ; inline
 
 M:: object >uniform-matrix ( sequence cols rows -- c-array )
@@ -316,7 +316,7 @@ M:: object >uniform-matrix ( sequence cols rows -- c-array )
 M: binary-data >uniform-matrix 2drop ; inline
 
 M: object >uniform-matrix-array
-     '[ _ _ >uniform-matrix ] map concat ; inline
+     $[ _ _ >uniform-matrix ] map concat ; inline
 M: binary-data >uniform-matrix-array 2drop ; inline
 
 M: object bind-uniform-bvec2 ( index sequence -- )
@@ -548,7 +548,7 @@ PRIVATE<
     [ [ length ] [ c:int >c-array ] bi glDrawBuffers ] if ;
 
 : bind-named-output-attachments ( program-instance framebuffer attachments -- )
-    rot '[ first _ swap output-index ] sort-with values
+    rot $[ first _ swap output-index ] sort-with values
     bind-unnamed-output-attachments ;
 
 : bind-output-attachments ( program-instance framebuffer attachments -- )

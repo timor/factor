@@ -41,4 +41,4 @@ C: <secure-only> secure-only ;
     } cond ; inline
 
 M: secure-only call-responder*
-    '[ _ _ call-next-method ] if-secure ;
+    $[ _ _ call-next-method ] if-secure ;

@@ -16,7 +16,7 @@ PRIVATE<
 : >vibration ( float -- short )
     65535 * >fixnum 0 65535 clamp ; inline
 MACRO: map-index-compose ( seq quot -- quot' )
-    '[ '[ _ execute _ ] _ compose ] map-index 1quotation ;
+    $[ $[ _ execute _ ] _ compose ] map-index 1quotation ;
 
 : fill-buttons ( button-bitmap -- button-array )
     10 0.0 <array> dup rot >fixnum

@@ -27,7 +27,7 @@ CONSTANT: clen-shuffle { 16 17 18 0 8 7 9 6 10 5 11 4 12 3 13 2 14 1 15 } ;
 
 : get-table ( values size -- table )
     16 f <array> <enum>
-    [ '[ _ push-at ] 2each ] keep
+    [ $[ _ push-at ] 2each ] keep
     seq>> rest-slice [ natural-sort ] map ; inline
 
 :: decode-huffman-tables ( bitstream -- tables )
@@ -39,7 +39,7 @@ CONSTANT: clen-shuffle { 16 17 18 0 8 7 9 6 10 5 11 4 12 3 13 2 14 1 15 } ;
     get-table
     bitstream swap <huffman-decoder>
     [ 2dup + ] dip swap :> k!
-    '[
+    $[
         _ read1-huff2 {
             { [ dup 16 = ] [ 2 bitstream bs:read 3 + 2array ] }
             { [ dup 17 = ] [ 3 bitstream bs:read 3 + 2array ] }
@@ -91,7 +91,7 @@ CONSTANT: dist-table
     1000 <byte-vector> :> bytes
     seq [
         dup array?
-        [ first2 '[ _ 1 - bytes nth* bytes push ] times ]
+        [ first2 $[ _ 1 - bytes nth* bytes push ] times ]
         [ bytes push ] if
     ] each
     bytes >byte-array ;

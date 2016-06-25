@@ -13,7 +13,7 @@ PRIVATE<
     <repetition> [ ] concat-as ;
 
 : [nsequence] ( length exemplar -- quot )
-    [ [ [ 1 - ] keep ] dip '[ _ _ _ new-sequence ] ]
+    [ [ [ 1 - ] keep ] dip $[ _ _ _ new-sequence ] ]
     [ drop [ [ set-nth-unsafe ] 2keep [ 1 - ] dip ] (n*quot) ] 2bi
     [ nip ] 3append ;
 
@@ -40,11 +40,11 @@ PRIVATE<
     [ in>> unpacker ] [ out>> packer ] bi surround ;
 
 : make/n ( table quot effect -- quot )
-    [ unpack/pack '[ _ _ cache ] ] keep pack/unpack ;
+    [ unpack/pack $[ _ _ cache ] ] keep pack/unpack ;
 
 : make/0 ( table quot effect -- quot )
     out>> [
-        packer '[
+        packer $[
             _ dup first-unsafe
             [ nip ] [ @ @ [ 0 rot set-nth-unsafe ] keep ] if*
         ]
@@ -57,7 +57,7 @@ PRIVATE>
 
 : (define-memoized) ( word quot effect hashtable -- )
     [ [ drop "memo-quot" set-word-prop ] ] dip
-    '[ 2drop _ "memoize" set-word-prop ]
+    $[ 2drop _ "memoize" set-word-prop ]
     [ [ [ dup "memoize" word-prop ] 2dip make-memoizer ] keep define-declared ]
     3tri ;
 

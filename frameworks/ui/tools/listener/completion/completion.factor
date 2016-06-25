@@ -37,14 +37,14 @@ color-completion char-completion path-completion history-completion ;
 GENERIC: completion-quot ( interactor completion-mode -- quot ) ;
 
 : (completion-quot) ( interactor completion-mode quot -- quot' )
-    2nip '[ [ { } ] _ if-empty ] ; inline
+    2nip $[ [ { } ] _ if-empty ] ; inline
 
 M: word-completion completion-quot [ words-matching ] (completion-quot) ;
 M: vocab-completion completion-quot [ vocabs-matching ] (completion-quot) ;
 M: color-completion completion-quot [ colors-matching ] (completion-quot) ;
 M: char-completion completion-quot [ chars-matching ] (completion-quot) ;
 M: path-completion completion-quot [ paths-matching ] (completion-quot) ;
-M: history-completion completion-quot drop '[ _ history-completions ] ;
+M: history-completion completion-quot drop $[ _ history-completions ] ;
 
 GENERIC: completion-element ( completion-mode -- element ) ;
 
@@ -108,7 +108,7 @@ TUPLE: completion-popup < track interactor table completion-mode ;
 
 : <completion-model> ( editor element quot -- model )
     [ <element-model> 1/3 seconds <delay> ] dip
-    '[ @ keys 1000 short head ] <arrow> ;
+    $[ @ keys 1000 short head ] <arrow> ;
 
 M: completion-popup focusable-child* table>> ;
 
@@ -147,7 +147,7 @@ GENERIC#: accept-completion-hook 1 ( item popup -- ) ;
         30 >>min-cols
         10 >>min-rows
         10 >>max-rows
-        dup '[ _ accept-completion ] >>action ;
+        dup $[ _ accept-completion ] >>action ;
 
 : <completion-scroller> ( completion-popup -- scroller )
     table>> <scroller> content-background <solid> >>interior ;

@@ -22,7 +22,7 @@ SYMBOL: allocations
     (allocation) set-at ;
 
 : record-allocations ( allocations values -- )
-    (allocation) '[ _ set-at ] 2each ;
+    (allocation) $[ _ set-at ] 2each ;
 
 SYMBOL: slot-accesses
 
@@ -51,7 +51,7 @@ SYMBOL: +escaping+
     escaping-values get (introduce-value) ;
 
 : introduce-values ( values -- )
-    escaping-values get '[ _ (introduce-value) ] each ;
+    escaping-values get $[ _ (introduce-value) ] each ;
 
 : <slot-value> ( -- value )
     <value> dup introduce-value ;
@@ -120,7 +120,7 @@ SYMBOL: escaping-allocations
 
 : compute-escaping-allocations ( -- )
     allocations get escaping-values get
-    '[ drop _ (escaping-value?) ] assoc-filter
+    $[ drop _ (escaping-value?) ] assoc-filter
     escaping-allocations set ;
 
 : escaping-allocation? ( value -- ? )

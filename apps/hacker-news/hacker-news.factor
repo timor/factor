@@ -25,13 +25,13 @@ PRIVATE<
     [  hacker-news-recent-ids ] dip head hacker-news-items ;
 
 : write-title ( title url -- )
-    '[
+    $[
         _ presented ,,
         ui-running? color: black color: white ? foreground ,,
     ] H{ } make format ;
 
 : write-link ( title url -- )
-    '[
+    $[
         _ presented ,,
         hexcolor: 888888 foreground ,,
     ] H{ } make format ;

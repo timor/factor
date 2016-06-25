@@ -19,8 +19,8 @@ PRIVATE>
     {
         [ nip check-macro-effect ]
         [
-            [ '[ _ _ call-effect ] ] keep
-            [ memoize-quot '[ @ call ] ] keep
+            [ $[ _ _ call-effect ] ] keep
+            [ memoize-quot $[ @ call ] ] keep
             define-declared
         ]
         [ drop "macro" set-word-prop ]

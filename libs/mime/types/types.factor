@@ -37,7 +37,7 @@ MEMO: mime-db ( -- seq )
 
 MEMO: mime-types ( -- assoc )
     [
-        mime-db [ unclip '[ [ _ ] dip ,, ] each ] each
+        mime-db [ unclip $[ [ _ ] dip ,, ] each ] each
     ] H{ } make
     nonstandard-mime-types assoc-union
     removed-mime-types assoc-union ;

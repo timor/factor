@@ -67,7 +67,7 @@ DEFER: collect-variables
 : compute-phi-input-infos ( phi-in -- phi-info )
     infer-children-data get
     [
-        '[
+        $[
             _ [
                 dup +bottom+ eq?
                 [ drop null-info ] [ value-info ] if

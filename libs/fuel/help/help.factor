@@ -11,7 +11,7 @@ IN: fuel.help
 PRIVATE<
 
 : fuel-find-word ( name -- word/f )
-    { [ search ] [ '[ name>> _ = ] all-words swap find nip ] } 1|| ;
+    { [ search ] [ $[ name>> _ = ] all-words swap find nip ] } 1|| ;
 
 : fuel-value-str ( word -- str )
     [ pprint-short ] with-string-writer ; inline

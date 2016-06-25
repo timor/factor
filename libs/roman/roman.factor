@@ -50,7 +50,7 @@ PRIVATE<
 
 MACRO: binary-roman-op ( quot -- quot' )
     [ inputs ] [ ] [ outputs ] tri
-    '[ [ roman> ] _ napply @ [ >roman ] _ napply ] ;
+    $[ [ roman> ] _ napply @ [ >roman ] _ napply ] ;
 
 PRIVATE>
 
@@ -58,7 +58,7 @@ COMPILE<
 
 SYNTAX: \ ROMAN-OP:
     scan-word [ name>> "roman" prepend create-word-in ] keep
-    1quotation '[ _ binary-roman-op ]
+    1quotation $[ _ binary-roman-op ]
     scan-effect ";" expect define-declared ;
 
 COMPILE>

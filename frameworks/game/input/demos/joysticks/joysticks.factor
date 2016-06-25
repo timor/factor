@@ -125,7 +125,7 @@ TUPLE: joystick-demo-gadget < pack axis raxis controller buttons timer ;
     [ (update-axes) ] [ kill-update-axes ] if* ;
 
 M: joystick-demo-gadget graft*
-    dup '[ _ update-axes ] FREQUENCY every >>timer
+    dup $[ _ update-axes ] FREQUENCY every >>timer
     drop ;
 
 M: joystick-demo-gadget ungraft*

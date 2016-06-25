@@ -44,7 +44,7 @@ ERROR: bad-math-inverse ;
     dup word? [ bad-math-inverse ] when 1quotation ;
 
 : swap-inverse ( math-inverse revquot -- revquot* quot )
-    next assure-constant rot second '[ @ swap @ ] ;
+    next assure-constant rot second $[ @ swap @ ] ;
 
 : pull-inverse ( math-inverse revquot const -- revquot* quot )
     assure-constant rot first compose ;
@@ -132,10 +132,10 @@ MACRO: undo ( quot -- quot ) [undo] ;
 \ 3dup [ pick =/fail pick =/fail pick =/fail ] define-inverse
 \ pick [ [ pick ] dip =/fail ] define-inverse
 
-\ bi@ 1 [ [undo] '[ _ bi@ ] ] define-pop-inverse
-\ tri@ 1 [ [undo] '[ _ tri@ ] ] define-pop-inverse
-\ bi* 2 [ [ [undo] ] bi@ '[ _ _ bi* ] ] define-pop-inverse
-\ tri* 3 [ [ [undo] ] tri@ '[ _ _ _ tri* ] ] define-pop-inverse
+\ bi@ 1 [ [undo] $[ _ bi@ ] ] define-pop-inverse
+\ tri@ 1 [ [undo] $[ _ tri@ ] ] define-pop-inverse
+\ bi* 2 [ [ [undo] ] bi@ $[ _ _ bi* ] ] define-pop-inverse
+\ tri* 3 [ [ [undo] ] tri@ $[ _ _ _ tri* ] ] define-pop-inverse
 
 \ not define-involution
 \ >boolean [ dup { t f } member-eq? assure ] define-inverse
@@ -144,7 +144,7 @@ MACRO: undo ( quot -- quot ) [undo] ;
 \ reverse define-involution
 
 \ undo 1 [ ] define-pop-inverse
-\ map 1 [ [undo] '[ dup sequence? assure _ map ] ] define-pop-inverse
+\ map 1 [ [undo] $[ dup sequence? assure _ map ] ] define-pop-inverse
 
 \ e^ \ log define-dual
 \ sq \ sqrt define-dual
@@ -187,7 +187,7 @@ DEFER: __
     { >string string? }
     { >sbuf sbuf? }
     { >quotation quotation? }
-} [ '[ dup _ execute assure ] define-inverse ] assoc-each
+} [ $[ dup _ execute assure ] define-inverse ] assoc-each
 
 : assure-length ( seq length -- )
     swap length =/fail ; inline
@@ -203,7 +203,7 @@ DEFER: __
 \ 2array [ 2 undo-narray ] define-inverse
 \ 3array [ 3 undo-narray ] define-inverse
 \ 4array [ 4 undo-narray ] define-inverse
-\ narray 1 [ '[ _ undo-narray ] ] define-pop-inverse
+\ narray 1 [ $[ _ undo-narray ] ] define-pop-inverse
 
 \ first [ 1array ] define-inverse
 \ first2 [ 2array ] define-inverse
@@ -219,8 +219,8 @@ DEFER: __
 : assure-same-class ( obj1 obj2 -- )
     [ class-of ] same? assure ; inline
 
-\ output>sequence 2 [ [undo] '[ dup _ assure-same-class _ input<sequence ] ] define-pop-inverse
-\ input<sequence 1 [ [undo] '[ _ { } output>sequence ] ] define-pop-inverse
+\ output>sequence 2 [ [undo] $[ dup _ assure-same-class _ input<sequence ] ] define-pop-inverse
+\ input<sequence 1 [ [undo] $[ _ { } output>sequence ] ] define-pop-inverse
 
 ! conditionals
 
@@ -265,7 +265,7 @@ DEFER: __
     ] recover ; inline
 
 : true-out ( quot effect -- quot' )
-    out>> length '[ @ _ ndrop t ] ;
+    out>> length $[ @ _ ndrop t ] ;
 
 : false-recover ( effect -- quot )
     in>> length [ ndrop f ] curry [ recover-fail ] curry ;

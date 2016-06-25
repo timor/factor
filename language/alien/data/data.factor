@@ -8,7 +8,7 @@ IN: alien.data
 
 : <ref> ( value c-type -- c-ptr )
     [ heap-size (byte-array) ] keep
-    '[ 0 _ set-alien-value ] keep ; inline
+    $[ 0 _ set-alien-value ] keep ; inline
 
 : deref ( c-ptr c-type -- value )
     [ 0 ] dip alien-value ; inline
@@ -107,10 +107,10 @@ M: value-type c-type-getter
     drop [ swap <displaced-alien> ] ;
 
 M: value-type c-type-copier
-    heap-size '[ _ memory>byte-array ] ;
+    heap-size $[ _ memory>byte-array ] ;
 
 M: value-type c-type-setter
-    [ c-type-getter ] [ heap-size ] bi '[ @ swap _ memcpy ] ;
+    [ c-type-getter ] [ heap-size ] bi $[ @ swap _ memcpy ] ;
 
 M: array c-type-boxer-quot
     unclip [ array-length ] dip [ <c-direct-array> ] 2curry ;
@@ -130,10 +130,10 @@ PRIVATE<
 
 MACRO: (simple-local-allot) ( c-type -- quot )
     [ add-depends-on-c-type ]
-    [ dup '[ _ heap-size _ c-type-align (local-allot) ] ] bi ;
+    [ dup $[ _ heap-size _ c-type-align (local-allot) ] ] bi ;
 
 : [hairy-local-allot] ( c-type initial -- quot )
-    over '[ _ (simple-local-allot) _ over 0 _ set-alien-value ] ;
+    over $[ _ (simple-local-allot) _ over 0 _ set-alien-value ] ;
 
 : hairy-local-allot? ( obj -- ? )
     {
@@ -145,19 +145,19 @@ MACRO: (simple-local-allot) ( c-type -- quot )
 MACRO: (hairy-local-allot) ( obj -- quot )
     dup hairy-local-allot?
     [ first3 nip [hairy-local-allot] ]
-    [ '[ _ (simple-local-allot) ] ]
+    [ $[ _ (simple-local-allot) ] ]
     if ;
 
 MACRO: (local-allots) ( c-types -- quot )
-    [ '[ _ (hairy-local-allot) ] ] map [ ] join ;
+    [ $[ _ (hairy-local-allot) ] ] map [ ] join ;
 
 MACRO: box-values ( c-types -- quot )
-    [ c-type-boxer-quot ] map '[ _ spread ] ;
+    [ c-type-boxer-quot ] map $[ _ spread ] ;
 
 MACRO: out-parameters ( c-types -- quot )
     [ dup hairy-local-allot? [ first ] when ] map
-    [ length ] [ [ '[ 0 _ alien-copy-value ] ] map ] bi
-    '[ _ nkeep _ spread ] ;
+    [ length ] [ [ $[ 0 _ alien-copy-value ] ] map ] bi
+    $[ _ nkeep _ spread ] ;
 
 PRIVATE>
 

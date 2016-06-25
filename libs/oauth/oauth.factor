@@ -46,7 +46,7 @@ nonce ;
     [ url-encode-full ] [ "" or url-encode-full ] bi* "&" glue ;
 
 : make-token-params ( params quot -- assoc )
-    '[
+    $[
         "1.0" "oauth_version" ,,
         "HMAC-SHA1" "oauth_signature_method" ,,
 

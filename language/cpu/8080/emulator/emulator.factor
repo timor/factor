@@ -802,14 +802,14 @@ SYMBOLS: $1 $2 $3 $4 ;
     ! Return a parser for then instruction identified by the token.
     ! The parser return parses the token only and expects no additional
     ! arguments to the instruction.
-    token [ '[ { } _ generate-instruction ] ] action ;
+    token [ $[ { } _ generate-instruction ] ] action ;
 
 : complex-instruction ( type token -- parser )
     ! Return a parser for an instruction identified by the token.
     ! The instruction is expected to take additional arguments by
     ! being combined with other parsers. Then 'type' is used for a lookup
     ! in a pattern hashtable to return the instruction quotation pattern.
-    token swap [ nip '[ _ generate-instruction ] ] curry action ;
+    token swap [ nip $[ _ generate-instruction ] ] curry action ;
 
 : no-params ( ast -- ast )
     first { } swap curry ;

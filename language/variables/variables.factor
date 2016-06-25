@@ -18,9 +18,9 @@ SYNTAX: \ set:
     scan-object variable-setter suffix! ;
 
 : [variable-getter] ( variable -- quot )
-    '[ _ get ] ;
+    $[ _ get ] ;
 : [variable-setter] ( variable -- quot )
-    '[ _ set ] ;
+    $[ _ set ] ;
 
 : (define-variable) ( word getter setter -- )
     [ ( -- value ) define-inline ]
@@ -46,7 +46,7 @@ PREDICATE: typed-variable < variable
     "variable-type" word-prop >boolean ;
 
 : [typed-getter] ( quot type -- quot )
-    1array '[ @ _ declare ] ;
+    1array $[ @ _ declare ] ;
 : [typed-setter] ( quot type -- quot )
     instance-check-quot prepose ;
 
@@ -70,9 +70,9 @@ PREDICATE: global-variable < variable
     def>> first global-box? ;
 
 : [global-getter] ( box -- quot )
-    '[ _ value>> ] ;
+    $[ _ value>> ] ;
 : [global-setter] ( box -- quot )
-    '[ _ value<< ] ;
+    $[ _ value<< ] ;
 
 : define-global ( word -- )
     global-box new [ [global-getter] ] [ [global-setter] ] bi (define-variable) ;

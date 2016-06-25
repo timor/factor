@@ -50,8 +50,8 @@ M: word-break question>quot
     dup condition? [
         [ question>> question>quot ] [ yes>> ] [ no>> ] tri
         [ (execution-quot) ] bi@
-        '[ 2dup @ _ _ if ]
-    ] [ '[ _ execute ] ] if ;
+        $[ 2dup @ _ _ if ]
+    ] [ $[ _ execute ] ] if ;
 
 : execution-quot ( next-state -- quot )
     dup sequence? [ first ] when
@@ -65,10 +65,10 @@ C: <box> box ;
     dup condition? [
         [ question>> ] [ yes>> ] [ no>> ] tri
         [ condition>quot ] bi@
-        '[ dup _ class-member? _ _ if ]
+        $[ dup _ class-member? _ _ if ]
     ] [
         contents>>
-        [ [ 3drop ] ] [ execution-quot '[ drop @ ] ] if-empty
+        [ [ 3drop ] ] [ execution-quot $[ drop @ ] ] if-empty
     ] if ;
 
 : non-literals>dispatch ( literals non-literals  -- quot )
@@ -100,7 +100,7 @@ C: <box> box ;
 : transitions>quot ( transitions final-state? -- quot )
     dup shortest? get and [ 2drop [ drop nip ] ] [
         [ split-literals swap case>quot ] dip backwards? get
-        '[ { fixnum string } declare _ _ _ step ]
+        $[ { fixnum string } declare _ _ _ step ]
     ] if ;
 
 : word>quot ( word dfa -- quot )
@@ -109,7 +109,7 @@ C: <box> box ;
     transitions>quot ;
 
 : states>code ( words dfa -- )
-    '[
+    $[
         dup _ word>quot
         ( last-match index string -- ? )
         define-declared
@@ -125,7 +125,7 @@ C: <box> box ;
     states>words [ states>code ] keep start-state>> ;
 
 : word-template ( quot -- quot' )
-    '[ drop [ f ] 2dip over array-capacity? _ [ 2drop ] if ] ;
+    $[ drop [ f ] 2dip over array-capacity? _ [ 2drop ] if ] ;
 
 PRIVATE>
 

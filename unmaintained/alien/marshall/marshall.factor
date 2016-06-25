@@ -290,13 +290,13 @@ ALIAS: marshall-void* marshall-pointer ;
 
 : struct-unmarshaller ( type -- quot/f )
     [ ] \ struct-wrapper
-    [ '[ ?malloc-byte-array _ new swap >>underlying ] ]
+    [ $[ ?malloc-byte-array _ new swap >>underlying ] ]
     [ ]
     x-unmarshaller ;
 
 : class-unmarshaller ( type -- quot/f )
     [ type-sans-pointer "#" append ] \ class-wrapper
-    [ '[ _ new swap >>underlying ] ]
+    [ $[ _ new swap >>underlying ] ]
     [ ]
     x-unmarshaller ;
 

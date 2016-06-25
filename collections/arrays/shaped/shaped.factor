@@ -217,10 +217,10 @@ ERROR: 2d-expected shaped ;
     ! [
         ! [ underlying>> [ length iota ] keep zip ]
         ! [ ] bi
-    ! ] dip '[ _ [ _ set- ] @ ] assoc-each ; inline
+    ! ] dip $[ _ [ _ set- ] @ ] assoc-each ; inline
 
 : shaped-map! ( .. sa quot -- sa )
-    '[ _ map ] change-underlying ; inline
+    $[ _ map ] change-underlying ; inline
 
 : shaped-map ( .. sa quot -- sa' )
     [ [ underlying>> ] dip map ]
@@ -228,7 +228,7 @@ ERROR: 2d-expected shaped ;
 
 : pad-shapes ( sa0 sa1 -- sa0' sa1' )
     2dup [ shape>> ] bi@
-    2dup longer length '[ _ 1 pad-head ] bi@
+    2dup longer length $[ _ 1 pad-head ] bi@
     [ shaped-like ] bi-curry@ bi* ;
 
 : output-shape ( sa0 sa1 -- shape )
@@ -243,7 +243,7 @@ ERROR: 2d-expected shaped ;
 : broadcastable? ( sa0 sa1 -- ? )
     pad-shapes
     [ [ shape>> ] bi@ ] [ output-shape ] 2bi
-    '[ _ broadcast-shape-matches? ] both? ;
+    $[ _ broadcast-shape-matches? ] both? ;
 
 TUPLE: block-array shaped shape ;
 
@@ -266,32 +266,32 @@ TUPLE: block-array shaped shape ;
 
 : map-strict-lower ( shaped quot -- shaped )
     [ check-2d ] dip
-    '[ first2 first2 > _ when ] map-shaped-index ; inline
+    $[ first2 first2 > _ when ] map-shaped-index ; inline
 
 : map-lower ( shaped quot -- shaped )
     [ check-2d ] dip
-    '[ first2 first2 >= _ when ] map-shaped-index ; inline
+    $[ first2 first2 >= _ when ] map-shaped-index ; inline
 
 : map-strict-upper ( shaped quot -- shaped )
     [ check-2d ] dip
-    '[ first2 first2 < _ when ] map-shaped-index ; inline
+    $[ first2 first2 < _ when ] map-shaped-index ; inline
 
 : map-upper ( shaped quot -- shaped )
     [ check-2d ] dip
-    '[ first2 first2 <= _ when ] map-shaped-index ; inline
+    $[ first2 first2 <= _ when ] map-shaped-index ; inline
 
 : map-diagonal ( shaped quot -- shaped )
     [ check-2d ] dip
-    '[ first2 first2 = _ when ] map-shaped-index ; inline
+    $[ first2 first2 = _ when ] map-shaped-index ; inline
 
 : upper ( shape obj -- shaped )
-    [ zeros check-2d ] dip '[ drop _ ] map-upper ;
+    [ zeros check-2d ] dip $[ drop _ ] map-upper ;
 
 : strict-upper ( shape obj -- shaped )
-    [ zeros check-2d ] dip '[ drop _ ] map-strict-upper ;
+    [ zeros check-2d ] dip $[ drop _ ] map-strict-upper ;
 
 : lower ( shape obj -- shaped )
-    [ zeros check-2d ] dip '[ drop _ ] map-lower ;
+    [ zeros check-2d ] dip $[ drop _ ] map-lower ;
 
 : strict-lower ( shape obj -- shaped )
-    [ zeros check-2d ] dip '[ drop _ ] map-strict-lower ;
+    [ zeros check-2d ] dip $[ drop _ ] map-strict-lower ;

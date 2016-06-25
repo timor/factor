@@ -128,13 +128,13 @@ M: declared-effect (undeclared-known) known>> (undeclared-known) ;
 : adjust-stack-effect ( effect -- effect' )
     [ in>> ] [ out>> ] bi
     meta-d length pick length [-]
-    object <repetition> '[ _ prepend ] bi@
+    object <repetition> $[ _ prepend ] bi@
     <effect> ;
 
 : call-recursive-inline-word ( word label -- )
     over recursive? [
         [ required-stack-effect adjust-stack-effect ] dip
-        [ check-call ] [ '[ _ #call-recursive, ] consume/produce ] bi
+        [ check-call ] [ $[ _ #call-recursive, ] consume/produce ] bi
     ] [
         drop undeclared-recursion-error inference-error
     ] if ;

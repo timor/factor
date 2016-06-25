@@ -6,7 +6,7 @@ IN: cuda.syntax
 
 SYNTAX: \ CUDA-LIBRARY:
     scan-token scan-word scan-object ";" expect
-    '[ _ _ add-cuda-library ]
+    $[ _ _ add-cuda-library ]
     [ current-cuda-library set-global ] bi ;
 
 SYNTAX: \ CUDA-FUNCTION:

@@ -84,7 +84,7 @@ M: dlist equal?
     dlist-find-node [ prev>> ] [ f ] if* ; inline
 
 : dlist-each-node ( ... dlist quot: ( ... node -- ... ) -- ... )
-    '[ @ f ] dlist-find-node drop ; inline
+    $[ @ f ] dlist-find-node drop ; inline
 
 : unlink-node ( dlist-node -- )
     [ prev>> ] [ next>> ] bi
@@ -131,7 +131,7 @@ M: dlist pop-back*
     ] change-back normalize-front ;
 
 : dlist-find ( ... dlist quot: ( ... value -- ... ? ) -- ... obj/f ? )
-    '[ obj>> @ ] dlist-find-node [ obj>> t ] [ f f ] if* ; inline
+    $[ obj>> @ ] dlist-find-node [ obj>> t ] [ f f ] if* ; inline
 
 : dlist-any? ( ... dlist quot: ( ... value -- ... ? ) -- ... ? )
     dlist-find nip ; inline
@@ -160,7 +160,7 @@ M: dlist delete-node
     ] if* ; inline
 
 : delete-node-if ( ... dlist quot: ( ... value -- ... ? ) -- ... obj/f )
-    '[ obj>> @ ] delete-node-if* drop ; inline
+    $[ obj>> @ ] delete-node-if* drop ; inline
 
 M: dlist clear-deque
     f >>front f >>back drop ;
@@ -171,23 +171,23 @@ M: dlist clear-deque
     ] dlist-find-node drop ; flushable
 
 : dlist-each ( ... dlist quot: ( ... value -- ... ) -- ... )
-    '[ obj>> @ ] dlist-each-node ; inline
+    $[ obj>> @ ] dlist-each-node ; inline
 
 : dlist>sequence ( dlist -- seq )
     [ ] collector [ dlist-each ] dip ;
 
 : >dlist ( seq -- dlist )
-    <dlist> [ '[ _ push-back ] each ] keep ;
+    <dlist> [ $[ _ push-back ] each ] keep ;
 
 : 1dlist ( obj -- dlist ) <dlist> [ push-front ] keep ;
 
 : dlist-filter ( ... dlist quot: ( ... value -- ... ? ) -- ... dlist' )
     <dlist> [
-        '[ _ keep swap [ _ push-back ] [ drop ] if ] dlist-each
+        $[ _ keep swap [ _ push-back ] [ drop ] if ] dlist-each
     ] keep ; inline
 
 M: dlist clone
-    <dlist> [ '[ _ push-back ] dlist-each ] keep ;
+    <dlist> [ $[ _ push-back ] dlist-each ] keep ;
 
 PRIVATE<
 

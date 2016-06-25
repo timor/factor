@@ -3,7 +3,7 @@ IN: compiler.tests.redefine13
 
 : breakage-word ( a b -- c ) + ;
 
-COMPILE< MACRO: breakage-macro ( a -- quot ) '[ _ breakage-word ] ; COMPILE>
+COMPILE< MACRO: breakage-macro ( a -- quot ) $[ _ breakage-word ] ; COMPILE>
 
 GENERIC: breakage-caller ( a -- c ) ;
 

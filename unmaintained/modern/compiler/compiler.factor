@@ -22,7 +22,7 @@ SYNTAX: STRING-DISPATCH:
     [
         scan-new-word scan-effect
         H{ } clone over [ in>> but-last ] [ out>> ] bi <effect>
-        '[ _ ?at [ throw ] unless _ call-effect ]
+        $[ _ ?at [ throw ] unless _ call-effect ]
         swap
     ] with-definition define-declared ;
 
@@ -109,7 +109,7 @@ M: compound-literal literal>tag
         literal>tag [ "'" append "modern.compiler" lookup-word ]
         [ \ comment' ] if*
     ] bi
-    '[ _ make-holder ] call( obj -- obj ) ;
+    $[ _ make-holder ] call( obj -- obj ) ;
 
 : literals>holders ( literals -- holders )
     [ literal>holder ] map ;
@@ -241,7 +241,7 @@ M: tag-literal lookup-literal
     [ tag>> ] dip lookup-in-namespace ;
 
 : lookup-sequence ( seq namespace -- obj )
-    '[ _ lookup-literal ] map ;
+    $[ _ lookup-literal ] map ;
 
 ERROR: unknown-tag tag ;
 
@@ -293,11 +293,11 @@ M:: word' definition>quotation ( namespace name definition -- quot )
     name
     body namespace body>quotation
     effect namespace lookup-literal
-    '[ _ _ _ define-declared ] ;
+    $[ _ _ _ define-declared ] ;
 
 M: mixin' definition>quotation
     ! literal>> base-literal payload>> first tag>> >string
-    drop nip '[ _ define-mixin-class ] ;
+    drop nip $[ _ define-mixin-class ] ;
 
 M: object definition>quotation
     3drop [ ] ;

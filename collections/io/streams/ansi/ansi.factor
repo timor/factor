@@ -37,7 +37,7 @@ CONSTANT: colors H{
     [ 255 * round >integer ] tri@ 3array ;
 
 : color>ansi ( color -- ansi bold? )
-    color>rgb '[ _ distance ]
+    color>rgb $[ _ distance ]
     colors [ keys swap infimum-by ] [ at ] bi
     dup 8 >= [ 8 - t ] [ f ] if ;
 

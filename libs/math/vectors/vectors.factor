@@ -122,7 +122,7 @@ M:: object vbroadcast ( u n -- v ) u length n u nth <repetition> u like ; inline
 GENERIC#: vshuffle-elements 1 ( v perm -- w ) ;
 M: object vshuffle-elements
     over length 0 pad-tail
-    swap [ '[ _ nth ] ] keep map-as ; inline
+    swap [ $[ _ nth ] ] keep map-as ; inline
 
 GENERIC#: vshuffle2-elements 1 ( u v perm -- w ) ;
 M: object vshuffle2-elements
@@ -135,17 +135,17 @@ M: array vshuffle ( v perm -- w )
     vshuffle-elements ; inline
 
 GENERIC#: vlshift 1 ( v n -- w ) ;
-M: object vlshift '[ _ shift ] map ; inline
+M: object vlshift $[ _ shift ] map ; inline
 GENERIC#: vrshift 1 ( v n -- w ) ;
-M: object vrshift neg '[ _ shift ] map ; inline
+M: object vrshift neg $[ _ shift ] map ; inline
 
 GENERIC#: hlshift 1 ( v n -- w ) ;
 GENERIC#: hrshift 1 ( v n -- w ) ;
 
 GENERIC: (vmerge-head) ( u v -- h ) ;
-M: object (vmerge-head) over length 2 /i '[ _ head-slice ] bi@ [ zip ] keep concat-as ; inline
+M: object (vmerge-head) over length 2 /i $[ _ head-slice ] bi@ [ zip ] keep concat-as ; inline
 GENERIC: (vmerge-tail) ( u v -- t ) ;
-M: object (vmerge-tail) over length 2 /i '[ _ tail-slice ] bi@ [ zip ] keep concat-as ; inline
+M: object (vmerge-tail) over length 2 /i $[ _ tail-slice ] bi@ [ zip ] keep concat-as ; inline
 
 : (vmerge) ( u v -- h t )
     [ (vmerge-head) ] [ (vmerge-tail) ] 2bi ; inline

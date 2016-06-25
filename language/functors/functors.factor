@@ -128,7 +128,7 @@ FUNCTOR-SYNTAX: call-next-method T{ fake-call-next-method } suffix! ;
 
 : (INTERPOLATE) ( accum quot -- accum )
     [ scan-token interpolate-locals-quot ] dip
-    '[ _ with-string-writer @ ] suffix! ;
+    $[ _ with-string-writer @ ] suffix! ;
 
 PRIVATE>
 
@@ -153,7 +153,7 @@ PRIVATE<
     } cond ;
 
 : parse-bindings ( end -- words assoc )
-    '[
+    $[
         building get use-words
         [ _ parse-binding dup ]
         [ first2 [ make-local ] dip 2array ]

@@ -11,17 +11,17 @@ IN: images.normalization
 
 PRIVATE<
 
-CONSTANT: don't-care 127 ;
+CONSTANT: dont-care 127 ;
 CONSTANT: fill-value 255 ;
 
 : permutation ( src dst -- seq )
-    swap '[ _ index [ don't-care ] unless* ] { } map-as
-    4 don't-care pad-tail ;
+    swap $[ _ index [ dont-care ] unless* ] { } map-as
+    4 dont-care pad-tail ;
 
 : pad4 ( seq -- newseq ) 4 fill-value pad-tail ;
 
 : shuffle ( seq permutation -- newseq )
-    swap '[
+    swap $[
         dup 4 >= [ drop fill-value ] [ _ nth ] if
     ] B{ } map-as ;
 
@@ -39,7 +39,7 @@ CONSTANT: fill-value 255 ;
 
 : (reorder-components) ( image src-order dest-order -- image )
     [ [ ] [ dim>> first ] [ stride ] tri ] 2dip
-    '[ _ _ _ _ permute ] change-bitmap ;
+    $[ _ _ _ _ permute ] change-bitmap ;
 
 GENERIC: normalize-component-type* ( image component-type -- image ) ;
 
@@ -63,7 +63,7 @@ M: ubyte-components normalize-component-type*
 
 : normalize-scan-line-order ( image -- image' )
     dup upside-down?>> [
-        dup dim>> first 4 * '[
+        dup dim>> first 4 * $[
             _ <groups> reverse concat
         ] change-bitmap
         f >>upside-down?
@@ -79,7 +79,7 @@ PRIVATE>
 
 : reorder-components ( image component-order -- image' )
     [
-        dup component-type>> '[ _ normalize-component-type* ] change-bitmap
+        dup component-type>> $[ _ normalize-component-type* ] change-bitmap
         dup component-order>>
     ] dip
     validate-request [ (reorder-components) ] keep >>component-order ;

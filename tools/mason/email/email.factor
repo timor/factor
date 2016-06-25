@@ -6,7 +6,7 @@ math.order namespaces sequences smtp ;
 IN: mason.email
 
 : mason-email ( body content-type subject -- )
-    '[
+    $[
         <email>
             builder-from get >>from
             builder-recipients get >>to

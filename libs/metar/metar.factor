@@ -58,13 +58,13 @@ MEMO: all-stations ( -- seq )
     ] map ;
 
 : find-by-cccc ( cccc -- station )
-    all-stations swap '[ cccc>> _ = ] find nip ;
+    all-stations swap $[ cccc>> _ = ] find nip ;
 
 : find-by-country ( country -- stations )
-    all-stations swap '[ country>> _ = ] filter ;
+    all-stations swap $[ country>> _ = ] filter ;
 
 : find-by-state ( state -- stations )
-    all-stations swap '[ state>> _ = ] filter ;
+    all-stations swap $[ state>> _ = ] filter ;
 
 PRIVATE<
 
@@ -292,7 +292,7 @@ CONSTANT: re-altimeter R`` [AQ]\d{4}`` ;
     dupd find drop [ tail unclip ] [ f ] if* ; inline
 
 : find-all ( seq quot: ( elt -- ? ) -- seq elts )
-    [ find-one swap ] keep '[
+    [ find-one swap ] keep $[
         dup [ f ] [ first @ ] if-empty
     ] [ unclip ] produce rot [ prefix ] when* ; inline
 
@@ -548,7 +548,7 @@ CONSTANT: re-recent-weather R`` ((\w{2})?[BE]\d{2,4}((\w{2})?[BE]\d{2,4})?)+`` ;
     [ metar-body ] [ metar-remarks ] bi* ;
 
 : row. ( name quot -- )
-    '[
+    $[
         [ _ write ] with-cell
         [ @ [ 65 wrap-string write ] when* ] with-cell
     ] with-row ; inline

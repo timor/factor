@@ -27,7 +27,7 @@ IN: compiler.tree.escape-analysis.recursive
 
 : recursive-stacks ( #enter-recursive -- stacks )
     recursive-phi-in
-    escaping-values get '[ [ _ disjoint-set-member? ] all? ] filter
+    escaping-values get $[ [ _ disjoint-set-member? ] all? ] filter
     flip ;
 
 : analyze-recursive-phi ( #enter-recursive -- )
@@ -66,5 +66,5 @@ M: #return-recursive escape-analysis* ( #return-recursive -- )
     [ call-next-method ]
     [
         [ in-d>> ] [ label>> calls>> ] bi
-        [ node>> out-d>> escaping-values get '[ _ equate ] 2each ] with each
+        [ node>> out-d>> escaping-values get $[ _ equate ] 2each ] with each
     ] bi ;

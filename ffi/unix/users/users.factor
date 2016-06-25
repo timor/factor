@@ -92,16 +92,16 @@ GENERIC: set-real-user ( string/id -- ) ;
 GENERIC: set-effective-user ( string/id -- ) ;
 
 : (with-real-user) ( string/id quot -- )
-    '[ _ set-real-user @ ]
-    real-user-id '[ _ set-real-user ]
+    $[ _ set-real-user @ ]
+    real-user-id $[ _ set-real-user ]
     [ ] cleanup ; inline
 
 : with-real-user ( string/id/f quot -- )
     over [ (with-real-user) ] [ nip call ] if ; inline
 
 : (with-effective-user) ( string/id quot -- )
-    '[ _ set-effective-user @ ]
-    effective-user-id '[ _ set-effective-user ]
+    $[ _ set-effective-user @ ]
+    effective-user-id $[ _ set-effective-user ]
     [ ] cleanup ; inline
 
 : with-effective-user ( string/id/f quot -- )

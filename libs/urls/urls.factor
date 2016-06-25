@@ -183,7 +183,7 @@ PRIVATE>
     [ host>> >>host ] [ port>> >>port ] bi ;
 
 : ensure-port ( url -- url' )
-    clone dup protocol>> '[ _ protocol-port or ] change-port ;
+    clone dup protocol>> $[ _ protocol-port or ] change-port ;
 
 ! Literal syntax
 SYNTAX: \ URL" lexer get skip-blank parse-string >url suffix! ;

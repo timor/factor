@@ -104,7 +104,7 @@ M:: sfmt generate ( sfmt -- )
 : correct-period ( sfmt -- )
     [ drop 0 ]
     [ state>> parity>> first first-set-bit ]
-    [ uint-array>> swap '[ _ toggle-bit ] change-nth ] tri ;
+    [ uint-array>> swap $[ _ toggle-bit ] change-nth ] tri ;
 
 : certify-period ( sfmt -- sfmt )
     dup period-certified? [ dup correct-period ] unless ;

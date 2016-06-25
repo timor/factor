@@ -27,7 +27,7 @@ GENERIC#: load-image* 1 ( obj class -- image ) ;
 GENERIC: stream>image* ( stream class -- image ) ;
 
 : stream>image ( stream class -- image )
-    '[ _ &dispose _ stream>image* ] with-destructors ; inline
+    $[ _ &dispose _ stream>image* ] with-destructors ; inline
 
 : register-image-class ( extension class -- )
     swap types get set-at ;

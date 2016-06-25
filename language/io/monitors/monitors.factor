@@ -69,6 +69,6 @@ SYMBOL: +rename-file+
     [ <monitor> ] dip with-disposal ; inline
 
 : run-monitor ( path recursive? quot -- )
-    '[ [ @ t ] loop ] with-monitor ; inline
+    $[ [ @ t ] loop ] with-monitor ; inline
 
 "io.monitors." os name>> append require

@@ -39,7 +39,7 @@ PRIVATE<
     [ char: % , >hex >upper 2 char: 0 pad-head % ] each ;
 
 : (url-encode) ( str quot: ( ch -- ? ) -- encoded )
-    '[ [ dup @ [ , ] [ push-utf8 ] if ] each ] "" make ; inline
+    $[ [ dup @ [ , ] [ push-utf8 ] if ] each ] "" make ; inline
 
 PRIVATE>
 

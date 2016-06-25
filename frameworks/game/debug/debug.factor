@@ -196,7 +196,7 @@ PRIVATE>
 :: debug-cylinder ( pt half-height radius color -- )
     radius half-height cylinder-vertices scale-cylinder-vertices
     [ [ color debug-circle ] bi@ ]
-    [ color '[ _ debug-line ] 2each ] 2bi ; inline
+    [ color $[ _ debug-line ] 2each ] 2bi ; inline
 
 TYPED: draw-debug-lines ( lines: float-array mvp-matrix -- )
     [ lines-mode -rot draw-debug-primitives ] with-destructors ; inline

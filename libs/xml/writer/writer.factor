@@ -15,7 +15,7 @@ SYMBOL: xml-pprint?
 SYMBOL: indentation
 
 : sensitive? ( tag -- ? )
-    sensitive-tags get swap '[ _ names-match? ] any? ;
+    sensitive-tags get swap $[ _ names-match? ] any? ;
 
 : indent-string ( -- string )
     xml-pprint? get
@@ -105,7 +105,7 @@ M: comment write-xml
 : write-decl ( decl name quot: ( decl -- slot ) -- )
     "<!" write swap write bl
     [ name>> write bl ]
-    swap '[ @ write ">" write ] bi ; inline
+    swap $[ @ write ">" write ] bi ; inline
 
 M: element-decl write-xml
     "ELEMENT" [ content-spec>> ] write-decl ;

@@ -252,7 +252,7 @@ $nl
 { $code
     "CHLOE: random"
     "    random-attrs string>random-generator"
-    "    '["
+    "    $["
     "        _ _ _"
     "        [ [a,b] random present write ]"
     "        with-random-generator"

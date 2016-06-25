@@ -17,4 +17,4 @@ dup [ second ] map swap [ first ] map random-weighted swap nth ;
 
 MACRO: call-random-weighted ( exp -- )
   [ keys ] [ values <enum> >alist ] bi
-  '[ _ random-weighted _ case ] ;
+  $[ _ random-weighted _ case ] ;

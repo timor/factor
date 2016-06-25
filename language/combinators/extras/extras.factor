@@ -19,7 +19,7 @@ MACRO: cond-case ( assoc -- quot )
     ] map [ cond ] curry ;
 
 MACRO: cleave-array ( quots -- quot )
-    [ '[ _ cleave ] ] [ length '[ _ narray ] ] bi compose ;
+    [ $[ _ cleave ] ] [ length $[ _ narray ] ] bi compose ;
 
 : 3bi* ( u v w x y z p q -- )
     [ 3dip ] dip call ; inline
@@ -47,16 +47,16 @@ MACRO: cleave-array ( quots -- quot )
 
 MACRO: smart-plox ( true -- quot )
     [ inputs [ 1 - [ and ] n*quot ] keep ] keep swap
-    '[ _ _ [ _ ndrop f ] smart-if ] ;
+    $[ _ _ [ _ ndrop f ] smart-if ] ;
 
 : throttle ( quot millis -- quot' )
-    1,000,000 * '[
+    1,000,000 * $[
         _ nano-count { 0 } 2dup first-unsafe _ + >=
         [ 0 swap set-nth-unsafe call ] [ 3drop ] if
     ] ; inline
 
 : swap-when ( x y quot: ( x -- n ) quot: ( n n -- ? ) -- x' y' )
-    '[ _ _ 2dup _ bi@ @ [ swap ] when ] call ; inline
+    $[ _ _ 2dup _ bi@ @ [ swap ] when ] call ; inline
 
 
 ! ?1arg-result-falsify
@@ -84,7 +84,7 @@ MACRO:: n-falsify ( n -- quot )
 
 ! try the quot, keep the original arg if quot is true
 : ?1arg ( obj quot: ( obj -- ? ) -- obj/f )
-    [ ?1res ] 2keep drop '[ _ ] [ f ] if ; inline
+    [ ?1res ] 2keep drop $[ _ ] [ f ] if ; inline
 
 : ?2arg ( obj1 obj2 quot: ( obj1 obj2 -- ? ) -- obj1/f obj2/f )
-    [ ?2res ] 3keep drop '[ _ _ ] [ f f ] if ; inline
+    [ ?2res ] 3keep drop $[ _ _ ] [ f f ] if ; inline

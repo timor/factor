@@ -95,7 +95,7 @@ yield
 
 { 3 } [
     <promise> [
-        '[
+        $[
             _ [
                 [ get-callstack swap fulfill stop ] start-context-and-delete
             ] start-context-and-delete

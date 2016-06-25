@@ -37,7 +37,7 @@ C: <mime-variable> mime-variable ;
 
 : fill-bytes ( multipart -- multipart )
     buffer-size read
-    [ '[ _ B{ } append-as ] change-bytes ]
+    [ $[ _ B{ } append-as ] change-bytes ]
     [ t >>end-of-stream? ] if* ;
 
 : split-bytes ( bytes separator -- leftover-bytes safe-to-dump )

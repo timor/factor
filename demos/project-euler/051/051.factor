@@ -38,7 +38,7 @@ SYMBOL: large-families
     H{ } clone large-families namespaces:set ;
 
 : digits-positions ( str -- positions )
-    H{ } clone [ '[ swap _ push-at ] each-index ] keep ;
+    H{ } clone [ $[ swap _ push-at ] each-index ] keep ;
 
 : *-if-index ( char combination index -- char )
     member? [ drop char: * ] when ;

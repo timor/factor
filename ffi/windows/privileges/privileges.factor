@@ -40,7 +40,7 @@ TYPEDEF: TOKEN_PRIVILEGES* PTOKEN_PRIVILEGES ;
         >>Privileges ;
 
 : set-privilege ( name ? -- )
-    '[
+    $[
         0
         _ _ make-token-privileges
         dup byte-length
@@ -50,6 +50,6 @@ TYPEDEF: TOKEN_PRIVILEGES* PTOKEN_PRIVILEGES ;
     ] with-process-token ;
 
 : with-privileges ( seq quot -- )
-    [ '[ _ [ t set-privilege ] each @ ] ]
-    [ drop '[ _ [ f set-privilege ] each ] ]
+    [ $[ _ [ t set-privilege ] each @ ] ]
+    [ drop $[ _ [ f set-privilege ] each ] ]
     2bi [ ] cleanup ; inline

@@ -97,7 +97,7 @@ ALIAS: pochhammer rising-factorial ;
 
 : alternating-factorial ( n -- m )
     dup 1 > [
-        [ [1,b] ] keep even? '[
+        [ [1,b] ] keep even? $[
             [ factorial ] [ odd? _ = ] bi [ neg ] when
         ] map-sum
     ] [ drop 1 ] if ;
@@ -109,7 +109,7 @@ PRIVATE<
 
 : -prime? ( n quot: ( n -- m ) -- ? )
     [ 1 1 [ pick over - 1 <= ] ] dip
-    '[ drop [ 1 + ] _ bi ] until nip - abs 1 = ; inline
+    $[ drop [ 1 + ] _ bi ] until nip - abs 1 = ; inline
 
 PRIVATE>
 

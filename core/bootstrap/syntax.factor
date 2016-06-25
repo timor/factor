@@ -108,7 +108,7 @@ IN: bootstrap.syntax
 
         "::" "M::" "MEMO:" "MEMO::" "MACRO:" "MACRO::" "IDENTITY-MEMO:" "IDENTITY-MEMO::" "TYPED:" "TYPED::"
         ":>" "|[" "let[" "MEMO["
-        "'["
+        "$["
         "_"
         "@"
         "IH{"

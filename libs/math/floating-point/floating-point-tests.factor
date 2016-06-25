@@ -23,7 +23,7 @@ IN: math.floating-point.tests
 { 3+39854788871587/281474976710656 } [ pi double>ratio ] unit-test
 
 : roundtrip ( n -- )
-    [ '[ _ ] ] keep '[ _ double>ratio >float ] unit-test ;
+    [ $[ _ ] ] keep $[ _ double>ratio >float ] unit-test ;
 
 { 1 12 123 1234 } [ bits>double roundtrip ] each
 

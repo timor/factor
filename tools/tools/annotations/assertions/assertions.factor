@@ -8,7 +8,7 @@ ERROR: invalid-nth-unsafe n seq word ;
     2over length >= [ invalid-nth-unsafe ] [ drop ] if ; inline
 
 : (assert-nth-unsafe) ( word -- )
-    dup [ swap '[ _ check-nth-unsafe @ ] ] curry annotate ;
+    dup [ swap $[ _ check-nth-unsafe @ ] ] curry annotate ;
 
 : assert-nth-unsafe ( -- )
     \ nth-unsafe (assert-nth-unsafe)
@@ -34,7 +34,7 @@ ERROR: invalid-stream-read-unsafe-return out-len in-len buf port word ;
     [ count ] if ;
 
 : (assert-stream-read-unsafe) ( word -- )
-    dup [ swap '[ _
+    dup [ swap $[ _
         [ check-stream-read-unsafe-before @ ]
         [ check-stream-read-unsafe-after ] 4 nbi
     ] ] curry annotate ;

@@ -37,7 +37,7 @@ M: cmwc seed-random
     [ c>> >>c ] tri ;
 
 M:: cmwc random-32* ( cmwc -- n )
-    cmwc dup mod>> '[ 1 + _ bitand ] change-i
+    cmwc dup mod>> $[ 1 + _ bitand ] change-i
     [ a>> ]
     [ [ i>> ] [ Q>> ] bi nth-unsafe * ]
     [ c>> + ] tri
@@ -50,13 +50,13 @@ M:: cmwc random-32* ( cmwc -- n )
         cmwc b>> w-
     ] when
 
-    cmwc swap '[ r>> _ w- dup ] [ i>> ] [ Q>> ] tri set-nth-unsafe ;
+    cmwc swap $[ r>> _ w- dup ] [ i>> ] [ Q>> ] tri set-nth-unsafe ;
 
 : cmwc-4096 ( -- cmwc )
     4096
     [ 18782 4294967295 362436 <cmwc> ]
     [
-        '[ [ random-32 ] uint-array{ } replicate-as ] with-system-random
+        $[ [ random-32 ] uint-array{ } replicate-as ] with-system-random
         362436 <cmwc-seed> seed-random
     ] bi ;
 

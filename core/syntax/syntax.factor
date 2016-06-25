@@ -413,7 +413,7 @@ IN: bootstrap.syntax
     "|[" [ parse-lambda append! ] define-core-syntax
     "let[" [ parse-let append! ] define-core-syntax
     "MEMO[" [ parse-quotation dup infer memoize-quot suffix! ] define-core-syntax
-    "'[" [ parse-quotation fry append! ] define-core-syntax
+    "$[" [ parse-quotation fry append! ] define-core-syntax
     "IH{" [ \ } [ >identity-hashtable ] parse-literal ] define-core-syntax
     
     "PROTOCOL:" [

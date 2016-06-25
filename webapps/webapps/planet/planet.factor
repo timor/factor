@@ -97,7 +97,7 @@ posting "POSTINGS"
 
 : fetch-blogroll ( blogroll -- entries )
     [ [ feed-url>> fetch-feed ] parallel-map ] [ [ name>> ] map ] bi
-    [ '[ _ <posting> ] map ] 2map concat ;
+    [ $[ _ <posting> ] map ] 2map concat ;
 
 : sort-entries ( entries -- entries' )
     [ date>> ] inv-sort-with ;
@@ -196,7 +196,7 @@ posting "POSTINGS"
         { planet "planet-common" } >>template ;
 
 : start-update-task ( db -- )
-    '[
+    $[
         "webapps.planet"
         [ _ [ update-cached-postings ] with-db ] with-logging
     ] 10 minutes every drop ;

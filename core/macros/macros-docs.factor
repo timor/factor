@@ -18,7 +18,7 @@ HELP: \ MACRO:
   { $code
     "USING: fry generalizations kernel macros stack-checker ;"
     "MACRO: preserving ( quot -- quot' )"
-    "    [ inputs ] keep '[ _ ndup @ ] ;"
+    "    [ inputs ] keep $[ _ ndup @ ] ;"
   }
   "Using this macro, we can define a variant of " { $link if } " which takes a predicate quotation instead of a boolean; any values consumed by the predicate quotation are restored immediately after:"
   { $code

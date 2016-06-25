@@ -92,14 +92,14 @@ SYNTAX: r/
     \ / [ >mdbregexp ] parse-literal ;
 
 : with-db ( mdb quot -- )
-    '[ _ mdb-open &dispose _ with-connection ] with-destructors ; inline
+    $[ _ mdb-open &dispose _ with-connection ] with-destructors ; inline
 
 : with-mdb ( mdb quot -- )
     [ <mdb-pool> ] dip
     [ mdb-pool swap with-variable ] curry with-disposal ; inline
 
 : with-mdb-pool ( ..a mdb-pool quot -- ..b )
-    '[ _ with-connection ] with-pooled-connection ; inline
+    $[ _ with-connection ] with-pooled-connection ; inline
 
 : with-mdb-connection ( quot -- )
     [ mdb-pool get ] dip with-mdb-pool ; inline
@@ -138,7 +138,7 @@ PRIVATE<
 : ensure-valid-collection-name ( collection -- )
     [
         [ ";$." intersect length 0 > ] keep
-        '[ _ "contains invalid characters ( . $ ; )" ":" glue throw ] when
+        $[ _ "contains invalid characters ( . $ ; )" ":" glue throw ] when
     ] [
         [ ascii? ] all? [ "collection names must only contain ascii characters" throw ] unless
     ] bi ; inline
@@ -146,7 +146,7 @@ PRIVATE<
 : build-collection-map ( -- assoc )
     H{ } clone load-collection-list
     [ [ "name" ] dip at "." split second <mdb-collection> ] map
-    over '[ [ ] [ name>> ] bi _ set-at ] each ;
+    over $[ [ ] [ name>> ] bi _ set-at ] each ;
 
 : ensure-collection-map ( mdb-instance -- assoc )
     dup collections>> dup assoc-empty?
@@ -234,7 +234,7 @@ M: mdb-cursor find
 
 : find-all ( selector -- seq )
     [ V{ } clone ] dip
-    over '[ _ push-all ] each-chunk >array ;
+    over $[ _ push-all ] each-chunk >array ;
 
 : explain. ( mdb-query-msg -- )
     t >>explain find nip . ;
@@ -247,7 +247,7 @@ M: mdb-cursor find
     [ count-cmd make-cmd ] dip
     [ collection>> "count" set-cmd-opt ]
     [ query>> "query" set-cmd-opt ] bi send-cmd
-    [ check-ok nip ] keep '[ "n" _ at >fixnum ] [ f ] if ;
+    [ check-ok nip ] keep $[ "n" _ at >fixnum ] [ f ] if ;
 
 : lasterror ( -- error )
     getlasterror-cmd make-cmd send-cmd
@@ -259,7 +259,7 @@ M: string validate.
     [ validate-cmd make-cmd ] dip
     "validate" set-cmd-opt send-cmd
     [ check-ok nip ] keep
-    '[ "result" _ at print ] [  ] if ;
+    $[ "result" _ at print ] [  ] if ;
 
 M: mdb-collection validate.
     name>> validate. ;

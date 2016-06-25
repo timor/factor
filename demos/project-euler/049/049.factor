@@ -28,7 +28,7 @@ PRIVATE<
 
 : collect-permutations ( seq -- seq )
     [ V{ } clone ] [ dup ] bi* [
-        dupd '[ _ permutations? ] filter
+        dupd $[ _ permutations? ] filter
         [ diff ] keep pick push
     ] each drop ;
 
@@ -41,7 +41,7 @@ PRIVATE<
 
 : (find-unusual-terms) ( n seq -- seq/f )
     [ [ arithmetic-terms ] with map ] keep
-    '[ _ [ last ] dip member? ] find nip ;
+    $[ _ [ last ] dip member? ] find nip ;
 
 : find-unusual-terms ( seq -- seq/? )
     unclip-slice over (find-unusual-terms) [

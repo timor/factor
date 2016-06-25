@@ -15,10 +15,10 @@ M: glue pref-dim* drop { 0 0 } ;
 : <glue> ( -- glue ) glue new ;
 
 : <frame-grid> ( cols rows -- grid )
-    swap '[ _ [ <glue> ] replicate ] replicate ;
+    swap $[ _ [ <glue> ] replicate ] replicate ;
 
 : fill- ( frame grid-layout quot1 quot2 -- pref-dim gap filled-cell dims )
-    [ '[ [ dim>> ] [ gap>> ] [ filled-cell>> ] tri _ tri@ ] dip ] dip call ; inline
+    [ $[ [ dim>> ] [ gap>> ] [ filled-cell>> ] tri _ tri@ ] dip ] dip call ; inline
 
 : available-space ( pref-dim gap dims -- avail )
     length 1 + * [-] ; inline

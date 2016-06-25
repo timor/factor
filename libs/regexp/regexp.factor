@@ -17,7 +17,7 @@ TUPLE: reverse-regexp < regexp ;
 PRIVATE<
 
 M: lookahead question>quot ! Returns ( index string -- ? )
-    term>> ast>dfa dfa>shortest-word '[ f _ execute ] ;
+    term>> ast>dfa dfa>shortest-word $[ f _ execute ] ;
 
 : <reversed-option> ( ast -- reversed )
     "r" string>options <with-options> ;
@@ -25,7 +25,7 @@ M: lookahead question>quot ! Returns ( index string -- ? )
 M: lookbehind question>quot ! Returns ( index string -- ? )
     term>> <reversed-option>
     ast>dfa dfa>reverse-shortest-word
-    '[ [ 1 - ] dip f _ execute ] ;
+    $[ [ 1 - ] dip f _ execute ] ;
 
 : check-string ( string -- string )
     ! Make this configurable
@@ -157,7 +157,7 @@ GENERIC: compile-regexp ( regex -- regexp ) ;
     [ compile-regexp ] with-compilation-unit match-index-from ;
 
 M: regexp compile-regexp ( regexp -- regexp )
-    dup '[
+    dup $[
         dup \ regexp-initial-word =
         [ drop _ get-ast ast>dfa dfa>word ] when
     ] change-dfa ;
@@ -171,10 +171,10 @@ DEFER: compile-next-match
     [ compile-next-match ] with-compilation-unit do-next-match ;
 
 : compile-next-match ( regexp -- regexp )
-    dup '[
+    dup $[
         dup \ next-initial-word = [
             drop _ [ compile-regexp dfa>> def>> ] [ reverse-regexp? ] bi
-            '[ { array-capacity string regexp } declare _ _ next-match ]
+            $[ { array-capacity string regexp } declare _ _ next-match ]
             ( i string regexp -- start end string ) define-temp
         ] when
     ] change-next-match ;

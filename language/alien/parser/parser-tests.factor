@@ -8,7 +8,7 @@ IN: alien.parser.tests
 COMPILE<
 
 : with-parsing ( lines quot -- )
-    [ <lexer> ] [ '[ _ with-compilation-unit ] ] bi* with-lexer ; inline
+    [ <lexer> ] [ $[ _ with-compilation-unit ] ] bi* with-lexer ; inline
 
 ! (CREATE-C-TYPE)
 { "hello" } [

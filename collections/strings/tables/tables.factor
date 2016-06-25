@@ -6,10 +6,10 @@ IN: strings.tables
 PRIVATE<
 
 : format-row ( seq -- seq )
-    dup longest length '[ _ "" pad-tail ] map! ;
+    dup longest length $[ _ "" pad-tail ] map! ;
 
 : format-column ( seq -- seq )
-    dup longest length '[ _ char: \s pad-tail ] map! ;
+    dup longest length $[ _ char: \s pad-tail ] map! ;
 
 PRIVATE>
 

@@ -11,7 +11,7 @@ IN: tools.image-analyzer.graphviz.tests
     dup boot-image-path exists? [ drop ] [ make-image ] if ;
 
 : loadable-images ( -- images )
-    image-names cpu name>> '[ _ tail? ] filter ;
+    image-names cpu name>> $[ _ tail? ] filter ;
 
 ! Sanity test
 { t } [

@@ -19,17 +19,17 @@ IN: tools.image-analyzer.utils
     word-code over - [ <alien> ] dip memory>byte-array ;
 
 : until-eof-reader ( reader-quot -- reader-quot' )
-    '[
+    $[
         [ [ @ ] throw-on-eof ] [
             dup stream-exhausted? [ drop f ] [ throw ] if
         ] recover
     ] ; inline
 
 : save-io-excursion ( quot -- )
-    tell-input '[ _ seek-absolute seek-input ] [ ] cleanup ; inline
+    tell-input $[ _ seek-absolute seek-input ] [ ] cleanup ; inline
 
 : consume-stream>sequence ( reader-quot: ( -- item )  -- seq )
-    until-eof-reader '[ drop @ ] t swap follow rest ; inline
+    until-eof-reader $[ drop @ ] t swap follow rest ; inline
 
 TUPLE: backwards-reader stream ;
 

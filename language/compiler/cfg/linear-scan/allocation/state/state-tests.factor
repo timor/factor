@@ -157,7 +157,7 @@ $${ cell } [
        { spill-area-align $$[ cell ] }
     }
 } [
-    { } insns>cfg stack-frame>> [ '[ 8 _ next-spill-slot ] twice ] keep
+    { } insns>cfg stack-frame>> [ $[ 8 _ next-spill-slot ] twice ] keep
 ] unit-test
 
 ! >unhandled-min-heap

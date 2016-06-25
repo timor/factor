@@ -20,7 +20,7 @@ TUPLE: a-tuple slot1 slot2 { slot3 integer } ;
 : slash\hack ( -- y ) 20 ;
 
 ! As are quotes
-: don't-do-that ( x -- y ) ;
+: dont-do-that ( x -- y ) ;
 
 ! Double quotes aren't right yet.
 ! : do-"that" ( x -- y ) ;

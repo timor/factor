@@ -7,7 +7,7 @@ fry kernel namespaces sequences tools.test ;
 IN: compiler.cfg.linear-scan.live-intervals.tests
 
 : <live-interval-for-ranges> ( ranges -- live-interval )
-    10 <live-interval> [ '[ first2 _ ranges>> add-range ] each ] keep ;
+    10 <live-interval> [ $[ first2 _ ranges>> add-range ] each ] keep ;
 
 ! cfg>sync-points
 {

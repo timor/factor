@@ -62,7 +62,7 @@ file-chooser H{
 
 : list-of-files ( file-chooser -- seq )
      [ path>> value>> directory-entries ] [ extension>> ] bi
-     '[ [ name>> _ [ tail? ] with any? ] 
+     $[ [ name>> _ [ tail? ] with any? ] 
      [ directory? ] bi or ]  filter
 ;
 

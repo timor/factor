@@ -56,7 +56,7 @@ PRIVATE<
 : (pdf-layout) ( page obj -- page )
     [ dup ] [
         dupd [ pdf-render ] with-string-writer
-        '[ _ append ] [ change-stream ] curry dip
+        $[ _ append ] [ change-stream ] curry dip
         [ [ , <canvas> ] when ] keep
     ] while drop ;
 
@@ -75,7 +75,7 @@ C: <div> div ;
 
 M: div pdf-render
     [ style>> set-style ] keep
-    swap '[ _ pdf-render drop ] each f ;
+    swap $[ _ pdf-render drop ] each f ;
 
 M: div pdf-width
     [ style>> set-style ] keep

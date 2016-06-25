@@ -40,7 +40,7 @@ TUPLE: huffman-code
 
 : update-reverse-table ( huffman-code n table -- )
     [ drop all-patterns ]
-    [ nip '[ _ swap _ set-at ] each ] 3bi ;
+    [ nip $[ _ swap _ set-at ] each ] 3bi ;
 
 :: reverse-table ( tdesc n -- rtable )
    n f <array> <enum> :> table

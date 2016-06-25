@@ -50,7 +50,7 @@ M: ##unbox-alien rewrite rewrite-unbox-any-c-ptr ;
 : fuse-base-offset ( insn -- insn' )
     dup base>> vreg>insn
     [ src1>> ] [ src2>> ] bi
-    [ >>base ] [ '[ _ + ] change-offset ] bi* ;
+    [ >>base ] [ $[ _ + ] change-offset ] bi* ;
 
 ! Fuse ##add-imm into ##load-memory and ##store-memory
 ! just update the offset in the instruction
@@ -60,7 +60,7 @@ M: ##unbox-alien rewrite rewrite-unbox-any-c-ptr ;
 : fuse-displacement-offset ( insn -- insn' )
     dup displacement>> vreg>insn
     [ src1>> ] [ src2>> ] bi
-    [ >>displacement ] [ '[ _ + ] change-offset ] bi* ;
+    [ >>displacement ] [ $[ _ + ] change-offset ] bi* ;
 
 ! Fuse ##add into ##load-memory-imm and ##store-memory-imm
 ! construct a new ##load-memory or ##store-memory with the

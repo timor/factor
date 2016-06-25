@@ -9,10 +9,10 @@ PRIVATE<
     dup length [1,b] [ head ] with map ;
 
 : (abbrev) ( seq -- assoc )
-    [ prefixes ] keep 1array '[ _ ] H{ } map>assoc ;
+    [ prefixes ] keep 1array $[ _ ] H{ } map>assoc ;
 
 : assoc-merge ( assoc1 assoc2 -- assoc3 )
-    [ '[ over _ at [ append ] when* ] assoc-map ] keep swap assoc-union ;
+    [ $[ over _ at [ append ] when* ] assoc-map ] keep swap assoc-union ;
 
 PRIVATE>
 

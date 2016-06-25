@@ -41,7 +41,7 @@ SYMBOL: visited
     line-width 2 - glLineWidth
     line-width 2 - glPointSize
     1.0 1.0 1.0 1.0 glColor4d
-    dup '[ _ t <array> ] replicate visited set
+    dup $[ _ t <array> ] replicate visited set
     GL_LINE_STRIP glBegin
     { 0 0 } dup vertex (draw-maze)
     glEnd ;

@@ -4,7 +4,7 @@ prettyprint sequences twitter assocs ;
 IN: twitter.prettyprint
 
 MEMO: load-http-image ( url -- image/f )
-    '[ _
+    $[ _
         [ http-get nip ] [ image-class ] bi load-image*
     ] [ drop f ] recover ;
 

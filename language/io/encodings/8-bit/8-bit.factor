@@ -24,7 +24,7 @@ M: 8-bit encode-char
     swap [ 8-bit-encode ] dip stream-write1 ;
 
 M: 8-bit encode-string
-    swap [ '[ _ 8-bit-encode ] B{ } map-as ] dip stream-write ;
+    swap [ $[ _ 8-bit-encode ] B{ } map-as ] dip stream-write ;
 
 M: 8-bit decode-char
     swap stream-read1 dup

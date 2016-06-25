@@ -89,7 +89,7 @@ orig-timestamp recv-timestamp tx-timestamp ;
         [ [ { 11 12 } ] dip nths (time) ] ! recv-timestamp
         [ [ { 13 14 } ] dip nths (time) ] ! tx-timestamp
     } cleave ntp boa
-    dup stratum>> '[ _ (ref-id) ] change-ref-id
+    dup stratum>> $[ _ (ref-id) ] change-ref-id
     [ dup (leap) 2array ] change-leap
     [ dup (mode) 2array ] change-mode
     [ dup (stratum) 2array ] change-stratum ;

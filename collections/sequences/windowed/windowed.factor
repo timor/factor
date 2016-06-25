@@ -45,4 +45,4 @@ M: windowed-sequence length
     [ infimum ] rolling-map ;
 
 : rolling-count ( ... u n quot: ( ... elt -- ... ? ) -- ... v )
-    '[ _ count ] rolling-map ; inline
+    $[ _ count ] rolling-map ; inline

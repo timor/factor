@@ -43,7 +43,7 @@ TUPLE: feed-action < action title url entries ;
 
 : <feed-action> ( -- action )
     feed-action new-action
-        dup '[
+        dup $[
             feed new
                 _
                 [ title>> call >>title ]

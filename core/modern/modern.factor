@@ -186,7 +186,7 @@ ERROR: no-start-delimiter lexer opening ;
         nip matching-delimiter-string 1array
     ] [
         matching-delimiter-string [ append ] [ nip ] 2bi 2array
-    ] if closing '[ _ sequence= ] any? ;
+    ] if closing $[ _ sequence= ] any? ;
 
 
 ERROR: whitespace-expected-after n string ch ;
@@ -300,7 +300,7 @@ ERROR: lex-expected-but-got-eof lexer tags ;
 ERROR: unnestable-form n string obj ;
 ! For implementing [ { (
 : lex-until ( lexer tags -- payload closing )
-    '[
+    $[
         [
             _ lex-factor [
                 dup tag-literal? [
@@ -324,7 +324,7 @@ MACRO:: read-matched ( ch -- quot: ( lexer tag -- slice' ) )
         over lexer-nth-check-eof {
             { [ dup openstreq member? ] [ ch read-double-matched ] } ! (=( or ((
             { [ dup blank? ] [
-                drop dup '[
+                drop dup $[
                     _ matching-delimiter-string closestr1
                     2dup = [ drop 1array ] [ 2array ] if lex-until
                 ] dip 1 cut-slice* single-matched-literal make-matched-literal
@@ -524,7 +524,7 @@ MACRO: rules>call-lexer ( seq -- quot: ( lexer string -- literal ) )
         lexer-rules>assoc
         { f [ nip f like dup [ make-tag-literal ] when ] } suffix
     ] bi
-    '[ dup _ lex-til-either [ 2drop ] 2dip _ case ] ;
+    $[ dup _ lex-til-either [ 2drop ] 2dip _ case ] ;
 
 CONSTANT: factor-lexing-rules {
     T{ line-comment-lexer { generator read-exclamation } { delimiter char: \! } }
@@ -554,7 +554,7 @@ CONSTANT: factor-lexing-rules {
     factor-lexing-rules rules>call-lexer ;
 
 : string>literals ( string -- sequence )
-    <modern-lexer> '[ _ lex-factor ] loop>array postprocess-lexed ;
+    <modern-lexer> $[ _ lex-factor ] loop>array postprocess-lexed ;
 
 : path>literals ( path -- sequence )
     utf8 file-contents string>literals ;

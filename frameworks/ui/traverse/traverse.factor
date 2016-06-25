@@ -93,7 +93,7 @@ GENERIC#: leaves* 1 ( tree set -- ) ;
 
 M: node leaves* [ children>> ] dip leaves* ;
 
-M: array leaves* '[ _ leaves* ] each ;
+M: array leaves* $[ _ leaves* ] each ;
 
 M: gadget leaves* adjoin ;
 

@@ -16,7 +16,7 @@ PRIVATE<
     fftw_complex-array boa ;
 
 : >fftw-array ( seq -- array )
-    [ length <fftw-array> ] keep over '[
+    [ length <fftw-array> ] keep over $[
         [ >rect 0 1 ] [ _ nth ] bi*
         [ set-nth-unsafe ] curry bi-curry@ bi*
     ] each-index ;

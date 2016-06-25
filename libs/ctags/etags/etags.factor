@@ -12,7 +12,7 @@ PRIVATE<
 
 : etag-hash ( alist -- hash )
     H{ } clone [
-        '[ first2 swap [ 2array ] dip _ push-at ] assoc-each
+        $[ first2 swap [ 2array ] dip _ push-at ] assoc-each
     ] keep ;
 
 : lines>bytes ( lines -- bytes )

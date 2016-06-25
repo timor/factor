@@ -19,7 +19,7 @@ SYMBOL: state
 SYMBOL: nfa-table
 
 : set-each ( keys value hashtable -- )
-    '[ _ swap _ set-at ] each ;
+    $[ _ swap _ set-at ] each ;
 
 : options>hash ( options -- hashtable )
     H{ } clone [

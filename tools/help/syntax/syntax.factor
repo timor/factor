@@ -27,23 +27,23 @@ SYNTAX: \ ABOUT:
 COMPILE<
 SYNTAX: \ HELP-ARRAY:
     scan-new-escaped scan-word ";" expect
-    '[ \ } parse-until split-dashes >array _ prefix suffix! ] define-syntax ;
+    $[ \ } parse-until split-dashes >array _ prefix suffix! ] define-syntax ;
 
 SYNTAX: \ HELP-STRING:
     scan-new-escaped scan-word ";" expect
-    '[ _ "\"" parse-multiline-string-new 2array suffix! ] define-syntax ;
+    $[ _ "\"" parse-multiline-string-new 2array suffix! ] define-syntax ;
 
 SYNTAX: \ HELP-BACKTICK:
     scan-new-escaped scan-word ";" expect
-    '[ _ lexer get parse-spaceless-payload 2array suffix! ] define-syntax ;
+    $[ _ lexer get parse-spaceless-payload 2array suffix! ] define-syntax ;
 
 SYNTAX: \ HELP-2BACKTICKS:
     scan-new-escaped scan-word ";" expect
-    '[ _ "``" parse-multiline-string-new 2array suffix! ] define-syntax ;
+    $[ _ "``" parse-multiline-string-new 2array suffix! ] define-syntax ;
 
 SYNTAX: \ HELP-3BACKTICKS:
     scan-new-escaped scan-word ";" expect
-    '[ _ "```" parse-multiline-string-new 2array suffix! ] define-syntax ;
+    $[ _ "```" parse-multiline-string-new 2array suffix! ] define-syntax ;
 
 COMPILE>
 

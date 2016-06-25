@@ -256,7 +256,7 @@ ARTICLE: "peg.ebnf.action" "EBNF Action"
 "replaced by the AST left on the stack. This is mostly useful if variables are "
 "used in the rule since they can be referenced like locals in the action quotation. "
 "The action is defined by having a ' => ' at the end of a rule and "
-"using '[[' and ']]' to open and close the quotation. "
+"using $[[' and ']]' to open and close the quotation. "
 "If an action leaves the object 'ignore' on the stack then the result of that "
 "action will not be put in the AST of the result."
 { $examples

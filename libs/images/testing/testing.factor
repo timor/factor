@@ -43,7 +43,7 @@ PRIVATE>
     f verbose-tests? [
         path image-class load-image*
         [ clone normalize-image 1array ] keep
-        '[
+        $[
             binary [
                 _ path file-extension image-class image>stream
             ] with-byte-writer image-class load-image* normalize-image
@@ -66,4 +66,4 @@ PRIVATE>
     dup bytes-per-image random-bytes >>bitmap ;
 
 : image-load-must-fail ( path image-class -- )
-    '[ _ _ load-image* ] must-fail ;
+    $[ _ _ load-image* ] must-fail ;

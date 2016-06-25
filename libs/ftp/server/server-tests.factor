@@ -9,7 +9,7 @@ CONSTANT: test-file-contents "Files are so boring anymore." ;
     test-file-contents "ftp.server" [ ascii set-file-contents ] keep ;
 
 : test-ftp-server ( quot: ( server path -- ) -- )
-    '[
+    $[
         "." 0 <ftp-server> [
             "ftp://localhost" >url insecure-addr set-url-addr
                 "ftp" >>protocol

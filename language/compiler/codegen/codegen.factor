@@ -79,7 +79,7 @@ M: ##dispatch generate-insn
     length data-alignment get mod 0 assert= ;
 
 : with-fixup ( quot -- code )
-    '[
+    $[
         init-relocation
         init-gc-maps
         init-fixup

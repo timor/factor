@@ -5,7 +5,7 @@ multiline sequences ;
 IN: backticks
 
 SYNTAX: \ shell``
-    "``" parse-multiline-string '[
+    "``" parse-multiline-string $[
         _ interpolate>string
         utf8 [ contents ] with-process-reader
     ] append! ;

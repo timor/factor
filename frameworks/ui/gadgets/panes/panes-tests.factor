@@ -18,7 +18,7 @@ IN: ui.gadgets.panes.tests
 { t } [ #children "num-children" get = ] unit-test
 
 : test-gadget-text ( quot -- ? )
-    '[ _ call( -- ) ]
+    $[ _ call( -- ) ]
     [ make-pane gadget-text dup print "======" print ]
     [ with-string-writer dup print ] bi = ;
 

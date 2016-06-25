@@ -84,7 +84,7 @@ COMPILE< {
     [ innermost-frame-scan 1 + ] [ innermost-frame-executing ] bi ;
 
 : (change-frame) ( callstack quot -- callstack' )
-    [ dup innermost-frame-executing quotation? ] dip '[
+    [ dup innermost-frame-executing quotation? ] dip $[
         clone
         [ >innermost-frame< @ ]
         [ set-innermost-frame-quotation ]
@@ -94,7 +94,7 @@ COMPILE< {
 : change-frame ( continuation quot -- continuation' )
     ! Applies quot to innermost call frame of the
     ! continuation.
-    [ clone ] dip '[ _ (change-frame) ] change-call ; inline
+    [ clone ] dip $[ _ (change-frame) ] change-call ; inline
 
 PRIVATE>
 
@@ -123,15 +123,15 @@ PRIVATE>
 } [ "step-into" set-word-prop ] assoc-each
 
 ! Never step into these words
-: don't-step-into ( word -- )
-    dup '[ _ execute break ] "step-into" set-word-prop ;
+: dont-step-into ( word -- )
+    dup $[ _ execute break ] "step-into" set-word-prop ;
 
 {
     >n ndrop recover
     continue continue-with
     stop suspend (spawn)
     set-context start-context
-} [ don't-step-into ] each
+} [ dont-step-into ] each
 
 \ break [ break ] "step-into" set-word-prop
 

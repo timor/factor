@@ -237,7 +237,7 @@ http.server.dispatchers db.tuples ;
 ] unit-test
 
 : test-with-dispatcher ( dispatcher quot -- )
-    '[
+    $[
         main-responder set
         <http-server> 0 >>insecure f >>secure
         [

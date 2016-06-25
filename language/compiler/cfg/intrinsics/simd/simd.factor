@@ -77,7 +77,7 @@ CONSTANT: rep>half {
     rep-component-type heap-size
     [ dup <repetition> >byte-array ]
     [ iota >byte-array ] bi
-    '[ _ n*v _ v+ ] map concat ;
+    $[ _ n*v _ v+ ] map concat ;
 
 : ^load-immediate-shuffle ( shuffle rep -- dst )
     >variable-shuffle ^^load-literal ;
@@ -635,7 +635,7 @@ PREDICATE: fixnum-vector-rep < int-vector-rep
 
 : emit-alien-vector ( block node -- block' )
     dup [
-        '[
+        $[
             ds-drop prepare-load-memory
             _ f ^^load-memory-imm ds-push
         ]
@@ -644,7 +644,7 @@ PREDICATE: fixnum-vector-rep < int-vector-rep
 
 : emit-set-alien-vector ( block node -- block' )
     dup [
-        '[
+        $[
             ds-drop prepare-store-memory
             _ f ##store-memory-imm,
         ]

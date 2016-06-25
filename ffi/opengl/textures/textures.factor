@@ -378,7 +378,7 @@ TUPLE: multi-texture < disposable grid display-list loc ;
 
 : <texture-grid> ( image-grid loc -- grid )
     [ dup image-locs ] dip
-    '[ [ _ v+ <single-texture> |dispose ] 2map ] 2map ;
+    $[ [ _ v+ <single-texture> |dispose ] 2map ] 2map ;
 
 : grid-has-alpha? ( grid -- ? )
     first first image>> has-alpha? ;

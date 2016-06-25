@@ -20,4 +20,4 @@ FUNCTION: CFIndex CFArrayGetCount ( CFArrayRef array ) ;
 
 : <CFArray> ( seq -- alien )
     f over length &: kCFTypeArrayCallBacks CFArrayCreateMutable
-    [ '[ [ _ ] 2dip swap CFArraySetValueAtIndex ] each-index ] keep ;
+    [ $[ [ _ ] 2dip swap CFArraySetValueAtIndex ] each-index ] keep ;

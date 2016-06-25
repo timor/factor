@@ -97,7 +97,7 @@ TUPLE: choice size multiple choices ;
 : render-options ( value choice -- xml )
     [ choices>> value ] [ multiple>> ] bi
     [ swap ] [ swap 1array ] if
-    '[ dup _ member? render-option ] map ;
+    $[ dup _ member? render-option ] map ;
 
 M:: choice render* ( value name choice -- xml )
     choice size>> :> size

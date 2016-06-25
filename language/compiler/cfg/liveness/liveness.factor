@@ -30,7 +30,7 @@ GENERIC: visit-insn ( live-set insn -- ) ;
 ! This would be much better if live-set was a real set
 : kill-defs ( live-set insn -- )
     defs-vregs [ ?leader ] map
-    '[ drop ?leader _ in? ] assoc-reject! drop ; inline
+    $[ drop ?leader _ in? ] assoc-reject! drop ; inline
 
 : gen-uses ( live-set insn -- )
     uses-vregs [ swap conjoin ] with each ; inline
@@ -93,7 +93,7 @@ M: vreg-insn lookup-base-pointer* 2drop f ;
 
 : gc-roots ( live-set -- derived-roots gc-roots )
     keys V{ } clone HS{ } clone
-    [ '[ _ _ visit-gc-root ] each ] 2keep members ;
+    [ $[ _ _ visit-gc-root ] each ] 2keep members ;
 
 : fill-gc-map ( live-set gc-map -- )
     [ gc-roots ] dip [ gc-roots<< ] [ derived-roots<< ] bi ;
@@ -113,7 +113,7 @@ M: insn visit-insn 2drop ;
 
 : compute-edge-live-in ( basic-block -- edge-live-in )
     H{ } clone [
-        '[ inputs>> [ swap _ conjoin-at ] assoc-each ] each-phi
+        $[ inputs>> [ swap _ conjoin-at ] assoc-each ] each-phi
     ] keep ;
 
 : update-live-in ( basic-block -- changed? )

@@ -84,7 +84,7 @@ CONSTANT: d 3 ;
     ] change-nth-unsafe ; inline
 
 MACRO: with-md5-round ( ops quot -- quot )
-    '[ [ _ (ABCD) ] compose ] map '[ _ 2cleave ] ;
+    $[ [ _ (ABCD) ] compose ] map $[ _ 2cleave ] ;
 
 : (process-md5-block-F) ( block state -- )
     { uint-array uint-array } declare {

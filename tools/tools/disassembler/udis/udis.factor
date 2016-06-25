@@ -62,7 +62,7 @@ SINGLETON: udis-disassembler
 
 : format-disassembly ( lines -- lines' )
     dup [ second length ] [ max ] map-reduce
-    '[
+    $[
         [
             [ first >hex cell 2 * char: 0 pad-head % ": " % ]
             [ second _ char: \s pad-tail % "  " % ]
@@ -73,7 +73,7 @@ SINGLETON: udis-disassembler
 
 : (disassemble) ( ud -- lines )
     [
-        dup '[
+        dup $[
             _ ud_disassemble 0 =
             [ f ] [
                 _
@@ -86,7 +86,7 @@ SINGLETON: udis-disassembler
     ] { } make ;
 
 M: udis-disassembler disassemble* ( from to -- buffer )
-    '[
+    $[
         _ _
         [ drop ud_set_pc ]
         [ buf/len ud_set_input_buffer ]

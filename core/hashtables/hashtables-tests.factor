@@ -146,7 +146,7 @@ H{ } "x" set
 { t } [
     100 iota
     [ [ <hashtable> ] map ]
-    [ [ H{ } clone [ '[ dup _ set-at ] each-integer ] keep ] map ] bi
+    [ [ H{ } clone [ $[ dup _ set-at ] each-integer ] keep ] map ] bi
     [ [ array>> length ] bi@ = ] 2all?
 ] unit-test
 

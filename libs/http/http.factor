@@ -14,7 +14,7 @@ CONSTANT: max-redirects 10 ;
     [ read-?crlf dup f like ] [ parse-header-line ] produce nip ;
 
 : collect-headers ( assoc -- assoc' )
-    H{ } clone [ '[ _ push-at ] assoc-each ] keep ;
+    H{ } clone [ $[ _ push-at ] assoc-each ] keep ;
 
 : process-header ( alist -- assoc )
     f swap [ [ swap or dup ] dip swap ] assoc-map nip
@@ -197,7 +197,7 @@ M: response clone
         [ clone ] change-cookies ;
 
 : get-cookie ( request/response name -- cookie/f )
-    [ cookies>> ] dip '[ [ _ ] dip name>> = ] find nip ;
+    [ cookies>> ] dip $[ [ _ ] dip name>> = ] find nip ;
 
 : delete-cookie ( request/response name -- )
     over cookies>> [ get-cookie ] dip remove! drop ;

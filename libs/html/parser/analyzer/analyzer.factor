@@ -18,10 +18,10 @@ IN: html.parser.analyzer
     swap attributes>> key? ;
 
 : find-all ( seq quot -- alist )
-   [ <enum> >alist ] [ '[ second @ ] ] bi* filter ; inline
+   [ <enum> >alist ] [ $[ second @ ] ] bi* filter ; inline
 
 : loopn-index ( n quot -- )
-    [ iota ] [ '[ @ not ] ] bi* find 2drop ; inline
+    [ iota ] [ $[ @ not ] ] bi* find 2drop ; inline
 
 : loopn ( n quot -- )
     [ drop ] prepose loopn-index ; inline
@@ -38,7 +38,7 @@ ERROR: undefined-find-nth m n seq quot ;
     pick 0 = [ undefined-find-nth ] when ; inline
 
 : find-nth-from ( m n seq quot -- i/f elt/f )
-    check-trivial-find [ f ] 3dip '[
+    check-trivial-find [ f ] 3dip $[
         drop _ _ find-from [ dup [ 1 + ] when ] dip over
     ] loopn [ dup [ 1 - ] when ] dip ; inline
 
@@ -46,7 +46,7 @@ ERROR: undefined-find-nth m n seq quot ;
     [ 0 ] 3dip find-nth-from ; inline
 
 : find-last-nth-from ( m n seq quot -- i/f elt/f )
-    check-trivial-find [ f ] 3dip '[
+    check-trivial-find [ f ] 3dip $[
         drop _ _ find-last-from [ dup [ 1 - ] when ] dip over
     ] loopn [ dup [ 1 + ] when ] dip ; inline
 
@@ -54,14 +54,14 @@ ERROR: undefined-find-nth m n seq quot ;
     [ [ nip length 1 - ] [ ] 2bi ] dip find-last-nth-from ; inline
 
 : find-first-name ( vector string -- i/f tag/f )
-    >lower '[ name>> _ = ] find ; inline
+    >lower $[ name>> _ = ] find ; inline
 
 : stack-find ( seq quot: ( elt -- 1/0/-1 ) -- i/f )
     map cum-sum 0 swap index ; inline
 
 : tag-classifier ( string -- quot )
     >lower
-    '[ dup name>> _ = [ closing?>> -1 1  ? ] [ drop 0 ] if ] ; inline
+    $[ dup name>> _ = [ closing?>> -1 1  ? ] [ drop 0 ] if ] ; inline
 
 : find-between* ( vector i/f tag/f -- vector )
     over integer? [
@@ -82,7 +82,7 @@ ERROR: undefined-find-nth m n seq quot ;
 
 : find-between-all ( vector quot -- seq )
     dupd
-    '[ _ [ closing?>> not ] bi and ] find-all
+    $[ _ [ closing?>> not ] bi and ] find-all
     [ first2 find-between* ] with map ; inline
 
 : remove-blank-text ( vector -- vector' )
@@ -98,33 +98,33 @@ ERROR: undefined-find-nth m n seq quot ;
     ] map ;
 
 : find-by-id ( vector id -- vector' elt/f )
-    '[ _ html-id? ] find ;
+    $[ _ html-id? ] find ;
 
 : find-by-class ( vector id -- vector' elt/f )
-    '[ _ html-class? ] find ;
+    $[ _ html-class? ] find ;
 
 : find-by-name ( vector string -- vector elt/f )
-    >lower '[ name>> _ = ] find ;
+    >lower $[ name>> _ = ] find ;
 
 : find-by-id-between ( vector string -- vector' )
-    '[ _ html-id? ] dupd find find-between* ;
+    $[ _ html-id? ] dupd find find-between* ;
 
 : find-by-class-between ( vector string -- vector' )
-    '[ _ html-class? ] dupd find find-between* ;
+    $[ _ html-class? ] dupd find find-between* ;
 
 : find-by-class-id-between ( vector class id -- vector' )
-    '[
+    $[
         [ _ html-class? ] [ _ html-id? ] bi and
     ] dupd find find-between* ;
 
 : find-by-attribute-key ( vector key -- vector' )
-    >lower '[ _ attribute? ] filter sift ;
+    >lower $[ _ attribute? ] filter sift ;
 
 : find-by-attribute-key-value ( vector value key -- vector' )
-    >lower swap '[ _ attribute _ = ] filter sift ;
+    >lower swap $[ _ attribute _ = ] filter sift ;
 
 : find-first-attribute-key-value ( vector value key -- i/f tag/f )
-    >lower swap '[ _ attribute _ = ] find ;
+    >lower swap $[ _ attribute _ = ] find ;
 
 : find-links ( vector -- vector' )
     [ { [ name>> "a" = ] [ "href" attribute ] } 1&& ]

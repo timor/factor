@@ -132,7 +132,7 @@ main-responder [ <404> <trivial-responder> ] initialize
     swap development? get [ make-http-error >>body ] [ drop ] if ;
 
 : do-response ( response -- )
-    '[ request get _ write-full-response ]
+    $[ request get _ write-full-response ]
     [
         [ \ do-response log-error ]
         [
@@ -187,7 +187,7 @@ SYMBOL: params
     [
         local-address get
         [ secure? "https" "http" ? >>protocol ]
-        [ port>> remap-port '[ _ or ] change-port ]
+        [ port>> remap-port $[ _ or ] change-port ]
         bi
     ] change-url drop ;
 
@@ -196,7 +196,7 @@ SYMBOL: params
     local-address get port>> remap-port = ;
 
 : do-request ( request -- response )
-    '[
+    $[
         _
         {
             [ prepare-request ]

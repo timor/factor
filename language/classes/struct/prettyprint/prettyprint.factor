@@ -119,7 +119,7 @@ M: struct-mirror >alist ( mirror -- alist )
     object>> [
         [ drop "underlying" ] [ >c-ptr ] bi 2array 1array
     ] [
-        '[
+        $[
             _ struct>assoc
             [ [ [ name>> ] [ type>> ] bi 2array ] dip ] assoc-map
         ] [ drop { } ] recover

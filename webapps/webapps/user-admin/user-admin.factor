@@ -160,7 +160,7 @@ can-administer-users? define-capability
 
 : give-capability ( username capability -- )
     [ <user> select-tuple ] dip
-    '[ _ suffix ] change-capabilities
+    $[ _ suffix ] change-capabilities
     update-tuple ;
 
 : make-admin ( username -- )

@@ -81,7 +81,7 @@ M: editor graft*
     [ dup mark>> activate-editor-model ]
     [
         [
-            '[ _ blink-caret ] blink-interval get dup <timer>
+            $[ _ blink-caret ] blink-interval get dup <timer>
         ] keep blink-timer<<
     ] tri ;
 
@@ -178,7 +178,7 @@ TUPLE: selected-line start end first? last? ;
     dup gadget-selection? [
         [ selection-start/end [ [ first ] bi@ [a,b] ] [ ] 2bi ]
         [ model>> ] bi
-        '[ [ _ _ ] [ _ start/end-on-line ] bi 2array ] H{ } map>assoc
+        $[ [ _ _ ] [ _ start/end-on-line ] bi 2array ] H{ } map>assoc
     ] [ drop f ] if ;
 
 :: draw-selection ( line pair editor -- )
@@ -224,8 +224,8 @@ M: editor cap-height font>> font-metrics cap-height>> ;
 PRIVATE<
 
 : contents-changed ( model editor -- )
-    [ [ nip caret>> ] [ drop ] 2bi '[ _ validate-loc ] (change-model) ]
-    [ [ nip mark>> ] [ drop ] 2bi '[ _ validate-loc ] (change-model) ]
+    [ [ nip caret>> ] [ drop ] 2bi $[ _ validate-loc ] (change-model) ]
+    [ [ nip mark>> ] [ drop ] 2bi $[ _ validate-loc ] (change-model) ]
     [ nip relayout ] 2tri ;
 
 : caret/mark-changed ( editor -- )
@@ -309,19 +309,19 @@ M: editor gadget-text* editor-string % ;
     ] if ; inline
 
 : editor-delete ( editor elt -- )
-    '[ dupd _ next-elt ] delete/backspace ;
+    $[ dupd _ next-elt ] delete/backspace ;
 
 : editor-backspace ( editor elt -- )
-    '[ over [ _ prev-elt ] dip ] delete/backspace ;
+    $[ over [ _ prev-elt ] dip ] delete/backspace ;
 
 : editor-select-prev ( editor elt -- )
-    '[ _ prev-elt ] change-caret ;
+    $[ _ prev-elt ] change-caret ;
 
 : editor-prev ( editor elt -- )
     [ editor-select-prev ] [ drop mark>caret ] 2bi ;
 
 : editor-select-next ( editor elt -- )
-    '[ _ next-elt ] change-caret ;
+    $[ _ next-elt ] change-caret ;
 
 : editor-next ( editor elt -- )
     dupd editor-select-next mark>caret ;
@@ -536,7 +536,7 @@ PRIVATE>
     "\n" swap user-input* drop ;
 
 : change-selection ( editor quot -- )
-    '[ gadget-selection @ ] [ user-input* drop ] bi ; inline
+    $[ gadget-selection @ ] [ user-input* drop ] bi ; inline
 
 PRIVATE<
 
@@ -599,7 +599,7 @@ TUPLE: source-editor < multiline-editor ;
 ! A useful model
 : <element-model> ( editor element -- model )
     [ [ caret>> ] [ model>> ] bi ] dip
-    '[ _ _ elt-string ] <arrow> ;
+    $[ _ _ elt-string ] <arrow> ;
 
 ! Fields wrap an editor
 TUPLE: field < border editor min-cols max-cols ;

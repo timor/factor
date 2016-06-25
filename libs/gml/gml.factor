@@ -54,7 +54,7 @@ SYMBOLS: pre-hook post-hook ;
 
 : (gml-listener) ( -- )
     "GML> " write flush readln [
-        '[
+        $[
             pre-hook get call( -- )
             _ run-gml-string
             post-hook get call( -- )

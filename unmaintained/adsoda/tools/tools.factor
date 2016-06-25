@@ -129,7 +129,7 @@ refs-to-points
     ! from x to y (height = y-x)
     ! and of based on the X points
     ! a face is a group of 3 or mode points.   
-    '[ [ [ _ suffix ] map ] [ [ _ suffix ] map ] bi ] call
+    $[ [ [ _ suffix ] map ] [ [ _ suffix ] map ] bi ] call
     2-faces-to-prism
 ;
 

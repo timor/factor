@@ -14,17 +14,17 @@ IN: benchmark.mandel
 : c ( i j -- c ) scale center width height scale 2 / - + ; inline
 
 : count-iterations ( z max-iterations step-quot test-quot -- #iters )
-    '[ drop @ dup @ ] find-last-integer nip ; inline
+    $[ drop @ dup @ ] find-last-integer nip ; inline
 
 : pixel ( c -- iterations )
     [ C{ 0.0 0.0 } max-iterations ] dip
-    '[ sq _ + ] [ absq 4.0 >= ] count-iterations ; inline
+    $[ sq _ + ] [ absq 4.0 >= ] count-iterations ; inline
 
 : color ( iterations -- color )
     [ color-map [ length mod ] keep nth ] [ B{ 0 0 0 } ] if* ; inline
 
 : render ( -- )
-    height iota [ width iota swap '[ _ c pixel color write ] each ] each ; inline
+    height iota [ width iota swap $[ _ c pixel color write ] each ] each ; inline
 
 : ppm-header ( -- )
     ascii encode-output

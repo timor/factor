@@ -27,7 +27,7 @@ UNION: dtd-acceptable
             { char: \" [ parse-quote ] }
             [ drop take-external-id close ]
         } case
-   ] dip '[ swap _ [ ?set-at ] change ] 2keep ;
+   ] dip $[ swap _ [ ?set-at ] change ] 2keep ;
 
 : take-entity-decl ( -- entity-decl )
     pass-blank get-char {

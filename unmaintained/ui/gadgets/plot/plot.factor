@@ -58,11 +58,11 @@ TUPLE: function function color ;
 GENERIC: plot-function ( plot object -- plot )
 
 M: callable plot-function ( plot quotation -- plot )
-  [ dup plot-range ] dip '[ dup @ 2array ] map line-strip ;
+  [ dup plot-range ] dip $[ dup @ 2array ] map line-strip ;
 
 M: function plot-function ( plot function -- plot )
    dup color>> dup [ >stroke-color ] [ drop ] if
-   [ dup plot-range ] dip function>> '[ dup @ 2array ] map line-strip ;
+   [ dup plot-range ] dip function>> $[ dup @ 2array ] map line-strip ;
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

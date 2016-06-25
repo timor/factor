@@ -114,7 +114,7 @@ DEFER: (with-http-request)
 SYMBOL: redirects
 
 : redirect-url ( request url -- request )
-    '[ _ >url derive-url ensure-port ] change-url ;
+    $[ _ >url derive-url ensure-port ] change-url ;
 
 : redirect? ( response -- ? )
     code>> 300 399 between? ;
@@ -261,7 +261,7 @@ PRIVATE>
     with-http-request* check-response ; inline
 
 : http-request* ( request -- response data )
-    BV{ } clone [ '[ _ push-all ] with-http-request* ] keep
+    BV{ } clone [ $[ _ push-all ] with-http-request* ] keep
     B{ } like over content-encoding>> decode [ >>body ] keep ;
 
 : http-request ( request -- response data )

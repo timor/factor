@@ -10,7 +10,7 @@ PRIVATE<
 
 MACRO: com-invoke ( n return parameters -- quot )
     [ 2nip length ] 3keep
-    '[
+    $[
         _ npick void* deref _ cell * alien-cell _ _
         stdcall alien-indirect
     ] ;
@@ -69,7 +69,7 @@ ERROR: no-com-interface interface ;
 
 :: (define-word-for-function) ( function interface n -- )
     function interface (function-word)
-    n function [ return>> ] [ parameter-types>> ] bi '[ _ _ _ com-invoke ]
+    n function [ return>> ] [ parameter-types>> ] bi $[ _ _ _ com-invoke ]
     function [ parameter-names>> ] [ return>> ] bi function-effect
     define-declared ;
 

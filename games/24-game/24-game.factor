@@ -39,7 +39,7 @@ CONSTANT: (operators) { + - * / rot swap q } ;
     length 3 < [ \ rot (operators) remove ] [ (operators) ] if ;
 
 : find-operator ( operators string -- word/f )
-    '[ name>> _ = ] find nip ;
+    $[ name>> _ = ] find nip ;
 
 : get-operator ( operators -- word )
     dup "Operators: %u\n" printf flush

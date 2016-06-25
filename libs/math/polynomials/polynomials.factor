@@ -36,7 +36,7 @@ ALIAS: n*p n*v ;
     [ drop length [ iota ] keep ]
     [ nip <reversed> ]
     [ drop ] 2tri
-    '[ _ _ <slice> _ v* sum ] map reverse! ;
+    $[ _ _ <slice> _ v* sum ] map reverse! ;
 
 : p-sq ( p -- p^2 ) dup p* ; inline
 
@@ -92,7 +92,7 @@ PRIVATE>
     ! Horner scheme
     [ nip <reversed> unclip-slice swap ]
     [ drop ] 2bi
-    '[ [ _ * ] dip + ] each ;
+    $[ [ _ * ] dip + ] each ;
 
 MACRO: polyval* ( p -- quot )
     reverse

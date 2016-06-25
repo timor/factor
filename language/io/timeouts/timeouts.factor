@@ -14,7 +14,7 @@ M: encoder set-timeout stream>> set-timeout ;
 GENERIC: cancel-operation ( obj -- ) ;
 
 : queue-timeout ( obj timeout -- timer )
-    [ '[ _ cancel-operation ] ] dip later ;
+    [ $[ _ cancel-operation ] ] dip later ;
 
 : with-timeout* ( obj timeout quot -- )
     2over queue-timeout

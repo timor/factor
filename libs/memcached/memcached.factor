@@ -91,7 +91,7 @@ TUPLE: request cmd key val extra opaque cas ;
     } cleave
     ! magic, opcode, keylen, extralen, datatype, status,
     ! bodylen, opaque, cas [ big-endian ]
-    '[ 0x80 _ _ _ 0 0 _ _ _ ] "CCSCCSIIQ" pack-be write ;
+    $[ 0x80 _ _ _ 0 0 _ _ _ ] "CCSCCSIIQ" pack-be write ;
 
 : (send) ( str -- )
     [ >byte-array write ] unless-empty ;
@@ -153,7 +153,7 @@ TUPLE: request cmd key val extra opaque cas ;
     <request> swap >>key ;
 
 : (incr/decr) ( amt key cmd -- response )
-    (cmd) swap '[ _ 0 0 ] "QQI" pack-be >>extra ! amt init exp
+    (cmd) swap $[ _ 0 0 ] "QQI" pack-be >>extra ! amt init exp
     submit "Q" unpack-be first ;
 
 : (mutate) ( val key cmd -- )
@@ -188,11 +188,11 @@ PRIVATE>
     [ length 10 + NOOP <request> swap >>opaque send-request ]
     [
         <enum> [
-            assoc-size 10 + '[
+            assoc-size 10 + $[
                 _ read-header [ check-opaque ] keep swap
             ]
         ] [
-            '[
+            $[
                 [ read-body drop 4 tail ]
                 [ [ 7 ] dip nth _ at ]
                 bi pick set-at

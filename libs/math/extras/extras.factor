@@ -97,7 +97,7 @@ PRIVATE>
     <clumps> [ mean ] map ;
 
 : exponential-moving-average ( seq a -- newseq )
-    [ 1 ] 2dip '[ dupd swap - _ * + dup ] map nip ;
+    [ 1 ] 2dip $[ dupd swap - _ * + dup ] map nip ;
 
 : moving-median ( u n -- v )
     <clumps> [ median ] map ;
@@ -112,7 +112,7 @@ PRIVATE>
     <clumps> [ sum ] map ;
 
 : moving-count ( ... u n quot: ( ... elt -- ... ? ) -- ... v )
-    [ <clumps> ] [ '[ _ count ] map ] bi* ; inline
+    [ <clumps> ] [ $[ _ count ] map ] bi* ; inline
 
 : nonzero ( seq -- seq' )
     [ zero? ] reject ;
@@ -165,7 +165,7 @@ PRIVATE>
     [ dup zero? ] swap until drop ; inline
 
 : cum-reduce ( seq identity quot: ( prev elt -- next ) -- result cum-result )
-    [ dup rot ] dip dup '[ _ curry dip dupd @ ] each ; inline
+    [ dup rot ] dip dup $[ _ curry dip dupd @ ] each ; inline
 
 PRIVATE<
 
@@ -196,19 +196,19 @@ PRIVATE>
     [ - ] [ 1 swap - / ] bi ;
 
 : exponential-index ( seq -- x )
-    dup sum '[ _ / dup ^ ] map-product ;
+    dup sum $[ _ / dup ^ ] map-product ;
 
 : weighted-random ( histogram -- obj )
     unzip cum-sum [ last random ] [ bisect-left ] bi swap nth ;
 
 : unique-indices ( seq -- unique indices )
-    [ members ] keep over dup length iota H{ } zip-as '[ _ at ] map ;
+    [ members ] keep over dup length iota H{ } zip-as $[ _ at ] map ;
 
 : digitize-left ( seq bins -- seq' )
-    '[ _ bisect-left ] map ;
+    $[ _ bisect-left ] map ;
 
 : digitize-right ( seq bins -- seq' )
-    '[ _ bisect-right ] map ;
+    $[ _ bisect-right ] map ;
 
 PRIVATE<
 
@@ -278,14 +278,14 @@ M: real round-away-from-zero
 
 : monotonic-count ( seq quot: ( elt1 elt2 -- ? ) -- newseq )
     over empty? [ 2drop { } ] [
-        [ 0 swap unclip-slice swap ] dip '[
+        [ 0 swap unclip-slice swap ] dip $[
             [ @ [ 1 + ] [ drop 0 ] if ] keep over
         ] { } map-as 2nip 0 prefix
     ] if ; inline
 
 : max-monotonic-count ( seq quot: ( elt1 elt2 -- ? ) -- n )
     over empty? [ 2drop 0 ] [
-        [ 0 swap unclip-slice swap 0 ] dip '[
+        [ 0 swap unclip-slice swap 0 ] dip $[
             [ swapd @ [ 1 + ] [ max 0 ] if ] keep swap
         ] reduce nip max
     ] if ; inline

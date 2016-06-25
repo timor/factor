@@ -60,7 +60,7 @@ M: windows scp-name "pscp" ;
 
 : with-build-images ( quot -- )
     [ boot-image-names [ absolute-path ] map ] dip
-    '[
+    $[
         [
             ! Copy boot images
             _ "." copy-files-into

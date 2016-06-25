@@ -95,7 +95,7 @@ PRIVATE>
     "-l" prepend linker-args get push ;
 
 : c-use-framework ( str -- )
-    "-framework" swap linker-args get '[ _ push ] bi@ ;
+    "-framework" swap linker-args get $[ _ push ] bi@ ;
 
 : c-link-to/use-framework ( str -- )
     os macosx? [ c-use-framework ] [ c-link-to ] if ;

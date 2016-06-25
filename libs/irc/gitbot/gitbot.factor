@@ -27,7 +27,7 @@ M: object handle-message drop ;
     [ connect-irc ]
     [
         [ bot-channel <irc-channel-chat> dup ] dip
-        '[ _ [ _ attach-chat ] [ bot-loop ] bi ]
+        $[ _ [ _ attach-chat ] [ bot-loop ] bi ]
         "GitBot" spawn drop
     ] bi ;
 
@@ -48,10 +48,10 @@ M: object handle-message drop ;
 : report-updates ( from to chat -- )
     [ updates ] dip
     [ 1 seconds sleep ] swap
-    '[ _ speak ] interleave ;
+    $[ _ speak ] interleave ;
 
 : check-for-updates ( chat -- )
-    '[
+    $[
         git-id
         { "git" "pull" "origin" "master" } short-running-process
         git-id
@@ -60,6 +60,6 @@ M: object handle-message drop ;
 
 : bot ( -- )
     start-bot
-    '[ _ check-for-updates ] 5 minutes every drop ;
+    $[ _ check-for-updates ] 5 minutes every drop ;
 
 MAIN: bot

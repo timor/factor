@@ -9,13 +9,13 @@ IN: xmode.utilities
     {
         { [ dup quotation? ] [ [ object get tag get ] prepose ] }
         { [ dup length 2 = ] [
-            first2 '[
+            first2 $[
                 tag get children>string
                 _ [ execute ] when* object get _ execute
             ]
         ] }
         { [ dup length 3 = ] [
-            first3 '[
+            first3 $[
                 tag get _ attr
                 _ [ execute ] when* object get _ execute
             ]

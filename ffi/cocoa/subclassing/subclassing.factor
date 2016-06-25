@@ -19,13 +19,13 @@ IN: cocoa.subclassing
     class_addMethod "add method to class" throw-if-false ;
 
 : add-methods ( methods class -- )
-    '[ [ _ ] dip init-method add-method ] each ;
+    $[ [ _ ] dip init-method add-method ] each ;
 
 : add-protocol ( class protocol -- )
     class_addProtocol "add protocol to class" throw-if-false ;
 
 : add-protocols ( protocols class -- )
-    '[ [ _ ] dip objc-protocol add-protocol ] each ;
+    $[ [ _ ] dip objc-protocol add-protocol ] each ;
 
 : (define-objc-class) ( methods protocols superclass name -- )
     [ objc-class ] dip 0 objc_allocateClassPair
@@ -40,7 +40,7 @@ IN: cocoa.subclassing
 
 : prepare-method ( ret types quot -- type imp )
     [ [ encode-types ] 2keep ] dip
-    '[ _ _ cdecl _ alien-callback ]
+    $[ _ _ cdecl _ alien-callback ]
     ( -- callback ) define-temp ;
 
 : prepare-methods ( methods -- methods )
@@ -59,7 +59,7 @@ IN: cocoa.subclassing
 
 : redefine-objc-methods ( methods name -- )
     dup class-exists? [
-        objc_getClass '[ [ _ ] dip (redefine-objc-method) ] each
+        objc_getClass $[ [ _ ] dip (redefine-objc-method) ] each
     ] [ 2drop ] if ;
 
 :: define-objc-class ( name superclass protocols methods -- )

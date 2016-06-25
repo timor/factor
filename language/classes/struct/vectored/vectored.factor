@@ -27,20 +27,20 @@ MACRO: first-slot ( struct-class -- quot: ( struct -- value ) )
 MACRO: set-vectored-nth ( struct-class -- quot: ( value i vector -- ) )
     struct-slots [
         name>> reader-word 1quotation dup
-        '[ _ [ ] _ tri* set-nth-unsafe ]
-    ] map '[ _ 3cleave ] ;
+        $[ _ [ ] _ tri* set-nth-unsafe ]
+    ] map $[ _ 3cleave ] ;
 
 MACRO: <vectored-slots> ( struct-class -- quot: ( n -- slots... ) )
     struct-slots [ type>> <array-class>-of 1quotation ] map
-    '[ _ cleave ] ;
+    $[ _ cleave ] ;
 
 MACRO: (vectored-slots) ( struct-class -- quot: ( n -- slots... ) )
     struct-slots [ type>> (array-class)-of 1quotation ] map
-    '[ _ cleave ] ;
+    $[ _ cleave ] ;
 
 MACRO: (vectored-element>) ( struct-class -- quot: ( elt -- struct ) )
     [ struct-slots [ name>> reader-word 1quotation ] map ] keep
-    '[ _ cleave _ <struct-boa> ] ;
+    $[ _ cleave _ <struct-boa> ] ;
 
 SLOT: (n)
 SLOT: (vectored)

@@ -141,16 +141,16 @@ M: object time-happened drop now ;
 GENERIC: handle-inbox ( tab message -- )
 
 : value-labels ( assoc val -- seq )
-    '[ nip _ = ] assoc-filter keys sort-strings [ <label> ] map ;
+    $[ nip _ = ] assoc-filter keys sort-strings [ <label> ] map ;
 
 : add-gadget-color ( pack seq color -- pack )
-    '[ _ >>color add-gadget ] each ;
+    $[ _ >>color add-gadget ] each ;
 
 M: object handle-inbox
     nip print-irc ;
 
 : display ( stream tab -- )
-    '[ _ [ [ t ]
+    $[ _ [ [ t ]
            [ _ dup chat>> hear handle-inbox ]
            while ] with-output-stream ] "ircv" spawn drop ;
 
@@ -169,7 +169,7 @@ TUPLE: irc-editor < editor outstream tab ;
       [ [ irc-tab? ] find-parent ]
       [ editor-string ]
       [ "" swap set-editor-string ] } cleave
-     '[ _ irc-tab set _ parse-message ] with-output-stream ;
+     $[ _ irc-tab set _ parse-message ] with-output-stream ;
 
 irc-editor "general" f {
     { T{ key-down f f "RET" } editor-send }

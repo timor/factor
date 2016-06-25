@@ -39,7 +39,7 @@ CONSTANT: a uint-array{ 0 0x9908b0df } ;
     dupd nth dup -30 shift bitxor 1812433253 * + 1 w+ ; inline
 
 : init-mt-rest ( seq -- )
-    n 1 - swap '[
+    n 1 - swap $[
         _ [ init-mt-formula ] [ [ 1 + ] dip set-nth ] 2bi
     ] each-integer ; inline
 

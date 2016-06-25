@@ -66,7 +66,7 @@ CONSTANT: next 1 ;
     ] with-style ;
 
 : <help-header> ( browser-gadget -- gadget )
-    model>> [ '[ _ $title ] try ] <pane-control> ;
+    model>> [ $[ _ $title ] try ] <pane-control> ;
 
 : add-help-header ( track -- track )
     dup <help-header> { 3 3 } <border>
@@ -74,7 +74,7 @@ CONSTANT: next 1 ;
     { 1 0 } >>fill f track-add ;
 
 : <help-footer> ( browser-gadget direction -- gadget )
-    [ model>> ] dip '[ [ _ $navigation ] try ] <pane-control>
+    [ model>> ] dip $[ [ _ $navigation ] try ] <pane-control>
     { 0 0 } <border> { 1/2 1/2 } >>align
     toolbar-background <solid> >>interior ;
 
@@ -90,17 +90,17 @@ CONSTANT: next 1 ;
     article-content print-content ;
 
 : <help-pane> ( browser-gadget -- gadget )
-    model>> [ '[ _ print-topic ] try ] <pane-control> ;
+    model>> [ $[ _ print-topic ] try ] <pane-control> ;
 
 : add-help-pane ( track -- track )
     dup dup <help-pane> margins
     <scroller> >>scroller scroller>> white-interior 1 track-add ;
 
 : search-browser ( string browser -- )
-    '[ [ blank? ] trim <apropos-search> _ show-help ] unless-empty ;
+    $[ [ blank? ] trim <apropos-search> _ show-help ] unless-empty ;
 
 : <search-field> ( browser -- field )
-    '[ _ search-browser ] <action-field>
+    $[ _ search-browser ] <action-field>
         "Search" >>default-text
         10 >>min-cols
         10 >>max-cols
@@ -149,7 +149,7 @@ M: browser-gadget handle-gesture
 
 M: browser-gadget definitions-changed ( set browser -- )
     [ control-value swap showing-definition? ] keep
-    '[ _ [ history-value ] keep set-history-value ] when ;
+    $[ _ [ history-value ] keep set-history-value ] when ;
 
 M: browser-gadget focusable-child* search-field>> ;
 
@@ -206,7 +206,7 @@ browser-gadget "toolbar" f {
     over [ show-help ] [ 2drop ] if ;
 
 : navigate ( browser quot -- )
-    '[ control-value @ ] keep ?show-help ; inline
+    $[ control-value @ ] keep ?show-help ; inline
 
 : com-up ( browser -- ) [ article-parent ] navigate ;
 

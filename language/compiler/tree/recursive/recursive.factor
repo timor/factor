@@ -114,7 +114,7 @@ SYMBOL: changed?
     HS{ } clone not-loops namespaces:set
     V{ } clone recursive-nesting namespaces:set
     [ visit-back-edges ]
-    [ '[ _ detect-cross-frame-calls ] while-changing ]
+    [ $[ _ detect-cross-frame-calls ] while-changing ]
     bi ;
 
 : mark-loops ( call-graph -- )

@@ -3,7 +3,7 @@ USING: combinators.short-circuit fry make math kernel sequences ;
 IN: sequences.squish
 
 : (squish) ( seq quot: ( obj -- ? ) -- )
-    2dup call [ '[ _ (squish) ] each ] [ drop , ] if ; inline recursive
+    2dup call [ $[ _ (squish) ] each ] [ drop , ] if ; inline recursive
 
 : squish ( seq quot exemplar -- seq' )
     [ [ (squish) ] ] dip make ; inline

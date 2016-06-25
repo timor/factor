@@ -6,7 +6,7 @@ smalltalk.eval smalltalk.printer smalltalk.listener ;
 IN: smalltalk.listener
 
 : eval-interactively ( string -- )
-    '[
+    $[
         _ eval-smalltalk
         dup nil? [ drop ] [ "Result: " write smalltalk>string print ] if
     ] try ;

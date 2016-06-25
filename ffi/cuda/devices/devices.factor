@@ -11,13 +11,13 @@ IN: cuda.devices
     { int } [ cuDeviceGetCount cuda-error ] with-out-parameters ;
 
 : n>cuda-device ( n -- device )
-    [ { CUdevice } ] dip '[ _ cuDeviceGet cuda-error ] with-out-parameters ;
+    [ { CUdevice } ] dip $[ _ cuDeviceGet cuda-error ] with-out-parameters ;
 
 : enumerate-cuda-devices ( -- devices )
     #cuda-devices iota [ n>cuda-device ] map ;
 
 : with-each-cuda-device ( quot -- )
-    [ enumerate-cuda-devices ] dip '[ 0 _ with-cuda-context ] each ; inline
+    [ enumerate-cuda-devices ] dip $[ 0 _ with-cuda-context ] each ; inline
 
 : cuda-device-properties ( n -- properties )
     [ CUdevprop <struct> ] dip
@@ -33,16 +33,16 @@ IN: cuda.devices
 
 : cuda-device-capability ( n -- pair )
     [ { int int } ] dip
-    '[ _ cuDeviceComputeCapability cuda-error ] with-out-parameters
+    $[ _ cuDeviceComputeCapability cuda-error ] with-out-parameters
     2array ;
 
 : cuda-device-memory ( n -- bytes )
     [ { uint } ] dip
-    '[ _ cuDeviceTotalMem cuda-error ] with-out-parameters ;
+    $[ _ cuDeviceTotalMem cuda-error ] with-out-parameters ;
 
 : cuda-device-attribute ( attribute n -- n )
     [ { int } ] 2dip
-    '[ _ _ cuDeviceGetAttribute cuda-error ] with-out-parameters ;
+    $[ _ _ cuDeviceGetAttribute cuda-error ] with-out-parameters ;
 
 : cuda-device. ( n -- )
     {

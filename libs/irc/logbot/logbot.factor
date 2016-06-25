@@ -63,7 +63,7 @@ M: irc-message handle-message [ >log-line ] [ timestamp>> ] bi log-message ;
     [ connect-irc ]
     [
         [ bot-channel <irc-channel-chat> ] dip
-        '[ _ [ _ attach-chat ] [ bot-loop ] bi ]
+        $[ _ [ _ attach-chat ] [ bot-loop ] bi ]
         "LogBot" spawn drop
     ] bi ;
 

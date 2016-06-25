@@ -216,10 +216,10 @@ CONSTANT: trivial-defs
     [ { [ callable? ] [ ignore-def? not ] } 1&& ] deep-filter ;
 
 : (load-definitions) ( word def hash -- )
-    [ all-callables ] dip '[ _ push-at ] with each ;
+    [ all-callables ] dip $[ _ push-at ] with each ;
 
 : load-definitions ( words -- hash )
-    H{ } clone [ '[ dup def>> _ (load-definitions) ] each ] keep ;
+    H{ } clone [ $[ dup def>> _ (load-definitions) ] each ] keep ;
 
 SYMBOL: lint-definitions
 SYMBOL: lint-definitions-keys
@@ -232,7 +232,7 @@ SYMBOL: lint-definitions-keys
     [ [ [ def>> ] [ 1quotation ] bi = ] reject ] assoc-map
 
     ! Add manual definitions
-    manual-substitutions over '[ _ push-at ] assoc-each
+    manual-substitutions over $[ _ push-at ] assoc-each
 
     ! Set globals to new values
     [ lint-definitions set-global ]
@@ -246,7 +246,7 @@ GENERIC: lint ( obj -- seq ) ;
 M: object lint ( obj -- seq ) drop f ;
 
 M: callable lint ( quot -- seq )
-    [ lint-definitions-keys get-global ] dip '[ _ subseq? ] filter ;
+    [ lint-definitions-keys get-global ] dip $[ _ subseq? ] filter ;
 
 M: word lint ( word -- seq/f )
     def>> [ callable? ] deep-filter [ lint ] map concat ;

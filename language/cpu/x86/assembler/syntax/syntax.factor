@@ -17,7 +17,7 @@ registers [ H{ } clone ] initialize
     } 3cleave ;
 
 : (define-registers) ( names start size -- seq )
-    '[ _ + _ define-register ] map-index ;
+    $[ _ + _ define-register ] map-index ;
 
 : define-registers ( names size -- )
     [ [ 0 ] dip (define-registers) ] keep registers get set-at ;

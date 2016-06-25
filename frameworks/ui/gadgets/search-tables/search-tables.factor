@@ -23,7 +23,7 @@ TUPLE: search-field < track field ;
     "clear-button-clicked" theme-image <image-pen> dup dup <button-pen> ;
 
 : <clear-button> ( search-field -- button )
-    [ f ] dip '[ drop _ clear-search-field ] <button>
+    [ f ] dip $[ drop _ clear-search-field ] <button>
     <clear-button-pen> >>interior
     dup dup interior>> pen-pref-dim >>min-dim ;
 

@@ -16,7 +16,7 @@ in: specialized
     if ;
 
 : final-info-quot ( word -- quot )
-    [ stack-effect in>> length '[ _ ndrop ] ]
+    [ stack-effect in>> length $[ _ ndrop ] ]
     [ def>> [ final-info ] with-scope >quotation ] bi
     compose ;
 
@@ -41,7 +41,7 @@ ERROR: bad-outputs word quot ;
     ] if ;
 
 : specialized-quot ( word n -- quot )
-    '[ _ _ lookup-specialized ] ;
+    $[ _ _ lookup-specialized ] ;
 
 : make-specialized ( word n -- )
     [ drop H{ } clone "specialized-defs" set-word-prop ]

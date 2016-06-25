@@ -338,7 +338,7 @@ M: x86.64 has-small-reg? 2drop t ;
 : small-reg-that-isn't ( exclude -- reg' )
     [ have-byte-regs ] dip
     [ native-version-of ] map
-    '[ _ member-eq? not ] find nip ;
+    $[ _ member-eq? not ] find nip ;
 
 : with-save/restore ( reg quot -- )
     [ drop PUSH ] [ call ] [ drop POP ] 2tri ; inline
@@ -671,7 +671,7 @@ M: x86 %alien-invoke ( reg-inputs stack-inputs
                        cleanup
                        stack-size
                        symbols dll gc-map -- )
-                       '[ _ _ _ %c-invoke ] %alien-assembly ;
+                       $[ _ _ _ %c-invoke ] %alien-assembly ;
 
 M:: x86 %alien-indirect ( src reg-inputs stack-inputs reg-outputs dead-outputs cleanup stack-size gc-map -- )
     reg-inputs stack-inputs reg-outputs dead-outputs cleanup stack-size [

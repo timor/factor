@@ -132,7 +132,7 @@ M: line-comment-literal write-literal
         ]
         [
             seq>> 3 swap ?nth
-            [ tag>> length 1 + last-slice swap '[ _ modify-to ] change ] when*
+            [ tag>> length 1 + last-slice swap $[ _ modify-to ] change ] when*
         ]
     } cleave ;
 
@@ -201,7 +201,7 @@ M: compound-sequence-literal write-literal
 : map-literals ( obj quot: ( obj -- obj' ) -- seq )
     over single-matched-literal? [
         [ call drop ] [
-            '[
+            $[
                 dup compound-sequence-literal? [ sequence>> ] when
                 [ _ map-literals ] map
             ] change-payload
@@ -212,14 +212,14 @@ M: compound-sequence-literal write-literal
 
 : rewrite-path ( path quot -- )
     ! dup print
-    '[ [ path>literals [ _ map-literals ] map ] [ ] bi write-modern-path ]
+    $[ [ path>literals [ _ map-literals ] map ] [ ] bi write-modern-path ]
     [ drop . ] recover ; inline
 
 : rewrite-string ( string quot -- )
     ! dup print
-    [ string>literals ] dip '[ _ map-literals ] map write-modern-string ; inline
+    [ string>literals ] dip $[ _ map-literals ] map write-modern-string ; inline
 
-: rewrite-paths ( seq quot -- ) '[ _ rewrite-path ] each ; inline
+: rewrite-paths ( seq quot -- ) $[ _ rewrite-path ] each ; inline
 
 
 : paren-word>tick-word ( string -- string' )

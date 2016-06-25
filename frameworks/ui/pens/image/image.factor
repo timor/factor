@@ -13,7 +13,7 @@ M: image-pen draw-interior
     [ dim>> ] [ [ image>> ] [ fill?>> ] bi ] bi*
     [ draw-scaled-image ] [
         [ image-dim [ - 2 /i ] 2map ] keep
-        '[ _ draw-image ] with-translation
+        $[ _ draw-image ] with-translation
     ] if ;
 
 M: image-pen pen-pref-dim nip image>> image-dim ;

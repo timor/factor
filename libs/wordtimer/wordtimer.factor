@@ -40,7 +40,7 @@ SYMBOL: *calling*
     [ swap time-unless-recursing ] 2curry ;
 
 : add-timer ( word -- )
-    dup '[ [ _ ] dip (add-timer) ] annotate ;
+    dup $[ [ _ ] dip (add-timer) ] annotate ;
 
 : add-timers ( vocab -- )
     vocab-words [ add-timer ] each ;

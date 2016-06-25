@@ -46,7 +46,7 @@ justified,$right$justified,$or$center$justified$within$its$column." ;
 : split-and-pad ( text -- lines )
     "\n" split [ "$" split harvest ] map
     dup longest length
-    '[ _ "" pad-tail ] map ;
+    $[ _ "" pad-tail ] map ;
 
 : column-widths ( columns -- widths )
     [ longest length ] map ;
@@ -65,7 +65,7 @@ M: +middle+ align-string
     [ ceiling char: space <string> ] bi surround ;
 
 : align-columns ( columns alignment -- columns' )
-    [ dup column-widths ] dip '[
+    [ dup column-widths ] dip $[
         [ _ align-string ] curry map
     ] 2map ;
 

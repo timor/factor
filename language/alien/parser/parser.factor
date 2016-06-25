@@ -124,7 +124,7 @@ PRIVATE>
     ] until drop types names [ >array ] bi@ ;
 
 : function-quot ( return library function types -- quot )
-    '[ _ _ _ _ alien-invoke ] ;
+    $[ _ _ _ _ alien-invoke ] ;
 
 : function-effect ( names return -- effect )
     [ { } ] [ return-type-name 1array ] if-void <effect> ;
@@ -144,7 +144,7 @@ PRIVATE>
     scan-function-name current-library get scan-c-args ";" expect ;
 
 : callback-quot ( return types abi -- quot )
-    '[ [ _ _ _ ] dip alien-callback ] ;
+    $[ [ _ _ _ ] dip alien-callback ] ;
 
 :: make-callback-type ( return function library types names -- word quot effect )
     function create-function :> type-word
@@ -170,11 +170,11 @@ PREDICATE: alien-callback-type-word < typedef-word
 
 : global-quot ( type word -- quot )
     swap [ name>> current-library get ] dip
-    '[ _ _ address-of 0 _ alien-value ] ;
+    $[ _ _ address-of 0 _ alien-value ] ;
 
 : set-global-quot ( type word -- quot )
     swap [ name>> current-library get ] dip
-    '[ _ _ address-of 0 _ set-alien-value ] ;
+    $[ _ _ address-of 0 _ set-alien-value ] ;
 
 : define-global-getter ( type word -- )
     [ nip ] [ global-quot ] 2bi ( -- value ) define-declared ;

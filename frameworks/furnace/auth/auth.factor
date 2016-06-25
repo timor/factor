@@ -129,7 +129,7 @@ TUPLE: secure-realm-only < filter-responder ;
 C: <secure-realm-only> secure-realm-only ;
 
 M: secure-realm-only call-responder*
-    '[ _ _ call-next-method ] if-secure-realm ;
+    $[ _ _ call-next-method ] if-secure-realm ;
 
 TUPLE: protected < filter-responder description capabilities ;
 

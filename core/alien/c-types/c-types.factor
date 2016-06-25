@@ -124,7 +124,7 @@ MACRO: alien-copy-value ( c-type -- quot: ( c-ptr offset -- value ) )
     [ c-type-getter ] [ c-type-copier ] [ c-type-boxer-quot ] tri 3append ;
 
 MACRO: set-alien-value ( c-type -- quot: ( value c-ptr offset -- ) )
-    [ c-type-unboxer-quot [ [ ] ] [ '[ _ 2dip ] ] if-empty ]
+    [ c-type-unboxer-quot [ [ ] ] [ $[ _ 2dip ] ] if-empty ]
     [ c-type-setter ]
     bi append ;
 
@@ -213,7 +213,7 @@ PRIVATE<
     ] [ drop t ] if ;
 
 : (pointer-c-type) ( void* type -- void*' )
-    [ clone ] dip c-type-boxer-quot '[ _ [ f ] if* ] >>boxer-quot ;
+    [ clone ] dip c-type-boxer-quot $[ _ [ f ] if* ] >>boxer-quot ;
 
 PRIVATE>
 

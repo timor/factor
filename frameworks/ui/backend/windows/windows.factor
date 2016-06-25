@@ -737,7 +737,7 @@ M: win-base flush-gl-context ( handle -- )
 
 : (make-opaque) ( byte-array -- byte-array' )
     [ length 4 /i ]
-    [ '[ 255 swap 4 * 3 + _ set-nth ] each ]
+    [ $[ 255 swap 4 * 3 + _ set-nth ] each ]
     [ ] tri ;
 
 : (opaque-pixels) ( world -- pixels )

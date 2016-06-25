@@ -10,7 +10,7 @@ TUPLE: method-breakpoint-tuple ;
 
 M: method-breakpoint-tuple method-breakpoint-test break drop 1 2 + ;
 
-\ method-breakpoint-test don't-step-into
+\ method-breakpoint-test dont-step-into
 
 { 3 }
 [ [ T{ method-breakpoint-tuple } method-breakpoint-test ] trace ] unit-test
@@ -18,13 +18,13 @@ M: method-breakpoint-tuple method-breakpoint-test break drop 1 2 + ;
 : case-breakpoint-test ( -- x )
     5 { [ break 1 + ] } case ;
 
-\ case-breakpoint-test don't-step-into
+\ case-breakpoint-test dont-step-into
 
 { 6 } [ [ case-breakpoint-test ] trace ] unit-test
 
 : call(-breakpoint-test ( -- x )
     [ break 1 ] call( -- x ) 2 + ;
 
-\ call(-breakpoint-test don't-step-into
+\ call(-breakpoint-test dont-step-into
 
 { 3 } [ [ call(-breakpoint-test ] trace ] unit-test

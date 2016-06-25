@@ -32,6 +32,6 @@ ERROR: count-down-already-done ;
     f await-timeout ;
 
 : spawn-stage ( quot count-down -- )
-    [ '[ @ _ count-down ] ] keep
+    [ $[ @ _ count-down ] ] keep
     "Count down stage"
     swap promise>> mailbox>> spawn-linked-to drop ;

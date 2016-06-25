@@ -14,5 +14,5 @@ IN: io.directories.search.windows
 
 : find-in-program-files ( base-directory quot -- path )
     t swap [
-        [ program-files-directories ] dip '[ _ append-path ] map
+        [ program-files-directories ] dip $[ _ append-path ] map
     ] 2dip find-in-directories ; inline

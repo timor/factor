@@ -38,7 +38,7 @@ IN: compiler.cfg.intrinsics.fixnum
     } cond ;
 
 : emit-fixnum-comparison ( cc -- )
-    '[ _ ^^compare-integer ] binary-op ;
+    $[ _ ^^compare-integer ] binary-op ;
 
 : emit-no-overflow-case ( dst block -- final-bb )
     [ swap d: -2 inc-stack ds-push ] with-branch ;

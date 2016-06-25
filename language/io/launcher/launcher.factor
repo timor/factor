@@ -200,7 +200,7 @@ PRIVATE<
     [
         [
             <process-with-pipe> {
-                [ '[ _ out>> or ] change-stdout ]
+                [ $[ _ out>> or ] change-stdout ]
                 [ drop run-detached ]
                 [ out>> dispose ]
                 [ in>> <input-port> ]
@@ -214,7 +214,7 @@ PRIVATE>
     (process-reader) drop ; inline
 
 : with-process-reader* ( desc encoding quot -- process status )
-    [ (process-reader) ] dip '[ _ with-input-stream ] dip
+    [ (process-reader) ] dip $[ _ with-input-stream ] dip
     dup wait-for-process ; inline
 
 : with-process-reader ( desc encoding quot -- )
@@ -226,7 +226,7 @@ PRIVATE<
     [
         [
             <process-with-pipe> {
-                [ '[ _ in>> or ] change-stdin ]
+                [ $[ _ in>> or ] change-stdin ]
                 [ drop run-detached ]
                 [ in>> dispose ]
                 [ out>> <output-port> ]
@@ -240,7 +240,7 @@ PRIVATE>
     (process-writer) drop ; inline
 
 : with-process-writer* ( desc encoding quot -- process status )
-    [ (process-writer) ] dip '[ _ with-output-stream ] dip
+    [ (process-writer) ] dip $[ _ with-output-stream ] dip
     dup wait-for-process ; inline
 
 : with-process-writer ( desc encoding quot -- )
@@ -271,7 +271,7 @@ PRIVATE>
     (process-stream) drop ; inline
 
 : with-process-stream* ( desc encoding quot -- process status )
-    [ (process-stream) ] dip '[ _ with-stream ] dip
+    [ (process-stream) ] dip $[ _ with-stream ] dip
     dup wait-for-process ; inline
 
 : with-process-stream ( desc encoding quot -- )

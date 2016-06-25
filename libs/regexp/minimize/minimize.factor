@@ -17,8 +17,8 @@ IN: regexp.minimize
 : initially-same? ( s1 s2 transition-table -- ? )
     {
         [ drop <= ]
-        [ transitions>> '[ _ at keys ] bi@ set= ]
-        [ final-states>> '[ _ in? ] bi@ = ]
+        [ transitions>> $[ _ at keys ] bi@ set= ]
+        [ final-states>> $[ _ in? ] bi@ = ]
     } 3&& ;
 
 :: initialize-partitions ( transition-table -- partitions )
@@ -36,14 +36,14 @@ IN: regexp.minimize
     { [ [ sort-pair 2array ] dip key? ] [ drop = ] } 3|| ;
 
 : assemble-values ( assoc1 assoc2 -- values )
-    dup keys '[ _ swap [ at ] curry map ] bi@ zip ;
+    dup keys $[ _ swap [ at ] curry map ] bi@ zip ;
 
 : stay-same? ( s1 s2 transition partitions -- ? )
-    [ '[ _ transitions>> at ] bi@ assemble-values ] dip
-    '[ _ same-partition? ] assoc-all? ;
+    [ $[ _ transitions>> at ] bi@ assemble-values ] dip
+    $[ _ same-partition? ] assoc-all? ;
 
 : partition-more ( partitions transition-table -- partitions )
-    over '[ drop first2 _ _ stay-same? ] assoc-filter ;
+    over $[ drop first2 _ _ stay-same? ] assoc-filter ;
 
 : partition>classes ( partitions -- synonyms ) ! old-state => new-state
     sort-keys
@@ -64,7 +64,7 @@ IN: regexp.minimize
 
 : (state-classes) ( transition-table -- partition )
     [ initialize-partitions ] keep
-    '[ _ partition-more ] [ assoc-size ] while-changes ;
+    $[ _ partition-more ] [ assoc-size ] while-changes ;
 
 : assoc>set ( assoc -- keys-set )
     [ drop dup ] assoc-map ;
@@ -74,18 +74,18 @@ IN: regexp.minimize
     [ assoc>set ] [ (state-classes) partition>classes ] bi* assoc-union ;
 
 : canonical-state? ( state transitions state-classes -- ? )
-    '[ dup _ at =  ] swap '[ _ at has-conditions? ] bi or ;
+    $[ dup _ at =  ] swap $[ _ at has-conditions? ] bi or ;
 
 : delete-duplicates ( transitions state-classes -- new-transitions )
-    dupd '[ drop _ _ canonical-state? ] assoc-filter ;
+    dupd $[ drop _ _ canonical-state? ] assoc-filter ;
 
 : combine-states ( table -- smaller-table )
     dup state-classes
     [ transitions-at ] keep
-    '[ _ delete-duplicates ] change-transitions ;
+    $[ _ delete-duplicates ] change-transitions ;
 
 : combine-state-transitions ( hash -- hash )
-    [ H{ } clone ] dip over '[
+    [ H{ } clone ] dip over $[
         _ [ 2array <or-class> ] change-at
     ] assoc-each [ swap ] assoc-map ;
 

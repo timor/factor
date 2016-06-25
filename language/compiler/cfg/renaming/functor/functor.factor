@@ -9,7 +9,7 @@ IN: compiler.cfg.renaming.functor
 ! Like compiler.cfg.def-use, but for changing operands
 
 : slot-change-quot ( slots quot -- quot' )
-    '[ [ _ ] dip changer-word [ ] 2sequence ] map [ ] join
+    $[ [ _ ] dip changer-word [ ] 2sequence ] map [ ] join
     [ drop ] append ;
 
 FUNCTOR< define-renaming ( NAME DEF-QUOT USE-QUOT TEMP-QUOT -- )

@@ -18,7 +18,7 @@ IN: compiler.cfg.stacks.finalize
     diff ;
 
 : each-insertion ( ... set bb quot: ( ... vreg loc -- ... ) -- ... )
-    [ members ] 2dip '[ [ loc>vreg ] [ _ untranslate-loc ] bi @ ] each ; inline
+    [ members ] 2dip $[ [ loc>vreg ] [ _ untranslate-loc ] bi @ ] each ; inline
 
 ERROR: bad-peek dst loc ;
 
@@ -37,7 +37,7 @@ ERROR: bad-peek dst loc ;
     ] if ;
 
 : visit-block ( bb -- )
-    [ predecessors>> ] keep '[ _ visit-edge ] each ;
+    [ predecessors>> ] keep $[ _ visit-edge ] each ;
 
 : finalize-stack-shuffling ( cfg -- )
     [ [ visit-block ] each-basic-block ] [ cfg-changed ] bi ;

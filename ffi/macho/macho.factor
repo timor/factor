@@ -937,7 +937,7 @@ TYPED: load-commands ( macho: mach_header_32/64 -- load-commands )
     symbol-name "_" ?head drop ;
 
 : with-mapped-macho ( path quot -- )
-    '[
+    $[
         address>> macho-header @
     ] with-mapped-file-reader ; inline
 

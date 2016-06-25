@@ -41,7 +41,7 @@ M: form clone
     [ make-mirror ] [ values extract-keys ] bi* assoc-union! drop ;
 
 : with-each-value ( name quot -- )
-    [ value ] dip '[
+    [ value ] dip $[
         [
             form [ clone ] change
             1 + "index" set-value
@@ -51,7 +51,7 @@ M: form clone
     ] each-index ; inline
 
 : with-each-object ( name quot -- )
-    [ value ] dip '[
+    [ value ] dip $[
         [
             begin-form
             1 + "index" set-value
@@ -63,7 +63,7 @@ M: form clone
 SYMBOL: nested-forms
 
 : with-form ( name quot -- )
-    '[
+    $[
         _
         [ nested-forms [ swap prefix ] change ]
         [ value form set ]
@@ -96,7 +96,7 @@ C: <validation-error-state> validation-error-state ;
     >hashtable "validators" set-word-prop ;
 
 : validate ( value quot -- result )
-    '[ _ call( value -- validated ) ] [ <validation-error-state> ] recover ;
+    $[ _ call( value -- validated ) ] [ <validation-error-state> ] recover ;
 
 : validate-value ( name value quot -- )
     validate
@@ -104,7 +104,7 @@ C: <validation-error-state> validation-error-state ;
     swap set-value ;
 
 : validate-values ( assoc validators -- )
-    swap '[ [ dup _ at ] dip validate-value ] assoc-each ;
+    swap $[ [ dup _ at ] dip validate-value ] assoc-each ;
 
 : render-validation-errors ( -- )
     form get errors>>

@@ -10,7 +10,7 @@ IN: compiler.cfg.representations.coalescing
 SYMBOL: components
 
 : init-components ( cfg components -- )
-    '[
+    $[
         [
             defs-vregs [ _ add-atom ] each
         ] each
@@ -27,7 +27,7 @@ M: ##phi visit-insn
 M: insn visit-insn 2drop ;
 
 : merge-components ( cfg components -- )
-    '[
+    $[
         [
             _ visit-insn
         ] each

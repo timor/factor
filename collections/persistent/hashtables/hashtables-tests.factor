@@ -86,7 +86,7 @@ COMPILE>
 
 : random-assocs ( n -- hash phash )
     [ random-string ] replicate
-    [ H{ } clone [ '[ swap _ set-at ] each-index ] keep ]
+    [ H{ } clone [ $[ swap _ set-at ] each-index ] keep ]
     [ PH{ } clone swap |[ ph elt i | i elt ph new-at ] each-index ]
     bi ;
 

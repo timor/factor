@@ -10,11 +10,11 @@ SYMBOL: rename-map
     [ rename-map get at ] keep or ;
 
 : rename-values ( values -- values' )
-    dup empty? [ rename-map get '[ [ _ at ] keep or ] map ] unless ;
+    dup empty? [ rename-map get $[ [ _ at ] keep or ] map ] unless ;
 
 : add-renamings ( old new -- )
     [ rename-values ] dip
-    rename-map get '[ _ set-at ] 2each ;
+    rename-map get $[ _ set-at ] 2each ;
 
 GENERIC: rename-node-values* ( node -- node ) ;
 

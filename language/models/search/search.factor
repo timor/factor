@@ -4,7 +4,7 @@ USING: fry kernel models.arrow.smart sequences unicode ;
 IN: models.search
 
 : <search> ( values search quot -- model )
-    '[ _ curry filter ] <smart-arrow> ; inline
+    $[ _ curry filter ] <smart-arrow> ; inline
 
 : <string-search> ( values search quot -- model )
-    '[ swap @ [ >case-fold ] bi@ subseq? ] <search> ; inline
+    $[ swap @ [ >case-fold ] bi@ subseq? ] <search> ; inline

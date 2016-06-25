@@ -129,7 +129,7 @@ ERROR: all-points-colinear ;
 : connect-opposite-edges ( b-rep -- )
     edges>>
     [ [ [ next-edge>> vertex>> ] [ vertex>> 2array ] [ ] tri ] H{ } map>assoc ]
-    [ swap '[ [ vertex>> ] [ next-edge>> vertex>> 2array _ at ] [ opposite-edge<< ] tri ] each ] bi ;
+    [ swap $[ [ vertex>> ] [ next-edge>> vertex>> 2array _ at ] [ opposite-edge<< ] tri ] each ] bi ;
 
 : connect-faces ( b-rep -- )
     edges>> [ dup face>> edge<< ] each ;

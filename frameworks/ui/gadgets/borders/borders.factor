@@ -20,7 +20,7 @@ TUPLE: border < aligned-gadget
     <border> { 1 1 } >>fill ;
 
 : border-pref-dim ( border child-dim -- pref-dim )
-    '[ size>> 2 v*n _ v+ ] [ min-dim>> ] bi vmax ;
+    $[ size>> 2 v*n _ v+ ] [ min-dim>> ] bi vmax ;
 
 M: border pref-dim*
     dup gadget-child pref-dim border-pref-dim ;

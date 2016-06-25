@@ -28,7 +28,7 @@ ARTICLE: "inference-combinators" "Combinator stack effects"
 "The following usage of " { $link map } " passes the stack checker, because the quotation is the result of " { $link curry } ":"
 { $example "USING: math sequences ;" "[ [ + ] curry map ] infer." "( x x -- x )" }
 "The equivalent code using " { $vocab-link "fry" } " and " { $vocab-link "locals" } " likewise passes the stack checker:"
-{ $example "USING: fry math sequences ;" "[ '[ _ + ] map ] infer." "( x x -- x )" }
+{ $example "USING: fry math sequences ;" "[ $[ _ + ] map ] infer." "( x x -- x )" }
 { $example "USING: locals math sequences ;" "|[ a | [ a + ] map ] infer." "( x x -- x )" }
 { $subheading "Defining an inline combinator" }
 "The following word calls a quotation twice; the word is declared " { $link postpone\ inline } ", since it invokes " { $link call } " on the result of " { $link compose } " on an input parameter:"

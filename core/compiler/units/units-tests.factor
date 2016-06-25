@@ -18,7 +18,7 @@ IN: compiler.units.tests
     gensym "b" set
     [
         "a" get [ "A" ] define
-        "b" get "a" get '[ _ execute ] define
+        "b" get "a" get $[ _ execute ] define
     ] with-compilation-unit
     "b" get execute
     [

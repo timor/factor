@@ -73,7 +73,7 @@ CONSTANT: node-colors {
 
 ! Edges
 : heap-node-edges ( heap heap-node -- seq )
-    [ collect-pointers ] keep address>> '[ _ swap 2array ] map ;
+    [ collect-pointers ] keep address>> $[ _ swap 2array ] map ;
 
 : image>edges ( image -- edges )
     heap>> dup [ heap-node-edges ] with map concat

@@ -93,8 +93,8 @@ M: cord vandn             [ vandn             ] [ call-next-method ] cord-2map ;
 M: cord vor               [ vor               ] [ call-next-method ] cord-2map ; inline
 M: cord vxor              [ vxor              ] [ call-next-method ] cord-2map ; inline
 M: cord vnot              [ vnot              ] cord-map  ; inline
-M: cord vlshift           '[ _ vlshift        ] cord-map  ; inline
-M: cord vrshift           '[ _ vrshift        ] cord-map  ; inline
+M: cord vlshift           $[ _ vlshift        ] cord-map  ; inline
+M: cord vrshift           $[ _ vrshift        ] cord-map  ; inline
 M: cord (vmerge-head)     [ head>> ] bi@ (vmerge) cord-append ; inline
 M: cord (vmerge-tail)     [ tail>> ] bi@ (vmerge) cord-append ; inline
 M: cord v<=               [ v<=               ] [ call-next-method ] cord-2map ; inline
@@ -114,10 +114,10 @@ M: cord n+v [ n+v ] with cord-map ; inline
 M: cord n-v [ n-v ] with cord-map ; inline
 M: cord n*v [ n*v ] with cord-map ; inline
 M: cord n/v [ n/v ] with cord-map ; inline
-M: cord v+n '[ _ v+n ] cord-map ; inline
-M: cord v-n '[ _ v-n ] cord-map ; inline
-M: cord v*n '[ _ v*n ] cord-map ; inline
-M: cord v/n '[ _ v/n ] cord-map ; inline
+M: cord v+n $[ _ v+n ] cord-map ; inline
+M: cord v-n $[ _ v-n ] cord-map ; inline
+M: cord v*n $[ _ v*n ] cord-map ; inline
+M: cord v/n $[ _ v/n ] cord-map ; inline
 
 M: cord norm-sq [ norm-sq ] cord-both + ; inline
 M: cord distance v- norm ; inline

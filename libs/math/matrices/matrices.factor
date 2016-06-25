@@ -8,23 +8,23 @@ IN: math.matrices
 
 ! Matrices
 : make-matrix ( m n quot -- matrix )
-    '[ _ _ replicate ] replicate ; inline
+    $[ _ _ replicate ] replicate ; inline
 
 : <matrix> ( m n element -- matrix )
-    '[ _ _ <array> ] replicate ; inline
+    $[ _ _ <array> ] replicate ; inline
 
 : zero-matrix ( m n -- matrix )
     0 <matrix> ; inline
 
 : diagonal-matrix ( diagonal-seq -- matrix )
     dup length dup zero-matrix
-    [ '[ dup _ nth set-nth ] each-index ] keep ; inline
+    [ $[ dup _ nth set-nth ] each-index ] keep ; inline
 
 : identity-matrix ( n -- matrix )
     1 <repetition> diagonal-matrix ; inline
 
 : eye ( m n k -- matrix )
-    [ [ iota ] bi@ ] dip neg '[ _ + = 1 0 ? ] cartesian-map ;
+    [ [ iota ] bi@ ] dip neg $[ _ + = 1 0 ? ] cartesian-map ;
 
 : hilbert-matrix ( m n -- matrix )
     [ iota ] bi@ [ + 1 + recip ] cartesian-map ;
@@ -33,10 +33,10 @@ IN: math.matrices
     iota dup [ - abs 1 + ] cartesian-map ;
 
 : hankel-matrix ( n -- matrix )
-    [ iota dup ] keep '[ + abs 1 + dup _ > [ drop 0 ] when ] cartesian-map ;
+    [ iota dup ] keep $[ + abs 1 + dup _ > [ drop 0 ] when ] cartesian-map ;
 
 : box-matrix ( r -- matrix )
-    2 * 1 + dup '[ _ 1 <array> ] replicate ;
+    2 * 1 + dup $[ _ 1 <array> ] replicate ;
 
 : vandermonde-matrix ( u n -- matrix )
     iota [ v^n ] with map reverse flip ;
@@ -180,7 +180,7 @@ ERROR: negative-power-matrix m n ;
     [ ] [ [ append ] 2map ] map-reduce ;
 
 : kron ( m1 m2 -- m )
-    '[ [ _ n*m  ] map ] map stitch stitch ;
+    $[ [ _ n*m  ] map ] map stitch stitch ;
 
 : outer ( u v -- m )
     [ n*v ] curry map ;
@@ -189,38 +189,38 @@ ERROR: negative-power-matrix m n ;
     nth ; inline
 
 : rows ( seq matrix -- cols )
-    '[ _ row ] map ; inline
+    $[ _ row ] map ; inline
 
 : col ( n matrix -- col )
-    swap '[ _ swap nth ] map ; inline
+    swap $[ _ swap nth ] map ; inline
 
 : cols ( seq matrix -- cols )
-    '[ _ col ] map ; inline
+    $[ _ col ] map ; inline
 
 : set-index ( object pair matrix -- )
     [ first2 swap ] dip nth set-nth ; inline
 
 : set-indices ( object sequence matrix -- )
-    '[ _ set-index ] with each ; inline
+    $[ _ set-index ] with each ; inline
 
 : matrix-map ( matrix quot -- )
-    '[ _ map ] map ; inline
+    $[ _ map ] map ; inline
 
 : column-map ( matrix quot -- seq )
-    [ [ first length iota ] keep ] dip '[ _ col @ ] map ; inline
+    [ [ first length iota ] keep ] dip $[ _ col @ ] map ; inline
 
 : cartesian-square-indices ( n -- matrix )
     iota dup cartesian-product ; inline
 
 : cartesian-matrix-map ( matrix quot -- matrix' )
     [ [ first length cartesian-square-indices ] keep ] dip
-    '[ _ @ ] matrix-map ; inline
+    $[ _ @ ] matrix-map ; inline
 
 : cartesian-matrix-column-map ( matrix quot -- matrix' )
     [ cols first2 ] prepose cartesian-matrix-map ; inline
 
 : cov-matrix-ddof ( matrix ddof -- cov )
-    '[ _ cov-ddof ] cartesian-matrix-column-map ; inline
+    $[ _ cov-ddof ] cartesian-matrix-column-map ; inline
 
 : cov-matrix ( matrix -- cov ) 0 cov-matrix-ddof ; inline
 
@@ -229,7 +229,7 @@ ERROR: negative-power-matrix m n ;
 GENERIC: square-rows ( object -- matrix ) ;
 M: integer square-rows iota square-rows ;
 M: sequence square-rows
-    [ length ] keep >array '[ _ clone ] { } replicate-as ;
+    [ length ] keep >array $[ _ clone ] { } replicate-as ;
 
 GENERIC: square-cols ( object -- matrix ) ;
 M: integer square-cols iota square-cols ;
@@ -237,14 +237,14 @@ M: sequence square-cols
     [ length ] keep [ <array> ] with { } map-as ;
 
 : make-matrix-with-indices ( m n quot -- matrix )
-    [ [ iota ] bi@ ] dip '[ @ ] cartesian-map ; inline
+    [ [ iota ] bi@ ] dip $[ @ ] cartesian-map ; inline
 
 : null-matrix? ( matrix -- ? ) empty? ; inline
 
 : well-formed-matrix? ( matrix -- ? )
     [ t ] [
         [ ] [ first length ] bi
-        '[ length _ = ] all?
+        $[ length _ = ] all?
     ] if-empty ;
 
 : dim ( matrix -- pair/f )

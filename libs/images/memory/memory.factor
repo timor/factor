@@ -25,6 +25,6 @@ PRIVATE<
 PRIVATE>
 
 : make-memory-bitmap ( dim quot -- image )
-    '[
+    $[
         [ malloc-bitmap-data ] keep _ [ <bitmap-image> ] 2bi
     ] with-destructors ; inline

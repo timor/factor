@@ -67,20 +67,20 @@ TUPLE: nbody-system { bodies array read-only } ;
     ] each-index ; inline
 
 : update-position ( body dt -- )
-    [ dup velocity>> ] dip '[ _ _ v*n v+ ] change-location drop ;
+    [ dup velocity>> ] dip $[ _ _ v*n v+ ] change-location drop ;
 
 : mag ( dt body other-body -- mag d )
     [ location>> ] bi@ v- [ norm-sq dup sqrt * / ] keep ; inline
 
 :: update-velocity ( other-body body dt -- )
     dt body other-body mag
-    [ [ body ] 2dip '[ other-body mass>> _ * _ n*v v- ] change-velocity drop ]
-    [ [ other-body ] 2dip '[ body mass>> _ * _ n*v v+ ] change-velocity drop ] 2bi ;
+    [ [ body ] 2dip $[ other-body mass>> _ * _ n*v v- ] change-velocity drop ]
+    [ [ other-body ] 2dip $[ body mass>> _ * _ n*v v+ ] change-velocity drop ] 2bi ;
 
 : advance ( system dt -- )
     [ bodies>> ] dip
-    [ '[ _ update-velocity ] [ drop ] each-pair ]
-    [ '[ _ update-position ] each ]
+    [ $[ _ update-velocity ] [ drop ] each-pair ]
+    [ $[ _ update-position ] each ]
     2bi ; inline
 
 : inertia ( body -- e )
@@ -94,7 +94,7 @@ TUPLE: nbody-system { bodies array read-only } ;
 
 : nbody ( n -- )
     <nbody-system>
-    [ energy . ] [ '[ _ 0.01 advance ] times ] [ energy . ] tri ;
+    [ energy . ] [ $[ _ 0.01 advance ] times ] [ energy . ] tri ;
 
 HINTS: update-position body float ;
 HINTS: update-velocity body body float ;

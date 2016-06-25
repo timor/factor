@@ -26,7 +26,7 @@ ERROR: cairo-error n message ;
 : <cairo> ( surface -- cairo ) cairo_create dup check-cairo ; inline
 
 : make-bitmap-image ( dim quot -- image )
-    '[
+    $[
         <image-surface> &cairo_surface_destroy
         <cairo> &cairo_destroy
         @

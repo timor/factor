@@ -62,4 +62,4 @@ DEFER: maybe-loop
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-: go* ( quot -- ) '[ [ springies-window* 1000 sleep @ ] with-scope ] with-ui ;
+: go* ( quot -- ) $[ [ springies-window* 1000 sleep @ ] with-scope ] with-ui ;

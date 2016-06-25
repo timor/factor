@@ -20,7 +20,7 @@ CONSTANT: knucleotide-in "vocab:benchmark/knucleotide/knucleotide-input.txt" ;
 : handle-table ( inputs n -- )
     clump
     [ histogram sort-values reverse ] [ length ] bi
-    '[
+    $[
         [ first write bl ]
         [ second 100 * _ /f "%.3f" printf nl ] bi
     ] each ;

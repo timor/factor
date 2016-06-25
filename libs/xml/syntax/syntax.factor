@@ -16,7 +16,7 @@ M: no-tag summary
     drop "The tag-dispatching word has no method for the given tag name" ;
 
 : compile-tags ( word xtable -- quot )
-    >alist swap '[ _ no-tag ] suffix '[ dup main>> _ case ] ;
+    >alist swap $[ _ no-tag ] suffix $[ dup main>> _ case ] ;
 
 : define-tags ( word effect -- )
     [ dup dup "xtable" word-prop compile-tags ] dip define-declared ;
@@ -37,7 +37,7 @@ SYNTAX: \ TAG:
     scan-token scan-word parse-definition define-tag ;
 
 SYNTAX: \ XML-NS:
-    scan-new-word scan-token ";" expect '[ f swap _ <name> ] ( string -- name ) define-memoized ;
+    scan-new-word scan-token ";" expect $[ f swap _ <name> ] ( string -- name ) define-memoized ;
 
 PRIVATE<
 
@@ -54,14 +54,14 @@ PRIVATE<
      } cond ; inline recursive
 
 : each-interpolated ( xml quot -- )
-    '[ _ (each-interpolated) ] deep-each ; inline
+    $[ _ (each-interpolated) ] deep-each ; inline
 
 : has-interpolated? ( xml -- ? )
     ! If this becomes a performance problem, it can be improved
     f swap [ 2drop t ] each-interpolated ;
 
 : when-interpolated ( xml quot -- genquot )
-    [ dup has-interpolated? ] dip [ '[ _ swap ] ] if ; inline
+    [ dup has-interpolated? ] dip [ $[ _ swap ] ] if ; inline
 
 : string>chunk ( string -- chunk )
     t interpolating? [ string>xml-chunk ] with-variable ;
@@ -72,21 +72,21 @@ PRIVATE<
 DEFER: interpolate-sequence
 
 : get-interpolated ( interpolated -- quot )
-    var>> '[ [ _ of ] keep ] ;
+    var>> $[ [ _ of ] keep ] ;
 
 : ?present ( object -- string )
     dup [ present ] when ;
 
 : interpolate-attr ( key value -- quot )
     dup interpolated?
-    [ get-interpolated '[ _ swap @ [ ?present 2array ] dip ] ]
-    [ 2array '[ _ swap ] ] if ;
+    [ get-interpolated $[ _ swap @ [ ?present 2array ] dip ] ]
+    [ 2array $[ _ swap ] ] if ;
 
 : interpolate-attrs ( attrs -- quot )
     [
         [ [ interpolate-attr ] { } assoc>map [ ] join ]
         [ assoc-size ] bi
-        '[ @ _ swap [ narray sift-values <attrs> ] dip ]
+        $[ @ _ swap [ narray sift-values <attrs> ] dip ]
     ] when-interpolated ;
 
 : interpolate-tag ( tag -- quot )
@@ -94,7 +94,7 @@ DEFER: interpolate-sequence
         [ name>> ]
         [ attrs>> interpolate-attrs ]
         [ children>> interpolate-sequence ] tri
-        '[ _ swap @ @ [ <tag> ] dip ]
+        $[ _ swap @ @ [ <tag> ] dip ]
     ] when-interpolated ;
 
 GENERIC: push-item ( item -- ) ;
@@ -122,18 +122,18 @@ M: interpolated interpolate-item get-interpolated ;
     [
         [ [ interpolate-item ] map concat ]
         [ length ] bi
-        '[ @ _ swap [ narray concat-interpolate ] dip ]
+        $[ @ _ swap [ narray concat-interpolate ] dip ]
     ] when-interpolated ;
 
 GENERIC: [interpolate-xml] ( xml -- quot ) ;
 
 M: xml [interpolate-xml]
     dup body>> interpolate-tag
-    '[ _ (clone) swap @ drop >>body ] ;
+    $[ _ (clone) swap @ drop >>body ] ;
 
 M: xml-chunk [interpolate-xml]
     interpolate-sequence
-    '[ @ drop <xml-chunk> ] ;
+    $[ @ drop <xml-chunk> ] ;
 
 MACRO: interpolate-xml ( xml -- quot )
     [interpolate-xml] ;

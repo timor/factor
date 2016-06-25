@@ -110,7 +110,7 @@ IN: compiler.tree.propagation.transforms
 
 : shift-2^ ( -- quot )
     cell-bits tag-bits get - 1 -
-    '[
+    $[
         integer>fixnum-strict dup 0 < [ 2drop 0 ] [
             dup _ < [ fixnum-shift ] [
                 fixnum-shift
@@ -187,7 +187,7 @@ ERROR: bad-partial-eval quot word ;
         [ drop all-slots [ initial>> literalize ] [ ] map-as ]
         [ nip ]
         2tri
-        '[ @ _ <tuple-boa> ]
+        $[ @ _ <tuple-boa> ]
     ] [ drop f ] if ;
 
 \ new [ inline-new ] 1 define-partial-eval
@@ -205,8 +205,8 @@ ERROR: bad-partial-eval quot word ;
 
 ! Shuffling
 : nths-quot ( indices -- quot )
-    [ [ '[ _ swap nth ] ] map ] [ length ] bi
-    '[ _ cleave _ narray ] ;
+    [ [ $[ _ swap nth ] ] map ] [ length ] bi
+    $[ _ cleave _ narray ] ;
 
 \ shuffle [
     shuffle-mapping nths-quot
@@ -216,7 +216,7 @@ ERROR: bad-partial-eval quot word ;
 \ index [
     dup sequence? [
         dup length 4 >= [
-            H{ } zip-index-as '[ _ at ]
+            H{ } zip-index-as $[ _ at ]
         ] [ drop f ] if
     ] [ drop f ] if
 ] 1 define-partial-eval
@@ -255,11 +255,11 @@ CONSTANT: lookup-table-at-max 256 ;
     } 1&& ;
 
 : lookup-table-seq ( assoc -- table )
-    [ keys supremum 1 + iota ] keep '[ _ at ] { } map-as ;
+    [ keys supremum 1 + iota ] keep $[ _ at ] { } map-as ;
 
 : lookup-table-quot ( seq -- newquot )
     lookup-table-seq
-    '[
+    $[
         _ over integer? [
             2dup bounds-check? [
                 nth-unsafe dup >boolean
@@ -278,7 +278,7 @@ CONSTANT: lookup-table-at-max 256 ;
 
 : fast-lookup-table-quot ( seq -- newquot )
     fast-lookup-table-seq
-    '[
+    $[
         _ over integer? [
             2dup bounds-check? [
                 nth-unsafe dup 255 eq? [ drop f f ] [ t ] if
@@ -300,17 +300,17 @@ CONSTANT: lookup-table-at-max 256 ;
 \ at* [ at-quot ] 1 define-partial-eval
 
 : diff-quot ( seq -- quot: ( seq' -- seq'' ) )
-    [ tester ] keep '[ members [ @ ] reject _ set-like ] ;
+    [ tester ] keep $[ members [ @ ] reject _ set-like ] ;
 
 M\ sets:set diff [ diff-quot ] 1 define-partial-eval
 
 : intersect-quot ( seq -- quot: ( seq' -- seq'' ) )
-    [ tester ] keep '[ members _ filter _ set-like ] ;
+    [ tester ] keep $[ members _ filter _ set-like ] ;
 
 M\ sets:set intersect [ intersect-quot ] 1 define-partial-eval
 
 : intersects?-quot ( seq -- quot: ( seq' -- seq'' ) )
-    tester '[ members _ any? ] ;
+    tester $[ members _ any? ] ;
 
 M\ sets:set intersects? [ intersects?-quot ] 1 define-partial-eval
 
@@ -329,17 +329,17 @@ M\ sets:set intersects? [ intersects?-quot ] 1 define-partial-eval
 
 : custom-inline-fixnum ( #call method -- y )
     [ in-d>> first value-info class>> fixnum \ f class-or class<= ] dip
-    '[ [ dup [ _ no-method ] unless ] ] [ f ] if ;
+    $[ [ dup [ _ no-method ] unless ] ] [ f ] if ;
 
 ! Speeds up fasta benchmark
 { >fixnum integer>fixnum integer>fixnum-strict } [
-    dup '[ _ custom-inline-fixnum ] "custom-inlining" set-word-prop
+    dup $[ _ custom-inline-fixnum ] "custom-inlining" set-word-prop
 ] each
 
 ! We want to constant-fold calls to heap-size, and recompile those
 ! calls when a C type is redefined
 \ heap-size [
-    [ add-depends-on-c-type ] [ heap-size '[ _ ] ] bi
+    [ add-depends-on-c-type ] [ heap-size $[ _ ] ] bi
 ] 1 define-partial-eval
 
 ! Eliminates a few redundant checks here and there

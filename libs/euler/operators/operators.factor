@@ -300,18 +300,18 @@ TYPED: move-v ( edge: b-edge point: point -- )
 
 TYPED: move-e ( edge: b-edge offset: point -- )
     [ dup opposite-edge>> ] dip
-    '[ vertex>> [ _ v+ ] change-position drop ] bi@ ;
+    $[ vertex>> [ _ v+ ] change-position drop ] bi@ ;
 
 TYPED: move-f ( edge: b-edge offset: point -- )
-    '[ vertex>> [ _ v+ ] change-position drop ] each-face-edge ;
+    $[ vertex>> [ _ v+ ] change-position drop ] each-face-edge ;
 
 TYPED: sharp-e ( edge: b-edge sharp?: boolean -- )
     >>sharpness drop ;
 
 TYPED: sharp-f ( edge: b-edge sharp?: boolean -- )
-    '[ _ sharp-e ] each-face-edge ;
+    $[ _ sharp-e ] each-face-edge ;
 
 TYPED: sharp-v ( edge: b-edge sharp?: boolean -- )
-    '[ _ sharp-e ] each-vertex-edge ;
+    $[ _ sharp-e ] each-vertex-edge ;
 
 TYPED: material-f ( edge: b-edge material -- ) 2drop ;

@@ -17,6 +17,6 @@ PRIVATE<
 
 M: change-tracking-tuple-class writer-quot ( class slot-spec -- quot )
     [ call-next-method ]
-    [ name>> "changed?" = [ '[ _ [ t >>changed? drop ] bi ] ] unless ] bi ;
+    [ name>> "changed?" = [ $[ _ [ t >>changed? drop ] bi ] ] unless ] bi ;
 
 PRIVATE>

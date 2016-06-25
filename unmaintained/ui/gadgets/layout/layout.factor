@@ -25,10 +25,10 @@ TUPLE: placeholder < gadget members ;
 DEFER: with-interface
 : insertion-quot ( quot -- quot' )
     make:building get [ [ placeholder? ] find-last nip [ <placeholder> dup , ] unless*
-    [ templates get ] 2dip swap '[ [ _ templates set _ , @ ] with-interface ] ] when* ;
+    [ templates get ] 2dip swap $[ [ _ templates set _ , @ ] with-interface ] ] when* ;
 
 SYNTAX: ,% scan string>number [ <layout> , ] curry append! ;
-SYNTAX: ->% scan string>number '[ [ _ <layout> , ] [ output-model ] bi ] append! ;
+SYNTAX: ->% scan string>number $[ [ _ <layout> , ] [ output-model ] bi ] append! ;
 
 GENERIC: -> ( uiitem -- model )
 M: gadget -> dup , output-model ;

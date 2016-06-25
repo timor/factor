@@ -55,7 +55,7 @@ M: ad-do-it-error summary
     in-advice? get [ ad-do-it-error ] unless coyield ;
     
 : make-advised ( word -- )
-    [ dup '[ [ _ ] dip over dup '[ _ call-before _ _ call-around _ call-after ] ] annotate ]
+    [ dup $[ [ _ ] dip over dup $[ _ call-before _ _ call-around _ call-after ] ] annotate ]
     [ { before after around } [ <linked-hash> swap set-word-prop ] with each ] 
     [ t advised set-word-prop ] tri ;
 

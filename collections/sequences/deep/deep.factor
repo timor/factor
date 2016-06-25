@@ -14,14 +14,14 @@ M: object branch? drop f ;
 
 : deep-each ( ... obj quot: ( ... elt -- ... ) -- ... )
     [ call ] 2keep over branch?
-    [ '[ _ deep-each ] each ] [ 2drop ] if ; inline recursive
+    [ $[ _ deep-each ] each ] [ 2drop ] if ; inline recursive
 
 : deep-reduce ( ... obj identity quot: ( ... prev elt -- ... next ) -- ... result )
     swapd deep-each ; inline
 
 : deep-map ( ... obj quot: ( ... elt -- ... elt' ) -- ... newobj )
     [ call ] keep over branch?
-    [ '[ _ deep-map ] map ] [ drop ] if ; inline recursive
+    [ $[ _ deep-map ] map ] [ drop ] if ; inline recursive
 
 : deep-filter-as ( ... obj quot: ( ... elt -- ... ? ) exemplar -- ... seq )
     [ selector [ deep-each ] dip ] dip [ like ] when* ; inline recursive
@@ -32,7 +32,7 @@ M: object branch? drop f ;
 : (deep-find) ( ... obj quot: ( ... elt -- ... ? ) -- ... elt ? )
     [ call ] 2keep rot [ drop t ] [
         over branch? [
-            [ f ] 2dip '[ nip _ (deep-find) ] any?
+            [ f ] 2dip $[ nip _ (deep-find) ] any?
         ] [ 2drop f f ] if
     ] if ; inline recursive
 
@@ -41,21 +41,21 @@ M: object branch? drop f ;
 : deep-any? ( ... obj quot: ( ... elt -- ... ? ) -- ... ? ) (deep-find) nip ; inline
 
 : deep-all? ( ... obj quot: ( ... elt -- ... ? ) -- ... ? )
-    '[ @ not ] deep-any? not ; inline
+    $[ @ not ] deep-any? not ; inline
 
 : deep-member? ( obj seq -- ? )
-    swap '[
+    swap $[
         _ swap dup branch? [ member? ] [ 2drop f ] if
     ] deep-find >boolean ;
 
 : deep-subseq? ( subseq seq -- ? )
-    swap '[
+    swap $[
         _ swap dup branch? [ subseq? ] [ 2drop f ] if
     ] deep-find >boolean ;
 
 : deep-map! ( ... obj quot: ( ... elt -- ... elt' ) -- ... obj )
     over branch? [
-        '[ _ [ call ] keep over [ deep-map! drop ] dip ] map!
+        $[ _ [ call ] keep over [ deep-map! drop ] dip ] map!
     ] [ drop ] if ; inline recursive
 
 : flatten ( obj -- seq )

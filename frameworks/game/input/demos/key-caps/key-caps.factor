@@ -163,7 +163,7 @@ M: key-caps-gadget pref-dim* drop KEYBOARD-SIZE ;
 
 M: key-caps-gadget graft*
     open-game-input
-    dup '[ _ update-key-caps-state ] FREQUENCY every >>timer
+    dup $[ _ update-key-caps-state ] FREQUENCY every >>timer
     drop ;
 
 M: key-caps-gadget ungraft*

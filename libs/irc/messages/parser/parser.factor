@@ -7,7 +7,7 @@ IN: irc.messages.parser
 
 PRIVATE<
 : split-at-first ( seq separators -- before after )
-    dupd '[ _ member? ] find [ cut rest ] [ swap ] if ;
+    dupd $[ _ member? ] find [ cut rest ] [ swap ] if ;
 
 ! ":ircuser!n=user@isp.net JOIN :#factortest"
 : split-message ( string -- prefix command parameters trailing )

@@ -98,4 +98,4 @@ M: object selector-new new ;
 
 selector\ time
 
-M: object selector-time '[ _ call( -- result ) ] time ;
+M: object selector-time $[ _ call( -- result ) ] time ;

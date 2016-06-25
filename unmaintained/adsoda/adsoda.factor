@@ -72,7 +72,7 @@ TUPLE: light name { direction array } color ;
 ! halfspace manipulation
 ! -------------------------------------------------------------
 
-: constant+ ( v x -- w )  '[ [ _ + ] change-last ] keep ;
+: constant+ ( v x -- w )  $[ [ _ + ] change-last ] keep ;
 : translate ( u v -- w )   dupd     v* sum     constant+ ; 
 
 : transform ( u matrix -- w )
@@ -156,7 +156,7 @@ TUPLE: face { halfspace array }
     2dup =   [ drop ] [ (add-to-adjacent-faces) ] if ;
 
 : update-adjacent-faces ( faces corner -- )
-   '[ [ _ suffix-touching-corner drop ] each ] keep 
+   $[ [ _ suffix-touching-corner drop ] each ] keep 
     2 among [ 
         [ first ] keep second  
         [ add-to-adjacent-faces drop ] 2keep 

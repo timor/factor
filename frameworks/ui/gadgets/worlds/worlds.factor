@@ -85,7 +85,7 @@ TUPLE: world-attributes
 : hide-status ( gadget -- )
     dup find-world dup [
         [ status-owner>> eq? ] keep
-        '[ f _ [ status-owner<< ] [ status>> set-model ] 2bi ] when
+        $[ f _ [ status-owner<< ] [ status>> set-model ] 2bi ] when
     ] [ 2drop ] if ;
 
 : window-resource ( resource -- resource )
@@ -96,7 +96,7 @@ TUPLE: world-attributes
     [ handle>> select-gl-context ] bi ;
 
 : with-gl-context ( world quot -- )
-    '[ set-gl-context @ ]
+    $[ set-gl-context @ ]
     [ handle>> flush-gl-context gl-error ] bi ; inline
 
 ERROR: no-world-found ;
@@ -225,7 +225,7 @@ ui-error-hook [ [ rethrow ] ] initialize
 world
 action-gestures [
     [ [ { C+ } ] dip f <key-down> ]
-    [ '[ _ send-action ] ]
+    [ $[ _ send-action ] ]
     bi*
 ] H{ } assoc-map-as
 H{
@@ -258,7 +258,7 @@ M: world handle-gesture ( gesture gadget -- ? )
     ] [ 2drop f ] if ;
 
 : close-global ( world global -- )
-    [ get-global find-world eq? ] keep '[ f _ set-global ] when ;
+    [ get-global find-world eq? ] keep $[ f _ set-global ] when ;
 
 M: world world-pixel-format-attributes
     pixel-format-attributes>> ;

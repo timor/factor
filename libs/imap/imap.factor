@@ -61,7 +61,7 @@ PRIVATE<
 
 : read-response ( tag -- lines )
     "^%s (BAD|NO|OK) (.*)$" sprintf
-    '[ _ read-response-chunk [ suffix ] dip ] { } swap loop
+    $[ _ read-response-chunk [ suffix ] dip ] { } swap loop
     unclip-last first2 [ check-status ] keep suffix ;
 
 : write-command ( command literal tag -- )
@@ -174,7 +174,7 @@ PRIVATE>
 ! High level API
 
 : with-imap ( host email password quot -- )
-    [ <imap4ssl> ] 3dip '[ _ _ login drop @ ] with-stream ; inline
+    [ <imap4ssl> ] 3dip $[ _ _ login drop @ ] with-stream ; inline
 
 TUPLE: imap-settings host email password ;
 

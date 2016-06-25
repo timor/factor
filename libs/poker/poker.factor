@@ -168,7 +168,7 @@ ERROR: no-card card deck ;
     2dup index [ swap remove-nth! drop ] [ no-card ] if* ;
 
 : start-hands ( seq -- seq' deck )
-    <deck> [ '[ [ _ draw-specific-card ] map ] map ] keep ;
+    <deck> [ $[ [ _ draw-specific-card ] map ] map ] keep ;
 
 :: holdem-hand% ( hole1 deck community n -- x )
     community length 5 swap - 2 + :> #samples
@@ -183,7 +183,7 @@ ERROR: no-card card deck ;
 
 :: compare-holdem-hands ( holes deck n -- seq )
     n [
-        holes deck 5 sample '[
+        holes deck 5 sample $[
             [ _ append best-holdem-hand drop ] keep
         ] { } map>assoc infimum second
     ] replicate histogram ;
@@ -197,7 +197,7 @@ ERROR: no-card card deck ;
 
 :: compare-omaha-hands ( holes deck n -- seq )
     n [
-        holes deck 5 sample '[
+        holes deck 5 sample $[
             [ _ append best-omaha-hand drop ] keep
         ] { } map>assoc infimum second
     ] replicate histogram ;

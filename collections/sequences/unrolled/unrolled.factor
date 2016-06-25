@@ -6,14 +6,14 @@ IN: sequences.unrolled
 
 PRIVATE<
 : (unrolled-each-integer) ( quot n -- )
-    swap '[ _ call( i -- ) ] each-integer ;
+    swap $[ _ call( i -- ) ] each-integer ;
 
 COMPILE< \ (unrolled-each-integer) [
-    iota [ '[ _ swap call( i -- ) ] ] [ ] map-as '[ _ cleave ]
+    iota [ $[ _ swap call( i -- ) ] ] [ ] map-as $[ _ cleave ]
 ] 1 define-partial-eval COMPILE>
 
 : (unrolled-collect) ( quot into -- quot' )
-    '[ dup @ swap _ set-nth-unsafe ] ; inline
+    $[ dup @ swap _ set-nth-unsafe ] ; inline
 
 PRIVATE>
 
@@ -42,13 +42,13 @@ PRIVATE<
     [ xseq yseq len quot ] if ; inline
 
 : (unrolled-each) ( seq len quot -- len quot )
-    swapd '[ _ nth-unsafe @ ] ; inline
+    swapd $[ _ nth-unsafe @ ] ; inline
 
 : (unrolled-each-index) ( seq len quot -- len quot )
-    swapd '[ dup _ nth-unsafe swap @ ] ; inline
+    swapd $[ dup _ nth-unsafe swap @ ] ; inline
 
 : (unrolled-2each) ( xseq yseq len quot -- len quot )
-    [ '[ _ ] 2dip ] dip (2each) nip ; inline
+    [ $[ _ ] 2dip ] dip (2each) nip ; inline
 
 : unrolled-each-unsafe ( seq len quot: ( x -- ) -- )
     (unrolled-each) unrolled-each-integer ; inline

@@ -7,7 +7,7 @@ IN: sorting.slots
     execute( obj1 obj2 -- <=> ) dup +eq+ eq? [ drop f ] when ;
 
 : execute-accessor ( obj1 obj2 word -- obj1' obj2' )
-    '[ _ execute( tuple -- value ) ] bi@ ;
+    $[ _ execute( tuple -- value ) ] bi@ ;
 
 : compare-slots ( obj1 obj2 sort-specs -- <=> )
     ! sort-spec: { accessors comparator }
@@ -19,7 +19,7 @@ IN: sorting.slots
     ] 2with map-find drop +eq+ or ;
 
 : sort-by-with ( seq sort-specs quot: ( obj -- key ) -- seq' )
-    swap '[ _ bi@ _ compare-slots ] sort ; inline
+    swap $[ _ bi@ _ compare-slots ] sort ; inline
 
 : sort-by ( seq sort-specs -- seq' ) [ ] sort-by-with ;
 

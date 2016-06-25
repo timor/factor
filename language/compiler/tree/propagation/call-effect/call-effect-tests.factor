@@ -94,25 +94,25 @@ IN: compiler.tree.propagation.call-effect.tests
 
 { [ 3 ] } [ [ 1 2 \ + execute( a b -- c ) ] optimized-quot ] unit-test
 { [ 3 ] } [ [ 1 2 [ + ] call( a b -- c ) ] optimized-quot ] unit-test
-{ [ 3 ] } [ [ 1 2 '[ _ + ] call( a -- b ) ] optimized-quot ] unit-test
-{ [ 3 ] } [ [ 1 2 '[ _ ] [ + ] compose call( a -- b ) ] optimized-quot ] unit-test
+{ [ 3 ] } [ [ 1 2 $[ _ + ] call( a -- b ) ] optimized-quot ] unit-test
+{ [ 3 ] } [ [ 1 2 $[ _ ] [ + ] compose call( a -- b ) ] optimized-quot ] unit-test
 
 [ 1 2 { [ + ] } first compiled-call2 ] must-fail
 { 3 } [ 1 2 { + } first compiled-execute2 ] unit-test
-{ 3 } [ 1 2 '[ _ + ] compiled-call2 ] unit-test
-{ 3 } [ 1 2 '[ _ ] [ + ] compose compiled-call2 ] unit-test
+{ 3 } [ 1 2 $[ _ + ] compiled-call2 ] unit-test
+{ 3 } [ 1 2 $[ _ ] [ + ] compose compiled-call2 ] unit-test
 { 3 } [ 1 2 \ + compiled-execute2 ] unit-test
 
 { 3 } [ 1 2 { [ + ] } first call( a b -- c ) ] unit-test
 { 3 } [ 1 2 { + } first execute( a b -- c ) ] unit-test
-{ 3 } [ 1 2 '[ _ + ] call( a -- b ) ] unit-test
-{ 3 } [ 1 2 '[ _ ] [ + ] compose call( a -- b ) ] unit-test
+{ 3 } [ 1 2 $[ _ + ] call( a -- b ) ] unit-test
+{ 3 } [ 1 2 $[ _ ] [ + ] compose call( a -- b ) ] unit-test
 
-{ t } [ [ 2 '[ _ ] [ + ] compose ] final-info first infer-value ( object -- object ) effect= ] unit-test
-{ t } [ [ 2 '[ _ ] 1 '[ _ + ] compose ] final-info first infer-value ( -- object ) effect= ] unit-test
-{ t } [ [ 2 '[ _ + ] ] final-info first infer-value ( object -- object ) effect= ] unit-test
+{ t } [ [ 2 $[ _ ] [ + ] compose ] final-info first infer-value ( object -- object ) effect= ] unit-test
+{ t } [ [ 2 $[ _ ] 1 $[ _ + ] compose ] final-info first infer-value ( -- object ) effect= ] unit-test
+{ t } [ [ 2 $[ _ + ] ] final-info first infer-value ( object -- object ) effect= ] unit-test
 { f } [ [ [ [ ] [ 1 ] if ] ] final-info first infer-value ] unit-test
-{ t } [ [ [ 1 ] '[ @ ] ] final-info first infer-value ( -- object ) effect= ] unit-test
+{ t } [ [ [ 1 ] $[ @ ] ] final-info first infer-value ( -- object ) effect= ] unit-test
 { f } [ [ dup drop ] final-info first infer-value ] unit-test
 
 ! This should not hang
@@ -123,7 +123,7 @@ IN: compiler.tree.propagation.call-effect.tests
 ! [ boa ] by itself doesn't infer
 TUPLE: a-tuple x ;
 
-{ V{ a-tuple } } [ [ a-tuple '[ _ boa ] call( x -- tuple ) ] final-classes ] unit-test
+{ V{ a-tuple } } [ [ a-tuple $[ _ boa ] call( x -- tuple ) ] final-classes ] unit-test
 
 ! See if redefinitions are handled correctly
 : call(-redefine-test ( a -- b ) 1 + ;

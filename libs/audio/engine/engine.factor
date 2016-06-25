@@ -226,7 +226,7 @@ DEFER: update-audio
 
 : start-audio ( audio-engine -- )
     dup start-audio*
-    dup '[ _ update-audio ] 20 milliseconds every >>update-timer
+    dup $[ _ update-audio ] 20 milliseconds every >>update-timer
     drop ;
 
 : stop-audio ( audio-engine -- )

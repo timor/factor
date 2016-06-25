@@ -43,7 +43,7 @@ PRIVATE<
 
 : possible-sums ( seq -- seq )
     H{ } clone
-    [ dupd '[ _ [ + _ conjoin ] with each ] each ]
+    [ dupd $[ _ [ + _ conjoin ] with each ] each ]
     keep keys ;
 
 PRIVATE>

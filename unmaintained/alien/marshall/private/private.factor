@@ -15,7 +15,7 @@ in: alien.marshall.private
     } case ;
 
 MACRO: marshall-x* ( num-quot seq-quot -- alien )
-    '[ bool>arg dup number? _ _ if ] ;
+    $[ bool>arg dup number? _ _ if ] ;
 
 : ptr-pass-through ( obj quot -- alien )
     over { [ c-ptr? ] [ ] } 1&& [ drop ] [ call ] if ; inline

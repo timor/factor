@@ -116,7 +116,7 @@ TUPLE: sequence-parser sequence n ;
     [ take-rest-slice ] [ sequence>> like ] bi f like ;
 
 : take-until-object ( sequence-parser obj -- sequence )
-    '[ current _ = ] take-until ;
+    $[ current _ = ] take-until ;
 
 : parse-sequence ( sequence quot -- )
     [ <sequence-parser> ] dip call ; inline
@@ -139,7 +139,7 @@ COMPILE< "length" [ length ] define-sorting COMPILE>
 
 : take-first-matching ( sequence-parser seq -- seq )
     swap
-    '[ _ [ swap take-sequence ] with-sequence-parser ] find nip ;
+    $[ _ [ swap take-sequence ] with-sequence-parser ] find nip ;
 
 : take-longest ( sequence-parser seq -- seq )
     sort-tokens take-first-matching ;

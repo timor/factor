@@ -69,39 +69,39 @@ M: ##horizontal-shl-vector-imm insn-available? rep>> %horizontal-shl-vector-imm-
 M: ##horizontal-shr-vector-imm insn-available? rep>> %horizontal-shr-vector-imm-reps member? ;
 
 : [vector-op-checked] ( #dup quot -- quot )
-    '[ _ ndup [ @ ] { } make dup [ insn-available? ] all? ] ;
+    $[ _ ndup [ @ ] { } make dup [ insn-available? ] all? ] ;
 
 GENERIC#: >vector-op-cond 2 ( quot #pick #dup -- quotpair ) ;
 M:: callable >vector-op-cond ( quot #pick #dup -- quotpair )
-    #dup quot [vector-op-checked] '[ 2drop @ ]
-    #dup '[ % _ nnip ]
+    #dup quot [vector-op-checked] $[ 2drop @ ]
+    #dup $[ % _ nnip ]
     2array ;
 
 M:: pair >vector-op-cond ( pair #pick #dup -- quotpair )
     pair first2 :> ( class quot )
     #pick class #dup quot [vector-op-checked]
-    '[ 2drop _ npick _ instance? _ [ f f f ] if ]
-    #dup '[ % _ nnip ]
+    $[ 2drop _ npick _ instance? _ [ f f f ] if ]
+    #dup $[ % _ nnip ]
     2array ;
 
 MACRO: v-vector-op ( trials -- quot )
-    [ 1 2 >vector-op-cond ] map '[ f f _ cond ] ;
+    [ 1 2 >vector-op-cond ] map $[ f f _ cond ] ;
 MACRO: vl-vector-op ( trials -- quot )
-    [ 1 3 >vector-op-cond ] map '[ f f _ cond ] ;
+    [ 1 3 >vector-op-cond ] map $[ f f _ cond ] ;
 MACRO: vvl-vector-op ( trials -- quot )
-    [ 1 4 >vector-op-cond ] map '[ f f _ cond ] ;
+    [ 1 4 >vector-op-cond ] map $[ f f _ cond ] ;
 MACRO: vv-vector-op ( trials -- quot )
-    [ 1 3 >vector-op-cond ] map '[ f f _ cond ] ;
+    [ 1 3 >vector-op-cond ] map $[ f f _ cond ] ;
 MACRO: vv-cc-vector-op ( trials -- quot )
-    [ 2 4 >vector-op-cond ] map '[ f f _ cond ] ;
+    [ 2 4 >vector-op-cond ] map $[ f f _ cond ] ;
 MACRO: vvvv-vector-op ( trials -- quot )
-    [ 1 5 >vector-op-cond ] map '[ f f _ cond ] ;
+    [ 1 5 >vector-op-cond ] map $[ f f _ cond ] ;
 
 ! Intrinsic code emission
 
 MACRO: check-elements ( quots -- quot )
-    [ length '[ _ firstn ] ]
-    [ '[ _ spread ] ]
+    [ length $[ _ firstn ] ]
+    [ $[ _ spread ] ]
     [ length 1 - \ and <repetition> [ ] like ]
     tri 3append ;
 
@@ -110,7 +110,7 @@ ERROR: bad-simd-intrinsic node ;
 MACRO: if-literals-match ( quots -- quot )
     [ length ] [ ] [ length ] tri
     ! n quots n
-    '[
+    $[
         ! node quot
         [
             dup node-input-infos
@@ -140,7 +140,7 @@ CONSTANT: [quaternary]
 
 :: [emit-vector-op] ( trials params-quot op-quot literal-preds -- quot )
     params-quot trials op-quot literal-preds
-    '[ [ _ dip _ @ ds-push ] _ if-literals-match ] ;
+    $[ [ _ dip _ @ ds-push ] _ if-literals-match ] ;
 
 MACRO: emit-v-vector-op ( trials -- quot )
     [unary] [ v-vector-op ] { [ representation? ] } [emit-vector-op] ;
@@ -155,7 +155,7 @@ MACRO: emit-vvvv-vector-op ( trials -- quot )
 
 MACRO:: emit-vv-or-vl-vector-op ( var-trials imm-trials literal-pred -- quot )
     literal-pred imm-trials literal-pred var-trials
-    '[
+    $[
         dup node-input-infos 2 tail-slice* first literal>> @
         [ _ _ emit-vl-vector-op ]
         [ _   emit-vv-vector-op ] if

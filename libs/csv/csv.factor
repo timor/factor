@@ -50,13 +50,13 @@ DEFER: quoted-field,
     ] [ [ 3drop ] 2dip swap ?trim ] if ;
 
 : (stream-read-row) ( delimiter stream field-end quoted-field -- sep/f fields )
-    [ [ dup '[ dup _ = ] ] keep ] 3dip
-    '[ drop _ _ _ _ field ] produce ; inline
+    [ [ dup $[ dup _ = ] ] keep ] 3dip
+    $[ drop _ _ _ _ field ] produce ; inline
 
 : (stream-read-csv) ( stream -- )
     [ dup [ empty? ] all? [ drop ] [ , ] if ]
     delimiter get rot over field-delimiters
-    '[ _ _ _ _ (stream-read-row) ] do while ;
+    $[ _ _ _ _ (stream-read-row) ] do while ;
 
 PRIVATE>
 
@@ -86,7 +86,7 @@ PRIVATE>
 PRIVATE<
 
 : needs-escaping? ( cell delimiter -- ? )
-    '[ dup "\n\"\r" member? [ drop t ] [ _ = ] if ] any? ; inline
+    $[ dup "\n\"\r" member? [ drop t ] [ _ = ] if ] any? ; inline
 
 : escape-quotes ( cell stream -- )
     char: \" over stream-write1 swap [
@@ -99,8 +99,8 @@ PRIVATE<
     [ escape-quotes ] [ stream-write ] bi-curry if ; inline
 
 : (stream-write-row) ( row delimiter stream -- )
-    [ '[ _ _ stream-write1 ] ] 2keep
-    '[ _ _ escape-if-required ] interleave nl ; inline
+    [ $[ _ _ stream-write1 ] ] 2keep
+    $[ _ _ escape-if-required ] interleave nl ; inline
 
 PRIVATE>
 
@@ -111,7 +111,7 @@ PRIVATE>
     output-stream get stream-write-row ; inline
 
 : stream-write-csv ( rows stream -- )
-    delimiter get swap '[ _ _ (stream-write-row) ] each ;
+    delimiter get swap $[ _ _ (stream-write-row) ] each ;
 
 : write-csv ( rows -- )
     output-stream get stream-write-csv ;

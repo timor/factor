@@ -56,7 +56,7 @@ foreground background page-color inset line-height metrics ;
         [ inset of { 0 0 } or >>inset ]
     } cleave
     dup font>> font-metrics
-    [ >>metrics ] [ height>> '[ _ max ] change-line-height ] bi ;
+    [ >>metrics ] [ height>> $[ _ max ] change-line-height ] bi ;
 
 ! introduce positioning of elements versus canvas?
 
@@ -82,10 +82,10 @@ foreground background page-color inset line-height metrics ;
     [ height>> ] [ margin>> top>> ] [ y>> ] tri + - ;
 
 : inc-x ( canvas n -- )
-    '[ _ + ] change-x drop ;
+    $[ _ + ] change-x drop ;
 
 : inc-y ( canvas n -- )
-    '[ _ + ] change-y drop ;
+    $[ _ + ] change-y drop ;
 
 : line-height ( canvas -- n )
     [ line-height>> ] [ inset>> first 2 * ] bi + ;

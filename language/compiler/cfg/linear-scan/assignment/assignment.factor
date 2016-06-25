@@ -103,14 +103,14 @@ RENAMING: assign [ vreg>reg ] [ vreg>reg ] [ vreg>reg ] ;
 
 : change-insn-gc-roots ( gc-map-insn quot: ( x -- x ) -- )
     [ gc-map>> ] dip [ swap gc-roots>> swap map! drop ]
-    [ '[ [ [ @ ] bi@ ] assoc-map ] change-derived-roots drop ] 2bi ; inline
+    [ $[ [ [ @ ] bi@ ] assoc-map ] change-derived-roots drop ] 2bi ; inline
 
 : spill-required? ( live-interval root-leaders n -- ? )
     [ [ vreg>> ] dip sets:in? ] [ swap covers? ] bi-curry* bi or ;
 
 : spill-intervals ( root-leaders n -- live-intervals )
     [ pending-interval-heap get heap-members ] 2dip
-    '[ _ _ spill-required? ] filter ;
+    $[ _ _ spill-required? ] filter ;
 
 : spill/reload ( interval -- {reg,rep,slot} )
     [ reg>> ] [ vreg>> dup rep-of dup swapd assign-spill-slot ] bi 3array ;

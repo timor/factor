@@ -240,7 +240,7 @@ M: f link-feedback-format
 
 : link-vertex-formats ( program-handle formats -- )
     [ vertex-format-attributes [ name>> ] map sift ] map concat
-    swap '[ [ _ ] 2dip swap glBindAttribLocation ] each-index ;
+    swap $[ [ _ ] 2dip swap glBindAttribLocation ] each-index ;
 
 GENERIC: link-geometry-shader-parameter ( program-handle parameter -- ) ;
 
@@ -389,7 +389,7 @@ PRIVATE<
     [ first2 [ ?>buffer-ptr ] dip 2array ] map ; inline
 
 : (bind-vertex-array) ( vertex-formats program-instance -- )
-    '[ _ swap first2 bind-vertex-format ] each ; inline
+    $[ _ swap first2 bind-vertex-format ] each ; inline
 
 : (reset-vertex-array) ( -- )
     GL_MAX_VERTEX_ATTRIBS get-gl-int iota [ glDisableVertexAttribArray ] each ; inline
@@ -476,10 +476,10 @@ PRIVATE<
     [ throw-compile-shader-error ] if ;
 
 : (link-program) ( program shader-instances -- program-instance )
-    '[ _ [ handle>> ] map ]
+    $[ _ [ handle>> ] map ]
     [
         [ vertex-formats>> ] [ feedback-format>> ] [ geometry-shader-parameters>> ] tri
-        '[
+        $[
             [ _ link-vertex-formats ]
             [ _ link-feedback-format ]
             [ _ link-geometry-shader-parameters ] tri

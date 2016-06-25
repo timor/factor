@@ -28,4 +28,4 @@ fry namespaces ;
     H{ } clone replaces set ;
 
 : cfg-unit-test ( result quot -- )
-    '[ init-cfg-test @ ] unit-test ; inline
+    $[ init-cfg-test @ ] unit-test ; inline

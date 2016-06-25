@@ -6,7 +6,7 @@ IN: concurrency.futures
 
 : future ( quot -- future )
     <promise> [
-        [ '[ @ _ fulfill ] "Future" ] keep
+        [ $[ @ _ fulfill ] "Future" ] keep
         mailbox>> spawn-linked-to drop
     ] keep ; inline
 

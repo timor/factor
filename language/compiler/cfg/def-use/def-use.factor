@@ -64,12 +64,12 @@ PRIVATE<
     [ reader-word 1quotation ] map dup length {
         { 0 [ drop [ drop f ] ] }
         { 1 [ first [ 1array ] compose ] }
-        { 2 [ first2 '[ _ _ bi 2array ] ] }
-        [ '[ _ cleave _ narray ] ]
+        { 2 [ first2 $[ _ _ bi 2array ] ] }
+        [ $[ _ cleave _ narray ] ]
     } case ;
 
 : define-vregs-method ( insn slots word -- )
-    [ [ drop ] ] dip '[
+    [ [ drop ] ] dip $[
         [ _ create-method ]
         [ [ name>> ] map slot-array-quot ] bi*
         define
@@ -105,7 +105,7 @@ SYMBOLS: defs insns ;
 
 : compute-defs ( cfg -- )
     H{ } clone [
-        '[
+        $[
             [ basic-block get ] dip [
                 _ set-def-of
             ] with each
@@ -114,7 +114,7 @@ SYMBOLS: defs insns ;
 
 : compute-insns ( cfg -- )
     H{ } clone [
-        '[
+        $[
             [
                 dup _ set-def-of
             ] each

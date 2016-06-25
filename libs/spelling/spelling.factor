@@ -9,22 +9,22 @@ IN: spelling
 CONSTANT: ALPHABET "abcdefghijklmnopqrstuvwxyz" ;
 
 : deletes ( word -- edits )
-    [ length iota ] keep '[ _ remove-nth ] map ;
+    [ length iota ] keep $[ _ remove-nth ] map ;
 
 : transposes ( word -- edits )
-    [ length [1,b) ] keep '[
+    [ length [1,b) ] keep $[
         dup 1 - _ clone [ exchange-unsafe ] keep
     ] map ;
 
 : replaces ( word -- edits )
-    [ length iota ] keep '[
+    [ length iota ] keep $[
         ALPHABET [
             swap _ clone [ set-nth-unsafe ] keep
         ] with { } map-as
     ] map concat ;
 
 : inserts ( word -- edits )
-    [ length [0,b] ] keep '[
+    [ length [0,b] ] keep $[
         char: ? over _ insert-nth ALPHABET swap [
             swapd clone [ set-nth-unsafe ] keep
         ] curry with { } map-as
@@ -44,7 +44,7 @@ CONSTANT: ALPHABET "abcdefghijklmnopqrstuvwxyz" ;
     edits1 [ edits1 ] map concat ;
 
 : filter-known ( edits dictionary -- words )
-    '[ _ key? ] filter ;
+    $[ _ key? ] filter ;
 
 :: corrections ( word dictionary -- words )
     word 1array dictionary filter-known

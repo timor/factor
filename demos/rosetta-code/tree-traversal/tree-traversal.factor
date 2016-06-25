@@ -80,7 +80,7 @@ CONSTANT: example-tree
 
 : levelorder2 ( node quot: ( data -- ) -- )
     [ 1dlist ] dip
-    [ dup deque-empty? not ] swap '[
+    [ dup deque-empty? not ] swap $[
         dup pop-front
         [ data>> @ ]
         [ left>> [ over push-back ] when* ]

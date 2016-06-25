@@ -8,7 +8,7 @@ IN: xmode.code2html.responder
 : <sources> ( root -- responder )
     [
         drop
-        dup '[
+        dup $[
             _ utf8 [
                 _ file-name input-stream get htmlize-stream
             ] with-file-reader

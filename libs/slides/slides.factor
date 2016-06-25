@@ -127,4 +127,4 @@ SYNTAX: \ STRIP-TEASE:
 } set-gestures
 
 : slides-window ( slides title -- )
-    '[ _ <slides> _ open-window ] with-ui ;
+    $[ _ <slides> _ open-window ] with-ui ;

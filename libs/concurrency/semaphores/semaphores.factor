@@ -35,4 +35,4 @@ M: negative-count-semaphore summary
     quot [ semaphore release ] [ ] cleanup ; inline
 
 : with-semaphore ( semaphore quot -- )
-    swap dup acquire '[ _ release ] [ ] cleanup ; inline
+    swap dup acquire $[ _ release ] [ ] cleanup ; inline

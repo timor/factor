@@ -123,7 +123,7 @@ STRUCT: kinfo_proc
     { e_spare int32_t[4] } ;
 
 : head-split-skip ( seq n quot: ( elt -- ? ) -- pieces )
-    [ dup 0 >= ] swap '[
+    [ dup 0 >= ] swap $[
         [ _ [ trim-head-slice ] [ split1-when-slice ] bi ]
         [ 1 - rot ] bi*
     ] produce 2nip ; inline

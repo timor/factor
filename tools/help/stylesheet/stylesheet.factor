@@ -153,4 +153,4 @@ SYMBOL: bullet
             subsection-style snippet-style
             code-char-style
         }
-    ] dip '[ get-global [ _ + ] change-at ] with each ;
+    ] dip $[ get-global [ _ + ] change-at ] with each ;

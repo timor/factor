@@ -152,7 +152,7 @@ PRIVATE>
     ] unless ;
 
 : change-doc-range ( from to document quot -- )
-    '[ doc-range @ ] 3keep set-doc-range ; inline
+    $[ doc-range @ ] 3keep set-doc-range ; inline
 
 : remove-doc-range ( from to document -- )
     [ "" ] 3dip set-doc-range ;
@@ -189,7 +189,7 @@ PRIVATE>
 PRIVATE<
 
 : undo/redo-edit ( edit document string-quot to-quot -- )
-    '[ [ _ [ from>> ] _ tri ] dip set-doc-range ] with-undo ; inline
+    $[ [ _ [ from>> ] _ tri ] dip set-doc-range ] with-undo ; inline
 
 : undo-edit ( edit document -- )
     [ old-string>> ] [ new-to>> ] undo/redo-edit ;
@@ -199,7 +199,7 @@ PRIVATE<
 
 : undo/redo ( document source-quot dest-quot do-quot -- )
     [ dupd call [ drop ] ] 2dip
-    '[ pop swap [ @ push ] _ 2bi ] if-empty ; inline
+    $[ pop swap [ @ push ] _ 2bi ] if-empty ; inline
 
 PRIVATE>
 

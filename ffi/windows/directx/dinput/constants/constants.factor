@@ -61,7 +61,7 @@ M: array array-base-type first ;
     DIOBJECTDATAFORMAT-array{ } { } 1 2 mnmap-as ;
 
 : make-DIOBJECTDATAFORMAT-array-quot ( struct arr -- quot )
-    [ nip length ] [ make-DIOBJECTDATAFORMAT-arrays ] 2bi '[
+    [ nip length ] [ make-DIOBJECTDATAFORMAT-arrays ] 2bi $[
         _ DIOBJECTDATAFORMAT malloc-array
         [ _ dup byte-length memcpy ]
         [ _ [ get >>pguid drop ] 2each ]
@@ -73,10 +73,10 @@ COMPILE>
 MACRO: <DIDATAFORMAT> ( dwFlags dwDataSize struct rgodf-array -- alien )
     [ DIDATAFORMAT heap-size DIOBJECTDATAFORMAT heap-size ] 4 ndip
     [ nip length ] [ make-DIOBJECTDATAFORMAT-array-quot ] 2bi
-    '[ _ _ _ _ _ @ DIDATAFORMAT <struct-boa> ] ;
+    $[ _ _ _ _ _ @ DIDATAFORMAT <struct-boa> ] ;
 
 : (malloc-guid-symbol) ( symbol guid -- )
-    '[ _ malloc-byte-array ] initialize ;
+    $[ _ malloc-byte-array ] initialize ;
 
 : define-guid-constants ( -- )
     {
@@ -835,7 +835,7 @@ MACRO: <DIDATAFORMAT> ( dwFlags dwDataSize struct rgodf-array -- alien )
 [ define-constants ] "windows.directx.dinput.constants" add-startup-hook
 
 : uninitialize ( variable quot -- )
-    '[ _ when* f ] change-global ; inline
+    $[ _ when* f ] change-global ; inline
 
 : free-dinput-constants ( -- )
     {

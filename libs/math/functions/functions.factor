@@ -40,7 +40,7 @@ M: bignum ^n
     [ factor-2s ] dip [ (^n) ] keep rot * shift ;
 
 M: ratio ^n
-    [ >fraction ] dip '[ _ ^n ] bi@ / ;
+    [ >fraction ] dip $[ _ ^n ] bi@ / ;
 
 M: float ^n (^n) ;
 
@@ -87,11 +87,11 @@ PRIVATE<
     2dup [ real? ] both? [ drop 0 >= ] [ 2drop f ] if ; inline
 
 : 0^ ( zero x -- z )
-    swap [ 0/0. ] swap '[ 0 < 1/0. _ ? ] if-zero ; inline
+    swap [ 0/0. ] swap $[ 0 < 1/0. _ ? ] if-zero ; inline
 
 : (^mod) ( x y n -- z )
     [ make-bits 1 ] dip dup
-    '[ [ over * _ mod ] when [ sq _ mod ] dip ] reduce nip ; inline
+    $[ [ over * _ mod ] when [ sq _ mod ] dip ] reduce nip ; inline
 
 PRIVATE>
 
@@ -212,7 +212,7 @@ CONSTANT: log10-2 0x1.34413509f79ffp-2 ;
     most-positive-finite-float between? ; inline
 
 : (bignum-log) ( n log-quot: ( x -- y ) log-2 -- log )
-    [ dup ] dip '[
+    [ dup ] dip $[
         dup representable-as-float?
         [ >float @ ] [ frexp [ @ ] [ _ * ] bi* + ] if
     ] call ; inline

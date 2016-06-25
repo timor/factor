@@ -17,7 +17,7 @@ TUPLE: track < pack sizes ;
 PRIVATE<
 
 : normalized-sizes ( track -- seq )
-    sizes>> dup sift sum '[ dup [ _ / ] when ] map ;
+    sizes>> dup sift sum $[ dup [ _ / ] when ] map ;
 
 : alloted-dim ( track -- dim )
     [ children>> ] [ sizes>> ] bi { 0 0 }
@@ -33,7 +33,7 @@ PRIVATE<
         [ [ available-dim ] [ gap-dim ] bi v- ]
         [ orientation>> ]
     } cleave
-    '[ [ _ n*v _ set-axis ] when* ] 2map ;
+    $[ [ _ n*v _ set-axis ] when* ] 2map ;
 
 M: track layout* ( track -- ) dup track-layout pack-layout ;
 

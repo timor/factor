@@ -415,7 +415,7 @@ M: hostname with-port
     [ host>> ] dip <inet> ;
 
 M: inet resolve-host
-    [ call-next-method ] [ port>> ] bi '[ _ with-port ] map ;
+    [ call-next-method ] [ port>> ] bi $[ _ with-port ] map ;
 
 M: inet4 resolve-host 1array ;
 

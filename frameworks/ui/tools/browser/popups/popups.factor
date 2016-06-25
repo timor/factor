@@ -19,7 +19,7 @@ M: link-renderer row-value drop first ;
 TUPLE: links-popup < wrapper ;
 
 : <links-table> ( model quot -- table )
-    '[
+    $[
         @ sort-articles
         [ dup article-title ] { } map>assoc
     ] <arrow> link-renderer [ second ] <search-table>

@@ -46,7 +46,7 @@ PRIVATE<
 : check-word ( word -- )
     [ with-file-vocabs ] vocabs-quot set
     dup word-help [
-        [ >link ] keep '[
+        [ >link ] keep $[
             _ dup word-help {
                 [ check-values ]
                 [ check-value-effects ]
@@ -58,7 +58,7 @@ PRIVATE<
 
 : check-article ( article -- )
     [ with-interactive-vocabs ] vocabs-quot set
-    >link dup '[
+    >link dup $[
         _
         [ check-article-title ]
         [ article-content check-markup ] bi
@@ -66,7 +66,7 @@ PRIVATE<
 
 : check-about ( vocab -- )
     <vocab-link> dup
-    '[ _ vocab-help [ lookup-article drop ] when* ] check-something ;
+    $[ _ vocab-help [ lookup-article drop ] when* ] check-something ;
 
 : check-vocab ( vocab -- )
     "Checking " write dup write "..." print flush

@@ -46,12 +46,12 @@ M: string-type c-type-rep drop int-rep ;
 M: string-type c-type-boxer-quot
     second dup binary =
     [ drop void* c-type-boxer-quot ]
-    [ '[ _ alien>string ] ] if ;
+    [ $[ _ alien>string ] ] if ;
 
 M: string-type c-type-unboxer-quot
     second dup binary =
     [ drop void* c-type-unboxer-quot ]
-    [ '[ _ string>alien ] ] if ;
+    [ $[ _ string>alien ] ] if ;
 
 M: string-type c-type-getter
     drop [ alien-cell ] ;

@@ -79,7 +79,7 @@ M: unix wait-for-fd ( handle event -- )
     ] if ;
 
 : wait-for-port ( port event -- )
-    '[ handle>> _ wait-for-fd ] with-timeout ;
+    $[ handle>> _ wait-for-fd ] with-timeout ;
 
 ! Some general stuff
 
@@ -166,7 +166,7 @@ M: stdin dispose*
     ] if ;
 
 M: stdin refill
-    '[
+    $[
         buffer>> _ dup wait-for-stdin refill-stdin f
     ] with-timeout ;
 
@@ -193,7 +193,7 @@ dispatch-signal-hook [ [ drop ] ] initialize
     OBJ-SIGNAL-PIPE special-object ; inline
 
 : signal-pipe-loop ( port -- )
-    '[
+    $[
         int heap-size _ io:stream-read
         dup [ int deref dispatch-signal-hook get call( x -- ) ] when*
     ] loop ;
@@ -201,7 +201,7 @@ dispatch-signal-hook [ [ drop ] ] initialize
 : start-signal-pipe-thread ( -- )
     signal-pipe-fd [
         <fd> init-fd <input-port>
-        '[ _ signal-pipe-loop ] "Signals" spawn drop
+        $[ _ signal-pipe-loop ] "Signals" spawn drop
     ] when* ;
 
 M: unix init-stdio

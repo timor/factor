@@ -5,13 +5,13 @@ random random.private sequences splitting ;
 IN: dice
 
 : (random-roll) ( #dice #sides obj -- n )
-    [ 0 ] 3dip '[ _ _ (random-integer) + 1 + ] times ;
+    [ 0 ] 3dip $[ _ _ (random-integer) + 1 + ] times ;
 
 : random-roll ( #dice #sides -- n )
     random-generator get (random-roll) ;
 
 : random-rolls ( length #dice #sides -- seq )
-    random-generator get '[ _ _ _ (random-roll) ] replicate ;
+    random-generator get $[ _ _ _ (random-roll) ] replicate ;
 
 : parse-roll ( string -- #dice #sides #added )
     "d" split1 "+" split1 [ string>number ] tri@ ;
@@ -21,9 +21,9 @@ IN: dice
 
 : roll-quot ( string -- quot: ( -- n ) )
     parse-roll [
-        '[ _ _ random-roll _ + ]
+        $[ _ _ random-roll _ + ]
     ] [
-        '[ _ _ random-roll ]
+        $[ _ _ random-roll ]
     ] if* ;
 
 SYNTAX: \ roll: scan-token roll-quot append! ;

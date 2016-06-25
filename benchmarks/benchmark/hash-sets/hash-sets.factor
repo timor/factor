@@ -10,7 +10,7 @@ CONSTANT: test-sets $$[
 ] ;
 
 : do-times ( n quot: ( set1 set2 -- set' ) -- )
-    '[ 2dup @ drop ] times 2drop ; inline
+    $[ 2dup @ drop ] times 2drop ; inline
 
 : bench-sets ( seq -- )
     2 [

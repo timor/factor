@@ -52,7 +52,7 @@ M: tuple error. describe ;
 
 : vars-in-scope ( seq -- alist )
     [ [ global eq? ] reject [ keys ] gather ] keep
-    '[ dup _ assoc-stack ] H{ } map>assoc ;
+    $[ dup _ assoc-stack ] H{ } map>assoc ;
 
 : .vars ( -- )
     get-namestack vars-in-scope describe ;

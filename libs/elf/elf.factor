@@ -618,10 +618,10 @@ M:: segment sections ( segment -- sections )
     symbol sym>> st_size>> uchar <c-direct-array> ;
 
 : find-section ( sections name -- section/f )
-    '[ name>> _ = ] find nip ; inline
+    $[ name>> _ = ] find nip ; inline
 
 : find-symbol ( symbols name -- symbol/f )
-    '[ name>> _ = ] find nip ; inline
+    $[ name>> _ = ] find nip ; inline
 
 : find-section-symbol ( sections section symbol -- symbol/f )
     [ find-section ] dip over [
@@ -629,4 +629,4 @@ M:: segment sections ( segment -- sections )
     ] [ 2drop f ] if ;
 
 : with-mapped-elf ( path quot -- )
-    '[ address>> <elf> @ ] with-mapped-file-reader ; inline
+    $[ address>> <elf> @ ] with-mapped-file-reader ; inline

@@ -115,8 +115,8 @@ M: hash-set random
     ] if-zero ;
 
 : randomize-n-last ( seq n -- seq )
-    [ dup length dup ] dip - 1 max '[ dup _ > ]
-    random-generator get '[
+    [ dup length dup ] dip - 1 max $[ dup _ > ]
+    random-generator get $[
         [ _ (random-integer) ] [ 1 - ] bi
         [ pick exchange-unsafe ] keep
     ] while drop ;
@@ -170,10 +170,10 @@ PRIVATE>
     random-generator get (random-unit) ; inline
 
 : random-units ( length -- sequence )
-    random-generator get '[ _ (random-unit) ] replicate ;
+    random-generator get $[ _ (random-unit) ] replicate ;
 
 : random-integers ( length n -- sequence )
-    random-generator get '[ _ _ (random-integer) ] replicate ;
+    random-generator get $[ _ _ (random-integer) ] replicate ;
 
 PRIVATE<
 
@@ -341,7 +341,7 @@ PRIVATE>
 
 ! Box-Muller
 : poisson-random-float ( mean -- n )
-    [ -1 0 ] dip [ 2dup < ] random-generator get '[
+    [ -1 0 ] dip [ 2dup < ] random-generator get $[
         [ 1 + ] 2dip [ _ (random-unit) log neg + ] dip
     ] while 2drop ;
 

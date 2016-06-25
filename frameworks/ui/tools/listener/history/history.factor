@@ -45,7 +45,7 @@ PRIVATE<
 
 : change-history-index ( history i -- )
     over elements>> length 1 -
-    '[ _ + 0 _ clamp ] change-index drop ;
+    $[ _ + 0 _ clamp ] change-index drop ;
 
 : history-recall ( history i -- )
     over elements>> empty? [ 2drop ] [

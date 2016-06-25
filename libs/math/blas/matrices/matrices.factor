@@ -111,7 +111,7 @@ GENERIC: (blas-matrix-like) ( data ld rows cols transpose exemplar -- matrix ) ;
     C f >>transpose ; inline
 
 : (>matrix) ( arrays >c-array -- c-array ld rows cols transpose )
-    '[ <merged> @ ] [ length dup ] [ first length ] tri f ; inline
+    $[ <merged> @ ] [ length dup ] [ first length ] tri f ; inline
 
 PRIVATE>
 

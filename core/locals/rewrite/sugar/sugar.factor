@@ -53,7 +53,7 @@ GENERIC: rewrite-element ( obj -- ) ;
     [ rewrite-element ] each ;
 
 : rewrite-sequence ( seq -- )
-    [ rewrite-elements ] [ length ] [ 0 head ] tri '[ _ _ nsequence ] % ;
+    [ rewrite-elements ] [ length ] [ 0 head ] tri $[ _ _ nsequence ] % ;
 
 M: array rewrite-element
     dup rewrite-literal? [ rewrite-sequence ] [ , ] if ;
@@ -66,7 +66,7 @@ M: hashtable rewrite-element
 
 M: tuple rewrite-element
     dup rewrite-literal? [
-        [ tuple-slots rewrite-elements ] [ class-of ] bi '[ _ boa ] %
+        [ tuple-slots rewrite-elements ] [ class-of ] bi $[ _ boa ] %
     ] [ , ] if ;
 
 M: quotation rewrite-element rewrite-sugar* ;

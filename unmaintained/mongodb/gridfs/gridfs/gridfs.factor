@@ -141,7 +141,7 @@ TUPLE: state bytes count ;
 
 : update-state ( bytes -- )
     [ get-state ] dip
-    '[ _ + ] change-bytes 
+    $[ _ + ] change-bytes 
     [ 1 + ] change-count drop ; inline
 
 :: store-chunk ( chunk entry n -- ) 

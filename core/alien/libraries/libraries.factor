@@ -58,7 +58,7 @@ M: library dispose dll>> [ dispose ] when* ;
     [ swap path>> = ] [ swap abi>> = ] bi-curry* bi and ;
 
 : add-library? ( name path abi -- ? )
-    [ lookup-library ] 2dip '[ _ _ same-library? not ] [ t ] if* ;
+    [ lookup-library ] 2dip $[ _ _ same-library? not ] [ t ] if* ;
 
 : add-library ( name path abi -- )
     3dup add-library? [

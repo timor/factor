@@ -64,7 +64,7 @@ TUPLE: bull ;
 : check-win ( score -- ? ) bulls>> 4 = ;
 
 : sum-score ( n g -- score ? )
-    '[ _ cow-or-bull ] map sift add-to-score dup check-win ;
+    $[ _ cow-or-bull ] map sift add-to-score dup check-win ;
 
 : print-sum ( score -- str )
     dup bulls>> number>string "Bulls: " swap append swap cows>> number>string

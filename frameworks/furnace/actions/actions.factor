@@ -47,7 +47,7 @@ TUPLE: action rest init authorize display validate submit ;
     ] when* ;
 
 : handle-get ( action -- response )
-    '[
+    $[
         _ dup display>> [
             {
                 [ init>> call( -- ) ]
@@ -74,7 +74,7 @@ CONSTANT: revalidate-url-key "__u" ;
     exit-with ;
 
 : handle-post ( action -- response )
-    '[
+    $[
         _ dup submit>> [
             [ validate>> call( -- ) ]
             [ authorize>> call( -- ) ]
@@ -118,4 +118,4 @@ TUPLE: page-action < action template ;
 
 : <page-action> ( -- page )
     page-action new-action
-        dup '[ _ template>> <chloe-content> ] >>display ;
+        dup $[ _ template>> <chloe-content> ] >>display ;

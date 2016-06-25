@@ -107,5 +107,5 @@ PRIVATE>
 
 : <interval-and> ( set1 set2 -- set )
     2dup interval-max
-    [ '[ _ <interval-not> ] bi@ <interval-or> ] keep
+    [ $[ _ <interval-not> ] bi@ <interval-or> ] keep
     <interval-not> ;

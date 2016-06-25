@@ -259,4 +259,4 @@ symbol: the-slate
 use: fry
 
 : cfdg-window. ( quot -- )
-  '[ [ @ <cfdg-gadget> "CFDG" open-window ] with-scope ] with-ui ;
+  $[ [ @ <cfdg-gadget> "CFDG" open-window ] with-scope ] with-ui ;

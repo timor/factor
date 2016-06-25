@@ -15,7 +15,7 @@ PRIVATE<
     HS{ } clone HS{ } clone natural-loop boa ;
 
 : lookup-header ( header -- loop )
-    loops get dup '[ _ assoc-size <natural-loop> ] cache ;
+    loops get dup $[ _ assoc-size <natural-loop> ] cache ;
 
 SYMBOLS: visited active ;
 
@@ -34,7 +34,7 @@ DEFER: find-loop-headers
     dup visited get ?adjoin [
         active get
         [ adjoin ]
-        [ [ dup successors>> ] dip '[ _ visit-edge ] with each ]
+        [ [ dup successors>> ] dip $[ _ visit-edge ] with each ]
         [ delete ]
         2tri
     ] [ drop ] if ;
@@ -45,7 +45,7 @@ DEFER: find-loop-headers
 
 : process-loop-ends ( loop -- )
     dup ends>> members <dlist> [ push-all-front ] keep
-    swap '[ _ process-loop-block ] slurp/replenish-deque ;
+    swap $[ _ process-loop-block ] slurp/replenish-deque ;
 
 : process-loop-headers ( -- )
     loops get values [ process-loop-ends ] each ;
@@ -54,7 +54,7 @@ SYMBOL: loop-nesting
 
 : compute-loop-nesting ( -- )
     loops get H{ } clone [
-        [ values ] dip '[ blocks>> members [ _ inc-at ] each ] each
+        [ values ] dip $[ blocks>> members [ _ inc-at ] each ] each
     ] keep loop-nesting namespaces:set ;
 
 : detect-loops ( cfg -- cfg' )

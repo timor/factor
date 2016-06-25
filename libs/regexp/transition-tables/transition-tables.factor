@@ -31,19 +31,19 @@ TUPLE: transition-table transitions start-state final-states ;
     over [ [ members ] dip map ] dip set-like ; inline
 
 : number-transitions ( transitions numbering -- new-transitions )
-    dup '[
+    dup $[
         [ _ at ]
         [ [ _ condition-at ] assoc-map ] bi*
     ] assoc-map ;
 
 : transitions-at ( transition-table assoc -- transition-table )
     [ clone ] dip
-    [ '[ _ condition-at ] change-start-state ]
-    [ '[ [ _ at ] map-set ] change-final-states ]
-    [ '[ _ number-transitions ] change-transitions ] tri ;
+    [ $[ _ condition-at ] change-start-state ]
+    [ $[ [ _ at ] map-set ] change-final-states ]
+    [ $[ _ number-transitions ] change-transitions ] tri ;
 
 : expand-one-or ( or-class transition -- alist )
-    [ seq>> ] dip '[ _ 2array ] map ;
+    [ seq>> ] dip $[ _ 2array ] map ;
 
 : expand-or ( state-transitions -- new-transitions )
     >alist [

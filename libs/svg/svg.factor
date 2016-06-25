@@ -93,7 +93,7 @@ TUPLE: smooth-quadratic-bezier-curveto p relative? ;
 TUPLE: elliptical-arc radii x-axis-rotation large-arc? sweep? p relative? ;
 
 : (set-relative) ( args rel -- args )
-    '[ [ _ >>relative? drop ] each ] keep ;
+    $[ [ _ >>relative? drop ] each ] keep ;
 
 EBNF: svg-path>array [=[
 

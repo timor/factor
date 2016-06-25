@@ -55,4 +55,4 @@ CONSTANT: expected-result [[
         sample-doc string>xml dup template pprint-xml>string
     ] with-scope ;
 
-expected-result '[ _ ] [ test-refs ] unit-test
+expected-result $[ _ ] [ test-refs ] unit-test

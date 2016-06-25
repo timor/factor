@@ -20,7 +20,7 @@ GENERIC: new-underlying ( underlying seq -- seq' ) ;
 : make-underlying ( seq quot -- seq' )
     dip new-underlying ; inline
 : change-underlying ( seq quot -- seq' )
-    '[ underlying>> @ ] keep new-underlying ; inline
+    $[ underlying>> @ ] keep new-underlying ; inline
 PRIVATE>
 COMPILE>
 
@@ -65,7 +65,7 @@ DEFER: simd-construct-op
     [ 2over [ simd-128? ] both? ] 2dip if ; inline
 
 : if-both-vectors-match ( a b rep t f -- )
-    [ 3dup [ drop [ simd-128? ] both? ] [ '[ simd-rep _ eq? ] both? ] 3bi and ]
+    [ 3dup [ drop [ simd-128? ] both? ] [ $[ simd-rep _ eq? ] both? ] 3bi and ]
     2dip if ; inline
 
 : simd-unbox ( a -- a (a) )
@@ -96,7 +96,7 @@ DEFER: simd-construct-op
     [ [ simd-unbox ] [ underlying>> ] bi* ] 3dip 2curry 2curry make-underlying ; inline
     
 : vv->v-op ( a b rep quot: ( (a) (b) rep -- (c) ) fallback-quot -- c )
-    [ '[ _ (vv->v-op) ] ] [ '[ drop @ ] ] bi* if-both-vectors-match ; inline
+    [ $[ _ (vv->v-op) ] ] [ $[ drop @ ] ] bi* if-both-vectors-match ; inline
 
 :: vvx->v-op ( a b obj rep quot: ( (a) (b) obj rep -- (c) ) fallback-quot -- c )
     a b rep
@@ -104,10 +104,10 @@ DEFER: simd-construct-op
     [ drop obj fallback-quot call ] if-both-vectors-match ; inline
 
 : vv'->v-op ( a b rep quot: ( (a) (b) rep -- (c) ) fallback-quot -- c )
-    [ '[ _ (vv->v-op) ] ] [ '[ drop @ ] ] bi* if-both-vectors ; inline
+    [ $[ _ (vv->v-op) ] ] [ $[ drop @ ] ] bi* if-both-vectors ; inline
 
 : vv->x-op ( a b rep quot: ( (a) (b) rep -- obj ) fallback-quot -- obj )
-    [ '[ _ (vv->x-op) ] ] [ '[ drop @ ] ] bi* if-both-vectors-match ; inline
+    [ $[ _ (vv->x-op) ] ] [ $[ drop @ ] ] bi* if-both-vectors-match ; inline
 
 : mask>count ( n rep -- n' )
     [ bit-count ] dip {
@@ -307,7 +307,7 @@ M: A length drop N ; inline
 [ COERCER N napply ] N {
     { 2 [ [ A-rep (simd-gather-2) A boa ] ] }
     { 4 [ [ A-rep (simd-gather-4) A boa ] ] }
-    [ \ A new '[ _ _ nsequence ] ]
+    [ \ A new $[ _ _ nsequence ] ]
 } case compose
 BOA-EFFECT define-inline
 

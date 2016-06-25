@@ -231,7 +231,7 @@ M: object infer-call* \ call bad-macro-input ;
 
 { call-effect execute-effect } [
     dup t "no-compile" set-word-prop
-    dup '[ _ infer-call-effect ] "special" set-word-prop
+    dup $[ _ infer-call-effect ] "special" set-word-prop
 ] each
 
 \ if [ infer-if ] "special" set-word-prop
@@ -254,7 +254,7 @@ M: object infer-call* \ call bad-macro-input ;
     set-datastack
     set-retainstack
     unwind-native-frames
-} [ dup '[ _ do-not-compile ] "special" set-word-prop ] each
+} [ dup $[ _ do-not-compile ] "special" set-word-prop ] each
 
 {
     declare call (call) dip 2dip 3dip curry compose

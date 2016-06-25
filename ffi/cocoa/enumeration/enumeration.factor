@@ -9,7 +9,7 @@ IN: cocoa.enumeration
 CONSTANT: NS-EACH-BUFFER-SIZE 16 ;
 
 : with-enumeration-buffers ( quot -- )
-    '[
+    $[
         NSFastEnumerationState malloc-struct &free
         NS-EACH-BUFFER-SIZE id malloc-array &free
         NS-EACH-BUFFER-SIZE
@@ -29,11 +29,11 @@ CONSTANT: NS-EACH-BUFFER-SIZE 16 ;
 
 : NSFastEnumeration-map ( ... object quot: ( ... elt -- ... newelt ) -- ... vector )
     NS-EACH-BUFFER-SIZE <vector>
-    [ '[ @ _ push ] NSFastEnumeration-each ] keep ; inline
+    [ $[ @ _ push ] NSFastEnumeration-each ] keep ; inline
 
 : NSFastEnumeration>vector ( object -- vector )
     [ ] NSFastEnumeration-map ;
 
 : NSFastEnumeration>hashtable ( ... object quot: ( ... elt -- ... key value ) -- ... vector )
     NS-EACH-BUFFER-SIZE <hashtable>
-    [ '[ @ swap _ set-at ] NSFastEnumeration-each ] keep ; inline
+    [ $[ @ swap _ set-at ] NSFastEnumeration-each ] keep ; inline

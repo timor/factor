@@ -7,7 +7,7 @@ splitting.monotonic ;
 IN: math.statistics
 
 : power-mean ( seq p -- x )
-    [ '[ _ ^ ] map-sum ] [ [ length / ] [ recip ^ ] bi* ] 2bi ; inline
+    [ $[ _ ^ ] map-sum ] [ [ length / ] [ recip ^ ] bi* ] 2bi ; inline
 
 ! Delta in degrees-of-freedom
 : mean-ddof ( seq ddof -- x )
@@ -97,7 +97,7 @@ PRIVATE<
     [ [ nth-unsafe ] [ exchange-unsafe ] ] dip (kth-object) ; inline
 
 : kth-objects-unsafe ( seq kths quot: ( x y -- ? ) -- elts )
-    '[ _ kth-object-unsafe ] with map ; inline
+    $[ _ kth-object-unsafe ] with map ; inline
 
 PRIVATE>
 
@@ -105,7 +105,7 @@ PRIVATE>
     [ [ nth ] [ exchange ] ] dip (kth-object) ; inline
 
 : kth-objects ( seq kths quot: ( x y -- ? ) -- elts )
-    '[ _ kth-object ] with map ; inline
+    $[ _ kth-object ] with map ; inline
 
 : kth-smallests ( seq kths -- elts ) [ < ] kth-objects-unsafe ;
 
@@ -116,7 +116,7 @@ PRIVATE>
 : kth-largest ( seq k -- elt ) [ > ] kth-object-unsafe ;
 
 : count-relative ( seq k -- lt eq gt )
-    [ 0 0 0 ] 2dip '[
+    [ 0 0 0 ] 2dip $[
         _ <=> {
             { +lt+ [ [ 1 + ] 2dip ] }
             { +gt+ [ 1 + ] }
@@ -125,9 +125,9 @@ PRIVATE>
     ] each ;
 
 : minmax-relative ( seq k -- lt eq gt lt-max gt-min )
-    [ 0 0 0 -1/0. 1/0. ] 2dip '[
+    [ 0 0 0 -1/0. 1/0. ] 2dip $[
         dup _ <=> {
-            { +lt+ [ [ 1 + ] 5 ndip '[ _ max ] dip ] }
+            { +lt+ [ [ 1 + ] 5 ndip $[ _ max ] dip ] }
             { +gt+ [ [ 1 + ] 3dip min ] }
             { +eq+ [ [ 1 + ] 4dip drop ] }
         } case
@@ -246,7 +246,7 @@ PRIVATE>
     histogram sort-values ;
 
 : normalized-histogram ( seq -- alist )
-    [ histogram ] [ length ] bi '[ _ / ] assoc-map ;
+    [ histogram ] [ length ] bi $[ _ / ] assoc-map ;
 
 : collect-index-by ( ... seq quot: ( ... obj -- ... key ) -- ... hashtable )
     [ dip swap ] curry [ push-at ] sequence-index>hashtable ; inline
@@ -296,7 +296,7 @@ ALIAS: std sample-std ;
 
 : median-dev ( seq -- x ) demedian vabs mean ;
 
-: ste-ddof ( seq n -- x ) '[ _ std-ddof ] [ length ] bi sqrt / ;
+: ste-ddof ( seq n -- x ) $[ _ std-ddof ] [ length ] bi sqrt / ;
 
 : population-ste ( seq -- x ) 0 ste-ddof ;
 
@@ -332,7 +332,7 @@ PRIVATE>
 
 : corr-ddof ( x-seq y-seq n -- corr )
     [ [ population-cov ] ] dip
-    '[ [ _ var-ddof ] bi@ * sqrt ] 2bi / ;
+    $[ [ _ var-ddof ] bi@ * sqrt ] 2bi / ;
 
 : population-corr ( x-seq y-seq -- corr ) 0 corr-ddof ; inline
 
@@ -354,7 +354,7 @@ PRIVATE>
     0 swap [ [ + dup ] dip 1 + / ] map-index nip ;
 
 : cum-count ( seq quot -- seq' )
-    [ 0 ] dip '[ _ call [ 1 + ] when ] accumulate* ; inline
+    [ 0 ] dip $[ _ call [ 1 + ] when ] accumulate* ; inline
 
 : cum-min ( seq -- seq' )
     dup ?first [ min ] accumulate* ;
@@ -363,7 +363,7 @@ PRIVATE>
     dup ?first [ max ] accumulate* ;
 
 : entropy ( probabilities -- n )
-    dup sum '[ _ / dup log * ] map-sum neg ;
+    dup sum $[ _ / dup log * ] map-sum neg ;
 
 : maximum-entropy ( probabilities -- n )
     length log ;
@@ -390,7 +390,7 @@ PRIVATE>
     sort-keys 0 swap [ rot [ + ] keep swapd ] H{ } assoc-map-as nip ;
 
 : rank-values ( seq -- seq' )
-    dup histogram rankings '[ _ at ] map ;
+    dup histogram rankings $[ _ at ] map ;
 
 : z-score ( seq -- n )
     [ demean ] [ sample-std ] bi v/n ;

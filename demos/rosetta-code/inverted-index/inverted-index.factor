@@ -22,7 +22,7 @@ IN: rosetta-code.inverted-index
     over [ swap [ adjoin ] keep ] [ nip 1vector ] if ;
 
 : add-to-index ( words index file -- )
-    '[ _ [ _ add-to-file-list ] change-at ] each ;
+    $[ _ [ _ add-to-file-list ] change-at ] each ;
 
 : (index-files) ( files index -- )
    [ [ [ file-words ] keep ] dip swap add-to-index ] curry each ;

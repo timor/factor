@@ -57,11 +57,11 @@ CONSTRUCTOR: <mdb-connection> mdb-connection ( instance -- mdb-connection ) ;
     [ mdb-instance name>> ] dip "." glue ; inline
 
 : send-message ( message -- )
-    [ mdb-connection get handle>> ] dip '[ _ write-message ] with-stream* ;
+    [ mdb-connection get handle>> ] dip $[ _ write-message ] with-stream* ;
 
 : send-query-plain ( query-message -- result )
     [ mdb-connection get handle>> ] dip
-    '[ _ write-message read-message ] with-stream* ;
+    $[ _ write-message read-message ] with-stream* ;
 
 : send-query-1result ( collection assoc -- result )
     <mdb-query-msg> -1 >>return# send-query-plain

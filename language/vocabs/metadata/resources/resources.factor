@@ -8,11 +8,11 @@ PRIVATE<
 
 : (expand-vocab-resource) ( resource-path -- filenames )
     dup file-info directory?
-    [ dup '[ _ directory-tree-files [ append-path ] with map ] [ prefix ] bi ]
+    [ dup $[ _ directory-tree-files [ append-path ] with map ] [ prefix ] bi ]
     [ 1array ] if ;
 
 : filter-resources ( vocab-files resource-globs -- resource-files )
-    '[ _ [ matches? ] with any? ] filter ;
+    $[ _ [ matches? ] with any? ] filter ;
 
 : copy-vocab-resource ( to from file -- )
     [ append-path ] curry bi@
@@ -26,7 +26,7 @@ PRIVATE>
     [ find-vocab-root ] [ vocab-dir ] bi append-path ;
 
 : expand-vocab-resource-files ( vocab resource-glob-strings -- filenames )
-    [ vocab-dir-in-root ] dip [ <glob> ] map '[
+    [ vocab-dir-in-root ] dip [ <glob> ] map $[
         _ filter-resources
         [ (expand-vocab-resource) ] map concat
     ] with-directory-tree-files ;

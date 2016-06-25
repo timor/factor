@@ -42,8 +42,8 @@ ERROR: vocab-root-required root ;
 : (disk-vocab-children) ( root prefix -- vocabs )
     check-vocab-name
     [ vocab-dir append-path dup exists? [ vocab-subdirs ] [ drop { } ] if ]
-    [ nip [ "." append '[ _ prepend ] map! ] unless-empty ]
-    [ drop '[ _ over vocab-dir? [ >vocab-link ] [ <vocab-prefix> ] if ] map! ]
+    [ nip [ "." append $[ _ prepend ] map! ] unless-empty ]
+    [ drop $[ _ over vocab-dir? [ >vocab-link ] [ <vocab-prefix> ] if ] map! ]
     2tri ;
 
 : disk-vocabs-recursive% ( root prefix -- )
@@ -62,7 +62,7 @@ ERROR: vocab-root-required root ;
 : unrooted-disk-vocabs ( prefix -- seq )
     [ loaded-vocab-names no-rooted ] dip
     dup empty? [ char: . suffix ] unless
-    '[ vocab-name _ one-level-only? ] filter ;
+    $[ vocab-name _ one-level-only? ] filter ;
 
 : unrooted-disk-vocabs-recursive ( prefix -- seq )
     loaded-child-vocab-names no-rooted ;
@@ -79,7 +79,7 @@ PRIVATE>
     [ vocab-prefix? ] partition
     [
         [ vocab-name ] map fast-set
-        '[ name>> _ in? ] reject
+        $[ name>> _ in? ] reject
         convert-prefixes
     ] keep
     append ;
@@ -90,7 +90,7 @@ PRIVATE>
     no-roots no-prefixes members ;
 
 : disk-vocabs-for-prefix ( prefix -- assoc )
-    [ [ vocab-roots get ] dip '[ dup _ (disk-vocab-children) ] { } map>assoc ]
+    [ [ vocab-roots get ] dip $[ dup _ (disk-vocab-children) ] { } map>assoc ]
     [ unrooted-disk-vocabs [ lookup-vocab ] map! f swap 2array ]
     bi suffix ;
 
@@ -98,7 +98,7 @@ PRIVATE>
     "" disk-vocabs-for-prefix ;
 
 : disk-vocabs-recursive-for-prefix ( prefix -- assoc )
-    [ [ vocab-roots get ] dip '[ dup _ (disk-vocabs-recursive) ] { } map>assoc ]
+    [ [ vocab-roots get ] dip $[ dup _ (disk-vocabs-recursive) ] { } map>assoc ]
     [ unrooted-disk-vocabs-recursive [ lookup-vocab ] map! f swap 2array ]
     bi suffix ;
 
@@ -137,7 +137,7 @@ PRIVATE<
 
 : vocabs-to-load ( root prefix -- seq )
     disk-vocabs-in-root/prefix
-    [ don't-load? ] reject no-prefixes ;
+    [ dont-load? ] reject no-prefixes ;
 
 PRIVATE>
 
@@ -148,7 +148,7 @@ PRIVATE>
     "" load-from-root ;
 
 : load ( prefix -- )
-    [ vocab-roots get ] dip '[ _ load-from-root ] each ;
+    [ vocab-roots get ] dip $[ _ load-from-root ] each ;
 
 : load-all ( -- )
     "" load ;

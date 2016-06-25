@@ -141,7 +141,7 @@ TUPLE: vbo
         [
             [
                 [ index-buffer>> ] [ index-count>> ] bi
-                '[ _ 0 <buffer-ptr> _ uint-indexes <index-elements> ] call
+                $[ _ 0 <buffer-ptr> _ uint-indexes <index-elements> ] call
             ] map >>index-vectors drop
         ]
         [ [ texture>> ] map >>textures drop ]

@@ -75,10 +75,10 @@ ERROR: bad-checksum ;
     [ read-png-chunks ] unless ;
 
 : find-chunk ( loading-png string -- chunk )
-    [ chunks>> ] dip '[ type>> _ = ] find nip ;
+    [ chunks>> ] dip $[ type>> _ = ] find nip ;
 
 : find-chunks ( loading-png string -- chunk )
-    [ chunks>> ] dip '[ type>> _ = ] filter ;
+    [ chunks>> ] dip $[ type>> _ = ] filter ;
 
 : read-png-string ( -- str )
     { 0 } read-until drop latin1 decode ;
@@ -304,7 +304,7 @@ ERROR: unknown-component-type n ;
     bit-depth>> {
         { 8 [ ] }
         { 16 [ 2 group [ swap ] assoc-map B{ } concat-as ] }
-        [ scale-factor '[ _ * ] B{ } map-as ]
+        [ scale-factor $[ _ * ] B{ } map-as ]
     } case ;
 
 : decode-greyscale ( loading-png -- byte-array )
@@ -323,7 +323,7 @@ ERROR: invalid-PLTE array ;
 : decode-indexed-color ( loading-image -- byte-array )
     [ uncompress-bytes ] keep
     "PLTE" find-chunk data>> verify-PLTE
-    3 group '[ _ nth ] { } map-as B{ } concat-as ;
+    3 group $[ _ nth ] { } map-as B{ } concat-as ;
 
 ERROR: invalid-color-type/bit-depth loading-png ;
 

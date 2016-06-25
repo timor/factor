@@ -103,7 +103,7 @@ CONSTANT: fortran>c-types H{
 
 MACRO: size-case-type ( cases -- quot )
     [ invalid-fortran-type ] suffix
-    '[ [ size>> _ case ] [ append-dimensions ] bi ] ;
+    $[ [ size>> _ case ] [ append-dimensions ] bi ] ;
 
 : simple-type ( type base-c-type -- c-type )
     swap
@@ -421,7 +421,7 @@ PRIVATE>
 
 :: (fortran-invoke) ( return library function parameters -- quot )
     library library-fortran-abis get-global at dup bad-fortran-abi?
-    [ '[ _ throw ] ]
+    [ $[ _ throw ] ]
     [ drop return library function parameters ((fortran-invoke)) ] if ;
 
 MACRO: fortran-invoke ( return library function parameters -- quot )

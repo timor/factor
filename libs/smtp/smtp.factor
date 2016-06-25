@@ -40,7 +40,7 @@ LOG: log-smtp-connection NOTICE ;
 
 : with-smtp-config ( quot -- )
     [ \ smtp-config get-global clone \ smtp-config ] dip
-    '[ _ with-smtp-connection ] with-variable ; inline
+    $[ _ with-smtp-connection ] with-variable ; inline
 
 TUPLE: email
     { from string }

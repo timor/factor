@@ -121,7 +121,7 @@ IN: bootstrap.ppc
 ] CALLBACK-STUB jit-define
 
 : jit-conditional* ( test-quot false-quot -- )
-    [ '[ 4 + @ ] ] dip jit-conditional ; inline
+    [ $[ 4 + @ ] ] dip jit-conditional ; inline
 
 : jit-load-context ( -- )
     ctx-reg vm-reg vm-context-offset jit-load-cell ;

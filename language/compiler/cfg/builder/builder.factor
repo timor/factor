@@ -17,7 +17,7 @@ SYMBOL: loops
     <basic-block> dup set-basic-block <cfg> dup cfg set ;
 
 : with-cfg-builder ( nodes word label quot: ( ..a block -- ..b ) -- )
-    '[
+    $[
         begin-stack-analysis
         begin-cfg
         [ procedures get push ]
@@ -28,7 +28,7 @@ SYMBOL: loops
 : with-dummy-cfg-builder ( node quot -- )
     [
         [ V{ } clone procedures ] 2dip
-        '[ _ t t [ drop _ call( node -- ) ] with-cfg-builder ] with-variable
+        $[ _ t t [ drop _ call( node -- ) ] with-cfg-builder ] with-variable
     ] { } make drop ;
 
 GENERIC: emit-node ( block node -- block' ) ;
@@ -80,7 +80,7 @@ M: #recursive emit-node ( block node -- block' )
     [ swap emit-nodes ] with-branch ;
 
 : emit-if ( block node -- block' )
-    children>> over '[ _ emit-branch ] map emit-conditional ;
+    children>> over $[ _ emit-branch ] map emit-conditional ;
 
 : trivial-branch? ( nodes -- value ? )
     dup length 1 = [

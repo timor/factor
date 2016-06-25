@@ -28,7 +28,7 @@ CONSTANT: elements-vocab "html.elements" ;
 : def-for-html-word-<foo> ( name -- )
     ! Return the name and code for the <foo> patterned
     ! word.
-    dup <foo> swap '[ _ <foo> write-html ]
+    dup <foo> swap $[ _ <foo> write-html ]
     ( -- ) html-word ;
 
 : <foo ( str -- <str ) "<" prepend ;
@@ -36,7 +36,7 @@ CONSTANT: elements-vocab "html.elements" ;
 : def-for-html-word-<foo ( name -- )
     ! Return the name and code for the <foo patterned
     ! word.
-    <foo dup '[ _ write-html ]
+    <foo dup $[ _ write-html ]
     ( -- ) html-word ;
 
 : foo> ( str -- foo> ) ">" append ;
@@ -51,14 +51,14 @@ CONSTANT: elements-vocab "html.elements" ;
 : def-for-html-word-</foo> ( name -- )
     ! Return the name and code for the </foo> patterned
     ! word.
-    </foo> dup '[ _ write-html ] ( -- ) html-word ;
+    </foo> dup $[ _ write-html ] ( -- ) html-word ;
 
 : <foo/> ( str -- <str/> ) "<" "/>" surround ;
 
 : def-for-html-word-<foo/> ( name -- )
     ! Return the name and code for the <foo/> patterned
     ! word.
-    dup <foo/> swap '[ _ <foo/> write-html ]
+    dup <foo/> swap $[ _ <foo/> write-html ]
     ( -- ) html-word ;
 
 : foo/> ( str -- str/> ) "/>" append ;
@@ -92,7 +92,7 @@ CONSTANT: elements-vocab "html.elements" ;
 
 : define-attribute-word ( name -- )
     dup "=" prepend swap
-    '[ _ write-attr ] ( string -- ) html-word ;
+    $[ _ write-attr ] ( string -- ) html-word ;
 
 ! Define some closed HTML tags
 [

@@ -23,8 +23,8 @@ M: #shuffle finalize*
     dup {
         [ [ in-d>> length ] [ out-d>> length ] bi = ]
         [ [ in-r>> length ] [ out-r>> length ] bi = ]
-        [ [ in-d>> ] [ out-d>> ] [ mapping>> ] tri '[ _ at = ] 2all? ]
-        [ [ in-r>> ] [ out-r>> ] [ mapping>> ] tri '[ _ at = ] 2all? ]
+        [ [ in-d>> ] [ out-d>> ] [ mapping>> ] tri $[ _ at = ] 2all? ]
+        [ [ in-r>> ] [ out-r>> ] [ mapping>> ] tri $[ _ at = ] 2all? ]
     } 1&& [ drop f ] when ;
 
 MEMO: cached-expansion ( word -- nodes )

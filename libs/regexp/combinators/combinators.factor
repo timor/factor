@@ -7,8 +7,8 @@ IN: regexp.combinators
 PRIVATE<
 
 : modify-regexp ( regexp raw-quot tree-quot -- new-regexp )
-    [ '[ raw>> @ ] ]
-    [ '[ parse-tree>> @ ] ] bi* bi
+    [ $[ raw>> @ ] ]
+    [ $[ parse-tree>> @ ] ] bi* bi
     make-regexp ; inline
 
 PRIVATE>

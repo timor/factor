@@ -30,7 +30,7 @@ GENERIC: eval-generator ( singleton -- object ) ;
 
 : resulting-tuple ( exemplar-tuple row out-params -- tuple )
     rot class-of new [
-        '[ slot-name>> _ set-slot-named ] 2each
+        $[ slot-name>> _ set-slot-named ] 2each
     ] keep ;
 
 : query-tuples ( exemplar-tuple statement -- seq )
@@ -117,7 +117,7 @@ ERROR: no-defined-persistent object ;
 : recreate-table ( class -- )
     ensure-defined-persistent
     [
-        '[
+        $[
             [
                 _ drop-sql-statement [ execute-statement ] with-disposals
             ] ignore-table-missing
@@ -126,7 +126,7 @@ ERROR: no-defined-persistent object ;
 
 : ensure-table ( class -- )
     ensure-defined-persistent
-    '[ [ _ create-table ] ignore-table-exists ] ignore-function-exists ;
+    $[ [ _ create-table ] ignore-table-exists ] ignore-function-exists ;
 
 : ensure-tables ( classes -- ) [ ensure-table ] each ;
 

@@ -38,7 +38,7 @@ IN: compiler.cfg.rpo
     ] if ; inline
 
 : simple-optimization ( ... cfg quot: ( ... insns -- ... insns' ) -- ... )
-    '[ _ optimize-basic-block ] each-basic-block ; inline
+    $[ _ optimize-basic-block ] each-basic-block ; inline
 
 : analyze-basic-block ( bb quot -- )
     over kill-block?>> [ 2drop ] [
@@ -46,7 +46,7 @@ IN: compiler.cfg.rpo
     ] if ; inline
 
 : simple-analysis ( ... cfg quot: ( ... insns -- ... ) -- ... )
-    '[ _ analyze-basic-block ] each-basic-block ; inline
+    $[ _ analyze-basic-block ] each-basic-block ; inline
 
 : needs-post-order ( cfg -- )
     post-order drop ;

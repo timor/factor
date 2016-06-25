@@ -173,7 +173,7 @@ TUPLE: slide-button < repeat-button ;
     [ swap ] 2dip
     [
         [ <gadget> ] dip
-        '[ _ swap find-slider slide-by-line ]
+        $[ _ swap find-slider slide-by-line ]
         slide-button new-button
     ] 3dip
     <slide-button-pen> >>interior ;

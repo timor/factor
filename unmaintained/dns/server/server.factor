@@ -204,5 +204,5 @@ DEFER: query->rrs
   [ receive-packet handle-request ] [ receive-loop ] bi ;
 
 : loop ( addr-spec -- )
-  [ <datagram> '[ _ [ receive-loop ] with-disposal ] try ] [ loop ] bi ;
+  [ <datagram> $[ _ [ receive-loop ] with-disposal ] try ] [ loop ] bi ;
 

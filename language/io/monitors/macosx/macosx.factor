@@ -8,7 +8,7 @@ IN: io.monitors.macosx
 TUPLE: macosx-monitor < monitor handle ;
 
 : enqueue-notifications ( triples monitor -- )
-    '[ first { +modify-file+ } _ queue-change ] each ;
+    $[ first { +modify-file+ } _ queue-change ] each ;
 
 M:: macosx (monitor) ( path recursive? mailbox -- monitor )
     path normalize-path :> path

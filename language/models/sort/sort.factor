@@ -4,4 +4,4 @@ USING: sorting models.arrow.smart fry ;
 IN: models.sort
 
 : <sort> ( values sort -- model )
-    [ '[ _ call( obj1 obj2 -- <=> ) ] sort ] <smart-arrow> ; inline
+    [ $[ _ call( obj1 obj2 -- <=> ) ] sort ] <smart-arrow> ; inline

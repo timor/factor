@@ -69,16 +69,16 @@ M: object infer-known* drop f ;
 
 MACRO: output>sequence-n ( quot exemplar n -- quot )
     3dup nip [ outputs ] dip - -rot
-    '[ @ [ _ _ nsequence ] _ ndip ] ;
+    $[ @ [ _ _ nsequence ] _ ndip ] ;
 
 MACRO: output>array-n ( quot n -- array )
-    '[ _ { } _ output>sequence-n ] ;
+    $[ _ { } _ output>sequence-n ] ;
 
 : cleave>array ( obj quots -- array )
-    '[ _ cleave ] output>array ; inline
+    $[ _ cleave ] output>array ; inline
 
 : cleave>sequence ( x seq exemplar -- array )
-    [ '[ _ cleave ] ] dip output>sequence ; inline
+    [ $[ _ cleave ] ] dip output>sequence ; inline
 
 : input<sequence ( seq quot -- )
     [ inputs firstn ] [ call ] bi ; inline
@@ -96,7 +96,7 @@ MACRO: output>array-n ( quot n -- array )
     [ drop call ] [ swap outputs ] 2bi napply ; inline
 
 MACRO: map-reduce-outputs ( quot mapper reducer -- quot )
-    [ '[ _ _ map-outputs ] ] dip '[ _ _ reduce-outputs ] ;
+    [ $[ _ _ map-outputs ] ] dip $[ _ _ reduce-outputs ] ;
 
 : append-outputs-as ( quot exemplar -- seq )
     [ [ call ] [ outputs ] bi ] dip nappend-as ; inline
@@ -108,7 +108,7 @@ MACRO: map-reduce-outputs ( quot mapper reducer -- quot )
     [ inputs ndup ] [ call ] bi ; inline
 
 : dropping ( quot -- quot' )
-    inputs '[ _ ndrop ] ; inline
+    inputs $[ _ ndrop ] ; inline
 
 : nullary ( quot -- )
     dropping call ; inline
@@ -135,28 +135,28 @@ MACRO: map-reduce-outputs ( quot mapper reducer -- quot )
     [ dup inputs ] dip mnapply ; inline
 
 : smart-with ( param obj quot -- obj curry )
-    swapd dup inputs '[ [ _ -nrot ] dip call ] 2curry ; inline
+    swapd dup inputs $[ [ _ -nrot ] dip call ] 2curry ; inline
 
 MACRO: smart-reduce ( reduce-quots -- quot )
-    unzip [ [ ] like ] bi@ dup length dup '[
+    unzip [ [ ] like ] bi@ dup length dup $[
         [ @ ] dip [ @ _ cleave-curry _ spread* ] each
     ] ;
 
 MACRO: smart-map-reduce ( map-reduce-quots -- quot )
-    [ keys ] [ [ [ ] concat-as ] [ ] map-as ] bi dup length dup '[
+    [ keys ] [ [ [ ] concat-as ] [ ] map-as ] bi dup length dup $[
         [ first _ cleave ] keep
         [ @ _ cleave-curry _ spread* ]
         [ 1 ] 2dip setup-each (each-integer)
     ] ;
 
 MACRO: smart-2reduce ( 2reduce-quots -- quot )
-    unzip [ [ ] like ] bi@ dup length dup '[
+    unzip [ [ ] like ] bi@ dup length dup $[
         [ @ ] 2dip
         [ @ _ [ cleave-curry ] [ cleave-curry ] bi _ spread* ] 2each
     ] ;
 
 MACRO: smart-2map-reduce ( 2map-reduce-quots -- quot )
-    [ keys ] [ [ [ ] concat-as ] [ ] map-as ] bi dup length dup '[
+    [ keys ] [ [ [ ] concat-as ] [ ] map-as ] bi dup length dup $[
         [ [ first ] bi@ _ 2cleave ] 2keep
         [ @ _ [ cleave-curry ] [ cleave-curry ] bi _ spread* ]
         [ 1 ] 3dip (2each) (each-integer)

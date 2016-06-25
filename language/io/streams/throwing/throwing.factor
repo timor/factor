@@ -41,7 +41,7 @@ M: throws-on-eof-stream stream-length
 
 M: throws-on-eof-stream stream-read-until
     [ stream>> stream-read-until ]
-    [ '[ length _ \ read-until stream-exhausted ] unless* ] bi ;
+    [ $[ length _ \ read-until stream-exhausted ] unless* ] bi ;
 
 : stream-throw-on-eof ( ..a stream quot: ( ..a stream' -- ..b ) -- ..b )
     [ <throws-on-eof-stream> ] dip with-input-stream* ; inline

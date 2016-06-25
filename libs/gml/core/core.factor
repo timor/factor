@@ -70,7 +70,7 @@ GML: flatten ( array -- flatarray )
     [ dup array? [ 1array ] unless ] map concat ;
 GML: reverse ( array -- reversed ) reverse ;
 GML: slice ( array n k -- slice )
-    [a,b) swap '[ _ wrap nth ] map ;
+    [a,b) swap $[ _ wrap nth ] map ;
 GML:: subarray ( array n k -- slice )
     k n k + array subseq ;
 GML: sort-number-permutation ( array -- permutation )
@@ -120,28 +120,28 @@ GML: copy ( collection -- collection' ) (gml-copy) ;
 
 ! Control flow
 : proc>quot ( proc -- quot: ( registers gml -- registers gml ) )
-    '[ _ exec-proc ] ; inline
+    $[ _ exec-proc ] ; inline
 : proc>quot1 ( proc -- quot: ( registers gml value -- registers gml ) )
-    '[ over push-operand _ exec-proc ] ; inline
+    $[ over push-operand _ exec-proc ] ; inline
 : proc>quot2 ( proc -- quot: ( registers gml value1 value2 -- registers gml ) )
-    '[ [ over push-operand ] bi@ _ exec-proc ] ; inline
+    $[ [ over push-operand ] bi@ _ exec-proc ] ; inline
 
 GML: if ( flag proc -- ) [ true? ] [ proc>quot ] bi* when ;
 GML: ifelse ( flag proc0 proc1 -- ) [ true? ] [ proc>quot ] [ proc>quot ] tri* if ;
 GML:: ifpop ( x y flag -- x/y ) flag true? y x ? ;
 GML: exit ( -- ) return ;
 GML: loop ( proc -- )
-    '[ _ proc>quot '[ @ t ] loop ] with-return ;
+    $[ _ proc>quot $[ @ t ] loop ] with-return ;
 GML: repeat ( n proc -- )
-    '[ _ _ proc>quot times ] with-return ;
+    $[ _ _ proc>quot times ] with-return ;
 GML: for ( a s b proc -- )
-    '[ _ _ _ _ [ swap <range> ] dip proc>quot1 each ] with-return ;
+    $[ _ _ _ _ [ swap <range> ] dip proc>quot1 each ] with-return ;
 GML: forx ( a s b proc -- )
-    '[ _ _ _ _ [ 1 - swap <range> ] dip proc>quot1 each ] with-return ;
+    $[ _ _ _ _ [ 1 - swap <range> ] dip proc>quot1 each ] with-return ;
 GML: forall ( array proc -- )
-    '[ _ _ proc>quot1 each ] with-return ;
+    $[ _ _ proc>quot1 each ] with-return ;
 GML: twoforall ( array1 array2 proc -- )
-    '[ _ _ _ proc>quot2 2each ] with-return ;
+    $[ _ _ _ proc>quot2 2each ] with-return ;
 GML:: map ( array proc -- )
     :> gml
     marker gml push-operand

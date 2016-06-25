@@ -20,7 +20,7 @@ IN: grouping.extras
 
 MACRO: nclump-map-as ( seq quot exemplar n -- result )
     [ nip [1,b) [ [ short tail-slice ] curry ] map swap ] 2keep
-    '[ _ dup _ cleave _ _ _ nmap-as ] ;
+    $[ _ dup _ cleave _ _ _ nmap-as ] ;
 
 : nclump-map ( seq quot n -- result )
     { } swap nclump-map-as ; inline
@@ -61,4 +61,4 @@ PRIVATE<
 PRIVATE>
 
 : group-by ( seq quot: ( elt -- key ) -- groups )
-    '[ dup _ call( x -- y ) (group-by) ] V{ } clone swap reduce ;
+    $[ dup _ call( x -- y ) (group-by) ] V{ } clone swap reduce ;

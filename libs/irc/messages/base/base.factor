@@ -37,7 +37,7 @@ M: irc-message process-irc-prefix
 
 PRIVATE<
 : [slot-setter] ( mirror -- quot )
-    '[ [ _ set-at ] [ drop ] if* ] ; inline
+    $[ [ _ set-at ] [ drop ] if* ] ; inline
 PRIVATE>
 
 GENERIC: process-irc-parameters ( irc-message -- ) ;
@@ -66,7 +66,7 @@ M: irc-message irc-command-string drop f ;
 GENERIC: set-irc-parameters ( irc-message -- ) ;
 M: irc-message set-irc-parameters
     dup irc-parameter-slots
-    [ over <mirror> '[ _ at ] map >>parameters ] when* drop ;
+    [ over <mirror> $[ _ at ] map >>parameters ] when* drop ;
 
 GENERIC: set-irc-trailing ( irc-message -- ) ;
 M: irc-message set-irc-trailing
@@ -88,13 +88,13 @@ PRIVATE<
 : ?define-irc-parameters ( class slot-names -- )
     dup empty? not [
         [ \ irc-parameter-slots create-method-in ] dip
-        [ [ "_" = not ] keep and ] map '[ drop _ ] define
+        [ [ "_" = not ] keep and ] map $[ drop _ ] define
     ] [ 2drop ] if ;
 
 : ?define-irc-trailing ( class slot-name -- )
     [
         [ \ irc-trailing-slot create-method-in ] dip
-        first '[ drop _ ] define
+        first $[ drop _ ] define
     ] [ drop ] if* ;
 
 : define-irc-class ( class params -- )

@@ -26,7 +26,7 @@ SYMBOL: phis
     copies get (record-copy) ; inline
 
 : record-copies ( seq -- )
-    copies get '[ dup _ (record-copy) ] each ; inline
+    copies get $[ dup _ (record-copy) ] each ; inline
 
 GENERIC: visit-insn ( insn -- ) ;
 
@@ -64,7 +64,7 @@ M: insn visit-insn drop ;
 : collect-copies ( cfg -- )
     H{ } clone copies set
     H{ } clone phis set
-    '[
+    $[
         changed? off
         _ (collect-copies)
         changed? get

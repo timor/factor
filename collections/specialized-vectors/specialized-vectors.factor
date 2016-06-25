@@ -73,7 +73,7 @@ PRIVATE>
 
 : define-vector-vocab ( type -- vocab )
     underlying-type
-    [ specialized-vector-vocab ] [ '[ _ define-vector ] ] bi
+    [ specialized-vector-vocab ] [ $[ _ define-vector ] ] bi
     generate-vocab ;
 
 SYNTAX: \ SPECIALIZED-VECTORS:

@@ -10,7 +10,7 @@ sequences sequences.generalizations words ;
 IN: compiler.cfg.builder.alien
 
 : with-param-regs* ( quot -- reg-values stack-values )
-    '[
+    $[
         V{ } clone reg-values set
         V{ } clone stack-values set
         @
@@ -33,7 +33,7 @@ IN: compiler.cfg.builder.alien
 : prepare-struct-caller ( vregs reps return -- vregs' reps' return-vreg/f )
     dup large-struct? [
         heap-size cell f ^^local-allot [
-            '[ _ prefix ]
+            $[ _ prefix ]
             [ int-rep struct-return-on-stack? f 3array prefix ] bi*
         ] keep
     ] [ drop f ] if ;
@@ -43,7 +43,7 @@ IN: compiler.cfg.builder.alien
 
 : caller-parameters ( params -- reg-inputs stack-inputs )
     [ abi>> ] [ parameters>> ] [ return>> ] tri
-    '[
+    $[
         _ unbox-parameters
         _ prepare-struct-caller struct-return-area set
         (caller-parameters)
@@ -134,7 +134,7 @@ M: #alien-assembly emit-node ( block node -- block' )
 
 : callee-parameters ( params -- vregs reps reg-outputs stack-outputs )
     [ abi>> ] [ return>> ] [ parameters>> ] tri
-    '[
+    $[
         _ prepare-struct-callee struct-return-area set
         _ [ base-type ] map (callee-parameters)
     ] with-param-regs* ;

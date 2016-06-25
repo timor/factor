@@ -26,6 +26,6 @@ CONSTANT: state-classes { session aside conversation permit } ;
     <db-persistence> ;
 
 : start-expiring ( db -- )
-    '[
+    $[
         _ [ state-classes [ expire-state ] each ] with-db
     ] 5 minutes every drop ;

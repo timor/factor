@@ -45,7 +45,7 @@ PRIVATE<
 GENERIC#: (annotate) 1 ( word quot -- ) ;
 
 M: generic (annotate)
-    '[ _ (annotate) ] annotate-generic ;
+    $[ _ (annotate) ] annotate-generic ;
 
 M: word (annotate)
     prepare-annotate
@@ -54,11 +54,11 @@ M: word (annotate)
 GENERIC#: (deep-annotate) 1 ( word quot -- ) ;
 
 M: generic (deep-annotate)
-    '[ _ (deep-annotate) ] annotate-generic ;
+    $[ _ (deep-annotate) ] annotate-generic ;
 
 M: word (deep-annotate)
     prepare-annotate
-    '[ dup callable? [ _ call( old -- new ) ] when ] deep-map define ;
+    $[ dup callable? [ _ call( old -- new ) ] when ] deep-map define ;
 
 PRIVATE>
 
@@ -88,17 +88,17 @@ MACRO: leaving ( word -- quot )
     dup stack-effect [ out>> ] "Leaving" trace-quot ;
 
 : (watch) ( word def -- def )
-    over '[ _ entering @ _ leaving ] ;
+    over $[ _ entering @ _ leaving ] ;
 
 PRIVATE>
 
 : watch ( word -- )
-    dup '[ [ _ ] dip (watch) ] annotate ;
+    dup $[ [ _ ] dip (watch) ] annotate ;
 
 PRIVATE<
 
 : (watch-vars) ( word vars quot -- newquot )
-   '[
+   $[
         [
             "--- Entering: " write _ .
             "--- Variable values:" print _ [ dup get ] H{ } map>assoc describe
@@ -109,7 +109,7 @@ PRIVATE<
 PRIVATE>
 
 : watch-vars ( word vars -- )
-    dupd '[ [ _ _ ] dip (watch-vars) ] annotate ;
+    dupd $[ [ _ _ ] dip (watch-vars) ] annotate ;
 
 SYMBOL: word-timing
 
@@ -121,7 +121,7 @@ word-timing [ H{ } clone ] initialize
 PRIVATE<
 
 : (add-timing) ( def word -- def' )
-    '[
+    $[
         _ benchmark _ word-timing get [
             [
                 [ 0 swap [ + ] change-nth ] keep
@@ -133,7 +133,7 @@ PRIVATE<
 PRIVATE>
 
 : add-timing ( word -- )
-    dup '[ _ (add-timing) ] annotate ;
+    dup $[ _ (add-timing) ] annotate ;
 
 : word-timing. ( -- )
     word-timing get >alist

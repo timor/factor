@@ -39,7 +39,7 @@ ERROR: no-such-client username ;
 PRIVATE<
 
 : (send-client) ( managed-client seq -- )
-    [ output-stream>> ] dip '[ _ print flush ] with-output-stream* ;
+    [ output-stream>> ] dip $[ _ print flush ] with-output-stream* ;
 
 PRIVATE>
 
@@ -47,10 +47,10 @@ PRIVATE>
     clients ?at [ no-such-client ] [ (send-client) ] if ;
 
 : send-everyone ( seq -- )
-    [ client-streams ] dip '[ _ (send-client) ] each ;
+    [ client-streams ] dip $[ _ (send-client) ] each ;
 
 : send-everyone-else ( seq -- )
-    [ everyone-else-streams ] dip '[ _ (send-client) ] each ;
+    [ everyone-else-streams ] dip $[ _ (send-client) ] each ;
 
 PRIVATE<
 

@@ -153,7 +153,7 @@ error-display "toolbar" f {
     format-toolbar ;
 
 : <error-model> ( visible-errors model -- model' )
-    [ swap '[ error-type _ at ] filter ] <smart-arrow> ;
+    [ swap $[ error-type _ at ] filter ] <smart-arrow> ;
 
 :: <error-list-gadget> ( model -- gadget )
     vertical \ error-list-gadget new-track

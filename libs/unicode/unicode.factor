@@ -61,7 +61,7 @@ CATEGORY: math Sm | "Other_Math" property? ;
 PRIVATE<
 
 : >pieces ( str quot: ( str -- i ) -- graphemes )
-    [ dup empty? not ] swap '[ dup @ cut-slice swap ] produce nip ; inline
+    [ dup empty? not ] swap $[ dup @ cut-slice swap ] produce nip ; inline
 
 PRIVATE>
 
@@ -73,7 +73,7 @@ PRIVATE>
 
 : first-word ( str -- i )
     [ [ length ] [ first word-break-prop ] bi ] keep
-    1 swap dup '[ _ word-break-next ] find-index-from
+    1 swap dup $[ _ word-break-next ] find-index-from
     drop nip swap or ;
 
 : >words ( str -- words )
@@ -82,7 +82,7 @@ PRIVATE>
 PRIVATE<
 
 : nth-next ( i str -- str[i-1] str[i] )
-    [ [ 1 - ] keep ] dip '[ _ nth ] bi@ ;
+    [ [ 1 - ] keep ] dip $[ _ nth ] bi@ ;
 
 PRIVATE>
 
@@ -100,7 +100,7 @@ PRIVATE>
     over tail-slice first-word + ;
 
 : last-word ( str -- i )
-    [ length iota ] keep '[ _ word-break-at? ] find-last drop 0 or ;
+    [ length iota ] keep $[ _ word-break-at? ] find-last drop 0 or ;
 
 : last-word-from ( end str -- i )
     swap head-slice last-word ;

@@ -22,7 +22,7 @@ M: singleton-class component-tag ( tag class -- )
 
 : compile-component-attrs ( tag class -- )
     [ attrs>> [ drop main>> "name" = ] assoc-reject ] dip
-    [ all-slots swap '[ name>> _ at compile-attr ] each ]
+    [ all-slots swap $[ name>> _ at compile-attr ] each ]
     [ [ boa ] [code-with] ]
     bi ;
 
@@ -33,5 +33,5 @@ M: tuple-class component-tag ( tag class -- )
 
 SYNTAX: \ COMPONENT:
     scan-word
-    [ name>> ] [ '[ _ component-tag ] ] bi
+    [ name>> ] [ $[ _ component-tag ] ] bi
     define-chloe-tag ;

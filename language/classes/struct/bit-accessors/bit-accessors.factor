@@ -32,8 +32,8 @@ IN: classes.struct.bit-accessors
     ] if-zero ; inline recursive
 
 : bit-reader ( offset bits -- quot: ( alien -- n ) )
-    [ neg '[ _ alien-unsigned-1 _ bitand _ shift ] ]
-    [ swap '[ _ _ bi _ shift bitor ] ]
+    [ neg $[ _ alien-unsigned-1 _ bitand _ shift ] ]
+    [ swap $[ _ _ bi _ shift bitor ] ]
     bit-manipulator ;
 
 :: write-bits ( n alien i mask start-bit -- )
@@ -42,6 +42,6 @@ IN: classes.struct.bit-accessors
     bitor alien i set-alien-unsigned-1 ; inline
 
 : bit-writer ( offset bits -- quot: ( n alien -- ) )
-    [ '[ _ _ _ write-bits ] ]
-    [ '[ _ [ [ _ neg shift ] dip @ ] 2bi ] ]
+    [ $[ _ _ _ write-bits ] ]
+    [ $[ _ [ [ _ neg shift ] dip @ ] 2bi ] ]
     bit-manipulator ;

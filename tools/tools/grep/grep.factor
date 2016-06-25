@@ -9,7 +9,7 @@ IN: tools.grep
 ! TODO: case-insensitive
 
 : grep-lines ( regexpt -- )
-    '[ dup _ matches? [ print ] [ drop ] if ] each-line ;
+    $[ dup _ matches? [ print ] [ drop ] if ] each-line ;
 
 : grep-file ( pattern filename -- )
     ascii [ grep-lines ] with-file-reader ;

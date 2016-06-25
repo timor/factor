@@ -30,7 +30,7 @@ short-url "SHORT_URLS" {
     swap [ drop ] prepose attempt-all ; inline
 
 : insert-short-url ( short-url -- short-url )
-    '[ _ dup random-url >>short insert-tuple ] 10 retry ;
+    $[ _ dup random-url >>short insert-tuple ] 10 retry ;
 
 : shorten ( url -- short )
     short-url new swap >>url dup select-tuple

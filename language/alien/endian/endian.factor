@@ -24,13 +24,13 @@ MACRO: byte-reverse ( n signed? -- quot )
         [
             dup iota [
                 [ 1 + - -8 * ] [ nip 8 * ] 2bi
-                '[ _ shift 0xff bitand _ shift ]
+                $[ _ shift 0xff bitand _ shift ]
             ] with map
         ] [ 1 - [ bitor ] n*quot ] bi
     ] [
         [ convert-signed-quot ] [ drop [ ] ] if
     ] 2bi
-    '[ _ cleave @ @ ] ;
+    $[ _ cleave @ @ ] ;
 
 SYMBOLS: le8 be8 ule8 ube8
 ule16 ule32 ule64 ube16 ube32 ube64
@@ -68,10 +68,10 @@ ERROR: unknown-endian-c-type symbol ;
             ] dip [ [ 64 >signed ] compose ] when
             >>getter drop
         ]
-        [ '[ [ [ _ _ byte-reverse ] 2dip ] prepose ] change-setter ] 3bi
+        [ $[ [ [ _ _ byte-reverse ] 2dip ] prepose ] change-setter ] 3bi
     ] [
-        [ '[ [ _ _ byte-reverse ] compose ] change-getter drop ]
-        [ '[ [ [ _ _ byte-reverse ] 2dip ] prepose ] change-setter ] 3bi
+        [ $[ [ _ _ byte-reverse ] compose ] change-getter drop ]
+        [ $[ [ [ _ _ byte-reverse ] 2dip ] prepose ] change-setter ] 3bi
     ] if ;
 
 : typedef-endian ( n ? c-type endian -- )

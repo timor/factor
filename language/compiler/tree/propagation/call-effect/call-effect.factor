@@ -57,7 +57,7 @@ M: quotation cached-effect
 
 : call-effect-slow>quot ( effect -- quot )
     [ \ call-effect def>> curry ] [ add-effect-input ] bi
-    '[ _ _ call-effect-unsafe ] ;
+    $[ _ _ call-effect-unsafe ] ;
 
 : call-effect-slow ( quot effect -- ) drop call ;
 
@@ -83,10 +83,10 @@ M: quotation cached-effect
     if ; inline
 
 : call-effect>quot ( effect -- quot )
-    inline-cache new '[ drop _ _ call-effect-ic ] ;
+    inline-cache new $[ drop _ _ call-effect-ic ] ;
 
 : execute-effect-slow ( word effect -- )
-    [ '[ _ execute ] ] dip call-effect-slow ; inline
+    [ $[ _ execute ] ] dip call-effect-slow ; inline
 
 : execute-effect-unsafe? ( word effect -- ? )
     over word-optimized?
@@ -107,7 +107,7 @@ M: quotation cached-effect
     if ; inline
 
 : execute-effect>quot ( effect -- quot )
-    inline-cache new '[ drop _ _ execute-effect-ic ] ;
+    inline-cache new $[ drop _ _ execute-effect-ic ] ;
 
 GENERIC: already-inlined-quot? ( quot -- ? ) ;
 
@@ -162,22 +162,22 @@ ERROR: uninferable ;
 
 : (value>quot) ( value-info -- quot )
     dup literal?>> [
-        literal>> [ add-quot-to-history ] [ '[ drop @ ] ] bi
+        literal>> [ add-quot-to-history ] [ $[ drop @ ] ] bi
     ] [
         dup class>> {
             { \ curry [
                 slots>> third (value>quot)
-                '[ [ obj>> ] [ quot>> @ ] bi ]
+                $[ [ obj>> ] [ quot>> @ ] bi ]
             ] }
             { \ compose [
                 slots>> last2 [ (value>quot) ] bi@
-                '[ [ first>> @ ] [ second>> @ ] bi ]
+                $[ [ first>> @ ] [ second>> @ ] bi ]
             ] }
         } case
     ] if ;
 
 : value>quot ( value-info -- quot: ( code effect -- ) )
-    (value>quot) '[ drop @ ] ;
+    (value>quot) $[ drop @ ] ;
 
 : call-inlining ( #call -- quot/f )
     top-two dup infer-value [
@@ -191,7 +191,7 @@ ERROR: uninferable ;
 : execute-inlining ( #call -- quot/f )
     top-two >literal< [
         2dup swap execute-effect-unsafe?
-        [ nip '[ 2drop _ execute ] ]
+        [ nip $[ 2drop _ execute ] ]
         [ drop execute-effect>quot ] if
     ] [ drop execute-effect>quot ] if ;
 

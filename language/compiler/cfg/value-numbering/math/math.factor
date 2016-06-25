@@ -59,7 +59,7 @@ M: ##not rewrite
     [ (reassociate) ] keep binary-constant-fold* ;
 
 : ?new-insn ( dst src1 src2 ? class -- insn/f )
-    '[ _ new-insn ] [ 3drop f ] if ; inline
+    $[ _ new-insn ] [ 3drop f ] if ; inline
 
 : reassociate-arithmetic ( insn new-insn -- insn/f )
     [ reassociate dup immediate-arithmetic? ] dip ?new-insn ; inline

@@ -11,6 +11,6 @@ IN: benchmark.dawes
     120000 iota [ 255 bitand ] int-array{ } map-as ; inline
 
 : dawes-benchmark ( -- )
-    200 make-int-array '[ _ count-ones ] replicate drop ;
+    200 make-int-array $[ _ count-ones ] replicate drop ;
 
 MAIN: dawes-benchmark

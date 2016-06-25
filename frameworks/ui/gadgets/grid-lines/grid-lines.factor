@@ -12,9 +12,9 @@ PRIVATE<
 
 :: (compute-grid-lines) ( grid n ns orientation -- seq )
     grid gap>> :> gap
-    ns n suffix gap orientation v. '[ _ - orientation n*v ] map
-    dup grid dim>> gap v- orientation reverse v* '[ _ v+ ] map
-    gap [ 2 /f ] map '[ [ _ v+ ] map ] bi@ zip ;
+    ns n suffix gap orientation v. $[ _ - orientation n*v ] map
+    dup grid dim>> gap v- orientation reverse v* $[ _ v+ ] map
+    gap [ 2 /f ] map $[ [ _ v+ ] map ] bi@ zip ;
 
 : compute-grid-lines ( grid -- lines )
     dup <grid-layout>

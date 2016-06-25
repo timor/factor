@@ -9,7 +9,7 @@ IN: cuda.memory
 
 : cuda-malloc ( n -- ptr )
     [ { CUdeviceptr } ] dip
-    '[ _ cuMemAlloc cuda-error ] with-out-parameters ; inline
+    $[ _ cuMemAlloc cuda-error ] with-out-parameters ; inline
 
 : cuda-malloc-type ( n type -- ptr )
     c:heap-size * cuda-malloc ; inline

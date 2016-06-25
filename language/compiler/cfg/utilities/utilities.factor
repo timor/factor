@@ -64,11 +64,11 @@ IN: compiler.cfg.utilities
 
 : each-phi ( ... bb quot: ( ... ##phi -- ... ) -- ... )
     [ instructions>> ] dip
-    '[ dup ##phi? [ @ t ] [ drop f ] if ] all? drop ; inline
+    $[ dup ##phi? [ @ t ] [ drop f ] if ] all? drop ; inline
 
 : each-non-phi ( ... bb quot: ( ... insn -- ... ) -- ... )
     [ instructions>> ] dip
-    '[ dup ##phi? [ drop ] _ if ] each ; inline
+    $[ dup ##phi? [ drop ] _ if ] each ; inline
 
 : predecessor ( bb -- pred )
     predecessors>> first ; inline
@@ -81,7 +81,7 @@ IN: compiler.cfg.utilities
     [ predecessors>> swap suffix! drop ] 2bi ;
 
 : connect-Nto1-bbs ( froms to -- )
-    '[ _ connect-bbs ] each ;
+    $[ _ connect-bbs ] each ;
 
 : make-edges ( block-map edgelist -- )
     [ [ of ] with map first2 connect-bbs ] with each ;
@@ -91,11 +91,11 @@ MACRO: apply-passes ( passes -- quot: ( obj -- ) )
     unclip-last [ [ 1array \ dup prefix ] map [ ] concat-as ] dip suffix ;
 
 : slurp/replenish-deque ( ... deque quot: ( ... obj -- ... seq ) -- ... )
-      over '[ @ _ push-all-front ] slurp-deque ; inline
+      over $[ @ _ push-all-front ] slurp-deque ; inline
 
 : heap-members ( heap -- seq )
     data>> [ value>> ] map ;
 
 : heap-pop-while ( heap quot: ( key -- ? ) -- values )
-    '[ dup heap-empty? [ f f ] [ dup heap-peek @ ] if ]
+    $[ dup heap-empty? [ f f ] [ dup heap-peek @ ] if ]
     [ over heap-pop* ] produce 2nip ; inline

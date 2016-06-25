@@ -76,7 +76,7 @@ MEMO: make-prepare-send ( selector method super? -- quot )
     [
         [ \ <super> , ] when swap <selector> , \ selector ,
     ] [ ] make
-    swap second length 2 - '[ _ _ ndip ] ;
+    swap second length 2 - $[ _ _ ndip ] ;
 
 MACRO: (send) ( selector super? -- quot )
     [ dup lookup-method ] dip
@@ -246,7 +246,7 @@ ERROR: no-objc-type name ;
 : define-objc-class-word ( quot name -- )
     [ class-init-hooks get set-at ]
     [
-        [ "cocoa.classes" create-word ] [ '[ _ objc-class ] ] bi
+        [ "cocoa.classes" create-word ] [ $[ _ objc-class ] ] bi
         ( -- class ) define-declared
     ] bi ;
 

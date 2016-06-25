@@ -11,12 +11,12 @@ IN: images.tessellation
     second <groups> ; inline
 
 : tesselate-columns ( bitmap-rows tess-dim -- bitmaps )
-    first '[ _ <groups> ] map flip ; inline
+    first $[ _ <groups> ] map flip ; inline
 
 : tesselate-bitmap ( bitmap bitmap-dim tess-dim -- bitmap-grid )
     [ group-rows ] dip
     [ tesselate-rows ] keep
-    '[ _ tesselate-columns ] map ;
+    $[ _ tesselate-columns ] map ;
 
 : tile-width ( tile-bitmap original-image -- width )
     [ first length ] [ bytes-per-pixel ] bi* /i ;

@@ -235,7 +235,7 @@ PRIVATE>
         { 5 5 } >>gap ;
 
 : command-button-quot ( target command -- quot )
-    '[ _ _ invoke-command ] ;
+    $[ _ _ invoke-command ] ;
 
 : gesture>tooltip ( gesture -- str/f )
     gesture>string dup [ "Shortcut: " prepend ] when ;
@@ -243,5 +243,5 @@ PRIVATE>
 :: <command-button> ( target gesture command -- button )
     command command-name
     target command command-button-quot
-    '[ drop @ ] <border-button>
+    $[ drop @ ] <border-button>
     gesture gesture>tooltip >>tooltip ; inline

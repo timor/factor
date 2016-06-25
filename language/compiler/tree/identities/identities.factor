@@ -7,7 +7,7 @@ IN: compiler.tree.identities
 
 : define-identities ( word identities -- )
     [ integer-derived-ops dup empty? f assert= ] dip
-    '[ _ "identities" set-word-prop ] each ;
+    $[ _ "identities" set-word-prop ] each ;
 
 SYMBOL: X
 
@@ -55,7 +55,7 @@ SYMBOL: X
     [ over X eq? [ 2drop t ] [ literal>> = ] if ] 2all? ;
 
 : find-identity ( patterns infos -- result )
-    '[ first _ matches? ] find swap [ second ] when ;
+    $[ first _ matches? ] find swap [ second ] when ;
 
 GENERIC: apply-identities* ( node -- node ) ;
 

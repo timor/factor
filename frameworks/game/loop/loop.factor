@@ -77,10 +77,10 @@ PRIVATE>
     t >>running?
 
     dup
-    [ '[ _ tick-iteration ] f ]
+    [ $[ _ tick-iteration ] f ]
     [ tick-interval-nanos>> nanoseconds ] bi <timer> >>tick-timer
 
-    dup '[ _ frame-iteration ] f 1 milliseconds <timer> >>draw-timer
+    dup $[ _ frame-iteration ] f 1 milliseconds <timer> >>draw-timer
 
     [ tick-timer>> ] [ draw-timer>> ] bi [ start-timer ] bi@ ;
 

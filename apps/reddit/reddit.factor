@@ -78,13 +78,13 @@ PRIVATE>
 PRIVATE<
 
 : write-title ( title url -- )
-    '[
+    $[
         _ presented ,,
         color: blue foreground ,,
     ] H{ } make format ;
 
 : write-link ( title url -- )
-    '[
+    $[
         _ presented ,,
         hexcolor: 888888 foreground ,,
     ] H{ } make format ;

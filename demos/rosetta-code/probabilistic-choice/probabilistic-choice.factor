@@ -45,18 +45,18 @@ MACRO: case-probas ( data -- quot )
 
 : generate ( # case-probas -- seq )
     H{ } clone [
-        '[ _ casep _ inc-at ] times
+        $[ _ casep _ inc-at ] times
     ] keep ; inline
 
 : normalize ( seq # -- seq )
-    [ clone ] dip '[ _ /f ] assoc-map ;
+    [ clone ] dip $[ _ /f ] assoc-map ;
 
 : summarize1 ( name value data -- )
     pick expected "%6s: %10f %10f\n" printf ;
 
 : summarize ( generated data -- )
     "Key" "Value" "expected" "%6s  %10s %10s\n" printf
-    '[ _ summarize1 ] assoc-each ;
+    $[ _ summarize1 ] assoc-each ;
 
 : generate-normalized ( # proba -- seq )
     [ generate ] [ drop normalize ] 2bi ; inline

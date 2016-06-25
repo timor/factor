@@ -21,7 +21,7 @@ IN: compiler.tree.debugger
 GENERIC: node>quot ( node -- ) ;
 
 MACRO: match-choose ( alist -- quot )
-    [ '[ syntax:_ ] ] assoc-map '[ syntax:_ match-cond ] ;
+    [ $[ syntax:_ ] ] assoc-map $[ syntax:_ match-cond ] ;
 
 MATCH-VARS: ?a ?b ?c ;
 
@@ -54,7 +54,7 @@ TUPLE: shuffle-node { effect effect } ;
 M: shuffle-node pprint* effect>> effect>string text ;
 
 : (shuffle-effect) ( in out #shuffle -- effect )
-    mapping>> '[ syntax:_ at ] map [ >array ] bi@ <effect> ;
+    mapping>> $[ syntax:_ at ] map [ >array ] bi@ <effect> ;
 
 : shuffle-effect ( #shuffle -- effect )
     [ in-d>> ] [ out-d>> ] [ ] tri (shuffle-effect) ;

@@ -98,5 +98,5 @@ FUNCTION: CFStringRef CFCopyTypeIDDescription ( CFTypeID type_id ) ;
 
 SYNTAX: \ CFSTRING:
     scan-new-word scan-object ";" expect
-    [ drop ] [ '[ _ [ _ <CFString> ] initialize-alien ] ] 2bi
+    [ drop ] [ $[ _ [ _ <CFString> ] initialize-alien ] ] 2bi
     ( -- alien ) define-declared ;

@@ -125,7 +125,7 @@ TUPLE: tiling < track gadgets tiles first focused ;
 
 : exchanged! ( seq a b -- )
                    [ 0 max ] bi@
-  pick length 1 - '[ _ min ] bi@
+  pick length 1 - $[ _ min ] bi@
   rot exchange ;
 
 : move-prev ( tiling -- tiling )

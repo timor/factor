@@ -18,7 +18,7 @@ IN: forestdb.utils
 
 ! Manual naming scheme: foo.db
 : do-forestdb-test-db-manual ( config quot -- )
-    '[
+    $[
         "forestdb-test-manual" ".db" [
             _
             "default" _ with-forestdb-path-config-kvs-name
@@ -27,7 +27,7 @@ IN: forestdb.utils
 
 ! Auto naming scheme: foo.db.0 foo.db.meta
 : do-forestdb-test-db-auto ( config quot -- )
-    '[
+    $[
         "forestdb-test-auto" { ".db.0" ".db.meta" } [
             first ".0" ?tail drop
             _ "default" _ with-forestdb-path-config-kvs-name

@@ -11,10 +11,10 @@ IN: math.floats.env.tests
 set-default-fp-env
 
 : test-fp-exception ( exception inputs quot -- quot' )
-    '[ _ [ @ @ ] collect-fp-exceptions nip member? ] ;
+    $[ _ [ @ @ ] collect-fp-exceptions nip member? ] ;
 
 : test-fp-exception-compiled ( exception inputs quot -- quot' )
-    '[ _ @ [ _ collect-fp-exceptions ] compile-call nip member? ] ;
+    $[ _ @ [ _ collect-fp-exceptions ] compile-call nip member? ] ;
 
 { t } +fp-zero-divide+ [ 1.0 0.0 ] [ /f ] test-fp-exception unit-test
 { t } +fp-inexact+ [ 1.0 3.0 ] [ /f ] test-fp-exception unit-test
@@ -110,10 +110,10 @@ set-default-fp-env
     2 head $${ KERNEL-ERROR ERROR-FP-TRAP } = ;
 
 : test-traps ( traps inputs quot -- quot' fail-quot )
-    append '[ _ _ with-fp-traps ] [ fp-trap-error? ] ;
+    append $[ _ _ with-fp-traps ] [ fp-trap-error? ] ;
 
 : test-traps-compiled ( traps inputs quot -- quot' fail-quot )
-    swapd '[ @ [ _ _ with-fp-traps ] compile-call ] [ fp-trap-error? ] ;
+    swapd $[ @ [ _ _ with-fp-traps ] compile-call ] [ fp-trap-error? ] ;
 
 { +fp-zero-divide+ } [ 1.0 0.0 ] [ /f ] test-traps must-fail-with
 { +fp-inexact+ } [ 1.0 3.0 ] [ /f ] test-traps must-fail-with
@@ -138,7 +138,7 @@ set-default-fp-env
     test-comparison-quot append [ fp-trap-error? ] ;
 
 : test-comparison-compiled ( inputs word -- quot fail-quot )
-    test-comparison-quot '[ @ _ compile-call ] [ fp-trap-error? ] ;
+    test-comparison-quot $[ @ _ compile-call ] [ fp-trap-error? ] ;
 
 \ float< "intrinsic" word-prop [
     [ 0/0. -15.0 ] \ < test-comparison must-fail-with

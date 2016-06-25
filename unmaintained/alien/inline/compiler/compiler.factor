@@ -23,7 +23,7 @@ symbol: C++
     } cond ;
 
 : library-path ( str -- path )
-    '[ "lib" % _ % library-suffix % ] "" make inline-library-file ;
+    $[ "lib" % _ % library-suffix % ] "" make inline-library-file ;
 
 HOOK: compiler os ( lang -- str )
 

@@ -22,13 +22,13 @@ PRIVATE<
 
 : with-cairo ( cairo quot -- )
     [ &cairo_destroy current-cairo ] dip
-    '[ @ current-cairo get check-cairo ] with-variable ; inline
+    $[ @ current-cairo get check-cairo ] with-variable ; inline
 
 : with-surface ( cairo_surface quot -- alien )
     [ &cairo_surface_destroy ] dip [ check-surface ] bi ; inline
 
 : with-cairo-from-surface ( cairo_surface quot -- )
-    '[ cairo_create _ with-cairo ] with-surface ; inline
+    $[ cairo_create _ with-cairo ] with-surface ; inline
 
 PRIVATE>
 
@@ -39,7 +39,7 @@ GENERIC: render-cairo* ( gadget -- ) ;
         image-dims
         [ image-buffer dup CAIRO_FORMAT_ARGB32 ]
         [ cairo_image_surface_create_for_data ] 3bi
-    ] [ '[ _ render-cairo* ] with-cairo-from-surface ] bi ;
+    ] [ $[ _ render-cairo* ] with-cairo-from-surface ] bi ;
 
 TUPLE: cairo-gadget < gadget ;
 

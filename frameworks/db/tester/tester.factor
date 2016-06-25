@@ -29,13 +29,13 @@ IN: db.tester
 
 
 : test-sqlite ( quot -- )
-    '[
+    $[
         [ ] [ sqlite-test-db _ with-db ] unit-test
     ] call ; inline
 
 : test-postgresql ( quot -- )
 
-    '[
+    $[
         os windows? cpu x86.64? and [
             postgresql-template1-db [
                 postgresql-test-db-name ensure-database

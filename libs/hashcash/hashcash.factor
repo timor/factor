@@ -32,7 +32,7 @@ PRIVATE>
 
 ! Generate a 'length' long random salt
 : salt ( length -- salted )
-    available-chars '[ _ random ] "" replicate-as ;
+    available-chars $[ _ random ] "" replicate-as ;
 
 TUPLE: hashcash version bits date resource ext salt suffix ;
 

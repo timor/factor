@@ -39,7 +39,7 @@ SYNTAX: \ C-TYPE:
 ARITY: \ C-TYPE: 2
 
 SYNTAX: \ &:
-    scan-token current-library get '[ _ _ address-of ] append! ;
+    scan-token current-library get $[ _ _ address-of ] append! ;
 
 SYNTAX: \ C-GLOBAL: scan-c-type scan-new-word ";" expect define-global ;
 

@@ -46,7 +46,7 @@ M: #branch normalize*
 
 M: #phi normalize*
     remaining-introductions get swap dup terminated>>
-    '[ _ eliminate-phi-introductions ] change-phi-in-d ;
+    $[ _ eliminate-phi-introductions ] change-phi-in-d ;
 
 : (normalize) ( nodes introductions -- nodes )
     introduction-stack [
@@ -55,7 +55,7 @@ M: #phi normalize*
 
 M: #recursive normalize*
     [ [ child>> first ] [ in-d>> ] bi >>in-d drop ]
-    [ dup label>> introductions>> make-values '[ _ (normalize) ] change-child ]
+    [ dup label>> introductions>> make-values $[ _ (normalize) ] change-child ]
     bi ;
 
 M: #enter-recursive normalize*
@@ -68,14 +68,14 @@ M: #enter-recursive normalize*
 
 : call<return ( #call-recursive n -- nodes )
     neg dup make-values [
-        [ pop-introductions '[ _ prepend ] change-in-d ]
-        [ '[ _ prepend ] change-out-d ]
+        [ pop-introductions $[ _ prepend ] change-in-d ]
+        [ $[ _ prepend ] change-out-d ]
         bi*
     ] [ introduction-stack [ prepend ] change ] bi ;
 
 : call>return ( #call-recursive n -- #call-recursive )
-    [ [ [ in-d>> ] [ out-d>> ] bi ] [ '[ _ head ] ] bi* bi@ add-renamings ]
-    [ '[ _ tail ] [ change-in-d ] [ change-out-d ] bi ]
+    [ [ [ in-d>> ] [ out-d>> ] bi ] [ $[ _ head ] ] bi* bi@ add-renamings ]
+    [ $[ _ tail ] [ change-in-d ] [ change-out-d ] bi ]
     2bi ;
 
 M: #call-recursive normalize*

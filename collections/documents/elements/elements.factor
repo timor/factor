@@ -59,7 +59,7 @@ PRIVATE<
     2dup ?nth blank? ;
 
 : break-detector ( ? -- quot )
-    '[ blank? _ xor ] ; inline
+    $[ blank? _ xor ] ; inline
 
 : prev-word ( col str ? -- col )
     break-detector find-last-from drop ?1+ ;

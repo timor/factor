@@ -14,7 +14,7 @@ IN: lcd
     } nth 4 <groups> nth ;
 
 : lcd-row ( row digit -- string )
-    '[ _ lcd-digit ] { } map-as concat ;
+    $[ _ lcd-digit ] { } map-as concat ;
 
 : lcd ( digit-str -- string )
     4 iota [ lcd-row ] with map "\n" join ;

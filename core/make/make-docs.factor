@@ -34,7 +34,7 @@ $nl
 "For example,"
 { $code "[ 2 , , \\ + , ] [ ] make" }
 "is better expressed as"
-{ $code "'[ 2 _ + ]" } ;
+{ $code "$[ 2 _ + ]" } ;
 
 ARTICLE: "namespaces-make" "Making sequences with variables"
 "The " { $vocab-link "make" } " vocabulary implements a facility for constructing " { $link sequence } "s and " { $link assoc } "s by holding a collector object in a variable. Storing the collector object in a variable rather than the stack may allow code to be written with less stack manipulation."

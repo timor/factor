@@ -3,7 +3,7 @@ xml.data quotations fry byte-arrays ;
 IN: xml.errors.tests
 
 : xml-error-test ( expected-error xml-string -- )
-    '[ _ string>xml ] swap '[ _ = ] must-fail-with ;
+    $[ _ string>xml ] swap $[ _ = ] must-fail-with ;
 
 T{ no-entity f 1 10 "nbsp" } "<x>&nbsp;</x>" xml-error-test
 T{ mismatched f 1 7 T{ name f "" "x" "" } T{ name f "" "y" "" } }

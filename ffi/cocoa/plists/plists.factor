@@ -42,9 +42,9 @@ PRIVATE<
 MACRO: objc-class-case ( alist -- quot )
     [
         dup callable?
-        [ first2 [ '[ dup _ execute send\ isKindOfClass: c-bool> ] ] dip 2array ]
+        [ first2 [ $[ dup _ execute send\ isKindOfClass: c-bool> ] ] dip 2array ]
         unless
-    ] map '[ _ cond ] ;
+    ] map $[ _ cond ] ;
 
 PRIVATE>
 

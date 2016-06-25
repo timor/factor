@@ -72,7 +72,7 @@ M: insn value-number
 : determine-value-numbers ( cfg -- )
     final-iteration? off
     init-value-graph
-    '[
+    $[
         changed? off
         _ value-numbering-iteration
         changed? get

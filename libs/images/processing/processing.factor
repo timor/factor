@@ -8,8 +8,8 @@ IN: images.processing
 : coord-matrix ( dim -- m )
     [ iota ] map first2 cartesian-product ;
 
-: map^2 ( m quot -- m' ) '[ _ map ] map ; inline
-: each^2 ( m quot -- m' ) '[ _ each ] each ; inline
+: map^2 ( m quot -- m' ) $[ _ map ] map ; inline
+: each^2 ( m quot -- m' ) $[ _ each ] each ; inline
 
 : matrix-dim ( m -- dim ) [ length ] [ first length ] bi 2array ;
 

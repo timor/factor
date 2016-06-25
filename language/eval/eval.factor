@@ -18,12 +18,12 @@ SYNTAX: \ eval( \ eval parse-call-paren ;
 
 SYNTAX: \ eval[[
     "]]" parse-multiline-string
-    '[ get-datastack _ parse-string with-datastack set-datastack ] append! ;
+    $[ get-datastack _ parse-string with-datastack set-datastack ] append! ;
 
 : (eval>string) ( str -- output )
     [
         parser-quiet? on
-        '[ _ ( -- ) (eval) ] [ print-error ] recover
+        $[ _ ( -- ) (eval) ] [ print-error ] recover
     ] with-string-writer ;
 
 : eval>string ( str -- output )

@@ -9,7 +9,7 @@ IN: successor
 PRIVATE<
 
 : carry ( elt last first -- ? elt' )
-    '[ _ > dup _ ] keep ? ;
+    $[ _ > dup _ ] keep ? ;
 
 : next-digit ( ch -- ? ch' )
     1 + char: 9 char: 0 carry ;
@@ -26,7 +26,7 @@ PRIVATE<
     } cond ;
 
 : map-until ( seq quot: ( elt -- ? elt' ) -- seq' ? )
-    [ t 0 pick length '[ 2dup _ < and ] ] dip '[
+    [ t 0 pick length $[ 2dup _ < and ] ] dip $[
         nip [ over _ change-nth ] keep 1 +
     ] while drop ; inline
 

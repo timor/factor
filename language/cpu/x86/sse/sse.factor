@@ -58,7 +58,7 @@ MACRO: available-reps ( alist -- quot )
     unzip { } [ append ] accumulate*
     [ [ 1quotation ] map ] bi@ zip
     reverse [ { } ] suffix
-    '[ _ cond ] ;
+    $[ _ cond ] ;
 
 M: x86 %alien-vector-reps
     {

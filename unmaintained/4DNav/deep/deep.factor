@@ -6,7 +6,7 @@ in: 4DNav.deep
 ! MACRO: deep-cleave-quots ( seq -- quot )
 !    [ [ quotation? ] deep-filter ]
 !    [ [ dup quotation? [ drop , ] when ] deep-map ]
-!    bi '[ _ cleave _ bake ] ;
+!    bi $[ _ cleave _ bake ] ;
 
 : make-matrix ( quot width -- matrix ) 
     [ { } make ] dip group ; inline

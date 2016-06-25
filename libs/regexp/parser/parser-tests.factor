@@ -2,10 +2,10 @@ USING: kernel tools.test regexp.parser fry sequences ;
 IN: regexp.parser.tests
 
 : regexp-parses ( string -- )
-    [ [ ] ] dip '[ _ parse-regexp drop ] unit-test ;
+    [ [ ] ] dip $[ _ parse-regexp drop ] unit-test ;
 
 : regexp-fails ( string -- )
-    '[ _ parse-regexp ] must-fail ;
+    $[ _ parse-regexp ] must-fail ;
 
 {
     "a|b" "a.b" "a|b|c" "abc|b" "a|bcd" "a|(b)" "(?-i:a)" "||"

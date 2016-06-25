@@ -187,7 +187,7 @@ TUPLE: pane-control < pane quot ;
 
 M: pane-control model-changed ( model pane-control -- )
     [ value>> ] [ dup quot>> ] bi*
-    '[ _ call( value -- ) ] with-pane ;
+    $[ _ call( value -- ) ] with-pane ;
 
 : <pane-control> ( model quot -- pane )
     f pane-control new-pane
@@ -347,7 +347,7 @@ M: paragraph stream-write1
 
 : gadget-format ( string style stream -- )
     [ [ empty-output? ] 2keep ] dip
-    '[ _ _ swap <styled-label> _ swap add-gadget drop ] unless ;
+    $[ _ _ swap <styled-label> _ swap add-gadget drop ] unless ;
 
 M: pack stream-format
     gadget-format ;

@@ -31,14 +31,14 @@ MEMO: resolved-primitives ( -- seq )
 : primitive-type? ( type -- ? )
     [
         factorize-type resolve-typedef [ resolved-primitives ] dip
-        '[ _ = ] any?
+        $[ _ = ] any?
     ] [ 2drop f ] recover ;
 
 : pointer? ( type -- ? )
     factorize-type [ "*" tail? ] [ "&" tail? ] bi or ;
 
 : type-sans-pointer ( type -- type' )
-    factorize-type [ '[ _ = ] "*&" swap any? ] trim-tail ;
+    factorize-type [ $[ _ = ] "*&" swap any? ] trim-tail ;
 
 : pointer-to-primitive? ( type -- ? )
     factorize-type

@@ -172,9 +172,9 @@ M: tag like
 MACRO: clone-slots ( class -- quot )
     [
         "slots" word-prop
-        [ name>> reader-word '[ _ execute clone ] ] map
-        '[ _ cleave ]
-    ] [ '[ _ boa ] ] bi compose ;
+        [ name>> reader-word $[ _ execute clone ] ] map
+        $[ _ cleave ]
+    ] [ $[ _ boa ] ] bi compose ;
 
 M: tag clone
     tag clone-slots ;

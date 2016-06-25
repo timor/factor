@@ -15,7 +15,7 @@ IN: compiler.cfg.builder.tests
 
 ! Just ensure that various CFGs build correctly.
 : unit-test-builder ( quot -- )
-    '[
+    $[
         _ test-builder [
             [
                 [ optimize-cfg ] [ check-cfg ] bi
@@ -143,8 +143,8 @@ IN: compiler.cfg.builder.tests
         alien-float
         alien-double
     } |[ word |
-        { class } word '[ _ declare 10 _ execute ] unit-test-builder
-        { class fixnum } word '[ _ declare _ execute ] unit-test-builder
+        { class } word $[ _ declare 10 _ execute ] unit-test-builder
+        { class fixnum } word $[ _ declare _ execute ] unit-test-builder
     ] each
 
     {
@@ -155,18 +155,18 @@ IN: compiler.cfg.builder.tests
         set-alien-unsigned-2
         set-alien-unsigned-4
     } |[ word |
-        { fixnum class } word '[ _ declare 10 _ execute ] unit-test-builder
-        { fixnum class fixnum } word '[ _ declare _ execute ] unit-test-builder
+        { fixnum class } word $[ _ declare 10 _ execute ] unit-test-builder
+        { fixnum class fixnum } word $[ _ declare _ execute ] unit-test-builder
     ] each
 
-    { float class } \ set-alien-float '[ _ declare 10 _ execute ] unit-test-builder
-    { float class fixnum } \ set-alien-float '[ _ declare _ execute ] unit-test-builder
+    { float class } \ set-alien-float $[ _ declare 10 _ execute ] unit-test-builder
+    { float class fixnum } \ set-alien-float $[ _ declare _ execute ] unit-test-builder
 
-    { float class } \ set-alien-double '[ _ declare 10 _ execute ] unit-test-builder
-    { float class fixnum } \ set-alien-double '[ _ declare _ execute ] unit-test-builder
+    { float class } \ set-alien-double $[ _ declare 10 _ execute ] unit-test-builder
+    { float class fixnum } \ set-alien-double $[ _ declare _ execute ] unit-test-builder
 
-    { pinned-c-ptr class } \ set-alien-cell '[ _ declare 10 _ execute ] unit-test-builder
-    { pinned-c-ptr class fixnum } \ set-alien-cell '[ _ declare _ execute ] unit-test-builder
+    { pinned-c-ptr class } \ set-alien-cell $[ _ declare 10 _ execute ] unit-test-builder
+    { pinned-c-ptr class fixnum } \ set-alien-cell $[ _ declare _ execute ] unit-test-builder
 ] each
 
 { t } [ [ swap ] [ ##replace? ] contains-insn? ] unit-test

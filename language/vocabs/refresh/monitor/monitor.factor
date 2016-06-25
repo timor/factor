@@ -49,7 +49,7 @@ TR: convert-separators "/\\" ".." ;
 
 : start-vocab-monitor ( vocab-root -- )
     [
-        dup '[
+        dup $[
             [ _ (start-vocab-monitor) ]
             [
                 [

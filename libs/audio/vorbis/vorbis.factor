@@ -51,7 +51,7 @@ PRIVATE<
     dup 0 < [ ogg-error ] [ drop ] if ; inline
 
 : confirm-buffer ( len vorbis-stream -- ? )
-    '[ _ sync-state>> swap ogg_sync_wrote ?ogg-error ] keep zero? not ; inline
+    $[ _ sync-state>> swap ogg_sync_wrote ?ogg-error ] keep zero? not ; inline
 
 : buffer-data-from-stream ( vorbis-stream -- ? )
     [ sync-buffer ] [ stream-into-buffer ] [ confirm-buffer ] tri ; inline

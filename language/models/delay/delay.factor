@@ -18,7 +18,7 @@ TUPLE: delay < model model timeout timer ;
     timer>> [ stop-timer ] when* ;
 
 : start-delay ( delay -- )
-    [ '[ _ f >>timer update-delay-model ] ]
+    [ $[ _ f >>timer update-delay-model ] ]
     [ timeout>> later ]
     [ timer<< ] tri ;
 

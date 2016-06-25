@@ -9,7 +9,7 @@ PRIVATE<
 
 : class-tally ( set -- assoc' )
     H{ } clone [
-        [ members ] dip '[ dup class-of _ push-at ] each
+        [ members ] dip $[ dup class-of _ push-at ] each
     ] keep ;
 
 : (disposables.) ( set -- )
@@ -42,7 +42,7 @@ PRIVATE>
 
 : disposables-of-class. ( class -- )
     [ disposables get members sort-disposables ] dip
-    '[ _ instance? ] filter stack. ;
+    $[ _ instance? ] filter stack. ;
 
 : leaks ( quot -- disposables )
     disposables get clone

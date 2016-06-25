@@ -87,5 +87,5 @@ CONSTANT: event-mask
 : unmap-window ( win -- ) dpy get swap XUnmapWindow drop ;
 
 : pixmap-bits ( dim pixmap -- alien )
-    swap first2 '[ dpy get _ 0 0 _ _ AllPlanes ZPixmap XGetImage ] call
+    swap first2 $[ dpy get _ 0 0 _ _ AllPlanes ZPixmap XGetImage ] call
     [ XImage-pixels ] [ XDestroyImage drop ] bi ;

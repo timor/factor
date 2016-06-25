@@ -26,7 +26,7 @@ TUPLE: callback cont quot expires alarm responder ;
 : touch-callback ( callback -- )
     dup expires>> [
         dup alarm>> [ cancel-alarm ] when*
-        dup '[ , timeout-callback ] timeout later >>alarm
+        dup $[ , timeout-callback ] timeout later >>alarm
     ] when drop ;
 
 : <callback> ( cont quot expires? -- callback )
@@ -96,7 +96,7 @@ symbol: current-show
     url>> cont-id query-param swap callbacks>> at ;
 
 M: callback-responder call-responder* ( path responder -- response )
-    '[
+    $[
         , ,
 
         [ callback-responder set ]

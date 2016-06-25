@@ -70,7 +70,7 @@ TR: convert-command-name "-" " " ;
         [
             commands>>
             sift-keys
-            [ '[ _ invoke-command ] swap ,, ] assoc-each
+            [ $[ _ invoke-command ] swap ,, ] assoc-each
         ] each
     ] H{ } make ;
 
@@ -96,7 +96,7 @@ M: word command-description ( word -- str )
 
 : define-command ( word hash -- )
     default-flags swap assoc-union
-    '[ _ assoc-union ] change-props drop ;
+    $[ _ assoc-union ] change-props drop ;
 
 : command-quot ( target command -- quot )
     [ 1quotation ] [ +nullary+ word-prop ] bi

@@ -15,7 +15,7 @@ IN: compiler.cfg.linear-scan.debugger
 
 : picture ( uses -- str )
     dup last 1 + char: space <string>
-    [ '[ char: * swap _ set-nth ] each ] keep ;
+    [ $[ char: * swap _ set-nth ] each ] keep ;
 
 : interval-picture ( interval -- str )
     [ uses>> picture ]

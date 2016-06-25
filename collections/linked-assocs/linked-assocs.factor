@@ -20,7 +20,7 @@ M: linked-assoc at*
 PRIVATE<
 
 : (delete-at) ( key assoc dlist -- )
-    '[ at [ _ delete-node ] when* ] [ delete-at ] 2bi ; inline
+    $[ at [ _ delete-node ] when* ] [ delete-at ] 2bi ; inline
 
 PRIVATE>
 
@@ -36,7 +36,7 @@ PRIVATE>
 
 M: linked-assoc set-at
     [ assoc>> ] [ dlist>> ] bi
-    '[ _ 2over key? [ 3dup (delete-at) ] when nip add-to-dlist ]
+    $[ _ 2over key? [ 3dup (delete-at) ] when nip add-to-dlist ]
     [ set-at ] 2bi ;
 
 M: linked-assoc >alist

@@ -459,7 +459,7 @@ ERROR: unhandled-compression compression ;
     } case ;
 
 : uncompress-strips ( ifd -- ifd )
-    dup '[
+    dup $[
         _ compression find-tag (uncompress-strips)
     ] change-strips ;
 
@@ -471,7 +471,7 @@ ERROR: unhandled-compression compression ;
     [ image-width find-tag ]
     [ samples-per-pixel find-tag ] tri
     [ * ] keep
-    '[
+    $[
         _ group
         [ _ [ group ] [ 0 <array> ] bi [ v+ ] accumulate* concat ] map
         B{ } concat-as

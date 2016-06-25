@@ -335,12 +335,12 @@ ${example-indent}}
     ] with-variable ;
 
 : n-examples-using ( n using -- )
-    '[ _ example-using ] times ;
+    $[ _ example-using ] times ;
 
 : scaffold-n-examples ( n word -- )
     vocabulary>> "prettyprint" 2array
     [ t nested-examples ] 2dip
-    '[
+    $[
         "{ $examples" print
         _ _ n-examples-using
         "}" print

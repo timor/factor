@@ -29,7 +29,7 @@ IN: mason.report
 
 : with-report ( quot -- )
     [ "report" utf8 ] dip
-    '[
+    $[
         common-report
         _ call( -- xml )
         XML-CHUNK[[ <html><body><-><-></body></html> ]]

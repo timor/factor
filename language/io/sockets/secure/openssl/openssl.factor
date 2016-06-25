@@ -303,7 +303,7 @@ M: ssl-handle drain ( port handle -- event/f )
 : secure-connection ( client-out addrspec -- )
     [ handle>> ] dip
     [
-        '[
+        $[
             _ dup get-session
             [ resume-session ] [ begin-session ] ?if
         ] with-timeout

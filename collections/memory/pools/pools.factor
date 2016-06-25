@@ -10,7 +10,7 @@ TUPLE: pool
 
 : <pool> ( size class -- pool )
     [ nip new ]
-    [ '[ _ new ] V{ } replicate-as ] 2bi
+    [ $[ _ new ] V{ } replicate-as ] 2bi
     pool boa ;
 
 : pool-size ( pool -- size )
@@ -50,4 +50,4 @@ PRIVATE>
     dup class-of class-pool pool-free ;
 
 SYNTAX: \ POOL:
-    scan-word scan-word ";" expect '[ _ swap <pool> ] [ swap set-class-pool ] bi ;
+    scan-word scan-word ";" expect $[ _ swap <pool> ] [ swap set-class-pool ] bi ;

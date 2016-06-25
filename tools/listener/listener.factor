@@ -120,7 +120,7 @@ PRIVATE<
 
     [
         read-quot [
-            '[ datastack _ with-datastack ]
+            $[ datastack _ with-datastack ]
             [ call-error-hook datastack ]
             recover
         ] [ return ] if*

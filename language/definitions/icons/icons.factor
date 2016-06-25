@@ -20,7 +20,7 @@ icons [ H{ } clone ] initialize
     [ swap icons get set-at ]
     [
         [ \ definition-icon create-method ]
-        [ '[ drop _ definition-icon-path ] ] bi*
+        [ $[ drop _ definition-icon-path ] ] bi*
         define
     ] 2bi ;
 

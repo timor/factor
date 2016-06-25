@@ -33,9 +33,9 @@ M: unix copy-file ( from to -- )
     [ [ file-permissions ] dip swap set-file-permissions ] 2bi ;
 
 : with-unix-directory ( path quot -- )
-    dupd '[ _ _
+    dupd $[ _ _
         [ opendir dup [ throw-errno ] unless ] dip
-        dupd curry swap '[ _ closedir io-error ] [ ] cleanup
+        dupd curry swap $[ _ closedir io-error ] [ ] cleanup
     ] with-directory ; inline
 
 : dirent-type>file-type ( type -- file-type )
@@ -67,7 +67,7 @@ M: unix copy-file ( from to -- )
 M: unix (directory-entries) ( path -- seq )
     [
         dirent <struct>
-        '[ _ _ next-dirent ] [ >directory-entry ] produce nip
+        $[ _ _ next-dirent ] [ >directory-entry ] produce nip
     ] with-unix-directory ;
 
 os linux? [ "io.directories.unix.linux" require ] when

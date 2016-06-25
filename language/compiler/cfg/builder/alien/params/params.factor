@@ -60,7 +60,7 @@ M: double-rep next-reg-param
     [ <reversed> >vector swap set ] assoc-each ;
 
 : with-param-regs ( abi quot -- )
-    '[ param-regs init-regs 0 stack-params set @ ] with-scope ; inline
+    $[ param-regs init-regs 0 stack-params set @ ] with-scope ; inline
 
 SYMBOLS: stack-values reg-values ;
 
@@ -73,4 +73,4 @@ SYMBOLS: stack-values reg-values ;
 : next-return-reg ( rep -- reg ) reg-class-of get pop ;
 
 : with-return-regs ( quot -- )
-    '[ return-regs init-regs @ ] with-scope ; inline
+    $[ return-regs init-regs @ ] with-scope ; inline

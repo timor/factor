@@ -72,7 +72,7 @@ M: word combinator? inline? ;
     swap [ finish ] [ compiled get set-at ] bi return ;
 
 : not-compiled-def ( word error -- def )
-    '[ _ _ not-compiled ] [ ] like ;
+    $[ _ _ not-compiled ] [ ] like ;
 
 : deoptimize* ( word -- * )
     dup def>> deoptimize-with ;
@@ -126,7 +126,7 @@ M: word combinator? inline? ;
 : compile-word ( word -- )
     ! We return early if the word has breakpoints or if it
     ! failed to infer.
-    '[
+    $[
         _ {
             [ start ]
             [ frontend ]
@@ -140,7 +140,7 @@ SINGLETON: optimizing-compiler
 M: optimizing-compiler update-call-sites ( class generic -- words )
     ! Words containing call sites with inferred type 'class'
     ! which inlined a method on 'generic'
-    generic-call-sites-of keys swap '[
+    generic-call-sites-of keys swap $[
         _ 2dup [ classoid? ] both?
         [ classes-intersect? ] [ 2drop f ] if
     ] filter ;

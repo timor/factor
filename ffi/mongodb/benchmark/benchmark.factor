@@ -106,7 +106,7 @@ CONSTANT: DOC-LARGE H{ { "base_url" "http://www.example.com/test-me" }
                                              "developers" "focus" "building" "mongodb" "mongo" } } } ;
 
 : set-doc ( name -- )
-    [ result ] dip '[ _ >>doc ] change ; inline
+    [ result ] dip $[ _ >>doc ] change ; inline
 
 : small-doc ( -- quot )
     "small" set-doc [ ] ; inline
@@ -119,11 +119,11 @@ CONSTANT: DOC-LARGE H{ { "base_url" "http://www.example.com/test-me" }
 
 : small-doc-prepare ( -- quot: ( i -- doc ) )
     small-doc drop
-    '[ "x" DOC-SMALL clone [ set-at ] keep ] ;
+    $[ "x" DOC-SMALL clone [ set-at ] keep ] ;
 
 : medium-doc-prepare ( -- quot: ( i -- doc ) )
     medium-doc drop
-    '[ "x" DOC-MEDIUM clone [ set-at ] keep ] ;
+    $[ "x" DOC-MEDIUM clone [ set-at ] keep ] ;
 
 : large-doc-prepare ( -- quot: ( i -- doc ) )
     large-doc drop
@@ -133,16 +133,16 @@ CONSTANT: DOC-LARGE H{ { "base_url" "http://www.example.com/test-me" }
 
 : (insert) ( quot: ( i -- doc ) collection -- )
     [ trial-size ] 2dip
-    '[ _ call( i -- doc ) [ _ ] dip
+    $[ _ call( i -- doc ) [ _ ] dip
        result get lasterror>> [ save ] [ save-unsafe ] if ] each-integer ;
 
 : (prepare-batch) ( i b quot: ( i -- doc ) -- batch-seq )
     [ [ * ] keep 1 range boa ] dip
-    '[ _ call( i -- doc ) ] map ;
+    $[ _ call( i -- doc ) ] map ;
 
 : (insert-batch) ( quot: ( i -- doc ) collection -- )
     [ trial-size batch-size [ / ] keep ] 2dip
-    '[ _ _ (prepare-batch) [ _ ] dip
+    $[ _ _ (prepare-batch) [ _ ] dip
        result get lasterror>> [ save ] [ save-unsafe ] if
     ] each-integer ;
 
@@ -169,14 +169,14 @@ CONSTANT: DOC-LARGE H{ { "base_url" "http://www.example.com/test-me" }
     prepare-collection
     result get index>> [ [ prepare-index ] keep ] when
     result get batch>>
-    [ '[ _ _ (insert-batch) ] ] [ '[ _ _ (insert) ] ] if ;
+    [ $[ _ _ (insert-batch) ] ] [ $[ _ _ (insert) ] ] if ;
 
 : serialize ( doc-quot: ( i -- doc ) -- quot: ( -- ) )
-    '[ trial-size [ _ call( i -- doc ) assoc>bv drop ] each-integer ] ;
+    $[ trial-size [ _ call( i -- doc ) assoc>bv drop ] each-integer ] ;
 
 : deserialize ( doc-quot: ( i -- doc ) -- quot: ( -- ) )
     [ 0 ] dip call( i -- doc ) assoc>bv
-    '[ trial-size [  _ binary [ H{ } stream>assoc drop ] with-byte-reader ] times ] ;
+    $[ trial-size [  _ binary [ H{ } stream>assoc drop ] with-byte-reader ] times ] ;
 
 : check-for-key ( assoc key -- )
     CHECK-KEY [ swap key? [ "ups... where's the key" throw ] unless ] [ 2drop ] if ;
@@ -192,13 +192,13 @@ CONSTANT: DOC-LARGE H{ { "base_url" "http://www.example.com/test-me" }
     [ trial-size
       collection-name
       trial-size 2 / "x" associate
-      '[ _ _ <query> 1 limit (find) ] times ] ;
+      $[ _ _ <query> 1 limit (find) ] times ] ;
 
 : find-all ( quot -- quot: ( -- ) )
     drop
     collection-name
     H{ } clone
-    '[ _ _ <query> (find) ] ;
+    $[ _ _ <query> (find) ] ;
 
 : find-range ( quot -- quot: ( -- ) )
     drop
@@ -207,7 +207,7 @@ CONSTANT: DOC-LARGE H{ { "base_url" "http://www.example.com/test-me" }
        trial-size 2 / "$gt" H{ } clone [ set-at ] keep
        [ trial-size 2 / batch-size + "$lt" ] dip [ set-at ] keep
        "x" H{ } clone [ set-at ] keep
-       '[ _ _ <query> (find) ] times ] ;
+       $[ _ _ <query> (find) ] times ] ;
 
 : batch ( -- )
     result [ t >>batch ] change ; inline
@@ -242,11 +242,11 @@ CONSTANT: DOC-LARGE H{ { "base_url" "http://www.example.com/test-me" }
     print-separator-bold ;
 
 : with-result ( options quot -- )
-    '[ <result> _ call( options -- time ) print-result ] with-scope ;
+    $[ <result> _ call( options -- time ) print-result ] with-scope ;
 
 : [bench-quot] ( feat-seq op-word -- quot: ( doc-word -- ) )
-    '[ _ swap _
-       '[ [ [ _ execute( -- quot ) ] dip
+    $[ _ swap _
+       $[ [ [ _ execute( -- quot ) ] dip
           [ execute( -- ) ] each _ execute( quot -- quot ) gc
             benchmark ] with-result ] each
        print-separator ] ;
@@ -254,32 +254,32 @@ CONSTANT: DOC-LARGE H{ { "base_url" "http://www.example.com/test-me" }
 : run-serialization-bench ( doc-word-seq feat-seq -- )
     "Serialization Tests" print
     print-separator-bold
-    \ serialize [bench-quot] '[ _ call( doc-word -- ) ] each ;
+    \ serialize [bench-quot] $[ _ call( doc-word -- ) ] each ;
 
 : run-deserialization-bench ( doc-word-seq feat-seq -- )
     "Deserialization Tests" print
     print-separator-bold
-    \ deserialize [bench-quot] '[ _ call( doc-word -- ) ] each ;
+    \ deserialize [bench-quot] $[ _ call( doc-word -- ) ] each ;
 
 : run-insert-bench ( doc-word-seq feat-seq -- )
     "Insert Tests" print
     print-separator-bold
-    \ insert [bench-quot] '[ _ call( doc-word -- ) ] each ;
+    \ insert [bench-quot] $[ _ call( doc-word -- ) ] each ;
 
 : run-find-one-bench ( doc-word-seq feat-seq -- )
     "Query Tests - Find-One" print
     print-separator-bold
-    \ find-one [bench-quot] '[ _ call( doc-word -- ) ] each ;
+    \ find-one [bench-quot] $[ _ call( doc-word -- ) ] each ;
 
 : run-find-all-bench ( doc-word-seq feat-seq -- )
     "Query Tests - Find-All" print
     print-separator-bold
-    \ find-all [bench-quot] '[ _ call( doc-word -- ) ] each ;
+    \ find-all [bench-quot] $[ _ call( doc-word -- ) ] each ;
 
 : run-find-range-bench ( doc-word-seq feat-seq -- )
     "Query Tests - Find-Range" print
     print-separator-bold
-    \ find-range [bench-quot] '[ _ call( doc-word -- ) ] each ;
+    \ find-range [bench-quot] $[ _ call( doc-word -- ) ] each ;
 
 
 : run-benchmarks ( -- )

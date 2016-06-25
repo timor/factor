@@ -42,7 +42,7 @@ PRIVATE>
     [ tail-slice ] 2keep [ dup length ] dip - head-slice v- ;
 
 : performance ( seq -- newseq )
-    dup first '[ _ [ - ] [ /f ] bi 100 * ] map ;
+    dup first $[ _ [ - ] [ /f ] bi 100 * ] map ;
 
 : monthly ( x -- y ) 12 / ; inline
 

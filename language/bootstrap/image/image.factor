@@ -75,10 +75,10 @@ M: eq-wrapper hashcode*
 SYMBOL: objects
 
 : cache-eql-object ( obj quot -- value )
-    [ <eql-wrapper> objects get ] dip '[ obj>> @ ] cache ; inline
+    [ <eql-wrapper> objects get ] dip $[ obj>> @ ] cache ; inline
 
 : cache-eq-object ( obj quot -- value )
-    [ <eq-wrapper> objects get ] dip '[ obj>> @ ] cache ; inline
+    [ <eq-wrapper> objects get ] dip $[ obj>> @ ] cache ; inline
 
 : lookup-object ( obj -- n/f )
     <eq-wrapper> objects get at ;
@@ -515,8 +515,8 @@ M: quotation prepare-object
 : (write-image) ( image -- )
     bootstrap-cell output-stream get
     big-endian get
-    [ '[ _ >be _ stream-write ] each ]
-    [ '[ _ >le _ stream-write ] each ] if ;
+    [ $[ _ >be _ stream-write ] each ]
+    [ $[ _ >le _ stream-write ] each ] if ;
 
 : write-image ( image -- )
     "Writing image to " write

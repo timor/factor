@@ -21,7 +21,7 @@ SYMBOL: vocab-articles
 
 : check-example ( element -- )
     [
-        '[
+        $[
             _ rest [
                 but-last "\n" join
                 [ (eval>string) ] call( code -- output )
@@ -69,9 +69,9 @@ SYMBOL: vocab-articles
         $predicate
         $class-description
         $error-description
-    } swap '[ _ elements empty? not ] any? ;
+    } swap $[ _ elements empty? not ] any? ;
 
-: don't-check-word? ( word -- ? )
+: dont-check-word? ( word -- ? )
     {
         [ macro? ]
         [ symbol? ]
@@ -82,7 +82,7 @@ SYMBOL: vocab-articles
     } 1|| ;
 
 : skip-check-values? ( word element -- ? )
-    [ don't-check-word? ] [ contains-funky-elements? ] bi* or ;
+    [ dont-check-word? ] [ contains-funky-elements? ] bi* or ;
 
 : check-values ( word element -- )
     2dup skip-check-values? [ 2drop ] [
@@ -182,7 +182,7 @@ SYMBOL: vocab-articles
 
 : check-descriptions ( element -- )
     { $description $class-description $var-description }
-    swap '[
+    swap $[
         _ elements [
             rest { { } { "" } } member?
             [ "Empty $description" simple-lint-error ] when
@@ -208,7 +208,7 @@ SYMBOL: vocab-articles
     articles get keys
     files>vocabs
     H{ } clone [
-        '[
+        $[
             dup >link where dup
             [ first _ at _ push-at ] [ 2drop ] if
         ] each

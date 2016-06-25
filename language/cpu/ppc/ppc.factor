@@ -467,7 +467,7 @@ M:: ppc %c-invoke ( name dll gc-map -- )
 M: ppc %alien-invoke ( reg-inputs stack-inputs reg-outputs
                        dead-outputs cleanup stack-size
                        symbols dll gc-map -- )
-    '[ _ _ _ %c-invoke ] emit-alien-insn ;
+    $[ _ _ _ %c-invoke ] emit-alien-insn ;
 
 M:: ppc %alien-indirect ( src reg-inputs stack-inputs
                           reg-outputs dead-outputs cleanup
@@ -488,7 +488,7 @@ M:: ppc %alien-indirect ( src reg-inputs stack-inputs
 M: ppc %alien-assembly ( reg-inputs stack-inputs reg-outputs
                          dead-outputs cleanup stack-size quot
                          -- )
-    '[ _ call( -- ) ] emit-alien-insn ;
+    $[ _ call( -- ) ] emit-alien-insn ;
 
 M: ppc %callback-inputs ( reg-outputs stack-outputs -- )
     [ [ first3 load-reg-param ] each ]

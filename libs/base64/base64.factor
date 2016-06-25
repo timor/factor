@@ -15,7 +15,7 @@ CONSTANT: alphabet
 
 : alphabet-inverse ( alphabet -- seq )
     dup supremum 1 + f <array> [
-        '[ swap _ set-nth ] each-index
+        $[ swap _ set-nth ] each-index
     ] keep ;
 COMPILE>
 
@@ -27,7 +27,7 @@ COMPILE>
     [ malformed-base64 ] unless* ; inline
 
 : (write-lines) ( column byte-array -- column' )
-    output-stream get dup '[
+    output-stream get dup $[
         _ stream-write1 1 + dup 76 = [
             drop B{ char: \r char: \n } _ stream-write 0
         ] when
@@ -37,7 +37,7 @@ COMPILE>
     over [ (write-lines) ] [ write ] if ; inline
 
 : encode3 ( seq -- byte-array )
-    be> { -18 -12 -6 0 } '[
+    be> { -18 -12 -6 0 } $[
         shift 0x3f bitand ch>base64
     ] with B{ } map-as ; inline
 
@@ -70,7 +70,7 @@ PRIVATE<
     dup { f 0 } member-eq? [ drop ] [ suffix! ] if ; inline
 
 : read-into-ignoring ( accum n ignoring stream -- accum )
-    '[ _ _ read1-ignoring push-ignoring ] times ; inline
+    $[ _ _ read1-ignoring push-ignoring ] times ; inline
 
 : read-ignoring ( n ignoring stream -- accum )
     [ [ <sbuf> ] keep ] 2dip read-into-ignoring ; inline

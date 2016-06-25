@@ -39,7 +39,7 @@ reset-gl-function-number-counter
     ] if* ;
 
 : indirect-quot ( function-ptr-quot return types abi -- quot )
-    '[ @  _ _ _ alien-indirect ] ;
+    $[ @  _ _ _ alien-indirect ] ;
 
 :: define-indirect ( abi return function-name function-ptr-quot types names -- )
     function-name create-function
@@ -51,5 +51,5 @@ SYNTAX: \ GL-FUNCTION:
     gl-function-calling-convention
     scan-function-name
     "{" expect "}" parse-tokens over suffix
-    gl-function-counter '[ _ _ gl-function-pointer ]
+    gl-function-counter $[ _ _ gl-function-pointer ]
     scan-c-args ";" expect define-indirect ;

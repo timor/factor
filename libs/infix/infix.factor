@@ -43,7 +43,7 @@ M: ast-local infix-codegen
 
 M: ast-array infix-codegen
     [ index>> infix-codegen prepare-operand ]
-    [ name>> >local-word ] bi '[ @ _ infix-nth ] ;
+    [ name>> >local-word ] bi $[ @ _ infix-nth ] ;
 
 : infix-subseq-step ( subseq step -- subseq' )
     dup 0 < [ [ reverse! ] dip ] when
@@ -71,21 +71,21 @@ M: ast-slice infix-codegen
         [ to>>   [ infix-codegen prepare-operand ] [ [ f ] ] if* ]
         [ step>> [ infix-codegen prepare-operand ] [ [ f ] ] if* ]
         [ name>> >local-word ]
-    } cleave '[ @ @ @ _ infix-subseq ] ;
+    } cleave $[ @ @ @ _ infix-subseq ] ;
 
 M: ast-op infix-codegen
     [ left>> infix-codegen ] [ right>> infix-codegen ]
     [ op>> select-op ] tri
     2over [ number? ] both? [ call( a b -- c ) ] [
-        [ [ prepare-operand ] bi@ ] dip '[ @ @ @ ]
+        [ [ prepare-operand ] bi@ ] dip $[ @ @ @ ]
     ] if ;
 
 M: ast-negation infix-codegen
     term>> infix-codegen
     {
         { [ dup number? ] [ neg ] }
-        { [ dup callable? ] [ '[ @ neg ] ] }
-        [ '[ _ neg ] ] ! local word
+        { [ dup callable? ] [ $[ @ neg ] ] }
+        [ $[ _ neg ] ] ! local word
     } cond ;
 
 ERROR: bad-stack-effect word ;

@@ -8,7 +8,7 @@ IN: ui.theme.switching
 PRIVATE<
 
 : update-style ( style color elt -- )
-    '[ _ _ rot ?set-at ] change-global ;
+    $[ _ _ rot ?set-at ] change-global ;
 
 : update-stylesheet ( -- )
     ! fonts

@@ -116,14 +116,14 @@ vector>vector-intrinsics [ { byte-array } "default-output-classes" set-word-prop
     clone dup in-d>> extract-value-info >>info ;
 
 : try-intrinsic ( node intrinsic-quot -- ? )
-    '[
+    $[
         _ clone-with-value-infos
         _ with-dummy-cfg-builder
         t
     ] [ drop f ] recover ;
 
 : inline-unless-intrinsic ( word -- )
-    dup '[
+    dup $[
         _ swap over "intrinsic" word-prop
         "always-inline-simd-intrinsics" get not swap and
         ! word node intrinsic

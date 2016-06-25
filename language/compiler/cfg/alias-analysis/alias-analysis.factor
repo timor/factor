@@ -47,7 +47,7 @@ SYMBOL: heap-ac
     [ vreg>ac ] dip
     2dup eq? [ 2drop ] [
         [ ac>vregs ] dip
-        [ vregs>acs get '[ [ _ ] dip _ set-at ] each ]
+        [ vregs>acs get $[ [ _ ] dip _ set-at ] each ]
         [ ac>vregs push-all ]
         2bi
     ] if ;

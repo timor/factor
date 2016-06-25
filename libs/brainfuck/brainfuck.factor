@@ -36,10 +36,10 @@ TUPLE: brainfuck pointer memory ;
     read1 set-memory ;
 
 : (>) ( brainfuck n -- brainfuck )
-    '[ _ + ] change-pointer ;
+    $[ _ + ] change-pointer ;
 
 : (<) ( brainfuck n -- brainfuck )
-    '[ _ - ] change-pointer ;
+    $[ _ - ] change-pointer ;
 
 : (#) ( brainfuck -- brainfuck )
     dup
@@ -51,10 +51,10 @@ TUPLE: brainfuck pointer memory ;
 
 EBNF: parse-brainfuck [=[
 
-inc-ptr  = (">")+  => [[ length '[ _ (>) ] ]]
-dec-ptr  = ("<")+  => [[ length '[ _ (<) ] ]]
-inc-mem  = ("+")+  => [[ length '[ _ (+) ] ]]
-dec-mem  = ("-")+  => [[ length '[ _ (-) ] ]]
+inc-ptr  = (">")+  => [[ length $[ _ (>) ] ]]
+dec-ptr  = ("<")+  => [[ length $[ _ (<) ] ]]
+inc-mem  = ("+")+  => [[ length $[ _ (+) ] ]]
+dec-mem  = ("-")+  => [[ length $[ _ (-) ] ]]
 output   = "."  => [[ [ (.) ] ]]
 input    = ","  => [[ [ (,) ] ]]
 debug    = "#"  => [[ [ (#) ] ]]
@@ -62,7 +62,7 @@ space    = [ \t\n\r]+ => [[ [ ] ]]
 unknown  = (.)  => [[ "Invalid input" throw ]]
 
 ops   = inc-ptr|dec-ptr|inc-mem|dec-mem|output|input|debug|space
-loop  = "[" {loop|ops}+ "]" => [[ second compose-all '[ [ (?) ] _ while ] ]]
+loop  = "[" {loop|ops}+ "]" => [[ second compose-all $[ [ (?) ] _ while ] ]]
 
 code  = (loop|ops|unknown)*  => [[ compose-all ]]
 
@@ -71,7 +71,7 @@ code  = (loop|ops|unknown)*  => [[ compose-all ]]
 PRIVATE>
 
 MACRO: run-brainfuck ( code -- quot )
-    parse-brainfuck '[ <brainfuck> @ drop flush ] ;
+    parse-brainfuck $[ <brainfuck> @ drop flush ] ;
 
 : get-brainfuck ( code -- result )
     [ run-brainfuck ] with-string-writer ; inline

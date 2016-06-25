@@ -41,7 +41,7 @@ ERROR: unexpected-end n string ;
 
 :: slice-til-either ( n string tokens -- n'/f string slice/f ch/f )
     n [
-        n string '[ tokens member? ] find-from
+        n string $[ tokens member? ] find-from
         dup "\s\r\n" member? [
             :> ( n' ch )
             n' string
@@ -74,7 +74,7 @@ ERROR: unexpected-end n string ;
 
 
 :: slice-til-separator-inclusive ( n string tokens -- n' string slice/f ch/f )
-    n string '[ tokens member? ] find-from [ dup [ 1 + ] when ] dip  :> ( n' ch )
+    n string $[ tokens member? ] find-from [ dup [ 1 + ] when ] dip  :> ( n' ch )
     n' string
     n n' string ?<slice>
     ch ; inline
@@ -126,11 +126,11 @@ ERROR: unexpected-end n string ;
     [ lex-til-whitespace drop 2nip ] dip merge-slices ;
 
 : peek-merge-til-whitespace ( lexer slice -- slice' )
-    '[ _ merge-lex-til-whitespace ] with-lexer-rollback ;
+    $[ _ merge-lex-til-whitespace ] with-lexer-rollback ;
 
 :: slice-til-eol ( n string -- n'/f string slice/f ch/f )
     n [
-        n string '[ "\r\n" member? ] find-from :> ( n' ch )
+        n string $[ "\r\n" member? ] find-from :> ( n' ch )
         n' string
         n n' string ?<slice>
         ch

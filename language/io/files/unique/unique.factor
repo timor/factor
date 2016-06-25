@@ -31,15 +31,15 @@ PRIVATE<
 PRIVATE>
 
 : unique-file ( prefix suffix -- path )
-    '[
+    $[
         _ _ random-file-name glue
         dup touch-unique-file
     ] unique-retries get retry absolute-path ;
 
 : unique-files ( prefix suffixes -- paths )
-    '[
+    $[
         V{ } clone [
-            _ _ random-file-name '[
+            _ _ random-file-name $[
                 _ glue
                 dup touch-unique-file suffix!
             ] with each { } like

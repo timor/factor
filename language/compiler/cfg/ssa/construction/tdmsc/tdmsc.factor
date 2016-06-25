@@ -15,12 +15,12 @@ PRIVATE<
 SYMBOLS: merge-sets levels again? ;
 
 : init-merge-sets ( cfg -- )
-    post-order dup length '[ _ <bit-set> ] H{ } map>assoc
+    post-order dup length $[ _ <bit-set> ] H{ } map>assoc
     merge-sets namespaces:set ;
 
 : compute-levels ( cfg -- )
     0 over entry>> associate [
-        '[
+        $[
             _ [ [ dom-parent ] dip at 1 + ] 2keep set-at
         ] each-basic-block
     ] keep levels namespaces:set ;
@@ -31,7 +31,7 @@ SYMBOLS: merge-sets levels again? ;
 : level ( bb -- n ) levels get at ; inline
 
 : update-merge-set ( tmp to -- )
-    [ merge-sets get ] dip over '[
+    [ merge-sets get ] dip over $[
         _
         [ _ at union ]
         [ number>> over adjoin ]
@@ -46,13 +46,13 @@ SYMBOLS: merge-sets levels again? ;
 
 : each-incoming-j-edge ( ... bb quot: ( ... from to -- ... ) -- ... )
     [ [ predecessors>> ] keep ] dip
-    '[ _ 2dup j-edge? _ [ 2drop ] if ] each ; inline
+    $[ _ 2dup j-edge? _ [ 2drop ] if ] each ; inline
 
 : consistent? ( snode lnode -- ? )
-    merge-sets get '[ _ at ] bi@ subset? ;
+    merge-sets get $[ _ at ] bi@ subset? ;
 
 : (process-edge) ( from to visited -- )
-    [ f walk ] dip '[
+    [ f walk ] dip $[
         2dup 2array _ in? [
             consistent? [ again? on ] unless
         ] [ 2drop ] if
@@ -60,21 +60,21 @@ SYMBOLS: merge-sets levels again? ;
 
 : process-edge ( from to visited -- )
     [ 2over 2array swap ?adjoin ] keep
-    '[ _ (process-edge) ] [ 2drop ] if ;
+    $[ _ (process-edge) ] [ 2drop ] if ;
 
 : process-block ( bb visited -- )
-    '[ _ process-edge ] each-incoming-j-edge ;
+    $[ _ process-edge ] each-incoming-j-edge ;
 
 : compute-merge-set-step ( bfo -- )
-    HS{ } clone '[ _ process-block ] each ;
+    HS{ } clone $[ _ process-block ] each ;
 
 : compute-merge-set-loop ( cfg -- )
     breadth-first-order
-    '[ again? off _ compute-merge-set-step again? get ]
+    $[ again? off _ compute-merge-set-step again? get ]
     loop ;
 
 : (merge-set) ( bbs -- flags rpo )
-    merge-sets get '[ _ at ] [ union ] map-reduce
+    merge-sets get $[ _ at ] [ union ] map-reduce
     cfg get reverse-post-order ; inline
 
 PRIVATE>

@@ -22,7 +22,7 @@ MAIN-WINDOW: merger-window {
       ] 2each
     ] keep
     dup first2
-    '[ _ [ value>> ] all? [ parent>> "processing..." <label> [
+    $[ _ [ value>> ] all? [ parent>> "processing..." <label> [
          <zero-rect> show-glass
          _ value>> [
             "." _ value>> [ [ directory-files ] bi@ diff ] keep copy-files-into

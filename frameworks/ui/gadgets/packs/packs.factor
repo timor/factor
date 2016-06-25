@@ -11,19 +11,19 @@ TUPLE: pack < aligned-gadget
 PRIVATE<
 
 : (packed-dims) ( gadget sizes -- list )
-    swap [ dim>> ] [ fill>> ] bi '[ _ over v- _ v*n v+ ] map ;
+    swap [ dim>> ] [ fill>> ] bi $[ _ over v- _ v*n v+ ] map ;
 
 : orient ( seq1 seq2 gadget -- seq )
-    orientation>> '[ _ set-axis ] 2map ;
+    orientation>> $[ _ set-axis ] 2map ;
 
 : packed-dims ( gadget sizes -- seq )
     [ (packed-dims) ] [ nip ] [ drop ] 2tri orient ;
 
 : gap-locs ( sizes gap -- seq )
-    [ { 0 0 } ] dip '[ v+ _ v+ ] accumulate nip ;
+    [ { 0 0 } ] dip $[ v+ _ v+ ] accumulate nip ;
 
 : numerically-aligned-locs ( sizes pack -- seq )
-    [ align>> ] [ dim>> ] bi '[ [ _ _ ] dip v- [ * >integer ] with map ] map ;
+    [ align>> ] [ dim>> ] bi $[ [ _ _ ] dip v- [ * >integer ] with map ] map ;
 
 : baseline-aligned-locs ( pack -- seq )
     children>> align-baselines [ 0 swap 2array ] map ;

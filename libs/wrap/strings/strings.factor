@@ -20,7 +20,7 @@ PRIVATE<
 PRIVATE>
 
 : wrap-lines ( string width -- newlines )
-    [ split-lines ] dip '[ _ dup wrap join-elements ] map! concat ;
+    [ split-lines ] dip $[ _ dup wrap join-elements ] map! concat ;
 
 : wrap-string ( string width -- newstring )
     wrap-lines join-lines ;
@@ -34,4 +34,4 @@ PRIVATE>
 
 : wrap-indented-string ( string width indent -- newstring )
     make-indent [ length - wrap-lines ] keep
-    over empty? [ nip ] [ '[ _ prepend ] map! join-lines ] if ;
+    over empty? [ nip ] [ $[ _ prepend ] map! join-lines ] if ;

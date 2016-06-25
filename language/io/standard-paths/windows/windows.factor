@@ -7,8 +7,8 @@ IN: io.standard-paths.windows
 
 M: windows find-in-applications
     >lower
-    '[ [ >lower _ tail? ] find-in-program-files ] map-find drop ;
+    $[ [ >lower _ tail? ] find-in-program-files ] map-find drop ;
 
 M: windows find-in-path*
     [ "PATH" os-env ";" split ] dip
-    '[ _ append-path exists? ] find nip ;
+    $[ _ append-path exists? ] find nip ;

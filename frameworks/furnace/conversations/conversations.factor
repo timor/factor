@@ -101,8 +101,8 @@ M: conversations call-responder*
 : restore-conversation ( seq -- )
     conversation get [
         namespace>>
-        [ '[ _ key? ] filter ]
-        [ '[ [ _ at ] keep set ] each ]
+        [ $[ _ key? ] filter ]
+        [ $[ [ _ at ] keep set ] each ]
         bi
     ] [ drop ] if* ;
 

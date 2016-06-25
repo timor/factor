@@ -29,7 +29,7 @@ SYMBOL: command-line
     home prepend-path ;
 
 : try-user-init ( file -- )
-    "user-init" get swap '[
+    "user-init" get swap $[
         _ [ ?run-file ] [
             <user-init-error>
             swap user-init-errors get set-at

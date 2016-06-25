@@ -40,7 +40,7 @@ IN: project-euler.203
 PRIVATE<
 
 : iterate ( n initial quot -- results )
-    swapd '[ @ dup ] replicate nip ; inline
+    swapd $[ @ dup ] replicate nip ; inline
 
 : (generate) ( seq -- seq )
     [ 0 prefix ] [ 0 suffix ] bi v+ ;

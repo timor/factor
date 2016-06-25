@@ -34,7 +34,7 @@ SYMBOLS: edge-copies phi-copies ;
     [ ##parallel-copy, ##branch, ] { } make insert-basic-block ;
 
 : insert-all-edge-copies ( bb -- )
-    [ edge-copies get ] dip '[
+    [ edge-copies get ] dip $[
         [ drop ] [ [ _ ] dip insert-edge-copies ] if-empty
     ] assoc-each ;
 
@@ -58,7 +58,7 @@ SYMBOLS: edge-copies phi-copies ;
 
 : convert-phis ( bb -- )
     [ init-copies ]
-    [ dup predecessors>> '[ _ convert-phi ] each-phi ]
+    [ dup predecessors>> $[ _ convert-phi ] each-phi ]
     [ insert-copies ]
     tri ;
 

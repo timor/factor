@@ -15,7 +15,7 @@ SYMBOL: known-values
     known-values get at ;
 
 : set-known ( known value -- )
-    '[ _ known-values get set-at ] when* ;
+    $[ _ known-values get set-at ] when* ;
 
 : make-known ( known -- value )
     <value> [ set-known ] keep ;

@@ -61,7 +61,7 @@ SYMBOL: dpi
     [ [ { 0 0 } ] dip <rect> fill-rect ] bi-curry* bi ;
 
 : rect-translate-x ( rect x -- rect' )
-    '[ _ 0 2array v- ] change-loc ;
+    $[ _ 0 2array v- ] change-loc ;
 
 : first-line ( layout -- line )
     layout>> 0 pango_layout_get_line_readonly ;

@@ -19,17 +19,17 @@ SYMBOLS: return-addresses gc-maps ;
 : emit-scrub ( seqs -- n )
     ! seqs is a sequence of sequences of 0/1
     dup longest length
-    [ '[ [ 0 = ] ?{ } map-as _ f pad-tail % ] each ] keep ;
+    [ $[ [ 0 = ] ?{ } map-as _ f pad-tail % ] each ] keep ;
 
 : integers>bits ( seq n -- bit-array )
-    <bit-array> [ '[ [ t ] dip _ set-nth ] each ] keep ;
+    <bit-array> [ $[ [ t ] dip _ set-nth ] each ] keep ;
 
 : largest-spill-slot ( seqs -- n )
     concat [ 0 ] [ supremum 1 + ] if-empty ;
 
 : emit-gc-roots ( seqs -- n )
     ! seqs is a sequence of sequences of integers 0..n-1
-    dup largest-spill-slot [ '[ _ integers>bits % ] each ] keep ;
+    dup largest-spill-slot [ $[ _ integers>bits % ] each ] keep ;
 
 : emit-uint ( n -- )
     building get push-uint ;
@@ -56,7 +56,7 @@ SYMBOLS: return-addresses gc-maps ;
 : emit-base-tables ( gc-maps -- count )
     [ derived-root-offsets ] map
     dup [ keys ] map largest-spill-slot
-    [ '[ _ emit-base-table ] each ] keep ;
+    [ $[ _ emit-base-table ] each ] keep ;
 
 : serialize-gc-maps ( -- byte-array )
     [

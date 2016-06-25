@@ -44,12 +44,12 @@ TYPED: new-line ( paragraph: paragraph element: element -- paragraph )
     } 2cleave <paragraph> ; inline
 
 TYPED: add-element ( paragraph: paragraph element: element -- )
-    [ '[ _ element-length + ] change-head-width ]
-    [ '[ unswons _ swons swons ] change-lines ] bi drop ; inline
+    [ $[ _ element-length + ] change-head-width ]
+    [ $[ unswons _ swons swons ] change-lines ] bi drop ; inline
 
 TYPED: wrap-step ( paragraphs: array element: element -- paragraphs )
     [ [ min-cost ] dip new-line ]
-    [ dupd '[ _ add-element ] each ]
+    [ dupd $[ _ add-element ] each ]
     2bi swap prefix { array } declare
     [ fits? ] filter ; inline
 

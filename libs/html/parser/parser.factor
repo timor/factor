@@ -37,7 +37,7 @@ SYMBOL: tagstack
         swap >>text ; inline
 
 : (read-quote) ( sequence-parser ch -- string )
-    '[ [ current _ = ] take-until ] [ advance drop ] bi ;
+    $[ [ current _ = ] take-until ] [ advance drop ] bi ;
 
 : read-single-quote ( sequence-parser -- string )
     char: ' (read-quote) ;
@@ -63,7 +63,7 @@ SYMBOL: tagstack
 
 : read-comment ( sequence-parser -- )
     [ "-->" take-until-sequence comment new-tag push-tag ]
-    [ '[ _ advance drop ] 3 swap times ] bi ;
+    [ $[ _ advance drop ] 3 swap times ] bi ;
 
 : read-dtd ( sequence-parser -- )
     [ ">" take-until-sequence dtd new-tag push-tag ]

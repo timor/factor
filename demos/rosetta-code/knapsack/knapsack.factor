@@ -73,7 +73,7 @@ CONSTANT: limit 400 ;
 
 : fill-table ( table -- )
     [ items length iota ] dip
-    '[ _ iterate ] each ;
+    $[ _ iterate ] each ;
 
 :: extract-packed-items ( table -- items )
     [

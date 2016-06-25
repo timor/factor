@@ -89,7 +89,7 @@ PRIVATE<
     float-vector-rep? [ -1 bits>double 0.0 ] [ -1 0 ] if ;
 
 : 2byte>rep-array ( a b rep -- a' b' )
-    '[ _ byte>rep-array ] bi@ ; inline
+    $[ _ byte>rep-array ] bi@ ; inline
 
 : components-map ( a rep quot -- c )
     [ [ byte>rep-array ] [ rep-length ] bi ] dip unrolled-map-unsafe underlying>> ; inline
@@ -156,14 +156,14 @@ PRIVATE>
     ] unrolled-each-unsafe
     c' underlying>> ;
 : (simd-vs+)               ( a b rep -- c )
-    dup rep-component-type '[ + _ c:c-type-clamp ] components-2map ;
+    dup rep-component-type $[ + _ c:c-type-clamp ] components-2map ;
 : (simd-vs-)               ( a b rep -- c )
-    dup rep-component-type '[ - _ c:c-type-clamp ] components-2map ;
+    dup rep-component-type $[ - _ c:c-type-clamp ] components-2map ;
 : (simd-vs*)               ( a b rep -- c )
-    dup rep-component-type '[ * _ c:c-type-clamp ] components-2map ;
+    dup rep-component-type $[ * _ c:c-type-clamp ] components-2map ;
 : (simd-v*)                ( a b rep -- c ) [ * ] components-2map ;
 : (simd-v*high)            ( a b rep -- c )
-    dup rep-component-type c:heap-size -8 * '[ * _ shift ] components-2map ;
+    dup rep-component-type c:heap-size -8 * $[ * _ shift ] components-2map ;
 :: (simd-v*hs+)            ( a b rep -- c )
     rep { char-16-rep uchar-16-rep } member-eq?
     [ uchar-16-rep char-16-rep ]
@@ -185,7 +185,7 @@ PRIVATE>
 ! XXX
 : (simd-v.)                ( a b rep -- n )
     [ 2byte>rep-array [ [ first ] bi@ * ] 2keep ] keep
-    1 swap rep-length [a,b) [ '[ _ swap nth-unsafe ] bi@ * + ] 2with each ;
+    1 swap rep-length [a,b) [ $[ _ swap nth-unsafe ] bi@ * + ] 2with each ;
 : (simd-vsqrt)             ( a   rep -- c ) [ fsqrt ] components-map ;
 : (simd-vsad)              ( a b rep -- c ) 2byte>rep-array [ - abs ] [ + ] 2map-reduce ;
 : (simd-sum)               ( a   rep -- n ) [ + ] components-reduce ;
@@ -200,8 +200,8 @@ PRIVATE>
 : (simd-vor)               ( a b rep -- c ) [ bitor ] bitwise-components-2map ;
 : (simd-vxor)              ( a b rep -- c ) [ bitxor ] bitwise-components-2map ;
 : (simd-vnot)              ( a   rep -- c ) [ bitnot ] bitwise-components-map ;
-: (simd-vlshift)           ( a n rep -- c ) swap '[ _ shift ] bitwise-components-map ;
-: (simd-vrshift)           ( a n rep -- c ) swap '[ _ neg shift ] bitwise-components-map ;
+: (simd-vlshift)           ( a n rep -- c ) swap $[ _ shift ] bitwise-components-map ;
+: (simd-vrshift)           ( a n rep -- c ) swap $[ _ neg shift ] bitwise-components-map ;
 ! XXX
 : (simd-hlshift)           ( a n rep -- c )
     drop head-slice* 16 0 pad-head ;
@@ -229,17 +229,17 @@ PRIVATE>
     ] unrolled-each-integer
     c' underlying>> ;
 : (simd-v<=)               ( a b rep -- c )
-    dup rep-tf-values '[ <= _ _ ? ] components-2map ;
+    dup rep-tf-values $[ <= _ _ ? ] components-2map ;
 : (simd-v<)                ( a b rep -- c )
-    dup rep-tf-values '[ <  _ _ ? ] components-2map ;
+    dup rep-tf-values $[ <  _ _ ? ] components-2map ;
 : (simd-v=)                ( a b rep -- c )
-    dup rep-tf-values '[ =  _ _ ? ] components-2map ;
+    dup rep-tf-values $[ =  _ _ ? ] components-2map ;
 : (simd-v>)                ( a b rep -- c )
-    dup rep-tf-values '[ >  _ _ ? ] components-2map ;
+    dup rep-tf-values $[ >  _ _ ? ] components-2map ;
 : (simd-v>=)               ( a b rep -- c )
-    dup rep-tf-values '[ >= _ _ ? ] components-2map ;
+    dup rep-tf-values $[ >= _ _ ? ] components-2map ;
 : (simd-vunordered?)       ( a b rep -- c )
-    dup rep-tf-values '[ unordered? _ _ ? ] components-2map ;
+    dup rep-tf-values $[ unordered? _ _ ? ] components-2map ;
 : (simd-vany?)             ( a   rep -- ? ) [ bitor  ] bitwise-components-reduce zero? not ;
 : (simd-vall?)             ( a   rep -- ? ) [ bitand ] bitwise-components-reduce zero? not ;
 : (simd-vnone?)            ( a   rep -- ? ) [ bitor  ] bitwise-components-reduce zero?     ;
@@ -255,19 +255,19 @@ PRIVATE>
 : (simd-vpack-signed)      ( a b rep -- c )
     [ [ 2byte>rep-array cord-append ] [ rep-length 2 * ] bi ]
     [ narrow-vector-rep [ <rep-array> ] [ rep-component-type ] bi ] bi
-    '[ _ c:c-type-clamp ] swap unrolled-map-as-unsafe underlying>> ;
+    $[ _ c:c-type-clamp ] swap unrolled-map-as-unsafe underlying>> ;
 : (simd-vpack-unsigned)    ( a b rep -- c )
     [ [ 2byte>rep-array cord-append ] [ rep-length 2 * ] bi ]
     [ narrow-vector-rep >uint-vector-rep [ <rep-array> ] [ rep-component-type ] bi ] bi
-    '[ _ c:c-type-clamp ] swap unrolled-map-as-unsafe underlying>> ;
+    $[ _ c:c-type-clamp ] swap unrolled-map-as-unsafe underlying>> ;
 : (simd-vunpack-head)      ( a   rep -- c )
-    [ byte>rep-array ] [ widen-vector-rep [ rep-length ] [ '[ _ >rep-array ] ] bi ] bi
+    [ byte>rep-array ] [ widen-vector-rep [ rep-length ] [ $[ _ >rep-array ] ] bi ] bi
     [ head-slice ] dip call( a' -- c' ) underlying>> ;
 : (simd-vunpack-tail)      ( a   rep -- c )
-    [ byte>rep-array ] [ widen-vector-rep [ rep-length ] [ '[ _ >rep-array ] ] bi ] bi
+    [ byte>rep-array ] [ widen-vector-rep [ rep-length ] [ $[ _ >rep-array ] ] bi ] bi
     [ tail-slice ] dip call( a' -- c' ) underlying>> ;
 : (simd-with)              (   n rep -- v )
-    [ rep-length swap '[ _ ] ] [ <rep-array> ] bi replicate-as
+    [ rep-length swap $[ _ ] ] [ <rep-array> ] bi replicate-as
     underlying>> ;
 : (simd-gather-2)          ( m n rep -- v ) <rep-array> [ 2 set-firstn-unsafe ] keep underlying>> ;
 : (simd-gather-4)          ( m n o p rep -- v ) <rep-array> [ 4 set-firstn-unsafe ] keep underlying>> ;

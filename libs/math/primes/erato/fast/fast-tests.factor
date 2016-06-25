@@ -14,8 +14,8 @@ IN: math.primes.erato.fast
 { 78498 } [ 1,000,000 sieve length ] unit-test
 
 { t } [
-    { 2 3 5 7 11 13 } 100 make-sieve '[ _ marked-prime? ] all?
+    { 2 3 5 7 11 13 } 100 make-sieve $[ _ marked-prime? ] all?
 ] unit-test
 { t } [
-    { 4 6 8 9 10 12 } 100 make-sieve '[ _ marked-prime? not ] all?
+    { 4 6 8 9 10 12 } 100 make-sieve $[ _ marked-prime? not ] all?
 ] unit-test

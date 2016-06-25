@@ -51,11 +51,11 @@ IN: http.server.cgi
     <raw-response>
     200 >>code
     "CGI output follows" >>message
-    swap '[
+    swap $[
         binary encode-output
         output-stream get _ <cgi-process> binary <process-stream> [
             post-request? [ request get post-data>> data>> write flush ] when
-            '[ _ stream-write ] each-block
+            $[ _ stream-write ] each-block
         ] with-stream
     ] >>body ;
 

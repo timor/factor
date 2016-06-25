@@ -33,13 +33,13 @@ ERROR: empty-deque ;
     push-front* drop ; inline
 
 : push-all-front ( seq deque -- )
-    '[ _ push-front ] each ;
+    $[ _ push-front ] each ;
 
 : push-back ( obj deque -- )
     push-back* drop ; inline
 
 : push-all-back ( seq deque -- )
-    '[ _ push-back ] each ;
+    $[ _ push-back ] each ;
 
 : pop-front ( deque -- obj )
     [ peek-front ] [ pop-front* ] bi ; inline
@@ -48,8 +48,8 @@ ERROR: empty-deque ;
     [ peek-back ] [ pop-back* ] bi ; inline
 
 : slurp-deque ( ... deque quot: ( ... obj -- ... ) -- ... )
-    [ drop '[ _ deque-empty? ] ]
-    [ '[ _ pop-back @ ] ]
+    [ drop $[ _ deque-empty? ] ]
+    [ $[ _ pop-back @ ] ]
     2bi until ; inline
 
 MIXIN: deque

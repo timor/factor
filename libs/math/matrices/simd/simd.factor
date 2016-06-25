@@ -44,7 +44,7 @@ PRIVATE<
     ] make-matrix4 ; inline
 
 : map-columns ( ... a quot: ( ... col -- ... newcol ) -- ... c )
-    '[ columns _ 4 napply ] make-matrix4 ; inline
+    $[ columns _ 4 napply ] make-matrix4 ; inline
 
 PRIVATE>
 

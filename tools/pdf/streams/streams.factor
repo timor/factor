@@ -11,7 +11,7 @@ PRIVATE<
 ! FIXME: what about "proper" tab support?
 
 : string>texts ( string style -- seq )
-    [ string-lines ] dip '[ _ <text> 1array ] map
+    [ string-lines ] dip $[ _ <text> 1array ] map
     <br> 1array join ;
 
 PRIVATE>
@@ -34,7 +34,7 @@ TUPLE: pdf-sub-stream < pdf-writer parent ;
     new-pdf-writer
         swap >>parent
         swap >>style
-    dup parent>> style>> '[ _ swap assoc-union ] change-style ;
+    dup parent>> style>> $[ _ swap assoc-union ] change-style ;
 
 TUPLE: pdf-block-stream < pdf-sub-stream ;
 
@@ -54,14 +54,14 @@ M: pdf-span-stream dispose
 M: pdf-writer stream-flush drop ;
 
 M: pdf-writer stream-write1
-    dup style>> '[ 1string _ <text> ] [ data>> ] bi* push ;
+    dup style>> $[ 1string _ <text> ] [ data>> ] bi* push ;
 
 M: pdf-writer stream-write
-    dup style>> '[ _ string>texts ] [ data>> ] bi* push-all ;
+    dup style>> $[ _ string>texts ] [ data>> ] bi* push-all ;
 
 M: pdf-writer stream-format
     swap [ dup style>> ] dip assoc-union
-    '[ _ string>texts ] [ data>> ] bi* push-all ;
+    $[ _ string>texts ] [ data>> ] bi* push-all ;
 
 M: pdf-writer stream-nl
     <br> swap data>> push ; ! FIXME: <br> needs style?

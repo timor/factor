@@ -57,7 +57,7 @@ M: mailbox mailbox-get-timeout block-if-empty data>> pop-back ;
     f mailbox-get-all-timeout ;
 
 : while-mailbox-empty ( mailbox quot -- )
-    [ '[ _ mailbox-empty? ] ] dip while ; inline
+    [ $[ _ mailbox-empty? ] ] dip while ; inline
 
 : mailbox-get-timeout? ( mailbox timeout pred -- obj )
     [ block-unless-pred ]

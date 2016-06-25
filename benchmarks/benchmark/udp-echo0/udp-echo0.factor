@@ -10,7 +10,7 @@ IN: benchmark.udp-echo0
     [ 2dup addr>> ] [ send ] bi* receive drop assert= ;
 
 : udp-echo ( #times #bytes -- )
-    '[
+    $[
         _ iota [ _ >be ] map
         "127.0.0.1" 0 <inet4> <datagram> &dispose
         "127.0.0.1" 0 <inet4> <datagram> &dispose

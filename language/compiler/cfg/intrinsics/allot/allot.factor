@@ -8,7 +8,7 @@ kernel layouts locals math math.order namespaces sequences ;
 IN: compiler.cfg.intrinsics.allot
 
 : ##set-slots, ( regs obj class -- )
-    '[ _ swap 1 + _ type-number ##set-slot-imm, ] each-index ;
+    $[ _ swap 1 + _ type-number ##set-slot-imm, ] each-index ;
 
 : emit-simple-allot ( node -- )
     [ in-d>> length ] [ node-output-infos first class>> ] bi

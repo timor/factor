@@ -29,7 +29,7 @@ IN: documents.tests
     [
         { 1 10 } { 2 11 }
         t f
-        '[ [ _ _ ] dip 3array , ] each-line
+        $[ [ _ _ ] dip 3array , ] each-line
     ] { } make
 ] unit-test
 

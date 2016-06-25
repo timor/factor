@@ -33,7 +33,7 @@ M: object add-recent-where f ;
 
 : expire ( seq -- )
     [ length recent-count - [ 0 > ] keep ] keep
-    '[ 0 _ _ delete-slice ] when ;
+    $[ 0 _ _ delete-slice ] when ;
 
 : add-recent ( obj -- )
     add-recent-where dup

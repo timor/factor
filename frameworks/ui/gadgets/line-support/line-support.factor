@@ -55,7 +55,7 @@ M: line-gadget line-height
     control-value length 1 - 0 swap between? ;
 
 : visible-line ( gadget quot -- n )
-    '[
+    $[
         [ clip get @ origin get [ second ] bi@ - ] dip
         y>line
     ] keep validate-line ; inline
@@ -78,7 +78,7 @@ GENERIC: draw-line ( line index gadget -- ) ;
         [ control-value ]
         [ line-height ]
         [ ]
-    } cleave '[
+    } cleave $[
         0 over _ * >integer 2array
         [ _ draw-line ] with-translation
     ] each-slice-index ;

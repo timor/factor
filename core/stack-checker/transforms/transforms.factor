@@ -9,7 +9,7 @@ stack-checker.visitor words ;
 IN: stack-checker.transforms
 
 : call-transformer ( stack quot -- newquot )
-    '[ _ _ with-datastack [ length 1 assert= ] [ first ] bi ]
+    $[ _ _ with-datastack [ length 1 assert= ] [ first ] bi ]
     [ error-continuation get current-word get transform-expansion-error ]
     recover ;
 
@@ -91,35 +91,35 @@ IN: stack-checker.transforms
 
 \ spread t "no-compile" set-word-prop
 
-\ 0&& [ '[ _ 0 n&& ] ] 1 define-transform
+\ 0&& [ $[ _ 0 n&& ] ] 1 define-transform
 
 \ 0&& t "no-compile" set-word-prop
 
-\ 1&& [ '[ _ 1 n&& ] ] 1 define-transform
+\ 1&& [ $[ _ 1 n&& ] ] 1 define-transform
 
 \ 1&& t "no-compile" set-word-prop
 
-\ 2&& [ '[ _ 2 n&& ] ] 1 define-transform
+\ 2&& [ $[ _ 2 n&& ] ] 1 define-transform
 
 \ 2&& t "no-compile" set-word-prop
 
-\ 3&& [ '[ _ 3 n&& ] ] 1 define-transform
+\ 3&& [ $[ _ 3 n&& ] ] 1 define-transform
 
 \ 3&& t "no-compile" set-word-prop
 
-\ 0|| [ '[ _ 0 n|| ] ] 1 define-transform
+\ 0|| [ $[ _ 0 n|| ] ] 1 define-transform
 
 \ 0|| t "no-compile" set-word-prop
 
-\ 1|| [ '[ _ 1 n|| ] ] 1 define-transform
+\ 1|| [ $[ _ 1 n|| ] ] 1 define-transform
 
 \ 1|| t "no-compile" set-word-prop
 
-\ 2|| [ '[ _ 2 n|| ] ] 1 define-transform
+\ 2|| [ $[ _ 2 n|| ] ] 1 define-transform
 
 \ 2|| t "no-compile" set-word-prop
 
-\ 3|| [ '[ _ 3 n|| ] ] 1 define-transform
+\ 3|| [ $[ _ 3 n|| ] ] 1 define-transform
 
 \ 3|| t "no-compile" set-word-prop
 
@@ -131,7 +131,7 @@ IN: stack-checker.transforms
 
 \ (call-next-method) [
     [ add-next-method-dependency ]
-    [ [ next-method-quot ] [ '[ _ no-next-method ] ] bi or ] bi
+    [ [ next-method-quot ] [ $[ _ no-next-method ] ] bi or ] bi
 ] 1 define-transform
 
 \ (call-next-method) t "no-compile" set-word-prop
@@ -142,7 +142,7 @@ IN: stack-checker.transforms
         dup tuple-layout
         [ add-depends-on-tuple-layout ]
         [ [ "boa-check" word-prop [ ] or ] dip ] 2bi
-        '[ @ _ <tuple-boa> ]
+        $[ @ _ <tuple-boa> ]
     ] [
         \ boa time-bomb
     ] if

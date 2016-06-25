@@ -47,33 +47,33 @@ M: word integer-op-input-classes
     } at swap or ;
 
 : bignum-fixnum-op-quot ( big-word -- quot )
-    '[ fixnum>bignum _ execute ] ;
+    $[ fixnum>bignum _ execute ] ;
 
 : fixnum-bignum-op-quot ( big-word -- quot )
-    '[ [ fixnum>bignum ] dip _ execute ] ;
+    $[ [ fixnum>bignum ] dip _ execute ] ;
 
 : integer-fixnum-op-quot ( fix-word big-word -- quot )
     [
         [ over fixnum? ] %
-        [ '[ _ execute ] , ] [ bignum-fixnum-op-quot , ] bi* \ if ,
+        [ $[ _ execute ] , ] [ bignum-fixnum-op-quot , ] bi* \ if ,
     ] [ ] make ;
 
 : fixnum-integer-op-quot ( fix-word big-word -- quot )
     [
         [ dup fixnum? ] %
-        [ '[ _ execute ] , ] [ fixnum-bignum-op-quot , ] bi* \ if ,
+        [ $[ _ execute ] , ] [ fixnum-bignum-op-quot , ] bi* \ if ,
     ] [ ] make ;
 
 : integer-bignum-op-quot ( big-word -- quot )
     [
         [ over fixnum? ] %
-        [ fixnum-bignum-op-quot , ] [ '[ _ execute ] , ] bi \ if ,
+        [ fixnum-bignum-op-quot , ] [ $[ _ execute ] , ] bi \ if ,
     ] [ ] make ;
 
 : integer-integer-op-quot ( fix-word big-word -- quot )
     [
         [ 2dup both-fixnums? ] %
-        [ '[ _ execute ] , ]
+        [ $[ _ execute ] , ]
         [
             [
                 [ dup fixnum? ] %
@@ -104,14 +104,14 @@ M: word integer-op-input-classes
     ] 3bi ;
 
 : define-integer-op-words ( triples fix-word big-word -- )
-    '[ [ _ _ ] dip define-integer-op-word ] each ;
+    $[ [ _ _ ] dip define-integer-op-word ] each ;
 
 : integer-op-triples ( word -- triples )
     {
         { fixnum integer }
         { integer fixnum }
         { integer integer }
-    } swap '[ _ prefix ] map ;
+    } swap $[ _ prefix ] map ;
 
 : define-integer-ops ( word fix-word big-word -- )
     [
@@ -151,7 +151,7 @@ SYMBOL: fast-math-ops
     [ drop math-class-max swap method-for-class >boolean ] if ;
 
 : (derived-ops) ( word assoc -- words )
-    swap '[ swap first _ eq? nip ] assoc-filter ;
+    swap $[ swap first _ eq? nip ] assoc-filter ;
 
 : derived-ops ( word -- words )
     [ 1array ] [ math-ops get (derived-ops) values ] bi append ;

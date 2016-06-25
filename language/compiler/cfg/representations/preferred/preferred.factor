@@ -32,13 +32,13 @@ PRIVATE<
         [ rep>> rep-getter-quot ] map dup length {
             { 0 [ drop [ drop f ] ] }
             { 1 [ first [ 1array ] compose ] }
-            { 2 [ first2 '[ _ _ bi 2array ] ] }
-            [ '[ _ cleave _ narray ] ]
+            { 2 [ first2 $[ _ _ bi 2array ] ] }
+            [ $[ _ cleave _ narray ] ]
         } case
     ] if ;
 
 : define-vreg-reps-method ( insn slots word -- )
-    [ [ drop ] ] dip '[
+    [ [ drop ] ] dip $[
         [ _ create-method ]
         [ reps-getter-quot ]
         bi* define

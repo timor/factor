@@ -103,7 +103,7 @@ C: <vocab-author> vocab-author ;
     ] unless-empty ;
 
 : (describe-classes) ( classes heading -- )
-    '[
+    $[
         _ $subheading
         [ <$pretty-link> 1array ] map $table
     ] unless-empty ;
@@ -169,7 +169,7 @@ C: <vocab-author> vocab-author ;
     [ word-row ] map word-headings prefix $table ;
 
 : (describe-words) ( words heading -- )
-    '[ _ $subheading words-table ] unless-empty ;
+    $[ _ $subheading words-table ] unless-empty ;
 
 : describe-generics ( words -- )
     "Generic words" (describe-words) ;
@@ -253,7 +253,7 @@ C: <vocab-author> vocab-author ;
     } cleave ;
 
 : keyed-vocabs ( str quot -- seq )
-    [ all-disk-vocabs-recursive ] 2dip '[
+    [ all-disk-vocabs-recursive ] 2dip $[
         [ _ swap @ member? ] filter no-prefixes
         [ name>> ] sort-with
     ] assoc-map ; inline

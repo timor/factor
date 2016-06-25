@@ -15,8 +15,8 @@ SPECIALIZED-ARRAY: void*
 
 : alien>strings ( alien encoding -- strings )
     [ [ dup more? ] ] dip
-    '[ [ advance ] [ void* deref _ alien>string ] bi ]
+    $[ [ advance ] [ void* deref _ alien>string ] bi ]
     produce nip ;
 
 : strings>alien ( strings encoding -- array )
-    '[ _ malloc-string ] void*-array{ } map-as f suffix ;
+    $[ _ malloc-string ] void*-array{ } map-as f suffix ;

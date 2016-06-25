@@ -52,7 +52,7 @@ M: struct >c-ptr
 : memory>struct ( ptr class -- struct )
     ! This is sub-optimal if the class is not literal, but gets
     ! optimized down to efficient code if it is.
-    '[ _ boa ] call( ptr -- struct ) ; inline
+    $[ _ boa ] call( ptr -- struct ) ; inline
 
 : read-struct ( class -- struct )
     [ heap-size read ] [ memory>struct ] bi ;
@@ -60,7 +60,7 @@ M: struct >c-ptr
 PRIVATE<
 
 : init-struct ( class with-prototype: ( prototype -- alien ) sans-prototype: ( class -- alien ) -- alien )
-    '[ dup struct-prototype _ _ ?if ] keep memory>struct ; inline
+    $[ dup struct-prototype _ _ ?if ] keep memory>struct ; inline
 
 PRIVATE>
 
@@ -96,12 +96,12 @@ PRIVATE<
     1 - -1 swap shift [ + ] keep bitxor ; inline
 
 : sign-extender ( signed? bits -- quot )
-    '[ _ [ _ sign-extend ] when ] ;
+    $[ _ [ _ sign-extend ] when ] ;
 
 GENERIC: (reader-quot) ( slot -- quot ) ;
 
 M: struct-slot-spec (reader-quot)
-    [ offset>> ] [ type>> ] bi '[ >c-ptr _ _ alien-value ] ;
+    [ offset>> ] [ type>> ] bi $[ >c-ptr _ _ alien-value ] ;
 
 M: struct-bit-slot-spec (reader-quot)
     [ [ offset>> ] [ bits>> ] bi bit-reader ]
@@ -112,13 +112,13 @@ M: struct-bit-slot-spec (reader-quot)
 GENERIC: (writer-quot) ( slot -- quot ) ;
 
 M: struct-slot-spec (writer-quot)
-    [ offset>> ] [ type>> ] bi '[ >c-ptr _ _ set-alien-value ] ;
+    [ offset>> ] [ type>> ] bi $[ >c-ptr _ _ set-alien-value ] ;
 
 M: struct-bit-slot-spec (writer-quot)
     [ offset>> ] [ bits>> ] bi bit-writer [ >c-ptr ] prepose ;
 
 : (boxer-quot) ( class -- quot )
-    '[ _ memory>struct ] ;
+    $[ _ memory>struct ] ;
 
 : (unboxer-quot) ( class -- quot )
     drop [ >c-ptr ] ;
@@ -145,10 +145,10 @@ GENERIC: struct-slot-values ( struct -- sequence ) ;
 
 M: struct-class reader-quot
     dup type>> array? [ dup type>> first define-array-vocab drop ] when
-    nip '[ _ read-struct-slot ] ;
+    nip $[ _ read-struct-slot ] ;
 
 M: struct-class writer-quot
-    nip '[ _ write-struct-slot ] ;
+    nip $[ _ write-struct-slot ] ;
 
 : offset-of ( field struct -- offset )
     struct-slots slot-named offset>> ; inline

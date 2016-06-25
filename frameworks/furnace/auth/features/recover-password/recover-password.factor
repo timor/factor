@@ -42,7 +42,7 @@ SYMBOL: lost-password-from
         ] "" make >>body ;
 
 : send-password-email ( user -- )
-    '[ _ password-email send-email ]
+    $[ _ password-email send-email ]
     "E-mail send thread" spawn drop ;
 
 : <recover-action-1> ( -- action )

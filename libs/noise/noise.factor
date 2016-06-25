@@ -11,7 +11,7 @@ IN: noise
     [ <mersenne-twister> ] dip with-random ; inline
 
 : float-map>byte-map ( floats: float-array scale: float bias: float -- bytes: byte-array )
-    '[
+    $[
         [ _ 255.0 * v*n _ 255.0 * v+n float-4 int-4 vconvert ] 4 napply
         [ int-4 short-8 vconvert ] 2bi@
         short-8 uchar-16 vconvert
@@ -28,14 +28,14 @@ TYPED: byte-map>image ( bytes: byte-array dim -- image: image )
     floats scale bias float-map>byte-map dim byte-map>image ; inline
 
 : uniform-noise-image ( seed dim -- image )
-    [ '[ _ product random-bytes >byte-array ] with-seed ]
+    [ $[ _ product random-bytes >byte-array ] with-seed ]
     [ byte-map>image ] bi ; inline
 
 CONSTANT: normal-noise-pow 2 ;
 CONSTANT: normal-noise-count 4 ;
 
 TYPED: normal-noise-map ( seed: integer dim -- bytes )
-    '[ _ product normal-noise-count * random-bytes >byte-array ] with-seed
+    $[ _ product normal-noise-count * random-bytes >byte-array ] with-seed
     [
         [ short-8{ 0 0 0 0 0 0 0 0 } short-8{ 0 0 0 0 0 0 0 0 } ] normal-noise-count ndip
         [ uchar-16 short-8 vconvert [ v+ ] bi-curry@ bi* ] normal-noise-count napply

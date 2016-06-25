@@ -29,10 +29,10 @@ generic-call-site-crossref [ H{ } clone ] initialize
 
 : dependencies-satisfied? ( word cache -- ? )
     [ "dependency-checks" word-prop ] dip
-    '[ _ [ satisfied? ] cache ] all? ;
+    $[ _ [ satisfied? ] cache ] all? ;
 
 : outdated-conditional-usages ( set -- assocs )
-    members H{ } clone '[
+    members H{ } clone $[
         conditional-dependencies-of
         [ drop _ dependencies-satisfied? ] assoc-reject
     ] map ;
@@ -59,12 +59,12 @@ generic-call-site-crossref [ H{ } clone ] initialize
     [ (store-dependencies) ] tri-curry@ tri-curry* tri ;
 
 : add-xref ( word dependencies crossref -- )
-    rot '[
+    rot $[
         swap _ [ drop H{ } clone ] cache _ swap set-at
     ] assoc-each ;
 
 : remove-xref ( word dependencies crossref -- )
-    [ keys ] dip '[ _ at delete-at ] with each ;
+    [ keys ] dip $[ _ at delete-at ] with each ;
 
 : (compiled-xref) ( word dependencies generic-dependencies -- )
     compiled-crossref generic-call-site-crossref
@@ -78,7 +78,7 @@ generic-call-site-crossref [ H{ } clone ] initialize
     3tri ;
 
 : set-at-each ( keys assoc value -- )
-    '[ _ [ _ ] 2dip set-at ] each ;
+    $[ _ [ _ ] 2dip set-at ] each ;
 
 : join-dependencies ( effect-deps cond-deps def-deps -- assoc )
     H{ } clone [

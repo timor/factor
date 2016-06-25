@@ -274,7 +274,7 @@ PRIVATE>
     ] when* ;
 
 : (textual-list) ( seq quot sep -- )
-    '[ _ print-element ] swap interleave ; inline
+    $[ _ print-element ] swap interleave ; inline
 
 : textual-list ( seq quot -- )
     ", " (textual-list) ; inline
@@ -494,7 +494,7 @@ M: array elements*
 : elements ( elt-type element -- seq ) [ elements* ] { } make ;
 
 : collect-elements ( element seq -- elements )
-    swap '[ _ elements [ rest ] map concat ] gather ;
+    swap $[ _ elements [ rest ] map concat ] gather ;
 
 : <$link> ( topic -- element )
     1array \ $link prefix ;

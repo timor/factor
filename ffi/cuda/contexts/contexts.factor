@@ -10,7 +10,7 @@ IN: cuda.contexts
 : create-context ( device flags -- context )
     swap
     [ { CUcontext } ] 2dip
-    '[ _ _ cuCtxCreate cuda-error ] with-out-parameters ; inline
+    $[ _ _ cuCtxCreate cuda-error ] with-out-parameters ; inline
 
 : sync-context ( -- )
     cuCtxSynchronize cuda-error ; inline
@@ -27,7 +27,7 @@ DESTRUCTOR: destroy-context
 DESTRUCTOR: clean-up-context
 
 : (with-cuda-context) ( context quot -- )
-    swap '[ _ clean-up-context ] [ ] cleanup ; inline
+    swap $[ _ clean-up-context ] [ ] cleanup ; inline
 
 : with-cuda-context ( device flags quot -- )
     [ set-up-cuda-context create-context ] dip (with-cuda-context) ; inline

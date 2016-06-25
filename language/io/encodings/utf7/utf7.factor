@@ -34,7 +34,7 @@ TUPLE: utf7codec dialect buffer ;
 
 : encode-utf7-string ( str codec -- bytes )
     [ [ printable? ] group-by ] dip
-    dialect>> first2 '[ _ _ rot first2 swap encode-chunk ] map
+    dialect>> first2 $[ _ _ rot first2 swap encode-chunk ] map
     B{ } concat-as ;
 
 M: utf7codec encode-string ( str stream codec -- )

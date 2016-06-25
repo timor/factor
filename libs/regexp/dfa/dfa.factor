@@ -5,7 +5,7 @@ regexp.classes regexp.transition-tables sequences sets vectors ;
 IN: regexp.dfa
 
 : find-delta ( states transition nfa -- new-states )
-    transitions>> '[ _ swap _ at at ] gather sift ;
+    transitions>> $[ _ swap _ at at ] gather sift ;
 
 :: epsilon-loop ( state table nfa question -- )
     state table at :> old-value
@@ -25,7 +25,7 @@ IN: regexp.dfa
 
 : epsilon-table ( states nfa -- table )
     [ [ H{ } clone ] dip over ] dip
-    '[ _ _ t epsilon-loop ] each ;
+    $[ _ _ t epsilon-loop ] each ;
 
 : find-epsilon-closure ( states nfa -- dfa-state )
     epsilon-table table>condition ;
@@ -38,7 +38,7 @@ IN: regexp.dfa
 
 : find-transitions ( dfa-state nfa -- next-dfa-state )
     transitions>>
-    '[ _ at keys [ condition-states ] map concat ] gather
+    $[ _ at keys [ condition-states ] map concat ] gather
     [ tagged-epsilon? ] reject ;
 
 : add-todo-state ( state visited-states new-states -- )
@@ -46,7 +46,7 @@ IN: regexp.dfa
 
 : add-todo-states ( state/condition visited-states new-states -- )
     [ condition-states ] 2dip
-    '[ _ _ add-todo-state ] each ;
+    $[ _ _ add-todo-state ] each ;
 
 : ensure-state ( key table -- )
     2dup key? [ 2drop ] [ [ H{ } clone ] 2dip set-at ] if ; inline

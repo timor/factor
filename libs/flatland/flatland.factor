@@ -74,8 +74,8 @@ METHOD: height { sequence } second ;
 METHOD: move-to { sequence sequence }         [ x x! ] [ y y! ] bi drop ;
 METHOD: move-by { sequence sequence } dupd v+ [ x x! ] [ y y! ] bi drop ;
 
-METHOD: move-left-by  { sequence number } '[ _ - ] changed-x ;
-METHOD: move-right-by { sequence number } '[ _ + ] changed-x ;
+METHOD: move-left-by  { sequence number } $[ _ - ] changed-x ;
+METHOD: move-right-by { sequence number } $[ _ + ] changed-x ;
 
 ! METHOD: move-left-by  { sequence number } neg 0 2array move-by ;
 ! METHOD: move-right-by { sequence number }     0 2array move-by ;
@@ -106,7 +106,7 @@ METHOD: move-right-by { <pos> number } [ pos>> ] dip move-right-by ;
 METHOD: above? { <pos> number } [ y ] dip > ;
 METHOD: below? { <pos> number } [ y ] dip < ;
 
-METHOD: move-by { <pos> sequence } '[ _ v+ ] change-pos drop ;
+METHOD: move-by { <pos> sequence } $[ _ v+ ] change-pos drop ;
 
 METHOD: distance { <pos> <pos> } [ pos>> ] bi@ distance ;
 

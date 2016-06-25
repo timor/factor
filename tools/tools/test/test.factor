@@ -86,7 +86,7 @@ M: did-not-fail summary drop "Did not fail" ;
 MACRO: <experiment> ( word -- quot )
     [ stack-effect in>> length dup ]
     [ name>> experiment-title ] bi
-    '[ _ ndup _ narray _ prefix ] ;
+    $[ _ ndup _ narray _ prefix ] ;
 
 : experiment. ( seq -- )
     [ first write ": " write ]
@@ -111,7 +111,7 @@ COMPILE<
 SYNTAX: \ TEST:
     scan-token
     [ create-word-in ]
-    [ "(" ")" surround search '[ _ parse-test ] ] bi
+    [ "(" ")" surround search $[ _ parse-test ] ] bi
     define-syntax ;
 COMPILE>
 
@@ -128,7 +128,7 @@ PRIVATE>
 : run-test-file ( path -- )
     dup current-test-file [
         test-failures get current-test-file get +test-failure+ delete-file-errors
-        '[ _ run-file ] [
+        $[ _ run-file ] [
             restartable-tests? get
             [ dup compute-restarts empty? not ] [ f ] if
             [ rethrow ] [ file-failure ] if
@@ -158,7 +158,7 @@ PRIVATE<
 PRIVATE>
 
 : with-test-file ( ..a quot: ( ..a path -- ..b ) -- ..b )
-    '[ "" "" _ cleanup-unique-file ] with-temp-directory ; inline
+    $[ "" "" _ cleanup-unique-file ] with-temp-directory ; inline
 
 : with-test-directory ( ..a quot: ( ..a -- ..b ) -- ..b )
     [ cleanup-unique-directory ] with-temp-directory ; inline
@@ -181,7 +181,7 @@ M: test-failure error. ( error -- )
 
 : test ( prefix -- ) loaded-child-vocab-names test-vocabs ;
 
-: test-all ( -- ) loaded-vocab-names filter-don't-test test-vocabs ;
+: test-all ( -- ) loaded-vocab-names filter-dont-test test-vocabs ;
 
 : test-main ( -- )
     command-line get [ [ load ] [ test ] bi ] each ;

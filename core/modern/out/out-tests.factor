@@ -46,7 +46,7 @@ IN: modern.out.tests
 
 ![[
 { ": asdf < '< > > ;" } [
-    ": asdf [ '[ ] ] ;" [
+    ": asdf [ $[ ] ] ;" [
         dup { [ single-matched-literal? ] [ delimiter>> "[" = ] } 1&&
         [ [ drop "<" ] change-delimiter ] when
     ] rewrite-string

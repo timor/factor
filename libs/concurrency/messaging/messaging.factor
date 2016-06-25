@@ -59,7 +59,7 @@ M: cannot-send-synchronous-to-self summary
         cannot-send-synchronous-to-self
     ] [
         [ <synchronous> dup ] dip send
-        '[ _ synchronous-reply? ] receive-if
+        $[ _ synchronous-reply? ] receive-if
         data>>
     ] if ;
 

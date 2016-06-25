@@ -79,7 +79,7 @@ operations [ <linked-hash> ] initialize
         t >>listener? ;
 
 : modify-operations ( operations translator -- operations )
-    '[ [ _ ] dip modify-operation ] map ;
+    $[ [ _ ] dip modify-operation ] map ;
 
 : operations>commands ( object translator -- pairs )
     [ object-operations ] dip modify-operations
@@ -89,7 +89,7 @@ operations [ <linked-hash> ] initialize
     operations>commands define-command-map ;
 
 : operation-quot ( target operation -- quot )
-    [ translator>> ] [ command>> ] bi '[ _ @ _ execute ] ;
+    [ translator>> ] [ command>> ] bi $[ _ @ _ execute ] ;
 
 M: operation invoke-command ( target command -- )
     operation-quot call( -- ) ;

@@ -34,12 +34,12 @@ M: mirror delete-at ( key mirror -- )
     [ f ] 2dip set-at ;
 
 M: mirror clear-assoc ( mirror -- )
-    [ object-slots ] [ object>> ] bi '[
+    [ object-slots ] [ object>> ] bi $[
         [ initial>> ] [ offset>> _ swap set-slot ] bi
     ] each ;
 
 M: mirror >alist ( mirror -- alist )
-    [ object-slots ] [ object>> ] bi '[
+    [ object-slots ] [ object>> ] bi $[
         [ name>> ] [ offset>> _ swap slot ] bi
     ] { } map>assoc ;
 
@@ -48,7 +48,7 @@ M: mirror keys ( mirror -- keys )
 
 M: mirror values ( mirror -- values )
     [ object-slots ] [ object>> ] bi
-    '[ offset>> _ swap slot ] map ;
+    $[ offset>> _ swap slot ] map ;
 
 M: mirror assoc-size
     object>> class-of class-size ;

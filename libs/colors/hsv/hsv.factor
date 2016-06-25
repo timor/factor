@@ -79,6 +79,6 @@ M:: rgba >hsva ( rgba -- hsva )
     } cleave <hsva> ;
 
 : golden-rainbow ( num-colors saturation luminance -- colors )
-    [ random-unit ] 3dip '[
+    [ random-unit ] 3dip $[
         0.618033988749895 + 1.0 mod dup _ _ 1.0 <hsva>
     ] replicate nip ;

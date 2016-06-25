@@ -7,7 +7,7 @@ SYNTAX: \ funktor[[ "]]" parse-multiline-string
     manifest get search-vocab-names>>
     { "syntax" } diff members
     current-vocab name>> ".private" ?tail drop ".private" append suffix
-    '[
+    $[
         _ interpolate>string
         current-vocab name>> "\nIN: " "\n" surround prepend
         _ 5 group [ " " join ] map "\n" join
@@ -17,4 +17,4 @@ SYNTAX: \ funktor[[ "]]" parse-multiline-string
 
 SYNTAX: \ FUNKTOR:
     scan-new-escaped scan-effect scan-object
-    '[ _ call ] swap define-declared ;
+    $[ _ call ] swap define-declared ;

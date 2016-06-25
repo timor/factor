@@ -188,7 +188,7 @@ DEFER: parse-mapping
 ! Same as 'with', but for combinators that
 ! put 2 arguments on the stack
 : with2 ( param obj quot -- obj curry )
-    swapd '[ [ _ ] 2dip @ ] ; inline
+    swapd $[ [ _ ] 2dip @ ] ; inline
 
 GENERIC: (deref-aliases) ( anchors obj -- obj' ) ;
 
@@ -336,7 +336,7 @@ M: sets:set (replace-aliases)
     [ members (replace-aliases) ] keep set-like ;
 
 M: assoc (replace-aliases)
-    swap '[ [ _ swap ?replace-aliases ] bi@ ] assoc-map ;
+    swap $[ [ _ swap ?replace-aliases ] bi@ ] assoc-map ;
 
 TUPLE: yaml-anchor anchor obj ;
 C: <yaml-anchor> yaml-anchor ;
@@ -365,7 +365,7 @@ M: sets:set (replace-anchors)
     [ members ?replace-anchors ] keep set-like ;
 
 M: assoc (replace-anchors)
-    swap '[ [ _ swap ?replace-anchors ] bi@ ] assoc-map ;
+    swap $[ [ _ swap ?replace-anchors ] bi@ ] assoc-map ;
 
 : replace-identities ( obj -- obj' )
     [ <yaml-anchors> ] dip dupd ?replace-aliases ?replace-anchors ;

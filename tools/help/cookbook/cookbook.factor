@@ -214,7 +214,7 @@ regexp command-line namespaces ;
 IN: grep
 
 : grep-lines ( pattern -- )
-    '[ dup _ matches? [ print ] [ drop ] if ] each-line ;
+    $[ dup _ matches? [ print ] [ drop ] if ] each-line ;
 
 : grep-file ( pattern filename -- )
     ascii [ grep-lines ] with-file-reader ;

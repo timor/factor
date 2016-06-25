@@ -40,16 +40,16 @@ M: wrapper expand-macros* wrapped>> literal ;
 
 : expand-dispatch ( -- )
     stack get pop end
-    [ [ expand-macros ] [ ] map-as '[ _ dip ] % ]
+    [ [ expand-macros ] [ ] map-as $[ _ dip ] % ]
     [
         length iota [ <reversed> ] keep
-        [ '[ _ ndrop _ nnip call ] [ ] like ] 2map , \ dispatch ,
+        [ $[ _ ndrop _ nnip call ] [ ] like ] 2map , \ dispatch ,
     ] bi ;
 
 : word, ( word -- ) end , ;
 
 : expand-macro ( word quot -- )
-    '[
+    $[
         drop
         stack [ _ with-datastack >vector ] change
         stack get pop >quotation end

@@ -69,8 +69,8 @@ M: little-endian unsigned-endian> le> ;
     ] [
         [ [ <groups> ] keep ] dip
         little-endian = [
-            '[ be> _ >le ] map
+            $[ be> _ >le ] map
         ] [
-            '[ le> _ >be ] map
+            $[ le> _ >be ] map
         ] if concat
     ] if ; inline

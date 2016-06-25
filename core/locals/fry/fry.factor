@@ -11,7 +11,7 @@ M: lambda count-inputs body>> count-inputs ;
 
 M: lambda fry
     clone [ [ count-inputs ] [ fry ] bi ] change-body
-    [ [ vars>> length ] keep '[ _ _ mnswap _ call ] ]
+    [ [ vars>> length ] keep $[ _ _ mnswap _ call ] ]
     [ drop [ncurry] curry [ call ] compose ] 2bi ;
 
 M: let fry

@@ -6,10 +6,10 @@ tools.profiler.sampling tools.test tools.time vocabs.hierarchy vocabs.loader ;
 IN: benchmark
 
 : run-timing-benchmark ( vocab -- time )
-    5 swap '[ gc [ _ run ] benchmark ] replicate infimum ;
+    5 swap $[ gc [ _ run ] benchmark ] replicate infimum ;
 
 : run-profile-benchmark ( vocab -- profile )
-    compact-gc '[ _ run ] profile most-recent-profile-data ;
+    compact-gc $[ _ run ] profile most-recent-profile-data ;
 
 : find-benchmark-vocabs ( -- seq )
     "benchmark" disk-child-vocab-names [ find-vocab-root ] filter ;
@@ -20,14 +20,14 @@ PRIVATE<
     "=== %s\n" printf ;
 
 : run-benchmark ( vocab quot: ( vocab -- res ) -- result ok? )
-    over write-header '[ _ @ t ] [
+    over write-header $[ _ @ t ] [
         f f f <test-failure> f
     ] recover ; inline
 
 PRIVATE>
 
 : run-benchmarks ( benchmarks quot: ( vocab -- res ) -- results errors )
-    '[ dup _ run-benchmark 3array ] map
+    $[ dup _ run-benchmark 3array ] map
     [ third ] partition [ [ 2 head ] map ] bi@ ; inline
 
 : run-profile-benchmarks ( -- results errors )

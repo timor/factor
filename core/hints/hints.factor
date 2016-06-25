@@ -12,7 +12,7 @@ GENERIC: specializer-predicate ( spec -- quot ) ;
 
 M: class specializer-predicate predicate-def ;
 
-M: object specializer-predicate '[ _ eq? ] ;
+M: object specializer-predicate $[ _ eq? ] ;
 
 GENERIC: specializer-declaration ( spec -- class ) ;
 
@@ -35,7 +35,7 @@ M: object specializer-declaration class-of ;
 : specializer-cases ( quot specializer -- alist )
     dup [ array? ] all? [ 1array ] unless [
         [ nip make-specializer ]
-        [ [ specializer-declaration ] map swap '[ _ declare @ ] ] 2bi
+        [ [ specializer-declaration ] map swap $[ _ declare @ ] ] 2bi
     ] with { } map>assoc ;
 
 : specialize-quot ( quot specializer -- quot' )

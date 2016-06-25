@@ -50,11 +50,11 @@ IN: continuations.tests
     gc
 ] unit-test
 
-: don't-compile-me ( -- ) ;
-: foo ( -- ) get-callstack "c" set don't-compile-me ;
+: dont-compile-me ( -- ) ;
+: foo ( -- ) get-callstack "c" set dont-compile-me ;
 : bar ( -- a b ) 1 foo 2 ;
 
-COMPILE< { don't-compile-me foo bar } [ t "no-compile" set-word-prop ] each COMPILE>
+COMPILE< { dont-compile-me foo bar } [ t "no-compile" set-word-prop ] each COMPILE>
 
 { 1 2 } [ bar ] unit-test
 

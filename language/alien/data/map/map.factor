@@ -40,7 +40,7 @@ INSTANCE: data-map-param immutable-sequence ;
     swap heap-size * >fixnum ; inline
 
 : [>c-type-param] ( c-type count -- quot )
-    2dup c-type-iter-length '[
+    2dup c-type-iter-length $[
         [ _ _ ] dip
         [ ]
         [ >c-ptr ]
@@ -51,7 +51,7 @@ INSTANCE: data-map-param immutable-sequence ;
     ] ;
 
 : [>object-param] ( class count -- quot )
-    nip '[ _ <groups> ] ;
+    nip $[ _ <groups> ] ;
 
 : [>param] ( type -- quot )
     c-type-count over c-type-name?
@@ -61,7 +61,7 @@ MACRO: >param ( in -- quot: ( array -- param ) )
     [>param] ;
 
 : [alloc-c-type-param] ( c-type count -- quot )
-    2dup c-type-iter-length dup '[
+    2dup c-type-iter-length dup $[
         [ _ _ ] dip
         [
             _ * >fixnum [ (byte-array) dup ] keep
@@ -81,7 +81,7 @@ MACRO: alloc-param ( out -- quot: ( len -- param ) )
     [alloc-param] ;
 
 MACRO: unpack-params ( ins -- quot )
-    [ c-type-count nip '[ _ firstn-unsafe ] ] map '[ _ spread ] ;
+    [ c-type-count nip $[ _ firstn-unsafe ] ] map $[ _ spread ] ;
 
 MACRO: pack-params ( outs -- quot )
     [ ] [ c-type-count nip dup [ [ ndip _ ] dip set-firstn ] 3curry ] reduce
@@ -107,14 +107,14 @@ MACRO: pack-params ( outs -- quot )
 MACRO: data-map ( ins outs -- quot )
     2dup
     [
-        [ [ '[ _ >param ] ] map '[ _ spread ] ]
-        [ length dup '[ _ ndup _ nmin-length ] compose ] bi
+        [ [ $[ _ >param ] ] map $[ _ spread ] ]
+        [ length dup $[ _ ndup _ nmin-length ] compose ] bi
     ]
-    [ [ '[ _ alloc-param ] ] map '[ _ cleave ] ] bi* compose
+    [ [ $[ _ alloc-param ] ] map $[ _ cleave ] ] bi* compose
     [data-map] ;
 
 MACRO: data-map! ( ins outs -- quot )
-    2dup append [ '[ _ >param ] ] map '[ _ spread ] [data-map] ;
+    2dup append [ $[ _ >param ] ] map $[ _ spread ] [data-map] ;
 
 : parse-data-map-effect ( accum -- accum )
     ")" parse-effect

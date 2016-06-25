@@ -64,7 +64,7 @@ IN: rosetta-code.dice7
         [ ] [ sum ] [ length ] tri
         [ / v-n vabs ]
         [ drop v/n ] 2bi
-    ] dip '[ _ < ] all? ;
+    ] dip $[ _ < ] all? ;
 
 ! Verify distribution uniformity/naive. Error is the acceptable
 ! deviation from the ideal number of items in each bucket,

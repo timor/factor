@@ -37,7 +37,7 @@ IN: tools.dns
 GENERIC#: dns-host 1 ( servers domain -- ) ;
 
 M: sequence dns-host ( servers domain -- )
-    '[ _ host ] with-dns-servers ;
+    $[ _ host ] with-dns-servers ;
 
 M: string dns-host
     [ 1array ] dip dns-host ;

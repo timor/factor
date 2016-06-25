@@ -9,7 +9,7 @@ SYMBOL: fuzz-test-trials
 fuzz-test-trials [ 100 ] initialize
 
 : fuzz-test-failures* ( trials generator: ( -- ..a ) predicate: ( ..a -- ? ) -- failures )
-    '[
+    $[
         _ { } output>sequence [ _ input<sequence ] [ f swap ? ] bi
     ] replicate sift ; inline
 
@@ -33,7 +33,7 @@ M: fuzz-test-failure summary
 
 : (fuzz-test) ( generator predicate -- error ? )
     [ fuzz-test-failures [ f f ] ]
-    [ '[ _ fuzz-test-trials get <fuzz-test-failure> t ] ] bi
+    [ $[ _ fuzz-test-trials get <fuzz-test-failure> t ] ] bi
     if-empty ; inline
 
 PRIVATE>

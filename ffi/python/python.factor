@@ -11,7 +11,7 @@ SPECIALIZED-ARRAY: void*
 
 ! Borrowed from unix.utilities
 : strings>alien ( strings encoding -- array )
-    '[ _ malloc-string ] void*-array{ } map-as f suffix ;
+    $[ _ malloc-string ] void*-array{ } map-as f suffix ;
 
 ! Initialization and finalization
 : py-initialize ( -- )
@@ -107,13 +107,13 @@ ERROR: missing-type type ;
 
 ! Callbacks
 : quot>py-callback ( quot: ( args kw -- ret ) -- alien )
-    '[
+    $[
         [ nip ] dip
         [ [ py> ] [ { } ] if* ] bi@ @ >py
     ] PyCallback ; inline
 
 : with-quot>py-cfunction ( alien quot -- )
-    '[ <py-cfunction> @ ] with-callback ; inline
+    $[ <py-cfunction> @ ] with-callback ; inline
 
 [ py-initialize ] "python" add-startup-hook
 [ py-finalize ] "python" add-shutdown-hook

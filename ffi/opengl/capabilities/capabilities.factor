@@ -5,7 +5,7 @@ sequences sets splitting strings system ;
 IN: opengl.capabilities
 
 : (require-gl) ( thing require-quot make-error-quot -- )
-    [ dupd call [ drop ] ] dip '[ _ " " make throw ] if ; inline
+    [ dupd call [ drop ] ] dip $[ _ " " make throw ] if ; inline
 
 : (has-extension?) ( query-extension(s) available-extensions -- ? )
     over string?  [ member? ] [ [ member? ] curry any? ] if ;

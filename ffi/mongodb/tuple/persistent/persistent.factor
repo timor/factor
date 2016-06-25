@@ -26,7 +26,7 @@ PRIVATE<
 
 : make-tuple ( assoc -- tuple )
    prepare-assoc>tuple
-   '[ dup _ at assoc>tuple swap _ set-at ] each ; inline recursive
+   $[ dup _ at assoc>tuple swap _ set-at ] each ; inline recursive
 
 : at+ ( value key assoc -- value )
     2dup key?
@@ -63,13 +63,13 @@ CONSTRUCTOR: <cond-value> cond-value ( value quot -- cond-value ) ;
       { [ dup value>> data-tuple? ]
         [ [ value>> ] [ quot>> ] bi ( tuple -- assoc ) call-effect ]  }
       { [ dup value>> [ hashtable? ] [ linked-assoc? ] bi or ]
-        [ [ value>> ] [ quot>> ] bi '[ _ write-field ] assoc-map ] }
+        [ [ value>> ] [ quot>> ] bi $[ _ write-field ] assoc-map ] }
       [ value>> ]
    } cond ;
 
 : write-tuple-fields ( mirror tuple assoc quot: ( tuple -- assoc ) -- )
    swap ! m t q q a
-   '[ _ 2over write-field?
+   $[ _ 2over write-field?
       [ _ write-field swap _ set-at ]
       [ 2drop ] if
    ] assoc-each ;
@@ -92,7 +92,7 @@ GENERIC: tuple>storable ( tuple -- storable ) ;
    dup id>> [ <oid> >>id ] unless ; inline
 
 M: mdb-persistent tuple>storable ( mdb-persistent -- object-map )
-   '[ _ [ tuple>assoc ] write-mdb-persistent drop ] with-object-map ; inline
+   $[ _ [ tuple>assoc ] write-mdb-persistent drop ] with-object-map ; inline
 
 M: mdb-persistent tuple>assoc ( tuple -- assoc )
    ensure-oid (tuple>assoc) ;

@@ -10,20 +10,20 @@ ERROR: not-final class ;
 
 PRIVATE<
 
-MACRO: boa-unsafe ( class -- quot ) tuple-layout '[ _ <tuple-boa> ] ;
+MACRO: boa-unsafe ( class -- quot ) tuple-layout $[ _ <tuple-boa> ] ;
 
-: tuple-arity ( class -- quot ) '[ _ boa ] inputs ; inline
+: tuple-arity ( class -- quot ) $[ _ boa ] inputs ; inline
 
 : tuple-slice ( n seq -- slice )
     [ n>> [ * dup ] keep + ] [ seq>> ] bi <slice-unsafe> ; inline
 
 : read-tuple ( slice class -- tuple )
-    '[ _ boa-unsafe ] input<sequence-unsafe ; inline
+    $[ _ boa-unsafe ] input<sequence-unsafe ; inline
 
 MACRO: write-tuple ( class -- quot )
-    [ '[ [ _ boa ] undo ] ]
-    [ tuple-arity iota <reversed> [ '[ [ _ ] dip set-nth-unsafe ] ] map '[ _ cleave ] ]
-    bi '[ _ dip @ ] ;
+    [ $[ [ _ boa ] undo ] ]
+    [ tuple-arity iota <reversed> [ $[ [ _ ] dip set-nth-unsafe ] ] map $[ _ cleave ] ]
+    bi $[ _ dip @ ] ;
 
 : check-final ( class -- )
     {

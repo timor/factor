@@ -7,7 +7,7 @@ IN: compiler.utilities
 : flattener ( seq quot -- seq vector quot' )
     over length <vector> [
         dup
-        '[
+        $[
             @ [
                 dup [ array? ] [ vector? ] bi or
                 [ _ push-all ] [ _ push ] if
@@ -30,7 +30,7 @@ SYMBOL: yield-hook
 yield-hook [ [ ] ] initialize
 
 : alist-most ( alist quot -- pair )
-    [ [ ] ] dip '[ [ [ second ] bi@ @ ] most ] map-reduce ; inline
+    [ [ ] ] dip $[ [ [ second ] bi@ @ ] most ] map-reduce ; inline
 
 : alist-min ( alist -- pair ) [ before=? ] alist-most ;
 

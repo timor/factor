@@ -66,8 +66,8 @@ GENERIC: model-changed ( model observer -- ) ;
     empty? [ deactivate-model ] [ drop ] if ;
 
 : with-locked-model ( model quot -- )
-    [ '[ _ t >>locked? @ ] ]
-    [ drop '[ f _ locked?<< ] ]
+    [ $[ _ t >>locked? @ ] ]
+    [ drop $[ f _ locked?<< ] ]
     2bi [ ] cleanup ; inline
 
 GENERIC: update-model ( model -- ) ;
@@ -113,7 +113,7 @@ GENERIC: set-range-max-value ( value model -- ) ;
     [ range-min-value ] [ range-max-value* ] bi clamp ;
 
 : change-model* ( ..a model quot: ( ..a obj -- ..b ) -- ..b )
-    '[ _ keep ] change-model ; inline
+    $[ _ keep ] change-model ; inline
 
 : push-model ( value model -- )
     [ push ] change-model* ;

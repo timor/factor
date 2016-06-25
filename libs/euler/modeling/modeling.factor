@@ -75,4 +75,4 @@ sharp-continue ;
     line-vt n*v line-p0 v+ ; inline
 
 : project-poly-plane ( poly vdir plane-n plane-d -- qoly )
-    '[ _ _ _ project-pt-plane ] map ; inline
+    $[ _ _ _ project-pt-plane ] map ; inline

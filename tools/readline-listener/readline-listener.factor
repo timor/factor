@@ -23,7 +23,7 @@ M: readline-reader prompt.
     f completions tset ;
 
 : prefixed ( prefix seq -- seq' )
-    swap '[ _ head? ] filter ;
+    swap $[ _ head? ] filter ;
 
 : prefixed-words ( prefix -- words )
     all-words [ name>> ] map! prefixed ;

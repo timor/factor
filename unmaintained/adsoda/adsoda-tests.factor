@@ -259,15 +259,15 @@ unit-test
 [ { { 13 15 } { 15 13 } { 13 13 } } ]
     [ 0 >pv solid2 solid1 clip-solid first corners>> ] unit-test
 
-solid1 corners>> '[ _ ]
+solid1 corners>> $[ _ ]
     [ 0 >pv solid1 solid1 clip-solid first corners>> ] unit-test
 
-solid1 corners>> '[ _ ]
+solid1 corners>> $[ _ ]
     [ 0 >pv solid1 solid2 clip-solid first corners>> ] unit-test
 
-solid1 corners>> '[ _ ]
+solid1 corners>> $[ _ ]
     [ 1 >pv solid1 solid2 clip-solid first corners>> ] unit-test
-solid2 corners>> '[ _ ]
+solid2 corners>> $[ _ ]
     [ 1 >pv solid2 solid1 clip-solid first corners>> ] unit-test
 
 !

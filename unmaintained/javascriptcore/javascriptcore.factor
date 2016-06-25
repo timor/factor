@@ -13,8 +13,8 @@ symbol: js-context
 : with-global-context ( quot -- )
     [
         [ f JSGlobalContextCreate dup js-context set ] dip
-        [ nip '[ @ ] ]
-        [ drop '[ _ JSGlobalContextRelease ] ] 2bi
+        [ nip $[ @ ] ]
+        [ drop $[ _ JSGlobalContextRelease ] ] 2bi
         [ ] cleanup
     ] with-scope ; inline
 
@@ -42,7 +42,7 @@ symbol: js-context
     dup [ nip JSValueRef>string javascriptcore-error ] [ drop JSValueRef>string ] if ;
 
 : eval-js-standalone ( string -- result-string )
-    '[ _ eval-js ] with-javascriptcore ;
+    $[ _ eval-js ] with-javascriptcore ;
 
 : eval-js-path-standalone ( path -- result-string ) utf8 file-contents eval-js-standalone ;
 

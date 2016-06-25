@@ -92,7 +92,7 @@ ERROR: unexpected-end n string ;
 
 :: slice-til-eol ( n string -- n' string slice/f ch/f )
     n [
-        n string '[ "\r\n" member? ] find-from :> ( n' ch )
+        n string $[ "\r\n" member? ] find-from :> ( n' ch )
         n' string
         n n' string ?<slice>
         ch
@@ -102,7 +102,7 @@ ERROR: unexpected-end n string ;
 
 :: ((merge-slice-til-eol-slash)) ( n string -- n' string slice/f ch/f )
     n [
-        n string '[ "\r\n\\" member? ] find-from :> ( n' ch )
+        n string $[ "\r\n\\" member? ] find-from :> ( n' ch )
         n' string
         n n' string ?<slice>
         ch
@@ -145,7 +145,7 @@ ERROR: unexpected-end n string ;
     2dup empty-slice-from (merge-slice-til-eol-slash) ;
 
 :: slice-til-separator-inclusive ( n string tokens -- n' string slice/f ch/f )
-    n string '[ tokens member? ] find-from [ dup [ 1 + ] when ] dip  :> ( n' ch )
+    n string $[ tokens member? ] find-from [ dup [ 1 + ] when ] dip  :> ( n' ch )
     n' string
     n n' string ?<slice>
     ch ; inline
@@ -157,7 +157,7 @@ ERROR: unexpected-end n string ;
 
 :: slice-til-either ( n string tokens -- n'/f string slice/f ch )
     n [
-        n string '[ tokens member? ] find-from
+        n string $[ tokens member? ] find-from
         dup "\s\r\n" member? [
             :> ( n' ch )
             n' string
@@ -193,7 +193,7 @@ ERROR: char-expected-but-got-eof n string expected ;
     slice from>> n' string ?<slice> ;
 
 : modify-from ( slice n -- slice' )
-    '[ from>> _ + ] [ to>> ] [ seq>> ] tri <slice> ;
+    $[ from>> _ + ] [ to>> ] [ seq>> ] tri <slice> ;
 
 : modify-to ( slice n -- slice' )
     [ [ from>> ] [ to>> ] [ seq>> ] tri ] dip

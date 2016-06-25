@@ -75,7 +75,7 @@ M: paragraph pref-dim*
         [ ]
         [ word-x-coordinates ]
         [ [ key>> ] map align-baselines ] tri
-    ] dip '[ _ + layout-word ] 3each ;
+    ] dip $[ _ + layout-word ] 3each ;
 
 M: paragraph layout*
     f >>wrapped

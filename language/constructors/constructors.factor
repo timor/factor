@@ -8,15 +8,15 @@ IN: constructors
 
 : all-slots-assoc ( class -- slots )
     superclasses-of [
-        [ "slots" word-prop ] keep '[ _ ] { } map>assoc
+        [ "slots" word-prop ] keep $[ _ ] { } map>assoc
     ] map concat ;
 
 MACRO:: slots>boa ( slots class -- quot )
-    class all-slots-assoc slots [ '[ first name>> _ = ] find-last nip ] with map :> slot-assoc
+    class all-slots-assoc slots [ $[ first name>> _ = ] find-last nip ] with map :> slot-assoc
     class all-slots-assoc [ [ ] [ first initial>> ] bi ] { } map>assoc :> default-params
     slots length
     default-params length
-    '[
+    $[
         _ narray slot-assoc swap zip
         default-params swap assoc-union values _ firstn class boa
     ] ;
@@ -31,7 +31,7 @@ ERROR: unknown-constructor-parameters class effect unknown ;
     [ unknown-constructor-parameters ] unless-empty ;
 
 : constructor-boa-quot ( constructor-word class effect -- word quot )
-    in>> swap '[ _ _ slots>boa ] ; inline
+    in>> swap $[ _ _ slots>boa ] ; inline
 
 : define-constructor ( constructor-word class effect -- )
     ensure-constructor-parameters
@@ -61,4 +61,4 @@ SYNTAX: \ CONSTRUCTOR:
 
 SYNTAX: \ slot-constructor:
     scan-new-word [ name>> "(" append create-reset ] keep
-    '[ scan-rest-input-effect in>> _ '[ _ _ slots>boa ] append! ] define-syntax ;
+    $[ scan-rest-input-effect in>> _ $[ _ _ slots>boa ] append! ] define-syntax ;

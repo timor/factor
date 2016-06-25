@@ -116,7 +116,7 @@ IN: tools.deploy.shaker
 
 : strip-word-props ( stripped-props words -- )
     "Stripping word properties" show
-    swap '[
+    swap $[
         [
             [ drop _ member? ] assoc-reject sift-values
             >alist f like
@@ -246,7 +246,7 @@ IN: tools.deploy.shaker
     map concat unique ;
 
 : prune-decision-tree ( tree classes -- )
-    [ tuple class>type ] 2dip '[
+    [ tuple class>type ] 2dip $[
         dup array? [
             [
                 dup array? [
@@ -264,11 +264,11 @@ IN: tools.deploy.shaker
     strip-dictionary? [
         "Stripping compiler classes" show
         [ single-generic? ] instances
-        compiler-classes '[ "decision-tree" word-prop _ prune-decision-tree ] each
+        compiler-classes $[ "decision-tree" word-prop _ prune-decision-tree ] each
     ] when ;
 
 : recursive-subst ( seq old new -- )
-    '[
+    $[
         _ _
         {
             ! old becomes new
@@ -297,7 +297,7 @@ IN: tools.deploy.shaker
     strip-debugger? [
         "Stripping default methods" show
         [ single-generic? ] instances
-        new-default-method '[ _ strip-default-method ] each
+        new-default-method $[ _ strip-default-method ] each
     ] when ;
 
 : vocab-tree-globals ( except names -- words )
@@ -418,10 +418,10 @@ IN: tools.deploy.shaker
     ] { } make ;
 
 : strip-global? ( name stripped-globals -- ? )
-    '[ _ member? ] [ tuple? ] bi or ;
+    $[ _ member? ] [ tuple? ] bi or ;
 
 : clear-global? ( name cleared-globals -- ? )
-    '[ _ member? ] [ string? ] bi or ;
+    $[ _ member? ] [ string? ] bi or ;
 
 : strip-globals ( -- )
     strip-globals? |[ |
@@ -495,7 +495,7 @@ SYMBOL: deploy-vocab
             ! deployed app
             [:c]
             [print-error]
-            '[
+            $[
                 [ _ execute( obj -- ) ] [
                     _ execute( obj -- ) nl
                     _ execute( obj -- )

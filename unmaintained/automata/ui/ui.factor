@@ -46,7 +46,7 @@ var: slate
 
 ! Create a quotation that is appropriate for buttons and gesture handler.
 
-: view-action ( quot -- quot ) '[ drop _ with-view ] closed-quot ;
+: view-action ( quot -- quot ) $[ drop _ with-view ] closed-quot ;
 
 : view-button ( label quot -- button ) [ <label> ] dip view-action <bevel-button> ;
 

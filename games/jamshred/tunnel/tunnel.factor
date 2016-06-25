@@ -59,7 +59,7 @@ CONSTANT: default-segment-radius 1 ;
 : sub-tunnel ( from to segments -- segments )
     ! return segments between from and to, after clamping from and to to
     ! valid values
-    [ '[ _ clamp-length ] bi@ ] keep <slice> ;
+    [ $[ _ clamp-length ] bi@ ] keep <slice> ;
 
 : get-segment ( segments n -- segment )
     over clamp-length swap nth ;

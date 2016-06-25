@@ -26,7 +26,7 @@ PRIVATE<
 
 MACRO: ordinary-op ( word -- o )
     [ input-length ] keep
-    '[ [ ordinary-part>> ] _ napply _ execute ] ;
+    $[ [ ordinary-part>> ] _ napply _ execute ] ;
 
 ! Takes N dual numbers <o1,e1> <o2,e2> ... <oN,eN> and weaves
 ! their ordinary and epsilon parts to produce
@@ -35,7 +35,7 @@ MACRO: ordinary-op ( word -- o )
 ! at the same point.
 MACRO: duals>nweave ( n -- quot )
    dup dup dup
-   '[
+   $[
        [ [ epsilon-part>> ] _ napply ]
        _ nkeep
        [ ordinary-part>> ] _ napply
@@ -43,11 +43,11 @@ MACRO: duals>nweave ( n -- quot )
     ] ;
 
 MACRO: chain-rule ( word -- e )
-    [ input-length '[ _ duals>nweave ] ]
+    [ input-length $[ _ duals>nweave ] ]
     [ "derivative" word-prop ]
-    [ input-length 1 + '[ _ nspread ] ]
+    [ input-length 1 + $[ _ nspread ] ]
     tri
-    '[ [ @ _ @ ] sum-outputs ] ;
+    $[ [ @ _ @ ] sum-outputs ] ;
 
 : set-dual-help ( word dword -- )
     [ swap
@@ -65,17 +65,17 @@ MACRO: chain-rule ( word -- e )
 PRIVATE>
 
 MACRO: dual-op ( word -- quot )
-    [ '[ _ ordinary-op ] ]
-    [ input-length '[ _ nkeep ] ]
-    [ '[ _ chain-rule ] ]
+    [ $[ _ ordinary-op ] ]
+    [ input-length $[ _ nkeep ] ]
+    [ $[ _ chain-rule ] ]
     tri
-    '[ _ @ @ <dual> ] ;
+    $[ _ @ @ <dual> ] ;
 
 : define-dual ( word -- )
     dup name>> "d" prepend "math.dual" create-word
     [ [ stack-effect ] dip set-stack-effect ]
     [ set-dual-help ]
-    [ swap '[ _ dual-op ] define ]
+    [ swap $[ _ dual-op ] define ]
     2tri ;
 
 ! Specialize math functions to operate on dual numbers.

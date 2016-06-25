@@ -23,4 +23,4 @@ MEMO: dict-anagrams ( -- assoc )
     dict-anagrams values all-longest ;
 
 : longest-anagrams ( -- seq )
-    dict-anagrams [ keys all-longest ] keep '[ _ at ] map ;
+    dict-anagrams [ keys all-longest ] keep $[ _ at ] map ;

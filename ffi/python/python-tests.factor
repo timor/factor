@@ -4,7 +4,7 @@ python.ffi python.objects sequences strings tools.test ;
 IN: python
 
 : py-test ( result quot -- )
-    '[ _ with-destructors ] unit-test ; inline
+    $[ _ with-destructors ] unit-test ; inline
 
 ! None testing
 { t } [

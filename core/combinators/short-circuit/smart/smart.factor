@@ -13,6 +13,6 @@ ERROR: cannot-determine-arity ;
 
 PRIVATE>
 
-MACRO: && ( quots -- quot ) dup arity '[ _ _ n&& ] ;
+MACRO: && ( quots -- quot ) dup arity $[ _ _ n&& ] ;
 
-MACRO: || ( quots -- quot ) dup arity '[ _ _ n|| ] ;
+MACRO: || ( quots -- quot ) dup arity $[ _ _ n|| ] ;

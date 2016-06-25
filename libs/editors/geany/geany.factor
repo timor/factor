@@ -20,7 +20,7 @@ M: windows find-geany-path
     } 0|| ;
 
 M: geany editor-command
-    '[
+    $[
         geany-path get [ find-geany-path ] unless* ,
         _ ,
         "--line" , _ number>string ,

@@ -229,11 +229,11 @@ M: real sleep
     <thread> [ (spawn) ] keep ;
 
 : spawn-server ( quot name -- thread )
-    [ '[ _ loop ] ] dip spawn ;
+    [ $[ _ loop ] ] dip spawn ;
 
 : in-thread ( quot -- )
     [ get-datastack ] dip
-    '[ _ set-datastack @ ]
+    $[ _ set-datastack @ ]
     "Thread" spawn drop ;
 
 PRIVATE<

@@ -32,7 +32,7 @@ ERROR: invalid-local-name name ;
 SINGLETON: lambda-parser
 
 : with-lambda-scope ( assoc reader-quot: ( -- quot ) -- quot )
-    '[
+    $[
         in-lambda? on
         lambda-parser quotation-parser set
         use-words @

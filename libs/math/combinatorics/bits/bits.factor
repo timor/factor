@@ -10,8 +10,8 @@ IN: math.combinatorics.bits
 PRIVATE<
 
 : permutation-bits-quot ( bit-count bits quot -- n pred body )
-    [ [ on-bits dup '[ dup _ >= ] ] [ on-bits ] bi* ] dip swap
-    '[ _ [ next-permutation-bits _ bitand ] bi ] ; inline
+    [ [ on-bits dup $[ dup _ >= ] ] [ on-bits ] bi* ] dip swap
+    $[ _ [ next-permutation-bits _ bitand ] bi ] ; inline
 
 PRIVATE>
 

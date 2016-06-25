@@ -81,7 +81,7 @@ PRIVATE<
     ] [
         [ site>> ] [ rules>> disallows>> ] bi
         derive-urls [ <glob> ] map <and> <not>
-    ] bi 2array <or> '[ _ matches? ] ;
+    ] bi 2array <or> $[ _ matches? ] ;
 
 : relevant-rules ( robots -- rules )
     [

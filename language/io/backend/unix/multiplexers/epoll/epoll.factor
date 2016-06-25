@@ -60,7 +60,7 @@ M: epoll-mx remove-output-callbacks ( fd mx -- seq )
     [ input-available ] [ output-available ] 2tri ;
 
 : handle-events ( mx n -- )
-    [ dup events>> ] dip head-slice swap '[ _ handle-event ] each ;
+    [ dup events>> ] dip head-slice swap $[ _ handle-event ] each ;
 
 M: epoll-mx wait-for-events ( nanos mx -- )
     swap 60000000 or dupd wait-event handle-events ;

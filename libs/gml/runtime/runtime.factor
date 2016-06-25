@@ -114,7 +114,7 @@ TUPLE: use-registers { n fixnum } ;
 : <use-registers> ( -- use-registers ) use-registers new ;
 
 EXEC: use-registers
-    n>> f <array> '[ drop _ ] dip ;
+    n>> f <array> $[ drop _ ] dip ;
 
 ! Pathnames
 TUPLE: pathname names ;
@@ -158,13 +158,13 @@ ERROR: gml-stack-underflow ;
     [ over length + swap lengthen ] 2keep set-lastn ; inline
 
 MACRO: inputs ( inputs# -- quot: ( gml -- gml inputs... ) )
-    '[ dup operand-stack>> _ popn ] ;
+    $[ dup operand-stack>> _ popn ] ;
 
 MACRO: outputs ( outputs# -- quot: ( gml outputs... -- gml ) )
-    [ 1 + ] keep '[ _ npick operand-stack>> _ pushn ] ;
+    [ 1 + ] keep $[ _ npick operand-stack>> _ pushn ] ;
 
 MACRO: gml-primitive ( inputs# outputs# quot: ( registers gml inputs... -- outputs... ) -- quot: ( registers gml -- registers gml ) )
-    swap '[ _ inputs @ _ outputs ] ;
+    swap $[ _ inputs @ _ outputs ] ;
 
 SYMBOL: global-dictionary
 
@@ -174,9 +174,9 @@ global-dictionary [ H{ } clone ] initialize
     name global-dictionary get-global set-at ;
 
 : define-gml-primitive ( word name effect def -- )
-    [ '[ _ add-primitive ] keep ]
+    [ $[ _ add-primitive ] keep ]
     [ [ in>> length ] [ out>> length ] bi ]
-    [ '[ { gml } declare _ _ _ gml-primitive ] ] tri*
+    [ $[ { gml } declare _ _ _ gml-primitive ] ] tri*
     primitive-effect define-declared ;
 
 : scan-gml-name ( -- word name )

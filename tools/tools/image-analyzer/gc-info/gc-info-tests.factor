@@ -139,7 +139,7 @@ FUNCTION: void LLVMDisposeTypeHandle ( LLVMTypeHandleRef TypeHandle ) ;
     [ 1array compile ] keep word>gc-info ;
 
 : deterministic-gc-info? ( word -- ? )
-    20 swap '[
+    20 swap $[
         _ recompile-word>gc-info struct-slot-values
         dup last 0 = [ drop f ] when
     ] replicate all-equal? ;

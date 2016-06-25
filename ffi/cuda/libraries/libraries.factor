@@ -75,7 +75,7 @@ PRIVATE>
 
 : load-module ( path -- module )
     [ { CUmodule } ] dip
-    '[ _ cuModuleLoad cuda-error ] with-out-parameters ;
+    $[ _ cuModuleLoad cuda-error ] with-out-parameters ;
 
 : unload-module ( module -- )
     cuModuleUnload cuda-error ;
@@ -137,22 +137,22 @@ PRIVATE<
     >argument-type "cuda-arg" swap { } <struct-slot-spec> ;
 
 : [cuda-arguments] ( c-types abi -- quot )
-    '[ _ >argument-struct-slot ] map
+    $[ _ >argument-struct-slot ] map
     [ compute-struct-offsets ]
-    [ [ '[ _ write-struct-slot ] ] [ ] map-as ]
+    [ [ $[ _ write-struct-slot ] ] [ ] map-as ]
     [ length ] tri
-    '[
+    $[
         [ _ make-param-buffer [ drop @ _ fill-param-buffer ] 2keep ]
-        [ '[ _ 0 ] 2dip cuda-vector ] bi
+        [ $[ _ 0 ] 2dip cuda-vector ] bi
     ] ;
 PRIVATE>
 
 MACRO: cuda-arguments ( c-types abi -- quot: ( args... function -- ) )
-    [ [ 0 cuda-param-size ] ] swap '[ _ [cuda-arguments] ] if-empty ;
+    [ [ 0 cuda-param-size ] ] swap $[ _ [cuda-arguments] ] if-empty ;
 
 : get-function-ptr ( module string -- function )
     [ { CUfunction } ] 2dip
-    '[ _ _ cuModuleGetFunction cuda-error ] with-out-parameters ;
+    $[ _ _ cuModuleGetFunction cuda-error ] with-out-parameters ;
 
 : cached-module ( module-name -- alien )
     lookup-cuda-library
@@ -163,7 +163,7 @@ MACRO: cuda-arguments ( c-types abi -- quot: ( args... function -- ) )
     2array cuda-functions get [ first2 get-function-ptr ] cache ;
 
 MACRO: cuda-invoke ( module-name function-name arguments -- quot )
-    pick lookup-cuda-library abi>> '[
+    pick lookup-cuda-library abi>> $[
         _ _ cached-function
         [ nip _ _ cuda-arguments ]
         [ run-grid ] 2bi
@@ -172,7 +172,7 @@ MACRO: cuda-invoke ( module-name function-name arguments -- quot )
 : cuda-global* ( module-name symbol-name -- device-ptr size )
     [ { CUdeviceptr { c:uint initial: 0 } } ] 2dip
     [ cached-module ] dip
-    '[ _ _ cuModuleGetGlobal cuda-error ] with-out-parameters ; inline
+    $[ _ _ cuModuleGetGlobal cuda-error ] with-out-parameters ; inline
 
 : cuda-global ( module-name symbol-name -- device-ptr )
     cuda-global* drop ; inline
@@ -184,7 +184,7 @@ MACRO: cuda-invoke ( module-name function-name arguments -- quot )
     define-inline ;
 
 : define-cuda-global ( word module-name symbol-name -- )
-    '[ _ _ cuda-global ] ( -- device-ptr ) define-inline ;
+    $[ _ _ cuda-global ] ( -- device-ptr ) define-inline ;
 
 TUPLE: cuda-library name abi path handle ;
 ERROR: bad-cuda-abi abi ;

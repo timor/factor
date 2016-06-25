@@ -16,8 +16,8 @@ math.ranges sequences tools.test ;
 { } [ 2 100 [a,b] [ dup sieve marked-prime? drop ] each ] unit-test
 
 { t } [
-    { 2 3 5 7 11 13 } 100 sieve '[ _ marked-prime? ] all?
+    { 2 3 5 7 11 13 } 100 sieve $[ _ marked-prime? ] all?
 ] unit-test
 { t } [
-    { 4 6 8 9 10 12 } 100 sieve '[ _ marked-prime? not ] all?
+    { 4 6 8 9 10 12 } 100 sieve $[ _ marked-prime? not ] all?
 ] unit-test

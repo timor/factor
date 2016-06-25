@@ -76,7 +76,7 @@ GLSL-PROGRAM: blur-program window-vertex-shader blur-fragment-shader window-vert
 : vertical-blur ( texture -- texture ) f blur ; inline
 
 : discompose ( quot1 quot2 -- compose )
-    '[ @ &dispose @ ] with-destructors ; inline
+    $[ @ &dispose @ ] with-destructors ; inline
 
 : gaussian-blur ( texture -- texture )
     [ horizontal-blur ] [ vertical-blur ] discompose ;

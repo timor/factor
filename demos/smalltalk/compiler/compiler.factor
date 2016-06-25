@@ -68,7 +68,7 @@ M: ast-return compile-ast
 : block-lexenv ( block -- lexenv )
     [ [ arguments>> ] [ temporaries>> ] bi append ]
     [ body>> [ assigned-locals ] map concat unique ] bi
-    '[
+    $[
         dup dup _ key?
         [ <local-reader> ]
         [ <local> ]
@@ -80,7 +80,7 @@ M: ast-return compile-ast
     <lexenv> swap >>local-writers swap >>local-readers ;
 
 : lookup-block-vars ( vars lexenv -- seq )
-    local-readers>> '[ _ at ] map ;
+    local-readers>> $[ _ at ] map ;
 
 : make-temporaries ( block lexenv -- quot )
     [ temporaries>> ] dip lookup-block-vars
@@ -105,7 +105,7 @@ M: array contains-blocks? [ contains-blocks? ] any? ;
 M: array compile-ast
     dup contains-blocks? [
         [ [ compile-ast ] with map [ ] join ] [ length ] bi
-        '[ @ _ narray ]
+        $[ @ _ narray ]
     ] [ call-next-method ] if ;
 
 GENERIC: compile-assignment ( lexenv name -- quot ) ;
@@ -116,7 +116,7 @@ M: ast-assignment compile-ast
     [ value>> compile-ast [ dup ] ] [ name>> compile-assignment ] 2bi 3append ;
 
 M: ast-block compile-ast
-    compile-sequence <lambda> '[ _ ] ;
+    compile-sequence <lambda> $[ _ ] ;
 
 :: (compile-method-body) ( lexenv block -- lambda )
     lexenv block compile-sequence

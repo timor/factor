@@ -7,7 +7,7 @@ math.vectors prettyprint sequences sequences.deep ;
 IN: benchmark.pidigits
 
 : extract ( z x -- n )
-    [ first2 ] dip '[ first2 [ _ * ] [ + ] bi* ] bi@ /i ;
+    [ first2 ] dip $[ first2 [ _ * ] [ + ] bi* ] bi@ /i ;
 
 : next ( z -- n )
     3 extract ;
@@ -32,7 +32,7 @@ IN: benchmark.pidigits
     10 col - number>string glue ;
 
 : padded-total ( row col -- )
-    (padded-total) '[ _ printf ] call( str n -- ) ;
+    (padded-total) $[ _ printf ] call( str n -- ) ;
 
 :: (pidigits) ( k z n row col -- )
     n 0 > [

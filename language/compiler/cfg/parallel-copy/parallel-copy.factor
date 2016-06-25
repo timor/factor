@@ -14,7 +14,7 @@ SYMBOLS: locs preds to-do ready ;
     to-do get push-all-back ;
 
 : init-ready ( bs -- )
-    locs get '[ _ key? ] reject ready get push-all-front ;
+    locs get $[ _ key? ] reject ready get push-all-front ;
 
 : init ( mapping -- )
     <dlist> to-do set
@@ -52,7 +52,7 @@ PRIVATE>
     ] with-scope ; inline
 
 : parallel-copy ( mapping -- insns )
-    [ next-vreg '[ drop _ ] [ any-rep ##copy, ] parallel-mapping ] { } make ;
+    [ next-vreg $[ drop _ ] [ any-rep ##copy, ] parallel-mapping ] { } make ;
 
 PRIVATE<
 

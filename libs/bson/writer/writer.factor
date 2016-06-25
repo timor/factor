@@ -68,7 +68,7 @@ TYPED: write-mdbregexp ( regexp: mdbregexp -- )
    [ options>> write-cstring ] bi ; inline
 
 TYPED: write-sequence ( array: sequence -- )
-   '[
+   $[
         _ [ number>string swap write-pair ] each-index
         write-eoo
     ] with-length-prefix ; inline recursive
@@ -87,7 +87,7 @@ TYPED: write-oid ( oid: oid -- )
 UNION: hashtables hashtable linked-assoc ;
 
 TYPED: write-assoc ( assoc: hashtables -- )
-    '[ _ [ write-oid-field ] [
+    $[ _ [ write-oid-field ] [
             [ skip-field? [ 2drop ] [ write-pair ] if ] assoc-each
          ] bi write-eoo
     ] with-length-prefix ; inline recursive
@@ -159,7 +159,7 @@ TYPED: write-pair ( name: string obj -- )
 PRIVATE>
 
 TYPED: assoc>bv ( assoc: hashtables -- byte-vector: byte-vector )
-    [ BV{ } clone dup ] dip '[ _ write-assoc ] with-output-stream* ; inline
+    [ BV{ } clone dup ] dip $[ _ write-assoc ] with-output-stream* ; inline
 
 TYPED: assoc>stream ( assoc: hashtables -- )
     write-assoc ; inline

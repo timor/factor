@@ -11,10 +11,10 @@ TUPLE: image header heap ;
     binary [ [ read-code-block ] consume-stream>sequence ] with-byte-reader ;
 
 : data-heap>objects ( data-relocation-base data-heap -- seq )
-    binary [ '[ _ read-object ] consume-stream>sequence ] with-byte-reader ;
+    binary [ $[ _ read-object ] consume-stream>sequence ] with-byte-reader ;
 
 : (adjust-addresses) ( nodes base -- )
-    '[ [ _ + ] change-address drop ] each ;
+    $[ [ _ + ] change-address drop ] each ;
 
 : adjust-addresses ( header data-nodes code-nodes -- )
     pick code-relocation-base>> (adjust-addresses)

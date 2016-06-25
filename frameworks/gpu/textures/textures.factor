@@ -337,7 +337,7 @@ TYPED: set-texture-parameters ( texture: texture parameters: texture-parameters 
 PRIVATE<
 
 : <texture> ( component-order component-type parameters class -- texture )
-    '[ [ gen-texture ] 2dip _ boa dup window-resource ] dip
+    $[ [ gen-texture ] 2dip _ boa dup window-resource ] dip
     [ T{ texture-parameters } clone ] unless* set-texture-parameters ; inline
 
 PRIVATE>

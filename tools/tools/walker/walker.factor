@@ -162,7 +162,7 @@ SYMBOL: +stopped+
     [ add-breakpoint ] annotate ;
 
 : breakpoint-if ( word quot -- )
-    '[ [ _ [ [ break ] when ] ] dip 3append ] annotate ;
+    $[ [ _ [ [ break ] when ] ] dip 3append ] annotate ;
 
 ! For convenience
 IN: syntax

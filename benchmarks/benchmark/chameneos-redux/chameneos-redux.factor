@@ -50,7 +50,7 @@ TUPLE: meeting-place count mailbox ;
 
 : print-color-table ( -- )
     { blue red yellow } dup
-    '[ _ '[ color-string print ] with each ] each ;
+    $[ _ $[ color-string print ] with each ] each ;
 
 : try-meet ( meeting-place creature -- )
     over count>> 0 < [
@@ -75,7 +75,7 @@ TUPLE: meeting-place count mailbox ;
         mailbox>> mailbox-get-all
         [ f swap mailbox>> mailbox-put ] each
     ] [
-        [ mailbox>> 2 swap '[ _ mailbox-get ] replicate creature-meeting ]
+        [ mailbox>> 2 swap $[ _ mailbox-get ] replicate creature-meeting ]
         [ run-meeting-place ] bi
     ] if ;
 
@@ -86,7 +86,7 @@ TUPLE: meeting-place count mailbox ;
     [ <meeting-place> ] [ make-creatures ] bi*
     {
         [ nip nl bl [ bl ] [ color>> name>> write ] interleave nl ]
-        [ [ '[ _ _ try-meet ] in-thread ] with each ]
+        [ [ $[ _ _ try-meet ] in-thread ] with each ]
         [ drop run-meeting-place ]
 
         [ nip [ [ count>> number>string write bl ] [ self-count>> number>text write nl ] bi ] each ]

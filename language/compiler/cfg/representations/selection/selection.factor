@@ -64,7 +64,7 @@ SYMBOL: costs
 
 : increase-cost ( rep scc factor -- )
     [ costs get at 2dup key? ] dip
-    '[ [ current-loop-nesting 10^ _ * + ] change-at ] [ 2drop ] if ;
+    $[ [ current-loop-nesting 10^ _ * + ] change-at ] [ 2drop ] if ;
 
 :: increase-costs ( vreg preferred factor -- )
     vreg vreg>scc :> scc
@@ -116,7 +116,7 @@ GENERIC: compute-insn-costs ( insn -- ) ;
 M: insn compute-insn-costs drop ;
 
 M: vreg-insn compute-insn-costs
-    dup peephole-optimizable? 2 5 ? '[ _ increase-costs ] each-rep ;
+    dup peephole-optimizable? 2 5 ? $[ _ increase-costs ] each-rep ;
 
 : compute-costs ( cfg -- )
     init-costs
@@ -132,5 +132,5 @@ M: vreg-insn compute-insn-costs
 : compute-representations ( cfg -- )
     compute-costs costs get minimize-costs
     [ components get [ disjoint-set-members ] keep ] dip
-    '[ dup _ representative _ at ] H{ } map>assoc
+    $[ dup _ representative _ at ] H{ } map>assoc
     representations namespaces:set ;

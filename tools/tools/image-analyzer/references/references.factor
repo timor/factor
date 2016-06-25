@@ -12,7 +12,7 @@ QUALIFIED-WITH: tools.image-analyzer.vm vm ;
 GENERIC: pointers ( heap heap-node struct -- seq ) ;
 
 : find-heap-node ( heap ptr -- node )
-    15 unmask '[ address>> _ = ] find nip ;
+    15 unmask $[ address>> _ = ] find nip ;
 
 : load-relocations ( heap code-block -- seq )
     relocation>> find-heap-node payload>> >byte-array byte-array>relocations

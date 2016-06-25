@@ -81,7 +81,7 @@ IN: tools.ps.windows
         TH32CS_SNAPALL do-snapshot
         [ <win32-handle> &dispose drop ]
         [ first-process ]
-        [ '[ drop _ next-process ] follow ] tri
+        [ $[ drop _ next-process ] follow ] tri
         [
             [ th32ProcessID>> ]
             [ th32ProcessID>> open-process-read dup [ read-args ] when ]

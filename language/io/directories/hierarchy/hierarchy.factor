@@ -8,7 +8,7 @@ IN: io.directories.hierarchy
 PRIVATE<
 
 : directory-tree-files% ( path prefix -- )
-    [ dup directory-entries ] dip '[
+    [ dup directory-entries ] dip $[
         [ name>> [ append-path ] [ _ prepend-path ] bi ]
         [ directory? ] bi over ,
         [ directory-tree-files% ] [ 2drop ] if
@@ -20,7 +20,7 @@ PRIVATE>
     [ "" directory-tree-files% ] { } make ;
 
 : with-directory-tree-files ( path quot -- )
-    '[ "" directory-tree-files @ ] with-directory ; inline
+    $[ "" directory-tree-files @ ] with-directory ; inline
 
 : delete-tree ( path -- )
     dup link-info directory? [
@@ -36,7 +36,7 @@ DEFER: copy-trees-into
     over link-info type>>
     {
         { +symbolic-link+ [ copy-link ] }
-        { +directory+ [ '[ _ copy-trees-into ] with-directory-files ] }
+        { +directory+ [ $[ _ copy-trees-into ] with-directory-files ] }
         [ drop copy-file ]
     } case ;
 
@@ -44,4 +44,4 @@ DEFER: copy-trees-into
     to-directory copy-tree ;
 
 : copy-trees-into ( files to -- )
-    '[ _ copy-tree-into ] each ;
+    $[ _ copy-tree-into ] each ;

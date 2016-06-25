@@ -132,17 +132,17 @@ M: end-of-stream cursor-stream-ended? drop t ; inline
 !
 
 : -each ( ... begin end quot: ( ... cursor -- ... ) -- ... )
-    [ '[ dup _ cursor>= ] ]
-    [ '[ _ keep inc-cursor ] ] bi* until drop ; inline
+    [ $[ dup _ cursor>= ] ]
+    [ $[ _ keep inc-cursor ] ] bi* until drop ; inline
 
 : -find ( ... begin end quot: ( ... cursor -- ... ? ) -- ... cursor )
-    '[ dup _ cursor>= [ t ] [ dup @ ] if ] [ inc-cursor ] until ; inline
+    $[ dup _ cursor>= [ t ] [ dup @ ] if ] [ inc-cursor ] until ; inline
 
 : -in- ( quot -- quot' )
-    '[ cursor-value-unsafe @ ] ; inline
+    $[ cursor-value-unsafe @ ] ; inline
 
 : -out- ( quot -- quot' )
-    '[ _ keep set-cursor-value-unsafe ] ; inline
+    $[ _ keep set-cursor-value-unsafe ] ; inline
 
 : -out ( ... begin end quot: ( ... cursor -- ... value ) -- ... )
     -out- -each ; inline
@@ -366,7 +366,7 @@ M: map-cursor set-cursor-value-unsafe to>> set-cursor-value-unsafe ; inline
 M: map-cursor set-cursor-value        to>> set-cursor-value        ; inline
 
 : -map- ( begin end quot to -- begin' end' quot' )
-    swap [ '[ _ <map-cursor> ] bi@ ] dip '[ from>> @ ] -out- ; inline
+    swap [ $[ _ <map-cursor> ] bi@ ] dip $[ from>> @ ] -out- ; inline
 
 : -map ( begin end quot to -- begin' end' quot' )
     -map- -each ; inline
@@ -424,7 +424,7 @@ M: forward-cursor new-sequence-cursor
 !
 
 : -assoc- ( quot -- quot' )
-    '[ cursor-key-value @ ] ; inline
+    $[ cursor-key-value @ ] ; inline
 
 : assoc- ( assoc quot -- begin end quot' )
     all- -assoc- ; inline
@@ -549,7 +549,7 @@ ALIAS: -2in- -assoc- ;
 !
 
 : -unzip- ( quot -- quot' )
-    '[ [ keys>> cursor-value-unsafe ] [ values>> ] bi @ ] ; inline
+    $[ [ keys>> cursor-value-unsafe ] [ values>> ] bi @ ] ; inline
 
 MACRO: nzip-cursors ( n -- quot ) 1 - [ zip-cursors ] n*quot ;
 
@@ -573,7 +573,7 @@ MACRO: -nin- ( n -- quot )
 !
 
 : -with- ( invariant begin end quot -- begin end quot' )
-    [ rot ] dip '[ [ _ ] dip @ ] ; inline
+    [ rot ] dip $[ [ _ ] dip @ ] ; inline
 
 : -2with- ( invariant invariant begin end quot -- begin end quot' )
     -with- -with- ; inline

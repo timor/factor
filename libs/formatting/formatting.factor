@@ -47,10 +47,10 @@ pad-align = ("-")?               => [[ \ pad-tail \ pad-head ? ]]
 pad-width = ([0-9])*             => [[ >digits ]]
 pad       = pad-align pad-char pad-width => [[ <reversed> >quotation dup first 0 = [ drop [ ] ] when ]]
 
-sign_     = [+ ]                 => [[ '[ dup char: - swap index [ _ prefix ] unless ] ]]
+sign_     = [+ ]                 => [[ $[ dup char: - swap index [ _ prefix ] unless ] ]]
 sign      = (sign_)?             => [[ [ ] or ]]
 
-width_    = "." ([0-9])*         => [[ second >digits '[ _ short head ] ]]
+width_    = "." ([0-9])*         => [[ second >digits $[ _ short head ] ]]
 width     = (width_)?            => [[ [ ] or ]]
 
 digits_   = "." ([0-9])*         => [[ second >digits ]]
@@ -65,9 +65,9 @@ fmt-u     = "u"                  => [[ [ unparse ] ]]
 fmt-d     = "d"                  => [[ [ >integer number>string ] ]]
 fmt-o     = "o"                  => [[ [ >integer >oct ] ]]
 fmt-b     = "b"                  => [[ [ >integer >bin ] ]]
-fmt-e     = digits "e"           => [[ first '[ _ format-scientific ] ]]
-fmt-E     = digits "E"           => [[ first '[ _ format-scientific >upper ] ]]
-fmt-f     = digits "f"           => [[ first '[ _ format-decimal ] ]]
+fmt-e     = digits "e"           => [[ first $[ _ format-scientific ] ]]
+fmt-E     = digits "E"           => [[ first $[ _ format-scientific >upper ] ]]
+fmt-f     = digits "f"           => [[ first $[ _ format-decimal ] ]]
 fmt-x     = "x"                  => [[ [ >hex ] ]]
 fmt-X     = "X"                  => [[ [ >hex >upper ] ]]
 unknown   = (.)*                 => [[ unknown-printf-directive ]]
@@ -80,9 +80,9 @@ numbers   = sign pad numbers_    => [[ unclip-last prefix compose-all [ fix-sign
 
 types     = strings|numbers
 
-lists     = "[%" types ", %]"    => [[ second '[ _ map ", " join "{ " prepend " }" append ] ]]
+lists     = "[%" types ", %]"    => [[ second $[ _ map ", " join "{ " prepend " }" append ] ]]
 
-assocs    = "[%" types ": %" types " %]" => [[ [ second ] [ fourth ] bi '[ unzip [ _ map ] dip _ map zip [ ":" join ] map ", " join "{ " prepend " }" append ] ]]
+assocs    = "[%" types ": %" types " %]" => [[ [ second ] [ fourth ] bi $[ unzip [ _ map ] dip _ map zip [ ":" join ] map ", " join "{ " prepend " }" append ] ]]
 
 formats   = "%" (types|fmt-%|lists|assocs|unknown) => [[ second ]]
 
@@ -101,17 +101,17 @@ text      = (formats|plain-text)* => [[ ]]
 PRIVATE>
 
 MACRO: printf ( format-string -- quot )
-    printf-quot '[
+    printf-quot $[
         @ output-stream get [ stream-write ] curry _ napply
     ] ;
 
 MACRO: sprintf ( format-string -- quot )
-    printf-quot '[
+    printf-quot $[
         @ _ "" nappend-as
     ] ;
 
 : vprintf ( seq format-string -- )
-    parse-printf output-stream get '[
+    parse-printf output-stream get $[
         dup string? [
             [ unclip-slice ] dip call( x -- y )
         ] unless _ stream-write
@@ -198,10 +198,10 @@ PRIVATE>
 MACRO: strftime ( format-string -- quot )
     parse-strftime [
         dup string? [
-            '[ _ swap push-all ]
+            $[ _ swap push-all ]
         ] [
-            '[ over @ swap push-all ]
+            $[ over @ swap push-all ]
         ] if
-    ] map '[
+    ] map $[
         SBUF" " clone [ _ cleave drop ] keep "" like
     ] ;

@@ -112,8 +112,8 @@ M: real stream-json-print
 
 M: sequence stream-json-print
     char: \[ over stream-write1 swap
-    over '[ char: , _ stream-write1 ]
-    pick '[ _ stream-json-print ] interleave
+    over $[ char: , _ stream-write1 ]
+    pick $[ _ stream-json-print ] interleave
     char: \] swap stream-write1 ;
 
 PRIVATE<
@@ -133,7 +133,7 @@ M: real json-coerce >float number>string ;
     char: \{ stream stream-write1 obj >alist
     [ char: \, stream stream-write1 ]
     json-friendly-keys? get
-    json-coerce-keys? get '[
+    json-coerce-keys? get $[
         first2 [
             dup string?
             [ _ [ json-friendly ] when ]

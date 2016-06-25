@@ -404,7 +404,7 @@ CONSTANT: VK_OEM_3          0xC0 ; ! '`~' for US
 
 ! 0xD8 - 0xDA : unassigned
 
-CONSTANT: VK_OEM_4          0xDB ; !  '[{' for US
+CONSTANT: VK_OEM_4          0xDB ; !  $[{' for US
 CONSTANT: VK_OEM_5          0xDC ; !  '\|' for US
 CONSTANT: VK_OEM_6          0xDD ; !  ']}' for US
 CONSTANT: VK_OEM_7          0xDE ; !  ''"' for US

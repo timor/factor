@@ -48,7 +48,7 @@ unless
 
 : (make-query-interface) ( interfaces -- quot )
     (query-interface-cases)
-    '[
+    $[
         swap _ case
         [
             void* heap-size * rot <displaced-alien> com-add-ref
@@ -57,7 +57,7 @@ unless
     ] ;
 
 : (make-add-ref) ( interfaces -- quot )
-    length void* heap-size * '[
+    length void* heap-size * $[
         _
         [ alien-unsigned-4 1 + dup ]
         [ set-alien-unsigned-4 ]
@@ -65,7 +65,7 @@ unless
     ] ;
 
 : (make-release) ( interfaces -- quot )
-    length void* heap-size * '[
+    length void* heap-size * $[
         _
         [ drop ]
         [ alien-unsigned-4 1 - dup ]
@@ -83,16 +83,16 @@ unless
 : (thunk) ( n -- quot )
     dup 0 =
     [ drop [ ] ]
-    [ void* heap-size neg * '[ _ swap <displaced-alien> ] ]
+    [ void* heap-size neg * $[ _ swap <displaced-alien> ] ]
     if ;
 
 : (thunked-quots) ( quots iunknown-methods thunk -- {thunk,quot}s )
-    [ '[ @ com-unwrap ] [ swap 2array ] curry map ]
+    [ $[ @ com-unwrap ] [ swap 2array ] curry map ]
     [                   [ swap 2array ] curry map ] bi-curry bi*
     prepend ;
 
 : compile-alien-callback ( word return parameters abi quot -- word )
-    '[ _ _ _ _ alien-callback ]
+    $[ _ _ _ _ alien-callback ]
     [ [ ( -- alien ) define-declared ] pick [ call ] dip ]
     with-compilation-unit ;
 
@@ -101,13 +101,13 @@ unless
     "windows.com.wrapper.callbacks" create-word ;
 
 : (finish-thunk) ( param-count thunk quot -- thunked-quot )
-    [ [ drop [ ] ] [ swap 1 - '[ _ _ ndip ] ] if-empty ]
+    [ [ drop [ ] ] [ swap 1 - $[ _ _ ndip ] ] if-empty ]
     dip compose ;
 
 : (make-interface-callbacks) ( interface quots iunknown-methods n -- words )
     (thunk) (thunked-quots)
     swap [ find-com-interface-definition family-tree-functions ]
-    keep (next-vtbl-counter) '[
+    keep (next-vtbl-counter) $[
         swap [
             [ name>> _ _ (callback-word) ]
             [ return>> ] [ parameter-types>> dup length ] tri

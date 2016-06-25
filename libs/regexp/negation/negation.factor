@@ -37,7 +37,7 @@ CONSTANT: fail-state -1 ;
 
 : unify-final-state ( transition-table -- transition-table )
     dup [ final-states>> members ] keep
-    '[ -2 epsilon _ set-transition ] each
+    $[ -2 epsilon _ set-transition ] each
     HS{ -2 } clone >>final-states ;
 
 : adjoin-dfa ( transition-table -- start end )

@@ -17,7 +17,7 @@ M: irc-chat         has-participant? 2drop f ;
 M: irc-channel-chat has-participant? participants>> key? ;
 
 : rename-X ( new old assoc quot: ( obj value -- obj ) -- )
-    '[ delete-at* drop swap @ ] [ nip set-at ] 3bi ; inline
+    $[ delete-at* drop swap @ ] [ nip set-at ] 3bi ; inline
 
 : rename-nick-chat ( new old -- ) irc> chats>> [ >>name ] rename-X ;
 : rename-participant ( new old chat -- ) participants>> [ >>nick ] rename-X ;
@@ -44,7 +44,7 @@ M: irc-channel-chat has-participant? participants>> key? ;
 
 : apply-modes ( mode-line participant -- )
     [ unclip char: + = ] dip
-    '[ [ _ _ ] dip apply-mode ] each ;
+    $[ [ _ _ ] dip apply-mode ] each ;
 
 : change-participant-mode ( mode channel nick -- )
     swap chat> participants>> at apply-modes ;

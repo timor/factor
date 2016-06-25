@@ -21,7 +21,7 @@ IN: compiler.cfg.stacks.padding
     swap 2dup second member? [ 2drop 2 ] [ first >= [ 1 ] [ 0 ] if ] if ;
 
 : shift-stack ( n stack -- stack' )
-    first2 pick '[ _ + ] map [ 0 >= ] filter pick 0 max iota sets:union
+    first2 pick $[ _ + ] map [ 0 >= ] filter pick 0 max iota sets:union
     [ + ] dip 2array ;
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -33,7 +33,7 @@ CONSTANT: initial-state { { 0 { } } { 0 { } } } ;
 
 : apply-stack-op ( state insn quote: ( n stack -- stack' ) -- state' )
     [ [ first2 ] dip loc>> >loc< ] dip
-    [ '[ rot @ swap ] ] [ '[ swap @ ] ] bi if 2array ; inline
+    [ $[ rot @ swap ] ] [ $[ swap @ ] ] bi if 2array ; inline
 
 : combine-states ( states -- state )
     [ initial-state ] [ flip [ combine-stacks ] map ] if-empty ;

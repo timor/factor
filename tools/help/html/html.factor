@@ -90,7 +90,7 @@ M: pathname url-of
     [ dup 0 > ] [ 1 - 26 /mod char: a + ] "" produce-as nip reverse! ;
 
 : css-class ( style classes -- name )
-    dup '[ drop _ assoc-size 1 + bijective-base26 ] cache ;
+    dup $[ drop _ assoc-size 1 + bijective-base26 ] cache ;
 
 : css-classes ( classes -- stylesheet )
     [
@@ -168,7 +168,7 @@ M: pathname url-of
         { recent-articles f }
         { recent-vocabs f }
     } [
-        all-topics [ '[ _ generate-help-file ] try ] each
+        all-topics [ $[ _ generate-help-file ] try ] each
     ] with-variables ;
 
 : generate-help ( -- )

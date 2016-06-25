@@ -33,7 +33,7 @@ ERROR: incorrect-#bytes ;
 
 M: tcp-echo handle-client*
     [ #times>> ] [ #bytes>> ] bi
-    '[ _ [ _ test-bytes write-read ] times ] call ;
+    $[ _ [ _ test-bytes write-read ] times ] call ;
 
 : server>address ( server -- port )
     servers>> first addr>> port>> local-server ;

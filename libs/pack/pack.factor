@@ -95,8 +95,8 @@ PRIVATE>
 
 MACRO: pack ( str -- quot )
     expand-pack-format
-    [ pack-table at '[ _ execute ] ] { } map-as
-    '[ [ [ _ spread ] input<sequence ] B{ } append-outputs-as ] ;
+    [ pack-table at $[ _ execute ] ] { } map-as
+    $[ [ [ _ spread ] input<sequence ] B{ } append-outputs-as ] ;
 
 : ch>packed-length ( ch -- n )
     packed-length-table at ; inline
@@ -105,13 +105,13 @@ MACRO: pack ( str -- quot )
     [ ch>packed-length ] map-sum ;
 
 : pack-native ( seq str -- seq )
-    '[ _ _ pack ] with-native-endian ; inline
+    $[ _ _ pack ] with-native-endian ; inline
 
 : pack-be ( seq str -- seq )
-    '[ _ _ pack ] with-big-endian ; inline
+    $[ _ _ pack ] with-big-endian ; inline
 
 : pack-le ( seq str -- seq )
-    '[ _ _ pack ] with-little-endian ; inline
+    $[ _ _ pack ] with-little-endian ; inline
 
 PRIVATE<
 
@@ -123,18 +123,18 @@ PRIVATE>
 MACRO: unpack ( str -- quot )
     expand-pack-format
     [ [ ch>packed-length ] { } map-as start/end ]
-    [ [ unpack-table at '[ @ ] ] { } map-as ] bi
-    [ '[ [ _ _ ] dip <slice> @ ] ] 3map
-    '[ [ _ cleave ] output>array ] ;
+    [ [ unpack-table at $[ @ ] ] { } map-as ] bi
+    [ $[ [ _ _ ] dip <slice> @ ] ] 3map
+    $[ [ _ cleave ] output>array ] ;
 
 : unpack-native ( seq str -- seq )
-    '[ _ _ unpack ] with-native-endian ; inline
+    $[ _ _ unpack ] with-native-endian ; inline
 
 : unpack-be ( seq str -- seq )
-    '[ _ _ unpack ] with-big-endian ; inline
+    $[ _ _ unpack ] with-big-endian ; inline
 
 : unpack-le ( seq str -- seq )
-    '[ _ _ unpack ] with-little-endian ; inline
+    $[ _ _ unpack ] with-little-endian ; inline
 
 ERROR: packed-read-fail str bytes ;
 

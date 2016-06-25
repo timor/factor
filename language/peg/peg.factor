@@ -339,7 +339,7 @@ TUPLE: token-parser symbol ;
     ] if ;
 
 M: token-parser (compile) ( peg -- quot )
-    symbol>> '[ input-slice _ parse-token ] ;
+    symbol>> $[ input-slice _ parse-token ] ;
 
 TUPLE: satisfy-parser quot ;
 
@@ -355,7 +355,7 @@ TUPLE: satisfy-parser quot ;
     ] if-empty ; inline
 
 M: satisfy-parser (compile)
-    quot>> '[ input-slice _ parse-satisfy ] ;
+    quot>> $[ input-slice _ parse-satisfy ] ;
 
 TUPLE: range-parser min max ;
 
@@ -371,7 +371,7 @@ TUPLE: range-parser min max ;
     ] if ;
 
 M: range-parser (compile)
-    [ min>> ] [ max>> ] bi '[ input-slice _ _ parse-range ] ;
+    [ min>> ] [ max>> ] bi $[ input-slice _ _ parse-range ] ;
 
 TUPLE: seq-parser parsers ;
 
@@ -428,7 +428,7 @@ TUPLE: repeat0-parser parser ;
     ] if* ; inline recursive
 
 M: repeat0-parser (compile)
-    parser>> compile-parser-quot '[
+    parser>> compile-parser-quot $[
         input-slice V{ } clone <parse-result> _ swap (repeat)
     ] ;
 
@@ -442,7 +442,7 @@ TUPLE: repeat1-parser parser ;
     ] if* ;
 
 M: repeat1-parser (compile)
-    parser>> compile-parser-quot '[
+    parser>> compile-parser-quot $[
         input-slice V{ } clone <parse-result> _ swap (repeat)
         repeat1-empty-check
     ] ;
@@ -453,7 +453,7 @@ TUPLE: optional-parser parser ;
       [ input-slice f <parse-result> ] unless* ;
 
 M: optional-parser (compile)
-      parser>> compile-parser-quot '[ @ check-optional ] ;
+      parser>> compile-parser-quot $[ @ check-optional ] ;
 
 TUPLE: semantic-parser parser quot ;
 
@@ -466,7 +466,7 @@ TUPLE: semantic-parser parser quot ;
 
 M: semantic-parser (compile)
     [ parser>> compile-parser-quot ] [ quot>> ] bi
-    '[ @ _ check-semantic ] ;
+    $[ @ _ check-semantic ] ;
 
 TUPLE: ensure-parser parser ;
 
@@ -474,7 +474,7 @@ TUPLE: ensure-parser parser ;
     [ ignore <parse-result> ] [ drop f ] if ;
 
 M: ensure-parser (compile)
-    parser>> compile-parser-quot '[ input-slice @ check-ensure ] ;
+    parser>> compile-parser-quot $[ input-slice @ check-ensure ] ;
 
 TUPLE: ensure-not-parser parser ;
 
@@ -482,7 +482,7 @@ TUPLE: ensure-not-parser parser ;
     [ drop f ] [ ignore <parse-result> ] if ;
 
 M: ensure-not-parser (compile)
-    parser>> compile-parser-quot '[ input-slice @ check-ensure-not ] ;
+    parser>> compile-parser-quot $[ input-slice @ check-ensure-not ] ;
 
 TUPLE: action-parser parser quot ;
 
@@ -494,12 +494,12 @@ TUPLE: action-parser parser quot ;
     ] if ;
 
 M: action-parser (compile)
-    [ parser>> compile-parser-quot ] [ quot>> ] bi '[ @ _ check-action ] ;
+    [ parser>> compile-parser-quot ] [ quot>> ] bi $[ @ _ check-action ] ;
 
 TUPLE: sp-parser parser ;
 
 M: sp-parser (compile)
-    parser>> compile-parser-quot '[
+    parser>> compile-parser-quot $[
         input-slice [ blank? ] trim-head-slice input-from pos namespaces:set @
     ] ;
 

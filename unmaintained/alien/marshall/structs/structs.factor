@@ -28,8 +28,8 @@ PRIVATE<
 : define-struct-constructor ( class -- )
     {
         [ name>> "<" prepend ">" append create-word-in ]
-        [ '[ _ new ] ]
-        [ name>> '[ _ malloc-struct >>underlying ] append ]
+        [ $[ _ new ] ]
+        [ name>> $[ _ malloc-struct >>underlying ] append ]
         [ name>> 1array ]
     } cleave { } swap <effect> define-declared ;
 PRIVATE>

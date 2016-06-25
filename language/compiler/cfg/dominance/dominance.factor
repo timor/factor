@@ -35,7 +35,7 @@ PRIVATE<
 : compute-dom-parents ( cfg -- )
     H{ } clone dom-parents set
     reverse-post-order
-    unclip dup set-idom drop '[ _ iterate ] loop ;
+    unclip dup set-idom drop $[ _ iterate ] loop ;
 
 SYMBOL: dom-childrens
 
@@ -46,7 +46,7 @@ PRIVATE>
 PRIVATE<
 
 : compute-dom-children ( dom-parents -- dom-childrens )
-    H{ } clone [ '[ 2dup eq? [ 2drop ] [ _ push-at ] if ] assoc-each ] keep
+    H{ } clone [ $[ 2dup eq? [ 2drop ] [ _ push-at ] if ] assoc-each ] keep
     [ [ number>> ] sort-with ] assoc-map ;
 
 SYMBOLS: preorder maxpreorder ;

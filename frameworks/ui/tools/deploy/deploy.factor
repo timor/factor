@@ -73,7 +73,7 @@ TUPLE: deploy-gadget < pack vocab settings ;
 
 : com-deploy ( gadget -- )
     [ com-save ]
-    [ find-deploy-vocab '[ _ deploy ] \ deploy call-listener ]
+    [ find-deploy-vocab $[ _ deploy ] \ deploy call-listener ]
     [ close-window ]
     tri ;
 

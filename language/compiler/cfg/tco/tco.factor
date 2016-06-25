@@ -27,7 +27,7 @@ IN: compiler.cfg.tco
     instructions>> penultimate ##call? ;
 
 : convert-tail-call ( ..a bb quot: ( ..a insn -- ..a tail-insn ) -- ..b )
-    '[
+    $[
         instructions>>
         [ pop* ] [ pop ] [ ] tri
         [ [ ##safepoint new-insn ] dip push ]

@@ -98,7 +98,7 @@ M: zmq-socket zmq-setopt
 
 : zmq-send ( socket byte-array flags -- )
     [ byte-array>zmq-message ] dip
-    '[ _ zmq-sendmsg ] with-disposal ;
+    $[ _ zmq-sendmsg ] with-disposal ;
 
 : zmq-recv ( socket flags -- byte-array )
     <zmq-message> [

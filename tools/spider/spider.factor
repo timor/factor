@@ -49,11 +49,11 @@ PRIVATE<
 
 : apply-filters ( links spider -- links' )
     filters>> [
-        '[ [ _ 1&& ] filter ] call( seq -- seq' )
+        $[ [ _ 1&& ] filter ] call( seq -- seq' )
     ] when* ;
 
 : push-links ( links level unique-deque -- )
-    '[ _ _ push-url ] each ;
+    $[ _ _ push-url ] each ;
 
 : add-todo ( links level spider -- )
     todo>> push-links ;

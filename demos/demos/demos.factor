@@ -6,7 +6,7 @@ IN: demos
 : demo-vocabs ( -- seq ) "demos" tagged values concat [ name>> ] map ;
 
 : <run-vocab-button> ( vocab-name -- button )
-    dup '[ drop [ _ run ] \ run call-listener ] <border-button> ;
+    dup $[ drop [ _ run ] \ run call-listener ] <border-button> ;
 
 : <demo-runner> ( -- gadget )
     <pile> 1 >>fill { 2 2 } >>gap demo-vocabs [ <run-vocab-button> add-gadget ] each ;

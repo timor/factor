@@ -88,7 +88,7 @@ ERROR: ftp-error got expected ;
 
 : with-ftp-client ( url quot -- )
     [ [ ftp-connect ] keep ] dip
-    '[ _ [ ftp-login ] _ bi ftp-quit drop ] with-stream ; inline
+    $[ _ [ ftp-login ] _ bi ftp-quit drop ] with-stream ; inline
 
 : ensure-login ( url -- url )
     dup username>> [

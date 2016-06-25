@@ -304,7 +304,7 @@ GENERIC: pad-initial-bytes ( string sha2 -- padded-string ) ;
     [ word-size>> <groups> [ be> ] map ]
     [
         block-size>> [ 0 pad-tail 16 ] keep [a,b) over
-        '[ _ prepare-M-256 ] each
+        $[ _ prepare-M-256 ] each
     ] bi ; inline
 
 :: process-chunk ( M block-size cloned-H sha2 -- )
@@ -320,7 +320,7 @@ M: sha2-short checksum-block
     [ [ block-size>> ] [ H>> clone ] [ ] tri process-chunk ] bi ;
 
 : sequence>byte-array ( seq n -- bytes )
-    '[ _ >be ] map B{ } concat-as ; inline
+    $[ _ >be ] map B{ } concat-as ; inline
 
 : sha1>checksum ( sha2 -- bytes )
     H>> 4 sequence>byte-array ; inline
@@ -356,7 +356,7 @@ M: sha-256-state get-checksum
 : prepare-sha1-message-schedule ( seq -- w-seq )
     4 <groups> [ be> ] map
     80 0 pad-tail 16 80 [a,b) over
-    '[ _ sha1-W ] each ; inline
+    $[ _ sha1-W ] each ; inline
 
 : sha1-f ( B C D n -- f_nbcd )
     20 /i

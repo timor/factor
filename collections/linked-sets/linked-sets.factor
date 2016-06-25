@@ -17,7 +17,7 @@ M: linked-set clear-set
 PRIVATE<
 
 : (delete-at) ( key assoc dlist -- )
-    '[ at [ _ delete-node ] when* ] [ delete-at ] 2bi ; inline
+    $[ at [ _ delete-node ] when* ] [ delete-at ] 2bi ; inline
 
 PRIVATE>
 
@@ -28,7 +28,7 @@ M: linked-set cardinality assoc>> assoc-size ;
 
 M: linked-set adjoin
     [ assoc>> ] [ dlist>> ] bi
-    '[ _ 2over key? [ 3dup (delete-at) ] when nip push-back* ]
+    $[ _ 2over key? [ 3dup (delete-at) ] when nip push-back* ]
     [ set-at ] 2bi ;
 
 M: linked-set members

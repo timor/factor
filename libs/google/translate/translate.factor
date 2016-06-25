@@ -42,7 +42,7 @@ TUPLE: response-error response error ;
 
 : translate ( text from to -- text' )
     [ maximum-translation-size group ] 2dip
-    '[ _ _ (translate) ] map concat ;
+    $[ _ _ (translate) ] map concat ;
 
 :: translation-party ( text source target -- )
     text dup print [

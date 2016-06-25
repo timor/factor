@@ -261,8 +261,8 @@ COMPILE< \"length\" [ length ] define-sorting >>"
     { $slide "Fry"
         "Used to construct quotations"
         { "'Holes', represented by " { $snippet "_" } " are filled left to right" }
-        { $code "10 4 '[ _ + ] call" }
-        { $code "3 4 '[ _ sq _ + ] call" }
+        { $code "10 4 $[ _ + ] call" }
+        { $code "3 4 $[ _ sq _ + ] call" }
     }
     { $slide "Locals"
         "When data flow combinators and shuffle words are not enough"
@@ -285,12 +285,12 @@ COMPILE< \"length\" [ length ] define-sorting >>"
         { $code
             ": area ( a b c -- x )
     [ ] [ + + 2 / ] 3bi
-    [ '[ _ - ] tri@ ] [ neg ] bi
+    [ $[ _ - ] tri@ ] [ neg ] bi
     * * * sqrt ;" }
     }
     { $slide "More idiomatic version"
         "But there's a trick: put the lengths in an array"
-        { $code ": v-n ( v n -- w ) '[ _ - ] map ;
+        { $code ": v-n ( v n -- w ) $[ _ - ] map ;
 
 : area ( seq -- x )
     [ 0 suffix ] [ sum 2 / ] bi
@@ -327,7 +327,7 @@ var price = (order == null ? null : order.price);" }
         "Constructed using map, fry, and concat"
         { $code "MACRO: plox ( seq -- quot )
     [
-        '[ dup _ when ]
+        $[ dup _ when ]
     ] map [ ] concat-as ;"
         }
     }

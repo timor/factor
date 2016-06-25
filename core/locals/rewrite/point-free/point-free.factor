@@ -9,7 +9,7 @@ IN: locals.rewrite.point-free
 ! retain stack manipulation
 
 : local-index ( args obj -- n )
-    2dup '[ unquote _ eq? ] find drop
+    2dup $[ unquote _ eq? ] find drop
     [ 2nip ] [ bad-local ] if* ;
 
 : read-local-quot ( args obj -- quot )

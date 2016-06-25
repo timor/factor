@@ -20,7 +20,7 @@ MACRO: set-slot ( name -- quot: ( value tuple -- ) )
 ! In-place modifiers akin to *-at or *-nth
 
 : change-slot ( ..a tuple name quot: ( ..a old -- ..b new ) -- ..b )
-    '[ slot @ ] [ set-slot ] 2bi ; inline
+    $[ slot @ ] [ set-slot ] 2bi ; inline
 
 : inc-slot ( tuple name -- )
     [ 0 or 1 + ] change-slot ; inline
@@ -34,22 +34,22 @@ MACRO: set-slot ( name -- quot: ( value tuple -- ) )
 ! Chainable setters
 
 : set-slot* ( tuple value name -- tuple )
-    swapd '[ _ set-slot ] keep ; inline
+    swapd $[ _ set-slot ] keep ; inline
 
 : change-slot* ( tuple name quot: ( ..a old -- ..b new ) -- ..b tuple )
-    '[ _ _ change-slot ] keep ; inline
+    $[ _ _ change-slot ] keep ; inline
 
 ! Multiple-slot accessors
 
 MACRO: slots ( names -- quot: ( tuple -- values... ) )
-    [ '[ _ slot ] ] { } map-as '[ _ cleave ] ;
+    [ $[ _ slot ] ] { } map-as $[ _ cleave ] ;
 
 MACRO: slots>array ( names -- quot: ( tuple -- values ) )
-    dup length '[ _ slots _ narray ] ;
+    dup length $[ _ slots _ narray ] ;
 
 MACRO: set-slots ( names -- quot: ( values... tuple -- ) )
-    [ [ '[ _ set-slot ] ] [ ] map-as ] [ length dup ] bi
-    '[ @ _ cleave-curry _ spread* ] ;
+    [ [ $[ _ set-slot ] ] [ ] map-as ] [ length dup ] bi
+    $[ @ _ cleave-curry _ spread* ] ;
 
 MACRO: set-tuple-slots ( names -- quot: ( values tuple -- ) )
-    [ length ] keep '[ [ _ firstn ] dip _ set-slots ] ;
+    [ length ] keep $[ [ _ firstn ] dip _ set-slots ] ;

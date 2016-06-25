@@ -51,7 +51,7 @@ ERROR: bit-range-error x high low ;
 : W* ( x y -- z ) * 64 bits ; inline
 
 : symbols>flags ( symbols assoc -- flag-bits )
-    '[ _ at ] map 0 [ bitor ] reduce ;
+    $[ _ at ] map 0 [ bitor ] reduce ;
 
 ! bitfield
 PRIVATE<
@@ -59,20 +59,20 @@ PRIVATE<
 GENERIC: (bitfield-quot) ( spec -- quot ) ;
 
 M: integer (bitfield-quot) ( spec -- quot )
-    '[ _ shift ] ;
+    $[ _ shift ] ;
 
 M: pair (bitfield-quot) ( spec -- quot )
     first2-unsafe over word? [
-        '[ _ execute _ shift ]
+        $[ _ execute _ shift ]
     ] [
-        '[ _ _ shift ]
+        $[ _ _ shift ]
     ] if ;
 
 PRIVATE>
 
 MACRO: bitfield ( bitspec -- quot )
     [ [ 0 ] ] [
-        [ (bitfield-quot) ] [ '[ @ _ dip bitor ] ] map-reduce
+        [ (bitfield-quot) ] [ $[ @ _ dip bitor ] ] map-reduce
     ] if-empty ;
 
 ! bit-count
@@ -85,7 +85,7 @@ COMPILE<
 \ byte-bit-count
 256 iota [
     8 <bits> 0 [ [ 1 + ] when ] reduce
-] B{ } map-as '[ 0xff bitand _ nth-unsafe ]
+] B{ } map-as $[ 0xff bitand _ nth-unsafe ]
 ( byte -- table ) define-declared
 
 \ byte-bit-count make-inline

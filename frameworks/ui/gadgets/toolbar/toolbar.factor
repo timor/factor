@@ -25,7 +25,7 @@ PRIVATE>
 :: <toolbar-button> ( target gesture command -- button )
     command command-name
     target command command-button-quot
-    '[ drop @ ] <button> toolbar-button-theme
+    $[ drop @ ] <button> toolbar-button-theme
     gesture gesture>tooltip >>tooltip ; inline
 
 : <toolbar> ( target -- toolbar )
@@ -35,7 +35,7 @@ PRIVATE>
         { 5 5 } >>gap
         swap
         [ [ "toolbar" ] dip class-of get-command-at commands>> ]
-        [ '[ [ _ ] 2dip <toolbar-button> f track-add ] ]
+        [ $[ [ _ ] 2dip <toolbar-button> f track-add ] ]
         bi assoc-each ;
 
 : format-toolbar ( toolbar -- toolbar )

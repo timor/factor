@@ -56,7 +56,7 @@ CHLOE: write-atom drop [ write-atom-feeds ] [code] ;
 
 : compile-link-attrs ( tag -- )
     ! Side-effects current namespace.
-    '[ [ [ _ ] dip link-attr ] each-responder ] [code] ;
+    $[ [ [ _ ] dip link-attr ] each-responder ] [code] ;
 
 : process-attrs ( assoc -- newassoc )
     [ "@" ?head [ value present ] when ] assoc-map ;
@@ -89,7 +89,7 @@ CHLOE: base
     [ "," split [ hidden render>xml ] map ] [ f ] if* ;
 
 : compile-hidden-form-fields ( for -- )
-    '[
+    $[
         _ render-hidden
         hidden-nested-fields
         form-modifications

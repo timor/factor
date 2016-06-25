@@ -16,7 +16,7 @@ SYNTAX: \ MDBTUPLE:
 
 : define-persistent ( class collection slot-options index -- )
     [ [ <mdb-tuple-collection> dupd link-collection ] when* ] 2dip
-    [ dup '[ _ mdb-persistent add-mixin-instance ] with-compilation-unit ] 2dip
+    [ dup $[ _ mdb-persistent add-mixin-instance ] with-compilation-unit ] 2dip
     [ drop set-slot-map ]
     [ nip set-index-map ] 3bi ; inline
 
@@ -24,7 +24,7 @@ SYNTAX: \ MDBTUPLE:
     tuple-collection
     [ create-collection ]
     [ [ mdb-index-map values ] keep
-      '[ _ name>> >>ns ensure-index ] each
+      $[ _ name>> >>ns ensure-index ] each
     ] bi ;
 
 : ensure-tables ( classes -- )
@@ -33,7 +33,7 @@ SYNTAX: \ MDBTUPLE:
 : drop-table ( class -- )
       tuple-collection
       [ [ mdb-index-map values ] keep
-        '[ _ name>> swap name>> drop-index ] each ]
+        $[ _ name>> swap name>> drop-index ] each ]
       [ name>> drop-collection ] bi ;
 
 : recreate-table ( class -- )
@@ -53,7 +53,7 @@ M: mdb-persistent id-selector
    >toid id-selector ;
 
 : (save-tuples) ( collection assoc -- )
-   swap '[ [ _ ] 2dip
+   swap $[ [ _ ] 2dip
            [ id-selector ] dip
            <update> >upsert update ] assoc-each ; inline
 

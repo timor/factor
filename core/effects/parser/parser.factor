@@ -9,7 +9,7 @@ DEFER: parse-effect
 
 ERROR: bad-effect ;
 ERROR: invalid-row-variable ;
-ERROR: row-variable-can't-have-type ;
+ERROR: row-variable-cant-have-type ;
 ERROR: stack-effect-omits-dashes ;
 
 SYMBOL: effect-var
@@ -23,7 +23,7 @@ PRIVATE<
 
 : parse-effect-var ( first? var name -- var )
     nip
-    [ ":" ?tail [ row-variable-can't-have-type ] when ] curry
+    [ ":" ?tail [ row-variable-cant-have-type ] when ] curry
     [ invalid-row-variable ] if ;
 
 : parse-effect-value ( token -- value )
@@ -67,11 +67,11 @@ PRIVATE>
 
 CONSTANT: in-definition HS{ } ;
 
-ERROR: can't-nest-definitions word ;
+ERROR: cant-nest-definitions word ;
 
 : set-in-definition ( -- )
     manifest get current-vocab>> t or in-definition ?adjoin
-    [ last-word can't-nest-definitions ] unless ;
+    [ last-word cant-nest-definitions ] unless ;
 
 : unset-in-definition ( -- )
     manifest get current-vocab>> t or in-definition delete ;

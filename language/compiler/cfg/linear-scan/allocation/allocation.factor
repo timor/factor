@@ -12,7 +12,7 @@ IN: compiler.cfg.linear-scan.allocation
 
 : inactive-positions ( new assoc -- )
     [ [ inactive-intervals-for ] keep ] dip
-    '[
+    $[
         [ _ intersect-intervals 1/0. or ] [ reg>> ] bi
         _ add-use-position
     ] each ;

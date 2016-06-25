@@ -49,10 +49,10 @@ HOOK: (directory-entries) os ( path -- seq ) ;
     directory-entries [ name>> ] map! ;
 
 : with-directory-entries ( path quot -- )
-    '[ "" directory-entries @ ] with-directory ; inline
+    $[ "" directory-entries @ ] with-directory ; inline
 
 : with-directory-files ( path quot -- )
-    '[ "" directory-files @ ] with-directory ; inline
+    $[ "" directory-files @ ] with-directory ; inline
 
 ! Touching files
 HOOK: touch-file io-backend ( path -- ) ;
@@ -63,7 +63,7 @@ HOOK: delete-file io-backend ( path -- ) ;
 HOOK: delete-directory io-backend ( path -- ) ;
 
 : ?delete-file ( path -- )
-    '[ _ delete-file ] ignore-errors ;
+    $[ _ delete-file ] ignore-errors ;
 
 : to-directory ( from to -- from to' )
     over file-name append-path ;
@@ -75,7 +75,7 @@ HOOK: move-file io-backend ( from to -- ) ;
     to-directory move-file ;
 
 : move-files-into ( files to -- )
-    '[ _ move-file-into ] each ;
+    $[ _ move-file-into ] each ;
 
 ! Copying files
 HOOK: copy-file io-backend ( from to -- ) ;
@@ -91,7 +91,7 @@ M: object copy-file
     to-directory copy-file ;
 
 : copy-files-into ( files to -- )
-    '[ _ copy-file-into ] each ;
+    $[ _ copy-file-into ] each ;
 
 {
     { [ os unix? ] [ "io.directories.unix" require ] }

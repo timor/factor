@@ -88,7 +88,7 @@ SYMBOL: terms
 
 : wedge ( x y -- x.y )
     [ >alt ] bi@ [
-        swap building get '[
+        swap building get $[
             [
                 2swap [
                     swapd * -rot (wedge) _ at+

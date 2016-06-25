@@ -351,10 +351,10 @@ CONSTANT: google-slides
         { $code
             "USE: io.monitors"
             ""
-            ": forever ( quot -- ) '[ @ t ] loop ; inline"
+            ": forever ( quot -- ) $[ @ t ] loop ; inline"
             ""
             "\"/tmp\" t <monitor>"
-            "'[ _ next-change . ] forever"
+            "$[ _ next-change . ] forever"
         }
     }
     { $slide "Example: time server"
@@ -437,7 +437,7 @@ CONSTANT: google-slides
     }
     { $slide "Compiler: escape analysis"
         "We identify allocations for tuples which are never returned or passed to other words (except slot access)"
-        { "Partial application with " { $link postpone\ '[ } }
+        { "Partial application with " { $link postpone\ $[ } }
         "Complex numbers"
     }
     { $slide "Compiler: escape analysis"

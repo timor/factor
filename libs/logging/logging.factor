@@ -99,7 +99,7 @@ PRIVATE>
 : input# ( word -- n ) stack-effect in>> length ;
 
 : input-logging-quot ( quot word level -- quot' )
-    rot [ [ input# ] keep ] 2dip '[ _ _ _ log-stack @ ] ;
+    rot [ [ input# ] keep ] 2dip $[ _ _ _ log-stack @ ] ;
 
 : add-input-logging ( word level -- )
     [ input-logging-quot ] (define-logging) ;
@@ -107,7 +107,7 @@ PRIVATE>
 : output# ( word -- n ) stack-effect out>> length ;
 
 : output-logging-quot ( quot word level -- quot' )
-    [ [ output# ] keep ] dip '[ @ _ _ _ log-stack ] ;
+    [ [ output# ] keep ] dip $[ @ _ _ _ log-stack ] ;
 
 : add-output-logging ( word level -- )
     [ output-logging-quot ] (define-logging) ;
@@ -131,7 +131,7 @@ PRIVATE>
 
 : error-logging-quot ( quot word -- quot' )
     dup stack-effect stack-balancer
-    '[ _ [ _ log-error @ ] recover ] ;
+    $[ _ [ _ log-error @ ] recover ] ;
 
 : add-error-logging ( word level -- )
     [ [ input-logging-quot ] 2keep drop error-logging-quot ]
@@ -140,7 +140,7 @@ PRIVATE>
 SYNTAX: \ LOG:
     ! Syntax: name level
     scan-new-word dup scan-word ";" expect
-    '[ 1array stack>message _ _ log-message ]
+    $[ 1array stack>message _ _ log-message ]
     ( message -- ) define-declared ;
 
 USE: vocabs

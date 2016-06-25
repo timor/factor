@@ -79,7 +79,7 @@ TUPLE: alien-callback-params < alien-node-params xt ;
     pop-params
     pop-return
     ! Coerce parameters to required types
-    dup param-prep-quot '[ _ [ >c-ptr ] bi* ] infer-quot-here
+    dup param-prep-quot $[ _ [ >c-ptr ] bi* ] infer-quot-here
     ! Magic #: consume the function pointer, too
     dup 1 alien-stack
     ! Add node to IR
@@ -108,14 +108,14 @@ TUPLE: alien-callback-params < alien-node-params xt ;
 
 : callback-bottom ( params -- )
     "( callback )" <uninterned-word> >>xt
-    xt>> '[ _ callback-xt { alien } declare ] infer-quot-here ;
+    xt>> $[ _ callback-xt { alien } declare ] infer-quot-here ;
 
 : callback-return-quot ( ctype -- quot )
     return>> [ [ ] ] [ lookup-c-type c-type-unboxer-quot ] if-void ;
 
 : callback-parameter-quot ( params -- quot )
     parameters>> [ lookup-c-type ] map
-    [ [ c-type-class ] map '[ _ declare ] ]
+    [ [ c-type-class ] map $[ _ declare ] ]
     [ [ c-type-boxer-quot ] map deep-spread>quot ]
     bi append ;
 
@@ -128,7 +128,7 @@ wait-for-callback-hook [ [ drop ] ] initialize
 M: callable wrap-callback-quot
     swap [ callback-parameter-quot ] [ callback-return-quot ] bi surround
     wait-for-callback-hook get
-    '[ _ _ do-callback ] >quotation ;
+    $[ _ _ do-callback ] >quotation ;
 
 : callback-effect ( params -- effect )
     [ parameters>> length "x" <array> ]

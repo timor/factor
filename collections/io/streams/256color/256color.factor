@@ -57,7 +57,7 @@ intensities |[ r i |
     [ 255 * round >integer ] tri@ 3array ;
 
 : color>256color ( color -- 256color )
-    color>rgb '[ _ distance ]
+    color>rgb $[ _ distance ]
     256colors [ keys swap infimum-by ] [ at ] bi ;
 
 : color>foreground ( color -- string )

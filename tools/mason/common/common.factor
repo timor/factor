@@ -27,7 +27,7 @@ SYMBOL: current-git-id
 
 : retry ( n quot -- )
     [ iota ] dip
-    '[ drop @ f ] attempt-all drop ; inline
+    $[ drop @ f ] attempt-all drop ; inline
 
 : upload-process ( process -- )
     ! Give network operations and shell commands at most

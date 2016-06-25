@@ -6,7 +6,7 @@ IN: compiler.cfg.stacks.vacant
 : vacant>bits ( vacant --  bits )
     [ { } ] [
         dup supremum 1 + 1 <array>
-        [ '[ _ 0 -rot set-nth ] each ] keep
+        [ $[ _ 0 -rot set-nth ] each ] keep
     ] if-empty ;
 
 : state>gc-data ( state -- gc-data )

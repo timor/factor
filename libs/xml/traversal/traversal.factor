@@ -30,10 +30,10 @@ IN: xml.traversal
     dup tag? [ names-match? ] [ 2drop f ] if ;
 
 : tag-named ( tag name/string -- matching-tag )
-    assure-name '[ _ swap tag-named? ] find nip ;
+    assure-name $[ _ swap tag-named? ] find nip ;
 
 : tags-named ( tag name/string -- tags-seq )
-    assure-name '[ _ swap tag-named? ] { } filter-as ;
+    assure-name $[ _ swap tag-named? ] { } filter-as ;
 
 PRIVATE<
 
@@ -43,28 +43,28 @@ PRIVATE<
 PRIVATE>
 
 : deep-tag-named ( tag name/string -- matching-tag )
-    prepare-deep '[ _ swap tag-named? ] deep-find ;
+    prepare-deep $[ _ swap tag-named? ] deep-find ;
 
 : deep-tags-named ( tag name/string -- tags-seq )
-    prepare-deep '[ _ swap tag-named? ] { } deep-filter-as ;
+    prepare-deep $[ _ swap tag-named? ] { } deep-filter-as ;
 
 : tag-with-attr? ( elem attr-value attr-name -- ? )
     rot dup tag? [ swap attr = ] [ 3drop f ] if ;
 
 : tag-with-attr ( tag attr-value attr-name -- matching-tag )
-    assure-name '[ _ _ tag-with-attr? ] find nip ;
+    assure-name $[ _ _ tag-with-attr? ] find nip ;
 
 : tag-named-with-attr ( tag tag-name attr-value attr-name -- matching-tag )
-    [ tags-named ] 2dip '[ _ _ tag-with-attr? ] find nip ;
+    [ tags-named ] 2dip $[ _ _ tag-with-attr? ] find nip ;
 
 : tags-with-attr ( tag attr-value attr-name -- tags-seq )
-    assure-name '[ _ _ tag-with-attr? ] { } filter-as ;
+    assure-name $[ _ _ tag-with-attr? ] { } filter-as ;
 
 : deep-tag-with-attr ( tag attr-value attr-name -- matching-tag )
-    assure-name '[ _ _ tag-with-attr? ] deep-find ;
+    assure-name $[ _ _ tag-with-attr? ] deep-find ;
 
 : deep-tags-with-attr ( tag attr-value attr-name -- tags-seq )
-    assure-name '[ _ _ tag-with-attr? ] deep-filter ;
+    assure-name $[ _ _ tag-with-attr? ] deep-filter ;
 
 : get-id ( tag id -- elem )
     "id" deep-tag-with-attr ;

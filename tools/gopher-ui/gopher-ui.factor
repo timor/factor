@@ -38,10 +38,10 @@ M: gopher-gadget model-changed
     2bi ;
 
 : <url-field> ( gopher-gadget -- field )
-    '[ >url _ show-gopher ] <action-field> ;
+    $[ >url _ show-gopher ] <action-field> ;
 
 : <gopher-pane> ( gopher-gadget -- gadget )
-    model>> [ '[ _ [ gopher. ] when* ] try ] <pane-control> ;
+    model>> [ $[ _ [ gopher. ] when* ] try ] <pane-control> ;
 
 : <gopher-toolbar> ( browser -- toolbar )
     horizontal <track>

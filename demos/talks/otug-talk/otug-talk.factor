@@ -53,14 +53,14 @@ CONSTANT: otug-slides
     { $slide "Constructing quotations"
         { "Suppose we want a " { $snippet "remove-comments*" } " word" }
         { $code ": remove-comments* ( lines string -- lines' )" "    [ ??? head? ] reject ;" }
-        { "We use " { $link postpone\ '[ } " instead of " { $link postpone\ [ } }
+        { "We use " { $link postpone\ $[ } " instead of " { $link postpone\ [ } }
         { "Create “holes” with " { $link _ } }
         "Holes filled in left to right when quotation pushed on the stack"
     }
     { $slide "Constructing quotations"
-        { $code ": remove-comments* ( lines string -- lines' )" "    '[ _ head? ] reject ;" "" ": remove-comments ( lines -- lines' )" "    \"#\" remove-comments* ;" }
+        { $code ": remove-comments* ( lines string -- lines' )" "    $[ _ head? ] reject ;" "" ": remove-comments ( lines -- lines' )" "    \"#\" remove-comments* ;" }
         { { $link @ } " inserts a quotation" }
-        { $code ": replicate ( n quot -- seq )" "    '[ drop @ ] map ;" }
+        { $code ": replicate ( n quot -- seq )" "    $[ drop @ ] map ;" }
         { $code "10 [ 1 10 [a,b] random ] replicate ." }
     }
     { $slide "Combinators"
@@ -141,12 +141,12 @@ CONSTANT: otug-slides
         { $code
             ": area ( a b c -- x )
     [ ] [ + + 2 / ] 3bi
-    [ '[ _ - ] tri@ ] [ neg ] bi
+    [ $[ _ - ] tri@ ] [ neg ] bi
     * * * sqrt ;" }
     }
     { $slide "More idiomatic version"
         "But there's a trick: put the points in an array"
-        { $code ": v-n ( v n -- w ) '[ _ - ] map ;
+        { $code ": v-n ( v n -- w ) $[ _ - ] map ;
 
 : area ( points -- x )
     [ 0 suffix ] [ sum 2 / ] bi

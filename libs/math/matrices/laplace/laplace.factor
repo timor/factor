@@ -19,7 +19,7 @@ INSTANCE: missing immutable-sequence ;
 
 : first-sub-matrix ( matrix -- first-row seq )
     [ unclip-slice swap ] [ length iota ] bi
-    [ '[ _ <missing> ] map ] with map ;
+    [ $[ _ <missing> ] map ] with map ;
 
 :: laplace-expansion ( row matrix -- x )
     matrix length 2 =

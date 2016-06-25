@@ -131,12 +131,12 @@ walker-gadget "multitouch" f {
     } cond ;
 
 : find-walker-window ( thread -- world/f )
-    '[ _ swap walker-for-thread? ] find-window ;
+    $[ _ swap walker-for-thread? ] find-window ;
 
 : walker-window ( status continuation thread -- )
     [ <walker-gadget> ] [ name>> ] bi open-status-window ;
 
 [
     dup find-walker-window dup
-    [ raise-window 3drop ] [ drop '[ _ _ _ walker-window ] with-ui ] if
+    [ raise-window 3drop ] [ drop $[ _ _ _ walker-window ] with-ui ] if
 ] show-walker-hook set-global

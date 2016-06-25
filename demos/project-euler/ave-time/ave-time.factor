@@ -5,7 +5,7 @@ math.statistics memory sequences tools.time ;
 IN: project-euler.ave-time
 
 MACRO: collect-benchmarks ( quot n -- seq )
-    swap '[ _ [ [ [ _ nullary ] preserving ] gc benchmark 6 10^ / ] replicate ] ;
+    swap $[ _ [ [ [ _ nullary ] preserving ] gc benchmark 6 10^ / ] replicate ] ;
 
 : ave-time ( quot n -- )
     [

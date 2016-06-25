@@ -7,7 +7,7 @@ IN: cuda.gl
 : create-gl-cuda-context ( device flags -- context )
     swap
     [ { CUcontext } ] 2dip
-    '[ _ _ cuGLCtxCreate cuda-error ] with-out-parameters ; inline
+    $[ _ _ cuGLCtxCreate cuda-error ] with-out-parameters ; inline
 
 : with-gl-cuda-context ( device flags quot -- )
     [ set-up-cuda-context create-gl-cuda-context ] dip (with-cuda-context) ; inline
@@ -15,7 +15,7 @@ IN: cuda.gl
 : gl-buffer>resource ( gl-buffer flags -- resource )
     enum>number
     [ { CUgraphicsResource } ] 2dip
-    '[ _ _ cuGraphicsGLRegisterBuffer cuda-error ] with-out-parameters ; inline
+    $[ _ _ cuGraphicsGLRegisterBuffer cuda-error ] with-out-parameters ; inline
 
 : buffer>resource ( buffer flags -- resource )
     [ handle>> ] dip gl-buffer>resource ; inline
@@ -23,7 +23,7 @@ IN: cuda.gl
 : map-resource ( resource -- device-ptr size )
     [ 1 swap void* <ref> f cuGraphicsMapResources cuda-error ] [
         [ { CUdeviceptr uint } ] dip
-        '[ _ cuGraphicsResourceGetMappedPointer cuda-error ]
+        $[ _ cuGraphicsResourceGetMappedPointer cuda-error ]
         with-out-parameters
     ] bi ; inline
 
@@ -38,7 +38,7 @@ DESTRUCTOR: unmap-resource
 DESTRUCTOR: free-resource
 
 : with-mapped-resource ( ..a resource quot: ( ..a device-ptr size -- ..b ) -- ..b )
-    over [ map-resource ] 2dip '[ _ unmap-resource ] [ ] cleanup ; inline
+    over [ map-resource ] 2dip $[ _ unmap-resource ] [ ] cleanup ; inline
 
 TUPLE: cuda-buffer
     { buffer buffer }

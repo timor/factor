@@ -27,8 +27,8 @@ CONSTANT: base "vocab:xml/tests/xmltest/" ;
     [ file>xml ] fails? "not-wf" "valid" ? ;
 
 : test-quots ( test -- result quot )
-    [ type>> '[ _ ] ]
-    [ '[ _ uri>> base swap append-path well-formed? ] ] bi ;
+    [ type>> $[ _ ] ]
+    [ $[ _ uri>> base swap append-path well-formed? ] ] bi ;
 
 : xml-tests ( -- tests )
     base "xmltest.xml" append-path file>xml

@@ -76,11 +76,11 @@ PRIVATE<
 
 : optl>map ( seq -- map )
     [ H{ } clone ] dip over
-    '[ split-optl swap _ set-at ] each ; inline
+    $[ split-optl swap _ set-at ] each ; inline
 
 : index-list>map ( seq -- map )
     [ H{ } clone ] dip over
-    '[ dup name>> _ set-at ] each ; inline
+    $[ dup name>> _ set-at ] each ; inline
 
 : user-defined-key ( map -- key value ? )
     [ nip [ +user-defined-key+ ] dip member? ] assoc-find ; inline
@@ -152,7 +152,7 @@ PRIVATE<
 
 : slot-option? ( tuple slot option -- ? )
     [ swap mdb-slot-map at ] dip
-    '[ _ swap member-eq? ] [ f ] if* ;
+    $[ _ swap member-eq? ] [ f ] if* ;
 
 PRIVATE>
 

@@ -12,7 +12,7 @@ TUPLE: disjoint-set
 PRIVATE<
 
 : add-count ( p a disjoint-set -- )
-    counts>> [ at '[ _ + ] ] [ swap change-at ] bi ; inline
+    counts>> [ at $[ _ + ] ] [ swap change-at ] bi ; inline
 
 : set-parent ( p a disjoint-set -- )
     parents>> set-at ; inline
@@ -38,10 +38,10 @@ M:: disjoint-set representative ( a disjoint-set -- p )
 PRIVATE<
 
 : representatives ( a b disjoint-set -- r r )
-    '[ _ representative ] bi@ ; inline
+    $[ _ representative ] bi@ ; inline
 
 : ranks ( a b disjoint-set -- r r )
-    '[ _ ranks>> at ] bi@ ; inline
+    $[ _ ranks>> at ] bi@ ; inline
 
 :: branch ( a b neg zero pos -- )
     a b = zero [ a b < neg pos if ] if ; inline
@@ -59,7 +59,7 @@ M: disjoint-set add-atom
     [ [ 1 ] 2dip counts>> set-at ]
     2tri ;
 
-: add-atoms ( seq disjoint-set -- ) '[ _ add-atom ] each ;
+: add-atoms ( seq disjoint-set -- ) $[ _ add-atom ] each ;
 
 GENERIC: disjoint-set-member? ( a disjoint-set -- ? ) ;
 
@@ -89,7 +89,7 @@ M:: disjoint-set equate ( a b disjoint-set -- )
     ] if ;
 
 : equate-all-with ( seq a disjoint-set -- )
-    '[ _ _ equate ] each ;
+    $[ _ _ equate ] each ;
 
 : equate-all ( seq disjoint-set -- )
     over empty? [ 2drop ] [
@@ -102,6 +102,6 @@ M: disjoint-set clone
 
 : assoc>disjoint-set ( assoc -- disjoint-set )
     <disjoint-set> [
-        [ '[ drop _ add-atom ] assoc-each ]
-        [ '[ _ equate ] assoc-each ] 2bi
+        [ $[ drop _ add-atom ] assoc-each ]
+        [ $[ _ equate ] assoc-each ] 2bi
     ] keep ;

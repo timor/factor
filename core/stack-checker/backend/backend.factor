@@ -135,12 +135,12 @@ M: object apply-object push-literal ;
     consume-r dup copy-values [ nip output-d ] [ #r>, ] 2bi ;
 
 : consume/produce ( ..a effect quot: ( ..a inputs outputs -- ..b ) -- ..b )
-    '[ [ in>> length consume-d ] [ out>> length produce-d ] bi @ ]
+    $[ [ in>> length consume-d ] [ out>> length produce-d ] bi @ ]
     [ terminated?>> [ terminate ] when ]
     bi ; inline
 
 : apply-word/effect ( word effect -- )
-    swap '[ _ #call, ] consume/produce ;
+    swap $[ _ #call, ] consume/produce ;
 
 : end-infer ( -- )
     meta-d clone #return, ;

@@ -112,7 +112,7 @@ M: inspector-gadget focusable-child*
 
 : com-edit-slot ( inspector -- )
     [ close-window ] swap
-    [ '[ _ com-refresh ] ]
+    [ $[ _ com-refresh ] ]
     [ control-value make-mirror ]
     [ table>> (selected-row) ] tri [
         [ key>> ] [ key-string>> ] bi

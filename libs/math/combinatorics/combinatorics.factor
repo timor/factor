@@ -46,7 +46,7 @@ PRIVATE<
     0 [ over 0 > ] [ 1 + [ /mod ] keep swap ] produce reverse! 2nip ;
 
 : bump-indices ( seq n -- )
-    '[ dup _ >= [ 1 + ] when ] map! drop ; inline
+    $[ dup _ >= [ 1 + ] when ] map! drop ; inline
 
 : (>permutation) ( seq n index -- seq )
     swap [ dupd head-slice ] dip bump-indices ;
@@ -102,7 +102,7 @@ PRIVATE<
 
 : permutations-quot ( seq quot -- seq quot' )
     [ [ permutation-iota ] [ length iota >array ] [ ] tri ] dip
-    '[ drop _ [ _ nths-unsafe @ ] keep next-permutation drop ] ; inline
+    $[ drop _ [ _ nths-unsafe @ ] keep next-permutation drop ] ; inline
 
 PRIVATE>
 
@@ -198,7 +198,7 @@ INSTANCE: combinations immutable-sequence ;
 PRIVATE<
 
 : find-max-index ( seq n -- i )
-    over length - '[ _ + >= ] find-index drop ; inline
+    over length - $[ _ + >= ] find-index drop ; inline
 
 : increment-rest ( i seq -- )
     [ nth ] [ swap tail-slice ] 2bi
@@ -217,7 +217,7 @@ PRIVATE<
 :: combinations-quot ( seq k quot -- seq quot' )
     seq length :> n
     n k nCk iota k iota >array seq quot n
-    '[ drop _ [ _ nths-unsafe @ ] keep _ next-combination drop ] ; inline
+    $[ drop _ [ _ nths-unsafe @ ] keep _ next-combination drop ] ; inline
 
 PRIVATE>
 

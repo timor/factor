@@ -152,11 +152,11 @@ MEMO: fixnum-coercion ( flags -- nodes )
     ! flags indicate which input parameters are already known to be fixnums,
     ! and don't need a coercion as a result.
     [ [ ] [ >fixnum ] ? ] map shallow-spread>quot
-    '[ _ call ] splice-quot ;
+    $[ _ call ] splice-quot ;
 
 : modular-value-info ( #call -- alist )
     [ in-d>> ] [ out-d>> ] bi append
-    fixnum <class-info> '[ _ ] { } map>assoc ;
+    fixnum <class-info> $[ _ ] { } map>assoc ;
 
 : optimize-modular-op ( #call -- nodes )
     dup out-d>> first modular-value? [

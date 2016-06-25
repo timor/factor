@@ -11,7 +11,7 @@ TUPLE: parts in out ;
     zip [ first ] partition [ values ] bi@ parts boa ;
 
 : powerset-partition ( sequence -- partitions )
-    [ length [ 2^ iota ] keep ] keep '[ _ <bits> _ make-partition ] map rest ;
+    [ length [ 2^ iota ] keep ] keep $[ _ <bits> _ make-partition ] map rest ;
 
 : partition>class ( parts -- class )
     [ out>> [ <not-class> ] map ]
@@ -19,7 +19,7 @@ TUPLE: parts in out ;
 
 : singleton-partition ( integer non-integers -- {class,partition} )
     dupd
-    '[ _ [ class-member? ] with filter ] keep
+    $[ _ [ class-member? ] with filter ] keep
     prefix f parts boa
     2array ;
 
@@ -31,13 +31,13 @@ TUPLE: parts in out ;
 
 : meaningful-integers ( partition table -- integers )
     [ [ in>> ] [ out>> ] bi ] dip
-    '[ [ _ at ] map intersection ] bi@ diff ;
+    $[ [ _ at ] map intersection ] bi@ diff ;
 
 : class-integers ( classes integers -- table )
-    '[ _ over '[ _ class-member? ] filter ] H{ } map>assoc ;
+    $[ _ over $[ _ class-member? ] filter ] H{ } map>assoc ;
 
 : add-integers ( partitions classes integers -- partitions )
-    class-integers '[
+    class-integers $[
         [ _ meaningful-integers ] [ ] bi add-out
     ] map ;
 
@@ -52,13 +52,13 @@ TUPLE: parts in out ;
     values [ keys ] gather [ tagged-epsilon? ] reject class-partitions ;
 
 : get-transitions ( partition state-transitions -- next-states )
-    [ in>> ] dip '[ _ at ] gather sift ;
+    [ in>> ] dip $[ _ at ] gather sift ;
 
 : disambiguate ( nfa -- nfa )
     expand-ors [
-        dup new-transitions '[
+        dup new-transitions $[
             [
-                _ swap '[ _ get-transitions ] assoc-map
+                _ swap $[ _ get-transitions ] assoc-map
                 harvest-values
             ] [
                 [ drop tagged-epsilon? ] assoc-filter

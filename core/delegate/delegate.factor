@@ -65,10 +65,10 @@ M: consult-method reset-word
 GENERIC#: (consult-method-quot) 2 ( consultation quot word -- object ) ;
 
 M: consultation (consult-method-quot)
-    '[ _ call _ execute ] nip ;
+    $[ _ call _ execute ] nip ;
 
 M: broadcast (consult-method-quot)
-    '[ _ call [ _ execute ] each ] nip ;
+    $[ _ call [ _ execute ] each ] nip ;
 
 : consult-method-quot ( consultation word -- object )
     [ dup quot>> ] dip
@@ -85,7 +85,7 @@ M: broadcast (consult-method-quot)
 
 : register-consult ( consultation -- )
     [ group>> "protocol-consult" ] [ ] [ class>> ] tri
-    '[ [ _ _ ] dip ?set-at ] change-word-prop ;
+    $[ [ _ _ ] dip ?set-at ] change-word-prop ;
 
 : consult-methods ( consultation -- )
     [ define-consult-method ] each-generic ;

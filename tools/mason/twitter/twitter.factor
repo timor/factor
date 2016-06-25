@@ -4,4 +4,4 @@ USING: debugger fry kernel namespaces twitter ;
 IN: mason.twitter
 
 : mason-tweet ( message -- )
-    twitter-access-token get [ '[ _ tweet ] try ] [ drop ] if ;
+    twitter-access-token get [ $[ _ tweet ] try ] [ drop ] if ;

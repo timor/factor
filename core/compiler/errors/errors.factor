@@ -45,7 +45,7 @@ T{ error-type-holder
     \ linkage-error <definition-error> ;
 
 : set-linkage-error ( name message word class -- )
-    '[ _ boa ] dip <linkage-error> dup asset>> linkage-errors get set-at ; inline
+    $[ _ boa ] dip <linkage-error> dup asset>> linkage-errors get set-at ; inline
 
 T{ error-type-holder
    { type +linkage-error+ }

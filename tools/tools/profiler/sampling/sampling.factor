@@ -104,7 +104,7 @@ CONSTANT: zero-counts { 0 0 0 0 0 } ;
 
 :: collect-tops ( samples max-depth depth -- node )
     samples H{ } clone [
-        '[ unclip-callstack _ push-at ] each
+        $[ unclip-callstack _ push-at ] each
     ] keep [
         [ sum-counts ]
         [ max-depth depth [ max-depth depth 1 + collect-tops ] (collect-subtrees) ] bi
@@ -157,7 +157,7 @@ PRIVATE<
     [ total-time>> ] same? ;
 
 : trim-flat ( root-node -- root-node' )
-    dup '[ [ nip _ redundant-flat-node? ] assoc-reject ] change-children ;
+    dup $[ [ nip _ redundant-flat-node? ] assoc-reject ] change-children ;
 
 PRIVATE>
 
@@ -227,7 +227,7 @@ DEFER: (profile.)
     node children>> depth 1 + (profile.) ;
 
 : (profile.) ( nodes depth -- )
-    [ by-total-time ] dip '[ _ (profile-node.) ] assoc-each ;
+    [ by-total-time ] dip $[ _ (profile-node.) ] assoc-each ;
 
 : profile-heading. ( -- )
     "depth   time ms  GC %  JIT %  FFI %   FT %" print ;

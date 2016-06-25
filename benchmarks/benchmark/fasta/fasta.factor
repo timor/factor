@@ -53,7 +53,7 @@ TYPED: make-cumulative ( freq -- chars: byte-array floats: double-array )
     seed next-fasta-random floats [ <= ] with find drop chars nth-unsafe ; inline
 
 TYPED: make-random-fasta ( seed: float len: fixnum chars: byte-array floats: double-array -- seed: float )
-    '[ _ _ select-random ] "" replicate-as print ;
+    $[ _ _ select-random ] "" replicate-as print ;
 
 : write-description ( desc id -- )
     ">" write write bl print ;
@@ -65,7 +65,7 @@ TYPED: make-random-fasta ( seed: float len: fixnum chars: byte-array floats: dou
 
 TYPED: write-random-fasta ( seed: float n: fixnum chars: byte-array floats: double-array desc id -- seed: float )
     write-description
-    '[ _ _ make-random-fasta ] split-lines ;
+    $[ _ _ make-random-fasta ] split-lines ;
 
 TYPED:: make-repeat-fasta ( k: fixnum len: fixnum alu: string -- k': fixnum )
     alu length :> kn

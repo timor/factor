@@ -36,7 +36,7 @@ IN: sequences.extras
     [ 0 len clamp ] bi@ dupd max seq subseq ;
 
 : safe-subseq ( from to seq -- subseq )
-    [ length '[ 0 _ clamp ] bi@ ] keep subseq ;
+    [ length $[ 0 _ clamp ] bi@ ] keep subseq ;
 
 : all-subseqs ( seq -- seqs )
     dup length [1,b] [ clump ] with map concat ;
@@ -52,11 +52,11 @@ IN: sequences.extras
     ] each ; inline
 
 : map-like ( seq exemplar -- seq' )
-    '[ _ like ] map ; inline
+    $[ _ like ] map ; inline
 
 : filter-all-subseqs-range ( ... seq range quot: ( ... x -- ... ) -- seq )
     [
-        '[ <clumps> _ filter ] with map concat
+        $[ <clumps> _ filter ] with map concat
     ] 3keep 2drop map-like ; inline
 
 : filter-all-subseqs ( ... seq quot: ( ... x -- ... ) -- seq )
@@ -184,14 +184,14 @@ PRIVATE>
 : slices-touch? ( slice1 slice2 -- ? )
     unordered-slices-touch? ;
 
-ERROR: slices-don't-touch slice1 slice2 ;
+ERROR: slices-dont-touch slice1 slice2 ;
 
 : merge-slices ( slice1 slice2 -- slice/* )
     slice-order-by-from
     2dup ordered-slices-touch? [
         [ from>> ] [ [ to>> ] [ seq>> ] bi ] bi* <slice>
     ] [
-        slices-don't-touch
+        slices-dont-touch
     ] if ;
 
 : rotate ( seq n -- seq' )
@@ -265,7 +265,7 @@ PRIVATE>
 PRIVATE<
 
 : (setup-each-from) ( i seq -- n quot )
-    [ length over [-] swap ] keep '[ _ + _ nth-unsafe ] ; inline
+    [ length over [-] swap ] keep $[ _ + _ nth-unsafe ] ; inline
 
 : setup-each-from ( i seq quot -- n quot' )
     [ (setup-each-from) ] dip compose ; inline
@@ -452,7 +452,7 @@ PRIVATE>
 : nth? ( ... n seq quot: ( ... elt -- ... ? ) -- ... ? ) [ nth ] dip call ; inline
 
 : loop>sequence ( quot exemplar -- seq )
-   [ '[ [ @ [ [ , ] when* ] keep ] loop ] ] dip make ; inline
+   [ $[ [ @ [ [ , ] when* ] keep ] loop ] ] dip make ; inline
 
 : loop>array ( quot -- seq )
    { } loop>sequence ; inline
@@ -473,14 +473,14 @@ PRIVATE>
 
 : insert-nth! ( elt n seq -- )
     [ length ] keep ensure swap pick (a,b]
-    over '[ [ 1 + ] keep _ move-unsafe ] each
+    over $[ [ 1 + ] keep _ move-unsafe ] each
     set-nth-unsafe ;
 
 : set-nths ( value indices seq -- )
-    swapd '[ _ swap _ set-nth ] each ; inline
+    swapd $[ _ swap _ set-nth ] each ; inline
 
 : set-nths-unsafe ( value indices seq -- )
-    swapd '[ _ swap _ set-nth-unsafe ] each ; inline
+    swapd $[ _ swap _ set-nth-unsafe ] each ; inline
 
 : flatten1 ( obj -- seq )
     [
@@ -502,7 +502,7 @@ PRIVATE>
 : map-find-index ( ... seq quot: ( ... elt index -- ... result/f ) -- ... result i elt )
     [ find-index ] (map-find-index) ; inline
 
-: filter-length ( seq n -- seq' ) '[ length _ = ] filter ;
+: filter-length ( seq n -- seq' ) $[ length _ = ] filter ;
 
 : all-shortest ( seqs -- seqs' ) dup shortest length filter-length ;
 
@@ -589,7 +589,7 @@ PRIVATE>
     [ drop length 1 - ] [ change-nth-unsafe ] 2bi ; inline
 
 : replicate-into ( ... seq quot: ( ... -- ... newelt ) -- ... )
-    over [ length ] 2dip '[ _ dip _ set-nth-unsafe ] each-integer ; inline
+    over [ length ] 2dip $[ _ dip _ set-nth-unsafe ] each-integer ; inline
 
 : count* ( ... seq quot: ( ... elt -- ... ? ) -- ... % )
     over [ count ] [ length ] bi* / ; inline
@@ -618,10 +618,10 @@ PRIVATE>
     start-all* length ; inline
 
 : map-zip ( quot: ( x -- y ) -- alist )
-    '[ _ keep swap ] map>alist ; inline
+    $[ _ keep swap ] map>alist ; inline
 
 : map-keys ( assoc quot: ( key -- key' ) -- assoc )
-    '[ _ dip ] assoc-map ; inline
+    $[ _ dip ] assoc-map ; inline
 
 : map-values ( assoc quot: ( value -- value' ) -- assoc )
-    '[ swap _ dip swap ] assoc-map ; inline
+    $[ swap _ dip swap ] assoc-map ; inline

@@ -12,7 +12,7 @@ PRIVATE<
     dup alias? [ def>> first expand-alias ] when ;
 
 : expand-literal ( seq obj -- seq' )
-    '[
+    $[
         _ expand-alias dup word? [ def>> call ] when
     ] with-datastack ;
 

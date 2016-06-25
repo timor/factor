@@ -14,12 +14,12 @@ PRIVATE>
 
 : parallel-each ( seq quot: ( elt -- ) -- )
     over length [
-        '[ _ curry _ spawn-stage ] each
+        $[ _ curry _ spawn-stage ] each
     ] (parallel-each) ; inline
 
 : 2parallel-each ( seq1 seq2 quot: ( elt1 elt2 -- ) -- )
     2over min-length [
-        '[ _ 2curry _ spawn-stage ] 2each
+        $[ _ 2curry _ spawn-stage ] 2each
     ] (parallel-each) ; inline
 
 : parallel-product-each ( seq quot: ( elt -- ) -- )
@@ -33,7 +33,7 @@ PRIVATE>
 
 PRIVATE<
 
-: [future] ( quot -- quot' ) '[ _ curry future ] ; inline
+: [future] ( quot -- quot' ) $[ _ curry future ] ; inline
 
 : future-values ( futures -- futures )
     [ ?future ] map! ; inline
@@ -45,14 +45,14 @@ PRIVATE>
 
 : parallel-assoc-map-as ( assoc quot: ( key value -- newkey newvalue ) exemplar -- newassoc )
     [
-        [ 2array ] compose '[ _ 2curry future ] { } assoc>map future-values
+        [ 2array ] compose $[ _ 2curry future ] { } assoc>map future-values
     ] dip assoc-like ;
 
 : parallel-assoc-map ( assoc quot: ( key value -- newkey newvalue ) -- newassoc )
     over parallel-assoc-map-as ;
 
 : 2parallel-map ( seq1 seq2 quot: ( elt1 elt2 -- newelt ) -- newseq )
-    '[ _ 2curry future ] 2map future-values ;
+    $[ _ 2curry future ] 2map future-values ;
 
 : parallel-product-map ( seq quot: ( elt -- newelt ) -- newseq )
     [ <product-sequence> ] dip parallel-map ;
@@ -71,10 +71,10 @@ PRIVATE<
 PRIVATE>
 
 MACRO: parallel-cleave ( quots -- quot )
-    (parallel-cleave) '[ _ cleave _ spread ] ;
+    (parallel-cleave) $[ _ cleave _ spread ] ;
 
 MACRO: parallel-spread ( quots -- quot )
-    (parallel-cleave) '[ _ spread _ spread ] ;
+    (parallel-cleave) $[ _ spread _ spread ] ;
 
 MACRO: parallel-napply ( quot n -- quot )
-    [ [future] ] dip dup (parallel-spread) '[ _ _ napply _ spread ] ;
+    [ [future] ] dip dup (parallel-spread) $[ _ _ napply _ spread ] ;

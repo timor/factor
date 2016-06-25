@@ -6,4 +6,4 @@ in: set-n
 : set* ( val var n -- ) 1 + namestack [ length swap - ] keep nth set-at ;
 
 ! dynamic lambda
-SYNTAX: :| (:) dup in>> dup length [ spin '[ _ narray _ swap zip _ bind ] ] 2curry dip define-declared ;
+SYNTAX: :| (:) dup in>> dup length [ spin $[ _ narray _ swap zip _ bind ] ] 2curry dip define-declared ;

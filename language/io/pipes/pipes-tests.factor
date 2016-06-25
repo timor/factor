@@ -56,7 +56,7 @@ IN: io.pipes.tests
         utf8 <pipe> &dispose
         [
             [
-                '[
+                $[
                     _ stream-read1 drop
                     "count-down" get count-down
                 ] in-thread

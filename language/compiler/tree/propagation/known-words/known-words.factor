@@ -34,12 +34,12 @@ IN: compiler.tree.propagation.known-words
 : fits-in-fixnum? ( interval -- ? )
     fixnum-interval interval-subset? ;
 
-: won't-overflow? ( class interval -- ? )
+: wont-overflow? ( class interval -- ? )
     [ fixnum class<= ] [ fits-in-fixnum? ] bi* and ;
 
 : may-overflow ( class interval -- class' interval' )
     over null-class? [
-        2dup won't-overflow?
+        2dup wont-overflow?
         [ [ integer math-class-max ] dip ] unless
     ] unless ;
 
@@ -80,7 +80,7 @@ IN: compiler.tree.propagation.known-words
     ] dip call ; inline
 
 : unary-op ( word interval-quot post-proc-quot -- )
-    '[
+    $[
         [ unary-op-class ] [ _ unary-op-interval ] bi
         @
         <class/interval-info>
@@ -106,7 +106,7 @@ IN: compiler.tree.propagation.known-words
     [ [ interval>> ] bi@ ] dip call ; inline
 
 : binary-op ( word interval-quot post-proc-quot -- )
-    '[
+    $[
         [ binary-op-class ] [ _ binary-op-interval ] 2bi
         @
         <class/interval-info>
@@ -148,25 +148,25 @@ IN: compiler.tree.propagation.known-words
     { mod-integer-fixnum integer-valued }
     { bignum-mod integer-valued }
     { fixnum-mod fixnum-valued }
-} [ '[ _ mod-outputs-info ] "outputs" set-word-prop ] assoc-each
+} [ $[ _ mod-outputs-info ] "outputs" set-word-prop ] assoc-each
 
 \ rem [ [ interval-rem ] [ may-overflow real-valued ] binary-op ] each-derived-op
 
 ! /mod is the combination of /i and mod, fixnum/mod of /i and fixnum-mod
 \ /mod
 \ /i \ mod [ "outputs" word-prop ] bi@
-'[ _ _ 2bi ] "outputs" set-word-prop
+$[ _ _ 2bi ] "outputs" set-word-prop
 
 \ fixnum/mod
 \ /i \ fixnum-mod [ "outputs" word-prop ] bi@
-'[ _ _ 2bi ] "outputs" set-word-prop
+$[ _ _ 2bi ] "outputs" set-word-prop
 
 : shift-op-class ( info1 info2 -- newclass )
     [ class>> ] bi@
     2dup [ null-class? ] either? [ 2drop null ] [ drop math-closure ] if ;
 
 : shift-op ( word interval-quot post-proc-quot -- )
-    '[
+    $[
         [ shift-op-class ] [ _ binary-op-interval ] 2bi
         @
         <class/interval-info>
@@ -191,10 +191,10 @@ IN: compiler.tree.propagation.known-words
     in1 in2 op negate-comparison (comparison-constraints) out f--> 2array ;
 
 : define-comparison-constraints ( word op -- )
-    '[ _ comparison-constraints ] "constraints" set-word-prop ;
+    $[ _ comparison-constraints ] "constraints" set-word-prop ;
 
 comparison-ops
-[ dup '[ _ define-comparison-constraints ] each-derived-op ] each
+[ dup $[ _ define-comparison-constraints ] each-derived-op ] each
 
 ! Remove redundant comparisons
 : fold-comparison ( info1 info2 word -- info )
@@ -205,14 +205,14 @@ comparison-ops
     } case ;
 
 comparison-ops [
-    dup '[
+    dup $[
         [ _ fold-comparison ] "outputs" set-word-prop
     ] each-derived-op
 ] each
 
 generic-comparison-ops [
     dup specific-comparison
-    '[ _ fold-comparison ] "outputs" set-word-prop
+    $[ _ fold-comparison ] "outputs" set-word-prop
 ] each
 
 : maybe-or-never ( ? -- info )
@@ -258,7 +258,7 @@ generic-comparison-ops [
 
     { >integer integer }
 } [
-    '[ _ swap interval>> <class/interval-info> ] "outputs" set-word-prop
+    $[ _ swap interval>> <class/interval-info> ] "outputs" set-word-prop
 ] assoc-each
 
 ! For these we limit the outputted interval
@@ -266,7 +266,7 @@ generic-comparison-ops [
     { fixnum>bignum bignum }
     { fixnum>float float }
 } [
-    '[
+    $[
         _ swap interval>> fixnum-interval interval-intersect
         <class/interval-info>
     ] "outputs" set-word-prop
@@ -281,7 +281,7 @@ generic-comparison-ops [
     { >byte-vector byte-vector }
     { >hashtable hashtable }
 } [
-    '[ drop _ <class-info> ] "outputs" set-word-prop
+    $[ drop _ <class-info> ] "outputs" set-word-prop
 ] assoc-each
 
 { numerator denominator }
@@ -316,7 +316,7 @@ generic-comparison-ops [
         { [ "alien-unsigned-" ?head ] [ string>number (unsigned-interval) ] }
     } cond [a,b]
     [ fits-in-fixnum? fixnum integer ? ] keep <class/interval-info>
-    '[ 2drop _ ] "outputs" set-word-prop
+    $[ 2drop _ ] "outputs" set-word-prop
 ] each
 
 \ alien-cell [

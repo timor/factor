@@ -58,7 +58,7 @@ ERROR: not-a-gopher-url url ;
         [ port>> 70 or <inet> binary ]
         [ path>> rest [ "1/" ] when-empty ]
         [ query>> [ assoc>query url-decode "?" glue ] when* ]
-    } cleave '[
+    } cleave $[
         1 minutes input-stream get set-timeout
         _ gopher-get
     ] with-client ;

@@ -32,7 +32,7 @@ M: stack-entry-renderer row-value drop object>> ;
         t >>single-click? ;
 
 : <stack-display> ( model quot title color -- gadget )
-    [ '[ dup _ when ] <arrow> <stack-table> margins <scroller> white-interior ] 2dip
+    [ $[ dup _ when ] <arrow> <stack-table> margins <scroller> white-interior ] 2dip
     <labeled> ;
 
 : <callstack-display> ( model -- gadget )

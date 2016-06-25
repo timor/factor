@@ -77,7 +77,7 @@ var: present-space
 ! namespace utilities
 
 : closed-quot ( quot -- quot )
-  namestack swap '[ namestack [ _ set-namestack @ ] dip set-namestack ] ;
+  namestack swap $[ namestack [ _ set-namestack @ ] dip set-namestack ] ;
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! waiting for deep-cleave-quots
@@ -154,7 +154,7 @@ var: present-space
     3 model-projection <model> view4> model<< ;
 
 : camera-action ( quot -- quot ) 
-    '[ drop _ observer3d>  
+    $[ drop _ observer3d>  
     with-self update-observer-projections ] 
     closed-quot ;
 
@@ -173,13 +173,13 @@ var: present-space
     update-observer-projections ; inline
 
 : rotation-4D ( m -- ) 
-    '[ _ [ [ middle-of-space dup vneg ] keep 
+    $[ _ [ [ middle-of-space dup vneg ] keep 
         swap space-translate ] dip
          space-transform 
          swap space-translate
     ] (mvt-4D) ;
 
-: translation-4D ( v -- ) '[ _ space-translate ] (mvt-4D) ;
+: translation-4D ( v -- ) $[ _ space-translate ] (mvt-4D) ;
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! menu
@@ -300,7 +300,7 @@ var: present-space
   redraw-model ;
 
 : mvt-3D-X ( turn pitch -- quot )
-    '[ turtle-pos> norm neg reset-turtle 
+    $[ turtle-pos> norm neg reset-turtle 
         _ turn-left 
         _ pitch-up 
         step-turtle ] ;
@@ -317,7 +317,7 @@ var: present-space
 ! file chooser
 ! ----------------------------------------------------------
 : <run-file-button> ( file-name -- button )
-  dup '[ drop  _  \ selected-file set-value load-model-file 
+  dup $[ drop  _  \ selected-file set-value load-model-file 
    ] 
  closed-quot  <roll-button> { 0 0 } >>align ;
 

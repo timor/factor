@@ -65,9 +65,9 @@ M: string remove-coverage
 
 M: word add-coverage
     H{ } clone [ "coverage" set-word-prop ] 2keep
-    '[
+    $[
         \ coverage-state new [ _ set-at ] 2keep
-        '[ _ flag-covered ] prepend
+        $[ _ flag-covered ] prepend
     ] deep-annotate ;
 
 M: word remove-coverage
@@ -121,7 +121,7 @@ PRIVATE>
     [
         add-coverage
     ] [
-        dup '[
+        dup $[
             [
                 _
                 [ coverage-on test-vocab coverage-off ]

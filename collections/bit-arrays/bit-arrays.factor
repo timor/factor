@@ -25,7 +25,7 @@ PRIVATE<
 
 : (set-bits) ( bit-array n -- )
     [ [ length bits>cells ] keep ] dip swap underlying>>
-    '[ [ _ _ ] dip 4 * set-alien-unsigned-4 ] each-integer ; inline
+    $[ [ _ _ ] dip 4 * set-alien-unsigned-4 ] each-integer ; inline
 
 : zero-end-bits ( bit-array -- bit-array )
     ! Zero bits after the end.

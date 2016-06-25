@@ -47,7 +47,7 @@ PRIVATE<
 
 :: unboxer ( error-quot word types type -- quot )
     type word? [ type "coercer" word-prop ] [ f ] if [ ] or
-    type type word types error-quot '[ dup _ instance? [ _ _ _ @ ] unless ]
+    type type word types error-quot $[ dup _ instance? [ _ _ _ @ ] unless ]
     type (unboxer)
     compose compose ;
 
@@ -70,7 +70,7 @@ PRIVATE<
     types unboxed-types :> unboxed-types
 
     [ input-mismatch-error ] word types make-unboxer
-    unboxed-types quot '[ _ declare @ ]
+    unboxed-types quot $[ _ declare @ ]
     compose ;
 
 ! typed outputs
@@ -93,7 +93,7 @@ DEFER: make-boxer
 
 : make-boxer ( types -- quot )
     [ [ ] ]
-    [ [ boxer ] [ swap '[ @ _ dip ] ] map-reduce ] if-empty ;
+    [ [ boxer ] [ swap $[ @ _ dip ] ] map-reduce ] if-empty ;
 
 ! defining typed words
 
@@ -102,7 +102,7 @@ MACRO: (typed) ( word def effect -- quot )
     [
         nip effect-in-types swap
         [ [ unboxed-types ] [ make-boxer ] bi ] dip
-        '[ _ declare @ @ ]
+        $[ _ declare @ @ ]
     ]
     [
         effect-out-types
@@ -131,7 +131,7 @@ MACRO: typed ( quot word effect -- quot' )
     [ effect-in-types dup typed-stack-effect? [ typed-inputs ] [ 2drop ] if ]
     [
         nip effect-out-types dup typed-stack-effect?
-        [ [ unboxed-types ] [ make-boxer ] bi '[ @ _ declare @ ] ] [ drop ] if
+        [ [ unboxed-types ] [ make-boxer ] bi $[ @ _ declare @ ] ] [ drop ] if
     ] 2bi ;
 
 : (typed-def) ( word def effect -- quot )

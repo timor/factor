@@ -143,7 +143,7 @@ TUPLE: simd-test-failure
     seq |[ input |
         input test-quot call :> ( input-quot code-quot )
         input-quot [ class-of ] { } map-as :> input-classes
-        input-classes code-quot '[ _ declare @ ] :> code-quot'
+        input-classes code-quot $[ _ declare @ ] :> code-quot'
 
         "print-mr" get [ code-quot' regs. ] when
         "print-checks" get [ input-quot . code-quot' . ] when
@@ -173,18 +173,18 @@ TUPLE: simd-test-failure
 "== Checking -new constructors" print
 
 { { } } [
-    simd-classes [ [ [ ] ] dip '[ _ new ] ] [ = ] check-optimizer
+    simd-classes [ [ [ ] ] dip $[ _ new ] ] [ = ] check-optimizer
 ] unit-test
 
 { { } } [
-    simd-classes [ '[ _ new ] compile-call [ zero? ] all? ] reject
+    simd-classes [ $[ _ new ] compile-call [ zero? ] all? ] reject
 ] unit-test
 
 "== Checking -with constructors" print
 
 { { } } [
     with-ctors [
-        [ 1000 random '[ _ ] ] dip '[ _ execute ]
+        [ 1000 random $[ _ ] ] dip $[ _ execute ]
     ] [ = ] check-optimizer
 ] unit-test
 
@@ -199,7 +199,7 @@ TUPLE: simd-test-failure
 { { } } [
     boa-ctors [
         [ stack-effect in>> length [ 1000 random ] [ ] replicate-as ] keep
-        '[ _ execute ]
+        $[ _ execute ]
     ] [ = ] check-optimizer
 ] unit-test
 
@@ -229,7 +229,7 @@ TUPLE: simd-test-failure
             { +scalar+ [ 1000 random elt-class float = [ >float ] when ] }
         } case
     ] [ ] map-as
-    word '[ _ execute ] ;
+    word $[ _ execute ] ;
 
 : remove-float-words ( alist -- alist' )
     { distance vsqrt n/v v/n v/ normalize } unique assoc-diff ;
@@ -251,7 +251,7 @@ TUPLE: simd-test-failure
 : check-vector-ops ( class elt-class compare-quot -- failures )
     [
         [ nip ops-to-check ] 2keep
-        '[ first2 vector-word-inputs _ _ check-vector-op ]
+        $[ first2 vector-word-inputs _ _ check-vector-op ]
     ] dip check-optimizer ; inline
 
 : (approx=) ( x y -- ? )
@@ -284,7 +284,7 @@ TUPLE: simd-test-failure
     ] map ;
 
 simd-classes&reps [
-    [ [ { } ] ] dip first3 '[ _ _ _ check-vector-ops ] unit-test
+    [ [ { } ] ] dip first3 $[ _ _ _ check-vector-ops ] unit-test
 ] each
 
 "== Checking boolean operations" print
@@ -299,16 +299,16 @@ simd-classes&reps [
             { +scalar+ [ 1000 random elt-class float = [ >float ] when ] }
         } case
     ] [ ] map-as
-    word '[ _ execute ] ;
+    word $[ _ execute ] ;
 
 : check-boolean-ops ( class elt-class compare-quot -- seq )
     [
         [ boolean-ops [ dup vector-words at ] { } map>assoc ] 2dip
-        '[ first2 vector-word-inputs _ _ check-boolean-op ]
+        $[ first2 vector-word-inputs _ _ check-boolean-op ]
     ] dip check-optimizer ; inline
 
 simd-classes&reps [
-    [ [ { } ] ] dip first3 '[ _ _ _ check-boolean-ops ] unit-test
+    [ [ { } ] ] dip first3 $[ _ _ _ check-boolean-ops ] unit-test
 ] each
 
 "== Checking vector blend" print
@@ -422,7 +422,7 @@ simd-classes&reps [
             [ [ 4 + ] map ] map
             [ append ] 2map
         ] }
-        [ dup '[ _ random ] replicate 1array ]
+        [ dup $[ _ random ] replicate 1array ]
     } case ;
 
 : 2shuffles-for ( n -- shuffles )
@@ -454,14 +454,14 @@ simd-classes&reps [
             [ [ 8 + ] map ] map
             [ append ] 2map
         ] }
-        [ dup 2 * '[ _ random ] replicate 1array ]
+        [ dup 2 * $[ _ random ] replicate 1array ]
     } case ;
 
 simd-classes [
     [ [ { } ] ] dip
     [ new length shuffles-for ] keep
-    '[
-        _ [ [ _ new [ length iota ] keep like 1quotation ] dip '[ _ vshuffle ] ]
+    $[
+        _ [ [ _ new [ length iota ] keep like 1quotation ] dip $[ _ vshuffle ] ]
         [ = ] check-optimizer
     ] unit-test
 ] each
@@ -469,12 +469,12 @@ simd-classes [
 simd-classes [
     [ [ { } ] ] dip
     [ new length 2shuffles-for ] keep
-    '[
+    $[
         _ [ [
             _ new
             [ [ length iota ] keep like ]
             [ [ length dup dup + [a,b) ] keep like ] bi [ ] 2sequence
-        ] dip '[ _ vshuffle2-elements ] ]
+        ] dip $[ _ vshuffle2-elements ] ]
         [ = ] check-optimizer
     ] unit-test
 ] each
@@ -496,7 +496,7 @@ simd-classes [
     ] call( -- ? ) ;
 
 { char-16 uchar-16 short-8 ushort-8 int-4 uint-4 longlong-2 ulonglong-2 }
-[ 10 swap '[ [ t ] [ _ test-shift-vector ] unit-test ] times ] each
+[ 10 swap $[ [ t ] [ _ test-shift-vector ] unit-test ] times ] each
 
 "== Checking vector tests" print
 
@@ -560,7 +560,7 @@ TUPLE: inconsistent-vector-test bool branch ;
 ! Test element access -- it should box bignums for int-4 on x86
 : test-accesses ( seq -- failures )
     [ length iota dup [ >bignum ] map append ] keep
-    '[ [ _ 1quotation ] dip '[ _ swap nth ] ] [ = ] check-optimizer ; inline
+    $[ [ _ 1quotation ] dip $[ _ swap nth ] ] [ = ] check-optimizer ; inline
 
 { { } } [ float-4{ 1.0 2.0 3.0 4.0 } test-accesses ] unit-test
 { { } } [ int-4{ 0x7fffffff 3 4 -8 } test-accesses ] unit-test
@@ -577,7 +577,7 @@ TUPLE: inconsistent-vector-test bool branch ;
 "== Checking broadcast" print
 : test-broadcast ( seq -- failures )
     [ length iota >array ] keep
-    '[ [ _ 1quotation ] dip '[ _ vbroadcast ] ] [ = ] check-optimizer ;
+    $[ [ _ 1quotation ] dip $[ _ vbroadcast ] ] [ = ] check-optimizer ;
 
 { { } } [ float-4{ 1.0 2.0 3.0 4.0 } test-broadcast ] unit-test
 { { } } [ int-4{ 0x7fffffff 3 4 -8 } test-broadcast ] unit-test

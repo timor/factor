@@ -38,13 +38,13 @@ M: #shuffle compute-live-values*
 M: #alien-node compute-live-values* nip look-at-inputs ;
 
 : filter-mapping ( assoc -- assoc' )
-    live-values get '[ drop _ key? ] assoc-filter ;
+    live-values get $[ drop _ key? ] assoc-filter ;
 
 : filter-corresponding ( new old -- old' )
     zip filter-mapping values ;
 
 : filter-live ( values -- values' )
-    dup empty? [ live-values get '[ _ at ] filter ] unless ;
+    dup empty? [ live-values get $[ _ at ] filter ] unless ;
 
 :: drop-values ( inputs outputs mapping-keys mapping-values -- #shuffle )
     inputs

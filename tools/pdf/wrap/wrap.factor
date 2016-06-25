@@ -30,7 +30,7 @@ PRIVATE>
 PRIVATE<
 
 : string>elements ( string font -- elements )
-    [ word-split ] dip '[
+    [ word-split ] dip $[
         dup word-split1 "" or
         [ _ swap text-width ] bi@
         <element>

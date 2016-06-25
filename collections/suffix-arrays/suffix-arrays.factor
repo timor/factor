@@ -16,10 +16,10 @@ PRIVATE<
     [ prefix<=> ] with search drop ;
 
 : query-from ( index begin suffix-array -- from )
-    swap '[ _ head? not ] find-last-from drop [ 1 + ] [ 0 ] if* ;
+    swap $[ _ head? not ] find-last-from drop [ 1 + ] [ 0 ] if* ;
 
 : query-to ( index begin suffix-array -- to )
-    [ swap '[ _ head? not ] find-from drop ] [ length or ] bi ;
+    [ swap $[ _ head? not ] find-from drop ] [ length or ] bi ;
 
 : query-range ( index begin suffix-array -- from to )
     [ query-from ] [ query-to ] 3bi [ min ] keep ;
@@ -35,4 +35,4 @@ PRIVATE>
 SYNTAX: \ SA{ \ } [ >suffix-array ] parse-literal ;
 
 : query ( begin suffix-array -- matches )
-    [ find-index ] 2keep '[ _ _ (query) ] [ { } ] if* ;
+    [ find-index ] 2keep $[ _ _ (query) ] [ { } ] if* ;

@@ -125,7 +125,7 @@ M: byte-array encode-kv ;
     0 >>keylen ;
 
 : with-doc ( doc quot: ( doc -- ) -- )
-    over '[ _ _ [ _ fdb-doc-free rethrow ] recover ] call ; inline
+    over $[ _ _ [ _ fdb-doc-free rethrow ] recover ] call ; inline
 
 : with-create-doc ( key meta body quot: ( doc -- ) -- )
     [ fdb-doc-create ] dip with-doc ; inline
@@ -287,7 +287,7 @@ T{ doc
 : with-fdb-iterator ( start-key end-key fdb_iterator_opt_t iterator-init iterator-advance quot: ( obj -- ) -- )
     [ execute ] 2dip
     swap
-    '[
+    $[
         _ &dispose handle>> [
             [ fdb-iterator-get ] keep swap
             [ _ with-doc _ execute check-iterate-result ]
@@ -345,7 +345,7 @@ PRIVATE>
 : with-fdb-map ( start-key end-key fdb_iterator_opt_t iterator-init iterator-next quot: ( obj -- ) -- )
     [ execute ] 2dip
     swap
-    '[
+    $[
         _ &dispose handle>> [
             [ fdb-iterator-get ] keep swap
             [ _ with-doc swap _ execute check-iterate-result ]
@@ -373,7 +373,7 @@ PRIVATE>
 
 
 : with-kvs-name-config ( name config quot -- )
-    '[
+    $[
         _ _ fdb-kvs-open-config &dispose current-fdb-kvs-handle _ with-variable
     ] with-destructors ; inline
 
@@ -382,17 +382,17 @@ PRIVATE>
 
 
 : with-forestdb-file-handle ( path config quot -- )
-    '[
+    $[
         _ _ fdb-open &dispose current-fdb-file-handle _ with-variable
     ] with-destructors ; inline
 
 : with-forestdb-path-config-kvs-name-config ( path config kvs-name kvs-config quot -- )
-    '[
+    $[
         _ _ with-kvs-name-config
     ] with-forestdb-file-handle ; inline
 
 : with-forestdb-path-config-kvs-name ( path config kvs-name quot -- )
-    '[
+    $[
         _ _ with-kvs-name
     ] with-forestdb-file-handle ; inline
 
@@ -401,7 +401,7 @@ PRIVATE>
 ! fdb-current is weird, it gets replaced if you call fdb-rollback
 ! Therefore, only clean up fdb-current once, and clean it up at the end
 : with-forestdb-handles ( file-handle handle quot fdb_commit_opt_t/f -- )
-    '[
+    $[
         _ current-fdb-file-handle [
             _ current-fdb-kvs-handle [
                 [
@@ -429,7 +429,7 @@ PRIVATE>
     FDB_COMMIT_MANUAL_WAL_FLUSH with-forestdb-handles ; inline
 
 : with-forestdb-snapshot ( n quot -- )
-    [ fdb-open-snapshot ] dip '[
+    [ fdb-open-snapshot ] dip $[
         _ current-fdb-kvs-handle [
             [
                 @

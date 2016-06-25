@@ -5,5 +5,5 @@ IN: math.algebra
 
 : chinese-remainder ( aseq nseq -- x )
     dup product [
-        '[ _ over / [ swap gcd drop ] keep * * ] 2map sum
+        $[ _ over / [ swap gcd drop ] keep * * ] 2map sum
     ] keep rem ; foldable

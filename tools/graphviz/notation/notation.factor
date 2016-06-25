@@ -33,13 +33,13 @@ PRIVATE<
     [ graph subgraph ] dip [
         =attr-method
         setter-word 1quotation
-        '[ <graph-attributes> swap present @ add ]
+        $[ <graph-attributes> swap present @ add ]
         define
     ] curry bi@ ;
 
 : edge/node-=attr ( class attr -- )
     =attr-method
-    writer-word 1quotation '[ present over attributes>> @ ]
+    writer-word 1quotation $[ present over attributes>> @ ]
     define ;
 
 : graph-obj-=attr ( class attr -- )
@@ -49,7 +49,7 @@ PRIVATE<
 
 : attrs-obj-=attr ( class attr -- )
     =attr-method
-    setter-word 1quotation '[ present @ ]
+    setter-word 1quotation $[ present @ ]
     define ;
 
 : define-=attrs ( base-class attrs-class -- )
@@ -72,14 +72,14 @@ ALIAS: --- add-edge ;
 ALIAS: ~--> add-path ;
 ALIAS: ~--- add-path ;
 
-SYNTAX: \ graph[ parse-quotation '[ <graph-attributes> @ add ] append! ;
-SYNTAX: \ node[ parse-quotation '[ <node-attributes> @ add ] append! ;
-SYNTAX: \ edge[ parse-quotation '[ <edge-attributes> @ add ] append! ;
+SYNTAX: \ graph[ parse-quotation $[ <graph-attributes> @ add ] append! ;
+SYNTAX: \ node[ parse-quotation $[ <node-attributes> @ add ] append! ;
+SYNTAX: \ edge[ parse-quotation $[ <edge-attributes> @ add ] append! ;
 
-SYNTAX: \ add-node[ parse-quotation '[ <node> @ add ] append! ;
-SYNTAX: \ add-edge[ parse-quotation '[ <edge> @ add ] append! ;
-SYNTAX: \ -->[ parse-quotation '[ <edge> @ add ] append! ;
-SYNTAX: \ ---[ parse-quotation '[ <edge> @ add ] append! ;
+SYNTAX: \ add-node[ parse-quotation $[ <node> @ add ] append! ;
+SYNTAX: \ add-edge[ parse-quotation $[ <edge> @ add ] append! ;
+SYNTAX: \ -->[ parse-quotation $[ <edge> @ add ] append! ;
+SYNTAX: \ ---[ parse-quotation $[ <edge> @ add ] append! ;
 
 ! FIXME:
 ! Can't really do add-path[ & add-nodes[ this way, since they

@@ -113,7 +113,7 @@ M: gadget gadget-text-separator
     orientation>> vertical = "\n" "" ? ;
 
 : gadget-seq-text ( seq gadget -- )
-    gadget-text-separator '[ _ % ] [ gadget-text* ] interleave ;
+    gadget-text-separator $[ _ % ] [ gadget-text* ] interleave ;
 
 M: gadget gadget-text*
     [ children>> ] keep gadget-seq-text ;
@@ -340,7 +340,7 @@ PRIVATE>
 
 : add-gadgets ( parent children -- parent )
     not-in-layout
-    over '[ _ (add-gadget) ] each
+    over $[ _ (add-gadget) ] each
     dup relayout ;
 
 : parents ( gadget -- seq )

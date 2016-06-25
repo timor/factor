@@ -65,21 +65,21 @@ IN: compiler.cfg.intrinsics.simd.tests
 
 : test-emit ( cpu rep quot -- node )
     [
-        [ new \ cpu ] 2dip '[
+        [ new \ cpu ] 2dip $[
             test-compiler-env [ _ test-node @ ] with-variables
         ] with-variable
     ] make-classes ; inline
 
 : test-emit-literal ( cpu lit rep quot -- node )
     [
-        [ new \ cpu ] 3dip '[
+        [ new \ cpu ] 3dip $[
             test-compiler-env [ _ _ test-node-literal @ ] with-variables
         ] with-variable
     ] make-classes ; inline
 
 : test-emit-nonliteral-rep ( cpu quot -- node )
     [
-        [ new \ cpu ] dip '[
+        [ new \ cpu ] dip $[
             test-compiler-env [ test-node-nonliteral-rep @ ] with-variables
         ] with-variable
     ] make-classes ; inline

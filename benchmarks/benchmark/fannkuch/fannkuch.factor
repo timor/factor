@@ -7,10 +7,10 @@ IN: benchmark.fannkuch
 : count ( quot: ( -- ? ) -- n )
     ! Call quot until it returns false, return number of times
     ! it was true
-    [ 0 ] dip '[ _ dip swap [ [ 1 + ] when ] keep ] loop ; inline
+    [ 0 ] dip $[ _ dip swap [ [ 1 + ] when ] keep ] loop ; inline
 
 : count-flips ( perm -- flip# )
-    '[
+    $[
         _ dup first dup 1 =
         [ 2drop f ] [ head-slice reverse! drop t ] if
     ] count ; inline

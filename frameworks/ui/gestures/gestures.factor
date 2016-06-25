@@ -74,7 +74,7 @@ M: user-input-tuple send-queued-gesture
     [ user-input* ] with each-parent drop ;
 
 : user-input ( string world -- )
-    '[ _ \ user-input-tuple queue-gesture ] unless-empty ;
+    $[ _ \ user-input-tuple queue-gesture ] unless-empty ;
 
 ! Gesture objects
 TUPLE: drag # ;             C: <drag> drag ;

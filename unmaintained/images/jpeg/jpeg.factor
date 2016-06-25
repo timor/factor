@@ -226,7 +226,7 @@ MEMO: dct-matrix-blas ( -- m ) dct-matrix >float-blas-matrix ;
     block dup length>> sqrt >fixnum group flip
     dup matrix-dim coord-matrix flip
     [
-        [ '[ _ [ second ] [ first ] bi ] dip nth nth ]
+        [ $[ _ [ second ] [ first ] bi ] dip nth nth ]
         [ x,y v+ color-id jpeg-image draw-color ] bi
     ] with each^2 ;
 

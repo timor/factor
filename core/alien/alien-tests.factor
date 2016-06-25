@@ -89,7 +89,7 @@ f initialize-test set-global
 ! Generate callbacks until the whole callback-heap is full, then free
 ! them. Do it ten times in a row for good measure.
 : produce-until-error ( quot -- error seq )
-    '[ [ @ t ] [ f ] recover ] [ ] produce ; inline
+    $[ [ @ t ] [ f ] recover ] [ ] produce ; inline
 
 SYMBOL: foo
 

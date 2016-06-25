@@ -73,7 +73,7 @@ SYMBOL: table
     [ dup word? [ execute( -- x ) ] when ] map ;
 
 : (set-table) ( class1 class2 val -- )
-    [ table get nth ] dip '[ _ or ] change-nth ;
+    [ table get nth ] dip $[ _ or ] change-nth ;
 
 : set-table ( classes1 classes2 val -- )
     [ [ eval-seq ] bi@ ] dip

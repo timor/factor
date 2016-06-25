@@ -32,7 +32,7 @@ PRIVATE<
     [ bitmap>> ] [ row-length ] bi group rows-remove-pad ;
 
 : (seperate-to-pixels) ( byte-rows image -- pixel-rows )
-    component-order>> bytes-per-pixel '[ _ group ] map ;
+    component-order>> bytes-per-pixel $[ _ group ] map ;
 
 : image>pixel-rows ( image -- pixel-rows )
     [ image>byte-rows ] keep (seperate-to-pixels) ;
@@ -46,7 +46,7 @@ PRIVATE<
 :  normalize-degree ( n -- n' ) 360 rem ;
 
 : processing-effect ( image quot -- image' )
-    '[ image>pixel-rows @ flatten-table ] [ bitmap<< ] [ ] tri ; inline
+    $[ image>pixel-rows @ flatten-table ] [ bitmap<< ] [ ] tri ; inline
 
 :: rotate' ( image n -- image )
     n normalize-degree :> n'
@@ -59,7 +59,7 @@ PRIVATE>
 
 : rotate ( image n -- image' )
     normalize-degree
-    [ '[ _ (rotate) ] processing-effect ] [ ?reverse-dimensions ] 2bi ;
+    [ $[ _ (rotate) ] processing-effect ] [ ?reverse-dimensions ] 2bi ;
 
 : reflect-y-axis ( image -- image ) 
     [ [ reverse ] map ] processing-effect ;

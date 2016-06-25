@@ -113,7 +113,7 @@ M: world ungraft*
     [ hand-loc get-global swap move-hand ] [ drop ] if ;
 
 : slurp-vector ( .. seq quot: ( ... elt -- .. ) -- )
-    over '[ _ empty? not ] -rot '[ _ pop @ ] while ; inline
+    over $[ _ empty? not ] -rot $[ _ pop @ ] while ; inline
 
 : layout-queued ( -- seq )
     layout-queue [
@@ -143,7 +143,7 @@ PRIVATE>
 
 : find-window ( quot: ( world -- ? ) -- world )
     [ ui-windows get-global values ] dip
-    '[ dup children>> [ ] [ nip first ] if-empty @ ]
+    $[ dup children>> [ ] [ nip first ] if-empty @ ]
     find-last nip ; inline
 
 : ui-running? ( -- ? )
@@ -217,7 +217,7 @@ M: object resize-window 2drop ;
     [ find-world [ dup pref-dim resize-window ] when* ] bi ;
 
 : with-ui ( quot: ( -- ) -- )
-    ui-running? [ call( -- ) ] [ '[ init-ui @ ] (with-ui) ] if ;
+    ui-running? [ call( -- ) ] [ $[ init-ui @ ] (with-ui) ] if ;
 
 HOOK: beep ui-backend ( -- ) ;
 
@@ -227,7 +227,7 @@ HOOK: system-alert ui-backend ( caption text -- ) ;
     "{" expect dup all-slots parse-tuple-literal-slots ;
 
 : define-window ( word attributes quot -- )
-    '[ [ f _ clone @ open-window ] with-ui ] ( -- ) define-declared ;
+    $[ [ f _ clone @ open-window ] with-ui ] ( -- ) define-declared ;
 
 SYNTAX: \ WINDOW:
     scan-new-word

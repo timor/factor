@@ -77,10 +77,10 @@ M: windows (directory-entries) ( path -- seq )
     find-first-file over
     [ >windows-directory-entry ] 2dip
     [
-        '[
+        $[
             [ _ _ find-next-file dup ]
             [ >windows-directory-entry ]
             produce nip
             over name>> "." = [ nip ] [ swap prefix ] if
         ]
-    ] [ drop '[ _ FindClose win32-error=0/f ] ] 2bi [ ] cleanup ;
+    ] [ drop $[ _ FindClose win32-error=0/f ] ] 2bi [ ] cleanup ;

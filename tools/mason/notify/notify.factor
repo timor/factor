@@ -22,7 +22,7 @@ IN: mason.notify
 
 : status-notify ( report arg message -- )
     status-notify? [
-        '[
+        $[
             5 [
                 _ _ _ status-params status-url get
                 http-post 2drop

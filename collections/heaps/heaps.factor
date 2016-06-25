@@ -80,7 +80,7 @@ M: max-heap heap-compare
     drop { entry entry } declare [ key>> ] bi@ before? ; inline
 
 : data-compare ( m n heap -- ? )
-    [ '[ _ data-nth ] bi@ ] [ heap-compare ] bi ; inline
+    [ $[ _ data-nth ] bi@ ] [ heap-compare ] bi ; inline
 
 PRIVATE>
 
@@ -116,7 +116,7 @@ M: heap heap-push*
     heap-push* drop ;
 
 : heap-push-all ( assoc heap -- )
-    '[ swap _ heap-push ] assoc-each ;
+    $[ swap _ heap-push ] assoc-each ;
 
 PRIVATE<
 
@@ -149,8 +149,8 @@ M: heap heap-pop
 
 : slurp-heap ( ... heap quot: ( ... value key -- ... ) -- ... )
     [ check-heap ] dip
-    [ drop '[ _ heap-empty? ] ]
-    [ '[ _ heap-pop @ ] until ] 2bi ; inline
+    [ drop $[ _ heap-empty? ] ]
+    [ $[ _ heap-pop @ ] until ] 2bi ; inline
 
 : heap-pop-all ( heap -- alist )
     [ heap-size <vector> ] keep

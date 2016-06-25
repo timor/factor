@@ -38,6 +38,6 @@ IN: rosetta-code.bitmap
 : <raster-image> ( width height -- image )
     zero-matrix [ drop { 0 0 0 } ] mmap ;
 : fill-image ( {R,G,B} image -- image )
-    swap '[ drop _ ] mmap! ;
+    swap $[ drop _ ] mmap! ;
 : set-pixel ( {R,G,B} {i,j} image -- ) set-Mi,j ; inline
 : get-pixel ( {i,j} image -- pixel ) Mi,j ; inline

@@ -30,7 +30,7 @@ TUPLE: select-mx < mx read-fdset write-fdset ;
     [ check-fd ] 3curry each ; inline
 
 : init-fdset ( fds fdset -- )
-    '[ t swap munge _ set-nth ] each ;
+    $[ t swap munge _ set-nth ] each ;
 
 : read-fdset/tasks ( mx -- seq fdset )
     [ reads>> keys ] [ read-fdset>> ] bi ;

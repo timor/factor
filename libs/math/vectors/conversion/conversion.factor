@@ -32,11 +32,11 @@ PRIVATE<
         }
         {
             [ from-element float-type? ]
-            [ from-type new simd-rep '[ underlying>> _ (simd-v>integer) to-type boa ] ]
+            [ from-type new simd-rep $[ underlying>> _ (simd-v>integer) to-type boa ] ]
         }
         {
             [ to-element   float-type? ]
-            [ from-type new simd-rep '[ underlying>> _ (simd-v>float)   to-type boa ] ]
+            [ from-type new simd-rep $[ underlying>> _ (simd-v>float)   to-type boa ] ]
         }
     } cond
     [ from-type check-vconvert-type ] prepose ;
@@ -50,14 +50,14 @@ PRIVATE<
 
 :: ([vpack-unsigned]) ( from-type to-type -- quot )
     from-type new simd-rep
-    '[
+    $[
         [ from-type check-vconvert-type underlying>> ] bi@
         _ (simd-vpack-unsigned) to-type boa
     ] ;
 
 :: ([vpack-signed]) ( from-type to-type -- quot )
     from-type new simd-rep
-    '[
+    $[
         [ from-type check-vconvert-type underlying>> ] bi@
         _ (simd-vpack-signed)   to-type boa
     ] ;
@@ -79,7 +79,7 @@ PRIVATE<
 
 :: ([vunpack]) ( from-type to-type -- quot )
     from-type new simd-rep
-    '[
+    $[
         from-type check-vconvert-type underlying>> _
         [ (simd-vunpack-head) to-type boa ]
         [ (simd-vunpack-tail) to-type boa ] 2bi

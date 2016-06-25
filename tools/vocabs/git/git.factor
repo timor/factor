@@ -6,7 +6,7 @@ IN: vocabs.git
 
 PRIVATE<
 : git-object-id ( filename rev -- id/f )
-    [ [ parent-directory ] [ file-name ] bi ] dip swap '[
+    [ [ parent-directory ] [ file-name ] bi ] dip swap $[
         { "git" "ls-tree" } _ suffix _ suffix ascii [
             readln
             [ " " split1 nip " " split1 nip "\t" split1 drop ]

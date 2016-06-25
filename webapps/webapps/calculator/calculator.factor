@@ -36,7 +36,7 @@ USING: db.sqlite furnace.alloy namespaces http.server ;
 : calculator-db ( -- db ) "calculator.db" <sqlite-db> ;
 
 : run-calculator ( port -- )
-    '[
+    $[
         <calculator>
             calculator-db <alloy>
             main-responder set-global

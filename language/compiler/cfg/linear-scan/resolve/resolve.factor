@@ -42,7 +42,7 @@ SYMBOL: temp-locations
     H{ } clone temp-locations set ;
 
 : add-mapping ( from to rep -- )
-    '[ _ <location> ] bi@ 2array , ;
+    $[ _ <location> ] bi@ 2array , ;
 
 :: resolve-value-data-flow ( vreg live-out live-in edge-live-in -- )
     vreg live-out ?at [ bad-vreg ] unless

@@ -25,7 +25,7 @@ SYMBOL: current-macro
 : save-euler-op ( euler-op -- ) current-macro get log>> push ;
 
 MACRO:: log-euler-op ( class def inputs -- quot )
-    class inputs def inputs '[ [ current-macro get [ _ boa save-euler-op ] [ _ ndrop ] if ] _ _ nbi ] ;
+    class inputs def inputs $[ [ current-macro get [ _ boa save-euler-op ] [ _ ndrop ] if ] _ _ nbi ] ;
 
 SYNTAX: \ LOG-GML:
     let[
@@ -35,7 +35,7 @@ SYNTAX: \ LOG-GML:
         record-class tuple effect in>> define-tuple-class
 
         record-class def effect in>> length
-        '[ _ _ _ log-euler-op ] :> logging-def
+        $[ _ _ _ log-euler-op ] :> logging-def
 
         word name effect logging-def define-gml-primitive
     ] ;

@@ -78,7 +78,7 @@ GENERIC: bind-tuple ( tuple statement -- ) ;
 GENERIC: execute-statement* ( statement type -- ) ;
 
 M: object execute-statement* ( statement type -- )
-    '[
+    $[
         _ _ drop query-results dispose
     ] [
         parse-db-error rethrow
@@ -117,7 +117,7 @@ M: object execute-statement* ( statement type -- )
 
 : with-db ( db quot -- )
     [ db-open db-connection ] dip
-    '[ db-connection get [ drop @ ] with-disposal ] with-variable ; inline
+    $[ db-connection get [ drop @ ] with-disposal ] with-variable ; inline
 
 ! Words for working with raw SQL statements
 : default-query ( query -- result-set )

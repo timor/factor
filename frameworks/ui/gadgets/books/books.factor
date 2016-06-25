@@ -29,6 +29,6 @@ M: book model-changed ( model book -- )
 M: book pref-dim* ( book -- dim ) children>> pref-dims max-dims ;
 
 M: book layout* ( book -- )
-    [ children>> ] [ dim>> ] bi '[ _ >>dim drop ] each ;
+    [ children>> ] [ dim>> ] bi $[ _ >>dim drop ] each ;
 
 M: book focusable-child* ( book -- child/t ) current-page ;

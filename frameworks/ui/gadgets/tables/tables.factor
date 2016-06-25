@@ -79,7 +79,7 @@ M: image-name cell-dim nip image-dim first2 image-padding ;
 M: image-name draw-cell nip draw-image ;
 
 : column-offsets ( widths gap -- x xs )
-    [ 0 ] dip '[ _ + + ] accumulate ;
+    [ 0 ] dip $[ _ + + ] accumulate ;
 
 : column-title-font ( font -- font' )
     column-title-background font-with-background t >>bold? ;
@@ -149,14 +149,14 @@ M: table layout*
 : column-line-offsets ( table -- xs )
     [ column-widths>> ] [ gap>> ] bi
     [ column-offsets nip [ f ] ]
-    [ 2/ '[ rest-slice [ _ - ] map ] ]
+    [ 2/ $[ rest-slice [ _ - ] map ] ]
     bi if-empty ;
 
 : draw-column-lines ( table -- )
     [ column-line-color>> gl-color ]
     [
         [ column-line-offsets ] [ dim>> second ] bi
-        '[ [ 0 2array ] [ _ 2array ] bi gl-line ] each
+        $[ [ 0 2array ] [ _ 2array ] bi gl-line ] each
     ] bi ;
 
 :: column-loc ( font column width align -- loc )
@@ -188,7 +188,7 @@ M: table layout*
     [ table selection-color>> >>background ] when ;
 
 : draw-columns ( columns widths alignment font gap -- )
-    '[ [ _ ] 3dip _ draw-column ] 3each ;
+    $[ [ _ ] 3dip _ draw-column ] 3each ;
 
 M:: table draw-line ( row index table -- )
     row table renderer>> row-columns
@@ -266,12 +266,12 @@ PRIVATE<
 
 : find-row-index ( value table -- n/f )
     [ control-value ] [ renderer>> ] bi
-    '[ _ row-value? ] with find drop ;
+    $[ _ row-value? ] with find drop ;
 
 : update-table-rows ( table -- )
     [
         [ control-value ] [ renderer>> ] bi
-        '[ _ row-columns ] map
+        $[ _ row-columns ] map
     ]
     [ rows<< ] bi ; inline
 
@@ -312,7 +312,7 @@ M: table model-changed
 
 : if-mouse-row ( table true: ( mouse-index table -- ) false: ( table -- ) -- )
     [ [ mouse-row ] keep 2dup valid-line? ]
-    [ ] [ '[ nip @ ] ] tri* if ; inline
+    [ ] [ $[ nip @ ] ] tri* if ; inline
 
 : table-button-down ( table -- )
     dup takes-focus?>> [ dup request-focus ] when
@@ -346,7 +346,7 @@ PRIVATE<
 
 : prev/next-row ( table n -- )
     [ dup selection-index>> value>> ] dip
-    '[ _ + ] [ 0 ] if* select-row ;
+    $[ _ + ] [ 0 ] if* select-row ;
 
 : previous-row ( table -- )
     -1 prev/next-row ;

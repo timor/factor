@@ -98,7 +98,7 @@ M: participant-mode process-message ( participant-mode -- )
 
 M: rpl-names process-message
     [ nicks>> ] [ chat> ] bi dup ?clear-participants
-    '[ _ join-participant ] each ;
+    $[ _ join-participant ] each ;
 
 M: rpl-names-end process-message chat> t >>clear-participants drop ;
 

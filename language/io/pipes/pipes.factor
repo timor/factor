@@ -37,7 +37,7 @@ GENERIC: run-pipeline-element ( input-fd output-fd obj -- result ) ;
 M: callable run-pipeline-element
     [
         [ [ ?reader ] [ ?writer ] bi* ] dip
-        '[ _ call( -- result ) ] with-streams*
+        $[ _ call( -- result ) ] with-streams*
     ] with-destructors ;
 
 GENERIC: <pipes> ( obj -- pipes ) ;

@@ -12,7 +12,7 @@ PRIVATE<
 
 : smart-index-from ( obj i seq -- n/f )
     rot [ ch>lower ] [ ch>upper ] bi
-    '[ dup _ eq? [ drop t ] [ _ eq? ] if ] find-from drop ;
+    $[ dup _ eq? [ drop t ] [ _ eq? ] if ] find-from drop ;
 
 :: (fuzzy) ( accum i full ch -- accum i ? )
     ch i full smart-index-from [
@@ -96,7 +96,7 @@ PRIVATE>
 PRIVATE<
 
 : directory-paths ( directory -- alist )
-    dup '[
+    dup $[
         [
             [ name>> dup _ prepend-path ]
             [ directory? [ path-separator append ] when ]

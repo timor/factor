@@ -83,7 +83,7 @@ PRIVATE<
 
 : (write-message) ( message quot -- )
     [ connection-buffer dup ] 2dip
-    '[
+    $[
         [ _ [ write-header ] [ @ ] bi ] with-length-prefix
     ] with-output-stream* write flush ; inline
 

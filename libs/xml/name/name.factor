@@ -78,7 +78,7 @@ PRIVATE<
 PRIVATE>
 
 : take-name ( -- string )
-    version-1.0? '[ _ swap name-char? not ] take-until ;
+    version-1.0? $[ _ swap name-char? not ] take-until ;
 
 : parse-name ( -- name )
     take-name interpret-name ;

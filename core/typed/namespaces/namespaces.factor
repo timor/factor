@@ -7,7 +7,7 @@ ERROR: variable-type-error variable value type ;
 PRIVATE<
 
 MACRO: declare1 ( type -- quot: ( value -- value ) )
-    1array '[ _ declare ] ;
+    1array $[ _ declare ] ;
 
 : typed-get-unsafe ( name type -- value )
     [ get ] dip declare1 ; inline

@@ -26,7 +26,7 @@ IN: tools.image-analyzer.gc-info
 
 : base-pointers ( gc-info -- seq )
     [ return-address-count>> ] keep derived-root-count>>
-    '[ _ read-ints ] replicate <reversed> ;
+    $[ _ read-ints ] replicate <reversed> ;
 
 : bit-counts ( gc-info -- counts )
     struct-slot-values 3 head ;

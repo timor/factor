@@ -23,12 +23,12 @@ SYMBOLS: +bottom+ +top+ ;
     ! unify with literals.
     dup empty? [
         dup longest length
-        '[ _ +bottom+ pad-head ] map
+        $[ _ +bottom+ pad-head ] map
     ] unless ;
 
 : phi-inputs ( max-input-count pairs -- newseq )
     dup empty? [ nip ] [
-        swap '[ [ _ ] dip first2 unify-inputs ] map
+        swap $[ [ _ ] dip first2 unify-inputs ] map
         pad-with-bottom
     ] if ;
 
@@ -62,7 +62,7 @@ SYMBOLS: combinator quotations ;
     ] if-empty ;
 
 : branch-variable ( seq symbol -- seq )
-    '[ _ of ] map ;
+    $[ _ of ] map ;
 
 : active-variable ( seq symbol -- seq )
     [ [ terminated? over at [ drop f ] when ] map ] dip

@@ -40,6 +40,6 @@ M: object need-return-continuation? drop f ;
 
 :: make-return ( quot n lexenv block -- quot )
     block need-return-continuation? [
-        quot clone [ lexenv return>> <def> '[ _ ] prepend ] change-body
-        n '[ _ _ ncurry callcc1 ]
+        quot clone [ lexenv return>> <def> $[ _ ] prepend ] change-body
+        n $[ _ _ ncurry callcc1 ]
     ] [ quot ] if rewrite-closures first ;

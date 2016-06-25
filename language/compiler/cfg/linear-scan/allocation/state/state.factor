@@ -81,12 +81,12 @@ ERROR: register-already-used live-interval ;
 : deactivate ( n live-interval -- keep? )
     nip add-inactive f ;
 
-: don't-change ( n live-interval -- keep? ) 2drop t ;
+: dont-change ( n live-interval -- keep? ) 2drop t ;
 
 ! Moving intervals between active and inactive sets
 : process-intervals ( n symbol quots -- )
     ! symbol stores an alist mapping register classes to vectors
-    [ get values ] dip '[ [ _ cond ] with filter! drop ] with each ; inline
+    [ get values ] dip $[ [ _ cond ] with filter! drop ] with each ; inline
 
 : covers? ( n live-interval -- ? )
     ranges>> ranges-cover? ;
@@ -96,14 +96,14 @@ ERROR: register-already-used live-interval ;
     active-intervals {
         { [ 2dup finished? ] [ finish ] }
         { [ 2dup covers? not ] [ deactivate ] }
-        [ don't-change ]
+        [ dont-change ]
     } process-intervals ;
 
 : activate-intervals ( n -- )
     inactive-intervals {
         { [ 2dup finished? ] [ finish ] }
         { [ 2dup covers? ] [ activate ] }
-        [ don't-change ]
+        [ dont-change ]
     } process-intervals ;
 
 : add-unhandled ( live-interval -- )

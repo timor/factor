@@ -16,7 +16,7 @@ SYMBOLS: loop-heads visited ;
 : visited? ( bb -- ? ) visited get in? ;
 
 : predecessors-ready? ( bb -- ? )
-    [ predecessors>> ] keep '[
+    [ predecessors>> ] keep $[
         _ 2dup back-edge?
         [ 2drop t ] [ drop visited? ] if
     ] all? ;
@@ -30,7 +30,7 @@ SYMBOLS: loop-heads visited ;
     } 1&& [ predecessor (find-alternate-loop-head) ] when ;
 
 : find-back-edge ( bb -- pred )
-    [ predecessors>> ] keep '[ _ back-edge? ] find nip ;
+    [ predecessors>> ] keep $[ _ back-edge? ] find nip ;
 
 : find-alternate-loop-head ( bb -- bb' )
     dup find-back-edge dup visited? [ drop ] [
@@ -49,7 +49,7 @@ SYMBOLS: loop-heads visited ;
 : (linearization-order) ( cfg -- bbs )
     HS{ } clone visited namespaces:set
     entry>> <dlist> [ push-back ] keep
-    [ dup '[ process-block _ push-all-back ] slurp-deque ] { } make ;
+    [ dup $[ process-block _ push-all-back ] slurp-deque ] { } make ;
 
 PRIVATE>
 

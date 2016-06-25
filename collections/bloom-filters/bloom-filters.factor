@@ -84,7 +84,7 @@ PRIVATE<
 ! tradeoff to support it, and I haven't done my own, but we'll
 ! go with it anyway.
 : size-bloom-filter ( error-rate number-objects -- number-hashes number-bits )
-    [ #hashes-range identity-configuration ] 2dip '[
+    [ #hashes-range identity-configuration ] 2dip $[
         dup _ _ bits-to-satisfy-error-rate
         2array smaller-second
     ] reduce check-hashes first2 ;
@@ -127,7 +127,7 @@ PRIVATE<
 
 : relevant-indices ( object bloom-filter -- n quot: ( elt -- n ) )
     [ double-hashcodes ] [ #hashes-and-length ] bi*
-    [ -rot ] dip '[ _ _ combine-hashcodes _ mod ] ; inline
+    [ -rot ] dip $[ _ _ combine-hashcodes _ mod ] ; inline
 
 PRIVATE>
 

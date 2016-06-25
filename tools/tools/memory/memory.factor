@@ -85,7 +85,7 @@ PRIVATE>
 
 : heap-stats ( -- counts sizes )
     [ ] instances H{ } clone H{ } clone
-    [ '[ _ _ heap-stat-step ] each ] 2keep ;
+    [ $[ _ _ heap-stat-step ] each ] 2keep ;
 
 : heap-stats. ( -- )
     heap-stats dup keys natural-sort standard-table-style [
@@ -141,7 +141,7 @@ TUPLE: gc-stats collections times ;
 
 : compute-gc-stats ( events -- stats )
     V{ } clone [
-        '[
+        $[
             dup op>> _ [ drop <gc-stats> ] cache
             [ 1 + ] change-collections
             [ total-time>> ] dip times>> push
@@ -249,7 +249,7 @@ FROM: sequences.private => nth-unsafe ;
 
 M: code-blocks nth-unsafe
     [ cache>> ] [ blocks>> ] bi
-    '[ _ nth-unsafe <code-block> ] cache ; inline
+    $[ _ nth-unsafe <code-block> ] cache ; inline
 
 INSTANCE: code-blocks immutable-sequence ;
 
@@ -273,7 +273,7 @@ PRIVATE<
 
 : code-block-stats ( code-blocks -- counts sizes )
     H{ } clone H{ } clone
-    [ '[ [ size>> ] [ type>> ] bi [ nip _ inc-at ] [ _ at+ ] 2bi ] each ]
+    [ $[ [ size>> ] [ type>> ] bi [ nip _ inc-at ] [ _ at+ ] 2bi ] each ]
     2keep ;
 
 : blocks ( n -- str ) number>string " blocks" append ;
@@ -289,7 +289,7 @@ PRIVATE<
             { "Inline caches:" +pic+ }
             { "Profiling stubs:" +profiling+ }
         }
-    ] 2dip '[ _ _ code-block-table-row ] { } assoc>map
+    ] 2dip $[ _ _ code-block-table-row ] { } assoc>map
     simple-table. ;
 
 PRIVATE>

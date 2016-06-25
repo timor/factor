@@ -67,19 +67,19 @@ SPECIALIZED-ARRAY: body
     ] each-index ; inline
 
 : update-position ( body dt -- )
-    [ dup velocity>> ] dip '[ _ _ v*n v+ ] change-location drop ; inline
+    [ dup velocity>> ] dip $[ _ _ v*n v+ ] change-location drop ; inline
 
 : mag ( dt body other-body -- mag d )
     [ location>> ] bi@ v- [ norm-sq dup sqrt * / ] keep ; inline
 
 :: update-velocity ( other-body body dt -- )
     dt body other-body mag
-    [ [ body ] 2dip '[ other-body mass>> _ * _ n*v v- ] change-velocity drop ]
-    [ [ other-body ] 2dip '[ body mass>> _ * _ n*v v+ ] change-velocity drop ] 2bi ; inline
+    [ [ body ] 2dip $[ other-body mass>> _ * _ n*v v- ] change-velocity drop ]
+    [ [ other-body ] 2dip $[ body mass>> _ * _ n*v v+ ] change-velocity drop ] 2bi ; inline
 
 : advance ( system dt -- )
-    [ '[ _ update-velocity ] [ drop ] each-pair ]
-    [ '[ _ update-position ] each ]
+    [ $[ _ update-velocity ] [ drop ] each-pair ]
+    [ $[ _ update-position ] each ]
     2bi ; inline
 
 : inertia ( body -- e )
@@ -95,7 +95,7 @@ SPECIALIZED-ARRAY: body
     >fixnum
     <nbody-system>
     [ energy number>string print ]
-    [ '[ _ 0.01 advance ] times ]
+    [ $[ _ 0.01 advance ] times ]
     [ energy number>string print ] tri ;
 
 : nbody-simd-benchmark ( -- ) 1000000 nbody ;

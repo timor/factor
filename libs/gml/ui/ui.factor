@@ -35,7 +35,7 @@ TUPLE: gml-editor < frame editor gml stack-model b-rep b-rep-model ;
     bi ;
 
 : with-gml-editor ( gml-editor quot -- )
-    '[
+    $[
         [ [ gml>> gml set ] [ b-rep>> b-rep set ] bi @ ]
         [ update-models ]
         bi
@@ -83,7 +83,7 @@ CONSTANT: example-dir "vocab:gml/examples/" ;
     [ file-extension >lower "gml" = ] filter ;
 
 : <example-button> ( file -- button )
-    dup '[ example-dir _ append-path swap find-gml-editor load-input ]
+    dup $[ example-dir _ append-path swap find-gml-editor load-input ]
     <border-button> ;
 
 : <example-buttons> ( -- gadget )

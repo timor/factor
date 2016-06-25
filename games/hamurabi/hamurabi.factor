@@ -26,7 +26,7 @@ total-births total-deaths ;
         0 >>cost
     dup births>> >>total-births
     dup deaths>> >>total-deaths
-    dup births>> '[ _ + ] change-population
+    dup births>> $[ _ + ] change-population
     dup [ harvest>> ] [ yield>> ] bi / >>acres
     dup [ harvest>> ] [ stores>> ] bi - >>eaten ;
 
@@ -128,8 +128,8 @@ total-births total-deaths ;
     } case ;
 
 : adjust-acres ( game n -- game )
-    [ '[ _ + ] change-acres ]
-    [ over cost>> * '[ _ - ] change-stores ] bi ;
+    [ $[ _ + ] change-acres ]
+    [ over cost>> * $[ _ - ] change-stores ] bi ;
 
 : buy-acres ( game -- game )
     "HOW MANY ACRES DO YOU WISH TO BUY? " input
@@ -149,7 +149,7 @@ total-births total-deaths ;
     "HOW MANY BUSHELS DO YOU WISH TO FEED YOUR PEOPLE? " input
     over stores>> dupd > "stores" and check-error
     [ drop feed-people ] [
-        [ >>feed ] [ '[ _ - ] change-stores ] bi
+        [ >>feed ] [ $[ _ - ] change-stores ] bi
     ] if nl ;
 
 : plant-seeds ( game -- game )
@@ -159,7 +159,7 @@ total-births total-deaths ;
         { [ over population>> 10 * dupd > ] [ "population" ] }
         [ f ]
     } cond check-error [ drop plant-seeds ] [
-        [ >>planted ] [ 2/ '[ _ - ] change-stores ] bi
+        [ >>planted ] [ 2/ $[ _ - ] change-stores ] bi
     ] if nl ;
 
 : report-status ( game -- game )
@@ -185,19 +185,19 @@ total-births total-deaths ;
 : update-stores ( game -- game )
     dup #harvested >>harvest
     dup #eaten >>eaten
-    dup #stored '[ _ + ] change-stores ;
+    dup #stored $[ _ + ] change-stores ;
 
 : update-births ( game -- game )
     dup #births
     [ >>births ]
-    [ '[ _ + ] change-total-births ]
-    [ '[ _ + ] change-population ] tri ;
+    [ $[ _ + ] change-total-births ]
+    [ $[ _ + ] change-population ] tri ;
 
 : update-deaths ( game -- game )
     dup #starved
     [ >>deaths ]
-    [ '[ _ + ] change-total-deaths ]
-    [ '[ _ - ] change-population ] tri ;
+    [ $[ _ + ] change-total-deaths ]
+    [ $[ _ - ] change-population ] tri ;
 
 : check-plague ( game -- game )
     dup plague>> [ [ 2/ ] change-population ] when ;

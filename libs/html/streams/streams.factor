@@ -58,8 +58,8 @@ TUPLE: html-sub-stream < html-writer style parent ;
     "font-family: " % % "; " % ;
 
 MACRO: make-css ( pairs -- str )
-    [ '[ _ of [ _ execute ] when* ] ] { } assoc>map
-    '[ [ _ cleave ] "" make ] ;
+    [ $[ _ of [ _ execute ] when* ] ] { } assoc>map
+    $[ [ _ cleave ] "" make ] ;
 
 : span-css-style ( style -- str )
     {

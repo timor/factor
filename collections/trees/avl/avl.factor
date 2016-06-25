@@ -20,7 +20,7 @@ TUPLE: avl-node < node balance ;
         0 >>balance ; inline
 
 : increase-balance ( node amount -- node )
-    '[ _ + ] change-balance ;
+    $[ _ + ] change-balance ;
 
 : rotate ( node -- node )
     dup

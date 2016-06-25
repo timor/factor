@@ -76,11 +76,11 @@ HINTS: next* { spot } ;
     ! from code until the quotation given is true and
     ! advance spot to after the substring.
    10 <sbuf> [
-       '[ _ keep over [ drop ] [ _ push ] if ] skip-until
+       $[ _ keep over [ drop ] [ _ push ] if ] skip-until
    ] keep "" like ; inline
 
 : take-to ( seq -- string )
-    '[ _ member? ] take-until ; inline
+    $[ _ member? ] take-until ; inline
 
 : pass-blank ( -- )
     ! Advance code past any whitespace, including newlines
@@ -90,7 +90,7 @@ HINTS: next* { spot } ;
     [ over ] dip nth eq? [ 1 + ] [ drop 0 ] if ; inline
 
 : string-matcher ( str -- quot: ( pos char -- pos ? ) )
-    dup length 1 - '[ _ next-matching dup _ > ] ; inline
+    dup length 1 - $[ _ next-matching dup _ > ] ; inline
 
 :: (take-string) ( match spot -- sbuf matched? )
     10 <sbuf> f [
@@ -106,7 +106,7 @@ HINTS: next* { spot } ;
     [ dupd [ length ] bi@ - over shorten "" like ] bi ;
 
 : expect ( string -- )
-    dup length spot get '[ _ [ char>> ] keep next* ] "" replicate-as
+    dup length spot get $[ _ [ char>> ] keep next* ] "" replicate-as
     2dup = [ 2drop ] [ expected ] if ;
 
 ! Suddenly XML-specific
@@ -175,7 +175,7 @@ HINTS: next* { spot } ;
     [ dup "\t\r\n" member? [ drop char: \s ] when ] map! ;
 
 : (parse-quote) ( <-disallowed? ch -- string )
-    swap '[
+    swap $[
         dup _ eq? [ drop t ]
         [ char: \< eq? _ and [ attr-w/lt ] [ f ] if ] if
     ] parse-char normalize-quote get-char

@@ -26,7 +26,7 @@ IN: rosettacode.anagrams-deranged
 : parse-dict-file ( path -- hash )
     utf8 file-lines
     H{ } clone [
-        '[
+        $[
             [ natural-sort >string ] keep
             _ [ swap suffix  ] with change-at
         ] each

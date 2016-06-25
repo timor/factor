@@ -50,7 +50,7 @@ PRIVATE<
     image-placements ; inline
 
 : atlas-image-format ( image-placements -- component-order component-type upside-down? )
-    [ image>> ] map dup unclip '[ _
+    [ image>> ] map dup unclip $[ _
         [ [ component-order>> ] same? ]
         [ [ component-type>>  ] same? ]
         [ [ upside-down?>>    ] same? ] 2tri and and
@@ -82,7 +82,7 @@ PRIVATE<
     ] each ; inline
 
 : copy-images-into-atlas ( image-placements atlas -- )
-    '[ _ copy-image-into-atlas ] each ; inline
+    $[ _ copy-image-into-atlas ] each ; inline
 
 PRIVATE>
 
@@ -119,7 +119,7 @@ PRIVATE>
     [ left-u bottom-v right-u top-v    ] if 4array ; inline
 
 : make-atlas ( images -- image-texcoords atlas-image )
-    pack-atlas dup (make-atlas) [ '[ _ image-placement>texcoords ] H{ } map>assoc ] keep ;
+    pack-atlas dup (make-atlas) [ $[ _ image-placement>texcoords ] H{ } map>assoc ] keep ;
 
 : make-atlas-assoc ( image-assoc -- texcoord-assoc atlas-image )
-    dup values make-atlas [ '[ _ at ] assoc-map ] dip ;
+    dup values make-atlas [ $[ _ at ] assoc-map ] dip ;

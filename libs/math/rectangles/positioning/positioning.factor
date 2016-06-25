@@ -11,7 +11,7 @@ IN: math.rectangles.positioning
 PRIVATE<
 
 : adjust-visible-rect ( visible-rect popup-dim screen-dim -- visible-rect' )
-    [ drop clone ] dip '[ _ vmin ] change-loc ;
+    [ drop clone ] dip $[ _ vmin ] change-loc ;
 
 : popup-x ( visible-rect popup-dim screen-dim -- x )
     [ loc>> first ] 2dip swap [ first ] bi@ - min 0 max ;

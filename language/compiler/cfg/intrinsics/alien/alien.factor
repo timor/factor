@@ -15,7 +15,7 @@ IN: compiler.cfg.intrinsics.alien
 
 : emit-<displaced-alien> ( block node -- block' )
     dup emit-<displaced-alien>? [
-        '[
+        $[
             _ node-input-infos second class>>
             ^^box-displaced-alien
         ] binary-op
@@ -39,7 +39,7 @@ IN: compiler.cfg.intrinsics.alien
     [ 2inputs ] dip first prepare-accessor ;
 
 : (emit-load-memory) ( block node rep c-type quot -- block' )
-    '[ prepare-load-memory _ _ ^^load-memory-imm @ ds-push ]
+    $[ prepare-load-memory _ _ ^^load-memory-imm @ ds-push ]
     [ inline-load-memory? ]
     inline-accessor ; inline
 
@@ -50,7 +50,7 @@ IN: compiler.cfg.intrinsics.alien
     int-rep f [ ^^box-alien ] (emit-load-memory) ;
 
 : inline-store-memory? ( infos class -- ? )
-    '[ first class>> _ class<= ]
+    $[ first class>> _ class<= ]
     [ second class>> c-ptr class<= ]
     [ third class>> fixnum class<= ]
     tri and and ;

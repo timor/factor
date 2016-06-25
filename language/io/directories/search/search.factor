@@ -15,10 +15,10 @@ IN: io.directories.search
     dup directory-files [ append-path ] with map! ;
 
 : with-qualified-directory-files ( path quot -- )
-    '[ "" qualified-directory-files @ ] with-directory ; inline
+    $[ "" qualified-directory-files @ ] with-directory ; inline
 
 : with-qualified-directory-entries ( path quot -- )
-    '[ "" qualified-directory-entries @ ] with-directory ; inline
+    $[ "" qualified-directory-entries @ ] with-directory ; inline
 
 PRIVATE<
 
@@ -29,7 +29,7 @@ TUPLE: directory-iterator
 
 : push-directory-entries ( path iter -- )
     { directory-iterator } declare
-    [ [ qualified-directory-entries ] [ 2drop f ] recover ] dip '[
+    [ [ qualified-directory-entries ] [ 2drop f ] recover ] dip $[
         _ [ queue>> ] [ bfs>> ] bi
         [ push-front ] [ push-back ] if
     ] each ;
@@ -114,11 +114,11 @@ ERROR: sequence-expected obj ;
 ! Can't make this generic# on string/sequence because of combinators
 : find-in-directories ( directories bfs? quot -- path'/f )
     [ ensure-sequence-of-directories ] 2dip
-    '[ _ [ _ _ find-file-throws ] attempt-all ]
+    $[ _ [ _ _ find-file-throws ] attempt-all ]
     [ drop f ] recover ; inline
 
 : find-all-in-directories ( directories quot -- paths/f )
-    '[ _ find-all-files ] map concat ; inline
+    $[ _ find-all-files ] map concat ; inline
 
 : ?parent-directory ( path -- path'/f )
     dup parent-directory 2dup = [ 2drop f ] [ nip ] if ;
@@ -160,13 +160,13 @@ ERROR: sequence-expected obj ;
 
 : find-by-extensions ( path extensions -- seq )
     [ >lower ] map
-    '[ >lower _ [ tail? ] with any? ] find-all-files ;
+    $[ >lower _ [ tail? ] with any? ] find-all-files ;
 
 : find-by-extension ( path extension -- seq )
     1array find-by-extensions ;
 
 : find-files-larger-than ( path size -- seq )
-    '[ file-info size>> _ > ] filter-files-by-depth ;
+    $[ file-info size>> _ > ] filter-files-by-depth ;
 
 : file-info-recursive ( path -- seq )
     [ dup ?file-info [ 2array ] [ drop f ] if* ] filter-files-by-depth ;

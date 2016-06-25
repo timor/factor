@@ -27,7 +27,7 @@ SYMBOLS: effect-dependency conditional-dependency definition-dependency ;
 : depends-on ( word how -- )
     over primitive? [ 2drop ] [
         dependencies get dup [
-            swap '[ _ strongest-dependency ] change-at
+            swap $[ _ strongest-dependency ] change-at
         ] [ 3drop ] if
     ] if ;
 

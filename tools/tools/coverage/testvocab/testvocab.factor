@@ -22,7 +22,7 @@ MACRO: mconcat ( seq -- quot ) concat ;
     { [ 2dup ] [ <= [ ] [ ] if ] [ > [ ] [ ] if ] } mconcat ;
 
 : testfry ( ? -- )
-  '[ _ [ ] [ ] if ] call ;
+  $[ _ [ ] [ ] if ] call ;
 
 : untested ( -- ) ;
 

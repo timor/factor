@@ -5,7 +5,7 @@ IN: help.markup.tests
 
 : with-markup-test ( quot -- )
     [ f last-element ] dip
-    '[ _ with-string-writer ] with-variable ; inline
+    $[ _ with-string-writer ] with-variable ; inline
 
 TUPLE: blahblah quux ;
 

@@ -34,7 +34,7 @@ ARTICLE: "concurrency.semaphores.examples" "Semaphore examples"
 { $code
     "SYMBOL: expensive-section"
     "requests"
-    "10 <semaphore> '["
+    "10 <semaphore> $["
     "    ..."
     "    _ [ do-expensive-stuff ] with-semaphore"
     "    ..."
@@ -52,7 +52,7 @@ fry http.client kernel urls ;
     URL\" http://www.hp.com\"
     URL\" http://www.oracle.com\"
 }
-2 <semaphore> '[
+2 <semaphore> $[
     _ [ http-get nip ] with-semaphore
 ] parallel-map"
 } ;

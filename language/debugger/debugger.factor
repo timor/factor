@@ -109,7 +109,7 @@ HOOK: signal-error. os ( obj -- ) ;
 
 : find-ffi-error ( string -- error )
     [ linkage-errors get ] dip
-    '[ nip asset>> name>> _ = ] assoc-find drop nip
+    $[ nip asset>> name>> _ = ] assoc-find drop nip
     [ error>> message>> ] [ "none" ] if* ;
 
 : undefined-symbol-error. ( obj -- )
@@ -367,7 +367,7 @@ M: bad-effect summary
 M: invalid-row-variable summary
     drop "Stack effect row variables can only occur as the first input or output" ;
 
-M: row-variable-can't-have-type summary
+M: row-variable-cant-have-type summary
     drop "Stack effect row variables cannot have a declared type" ;
 
 M: bad-escape error.

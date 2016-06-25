@@ -32,7 +32,7 @@ ERROR: no-imap-test-host ;
     \ imap-settings get-global host>> [ no-imap-test-host ] unless* ;
 
 : imap-test ( result quot -- )
-    '[ \ imap-settings get-global _ with-imap-settings ] unit-test ; inline
+    $[ \ imap-settings get-global _ with-imap-settings ] unit-test ; inline
 
 : base-folder ( -- s )
     os name>> cpu name>> "-" glue ;
@@ -41,7 +41,7 @@ MEMO: my-uuid ( -- str )
     uuid1 ;
 
 : test-folder ( s -- s )
-    '[
+    $[
         base-folder "/" my-uuid "/" _
     ] "" append-outputs-as ;
 
@@ -103,7 +103,7 @@ MEMO: my-uuid ( -- str )
     10 random-ascii {
         [ create-folder ]
         [
-            '[ _ "(\\Seen)" now sample-mail append-mail drop ]
+            $[ _ "(\\Seen)" now sample-mail append-mail drop ]
             10 swap times
         ]
         [
@@ -123,7 +123,7 @@ MEMO: my-uuid ( -- str )
     10 random-ascii {
         [ create-folder ]
         [
-            '[ _ "(\\Seen)" now sample-mail append-mail drop ]
+            $[ _ "(\\Seen)" now sample-mail append-mail drop ]
             10 swap times
         ]
         [
@@ -145,7 +145,7 @@ MEMO: my-uuid ( -- str )
 ! Create a folder hierarchy
 [ t ] [
     "foo/bar/baz/日本語" test-folder
-    [ '[ _ delete-folder ] ignore-errors ]
+    [ $[ _ delete-folder ] ignore-errors ]
     [
         "*" test-folder list-folders length
         swap create-folder

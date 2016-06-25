@@ -39,7 +39,7 @@ TUPLE: b-rep-vertices
     face-count edge-count point-count \ b-rep-vertices boa ; inline
 
 : face-selected? ( face selected -- ? )
-    [ f ] 2dip [ edge>> ] dip '[ _ in? or ] each-face-edge ;
+    [ f ] 2dip [ edge>> ] dip $[ _ in? or ] each-face-edge ;
 
 :: b-rep-face-vertices ( b-rep selected -- vertices count indices )
     float-4-vector{ } clone :> vertices
@@ -263,7 +263,7 @@ CONSTANT: edge-hitbox-radius 0.05 ;
 : select-edge ( world -- )
     [ [ location>> ] [ hand-loc get wasd-pixel-ray ] bi ]
     [ b-rep>> intersecting-edge-node ]
-    [ '[ _ [ selected>> push-model ] [ refresh-b-rep-view ] bi ] when* ] tri ;
+    [ $[ _ [ selected>> push-model ] [ refresh-b-rep-view ] bi ] when* ] tri ;
 
 gml-viewer-world H{
     { T{ button-up f f 1 } [ dup drag?>> [ drop ] [ select-edge ] if ] }
@@ -292,7 +292,7 @@ M: gml-viewer-world wasd-mouse-scale drag?>> -1/600. 0.0 ? ;
 
 : gml-viewer ( b-rep selection -- )
     [ wrap-in-model ] [ wrap-in-growable-model ] bi*
-    '[
+    $[
         f T{ game-attributes
             { world-class gml-viewer-world }
             { title "GML wireframe viewer" }

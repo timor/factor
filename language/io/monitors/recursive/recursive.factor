@@ -30,7 +30,7 @@ DEFER: add-child-monitor
     qualify-path dup link-info directory? [
         [ add-child-monitors ]
         [
-            '[
+            $[
                 _ [ f my-mailbox (monitor) ] keep
                 monitor tget children>> set-at
             ] ignore-errors
@@ -76,7 +76,7 @@ M: recursive-monitor dispose*
         { [ dup +stop+ eq? ] [ drop stop-pump ] }
         { [ dup monitor-disposed eq? ] [ drop ] }
         [
-            [ '[ _ update-hierarchy ] ignore-errors ] [ pump-step ] bi
+            [ $[ _ update-hierarchy ] ignore-errors ] [ pump-step ] bi
             pump-loop
         ]
     } cond ;
@@ -92,7 +92,7 @@ M: recursive-monitor dispose*
     pump-loop ;
 
 : start-pump-thread ( monitor -- )
-    dup '[ _ pump-thread ]
+    dup $[ _ pump-thread ]
     "Recursive monitor pump" spawn
     >>thread drop ;
 
