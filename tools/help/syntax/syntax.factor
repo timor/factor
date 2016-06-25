@@ -45,6 +45,10 @@ SYNTAX: \ HELP-3BACKTICKS:
     scan-new-escaped scan-word ";" expect
     $[ _ "```" parse-multiline-string-new 2array suffix! ] define-syntax ;
 
+SYNTAX: \ HELP-BACKSLASH:
+    scan-new-escaped scan-word ";" expect
+    $[ _ scan-word <wrapper> 2array suffix! ] define-syntax ;
+
 COMPILE>
 
 HELP-ARRAY: \ $breadcrumbs{ $breadcrumbs ;
@@ -366,3 +370,68 @@ HELP-3BACKTICKS: \ $vocab-links``` $vocab-links ;
 HELP-3BACKTICKS: \ $vocab-subsection``` $vocab-subsection ;
 HELP-3BACKTICKS: \ $vocabulary``` $vocabulary ;
 HELP-3BACKTICKS: \ $warning``` $warning ;
+
+
+HELP-BACKSLASH: \ $breadcrumbs\ $breadcrumbs ;
+HELP-BACKSLASH: \ $class-description\ $class-description ;
+HELP-BACKSLASH: \ $code\ $code ;
+HELP-BACKSLASH: \ $complex-shuffle\ $complex-shuffle ;
+HELP-BACKSLASH: \ $content\ $content ;
+HELP-BACKSLASH: \ $contract\ $contract ;
+HELP-BACKSLASH: \ $curious\ $curious ;
+HELP-BACKSLASH: \ $definition\ $definition ;
+HELP-BACKSLASH: \ $definition-icons\ $definition-icons ;
+HELP-BACKSLASH: \ $deprecated\ $deprecated ;
+HELP-BACKSLASH: \ $description\ $description ;
+HELP-BACKSLASH: \ $emphasis\ $emphasis ;
+HELP-BACKSLASH: \ $error-description\ $error-description ;
+HELP-BACKSLASH: \ $errors\ $errors ;
+HELP-BACKSLASH: \ $example\ $example ;
+HELP-BACKSLASH: \ $examples\ $examples ;
+HELP-BACKSLASH: \ $heading\ $heading ;
+HELP-BACKSLASH: \ $image\ $image ;
+HELP-BACKSLASH: \ $instance\ $instance ;
+HELP-BACKSLASH: \ $io-error\ $io-error ;
+HELP-BACKSLASH: \ $link\ $link ;
+HELP-BACKSLASH: \ $links\ $links ;
+HELP-BACKSLASH: \ $list\ $list ;
+HELP-BACKSLASH: \ $long-link\ $long-link ;
+HELP-BACKSLASH: \ $low-level-note\ $low-level-note ;
+HELP-BACKSLASH: \ $markup-example\ $markup-example ;
+HELP-BACKSLASH: \ $maybe\ $maybe ;
+HELP-BACKSLASH: \ $methods\ $methods ;
+HELP-BACKSLASH: \ $nl\ $nl ;
+HELP-BACKSLASH: \ $notes\ $notes ;
+HELP-BACKSLASH: \ $or\ $or ;
+HELP-BACKSLASH: \ $parsing-note\ $parsing-note ;
+HELP-BACKSLASH: \ $pretty-link\ $pretty-link ;
+HELP-BACKSLASH: \ $prettyprinting-note\ $prettyprinting-note ;
+HELP-BACKSLASH: \ $quotation\ $quotation ;
+HELP-BACKSLASH: \ $references\ $references ;
+HELP-BACKSLASH: \ $related\ $related ;
+HELP-BACKSLASH: \ $see\ $see ;
+HELP-BACKSLASH: \ $see-also\ $see-also ;
+HELP-BACKSLASH: \ $sequence\ $sequence ;
+HELP-BACKSLASH: \ $shuffle\ $shuffle ;
+HELP-BACKSLASH: \ $side-effects\ $side-effects ;
+HELP-BACKSLASH: \ $slot\ $slot ;
+HELP-BACKSLASH: \ $snippet\ $snippet ;
+HELP-BACKSLASH: \ $strong\ $strong ;
+HELP-BACKSLASH: \ $subheading\ $subheading ;
+HELP-BACKSLASH: \ $subsection\ $subsection ;
+HELP-BACKSLASH: \ $subsection*\ $subsection* ;
+HELP-BACKSLASH: \ $subsections\ $subsections ;
+HELP-BACKSLASH: \ $synopsis\ $synopsis ;
+HELP-BACKSLASH: \ $syntax\ $syntax ;
+HELP-BACKSLASH: \ $table\ $table ;
+HELP-BACKSLASH: \ $unchecked-example\ $unchecked-example ;
+HELP-BACKSLASH: \ $url\ $url ;
+HELP-BACKSLASH: \ $value\ $value ;
+HELP-BACKSLASH: \ $values\ $values ;
+HELP-BACKSLASH: \ $values-x/y\ $values-x/y ;
+HELP-BACKSLASH: \ $var-description\ $var-description ;
+HELP-BACKSLASH: \ $vocab-link\ $vocab-link ;
+HELP-BACKSLASH: \ $vocab-links\ $vocab-links ;
+HELP-BACKSLASH: \ $vocab-subsection\ $vocab-subsection ;
+HELP-BACKSLASH: \ $vocabulary\ $vocabulary ;
+HELP-BACKSLASH: \ $warning\ $warning ;

@@ -9,7 +9,7 @@ HELP: OBJ-UNDEFINED
 $description"Default definition for undefined words." ;
 
 HELP: WIN-EXCEPTION-HANDLER
-$description{ "This special object is an " $link{ alien } " containing a pointer to the processes global exception handler. Only applicable on " $link{ windows } "." } ;
+$description{ "This special object is an " $link\ alien " containing a pointer to the processes global exception handler. Only applicable on " $link\ windows "." } ;
 
 HELP: eq?
 $values{ `obj1 object -- `obj2 object -- `? boolean }
@@ -79,16 +79,16 @@ HELP: hashcode*
 $values{ "depth" integer -- "obj" object -- "code" fixnum }
 $contract{ "Outputs the hashcode of an object. The hashcode operation must satisfy the following properties:"
 $list{
-    { "If two objects are equal under " $link{ = } ", they must have equal hashcodes." }
-    { "If the hashcode of an object depends on the values of its slots, the hashcode of the slots must be computed recursively by calling " $link{ hashcode* } " with a " $snippet{ "level" } " parameter decremented by one. This avoids excessive work while still computing well-distributed hashcodes. The " $link{ recursive-hashcode } " combinator can help with implementing this logic," }
-    { "The hashcode should be a " $link{ fixnum } ", however returning a " $link{ bignum } " will not cause any problems other than potential performance degradation." }
+    { "If two objects are equal under " $link\ = ", they must have equal hashcodes." }
+    { "If the hashcode of an object depends on the values of its slots, the hashcode of the slots must be computed recursively by calling " $link\ hashcode* " with a " $snippet{ "level" } " parameter decremented by one. This avoids excessive work while still computing well-distributed hashcodes. The " $link\ recursive-hashcode " combinator can help with implementing this logic," }
+    { "The hashcode should be a " $link\ fixnum ", however returning a " $link\ bignum " will not cause any problems other than potential performance degradation." }
     { "The hashcode is only permitted to change between two invocations if the object or one of its slot values was mutated." }
 }
-"If mutable objects are used as hashtable keys, they must not be mutated in such a way that their hashcode changes. Doing so will violate bucket sorting invariants and result in undefined behavior. See " $link{ "hashtables.keys" } " for details." } ;
+"If mutable objects are used as hashtable keys, they must not be mutated in such a way that their hashcode changes. Doing so will violate bucket sorting invariants and result in undefined behavior. See " $link"hashtables.keys" " for details." } ;
 
 HELP: hashcode
 $values{ { "obj" object } { "code" fixnum } }
-$description{ "Computes the hashcode of an object with a default hashing depth. See " $link{ hashcode* } " for the hashcode contract." } ;
+$description{ "Computes the hashcode of an object with a default hashing depth. See " $link\ hashcode* " for the hashcode contract." } ;
 
 HELP: identity-hashcode
 $values{ { "obj" object } { "code" fixnum } }
@@ -99,7 +99,7 @@ $description{ "Outputs the identity hashcode of an object. The identity hashcode
 HELP: =
 $values{ "obj1" object -- "obj2" object -- "?" boolean }
 $description{
-    "Tests if two objects are equal. If " $snippet{ "obj1" } " and " $snippet{ "obj2" } " point to the same object, outputs " $link{ t } ". Otherwise, calls the " $link{ equal? } " generic word."
+    "Tests if two objects are equal. If " $snippet{ "obj1" } " and " $snippet{ "obj2" } " point to the same object, outputs " $link\ t ". Otherwise, calls the " $link\ equal? " generic word."
 }
 $examples{
     $example{ "USING: kernel prettyprint ;" "5 5 = ." "t" }
@@ -114,28 +114,28 @@ $values{ { "obj1" object } { "obj2" object } { "?" boolean } }
 $contract{
     "Tests if two objects are equal."
     $nl
-    "User code should call " $link{ = } " instead; that word first tests the case where the objects are " $link{ eq? } ", and so by extension, methods defined on " $link{ equal? } " assume they are never called on " $link{ eq? } " objects."
+    "User code should call " $link\ = " instead; that word first tests the case where the objects are " $link\ eq? ", and so by extension, methods defined on " $link\ equal? " assume they are never called on " $link\ eq? " objects."
     $nl
-    "Method definitions should ensure that this is an equality relation, modulo the assumption that the two objects are not " $link{ eq? } ". That is, for any three non-" $link{ eq? } " objects " $snippet{ "a" } ", " $snippet{ "b" } " and " $snippet{ "c" } ", we must have:"
+    "Method definitions should ensure that this is an equality relation, modulo the assumption that the two objects are not " $link\ eq? ". That is, for any three non-" $link\ eq? " objects " $snippet{ "a" } ", " $snippet{ "b" } " and " $snippet{ "c" } ", we must have:"
     $list{
         { $snippet{ "a = b" } " implies " $snippet{ "b = a" } }
         { $snippet{ "a = b" } " and " $snippet{ "b = c" } " implies " $snippet{ "a = c" } }
     }
-    "If a class defines a custom equality comparison test, it should also define a compatible method for the " $link{ hashcode* } " generic word."
+    "If a class defines a custom equality comparison test, it should also define a compatible method for the " $link\ hashcode* " generic word."
 }
 $examples{
     "An example demonstrating why this word should only be used to define methods on, and never called directly:"
     $example{ "USING: kernel prettyprint ;" "5 5 equal? ." "f" }
-    "Using " $link{ = } " gives the expected behavior:"
+    "Using " $link\ = " gives the expected behavior:"
     $example{ "USING: kernel prettyprint ;" "5 5 = ." "t" }
 } ;
 
 HELP: identity-tuple
-$class-description{ "A class defining an " $link{ equal? } " method which always returns f." }
+$class-description{ "A class defining an " $link\ equal? " method which always returns f." }
 $examples{
-    "To define a tuple class such that two instances are only equal if they are both the same instance, inherit from the " $link{ identity-tuple } " class. This class defines a method on " $link{ equal? } " which always returns " $link{ f } ". Since " $link{ = } " handles the case where the two objects are " $link{ eq? } ", this method will never be called with two " $link{ eq? } " objects, so such a definition is valid:"
+    "To define a tuple class such that two instances are only equal if they are both the same instance, inherit from the " $link\ identity-tuple " class. This class defines a method on " $link\ equal? " which always returns " $link\ f ". Since " $link\ = " handles the case where the two objects are " $link\ eq? ", this method will never be called with two " $link\ eq? " objects, so such a definition is valid:"
     $code{ "TUPLE: foo < identity-tuple ;" }
-    "By calling " $link{ = } " on instances of " $snippet{ "foo" } " we get the results we expect:"
+    "By calling " $link\ = " on instances of " $snippet{ "foo" } " we get the results we expect:"
     $unchecked-example{ "T{ foo } dup = ." "t" }
     $unchecked-example{ "T{ foo } dup clone = ." "f" }
 } ;
@@ -149,21 +149,21 @@ $values{ "?" "a generalized boolean" -- "true" object -- "false" object -- "true
 $description{ "Chooses between two values depending on the boolean value of " $snippet{ "cond" } "." } ;
 
 HELP: boolean
-$class-description{ "A union of the " $link{ postpone\ t } " and " $link{ postpone\ f } " classes." } ;
+$class-description{ "A union of the " $link\ t " and " $link\ f " classes." } ;
 
 HELP: >boolean
 $values{ { "obj" "a generalized boolean" } { "?" boolean } }
-$description{ "Convert a generalized boolean into a boolean. That is, " $link{ f } " retains its value, whereas anything else becomes " $link{ t } "." } ;
+$description{ "Convert a generalized boolean into a boolean. That is, " $link\ f " retains its value, whereas anything else becomes " $link\ t "." } ;
 
 HELP: not
 $values{ { "obj" "a generalized boolean" } { "?" boolean } }
-$description{ "For " $link{ f } " outputs " $link{ t } " and for anything else outputs " $link{ f } "." }
-$notes{ "This word implements boolean not, so applying it to integers will not yield useful results (all integers have a true value). Bitwise not is the " $link{ bitnot } " word." } ;
+$description{ "For " $link\ f " outputs " $link\ t " and for anything else outputs " $link\ f "." }
+$notes{ "This word implements boolean not, so applying it to integers will not yield useful results (all integers have a true value). Bitwise not is the " $link\ bitnot " word." } ;
 
 HELP: and
 $values{ { "obj1" "a generalized boolean" } { "obj2" "a generalized boolean" } { "?" "a generalized boolean" } }
-$description{ "If both inputs are true, outputs " $snippet{ "obj2" } ". otherwise outputs " $link{ f } "." }
-$notes{ "This word implements boolean and, so applying it to integers will not yield useful results (all integers have a true value). Bitwise and is the " $link{ bitand } " word." }
+$description{ "If both inputs are true, outputs " $snippet{ "obj2" } ". otherwise outputs " $link\ f "." }
+$notes{ "This word implements boolean and, so applying it to integers will not yield useful results (all integers have a true value). Bitwise and is the " $link\ bitand " word." }
 $examples{
     "Usually only the boolean value of the result is used, however you can also explicitly rely on the behavior that if both inputs are true, the second is output:"
     $example{ "USING: kernel prettyprint ;" "t f and ." "f" }
@@ -173,8 +173,8 @@ $examples{
 
 HELP: or
 $values{ { "obj1" "a generalized boolean" } { "obj2" "a generalized boolean" } { "?" "a generalized boolean" } }
-$description{ "If both inputs are false, outputs " $link{ f } ". otherwise outputs the first of " $snippet{ "obj1" } " and " $snippet{ "obj2" } " which is true." }
-$notes{ "This word implements boolean inclusive or, so applying it to integers will not yield useful results (all integers have a true value). Bitwise inclusive or is the " $link{ bitor } " word." }
+$description{ "If both inputs are false, outputs " $link\ f ". otherwise outputs the first of " $snippet{ "obj1" } " and " $snippet{ "obj2" } " which is true." }
+$notes{ "This word implements boolean inclusive or, so applying it to integers will not yield useful results (all integers have a true value). Bitwise inclusive or is the " $link\ bitor " word." }
 $examples{
     "Usually only the boolean value of the result is used, however you can also explicitly rely on the behavior that the result will be the first true input:"
     $example{ "USING: kernel prettyprint ;" "t f or ." "t" }
@@ -183,8 +183,8 @@ $examples{
 
 HELP: xor
 $values{ { "obj1" "a generalized boolean" } { "obj2" "a generalized boolean" } { "?" "a generalized boolean" } }
-$description{ "If exactly one input is false, outputs the other input. Otherwise outputs " $link{ f } "." }
-$notes{ "This word implements boolean exclusive or, so applying it to integers will not yield useful results (all integers have a true value). Bitwise exclusive or is the " $link{ bitxor } " word." } ;
+$description{ "If exactly one input is false, outputs the other input. Otherwise outputs " $link\ f "." }
+$notes{ "This word implements boolean exclusive or, so applying it to integers will not yield useful results (all integers have a true value). Bitwise exclusive or is the " $link\ bitxor " word." } ;
 
 HELP: both?
 $values{ { "x" object } { "y" object } { "quot" $quotation{ ( ... obj -- ... ? ) } } { "?" boolean } }
@@ -212,7 +212,7 @@ $examples{
 
 HELP: execute
 $values{ { "word" word } }
-$description{ "Executes a word. Words which " $link{ execute } " an input parameter must be declared " $link{ postpone\ inline } " so that a caller which passes in a literal word can have a static stack effect." }
+$description{ "Executes a word. Words which " $link\ execute " an input parameter must be declared " $link\ inline " so that a caller which passes in a literal word can have a static stack effect." }
 $examples{
     $example{ "USING: kernel io words ;" "IN: scratchpad" ": twice ( word -- ) dup execute execute ; inline\n: hello ( -- ) \"Hello\" print ;\n\\ hello twice" "Hello\nHello" }
 } ;
@@ -222,11 +222,11 @@ $examples{
 HELP: (execute)
 $values{ { "word" word } }
 $description{ "Executes a word without checking if it is a word first." }
-$warning{ "This word is in the " $vocab-link{ "kernel.private" } " vocabulary because it is unsafe. Calling with a parameter that is not a word will crash Factor. Use " $link{ execute } " instead." } ;
+$warning{ "This word is in the " $vocab-link{ "kernel.private" } " vocabulary because it is unsafe. Calling with a parameter that is not a word will crash Factor. Use " $link\ execute " instead." } ;
 
 HELP: call
 $values{ { "callable" callable } }
-$description{ "Calls a quotation. Words which " $link{ call } " an input parameter must be declared " $link{ postpone\ inline } " so that a caller which passes in a literal quotation can have a static stack effect." }
+$description{ "Calls a quotation. Words which " $link\ call " an input parameter must be declared " $link\ inline " so that a caller which passes in a literal quotation can have a static stack effect." }
 $examples{
     "The following two lines are equivalent:"
     $code{ "2 [ 2 + 3 * ] call" "2 2 + 3 *" }
@@ -479,12 +479,12 @@ $notes{
     "[ p ] [ q ] bi-curry [ call ] bi@"
     "[ p ] [ q ] bi"
   }
-  "Higher-arity variants of " $link{ bi } " can be built from " $link{ bi-curry } ":"
+  "Higher-arity variants of " $link\ bi " can be built from " $link\ bi-curry ":"
   $code{
     "[ p ] [ q ] bi-curry bi == [ p ] [ q ] 2bi"
     "[ p ] [ q ] bi-curry bi-curry bi == [ p ] [ q ] 3bi"
   }
-  "The combination " $snippet{ "bi-curry bi*" } " cannot be expressed with the non-currying dataflow combinators alone; it is equivalent to a stack shuffle preceding " $link{ 2bi* } ":"
+  "The combination " $snippet{ "bi-curry bi*" } " cannot be expressed with the non-currying dataflow combinators alone; it is equivalent to a stack shuffle preceding " $link\ 2bi* ":"
   $code{
     "[ p ] [ q ] bi-curry bi*"
     "[ swap ] keep [ p ] [ q ] 2bi*"
@@ -509,7 +509,7 @@ $notes{
     "[ p ] [ q ] [ r ] tri-curry [ call ] tri@"
     "[ p ] [ q ] [ r ] tri"
   }
-  "Higher-arity variants of " $link{ tri } " can be built from " $link{ tri-curry } ":"
+  "Higher-arity variants of " $link\ tri " can be built from " $link\ tri-curry ":"
   $code{
     "[ p ] [ q ] [ r ] tri-curry tri == [ p ] [ q ] [ r ] 2tri"
     "[ p ] [ q ] [ r ] tri-curry tri-curry bi == [ p ] [ q ] [ r ] 3tri"
@@ -525,14 +525,14 @@ $notes{
     "[ p ] [ q ] bi-curry* [ call ] bi@"
     "[ p ] [ q ] bi*"
   }
-  "The combination " $snippet{ "bi-curry* bi" } " is equivalent to a stack shuffle preceding " $link{ 2bi* } ":"
+  "The combination " $snippet{ "bi-curry* bi" } " is equivalent to a stack shuffle preceding " $link\ 2bi* ":"
   $code{
     "[ p ] [ q ] bi-curry* bi"
     "[ over ] dip [ p ] [ q ] 2bi*"
   }
   "In other words, " $snippet{ "bi-curry* bi" } " handles the case where you have the three values " $snippet{ "a b c" } " on the stack, and you wish to apply " $snippet{ "p" } " to " $snippet{ "a b" } " and " $snippet{ "q" } " to " $snippet{ "a c" } "."
   $nl
-  "The combination " $snippet{ "bi-curry* bi*" } " is equivalent to a stack shuffle preceding " $link{ 2bi* } ":"
+  "The combination " $snippet{ "bi-curry* bi*" } " is equivalent to a stack shuffle preceding " $link\ 2bi* ":"
   $code{
     "[ p ] [ q ] bi-curry* bi*"
     "[ swap ] dip [ p ] [ q ] 2bi*"
@@ -560,7 +560,7 @@ $notes{
     "[ p ] [ q ] [ r ] tri-curry* [ call ] tri@"
     "[ p ] [ q ] [ r ] tri*"
   }
-  "The combination " $snippet{ "tri-curry* tri" } " is equivalent to a stack shuffle preceding " $link{ 2tri* } ":"
+  "The combination " $snippet{ "tri-curry* tri" } " is equivalent to a stack shuffle preceding " $link\ 2tri* ":"
   $code{
     "[ p ] [ q ] [ r ] tri-curry* tri"
     "[ [ over ] dip over ] dip [ p ] [ q ] [ r ] 2tri*"
@@ -599,7 +599,7 @@ $notes{
 
 HELP: if
 $values{ { "?" "a generalized boolean" } { "true" quotation } { "false" quotation } }
-$description{ "If " $snippet{ "cond" } " is " $link{ f } ", calls the " $snippet{ "false" } " quotation. Otherwise calls the " $snippet{ "true" } " quotation."
+$description{ "If " $snippet{ "cond" } " is " $link\ f ", calls the " $snippet{ "false" } " quotation. Otherwise calls the " $snippet{ "true" } " quotation."
 $nl
 "The " $snippet{ "cond" } " value is removed from the stack before either quotation is called." }
 $examples{
@@ -609,11 +609,11 @@ $examples{
         "Math is good"
     }
 }
-$notes{ $snippet{ "if" } " is executed as a primitive when preceded by two literal quotations. The below definition is not executed unless one of its arguments is a non-literal quotation, such as a quotation constructed with " $link{ curry } " or " $link{ compose } ", or for " $link{ "fry" } " or quotations including " $link{ "locals" } "." } ;
+$notes{ $snippet{ "if" } " is executed as a primitive when preceded by two literal quotations. The below definition is not executed unless one of its arguments is a non-literal quotation, such as a quotation constructed with " $link\ curry " or " $link\ compose ", or for " $link"fry" " or quotations including " $link"locals" "." } ;
 
 HELP: when
 $values{ { "?" "a generalized boolean" } { "true" quotation } }
-$description{ "If " $snippet{ "cond" } " is not " $link{ f } ", calls the " $snippet{ "true" } " quotation."
+$description{ "If " $snippet{ "cond" } " is not " $link\ f ", calls the " $snippet{ "true" } " quotation."
 $nl
 "The " $snippet{ "cond" } " value is removed from the stack before the quotation is called." }
 $examples{
@@ -626,7 +626,7 @@ $examples{
 
 HELP: unless
 $values{ { "?" "a generalized boolean" } { "false" quotation } }
-$description{ "If " $snippet{ "cond" } " is " $link{ f } ", calls the " $snippet{ "false" } " quotation."
+$description{ "If " $snippet{ "cond" } " is " $link\ f ", calls the " $snippet{ "false" } " quotation."
 $nl
 "The " $snippet{ "cond" } " value is removed from the stack before the quotation is called." }
 $examples{
@@ -657,7 +657,7 @@ $nl
 "The following two lines are equivalent:"
 $code{ "X [ Y ] [ Z ] if*" "X dup [ Y ] [ drop Z ] if" } }
 $examples{
-    "Notice how in this example, the same value is tested by the conditional, and then used in the true branch; the false branch does not need to drop the value because of how " $link{ if* } " works:"
+    "Notice how in this example, the same value is tested by the conditional, and then used in the true branch; the false branch does not need to drop the value because of how " $link\ if* " works:"
     $example{
         "USING: assocs io kernel math.parser ;"
         "IN: scratchpad"
@@ -683,21 +683,21 @@ $examples{
 
 HELP: when*
 $values{ { "?" "a generalized boolean" } { "true" $quotation{ ( ..a ? -- ..a ) } } }
-$description{ "Variant of " $link{ if* } " with no false quotation."
+$description{ "Variant of " $link\ if* " with no false quotation."
 $nl
 "The following two lines are equivalent:"
 $code{ "X [ Y ] when*" "X dup [ Y ] [ drop ] if" } } ;
 
 HELP: unless*
 $values{ { "?" "a generalized boolean" } { "false" $quotation{ ( ..a -- ..a x ) } } { "x" object } }
-$description{ "Variant of " $link{ if* } " with no true quotation." }
+$description{ "Variant of " $link\ if* " with no true quotation." }
 $notes{
 "The following two lines are equivalent:"
 $code{ "X [ Y ] unless*" "X dup [ ] [ drop Y ] if" } } ;
 
 HELP: ?if
 $values{ { "default" object } { "cond" "a generalized boolean" } { "true" $quotation{ ( ..a cond -- ..b ) } } { "false" $quotation{ ( ..a default -- ..b ) } } }
-$description{ "If the condition is " $link{ f } ", the " $snippet{ "false" } " quotation is called with the " $snippet{ "default" } " value on the stack. Otherwise, the " $snippet{ "true" } " quotation is called with the condition on the stack." }
+$description{ "If the condition is " $link\ f ", the " $snippet{ "false" } " quotation is called with the " $snippet{ "default" } " value on the stack. Otherwise, the " $snippet{ "true" } " quotation is called with the condition on the stack." }
 $notes{
 "The following two lines are equivalent:"
 $code{ "[ X ] [ Y ] ?if" "dup [ nip X ] [ drop Y ] if" }
@@ -716,7 +716,7 @@ $notes{
 
 HELP: (clone)
 $values{ { "obj" object } { "newobj" "a shallow copy" } }
-$description{ "Outputs a byte-by-byte copy of the given object. User code should call " $link{ clone } " instead." } ;
+$description{ "Outputs a byte-by-byte copy of the given object. User code should call " $link\ clone " instead." } ;
 
 HELP: declare
 $values{ { "spec" "an array of class words" } }
@@ -725,13 +725,13 @@ $warning{ "The compiler blindly trusts declarations, and false declarations can 
 $examples{
     "The optimizer cannot do anything with the below code:"
     $code{ "2 + 10 *" }
-    "However, if we declare that the top of the stack is a " $link{ float } ", then type checks and generic dispatch are eliminated, and the compiler can use unsafe intrinsics:"
+    "However, if we declare that the top of the stack is a " $link\ float ", then type checks and generic dispatch are eliminated, and the compiler can use unsafe intrinsics:"
     $code{ "{ float } declare 2 + 10 *" }
 } ;
 
 HELP: tag
 $values{ { "object" object } { "n" "a tag number" } }
-$description{ "Outputs an object's tag number, between zero and one less than " $link{ num-types } ". This is implementation detail and user code should call " $link{ class-of } " instead." } ;
+$description{ "Outputs an object's tag number, between zero and one less than " $link\ num-types ". This is implementation detail and user code should call " $link\ class-of " instead." } ;
 
 HELP: special-object
 $values{ { "n" "a non-negative integer" } { "obj" object } }
@@ -752,7 +752,7 @@ $class-description{
     "The canonical empty class with no instances."
 }
 $notes{
-    "Unlike " $snippet{ "null" } " in Java or " $snippet{ "NULL" } " in C++, this is not a value signifying empty, or nothing. Use " $link{ f } " for this purpose."
+    "Unlike " $snippet{ "null" } " in Java or " $snippet{ "NULL" } " in C++, this is not a value signifying empty, or nothing. Use " $link\ f " for this purpose."
 } ;
 
 HELP: most
@@ -761,8 +761,8 @@ $description{ "If the quotation yields a true value when applied to " $snippet{ 
 
 HELP: curry
 $values{ { "obj" object } { "quot" callable } { "curry" curry } }
-$description{ "Partial application. Outputs a " $link{ callable } " which first pushes " $snippet{ "obj" } " and then calls " $snippet{ "quot" } "." }
-$class-description{ "The class of objects created by " $link{ curry } ". These objects print identically to quotations and implement the sequence protocol, however they only use two cells of storage; a reference to the object and a reference to the underlying quotation." }
+$description{ "Partial application. Outputs a " $link\ callable " which first pushes " $snippet{ "obj" } " and then calls " $snippet{ "quot" } "." }
+$class-description{ "The class of objects created by " $link\ curry ". These objects print identically to quotations and implement the sequence protocol, however they only use two cells of storage; a reference to the object and a reference to the underlying quotation." }
 $notes{ "Even if " $snippet{ "obj" } " is a word, it will be pushed as a literal."
 $nl
 "This operation is efficient and does not copy the quotation." }
@@ -774,7 +774,7 @@ $examples{
 
 HELP: 2curry
 $values{ { "obj1" object } { "obj2" object } { "quot" callable } { "curry" curry } }
-$description{ "Outputs a " $link{ callable } " which pushes " $snippet{ "obj1" } " and " $snippet{ "obj2" } " and then calls " $snippet{ "quot" } "." }
+$description{ "Outputs a " $link\ callable " which pushes " $snippet{ "obj1" } " and " $snippet{ "obj2" } " and then calls " $snippet{ "quot" } "." }
 $notes{ "This operation is efficient and does not copy the quotation." }
 $examples{
     $example{ "USING: kernel math prettyprint ;" "5 4 [ + ] 2curry ." "[ 5 4 + ]" }
@@ -782,7 +782,7 @@ $examples{
 
 HELP: 3curry
 $values{ { "obj1" object } { "obj2" object } { "obj3" object } { "quot" callable } { "curry" curry } }
-$description{ "Outputs a " $link{ callable } " which pushes " $snippet{ "obj1" } ", " $snippet{ "obj2" } " and " $snippet{ "obj3" } ", and then calls " $snippet{ "quot" } "." }
+$description{ "Outputs a " $link\ callable " which pushes " $snippet{ "obj1" } ", " $snippet{ "obj2" } " and " $snippet{ "obj3" } ", and then calls " $snippet{ "quot" } "." }
 $notes{ "This operation is efficient and does not copy the quotation." } ;
 
 HELP: with
@@ -810,21 +810,21 @@ $description{ "Partial application on the left of two parameters." } ;
 
 HELP: compose
 $values{ { "quot1" callable } { "quot2" callable } { "compose" compose } }
-$description{ "Quotation composition. Outputs a " $link{ callable } " which calls " $snippet{ "quot1" } " followed by " $snippet{ "quot2" } "." }
+$description{ "Quotation composition. Outputs a " $link\ callable " which calls " $snippet{ "quot1" } " followed by " $snippet{ "quot2" } "." }
 $notes{
     "The following two lines are equivalent:"
     $code{
         "compose call"
         "append call"
     }
-    "However, " $link{ compose } " runs in constant time, and the optimizing compiler is able to compile code which calls composed quotations."
+    "However, " $link\ compose " runs in constant time, and the optimizing compiler is able to compile code which calls composed quotations."
 } ;
 
 
 HELP: prepose
 $values{ { "quot1" callable } { "quot2" callable } { "compose" compose } }
-$description{ "Quotation composition. Outputs a " $link{ callable } " which calls " $snippet{ "quot2" } " followed by " $snippet{ "quot1" } "." }
-$notes{ "See " $link{ compose } " for details." } ;
+$description{ "Quotation composition. Outputs a " $link\ callable " which calls " $snippet{ "quot2" } " followed by " $snippet{ "quot1" } "." }
+$notes{ "See " $link\ compose " for details." } ;
 
 { compose prepose } related-words
 
@@ -834,7 +834,7 @@ $description{ "Removes " $snippet{ "x" } " from the datastack, calls " $snippet{
 $examples{
     $example{ "USING: arrays kernel math prettyprint ;" "10 20 30 [ / ] dip 2array ." "{ 1/2 30 }" }
 }
-$notes{ $snippet{ "dip" } " is executed as a primitive when preceded by a literal quotation. The below definition is not executed unless its argument is a non-literal quotation, such as a quotation constructed with " $link{ curry } " or " $link{ compose } ", or for " $link{ "fry" } " or quotations including " $link{ "locals" } "." } ;
+$notes{ $snippet{ "dip" } " is executed as a primitive when preceded by a literal quotation. The below definition is not executed unless its argument is a non-literal quotation, such as a quotation constructed with " $link\ curry " or " $link\ compose ", or for " $link"fry" " or quotations including " $link"locals" "." } ;
 
 HELP: 2dip
 $values{ { "x" object } { "y" object } { "quot" quotation } }
@@ -862,20 +862,20 @@ $notes{ "The following are equivalent:"
 
 HELP: while
 $values{ { "pred" $quotation{ ( ..a -- ..b ? ) } } { "body" $quotation{ ( ..b -- ..a ) } } }
-$description{ "Calls " $snippet{ "body" } " until " $snippet{ "pred" } " returns " $link{ f } "." } ;
+$description{ "Calls " $snippet{ "body" } " until " $snippet{ "pred" } " returns " $link\ f "." } ;
 
 HELP: until
 $values{ { "pred" $quotation{ ( ..a -- ..b ? ) } } { "body" $quotation{ ( ..b -- ..a ) } } }
-$description{ "Calls " $snippet{ "body" } " until " $snippet{ "pred" } " returns " $link{ t } "." } ;
+$description{ "Calls " $snippet{ "body" } " until " $snippet{ "pred" } " returns " $link\ t "." } ;
 
 HELP: do
 $values{ { "pred" $quotation{ ( ..a -- ..b ? ) } } { "body" $quotation{ ( ..b -- ..a ) } } }
-$description{ "Executes one iteration of a " $link{ while } " or " $link{ until } " loop." } ;
+$description{ "Executes one iteration of a " $link\ while " or " $link\ until " loop." } ;
 
 HELP: loop
 $values{
      { "pred" quotation } }
-     $description{ "Calls the quotation repeatedly until it outputs " $link{ f } "." }
+     $description{ "Calls the quotation repeatedly until it outputs " $link\ f "." }
 $examples{ "Loop until we hit a zero:"
     $unchecked-example{ "USING: kernel random math io ; "
     " [ \"hi\" write bl 10 random zero? not ] loop"
@@ -887,35 +887,35 @@ $examples{ "Loop until we hit a zero:"
 } ;
 
 ARTICLE: "looping-combinators" "Looping combinators"
-"In most cases, loops should be written using high-level combinators (such as " $link{ "sequences-combinators" } ") or tail recursion. However, sometimes, the best way to express intent is with a loop."
+"In most cases, loops should be written using high-level combinators (such as " $link"sequences-combinators" ") or tail recursion. However, sometimes, the best way to express intent is with a loop."
 $subsections{
     while
     until
 }
 "To execute one iteration of a loop, use the following word:"
 $subsections{ do }
-"This word is intended as a modifier. The normal " $link{ while } " loop never executes the body if the predicate returns false on the first iteration. To ensure the body executes at least once, use " $link{ do } ":"
+"This word is intended as a modifier. The normal " $link\ while " loop never executes the body if the predicate returns false on the first iteration. To ensure the body executes at least once, use " $link\ do ":"
 $code{
     "[ P ] [ Q ] do while"
 }
-"A simpler looping combinator which executes a single quotation until it returns " $link{ f } ":"
+"A simpler looping combinator which executes a single quotation until it returns " $link\ f ":"
 $subsections{ loop } ;
 
 HELP: assert
 $values{ { "got" "the obtained value" } { "expect" "the expected value" } }
-$description{ "Throws an " $link{ assert } " error." }
+$description{ "Throws an " $link\ assert " error." }
 $error-description{ "Thrown when a unit test or other assertion fails." } ;
 
 HELP: assert=
 $values{ { "a" object } { "b" object } }
-$description{ "Throws an " $link{ assert } " error if " $snippet{ "a" } " does not equal " $snippet{ "b" } "." } ;
+$description{ "Throws an " $link\ assert " error if " $snippet{ "a" } " does not equal " $snippet{ "b" } "." } ;
 
 HELP: become
 $values{ { "old" array } { "new" array } }
-$description{ "Replaces all references to objects in " $snippet{ "old" } " with the corresponding object in " $snippet{ "new" } ". This word is used to implement tuple reshaping. See " $link{ "tuple-redefinition" } "." } ;
+$description{ "Replaces all references to objects in " $snippet{ "old" } " with the corresponding object in " $snippet{ "new" } ". This word is used to implement tuple reshaping. See " $link"tuple-redefinition" "." } ;
 
 ARTICLE: "shuffle-words-complex" "Complex shuffle words"
-"These shuffle words tend to make code difficult to read and to reason about. Code that uses them should almost always be rewritten using " $link{ "locals" } " or " $link{ "dataflow-combinators" } "."
+"These shuffle words tend to make code difficult to read and to reason about. Code that uses them should almost always be rewritten using " $link"locals" " or " $link"dataflow-combinators" "."
 $nl
 "Duplicating stack elements deep in the stack:"
 $subsections{
@@ -929,7 +929,7 @@ $subsections{
 } ;
 
 ARTICLE: "shuffle-words" "Shuffle words"
-"Shuffle words rearrange items at the top of the data stack as indicated by their stack effects. They provide simple data flow control between words. More complex data flow control is available with the " $link{ "dataflow-combinators" } " and with " $link{ "locals" } "."
+"Shuffle words rearrange items at the top of the data stack as indicated by their stack effects. They provide simple data flow control between words. More complex data flow control is available with the " $link"dataflow-combinators" " and with " $link"locals" "."
 $nl
 "Removing stack elements:"
 $subsections{
@@ -964,9 +964,9 @@ $nl
 $subsections{ eq? }
 "You can test if two objects are equal in a domain-specific sense, usually by being instances of the same class, and having equal slot values (" $emphasis{ "value comparison" } "):"
 $subsections{ = }
-"A third form of equality is provided by " $link{ number= } ". It compares numeric value while disregarding types."
+"A third form of equality is provided by " $link\ number= ". It compares numeric value while disregarding types."
 $nl
-"Custom value comparison methods for use with " $link{ = } " can be defined on a generic word:"
+"Custom value comparison methods for use with " $link\ = " can be defined on a generic word:"
 $subsections{ equal? }
 "Utility class:"
 $subsections{ identity-tuple }
