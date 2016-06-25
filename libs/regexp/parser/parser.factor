@@ -146,8 +146,8 @@ Escape = "p{" CharacterInBracket*:s "}" => [[ s name>class <primitive-class> ]]
 EscapeSequence = "\\" Escape:e => [[ e ]]
 
 Character = EscapeSequence
-          | "$" => [[ $ <tagged-epsilon> ]]
-          | "^" => [[ ^ <tagged-epsilon> ]]
+          | "$" => [[ end-anchor <tagged-epsilon> ]]
+          | "^" => [[ begin-anchor <tagged-epsilon> ]]
           | . ?[ allowed-char? ]?
 
 AnyRangeCharacter = !("&&"|"||"|"--"|"~~") (EscapeSequence | .)
