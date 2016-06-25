@@ -107,6 +107,14 @@ $examples{
     $example{ "USING: kernel prettyprint ;" "5 5.0 = ." "f" }
     $example{ "USING: arrays kernel prettyprint ;" "{ \"a\" \"b\" } \"a\" \"b\" 2array = ." "t" }
     $example{ "USING: arrays kernel prettyprint ;" "{ \"a\" \"b\" } [ \"a\" \"b\" ] = ." "f" }
+    ![[
+    $fexample{
+        $factor{{ USING: arrays kernel prettyprint ;
+            { \"a\" \"b\" } [ \"a\" \"b\" ] =
+        }}
+        { f }
+    }
+    ]]
 } ;
 
 HELP: equal?
