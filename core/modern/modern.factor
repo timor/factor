@@ -224,7 +224,9 @@ ERROR: closing-delimiter-required opening-delimiter ;
 :: make-matched-literal ( payload closing tag opening-delimiter class -- literal )
     class new
         tag >string >>tag
-        payload postprocess-lexed opening-delimiter "\"" = [ split-double-dash ] unless >>payload
+        ! TODO: split -- here or elsewhere?
+        ! payload postprocess-lexed opening-delimiter "\"" = [ split-double-dash ] unless >>payload
+        payload postprocess-lexed >>payload
         tag closing [ dup tag-literal? [ lexed-underlying ] when ] bi@ ?span-slices >>underlying
         opening-delimiter >string >>delimiter
 
