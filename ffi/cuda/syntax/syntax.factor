@@ -13,6 +13,6 @@ SYNTAX: \ CUDA-FUNCTION:
     scan-token [ create-word-in current-cuda-library get ] keep
     scan-c-args ";" expect define-cuda-function ;
 
-SYNTAX: \ cuda-global:
+SYNTAX: \ CUDA-GLOBAL:
     scan-token [ create-word-in current-cuda-library get ] keep
     define-cuda-global ;

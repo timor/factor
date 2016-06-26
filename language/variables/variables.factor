@@ -14,7 +14,7 @@ GENERIC: variable-setter ( word -- word' ) ;
 M: variable variable-setter "variable-setter" word-prop ;
 M: local-reader variable-setter "local-writer" word-prop ;
 
-SYNTAX: \ set:
+SYNTAX: \ vset:
     scan-object variable-setter suffix! ;
 
 : [variable-getter] ( variable -- quot )
@@ -26,7 +26,7 @@ SYNTAX: \ set:
     [ ( -- value ) define-inline ]
     [
         [
-            [ name>> "set: " prepend <uninterned-word> ]
+            [ name>> "vset: " prepend <uninterned-word> ]
             [ over "variable-setter" set-word-prop ] bi
         ] dip ( value -- ) define-inline
     ] bi-curry* bi ;
@@ -77,10 +77,10 @@ PREDICATE: global-variable < variable
 : define-global ( word -- )
     global-box new [ [global-getter] ] [ [global-setter] ] bi (define-variable) ;
 
-SYNTAX: \ global:
+SYNTAX: \ GLOBAL:
     scan-new-word define-global ;
 
-M: global-variable definer drop \ global: f ;
+M: global-variable definer drop \ GLOBAL: f ;
 
 INTERSECTION: typed-global-variable
     global-variable typed-variable ;
