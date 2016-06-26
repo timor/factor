@@ -394,7 +394,7 @@ TUPLE: pdf info pages fonts ;
     [
         pdf info>> pdf-value ,
         pdf-catalog ,
-        { $ sans-serif-font $ serif-font $ monospace-font } {
+        { $\ sans-serif-font $\ serif-font $\ monospace-font } {
             [ [ f >>bold? f >>italic? pdf-value , ] each ]
             [ [ t >>bold? f >>italic? pdf-value , ] each ]
             [ [ f >>bold? t >>italic? pdf-value , ] each ]

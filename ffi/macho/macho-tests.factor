@@ -21,7 +21,7 @@ CONSTANT: validation-output [[
 ]] ;
 
 cpu ppc? [
-    { $ validation-output }
+    { $\ validation-output }
     [ [ "resource:extra/macho/a.macho" macho-nm ] with-string-writer ]
     unit-test
 

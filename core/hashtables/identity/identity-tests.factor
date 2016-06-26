@@ -6,7 +6,7 @@ CONSTANT: the-real-slim-shady "marshall mathers" ;
 
 CONSTANT: will
     IH{
-        { $ the-real-slim-shady t }
+        { $\ the-real-slim-shady t }
         { "marshall mathers"    f }
     } ;
 
@@ -32,5 +32,5 @@ CONSTANT: will
 
 CONSTANT: same-as-it-ever-was "same as it ever was" ;
 
-{ IH{ { $ same-as-it-ever-was $ same-as-it-ever-was } } }
-[ H{ { $ same-as-it-ever-was $ same-as-it-ever-was } } IH{ } assoc-like ] unit-test
+{ IH{ { $\ same-as-it-ever-was $\ same-as-it-ever-was } } }
+[ H{ { $\ same-as-it-ever-was $\ same-as-it-ever-was } } IH{ } assoc-like ] unit-test

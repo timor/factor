@@ -59,7 +59,7 @@ f 2/2 6/2 8/4 4/4
 f 5/1 1/1 3/3 7/3
 " ;
 
-{ $ valid-cube-obj } [ [ valid-cube-b-rep write-obj ] with-string-writer ] unit-test
+{ $\ valid-cube-obj } [ [ valid-cube-b-rep write-obj ] with-string-writer ] unit-test
 
 {
     V{

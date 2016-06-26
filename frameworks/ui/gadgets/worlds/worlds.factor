@@ -52,8 +52,8 @@ TUPLE: world-attributes
     { title string initial: "Factor Window" }
     status
     gadgets
-    { pixel-format-attributes initial: $ default-world-pixel-format-attributes }
-    { window-controls initial: $ default-world-window-controls }
+    { pixel-format-attributes initial: $\ default-world-pixel-format-attributes }
+    { window-controls initial: $\ default-world-window-controls }
     pref-dim ;
 
 : <world-attributes> ( -- world-attributes )

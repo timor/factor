@@ -120,18 +120,18 @@ TR: hyphens>underscores "-" "_" ;
 
 : feedback-type= ( component-type dim gl-type -- ? )
     [ 2array ] dip {
-        { $ GL_FLOAT             [ { float-components 1 } ] }
-        { $ GL_FLOAT_VEC2        [ { float-components 2 } ] }
-        { $ GL_FLOAT_VEC3        [ { float-components 3 } ] }
-        { $ GL_FLOAT_VEC4        [ { float-components 4 } ] }
-        { $ GL_INT               [ { int-integer-components 1 } ] }
-        { $ GL_INT_VEC2          [ { int-integer-components 2 } ] }
-        { $ GL_INT_VEC3          [ { int-integer-components 3 } ] }
-        { $ GL_INT_VEC4          [ { int-integer-components 4 } ] }
-        { $ GL_UNSIGNED_INT      [ { uint-integer-components 1 } ] }
-        { $ GL_UNSIGNED_INT_VEC2 [ { uint-integer-components 2 } ] }
-        { $ GL_UNSIGNED_INT_VEC3 [ { uint-integer-components 3 } ] }
-        { $ GL_UNSIGNED_INT_VEC4 [ { uint-integer-components 4 } ] }
+        { $\ GL_FLOAT             [ { float-components 1 } ] }
+        { $\ GL_FLOAT_VEC2        [ { float-components 2 } ] }
+        { $\ GL_FLOAT_VEC3        [ { float-components 3 } ] }
+        { $\ GL_FLOAT_VEC4        [ { float-components 4 } ] }
+        { $\ GL_INT               [ { int-integer-components 1 } ] }
+        { $\ GL_INT_VEC2          [ { int-integer-components 2 } ] }
+        { $\ GL_INT_VEC3          [ { int-integer-components 3 } ] }
+        { $\ GL_INT_VEC4          [ { int-integer-components 4 } ] }
+        { $\ GL_UNSIGNED_INT      [ { uint-integer-components 1 } ] }
+        { $\ GL_UNSIGNED_INT_VEC2 [ { uint-integer-components 2 } ] }
+        { $\ GL_UNSIGNED_INT_VEC3 [ { uint-integer-components 3 } ] }
+        { $\ GL_UNSIGNED_INT_VEC4 [ { uint-integer-components 4 } ] }
     } case = ;
 
 :: assert-feedback-attribute ( size gl-type name vertex-attribute -- )

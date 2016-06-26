@@ -71,7 +71,7 @@ M: nehe4-gadget ungraft* ( gadget -- )
 MAIN-WINDOW: run4
     {
         { title "NeHe Tutorial 4" }
-        { pref-dim { $ width $ height } }
+        { pref-dim { $\ width $\ height } }
         { pixel-format-attributes {
             windowed
             double-buffered

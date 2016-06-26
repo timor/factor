@@ -20,26 +20,26 @@ C: <window-handle> window-handle ;
 SINGLETON: cocoa-ui-backend
 
 PIXEL-FORMAT-ATTRIBUTE-TABLE: NSOpenGLPFA { } H{
-    { double-buffered { $ NSOpenGLPFADoubleBuffer } }
-    { stereo { $ NSOpenGLPFAStereo } }
-    { offscreen { $ NSOpenGLPFAOffScreen } }
-    { fullscreen { $ NSOpenGLPFAFullScreen } }
-    { windowed { $ NSOpenGLPFAWindow } }
-    { accelerated { $ NSOpenGLPFAAccelerated } }
-    { software-rendered { $ NSOpenGLPFARendererID $ kCGLRendererGenericFloatID } }
-    { backing-store { $ NSOpenGLPFABackingStore } }
-    { multisampled { $ NSOpenGLPFAMultisample } }
-    { supersampled { $ NSOpenGLPFASupersample } }
-    { sample-alpha { $ NSOpenGLPFASampleAlpha } }
-    { color-float { $ NSOpenGLPFAColorFloat } }
-    { color-bits { $ NSOpenGLPFAColorSize } }
-    { alpha-bits { $ NSOpenGLPFAAlphaSize } }
-    { accum-bits { $ NSOpenGLPFAAccumSize } }
-    { depth-bits { $ NSOpenGLPFADepthSize } }
-    { stencil-bits { $ NSOpenGLPFAStencilSize } }
-    { aux-buffers { $ NSOpenGLPFAAuxBuffers } }
-    { sample-buffers { $ NSOpenGLPFASampleBuffers } }
-    { samples { $ NSOpenGLPFASamples } }
+    { double-buffered { $\ NSOpenGLPFADoubleBuffer } }
+    { stereo { $\ NSOpenGLPFAStereo } }
+    { offscreen { $\ NSOpenGLPFAOffScreen } }
+    { fullscreen { $\ NSOpenGLPFAFullScreen } }
+    { windowed { $\ NSOpenGLPFAWindow } }
+    { accelerated { $\ NSOpenGLPFAAccelerated } }
+    { software-rendered { $\ NSOpenGLPFARendererID $\ kCGLRendererGenericFloatID } }
+    { backing-store { $\ NSOpenGLPFABackingStore } }
+    { multisampled { $\ NSOpenGLPFAMultisample } }
+    { supersampled { $\ NSOpenGLPFASupersample } }
+    { sample-alpha { $\ NSOpenGLPFASampleAlpha } }
+    { color-float { $\ NSOpenGLPFAColorFloat } }
+    { color-bits { $\ NSOpenGLPFAColorSize } }
+    { alpha-bits { $\ NSOpenGLPFAAlphaSize } }
+    { accum-bits { $\ NSOpenGLPFAAccumSize } }
+    { depth-bits { $\ NSOpenGLPFADepthSize } }
+    { stencil-bits { $\ NSOpenGLPFAStencilSize } }
+    { aux-buffers { $\ NSOpenGLPFAAuxBuffers } }
+    { sample-buffers { $\ NSOpenGLPFASampleBuffers } }
+    { samples { $\ NSOpenGLPFASamples } }
 } ;
 
 M: cocoa-ui-backend (make-pixel-format)
@@ -113,14 +113,14 @@ M: cocoa-ui-backend (fullscreen?) ( world -- ? )
 ! dialog-window is the same as normal-title-window
 CONSTANT: window-control>styleMask
     H{
-        { close-button $ NSClosableWindowMask }
-        { minimize-button $ NSMiniaturizableWindowMask }
+        { close-button $\ NSClosableWindowMask }
+        { minimize-button $\ NSMiniaturizableWindowMask }
         { maximize-button 0 }
-        { resize-handles $ NSResizableWindowMask }
+        { resize-handles $\ NSResizableWindowMask }
         { small-title-bar $$[ NSTitledWindowMask NSUtilityWindowMask bitor ] }
-        { textured-background $ NSTexturedBackgroundWindowMask }
-        { normal-title-bar $ NSTitledWindowMask }
-        { dialog-window $ NSTitledWindowMask }
+        { textured-background $\ NSTexturedBackgroundWindowMask }
+        { normal-title-bar $\ NSTitledWindowMask }
+        { dialog-window $\ NSTitledWindowMask }
     } ;
 
 : world>styleMask ( world -- n )

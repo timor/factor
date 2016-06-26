@@ -123,7 +123,7 @@ M: nehe5-gadget ungraft* ( gadget -- )
 MAIN-WINDOW: run5
     {
         { title "NeHe Tutorial 5" }
-        { pref-dim { $ width $ height } }
+        { pref-dim { $\ width $\ height } }
         { pixel-format-attributes {
             windowed
             double-buffered

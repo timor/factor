@@ -40,14 +40,14 @@ M: unix copy-file ( from to -- )
 
 : dirent-type>file-type ( type -- file-type )
     H{
-        { $ DT_BLK  +block-device+ }
-        { $ DT_CHR  +character-device+ }
-        { $ DT_DIR  +directory+ }
-        { $ DT_LNK  +symbolic-link+ }
-        { $ DT_SOCK +socket+ }
-        { $ DT_FIFO +fifo+ }
-        { $ DT_REG  +regular-file+ }
-        { $ DT_WHT  +whiteout+ }
+        { $\ DT_BLK  +block-device+ }
+        { $\ DT_CHR  +character-device+ }
+        { $\ DT_DIR  +directory+ }
+        { $\ DT_LNK  +symbolic-link+ }
+        { $\ DT_SOCK +socket+ }
+        { $\ DT_FIFO +fifo+ }
+        { $\ DT_REG  +regular-file+ }
+        { $\ DT_WHT  +whiteout+ }
     } at* [ drop +unknown+ ] unless ;
 
 ! An easy way to return +unknown+ is to mount a .iso on OSX and

@@ -175,9 +175,9 @@ PRIVATE<
 
 : gl-triangle-mode> ( triangle-mode -- mode )
     {
-        { $ GL_POINT [ triangle-points ] }
-        { $ GL_LINE  [ triangle-lines  ] }
-        { $ GL_FILL  [ triangle-fill   ] }
+        { $\ GL_POINT [ triangle-points ] }
+        { $\ GL_LINE  [ triangle-lines  ] }
+        { $\ GL_FILL  [ triangle-fill   ] }
     } case ;
 
 : gl-point-sprite-origin ( point-sprite-origin -- sprite-origin )
@@ -188,8 +188,8 @@ PRIVATE<
 
 : gl-point-sprite-origin> ( point-sprite-origin -- sprite-origin )
     {
-        { $ GL_UPPER_LEFT [ origin-upper-left ] }
-        { $ GL_LOWER_LEFT [ origin-lower-left ] }
+        { $\ GL_UPPER_LEFT [ origin-upper-left ] }
+        { $\ GL_LOWER_LEFT [ origin-lower-left ] }
     } case ;
 
 : gl-comparison ( comparison -- comparison )
@@ -206,14 +206,14 @@ PRIVATE<
 
 : gl-comparison> ( comparison -- comparison )
     {
-        { $ GL_NEVER    [ cmp-never         ] }
-        { $ GL_ALWAYS   [ cmp-always        ] }
-        { $ GL_LESS     [ cmp-less          ] }
-        { $ GL_LEQUAL   [ cmp-less-equal    ] }
-        { $ GL_EQUAL    [ cmp-equal         ] }
-        { $ GL_GEQUAL   [ cmp-greater-equal ] }
-        { $ GL_GREATER  [ cmp-greater       ] }
-        { $ GL_NOTEQUAL [ cmp-not-equal     ] }
+        { $\ GL_NEVER    [ cmp-never         ] }
+        { $\ GL_ALWAYS   [ cmp-always        ] }
+        { $\ GL_LESS     [ cmp-less          ] }
+        { $\ GL_LEQUAL   [ cmp-less-equal    ] }
+        { $\ GL_EQUAL    [ cmp-equal         ] }
+        { $\ GL_GEQUAL   [ cmp-greater-equal ] }
+        { $\ GL_GREATER  [ cmp-greater       ] }
+        { $\ GL_NOTEQUAL [ cmp-not-equal     ] }
     } case ;
 
 : gl-stencil-op ( stencil-op -- op )
@@ -230,14 +230,14 @@ PRIVATE<
 
 : gl-stencil-op> ( op -- op )
     {
-        { $ GL_KEEP      [ op-keep     ] }
-        { $ GL_ZERO      [ op-zero     ] }
-        { $ GL_REPLACE   [ op-replace  ] }
-        { $ GL_INVERT    [ op-invert   ] }
-        { $ GL_INCR      [ op-inc-sat  ] }
-        { $ GL_DECR      [ op-dec-sat  ] }
-        { $ GL_INCR_WRAP [ op-inc-wrap ] }
-        { $ GL_DECR_WRAP [ op-dec-wrap ] }
+        { $\ GL_KEEP      [ op-keep     ] }
+        { $\ GL_ZERO      [ op-zero     ] }
+        { $\ GL_REPLACE   [ op-replace  ] }
+        { $\ GL_INVERT    [ op-invert   ] }
+        { $\ GL_INCR      [ op-inc-sat  ] }
+        { $\ GL_DECR      [ op-dec-sat  ] }
+        { $\ GL_INCR_WRAP [ op-inc-wrap ] }
+        { $\ GL_DECR_WRAP [ op-dec-wrap ] }
     } case ;
 
 : (set-stencil-mode) ( gl-face stencil-mode -- )
@@ -260,11 +260,11 @@ PRIVATE<
 
 : gl-blend-equation> ( blend-equation -- blend-equation )
     {
-        { $ GL_FUNC_ADD              [ eq-add              ] }
-        { $ GL_FUNC_SUBTRACT         [ eq-subtract         ] }
-        { $ GL_FUNC_REVERSE_SUBTRACT [ eq-reverse-subtract ] }
-        { $ GL_MIN                   [ eq-min              ] }
-        { $ GL_MAX                   [ eq-max              ] }
+        { $\ GL_FUNC_ADD              [ eq-add              ] }
+        { $\ GL_FUNC_SUBTRACT         [ eq-subtract         ] }
+        { $\ GL_FUNC_REVERSE_SUBTRACT [ eq-reverse-subtract ] }
+        { $\ GL_MIN                   [ eq-min              ] }
+        { $\ GL_MAX                   [ eq-max              ] }
     } case ;
 
 : gl-blend-function ( blend-function -- blend-function )

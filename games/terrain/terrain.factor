@@ -79,10 +79,10 @@ TYPED: eye-rotate ( yaw: float pitch: float v: float-4 -- v': float-4 )
 
 : forward-vector ( player -- v )
     yaw>> 0.0
-    float-4{ 0.0 0.0 $ MOVEMENT-SPEED 1.0 } vneg eye-rotate ; inline
+    float-4{ 0.0 0.0 $\ MOVEMENT-SPEED 1.0 } vneg eye-rotate ; inline
 : rightward-vector ( player -- v )
     yaw>> 0.0
-    float-4{ $ MOVEMENT-SPEED 0.0 0.0 1.0 } eye-rotate ; inline
+    float-4{ $\ MOVEMENT-SPEED 0.0 0.0 1.0 } eye-rotate ; inline
 : clamp-pitch ( pitch -- pitch' )
     -90.0 90.0 clamp ; inline
 
@@ -95,7 +95,7 @@ TYPED: eye-rotate ( yaw: float pitch: float v: float-4 -- v': float-4 )
 : walk-rightward ( player -- )
     dup rightward-vector [ v+ ] curry change-velocity drop ; inline
 : jump ( player -- )
-    [ float-4{ 0.0 $ JUMP 0.0 0.0 } v+ ] change-velocity drop ; inline
+    [ float-4{ 0.0 $\ JUMP 0.0 0.0 } v+ ] change-velocity drop ; inline
 : rotate-leftward ( player x -- )
     [ - ] curry change-yaw drop ; inline
 : rotate-rightward ( player x -- )

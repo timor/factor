@@ -26,31 +26,31 @@ C: <win> win ;
 
 PRIVATE<
 
-PIXEL-FORMAT-ATTRIBUTE-TABLE: WGL_ARB { $ WGL_SUPPORT_OPENGL_ARB 1 } H{
-    { double-buffered { $ WGL_DOUBLE_BUFFER_ARB 1 } }
-    { stereo { $ WGL_STEREO_ARB 1 } }
-    { offscreen { $ WGL_DRAW_TO_BITMAP_ARB 1 } }
-    { fullscreen { $ WGL_DRAW_TO_WINDOW_ARB 1 } }
-    { windowed { $ WGL_DRAW_TO_WINDOW_ARB 1 } }
-    { accelerated { $ WGL_ACCELERATION_ARB $ WGL_FULL_ACCELERATION_ARB } }
-    { software-rendered { $ WGL_ACCELERATION_ARB $ WGL_NO_ACCELERATION_ARB } }
-    { backing-store { $ WGL_SWAP_METHOD_ARB $ WGL_SWAP_COPY_ARB } }
-    { color-float { $ WGL_TYPE_RGBA_FLOAT_ARB 1 } }
-    { color-bits { $ WGL_COLOR_BITS_ARB } }
-    { red-bits { $ WGL_RED_BITS_ARB } }
-    { green-bits { $ WGL_GREEN_BITS_ARB } }
-    { blue-bits { $ WGL_BLUE_BITS_ARB } }
-    { alpha-bits { $ WGL_ALPHA_BITS_ARB } }
-    { accum-bits { $ WGL_ACCUM_BITS_ARB } }
-    { accum-red-bits { $ WGL_ACCUM_RED_BITS_ARB } }
-    { accum-green-bits { $ WGL_ACCUM_GREEN_BITS_ARB } }
-    { accum-blue-bits { $ WGL_ACCUM_BLUE_BITS_ARB } }
-    { accum-alpha-bits { $ WGL_ACCUM_ALPHA_BITS_ARB } }
-    { depth-bits { $ WGL_DEPTH_BITS_ARB } }
-    { stencil-bits { $ WGL_STENCIL_BITS_ARB } }
-    { aux-buffers { $ WGL_AUX_BUFFERS_ARB } }
-    { sample-buffers { $ WGL_SAMPLE_BUFFERS_ARB } }
-    { samples { $ WGL_SAMPLES_ARB } }
+PIXEL-FORMAT-ATTRIBUTE-TABLE: WGL_ARB { $\ WGL_SUPPORT_OPENGL_ARB 1 } H{
+    { double-buffered { $\ WGL_DOUBLE_BUFFER_ARB 1 } }
+    { stereo { $\ WGL_STEREO_ARB 1 } }
+    { offscreen { $\ WGL_DRAW_TO_BITMAP_ARB 1 } }
+    { fullscreen { $\ WGL_DRAW_TO_WINDOW_ARB 1 } }
+    { windowed { $\ WGL_DRAW_TO_WINDOW_ARB 1 } }
+    { accelerated { $\ WGL_ACCELERATION_ARB $\ WGL_FULL_ACCELERATION_ARB } }
+    { software-rendered { $\ WGL_ACCELERATION_ARB $\ WGL_NO_ACCELERATION_ARB } }
+    { backing-store { $\ WGL_SWAP_METHOD_ARB $\ WGL_SWAP_COPY_ARB } }
+    { color-float { $\ WGL_TYPE_RGBA_FLOAT_ARB 1 } }
+    { color-bits { $\ WGL_COLOR_BITS_ARB } }
+    { red-bits { $\ WGL_RED_BITS_ARB } }
+    { green-bits { $\ WGL_GREEN_BITS_ARB } }
+    { blue-bits { $\ WGL_BLUE_BITS_ARB } }
+    { alpha-bits { $\ WGL_ALPHA_BITS_ARB } }
+    { accum-bits { $\ WGL_ACCUM_BITS_ARB } }
+    { accum-red-bits { $\ WGL_ACCUM_RED_BITS_ARB } }
+    { accum-green-bits { $\ WGL_ACCUM_GREEN_BITS_ARB } }
+    { accum-blue-bits { $\ WGL_ACCUM_BLUE_BITS_ARB } }
+    { accum-alpha-bits { $\ WGL_ACCUM_ALPHA_BITS_ARB } }
+    { depth-bits { $\ WGL_DEPTH_BITS_ARB } }
+    { stencil-bits { $\ WGL_STENCIL_BITS_ARB } }
+    { aux-buffers { $\ WGL_AUX_BUFFERS_ARB } }
+    { sample-buffers { $\ WGL_SAMPLE_BUFFERS_ARB } }
+    { samples { $\ WGL_SAMPLES_ARB } }
 } ;
 
 : has-wglChoosePixelFormatARB? ( world -- ? )
@@ -70,13 +70,13 @@ PIXEL-FORMAT-ATTRIBUTE-TABLE: WGL_ARB { $ WGL_SUPPORT_OPENGL_ARB 1 } H{
     ] if-empty ;
 
 CONSTANT: pfd-flag-map H{
-    { double-buffered $ PFD_DOUBLEBUFFER }
-    { stereo $ PFD_STEREO }
-    { offscreen $ PFD_DRAW_TO_BITMAP }
-    { fullscreen $ PFD_DRAW_TO_WINDOW }
-    { windowed $ PFD_DRAW_TO_WINDOW }
-    { backing-store $ PFD_SWAP_COPY }
-    { software-rendered $ PFD_GENERIC_FORMAT }
+    { double-buffered $\ PFD_DOUBLEBUFFER }
+    { stereo $\ PFD_STEREO }
+    { offscreen $\ PFD_DRAW_TO_BITMAP }
+    { fullscreen $\ PFD_DRAW_TO_WINDOW }
+    { windowed $\ PFD_DRAW_TO_WINDOW }
+    { backing-store $\ PFD_SWAP_COPY }
+    { software-rendered $\ PFD_GENERIC_FORMAT }
 } ;
 
 : >pfd-flag ( attribute -- value )
@@ -223,11 +223,11 @@ CONSTANT: window-control>style
     H{
         { close-button 0 }
         { textured-background 0 }
-        { minimize-button $ WS_MINIMIZEBOX }
-        { maximize-button $ WS_MAXIMIZEBOX }
-        { resize-handles $ WS_THICKFRAME }
-        { small-title-bar $ WS_CAPTION }
-        { normal-title-bar $ WS_CAPTION }
+        { minimize-button $\ WS_MINIMIZEBOX }
+        { maximize-button $\ WS_MAXIMIZEBOX }
+        { resize-handles $\ WS_THICKFRAME }
+        { small-title-bar $\ WS_CAPTION }
+        { normal-title-bar $\ WS_CAPTION }
         { dialog-window 0 }
     } ;
 
@@ -237,9 +237,9 @@ CONSTANT: window-control>ex-style
         { textured-background 0 }
         { minimize-button 0 }
         { maximize-button 0 }
-        { resize-handles $ WS_EX_WINDOWEDGE }
+        { resize-handles $\ WS_EX_WINDOWEDGE }
         { small-title-bar $$[ WS_EX_TOOLWINDOW WS_EX_TOPMOST bitor ] }
-        { normal-title-bar $ WS_EX_APPWINDOW }
+        { normal-title-bar $\ WS_EX_APPWINDOW }
         { dialog-window 0 }
     } ;
 

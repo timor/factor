@@ -43,5 +43,5 @@ M: nehe3-gadget draw-gadget* ( gadget -- )
     -1.0 -1.0 0.0 glVertex3f
   ] do-state ;
 
-MAIN-WINDOW: run3 { { title "NeHe Tutorial 3" } { pref-dim { $ width $ height } } }
+MAIN-WINDOW: run3 { { title "NeHe Tutorial 3" } { pref-dim { $\ width $\ height } } }
   <nehe3-gadget> >>gadgets ;

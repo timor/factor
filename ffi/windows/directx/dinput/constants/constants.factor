@@ -80,24 +80,24 @@ MACRO: <DIDATAFORMAT> ( dwFlags dwDataSize struct rgodf-array -- alien )
 
 : define-guid-constants ( -- )
     {
-        { GUID_XAxis_malloced          $ GUID_XAxis }
-        { GUID_YAxis_malloced          $ GUID_YAxis }
-        { GUID_ZAxis_malloced          $ GUID_ZAxis }
-        { GUID_RxAxis_malloced         $ GUID_RxAxis }
-        { GUID_RyAxis_malloced         $ GUID_RyAxis }
-        { GUID_RzAxis_malloced         $ GUID_RzAxis }
-        { GUID_Slider_malloced         $ GUID_Slider }
-        { GUID_Button_malloced         $ GUID_Button }
-        { GUID_Key_malloced            $ GUID_Key }
-        { GUID_POV_malloced            $ GUID_POV }
-        { GUID_Unknown_malloced        $ GUID_Unknown }
-        { GUID_SysMouse_malloced       $ GUID_SysMouse }
-        { GUID_SysKeyboard_malloced    $ GUID_SysKeyboard }
-        { GUID_Joystick_malloced       $ GUID_Joystick }
-        { GUID_SysMouseEm_malloced     $ GUID_SysMouseEm }
-        { GUID_SysMouseEm2_malloced    $ GUID_SysMouseEm2 }
-        { GUID_SysKeyboardEm_malloced  $ GUID_SysKeyboardEm }
-        { GUID_SysKeyboardEm2_malloced $ GUID_SysKeyboardEm2 }
+        { GUID_XAxis_malloced          $\ GUID_XAxis }
+        { GUID_YAxis_malloced          $\ GUID_YAxis }
+        { GUID_ZAxis_malloced          $\ GUID_ZAxis }
+        { GUID_RxAxis_malloced         $\ GUID_RxAxis }
+        { GUID_RyAxis_malloced         $\ GUID_RyAxis }
+        { GUID_RzAxis_malloced         $\ GUID_RzAxis }
+        { GUID_Slider_malloced         $\ GUID_Slider }
+        { GUID_Button_malloced         $\ GUID_Button }
+        { GUID_Key_malloced            $\ GUID_Key }
+        { GUID_POV_malloced            $\ GUID_POV }
+        { GUID_Unknown_malloced        $\ GUID_Unknown }
+        { GUID_SysMouse_malloced       $\ GUID_SysMouse }
+        { GUID_SysKeyboard_malloced    $\ GUID_SysKeyboard }
+        { GUID_Joystick_malloced       $\ GUID_Joystick }
+        { GUID_SysMouseEm_malloced     $\ GUID_SysMouseEm }
+        { GUID_SysMouseEm2_malloced    $\ GUID_SysMouseEm2 }
+        { GUID_SysKeyboardEm_malloced  $\ GUID_SysKeyboardEm }
+        { GUID_SysKeyboardEm2_malloced $\ GUID_SysKeyboardEm2 }
     } [ first2 (malloc-guid-symbol) ] each ;
 
 : define-joystick-format-constant ( -- )

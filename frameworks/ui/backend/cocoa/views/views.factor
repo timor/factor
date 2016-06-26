@@ -34,10 +34,10 @@ CONSTANT: NSHelpKeyMask       0x400000 ;
 CONSTANT: NSFunctionKeyMask   0x800000 ;
 
 CONSTANT: modifiers {
-        { S+ $ NSShiftKeyMask }
-        { C+ $ NSControlKeyMask }
-        { A+ $ NSCommandKeyMask }
-        { M+ $ NSAlternateKeyMask }
+        { S+ $\ NSShiftKeyMask }
+        { C+ $\ NSControlKeyMask }
+        { A+ $\ NSCommandKeyMask }
+        { M+ $\ NSAlternateKeyMask }
     } ;
 
 CONSTANT: key-codes

@@ -10,7 +10,7 @@ CONSTANT: stylesheet
     H{
         { default-span-style
             H{
-                { font-name $ default-sans-serif-font-name }
+                { font-name $\ default-sans-serif-font-name }
                 { font-size $$[ default-font-size 3 * ] }
             }
         }
@@ -21,7 +21,7 @@ CONSTANT: stylesheet
         }
         { code-char-style
             H{
-                { font-name $ default-monospace-font-name }
+                { font-name $\ default-monospace-font-name }
                 { font-size $$[ default-font-size 3 * ] }
             }
         }
@@ -32,7 +32,7 @@ CONSTANT: stylesheet
         }
         { snippet-style
             H{
-                { font-name $ default-monospace-font-name }
+                { font-name $\ default-monospace-font-name }
                 { font-size $$[ default-font-size 3 * ] }
                 { foreground T{ rgba f 0.1 0.1 0.4 1 } }
             }
@@ -52,7 +52,7 @@ CONSTANT: stylesheet
 : $title ( string -- )
     [
         H{
-            { font-name $ default-sans-serif-font-name }
+            { font-name $\ default-sans-serif-font-name }
             { font-size $$[ default-font-size 4 * ] }
         } format
     ] ($block) ;

@@ -100,41 +100,41 @@ CONSTANT: events-mask
 
 CONSTANT: modifiers
     {
-        { S+ $ GDK_SHIFT_MASK }
-        { C+ $ GDK_CONTROL_MASK }
-        { A+ $ GDK_MOD1_MASK }
+        { S+ $\ GDK_SHIFT_MASK }
+        { C+ $\ GDK_CONTROL_MASK }
+        { A+ $\ GDK_MOD1_MASK }
     } ;
 
 CONSTANT: action-key-codes
     H{
-        { $ GDK_KEY_BackSpace "BACKSPACE" }
-        { $ GDK_KEY_Tab "TAB" }
-        { $ GDK_KEY_ISO_Left_Tab "TAB" }
-        { $ GDK_KEY_Return "RET" }
-        { $ GDK_KEY_KP_Enter "ENTER" }
-        { $ GDK_KEY_Escape "ESC" }
-        { $ GDK_KEY_Delete "DELETE" }
-        { $ GDK_KEY_Home "HOME" }
-        { $ GDK_KEY_Left "LEFT" }
-        { $ GDK_KEY_Up "UP" }
-        { $ GDK_KEY_Right "RIGHT" }
-        { $ GDK_KEY_Down "DOWN" }
-        { $ GDK_KEY_Page_Up "PAGE_UP" }
-        { $ GDK_KEY_Page_Down "PAGE_DOWN" }
-        { $ GDK_KEY_End "END" }
-        { $ GDK_KEY_Begin "BEGIN" }
-        { $ GDK_KEY_F1 "F1" }
-        { $ GDK_KEY_F2 "F2" }
-        { $ GDK_KEY_F3 "F3" }
-        { $ GDK_KEY_F4 "F4" }
-        { $ GDK_KEY_F5 "F5" }
-        { $ GDK_KEY_F6 "F6" }
-        { $ GDK_KEY_F7 "F7" }
-        { $ GDK_KEY_F8 "F8" }
-        { $ GDK_KEY_F9 "F9" }
-        { $ GDK_KEY_F10 "F10" }
-        { $ GDK_KEY_F11 "F11" }
-        { $ GDK_KEY_F12 "F12" }
+        { $\ GDK_KEY_BackSpace "BACKSPACE" }
+        { $\ GDK_KEY_Tab "TAB" }
+        { $\ GDK_KEY_ISO_Left_Tab "TAB" }
+        { $\ GDK_KEY_Return "RET" }
+        { $\ GDK_KEY_KP_Enter "ENTER" }
+        { $\ GDK_KEY_Escape "ESC" }
+        { $\ GDK_KEY_Delete "DELETE" }
+        { $\ GDK_KEY_Home "HOME" }
+        { $\ GDK_KEY_Left "LEFT" }
+        { $\ GDK_KEY_Up "UP" }
+        { $\ GDK_KEY_Right "RIGHT" }
+        { $\ GDK_KEY_Down "DOWN" }
+        { $\ GDK_KEY_Page_Up "PAGE_UP" }
+        { $\ GDK_KEY_Page_Down "PAGE_DOWN" }
+        { $\ GDK_KEY_End "END" }
+        { $\ GDK_KEY_Begin "BEGIN" }
+        { $\ GDK_KEY_F1 "F1" }
+        { $\ GDK_KEY_F2 "F2" }
+        { $\ GDK_KEY_F3 "F3" }
+        { $\ GDK_KEY_F4 "F4" }
+        { $\ GDK_KEY_F5 "F5" }
+        { $\ GDK_KEY_F6 "F6" }
+        { $\ GDK_KEY_F7 "F7" }
+        { $\ GDK_KEY_F8 "F8" }
+        { $\ GDK_KEY_F9 "F9" }
+        { $\ GDK_KEY_F10 "F10" }
+        { $\ GDK_KEY_F11 "F11" }
+        { $\ GDK_KEY_F12 "F12" }
     } ;
 
 : event-modifiers ( event -- seq )
@@ -148,10 +148,10 @@ CONSTANT: action-key-codes
 
 : scroll-direction ( event -- pair )
     direction>> {
-        { $ GDK_SCROLL_UP { 0 -1 } }
-        { $ GDK_SCROLL_DOWN { 0 1 } }
-        { $ GDK_SCROLL_LEFT { -1 0 } }
-        { $ GDK_SCROLL_RIGHT { 1 0 } }
+        { $\ GDK_SCROLL_UP { 0 -1 } }
+        { $\ GDK_SCROLL_DOWN { 0 1 } }
+        { $\ GDK_SCROLL_LEFT { -1 0 } }
+        { $\ GDK_SCROLL_RIGHT { 1 0 } }
     } at ;
 
 : on-motion ( win event user-data -- ? )
@@ -350,21 +350,21 @@ CONSTANT: action-key-codes
 CONSTANT: window-controls>decor-flags
     H{
         { close-button 0 }
-        { minimize-button $ GDK_DECOR_MINIMIZE }
-        { maximize-button $ GDK_DECOR_MAXIMIZE }
-        { resize-handles $ GDK_DECOR_RESIZEH }
-        { small-title-bar $ GDK_DECOR_TITLE }
-        { normal-title-bar $ GDK_DECOR_TITLE }
+        { minimize-button $\ GDK_DECOR_MINIMIZE }
+        { maximize-button $\ GDK_DECOR_MAXIMIZE }
+        { resize-handles $\ GDK_DECOR_RESIZEH }
+        { small-title-bar $\ GDK_DECOR_TITLE }
+        { normal-title-bar $\ GDK_DECOR_TITLE }
         { textured-background 0 }
         { dialog-window 0 }
     } ;
 
 CONSTANT: window-controls>func-flags
     H{
-        { close-button $ GDK_FUNC_CLOSE }
-        { minimize-button $ GDK_FUNC_MINIMIZE }
-        { maximize-button $ GDK_FUNC_MAXIMIZE }
-        { resize-handles $ GDK_FUNC_RESIZE }
+        { close-button $\ GDK_FUNC_CLOSE }
+        { minimize-button $\ GDK_FUNC_MINIMIZE }
+        { maximize-button $\ GDK_FUNC_MAXIMIZE }
+        { resize-handles $\ GDK_FUNC_RESIZE }
         { small-title-bar 0 }
         { normal-title-bar 0 }
         { textured-background 0 }

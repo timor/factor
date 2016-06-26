@@ -5,14 +5,15 @@ classes.algebra.private classes.builtin classes.error
 classes.intersection classes.maybe classes.mixin classes.parser
 classes.predicate classes.singleton classes.tuple
 classes.tuple.parser classes.union combinators compiler.units
-definitions delegate effects effects.parser fry generic
-generic.hook generic.math generic.parser generic.standard
-hash-sets hashtables hashtables.identity io.pathnames kernel
-lexer locals.errors locals.parser macros math memoize namespaces
-parser quotations sbufs sequences slots source-files splitting
+definitions delegate delegate.private effects effects.parser fry
+generic generic.hook generic.math generic.parser
+generic.standard hash-sets hashtables hashtables.identity hints
+io.pathnames kernel lexer literals literals.private locals.errors
+locals.parser macros math memoize multiline namespaces parser
+quotations sbufs sequences slots source-files splitting
 stack-checker strings strings.parser strings.parser.private
 typed vectors vocabs vocabs.parser words words.alias
-words.constant words.symbol delegate.private hints multiline ;
+words.constant words.symbol ;
 IN: bootstrap.syntax
 
 ! These words are defined as a top-level form, instead of with
@@ -100,6 +101,10 @@ IN: bootstrap.syntax
 
     "````" [
         "````" parse-multiline-string-new suffix!
+    ] define-core-syntax
+
+    "$\\" [
+         scan-word expand-literal >vector
     ] define-core-syntax
 
     ! Different from parse-multiline-string

@@ -5,7 +5,7 @@ namespaces sequences splitting ;
 IN: money
 
 SYMBOL: currency-token
-char: $ currency-token set-global
+char: \$ currency-token set-global
 
 : dollars/cents ( dollars -- dollars cents )
     100 * 100 /mod round ;

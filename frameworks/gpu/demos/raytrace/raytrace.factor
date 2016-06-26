@@ -67,7 +67,7 @@ M: sphere audio-distance radius>> fsqrt 2.0 * ; inline
     raytrace-uniforms boa ;
 
 CONSTANT: initial-spheres {
-    T{ sphere f { 0.0 1.0  0.0 } {  0.0 0.0 0.0 } 0.0   4.0 $ reflection-color  }
+    T{ sphere f { 0.0 1.0  0.0 } {  0.0 0.0 0.0 } 0.0   4.0 $\ reflection-color  }
     T{ sphere f { 0.0 1.0  0.0 } {  7.0 0.0 0.0 } 0.02  1.0 { 1.0 0.0 0.0 1.0 } }
     T{ sphere f { 0.0 0.0 -1.0 } { -9.0 0.0 0.0 } 0.03  1.0 { 0.0 1.0 0.0 1.0 } }
     T{ sphere f { 1.0 0.0  0.0 } {  0.0 5.0 0.0 } 0.025 1.0 { 1.0 1.0 0.0 1.0 } }

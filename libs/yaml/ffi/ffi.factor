@@ -546,11 +546,11 @@ CONSTANT:  YAML_SEQ_TAG        "tag:yaml.org,2002:seq" ;
 CONSTANT:  YAML_MAP_TAG        "tag:yaml.org,2002:map" ;
 
 ! /** The default scalar tag is @c !!str. */
-CONSTANT:  YAML_DEFAULT_SCALAR_TAG     $ YAML_STR_TAG ;
+CONSTANT:  YAML_DEFAULT_SCALAR_TAG     $\ YAML_STR_TAG ;
 ! /** The default sequence tag is @c !!seq. */
-CONSTANT:  YAML_DEFAULT_SEQUENCE_TAG   $ YAML_SEQ_TAG ;
+CONSTANT:  YAML_DEFAULT_SEQUENCE_TAG   $\ YAML_SEQ_TAG ;
 ! /** The default mapping tag is @c !!map. */
-CONSTANT:  YAML_DEFAULT_MAPPING_TAG    $ YAML_MAP_TAG ;
+CONSTANT:  YAML_DEFAULT_MAPPING_TAG    $\ YAML_MAP_TAG ;
 
 ! /** Node types. */
 ENUM: yaml_node_type_t

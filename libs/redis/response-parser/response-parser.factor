@@ -31,10 +31,10 @@ PRIVATE>
 : read-response ( -- response )
     readln unclip {
         { char: \: [ string>number ] }
-        { char: + [ handle-response ] }
-        { char: $ [ string>number read-bulk ] }
-        { char: * [ string>number read-multi-bulk ] }
-        { char: - [ handle-error ] }
+        { char: \+ [ handle-response ] }
+        { char: \$ [ string>number read-bulk ] }
+        { char: \* [ string>number read-multi-bulk ] }
+        { char: \- [ handle-error ] }
     } case ;
 
 : check-response ( -- )

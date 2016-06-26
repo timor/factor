@@ -43,7 +43,7 @@ M: nehe2-gadget draw-gadget* ( gadget -- )
 MAIN-WINDOW: run2
     {
         { title "NeHe Tutorial 2" }
-        { pref-dim { $ width $ height } }
+        { pref-dim { $\ width $\ height } }
         { pixel-format-attributes {
             windowed
             double-buffered

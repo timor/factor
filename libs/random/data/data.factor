@@ -22,7 +22,7 @@ COMPILE>
 CONSTANT: digit-probability $$[ letters-count 2 * digits-count / 1 + recip ] ;
 : random-ch ( -- ch )
     {
-      { $ digit-probability [ random-digit ] }
+      { $\ digit-probability [ random-digit ] }
       [ random-Letter ]
     } casep ;
 

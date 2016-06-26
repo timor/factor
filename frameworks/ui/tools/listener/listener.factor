@@ -97,14 +97,14 @@ GENERIC: (print-input) ( object -- ) ;
 SYMBOL: listener-input-style
 H{
     { font-style bold }
-    { foreground $ text-color }
+    { foreground $\ text-color }
 } listener-input-style set-global
 
 SYMBOL: listener-word-style
 H{
     { font-name "sans-serif" }
     { font-style bold }
-    { foreground $ text-color }
+    { foreground $\ text-color }
 } listener-word-style set-global
 
 M: input (print-input)
@@ -399,7 +399,7 @@ interactor "completion" f {
 
 : introduction. ( -- )
     [
-        H{ { font-size $ default-font-size } } [
+        H{ { font-size $\ default-font-size } } [
             { $tip-of-the-day } print-element nl
             { $strong "Press " { $snippet "F1" } " at any time for help." } print-element nl
             version-info print-element

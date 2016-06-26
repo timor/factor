@@ -39,11 +39,11 @@ os unix? [ [ 10 ] [ PCRE_CONFIG_NEWLINE pcre-config ] unit-test ] when
 ! these configuration parameters.
 { t } [
     [ PCRE_CONFIG_UTF16 pcre-config ] [ what>> ] recover
-    { 0 $ PCRE_CONFIG_UTF16 } member?
+    { 0 $\ PCRE_CONFIG_UTF16 } member?
 ] unit-test
 { t } [
     [ PCRE_CONFIG_UTF32 pcre-config ] [ what>> ] recover
-    { 0 $ PCRE_CONFIG_UTF32 } member?
+    { 0 $\ PCRE_CONFIG_UTF32 } member?
 ] unit-test
 
 { 33 }

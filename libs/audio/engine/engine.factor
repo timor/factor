@@ -137,7 +137,7 @@ PRIVATE<
     al-source {
         [ AL_BUFFERS_PROCESSED get-source-param 0 = ]
         [ AL_BUFFERS_QUEUED get-source-param 0 = ]
-        [ AL_SOURCE_STATE get-source-param { $ AL_INITIAL $ AL_STOPPED } member? ]
+        [ AL_SOURCE_STATE get-source-param { $\ AL_INITIAL $\ AL_STOPPED } member? ]
     } 1&&
     [ next-source# al-source ] [
         next-source# stop-source# =

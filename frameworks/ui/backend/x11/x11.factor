@@ -61,23 +61,23 @@ M: world configure-event
     ! In case dimensions didn't change
     relayout-1 ;
 
-PIXEL-FORMAT-ATTRIBUTE-TABLE: glx-visual { $ GLX_RGBA } H{
-    { double-buffered { $ GLX_DOUBLEBUFFER } }
-    { stereo { $ GLX_STEREO } }
-    { color-bits { $ GLX_BUFFER_SIZE } }
-    { red-bits { $ GLX_RED_SIZE } }
-    { green-bits { $ GLX_GREEN_SIZE } }
-    { blue-bits { $ GLX_BLUE_SIZE } }
-    { alpha-bits { $ GLX_ALPHA_SIZE } }
-    { accum-red-bits { $ GLX_ACCUM_RED_SIZE } }
-    { accum-green-bits { $ GLX_ACCUM_GREEN_SIZE } }
-    { accum-blue-bits { $ GLX_ACCUM_BLUE_SIZE } }
-    { accum-alpha-bits { $ GLX_ACCUM_ALPHA_SIZE } }
-    { depth-bits { $ GLX_DEPTH_SIZE } }
-    { stencil-bits { $ GLX_STENCIL_SIZE } }
-    { aux-buffers { $ GLX_AUX_BUFFERS } }
-    { sample-buffers { $ GLX_SAMPLE_BUFFERS } }
-    { samples { $ GLX_SAMPLES } }
+PIXEL-FORMAT-ATTRIBUTE-TABLE: glx-visual { $\ GLX_RGBA } H{
+    { double-buffered { $\ GLX_DOUBLEBUFFER } }
+    { stereo { $\ GLX_STEREO } }
+    { color-bits { $\ GLX_BUFFER_SIZE } }
+    { red-bits { $\ GLX_RED_SIZE } }
+    { green-bits { $\ GLX_GREEN_SIZE } }
+    { blue-bits { $\ GLX_BLUE_SIZE } }
+    { alpha-bits { $\ GLX_ALPHA_SIZE } }
+    { accum-red-bits { $\ GLX_ACCUM_RED_SIZE } }
+    { accum-green-bits { $\ GLX_ACCUM_GREEN_SIZE } }
+    { accum-blue-bits { $\ GLX_ACCUM_BLUE_SIZE } }
+    { accum-alpha-bits { $\ GLX_ACCUM_ALPHA_SIZE } }
+    { depth-bits { $\ GLX_DEPTH_SIZE } }
+    { stencil-bits { $\ GLX_STENCIL_SIZE } }
+    { aux-buffers { $\ GLX_AUX_BUFFERS } }
+    { sample-buffers { $\ GLX_SAMPLE_BUFFERS } }
+    { samples { $\ GLX_SAMPLES } }
 } ;
 
 M: x11-ui-backend (make-pixel-format)

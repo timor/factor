@@ -31,9 +31,9 @@ PRIVATE<
 
 : origin>seek-type ( origin -- seek-type )
     {
-        { $ STREAM_SEEK_SET [ seek-absolute ] }
-        { $ STREAM_SEEK_CUR [ seek-relative ] }
-        { $ STREAM_SEEK_END [ seek-end ] }
+        { $\ STREAM_SEEK_SET [ seek-absolute ] }
+        { $\ STREAM_SEEK_CUR [ seek-relative ] }
+        { $\ STREAM_SEEK_END [ seek-end ] }
     } case ;
 
 :: IStream-seek ( stream move origin new-position -- hresult )

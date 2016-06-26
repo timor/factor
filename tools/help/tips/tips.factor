@@ -29,9 +29,9 @@ SYNTAX: \ TIP:
 
 SYMBOL: tip-of-the-day-style
 H{
-    { page-color $ tip-background-color }
+    { page-color $\ tip-background-color }
     { inset { 5 5 } }
-    { wrap-margin $ wrap-margin-full }
+    { wrap-margin $\ wrap-margin-full }
 } tip-of-the-day-style set-global
 
 : $tip-title ( tip -- )

@@ -72,9 +72,9 @@ CONSTANT: rt-safepoint 15 ;
 
 : rc-absolute? ( n -- ? )
     $${
-        $ rc-absolute-ppc-2/2
-        $ rc-absolute-cell
-        $ rc-absolute
-        $ rc-absolute-2
-        $ rc-absolute-1
+        rc-absolute-ppc-2/2
+        rc-absolute-cell
+        rc-absolute
+        rc-absolute-2
+        rc-absolute-1
     } member? ;
