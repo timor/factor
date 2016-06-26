@@ -17,7 +17,7 @@ IN: compiler.cfg.gvn.avail
 ! This doesn't propagate across "kill blocks".  Not sure if
 ! that's right, though I may as well assume as much.
 
-forward-analysis: avail
+FORWARD-ANALYSIS: avail
 
 M: avail transfer-set drop defined assoc-union ;
 

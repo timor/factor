@@ -133,8 +133,8 @@ FUNCTOR>
 
 PRIVATE>
 
-SYNTAX: forward-analysis:
+SYNTAX: \ FORWARD-ANALYSIS:
     scan-token [ define-analysis ] [ define-forward-analysis ] bi ;
 
-SYNTAX: backward-analysis:
+SYNTAX: \ BACKWARD-ANALYSIS:
     scan-token [ define-analysis ] [ define-backward-analysis ] bi ;

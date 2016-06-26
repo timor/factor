@@ -59,6 +59,6 @@ SYNTAX: \ CONSTRUCTOR:
 : scan-full-input-effect ( -- effect )
     "(" expect scan-rest-input-effect ;
 
-SYNTAX: \ slot-constructor:
+SYNTAX: \ SLOT-CONSTRUCTOR:
     scan-new-word [ name>> "(" append create-reset ] keep
     $[ scan-rest-input-effect in>> _ $[ _ _ slots>boa ] append! ] define-syntax ;

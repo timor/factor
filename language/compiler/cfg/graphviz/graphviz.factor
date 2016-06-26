@@ -43,7 +43,7 @@ IN: compiler.cfg.graphviz
 
 : add-cfg-edges ( graph bb -- graph' )
     dup successors>> [
-        [ number>> ] bi@ ->
+        [ number>> ] bi@ -->
     ] with each ;
 
 : cfgviz ( cfg -- graph )

@@ -50,7 +50,7 @@ TUPLE: a-monster < monster ;
 TUPLE: b-monster < monster ;
 
 COMPILE<
-slot-constructor: a-monster
+SLOT-CONSTRUCTOR: a-monster
 COMPILE>
 
 : <a-monster> ( name hp max-hp -- obj )

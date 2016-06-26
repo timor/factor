@@ -77,7 +77,7 @@ M: ##peek visit-insn ( state insn -- state )
 M: insn visit-insn ( state insn -- state' )
     drop ;
 
-forward-analysis: padding
+FORWARD-ANALYSIS: padding
 
 SYMBOL: stack-record
 
