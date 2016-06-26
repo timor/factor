@@ -563,5 +563,5 @@ SYNTAX: \ EBNF:
     ( input -- ast ) define-declared "ebnf-parser" set-word-prop
     reset-tokenizer ;
 
-SYNTAX: @ebnf
+SYNTAX: \ @ebnf
     words:last-word dup "ebnf-parser" set-word-prop ;

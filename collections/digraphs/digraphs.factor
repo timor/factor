@@ -19,9 +19,9 @@ TUPLE: vertex value edges ;
 : children ( key digraph -- seq )
     at edges>> ;
 
-: @edges ( from to digraph -- to edges ) swapd at edges>> ;
-: add-edge ( from to digraph -- ) @edges push ;
-: delete-edge ( from to digraph -- ) @edges remove! drop ;
+: edges ( from to digraph -- to edges ) swapd at edges>> ;
+: add-edge ( from to digraph -- ) edges push ;
+: delete-edge ( from to digraph -- ) edges remove! drop ;
 
 : delete-to-edges ( to digraph -- )
     [ nip dupd edges>> remove! drop ] assoc-each drop ;
