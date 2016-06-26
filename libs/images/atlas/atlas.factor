@@ -27,17 +27,17 @@ PRIVATE<
 : height ( dim -- height ) second atlas-padding + ; inline
 : area   ( dim -- area   ) [ width ] [ height ] bi * ; inline
 
-:: (pack-stripe) ( image-placements atlas-width @y -- stripe-height/f )
-    0 set: @x!
+:: (pack-stripe) ( image-placements atlas-width y -- stripe-height/f )
+    0 set: x!
     f set: stripe-height!
     image-placements |[ ip |
         ip loc>> [
             ip image>> dim>> set: dim
             stripe-height [ dim height stripe-height 0 or max stripe-height! ] unless
             dim width set: w
-            atlas-width w @x + >= [
-                ip { @x @y } >>loc drop
-                @x w + @x!
+            atlas-width w x + >= [
+                ip { x y } >>loc drop
+                x w + x!
             ] when
         ] unless
     ] each
@@ -45,8 +45,8 @@ PRIVATE<
 
 :: (pack-images) ( images atlas-width sort-quot -- placements )
     images sort-quot inv-sort-with [ f image-placement boa ] map set: image-placements
-    0 set: @y!
-    [ image-placements atlas-width @y (pack-stripe) dup ] [ @y + @y! ] while drop
+    0 set: y!
+    [ image-placements atlas-width y (pack-stripe) dup ] [ y + y! ] while drop
     image-placements ; inline
 
 : atlas-image-format ( image-placements -- component-order component-type upside-down? )
