@@ -86,8 +86,8 @@ SYMBOL: matrix
     ] with-matrix ;
 
 :: basis-vector ( row col# -- )
-    row clone :> row'
-    col# row' nth neg recip :> a
+    row clone set: row'
+    col# row' nth neg recip set: a
     0 col# row' set-nth
     a row n*v col# matrix get set-nth ;
 

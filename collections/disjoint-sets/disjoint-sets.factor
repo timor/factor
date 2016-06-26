@@ -28,7 +28,7 @@ PRIVATE>
 GENERIC: representative ( a disjoint-set -- p ) ;
 
 M:: disjoint-set representative ( a disjoint-set -- p )
-    a disjoint-set parents>> at :> p
+    a disjoint-set parents>> at set: p
     a p = [ a ] [
         p disjoint-set representative [
             a disjoint-set set-parent

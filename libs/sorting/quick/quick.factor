@@ -10,7 +10,7 @@ PRIVATE<
 
 :: quicksort ( seq from to quot: ( obj1 obj2 -- <=> ) -- )
     from to < [
-        from to fixnum+fast 2/ seq nth-unsafe :> pivot
+        from to fixnum+fast 2/ seq nth-unsafe set: pivot
 
         from to [ 2dup <= ] [
             [

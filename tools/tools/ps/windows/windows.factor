@@ -37,7 +37,7 @@ IN: tools.ps.windows
 :: read-process-memory ( HANDLE alien offset len -- byte-array )
     HANDLE
     offset alien <displaced-alien>
-    len <byte-array> dup :> ba
+    len <byte-array> dup set: ba
     len
     f
     ReadProcessMemory win32-error=0/f
@@ -55,13 +55,13 @@ IN: tools.ps.windows
 
 :: read-args ( handle -- string/f )
     handle <win32-handle> &dispose drop
-    handle query-information-process :> process-basic-information
+    handle query-information-process set: process-basic-information
     handle process-basic-information PebBaseAddress>>
     [
         "ProcessParameters" PEB offset-of
         PVOID heap-size
         read-process-memory
-        PVOID deref :> args-offset
+        PVOID deref set: args-offset
         args-offset alien: 0 = [
             f
         ] [

@@ -32,7 +32,7 @@ PRIVATE<
 
 :: kochanek-bartels-tangents ( points m0 mn c1 c2 -- tangents )
     points 3 clump [
-        first3 :> ( pi-1 pi pi+1 )
+        first3 set: ( pi-1 pi pi+1 )
         pi pi-1 v- c1 v*n
         pi+1 pi v- c2 v*n v+
     ] map
@@ -44,10 +44,10 @@ PRIVATE>
     control-points
     [ length 1 - ]
     [ first length [ { 0 } ] replicate ]
-    bi :> ( n acc )
+    bi set: ( n acc )
 
     control-points |[ pt i |
-        n i bernstein-polynomial-ith :> poly
+        n i bernstein-polynomial-ith set: poly
         pt |[ v j |
             j acc [ v poly n*p p+ ] change-nth
         ] each-index
@@ -74,10 +74,10 @@ PRIVATE>
     2 clump [ first2 [ first2 ] bi@ <cubic-hermite-curve> ] map ;
 
 :: <kochanek-bartels-curve> ( points m0 mn tension bias continuity -- polynomials-sequence )
-    tension bias continuity kochanek-bartels-coefficients :> ( s1 d1 s2 d2 )
+    tension bias continuity kochanek-bartels-coefficients set: ( s1 d1 s2 d2 )
     points m0 mn
     [ s1 s2 kochanek-bartels-tangents ]
-    [ d1 d2 kochanek-bartels-tangents ] 3bi :> ( in out )
+    [ d1 d2 kochanek-bartels-tangents ] 3bi set: ( in out )
     points in out [ 3array ] 3map (cubic-hermite-spline) ;
 
 : <catmull-rom-spline> ( points m0 mn -- polynomials-sequence )

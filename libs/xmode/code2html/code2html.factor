@@ -26,8 +26,8 @@ IN: xmode.code2html
 :: htmlize-stream ( path stream -- xml )
     stream stream-lines
     [ "" ] [ path over first find-mode htmlize-lines ]
-    if-empty :> input
-    default-stylesheet :> stylesheet
+    if-empty set: input
+    default-stylesheet set: stylesheet
     XML-DOC[[ <html>
         <head>
             <-stylesheet->

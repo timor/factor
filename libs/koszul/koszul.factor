@@ -227,7 +227,7 @@ DEFER: (d)
     laplacian-matrix null/rank drop ;
 
 :: laplacian-kernel ( basis1 basis2 basis3 -- basis )
-    basis1 basis2 basis3 laplacian-matrix :> lap
+    basis1 basis2 basis3 laplacian-matrix set: lap
     lap empty-matrix? [ f ] [
         lap nullspace |[ x |
             basis2 x [ [ wedge (alt+) ] 2each ] with-terms

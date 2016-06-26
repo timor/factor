@@ -273,7 +273,7 @@ COMPILE< \"length\" [ length ] define-sorting >>"
         "Area of a triangle using Heron's formula"
         { $code
             ":: area ( a b c -- x )
-    a b c + + 2 / :> p
+    a b c + + 2 / set: p
     p
     p a - *
     p b - *

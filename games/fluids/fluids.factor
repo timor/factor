@@ -21,8 +21,8 @@ CONSTANT: gravity { 0.0 -0.1 } ;
 
 :: verlet-integrate-particle ( particle dt -- particle' )
     particle [ p>> ] [ v>> ] bi dt v*n v+
-    gravity dt dt * particle m>> 2 * / v*n v+ :> p'
-    p' particle p>> v- dt v/n :> v'
+    gravity dt dt * particle m>> 2 * / v*n v+ set: p'
+    p' particle p>> v- dt v/n set: v'
     p' v' particle m>> particle_t <struct-boa> ; inline
 
 CONSTANT: initial-particles
@@ -91,7 +91,7 @@ M: fluids-world tick-game-world
 M:: fluids-world draw-world* ( world -- )
     world particles>> [
         [ p>> [ first , ] [ second , ] bi ] each
-    ] curry float-array{ } make :> verts
+    ] curry float-array{ } make set: verts
 
     [
         verts world texture>> 30.0 world dim>> { 4 4 } v/

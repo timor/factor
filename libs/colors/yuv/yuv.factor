@@ -45,8 +45,8 @@ M: object >yuva >rgba >yuva ;
 M: yuva >yuva ; inline
 
 M:: rgba >yuva ( rgba -- yuva )
-    rgba >rgba-components :> ( r g b a )
-    Wr r * Wg g * Wb b * + + :> y
-    Umax 1 Wb - / b y - * :> u
-    Vmax 1 Wr - / r y - * :> v
+    rgba >rgba-components set: ( r g b a )
+    Wr r * Wg g * Wb b * + + set: y
+    Umax 1 Wb - / b y - * set: u
+    Vmax 1 Wr - / r y - * set: v
     y u v a <yuva> ;

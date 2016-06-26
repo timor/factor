@@ -41,7 +41,7 @@ CONSTANT: poll-fd-events
 M:: unix with-event-loop ( quot -- )
     stop-io-thread
     <funcs> &free
-    GSource heap-size g_source_new &g_source_unref :> source
+    GSource heap-size g_source_new &g_source_unref set: source
     source <poll-fd> g_source_add_poll
     source f g_source_attach drop
     [ quot call( -- ) ]

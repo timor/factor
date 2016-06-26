@@ -269,7 +269,7 @@ M: ##neg optimize-insn
 ! Identity:
 ! tag(not(untag(x))) = not(x) xor tag-mask
 :: emit-tagged-not ( insn -- )
-    tagged-rep next-vreg-rep :> temp
+    tagged-rep next-vreg-rep set: temp
     temp insn src>> ##not,
     insn dst>> temp tag-mask get ##xor-imm, here ;
 

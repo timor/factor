@@ -14,8 +14,8 @@ IN: benchmark.matrix-exponential-scalar
     ] each ;
 
 :: matrix-exponential-scalar-benchmark ( -- )
-    f :> result!
-    4 identity-matrix :> i4
+    f set: result!
+    4 identity-matrix set: i4
     10000 [
         i4 20 e^m result!
     ] times

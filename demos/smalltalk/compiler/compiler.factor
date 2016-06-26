@@ -87,7 +87,7 @@ M: ast-return compile-ast
     [ <def> [ f ] swap suffix ] map [ ] join ;
 
 :: compile-sequence ( lexenv block -- vars quot )
-    lexenv block block-lexenv lexenv-union :> lexenv
+    lexenv block block-lexenv lexenv-union set: lexenv
     block arguments>> lexenv lookup-block-vars
     lexenv block body>> (compile-sequence) block lexenv make-temporaries prepend ;
 

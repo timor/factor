@@ -144,7 +144,7 @@ DEFER: parse-mapping
 
 :: parse-mapping ( parser event -- map )
     [
-        f :> done!
+        f set: done!
         [ done ] [
             [
                 parser event next-event type>>
@@ -163,7 +163,7 @@ DEFER: parse-mapping
 
 :: parse-sequence ( parser event  -- seq )
     [
-        f :> done!
+        f set: done!
         [ done ] [
             [
                 parser event next-event type>>
@@ -266,15 +266,15 @@ M: assoc apply-merge-keys
 
 ! registers destructors (use with with-destructors)
 :: init-parser ( str -- parser event )
-    yaml_parser_t (malloc-struct) &free :> parser
+    yaml_parser_t (malloc-struct) &free set: parser
     parser yaml_parser_initialize yaml-initialize-assert-ok
     parser &yaml_parser_delete drop
 
     str utf8 encode
-    [ malloc-byte-array &free ] [ length ] bi :> ( input length )
+    [ malloc-byte-array &free ] [ length ] bi set: ( input length )
     parser input length yaml_parser_set_input_string
 
-    yaml_event_t (malloc-struct) &free :> event
+    yaml_event_t (malloc-struct) &free set: event
     parser event ;
 
 PRIVATE>
@@ -309,13 +309,13 @@ GENERIC: (replace-aliases) ( yaml-anchors obj -- obj' ) ;
     ] bi ;
 
 :: (?replace-aliases) ( yaml-anchors obj -- obj' )
-    yaml-anchors objects>> :> objects
+    yaml-anchors objects>> set: objects
     obj objects at* [
         [ yaml-anchors incr-anchor dup obj objects set-at ] unless*
         <yaml-alias>
     ] [
         drop f obj objects set-at
-        yaml-anchors obj (replace-aliases) :> obj'
+        yaml-anchors obj (replace-aliases) set: obj'
         obj obj' yaml-anchors new-objects>> set-at
         obj'
     ] if ;
@@ -489,16 +489,16 @@ M: sets:set emit-value ( emitter event anchor set -- )
 
 ! registers destructors (use with with-destructors)
 :: init-emitter ( -- emitter event )
-    yaml_emitter_t (malloc-struct) &free :> emitter
+    yaml_emitter_t (malloc-struct) &free set: emitter
     emitter yaml_emitter_initialize yaml-initialize-assert-ok
     emitter &yaml_emitter_delete drop
     emitter init-emitter-options
 
-    BV{ } clone :> output
+    BV{ } clone set: output
     output yaml-write-buffer set-global
     emitter yaml-write-handler f yaml_emitter_set_output
 
-    yaml_event_t (malloc-struct) &free :> event
+    yaml_event_t (malloc-struct) &free set: event
 
     event YAML_UTF8_ENCODING
     yaml_stream_start_event_initialize yaml-initialize-assert-ok

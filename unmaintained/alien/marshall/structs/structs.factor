@@ -35,7 +35,7 @@ PRIVATE<
 PRIVATE>
 
 :: define-struct-tuple ( name -- )
-    name create-word-in :> class
+    name create-word-in set: class
     class struct-wrapper { } define-tuple-class
     class define-struct-constructor
     name c-type fields>> [

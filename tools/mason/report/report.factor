@@ -41,8 +41,8 @@ IN: mason.report
 
 :: failed-report ( error file what -- status )
     [
-        error [ error. ] with-string-writer :> error
-        file utf8 400 file-tail :> output
+        error [ error. ] with-string-writer set: error
+        file utf8 400 file-tail set: output
 
         XML-CHUNK[[
         <h2><-what-></h2>

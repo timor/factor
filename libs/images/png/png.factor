@@ -146,10 +146,10 @@ ERROR: unimplemented-color-type image ;
 ERROR: bad-filter n ;
 
 :: png-unfilter-line ( width prev curr filter -- curr' )
-    prev :> c
-    prev width tail-slice :> b
-    curr :> a
-    curr width tail-slice :> x
+    prev set: c
+    prev width tail-slice set: b
+    curr set: a
+    curr width tail-slice set: x
     x length iota
     filter {
         { filter-none [ drop ] }
@@ -173,16 +173,16 @@ ERROR: bad-filter n ;
     ] map B{ } concat-as ;
 
 :: visit ( row col height width pixel image -- )
-    row image nth :> irow
+    row image nth set: irow
     pixel col irow set-nth ;
 
 :: read-scanlines ( byte-reader loading-png width height -- array )
-    loading-png png-components-per-pixel :> #components
-    loading-png bit-depth>> :> bit-depth
-    bit-depth :> depth!
-    #components width * :> count!
+    loading-png png-components-per-pixel set: #components
+    loading-png bit-depth>> set: bit-depth
+    bit-depth set: depth!
+    #components width * set: count!
 
-    #components bit-depth * width * 8 math:align 8 /i :> stride
+    #components bit-depth * width * 8 math:align 8 /i set: stride
 
     height [
         stride 1 + byte-reader stream-read
@@ -195,16 +195,16 @@ ERROR: bad-filter n ;
         count 2 * count!
     ] when
 
-    bitstreams:<msb0-bit-reader> :> br
+    bitstreams:<msb0-bit-reader> set: br
     height [
         count [ depth br bitstreams:read ] B{ } replicate-as
         8 br bitstreams:align
     ] replicate concat ;
 
 :: reverse-interlace-none ( bytes loading-png -- array )
-    bytes binary <byte-reader> :> br
-    loading-png width>> :> width
-    loading-png height>> :> height
+    bytes binary <byte-reader> set: br
+    loading-png width>> set: width
+    loading-png height>> set: height
     br loading-png width height read-scanlines ;
 
 :: adam7-subimage-height ( png-height pass -- subimage-height )
@@ -226,8 +226,8 @@ ERROR: bad-filter n ;
     ] if ;
 
 :: read-adam7-subimage ( byte-reader loading-png pass -- lines )
-    loading-png height>> pass adam7-subimage-height :> height
-    loading-png width>> pass adam7-subimage-width :> width
+    loading-png height>> pass adam7-subimage-height set: height
+    loading-png width>> pass adam7-subimage-width set: width
 
     height width * zero? [
         B{ } clone
@@ -236,21 +236,21 @@ ERROR: bad-filter n ;
     ] if ;
 
 :: reverse-interlace-adam7 ( byte-array loading-png -- byte-array )
-    byte-array binary <byte-reader> :> ba
-    loading-png height>> :> height
-    loading-png width>> :> width
-    loading-png bit-depth>> :> bit-depth
-    loading-png png-components-per-pixel :> #bytes!
-    width height * f <array> width <groups> :> image
+    byte-array binary <byte-reader> set: ba
+    loading-png height>> set: height
+    loading-png width>> set: width
+    loading-png bit-depth>> set: bit-depth
+    loading-png png-components-per-pixel set: #bytes!
+    width height * f <array> width <groups> set: image
 
     bit-depth 16 = [
         #bytes 2 * #bytes!
     ] when
 
-    0 :> row!
-    0 :> col!
+    0 set: row!
+    0 set: col!
 
-    0 :> pass!
+    0 set: pass!
     [ pass 7 < ] [
       ba loading-png pass read-adam7-subimage
 

@@ -281,11 +281,11 @@ PRIVATE<
     slot-specs check-struct-slots
     slot-specs empty? [ struct-must-have-slots ] when
     class redefine-struct-tuple-class
-    slot-specs offsets-quot call :> unaligned-size
-    slot-specs alignment-quot call :> alignment
-    unaligned-size alignment align :> size
+    slot-specs offsets-quot call set: unaligned-size
+    slot-specs alignment-quot call set: alignment
+    unaligned-size alignment align set: size
 
-    class slot-specs size alignment c-type-for-class :> c-type
+    class slot-specs size alignment c-type-for-class set: c-type
 
     c-type class typedef
     class slot-specs define-accessors

@@ -19,17 +19,17 @@ PRIVATE<
 PRIVATE>
 
 :: XISetMask ( mask event -- )
-    event mask-index :> index
+    event mask-index set: index
     event bitmask index mask nth bitor
     index mask set-nth ; inline
 
 :: XIClearMask ( mask event -- )
-    event mask-index :> index
+    event mask-index set: index
     event bitmask bitnot index mask nth bitand
     index mask set-nth ; inline
 
 :: XIMaskIsSet ( mask event -- n )
-    event mask-index :> index
+    event mask-index set: index
     event bitmask index mask nth bitand ;
 
 : XIMaskLen ( event -- n ) 7 + -3 shift ;

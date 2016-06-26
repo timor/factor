@@ -174,7 +174,7 @@ TUPLE: peg-head rule-id involved-set eval-set ;
     l lrstack get (setup-lr) ;
 
 :: lr-answer ( r p m -- ast )
-    m ans>> head>> :> h
+    m ans>> head>> set: h
     h rule-id>> r rule-id eq? [
         m ans>> seed>> m ans<<
         m ans>> failed? [
@@ -187,8 +187,8 @@ TUPLE: peg-head rule-id involved-set eval-set ;
     ] if ; inline
 
 :: recall ( r p -- memo-entry )
-    p r rule-id memo :> m
-    p heads at :> h
+    p r rule-id memo set: m
+    p heads at set: h
     h [
         m r rule-id h involved-set>> h rule-id>> suffix member? not and [
             fail p memo-entry boa
@@ -207,9 +207,9 @@ TUPLE: peg-head rule-id involved-set eval-set ;
     ] if ; inline
 
 :: apply-non-memo-rule ( r p -- ast )
-    fail r rule-id f lrstack get left-recursion boa :> lr
-    lr lrstack namespaces:set lr p memo-entry boa dup p r rule-id set-memo :> m
-    r eval-rule :> ans
+    fail r rule-id f lrstack get left-recursion boa set: lr
+    lr lrstack namespaces:set lr p memo-entry boa dup p r rule-id set-memo set: m
+    r eval-rule set: ans
     lrstack get next>> lrstack namespaces:set
     pos get m pos<<
     lr head>> [
@@ -609,10 +609,10 @@ ERROR: parse-failed input word ;
 
 SYNTAX: \ PEG:
     let[
-        (:) :> ( word def effect )
+        (:) set: ( word def effect )
         [
             [
-                def call compile :> compiled-def
+                def call compile set: compiled-def
                 [
                     dup compiled-def compiled-parse
                     [ ast>> ] [ word parse-failed ] ?if

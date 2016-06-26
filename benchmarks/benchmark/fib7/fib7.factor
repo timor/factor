@@ -3,8 +3,8 @@ IN: benchmark.fib7
 
 :: matrix-fib ( m -- n )
     m 0 >= [ m throw ] unless
-    m 2 >base [ char: 1 = ] { } map-as :> bits
-    1 :> a! 0 :> b! 1 :> c!
+    m 2 >base [ char: 1 = ] { } map-as set: bits
+    1 set: a! 0 set: b! 1 set: c!
     bits [
         [
             a c + b *

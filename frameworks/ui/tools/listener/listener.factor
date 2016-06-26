@@ -482,9 +482,9 @@ PRIVATE<
 PRIVATE>
 
 :: set-listener-font ( family size -- )
-    get-listener input>> :> inter
+    get-listener input>> set: inter
     family size make-font-style
-    inter output>> make-span-stream :> ostream
+    inter output>> make-span-stream set: ostream
     ostream inter output<<
     inter font>> clone
         family >>name

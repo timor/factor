@@ -67,7 +67,7 @@ max-cols ;
 CONSULT: table-protocol search-table table>> ;
 
 :: <search-table> ( values renderer quot -- gadget )
-    f <model> :> search
+    f <model> set: search
     vertical search-table new-track
         values >>model
         search <search-field> >>field

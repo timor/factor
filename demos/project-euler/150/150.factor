@@ -51,7 +51,7 @@ PRIVATE<
     0 1000 [1,b] [ [ next ] replicate partial-sums ] map nip ; inline
 
 :: (euler150) ( m -- n )
-    sums-triangle :> table
+    sums-triangle set: table
     m iota |[ x |
         x 1 + iota |[ y |
             m x - iota |[ z |

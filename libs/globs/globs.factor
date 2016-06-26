@@ -73,8 +73,8 @@ DEFER: glob%
     ] if ;
 
 :: glob-wildcard% ( root globs -- )
-    globs ?second :> next-glob
-    next-glob dup pair? [ second ] [ drop f ] if :> next-glob-regexp
+    globs ?second set: next-glob
+    next-glob dup pair? [ second ] [ drop f ] if set: next-glob-regexp
 
     root glob-entries |[ entry |
         root entry name>> append-path
@@ -111,7 +111,7 @@ DEFER: glob%
     ] each ;
 
 :: glob-pattern% ( root globs -- )
-    globs unclip second :> ( remaining glob )
+    globs unclip second set: ( remaining glob )
 
     root glob-entries |[ entry |
         entry name>> >case-fold glob matches? [
@@ -121,7 +121,7 @@ DEFER: glob%
     ] each ;
 
 :: glob-literal% ( root globs -- )
-    globs unclip :> ( remaining glob )
+    globs unclip set: ( remaining glob )
 
     root glob append-path dup exists? [
         remaining over file-info ?glob%

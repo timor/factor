@@ -163,14 +163,14 @@ PRIVATE<
     -32767.5 * 0.5 - >integer -32768 32767 clamp ; inline
 
 :: write-pcm-to-buffer ( vorbis-stream offset pcm len -- offset' )
-    vorbis-stream buffer>> :> buffer
-    buffer length -1 shift :> buffer-length
-    offset -1 shift :> sample-offset
-    buffer buffer-length c:short <c-direct-array> sample-offset short-vector boa :> short-buffer
-    vorbis-stream info>> channels>> :> #channels
-    buffer-length sample-offset - #channels /i :> max-len
-    len max-len min :> len'
-    pcm #channels void* <c-direct-array> :> channel*s
+    vorbis-stream buffer>> set: buffer
+    buffer length -1 shift set: buffer-length
+    offset -1 shift set: sample-offset
+    buffer buffer-length c:short <c-direct-array> sample-offset short-vector boa set: short-buffer
+    vorbis-stream info>> channels>> set: #channels
+    buffer-length sample-offset - #channels /i set: max-len
+    len max-len min set: len'
+    pcm #channels void* <c-direct-array> set: channel*s
 
     len' iota |[ sample |
         #channels iota |[ channel |

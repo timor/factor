@@ -60,10 +60,10 @@ nonce ;
     ] H{ } make ; inline
 
 :: sign-params ( url request-method consumer-token request-token params -- signed-params )
-    params sort-keys :> params
-    url request-method params signature-base-string :> sbs
-    consumer-token secret>> request-token dup [ secret>> ] when hmac-key :> key
-    sbs key sha1 hmac-bytes >base64 >string :> signature
+    params sort-keys set: params
+    url request-method params signature-base-string set: sbs
+    consumer-token secret>> request-token dup [ secret>> ] when hmac-key set: key
+    sbs key sha1 hmac-bytes >base64 >string set: signature
     params { "oauth_signature" signature } prefix ;
 
 : extract-user-data ( assoc -- assoc' )

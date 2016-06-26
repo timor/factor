@@ -83,7 +83,7 @@ DESTRUCTOR: gdbm-close
 
 :: (setopt) ( value option -- )
     [
-        int heap-size dup malloc &free :> ( size ptr )
+        int heap-size dup malloc &free set: ( size ptr )
         value ptr 0 int set-alien-value
         dbf option ptr size gdbm_setopt check-error
     ] with-destructors ;

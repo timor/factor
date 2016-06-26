@@ -55,14 +55,14 @@ PRIVATE<
     ] each ;
 
 :: read-pbm ( -- image )
-    read-token     :> type
-    read-number    :> width
-    read-number    :> height
+    read-token     set: type
+    read-number    set: width
+    read-number    set: height
 
     type {
         { "P1" [ [ [ read-ascii-bits ] ignore-errors ] B{ } make ] }
         { "P4" [ [ width height read-binary-bits ] B{ } make ] }
-    } case :> data
+    } case set: data
 
     image new
     L                >>component-order

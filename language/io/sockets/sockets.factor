@@ -366,14 +366,14 @@ SYMBOL: remote-address
 CONSTANT: datagram-size 65536 ;
 
 :: receive ( datagram -- bytes addrspec )
-    datagram-size (byte-array) :> buf
+    datagram-size (byte-array) set: buf
     datagram-size buf datagram
-    receive-unsafe :> ( count addrspec )
+    receive-unsafe set: ( count addrspec )
     count buf resize addrspec ; inline
 
 :: receive-into ( buf datagram -- buf-slice addrspec )
-    buf length :> n
-    n buf datagram receive-unsafe :> ( count addrspec )
+    buf length set: n
+    n buf datagram receive-unsafe set: ( count addrspec )
     buf count head-slice addrspec ; inline
 
 : send ( bytes addrspec datagram -- )

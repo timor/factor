@@ -50,9 +50,9 @@ SYMBOL: temp-locations
     2dup = [ 2drop ] [ vreg rep-of add-mapping ] if ;
 
 :: compute-mappings ( bb to -- mappings )
-    bb machine-live-out :> live-out
-    to machine-live-in :> live-in
-    bb to machine-edge-live-in :> edge-live-in
+    bb machine-live-out set: live-out
+    to machine-live-in set: live-in
+    bb to machine-edge-live-in set: edge-live-in
     live-out assoc-empty? [ f ] [
         [
             live-in keys edge-live-in keys append [

@@ -8,13 +8,13 @@ IN: math.approx
 PRIVATE<
 
 :: (simplest) ( n d n' d' -- val ) ! assumes 0 < n/d < n'/d'
-    n  d  /mod :> ( q  r  )
-    n' d' /mod :> ( q' r' )
+    n  d  /mod set: ( q  r  )
+    n' d' /mod set: ( q' r' )
     {
         { [ r zero? ] [ q ] }
         { [ q q' = not ] [ q 1 + ] }
         [
-            d' r' d r (simplest) >fraction :> ( n'' d'' )
+            d' r' d r (simplest) >fraction set: ( n'' d'' )
             q n'' * d'' + n'' /
         ]
     } cond ;

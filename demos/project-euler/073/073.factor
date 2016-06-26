@@ -33,7 +33,7 @@ IN: project-euler.073
 PRIVATE<
 
 :: (euler073) ( counter limit lo hi -- counter' )
-    lo hi mediant :> m
+    lo hi mediant set: m
     m denominator limit <= [
         counter 1 +
         limit lo m (euler073)

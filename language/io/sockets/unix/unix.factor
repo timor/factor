@@ -124,7 +124,7 @@ M: unix (broadcast)
     dup handle>> SOL_SOCKET SO_BROADCAST set-socket-option ;
 
 :: do-receive ( n buf port -- count sockaddr )
-    port addr>> empty-sockaddr/size :> ( sockaddr len )
+    port addr>> empty-sockaddr/size set: ( sockaddr len )
     port handle>> handle-fd ! s
     buf ! buf
     n ! nbytes

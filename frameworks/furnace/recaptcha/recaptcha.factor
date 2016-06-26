@@ -50,8 +50,8 @@ PRIVATE<
     "\n" split first2 [ "true" = ] dip ;
 
 :: (validate-recaptcha) ( challenge response recaptcha -- valid? error )
-    recaptcha private-key>> :> private-key
-    remote-address get host>> :> remote-ip
+    recaptcha private-key>> set: private-key
+    remote-address get host>> set: remote-ip
     H{
         { "challenge" challenge }
         { "response" response }

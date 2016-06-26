@@ -12,12 +12,12 @@ IN: compression.run-length
     [ 0xf0 bitand -4 shift ] [ 0xf bitand ] bi ; inline
 
 :: run-length-uncompress-bitmap4 ( byte-array m n -- byte-array' )
-    byte-array <sequence-parser> :> sp
-    m  1 + n zero-matrix :> matrix
-    n 4 mod n + :> stride
-    0 :> i!
-    0 :> j!
-    f :> done?!
+    byte-array <sequence-parser> set: sp
+    m  1 + n zero-matrix set: matrix
+    n 4 mod n + set: stride
+    0 set: i!
+    0 set: j!
+    f set: done?!
     [
         ! i j [ number>string ] bi@ " " glue .
         sp next dup 0 = [
@@ -44,12 +44,12 @@ IN: compression.run-length
     matrix B{ } concat-as ;
 
 :: run-length-uncompress-bitmap8 ( byte-array m n -- byte-array' )
-    byte-array <sequence-parser> :> sp
-    m  1 + n zero-matrix :> matrix
-    n 4 mod n + :> stride
-    0 :> i!
-    0 :> j!
-    f :> done?!
+    byte-array <sequence-parser> set: sp
+    m  1 + n zero-matrix set: matrix
+    n 4 mod n + set: stride
+    0 set: i!
+    0 set: j!
+    f set: done?!
     [
         ! i j [ number>string ] bi@ " " glue .
         sp next dup 0 = [

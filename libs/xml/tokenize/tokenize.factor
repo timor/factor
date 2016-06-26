@@ -32,8 +32,8 @@ HINTS: assure-good-char { spot fixnum } ;
 HINTS: record { spot fixnum } ;
 
 :: (next) ( spot -- spot char )
-    spot next>> :> old-next
-    spot stream>> stream-read1 :> new-next
+    spot next>> set: old-next
+    spot stream>> stream-read1 set: new-next
     old-next char: \r eq? [
         spot char: \n >>char
         new-next char: \n eq?
@@ -130,7 +130,7 @@ HINTS: next* { spot } ;
     [ swap push-all ] [ no-entity ] ?if ;
 
 :: (parse-char) ( quot: ( ch -- ? ) accum spot -- )
-    spot char>> :> char
+    spot char>> set: char
     {
         { [ char not ] [ ] }
         { [ char quot call ] [ spot next* ] }
@@ -156,8 +156,8 @@ HINTS: next* { spot } ;
     "]]>" next-matching dup 2 > [ text-w/terminator ] when ; inline
 
 :: parse-text ( -- string )
-    depth get zero? :> no-text
-    0 :> pos!
+    depth get zero? set: no-text
+    0 set: pos!
     |[ char |
         pos char assure-no-terminator pos!
         no-text [

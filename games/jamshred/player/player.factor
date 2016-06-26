@@ -98,8 +98,8 @@ CONSTANT: max-speed 30.0 ;
     ] if ;
 
 :: move-player-on-heading ( d-left player distance heading -- d-left' player )
-    d-left distance min :> d-to-move
-    d-to-move heading n*v :> move-v
+    d-left distance min set: d-to-move
+    d-to-move heading n*v set: move-v
 
     move-v player location+
     heading player update-nearest-segment2

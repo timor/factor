@@ -206,10 +206,10 @@ M: object infer-call* \ call bad-macro-input ;
 \ load-local [ infer-load-local ] "special" set-word-prop
 
 :: infer-get-local ( -- )
-    pop-literal nip 1 swap - :> n
-    n consume-r :> in-r
-    in-r first copy-value 1array :> out-d
-    in-r copy-values :> out-r
+    pop-literal nip 1 swap - set: n
+    n consume-r set: in-r
+    in-r first copy-value 1array set: out-d
+    in-r copy-values set: out-r
 
     out-d output-d
     out-r output-r

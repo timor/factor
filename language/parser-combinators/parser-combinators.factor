@@ -59,8 +59,8 @@ C: <token-parser> token-parser ;
 : case-insensitive-token ( string -- parser ) t <token-parser> ;
 
 M:: token-parser parse ( input parser -- list )
-    parser string>> :> str
-    parser ignore-case?>> :> case?
+    parser string>> set: str
+    parser ignore-case?>> set: case?
 
     str input str case? ?string-head
     [ <parse-results> ] [ 2drop nil ] if ;

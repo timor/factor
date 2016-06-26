@@ -26,7 +26,7 @@ CONSTANT: game-height 256 ;
     first2 game-width 3 * * swap 3 * + ;
 
 :: set-bitmap-pixel ( bitmap point color -- )
-    point bitmap-index :> index
+    point bitmap-index set: index
     color first  index     bitmap set-nth
     color second index 1 + bitmap set-nth
     color third  index 2 + bitmap set-nth ;

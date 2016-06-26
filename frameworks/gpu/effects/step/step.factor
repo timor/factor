@@ -34,7 +34,7 @@ GLSL-PROGRAM: step-program window-vertex-shader step-fragment-shader window-vert
     } 2<render-set> render ;
 
 :: step-texture ( texture ramp dim -- texture )
-    dim RGB float-components <2d-render-texture> :> ( target-framebuffer target-texture )
+    dim RGB float-components <2d-render-texture> set: ( target-framebuffer target-texture )
     texture ramp target-framebuffer dim (step-texture)
     target-framebuffer dispose
     target-texture ;

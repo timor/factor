@@ -19,10 +19,10 @@ ERROR: local-writer-in-literal-error ;
 M: local-writer-in-literal-error summary
     drop "Local writer words not permitted inside literals" ;
 
-ERROR: :>-outside-lambda-error ;
+ERROR: set:-outside-lambda-error ;
 
-M: :>-outside-lambda-error summary
-    drop ":> cannot be used outside of let[, |[, or :: forms" ;
+M: set:-outside-lambda-error summary
+    drop "set: cannot be used outside of let[, |[, or :: forms" ;
 
 ERROR: bad-local args obj ;
 

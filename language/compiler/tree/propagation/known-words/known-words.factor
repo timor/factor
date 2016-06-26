@@ -180,8 +180,8 @@ $[ _ _ 2bi ] "outputs" set-word-prop
 \ bitxor [ [ interval-bitxor ] [ integer-valued ] binary-op ] each-derived-op
 
 :: (comparison-constraints) ( in1 in2 op -- constraint )
-    in1 value-info interval>> :> i1
-    in2 value-info interval>> :> i2
+    in1 value-info interval>> set: i1
+    in2 value-info interval>> set: i2
     in1 i1 i2 op assumption is-in-interval
     in2 i2 i1 op swap-comparison assumption is-in-interval
     2array ;

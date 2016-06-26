@@ -19,7 +19,7 @@ M:: leaf-node (new-at) ( shift value key hashcode leaf-node -- node' added-leaf 
             value leaf-node value>> =
             [ leaf-node f ] [ value key hashcode <leaf-node> f ] if
         ] [
-            value key hashcode <leaf-node> :> new-leaf
+            value key hashcode <leaf-node> set: new-leaf
             hashcode leaf-node new-leaf 2array <collision-node>
             new-leaf
         ] if

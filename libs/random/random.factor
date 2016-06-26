@@ -209,23 +209,23 @@ PRIVATE<
     ! Uses R.C.H. Cheng, "The generation of Gamma
     ! variables with non-integral shape parameters",
     ! Applied Statistics, (1977), 26, No. 1, p71-74
-    random-generator get :> rnd
-    2. alpha * 1 - sqrt  :> ainv
-    alpha 4. log -       :> bbb
-    alpha ainv +         :> ccc
+    random-generator get set: rnd
+    2. alpha * 1 - sqrt  set: ainv
+    alpha 4. log -       set: bbb
+    alpha ainv +         set: ccc
 
-    0 :> r! 0 :> z! 0 :> result! ! initialize locals
+    0 set: r! 0 set: z! 0 set: result! ! initialize locals
     [
         r {
             [ 1. 4.5 log + + z 4.5 * - 0 >= ]
             [ z log >= ]
         } 1|| not
     ] [
-        rnd (random-unit) :> u1
-        rnd (random-unit) :> u2
+        rnd (random-unit) set: u1
+        rnd (random-unit) set: u2
 
-        u1 1. u1 - / log ainv / :> v
-        alpha v e^ *            :> x
+        u1 1. u1 - / log ainv / set: v
+        alpha v e^ *            set: x
         u1 sq u2 *              z!
         bbb ccc v * + x -       r!
 
@@ -237,10 +237,10 @@ PRIVATE<
 
 :: (gamma-random-float<1) ( alpha beta -- n )
     ! Uses ALGORITHM GS of Statistical Computing - Kennedy & Gentle
-    random-generator get :> rnd
-    alpha e + e / :> b
+    random-generator get set: rnd
+    alpha e + e / set: b
 
-    0 :> x! 0 :> p! ! initialize locals
+    0 set: x! 0 set: p! ! initialize locals
     [
         p 1.0 > [
             rnd (random-unit) x alpha 1 - ^ >
@@ -273,21 +273,21 @@ PRIVATE>
     ! Based upon an algorithm published in: Fisher, N.I.,
     ! "Statistical Analysis of Circular Data", Cambridge
     ! University Press, 1993.
-    random-generator get :> rnd
+    random-generator get set: rnd
     kappa 1e-6 <= [
         2pi rnd (random-unit) *
     ] [
-        4. kappa sq * 1. + sqrt 1. + :> a
-        a 2. a * sqrt - 2. kappa * / :> b
-        b sq 1. + 2. b * /           :> r
+        4. kappa sq * 1. + sqrt 1. + set: a
+        a 2. a * sqrt - 2. kappa * / set: b
+        b sq 1. + 2. b * /           set: r
 
-        0 :> c! 0 :> _f! ! initialize locals
+        0 set: c! 0 set: _f! ! initialize locals
         [
             rnd (random-unit) {
                 [ 2. c - c * < ] [ 1. c - e^ c * <= ]
             } 1|| not
         ] [
-            rnd (random-unit) pi * cos :> z
+            rnd (random-unit) pi * cos set: z
             r z * 1. + r z + /   _f!
             r _f - kappa *       c!
         ] do while
@@ -299,8 +299,8 @@ PRIVATE>
 PRIVATE<
 
 :: (triangular-random-float) ( low high mode -- n )
-    mode low - high low - / :> c!
-    random-unit :> u!
+    mode low - high low - / set: c!
+    random-unit set: u!
     high low
     u c > [ 1. u - u! 1. c - c! swap ] when
     [ - u c * sqrt * ] keep + ;

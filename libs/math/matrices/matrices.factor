@@ -42,25 +42,25 @@ IN: math.matrices
     iota [ v^n ] with map reverse flip ;
 
 :: rotation-matrix3 ( axis theta -- matrix )
-    theta cos :> c
-    theta sin :> s
-    axis first3 :> ( x y z )
+    theta cos set: c
+    theta sin set: s
+    axis first3 set: ( x y z )
     x sq 1.0 x sq - c * +     x y * 1.0 c - * z s * -   x z * 1.0 c - * y s * + 3array
     x y * 1.0 c - * z s * +   y sq 1.0 y sq - c * +     y z * 1.0 c - * x s * - 3array
     x z * 1.0 c - * y s * -   y z * 1.0 c - * x s * +   z sq 1.0 z sq - c * +   3array
     3array ;
 
 :: rotation-matrix4 ( axis theta -- matrix )
-    theta cos :> c
-    theta sin :> s
-    axis first3 :> ( x y z )
+    theta cos set: c
+    theta sin set: s
+    axis first3 set: ( x y z )
     x sq 1.0 x sq - c * +     x y * 1.0 c - * z s * -   x z * 1.0 c - * y s * +   0 4array
     x y * 1.0 c - * z s * +   y sq 1.0 y sq - c * +     y z * 1.0 c - * x s * -   0 4array
     x z * 1.0 c - * y s * -   y z * 1.0 c - * x s * +   z sq 1.0 z sq - c * +     0 4array
     { 0.0 0.0 0.0 1.0 } 4array ;
 
 :: translation-matrix4 ( offset -- matrix )
-    offset first3 :> ( x y z )
+    offset first3 set: ( x y z )
     {
         { 1.0 0.0 0.0 x   }
         { 0.0 1.0 0.0 y   }
@@ -72,7 +72,7 @@ IN: math.matrices
     dup number? [ dup dup ] [ first3 ] if ;
 
 :: scale-matrix3 ( factors -- matrix )
-    factors >scale-factors :> ( x y z )
+    factors >scale-factors set: ( x y z )
     {
         { x   0.0 0.0 }
         { 0.0 y   0.0 }
@@ -80,7 +80,7 @@ IN: math.matrices
     } ;
 
 :: scale-matrix4 ( factors -- matrix )
-    factors >scale-factors :> ( x y z )
+    factors >scale-factors set: ( x y z )
     {
         { x   0.0 0.0 0.0 }
         { 0.0 y   0.0 0.0 }
@@ -92,11 +92,11 @@ IN: math.matrices
     [ recip ] map scale-matrix4 ;
 
 :: frustum-matrix4 ( xy-dim near far -- matrix )
-    xy-dim first2 :> ( x y )
-    near x /f :> xf
-    near y /f :> yf
-    near far + near far - /f :> zf
-    2 near far * * near far - /f :> wf
+    xy-dim first2 set: ( x y )
+    near x /f set: xf
+    near y /f set: yf
+    near far + near far - /f set: zf
+    2 near far * * near far - /f set: wf
 
     {
         { xf  0.0  0.0 0.0 }
@@ -106,7 +106,7 @@ IN: math.matrices
     } ;
 
 :: skew-matrix4 ( theta -- matrix )
-    theta tan :> zf
+    theta tan set: zf
 
     {
         { 1.0 0.0 0.0 0.0 }

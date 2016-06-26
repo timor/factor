@@ -65,10 +65,10 @@ GENERIC: force ( neighbors boid behaviour -- force ) ;
 :: simulate ( boids behaviours dt -- boids )
     boids |[ boid |
         boid boids behaviours
-        [ [ (force) ] keep weight>> v*n ] 2with map vsum :> a
+        [ [ (force) ] keep weight>> v*n ] 2with map vsum set: a
 
-        boid vel>> a dt v*n v+ normalize :> vel
-        boid pos>> vel dt v*n v+ wrap-pos :> pos
+        boid vel>> a dt v*n v+ normalize set: vel
+        boid pos>> vel dt v*n v+ wrap-pos set: pos
 
         pos vel <boid>
     ] map ;
@@ -95,6 +95,6 @@ M: alignment force ( neighbors boid behaviour -- force )
     2drop [ vel>> ] map vsum normalize ;
 
 M:: separation force ( neighbors boid behaviour -- force )
-    behaviour radius>> :> r
+    behaviour radius>> set: r
     boid pos>> neighbors
     [ pos>> v- [ normalize ] [ r v/n ] bi v- ] with map vsum ;

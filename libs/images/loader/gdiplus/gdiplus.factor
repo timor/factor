@@ -36,18 +36,18 @@ PRIVATE<
     ! Copy the rect to stack space because the gc might move it
     ! because calling GdipBitmapLockBits triggers callbacks to Factor.
     { BitmapData GpRect } [
-        :> ( stack-data stack-rect )
+        set: ( stack-data stack-rect )
         stack-rect rect binary-object memcpy
         bitmap stack-rect mode format stack-data GdipBitmapLockBits
         check-gdi+-status
     ] with-out-parameters drop ;
 
 :: gdi+-bitmap>data ( bitmap -- w h pixels )
-    bitmap [ gdi+-bitmap-width ] [ gdi+-bitmap-height ] bi :> ( w h )
+    bitmap [ gdi+-bitmap-width ] [ gdi+-bitmap-height ] bi set: ( w h )
     bitmap 0 0 w h <GpRect> ImageLockModeRead enum>number
-    PixelFormat32bppARGB gdi+-lock-bitmap :> bitmap-data
+    PixelFormat32bppARGB gdi+-lock-bitmap set: bitmap-data
     bitmap-data [ Scan0>> ] [ Stride>> ] [ Height>> * ] tri
-    memory>byte-array :> pixels
+    memory>byte-array set: pixels
     bitmap bitmap-data GdipBitmapUnlockBits check-gdi+-status
     w h pixels ;
 

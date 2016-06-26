@@ -8,11 +8,11 @@ persistent.hashtables.nodes ;
 IN: persistent.hashtables.nodes.full
 
 M:: full-node (new-at) ( shift value key hashcode full-node -- node' added-leaf )
-    full-node nodes>> :> nodes
-    hashcode full-node shift>> mask :> idx
-    idx nodes nth-unsafe :> n
+    full-node nodes>> set: nodes
+    hashcode full-node shift>> mask set: idx
+    idx nodes nth-unsafe set: n
 
-    shift radix-bits + value key hashcode n (new-at) :> ( n' new-leaf )
+    shift radix-bits + value key hashcode n (new-at) set: ( n' new-leaf )
     n n' eq? [
         full-node
     ] [
@@ -21,9 +21,9 @@ M:: full-node (new-at) ( shift value key hashcode full-node -- node' added-leaf 
     new-leaf ;
 
 M:: full-node (pluck-at) ( key hashcode full-node -- node' )
-    hashcode full-node shift>> mask :> idx
-    idx full-node nodes>> nth :> n
-    key hashcode n (pluck-at) :> n'
+    hashcode full-node shift>> mask set: idx
+    idx full-node nodes>> nth set: n
+    key hashcode n (pluck-at) set: n'
 
     n n' eq? [
         full-node

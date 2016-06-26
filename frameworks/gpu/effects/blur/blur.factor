@@ -65,8 +65,8 @@ GLSL-PROGRAM: blur-program window-vertex-shader blur-fragment-shader window-vert
     } 2<render-set> render ;
 
 :: blur ( texture horizontal? -- texture )
-    texture 0 texture-dim :> dim
-    dim RGB float-components <2d-render-texture> :> ( target-framebuffer target-texture )
+    texture 0 texture-dim set: dim
+    dim RGB float-components <2d-render-texture> set: ( target-framebuffer target-texture )
     texture horizontal? target-framebuffer dim (blur)
     target-framebuffer dispose
     target-texture ;

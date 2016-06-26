@@ -45,7 +45,7 @@ M: ##copy value-number [ src>> vreg>vn ] [ dst>> ] bi set-vn ;
     swap dst>> set-vn ;
 
 :: useful-instruction ( insn expr -- )
-    insn dst>> :> vn
+    insn dst>> set: vn
     vn vn set-vn
     vn expr exprs>vns get set-at
     insn vn vns>insns get set-at ;

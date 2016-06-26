@@ -17,12 +17,12 @@ PRIVATE>
     f [ random zero? [ nip ] [ drop ] if ] each-numbered-line ;
 
 :: random-lines ( n -- lines )
-    V{ } clone :> accum
+    V{ } clone set: accum
     |[ line line# |
         line# n <= [
             line accum push
         ] [
-            line# random :> r
+            line# random set: r
             r n < [ line r accum set-nth-unsafe ] when
         ] if
     ] each-numbered-line accum ;

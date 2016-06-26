@@ -3,7 +3,7 @@ sequences ;
 IN: benchmark.sieve
 
 :: sieve ( n -- #primes )
-    n dup odd? [ 1 + ] when 2/ <bit-array> :> sieve
+    n dup odd? [ 1 + ] when 2/ <bit-array> set: sieve
     t 0 sieve set-nth
 
     3 n sqrt 2 <range> |[ i |

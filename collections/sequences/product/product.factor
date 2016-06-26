@@ -53,14 +53,14 @@ M: product-sequence nth
     product@ nths ;
 
 :: product-each ( ... sequences quot: ( ... seq -- ... ) -- ... )
-    sequences start-product-iter :> ( ns lengths )
+    sequences start-product-iter set: ( ns lengths )
     lengths [ 0 = ] any? [
         [ ns lengths end-product-iter? ]
         [ ns sequences nths quot call ns lengths product-iter ] until
     ] unless ; inline
 
 :: product-map-as ( ... sequences quot: ( ... seq -- ... value ) exemplar -- ... sequence )
-    0 :> i!
+    0 set: i!
     sequences product-length exemplar
     |[ result |
         sequences [ quot call i result set-nth-unsafe i 1 + i! ] product-each
@@ -71,7 +71,7 @@ M: product-sequence nth
     over product-map-as ; inline
 
 :: product-map>assoc ( ... sequences quot: ( ... seq -- ... key value ) exemplar -- ... assoc )
-    0 :> i!
+    0 set: i!
     sequences product-length { }
     |[ result |
         sequences [ quot call 2array i result set-nth-unsafe i 1 + i! ] product-each

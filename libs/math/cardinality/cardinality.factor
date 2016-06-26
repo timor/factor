@@ -12,12 +12,12 @@ M: fixnum trailing-zeros
     ] if-zero ;
 
 :: estimate-cardinality ( seq k -- n )
-    k 2^                         :> num_buckets
-    num_buckets 0 <array>        :> max_zeros
+    k 2^                         set: num_buckets
+    num_buckets 0 <array>        set: max_zeros
     seq [
-        hashcode >fixnum         :> h
-        h num_buckets 1 - bitand :> bucket
-        h k neg shift            :> bucket_hash
+        hashcode >fixnum         set: h
+        h num_buckets 1 - bitand set: bucket
+        h k neg shift            set: bucket_hash
         bucket max_zeros [
             bucket_hash trailing-zeros max
         ] change-nth

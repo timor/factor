@@ -67,7 +67,7 @@ CONSTANT: final-count 28 ;
     over [ non-starter? not ] find-last-from drop ?1+ reorder-next 2drop ;
 
 :: decompose ( string quot -- decomposed )
-    string length <sbuf> :> out
+    string length <sbuf> set: out
     string [
         >fixnum dup ascii? [ out push ] [
             dup hangul? [ hangul>jamo out push-all ]

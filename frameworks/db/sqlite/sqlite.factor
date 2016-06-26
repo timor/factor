@@ -83,8 +83,8 @@ M: literal-bind sqlite-bind-conversion ( tuple literal-bind -- array )
     <sqlite-low-level-binding> ;
 
 M:: generator-bind sqlite-bind-conversion ( tuple generate-bind -- array )
-    generate-bind generator-singleton>> eval-generator :> obj
-    generate-bind slot-name>> :> name
+    generate-bind generator-singleton>> eval-generator set: obj
+    generate-bind slot-name>> set: name
     obj name tuple set-slot-named
     generate-bind key>> obj generate-bind type>> <sqlite-low-level-binding> ;
 

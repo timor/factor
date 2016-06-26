@@ -21,7 +21,7 @@ IN: compiler.cfg.intrinsics.simd.tests
     } ;
 
 :: test-node-literal ( lit rep -- node )
-    lit class-of :> lit-class
+    lit class-of set: lit-class
     T{ #call
         { in-d  { 1 2 3 4 } }
         { out-d { 5 } }

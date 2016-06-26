@@ -49,7 +49,7 @@ IN: cocoa.subclassing
     ] with-nested-compilation-unit ;
 
 :: (redefine-objc-method) ( class method -- )
-    method init-method :> ( sel imp types )
+    method init-method set: ( sel imp types )
 
     class sel class_getInstanceMethod [
         imp method_setImplementation drop
@@ -63,7 +63,7 @@ IN: cocoa.subclassing
     ] [ 2drop ] if ;
 
 :: define-objc-class ( name superclass protocols methods -- )
-    methods prepare-methods :> methods
+    methods prepare-methods set: methods
     name "cocoa.classes" create-word drop
     methods name redefine-objc-methods
     name [ methods protocols superclass name (define-objc-class) ] import-objc-class ;

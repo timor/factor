@@ -51,7 +51,7 @@ CONSTANT: pov-polygons
     [ (xy>loc) ] dip (z>loc) ;
 
 :: move-axis ( gadget x y z -- )
-    x y z (xyz>loc) :> ( xy z )
+    x y z (xyz>loc) set: ( xy z )
     xy gadget   indicator>> loc<<
     z  gadget z-indicator>> loc<< ;
 

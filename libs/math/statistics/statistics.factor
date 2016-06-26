@@ -63,11 +63,11 @@ PRIVATE<
 :: kth-object-impl ( seq k nth-quot exchange-quot quot: ( x y -- ? ) -- elt )
     ! Wirth's method, Algorithm's + Data structues = Programs p. 84
     k seq bounds-check 2drop
-    0 :> i!
-    0 :> j!
-    0 :> l!
-    0 :> x!
-    seq length 1 - :> m!
+    0 set: i!
+    0 set: j!
+    0 set: l!
+    0 set: x!
+    seq length 1 - set: m!
     [ l m < ]
     [
         k seq nth-unsafe x!
@@ -171,9 +171,9 @@ PRIVATE>
     y-floor y-ceiling y-floor - c d x frac * + * + ;
 
 :: quantile-abcd ( seq qs a b c d -- quantile )
-    seq qs a b quantile-indices :> indices
+    seq qs a b quantile-indices set: indices
     indices [ [ floor 0 max ] [ ceiling seq length 1 - min ] bi 2array ] map
-    concat :> index-pairs
+    concat set: index-pairs
 
     seq index-pairs kth-smallests
     2 group indices [ [ first2 ] dip c d qabcd ] 2map ;

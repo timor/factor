@@ -141,8 +141,8 @@ TUPLE: image
 PRIVATE<
 
 :: pixel@ ( x y w image -- start end bitmap )
-    image dim>> first y * x + :> start
-    start w [ image bytes-per-pixel * ] bi@ :> ( start' w' )
+    image dim>> first y * x + set: start
+    start w [ image bytes-per-pixel * ] bi@ set: ( start' w' )
     start'  start' w' +  image bitmap>> ; inline
 
 : set-subseq ( new-value from to victim -- )
@@ -169,11 +169,11 @@ PRIVATE>
     [ 1 ] dip set-pixel-row-at ; inline
 
 :: each-pixel ( ... image quot: ( ... x y pixel -- ... ) -- ... )
-    image dim>> first2 :> ( width height )
-    image bytes-per-pixel :> n
+    image dim>> first2 set: ( width height )
+    image bytes-per-pixel set: n
     height width [ iota ] bi@ |[ y x |
-        y width * x + :> start
-        start n * :> from
-        from n + :> to
+        y width * x + set: start
+        start n * set: from
+        from n + set: to
         x y from to image bitmap>> <slice> quot call
     ] cartesian-each ; inline

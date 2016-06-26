@@ -96,7 +96,7 @@ M: bad-byte-array-length summary
     string>alien malloc-byte-array ;
 
 M:: memory-stream stream-read-unsafe ( n buf stream -- count )
-    stream alien>> :> src
+    stream alien>> set: src
     buf src n memcpy
     n src <displaced-alien> stream alien<<
     n ; inline

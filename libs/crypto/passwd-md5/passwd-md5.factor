@@ -24,7 +24,7 @@ PRIVATE>
     head-slice append
     password [ length make-bits ] [ first ] bi
     $[ char: \0 _ ? ] "" map-as append
-    md5 checksum-bytes :> final!
+    md5 checksum-bytes set: final!
 
     1000 iota [
         "" swap

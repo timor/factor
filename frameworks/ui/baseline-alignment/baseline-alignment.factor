@@ -61,7 +61,7 @@ TUPLE: gadget-metrics height ascent descent cap-height ;
 
 :: combine-metrics ( graphics-height ascent descent cap-height -- ascent' descent' )
     ascent [
-        cap-height 0 or 2 / :> mid-line
+        cap-height 0 or 2 / set: mid-line
         graphics-height 2 /
         [ ascent mid-line - max mid-line + floor >integer ]
         [ descent mid-line + max mid-line - ceiling >integer ] bi
@@ -80,13 +80,13 @@ PRIVATE>
 
 :: align-baselines ( gadgets -- ys )
     gadgets [ dup pref-dim <gadget-metrics> ] map
-    dup max-ascent 0 or :> max-ascent
-    dup max-cap-height 0 or :> max-cap-height
-    dup max-graphics-height :> max-graphics-height
+    dup max-ascent 0 or set: max-ascent
+    dup max-cap-height 0 or set: max-cap-height
+    dup max-graphics-height set: max-graphics-height
 
-    max-cap-height max-graphics-height + 2 /i :> critical-line
-    critical-line max-ascent [-] :> text-leading
-    max-ascent critical-line [-] :> graphics-leading
+    max-cap-height max-graphics-height + 2 /i set: critical-line
+    critical-line max-ascent [-] set: text-leading
+    max-ascent critical-line [-] set: graphics-leading
 
     [
         dup ascent>>

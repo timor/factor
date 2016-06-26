@@ -85,7 +85,7 @@ ERROR: file-expected path ;
     |[ buf size rwflag password! |
         password [ B{ 0 } password! ] unless
 
-        password strlen :> len
+        password strlen set: len
         buf password len 1 + size min memcpy
         len
     ] alien-callback ;
@@ -211,9 +211,9 @@ SYMBOL: default-secure-context
     ] with-destructors ;
 
 :: <ssl-socket> ( winsock hostname -- ssl )
-    winsock socket-handle BIO_NOCLOSE BIO_new_socket dup ssl-error :> bio
-    winsock <ssl-handle> :> handle
-    handle handle>> :> native-handle
+    winsock socket-handle BIO_NOCLOSE BIO_new_socket dup ssl-error set: bio
+    winsock <ssl-handle> set: handle
+    handle handle>> set: native-handle
     hostname [
         utf8 string>alien
         native-handle swap SSL_set_tlsext_host_name ssl-error

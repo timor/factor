@@ -15,9 +15,9 @@ INSTANCE: fletcher-32 checksum ;
 INSTANCE: fletcher-64 checksum ;
 
 :: fletcher ( seq k -- n )
-    k 16 / :> chars
-    k 2 / 2^ :> base
-    base 1 - :> modulo
+    k 16 / set: chars
+    k 2 / 2^ set: base
+    base 1 - set: modulo
     0 0 seq chars <groups> [
         be> + modulo mod [ + modulo mod ] keep
     ] each [ base * ] [ + ] bi* ; inline

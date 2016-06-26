@@ -42,14 +42,14 @@ STRUCT: group-directory-entry
     [ [ ImageOffset>> dup ] [ ImageSize>> + ] bi ] dip subseq ; inline
 
 :: ico-group-and-icons ( bytes -- group-bytes icon-bytes )
-    bytes ico-header memory>struct :> header
+    bytes ico-header memory>struct set: header
 
     ico-header heap-size bytes <displaced-alien>
-    header ImageCount>> ico-directory-entry <c-direct-array> :> directory
+    header ImageCount>> ico-directory-entry <c-direct-array> set: directory
 
     directory dup length iota [ ico>group-directory-entry ] { } 2map-as
-        :> group-directory
-    directory [ bytes ico-icon ] { } map-as :> icon-bytes
+        set: group-directory
+    directory [ bytes ico-icon ] { } map-as set: icon-bytes
 
     header clone >c-ptr group-directory concat append
     icon-bytes ; inline
@@ -67,9 +67,9 @@ ERROR: unsupported-ico-format bytes format ;
 PRIVATE>
 
 :: embed-icon-resource ( exe ico-bytes id -- )
-    exe normalize-path 1 BeginUpdateResource :> hUpdate
+    exe normalize-path 1 BeginUpdateResource set: hUpdate
     hUpdate [
-        ico-bytes check-ico-type ico-group-and-icons :> ( group icons )
+        ico-bytes check-ico-type ico-group-and-icons set: ( group icons )
         hUpdate RT_GROUP_ICON id 0 group dup byte-length
         UpdateResource drop
 

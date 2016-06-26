@@ -55,7 +55,7 @@ XML-NS: foo http://blah.com ;
   y
   <foo/>
 </x>" } [
-    let[ "one" :> a "two" :> c "y" :> x XML-CHUNK[[ <-x-> <foo/> ]] :> d
+    let[ "one" set: a "two" set: c "y" set: x XML-CHUNK[[ <-x-> <foo/> ]] set: d
         XML-DOC[[
             <x> <-a-> <b val=<-c->/> <-d-> </x>
         ]] pprint-xml>string

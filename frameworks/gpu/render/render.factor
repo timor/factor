@@ -362,8 +362,8 @@ M: binary-data bind-uniform-vec4 ( index sequence -- ) 1 swap glUniform4fv ; inl
 DEFER: [bind-uniform-tuple]
 
 :: [bind-uniform-array] ( value>>-quot type texture-unit name dim -- texture-unit' quot )
-    { name uniform-index } >quotation :> index-quot
-    { index-quot value>>-quot bi* } >quotation :> pre-quot
+    { name uniform-index } >quotation set: index-quot
+    { index-quot value>>-quot bi* } >quotation set: pre-quot
 
     type H{
         { bool-uniform  { dim swap >uniform-bool-array  glUniform1iv  } }
@@ -399,14 +399,14 @@ DEFER: [bind-uniform-tuple]
         { mat4-uniform   { [ dim 0 ] dip 4 4 >uniform-matrix-array glUniformMatrix4fv   } }
 
         { texture-uniform { drop dim dup iota [ texture-unit + ] int-array{ } map-as glUniform1iv } }
-    } at [ uniform invalid-uniform-type ] unless* >quotation :> value-quot
+    } at [ uniform invalid-uniform-type ] unless* >quotation set: value-quot
 
     type uniform-type-texture-units dim * texture-unit +
     pre-quot value-quot append ;
 
 :: [bind-uniform-value] ( value>>-quot type texture-unit name -- texture-unit' quot )
-    { name uniform-index } >quotation :> index-quot
-    { index-quot value>>-quot bi* } >quotation :> pre-quot
+    { name uniform-index } >quotation set: index-quot
+    { index-quot value>>-quot bi* } >quotation set: pre-quot
 
     type H{
         { bool-uniform  [ >c-bool glUniform1i  ] }
@@ -442,7 +442,7 @@ DEFER: [bind-uniform-tuple]
         { mat4-uniform   [ [ 1 0 ] dip 4 4 >uniform-matrix glUniformMatrix4fv   ] }
 
         { texture-uniform { drop texture-unit glUniform1i } }
-    } at [ uniform invalid-uniform-type ] unless* >quotation :> value-quot
+    } at [ uniform invalid-uniform-type ] unless* >quotation set: value-quot
 
     type uniform-type-texture-units texture-unit +
     pre-quot value-quot append ;
@@ -456,22 +456,22 @@ DEFER: [bind-uniform-tuple]
     ] [
         { [ ] }
         name "." append 1array
-    ] if* :> ( quot-prefixes name-prefixes )
-    type all-uniform-tuple-slots :> uniforms
+    ] if* set: ( quot-prefixes name-prefixes )
+    type all-uniform-tuple-slots set: uniforms
 
     texture-unit quot-prefixes name-prefixes |[ quot-prefix name-prefix |
         uniforms name-prefix [bind-uniform-tuple]
         quot-prefix prepend
-    ] 2map :> ( texture-unit' value-cleave )
+    ] 2map set: ( texture-unit' value-cleave )
 
     texture-unit'
     value>>-quot { value-cleave 2cleave } append ;
 
 :: [bind-uniform] ( texture-unit uniform prefix -- texture-unit' quot )
-    prefix uniform name>> append hyphens>underscores :> name
-    uniform uniform-type>> :> type
-    uniform dim>> :> dim
-    uniform name>> reader-word 1quotation :> value>>-quot
+    prefix uniform name>> append hyphens>underscores set: name
+    uniform uniform-type>> set: type
+    uniform dim>> set: dim
+    uniform name>> reader-word 1quotation set: value>>-quot
 
     value>>-quot type texture-unit name {
         { [ type uniform-type? dim     and ] [ dim [bind-uniform-array] ] }
@@ -480,15 +480,15 @@ DEFER: [bind-uniform-tuple]
     } cond ;
 
 :: [bind-uniform-tuple] ( texture-unit uniforms prefix -- texture-unit' quot )
-    texture-unit uniforms [ prefix [bind-uniform] ] map :> ( texture-unit' uniforms-cleave )
+    texture-unit uniforms [ prefix [bind-uniform] ] map set: ( texture-unit' uniforms-cleave )
 
     texture-unit'
     { uniforms-cleave 2cleave } >quotation ;
 
 :: [bind-uniforms] ( superclass uniforms -- quot )
-    superclass "uniform-tuple-texture-units" word-prop 0 or :> first-texture-unit
-    superclass \ (bind-uniforms) lookup-method :> next-method
-    first-texture-unit uniforms "" [bind-uniform-tuple] nip :> bind-quot
+    superclass "uniform-tuple-texture-units" word-prop 0 or set: first-texture-unit
+    superclass \ (bind-uniforms) lookup-method set: next-method
+    first-texture-unit uniforms "" [bind-uniform-tuple] nip set: bind-quot
 
     { 2dup next-method } bind-quot [ ] append-as ;
 

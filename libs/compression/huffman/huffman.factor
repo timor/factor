@@ -25,13 +25,13 @@ TUPLE: huffman-code
     [ 1 + ] change-code drop ; inline
 
 :: all-patterns ( huffman-code n -- seq )
-    n log2 huffman-code size>> - :> free-bits
+    n log2 huffman-code size>> - set: free-bits
     free-bits 0 >
     [ free-bits 2^ iota [ huffman-code code>> free-bits 2^ * + ] map ]
     [ huffman-code code>> free-bits neg 2^ /i 1array ] if ;
 
 :: huffman-each ( ... tdesc quot: ( ... huffman-code -- ... ) -- ... )
-    <huffman-code> :> code
+    <huffman-code> set: code
     tdesc
     [
         code next-size
@@ -43,7 +43,7 @@ TUPLE: huffman-code
     [ nip $[ _ swap _ set-at ] each ] 3bi ;
 
 :: reverse-table ( tdesc n -- rtable )
-   n f <array> <enum> :> table
+   n f <array> <enum> set: table
    tdesc [ n table update-reverse-table ] huffman-each
    table seq>> ;
 

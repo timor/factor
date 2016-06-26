@@ -488,9 +488,9 @@ CONSTANT: partially-degenerate-second-face
     ] each ;
 
 :: disconnect-b-rep ( b-rep -- )
-    b-rep faces>> >index-hash :> face-indices
-    b-rep edges>> >index-hash :> edge-indices
-    b-rep vertices>> >index-hash :> vertex-indices
+    b-rep faces>> >index-hash set: face-indices
+    b-rep edges>> >index-hash set: edge-indices
+    b-rep vertices>> >index-hash set: vertex-indices
 
     b-rep faces>> [
         [ edge-indices at ] change-edge

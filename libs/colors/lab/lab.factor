@@ -15,31 +15,31 @@ M: laba >rgba >xyza >rgba ;
 M: laba >xyza
     [
         let[
-            [ l>> ] [ a>> ] [ b>> ] tri :> ( l a b )
-            l 16 + 116 / :> fy
-            a 500 / fy + :> fx
-            fy b 200 / - :> fz
+            [ l>> ] [ a>> ] [ b>> ] tri set: ( l a b )
+            l 16 + 116 / set: fy
+            a 500 / fy + set: fx
+            fy b 200 / - set: fz
 
-            fx 3 ^ :> fx3
-            fz 3 ^ :> fz3
+            fx 3 ^ set: fx3
+            fz 3 ^ set: fz3
 
             fx3 xyz_epsilon > [
                 fx3
             ] [
                 116 fx * 16 - xyz_kappa /
-            ] if :> x
+            ] if set: x
 
             l xyz_kappa xyz_epsilon * > [
                 l 16 + 116 / 3 ^
             ] [
                 l xyz_kappa /
-            ] if :> y
+            ] if set: y
 
             fz3 xyz_epsilon > [
                 fz3
             ] [
                 116 fz * 16 - xyz_kappa /
-            ] if :> z
+            ] if set: z
 
             x wp_x * y wp_y * z wp_z *
         ]
@@ -58,7 +58,7 @@ M: xyza >laba
             [
                 dup xyz_epsilon >
                 [ 1/3 ^ ] [ xyz_kappa * 16 + 116 / ] if
-            ] tri@ :> ( fx fy fz )
+            ] tri@ set: ( fx fy fz )
             116 fy * 16 -
             500 fx fy - *
             200 fy fz - *

@@ -4,8 +4,8 @@ threads sequences calendar accessors ;
 IN: concurrency.locks.tests
 
 :: lock-test-0 ( -- v )
-    V{ } clone :> v
-    2 <count-down> :> c
+    V{ } clone set: v
+    2 <count-down> set: c
 
     [
         yield
@@ -27,9 +27,9 @@ IN: concurrency.locks.tests
     v ;
 
 :: lock-test-1 ( -- v )
-    V{ } clone :> v
-    <lock> :> l
-    2 <count-down> :> c
+    V{ } clone set: v
+    <lock> set: l
+    2 <count-down> set: c
 
     [
         l [
@@ -78,11 +78,11 @@ IN: concurrency.locks.tests
 { } [ <rw-lock> dup [ [ ] with-read-lock ] with-write-lock ] unit-test
 
 :: rw-lock-test-1 ( -- v )
-    <rw-lock> :> l
-    1 <count-down> :> c
-    1 <count-down> :> c'
-    4 <count-down> :> c''
-    V{ } clone :> v
+    <rw-lock> set: l
+    1 <count-down> set: c
+    1 <count-down> set: c'
+    4 <count-down> set: c''
+    V{ } clone set: v
 
     [
         l [
@@ -127,10 +127,10 @@ IN: concurrency.locks.tests
 { V{ 1 2 3 4 5 6 } } [ rw-lock-test-1 ] unit-test
 
 :: rw-lock-test-2 ( -- v )
-    <rw-lock> :> l
-    1 <count-down> :> c
-    2 <count-down> :> c'
-    V{ } clone :> v
+    <rw-lock> set: l
+    1 <count-down> set: c
+    2 <count-down> set: c'
+    V{ } clone set: v
 
     [
         l [
@@ -157,7 +157,7 @@ IN: concurrency.locks.tests
 
 ! Test lock timeouts
 :: lock-timeout-test ( -- v )
-    <lock> :> l
+    <lock> set: l
 
     [
         l [ 1 seconds sleep ] with-lock

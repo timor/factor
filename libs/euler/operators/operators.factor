@@ -51,7 +51,7 @@ ERROR: has-rings face ;
 PRIVATE<
 
 :: make-loop ( vertex face -- edge )
-    b-rep get new-edge :> edge
+    b-rep get new-edge set: edge
     vertex edge vertex<<
     edge edge next-edge<<
     face edge face<<
@@ -64,7 +64,7 @@ PRIVATE<
     make-loop ;
 
 :: make-edge ( vertex next-edge -- edge )
-    b-rep get new-edge :> edge
+    b-rep get new-edge set: edge
     vertex edge vertex<<
     next-edge edge next-edge<<
     next-edge face>> edge face<<
@@ -81,13 +81,13 @@ INSTANCE: sequence point ;
 INSTANCE: number point ;
 
 TYPED:: make-vefs ( pos1: point pos2: point -- edge: b-edge )
-    b-rep get :> b-rep
+    b-rep get set: b-rep
 
-    pos1 b-rep new-vertex :> v1
-    v1 make-loop-face :> e1
+    pos1 b-rep new-vertex set: v1
+    v1 make-loop-face set: e1
 
-    pos2 b-rep new-vertex :> v2
-    v2 e1 make-edge :> e2
+    pos2 b-rep new-vertex set: v2
+    v2 e1 make-edge set: e2
 
     e2 e1 next-edge<<
     e1 e2 opposite-edges
@@ -95,10 +95,10 @@ TYPED:: make-vefs ( pos1: point pos2: point -- edge: b-edge )
     e2 ;
 
 TYPED:: make-ev-one ( edge: b-edge point: point -- edge: b-edge )
-    point b-rep get new-vertex :> v
-    v edge make-edge :> e1'
+    point b-rep get new-vertex set: v
+    v edge make-edge set: e1'
 
-    edge vertex>> e1' make-edge :> e2'
+    edge vertex>> e1' make-edge set: e2'
 
     e2' edge face-cw next-edge<<
     e1' e2' opposite-edges
@@ -116,18 +116,18 @@ PRIVATE<
 :: (make-ev) ( e1 e2 point -- edge )
     e1 e2 assert-incident
 
-    point b-rep get new-vertex :> v'
-    v' e2 make-edge :> e1'
+    point b-rep get new-vertex set: v'
+    v' e2 make-edge set: e1'
 
-    e1 vertex>> :> v
+    e1 vertex>> set: v
 
-    v e1 make-edge :> e2'
+    v e1 make-edge set: e2'
 
     e1 e2 v' subdivide-vertex-cycle
 
-    e1 face-cw :> e1p
-    e2 face-cw :> e2p
-    e1 opposite-edge>> :> e1m
+    e1 face-cw set: e1p
+    e2 face-cw set: e2p
+    e1 opposite-edge>> set: e1m
 
     e1m e1p assert-not=
 
@@ -157,14 +157,14 @@ PRIVATE>
 TYPED:: make-ef ( e1: b-edge e2: b-edge -- edge: b-edge )
     e1 e2 assert-same-face
 
-    e2 vertex>> make-loop-face :> e1'
-    e1 vertex>> e2 make-edge :> e2'
+    e2 vertex>> make-loop-face set: e1'
+    e1 vertex>> e2 make-edge set: e2'
     e1' e2' opposite-edges
 
-    e1 face-cw :> e1p
+    e1 face-cw set: e1p
 
     e1 e2 eq? [
-        e2 face-cw :> e2p
+        e2 face-cw set: e2p
 
         e1' face>> e1 e2 subdivide-edge-cycle
 
@@ -176,14 +176,14 @@ TYPED:: make-ef ( e1: b-edge e2: b-edge -- edge: b-edge )
     e1' ;
 
 TYPED:: make-e-kill-r ( edge-ring: b-edge edge-face: b-edge -- edge: b-edge )
-    edge-ring face>> :> ring
-    edge-face face>> :> face
+    edge-ring face>> set: ring
+    edge-face face>> set: face
     ring face assert-ring-of
 
     edge-ring [ face >>face drop ] each-face-edge
 
-    edge-ring vertex>> edge-face make-edge :> e1
-    edge-face vertex>> edge-ring make-edge :> e2
+    edge-ring vertex>> edge-face make-edge set: e1
+    edge-face vertex>> edge-ring make-edge set: e2
 
     ring face delete-ring
     ring b-rep get delete-face
@@ -196,19 +196,19 @@ TYPED:: make-e-kill-r ( edge-ring: b-edge edge-face: b-edge -- edge: b-edge )
     e1 ;
 
 TYPED:: make-f-kill-rh ( edge-ring: b-edge -- )
-    edge-ring face>> :> ring
-    ring base-face>> :> base-face
+    edge-ring face>> set: ring
+    ring base-face>> set: base-face
     ring base-face delete-ring
     ring ring base-face<< ;
 
 TYPED:: kill-vefs ( edge: b-edge -- )
     edge assert-isolated-component
 
-    b-rep get :> b-rep
-    edge dup opposite-edge>> :> ( e2 e1 )
+    b-rep get set: b-rep
+    edge dup opposite-edge>> set: ( e2 e1 )
 
-    e1 vertex>> :> v1
-    e2 vertex>> :> v2
+    e1 vertex>> set: v1
+    e2 vertex>> set: v2
 
     e1 face>> b-rep delete-face
 
@@ -218,16 +218,16 @@ TYPED:: kill-vefs ( edge: b-edge -- )
     v2 b-rep delete-vertex ;
 
 TYPED:: kill-ev ( edge: b-edge -- )
-    b-rep get :> b-rep
+    b-rep get set: b-rep
 
-    edge vertex>> :> v
-    edge opposite-edge>> :> edge'
-    edge' vertex>> :> v'
+    edge vertex>> set: v
+    edge opposite-edge>> set: edge'
+    edge' vertex>> set: v'
 
     edge [ v' >>vertex drop ] each-vertex-edge
 
-    edge face-cw :> edgep
-    edge' face-cw :> edge'p
+    edge face-cw set: edgep
+    edge' face-cw set: edge'p
 
     edge next-edge>> edgep next-edge<<
     edge' next-edge>> edge'p next-edge<<
@@ -237,18 +237,18 @@ TYPED:: kill-ev ( edge: b-edge -- )
     edge' b-rep delete-edge ;
 
 TYPED:: kill-ef ( edge: b-edge -- )
-    b-rep get :> b-rep
+    b-rep get set: b-rep
 
-    edge :> e1
-    edge opposite-edge>> :> e2
+    edge set: e1
+    edge opposite-edge>> set: e2
 
     e1 e2 assert-different-faces
 
-    e1 face-cw :> e1p
-    e2 face-cw :> e2p
+    e1 face-cw set: e1p
+    e2 face-cw set: e2p
 
-    e1 face>> :> f1
-    e2 face>> :> f2
+    e1 face>> set: f1
+    e2 face>> set: f2
 
     e1 [ f2 >>face drop ] each-face-edge
     f1 b-rep delete-face
@@ -265,17 +265,17 @@ TYPED:: kill-ef ( edge: b-edge -- )
     e2 b-rep delete-edge ;
 
 TYPED:: kill-e-make-r ( edge: b-edge -- edge-ring: b-edge )
-    b-rep get :> b-rep
+    b-rep get set: b-rep
 
-    edge opposite-edge>> :> edge'
-    edge' next-edge>> :> edge-ring
-    edge-ring opposite-edge>> :> edge-ring'
+    edge opposite-edge>> set: edge'
+    edge' next-edge>> set: edge-ring
+    edge-ring opposite-edge>> set: edge-ring'
 
     edge edge' assert-same-face
     edge edge-ring assert-same-face
     edge edge-ring' assert-different-faces
 
-    b-rep new-face :> ring
+    b-rep new-face set: ring
 
     ring edge face>> base-face>> add-ring
     ring edge' edge subdivide-edge-cycle
@@ -286,8 +286,8 @@ TYPED:: kill-e-make-r ( edge: b-edge -- edge-ring: b-edge )
     edge-ring ;
 
 TYPED:: kill-f-make-rh ( edge-face: b-edge edge-base-face: b-edge -- )
-    edge-face face>> :> face
-    edge-base-face face>> :> base-face
+    edge-face face>> set: face
+    edge-base-face face>> set: base-face
 
     face assert-base-face
     base-face assert-base-face

@@ -78,7 +78,7 @@ M:: callable >vector-op-cond ( quot #pick #dup -- quotpair )
     2array ;
 
 M:: pair >vector-op-cond ( pair #pick #dup -- quotpair )
-    pair first2 :> ( class quot )
+    pair first2 set: ( class quot )
     #pick class #dup quot [vector-op-checked]
     $[ 2drop _ npick _ instance? _ [ f f f ] if ]
     #dup $[ % _ nnip ]

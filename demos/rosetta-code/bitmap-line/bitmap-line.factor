@@ -12,9 +12,9 @@ IN: rosetta-code.bitmap-line
 ! algorithm.
 
 :: line-points ( pt1 pt2 -- points )
-    pt1 first2 :> y0! :> x0!
-    pt2 first2 :> y1! :> x1!
-    y1 y0 - abs x1 x0 - abs > :> steep
+    pt1 first2 set: y0! set: x0!
+    pt2 first2 set: y1! set: x1!
+    y1 y0 - abs x1 x0 - abs > set: steep
     steep [
         y0 x0 y0! x0!
         y1 x1 y1! x1!
@@ -23,12 +23,12 @@ IN: rosetta-code.bitmap-line
         x0 x1 x0! x1!
         y0 y1 y0! y1!
     ] when
-    x1 x0 - :> deltax
-    y1 y0 - abs :> deltay
-    0 :> current-error!
-    deltay deltax / abs :> deltaerr
-    0 :> ystep!
-    y0 :> y!
+    x1 x0 - set: deltax
+    y1 y0 - abs set: deltay
+    0 set: current-error!
+    deltay deltax / abs set: deltaerr
+    0 set: ystep!
+    y0 set: y!
     y0 y1 < [ 1 ystep! ] [ -1 ystep! ] if
     x0 x1 1 <range> [
         y steep [ swap ] when 2array

@@ -77,7 +77,7 @@ PRIVATE<
 PRIVATE>
 
 :: graphviz ( graph path format layout -- )
-    path normalize-path :> dot-file
+    path normalize-path set: dot-file
     [
         graph dot-file ?encoding write-dot
         dot-file format layout try-graphviz-command

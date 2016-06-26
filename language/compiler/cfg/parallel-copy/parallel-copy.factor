@@ -24,15 +24,15 @@ SYMBOLS: locs preds to-do ready ;
     [ keys [ init-to-do ] [ init-ready ] bi ] tri ;
 
 :: process-ready ( b quot: ( dst src -- ) -- )
-    b preds get at :> a
-    a locs get at :> c
+    b preds get at set: a
+    a locs get at set: c
     b c quot call
     b a locs get set-at
     a c = a preds get at and [ a ready get push-front ] when ; inline
 
 :: process-to-do ( b temp: ( src -- dst ) quot: ( dst src -- ) -- )
     b locs get at b = [
-        b temp call :> temp'
+        b temp call set: temp'
         temp' b quot call
         temp' b locs get set-at
         b ready get push-front

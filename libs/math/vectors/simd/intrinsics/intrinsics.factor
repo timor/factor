@@ -110,8 +110,8 @@ PRIVATE<
     [ >bitwise-vector-rep byte>rep-array ] 2dip reduce ; inline
 
 :: (vshuffle) ( a elts rep -- c )
-    a rep byte>rep-array :> a'
-    rep <rep-array> :> c'
+    a rep byte>rep-array set: a'
+    rep <rep-array> set: c'
     elts rep rep-length |[ from to |
         from rep rep-length 1 - bitand
            a' nth-unsafe
@@ -120,10 +120,10 @@ PRIVATE<
     c' underlying>> ; inline
 
 :: (vshuffle2) ( a b elts rep -- c )
-    a rep byte>rep-array :> a'
-    b rep byte>rep-array :> b'
-    a' b' cord-append :> ab'
-    rep <rep-array> :> c'
+    a rep byte>rep-array set: a'
+    b rep byte>rep-array set: b'
+    a' b' cord-append set: ab'
+    rep <rep-array> set: c'
     elts rep rep-length |[ from to |
         from rep rep-length dup + 1 - bitand
            ab' nth-unsafe
@@ -145,8 +145,8 @@ PRIVATE>
 : (simd-v-)                ( a b rep -- c ) [ - ] components-2map ;
 : (simd-vneg)              ( a   rep -- c ) [ neg ] components-map ;
 :: (simd-v+-)              ( a b rep -- c )
-    a b rep 2byte>rep-array :> ( a' b' )
-    rep <rep-array> :> c'
+    a b rep 2byte>rep-array set: ( a' b' )
+    rep <rep-array> set: c'
     0  rep rep-length [ 1 -  2 <range> ] [ 2 /i ] bi |[ n |
         n     a' nth-unsafe n     b' nth-unsafe -
         n     c' set-nth-unsafe
@@ -167,11 +167,11 @@ PRIVATE>
 :: (simd-v*hs+)            ( a b rep -- c )
     rep { char-16-rep uchar-16-rep } member-eq?
     [ uchar-16-rep char-16-rep ]
-    [ rep rep ] if :> ( a-rep b-rep )
-    b-rep widen-vector-rep signed-rep :> wide-rep
-    wide-rep rep-component-type :> wide-type
-    a a-rep byte>rep-array 2 <groups> :> a'
-    b b-rep byte>rep-array 2 <groups> :> b'
+    [ rep rep ] if set: ( a-rep b-rep )
+    b-rep widen-vector-rep signed-rep set: wide-rep
+    wide-rep rep-component-type set: wide-type
+    a a-rep byte>rep-array 2 <groups> set: a'
+    b b-rep byte>rep-array 2 <groups> set: b'
     a' b' rep rep-length 2 /i [
         [ [ first  ] bi@ * ]
         [ [ second ] bi@ * ] 2bi +
@@ -212,17 +212,17 @@ PRIVATE>
 : (simd-vshuffle2-elements) ( a b n rep -- c ) [ rep-length 0 pad-tail ] keep (vshuffle2) ;
 : (simd-vshuffle-bytes)    ( a b rep -- c ) drop uchar-16-rep (vshuffle) ;
 :: (simd-vmerge-head)      ( a b rep -- c )
-    a b rep 2byte>rep-array :> ( a' b' )
-    rep <rep-array> :> c'
+    a b rep 2byte>rep-array set: ( a' b' )
+    rep <rep-array> set: c'
     rep rep-length 2 /i |[ n |
         n a' nth-unsafe n 2 *     c' set-nth-unsafe
         n b' nth-unsafe n 2 * 1 + c' set-nth-unsafe
     ] unrolled-each-integer
     c' underlying>> ;
 :: (simd-vmerge-tail)      ( a b rep -- c )
-    a b rep 2byte>rep-array :> ( a' b' )
-    rep <rep-array> :> c'
-    rep rep-length 2 /i :> len
+    a b rep 2byte>rep-array set: ( a' b' )
+    rep <rep-array> set: c'
+    rep rep-length 2 /i set: len
     len |[ n |
         n len + a' nth-unsafe n 2 *     c' set-nth-unsafe
         n len + b' nth-unsafe n 2 * 1 + c' set-nth-unsafe

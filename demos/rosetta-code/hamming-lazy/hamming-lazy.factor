@@ -21,8 +21,8 @@ IN: rosetta-code.hamming-lazy
 !    a convenient library – supports arbitrary-precision integers).
 
 :: sort-merge ( xs ys -- result )
-    xs car :> x
-    ys car :> y
+    xs car set: x
+    ys car set: y
     {
         { [ x y < ] [ [ x ] [ xs cdr ys sort-merge ] lazy-cons ] }
         { [ x y > ] [ [ y ] [ ys cdr xs sort-merge ] lazy-cons ] }
@@ -30,7 +30,7 @@ IN: rosetta-code.hamming-lazy
     } cond ;
 
 :: hamming ( -- hamming )
-    f :> h!
+    f set: h!
     [ 1 ] [
         h 2 3 5 [ $[ _ * ] lmap-lazy ] tri-curry@ tri
         sort-merge sort-merge

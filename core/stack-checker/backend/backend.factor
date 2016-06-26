@@ -166,19 +166,19 @@ M: object apply-object push-literal ;
     dup pair? [ second dup effect? [ drop f ] unless ] [ drop f ] if ;
 
 :: declare-effect-d ( word effect variables branches n -- )
-    meta-d length :> d-length
+    meta-d length set: d-length
     n d-length < [
-        d-length 1 - n - :> n'
-        n' meta-d nth :> value
-        value known :> known
-        known word effect variables branches <declared-effect> :> known'
+        d-length 1 - n - set: n'
+        n' meta-d nth set: value
+        value known set: known
+        known word effect variables branches <declared-effect> set: known'
         known' value set-known
         known' branches push
     ] [ word unknown-macro-input ] if ;
 
 :: declare-input-effects ( word -- )
-    H{ } clone :> variables
-    V{ } clone :> branches
+    H{ } clone set: variables
+    V{ } clone set: branches
     word stack-effect in>> <reversed> |[ in n |
         in ?quotation-effect |[ effect |
             word effect variables branches n declare-effect-d

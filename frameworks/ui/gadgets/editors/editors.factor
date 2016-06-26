@@ -182,7 +182,7 @@ TUPLE: selected-line start end first? last? ;
     ] [ drop f ] if ;
 
 :: draw-selection ( line pair editor -- )
-    pair [ editor font>> line offset>x ] map :> pair
+    pair [ editor font>> line offset>x ] map set: pair
     editor selection-color>> gl-color
     pair first 0 2array
     pair second pair first - round 1 max editor line-height 2array

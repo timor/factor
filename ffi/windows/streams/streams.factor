@@ -14,8 +14,8 @@ PRIVATE<
 
 :: IStream-read ( stream pv cb out-read -- hresult )
     [
-        cb stream stream-read :> buf
-        buf length :> bytes
+        cb stream stream-read set: buf
+        buf length set: bytes
         pv buf bytes memcpy
         out-read [ bytes out-read 0 ULONG set-alien-value ] when
 
@@ -50,8 +50,8 @@ PRIVATE<
 
 :: IStream-copy-to ( stream other-stream cb out-read out-written -- hresult )
     [
-        cb stream stream-read :> buf
-        buf length :> bytes
+        cb stream stream-read set: buf
+        buf length set: bytes
         out-read [ bytes out-read 0 ULONG set-alien-value ] when
 
         other-stream buf bytes out-written IStream::Write
@@ -70,9 +70,9 @@ PRIVATE<
     STG_E_INVALIDFUNCTION ;
 
 :: stream-size ( stream -- size )
-    stream stream-tell :> old-pos
+    stream stream-tell set: old-pos
     0 seek-end stream stream-seek
-    stream stream-tell :> size
+    stream stream-tell set: size
     old-pos seek-absolute stream stream-seek
     size ;
 

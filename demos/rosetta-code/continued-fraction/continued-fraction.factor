@@ -50,7 +50,7 @@ M: pi cfrac-b
 
 :: cfrac-estimate ( cfrac terms -- number )
     terms cfrac cfrac-a             ! top = last a_n
-    terms 1 - 1 [a,b] [ :> n
+    terms 1 - 1 [a,b] [ set: n
         n cfrac cfrac-b swap /      ! top = b_n / top
         n cfrac cfrac-a +           ! top = top + a_n
     ] each ;
@@ -59,7 +59,7 @@ M: pi cfrac-b
     rational 1 /mod             ! split whole, fractional parts
     prec 10^ *                  ! multiply fraction by 10 ^ prec
     [ >integer unparse ] bi@    ! convert digits to strings
-    :> fraction
+    set: fraction
     "."                         ! push decimal point
     prec fraction length -
     dup 0 < [ drop 0 ] when

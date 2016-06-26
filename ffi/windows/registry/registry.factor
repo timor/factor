@@ -24,7 +24,7 @@ CONSTANT: registry-value-max-length 16384 ;
     ] keep HKEY deref ;
 
 :: create-key* ( hKey lpSubKey lpClass dwOptions samDesired lpSecurityAttributes -- hkey new? )
-    f :> ret!
+    f set: ret!
     hKey lpSubKey 0 lpClass dwOptions samDesired lpSecurityAttributes
     0 HKEY <ref>
     0 DWORD <ref>
@@ -50,13 +50,13 @@ CONSTANT: registry-value-max-length 16384 ;
     ] if ;
 
 :: with-open-registry-key ( key subkey mode quot -- )
-    key subkey mode open-key :> hkey
+    key subkey mode open-key set: hkey
     [ hkey quot call ]
     [ hkey close-key ]
     [ ] cleanup ; inline
 
 :: with-create-registry-key ( key subkey quot -- )
-    key subkey create-key :> hkey
+    key subkey create-key set: hkey
     [ hkey quot call ]
     [ hkey close-key ]
     [ ] cleanup ; inline
@@ -67,9 +67,9 @@ PRIVATE<
     length 2 * <byte-array> ;
 
 :: reg-query-value-ex ( key subkey ptr1 ptr2 buffer -- buffer )
-    buffer length uint <ref> :> pdword
+    buffer length uint <ref> set: pdword
     key subkey ptr1 ptr2 buffer pdword [ RegQueryValueEx ] 2keep
-    rot :> ret
+    rot set: ret
     ret ERROR_SUCCESS = [
         uint deref head
     ] [
@@ -100,12 +100,12 @@ TUPLE: registry-enum-key ;
 :: reg-enum-keys ( registry-info -- seq )
     registry-info sub-keys>> iota [
         [ registry-info key>> ] dip
-        registry-value-max-length TCHAR <c-array> dup :> registry-value
-        registry-value length dup :> registry-value-length
+        registry-value-max-length TCHAR <c-array> dup set: registry-value
+        registry-value length dup set: registry-value-length
         f
-        0 DWORD <ref> dup :> type
-        f ! 0 BYTE <ref> dup :> data
-        f ! 0 BYTE <ref> dup :> buffer
+        0 DWORD <ref> dup set: type
+        f ! 0 BYTE <ref> dup set: data
+        f ! 0 BYTE <ref> dup set: buffer
         RegEnumKeyEx dup ERROR_SUCCESS = [
 
         ] [
@@ -115,18 +115,18 @@ TUPLE: registry-enum-key ;
 :: reg-query-info-key ( key -- n )
     key
     MAX_PATH
-    dup TCHAR <c-array> dup :> class-buffer
-    swap int <ref> dup :> class-buffer-length
+    dup TCHAR <c-array> dup set: class-buffer
+    swap int <ref> dup set: class-buffer-length
     f
-    0 DWORD <ref> dup :> sub-keys
-    0 DWORD <ref> dup :> longest-subkey
-    0 DWORD <ref> dup :> longest-class-string
-    0 DWORD <ref> dup :> #values
-    0 DWORD <ref> dup :> max-value
-    0 DWORD <ref> dup :> max-value-data
-    0 DWORD <ref> dup :> security-descriptor
-    FILETIME <struct> dup :> last-write-time
-    RegQueryInfoKey :> ret
+    0 DWORD <ref> dup set: sub-keys
+    0 DWORD <ref> dup set: longest-subkey
+    0 DWORD <ref> dup set: longest-class-string
+    0 DWORD <ref> dup set: #values
+    0 DWORD <ref> dup set: max-value
+    0 DWORD <ref> dup set: max-value-data
+    0 DWORD <ref> dup set: security-descriptor
+    FILETIME <struct> dup set: last-write-time
+    RegQueryInfoKey set: ret
     ret ERROR_SUCCESS = [
         key
         class-buffer

@@ -16,10 +16,10 @@ ERROR: unix-system-call-error args errno message word ;
     } 1|| ;
 
 MACRO:: unix-system-call ( quot -- quot )
-    quot inputs :> n
-    quot first :> word
-    0 :> ret!
-    f :> failed!
+    quot inputs set: n
+    quot first set: word
+    0 set: ret!
+    f set: failed!
     [
         [
             n ndup quot call ret!
@@ -39,9 +39,9 @@ MACRO:: unix-system-call ( quot -- quot )
     ] ;
 
 MACRO:: unix-system-call-allow-eintr ( quot -- quot )
-    quot inputs :> n
-    quot first :> word
-    0 :> ret!
+    quot inputs set: n
+    quot first set: word
+    0 set: ret!
     [
         n ndup quot call ret!
         ret unix-call-failed? [

@@ -943,7 +943,7 @@ TYPED: load-commands ( macho: mach_header_32/64 -- load-commands )
 
 : macho-nm ( path -- )
     |[ macho |
-        macho load-commands segment-commands sections-array :> sections
+        macho load-commands segment-commands sections-array set: sections
         macho load-commands symtab-commands |[ symtab |
             macho symtab symbols [
                 [ drop n_value>> "%016x " printf ]

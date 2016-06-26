@@ -16,7 +16,7 @@ C: <comment> comment ;
 ERROR: missing-usereg ;
 
 :: (resolve-registers) ( array registers -- ? )
-    f :> use-registers!
+    f set: use-registers!
     array [
         {
             { [ dup use-registers? ] [ use-registers! ] }
@@ -34,7 +34,7 @@ ERROR: missing-usereg ;
     use-registers ;
 
 :: resolve-registers ( array -- )
-    V{ } clone :> registers
+    V{ } clone set: registers
     array [ use-registers? ] any? [
         array registers (resolve-registers)
         registers length >>n drop

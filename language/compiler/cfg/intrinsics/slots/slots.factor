@@ -42,7 +42,7 @@ IN: compiler.cfg.intrinsics.slots
 :: (emit-set-slot-imm) ( write-barrier? tag slot -- )
     ds-drop
 
-    2inputs :> ( src obj )
+    2inputs set: ( src obj )
 
     src obj slot tag ##set-slot-imm,
 
@@ -50,9 +50,9 @@ IN: compiler.cfg.intrinsics.slots
     [ obj slot tag next-vreg next-vreg ##write-barrier-imm, ] when ;
 
 :: (emit-set-slot) ( write-barrier? tag -- )
-    3inputs :> ( src obj slot )
+    3inputs set: ( src obj slot )
 
-    slot tag slot-indexing :> ( slot scale tag )
+    slot tag slot-indexing set: ( slot scale tag )
 
     src obj slot scale tag ##set-slot,
 

@@ -215,8 +215,8 @@ M: table-row pdf-render
         [ drop ?line-break ]
         [
             let[
-                over y>> :> start-y
-                over y>> :> max-y!
+                over y>> set: start-y
+                over y>> set: max-y!
                 [
                     [
                         [ start-y >>y ] dip
@@ -245,7 +245,7 @@ M: table-row pdf-render
     ] map nip ;
 
 :: max-col-widths ( canvas rows -- widths )
-    H{ } clone :> widths
+    H{ } clone set: widths
     rows [
         cells>> canvas swap col-widths
         [ widths [ 0 or max ] change-at ] each-index

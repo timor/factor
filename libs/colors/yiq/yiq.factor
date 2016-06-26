@@ -31,10 +31,10 @@ M: object >yiqa >rgba >yiqa ;
 M: yiqa >yiqa ; inline
 
 M:: rgba >yiqa ( rgba -- yiqa )
-    rgba >rgba-components :> ( r g b a )
-    0.30 r *  0.59 g * 0.11 b * + + :> y
-    r y - :> r-y
-    b y - :> b-y
-    0.74 r-y * 0.27 b-y * - :> i
-    0.48 r-y * 0.41 b-y * + :> q
+    rgba >rgba-components set: ( r g b a )
+    0.30 r *  0.59 g * 0.11 b * + + set: y
+    r y - set: r-y
+    b y - set: b-y
+    0.74 r-y * 0.27 b-y * - set: i
+    0.48 r-y * 0.41 b-y * + set: q
     y i q a <yiqa> ;

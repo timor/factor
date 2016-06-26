@@ -42,17 +42,17 @@ TUPLE: b-rep-vertices
     [ f ] 2dip [ edge>> ] dip $[ _ in? or ] each-face-edge ;
 
 :: b-rep-face-vertices ( b-rep selected -- vertices count indices )
-    float-4-vector{ } clone :> vertices
-    ushort-vector{ } clone :> indices
+    float-4-vector{ } clone set: vertices
+    ushort-vector{ } clone set: indices
 
     0 b-rep faces>> |[ count face |
-        face selected face-selected? :> selected?
+        face selected face-selected? set: selected?
         face dup base-face>> eq? [
             face edge>> face-color
-                selected? selected-face-color neutral-face-color ? v* :> color
-            face triangulate-face seq>> :> triangles
-            triangles members :> tri-vertices
-            tri-vertices >index-hash :> vx-indices
+                selected? selected-face-color neutral-face-color ? v* set: color
+            face triangulate-face seq>> set: triangles
+            triangles members set: tri-vertices
+            tri-vertices >index-hash set: vx-indices
 
             tri-vertices [
                 position>> double-4>float-4 vertices push
@@ -62,7 +62,7 @@ TUPLE: b-rep-vertices
 
             count tri-vertices length +
         ] [ count ] if
-    ] each :> total
+    ] each set: total
     vertices float-4 >c-array underlying>>
     total
     indices ushort-array{ } like ;
@@ -91,13 +91,13 @@ M: sequence selected-vectors [ selected-vectors ] map concat ;
     [ dup vertex>> ] [ at 2 * ] [ swapd in? [ [ 1 + ] when ] keep ] tri* ;
 
 :: b-rep-edge-index-array ( b-rep selected offset -- edge-indices )
-    b-rep vertices>> >index-hash :> vertex-indices
-    b-rep edges>> length <ushort-vector> :> edge-indices
+    b-rep vertices>> >index-hash set: vertex-indices
+    b-rep edges>> length <ushort-vector> set: edge-indices
 
     b-rep edges>> |[ e |
-        e opposite-edge>> :> o
-        e vertex-indices selected edge-vertex-index [ offset + ] dip :> ( from e-selected? )
-        o vertex-indices selected edge-vertex-index [ offset + ] dip :> ( to   o-selected? )
+        e opposite-edge>> set: o
+        e vertex-indices selected edge-vertex-index [ offset + ] dip set: ( from e-selected? )
+        o vertex-indices selected edge-vertex-index [ offset + ] dip set: ( to   o-selected? )
 
         from to < [ from edge-indices push to edge-indices push ] when
     ] each
@@ -105,11 +105,11 @@ M: sequence selected-vectors [ selected-vectors ] map concat ;
     edge-indices ushort-array{ } like ;
 
 :: make-b-rep-vertices ( b-rep selected -- vertices face-indices edge-indices point-indices )
-    b-rep selected b-rep-face-vertices :> ( face-vertices face-count face-indices )
-    b-rep b-rep-edge-vertices :> ( edge-vertices edge-count )
-    selected selected-vertices :> ( sel-vertices sel-count )
+    b-rep selected b-rep-face-vertices set: ( face-vertices face-count face-indices )
+    b-rep b-rep-edge-vertices set: ( edge-vertices edge-count )
+    selected selected-vertices set: ( sel-vertices sel-count )
     face-vertices face-count edge-vertices edge-count sel-vertices sel-count
-    <b-rep-vertices> :> vertices
+    <b-rep-vertices> set: vertices
 
     vertices array>>
 
@@ -232,24 +232,24 @@ TYPED: rotate-view-mode ( world: gml-viewer-world -- )
 CONSTANT: edge-hitbox-radius 0.05 ;
 
 :: line-nearest-t ( p0 u q0 v -- tp tq )
-    p0 q0 v- :> w0
+    p0 q0 v- set: w0
 
-    u u v. :> a
-    u v v. :> b
-    v v v. :> c
-    u w0 v. :> d
-    v w0 v. :> e
+    u u v. set: a
+    u v v. set: b
+    v v v. set: c
+    u w0 v. set: d
+    v w0 v. set: e
 
-    a c * b b * - :> denom
+    a c * b b * - set: denom
 
     b e * c d * - denom /f
     a e * b d * - denom /f ;
 
 :: intersects-edge-node? ( source direction edge -- ? )
-    edge vertex>> position>> double-4>float-4 :> edge-source
-    edge opposite-edge>> vertex>> position>> double-4>float-4 edge-source v- :> edge-direction
+    edge vertex>> position>> double-4>float-4 set: edge-source
+    edge opposite-edge>> vertex>> position>> double-4>float-4 edge-source v- set: edge-direction
 
-    source direction edge-source edge-direction line-nearest-t :> ( ray-t edge-t )
+    source direction edge-source edge-direction line-nearest-t set: ( ray-t edge-t )
 
     ray-t 0.0 >= edge-t 0.0 0.5 between? and [
         source direction ray-t v*n v+

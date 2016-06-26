@@ -38,7 +38,7 @@ CONSTANT: clen-shuffle { 16 17 18 0 8 7 9 6 10 5 11 4 12 3 13 2 14 1 15 } ;
     dup length [ 3 bitstream bs:read ] replicate
     get-table
     bitstream swap <huffman-decoder>
-    [ 2dup + ] dip swap :> k!
+    [ 2dup + ] dip swap set: k!
     $[
         _ read1-huff2 {
             { [ dup 16 = ] [ 2 bitstream bs:read 3 + 2array ] }
@@ -88,7 +88,7 @@ CONSTANT: dist-table
     [ length 1 - swap - ] [ nth ] bi ; inline
 
 :: inflate-lz77 ( seq -- byte-array )
-    1000 <byte-vector> :> bytes
+    1000 <byte-vector> set: bytes
     seq [
         dup array?
         [ first2 $[ _ 1 - bytes nth* bytes push ] times ]
@@ -97,7 +97,7 @@ CONSTANT: dist-table
     bytes >byte-array ;
 
 :: inflate-huffman ( bitstream tables -- bytes )
-    bitstream tables [ <huffman-decoder> ] with map :> tables
+    bitstream tables [ <huffman-decoder> ] with map set: tables
     [
         tables first read1-huff2
         dup 256 > [
@@ -132,8 +132,8 @@ CONSTANT: dist-table
 
 :: inflate-raw ( bitstream -- bytes )
     8 bitstream bs:align
-    16 bitstream bs:read :> len
-    16 bitstream bs:read :> nlen
+    16 bitstream bs:read set: len
+    16 bitstream bs:read set: nlen
 
     ! len + ~len = -1
     len nlen + 16 >signed -1 assert=

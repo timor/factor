@@ -71,8 +71,8 @@ PRIVATE>
 PRIVATE<
 
 :: trace-quot ( word effect quot str -- quot' )
-    effect quot call :> values
-    values length :> n
+    effect quot call set: values
+    values length set: n
     [
         [
             "--- " write str write bl word .

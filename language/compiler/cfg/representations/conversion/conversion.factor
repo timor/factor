@@ -17,12 +17,12 @@ M: int-rep tagged>rep ( dst src rep -- )
     drop tag-bits get ##sar-imm, ;
 
 M:: float-rep rep>tagged ( dst src rep -- )
-    double-rep next-vreg-rep :> temp
+    double-rep next-vreg-rep set: temp
     temp src ##single>double-float,
     dst temp double-rep rep>tagged ;
 
 M:: float-rep tagged>rep ( dst src rep -- )
-    double-rep next-vreg-rep :> temp
+    double-rep next-vreg-rep set: temp
     temp src double-rep tagged>rep
     dst temp ##double>single-float, ;
 
@@ -34,7 +34,7 @@ M: double-rep tagged>rep
     drop float-offset double-rep f ##load-memory-imm, ;
 
 M:: vector-rep rep>tagged ( dst src rep -- )
-    tagged-rep next-vreg-rep :> temp
+    tagged-rep next-vreg-rep set: temp
     dst 16 2 cells + byte-array int-rep next-vreg-rep ##allot,
     temp 16 tag-fixnum ##load-tagged,
     temp dst 1 byte-array type-number ##set-slot-imm,
@@ -44,12 +44,12 @@ M: vector-rep tagged>rep
     [ byte-array-offset ] dip f ##load-memory-imm, ;
 
 M:: scalar-rep rep>tagged ( dst src rep -- )
-    tagged-rep next-vreg-rep :> temp
+    tagged-rep next-vreg-rep set: temp
     temp src rep ##scalar>integer,
     dst temp int-rep rep>tagged ;
 
 M:: scalar-rep tagged>rep ( dst src rep -- )
-    tagged-rep next-vreg-rep :> temp
+    tagged-rep next-vreg-rep set: temp
     temp src int-rep tagged>rep
     dst temp rep ##integer>scalar, ;
 

@@ -49,10 +49,10 @@ PRIVATE<
     $[ image>pixel-rows @ flatten-table ] [ bitmap<< ] [ ] tri ; inline
 
 :: rotate' ( image n -- image )
-    n normalize-degree :> n'
-    image image>pixel-rows :> pixel-table
+    n normalize-degree set: n'
+    image image>pixel-rows set: pixel-table
     image n' ?reverse-dimensions
-    pixel-table n' (rotate) :> table-rotated
+    pixel-table n' (rotate) set: table-rotated
     image table-rotated flatten-table >>bitmap ;
 
 PRIVATE>

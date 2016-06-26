@@ -281,7 +281,7 @@ M: iokit-game-input-backend reset-mouse
     } cond ;
 
 :: (device-input-callback) ( context result sender value -- )
-    sender get-input-device :> device
+    sender get-input-device set: device
     {
         { [ device mouse-device? ] [ +mouse-state+ get-global value record-mouse ] }
         { [ device controller-device? ] [

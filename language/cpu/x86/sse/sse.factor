@@ -391,7 +391,7 @@ M: x86 %float>integer-vector-reps
     } case ;
 
 :: (%compare-int-vector) ( dst src rep int64 int32 int16 int8 -- )
-    rep signed-rep :> rep'
+    rep signed-rep set: rep'
     dst src rep' {
         { longlong-2-rep [ int64 call ] }
         { int-4-rep      [ int32 call ] }
@@ -491,7 +491,7 @@ M: x86 %move-vector-mask-reps
     } available-reps ;
 
 M:: x86 %test-vector ( dst src temp rep vcc -- )
-    dst src rep (%move-vector-mask) :> mask
+    dst src rep (%move-vector-mask) set: mask
     dst temp mask vcc %test-vector-mask ;
 
 :: %test-vector-mask-branch ( label temp mask vcc -- )
@@ -503,7 +503,7 @@ M:: x86 %test-vector ( dst src temp rep vcc -- )
     } case ;
 
 M:: x86 %test-vector-branch ( label src temp rep vcc -- )
-    temp src rep (%move-vector-mask) :> mask
+    temp src rep (%move-vector-mask) set: mask
     label temp mask vcc %test-vector-mask-branch ;
 
 M: x86 %test-vector-reps

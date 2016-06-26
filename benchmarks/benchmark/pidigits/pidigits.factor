@@ -36,7 +36,7 @@ IN: benchmark.pidigits
 
 :: (pidigits) ( k z n row col -- )
     n 0 > [
-        z next :> y
+        z next set: y
         z y safe? [
             col 10 = [
                 row 10 + y "\t:%d\n%d" printf

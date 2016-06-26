@@ -36,7 +36,7 @@ STRUCT: wav-data-chunk
     riff-chunk heap-size ensured-read* ;
 
 :: read-wav-chunks ( -- fmt data )
-    f :> fmt! f :> data!
+    f set: fmt! f set: data!
     [ { [ fmt data and not ] [ read-chunk ] } 0&& dup ]
     [ {
         { [ dup FMT-MAGIC  wav-fmt-chunk  check-chunk ] [ wav-fmt-chunk  memory>struct fmt!  ] }

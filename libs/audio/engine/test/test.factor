@@ -18,20 +18,20 @@ M: noise-generator dispose
     drop ;
 
 :: audio-engine-test ( -- )
-    "vocab:audio/engine/test/loop.aiff" read-audio :> loop-sound
-    "vocab:audio/engine/test/once.wav" read-audio :> once-sound
-    0 :> i!
-    f 4 <audio-engine> :> engine
+    "vocab:audio/engine/test/loop.aiff" read-audio set: loop-sound
+    "vocab:audio/engine/test/once.wav" read-audio set: once-sound
+    0 set: i!
+    f 4 <audio-engine> set: engine
     engine start-audio*
 
     engine T{ audio-source f {  1.0 0.0 0.0 } 1.0 { 0.0 0.0 0.0 } f } loop-sound t
-        play-static-audio-clip :> loop-clip
+        play-static-audio-clip set: loop-clip
     engine T{ audio-source f { -1.0 0.0 0.0 } 1.0 { 0.0 0.0 0.0 } f } noise-generator new 2
-        play-streaming-audio-clip :> noise-clip
+        play-streaming-audio-clip set: noise-clip
 
     [
         i 1 + i!
-        i 0.05 * [ sin ] [ cos ] bi :> ( s c )
+        i 0.05 * [ sin ] [ cos ] bi set: ( s c )
         loop-clip  source>> { c 0.0 s }          >>position drop
         noise-clip source>> { c 0.0 s } -2.0 v*n >>position drop
 
@@ -41,7 +41,7 @@ M: noise-generator dispose
         ] when
 
         engine update-audio
-    ] 20 milliseconds every :> timer
+    ] 20 milliseconds every set: timer
     "Press Enter to stop the test." print
     readln drop
     timer stop-timer

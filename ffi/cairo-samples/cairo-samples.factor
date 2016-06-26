@@ -12,11 +12,11 @@ IN: cairo-samples
 
 TUPLE: arc-gadget < cairo-gadget ;
 M:: arc-gadget render-cairo* ( gadget -- )
-    128.0 :> xc
-    128.0 :> yc
-    100.0 :> radius
-    pi 1/4 * :> angle1
-    pi :> angle2
+    128.0 set: xc
+    128.0 set: yc
+    100.0 set: radius
+    pi 1/4 * set: angle1
+    pi set: angle2
     cr 10.0 cairo_set_line_width
     cr xc yc radius angle1 angle2 cairo_arc
     cr cairo_stroke
@@ -55,9 +55,9 @@ M: clip-gadget render-cairo* ( gadget -- )
 TUPLE: clip-image-gadget < cairo-gadget ;
 M:: clip-image-gadget render-cairo* ( gadget -- )
     "resource:misc/icons/Factor_128x128.png"
-    normalize-path cairo_image_surface_create_from_png :> png
-    png cairo_image_surface_get_width :> w
-    png cairo_image_surface_get_height :> h
+    normalize-path cairo_image_surface_create_from_png set: png
+    png cairo_image_surface_get_width set: w
+    png cairo_image_surface_get_height set: h
     cr 128 128 76.8 0 2 pi * cairo_arc
     cr cairo_clip
     cr cairo_new_path
@@ -69,8 +69,8 @@ M:: clip-image-gadget render-cairo* ( gadget -- )
 
 TUPLE: dash-gadget < cairo-gadget ;
 M:: dash-gadget render-cairo* ( gadget -- )
-    double-array{ 50 10 10 10 } underlying>> :> dashes
-    4 :> ndash
+    double-array{ 50 10 10 10 } underlying>> set: dashes
+    4 set: ndash
     cr dashes ndash -50 cairo_set_dash
     cr 10 cairo_set_line_width
     cr 128.0 25.6 cairo_move_to
@@ -81,9 +81,9 @@ M:: dash-gadget render-cairo* ( gadget -- )
 
 TUPLE: gradient-gadget < cairo-gadget ;
 M:: gradient-gadget render-cairo* ( gadget -- )
-    0 0 0 256 cairo_pattern_create_linear :> pat
+    0 0 0 256 cairo_pattern_create_linear set: pat
     115.2 102.4 25.6 102.4 102.4 128.0
-    cairo_pattern_create_radial :> radial
+    cairo_pattern_create_radial set: radial
     pat 1 0 0 0 1 cairo_pattern_add_color_stop_rgba
     pat 0 1 1 1 1 cairo_pattern_add_color_stop_rgba
     cr 0 0 256 256 cairo_rectangle

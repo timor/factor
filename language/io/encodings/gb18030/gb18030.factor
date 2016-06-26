@@ -49,7 +49,7 @@ TUPLE: range ufirst ulast bfirst blast ;
 
 : xml>gb-data ( stream -- mapping ranges )
     let[
-        H{ } clone :> mapping V{ } clone :> ranges
+        H{ } clone set: mapping V{ } clone set: ranges
         [
             dup contained? [
                 dup name>> main>> {

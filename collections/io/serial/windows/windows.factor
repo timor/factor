@@ -17,5 +17,5 @@ IN: io.serial.windows
     SetCommState win32-error=0/f ;
 
 :: with-comm-state ( duplex quot: ( dcb -- ) -- )
-    duplex get-comm-state :> dcb
+    duplex get-comm-state set: dcb
     dcb clone quot curry [ dcb set-comm-state ] recover ; inline

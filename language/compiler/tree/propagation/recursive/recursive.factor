@@ -24,7 +24,7 @@ IN: compiler.tree.propagation.recursive
     [ drop array-capacity ] when ;
 
 :: generalize-counter-interval ( interval initial-interval class -- interval' )
-    interval class counter-class :> class
+    interval class counter-class set: class
     {
         { [ interval initial-interval interval-subset? ] [ initial-interval ] }
         { [ interval empty-interval eq? ] [ initial-interval ] }

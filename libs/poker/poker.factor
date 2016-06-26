@@ -171,13 +171,13 @@ ERROR: no-card card deck ;
     <deck> [ $[ [ _ draw-specific-card ] map ] map ] keep ;
 
 :: holdem-hand% ( hole1 deck community n -- x )
-    community length 5 swap - 2 + :> #samples
+    community length 5 swap - 2 + set: #samples
     n [
         drop
-        deck #samples sample :> sampled
-        sampled 2 cut :> ( hole2 community2 )
-        hole1 community community2 3append :> hand1
-        hole2 community community2 3append :> hand2
+        deck #samples sample set: sampled
+        sampled 2 cut set: ( hole2 community2 )
+        hole1 community community2 3append set: hand1
+        hole2 community community2 3append set: hand2
         hand1 hand2 [ best-holdem-hand 2array ] compare +lt+ =
     ] count ;
 

@@ -46,7 +46,7 @@ M: backwards-reader stream-length
 
 M:: backwards-reader stream-read-unsafe ( n buf stream -- count )
     stream stream>> [
-        tell-input n + :> pos-after
+        tell-input n + set: pos-after
         pos-after neg backwards-seek
         n buf input-stream get stream-read-unsafe
         pos-after backwards-seek

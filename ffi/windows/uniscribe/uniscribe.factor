@@ -68,7 +68,7 @@ CONSTANT: ssa-dwFlags flags{ SSA_GLYPHS SSA_FALLBACK SSA_TAB } ;
     ScriptStringOut check-ole32-error ;
 
 :: render-image ( dc ssa script-string -- image )
-    script-string size>> :> size
+    script-string size>> set: size
     size dc
     [ ssa size script-string draw-script-string ] make-bitmap-image ;
 

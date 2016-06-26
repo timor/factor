@@ -78,7 +78,7 @@ M: gtk-clipboard set-clipboard-contents
 
 :: with-timer ( quot -- )
     <timer-funcs> &free
-    GSource heap-size g_source_new &g_source_unref :> source
+    GSource heap-size g_source_new &g_source_unref set: source
     source f g_source_attach drop
     [ quot call( -- ) ]
     [ source g_source_destroy ] [ ] cleanup ;
@@ -163,7 +163,7 @@ CONSTANT: action-key-codes
     3drop forget-rollover t ;
 
 :: on-button-press ( win event user-data -- ? )
-    win window :> world
+    win window set: world
     event type>> GDK_BUTTON_PRESS = [
         event button>> {
             { 8 [ ] }
@@ -178,7 +178,7 @@ CONSTANT: action-key-codes
     ] when t ;
 
 :: on-button-release ( win event user-data -- ? )
-    win window :> world
+    win window set: world
     event type>> GDK_BUTTON_RELEASE = [
         event button>> {
             { 8 [ world left-action send-action ] }
@@ -303,7 +303,7 @@ CONSTANT: action-key-codes
 
 ! has to be called before the window signal handler
 :: im-on-key-event ( win event im-context -- ? )
-    win window world-focus :> gadget
+    win window world-focus set: gadget
     gadget support-input-methods? [
         im-context gadget update-cursor-location
         im-context event gtk_im_context_filter_keypress
@@ -453,8 +453,8 @@ M: window-handle flush-gl-context ( handle -- )
     ] [ first2 gtk_window_move ] if ;
 
 M:: gtk-ui-backend (open-window) ( world -- )
-    GTK_WINDOW_TOPLEVEL gtk_window_new :> win
-    gtk_im_multicontext_new :> im
+    GTK_WINDOW_TOPLEVEL gtk_window_new set: win
+    gtk_im_multicontext_new set: im
 
     win im <window-handle> world handle<<
 

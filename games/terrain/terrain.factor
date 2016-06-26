@@ -116,8 +116,8 @@ terrain-world H{
 } set-gestures
 
 :: handle-input ( world -- )
-    world player>> :> player
-    read-keyboard keys>> :> keys
+    world player>> set: player
+    read-keyboard keys>> set: keys
 
     key-left-shift keys nth
     VELOCITY-MODIFIER-FAST VELOCITY-MODIFIER-NORMAL ? player velocity-modifier<<
@@ -155,9 +155,9 @@ terrain-world H{
     [ { 0 0 } vmax ] dip { 2 2 } v- vmin ;
 
 :: pixel-indices ( coords dim -- indices )
-    coords vfloor v>integer dim clamp-coords :> floor-coords
-    floor-coords first2 dim first * + :> base-index
-    base-index dim first + :> next-row-index
+    coords vfloor v>integer dim clamp-coords set: floor-coords
+    floor-coords first2 dim first * + set: base-index
+    base-index dim first + set: next-row-index
 
     base-index
     base-index 1 +
@@ -165,11 +165,11 @@ terrain-world H{
     next-row-index 1 + 4array ;
 
 :: terrain-height-at ( segment point -- height )
-    segment dim>> :> dim
-    dim point v* :> pixel
-    pixel dup vfloor v- :> pixel-mantissa
-    segment bitmap>> 4 <groups> :> pixels
-    pixel dim pixel-indices :> indices
+    segment dim>> set: dim
+    dim point v* set: pixel
+    pixel dup vfloor v- set: pixel-mantissa
+    segment bitmap>> 4 <groups> set: pixels
+    pixel dim pixel-indices set: indices
 
     indices [ pixels nth COMPONENT-SCALE v. 255.0 / ] map
     first4 pixel-mantissa bilerp ;
@@ -181,9 +181,9 @@ terrain-world H{
     ] keep vmax ; inline
 
 TYPED:: collide ( world: terrain-world player: player -- )
-    world terrain-segment>> :> segment
-    player location>> :> location
-    segment location (collide) :> location'
+    world terrain-segment>> set: segment
+    player location>> set: location
+    segment location (collide) set: location'
 
     location location' = not [
         player
@@ -199,8 +199,8 @@ TYPED:: collide ( world: terrain-world player: player -- )
     clone swap history>> push ;
 
 :: tick-player-reverse ( world player -- )
-    player reverse-time>> :> reverse-time
-    world history>> :> history
+    player reverse-time>> set: reverse-time
+    world history>> set: history
     history length 0 > [
         history length reverse-time 1 - - 1 max history set-length
         history pop world player<<

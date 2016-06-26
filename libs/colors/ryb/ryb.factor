@@ -22,9 +22,9 @@ PRIVATE<
     [ [ + ] curry tri@ ] tri* ; inline
 
 :: ryb>rgb ( r! y! b! -- r g b )
-    r y b max max :> my
+    r y b max max set: my
 
-    y b min :> g!
+    y b min set: g!
     y g - y!
     b g - b!
 
@@ -41,9 +41,9 @@ PRIVATE<
     ] unless-zero ;
 
 :: rgb>ryb ( r! g! b! -- r y b )
-    r g b max max :> mg
+    r g b max max set: mg
 
-    r g min :> y!
+    r g min set: y!
     r y - r!
     g y - g!
 

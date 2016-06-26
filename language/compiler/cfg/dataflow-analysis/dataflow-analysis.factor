@@ -46,8 +46,8 @@ MIXIN: dataflow-analysis
     bb in-sets out-sets dfa update-in/out-set bb dfa successors { } ? ;
 
 :: run-dataflow-analysis ( cfg dfa -- in-sets out-sets )
-    H{ } clone :> in-sets
-    H{ } clone :> out-sets
+    H{ } clone set: in-sets
+    H{ } clone set: out-sets
     cfg needs-predecessors
     cfg dfa <dfa-worklist>
     [ in-sets out-sets dfa dfa-step ] slurp/replenish-deque

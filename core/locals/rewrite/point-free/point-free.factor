@@ -35,7 +35,7 @@ M: def localize
 
 M: object localize 1quotation ;
 
-! We special-case all the :> at the start of a quotation
+! We special-case all the set: at the start of a quotation
 : load-locals-quot ( args -- quot )
     [ [ ] ] [
         dup [ local-reader? ] any? [

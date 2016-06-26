@@ -88,9 +88,9 @@ MACRO: pack-params ( outs -- quot )
     fry [ call ] compose ;
 
 :: [data-map] ( ins outs param-quot -- quot )
-    ins length :> #ins
-    outs length :> #outs
-    #ins #outs + :> #params
+    ins length set: #ins
+    outs length set: #outs
+    #ins #outs + set: #params
 
     [
         param-quot %

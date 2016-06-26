@@ -60,9 +60,9 @@ CONSTANT: limit 400 ;
     items length 1 + [ limit 1 + 0 <array> ] replicate ;
 
 :: iterate ( item-no table -- )
-    item-no table nth :> prev
-    item-no 1 + table nth :> curr
-    item-no items nth :> item
+    item-no table nth set: prev
+    item-no 1 + table nth set: curr
+    item-no items nth set: item
     limit [1,b] |[ weight |
         weight prev nth
         weight item weight>> - dup 0 >=
@@ -77,10 +77,10 @@ CONSTANT: limit 400 ;
 
 :: extract-packed-items ( table -- items )
     [
-        limit :> weight!
+        limit set: weight!
         items length iota <reversed> |[ item-no |
-            item-no table nth :> prev
-            item-no 1 + table nth :> curr
+            item-no table nth set: prev
+            item-no 1 + table nth set: curr
             weight [ curr nth ] [ prev nth ] bi =
             [
                 item-no items nth

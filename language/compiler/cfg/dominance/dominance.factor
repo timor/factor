@@ -90,8 +90,8 @@ PRIVATE>
     swap [ pre-of ] [ [ pre-of ] [ maxpre-of ] bi ] bi* between? ;
 
 :: breadth-first-order ( cfg -- bfo )
-    <dlist> :> work-list
-    cfg post-order length <vector> :> accum
+    <dlist> set: work-list
+    cfg post-order length <vector> set: accum
     cfg entry>> work-list push-front
     work-list [
         [ accum push ]

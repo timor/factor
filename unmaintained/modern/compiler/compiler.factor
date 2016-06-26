@@ -289,7 +289,7 @@ ERROR: word-expects-name-effect-body payload ;
 
 M:: word' definition>quotation ( namespace name definition -- quot )
     definition literal>> base-literal
-    name-effect-body :> ( name' effect body )
+    name-effect-body set: ( name' effect body )
     name
     body namespace body>quotation
     effect namespace lookup-literal

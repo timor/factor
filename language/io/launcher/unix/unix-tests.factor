@@ -134,8 +134,8 @@ IN: io.launcher.unix.tests
 ! Killed processes were exiting with code 0 on FreeBSD
 { f } [
     let[
-        <promise> :> p
-        <promise> :> s
+        <promise> set: p
+        <promise> set: s
 
         [
             "sleep 1000" run-detached

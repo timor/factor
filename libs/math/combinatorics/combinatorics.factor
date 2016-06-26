@@ -79,8 +79,8 @@ INSTANCE: permutations immutable-sequence ;
 TUPLE: k-permutations length skip k seq ;
 
 :: <k-permutations> ( seq k -- permutations )
-    seq length :> n
-    n k nPk :> len
+    seq length set: n
+    n k nPk set: len
     {
         { [ len k [ zero? ] either? ] [ { } ] }
         { [ n k = ] [ seq <permutations> ] }
@@ -166,7 +166,7 @@ PRIVATE<
 
 :: combination-indices ( x! p n -- seq )
     x 1 + x!
-    p 0 <array> :> c 0 :> k! 0 :> r!
+    p 0 <array> set: c 0 set: k! 0 set: r!
     p 1 - |[ i |
         i [ 0 ] [ 1 - c nth ] if-zero i c set-nth
         [ k x < ] [
@@ -215,7 +215,7 @@ PRIVATE<
     ] if* seq ; inline
 
 :: combinations-quot ( seq k quot -- seq quot' )
-    seq length :> n
+    seq length set: n
     n k nCk iota k iota >array seq quot n
     $[ drop _ [ _ nths-unsafe @ ] keep _ next-combination drop ] ; inline
 

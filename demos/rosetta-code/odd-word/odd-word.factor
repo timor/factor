@@ -50,9 +50,9 @@ PRIVATE<
 PRIVATE>
 
 :: read-odd-word ( -- )
-    f :> first-continuation!
-    f :> last-continuation!
-    f :> reverse!
+    f set: first-continuation!
+    f set: last-continuation!
+    f set: reverse!
     ! Read characters. Loop until end of stream.
     [ read1 dup ] [
         dup Letter? [

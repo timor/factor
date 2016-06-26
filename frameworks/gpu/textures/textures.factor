@@ -168,7 +168,7 @@ M: cube-map-face     texture-data-gl-target
     ] if* ; inline
 
 :: bind-tdt ( tdt -- texture )
-    tdt texture-object :> texture
+    tdt texture-object set: texture
     texture [ texture-gl-target ] [ handle>> ] bi glBindTexture
     texture ; inline
 
@@ -176,26 +176,26 @@ M: cube-map-face     texture-data-gl-target
     dup number? [ product ] unless ; inline
 
 :: (allocate-texture) ( tdt level dim data dim-quot teximage-quot -- )
-    tdt bind-tdt :> texture
+    tdt bind-tdt set: texture
     tdt texture-data-gl-target level texture texture-gl-internal-format
     dim dim-quot call 0 texture data texture-data-gl-args
     pixel-unpack-buffer teximage-quot with-gpu-data-ptr ; inline
 
 :: (allocate-compressed-texture) ( tdt level dim compressed-data dim-quot teximage-quot -- )
-    tdt bind-tdt :> texture
+    tdt bind-tdt set: texture
     tdt texture-data-gl-target level compressed-data format>> gl-compressed-texture-format
     dim dim-quot call 0 compressed-data [ length>> ] [ ptr>> ] bi
     pixel-unpack-buffer teximage-quot with-gpu-data-ptr ; inline
 
 :: (update-texture) ( tdt level loc dim data dim-quot texsubimage-quot -- )
-    tdt bind-tdt :> texture
+    tdt bind-tdt set: texture
     tdt texture-data-gl-target level
     loc dim dim-quot bi@
     texture data texture-data-gl-args
     pixel-unpack-buffer texsubimage-quot with-gpu-data-ptr ; inline
 
 :: (update-compressed-texture) ( tdt level loc dim compressed-data dim-quot texsubimage-quot -- )
-    tdt bind-tdt :> texture
+    tdt bind-tdt set: texture
     tdt texture-data-gl-target level
     loc dim dim-quot bi@
     compressed-data [ format>> gl-compressed-texture-format ] [ length>> ] [ ptr>> ] tri
@@ -254,17 +254,17 @@ M: texture-3d-data-target update-compressed-texture ( tdt level loc dim compress
 GENERIC#: texture-dim 1 ( tdt level -- dim ) ;
 
 M:: texture-1d-data-target texture-dim ( tdt level -- dim )
-    tdt bind-tdt :> texture
+    tdt bind-tdt set: texture
     tdt texture-data-gl-target level GL_TEXTURE_WIDTH get-texture-int ; inline
 
 M:: texture-2d-data-target texture-dim ( tdt level -- dim )
-    tdt bind-tdt :> texture
+    tdt bind-tdt set: texture
     tdt texture-data-gl-target level
     [ GL_TEXTURE_WIDTH get-texture-int ] [ GL_TEXTURE_HEIGHT get-texture-int ] 2bi
     2array ; inline
 
 M:: texture-3d-data-target texture-dim ( tdt level -- dim )
-    tdt bind-tdt :> texture
+    tdt bind-tdt set: texture
     tdt texture-data-gl-target level
     [ GL_TEXTURE_WIDTH get-texture-int ]
     [ GL_TEXTURE_HEIGHT get-texture-int ]
@@ -279,7 +279,7 @@ M:: texture-3d-data-target texture-dim ( tdt level -- dim )
     [ texture-dim ?product ] [ drop texture-object bytes-per-pixel ] 2bi * ; inline
 
 TYPED:: read-texture-to ( tdt: texture-data-target level: integer gpu-data-ptr -- )
-    tdt bind-tdt :> texture
+    tdt bind-tdt set: texture
     tdt texture-data-gl-target level
     texture [ component-order>> ] [ component-type>> ] bi image-data-format
     gpu-data-ptr pixel-pack-buffer [ glGetTexImage ] with-gpu-data-ptr ;
@@ -289,7 +289,7 @@ TYPED: read-texture ( tdt: texture-data-target level: integer -- byte-array: byt
     [ read-texture-to ] keep ;
 
 TYPED:: read-compressed-texture-to ( tdt: texture-data-target level: integer gpu-data-ptr -- )
-    tdt bind-tdt :> texture
+    tdt bind-tdt set: texture
     tdt texture-data-gl-target level
     gpu-data-ptr pixel-pack-buffer [ glGetCompressedTexImage ] with-gpu-data-ptr ;
 

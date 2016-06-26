@@ -32,12 +32,12 @@ M: let pprint* \ let[ pprint-let ;
 
 M: def pprint*
     dup local>> word?
-    [ <block \ :> pprint-word local>> pprint-var block> ]
+    [ <block \ set: pprint-word local>> pprint-var block> ]
     [ pprint-tuple ] if ;
 
 M: multi-def pprint*
     dup locals>> [ word? ] all?
-    [ <block \ :> pprint-word "(" text locals>> [ pprint-var ] each ")" text block> ]
+    [ <block \ set: pprint-word "(" text locals>> [ pprint-var ] each ")" text block> ]
     [ pprint-tuple ] if ;
 
 M: lambda-method synopsis*

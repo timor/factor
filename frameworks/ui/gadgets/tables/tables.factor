@@ -160,7 +160,7 @@ M: table layout*
     ] bi ;
 
 :: column-loc ( font column width align -- loc )
-    font column cell-dim :> ( cell-width cell-height cell-padding )
+    font column cell-dim set: ( cell-width cell-height cell-padding )
     cell-width width swap - align *
     cell-padding 2 / 1 align - * +
     cell-height \ line-height get swap - 2 /

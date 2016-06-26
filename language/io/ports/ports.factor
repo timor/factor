@@ -61,12 +61,12 @@ PRIVATE<
     [ integer>fixnum-strict 0 max ] dip check-disposed ; inline
 
 :: read-loop ( dst n-remaining port n-read -- n-total )
-    n-remaining port read-step :> ( n-buffered ptr )
+    n-remaining port read-step set: ( n-buffered ptr )
     ptr [
         dst ptr n-buffered memcpy
-        n-remaining n-buffered fixnum-fast :> n-remaining'
-        n-read n-buffered fixnum+fast :> n-read'
-        n-buffered dst <displaced-alien> :> dst'
+        n-remaining n-buffered fixnum-fast set: n-remaining'
+        n-read n-buffered fixnum+fast set: n-read'
+        n-buffered dst <displaced-alien> set: dst'
         dst' n-remaining' port n-read' read-loop
     ] [ n-read ] if ; inline recursive
 
@@ -143,8 +143,8 @@ M: output-port stream-write1
 PRIVATE<
 
 :: port-write ( c-ptr n-remaining port -- )
-    port buffer>> :> buffer
-    n-remaining buffer size>> min :> n-write
+    port buffer>> set: buffer
+    n-remaining buffer size>> min set: n-write
 
     n-write port wait-to-write
     c-ptr n-write buffer buffer-write

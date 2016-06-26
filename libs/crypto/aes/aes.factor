@@ -89,9 +89,9 @@ PRIVATE<
 
 ! generate t-box
 :: set-t ( T i -- )
-    i sbox nth :> a1
-    a1 xtime :> a2
-    a1 a2 bitxor :> a3
+    i sbox nth set: a1
+    a1 xtime set: a2
+    a1 a2 bitxor set: a3
 
     a3 a1 a1 a2 >ui32 i T set-nth
     a1 a1 a2 a3 >ui32 i 0x100 + T set-nth
@@ -104,14 +104,14 @@ MEMO:: t-table ( -- array )
 
 ! generate inverse t-box
 :: set-d ( D i -- )
-    i inv-sbox nth :> a1
-    a1 xtime :> a2
-    a2 xtime :> a4
-    a4 xtime :> a8
-    a8 a1 bitxor :> a9
-    a9 a2 bitxor :> ab
-    a9 a4 bitxor :> ad
-    a8 a4 a2 bitxor bitxor :> ae
+    i inv-sbox nth set: a1
+    a1 xtime set: a2
+    a2 xtime set: a4
+    a4 xtime set: a8
+    a8 a1 bitxor set: a9
+    a9 a2 bitxor set: ab
+    a9 a4 bitxor set: ad
+    a8 a4 a2 bitxor bitxor set: ae
 
     ab ad a9 ae >ui32 i D set-nth
     ad a9 ae ab >ui32 i 0x100 + D set-nth
@@ -263,7 +263,7 @@ M: aes-encrypt (round) aes-round ;
 M: aes-encrypt (final-round) [ final-round ] change-state add-final-round-key ;
 
 M:: aes-decrypt (expand-key) ( K Nr -- sched )
-    K Nr (expand-enc-key) dup length :> key-length
+    K Nr (expand-enc-key) dup length set: key-length
     [
         [ 4 >= ] [ key-length 4 - < ] bi and
         [ subword ui32-rev> d-transform ]

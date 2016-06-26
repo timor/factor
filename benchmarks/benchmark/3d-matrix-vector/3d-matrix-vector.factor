@@ -16,10 +16,10 @@ TYPED:: mv-matrix ( pitch: float yaw: float location: float-4 -- matrix: matrix4
     location vneg translation-matrix4 m4. m4. ;
 
 :: 3d-matrix-vector-benchmark ( -- )
-    f :> result!
+    f set: result!
     100000 [
-        float-4{ 1024.0 768.0 0.0 0.0 } 0.7 0.25 1024.0 p-matrix :> p
-        3.0 1.0 float-4{ 10.0 -0.0 2.0 0.0 } mv-matrix :> mv
+        float-4{ 1024.0 768.0 0.0 0.0 } 0.7 0.25 1024.0 p-matrix set: p
+        3.0 1.0 float-4{ 10.0 -0.0 2.0 0.0 } mv-matrix set: mv
         mv p m4. result!
     ] times
     result . ;

@@ -368,11 +368,11 @@ M: sha-256-state get-checksum
     } case ; inline
 
 :: inner-loop ( n H W K -- temp )
-    a H nth-unsafe :> A
-    b H nth-unsafe :> B
-    c H nth-unsafe :> C
-    d H nth-unsafe :> D
-    e H nth-unsafe :> E
+    a H nth-unsafe set: A
+    b H nth-unsafe set: B
+    c H nth-unsafe set: C
+    d H nth-unsafe set: D
+    e H nth-unsafe set: E
     [
         A 5 bitroll-32
 

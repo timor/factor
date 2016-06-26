@@ -76,7 +76,7 @@ ducet get-global insert-helpers
     drop [ 0 ] unless* tail-slice ;
 
 :: ?combine ( char slice i -- ? )
-    i slice nth char suffix :> str
+    i slice nth char suffix set: str
     str ducet get-global key? dup
     [ str i slice set-nth ] when ;
 

@@ -20,8 +20,8 @@ IN: core-text.tests
 
 :: test-typographic-bounds ( string font -- ? )
     [
-        font test-font &CFRelease :> ctfont
-        string ctfont color: white <CTLine> &CFRelease :> ctline
+        font test-font &CFRelease set: ctfont
+        string ctfont color: white <CTLine> &CFRelease set: ctline
         ctfont ctline compute-line-metrics {
             [ width>> float? ]
             [ ascent>> float? ]

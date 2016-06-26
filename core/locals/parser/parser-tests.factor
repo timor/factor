@@ -60,11 +60,11 @@ COMPILE>
 
 COMPILE<
 {
-    "V{ 99 :> kkk kkk }"
+    "V{ 99 set: kkk kkk }"
 } [
     [
         "locals" use-vocab
-        { "99 :> kkk kkk ;" } <lexer> [
+        { "99 set: kkk kkk ;" } <lexer> [
             H{ } clone [ \ ; parse-until ] with-lambda-scope
         ] with-lexer
     ] with-compilation-unit unparse

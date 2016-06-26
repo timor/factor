@@ -817,8 +817,8 @@ CONSTANT: all-primitives {
     [ rot set-word-prop ] with assoc-each ;
 
 :: create-primitive ( vocab word effect vm-func inputs outputs extra-word -- )
-    word vocab primitive-word :> word
-    word vm-func primitive-quot :> quot
+    word vocab primitive-word set: word
+    word vm-func primitive-quot set: quot
     word quot effect define-declared
     word inputs "input-classes" set-word-prop
     word outputs "default-output-classes" set-word-prop

@@ -11,8 +11,8 @@ IN: io.encodings.string
         byte-array byte-array? encoding ascii eq? and [
             byte-array byte-array>string-fast
         ] [
-            byte-array encoding <byte-reader> :> reader
-            byte-array length encoding guess-decoded-length <sbuf> :> buf
+            byte-array encoding <byte-reader> set: reader
+            byte-array length encoding guess-decoded-length <sbuf> set: buf
             [ reader stream-read1 dup ] [ buf push ] while drop
             buf "" like
         ] if
@@ -23,7 +23,7 @@ IN: io.encodings.string
         string aux>> not encoding { ascii utf8 } member-eq? and [
             string string>byte-array-fast
         ] [
-            string length encoding guess-encoded-length <byte-vector> :> vec
+            string length encoding guess-encoded-length <byte-vector> set: vec
             string vec encoding <encoder> stream-write
             vec B{ } like
         ] if

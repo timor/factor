@@ -116,10 +116,10 @@ M:: <pong> draw-gadget* ( PONG -- )
 
 :: iterate-system ( GADGET -- )
 
-    GADGET field>>    :> FIELD
-    GADGET ball>>     :> BALL
-    GADGET player>>   :> PLAYER
-    GADGET computer>> :> COMPUTER
+    GADGET field>>    set: FIELD
+    GADGET ball>>     set: BALL
+    GADGET player>>   set: PLAYER
+    GADGET computer>> set: COMPUTER
 
     BALL FIELD in-bounds? [
 

@@ -55,8 +55,8 @@ M: #alien-node compute-live-values* nip look-at-inputs ;
     filter-corresponding zip <#data-shuffle> ; inline
 
 :: drop-dead-values ( outputs -- #shuffle )
-    outputs length make-values :> new-outputs
-    outputs filter-live :> live-outputs
+    outputs length make-values set: new-outputs
+    outputs filter-live set: live-outputs
     new-outputs
     live-outputs
     outputs

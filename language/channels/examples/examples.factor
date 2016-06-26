@@ -25,8 +25,8 @@ IN: channels.examples
     ] 3keep filter ;
 
 :: (sieve) ( prime c -- )
-    c from :> p
-    <channel> :> newc
+    c from set: p
+    <channel> set: newc
     p prime to
     [ newc p c filter ] "Filter" spawn drop
     prime newc (sieve) ;

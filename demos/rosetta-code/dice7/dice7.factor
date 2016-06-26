@@ -70,7 +70,7 @@ IN: rosetta-code.dice7
 ! deviation from the ideal number of items in each bucket,
 ! expressed as a fraction of the total count.
 :: test-distribution ( #sides #trials quot error -- )
-    #sides #trials quot replicate count-outcomes :> outcomes
+    #sides #trials quot replicate count-outcomes set: outcomes
     outcomes .
     outcomes error fair-counts?
     "Random enough" "Not random enough" ? . ; inline

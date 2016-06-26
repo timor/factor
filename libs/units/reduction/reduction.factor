@@ -25,7 +25,7 @@ CONSTANT: unit-suffix-hash H{
         n neg multiplier base suffixes reduce-magnitude
         "-" prepend
     ] [
-        suffixes n multiplier base find-unit-suffix :> i
+        suffixes n multiplier base find-unit-suffix set: i
         n multiplier i * base swap ^
         /i number>string i suffixes nth append
     ] if ;
@@ -40,7 +40,7 @@ ERROR: bad-storage-string string reason ;
 
 :: (storage>n) ( string multiplier base -- n )
     string last unit-suffix-hash ?at [
-        :> unit
+        set: unit
         string but-last string>number
         [ "not a number" throw ] unless*
         multiplier unit * base swap ^ *

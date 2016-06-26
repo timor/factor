@@ -42,7 +42,7 @@ TUPLE: parts in out ;
     ] map ;
 
 :: class-partitions ( classes -- assoc )
-    classes [ integer? ] partition :> ( integers classes )
+    classes [ integer? ] partition set: ( integers classes )
 
     classes powerset-partition classes integers add-integers
     [ [ partition>class ] [ ] bi 2array ] map sift-keys

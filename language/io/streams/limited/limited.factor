@@ -80,7 +80,7 @@ PRIVATE<
     pick 0 <= [ 3drop f ] [ [ stream>> ] dip call ] if ; inline
 
 :: maybe-read-unsafe ( n buf limited-stream quot: ( n buf stream -- count ) -- count )
-    n limited-stream adjust-limited-read :> ( n' lstream' )
+    n limited-stream adjust-limited-read set: ( n' lstream' )
     n' 0 <= [ 0 ] [ n' buf lstream' stream>> quot call ] if ; inline
 
 PRIVATE>

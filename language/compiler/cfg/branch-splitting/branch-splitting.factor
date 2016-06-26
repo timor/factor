@@ -31,7 +31,7 @@ IN: compiler.cfg.branch-splitting
     $[ [ _ ] dip update-successors ] 2each ;
 
 :: update-successor-predecessor ( copies old-bb succ -- )
-    succ predecessors>> dup >array :> ( preds preds' )
+    succ predecessors>> dup >array set: ( preds preds' )
     preds delete-all
     preds' [
         dup old-bb eq?

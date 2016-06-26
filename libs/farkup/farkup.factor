@@ -109,8 +109,8 @@ DEFER: (parse-paragraph)
 
 :: (take-until) ( state delimiter accum -- string/f state' )
     state empty? [ accum "\n" join f ] [
-        state unclip-slice :> ( rest first )
-        first delimiter split1 :> ( before after )
+        state unclip-slice set: ( rest first )
+        first delimiter split1 set: ( before after )
         before accum push
         after [
             accum "\n" join

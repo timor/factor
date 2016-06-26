@@ -116,8 +116,8 @@ render-loc render-dim ;
 :: <line> ( font string -- line )
     [
         line new-disposable
-        font retina? get-global [ cache-font@2x ] [ cache-font ] if :> open-font
-        string open-font font foreground>> <CTLine> |CFRelease :> line
+        font retina? get-global [ cache-font@2x ] [ cache-font ] if set: open-font
+        string open-font font foreground>> <CTLine> |CFRelease set: line
         open-font line compute-line-metrics
         [ >>metrics ] [ metrics>dim >>dim ] bi
         font >>font
@@ -126,18 +126,18 @@ render-loc render-dim ;
     ] with-destructors ;
 
 :: render ( line -- line image )
-    line line>> :> ctline
-    line string>> :> string
-    line font>> :> font
+    line line>> set: ctline
+    line string>> set: string
+    line font>> set: font
 
     line render-loc>> [
 
-        ctline line-rect :> rect
-        rect origin>> CGPoint>loc :> (loc)
-        rect size>> CGSize>dim :> (dim)
-        (loc) vfloor :> loc
-        (loc) (dim) v+ vceiling :> ext
-        ext loc [ - >integer 1 max ] 2map :> dim
+        ctline line-rect set: rect
+        rect origin>> CGPoint>loc set: (loc)
+        rect size>> CGSize>dim set: (dim)
+        (loc) vfloor set: loc
+        (loc) (dim) v+ vceiling set: ext
+        ext loc [ - >integer 1 max ] 2map set: dim
 
         loc line render-loc<<
         dim line render-dim<<
@@ -146,8 +146,8 @@ render-loc render-dim ;
 
     ] unless
 
-    line render-loc>> :> loc
-    line render-dim>> :> dim
+    line render-loc>> set: loc
+    line render-dim>> set: dim
 
     line dim [
         {

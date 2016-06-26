@@ -10,10 +10,10 @@ IN: persistent.hashtables.nodes.bitmap
 : index ( bit bitmap -- n ) [ 1 - ] dip bitand bit-count ; inline
 
 M:: bitmap-node (entry-at) ( key hashcode bitmap-node -- entry )
-    bitmap-node shift>> :> shift
-    hashcode shift bitpos :> bit
-    bitmap-node bitmap>> :> bitmap
-    bitmap-node nodes>> :> nodes
+    bitmap-node shift>> set: shift
+    hashcode shift bitpos set: bit
+    bitmap-node bitmap>> set: bitmap
+    bitmap-node nodes>> set: nodes
     bitmap bit bitand 0 eq? [ f ] [
         key hashcode
         bit bitmap index nodes nth-unsafe
@@ -21,22 +21,22 @@ M:: bitmap-node (entry-at) ( key hashcode bitmap-node -- entry )
     ] if ;
 
 M:: bitmap-node (new-at) ( shift value key hashcode bitmap-node -- node' added-leaf )
-    bitmap-node shift>> :> shift
-    hashcode shift bitpos :> bit
-    bitmap-node bitmap>> :> bitmap
-    bit bitmap index :> idx
-    bitmap-node nodes>> :> nodes
+    bitmap-node shift>> set: shift
+    hashcode shift bitpos set: bit
+    bitmap-node bitmap>> set: bitmap
+    bit bitmap index set: idx
+    bitmap-node nodes>> set: nodes
 
     bitmap bit bitand 0 eq? [
-        value key hashcode <leaf-node> :> new-leaf
+        value key hashcode <leaf-node> set: new-leaf
         bitmap bit bitor
         new-leaf idx nodes insert-nth
         shift
         <bitmap-node>
         new-leaf
     ] [
-        idx nodes nth :> n
-        shift radix-bits + value key hashcode n (new-at) :> ( n' new-leaf )
+        idx nodes nth set: n
+        shift radix-bits + value key hashcode n (new-at) set: ( n' new-leaf )
         n n' eq? [
             bitmap-node
         ] [
@@ -49,14 +49,14 @@ M:: bitmap-node (new-at) ( shift value key hashcode bitmap-node -- node' added-l
     ] if ;
 
 M:: bitmap-node (pluck-at) ( key hashcode bitmap-node -- node' )
-    hashcode bitmap-node shift>> bitpos :> bit
-    bitmap-node bitmap>> :> bitmap
-    bitmap-node nodes>> :> nodes
-    bitmap-node shift>> :> shift
+    hashcode bitmap-node shift>> bitpos set: bit
+    bitmap-node bitmap>> set: bitmap
+    bitmap-node nodes>> set: nodes
+    bitmap-node shift>> set: shift
     bit bitmap bitand 0 eq? [ bitmap-node ] [
-        bit bitmap index :> idx
-        idx nodes nth-unsafe :> n
-        key hashcode n (pluck-at) :> n'
+        bit bitmap index set: idx
+        idx nodes nth-unsafe set: n
+        key hashcode n (pluck-at) set: n'
         n n' eq? [
             bitmap-node
         ] [

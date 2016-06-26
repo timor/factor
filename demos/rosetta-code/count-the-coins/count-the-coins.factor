@@ -29,7 +29,7 @@ IN: rosetta-code.count-the-coins
 PRIVATE<
 
 :: (make-change) ( cents coins -- ways )
-    cents 1 + 0 <array> :> ways
+    cents 1 + 0 <array> set: ways
     1 ways set-first
     coins |[ coin |
         coin cents [a,b] |[ j |

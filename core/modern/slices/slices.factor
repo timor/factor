@@ -61,13 +61,13 @@ ERROR: unexpected-end n string ;
 
 ! Don't include the whitespace in the slice
 :: slice-til-whitespace ( n string -- n' string slice/f ch/f )
-    n string [ "\s\r\n" member? ] find-from :> ( n' ch )
+    n string [ "\s\r\n" member? ] find-from set: ( n' ch )
     n' string
     n n' string ?<slice>
     ch ; inline
 
 :: (slice-until) ( n string quot -- n' string slice/f ch/f )
-    n string quot find-from :> ( n' ch )
+    n string quot find-from set: ( n' ch )
     n' string
     n n' string ?<slice>
     ch ; inline
@@ -76,7 +76,7 @@ ERROR: unexpected-end n string ;
     (slice-until) drop ; inline
 
 :: slice-til-not-whitespace ( n string -- n' string slice/f ch/f )
-    n string [ "\s\r\n" member? not ] find-from :> ( n' ch )
+    n string [ "\s\r\n" member? not ] find-from set: ( n' ch )
     n' string
     n n' string ?<slice>
     ch ; inline
@@ -92,7 +92,7 @@ ERROR: unexpected-end n string ;
 
 :: slice-til-eol ( n string -- n' string slice/f ch/f )
     n [
-        n string $[ "\r\n" member? ] find-from :> ( n' ch )
+        n string $[ "\r\n" member? ] find-from set: ( n' ch )
         n' string
         n n' string ?<slice>
         ch
@@ -102,7 +102,7 @@ ERROR: unexpected-end n string ;
 
 :: ((merge-slice-til-eol-slash)) ( n string -- n' string slice/f ch/f )
     n [
-        n string $[ "\r\n\\" member? ] find-from :> ( n' ch )
+        n string $[ "\r\n\\" member? ] find-from set: ( n' ch )
         n' string
         n n' string ?<slice>
         ch
@@ -129,7 +129,7 @@ ERROR: unexpected-end n string ;
     over [ ?nth ] [ 2drop f ] if ;
 
 :: (merge-slice-til-eol-slash) ( n string slice -- n' string slice/f ch/f )
-    n string ((merge-slice-til-eol-slash)) :> ( n' string' slice' ch' )
+    n string ((merge-slice-til-eol-slash)) set: ( n' string' slice' ch' )
     ch' char: \ = [
         n' 1 + string' ?nth' "\r\n" member? [
             n' 2 + string' slice slice' span-slices (merge-slice-til-eol-slash)
@@ -145,7 +145,7 @@ ERROR: unexpected-end n string ;
     2dup empty-slice-from (merge-slice-til-eol-slash) ;
 
 :: slice-til-separator-inclusive ( n string tokens -- n' string slice/f ch/f )
-    n string $[ tokens member? ] find-from [ dup [ 1 + ] when ] dip  :> ( n' ch )
+    n string $[ tokens member? ] find-from [ dup [ 1 + ] when ] dip  set: ( n' ch )
     n' string
     n n' string ?<slice>
     ch ; inline
@@ -159,12 +159,12 @@ ERROR: unexpected-end n string ;
     n [
         n string $[ tokens member? ] find-from
         dup "\s\r\n" member? [
-            :> ( n' ch )
+            set: ( n' ch )
             n' string
             n n' string ?<slice>
             ch
         ] [
-            [ dup [ 1 + ] when ] dip :> ( n' ch )
+            [ dup [ 1 + ] when ] dip set: ( n' ch )
             n' string
             n n' string ?<slice>
             ch
@@ -176,7 +176,7 @@ ERROR: unexpected-end n string ;
 ERROR: subseq-expected-but-got-eof n string expected ;
 
 :: slice-til-string ( n string search --  n' string payload end-string )
-    search string n start* :> n'
+    search string n start* set: n'
     n' [ n string search subseq-expected-but-got-eof ] unless
     n' search length +  string
     n n' string ?<slice>
@@ -185,7 +185,7 @@ ERROR: subseq-expected-but-got-eof n string expected ;
 ERROR: char-expected-but-got-eof n string expected ;
 
 :: slice-til-not-char ( n string slice char --  n' string found )
-    n string [ char = not ] find-from drop :> n'
+    n string [ char = not ] find-from drop set: n'
     n' [ n string char char-expected-but-got-eof ] unless
     B
     n'

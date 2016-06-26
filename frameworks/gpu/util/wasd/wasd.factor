@@ -58,8 +58,8 @@ CONSTANT: fov 0.7 ;
     dim>> dup first2 min >float v/n fov v*n ; inline
 
 :: generate-p-matrix ( world -- matrix )
-    world wasd-near-plane :> near-plane
-    world wasd-far-plane :> far-plane
+    world wasd-near-plane set: near-plane
+    world wasd-far-plane set: far-plane
 
     world wasd-fov-vector near-plane v*n
     near-plane far-plane frustum-matrix4 ;
@@ -74,12 +74,12 @@ CONSTANT: fov 0.7 ;
     [ >>location ] [ >>yaw ] [ >>pitch ] tri* ;
 
 :: eye-rotate ( yaw pitch v -- v' )
-    yaw neg :> y
-    pitch neg :> p
-    y cos :> cosy
-    y sin :> siny
-    p cos :> cosp
-    p sin :> sinp
+    yaw neg set: y
+    pitch neg set: p
+    y cos set: cosy
+    y sin set: siny
+    p cos set: cosp
+    p sin set: sinp
 
     cosy         0.0       siny        neg  3array
     siny sinp *  cosp      cosy sinp *      3array
@@ -122,7 +122,7 @@ M: wasd-world audio-orientation
     drop ;
 
 :: wasd-keyboard-input ( world -- )
-    read-keyboard keys>> :> keys
+    read-keyboard keys>> set: keys
     key-w keys nth [ world walk-forward   ] when
     key-s keys nth [ world walk-backward  ] when
     key-a keys nth [ world walk-leftward  ] when

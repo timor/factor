@@ -35,14 +35,14 @@ C: <point> point ;
     [ x>> ] [ y>> ] bi [ sum-digits ] bi@ + 25 <= ; inline
 
 :: ant-benchmark ( -- )
-    200000 <hash-set> :> seen
-    100000 <vector> :> stack
-    0 :> total!
+    200000 <hash-set> set: seen
+    100000 <vector> set: stack
+    0 set: total!
 
     1000 1000 <point> stack push
 
     [ stack empty? ] [
-        stack pop :> p
+        stack pop set: p
         p seen ?adjoin [
             p walkable? [
                 total 1 + total!

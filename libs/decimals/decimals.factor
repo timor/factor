@@ -72,7 +72,7 @@ M: decimal before?
     guard-decimals [ >decimal< ] bi@ swapd + [ * ] dip <decimal> ;
 
 :: D/ ( D1 D2 a -- D3 )
-    D1 D2 guard-decimals [ >decimal< ] bi@ :> ( m1 e1 m2 e2 )
+    D1 D2 guard-decimals [ >decimal< ] bi@ set: ( m1 e1 m2 e2 )
     m1 a 10^ *
     m2 /i
 

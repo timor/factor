@@ -23,8 +23,8 @@ IN: regexp.minimize
 
 :: initialize-partitions ( transition-table -- partitions )
     ! Partition table is sorted-array => ?
-    H{ } clone :> out
-    transition-table transitions>> keys :> states
+    H{ } clone set: out
+    transition-table transitions>> keys set: states
     states |[ s1 |
         states |[ s2 |
             s1 s2 transition-table initially-same?
@@ -52,8 +52,8 @@ IN: regexp.minimize
     >hashtable ;
 
 :: (while-changes) ( ..a obj quot: ( ..a obj -- ..b obj' ) comp: ( ..b obj' -- ..a key ) old-key -- ..a obj )
-    obj quot call :> new-obj
-    new-obj comp call :> new-key
+    obj quot call set: new-obj
+    new-obj comp call set: new-key
     new-key old-key =
     [ new-obj ]
     [ new-obj quot comp new-key (while-changes) ]

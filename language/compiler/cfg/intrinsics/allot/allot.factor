@@ -43,10 +43,10 @@ IN: compiler.cfg.intrinsics.allot
     2 + cells array ^^allot ;
 
 :: emit-<array> ( block node -- block' )
-    node node-input-infos first literal>> :> len
+    node node-input-infos first literal>> set: len
     len expand-<array>? [
-        ds-pop :> elt
-        len ^^allot-array :> reg
+        ds-pop set: elt
+        len ^^allot-array set: reg
         ds-drop
         len reg array store-length
         len reg elt array store-initial-element
@@ -73,15 +73,15 @@ IN: compiler.cfg.intrinsics.allot
     ] [ drop emit-primitive ] if ;
 
 :: zero-byte-array ( len reg -- )
-    0 ^^load-literal :> elt
-    reg ^^tagged>integer :> reg
+    0 ^^load-literal set: elt
+    reg ^^tagged>integer set: reg
     len cell align cell /i iota [
         [ elt reg ] dip cells byte-array-offset + int-rep f ##store-memory-imm,
     ] each ;
 
 :: emit-<byte-array> ( block #call -- block' )
     #call node-input-infos first literal>> dup expand-<byte-array>? [
-        :> len
-        len emit-allot-byte-array :> reg
+        set: len
+        len emit-allot-byte-array set: reg
         len reg zero-byte-array block
     ] [ drop block #call emit-primitive ] if ;

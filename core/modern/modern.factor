@@ -261,21 +261,21 @@ MACRO:: read-double-matched ( open-ch -- quot: ( lexer tag ch -- seq ) )
         [ drop 2 swap <string> ]
         [ drop 1string ]
         [ nip 2 swap <string> ]
-    } 2cleave :> ( openstr2 openstr1 closestr2 )
+    } 2cleave set: ( openstr2 openstr1 closestr2 )
     |[ lexer tag! ch |
         ch {
             { char: = [
-                lexer openstr1 lex-til-separator-inclusive [ -1 modify-from ] dip :> ( n' string' opening ch )
+                lexer openstr1 lex-til-separator-inclusive [ -1 modify-from ] dip set: ( n' string' opening ch )
                 ch open-ch = [ tag openstr2 lexer ch long-opening-mismatch ] unless
-                opening matching-delimiter-string :> needle
+                opening matching-delimiter-string set: needle
 
-                lexer needle lex-til-string :> ( n'' string'' payload closing )
+                lexer needle lex-til-string set: ( n'' string'' payload closing )
                 payload closing tag but-last-slice opening double-matched-literal make-matched-literal
                 [ >string ] change-payload
             ] }
             { open-ch [
-                tag 1 cut-slice* swap tag! 1 modify-to :> opening
-                lexer [ 1 + ] change-n closestr2 lex-til-string :> ( n' string' payload closing )
+                tag 1 cut-slice* swap tag! 1 modify-to set: opening
+                lexer [ 1 + ] change-n closestr2 lex-til-string set: ( n' string' payload closing )
                 payload closing tag opening double-matched-literal make-matched-literal
                 [ >string ] change-payload
             ] }
@@ -317,7 +317,7 @@ MACRO:: read-matched ( ch -- quot: ( lexer tag -- slice' ) )
     ch dup matching-delimiter {
         [ drop "=" swap prefix ]
         [ nip 1string ]
-    } 2cleave :> ( openstreq closestr1 )  ! [= ]
+    } 2cleave set: ( openstreq closestr1 )  ! [= ]
 
     |[ lexer tag |
         lexer tag
@@ -339,7 +339,7 @@ MACRO:: read-matched ( ch -- quot: ( lexer tag -- slice' ) )
 
 :: read-string-payload ( lexer -- n' string slice )
     lexer dup ?lexer-nth [
-        { char: \\ char: \" } lex-til-separator-inclusive :> ( n' string' slice ch )
+        { char: \\ char: \" } lex-til-separator-inclusive set: ( n' string' slice ch )
         ch {
             { f [ n' string' slice ] }
             { char: \" [ n' string' slice ] }
@@ -350,8 +350,8 @@ MACRO:: read-matched ( ch -- quot: ( lexer tag -- slice' ) )
     ] if ;
 
 :: read-string ( lexer tag -- seq )
-    lexer n>> :> n
-    lexer read-string-payload :> ( n' string slice )
+    lexer n>> set: n
+    lexer read-string-payload set: ( n' string slice )
     n' [ n string string-expected-got-eof ] unless
     n n' 1 - string <slice>
     n' 1 - n' string <slice>
@@ -426,11 +426,11 @@ ERROR: closing-tag-required lexer tag ;
     (trim-tail) [ length ] dip - ; inline
 
 :: read-backtick ( lexer slice -- obj )
-    lexer slice char: \` lex-til-not-char 2nip :> tag-opening
-    tag-opening [ char: \` = ] count-tail :> count
-    tag-opening count cut-slice* :> ( tag opening )
+    lexer slice char: \` lex-til-not-char 2nip set: tag-opening
+    tag-opening [ char: \` = ] count-tail set: count
+    tag-opening count cut-slice* set: ( tag opening )
     count 1 > [
-        lexer opening lex-til-string :> ( n' string' payload closing )
+        lexer opening lex-til-string set: ( n' string' payload closing )
         payload closing tag opening matched-backtick-literal make-matched-literal
         [ >string ] change-payload
     ] [

@@ -28,9 +28,9 @@ C: <appender> appender ;
 INSTANCE: appender inserter ;
 
 M:: appender new-sequence ( len inserter -- sequence )
-    inserter underlying>> :> underlying
-    underlying length :> old-length
-    old-length len + :> new-length
+    inserter underlying>> set: underlying
+    underlying length set: old-length
+    old-length len + set: new-length
     new-length underlying set-length
     underlying old-length <offset-growable> ; inline
 

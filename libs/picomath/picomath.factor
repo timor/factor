@@ -20,11 +20,11 @@ PRIVATE>
 ! Standalone error function erf(x)
 ! http://www.johndcook.com/blog/2009/01/19/stand-alone-error-function-erf/
 :: erf ( x -- value )
-    x 0 >= 1 -1 ? :> sign
-    x abs :> x!
-    p x * 1 + recip :> t
+    x 0 >= 1 -1 ? set: sign
+    x abs set: x!
+    p x * 1 + recip set: t
     a5 t * a4 + t * a3 + t * a2 + t * a1 + t *
-    x x neg * e^ * 1 swap - :> y
+    x x neg * e^ * 1 swap - set: y
     sign y * ;
 
 :: expm1 ( x -- value )
@@ -32,11 +32,11 @@ PRIVATE>
 
 ! Standalone implementation of phi(x)
 :: phi ( x -- value )
-    x 0 >= 1 -1 ? :> sign
-    x abs 2 sqrt / :> x!
-    p x * 1 + recip :> t
+    x 0 >= 1 -1 ? set: sign
+    x abs 2 sqrt / set: x!
+    p x * 1 + recip set: t
     a5 t * a4 + t * a3 + t * a2 + t * a1 + t *
-    x x neg * e^ * 1 swap - :> y
+    x x neg * e^ * 1 swap - set: y
     sign y * 1 + 2 / ;
 
 PRIVATE<
@@ -331,8 +331,8 @@ CONSTANT: d2 0.001308 ;
 PRIVATE>
 
 :: rational-approximation ( t -- value )
-    c2 t * c1 + t * c0 + :> numerator
-    d2 t * d1 + t * d0 + t * 1.0 + :> denominator
+    c2 t * c1 + t * c0 + set: numerator
+    d2 t * d1 + t * d0 + t * 1.0 + set: denominator
     t numerator denominator / - ;
 
 :: normal-cdf-inverse ( p -- value )
@@ -367,8 +367,8 @@ DEFER: gamma
 :: log-gamma ( x -- value )
     x 0 <= [ "Invalid input" throw ] when
     x 12 < [ x gamma abs log ] [
-        1.0 x x * / :> z
-        7 c nth 7 iota reverse [ [ z * ] [ c nth ] bi* + ] each x / :> series
+        1.0 x x * / set: z
+        7 c nth 7 iota reverse [ [ z * ] [ c nth ] bi* + ] each x / set: series
         x 0.5 - x log * x - halfLogTwoPi + series +
     ] if ;
 
@@ -403,14 +403,14 @@ CONSTANT: Q {
 :: (gamma) ( x -- value )
     ! The algorithm directly approximates gamma over (1,2) and uses
     ! reduction identities to reduce other arguments to this interval.
-    x :> y!
-    0 :> n!
-    y 1.0 < :> arg-was-less-than-one
+    x set: y!
+    0 set: n!
+    y 1.0 < set: arg-was-less-than-one
     arg-was-less-than-one
     [ y 1.0 + y! ] [ y floor >integer 1 - n! y n - y! ] if
-    0.0 :> num!
-    1.0 :> den!
-    y 1 - :> z!
+    0.0 set: num!
+    1.0 set: den!
+    y 1 - set: z!
     8 iota [
         [ P nth num + z * num! ]
         [ Q nth den z * + den! ] bi

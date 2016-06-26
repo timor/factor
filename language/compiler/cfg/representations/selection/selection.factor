@@ -67,7 +67,7 @@ SYMBOL: costs
     $[ [ current-loop-nesting 10^ _ * + ] change-at ] [ 2drop ] if ;
 
 :: increase-costs ( vreg preferred factor -- )
-    vreg vreg>scc :> scc
+    vreg vreg>scc set: scc
     scc possibilities get at [
         dup preferred eq? [ drop ] [ scc factor increase-cost ] if
     ] each ; inline

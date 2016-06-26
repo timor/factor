@@ -43,8 +43,8 @@ SYMBOLS: supported-layouts supported-formats ;
 : next! ( seq -- elt ) [ first ] [ 1 rotate! ] bi ;
 
 :: smoke-test ( graph -- pass? )
-    supported-formats get-global next! :> -T
-    supported-layouts get-global next! :> -K
+    supported-formats get-global next! set: -T
+    supported-layouts get-global next! set: -K
     [
         graph "smoke-test" -T -K graphviz
         "smoke-test" graphviz-output-appears-to-exist?

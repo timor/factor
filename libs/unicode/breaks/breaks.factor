@@ -210,7 +210,7 @@ COMPILE>
     } case ;
 
 :: word-break-next ( old-class new-char i str -- next-class ? )
-    new-char word-break-prop :> new-class
+    new-char word-break-prop set: new-class
     new-class (format/extended?)
     [ old-class dup $${ wCR wLF wNewline } member? ] [
         new-class old-class over word-table-nth

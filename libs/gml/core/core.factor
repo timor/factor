@@ -143,12 +143,12 @@ GML: forall ( array proc -- )
 GML: twoforall ( array1 array2 proc -- )
     $[ _ _ _ proc>quot2 2each ] with-return ;
 GML:: map ( array proc -- )
-    :> gml
+    set: gml
     marker gml push-operand
     gml array proc proc>quot1 each
     execute\ gml-] ;
 GML:: twomap ( array1 array2 proc -- )
-    :> gml
+    set: gml
     marker gml push-operand
     gml array1 array2 proc proc>quot2 2each
     execute\ gml-] ;

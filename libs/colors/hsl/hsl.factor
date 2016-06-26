@@ -35,8 +35,8 @@ M: hsla >rgba
         s zero? [
             l l l
         ] [
-            l 0.5 < [ l s 1 + * ] [ l s + l s * - ] if :> q
-            l 2 * q - :> p
+            l 0.5 < [ l s 1 + * ] [ l s + l s * - ] if set: q
+            l 2 * q - set: p
             p q h 1/3 + value
             p q h value
             p q h 1/3 - value
@@ -51,10 +51,10 @@ M: hsla >hsla ; inline
 
 M: rgba >hsla
     >rgba-components |[ r g b |
-        r g b min min :> min-c
-        r g b max max :> max-c
-        min-c max-c + 2 / :> l
-        max-c min-c - :> d
+        r g b min min set: min-c
+        r g b max max set: max-c
+        min-c max-c + 2 / set: l
+        max-c min-c - set: d
         d zero? [ 0.0 0.0 ] [
             max-c {
                 { r [ g b - d / g b < 6.0 0.0 ? + ] }

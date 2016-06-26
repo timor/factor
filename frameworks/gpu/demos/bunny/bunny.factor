@@ -120,7 +120,7 @@ UNIFORM-TUPLE: loading-uniforms
     (parse-bunny-model) ; inline
 
 :: calc-bunny-normal ( a b c vertexes -- )
-    a b c [ vertexes nth vertex>> ] tri@ normal :> n
+    a b c [ vertexes nth vertex>> ] tri@ normal set: n
     a b c [ vertexes nth [ n v+ ] change-normal drop ] tri@ ; inline
 
 : calc-bunny-normals ( vertexes indexes -- )

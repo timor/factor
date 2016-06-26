@@ -28,11 +28,11 @@ M: an-observer model-changed nip [ 1 + ] change-i drop ;
 
 { 1 0 } [
     let[
-        1 <model> :> m1
-        2 <model> :> m2
-        { m1 m2 } <product> :> c
-        an-observer new :> o1
-        an-observer new :> o2
+        1 <model> set: m1
+        2 <model> set: m2
+        { m1 m2 } <product> set: c
+        an-observer new set: o1
+        an-observer new set: o2
 
         o1 m1 add-connection
         o2 m2 add-connection

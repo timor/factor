@@ -71,8 +71,8 @@ PRIVATE<
     spider-result dup url>>
     spider spidered>> set-at
 
-    spider spider-result filter-base-links :> ( matching nonmatching )
-    spider-result depth>> 1 + :> depth
+    spider spider-result filter-base-links set: ( matching nonmatching )
+    spider-result depth>> 1 + set: depth
 
     nonmatching depth spider add-nonmatching
 
@@ -90,9 +90,9 @@ PRIVATE<
     path>> file-extension { ".htm" ".html" f } member? ;
 
 :: fill-spidered-result ( spider spider-result -- )
-    spider-result url>> :> url
+    spider-result url>> set: url
     f url spider spidered>> set-at
-    [ url http-get ] benchmark :> ( headers html fetched-in )
+    [ url http-get ] benchmark set: ( headers html fetched-in )
     [
         url url-html? [
             html parse-html
@@ -101,7 +101,7 @@ PRIVATE<
         ] [
             f { }
         ] if
-    ] benchmark :> ( parsed-html links processed-in )
+    ] benchmark set: ( parsed-html links processed-in )
     spider-result
         headers >>headers
         fetched-in >>fetched-in

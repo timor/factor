@@ -17,7 +17,7 @@ IN: fullscreen
     DEVMODE <struct>
         DEVMODE heap-size >>dmSize
         flags{ DM_BITSPERPEL DM_PELSWIDTH DM_PELSHEIGHT } >>dmFields
-    :> devmode
+    set: devmode
 
     monitor-info szDevice>>
     n
@@ -99,7 +99,7 @@ ERROR: unsupported-resolution triple ;
     SetWindowPos win32-error=0/f ;
 
 :: enable-fullscreen ( triple hwnd -- rect )
-    hwnd hwnd>RECT :> rect
+    hwnd hwnd>RECT set: rect
 
     desktop-monitor-info
     triple GetDesktopWindow find-devmode

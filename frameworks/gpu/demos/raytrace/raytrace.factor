@@ -74,8 +74,8 @@ CONSTANT: initial-spheres {
 } ;
 
 :: set-up-audio ( world -- )
-    world audio-engine>> :> audio-engine
-    world spheres>> :> spheres
+    world audio-engine>> set: audio-engine
+    world spheres>> set: spheres
 
     audio-engine world >>listener update-audio
 

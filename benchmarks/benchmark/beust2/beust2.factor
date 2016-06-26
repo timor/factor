@@ -7,9 +7,9 @@ IN: benchmark.beust2
 
 :: (count-numbers) ( remaining first value used max listener: ( -- ) -- ? )
     10 first - iota |[ i |
-        i first + :> digit
-        digit 2^ :> mask
-        i value + :> value'
+        i first + set: digit
+        digit 2^ set: mask
+        i value + set: value'
         used mask bitand zero? [
             value max > [ t ] [
                 remaining 1 <= [
@@ -31,7 +31,7 @@ IN: benchmark.beust2
     10 iota [ 1 + 1 1 0 max listener (count-numbers) ] any? drop ; inline
 
 :: beust2-benchmark ( -- )
-    0 :> i!
+    0 set: i!
     5000000000 [ i 1 + i! ] count-numbers
     i 7063290 assert= ;
 

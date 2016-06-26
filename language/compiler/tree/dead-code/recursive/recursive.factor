@@ -37,8 +37,8 @@ M: #enter-recursive remove-dead-code*
     2bi ;
 
 :: (drop-call-recursive-outputs) ( inputs outputs -- #shuffle )
-    inputs outputs filter-corresponding length make-values :> new-live-outputs
-    outputs filter-live :> live-outputs
+    inputs outputs filter-corresponding length make-values set: new-live-outputs
+    outputs filter-live set: live-outputs
     new-live-outputs
     live-outputs
     live-outputs
@@ -57,16 +57,16 @@ M: #call-recursive remove-dead-code*
     tri 3array ;
 
 :: drop-recursive-inputs ( node -- shuffle )
-    node [ in-d>> ] [ label>> enter-out>> ] bi drop-dead-inputs :> shuffle
-    shuffle out-d>> :> new-outputs
+    node [ in-d>> ] [ label>> enter-out>> ] bi drop-dead-inputs set: shuffle
+    shuffle out-d>> set: new-outputs
     node new-outputs
     [ [ label>> enter-recursive>> ] dip >>in-d drop ] [ >>in-d drop ] 2bi
     shuffle ;
 
 :: drop-recursive-outputs ( node -- shuffle )
-    node label>> return>> :> return
-    return in-d>> filter-live :> new-inputs
-    return [ in-d>> ] [ out-d>> ] bi filter-corresponding :> new-outputs
+    node label>> return>> set: return
+    return in-d>> filter-live set: new-inputs
+    return [ in-d>> ] [ out-d>> ] bi filter-corresponding set: new-outputs
     return
     [ new-inputs >>in-d new-outputs >>out-d drop ]
     [ drop-dead-outputs ]

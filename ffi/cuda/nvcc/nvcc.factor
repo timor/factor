@@ -23,7 +23,7 @@ M: macosx nvcc-path "/usr/local/cuda/bin/nvcc" ;
 ERROR: nvcc-failed n path ;
 
 :: compile-cu ( path -- path' )
-    path normalize-path :> path2
+    path normalize-path set: path2
     path2 parent-directory [
         path2 nvcc-command
         run-process wait-for-process [ path2 nvcc-failed ] unless-zero

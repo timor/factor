@@ -13,7 +13,7 @@ TUPLE: sequence-parser sequence n ;
         0 >>n ;
 
 :: with-sequence-parser ( sequence-parser quot -- seq/f )
-    sequence-parser n>> :> n
+    sequence-parser n>> set: n
     sequence-parser quot call [
         n sequence-parser n<< f
     ] unless* ; inline
@@ -79,13 +79,13 @@ TUPLE: sequence-parser sequence n ;
     take-sequence drop ;
 
 :: take-until-sequence ( sequence-parser sequence -- sequence'/f )
-    sequence-parser n>> :> saved
-    sequence length <growing-circular> :> growing
+    sequence-parser n>> set: saved
+    sequence length <growing-circular> set: growing
     sequence-parser
     [
         current growing growing-circular-push
         sequence growing sequence=
-    ] take-until :> found
+    ] take-until set: found
     growing sequence sequence= [
         found dup length
         growing length 1 - - head
@@ -97,7 +97,7 @@ TUPLE: sequence-parser sequence n ;
     ] if ;
 
 :: take-until-sequence* ( sequence-parser sequence -- sequence'/f )
-    sequence-parser sequence take-until-sequence :> out
+    sequence-parser sequence take-until-sequence set: out
     out [
         sequence-parser [ sequence length + ] change-n drop
     ] when out ;

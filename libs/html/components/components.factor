@@ -75,8 +75,8 @@ TUPLE: textarea rows cols ;
     textarea new ;
 
 M:: textarea render* ( value name area -- xml )
-    area rows>> :> rows
-    area cols>> :> cols
+    area rows>> set: rows
+    area cols>> set: cols
     XML-CHUNK[[
          <textarea
             name=<-name->
@@ -100,9 +100,9 @@ TUPLE: choice size multiple choices ;
     $[ dup _ member? render-option ] map ;
 
 M:: choice render* ( value name choice -- xml )
-    choice size>> :> size
-    choice multiple>> "true" and :> multiple
-    value choice render-options :> contents
+    choice size>> set: size
+    choice multiple>> "true" and set: multiple
+    value choice render-options set: contents
     XML-CHUNK[[ <select
         name=<-name->
         size=<-size->

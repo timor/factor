@@ -152,7 +152,7 @@ CONSTANT: window-vertexes
     } 3<render-set> render ;
 
 :: blended-point-sprite-batch ( verts texture point-size dim -- texture )
-    dim RGB float-components <2d-render-texture> :> ( target-framebuffer target-texture )
+    dim RGB float-components <2d-render-texture> set: ( target-framebuffer target-texture )
     verts target-framebuffer texture point-size dim (blended-point-sprite-batch)
     target-framebuffer dispose
     target-texture ;

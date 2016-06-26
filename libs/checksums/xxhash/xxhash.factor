@@ -28,11 +28,11 @@ PRIVATE<
 PRIVATE>
 
 M:: xxhash checksum-bytes ( bytes checksum -- value )
-    checksum seed>> :> seed
-    bytes length :> len
+    checksum seed>> set: seed
+    bytes length set: len
 
-    len dup 16 mod - :> len/16
-    len dup 4 mod - :> len/4
+    len dup 16 mod - set: len/16
+    len dup 4 mod - set: len/4
 
     len 16 >= [
 

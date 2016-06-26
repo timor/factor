@@ -52,7 +52,7 @@ CONSTANT: image-bitmap B{
 
 :: make-ball ( x y -- shape )
     cpBodyAlloc 1.0 nan: 0 cpBodyInit
-    x y cpv >>p :> body
+    x y cpv >>p set: body
     cpCircleShapeAlloc body 0.95 0 0 cpv cpCircleShapeInit
     dup shape>>
         0 >>e
@@ -75,7 +75,7 @@ M:: chipmunk-world draw-world* ( world -- )
     0.5 0.5 0 glTranslatef
     GL_VERTEX_ARRAY glEnableClientState
 
-    world space>> :> space
+    world space>> set: space
 
     3 glPointSize
     0 0 0 glColor3f
@@ -101,7 +101,7 @@ M:: chipmunk-world draw-world* ( world -- )
 M:: chipmunk-world begin-game-world ( world -- )
     cpInitChipmunk
 
-    cpSpaceAlloc cpSpaceInit :> space
+    cpSpaceAlloc cpSpaceInit set: space
 
     world space >>space drop
     space 2.0 10000 cpSpaceResizeActiveHash
@@ -112,19 +112,19 @@ M:: chipmunk-world begin-game-world ( world -- )
             x y get-pixel [
                 x image-width 2 / - 0.05 random-unit * + 2 *
                 image-height 2 / y - 0.05 random-unit * + 2 *
-                make-ball :> shape
+                make-ball set: shape
                 space shape shape>> body>> cpSpaceAddBody drop
                 space shape cpSpaceAddShape drop
             ] when
         ] each
     ] each
 
-    space cpBodyAlloc nan: 0 dup cpBodyInit cpSpaceAddBody :> body
+    space cpBodyAlloc nan: 0 dup cpBodyInit cpSpaceAddBody set: body
     body -1000 -10 cpv >>p drop
     body 400 0 cpv >>v drop
 
     space cpCircleShapeAlloc [ body 8 0 0 cpv cpCircleShapeInit cpSpaceAddShape drop ] keep
-        :> shape
+        set: shape
     shape shape>>
         0 >>e
         0 >>u

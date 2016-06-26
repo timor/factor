@@ -7,15 +7,15 @@ PRIVATE<
 
 :: (tuple-slot-quot) ( slot assoc n -- quot )
     slot name>> assoc at [
-        slot initial>> :> initial
+        slot initial>> set: initial
         { n ndrop initial } >quotation
     ] unless* ;
 
 PRIVATE>
 
 MACRO:: nmake-tuple ( class assoc n -- quot )
-    class all-slots [ assoc n (tuple-slot-quot) ] map :> quots
-    class <wrapper> :> \class
+    class all-slots [ assoc n (tuple-slot-quot) ] map set: quots
+    class <wrapper> set: \class
     { quots n ncleave \class boa } >quotation ;
 
 : make-tuple ( x class assoc -- tuple )

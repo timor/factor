@@ -164,8 +164,8 @@ PRIVATE<
 
 : check-collection ( collection -- fq-collection )
     let[
-        mdb-instance :> instance
-        instance name>> :> instance-name
+        mdb-instance set: instance
+        instance name>> set: instance-name
         dup mdb-collection? [ name>> ] when
         "." split1 over instance-name =
         [ nip ] [ drop ] if

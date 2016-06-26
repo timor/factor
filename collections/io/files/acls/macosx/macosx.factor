@@ -49,8 +49,8 @@ PRIVATE>
 
 :: acl-entry-each ( path quot -- )
     [
-        path file-acl &free-acl :> acl
-        f :> acl-entry!
+        path file-acl &free-acl set: acl
+        f set: acl-entry!
         acl [
             acl first-acl-entry void* deref quot call
             [ acl next-acl-entry dup acl-entry! ]
@@ -60,7 +60,7 @@ PRIVATE>
 
 :: acl-each ( path quot -- )
     [
-        path file-acl &free-acl :> acl
+        path file-acl &free-acl set: acl
         acl [
             acl first-acl-entry drop
             acl quot call

@@ -9,7 +9,7 @@ TYPED:: e^m4 ( m: matrix4 iterations: fixnum -- e^m: matrix4 )
     ] each ;
 
 :: matrix-exponential-simd-benchmark ( -- )
-    f :> result!
+    f set: result!
     10000 [
         identity-matrix4 20 e^m4 result!
     ] times

@@ -27,18 +27,18 @@ PRIVATE>
 
 M:: lagged-fibonacci seed-random ( lagged-fibonacci seed! -- lagged-fibonacci )
     seed normalize-seed seed!
-    seed 30082 /i :> ij
-    seed 30082 ij * - :> kl
-    ij 177 /i 177 mod 2 + :> i!
-    ij 177 mod 2 + :> j!
-    kl 169 /i 178 mod 1 + :> k!
-    kl 169 mod :> l!
+    seed 30082 /i set: ij
+    seed 30082 ij * - set: kl
+    ij 177 /i 177 mod 2 + set: i!
+    ij 177 mod 2 + set: j!
+    kl 169 /i 178 mod 1 + set: k!
+    kl 169 mod set: l!
 
     lagged-fibonacci u>> [
         drop
-        0.0 :> s!
-        0.5 :> t!
-        0.0 :> m!
+        0.0 set: s!
+        0.5 set: t!
+        0.0 set: m!
         lagged-fibonacci-sig-bits [
             i j * 179 mod k * 179 mod m!
             j i!

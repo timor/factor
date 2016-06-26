@@ -38,9 +38,9 @@ PRIVATE>
     [
         face dup base-face>> eq? [ triangulated-face-must-be-base ] unless
 
-        gluNewTess &gluDeleteTess :> tess
-        V{ } clone :> vertices
-        vertices <alien-handle-ptr> &release-alien-handle-ptr :> vertices-h
+        gluNewTess &gluDeleteTess set: tess
+        V{ } clone set: vertices
+        vertices <alien-handle-ptr> &release-alien-handle-ptr set: vertices-h
 
         tess GLU_TESS_BEGIN_DATA     tess-begin     gluTessCallback
         tess GLU_TESS_END_DATA       tess-end       gluTessCallback
@@ -49,7 +49,7 @@ PRIVATE>
 
         tess vertices-h gluTessBeginPolygon
 
-        4 double malloc-array &free :> vertex-buf
+        4 double malloc-array &free set: vertex-buf
 
         face |[ ring |
             tess gluTessBeginContour

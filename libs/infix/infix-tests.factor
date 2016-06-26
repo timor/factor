@@ -32,24 +32,24 @@ IN: infix.tests
 { t } [ 5 \ stupid_function check-word ] unit-test
 { 10 } [ infix[[ stupid_function (0, 1, 2, 3, 4) ]] ] unit-test
 
-{ -1 } [ let[ 1 :> a infix[[ -a ]] ] ] unit-test
+{ -1 } [ let[ 1 set: a infix[[ -a ]] ] ] unit-test
 
-{ char: f } [ let[ "foo" :> s infix[[ s[0] ]] ] ] unit-test
-{ char: r } [ let[ "bar" :> s infix[[ s[-1] ]] ] ] unit-test
-{ "foo" } [ let[ "foobar" :> s infix[[ s[0:3] ]] ] ] unit-test
-{ "foo" } [ let[ "foobar" :> s infix[[ s[:3] ]] ] ] unit-test
-{ "bar" } [ let[ "foobar" :> s infix[[ s[-3:] ]] ] ] unit-test
-{ "boof" } [ let[ "foobar" :> s infix[[ s[-3::-1] ]] ] ] unit-test
-{ "foobar" } [ let[ "foobar" :> s infix[[ s[:] ]] ] ] unit-test
-{ "foa" } [ let[ "foobar" :> s infix[[ s[::2] ]] ] ] unit-test
-{ "bar" } [ let[ "foobar" :> s infix[[ s[-3:100] ]] ] ] unit-test
-{ "foobar" } [ let[ "foobar" :> s infix[[ s[-100:100] ]] ] ] unit-test
-{ "olh" } [ let[ "hello" :> s infix[[ s[4::-2] ]] ] ] unit-test
-{ "rb" } [ let[ "foobar" :> s infix[[ s[:1:-2] ]] ] ] unit-test
-{ "foa" } [ let[ "foobar" :> s infix[[ s[:-1:2] ]] ] ] unit-test
-{ "rbo" } [ let[ "foobar" :> s infix[[ s[::-2] ]] ] ] unit-test
-{ "rbo" } [ let[ "foobar" :> s infix[[ s[:0:-2] ]] ] ] unit-test
-{ "rb" } [ let[ "foobar" :> s infix[[ s[:-5:-2] ]] ] ] unit-test
+{ char: f } [ let[ "foo" set: s infix[[ s[0] ]] ] ] unit-test
+{ char: r } [ let[ "bar" set: s infix[[ s[-1] ]] ] ] unit-test
+{ "foo" } [ let[ "foobar" set: s infix[[ s[0:3] ]] ] ] unit-test
+{ "foo" } [ let[ "foobar" set: s infix[[ s[:3] ]] ] ] unit-test
+{ "bar" } [ let[ "foobar" set: s infix[[ s[-3:] ]] ] ] unit-test
+{ "boof" } [ let[ "foobar" set: s infix[[ s[-3::-1] ]] ] ] unit-test
+{ "foobar" } [ let[ "foobar" set: s infix[[ s[:] ]] ] ] unit-test
+{ "foa" } [ let[ "foobar" set: s infix[[ s[::2] ]] ] ] unit-test
+{ "bar" } [ let[ "foobar" set: s infix[[ s[-3:100] ]] ] ] unit-test
+{ "foobar" } [ let[ "foobar" set: s infix[[ s[-100:100] ]] ] ] unit-test
+{ "olh" } [ let[ "hello" set: s infix[[ s[4::-2] ]] ] ] unit-test
+{ "rb" } [ let[ "foobar" set: s infix[[ s[:1:-2] ]] ] ] unit-test
+{ "foa" } [ let[ "foobar" set: s infix[[ s[:-1:2] ]] ] ] unit-test
+{ "rbo" } [ let[ "foobar" set: s infix[[ s[::-2] ]] ] ] unit-test
+{ "rbo" } [ let[ "foobar" set: s infix[[ s[:0:-2] ]] ] ] unit-test
+{ "rb" } [ let[ "foobar" set: s infix[[ s[:-5:-2] ]] ] ] unit-test
 
 INFIX:: foo ( x y -- z ) x**2-abs(y) ;
 

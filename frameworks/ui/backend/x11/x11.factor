@@ -394,10 +394,10 @@ M: x11-ui-backend system-alert
 : black ( -- xcolor ) 0 0 0 0 0 0 XColor <struct-boa> ; inline
 
 M:: x11-ui-backend (grab-input) ( handle -- )
-    handle window>>                                                  :> wnd
-    dpy get                                                          :> dpy
-    dpy wnd uchar-array{ 0 0 0 0 0 0 0 0 } 8 8 XCreateBitmapFromData :> pixmap
-    dpy pixmap dup black dup 0 0 XCreatePixmapCursor                 :> cursor
+    handle window>>                                                  set: wnd
+    dpy get                                                          set: dpy
+    dpy wnd uchar-array{ 0 0 0 0 0 0 0 0 } 8 8 XCreateBitmapFromData set: pixmap
+    dpy pixmap dup black dup 0 0 XCreatePixmapCursor                 set: cursor
 
     dpy wnd 1 NoEventMask GrabModeAsync dup wnd cursor CurrentTime XGrabPointer drop
 

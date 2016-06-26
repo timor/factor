@@ -10,8 +10,8 @@ DEFER: (fft)
 
 ! Discrete Fourier Transform
 :: (slow-fft) ( seq inverse? -- seq' )
-    seq length :> N
-    inverse? 1 -1 ? 2pi * N / N iota n*v :> omega
+    seq length set: N
+    inverse? 1 -1 ? 2pi * N / N iota n*v set: omega
     N iota |[ k |
         0 seq omega [ k * cis * + ] 2each
         inverse? [ N / ] when
@@ -19,7 +19,7 @@ DEFER: (fft)
 
 ! Cooley–Tukey Algorithm
 :: (fast-fft) ( seq inverse? -- seq' )
-    seq length :> N
+    seq length set: N
     N 1 = [ seq ] [
         seq even-indices inverse? (fast-fft)
         seq odd-indices inverse? (fast-fft)

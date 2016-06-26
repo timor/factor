@@ -56,7 +56,7 @@ GENERIC: read-payload ( rel-base struct -- tuple ) ;
     remainder-padding seek-relative seek-input ;
 
 :: read-padded-payload ( count object c-type -- payload )
-    count c-type heap-size * :> payload-size
+    count c-type heap-size * set: payload-size
     payload-size [
         c-type read-bytes>array
     ] [ object seek-past-padding ] bi ;

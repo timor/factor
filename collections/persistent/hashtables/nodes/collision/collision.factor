@@ -15,7 +15,7 @@ M:: collision-node (entry-at) ( key hashcode collision-node -- leaf-node )
 
 M:: collision-node (pluck-at) ( key hashcode collision-node -- leaf-node )
     hashcode collision-node hashcode>> eq? [
-        key hashcode collision-node find-index drop :> idx
+        key hashcode collision-node find-index drop set: idx
         idx [
             idx collision-node leaves>> smash [
                 collision-node hashcode>>
@@ -26,7 +26,7 @@ M:: collision-node (pluck-at) ( key hashcode collision-node -- leaf-node )
 
 M:: collision-node (new-at) ( shift value key hashcode collision-node -- node' added-leaf )
     hashcode collision-node hashcode>> eq? [
-        key hashcode collision-node find-index :> ( idx leaf-node )
+        key hashcode collision-node find-index set: ( idx leaf-node )
         idx [
             value leaf-node value>> = [
                 collision-node f
@@ -40,7 +40,7 @@ M:: collision-node (new-at) ( shift value key hashcode collision-node -- node' a
                 f
             ] if
         ] [
-            value key hashcode <leaf-node> :> new-leaf-node
+            value key hashcode <leaf-node> set: new-leaf-node
             hashcode
             collision-node leaves>>
             new-leaf-node

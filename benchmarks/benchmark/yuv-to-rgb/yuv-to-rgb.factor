@@ -18,10 +18,10 @@ STRUCT: yuv-buffer
     { v void* } ;
 
 :: fake-data ( -- rgb yuv )
-    1600 :> w
-    1200 :> h
-    yuv-buffer <struct> :> buffer
-    w h * 3 * <byte-array> :> rgb
+    1600 set: w
+    1200 set: h
+    yuv-buffer <struct> set: buffer
+    w h * 3 * <byte-array> set: rgb
     rgb buffer
         w >>y_width
         h >>y_height

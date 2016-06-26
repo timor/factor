@@ -410,8 +410,8 @@ IN: bootstrap.syntax
     "IDENTITY-MEMO:" [ (:) define-identity-memoized ] define-core-syntax
     "IDENTITY-MEMO::" [ (::) define-identity-memoized ] define-core-syntax
 
-    ":>" [
-        in-lambda? get [ :>-outside-lambda-error ] unless
+    "set:" [
+        in-lambda? get [ set:-outside-lambda-error ] unless
         scan-token parse-def suffix!
     ] define-core-syntax
 

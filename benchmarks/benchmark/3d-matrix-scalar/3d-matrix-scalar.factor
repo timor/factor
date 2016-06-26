@@ -12,10 +12,10 @@ IN: benchmark.3d-matrix-scalar
     location vneg translation-matrix4 m. m. ;
 
 :: 3d-matrix-scalar-benchmark ( -- )
-    f :> result!
+    f set: result!
     100000 [
-        { 1024.0 768.0 } 0.7 0.25 1024.0 p-matrix :> p
-        3.0 1.0 { 10.0 -0.0 2.0 } mv-matrix :> mv
+        { 1024.0 768.0 } 0.7 0.25 1024.0 p-matrix set: p
+        3.0 1.0 { 10.0 -0.0 2.0 } mv-matrix set: mv
         mv p m. result!
     ] times
     result . ;

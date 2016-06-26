@@ -70,10 +70,10 @@ SYMBOL: dyld-executable-path
     ] if ;
 
 :: dyld-default-search ( name -- seq )
-    name make-framework-info :> framework
-    name file-name :> basename
-    "DYLD_FALLBACK_FRAMEWORK_PATH" dyld-paths :> fallback-framework-path
-    "DYLD_FALLBACK_LIBRARY_PATH" dyld-paths :> fallback-library-path
+    name make-framework-info set: framework
+    name file-name set: basename
+    "DYLD_FALLBACK_FRAMEWORK_PATH" dyld-paths set: fallback-framework-path
+    "DYLD_FALLBACK_LIBRARY_PATH" dyld-paths set: fallback-library-path
     [
         name ,
 

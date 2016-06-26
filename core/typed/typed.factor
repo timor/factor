@@ -67,7 +67,7 @@ PRIVATE<
     [ (unboxed-types) ] map concat ;
 
 :: typed-inputs ( quot word types -- quot' )
-    types unboxed-types :> unboxed-types
+    types unboxed-types set: unboxed-types
 
     [ input-mismatch-error ] word types make-unboxer
     unboxed-types quot $[ _ declare @ ]

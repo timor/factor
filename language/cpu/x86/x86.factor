@@ -201,7 +201,7 @@ M: x86 %unbox-alien ( dst src -- )
     alien-offset [+] MOV ;
 
 M:: x86 %unbox-any-c-ptr ( dst src -- )
-    <label> :> end
+    <label> set: end
     dst dst XOR
     ! Is the object f?
     src \ f type-number CMP
@@ -221,7 +221,7 @@ M:: x86 %unbox-any-c-ptr ( dst src -- )
 : alien@ ( reg n -- op ) cells alien type-number - [+] ;
 
 M:: x86 %box-alien ( dst src temp -- )
-    <label> :> end
+    <label> set: end
     dst \ f type-number MOV
     src src TEST
     end JE
@@ -259,8 +259,8 @@ M:: x86 %box-alien ( dst src temp -- )
     dst 4 alien@ temp MOV ;
 
 :: %box-displaced-alien/dynamic ( dst displacement base temp end -- )
-    <label> :> not-f
-    <label> :> not-alien
+    <label> set: not-f
+    <label> set: not-alien
 
     ! Check base type
     temp base MOV
@@ -292,7 +292,7 @@ M:: x86 %box-alien ( dst src temp -- )
     dst displacement base temp %box-displaced-alien/byte-array ;
 
 M:: x86 %box-displaced-alien ( dst displacement base temp base-class -- )
-    <label> :> end
+    <label> set: end
 
     ! If displacement is zero, return the base
     dst base MOV
@@ -602,10 +602,10 @@ M:: x86 %dispatch ( src temp -- )
     ! Load jump table base.
     temp 0 MOV
     0 rc-absolute-cell rel-here
-    building get length :> start
+    building get length set: start
     ! Add jump table base
     temp src 0x7f [++] JMP
-    building get length :> end
+    building get length set: end
     ! Fix up the displacement above
     cell alignment
     [ end start - + building get set-last ]
@@ -717,14 +717,14 @@ M: x86 immediate-bitwise? ( n -- ? )
     -0x80000000 0x7fffffff between? ;
 
 :: %cmov-float= ( dst src -- )
-    <label> :> no-move
+    <label> set: no-move
     no-move [ JNE ] [ JP ] bi
     dst src MOV
     no-move resolve-label ;
 
 :: %cmov-float/= ( dst src -- )
-    <label> :> no-move
-    <label> :> move
+    <label> set: no-move
+    <label> set: move
     move JP
     no-move JE
     move resolve-label
@@ -750,7 +750,7 @@ M: x86 immediate-bitwise? ( n -- ? )
     } case ; inline
 
 :: %jump-float= ( label -- )
-    <label> :> no-jump
+    <label> set: no-jump
     no-jump JP
     label JE
     no-jump resolve-label ;

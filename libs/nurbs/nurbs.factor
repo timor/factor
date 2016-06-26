@@ -16,17 +16,17 @@ TUPLE: nurbs-curve
     dup zero? [ recip ] unless ;
 
 :: order-index-knot-constants ( curve order index -- knot-constants )
-    curve knots>> :> knots
-    index order 1 - + knots nth :> knot_i+k-1
-    index             knots nth :> knot_i
-    index order +     knots nth :> knot_i+k
-    index 1 +         knots nth :> knot_i+1
+    curve knots>> set: knots
+    index order 1 - + knots nth set: knot_i+k-1
+    index             knots nth set: knot_i
+    index order +     knots nth set: knot_i+k
+    index 1 +         knots nth set: knot_i+1
 
-    knot_i+k-1 knot_i   - ?recip :> c1
-    knot_i+1   knot_i+k - ?recip :> c2
+    knot_i+k-1 knot_i   - ?recip set: c1
+    knot_i+1   knot_i+k - ?recip set: c2
 
-    knot_i   c1 * neg :> c3
-    knot_i+k c2 * neg :> c4
+    knot_i   c1 * neg set: c3
+    knot_i+k c2 * neg set: c4
 
     c1 c2 c3 c4 float-array{ } 4sequence ;
 
@@ -59,12 +59,12 @@ TUPLE: nurbs-curve
     [ n*v ] 2map { 0.0 0.0 0.0 } [ v+ ] binary-reduce h>v ;
 
 :: (eval-bases) ( curve t interval values order -- values' )
-    order 2 - curve (knot-constants)>> nth :> all-knot-constants
-    interval order interval + all-knot-constants clip-range :> ( from to )
-    from to all-knot-constants subseq :> knot-constants
-    values { 0.0 } { 0.0 } surround 2 <clumps> :> bases
+    order 2 - curve (knot-constants)>> nth set: all-knot-constants
+    interval order interval + all-knot-constants clip-range set: ( from to )
+    from to all-knot-constants subseq set: knot-constants
+    values { 0.0 } { 0.0 } surround 2 <clumps> set: bases
 
-    knot-constants bases [ t eval-base ] 2map :> values'
+    knot-constants bases [ t eval-base ] 2map set: values'
     order curve order>> =
     [ values' from to curve control-points>> subseq (eval-curve) ]
     [ curve t interval 1 - values' order 1 + (eval-bases) ] if ;

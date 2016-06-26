@@ -13,9 +13,9 @@ M: indexed-seq nth
     [ iseq>> nth ] keep dseq>> nth ; inline
 
 M:: indexed-seq set-nth ( elt n seq -- )
-    seq dseq>>   :> dseq
-    seq iseq>>   :> iseq
-    seq rassoc>> :> rassoc
+    seq dseq>>   set: dseq
+    seq iseq>>   set: iseq
+    seq rassoc>> set: rassoc
     seq length n = not [ elt n seq immutable ] when
     elt rassoc at
     [

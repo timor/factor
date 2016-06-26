@@ -20,8 +20,8 @@ IN: sets.extras
     intersects? not ;
 
 :: non-repeating ( seq -- seq' )
-    HS{ } clone :> visited
-    0 seq new-resizable :> accum
+    HS{ } clone set: visited
+    0 seq new-resizable set: accum
     seq [
         accum over visited ?adjoin
         [ push ] [ remove-first! drop ] if

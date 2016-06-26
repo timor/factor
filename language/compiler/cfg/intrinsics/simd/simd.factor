@@ -94,19 +94,19 @@ CONSTANT: rep>half {
     } v-vector-op ;
 
 :: ^swap-compare-vector ( src1 src2 rep {cc,swap} -- dst )
-    {cc,swap} first2 :> ( cc swap? )
+    {cc,swap} first2 set: ( cc swap? )
     swap?
     [ src2 src1 rep cc ^^compare-vector ]
     [ src1 src2 rep cc ^^compare-vector ] if ;
 
 :: ^(compare-vector) ( src1 src2 rep orig-cc -- dst )
-    rep orig-cc %compare-vector-ccs :> ( ccs not? )
+    rep orig-cc %compare-vector-ccs set: ( ccs not? )
 
     ccs empty?
     [ rep not? [ ^^fill-vector ] [ ^^zero-vector ] if ]
     [
-        ccs unclip :> ( rest-ccs first-cc )
-        src1 src2 rep first-cc ^swap-compare-vector :> first-dst
+        ccs unclip set: ( rest-ccs first-cc )
+        src1 src2 rep first-cc ^swap-compare-vector set: first-dst
 
         rest-ccs first-dst
         [ [ src1 src2 rep ] dip ^swap-compare-vector rep ^^or-vector ]
@@ -128,7 +128,7 @@ CONSTANT: rep>half {
         [ ^(compare-vector) ]
         [ ^minmax-compare-vector ]
         { unsigned-int-vector-rep |[ src1 src2 rep cc |
-            rep sign-bit-mask ^^load-literal :> sign-bits
+            rep sign-bit-mask ^^load-literal set: sign-bits
             src1 sign-bits rep ^^xor-vector
             src2 sign-bits rep ^^xor-vector
             rep signed-rep cc ^(compare-vector)
@@ -140,13 +140,13 @@ CONSTANT: rep>half {
         [ ^^unpack-vector-head ]
         { unsigned-int-vector-rep [ [ ^^zero-vector ] [ ^^merge-vector-head ] bi ] }
         { signed-int-vector-rep |[ src rep |
-            src src rep ^^merge-vector-head :> merged
-            rep rep-component-type heap-size 8 * :> bits
+            src src rep ^^merge-vector-head set: merged
+            rep rep-component-type heap-size 8 * set: bits
             merged bits rep widen-vector-rep ^^shr-vector-imm
         ] }
         { signed-int-vector-rep |[ src rep |
-            rep ^^zero-vector :> zero
-            zero src rep cc> ^compare-vector :> sign
+            rep ^^zero-vector set: zero
+            zero src rep cc> ^compare-vector set: sign
             src sign rep ^^merge-vector-head
         ] }
     } v-vector-op ;
@@ -157,13 +157,13 @@ CONSTANT: rep>half {
         [ [ ^^tail>head-vector ] [ ^^unpack-vector-head ] bi ]
         { unsigned-int-vector-rep [ [ ^^zero-vector ] [ ^^merge-vector-tail ] bi ] }
         { signed-int-vector-rep |[ src rep |
-            src src rep ^^merge-vector-tail :> merged
-            rep rep-component-type heap-size 8 * :> bits
+            src src rep ^^merge-vector-tail set: merged
+            rep rep-component-type heap-size 8 * set: bits
             merged bits rep widen-vector-rep ^^shr-vector-imm
         ] }
         { signed-int-vector-rep |[ src rep |
-            rep ^^zero-vector :> zero
-            zero src rep cc> ^compare-vector :> sign
+            rep ^^zero-vector set: zero
+            zero src rep cc> ^compare-vector set: sign
             src sign rep ^^merge-vector-tail
         ] }
     } v-vector-op ;
@@ -175,8 +175,8 @@ PREDICATE: fixnum-vector-rep < int-vector-rep
     {
         [ dupd ^^horizontal-add-vector ]
         |[ src rep |
-            src src rep ^^merge-vector-head :> head
-            src src rep ^^merge-vector-tail :> tail
+            src src rep ^^merge-vector-head set: head
+            src src rep ^^merge-vector-tail set: tail
             head tail rep ^^add-vector
         ]
     } v-vector-op ;
@@ -188,13 +188,13 @@ PREDICATE: fixnum-vector-rep < int-vector-rep
             [ dupd ^^horizontal-add-vector ] bi
         ]
         |[ src rep |
-            src src rep ^^merge-vector-head :> head
-            src src rep ^^merge-vector-tail :> tail
-            head tail rep ^^add-vector :> src'
+            src src rep ^^merge-vector-head set: head
+            src src rep ^^merge-vector-tail set: tail
+            head tail rep ^^add-vector set: src'
 
-            rep widen-vector-rep :> rep'
-            src' src' rep' ^^merge-vector-head :> head'
-            src' src' rep' ^^merge-vector-tail :> tail'
+            rep widen-vector-rep set: rep'
+            src' src' rep' ^^merge-vector-head set: head'
+            src' src' rep' ^^merge-vector-tail set: tail'
             head' tail' rep ^^add-vector
         ]
     } v-vector-op ;
@@ -207,18 +207,18 @@ PREDICATE: fixnum-vector-rep < int-vector-rep
             [ dupd ^^horizontal-add-vector ] tri
         ]
         |[ src rep |
-            src src rep ^^merge-vector-head :> head
-            src src rep ^^merge-vector-tail :> tail
-            head tail rep ^^add-vector :> src'
+            src src rep ^^merge-vector-head set: head
+            src src rep ^^merge-vector-tail set: tail
+            head tail rep ^^add-vector set: src'
 
-            rep widen-vector-rep :> rep'
-            src' src' rep' ^^merge-vector-head :> head'
-            src' src' rep' ^^merge-vector-tail :> tail'
-            head' tail' rep ^^add-vector :> src''
+            rep widen-vector-rep set: rep'
+            src' src' rep' ^^merge-vector-head set: head'
+            src' src' rep' ^^merge-vector-tail set: tail'
+            head' tail' rep ^^add-vector set: src''
 
-            rep' widen-vector-rep :> rep''
-            src'' src'' rep'' ^^merge-vector-head :> head''
-            src'' src'' rep'' ^^merge-vector-tail :> tail''
+            rep' widen-vector-rep set: rep''
+            src'' src'' rep'' ^^merge-vector-head set: head''
+            src'' src'' rep'' ^^merge-vector-tail set: tail''
             head'' tail'' rep ^^add-vector
         ]
     } v-vector-op ;
@@ -234,23 +234,23 @@ PREDICATE: fixnum-vector-rep < int-vector-rep
             } cleave
         ]
         |[ src rep |
-            src src rep ^^merge-vector-head :> head
-            src src rep ^^merge-vector-tail :> tail
-            head tail rep ^^add-vector :> src'
+            src src rep ^^merge-vector-head set: head
+            src src rep ^^merge-vector-tail set: tail
+            head tail rep ^^add-vector set: src'
 
-            rep widen-vector-rep :> rep'
-            src' src' rep' ^^merge-vector-head :> head'
-            src' src' rep' ^^merge-vector-tail :> tail'
-            head' tail' rep ^^add-vector :> src''
+            rep widen-vector-rep set: rep'
+            src' src' rep' ^^merge-vector-head set: head'
+            src' src' rep' ^^merge-vector-tail set: tail'
+            head' tail' rep ^^add-vector set: src''
 
-            rep' widen-vector-rep :> rep''
-            src'' src'' rep'' ^^merge-vector-head :> head''
-            src'' src'' rep'' ^^merge-vector-tail :> tail''
-            head'' tail'' rep ^^add-vector :> src'''
+            rep' widen-vector-rep set: rep''
+            src'' src'' rep'' ^^merge-vector-head set: head''
+            src'' src'' rep'' ^^merge-vector-tail set: tail''
+            head'' tail'' rep ^^add-vector set: src'''
 
-            rep'' widen-vector-rep :> rep'''
-            src''' src''' rep''' ^^merge-vector-head :> head'''
-            src''' src''' rep''' ^^merge-vector-tail :> tail'''
+            rep'' widen-vector-rep set: rep'''
+            src''' src''' rep''' ^^merge-vector-head set: head'''
+            src''' src''' rep''' ^^merge-vector-tail set: tail'''
             head''' tail''' rep ^^add-vector
         ]
     } v-vector-op ;
@@ -269,9 +269,9 @@ PREDICATE: fixnum-vector-rep < int-vector-rep
     {
         { float-vector-rep [ ^(sum-vector) ] }
         { fixnum-vector-rep |[ src rep |
-            src rep ^unpack-vector-head :> head
-            src rep ^unpack-vector-tail :> tail
-            rep widen-vector-rep :> wide-rep
+            src rep ^unpack-vector-head set: head
+            src rep ^unpack-vector-tail set: tail
+            rep widen-vector-rep set: wide-rep
             head tail wide-rep ^^add-vector wide-rep
             ^(sum-vector)
         ] }
@@ -288,7 +288,7 @@ PREDICATE: fixnum-vector-rep < int-vector-rep
 : ^shuffle-2-vectors-imm ( src1 src2 shuffle rep -- dst )
     [ rep-length 0 pad-tail ] keep {
         { double-2-rep |[ src1 src2 shuffle rep |
-            shuffle first2 [ 4 mod ] bi@ :> ( i j )
+            shuffle first2 [ 4 mod ] bi@ set: ( i j )
             {
                 { [ i j [ 2 < ] both? ] [
                     src1 shuffle rep ^shuffle-vector-imm
@@ -340,14 +340,14 @@ PREDICATE: fixnum-vector-rep < int-vector-rep
     {
         [ ^^add-sub-vector ]
         { float-vector-rep |[ src1 src2 rep |
-            rep ^load-add-sub-vector :> signs
-            src2 signs rep ^^xor-vector :> src2'
+            rep ^load-add-sub-vector set: signs
+            src2 signs rep ^^xor-vector set: src2'
             src1 src2' rep ^^add-vector
         ] }
         { int-vector-rep   |[ src1 src2 rep |
-            rep ^load-add-sub-vector :> signs
-            src2  signs rep ^^xor-vector :> src2'
-            src2' signs rep ^^sub-vector :> src2''
+            rep ^load-add-sub-vector set: signs
+            src2  signs rep ^^xor-vector set: src2'
+            src2' signs rep ^^sub-vector set: src2''
             src1 src2'' rep ^^add-vector
         ] }
     } emit-vv-vector-op ;
@@ -447,9 +447,9 @@ PREDICATE: fixnum-vector-rep < int-vector-rep
         [ ^^abs-vector ]
         { float-vector-rep [ [ ^load-neg-zero-vector ] [ swapd ^^andn-vector ] bi ] }
         { int-vector-rep |[ src rep |
-            rep ^^zero-vector :> zero
-            zero src rep ^^sub-vector :> -src
-            zero src rep cc> ^compare-vector :> sign
+            rep ^^zero-vector set: zero
+            zero src rep ^^sub-vector set: -src
+            zero src rep cc> ^compare-vector set: sign
             sign -src src rep ^blend-vector
         ] }
     } emit-v-vector-op ;
@@ -585,8 +585,8 @@ PREDICATE: fixnum-vector-rep < int-vector-rep
 : emit-simd-vpack-signed ( node -- )
     {
         { double-2-rep |[ src1 src2 rep |
-            src1 double-2-rep ^^float-pack-vector :> dst-head
-            src2 double-2-rep ^^float-pack-vector :> dst-tail
+            src1 double-2-rep ^^float-pack-vector set: dst-head
+            src2 double-2-rep ^^float-pack-vector set: dst-tail
             dst-head dst-tail { 0 1 0 1 } float-4-rep ^^shuffle-vector-halves-imm
         ] }
         { int-vector-rep [ ^^signed-pack-vector ] }

@@ -37,7 +37,7 @@ PRIVATE<
     path exists?
     [ path ] [
         current-vocab-dirs custom-gir-dirs system-gir-dirs
-        3append sift :> paths
+        3append sift set: paths
         paths [ path append-path exists? ] find nip
         [ path append-path ] [ path paths gir-not-found ] if*
     ] if ;

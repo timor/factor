@@ -30,7 +30,7 @@ IN: sequences.extras
     [ swap ] 2dip each-from ; inline
 
 :: subseq* ( from to seq -- subseq )
-    seq length :> len
+    seq length set: len
     from [ dup 0 < [ len + ] when ] [ 0 ] if*
     to [ dup 0 < [ len + ] when ] [ len ] if*
     [ 0 len clamp ] bi@ dupd max seq subseq ;
@@ -42,11 +42,11 @@ IN: sequences.extras
     dup length [1,b] [ clump ] with map concat ;
 
 :: each-subseq ( ... seq quot: ( ... x -- ... ) -- ... )
-    seq length :> len
+    seq length set: len
     len [0,b] [
-        :> from
+        set: from
         from len (a,b] [
-            :> to
+            set: to
             from to seq subseq quot call
         ] each
     ] each ; inline
@@ -63,16 +63,16 @@ IN: sequences.extras
     [ dup length [1,b] ] dip filter-all-subseqs-range ; inline
 
 :: longest-subseq ( seq1 seq2 -- subseq )
-    seq1 length :> len1
-    seq2 length :> len2
-    0 :> n!
-    0 :> end!
-    len1 1 + [ len2 1 + 0 <array> ] replicate :> table
+    seq1 length set: len1
+    seq2 length set: len2
+    0 set: n!
+    0 set: end!
+    len1 1 + [ len2 1 + 0 <array> ] replicate set: table
     len1 [1,b] |[ x |
         len2 [1,b] |[ y |
             x 1 - seq1 nth-unsafe
             y 1 - seq2 nth-unsafe = [
-                y 1 - x 1 - table nth-unsafe nth-unsafe 1 + :> len
+                y 1 - x 1 - table nth-unsafe nth-unsafe 1 + set: len
                 len y x table nth-unsafe set-nth-unsafe
                 len n > [ len n! x end! ] when
             ] [ 0 y x table nth-unsafe set-nth-unsafe ] if
@@ -139,7 +139,7 @@ PRIVATE>
     2tri ; inline
 
 :: slice-when ( seq quot: ( elt -- ? ) -- seq' )
-    seq length :> len
+    seq length set: len
     0 [ len dupd < ] [
         dup seq quot find-from drop
         [ 2dup = [ 1 + ] when ] [ len ] if*
@@ -211,7 +211,7 @@ ERROR: underlying-mismatch slice1 slice2 ;
     2dup and [ span-slices ] [ or ] if ;
 
 :: rotate! ( seq n -- )
-    seq length :> len
+    seq length set: len
     n len mod dup 0 < [ len + ] when seq bounds-check drop 0 over
     [ 2dup = ] [
         [ seq exchange-unsafe ] [ [ 1 + ] bi@ ] 2bi

@@ -142,26 +142,26 @@ TR: hyphens>underscores "-" "_" ;
     } 0&& [ vertex-attribute inaccurate-feedback-attribute-error ] unless ;
 
 :: (bind-float-vertex-attribute) ( program-instance ptr name dim gl-type normalize? stride offset -- )
-    program-instance name attribute-index :> idx
+    program-instance name attribute-index set: idx
     idx 0 >= [
         idx glEnableVertexAttribArray
         idx dim gl-type normalize? stride offset ptr <displaced-alien> glVertexAttribPointer
     ] when ; inline
 
 :: (bind-int-vertex-attribute) ( program-instance ptr name dim gl-type stride offset -- )
-    program-instance name attribute-index :> idx
+    program-instance name attribute-index set: idx
     idx 0 >= [
         idx glEnableVertexAttribArray
         idx dim gl-type stride offset ptr <displaced-alien> glVertexAttribIPointer
     ] when ; inline
 
 :: [bind-vertex-attribute] ( stride offset vertex-attribute -- stride offset' quot )
-    vertex-attribute name>> hyphens>underscores :> name
-    vertex-attribute component-type>>           :> type
-    type gl-vertex-type                         :> gl-type
-    vertex-attribute dim>>                      :> dim
-    vertex-attribute normalize?>> >c-bool       :> normalize?
-    vertex-attribute vertex-attribute-size      :> size
+    vertex-attribute name>> hyphens>underscores set: name
+    vertex-attribute component-type>>           set: type
+    type gl-vertex-type                         set: gl-type
+    vertex-attribute dim>>                      set: dim
+    vertex-attribute normalize?>> >c-bool       set: normalize?
+    vertex-attribute vertex-attribute-size      set: size
 
     stride offset size +
     {
@@ -174,9 +174,9 @@ TR: hyphens>underscores "-" "_" ;
     } cond ;
 
 :: [bind-vertex-format] ( vertex-attributes -- quot )
-    vertex-attributes vertex-attributes-size :> stride
-    stride 0 vertex-attributes [ [bind-vertex-attribute] ] { } map-as 2nip :> attributes-cleave
-    { attributes-cleave 2cleave } >quotation :> with-block
+    vertex-attributes vertex-attributes-size set: stride
+    stride 0 vertex-attributes [ [bind-vertex-attribute] ] { } map-as 2nip set: attributes-cleave
+    { attributes-cleave 2cleave } >quotation set: with-block
 
     { drop vertex-buffer with-block with-buffer-ptr } >quotation ;
 
@@ -185,15 +185,15 @@ TR: hyphens>underscores "-" "_" ;
     [ [ nip invalid-link-feedback-format-error ] ] [
         vertex-attributes
         [ name>> ascii malloc-string ]
-        void*-array{ } map-as :> varying-names
-        vertex-attributes length :> varying-count
+        void*-array{ } map-as set: varying-names
+        vertex-attributes length set: varying-count
         { drop varying-count varying-names GL_INTERLEAVED_ATTRIBS glTransformFeedbackVaryings }
         >quotation
     ] if ;
 
 :: [verify-feedback-attribute] ( vertex-attribute index -- quot )
-    vertex-attribute name>> :> name
-    name length 1 + :> name-buffer-length
+    vertex-attribute name>> set: name
+    name length 1 + set: name-buffer-length
     {
         index name-buffer-length dup
         [ f 0 int <ref> 0 int <ref> ] dip <byte-array>
@@ -203,7 +203,7 @@ TR: hyphens>underscores "-" "_" ;
     } >quotation ;
 
 :: [verify-feedback-format] ( vertex-attributes -- quot )
-    vertex-attributes [ [verify-feedback-attribute] ] map-index :> verify-cleave
+    vertex-attributes [ [verify-feedback-attribute] ] map-index set: verify-cleave
     { drop verify-cleave cleave } >quotation ;
 
 : gl-geometry-shader-input ( input -- input )
@@ -395,7 +395,7 @@ PRIVATE<
     GL_MAX_VERTEX_ATTRIBS get-gl-int iota [ glDisableVertexAttribArray ] each ; inline
 
 :: <multi-vertex-array-object> ( vertex-formats program-instance -- vertex-array )
-    gen-vertex-array :> handle
+    gen-vertex-array set: handle
     handle glBindVertexArray
 
     vertex-formats normalize-vertex-formats program-instance (bind-vertex-array)
@@ -407,7 +407,7 @@ PRIVATE<
     [ normalize-vertex-formats ] dip vertex-array-collection boa ; inline
 
 :: <vertex-array-object> ( vertex-buffer program-instance format -- vertex-array )
-    gen-vertex-array :> handle
+    gen-vertex-array set: handle
     handle glBindVertexArray
     program-instance vertex-buffer ?>buffer-ptr format bind-vertex-format
     handle program-instance vertex-buffer ?>buffer 1array
@@ -555,8 +555,8 @@ TYPED:: refresh-program ( program: program -- )
         old-instance valid-handle? [
             world [
                 [
-                    program shaders>> [ compile-shader |dispose ] map :> new-shader-instances
-                    program new-shader-instances (link-program) |dispose :> new-program-instance
+                    program shaders>> [ compile-shader |dispose ] map set: new-shader-instances
+                    program new-shader-instances (link-program) |dispose set: new-program-instance
 
                     old-instance new-program-instance become-program-instance
                     new-shader-instances |[ new-shader-instance |

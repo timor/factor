@@ -77,12 +77,12 @@ M: ##box-displaced-alien allocation-size* drop 5 cells ;
     ! the next block, and a GC call.
     ! Every basic block but the first has two predecessors:
     ! the previous block, and the previous block's GC call.
-    bbs length 1 - :> len
-    len [ <gc-call> ] replicate :> gc-calls
+    bbs length 1 - set: len
+    len [ <gc-call> ] replicate set: gc-calls
     len |[ n |
-        n bbs nth :> bb
-        n 1 + bbs nth :> next-bb
-        n gc-calls nth :> gc-call
+        n bbs nth set: bb
+        n 1 + bbs nth set: next-bb
+        n gc-calls nth set: gc-call
         V{ next-bb gc-call } bb successors<<
         V{ next-bb } gc-call successors<<
         V{ bb } gc-call predecessors<<

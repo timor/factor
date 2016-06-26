@@ -88,7 +88,7 @@ PRIVATE<
     ] with-output-stream* write flush ; inline
 
 :: build-query-object ( query -- selector )
-    H{ } clone :> selector
+    H{ } clone set: selector
     query {
         [ orderby>> [ "$orderby" selector set-at ] when* ]
         [ explain>> [ "$explain" selector set-at ] when* ]

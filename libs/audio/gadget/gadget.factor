@@ -60,8 +60,8 @@ PRIVATE>
 
 :: <audio-gadget> ( audio -- gadget )
     initialize-audio-gadgets
-    play-label-image get-global <image-gadget> :> play-label
-    pause-label-image get-global <image-gadget> :> pause-label
+    play-label-image get-global <image-gadget> set: play-label
+    pause-label-image get-global <image-gadget> set: pause-label
     play-label [ click-audio-gadget ] audio-gadget new-button
         border-button-theme
         audio >>audio

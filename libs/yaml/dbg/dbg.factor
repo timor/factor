@@ -21,15 +21,15 @@ IN: yaml.dbg
 
 :: yaml-events ( string -- )
     [
-        yaml_parser_t (malloc-struct) &free &yaml_parser_delete :> parser
+        yaml_parser_t (malloc-struct) &free &yaml_parser_delete set: parser
         parser yaml_parser_initialize .
 
-        string utf8 encode [ malloc-byte-array &free ] [ length ] bi :> ( input length )
+        string utf8 encode [ malloc-byte-array &free ] [ length ] bi set: ( input length )
         parser input length yaml_parser_set_input_string
 
-        yaml_event_t (malloc-struct) &free :> event
+        yaml_event_t (malloc-struct) &free set: event
 
-        f :> done!
+        f set: done!
         [
             [ done ] [
                 parser event yaml_parser_parse [ [

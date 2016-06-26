@@ -10,8 +10,8 @@ SYMBOLS: param-area-size allot-area-size allot-area-align ;
 GENERIC: compute-stack-frame* ( insn -- ? ) ;
 
 M:: ##local-allot compute-stack-frame* ( insn -- ? )
-    insn size>> :> s
-    insn align>> :> a
+    insn size>> set: s
+    insn align>> set: a
     allot-area-align [ a max ] change
     allot-area-size [ a align [ insn offset<< ] [ s + ] bi ] change t ;
 

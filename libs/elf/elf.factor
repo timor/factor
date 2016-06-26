@@ -479,12 +479,12 @@ TYPED: elf-header ( c-ptr -- elf: Elf32/64_Ehdr )
     [ nip ] [ drop Elf32_Ehdr memory>struct ] if ;
 
 TYPED:: elf-section-headers ( elf: Elf32/64_Ehdr -- headers: Elf32/64_Shdr-array )
-    elf [ e_shoff>> ] [ e_shnum>> ] bi :> ( off num )
+    elf [ e_shoff>> ] [ e_shnum>> ] bi set: ( off num )
     off elf >c-ptr <displaced-alien> num
     elf 64-bit? Elf64_Shdr Elf32_Shdr ? <c-direct-array> ;
 
 TYPED:: elf-program-headers ( elf: Elf32/64_Ehdr -- headers: Elf32/64_Phdr-array )
-    elf [ e_phoff>> ] [ e_phnum>> ] bi :> ( off num )
+    elf [ e_phoff>> ] [ e_phnum>> ] bi set: ( off num )
     off elf >c-ptr <displaced-alien> num
     elf 64-bit? Elf64_Phdr Elf32_Phdr ? <c-direct-array> ;
 
@@ -492,8 +492,8 @@ TYPED: elf-loadable-segments ( headers: Elf32/64_Phdr-array -- headers: Elf32/64
     [ p_type>> PT_LOAD = ] filter ;
 
 TYPED:: elf-segment-sections ( segment: Elf32/64_Phdr sections: Elf32/64_Shdr-array -- sections )
-    segment [ p_offset>> dup ] [ p_filesz>> + ] bi [a,b)                            :> segment-interval
-    sections [ dup [ sh_offset>> dup ] [ sh_size>> + ] bi [a,b) 2array ] { } map-as :> section-intervals
+    segment [ p_offset>> dup ] [ p_filesz>> + ] bi [a,b)                            set: segment-interval
+    sections [ dup [ sh_offset>> dup ] [ sh_size>> + ] bi [a,b) 2array ] { } map-as set: section-intervals
     section-intervals [ second segment-interval interval-intersect empty-interval = not ]
     filter keys ;
 
@@ -504,9 +504,9 @@ TYPED:: virtual-address-segment ( elf: Elf32/64_Ehdr address -- program-header/f
     ] find nip ;
 
 TYPED:: virtual-address-section ( elf: Elf32/64_Ehdr address -- section-header/f )
-    elf address virtual-address-segment :> segment
-    segment elf elf-section-headers elf-segment-sections :> sections
-    address segment p_vaddr>> - segment p_offset>> + :> faddress
+    elf address virtual-address-segment set: segment
+    segment elf elf-section-headers elf-segment-sections set: sections
+    address segment p_vaddr>> - segment p_offset>> + set: faddress
     sections [
         [ sh_offset>> dup ] [ sh_size>> + ] bi [a,b)
         faddress swap interval-contains?
@@ -521,27 +521,27 @@ TYPED:: elf-section-data ( elf: Elf32/64_Ehdr header: Elf32/64_Shdr -- uchar-arr
     header sh_size>> uchar <c-direct-array> ;
 
 TYPED:: elf-section-data-by-index ( elf: Elf32/64_Ehdr index -- header/f uchar-array/f )
-    elf elf-section-headers     :> sections
-    index sections nth          :> header
-    elf header elf-section-data :> data
+    elf elf-section-headers     set: sections
+    index sections nth          set: header
+    elf header elf-section-data set: data
     header data ;
 
 TYPED:: elf-section-name ( elf: Elf32/64_Ehdr header: Elf32/64_Shdr -- name: string )
-    elf elf e_shstrndx>> elf-section-data-by-index nip >c-ptr :> section-names
+    elf elf e_shstrndx>> elf-section-data-by-index nip >c-ptr set: section-names
     header sh_name>> section-names <displaced-alien> ascii alien>string ;
 
 TYPED:: elf-section-data-by-name ( elf: Elf32/64_Ehdr name: string -- header/f uchar-array/f )
-    elf elf-section-headers                      :> sections
-    elf e_shstrndx>>                             :> ndx
-    elf ndx sections nth elf-section-data >c-ptr :> section-names
+    elf elf-section-headers                      set: sections
+    elf e_shstrndx>>                             set: ndx
+    elf ndx sections nth elf-section-data >c-ptr set: section-names
     1 sections [
         sh_name>> section-names <displaced-alien> ascii alien>string name =
     ] find-from nip
     [ dup elf swap elf-section-data ] [ f f ] if* ;
 
 TYPED:: elf-sections ( elf: Elf32/64_Ehdr -- sections )
-    elf elf-section-headers                                   :> sections
-    elf elf e_shstrndx>> elf-section-data-by-index nip >c-ptr :> section-names
+    elf elf-section-headers                                   set: sections
+    elf elf e_shstrndx>> elf-section-data-by-index nip >c-ptr set: section-names
     sections [
         [
             sh_name>> section-names <displaced-alien> ascii alien>string
@@ -549,7 +549,7 @@ TYPED:: elf-sections ( elf: Elf32/64_Ehdr -- sections )
     ] { } map>assoc ;
 
 TYPED:: elf-symbols ( elf: Elf32/64_Ehdr section-data: uchar-array -- symbols )
-    elf ".strtab" elf-section-data-by-name nip >c-ptr :> strings
+    elf ".strtab" elf-section-data-by-name nip >c-ptr set: strings
     section-data [ >c-ptr ] [ length ] bi
     elf 64-bit?
     [ Elf64_Sym heap-size / Elf64_Sym <c-direct-array> ]
@@ -572,39 +572,39 @@ GENERIC: sections ( obj -- sections ) ;
     elf-header elf boa ;
 
 M:: elf sections ( elf -- sections )
-    elf elf-header>> :> elf-header
+    elf elf-header>> set: elf-header
 
     elf-header elf-sections
     |[ name header |
-        elf-header header elf-section-data :> data
+        elf-header header elf-section-data set: data
         name elf-header header data section boa
     ] { } assoc>map ;
 
 :: segments ( elf -- segments )
-    elf elf-header>> :> elf-header
+    elf elf-header>> set: elf-header
 
     elf-header elf-program-headers
     |[ header |
-        elf-header header elf-segment-data :> data
+        elf-header header elf-segment-data set: data
         elf-header header data segment boa
     ] { } map-as ;
 
 M:: segment sections ( segment -- sections )
-    segment program-header>> :> program-header
-    segment elf-header>> :> elf-header
+    segment program-header>> set: program-header
+    segment elf-header>> set: elf-header
 
     program-header elf-header
     elf-section-headers
     elf-segment-sections
     |[ header |
-        elf-header header elf-section-name :> name
-        elf-header header elf-section-data :> data
+        elf-header header elf-section-name set: name
+        elf-header header elf-section-data set: data
         name elf-header header data section boa
     ] { } map-as ;
 
 :: symbols ( section -- symbols )
-    section elf-header>> :> elf-header
-    section data>> :> data
+    section elf-header>> set: elf-header
+    section data>> set: data
 
     elf-header data elf-symbols
     |[ name sym |
@@ -612,8 +612,8 @@ M:: segment sections ( segment -- sections )
     ] { } assoc>map ;
 
 :: symbol-data ( symbol -- data )
-    symbol [ elf-header>> ] [ sym>> st_value>> ] bi virtual-address-segment :> segment
-    symbol sym>> st_value>> segment p_vaddr>> - segment p_offset>> + :> faddress
+    symbol [ elf-header>> ] [ sym>> st_value>> ] bi virtual-address-segment set: segment
+    symbol sym>> st_value>> segment p_vaddr>> - segment p_offset>> + set: faddress
     faddress symbol elf-header>> >c-ptr <displaced-alien>
     symbol sym>> st_size>> uchar <c-direct-array> ;
 

@@ -46,8 +46,8 @@ TUPLE: anon-var ;
     ] reduce ;
 
 :: (interpolate-quot) ( str quot -- quot' )
-    str parse-interpolate :> args
-    args max-stack-var    :> vars
+    str parse-interpolate set: args
+    args max-stack-var    set: vars
 
     args [
         dup named-var? [

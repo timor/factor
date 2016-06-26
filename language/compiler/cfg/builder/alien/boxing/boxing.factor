@@ -38,13 +38,13 @@ M: object flatten-struct-type-return
     0 [ rep-size + ] accumulate nip ;
 
 :: explode-struct ( src c-type -- vregs reps )
-    c-type flatten-struct-type :> reps
+    c-type flatten-struct-type set: reps
     reps keys dup component-offsets
     |[ rep offset | src offset rep f ^^load-memory-imm ] 2map
     reps ;
 
 :: explode-struct-return ( src c-type -- vregs reps )
-    c-type flatten-struct-type-return :> reps
+    c-type flatten-struct-type-return set: reps
     reps keys dup component-offsets
     |[ rep offset | src offset rep f ^^load-memory-imm ] 2map
     reps ;

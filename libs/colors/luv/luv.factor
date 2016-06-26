@@ -13,7 +13,7 @@ C: <luva> luva ;
 PRIVATE<
 
 :: xyz-to-uv ( x y z -- u v )
-    x y 15 * z 3 * + + :> d
+    x y 15 * z 3 * + + set: d
     4 x * d /
     9 y * d / ; foldable
 
@@ -24,19 +24,19 @@ M: luva >rgba >xyza >rgba ;
 M: luva >xyza
     [
         let[
-            wp_x wp_y wp_z xyz-to-uv :> ( u_wp v_wp )
-            [ l>> ] [ u>> ] [ v>> ] tri :> ( l u v )
+            wp_x wp_y wp_z xyz-to-uv set: ( u_wp v_wp )
+            [ l>> ] [ u>> ] [ v>> ] tri set: ( l u v )
 
-            52 l * 13 l * u_wp * u + / 1 - 3 / :> a
+            52 l * 13 l * u_wp * u + / 1 - 3 / set: a
             l xyz_kappa xyz_epsilon * > [
                 l 16 + 116 / 3 ^ wp_y *
             ] [
                 l xyz_kappa / wp_y *
-            ] if :> y
-            y -5 * :> b
-            39 l * 13 l * v_wp * v + / 5 - y * :> d
-            d b - a 1/3 + / :> x
-            a x * b + :> z
+            ] if set: y
+            y -5 * set: b
+            39 l * 13 l * v_wp * v + / 5 - y * set: d
+            d b - a 1/3 + / set: x
+            a x * b + set: z
 
             x y z
         ]
@@ -53,19 +53,19 @@ M: luva >luva ; inline
 M: xyza >luva
     [
         let[
-            wp_x wp_y wp_z xyz-to-uv :> ( u_wp v_wp )
-            [ x>> ] [ y>> ] [ z>> ] tri :> ( x_ y_ z_ )
-            x_ y_ z_ xyz-to-uv :> ( u_ v_ )
+            wp_x wp_y wp_z xyz-to-uv set: ( u_wp v_wp )
+            [ x>> ] [ y>> ] [ z>> ] tri set: ( x_ y_ z_ )
+            x_ y_ z_ xyz-to-uv set: ( u_ v_ )
 
-            y_ wp_y / :> y
+            y_ wp_y / set: y
 
             y xyz_epsilon > [
                 y 1/3 ^ 116 * 16 -
             ] [
                 xyz_kappa y *
-            ] if :> l
-            13 l * u_ u_wp - * :> u
-            13 l * v_ v_wp - * :> v
+            ] if set: l
+            13 l * u_ u_wp - * set: u
+            13 l * v_ v_wp - * set: v
 
             l u v
         ]

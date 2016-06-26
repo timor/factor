@@ -28,7 +28,7 @@ TUPLE: live-interval-state
     [ drop f ] [ last [ n>> = ] keep and ] if-empty ;
 
 :: (add-use) ( insn# live-interval spill-slot? -- use )
-    live-interval uses>> :> uses
+    live-interval uses>> set: uses
     insn# uses last-use? [ insn# uses new-use ] unless*
     spill-slot? [ t >>spill-slot? ] when ;
 
@@ -64,19 +64,19 @@ GENERIC: compute-live-intervals* ( insn -- ) ;
 M: insn compute-live-intervals* drop ;
 
 :: record-def ( vreg n spill-slot? -- )
-    vreg vreg>live-interval :> live-interval
+    vreg vreg>live-interval set: live-interval
 
     n live-interval ranges>> shorten-ranges
     n live-interval spill-slot? (add-use) vreg rep-of >>def-rep drop ;
 
 :: record-use ( vreg n spill-slot? -- )
-    vreg vreg>live-interval :> live-interval
+    vreg vreg>live-interval set: live-interval
 
     from get n live-interval ranges>> add-range
     n live-interval spill-slot? (add-use) vreg rep-of >>use-rep drop ;
 
 :: record-temp ( vreg n -- )
-    vreg vreg>live-interval :> live-interval
+    vreg vreg>live-interval set: live-interval
 
     n n live-interval ranges>> add-range
     n live-interval f (add-use) vreg rep-of >>def-rep drop ;

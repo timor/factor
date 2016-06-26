@@ -29,15 +29,15 @@ SINGLETON: ppm-image
     ] unless ;
 
 :: read-ppm ( -- image )
-    read-token         :> type
-    read-number        :> width
-    read-number        :> height
-    read-number        :> max
-    width height 3 * * :> npixels
+    read-token         set: type
+    read-number        set: width
+    read-number        set: height
+    read-number        set: max
+    width height 3 * * set: npixels
     type {
         { "P3" [ [ 0 npixels read-numbers ] B{ } make ] }
         { "P6" [ npixels read ] }
-    } case :> data
+    } case set: data
 
     image new
     RGB              >>component-order

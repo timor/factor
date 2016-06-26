@@ -49,11 +49,11 @@ PRIVATE>
     ] unique-retries get retry [ absolute-path ] map ;
 
 :: cleanup-unique-file ( ..a prefix suffix quot: ( ..a path -- ..b ) -- ..b )
-    prefix suffix unique-file :> path
+    prefix suffix unique-file set: path
     [ path quot call ] [ path delete-file ] [ ] cleanup ; inline
 
 :: cleanup-unique-files ( ..a prefix suffixes quot: ( ..a paths -- ..b ) -- ..b )
-    prefix suffixes unique-files :> paths
+    prefix suffixes unique-files set: paths
     [ paths quot call ] [ paths [ delete-file ] each ] [ ] cleanup ; inline
 
 : unique-directory ( -- path )
@@ -63,12 +63,12 @@ PRIVATE>
     ] unique-retries get retry absolute-path ;
 
 :: with-unique-directory ( quot -- path )
-    unique-directory :> path
+    unique-directory set: path
     path quot with-directory
     path ; inline
 
 :: cleanup-unique-directory ( quot -- )
-    unique-directory :> path
+    unique-directory set: path
     [ path quot with-directory ]
     [ path delete-tree ] [ ] cleanup ; inline
 

@@ -290,7 +290,7 @@ PRIVATE<
 
 :: (wcread) ( n encoding window-ptr -- string )
     [
-        n 1 + malloc &free :> str
+        n 1 + malloc &free set: str
         window-ptr str n ffi:wgetnstr curses-error
         str encoding alien>string
     ] with-destructors ; inline

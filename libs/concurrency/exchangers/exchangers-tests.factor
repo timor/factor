@@ -5,11 +5,11 @@ FROM: sequences => 3append ;
 IN: concurrency.exchangers.tests
 
 :: exchanger-test ( -- string )
-    <exchanger> :> ex
-    2 <count-down> :> c
-    f :> v1!
-    f :> v2!
-    <promise> :> pr
+    <exchanger> set: ex
+    2 <count-down> set: c
+    f set: v1!
+    f set: v2!
+    <promise> set: pr
 
     [
         c await

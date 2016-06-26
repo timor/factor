@@ -68,15 +68,15 @@ TYPED: write-random-fasta ( seed: float n: fixnum chars: byte-array floats: doub
     $[ _ _ make-random-fasta ] split-lines ;
 
 TYPED:: make-repeat-fasta ( k: fixnum len: fixnum alu: string -- k': fixnum )
-    alu length :> kn
+    alu length set: kn
     len iota [ k + kn mod alu nth-unsafe ] "" map-as print
     k len + ;
 
 : write-repeat-fasta ( n alu desc id -- )
     write-description
     let[
-        :> alu
-        0 :> k!
+        set: alu
+        0 set: k!
         |[ len | k len alu make-repeat-fasta k! ] split-lines
     ] ;
 
@@ -84,8 +84,8 @@ TYPED:: make-repeat-fasta ( k: fixnum len: fixnum alu: string -- k': fixnum )
     homo-sapiens make-cumulative
     IUB make-cumulative
     let[
-        :> ( n out IUB-chars IUB-floats homo-sapiens-chars homo-sapiens-floats )
-        initial-seed :> seed
+        set: ( n out IUB-chars IUB-floats homo-sapiens-chars homo-sapiens-floats )
+        initial-seed set: seed
 
         out ascii [
             n 2 * ALU "Homo sapiens alu" "ONE" write-repeat-fasta

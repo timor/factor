@@ -170,8 +170,8 @@ M: ppc %replace ( vreg loc -- )
 
 ! Replace value at stack location with an immediate value.
 M:: ppc %replace-imm ( src loc -- )
-    loc loc-reg :> reg
-    loc n>> cells neg :> offset
+    loc loc-reg set: reg
+    loc n>> cells neg set: offset
     src {
         { [ dup not ] [
             drop scratch-reg \ f type-number LI ] }
@@ -524,7 +524,7 @@ M: ppc %unbox-alien ( dst src -- )
 ! else // Assume (src & tag_mask) == BYTE_ARRAY_TYPE
 !   dst = ((byte_array*)src) + 1;
 M:: ppc %unbox-any-c-ptr ( dst src -- )
-    <label> :> end
+    <label> set: end
     ! Is the object f?
     dst 0 LI
     0 src \ f type-number %compare-cell-imm
@@ -557,7 +557,7 @@ M:: ppc %unbox-any-c-ptr ( dst src -- )
 !   dst->address = src;
 ! }
 M:: ppc %box-alien ( dst src temp -- )
-    <label> :> f-label
+    <label> set: f-label
 
     ! Is the object f?
     dst \ f type-number LI
@@ -623,8 +623,8 @@ M:: ppc %box-alien ( dst src temp -- )
 ! else
 !   box_displaced_alien_byte_array(dst, displacement, base, temp);
 :: box-displaced-alien/dynamic ( dst displacement base temp end -- )
-    <label> :> not-f
-    <label> :> not-alien
+    <label> set: not-f
+    <label> set: not-alien
 
     ! Is base f?
     0 base \ f type-number %compare-cell-imm
@@ -659,7 +659,7 @@ M:: ppc %box-alien ( dst src temp -- )
 !      box_displaced_alien_dynamic(dst, displacement, base, temp);
 ! }
 M:: ppc %box-displaced-alien ( dst displacement base temp base-class -- )
-    <label> :> end
+    <label> set: end
 
     ! If displacement is zero, return the base.
     dst base MR
@@ -993,11 +993,11 @@ M: ppc %compare-imm [ (%compare-imm) ] 2dip %boolean ;
 M: ppc %compare-integer-imm [ (%compare-integer-imm) ] 2dip %boolean ;
 
 M:: ppc %compare-float-ordered ( dst src1 src2 cc temp -- )
-    src1 src2 cc negate-cc \ (%compare-float-ordered) (%compare-float) :> ( branch1 branch2 )
+    src1 src2 cc negate-cc \ (%compare-float-ordered) (%compare-float) set: ( branch1 branch2 )
     dst temp branch1 branch2 (%boolean) ;
 
 M:: ppc %compare-float-unordered ( dst src1 src2 cc temp -- )
-    src1 src2 cc negate-cc \ (%compare-float-unordered) (%compare-float) :> ( branch1 branch2 )
+    src1 src2 cc negate-cc \ (%compare-float-unordered) (%compare-float) set: ( branch1 branch2 )
     dst temp branch1 branch2 (%boolean) ;
 
 :: %branch ( label cc -- )
@@ -1027,11 +1027,11 @@ M:: ppc %compare-integer-imm-branch ( label src1 src2 cc -- )
     branch2 [ 0 label branch2 execute( cr label -- ) ] when ; inline
 
 M:: ppc %compare-float-ordered-branch ( label src1 src2 cc -- )
-    src1 src2 cc \ (%compare-float-ordered) (%compare-float) :> ( branch1 branch2 )
+    src1 src2 cc \ (%compare-float-ordered) (%compare-float) set: ( branch1 branch2 )
     label branch1 branch2 (%branch) ;
 
 M:: ppc %compare-float-unordered-branch ( label src1 src2 cc -- )
-    src1 src2 cc \ (%compare-float-unordered) (%compare-float) :> ( branch1 branch2 )
+    src1 src2 cc \ (%compare-float-unordered) (%compare-float) set: ( branch1 branch2 )
     label branch1 branch2 (%branch) ;
 
 M: ppc %spill ( src rep dst -- )

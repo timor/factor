@@ -43,8 +43,8 @@ M: ##test-vector-branch negate-insn-cc
     [ negate-vcc ] change-vcc drop ;
 
 M:: conditional-branch-insn generate-insn ( insn -- )
-    basic-block get :> bb
-    bb successors>> first2 :> ( first second )
+    basic-block get set: bb
+    bb successors>> first2 set: ( first second )
     bb second useless-branch?
     [ bb second first ]
     [ bb first second insn negate-insn-cc ] if

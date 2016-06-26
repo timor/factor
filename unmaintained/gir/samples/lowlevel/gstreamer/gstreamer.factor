@@ -10,9 +10,9 @@ CONSTANT: uri "http://tinyvid.tv/file/3gocxnjott7wr.ogg" ;
 
 :: gstreamer-win ( -- window )
     f f gst_init
-    "playbin" "player" [ utf8 string>alien ] bi@ gst_element_factory_make :> pipeline
+    "playbin" "player" [ utf8 string>alien ] bi@ gst_element_factory_make set: pipeline
 
-    GValue <struct> :> value
+    GValue <struct> set: value
     value G_TYPE_STRING g_value_init drop
     value uri utf8 string>alien g_value_set_string
     
@@ -20,17 +20,17 @@ CONSTANT: uri "http://tinyvid.tv/file/3gocxnjott7wr.ogg" ;
         
     ! pipeline GST_STATE_PLAYING gst_element_set_state drop
 
-    GTK_WINDOW_TOPLEVEL gtk_window_new :> window
+    GTK_WINDOW_TOPLEVEL gtk_window_new set: window
 
     window
     [ "GStreamer" utf8 string>alien gtk_window_set_title ]
     [ 300 200 gtk_window_set_default_size ]
     [ GTK_WIN_POS_CENTER gtk_window_set_position ] tri
 
-    gtk_fixed_new :> frame
+    gtk_fixed_new set: frame
     window frame gtk_container_add
     
-    "Start" utf8 string>alien gtk_button_new_with_label :> button
+    "Start" utf8 string>alien gtk_button_new_with_label set: button
     button 140 30 gtk_widget_set_size_request
     frame button 80 60 gtk_fixed_put
 
@@ -49,7 +49,7 @@ CONSTANT: uri "http://tinyvid.tv/file/3gocxnjott7wr.ogg" ;
 
 :: gstreamer-main ( -- )
     f f gtk_init
-    gstreamer-win :> window
+    gstreamer-win set: window
 
     window "destroy" utf8 string>alien
     [ 2drop gtk_main_quit ] GtkObject:destroy

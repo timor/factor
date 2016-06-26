@@ -43,12 +43,12 @@ ERROR: unexpected-end n string ;
     n [
         n string $[ tokens member? ] find-from
         dup "\s\r\n" member? [
-            :> ( n' ch )
+            set: ( n' ch )
             n' string
             n n' string ?<slice>
             ch
         ] [
-            [ dup [ 1 + ] when ] dip :> ( n' ch )
+            [ dup [ 1 + ] when ] dip set: ( n' ch )
             n' string
             n n' string ?<slice>
             ch
@@ -60,12 +60,12 @@ ERROR: unexpected-end n string ;
 ! ":foo" with partial>> slot broke this
 :: lex-til-either ( lexer tokens -- n'/f string' slice/f ch/f )
     lexer >lexer<
-    lexer partial>> :> partial
+    lexer partial>> set: partial
     partial [
         [ dup [ 1 - ] when ] dip
         f lexer partial<<
     ] when
-    tokens slice-til-either :> ( n' string' slice ch )
+    tokens slice-til-either set: ( n' string' slice ch )
     lexer
         n' >>n drop
     n' string'
@@ -74,13 +74,13 @@ ERROR: unexpected-end n string ;
 
 
 :: slice-til-separator-inclusive ( n string tokens -- n' string slice/f ch/f )
-    n string $[ tokens member? ] find-from [ dup [ 1 + ] when ] dip  :> ( n' ch )
+    n string $[ tokens member? ] find-from [ dup [ 1 + ] when ] dip  set: ( n' ch )
     n' string
     n n' string ?<slice>
     ch ; inline
 
 :: lex-til-separator-inclusive ( lexer tokens -- n' string' slice/f ch/f )
-    lexer >lexer< tokens slice-til-separator-inclusive :> ( n' string' slice ch )
+    lexer >lexer< tokens slice-til-separator-inclusive set: ( n' string' slice ch )
 
     lexer
         n' >>n drop
@@ -94,7 +94,7 @@ ERROR: unexpected-end n string ;
     ] when ;
 
 :: lex-til-separator-exclusive ( lexer tokens -- n'/f string' slice/f ch/f )
-    lexer >lexer< tokens slice-til-separator-exclusive :> ( n' string' slice ch )
+    lexer >lexer< tokens slice-til-separator-exclusive set: ( n' string' slice ch )
     lexer
         n' >>n drop
     n' string' slice ch ;
@@ -102,7 +102,7 @@ ERROR: unexpected-end n string ;
 ! Don't include the whitespace in the slice
 :: slice-til-whitespace ( n string -- n'/f string slice/f ch/f )
     n [
-        n string [ "\s\r\n" member? ] find-from :> ( n' ch )
+        n string [ "\s\r\n" member? ] find-from set: ( n' ch )
         n' string
         n n' string ?<slice>
         ch
@@ -111,14 +111,14 @@ ERROR: unexpected-end n string ;
     ] if ; inline
 
 :: lex-til-whitespace ( lexer -- n'/f string slice/f ch/f )
-    lexer >lexer< slice-til-whitespace :> ( n' string' slice ch )
+    lexer >lexer< slice-til-whitespace set: ( n' string' slice ch )
     lexer
         n' >>n drop
     n' string' slice ch ;
 
 ! rollback only n, other state is not rolled back
 :: with-lexer-rollback ( lexer quot -- )
-    lexer n>> :> n
+    lexer n>> set: n
     lexer quot call lexer n >>n drop ; inline
 
 
@@ -130,7 +130,7 @@ ERROR: unexpected-end n string ;
 
 :: slice-til-eol ( n string -- n'/f string slice/f ch/f )
     n [
-        n string $[ "\r\n" member? ] find-from :> ( n' ch )
+        n string $[ "\r\n" member? ] find-from set: ( n' ch )
         n' string
         n n' string ?<slice>
         ch
@@ -139,7 +139,7 @@ ERROR: unexpected-end n string ;
     ] if ; inline
 
 :: lex-til-eol ( lexer -- n' string' slice/f ch/f )
-    lexer >lexer< slice-til-eol :> ( n' string' slice ch )
+    lexer >lexer< slice-til-eol set: ( n' string' slice ch )
     lexer
         n' >>n drop
     n' string' slice ch ;
@@ -148,14 +148,14 @@ ERROR: unexpected-end n string ;
 ERROR: subseq-expected-but-got-eof n string expected ;
 
 :: slice-til-string ( n string search --  n' string payload closing )
-    search string n start* :> n'
+    search string n start* set: n'
     n' [ n string search subseq-expected-but-got-eof ] unless
     n' search length +  string
     n n' string ?<slice>
     n' dup search length + string ?<slice> ;
 
 :: lex-til-string ( lexer search -- n'/f string' payload closing )
-    lexer >lexer< search slice-til-string :> ( n' string' payload closing )
+    lexer >lexer< search slice-til-string set: ( n' string' payload closing )
     lexer
         n' >>n drop
     n' string' payload closing ;
@@ -174,14 +174,14 @@ ERROR: subseq-expected-but-got-eof n string expected ;
 ERROR: char-expected-but-got-eof n string expected ;
 
 :: slice-til-not-char ( n string slice char --  n' string found )
-    n string [ char = not ] find-from drop :> n'
+    n string [ char = not ] find-from drop set: n'
     n' [ n string char char-expected-but-got-eof ] unless
     n'
     string
     slice from>> n' string ?<slice> ;
 
 :: lex-til-not-char ( lexer slice char -- n'/f string' found )
-    lexer >lexer< slice char slice-til-not-char :> ( n' string' found )
+    lexer >lexer< slice char slice-til-not-char set: ( n' string' found )
     lexer
         n' >>n drop
     n' string' found ;

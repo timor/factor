@@ -27,8 +27,8 @@ M: LCHuv >xyza >luva >xyza ;
 M: LCHuv >luva
     [
         let[
-            [ l>> ] [ c>> ] [ h>> ] tri :> ( l c h )
-            h deg>rad :> hr
+            [ l>> ] [ c>> ] [ h>> ] tri set: ( l c h )
+            h deg>rad set: hr
 
             l
             c hr cos *
@@ -45,10 +45,10 @@ M: LCHuv >LCHuv ; inline
 M: luva >LCHuv
     [
         let[
-            [ l>> ] [ u>> ] [ v>> ] tri :> ( l u v )
+            [ l>> ] [ u>> ] [ v>> ] tri set: ( l u v )
             v u fatan2 rad>deg
             [ dup 360 > ] [ 360 - ] while
-            [ dup 0 < ] [ 360 + ] while :> h
+            [ dup 0 < ] [ 360 + ] while set: h
 
             l
             u sq v sq + sqrt
@@ -65,8 +65,8 @@ M: LCHab >rgba >laba >rgba ;
 M: LCHab >laba
     [
         let[
-            [ l>> ] [ c>> ] [ h>> ] tri :> ( l c h )
-            h deg>rad :> hr
+            [ l>> ] [ c>> ] [ h>> ] tri set: ( l c h )
+            h deg>rad set: hr
 
             l
             c hr cos *
@@ -83,10 +83,10 @@ M: LCHab >LCHab ; inline
 M: laba >LCHab
     [
         let[
-            [ l>> ] [ a>> ] [ b>> ] tri :> ( l a b )
+            [ l>> ] [ a>> ] [ b>> ] tri set: ( l a b )
             b a fatan2 rad>deg
             [ dup 360 > ] [ 360 - ] while
-            [ dup 0 < ] [ 360 + ] while :> h
+            [ dup 0 < ] [ 360 + ] while set: h
 
             l
             a sq b sq + sqrt

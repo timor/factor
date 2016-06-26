@@ -22,7 +22,7 @@ IN: compiler.cfg.intrinsics.alien
     ] [ emit-primitive ] if ;
 
 :: inline-accessor ( block #call quot test -- block' )
-    #call node-input-infos :> infos
+    #call node-input-infos set: infos
     infos test call
     [ infos quot call block ]
     [ block #call emit-primitive ] if ; inline

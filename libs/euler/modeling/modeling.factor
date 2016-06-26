@@ -25,21 +25,21 @@ sharp-continue ;
     (polygon>double-face) ;
 
 :: extrude-simple ( edge dist sharp? -- edge )
-    edge face-normal dist v*n :> vec
-    edge vertex-pos vec v+ :> pos
-    edge pos make-ev-one :> e0!
-    e0 opposite-edge>> :> e-end
-    edge face-ccw :> edge!
+    edge face-normal dist v*n set: vec
+    edge vertex-pos vec v+ set: pos
+    edge pos make-ev-one set: e0!
+    e0 opposite-edge>> set: e-end
+    edge face-ccw set: edge!
 
     [ edge e-end eq? not ] [
-        edge vertex-pos vec v+ :> pos
-        edge pos make-ev-one :> e1
+        edge vertex-pos vec v+ set: pos
+        edge pos make-ev-one set: e1
         e0 e1 make-ef drop
         e1 e0!
         edge face-ccw edge!
     ] do while
 
-    e-end face-ccw :> e-end
+    e-end face-ccw set: e-end
     e0 e-end make-ef drop
 
     e-end ;
@@ -55,8 +55,8 @@ sharp-continue ;
 :: bridge-rings-simple ( e1 e2 sharp? -- edge )
     e1 e2 check-bridge-rings
     e1 e2 kill-f-make-rh
-    e1 e2 make-e-kill-r face-cw :> ea!
-    e2 face-ccw :> eb!
+    e1 e2 make-e-kill-r face-cw set: ea!
+    e2 face-ccw set: eb!
     [ ea e1 eq? not ] [
         ea eb make-ef opposite-edge>> face-cw ea!
         eb face-ccw eb!
@@ -64,7 +64,7 @@ sharp-continue ;
     eb ;
 
 :: project-pt-line ( p p0 p1 -- q )
-    p1 p0 v- :> vt
+    p1 p0 v- set: vt
     p p0 v- vt v* sum
     vt norm-sq /
     vt n*v p0 v+ ; inline

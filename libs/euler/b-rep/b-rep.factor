@@ -14,7 +14,7 @@ TUPLE: vertex < identity-tuple position edge ;
 TUPLE: face < identity-tuple edge next-ring base-face ;
 
 :: (opposite) ( e1 e2 quot: ( edge -- edge' ) -- edge )
-    e1 quot call :> e0
+    e1 quot call set: e0
     e0 e2 eq? [ e1 ] [ e0 e2 quot (opposite) ] if ;
     inline recursive
 
@@ -224,7 +224,7 @@ ERROR: b-rep-not-empty b-rep ;
     [ opposite-edge>> vertex>> position>> ] bi ; inline
 
 :: connecting-edge ( e0 e1 -- edge/f )
-    e1 vertex>> :> target-vertex
+    e1 vertex>> set: target-vertex
     e0 vertex>> target-vertex eq? [ f ] [
         f e0 |[ ret edge |
             edge opposite-edge>> vertex>> target-vertex eq?

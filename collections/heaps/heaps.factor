@@ -93,7 +93,7 @@ M: heap heap-peek ( heap -- value key )
 PRIVATE<
 
 :: sift-down ( heap from to -- )
-    to heap data-nth :> tmp
+    to heap data-nth set: tmp
 
     to t [ over from > and ] [
         dup up
@@ -121,8 +121,8 @@ M: heap heap-push*
 PRIVATE<
 
 :: sift-up ( heap n -- )
-    heap heap-size  :> end
-    n heap data-nth :> tmp
+    heap heap-size  set: end
+    n heap data-nth set: tmp
 
     n dup left [ dup end < ] [
         dup 1 fixnum+fast

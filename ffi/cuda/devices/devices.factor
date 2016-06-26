@@ -75,10 +75,10 @@ IN: cuda.devices
 :: (distribute-jobs) ( job-count per-job-shared max-shared-size max-block-size
                        -- grid-size block-size per-block-shared )
     per-job-shared [ max-block-size ] [ max-shared-size swap /i max-block-size min ] if-zero
-        job-count min :> job-max-block-size
-    job-count job-max-block-size up/i :> grid-size
-    job-count grid-size up/i          :> block-size
-    block-size per-job-shared *       :> per-block-shared
+        job-count min set: job-max-block-size
+    job-count job-max-block-size up/i set: grid-size
+    job-count grid-size up/i          set: block-size
+    block-size per-job-shared *       set: per-block-shared
 
     grid-size block-size per-block-shared ; inline
 

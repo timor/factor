@@ -24,16 +24,16 @@ ERROR: cl-error err ;
     dup CL_SUCCESS = [ drop ] [ cl-error ] if ;
 
 :: cl-string-array ( str -- alien )
-    str ascii encode 0 suffix :> str-buffer
-    str-buffer length malloc &free :> str-alien
+    str ascii encode 0 suffix set: str-buffer
+    str-buffer length malloc &free set: str-alien
     str-alien str-buffer dup length memcpy str-alien ;
 
 :: opencl-square ( in -- out )
     0 f 0 uint <ref> [ clGetPlatformIDs cl-success ] keep uint deref
     dup void* <c-array> [ f clGetPlatformIDs cl-success ] keep first
-    CL_DEVICE_TYPE_DEFAULT 1 f void* <ref> [ f clGetDeviceIDs cl-success ] keep void* deref :> device-id
-    f 1 device-id void* <ref> f f 0 int <ref> [ clCreateContext ] keep int deref cl-success   :> context
-    context device-id 0 0 int <ref> [ clCreateCommandQueue ] keep int deref cl-success    :> queue
+    CL_DEVICE_TYPE_DEFAULT 1 f void* <ref> [ f clGetDeviceIDs cl-success ] keep void* deref set: device-id
+    f 1 device-id void* <ref> f f 0 int <ref> [ clCreateContext ] keep int deref cl-success   set: context
+    context device-id 0 0 int <ref> [ clCreateCommandQueue ] keep int deref cl-success    set: queue
 
     [
         context 1 kernel-source cl-string-array void* <ref>
@@ -41,13 +41,13 @@ ERROR: cl-error err ;
         [ 0 f f f f clBuildProgram cl-success ]
         [ "square" cl-string-array 0 int <ref> [ clCreateKernel ] keep int deref cl-success ]
         [ ] tri
-    ] with-destructors :> ( kernel program )
+    ] with-destructors set: ( kernel program )
 
     context CL_MEM_READ_ONLY in byte-length f
-    0 int <ref> [ clCreateBuffer ] keep int deref cl-success :> input
+    0 int <ref> [ clCreateBuffer ] keep int deref cl-success set: input
 
     context CL_MEM_WRITE_ONLY in byte-length f
-    0 int <ref> [ clCreateBuffer ] keep int deref cl-success :> output
+    0 int <ref> [ clCreateBuffer ] keep int deref cl-success set: output
 
     queue input CL_TRUE 0 in byte-length in 0 f f clEnqueueWriteBuffer cl-success
 

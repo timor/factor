@@ -39,11 +39,11 @@ PRIVATE>
     [ &BN_clear_free EC_KEY_set_private_key ssl-error ] with-destructors ;
 
 :: set-public-key ( BIN -- )
-    ec-key-handle :> KEY
-    KEY EC_KEY_get0_group :> GROUP
+    ec-key-handle set: KEY
+    KEY EC_KEY_get0_group set: GROUP
     GROUP EC_POINT_new dup ssl-error
     [
-        &EC_POINT_clear_free :> POINT
+        &EC_POINT_clear_free set: POINT
         GROUP POINT BIN dup length f EC_POINT_oct2point ssl-error
         KEY POINT EC_KEY_set_public_key ssl-error
     ] with-destructors ;
@@ -53,21 +53,21 @@ PRIVATE>
     dup [ dup BN_num_bits bits>bytes <byte-array> [ BN_bn2bin drop ] keep ] when ;
 
 :: get-public-key ( -- bin/f )
-    ec-key-handle :> KEY
+    ec-key-handle set: KEY
     KEY EC_KEY_get0_public_key dup
     |[ PUB |
-        KEY EC_KEY_get0_group :> GROUP
-        GROUP EC_GROUP_get_degree bits>bytes 1 + :> LEN
-        LEN <byte-array> :> BIN
+        KEY EC_KEY_get0_group set: GROUP
+        GROUP EC_GROUP_get_degree bits>bytes 1 + set: LEN
+        LEN <byte-array> set: BIN
         GROUP PUB POINT_CONVERSION_COMPRESSED BIN LEN f
         EC_POINT_point2oct ssl-error
         BIN
     ] when ;
 
 :: ecdsa-sign ( DGST -- sig )
-    ec-key-handle :> KEY
-    KEY ECDSA_size dup ssl-error <byte-array> :> SIG
-    0 uint <ref> :> LEN
+    ec-key-handle set: KEY
+    KEY ECDSA_size dup ssl-error <byte-array> set: SIG
+    0 uint <ref> set: LEN
     0 DGST dup length SIG LEN KEY ECDSA_sign ssl-error
     LEN uint deref SIG resize ;
 

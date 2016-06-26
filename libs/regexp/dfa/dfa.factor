@@ -8,8 +8,8 @@ IN: regexp.dfa
     transitions>> $[ _ swap _ at at ] gather sift ;
 
 :: epsilon-loop ( state table nfa question -- )
-    state table at :> old-value
-    old-value question 2array <or-class> :> new-question
+    state table at set: old-value
+    old-value question 2array <or-class> set: new-question
     new-question old-value = [
         new-question state table set-at
         state nfa transitions>> at
@@ -53,11 +53,11 @@ IN: regexp.dfa
 
 :: new-transitions ( nfa dfa new-states visited-states -- nfa dfa )
     new-states [ nfa dfa ] [
-        pop :> state
+        pop set: state
         state dfa transitions>> ensure-state
         state nfa find-transitions
         |[ trans |
-            state trans nfa find-closure :> new-state
+            state trans nfa find-closure set: new-state
             new-state visited-states new-states add-todo-states
             state new-state trans dfa set-transition
         ] each

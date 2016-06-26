@@ -7,7 +7,7 @@ IN: tools.deploy.embed
 
 :: embed-image ( image executable -- )
     executable binary <file-appender> |[ out |
-        out stream-tell :> offset
+        out stream-tell set: offset
         image binary <file-reader> |[ in |
             in out stream-copy*
         ] with-disposal

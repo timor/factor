@@ -137,7 +137,7 @@ M: range-observer model-changed
 
 :: create-gadgets ( -- gadgets )
     <shelf>
-    <boids-gadget> :> boids-gadget
+    <boids-gadget> set: boids-gadget
     boids-gadget [ start-boids-thread ] keep
     add-gadget
 

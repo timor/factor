@@ -11,10 +11,10 @@ IN: classes.struct.bit-accessors
     [ on-bits ] bi@ swap unmask ;
 
 :: manipulate-bits ( offset bits step-quot -- quot shift-amount offset' bits' )
-    offset 8 /mod :> ( i start-bit )
-    start-bit bits + 8 min :> end-bit
-    start-bit end-bit ones-between :> mask
-    end-bit start-bit - :> used-bits
+    offset 8 /mod set: ( i start-bit )
+    start-bit bits + 8 min set: end-bit
+    start-bit end-bit ones-between set: mask
+    end-bit start-bit - set: used-bits
 
     i mask start-bit step-quot call( i mask start-bit -- quot )
     used-bits

@@ -164,7 +164,7 @@ error-display "toolbar" f {
         dup <source-file-table> >>source-file-table
         dup <error-table> >>error-table
         dup <error-display> >>error-display
-    :> error-list
+    set: error-list
     error-list vertical <track> with-lines
         error-list <error-list-toolbar> f track-add
         error-list source-file-table>> margins <scroller> white-interior

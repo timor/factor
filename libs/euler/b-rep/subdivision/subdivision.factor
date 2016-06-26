@@ -10,11 +10,11 @@ IN: euler.b-rep.subdivision
     [ edge>> face-midpoint <vertex> ] map ; inline
 
 :: edge-points ( edges edge-indices face-indices face-points -- edge-pts )
-    edges length 0 <array> :> edge-pts
+    edges length 0 <array> set: edge-pts
 
     edges |[ edge n |
-        edge opposite-edge>> :> opposite-edge
-        opposite-edge edge-indices at :> opposite-n
+        edge opposite-edge>> set: opposite-edge
+        opposite-edge edge-indices at set: opposite-n
 
         n opposite-n < [
             edge          vertex>> position>>
@@ -37,55 +37,55 @@ IN: euler.b-rep.subdivision
             valence 1 +
             face-sum edge face>> face-indices at face-points nth position>> v+
             edge-sum edge next-edge>> vertex>> position>> v+
-        ] each-vertex-edge :> ( valence face-sum edge-sum )
-        valence >float :> fvalence
-        face-sum fvalence v/n :> face-avg
-        edge-sum fvalence v/n :> edge-avg
+        ] each-vertex-edge set: ( valence face-sum edge-sum )
+        valence >float set: fvalence
+        face-sum fvalence v/n set: face-avg
+        edge-sum fvalence v/n set: edge-avg
         face-avg  edge-avg v+  vertex position>> fvalence 2.0 - v*n v+
         fvalence v/n
         <vertex>
     ] map ; inline
 
 TYPED:: subdivide ( brep: b-rep -- brep': b-rep )
-    brep vertices>> :> vertices
-    brep edges>>    :> edges
-    brep faces>>    :> faces
+    brep vertices>> set: vertices
+    brep edges>>    set: edges
+    brep faces>>    set: faces
 
-    vertices >index-hash :> vertex-indices
-    edges    >index-hash :> edge-indices
-    faces    >index-hash :> face-indices
+    vertices >index-hash set: vertex-indices
+    edges    >index-hash set: edge-indices
+    faces    >index-hash set: face-indices
 
-    faces face-points :> face-pts
-    edges edge-indices face-indices face-pts edge-points :> edge-pts
-    vertices edge-indices face-indices edge-pts face-pts vertex-points :> vertex-pts
+    faces face-points set: face-pts
+    edges edge-indices face-indices face-pts edge-points set: edge-pts
+    vertices edge-indices face-indices edge-pts face-pts vertex-points set: vertex-pts
 
-    V{ } clone :> sub-edges
-    V{ } clone :> sub-faces
+    V{ } clone set: sub-edges
+    V{ } clone set: sub-faces
 
     vertices [
         edge>> |[ edg |
-            edg edge-indices at edge-pts nth :> point-a
-            edg next-edge>> :> next-edg
-            next-edg vertex>> :> next-vertex
-            next-vertex vertex-indices at vertex-pts nth :> point-b
-            next-edg edge-indices at edge-pts nth :> point-c
-            edg face>> face-indices at face-pts nth :> point-d
+            edg edge-indices at edge-pts nth set: point-a
+            edg next-edge>> set: next-edg
+            next-edg vertex>> set: next-vertex
+            next-vertex vertex-indices at vertex-pts nth set: point-b
+            next-edg edge-indices at edge-pts nth set: point-c
+            edg face>> face-indices at face-pts nth set: point-d
 
             face new
-                dup >>base-face :> fac
+                dup >>base-face set: fac
 
             b-edge new
                 fac >>face
-                point-a >>vertex :> edg-a
+                point-a >>vertex set: edg-a
             b-edge new
                 fac >>face
-                point-b >>vertex :> edg-b
+                point-b >>vertex set: edg-b
             b-edge new
                 fac >>face
-                point-c >>vertex :> edg-c
+                point-c >>vertex set: edg-c
             b-edge new
                 fac >>face
-                point-d >>vertex :> edg-d
+                point-d >>vertex set: edg-d
             edg-a fac   edge<<
             edg-b edg-a next-edge<<
             edg-c edg-b next-edge<<

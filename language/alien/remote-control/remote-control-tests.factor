@@ -13,7 +13,7 @@ IN: alien.remote-control.tests
     ascii [ readln ] with-process-reader ;
 
 :: test-embedding ( code -- line )
-    image-path :> image
+    image-path set: image
 
     [
         I[[

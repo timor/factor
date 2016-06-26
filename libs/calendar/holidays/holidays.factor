@@ -15,7 +15,7 @@ SYNTAX: \ HOLIDAY:
     parse-definition ( timestamp/n -- timestamp ) define-declared ;
 
 SYNTAX: \ HOLIDAY-NAME:
-    let[ scan-word "holiday" word-prop :> holidays scan-word :> name scan-object :> value
+    let[ scan-word "holiday" word-prop set: holidays scan-word set: name scan-object set: value
     ";" expect
     value name holidays set-at ] ;
 COMPILE>

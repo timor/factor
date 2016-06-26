@@ -304,7 +304,7 @@ CLASS< FactorView < NSOpenGLView
 
     METHOD: char readSelectionFromPasteboard: id pboard
     [
-        self window :> window
+        self window set: window
         window [
             pboard pasteboard-string
             [ window user-input 1 ] [ 0 ] if*
@@ -314,7 +314,7 @@ CLASS< FactorView < NSOpenGLView
     ! Text input
     METHOD: void insertText: id text
     [
-        self window :> window
+        self window set: window
         window [
             text CF>string window user-input
         ] when
@@ -343,7 +343,7 @@ CLASS< FactorView < NSOpenGLView
     ! Initialization
     METHOD: void updateFactorGadgetSize: id notification
     [
-        self window :> window
+        self window set: window
         window [
             self view-dim window dim<< yield
         ] when
@@ -394,8 +394,8 @@ CLASS< FactorWindowDelegate < NSObject
     METHOD: void windowDidResignKey: id notification
     [
         forget-rollover
-        notification send\ object send\ contentView :> view
-        view window :> window
+        notification send\ object send\ contentView set: view
+        view window set: window
         window [
             view send\ isInFullScreenMode 0 =
             [ window unfocus-world ] when

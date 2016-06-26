@@ -74,13 +74,13 @@ ERROR: invalid-perlin-noise-table table ;
     } cleave ; inline
 
 :: hashes ( table x y z -- aaa baa aba bba aab bab abb bbb )
-    x      table nth-unsafe y + :> a
-    x  1 + table nth-unsafe y + :> b
+    x      table nth-unsafe y + set: a
+    x  1 + table nth-unsafe y + set: b
 
-    a      table nth-unsafe z + :> aa
-    b      table nth-unsafe z + :> ba
-    a  1 + table nth-unsafe z + :> ab
-    b  1 + table nth-unsafe z + :> bb
+    a      table nth-unsafe z + set: aa
+    b      table nth-unsafe z + set: ba
+    a  1 + table nth-unsafe z + set: ab
+    b  1 + table nth-unsafe z + set: bb
 
     aa     table nth-unsafe
     ba     table nth-unsafe
@@ -93,19 +93,19 @@ ERROR: invalid-perlin-noise-table table ;
 
 :: grad ( hash v -- gradient )
     hash 8  bitand zero? [ v first ] [ v second ] if
-        :> u
+        set: u
     hash 12 bitand zero?
     [ v second ] [ hash 13 bitand 12 = [ v first ] [ v third ] if ] if
-        :> v
+        set: v
 
     hash 1 bitand zero? [ u ] [ u neg ] if
     hash 2 bitand zero? [ v ] [ v neg ] if + ; inline
 
 TYPED:: perlin-noise ( table: byte-array point: float-4 -- value: float )
-    point floor-vector :> _point_
-    _point_ unit-cubed :> cube
-    point _point_ v- :> gradients
-    gradients fade :> faded
+    point floor-vector set: _point_
+    _point_ unit-cubed set: cube
+    point _point_ v- set: gradients
+    gradients fade set: faded
 
     table cube first3 hashes {
         [ gradients                               grad ]

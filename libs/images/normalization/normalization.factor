@@ -26,8 +26,8 @@ CONSTANT: fill-value 255 ;
     ] B{ } map-as ;
 
 :: permute ( bytes width stride src-order dst-order -- new-bytes )
-    src-order name>> :> src
-    dst-order name>> :> dst
+    src-order name>> set: src
+    dst-order name>> set: dst
     bytes stride group
     [
         src length group width head

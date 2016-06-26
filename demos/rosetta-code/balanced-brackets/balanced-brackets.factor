@@ -22,8 +22,8 @@ IN: rosetta-code.balanced-brackets
 ! [[][]]    OK   []][[]    NOT OK
 
 :: balanced? ( str -- ? )
-    0 :> counter!
-    t :> ok!
+    0 set: counter!
+    t set: ok!
     str [
         {
             { char: \[ [ 1 ] }

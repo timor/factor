@@ -102,7 +102,7 @@ SYMBOL: sub-primitives
 SYMBOL: special-objects
 
 :: jit-conditional ( test-quot false-quot -- )
-    [ 0 test-quot call ] B{ } make length :> len
+    [ 0 test-quot call ] B{ } make length set: len
     building get length extra-offset get + len +
     [ extra-offset set false-quot call ] B{ } make
     [ length test-quot call ] [ % ] bi ; inline

@@ -7,7 +7,7 @@ IN: splitting.monotonic
 PRIVATE<
 
 :: monotonic-split-impl ( seq quot slice-quot n -- pieces )
-    V{ 0 } clone :> accum
+    V{ 0 } clone set: accum
 
     0 seq [ ] [
         [ 1 + ] 2dip [

@@ -58,18 +58,18 @@ TUPLE: sfmt
 GENERIC: generate ( sfmt -- ) ;
 
 M:: sfmt generate ( sfmt -- )
-    sfmt state>> :> state
-    sfmt uint-4-array>> :> array
+    sfmt state>> set: state
+    sfmt uint-4-array>> set: array
     state n>> 2 - array nth state r1<<
     state n>> 1 - array nth state r2<<
-    state m>> :> m
-    state n>> :> n
-    state mask>> :> mask
+    state m>> set: m
+    state n>> set: n
+    state mask>> set: mask
 
     n m - >fixnum iota |[ i |
         i array nth-unsafe
         i m + array nth-unsafe
-        mask state r1>> state r2>> formula :> r
+        mask state r1>> state r2>> formula set: r
 
         r i array set-nth-unsafe
         state r2>> state r1<<
@@ -78,10 +78,10 @@ M:: sfmt generate ( sfmt -- )
 
     ! n m - 1 + n [a,b) [
     m 1 - iota [
-        n m - 1 + + >fixnum :> i
+        n m - 1 + + >fixnum set: i
         i array nth-unsafe
         m n - i + array nth-unsafe
-        mask state r1>> state r2>> formula :> r
+        mask state r1>> state r2>> formula set: r
 
         r i array set-nth-unsafe
         state r2>> state r1<<

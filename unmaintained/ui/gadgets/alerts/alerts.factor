@@ -13,9 +13,9 @@ in: ui.gadgets.alerts
 
 :: ask-user ( string -- model' )
     [
-        string <label>  T{ font { name "sans-serif" } { size 14 } } >>font dup , :> lbl
-        <model-field*> ->% 1 :> fldm
-        "okay" <model-border-btn> :> btn
+        string <label>  T{ font { name "sans-serif" } { size 14 } } >>font dup , set: lbl
+        <model-field*> ->% 1 set: fldm
+        "okay" <model-border-btn> set: btn
         btn -> [ fldm swap updates ]
                [ [ drop lbl close-window ] $> , ] bi
     ] <vbox> { 161 86 } >>pref-dim "" open-window ;

@@ -79,12 +79,12 @@ CONSTANT: default-segment-radius 1 ;
     } case ;
 
 :: distance-to-next-segment ( current next location heading -- distance )
-    current forward>> :> cf
+    current forward>> set: cf
     cf next location>> v. cf location v. - cf heading v. / ;
 
 :: distance-to-next-segment-area ( current next location heading -- distance )
-    current forward>> :> cf
-    next current half-way-between-oints :> h
+    current forward>> set: cf
+    next current half-way-between-oints set: h
     cf h v. cf location v. - cf heading v. / ;
 
 : vector-to-centre ( seg loc -- v )
@@ -110,9 +110,9 @@ CONSTANT: distant 1000 ;
     v norm 0 = [
         distant
     ] [
-        v dup v. :> a
-        v w v. 2 * :> b
-        w dup v. r sq - :> c
+        v dup v. set: a
+        v w v. 2 * set: b
+        w dup v. r sq - set: c
         c b a quadratic max-real
     ] if ;
 

@@ -109,20 +109,20 @@ ERROR: not-enough-widthed-bits widthed n ;
     [ swap bits>> ] B{ } produce-as nip swap ;
 
 :: |widthed ( widthed1 widthed2 -- widthed3 )
-    widthed1 bits>> :> bits1
-    widthed1 #bits>> :> #bits1
-    widthed2 bits>> :> bits2
-    widthed2 #bits>> :> #bits2
+    widthed1 bits>> set: bits1
+    widthed1 #bits>> set: #bits1
+    widthed2 bits>> set: bits2
+    widthed2 #bits>> set: #bits2
     bits1 #bits2 shift bits2 bitor
     #bits1 #bits2 + <widthed> ;
 
 PRIVATE>
 
 M:: lsb0-bit-writer poke ( value n bs -- )
-    value n <widthed> :> widthed
+    value n <widthed> set: widthed
     widthed
-    bs widthed>> #bits>> 8 swap - split-widthed :> ( byte remainder )
-    byte bs widthed>> |widthed :> new-byte
+    bs widthed>> #bits>> 8 swap - split-widthed set: ( byte remainder )
+    byte bs widthed>> |widthed set: new-byte
     new-byte #bits>> 8 = [
         new-byte bits>> bs bytes>> push
         zero-widthed bs widthed<<
@@ -151,7 +151,7 @@ ERROR: not-enough-bits n bit-reader ;
     neg shift n bits ;
 
 :: adjust-bits ( n bs -- )
-    n 8 /mod :> ( #bytes #bits )
+    n 8 /mod set: ( #bytes #bits )
     bs [ #bytes + ] change-byte-pos
     bit-pos>> #bits + dup 8 >= [
         8 - bs bit-pos<<
@@ -173,7 +173,7 @@ M: msb0-bit-reader peek ( n bs -- bits )
     \ be> \ subseq>bits-be (peek) ;
 
 :: bit-writer-bytes ( writer -- bytes )
-    writer widthed>> #bits>> :> n
+    writer widthed>> #bits>> set: n
     n 0 = [
         writer widthed>> bits>> 8 n - shift
         writer bytes>> push

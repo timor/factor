@@ -25,7 +25,7 @@ PRIVATE<
     [ first2 rect> ] { } map-as ;
 
 :: (fft1d) ( seq sign -- seq' )
-    seq length :> n
+    seq length set: n
     [
         n
         seq >fftw-array

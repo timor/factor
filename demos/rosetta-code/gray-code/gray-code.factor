@@ -37,7 +37,7 @@ IN: rosetta-code.gray-code
 : gray-encode ( n -- n' ) dup -1 shift bitxor ;
 
 :: gray-decode ( n! -- n' )
-    n :> p!
+    n set: p!
     [ n -1 shift dup n! 0 = not ] [
         p n bitxor p!
     ] while

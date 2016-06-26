@@ -27,7 +27,7 @@ SYMBOL: alternatives
     ! becomes the output of a conversion instruction.
     preferred required eq? [ src ] [
         src required alternatives get [
-            required next-vreg-rep :> new-src
+            required next-vreg-rep set: new-src
             [ new-src ] 2dip preferred emit-conversion
             new-src
         ] 2cache
@@ -46,7 +46,7 @@ SYMBOLS: renaming-set needs-renaming? ;
     2array renaming-set get push needs-renaming? on ;
 
 :: (compute-renaming-set) ( vreg required quot: ( vreg preferred required -- new-vreg ) -- )
-    vreg rep-of :> preferred
+    vreg rep-of set: preferred
     preferred required eq?
     [ vreg no-renaming ]
     [ vreg vreg preferred required quot call record-renaming ] if ; inline

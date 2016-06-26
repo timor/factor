@@ -111,7 +111,7 @@ SYMBOL: ac-counter
     recent-stores get [ drop H{ } clone ] cache ;
 
 :: record-constant-set-slot ( insn# slot# vreg -- )
-    vreg recent-stores-of :> recent-stores
+    vreg recent-stores-of set: recent-stores
     slot# recent-stores at [ dead-store ] when*
     insn# slot# recent-stores set-at ;
 
@@ -193,10 +193,10 @@ M: read-insn analyze-aliases
     live-slot = ;
 
 M:: write-insn analyze-aliases ( insn -- insn )
-    insn src>> resolve :> src
-    insn insn-slot# :> slot#
-    insn insn-object :> vreg
-    insn insn#>> :> insn#
+    insn src>> resolve set: src
+    insn insn-slot# set: slot#
+    insn insn-object set: vreg
+    insn insn#>> set: insn#
 
     src slot# vreg idempotent? [ insn# dead-store ] [
         src heap-ac get merge-acs

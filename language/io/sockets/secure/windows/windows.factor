@@ -31,9 +31,9 @@ M: openssl ssl-certificate-verification-supported? f ;
 
 :: set-windows-certs-for ( name -- )
     [
-        name load-windows-cert-store :> cs
-        X509_STORE_new :> x509-store
-        f :> ctx!
+        name load-windows-cert-store set: cs
+        X509_STORE_new set: x509-store
+        f set: ctx!
         [ ctx ]
         [
             cs ctx CertEnumCertificatesInStore ctx!
@@ -70,7 +70,7 @@ M: secure (get-local-address) ( handle remote -- sockaddr )
 M: secure parse-sockaddr addrspec>> parse-sockaddr f <secure> ;
 
 M:: secure establish-connection ( client-out addrspec -- )
-    client-out handle>> file>> :> socket
+    client-out handle>> file>> set: socket
     socket FIONBIO 1 set-ioctl-socket
     socket <output-port> addrspec addrspec>> establish-connection
     client-out addrspec secure-connection

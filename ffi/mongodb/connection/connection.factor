@@ -132,11 +132,11 @@ PRIVATE>
 
 :: verify-nodes ( mdb -- )
     [
-        V{ } clone :> acc
-        mdb dup master-node [ check-node ] keep :> node1
+        V{ } clone set: acc
+        mdb dup master-node [ check-node ] keep set: node1
         mdb node1 remote>>
         [ [ check-node ] keep ]
-        [ drop f ] if*  :> node2
+        [ drop f ] if*  set: node2
         node1 [ acc push ] when*
         node2 [ acc push ] when*
         mdb acc nodelist>table >>nodes drop

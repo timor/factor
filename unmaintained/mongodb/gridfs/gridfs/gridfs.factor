@@ -145,13 +145,13 @@ TUPLE: state bytes count ;
     [ 1 + ] change-count drop ; inline
 
 :: store-chunk ( chunk entry n -- ) 
-    entry id>> :> id
+    entry id>> set: id
     H{ { "files_id" id }
        { "n" n } { "data" chunk } }
     [ chunks-collection ] dip save ; inline
 
 :: write-chunks ( stream entry -- length )
-    entry chunk-size>> :> chunk-size
+    entry chunk-size>> set: chunk-size
     [
         [ 
             chunk-size stream stream-read dup [
@@ -245,7 +245,7 @@ PRIVATE<
     [ drop advance-stream ] 3bi ; inline
 
 :: (stream-read-partial) ( n stream -- seq/f )
-    stream ?chunk :> chunk :> available
+    stream ?chunk set: chunk set: available
     chunk [
         n available < 
         [ n ] [ available ] if 

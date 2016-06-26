@@ -242,9 +242,9 @@ MEMO: dct-matrix-blas ( -- m ) dct-matrix >float-blas-matrix ;
 
 :: decode-block ( color -- pixels )
     color dc-huff-table>> read1-jpeg-dc color apply-diff
-    64 0 <array> :> coefs
+    64 0 <array> set: coefs
     0 coefs set-nth
-    0 :> k!
+    0 set: k!
     [
         color ac-huff-table>> read1-jpeg-ac
         [ first 1 + k + k! ] [ second k coefs set-nth ] [ ] tri
@@ -255,7 +255,7 @@ MEMO: dct-matrix-blas ( -- m ) dct-matrix >float-blas-matrix ;
     reverse-zigzag idct ;
     
 :: draw-macroblock-yuv420 ( mb blocks -- )
-    mb { 16 16 } v* :> pos
+    mb { 16 16 } v* set: pos
     0 blocks nth pos { 0 0 } v+ 0 jpeg> draw-block
     1 blocks nth pos { 8 0 } v+ 0 jpeg> draw-block
     2 blocks nth pos { 0 8 } v+ 0 jpeg> draw-block
@@ -264,11 +264,11 @@ MEMO: dct-matrix-blas ( -- m ) dct-matrix >float-blas-matrix ;
     5 blocks nth 8 group 2 matrix-zoom concat pos 2 jpeg> draw-block ;
     
 :: draw-macroblock-yuv444 ( mb blocks -- )
-    mb { 8 8 } v* :> pos
+    mb { 8 8 } v* set: pos
     3 iota [ [ blocks nth pos ] [ jpeg> draw-block ] bi ] each ;
 
 :: draw-macroblock-y ( mb blocks -- )
-    mb { 8 8 } v* :> pos
+    mb { 8 8 } v* set: pos
     0 blocks nth pos 0 jpeg> draw-block
     64 0 <array> pos 1 jpeg> draw-block
     64 0 <array> pos 2 jpeg> draw-block ;
@@ -309,7 +309,7 @@ ERROR: unsupported-colorspace ;
 SINGLETONS: YUV420 YUV444 Y MAGIC! ;
 
 :: detect-colorspace ( jpeg-image -- csp )
-    jpeg-image color-info>> sift :> colors
+    jpeg-image color-info>> sift set: colors
     MAGIC!
     colors length 1 = [ drop Y ] when
     colors length 3 =

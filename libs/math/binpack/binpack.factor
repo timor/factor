@@ -19,8 +19,8 @@ TUPLE: bin items total ;
     [ + ] change-total items>> push ;
 
 :: (binpack) ( alist #bins -- bins )
-    alist sort-values <reversed> :> items
-    #bins [ <bin> ] replicate :> bins
+    alist sort-values <reversed> set: items
+    #bins [ <bin> ] replicate set: bins
     items [ bins smallest-bin add-to-bin ] assoc-each
     bins [ items>> ] map ;
 

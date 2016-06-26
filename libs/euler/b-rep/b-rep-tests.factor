@@ -14,9 +14,9 @@ IN: euler.b-rep.tests
 { f } [ 6 multi-ringed-face-cube-b-rep faces>> nth base-face? ] unit-test
 
 :: mock-face ( p0 p1 p2 -- edge )
-    b-edge new vertex new p0 >>position >>vertex :> e0
-    b-edge new vertex new p1 >>position >>vertex :> e1
-    b-edge new vertex new p2 >>position >>vertex :> e2
+    b-edge new vertex new p0 >>position >>vertex set: e0
+    b-edge new vertex new p1 >>position >>vertex set: e1
+    b-edge new vertex new p2 >>position >>vertex set: e2
 
     e1 e0 next-edge<<
     e2 e1 next-edge<<

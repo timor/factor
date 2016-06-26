@@ -98,7 +98,7 @@ M: pathname url-of
     ] { } assoc>map "\n" join ;
 
 :: css-styles-to-classes ( body -- stylesheet body )
-    H{ } clone :> classes
+    H{ } clone set: classes
     body [
         dup xml-chunk? [
             seq>> [ tag? ] filter

@@ -19,7 +19,7 @@ TUPLE: pool
 PRIVATE<
 
 :: copy-tuple ( from to -- to )
-    from tuple-size :> size
+    from tuple-size set: size
     size |[ n | n from array-nth n to set-array-nth ] each-integer
     to ; inline
 

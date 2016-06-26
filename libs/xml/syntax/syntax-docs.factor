@@ -75,11 +75,11 @@ XML-DOC[[ <doc><-></doc> ]] pprint-xml"
 { $example
 "USING: locals urls xml.syntax xml.writer ;
 let[
-    3 :> number
-    f :> false
-    URL\" http://factorcode.org/\" :> url
-    \"hello\" :> string
-    \\ drop :> word
+    3 set: number
+    f set: false
+    URL\" http://factorcode.org/\" set: url
+    \"hello\" set: string
+    \\ drop set: word
     XML-DOC[[
         <x
             number=<-number->

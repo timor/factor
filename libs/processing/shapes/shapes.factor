@@ -75,8 +75,8 @@ color: white fill-color set-global
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 :: rectangle ( loc dim -- )
-    loc first2 :> ( x y )
-    dim first2 :> ( dx dy )
+    loc first2 set: ( x y )
+    dim first2 set: ( dx dy )
 
     x y 2array
     x dx + y 2array

@@ -12,8 +12,8 @@ IN: constructors
     ] map concat ;
 
 MACRO:: slots>boa ( slots class -- quot )
-    class all-slots-assoc slots [ $[ first name>> _ = ] find-last nip ] with map :> slot-assoc
-    class all-slots-assoc [ [ ] [ first initial>> ] bi ] { } map>assoc :> default-params
+    class all-slots-assoc slots [ $[ first name>> _ = ] find-last nip ] with map set: slot-assoc
+    class all-slots-assoc [ [ ] [ first initial>> ] bi ] { } map>assoc set: default-params
     slots length
     default-params length
     $[

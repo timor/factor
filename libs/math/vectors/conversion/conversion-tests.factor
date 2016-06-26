@@ -10,12 +10,12 @@ ERROR: optimized-vconvert-inconsistent
     optimized-result ;
 
 MACRO:: test-vconvert ( from-type to-type -- quot )
-    [ from-type to-type vconvert ] :> quot
-    quot infer :> effect
-    effect in>> length :> inputs
-    effect out>> length :> outputs
+    [ from-type to-type vconvert ] set: quot
+    quot infer set: effect
+    effect in>> length set: inputs
+    effect out>> length set: outputs
 
-    inputs from-type <array> :> declaration
+    inputs from-type <array> set: declaration
 
     [
         inputs narray

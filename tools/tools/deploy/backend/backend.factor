@@ -110,9 +110,9 @@ DEFER: ?make-staging-image
 :: make-deploy-image ( vm image vocab config -- manifest )
     make-boot-image
 
-    config config>profile :> profile
-    vocab "vocab-manifest-" prepend temp-file :> manifest-file
-    image vocab manifest-file profile deploy-command-line :> flags
+    config config>profile set: profile
+    vocab "vocab-manifest-" prepend temp-file set: manifest-file
+    image vocab manifest-file profile deploy-command-line set: flags
 
     profile ?make-staging-image
     vm flags run-factor

@@ -47,7 +47,7 @@ IN: compiler.cfg.utilities
     from successors>> [ dup to eq? [ drop bb ] when ] map! drop ;
 
 :: insert-basic-block ( from to insns -- )
-    insns f insns>block :> bb
+    insns f insns>block set: bb
     V{ from } bb predecessors<<
     V{ to } bb successors<<
     from to bb update-predecessors

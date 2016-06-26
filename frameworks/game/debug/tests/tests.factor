@@ -17,7 +17,7 @@ IN: game.debug.tests
     180 / pi * ;
 
 :: draw-debug-tests ( world -- )
-    world [ wasd-p-matrix ] [ wasd-mv-matrix ] bi m. :> mvp-matrix
+    world [ wasd-p-matrix ] [ wasd-mv-matrix ] bi m. set: mvp-matrix
     { 0 0 0 } clear-screen
 
     [

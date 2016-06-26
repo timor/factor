@@ -11,7 +11,7 @@ PRIVATE<
 :: (solovay-strassen) ( n numtrials -- ? )
     numtrials iota [
         drop
-        n 1 - [1,b) random :> a
+        n 1 - [1,b) random set: a
         a n simple-gcd 1 > [ t ] [
             a n jacobi n mod'
             a n 1 - 2 /i n ^mod = not

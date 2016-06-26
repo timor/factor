@@ -89,13 +89,13 @@ TUPLE: code-file
     [ number>string ] [ char: \s pad-head ] bi* ;
 
 :: code>html ( dir file -- page )
-    file name>> :> name
+    file name>> set: name
     "Generating HTML for " write name write "..." print flush
-    dir [ file [ name>> ] [ encoding>> ] bi file-lines ] with-directory :> lines
-    lines length 1 + number>string length :> line#len
-    file mode>> load-mode :> rules
+    dir [ file [ name>> ] [ encoding>> ] bi file-lines ] with-directory set: lines
+    lines length 1 + number>string length set: line#len
+    file mode>> load-mode set: rules
     f lines |[ l i | l rules tokenize-line i 1 + line#len line#>string htmlize-tokens ]
-    map-index concat nip :> html-lines
+    map-index concat nip set: html-lines
     XML-DOC[[ <html>
         <head>
             <title><-name-></title>
@@ -111,10 +111,10 @@ TUPLE: code-file
 :: code>toc-html ( dir name files -- html )
     "Generating HTML table of contents" print flush
 
-    now timestamp>rfc822 :> timestamp
-    dir absolute-path :> source
+    now timestamp>rfc822 set: timestamp
+    dir absolute-path set: source
     dir [
-        files toc-list :> toc
+        files toc-list set: toc
 
         XML-DOC[[ <html>
             <head>
@@ -137,15 +137,15 @@ TUPLE: code-file
     "Generating NCX table of contents" print flush
 
     files |[ file i |
-        file name>> :> name
-        name file-html-name :> filename
-        i 2 + number>string :> istr
+        file name>> set: name
+        name file-html-name set: filename
+        i 2 + number>string set: istr
 
         XML-CHUNK[[ <navPoint class="book" id=<-filename-> playOrder=<-istr->>
             <navLabel><text><-name-></text></navLabel>
             <content src=<-filename-> />
         </navPoint> ]]
-    ] map-index :> file-nav-points
+    ] map-index set: file-nav-points
 
     XML-DOC[[ <?xml version="1.0" encoding="UTF-8" ?>
     <ncx version="2005-1" xmlns="http://www.daisy.org/z3986/2005/ncx/">
@@ -160,14 +160,14 @@ TUPLE: code-file
 
 :: code>opf ( dir name files -- xml )
     "Generating OPF manifest" print flush
-    name ".ncx"  append :> ncx-name
+    name ".ncx"  append set: ncx-name
 
     files [
         name>> file-html-name dup
         XML-CHUNK[[ <item id=<-> href=<-> media-type="text/html" /> ]]
-    ] map :> html-manifest
+    ] map set: html-manifest
 
-    files [ name>> file-html-name XML-CHUNK[[ <itemref idref=<-> /> ]] ] map :> html-spine
+    files [ name>> file-html-name XML-CHUNK[[ <itemref idref=<-> /> ]] ] map set: html-spine
 
     XML-DOC[[ <?xml version="1.0" encoding="UTF-8" ?>
     <package
@@ -210,15 +210,15 @@ codebook-output-path [ "resource:codebooks" ] initialize
     [ append-path ] dip append ;
 
 :: codebook ( src-dir -- )
-    codebook-output-path get normalize-path :> dest-dir
+    codebook-output-path get normalize-path set: dest-dir
 
     "Generating ebook for " write src-dir write " in " write dest-dir print flush
 
     dest-dir make-directories
     [
         [
-            src-dir file-name :> name
-            src-dir code-files :> files
+            src-dir file-name set: name
+            src-dir code-files set: files
 
             src-dir name files code>opf
             name ".opf" write-dest-file
@@ -239,7 +239,7 @@ codebook-output-path [ "resource:codebooks" ] initialize
             "." name ".opf" kindle-path kindlegen
             "." name ".mobi" kindle-path dest-dir copy-file-into
 
-            dest-dir name ".mobi" kindle-path :> mobi-path
+            dest-dir name ".mobi" kindle-path set: mobi-path
 
             "Job's finished: " write mobi-path print flush
         ] cleanup-unique-directory

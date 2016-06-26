@@ -33,7 +33,7 @@ CONSTANT: masks
 : upper-bound ( sieve -- n ) length 30 * 1 - ; inline
 
 :: unmark-multiples ( i upper sieve -- )
-    i 2 fixnum*fast :> step
+    i 2 fixnum*fast set: step
     i i fixnum*fast
     [ dup upper <= ] [
         [ sieve unmark ] [ step fixnum+fast ] bi
@@ -45,8 +45,8 @@ CONSTANT: masks
 PRIVATE>
 
 :: sieve ( n -- sieve )
-    n integer>fixnum-strict init-sieve :> sieve
-    sieve upper-bound >fixnum :> upper
+    n integer>fixnum-strict init-sieve set: sieve
+    sieve upper-bound >fixnum set: upper
     3 upper sqrt 2 <range> |[ i |
         i sieve marked-unsafe? [
             i upper sieve unmark-multiples

@@ -426,8 +426,8 @@ IN: tools.deploy.shaker
 : strip-globals ( -- )
     strip-globals? |[ |
         "Stripping globals" show
-        stripped-globals :> to-strip
-        cleared-globals :> to-clear
+        stripped-globals set: to-strip
+        cleared-globals set: to-clear
         global boxes>>
         [ drop to-strip strip-global? ] assoc-reject!
         [

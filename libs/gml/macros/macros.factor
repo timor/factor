@@ -29,13 +29,13 @@ MACRO:: log-euler-op ( class def inputs -- quot )
 
 SYNTAX: \ LOG-GML:
     let[
-        (GML:) :> ( word name effect def )
+        (GML:) set: ( word name effect def )
 
-        name "-record" append create-word-in :> record-class
+        name "-record" append create-word-in set: record-class
         record-class tuple effect in>> define-tuple-class
 
         record-class def effect in>> length
-        $[ _ _ _ log-euler-op ] :> logging-def
+        $[ _ _ _ log-euler-op ] set: logging-def
 
         word name effect logging-def define-gml-primitive
     ] ;

@@ -38,12 +38,12 @@ IN: cpu.ppc.assembler
     [ { 0 1 6 11 16 21 } bitfield ] dip insn ;
 
 :: md-insn ( rs ra sh mb xo sh5 rc opcode -- )
-    mb [ 0x1f bitand 1 shift ] [ -5 shift ] bi bitor :> mb
+    mb [ 0x1f bitand 1 shift ] [ -5 shift ] bi bitor set: mb
     rs ra sh mb xo sh5 rc opcode
     [ { 0 1 2 5 11 16 21 } bitfield ] dip insn ;
 
 :: mds-insn ( rs ra rb mb xo rc opcode -- )
-    mb [ 0x1f bitand 1 shift ] [ -5 shift ] bi bitor :> mb
+    mb [ 0x1f bitand 1 shift ] [ -5 shift ] bi bitor set: mb
     rs ra rb mb xo rc opcode
     [ { 0 1 5 11 16 21 } bitfield ] dip insn ;
 

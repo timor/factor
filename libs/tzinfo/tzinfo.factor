@@ -64,9 +64,9 @@ TUPLE: transition seconds timestamp local-time ;
 C: <transition> transition ;
 
 :: tzfile>transitions ( tzfile -- transitions )
-    tzfile abbrevs>> tznames :> abbrevs
-    tzfile is-std>> :> is-std
-    tzfile is-gmt>> :> is-gmt
+    tzfile abbrevs>> tznames set: abbrevs
+    tzfile is-std>> set: is-std
+    tzfile is-gmt>> set: is-gmt
     tzfile types>> [
         [
             {
@@ -77,7 +77,7 @@ C: <transition> transition ;
         ] dip
         [ is-std ?nth dup [ 1 = ] when ]
         [ is-gmt ?nth dup [ 1 = ] when ] bi <local-time>
-    ] map-index :> local-times
+    ] map-index set: local-times
     tzfile transition-times>>
     tzfile local-times>> [
         [ dup unix-time>timestamp ] [ local-times nth ] bi*

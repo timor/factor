@@ -24,8 +24,8 @@ PRIVATE<
     [ def-index>> ] bi@ < ;
 
 :: vreg-dominates? ( vreg1 vreg2 -- ? )
-    vreg1 bb>> :> bb1
-    vreg2 bb>> :> bb2
+    vreg1 bb>> set: bb1
+    vreg2 bb>> set: bb2
     bb1 bb2 eq?
     [ vreg1 vreg2 locally-dominates? ] [ bb1 bb2 dominates? ] if ;
 
@@ -55,8 +55,8 @@ PRIVATE<
     interferes-first-dominates? ;
 
 :: vregs-intersect? ( vreg1 vreg2 -- ? )
-    vreg1 bb>> :> bb1
-    vreg2 bb>> :> bb2
+    vreg1 bb>> set: bb1
+    vreg2 bb>> set: bb2
     {
         { [ bb1 bb2 eq? ] [ vreg1 vreg2 interferes-same-block? ] }
         { [ bb1 bb2 dominates? ] [ vreg1 vreg2 interferes-first-dominates? ] }
@@ -140,7 +140,7 @@ TUPLE: iterator seq n ;
     ] if ;
 
 :: linear-interference-test ( seq -- ? )
-    V{ } clone :> dom
+    V{ } clone set: dom
     seq |[ vreg |
         dom vreg find-parent
         { [ ] [ vreg same-sets? not ] [ vreg swap vregs-interfere? ] } 1&&

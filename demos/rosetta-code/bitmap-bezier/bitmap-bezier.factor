@@ -11,7 +11,7 @@ IN: rosetta-code.bitmap-bezier
 ! draw a cubic bezier curves (definition on Wikipedia).
 
 :: (cubic-bezier) ( P0 P1 P2 P3 -- bezier )
-    [ :> x
+    [ set: x
         1 x - 3 ^ P0 n*v
         1 x - sq 3 * x * P1 n*v
         1 x - 3 * x sq * P2 n*v

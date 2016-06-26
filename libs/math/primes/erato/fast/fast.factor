@@ -24,7 +24,7 @@ CONSTANT: wheel-2-3-5-7 $$[
     ] while drop ; inline
 
 :: mark-multiples ( i upto sieve -- )
-    i 2 fixnum*fast :> step
+    i 2 fixnum*fast set: step
     i i fixnum*fast upto integer>fixnum-strict $[ dup _ <= ] [
         t over 2/ sieve set-nth-unsafe
         step fixnum+fast
@@ -36,7 +36,7 @@ CONSTANT: wheel-2-3-5-7 $$[
 PRIVATE>
 
 :: make-sieve ( n -- sieve )
-    n sieve-bits <bit-array> :> sieve
+    n sieve-bits <bit-array> set: sieve
     t 0 sieve set-nth
     t 4 sieve set-nth
     n sqrt >integer sieve
@@ -44,7 +44,7 @@ PRIVATE>
     sieve ; inline
 
 :: sieve ( n -- primes )
-    V{ 2 3 5 7 } clone :> primes
+    V{ 2 3 5 7 } clone set: primes
     n dup make-sieve [
         dup n <= [ primes push ] [ drop ] if
     ] each-prime primes ;

@@ -190,8 +190,8 @@ SYNTAX: \ GML:
 
 SYNTAX: \ GML::
     let[
-        scan-gml-name :> ( word name )
-        word [ parse-definition ] parse-locals-definition :> ( word def effect )
+        scan-gml-name set: ( word name )
+        word [ parse-definition ] parse-locals-definition set: ( word def effect )
         word name effect def define-gml-primitive
     ] ;
 

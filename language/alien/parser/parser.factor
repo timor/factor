@@ -114,8 +114,8 @@ PRIVATE>
     scan-c-type scan-token parse-pointers ;
 
 :: scan-c-args ( -- types names )
-    V{ } clone :> types
-    V{ } clone :> names
+    V{ } clone set: types
+    V{ } clone set: names
     "(" expect scan-token [ dup ")" = ] [
         parse-c-type
         scan-token "," ?tail drop
@@ -147,7 +147,7 @@ PRIVATE>
     $[ [ _ _ _ ] dip alien-callback ] ;
 
 :: make-callback-type ( return function library types names -- word quot effect )
-    function create-function :> type-word
+    function create-function set: type-word
     void* type-word typedef
     type-word names return function-effect "callback-effect" set-word-prop
     type-word library "callback-library" set-word-prop

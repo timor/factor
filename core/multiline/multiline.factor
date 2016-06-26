@@ -6,7 +6,7 @@ IN: multiline
 PRIVATE<
 
 :: scan-multiline-string ( i end lexer -- j )
-    lexer line-text>> :> text
+    lexer line-text>> set: text
     lexer still-parsing? [
         end text i start* |[ j |
             i j text subseq % j end length +

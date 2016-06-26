@@ -30,17 +30,17 @@ SINGLETON: pgm-image
     ] unless ;
 
 :: read-pgm ( -- image )
-    read-token         :> type
-    read-number        :> width
-    read-number        :> height
-    read-number        :> max
-    width height *     :> npixels
-    max 256 >=         :> wide
+    read-token         set: type
+    read-number        set: width
+    read-number        set: height
+    read-number        set: max
+    width height *     set: npixels
+    max 256 >=         set: wide
 
     type {
         { "P2" [ [ 0 npixels read-numbers ] wide [ ushort-array{ } ] [ B{ } ] if make ] }
         { "P5" [ wide [ 2 ] [ 1 ] if npixels * read ] }
-    } case :> data
+    } case set: data
 
     image new
     L                                                  >>component-order

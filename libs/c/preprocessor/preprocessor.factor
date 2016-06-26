@@ -88,9 +88,9 @@ ERROR: header-file-missing path ;
     [ current { [ blank? ] [ char: \( = ] } 1|| ] take-until ;
 
 :: handle-define ( preprocessor-state sequence-parser -- )
-    sequence-parser take-define-identifier :> ident
-    sequence-parser skip-whitespace/comments take-rest :> def
-    def "\\" ?tail [ readlns append ] when :> def
+    sequence-parser take-define-identifier set: ident
+    sequence-parser skip-whitespace/comments take-rest set: def
+    def "\\" ?tail [ readlns append ] when set: def
     def ident preprocessor-state symbol-table>> set-at ;
 
 : handle-undef ( preprocessor-state sequence-parser -- )

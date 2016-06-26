@@ -43,14 +43,14 @@ IN: c.lexer
     [ current { [ blank? ] [ char: \( = ] } 1|| ] take-until ;
 
 :: take-quoted-string ( sequence-parser escape-char quote-char -- string )
-    sequence-parser n>> :> start-n
+    sequence-parser n>> set: start-n
     sequence-parser advance
     [
         {
             [ { [ previous escape-char = ] [ current quote-char = ] } 1&& ]
             [ current quote-char = not ]
         } 1||
-    ] take-while :> string
+    ] take-while set: string
     sequence-parser current quote-char = [
         sequence-parser advance* string
     ] [

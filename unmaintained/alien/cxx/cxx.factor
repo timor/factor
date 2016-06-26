@@ -24,11 +24,11 @@ PRIVATE>
     add-mixin-instance define-class-tuple ;
 
 :: define-c++-method ( class-name generic name types effect virtual -- )
-    [ name % "_" % class-name H{ { CHAR: : CHAR: _ } } substitute % ] "" make           :> name'
-    effect [ in>> "self" suffix ] [ out>> ] bi <effect> :> effect'
-    types class-name "*" append suffix                  :> types'
-    effect in>> "," join                                :> args
-    class-name virtual [ "#" append ] unless current-vocab lookup                  :> class
-    SBUF" " clone dup [ I[ return self->${name}(${args});]I ] with-output-stream >string :> body
+    [ name % "_" % class-name H{ { CHAR: : CHAR: _ } } substitute % ] "" make           set: name'
+    effect [ in>> "self" suffix ] [ out>> ] bi <effect> set: effect'
+    types class-name "*" append suffix                  set: types'
+    effect in>> "," join                                set: args
+    class-name virtual [ "#" append ] unless current-vocab lookup                  set: class
+    SBUF" " clone dup [ I[ return self->${name}(${args});]I ] with-output-stream >string set: body
     name' types' effect' body define-c-marshalled
     class generic create-method name' current-vocab lookup 1quotation define ;

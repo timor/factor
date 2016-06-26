@@ -93,7 +93,7 @@ MACRO: <experiment> ( word -- quot )
     [ rest verbose-tests? get [ . ] [ short. ] if flush ] bi ;
 
 :: experiment ( word: ( -- error ? ) line# -- )
-    word <experiment> :> e
+    word <experiment> set: e
     e experiment.
     word execute [
         current-test-file get [

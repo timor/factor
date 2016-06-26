@@ -7,8 +7,8 @@ IN: binary-search
 PRIVATE<
 
 :: (search) ( seq from to quot: ( elt -- <=> ) -- i elt )
-    from to + 2/ :> midpoint@
-    midpoint@ seq nth-unsafe :> midpoint
+    from to + 2/ set: midpoint@
+    midpoint@ seq nth-unsafe set: midpoint
 
     to from - 1 <= [
         midpoint@ midpoint

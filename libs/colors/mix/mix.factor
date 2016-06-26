@@ -9,10 +9,10 @@ IN: colors.mix
     [ + ] tri-curry@ tri* 1.0 <rgba> ;
 
 :: sample-linear-gradient ( colors percent -- color )
-    colors length :> num-colors
-    num-colors 1 - percent * >integer :> left-index
-    1.0 num-colors 1 - / :> cell-range
-    percent left-index cell-range * - cell-range / :> alpha
-    left-index colors nth :> left-color
-    left-index 1 + num-colors mod colors nth :> right-color
+    colors length set: num-colors
+    num-colors 1 - percent * >integer set: left-index
+    1.0 num-colors 1 - / set: cell-range
+    percent left-index cell-range * - cell-range / set: alpha
+    left-index colors nth set: left-color
+    left-index 1 + num-colors mod colors nth set: right-color
     left-color right-color alpha linear-gradient ;

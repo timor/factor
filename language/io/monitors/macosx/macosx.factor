@@ -11,7 +11,7 @@ TUPLE: macosx-monitor < monitor handle ;
     $[ first { +modify-file+ } _ queue-change ] each ;
 
 M:: macosx (monitor) ( path recursive? mailbox -- monitor )
-    path normalize-path :> path
+    path normalize-path set: path
     path mailbox macosx-monitor new-monitor
     dup [ enqueue-notifications ] curry
     path 1array 0 0 <event-stream> >>handle ;

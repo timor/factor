@@ -36,8 +36,8 @@ M: peek-stream stream-read1
     ] if-empty ;
 
 M:: peek-stream stream-read-unsafe ( n buf stream -- count )
-    stream peeked>> :> peeked
-    peeked length :> #peeked
+    stream peeked>> set: peeked
+    peeked length set: #peeked
     #peeked 0 = [
         n buf stream stream>> stream-read-unsafe
     ] [
@@ -48,12 +48,12 @@ M:: peek-stream stream-read-unsafe ( n buf stream -- count )
         ] [
             peeked <reversed> 0 buf copy
             0 peeked shorten
-            n #peeked - :> n'
+            n #peeked - set: n'
             stream stream>> input-port? [
                 #peeked buf <displaced-alien>
             ] [
                 buf #peeked tail-slice
-            ] if :> buf'
+            ] if set: buf'
             n' buf' stream stream-read-unsafe #peeked +
         ] if
     ] if ;

@@ -82,11 +82,11 @@ SYMBOL: master-completion-port
     ] with-timeout ;
 
 :: wait-for-overlapped ( nanos -- bytes-transferred overlapped error? )
-    nanos [ 1,000,000 /i ] [ INFINITE ] if* :> timeout
+    nanos [ 1,000,000 /i ] [ INFINITE ] if* set: timeout
     master-completion-port get-global
     { int void* pointer: OVERLAPPED }
     [ timeout GetQueuedCompletionStatus zero? ] with-out-parameters
-    :> ( error? bytes key overlapped )
+    set: ( error? bytes key overlapped )
     bytes overlapped error? ;
 
 : resume-callback ( result overlapped -- )

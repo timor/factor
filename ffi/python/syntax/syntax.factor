@@ -41,7 +41,7 @@ SYMBOL: current-context
     [ py-import ] dip getattr ;
 
 :: add-function ( name effect module prefix? -- )
-    module name prefix? make-factor-words :> ( call-word obj-word )
+    module name prefix? make-factor-words set: ( call-word obj-word )
     obj-word module name $[ _ _ import-getattr ] ( -- o ) define-inline
     call-word obj-word def>> effect make-function-quot effect define-inline ;
 

@@ -125,21 +125,21 @@ CONSTANT: seconds-per-year 31556952 ;
 :: julian-day-number ( year month day -- n )
     ! Returns a composite date number
     ! Not valid before year -4800
-    14 month - 12 /i :> a
-    year 4800 + a - :> y
-    month 12 a * + 3 - :> m
+    14 month - 12 /i set: a
+    year 4800 + a - set: y
+    month 12 a * + 3 - set: m
 
     day 153 m * 2 + 5 /i + 365 y * +
     y 4 /i + y 100 /i - y 400 /i + 32045 - ;
 
 :: julian-day-number>date ( n -- year month day )
     ! Inverse of julian-day-number
-    n 32044 + :> a
-    4 a * 3 + 146097 /i :> b
-    a 146097 b * 4 /i - :> c
-    4 c * 3 + 1461 /i :> d
-    c 1461 d * 4 /i - :> e
-    5 e * 2 + 153 /i :> m
+    n 32044 + set: a
+    4 a * 3 + 146097 /i set: b
+    a 146097 b * 4 /i - set: c
+    4 c * 3 + 1461 /i set: d
+    c 1461 d * 4 /i - set: e
+    5 e * 2 + 153 /i set: m
 
     100 b * d + 4800 -
     m 10 /i + m 3 +
@@ -149,15 +149,15 @@ CONSTANT: seconds-per-year 31556952 ;
 GENERIC: easter ( obj -- obj' ) ;
 
 :: easter-month-day ( year -- month day )
-    year 19 mod :> a
-    year 100 /mod :> ( b c )
-    b 4 /mod :> ( d e )
-    b 8 + 25 /i :> f
-    b f - 1 + 3 /i :> g
-    19 a * b + d - g - 15 + 30 mod :> h
-    c 4 /mod :> ( i k )
-    32 2 e * + 2 i * + h - k - 7 mod :> l
-    a 11 h * + 22 l * + 451 /i :> m
+    year 19 mod set: a
+    year 100 /mod set: ( b c )
+    b 4 /mod set: ( d e )
+    b 8 + 25 /i set: f
+    b f - 1 + 3 /i set: g
+    19 a * b + d - g - 15 + 30 mod set: h
+    c 4 /mod set: ( i k )
+    32 2 e * + 2 i * + h - k - 7 mod set: l
+    a 11 h * + 22 l * + 451 /i set: m
 
     h l + 7 m * - 114 + 31 /mod 1 + ;
 

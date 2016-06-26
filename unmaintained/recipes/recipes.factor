@@ -29,19 +29,19 @@ STORED-TUPLE: recipe { title { VARCHAR 100 } } { votes INTEGER } { txt TEXT } { 
   
 :: recipe-browser ( -- ) [ [
     interface
-      <table*> :> tbl
-      "okay" <model-border-btn> BUTTON -> :> ok
-      IMG-MODEL-BTN: submit [ store-tuple ] >>value TOOLBAR -> :> submit
+      <table*> set: tbl
+      "okay" <model-border-btn> BUTTON -> set: ok
+      IMG-MODEL-BTN: submit [ store-tuple ] >>value TOOLBAR -> set: submit
       IMG-MODEL-BTN: love 1 >>value TOOLBAR ->
-      IMG-MODEL-BTN: hate -1 >>value -> 2array merge :> votes
+      IMG-MODEL-BTN: hate -1 >>value -> 2array merge set: votes
       IMG-MODEL-BTN: back -> [ -30 ] <$
-      IMG-MODEL-BTN: more -> [ 30 ] <$ 2array merge :> viewed
-      <spacer> <model-field*> ->% 1 :> search
-      submit ok [ [ drop ] ] <$ 2array merge [ drop ] >>value :> quot
+      IMG-MODEL-BTN: more -> [ 30 ] <$ 2array merge set: viewed
+      <spacer> <model-field*> ->% 1 set: search
+      submit ok [ [ drop ] ] <$ 2array merge [ drop ] >>value set: quot
       viewed 0 [ + ] fold search ok t <basic> "all" <model-btn> ALL ->
       tbl selection>> votes [ [ + ] curry change-votes modify-tuple ] 2$>
         4array merge
-        [ drop [ f ] [ "%" dup surround <pattern> ] if-empty top-recipes ] 3fmap :> ups
+        [ drop [ f ] [ "%" dup surround <pattern> ] if-empty top-recipes ] 3fmap set: ups
       ups [ top-genres [ <model-btn> GENRES -> ] map merge ] bind*
         [ text>> T{ recipe } swap >>genre get-tuples ] fmap
       tbl swap ups 2merge >>model

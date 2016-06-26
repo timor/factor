@@ -20,8 +20,8 @@ os macosx? [
     send\ CGImage ;
 
 :: CGImage>image ( image -- image )
-    image CGImageGetWidth :> w
-    image CGImageGetHeight :> h
+    image CGImageGetWidth set: w
+    image CGImageGetHeight set: h
     { w h } [
         0 0 w h <CGRect> image CGContextDrawImage
     ] make-bitmap-image ;

@@ -28,13 +28,13 @@ PRIVATE<
 : area   ( dim -- area   ) [ width ] [ height ] bi * ; inline
 
 :: (pack-stripe) ( image-placements atlas-width @y -- stripe-height/f )
-    0 :> @x!
-    f :> stripe-height!
+    0 set: @x!
+    f set: stripe-height!
     image-placements |[ ip |
         ip loc>> [
-            ip image>> dim>> :> dim
+            ip image>> dim>> set: dim
             stripe-height [ dim height stripe-height 0 or max stripe-height! ] unless
-            dim width :> w
+            dim width set: w
             atlas-width w @x + >= [
                 ip { @x @y } >>loc drop
                 @x w + @x!
@@ -44,8 +44,8 @@ PRIVATE<
     stripe-height ;
 
 :: (pack-images) ( images atlas-width sort-quot -- placements )
-    images sort-quot inv-sort-with [ f image-placement boa ] map :> image-placements
-    0 :> @y!
+    images sort-quot inv-sort-with [ f image-placement boa ] map set: image-placements
+    0 set: @y!
     [ image-placements atlas-width @y (pack-stripe) dup ] [ @y + @y! ] while drop
     image-placements ; inline
 
@@ -63,7 +63,7 @@ PRIVATE<
     [ next-power-of-2 ] map ; inline
 
 :: <atlas-image> ( image-placements component-order component-type upside-down? -- atlas )
-    image-placements atlas-dim :> dim
+    image-placements atlas-dim set: dim
     <image>
         dim >>dim
         component-order >>component-order
@@ -72,9 +72,9 @@ PRIVATE<
         dim product component-order component-type (bytes-per-pixel) * <byte-array> >>bitmap ; inline
 
 :: copy-image-into-atlas ( image-placement atlas -- )
-    image-placement image>> :> image
-    image dim>> first2 :> ( w h )
-    image-placement loc>> first2 :> ( x y )
+    image-placement image>> set: image
+    image dim>> first2 set: ( w h )
+    image-placement loc>> first2 set: ( x y )
 
     h iota |[ row |
         0  row      w  image pixel-row-slice-at
@@ -104,15 +104,15 @@ PRIVATE>
     dup dup atlas-image-format <atlas-image> [ copy-images-into-atlas ] keep ;
 
 :: image-placement>texcoords ( image-placement atlas-image -- image texcoords )
-    atlas-image dim>> first2 :> ( aw ah )
-    image-placement image>> :> image
-    image-placement loc>> first2 :> ( x y )
-    image dim>> first2 :> ( w h )
+    atlas-image dim>> first2 set: ( aw ah )
+    image-placement image>> set: image
+    image-placement loc>> first2 set: ( x y )
+    image dim>> first2 set: ( w h )
 
-    x     aw /f :> left-u
-    y     ah /f :> top-v
-    x w + aw /f :> right-u
-    y h + ah /f :> bottom-v
+    x     aw /f set: left-u
+    y     ah /f set: top-v
+    x w + aw /f set: right-u
+    y h + ah /f set: bottom-v
 
     image dup upside-down?>>
     [ left-u top-v    right-u bottom-v ]

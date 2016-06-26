@@ -132,10 +132,10 @@ CONSTANT: window-control>styleMask
 
 M:: cocoa-ui-backend (open-window) ( world -- )
     world [ [ dim>> ] dip <FactorView> ]
-    with-world-pixel-format :> view
+    with-world-pixel-format set: view
     world window-controls>> textured-background swap member-eq?
     [ view make-context-transparent ] when
-    view world [ world>NSRect ] [ world>styleMask ] bi <ViewWindow> :> window
+    view world [ world>NSRect ] [ world>styleMask ] bi <ViewWindow> set: window
     view send\ release
     world view register-window
     window world window-loc>> auto-position

@@ -8,8 +8,8 @@ IN: gtk-samples.opengl
 ! http://code.valaide.org/content/simple-opengl-sample-using-gtkglext
 
 :: on-configure ( sender event user-data -- result )
-    sender gtk_widget_get_gl_context :> gl-context
-    sender gtk_widget_get_gl_window :> gl-drawable
+    sender gtk_widget_get_gl_context set: gl-context
+    sender gtk_widget_get_gl_window set: gl-drawable
 
     gl-drawable gl-context gdk_gl_drawable_gl_begin dup
     [
@@ -18,8 +18,8 @@ IN: gtk-samples.opengl
     ] when ;
 
 :: on-expose ( sender event user-data -- result )
-    sender gtk_widget_get_gl_context :> gl-context
-    sender gtk_widget_get_gl_window :> gl-drawable
+    sender gtk_widget_get_gl_context set: gl-context
+    sender gtk_widget_get_gl_window set: gl-drawable
 
     gl-drawable gl-context gdk_gl_drawable_gl_begin dup
     [
@@ -42,14 +42,14 @@ IN: gtk-samples.opengl
     ] when ;
 
 :: opengl-win ( -- window )
-    GTK_WINDOW_TOPLEVEL gtk_window_new :> window
+    GTK_WINDOW_TOPLEVEL gtk_window_new set: window
 
     window
     [ "OpenGL" utf8 string>alien gtk_window_set_title ]
     [ 200 200 gtk_window_set_default_size ]
     [ GTK_WIN_POS_CENTER gtk_window_set_position ] tri
 
-    GDK_GL_MODE_RGBA gdk_gl_config_new_by_mode :> gl-config
+    GDK_GL_MODE_RGBA gdk_gl_config_new_by_mode set: gl-config
 
     window gl-config f t GDK_GL_RGBA_TYPE
     gtk_widget_set_gl_capability drop
@@ -67,7 +67,7 @@ IN: gtk-samples.opengl
 :: opengl-main ( -- )
     f f gtk_init
     f f gtk_gl_init
-    opengl-win :> window
+    opengl-win set: window
 
     window "destroy" utf8 string>alien
     [ 2drop gtk_main_quit ] GtkObject:destroy

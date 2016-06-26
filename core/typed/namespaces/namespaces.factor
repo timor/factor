@@ -18,7 +18,7 @@ MACRO: declare1 ( type -- quot: ( value -- value ) )
 PRIVATE>
 
 :: (typed-get) ( name type getter: ( name -- value ) -- value )
-    name getter call :> value
+    name getter call set: value
     value type instance? [ name value type variable-type-error ] unless
     value type declare1 ; inline
 

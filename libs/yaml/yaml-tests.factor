@@ -152,9 +152,9 @@ $${ many-recursive-objects-anchored } [ many-recursive-objects replace-identitie
 
 ! Advanced recursive outputs
 :: transitive-recursive-objects ( -- obj )
-  { f } :> list
-  HS{ list } :> set
-  H{ { set list } } :> hash
+  { f } set: list
+  HS{ list } set: set
+  H{ { set list } } set: hash
   hash 0 list set-nth
   list ;
 CONSTANT: transitive-recursive-objects-anchored T{ yaml-anchor f "0" {
@@ -418,10 +418,10 @@ CONSTANT: construct-merge-obj {
 } ;
 
 :: construct-merge-obj2 ( -- obj )
-    H{ { "x" 1 } { "y" 2 } } :> CENTER
-    H{ { "x" 0 } { "y" 2 } } :> LEFT
-    H{ { "r" 10 } } :> BIG
-    H{ { "r" 1 } } :> SMALL
+    H{ { "x" 1 } { "y" 2 } } set: CENTER
+    H{ { "x" 0 } { "y" 2 } } set: LEFT
+    H{ { "r" 10 } } set: BIG
+    H{ { "r" 1 } } set: SMALL
  {
     CENTER
     LEFT
@@ -496,7 +496,7 @@ $${ recursive-merge-obj } [ $\ recursive-merge-obj >yaml yaml> ] unit-test
 ! {1: 2, 2: 3, 3: {1: 2, 2: 3, 3: 100, 4: 5}}
 CONSTANT: recursive-merge-str2 "&1 {1: 2, 2: 3, 3: {4: 5, <<: *1}}" ;
 CONSTANT: recursive-merge-str3 "&1 {1: 2, 2: 3, 3: {3: 100, 4: 5, <<: *1}}" ;
-:: recursive-merge-obj2 ( -- obj ) H{ } clone :> inner
+:: recursive-merge-obj2 ( -- obj ) H{ } clone set: inner
   inner H{
   { 1 2 }
   { 2 3 }

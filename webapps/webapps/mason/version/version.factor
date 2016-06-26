@@ -25,8 +25,8 @@ IN: webapps.mason.version
 
 :: (do-release) ( version announcement-url -- )
     [
-        builder new select-tuples :> builders
-        builders first release-git-id>> :> git-id
+        builder new select-tuples set: builders
+        builders first release-git-id>> set: git-id
 
         builders check-releases
         version make-release-directory

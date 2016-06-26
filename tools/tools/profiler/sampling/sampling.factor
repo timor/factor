@@ -145,7 +145,7 @@ PRIVATE<
     key assoc [ zero-counts or sample sample-counts-slice v+ ] change-at ;
 
 :: collect-flat ( samples -- flat )
-    IH{ } clone :> per-word-samples
+    IH{ } clone set: per-word-samples
     samples |[ sample |
         sample sample-callstack members [ ignore-word? ] reject [
             per-word-samples sample counts+at
@@ -176,9 +176,9 @@ PRIVATE<
     ] if-empty ;
 
 :: collect-cross-section ( samples depth -- cross-section )
-    IH{ } clone :> per-word-samples
+    IH{ } clone set: per-word-samples
     samples |[ sample |
-        depth sample sample-callstack [ ignore-word? ] trim-tail nth-or-last :> word
+        depth sample sample-callstack [ ignore-word? ] trim-tail nth-or-last set: word
         word [
             word per-word-samples sample counts+at
         ] when

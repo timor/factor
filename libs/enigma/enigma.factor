@@ -32,9 +32,9 @@ TUPLE: enigma cogs prev-cogs reflector ;
     [ 25 > ] [ 0 < ] bi or ;
 
 :: encode ( text enigma -- cipher-text )
-    0 :> ln!
-    enigma cogs>> :> cogs
-    enigma reflector>> :> reflector
+    0 set: ln!
+    enigma cogs>> set: cogs
+    enigma reflector>> set: reflector
     text >lower [
         char: a mod dup special? [
             ln 1 + ln!

@@ -141,23 +141,23 @@ TUPLE: simd-test-failure
     ! test-quot: ( input -- input-quot: ( -- ..v ) code-quot: ( ..v -- result ) )
     ! eq-quot: ( result1 result2 -- ? )
     seq |[ input |
-        input test-quot call :> ( input-quot code-quot )
-        input-quot [ class-of ] { } map-as :> input-classes
-        input-classes code-quot $[ _ declare @ ] :> code-quot'
+        input test-quot call set: ( input-quot code-quot )
+        input-quot [ class-of ] { } map-as set: input-classes
+        input-classes code-quot $[ _ declare @ ] set: code-quot'
 
         "print-mr" get [ code-quot' regs. ] when
         "print-checks" get [ input-quot . code-quot' . ] when
 
         input-quot code-quot' [ [ call ] dip call ]
-        call( i c -- result ) :> unoptimized-result
+        call( i c -- result ) set: unoptimized-result
         input-quot code-quot' [ [ call ] dip compile-call ]
-        call( i c -- result ) :> optimized-result
+        call( i c -- result ) set: optimized-result
         input-quot code-quot' [
             t "always-inline-simd-intrinsics" [
                 "print-inline-mr" get [ code-quot' regs. ] when
                 [ call ] dip compile-call
             ] with-variable
-        ] call( i c -- result ) :> nonintrinsic-result
+        ] call( i c -- result ) set: nonintrinsic-result
 
         unoptimized-result optimized-result eq-quot call
         optimized-result nonintrinsic-result eq-quot call
@@ -486,9 +486,9 @@ simd-classes [
 
 :: test-shift-vector ( class -- ? )
     [
-        class random-int-vector :> src
-        char-16 random-shift-vector :> perm
-        { class char-16 } :> decl
+        class random-int-vector set: src
+        char-16 random-shift-vector set: perm
+        { class char-16 } set: decl
 
         src perm vshuffle
         src perm [ decl declare vshuffle ] compile-call
@@ -526,8 +526,8 @@ TUPLE: inconsistent-vector-test bool branch ;
 
 :: test-vector-tests ( vector decl -- none? any? all? )
     [
-        vector decl test-vector-tests-bool :> ( bool-none bool-any bool-all )
-        vector decl test-vector-tests-branch :> ( branch-none branch-any branch-all )
+        vector decl test-vector-tests-bool set: ( bool-none bool-any bool-all )
+        vector decl test-vector-tests-branch set: ( branch-none branch-any branch-all )
 
         bool-none branch-none ?inconsistent
         bool-any  branch-any  ?inconsistent
@@ -685,10 +685,10 @@ STRUCT: simd-struct
    axis { float-4 } declare drop
    theta { float } declare drop
 
-   theta cos float-4-with :> cc
-   theta sin float-4-with :> ss
+   theta cos float-4-with set: cc
+   theta sin float-4-with set: ss
 
-   axis cc v+ :> diagonal
+   axis cc v+ set: diagonal
 
    diagonal cc ss ; inline
 

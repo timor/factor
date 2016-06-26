@@ -107,7 +107,7 @@ ERROR: bad-tga-unsupported ;
     1 read ascii decode append [ " " = ] trim ; inline
 
 :: read-key-color ( -- color )
-    1 read le> 255 /f :> alpha
+    1 read le> 255 /f set: alpha
     1 read le> 255 /f
     1 read le> 255 /f
     1 read le> 255 /f
@@ -144,7 +144,7 @@ ERROR: bad-tga-unsupported ;
         4 iota
         [
             drop
-            2 read le> 65535 /f :> alpha
+            2 read le> 65535 /f set: alpha
             2 read le> 65535 /f
             2 read le> 65535 /f
             2 read le> 65535 /f
@@ -170,27 +170,27 @@ ERROR: bad-tga-unsupported ;
 
 :: read-tga ( -- image )
     ! Read header
-    read-id-length                                       :> id-length
-    read-color-map-type                                  :> map-type
-    read-image-type                                      :> image-type
-    read-color-map-first                                 :> map-first
-    read-color-map-length                                :> map-length
-    read-color-map-entry-size                            :> map-entry-size
-    read-x-origin                                        :> x-origin
-    read-y-origin                                        :> y-origin
-    read-image-width                                     :> image-width
-    read-image-height                                    :> image-height
-    read-pixel-depth                                     :> pixel-depth
-    read-image-descriptor                                :> ( alpha-bits pixel-order )
-    id-length read-image-id                              :> image-id
-    map-type map-length map-entry-size read-color-map    :> color-map-data
-    image-width image-height pixel-depth read-image-data :> image-data
+    read-id-length                                       set: id-length
+    read-color-map-type                                  set: map-type
+    read-image-type                                      set: image-type
+    read-color-map-first                                 set: map-first
+    read-color-map-length                                set: map-length
+    read-color-map-entry-size                            set: map-entry-size
+    read-x-origin                                        set: x-origin
+    read-y-origin                                        set: y-origin
+    read-image-width                                     set: image-width
+    read-image-height                                    set: image-height
+    read-pixel-depth                                     set: pixel-depth
+    read-image-descriptor                                set: ( alpha-bits pixel-order )
+    id-length read-image-id                              set: image-id
+    map-type map-length map-entry-size read-color-map    set: color-map-data
+    image-width image-height pixel-depth read-image-data set: image-data
 
     [
         ! Read optional footer
         26 seek-end seek-input
-        read-extension-area-offset      :> extension-offset
-        read-developer-directory-offset :> directory-offset
+        read-extension-area-offset      set: extension-offset
+        read-developer-directory-offset set: directory-offset
         read-signature
 
         ! Read optional extension section
@@ -198,35 +198,35 @@ ERROR: bad-tga-unsupported ;
         [
             extension-offset seek-absolute seek-input
             read-extension-size
-            read-author-name             :> author-name
-            read-author-comments         :> author-comments
-            read-date-timestamp          :> date-timestamp
-            read-job-name                :> job-name
-            read-job-time                :> job-time
-            read-software-id             :> software-id
-            read-software-version        :> software-version
-            read-key-color               :> key-color
-            read-pixel-aspect-ratio      :> aspect-ratio
-            read-gamma-value             :> gamma-value
-            read-color-correction-offset :> color-correction-offset
-            read-postage-stamp-offset    :> postage-stamp-offset
-            read-scan-line-offset        :> scan-line-offset
-            read-premultiplied-alpha     :> premultiplied-alpha
+            read-author-name             set: author-name
+            read-author-comments         set: author-comments
+            read-date-timestamp          set: date-timestamp
+            read-job-name                set: job-name
+            read-job-time                set: job-time
+            read-software-id             set: software-id
+            read-software-version        set: software-version
+            read-key-color               set: key-color
+            read-pixel-aspect-ratio      set: aspect-ratio
+            read-gamma-value             set: gamma-value
+            read-color-correction-offset set: color-correction-offset
+            read-postage-stamp-offset    set: postage-stamp-offset
+            read-scan-line-offset        set: scan-line-offset
+            read-premultiplied-alpha     set: premultiplied-alpha
 
             color-correction-offset 0 =
             [
                 color-correction-offset seek-absolute seek-input
-                read-color-correction-table :> color-correction-table
+                read-color-correction-table set: color-correction-table
             ] unless
 
             postage-stamp-offset 0 =
             [
                 postage-stamp-offset seek-absolute seek-input
-                pixel-depth read-postage-stamp-image :> postage-data
+                pixel-depth read-postage-stamp-image set: postage-data
             ] unless
 
             scan-line-offset seek-absolute seek-input
-            image-height read-scan-line-table :> scan-offsets
+            image-height read-scan-line-table set: scan-offsets
 
             ! Read optional developer section
             directory-offset 0 =
@@ -234,7 +234,7 @@ ERROR: bad-tga-unsupported ;
             [
                 directory-offset seek-absolute seek-input
                 read-developer-directory read-developer-areas
-            ] if :> developer-areas
+            ] if set: developer-areas
         ] unless
     ] ignore-errors
 

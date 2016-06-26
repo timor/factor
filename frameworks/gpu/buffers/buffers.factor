@@ -87,7 +87,7 @@ TYPED: buffer-size ( buffer: buffer -- size: integer )
     buffer-range boa ; inline
 
 :: allocate-buffer ( buffer size initial-data -- )
-    buffer bind-buffer :> target
+    buffer bind-buffer set: target
     target size initial-data buffer gl-buffer-usage glBufferData ; inline
 
 : allocate-byte-array ( buffer byte-array -- )
@@ -113,14 +113,14 @@ TYPED: byte-array>buffer ( byte-array
     [ byte-length ] [ ] bi <buffer> ;
 
 TYPED:: update-buffer ( buffer-ptr: buffer-ptr size: integer data -- )
-    buffer-ptr buffer>> :> buffer
-    buffer bind-buffer :> target
+    buffer-ptr buffer>> set: buffer
+    buffer bind-buffer set: target
     target buffer-ptr offset>> size data glBufferSubData ;
 
 TYPED:: read-buffer ( buffer-ptr: buffer-ptr size: integer -- data: byte-array )
-    buffer-ptr buffer>> :> buffer
-    buffer bind-buffer :> target
-    size <byte-array> :> data
+    buffer-ptr buffer>> set: buffer
+    buffer bind-buffer set: target
+    size <byte-array> set: data
     target buffer-ptr offset>> size data glGetBufferSubData
     data ;
 
@@ -140,7 +140,7 @@ TYPED: grow-buffer ( buffer: buffer target-size: integer -- )
     [ (grow-buffer-size) f allocate-buffer ] [ 3drop ] if ; inline
 
 :: with-mapped-buffer ( ..a buffer access quot: ( ..a alien -- ..b ) -- ..b )
-    buffer bind-buffer :> target
+    buffer bind-buffer set: target
     target access gl-access glMapBuffer
 
     quot call
@@ -148,7 +148,7 @@ TYPED: grow-buffer ( buffer: buffer target-size: integer -- )
     target glUnmapBuffer drop ; inline
 
 :: with-mapped-buffer-array ( ..a buffer access c-type quot: ( ..a array -- ..b ) -- ..b )
-    buffer buffer-size c-type heap-size /i :> len
+    buffer buffer-size c-type heap-size /i set: len
     buffer access [ len c-type <c-direct-array> quot call ] with-mapped-buffer ; inline
 
 :: with-bound-buffer ( ..a buffer target quot: ( ..a -- ..b ) -- ..b )

@@ -63,26 +63,26 @@ $nl
 "You can access " { $vocab-link "sequences" } " inside infix expressions with the familiar " { $snippet "seq[index]" } " notation."
 { $example
     "USING: arrays locals infix ;"
-    "let[ { 1 2 3 4 } :> myarr infix[[ myarr[4/2]*3 ]] ] ."
+    "let[ { 1 2 3 4 } set: myarr infix[[ myarr[4/2]*3 ]] ] ."
     "9"
 }
 $nl
 "You can create sub-" { $vocab-link "sequences" } " inside infix expressions using " { $snippet "seq[from:to]" } " notation."
 { $example
     "USING: arrays locals infix ;"
-    "let[ \"foobar\" :> s infix[[ s[0:3] ]] ] ."
+    "let[ \"foobar\" set: s infix[[ s[0:3] ]] ] ."
     "\"foo\""
 }
 $nl
 "Additionally, you can step through " { $vocab-link "sequences" } " with " { $snippet "seq[from:to:step]" } " notation."
 { $example
     "USING: arrays locals infix ;"
-    "let[ \"reverse\" :> s infix[[ s[::-1] ]] ] ."
+    "let[ \"reverse\" set: s infix[[ s[::-1] ]] ] ."
     "\"esrever\""
 }
 { $example
     "USING: arrays locals infix ;"
-    "let[ \"0123456789\" :> s infix[[ s[::2] ]] ] ."
+    "let[ \"0123456789\" set: s infix[[ s[::2] ]] ] ."
     "\"02468\""
 }
 ;

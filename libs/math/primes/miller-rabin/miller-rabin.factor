@@ -7,9 +7,9 @@ IN: math.primes.miller-rabin
 PRIVATE<
 
 :: (miller-rabin) ( n trials -- ? )
-    n 1 - :> n-1
-    n-1 factor-2s :> ( r s )
-    0 :> a!
+    n 1 - set: n-1
+    n-1 factor-2s set: ( r s )
+    0 set: a!
     trials iota [
         drop
         2 n 2 - [a,b] random a!

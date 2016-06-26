@@ -6,7 +6,7 @@ namespaces namespaces.private assocs accessors ;
 IN: tools.walker.debug
 
 :: test-walker ( quot -- data )
-    <promise> :> p
+    <promise> set: p
     [
         H{ } clone >n
 

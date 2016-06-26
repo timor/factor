@@ -15,8 +15,8 @@ PRIVATE<
 PRIVATE>
 
 :: write-obj ( b-rep -- )
-    b-rep vertices>> :> vertices
-    vertices >index-hash :> vx-indices
+    b-rep vertices>> set: vertices
+    vertices >index-hash set: vx-indices
 
     vertices [ write-obj-vertex ] each
     b-rep faces>> [ vx-indices write-obj-face ] each ;
@@ -25,25 +25,25 @@ PRIVATE<
 :: reconstruct-face ( face-vertices vertices -- face edges )
     face new
         dup >>base-face
-        :> face
+        set: face
     face-vertices [
-        vertices nth :> vertex
+        vertices nth set: vertex
         b-edge new
             vertex >>vertex
             face >>face
-            :> edge
+            set: edge
         vertex [ [ edge ] unless* ] change-edge drop
         edge
-    ] { } map-as :> edges
+    ] { } map-as set: edges
 
     edges 1 edges length 1 + edges <circular-slice> [ >>next-edge drop ] 2each
     face edges first >>edge
     edges ;
 
 :: reconstruct-b-rep ( vertex-positions faces-vertices -- b-rep )
-    vertex-positions [ vertex new swap >>position ] { } map-as :> vertices
-    V{ } clone :> edges
-    faces-vertices [ vertices reconstruct-face edges push-all ] { } map-as :> faces
+    vertex-positions [ vertex new swap >>position ] { } map-as set: vertices
+    V{ } clone set: edges
+    faces-vertices [ vertices reconstruct-face edges push-all ] { } map-as set: faces
 
     b-rep new
         faces >>faces
@@ -70,8 +70,8 @@ PRIVATE<
 PRIVATE>
 
 :: (read-obj) ( -- vertices faces )
-    V{ } clone :> vertices
-    V{ } clone :> faces
+    V{ } clone set: vertices
+    V{ } clone set: faces
     [
         " " split1 swap {
             { "#" [ drop ] }

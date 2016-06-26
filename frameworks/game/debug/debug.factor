@@ -105,7 +105,7 @@ CONSTANT: debug-text-texture-parameters
 :: screen-quad ( image pt dim -- float-array )
     pt dim v/ 2.0 v*n 1.0 v-n
     dup image dim>> dim v/ 2.0 v*n v+
-    [ first2 ] bi@ :> ( x0 y0 x1 y1 )
+    [ first2 ] bi@ set: ( x0 y0 x1 y1 )
     image upside-down?>>
     [ { x0 y0 0 0 x1 y0 1 0 x1 y1 1 1 x0 y1 0 1 } ]
     [ { x0 y0 0 1 x1 y0 1 1 x1 y1 1 0 x0 y1 0 0 } ]

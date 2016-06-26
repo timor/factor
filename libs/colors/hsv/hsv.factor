@@ -56,8 +56,8 @@ M: object >hsva >rgba >hsva ;
 M: hsva >hsva ; inline
 
 M:: rgba >hsva ( rgba -- hsva )
-    rgba >rgba-components :> ( r g b a )
-    r g b sort-triple :> ( z y x )
+    rgba >rgba-components set: ( r g b a )
+    r g b sort-triple set: ( z y x )
     x z = x zero? or [ 0 0 x a <hsva> ] [
         {
             { [ r x = g z = and ] [ 5 x b - x z - / + ] }

@@ -21,16 +21,16 @@ __kernel void square(
 
 :: opencl-square ( in -- out )
     [
-        in byte-length                         :> num-bytes
-        in length                              :> num-floats
-        cl-platforms first devices>> first     :> device
-        device 1array <cl-context> &dispose    :> context
-        context device f f <cl-queue> &dispose :> queue
+        in byte-length                         set: num-bytes
+        in length                              set: num-floats
+        cl-platforms first devices>> first     set: device
+        device 1array <cl-context> &dispose    set: context
+        context device f f <cl-queue> &dispose set: queue
 
         context device queue [
-            "" kernel-source 1array <cl-program> &dispose "square" <cl-kernel> &dispose :> kernel
-            cl-read-access num-bytes in <cl-buffer> &dispose :> in-buffer
-            cl-write-access num-bytes f <cl-buffer> &dispose :> out-buffer
+            "" kernel-source 1array <cl-program> &dispose "square" <cl-kernel> &dispose set: kernel
+            cl-read-access num-bytes in <cl-buffer> &dispose set: in-buffer
+            cl-write-access num-bytes f <cl-buffer> &dispose set: out-buffer
 
             kernel in-buffer out-buffer num-floats uint <ref> 3array
             { num-floats } [ ] cl-queue-kernel &dispose drop

@@ -40,7 +40,7 @@ PRIVATE>
 
 :: build-sub-tree ( in-d out-d word/quot -- nodes/f )
     [
-        in-d word/quot build-tree-with unclip-last in-d>> :> in-d'
+        in-d word/quot build-tree-with unclip-last in-d>> set: in-d'
         {
             { [ dup not ] [ ] }
             { [ dup ends-with-terminate? ] [ out-d [ f swap <#push> ] map append ] }

@@ -13,15 +13,15 @@ SYMBOLS: edge-copies phi-copies ;
     predecessors>> [ V{ } clone ] H{ } map>assoc edge-copies set ;
 
 :: convert-operand ( src pred rep -- dst )
-    rep next-vreg-rep :> dst
+    rep next-vreg-rep set: dst
     { dst src } pred edge-copies get at push
     dst ;
 
 :: convert-phi ( insn preds -- )
-    insn dst>> :> dst
-    dst rep-of :> rep
-    insn inputs>> :> inputs
-    rep next-vreg-rep :> dst'
+    insn dst>> set: dst
+    dst rep-of set: rep
+    insn inputs>> set: inputs
+    rep next-vreg-rep set: dst'
 
     { dst dst' } phi-copies get push
     dst' insn dst<<

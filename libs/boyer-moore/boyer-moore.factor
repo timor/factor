@@ -49,9 +49,9 @@ TUPLE: boyer-moore pattern bc-table gs-table ;
     find-last-integer ; inline
 
 :: (search-from) ( seq from bm -- i/f )
-    bm pattern>>      :> pat
-    pat length        :> plen
-    seq length plen - :> lim
+    bm pattern>>      set: pat
+    pat length        set: plen
+    seq length plen - set: lim
     from
     [
         dup lim <=

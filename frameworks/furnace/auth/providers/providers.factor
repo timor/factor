@@ -23,7 +23,7 @@ GENERIC: new-user ( user provider -- user/f ) ;
 ! Password recovery support
 
 :: issue-ticket ( email username provider -- user/f )
-    username provider get-user :> user
+    username provider get-user set: user
     user [
         user email>> length 0 > [
             user email>> email = [
@@ -35,7 +35,7 @@ GENERIC: new-user ( user provider -- user/f ) ;
     ] [ f ] if ;
 
 :: claim-ticket ( ticket username provider -- user/f )
-    username provider get-user :> user
+    username provider get-user set: user
     user [
         user ticket>> ticket = [
             user f >>ticket dup provider update-user

@@ -78,7 +78,7 @@ M: vreg-insn lookup-base-pointer* 2drop f ;
     ] unless ;
 
 :: visit-derived-root ( vreg derived-roots gc-roots -- )
-    vreg lookup-base-pointer :> base
+    vreg lookup-base-pointer set: base
     base [
         { vreg base } derived-roots push
         base gc-roots adjoin

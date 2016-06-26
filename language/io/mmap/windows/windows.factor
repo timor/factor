@@ -11,8 +11,8 @@ IN: io.mmap.windows
     MapViewOfFile [ win32-error=0/f ] keep ;
 
 :: mmap-open ( path length access-mode create-mode protect access -- handle handle address )
-    length 32 bits :> lo
-    length -32 shift 32 bits :> hi
+    length 32 bits set: lo
+    length -32 shift 32 bits set: hi
     { "SeCreateGlobalPrivilege" "SeLockMemoryPrivilege" } [
         path access-mode create-mode 0 open-file |dispose
         dup handle>> f protect hi lo f create-file-mapping |dispose

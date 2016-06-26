@@ -38,10 +38,10 @@ SYMBOL: current-git-id
     try-output-process ;
 
 :: upload-safely ( local username host remote -- )
-    remote ".incomplete" append :> temp
-    { username "@" host ":" temp } concat :> scp-remote
-    scp-command get :> scp
-    ssh-command get :> ssh
+    remote ".incomplete" append set: temp
+    { username "@" host ":" temp } concat set: scp-remote
+    scp-command get set: scp
+    ssh-command get set: ssh
     5 [ { scp local scp-remote } upload-process ] retry
     5 [ { ssh host "-l" username "mv" temp remote } short-running-process ] retry ;
 

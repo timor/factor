@@ -14,8 +14,8 @@ ERROR: bad-length seq ;
     dup length 45 > [ bad-length ] when ; inline
 
 :: binary>ascii ( seq -- seq' )
-    0 :> char!
-    0 :> bits!
+    0 set: char!
+    0 set: bits!
     seq check-length [
         dup length char: \s + ,
 
@@ -43,10 +43,10 @@ ERROR: illegal-character ch ;
     dup char: \s dup 64 + between? [ illegal-character ] unless ;
 
 :: ascii>binary ( seq -- seq' )
-    0 :> char!
-    0 :> bits!
+    0 set: char!
+    0 set: bits!
 
-    seq unclip-slice char: \s - :> len!
+    seq unclip-slice char: \s - set: len!
 
     [
         [ dup empty? not len 0 > and ] [

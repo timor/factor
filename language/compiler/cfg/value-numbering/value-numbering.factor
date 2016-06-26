@@ -23,7 +23,7 @@ GENERIC: process-instruction ( insn -- insn' ) ;
     [ dst>> ] dip [ swap set-vn ] [ <copy> ] 2bi ;
 
 :: useful-instruction ( insn expr -- insn' )
-    insn dst>> :> vn
+    insn dst>> set: vn
     vn vn vregs>vns get set-at
     vn expr exprs>vns get set-at
     insn vn vns>insns get set-at
