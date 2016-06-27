@@ -600,6 +600,41 @@ PRIVATE>
 : map-find-last-index ( ... seq quot: ( ... elt index -- ... result/f ) -- ... result i elt )
     [ find-last-index ] (map-find-index) ; inline
 
+: loopn-index ( n quot -- )
+    [ iota ] [ $[ @ not ] ] bi* find 2drop ; inline
+
+: loopn ( n quot -- )
+    [ drop ] prepose loopn-index ; inline
+
+ERROR: undefined-find-nth m n seq quot ;
+
+: check-trivial-find ( m n seq quot -- m n seq quot )
+    pick 0 = [ undefined-find-nth ] when ; inline
+
+: find-nth-from ( m n seq quot -- i/f elt/f )
+    check-trivial-find [ f ] 3dip $[
+        drop _ _ find-from [ dup [ 1 + ] when ] dip over
+    ] loopn [ dup [ 1 - ] when ] dip ; inline
+
+: find-nth ( n seq quot -- i/f elt/f )
+    [ 0 ] 3dip find-nth-from ; inline
+
+: find-last-nth-from ( m n seq quot -- i/f elt/f )
+    check-trivial-find [ f ] 3dip $[
+        drop _ _ find-last-from [ dup [ 1 - ] when ] dip over
+    ] loopn [ dup [ 1 + ] when ] dip ; inline
+
+: find-last-nth ( n seq quot -- i/f elt/f )
+    [ [ nip length 1 - ] [ ] 2bi ] dip find-last-nth-from ; inline
+
+ERROR: head-nth-reached-end n seq quot ;
+:: head-nth ( n seq quot -- seq' )
+    n seq quot find-nth drop [
+        [ seq ] dip 1 + head
+    ] [
+        n seq quot head-nth-reached-end
+    ] if* ; inline
+
 :: (start-all) ( subseq seq increment -- indices )
     0
     [ [ subseq seq ] dip start* dup ]

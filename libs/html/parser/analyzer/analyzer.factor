@@ -2,7 +2,8 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs combinators combinators.short-circuit
 fry html.parser http.client io kernel locals math math.statistics
-sequences sets splitting unicode urls urls.encoding shuffle ;
+sequences sequences.extras sets splitting unicode urls urls.encoding
+shuffle ;
 IN: html.parser.analyzer
 
 : scrape-html ( url -- response vector )
@@ -20,38 +21,11 @@ IN: html.parser.analyzer
 : find-all ( seq quot -- alist )
    [ <enum> >alist ] [ $[ second @ ] ] bi* filter ; inline
 
-: loopn-index ( n quot -- )
-    [ iota ] [ $[ @ not ] ] bi* find 2drop ; inline
-
-: loopn ( n quot -- )
-    [ drop ] prepose loopn-index ; inline
-
 : html-class? ( tag string -- ? )
     swap "class" attribute [ blank? ] split-when member? ;
 
 : html-id? ( tag string -- ? )
     swap "id" attribute = ;
-
-ERROR: undefined-find-nth m n seq quot ;
-
-: check-trivial-find ( m n seq quot -- m n seq quot )
-    pick 0 = [ undefined-find-nth ] when ; inline
-
-: find-nth-from ( m n seq quot -- i/f elt/f )
-    check-trivial-find [ f ] 3dip $[
-        drop _ _ find-from [ dup [ 1 + ] when ] dip over
-    ] loopn [ dup [ 1 - ] when ] dip ; inline
-
-: find-nth ( n seq quot -- i/f elt/f )
-    [ 0 ] 3dip find-nth-from ; inline
-
-: find-last-nth-from ( m n seq quot -- i/f elt/f )
-    check-trivial-find [ f ] 3dip $[
-        drop _ _ find-last-from [ dup [ 1 - ] when ] dip over
-    ] loopn [ dup [ 1 + ] when ] dip ; inline
-
-: find-last-nth ( n seq quot -- i/f elt/f )
-    [ [ nip length 1 - ] [ ] 2bi ] dip find-last-nth-from ; inline
 
 : find-first-name ( vector string -- i/f tag/f )
     >lower $[ name>> _ = ] find ; inline
