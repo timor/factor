@@ -256,4 +256,7 @@ IN: sequences.extras.tests
 [ undefined-find-nth? ] must-fail-with
 
 { { 1 1 2 1 } }
-[ 3 { 1 1 2 1 } [ 2 = not ] head-nth ] unit-test
+[ 3 { 1 1 2 1 1 1 } [ 2 = not ] head-nth-match ] unit-test
+
+{ { 1 1 2 1 } { 1 1 } }
+[ 3 { 1 1 2 1 1 1 } [ 2 = not ] cut-nth-match ] unit-test

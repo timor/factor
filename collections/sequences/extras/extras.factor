@@ -627,12 +627,20 @@ ERROR: undefined-find-nth m n seq quot ;
 : find-last-nth ( n seq quot -- i/f elt/f )
     [ [ nip length 1 - ] [ ] 2bi ] dip find-last-nth-from ; inline
 
-ERROR: head-nth-reached-end n seq quot ;
-:: head-nth ( n seq quot -- seq' )
+ERROR: combinator-nth-reached-end n seq quot ;
+
+:: head-nth-match ( n seq quot -- seq' )
     n seq quot find-nth drop [
         [ seq ] dip 1 + head
     ] [
-        n seq quot head-nth-reached-end
+        n seq quot combinator-nth-reached-end
+    ] if* ; inline
+
+:: cut-nth-match ( n seq quot -- seq' )
+    n seq quot find-nth drop [
+        [ seq ] dip 1 + head
+    ] [
+        n seq quot combinator-nth-reached-end
     ] if* ; inline
 
 :: (start-all) ( subseq seq increment -- indices )
