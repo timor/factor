@@ -221,6 +221,7 @@ PRIVATE>
     parse-noblank-token <optioned-regexp> compile-next-match
     suffix! ;
 
+SYNTAX: \ R` lexer get parse-spaceless-payload <regexp> suffix! ;
 SYNTAX: \ R`` "``" parse-optioned-regexp ;
 SYNTAX: \ R``` "```" parse-optioned-regexp ;
 SYNTAX: \ R```` "````" parse-optioned-regexp ;
