@@ -37,6 +37,9 @@ SYMBOL: add-vocab-root-hook
 SYMBOL: root-cache
 root-cache [ H{ } clone ] initialize
 
+: clear-root-cache ( -- )
+    root-cache get clear-assoc ;
+
 ERROR: not-found-in-roots path ;
 
 PRIVATE<
