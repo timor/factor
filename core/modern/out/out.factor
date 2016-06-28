@@ -41,6 +41,7 @@ CONSTANT: janky-arities H{
     `CYCLES 1 --
     `MIXIN 1 --
     `SLOT 1 --
+    `SLOT-CONSTRUCTOR 1 --
     `MAIN 1 --
     `SPECIALIZED-ARRAY 1 --
     `SPECIALIZED-VECTOR 1 --
@@ -51,6 +52,14 @@ CONSTANT: janky-arities H{
     `DESTRUCTOR 1 --
     `COMPONENT 1 --
     `FRAMEWORK 1 --
+    `REGISTER 1 --
+    `FORWARD-ANALYSIS 1 --
+    `BACKWARD-ANALYSIS 1 --
+    `VECTORED-STRUCT 1 --
+    `IMPORT 1 --
+    `GIR 1 --
+    `PIXEL-FORMAT-ATTRIBUTE-TABLE 1 --
+    `TEST 1 --
 
     `ALIAS 2 --
     `ARITY 2 --
