@@ -48,7 +48,6 @@ CONSTANT: janky-arities H{
     `HOOK 3
 } ;
 
-DEFER: write-literal
 GENERIC: write-literal ( obj -- ) ;
 ! M: object write-literal lexed-underlying write ;
 M: string write-literal write ;
@@ -234,22 +233,24 @@ M: compound-sequence-literal write-literal
     ] if ; inline recursive
 
 
-GENERIC: split-arity ( obj -- seq ) ;
+GENERIC: fixup-arity ( obj -- seq ) ;
 
-M: uppercase-colon-literal split-arity
-    dup { [ uppercase-colon-literal? ] [ tag>> janky-arities at ] } 1&& [
-        dup tag>> janky-arities at
+ERROR: closing-tag-required2 obj ;
+M: uppercase-colon-literal fixup-arity
+    dup tag>> janky-arities ?at [
         $[ _ swap [ any-comment? not ] cut-nth-match swap ] change-payload
         swap 2array
         dup first f >>closing-tag drop
         ! dup first " ;" >>closing-tag drop
-    ] when ;
+    ] [
+        drop
+        dup closing-tag>> [ closing-tag-required2 ] unless
+    ] if ;
 
-M: less-than-literal split-arity
-    [ [ split-arity ] map ] change-payload ;
+M: less-than-literal fixup-arity
+    [ [ fixup-arity ] map ] change-payload ;
 
-M: object split-arity ;
-
+M: object fixup-arity ;
 
 : rewrite-path ( path quot -- )
     ! dup print
@@ -257,7 +258,7 @@ M: object split-arity ;
         [
             path>literals
             [ _ map-literals ] map
-            [ split-arity ] map
+            [ fixup-arity ] map
         ] [ ] bi write-modern-path ]
     [ drop . ] recover ; inline
 
@@ -265,7 +266,7 @@ M: object split-arity ;
     ! dup print
     [ string>literals ] dip $[ _ map-literals ] map
     ! colons
-    [ split-arity ] map
+    [ fixup-arity ] map
     write-modern-string ; inline
 
 : rewrite-paths ( seq quot -- ) $[ _ rewrite-path ] each ; inline
