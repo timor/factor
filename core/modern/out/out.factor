@@ -233,10 +233,6 @@ M: compound-sequence-literal write-literal
         call
     ] if ; inline recursive
 
-: rewrite-path ( path quot -- )
-    ! dup print
-    $[ [ path>literals [ _ map-literals ] map ] [ ] bi write-modern-path ]
-    [ drop . ] recover ; inline
 
 GENERIC: split-arity ( obj -- seq ) ;
 
@@ -253,6 +249,17 @@ M: less-than-literal split-arity
     [ [ split-arity ] map ] change-payload ;
 
 M: object split-arity ;
+
+
+: rewrite-path ( path quot -- )
+    ! dup print
+    $[
+        [
+            path>literals
+            [ _ map-literals ] map
+            [ split-arity ] map
+        ] [ ] bi write-modern-path ]
+    [ drop . ] recover ; inline
 
 : rewrite-string ( string quot -- )
     ! dup print
