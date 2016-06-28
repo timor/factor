@@ -25,56 +25,18 @@ SYMBOL: last-slice
     ] [ drop last-slice namespaces:set ] 2bi ;
 
 CONSTANT: janky-arities H{
-    `DEFER 1 --
-    `FORGET 1 --
-    `IN 1 --
-    `USE 1 --
-    `UNUSE 1 --
-    `SYMBOL 1 --
-    `SINGLETON 1 --
-    `B 1 --
-    `MAIN 1 --
-    `LEFT-DECORATOR 1 --
-    `ABOUT 1 --
-    `SOLUTION 1 --
-    `OPCODE 1 --
-    `CYCLES 1 --
-    `MIXIN 1 --
-    `SLOT 1 --
-    `SLOT-CONSTRUCTOR 1 --
-    `MAIN 1 --
-    `SPECIALIZED-ARRAY 1 --
-    `SPECIALIZED-VECTOR 1 --
-    `8-BIT 1 --
-    `TUPLE-ARRAY 1 --
-    `C-TYPE 1 --
-    `LIBRARY 1 --
-    `DESTRUCTOR 1 --
-    `COMPONENT 1 --
-    `FRAMEWORK 1 --
-    `REGISTER 1 --
-    `FORWARD-ANALYSIS 1 --
-    `BACKWARD-ANALYSIS 1 --
-    `VECTORED-STRUCT 1 --
-    `IMPORT 1 --
-    `GIR 1 --
-    `TEST 1 --
-    `SELECTOR 1 --
-    `SIMD-128 1 --
-    `QUALIFIED 1 --
+    `DEFER 1 -- `FORGET 1 -- `IN 1 -- `USE 1 -- `UNUSE 1 --
+    `SYMBOL 1 -- `SINGLETON 1 -- `B 1 -- `MAIN 1 -- `LEFT-DECORATOR 1 --
+    `ABOUT 1 -- `SOLUTION 1 -- `OPCODE 1 -- `CYCLES 1 -- `MIXIN 1 --
+    `SLOT 1 -- `SLOT-CONSTRUCTOR 1 -- `MAIN 1 --
+    `SPECIALIZED-ARRAY 1 -- `SPECIALIZED-VECTOR 1 -- `8-BIT 1 -- `TUPLE-ARRAY 1 --
+    `C-TYPE 1 -- `LIBRARY 1 -- `DESTRUCTOR 1 -- `COMPONENT 1 -- `FRAMEWORK 1 --
+    `REGISTER 1 -- `FORWARD-ANALYSIS 1 -- `BACKWARD-ANALYSIS 1 -- `VECTORED-STRUCT 1 --
+    `IMPORT 1 -- `GIR 1 -- `TEST 1 -- `SELECTOR 1 -- `SIMD-128 1 -- `QUALIFIED 1 --
 
-    `ALIAS 2 --
-    `ARITY 2 --
-    `C 2 --
-    `CONSTANT 2 --
-    `INSTANCE 2 --
-    `GENERIC 2 --
-    `PRIMITIVE 2 --
+    `ALIAS 2 -- `ARITY 2 -- `C 2 -- `CONSTANT 2 -- `INSTANCE 2 -- `GENERIC 2 -- `PRIMITIVE 2 --
 
-    `GENERIC# 3 --
-    `PIXEL-FORMAT-ATTRIBUTE-TABLE 3 --
-    `HOOK 3
-
+    `GENERIC# 3 -- `PIXEL-FORMAT-ATTRIBUTE-TABLE 3 -- `HOOK 3
 } ;
 
 GENERIC: write-literal ( obj -- ) ;
