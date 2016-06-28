@@ -58,10 +58,10 @@ CONSTANT: janky-arities H{
     `VECTORED-STRUCT 1 --
     `IMPORT 1 --
     `GIR 1 --
-    `PIXEL-FORMAT-ATTRIBUTE-TABLE 1 --
     `TEST 1 --
     `SELECTOR 1 --
     `SIMD-128 1 --
+    `QUALIFIED 1 --
 
     `ALIAS 2 --
     `ARITY 2 --
@@ -70,10 +70,11 @@ CONSTANT: janky-arities H{
     `INSTANCE 2 --
     `GENERIC 2 --
     `PRIMITIVE 2 --
-    `QUALIFIED 2 --
 
     `GENERIC# 3 --
+    `PIXEL-FORMAT-ATTRIBUTE-TABLE 3 --
     `HOOK 3
+
 } ;
 
 GENERIC: write-literal ( obj -- ) ;
@@ -288,7 +289,7 @@ M: object fixup-arity ;
             [ _ map-literals ] map
             [ fixup-arity ] map
         ] [ ] bi write-modern-path ]
-    [ drop . ] recover ; inline
+    [ B drop . ] recover ; inline
 
 : rewrite-string ( string quot -- )
     ! dup print
