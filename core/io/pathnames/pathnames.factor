@@ -1,8 +1,31 @@
 ! Copyright (C) 2004, 2009 Slava Pestov, Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors combinators io.backend kernel math math.order
-namespaces sequences splitting strings system ;
+USING: accessors arrays combinators io.backend kernel math
+math.order namespaces sequences sequences.private splitting
+strings system ;
 IN: io.pathnames
+
+TUPLE: pathname string ;
+C: <pathname> pathname ;
+
+M: pathname nth string>> nth ;
+M: pathname nth-unsafe string>> nth-unsafe ;
+M: pathname length string>> length ;
+M: pathname like drop dup pathname? [ <pathname> ] unless ;
+M: pathname string-lines normalize-path 1array ;
+
+TUPLE: resource-path < pathname ;
+C: <resource-path> resource-path ;
+
+TUPLE: vocab-path < pathname ;
+C: <vocab-path> vocab-path ;
+
+TUPLE: home-path < pathname ;
+C: <home-path> home-path ;
+
+M: resource-path like drop dup pathname? [ <resource-path> ] unless ;
+M: vocab-path like drop dup pathname? [ <vocab-path> ] unless ;
+M: home-path like drop dup pathname? [ <home-path> ] unless ;
 
 SYMBOL: current-directory
 
@@ -162,10 +185,6 @@ M: string absolute-path
 
 M: object normalize-path ( path -- path' )
     absolute-path ;
-
-TUPLE: pathname string ;
-
-C: <pathname> pathname ;
 
 M: pathname absolute-path string>> absolute-path ;
 

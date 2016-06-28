@@ -18,6 +18,8 @@ IN: bootstrap.syntax
         "[[" "[=[" "[==["
         "factor[[" "factor[=[" "factor[==["
         "factor\""
+        "resource\"" "vocab\"" "home\""
+        "resource`" "vocab`" "home`"
         "PRIVATE<"
         "B{"
         "BV{"

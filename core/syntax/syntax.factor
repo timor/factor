@@ -124,6 +124,30 @@ IN: bootstrap.syntax
         "]==]" parse-multiline-string suffix!
     ] define-core-syntax
 
+    "resource\"" [
+        "\"" parse-multiline-string-new <resource-path> suffix!
+    ] define-core-syntax
+
+    "resource`" [
+        lexer get parse-spaceless-payload <resource-path> suffix!
+    ] define-core-syntax
+
+    "vocab\"" [
+        "\"" parse-multiline-string-new <vocab-path> suffix!
+    ] define-core-syntax
+
+    "vocab`" [
+        lexer get parse-spaceless-payload <vocab-path> suffix!
+    ] define-core-syntax
+
+    "home\"" [
+        "\"" parse-multiline-string-new <home-path> suffix!
+    ] define-core-syntax
+
+    "home`" [
+        lexer get parse-spaceless-payload <home-path> suffix!
+    ] define-core-syntax
+
     "PRIMITIVE:" [
         current-vocab name>>
         scan-word scan-effect ";" expect ensure-primitive
