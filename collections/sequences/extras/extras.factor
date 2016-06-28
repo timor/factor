@@ -636,9 +636,9 @@ ERROR: combinator-nth-reached-end n seq quot ;
         n seq quot combinator-nth-reached-end
     ] if* ; inline
 
-:: cut-nth-match ( n seq quot -- seq' )
+:: cut-nth-match ( n seq quot -- head tail )
     n seq quot find-nth drop [
-        [ seq ] dip 1 + head
+        [ seq ] dip 1 + cut
     ] [
         n seq quot combinator-nth-reached-end
     ] if* ; inline
