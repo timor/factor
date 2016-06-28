@@ -259,8 +259,8 @@ M: manifest definitions-changed
 
 PRIVATE>
 
-: with-manifest ( quot -- )
-    <manifest> manifest [
+: (with-manifest) ( quot manifest -- )
+    manifest [
         [ call ] [
             [ manifest get add-definition-observer call ]
             [ manifest get remove-definition-observer ]
@@ -268,3 +268,9 @@ PRIVATE>
             cleanup
         ] if-bootstrapping
     ] with-variable ; inline
+
+: with-manifest ( quot -- )
+    <manifest> (with-manifest) ; inline
+
+: with-current-manifest ( quot -- )
+    manifest get (with-manifest) ; inline
