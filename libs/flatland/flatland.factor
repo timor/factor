@@ -2,56 +2,55 @@
 USING: accessors arrays combinators combinators.short-circuit
 fry kernel locals math math.intervals math.vectors multi-methods
 sequences ;
-FROM: multi-methods => GENERIC: ;
 IN: flatland
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 ! Two dimensional world protocol
 
-GENERIC: x ( obj -- x ) ;
-GENERIC: y ( obj -- y ) ;
+multi-methods:GENERIC: x ( obj -- x ) ;
+multi-methods:GENERIC: y ( obj -- y ) ;
 
-GENERIC: (x!) ( x obj -- ) ;
-GENERIC: (y!) ( y obj -- ) ;
+multi-methods:GENERIC: (x!) ( x obj -- ) ;
+multi-methods:GENERIC: (y!) ( y obj -- ) ;
 
 : x! ( obj x -- obj ) over (x!) ;
 : y! ( obj y -- obj ) over (y!) ;
 
-GENERIC: width  ( obj -- width  ) ;
-GENERIC: height ( obj -- height ) ;
+multi-methods:GENERIC: width  ( obj -- width  ) ;
+multi-methods:GENERIC: height ( obj -- height ) ;
 
-GENERIC: (width!)  ( width  obj -- ) ;
-GENERIC: (height!) ( height obj -- ) ;
+multi-methods:GENERIC: (width!)  ( width  obj -- ) ;
+multi-methods:GENERIC: (height!) ( height obj -- ) ;
 
 : width!  ( obj width  -- obj ) over (width!) ;
 : height! ( obj height -- obj ) over (width!) ;
 
 ! Predicates on relative placement
 
-GENERIC: to-the-left-of?  ( obj obj -- ? ) ;
-GENERIC: to-the-right-of? ( obj obj -- ? ) ;
+multi-methods:GENERIC: to-the-left-of?  ( obj obj -- ? ) ;
+multi-methods:GENERIC: to-the-right-of? ( obj obj -- ? ) ;
 
-GENERIC: below? ( obj obj -- ? ) ;
-GENERIC: above? ( obj obj -- ? ) ;
+multi-methods:GENERIC: below? ( obj obj -- ? ) ;
+multi-methods:GENERIC: above? ( obj obj -- ? ) ;
 
-GENERIC: in-between-horizontally? ( obj obj -- ? ) ;
+multi-methods:GENERIC: in-between-horizontally? ( obj obj -- ? ) ;
 
-GENERIC: horizontal-interval ( obj -- interval ) ;
+multi-methods:GENERIC: horizontal-interval ( obj -- interval ) ;
 
-GENERIC: move-to ( obj obj -- ) ;
+multi-methods:GENERIC: move-to ( obj obj -- ) ;
 
-GENERIC: move-by ( obj delta -- ) ;
+multi-methods:GENERIC: move-by ( obj delta -- ) ;
 
-GENERIC: move-left-by  ( obj obj -- ) ;
-GENERIC: move-right-by ( obj obj -- ) ;
+multi-methods:GENERIC: move-left-by  ( obj obj -- ) ;
+multi-methods:GENERIC: move-right-by ( obj obj -- ) ;
 
-GENERIC: left   ( obj -- left   ) ;
-GENERIC: right  ( obj -- right  ) ;
-GENERIC: bottom ( obj -- bottom ) ;
-GENERIC: top    ( obj -- top    ) ;
+multi-methods:GENERIC: left   ( obj -- left   ) ;
+multi-methods:GENERIC: right  ( obj -- right  ) ;
+multi-methods:GENERIC: bottom ( obj -- bottom ) ;
+multi-methods:GENERIC: top    ( obj -- top    ) ;
 
-GENERIC: distance ( a b -- c ) ;
+multi-methods:GENERIC: distance ( a b -- c ) ;
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -216,7 +215,7 @@ METHOD: above? { sequence <rectangle> } [ y ] [ top    ] bi* > ;
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-GENERIC: within? ( a b -- ? ) ;
+multi-methods:GENERIC: within? ( a b -- ? ) ;
 
 METHOD: within? { <pos> <rectangle> }
   {
