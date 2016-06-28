@@ -35,6 +35,10 @@ CONSTANT: janky-arities H{
     `B 1 --
     `MAIN 1 --
     `LEFT-DECORATOR 1 --
+    `ABOUT 1 --
+    `SOLUTION 1 --
+    `OPCODE 1 --
+    `CYCLES 1 --
 
     `ALIAS 2 --
     `ARITY 2 --
@@ -240,7 +244,7 @@ M: uppercase-colon-literal fixup-arity
     dup tag>> janky-arities ?at [
         $[ _ swap [ any-comment? not ] cut-nth-match swap ] change-payload
         swap 2array
-        dup first f >>closing-tag drop
+        ! dup first f >>closing-tag drop
         ! dup first " ;" >>closing-tag drop
     ] [
         drop
