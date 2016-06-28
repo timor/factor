@@ -150,7 +150,7 @@ IN: bootstrap.syntax
 
     "PRIMITIVE:" [
         current-vocab name>>
-        scan-word scan-effect ";" expect ensure-primitive
+        scan-word scan-effect ensure-primitive
     ] define-core-syntax
 
     "CS{" [
@@ -171,7 +171,7 @@ IN: bootstrap.syntax
 
     "QUALIFIED:" [ scan-token dup add-qualified ] define-core-syntax
 
-    "QUALIFIED-WITH:" [ scan-token scan-token ";" expect add-qualified ] define-core-syntax
+    "QUALIFIED-WITH:" [ scan-token scan-token add-qualified ] define-core-syntax
 
     "FROM:" [
         scan-token "=>" expect ";" parse-tokens add-words-from
@@ -265,11 +265,11 @@ IN: bootstrap.syntax
 
 
     "ALIAS:" [
-        scan-new-escaped scan-escaped-word ";" expect define-alias
+        scan-new-escaped scan-escaped-word define-alias
     ] define-core-syntax
 
     "CONSTANT:" [
-        scan-new-word scan-object ";" expect define-constant
+        scan-new-word scan-object define-constant
     ] define-core-syntax
 
     ":" [
@@ -310,7 +310,7 @@ IN: bootstrap.syntax
 
     "INSTANCE:" [
         location [
-            scan-word scan-word ";" expect 2dup add-mixin-instance
+            scan-word scan-word 2dup add-mixin-instance
             <mixin-instance>
         ] dip remember-definition
     ] define-core-syntax
@@ -342,7 +342,7 @@ IN: bootstrap.syntax
     ] define-core-syntax
 
     "C:" [
-        scan-new-word scan-word ";" expect define-boa-word
+        scan-new-word scan-word define-boa-word
     ] define-core-syntax
 
     "ERROR:" [

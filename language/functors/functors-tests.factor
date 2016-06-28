@@ -1,6 +1,6 @@
 USING: classes.struct classes.tuple functors tools.test math
 words kernel parser io.streams.string generic ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 IN: functors.tests
 
 COMPILE<
@@ -14,7 +14,7 @@ WHERE
 
 TUPLE: B { value T } ;
 
-C: <B> B ;
+C: <B> B
 
 FUNCTOR>
 
@@ -90,7 +90,7 @@ W DEFINES ${W}
 
 WHERE
 
-GENERIC: W ( a -- b ) ;
+GENERIC: W ( a -- b )
 M: object W ;
 M: integer W 1 + ;
 
@@ -137,7 +137,7 @@ WHERE
 
 TUPLE: W-tuple ;
 : W-word ( -- ) ;
-GENERIC: W-generic ( a -- b ) ;
+GENERIC: W-generic ( a -- b )
 M: W-tuple W-generic ;
 SYMBOL: W-symbol
 

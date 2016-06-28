@@ -17,7 +17,7 @@ TUPLE: fake-call-next-method ;
 
 TUPLE: fake-quotation seq ;
 
-GENERIC: >fake-quotations ( quot -- fake ) ;
+GENERIC: >fake-quotations ( quot -- fake )
 
 M: callable >fake-quotations
     >array >fake-quotations fake-quotation boa ;
@@ -26,7 +26,7 @@ M: array >fake-quotations [ >fake-quotations ] { } map-as ;
 
 M: object >fake-quotations ;
 
-GENERIC: (fake-quotations>) ( fake -- ) ;
+GENERIC: (fake-quotations>) ( fake -- )
 
 : fake-quotations> ( fake -- quot )
     [ (fake-quotations>) ] [ ] make ;
@@ -107,13 +107,11 @@ FUNCTOR-SYNTAX: \ SYNTAX:
 FUNCTOR-SYNTAX: \ INSTANCE:
     scan-param suffix!
     scan-param suffix!
-    ";" expect
     \ add-mixin-instance suffix! ;
 
 FUNCTOR-SYNTAX: \ GENERIC:
     scan-param suffix!
     scan-effect suffix!
-    ";" expect
     \ define-simple-generic* suffix! ;
 
 FUNCTOR-SYNTAX: \ MACRO:
