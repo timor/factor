@@ -4,8 +4,6 @@ grouping kernel locals math math.intervals math.order
 math.rectangles math.vectors namespaces opengl opengl.gl
 opengl.glu processing.shapes sequences sequences.generalizations
 shuffle threads ui ui.gadgets ui.gestures ui.render ;
-FROM: multi-methods => GENERIC: METHOD: ;
-FROM: syntax => M: ;
 IN: pong
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -85,10 +83,10 @@ TUPLE: <ball> < <vel>
 
 ! Protocol for drawing PONG objects
 
-GENERIC: draw ( obj -- ) ;
+multi-methods:GENERIC: draw ( obj -- ) ;
 
-METHOD: draw { <paddle> } [ bottom-left ] [ dim>>          ] bi rectangle ;
-METHOD: draw { <ball>   } [ pos>>       ] [ diameter>> 2 / ] bi circle    ;
+multi-methods:METHOD: draw { <paddle> } [ bottom-left ] [ dim>>          ] bi rectangle ;
+multi-methods:METHOD: draw { <ball>   } [ pos>>       ] [ diameter>> 2 / ] bi circle    ;
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
