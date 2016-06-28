@@ -3,8 +3,8 @@
 USING: alien.c-types alien.syntax calendar literals math ;
 IN: core-foundation.time
 
-TYPEDEF: double CFTimeInterval ;
-TYPEDEF: double CFAbsoluteTime ;
+TYPEDEF: double CFTimeInterval
+TYPEDEF: double CFAbsoluteTime
 
 ALIAS: >CFTimeInterval duration>seconds
 

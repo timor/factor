@@ -11,13 +11,13 @@ COMPILE< "curses" {
 } cond cdecl add-library COMPILE>
 
 C-TYPE: SCREEN
-TYPEDEF: void* va_list ;
+TYPEDEF: void* va_list
 
-TYPEDEF: uint chtype ;
-TYPEDEF: chtype attr_t ;
-TYPEDEF: short NCURSES_SIZE_T ;
-TYPEDEF: ushort wchar_t ;
-TYPEDEF: ulong mmask_t ;
+TYPEDEF: uint chtype
+TYPEDEF: chtype attr_t
+TYPEDEF: short NCURSES_SIZE_T
+TYPEDEF: ushort wchar_t
+TYPEDEF: ulong mmask_t
 
 CONSTANT: CCHARW_MAX  5
 
@@ -83,7 +83,7 @@ STRUCT: MEVENT
 
 LIBRARY: curses
 
-C-GLOBAL: void* stdscr ;
+C-GLOBAL: void* stdscr
 
 FUNCTION: WINDOW* initscr ( ) ;
 FUNCTION: int endwin ( ) ;
@@ -248,8 +248,8 @@ FUNCTION: bool can_change_color ( ) ;
 FUNCTION: int color_content ( short color, short* r, short* g, short* b ) ;
 FUNCTION: int pair_content ( short pair, short* f, short* b ) ;
 
-C-GLOBAL: int COLORS ;
-C-GLOBAL: int COLOR_PAIRS ;
+C-GLOBAL: int COLORS
+C-GLOBAL: int COLOR_PAIRS
 
 : COLOR_PAIR ( n -- n' ) 8 shift ; inline foldable
 

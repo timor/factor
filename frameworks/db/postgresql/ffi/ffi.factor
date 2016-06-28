@@ -53,17 +53,17 @@ CONSTANT: PQERRORS_VERBOSE                  0x2
 
 CONSTANT: InvalidOid 0
 
-TYPEDEF: int ConnStatusType ;
-TYPEDEF: int ExecStatusType ;
-TYPEDEF: int PostgresPollingStatusType ;
-TYPEDEF: int PGTransactionStatusType ;
-TYPEDEF: int PGVerbosity ;
+TYPEDEF: int ConnStatusType
+TYPEDEF: int ExecStatusType
+TYPEDEF: int PostgresPollingStatusType
+TYPEDEF: int PGTransactionStatusType
+TYPEDEF: int PGVerbosity
 
 C-TYPE: PGconn
 C-TYPE: PGresult
 C-TYPE: PGcancel
-TYPEDEF: uint Oid ;
-TYPEDEF: char pqbool ;
+TYPEDEF: uint Oid
+TYPEDEF: char pqbool
 C-TYPE: PQconninfoOption
 C-TYPE: PGnotify
 C-TYPE: PQArgBlock

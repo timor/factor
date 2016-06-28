@@ -8,7 +8,7 @@ IN: xml.syntax.tests
 
 ! TAGS test
 
-TAGS: calculate ( tag -- n ) ;
+TAGS: calculate ( tag -- n )
 
 : calc-2children ( tag -- n n )
     children-tags first2 [ calculate ] dip calculate ;
@@ -34,7 +34,7 @@ TAG: neg calculate
     calc-arith
 ] unit-test
 
-XML-NS: foo http://blah.com ;
+XML-NS: foo http://blah.com
 
 { T{ name { main "bling" } { url "http://blah.com" } } } [ "bling" foo ] unit-test
 

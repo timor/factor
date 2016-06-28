@@ -12,7 +12,7 @@ FUNCTION: void GdipFree ( void* mem ) ;
 
 DESTRUCTOR: GdipFree
 
-TYPEDEF: float REAL ;
+TYPEDEF: float REAL
 
 ENUM: GpStatus
     { Ok                          0 }
@@ -39,8 +39,8 @@ ENUM: GpStatus
     { ProfileNotFound            21 } ;
 
 CALLBACK: BOOL ImageAbort ( void* data ) ;
-TYPEDEF: ImageAbort DrawImageAbort ;
-TYPEDEF: ImageAbort GetThumbnailImageAbort ;
+TYPEDEF: ImageAbort DrawImageAbort
+TYPEDEF: ImageAbort GetThumbnailImageAbort
 
 STRUCT: GpPoint
     { X INT }
@@ -71,8 +71,8 @@ STRUCT: CharacterRange
     { First INT }
     { Length INT } ;
 
-TYPEDEF: UINT GraphicsState ;
-TYPEDEF: UINT GraphicsContainer ;
+TYPEDEF: UINT GraphicsState
+TYPEDEF: UINT GraphicsContainer
 
 ENUM: GpUnit
     { UnitWorld       0 }
@@ -427,8 +427,8 @@ STRUCT: GdiplusStartupOutput
 FUNCTION: GpStatus GdiplusStartup ( ULONG_PTR* x, GdiplusStartupInput* in, GdiplusStartupOutput* out ) ;
 FUNCTION: void GdiplusShutdown ( ULONG_PTR x ) ;
 
-TYPEDEF: DWORD ARGB ;
-TYPEDEF: INT PixelFormat ;
+TYPEDEF: DWORD ARGB
+TYPEDEF: INT PixelFormat
 
 PRIVATE<
 : pixel-format-constant ( n m l -- format )

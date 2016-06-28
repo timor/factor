@@ -3,9 +3,9 @@
 USING: alien.c-types alien.syntax classes.struct ;
 IN: cocoa.runtime
 
-TYPEDEF: void* SEL ;
+TYPEDEF: void* SEL
 
-TYPEDEF: void* id ;
+TYPEDEF: void* id
 
 FUNCTION: c-string sel_getName ( SEL aSelector ) ;
 
@@ -13,9 +13,9 @@ FUNCTION: char sel_isMapped ( SEL aSelector ) ;
 
 FUNCTION: SEL sel_registerName ( c-string str ) ;
 
-TYPEDEF: void* Class ;
-TYPEDEF: void* Method ;
-TYPEDEF: void* Protocol ;
+TYPEDEF: void* Class
+TYPEDEF: void* Method
+TYPEDEF: void* Protocol
 
 STRUCT: objc-super
     { receiver id }

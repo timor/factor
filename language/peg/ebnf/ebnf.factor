@@ -558,7 +558,7 @@ SYNTAX: \ EBNF((
     suffix! \ call suffix! reset-tokenizer ;
 
 SYNTAX: \ EBNF:
-    reset-tokenizer scan-new-word dup scan-object ";" expect
+    reset-tokenizer scan-new-word dup scan-object
     ebnf>quot swapd
     ( input -- ast ) define-declared "ebnf-parser" set-word-prop
     reset-tokenizer ;

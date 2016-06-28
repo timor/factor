@@ -23,14 +23,14 @@ STRUCT: SMPTETime
     { mSeconds         SInt16 }
     { mFrames          SInt16 } ;
 
-CFSTRING: QTKitErrorDomain "QTKitErrorDomain" ;
-CFSTRING: QTErrorCaptureInputKey "QTErrorCaptureInputKey" ;
-CFSTRING: QTErrorCaptureOutputKey "QTErrorCaptureOutputKey" ;
-CFSTRING: QTErrorDeviceKey "QTErrorDeviceKey" ;
-CFSTRING: QTErrorExcludingDeviceKey "QTErrorExcludingDeviceKey" ;
-CFSTRING: QTErrorTimeKey "QTErrorTimeKey" ;
-CFSTRING: QTErrorFileSizeKey "QTErrorFileSizeKey" ;
-CFSTRING: QTErrorRecordingSuccesfullyFinishedKey "QTErrorRecordingSuccesfullyFinishedKey" ;
+CFSTRING: QTKitErrorDomain "QTKitErrorDomain"
+CFSTRING: QTErrorCaptureInputKey "QTErrorCaptureInputKey"
+CFSTRING: QTErrorCaptureOutputKey "QTErrorCaptureOutputKey"
+CFSTRING: QTErrorDeviceKey "QTErrorDeviceKey"
+CFSTRING: QTErrorExcludingDeviceKey "QTErrorExcludingDeviceKey"
+CFSTRING: QTErrorTimeKey "QTErrorTimeKey"
+CFSTRING: QTErrorFileSizeKey "QTErrorFileSizeKey"
+CFSTRING: QTErrorRecordingSuccesfullyFinishedKey "QTErrorRecordingSuccesfullyFinishedKey"
 
 CONSTANT: QTErrorUnknown                                      -1
 CONSTANT: QTErrorIncompatibleInput                          1002

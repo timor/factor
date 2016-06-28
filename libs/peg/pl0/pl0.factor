@@ -24,4 +24,4 @@ factor      = ident | number | "(" expression ")"
 ident       = (([a-zA-Z])+)   => [[ >string ]]
 number      = ([0-9])+        => [[ string>number ]]
 program     = { block "." }
-]=] ;
+]=]

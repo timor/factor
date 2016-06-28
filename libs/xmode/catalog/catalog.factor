@@ -6,7 +6,7 @@ IN: xmode.catalog
 
 TUPLE: mode file file-name-glob first-line-glob ;
 
-TAGS: parse-mode-tag ( modes tag -- ) ;
+TAGS: parse-mode-tag ( modes tag -- )
 
 TAG: MODE parse-mode-tag
     dup "NAME" attr [

@@ -66,7 +66,7 @@ CONSTANT: TDBQPOUT  2
 CONSTANT: TDBQPSTOP 16777216
 
 ! int (*)(const void *pkbuf, int pksiz, TCMAP *cols, void *op);
-TYPEDEF: void* TDBQRYPROC ;
+TYPEDEF: void* TDBQRYPROC
 
 FUNCTION: c-string tctdberrmsg ( int ecode ) ;
 FUNCTION: TCTDB* tctdbnew ( ) ;

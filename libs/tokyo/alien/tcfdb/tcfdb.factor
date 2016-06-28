@@ -4,7 +4,7 @@ USING: alien alien.c-types alien.libraries alien.syntax
 combinators kernel tokyo.alien.tcutil ;
 IN: tokyo.alien.tcfdb
 
-TYPEDEF: void* TCFDB ;
+TYPEDEF: void* TCFDB
 
 CONSTANT: FDBFOPEN  1
 CONSTANT: FDBFFATAL 2

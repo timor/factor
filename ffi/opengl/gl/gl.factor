@@ -7,26 +7,26 @@ io.encodings.ascii kernel opengl.gl.extensions system ;
 FROM: alien.c-types => short ;
 IN: opengl.gl
 
-TYPEDEF: uint    GLenum ;
-TYPEDEF: uchar   GLboolean ;
-TYPEDEF: uint    GLbitfield ;
-TYPEDEF: char    GLbyte ;
-TYPEDEF: short   GLshort ;
-TYPEDEF: int     GLint ;
-TYPEDEF: int     GLsizei ;
-TYPEDEF: uchar   GLubyte ;
-TYPEDEF: ushort  GLushort ;
-TYPEDEF: uint    GLuint ;
-TYPEDEF: float   GLfloat ;
-TYPEDEF: float   GLclampf ;
-TYPEDEF: double  GLdouble ;
-TYPEDEF: double  GLclampd ;
-TYPEDEF: longlong  GLint64 ;
-TYPEDEF: ulonglong GLuint64 ;
-TYPEDEF: void*     GLsync ;
+TYPEDEF: uint    GLenum
+TYPEDEF: uchar   GLboolean
+TYPEDEF: uint    GLbitfield
+TYPEDEF: char    GLbyte
+TYPEDEF: short   GLshort
+TYPEDEF: int     GLint
+TYPEDEF: int     GLsizei
+TYPEDEF: uchar   GLubyte
+TYPEDEF: ushort  GLushort
+TYPEDEF: uint    GLuint
+TYPEDEF: float   GLfloat
+TYPEDEF: float   GLclampf
+TYPEDEF: double  GLdouble
+TYPEDEF: double  GLclampd
+TYPEDEF: longlong  GLint64
+TYPEDEF: ulonglong GLuint64
+TYPEDEF: void*     GLsync
 C-TYPE: GLvoid
 
-TYPEDEF: c-string[ascii] GLstring ;
+TYPEDEF: c-string[ascii] GLstring
 
 ! Constants
 
@@ -1485,8 +1485,8 @@ ALIAS: GL_FOG_COORD_ARRAY_BUFFER_BINDING GL_FOG_COORDINATE_ARRAY_BUFFER_BINDING
 ALIAS: GL_SRC2_ALPHA GL_SOURCE2_ALPHA
 ALIAS: GL_SRC2_RGB GL_SOURCE2_RGB
 
-TYPEDEF: ptrdiff_t GLsizeiptr ;
-TYPEDEF: ptrdiff_t GLintptr ;
+TYPEDEF: ptrdiff_t GLsizeiptr
+TYPEDEF: ptrdiff_t GLintptr
 
 GL-FUNCTION: void glBeginQuery { glBeginQueryARB } ( GLenum target, GLuint id ) ;
 GL-FUNCTION: void glBindBuffer { glBindBufferARB } ( GLenum target, GLuint buffer ) ;
@@ -1730,7 +1730,7 @@ GL-FUNCTION: void glUniformMatrix4x3fv { } ( GLint location, GLsizei count, GLbo
 ! OpenGL 3.0
 
 
-TYPEDEF: ushort  GLhalf ;
+TYPEDEF: ushort  GLhalf
 
 CONSTANT: GL_VERTEX_ATTRIB_ARRAY_INTEGER 0x88FD
 CONSTANT: GL_SAMPLER_CUBE_SHADOW 0x8DC5

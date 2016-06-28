@@ -6,9 +6,9 @@ IN: io.serial.linux.ffi
 
 CONSTANT: NCCS 32
 
-TYPEDEF: uchar cc_t ;
-TYPEDEF: uint speed_t ;
-TYPEDEF: uint tcflag_t ;
+TYPEDEF: uchar cc_t
+TYPEDEF: uint speed_t
+TYPEDEF: uint tcflag_t
 
 STRUCT: termios
     { iflag tcflag_t }

@@ -8,16 +8,16 @@ fonts init kernel locals make math math.functions math.order
 math.vectors memoize namespaces sequences strings ;
 IN: core-text
 
-TYPEDEF: void* CTLineRef ;
+TYPEDEF: void* CTLineRef
 
-C-GLOBAL: CFStringRef kCTFontAttributeName ;
-C-GLOBAL: CFStringRef kCTKernAttributeName ;
-C-GLOBAL: CFStringRef kCTLigatureAttributeName ;
-C-GLOBAL: CFStringRef kCTForegroundColorAttributeName ;
-C-GLOBAL: CFStringRef kCTParagraphStyleAttributeName ;
-C-GLOBAL: CFStringRef kCTUnderlineStyleAttributeName ;
-C-GLOBAL: CFStringRef kCTVerticalFormsAttributeName ;
-C-GLOBAL: CFStringRef kCTGlyphInfoAttributeName ;
+C-GLOBAL: CFStringRef kCTFontAttributeName
+C-GLOBAL: CFStringRef kCTKernAttributeName
+C-GLOBAL: CFStringRef kCTLigatureAttributeName
+C-GLOBAL: CFStringRef kCTForegroundColorAttributeName
+C-GLOBAL: CFStringRef kCTParagraphStyleAttributeName
+C-GLOBAL: CFStringRef kCTUnderlineStyleAttributeName
+C-GLOBAL: CFStringRef kCTVerticalFormsAttributeName
+C-GLOBAL: CFStringRef kCTGlyphInfoAttributeName
 
 FUNCTION: CTLineRef CTLineCreateWithAttributedString ( CFAttributedStringRef string ) ;
 

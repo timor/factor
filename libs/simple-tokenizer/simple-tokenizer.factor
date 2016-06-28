@@ -10,4 +10,4 @@ quoted = '"' (escaped-char | [^"])*:a '"' => [[ a ]]
 unquoted = (escaped-char | [^ \t\n\r"])+
 argument = (quoted | unquoted) => [[ >string ]]
 command = space* (argument:a space* => [[ a ]])+:c !(.) => [[ c ]]
-]=] ;
+]=]

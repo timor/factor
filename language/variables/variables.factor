@@ -59,7 +59,7 @@ PREDICATE: typed-variable < variable
     } 2cleave (define-variable) ;
 
 SYNTAX: \ TYPED-VAR:
-    scan-new-word scan-object ";" expect define-typed-variable ;
+    scan-new-word scan-object define-typed-variable ;
 
 M: typed-variable definer drop \ TYPED-VAR: f ;
 M: typed-variable definition "variable-type" word-prop 1quotation ;
@@ -92,6 +92,6 @@ INTERSECTION: typed-global-variable
     [ [ [global-setter] ] dip [typed-setter] ] 2bi (define-variable) ;
 
 SYNTAX: \ TYPED-GLOBAL:
-    scan-new-word scan-object ";" expect define-typed-global ;
+    scan-new-word scan-object define-typed-global ;
 
 M: typed-global-variable definer drop \ TYPED-GLOBAL: f ;

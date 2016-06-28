@@ -591,7 +591,7 @@ SYNTAX: \ GLSL-SHADER:
         scan-word
         f
         lexer get line>>
-        scan-object ";" expect
+        scan-object
     ] dip
     shader boa
     over reset-generic
@@ -601,7 +601,7 @@ SYNTAX: \ GLSL-SHADER-FILE:
     scan-new dup
     dup old-instances [
         scan-word execute( -- kind )
-        scan-object ";" expect in-word's-path
+        scan-object in-word's-path
         0
         over ascii file-contents
     ] dip

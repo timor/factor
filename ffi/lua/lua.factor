@@ -14,8 +14,8 @@ COMPILE< "liblua5.1" {
 LIBRARY: liblua5.1
 
 ! luaconf.h
-TYPEDEF: double LUA_NUMBER ;
-TYPEDEF: ptrdiff_t LUA_INTEGER ;
+TYPEDEF: double LUA_NUMBER
+TYPEDEF: ptrdiff_t LUA_INTEGER
 
 CONSTANT: LUA_IDSIZE 60
 
@@ -63,8 +63,8 @@ CONSTANT: LUA_TTHREAD         8
 
 CONSTANT: LUA_MINSTACK 20
 
-TYPEDEF: LUA_NUMBER lua_Number ;
-TYPEDEF: LUA_INTEGER lua_Integer ;
+TYPEDEF: LUA_NUMBER lua_Number
+TYPEDEF: LUA_INTEGER lua_Integer
 
 FUNCTION: lua_State* lua_newstate ( lua_Alloc f, void* ud ) ;
 FUNCTION: void lua_close ( lua_State* L ) ;
@@ -159,8 +159,8 @@ FUNCTION: void lua_concat ( lua_State* L, int n ) ;
 FUNCTION: lua_Alloc lua_getallocf ( lua_State* L, void* *ud ) ;
 FUNCTION: void lua_setallocf ( lua_State* L, lua_Alloc f, void* ud ) ;
 
-TYPEDEF: lua_Reader lua_Chunkreader ;
-TYPEDEF: lua_Writer lua_Chunkwriter ;
+TYPEDEF: lua_Reader lua_Chunkreader
+TYPEDEF: lua_Writer lua_Chunkwriter
 
 FUNCTION: void lua_setlevel ( lua_State* from, lua_State* to ) ;
 

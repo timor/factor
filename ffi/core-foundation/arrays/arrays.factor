@@ -4,7 +4,7 @@ USING: alien.c-types alien.syntax core-foundation fry kernel
 sequences ;
 IN: core-foundation.arrays
 
-TYPEDEF: void* CFArrayRef ;
+TYPEDEF: void* CFArrayRef
 
 FUNCTION: CFArrayRef CFArrayCreateMutable ( CFAllocatorRef allocator, CFIndex capacity, void* callbacks ) ;
 

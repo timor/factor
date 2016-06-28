@@ -333,8 +333,8 @@ ALIAS: CURLOPT_RTSPHEADER CURLOPT_HTTPHEADER
 
 ! easy.h
 
-TYPEDEF: void CURL ;
-TYPEDEF: int64_t curl_off_t ;
+TYPEDEF: void CURL
+TYPEDEF: int64_t curl_off_t
 
 FUNCTION: CURL* curl_easy_init ( ) ;
 
@@ -384,7 +384,7 @@ CONSTANT: CURL_SOCKOPT_OK 0
 CONSTANT: CURL_SOCKOPT_ERROR 1
 CONSTANT: CURL_SOCKOPT_ALREADY_CONNECTED 2
 
-TYPEDEF: int curl_socket_t ;
+TYPEDEF: int curl_socket_t
 
 CALLBACK: int sockopt_callback ( void* clientp, curl_socket_t curlfd, curlsocktype purpose ) ;
 

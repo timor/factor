@@ -116,21 +116,21 @@ CONSTANT: kIOHIDTransactionDirectionTypeOutput 1
 
 CONSTANT: kIOHIDTransactionOptionDefaultOutputValue 1
 
-TYPEDEF: ptrdiff_t IOHIDElementCookie ;
-TYPEDEF: int IOHIDElementType ;
-TYPEDEF: int IOHIDElementCollectionType ;
-TYPEDEF: int IOHIDReportType ;
-TYPEDEF: uint IOHIDOptionsType ;
-TYPEDEF: uint IOHIDQueueOptionsType ;
-TYPEDEF: uint IOHIDElementFlags ;
-TYPEDEF: void* IOHIDDeviceRef ;
-TYPEDEF: void* IOHIDElementRef ;
-TYPEDEF: void* IOHIDQueueRef ;
-TYPEDEF: void* IOHIDValueRef ;
-TYPEDEF: void* IOHIDManagerRef ;
-TYPEDEF: void* IOHIDTransactionRef ;
-TYPEDEF: UInt32 IOHIDValueScaleType ;
-TYPEDEF: UInt32 IOHIDTransactionDirectionType ;
+TYPEDEF: ptrdiff_t IOHIDElementCookie
+TYPEDEF: int IOHIDElementType
+TYPEDEF: int IOHIDElementCollectionType
+TYPEDEF: int IOHIDReportType
+TYPEDEF: uint IOHIDOptionsType
+TYPEDEF: uint IOHIDQueueOptionsType
+TYPEDEF: uint IOHIDElementFlags
+TYPEDEF: void* IOHIDDeviceRef
+TYPEDEF: void* IOHIDElementRef
+TYPEDEF: void* IOHIDQueueRef
+TYPEDEF: void* IOHIDValueRef
+TYPEDEF: void* IOHIDManagerRef
+TYPEDEF: void* IOHIDTransactionRef
+TYPEDEF: UInt32 IOHIDValueScaleType
+TYPEDEF: UInt32 IOHIDTransactionDirectionType
 
 CALLBACK: void IOHIDCallback ( void* context, IOReturn result, void* sender ) ;
 CALLBACK: void IOHIDReportCallback ( void* context, IOReturn result, void* sender, IOHIDReportType type, UInt32 reportID, uchar* report, CFIndex reportLength ) ;

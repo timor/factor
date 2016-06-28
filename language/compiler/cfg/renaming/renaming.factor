@@ -9,4 +9,4 @@ SYMBOL: renamings
 : rename-value ( vreg -- vreg' )
     renamings get ?at drop ;
 
-RENAMING: rename [ rename-value ] [ rename-value ] [ drop next-vreg ] ;
+RENAMING: rename [ rename-value ] [ rename-value ] [ drop next-vreg ]

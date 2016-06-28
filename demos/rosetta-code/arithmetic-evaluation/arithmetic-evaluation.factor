@@ -51,7 +51,7 @@ exp      =   exp:a spaces "+" fac:b         => [[ a b <add> ]]
            | fac
 
 main     = exp:e spaces !(.)                => [[ e ]]
-]=] ;
+]=]
 
 GENERIC: eval-ast ( ast -- result )
 

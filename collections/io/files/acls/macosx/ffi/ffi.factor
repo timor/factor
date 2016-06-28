@@ -4,12 +4,12 @@ USING: alien.c-types alien.syntax classes.struct kernel
 literals math.order sequences unix.types ;
 IN: io.files.acls.macosx.ffi
 
-TYPEDEF: uint acl_type_t ;
-TYPEDEF: uint acl_perm_t ;
-TYPEDEF: void* acl_t ;
-TYPEDEF: void* acl_entry_t ;
-TYPEDEF: void* acl_permset_t ;
-TYPEDEF: void* acl_flagset_t ;
+TYPEDEF: uint acl_type_t
+TYPEDEF: uint acl_perm_t
+TYPEDEF: void* acl_t
+TYPEDEF: void* acl_entry_t
+TYPEDEF: void* acl_permset_t
+TYPEDEF: void* acl_flagset_t
 
 CONSTANT: KAUTH_GUID_SIZE 16
 
@@ -69,7 +69,7 @@ CONSTANT: acl-file-perm { t f t f t f t t f f t t t t t t t }
 CONSTANT: acl-dir-perm  { f t f t f t t f t t t t t t t t t }
 
 ! acl_tag_t
-TYPEDEF: uint acl_tag_t ;
+TYPEDEF: uint acl_tag_t
 CONSTANT: ACL_UNDEFINED_TAG  0
 CONSTANT: ACL_EXTENDED_ALLOW 1
 CONSTANT: ACL_EXTENDED_DENY  2
@@ -81,7 +81,7 @@ ERROR: bad-acl-tag-t n ;
     { "undefined" "allow" "deny" } nth ;
 
 ! acl_flag_t
-TYPEDEF: int acl_flag_t ;
+TYPEDEF: int acl_flag_t
 CONSTANT: ACL_FLAG_DEFER_INHERIT 1
 CONSTANT: ACL_ENTRY_INHERITED 16
 CONSTANT: ACL_ENTRY_FILE_INHERIT 32
@@ -106,24 +106,24 @@ CONSTANT: acl-flag-names {
 STRUCT: guid_t
    { g_guid { uchar KAUTH_GUID_SIZE } } ;
 
-TYPEDEF: uint kauth_ace_rights_t ;
+TYPEDEF: uint kauth_ace_rights_t
 STRUCT: kauth_ace
    { ace_applicable guid_t }
    { ace_flags uint }
    { ace_rights kauth_ace_rights_t } ;
-TYPEDEF: kauth_ace* kauth_ace_t ;
+TYPEDEF: kauth_ace* kauth_ace_t
 
 STRUCT: kauth_acl
    { acl_entrycount uint }
    { acl_flags uint }
    { acl_ace { kauth_ace 1 } } ;
-TYPEDEF: kauth_acl* kauth_acl_t ;
+TYPEDEF: kauth_acl* kauth_acl_t
 
 STRUCT: kauth_filesec
    { fsec_magic uint }
    { fsec_owner guid_t }
    { fsec_group guid_t } ;
-TYPEDEF: kauth_filesec* kauth_filesec_t ;
+TYPEDEF: kauth_filesec* kauth_filesec_t
 
 FUNCTION: int acl_dup ( acl_t acl ) ;
 FUNCTION: int acl_free ( void* obj_p ) ;
@@ -156,7 +156,7 @@ FUNCTION: int acl_get_flagset_np ( void *obj, acl_flagset_t* flagset_p ) ;
 FUNCTION: int acl_get_flag_np ( acl_flagset_t flagset_d, acl_flag_t flag ) ;
 FUNCTION: int acl_get_tag_type ( acl_entry_t entry_d, acl_tag_t *tag_type_p ) ;
 
-TYPEDEF: uchar[16] uuid_t ;
+TYPEDEF: uchar[16] uuid_t
 
 CONSTANT: ID_TYPE_UID 0
 CONSTANT: ID_TYPE_GID 1
@@ -182,6 +182,6 @@ FUNCTION: int mbr_uuid_to_id ( uuid_t uu, uid_t *id, int *id_type ) ;
 FUNCTION: int mbr_sid_to_uuid ( nt_sid_t *sid, uuid_t uu ) ;
 FUNCTION: int mbr_uuid_to_sid ( uuid_t uu, nt_sid_t *sid ) ;
 
-TYPEDEF: char[37] uuid_string_t ;
+TYPEDEF: char[37] uuid_string_t
 
 FUNCTION: int mbr_uuid_to_string (  uuid_t uu, char* string ) ;

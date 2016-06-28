@@ -10,7 +10,7 @@ libc math opengl.gl sequences ;
 
 IN: core-graphics
 
-TYPEDEF: int CGImageAlphaInfo ;
+TYPEDEF: int CGImageAlphaInfo
 CONSTANT: kCGImageAlphaNone 0
 CONSTANT: kCGImageAlphaPremultipliedLast 1
 CONSTANT: kCGImageAlphaPremultipliedFirst 2

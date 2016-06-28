@@ -244,7 +244,7 @@ STRUCT: SCRIPT_TABDEF
     { pTabStops int* }
     { iTabOrigin int } ;
 
-TYPEDEF: void* SCRIPT_STRING_ANALYSIS ;
+TYPEDEF: void* SCRIPT_STRING_ANALYSIS
 
 FUNCTION: HRESULT ScriptStringAnalyse (
     HDC hdc,

@@ -5,13 +5,13 @@ parser ;
 IN: cuda.syntax
 
 SYNTAX: \ CUDA-LIBRARY:
-    scan-token scan-word scan-object ";" expect
+    scan-token scan-word scan-object
     $[ _ _ add-cuda-library ]
     [ current-cuda-library set-global ] bi ;
 
 SYNTAX: \ CUDA-FUNCTION:
     scan-token [ create-word-in current-cuda-library get ] keep
-    scan-c-args ";" expect define-cuda-function ;
+    scan-c-args define-cuda-function ;
 
 SYNTAX: \ CUDA-GLOBAL:
     scan-token [ create-word-in current-cuda-library get ] keep

@@ -6,7 +6,7 @@ IN: xmode.loader
 ! Based on org.gjt.sp.jedit.XModeHandler
 
 ! RULES and its children
-TAGS: parse-rule-tag ( rule-set tag -- ) ;
+TAGS: parse-rule-tag ( rule-set tag -- )
 
 TAG: PROPS parse-rule-tag
     parse-props-tag >>props drop ;

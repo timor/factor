@@ -4,10 +4,10 @@ math.functions math.parser math.vectors memoize peg.ebnf sequences sequences.squ
 splitting strings xml.data xml.syntax ;
 IN: svg
 
-XML-NS: svg-name http://www.w3.org/2000/svg ;
-XML-NS: xlink-name http://www.w3.org/1999/xlink ;
-XML-NS: sodipodi-name http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd ;
-XML-NS: inkscape-name http://www.inkscape.org/namespaces/inkscape ;
+XML-NS: svg-name http://www.w3.org/2000/svg
+XML-NS: xlink-name http://www.w3.org/1999/xlink
+XML-NS: sodipodi-name http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd
+XML-NS: inkscape-name http://www.inkscape.org/namespaces/inkscape
 
 : svg-string>number ( string -- number )
     H{ { char: E char: e } } substitute "e" split1
@@ -76,7 +76,7 @@ wsp = [ \t\r\n]
 transform-list = wsp* transforms?:t wsp*
     => [[ t [ identity-transform ] unless* ]]
 
-]=] ;
+]=]
 
 : tag-transform ( tag -- transform )
     "transform" svg-name attr svg-transform>affine-transform ;
@@ -218,7 +218,7 @@ wsp = [ \t\r\n]
 
 svg-path = wsp* moveto-drawto-command-groups?:x wsp* => [[ x ]]
 
-]=] ;
+]=]
 
 : tag-d ( tag -- d )
     "d" svg-name attr svg-path>array ;

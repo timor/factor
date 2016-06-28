@@ -13,16 +13,16 @@ COMPILE>
 
 LIBRARY: cuda
 
-TYPEDEF: uint CUdeviceptr ;
-TYPEDEF: int CUdevice ;
-TYPEDEF: void* CUcontext ;
-TYPEDEF: void* CUmodule ;
-TYPEDEF: void* CUfunction ;
-TYPEDEF: void* CUarray ;
-TYPEDEF: void* CUtexref ;
-TYPEDEF: void* CUevent ;
-TYPEDEF: void* CUstream ;
-TYPEDEF: void* CUgraphicsResource ;
+TYPEDEF: uint CUdeviceptr
+TYPEDEF: int CUdevice
+TYPEDEF: void* CUcontext
+TYPEDEF: void* CUmodule
+TYPEDEF: void* CUfunction
+TYPEDEF: void* CUarray
+TYPEDEF: void* CUtexref
+TYPEDEF: void* CUevent
+TYPEDEF: void* CUstream
+TYPEDEF: void* CUgraphicsResource
 
 ! versions of double and longlong that always 8-byte align
 

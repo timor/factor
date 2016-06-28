@@ -16,7 +16,6 @@ SYNTAX: \ HOLIDAY:
 
 SYNTAX: \ HOLIDAY-NAME:
     let[ scan-word "holiday" word-prop set: holidays scan-word set: name scan-object set: value
-    ";" expect
     value name holidays set-at ] ;
 COMPILE>
 
@@ -54,4 +53,4 @@ M: all holidays
     ] keep $[ _ swap "holiday" word-prop at ] map ;
 
 HOLIDAY: armistice-day november 11 >>day ;
-HOLIDAY-NAME: armistice-day world "Armistice Day" ;
+HOLIDAY-NAME: armistice-day world "Armistice Day"

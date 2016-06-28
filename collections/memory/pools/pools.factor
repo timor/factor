@@ -50,4 +50,4 @@ PRIVATE>
     dup class-of class-pool pool-free ;
 
 SYNTAX: \ POOL:
-    scan-word scan-word ";" expect $[ _ swap <pool> ] [ swap set-class-pool ] bi ;
+    scan-word scan-word $[ _ swap <pool> ] [ swap set-class-pool ] bi ;

@@ -73,7 +73,7 @@ SYMBOLS: stacks pushed ;
     (top-name)
     dup [ dup used-vregs get push-front ] when ;
 
-RENAMING: ssa-rename [ gen-name ] [ top-name ] [ ] ;
+RENAMING: ssa-rename [ gen-name ] [ top-name ] [ ]
 
 GENERIC: rename-insn ( insn -- )
 

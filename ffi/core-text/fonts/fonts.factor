@@ -6,8 +6,8 @@ core-foundation.strings core-graphics.types destructors fonts
 init kernel locals math memoize unix.types ;
 IN: core-text.fonts
 
-TYPEDEF: void* CTFontRef ;
-TYPEDEF: void* CTFontDescriptorRef ;
+TYPEDEF: void* CTFontRef
+TYPEDEF: void* CTFontDescriptorRef
 
 ! CTFontSymbolicTraits
 : kCTFontItalicTrait ( -- n ) 0 2^ ; inline
@@ -18,28 +18,28 @@ TYPEDEF: void* CTFontDescriptorRef ;
 : kCTFontVerticalTrait ( -- n ) 11 2^ ; inline
 : kCTFontUIOptimizedTrait ( -- n ) 12 2^ ; inline
 
-C-GLOBAL: CFStringRef kCTFontSymbolicTrait ;
-C-GLOBAL: CFStringRef kCTFontWeightTrait ;
-C-GLOBAL: CFStringRef kCTFontWidthTrait ;
-C-GLOBAL: CFStringRef kCTFontSlantTrait ;
+C-GLOBAL: CFStringRef kCTFontSymbolicTrait
+C-GLOBAL: CFStringRef kCTFontWeightTrait
+C-GLOBAL: CFStringRef kCTFontWidthTrait
+C-GLOBAL: CFStringRef kCTFontSlantTrait
 
-C-GLOBAL: CFStringRef kCTFontNameAttribute ;
-C-GLOBAL: CFStringRef kCTFontDisplayNameAttribute ;
-C-GLOBAL: CFStringRef kCTFontFamilyNameAttribute ;
-C-GLOBAL: CFStringRef kCTFontStyleNameAttribute ;
-C-GLOBAL: CFStringRef kCTFontTraitsAttribute ;
-C-GLOBAL: CFStringRef kCTFontVariationAttribute ;
-C-GLOBAL: CFStringRef kCTFontSizeAttribute ;
-C-GLOBAL: CFStringRef kCTFontMatrixAttribute ;
-C-GLOBAL: CFStringRef kCTFontCascadeListAttribute ;
-C-GLOBAL: CFStringRef kCTFontCharacterSetAttribute ;
-C-GLOBAL: CFStringRef kCTFontLanguagesAttribute ;
-C-GLOBAL: CFStringRef kCTFontBaselineAdjustAttribute ;
-C-GLOBAL: CFStringRef kCTFontMacintoshEncodingsAttribute ;
-C-GLOBAL: CFStringRef kCTFontFeaturesAttribute ;
-C-GLOBAL: CFStringRef kCTFontFeatureSettingsAttribute ;
-C-GLOBAL: CFStringRef kCTFontFixedAdvanceAttribute ;
-C-GLOBAL: CFStringRef kCTFontOrientationAttribute ;
+C-GLOBAL: CFStringRef kCTFontNameAttribute
+C-GLOBAL: CFStringRef kCTFontDisplayNameAttribute
+C-GLOBAL: CFStringRef kCTFontFamilyNameAttribute
+C-GLOBAL: CFStringRef kCTFontStyleNameAttribute
+C-GLOBAL: CFStringRef kCTFontTraitsAttribute
+C-GLOBAL: CFStringRef kCTFontVariationAttribute
+C-GLOBAL: CFStringRef kCTFontSizeAttribute
+C-GLOBAL: CFStringRef kCTFontMatrixAttribute
+C-GLOBAL: CFStringRef kCTFontCascadeListAttribute
+C-GLOBAL: CFStringRef kCTFontCharacterSetAttribute
+C-GLOBAL: CFStringRef kCTFontLanguagesAttribute
+C-GLOBAL: CFStringRef kCTFontBaselineAdjustAttribute
+C-GLOBAL: CFStringRef kCTFontMacintoshEncodingsAttribute
+C-GLOBAL: CFStringRef kCTFontFeaturesAttribute
+C-GLOBAL: CFStringRef kCTFontFeatureSettingsAttribute
+C-GLOBAL: CFStringRef kCTFontFixedAdvanceAttribute
+C-GLOBAL: CFStringRef kCTFontOrientationAttribute
 
 FUNCTION: CTFontDescriptorRef CTFontDescriptorCreateWithAttributes (
    CFDictionaryRef attributes

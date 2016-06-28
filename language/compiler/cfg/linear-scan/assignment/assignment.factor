@@ -88,7 +88,7 @@ SYMBOL: machine-live-outs
     [ pending-interval-heap get expire-old-intervals ]
     [ unhandled-intervals get activate-new-intervals ] bi ;
 
-RENAMING: assign [ vreg>reg ] [ vreg>reg ] [ vreg>reg ] ;
+RENAMING: assign [ vreg>reg ] [ vreg>reg ] [ vreg>reg ]
 
 : assign-all-registers ( insn -- )
     [ assign-insn-defs ] [ assign-insn-uses ] [ assign-insn-temps ] tri ;

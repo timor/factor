@@ -21,18 +21,18 @@ COMPILE< os unix? [ "openal" deploy-library ] unless COMPILE>
 
 LIBRARY: openal
 
-TYPEDEF: char ALboolean ;
-TYPEDEF: char ALchar ;
-TYPEDEF: char ALbyte ;
-TYPEDEF: uchar ALubyte ;
-TYPEDEF: short ALshort ;
-TYPEDEF: ushort ALushort ;
-TYPEDEF: int ALint ;
-TYPEDEF: uint ALuint ;
-TYPEDEF: int ALsizei ;
-TYPEDEF: int ALenum ;
-TYPEDEF: float ALfloat ;
-TYPEDEF: double ALdouble ;
+TYPEDEF: char ALboolean
+TYPEDEF: char ALchar
+TYPEDEF: char ALbyte
+TYPEDEF: uchar ALubyte
+TYPEDEF: short ALshort
+TYPEDEF: ushort ALushort
+TYPEDEF: int ALint
+TYPEDEF: uint ALuint
+TYPEDEF: int ALsizei
+TYPEDEF: int ALenum
+TYPEDEF: float ALfloat
+TYPEDEF: double ALdouble
 
 CONSTANT: AL_INVALID -1
 CONSTANT: AL_NONE 0
@@ -180,12 +180,12 @@ FUNCTION: void alDistanceModel ( ALenum distanceModel ) ;
 
 C-TYPE: ALCdevice
 C-TYPE: ALCcontext
-TYPEDEF: char ALCboolean ;
-TYPEDEF: char ALCchar ;
-TYPEDEF: int ALCenum ;
-TYPEDEF: int ALCint ;
-TYPEDEF: int ALCsizei ;
-TYPEDEF: uint ALCuint ;
+TYPEDEF: char ALCboolean
+TYPEDEF: char ALCchar
+TYPEDEF: int ALCenum
+TYPEDEF: int ALCint
+TYPEDEF: int ALCsizei
+TYPEDEF: uint ALCuint
 
 CONSTANT: ALC_FALSE                                0
 CONSTANT: ALC_TRUE                                 1

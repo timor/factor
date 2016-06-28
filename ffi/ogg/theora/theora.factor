@@ -37,13 +37,13 @@ CONSTANT: TH-EIMPL      -23
 CONSTANT: TH-EBADPACKET -24
 CONSTANT: TH-DUPFRAME     1
 
-TYPEDEF: int th-colorspace ;
+TYPEDEF: int th-colorspace
 CONSTANT: TH-CS-UNSPECIFIED   0
 CONSTANT: TH-CS-ITU-REC-470M  1
 CONSTANT: TH-CS-ITU-REC-470BG 2
 CONSTANT: TH-CS-NSPACES       3
 
-TYPEDEF: int th-pixelformat ;
+TYPEDEF: int th-pixelformat
 CONSTANT: TH-PF-RSVD     0
 CONSTANT: TH-PF-422      1
 CONSTANT: TH-PF-444      2
@@ -56,7 +56,7 @@ STRUCT: th-img-plane
     { data uchar* }
 ;
 
-TYPEDEF: th-img-plane[3] th-ycbcr-buffer ;
+TYPEDEF: th-img-plane[3] th-ycbcr-buffer
 
 STRUCT: th-info
     { version-major uchar }
@@ -86,7 +86,7 @@ STRUCT: th-comment
     { vendor c-string }
 ;
 
-TYPEDEF: uchar[64] th-quant-base ;
+TYPEDEF: uchar[64] th-quant-base
 
 STRUCT: th-quant-ranges
     { nranges int }
@@ -142,7 +142,7 @@ CONSTANT: TH-RATECTL-DROP-FRAMES 1
 CONSTANT: TH-RATECTL-CAP-OVERFLOW 2
 CONSTANT: TH-RATECTL-CAP-UNDERFOW 4
 
-TYPEDEF: void* th-enc-ctx ;
+TYPEDEF: void* th-enc-ctx
 
 LIBRARY: theoraenc
 FUNCTION: th-enc-ctx* th_encode_alloc ( th-info* info ) ;
@@ -161,15 +161,15 @@ CONSTANT: TH-DECCTL-SET-TELEMETRY-MV 11
 CONSTANT: TH-DECCTL-SET-TELEMETRY-QI 13
 CONSTANT: TH-DECCTL-SET-TELEMETRY-BITS 15
 
-TYPEDEF: void* th-stripe-decoded-func ;
+TYPEDEF: void* th-stripe-decoded-func
 
 STRUCT: th-stripe-callback
     { ctx void* }
     { stripe-decoded th-stripe-decoded-func }
 ;
 
-TYPEDEF: void* th-dec-ctx ;
-TYPEDEF: void* th-setup-info ;
+TYPEDEF: void* th-dec-ctx
+TYPEDEF: void* th-setup-info
 
 LIBRARY: theoradec
 FUNCTION: int th_decode_headerin ( th-info* info, th-comment* tc, th-setup-info** setup, ogg-packet* op ) ;

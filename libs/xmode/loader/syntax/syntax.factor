@@ -81,7 +81,7 @@ SYNTAX: \ RULE:
     [ parse-literal-matcher >>end drop ] , ;
 
 ! SPAN's children
-TAGS: parse-begin/end-tag ( rule tag -- ) ;
+TAGS: parse-begin/end-tag ( rule tag -- )
 
 TAG: BEGIN parse-begin/end-tag
     ! XXX

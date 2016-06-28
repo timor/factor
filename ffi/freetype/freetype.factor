@@ -12,28 +12,28 @@ COMPILE< "freetype" {
 
 LIBRARY: freetype
 
-TYPEDEF: uchar FT_Byte ;
-TYPEDEF: void* FT_Bytes ;
-TYPEDEF: char FT_Char ;
-TYPEDEF: int FT_Int ;
-TYPEDEF: int FT_Int32 ;
-TYPEDEF: uint FT_UInt ;
-TYPEDEF: short FT_Short ;
-TYPEDEF: ushort FT_UShort ;
-TYPEDEF: long FT_Long ;
-TYPEDEF: ulong FT_ULong ;
-TYPEDEF: uchar FT_Bool ;
-TYPEDEF: ulong FT_Offset ;
-TYPEDEF: int FT_PtrDist ;
-TYPEDEF: char FT_String ;
-TYPEDEF: int FT_Tag ;
-TYPEDEF: int FT_Error ;
-TYPEDEF: long FT_Fixed ;
-TYPEDEF: void* FT_Pointer ;
-TYPEDEF: long FT_Pos ;
-TYPEDEF: ushort FT_UFWord ;
-TYPEDEF: short FT_F2Dot14 ;
-TYPEDEF: long FT_F26Dot6 ;
+TYPEDEF: uchar FT_Byte
+TYPEDEF: void* FT_Bytes
+TYPEDEF: char FT_Char
+TYPEDEF: int FT_Int
+TYPEDEF: int FT_Int32
+TYPEDEF: uint FT_UInt
+TYPEDEF: short FT_Short
+TYPEDEF: ushort FT_UShort
+TYPEDEF: long FT_Long
+TYPEDEF: ulong FT_ULong
+TYPEDEF: uchar FT_Bool
+TYPEDEF: ulong FT_Offset
+TYPEDEF: int FT_PtrDist
+TYPEDEF: char FT_String
+TYPEDEF: int FT_Tag
+TYPEDEF: int FT_Error
+TYPEDEF: long FT_Fixed
+TYPEDEF: void* FT_Pointer
+TYPEDEF: long FT_Pos
+TYPEDEF: ushort FT_UFWord
+TYPEDEF: short FT_F2Dot14
+TYPEDEF: long FT_F26Dot6
 
 FUNCTION: FT_Error FT_Init_FreeType ( void* library ) ;
 

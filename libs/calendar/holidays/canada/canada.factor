@@ -6,6 +6,6 @@ IN: calendar.holidays.canada
 SINGLETONS: canada canadian-federal ;
 
 HOLIDAY: canadian-thanksgiving-day october 2 monday-of-month ;
-HOLIDAY-NAME: canadian-thanksgiving-day canadian-federal "Thanksgiving Day" ;
+HOLIDAY-NAME: canadian-thanksgiving-day canadian-federal "Thanksgiving Day"
 
-HOLIDAY-NAME: armistice-day commonwealth-of-nations "Remembrance Day" ;
+HOLIDAY-NAME: armistice-day commonwealth-of-nations "Remembrance Day"

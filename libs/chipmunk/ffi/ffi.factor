@@ -19,17 +19,17 @@ COMPILE>
 LIBRARY: chipmunk
 
 ! chipmunk_types.h
-TYPEDEF: double cpFloat ;
+TYPEDEF: double cpFloat
 STRUCT: cpVect
     { x cpFloat }
     { y cpFloat } ;
 SPECIALIZED-ARRAY: cpVect
 
-TYPEDEF: uint cpHashValue ;
-TYPEDEF: void* cpDataPointer ;
-TYPEDEF: uint cpCollisionType ;
-TYPEDEF: uint cpLayers ;
-TYPEDEF: uint cpGroup ;
+TYPEDEF: uint cpHashValue
+TYPEDEF: void* cpDataPointer
+TYPEDEF: uint cpCollisionType
+TYPEDEF: uint cpLayers
+TYPEDEF: uint cpGroup
 
 CONSTANT: CP_NO_GROUP 0
 CONSTANT: CP_ALL_LAYERS 0xffffffff

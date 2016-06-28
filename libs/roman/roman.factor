@@ -59,14 +59,14 @@ COMPILE<
 SYNTAX: \ ROMAN-OP:
     scan-word [ name>> "roman" prepend create-word-in ] keep
     1quotation $[ _ binary-roman-op ]
-    scan-effect ";" expect define-declared ;
+    scan-effect define-declared ;
 
 COMPILE>
 
-ROMAN-OP: + ( x y -- z ) ;
-ROMAN-OP: - ( x y -- z ) ;
-ROMAN-OP: * ( x y -- z ) ;
-ROMAN-OP: /i ( x y -- z ) ;
-ROMAN-OP: /mod ( x y -- z w ) ;
+ROMAN-OP: + ( x y -- z )
+ROMAN-OP: - ( x y -- z )
+ROMAN-OP: * ( x y -- z )
+ROMAN-OP: /i ( x y -- z )
+ROMAN-OP: /mod ( x y -- z w )
 
 SYNTAX: \ roman: scan-token roman> suffix! ;

@@ -13,7 +13,7 @@ COMPILE< "readline" {
 
 LIBRARY: readline
 
-TYPEDEF: void* histdata_t ;
+TYPEDEF: void* histdata_t
 
 STRUCT: HIST_ENTRY
     { line      c-string   }
@@ -93,18 +93,18 @@ STRUCT: KEYMAP_ENTRY
 CONSTANT: KEYMAP_SIZE 257
 CONSTANT: ANYOTHERKEY 256
 
-TYPEDEF: KEYMAP_ENTRY[257] KEYMAP_ENTRY_ARRAY ;
-TYPEDEF: KEYMAP_ENTRY*     Keymap ;
+TYPEDEF: KEYMAP_ENTRY[257] KEYMAP_ENTRY_ARRAY
+TYPEDEF: KEYMAP_ENTRY*     Keymap
 
 CONSTANT: ISFUNC 0
 CONSTANT: ISKMAP 1
 CONSTANT: ISMACR 2
 
-C-GLOBAL: KEYMAP_ENTRY_ARRAY emacs_standard_keymap ;
-C-GLOBAL: KEYMAP_ENTRY_ARRAY emacs_meta_keymap ;
-C-GLOBAL: KEYMAP_ENTRY_ARRAY emacs_ctlx_keymap ;
-C-GLOBAL: KEYMAP_ENTRY_ARRAY vi_insertion_keymap ;
-C-GLOBAL: KEYMAP_ENTRY_ARRAY vi_movement_keymap ;
+C-GLOBAL: KEYMAP_ENTRY_ARRAY emacs_standard_keymap
+C-GLOBAL: KEYMAP_ENTRY_ARRAY emacs_meta_keymap
+C-GLOBAL: KEYMAP_ENTRY_ARRAY emacs_ctlx_keymap
+C-GLOBAL: KEYMAP_ENTRY_ARRAY vi_insertion_keymap
+C-GLOBAL: KEYMAP_ENTRY_ARRAY vi_movement_keymap
 
 FUNCTION: Keymap rl_copy_keymap ( Keymap k ) ;
 FUNCTION: Keymap rl_make_keymap ( ) ;
@@ -112,29 +112,29 @@ FUNCTION: void rl_discard_keymap ( Keymap k ) ;
 
 CALLBACK: c-string tilde_hook_func_t ( c-string s ) ;
 
-C-GLOBAL: tilde_hook_func_t* tilde_expansion_preexpansion_hook ;
-C-GLOBAL: tilde_hook_func_t* tilde_expansion_failure_hook ;
-C-GLOBAL: char**             tilde_additional_prefixes ;
-C-GLOBAL: char**             tilde_additional_suffixes ;
+C-GLOBAL: tilde_hook_func_t* tilde_expansion_preexpansion_hook
+C-GLOBAL: tilde_hook_func_t* tilde_expansion_failure_hook
+C-GLOBAL: char**             tilde_additional_prefixes
+C-GLOBAL: char**             tilde_additional_suffixes
 
 FUNCTION: c-string tilde_expand ( c-string s ) ;
 FUNCTION: c-string tilde_expand_word ( c-string s ) ;
 FUNCTION: c-string tilde_find_word ( c-string arg1, int arg2,
                                     int* arg3 ) ;
 
-C-GLOBAL: int history_base ;
-C-GLOBAL: int history_length ;
-C-GLOBAL: int history_max_entries ;
-C-GLOBAL: char history_expansion_char ;
-C-GLOBAL: char history_subst_char ;
-C-GLOBAL: c-string history_word_delimiters ;
-C-GLOBAL: char history_comment_char ;
-C-GLOBAL: c-string history_no_expand_chars ;
-C-GLOBAL: c-string history_search_delimiter_chars ;
-C-GLOBAL: int history_quotes_inhibit_expansion ;
-C-GLOBAL: int history_write_timestamps ;
-C-GLOBAL: int max_input_history ;
-C-GLOBAL: rl_linebuf_func_t* history_inhibit_expansion_function ;
+C-GLOBAL: int history_base
+C-GLOBAL: int history_length
+C-GLOBAL: int history_max_entries
+C-GLOBAL: char history_expansion_char
+C-GLOBAL: char history_subst_char
+C-GLOBAL: c-string history_word_delimiters
+C-GLOBAL: char history_comment_char
+C-GLOBAL: c-string history_no_expand_chars
+C-GLOBAL: c-string history_search_delimiter_chars
+C-GLOBAL: int history_quotes_inhibit_expansion
+C-GLOBAL: int history_write_timestamps
+C-GLOBAL: int max_input_history
+C-GLOBAL: rl_linebuf_func_t* history_inhibit_expansion_function
 
 CALLBACK: int rl_intfunc_t ( int i ) ;
 CALLBACK: int rl_icpfunc_t ( c-string s ) ;
@@ -159,13 +159,13 @@ STRUCT: UNDO_LIST
     { text      char*      }
     { what      undo_code  } ;
 
-C-GLOBAL: UNDO_LIST* rl_undo_list ;
+C-GLOBAL: UNDO_LIST* rl_undo_list
 
 STRUCT: FUNMAP
     { name     c-string           }
     { function rl_command_func_t* } ;
 
-C-GLOBAL: FUNMAP** funmap ;
+C-GLOBAL: FUNMAP** funmap
 
 FUNCTION: int rl_digit_argument ( int arg1, int arg2 ) ;
 FUNCTION: int rl_universal_argument ( int arg, int arg ) ;
@@ -501,87 +501,87 @@ FUNCTION: c-string rl_filename_completion_function ( c-string
 
 FUNCTION: int rl_completion_mode ( rl_command_func_t* p ) ;
 
-C-GLOBAL: c-string rl_library_version ;
-C-GLOBAL: int rl_readline_version ;
-C-GLOBAL: int rl_gnu_readline_p ;
-C-GLOBAL: int rl_readline_state ;
-C-GLOBAL: int rl_editing_mode ;
-C-GLOBAL: int rl_insert_mode ;
-C-GLOBAL: c-string rl_readline_name ;
-C-GLOBAL: c-string rl_prompt ;
-C-GLOBAL: c-string rl_display_prompt ;
-C-GLOBAL: c-string rl_line_buffer ;
-C-GLOBAL: int rl_point ;
-C-GLOBAL: int rl_end ;
-C-GLOBAL: int rl_mark ;
-C-GLOBAL: int rl_done ;
-C-GLOBAL: int rl_pending_input ;
-C-GLOBAL: int rl_dispatching ;
-C-GLOBAL: int rl_explicit_arg ;
-C-GLOBAL: int rl_numeric_arg ;
-C-GLOBAL: rl_command_func_t* rl_last_func ;
-C-GLOBAL: c-string rl_terminal_name ;
+C-GLOBAL: c-string rl_library_version
+C-GLOBAL: int rl_readline_version
+C-GLOBAL: int rl_gnu_readline_p
+C-GLOBAL: int rl_readline_state
+C-GLOBAL: int rl_editing_mode
+C-GLOBAL: int rl_insert_mode
+C-GLOBAL: c-string rl_readline_name
+C-GLOBAL: c-string rl_prompt
+C-GLOBAL: c-string rl_display_prompt
+C-GLOBAL: c-string rl_line_buffer
+C-GLOBAL: int rl_point
+C-GLOBAL: int rl_end
+C-GLOBAL: int rl_mark
+C-GLOBAL: int rl_done
+C-GLOBAL: int rl_pending_input
+C-GLOBAL: int rl_dispatching
+C-GLOBAL: int rl_explicit_arg
+C-GLOBAL: int rl_numeric_arg
+C-GLOBAL: rl_command_func_t* rl_last_func
+C-GLOBAL: c-string rl_terminal_name
 
-C-GLOBAL: FILE* rl_instream ;
-C-GLOBAL: FILE* rl_outstream ;
+C-GLOBAL: FILE* rl_instream
+C-GLOBAL: FILE* rl_outstream
 
-C-GLOBAL: int rl_prefer_env_winsize ;
+C-GLOBAL: int rl_prefer_env_winsize
 
-C-GLOBAL: rl_hook_func_t* rl_startup_hook ;
-C-GLOBAL: rl_hook_func_t* rl_pre_input_hook ;
-C-GLOBAL: rl_hook_func_t* rl_event_hook ;
+C-GLOBAL: rl_hook_func_t* rl_startup_hook
+C-GLOBAL: rl_hook_func_t* rl_pre_input_hook
+C-GLOBAL: rl_hook_func_t* rl_event_hook
 
-C-GLOBAL: rl_getc_func_t* rl_getc_function ;
-C-GLOBAL: rl_voidfunc_t* rl_redisplay_function ;
-C-GLOBAL: rl_vintfunc_t* rl_prep_term_function ;
-C-GLOBAL: rl_voidfunc_t* rl_deprep_term_function ;
+C-GLOBAL: rl_getc_func_t* rl_getc_function
+C-GLOBAL: rl_voidfunc_t* rl_redisplay_function
+C-GLOBAL: rl_vintfunc_t* rl_prep_term_function
+C-GLOBAL: rl_voidfunc_t* rl_deprep_term_function
 
-C-GLOBAL: Keymap rl_executing_keymap ;
-C-GLOBAL: Keymap rl_binding_keymap ;
+C-GLOBAL: Keymap rl_executing_keymap
+C-GLOBAL: Keymap rl_binding_keymap
 
-C-GLOBAL: int rl_erase_empty_line ;
-C-GLOBAL: int rl_already_prompted ;
-C-GLOBAL: int rl_num_chars_to_read ;
-C-GLOBAL: c-string rl_executing_macro ;
+C-GLOBAL: int rl_erase_empty_line
+C-GLOBAL: int rl_already_prompted
+C-GLOBAL: int rl_num_chars_to_read
+C-GLOBAL: c-string rl_executing_macro
 
-C-GLOBAL: int rl_catch_signals ;
-C-GLOBAL: int rl_catch_sigwinch ;
-C-GLOBAL: rl_compentry_func_t* rl_completion_entry_function ;
-C-GLOBAL: rl_compentry_func_t* rl_menu_completion_entry_function ;
-C-GLOBAL: rl_compignore_func_t* rl_ignore_some_completions_function ;
-C-GLOBAL: rl_completion_func_t* rl_attempted_completion_function ;
-C-GLOBAL: c-string rl_basic_word_break_characters ;
-C-GLOBAL: c-string rl_completer_word_break_characters ;
-C-GLOBAL: rl_cpvfunc_t* rl_completion_word_break_hook ;
+C-GLOBAL: int rl_catch_signals
+C-GLOBAL: int rl_catch_sigwinch
+C-GLOBAL: rl_compentry_func_t* rl_completion_entry_function
+C-GLOBAL: rl_compentry_func_t* rl_menu_completion_entry_function
+C-GLOBAL: rl_compignore_func_t* rl_ignore_some_completions_function
+C-GLOBAL: rl_completion_func_t* rl_attempted_completion_function
+C-GLOBAL: c-string rl_basic_word_break_characters
+C-GLOBAL: c-string rl_completer_word_break_characters
+C-GLOBAL: rl_cpvfunc_t* rl_completion_word_break_hook
 
-C-GLOBAL: c-string rl_completer_quote_characters ;
-C-GLOBAL: c-string rl_basic_quote_characters ;
-C-GLOBAL: c-string rl_filename_quote_characters ;
-C-GLOBAL: c-string rl_special_prefixes ;
-C-GLOBAL: rl_icppfunc_t* rl_directory_completion_hook ;
+C-GLOBAL: c-string rl_completer_quote_characters
+C-GLOBAL: c-string rl_basic_quote_characters
+C-GLOBAL: c-string rl_filename_quote_characters
+C-GLOBAL: c-string rl_special_prefixes
+C-GLOBAL: rl_icppfunc_t* rl_directory_completion_hook
 
-C-GLOBAL: rl_icppfunc_t* rl_directory_rewrite_hook ;
-C-GLOBAL: rl_dequote_func_t* rl_filename_rewrite_hook ;
-C-GLOBAL: rl_compdisp_func_t* rl_completion_display_matches_hook ;
-C-GLOBAL: int rl_filename_completion_desired ;
-C-GLOBAL: int rl_filename_quoting_desired ;
-C-GLOBAL: rl_quote_func_t* rl_filename_quoting_function ;
-C-GLOBAL: rl_dequote_func_t* rl_filename_dequoting_function ;
-C-GLOBAL: rl_linebuf_func_t* rl_char_is_quoted_p ;
-C-GLOBAL: int rl_attempted_completion_over ;
-C-GLOBAL: int rl_completion_type ;
-C-GLOBAL: int rl_completion_invoking_key ;
-C-GLOBAL: int rl_completion_query_items ;
-C-GLOBAL: int rl_completion_append_character ;
-C-GLOBAL: int rl_completion_suppress_append ;
-C-GLOBAL: int rl_completion_quote_character ;
-C-GLOBAL: int rl_completion_found_quote ;
-C-GLOBAL: int rl_completion_suppress_quote ;
-C-GLOBAL: int rl_sort_completion_matches ;
-C-GLOBAL: int rl_completion_mark_symlink_dirs ;
+C-GLOBAL: rl_icppfunc_t* rl_directory_rewrite_hook
+C-GLOBAL: rl_dequote_func_t* rl_filename_rewrite_hook
+C-GLOBAL: rl_compdisp_func_t* rl_completion_display_matches_hook
+C-GLOBAL: int rl_filename_completion_desired
+C-GLOBAL: int rl_filename_quoting_desired
+C-GLOBAL: rl_quote_func_t* rl_filename_quoting_function
+C-GLOBAL: rl_dequote_func_t* rl_filename_dequoting_function
+C-GLOBAL: rl_linebuf_func_t* rl_char_is_quoted_p
+C-GLOBAL: int rl_attempted_completion_over
+C-GLOBAL: int rl_completion_type
+C-GLOBAL: int rl_completion_invoking_key
+C-GLOBAL: int rl_completion_query_items
+C-GLOBAL: int rl_completion_append_character
+C-GLOBAL: int rl_completion_suppress_append
+C-GLOBAL: int rl_completion_quote_character
+C-GLOBAL: int rl_completion_found_quote
+C-GLOBAL: int rl_completion_suppress_quote
+C-GLOBAL: int rl_sort_completion_matches
+C-GLOBAL: int rl_completion_mark_symlink_dirs
 
-C-GLOBAL: int rl_ignore_completion_duplicates ;
-C-GLOBAL: int rl_inhibit_completion ;
+C-GLOBAL: int rl_ignore_completion_duplicates
+C-GLOBAL: int rl_inhibit_completion
 
 CONSTANT: READERR -2
 

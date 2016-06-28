@@ -66,7 +66,7 @@ loop  = "[" {loop|ops}+ "]" => [[ second compose-all $[ [ (?) ] _ while ] ]]
 
 code  = (loop|ops|unknown)*  => [[ compose-all ]]
 
-]=] ;
+]=]
 
 PRIVATE>
 

@@ -36,7 +36,7 @@ CONSTANT: MAGIC_NO_CHECK_TROFF 0x040000
 CONSTANT: MAGIC_NO_CHECK_FORTRAN 0x080000
 CONSTANT: MAGIC_NO_CHECK_TOKENS 0x100000
 
-TYPEDEF: void* magic_t ;
+TYPEDEF: void* magic_t
 FUNCTION: magic_t magic_open ( int flags ) ;
 FUNCTION: void magic_close ( magic_t magic ) ;
 

@@ -26,7 +26,7 @@ C: <plain-auth> plain-auth
         1 minutes >>read-timeout
         no-auth >>auth ; inline
 
-LOG: log-smtp-connection NOTICE ;
+LOG: log-smtp-connection NOTICE
 
 : with-smtp-connection ( quot -- )
     smtp-config get server>>
@@ -91,7 +91,7 @@ ERROR: bad-email-address email ;
 : quit ( -- )
     "QUIT" command ;
 
-LOG: smtp-response DEBUG ;
+LOG: smtp-response DEBUG
 
 : multiline? ( response -- ? )
     3 swap ?nth char: - = ;

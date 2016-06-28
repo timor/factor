@@ -6,7 +6,7 @@ windows.advapi32 windows.errors windows.kernel32 windows.types
 alien.c-types ;
 IN: windows.privileges
 
-TYPEDEF: TOKEN_PRIVILEGES* PTOKEN_PRIVILEGES ;
+TYPEDEF: TOKEN_PRIVILEGES* PTOKEN_PRIVILEGES
 
 ! Security tokens
 !  http://msdn.microsoft.com/msdnmag/issues/05/03/TokenPrivileges/

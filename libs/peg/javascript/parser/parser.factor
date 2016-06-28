@@ -197,4 +197,4 @@ SrcElem            =   "function" Name:n FuncRest:f                  => [[ n f a
                      | Stmt
 SrcElems           = SrcElem*                                      => [[ ast-begin boa ]]
 TopLevel           = SrcElems Spaces
-]=] ;
+]=]

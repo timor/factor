@@ -5,34 +5,34 @@ classes.struct gobject-introspection.types kernel parser ;
 IN: gobject-introspection.standard-types
 
 COMPILE<
-TYPEDEF: char gchar ;
-TYPEDEF: uchar guchar ;
-TYPEDEF: short gshort ;
-TYPEDEF: ushort gushort ;
-TYPEDEF: long glong ;
-TYPEDEF: ulong gulong ;
-TYPEDEF: int gint ;
-TYPEDEF: uint guint ;
+TYPEDEF: char gchar
+TYPEDEF: uchar guchar
+TYPEDEF: short gshort
+TYPEDEF: ushort gushort
+TYPEDEF: long glong
+TYPEDEF: ulong gulong
+TYPEDEF: int gint
+TYPEDEF: uint guint
 
-TYPEDEF: char gint8 ;
-TYPEDEF: uchar guint8 ;
-TYPEDEF: short gint16 ;
-TYPEDEF: ushort guint16 ;
-TYPEDEF: int gint32 ;
-TYPEDEF: uint guint32 ;
-TYPEDEF: longlong gint64 ;
-TYPEDEF: ulonglong guint64 ;
+TYPEDEF: char gint8
+TYPEDEF: uchar guint8
+TYPEDEF: short gint16
+TYPEDEF: ushort guint16
+TYPEDEF: int gint32
+TYPEDEF: uint guint32
+TYPEDEF: longlong gint64
+TYPEDEF: ulonglong guint64
 
-TYPEDEF: float gfloat ;
-TYPEDEF: double gdouble ;
+TYPEDEF: float gfloat
+TYPEDEF: double gdouble
 
-TYPEDEF: size_t gsize ;
-TYPEDEF: long gssize ;
+TYPEDEF: size_t gsize
+TYPEDEF: long gssize
 
-TYPEDEF: gulong GType ;
-TYPEDEF: void* gpointer ;
-TYPEDEF: guint32 gunichar ;
-TYPEDEF: void* va_list ;
+TYPEDEF: gulong GType
+TYPEDEF: void* gpointer
+TYPEDEF: guint32 gunichar
+TYPEDEF: void* va_list
 
 int lookup-c-type clone
     [ >c-bool ] >>unboxer-quot

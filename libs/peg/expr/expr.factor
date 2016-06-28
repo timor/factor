@@ -16,4 +16,4 @@ fac      =   fac "*" value  => [[ first3 nip * ]]
 exp      =   exp "+" fac    => [[ first3 nip + ]]
            | exp "-" fac    => [[ first3 nip - ]]
            | fac
-]=] ;
+]=]

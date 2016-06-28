@@ -109,7 +109,7 @@ M: server-error error.
     "Description: " write dup message>> print
     "Tag: " write tag>> xml>string print ;
 
-TAGS: xml>item ( tag -- object ) ;
+TAGS: xml>item ( tag -- object )
 
 TAG: string xml>item
     children>string ;

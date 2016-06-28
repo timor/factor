@@ -35,7 +35,7 @@ UnknownError = .* => [[ >string <sql-unknown-error> ]]
 
 PostgresqlSqlError = (TableError | DatabaseError | FunctionError | SyntaxError | UnknownError) 
 
-]=] ;
+]=]
 
 
 TUPLE: parse-postgresql-location column line text ;

@@ -6,9 +6,9 @@ windows.user32 ;
 IN: file-picker.windows
 LIBRARY: shell32
 
-TYPEDEF: void* PIDLIST_ABSOLUTE ;
-TYPEDEF: void* PCIDLIST_ABSOLUTE ;
-TYPEDEF: void* BFFCALLBACK ;
+TYPEDEF: void* PIDLIST_ABSOLUTE
+TYPEDEF: void* PCIDLIST_ABSOLUTE
+TYPEDEF: void* BFFCALLBACK
 
 FUNCTION: HRESULT SHGetFolderLocation (
     HWND hwndOwner,

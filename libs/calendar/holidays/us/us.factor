@@ -27,38 +27,38 @@ M: us-federal holidays
     { [ sunday? not ] [ us-federal holiday? not ] } 1&& ;
 
 HOLIDAY: new-years-day january 1 >>day ;
-HOLIDAY-NAME: new-years-day world "New Year's Day" ;
-HOLIDAY-NAME: new-years-day us-federal "New Year's Day" ;
+HOLIDAY-NAME: new-years-day world "New Year's Day"
+HOLIDAY-NAME: new-years-day us-federal "New Year's Day"
 
 HOLIDAY: martin-luther-king-day january 3 monday-of-month ;
-HOLIDAY-NAME: martin-luther-king-day us-federal "Martin Luther King Day" ;
+HOLIDAY-NAME: martin-luther-king-day us-federal "Martin Luther King Day"
 
 HOLIDAY: inauguration-day january 20 >>day [ dup 4 neg rem + ] change-year ;
-HOLIDAY-NAME: inauguration-day us "Inauguration Day" ;
+HOLIDAY-NAME: inauguration-day us "Inauguration Day"
 
 HOLIDAY: washingtons-birthday february 3 monday-of-month ;
-HOLIDAY-NAME: washingtons-birthday us-federal "Washington's Birthday" ;
+HOLIDAY-NAME: washingtons-birthday us-federal "Washington's Birthday"
 
 HOLIDAY: memorial-day may last-monday-of-month ;
-HOLIDAY-NAME: memorial-day us-federal "Memorial Day" ;
+HOLIDAY-NAME: memorial-day us-federal "Memorial Day"
 
 HOLIDAY: independence-day july 4 >>day ;
-HOLIDAY-NAME: independence-day us-federal "Independence Day" ;
+HOLIDAY-NAME: independence-day us-federal "Independence Day"
 
 HOLIDAY: labor-day september 1 monday-of-month ;
-HOLIDAY-NAME: labor-day us-federal "Labor Day" ;
+HOLIDAY-NAME: labor-day us-federal "Labor Day"
 
 HOLIDAY: columbus-day october 2 monday-of-month ;
-HOLIDAY-NAME: columbus-day us-federal "Columbus Day" ;
+HOLIDAY-NAME: columbus-day us-federal "Columbus Day"
 
-HOLIDAY-NAME: armistice-day us-federal "Veterans Day" ;
+HOLIDAY-NAME: armistice-day us-federal "Veterans Day"
 
 HOLIDAY: thanksgiving-day november 4 thursday-of-month ;
-HOLIDAY-NAME: thanksgiving-day us-federal "Thanksgiving Day" ;
+HOLIDAY-NAME: thanksgiving-day us-federal "Thanksgiving Day"
 
 HOLIDAY: christmas-day december 25 >>day ;
-HOLIDAY-NAME: christmas-day world "Christmas Day" ;
-HOLIDAY-NAME: christmas-day us-federal "Christmas Day" ;
+HOLIDAY-NAME: christmas-day world "Christmas Day"
+HOLIDAY-NAME: christmas-day us-federal "Christmas Day"
 
 HOLIDAY: belly-laugh-day january 24 >>day ;
 

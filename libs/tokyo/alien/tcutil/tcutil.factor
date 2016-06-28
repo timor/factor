@@ -18,7 +18,7 @@ CONSTANT: TCDBTFIXED 2
 CONSTANT: TCDBTTABLE 3
 
 ! FIXME: on windows 64bits this isn't correct, because long is 32bits there, and time_t is int64
-TYPEDEF: long tokyo_time_t ;
+TYPEDEF: long tokyo_time_t
 
 C-TYPE: TCLIST
 
@@ -32,7 +32,7 @@ FUNCTION: void tclistpush ( TCLIST* list, void* ptr, int size ) ;
 FUNCTION: void tclistpush2 ( TCLIST* list, c-string str ) ;
 FUNCTION: void tcfree ( void* ptr ) ;
 
-TYPEDEF: void* TCCMP ;
-TYPEDEF: void* TCCODEC ;
-TYPEDEF: void* TCPDPROC ;
-TYPEDEF: void* TCITER ;
+TYPEDEF: void* TCCMP
+TYPEDEF: void* TCCODEC
+TYPEDEF: void* TCPDPROC
+TYPEDEF: void* TCITER

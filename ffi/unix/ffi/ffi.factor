@@ -198,7 +198,7 @@ FUNCTION: int unlink ( c-string path ) ;
 FUNCTION: int utimes ( c-string path, timeval[2] times ) ;
 FUNCTION: ssize_t write ( int fd, void* buf, size_t nbytes ) ;
 FUNCTION: ssize_t writev ( int fds, iovec* iov, int iovcnt ) ;
-TYPEDEF: void* sighandler_t ;
+TYPEDEF: void* sighandler_t
 FUNCTION: sighandler_t signal ( int signum, sighandler_t handler ) ;
 
 "librt" "librt.so" cdecl add-library

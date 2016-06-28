@@ -21,7 +21,7 @@ C-TYPE: GLUnurbs
 C-TYPE: GLUquadric
 C-TYPE: GLUtesselator
 C-TYPE: GLubyte
-TYPEDEF: void* GLUfuncptr ;
+TYPEDEF: void* GLUfuncptr
 
 ! StringName
 CONSTANT: GLU_VERSION                        100800

@@ -331,17 +331,17 @@ CONSTANT: DT_ARM_PREEMPTYMAP 0x70000002
 CONSTANT: DT_ARM_RESERVED2   0x70000003
 CONSTANT: DT_HIPROC          0x7fffffff
 
-TYPEDEF: ushort    Elf32_Half ;
-TYPEDEF: uint      Elf32_Word ;
-TYPEDEF: int       Elf32_Sword ;
-TYPEDEF: uint      Elf32_Off ;
-TYPEDEF: uint      Elf32_Addr ;
-TYPEDEF: ushort    Elf64_Half ;
-TYPEDEF: uint      Elf64_Word ;
-TYPEDEF: ulonglong Elf64_Xword ;
-TYPEDEF: longlong  Elf64_Sxword ;
-TYPEDEF: ulonglong Elf64_Off ;
-TYPEDEF: ulonglong Elf64_Addr ;
+TYPEDEF: ushort    Elf32_Half
+TYPEDEF: uint      Elf32_Word
+TYPEDEF: int       Elf32_Sword
+TYPEDEF: uint      Elf32_Off
+TYPEDEF: uint      Elf32_Addr
+TYPEDEF: ushort    Elf64_Half
+TYPEDEF: uint      Elf64_Word
+TYPEDEF: ulonglong Elf64_Xword
+TYPEDEF: longlong  Elf64_Sxword
+TYPEDEF: ulonglong Elf64_Off
+TYPEDEF: ulonglong Elf64_Addr
 
 STRUCT: Elf32_Ehdr
     { e_ident     uchar[16]  }

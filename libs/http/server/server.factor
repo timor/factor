@@ -144,9 +144,9 @@ main-responder [ <404> <trivial-responder> ] initialize
         ] bi
     ] recover ;
 
-LOG: httpd-hit NOTICE ;
+LOG: httpd-hit NOTICE
 
-LOG: httpd-header NOTICE ;
+LOG: httpd-header NOTICE
 
 : log-header ( request name -- )
     [ nip ] [ header ] 2bi 2array httpd-header ;
@@ -209,7 +209,7 @@ SYMBOL: params
 : ?refresh-all ( -- )
     development? get-global [ [ refresh-all ] with-global ] when ;
 
-LOG: httpd-benchmark DEBUG ;
+LOG: httpd-benchmark DEBUG
 
 : ?benchmark ( quot -- )
     benchmark? get [
@@ -223,7 +223,7 @@ SYMBOL: request-limit
 
 request-limit [ 64 1024 * ] initialize
 
-LOG: httpd-bad-request NOTICE ;
+LOG: httpd-bad-request NOTICE
 
 : handle-client-error ( error -- )
     dup request-error? [

@@ -15,7 +15,7 @@ COMPILE< "libudis86" {
 
 LIBRARY: libudis86
 
-TYPEDEF: void ud ;
+TYPEDEF: void ud
 
 FUNCTION: void ud_translate_intel ( ud* u ) ;
 FUNCTION: void ud_translate_att ( ud* u ) ;

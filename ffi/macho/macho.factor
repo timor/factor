@@ -9,11 +9,11 @@ FROM: alien.c-types => short ;
 IN: macho
 
 ! FFI data
-TYPEDEF: int       integer_t ;
-TYPEDEF: int       vm_prot_t ;
-TYPEDEF: integer_t cpu_type_t ;
-TYPEDEF: integer_t cpu_subtype_t ;
-TYPEDEF: integer_t cpu_threadtype_t ;
+TYPEDEF: int       integer_t
+TYPEDEF: int       vm_prot_t
+TYPEDEF: integer_t cpu_type_t
+TYPEDEF: integer_t cpu_subtype_t
+TYPEDEF: integer_t cpu_threadtype_t
 
 CONSTANT: VM_PROT_NONE        0x00
 CONSTANT: VM_PROT_READ        0x01

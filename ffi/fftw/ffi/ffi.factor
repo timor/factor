@@ -14,9 +14,9 @@ COMPILE< "fftw3" {
     { [ os unix? ] [ "libfftw3.so" ] }
 } cond cdecl add-library COMPILE>
 
-TYPEDEF: double[2] fftw_complex ;
+TYPEDEF: double[2] fftw_complex
 
-TYPEDEF: void* fftw_plan ;
+TYPEDEF: void* fftw_plan
 
 CONSTANT: FFTW_FORWARD -1
 CONSTANT: FFTW_BACKWARD 1

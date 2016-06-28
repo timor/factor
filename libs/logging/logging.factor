@@ -139,7 +139,7 @@ PRIVATE>
 
 SYNTAX: \ LOG:
     ! Syntax: name level
-    scan-new-word dup scan-word ";" expect
+    scan-new-word dup scan-word
     $[ 1array stack>message _ _ log-message ]
     ( message -- ) define-declared ;
 

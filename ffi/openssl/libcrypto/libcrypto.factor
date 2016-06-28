@@ -54,7 +54,7 @@ LIBRARY: libcrypto
 STRUCT: crypto_ex_data_st
     { sk void* }
     { dummy int } ;
-TYPEDEF: crypto_ex_data_st CRYPTO_EX_DATA ;
+TYPEDEF: crypto_ex_data_st CRYPTO_EX_DATA
 
 ! ===============================================
 ! bio.h
@@ -70,7 +70,7 @@ STRUCT: bio_method_st
     { create void* }
     { destroy void* }
     { callback_ctrl void* } ;
-TYPEDEF: bio_method_st BIO_METHOD ;
+TYPEDEF: bio_method_st BIO_METHOD
 
 STRUCT: bio_st
     { method BIO_METHOD* }
@@ -88,7 +88,7 @@ STRUCT: bio_st
     { num-read ulong }
     { num-write ulong }
     { ex-data CRYPTO_EX_DATA } ;
-TYPEDEF: bio_st BIO ;
+TYPEDEF: bio_st BIO
 
 FUNCTION: BIO* BIO_new_file ( c-string filename, c-string mode ) ;
 

@@ -195,7 +195,7 @@ STRUCT: stack_st
     { sorted int }
     { num_alloc int }
     { comp void* } ;
-TYPEDEF: stack_st _STACK ;
+TYPEDEF: stack_st _STACK
 
 ! ===============================================
 ! asn1t.h
@@ -207,7 +207,7 @@ C-TYPE: ASN1_ITEM
 ! asn1.h
 ! ===============================================
 C-TYPE: ASN1_VALUE
-TYPEDEF: ASN1_ITEM ASN1_ITEM_EXP ;
+TYPEDEF: ASN1_ITEM ASN1_ITEM_EXP
 
 STRUCT: ASN1_STRING
     { length int }
@@ -222,7 +222,7 @@ FUNCTION: ASN1_VALUE* ASN1_item_d2i ( ASN1_VALUE** val, uchar **in, long len, AS
 ! ===============================================
 ! ossl_typ.h
 ! ===============================================
-TYPEDEF: ASN1_STRING ASN1_OCTET_STRING ;
+TYPEDEF: ASN1_STRING ASN1_OCTET_STRING
 
 ! ===============================================
 ! x509.h
@@ -300,7 +300,7 @@ STRUCT: ssl_method_st
     { ssl_version void* }
     { ssl_callback_ctrl void* }
     { ssl_ctx_callback_ctrl void* } ;
-TYPEDEF: ssl_method_st* ssl-method ;
+TYPEDEF: ssl_method_st* ssl-method
 
 STRUCT: ssl_st
     { version int }
@@ -355,7 +355,7 @@ STRUCT: ssl_st
     { psk_client_callback void* }
     { psk_server_callback void* }
     { ctx SSL_CTX* } ;
-TYPEDEF: ssl_st SSL ;
+TYPEDEF: ssl_st SSL
 
 FUNCTION: c-string SSL_get_version ( SSL* ssl ) ;
 

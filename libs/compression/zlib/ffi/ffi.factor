@@ -12,10 +12,10 @@ COMPILE< "zlib" {
 
 LIBRARY: zlib
 
-TYPEDEF: void Bytef ;
-TYPEDEF: ulong uLongf ;
-TYPEDEF: ulong uLong ;
-TYPEDEF: uint uInt ;
+TYPEDEF: void Bytef
+TYPEDEF: ulong uLongf
+TYPEDEF: ulong uLong
+TYPEDEF: uint uInt
 
 STRUCT: z_stream
     { next_in uchar* }
@@ -37,7 +37,7 @@ STRUCT: z_stream
     { adler ulong }
     { reserved ulong } ;
 
-TYPEDEF: z_stream* z_streamp ;
+TYPEDEF: z_stream* z_streamp
 
 STRUCT: gz_header
     { text int }
@@ -54,7 +54,7 @@ STRUCT: gz_header
     { hcrc int }
     { done int } ;
 
-TYPEDEF: gz_header* gz_headerp ;
+TYPEDEF: gz_header* gz_headerp
 CONSTANT: Z_NO_FLUSH      0
 CONSTANT: Z_PARTIAL_FLUSH 1
 CONSTANT: Z_SYNC_FLUSH    2
@@ -126,7 +126,7 @@ FUNCTION: uLong compressBound ( uLong sourceLen ) ;
 
 FUNCTION: int uncompress ( Bytef* dest, uLongf* destLen, Bytef* source, uLong sourceLen ) ;
 
-TYPEDEF: void* gzFile ;
+TYPEDEF: void* gzFile
 
 FUNCTION: gzFile gzdopen ( int fd, c-string mode ) ;
 FUNCTION: int gzbuffer ( gzFile file, uint size ) ;

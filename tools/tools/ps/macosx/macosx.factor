@@ -48,10 +48,10 @@ STRUCT: vmspace
     { dummy3 int32_t[5] }
     { dummy4 caddr_t[3] } ;
 
-TYPEDEF: int32_t segsz_t ;
-TYPEDEF: uint32_t fixpt_t ;
-TYPEDEF: uint64_t u_quad_t ;
-TYPEDEF: uint32_t sigset_t ;
+TYPEDEF: int32_t segsz_t
+TYPEDEF: uint32_t fixpt_t
+TYPEDEF: uint64_t u_quad_t
+TYPEDEF: uint32_t sigset_t
 
 STRUCT: itimerval
     { it_interval timeval }

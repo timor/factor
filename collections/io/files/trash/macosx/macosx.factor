@@ -11,9 +11,9 @@ PRIVATE<
 STRUCT: FSRef
     { hidden UInt8[80] } ;
 
-TYPEDEF: SInt32 OSStatus ;
+TYPEDEF: SInt32 OSStatus
 
-TYPEDEF: UInt32 OptionBits ;
+TYPEDEF: UInt32 OptionBits
 
 CONSTANT: noErr 0
 

@@ -13,17 +13,17 @@ COMPILE< "opencl" {
 LIBRARY: opencl
 
 ! cl_platform.h
-TYPEDEF: char      cl_char ;
-TYPEDEF: uchar     cl_uchar ;
-TYPEDEF: short     cl_short ;
-TYPEDEF: ushort    cl_ushort ;
-TYPEDEF: int       cl_int ;
-TYPEDEF: uint      cl_uint ;
-TYPEDEF: longlong  cl_long ;
-TYPEDEF: ulonglong cl_ulong ;
-TYPEDEF: ushort    cl_half ;
-TYPEDEF: float     cl_float ;
-TYPEDEF: double    cl_double ;
+TYPEDEF: char      cl_char
+TYPEDEF: uchar     cl_uchar
+TYPEDEF: short     cl_short
+TYPEDEF: ushort    cl_ushort
+TYPEDEF: int       cl_int
+TYPEDEF: uint      cl_uint
+TYPEDEF: longlong  cl_long
+TYPEDEF: ulonglong cl_ulong
+TYPEDEF: ushort    cl_half
+TYPEDEF: float     cl_float
+TYPEDEF: double    cl_double
 
 CONSTANT: CL_CHAR_BIT         8
 CONSTANT: CL_SCHAR_MAX        127
@@ -69,9 +69,9 @@ CONSTANT: CL_HUGE_VAL         1.0e500
 CONSTANT: CL_MAXFLOAT         340282346638528859811704183484516925440.0
 CONSTANT: CL_INFINITY         1.0e50
 
-TYPEDEF: uint cl_GLuint ;
-TYPEDEF: int  cl_GLint ;
-TYPEDEF: uint cl_GLenum ;
+TYPEDEF: uint cl_GLuint
+TYPEDEF: int  cl_GLint
+TYPEDEF: uint cl_GLenum
 
 ! cl.h
 C-TYPE: _cl_platform_id
@@ -84,49 +84,49 @@ C-TYPE: _cl_kernel
 C-TYPE: _cl_event
 C-TYPE: _cl_sampler
 
-TYPEDEF: _cl_platform_id*    cl_platform_id ;
-TYPEDEF: _cl_device_id*      cl_device_id ;
-TYPEDEF: _cl_context*        cl_context ;
-TYPEDEF: _cl_command_queue*  cl_command_queue ;
-TYPEDEF: _cl_mem*            cl_mem ;
-TYPEDEF: _cl_program*        cl_program ;
-TYPEDEF: _cl_kernel*         cl_kernel ;
-TYPEDEF: _cl_event*          cl_event ;
-TYPEDEF: _cl_sampler*        cl_sampler ;
+TYPEDEF: _cl_platform_id*    cl_platform_id
+TYPEDEF: _cl_device_id*      cl_device_id
+TYPEDEF: _cl_context*        cl_context
+TYPEDEF: _cl_command_queue*  cl_command_queue
+TYPEDEF: _cl_mem*            cl_mem
+TYPEDEF: _cl_program*        cl_program
+TYPEDEF: _cl_kernel*         cl_kernel
+TYPEDEF: _cl_event*          cl_event
+TYPEDEF: _cl_sampler*        cl_sampler
 
-TYPEDEF: cl_uint             cl_bool ;
-TYPEDEF: cl_ulong            cl_bitfield ;
-TYPEDEF: cl_bitfield         cl_device_type ;
-TYPEDEF: cl_uint             cl_platform_info ;
-TYPEDEF: cl_uint             cl_device_info ;
-TYPEDEF: cl_bitfield         cl_device_address_info ;
-TYPEDEF: cl_bitfield         cl_device_fp_config ;
-TYPEDEF: cl_uint             cl_device_mem_cache_type ;
-TYPEDEF: cl_uint             cl_device_local_mem_type ;
-TYPEDEF: cl_bitfield         cl_device_exec_capabilities ;
-TYPEDEF: cl_bitfield         cl_command_queue_properties ;
+TYPEDEF: cl_uint             cl_bool
+TYPEDEF: cl_ulong            cl_bitfield
+TYPEDEF: cl_bitfield         cl_device_type
+TYPEDEF: cl_uint             cl_platform_info
+TYPEDEF: cl_uint             cl_device_info
+TYPEDEF: cl_bitfield         cl_device_address_info
+TYPEDEF: cl_bitfield         cl_device_fp_config
+TYPEDEF: cl_uint             cl_device_mem_cache_type
+TYPEDEF: cl_uint             cl_device_local_mem_type
+TYPEDEF: cl_bitfield         cl_device_exec_capabilities
+TYPEDEF: cl_bitfield         cl_command_queue_properties
 
-TYPEDEF: intptr_t            cl_context_properties ;
-TYPEDEF: cl_uint             cl_context_info ;
-TYPEDEF: cl_uint             cl_command_queue_info ;
-TYPEDEF: cl_uint             cl_channel_order ;
-TYPEDEF: cl_uint             cl_channel_type ;
-TYPEDEF: cl_bitfield         cl_mem_flags ;
-TYPEDEF: cl_uint             cl_mem_object_type ;
-TYPEDEF: cl_uint             cl_mem_info ;
-TYPEDEF: cl_uint             cl_image_info ;
-TYPEDEF: cl_uint             cl_addressing_mode ;
-TYPEDEF: cl_uint             cl_filter_mode ;
-TYPEDEF: cl_uint             cl_sampler_info ;
-TYPEDEF: cl_bitfield         cl_map_flags ;
-TYPEDEF: cl_uint             cl_program_info ;
-TYPEDEF: cl_uint             cl_program_build_info ;
-TYPEDEF: cl_int              cl_build_status ;
-TYPEDEF: cl_uint             cl_kernel_info ;
-TYPEDEF: cl_uint             cl_kernel_work_group_info ;
-TYPEDEF: cl_uint             cl_event_info ;
-TYPEDEF: cl_uint             cl_command_type ;
-TYPEDEF: cl_uint             cl_profiling_info ;
+TYPEDEF: intptr_t            cl_context_properties
+TYPEDEF: cl_uint             cl_context_info
+TYPEDEF: cl_uint             cl_command_queue_info
+TYPEDEF: cl_uint             cl_channel_order
+TYPEDEF: cl_uint             cl_channel_type
+TYPEDEF: cl_bitfield         cl_mem_flags
+TYPEDEF: cl_uint             cl_mem_object_type
+TYPEDEF: cl_uint             cl_mem_info
+TYPEDEF: cl_uint             cl_image_info
+TYPEDEF: cl_uint             cl_addressing_mode
+TYPEDEF: cl_uint             cl_filter_mode
+TYPEDEF: cl_uint             cl_sampler_info
+TYPEDEF: cl_bitfield         cl_map_flags
+TYPEDEF: cl_uint             cl_program_info
+TYPEDEF: cl_uint             cl_program_build_info
+TYPEDEF: cl_int              cl_build_status
+TYPEDEF: cl_uint             cl_kernel_info
+TYPEDEF: cl_uint             cl_kernel_work_group_info
+TYPEDEF: cl_uint             cl_event_info
+TYPEDEF: cl_uint             cl_command_type
+TYPEDEF: cl_uint             cl_profiling_info
 
 STRUCT: cl_image_format
     { image_channel_order        cl_channel_order }
@@ -492,9 +492,9 @@ CONSTANT: CL_PLATFORM_NOT_FOUND_KHR  -1001
 FUNCTION: cl_int clIcdGetPlatformIDsKHR ( cl_uint num_entries, cl_platform_id* platforms, cl_uint* num_platforms ) ;
 
 ! cl_gl.h
-TYPEDEF: cl_uint cl_gl_object_type ;
-TYPEDEF: cl_uint cl_gl_texture_info ;
-TYPEDEF: cl_uint cl_gl_platform_info ;
+TYPEDEF: cl_uint cl_gl_object_type
+TYPEDEF: cl_uint cl_gl_texture_info
+TYPEDEF: cl_uint cl_gl_platform_info
 
 CONSTANT: CL_GL_OBJECT_BUFFER             0x2000
 CONSTANT: CL_GL_OBJECT_TEXTURE2D          0x2001
@@ -513,7 +513,7 @@ FUNCTION: cl_int clEnqueueAcquireGLObjects ( cl_command_queue command_queue, cl_
 FUNCTION: cl_int clEnqueueReleaseGLObjects ( cl_command_queue command_queue, cl_uint num_objects, cl_mem* mem_objects, cl_uint num_events_in_wait_list, cl_event* event_wait_list, cl_event* event ) ;
 
 ! cl_khr_gl_sharing.txt
-TYPEDEF: cl_uint cl_gl_context_info ;
+TYPEDEF: cl_uint cl_gl_context_info
 
 CONSTANT: CL_INVALID_GL_SHAREGROUP_REFERENCE_KHR  -1000
 CONSTANT: CL_CURRENT_DEVICE_FOR_GL_CONTEXT_KHR    0x2006
@@ -542,8 +542,8 @@ CONSTANT: CL_INVALID_D3D9_RESOURCE_NV           -1011
 CONSTANT: CL_D3D9_RESOURCE_ALREADY_ACQUIRED_NV  -1012
 CONSTANT: CL_D3D9_RESOURCE_NOT_ACQUIRED_NV      -1013
 
-TYPEDEF: void* cl_d3d9_device_source_nv ;
-TYPEDEF: void* cl_d3d9_device_set_nv ;
+TYPEDEF: void* cl_d3d9_device_source_nv
+TYPEDEF: void* cl_d3d9_device_set_nv
 
 FUNCTION: cl_int clGetDeviceIDsFromD3D9NV ( cl_platform_id platform, cl_d3d9_device_source_nv d3d_device_source, void* d3d_object, cl_d3d9_device_set_nv d3d_device_set, cl_uint num_entries, cl_device_id* devices, cl_uint* num_devices ) ;
 FUNCTION: cl_mem clCreateFromD3D9VertexBufferNV ( cl_context context, cl_mem_flags flags, void* id3dvb9_resource, cl_int* errcode_ret ) ;
@@ -570,8 +570,8 @@ CONSTANT: CL_INVALID_D3D10_RESOURCE_NV           -1003
 CONSTANT: CL_D3D10_RESOURCE_ALREADY_ACQUIRED_NV  -1004
 CONSTANT: CL_D3D10_RESOURCE_NOT_ACQUIRED_NV      -1005
 
-TYPEDEF: void* cl_d3d10_device_source_nv ;
-TYPEDEF: void* cl_d3d10_device_set_nv ;
+TYPEDEF: void* cl_d3d10_device_source_nv
+TYPEDEF: void* cl_d3d10_device_set_nv
 
 FUNCTION: cl_int clGetDeviceIDsFromD3D10NV ( cl_platform_id platform, cl_d3d10_device_source_nv d3d_device_source, void* d3d_object, cl_d3d10_device_set_nv d3d_device_set, cl_uint num_entries, cl_device_id* devices, cl_uint* num_devices ) ;
 FUNCTION: cl_mem clCreateFromD3D10BufferNV ( cl_context context, cl_mem_flags flags, void* id3d10buffer_resource, cl_int* errcode_ret ) ;
@@ -595,8 +595,8 @@ CONSTANT: CL_INVALID_D3D11_RESOURCE_NV           -1007
 CONSTANT: CL_D3D11_RESOURCE_ALREADY_ACQUIRED_NV  -1008
 CONSTANT: CL_D3D11_RESOURCE_NOT_ACQUIRED_NV      -1009
 
-TYPEDEF: void* cl_d3d11_device_source_nv ;
-TYPEDEF: void* cl_d3d11_device_set_nv ;
+TYPEDEF: void* cl_d3d11_device_source_nv
+TYPEDEF: void* cl_d3d11_device_set_nv
 
 FUNCTION: cl_int clGetDeviceIDsFromD3D11NV ( cl_platform_id platform, cl_d3d11_device_source_nv d3d_device_source, void* d3d_object, cl_d3d11_device_set_nv d3d_device_set, cl_uint num_entries, cl_device_id* devices, cl_uint* num_devices ) ;
 FUNCTION: cl_mem clCreateFromD3D11BufferNV ( cl_context context, cl_mem_flags flags, void* id3d11buffer_resource, cl_int* errcode_ret ) ;

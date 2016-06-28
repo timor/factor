@@ -11,8 +11,8 @@ IN: system-info.macosx
 
 PRIVATE<
 
-TYPEDEF: SInt16 OSErr ;
-TYPEDEF: UInt32 OSType ;
+TYPEDEF: SInt16 OSErr
+TYPEDEF: UInt32 OSType
 FUNCTION: OSErr Gestalt ( OSType selector, SInt32* response ) ;
 
 : gestalt ( selector -- response )

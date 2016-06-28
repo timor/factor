@@ -40,10 +40,10 @@ CONSTANT: kFSEventStreamEventFlagItemIsFile 0x00010000
 CONSTANT: kFSEventStreamEventFlagItemIsDir 0x00020000
 CONSTANT: kFSEventStreamEventFlagItemIsSymlink 0x00040000
 
-TYPEDEF: uint FSEventStreamCreateFlags ;
-TYPEDEF: uint FSEventStreamEventFlags ;
-TYPEDEF: ulonglong FSEventStreamEventId ;
-TYPEDEF: void* FSEventStreamRef ;
+TYPEDEF: uint FSEventStreamCreateFlags
+TYPEDEF: uint FSEventStreamEventFlags
+TYPEDEF: ulonglong FSEventStreamEventId
+TYPEDEF: void* FSEventStreamRef
 
 STRUCT: FSEventStreamContext
     { version CFIndex }
@@ -135,7 +135,7 @@ FUNCTION: CFStringRef FSEventStreamCopyDescription ( FSEventStreamRef streamRef 
     flags
     FSEventStreamCreate ;
 
-C-GLOBAL: void* kCFRunLoopCommonModes ;
+C-GLOBAL: void* kCFRunLoopCommonModes
 
 : schedule-event-stream ( event-stream -- )
     CFRunLoopGetMain

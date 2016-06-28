@@ -6,9 +6,9 @@ QUALIFIED-WITH: alien.c-types c
 FROM: math => float ;
 IN: core-foundation.numbers
 
-TYPEDEF: void* CFNumberRef ;
+TYPEDEF: void* CFNumberRef
 
-TYPEDEF: int CFNumberType ;
+TYPEDEF: int CFNumberType
 CONSTANT: kCFNumberSInt8Type 1
 CONSTANT: kCFNumberSInt16Type 2
 CONSTANT: kCFNumberSInt32Type 3

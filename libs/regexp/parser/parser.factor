@@ -217,4 +217,4 @@ Alternation = Concatenation:c ("|" Concatenation)*:a
 End = !(.)
 
 Main = Alternation End
-]=] ;
+]=]

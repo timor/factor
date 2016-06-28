@@ -22,6 +22,6 @@ COMPILE<
 } cond
 COMPILE>
 
-FOREIGN-RECORD-TYPE: cairo.Path cairo_path_t ;
+FOREIGN-RECORD-TYPE: cairo.Path cairo_path_t
 
 GIR: Clutter-1.0.gir

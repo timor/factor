@@ -3,7 +3,7 @@
 USING: classes.struct alien.c-types alien.syntax kernel.private ;
 IN: vm
 
-TYPEDEF: uintptr_t cell_t ;
+TYPEDEF: uintptr_t cell_t
 
 STRUCT: segment
     { start cell_t }

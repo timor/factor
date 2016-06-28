@@ -5,7 +5,7 @@ core-foundation.dictionaries core-foundation.strings
 core-foundation.utilities destructors kernel ;
 IN: core-foundation.attributed-strings
 
-TYPEDEF: void* CFAttributedStringRef ;
+TYPEDEF: void* CFAttributedStringRef
 
 FUNCTION: CFAttributedStringRef CFAttributedStringCreate (
    CFAllocatorRef alloc,

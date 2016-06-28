@@ -28,7 +28,7 @@ M: no-tag summary
 PRIVATE>
 
 SYNTAX: \ TAGS:
-    scan-new-word scan-effect ";" expect
+    scan-new-word scan-effect
     [ drop H{ } clone "xtable" set-word-prop ]
     [ define-tags ]
     2bi ;
@@ -37,7 +37,7 @@ SYNTAX: \ TAG:
     scan-token scan-word parse-definition define-tag ;
 
 SYNTAX: \ XML-NS:
-    scan-new-word scan-token ";" expect $[ f swap _ <name> ] ( string -- name ) define-memoized ;
+    scan-new-word scan-token $[ f swap _ <name> ] ( string -- name ) define-memoized ;
 
 PRIVATE<
 

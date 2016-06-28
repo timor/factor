@@ -4,8 +4,8 @@ USING: alien.c-types alien.syntax core-foundation kernel
 literals ;
 IN: core-foundation.file-descriptors
 
-TYPEDEF: void* CFFileDescriptorRef ;
-TYPEDEF: int CFFileDescriptorNativeDescriptor ;
+TYPEDEF: void* CFFileDescriptorRef
+TYPEDEF: int CFFileDescriptorNativeDescriptor
 
 CALLBACK: void CFFileDescriptorCallBack (
    CFFileDescriptorRef f,

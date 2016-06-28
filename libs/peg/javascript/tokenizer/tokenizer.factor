@@ -87,4 +87,4 @@ Special            =   "("    | ")"   | "{"   | "}"   | "["   | "]"   | ","   | 
                      | "^"
 Tok                = Spaces (Name | Keyword | Number | Str | RegExp | Special )
 Toks               = Tok* Spaces
-]=] ;
+]=]

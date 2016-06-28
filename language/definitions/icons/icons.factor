@@ -24,20 +24,20 @@ icons [ H{ } clone ] initialize
         define
     ] 2bi ;
 
-SYNTAX: \ ICON: scan-word scan-token ";" expect define-icon ;
+SYNTAX: \ ICON: scan-word scan-token define-icon ;
 
 COMPILE>
 
-ICON: predicate-class class-predicate-word ;
-ICON: generic generic-word ;
-ICON: macro macro-word ;
-ICON: parsing-word parsing-word ;
-ICON: primitive primitive-word ;
-ICON: symbol symbol-word ;
-ICON: constant constant-word ;
-ICON: word normal-word ;
-ICON: word-link word-help-article ;
-ICON: topic help-article ;
-ICON: runnable-vocab runnable-vocab ;
-ICON: vocab open-vocab ;
-ICON: vocab-link unopen-vocab ;
+ICON: predicate-class class-predicate-word
+ICON: generic generic-word
+ICON: macro macro-word
+ICON: parsing-word parsing-word
+ICON: primitive primitive-word
+ICON: symbol symbol-word
+ICON: constant constant-word
+ICON: word normal-word
+ICON: word-link word-help-article
+ICON: topic help-article
+ICON: runnable-vocab runnable-vocab
+ICON: vocab open-vocab
+ICON: vocab-link unopen-vocab

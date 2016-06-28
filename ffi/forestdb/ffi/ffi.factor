@@ -17,15 +17,15 @@ CONSTANT: FDB_MAX_METALEN 65512
 CONSTANT: FDB_MAX_BODYLEN 4294967295
 CONSTANT: FDB_SNAPSHOT_INMEM -1
 
-TYPEDEF: uint64_t fdb_seqnum_t ;
-TYPEDEF: int64_t cs_off_t ;
+TYPEDEF: uint64_t fdb_seqnum_t
+TYPEDEF: int64_t cs_off_t
 
-TYPEDEF: void* fdb_custom_cmp_fixed ;
-TYPEDEF: void* fdb_custom_cmp_variable ;
-TYPEDEF: void* fdb_file_handle ;
-TYPEDEF: void* fdb_kvs_handle ;
-TYPEDEF: void* fdb_iterator ;
-TYPEDEF: void* fdb_changes_callback_fn ;
+TYPEDEF: void* fdb_custom_cmp_fixed
+TYPEDEF: void* fdb_custom_cmp_variable
+TYPEDEF: void* fdb_file_handle
+TYPEDEF: void* fdb_kvs_handle
+TYPEDEF: void* fdb_iterator
+TYPEDEF: void* fdb_changes_callback_fn
 
 ENUM: fdb_open_flags < uint32_t
     { FDB_OPEN_FLAG_CREATE 1 }
@@ -222,7 +222,7 @@ STRUCT: fdb_kvs_commit_marker_t
     { kv_store_name char* }
     { seqnum fdb_seqnum_t } ;
 
-TYPEDEF: uint64_t fdb_snapshot_marker_t ;
+TYPEDEF: uint64_t fdb_snapshot_marker_t
 
 STRUCT: fdb_snapshot_info_t
     { marker fdb_snapshot_marker_t }

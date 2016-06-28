@@ -7,7 +7,7 @@ IN: tokyo.alien.tcadb
 
 LIBRARY: tokyocabinet
 
-TYPEDEF: void* TCADB ;
+TYPEDEF: void* TCADB
 
 CONSTANT: ADBOVOID 0
 CONSTANT: ADBOMDB 1
@@ -55,9 +55,9 @@ FUNCTION: TCLIST* tcadbmisc ( TCADB* adb, c-string name, TCLIST* args ) ;
 
 ! -----
 
-TYPEDEF: void* ADBSKEL ;
+TYPEDEF: void* ADBSKEL
 
-TYPEDEF: void* ADBMAPPROC ;
+TYPEDEF: void* ADBMAPPROC
 
 FUNCTION: bool tcadbsetskel ( TCADB* adb, ADBSKEL* skel ) ;
 FUNCTION: int tcadbomode ( TCADB* adb ) ;

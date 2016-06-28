@@ -19,11 +19,11 @@ LIBRARY: cairo
 FUNCTION: int cairo_version ( ) ;
 FUNCTION: c-string cairo_version_string ( ) ;
 
-TYPEDEF: int cairo_bool_t ;
+TYPEDEF: int cairo_bool_t
 
 ! I am leaving these and other void* types as opaque structures
-TYPEDEF: void* cairo_t ;
-TYPEDEF: void* cairo_surface_t ;
+TYPEDEF: void* cairo_t
+TYPEDEF: void* cairo_surface_t
 
 STRUCT: cairo_matrix_t
     { xx double }
@@ -33,7 +33,7 @@ STRUCT: cairo_matrix_t
     { x0 double }
     { y0 double } ;
 
-TYPEDEF: void* cairo_pattern_t ;
+TYPEDEF: void* cairo_pattern_t
 
 CALLBACK: void cairo_destroy_func_t ( void* data ) ;
 
@@ -289,9 +289,9 @@ FUNCTION: void cairo_rectangle_list_destroy ( cairo_rectangle_list_t* rectangle_
 
 ! Font/Text functions
 
-TYPEDEF: void* cairo_scaled_font_t ;
+TYPEDEF: void* cairo_scaled_font_t
 
-TYPEDEF: void* cairo_font_face_t ;
+TYPEDEF: void* cairo_font_face_t
 
 STRUCT: cairo_glyph_t
     { index ulong  }
@@ -356,7 +356,7 @@ ENUM: cairo_hint_metrics_t
     CAIRO_HINT_METRICS_OFF
     CAIRO_HINT_METRICS_ON ;
 
-TYPEDEF: void* cairo_font_options_t ;
+TYPEDEF: void* cairo_font_options_t
 
 FUNCTION: cairo_font_options_t* cairo_font_options_create ( ) ;
 

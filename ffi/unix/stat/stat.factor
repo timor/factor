@@ -18,8 +18,8 @@ CONSTANT: S_IFWHT  0o160000  ! Whiteout.
 STRUCT: fsid
     { __val int[2] } ;
 
-TYPEDEF: fsid __fsid_t ;
-TYPEDEF: fsid fsid_t ;
+TYPEDEF: fsid __fsid_t
+TYPEDEF: fsid fsid_t
 
 COMPILE< "unix.stat." os name>> append require COMPILE>
 

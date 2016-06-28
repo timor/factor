@@ -4,10 +4,10 @@ USING: alien.c-types alien.syntax core-foundation kernel
 sequences ;
 IN: core-foundation.data
 
-TYPEDEF: void* CFDataRef ;
-TYPEDEF: void* CFSetRef ;
+TYPEDEF: void* CFDataRef
+TYPEDEF: void* CFSetRef
 
-TYPEDEF: int CFPropertyListMutabilityOptions ;
+TYPEDEF: int CFPropertyListMutabilityOptions
 CONSTANT: kCFPropertyListImmutable 0
 CONSTANT: kCFPropertyListMutableContainers 1
 CONSTANT: kCFPropertyListMutableContainersAndLeaves 2

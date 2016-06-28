@@ -6,7 +6,7 @@ IN: core-foundation.urls
 
 CONSTANT: kCFURLPOSIXPathStyle 0
 
-TYPEDEF: void* CFURLRef ;
+TYPEDEF: void* CFURLRef
 
 FUNCTION: CFURLRef CFURLCreateWithFileSystemPath ( CFAllocatorRef allocator, CFStringRef filePath, int pathStyle, Boolean isDirectory ) ;
 

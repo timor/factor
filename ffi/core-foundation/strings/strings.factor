@@ -7,9 +7,9 @@ io.encodings.string io.encodings.utf8 kernel math math.order
 parser sequences words lexer ;
 IN: core-foundation.strings
 
-TYPEDEF: void* CFStringRef ;
+TYPEDEF: void* CFStringRef
 
-TYPEDEF: int CFStringEncoding ;
+TYPEDEF: int CFStringEncoding
 CONSTANT: kCFStringEncodingMacRoman 0x0
 CONSTANT: kCFStringEncodingWindowsLatin1 0x0500
 CONSTANT: kCFStringEncodingISOLatin1 0x0201
@@ -97,6 +97,6 @@ FUNCTION: CFStringRef CFCopyTypeIDDescription ( CFTypeID type_id ) ;
     CFGetTypeID [ CFCopyTypeIDDescription &CFRelease CF>string ] with-destructors ;
 
 SYNTAX: \ CFSTRING:
-    scan-new-word scan-object ";" expect
+    scan-new-word scan-object
     [ drop ] [ $[ _ [ _ <CFString> ] initialize-alien ] ] 2bi
     ( -- alien ) define-declared ;

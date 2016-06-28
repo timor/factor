@@ -19,34 +19,34 @@ IN: x11.xlib
 
 LIBRARY: xlib
 
-TYPEDEF: ulong XID ;
-TYPEDEF: XID Window ;
-TYPEDEF: XID Drawable ;
-TYPEDEF: XID Font ;
-TYPEDEF: XID Pixmap ;
-TYPEDEF: XID Cursor ;
-TYPEDEF: XID Colormap ;
-TYPEDEF: XID GContext ;
-TYPEDEF: XID KeySym ;
+TYPEDEF: ulong XID
+TYPEDEF: XID Window
+TYPEDEF: XID Drawable
+TYPEDEF: XID Font
+TYPEDEF: XID Pixmap
+TYPEDEF: XID Cursor
+TYPEDEF: XID Colormap
+TYPEDEF: XID GContext
+TYPEDEF: XID KeySym
 
-TYPEDEF: ulong Atom ;
+TYPEDEF: ulong Atom
 
-TYPEDEF: c-string XPointer ;
+TYPEDEF: c-string XPointer
 C-TYPE: Screen
-TYPEDEF: void* GC ;
+TYPEDEF: void* GC
 C-TYPE: Visual
 C-TYPE: XExtData
 C-TYPE: XFontProp
 C-TYPE: XComposeStatus
-TYPEDEF: void* XIM ;
-TYPEDEF: void* XIC ;
+TYPEDEF: void* XIM
+TYPEDEF: void* XIC
 
-TYPEDEF: int Status ;
+TYPEDEF: int Status
 
-TYPEDEF: int Bool ;
+TYPEDEF: int Bool
 
-TYPEDEF: ulong VisualID ;
-TYPEDEF: ulong Time ;
+TYPEDEF: ulong VisualID
+TYPEDEF: ulong Time
 
 : *XID ( bytes -- n ) ulong deref ;
 ALIAS: *Window *XID
@@ -611,8 +611,8 @@ STRUCT: XButtonEvent
 { button uint }
 { same_screen Bool } ;
 
-TYPEDEF: XButtonEvent XButtonPressedEvent ;
-TYPEDEF: XButtonEvent XButtonReleasedEvent ;
+TYPEDEF: XButtonEvent XButtonPressedEvent
+TYPEDEF: XButtonEvent XButtonReleasedEvent
 
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -634,8 +634,8 @@ STRUCT: XKeyEvent
 { keycode uint }
 { same_screen Bool } ;
 
-TYPEDEF: XKeyEvent XKeyPressedEvent ;
-TYPEDEF: XKeyEvent XKeyReleasedEvent ;
+TYPEDEF: XKeyEvent XKeyPressedEvent
+TYPEDEF: XKeyEvent XKeyReleasedEvent
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -656,7 +656,7 @@ STRUCT: XMotionEvent
 { is_hint char }
 { same_screen Bool } ;
 
-TYPEDEF: XMotionEvent XPointerMovedEvent ;
+TYPEDEF: XMotionEvent XPointerMovedEvent
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -679,8 +679,8 @@ STRUCT: XCrossingEvent
 { focus Bool }
 { state uint } ;
 
-TYPEDEF: XCrossingEvent XEnterWindowEvent ;
-TYPEDEF: XCrossingEvent XLeaveWindowEvent ;
+TYPEDEF: XCrossingEvent XEnterWindowEvent
+TYPEDEF: XCrossingEvent XLeaveWindowEvent
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -693,8 +693,8 @@ STRUCT: XFocusChangeEvent
 { mode int }
 { detail int } ;
 
-TYPEDEF: XFocusChangeEvent XFocusInEvent ;
-TYPEDEF: XFocusChangeEvent XFocusOutEvent ;
+TYPEDEF: XFocusChangeEvent XFocusInEvent
+TYPEDEF: XFocusChangeEvent XFocusOutEvent
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

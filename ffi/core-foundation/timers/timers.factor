@@ -4,14 +4,14 @@ USING: alien.c-types alien.syntax calendar.unix core-foundation
 core-foundation.time locals ;
 IN: core-foundation.timers
 
-TYPEDEF: void* CFRunLoopTimerRef ;
+TYPEDEF: void* CFRunLoopTimerRef
 
 CALLBACK: void CFRunLoopTimerCallBack (
    CFRunLoopTimerRef timer,
    void *info
 ) ;
 
-TYPEDEF: void* CFRunLoopTimerContext ;
+TYPEDEF: void* CFRunLoopTimerContext
 
 FUNCTION: CFRunLoopTimerRef CFRunLoopTimerCreate (
    CFAllocatorRef allocator,

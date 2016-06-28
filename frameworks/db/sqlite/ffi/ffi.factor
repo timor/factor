@@ -101,8 +101,8 @@ CONSTANT: SQLITE_OPEN_MASTER_JOURNAL   0x00004000
 
 C-TYPE: sqlite3
 C-TYPE: sqlite3_stmt
-TYPEDEF: longlong sqlite3_int64 ;
-TYPEDEF: ulonglong sqlite3_uint64 ;
+TYPEDEF: longlong sqlite3_int64
+TYPEDEF: ulonglong sqlite3_uint64
 
 LIBRARY: sqlite
 FUNCTION: int sqlite3_open ( c-string filename, void* ppDb ) ;

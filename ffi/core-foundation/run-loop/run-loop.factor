@@ -13,8 +13,8 @@ CONSTANT: kCFRunLoopRunStopped 2
 CONSTANT: kCFRunLoopRunTimedOut 3
 CONSTANT: kCFRunLoopRunHandledSource 4
 
-TYPEDEF: void* CFRunLoopRef ;
-TYPEDEF: void* CFRunLoopSourceRef ;
+TYPEDEF: void* CFRunLoopRef
+TYPEDEF: void* CFRunLoopSourceRef
 
 FUNCTION: CFRunLoopRef CFRunLoopGetMain ( ) ;
 FUNCTION: CFRunLoopRef CFRunLoopGetCurrent ( ) ;
@@ -55,7 +55,7 @@ FUNCTION: void CFRunLoopRemoveTimer (
     CFStringRef mode
 ) ;
 
-CFSTRING: CFRunLoopDefaultMode "kCFRunLoopDefaultMode" ;
+CFSTRING: CFRunLoopDefaultMode "kCFRunLoopDefaultMode"
 
 TUPLE: run-loop-state fds sources timers ;
 

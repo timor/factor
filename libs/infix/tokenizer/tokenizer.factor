@@ -21,4 +21,4 @@ Special           =   [+*/%(),] | "-" => [[ char: - ]]
 Tok               = Spaces (Name | Number | Special )
 End               = !(.)
 Toks              = Tok* Spaces End
-]=] ;
+]=]

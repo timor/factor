@@ -21,7 +21,7 @@ CONSTANT: chloe-ns "http://factorcode.org/chloe/1.0"
 : chloe-name? ( name -- ? )
     url>> chloe-ns = ;
 
-XML-NS: chloe-name http://factorcode.org/chloe/1.0 ;
+XML-NS: chloe-name http://factorcode.org/chloe/1.0
 
 : required-attr ( tag name -- value )
     [ nip ] [ chloe-name attr ] 2bi

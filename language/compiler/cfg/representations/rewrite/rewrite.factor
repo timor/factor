@@ -66,7 +66,7 @@ SYMBOLS: renaming-set needs-renaming? ;
 : converted-value ( vreg -- vreg' )
     renaming-set get pop first2 [ assert= ] dip ;
 
-RENAMING: convert [ converted-value ] [ converted-value ] [ ] ;
+RENAMING: convert [ converted-value ] [ converted-value ] [ ]
 
 : perform-renaming ( insn -- )
     needs-renaming? get [

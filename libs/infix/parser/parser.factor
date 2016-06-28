@@ -29,7 +29,7 @@ Sum         =   Sum:s ("+"|"-"):op Product:p  => [[ s p op ast-op boa ]]
 
 End         = !(.)
 Expression  = Sum End
-]=] ;
+]=]
 
 : build-infix-ast ( string -- ast )
     tokenize-infix parse-infix ;

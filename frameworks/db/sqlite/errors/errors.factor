@@ -25,4 +25,4 @@ SqliteError =
       => [[ table >string <sql-table-missing> ]]
     | .*:error
       => [[ error >string <unparsed-sqlite-error> ]]
-]=] ;
+]=]

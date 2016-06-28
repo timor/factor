@@ -50,7 +50,7 @@ FUNCTION: void yaml_get_version ( int *major, int *minor, int *patch ) ;
 ! It copies it's input and we can use null-terminated string
 ! if we give a negative length. So we can use factor's c-string
 ! for input and output.
-TYPEDEF: uchar yaml_char_t ;
+TYPEDEF: uchar yaml_char_t
 
 ! /** The version directive data. */
 STRUCT: yaml_version_directive_t
@@ -565,7 +565,7 @@ ENUM: yaml_node_type_t
 ! typedef struct yaml_node_s yaml_node_t;
 
 ! /** An element of a sequence node. */
-TYPEDEF: int yaml_node_item_t ;
+TYPEDEF: int yaml_node_item_t
 
 ! /** An element of a mapping node. */
 STRUCT: yaml_node_pair_t

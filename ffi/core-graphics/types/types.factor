@@ -73,17 +73,17 @@ STRUCT: CGAffineTransform
     { tx CGFloat }
     { ty CGFloat } ;
 
-TYPEDEF: void* CGColorRef ;
-TYPEDEF: void* CGColorSpaceRef ;
-TYPEDEF: void* CGContextRef ;
-TYPEDEF: void* CGImageRef ;
-TYPEDEF: void* CGImageDestinationRef ;
+TYPEDEF: void* CGColorRef
+TYPEDEF: void* CGColorSpaceRef
+TYPEDEF: void* CGContextRef
+TYPEDEF: void* CGImageRef
+TYPEDEF: void* CGImageDestinationRef
 
-TYPEDEF: uint CGBitmapInfo ;
+TYPEDEF: uint CGBitmapInfo
 
-TYPEDEF: int CGLError ;
-TYPEDEF: int CGError ;
-TYPEDEF: uint CGDirectDisplayID ;
-TYPEDEF: int boolean_t ;
-TYPEDEF: void* CGLContextObj ;
-TYPEDEF: int CGLContextParameter ;
+TYPEDEF: int CGLError
+TYPEDEF: int CGError
+TYPEDEF: uint CGDirectDisplayID
+TYPEDEF: int boolean_t
+TYPEDEF: void* CGLContextObj
+TYPEDEF: int CGLContextParameter

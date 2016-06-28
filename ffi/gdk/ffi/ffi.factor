@@ -28,13 +28,13 @@ STRUCT: cairo_rectangle_int_t
 C-TYPE: cairo_region_t
 ! workaround>
 
-FOREIGN-RECORD-TYPE: cairo.RectangleInt cairo_rectangle_int_t ;
-FOREIGN-RECORD-TYPE: cairo.Region cairo_region_t ;
-FOREIGN-RECORD-TYPE: cairo.FontOptions cairo_font_options_t ;
-FOREIGN-RECORD-TYPE: cairo.Surface cairo_surface_t ;
-FOREIGN-RECORD-TYPE: cairo.Pattern cairo_pattern_t ;
-FOREIGN-RECORD-TYPE: cairo.Context cairo_t ;
-FOREIGN-ENUM-TYPE: cairo.Content cairo_content_t ;
+FOREIGN-RECORD-TYPE: cairo.RectangleInt cairo_rectangle_int_t
+FOREIGN-RECORD-TYPE: cairo.Region cairo_region_t
+FOREIGN-RECORD-TYPE: cairo.FontOptions cairo_font_options_t
+FOREIGN-RECORD-TYPE: cairo.Surface cairo_surface_t
+FOREIGN-RECORD-TYPE: cairo.Pattern cairo_pattern_t
+FOREIGN-RECORD-TYPE: cairo.Context cairo_t
+FOREIGN-ENUM-TYPE: cairo.Content cairo_content_t
 
 GIR: vocab:gdk/Gdk-3.0.gir
 

@@ -73,7 +73,7 @@ STRUCT: XIModifierState
     { locked    int }
     { effective int } ;
 
-TYPEDEF: XIModifierState XIGroupState ;
+TYPEDEF: XIModifierState XIGroupState
 
 STRUCT: XIButtonState
     { mask_len int }
@@ -244,9 +244,9 @@ STRUCT: XIEnterEvent
     { mods        XIModifierState }
     { group       XIGroupState } ;
 
-TYPEDEF: XIEnterEvent XILeaveEvent ;
-TYPEDEF: XIEnterEvent XIFocusInEvent ;
-TYPEDEF: XIEnterEvent XIFocusOutEvent ;
+TYPEDEF: XIEnterEvent XILeaveEvent
+TYPEDEF: XIEnterEvent XIFocusInEvent
+TYPEDEF: XIEnterEvent XIFocusOutEvent
 
 STRUCT: XIPropertyEvent
     { type       int }

@@ -6,9 +6,9 @@
 USING: alien alien.c-types alien.syntax math x11.xlib ;
 IN: x11.constants
 
-TYPEDEF: ulong Mask ;
+TYPEDEF: ulong Mask
 
-TYPEDEF: uchar KeyCode ;
+TYPEDEF: uchar KeyCode
 
 ! Reserved Resource and Constant Definitions
 
