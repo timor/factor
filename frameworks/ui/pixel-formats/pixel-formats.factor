@@ -83,7 +83,7 @@ M: pixel-format-attribute >PFA
 
 FUNCTOR>
 
-SYNTAX: PIXEL-FORMAT-ATTRIBUTE-TABLE:
+SYNTAX: \ PIXEL-FORMAT-ATTRIBUTE-TABLE:
     scan-token scan-object scan-object ";" expect define-pixel-format-attribute-table ;
 
 PRIVATE>
