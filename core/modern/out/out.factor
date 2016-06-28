@@ -60,6 +60,8 @@ CONSTANT: janky-arities H{
     `GIR 1 --
     `PIXEL-FORMAT-ATTRIBUTE-TABLE 1 --
     `TEST 1 --
+    `SELECTOR 1 --
+    `SIMD-128 1 --
 
     `ALIAS 2 --
     `ARITY 2 --
