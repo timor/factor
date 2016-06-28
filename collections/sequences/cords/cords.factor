@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2010 Slava Pestov, Joe Groff.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs sequences sorting binary-search fry math
-math.order arrays classes combinators kernel functors locals
+math.order arrays classes combinators kernel funktors locals
 math.functions math.vectors ;
 IN: sequences.cords
 
@@ -27,21 +27,17 @@ GENERIC: cord-append ( seq1 seq2 -- cord )
 M: object cord-append
     generic-cord boa ; inline
 
-FUNCTOR< define-specialized-cord ( T C -- )
+FUNKTOR: define-specialized-cord ( T C -- ) [[
 
-T-cord DEFINES-CLASS ${C}
+TUPLE: ${C}-cord
+    { head ${T} read-only } { tail ${T} read-only } ; final
+INSTANCE: ${C}-cord cord
 
-WHERE
+M: ${T} cord-append
+    2dup [ ${T} instance? ] both?
+    [ ${C}-cord boa ] [ generic-cord boa ] if ; inline
+]]
 
-TUPLE: T-cord
-    { head T read-only } { tail T read-only } ; final
-INSTANCE: T-cord cord
-
-M: T cord-append
-    2dup [ T instance? ] both?
-    [ T-cord boa ] [ generic-cord boa ] if ; inline
-
-FUNCTOR>
 
 : cord-map ( cord quot -- cord' )
     [ [ head>> ] dip call ]
