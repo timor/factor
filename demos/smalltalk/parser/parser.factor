@@ -63,7 +63,7 @@ Exponent = "e" => [[ char: e ]] (OptionalMinus DecimalIntegerLiteral)?
 
 CharacterLiteral = "$" Character:c => [[ c ]]
 
-StringLiteral = "'" (StringLiteralCharacter | "''" => [[ char: ' ]])*:s "'"
+StringLiteral = "'" (StringLiteralCharacter | "''" => [[ char: \' ]])*:s "'"
                 => [[ s >string ]]
 StringLiteralCharacter = [^']
 

@@ -108,7 +108,7 @@ PRIVATE<
 
 : lookup-type ( string -- object/string ? )
     "/f" ?tail swap
-    "new" ?head drop [ { [ char: ' = ] [ digit? ] } 1|| ] trim-tail
+    "new" ?head drop [ { [ char: \' = ] [ digit? ] } 1|| ] trim-tail
     H{
         { "object" object }
         { "obj" object }

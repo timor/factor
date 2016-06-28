@@ -116,7 +116,7 @@ C: <ebnf> ebnf ;
             [ "\"\\" member? ] satisfy 2seq ,
             [ char: \" = not ] satisfy ,
         ] choice* repeat1 "\"" "\"" surrounded-by ,
-        [ char: ' = not ] satisfy repeat1 "'" "'" surrounded-by ,
+        [ char: \' = not ] satisfy repeat1 "'" "'" surrounded-by ,
     ] choice* [ "" flatten-as unescape-string ] action ;
 
 : non-terminal-parser ( -- parser )

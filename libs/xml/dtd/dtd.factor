@@ -23,7 +23,7 @@ UNION: dtd-acceptable
 : take-entity-def ( var -- entity-name entity-def )
     [
         take-word pass-blank get-char {
-            { char: ' [ parse-quote ] }
+            { char: \' [ parse-quote ] }
             { char: \" [ parse-quote ] }
             [ drop take-external-id close ]
         } case

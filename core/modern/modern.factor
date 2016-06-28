@@ -128,7 +128,7 @@ M: array collapse-decorators
     dup [ length 2 - ] keep [ char: \: = ] find-last-from [ 1 + tail ] [ drop ] if ;
 
 : scoped-less-than-name ( string -- string' )
-    dup [ length 2 - ] keep [ char: < = ] find-last-from [ 1 + tail ] [ drop ] if ;
+    dup [ length 2 - ] keep [ char: \< = ] find-last-from [ 1 + tail ] [ drop ] if ;
 
 : trim-top-level ( string -- string' )
     {

@@ -382,7 +382,7 @@ M: x11-ui-backend beep ( -- )
 
 PRIVATE<
 : escape-' ( string -- string' )
-    [ dup char: ' = [ drop "'\\''" ] [ 1string ] if ] { } map-as concat ;
+    [ dup char: \' = [ drop "'\\''" ] [ 1string ] if ] { } map-as concat ;
 
 : xmessage ( string -- )
     escape-' "/usr/bin/env xmessage '" "'" surround system drop ;

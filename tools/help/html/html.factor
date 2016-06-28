@@ -16,18 +16,18 @@ IN: help.html
     dup ascii? [
         dup H{
             { char: \" "__quo__" }
-            { char: * "__star__" }
+            { char: \* "__star__" }
             { char: \: "__colon__" }
-            { char: < "__lt__" }
-            { char: > "__gt__" }
-            { char: ? "__que__" }
+            { char: \< "__lt__" }
+            { char: \> "__gt__" }
+            { char: \? "__que__" }
             { char: \\ "__back__" }
-            { char: | "__pipe__" }
-            { char: / "__slash__" }
-            { char: , "__comma__" }
-            { char: @ "__at__" }
-            { char: # "__hash__" }
-            { char: % "__percent__" }
+            { char: \| "__pipe__" }
+            { char: \/ "__slash__" }
+            { char: \, "__comma__" }
+            { char: \@ "__at__" }
+            { char: \# "__hash__" }
+            { char: \% "__percent__" }
         } at [ % ] [ , ] ?if
     ] [ number>string "__" "__" surround % ] if ;
 

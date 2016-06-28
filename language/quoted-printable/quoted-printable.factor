@@ -15,8 +15,8 @@ PRIVATE<
 
 : printable? ( ch -- ? )
     {
-        [ char: \s char: < between? ]
-        [ char: > char: ~ between? ]
+        [ char: \s char: \< between? ]
+        [ char: \> char: \~ between? ]
         [ char: \t = ]
     } 1|| ;
 
