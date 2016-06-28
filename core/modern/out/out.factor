@@ -39,6 +39,18 @@ CONSTANT: janky-arities H{
     `SOLUTION 1 --
     `OPCODE 1 --
     `CYCLES 1 --
+    `MIXIN 1 --
+    `SLOT 1 --
+    `MAIN 1 --
+    `SPECIALIZED-ARRAY 1 --
+    `SPECIALIZED-VECTOR 1 --
+    `8-BIT 1 --
+    `TUPLE-ARRAY 1 --
+    `C-TYPE 1 --
+    `LIBRARY 1 --
+    `DESTRUCTOR 1 --
+    `COMPONENT 1 --
+    `FRAMEWORK 1 --
 
     `ALIAS 2 --
     `ARITY 2 --
@@ -47,6 +59,7 @@ CONSTANT: janky-arities H{
     `INSTANCE 2 --
     `GENERIC 2 --
     `PRIMITIVE 2 --
+    `QUALIFIED 2 --
 
     `GENERIC# 3 --
     `HOOK 3
@@ -248,7 +261,7 @@ M: uppercase-colon-literal fixup-arity
         ! dup first " ;" >>closing-tag drop
     ] [
         drop
-        dup closing-tag>> [ closing-tag-required2 ] unless
+        dup closing-tag>> [ B closing-tag-required2 ] unless
     ] if ;
 
 M: less-than-literal fixup-arity
