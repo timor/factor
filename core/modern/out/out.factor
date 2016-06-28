@@ -1,11 +1,11 @@
 ! Copyright (C) 2016 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays combinators combinators.short-circuit
-combinators.smart continuations fry io io.encodings.utf8
-io.files io.streams.string kernel modern modern.paths
-modern.slices namespaces prettyprint sequences
-sequences.extras sets splitting splitting.monotonic strings
-unicode math ;
+USING: accessors arrays assocs combinators
+combinators.short-circuit combinators.smart continuations fry io
+io.encodings.utf8 io.files io.streams.string kernel math modern
+modern.paths modern.refactor modern.slices namespaces
+prettyprint sequences sequences.extras sets splitting
+splitting.monotonic strings unicode ;
 IN: modern.out
 
 SYMBOL: last-slice
@@ -24,6 +24,29 @@ SYMBOL: last-slice
         length modify-from io:write
     ] [ drop last-slice namespaces:set ] 2bi ;
 
+CONSTANT: janky-arities H{
+    `DEFER 1 --
+    `FORGET 1 --
+    `IN 1 --
+    `USE 1 --
+    `UNUSE 1 --
+    `SYMBOL 1 --
+    `SINGLETON 1 --
+    `B 1 --
+    `MAIN 1 --
+    `LEFT-DECORATOR 1 --
+
+    `ALIAS 2 --
+    `ARITY 2 --
+    `C 2 --
+    `CONSTANT 2 --
+    `INSTANCE 2 --
+    `GENERIC 2 --
+    `PRIMITIVE 2 --
+
+    `GENERIC# 3 --
+    `HOOK 3
+} ;
 
 DEFER: write-literal
 GENERIC: write-literal ( obj -- ) ;
@@ -215,9 +238,28 @@ M: compound-sequence-literal write-literal
     $[ [ path>literals [ _ map-literals ] map ] [ ] bi write-modern-path ]
     [ drop . ] recover ; inline
 
+GENERIC: split-arity ( obj -- seq ) ;
+
+M: uppercase-colon-literal split-arity
+    dup { [ uppercase-colon-literal? ] [ tag>> janky-arities at ] } 1&& [
+        dup tag>> janky-arities at
+        $[ _ swap [ any-comment? not ] cut-nth-match swap ] change-payload
+        swap 2array
+        dup first f >>closing-tag drop
+        ! dup first " ;" >>closing-tag drop
+    ] when ;
+
+M: less-than-literal split-arity
+    [ [ split-arity ] map ] change-payload ;
+
+M: object split-arity ;
+
 : rewrite-string ( string quot -- )
     ! dup print
-    [ string>literals ] dip $[ _ map-literals ] map write-modern-string ; inline
+    [ string>literals ] dip $[ _ map-literals ] map
+    ! colons
+    [ split-arity ] map
+    write-modern-string ; inline
 
 : rewrite-paths ( seq quot -- ) $[ _ rewrite-path ] each ; inline
 
