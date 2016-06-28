@@ -1,20 +1,14 @@
-USING: accessors effects.parser eval grouping interpolate kernel
-multiline namespaces parser sequences sets splitting
-vocabs.parser words ;
+! Copyright (C) 2016 Doug Coleman.
+! See http://factorcode.org/license.txt for BSD license.
+USING: accessors arrays effects.parser eval interpolate
+io.streams.string kernel locals.parser namespaces parser
+sequences words ;
 IN: funktors
 
-SYNTAX: \ funktor[[ "]]" parse-multiline-string
-    manifest get search-vocab-names>>
-    { "syntax" } diff members
-    current-vocab name>> ".private" ?tail drop ".private" append suffix
-    $[
-        _ interpolate>string
-        current-vocab name>> "\nIN: " "\n" surround prepend
-        _ 5 group [ " " join ] map "\n" join
-        "USING: " " ;\n" surround prepend
-        eval( -- )
-    ] suffix! ;
-
 SYNTAX: \ FUNKTOR:
-    scan-new-escaped scan-effect scan-object
-    $[ _ call ] swap define-declared ;
+    scan-new-escaped
+    scan-effect dup in>> [ dup pair? [ first ] when ] map make-locals
+    drop [ name>> ] map reverse [ $[ _ namespaces:set ] ] map [ ] [ compose ] reduce
+    scan-object interpolate-locals-quot compose
+    $[ [ _ call ] with-string-writer eval-in-current( -- ) ] swap define-declared ;
+    ! $[ @ interpolate>string eval-in-current( -- ) ] swap define-declared ;

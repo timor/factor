@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: combinators compiler.units continuations debugger
 effects.parser io.streams.string kernel kernel.private multiline
-namespaces parser parser.notes sequences splitting ;
+namespaces parser parser.notes sequences splitting vocabs.parser ;
 IN: eval
 
 : parse-string ( str -- quot )
@@ -15,6 +15,11 @@ IN: eval
     [ (eval) ] with-file-vocabs ; inline
 
 SYNTAX: \ eval( \ eval parse-call-paren ;
+
+: eval-in-current ( string effect -- output )
+    [ (eval) ] with-current-manifest ; inline
+
+SYNTAX: \ eval-in-current( \ eval-in-current parse-call-paren ;
 
 SYNTAX: \ eval[[
     "]]" parse-multiline-string

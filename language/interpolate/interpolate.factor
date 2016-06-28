@@ -88,3 +88,6 @@ MACRO: interpolate-locals ( str -- quot )
 SYNTAX: \ I[[
     "]]" parse-multiline-string
     interpolate-locals-quot append! ;
+
+SYNTAX: \ $[[
+    "]]" parse-multiline-string interpolate-locals-quot append! ;
