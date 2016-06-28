@@ -1,8 +1,9 @@
 ! Copyright (C) 2015 Doug Coleman.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors combinators.smart io.directories.search
-io.files kernel namespaces sequences sets splitting vocabs.files
-vocabs.hierarchy vocabs.loader vocabs.metadata ;
+USING: accessors combinators.smart io.backend
+io.directories.search io.files kernel namespaces sequences sets
+splitting vocabs.files vocabs.hierarchy vocabs.loader
+vocabs.metadata ;
 IN: modern.paths
 
 : vocabs-from ( root -- vocabs )
@@ -55,7 +56,7 @@ IN: modern.paths
         "resource:core/vocabs/loader/test/n/n.factor"
         "resource:core/vocabs/loader/test/o/o.factor"
         "resource:core/vocabs/loader/test/p/p.factor"
-    } diff
+    } [ normalize-path ] map diff
     ! Don't parse .modern files yet
     [ ".modern" tail? ] reject ;
 
