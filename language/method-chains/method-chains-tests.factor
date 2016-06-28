@@ -1,7 +1,7 @@
 IN: method-chains.tests
 USING: method-chains tools.test arrays strings sequences kernel namespaces ;
 
-GENERIC: testing ( a b -- c ) ;
+GENERIC: testing ( a b -- c )
 
 M: sequence testing nip reverse ;
 AFTER: string testing append ;

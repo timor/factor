@@ -11,8 +11,8 @@ TUPLE: jamshred-gadget < gadget { jamshred jamshred } last-hand-loc ;
 : <jamshred-gadget> ( jamshred -- gadget )
     jamshred-gadget new swap >>jamshred ;
 
-CONSTANT: default-width 800 ;
-CONSTANT: default-height 600 ;
+CONSTANT: default-width 800
+CONSTANT: default-height 600
 
 M: jamshred-gadget pref-dim*
     drop default-width default-height 2array ;

@@ -15,23 +15,23 @@ blocks blocks-free blocks-available
 files files-free files-available
 name-max flags id ;
 
-HOOK: new-file-system-info os ( --  file-system-info ) ;
+HOOK: new-file-system-info os ( --  file-system-info )
 
 M: unix new-file-system-info unix-file-system-info new ;
 
-HOOK: file-system-statfs os ( path -- statfs ) ;
+HOOK: file-system-statfs os ( path -- statfs )
 
 M: unix file-system-statfs drop f ;
 
-HOOK: file-system-statvfs os ( path -- statvfs ) ;
+HOOK: file-system-statvfs os ( path -- statvfs )
 
 M: unix file-system-statvfs drop f ;
 
-HOOK: statfs>file-system-info os ( file-system-info statfs -- file-system-info' ) ;
+HOOK: statfs>file-system-info os ( file-system-info statfs -- file-system-info' )
 
 M: unix statfs>file-system-info drop ;
 
-HOOK: statvfs>file-system-info os ( file-system-info statvfs -- file-system-info' ) ;
+HOOK: statvfs>file-system-info os ( file-system-info statvfs -- file-system-info' )
 
 M: unix statvfs>file-system-info drop ;
 
@@ -51,11 +51,11 @@ M: unix file-system-info
 TUPLE: unix-file-info < file-info-tuple uid gid dev ino
 nlink rdev blocks blocksize ;
 
-HOOK: new-file-info os ( -- file-info ) ;
+HOOK: new-file-info os ( -- file-info )
 
-HOOK: stat>file-info os ( stat -- file-info ) ;
+HOOK: stat>file-info os ( stat -- file-info )
 
-HOOK: stat>type os ( stat -- file-info ) ;
+HOOK: stat>type os ( stat -- file-info )
 
 M: unix file-info ( path -- info )
     normalize-path file-status stat>file-info ;
@@ -65,7 +65,7 @@ M: unix link-info ( path -- info )
 
 M: unix new-file-info ( -- class ) unix-file-info new ;
 
-CONSTANT: standard-unix-block-size 512 ;
+CONSTANT: standard-unix-block-size 512
 
 M: unix stat>file-info ( stat -- file-info )
     [ new-file-info ] dip
@@ -111,7 +111,7 @@ PRIVATE<
     [ dup stat-mode ] 2dip
     [ bitor ] [ unmask ] if [ chmod ] unix-system-call drop ;
 
-GENERIC#: file-mode? 1 ( obj mask -- ? ) ;
+GENERIC#: file-mode? 1 ( obj mask -- ? )
 
 M: integer file-mode? mask? ;
 M: string file-mode? [ stat-mode ] dip mask? ;
@@ -119,24 +119,24 @@ M: file-info-tuple file-mode? [ permissions>> ] dip mask? ;
 
 PRIVATE>
 
-CONSTANT: UID           0o0004000 ;
-CONSTANT: GID           0o0002000 ;
-CONSTANT: STICKY        0o0001000 ;
-CONSTANT: USER-ALL      0o0000700 ;
-CONSTANT: USER-READ     0o0000400 ;
-CONSTANT: USER-WRITE    0o0000200 ;
-CONSTANT: USER-EXECUTE  0o0000100 ;
-CONSTANT: GROUP-ALL     0o0000070 ;
-CONSTANT: GROUP-READ    0o0000040 ;
-CONSTANT: GROUP-WRITE   0o0000020 ;
-CONSTANT: GROUP-EXECUTE 0o0000010 ;
-CONSTANT: OTHER-ALL     0o0000007 ;
-CONSTANT: OTHER-READ    0o0000004 ;
-CONSTANT: OTHER-WRITE   0o0000002 ;
-CONSTANT: OTHER-EXECUTE 0o0000001 ;
-CONSTANT: ALL-READ      0o0000444 ;
-CONSTANT: ALL-WRITE     0o0000222 ;
-CONSTANT: ALL-EXECUTE   0o0000111 ;
+CONSTANT: UID           0o0004000
+CONSTANT: GID           0o0002000
+CONSTANT: STICKY        0o0001000
+CONSTANT: USER-ALL      0o0000700
+CONSTANT: USER-READ     0o0000400
+CONSTANT: USER-WRITE    0o0000200
+CONSTANT: USER-EXECUTE  0o0000100
+CONSTANT: GROUP-ALL     0o0000070
+CONSTANT: GROUP-READ    0o0000040
+CONSTANT: GROUP-WRITE   0o0000020
+CONSTANT: GROUP-EXECUTE 0o0000010
+CONSTANT: OTHER-ALL     0o0000007
+CONSTANT: OTHER-READ    0o0000004
+CONSTANT: OTHER-WRITE   0o0000002
+CONSTANT: OTHER-EXECUTE 0o0000001
+CONSTANT: ALL-READ      0o0000444
+CONSTANT: ALL-WRITE     0o0000222
+CONSTANT: ALL-EXECUTE   0o0000111
 
 : uid? ( obj -- ? ) UID file-mode? ;
 : gid? ( obj -- ? ) GID file-mode? ;
@@ -211,9 +211,9 @@ PRIVATE>
     [ normalize-path ] 2dip [ -1 or ] bi@
     [ chown ] unix-system-call drop ;
 
-GENERIC: set-file-user ( path string/id -- ) ;
+GENERIC: set-file-user ( path string/id -- )
 
-GENERIC: set-file-group ( path string/id -- ) ;
+GENERIC: set-file-group ( path string/id -- )
 
 M: integer set-file-user ( path uid -- )
     f set-file-ids ;

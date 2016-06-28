@@ -9,23 +9,23 @@ IN: unicode.data
 
 PRIVATE<
 
-CONSTANT: simple-lower H{ } ;
-CONSTANT: simple-upper H{ } ;
-CONSTANT: simple-title H{ } ;
-CONSTANT: canonical-map H{ } ;
-CONSTANT: combine-map H{ } ;
-CONSTANT: class-map H{ } ;
-CONSTANT: compatibility-map H{ } ;
-CONSTANT: category-map BV{ } ;
-CONSTANT: special-casing H{ } ;
-CONSTANT: properties H{ } ;
+CONSTANT: simple-lower H{ }
+CONSTANT: simple-upper H{ }
+CONSTANT: simple-title H{ }
+CONSTANT: canonical-map H{ }
+CONSTANT: combine-map H{ }
+CONSTANT: class-map H{ }
+CONSTANT: compatibility-map H{ }
+CONSTANT: category-map BV{ }
+CONSTANT: special-casing H{ }
+CONSTANT: properties H{ }
 
 : >2ch ( a b -- c ) [ 21 shift ] dip + ;
 : 2ch> ( c -- a b ) [ -21 shift ] [ 21 on-bits mask ] bi ;
 
 PRIVATE>
 
-CONSTANT: name-map H{ } ;
+CONSTANT: name-map H{ }
 
 : canonical-entry ( char -- seq ) canonical-map at ; inline
 : compatibility-entry ( char -- seq ) compatibility-map at ; inline
@@ -46,14 +46,14 @@ CONSTANT: categories {
     "Sm" "Sc" "Sk" "So"
     "Zs" "Zl" "Zp"
     "Cc" "Cf" "Cs" "Co"
-} ;
+}
 
 PRIVATE<
 
 MEMO: categories-map ( -- hashtable )
     categories <enum> [ swap ] H{ } assoc-map-as ;
 
-CONSTANT: num-chars 0x2FA1E ;
+CONSTANT: num-chars 0x2FA1E
 
 PRIVATE>
 
@@ -160,7 +160,7 @@ PRIVATE>
 
 TUPLE: code-point lower title upper ;
 
-C: <code-point> code-point ;
+C: <code-point> code-point
 
 PRIVATE<
 

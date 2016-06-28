@@ -24,7 +24,7 @@ TUPLE: win32-mapped-file file mapping ;
 M: win32-mapped-file dispose
     [ file>> dispose ] [ mapping>> dispose ] bi ;
 
-C: <win32-mapped-file> win32-mapped-file ;
+C: <win32-mapped-file> win32-mapped-file
 
 M: windows (mapped-file-r/w)
     [

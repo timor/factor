@@ -15,7 +15,7 @@ TUPLE: word-break-gadget < label ;
 
 M: word-break-gadget draw-gadget* drop ;
 
-INSTANCE: word-break-gadget word-break ;
+INSTANCE: word-break-gadget word-break
 
 ! A gadget that arranges its children in a word-wrap style.
 TUPLE: paragraph < aligned-gadget margin wrapped ;

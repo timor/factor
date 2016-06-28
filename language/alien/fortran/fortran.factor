@@ -7,13 +7,13 @@ parser sequences sequences.generalizations splitting
 stack-checker vectors vocabs.parser words locals
 io.encodings.ascii io.encodings.string shuffle effects
 math.ranges math.order sorting strings system alien.libraries ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 IN: alien.fortran
 
 SINGLETONS: f2c-abi g95-abi gfortran-abi intel-unix-abi intel-windows-abi ;
 
 TUPLE: bad-fortran-abi detail ;
-C: <bad-fortran-abi> bad-fortran-abi ;
+C: <bad-fortran-abi> bad-fortran-abi
 
 : alien>nstring ( alien len encoding -- string )
     [ memory>byte-array ] dip decode ;
@@ -37,7 +37,7 @@ PRIVATE<
     >lower char: _ over member?
     [ "__" append ] [ "_" append ] if ;
 
-HOOK: fortran-c-abi fortran-abi ( -- abi ) ;
+HOOK: fortran-c-abi fortran-abi ( -- abi )
 M: bad-fortran-abi fortran-c-abi cdecl ;
 M: f2c-abi fortran-c-abi cdecl ;
 M: g95-abi fortran-c-abi cdecl ;
@@ -45,28 +45,28 @@ M: gfortran-abi fortran-c-abi cdecl ;
 M: intel-unix-abi fortran-c-abi cdecl ;
 M: intel-windows-abi fortran-c-abi cdecl ;
 
-HOOK: real-functions-return-double? fortran-abi ( -- ? ) ;
+HOOK: real-functions-return-double? fortran-abi ( -- ? )
 M: f2c-abi real-functions-return-double? t ;
 M: g95-abi real-functions-return-double? f ;
 M: gfortran-abi real-functions-return-double? f ;
 M: intel-unix-abi real-functions-return-double? f ;
 M: intel-windows-abi real-functions-return-double? f ;
 
-HOOK: complex-functions-return-by-value? fortran-abi ( -- ? ) ;
+HOOK: complex-functions-return-by-value? fortran-abi ( -- ? )
 M: f2c-abi complex-functions-return-by-value? f ;
 M: g95-abi complex-functions-return-by-value? f ;
 M: gfortran-abi complex-functions-return-by-value? t ;
 M: intel-unix-abi complex-functions-return-by-value? f ;
 M: intel-windows-abi complex-functions-return-by-value? f ;
 
-HOOK: character(1)-maps-to-char? fortran-abi ( -- ? ) ;
+HOOK: character(1)-maps-to-char? fortran-abi ( -- ? )
 M: f2c-abi character(1)-maps-to-char? f ;
 M: g95-abi character(1)-maps-to-char? f ;
 M: gfortran-abi character(1)-maps-to-char? f ;
 M: intel-unix-abi character(1)-maps-to-char? t ;
 M: intel-windows-abi character(1)-maps-to-char? t ;
 
-HOOK: mangle-name fortran-abi ( name -- name' ) ;
+HOOK: mangle-name fortran-abi ( name -- name' )
 M: f2c-abi mangle-name lowercase-name-with-extra-underscore ;
 M: g95-abi mangle-name lowercase-name-with-extra-underscore ;
 M: gfortran-abi mangle-name lowercase-name-with-underscore ;
@@ -96,7 +96,7 @@ CONSTANT: fortran>c-types H{
     { "double-precision" double-precision-type }
     { "complex"          real-complex-type     }
     { "double-complex"   double-complex-type   }
-} ;
+}
 
 : append-dimensions ( base-c-type type -- c-type )
     dims>> [ product 2array ] when* ;
@@ -113,7 +113,7 @@ MACRO: size-case-type ( cases -- quot )
 : new-fortran-type ( out? dims size class -- type )
     new [ [ size<< ] [ dims<< ] [ out?<< ] tri ] keep ;
 
-GENERIC: (fortran-type>c-type) ( type -- c-type ) ;
+GENERIC: (fortran-type>c-type) ( type -- c-type )
 
 M: f (fortran-type>c-type) drop c:void ;
 
@@ -178,12 +178,12 @@ M: character-type (fortran-type>c-type)
 : parse-fortran-type ( fortran-type-string/f -- type/f )
     dup [ (parse-fortran-type) ] when ;
 
-GENERIC: added-c-args ( type -- args ) ;
+GENERIC: added-c-args ( type -- args )
 
 M: fortran-type added-c-args drop { } ;
 M: character-type added-c-args fix-character-type single-char? [ { } ] [ { c:long } ] if ;
 
-GENERIC: returns-by-value? ( type -- ? ) ;
+GENERIC: returns-by-value? ( type -- ? )
 
 M: f returns-by-value? drop t ;
 M: fortran-type returns-by-value? drop f ;
@@ -192,14 +192,14 @@ M: character-type returns-by-value? fix-character-type single-char? ;
 M: complex-type returns-by-value?
     { [ drop complex-functions-return-by-value? ] [ dims>> not ] } 1&& ;
 
-GENERIC: (fortran-ret-type>c-type) ( type -- c-type ) ;
+GENERIC: (fortran-ret-type>c-type) ( type -- c-type )
 
 M: f (fortran-ret-type>c-type) drop c:void ;
 M: fortran-type (fortran-ret-type>c-type) (fortran-type>c-type) ;
 M: real-type (fortran-ret-type>c-type)
     drop real-functions-return-double? [ c:double ] [ c:float ] if ;
 
-GENERIC: (fortran-arg>c-args) ( type -- main-quot added-quot ) ;
+GENERIC: (fortran-arg>c-args) ( type -- main-quot added-quot )
 
 : args?dims ( type quot -- main-quot added-quot )
     [ dup dims>> [ drop [ ] [ drop ] ] ] dip if ; inline
@@ -253,7 +253,7 @@ M: character-type (fortran-arg>c-args)
 M: misc-type (fortran-arg>c-args)
     drop [ ] [ drop ] ;
 
-GENERIC: (fortran-result>) ( type -- quots ) ;
+GENERIC: (fortran-result>) ( type -- quots )
 
 : result?dims ( type quot -- quot )
     [ dup dims>> [ drop { [ ] } ] ] dip if ; inline
@@ -303,7 +303,7 @@ M: character-type (fortran-result>)
 M: misc-type (fortran-result>)
     drop { [ ] } ;
 
-GENERIC: (<fortran-result>) ( type -- quot ) ;
+GENERIC: (<fortran-result>) ( type -- quot )
 
 M: fortran-type (<fortran-result>)
     (fortran-type>c-type) \ heap-size \ <byte-array> [ ] 3sequence ;

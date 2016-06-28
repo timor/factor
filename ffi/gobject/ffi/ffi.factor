@@ -31,27 +31,27 @@ FORGET: G_IO_NVAL
 
 DESTRUCTOR: g_object_unref
 
-CONSTANT: G_TYPE_INVALID $$[ 0 2 shift ] ;
-CONSTANT: G_TYPE_NONE $$[ 1 2 shift ] ;
-CONSTANT: G_TYPE_INTERFACE $$[ 2 2 shift ] ;
-CONSTANT: G_TYPE_CHAR $$[ 3 2 shift ] ;
-CONSTANT: G_TYPE_UCHAR $$[ 4 2 shift ] ;
-CONSTANT: G_TYPE_BOOLEAN $$[ 5 2 shift ] ;
-CONSTANT: G_TYPE_INT $$[ 6 2 shift ] ;
-CONSTANT: G_TYPE_UINT $$[ 7 2 shift ] ;
-CONSTANT: G_TYPE_LONG $$[ 8 2 shift ] ;
-CONSTANT: G_TYPE_ULONG $$[ 9 2 shift ] ;
-CONSTANT: G_TYPE_INT64 $$[ 10 2 shift ] ;
-CONSTANT: G_TYPE_UINT64 $$[ 11 2 shift ] ;
-CONSTANT: G_TYPE_ENUM $$[ 12 2 shift ] ;
-CONSTANT: G_TYPE_FLAGS $$[ 13 2 shift ] ;
-CONSTANT: G_TYPE_FLOAT $$[ 14 2 shift ] ;
-CONSTANT: G_TYPE_DOUBLE $$[ 15 2 shift ] ;
-CONSTANT: G_TYPE_STRING $$[ 16 2 shift ] ;
-CONSTANT: G_TYPE_POINTER $$[ 17 2 shift ] ;
-CONSTANT: G_TYPE_BOXED $$[ 18 2 shift ] ;
-CONSTANT: G_TYPE_PARAM $$[ 19 2 shift ] ;
-CONSTANT: G_TYPE_OBJECT $$[ 20 2 shift ] ;
+CONSTANT: G_TYPE_INVALID $$[ 0 2 shift ]
+CONSTANT: G_TYPE_NONE $$[ 1 2 shift ]
+CONSTANT: G_TYPE_INTERFACE $$[ 2 2 shift ]
+CONSTANT: G_TYPE_CHAR $$[ 3 2 shift ]
+CONSTANT: G_TYPE_UCHAR $$[ 4 2 shift ]
+CONSTANT: G_TYPE_BOOLEAN $$[ 5 2 shift ]
+CONSTANT: G_TYPE_INT $$[ 6 2 shift ]
+CONSTANT: G_TYPE_UINT $$[ 7 2 shift ]
+CONSTANT: G_TYPE_LONG $$[ 8 2 shift ]
+CONSTANT: G_TYPE_ULONG $$[ 9 2 shift ]
+CONSTANT: G_TYPE_INT64 $$[ 10 2 shift ]
+CONSTANT: G_TYPE_UINT64 $$[ 11 2 shift ]
+CONSTANT: G_TYPE_ENUM $$[ 12 2 shift ]
+CONSTANT: G_TYPE_FLAGS $$[ 13 2 shift ]
+CONSTANT: G_TYPE_FLOAT $$[ 14 2 shift ]
+CONSTANT: G_TYPE_DOUBLE $$[ 15 2 shift ]
+CONSTANT: G_TYPE_STRING $$[ 16 2 shift ]
+CONSTANT: G_TYPE_POINTER $$[ 17 2 shift ]
+CONSTANT: G_TYPE_BOXED $$[ 18 2 shift ]
+CONSTANT: G_TYPE_PARAM $$[ 19 2 shift ]
+CONSTANT: G_TYPE_OBJECT $$[ 20 2 shift ]
 
 ! Macros
 

@@ -2,7 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors combinators io kernel math math.order
 namespaces sequences vectors ;
-QUALIFIED-WITH: bitstreams bs ;
+QUALIFIED-WITH: bitstreams bs
 IN: compression.lzw
 
 TUPLE: lzw
@@ -53,14 +53,14 @@ ERROR: code-size-zero ;
 : write-code ( lzw -- )
     [ lookup-code ] [ output>> ] bi push-all ;
 
-GENERIC: code-space-full? ( lzw -- ? ) ;
+GENERIC: code-space-full? ( lzw -- ? )
 
 : size-and-limit ( lzw -- m n ) [ table>> length ] [ code-size>> 2^ ] bi ;
 
 M: tiff-lzw code-space-full? size-and-limit 1 - = ;
 M: gif-lzw code-space-full? size-and-limit = ;
 
-GENERIC: increment-code-size ( lzw -- lzw ) ;
+GENERIC: increment-code-size ( lzw -- lzw )
 
 M: lzw increment-code-size [ 1 + ] change-code-size ;
 M: gif-lzw increment-code-size [ 1 + 12 min ] change-code-size ;

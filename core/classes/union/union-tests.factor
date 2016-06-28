@@ -15,7 +15,7 @@ UNION: bah fixnum alien ;
 ! Test redefinition of classes
 UNION: union-1 fixnum float ;
 
-GENERIC: generic-update-test ( x -- y ) ;
+GENERIC: generic-update-test ( x -- y )
 
 M: union-1 generic-update-test drop "union-1" ;
 
@@ -37,7 +37,7 @@ M: union-1 generic-update-test drop "union-1" ;
 [ -7 generic-update-test ] must-fail
 
 ! Empty unions were causing problems
-GENERIC: empty-union-test ( obj -- obj ) ;
+GENERIC: empty-union-test ( obj -- obj )
 
 UNION: empty-union-1 ;
 
@@ -77,7 +77,7 @@ UNION: redefine-bug-2 redefine-bug-1 quotation ;
 
 { f } [ "foo?" "classes.union.tests" lookup-word predicate? ] unit-test
 
-GENERIC: test-generic ( x -- y ) ;
+GENERIC: test-generic ( x -- y )
 
 TUPLE: a-tuple ;
 

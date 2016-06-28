@@ -7,17 +7,17 @@ destructors mirrors sets db.types db.private fry
 combinators.short-circuit db.errors ;
 IN: db.tuples
 
-HOOK: create-sql-statement db-connection ( class -- object ) ;
-HOOK: drop-sql-statement db-connection ( class -- object ) ;
+HOOK: create-sql-statement db-connection ( class -- object )
+HOOK: drop-sql-statement db-connection ( class -- object )
 
-HOOK: <insert-db-assigned-statement> db-connection ( class -- object ) ;
-HOOK: <insert-user-assigned-statement> db-connection ( class -- object ) ;
-HOOK: <update-tuple-statement> db-connection ( class -- object ) ;
-HOOK: <delete-tuples-statement> db-connection ( tuple class -- object ) ;
-HOOK: <select-by-slots-statement> db-connection ( tuple class -- statement ) ;
-HOOK: <count-statement> db-connection ( query -- statement ) ;
-HOOK: query>statement db-connection ( query -- statement ) ;
-HOOK: insert-tuple-set-key db-connection ( tuple statement -- ) ;
+HOOK: <insert-db-assigned-statement> db-connection ( class -- object )
+HOOK: <insert-user-assigned-statement> db-connection ( class -- object )
+HOOK: <update-tuple-statement> db-connection ( class -- object )
+HOOK: <delete-tuples-statement> db-connection ( tuple class -- object )
+HOOK: <select-by-slots-statement> db-connection ( tuple class -- statement )
+HOOK: <count-statement> db-connection ( query -- statement )
+HOOK: query>statement db-connection ( query -- statement )
+HOOK: insert-tuple-set-key db-connection ( tuple statement -- )
 
 PRIVATE<
 
@@ -26,7 +26,7 @@ SYMBOL: sql-counter
 : next-sql-counter ( -- str )
     sql-counter [ inc ] [ get ] bi number>string ;
 
-GENERIC: eval-generator ( singleton -- object ) ;
+GENERIC: eval-generator ( singleton -- object )
 
 : resulting-tuple ( exemplar-tuple row out-params -- tuple )
     rot class-of new [
@@ -93,7 +93,7 @@ TUPLE: query tuple group order offset limit ;
 
 : <query> ( -- query ) \ query new ;
 
-GENERIC: >query ( object -- query ) ;
+GENERIC: >query ( object -- query )
 
 M: query >query clone ;
 

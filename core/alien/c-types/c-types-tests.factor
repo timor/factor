@@ -4,7 +4,7 @@ math.constants tools.test ;
 FROM: alien.c-types => short ;
 IN: alien.c-types.tests
 
-CONSTANT: xyz 123 ;
+CONSTANT: xyz 123
 
 { 492 } [ { int xyz } heap-size ] unit-test
 

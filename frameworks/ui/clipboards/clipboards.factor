@@ -9,9 +9,9 @@ IN: ui.clipboards
 
 TUPLE: clipboard contents ;
 
-GENERIC: clipboard-contents ( clipboard -- string ) ;
+GENERIC: clipboard-contents ( clipboard -- string )
 
-GENERIC: set-clipboard-contents ( string clipboard -- ) ;
+GENERIC: set-clipboard-contents ( string clipboard -- )
 
 M: clipboard clipboard-contents contents>> ;
 
@@ -19,12 +19,12 @@ M: clipboard set-clipboard-contents contents<< ;
 
 : <clipboard> ( -- clipboard ) "" clipboard boa ;
 
-GENERIC: paste-clipboard ( gadget clipboard -- ) ;
+GENERIC: paste-clipboard ( gadget clipboard -- )
 
 M: object paste-clipboard
     clipboard-contents dup [ swap user-input ] [ 2drop ] if ;
 
-GENERIC: copy-clipboard ( string gadget clipboard -- ) ;
+GENERIC: copy-clipboard ( string gadget clipboard -- )
 
 M: object copy-clipboard nip set-clipboard-contents ;
 

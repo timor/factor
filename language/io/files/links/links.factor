@@ -4,11 +4,11 @@ USING: accessors io.backend io.files.info io.files.types
 io.pathnames kernel math namespaces system vocabs ;
 IN: io.files.links
 
-HOOK: make-link os ( target symlink -- ) ;
+HOOK: make-link os ( target symlink -- )
 
-HOOK: make-hard-link os ( target link -- ) ;
+HOOK: make-hard-link os ( target link -- )
 
-HOOK: read-link os ( symlink -- path ) ;
+HOOK: read-link os ( symlink -- path )
 
 : copy-link ( target symlink -- )
     [ read-link ] dip make-link ;

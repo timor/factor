@@ -3,8 +3,8 @@ USING: alien alien.c-types alien.syntax byte-arrays classes
 gpu.buffers gpu.framebuffers gpu.shaders gpu.textures help.markup
 help.syntax images kernel math sequences
 specialized-arrays strings ;
-QUALIFIED-WITH: alien.c-types c ;
-QUALIFIED-WITH: math m ;
+QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: math m
 SPECIALIZED-ARRAY: c:float
 SPECIALIZED-ARRAY: int
 SPECIALIZED-ARRAY: uint

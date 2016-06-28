@@ -7,9 +7,9 @@ sets words ;
 IN: generic
 
 ! Method combination protocol
-GENERIC: perform-combination ( word combination -- ) ;
+GENERIC: perform-combination ( word combination -- )
 
-GENERIC: make-default-method ( generic combination -- method ) ;
+GENERIC: make-default-method ( generic combination -- method )
 
 PREDICATE: generic < word
     "combination" word-prop >boolean ;
@@ -63,7 +63,7 @@ PRIVATE>
     [ nip ] [ nearest-class ] 2bi
     [ swap ?lookup-method ] [ drop f ] if* ;
 
-GENERIC: effective-method ( generic -- method ) ;
+GENERIC: effective-method ( generic -- method )
 
 \ effective-method t "no-compile" set-word-prop
 
@@ -73,7 +73,7 @@ GENERIC: effective-method ( generic -- method ) ;
 : next-method ( class generic -- method/f )
     [ next-method-class ] keep ?lookup-method ;
 
-GENERIC: next-method-quot* ( class generic combination -- quot ) ;
+GENERIC: next-method-quot* ( class generic combination -- quot )
 
 : next-method-quot ( method -- quot )
     next-method-quot-cache get [
@@ -103,7 +103,7 @@ ERROR: check-method-error class generic ;
     outdated-generics get members [ generic? ] filter
     [ make-generic ] each ;
 
-GENERIC: update-generic ( class generic -- ) ;
+GENERIC: update-generic ( class generic -- )
 
 : with-methods ( class generic quot -- )
     [ "methods" word-prop ] prepose [ update-generic ] 2bi ; inline
@@ -128,7 +128,7 @@ M: method crossref?
     [ method-word-name f <word> ] [ method-word-props ] 2bi
     >>props ;
 
-GENERIC: implementor-classes ( obj -- class ) ;
+GENERIC: implementor-classes ( obj -- class )
 
 M: maybe implementor-classes class>> 1array ;
 
@@ -186,7 +186,7 @@ M: method forget*
         [ call-next-method ] bi
     ] if ;
 
-GENERIC#: check-combination-effect 1 ( combination effect -- ) ;
+GENERIC#: check-combination-effect 1 ( combination effect -- )
 
 M: object check-combination-effect 2drop ;
 

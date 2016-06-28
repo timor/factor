@@ -16,7 +16,7 @@ PRIVATE<
 : blocks-with-gc ( cfg -- bbs )
     post-order [ insert-gc-check? ] filter ;
 
-GENERIC#: gc-check-offsets* 1 ( call-index seen-allocation? insn n -- call-index seen-allocation? ) ;
+GENERIC#: gc-check-offsets* 1 ( call-index seen-allocation? insn n -- call-index seen-allocation? )
 
 :: gc-check-here ( call-index seen-allocation? insn insn-index -- call-index seen-allocation? )
     seen-allocation? [ call-index , ] when
@@ -46,7 +46,7 @@ M: insn gc-check-offsets* 2drop ;
         tail ,
     ] { } make ;
 
-GENERIC: allocation-size* ( insn -- n ) ;
+GENERIC: allocation-size* ( insn -- n )
 
 M: ##allot allocation-size* size>> ;
 M: ##box-alien allocation-size* drop 5 cells ;

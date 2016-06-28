@@ -7,7 +7,7 @@ IN: io.streams.random
 
 TUPLE: random-stream ;
 
-C: <random-stream> random-stream ;
+C: <random-stream> random-stream
 
 M: random-stream stream-element-type drop +byte+ ;
 
@@ -20,7 +20,7 @@ M: random-stream stream-read-partial-unsafe stream-read-unsafe ;
 
 M: random-stream dispose drop ;
 
-INSTANCE: random-stream input-stream ;
+INSTANCE: random-stream input-stream
 
 : random-file ( n path -- )
     [ <random-stream> swap limit-stream ]

@@ -31,22 +31,22 @@ PRIVATE<
 ! b = bit turned on depending on rank of card
 ! x = bit turned off, not used
 
-CONSTANT: STRAIGHT_FLUSH   0 ;
-CONSTANT: FOUR_OF_A_KIND   1 ;
-CONSTANT: FULL_HOUSE       2 ;
-CONSTANT: FLUSH            3 ;
-CONSTANT: STRAIGHT         4 ;
-CONSTANT: THREE_OF_A_KIND  5 ;
-CONSTANT: TWO_PAIR         6 ;
-CONSTANT: ONE_PAIR         7 ;
-CONSTANT: HIGH_CARD        8 ;
+CONSTANT: STRAIGHT_FLUSH   0
+CONSTANT: FOUR_OF_A_KIND   1
+CONSTANT: FULL_HOUSE       2
+CONSTANT: FLUSH            3
+CONSTANT: STRAIGHT         4
+CONSTANT: THREE_OF_A_KIND  5
+CONSTANT: TWO_PAIR         6
+CONSTANT: ONE_PAIR         7
+CONSTANT: HIGH_CARD        8
 
-CONSTANT: SUITS { "C" "D" "H" "S" } ;
+CONSTANT: SUITS { "C" "D" "H" "S" }
 
-CONSTANT: RANKS { "2" "3" "4" "5" "6" "7" "8" "9" "T" "J" "Q" "K" "A" } ;
+CONSTANT: RANKS { "2" "3" "4" "5" "6" "7" "8" "9" "T" "J" "Q" "K" "A" }
 
 CONSTANT: VALUES { "Straight Flush" "Four of a Kind" "Full House" "Flush"
-    "Straight" "Three of a Kind" "Two Pair" "One Pair" "High Card" } ;
+    "Straight" "Three of a Kind" "Two Pair" "One Pair" "High Card" }
 
 : card-suit ( suit -- n )
     SUITS index 3 swap - 2^ ;
@@ -72,7 +72,7 @@ CONSTANT: VALUES { "Straight Flush" "Four of a Kind" "Full House" "Flush"
     rank rank suit rank card-bitfield ;
 
 ! Cactus Kev Format
-GENERIC: >ckf ( string -- n ) ;
+GENERIC: >ckf ( string -- n )
 
 M: string >ckf >upper 1 cut (>ckf) ;
 

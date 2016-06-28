@@ -13,7 +13,7 @@ PRIVATE<
 ! to store each group of booleans in a byte.
 
 CONSTANT: masks
-{ f 128 f f f f f 64 f f f 32 f 16 f f f 8 f 4 f f f 2 f f f f f 1 } ;
+{ f 128 f f f f f 64 f f f 32 f 16 f f f 8 f 4 f f f 2 f f f f f 1 }
 
 : bit-pos ( n -- byte mask/f )
     { fixnum } declare

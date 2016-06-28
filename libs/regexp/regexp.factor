@@ -36,7 +36,7 @@ M: lookbehind question>quot ! Returns ( index string -- ? )
     ! and that string is a string.
     dup dfa>> execute( index string regexp -- i/f ) ; inline
 
-GENERIC: end/start ( string regexp -- end start ) ;
+GENERIC: end/start ( string regexp -- end start )
 M: regexp end/start drop length 0 ;
 M: reverse-regexp end/start drop length 1 - -1 swap ;
 
@@ -87,7 +87,7 @@ PRIVATE<
 : (each-match) ( ... i string regexp quot: ( ... start end string -- ... ) -- ... )
     over reverse-regexp? [ (each-match-backward) ] [ (each-match-forward) ] if ; inline
 
-GENERIC: match-iterator-start ( string regexp -- start ) ;
+GENERIC: match-iterator-start ( string regexp -- start )
 M: regexp match-iterator-start 2drop 0 ;
 M: reverse-regexp match-iterator-start drop length ;
 
@@ -151,7 +151,7 @@ PRIVATE<
 : get-ast ( regexp -- ast )
     [ parse-tree>> ] [ options>> ] bi <with-options> ;
 
-GENERIC: compile-regexp ( regex -- regexp ) ;
+GENERIC: compile-regexp ( regex -- regexp )
 
 : regexp-initial-word ( i string regexp -- i/f )
     [ compile-regexp ] with-compilation-unit match-index-from ;

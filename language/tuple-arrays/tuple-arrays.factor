@@ -69,7 +69,7 @@ M: CLASS-array new-sequence drop <CLASS-array> ; inline
 
 M: CLASS-array like drop dup CLASS-array? [ >CLASS-array ] unless ; inline
 
-INSTANCE: CLASS-array sequence ;
+INSTANCE: CLASS-array sequence
 
 FUNCTOR>
 

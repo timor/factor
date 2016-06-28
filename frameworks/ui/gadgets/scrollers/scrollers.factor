@@ -10,11 +10,11 @@ IN: ui.gadgets.scrollers
 TUPLE: scroller < frame column-header viewport x y follows ;
 
 ! Scrollable gadget protocol; optional
-GENERIC: pref-viewport-dim ( gadget -- dim ) ;
+GENERIC: pref-viewport-dim ( gadget -- dim )
 
 M: gadget pref-viewport-dim pref-dim ;
 
-GENERIC: viewport-column-header ( gadget -- gadget/f ) ;
+GENERIC: viewport-column-header ( gadget -- gadget/f )
 
 M: gadget viewport-column-header drop f ;
 
@@ -85,7 +85,7 @@ M: viewport pref-dim* gadget-child pref-viewport-dim ;
     [ viewport>> gadget-child pref-dim { 0 1 } v* ] keep
     set-scroll-position ;
 
-GENERIC: update-scroller ( scroller follows -- ) ;
+GENERIC: update-scroller ( scroller follows -- )
 
 M: t update-scroller drop (scroll>bottom) ;
 

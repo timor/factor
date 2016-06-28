@@ -49,9 +49,9 @@ TYPEDEF: ulong VisualID ;
 TYPEDEF: ulong Time ;
 
 : *XID ( bytes -- n ) ulong deref ;
-ALIAS: *Window *XID ;
-ALIAS: *Drawable *XID ;
-ALIAS: *KeySym *XID ;
+ALIAS: *Window *XID
+ALIAS: *Drawable *XID
+ALIAS: *KeySym *XID
 : *Atom ( bytes -- n ) ulong deref ;
 !
 ! 2 - Display Functions
@@ -123,19 +123,19 @@ STRUCT: XSetWindowAttributes
 { colormap Colormap }
 { cursor Cursor } ;
 
-CONSTANT: UnmapGravity          0 ;
+CONSTANT: UnmapGravity          0
 
-CONSTANT: ForgetGravity         0 ;
-CONSTANT: NorthWestGravity      1 ;
-CONSTANT: NorthGravity          2 ;
-CONSTANT: NorthEastGravity      3 ;
-CONSTANT: WestGravity           4 ;
-CONSTANT: CenterGravity         5 ;
-CONSTANT: EastGravity           6 ;
-CONSTANT: SouthWestGravity      7 ;
-CONSTANT: SouthGravity          8 ;
-CONSTANT: SouthEastGravity      9 ;
-CONSTANT: StaticGravity         10 ;
+CONSTANT: ForgetGravity         0
+CONSTANT: NorthWestGravity      1
+CONSTANT: NorthGravity          2
+CONSTANT: NorthEastGravity      3
+CONSTANT: WestGravity           4
+CONSTANT: CenterGravity         5
+CONSTANT: EastGravity           6
+CONSTANT: SouthWestGravity      7
+CONSTANT: SouthGravity          8
+CONSTANT: SouthEastGravity      9
+CONSTANT: StaticGravity         10
 
 ! 3.3 - Creating Windows
 
@@ -230,9 +230,9 @@ STRUCT: XWindowAttributes
 
 X-FUNCTION: Status XGetWindowAttributes ( Display* display, Window w, XWindowAttributes* attr ) ;
 
-CONSTANT: IsUnmapped            0 ;
-CONSTANT: IsUnviewable          1 ;
-CONSTANT: IsViewable            2 ;
+CONSTANT: IsUnmapped            0
+CONSTANT: IsUnviewable          1
+CONSTANT: IsViewable            2
 
 X-FUNCTION: Status XGetGeometry (
   Display* display,
@@ -333,22 +333,22 @@ X-FUNCTION: Colormap XCreateColormap ( Display* display, Window w, Visual* visua
 : GCDashList          ( -- n ) 21 2^ ; inline
 : GCArcMode           ( -- n ) 22 2^ ; inline
 
-CONSTANT: GXclear               0x0 ;
-CONSTANT: GXand                 0x1 ;
-CONSTANT: GXandReverse          0x2 ;
-CONSTANT: GXcopy                0x3 ;
-CONSTANT: GXandInverted         0x4 ;
-CONSTANT: GXnoop                0x5 ;
-CONSTANT: GXxor                 0x6 ;
-CONSTANT: GXor                  0x7 ;
-CONSTANT: GXnor                 0x8 ;
-CONSTANT: GXequiv               0x9 ;
-CONSTANT: GXinvert              0xa ;
-CONSTANT: GXorReverse           0xb ;
-CONSTANT: GXcopyInverted        0xc ;
-CONSTANT: GXorInverted          0xd ;
-CONSTANT: GXnand                0xe ;
-CONSTANT: GXset                 0xf ;
+CONSTANT: GXclear               0x0
+CONSTANT: GXand                 0x1
+CONSTANT: GXandReverse          0x2
+CONSTANT: GXcopy                0x3
+CONSTANT: GXandInverted         0x4
+CONSTANT: GXnoop                0x5
+CONSTANT: GXxor                 0x6
+CONSTANT: GXor                  0x7
+CONSTANT: GXnor                 0x8
+CONSTANT: GXequiv               0x9
+CONSTANT: GXinvert              0xa
+CONSTANT: GXorReverse           0xb
+CONSTANT: GXcopyInverted        0xc
+CONSTANT: GXorInverted          0xd
+CONSTANT: GXnand                0xe
+CONSTANT: GXset                 0xf
 
 STRUCT: XGCValues
 { function int }
@@ -444,7 +444,7 @@ X-FUNCTION: Status XDrawString (
 
 ! 8.7 - Transferring Images between Client and Server
 
-CONSTANT: AllPlanes -1 ;
+CONSTANT: AllPlanes -1
 
 STRUCT: XImage-funcs
 { create_image void* }
@@ -526,41 +526,41 @@ X-FUNCTION: Status XKillClient ( Display* display, XID resource ) ;
 : ColormapChangeMask       ( -- n ) 23 2^ ; inline
 : OwnerGrabButtonMask      ( -- n ) 24 2^ ; inline
 
-CONSTANT: KeyPress              2 ;
-CONSTANT: KeyRelease            3 ;
-CONSTANT: ButtonPress           4 ;
-CONSTANT: ButtonRelease         5 ;
-CONSTANT: MotionNotify          6 ;
-CONSTANT: EnterNotify           7 ;
-CONSTANT: LeaveNotify           8 ;
-CONSTANT: FocusIn               9 ;
-CONSTANT: FocusOut              10 ;
-CONSTANT: KeymapNotify          11 ;
-CONSTANT: Expose                12 ;
-CONSTANT: GraphicsExpose        13 ;
-CONSTANT: NoExpose              14 ;
-CONSTANT: VisibilityNotify      15 ;
-CONSTANT: CreateNotify          16 ;
-CONSTANT: DestroyNotify         17 ;
-CONSTANT: UnmapNotify           18 ;
-CONSTANT: MapNotify             19 ;
-CONSTANT: MapRequest            20 ;
-CONSTANT: ReparentNotify        21 ;
-CONSTANT: ConfigureNotify       22 ;
-CONSTANT: ConfigureRequest      23 ;
-CONSTANT: GravityNotify         24 ;
-CONSTANT: ResizeRequest         25 ;
-CONSTANT: CirculateNotify       26 ;
-CONSTANT: CirculateRequest      27 ;
-CONSTANT: PropertyNotify        28 ;
-CONSTANT: SelectionClear        29 ;
-CONSTANT: SelectionRequest      30 ;
-CONSTANT: SelectionNotify       31 ;
-CONSTANT: ColormapNotify        32 ;
-CONSTANT: ClientMessage         33 ;
-CONSTANT: MappingNotify         34 ;
-CONSTANT: GenericEvent          35 ;
-CONSTANT: LASTEvent             36 ;
+CONSTANT: KeyPress              2
+CONSTANT: KeyRelease            3
+CONSTANT: ButtonPress           4
+CONSTANT: ButtonRelease         5
+CONSTANT: MotionNotify          6
+CONSTANT: EnterNotify           7
+CONSTANT: LeaveNotify           8
+CONSTANT: FocusIn               9
+CONSTANT: FocusOut              10
+CONSTANT: KeymapNotify          11
+CONSTANT: Expose                12
+CONSTANT: GraphicsExpose        13
+CONSTANT: NoExpose              14
+CONSTANT: VisibilityNotify      15
+CONSTANT: CreateNotify          16
+CONSTANT: DestroyNotify         17
+CONSTANT: UnmapNotify           18
+CONSTANT: MapNotify             19
+CONSTANT: MapRequest            20
+CONSTANT: ReparentNotify        21
+CONSTANT: ConfigureNotify       22
+CONSTANT: ConfigureRequest      23
+CONSTANT: GravityNotify         24
+CONSTANT: ResizeRequest         25
+CONSTANT: CirculateNotify       26
+CONSTANT: CirculateRequest      27
+CONSTANT: PropertyNotify        28
+CONSTANT: SelectionClear        29
+CONSTANT: SelectionRequest      30
+CONSTANT: SelectionNotify       31
+CONSTANT: ColormapNotify        32
+CONSTANT: ClientMessage         33
+CONSTANT: MappingNotify         34
+CONSTANT: GenericEvent          35
+CONSTANT: LASTEvent             36
 
 STRUCT: XAnyEvent
 { type int }
@@ -573,11 +573,11 @@ STRUCT: XAnyEvent
 
 ! 10.5 Keyboard and Pointer Events
 
-CONSTANT: Button1 1 ;
-CONSTANT: Button2 2 ;
-CONSTANT: Button3 3 ;
-CONSTANT: Button4 4 ;
-CONSTANT: Button5 5 ;
+CONSTANT: Button1 1
+CONSTANT: Button2 2
+CONSTANT: Button3 3
+CONSTANT: Button4 4
+CONSTANT: Button5 5
 
 : Button1Mask ( -- n ) 1 8  shift ; inline
 : Button2Mask ( -- n ) 1 9  shift ; inline
@@ -1085,9 +1085,9 @@ X-FUNCTION: Status XMaskEvent ( Display* display, long event_mask, XEvent* event
 
 ! 11.3 - Event Queue Management
 
-CONSTANT: QueuedAlready 0 ;
-CONSTANT: QueuedAfterReading 1 ;
-CONSTANT: QueuedAfterFlush 2 ;
+CONSTANT: QueuedAlready 0
+CONSTANT: QueuedAfterReading 1
+CONSTANT: QueuedAfterFlush 2
 
 X-FUNCTION: int XEventsQueued ( Display* display, int mode ) ;
 X-FUNCTION: int XPending ( Display* display ) ;
@@ -1104,7 +1104,7 @@ X-FUNCTION: int XSetErrorHandler ( void* handler ) ;
 ! 12 - Input Device Functions
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-CONSTANT: None 0 ;
+CONSTANT: None 0
 
 X-FUNCTION: int XGrabPointer (
   Display* display,
@@ -1161,7 +1161,7 @@ X-FUNCTION: Status XWithdrawWindow (
 : PBaseSize    ( -- n ) 8 2^ ; inline
 : PWinGravity  ( -- n ) 9 2^ ; inline
 CONSTANT: PAllHints
-    flags{ PPosition PSize PMinSize PMaxSize PResizeInc PAspect } ;
+    flags{ PPosition PSize PMinSize PMaxSize PResizeInc PAspect }
 
 STRUCT: XSizeHints
     { flags long }
@@ -1211,17 +1211,17 @@ X-FUNCTION: int XLookupString (
 
 ! 16.7 Determining the Appropriate Visual Type
 
-CONSTANT: VisualNoMask                  0x0 ;
-CONSTANT: VisualIDMask                  0x1 ;
-CONSTANT: VisualScreenMask              0x2 ;
-CONSTANT: VisualDepthMask               0x4 ;
-CONSTANT: VisualClassMask               0x8 ;
-CONSTANT: VisualRedMaskMask             0x10 ;
-CONSTANT: VisualGreenMaskMask           0x20 ;
-CONSTANT: VisualBlueMaskMask            0x40 ;
-CONSTANT: VisualColormapSizeMask        0x80 ;
-CONSTANT: VisualBitsPerRGBMask          0x100 ;
-CONSTANT: VisualAllMask                 0x1FF ;
+CONSTANT: VisualNoMask                  0x0
+CONSTANT: VisualIDMask                  0x1
+CONSTANT: VisualScreenMask              0x2
+CONSTANT: VisualDepthMask               0x4
+CONSTANT: VisualClassMask               0x8
+CONSTANT: VisualRedMaskMask             0x10
+CONSTANT: VisualGreenMaskMask           0x20
+CONSTANT: VisualBlueMaskMask            0x40
+CONSTANT: VisualColormapSizeMask        0x80
+CONSTANT: VisualBitsPerRGBMask          0x100
+CONSTANT: VisualAllMask                 0x1FF
 
 STRUCT: XVisualInfo
         { visual Visual* }
@@ -1269,76 +1269,76 @@ X-FUNCTION: Status XSetStandardProperties (
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-CONSTANT: XA_PRIMARY  1 ;
-CONSTANT: XA_SECONDARY 2 ;
-CONSTANT: XA_ARC 3 ;
-CONSTANT: XA_ATOM 4 ;
-CONSTANT: XA_BITMAP 5 ;
-CONSTANT: XA_CARDINAL 6 ;
-CONSTANT: XA_COLORMAP 7 ;
-CONSTANT: XA_CURSOR 8 ;
-CONSTANT: XA_CUT_BUFFER0 9 ;
-CONSTANT: XA_CUT_BUFFER1 10 ;
-CONSTANT: XA_CUT_BUFFER2 11 ;
-CONSTANT: XA_CUT_BUFFER3 12 ;
-CONSTANT: XA_CUT_BUFFER4 13 ;
-CONSTANT: XA_CUT_BUFFER5 14 ;
-CONSTANT: XA_CUT_BUFFER6 15 ;
-CONSTANT: XA_CUT_BUFFER7 16 ;
-CONSTANT: XA_DRAWABLE 17 ;
-CONSTANT: XA_FONT 18 ;
-CONSTANT: XA_INTEGER 19 ;
-CONSTANT: XA_PIXMAP 20 ;
-CONSTANT: XA_POINT 21 ;
-CONSTANT: XA_RECTANGLE 22 ;
-CONSTANT: XA_RESOURCE_MANAGER 23 ;
-CONSTANT: XA_RGB_COLOR_MAP 24 ;
-CONSTANT: XA_RGB_BEST_MAP 25 ;
-CONSTANT: XA_RGB_BLUE_MAP 26 ;
-CONSTANT: XA_RGB_DEFAULT_MAP 27 ;
-CONSTANT: XA_RGB_GRAY_MAP 28 ;
-CONSTANT: XA_RGB_GREEN_MAP 29 ;
-CONSTANT: XA_RGB_RED_MAP 30 ;
-CONSTANT: XA_STRING 31 ;
-CONSTANT: XA_VISUALID 32 ;
-CONSTANT: XA_WINDOW 33 ;
-CONSTANT: XA_WM_COMMAND 34 ;
-CONSTANT: XA_WM_HINTS 35 ;
-CONSTANT: XA_WM_CLIENT_MACHINE 36 ;
-CONSTANT: XA_WM_ICON_NAME 37 ;
-CONSTANT: XA_WM_ICON_SIZE 38 ;
-CONSTANT: XA_WM_NAME 39 ;
-CONSTANT: XA_WM_NORMAL_HINTS 40 ;
-CONSTANT: XA_WM_SIZE_HINTS 41 ;
-CONSTANT: XA_WM_ZOOM_HINTS 42 ;
-CONSTANT: XA_MIN_SPACE 43 ;
-CONSTANT: XA_NORM_SPACE 44 ;
-CONSTANT: XA_MAX_SPACE 45 ;
-CONSTANT: XA_END_SPACE 46 ;
-CONSTANT: XA_SUPERSCRIPT_X 47 ;
-CONSTANT: XA_SUPERSCRIPT_Y 48 ;
-CONSTANT: XA_SUBSCRIPT_X 49 ;
-CONSTANT: XA_SUBSCRIPT_Y 50 ;
-CONSTANT: XA_UNDERLINE_POSITION 51 ;
-CONSTANT: XA_UNDERLINE_THICKNESS 52 ;
-CONSTANT: XA_STRIKEOUT_ASCENT 53 ;
-CONSTANT: XA_STRIKEOUT_DESCENT 54 ;
-CONSTANT: XA_ITALIC_ANGLE 55 ;
-CONSTANT: XA_X_HEIGHT 56 ;
-CONSTANT: XA_QUAD_WIDTH 57 ;
-CONSTANT: XA_WEIGHT 58 ;
-CONSTANT: XA_POINT_SIZE 59 ;
-CONSTANT: XA_RESOLUTION 60 ;
-CONSTANT: XA_COPYRIGHT 61 ;
-CONSTANT: XA_NOTICE 62 ;
-CONSTANT: XA_FONT_NAME 63 ;
-CONSTANT: XA_FAMILY_NAME 64 ;
-CONSTANT: XA_FULL_NAME 65 ;
-CONSTANT: XA_CAP_HEIGHT 66 ;
-CONSTANT: XA_WM_CLASS 67 ;
-CONSTANT: XA_WM_TRANSIENT_FOR 68 ;
+CONSTANT: XA_PRIMARY  1
+CONSTANT: XA_SECONDARY 2
+CONSTANT: XA_ARC 3
+CONSTANT: XA_ATOM 4
+CONSTANT: XA_BITMAP 5
+CONSTANT: XA_CARDINAL 6
+CONSTANT: XA_COLORMAP 7
+CONSTANT: XA_CURSOR 8
+CONSTANT: XA_CUT_BUFFER0 9
+CONSTANT: XA_CUT_BUFFER1 10
+CONSTANT: XA_CUT_BUFFER2 11
+CONSTANT: XA_CUT_BUFFER3 12
+CONSTANT: XA_CUT_BUFFER4 13
+CONSTANT: XA_CUT_BUFFER5 14
+CONSTANT: XA_CUT_BUFFER6 15
+CONSTANT: XA_CUT_BUFFER7 16
+CONSTANT: XA_DRAWABLE 17
+CONSTANT: XA_FONT 18
+CONSTANT: XA_INTEGER 19
+CONSTANT: XA_PIXMAP 20
+CONSTANT: XA_POINT 21
+CONSTANT: XA_RECTANGLE 22
+CONSTANT: XA_RESOURCE_MANAGER 23
+CONSTANT: XA_RGB_COLOR_MAP 24
+CONSTANT: XA_RGB_BEST_MAP 25
+CONSTANT: XA_RGB_BLUE_MAP 26
+CONSTANT: XA_RGB_DEFAULT_MAP 27
+CONSTANT: XA_RGB_GRAY_MAP 28
+CONSTANT: XA_RGB_GREEN_MAP 29
+CONSTANT: XA_RGB_RED_MAP 30
+CONSTANT: XA_STRING 31
+CONSTANT: XA_VISUALID 32
+CONSTANT: XA_WINDOW 33
+CONSTANT: XA_WM_COMMAND 34
+CONSTANT: XA_WM_HINTS 35
+CONSTANT: XA_WM_CLIENT_MACHINE 36
+CONSTANT: XA_WM_ICON_NAME 37
+CONSTANT: XA_WM_ICON_SIZE 38
+CONSTANT: XA_WM_NAME 39
+CONSTANT: XA_WM_NORMAL_HINTS 40
+CONSTANT: XA_WM_SIZE_HINTS 41
+CONSTANT: XA_WM_ZOOM_HINTS 42
+CONSTANT: XA_MIN_SPACE 43
+CONSTANT: XA_NORM_SPACE 44
+CONSTANT: XA_MAX_SPACE 45
+CONSTANT: XA_END_SPACE 46
+CONSTANT: XA_SUPERSCRIPT_X 47
+CONSTANT: XA_SUPERSCRIPT_Y 48
+CONSTANT: XA_SUBSCRIPT_X 49
+CONSTANT: XA_SUBSCRIPT_Y 50
+CONSTANT: XA_UNDERLINE_POSITION 51
+CONSTANT: XA_UNDERLINE_THICKNESS 52
+CONSTANT: XA_STRIKEOUT_ASCENT 53
+CONSTANT: XA_STRIKEOUT_DESCENT 54
+CONSTANT: XA_ITALIC_ANGLE 55
+CONSTANT: XA_X_HEIGHT 56
+CONSTANT: XA_QUAD_WIDTH 57
+CONSTANT: XA_WEIGHT 58
+CONSTANT: XA_POINT_SIZE 59
+CONSTANT: XA_RESOLUTION 60
+CONSTANT: XA_COPYRIGHT 61
+CONSTANT: XA_NOTICE 62
+CONSTANT: XA_FONT_NAME 63
+CONSTANT: XA_FAMILY_NAME 64
+CONSTANT: XA_FULL_NAME 65
+CONSTANT: XA_CAP_HEIGHT 66
+CONSTANT: XA_WM_CLASS 67
+CONSTANT: XA_WM_TRANSIENT_FOR 68
 
-CONSTANT: XA_LAST_PREDEFINED 68 ;
+CONSTANT: XA_LAST_PREDEFINED 68
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! The rest of the stuff is not from the book.
@@ -1351,65 +1351,65 @@ X-FUNCTION: int XBell ( Display* display, int percent ) ;
 
 ! !!! INPUT METHODS
 
-CONSTANT: XIMPreeditArea      0x0001 ;
-CONSTANT: XIMPreeditCallbacks 0x0002 ;
-CONSTANT: XIMPreeditPosition  0x0004 ;
-CONSTANT: XIMPreeditNothing   0x0008 ;
-CONSTANT: XIMPreeditNone      0x0010 ;
-CONSTANT: XIMStatusArea       0x0100 ;
-CONSTANT: XIMStatusCallbacks  0x0200 ;
-CONSTANT: XIMStatusNothing    0x0400 ;
-CONSTANT: XIMStatusNone       0x0800 ;
+CONSTANT: XIMPreeditArea      0x0001
+CONSTANT: XIMPreeditCallbacks 0x0002
+CONSTANT: XIMPreeditPosition  0x0004
+CONSTANT: XIMPreeditNothing   0x0008
+CONSTANT: XIMPreeditNone      0x0010
+CONSTANT: XIMStatusArea       0x0100
+CONSTANT: XIMStatusCallbacks  0x0200
+CONSTANT: XIMStatusNothing    0x0400
+CONSTANT: XIMStatusNone       0x0800
 
-CONSTANT: XNVaNestedList "XNVaNestedList" ;
-CONSTANT: XNQueryInputStyle "queryInputStyle" ;
-CONSTANT: XNClientWindow "clientWindow" ;
-CONSTANT: XNInputStyle "inputStyle" ;
-CONSTANT: XNFocusWindow "focusWindow" ;
-CONSTANT: XNResourceName "resourceName" ;
-CONSTANT: XNResourceClass "resourceClass" ;
-CONSTANT: XNGeometryCallback "geometryCallback" ;
-CONSTANT: XNDestroyCallback "destroyCallback" ;
-CONSTANT: XNFilterEvents "filterEvents" ;
-CONSTANT: XNPreeditStartCallback "preeditStartCallback" ;
-CONSTANT: XNPreeditDoneCallback "preeditDoneCallback" ;
-CONSTANT: XNPreeditDrawCallback "preeditDrawCallback" ;
-CONSTANT: XNPreeditCaretCallback "preeditCaretCallback" ;
-CONSTANT: XNPreeditStateNotifyCallback "preeditStateNotifyCallback" ;
-CONSTANT: XNPreeditAttributes "preeditAttributes" ;
-CONSTANT: XNStatusStartCallback "statusStartCallback" ;
-CONSTANT: XNStatusDoneCallback "statusDoneCallback" ;
-CONSTANT: XNStatusDrawCallback "statusDrawCallback" ;
-CONSTANT: XNStatusAttributes "statusAttributes" ;
-CONSTANT: XNArea "area" ;
-CONSTANT: XNAreaNeeded "areaNeeded" ;
-CONSTANT: XNSpotLocation "spotLocation" ;
-CONSTANT: XNColormap "colorMap" ;
-CONSTANT: XNStdColormap "stdColorMap" ;
-CONSTANT: XNForeground "foreground" ;
-CONSTANT: XNBackground "background" ;
-CONSTANT: XNBackgroundPixmap "backgroundPixmap" ;
-CONSTANT: XNFontSet "fontSet" ;
-CONSTANT: XNLineSpace "lineSpace" ;
-CONSTANT: XNCursor "cursor" ;
+CONSTANT: XNVaNestedList "XNVaNestedList"
+CONSTANT: XNQueryInputStyle "queryInputStyle"
+CONSTANT: XNClientWindow "clientWindow"
+CONSTANT: XNInputStyle "inputStyle"
+CONSTANT: XNFocusWindow "focusWindow"
+CONSTANT: XNResourceName "resourceName"
+CONSTANT: XNResourceClass "resourceClass"
+CONSTANT: XNGeometryCallback "geometryCallback"
+CONSTANT: XNDestroyCallback "destroyCallback"
+CONSTANT: XNFilterEvents "filterEvents"
+CONSTANT: XNPreeditStartCallback "preeditStartCallback"
+CONSTANT: XNPreeditDoneCallback "preeditDoneCallback"
+CONSTANT: XNPreeditDrawCallback "preeditDrawCallback"
+CONSTANT: XNPreeditCaretCallback "preeditCaretCallback"
+CONSTANT: XNPreeditStateNotifyCallback "preeditStateNotifyCallback"
+CONSTANT: XNPreeditAttributes "preeditAttributes"
+CONSTANT: XNStatusStartCallback "statusStartCallback"
+CONSTANT: XNStatusDoneCallback "statusDoneCallback"
+CONSTANT: XNStatusDrawCallback "statusDrawCallback"
+CONSTANT: XNStatusAttributes "statusAttributes"
+CONSTANT: XNArea "area"
+CONSTANT: XNAreaNeeded "areaNeeded"
+CONSTANT: XNSpotLocation "spotLocation"
+CONSTANT: XNColormap "colorMap"
+CONSTANT: XNStdColormap "stdColorMap"
+CONSTANT: XNForeground "foreground"
+CONSTANT: XNBackground "background"
+CONSTANT: XNBackgroundPixmap "backgroundPixmap"
+CONSTANT: XNFontSet "fontSet"
+CONSTANT: XNLineSpace "lineSpace"
+CONSTANT: XNCursor "cursor"
 
-CONSTANT: XNQueryIMValuesList "queryIMValuesList" ;
-CONSTANT: XNQueryICValuesList "queryICValuesList" ;
-CONSTANT: XNVisiblePosition "visiblePosition" ;
-CONSTANT: XNR6PreeditCallback "r6PreeditCallback" ;
-CONSTANT: XNStringConversionCallback "stringConversionCallback" ;
-CONSTANT: XNStringConversion "stringConversion" ;
-CONSTANT: XNResetState "resetState" ;
-CONSTANT: XNHotKey "hotKey" ;
-CONSTANT: XNHotKeyState "hotKeyState" ;
-CONSTANT: XNPreeditState "preeditState" ;
-CONSTANT: XNSeparatorofNestedList "separatorofNestedList" ;
+CONSTANT: XNQueryIMValuesList "queryIMValuesList"
+CONSTANT: XNQueryICValuesList "queryICValuesList"
+CONSTANT: XNVisiblePosition "visiblePosition"
+CONSTANT: XNR6PreeditCallback "r6PreeditCallback"
+CONSTANT: XNStringConversionCallback "stringConversionCallback"
+CONSTANT: XNStringConversion "stringConversion"
+CONSTANT: XNResetState "resetState"
+CONSTANT: XNHotKey "hotKey"
+CONSTANT: XNHotKeyState "hotKeyState"
+CONSTANT: XNPreeditState "preeditState"
+CONSTANT: XNSeparatorofNestedList "separatorofNestedList"
 
-CONSTANT: XBufferOverflow -1 ;
-CONSTANT: XLookupNone      1 ;
-CONSTANT: XLookupChars     2 ;
-CONSTANT: XLookupKeySym    3 ;
-CONSTANT: XLookupBoth      4 ;
+CONSTANT: XBufferOverflow -1
+CONSTANT: XLookupNone      1
+CONSTANT: XLookupChars     2
+CONSTANT: XLookupKeySym    3
+CONSTANT: XLookupBoth      4
 
 X-FUNCTION: Bool XFilterEvent ( XEvent* event, Window w ) ;
 
@@ -1430,12 +1430,12 @@ X-FUNCTION: int XwcLookupString ( XIC ic, XKeyPressedEvent* event, ulong* buffer
 X-FUNCTION: int Xutf8LookupString ( XIC ic, XKeyPressedEvent* event, c-string buffer_return, int bytes_buffer, KeySym* keysym_return, Status* status_return ) ;
 
 ! !!! category of setlocale
-CONSTANT: LC_ALL      0 ;
-CONSTANT: LC_COLLATE  1 ;
-CONSTANT: LC_CTYPE    2 ;
-CONSTANT: LC_MONETARY 3 ;
-CONSTANT: LC_NUMERIC  4 ;
-CONSTANT: LC_TIME     5 ;
+CONSTANT: LC_ALL      0
+CONSTANT: LC_COLLATE  1
+CONSTANT: LC_CTYPE    2
+CONSTANT: LC_MONETARY 3
+CONSTANT: LC_NUMERIC  4
+CONSTANT: LC_TIME     5
 
 X-FUNCTION: c-string setlocale ( int category, c-string name ) ;
 

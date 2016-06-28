@@ -64,7 +64,7 @@ M: sqlite-statement bind-statement* ( statement -- )
     dup bound?>> [ dup reset-bindings ] when
     low-level-bind ;
 
-GENERIC: sqlite-bind-conversion ( tuple obj -- array ) ;
+GENERIC: sqlite-bind-conversion ( tuple obj -- array )
 
 TUPLE: sqlite-low-level-binding < low-level-binding key type ;
 : <sqlite-low-level-binding> ( key value type -- obj )

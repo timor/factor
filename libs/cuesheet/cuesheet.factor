@@ -25,7 +25,7 @@ indices isrc postgap ;
 
 TUPLE: index number duration ;
 
-C: <index> index ;
+C: <index> index
 
 ERROR: unknown-filetype filetype ;
 

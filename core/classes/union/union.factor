@@ -11,7 +11,7 @@ PREDICATE: union-class < class
 
 PRIVATE<
 
-GENERIC: union-of-builtins? ( class -- ? ) ;
+GENERIC: union-of-builtins? ( class -- ? )
 
 M: builtin-class union-of-builtins? drop t ;
 
@@ -55,7 +55,7 @@ M: union-class update-class define-union-predicate ;
 
 ERROR: cannot-reference-self class members ;
 
-GENERIC: classes-contained-by ( obj -- members ) ;
+GENERIC: classes-contained-by ( obj -- members )
 
 M: union-class classes-contained-by ( union -- members )
     "members" word-prop [ f ] when-empty ;

@@ -73,7 +73,7 @@ M: struct summary
     ] "" make ;
 
 TUPLE: struct-mirror { object read-only } ;
-C: <struct-mirror> struct-mirror ;
+C: <struct-mirror> struct-mirror
 
 : get-struct-slot ( struct slot -- value present? )
     over class-of struct-slots slot-named
@@ -127,4 +127,4 @@ M: struct-mirror >alist ( mirror -- alist )
 
 M: struct make-mirror <struct-mirror> ;
 
-INSTANCE: struct-mirror assoc ;
+INSTANCE: struct-mirror assoc

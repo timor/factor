@@ -6,7 +6,7 @@ IN: ui.gadgets.grid-lines
 
 TUPLE: grid-lines color ;
 
-C: <grid-lines> grid-lines ;
+C: <grid-lines> grid-lines
 
 PRIVATE<
 

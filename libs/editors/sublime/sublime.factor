@@ -8,7 +8,7 @@ IN: editors.sublime
 SINGLETON: sublime
 sublime editor-class set-global
 
-HOOK: find-sublime-path os ( -- path ) ;
+HOOK: find-sublime-path os ( -- path )
 
 M: object find-sublime-path f ;
 

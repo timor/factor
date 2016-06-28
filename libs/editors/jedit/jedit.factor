@@ -8,7 +8,7 @@ IN: editors.jedit
 SINGLETON: jedit
 jedit editor-class set-global
 
-HOOK: find-jedit-path os ( -- path ) ;
+HOOK: find-jedit-path os ( -- path )
 
 M: object find-jedit-path f ;
 

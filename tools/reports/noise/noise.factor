@@ -68,7 +68,7 @@ IN: reports.noise
 
 : vsum ( pairs -- pair ) { 0 0 } [ v+ ] reduce ;
 
-GENERIC: noise ( obj -- pair ) ;
+GENERIC: noise ( obj -- pair )
 
 M: word noise badness 1 2array ;
 
@@ -105,7 +105,7 @@ M: array noise [ noise ] map vsum ;
         [ ]
     } cond noise-factor ;
 
-GENERIC: word-noise-factor ( word -- factor ) ;
+GENERIC: word-noise-factor ( word -- factor )
 
 M: word word-noise-factor
     def>> quot-noise-factor ;

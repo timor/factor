@@ -93,7 +93,7 @@ CONSTANT: self-closing-tags {
         "param"
         "source"
         "track"
-    } ;
+    }
 
 : check-tag ( -- )
     string-context? get [ tag-not-allowed-here ] when ;

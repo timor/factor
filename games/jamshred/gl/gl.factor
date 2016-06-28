@@ -8,17 +8,17 @@ FROM: alien.c-types => float ;
 SPECIALIZED-ARRAY: float
 IN: jamshred.gl
 
-CONSTANT: min-vertices 6 ;
-CONSTANT: max-vertices 32 ;
+CONSTANT: min-vertices 6
+CONSTANT: max-vertices 32
 
-CONSTANT: n-vertices 32 ;
+CONSTANT: n-vertices 32
 
 ! render enough of the tunnel that it looks continuous
-CONSTANT: n-segments-ahead 60 ;
-CONSTANT: n-segments-behind 40 ;
+CONSTANT: n-segments-ahead 60
+CONSTANT: n-segments-behind 40
 
 ! so that we can't see through the wall, we draw it a bit further away
-CONSTANT: wall-drawing-offset 0.15 ;
+CONSTANT: wall-drawing-offset 0.15
 
 : wall-drawing-radius ( segment -- r )
     radius>> wall-drawing-offset + ;

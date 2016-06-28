@@ -6,7 +6,7 @@ IN: compiler.tree.normalization.introductions
 
 SYMBOL: introductions
 
-GENERIC: count-introductions* ( node -- ) ;
+GENERIC: count-introductions* ( node -- )
 
 : count-introductions ( nodes -- n )
     ! Note: we use each, not each-node, since the #branch

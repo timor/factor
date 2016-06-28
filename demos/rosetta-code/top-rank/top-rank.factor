@@ -44,7 +44,7 @@ CONSTANT: employees {
         T{ employee f "Tim Sampair" "E03033" 27000 "D101" }
         T{ employee f "Kim Arlich" "E10001" 57000 "D190" }
         T{ employee f "Timothy Grove" "E16398" 29900 "D190" }
-    } ;
+    }
 
 : prepare-departments ( seq -- departments )
     [ department>> ] collect-by

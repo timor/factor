@@ -199,7 +199,7 @@ PRIVATE>
 : topmost-window ( -- world )
     ui-windows get-global last second ;
 
-HOOK: close-window ui-backend ( gadget -- ) ;
+HOOK: close-window ui-backend ( gadget -- )
 
 M: object close-window
     find-world [ ungraft ] when* ;
@@ -209,7 +209,7 @@ M: object close-window
     <flag> ui-notify-flag set-global
 ] "ui" add-startup-hook
 
-HOOK: resize-window ui-backend ( world dim -- ) ;
+HOOK: resize-window ui-backend ( world dim -- )
 M: object resize-window 2drop ;
 
 : relayout-window ( gadget -- )
@@ -219,9 +219,9 @@ M: object resize-window 2drop ;
 : with-ui ( quot: ( -- ) -- )
     ui-running? [ call( -- ) ] [ $[ init-ui @ ] (with-ui) ] if ;
 
-HOOK: beep ui-backend ( -- ) ;
+HOOK: beep ui-backend ( -- )
 
-HOOK: system-alert ui-backend ( caption text -- ) ;
+HOOK: system-alert ui-backend ( caption text -- )
 
 : parse-window-attributes ( class -- attributes )
     "{" expect dup all-slots parse-tuple-literal-slots ;

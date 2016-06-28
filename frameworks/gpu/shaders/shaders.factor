@@ -9,7 +9,7 @@ opengl opengl.gl opengl.shaders parser quotations sequences
 specialized-arrays splitting strings tr ui.gadgets.worlds
 variants vectors vocabs vocabs.loader vocabs.parser words
 words.constant math.floats.half typed ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAY: int
 SPECIALIZED-ARRAY: void*
 IN: gpu.shaders
@@ -66,7 +66,7 @@ TUPLE: program-instance < gpu-object
     { program program }
     { world world } ;
 
-GENERIC: vertex-format-size ( format -- size ) ;
+GENERIC: vertex-format-size ( format -- size )
 
 MEMO: uniform-index ( program-instance uniform-name -- index )
     [ handle>> ] dip glGetUniformLocation ;
@@ -231,9 +231,9 @@ UNION: geometry-shader-parameter
     geometry-shader-vertices-out ;
 
 
-GENERIC: bind-vertex-format ( program-instance buffer-ptr format -- ) ;
+GENERIC: bind-vertex-format ( program-instance buffer-ptr format -- )
 
-GENERIC: link-feedback-format ( program-handle format -- ) ;
+GENERIC: link-feedback-format ( program-handle format -- )
 
 M: f link-feedback-format
     2drop ;
@@ -242,7 +242,7 @@ M: f link-feedback-format
     [ vertex-format-attributes [ name>> ] map sift ] map concat
     swap $[ [ _ ] 2dip swap glBindAttribLocation ] each-index ;
 
-GENERIC: link-geometry-shader-parameter ( program-handle parameter -- ) ;
+GENERIC: link-geometry-shader-parameter ( program-handle parameter -- )
 
 M: geometry-shader-input link-geometry-shader-parameter
     [ GL_GEOMETRY_INPUT_TYPE ] dip gl-geometry-shader-input glProgramParameteriARB ;
@@ -254,7 +254,7 @@ M: geometry-shader-vertices-out link-geometry-shader-parameter
 : link-geometry-shader-parameters ( program-handle parameters -- )
     [ link-geometry-shader-parameter ] with each ;
 
-GENERIC: (verify-feedback-format) ( program-instance format -- ) ;
+GENERIC: (verify-feedback-format) ( program-instance format -- )
 
 M: f (verify-feedback-format)
     2drop ;
@@ -418,7 +418,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: bind-vertex-array ( vertex-array -- ) ;
+GENERIC: bind-vertex-array ( vertex-array -- )
 
 M: vertex-array-object bind-vertex-array
     handle>> glBindVertexArray ; inline
@@ -440,7 +440,7 @@ M: vertex-array-collection bind-vertex-array
 : <vertex-array> ( vertex-buffer program-instance -- vertex-array )
     dup program>> vertex-formats>> first <vertex-array*> ; inline
 
-GENERIC: vertex-array-buffers ( vertex-array -- buffers ) ;
+GENERIC: vertex-array-buffers ( vertex-array -- buffers )
 
 M: vertex-array-object vertex-array-buffers
     vertex-buffers>> ; inline

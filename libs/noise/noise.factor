@@ -3,7 +3,7 @@ fry generalizations images kernel locals math math.constants math.functions
 math.libm math.matrices.simd math.vectors math.vectors.conversion math.vectors.simd
 memoize random random.mersenne-twister sequences sequences.private specialized-arrays
 typed ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAYS: c:float c:uchar float-4 uchar-16 ;
 IN: noise
 
@@ -31,8 +31,8 @@ TYPED: byte-map>image ( bytes: byte-array dim -- image: image )
     [ $[ _ product random-bytes >byte-array ] with-seed ]
     [ byte-map>image ] bi ; inline
 
-CONSTANT: normal-noise-pow 2 ;
-CONSTANT: normal-noise-count 4 ;
+CONSTANT: normal-noise-pow 2
+CONSTANT: normal-noise-count 4
 
 TYPED: normal-noise-map ( seed: integer dim -- bytes )
     $[ _ product normal-noise-count * random-bytes >byte-array ] with-seed

@@ -11,7 +11,7 @@ IN: editors.visual-studio-code
 SINGLETON: visual-studio-code
 visual-studio-code editor-class set-global
 
-HOOK: find-visual-studio-code-invocation os ( -- array ) ;
+HOOK: find-visual-studio-code-invocation os ( -- array )
 
 MEMO: visual-studio-code-invocation ( -- array )
     {

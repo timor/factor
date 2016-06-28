@@ -26,9 +26,9 @@ types [ H{ } clone ] initialize
 
 PRIVATE>
 
-GENERIC#: load-models* 2 ( obj encoding class -- models ) ;
+GENERIC#: load-models* 2 ( obj encoding class -- models )
 
-GENERIC: stream>models ( stream class -- models ) ;
+GENERIC: stream>models ( stream class -- models )
 
 : register-models-class ( extension encoding class -- )
     2array swap types get set-at ;

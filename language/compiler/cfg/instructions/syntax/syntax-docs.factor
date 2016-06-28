@@ -5,7 +5,7 @@ COMPILE<
 CONSTANT: parse-insn-slot-specs-code [[
 USING: compiler.cfg.instructions.syntax prettyprint splitting ;
 "use: src/int-rep temp: temp/int-rep" " " split parse-insn-slot-specs .
-]] ;
+]]
 
 CONSTANT: parse-insn-slot-specs-result [[
 {
@@ -20,7 +20,7 @@ CONSTANT: parse-insn-slot-specs-result [[
         { rep int-rep }
     }
 }
-]] ;
+]]
 COMPILE>
 
 HELP: parse-insn-slot-specs

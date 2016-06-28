@@ -8,7 +8,7 @@ TUPLE: shifted
 { n integer read-only }
 { fill read-only } ;
 
-C: <shifted> shifted ;
+C: <shifted> shifted
 
 M: shifted length underlying>> length ;
 
@@ -24,4 +24,4 @@ M: shifted set-nth-unsafe
     [ n>> neg + ] [ underlying>> ] bi
     2dup bounds-check? [ set-nth-unsafe ] [ 3drop ] if ;
 
-INSTANCE: shifted sequence ;
+INSTANCE: shifted sequence

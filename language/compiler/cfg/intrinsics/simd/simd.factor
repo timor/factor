@@ -40,7 +40,7 @@ CONSTANT: rep>bit-mask {
             0x8000,0000,0000,0000
         }
     }
-} ;
+}
 
 : sign-bit-mask ( rep -- byte-array )
     signed-rep rep>bit-mask at underlying>> ;
@@ -48,7 +48,7 @@ CONSTANT: rep>bit-mask {
 CONSTANT: rep>neg-zero {
     { float-4-rep float-array{ -0.0 -0.0 -0.0 -0.0 } }
     { double-2-rep double-array{ -0.0 -0.0 } }
-} ;
+}
 
 : ^load-neg-zero-vector ( rep -- dst )
     rep>neg-zero at underlying>> ^^load-literal ;
@@ -60,7 +60,7 @@ CONSTANT: rep>add-sub {
     { short-8-rep short-array{ -1 0 -1 0 -1 0 -1 0 } }
     { int-4-rep int-array{ -1 0 -1 0 } }
     { longlong-2-rep longlong-array{ -1 0 } }
-} ;
+}
 
 : ^load-add-sub-vector ( rep -- dst )
     signed-rep rep>add-sub at underlying>> ^^load-literal ;
@@ -68,7 +68,7 @@ CONSTANT: rep>add-sub {
 CONSTANT: rep>half {
     { float-4-rep float-array{  0.5 0.5 0.5 0.5 } }
     { double-2-rep double-array{ 0.5 0.5 } }
-} ;
+}
 
 : ^load-half-vector ( rep -- dst )
     rep>half at underlying>> ^^load-literal ;

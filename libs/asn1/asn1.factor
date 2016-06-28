@@ -150,7 +150,7 @@ SYMBOL: end
 ! Fixnum
 ! =========================================================
 
-GENERIC: >ber ( obj -- byte-array ) ;
+GENERIC: >ber ( obj -- byte-array )
 M: fixnum >ber ( n -- byte-array )
     >128-ber dup length 2 swap 2array
     "cc" pack-native B{ } prepend-as ;

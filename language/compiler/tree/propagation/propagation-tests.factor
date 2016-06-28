@@ -683,7 +683,7 @@ TUPLE: mixed-mutable-immutable { x integer } { y sequence read-only } ;
     [ [ drop ] [ drop ] compose curry (each-integer) ] final-classes
 ] unit-test
 
-GENERIC: iterate ( obj -- next-obj ? ) ;
+GENERIC: iterate ( obj -- next-obj ? )
 M: fixnum iterate f ; inline
 M: array iterate first t ; inline
 
@@ -740,7 +740,7 @@ M: array iterate first t ; inline
     [ 10 eq? [ drop 3 ] unless ] final-literals
 ] unit-test
 
-GENERIC: bad-generic ( a -- b ) ;
+GENERIC: bad-generic ( a -- b )
 M: fixnum bad-generic 1 fixnum+fast ; inline
 : bad-behavior ( -- b ) 4 bad-generic ; inline recursive
 
@@ -752,7 +752,7 @@ M: fixnum bad-generic 1 fixnum+fast ; inline
     ] final-classes
 ] unit-test
 
-GENERIC: infinite-loop ( a -- b ) ;
+GENERIC: infinite-loop ( a -- b )
 M: integer infinite-loop infinite-loop ;
 
 { } [ [ { integer } declare infinite-loop ] final-classes drop ] unit-test
@@ -943,7 +943,7 @@ TUPLE: foo bar ;
 
 { t } [ [ foo new ] { new } inlined? ] unit-test
 
-GENERIC: whatever ( x -- y ) ;
+GENERIC: whatever ( x -- y )
 M: number whatever drop foo ; inline
 
 { t } [ [ 1 whatever new ] { new } inlined? ] unit-test
@@ -952,7 +952,7 @@ M: number whatever drop foo ; inline
 
 { f } [ [ that-thing new ] { new } inlined? ] unit-test
 
-GENERIC: whatever2 ( x -- y ) ;
+GENERIC: whatever2 ( x -- y )
 M: number whatever2 drop H{ { 1 1 } { 2 2 } { 3 3 } { 4 4 } { 5 6 } } ; inline
 M: f whatever2 ; inline
 
@@ -1096,7 +1096,7 @@ TUPLE: inline-please a ;
     [ maybe{ inline-please } instance? ] { instance? } inlined?
 ] unit-test
 
-GENERIC: derp ( obj -- obj' ) ;
+GENERIC: derp ( obj -- obj' )
 
 M: integer derp 5 + ;
 M: f derp drop t ;

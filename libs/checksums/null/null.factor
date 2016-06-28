@@ -3,6 +3,6 @@ IN: checksums.null
 
 SINGLETON: null
 
-INSTANCE: null checksum ;
+INSTANCE: null checksum
 
 M: null checksum-bytes drop ;

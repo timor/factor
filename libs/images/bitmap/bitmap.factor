@@ -6,7 +6,7 @@ images.loader images.normalization io io.binary
 io.encodings.8-bit.latin1 io.encodings.string kernel math
 math.bitwise sequences specialized-arrays summary
 io.streams.throwing ;
-QUALIFIED-WITH: bitstreams b ;
+QUALIFIED-WITH: bitstreams b
 SPECIALIZED-ARRAYS: uint ushort ;
 IN: images.bitmap
 
@@ -200,7 +200,7 @@ UNION: os2-header os2v1-header os2v2-header ;
 : parse-color-palette ( loading-bitmap -- loading-bitmap )
     dup color-palette-length read >>color-palette ;
 
-GENERIC: parse-color-data* ( loading-bitmap header -- loading-bitmap ) ;
+GENERIC: parse-color-data* ( loading-bitmap header -- loading-bitmap )
 
 : parse-color-data ( loading-bitmap -- loading-bitmap )
     dup header>> parse-color-data* ;
@@ -215,7 +215,7 @@ M: object parse-color-data* ( loading-bitmap header -- loading-bitmap )
 : alpha-used? ( loading-bitmap -- ? )
     color-index>> 4 <groups> [ fourth 0 = ] all? not ;
 
-GENERIC: bitmap>component-order* ( loading-bitmap header -- object ) ;
+GENERIC: bitmap>component-order* ( loading-bitmap header -- object )
 
 : bitmap>component-order ( loading-bitmap -- object )
     dup header>> bitmap>component-order* ;
@@ -320,7 +320,7 @@ M: unsupported-bitfield-widths summary
 
 ERROR: unsupported-bitmap-compression compression ;
 
-GENERIC: uncompress-bitmap* ( loading-bitmap header -- loading-bitmap ) ;
+GENERIC: uncompress-bitmap* ( loading-bitmap header -- loading-bitmap )
 
 : uncompress-bitmap ( loading-bitmap -- loading-bitmap )
     dup header>> uncompress-bitmap* ;

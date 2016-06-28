@@ -4,13 +4,13 @@ USING: combinators io.pathnames kernel sequences system
 vocabs ;
 IN: io.standard-paths
 
-HOOK: find-native-bundle os ( string -- path ) ;
+HOOK: find-native-bundle os ( string -- path )
 
-HOOK: find-in-path* os ( string -- path/f ) ;
+HOOK: find-in-path* os ( string -- path/f )
 
-HOOK: find-in-applications os ( directories filename -- path ) ;
+HOOK: find-in-applications os ( directories filename -- path )
 
-HOOK: find-in-standard-login-path* os ( string -- path/f ) ;
+HOOK: find-in-standard-login-path* os ( string -- path/f )
 
 M: object find-in-standard-login-path*
     find-in-path* ;

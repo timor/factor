@@ -30,7 +30,7 @@ CONSTANT: colors H{
     { { 255  85 255 } 13 }
     { {  85 255 255 } 14 }
     { { 255 255 255 } 15 }
-} ;
+}
 
 : color>rgb ( color -- rgb )
     [ red>> ] [ green>> ] [ blue>> ] tri
@@ -56,7 +56,7 @@ CONSTANT: colors H{
 
 TUPLE: ansi stream ;
 
-C: <ansi> ansi ;
+C: <ansi> ansi
 
 M: ansi stream-write1 stream>> stream-write1 ;
 M: ansi stream-write stream>> stream-write ;

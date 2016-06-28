@@ -32,7 +32,7 @@ T{ basic-block
         }
     }
 }
-]] ;
+]]
 
 CONSTANT: ex-make-input-map [[
 USING: compiler.cfg.builder prettyprint ;
@@ -42,7 +42,7 @@ H{
     { 37 T{ ds-loc { n 2 } } }
     { 92 T{ ds-loc } }
 }
-]] ;
+]]
 COMPILE>
 
 HELP: build-cfg

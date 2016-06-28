@@ -5,7 +5,7 @@ io.directories io.pathnames kernel math math.parser sequences
 sorting sorting.human splitting sets ;
 IN: forestdb.paths
 
-CONSTANT: fdb-filename-base "fq" ;
+CONSTANT: fdb-filename-base "fq"
 
 : fdb-filename? ( path -- ? )
     "." split {

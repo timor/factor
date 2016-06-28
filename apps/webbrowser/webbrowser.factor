@@ -6,7 +6,7 @@ sequences strings system ui.operations urls vocabs ;
 
 IN: webbrowser
 
-HOOK: open-file os ( path -- ) ;
+HOOK: open-file os ( path -- )
 
 "webbrowser." os name>> append require
 

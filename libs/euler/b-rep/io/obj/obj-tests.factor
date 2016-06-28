@@ -18,7 +18,7 @@ f 7 8 6 5
 f 3 4 8 7
 f 2 6 8 4
 f 5 1 3 7
-" ;
+"
 
 CONSTANT: valid-cube-obj-relative-indices
 "v -1.0 -1.0 -1.0
@@ -35,7 +35,7 @@ f 7 8 6 5
 f 3 4 8 7
 f 2 6 8 4
 f 5 1 3 7
-" ;
+"
 
 CONSTANT: valid-cube-obj-texcoords
 "# comment should be ignored
@@ -57,7 +57,7 @@ f 7/3 8/4 6/2 5/1
 f 3/3 4/4 8/4 7/3
 f 2/2 6/2 8/4 4/4
 f 5/1 1/1 3/3 7/3
-" ;
+"
 
 { $\ valid-cube-obj } [ [ valid-cube-b-rep write-obj ] with-string-writer ] unit-test
 

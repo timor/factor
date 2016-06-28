@@ -9,10 +9,10 @@ FROM: alien.c-types => float ;
 SPECIALIZED-ARRAY: float
 IN: jamshred.tunnel
 
-CONSTANT: n-segments 5000 ;
+CONSTANT: n-segments 5000
 
 TUPLE: segment < oint number color radius ;
-C: <segment> segment ;
+C: <segment> segment
 
 : segment-number++ ( segment -- )
     [ number>> 1 + ] keep number<< ;
@@ -23,8 +23,8 @@ C: <segment> segment ;
 : random-color ( -- color )
     { 100 100 100 } [ random 100 / >float ] map first3 1.0 <rgba> ;
 
-CONSTANT: tunnel-segment-distance 0.4 ;
-CONSTANT: random-rotation-angle $$[ pi 20 / ] ;
+CONSTANT: tunnel-segment-distance 0.4
+CONSTANT: random-rotation-angle $$[ pi 20 / ]
 
 : random-segment ( previous-segment -- segment )
     clone dup random-rotation-angle random-turn
@@ -34,7 +34,7 @@ CONSTANT: random-rotation-angle $$[ pi 20 / ] ;
 : (random-segments) ( segments n -- segments )
     [ dup last random-segment suffix! ] times ;
 
-CONSTANT: default-segment-radius 1 ;
+CONSTANT: default-segment-radius 1
 
 : initial-segment ( -- segment )
     float-array{ 0 0 0 } float-array{ 0 0 -1 } float-array{ 0 1 0 } float-array{ -1 0 0 }
@@ -96,7 +96,7 @@ CONSTANT: default-segment-radius 1 ;
 : wall-normal ( seg oint -- n )
     location>> vector-to-centre normalize ;
 
-CONSTANT: distant 1000 ;
+CONSTANT: distant 1000
 
 : max-real ( a b -- c )
     ! sometimes collision-coefficient yields complex roots, so we ignore these (hack)

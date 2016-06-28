@@ -9,7 +9,7 @@ CONSTANT: entities-out
         { char: \< "&lt;"   }
         { char: \> "&gt;"   }
         { char: \& "&amp;"  }
-    } ;
+    }
 
 CONSTANT: quoted-entities-out
     H{
@@ -17,7 +17,7 @@ CONSTANT: quoted-entities-out
         { char: \' "&apos;" }
         { char: \" "&quot;" }
         { char: \< "&lt;"   }
-    } ;
+    }
 
 : escape-string-by ( str table -- escaped )
     ! Convert <, >, &, ' and " to HTML entities.
@@ -36,7 +36,7 @@ CONSTANT: entities
         { "amp"   char: \&  }
         { "apos"  char: \'  }
         { "quot"  char: \"  }
-    } ;
+    }
 
 : with-entities ( entities quot -- )
     [ swap extra-entities set call ] with-scope ; inline

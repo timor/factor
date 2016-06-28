@@ -8,7 +8,7 @@ SPECIALIZED-ARRAY: double
 IN: benchmark.nbody
 
 : solar-mass ( -- x ) 4 pi sq * ; inline
-CONSTANT: days-per-year 365.24 ;
+CONSTANT: days-per-year 365.24
 
 TUPLE: body
 { location double-array }

@@ -9,7 +9,7 @@ IN: jamshred.oint
 ! segment's location and orientation are given by an oint.
 
 TUPLE: oint location forward up left ;
-C: <oint> oint ;
+C: <oint> oint
 
 : rotation-quaternion ( theta axis -- quaternion )
     swap 2 / dup cos swap sin rot n*v first3 rect> [ rect> ] dip 2array ;

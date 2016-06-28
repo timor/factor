@@ -9,7 +9,7 @@ IN: compiler.cfg.gvn.folding
 : binary-constant-fold? ( insn -- ? )
     src1>> vreg>insn ##load-integer? ; inline
 
-GENERIC: binary-constant-fold* ( x y insn -- z ) ;
+GENERIC: binary-constant-fold* ( x y insn -- z )
 
 M: ##add-imm binary-constant-fold* drop + ;
 M: ##sub-imm binary-constant-fold* drop - ;
@@ -29,7 +29,7 @@ M: ##shl-imm binary-constant-fold* drop shift ;
 : unary-constant-fold? ( insn -- ? )
     src>> vreg>insn ##load-integer? ; inline
 
-GENERIC: unary-constant-fold* ( x insn -- y ) ;
+GENERIC: unary-constant-fold* ( x insn -- y )
 
 M: ##not unary-constant-fold* drop bitnot ;
 M: ##neg unary-constant-fold* drop neg ;

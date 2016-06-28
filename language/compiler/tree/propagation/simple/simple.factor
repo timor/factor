@@ -22,7 +22,7 @@ M: #push propagate-before
 : set-value-infos ( infos values -- )
     [ set-value-info ] 2each ;
 
-GENERIC: add-depends-on-class ( obj -- ) ;
+GENERIC: add-depends-on-class ( obj -- )
 
 M: class add-depends-on-class
     add-depends-on-conditionally ;

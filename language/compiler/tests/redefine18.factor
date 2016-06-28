@@ -3,18 +3,18 @@ IN: compiler.tests.redefine18
 
 ! Mixin bug found by Doug
 
-GENERIC: g1 ( a -- b ) ;
-GENERIC: g2 ( a -- b ) ;
+GENERIC: g1 ( a -- b )
+GENERIC: g2 ( a -- b )
 
 MIXIN: c
 SINGLETON: a
-INSTANCE: a c ;
+INSTANCE: a c
 
 M: c g1 g2 ;
 M: a g2 drop a ;
 
 MIXIN: d
-INSTANCE: d c ;
+INSTANCE: d c
 
 M: d g2 drop d ;
 

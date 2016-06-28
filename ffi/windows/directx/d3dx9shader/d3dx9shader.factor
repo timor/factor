@@ -188,7 +188,7 @@ FUNCTION: HRESULT
         LPD3DXBUFFER*                   ppShader,
         LPD3DXBUFFER*                   ppErrorMsgs ) ;
 
-ALIAS: D3DXAssembleShaderFromFile D3DXAssembleShaderFromFileW ;
+ALIAS: D3DXAssembleShaderFromFile D3DXAssembleShaderFromFileW
 
 FUNCTION: HRESULT
     D3DXAssembleShaderFromResourceA (
@@ -210,7 +210,7 @@ FUNCTION: HRESULT
         LPD3DXBUFFER*                   ppShader,
         LPD3DXBUFFER*                   ppErrorMsgs ) ;
 
-ALIAS: D3DXAssembleShaderFromResource D3DXAssembleShaderFromResourceW ;
+ALIAS: D3DXAssembleShaderFromResource D3DXAssembleShaderFromResourceW
 
 FUNCTION: HRESULT
     D3DXAssembleShader (
@@ -246,7 +246,7 @@ FUNCTION: HRESULT
         LPD3DXBUFFER*                   ppErrorMsgs,
         LPD3DXCONSTANTTABLE*            ppConstantTable ) ;
 
-ALIAS: D3DXCompileShaderFromFile D3DXCompileShaderFromFileW ;
+ALIAS: D3DXCompileShaderFromFile D3DXCompileShaderFromFileW
 
 FUNCTION: HRESULT
     D3DXCompileShaderFromResourceA (
@@ -274,7 +274,7 @@ FUNCTION: HRESULT
         LPD3DXBUFFER*                   ppErrorMsgs,
         LPD3DXCONSTANTTABLE*            ppConstantTable ) ;
 
-ALIAS: D3DXCompileShaderFromResource D3DXCompileShaderFromResourceW ;
+ALIAS: D3DXCompileShaderFromResource D3DXCompileShaderFromResourceW
 
 FUNCTION: HRESULT
     D3DXCompileShader (
@@ -369,7 +369,7 @@ FUNCTION: HRESULT
         LPD3DXBUFFER*                ppShaderText,
         LPD3DXBUFFER*                ppErrorMsgs ) ;
 
-ALIAS: D3DXPreprocessShaderFromFile D3DXPreprocessShaderFromFileW ;
+ALIAS: D3DXPreprocessShaderFromFile D3DXPreprocessShaderFromFileW
 
 FUNCTION: HRESULT
     D3DXPreprocessShaderFromResourceA (
@@ -389,7 +389,7 @@ FUNCTION: HRESULT
         LPD3DXBUFFER*                ppShaderText,
         LPD3DXBUFFER*                ppErrorMsgs ) ;
 
-ALIAS: D3DXPreprocessShaderFromResource D3DXPreprocessShaderFromResourceW ;
+ALIAS: D3DXPreprocessShaderFromResource D3DXPreprocessShaderFromResourceW
 
 FUNCTION: HRESULT
     D3DXPreprocessShader (

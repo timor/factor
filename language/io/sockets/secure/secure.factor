@@ -11,8 +11,8 @@ SYMBOL: secure-socket-timeout
 
 SYMBOL: secure-socket-backend
 
-HOOK: ssl-supported? secure-socket-backend ( -- ? ) ;
-HOOK: ssl-certificate-verification-supported? secure-socket-backend ( -- ? ) ;
+HOOK: ssl-supported? secure-socket-backend ( -- ? )
+HOOK: ssl-certificate-verification-supported? secure-socket-backend ( -- ? )
 
 M: object ssl-supported? f ;
 M: object ssl-certificate-verification-supported? f ;
@@ -46,7 +46,7 @@ ephemeral-key-bits ;
 
 TUPLE: secure-context < disposable config handle ;
 
-HOOK: <secure-context> secure-socket-backend ( config -- context ) ;
+HOOK: <secure-context> secure-socket-backend ( config -- context )
 
 : with-secure-context ( config quot -- )
     [
@@ -58,7 +58,7 @@ TUPLE: secure
     { addrspec read-only }
     { hostname read-only } ;
 
-C: <secure> secure ;
+C: <secure> secure
 
 M: secure present addrspec>> present " (secure)" append ;
 
@@ -70,7 +70,7 @@ M: secure resolve-host ( secure -- seq )
     [ addrspec>> resolve-host ] [ hostname>> ] bi
     [ <secure> ] curry map ;
 
-HOOK: check-certificate secure-socket-backend ( host handle -- ) ;
+HOOK: check-certificate secure-socket-backend ( host handle -- )
 
 PREDICATE: secure-inet < secure addrspec>> inet? ;
 
@@ -117,13 +117,13 @@ M: upgrade-buffers-full summary
     drop
     "send-secure-handshake can only be used if buffers are empty" ;
 
-HOOK: non-ssl-socket? os ( obj -- ? ) ;
+HOOK: non-ssl-socket? os ( obj -- ? )
 
-HOOK: socket-handle os ( obj -- ? ) ;
+HOOK: socket-handle os ( obj -- ? )
 
-HOOK: send-secure-handshake secure-socket-backend ( -- ) ;
+HOOK: send-secure-handshake secure-socket-backend ( -- )
 
-HOOK: accept-secure-handshake secure-socket-backend ( -- ) ;
+HOOK: accept-secure-handshake secure-socket-backend ( -- )
 
 {
     { [ os unix? ] [ "io.sockets.secure.unix" require ] }

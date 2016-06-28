@@ -4,7 +4,7 @@ USING: accessors kernel lcs sequences strings xml.syntax
 xml.writer ;
 IN: lcs.diff2html
 
-GENERIC: diff-line ( obj -- xml ) ;
+GENERIC: diff-line ( obj -- xml )
 
 : item-string ( item -- string )
     item>> [ char: no-break-space 1string ] when-empty ;

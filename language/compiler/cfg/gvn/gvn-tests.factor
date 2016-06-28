@@ -6,7 +6,7 @@ compiler.cfg.predecessors compiler.cfg.utilities locals compiler.cfg.dce
 compiler.cfg.ssa.destruction compiler.cfg.loop-detection
 compiler.cfg.representations compiler.cfg assocs vectors arrays
 layouts literals namespaces alien compiler.cfg.gvn.simd system ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 IN: compiler.cfg.gvn.tests
 
 : trim-temps ( insns -- insns )

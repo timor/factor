@@ -18,7 +18,7 @@ PRIVATE<
 
 : indirect-scale* ( op -- n ) scale>> 0 or ;
 
-GENERIC: sib-present? ( op -- ? ) ;
+GENERIC: sib-present? ( op -- ? )
 
 M: indirect sib-present?
     {
@@ -29,7 +29,7 @@ M: indirect sib-present?
 
 M: register sib-present? drop f ;
 
-GENERIC: r/m ( operand -- n ) ;
+GENERIC: r/m ( operand -- n )
 
 M: indirect r/m
     dup sib-present?
@@ -40,13 +40,13 @@ M: register r/m reg-code ;
 ! Immediate operands
 UNION: immediate byte integer ;
 
-GENERIC: fits-in-byte? ( value -- ? ) ;
+GENERIC: fits-in-byte? ( value -- ? )
 
 M: byte fits-in-byte? drop t ;
 
 M: integer fits-in-byte? -128 127 between? ;
 
-GENERIC: modifier ( op -- n ) ;
+GENERIC: modifier ( op -- n )
 
 M: indirect modifier
     dup base>> [
@@ -61,7 +61,7 @@ M: indirect modifier
 
 M: register modifier drop 0b11 ;
 
-GENERIC#: n, 1 ( value n -- ) ;
+GENERIC#: n, 1 ( value n -- )
 
 M: integer n, >le % ;
 M: byte n, [ value>> ] dip n, ;
@@ -82,7 +82,7 @@ M: byte n, [ value>> ] dip n, ;
         drop
     ] if ;
 
-GENERIC: displacement, ( op -- ) ;
+GENERIC: displacement, ( op -- )
 
 M: indirect displacement,
     dup displacement>> dup [
@@ -197,12 +197,12 @@ PRIVATE>
 : GS ( -- ) 0x65 , ;
 
 ! Moving stuff
-GENERIC: PUSH ( op -- ) ;
+GENERIC: PUSH ( op -- )
 M: register PUSH f 0x50 short-operand ;
 M: immediate PUSH 0x68 , 4, ;
 M: operand PUSH { 0b110 f 0xff } 1-operand ;
 
-GENERIC: POP ( op -- ) ;
+GENERIC: POP ( op -- )
 M: register POP f 0x58 short-operand ;
 M: operand POP { 0b000 f 0x8f } 1-operand ;
 
@@ -214,7 +214,7 @@ PRIVATE<
 : maybe-zero-extend ( reg imm -- reg' imm )
     dup zero-extendable? [ [ 32-bit-version-of ] dip ] when ;
 
-GENERIC#: (MOV-I) 1 ( dst src -- ) ;
+GENERIC#: (MOV-I) 1 ( dst src -- )
 
 M: register (MOV-I)
     {
@@ -235,13 +235,13 @@ M: operand (MOV-I)
 
 PRIVATE>
 
-GENERIC: MOV ( dst src -- ) ;
+GENERIC: MOV ( dst src -- )
 M: immediate MOV (MOV-I) ;
 M: operand MOV 0x88 2-operand ;
 
 ERROR: bad-movabs-operands dst src ;
 
-GENERIC: MOVABS ( dst src -- ) ;
+GENERIC: MOVABS ( dst src -- )
 M: object MOVABS bad-movabs-operands ;
 M: register MOVABS
     {
@@ -263,17 +263,17 @@ M: integer MOVABS
 : LEA ( dst src -- ) swap 0x8d 2-operand ;
 
 ! Control flow
-GENERIC: JMP ( op -- ) ;
+GENERIC: JMP ( op -- )
 M: integer JMP 0xe9 , 4, ;
 M: operand JMP { 0b100 t 0xff } 1-operand ;
 
-GENERIC: CALL ( op -- ) ;
+GENERIC: CALL ( op -- )
 M: integer CALL 0xe8 , 4, ;
 M: operand CALL { 0b010 t 0xff } 1-operand ;
 
 PRIVATE<
 
-GENERIC#: JUMPcc 1 ( addr opcode -- ) ;
+GENERIC#: JUMPcc 1 ( addr opcode -- )
 M: integer JUMPcc extended-opcode, 4, ;
 
 : SETcc ( dst opcode -- )
@@ -321,28 +321,28 @@ PRIVATE>
 
 ! Arithmetic
 
-GENERIC: ADD ( dst src -- ) ;
+GENERIC: ADD ( dst src -- )
 M: immediate ADD { 0b000 t 0x80 } immediate-1/4 ;
 M: operand ADD 0o000 2-operand ;
 
-GENERIC: OR ( dst src -- ) ;
+GENERIC: OR ( dst src -- )
 M: immediate OR { 0b001 t 0x80 } immediate-1/4 ;
 M: operand OR 0o010 2-operand ;
 
-GENERIC: ADC ( dst src -- ) ;
+GENERIC: ADC ( dst src -- )
 M: immediate ADC { 0b010 t 0x80 } immediate-1/4 ;
 M: operand ADC 0o020 2-operand ;
 
-GENERIC: SBB ( dst src -- ) ;
+GENERIC: SBB ( dst src -- )
 M: immediate SBB { 0b011 t 0x80 } immediate-1/4 ;
 M: operand SBB 0o030 2-operand ;
 
-GENERIC: AND ( dst src -- ) ;
+GENERIC: AND ( dst src -- )
 M: immediate AND ( dst src -- )
     maybe-zero-extend { 0b100 t 0x80 } immediate-1/4 ;
 M: operand AND 0o040 2-operand ;
 
-GENERIC: SUB ( dst src -- ) ;
+GENERIC: SUB ( dst src -- )
 M: immediate SUB { 0b101 t 0x80 } immediate-1/4 ;
 M: operand SUB 0o050 2-operand ;
 
@@ -352,16 +352,16 @@ M: operand SUB 0o050 2-operand ;
 : DEC ( dst -- )
     { 0b001 t 0xff } 1-operand ;
 
-GENERIC: XOR ( dst src -- ) ;
+GENERIC: XOR ( dst src -- )
 M: immediate XOR { 0b110 t 0x80 } immediate-1/4 ;
 M: operand XOR 0o060 2-operand ;
 
-GENERIC: CMP ( dst src -- ) ;
+GENERIC: CMP ( dst src -- )
 M: immediate CMP ( dst src -- )
     { 0b111 t 0x80 } immediate-1/4 ;
 M: operand CMP 0o070 2-operand ;
 
-GENERIC: TEST ( dst src -- ) ;
+GENERIC: TEST ( dst src -- )
 M: immediate TEST ( dst src -- )
     maybe-zero-extend { 0b0 t 0xf7 } immediate-4 ;
 M: operand TEST 0o204 2-operand ;
@@ -370,19 +370,19 @@ M: operand TEST 0o204 2-operand ;
 
 : BSR ( dst src -- ) { 0x0f 0xbd } (2-operand) ;
 
-GENERIC: BT ( value n -- ) ;
+GENERIC: BT ( value n -- )
 M: immediate BT ( value n -- ) { 0b100 t { 0x0f 0xba } } immediate-1* ;
 M: operand   BT ( value n -- ) swap { 0x0f 0xa3 } (2-operand) ;
 
-GENERIC: BTC ( value n -- ) ;
+GENERIC: BTC ( value n -- )
 M: immediate BTC ( value n -- ) { 0b111 t { 0x0f 0xba } } immediate-1* ;
 M: operand   BTC ( value n -- ) swap { 0x0f 0xbb } (2-operand) ;
 
-GENERIC: BTR ( value n -- ) ;
+GENERIC: BTR ( value n -- )
 M: immediate BTR ( value n -- ) { 0b110 t { 0x0f 0xba } } immediate-1* ;
 M: operand   BTR ( value n -- ) swap { 0x0f 0xb3 } (2-operand) ;
 
-GENERIC: BTS ( value n -- ) ;
+GENERIC: BTS ( value n -- )
 M: immediate BTS ( value n -- ) { 0b101 t { 0x0f 0xba } } immediate-1* ;
 M: operand   BTS ( value n -- ) swap { 0x0f 0xab } (2-operand) ;
 
@@ -641,8 +641,8 @@ PRIVATE>
 : MOVHPD     ( dest src -- ) 0x16 0x66 2-operand-sse ;
 : MOVSHDUP   ( dest src -- ) 0x16 0xf3 2-operand-rm-sse ;
 
-ALIAS: MOVHLPS MOVLPS ;
-ALIAS: MOVLHPS MOVHPS ;
+ALIAS: MOVHLPS MOVLPS
+ALIAS: MOVLHPS MOVHPS
 
 : PREFETCHNTA ( mem -- )  { 0b000 f { 0x0f 0x18 } } 1-operand ;
 : PREFETCHT0  ( mem -- )  { 0b001 f { 0x0f 0x18 } } 1-operand ;
@@ -731,13 +731,13 @@ PRIVATE>
 
 : PEXTRW     ( dest src imm -- ) pick indirect? [ (PEXTRW-sse4) ] [ (PEXTRW-sse1) ] if ;
 : PEXTRD     ( dest src imm -- ) { 0x3a 0x16 } 0x66 3-operand-mr-sse ;
-ALIAS: PEXTRQ PEXTRD ;
+ALIAS: PEXTRQ PEXTRD
 : EXTRACTPS  ( dest src imm -- ) { 0x3a 0x17 } 0x66 3-operand-mr-sse ;
 
 : PINSRB     ( dest src imm -- ) { 0x3a 0x20 } 0x66 3-operand-rm-sse ;
 : INSERTPS   ( dest src imm -- ) { 0x3a 0x21 } 0x66 3-operand-rm-sse ;
 : PINSRD     ( dest src imm -- ) { 0x3a 0x22 } 0x66 3-operand-rm-sse ;
-ALIAS: PINSRQ PINSRD ;
+ALIAS: PINSRQ PINSRD
 : DPPS       ( dest src imm -- ) { 0x3a 0x40 } 0x66 3-operand-rm-sse ;
 : DPPD       ( dest src imm -- ) { 0x3a 0x41 } 0x66 3-operand-rm-sse ;
 : MPSADBW    ( dest src imm -- ) { 0x3a 0x42 } 0x66 3-operand-rm-sse ;

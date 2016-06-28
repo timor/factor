@@ -64,7 +64,7 @@ M: ppc-vmx-env (set-fp-env-register)
 M: ppc (fp-env-registers)
     <ppc-fpu-env> 1array ;
 
-CONSTANT: ppc-exception-flag-bits 0xfff8,0700 ;
+CONSTANT: ppc-exception-flag-bits 0xfff8,0700
 CONSTANT: ppc-exception-flag>bit
     H{
         { +fp-invalid-operation+ 0x2000,0000 }
@@ -72,9 +72,9 @@ CONSTANT: ppc-exception-flag>bit
         { +fp-underflow+         0x0800,0000 }
         { +fp-zero-divide+       0x0400,0000 }
         { +fp-inexact+           0x0200,0000 }
-    } ;
+    }
 
-CONSTANT: ppc-fp-traps-bits 0xf8 ;
+CONSTANT: ppc-fp-traps-bits 0xf8
 CONSTANT: ppc-fp-traps>bit
     H{
         { +fp-invalid-operation+ 0x80 }
@@ -82,18 +82,18 @@ CONSTANT: ppc-fp-traps>bit
         { +fp-underflow+         0x20 }
         { +fp-zero-divide+       0x10 }
         { +fp-inexact+           0x08 }
-    } ;
+    }
 
-CONSTANT: ppc-rounding-mode-bits 0x3 ;
+CONSTANT: ppc-rounding-mode-bits 0x3
 CONSTANT: ppc-rounding-mode>bit
     $$[ H{
         { +round-nearest+ 0x0 }
         { +round-zero+    0x1 }
         { +round-up+      0x2 }
         { +round-down+    0x3 }
-    } >biassoc ] ;
+    } >biassoc ]
 
-CONSTANT: ppc-denormal-mode-bits 0x4 ;
+CONSTANT: ppc-denormal-mode-bits 0x4
 
 M: ppc-fpu-env (get-exception-flags) ( register -- exceptions )
     fpscr>> ppc-exception-flag>bit mask> ; inline
@@ -120,7 +120,7 @@ M: ppc-fpu-env (set-denormal-mode) ( register mode -- register' )
         } case
     ] curry change-fpscr ; inline
 
-CONSTANT: vmx-denormal-mode-bits 0x10000 ;
+CONSTANT: vmx-denormal-mode-bits 0x10000
 
 M: ppc-vmx-env (get-exception-flags) ( register -- exceptions )
     drop { } ; inline

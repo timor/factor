@@ -26,7 +26,7 @@ PRIVATE>
 : 2ptrim ( p q -- p' q' ) [ ptrim ] bi@ ;
 : p+ ( p q -- r ) pextend v+ ;
 : p- ( p q -- r ) pextend v- ;
-ALIAS: n*p n*v ;
+ALIAS: n*p n*v
 
 : pextend-conv ( p q -- p' q' )
     2dup [ length ] bi@ + 1 - 2pad-tail ;

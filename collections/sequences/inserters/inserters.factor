@@ -3,8 +3,8 @@ USING: accessors fry growable kernel locals math sequences ;
 IN: sequences.inserters
 
 TUPLE: offset-growable { underlying read-only } { offset read-only } ;
-C: <offset-growable> offset-growable ;
-INSTANCE: offset-growable virtual-sequence ;
+C: <offset-growable> offset-growable
+INSTANCE: offset-growable virtual-sequence
 M: offset-growable length
     [ underlying>> length ] [ offset>> ] bi - ; inline
 M: offset-growable virtual-exemplar
@@ -23,9 +23,9 @@ M: inserter length
     drop 0 ; inline
 
 TUPLE: appender { underlying read-only } ;
-C: <appender> appender ;
+C: <appender> appender
 
-INSTANCE: appender inserter ;
+INSTANCE: appender inserter
 
 M:: appender new-sequence ( len inserter -- sequence )
     inserter underlying>> set: underlying
@@ -35,9 +35,9 @@ M:: appender new-sequence ( len inserter -- sequence )
     underlying old-length <offset-growable> ; inline
 
 TUPLE: replacer { underlying read-only } ;
-C: <replacer> replacer ;
+C: <replacer> replacer
 
-INSTANCE: replacer inserter ;
+INSTANCE: replacer inserter
 
 M: replacer new-sequence
     underlying>> [ set-length ] keep ; inline

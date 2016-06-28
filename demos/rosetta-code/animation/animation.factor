@@ -20,7 +20,7 @@ IN: rosetta-code.animation
 ! of the string and attaching it to the front. When the user
 ! clicks on the text, it should reverse its direction.
 
-CONSTANT: sentence "Hello World! " ;
+CONSTANT: sentence "Hello World! "
 
 TUPLE: animated-label < label-control reversed alarm ;
 

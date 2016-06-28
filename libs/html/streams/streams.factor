@@ -6,12 +6,12 @@ math.order math.parser namespaces sequences strings words
 splitting xml xml.syntax ;
 IN: html.streams
 
-GENERIC: url-of ( object -- url ) ;
+GENERIC: url-of ( object -- url )
 
 M: object url-of drop f ;
 
 TUPLE: html-writer data ;
-INSTANCE: html-writer output-stream ;
+INSTANCE: html-writer output-stream
 
 PRIVATE<
 
@@ -111,7 +111,7 @@ M: html-span-stream dispose
 : padding-css, ( padding -- )
     first2 (padding-css,) ;
 
-CONSTANT: pre-css "white-space: pre; font-family: monospace; " ;
+CONSTANT: pre-css "white-space: pre; font-family: monospace; "
 
 : div-css-style ( style -- str )
     [

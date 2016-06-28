@@ -15,7 +15,7 @@ TUPLE: snake-game
 TUPLE: snake-part
     dir type ;
 
-C: <snake-part> snake-part ;
+C: <snake-part> snake-part
 
 : <snake> ( -- snake )
     [

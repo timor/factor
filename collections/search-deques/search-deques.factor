@@ -5,7 +5,7 @@ IN: search-deques
 
 TUPLE: search-deque assoc deque ;
 
-C: <search-deque> search-deque ;
+C: <search-deque> search-deque
 
 M: search-deque deque-empty? deque>> deque-empty? ;
 
@@ -41,4 +41,4 @@ M: search-deque clear-deque
 M: search-deque deque-member?
     assoc>> key? ;
 
-INSTANCE: search-deque deque ;
+INSTANCE: search-deque deque

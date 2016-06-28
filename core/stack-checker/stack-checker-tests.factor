@@ -141,13 +141,13 @@ SYMBOL: sym-test
 
 { 1 0 } [ recursive-terminator ] must-infer-as
 
-GENERIC: potential-hang ( obj -- obj ) ;
+GENERIC: potential-hang ( obj -- obj )
 M: fixnum potential-hang dup [ potential-hang ] when ;
 
 { } [ [ 5 potential-hang ] infer drop ] unit-test
 
 TUPLE: funny-cons car cdr ;
-GENERIC: iterate ( obj -- ) ;
+GENERIC: iterate ( obj -- )
 M: funny-cons iterate cdr>> iterate ;
 M: f iterate drop ;
 M: real iterate drop ;
@@ -265,7 +265,7 @@ DEFER: inline-recursive-2
 
 ! Hooks
 SYMBOL: my-var
-HOOK: my-hook my-var ( -- x ) ;
+HOOK: my-hook my-var ( -- x )
 
 M: integer my-hook "an integer" ;
 M: string my-hook "a string" ;

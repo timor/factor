@@ -13,7 +13,7 @@ main()
     object_position = gl_Vertex.xyz;
     gl_Position = ftransform();
 }
-]] ;
+]]
 
 CONSTANT: plane-fragment-shader [[
 uniform float checker_size_inv;
@@ -37,7 +37,7 @@ main()
         ? mix(checker_color_1, checker_color_2, distance_factor)
         : mix(checker_color_2, checker_color_1, distance_factor);
 }
-]] ;
+]]
 
 CONSTANT: sphere-vertex-shader [[
 attribute vec3 center;
@@ -58,7 +58,7 @@ main()
     vcolor = surface_color;
     vradius = radius;
 }
-]] ;
+]]
 
 CONSTANT: sphere-solid-color-fragment-shader [[
 uniform vec3 light_position;
@@ -76,7 +76,7 @@ sphere_color(vec3 point, vec3 normal)
 
     return ambient * vcolor + diffuse * vec4(d * vcolor.rgb, vcolor.a);
 }
-]] ;
+]]
 
 CONSTANT: sphere-texture-fragment-shader [[
 uniform samplerCube surface_texture;
@@ -87,7 +87,7 @@ sphere_color(vec3 point, vec3 normal)
     vec3 reflect = reflect(normalize(point), normal);
     return textureCube(surface_texture, reflect * gl_NormalMatrix);
 }
-]] ;
+]]
 
 CONSTANT: sphere-main-fragment-shader [[
 varying float vradius;
@@ -109,7 +109,7 @@ main()
     gl_FragDepth = (transformed_surface.z/transformed_surface.w + 1.0) * 0.5;
 	gl_FragColor = sphere_color(world_surface.xyz, surface);
 }
-]] ;
+]]
 
 TUPLE: spheres-world < demo-world
     plane-program solid-sphere-program texture-sphere-program

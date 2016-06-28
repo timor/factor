@@ -5,13 +5,13 @@ compiler.tree.propagation.copy compiler.tree.propagation.info
 kernel sequences ;
 IN: compiler.tree.propagation.nodes
 
-GENERIC: propagate-before ( node -- ) ;
+GENERIC: propagate-before ( node -- )
 
-GENERIC: propagate-after ( node -- ) ;
+GENERIC: propagate-after ( node -- )
 
-GENERIC: annotate-node ( node -- ) ;
+GENERIC: annotate-node ( node -- )
 
-GENERIC: propagate-around ( node -- ) ;
+GENERIC: propagate-around ( node -- )
 
 : (propagate) ( nodes -- )
     [ [ compute-copy-equiv ] [ propagate-around ] bi ] each ;

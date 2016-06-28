@@ -7,7 +7,7 @@ math.bitwise math.intervals math.parser namespaces nmake
 prettyprint random sequences shuffle strings words fry ;
 IN: db.queries
 
-GENERIC: where ( specs obj -- ) ;
+GENERIC: where ( specs obj -- )
 
 SINGLETON: retryable
 : make-retryable ( obj -- obj' )

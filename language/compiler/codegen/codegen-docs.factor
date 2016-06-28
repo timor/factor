@@ -7,7 +7,7 @@ COMPILE<
 CONSTANT: generate-ex [[
 USING: compiler.cfg.debugger io prettyprint ;
 [ "hello\n" write ] test-regs first dup cfg set generate [ . ] [ 4 swap nth disassemble ] bi
-]] ;
+]]
 
 CONSTANT: generate-ex-answer [[
 {
@@ -50,7 +50,7 @@ CONSTANT: generate-ex-answer [[
 0000000001cc4cfa: 0000                  add [rax], al
 0000000001cc4cfc: 0000                  add [rax], al
 0000000001cc4cfe: 0000                  add [rax], al
-]] ;
+]]
 COMPILE>
 
 HELP: emit-branch

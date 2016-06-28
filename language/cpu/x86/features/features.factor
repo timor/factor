@@ -85,7 +85,7 @@ MEMO: sse-version ( -- n )
 : sse4.1? ( -- ? ) sse-version 41 >= ;
 : sse4.2? ( -- ? ) sse-version 42 >= ;
 
-HOOK: (cpuid) cpu ( rax rcx regs -- ) ;
+HOOK: (cpuid) cpu ( rax rcx regs -- )
 
 
 : cpuid-extended ( rax rcx -- 4array )
@@ -178,7 +178,7 @@ MEMO: enable-popcnt? ( -- ? )
         { 42 [ "SSE4.2" ] }
     } case ;
 
-HOOK: instruction-count cpu ( -- n ) ;
+HOOK: instruction-count cpu ( -- n )
 
 M: x86.32 instruction-count
     longlong { } cdecl [

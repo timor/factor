@@ -13,8 +13,8 @@ TUPLE: parser peg compiled id ;
 M: parser equal? { [ [ class-of ] same? ] [ [ id>> ] same? ] } 2&& ;
 M: parser hashcode* id>> hashcode* ;
 
-C: <parse-result> parse-result ;
-C: <parse-error>  parse-error ;
+C: <parse-result> parse-result
+C: <parse-error>  parse-error
 
 SYMBOL: error-stack
 
@@ -248,7 +248,7 @@ TUPLE: peg-head rule-id involved-set eval-set ;
         H{ } clone \ packrat ,,
     ] H{ } make swap with-variables ; inline
 
-GENERIC: (compile) ( peg -- quot ) ;
+GENERIC: (compile) ( peg -- quot )
 
 : process-parser-result ( result -- result )
     dup failed? [

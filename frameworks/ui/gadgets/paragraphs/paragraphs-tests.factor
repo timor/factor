@@ -7,7 +7,7 @@ TUPLE: fake-break < gadget ;
 
 : <fake-break> ( -- gadget ) fake-break new { 5 5 } >>dim ;
 
-INSTANCE: fake-break word-break ;
+INSTANCE: fake-break word-break
 
 100 <paragraph>
 <gadget> { 40 30 } >>dim dup "a" set add-gadget

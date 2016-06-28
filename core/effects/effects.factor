@@ -49,7 +49,7 @@ TUPLE: effect
     [ [ terminated?>> ] same? ]
     2tri and and ;
 
-GENERIC: effect>string ( obj -- str ) ;
+GENERIC: effect>string ( obj -- str )
 M: string effect>string ;
 M: object effect>string drop "object" ;
 M: word effect>string name>> ;
@@ -80,7 +80,7 @@ M: effect effect>string ( effect -- string )
         ")" %
     ] "" make ;
 
-GENERIC: effect>type ( obj -- type ) ;
+GENERIC: effect>type ( obj -- type )
 M: object effect>type drop object ;
 M: word effect>type ;
 M: pair effect>type second-unsafe effect>type ;
@@ -92,7 +92,7 @@ M: classoid effect>type ;
 : effect-out-types ( effect -- input-types )
     out>> [ effect>type ] map ;
 
-GENERIC: stack-effect ( word -- effect/f ) ;
+GENERIC: stack-effect ( word -- effect/f )
 
 M: word stack-effect
     dup "declared-effect" word-prop [ nip ] [

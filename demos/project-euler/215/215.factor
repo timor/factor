@@ -31,8 +31,8 @@ PRIVATE<
 TUPLE: block two three ;
 TUPLE: end { ways integer } ;
 
-C: <block> block ;
-C: <end> end ;
+C: <block> block
+C: <end> end
 : <failure> ( -- end ) 0 <end> ; inline
 : <success> ( -- end ) 1 <end> ; inline
 
@@ -41,9 +41,9 @@ C: <end> end ;
 : choice ( t p q -- t t )
     [ [ two>> ] [ three>> ] bi ] 2dip bi* ; inline
 
-GENERIC: merge ( t t -- t ) ;
-GENERIC#: block-merge 1 ( t t -- t ) ;
-GENERIC#: end-merge 1 ( t t -- t ) ;
+GENERIC: merge ( t t -- t )
+GENERIC#: block-merge 1 ( t t -- t )
+GENERIC#: end-merge 1 ( t t -- t )
 M: block merge block-merge ;
 M: end   merge end-merge ;
 M: block block-merge [ [ two>>   ] bi@ merge ]
@@ -52,10 +52,10 @@ M: end   block-merge nip ;
 M: block end-merge drop ;
 M: end   end-merge [ ways>> ] bi@ + <end> ;
 
-GENERIC: h-1 ( t -- t ) ;
-GENERIC: h0 ( t -- t ) ;
-GENERIC: h1 ( t -- t ) ;
-GENERIC: h2 ( t -- t ) ;
+GENERIC: h-1 ( t -- t )
+GENERIC: h0 ( t -- t )
+GENERIC: h1 ( t -- t )
+GENERIC: h2 ( t -- t )
 
 M: block h-1 [ h1 ] [ h2 ] choice merge ;
 M: block h0 drop <failure> ;
@@ -74,7 +74,7 @@ M: end h2 dup failure? [ <failure> <block> ] unless ;
     [ <failure> <success> <failure> ] dip
     1 - |[ a b c | b c <block> a b ] times 2drop ;
 
-GENERIC: total ( t -- n ) ;
+GENERIC: total ( t -- n )
 M: block total [ total ] dup choice + ;
 M: end   total ways>> ;
 

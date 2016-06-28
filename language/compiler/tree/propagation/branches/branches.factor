@@ -9,7 +9,7 @@ FROM: sets => union ;
 IN: compiler.tree.propagation.branches
 
 ! For conditionals, an assoc of child node # --> constraint
-GENERIC: child-constraints ( node -- seq ) ;
+GENERIC: child-constraints ( node -- seq )
 
 M: #if child-constraints
     in-d>> first [ =t ] [ =f ] bi 2array ;
@@ -20,7 +20,7 @@ M: #dispatch child-constraints
 ! There is an important invariant here, either no flags are set
 ! in live-branches, exactly one is set, or all are set.
 
-GENERIC: live-branches ( #branch -- indices ) ;
+GENERIC: live-branches ( #branch -- indices )
 
 M: #if live-branches
     in-d>> first value-info class>> {

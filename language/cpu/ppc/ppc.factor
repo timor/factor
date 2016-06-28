@@ -8,7 +8,7 @@ compiler.cfg.stack-frame compiler.codegen compiler.codegen.fixup
 compiler.constants compiler.units cpu.architecture cpu.ppc.assembler fry io
 kernel layouts literals locals make math math.order math.ranges memory
 namespaces prettyprint sequences system vm words ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 FROM: cpu.ppc.assembler => B ;
 FROM: math => float ;
 IN: cpu.ppc
@@ -29,20 +29,20 @@ IN: cpu.ppc
 ! f30: float scratch
 ! f31: ?
 
-HOOK: lr-save os ( -- n ) ;
-HOOK: has-toc os ( -- ? ) ;
-HOOK: reserved-area-size os ( -- n ) ;
-HOOK: allows-null-dereference os ( -- ? ) ;
+HOOK: lr-save os ( -- n )
+HOOK: has-toc os ( -- ? )
+HOOK: reserved-area-size os ( -- n )
+HOOK: allows-null-dereference os ( -- ? )
 
 M: label B  ( label -- )       [ 0 B  ] dip rc-relative-ppc-3-pc label-fixup ;
 M: label BL ( label -- )       [ 0 BL ] dip rc-relative-ppc-3-pc label-fixup ;
 M: label BC ( bo bi label -- ) [ 0 BC ] dip rc-relative-ppc-2-pc label-fixup ;
 
-CONSTANT: scratch-reg    30 ;
-CONSTANT: fp-scratch-reg 30 ;
-CONSTANT: ds-reg         14 ;
-CONSTANT: rs-reg         15 ;
-CONSTANT: vm-reg         16 ;
+CONSTANT: scratch-reg    30
+CONSTANT: fp-scratch-reg 30
+CONSTANT: ds-reg         14
+CONSTANT: rs-reg         15
+CONSTANT: vm-reg         16
 
 enable-float-intrinsics
 
@@ -88,49 +88,49 @@ M: ppc gc-root-offset ( spill-slot -- n )
         [ 0xffff bitand ORI ]
     } 3cleave ;
 
-HOOK: %clear-tag-bits cpu ( dst src -- ) ;
+HOOK: %clear-tag-bits cpu ( dst src -- )
 M: ppc.32 %clear-tag-bits tag-bits get CLRRWI ;
 M: ppc.64 %clear-tag-bits tag-bits get CLRRDI ;
 
-HOOK: %store-cell cpu ( dst src offset -- ) ;
+HOOK: %store-cell cpu ( dst src offset -- )
 M: ppc.32 %store-cell STW ;
 M: ppc.64 %store-cell STD ;
 
-HOOK: %store-cell-x cpu ( dst src offset -- ) ;
+HOOK: %store-cell-x cpu ( dst src offset -- )
 M: ppc.32 %store-cell-x STWX ;
 M: ppc.64 %store-cell-x STDX ;
 
-HOOK: %store-cell-update cpu ( dst src offset -- ) ;
+HOOK: %store-cell-update cpu ( dst src offset -- )
 M: ppc.32 %store-cell-update STWU ;
 M: ppc.64 %store-cell-update STDU ;
 
-HOOK: %load-cell cpu ( dst src offset -- ) ;
+HOOK: %load-cell cpu ( dst src offset -- )
 M: ppc.32 %load-cell LWZ ;
 M: ppc.64 %load-cell LD ;
 
-HOOK: %trap-null cpu ( src -- ) ;
+HOOK: %trap-null cpu ( src -- )
 M: ppc.32 %trap-null
     allows-null-dereference [ 0 TWEQI ] [ drop ] if ;
 M: ppc.64 %trap-null
     allows-null-dereference [ 0 TDEQI ] [ drop ] if ;
 
-HOOK: %load-cell-x cpu ( dst src offset -- ) ;
+HOOK: %load-cell-x cpu ( dst src offset -- )
 M: ppc.32 %load-cell-x LWZX ;
 M: ppc.64 %load-cell-x LDX ;
 
-HOOK: %load-cell-imm cpu ( dst imm -- ) ;
+HOOK: %load-cell-imm cpu ( dst imm -- )
 M: ppc.32 %load-cell-imm LOAD32 ;
 M: ppc.64 %load-cell-imm LOAD64 ;
 
-HOOK: %compare-cell cpu ( cr lhs rhs -- ) ;
+HOOK: %compare-cell cpu ( cr lhs rhs -- )
 M: ppc.32 %compare-cell CMPW ;
 M: ppc.64 %compare-cell CMPD ;
 
-HOOK: %compare-cell-imm cpu ( cr lhs imm -- ) ;
+HOOK: %compare-cell-imm cpu ( cr lhs imm -- )
 M: ppc.32 %compare-cell-imm CMPWI ;
 M: ppc.64 %compare-cell-imm CMPDI ;
 
-HOOK: %load-cell-imm-rc cpu ( -- rel-class ) ;
+HOOK: %load-cell-imm-rc cpu ( -- rel-class )
 M: ppc.32 %load-cell-imm-rc rc-absolute-ppc-2/2 ;
 M: ppc.64 %load-cell-imm-rc rc-absolute-ppc-2/2/2/2  ;
 
@@ -156,7 +156,7 @@ M:: ppc %load-vector ( dst val rep -- )
     scratch-reg 0 %load-cell-imm val %load-cell-imm-rc rel-binary-literal
     dst 0 scratch-reg LVX ;
 
-GENERIC: loc-reg ( loc -- reg ) ;
+GENERIC: loc-reg ( loc -- reg )
 M: ds-loc loc-reg drop ds-reg ;
 M: rs-loc loc-reg drop rs-reg ;
 
@@ -364,11 +364,11 @@ M: ppc float-on-stack? ( -- ? ) f ;
 ! If t, the struct return pointer is never passed in a param reg
 M: ppc struct-return-on-stack? ( -- ? ) f ;
 
-GENERIC: load-param ( reg src -- ) ;
+GENERIC: load-param ( reg src -- )
 M: integer load-param ( reg src -- ) int-rep %copy ;
 M: spill-slot load-param ( reg src -- ) [ 1 ] dip n>> spill@ %load-cell ;
 
-GENERIC: store-param ( reg dst -- ) ;
+GENERIC: store-param ( reg dst -- )
 M: integer store-param ( reg dst -- ) swap int-rep %copy ;
 M: spill-slot store-param ( reg dst -- ) [ 1 ] dip n>> spill@ %store-cell ;
 

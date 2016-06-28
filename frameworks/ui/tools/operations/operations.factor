@@ -120,7 +120,7 @@ IN: ui.tools.operations
 
 [ word? ] \ breakpoint H{ } define-operation
 
-GENERIC: com-stack-effect ( obj -- ) ;
+GENERIC: com-stack-effect ( obj -- )
 
 M: quotation com-stack-effect infer. ;
 

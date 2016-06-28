@@ -5,35 +5,35 @@ combinators.short-circuit kernel math.order namespaces
 x11 x11.xlib ;
 IN: x11.events
 
-GENERIC: expose-event ( event window -- ) ;
+GENERIC: expose-event ( event window -- )
 
-GENERIC: configure-event ( event window -- ) ;
+GENERIC: configure-event ( event window -- )
 
-GENERIC: button-down-event ( event window -- ) ;
+GENERIC: button-down-event ( event window -- )
 
-GENERIC: button-up-event ( event window -- ) ;
+GENERIC: button-up-event ( event window -- )
 
-GENERIC: enter-event ( event window -- ) ;
+GENERIC: enter-event ( event window -- )
 
-GENERIC: leave-event ( event window -- ) ;
+GENERIC: leave-event ( event window -- )
 
-GENERIC: scroll-event ( event window -- ) ;
+GENERIC: scroll-event ( event window -- )
 
-GENERIC: motion-event ( event window -- ) ;
+GENERIC: motion-event ( event window -- )
 
-GENERIC: key-down-event ( event window -- ) ;
+GENERIC: key-down-event ( event window -- )
 
-GENERIC: key-up-event ( event window -- ) ;
+GENERIC: key-up-event ( event window -- )
 
-GENERIC: focus-in-event ( event window -- ) ;
+GENERIC: focus-in-event ( event window -- )
 
-GENERIC: focus-out-event ( event window -- ) ;
+GENERIC: focus-out-event ( event window -- )
 
-GENERIC: selection-notify-event ( event window -- ) ;
+GENERIC: selection-notify-event ( event window -- )
 
-GENERIC: selection-request-event ( event window -- ) ;
+GENERIC: selection-request-event ( event window -- )
 
-GENERIC: client-event ( event window -- ) ;
+GENERIC: client-event ( event window -- )
 
 : next-event ( -- event )
     dpy get XEvent <struct> [ XNextEvent drop ] keep ;

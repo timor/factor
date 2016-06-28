@@ -45,7 +45,7 @@ CONSTANT: example-tree
             }
             f
         }
-    } ;
+    }
 
 : preorder ( node quot: ( data -- ) -- )
     [ [ data>> ] dip call ]

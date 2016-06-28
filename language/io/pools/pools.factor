@@ -28,7 +28,7 @@ TUPLE: return-connection-state conn pool ;
 : return-connection ( conn pool -- )
     dup check-pool connections>> push ;
 
-GENERIC: make-connection ( pool -- conn ) ;
+GENERIC: make-connection ( pool -- conn )
 
 : new-connection ( pool -- )
     dup check-pool [ make-connection ] keep return-connection ;

@@ -40,4 +40,4 @@ M: keyword-map >alist
         keyword-map-no-word-sep*
     ] ?if ;
 
-INSTANCE: keyword-map assoc ;
+INSTANCE: keyword-map assoc

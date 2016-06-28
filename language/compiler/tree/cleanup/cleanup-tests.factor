@@ -17,7 +17,7 @@ compiler.tree.propagation.info
 compiler.tree.checker
 compiler.tree.debugger ;
 FROM: math => float ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 IN: compiler.tree.cleanup.tests
 
 { t } [ [ [ 1 ] [ 2 ] if ] cleaned-up-tree [ #if? ] contains-node? ] unit-test
@@ -41,13 +41,13 @@ IN: compiler.tree.cleanup.tests
     \ >fixnum inlined?
 ] unit-test
 
-GENERIC: mynot ( x -- y ) ;
+GENERIC: mynot ( x -- y )
 
 M: f mynot drop t ; inline
 
 M: object mynot drop f ; inline
 
-GENERIC: detect-f ( x -- y ) ;
+GENERIC: detect-f ( x -- y )
 
 M: f detect-f ; inline
 
@@ -55,7 +55,7 @@ M: f detect-f ; inline
     [ dup [ mynot ] [ ] if detect-f ] \ detect-f inlined?
 ] unit-test
 
-GENERIC: xyz ( n -- n ) ;
+GENERIC: xyz ( n -- n )
 
 M: integer xyz ; inline
 
@@ -170,7 +170,7 @@ M: object xyz ; inline
     [ { array-capacity } declare 1 fixnum- ] \ fixnum- inlined?
 ] unit-test
 
-GENERIC: annotate-entry-test-1 ( x -- ) ;
+GENERIC: annotate-entry-test-1 ( x -- )
 
 M: fixnum annotate-entry-test-1 drop ;
 
@@ -193,7 +193,7 @@ M: fixnum annotate-entry-test-1 drop ;
     \ >float inlined?
 ] unit-test
 
-GENERIC: detect-float ( a -- b ) ;
+GENERIC: detect-float ( a -- b )
 
 M: float detect-float ;
 

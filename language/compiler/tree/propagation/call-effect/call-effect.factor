@@ -18,11 +18,11 @@ TUPLE: inline-cache value counter ;
 
 SINGLETON: +unknown+
 
-GENERIC: cached-effect ( quot -- effect ) ;
+GENERIC: cached-effect ( quot -- effect )
 
 M: object cached-effect drop +unknown+ ;
 
-GENERIC: curry-effect* ( effect -- effect' ) ;
+GENERIC: curry-effect* ( effect -- effect' )
 
 M: +unknown+ curry-effect* ;
 
@@ -109,7 +109,7 @@ M: quotation cached-effect
 : execute-effect>quot ( effect -- quot )
     inline-cache new $[ drop _ _ execute-effect-ic ] ;
 
-GENERIC: already-inlined-quot? ( quot -- ? ) ;
+GENERIC: already-inlined-quot? ( quot -- ? )
 
 M: curry already-inlined-quot? quot>> already-inlined-quot? ;
 
@@ -119,7 +119,7 @@ M: compose already-inlined-quot?
 
 M: quotation already-inlined-quot? already-inlined? ;
 
-GENERIC: add-quot-to-history ( quot -- ) ;
+GENERIC: add-quot-to-history ( quot -- )
 
 M: curry add-quot-to-history quot>> add-quot-to-history ;
 

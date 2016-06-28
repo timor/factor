@@ -5,12 +5,12 @@ compiler.cfg.rpo compiler.cfg.utilities deques dlists functors kernel lexer
 locals namespaces sequences ;
 IN: compiler.cfg.dataflow-analysis
 
-GENERIC: join-sets ( sets bb dfa -- set ) ;
-GENERIC: transfer-set ( in-set bb dfa -- out-set ) ;
-GENERIC: block-order ( cfg dfa -- bbs ) ;
-GENERIC: successors ( bb dfa -- seq ) ;
-GENERIC: predecessors ( bb dfa -- seq ) ;
-GENERIC: ignore-block? ( bb dfa -- ? ) ;
+GENERIC: join-sets ( sets bb dfa -- set )
+GENERIC: transfer-set ( in-set bb dfa -- out-set )
+GENERIC: block-order ( cfg dfa -- bbs )
+GENERIC: successors ( bb dfa -- seq )
+GENERIC: predecessors ( bb dfa -- seq )
+GENERIC: ignore-block? ( bb dfa -- ? )
 
 PRIVATE<
 
@@ -82,7 +82,7 @@ FUNCTOR>
 ! ! ! Forward dataflow analysis
 
 MIXIN: forward-analysis
-INSTANCE: forward-analysis dataflow-analysis ;
+INSTANCE: forward-analysis dataflow-analysis
 
 M: forward-analysis block-order  drop reverse-post-order ;
 M: forward-analysis successors   drop successors>> ;
@@ -97,7 +97,7 @@ compute-name-sets DEFINES compute-${name}-sets
 
 WHERE
 
-INSTANCE: name forward-analysis ;
+INSTANCE: name forward-analysis
 
 : compute-name-sets ( cfg -- )
     name run-dataflow-analysis
@@ -108,7 +108,7 @@ FUNCTOR>
 ! ! ! Backward dataflow analysis
 
 MIXIN: backward-analysis
-INSTANCE: backward-analysis dataflow-analysis ;
+INSTANCE: backward-analysis dataflow-analysis
 
 M: backward-analysis block-order  drop post-order ;
 M: backward-analysis successors   drop predecessors>> ;
@@ -123,7 +123,7 @@ compute-name-sets DEFINES compute-${name}-sets
 
 WHERE
 
-INSTANCE: name backward-analysis ;
+INSTANCE: name backward-analysis
 
 : compute-name-sets ( cfg -- )
     \ name run-dataflow-analysis

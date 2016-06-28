@@ -7,7 +7,7 @@ IN: checksums.internet
 
 SINGLETON: internet ! RFC 1071
 
-INSTANCE: internet checksum ;
+INSTANCE: internet checksum
 
 M: internet checksum-bytes
     drop 2 <groups> [ le> ] map-sum

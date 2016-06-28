@@ -15,7 +15,7 @@ COMPILE<
         "resource:" prepend-path normalize-path
     ] if* ;
 
-HOOK: cert-path os ( -- path/f ) ;
+HOOK: cert-path os ( -- path/f )
 
 M: object cert-path f ;
 
@@ -26,7 +26,7 @@ M: windows cert-path
     home "config/FactorSPC.pfx" append-path ;
 COMPILE>
 
-HOOK: sign-factor-app os ( -- ) ;
+HOOK: sign-factor-app os ( -- )
 
 M: object sign-factor-app ;
 

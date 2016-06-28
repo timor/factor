@@ -14,7 +14,7 @@ M: pipe dispose ( pipe -- )
         [ out>> &dispose drop ] bi
     ] with-destructors ;
 
-HOOK: (pipe) io-backend ( -- pipe ) ;
+HOOK: (pipe) io-backend ( -- pipe )
 
 : <pipe> ( encoding -- stream )
     [
@@ -32,7 +32,7 @@ PRIVATE<
 : ?writer ( handle/f -- stream )
     [ <output-port> &dispose ] [ output-stream get ] if* ;
 
-GENERIC: run-pipeline-element ( input-fd output-fd obj -- result ) ;
+GENERIC: run-pipeline-element ( input-fd output-fd obj -- result )
 
 M: callable run-pipeline-element
     [
@@ -40,7 +40,7 @@ M: callable run-pipeline-element
         $[ _ call( -- result ) ] with-streams*
     ] with-destructors ;
 
-GENERIC: <pipes> ( obj -- pipes ) ;
+GENERIC: <pipes> ( obj -- pipes )
 
 M: integer <pipes> ( n -- pipes )
     [

@@ -7,8 +7,8 @@ IN: benchmark.mandel.colors
 : scale-rgb ( rgba -- n )
     [ red>> scale ] [ green>> scale ] [ blue>> scale ] tri 3byte-array ;
 
-CONSTANT: sat 0.85 ;
-CONSTANT: val 0.85 ;
+CONSTANT: sat 0.85
+CONSTANT: val 0.85
 
 : <color-map> ( nb-cols -- map )
     [ iota ] keep $[

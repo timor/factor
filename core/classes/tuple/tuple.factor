@@ -8,8 +8,8 @@ sequences sequences.private slots slots.private strings words ;
 IN: classes.tuple
 
 PRIVATE<
-PRIMITIVE: <tuple> ( layout -- tuple ) ;
-PRIMITIVE: <tuple-boa> ( slots... layout -- tuple ) ;
+PRIMITIVE: <tuple> ( layout -- tuple )
+PRIMITIVE: <tuple-boa> ( slots... layout -- tuple )
 PRIVATE>
 
 PREDICATE: tuple-class < class
@@ -93,7 +93,7 @@ PRIVATE>
 : tuple-slots ( tuple -- seq )
     prepare-tuple-slots copy-tuple-slots ;
 
-GENERIC: slots>tuple ( seq class -- tuple ) ;
+GENERIC: slots>tuple ( seq class -- tuple )
 
 M: tuple-class slots>tuple ( seq class -- tuple )
     check-slots pad-slots
@@ -120,7 +120,7 @@ ERROR: bad-superclass class ;
         ] [ 2drop f ] if
     ] [ 2drop f ] if ; inline
 
-GENERIC: final-class? ( object -- ? ) ;
+GENERIC: final-class? ( object -- ? )
 
 M: tuple-class final-class? "final" word-prop ;
 
@@ -277,7 +277,7 @@ M: tuple-class update-class
     dup final-class? [ bad-superclass ] when
     dup class? [ bad-superclass ] unless drop ;
 
-GENERIC#: (define-tuple-class) 2 ( class superclass slots -- ) ;
+GENERIC#: (define-tuple-class) 2 ( class superclass slots -- )
 
 : thrower-effect ( slots -- effect )
     [ name>> ] map { "*" } <effect> ;
@@ -303,7 +303,7 @@ PRIVATE>
     over prepare-slots
     (define-tuple-class) ;
 
-GENERIC: make-final ( class -- ) ;
+GENERIC: make-final ( class -- )
 
 M: tuple-class make-final
     [ dup class-usage ?metaclass-changed ]

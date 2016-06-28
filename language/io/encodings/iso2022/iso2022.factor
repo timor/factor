@@ -31,12 +31,12 @@ M: iso2022 <encoder>
 M: iso2022 <decoder>
     make-iso-coder <decoder> ;
 
-CONSTANT: ESC 0x16 ;
+CONSTANT: ESC 0x16
 
-CONSTANT: switch-ascii B{ $\ ESC char: \( char: B } ;
-CONSTANT: switch-jis201 B{ $\ ESC char: \( char: J } ;
-CONSTANT: switch-jis208 B{ $\ ESC char: \$ char: B } ;
-CONSTANT: switch-jis212 B{ $\ ESC char: \$ char: \( char: D } ;
+CONSTANT: switch-ascii B{ $\ ESC char: \( char: B }
+CONSTANT: switch-jis201 B{ $\ ESC char: \( char: J }
+CONSTANT: switch-jis208 B{ $\ ESC char: \$ char: B }
+CONSTANT: switch-jis212 B{ $\ ESC char: \$ char: \( char: D }
 
 : find-type ( char -- code type )
     {

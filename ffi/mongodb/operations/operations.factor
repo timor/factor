@@ -20,7 +20,7 @@ PREDICATE: mdb-delete-op < integer OP_Delete = ;
 PREDICATE: mdb-getmore-op < integer OP_GetMore = ;
 PREDICATE: mdb-killcursors-op < integer OP_KillCursors = ;
 
-CONSTANT: MSG-HEADER-SIZE 16 ;
+CONSTANT: MSG-HEADER-SIZE 16
 
 SYMBOL: msg-bytes-read
 

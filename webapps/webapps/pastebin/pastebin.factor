@@ -44,7 +44,7 @@ entity f
     { "contents" "CONTENTS" TEXT +not-null+ }
 } define-persistent
 
-GENERIC: entity-url ( entity -- url ) ;
+GENERIC: entity-url ( entity -- url )
 
 M: entity feed-entry-title summary>> ;
 
@@ -89,7 +89,7 @@ TUPLE: annotation < entity parent ;
 ! LINKS, ETC
 ! ! !
 
-CONSTANT: pastebin-url URL" $pastebin/" ;
+CONSTANT: pastebin-url URL" $pastebin/"
 
 : paste-url ( id -- url )
     "$pastebin/paste" >url swap "id" set-query-param ;

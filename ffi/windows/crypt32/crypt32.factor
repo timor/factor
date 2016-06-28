@@ -182,7 +182,7 @@ FUNCTION: HCERTSTORE CertOpenSystemStoreW (
     LPTCSTR szSubsystemProtocol
 ) ;
 
-ALIAS: CertOpenSystemStore CertOpenSystemStoreW ;
+ALIAS: CertOpenSystemStore CertOpenSystemStoreW
 
 ! CertRDNValueToStrA
 ! CertRDNValueToStrW

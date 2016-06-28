@@ -10,7 +10,7 @@ scite editor-class set-global
 
 SYMBOL: scite-path
 
-HOOK: find-scite-path os ( -- path ) ;
+HOOK: find-scite-path os ( -- path )
 
 M: unix find-scite-path "scite" ?find-in-path ;
 

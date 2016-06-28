@@ -30,7 +30,7 @@ M: range nth-unsafe ( n range -- obj )
 ! sequences hashcode is O(n) in number of elements
 M: range hashcode* tuple-hashcode ;
 
-INSTANCE: range immutable-sequence ;
+INSTANCE: range immutable-sequence
 
 M: range sum [ length ] [ first ] [ last ] tri + * 2 / ;
 

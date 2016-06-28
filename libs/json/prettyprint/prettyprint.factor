@@ -7,9 +7,9 @@ IN: json.prettyprint
 
 PRIVATE<
 SYMBOL: indent-level
-CONSTANT: nspaces 2 ;
+CONSTANT: nspaces 2
 
-GENERIC: pprint-json* ( obj -- ) ;
+GENERIC: pprint-json* ( obj -- )
 
 : write-spaces ( -- )
     indent-level get 0 > [

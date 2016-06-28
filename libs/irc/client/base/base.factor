@@ -25,7 +25,7 @@ UNION: to-many-chats nick quit ;
 UNION: to-all-chats irc-end irc-disconnected irc-connected ;
 PREDICATE: to-me < to-target target>> me? ;
 
-GENERIC: chat-name ( irc-message -- name ) ;
+GENERIC: chat-name ( irc-message -- name )
 M: mode       chat-name name>> ;
 M: to-target  chat-name target>> ;
 M: to-me      chat-name sender>> ;
@@ -37,7 +37,7 @@ M: to-me      chat-name sender>> ;
 ! This fixes chat> for these kinds of messages.
 M: to-channel chat-name dup channel>> [ nip ] [ parameters>> ?first ] if* ;
 
-GENERIC: chat> ( obj -- chat/f ) ;
+GENERIC: chat> ( obj -- chat/f )
 M: string      chat> irc> chats>> at ;
 M: symbol      chat> irc> chats>> at ;
 M: to-one-chat chat> chat-name +server-chat+ or chat> ;

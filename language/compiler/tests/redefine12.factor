@@ -4,7 +4,7 @@ IN: compiler.tests.redefine12
 ! A regression that came about when fixing the
 ! 'no method on classes-intersect?' bug
 
-GENERIC: g ( a -- b ) ;
+GENERIC: g ( a -- b )
 
 M: object g drop t ;
 

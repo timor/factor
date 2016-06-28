@@ -8,7 +8,7 @@ IN: locals.rewrite.closures
 ! Step 2: identify free variables and make them into explicit
 ! parameters of lambdas which are curried on
 
-GENERIC: rewrite-closures* ( obj -- ) ;
+GENERIC: rewrite-closures* ( obj -- )
 
 : (rewrite-closures) ( form -- form' )
     [ [ rewrite-closures* ] each ] [ ] make ;
@@ -16,7 +16,7 @@ GENERIC: rewrite-closures* ( obj -- ) ;
 : rewrite-closures ( form -- form' )
     expand-macros (rewrite-sugar) (rewrite-closures) point-free ;
 
-GENERIC: defs-vars* ( seq form -- seq' ) ;
+GENERIC: defs-vars* ( seq form -- seq' )
 
 : defs-vars ( form -- vars ) { } [ defs-vars* ] reduce members ;
 
@@ -26,7 +26,7 @@ M: quotation defs-vars* [ defs-vars* ] each ;
 
 M: object defs-vars* drop ;
 
-GENERIC: uses-vars* ( seq form -- seq' ) ;
+GENERIC: uses-vars* ( seq form -- seq' )
 
 : uses-vars ( form -- vars ) { } [ uses-vars* ] reduce members ;
 

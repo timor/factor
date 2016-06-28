@@ -9,7 +9,7 @@ TUPLE: account name interest-rate interest-payment-day opening-date transactions
     V{ } clone 0 pick account boa ;
 
 TUPLE: transaction date amount description ;
-C: <transaction> transaction ;
+C: <transaction> transaction
 
 : >>transaction ( account transaction -- account )
     over transactions>> push ;

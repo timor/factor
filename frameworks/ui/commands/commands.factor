@@ -10,15 +10,15 @@ SYMBOL: +description+
 
 PREDICATE: listener-command < word +listener+ word-prop ;
 
-GENERIC: invoke-command ( target command -- ) ;
+GENERIC: invoke-command ( target command -- )
 
-GENERIC: command-name ( command -- str ) ;
+GENERIC: command-name ( command -- str )
 
 TUPLE: command-map blurb commands ;
 
-GENERIC: command-description ( command -- str/f ) ;
+GENERIC: command-description ( command -- str/f )
 
-GENERIC: command-word ( command -- word ) ;
+GENERIC: command-word ( command -- word )
 
 : <command-map> ( blurb commands -- command-map )
     { } like command-map boa ;

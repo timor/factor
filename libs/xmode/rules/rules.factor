@@ -7,7 +7,7 @@ IN: xmode.rules
 
 TUPLE: string-matcher string ignore-case? ;
 
-C: <string-matcher> string-matcher ;
+C: <string-matcher> string-matcher
 
 ! Based on org.gjt.sp.jedit.syntax.ParserRuleSet
 TUPLE: rule-set
@@ -55,7 +55,7 @@ MEMO: standard-rule-set ( id -- ruleset )
 ! Match restrictions
 TUPLE: matcher text at-line-start? at-whitespace-end? at-word-start? ;
 
-C: <matcher> matcher ;
+C: <matcher> matcher
 
 ! Based on org.gjt.sp.jedit.syntax.ParserRule
 TUPLE: rule
@@ -96,7 +96,7 @@ TUPLE: escape-rule < rule ;
     f <string-matcher> f f f <matcher>
     escape-rule new swap >>start ;
 
-GENERIC: text-hash-char ( text -- ch ) ;
+GENERIC: text-hash-char ( text -- ch )
 
 M: f text-hash-char ;
 

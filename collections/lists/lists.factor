@@ -6,13 +6,13 @@ IN: lists
 
 ! List Protocol
 MIXIN: list
-GENERIC: car ( cons -- car ) ;
-GENERIC: cdr ( cons -- cdr ) ;
-GENERIC: nil? ( object -- ?   ) ;
+GENERIC: car ( cons -- car )
+GENERIC: cdr ( cons -- cdr )
+GENERIC: nil? ( object -- ?   )
 
 TUPLE: cons-state { car read-only } { cdr read-only } ;
 
-C: cons cons-state ;
+C: cons cons-state
 
 M: cons-state car ( cons -- car ) car>> ;
 
@@ -96,9 +96,9 @@ PRIVATE>
 : deeplist>array ( list -- array )
     [ dup list? [ deeplist>array ] when ] lmap>array ;
 
-INSTANCE: cons-state list ;
-INSTANCE: +nil+ list ;
+INSTANCE: cons-state list
+INSTANCE: +nil+ list
 
-GENERIC: >list ( object -- list ) ;
+GENERIC: >list ( object -- list )
 
 M: list >list ;

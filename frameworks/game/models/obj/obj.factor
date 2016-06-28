@@ -5,7 +5,7 @@ kernel assocs io.files combinators math.order math namespaces
 arrays sequences.deep accessors alien.c-types alien.data
 game.models game.models.util gpu.shaders images game.models.loader
 prettyprint specialized-arrays make ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAYS: c:float c:uint ;
 IN: game.models.obj
 

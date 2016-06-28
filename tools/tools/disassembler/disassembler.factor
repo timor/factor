@@ -5,17 +5,17 @@ destructors io kernel libc math quotations sequences
 sequences.private stack-checker system tr vocabs words ;
 IN: tools.disassembler
 
-GENERIC: disassemble ( obj -- ) ;
+GENERIC: disassemble ( obj -- )
 
 PRIVATE<
 
 SYMBOL: disassembler-backend
 
-HOOK: disassemble* disassembler-backend ( from to -- lines ) ;
+HOOK: disassemble* disassembler-backend ( from to -- lines )
 
 TR: tabs>spaces "\t" "\s" ;
 
-GENERIC: (>address) ( object -- n ) ;
+GENERIC: (>address) ( object -- n )
 
 M: integer (>address) ;
 M: alien (>address) alien-address ;

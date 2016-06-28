@@ -24,7 +24,7 @@ WHERE
 
 TUPLE: TYPE handle disposed ;
 
-INSTANCE: TYPE assoc ;
+INSTANCE: TYPE assoc
 
 M: TYPE dispose* [ DBDEL f ] change-handle drop ;
 

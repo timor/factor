@@ -27,7 +27,7 @@ ERROR: malformed-port ;
         [ dup [ string>number [ malformed-port ] unless* ] when ] bi*
     ] [ f f ] if* ;
 
-GENERIC: >url ( obj -- url ) ;
+GENERIC: >url ( obj -- url )
 
 M: f >url drop <url> ;
 

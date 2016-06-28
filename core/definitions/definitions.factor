@@ -29,13 +29,13 @@ SYMBOL: new-words
 : new-word ( word -- )
     new-words get add-to-unit ;
 
-GENERIC: where ( defspec -- loc ) ;
+GENERIC: where ( defspec -- loc )
 
 M: object where drop f ;
 
-GENERIC: set-where ( loc defspec -- ) ;
+GENERIC: set-where ( loc defspec -- )
 
-GENERIC: forget* ( defspec -- ) ;
+GENERIC: forget* ( defspec -- )
 
 SYMBOL: forgotten-definitions
 
@@ -51,6 +51,6 @@ M: wrapper forget* wrapped>> forget ;
 
 : forget-all ( definitions -- ) [ forget ] each ;
 
-GENERIC: definer ( defspec -- start end ) ;
+GENERIC: definer ( defspec -- start end )
 
-GENERIC: definition ( defspec -- seq ) ;
+GENERIC: definition ( defspec -- seq )

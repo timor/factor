@@ -7,7 +7,7 @@ math math.intervals math.partial-dispatch math.private namespaces
 sequences stack-checker.branches stack-checker.dependencies words ;
 IN: compiler.tree.cleanup
 
-GENERIC: delete-node ( node -- ) ;
+GENERIC: delete-node ( node -- )
 
 M: #call-recursive delete-node
     dup label>> calls>> [ node>> eq? ] with reject! drop ;
@@ -19,7 +19,7 @@ M: node delete-node drop ;
 
 : delete-nodes ( nodes -- ) [ delete-node ] each-node ;
 
-GENERIC: cleanup-tree* ( node -- node/nodes ) ;
+GENERIC: cleanup-tree* ( node -- node/nodes )
 
 : cleanup-tree ( nodes -- nodes' )
     [ cleanup-tree* ] map-flat ;

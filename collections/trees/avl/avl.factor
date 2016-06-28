@@ -131,7 +131,7 @@ M: avl set-at ( value key node -- )
         left [ replace-with-a-child ] with-side
     ] if ;
 
-GENERIC: avl-delete ( key node -- node shorter? deleted? ) ;
+GENERIC: avl-delete ( key node -- node shorter? deleted? )
 
 M: f avl-delete ( key f -- f f f ) nip f f ;
 

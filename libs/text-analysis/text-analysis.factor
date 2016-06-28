@@ -33,7 +33,7 @@ CONSTANT: ABBREVIATIONS {
     "vs" "etc" "no" "esp" "cf" ! misc
 
     "ave" "bld" "blvd" "cl" "ct" "cres" "dr" "rd" "st" ! streets
-} ;
+}
 COMPILE>
 
 : split-sentences ( str -- seq )
@@ -78,7 +78,7 @@ CONSTANT: sub-syllable {
     R{{ [^cx]iou}} ! illustrious, NOT spacious, gracious, anxious, noxious
     R{{ sia$}} ! amnesia, polynesia
     R{{ .gue$}} ! dialogue, intrigue, colleague
-} ;
+}
 
 CONSTANT: add-syllable {
     R{{ i[aiou]}} ! alias, science, phobia
@@ -90,7 +90,7 @@ CONSTANT: add-syllable {
     R{{ (?:([^aeiouy])\1|ck|mp|ng)le$}} ! bubble, cattle, cackle, sample, angle
     R{{ dnt$}} ! couldn/t
     R{{ [aeiou]y[aeiou]}} ! annoying, layer
-} ;
+}
 
 : syllables ( str -- n )
     dup length 1 = [ drop 1 ] [
@@ -194,7 +194,7 @@ SMOG grade                     %2.2f
 Automated Readability index    %2.2f
 Dale-Chall readability         %2.2f
 
-]] ;
+]]
 
 PRIVATE>
 

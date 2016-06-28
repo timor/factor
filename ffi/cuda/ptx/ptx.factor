@@ -175,10 +175,10 @@ VARIANT: ptx-op
     .popc ;
 
 SINGLETONS: .lo .hi ;
-INSTANCE: .lo ptx-mul-mode ;
-INSTANCE: .lo ptx-cmp-op ;
-INSTANCE: .hi ptx-mul-mode ;
-INSTANCE: .hi ptx-cmp-op ;
+INSTANCE: .lo ptx-mul-mode
+INSTANCE: .lo ptx-cmp-op
+INSTANCE: .hi ptx-mul-mode
+INSTANCE: .hi ptx-cmp-op
 
 ROLE-TUPLE: ptx-set-instruction < ptx-3op-instruction
     { cmp-op ptx-cmp-op }
@@ -330,10 +330,10 @@ ROLE-TUPLE: vote      < ptx-2op-instruction
     { mode ptx-vote-mode } ;
 ROLE-TUPLE: xor       < ptx-3op-instruction ;
 
-GENERIC: ptx-element-label ( elt -- label ) ;
+GENERIC: ptx-element-label ( elt -- label )
 M: object ptx-element-label  drop f ;
 
-GENERIC: ptx-semicolon? ( elt -- ? ) ;
+GENERIC: ptx-semicolon? ( elt -- ? )
 M: object ptx-semicolon? drop t ;
 M: ptx-target ptx-semicolon? drop f ;
 M: ptx-entry ptx-semicolon? drop f ;
@@ -341,7 +341,7 @@ M: ptx-func ptx-semicolon? drop f ;
 M: .file ptx-semicolon? drop f ;
 M: .loc ptx-semicolon? drop f ;
 
-GENERIC: write-ptx-operand ( operand -- ) ;
+GENERIC: write-ptx-operand ( operand -- )
 
 M: string write-ptx-operand write ;
 M: integer write-ptx-operand number>string write ;
@@ -362,7 +362,7 @@ M: ptx-indirect write-ptx-operand
     } cond
     "]" write ;
 
-GENERIC: (write-ptx-element) ( elt -- ) ;
+GENERIC: (write-ptx-element) ( elt -- )
 
 : write-ptx-element ( elt -- )
     dup ptx-element-label [ write ":" write ] when*

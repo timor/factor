@@ -7,7 +7,7 @@ destructors fry init io io.backend io.encodings.string
 io.encodings.utf8 kernel lexer locals macros math math.parser
 namespaces opengl.gl.extensions parser prettyprint quotations
 sequences words ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 IN: cuda
 
 ERROR: cuda-error-state code ;

@@ -69,7 +69,7 @@ IN: cocoa.subclassing
     name [ methods protocols superclass name (define-objc-class) ] import-objc-class ;
 
 TUPLE: cocoa-protocol name ;
-C: <cocoa-protocol> cocoa-protocol ;
+C: <cocoa-protocol> cocoa-protocol
 
 SYNTAX: \ cocoa-protocol:
     scan-token <cocoa-protocol> suffix! ;

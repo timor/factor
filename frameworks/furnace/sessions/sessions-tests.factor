@@ -13,7 +13,7 @@ IN: furnace.sessions.tests
 
 TUPLE: foo ;
 
-C: <foo> foo ;
+C: <foo> foo
 
 M: foo init-session* drop 0 "x" sset ;
 

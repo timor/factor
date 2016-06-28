@@ -6,29 +6,29 @@ IN: io
 
 SYMBOLS: +byte+ +character+ ;
 
-GENERIC: stream-element-type ( stream -- type ) ;
+GENERIC: stream-element-type ( stream -- type )
 
-GENERIC: stream-read1 ( stream -- elt ) ;
-GENERIC: stream-read-unsafe ( n buf stream -- count ) ;
-GENERIC: stream-read-until ( seps stream -- seq sep/f ) ;
-GENERIC: stream-read-partial-unsafe ( n buf stream -- count ) ;
-GENERIC: stream-readln ( stream -- str/f ) ;
-GENERIC: stream-contents* ( stream -- seq ) ;
+GENERIC: stream-read1 ( stream -- elt )
+GENERIC: stream-read-unsafe ( n buf stream -- count )
+GENERIC: stream-read-until ( seps stream -- seq sep/f )
+GENERIC: stream-read-partial-unsafe ( n buf stream -- count )
+GENERIC: stream-readln ( stream -- str/f )
+GENERIC: stream-contents* ( stream -- seq )
 : stream-contents ( stream -- seq ) [ stream-contents* ] with-disposal ;
 
-GENERIC: stream-write1 ( elt stream -- ) ;
-GENERIC: stream-write ( data stream -- ) ;
-GENERIC: stream-flush ( stream -- ) ;
-GENERIC: stream-nl ( stream -- ) ;
+GENERIC: stream-write1 ( elt stream -- )
+GENERIC: stream-write ( data stream -- )
+GENERIC: stream-flush ( stream -- )
+GENERIC: stream-nl ( stream -- )
 
 ERROR: bad-seek-type type ;
 
 SINGLETONS: seek-absolute seek-relative seek-end ;
 
-GENERIC: stream-tell ( stream -- n ) ;
-GENERIC: stream-seek ( n seek-type stream -- ) ;
-GENERIC: stream-seekable? ( stream -- ? ) ;
-GENERIC: stream-length ( stream -- n/f ) ;
+GENERIC: stream-tell ( stream -- n )
+GENERIC: stream-seek ( n seek-type stream -- )
+GENERIC: stream-seekable? ( stream -- ? )
+GENERIC: stream-length ( stream -- n/f )
 
 : stream-print ( str stream -- )
     [ stream-write ] [ stream-nl ] bi ; inline
@@ -169,7 +169,7 @@ ERROR: invalid-read-buffer buf stream ;
 : lines ( -- seq )
     input-stream get stream-lines ; inline
 
-CONSTANT: each-block-size 65536 ;
+CONSTANT: each-block-size 65536
 
 : (each-stream-block-slice) ( ... stream quot: ( ... block-slice -- ... ) block-size -- ... )
     [ [ drop ] prepose swap ] dip

@@ -55,7 +55,7 @@ TUPLE: compound-sequence-literal sequence ;
 CONSTRUCTOR: <compound-sequence-literal> compound-sequence-literal ( sequence -- obj ) ;
 COMPILE>
 
-GENERIC: lexed-underlying ( obj -- slice ) ;
+GENERIC: lexed-underlying ( obj -- slice )
 M: f lexed-underlying ;
 M: object lexed-underlying underlying>> ;
 M: slice lexed-underlying ;
@@ -67,7 +67,7 @@ CONSTRUCTOR: <compound-literal> compound-literal ( sequence -- obj ) ;
 ERROR: bad-compound-literal seq decorators words ;
 : check-compound-literal ( seq -- seq ) ;
 
-GENERIC: make-compound-literals ( seq -- seq' ) ;
+GENERIC: make-compound-literals ( seq -- seq' )
 M: object make-compound-literals ;
 M: array make-compound-literals
     [
@@ -81,7 +81,7 @@ M: array make-compound-literals
 
 ! We have empty decorators, just the @ right here
 ! wrap the decorated object in the payload slot
-GENERIC: collapse-decorators ( seq -- seq' ) ;
+GENERIC: collapse-decorators ( seq -- seq' )
 M: object collapse-decorators ;
 M: array collapse-decorators
     [
@@ -550,7 +550,7 @@ CONSTANT: factor-lexing-rules {
     T{ whitespace-lexer { generator read-token-or-whitespace } { delimiter char: \s } }
     T{ whitespace-lexer { generator read-token-or-whitespace } { delimiter char: \r } }
     T{ whitespace-lexer { generator read-token-or-whitespace } { delimiter char: \n } }
-} ;
+}
 
 : lex-factor ( lexer -- literal )
     factor-lexing-rules rules>call-lexer ;

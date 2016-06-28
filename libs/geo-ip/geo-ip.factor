@@ -8,7 +8,7 @@ IN: geo-ip
 
 : db-path ( -- path ) "IpToCountry.csv" cache-file ;
 
-CONSTANT: db-url "http://software77.net/geo-ip/?DL=1" ;
+CONSTANT: db-url "http://software77.net/geo-ip/?DL=1"
 
 : download-db ( -- path )
     db-path dup exists? [
@@ -45,7 +45,7 @@ MEMO: ip-intervals ( -- interval-map )
     ip-db [ [ [ from>> ] [ to>> ] bi 2array ] keep ] { } map>assoc
     filter-overlaps <interval-map> ;
 
-GENERIC: lookup-ip ( ip -- ip-entry ) ;
+GENERIC: lookup-ip ( ip -- ip-entry )
 
 M: string lookup-ip ipv4-aton lookup-ip ;
 

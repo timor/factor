@@ -80,7 +80,7 @@ CONSTANT: font-names
         { "monospace" "Monaco" }
         { "sans-serif" "LucidaGrande" }
         { "serif" "Times" }
-    } ;
+    }
 
 : font-name ( string -- string' )
     font-names ?at drop ;

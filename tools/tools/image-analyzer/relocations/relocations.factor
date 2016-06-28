@@ -5,7 +5,7 @@ IN: tools.image-analyzer.relocations
 CONSTANT: rel-params {
     { 9 1 }
     { 0 2 } { 13 2 }
-} ;
+}
 
 : rel-type ( uint -- type )
     -28 shift 0xf bitand ;

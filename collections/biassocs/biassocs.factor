@@ -43,7 +43,7 @@ M: biassoc clear-assoc
 M: biassoc new-assoc
     drop [ <hashtable> ] [ <hashtable> ] bi biassoc boa ;
 
-INSTANCE: biassoc assoc ;
+INSTANCE: biassoc assoc
 
 : >biassoc ( assoc -- biassoc )
     T{ biassoc } assoc-clone-like ;

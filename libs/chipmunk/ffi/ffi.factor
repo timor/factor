@@ -31,8 +31,8 @@ TYPEDEF: uint cpCollisionType ;
 TYPEDEF: uint cpLayers ;
 TYPEDEF: uint cpGroup ;
 
-CONSTANT: CP_NO_GROUP 0 ;
-CONSTANT: CP_ALL_LAYERS 0xffffffff ;
+CONSTANT: CP_NO_GROUP 0
+CONSTANT: CP_ALL_LAYERS 0xffffffff
 
 ! cpVect.h
 TYPED: cpv ( x y -- v: cpVect )

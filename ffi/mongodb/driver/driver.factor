@@ -30,7 +30,7 @@ M: mdb-pool make-connection
 
 : <mdb-pool> ( mdb -- pool ) [ mdb-pool <pool> ] dip >>mdb ; inline
 
-CONSTANT: PARTIAL? "partial?" ;
+CONSTANT: PARTIAL? "partial?"
 
 ERROR: mdb-error msg ;
 
@@ -42,7 +42,7 @@ M: mdb-error pprint* ( obj -- )
 
 PRIVATE<
 
-GENERIC: <mdb-cursor> ( id mdb-query-msg/mdb-getmore-msg -- mdb-cursor ) ;
+GENERIC: <mdb-cursor> ( id mdb-query-msg/mdb-getmore-msg -- mdb-cursor )
 
 M: mdb-query-msg <mdb-cursor>
     mdb-cursor boa ;
@@ -53,7 +53,7 @@ M: mdb-getmore-msg <mdb-cursor>
 : >mdbregexp ( value -- regexp )
    first <mdbregexp> ; inline
 
-GENERIC: update-query ( mdb-result-msg mdb-query-msg/mdb-getmore-msg -- ) ;
+GENERIC: update-query ( mdb-result-msg mdb-query-msg/mdb-getmore-msg -- )
 
 M: mdb-query-msg update-query
     swap [ start#>> ] [ returned#>> ] bi + >>skip# drop ;
@@ -69,7 +69,7 @@ M: mdb-getmore-msg update-query
 
 DEFER: send-query
 
-GENERIC: verify-query-result ( mdb-result-msg mdb-query-msg/mdb-getmore-msg -- mdb-result-msg mdb-query-msg/mdb-getmore-msg ) ;
+GENERIC: verify-query-result ( mdb-result-msg mdb-query-msg/mdb-getmore-msg -- mdb-result-msg mdb-query-msg/mdb-getmore-msg )
 
 M: mdb-query-msg verify-query-result ;
 
@@ -113,7 +113,7 @@ SYNTAX: r/
    H{ } clone [ set-at ] keep <mdb-db>
    [ verify-nodes ] keep ;
 
-GENERIC: create-collection ( name/collection -- ) ;
+GENERIC: create-collection ( name/collection -- )
 
 M: string create-collection
     <mdb-collection> create-collection ;
@@ -214,12 +214,12 @@ PRIVATE>
 : key-spec ( spec-quot -- spec-assoc )
     output>array >hashtable ; inline
 
-GENERIC#: hint 1 ( mdb-query-msg index-hint -- mdb-query-msg ) ;
+GENERIC#: hint 1 ( mdb-query-msg index-hint -- mdb-query-msg )
 
 M: mdb-query-msg hint
     >>hint ;
 
-GENERIC: find ( selector -- mdb-cursor/f seq ) ;
+GENERIC: find ( selector -- mdb-cursor/f seq )
 
 M: mdb-query-msg find
     fix-query-collection send-query ;
@@ -253,7 +253,7 @@ M: mdb-cursor find
     getlasterror-cmd make-cmd send-cmd
     [ "err" ] dip at ;
 
-GENERIC: validate. ( collection -- ) ;
+GENERIC: validate. ( collection -- )
 
 M: string validate.
     [ validate-cmd make-cmd ] dip

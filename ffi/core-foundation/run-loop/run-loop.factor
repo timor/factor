@@ -8,10 +8,10 @@ sequences threads ;
 FROM: calendar.unix => system-micros ;
 IN: core-foundation.run-loop
 
-CONSTANT: kCFRunLoopRunFinished 1 ;
-CONSTANT: kCFRunLoopRunStopped 2 ;
-CONSTANT: kCFRunLoopRunTimedOut 3 ;
-CONSTANT: kCFRunLoopRunHandledSource 4 ;
+CONSTANT: kCFRunLoopRunFinished 1
+CONSTANT: kCFRunLoopRunStopped 2
+CONSTANT: kCFRunLoopRunTimedOut 3
+CONSTANT: kCFRunLoopRunHandledSource 4
 
 TYPEDEF: void* CFRunLoopRef ;
 TYPEDEF: void* CFRunLoopSourceRef ;

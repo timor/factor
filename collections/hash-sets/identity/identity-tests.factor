@@ -1,13 +1,13 @@
 USING: hash-sets.identity kernel literals sets tools.test ;
 IN: hash-sets.identity.tests
 
-CONSTANT: the-real-slim-shady "marshall mathers" ;
+CONSTANT: the-real-slim-shady "marshall mathers"
 
 CONSTANT: will
     IHS{
         $\ the-real-slim-shady
         "marshall mathers"
-    } ;
+    }
 
 : please-stand-up ( set obj -- ? )
     swap in? ;
@@ -21,7 +21,7 @@ CONSTANT: will
     [ delete ] [ members ] bi
 ] unit-test
 
-CONSTANT: same-as-it-ever-was "same as it ever was" ;
+CONSTANT: same-as-it-ever-was "same as it ever was"
 
 { IHS{ $\ same-as-it-ever-was } }
 [ HS{ $\ same-as-it-ever-was } IHS{ } set-like ] unit-test

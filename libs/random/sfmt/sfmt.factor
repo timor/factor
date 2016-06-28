@@ -10,7 +10,7 @@ IN: random.sfmt
 
 PRIVATE<
 
-CONSTANT: state-multiplier 1812433253 ;
+CONSTANT: state-multiplier 1812433253
 
 STRUCT: sfmt-state
     { seed uint }
@@ -55,7 +55,7 @@ TUPLE: sfmt
     [ wB ] dip vbitxor
     [ wA ] dip vbitxor ; inline
 
-GENERIC: generate ( sfmt -- ) ;
+GENERIC: generate ( sfmt -- )
 
 M:: sfmt generate ( sfmt -- )
     sfmt state>> set: state

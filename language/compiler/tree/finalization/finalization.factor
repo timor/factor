@@ -8,7 +8,7 @@ kernel math.partial-dispatch memoize sequences
 stack-checker.dependencies words ;
 IN: compiler.tree.finalization
 
-GENERIC: finalize* ( node -- nodes ) ;
+GENERIC: finalize* ( node -- nodes )
 
 : finalize ( nodes -- nodes' ) [ finalize* ] map-nodes ;
 
@@ -30,7 +30,7 @@ M: #shuffle finalize*
 MEMO: cached-expansion ( word -- nodes )
     def>> splice-final ;
 
-GENERIC: finalize-word ( #call word -- nodes ) ;
+GENERIC: finalize-word ( #call word -- nodes )
 
 M: predicate finalize-word
     "predicating" word-prop {

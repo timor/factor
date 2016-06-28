@@ -44,7 +44,7 @@ DEFER: tuple>query
 
 PRIVATE<
 
-GENERIC: id-selector ( object -- selector ) ;
+GENERIC: id-selector ( object -- selector )
 
 M: toid id-selector
    [ value>> ] [ key>> ] bi associate ; inline

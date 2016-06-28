@@ -53,7 +53,7 @@ IN: compiler.tests.redefine0
     ] with-compilation-unit
 ] unit-test
 
-GENERIC: test-7 ( a -- b ) ;
+GENERIC: test-7 ( a -- b )
 
 M: integer test-7 + ;
 

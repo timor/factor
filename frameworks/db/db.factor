@@ -21,9 +21,9 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: db-open ( db -- db-connection ) ;
-HOOK: db-close db-connection ( handle -- ) ;
-HOOK: parse-db-error db-connection ( error -- error' ) ;
+GENERIC: db-open ( db -- db-connection )
+HOOK: db-close db-connection ( handle -- )
+HOOK: parse-db-error db-connection ( error -- error' )
 
 : dispose-statements ( assoc -- ) values dispose-each ;
 
@@ -38,13 +38,13 @@ M: db-connection dispose ( db-connection -- )
 
 TUPLE: result-set sql in-params out-params handle n max ;
 
-GENERIC: query-results ( query -- result-set ) ;
-GENERIC: #rows ( result-set -- n ) ;
-GENERIC: #columns ( result-set -- n ) ;
-GENERIC#: row-column 1 ( result-set column -- obj ) ;
-GENERIC#: row-column-typed 1 ( result-set column -- sql ) ;
-GENERIC: advance-row ( result-set -- ) ;
-GENERIC: more-rows? ( result-set -- ? ) ;
+GENERIC: query-results ( query -- result-set )
+GENERIC: #rows ( result-set -- n )
+GENERIC: #columns ( result-set -- n )
+GENERIC#: row-column 1 ( result-set column -- obj )
+GENERIC#: row-column-typed 1 ( result-set column -- sql )
+GENERIC: advance-row ( result-set -- )
+GENERIC: more-rows? ( result-set -- ? )
 
 : init-result-set ( result-set -- )
     dup #rows >>max
@@ -68,14 +68,14 @@ TUPLE: prepared-statement < statement ;
         swap >>in-params
         swap >>sql ;
 
-HOOK: <simple-statement> db-connection ( string in out -- statement ) ;
-HOOK: <prepared-statement> db-connection ( string in out -- statement ) ;
-GENERIC: prepare-statement ( statement -- ) ;
-GENERIC: bind-statement* ( statement -- ) ;
-GENERIC: low-level-bind ( statement -- ) ;
-GENERIC: bind-tuple ( tuple statement -- ) ;
+HOOK: <simple-statement> db-connection ( string in out -- statement )
+HOOK: <prepared-statement> db-connection ( string in out -- statement )
+GENERIC: prepare-statement ( statement -- )
+GENERIC: bind-statement* ( statement -- )
+GENERIC: low-level-bind ( statement -- )
+GENERIC: bind-tuple ( tuple statement -- )
 
-GENERIC: execute-statement* ( statement type -- ) ;
+GENERIC: execute-statement* ( statement type -- )
 
 M: object execute-statement* ( statement type -- )
     $[
@@ -135,9 +135,9 @@ M: object execute-statement* ( statement type -- )
 ! Transactions
 SYMBOL: in-transaction
 
-HOOK: begin-transaction db-connection ( -- ) ;
-HOOK: commit-transaction db-connection ( -- ) ;
-HOOK: rollback-transaction db-connection ( -- ) ;
+HOOK: begin-transaction db-connection ( -- )
+HOOK: commit-transaction db-connection ( -- )
+HOOK: rollback-transaction db-connection ( -- )
 
 M: db-connection begin-transaction ( -- ) "BEGIN" sql-command ;
 M: db-connection commit-transaction ( -- ) "COMMIT" sql-command ;

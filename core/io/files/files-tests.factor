@@ -102,7 +102,7 @@ STRUCT: pt { x uint } { y uint } ;
 SPECIALIZED-ARRAY: pt
 
 CONSTANT: pt-array-1
-    pt-array{ S{ pt f 1 1 } S{ pt f 2 2 } S{ pt f 3 3 } } ;
+    pt-array{ S{ pt f 1 1 } S{ pt f 2 2 } S{ pt f 3 3 } }
 
 |[ path |
     { } [

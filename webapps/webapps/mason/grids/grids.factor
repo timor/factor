@@ -18,13 +18,13 @@ CONSTANT: oses
     { "windows" "Windows" }
     { "macosx" "Mac OS X" }
     { "linux" "Linux" }
-} ;
+}
 
 CONSTANT: cpus
 {
     { "x86.32" "x86" }
     { "x86.64" "x86-64" }
-} ;
+}
 
 : render-grid-header ( -- xml )
     oses values [ XML-CHUNK[[ <th align='center' scope='col'><-></th> ]] ] map ;

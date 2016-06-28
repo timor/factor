@@ -6,7 +6,7 @@ assocs byte-arrays classes.struct continuations fry grouping
 kernel libc literals math sequences splitting strings system
 system-info.macosx tools.ps unix unix.time unix.types ;
 
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 
 IN: tools.ps.macosx
 

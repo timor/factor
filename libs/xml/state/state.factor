@@ -5,7 +5,7 @@ IN: xml.state
 
 TUPLE: spot char line column next check version-1.0? stream ;
 
-C: <spot> spot ;
+C: <spot> spot
 
 : get-char ( -- char ) spot get char>> ; inline
 : get-line ( -- line ) spot get line>> ; inline

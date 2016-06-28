@@ -97,7 +97,7 @@ DEFER: interpolate-sequence
         $[ _ swap @ @ [ <tag> ] dip ]
     ] when-interpolated ;
 
-GENERIC: push-item ( item -- ) ;
+GENERIC: push-item ( item -- )
 M: string push-item , ;
 M: xml-data push-item , ;
 M: object push-item present , ;
@@ -113,7 +113,7 @@ M: xml-chunk push-item % ;
 : concat-interpolate ( array -- newarray )
     [ [ push-item ] each ] { } make ;
 
-GENERIC: interpolate-item ( item -- quot ) ;
+GENERIC: interpolate-item ( item -- quot )
 M: object interpolate-item [ swap ] curry ;
 M: tag interpolate-item interpolate-tag ;
 M: interpolated interpolate-item get-interpolated ;
@@ -125,7 +125,7 @@ M: interpolated interpolate-item get-interpolated ;
         $[ @ _ swap [ narray concat-interpolate ] dip ]
     ] when-interpolated ;
 
-GENERIC: [interpolate-xml] ( xml -- quot ) ;
+GENERIC: [interpolate-xml] ( xml -- quot )
 
 M: xml [interpolate-xml]
     dup body>> interpolate-tag

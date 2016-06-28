@@ -9,7 +9,7 @@ MIXIN: cord
 
 TUPLE: generic-cord
     { head read-only } { tail read-only } ; final
-INSTANCE: generic-cord cord ;
+INSTANCE: generic-cord cord
 
 M: cord length
     [ head>> length ] [ tail>> length ] bi + ; inline
@@ -20,9 +20,9 @@ M: cord virtual@
     2dup head>> length <
     [ head>> ] [ [ head>> length - ] [ tail>> ] bi ] if ; inline
 
-INSTANCE: cord virtual-sequence ;
+INSTANCE: cord virtual-sequence
 
-GENERIC: cord-append ( seq1 seq2 -- cord ) ;
+GENERIC: cord-append ( seq1 seq2 -- cord )
 
 M: object cord-append
     generic-cord boa ; inline
@@ -35,7 +35,7 @@ WHERE
 
 TUPLE: T-cord
     { head T read-only } { tail T read-only } ; final
-INSTANCE: T-cord cord ;
+INSTANCE: T-cord cord
 
 M: T cord-append
     2dup [ T instance? ] both?

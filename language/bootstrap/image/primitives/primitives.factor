@@ -803,7 +803,7 @@ CONSTANT: all-primitives {
             }
         }
     }
-} ;
+}
 
 : primitive-quot ( word vm-func -- quot )
     [

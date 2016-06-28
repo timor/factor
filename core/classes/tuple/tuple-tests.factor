@@ -21,7 +21,7 @@ TUPLE: rect x y w h ;
 ! Make sure we handle tuple class redefinition
 TUPLE: redefinition-test ;
 
-C: <redefinition-test> redefinition-test ;
+C: <redefinition-test> redefinition-test
 
 <redefinition-test> "redefinition-test" set
 
@@ -65,7 +65,7 @@ TUPLE: slotty a b c ;
 
 TUPLE: predicate-test ;
 
-C: <predicate-test> predicate-test ;
+C: <predicate-test> predicate-test
 
 : predicate-test ( a -- ? ) drop f ;
 
@@ -74,7 +74,7 @@ C: <predicate-test> predicate-test ;
 PREDICATE: silly-pred < tuple
     class-of \ rect = ;
 
-GENERIC: area ( obj -- n ) ;
+GENERIC: area ( obj -- n )
 M: silly-pred area dup w>> swap h>> * ;
 
 TUPLE: circle radius ;
@@ -85,7 +85,7 @@ M: circle area radius>> sq pi * ;
 ! Hashcode breakage
 TUPLE: empty ;
 
-C: <empty> empty ;
+C: <empty> empty
 
 { t } [ <empty> hashcode fixnum? ] unit-test
 
@@ -102,7 +102,7 @@ TUPLE: size-test a b c d ;
     size-test tuple-layout second =
 ] unit-test
 
-GENERIC: <yo-momma> ( a -- b ) ;
+GENERIC: <yo-momma> ( a -- b )
 
 TUPLE: yo-momma ;
 
@@ -126,7 +126,7 @@ TUPLE: loc-recording ;
 
 TUPLE: forget-robustness ;
 
-GENERIC: forget-robustness-generic ( a -- b ) ;
+GENERIC: forget-robustness-generic ( a -- b )
 
 M: forget-robustness forget-robustness-generic ;
 
@@ -139,8 +139,8 @@ M: integer forget-robustness-generic ;
 ] with-compilation-unit
 
 ! rapido found this one
-GENERIC#: m1 0 ( s n -- n ) ;
-GENERIC#: m2 1 ( s n -- v ) ;
+GENERIC#: m1 0 ( s n -- n )
+GENERIC#: m2 1 ( s n -- v )
 
 TUPLE: t1 ;
 
@@ -162,13 +162,13 @@ TUPLE: t4 ;
 M: t4 m1 drop ;
 M: t4 m2 nip ;
 
-C: <t4> t4 ;
+C: <t4> t4
 
 { 1 } [ 1 <t4> m1 ] unit-test
 { 1 } [ <t4> 1 m2 ] unit-test
 
 ! another combination issue
-GENERIC: silly ( obj -- obj obj ) ;
+GENERIC: silly ( obj -- obj obj )
 
 UNION: my-union slice repetition column array vector reversed ;
 
@@ -199,18 +199,18 @@ SYMBOL: not-a-tuple-class
 
 TUPLE: erg's-reshape-problem a b c d ;
 
-C: <erg's-reshape-problem> erg's-reshape-problem ;
+C: <erg's-reshape-problem> erg's-reshape-problem
 
 ! Inheritance
 TUPLE: computer cpu ram ;
-C: <computer> computer ;
+C: <computer> computer
 
 { "TUPLE: computer cpu ram ;" } [
     [ \ computer see ] with-string-writer string-lines second
 ] unit-test
 
 TUPLE: laptop < computer battery ;
-C: <laptop> laptop ;
+C: <laptop> laptop
 
 { t } [ laptop tuple-class? ] unit-test
 { t } [ laptop tuple class<= ] unit-test
@@ -237,7 +237,7 @@ test-laptop-slot-values
 { { tuple computer laptop } } [ laptop superclasses-of ] unit-test
 
 TUPLE: server < computer rackmount ;
-C: <server> server ;
+C: <server> server
 
 { t } [ server tuple-class? ] unit-test
 { t } [ server tuple class<= ] unit-test
@@ -836,7 +836,7 @@ DEFER: initial-slot
 ! Test no-slot error and get/set-slot-named
 
 TUPLE: no-slot-tuple0 a b c ;
-C: <no-slot-tuple0> no-slot-tuple0 ;
+C: <no-slot-tuple0> no-slot-tuple0
 
 [ 1 2 3 <no-slot-tuple0> "d" over get-slot-named ]
 [

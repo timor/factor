@@ -12,9 +12,9 @@ PRIVATE<
 
 TUPLE: mersenne-twister { seq uint-array } { i fixnum } ;
 
-CONSTANT: n 624 ;
-CONSTANT: m 397 ;
-CONSTANT: a uint-array{ 0 0x9908b0df } ;
+CONSTANT: n 624
+CONSTANT: m 397
+CONSTANT: a uint-array{ 0 0x9908b0df }
 
 : mt-step ( k+m k+1 k seq -- )
     [

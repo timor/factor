@@ -205,4 +205,4 @@ ERROR: malformed-hashtable-pair seq pair ;
 : parse-hashtable ( seq -- hashtable )
     check-hashtable H{ } assoc-clone-like ;
 
-INSTANCE: hashtable assoc ;
+INSTANCE: hashtable assoc

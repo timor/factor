@@ -7,15 +7,15 @@ IN: io.encodings
 
 ! The encoding descriptor protocol
 
-GENERIC: guess-encoded-length ( string-length encoding -- byte-length ) ;
-GENERIC: guess-decoded-length ( byte-length encoding -- string-length ) ;
+GENERIC: guess-encoded-length ( string-length encoding -- byte-length )
+GENERIC: guess-decoded-length ( byte-length encoding -- string-length )
 
 M: object guess-decoded-length drop ; inline
 M: object guess-encoded-length drop ; inline
 
-GENERIC: decode-char ( stream encoding -- char/f ) ;
+GENERIC: decode-char ( stream encoding -- char/f )
 
-GENERIC: decode-until ( seps stream encoding -- string/f sep/f ) ;
+GENERIC: decode-until ( seps stream encoding -- string/f sep/f )
 
 PRIVATE<
 
@@ -36,7 +36,7 @@ PRIVATE>
 
 M: object decode-until (decode-until) ;
 
-CONSTANT: replacement-char 0xfffd ;
+CONSTANT: replacement-char 0xfffd
 
 PRIVATE<
 
@@ -65,23 +65,23 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: encode-char ( char stream encoding -- ) ;
+GENERIC: encode-char ( char stream encoding -- )
 
-GENERIC: encode-string ( string stream encoding -- ) ;
+GENERIC: encode-string ( string stream encoding -- )
 
 M: object encode-string [ encode-char ] 2curry each ; inline
 
-GENERIC: <decoder> ( stream encoding -- newstream ) ;
+GENERIC: <decoder> ( stream encoding -- newstream )
 
 TUPLE: decoder { stream read-only } { code read-only } { cr boolean } ;
-INSTANCE: decoder input-stream ;
+INSTANCE: decoder input-stream
 
 ERROR: decode-error ;
 
-GENERIC: <encoder> ( stream encoding -- newstream ) ;
+GENERIC: <encoder> ( stream encoding -- newstream )
 
 TUPLE: encoder { stream read-only } { code read-only } ;
-INSTANCE: encoder output-stream ;
+INSTANCE: encoder output-stream
 
 ERROR: encode-error ;
 
@@ -201,11 +201,11 @@ M: encoder dispose stream>> dispose ; inline
 
 M: encoder stream-flush stream>> stream-flush ; inline
 
-INSTANCE: encoder plain-writer ;
+INSTANCE: encoder plain-writer
 
 PRIVATE>
 
-GENERIC#: re-encode 1 ( stream encoding -- newstream ) ;
+GENERIC#: re-encode 1 ( stream encoding -- newstream )
 
 M: object re-encode <encoder> ;
 
@@ -218,7 +218,7 @@ M: encoder re-encode [ stream>> ] dip re-encode ;
     [ [ output-stream get ] dip re-encode ] dip
     with-output-stream* ; inline
 
-GENERIC#: re-decode 1 ( stream encoding -- newstream ) ;
+GENERIC#: re-decode 1 ( stream encoding -- newstream )
 
 M: object re-decode <decoder> ;
 

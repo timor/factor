@@ -4,7 +4,7 @@ USING: math kernel math.constants math.private math.bits
 math.libm combinators fry math.order sequences ;
 IN: math.functions
 
-GENERIC: sqrt ( x -- y ) ; foldable
+GENERIC: sqrt ( x -- y ) foldable
 
 M: real sqrt
     >float dup 0.0 <
@@ -32,7 +32,7 @@ PRIVATE<
 : (^n) ( z w -- z^w )
     dup fixnum? [ (^fixnum) ] [ (^bignum) ] if ; inline
 
-GENERIC#: ^n 1 ( z w -- z^w ) ; foldable
+GENERIC#: ^n 1 ( z w -- z^w ) foldable
 
 M: fixnum ^n (^n) ;
 
@@ -61,7 +61,7 @@ PRIVATE>
 
 : polar> ( abs arg -- z ) cis * ; inline
 
-GENERIC: e^ ( x -- y ) ;
+GENERIC: e^ ( x -- y )
 
 M: float e^ fexp ; inline
 
@@ -122,7 +122,7 @@ ERROR: non-trivial-divisor n ;
     over 0 <
     [ [ [ neg ] dip ^mod ] keep mod-inv ] [ (^mod) ] if ; foldable
 
-GENERIC: absq ( x -- y ) ; foldable
+GENERIC: absq ( x -- y ) foldable
 
 M: real absq sq ; inline
 
@@ -149,7 +149,7 @@ M: real absq sq ; inline
 : >=1? ( x -- ? )
     dup complex? [ drop f ] [ 1 >= ] if ; inline
 
-GENERIC: frexp ( x -- y exp ) ;
+GENERIC: frexp ( x -- y exp )
 
 M: float frexp
     dup fp-special? [ dup zero? ] unless* [ 0 ] [
@@ -168,7 +168,7 @@ M: integer frexp
 
 DEFER: copysign
 
-GENERIC#: ldexp 1 ( x exp -- y ) ;
+GENERIC#: ldexp 1 ( x exp -- y )
 
 M: float ldexp
     over fp-special? [ over zero? ] unless* [ drop ] [
@@ -188,7 +188,7 @@ M: float ldexp
 M: integer ldexp
     2dup [ zero? ] either? [ 2drop 0 ] [ shift ] if ;
 
-GENERIC: log ( x -- y ) ;
+GENERIC: log ( x -- y )
 
 M: float log dup 0.0 >= [ flog ] [ 0.0 rect> log ] if ; inline
 
@@ -204,8 +204,8 @@ PRIVATE<
 : most-positive-finite-float ( -- x )
     0x1.ffff,ffff,ffff,fp1023 >integer ; inline
 
-CONSTANT: log-2   0x1.62e42fefa39efp-1 ;
-CONSTANT: log10-2 0x1.34413509f79ffp-2 ;
+CONSTANT: log-2   0x1.62e42fefa39efp-1
+CONSTANT: log10-2 0x1.34413509f79ffp-2
 
 : representable-as-float? ( x -- ? )
     most-negative-finite-float
@@ -221,7 +221,7 @@ PRIVATE>
 
 M: bignum log [ log ] log-2 (bignum-log) ;
 
-GENERIC: log1+ ( x -- y ) ;
+GENERIC: log1+ ( x -- y )
 
 M: object log1+ 1 + log ; inline
 
@@ -229,7 +229,7 @@ M: float log1+ dup -1.0 >= [ flog1+ ] [ 1.0 + 0.0 rect> log ] if ; inline
 
 : 10^ ( x -- y ) 10 swap ^ ; inline
 
-GENERIC: log10 ( x -- y ) ; foldable
+GENERIC: log10 ( x -- y ) foldable
 
 M: real log10 >float flog10 ; inline
 
@@ -237,7 +237,7 @@ M: complex log10 log 10 log / ; inline
 
 M: bignum log10 [ log10 ] log10-2 (bignum-log) ;
 
-GENERIC: cos ( x -- y ) ; foldable
+GENERIC: cos ( x -- y ) foldable
 
 M: complex cos
     >float-rect
@@ -250,7 +250,7 @@ M: real cos >float cos ; inline
 
 : sec ( x -- y ) cos recip ; inline
 
-GENERIC: cosh ( x -- y ) ; foldable
+GENERIC: cosh ( x -- y ) foldable
 
 M: complex cosh
     >float-rect
@@ -263,7 +263,7 @@ M: real cosh >float cosh ; inline
 
 : sech ( x -- y ) cosh recip ; inline
 
-GENERIC: sin ( x -- y ) ; foldable
+GENERIC: sin ( x -- y ) foldable
 
 M: complex sin
     >float-rect
@@ -276,7 +276,7 @@ M: real sin >float sin ; inline
 
 : cosec ( x -- y ) sin recip ; inline
 
-GENERIC: sinh ( x -- y ) ; foldable
+GENERIC: sinh ( x -- y ) foldable
 
 M: complex sinh
     >float-rect
@@ -289,7 +289,7 @@ M: real sinh >float sinh ; inline
 
 : cosech ( x -- y ) sinh recip ; inline
 
-GENERIC: tan ( x -- y ) ; foldable
+GENERIC: tan ( x -- y ) foldable
 
 M: complex tan [ sin ] [ cos ] bi / ;
 
@@ -297,7 +297,7 @@ M: float tan ftan ; inline
 
 M: real tan >float tan ; inline
 
-GENERIC: tanh ( x -- y ) ; foldable
+GENERIC: tanh ( x -- y ) foldable
 
 M: complex tanh [ sinh ] [ cosh ] bi / ;
 
@@ -334,7 +334,7 @@ M: real tanh >float tanh ; inline
 : acos ( x -- y )
     dup [-1,1]? [ >float facos ] [ asin pi 2 / swap - ] if ; inline
 
-GENERIC: atan ( x -- y ) ; foldable
+GENERIC: atan ( x -- y ) foldable
 
 M: complex atan i* atanh i* ; inline
 
@@ -350,7 +350,7 @@ M: real atan >float atan ; inline
 
 : truncate ( x -- y ) dup 1 mod - ; inline
 
-GENERIC: round ( x -- y ) ;
+GENERIC: round ( x -- y )
 
 M: integer round ; inline
 
@@ -377,13 +377,13 @@ M: float round dup sgn 2 /f + truncate ;
 
 : sigmoid ( x -- y ) neg e^ 1 + recip ; inline
 
-GENERIC: signum ( x -- y ) ;
+GENERIC: signum ( x -- y )
 
 M: real signum sgn ;
 
 M: complex signum dup abs / ;
 
-MATH: copysign ( x y -- x' ) ;
+MATH: copysign ( x y -- x' )
 
 M: real copysign >float copysign ;
 

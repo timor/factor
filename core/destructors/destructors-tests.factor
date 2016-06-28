@@ -25,7 +25,7 @@ TUPLE: dummy-obj destroyed? ;
 
 TUPLE: dummy-destructor obj ;
 
-C: <dummy-destructor> dummy-destructor ;
+C: <dummy-destructor> dummy-destructor
 
 M: dummy-destructor dispose ( obj -- )
     obj>> t >>destroyed? drop ;

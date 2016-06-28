@@ -17,7 +17,7 @@ PRIVATE<
 : protocol-consult ( protocol -- consulters )
     "protocol-consult" word-prop ;
 
-GENERIC: group-words ( group -- words ) ;
+GENERIC: group-words ( group -- words )
 
 M: standard-generic group-words
     dup "combination" word-prop #>> 2array 1array ;
@@ -62,7 +62,7 @@ PREDICATE: consult-method < method
 M: consult-method reset-word
     [ call-next-method ] [ f "consultation" set-word-prop ] bi ;
 
-GENERIC#: (consult-method-quot) 2 ( consultation quot word -- object ) ;
+GENERIC#: (consult-method-quot) 2 ( consultation quot word -- object )
 
 M: consultation (consult-method-quot)
     $[ _ call _ execute ] nip ;

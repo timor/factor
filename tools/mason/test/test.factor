@@ -43,7 +43,7 @@ IN: mason.test
     [ load-all-errors-file utf8 [ load-failures. ] with-file-writer ]
     bi ;
 
-GENERIC: word-vocabulary ( word -- vocabulary ) ;
+GENERIC: word-vocabulary ( word -- vocabulary )
 
 M: word word-vocabulary vocabulary>> ;
 

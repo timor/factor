@@ -12,7 +12,7 @@ IN: math.quaternions
 
 PRIVATE<
 
-GENERIC: (q*sign) ( q -- q' ) ;
+GENERIC: (q*sign) ( q -- q' )
 M: object (q*sign) { -1 1 1 1 } v* ; inline
 
 PRIVATE>
@@ -25,7 +25,7 @@ PRIVATE>
         [ [ { 0 3 1 2 } vshuffle ] [ { 0 2 3 1 } vshuffle ] bi* v* v- ]
     } 2cleave (q*sign) ; inline
 
-GENERIC: qconjugate ( u -- u' ) ;
+GENERIC: qconjugate ( u -- u' )
 M: object qconjugate ( u -- u' )
     { 1 -1 -1 -1 } v* ; inline
 

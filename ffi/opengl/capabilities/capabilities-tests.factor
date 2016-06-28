@@ -7,7 +7,7 @@ CONSTANT: test-extensions
         "GL_ARB_vent_core_frogblast"
         "GL_EXT_resonance_cascade"
         "GL_EXT_slipgate"
-    } ;
+    }
 
 { t }
 [ "GL_ARB_vent_core_frogblast" test-extensions (has-extension?) ] unit-test

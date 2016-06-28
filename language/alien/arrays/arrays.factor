@@ -5,7 +5,7 @@ arrays compiler.units cpu.architecture fry io.encodings.binary
 io.encodings.utf8 kernel math sequences words ;
 IN: alien.arrays
 
-INSTANCE: array value-type ;
+INSTANCE: array value-type
 
 M: array lookup-c-type ;
 

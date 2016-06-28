@@ -14,7 +14,7 @@ commands [ H{ } clone ] initialize
 SYMBOL: chat-docs
 chat-docs [ H{ } clone ] initialize
 
-CONSTANT: line-beginning "-!- " ;
+CONSTANT: line-beginning "-!- "
 
 : send-line ( string -- )
     write crlf flush ;

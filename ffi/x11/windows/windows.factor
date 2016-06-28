@@ -7,7 +7,7 @@ x11.glx ;
 IN: x11.windows
 
 CONSTANT: create-window-mask
-    flags{ CWBackPixel CWBorderPixel CWColormap CWEventMask } ;
+    flags{ CWBackPixel CWBorderPixel CWColormap CWEventMask }
 
 : create-colormap ( visinfo -- colormap )
     [ dpy get root get ] dip visual>> AllocNone
@@ -26,7 +26,7 @@ CONSTANT: event-mask
         EnterWindowMask
         LeaveWindowMask
         PropertyChangeMask
-    } ;
+    }
 
 : window-attributes ( visinfo -- attributes )
     XSetWindowAttributes <struct>

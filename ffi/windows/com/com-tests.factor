@@ -38,7 +38,7 @@ SYMBOL: +orig-wrapped-objects+
 +wrapped-objects+ get-global clone +orig-wrapped-objects+ set-global
 
 TUPLE: test-implementation x ;
-C: <test-implementation> test-implementation ;
+C: <test-implementation> test-implementation
 
 [
     [

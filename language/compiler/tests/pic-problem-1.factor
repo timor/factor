@@ -5,10 +5,10 @@ TUPLE: x ;
 
 M: x length drop 0 ;
 
-INSTANCE: x sequence ;
+INSTANCE: x sequence
 
 COMPILE< gc COMPILE>
 
-CONSTANT: blah T{ x } ;
+CONSTANT: blah T{ x }
 
 [ T{ x } ] [ blah ] unit-test

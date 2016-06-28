@@ -47,7 +47,7 @@ UNION: array-payload
     array
     bignum ;
 
-GENERIC: read-payload ( rel-base struct -- tuple ) ;
+GENERIC: read-payload ( rel-base struct -- tuple )
 
 : remainder-padding ( payload-size object -- n )
     class-heap-size + dup data-alignment get align swap - ;

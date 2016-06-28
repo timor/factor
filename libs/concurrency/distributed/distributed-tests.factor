@@ -5,7 +5,7 @@ continuations accessors prettyprint io.servers ;
 FROM: concurrency.messaging => receive send ;
 IN: concurrency.distributed.tests
 
-CONSTANT: test-ip "127.0.0.1" ;
+CONSTANT: test-ip "127.0.0.1"
 
 : test-node-server ( -- threaded-server )
     {

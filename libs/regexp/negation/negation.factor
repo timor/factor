@@ -6,7 +6,7 @@ regexp.minimize regexp.nfa regexp.transition-tables sequences
 sets vectors ;
 IN: regexp.negation
 
-CONSTANT: fail-state -1 ;
+CONSTANT: fail-state -1
 
 : add-default-transition ( state's-transitions -- new-state's-transitions )
     clone dup

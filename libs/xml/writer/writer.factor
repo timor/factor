@@ -58,7 +58,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: write-xml ( xml -- ) ;
+GENERIC: write-xml ( xml -- )
 
 PRIVATE<
 

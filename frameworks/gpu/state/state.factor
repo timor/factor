@@ -2,7 +2,7 @@
 USING: accessors alien.c-types alien.data arrays byte-arrays
 combinators gpu kernel literals math math.rectangles opengl
 opengl.gl sequences typed variants specialized-arrays ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 FROM: math => float ;
 SPECIALIZED-ARRAY: c:int
 SPECIALIZED-ARRAY: c:float
@@ -10,11 +10,11 @@ IN: gpu.state
 
 TUPLE: viewport-state
     { rect rect read-only } ;
-C: <viewport-state> viewport-state ;
+C: <viewport-state> viewport-state
 
 TUPLE: scissor-state
     { rect maybe{ rect } read-only } ;
-C: <scissor-state> scissor-state ;
+C: <scissor-state> scissor-state
 
 TUPLE: multisample-state
     { multisample? boolean read-only }
@@ -22,7 +22,7 @@ TUPLE: multisample-state
     { sample-alpha-to-one? boolean read-only }
     { sample-coverage maybe{ float } read-only }
     { invert-sample-coverage? boolean read-only } ;
-C: <multisample-state> multisample-state ;
+C: <multisample-state> multisample-state
 
 VARIANT: comparison
     cmp-never cmp-always
@@ -41,21 +41,21 @@ TUPLE: stencil-mode
     { stencil-fail-op stencil-op initial: op-keep read-only }
     { depth-fail-op stencil-op initial: op-keep read-only }
     { depth-pass-op stencil-op initial: op-keep read-only } ;
-C: <stencil-mode> stencil-mode ;
+C: <stencil-mode> stencil-mode
 
 TUPLE: stencil-state
     { front-mode maybe{ stencil-mode } initial: f read-only }
     { back-mode maybe{ stencil-mode } initial: f read-only } ;
-C: <stencil-state> stencil-state ;
+C: <stencil-state> stencil-state
 
 TUPLE: depth-range-state
     { near float initial: 0.0 read-only }
     { far  float initial: 1.0 read-only } ;
-C: <depth-range-state> depth-range-state ;
+C: <depth-range-state> depth-range-state
 
 TUPLE: depth-state
     { comparison maybe{ comparison } initial: f read-only } ;
-C: <depth-state> depth-state ;
+C: <depth-state> depth-state
 
 VARIANT: blend-equation
     eq-add eq-subtract eq-reverse-subtract eq-min eq-max ;
@@ -77,20 +77,20 @@ TUPLE: blend-mode
     { equation blend-equation initial: eq-add read-only }
     { source-function source-blend-function initial: func-source-alpha read-only }
     { dest-function blend-function initial: func-one-minus-source-alpha read-only } ;
-C: <blend-mode> blend-mode ;
+C: <blend-mode> blend-mode
 
 TUPLE: blend-state
     { constant-color sequence initial: f read-only }
     { rgb-mode maybe{ blend-mode } read-only }
     { alpha-mode maybe{ blend-mode } read-only } ;
-C: <blend-state> blend-state ;
+C: <blend-state> blend-state
 
 TUPLE: mask-state
     { color sequence initial: { t t t t } read-only }
     { depth boolean initial: t read-only }
     { stencil-front integer initial: 0xFFFFFFFF read-only }
     { stencil-back integer initial: 0xFFFFFFFF read-only } ;
-C: <mask-state> mask-state ;
+C: <mask-state> mask-state
 
 VARIANT: triangle-face
     face-ccw face-cw ;
@@ -102,13 +102,13 @@ VARIANT: triangle-mode
 TUPLE: triangle-cull-state
     { front-face triangle-face initial: face-ccw read-only }
     { cull maybe{ triangle-cull } initial: f read-only } ;
-C: <triangle-cull-state> triangle-cull-state ;
+C: <triangle-cull-state> triangle-cull-state
 
 TUPLE: triangle-state
     { front-mode triangle-mode initial: triangle-fill read-only }
     { back-mode triangle-mode initial: triangle-fill read-only }
     { antialias? boolean initial: f read-only } ;
-C: <triangle-state> triangle-state ;
+C: <triangle-state> triangle-state
 
 VARIANT: point-sprite-origin
     origin-upper-left origin-lower-left ;
@@ -117,12 +117,12 @@ TUPLE: point-state
     { size maybe{ float } initial: 1.0 read-only }
     { sprite-origin point-sprite-origin initial: origin-upper-left read-only }
     { fade-threshold float initial: 1.0 read-only } ;
-C: <point-state> point-state ;
+C: <point-state> point-state
 
 TUPLE: line-state
     { width float initial: 1.0 read-only }
     { antialias? boolean initial: f read-only } ;
-C: <line-state> line-state ;
+C: <line-state> line-state
 
 UNION: gpu-state
     viewport-state
@@ -307,7 +307,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: set-gpu-state* ( state -- ) ;
+GENERIC: set-gpu-state* ( state -- )
 
 M: viewport-state set-gpu-state*
     rect>> [ loc>> ] [ dim>> ] bi gl-viewport ;

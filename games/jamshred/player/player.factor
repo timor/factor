@@ -4,7 +4,7 @@ USING: accessors colors.constants combinators jamshred.log
 jamshred.oint jamshred.sound jamshred.tunnel kernel locals math
 math.constants math.order math.ranges math.vectors math.matrices
 sequences shuffle specialized-arrays strings system ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAY: c:float
 IN: jamshred.player
 
@@ -17,8 +17,8 @@ TUPLE: player < oint
     { speed float } ;
 
 ! speeds are in GL units / second
-CONSTANT: default-speed 1.0 ;
-CONSTANT: max-speed 30.0 ;
+CONSTANT: default-speed 1.0
+CONSTANT: max-speed 30.0
 
 : <player> ( name sounds -- player )
     [ float-array{ 0 0 5 } float-array{ 0 0 -1 } float-array{ 0 1 0 } float-array{ -1 0 0 } ] 2dip

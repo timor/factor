@@ -25,7 +25,7 @@ IN: project-euler.265
 
 ! Find S(5).
 
-CONSTANT: N 5 ;
+CONSTANT: N 5
 
 : decompose ( n -- seq )
     N iota [ drop [ 2/ ] [ 1 bitand ] bi ] map nip reverse ;

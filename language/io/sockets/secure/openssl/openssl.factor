@@ -10,7 +10,7 @@ math.parser memoize namespaces openssl openssl.libcrypto
 openssl.libssl random sequences sets splitting unicode ;
 IN: io.sockets.secure.openssl
 
-GENERIC: ssl-method ( symbol -- method ) ;
+GENERIC: ssl-method ( symbol -- method )
 M: TLSv1 ssl-method drop TLSv1_method ;
 M: TLSv1.1 ssl-method drop TLSv1_1_method ;
 M: TLSv1.2 ssl-method drop TLSv1_2_method ;

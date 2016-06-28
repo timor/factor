@@ -10,7 +10,7 @@ IN: io.streams.256color
 
 PRIVATE<
 
-CONSTANT: intensities { 0x00 0x5F 0x87 0xAF 0xD7 0xFF } ;
+CONSTANT: intensities { 0x00 0x5F 0x87 0xAF 0xD7 0xFF }
 
 CONSTANT: 256colors H{
 
@@ -33,7 +33,7 @@ CONSTANT: 256colors H{
     { { 255   0 255 } 13 }
     { {   0 255 255 } 14 }
     { { 255 255 255 } 15 }
-} ;
+}
 
 ! Add the RGB colors
 intensities |[ r i |
@@ -75,7 +75,7 @@ intensities |[ r i |
 
 TUPLE: 256color stream ;
 
-C: <256color> 256color ;
+C: <256color> 256color
 
 M: 256color stream-write1 stream>> stream-write1 ;
 M: 256color stream-write stream>> stream-write ;

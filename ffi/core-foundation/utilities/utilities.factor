@@ -7,7 +7,7 @@ core-foundation.strings destructors hashtables kernel math
 sequences strings ;
 IN: core-foundation.utilities
 
-GENERIC: (>cf) ( obj -- cf ) ;
+GENERIC: (>cf) ( obj -- cf )
 
 M: number (>cf) <CFNumber> ;
 M: t (>cf) <CFNumber> ;

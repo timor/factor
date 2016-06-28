@@ -44,7 +44,7 @@ ERROR: vregs-shouldnt-interfere vreg1 vreg2 ;
     initial-leaders leader-map namespaces:set
     initial-class-elements class-element-map namespaces:set ;
 
-GENERIC: coalesce-now ( insn -- ) ;
+GENERIC: coalesce-now ( insn -- )
 
 M: insn coalesce-now drop ;
 
@@ -55,7 +55,7 @@ M: ##phi coalesce-now
     [ dst>> ] [ inputs>> values ] bi zip-scalar
     natural-sort t try-eliminate-copies ;
 
-GENERIC: coalesce-later ( insn -- ) ;
+GENERIC: coalesce-later ( insn -- )
 
 M: insn coalesce-later drop ;
 

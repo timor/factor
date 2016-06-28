@@ -11,23 +11,23 @@ IN: x11.glx
 LIBRARY: glx
 
 ! Visual Config Attributes (glXGetConfig, glXGetFBConfigAttrib)
-CONSTANT: GLX_USE_GL 1 ; ! support GLX rendering ;
-CONSTANT: GLX_BUFFER_SIZE 2 ; ! depth of the color buffer ;
-CONSTANT: GLX_LEVEL 3 ; ! level in plane stacking ;
-CONSTANT: GLX_RGBA 4 ; ! true if RGBA mode ;
-CONSTANT: GLX_DOUBLEBUFFER 5 ; ! double buffering supported ;
-CONSTANT: GLX_STEREO 6 ; ! stereo buffering supported ;
-CONSTANT: GLX_AUX_BUFFERS 7 ; ! number of aux buffers ;
-CONSTANT: GLX_RED_SIZE 8 ; ! number of red component bits ;
-CONSTANT: GLX_GREEN_SIZE 9 ; ! number of green component bits ;
-CONSTANT: GLX_BLUE_SIZE 10 ; ! number of blue component bits ;
-CONSTANT: GLX_ALPHA_SIZE 11 ; ! number of alpha component bits ;
-CONSTANT: GLX_DEPTH_SIZE 12 ; ! number of depth bits ;
-CONSTANT: GLX_STENCIL_SIZE 13 ; ! number of stencil bits ;
-CONSTANT: GLX_ACCUM_RED_SIZE 14 ; ! number of red accum bits ;
-CONSTANT: GLX_ACCUM_GREEN_SIZE 15 ; ! number of green accum bits ;
-CONSTANT: GLX_ACCUM_BLUE_SIZE 16 ; ! number of blue accum bits ;
-CONSTANT: GLX_ACCUM_ALPHA_SIZE 17 ; ! number of alpha accum bits ;
+CONSTANT: GLX_USE_GL 1 ! support GLX rendering ;
+CONSTANT: GLX_BUFFER_SIZE 2 ! depth of the color buffer ;
+CONSTANT: GLX_LEVEL 3 ! level in plane stacking ;
+CONSTANT: GLX_RGBA 4 ! true if RGBA mode ;
+CONSTANT: GLX_DOUBLEBUFFER 5 ! double buffering supported ;
+CONSTANT: GLX_STEREO 6 ! stereo buffering supported ;
+CONSTANT: GLX_AUX_BUFFERS 7 ! number of aux buffers ;
+CONSTANT: GLX_RED_SIZE 8 ! number of red component bits ;
+CONSTANT: GLX_GREEN_SIZE 9 ! number of green component bits ;
+CONSTANT: GLX_BLUE_SIZE 10 ! number of blue component bits ;
+CONSTANT: GLX_ALPHA_SIZE 11 ! number of alpha component bits ;
+CONSTANT: GLX_DEPTH_SIZE 12 ! number of depth bits ;
+CONSTANT: GLX_STENCIL_SIZE 13 ! number of stencil bits ;
+CONSTANT: GLX_ACCUM_RED_SIZE 14 ! number of red accum bits ;
+CONSTANT: GLX_ACCUM_GREEN_SIZE 15 ! number of green accum bits ;
+CONSTANT: GLX_ACCUM_BLUE_SIZE 16 ! number of blue accum bits ;
+CONSTANT: GLX_ACCUM_ALPHA_SIZE 17 ! number of alpha accum bits ;
 
 TYPEDEF: XID GLXContextID ;
 TYPEDEF: XID GLXPixmap ;
@@ -86,12 +86,12 @@ X-FUNCTION: void* glXGetProcAddress ( c-string procname ) ;
 X-FUNCTION: void* glXGetProcAddressARB ( c-string procname ) ;
 
 ! GLX_ARB_multisample
-CONSTANT: GLX_SAMPLE_BUFFERS 100000 ;
-CONSTANT: GLX_SAMPLES 100001 ;
+CONSTANT: GLX_SAMPLE_BUFFERS 100000
+CONSTANT: GLX_SAMPLES 100001
 
 ! GLX_ARB_fbconfig_float
-CONSTANT: GLX_RGBA_FLOAT_TYPE 0x20B9 ;
-CONSTANT: GLX_RGBA_FLOAT_BIT  0x0004 ;
+CONSTANT: GLX_RGBA_FLOAT_TYPE 0x20B9
+CONSTANT: GLX_RGBA_FLOAT_BIT  0x0004
 
 ! GLX Events
 ! (also skipped for now. only has GLXPbufferClobberEvent, the rest is handled by xlib methinks)

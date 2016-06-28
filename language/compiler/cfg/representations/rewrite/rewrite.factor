@@ -75,7 +75,7 @@ RENAMING: convert [ converted-value ] [ converted-value ] [ ] ;
         renaming-set get length 0 assert=
     ] [ drop ] if ;
 
-GENERIC: conversions-for-insn ( insn -- ) ;
+GENERIC: conversions-for-insn ( insn -- )
 
 M: ##phi conversions-for-insn , ;
 

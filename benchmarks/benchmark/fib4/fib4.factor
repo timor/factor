@@ -3,7 +3,7 @@ IN: benchmark.fib4
 
 TUPLE: box { i read-only } ;
 
-C: <box> box ;
+C: <box> box
 
 : tuple-fib ( m -- n )
     dup i>> 1 <= [

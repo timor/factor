@@ -3,7 +3,7 @@
 USING: assocs kernel redis sequences ;
 IN: redis.assoc
 
-INSTANCE: redis assoc ;
+INSTANCE: redis assoc
 
 M: redis at* [ redis-get dup >boolean ] with-redis ;
 

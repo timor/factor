@@ -65,11 +65,11 @@ PRIVATE>
 : <threaded-server> ( encoding -- threaded-server )
     threaded-server new-threaded-server ;
 
-GENERIC: handle-client* ( threaded-server -- ) ;
+GENERIC: handle-client* ( threaded-server -- )
 
 PRIVATE<
 
-GENERIC: >insecure ( obj -- obj ) ;
+GENERIC: >insecure ( obj -- obj )
 
 M: inet >insecure 1array ;
 M: inet4 >insecure 1array ;
@@ -224,7 +224,7 @@ PRIVATE>
 
 PRIVATE<
 
-GENERIC: connect-addr ( addrspec -- addrspec ) ;
+GENERIC: connect-addr ( addrspec -- addrspec )
 
 M: inet4 connect-addr [ "127.0.0.1" ] dip port>> <inet4> ;
 

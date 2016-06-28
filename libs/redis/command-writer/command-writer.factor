@@ -6,7 +6,7 @@ IN: redis.command-writer
 
 PRIVATE<
 
-GENERIC: write-resp ( value -- ) ;
+GENERIC: write-resp ( value -- )
 
 M: string write-resp ( string -- )
     [ length ] keep "$%s\r\n%s\r\n" printf ;

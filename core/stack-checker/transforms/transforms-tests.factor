@@ -11,7 +11,7 @@ MACRO: compose-n ( n word -- quot' ) <repetition> >quotation ;
 
 TUPLE: color r g b ;
 
-C: <color> color ;
+C: <color> color
 
 : cleave-test ( color -- r g b )
     { [ r>> ] [ g>> ] [ b>> ] } cleave ;

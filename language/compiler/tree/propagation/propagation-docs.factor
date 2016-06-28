@@ -42,7 +42,7 @@ T{ #call
         }
     }
 }
-]] ;
+]]
 COMPILE>
 
 HELP: propagate

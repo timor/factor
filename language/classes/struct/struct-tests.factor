@@ -10,7 +10,7 @@ mirrors namespaces parser prettyprint prettyprint.config see
 sequences specialized-arrays specialized-arrays.private
 system tools.test vocabs ;
 FROM: math => float ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAY: char
 SPECIALIZED-ARRAY: int
 SPECIALIZED-ARRAY: ushort

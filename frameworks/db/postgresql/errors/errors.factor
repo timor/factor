@@ -39,7 +39,7 @@ PostgresqlSqlError = (TableError | DatabaseError | FunctionError | SyntaxError |
 
 
 TUPLE: parse-postgresql-location column line text ;
-C: <parse-postgresql-location> parse-postgresql-location ;
+C: <parse-postgresql-location> parse-postgresql-location
 
 : parse-postgresql-line-error ( string -- obj ) EBNF{{
 

@@ -16,13 +16,13 @@ SYMBOL: editor-class
     available-editors
     [ [ "Load " prepend ] keep ] { } map>assoc ;
 
-HOOK: editor-command editor-class ( file line -- command ) ;
+HOOK: editor-command editor-class ( file line -- command )
 
 M: f editor-command
     "Select an editor" editor-restarts throw-restarts require
     editor-command ;
 
-HOOK: editor-detached? editor-class ( -- ? ) ;
+HOOK: editor-detached? editor-class ( -- ? )
 M: object editor-detached? t ;
 
 : run-and-wait-for-editor ( command -- )
@@ -63,7 +63,7 @@ PRIVATE>
 : edit-vocab ( vocab -- )
     public-vocab-name >vocab-link edit ;
 
-GENERIC: edit ( object -- ) ;
+GENERIC: edit ( object -- )
 
 M: object edit
     dup where [ first2 edit-location ] [ cannot-find-source ] ?if ;
@@ -93,7 +93,7 @@ M: string edit edit-vocab ;
     [ [ smart-usage ] keep prefix ] bi
     edit-each ;
 
-GENERIC: edit-docs ( object -- ) ;
+GENERIC: edit-docs ( object -- )
 
 M: object edit-docs
     public-vocab-name vocab-docs-path 1 edit-location ;
@@ -104,7 +104,7 @@ M: word edit-docs
     [ vocabulary>> edit-docs ]
     if* ;
 
-GENERIC: edit-tests ( object -- ) ;
+GENERIC: edit-tests ( object -- )
 
 M: object edit-tests
     public-vocab-name vocab-tests-path 1 edit-location ;

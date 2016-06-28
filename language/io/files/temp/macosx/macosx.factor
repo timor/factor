@@ -9,10 +9,10 @@ PRIVATE<
 FUNCTION: id NSTemporaryDirectory ( ) ;
 
 TYPEDEF: NSUInteger NSSearchPathDirectory ;
-CONSTANT: NSCachesDirectory 13 ;
+CONSTANT: NSCachesDirectory 13
 
 TYPEDEF: NSUInteger NSSearchPathDomainMask ;
-CONSTANT: NSUserDomainMask 1 ;
+CONSTANT: NSUserDomainMask 1
 
 FUNCTION: id NSSearchPathForDirectoriesInDomains (
    NSSearchPathDirectory directory,
@@ -20,7 +20,7 @@ FUNCTION: id NSSearchPathForDirectoriesInDomains (
    char expandTilde
 ) ;
 
-CONSTANT: factor-bundle-name "org.factorcode.Factor" ;
+CONSTANT: factor-bundle-name "org.factorcode.Factor"
 
 : factor-bundle-subdir ( path -- path )
     factor-bundle-name append-path ;

@@ -8,13 +8,13 @@ quotations sequences strings system ;
 IN: threads
 
 PRIVATE<
-PRIMITIVE: (set-context) ( obj context -- obj' ) ;
-PRIMITIVE: (set-context-and-delete) ( obj context -- * ) ;
-PRIMITIVE: (sleep) ( nanos -- ) ;
-PRIMITIVE: (start-context) ( obj quot -- obj' ) ;
-PRIMITIVE: (start-context-and-delete) ( obj quot -- * ) ;
+PRIMITIVE: (set-context) ( obj context -- obj' )
+PRIMITIVE: (set-context-and-delete) ( obj context -- * )
+PRIMITIVE: (sleep) ( nanos -- )
+PRIMITIVE: (start-context) ( obj quot -- obj' )
+PRIMITIVE: (start-context-and-delete) ( obj quot -- * )
 
-PRIMITIVE: context-object-for ( n context -- obj ) ;
+PRIMITIVE: context-object-for ( n context -- obj )
 
 ! Wrap sub-primitives; we don't want them inlined into callers
 ! since their behavior depends on what frames are on the callstack
@@ -169,9 +169,9 @@ CONSTANT: [start]
         init-catchstack
         self quot>> call
         stop
-    ] ;
+    ]
 
-GENERIC: (next) ( obj thread -- obj' ) ;
+GENERIC: (next) ( obj thread -- obj' )
 
 M: thread (next)
     dup runnable>>
@@ -209,7 +209,7 @@ PRIVATE>
 : yield ( -- )
     self resume f suspend drop ;
 
-GENERIC: sleep-until ( n/f -- ) ;
+GENERIC: sleep-until ( n/f -- )
 
 M: integer sleep-until
     [ self ] dip schedule-sleep "sleep" suspend drop ;
@@ -217,7 +217,7 @@ M: integer sleep-until
 M: f sleep-until
     drop "standby" suspend drop ;
 
-GENERIC: sleep ( dt -- ) ;
+GENERIC: sleep ( dt -- )
 
 M: real sleep
     >integer nano-count + sleep-until ;

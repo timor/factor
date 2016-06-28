@@ -3,13 +3,13 @@
 
 USING: accessors arrays classes.struct io.streams.c kernel
 math system terminal unix unix.ffi ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 
 IN: terminal.linux
 
 PRIVATE<
 
-CONSTANT: TIOCGWINSZ 0x5413 ;
+CONSTANT: TIOCGWINSZ 0x5413
 
 STRUCT: winsize
 { ws_row c:short }

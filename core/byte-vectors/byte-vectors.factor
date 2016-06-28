@@ -45,4 +45,4 @@ M: byte-array new-resizable drop <byte-vector> ; inline
 
 M: byte-vector new-resizable drop <byte-vector> ; inline
 
-INSTANCE: byte-vector growable ;
+INSTANCE: byte-vector growable

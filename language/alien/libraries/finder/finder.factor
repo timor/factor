@@ -2,7 +2,7 @@ USING: accessors alien.libraries kernel sequences system vocabs
 ;
 IN: alien.libraries.finder
 
-HOOK: find-library* os ( name -- path/f ) ;
+HOOK: find-library* os ( name -- path/f )
 
 : find-library ( name -- path/library-not-found )
     dup find-library* [ nip ] when* ;

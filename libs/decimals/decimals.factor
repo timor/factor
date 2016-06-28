@@ -6,7 +6,7 @@ IN: decimals
 
 TUPLE: decimal { mantissa read-only } { exponent read-only } ;
 
-C: <decimal> decimal ;
+C: <decimal> decimal
 
 : >decimal< ( decimal -- mantissa exponent )
     [ mantissa>> ] [ exponent>> ] bi ; inline

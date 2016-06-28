@@ -17,7 +17,7 @@ FUNCTION: HRESULT D3DX10CompileFromFileA ( LPCSTR pSrcFile, D3D10_SHADER_MACRO* 
 FUNCTION: HRESULT D3DX10CompileFromFileW ( LPCWSTR pSrcFile, D3D10_SHADER_MACRO* pDefines, LPD3D10INCLUDE pInclude,
         LPCSTR pFunctionName, LPCSTR pProfile, UINT Flags1, UINT Flags2, ID3DX10ThreadPump* pPump, ID3D10Blob** ppShader, ID3D10Blob** ppErrorMsgs, HRESULT* pHResult ) ;
 
-ALIAS: D3DX10CompileFromFile D3DX10CompileFromFileW ;
+ALIAS: D3DX10CompileFromFile D3DX10CompileFromFileW
 
 FUNCTION: HRESULT D3DX10CompileFromResourceA ( HMODULE hSrcModule, LPCSTR pSrcResource, LPCSTR pSrcFileName, D3D10_SHADER_MACRO* pDefines,
     LPD3D10INCLUDE pInclude, LPCSTR pFunctionName, LPCSTR pProfile, UINT Flags1, UINT Flags2, ID3DX10ThreadPump* pPump, ID3D10Blob** ppShader, ID3D10Blob** ppErrorMsgs, HRESULT* pHResult ) ;
@@ -25,7 +25,7 @@ FUNCTION: HRESULT D3DX10CompileFromResourceA ( HMODULE hSrcModule, LPCSTR pSrcRe
 FUNCTION: HRESULT D3DX10CompileFromResourceW ( HMODULE hSrcModule, LPCWSTR pSrcResource, LPCWSTR pSrcFileName, D3D10_SHADER_MACRO* pDefines,
     LPD3D10INCLUDE pInclude, LPCSTR pFunctionName, LPCSTR pProfile, UINT Flags1, UINT Flags2, ID3DX10ThreadPump* pPump, ID3D10Blob** ppShader, ID3D10Blob** ppErrorMsgs, HRESULT* pHResult ) ;
 
-ALIAS: D3DX10CompileFromResource D3DX10CompileFromResourceW ;
+ALIAS: D3DX10CompileFromResource D3DX10CompileFromResourceW
 
 FUNCTION: HRESULT D3DX10CompileFromMemory ( LPCSTR pSrcData, SIZE_T SrcDataLen, LPCSTR pFileName, D3D10_SHADER_MACRO* pDefines, LPD3D10INCLUDE pInclude,
     LPCSTR pFunctionName, LPCSTR pProfile, UINT Flags1, UINT Flags2, ID3DX10ThreadPump* pPump, ID3D10Blob** ppShader, ID3D10Blob** ppErrorMsgs, HRESULT* pHResult ) ;
@@ -50,8 +50,8 @@ FUNCTION: HRESULT D3DX10CreateEffectFromResourceW ( HMODULE hModule, LPCWSTR pRe
     ID3D10Include* pInclude, LPCSTR pProfile, UINT HLSLFlags, UINT FXFlags, ID3D10Device* pDevice,
     ID3D10EffectPool* pEffectPool, ID3DX10ThreadPump* pPump, ID3D10Effect** ppEffect, ID3D10Blob** ppErrors, HRESULT* pHResult ) ;
 
-ALIAS: D3DX10CreateEffectFromFile          D3DX10CreateEffectFromFileW ;
-ALIAS: D3DX10CreateEffectFromResource      D3DX10CreateEffectFromResourceW ;
+ALIAS: D3DX10CreateEffectFromFile          D3DX10CreateEffectFromFileW
+ALIAS: D3DX10CreateEffectFromResource      D3DX10CreateEffectFromResourceW
 
 FUNCTION: HRESULT D3DX10CreateEffectPoolFromFileA ( LPCSTR pFileName, D3D10_SHADER_MACRO* pDefines,
     ID3D10Include* pInclude, LPCSTR pProfile, UINT HLSLFlags, UINT FXFlags, ID3D10Device* pDevice, ID3DX10ThreadPump* pPump,
@@ -73,8 +73,8 @@ FUNCTION: HRESULT D3DX10CreateEffectPoolFromResourceW ( HMODULE hModule, LPCWSTR
     ID3D10Include* pInclude, LPCSTR pProfile, UINT HLSLFlags, UINT FXFlags, ID3D10Device* pDevice,
     ID3DX10ThreadPump* pPump, ID3D10EffectPool** ppEffectPool, ID3D10Blob** ppErrors, HRESULT* pHResult ) ;
 
-ALIAS: D3DX10CreateEffectPoolFromFile      D3DX10CreateEffectPoolFromFileW ;
-ALIAS: D3DX10CreateEffectPoolFromResource  D3DX10CreateEffectPoolFromResourceW ;
+ALIAS: D3DX10CreateEffectPoolFromFile      D3DX10CreateEffectPoolFromFileW
+ALIAS: D3DX10CreateEffectPoolFromResource  D3DX10CreateEffectPoolFromResourceW
 
 FUNCTION: HRESULT D3DX10PreprocessShaderFromFileA ( LPCSTR pFileName, D3D10_SHADER_MACRO* pDefines,
     LPD3D10INCLUDE pInclude, ID3DX10ThreadPump* pPump, ID3D10Blob** ppShaderText, ID3D10Blob** ppErrorMsgs, HRESULT* pHResult ) ;
@@ -91,8 +91,8 @@ FUNCTION: HRESULT D3DX10PreprocessShaderFromResourceA ( HMODULE hModule, LPCSTR 
 FUNCTION: HRESULT D3DX10PreprocessShaderFromResourceW ( HMODULE hModule, LPCWSTR pResourceName, LPCWSTR pSrcFileName, D3D10_SHADER_MACRO* pDefines,
     LPD3D10INCLUDE pInclude, ID3DX10ThreadPump* pPump, ID3D10Blob** ppShaderText, ID3D10Blob** ppErrorMsgs, HRESULT* pHResult ) ;
 
-ALIAS: D3DX10PreprocessShaderFromFile      D3DX10PreprocessShaderFromFileW ;
-ALIAS: D3DX10PreprocessShaderFromResource  D3DX10PreprocessShaderFromResourceW ;
+ALIAS: D3DX10PreprocessShaderFromFile      D3DX10PreprocessShaderFromFileW
+ALIAS: D3DX10PreprocessShaderFromResource  D3DX10PreprocessShaderFromResourceW
 
 FUNCTION: HRESULT D3DX10CreateAsyncCompilerProcessor ( LPCSTR pFileName, D3D10_SHADER_MACRO* pDefines, LPD3D10INCLUDE pInclude,
         LPCSTR pFunctionName, LPCSTR pProfile, UINT Flags1, UINT Flags2,
@@ -115,8 +115,8 @@ FUNCTION: HRESULT D3DX10CreateAsyncMemoryLoader ( LPCVOID pData, SIZE_T cbData, 
 FUNCTION: HRESULT D3DX10CreateAsyncResourceLoaderW ( HMODULE hSrcModule, LPCWSTR pSrcResource, ID3DX10DataLoader** ppDataLoader ) ;
 FUNCTION: HRESULT D3DX10CreateAsyncResourceLoaderA ( HMODULE hSrcModule, LPCSTR pSrcResource, ID3DX10DataLoader** ppDataLoader ) ;
 
-ALIAS: D3DX10CreateAsyncFileLoader D3DX10CreateAsyncFileLoaderW ;
-ALIAS: D3DX10CreateAsyncResourceLoader D3DX10CreateAsyncResourceLoaderW ;
+ALIAS: D3DX10CreateAsyncFileLoader D3DX10CreateAsyncFileLoaderW
+ALIAS: D3DX10CreateAsyncResourceLoader D3DX10CreateAsyncResourceLoaderW
 
 FUNCTION: HRESULT D3DX10CreateAsyncTextureProcessor ( ID3D10Device* pDevice, D3DX10_IMAGE_LOAD_INFO* pLoadInfo, ID3DX10DataProcessor** ppDataProcessor ) ;
 FUNCTION: HRESULT D3DX10CreateAsyncTextureInfoProcessor ( D3DX10_IMAGE_INFO* pImageInfo, ID3DX10DataProcessor** ppDataProcessor ) ;

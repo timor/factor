@@ -10,7 +10,7 @@ TUPLE: group id name passwd members ;
 
 SYMBOL: group-cache
 
-GENERIC: group-struct ( obj -- group/f ) ;
+GENERIC: group-struct ( obj -- group/f )
 
 PRIVATE<
 
@@ -77,7 +77,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: user-groups ( string/id -- seq ) ;
+GENERIC: user-groups ( string/id -- seq )
 
 M: string user-groups ( string -- seq )
     (user-groups) ;
@@ -109,9 +109,9 @@ M: integer user-groups ( id -- seq )
 
 : group-exists? ( name/id -- ? ) group-id >boolean ;
 
-GENERIC: set-real-group ( obj -- ) ;
+GENERIC: set-real-group ( obj -- )
 
-GENERIC: set-effective-group ( obj -- ) ;
+GENERIC: set-effective-group ( obj -- )
 
 : (with-real-group) ( string/id quot -- )
     $[ _ set-real-group @ ]

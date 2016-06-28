@@ -12,7 +12,7 @@ IN: text-to-speech
 ! 3. core-audio?
 ! 4. use google-translate-tts, download and play?
 
-HOOK: speak-text os ( str -- ) ;
+HOOK: speak-text os ( str -- )
 
 {
     { [ os macosx?  ] [ "text-to-speech.macosx"  ] }
@@ -20,7 +20,7 @@ HOOK: speak-text os ( str -- ) ;
     { [ os windows? ] [ "text-to-speech.windows" ] }
 } cond require
 
-GENERIC: speak ( obj -- ) ;
+GENERIC: speak ( obj -- )
 
 M: object speak present speak-text ;
 

@@ -34,7 +34,7 @@ CONSTANT: codebook-style
         { MARKUP   [ XML-CHUNK[[ <b><font color="#333333"><-></font></b> ]] ] }
         { OPERATOR [ XML-CHUNK[[ <b><font color="#111111"><-></font></b> ]] ] }
         [ drop ]
-    } ;
+    }
 
 : first-line ( filename encoding -- line )
     [ readln ] with-file-reader ;

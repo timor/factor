@@ -20,9 +20,9 @@ rename-insn-temps DEFINES ${NAME}-insn-temps
 
 WHERE
 
-GENERIC: rename-insn-defs ( insn -- ) ;
-GENERIC: rename-insn-uses ( insn -- ) ;
-GENERIC: rename-insn-temps ( insn -- ) ;
+GENERIC: rename-insn-defs ( insn -- )
+GENERIC: rename-insn-uses ( insn -- )
+GENERIC: rename-insn-temps ( insn -- )
 
 M: insn rename-insn-defs drop ;
 M: insn rename-insn-uses drop ;

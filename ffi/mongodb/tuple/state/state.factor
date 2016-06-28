@@ -5,7 +5,7 @@ IN: mongodb.tuple.state
 
 PRIVATE<
 
-CONSTANT: MDB_TUPLE_INFO       "_mfd_t_info" ;
+CONSTANT: MDB_TUPLE_INFO       "_mfd_t_info"
 
 PRIVATE>
 

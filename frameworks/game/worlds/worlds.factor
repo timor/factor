@@ -14,13 +14,13 @@ TUPLE: game-world < world
     { audio-engine-voice-count initial: 16 }
     { tick-slice float initial: 0.0 } ;
 
-GENERIC: begin-game-world ( world -- ) ;
+GENERIC: begin-game-world ( world -- )
 M: object begin-game-world drop ;
 
-GENERIC: end-game-world ( world -- ) ;
+GENERIC: end-game-world ( world -- )
 M: object end-game-world drop ;
 
-GENERIC: tick-game-world ( world -- ) ;
+GENERIC: tick-game-world ( world -- )
 M: object tick-game-world drop ;
 
 M: game-world tick*

@@ -75,9 +75,9 @@ IN: rosetta-code.dice7
     outcomes error fair-counts?
     "Random enough" "Not random enough" ? . ; inline
 
-CONSTANT: trial-counts { 1 10 100 1000 10000 100000 1000000 } ;
-CONSTANT: #sides 7 ;
-CONSTANT: error-delta 0.02 ;
+CONSTANT: trial-counts { 1 10 100 1000 10000 100000 1000000 }
+CONSTANT: #sides 7
+CONSTANT: error-delta 0.02
 
 : verify-all ( -- )
     #sides trial-counts [

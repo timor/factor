@@ -6,7 +6,7 @@ IN: benchmark.binary-trees
 
 TUPLE: tree-node item left right ;
 
-C: <tree-node> tree-node ;
+C: <tree-node> tree-node
 
 : bottom-up-tree ( item depth -- tree )
     dup 0 > [
@@ -18,14 +18,14 @@ C: <tree-node> tree-node ;
         drop f f
     ] if <tree-node> ; inline recursive
 
-GENERIC: item-check ( node -- n ) ;
+GENERIC: item-check ( node -- n )
 
 M: tree-node item-check
     [ item>> ] [ left>> ] [ right>> ] tri [ item-check ] bi@ - + ;
 
 M: f item-check drop 0 ;
 
-CONSTANT: min-depth 4 ;
+CONSTANT: min-depth 4
 
 : stretch-tree ( max-depth -- )
     1 + 0 over bottom-up-tree item-check

@@ -36,7 +36,7 @@ M: circular virtual-exemplar seq>> ; inline
 : <circular-string> ( n -- circular )
     0 <string> <circular> ; inline
 
-INSTANCE: circular virtual-sequence ;
+INSTANCE: circular virtual-sequence
 
 TUPLE: growing-circular < circular { length integer } ;
 

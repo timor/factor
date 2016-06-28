@@ -28,7 +28,7 @@ TUPLE: script-string < disposable font string metrics ssa size image ;
 
 PRIVATE<
 
-CONSTANT: ssa-dwFlags flags{ SSA_GLYPHS SSA_FALLBACK SSA_TAB } ;
+CONSTANT: ssa-dwFlags flags{ SSA_GLYPHS SSA_FALLBACK SSA_TAB }
 
 : make-ssa ( dc script-string -- ssa )
     dup selection? [ string>> ] when

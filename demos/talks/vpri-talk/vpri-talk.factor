@@ -485,7 +485,7 @@ CONSTANT: vpri-slides
         "Factor has many cool things that I didn't talk about"
         "Questions?"
     }
-} ;
+}
 
 : vpri-talk ( -- ) vpri-slides "VPRI talk" slides-window ;
 

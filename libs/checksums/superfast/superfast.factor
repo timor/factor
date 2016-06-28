@@ -8,7 +8,7 @@ math.bitwise math.ranges sequences sequences.private ;
 IN: checksums.superfast
 
 TUPLE: superfast seed ;
-C: <superfast> superfast ;
+C: <superfast> superfast
 
 PRIVATE<
 

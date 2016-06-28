@@ -34,7 +34,7 @@ CONSTANT: seh-names
         { $\ STATUS_FLOAT_MULTIPLE_FAULTS      "STATUS_FLOAT_MULTIPLE_FAULTS"    }
         { $\ STATUS_FLOAT_MULTIPLE_TRAPS       "STATUS_FLOAT_MULTIPLE_TRAPS"     }
         { 0xe06d7363 "Visual C++ exception" }
-    } ;
+    }
 
 : seh-name. ( n -- )
     seh-names at [ " (" ")" surround write ] when* ;

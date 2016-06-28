@@ -16,7 +16,7 @@ SYMBOL: progress
 
 SYMBOL: unhandled-min-heap
 
-GENERIC: interval/sync-point-key ( interval/sync-point -- key ) ;
+GENERIC: interval/sync-point-key ( interval/sync-point -- key )
 
 M: live-interval-state interval/sync-point-key
     [ ranges>> ranges-endpoints ] [ vreg>> ] bi 3array ;

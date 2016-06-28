@@ -7,7 +7,7 @@ IN: mirrors
 
 TUPLE: mirror { object read-only } ;
 
-C: <mirror> mirror ;
+C: <mirror> mirror
 
 : object-slots ( mirror -- slots ) object>> class-of all-slots ; inline
 
@@ -53,9 +53,9 @@ M: mirror values ( mirror -- values )
 M: mirror assoc-size
     object>> class-of class-size ;
 
-INSTANCE: mirror assoc ;
+INSTANCE: mirror assoc
 
-GENERIC: make-mirror ( obj -- assoc ) ;
+GENERIC: make-mirror ( obj -- assoc )
 M: hashtable make-mirror ;
 M: hash-set make-mirror members make-mirror ;
 M: integer make-mirror drop f ;

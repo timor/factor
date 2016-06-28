@@ -1,6 +1,6 @@
 USING: specialized-arrays sequences.complex
 kernel sequences tools.test arrays accessors ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAY: c:float
 IN: sequences.complex.tests
 

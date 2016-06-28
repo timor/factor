@@ -41,7 +41,7 @@ are$delineated$by$a$single$'dollar'$character,$write$a$program
 that$aligns$each$column$of$fields$by$ensuring$that$words$in$each$
 column$are$separated$by$at$least$one$space.
 Further,$allow$for$each$word$in$a$column$to$be$either$left$
-justified,$right$justified,$or$center$justified$within$its$column." ;
+justified,$right$justified,$or$center$justified$within$its$column."
 
 : split-and-pad ( text -- lines )
     "\n" split [ "$" split harvest ] map
@@ -53,7 +53,7 @@ justified,$right$justified,$or$center$justified$within$its$column." ;
 
 SINGLETONS: +left+ +middle+ +right+ ;
 
-GENERIC: align-string ( str n alignment -- str' ) ;
+GENERIC: align-string ( str n alignment -- str' )
 
 M: +left+ align-string  drop char: space pad-tail ;
 M: +right+ align-string drop char: space pad-head ;

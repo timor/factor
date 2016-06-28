@@ -10,23 +10,23 @@ TUPLE: mx < disposable fd reads writes ;
         H{ } clone >>reads
         H{ } clone >>writes ; inline
 
-GENERIC: add-input-callback ( thread fd mx -- ) ;
+GENERIC: add-input-callback ( thread fd mx -- )
 
 M: mx add-input-callback reads>> push-at ;
 
-GENERIC: add-output-callback ( thread fd mx -- ) ;
+GENERIC: add-output-callback ( thread fd mx -- )
 
 M: mx add-output-callback writes>> push-at ;
 
-GENERIC: remove-input-callbacks ( fd mx -- callbacks ) ;
+GENERIC: remove-input-callbacks ( fd mx -- callbacks )
 
 M: mx remove-input-callbacks reads>> delete-at* drop ;
 
-GENERIC: remove-output-callbacks ( fd mx -- callbacks ) ;
+GENERIC: remove-output-callbacks ( fd mx -- callbacks )
 
 M: mx remove-output-callbacks writes>> delete-at* drop ;
 
-GENERIC: wait-for-events ( nanos mx -- ) ;
+GENERIC: wait-for-events ( nanos mx -- )
 
 : input-available ( fd mx -- )
     reads>> delete-at* drop [ resume ] each ;

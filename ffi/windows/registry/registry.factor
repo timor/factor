@@ -10,7 +10,7 @@ ERROR: open-key-failed key subkey mode error-string ;
 ERROR: create-key-failed hKey lpSubKey lpClass dwOptions
 samDesired lpSecurityAttributes phkResult lpdwDisposition ;
 
-CONSTANT: registry-value-max-length 16384 ;
+CONSTANT: registry-value-max-length 16384
 
 :: open-key ( key subkey mode -- hkey )
     key subkey 0 mode 0 HKEY <ref>

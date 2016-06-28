@@ -4,7 +4,7 @@ specialized-arrays bit-arrays ;
 SPECIALIZED-ARRAY: double
 IN: benchmark.dispatch3
 
-GENERIC: g ( obj -- str ) ;
+GENERIC: g ( obj -- str )
 
 M: assoc g drop "assoc" ;
 

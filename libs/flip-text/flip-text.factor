@@ -86,7 +86,7 @@ CONSTANT: CHARS H{
     { 0x2045 0x2046 }
     { 0x2234 0x2235 }
     { char: \r char: \n   }
-} ;
+}
 
 CHARS [ CHARS set-at ] assoc-each
 

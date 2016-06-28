@@ -39,7 +39,7 @@ SYMBOL: build-images-destination
 ! e.g. C:\Users\\Doug\\AppData\\Local\\Temp/factorcode.org\\Factor/checksums.txt
 ! ssh: Could not resolve hostname c: no address associated with name
 
-HOOK: scp-name os ( -- path ) ;
+HOOK: scp-name os ( -- path )
 M: object scp-name "scp" ;
 M: windows scp-name "pscp" ;
 

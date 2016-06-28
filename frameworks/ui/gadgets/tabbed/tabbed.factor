@@ -13,8 +13,8 @@ PRIVATE<
 : <lip> ( -- gadget )
     "active-tab-lip" theme-image <icon> ;
 
-CONSTANT: button-background color: FactorTan ;
-CONSTANT: active-tab-background color: FactorDarkTan ;
+CONSTANT: button-background color: FactorTan
+CONSTANT: active-tab-background color: FactorDarkTan
 
 : <tab-pen> ( -- pen )
     "inactive-tab" button-background f <border-button-state-pen> dup dup

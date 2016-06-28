@@ -5,15 +5,15 @@ destructors io io.backend io.encodings.utf8 io.files kernel
 kernel.private math sequences threads.private ;
 IN: io.streams.c
 
-PRIMITIVE: (fopen) ( path mode -- alien ) ;
-PRIMITIVE: fclose ( alien -- ) ;
-PRIMITIVE: fflush ( alien -- ) ;
-PRIMITIVE: fgetc ( alien -- byte/f ) ;
-PRIMITIVE: fputc ( byte alien -- ) ;
-PRIMITIVE: fread-unsafe ( n buf alien -- count ) ;
-PRIMITIVE: fseek ( alien offset whence -- ) ;
-PRIMITIVE: ftell ( alien -- n ) ;
-PRIMITIVE: fwrite ( data length alien -- ) ;
+PRIMITIVE: (fopen) ( path mode -- alien )
+PRIMITIVE: fclose ( alien -- )
+PRIMITIVE: fflush ( alien -- )
+PRIMITIVE: fgetc ( alien -- byte/f )
+PRIMITIVE: fputc ( byte alien -- )
+PRIMITIVE: fread-unsafe ( n buf alien -- count )
+PRIMITIVE: fseek ( alien offset whence -- )
+PRIMITIVE: ftell ( alien -- n )
+PRIMITIVE: fwrite ( data length alien -- )
 
 TUPLE: c-stream < disposable handle ;
 
@@ -23,8 +23,8 @@ TUPLE: c-stream < disposable handle ;
 M: c-stream dispose* handle>> fclose ;
 
 TUPLE: c-writer < c-stream ;
-INSTANCE: c-writer output-stream ;
-INSTANCE: c-writer file-writer ;
+INSTANCE: c-writer output-stream
+INSTANCE: c-writer file-writer
 
 : <c-writer> ( handle -- stream ) c-writer new-c-stream ;
 
@@ -39,8 +39,8 @@ M: c-writer stream-flush
     check-disposed handle>> fflush ;
 
 TUPLE: c-reader < c-stream ;
-INSTANCE: c-reader input-stream ;
-INSTANCE: c-reader file-reader ;
+INSTANCE: c-reader input-stream
+INSTANCE: c-reader file-reader
 
 : <c-reader> ( handle -- stream ) c-reader new-c-stream ;
 

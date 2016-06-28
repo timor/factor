@@ -528,29 +528,29 @@ DESTRUCTOR: yaml_event_delete
 !  */
 
 ! /** The tag @c !!null with the only possible value: @c null. */
-CONSTANT:  YAML_NULL_TAG       "tag:yaml.org,2002:null" ;
+CONSTANT:  YAML_NULL_TAG       "tag:yaml.org,2002:null"
 ! /** The tag @c !!bool with the values: @c true and @c falce. */
-CONSTANT:  YAML_BOOL_TAG       "tag:yaml.org,2002:bool" ;
+CONSTANT:  YAML_BOOL_TAG       "tag:yaml.org,2002:bool"
 ! /** The tag @c !!str for string values. */
-CONSTANT:  YAML_STR_TAG        "tag:yaml.org,2002:str" ;
+CONSTANT:  YAML_STR_TAG        "tag:yaml.org,2002:str"
 ! /** The tag @c !!int for integer values. */
-CONSTANT:  YAML_INT_TAG        "tag:yaml.org,2002:int" ;
+CONSTANT:  YAML_INT_TAG        "tag:yaml.org,2002:int"
 ! /** The tag @c !!float for float values. */
-CONSTANT:  YAML_FLOAT_TAG      "tag:yaml.org,2002:float" ;
+CONSTANT:  YAML_FLOAT_TAG      "tag:yaml.org,2002:float"
 ! /** The tag @c !!timestamp for date and time values. */
-CONSTANT:  YAML_TIMESTAMP_TAG  "tag:yaml.org,2002:timestamp" ;
+CONSTANT:  YAML_TIMESTAMP_TAG  "tag:yaml.org,2002:timestamp"
 
 ! /** The tag @c !!seq is used to denote sequences. */
-CONSTANT:  YAML_SEQ_TAG        "tag:yaml.org,2002:seq" ;
+CONSTANT:  YAML_SEQ_TAG        "tag:yaml.org,2002:seq"
 ! /** The tag @c !!map is used to denote mapping. */
-CONSTANT:  YAML_MAP_TAG        "tag:yaml.org,2002:map" ;
+CONSTANT:  YAML_MAP_TAG        "tag:yaml.org,2002:map"
 
 ! /** The default scalar tag is @c !!str. */
-CONSTANT:  YAML_DEFAULT_SCALAR_TAG     $\ YAML_STR_TAG ;
+CONSTANT:  YAML_DEFAULT_SCALAR_TAG     $\ YAML_STR_TAG
 ! /** The default sequence tag is @c !!seq. */
-CONSTANT:  YAML_DEFAULT_SEQUENCE_TAG   $\ YAML_SEQ_TAG ;
+CONSTANT:  YAML_DEFAULT_SEQUENCE_TAG   $\ YAML_SEQ_TAG
 ! /** The default mapping tag is @c !!map. */
-CONSTANT:  YAML_DEFAULT_MAPPING_TAG    $\ YAML_MAP_TAG ;
+CONSTANT:  YAML_DEFAULT_MAPPING_TAG    $\ YAML_MAP_TAG
 
 ! /** Node types. */
 ENUM: yaml_node_type_t

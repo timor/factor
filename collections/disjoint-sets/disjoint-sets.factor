@@ -25,7 +25,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: representative ( a disjoint-set -- p ) ;
+GENERIC: representative ( a disjoint-set -- p )
 
 M:: disjoint-set representative ( a disjoint-set -- p )
     a disjoint-set parents>> at set: p
@@ -51,7 +51,7 @@ PRIVATE>
 : <disjoint-set> ( -- disjoint-set )
     H{ } clone H{ } clone H{ } clone disjoint-set boa ;
 
-GENERIC: add-atom ( a disjoint-set -- ) ;
+GENERIC: add-atom ( a disjoint-set -- )
 
 M: disjoint-set add-atom
     [ dupd parents>> set-at ]
@@ -61,24 +61,24 @@ M: disjoint-set add-atom
 
 : add-atoms ( seq disjoint-set -- ) $[ _ add-atom ] each ;
 
-GENERIC: disjoint-set-member? ( a disjoint-set -- ? ) ;
+GENERIC: disjoint-set-member? ( a disjoint-set -- ? )
 
 M: disjoint-set disjoint-set-member? parents>> key? ;
 
-GENERIC: disjoint-set-members ( disjoint-set -- seq ) ;
+GENERIC: disjoint-set-members ( disjoint-set -- seq )
 
 M: disjoint-set disjoint-set-members parents>> keys ;
 
-GENERIC: equiv-set-size ( a disjoint-set -- n ) ;
+GENERIC: equiv-set-size ( a disjoint-set -- n )
 
 M: disjoint-set equiv-set-size
     [ representative ] keep counts>> at ;
 
-GENERIC: equiv? ( a b disjoint-set -- ? ) ;
+GENERIC: equiv? ( a b disjoint-set -- ? )
 
 M: disjoint-set equiv? representatives = ;
 
-GENERIC: equate ( a b disjoint-set -- ) ;
+GENERIC: equate ( a b disjoint-set -- )
 
 M:: disjoint-set equate ( a b disjoint-set -- )
     a b disjoint-set representatives

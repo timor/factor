@@ -6,7 +6,7 @@ unicode sequences.deep accessors ;
 IN: parser-combinators
 
 ! Parser combinator protocol
-GENERIC: parse ( input parser -- list ) ;
+GENERIC: parse ( input parser -- list )
 
 M: promise parse ( input parser -- list )
     force parse ;
@@ -22,7 +22,7 @@ ERROR: cannot-parse input ;
         nip car parsed>>
     ] if ;
 
-C: <parse-result> parse-result ;
+C: <parse-result> parse-result
 
 : <parse-results> ( parsed unparsed -- list )
     <parse-result> 1list ;
@@ -52,7 +52,7 @@ C: <parse-result> parse-result ;
 
 TUPLE: token-parser string ignore-case? ;
 
-C: <token-parser> token-parser ;
+C: <token-parser> token-parser
 
 : token ( string -- parser ) f <token-parser> ;
 
@@ -69,7 +69,7 @@ M:: token-parser parse ( input parser -- list )
 
 TUPLE: satisfy-parser quot ;
 
-C: satisfy satisfy-parser ;
+C: satisfy satisfy-parser
 
 M: satisfy-parser parse ( input parser -- list )
     ! A parser that succeeds if the predicate,
@@ -87,7 +87,7 @@ LAZY: any-char-parser ( -- parser )
 
 TUPLE: epsilon-parser ;
 
-C: epsilon epsilon-parser ;
+C: epsilon epsilon-parser
 
 M: epsilon-parser parse ( input parser -- list )
     ! A parser that parses the empty string. It
@@ -98,7 +98,7 @@ M: epsilon-parser parse ( input parser -- list )
 
 TUPLE: succeed-parser result ;
 
-C: succeed succeed-parser ;
+C: succeed succeed-parser
 
 M: succeed-parser parse ( input parser -- list )
     ! A parser that always returns 'result' as a
@@ -107,7 +107,7 @@ M: succeed-parser parse ( input parser -- list )
 
 TUPLE: fail-parser ;
 
-C: fail fail-parser ;
+C: fail fail-parser
 
 M: fail-parser parse ( input parser -- list )
     ! A parser that always fails and returns
@@ -188,7 +188,7 @@ TUPLE: sp-parser p1 ;
 
 ! Return a parser that first skips all whitespace before
 ! calling the original parser.
-C: sp sp-parser ;
+C: sp sp-parser
 
 M: sp-parser parse ( input parser -- list )
     ! Skip all leading whitespace from the input then call
@@ -197,7 +197,7 @@ M: sp-parser parse ( input parser -- list )
 
 TUPLE: just-parser p1 ;
 
-C: just just-parser ;
+C: just just-parser
 
 M: just-parser parse ( input parser -- result )
     ! Calls the given parser on the input removes
@@ -208,7 +208,7 @@ M: just-parser parse ( input parser -- result )
 
 TUPLE: apply-parser p1 quot ;
 
-C: <@ apply-parser ;
+C: <@ apply-parser
 
 M: apply-parser parse ( input parser -- result )
     ! Calls the parser on the input. For each successful
@@ -224,7 +224,7 @@ M: apply-parser parse ( input parser -- result )
 
 TUPLE: some-parser p1 ;
 
-C: some some-parser ;
+C: some some-parser
 
 M: some-parser parse ( input parser -- result )
     ! Calls the parser on the input, guarantees

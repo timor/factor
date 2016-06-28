@@ -35,7 +35,7 @@ IN: serialize.tests
 
 TUPLE: serialize-test a b ;
 
-C: <serialize-test> serialize-test ;
+C: <serialize-test> serialize-test
 
 CONSTANT: objects
     {
@@ -62,7 +62,7 @@ CONSTANT: objects
         COMPILE< 1 [ 2 ] curry suffix! COMPILE>
         { { "a" "bc" } { "de" "fg" } }
         H{ { "a" "bc" } { "de" "fg" } }
-    } ;
+    }
 
 : check-serialize-1 ( obj -- ? )
     "=====" print

@@ -53,8 +53,8 @@ M: A like
 
 SYNTAX: V{ \ } [ >V ] parse-literal ;
 
-INSTANCE: V specialized-vector ;
-INSTANCE: V growable ;
+INSTANCE: V specialized-vector
+INSTANCE: V growable
 
 FUNCTOR>
 

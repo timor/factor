@@ -16,10 +16,10 @@ MACRO: com-invoke ( n return parameters -- quot )
     ] ;
 
 TUPLE: com-interface-definition word parent iid functions ;
-C: <com-interface-definition> com-interface-definition ;
+C: <com-interface-definition> com-interface-definition
 
 TUPLE: com-function-definition return name parameter-types parameter-names ;
-C: <com-function-definition> com-function-definition ;
+C: <com-function-definition> com-function-definition
 
 SYMBOL: +com-interface-definitions+
 +com-interface-definitions+ get-global

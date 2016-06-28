@@ -27,10 +27,10 @@ ERROR: bad-vreg vreg ;
 TUPLE: loc { n integer } ;
 
 TUPLE: ds-loc < loc ;
-C: <ds-loc> ds-loc ;
+C: <ds-loc> ds-loc
 
 TUPLE: rs-loc < loc ;
-C: <rs-loc> rs-loc ;
+C: <rs-loc> rs-loc
 
 SYNTAX: \ D: scan-number <ds-loc> suffix! ;
 SYNTAX: \ d: scan-number <ds-loc> suffix! ;

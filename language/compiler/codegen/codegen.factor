@@ -14,7 +14,7 @@ SYMBOL: insn-counts
 
 H{ } clone insn-counts set-global
 
-GENERIC: generate-insn ( insn -- ) ;
+GENERIC: generate-insn ( insn -- )
 
 ! Control flow
 SYMBOL: labels
@@ -32,9 +32,9 @@ SYMBOL: labels
 M: ##branch generate-insn
     drop basic-block get dup successors>> first emit-branch ;
 
-GENERIC: generate-conditional-insn ( label insn -- ) ;
+GENERIC: generate-conditional-insn ( label insn -- )
 
-GENERIC: negate-insn-cc ( insn -- ) ;
+GENERIC: negate-insn-cc ( insn -- )
 
 M: conditional-branch-insn negate-insn-cc
     [ negate-cc ] change-cc drop ;

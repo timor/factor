@@ -8,7 +8,7 @@ IN: hashtables.sequences
 
 TUPLE: sequence-wrapper < wrapped-key ;
 
-C: <sequence-wrapper> sequence-wrapper ;
+C: <sequence-wrapper> sequence-wrapper
 
 M: sequence-wrapper equal?
     over sequence-wrapper?

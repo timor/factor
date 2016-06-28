@@ -3,7 +3,7 @@ USING: accessors alien alien.data audio classes.struct fry
 calendar timers combinators combinators.short-circuit
 destructors generalizations kernel literals locals math openal
 sequences sequences.generalizations specialized-arrays strings ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAYS: c:float c:uchar c:uint ;
 IN: audio.engine
 
@@ -19,7 +19,7 @@ TUPLE: audio-orientation-state
     { forward initial: { 0.0 0.0 -1.0 } }
     { up initial: { 0.0 1.0 0.0 } } ;
 
-C: <audio-orientation-state> audio-orientation-state ;
+C: <audio-orientation-state> audio-orientation-state
 
 : orientation>float-array ( orientation -- float-array )
     [ forward>> first3 ]
@@ -31,13 +31,13 @@ TUPLE: audio-listener
     { velocity initial: { 0.0 0.0 0.0 } }
     { orientation initial: T{ audio-orientation-state } } ;
 
-GENERIC: audio-position ( source/listener -- position ) ;
-GENERIC: audio-gain ( source/listener -- gain ) ;
-GENERIC: audio-velocity ( source/listener -- velocity ) ;
-GENERIC: audio-relative? ( source -- relative? ) ;
-GENERIC: audio-distance ( source -- distance ) ;
-GENERIC: audio-rolloff ( source -- rolloff ) ;
-GENERIC: audio-orientation ( listener -- orientation ) ;
+GENERIC: audio-position ( source/listener -- position )
+GENERIC: audio-gain ( source/listener -- gain )
+GENERIC: audio-velocity ( source/listener -- velocity )
+GENERIC: audio-relative? ( source -- relative? )
+GENERIC: audio-distance ( source -- distance )
+GENERIC: audio-rolloff ( source -- rolloff )
+GENERIC: audio-orientation ( listener -- orientation )
 
 M: object audio-position drop { 0.0 0.0 0.0 } ; inline
 M: object audio-gain drop 1.0 ; inline
@@ -59,8 +59,8 @@ M: audio-listener audio-gain gain>> ; inline
 M: audio-listener audio-velocity velocity>> ; inline
 M: audio-listener audio-orientation orientation>> ; inline
 
-GENERIC: generate-audio ( generator -- c-ptr size ) ;
-GENERIC: generator-audio-format ( generator -- channels sample-bits sample-rate ) ;
+GENERIC: generate-audio ( generator -- c-ptr size )
+GENERIC: generator-audio-format ( generator -- channels sample-bits sample-rate )
 
 TUPLE: audio-engine < disposable
     { voice-count integer }
@@ -183,7 +183,7 @@ PRIVATE<
         [ AL_ROLLOFF_FACTOR swap audio-rolloff alSourcef ]
     } 2cleave ;
 
-GENERIC: (update-audio-clip) ( audio-clip -- ) ;
+GENERIC: (update-audio-clip) ( audio-clip -- )
 
 M: static-audio-clip (update-audio-clip)
     drop ;

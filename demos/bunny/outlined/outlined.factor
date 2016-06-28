@@ -16,7 +16,7 @@ main()
     gl_FragData[0] = cel_light();
     gl_FragData[1] = vec4(normal, 1);
 }
-]] ;
+]]
 
 CONSTANT: outlined-pass2-vertex-shader-source [[
 varying vec2 coord;
@@ -27,7 +27,7 @@ main()
     gl_Position = ftransform();
     coord = (gl_Vertex * vec4(0.5) + vec4(0.5)).xy;
 }
-]] ;
+]]
 
 CONSTANT: outlined-pass2-fragment-shader-source [[
 uniform sampler2D colormap, normalmap, depthmap;
@@ -108,7 +108,7 @@ main()
 {
     gl_FragColor = mix(texture2D(colormap, coord), line_color, border_factor(coord));
 }
-]] ;
+]]
 
 TUPLE: bunny-outlined
     gadget

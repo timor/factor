@@ -71,7 +71,7 @@ ERROR: unknown-format n ;
 
 ERROR: cannot-convert obj ;
 
-GENERIC: write-msgpack ( obj -- ) ;
+GENERIC: write-msgpack ( obj -- )
 
 PRIVATE<
 
@@ -147,7 +147,7 @@ M: assoc write-msgpack
 
 PRIVATE>
 
-GENERIC: msgpack> ( seq -- obj ) ;
+GENERIC: msgpack> ( seq -- obj )
 
 M: string msgpack>
     [ read-msgpack ] with-string-reader ;

@@ -7,12 +7,12 @@ IN: help.home
 
 SYMBOLS: recent-words recent-articles recent-vocabs recent-searches ;
 
-CONSTANT: recent-count 10 ;
+CONSTANT: recent-count 10
 
 { recent-words recent-articles recent-vocabs recent-searches }
 [ [ V{ } clone ] initialize ] each
 
-GENERIC: add-recent-where ( obj -- obj symbol ) ;
+GENERIC: add-recent-where ( obj -- obj symbol )
 
 M: link add-recent-where recent-articles ;
 M: word-link add-recent-where recent-words ;

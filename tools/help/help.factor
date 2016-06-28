@@ -8,7 +8,7 @@ namespaces prettyprint sequences sets sorting vocabs words
 words.symbol ;
 IN: help
 
-GENERIC: word-help* ( word -- content ) ;
+GENERIC: word-help* ( word -- content )
 
 : word-help ( word -- content )
     dup "help" word-prop [ ] [ word-help* ] ?if ;

@@ -35,10 +35,10 @@ SYMBOL: xim
     [ "XCreateIC() failed" throw ] unless* ;
 
 COMPILE<
-CONSTANT: buf-size 100 ;
+CONSTANT: buf-size 100
 COMPILE>
 
-CONSTANT: buf $$[ buf-size <byte-array> ] ;
+CONSTANT: buf $$[ buf-size <byte-array> ]
 
 : lookup-string ( event xic -- string keysym )
     swap buf buf-size { KeySym } [ 0 int <ref>

@@ -33,7 +33,7 @@ CONSTANT: node-colors {
     { quotation "#449900" }
     { word "#00ffcc" }
     { wrapper "#ffaa77" }
-} ;
+}
 
 : heap-node>color ( heap-node -- color )
     object>> class-of node-colors at ;

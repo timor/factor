@@ -42,7 +42,7 @@ TUPLE: echo type identifier sequence data ;
 
 PRIVATE>
 
-HOOK: <ping-port> os ( inet -- port ) ;
+HOOK: <ping-port> os ( inet -- port )
 
 M: object <ping-port> <raw> ;
 

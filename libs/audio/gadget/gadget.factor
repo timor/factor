@@ -11,8 +11,8 @@ TUPLE: audio-gadget < button
 
 PRIVATE<
 
-CONSTANT: play-label-image-path "vocab:audio/gadget/play.png" ;
-CONSTANT: pause-label-image-path "vocab:audio/gadget/pause.png" ;
+CONSTANT: play-label-image-path "vocab:audio/gadget/play.png"
+CONSTANT: pause-label-image-path "vocab:audio/gadget/pause.png"
 
 SYMBOLS: play-label-image pause-label-image gadget-audio-engine ;
 

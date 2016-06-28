@@ -8,7 +8,7 @@ tools.deploy.config.editor tools.deploy.windows.ico
 vocabs.loader vocabs.metadata windows.shell32 windows.user32 ;
 IN: tools.deploy.windows
 
-CONSTANT: app-icon-resource-id "APPICON" ;
+CONSTANT: app-icon-resource-id "APPICON"
 
 :: copy-vm ( executable bundle-name extension -- vm-path )
     vm-path "." split1-last drop extension append

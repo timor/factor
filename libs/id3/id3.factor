@@ -43,7 +43,7 @@ CONSTANT: genres
         "Polsk Punk" "Beat" "Christian Gangsta Rap" "Heavy Metal"
         "Black Metal" "Crossover" "Contemporary Christian"
         "Christian Rock"
-    } ;
+    }
 
 TUPLE: header version flags size ;
 
@@ -63,9 +63,9 @@ speed genre-name start-time end-time ;
 
 : id3v2? ( seq -- ? ) "ID3" head? ; inline
 
-CONSTANT: id3v1-length 128 ;
-CONSTANT: id3v1-offset 128 ;
-CONSTANT: id3v1+-length 227 ;
+CONSTANT: id3v1-length 128
+CONSTANT: id3v1-offset 128
+CONSTANT: id3v1+-length 227
 : id3v1+-offset ( -- n ) id3v1-length id3v1+-length + ; inline
 
 : id3v1? ( seq -- ? )

@@ -8,7 +8,7 @@ IN: vocabs.hierarchy
 
 TUPLE: vocab-prefix name ;
 
-C: <vocab-prefix> vocab-prefix ;
+C: <vocab-prefix> vocab-prefix
 
 M: vocab-prefix vocab-name name>> ;
 

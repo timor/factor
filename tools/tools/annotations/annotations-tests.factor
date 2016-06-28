@@ -9,7 +9,7 @@ IN: tools.annotations.tests
 { } [ foo ] unit-test
 
 ! erg's bug
-GENERIC: some-generic ( a -- b ) ;
+GENERIC: some-generic ( a -- b )
 
 M: integer some-generic 1 + ;
 
@@ -28,7 +28,7 @@ M: integer some-generic 1 + ;
 { 2 } [ 3 some-generic ] unit-test
 
 ! slava's bug
-GENERIC: another-generic ( a -- b ) ;
+GENERIC: another-generic ( a -- b )
 
 M: object another-generic ;
 
@@ -43,7 +43,7 @@ M: object another-generic ;
 ! reset should do the right thing for generic words
 { } [ \ another-generic watch ] unit-test
 
-GENERIC: blah-generic ( a -- b ) ;
+GENERIC: blah-generic ( a -- b )
 
 M: string blah-generic ;
 
@@ -52,7 +52,7 @@ M: string blah-generic ;
 { "hi" } [ "hi" blah-generic ] unit-test
 
 ! See how well watch interacts with optimizations.
-GENERIC: my-generic ( a -- b ) ;
+GENERIC: my-generic ( a -- b )
 M: object my-generic ;
 
 \ my-generic watch

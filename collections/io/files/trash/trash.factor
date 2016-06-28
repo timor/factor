@@ -5,7 +5,7 @@ USING: combinators system vocabs ;
 
 IN: io.files.trash
 
-HOOK: send-to-trash os ( path -- ) ;
+HOOK: send-to-trash os ( path -- )
 
 {
     { [ os windows? ] [ "io.files.trash.windows" ] }

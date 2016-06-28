@@ -6,15 +6,15 @@ IN: help.topics
 
 TUPLE: link name ;
 
-INSTANCE: link definition-mixin ;
+INSTANCE: link definition-mixin
 
 MIXIN: topic
 
-INSTANCE: link topic ;
+INSTANCE: link topic
 
-INSTANCE: word topic ;
+INSTANCE: word topic
 
-GENERIC: >link ( obj -- obj ) ;
+GENERIC: >link ( obj -- obj )
 M: link >link ;
 M: wrapper >link wrapped>> >link ;
 M: vocab-spec >link ;
@@ -38,12 +38,12 @@ SYMBOL: article-xref
 
 article-xref [ H{ } clone ] initialize
 
-GENERIC: valid-article? ( topic -- ? ) ;
-GENERIC: article-title ( topic -- string ) ;
-GENERIC: article-name ( topic -- string ) ;
-GENERIC: article-content ( topic -- content ) ;
-GENERIC: article-parent ( topic -- parent ) ;
-GENERIC: set-article-parent ( parent topic -- ) ;
+GENERIC: valid-article? ( topic -- ? )
+GENERIC: article-title ( topic -- string )
+GENERIC: article-name ( topic -- string )
+GENERIC: article-content ( topic -- content )
+GENERIC: article-parent ( topic -- parent )
+GENERIC: set-article-parent ( parent topic -- )
 
 M: object article-name article-title ;
 

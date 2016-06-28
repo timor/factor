@@ -4,9 +4,9 @@ USING: kernel kernel.private threads concurrency.mailboxes
 continuations namespaces assocs accessors summary fry ;
 IN: concurrency.messaging
 
-GENERIC: send ( message thread -- ) ;
+GENERIC: send ( message thread -- )
 
-GENERIC: mailbox-of ( thread -- mailbox ) ;
+GENERIC: mailbox-of ( thread -- mailbox )
 
 M: thread mailbox-of
     dup mailbox>>

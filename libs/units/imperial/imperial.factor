@@ -47,9 +47,9 @@ IN: units.imperial
 
 : ells ( n -- dimensioned ) 1+1/4 * yards ;
 
-ALIAS: poles rods ;
+ALIAS: poles rods
 
-ALIAS: perches rods ;
+ALIAS: perches rods
 
 : ramsdens-chains ( n -- dimensioned ) 100 * feet ;
 
@@ -160,7 +160,7 @@ DEFER: imperial-fluid-ounces
 
 : beer-butts ( n -- dimensioned ) 2 * beer-hogsheads ;
 
-ALIAS: beer-pipes beer-butts ;
+ALIAS: beer-pipes beer-butts
 
 : beer-tuns ( n -- dimensioned ) 2 * beer-pipes ;
 
@@ -176,10 +176,10 @@ ALIAS: beer-pipes beer-butts ;
 
 : wine-punchians ( n -- dimensioned ) 2 * tierces ;
 
-ALIAS: wine-tertians wine-punchians ;
+ALIAS: wine-tertians wine-punchians
 
 : wine-butts ( n -- dimensioned ) 2 * wine-hogsheads ;
 
-ALIAS: wine-pipes wine-butts ;
+ALIAS: wine-pipes wine-butts
 
 : wine-tun ( n -- dimensioned ) 2 * wine-butts ;

@@ -5,7 +5,7 @@ IN: assoc-heaps
 
 TUPLE: assoc-heap assoc heap ;
 
-C: <assoc-heap> assoc-heap ;
+C: <assoc-heap> assoc-heap
 
 : <unique-min-heap> ( -- unique-heap )
     H{ } clone <min-heap> <assoc-heap> ;

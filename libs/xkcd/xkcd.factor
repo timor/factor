@@ -48,7 +48,7 @@ PRIVATE>
 
 TUPLE: xkcd number image ;
 
-C: <xkcd> xkcd ;
+C: <xkcd> xkcd
 
 SYNTAX: \ XKCD: scan-number dup xkcd-image <xkcd> suffix! ;
 

@@ -7,7 +7,7 @@ namespaces sequences math.order ;
 IN: io.streams.limited
 
 TUPLE: limited-stream stream count limit current start stop ;
-INSTANCE: limited-stream input-stream ;
+INSTANCE: limited-stream input-stream
 
 : <limited-stream> ( stream limit -- stream' )
     limited-stream new
@@ -20,7 +20,7 @@ INSTANCE: limited-stream input-stream ;
     [ drop file-info size>> ] 2bi
     <limited-stream> ;
 
-GENERIC#: limit-stream 1 ( stream limit -- stream' ) ;
+GENERIC#: limit-stream 1 ( stream limit -- stream' )
 
 M: decoder limit-stream ( stream limit -- stream' )
     $[ stream>> _ limit-stream ] [ code>> ] [ cr>> ] tri
@@ -145,7 +145,7 @@ M: limited-stream dispose stream>> dispose ;
 M: limited-stream stream-element-type
     stream>> stream-element-type ;
 
-GENERIC: unlimit-stream ( stream -- stream' ) ;
+GENERIC: unlimit-stream ( stream -- stream' )
 
 M: decoder unlimit-stream ( stream -- stream' )
     [ stream>> stream>> ] [ code>> ] [ cr>> ] tri decoder boa ;

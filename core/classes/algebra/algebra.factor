@@ -11,7 +11,7 @@ PRIVATE<
 
 TUPLE: anonymous-union { members read-only } ;
 
-INSTANCE: anonymous-union classoid ;
+INSTANCE: anonymous-union classoid
 
 ERROR: not-classoids sequence ;
 
@@ -33,7 +33,7 @@ M: anonymous-union rank-class drop 6 ;
 
 TUPLE: anonymous-intersection { participants read-only } ;
 
-INSTANCE: anonymous-intersection classoid ;
+INSTANCE: anonymous-intersection classoid
 
 : <anonymous-intersection> ( participants -- classoid )
     check-classoids
@@ -44,7 +44,7 @@ M: anonymous-intersection rank-class drop 4 ;
 
 TUPLE: anonymous-complement { class read-only } ;
 
-INSTANCE: anonymous-complement classoid ;
+INSTANCE: anonymous-complement classoid
 
 : <anonymous-complement> ( object -- classoid )
     check-classoid anonymous-complement boa ;
@@ -61,15 +61,15 @@ DEFER: (class<=)
 
 DEFER: (class-not)
 
-GENERIC: (classes-intersect?) ( first second -- ? ) ;
+GENERIC: (classes-intersect?) ( first second -- ? )
 
 DEFER: (class-and)
 
 DEFER: (class-or)
 
-GENERIC: (flatten-class) ( class -- ) ;
+GENERIC: (flatten-class) ( class -- )
 
-GENERIC: normalize-class ( class -- class' ) ;
+GENERIC: normalize-class ( class -- class' )
 
 M: object normalize-class ;
 

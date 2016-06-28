@@ -1,7 +1,7 @@
 USING: math strings sequences tools.test ;
 IN: multi-methods.tests
 
-GENERIC: legacy-test ( a -- b ) ;
+GENERIC: legacy-test ( a -- b )
 
 M: integer legacy-test sq ;
 M: string legacy-test " hey" append ;

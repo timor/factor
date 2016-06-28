@@ -16,28 +16,28 @@ COMPILE< {
     { [ os unix? ] [ "unix.ffi" ] }
 } cond use-vocab COMPILE>
 
-GENERIC#: with-port 1 ( addrspec port -- addrspec ) ;
+GENERIC#: with-port 1 ( addrspec port -- addrspec )
 
 ! Addressing
 PRIVATE<
 
-GENERIC: protocol ( addrspec -- n ) ;
+GENERIC: protocol ( addrspec -- n )
 
-GENERIC: protocol-family ( addrspec -- af ) ;
+GENERIC: protocol-family ( addrspec -- af )
 
-GENERIC: sockaddr-size ( addrspec -- n ) ;
+GENERIC: sockaddr-size ( addrspec -- n )
 
-GENERIC: make-sockaddr ( addrspec -- sockaddr ) ;
+GENERIC: make-sockaddr ( addrspec -- sockaddr )
 
-GENERIC: make-sockaddr-outgoing ( addrspec -- sockaddr ) ;
+GENERIC: make-sockaddr-outgoing ( addrspec -- sockaddr )
 
-GENERIC: empty-sockaddr ( addrspec -- sockaddr ) ;
+GENERIC: empty-sockaddr ( addrspec -- sockaddr )
 
-GENERIC: address-size ( addrspec -- n ) ;
+GENERIC: address-size ( addrspec -- n )
 
-GENERIC: inet-ntop ( data addrspec -- str ) ;
+GENERIC: inet-ntop ( data addrspec -- str )
 
-GENERIC: inet-pton ( str addrspec -- data ) ;
+GENERIC: inet-pton ( str addrspec -- data )
 
 : make-sockaddr/size-outgoing ( addrspec -- sockaddr size )
     [ make-sockaddr-outgoing ] [ sockaddr-size ] bi ;
@@ -50,13 +50,13 @@ GENERIC: inet-pton ( str addrspec -- data ) ;
 
 M: object make-sockaddr-outgoing make-sockaddr ;
 
-GENERIC: parse-sockaddr ( sockaddr addrspec -- newaddrspec ) ;
+GENERIC: parse-sockaddr ( sockaddr addrspec -- newaddrspec )
 
 M: f parse-sockaddr nip ;
 
-HOOK: sockaddr-of-family os ( alien af -- sockaddr ) ;
+HOOK: sockaddr-of-family os ( alien af -- sockaddr )
 
-HOOK: addrspec-of-family os ( af -- addrspec ) ;
+HOOK: addrspec-of-family os ( af -- addrspec )
 
 PRIVATE>
 
@@ -222,12 +222,12 @@ ERROR: addrinfo-error n string ;
 
 PRIVATE<
 
-GENERIC: (get-local-address) ( handle remote -- sockaddr ) ;
+GENERIC: (get-local-address) ( handle remote -- sockaddr )
 
 : get-local-address ( handle remote -- local )
     [ (get-local-address) ] keep parse-sockaddr ;
 
-GENERIC: (get-remote-address) ( handle remote -- sockaddr ) ;
+GENERIC: (get-remote-address) ( handle remote -- sockaddr )
 
 : get-remote-address ( handle local -- remote )
     [ (get-remote-address) ] keep parse-sockaddr ;
@@ -239,11 +239,11 @@ GENERIC: (get-remote-address) ( handle remote -- sockaddr ) ;
 
 SYMBOL: bind-local-address
 
-GENERIC: establish-connection ( client-out remote -- ) ;
+GENERIC: establish-connection ( client-out remote -- )
 
-GENERIC: remote>handle ( remote -- handle ) ;
+GENERIC: remote>handle ( remote -- handle )
 
-GENERIC: (client) ( remote -- client-in client-out local ) ;
+GENERIC: (client) ( remote -- client-in client-out local )
 
 M: array (client) [ (client) 3array ] attempt-all first3 ;
 
@@ -260,21 +260,21 @@ M: object (client) ( remote -- client-in client-out local )
 
 TUPLE: server-port < port addr encoding ;
 
-GENERIC: (server) ( addrspec -- handle ) ;
+GENERIC: (server) ( addrspec -- handle )
 
-GENERIC: (accept) ( server addrspec -- handle sockaddr ) ;
+GENERIC: (accept) ( server addrspec -- handle sockaddr )
 
 TUPLE: datagram-port < port addr ;
 
-HOOK: (datagram) io-backend ( addr -- datagram ) ;
+HOOK: (datagram) io-backend ( addr -- datagram )
 
 TUPLE: raw-port < port addr ;
 
-HOOK: (raw) io-backend ( addr -- raw ) ;
+HOOK: (raw) io-backend ( addr -- raw )
 
-HOOK: (broadcast) io-backend ( datagram -- datagram ) ;
+HOOK: (broadcast) io-backend ( datagram -- datagram )
 
-HOOK: (receive-unsafe) io-backend ( n buf datagram -- count addrspec ) ;
+HOOK: (receive-unsafe) io-backend ( n buf datagram -- count addrspec )
 
 ERROR: invalid-port object ;
 
@@ -291,7 +291,7 @@ ERROR: invalid-port object ;
 : check-receive ( port -- port )
     check-connectionless-port check-disposed ;
 
-HOOK: (send) io-backend ( bytes addrspec datagram -- ) ;
+HOOK: (send) io-backend ( bytes addrspec datagram -- )
 
 : addrinfo>addrspec ( addrinfo -- addrspec )
     [ [ addr>> ] [ family>> ] bi sockaddr-of-family ]
@@ -303,7 +303,7 @@ HOOK: (send) io-backend ( bytes addrspec datagram -- ) ;
     [ addrinfo>addrspec ] map
     sift ;
 
-HOOK: addrinfo-error-string io-backend ( n -- string ) ;
+HOOK: addrinfo-error-string io-backend ( n -- string )
 
 : prepare-addrinfo ( -- addrinfo )
     addrinfo <struct>
@@ -363,7 +363,7 @@ SYMBOL: remote-address
     check-receive
     [ (receive-unsafe) ] [ addr>> ] bi parse-sockaddr ; inline
 
-CONSTANT: datagram-size 65536 ;
+CONSTANT: datagram-size 65536
 
 :: receive ( datagram -- bytes addrspec )
     datagram-size (byte-array) set: buf
@@ -385,9 +385,9 @@ MEMO: ipv6-supported? ( -- ? )
 [ \ ipv6-supported? reset-memoized ]
 "io.sockets:ipv6-supported?" add-startup-hook
 
-GENERIC: resolve-host ( addrspec -- seq ) ;
+GENERIC: resolve-host ( addrspec -- seq )
 
-HOOK: resolve-localhost os ( -- obj ) ;
+HOOK: resolve-localhost os ( -- obj )
 
 TUPLE: hostname { host maybe{ string } read-only } ;
 
@@ -396,7 +396,7 @@ TUPLE: inet < hostname port ;
 M: inet present
     [ host>> ] [ port>> number>string ] bi ":" glue ;
 
-C: <inet> inet ;
+C: <inet> inet
 
 M: string resolve-host
     f prepare-addrinfo f void* <ref> [
@@ -432,7 +432,7 @@ M: object resolve-localhost
     { T{ ipv4 f "0.0.0.0" } }
     ? ;
 
-HOOK: host-name os ( -- string ) ;
+HOOK: host-name os ( -- string )
 
 M: inet (client) resolve-host (client) ;
 
@@ -462,7 +462,7 @@ M: invalid-local-address summary
 : <any-port-local-inet4> ( -- inet4 ) f 0 <inet4> ;
 : <any-port-local-inet6> ( -- inet6 ) f 0 <inet6> ;
 
-GENERIC: <any-port-local-inet> ( inet -- inet4 ) ;
+GENERIC: <any-port-local-inet> ( inet -- inet4 )
 M: inet4 <any-port-local-inet> drop <any-port-local-inet4> ;
 M: inet6 <any-port-local-inet> drop f 0 <inet6> ;
 

@@ -8,7 +8,7 @@ specialized-arrays classes.struct eval classes.algebra sets
 quotations math.constants compiler.units splitting math.matrices
 math.vectors.simd.cords alien.data ;
 FROM: math.vectors.simd.intrinsics => alien-vector set-alien-vector ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAY: c:float
 IN: math.vectors.simd.tests
 
@@ -52,7 +52,7 @@ CONSTANT: simd-classes
         ulonglong-2
         float-4
         double-2
-    } ;
+    }
 
 SYMBOLS: -> +vector+ +any-vector+ +scalar+ +boolean+ +nonnegative+ +literal+ ;
 
@@ -115,7 +115,7 @@ CONSTANT: vector-words
         { v> { +vector+ +vector+ -> +vector+ } }
         { v>= { +vector+ +vector+ -> +vector+ } }
         { vunordered? { +vector+ +vector+ -> +vector+ } }
-    } ;
+    }
 
 : vector-word-inputs ( schema -- seq ) { -> } split first ;
 

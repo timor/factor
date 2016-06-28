@@ -47,7 +47,7 @@ SYMBOL: current-fdb-kvs-handle
 : get-kvs-handle ( -- handle )
     current-fdb-kvs-handle get handle>> ;
 
-GENERIC: encode-kv ( object -- bytes ) ;
+GENERIC: encode-kv ( object -- bytes )
 
 M: string encode-kv utf8 encode ;
 M: byte-array encode-kv ;

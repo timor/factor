@@ -5,7 +5,7 @@ IN: compiler.tests.redefine13
 
 COMPILE< MACRO: breakage-macro ( a -- quot ) $[ _ breakage-word ] ; COMPILE>
 
-GENERIC: breakage-caller ( a -- c ) ;
+GENERIC: breakage-caller ( a -- c )
 
 M: fixnum breakage-caller 2 breakage-macro ;
 

@@ -6,7 +6,7 @@ IN: spelling
 
 ! http://norvig.com/spell-correct.html
 
-CONSTANT: ALPHABET "abcdefghijklmnopqrstuvwxyz" ;
+CONSTANT: ALPHABET "abcdefghijklmnopqrstuvwxyz"
 
 : deletes ( word -- edits )
     [ length iota ] keep $[ _ remove-nth ] map ;

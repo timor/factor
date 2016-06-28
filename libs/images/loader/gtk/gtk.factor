@@ -43,7 +43,7 @@ CONSTANT: bits>components {
     { 8 ubyte-components }
     { 16 ushort-components }
     { 32 uint-components }
-} ;
+}
 
 : component-type ( GdkPixbuf -- component-type )
     gdk_pixbuf_get_bits_per_sample bits>components at ;

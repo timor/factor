@@ -53,27 +53,27 @@ TUPLE: texture-1d-attachment
     { texture texture-1d-data-target read-only initial: T{ texture-1d } }
     { level integer read-only } ;
 
-C: <texture-1d-attachment> texture-1d-attachment ;
+C: <texture-1d-attachment> texture-1d-attachment
 
 TUPLE: texture-2d-attachment
     { texture texture-2d-data-target read-only initial: T{ texture-2d } }
     { level integer read-only } ;
 
-C: <texture-2d-attachment> texture-2d-attachment ;
+C: <texture-2d-attachment> texture-2d-attachment
 
 TUPLE: texture-3d-attachment
     { texture texture-3d read-only initial: T{ texture-3d } }
     { z-offset integer read-only }
     { level integer read-only } ;
 
-C: <texture-3d-attachment> texture-3d-attachment ;
+C: <texture-3d-attachment> texture-3d-attachment
 
 TUPLE: texture-layer-attachment
     { texture texture-3d-data-target read-only initial: T{ texture-3d } }
     { layer integer read-only }
     { level integer read-only } ;
 
-C: <texture-layer-attachment> texture-layer-attachment ;
+C: <texture-layer-attachment> texture-layer-attachment
 
 UNION: texture-attachment
     texture-1d-attachment texture-2d-attachment texture-3d-attachment texture-layer-attachment ;
@@ -82,7 +82,7 @@ M: texture-attachment dispose texture>> dispose ;
 
 UNION: framebuffer-attachment renderbuffer texture-attachment ;
 
-GENERIC: attachment-object ( attachment -- object ) ;
+GENERIC: attachment-object ( attachment -- object )
 M: renderbuffer attachment-object ;
 M: texture-attachment attachment-object texture>> texture-object ;
 
@@ -121,7 +121,7 @@ TUPLE: framebuffer-rect
     { attachment color-attachment-ref read-only initial: default-attachment }
     { rect rect read-only } ;
 
-C: <framebuffer-rect> framebuffer-rect ;
+C: <framebuffer-rect> framebuffer-rect
 
 TYPED: framebuffer-attachment-at ( framebuffer: framebuffer
                                    attachment-ref: attachment-ref
@@ -136,19 +136,19 @@ TYPED: framebuffer-attachment-at ( framebuffer: framebuffer
 
 PRIVATE<
 
-GENERIC: framebuffer-handle ( framebuffer -- handle ) ;
+GENERIC: framebuffer-handle ( framebuffer -- handle )
 
 M: system-framebuffer framebuffer-handle drop 0 ;
 M: framebuffer framebuffer-handle handle>> ;
 
-GENERIC#: allocate-framebuffer-attachment 1 ( framebuffer-attachment dim -- ) ;
+GENERIC#: allocate-framebuffer-attachment 1 ( framebuffer-attachment dim -- )
 
 M: texture-attachment allocate-framebuffer-attachment
     [ [ texture>> ] [ level>> ] bi ] dip f allocate-texture ;
 M: renderbuffer allocate-framebuffer-attachment
     allocate-renderbuffer ;
 
-GENERIC: framebuffer-attachment-dim ( framebuffer-attachment -- dim ) ;
+GENERIC: framebuffer-attachment-dim ( framebuffer-attachment -- dim )
 
 M: texture-attachment framebuffer-attachment-dim
     [ texture>> ] [ level>> ] bi texture-dim
@@ -170,7 +170,7 @@ M: renderbuffer framebuffer-attachment-dim
     framebuffer stencil-attachment>>
     |[ attachment | GL_STENCIL_ATTACHMENT attachment quot call ] when* ; inline
 
-GENERIC: bind-framebuffer-attachment ( attachment-target attachment -- ) ;
+GENERIC: bind-framebuffer-attachment ( attachment-target attachment -- )
 
 M:: renderbuffer bind-framebuffer-attachment ( attachment-target renderbuffer -- )
     GL_DRAW_FRAMEBUFFER attachment-target
@@ -201,9 +201,9 @@ M:: texture-layer-attachment bind-framebuffer-attachment ( attachment-target tex
     [ level>> ] [ layer>> ] tri
     glFramebufferTextureLayer ;
 
-GENERIC: (default-gl-attachment) ( framebuffer -- gl-attachment ) ;
-GENERIC: (default-attachment-type) ( framebuffer -- type ) ;
-GENERIC: (default-attachment-image-type) ( framebuffer -- order type ) ;
+GENERIC: (default-gl-attachment) ( framebuffer -- gl-attachment )
+GENERIC: (default-attachment-type) ( framebuffer -- type )
+GENERIC: (default-attachment-image-type) ( framebuffer -- order type )
 
 M: system-framebuffer (default-gl-attachment)
     drop GL_BACK ;
@@ -265,7 +265,7 @@ M: framebuffer (default-attachment-image-type) ( framebuffer -- order type )
 : framebuffer-rect-image-type ( framebuffer-rect -- order type )
     [ framebuffer>> ] [ attachment>> ] bi color-attachment-image-type ;
 
-HOOK: (clear-integer-color-attachment) gpu-api ( type value -- ) ;
+HOOK: (clear-integer-color-attachment) gpu-api ( type value -- )
 
 M: opengl-2 (clear-integer-color-attachment)
     4 0 pad-tail first4

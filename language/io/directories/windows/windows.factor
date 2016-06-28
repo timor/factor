@@ -61,7 +61,7 @@ M: windows delete-directory ( path -- )
 
 TUPLE: windows-directory-entry < directory-entry attributes ;
 
-C: <windows-directory-entry> windows-directory-entry ;
+C: <windows-directory-entry> windows-directory-entry
 
 : >windows-directory-entry ( WIN32_FIND_DATA -- directory-entry )
     [ cFileName>> alien>native-string ]

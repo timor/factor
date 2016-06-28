@@ -20,7 +20,7 @@ IN: rosetta-code.haversine-formula
 ! International Airport (LAX) in Los Angeles, CA, USA: N 33°56.4',
 ! W 118°24.0' (33.94, -118.40).
 
-CONSTANT: R_earth 6372.8 ; ! in kilometers
+CONSTANT: R_earth 6372.8 ! in kilometers
 
 : haversin ( x -- y ) cos 1 swap - 2 / ;
 

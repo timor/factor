@@ -8,7 +8,7 @@ IN: editors.gvim
 TUPLE: gvim < vim ;
 T{ gvim } editor-class set-global
 
-HOOK: find-gvim-path io-backend ( -- path ) ;
+HOOK: find-gvim-path io-backend ( -- path )
 
 M: object find-gvim-path f ;
 

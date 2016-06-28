@@ -11,7 +11,7 @@ SYMBOL: +gt+
     ! Can't use case, index or nth here
     dup +lt+ eq? [ drop +gt+ ] [ +eq+ eq? +eq+ +lt+ ? ] if ;
 
-GENERIC: <=> ( obj1 obj2 -- <=> ) ;
+GENERIC: <=> ( obj1 obj2 -- <=> )
 
 : >=< ( obj1 obj2 -- >=< ) <=> invert-comparison ; inline
 
@@ -22,7 +22,7 @@ PRIVATE<
 : (real<=>) ( x y -- <=> )
     2dup < [ 2drop +lt+ ] [ number= +eq+ +gt+ ? ] if ; inline
 
-MATH: real<=> ( x y -- <=> ) ;
+MATH: real<=> ( x y -- <=> )
 M: fixnum real<=> { fixnum fixnum } declare (real<=>) ; inline
 M: bignum real<=> { bignum bignum } declare (real<=>) ; inline
 M: float real<=> { float float } declare (real<=>) ; inline
@@ -32,10 +32,10 @@ PRIVATE>
 
 M: real <=> real<=> ; inline
 
-GENERIC: before? ( obj1 obj2 -- ? ) ;
-GENERIC: after? ( obj1 obj2 -- ? ) ;
-GENERIC: before=? ( obj1 obj2 -- ? ) ;
-GENERIC: after=? ( obj1 obj2 -- ? ) ;
+GENERIC: before? ( obj1 obj2 -- ? )
+GENERIC: after? ( obj1 obj2 -- ? )
+GENERIC: before=? ( obj1 obj2 -- ? )
+GENERIC: after=? ( obj1 obj2 -- ? )
 
 M: object before? ( obj1 obj2 -- ? ) <=> +lt+ eq? ; inline
 M: object after? ( obj1 obj2 -- ? ) <=> +gt+ eq? ; inline
@@ -47,8 +47,8 @@ M: real after? ( obj1 obj2 -- ? ) > ; inline
 M: real before=? ( obj1 obj2 -- ? ) <= ; inline
 M: real after=? ( obj1 obj2 -- ? ) >= ; inline
 
-GENERIC: min ( obj1 obj2 -- obj ) ;
-GENERIC: max ( obj1 obj2 -- obj ) ;
+GENERIC: min ( obj1 obj2 -- obj )
+GENERIC: max ( obj1 obj2 -- obj )
 
 M: object min [ before? ] most ; inline
 M: object max [ after? ] most ; inline

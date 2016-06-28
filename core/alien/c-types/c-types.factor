@@ -42,13 +42,13 @@ ERROR: no-c-type word ;
 M: no-c-type summary drop "Not a C type" ;
 
 ! C type protocol
-GENERIC: lookup-c-type ( name -- c-type ) ; foldable
+GENERIC: lookup-c-type ( name -- c-type ) foldable
 
 PREDICATE: c-type-word < word
     "c-type" word-prop >boolean ;
 
 TUPLE: pointer { to initial: void read-only } ;
-C: <pointer> pointer ;
+C: <pointer> pointer
 
 UNION: c-type-name
     c-type-word pointer ;
@@ -61,57 +61,57 @@ M: word lookup-c-type
     dup "c-type" word-prop resolve-typedef
     [ ] [ no-c-type ] ?if ;
 
-GENERIC: c-type-class ( name -- class ) ;
+GENERIC: c-type-class ( name -- class )
 
 M: abstract-c-type c-type-class class>> ;
 
-GENERIC: c-type-boxed-class ( name -- class ) ;
+GENERIC: c-type-boxed-class ( name -- class )
 
 M: abstract-c-type c-type-boxed-class boxed-class>> ;
 
-GENERIC: c-type-boxer-quot ( name -- quot ) ;
+GENERIC: c-type-boxer-quot ( name -- quot )
 
 M: abstract-c-type c-type-boxer-quot boxer-quot>> ;
 
-GENERIC: c-type-unboxer-quot ( name -- quot ) ;
+GENERIC: c-type-unboxer-quot ( name -- quot )
 
 M: abstract-c-type c-type-unboxer-quot unboxer-quot>> ;
 
-GENERIC: c-type-rep ( name -- rep ) ;
+GENERIC: c-type-rep ( name -- rep )
 
 M: c-type c-type-rep rep>> ;
 
-GENERIC: c-type-getter ( name -- quot ) ;
+GENERIC: c-type-getter ( name -- quot )
 
 M: c-type c-type-getter getter>> ;
 
-GENERIC: c-type-copier ( name -- quot ) ;
+GENERIC: c-type-copier ( name -- quot )
 
 M: c-type c-type-copier drop [ ] ;
 
-GENERIC: c-type-setter ( name -- quot ) ;
+GENERIC: c-type-setter ( name -- quot )
 
 M: c-type c-type-setter setter>> ;
 
-GENERIC: c-type-signed ( name -- boolean ) ; foldable
+GENERIC: c-type-signed ( name -- boolean ) foldable
 
 M: abstract-c-type c-type-signed signed>> ;
 
-GENERIC: c-type-align ( name -- n ) ; foldable
+GENERIC: c-type-align ( name -- n ) foldable
 
 M: abstract-c-type c-type-align align>> ;
 
-GENERIC: c-type-align-first ( name -- n ) ;
+GENERIC: c-type-align-first ( name -- n )
 
 M: abstract-c-type c-type-align-first align-first>> ;
 
-GENERIC: base-type ( c-type -- c-type ) ;
+GENERIC: base-type ( c-type -- c-type )
 
 M: c-type-name base-type lookup-c-type ;
 
 M: c-type base-type ;
 
-GENERIC: heap-size ( name -- size ) ;
+GENERIC: heap-size ( name -- size )
 
 M: abstract-c-type heap-size size>> ;
 
@@ -187,7 +187,7 @@ CONSTANT: primitive-types
         float double
         void* bool
         c-string
-    } ;
+    }
 
 : >c-bool ( ? -- int ) 1 0 ? ; inline
 

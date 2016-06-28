@@ -55,9 +55,9 @@ SYMBOL: knife
 [ multiple-inheritance-attempted? ] must-fail-with
 
 ! make sure method dispatch works
-GENERIC: poke ( pokee poker -- result ) ;
-GENERIC: scoop ( scoopee scooper -- result ) ;
-GENERIC: tune ( tunee tuner -- result ) ;
+GENERIC: poke ( pokee poker -- result )
+GENERIC: scoop ( scoopee scooper -- result )
+GENERIC: tune ( tunee tuner -- result )
 
 M: fork poke drop " got poked" append ;
 M: spoon scoop drop " got scooped" append ;

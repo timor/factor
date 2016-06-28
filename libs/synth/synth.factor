@@ -19,10 +19,10 @@ MEMO: single-sine-wave ( samples/wave -- seq )
     [ sample-freq>> * >integer 0 <repetition> ] [ data<< ] [ ] tri ;
 
 TUPLE: harmonic n amplitude ;
-C: <harmonic> harmonic ;
+C: <harmonic> harmonic
 
 TUPLE: note hz secs ;
-C: <note> note ;
+C: <note> note
 
 : harmonic-freq ( note harmonic -- freq )
     n>> swap hz>> * ;

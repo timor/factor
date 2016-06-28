@@ -25,7 +25,7 @@ PRIVATE<
         \ ; pprint-word
     ] with-pprint ;
 
-GENERIC: pprint-qualified ( qualified -- ) ;
+GENERIC: pprint-qualified ( qualified -- )
 
 M: qualified pprint-qualified ( qualified -- )
     [
@@ -86,7 +86,7 @@ CONSTANT: manifest-style H{
     { page-color color: FactorLightTan }
     { border-color color: FactorDarkTan }
     { inset { 5 5 } }
-} ;
+}
 
 [
     nl

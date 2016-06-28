@@ -47,7 +47,7 @@ SLOT: background-color
         GL_COLOR_BUFFER_BIT glClear
     ] bi ;
 
-GENERIC: draw-gadget* ( gadget -- ) ;
+GENERIC: draw-gadget* ( gadget -- )
 
 M: gadget draw-gadget* drop ;
 
@@ -60,14 +60,14 @@ SYMBOL: origin
 
 : translate ( rect/point -- ) loc>> origin [ v+ ] change ;
 
-GENERIC: draw-children ( gadget -- ) ;
+GENERIC: draw-children ( gadget -- )
 
 ! For gadget selection
 SYMBOL: selected-gadgets
 
 SYMBOL: selection-background
 
-GENERIC: selected-children ( gadget -- assoc/f selection-background ) ;
+GENERIC: selected-children ( gadget -- assoc/f selection-background )
 
 M: gadget selected-children drop f f ;
 
@@ -76,11 +76,11 @@ SYMBOL: background
 
 SYMBOL: foreground
 
-GENERIC: gadget-background ( gadget -- color ) ;
+GENERIC: gadget-background ( gadget -- color )
 
 M: gadget gadget-background dup interior>> pen-background ;
 
-GENERIC: gadget-foreground ( gadget -- color ) ;
+GENERIC: gadget-foreground ( gadget -- color )
 
 M: gadget gadget-foreground dup interior>> pen-foreground ;
 

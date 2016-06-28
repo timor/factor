@@ -25,7 +25,7 @@ value connections dependencies ref locked? ;
 
 DEFER: add-connection
 
-GENERIC: model-activated ( model -- ) ;
+GENERIC: model-activated ( model -- )
 
 M: model model-activated drop ;
 
@@ -54,7 +54,7 @@ DEFER: remove-connection
         drop
     ] if ;
 
-GENERIC: model-changed ( model observer -- ) ;
+GENERIC: model-changed ( model observer -- )
 
 : add-connection ( observer model -- )
     dup connections>>
@@ -70,7 +70,7 @@ GENERIC: model-changed ( model observer -- ) ;
     [ drop $[ f _ locked?<< ] ]
     2bi [ ] cleanup ; inline
 
-GENERIC: update-model ( model -- ) ;
+GENERIC: update-model ( model -- )
 
 M: model update-model drop ;
 
@@ -99,15 +99,15 @@ M: model update-model drop ;
 : (change-model) ( ..a model quot: ( ..a obj -- ..b newobj ) -- ..b )
     call-change-model value<< ; inline
 
-GENERIC: range-value ( model -- value ) ;
-GENERIC: range-page-value ( model -- value ) ;
-GENERIC: range-min-value ( model -- value ) ;
-GENERIC: range-max-value ( model -- value ) ;
-GENERIC: range-max-value* ( model -- value ) ;
-GENERIC: set-range-value ( value model -- ) ;
-GENERIC: set-range-page-value ( value model -- ) ;
-GENERIC: set-range-min-value ( value model -- ) ;
-GENERIC: set-range-max-value ( value model -- ) ;
+GENERIC: range-value ( model -- value )
+GENERIC: range-page-value ( model -- value )
+GENERIC: range-min-value ( model -- value )
+GENERIC: range-max-value ( model -- value )
+GENERIC: range-max-value* ( model -- value )
+GENERIC: set-range-value ( value model -- )
+GENERIC: set-range-page-value ( value model -- )
+GENERIC: set-range-min-value ( value model -- )
+GENERIC: set-range-max-value ( value model -- )
 
 : clamp-value ( value range -- newvalue )
     [ range-min-value ] [ range-max-value* ] bi clamp ;

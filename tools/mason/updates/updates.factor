@@ -6,7 +6,7 @@ IN: mason.updates
 
 TUPLE: sources git-id boot-image counter ;
 
-C: <sources> sources ;
+C: <sources> sources
 
 SYMBOLS: latest-sources last-built-sources ;
 

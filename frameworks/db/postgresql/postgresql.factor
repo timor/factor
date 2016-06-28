@@ -40,7 +40,7 @@ M: postgresql-db-connection db-close ( handle -- ) PQfinish ;
 
 M: postgresql-statement bind-statement* ( statement -- ) drop ;
 
-GENERIC: postgresql-bind-conversion ( tuple object -- low-level-binding ) ;
+GENERIC: postgresql-bind-conversion ( tuple object -- low-level-binding )
 
 M: sql-spec postgresql-bind-conversion ( tuple spec -- object )
     slot-name>> swap get-slot-named <low-level-binding> ;

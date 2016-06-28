@@ -7,58 +7,58 @@ BUILTIN: callstack ;
 BUILTIN: tuple ;
 BUILTIN: wrapper { wrapped read-only } ;
 
-PRIMITIVE: -rot ( x y z -- z x y ) ;
-PRIMITIVE: dup ( x -- x x ) ;
-PRIMITIVE: dupd ( x y -- x x y ) ;
-PRIMITIVE: drop ( x -- ) ;
-PRIMITIVE: nip ( x y -- y ) ;
-PRIMITIVE: over ( x y -- x y x ) ;
-PRIMITIVE: pick ( x y z -- x y z x ) ;
-PRIMITIVE: rot ( x y z -- y z x ) ;
-PRIMITIVE: swap ( x y -- y x ) ;
-PRIMITIVE: swapd ( x y z -- y x z ) ;
-PRIMITIVE: 2drop ( x y -- ) ;
-PRIMITIVE: 2dup ( x y -- x y x y ) ;
-PRIMITIVE: 2nip ( x y z -- z ) ;
-PRIMITIVE: 3drop ( x y z -- ) ;
-PRIMITIVE: 3dup ( x y z -- x y z x y z ) ;
-PRIMITIVE: 4drop ( w x y z -- ) ;
-PRIMITIVE: 4dup ( w x y z -- w x y z w x y z ) ;
+PRIMITIVE: -rot ( x y z -- z x y )
+PRIMITIVE: dup ( x -- x x )
+PRIMITIVE: dupd ( x y -- x x y )
+PRIMITIVE: drop ( x -- )
+PRIMITIVE: nip ( x y -- y )
+PRIMITIVE: over ( x y -- x y x )
+PRIMITIVE: pick ( x y z -- x y z x )
+PRIMITIVE: rot ( x y z -- y z x )
+PRIMITIVE: swap ( x y -- y x )
+PRIMITIVE: swapd ( x y z -- y x z )
+PRIMITIVE: 2drop ( x y -- )
+PRIMITIVE: 2dup ( x y -- x y x y )
+PRIMITIVE: 2nip ( x y z -- z )
+PRIMITIVE: 3drop ( x y z -- )
+PRIMITIVE: 3dup ( x y z -- x y z x y z )
+PRIMITIVE: 4drop ( w x y z -- )
+PRIMITIVE: 4dup ( w x y z -- w x y z w x y z )
 
-PRIMITIVE: (clone) ( obj -- newobj ) ;
-PRIMITIVE: eq? ( obj1 obj2 -- ? ) ;
-PRIMITIVE: <wrapper> ( obj -- wrapper ) ;
-PRIMITIVE: die ( -- ) ;
-PRIMITIVE: callstack>array ( callstack -- array ) ;
+PRIMITIVE: (clone) ( obj -- newobj )
+PRIMITIVE: eq? ( obj1 obj2 -- ? )
+PRIMITIVE: <wrapper> ( obj -- wrapper )
+PRIMITIVE: die ( -- )
+PRIMITIVE: callstack>array ( callstack -- array )
 
 PRIVATE<
-PRIMITIVE: (call) ( quot -- ) ;
-PRIMITIVE: (execute) ( word -- ) ;
-PRIMITIVE: (identity-hashcode) ( obj -- code ) ;
-PRIMITIVE: become ( old new -- ) ;
-PRIMITIVE: c-to-factor ( -- ) ;
-PRIMITIVE: callstack-bounds ( -- start end ) ;
-PRIMITIVE: check-datastack ( array in# out# -- ? ) ;
-PRIMITIVE: compute-identity-hashcode ( obj -- ) ;
-PRIMITIVE: context-object ( n -- obj ) ;
-PRIMITIVE: fpu-state ( -- ) ;
-PRIMITIVE: innermost-frame-executing ( callstack -- obj ) ;
-PRIMITIVE: innermost-frame-scan ( callstack -- n ) ;
-PRIMITIVE: lazy-jit-compile ( -- ) ;
-PRIMITIVE: leaf-signal-handler ( -- ) ;
-PRIMITIVE: set-callstack ( callstack -- * ) ;
-PRIMITIVE: set-context-object ( obj n -- ) ;
-PRIMITIVE: set-datastack ( array -- ) ;
-PRIMITIVE: set-fpu-state ( -- ) ;
-PRIMITIVE: set-innermost-frame-quotation ( n callstack -- ) ;
-PRIMITIVE: set-retainstack ( array -- ) ;
-PRIMITIVE: set-special-object ( obj n -- ) ;
-PRIMITIVE: signal-handler ( -- ) ;
-PRIMITIVE: special-object ( n -- obj ) ;
-PRIMITIVE: strip-stack-traces ( -- ) ;
-PRIMITIVE: tag ( object -- n ) ;
-PRIMITIVE: unimplemented ( -- * ) ;
-PRIMITIVE: unwind-native-frames ( -- ) ;
+PRIMITIVE: (call) ( quot -- )
+PRIMITIVE: (execute) ( word -- )
+PRIMITIVE: (identity-hashcode) ( obj -- code )
+PRIMITIVE: become ( old new -- )
+PRIMITIVE: c-to-factor ( -- )
+PRIMITIVE: callstack-bounds ( -- start end )
+PRIMITIVE: check-datastack ( array in# out# -- ? )
+PRIMITIVE: compute-identity-hashcode ( obj -- )
+PRIMITIVE: context-object ( n -- obj )
+PRIMITIVE: fpu-state ( -- )
+PRIMITIVE: innermost-frame-executing ( callstack -- obj )
+PRIMITIVE: innermost-frame-scan ( callstack -- n )
+PRIMITIVE: lazy-jit-compile ( -- )
+PRIMITIVE: leaf-signal-handler ( -- )
+PRIMITIVE: set-callstack ( callstack -- * )
+PRIMITIVE: set-context-object ( obj n -- )
+PRIMITIVE: set-datastack ( array -- )
+PRIMITIVE: set-fpu-state ( -- )
+PRIMITIVE: set-innermost-frame-quotation ( n callstack -- )
+PRIMITIVE: set-retainstack ( array -- )
+PRIMITIVE: set-special-object ( obj n -- )
+PRIMITIVE: signal-handler ( -- )
+PRIMITIVE: special-object ( n -- obj )
+PRIMITIVE: strip-stack-traces ( -- )
+PRIMITIVE: tag ( object -- n )
+PRIMITIVE: unimplemented ( -- * )
+PRIMITIVE: unwind-native-frames ( -- )
 PRIVATE>
 
 DEFER: dip
@@ -71,9 +71,9 @@ DEFER: 3dip
 : clear ( -- ) { } set-datastack ;
 
 ! Combinators
-GENERIC: call ( callable -- ) ;
+GENERIC: call ( callable -- )
 
-GENERIC: execute ( word -- ) ;
+GENERIC: execute ( word -- )
 
 DEFER: if
 
@@ -247,7 +247,7 @@ UNION: boolean postpone\ t postpone\ f ;
     [ [ not ] compose ] dip while ; inline
 
 ! Object protocol
-GENERIC: hashcode* ( depth obj -- code ) ;
+GENERIC: hashcode* ( depth obj -- code )
 
 M: object hashcode* 2drop 0 ; inline
 
@@ -265,7 +265,7 @@ M: f hashcode* 2drop 31337 ; inline
         ] if
     ] unless ; inline
 
-GENERIC: equal? ( obj1 obj2 -- ? ) ;
+GENERIC: equal? ( obj1 obj2 -- ? )
 
 M: object equal? 2drop f ; inline
 
@@ -282,20 +282,20 @@ M: identity-tuple hashcode* nip identity-hashcode ; inline
 
 : same? ( x y quot -- ? ) bi@ = ; inline
 
-GENERIC: clone ( obj -- cloned ) ;
+GENERIC: clone ( obj -- cloned )
 
 M: object clone ; inline
 
 M: callstack clone (clone) ; inline
 
 ! Tuple construction
-GENERIC: new ( class -- tuple ) ;
+GENERIC: new ( class -- tuple )
 
-GENERIC: boa ( slots... class -- tuple ) ;
+GENERIC: boa ( slots... class -- tuple )
 
 ! Error handling -- defined early so that other files can
 ! throw errors before continuations are loaded
-GENERIC: throw ( error -- * ) ;
+GENERIC: throw ( error -- * )
 
 ERROR: assert got expect ;
 
@@ -309,153 +309,153 @@ PRIVATE<
 
 ! Special object count and identifiers must be kept in sync with:
 !   vm/objects.hpp
-CONSTANT: special-object-count 85 ;
+CONSTANT: special-object-count 85
 
-CONSTANT: OBJ-WALKER-HOOK 3 ;
+CONSTANT: OBJ-WALKER-HOOK 3
 
-CONSTANT: OBJ-CALLCC-1 4 ;
+CONSTANT: OBJ-CALLCC-1 4
 
-CONSTANT: ERROR-HANDLER-QUOT 5 ;
+CONSTANT: ERROR-HANDLER-QUOT 5
 
-CONSTANT: OBJ-CELL-SIZE 7 ;
-CONSTANT: OBJ-CPU 8 ;
-CONSTANT: OBJ-OS 9 ;
+CONSTANT: OBJ-CELL-SIZE 7
+CONSTANT: OBJ-CPU 8
+CONSTANT: OBJ-OS 9
 
-CONSTANT: OBJ-ARGS 10 ;
-CONSTANT: OBJ-STDIN 11 ;
-CONSTANT: OBJ-STDOUT 12 ;
+CONSTANT: OBJ-ARGS 10
+CONSTANT: OBJ-STDIN 11
+CONSTANT: OBJ-STDOUT 12
 
-CONSTANT: OBJ-IMAGE 13 ;
-CONSTANT: OBJ-EXECUTABLE 14 ;
+CONSTANT: OBJ-IMAGE 13
+CONSTANT: OBJ-EXECUTABLE 14
 
-CONSTANT: OBJ-EMBEDDED 15 ;
-CONSTANT: OBJ-EVAL-CALLBACK 16 ;
-CONSTANT: OBJ-YIELD-CALLBACK 17 ;
-CONSTANT: OBJ-SLEEP-CALLBACK 18 ;
+CONSTANT: OBJ-EMBEDDED 15
+CONSTANT: OBJ-EVAL-CALLBACK 16
+CONSTANT: OBJ-YIELD-CALLBACK 17
+CONSTANT: OBJ-SLEEP-CALLBACK 18
 
-CONSTANT: OBJ-STARTUP-QUOT 20 ;
-CONSTANT: OBJ-GLOBAL 21 ;
-CONSTANT: OBJ-SHUTDOWN-QUOT 22 ;
+CONSTANT: OBJ-STARTUP-QUOT 20
+CONSTANT: OBJ-GLOBAL 21
+CONSTANT: OBJ-SHUTDOWN-QUOT 22
 
-CONSTANT: JIT-PROLOG 23 ;
-CONSTANT: JIT-PRIMITIVE-WORD 24 ;
-CONSTANT: JIT-PRIMITIVE 25 ;
-CONSTANT: JIT-WORD-JUMP 26 ;
-CONSTANT: JIT-WORD-CALL 27 ;
-CONSTANT: JIT-IF-WORD 28 ;
-CONSTANT: JIT-IF 29 ;
-CONSTANT: JIT-SAFEPOINT 30 ;
-CONSTANT: JIT-EPILOG 31 ;
-CONSTANT: JIT-RETURN 32 ;
-CONSTANT: JIT-UNUSED 33 ;
-CONSTANT: JIT-PUSH-LITERAL 34 ;
-CONSTANT: JIT-DIP-WORD 35 ;
-CONSTANT: JIT-DIP 36 ;
-CONSTANT: JIT-2DIP-WORD 37 ;
-CONSTANT: JIT-2DIP 38 ;
-CONSTANT: JIT-3DIP-WORD 39 ;
-CONSTANT: JIT-3DIP 40 ;
-CONSTANT: JIT-EXECUTE 41 ;
-CONSTANT: JIT-DECLARE-WORD 42 ;
+CONSTANT: JIT-PROLOG 23
+CONSTANT: JIT-PRIMITIVE-WORD 24
+CONSTANT: JIT-PRIMITIVE 25
+CONSTANT: JIT-WORD-JUMP 26
+CONSTANT: JIT-WORD-CALL 27
+CONSTANT: JIT-IF-WORD 28
+CONSTANT: JIT-IF 29
+CONSTANT: JIT-SAFEPOINT 30
+CONSTANT: JIT-EPILOG 31
+CONSTANT: JIT-RETURN 32
+CONSTANT: JIT-UNUSED 33
+CONSTANT: JIT-PUSH-LITERAL 34
+CONSTANT: JIT-DIP-WORD 35
+CONSTANT: JIT-DIP 36
+CONSTANT: JIT-2DIP-WORD 37
+CONSTANT: JIT-2DIP 38
+CONSTANT: JIT-3DIP-WORD 39
+CONSTANT: JIT-3DIP 40
+CONSTANT: JIT-EXECUTE 41
+CONSTANT: JIT-DECLARE-WORD 42
 
-CONSTANT: C-TO-FACTOR-WORD 43 ;
-CONSTANT: LAZY-JIT-COMPILE-WORD 44 ;
-CONSTANT: UNWIND-NATIVE-FRAMES-WORD 45 ;
-CONSTANT: GET-FPU-STATE-WORD 46 ;
-CONSTANT: SET-FPU-STATE-WORD 47 ;
-CONSTANT: SIGNAL-HANDLER-WORD 48 ;
-CONSTANT: LEAF-SIGNAL-HANDLER-WORD 49 ;
-CONSTANT: WIN-EXCEPTION-HANDLER 50 ;
+CONSTANT: C-TO-FACTOR-WORD 43
+CONSTANT: LAZY-JIT-COMPILE-WORD 44
+CONSTANT: UNWIND-NATIVE-FRAMES-WORD 45
+CONSTANT: GET-FPU-STATE-WORD 46
+CONSTANT: SET-FPU-STATE-WORD 47
+CONSTANT: SIGNAL-HANDLER-WORD 48
+CONSTANT: LEAF-SIGNAL-HANDLER-WORD 49
+CONSTANT: WIN-EXCEPTION-HANDLER 50
 
-CONSTANT: REDEFINITION-COUNTER 52 ;
+CONSTANT: REDEFINITION-COUNTER 52
 
-CONSTANT: CALLBACK-STUB 53 ;
+CONSTANT: CALLBACK-STUB 53
 
-CONSTANT: PIC-LOAD 54 ;
-CONSTANT: PIC-TAG 55 ;
-CONSTANT: PIC-TUPLE 56 ;
-CONSTANT: PIC-CHECK-TAG 57 ;
-CONSTANT: PIC-CHECK-TUPLE 58 ;
-CONSTANT: PIC-HIT 59 ;
-CONSTANT: PIC-MISS-WORD 60 ;
-CONSTANT: PIC-MISS-TAIL-WORD 61 ;
+CONSTANT: PIC-LOAD 54
+CONSTANT: PIC-TAG 55
+CONSTANT: PIC-TUPLE 56
+CONSTANT: PIC-CHECK-TAG 57
+CONSTANT: PIC-CHECK-TUPLE 58
+CONSTANT: PIC-HIT 59
+CONSTANT: PIC-MISS-WORD 60
+CONSTANT: PIC-MISS-TAIL-WORD 61
 
-CONSTANT: MEGA-LOOKUP 62 ;
-CONSTANT: MEGA-LOOKUP-WORD 63 ;
-CONSTANT: MEGA-MISS-WORD 64 ;
+CONSTANT: MEGA-LOOKUP 62
+CONSTANT: MEGA-LOOKUP-WORD 63
+CONSTANT: MEGA-MISS-WORD 64
 
-CONSTANT: OBJ-UNDEFINED 65 ;
+CONSTANT: OBJ-UNDEFINED 65
 
-CONSTANT: OBJ-STDERR 66 ;
+CONSTANT: OBJ-STDERR 66
 
-CONSTANT: OBJ-STAGE2 67 ;
+CONSTANT: OBJ-STAGE2 67
 
-CONSTANT: OBJ-CURRENT-THREAD 68 ;
+CONSTANT: OBJ-CURRENT-THREAD 68
 
-CONSTANT: OBJ-THREADS 69 ;
-CONSTANT: OBJ-RUN-QUEUE 70 ;
-CONSTANT: OBJ-SLEEP-QUEUE 71 ;
+CONSTANT: OBJ-THREADS 69
+CONSTANT: OBJ-RUN-QUEUE 70
+CONSTANT: OBJ-SLEEP-QUEUE 71
 
-CONSTANT: OBJ-VM-COMPILER 72 ;
+CONSTANT: OBJ-VM-COMPILER 72
 
-CONSTANT: OBJ-WAITING-CALLBACKS 73 ;
+CONSTANT: OBJ-WAITING-CALLBACKS 73
 
-CONSTANT: OBJ-SIGNAL-PIPE 74 ;
+CONSTANT: OBJ-SIGNAL-PIPE 74
 
-CONSTANT: OBJ-VM-COMPILE-TIME 75 ;
+CONSTANT: OBJ-VM-COMPILE-TIME 75
 
-CONSTANT: OBJ-VM-VERSION 76 ;
-CONSTANT: OBJ-VM-GIT-LABEL 77 ;
+CONSTANT: OBJ-VM-VERSION 76
+CONSTANT: OBJ-VM-GIT-LABEL 77
 
-CONSTANT: OBJ-CANONICAL-TRUE 78 ;
+CONSTANT: OBJ-CANONICAL-TRUE 78
 
-CONSTANT: OBJ-BIGNUM-ZERO 79 ;
-CONSTANT: OBJ-BIGNUM-POS-ONE 80 ;
-CONSTANT: OBJ-BIGNUM-NEG-ONE 81 ;
+CONSTANT: OBJ-BIGNUM-ZERO 79
+CONSTANT: OBJ-BIGNUM-POS-ONE 80
+CONSTANT: OBJ-BIGNUM-NEG-ONE 81
 
 ! Context object count and identifiers must be kept in sync with:
 !   vm/contexts.hpp
 
-CONSTANT: context-object-count 4 ;
+CONSTANT: context-object-count 4
 
-CONSTANT: CONTEXT-OBJ-NAMESTACK 0 ;
-CONSTANT: CONTEXT-OBJ-CATCHSTACK 1 ;
-CONSTANT: CONTEXT-OBJ-CONTEXT 2 ;
-CONSTANT: CONTEXT-OBJ-IN-CALLBACK-P 3 ;
+CONSTANT: CONTEXT-OBJ-NAMESTACK 0
+CONSTANT: CONTEXT-OBJ-CATCHSTACK 1
+CONSTANT: CONTEXT-OBJ-CONTEXT 2
+CONSTANT: CONTEXT-OBJ-IN-CALLBACK-P 3
 
 ! Runtime errors must be kept in sync with:
 !   basis/debugger/debugger.factor
 !   vm/errors.hpp
 
 ! VM adds this to kernel errors, so that user-space can identify them.
-CONSTANT: KERNEL-ERROR 0xfac7 ;
+CONSTANT: KERNEL-ERROR 0xfac7
 
-CONSTANT: kernel-error-count 20 ;
+CONSTANT: kernel-error-count 20
 
-CONSTANT: ERROR-EXPIRED 0 ;
-CONSTANT: ERROR-IO      1 ;
-CONSTANT: ERROR-NOT-IMPLEMENTED 2 ;
-CONSTANT: ERROR-TYPE 3 ;
-CONSTANT: ERROR-DIVIDE-BY-ZERO 4 ;
-CONSTANT: ERROR-SIGNAL 5 ;
-CONSTANT: ERROR-ARRAY-SIZE 6 ;
-CONSTANT: ERROR-OUT-OF-FIXNUM-RANGE 7 ;
-CONSTANT: ERROR-FFI 8 ;
-CONSTANT: ERROR-UNDEFINED-SYMBOL 9 ;
-CONSTANT: ERROR-DATASTACK-UNDERFLOW 10 ;
-CONSTANT: ERROR-DATASTACK-OVERFLOW 11 ;
-CONSTANT: ERROR-RETAINSTACK-UNDERFLOW 12 ;
-CONSTANT: ERROR-RETAINSTACK-OVERFLOW 13 ;
-CONSTANT: ERROR-CALLSTACK-UNDERFLOW 14 ;
-CONSTANT: ERROR-CALLSTACK-OVERFLOW 15 ;
-CONSTANT: ERROR-MEMORY 16 ;
-CONSTANT: ERROR-FP-TRAP 17 ;
-CONSTANT: ERROR-INTERRUPT 18 ;
-CONSTANT: ERROR-CALLBACK-SPACE-OVERFLOW 19 ;
+CONSTANT: ERROR-EXPIRED 0
+CONSTANT: ERROR-IO      1
+CONSTANT: ERROR-NOT-IMPLEMENTED 2
+CONSTANT: ERROR-TYPE 3
+CONSTANT: ERROR-DIVIDE-BY-ZERO 4
+CONSTANT: ERROR-SIGNAL 5
+CONSTANT: ERROR-ARRAY-SIZE 6
+CONSTANT: ERROR-OUT-OF-FIXNUM-RANGE 7
+CONSTANT: ERROR-FFI 8
+CONSTANT: ERROR-UNDEFINED-SYMBOL 9
+CONSTANT: ERROR-DATASTACK-UNDERFLOW 10
+CONSTANT: ERROR-DATASTACK-OVERFLOW 11
+CONSTANT: ERROR-RETAINSTACK-UNDERFLOW 12
+CONSTANT: ERROR-RETAINSTACK-OVERFLOW 13
+CONSTANT: ERROR-CALLSTACK-UNDERFLOW 14
+CONSTANT: ERROR-CALLSTACK-OVERFLOW 15
+CONSTANT: ERROR-MEMORY 16
+CONSTANT: ERROR-FP-TRAP 17
+CONSTANT: ERROR-INTERRUPT 18
+CONSTANT: ERROR-CALLBACK-SPACE-OVERFLOW 19
 
-PRIMITIVE: callstack-for ( context -- array ) ;
-PRIMITIVE: retainstack-for ( context -- array ) ;
-PRIMITIVE: datastack-for ( context -- array ) ;
+PRIMITIVE: callstack-for ( context -- array )
+PRIMITIVE: retainstack-for ( context -- array )
+PRIMITIVE: datastack-for ( context -- array )
 
 : context ( -- context )
     CONTEXT-OBJ-CONTEXT context-object ; inline

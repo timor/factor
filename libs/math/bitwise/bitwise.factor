@@ -56,7 +56,7 @@ ERROR: bit-range-error x high low ;
 ! bitfield
 PRIVATE<
 
-GENERIC: (bitfield-quot) ( spec -- quot ) ;
+GENERIC: (bitfield-quot) ( spec -- quot )
 
 M: integer (bitfield-quot) ( spec -- quot )
     $[ _ shift ] ;
@@ -92,7 +92,7 @@ COMPILE<
 
 COMPILE>
 
-GENERIC: (bit-count) ( x -- n ) ;
+GENERIC: (bit-count) ( x -- n )
 
 : fixnum-bit-count ( x -- n )
     { fixnum } declare
@@ -126,7 +126,7 @@ M: bignum (bit-count)
 
 PRIVATE>
 
-GENERIC: bit-count ( obj -- n ) ;
+GENERIC: bit-count ( obj -- n )
 
 M: integer bit-count
     dup 0 < [ non-negative-integer-expected ] when (bit-count) ; inline

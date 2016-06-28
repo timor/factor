@@ -12,24 +12,24 @@ MEMO: load-http-image ( url -- image/f )
     profile-image-url>> load-http-image ;
 
 CONSTANT: tweet-table-style
-    H{ { table-gap { 5 5 } } } ;
+    H{ { table-gap { 5 5 } } }
 
 CONSTANT: tweet-username-style
     H{
         { font-style bold }
-    } ;
+    }
 
 CONSTANT: tweet-text-style
     H{
         { font-name "sans-serif" }
         { font-size 16 }
         { wrap-margin 500 }
-    } ;
+    }
 
 CONSTANT: tweet-metadata-style
     H{
         { font-size 10 }
-    } ;
+    }
 
 : profile. ( user -- )
     tweet-table-style [

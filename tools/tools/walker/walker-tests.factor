@@ -122,7 +122,7 @@ IN: tools.walker.tests
 
 { { 3 } } [ [ breakpoint-test ] test-walker ] unit-test
 
-GENERIC: method-breakpoint-test ( x -- y ) ;
+GENERIC: method-breakpoint-test ( x -- y )
 
 TUPLE: method-breakpoint-tuple ;
 

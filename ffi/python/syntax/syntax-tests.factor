@@ -4,7 +4,7 @@ python.modules.__builtin__ python.modules.argparse python.modules.datetime
 python.modules.os python.modules.os.path python.modules.sys
 python.modules.time python.objects python.syntax sets splitting tools.test
 unicode ;
-QUALIFIED-WITH: sequences s ;
+QUALIFIED-WITH: sequences s
 IN: python.syntax.tests
 
 : py-test ( result quot -- )

@@ -20,27 +20,27 @@ TUPLE: loading-png
     width height bit-depth color-type compression-method
     filter-method interlace-method icc-profile itexts ;
 
-CONSTANT: filter-none 0 ;
-CONSTANT: filter-sub 1 ;
-CONSTANT: filter-up 2 ;
-CONSTANT: filter-average 3 ;
-CONSTANT: filter-paeth 4 ;
+CONSTANT: filter-none 0
+CONSTANT: filter-sub 1
+CONSTANT: filter-up 2
+CONSTANT: filter-average 3
+CONSTANT: filter-paeth 4
 
-CONSTANT: greyscale 0 ;
-CONSTANT: truecolor 2 ;
-CONSTANT: indexed-color 3 ;
-CONSTANT: greyscale-alpha 4 ;
-CONSTANT: truecolor-alpha 6 ;
+CONSTANT: greyscale 0
+CONSTANT: truecolor 2
+CONSTANT: indexed-color 3
+CONSTANT: greyscale-alpha 4
+CONSTANT: truecolor-alpha 6
 
-CONSTANT: interlace-none 0 ;
-CONSTANT: interlace-adam7 1 ;
+CONSTANT: interlace-none 0
+CONSTANT: interlace-adam7 1
 
-CONSTANT: starting-row  { 0 0 4 0 2 0 1 } ;
-CONSTANT: starting-col  { 0 4 0 2 0 1 0 } ;
-CONSTANT: row-increment { 8 8 8 4 4 2 2 } ;
-CONSTANT: col-increment { 8 8 4 4 2 2 1 } ;
-CONSTANT: block-height  { 8 8 4 4 2 2 1 } ;
-CONSTANT: block-width   { 8 4 4 2 2 1 1 } ;
+CONSTANT: starting-row  { 0 0 4 0 2 0 1 }
+CONSTANT: starting-col  { 0 4 0 2 0 1 0 }
+CONSTANT: row-increment { 8 8 8 4 4 2 2 }
+CONSTANT: col-increment { 8 8 4 4 2 2 1 }
+CONSTANT: block-height  { 8 8 4 4 2 2 1 }
+CONSTANT: block-width   { 8 4 4 2 2 1 1 }
 
 : <loading-png> ( -- image )
     loading-png new
@@ -52,7 +52,7 @@ TUPLE: png-chunk type data ;
     png-chunk new ; inline
 
 CONSTANT: png-header
-    B{ 0x89 0x50 0x4e 0x47 0x0d 0x0a 0x1a 0x0a } ;
+    B{ 0x89 0x50 0x4e 0x47 0x0d 0x0a 0x1a 0x0a }
 
 ERROR: bad-png-header header ;
 

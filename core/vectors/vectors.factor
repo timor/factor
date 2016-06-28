@@ -38,7 +38,7 @@ M: array like
 
 M: sequence new-resizable drop <vector> ; inline
 
-INSTANCE: vector growable ;
+INSTANCE: vector growable
 
 : 1vector ( x -- vector ) 1array 1 vector boa ; inline
 

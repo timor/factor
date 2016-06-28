@@ -7,7 +7,7 @@ compiler.cfg.representations.selection cpu.architecture kernel
 layouts locals make math namespaces sequences ;
 IN: compiler.cfg.representations.peephole
 
-GENERIC: optimize-insn ( insn -- ) ;
+GENERIC: optimize-insn ( insn -- )
 
 SYMBOL: insn-index
 

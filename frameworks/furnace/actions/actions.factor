@@ -58,7 +58,7 @@ TUPLE: action rest init authorize display validate submit ;
         ] [ drop <400> ] if
     ] with-exit-continuation ;
 
-CONSTANT: revalidate-url-key "__u" ;
+CONSTANT: revalidate-url-key "__u"
 
 : revalidate-url ( -- url/f )
     revalidate-url-key param

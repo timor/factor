@@ -6,12 +6,12 @@ cpu.architecture kernel layouts math ;
 IN: compiler.cfg.value-numbering.rewrite
 
 ! Outputs f to mean no change
-GENERIC: rewrite ( insn -- insn/f ) ;
+GENERIC: rewrite ( insn -- insn/f )
 
 M: insn rewrite drop f ;
 
 ! Utilities
-GENERIC: insn>integer ( insn -- n ) ;
+GENERIC: insn>integer ( insn -- n )
 
 M: ##load-integer insn>integer val>> ;
 
@@ -31,7 +31,7 @@ M: ##load-integer insn>integer val>> ;
 
 UNION: literal-insn ##load-integer ##load-reference ;
 
-GENERIC: insn>literal ( insn -- n ) ;
+GENERIC: insn>literal ( insn -- n )
 
 M: ##load-integer insn>literal val>> >fixnum ;
 

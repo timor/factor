@@ -138,7 +138,7 @@ PRIVATE<
         { "url" url }
     } at* [ swap [ \ $maybe swap 2array ] when ] dip ;
 
-GENERIC: add-using ( object -- ) ;
+GENERIC: add-using ( object -- )
 
 M: array add-using [ add-using ] each ;
 
@@ -368,6 +368,6 @@ ${example-indent}}
 : scaffold-factor-roots ( -- )
     ".factor-roots" scaffold-rc ;
 
-HOOK: scaffold-emacs os ( -- ) ;
+HOOK: scaffold-emacs os ( -- )
 
 M: unix scaffold-emacs ( -- ) ".emacs" scaffold-rc ;

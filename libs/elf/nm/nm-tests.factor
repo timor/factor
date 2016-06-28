@@ -44,7 +44,7 @@ CONSTANT: validation-output [[
 0000000000400524 .text            main
 00000000004003f0 .init            _init
 
-]] ;
+]]
 
 cpu ppc? [
     { $\ validation-output }

@@ -22,7 +22,7 @@ M: effect pprint* effect>string text ;
     ?effect-height 0 < [ end-group ] when ;
 
 ! Atoms
-GENERIC: word-name* ( obj -- str ) ;
+GENERIC: word-name* ( obj -- str )
 
 M: maybe word-name*
     class-name "maybe{ " " }" surround ;
@@ -42,7 +42,7 @@ M: word word-name* ( word -- str )
 : pprint-word ( word -- )
     [ word-name* ] [ word-style ] bi styled-text ;
 
-GENERIC: pprint-class ( obj -- ) ;
+GENERIC: pprint-class ( obj -- )
 
 M: classoid pprint-class pprint* ;
 

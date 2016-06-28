@@ -2,7 +2,7 @@ IN: compiler.tests.redefine20
 USING: kernel sequences compiler.units definitions classes.mixin
 tools.test ;
 
-GENERIC: cnm-recompile-test ( a -- b ) ;
+GENERIC: cnm-recompile-test ( a -- b )
 
 M: object cnm-recompile-test drop object ;
 

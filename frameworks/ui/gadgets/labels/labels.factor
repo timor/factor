@@ -91,7 +91,7 @@ M: label-control model-changed
     "" label-control new-label
         swap >>model ;
 
-GENERIC: >label ( obj -- gadget ) ;
+GENERIC: >label ( obj -- gadget )
 M: string >label <label> ;
 M: array >label <label> ;
 M: object >label ;

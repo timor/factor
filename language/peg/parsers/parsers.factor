@@ -10,7 +10,7 @@ CONSTANT: just-pattern [
     dup [
         dup remaining>> empty? [ drop f ] unless
     ] when
-] ;
+]
 
 M: just-parser (compile) ( parser -- quot )
     p1>> compile-parser-quot just-pattern compose ;

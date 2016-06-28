@@ -8,7 +8,7 @@ smalltalk.compiler.return smalltalk.selectors splitting vocabs
 words ;
 IN: smalltalk.compiler
 
-GENERIC: compile-ast ( lexenv ast -- quot ) ;
+GENERIC: compile-ast ( lexenv ast -- quot )
 
 M: object compile-ast nip 1quotation ;
 
@@ -94,7 +94,7 @@ M: ast-return compile-ast
 M: ast-sequence compile-ast
     compile-sequence nip ;
 
-GENERIC: contains-blocks? ( obj -- ? ) ;
+GENERIC: contains-blocks? ( obj -- ? )
 
 M: ast-block contains-blocks? drop t ;
 
@@ -108,7 +108,7 @@ M: array compile-ast
         $[ @ _ narray ]
     ] [ call-next-method ] if ;
 
-GENERIC: compile-assignment ( lexenv name -- quot ) ;
+GENERIC: compile-assignment ( lexenv name -- quot )
 
 M: ast-name compile-assignment name>> swap lookup-writer ;
 

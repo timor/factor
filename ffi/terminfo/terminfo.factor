@@ -13,7 +13,7 @@ IN: terminfo
 
 PRIVATE<
 
-CONSTANT: MAGIC 0o432 ;
+CONSTANT: MAGIC 0o432
 
 ERROR: bad-magic ;
 
@@ -23,7 +23,7 @@ ERROR: bad-magic ;
 TUPLE: terminfo-header names-bytes boolean-bytes #numbers
 #strings string-bytes ;
 
-C: <terminfo-header> terminfo-header ;
+C: <terminfo-header> terminfo-header
 
 : read-header ( -- header )
     12 read "ssssss" unpack-le unclip check-magic
@@ -54,7 +54,7 @@ C: <terminfo-header> terminfo-header ;
 
 TUPLE: terminfo names booleans numbers strings ;
 
-C: <terminfo> terminfo ;
+C: <terminfo> terminfo
 
 : read-terminfo ( -- terminfo )
     read-header {
@@ -69,7 +69,7 @@ PRIVATE>
 : file>terminfo ( path -- terminfo )
     binary [ read-terminfo ] with-file-reader ;
 
-HOOK: terminfo-path os ( name -- path ) ;
+HOOK: terminfo-path os ( name -- path )
 
 M: macosx terminfo-path ( name -- path )
     [ first >hex ] keep "/usr/share/terminfo/%s/%s" sprintf ;
@@ -101,7 +101,7 @@ CONSTANT: boolean-names {
     "no_correctly_working_cr" "gnu_has_meta_key"
     "linefeed_is_newline" "has_hardware_tabs"
     "return_does_clr_eol"
-} ;
+}
 
 CONSTANT: number-names {
     "columns" "init_tabs" "lines" "lines_of_memory"
@@ -117,7 +117,7 @@ CONSTANT: number-names {
     "bit_image_type" "magic_cookie_glitch_ul"
     "carriage_return_delay" "new_line_delay" "backspace_delay"
     "horizontal_tab_delay" "number_of_function_keys"
-} ;
+}
 
 CONSTANT: string-names {
     "back_tab" "bell" "carriage_return" "change_scroll_region"
@@ -229,7 +229,7 @@ CONSTANT: string-names {
     "acs_ll_corner" "acs_urcorner" "acs_lrcorner" "acs_ltee"
     "acs_rtee" "acs_btee" "acs_ttee" "acs_hline" "acs_vline"
     "acs_plus" "memory_lock" "memory_unlock" "box_chars_1"
-} ;
+}
 
 : zip-names ( seq names -- assoc )
     swap 2dup [ length ] bi@ - f <repetition> append zip ;

@@ -6,7 +6,7 @@ IN: wrap
 
 ! black is the text length, white is the whitespace length
 TUPLE: element contents black white ;
-C: <element> element ;
+C: <element> element
 
 PRIVATE<
 
@@ -14,7 +14,7 @@ PRIVATE<
     [ black>> ] [ white>> ] bi + ; inline
 
 TUPLE: paragraph line-max line-ideal lines head-width tail-cost ;
-C: <paragraph> paragraph ;
+C: <paragraph> paragraph
 
 : if-one-line ( paragraph true false -- )
     [ dup lines>> 1list? ] 2dip if ; inline

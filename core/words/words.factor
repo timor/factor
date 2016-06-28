@@ -10,11 +10,11 @@ BUILTIN: word
 { def quotation initial: [ ] } props pic-def pic-tail-def
 { sub-primitive read-only } ;
 
-PRIMITIVE: word-code ( word -- start end ) ;
-PRIMITIVE: word-optimized? ( word -- ? ) ;
+PRIMITIVE: word-code ( word -- start end )
+PRIMITIVE: word-optimized? ( word -- ? )
 
 PRIVATE<
-PRIMITIVE: (word) ( name vocab hashcode -- word ) ;
+PRIMITIVE: (word) ( name vocab hashcode -- word )
 PRIVATE>
 
 ! Need a dummy word here because BUILTIN: word is not a real word
@@ -95,16 +95,16 @@ SYMBOL: bootstrapping?
 : bootstrap-word ( word -- target )
     [ target-word ] [ ] if-bootstrapping ;
 
-GENERIC: crossref? ( word -- ? ) ;
+GENERIC: crossref? ( word -- ? )
 
 M: word crossref?
     dup "forgotten" word-prop [ drop f ] [ vocabulary>> >boolean ] if ;
 
-GENERIC: subwords ( word -- seq ) ;
+GENERIC: subwords ( word -- seq )
 
 M: word subwords drop f ;
 
-GENERIC: parent-word ( word -- word/f ) ;
+GENERIC: parent-word ( word -- word/f )
 
 M: word parent-word drop f ;
 
@@ -144,7 +144,7 @@ M: word parent-word drop f ;
 
 ERROR: cannot-be-inline word ;
 
-GENERIC: make-inline ( word -- ) ;
+GENERIC: make-inline ( word -- )
 
 M: word make-inline
     dup inline? [ drop ] [
@@ -159,7 +159,7 @@ M: word make-inline
 : make-recursive ( word -- )
     t "recursive" set-word-prop ;
 
-GENERIC: flushable? ( word -- ? ) ;
+GENERIC: flushable? ( word -- ? )
 
 M: word flushable?
     [ "flushable" word-prop ]
@@ -168,7 +168,7 @@ M: word flushable?
 : make-flushable ( word -- )
     t "flushable" set-word-prop ;
 
-GENERIC: foldable? ( word -- ? ) ;
+GENERIC: foldable? ( word -- ? )
 
 M: word foldable?
     [ "foldable" word-prop ]
@@ -178,7 +178,7 @@ M: word foldable?
     [ make-flushable ]
     [ t "foldable" set-word-prop ] bi ;
 
-GENERIC: reset-word ( word -- ) ;
+GENERIC: reset-word ( word -- )
 
 M: word reset-word
     dup flushable? [ dup changed-conditionally ] when
@@ -267,4 +267,4 @@ M: word hashcode*
 
 M: word literalize <wrapper> ;
 
-INSTANCE: word definition-mixin ;
+INSTANCE: word definition-mixin

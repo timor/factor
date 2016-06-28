@@ -23,7 +23,7 @@ TUPLE: pprinter last-newline line-count indent ;
     dup pprinter-in get dup [ vocab-name ] when =
     [ drop ] [ pprinter-use get adjoin ] if ;
 
-GENERIC: vocabulary-name ( obj -- string ) ;
+GENERIC: vocabulary-name ( obj -- string )
 
 M: word vocabulary-name
     vocabulary>> ;
@@ -70,19 +70,19 @@ SYMBOL: soft
 SYMBOL: hard
 
 ! Section protocol
-GENERIC: section-fits? ( section -- ? ) ;
+GENERIC: section-fits? ( section -- ? )
 
-GENERIC: short-section ( section -- ) ;
+GENERIC: short-section ( section -- )
 
-GENERIC: long-section ( section -- ) ;
+GENERIC: long-section ( section -- )
 
-GENERIC: indent-section? ( section -- ? ) ;
+GENERIC: indent-section? ( section -- ? )
 
-GENERIC: unindent-first-line? ( section -- ? ) ;
+GENERIC: unindent-first-line? ( section -- ? )
 
-GENERIC: newline-after? ( section -- ? ) ;
+GENERIC: newline-after? ( section -- ? )
 
-GENERIC: short-section? ( section -- ? ) ;
+GENERIC: short-section? ( section -- ? )
 
 ! Sections
 TUPLE: section

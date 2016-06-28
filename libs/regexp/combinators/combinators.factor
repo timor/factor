@@ -13,7 +13,7 @@ PRIVATE<
 
 PRIVATE>
 
-CONSTANT: <nothing> R[[ (?~.*)]]s ;
+CONSTANT: <nothing> R[[ (?~.*)]]s
 
 : <literal> ( string -- regexp )
     [ "\\Q" "\\E" surround ] [ <concatenation> ] bi make-regexp ; foldable

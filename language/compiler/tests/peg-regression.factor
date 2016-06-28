@@ -9,7 +9,7 @@ IN: compiler.tests.peg-regression
 
 TUPLE: pipeline-expr background ;
 
-GENERIC: blah ( a -- b ) ;
+GENERIC: blah ( a -- b )
 
 M: pipeline-expr blah ;
 

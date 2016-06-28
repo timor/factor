@@ -36,7 +36,7 @@ CONSTANT: system-code-names H{
     { { 10 2 } "Jaguar" }
     { { 10 1 } "Puma" }
     { { 10 0 } "Cheetah" }
-} ;
+}
 
 : system-code-name ( -- str/f )
     system-version-major system-version-minor 2array

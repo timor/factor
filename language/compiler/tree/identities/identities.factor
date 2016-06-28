@@ -57,7 +57,7 @@ SYMBOL: X
 : find-identity ( patterns infos -- result )
     $[ first _ matches? ] find swap [ second ] when ;
 
-GENERIC: apply-identities* ( node -- node ) ;
+GENERIC: apply-identities* ( node -- node )
 
 : simplify-to-constant ( #call constant -- nodes )
     [ [ in-d>> <#drop> ] [ out-d>> first ] bi ] dip swap <#push>

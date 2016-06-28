@@ -9,12 +9,12 @@ BUILTIN: quotation
     cached-effect
     cache-counter ;
 
-PRIMITIVE: jit-compile ( quot -- ) ;
-PRIMITIVE: quotation-code ( quot -- start end ) ;
-PRIMITIVE: quotation-compiled? ( quot -- ? ) ;
+PRIMITIVE: jit-compile ( quot -- )
+PRIMITIVE: quotation-code ( quot -- start end )
+PRIMITIVE: quotation-compiled? ( quot -- ? )
 
 PRIVATE<
-PRIMITIVE: array>quotation ( array -- quot ) ;
+PRIMITIVE: array>quotation ( array -- quot )
 
 : uncurry ( curry -- obj quot )
     { curry } declare dup 2 slot swap 3 slot ; inline
@@ -47,11 +47,11 @@ M: quotation nth-unsafe array>> nth-unsafe ;
 
 M: callable like drop dup quotation? [ >quotation ] unless ;
 
-INSTANCE: quotation immutable-sequence ;
+INSTANCE: quotation immutable-sequence
 
 : 1quotation ( obj -- quot ) 1array array>quotation ;
 
-GENERIC: literalize ( obj -- wrapped ) ;
+GENERIC: literalize ( obj -- wrapped )
 
 M: object literalize ;
 
@@ -65,7 +65,7 @@ M: curry nth
     [ [ 1 - ] dip quot>> nth ]
     if ;
 
-INSTANCE: curry immutable-sequence ;
+INSTANCE: curry immutable-sequence
 
 M: compose length
     [ first>> length ] [ second>> length ] bi + ;
@@ -79,4 +79,4 @@ M: compose virtual@
         [ first>> length - ] [ second>> ] bi
     ] if ;
 
-INSTANCE: compose virtual-sequence ;
+INSTANCE: compose virtual-sequence

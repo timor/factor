@@ -22,7 +22,7 @@ M: cycles virtual@ ( n seq -- n' seq' ) circular>> ;
 
 M: cycles virtual-exemplar circular>> ;
 
-INSTANCE: cycles virtual-sequence ;
+INSTANCE: cycles virtual-sequence
 
 TUPLE: repeats
 { seq sequence read-only }
@@ -39,4 +39,4 @@ M: repeats length length>> ;
 M: repeats nth-unsafe
     [ length>> / ] [ seq>> [ length * >integer ] keep nth ] bi ;
 
-INSTANCE: repeats immutable-sequence ;
+INSTANCE: repeats immutable-sequence

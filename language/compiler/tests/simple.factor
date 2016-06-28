@@ -202,7 +202,7 @@ DEFER: countdown-b
     ] compile-call
 ] unit-test
 
-GENERIC: single-combination-test ( obj1 obj2 -- obj ) ;
+GENERIC: single-combination-test ( obj1 obj2 -- obj )
 
 M: object single-combination-test drop ;
 M: f single-combination-test nip ;
@@ -221,7 +221,7 @@ DEFER: single-combination-test-2
 : single-combination-test-3 ( obj -- obj )
     drop 3 ;
 
-GENERIC: single-combination-test-2 ( obj -- obj ) ;
+GENERIC: single-combination-test-2 ( obj -- obj )
 M: object single-combination-test-2 single-combination-test-3 ;
 M: f single-combination-test-2 single-combination-test-4 ;
 
@@ -245,7 +245,7 @@ M: f single-combination-test-2 single-combination-test-4 ;
 ] times
 
 ! This should not compile
-GENERIC: bad-effect-test ( a -- ) ;
+GENERIC: bad-effect-test ( a -- )
 M: quotation bad-effect-test call ; inline
 : bad-effect-test* ( -- ) [ 1 2 3 ] bad-effect-test ;
 

@@ -92,12 +92,12 @@ M: ##unbox-alien rewrite rewrite-unbox-any-c-ptr ;
         [ base>> vreg>insn [ ##add? ] with-available-uses? ]
     } 1&& ;
 
-GENERIC: alien-insn-value ( insn -- value ) ;
+GENERIC: alien-insn-value ( insn -- value )
 
 M: ##load-memory-imm alien-insn-value dst>> ;
 M: ##store-memory-imm alien-insn-value src>> ;
 
-GENERIC: new-alien-insn ( value base displacement scale offset rep c-type insn -- insn ) ;
+GENERIC: new-alien-insn ( value base displacement scale offset rep c-type insn -- insn )
 
 M: ##load-memory-imm new-alien-insn drop ##load-memory new-insn ;
 M: ##store-memory-imm new-alien-insn drop ##store-memory new-insn ;

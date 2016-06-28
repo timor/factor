@@ -18,7 +18,7 @@ CONSTANT: rom-info {
     { 0x1800 "lrescue/lrescue.4" }
     { 0x4000 "lrescue/lrescue.5" }
     { 0x4800 "lrescue/lrescue.6" }
-} ;
+}
 
 : run-lunar ( -- )
     [

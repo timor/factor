@@ -31,7 +31,7 @@ M: data-map-param nth-unsafe
         [ c-type>> ]
     } cleave <displaced-direct-array> ; inline
 
-INSTANCE: data-map-param immutable-sequence ;
+INSTANCE: data-map-param immutable-sequence
 
 : c-type-count ( in/out -- c-type count )
     dup array? [ unclip swap array-length >fixnum ] [ 1 ] if ; inline

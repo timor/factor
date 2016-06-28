@@ -9,7 +9,7 @@ IN: xml.syntax.inverse
 : remove-blanks ( seq -- newseq )
     [ { [ string? not ] [ [ blank? ] all? not ] } 1|| ] filter ;
 
-GENERIC: >xml ( xml -- tag ) ;
+GENERIC: >xml ( xml -- tag )
 M: xml >xml body>> ;
 M: tag >xml ;
 M: xml-chunk >xml
@@ -21,12 +21,12 @@ M: object >xml fail ;
 : 1chunk ( object -- xml-chunk )
     1array <xml-chunk> ;
 
-GENERIC: >xml-chunk ( xml -- chunk ) ;
+GENERIC: >xml-chunk ( xml -- chunk )
 M: xml >xml-chunk body>> 1chunk ;
 M: xml-chunk >xml-chunk ;
 M: object >xml-chunk 1chunk ;
 
-GENERIC: [undo-xml] ( xml -- quot ) ;
+GENERIC: [undo-xml] ( xml -- quot )
 
 M: xml [undo-xml]
     body>> [undo-xml] $[ >xml @ ] ;

@@ -3,7 +3,7 @@ compiler.tree.debugger tools.test ;
 IN: hints.tests
 
 ! Regression
-GENERIC: blahblah ( a b c -- ) ;
+GENERIC: blahblah ( a b c -- )
 
 M: hashtable blahblah 2nip [ 1 + ] change-count drop ;
 

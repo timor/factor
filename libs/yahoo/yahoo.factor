@@ -6,7 +6,7 @@ IN: yahoo
 
 TUPLE: result title url summary ;
 
-C: <result> result ;
+C: <result> result
 
 TUPLE: search query results adult-ok start appid region type
 format similar-ok language country site subscription license ;
@@ -18,7 +18,7 @@ format similar-ok language country site subscription license ;
         first3 <result>
     ] map ;
 
-CONSTANT: yahoo-url URL" http://search.yahooapis.com/WebSearchService/V1/webSearch" ;
+CONSTANT: yahoo-url URL" http://search.yahooapis.com/WebSearchService/V1/webSearch"
 
 :: param ( search url name quot -- search url )
     search url search quot call
@@ -48,7 +48,7 @@ CONSTANT: yahoo-url URL" http://search.yahooapis.com/WebSearchService/V1/webSear
     "similar_ok" [ similar-ok>> ] bool-param
     nip ;
 
-CONSTANT: factor-id "fRrVAKzV34GDyeRw6bUHDhEWHRedwfOC7e61wwXZLgGF80E67spxdQXuugBe2pgIevMmKwA-" ;
+CONSTANT: factor-id "fRrVAKzV34GDyeRw6bUHDhEWHRedwfOC7e61wwXZLgGF80E67spxdQXuugBe2pgIevMmKwA-"
 
 : <search> ( query -- search )
     search new

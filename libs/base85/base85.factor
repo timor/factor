@@ -11,7 +11,7 @@ PRIVATE<
 
 COMPILE<
 CONSTANT: alphabet
-    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_`{|}~\";" ;
+    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_`{|}~\";"
 COMPILE>
 : ch>base85 ( ch -- ch )
     alphabet nth ; inline

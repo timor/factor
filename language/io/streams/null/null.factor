@@ -5,9 +5,9 @@ IN: io.streams.null
 
 SINGLETONS: null-reader null-writer ;
 UNION: null-stream null-reader null-writer ;
-INSTANCE: null-reader input-stream ;
-INSTANCE: null-writer output-stream ;
-INSTANCE: null-writer plain-writer ;
+INSTANCE: null-reader input-stream
+INSTANCE: null-writer output-stream
+INSTANCE: null-writer plain-writer
 
 M: null-stream dispose drop ;
 

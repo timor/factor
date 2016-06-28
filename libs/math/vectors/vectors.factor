@@ -3,100 +3,100 @@
 USING: arrays alien.c-types assocs kernel sequences math
 math.functions grouping math.order math.libm math.floats.private
 fry combinators byte-arrays accessors locals ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 IN: math.vectors
 
-GENERIC: vneg ( v -- w ) ;
+GENERIC: vneg ( v -- w )
 M: object vneg [ neg ] map ; inline
 
-GENERIC#: v+n 1 ( v n -- w ) ;
+GENERIC#: v+n 1 ( v n -- w )
 M: object v+n [ + ] curry map ; inline
 
-GENERIC: n+v ( n v -- w ) ;
+GENERIC: n+v ( n v -- w )
 M: object n+v [ + ] with map ; inline
 
-GENERIC#: v-n 1 ( v n -- w ) ;
+GENERIC#: v-n 1 ( v n -- w )
 M: object v-n [ - ] curry map ; inline
 
-GENERIC: n-v ( n v -- w ) ;
+GENERIC: n-v ( n v -- w )
 M: object n-v [ - ] with map ; inline
 
-GENERIC#: v*n 1 ( v n -- w ) ;
+GENERIC#: v*n 1 ( v n -- w )
 M: object v*n [ * ] curry map ; inline
 
-GENERIC: n*v ( n v -- w ) ;
+GENERIC: n*v ( n v -- w )
 M: object n*v [ * ] with map ; inline
 
-GENERIC#: v/n 1 ( v n -- w ) ;
+GENERIC#: v/n 1 ( v n -- w )
 M: object v/n [ / ] curry map ; inline
 
-GENERIC: n/v ( n v -- w ) ;
+GENERIC: n/v ( n v -- w )
 M: object n/v [ / ] with map ; inline
 
-GENERIC: v+ ( u v -- w ) ;
+GENERIC: v+ ( u v -- w )
 M: object v+ [ + ] 2map ; inline
 
-GENERIC: v- ( u v -- w ) ;
+GENERIC: v- ( u v -- w )
 M: object v- [ - ] 2map ; inline
 
-GENERIC: [v-] ( u v -- w ) ;
+GENERIC: [v-] ( u v -- w )
 M: object [v-] [ [-] ] 2map ; inline
 
-GENERIC: v* ( u v -- w ) ;
+GENERIC: v* ( u v -- w )
 M: object v* [ * ] 2map ; inline
 
-GENERIC: v*high ( u v -- w ) ;
+GENERIC: v*high ( u v -- w )
 
 PRIVATE<
 : (h+) ( v -- w ) 2 <groups> [ first2 + ] map ;
 PRIVATE>
 
-GENERIC: v*hs+ ( u v -- w ) ;
+GENERIC: v*hs+ ( u v -- w )
 M: object v*hs+ [ * ] 2map (h+) ; inline
 
-GENERIC: v/ ( u v -- w ) ;
+GENERIC: v/ ( u v -- w )
 M: object v/ [ / ] 2map ; inline
 
-GENERIC: v^ ( u v -- w ) ;
+GENERIC: v^ ( u v -- w )
 M: object v^ [ ^ ] 2map ; inline
 
-GENERIC: v^n ( v n -- w ) ;
+GENERIC: v^n ( v n -- w )
 M: object v^n [ ^ ] curry map ; inline
 
-GENERIC: n^v ( n v -- w ) ;
+GENERIC: n^v ( n v -- w )
 M: object n^v [ ^ ] with map ; inline
 
-GENERIC: vavg ( u v -- w ) ;
+GENERIC: vavg ( u v -- w )
 M: object vavg [ + 2 / ] 2map ; inline
 
-GENERIC: vmax ( u v -- w ) ;
+GENERIC: vmax ( u v -- w )
 M: object vmax [ max ] 2map ; inline
 
-GENERIC: vmin ( u v -- w ) ;
+GENERIC: vmin ( u v -- w )
 M: object vmin [ min ] 2map ; inline
 
-GENERIC: v+- ( u v -- w ) ;
+GENERIC: v+- ( u v -- w )
 M: object v+-
     [ t ] 2dip
     [ [ not ] 2dip pick [ + ] [ - ] if ] 2map
     nip ; inline
 
-GENERIC: vs+ ( u v -- w ) ;
+GENERIC: vs+ ( u v -- w )
 M: object vs+ [ + ] 2map ; inline
 
-GENERIC: vs- ( u v -- w ) ;
+GENERIC: vs- ( u v -- w )
 M: object vs- [ - ] 2map ; inline
 
-GENERIC: vs* ( u v -- w ) ;
+GENERIC: vs* ( u v -- w )
 M: object vs* [ * ] 2map ; inline
 
-GENERIC: vabs ( v -- w ) ;
+GENERIC: vabs ( v -- w )
 M: object vabs [ abs ] map ; inline
 
-GENERIC: vsqrt ( v -- w ) ;
+GENERIC: vsqrt ( v -- w )
 M: object vsqrt [ >float fsqrt ] map ; inline
 
-GENERIC: vsad ( u v -- n ) ;
+GENERIC: vsad ( u v -- n )
 M: object vsad [ - abs ] [ + ] 2map-reduce ; inline
 
 PRIVATE<
@@ -105,100 +105,100 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: vbitand ( u v -- w ) ;
+GENERIC: vbitand ( u v -- w )
 M: object vbitand [ bitand ] 2map ; inline
-GENERIC: vbitandn ( u v -- w ) ;
+GENERIC: vbitandn ( u v -- w )
 M: object vbitandn [ bitandn ] 2map ; inline
-GENERIC: vbitor ( u v -- w ) ;
+GENERIC: vbitor ( u v -- w )
 M: object vbitor [ bitor ] 2map ; inline
-GENERIC: vbitxor ( u v -- w ) ;
+GENERIC: vbitxor ( u v -- w )
 M: object vbitxor [ bitxor ] 2map ; inline
-GENERIC: vbitnot ( v -- w ) ;
+GENERIC: vbitnot ( v -- w )
 M: object vbitnot [ bitnot ] map ; inline
 
-GENERIC#: vbroadcast 1 ( u n -- v ) ;
+GENERIC#: vbroadcast 1 ( u n -- v )
 M:: object vbroadcast ( u n -- v ) u length n u nth <repetition> u like ; inline
 
-GENERIC#: vshuffle-elements 1 ( v perm -- w ) ;
+GENERIC#: vshuffle-elements 1 ( v perm -- w )
 M: object vshuffle-elements
     over length 0 pad-tail
     swap [ $[ _ nth ] ] keep map-as ; inline
 
-GENERIC#: vshuffle2-elements 1 ( u v perm -- w ) ;
+GENERIC#: vshuffle2-elements 1 ( u v perm -- w )
 M: object vshuffle2-elements
     [ append ] dip vshuffle-elements ; inline
 
-GENERIC#: vshuffle-bytes 1 ( v perm -- w ) ;
+GENERIC#: vshuffle-bytes 1 ( v perm -- w )
 
-GENERIC: vshuffle ( v perm -- w ) ;
+GENERIC: vshuffle ( v perm -- w )
 M: array vshuffle ( v perm -- w )
     vshuffle-elements ; inline
 
-GENERIC#: vlshift 1 ( v n -- w ) ;
+GENERIC#: vlshift 1 ( v n -- w )
 M: object vlshift $[ _ shift ] map ; inline
-GENERIC#: vrshift 1 ( v n -- w ) ;
+GENERIC#: vrshift 1 ( v n -- w )
 M: object vrshift neg $[ _ shift ] map ; inline
 
-GENERIC#: hlshift 1 ( v n -- w ) ;
-GENERIC#: hrshift 1 ( v n -- w ) ;
+GENERIC#: hlshift 1 ( v n -- w )
+GENERIC#: hrshift 1 ( v n -- w )
 
-GENERIC: (vmerge-head) ( u v -- h ) ;
+GENERIC: (vmerge-head) ( u v -- h )
 M: object (vmerge-head) over length 2 /i $[ _ head-slice ] bi@ [ zip ] keep concat-as ; inline
-GENERIC: (vmerge-tail) ( u v -- t ) ;
+GENERIC: (vmerge-tail) ( u v -- t )
 M: object (vmerge-tail) over length 2 /i $[ _ tail-slice ] bi@ [ zip ] keep concat-as ; inline
 
 : (vmerge) ( u v -- h t )
     [ (vmerge-head) ] [ (vmerge-tail) ] 2bi ; inline
 
-GENERIC: vmerge ( u v -- w ) ;
+GENERIC: vmerge ( u v -- w )
 M: object vmerge [ zip ] keep concat-as ; inline
 
-GENERIC: vand ( u v -- w ) ;
+GENERIC: vand ( u v -- w )
 M: object vand [ and ] 2map ; inline
 
-GENERIC: vandn ( u v -- w ) ;
+GENERIC: vandn ( u v -- w )
 M: object vandn [ [ not ] dip and ] 2map ; inline
 
-GENERIC: vor ( u v -- w ) ;
+GENERIC: vor ( u v -- w )
 M: object vor [ or ] 2map ; inline
 
-GENERIC: vxor ( u v -- w ) ;
+GENERIC: vxor ( u v -- w )
 M: object vxor [ xor ] 2map ; inline
 
-GENERIC: vnot ( v -- w ) ;
+GENERIC: vnot ( v -- w )
 M: object vnot [ not ] map ; inline
 
-GENERIC: vall? ( v -- ? ) ;
+GENERIC: vall? ( v -- ? )
 M: object vall? [ ] all? ; inline
 
-GENERIC: vcount ( v -- count ) ;
+GENERIC: vcount ( v -- count )
 M: object vcount [ ] count ; inline
 
-GENERIC: vany? ( v -- ? ) ;
+GENERIC: vany? ( v -- ? )
 M: object vany? [ ] any? ; inline
 
-GENERIC: vnone? ( v -- ? ) ;
+GENERIC: vnone? ( v -- ? )
 M: object vnone? [ not ] all? ; inline
 
-GENERIC: v< ( u v -- w ) ;
+GENERIC: v< ( u v -- w )
 M: object v< [ < ] 2map ; inline
 
-GENERIC: v<= ( u v -- w ) ;
+GENERIC: v<= ( u v -- w )
 M: object v<= [ <= ] 2map ; inline
 
-GENERIC: v>= ( u v -- w ) ;
+GENERIC: v>= ( u v -- w )
 M: object v>= [ >= ] 2map ; inline
 
-GENERIC: v> ( u v -- w ) ;
+GENERIC: v> ( u v -- w )
 M: object v> [ > ] 2map ; inline
 
-GENERIC: vunordered? ( u v -- w ) ;
+GENERIC: vunordered? ( u v -- w )
 M: object vunordered? [ unordered? ] 2map ; inline
 
-GENERIC: v= ( u v -- w ) ;
+GENERIC: v= ( u v -- w )
 M: object v= [ = ] 2map ; inline
 
-GENERIC: v? ( mask true false -- result ) ;
+GENERIC: v? ( mask true false -- result )
 M: object v?
     [ vand ] [ vandn ] bi-curry* bi vor ; inline
 
@@ -217,13 +217,13 @@ M: object v?
 : vsupremum ( seq -- vmax ) [ ] [ vmax ] map-reduce ; inline
 : vinfimum ( seq -- vmin ) [ ] [ vmin ] map-reduce ; inline
 
-GENERIC: v. ( u v -- x ) ;
+GENERIC: v. ( u v -- x )
 M: object v. [ * ] [ + ] 2map-reduce ; inline
 
-GENERIC: h. ( u v -- x ) ;
+GENERIC: h. ( u v -- x )
 M: object h. [ conjugate * ] [ + ] 2map-reduce ; inline
 
-GENERIC: norm-sq ( v -- x ) ;
+GENERIC: norm-sq ( v -- x )
 M: object norm-sq [ absq ] [ + ] map-reduce ; inline
 
 : l1-norm ( v -- x ) [ abs ] map-sum ; inline
@@ -243,7 +243,7 @@ M: object norm-sq [ absq ] [ + ] map-reduce ; inline
 
 : normalize ( v -- w ) dup norm v/n ; inline
 
-GENERIC: distance ( u v -- x ) ;
+GENERIC: distance ( u v -- x )
 M: object distance [ - absq ] [ + ] 2map-reduce sqrt ; inline
 
 : set-axis ( u v axis -- w )

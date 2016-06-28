@@ -131,9 +131,9 @@ CONSTANT: image-internal-formats H{
     { { RGBA      uint-integer-components   } $\ GL_RGBA32UI       }
     { { RGBA      u-5-5-5-1-components      } $\ GL_RGB5_A1            }
     { { RGBA      u-10-10-10-2-components   } $\ GL_RGB10_A2           }
-} ;
+}
 
-GENERIC: fix-internal-component-order ( order -- order' ) ;
+GENERIC: fix-internal-component-order ( order -- order' )
 
 M: object fix-internal-component-order ;
 M: BGR fix-internal-component-order drop RGB ;
@@ -193,7 +193,7 @@ M: XBGR fix-internal-component-order drop RGBA ;
         } case
     ] if ;
 
-GENERIC: (component-type>type) ( component-order component-type -- gl-type ) ;
+GENERIC: (component-type>type) ( component-order component-type -- gl-type )
 
 M: object (component-type>type) unsupported-component-order ;
 
@@ -262,7 +262,7 @@ SLOT: display-list
 
 : draw-texture ( texture -- ) display-list>> [ glCallList ] when* ;
 
-GENERIC: draw-scaled-texture ( dim texture -- ) ;
+GENERIC: draw-scaled-texture ( dim texture -- )
 
 DEFER: make-texture
 
@@ -404,7 +404,7 @@ M: multi-texture draw-scaled-texture nip draw-texture ;
 
 M: multi-texture dispose* grid>> [ [ dispose ] each ] each ;
 
-CONSTANT: max-texture-size { 512 512 } ;
+CONSTANT: max-texture-size { 512 512 }
 
 PRIVATE>
 

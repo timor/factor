@@ -22,7 +22,7 @@ M: persistent-vector length count>> ;
 
 PRIVATE<
 
-CONSTANT: node-size 32 ;
+CONSTANT: node-size 32
 
 : node-mask ( m -- n ) node-size mod ; inline
 
@@ -187,4 +187,4 @@ M: persistent-vector pprint-delims drop \ PV{ \ } ;
 M: persistent-vector >pprint-sequence ;
 M: persistent-vector pprint* pprint-object ;
 
-INSTANCE: persistent-vector immutable-sequence ;
+INSTANCE: persistent-vector immutable-sequence

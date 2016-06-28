@@ -14,7 +14,7 @@ IN: compiler.tree.propagation.info
 
 : null-class? ( class -- ? ) null class<= ;
 
-GENERIC: eql? ( obj1 obj2 -- ? ) ;
+GENERIC: eql? ( obj1 obj2 -- ? )
 M: object eql? eq? ;
 M: fixnum eql? eq? ;
 M: bignum eql? over bignum? [ = ] [ 2drop f ] if ;
@@ -29,9 +29,9 @@ TUPLE: value-info-state
     literal?
     slots ;
 
-CONSTANT: null-info T{ value-info-state f null empty-interval } ;
+CONSTANT: null-info T{ value-info-state f null empty-interval }
 
-CONSTANT: object-info T{ value-info-state f object full-interval } ;
+CONSTANT: object-info T{ value-info-state f object full-interval }
 
 : interval>literal ( class interval -- literal literal? )
     dup special-interval? [

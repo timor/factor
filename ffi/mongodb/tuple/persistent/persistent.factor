@@ -6,9 +6,9 @@ IN: mongodb.tuple.persistent
 
 SYMBOLS: object-map ;
 
-GENERIC: tuple>assoc ( tuple -- assoc ) ;
+GENERIC: tuple>assoc ( tuple -- assoc )
 
-GENERIC: tuple>selector ( tuple -- selector ) ;
+GENERIC: tuple>selector ( tuple -- selector )
 
 DEFER: assoc>tuple
 
@@ -86,7 +86,7 @@ CONSTRUCTOR: <cond-value> cond-value ( value quot -- cond-value ) ;
 
 PRIVATE>
 
-GENERIC: tuple>storable ( tuple -- storable ) ;
+GENERIC: tuple>storable ( tuple -- storable )
 
 : ensure-oid ( tuple -- tuple )
    dup id>> [ <oid> >>id ] unless ; inline

@@ -11,8 +11,8 @@ PREDICATE: class < word "class" word-prop ;
 PREDICATE: defining-class < word "defining-class" word-prop ;
 
 MIXIN: classoid
-INSTANCE: class classoid ;
-INSTANCE: defining-class classoid ;
+INSTANCE: class classoid
+INSTANCE: defining-class classoid
 
 PRIVATE<
 
@@ -43,13 +43,13 @@ SYMBOL: update-map
 
 SYMBOL: implementors-map
 
-GENERIC: class-name ( class -- string ) ;
+GENERIC: class-name ( class -- string )
 
 M: class class-name name>> ;
 
-GENERIC: rank-class ( class -- n ) ;
+GENERIC: rank-class ( class -- n )
 
-GENERIC: reset-class ( class -- ) ;
+GENERIC: reset-class ( class -- )
 
 M: class reset-class
     {
@@ -74,11 +74,11 @@ PREDICATE: predicate < word "predicating" word-prop >boolean ;
     [ name>> "?" append ] [ vocabulary>> ] bi create-word
     dup predicate? [ dup reset-generic ] unless ;
 
-GENERIC: class-of ( object -- class ) ;
+GENERIC: class-of ( object -- class )
 
-GENERIC: instance? ( object class -- ? ) ; flushable
+GENERIC: instance? ( object class -- ? ) flushable
 
-GENERIC: predicate-def ( obj -- quot ) ;
+GENERIC: predicate-def ( obj -- quot )
 
 M: word predicate-def
     "predicate" word-prop ;
@@ -121,7 +121,7 @@ M: predicate reset-word
     ! Output f for non-classes to work with algebra code
     dup class? [ "participants" word-prop ] [ drop f ] if ;
 
-GENERIC: implementors ( class/classes -- seq ) ;
+GENERIC: implementors ( class/classes -- seq )
 
 ! update-map
 : class-uses ( class -- seq )
@@ -166,7 +166,7 @@ PRIVATE<
         } spread
     ] H{ } make ;
 
-GENERIC: metaclass-changed ( use class -- ) ;
+GENERIC: metaclass-changed ( use class -- )
 
 : ?metaclass-changed ( class usages/f -- )
     [ [ metaclass-changed ] with each ] [ drop ] if* ;
@@ -201,11 +201,11 @@ GENERIC: metaclass-changed ( use class -- ) ;
         [ nip ?metaclass-changed ]
     } 3cleave ;
 
-GENERIC: update-class ( class -- ) ;
+GENERIC: update-class ( class -- )
 
 M: class update-class drop ;
 
-GENERIC: update-methods ( class seq -- ) ;
+GENERIC: update-methods ( class seq -- )
 
 : update-classes ( class -- )
     dup class-usages
@@ -226,7 +226,7 @@ GENERIC: update-methods ( class seq -- ) ;
         [ forget ] [ drop ] if
     ] [ 2drop ] if ;
 
-GENERIC: forget-methods ( class -- ) ;
+GENERIC: forget-methods ( class -- )
 
 PRIVATE>
 

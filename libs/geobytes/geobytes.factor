@@ -11,10 +11,10 @@ IN: geobytes
 ! Download and install GeoBytes yourself should you wish to use it.
 ! http://www.geobytes.com/GeoWorldMap.zip
 
-CONSTANT: geobytes-cities-path "resource:GeoWorldMap/Cities.txt" ;
-CONSTANT: geobytes-countries-path "resource:GeoWorldMap/Countries.txt" ;
-CONSTANT: geobytes-regions-path "resource:GeoWorldMap/Regions.txt" ;
-CONSTANT: geobytes-version-path "resource:GeoWorldMap/version.txt" ;
+CONSTANT: geobytes-cities-path "resource:GeoWorldMap/Cities.txt"
+CONSTANT: geobytes-countries-path "resource:GeoWorldMap/Countries.txt"
+CONSTANT: geobytes-regions-path "resource:GeoWorldMap/Regions.txt"
+CONSTANT: geobytes-version-path "resource:GeoWorldMap/version.txt"
 
 TUPLE: country country-id country fips104 iso2 iso3 ison internet capital map-reference
 nationality-singular nationality-plural currency currency-code population title

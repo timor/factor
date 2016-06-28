@@ -6,7 +6,7 @@ strings system ;
 IN: io.pathnames
 
 TUPLE: pathname string ;
-C: <pathname> pathname ;
+C: <pathname> pathname
 
 M: pathname nth string>> nth ;
 M: pathname nth-unsafe string>> nth-unsafe ;
@@ -15,13 +15,13 @@ M: pathname like drop dup pathname? [ <pathname> ] unless ;
 M: pathname string-lines normalize-path 1array ;
 
 TUPLE: resource-path < pathname ;
-C: <resource-path> resource-path ;
+C: <resource-path> resource-path
 
 TUPLE: vocab-path < pathname ;
-C: <vocab-path> vocab-path ;
+C: <vocab-path> vocab-path
 
 TUPLE: home-path < pathname ;
-C: <home-path> home-path ;
+C: <home-path> home-path
 
 M: resource-path like drop dup pathname? [ <resource-path> ] unless ;
 M: vocab-path like drop dup pathname? [ <vocab-path> ] unless ;
@@ -42,7 +42,7 @@ SYMBOL: current-directory
 : last-path-separator ( path -- n ? )
     [ length 1 - ] keep [ path-separator? ] find-last-from ;
 
-HOOK: root-directory? io-backend ( path -- ? ) ;
+HOOK: root-directory? io-backend ( path -- ? )
 
 M: object root-directory? ( path -- ? )
     [ f ] [ [ path-separator? ] all? ] if-empty ;
@@ -151,20 +151,20 @@ PRIVATE>
 : path-components ( path -- seq )
     normalize-path path-separator split harvest ;
 
-HOOK: resolve-symlinks os ( path -- path' ) ;
+HOOK: resolve-symlinks os ( path -- path' )
 
 M: object resolve-symlinks normalize-path ;
 
 : resource-path ( path -- newpath )
     "resource-path" get prepend-path ;
 
-HOOK: home io-backend ( -- dir ) ;
+HOOK: home io-backend ( -- dir )
 
 M: object home "" resource-path ;
 
-GENERIC: vocab-path ( path -- newpath ) ;
+GENERIC: vocab-path ( path -- newpath )
 
-GENERIC: absolute-path ( path -- path' ) ;
+GENERIC: absolute-path ( path -- path' )
 
 M: string absolute-path
     "resource:" ?head [

@@ -52,7 +52,7 @@ IN: calendar.format
         0 0 0 read-00 read-00 0 instant <timestamp>
     ] with-string-reader ;
 
-GENERIC: day. ( obj -- ) ;
+GENERIC: day. ( obj -- )
 
 M: integer day. ( n -- )
     number>string dup length 2 < [ bl ] when write ;
@@ -60,7 +60,7 @@ M: integer day. ( n -- )
 M: timestamp day. ( timestamp -- )
     day>> day. ;
 
-GENERIC: month. ( obj -- ) ;
+GENERIC: month. ( obj -- )
 
 M: array month. ( pair -- )
     first2
@@ -76,7 +76,7 @@ M: array month. ( pair -- )
 M: timestamp month. ( timestamp -- )
     [ year>> ] [ month>> ] bi 2array month. ;
 
-GENERIC: year. ( obj -- ) ;
+GENERIC: year. ( obj -- )
 
 M: integer year. ( n -- )
     12 [ 1 + 2array month. nl ] with each-integer ;

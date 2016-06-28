@@ -5,7 +5,7 @@ strings db.errors ;
 IN: db.sqlite.errors
 
 TUPLE: unparsed-sqlite-error error ;
-C: <unparsed-sqlite-error> unparsed-sqlite-error ;
+C: <unparsed-sqlite-error> unparsed-sqlite-error
 
 SINGLETONS: table-exists table-missing ;
 

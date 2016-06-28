@@ -8,11 +8,11 @@ TUPLE: text-printer < html-printer ;
 TUPLE: src-printer < html-printer ;
 TUPLE: html-prettyprinter < html-printer ;
 
-HOOK: print-text-tag html-printer ( tag -- ) ;
-HOOK: print-comment-tag html-printer ( tag -- ) ;
-HOOK: print-dtd-tag html-printer ( tag -- ) ;
-HOOK: print-opening-tag html-printer ( tag -- ) ;
-HOOK: print-closing-tag html-printer ( tag -- ) ;
+HOOK: print-text-tag html-printer ( tag -- )
+HOOK: print-comment-tag html-printer ( tag -- )
+HOOK: print-dtd-tag html-printer ( tag -- )
+HOOK: print-opening-tag html-printer ( tag -- )
+HOOK: print-closing-tag html-printer ( tag -- )
 
 ERROR: unknown-tag-error tag ;
 

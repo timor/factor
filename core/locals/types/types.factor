@@ -6,25 +6,25 @@ IN: locals.types
 
 TUPLE: lambda vars body ;
 
-C: <lambda> lambda ;
+C: <lambda> lambda
 
 TUPLE: let body ;
 
-C: <let> let ;
+C: <let> let
 
 TUPLE: quote local ;
 
-C: <quote> quote ;
+C: <quote> quote
 
 : unquote ( quote -- local ) dup quote? [ local>> ] when ; inline
 
 TUPLE: def local ;
 
-C: <def> def ;
+C: <def> def
 
 TUPLE: multi-def locals ;
 
-C: <multi-def> multi-def ;
+C: <multi-def> multi-def
 
 PREDICATE: local < word "local?" word-prop ;
 

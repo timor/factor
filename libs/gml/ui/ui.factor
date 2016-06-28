@@ -76,7 +76,7 @@ TUPLE: gml-editor < frame editor gml stack-model b-rep b-rep-model ;
     <update-button> add-gadget
     <reset-button> add-gadget ;
 
-CONSTANT: example-dir "vocab:gml/examples/" ;
+CONSTANT: example-dir "vocab:gml/examples/"
 
 : gml-files ( -- seq )
     example-dir directory-files

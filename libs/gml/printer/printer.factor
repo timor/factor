@@ -4,7 +4,7 @@ hashtables io io.styles kernel math math.parser math.vectors.simd
 math.vectors.simd.cords sequences strings colors ;
 IN: gml.printer
 
-GENERIC: write-gml ( obj -- ) ;
+GENERIC: write-gml ( obj -- )
 
 M: object write-gml "«Object: " write name>> write "»" write ;
 M: integer write-gml number>string write ;
@@ -48,7 +48,7 @@ CONSTANT: vertex-colors
         T{ rgba f   1.   0.   0. 1. }
         T{ rgba f   1.   0.   1. 1. }
         T{ rgba f   1.   1.   0. 1. }
-    } ;
+    }
 
 : vertex-color ( position -- rgba )
     first3 [ [ >float double>bits ] [ >integer ] bi + ] tri@

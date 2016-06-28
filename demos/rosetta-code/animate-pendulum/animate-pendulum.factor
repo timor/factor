@@ -15,9 +15,9 @@ IN: rosetta-code.animate-pendulum
 ! For this task, create a simple physical model of a pendulum
 ! and animate it.
 
-CONSTANT: g 9.81 ;
-CONSTANT: l 20 ;
-CONSTANT: theta0 0.5 ;
+CONSTANT: g 9.81
+CONSTANT: l 20
+CONSTANT: theta0 0.5
 
 : current-time ( -- time ) nano-count -9 10^ * ;
 

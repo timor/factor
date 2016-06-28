@@ -84,7 +84,7 @@ PEG: parse-log-line ( string -- entry ) log-line-parser ;
     log-path 1 log# dup exists?
     [ utf8 file-lines parse-log ] [ drop f ] if ;
 
-GENERIC: log-timestamp. ( date -- ) ;
+GENERIC: log-timestamp. ( date -- )
 
 M: timestamp log-timestamp. (timestamp>string) ;
 M: word log-timestamp. drop "multiline" write ;

@@ -6,25 +6,25 @@ SYMBOLS: game-input-backend game-input-opened ;
 
 game-input-opened [ 0 ] initialize
 
-HOOK: (open-game-input)  game-input-backend ( -- ) ;
-HOOK: (close-game-input) game-input-backend ( -- ) ;
-HOOK: (reset-game-input) game-input-backend ( -- ) ;
+HOOK: (open-game-input)  game-input-backend ( -- )
+HOOK: (close-game-input) game-input-backend ( -- )
+HOOK: (reset-game-input) game-input-backend ( -- )
 
-HOOK: get-controllers game-input-backend ( -- sequence ) ;
+HOOK: get-controllers game-input-backend ( -- sequence )
 
-HOOK: product-string game-input-backend ( controller -- string ) ;
-HOOK: product-id game-input-backend ( controller -- id ) ;
-HOOK: instance-id game-input-backend ( controller -- id ) ;
+HOOK: product-string game-input-backend ( controller -- string )
+HOOK: product-id game-input-backend ( controller -- id )
+HOOK: instance-id game-input-backend ( controller -- id )
 
-HOOK: read-controller game-input-backend ( controller -- controller-state ) ;
-HOOK: calibrate-controller game-input-backend ( controller -- ) ;
-HOOK: vibrate-controller game-input-backend ( controller motor1 motor2 -- ) ;
+HOOK: read-controller game-input-backend ( controller -- controller-state )
+HOOK: calibrate-controller game-input-backend ( controller -- )
+HOOK: vibrate-controller game-input-backend ( controller motor1 motor2 -- )
 
-HOOK: read-keyboard game-input-backend ( -- keyboard-state ) ;
+HOOK: read-keyboard game-input-backend ( -- keyboard-state )
 
-HOOK: read-mouse game-input-backend ( -- mouse-state ) ;
+HOOK: read-mouse game-input-backend ( -- mouse-state )
 
-HOOK: reset-mouse game-input-backend ( -- ) ;
+HOOK: reset-mouse game-input-backend ( -- )
 
 : game-input-opened? ( -- ? )
     game-input-opened get zero? not ;

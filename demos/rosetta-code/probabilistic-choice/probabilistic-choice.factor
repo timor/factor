@@ -35,7 +35,7 @@ CONSTANT: data
     { "waw"     1/10.0 }
     { "zayin"   1/11.0 }
     { "heth"    f }
-} ;
+}
 
 MACRO: case-probas ( data -- quot )
     [ first2 [ 1quotation ] dip [ swap 2array ] when* ] map 1quotation ;

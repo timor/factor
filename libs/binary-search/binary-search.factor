@@ -25,7 +25,7 @@ PRIVATE>
 : search ( seq quot: ( elt -- <=> ) -- i elt )
     over empty? [ 2drop f f ] [ [ 0 over length ] dip (search) ] if ; inline
 
-GENERIC: natural-search ( obj seq -- i elt ) ;
+GENERIC: natural-search ( obj seq -- i elt )
 M: object natural-search [ <=> ] with search ;
 M: array natural-search [ <=> ] with search ;
 M: vector natural-search [ <=> ] with search ;

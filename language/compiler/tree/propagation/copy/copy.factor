@@ -21,7 +21,7 @@ SYMBOL: copies
 : introduce-values ( vals -- )
     copies get [ conjoin ] curry each ;
 
-GENERIC: compute-copy-equiv* ( node -- ) ;
+GENERIC: compute-copy-equiv* ( node -- )
 
 M: #renaming compute-copy-equiv* inputs/outputs are-copies-of ;
 

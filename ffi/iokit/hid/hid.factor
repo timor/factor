@@ -4,117 +4,117 @@ core-foundation.dictionaries core-foundation.run-loop
 core-foundation.strings core-foundation.time unix.types ;
 IN: iokit.hid
 
-CONSTANT: kIOHIDDeviceKey "IOHIDDevice" ;
+CONSTANT: kIOHIDDeviceKey "IOHIDDevice"
 
-CONSTANT: kIOHIDTransportKey                  "Transport" ;
-CONSTANT: kIOHIDVendorIDKey                   "VendorID" ;
-CONSTANT: kIOHIDVendorIDSourceKey             "VendorIDSource" ;
-CONSTANT: kIOHIDProductIDKey                  "ProductID" ;
-CONSTANT: kIOHIDVersionNumberKey              "VersionNumber" ;
-CONSTANT: kIOHIDManufacturerKey               "Manufacturer" ;
-CONSTANT: kIOHIDProductKey                    "Product" ;
-CONSTANT: kIOHIDSerialNumberKey               "SerialNumber" ;
-CONSTANT: kIOHIDCountryCodeKey                "CountryCode" ;
-CONSTANT: kIOHIDLocationIDKey                 "LocationID" ;
-CONSTANT: kIOHIDDeviceUsageKey                "DeviceUsage" ;
-CONSTANT: kIOHIDDeviceUsagePageKey            "DeviceUsagePage" ;
-CONSTANT: kIOHIDDeviceUsagePairsKey           "DeviceUsagePairs" ;
-CONSTANT: kIOHIDPrimaryUsageKey               "PrimaryUsage" ;
-CONSTANT: kIOHIDPrimaryUsagePageKey           "PrimaryUsagePage" ;
-CONSTANT: kIOHIDMaxInputReportSizeKey         "MaxInputReportSize" ;
-CONSTANT: kIOHIDMaxOutputReportSizeKey       "MaxOutputReportSize" ;
-CONSTANT: kIOHIDMaxFeatureReportSizeKey       "MaxFeatureReportSize" ;
-CONSTANT: kIOHIDReportIntervalKey             "ReportInterval" ;
+CONSTANT: kIOHIDTransportKey                  "Transport"
+CONSTANT: kIOHIDVendorIDKey                   "VendorID"
+CONSTANT: kIOHIDVendorIDSourceKey             "VendorIDSource"
+CONSTANT: kIOHIDProductIDKey                  "ProductID"
+CONSTANT: kIOHIDVersionNumberKey              "VersionNumber"
+CONSTANT: kIOHIDManufacturerKey               "Manufacturer"
+CONSTANT: kIOHIDProductKey                    "Product"
+CONSTANT: kIOHIDSerialNumberKey               "SerialNumber"
+CONSTANT: kIOHIDCountryCodeKey                "CountryCode"
+CONSTANT: kIOHIDLocationIDKey                 "LocationID"
+CONSTANT: kIOHIDDeviceUsageKey                "DeviceUsage"
+CONSTANT: kIOHIDDeviceUsagePageKey            "DeviceUsagePage"
+CONSTANT: kIOHIDDeviceUsagePairsKey           "DeviceUsagePairs"
+CONSTANT: kIOHIDPrimaryUsageKey               "PrimaryUsage"
+CONSTANT: kIOHIDPrimaryUsagePageKey           "PrimaryUsagePage"
+CONSTANT: kIOHIDMaxInputReportSizeKey         "MaxInputReportSize"
+CONSTANT: kIOHIDMaxOutputReportSizeKey       "MaxOutputReportSize"
+CONSTANT: kIOHIDMaxFeatureReportSizeKey       "MaxFeatureReportSize"
+CONSTANT: kIOHIDReportIntervalKey             "ReportInterval"
 
-CONSTANT: kIOHIDElementKey                    "Elements" ;
+CONSTANT: kIOHIDElementKey                    "Elements"
 
-CONSTANT: kIOHIDElementCookieKey                      "ElementCookie" ;
-CONSTANT: kIOHIDElementTypeKey                        "Type" ;
-CONSTANT: kIOHIDElementCollectionTypeKey              "CollectionType" ;
-CONSTANT: kIOHIDElementUsageKey                       "Usage" ;
-CONSTANT: kIOHIDElementUsagePageKey                   "UsagePage" ;
-CONSTANT: kIOHIDElementMinKey                         "Min" ;
-CONSTANT: kIOHIDElementMaxKey                         "Max" ;
-CONSTANT: kIOHIDElementScaledMinKey                   "ScaledMin" ;
-CONSTANT: kIOHIDElementScaledMaxKey                   "ScaledMax" ;
-CONSTANT: kIOHIDElementSizeKey                        "Size" ;
-CONSTANT: kIOHIDElementReportSizeKey                  "ReportSize" ;
-CONSTANT: kIOHIDElementReportCountKey                 "ReportCount" ;
-CONSTANT: kIOHIDElementReportIDKey                    "ReportID" ;
-CONSTANT: kIOHIDElementIsArrayKey                     "IsArray" ;
-CONSTANT: kIOHIDElementIsRelativeKey                  "IsRelative" ;
-CONSTANT: kIOHIDElementIsWrappingKey                  "IsWrapping" ;
-CONSTANT: kIOHIDElementIsNonLinearKey                 "IsNonLinear" ;
-CONSTANT: kIOHIDElementHasPreferredStateKey           "HasPreferredState" ;
-CONSTANT: kIOHIDElementHasNullStateKey                "HasNullState" ;
-CONSTANT: kIOHIDElementFlagsKey                       "Flags" ;
-CONSTANT: kIOHIDElementUnitKey                        "Unit" ;
-CONSTANT: kIOHIDElementUnitExponentKey                "UnitExponent" ;
-CONSTANT: kIOHIDElementNameKey                        "Name" ;
-CONSTANT: kIOHIDElementValueLocationKey               "ValueLocation" ;
-CONSTANT: kIOHIDElementDuplicateIndexKey              "DuplicateIndex" ;
-CONSTANT: kIOHIDElementParentCollectionKey            "ParentCollection" ;
+CONSTANT: kIOHIDElementCookieKey                      "ElementCookie"
+CONSTANT: kIOHIDElementTypeKey                        "Type"
+CONSTANT: kIOHIDElementCollectionTypeKey              "CollectionType"
+CONSTANT: kIOHIDElementUsageKey                       "Usage"
+CONSTANT: kIOHIDElementUsagePageKey                   "UsagePage"
+CONSTANT: kIOHIDElementMinKey                         "Min"
+CONSTANT: kIOHIDElementMaxKey                         "Max"
+CONSTANT: kIOHIDElementScaledMinKey                   "ScaledMin"
+CONSTANT: kIOHIDElementScaledMaxKey                   "ScaledMax"
+CONSTANT: kIOHIDElementSizeKey                        "Size"
+CONSTANT: kIOHIDElementReportSizeKey                  "ReportSize"
+CONSTANT: kIOHIDElementReportCountKey                 "ReportCount"
+CONSTANT: kIOHIDElementReportIDKey                    "ReportID"
+CONSTANT: kIOHIDElementIsArrayKey                     "IsArray"
+CONSTANT: kIOHIDElementIsRelativeKey                  "IsRelative"
+CONSTANT: kIOHIDElementIsWrappingKey                  "IsWrapping"
+CONSTANT: kIOHIDElementIsNonLinearKey                 "IsNonLinear"
+CONSTANT: kIOHIDElementHasPreferredStateKey           "HasPreferredState"
+CONSTANT: kIOHIDElementHasNullStateKey                "HasNullState"
+CONSTANT: kIOHIDElementFlagsKey                       "Flags"
+CONSTANT: kIOHIDElementUnitKey                        "Unit"
+CONSTANT: kIOHIDElementUnitExponentKey                "UnitExponent"
+CONSTANT: kIOHIDElementNameKey                        "Name"
+CONSTANT: kIOHIDElementValueLocationKey               "ValueLocation"
+CONSTANT: kIOHIDElementDuplicateIndexKey              "DuplicateIndex"
+CONSTANT: kIOHIDElementParentCollectionKey            "ParentCollection"
 
 : kIOHIDElementVendorSpecificKey ( -- str )
     cpu ppc? "VendorSpecifc" "VendorSpecific" ? ; inline
 
-CONSTANT: kIOHIDElementCookieMinKey           "ElementCookieMin" ;
-CONSTANT: kIOHIDElementCookieMaxKey           "ElementCookieMax" ;
-CONSTANT: kIOHIDElementUsageMinKey            "UsageMin" ;
-CONSTANT: kIOHIDElementUsageMaxKey            "UsageMax" ;
+CONSTANT: kIOHIDElementCookieMinKey           "ElementCookieMin"
+CONSTANT: kIOHIDElementCookieMaxKey           "ElementCookieMax"
+CONSTANT: kIOHIDElementUsageMinKey            "UsageMin"
+CONSTANT: kIOHIDElementUsageMaxKey            "UsageMax"
 
-CONSTANT: kIOHIDElementCalibrationMinKey              "CalibrationMin" ;
-CONSTANT: kIOHIDElementCalibrationMaxKey              "CalibrationMax" ;
-CONSTANT: kIOHIDElementCalibrationSaturationMinKey    "CalibrationSaturationMin" ;
-CONSTANT: kIOHIDElementCalibrationSaturationMaxKey    "CalibrationSaturationMax" ;
-CONSTANT: kIOHIDElementCalibrationDeadZoneMinKey      "CalibrationDeadZoneMin" ;
-CONSTANT: kIOHIDElementCalibrationDeadZoneMaxKey      "CalibrationDeadZoneMax" ;
-CONSTANT: kIOHIDElementCalibrationGranularityKey      "CalibrationGranularity" ;
+CONSTANT: kIOHIDElementCalibrationMinKey              "CalibrationMin"
+CONSTANT: kIOHIDElementCalibrationMaxKey              "CalibrationMax"
+CONSTANT: kIOHIDElementCalibrationSaturationMinKey    "CalibrationSaturationMin"
+CONSTANT: kIOHIDElementCalibrationSaturationMaxKey    "CalibrationSaturationMax"
+CONSTANT: kIOHIDElementCalibrationDeadZoneMinKey      "CalibrationDeadZoneMin"
+CONSTANT: kIOHIDElementCalibrationDeadZoneMaxKey      "CalibrationDeadZoneMax"
+CONSTANT: kIOHIDElementCalibrationGranularityKey      "CalibrationGranularity"
 
-CONSTANT: kIOHIDElementTypeInput_Misc        1 ;
-CONSTANT: kIOHIDElementTypeInput_Button      2 ;
-CONSTANT: kIOHIDElementTypeInput_Axis        3 ;
-CONSTANT: kIOHIDElementTypeInput_ScanCodes   4 ;
-CONSTANT: kIOHIDElementTypeOutput            129 ;
-CONSTANT: kIOHIDElementTypeFeature           257 ;
-CONSTANT: kIOHIDElementTypeCollection        513 ;
+CONSTANT: kIOHIDElementTypeInput_Misc        1
+CONSTANT: kIOHIDElementTypeInput_Button      2
+CONSTANT: kIOHIDElementTypeInput_Axis        3
+CONSTANT: kIOHIDElementTypeInput_ScanCodes   4
+CONSTANT: kIOHIDElementTypeOutput            129
+CONSTANT: kIOHIDElementTypeFeature           257
+CONSTANT: kIOHIDElementTypeCollection        513
 
-CONSTANT: kIOHIDElementCollectionTypePhysical     0x00 ;
-CONSTANT: kIOHIDElementCollectionTypeApplication    0x01 ;
-CONSTANT: kIOHIDElementCollectionTypeLogical        0x02 ;
-CONSTANT: kIOHIDElementCollectionTypeReport         0x03 ;
-CONSTANT: kIOHIDElementCollectionTypeNamedArray     0x04 ;
-CONSTANT: kIOHIDElementCollectionTypeUsageSwitch    0x05 ;
-CONSTANT: kIOHIDElementCollectionTypeUsageModifier  0x06 ;
+CONSTANT: kIOHIDElementCollectionTypePhysical     0x00
+CONSTANT: kIOHIDElementCollectionTypeApplication    0x01
+CONSTANT: kIOHIDElementCollectionTypeLogical        0x02
+CONSTANT: kIOHIDElementCollectionTypeReport         0x03
+CONSTANT: kIOHIDElementCollectionTypeNamedArray     0x04
+CONSTANT: kIOHIDElementCollectionTypeUsageSwitch    0x05
+CONSTANT: kIOHIDElementCollectionTypeUsageModifier  0x06
 
-CONSTANT: kIOHIDReportTypeInput    0 ;
-CONSTANT: kIOHIDReportTypeOutput   1 ;
-CONSTANT: kIOHIDReportTypeFeature  2 ;
-CONSTANT: kIOHIDReportTypeCount    3 ;
+CONSTANT: kIOHIDReportTypeInput    0
+CONSTANT: kIOHIDReportTypeOutput   1
+CONSTANT: kIOHIDReportTypeFeature  2
+CONSTANT: kIOHIDReportTypeCount    3
 
-CONSTANT: kIOHIDOptionsTypeNone        0x00 ;
-CONSTANT: kIOHIDOptionsTypeSeizeDevice 0x01 ;
+CONSTANT: kIOHIDOptionsTypeNone        0x00
+CONSTANT: kIOHIDOptionsTypeSeizeDevice 0x01
 
-CONSTANT: kIOHIDQueueOptionsTypeNone    0x00 ;
-CONSTANT: kIOHIDQueueOptionsTypeEnqueueAll 0x01 ;
+CONSTANT: kIOHIDQueueOptionsTypeNone    0x00
+CONSTANT: kIOHIDQueueOptionsTypeEnqueueAll 0x01
 
-CONSTANT: kIOHIDElementFlagsConstantMask        0x0001 ;
-CONSTANT: kIOHIDElementFlagsVariableMask        0x0002 ;
-CONSTANT: kIOHIDElementFlagsRelativeMask        0x0004 ;
-CONSTANT: kIOHIDElementFlagsWrapMask            0x0008 ;
-CONSTANT: kIOHIDElementFlagsNonLinearMask       0x0010 ;
-CONSTANT: kIOHIDElementFlagsNoPreferredMask     0x0020 ;
-CONSTANT: kIOHIDElementFlagsNullStateMask       0x0040 ;
-CONSTANT: kIOHIDElementFlagsVolativeMask        0x0080 ;
-CONSTANT: kIOHIDElementFlagsBufferedByteMask    0x0100 ;
+CONSTANT: kIOHIDElementFlagsConstantMask        0x0001
+CONSTANT: kIOHIDElementFlagsVariableMask        0x0002
+CONSTANT: kIOHIDElementFlagsRelativeMask        0x0004
+CONSTANT: kIOHIDElementFlagsWrapMask            0x0008
+CONSTANT: kIOHIDElementFlagsNonLinearMask       0x0010
+CONSTANT: kIOHIDElementFlagsNoPreferredMask     0x0020
+CONSTANT: kIOHIDElementFlagsNullStateMask       0x0040
+CONSTANT: kIOHIDElementFlagsVolativeMask        0x0080
+CONSTANT: kIOHIDElementFlagsBufferedByteMask    0x0100
 
-CONSTANT: kIOHIDValueScaleTypeCalibrated 0 ;
-CONSTANT: kIOHIDValueScaleTypePhysical   1 ;
+CONSTANT: kIOHIDValueScaleTypeCalibrated 0
+CONSTANT: kIOHIDValueScaleTypePhysical   1
 
-CONSTANT: kIOHIDTransactionDirectionTypeInput  0 ;
-CONSTANT: kIOHIDTransactionDirectionTypeOutput 1 ;
+CONSTANT: kIOHIDTransactionDirectionTypeInput  0
+CONSTANT: kIOHIDTransactionDirectionTypeOutput 1
 
-CONSTANT: kIOHIDTransactionOptionDefaultOutputValue 1 ;
+CONSTANT: kIOHIDTransactionOptionDefaultOutputValue 1
 
 TYPEDEF: ptrdiff_t IOHIDElementCookie ;
 TYPEDEF: int IOHIDElementType ;

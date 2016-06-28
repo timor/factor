@@ -41,7 +41,7 @@ PRIVATE>
 
 TUPLE: continuation data call retain name catch ;
 
-C: <continuation> continuation ;
+C: <continuation> continuation
 
 : current-continuation ( -- continuation )
     get-datastack get-callstack get-retainstack get-namestack get-catchstack
@@ -105,7 +105,7 @@ SYMBOL: return-continuation
 : return ( -- * )
     return-continuation get continue ;
 
-GENERIC: compute-restarts ( error -- seq ) ;
+GENERIC: compute-restarts ( error -- seq )
 
 PRIVATE<
 
@@ -115,7 +115,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: error-in-thread ( error thread -- * ) ;
+GENERIC: error-in-thread ( error thread -- * )
 
 SYMBOL: thread-error-hook ! ( error thread -- * )
 
@@ -167,7 +167,7 @@ ERROR: attempt-all-error ;
 
 TUPLE: condition error restarts continuation ;
 
-C: <condition> condition ;
+C: <condition> condition
 
 : throw-restarts ( error restarts -- restart )
     [ <condition> throw ] callcc1 2nip ;
@@ -180,7 +180,7 @@ C: <condition> condition ;
 
 TUPLE: restart name obj continuation ;
 
-C: <restart> restart ;
+C: <restart> restart
 
 : continue-restart ( restart -- * )
     [ obj>> ] [ continuation>> ] bi continue-with ;

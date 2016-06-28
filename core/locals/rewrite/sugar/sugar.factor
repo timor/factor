@@ -10,12 +10,12 @@ IN: locals.rewrite.sugar
 ! literals with locals in them into code which constructs
 ! the literal after pushing locals on the stack
 
-GENERIC: rewrite-sugar* ( obj -- ) ;
+GENERIC: rewrite-sugar* ( obj -- )
 
 : (rewrite-sugar) ( form -- form' )
     [ rewrite-sugar* ] [ ] make ;
 
-GENERIC: quotation-rewrite ( form -- form' ) ;
+GENERIC: quotation-rewrite ( form -- form' )
 
 M: callable quotation-rewrite [ [ rewrite-sugar* ] each ] [ ] make ;
 
@@ -29,7 +29,7 @@ M: callable rewrite-sugar* quotation-rewrite , ;
 
 M: lambda rewrite-sugar* quotation-rewrite , ;
 
-GENERIC: rewrite-literal? ( obj -- ? ) ;
+GENERIC: rewrite-literal? ( obj -- ? )
 
 M: special rewrite-literal? drop t ;
 
@@ -47,7 +47,7 @@ M: tuple rewrite-literal? tuple>array rewrite-literal? ;
 
 M: object rewrite-literal? drop f ;
 
-GENERIC: rewrite-element ( obj -- ) ;
+GENERIC: rewrite-element ( obj -- )
 
 : rewrite-elements ( seq -- )
     [ rewrite-element ] each ;

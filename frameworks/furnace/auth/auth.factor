@@ -24,7 +24,7 @@ SYMBOL: logged-in-user
 : username ( -- string/f )
     logged-in-user get dup [ username>> ] when ;
 
-GENERIC: init-user-profile ( responder -- ) ;
+GENERIC: init-user-profile ( responder -- )
 
 M: object init-user-profile drop ;
 
@@ -58,15 +58,15 @@ V{ } clone capabilities set-global
 
 TUPLE: realm < dispatcher name users checksum secure ;
 
-GENERIC: login-required* ( description capabilities realm -- response ) ;
+GENERIC: login-required* ( description capabilities realm -- response )
 
-GENERIC: user-registered ( user realm -- response ) ;
+GENERIC: user-registered ( user realm -- response )
 
 M: object user-registered 2drop URL" $realm" <redirect> ;
 
-GENERIC: init-realm ( realm -- ) ;
+GENERIC: init-realm ( realm -- )
 
-GENERIC: logged-in-username ( realm -- username ) ;
+GENERIC: logged-in-username ( realm -- username )
 
 : login-required ( description capabilities -- * )
     realm get login-required* exit-with ;
@@ -84,7 +84,7 @@ GENERIC: logged-in-username ( realm -- username ) ;
 
 TUPLE: user-saver user ;
 
-C: <user-saver> user-saver ;
+C: <user-saver> user-saver
 
 M: user-saver dispose
     user>> dup changed?>> [ users update-user ] [ drop ] if ;
@@ -126,7 +126,7 @@ M: realm call-responder* ( path responder -- response )
 
 TUPLE: secure-realm-only < filter-responder ;
 
-C: <secure-realm-only> secure-realm-only ;
+C: <secure-realm-only> secure-realm-only
 
 M: secure-realm-only call-responder*
     $[ _ _ call-next-method ] if-secure-realm ;

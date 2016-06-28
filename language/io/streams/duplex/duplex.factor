@@ -7,14 +7,14 @@ IN: io.streams.duplex
 
 TUPLE: duplex-stream in out ;
 
-C: <duplex-stream> duplex-stream ;
+C: <duplex-stream> duplex-stream
 
 CONSULT: input-stream-protocol duplex-stream in>> ;
 CONSULT: output-stream-protocol duplex-stream out>> ;
 CONSULT: formatted-output-stream-protocol duplex-stream out>> ;
 
-INSTANCE: duplex-stream input-stream ;
-INSTANCE: duplex-stream output-stream ;
+INSTANCE: duplex-stream input-stream
+INSTANCE: duplex-stream output-stream
 
 : >duplex-stream< ( stream -- in out ) [ in>> ] [ out>> ] bi ; inline
 

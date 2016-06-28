@@ -2,7 +2,7 @@ USING: alien.c-types alien.syntax io.encodings.ascii
 io.streams.string prettyprint see tools.test ;
 IN: alien.prettyprint.tests
 
-CONSTANT: FOO 10 ;
+CONSTANT: FOO 10
 
 FUNCTION: int function_test ( float x, int[4][FOO] y, char* z, ushort *w ) ;
 

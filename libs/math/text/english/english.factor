@@ -90,7 +90,7 @@ SYMBOL: and-needed?
 
 PRIVATE>
 
-GENERIC: number>text ( n -- str ) ;
+GENERIC: number>text ( n -- str )
 
 M: integer number>text
     [ "zero" ] [ [ (number>text) ] with-scope ] if-zero ;

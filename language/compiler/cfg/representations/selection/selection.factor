@@ -21,7 +21,7 @@ SYMBOL: vreg-reps
 : handle-use ( vreg rep -- )
     int-rep eq? [ drop ] [ vreg>scc tagged-vregs get adjoin ] if ;
 
-GENERIC: (collect-vreg-reps) ( insn -- ) ;
+GENERIC: (collect-vreg-reps) ( insn -- )
 
 M: ##load-reference (collect-vreg-reps)
     [ dst>> ] [ obj>> ] bi {
@@ -111,7 +111,7 @@ UNION: peephole-optimizable
     ##test-imm-branch
     ##test-branch ;
 
-GENERIC: compute-insn-costs ( insn -- ) ;
+GENERIC: compute-insn-costs ( insn -- )
 
 M: insn compute-insn-costs drop ;
 

@@ -8,7 +8,7 @@ IN: colors.lab
 
 TUPLE: laba l a b alpha ;
 
-C: <laba> laba ;
+C: <laba> laba
 
 M: laba >rgba >xyza >rgba ;
 
@@ -45,7 +45,7 @@ M: laba >xyza
         ]
     ] [ alpha>> ] bi <xyza> ;
 
-GENERIC: >laba ( color -- laba ) ;
+GENERIC: >laba ( color -- laba )
 
 M: object >laba >rgba >laba ;
 

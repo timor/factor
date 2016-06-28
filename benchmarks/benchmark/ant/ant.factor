@@ -24,7 +24,7 @@ IN: benchmark.ant
     0 swap [ dup zero? ] [ 10 /mod swap [ + ] dip ] until drop ;
 
 TUPLE: point x y ;
-C: <point> point ;
+C: <point> point
 
 ! use: alien.c-types
 ! use: classes.struct

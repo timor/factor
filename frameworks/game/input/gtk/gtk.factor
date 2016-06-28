@@ -45,7 +45,7 @@ M: gtk-game-input-backend calibrate-controller
 M: gtk-game-input-backend vibrate-controller
     3drop ;
 
-HOOK: x>hid-bit-order os ( -- x ) ;
+HOOK: x>hid-bit-order os ( -- x )
 
 M: linux x>hid-bit-order
     {

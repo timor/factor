@@ -5,7 +5,7 @@ io.pathnames kernel lexer macros namespaces parser sequences
 vocabs words words.constant words.symbol ;
 IN: definitions.icons
 
-GENERIC: definition-icon ( definition -- path ) ;
+GENERIC: definition-icon ( definition -- path )
 
 : definition-icon-path ( string -- string' )
     "vocab:definitions/icons/" prepend-path ".png" append ;

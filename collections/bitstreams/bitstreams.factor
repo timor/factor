@@ -62,8 +62,8 @@ TUPLE: lsb0-bit-writer < bit-writer ;
 : <lsb0-bit-writer> ( -- bs )
     lsb0-bit-writer new-bit-writer ;
 
-GENERIC: peek ( n bitstream -- value ) ;
-GENERIC: poke ( value n bitstream -- ) ;
+GENERIC: peek ( n bitstream -- value )
+GENERIC: poke ( value n bitstream -- )
 
 : get-abp ( bitstream -- abp )
     [ byte-pos>> 8 * ] [ bit-pos>> + ] bi ; inline

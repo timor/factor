@@ -67,7 +67,7 @@ PRIVATE>
     dup <reversed> [ <bc-table> ] [ <gs-table> ] bi
     boyer-moore boa ;
 
-GENERIC: search-from ( seq from obj -- i/f ) ;
+GENERIC: search-from ( seq from obj -- i/f )
 
 M: sequence search-from
     dup length zero?

@@ -12,7 +12,7 @@ PRIVATE<
 CONSTANT: REQUEST B{ 0x1b 0 0 0 0 0 0 0
                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                     0 0 0 0 0 0 0 0 } ;
+                     0 0 0 0 0 0 0 0 }
 
 : (time) ( sequence -- timestamp )
     [ first ] [ second 32 2^ / ] bi + seconds

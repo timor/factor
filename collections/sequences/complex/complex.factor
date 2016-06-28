@@ -3,7 +3,7 @@ sequences sequences.private ;
 IN: sequences.complex
 
 TUPLE: complex-sequence seq ;
-INSTANCE: complex-sequence sequence ;
+INSTANCE: complex-sequence sequence
 
 : <complex-sequence> ( sequence -- complex-sequence )
     complex-sequence boa ; inline

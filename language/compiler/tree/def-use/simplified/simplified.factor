@@ -27,7 +27,7 @@ SYMBOLS: visited accum ;
 PRIVATE>
 
 ! Def
-GENERIC: actually-defined-by* ( value node -- ) ;
+GENERIC: actually-defined-by* ( value node -- )
 
 : (actually-defined-by) ( value -- )
     [ dup defined-by actually-defined-by* ] if-not-visited ;
@@ -58,7 +58,7 @@ M: node actually-defined-by*
     [ (actually-defined-by) ] with-simplified-def-use ;
 
 ! Use
-GENERIC: actually-used-by* ( value node -- ) ;
+GENERIC: actually-used-by* ( value node -- )
 
 : (actually-used-by) ( value -- )
     [ dup used-by [ actually-used-by* ] with each ] if-not-visited ;

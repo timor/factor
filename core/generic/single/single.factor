@@ -7,11 +7,11 @@ sequences words ;
 IN: generic.single
 
 PRIVATE<
-PRIMITIVE: inline-cache-miss ( generic methods index cache -- ) ;
-PRIMITIVE: inline-cache-miss-tail ( generic methods index cache -- ) ;
-PRIMITIVE: lookup-method ( object methods -- method ) ;
-PRIMITIVE: mega-cache-lookup ( methods index cache -- ) ;
-PRIMITIVE: mega-cache-miss ( methods index cache -- method ) ;
+PRIMITIVE: inline-cache-miss ( generic methods index cache -- )
+PRIMITIVE: inline-cache-miss-tail ( generic methods index cache -- )
+PRIMITIVE: lookup-method ( object methods -- method )
+PRIMITIVE: mega-cache-lookup ( methods index cache -- )
+PRIMITIVE: mega-cache-miss ( methods index cache -- method )
 PRIVATE>
 
 ERROR: no-method object generic ;
@@ -25,7 +25,7 @@ PREDICATE: single-generic < generic
 
 M: single-generic make-inline cannot-be-inline ;
 
-GENERIC: dispatch# ( word -- n ) ;
+GENERIC: dispatch# ( word -- n )
 
 M: generic dispatch# "combination" word-prop dispatch# ;
 
@@ -37,7 +37,7 @@ SYMBOL: combination
 : with-combination ( combination quot -- )
     [ combination ] dip with-variable ; inline
 
-HOOK: picker combination ( -- quot ) ;
+HOOK: picker combination ( -- quot )
 
 M: single-combination next-method-quot* ( class generic combination -- quot )
     [
@@ -72,7 +72,7 @@ M: single-combination make-default-method
 ! 1. Flatten methods
 TUPLE: predicate-engine class methods ;
 
-C: <predicate-engine> predicate-engine ;
+C: <predicate-engine> predicate-engine
 
 : push-method ( method class atomic assoc -- )
     dupd [
@@ -99,7 +99,7 @@ C: <predicate-engine> predicate-engine ;
 ! 2.1 Convert tuple methods
 TUPLE: echelon-dispatch-engine n methods ;
 
-C: <echelon-dispatch-engine> echelon-dispatch-engine ;
+C: <echelon-dispatch-engine> echelon-dispatch-engine
 
 TUPLE: tuple-dispatch-engine echelons ;
 
@@ -140,7 +140,7 @@ TUPLE: tuple-dispatch-engine echelons ;
 ! 3 Tag methods
 TUPLE: tag-dispatch-engine methods ;
 
-C: <tag-dispatch-engine> tag-dispatch-engine ;
+C: <tag-dispatch-engine> tag-dispatch-engine
 
 : <engine> ( assoc -- engine )
     flatten-methods
@@ -148,7 +148,7 @@ C: <tag-dispatch-engine> tag-dispatch-engine ;
     <tag-dispatch-engine> ;
 
 ! ! ! Compile engine ! ! !
-GENERIC: compile-engine ( engine -- obj ) ;
+GENERIC: compile-engine ( engine -- obj )
 
 : compile-engines ( assoc -- assoc' )
     [ compile-engine ] assoc-map ;
@@ -260,7 +260,7 @@ M: f compile-engine ;
         [ <engine> compile-engine ] bi
     ] tri ;
 
-HOOK: inline-cache-quots combination ( word methods -- pic-quot/f pic-tail-quot/f ) ;
+HOOK: inline-cache-quots combination ( word methods -- pic-quot/f pic-tail-quot/f )
 
 M: single-combination inline-cache-quots 2drop f f ;
 
@@ -269,7 +269,7 @@ M: single-combination inline-cache-quots 2drop f f ;
     [ >>pic-def ] [ >>pic-tail-def ] bi*
     drop ;
 
-HOOK: mega-cache-quot combination ( methods -- quot/f ) ;
+HOOK: mega-cache-quot combination ( methods -- quot/f )
 
 M: single-combination perform-combination
     [

@@ -17,7 +17,7 @@ IN: editors.textadept
 SINGLETON: textadept
 textadept editor-class set-global
 
-HOOK: find-textadept-path os ( -- path ) ;
+HOOK: find-textadept-path os ( -- path )
 
 M: object find-textadept-path f ;
 

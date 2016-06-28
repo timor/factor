@@ -9,4 +9,4 @@ FUNCTION: BOOL EnumDeviceDrivers ( LPVOID* lpImageBase, DWORD cb, LPDWORD lpcbNe
 
 FUNCTION: DWORD GetDeviceDriverBaseNameW ( LPVOID ImageBase, LPTSTR lpBaseName, DWORD nSize ) ;
 
-ALIAS: GetDeviceDriverBaseName GetDeviceDriverBaseNameW ;
+ALIAS: GetDeviceDriverBaseName GetDeviceDriverBaseNameW

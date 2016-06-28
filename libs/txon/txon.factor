@@ -63,7 +63,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: >txon ( object -- string ) ;
+GENERIC: >txon ( object -- string )
 
 M: sequence >txon
     [ >txon ] map "\n" join ;

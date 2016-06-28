@@ -15,7 +15,7 @@ CONSTANT: html-escapes {
     { char: \> "&gt;" }
     { char: \" "&quot;" }
     { char: \' "&#39;" }
-} ;
+}
 
 : next-escape ( seq -- i elt )
     [ html-escapes key? ] find ;
@@ -70,7 +70,7 @@ CONSTANT: invalid-charrefs H{
     { 0x9d "\x9d"     }  ! <control>
     { 0x9e "\u00017e" }  ! LATIN SMALL LETTER Z WITH CARON
     { 0x9f "\u000178" }  ! LATIN CAPITAL LETTER Y WITH DIAERESIS
-} ;
+}
 
 CONSTANT: invalid-codepoints {
     ! 0x0001 to 0x0008
@@ -93,7 +93,7 @@ CONSTANT: invalid-codepoints {
     0x8fffe 0x8ffff 0x9fffe 0x9ffff 0xafffe 0xaffff 0xbfffe 0xbffff
     0xcfffe 0xcffff 0xdfffe 0xdffff 0xefffe 0xeffff 0xffffe 0xfffff
     0x10fffe 0x10ffff
-} ;
+}
 
 ! see http://www.w3.org/TR/html5/syntax.html#named-character-references
 
@@ -2327,7 +2327,7 @@ CONSTANT: html5 H{
     { "zscr;" "\u01d4cf" }
     { "zwj;" "\u00200d" }
     { "zwnj;" "\u00200c" }
-} ;
+}
 
 : numeric-charref ( str -- newstr )
     ";" ?tail drop dup first "xX" member?
@@ -2350,7 +2350,7 @@ CONSTANT: html5 H{
     "#" ?head [ numeric-charref ] [ named-charref ] if ;
 
 CONSTANT: re-charref
-R[[ &(#[0-9]+|#[xX][0-9a-fA-F]+|[^\t\n\f <&#;]{1,32});?]] ;
+R[[ &(#[0-9]+|#[xX][0-9a-fA-F]+|[^\t\n\f <&#;]{1,32});?]]
 
 PRIVATE>
 

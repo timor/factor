@@ -25,13 +25,13 @@ TUPLE: buffered-port < port { buffer buffer } ;
         default-buffer-size get <buffer> >>buffer ; inline
 
 TUPLE: input-port < buffered-port ;
-INSTANCE: input-port input-stream ;
-INSTANCE: input-port file-reader ;
+INSTANCE: input-port input-stream
+INSTANCE: input-port file-reader
 
 : <input-port> ( handle -- input-port )
     input-port <buffered-port> ; inline
 
-HOOK: (wait-to-read) io-backend ( port -- ) ;
+HOOK: (wait-to-read) io-backend ( port -- )
 
 : wait-to-read ( port -- eof? )
     dup buffer>> buffer-empty? [
@@ -112,13 +112,13 @@ M: input-port stream-read-until
     ] if ;
 
 TUPLE: output-port < buffered-port ;
-INSTANCE: output-port output-stream ;
-INSTANCE: output-port file-writer ;
+INSTANCE: output-port output-stream
+INSTANCE: output-port file-writer
 
 : <output-port> ( handle -- output-port )
     output-port <buffered-port> ;
 
-HOOK: (wait-to-write) io-backend ( port -- ) ;
+HOOK: (wait-to-write) io-backend ( port -- )
 
 PRIVATE<
 
@@ -161,13 +161,13 @@ M: output-port stream-write
         [ check-c-ptr ] [ integer>fixnum-strict ] bi*
     ] [ port-write ] bi* ;
 
-HOOK: tell-handle os ( handle -- n ) ;
+HOOK: tell-handle os ( handle -- n )
 
-HOOK: seek-handle os ( n seek-type handle -- ) ;
+HOOK: seek-handle os ( n seek-type handle -- )
 
-HOOK: can-seek-handle? os ( handle -- ? ) ;
+HOOK: can-seek-handle? os ( handle -- ? )
 
-HOOK: handle-length os ( handle -- n/f ) ;
+HOOK: handle-length os ( handle -- n/f )
 
 PRIVATE<
 
@@ -211,7 +211,7 @@ M: buffered-port stream-seekable?
 M: buffered-port stream-length
     handle>> handle-length [ f ] when-zero ;
 
-GENERIC: shutdown ( handle -- ) ;
+GENERIC: shutdown ( handle -- )
 
 M: object shutdown drop ;
 
@@ -236,7 +236,7 @@ M: port cancel-operation handle>> cancel-operation ;
 M: port dispose*
     [ handle>> &dispose shutdown ] with-destructors ;
 
-GENERIC: underlying-port ( stream -- port ) ;
+GENERIC: underlying-port ( stream -- port )
 
 M: port underlying-port ;
 
@@ -244,7 +244,7 @@ M: encoder underlying-port stream>> underlying-port ;
 
 M: decoder underlying-port stream>> underlying-port ;
 
-GENERIC: underlying-handle ( stream -- handle ) ;
+GENERIC: underlying-handle ( stream -- handle )
 
 M: object underlying-handle underlying-port handle>> ;
 

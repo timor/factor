@@ -36,8 +36,8 @@ M: browser-gadget set-history-value
     [ set-control-value ]
     2bi ;
 
-CONSTANT: prev -1 ;
-CONSTANT: next 1 ;
+CONSTANT: prev -1
+CONSTANT: next 1
 
 : add-navigation-arrow ( str direction -- str )
     prev = [ "<" prefix ] [ ">" suffix ] if ;

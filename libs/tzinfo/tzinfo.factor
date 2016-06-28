@@ -32,7 +32,7 @@ ERROR: bad-magic ;
 TUPLE: tzfile header transition-times local-times types abbrevs
 leaps is-std is-gmt ;
 
-C: <tzfile> tzfile ;
+C: <tzfile> tzfile
 
 : read-be32 ( -- n )
     4 read be32 deref ;
@@ -57,11 +57,11 @@ C: <tzfile> tzfile ;
 
 TUPLE: local-time gmt-offset dst? abbrev std? gmt? ;
 
-C: <local-time> local-time ;
+C: <local-time> local-time
 
 TUPLE: transition seconds timestamp local-time ;
 
-C: <transition> transition ;
+C: <transition> transition
 
 :: tzfile>transitions ( tzfile -- transitions )
     tzfile abbrevs>> tznames set: abbrevs
@@ -86,7 +86,7 @@ C: <transition> transition ;
 
 TUPLE: tzinfo tzfile transitions ;
 
-C: <tzinfo> tzinfo ;
+C: <tzinfo> tzinfo
 
 : find-transition ( timestamp tzinfo -- transition )
     [ timestamp>unix-time ] [ transitions>> ] bi*

@@ -68,7 +68,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC#: add-mixin-instance 1 ( class mixin -- ) ;
+GENERIC#: add-mixin-instance 1 ( class mixin -- )
 
 M: class add-mixin-instance
     [ 2drop ] [ (add-mixin-instance) ] if-mixin-member? ;
@@ -93,7 +93,7 @@ M: mixin-class metaclass-changed
 ! INSTANCE: declaration from a source file updates the mixin. ;
 TUPLE: mixin-instance class mixin ;
 
-C: <mixin-instance> mixin-instance ;
+C: <mixin-instance> mixin-instance
 
 PRIVATE<
 

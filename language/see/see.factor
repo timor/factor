@@ -11,9 +11,9 @@ prettyprint.sections sequences sets slots sorting strings
 summary vocabs words words.alias words.constant words.symbol ;
 IN: see
 
-GENERIC: synopsis* ( defspec -- ) ;
+GENERIC: synopsis* ( defspec -- )
 
-GENERIC: see* ( defspec -- ) ;
+GENERIC: see* ( defspec -- )
 
 : see ( defspec -- ) see* nl ;
 
@@ -31,7 +31,7 @@ GENERIC: see* ( defspec -- ) ;
 : comment. ( text -- )
     H{ { font-style italic } } styled-text ;
 
-GENERIC: print-stack-effect? ( word -- ? ) ;
+GENERIC: print-stack-effect? ( word -- ? )
 
 M: parsing-word print-stack-effect? drop f ;
 M: symbol print-stack-effect? drop f ;
@@ -108,7 +108,7 @@ M: alias summary
 
 M: word summary synopsis ;
 
-GENERIC: declarations. ( obj -- ) ;
+GENERIC: declarations. ( obj -- )
 
 M: object declarations. drop ;
 
@@ -138,7 +138,7 @@ M: object see*
         block>
     ] with-use ;
 
-GENERIC: see-class* ( word -- ) ;
+GENERIC: see-class* ( word -- )
 
 M: union-class see-class*
     <colon \ UNION: pprint-word
@@ -170,7 +170,7 @@ M: predicate-class see-class*
 M: singleton-class see-class* ( class -- )
     \ SINGLETON: pprint-word pprint-word ;
 
-GENERIC: pprint-slot-name ( object -- ) ;
+GENERIC: pprint-slot-name ( object -- )
 
 M: string pprint-slot-name text ;
 

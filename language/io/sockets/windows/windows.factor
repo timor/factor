@@ -34,7 +34,7 @@ M: windows addrspec-of-family ( af -- addrspec )
         [ drop f ]
     } case ;
 
-HOOK: WSASocket-flags io-backend ( -- DWORD ) ;
+HOOK: WSASocket-flags io-backend ( -- DWORD )
 
 TUPLE: win32-socket < win32-file ;
 

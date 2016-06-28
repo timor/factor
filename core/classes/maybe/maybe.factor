@@ -7,9 +7,9 @@ IN: classes.maybe
 
 TUPLE: maybe { class classoid initial: object read-only } ;
 
-C: <maybe> maybe ;
+C: <maybe> maybe
 
-INSTANCE: maybe classoid ;
+INSTANCE: maybe classoid
 
 M: maybe instance?
     over [ class>> instance? ] [ 2drop t ] if ;

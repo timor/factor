@@ -9,13 +9,13 @@ PRIVATE<
 ! http://www.rskey.org/gamma.htm  "Lanczos Approximation"
 ! n=6: error ~ 3 x 10^-11
 
-CONSTANT: gamma-g6 5.15 ;
+CONSTANT: gamma-g6 5.15
 
 CONSTANT: gamma-p6
     {
         2.50662827563479526904 225.525584619175212544 -268.295973841304927459
         80.9030806934622512966 -5.00757863970517583837 0.0114684895434781459556
-    } ;
+    }
 
 : gamma-z ( x n -- seq )
     [ + recip ] with { } map-integers 1.0 0 pick set-nth ;

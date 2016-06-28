@@ -9,7 +9,7 @@ sequences slots.private stack-checker.branches
 stack-checker.values vectors ;
 IN: compiler.tree.tuple-unboxing
 
-GENERIC: unbox-tuples* ( node -- node/nodes ) ;
+GENERIC: unbox-tuples* ( node -- node/nodes )
 
 : unbox-output? ( node -- values )
     out-d>> first unboxed-allocation ;

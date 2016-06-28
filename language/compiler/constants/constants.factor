@@ -4,8 +4,8 @@ USING: alien arrays byte-arrays kernel layouts literals math
 quotations sequences strings words ;
 IN: compiler.constants
 
-CONSTANT: card-bits 8 ;
-CONSTANT: deck-bits 18 ;
+CONSTANT: card-bits 8
+CONSTANT: deck-bits 18
 
 : card-mark ( -- n ) 0x40 0x80 bitor ; inline
 
@@ -43,32 +43,32 @@ CONSTANT: deck-bits 18 ;
 : vm-special-object-offset ( n -- offset )
     bootstrap-cells 10 bootstrap-cells + ;
 
-CONSTANT: rc-absolute-cell 0 ;
-CONSTANT: rc-absolute 1 ;
-CONSTANT: rc-relative 2 ;
-CONSTANT: rc-absolute-ppc-2/2 3 ;
-CONSTANT: rc-absolute-ppc-2 4 ;
-CONSTANT: rc-relative-ppc-2-pc 5 ;
-CONSTANT: rc-relative-ppc-3-pc 6 ;
-CONSTANT: rc-absolute-2 10 ;
-CONSTANT: rc-absolute-1 11 ;
-CONSTANT: rc-absolute-ppc-2/2/2/2 12 ;
+CONSTANT: rc-absolute-cell 0
+CONSTANT: rc-absolute 1
+CONSTANT: rc-relative 2
+CONSTANT: rc-absolute-ppc-2/2 3
+CONSTANT: rc-absolute-ppc-2 4
+CONSTANT: rc-relative-ppc-2-pc 5
+CONSTANT: rc-relative-ppc-3-pc 6
+CONSTANT: rc-absolute-2 10
+CONSTANT: rc-absolute-1 11
+CONSTANT: rc-absolute-ppc-2/2/2/2 12
 
-CONSTANT: rt-dlsym 0 ;
-CONSTANT: rt-entry-point 1 ;
-CONSTANT: rt-entry-point-pic 2 ;
-CONSTANT: rt-entry-point-pic-tail 3 ;
-CONSTANT: rt-here 4 ;
-CONSTANT: rt-this 5 ;
-CONSTANT: rt-literal 6 ;
-CONSTANT: rt-untagged 7 ;
-CONSTANT: rt-megamorphic-cache-hits 8 ;
-CONSTANT: rt-vm 9 ;
-CONSTANT: rt-cards-offset 10 ;
-CONSTANT: rt-decks-offset 11 ;
-CONSTANT: rt-dlsym-toc 13 ;
-CONSTANT: rt-inline-cache-miss 14 ;
-CONSTANT: rt-safepoint 15 ;
+CONSTANT: rt-dlsym 0
+CONSTANT: rt-entry-point 1
+CONSTANT: rt-entry-point-pic 2
+CONSTANT: rt-entry-point-pic-tail 3
+CONSTANT: rt-here 4
+CONSTANT: rt-this 5
+CONSTANT: rt-literal 6
+CONSTANT: rt-untagged 7
+CONSTANT: rt-megamorphic-cache-hits 8
+CONSTANT: rt-vm 9
+CONSTANT: rt-cards-offset 10
+CONSTANT: rt-decks-offset 11
+CONSTANT: rt-dlsym-toc 13
+CONSTANT: rt-inline-cache-miss 14
+CONSTANT: rt-safepoint 15
 
 : rc-absolute? ( n -- ? )
     $${

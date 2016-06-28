@@ -115,7 +115,7 @@ PRIVATE>
 ! string-lines uses string-nth-fast which is 50% faster over
 ! nth-unsafe. be careful when changing the definition so that
 ! you don't unoptimize it.
-GENERIC: string-lines ( seq -- seq' ) ;
+GENERIC: string-lines ( seq -- seq' )
 
 M: string string-lines
     [ V{ } clone 0 ] dip [ 2dup bounds-check? ] [

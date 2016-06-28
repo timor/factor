@@ -10,7 +10,7 @@ IN: math.partial-dispatch
 PREDICATE: math-partial < word
     "derived-from" word-prop >boolean ;
 
-GENERIC: integer-op-input-classes ( word -- classes ) ;
+GENERIC: integer-op-input-classes ( word -- classes )
 
 M: math-partial integer-op-input-classes
     "derived-from" word-prop rest ;

@@ -4,11 +4,11 @@ USING: accessors colors.constants combinators kernel math
 namespaces ;
 IN: fonts
 
-CONSTANT: default-serif-font-name "serif" ;
-CONSTANT: default-sans-serif-font-name "sans-serif" ;
-CONSTANT: default-monospace-font-name "monospace" ;
+CONSTANT: default-serif-font-name "serif"
+CONSTANT: default-sans-serif-font-name "sans-serif"
+CONSTANT: default-monospace-font-name "monospace"
 
-CONSTANT: default-font-size 12 ;
+CONSTANT: default-font-size 12
 
 SYMBOL: default-font-foreground-color
 color: black default-font-foreground-color set-global
@@ -74,4 +74,4 @@ TUPLE: metrics width ascent descent height leading cap-height x-height ;
 
 TUPLE: selection string start end color ;
 
-C: <selection> selection ;
+C: <selection> selection

@@ -7,7 +7,7 @@ namespaces sequences sequences.private strings strings.private
 system system.private ;
 IN: alien.strings
 
-GENERIC#: alien>string 1 ( c-ptr encoding -- string/f ) ;
+GENERIC#: alien>string 1 ( c-ptr encoding -- string/f )
 
 M: c-ptr alien>string
     [ <memory-stream> ] [ <decoder> ] bi*
@@ -24,7 +24,7 @@ ERROR: invalid-c-string string ;
 : check-string ( string -- )
     0 over member-eq? [ invalid-c-string ] [ drop ] if ;
 
-GENERIC#: string>alien 1 ( string encoding -- byte-array ) ;
+GENERIC#: string>alien 1 ( string encoding -- byte-array )
 
 M: c-ptr string>alien drop ;
 
@@ -60,7 +60,7 @@ M: string string>alien
 
 M: tuple string>alien drop underlying>> ;
 
-HOOK: native-string-encoding os ( -- encoding ) ; foldable
+HOOK: native-string-encoding os ( -- encoding ) foldable
 
 M: unix native-string-encoding utf8 ;
 
@@ -75,13 +75,13 @@ M: windows native-string-encoding utf16n ;
 : dll-path ( dll -- string )
     path>> alien>native-string ;
 
-GENERIC: string>symbol ( str/seq -- alien ) ;
+GENERIC: string>symbol ( str/seq -- alien )
 
 M: string string>symbol utf8 string>alien ;
 
 M: sequence string>symbol [ utf8 string>alien ] map ;
 
-GENERIC: symbol>string ( symbol(s) -- string ) ;
+GENERIC: symbol>string ( symbol(s) -- string )
 
 M: byte-array symbol>string utf8 alien>string ;
 

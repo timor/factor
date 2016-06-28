@@ -19,7 +19,7 @@ void main()
         * (gl_ModelViewMatrixInverse * vec4(p.xyz, 0.0)).xyz;
 }
 
-]] ;
+]]
 
 CONSTANT: sky-pixel-shader [[
 
@@ -37,7 +37,7 @@ void main()
     gl_FragColor = mix(SKY_COLOR_A, SKY_COLOR_B, sin(6.28*t));
 }
 
-]] ;
+]]
 
 CONSTANT: terrain-vertex-shader [[
 
@@ -59,7 +59,7 @@ void main()
     heightcoords = gl_Vertex.xz;
 }
 
-]] ;
+]]
 
 CONSTANT: terrain-pixel-shader [[
 
@@ -79,4 +79,4 @@ void main()
     gl_FragColor = texture2D(heightmap, heightcoords);
 }
 
-]] ;
+]]

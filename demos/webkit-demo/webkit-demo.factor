@@ -19,7 +19,7 @@ CONSTANT: window-style
         NSMiniaturizableWindowMask
         NSResizableWindowMask
         NSTitledWindowMask
-    } ;
+    }
 
 : <WebWindow> ( -- id )
     <WebView> rect window-style <ViewWindow> ;

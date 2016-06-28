@@ -70,11 +70,11 @@ M: buffer dispose
 TUPLE: buffer-ptr
     { buffer buffer read-only }
     { offset integer read-only } ;
-C: <buffer-ptr> buffer-ptr ;
+C: <buffer-ptr> buffer-ptr
 
 TUPLE: buffer-range < buffer-ptr
     { size integer read-only } ;
-C: <buffer-range> buffer-range ;
+C: <buffer-range> buffer-range
 
 UNION: gpu-data-ptr buffer-ptr c-ptr ;
 

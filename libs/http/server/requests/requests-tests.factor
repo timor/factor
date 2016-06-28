@@ -50,7 +50,7 @@ Content-Disposition: form-data; name="text"; filename="upload.txt"
 hello
 --768de80194d942619886d23f1337aa15--
 
-]] ;
+]]
 {
     "upload.txt"
     H{
@@ -81,7 +81,7 @@ Content-Disposition: form-data; name="text"; filename="upload.txt"
 hello
 --768de80194d942619886d23f1337aa15--
 
-]] ;
+]]
 [ test-multipart/form-data-missing-boundary string>request ]
 [ no-boundary? ] must-fail-with
 

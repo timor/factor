@@ -31,7 +31,7 @@ CONSTANT: poll-fd-events
         G_IO_ERR
         G_IO_HUP
         G_IO_NVAL
-    } ;
+    }
 
 : <poll-fd> ( -- poll-fd )
     GPollFD malloc-struct &free

@@ -96,7 +96,7 @@ SYMBOL: visited
 
 ERROR: undefined-inverse ;
 
-GENERIC: inverse ( revquot word -- revquot* quot ) ;
+GENERIC: inverse ( revquot word -- revquot* quot )
 
 M: object inverse undo-literal ;
 

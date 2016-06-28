@@ -11,7 +11,7 @@ CONSTANT: action-request-test-1 [[
 GET http://foo/bar?a=12&b=13 HTTP/1.1
 
 blah
-]] ;
+]]
 
 { 25 } [
     action-request-test-1 lf>crlf
@@ -29,7 +29,7 @@ CONSTANT: action-request-test-2 [[
 GET http://foo/bar/123 HTTP/1.1
 
 blah
-]] ;
+]]
 
 { 25 } [
     action-request-test-2 lf>crlf

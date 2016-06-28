@@ -26,17 +26,17 @@ SYMBOL: known-values
 : copy-values ( values -- values' )
     [ copy-value ] map ;
 
-GENERIC: (literal-value?) ( value -- ? ) ;
+GENERIC: (literal-value?) ( value -- ? )
 
 : literal-value? ( value -- ? )
     known (literal-value?) ;
 
-GENERIC: (input-value?) ( value -- ? ) ;
+GENERIC: (input-value?) ( value -- ? )
 
 : input-value? ( value -- ? )
     known (input-value?) ;
 
-GENERIC: (literal) ( known -- literal ) ;
+GENERIC: (literal) ( known -- literal )
 
 TUPLE: literal-tuple < identity-tuple value recursion ;
 
@@ -60,7 +60,7 @@ M: literal-tuple (literal) ;
 
 TUPLE: curried obj quot ;
 
-C: <curried> curried ;
+C: <curried> curried
 
 : >curried< ( curried -- obj quot )
     [ obj>> ] [ quot>> ] bi ; inline
@@ -76,7 +76,7 @@ M: curried (literal)
 
 TUPLE: composed quot1 quot2 ;
 
-C: <composed> composed ;
+C: <composed> composed
 
 : >composed< ( composed -- quot1 quot2 )
     [ quot1>> ] [ quot2>> ] bi ; inline
@@ -104,7 +104,7 @@ M: input-parameter (literal) current-word get unknown-macro-input ;
 
 TUPLE: declared-effect known word effect variables branches actual ;
 
-C: (declared-effect) declared-effect ;
+C: (declared-effect) declared-effect
 
 : <declared-effect> ( known word effect variables branches -- declared-effect )
     f (declared-effect) ; inline
@@ -122,7 +122,7 @@ M: f (literal-value?) drop f ;
 
 M: f (literal) current-word get bad-macro-input ;
 
-GENERIC: known>callable ( known -- quot ) ;
+GENERIC: known>callable ( known -- quot )
 
 : ?@ ( x -- y )
     dup callable? [ drop [ @ ] ] unless ;

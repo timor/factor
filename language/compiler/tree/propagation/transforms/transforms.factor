@@ -243,7 +243,7 @@ ERROR: bad-partial-eval quot word ;
 ] 1 define-partial-eval
 
 ! Fast at for integer maps
-CONSTANT: lookup-table-at-max 256 ;
+CONSTANT: lookup-table-at-max 256
 
 : lookup-table-at? ( assoc -- ? )
     ! Can we use a fast byte array test here?

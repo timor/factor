@@ -5,18 +5,18 @@ math.ranges math ;
 IN: regexp.ast
 
 TUPLE: negation term ;
-C: <negation> negation ;
+C: <negation> negation
 
 TUPLE: from-to n m ;
-C: <from-to> from-to ;
+C: <from-to> from-to
 
 TUPLE: at-least n ;
-C: <at-least> at-least ;
+C: <at-least> at-least
 
 TUPLE: tagged-epsilon tag ;
-C: <tagged-epsilon> tagged-epsilon ;
+C: <tagged-epsilon> tagged-epsilon
 
-CONSTANT: epsilon T{ tagged-epsilon { tag t } } ;
+CONSTANT: epsilon T{ tagged-epsilon { tag t } }
 
 TUPLE: concatenation first second ;
 
@@ -29,13 +29,13 @@ TUPLE: alternation first second ;
     [ ] [ alternation boa ] map-reduce ;
 
 TUPLE: star term ;
-C: <star> star ;
+C: <star> star
 
 TUPLE: with-options tree options ;
-C: <with-options> with-options ;
+C: <with-options> with-options
 
 TUPLE: options on off ;
-C: <options> options ;
+C: <options> options
 
 SINGLETONS: unix-lines dotall multiline case-insensitive reversed-regexp ;
 
@@ -48,7 +48,7 @@ SINGLETONS: unix-lines dotall multiline case-insensitive reversed-regexp ;
 : repetition ( n term -- term' )
     <array> <concatenation> ;
 
-GENERIC: <times> ( term times -- term' ) ;
+GENERIC: <times> ( term times -- term' )
 
 M: at-least <times>
     n>> swap [ repetition ] [ <star> ] bi 2array <concatenation> ;
@@ -67,7 +67,7 @@ M: from-to <times>
     [ <or-class> ] dip [ <not-class> ] when ;
 
 TUPLE: lookahead term ;
-C: <lookahead> lookahead ;
+C: <lookahead> lookahead
 
 TUPLE: lookbehind term ;
-C: <lookbehind> lookbehind ;
+C: <lookbehind> lookbehind

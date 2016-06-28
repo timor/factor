@@ -5,7 +5,7 @@ compiler.tree.escape-analysis.allocations fry kernel math
 namespaces sequences ;
 IN: compiler.tree.escape-analysis.nodes
 
-GENERIC: escape-analysis* ( node -- ) ;
+GENERIC: escape-analysis* ( node -- )
 
 SYMBOL: next-node
 

@@ -10,11 +10,11 @@ ERROR: no-morse-ch ch ;
 
 PRIVATE<
 
-CONSTANT: dot-char char: . ;
-CONSTANT: dash-char char: - ;
-CONSTANT: char-gap-char char: \s ;
-CONSTANT: word-gap-char char: / ;
-CONSTANT: unknown-char char: ? ;
+CONSTANT: dot-char char: .
+CONSTANT: dash-char char: -
+CONSTANT: char-gap-char char: \s
+CONSTANT: word-gap-char char: /
+CONSTANT: unknown-char char: ?
 
 PRIVATE>
 
@@ -76,7 +76,7 @@ CONSTANT: morse-code-table $$[
         { char: \@ ".--.-." }
         { char: \s "/" }
     } >biassoc
-] ;
+]
 
 : ch>morse ( ch -- morse )
     ch>lower morse-code-table at unknown-char 1string or ;
@@ -126,7 +126,7 @@ SYMBOLS: source dot-buffer dash-buffer intra-char-gap-buffer letter-gap-buffer ;
 : intra-char-gap ( -- ) intra-char-gap-buffer queue ;
 : letter-gap ( -- ) letter-gap-buffer queue ;
 
-CONSTANT: beep-freq 880 ;
+CONSTANT: beep-freq 880
 
 : <morse-buffer> ( -- buffer )
     half-sample-freq <8bit-mono-buffer> ;

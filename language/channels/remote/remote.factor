@@ -50,7 +50,7 @@ PRIVATE>
 
 TUPLE: remote-channel node id ;
 
-C: <remote-channel> remote-channel ;
+C: <remote-channel> remote-channel
 
 PRIVATE<
 

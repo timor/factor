@@ -22,7 +22,7 @@ compiler.cfg.gvn.misc
 compiler.cfg.gvn.expressions ;
 IN: compiler.cfg.gvn
 
-GENERIC: simplify ( insn -- insn' ) ;
+GENERIC: simplify ( insn -- insn' )
 
 M: insn simplify dup rewrite [ simplify ] [ dup >avail-insn-uses ] ?if ;
 M: array simplify [ simplify ] map ;
@@ -30,7 +30,7 @@ M: ##copy simplify ;
 
 ! ! ! Global value numbering
 
-GENERIC: value-number ( insn -- ) ;
+GENERIC: value-number ( insn -- )
 
 M: array value-number [ value-number ] each ;
 
@@ -80,7 +80,7 @@ M: insn value-number
 
 ! ! ! Global common subexpression elimination
 
-GENERIC: gcse ( insn -- insn' ) ;
+GENERIC: gcse ( insn -- insn' )
 
 M: array gcse [ gcse ] map ;
 

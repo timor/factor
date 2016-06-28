@@ -4,7 +4,7 @@ destructors kernel math tools.test ;
 IN: alien.handles.tests
 
 TUPLE: thingy { x integer } ;
-C: <thingy> thingy ;
+C: <thingy> thingy
 
 CALLBACK: int thingy-callback ( uint thingy-handle ) ;
 CALLBACK: int thingy-ptr-callback ( void* thingy-handle ) ;

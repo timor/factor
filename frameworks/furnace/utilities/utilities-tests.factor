@@ -7,7 +7,7 @@ CONSTANT: dummy-vocab [[
 IN: dummy-vocab
 
 : dummy-word ( -- ) ;
-]] ;
+]]
 
 dummy-vocab "dummy.factor" temp-file [ utf8 set-file-contents ] keep run-file
 COMPILE>

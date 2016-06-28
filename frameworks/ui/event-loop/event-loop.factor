@@ -11,7 +11,7 @@ IN: ui.event-loop
         [ f ]
     } cond ;
 
-HOOK: do-events ui-backend ( -- ) ;
+HOOK: do-events ui-backend ( -- )
 
 : event-loop ( -- ) [ event-loop? ] [ do-events ] while ;
 

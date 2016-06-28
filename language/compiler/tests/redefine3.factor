@@ -3,7 +3,7 @@ kernel sequences sequences.private classes.mixin generic
 definitions arrays words assocs eval grouping ;
 IN: compiler.tests.redefine3
 
-GENERIC: sheeple ( obj -- x ) ;
+GENERIC: sheeple ( obj -- x )
 
 M: object sheeple drop "sheeple" ; inline
 

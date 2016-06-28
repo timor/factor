@@ -10,12 +10,12 @@ TUPLE: lagged-fibonacci { u double-array } { pt0 fixnum } { pt1 fixnum } ;
 
 PRIVATE<
 
-CONSTANT: p-r 1278 ;
-CONSTANT: q-r 417 ;
+CONSTANT: p-r 1278
+CONSTANT: q-r 417
 
-CONSTANT: lagged-fibonacci 899999963 ;
-CONSTANT: lagged-fibonacci-max-seed 900000000 ;
-CONSTANT: lagged-fibonacci-sig-bits 24 ;
+CONSTANT: lagged-fibonacci 899999963
+CONSTANT: lagged-fibonacci-max-seed 900000000
+CONSTANT: lagged-fibonacci-sig-bits 24
 
 : normalize-seed ( seed -- seed' )
     abs lagged-fibonacci-max-seed mod ; inline
@@ -58,7 +58,7 @@ M:: lagged-fibonacci seed-random ( lagged-fibonacci seed! -- lagged-fibonacci )
         p-r 1 + double <c-array> >>u
         swap seed-random ; inline
 
-GENERIC: random-float* ( tuple -- r ) ;
+GENERIC: random-float* ( tuple -- r )
 
 : random-float ( -- n ) random-generator get random-float* ; inline
 

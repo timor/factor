@@ -11,11 +11,11 @@ PRIVATE<
 
 ! using a virtual "missing element" sequence for performance
 TUPLE: missing seq i ;
-C: <missing> missing ;
+C: <missing> missing
 M: missing nth-unsafe
     [ i>> dupd >= [ 1 + ] when ] [ seq>> nth-unsafe ] bi ;
 M: missing length seq>> length 1 - ;
-INSTANCE: missing immutable-sequence ;
+INSTANCE: missing immutable-sequence
 
 : first-sub-matrix ( matrix -- first-row seq )
     [ unclip-slice swap ] [ length iota ] bi

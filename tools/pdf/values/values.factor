@@ -24,7 +24,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: pdf-value ( obj -- str ) ;
+GENERIC: pdf-value ( obj -- str )
 
 M: number pdf-value number>string ;
 

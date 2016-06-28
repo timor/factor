@@ -15,7 +15,7 @@ TUPLE: mailbox { threads dlist } { data dlist } ;
 : mailbox-empty? ( mailbox -- bool )
     data>> deque-empty? ; inline
 
-GENERIC: mailbox-put ( obj mailbox -- ) ;
+GENERIC: mailbox-put ( obj mailbox -- )
 
 M: mailbox mailbox-put
     [ data>> push-front ]
@@ -40,7 +40,7 @@ M: mailbox mailbox-put
 : mailbox-peek ( mailbox -- obj )
     data>> peek-back ;
 
-GENERIC#: mailbox-get-timeout 1 ( mailbox timeout -- obj ) ;
+GENERIC#: mailbox-get-timeout 1 ( mailbox timeout -- obj )
 
 M: mailbox mailbox-get-timeout block-if-empty data>> pop-back ;
 
@@ -76,7 +76,7 @@ M: mailbox mailbox-get-timeout block-if-empty data>> pop-back ;
 
 TUPLE: linked-error error thread ;
 
-C: <linked-error> linked-error ;
+C: <linked-error> linked-error
 
 : ?linked ( message -- message )
     dup linked-error? [ rethrow ] when ;

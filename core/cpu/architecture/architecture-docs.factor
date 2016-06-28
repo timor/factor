@@ -13,7 +13,7 @@ USING: cpu.architecture make ;
 0000000002270cc7: 48c7001c000000  mov qword [rax], 0x1c
 0000000002270cce: 4883c807        or rax, 0x7
 0000000002270cd2: 48830130        add qword [rcx], 0x30
-]] ;
+]]
 
 CONSTANT: ex-%box-alien [[
 USING: compiler.codegen compiler.codegen.relocation cpu.architecture make ;
@@ -30,25 +30,25 @@ init-fixup init-relocation [ RAX RBX RCX %box-alien ] B{ } make disassemble
 000000e9fcc720d1: 48c7400a01000000      mov qword [rax+0xa], 0x1
 000000e9fcc720d9: 48895812              mov [rax+0x12], rbx
 000000e9fcc720dd: 4889581a              mov [rax+0x1a], rbx
-]] ;
+]]
 
 CONSTANT: ex-%context [[
 USING: cpu.architecture make ;
 [ EAX %context ] B{ } make disassemble
 00000000010f5ed0: 418b4500  mov eax, [r13]
-]] ;
+]]
 
 CONSTANT: ex-%copy [[
 USING: cpu.architecture make ;
 RAX RBX int-rep [ %copy ] B{ } make disassemble
 000000000108a970: 4889d8  mov rax, rbx
-]] ;
+]]
 
 CONSTANT: ex-%safepoint [[
 USING: cpu.architecture make ;
 init-relocation [ %safepoint ] B{ } make disassemble
 00000000010b05a0: 890500000000  mov [rip], eax
-]] ;
+]]
 
 CONSTANT: ex-%save-context [[
 USING: cpu.architecture make ;
@@ -58,7 +58,7 @@ USING: cpu.architecture make ;
 0000000000e63ab9: 488918      mov [rax], rbx
 0000000000e63abc: 4c897010    mov [rax+0x10], r14
 0000000000e63ac0: 4c897818    mov [rax+0x18], r15
-]] ;
+]]
 
 CONSTANT: ex-%write-barrier [[
 USING: cpu.architecture make tools.disassembler ;
@@ -70,7 +70,7 @@ init-relocation [ RAX RBX 3 -14 RCX RDX %write-barrier ] B{ } make disassemble
 000000000143f978: 48c1e90a              shr rcx, 0xa
 000000000143f97c: 48ba0000000000000000  mov rdx, 0x0
 000000000143f986: 48c60411c0            mov byte [rcx+rdx], 0xc0
-]] ;
+]]
 COMPILE>
 
 HELP: %alien-invoke

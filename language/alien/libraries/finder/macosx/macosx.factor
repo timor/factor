@@ -31,14 +31,14 @@ CONSTANT: default-framework-fallback {
     "/Library/Frameworks"
     "/Network/Library/Frameworks"
     "/System/Library/Frameworks"
-} ;
+}
 
 CONSTANT: default-library-fallback {
     "~/lib"
     "/usr/local/lib"
     "/lib"
     "/usr/lib"
-} ;
+}
 
 SYMBOL: dyld-environment
 

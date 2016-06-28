@@ -2,18 +2,18 @@ USING: accessors assocs hashtables constructors kernel linked-assocs math
 sequences strings ;
 IN: mongodb.msg
 
-CONSTANT: OP_Reply   1 ;
-CONSTANT: OP_Message 1000 ;
-CONSTANT: OP_Update  2001 ;
-CONSTANT: OP_Insert  2002 ;
-CONSTANT: OP_Query   2004 ;
-CONSTANT: OP_GetMore 2005 ;
-CONSTANT: OP_Delete  2006 ;
-CONSTANT: OP_KillCursors 2007 ;
+CONSTANT: OP_Reply   1
+CONSTANT: OP_Message 1000
+CONSTANT: OP_Update  2001
+CONSTANT: OP_Insert  2002
+CONSTANT: OP_Query   2004
+CONSTANT: OP_GetMore 2005
+CONSTANT: OP_Delete  2006
+CONSTANT: OP_KillCursors 2007
 
-CONSTANT: ResultFlag_CursorNotFound 1 ; ! returned, with zero results, when getMore is called but the cursor id is not valid at the server.
-CONSTANT: ResultFlag_ErrSet 2 ; ! { $err : ... } is being returned
-CONSTANT: ResultFlag_ShardConfigStale 4 ; ! have to update config from the server,  usually $err is also set
+CONSTANT: ResultFlag_CursorNotFound 1 ! returned, with zero results, when getMore is called but the cursor id is not valid at the server.
+CONSTANT: ResultFlag_ErrSet 2 ! { $err : ... } is being returned
+CONSTANT: ResultFlag_ShardConfigStale 4 ! have to update config from the server,  usually $err is also set
 
 TUPLE: mdb-msg
     { opcode integer }
@@ -74,7 +74,7 @@ CONSTRUCTOR: <mdb-delete-msg> mdb-delete-msg ( collection selector -- mdb-delete
 CONSTRUCTOR: <mdb-query-msg> mdb-query-msg ( collection query -- mdb-query-msg )
     OP_Query >>opcode ; inline
 
-GENERIC: <mdb-killcursors-msg> ( object -- mdb-killcursors-msg ) ;
+GENERIC: <mdb-killcursors-msg> ( object -- mdb-killcursors-msg )
 
 M: sequence <mdb-killcursors-msg> ( sequences -- mdb-killcursors-msg )
     [ mdb-killcursors-msg new ] dip
@@ -84,7 +84,7 @@ M: sequence <mdb-killcursors-msg> ( sequences -- mdb-killcursors-msg )
 M: integer <mdb-killcursors-msg> ( integer -- mdb-killcursors-msg )
     V{ } clone [ push ] keep <mdb-killcursors-msg> ;
 
-GENERIC: <mdb-insert-msg> ( collection objects -- mdb-insert-msg ) ;
+GENERIC: <mdb-insert-msg> ( collection objects -- mdb-insert-msg )
 
 M: sequence <mdb-insert-msg> ( collection sequence -- mdb-insert-msg )
     [ mdb-insert-msg new ] 2dip

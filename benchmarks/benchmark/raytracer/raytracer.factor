@@ -16,29 +16,29 @@ CONSTANT: light
         -0.2672612419124244
         -0.8017837257372732
         0.5345224838248488
-    } ;
+    }
 
-CONSTANT: oversampling 4 ;
+CONSTANT: oversampling 4
 
-CONSTANT: levels 3 ;
+CONSTANT: levels 3
 
-CONSTANT: size 200 ;
+CONSTANT: size 200
 
 : delta ( -- n ) epsilon sqrt ; inline
 
 TUPLE: ray { orig double-array read-only } { dir double-array read-only } ;
 
-C: <ray> ray ;
+C: <ray> ray
 
 TUPLE: hit { normal double-array read-only } { lambda float read-only } ;
 
-C: <hit> hit ;
+C: <hit> hit
 
-GENERIC: intersect-scene ( hit ray scene -- hit ) ;
+GENERIC: intersect-scene ( hit ray scene -- hit )
 
 TUPLE: sphere { center double-array read-only } { radius float read-only } ;
 
-C: <sphere> sphere ;
+C: <sphere> sphere
 
 : sphere-v ( sphere ray -- v )
     [ center>> ] [ orig>> ] bi* v- ; inline
@@ -94,7 +94,7 @@ M: group intersect-scene ( hit ray group -- hit )
 
 HINTS: M\ group intersect-scene { hit ray group } ;
 
-CONSTANT: initial-hit T{ hit f double-array{ 0.0 0.0 0.0 } 1/0. } ;
+CONSTANT: initial-hit T{ hit f double-array{ 0.0 0.0 0.0 } 1/0. }
 
 : initial-intersect ( ray scene -- hit )
     [ initial-hit ] 2dip intersect-scene ; inline

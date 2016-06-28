@@ -10,20 +10,20 @@ SINGLETON: c-io-backend
 
 io-backend [ c-io-backend ] initialize
 
-HOOK: init-io io-backend ( -- ) ;
+HOOK: init-io io-backend ( -- )
 
-HOOK: init-stdio io-backend ( -- ) ;
+HOOK: init-stdio io-backend ( -- )
 
 : set-stdio ( input output error -- )
     [ utf8 <decoder> input-stream set-global ]
     [ utf8 <encoder> output-stream set-global ]
     [ utf8 <encoder> error-stream set-global ] tri* ;
 
-HOOK: io-multiplex io-backend ( nanos -- ) ;
+HOOK: io-multiplex io-backend ( nanos -- )
 
-HOOK: normalize-directory io-backend ( path -- path' ) ;
+HOOK: normalize-directory io-backend ( path -- path' )
 
-HOOK: normalize-path io-backend ( path -- path' ) ;
+HOOK: normalize-path io-backend ( path -- path' )
 
 M: object normalize-directory normalize-path ;
 

@@ -113,7 +113,7 @@ IN: alien.data.map.tests
 : vmerge-transpose ( a b c d -- ac bd ac bd )
     [ (vmerge) ] bi-curry@ bi* ; inline
 
-CONSTANT: plane-count 4 ;
+CONSTANT: plane-count 4
 
 : fold-rgba-planes ( r g b a -- rgba )
     [ vmerge-transpose vmerge-transpose ]

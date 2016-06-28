@@ -13,7 +13,7 @@ TUPLE: cmyka < color
 { black read-only }
 { alpha read-only } ;
 
-C: <cmyka> cmyka ;
+C: <cmyka> cmyka
 
 M: cmyka >rgba
     [ [ cyan>> ] [ black>> ] bi + ]
@@ -21,7 +21,7 @@ M: cmyka >rgba
     [ [ yellow>> ] [ black>> ] bi + ] tri
     [ 1.0 min 1.0 swap - ] tri@ 1.0 <rgba> ; inline
 
-GENERIC: >cmyka ( color -- cmyka ) ;
+GENERIC: >cmyka ( color -- cmyka )
 
 M: object >cmyka >rgba >cmyka ;
 

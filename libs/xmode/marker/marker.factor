@@ -55,7 +55,7 @@ IN: xmode.marker
 : current-char ( -- char )
     position get line get nth ;
 
-GENERIC: match-position ( rule -- n ) ;
+GENERIC: match-position ( rule -- n )
 
 M: mark-previous-rule match-position drop last-offset get ;
 
@@ -72,7 +72,7 @@ M: rule match-position drop position get ;
 : rest-of-line ( -- str )
     line get position get tail-slice ;
 
-GENERIC: text-matches? ( string text -- match-count/f ) ;
+GENERIC: text-matches? ( string text -- match-count/f )
 
 M: f text-matches?
     2drop f ;
@@ -116,9 +116,9 @@ DEFER: get-rules
 : get-rules ( char ruleset -- seq )
     [ f ] 2dip [ get-char-rules ] keep get-always-rules ;
 
-GENERIC: handle-rule-start ( match-count rule -- ) ;
+GENERIC: handle-rule-start ( match-count rule -- )
 
-GENERIC: handle-rule-end ( match-count rule -- ) ;
+GENERIC: handle-rule-end ( match-count rule -- )
 
 : find-escape-rule ( -- rule )
     context get dup

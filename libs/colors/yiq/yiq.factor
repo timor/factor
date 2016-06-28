@@ -12,7 +12,7 @@ TUPLE: yiqa < color
 { quadrature read-only }
 { alpha read-only } ;
 
-C: <yiqa> yiqa ;
+C: <yiqa> yiqa
 
 M: yiqa >rgba
     {
@@ -24,7 +24,7 @@ M: yiqa >rgba
         3tri [ 0.0 1.0 clamp ] tri@
     ] dip <rgba> ; inline
 
-GENERIC: >yiqa ( color -- yiqa ) ;
+GENERIC: >yiqa ( color -- yiqa )
 
 M: object >yiqa >rgba >yiqa ;
 

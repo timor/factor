@@ -6,7 +6,7 @@ IN: ui.pens.caching
 ! A pen that caches vertex arrays, etc
 TUPLE: caching-pen last-dim ;
 
-GENERIC: recompute-pen ( gadget pen -- ) ;
+GENERIC: recompute-pen ( gadget pen -- )
 
 : compute-pen ( gadget pen -- )
     2dup [ dim>> ] [ last-dim>> ] bi* eq? [

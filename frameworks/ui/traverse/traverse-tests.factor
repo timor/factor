@@ -5,7 +5,7 @@ IN: ui.traverse.tests
 
 M: array children>> ;
 
-GENERIC: (flatten-tree) ( node -- ) ;
+GENERIC: (flatten-tree) ( node -- )
 
 M: node (flatten-tree)
     children>> [ (flatten-tree) ] each ;

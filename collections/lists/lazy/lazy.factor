@@ -12,7 +12,7 @@ M: promise nil? force nil? ;
 
 TUPLE: lazy-cons-state { car promise } { cdr promise } ;
 
-C: <lazy-cons-state> lazy-cons-state ;
+C: <lazy-cons-state> lazy-cons-state
 
 : lazy-cons ( car cdr -- promise )
     [ <promise> ] bi@ <lazy-cons-state>
@@ -64,7 +64,7 @@ M: memoized-cons nil?
 
 TUPLE: lazy-map cons quot ;
 
-C: <lazy-map> lazy-map ;
+C: <lazy-map> lazy-map
 
 : lmap-lazy ( list quot -- result )
     over nil? [ 2drop nil ] [ <lazy-map> <memoized-cons> ] if ;
@@ -80,7 +80,7 @@ M: lazy-map nil?
 
 TUPLE: lazy-take n cons ;
 
-C: <lazy-take> lazy-take ;
+C: <lazy-take> lazy-take
 
 : ltake ( n list -- result )
     over zero? [ 2drop nil ] [ <lazy-take> ] if ;
@@ -96,7 +96,7 @@ M: lazy-take nil?
 
 TUPLE: lazy-until cons quot ;
 
-C: <lazy-until> lazy-until ;
+C: <lazy-until> lazy-until
 
 : luntil ( list quot: ( elt -- ? ) -- result )
     over nil? [ drop ] [ <lazy-until> ] if ;
@@ -114,7 +114,7 @@ M: lazy-until nil?
 
 TUPLE: lazy-while cons quot ;
 
-C: <lazy-while> lazy-while ;
+C: <lazy-while> lazy-while
 
 : lwhile ( list quot: ( elt -- ? ) -- result )
     over nil? [ drop ] [ <lazy-while> ] if ;
@@ -130,7 +130,7 @@ M: lazy-while nil?
 
 TUPLE: lazy-filter cons quot ;
 
-C: <lazy-filter> lazy-filter ;
+C: <lazy-filter> lazy-filter
 
 : lfilter ( list quot: ( elt -- ? ) -- result )
     over nil? [ 2drop nil ] [ <lazy-filter> <memoized-cons> ] if ;
@@ -164,7 +164,7 @@ M: lazy-filter nil?
 
 TUPLE: lazy-append list1 list2 ;
 
-C: <lazy-append> lazy-append ;
+C: <lazy-append> lazy-append
 
 : lappend-lazy ( list1 list2 -- result )
     over nil? [ nip ] [ <lazy-append> ] if ;
@@ -196,7 +196,7 @@ M: lazy-from-by nil?
 
 TUPLE: lazy-zip list1 list2 ;
 
-C: <lazy-zip> lazy-zip ;
+C: <lazy-zip> lazy-zip
 
 : lzip ( list1 list2 -- result )
     2dup [ nil? ] either?
@@ -213,7 +213,7 @@ M: lazy-zip nil?
 
 TUPLE: sequence-cons index seq ;
 
-C: <sequence-cons> sequence-cons ;
+C: <sequence-cons> sequence-cons
 
 : sequence-tail>list ( index seq -- list )
     2dup length >= [
@@ -235,7 +235,7 @@ M: sequence >list 0 swap sequence-tail>list ;
 
 TUPLE: lazy-concat car cdr ;
 
-C: <lazy-concat> lazy-concat ;
+C: <lazy-concat> lazy-concat
 
 DEFER: lconcat
 
@@ -302,7 +302,7 @@ PRIVATE>
 
 TUPLE: lazy-io stream car cdr quot ;
 
-C: <lazy-io> lazy-io ;
+C: <lazy-io> lazy-io
 
 : lcontents ( stream -- result )
     f f [ stream-read1 ] <lazy-io> ;
@@ -333,17 +333,17 @@ M: lazy-io cdr
 M: lazy-io nil?
     car nil? ;
 
-INSTANCE: sequence-cons list ;
-INSTANCE: memoized-cons list ;
-INSTANCE: promise list ;
-INSTANCE: lazy-io list ;
-INSTANCE: lazy-concat list ;
-INSTANCE: lazy-cons-state list ;
-INSTANCE: lazy-map list ;
-INSTANCE: lazy-take list ;
-INSTANCE: lazy-append list ;
-INSTANCE: lazy-from-by list ;
-INSTANCE: lazy-zip list ;
-INSTANCE: lazy-while list ;
-INSTANCE: lazy-until list ;
-INSTANCE: lazy-filter list ;
+INSTANCE: sequence-cons list
+INSTANCE: memoized-cons list
+INSTANCE: promise list
+INSTANCE: lazy-io list
+INSTANCE: lazy-concat list
+INSTANCE: lazy-cons-state list
+INSTANCE: lazy-map list
+INSTANCE: lazy-take list
+INSTANCE: lazy-append list
+INSTANCE: lazy-from-by list
+INSTANCE: lazy-zip list
+INSTANCE: lazy-while list
+INSTANCE: lazy-until list
+INSTANCE: lazy-filter list

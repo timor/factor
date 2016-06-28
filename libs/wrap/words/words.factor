@@ -5,7 +5,7 @@ sequences.private splitting.monotonic wrap ;
 IN: wrap.words
 
 TUPLE: wrapping-word key width break? ;
-C: <wrapping-word> wrapping-word ;
+C: <wrapping-word> wrapping-word
 
 PRIVATE<
 

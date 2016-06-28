@@ -114,7 +114,7 @@ IN: ui.tools.listener.tests
 
 { } [ <interactor> <pane> <pane-stream> >>output "interactor" set ] unit-test
 
-CONSTANT: text "Hello world.\nThis is a test." ;
+CONSTANT: text "Hello world.\nThis is a test."
 
 { } [ text "interactor" get set-editor-string ] unit-test
 

@@ -6,7 +6,7 @@ IN: io.streams.string
 
 ! Readers
 TUPLE: string-reader { underlying string read-only } { i array-capacity } ;
-INSTANCE: string-reader input-stream ;
+INSTANCE: string-reader input-stream
 
 M: string-reader stream-element-type drop +character+ ; inline
 

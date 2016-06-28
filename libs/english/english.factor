@@ -90,10 +90,10 @@ CONSTANT: singular-to-plural H{
     ! ouse -> ice
     { "louse" "lice" }
     { "mouse" "mice" }
-} ;
+}
 COMPILE>
 
-CONSTANT: plural-to-singular $$[ singular-to-plural assoc-invert ] ;
+CONSTANT: plural-to-singular $$[ singular-to-plural assoc-invert ]
 
 :: match-case ( master disciple -- master' )
     {

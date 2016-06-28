@@ -25,7 +25,7 @@ SYMBOL: allocations
     HS{ } clone live-vregs namespaces:set
     HS{ } clone allocations namespaces:set ;
 
-GENERIC: build-liveness-graph ( insn -- ) ;
+GENERIC: build-liveness-graph ( insn -- )
 
 : add-edges ( uses def -- )
     liveness-graph get [ union ] change-at ;
@@ -53,7 +53,7 @@ M: vreg-insn build-liveness-graph
 
 M: insn build-liveness-graph drop ;
 
-GENERIC: compute-live-vregs ( insn -- ) ;
+GENERIC: compute-live-vregs ( insn -- )
 
 : (record-live) ( vregs -- )
     [
@@ -86,7 +86,7 @@ M: vreg-insn compute-live-vregs record-live ;
 
 M: insn compute-live-vregs drop ;
 
-GENERIC: live-insn? ( insn -- ? ) ;
+GENERIC: live-insn? ( insn -- ? )
 
 M: ##set-slot live-insn? obj>> live-vreg? ;
 

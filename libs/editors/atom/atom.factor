@@ -9,7 +9,7 @@ atom-editor editor-class set-global
 
 SYMBOL: atom-path
 
-HOOK: find-atom os ( -- path ) ;
+HOOK: find-atom os ( -- path )
 
 M: object find-atom
     "atom" ?find-in-path ;

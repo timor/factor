@@ -7,11 +7,11 @@ namespaces present sequences splitting strings strings.tables
 summary ;
 IN: io.styles
 
-GENERIC: stream-format ( str style stream -- ) ;
-GENERIC: make-span-stream ( style stream -- stream' ) ;
-GENERIC: make-block-stream ( style stream -- stream' ) ;
-GENERIC: make-cell-stream ( style stream -- stream' ) ;
-GENERIC: stream-write-table ( table-cells style stream -- ) ;
+GENERIC: stream-format ( str style stream -- )
+GENERIC: make-span-stream ( style stream -- stream' )
+GENERIC: make-block-stream ( style stream -- stream' )
+GENERIC: make-cell-stream ( style stream -- stream' )
+GENERIC: stream-write-table ( table-cells style stream -- )
 
 PROTOCOL: formatted-output-stream-protocol
 stream-format make-span-stream make-block-stream
@@ -57,15 +57,15 @@ TUPLE: ignore-close-stream < filter-writer ;
 
 M: ignore-close-stream dispose drop ;
 
-C: <ignore-close-stream> ignore-close-stream ;
+C: <ignore-close-stream> ignore-close-stream
 
 TUPLE: style-stream < filter-writer style ;
-INSTANCE: style-stream output-stream ;
+INSTANCE: style-stream output-stream
 
 : do-nested-style ( style style-stream -- style stream )
     [ style>> swap assoc-union ] [ stream>> ] bi ; inline
 
-C: <style-stream> style-stream ;
+C: <style-stream> style-stream
 
 M: style-stream stream-format
     do-nested-style stream-format ;
@@ -145,12 +145,12 @@ CONSTANT: standard-table-style
     H{
         { table-gap { 5 5 } }
         { table-border T{ rgba f 0.8 0.8 0.8 1.0 } }
-    } ;
+    }
 
 ! Input history
 TUPLE: input string ;
 
-C: <input> input ;
+C: <input> input
 
 M: input present string>> ;
 

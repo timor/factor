@@ -179,7 +179,7 @@ PRIVATE>
 M: quadtree equal? ( a b -- ? )
     over quadtree? [ tree= ] [ 2drop f ] if ;
 
-INSTANCE: quadtree assoc ;
+INSTANCE: quadtree assoc
 
 M: quadtree at* ( key assoc -- value/f ? ) at-point ;
 M: quadtree assoc-size ( assoc -- n ) quadtree-size ;

@@ -37,7 +37,7 @@ INTERSECTION: generic-class generic class ;
 UNION: union-with-one-member a ;
 
 MIXIN: mixin-with-one-member
-INSTANCE: union-with-one-member mixin-with-one-member ;
+INSTANCE: union-with-one-member mixin-with-one-member
 
 ! class<=
 { t } [ \ fixnum \ integer class<= ] unit-test

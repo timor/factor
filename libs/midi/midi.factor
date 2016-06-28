@@ -14,11 +14,11 @@ IN: midi
 
 TUPLE: midi header chunks ;
 
-C: <midi> midi ;
+C: <midi> midi
 
 TUPLE: midi-chunk type bytes ;
 
-C: <midi-chunk> midi-chunk ;
+C: <midi-chunk> midi-chunk
 
 TUPLE: midi-header format #chunks division ;
 
@@ -26,27 +26,27 @@ TUPLE: midi-track events ;
 
 TUPLE: meta-event delta name value ;
 
-C: <meta-event> meta-event ;
+C: <meta-event> meta-event
 
 TUPLE: sysex-event delta type bytes ;
 
-C: <sysex-event> sysex-event ;
+C: <sysex-event> sysex-event
 
 TUPLE: midi-event delta name value ;
 
-C: <midi-event> midi-event ;
+C: <midi-event> midi-event
 
 CONSTANT: formats H{
     { 0 "the file contains a single multi-channel track" }
     { 1 "the file contains one or more simultaneous tracks (or MIDI outputs) of a sequence" }
     { 2 "the file contains one or more sequentially independant single-track patterns" }
-} ;
+}
 
-CONSTANT: min-pitchwheel -8192 ;
-CONSTANT: max-pitchwheel 8191 ;
+CONSTANT: min-pitchwheel -8192
+CONSTANT: max-pitchwheel 8191
 
-CONSTANT: min-songpos 0 ;
-CONSTANT: max-songpos 16383 ;
+CONSTANT: min-songpos 0
+CONSTANT: max-songpos 16383
 
 CONSTANT: key-signatures H{
     { B{ -7 0 } "Cb" }
@@ -79,14 +79,14 @@ CONSTANT: key-signatures H{
     { B{ 5 1 } "G#m" }
     { B{ 6 1 } "D#m" }
     { B{ 7 1 } "A#m" }
-} ;
+}
 
 CONSTANT: smpte-framerate H{
     { 0 24 }
     { 1 25 }
     { 2 29.97 }
     { 3 30 }
-} ;
+}
 
 PRIVATE<
 
@@ -259,7 +259,7 @@ PRIVATE<
 : write-string ( str -- )
     utf8 encode [ length write-number ] [ write ] bi ;
 
-GENERIC: write-event ( prev-status event -- status ) ;
+GENERIC: write-event ( prev-status event -- status )
 
 M: meta-event write-event
     [ delta>> write-number 0xff write1 ] [ value>> ] [ name>> ] tri {
@@ -379,7 +379,7 @@ M: midi-event write-event
         { "reset" [ 2drop 0xff dup write1 ] }
     } case ;
 
-GENERIC: write-chunk ( chunk -- ) ;
+GENERIC: write-chunk ( chunk -- )
 
 M: midi-header write-chunk
     $$[ "MThd" >byte-array ] write

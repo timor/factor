@@ -3,14 +3,14 @@
 USING: alien.strings io.backend kernel sequences system ;
 IN: memory
 
-PRIMITIVE: all-instances ( -- array ) ;
-PRIMITIVE: compact-gc ( -- ) ;
-PRIMITIVE: gc ( -- ) ;
-PRIMITIVE: minor-gc ( -- ) ;
-PRIMITIVE: size ( obj -- n ) ;
+PRIMITIVE: all-instances ( -- array )
+PRIMITIVE: compact-gc ( -- )
+PRIMITIVE: gc ( -- )
+PRIMITIVE: minor-gc ( -- )
+PRIMITIVE: size ( obj -- n )
 
 PRIVATE<
-PRIMITIVE: (save-image) ( path1 path2 then-die? -- ) ;
+PRIMITIVE: (save-image) ( path1 path2 then-die? -- )
 PRIVATE>
 
 : instances ( quot -- seq )

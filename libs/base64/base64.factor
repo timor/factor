@@ -11,7 +11,7 @@ PRIVATE<
 
 COMPILE<
 CONSTANT: alphabet
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" ;
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
 : alphabet-inverse ( alphabet -- seq )
     dup supremum 1 + f <array> [

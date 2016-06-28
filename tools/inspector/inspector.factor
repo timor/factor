@@ -18,7 +18,7 @@ PRIVATE<
     [ unparse-short ] map
     zip sort-values keys ;
 
-GENERIC: add-numbers ( alist -- table' ) ;
+GENERIC: add-numbers ( alist -- table' )
 
 M: enum add-numbers ;
 
@@ -29,7 +29,7 @@ TUPLE: slot-name name ;
 
 M: slot-name pprint* name>> text ;
 
-GENERIC: fix-slot-names ( assoc -- assoc ) ;
+GENERIC: fix-slot-names ( assoc -- assoc )
 
 M: assoc fix-slot-names >alist ;
 

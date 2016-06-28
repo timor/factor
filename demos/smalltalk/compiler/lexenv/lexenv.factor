@@ -14,7 +14,7 @@ TUPLE: lexenv local-readers local-writers self return class method ;
 
 : <lexenv> ( -- lexenv ) lexenv new ; inline
 
-CONSTANT: empty-lexenv T{ lexenv } ;
+CONSTANT: empty-lexenv T{ lexenv }
 
 : lexenv-union ( lexenv1 lexenv2 -- lexenv )
     [ <lexenv> ] 2dip {

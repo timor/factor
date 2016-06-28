@@ -8,9 +8,9 @@ IN: compiler.cfg.def-use
 
 ! Utilities for iterating over instruction operands
 
-GENERIC: defs-vregs ( insn -- seq ) ;
-GENERIC: temp-vregs ( insn -- seq ) ;
-GENERIC: uses-vregs ( insn -- seq ) ;
+GENERIC: defs-vregs ( insn -- seq )
+GENERIC: temp-vregs ( insn -- seq )
+GENERIC: uses-vregs ( insn -- seq )
 
 M: insn defs-vregs drop { } ;
 M: insn temp-vregs drop { } ;
@@ -24,7 +24,7 @@ CONSTANT: special-vreg-insns {
     ##alien-assembly
     ##callback-inputs
     ##callback-outputs
-} ;
+}
 
 ! Special defs-vregs methods
 M: ##parallel-copy defs-vregs values>> [ first ] map ;

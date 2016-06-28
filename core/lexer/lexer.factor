@@ -78,7 +78,7 @@ ERROR: unexpected want got ;
     [ check-lexer [ column>> ] [ line-text>> ] bi ] prepose
     keep column<< ; inline
 
-GENERIC: skip-blank ( lexer -- ) ;
+GENERIC: skip-blank ( lexer -- )
 
 PRIVATE<
 
@@ -98,7 +98,7 @@ M: lexer skip-blank
         [ skip-whitespace ] change-lexer-column
     ] if ;
 
-GENERIC: skip-word ( lexer -- ) ;
+GENERIC: skip-word ( lexer -- )
 
 M: lexer skip-word
     [

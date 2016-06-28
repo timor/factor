@@ -7,7 +7,7 @@ IN: colors.xyy
 
 TUPLE: xyYa x y Y alpha ;
 
-C: <xyYa> xyYa ;
+C: <xyYa> xyYa
 
 M: xyYa >rgba
     >xyza >rgba ;
@@ -22,7 +22,7 @@ M: xyYa >xyza
         ]
     ] [ alpha>> ] bi <xyza> ;
 
-GENERIC: >xyYa ( color -- xyYa ) ;
+GENERIC: >xyYa ( color -- xyYa )
 
 M: object >xyYa >xyza >xyYa ;
 

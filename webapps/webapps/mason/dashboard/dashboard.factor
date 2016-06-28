@@ -6,10 +6,10 @@ webapps.mason.utils ;
 IN: webapps.mason.downloads
 
 CONSTANT: CRASHED
-XML-CHUNK[[ <span style="background-color: yellow;">CRASHED</span> ]] ;
+XML-CHUNK[[ <span style="background-color: yellow;">CRASHED</span> ]]
 
 CONSTANT: BROKEN
-XML-CHUNK[[ <span style="background-color: red; color: white;">BROKEN</span> ]] ;
+XML-CHUNK[[ <span style="background-color: red; color: white;">BROKEN</span> ]]
 
 : builder-status ( builder -- status/f )
     {

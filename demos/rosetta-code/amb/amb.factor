@@ -29,7 +29,7 @@ CONSTANT: words {
     { "frog" "elephant" "thing" }
     { "walked" "treaded" "grows" }
     { "slowly" "quickly"  }
-} ;
+}
 
 : letters-match? ( str1 str2 -- ? ) [ last ] [ first ] bi* = ;
 

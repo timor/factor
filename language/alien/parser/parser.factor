@@ -72,7 +72,7 @@ ERROR: *-in-c-type-name name ;
     scan-token (CREATE-C-TYPE) ;
 
 PRIVATE<
-GENERIC: return-type-name ( type -- name ) ;
+GENERIC: return-type-name ( type -- name )
 
 M: object return-type-name drop "void" ;
 M: word return-type-name name>> ;

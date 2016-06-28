@@ -12,7 +12,7 @@ IN: compiler.cfg.gvn.expressions
 
 COMPILE<
 
-GENERIC: >expr ( insn -- expr ) ;
+GENERIC: >expr ( insn -- expr )
 
 : input-values ( slot-specs -- slot-specs' )
     [ type>> { use literal } member-eq? ] filter ;
@@ -61,11 +61,11 @@ COMPILE>
 
 TUPLE: integer-expr value ;
 
-C: <integer-expr> integer-expr ;
+C: <integer-expr> integer-expr
 
 TUPLE: reference-expr value ;
 
-C: <reference-expr> reference-expr ;
+C: <reference-expr> reference-expr
 
 M: reference-expr equal?
     over reference-expr? [

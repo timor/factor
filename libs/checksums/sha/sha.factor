@@ -7,16 +7,16 @@ sequences.generalizations sequences.private ;
 IN: checksums.sha
 
 MIXIN: sha
-INSTANCE: sha checksum ;
+INSTANCE: sha checksum
 
 SINGLETON: sha1
-INSTANCE: sha1 sha ;
+INSTANCE: sha1 sha
 
 SINGLETON: sha-224
 SINGLETON: sha-256
 
-INSTANCE: sha-224 sha ;
-INSTANCE: sha-256 sha ;
+INSTANCE: sha-224 sha
+INSTANCE: sha-256 sha
 
 PRIVATE<
 
@@ -33,7 +33,7 @@ CONSTANT: initial-H-sha1
         0x98badcfe
         0x10325476
         0xc3d2e1f0
-    } ;
+    }
 
 CONSTANT: K-sha1
     $$[
@@ -42,7 +42,7 @@ CONSTANT: K-sha1
         20 0x8f1bbcdc <repetition>
         20 0xca62c1d6 <repetition>
         4 { } nappend-as
-    ] ;
+    ]
 
 TUPLE: sha2-state < checksum-state
 { K array }
@@ -62,26 +62,26 @@ M: sha2-state clone
     [ clone ] change-H
     [ clone ] change-K ;
 
-CONSTANT: a 0 ;
-CONSTANT: b 1 ;
-CONSTANT: c 2 ;
-CONSTANT: d 3 ;
-CONSTANT: e 4 ;
-CONSTANT: f 5 ;
-CONSTANT: g 6 ;
-CONSTANT: h 7 ;
+CONSTANT: a 0
+CONSTANT: b 1
+CONSTANT: c 2
+CONSTANT: d 3
+CONSTANT: e 4
+CONSTANT: f 5
+CONSTANT: g 6
+CONSTANT: h 7
 
 CONSTANT: initial-H-224
     {
         0xc1059ed8 0x367cd507 0x3070dd17 0xf70e5939
         0xffc00b31 0x68581511 0x64f98fa7 0xbefa4fa4
-    } ;
+    }
 
 CONSTANT: initial-H-256
     {
         0x6a09e667 0xbb67ae85 0x3c6ef372 0xa54ff53a
         0x510e527f 0x9b05688c 0x1f83d9ab 0x5be0cd19
-    } ;
+    }
 
 CONSTANT: initial-H-384
     {
@@ -93,7 +93,7 @@ CONSTANT: initial-H-384
         0x8eb44a8768581511
         0xdb0c2e0d64f98fa7
         0x47b5481dbefa4fa4
-    } ;
+    }
 
 CONSTANT: initial-H-512
     {
@@ -105,7 +105,7 @@ CONSTANT: initial-H-512
         0x9b05688c2b3e6c1f
         0x1f83d9abfb41bd6b
         0x5be0cd19137e2179
-    } ;
+    }
 
 CONSTANT: K-256
     {
@@ -125,7 +125,7 @@ CONSTANT: K-256
         0x391c0cb3 0x4ed8aa4a 0x5b9cca4f 0x682e6ff3
         0x748f82ee 0x78a5636f 0x84c87814 0x8cc70208
         0x90befffa 0xa4506ceb 0xbef9a3f7 0xc67178f2
-    } ;
+    }
 
 CONSTANT: K-384
     {
@@ -150,9 +150,9 @@ CONSTANT: K-384
         0x06f067aa72176fba 0x0a637dc5a2c898a6 0x113f9804bef90dae 0x1b710b35131c471b
         0x28db77f523047d84 0x32caab7b40c72493 0x3c9ebe0a15c9bebc 0x431d67c49c100d4c
         0x4cc5d4becb3e42b6 0x597f299cfc657e2a 0x5fcb6fab3ad6faec 0x6c44198c4a475817
-    } ;
+    }
 
-ALIAS: K-512 K-384 ;
+ALIAS: K-512 K-384
 
 : <sha1-state> ( -- sha1-state )
     sha1-state new-checksum-state
@@ -266,7 +266,7 @@ M: sha-256 initialize-checksum-state drop <sha-256-state> ;
 : slice3 ( n seq -- a b c )
     [ dup 3 + ] dip <slice> first3 ; inline
 
-GENERIC: pad-initial-bytes ( string sha2 -- padded-string ) ;
+GENERIC: pad-initial-bytes ( string sha2 -- padded-string )
 
 :: T1-256 ( n M H sha2 -- T1 )
     n M nth-unsafe

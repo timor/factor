@@ -7,9 +7,9 @@ IN: io.streams.throwing
 ERROR: stream-exhausted n stream word ;
 
 TUPLE: throws-on-eof-stream stream ;
-INSTANCE: throws-on-eof-stream input-stream ;
+INSTANCE: throws-on-eof-stream input-stream
 
-C: <throws-on-eof-stream> throws-on-eof-stream ;
+C: <throws-on-eof-stream> throws-on-eof-stream
 
 M: throws-on-eof-stream stream-element-type stream>> stream-element-type ;
 

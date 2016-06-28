@@ -25,7 +25,7 @@ stack-checker.transforms
 stack-checker.dependencies
 stack-checker.recursive-state
 stack-checker.row-polymorphism ;
-QUALIFIED-WITH: generic.single.private gsp ;
+QUALIFIED-WITH: generic.single.private gsp
 IN: stack-checker.known-words
 
 : infer-special ( word -- )
@@ -92,7 +92,7 @@ IN: stack-checker.known-words
 \ declare [ infer-declare ] "special" set-word-prop
 
 ! Call
-GENERIC: infer-call* ( value known -- ) ;
+GENERIC: infer-call* ( value known -- )
 
 : (infer-call) ( value -- ) dup known infer-call* ;
 

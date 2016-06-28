@@ -22,7 +22,7 @@ IN: rosetta-code.100-doors
 ! integers. Opening only those doors is an optimization that may
 ! also be expressed.
 
-CONSTANT: number-of-doors 100 ;
+CONSTANT: number-of-doors 100
 
 : multiples ( n -- range )
     0 number-of-doors rot <range> ;

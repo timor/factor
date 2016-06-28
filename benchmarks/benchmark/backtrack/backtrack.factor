@@ -42,7 +42,7 @@ MEMO: 24-from-4 ( a b c d -- ? )
         ] map-sum
     ] map-sum ;
 
-CONSTANT: words { 24-from-1 24-from-2 24-from-3 24-from-4 } ;
+CONSTANT: words { 24-from-1 24-from-2 24-from-3 24-from-4 }
 
 : backtrack-benchmark ( -- )
     words [ reset-memoized ] each

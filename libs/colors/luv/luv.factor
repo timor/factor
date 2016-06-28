@@ -8,7 +8,7 @@ IN: colors.luv
 
 TUPLE: luva l u v alpha ;
 
-C: <luva> luva ;
+C: <luva> luva
 
 PRIVATE<
 
@@ -42,7 +42,7 @@ M: luva >xyza
         ]
     ] [ alpha>> ] bi <xyza> ;
 
-GENERIC: >luva ( color -- luva ) ;
+GENERIC: >luva ( color -- luva )
 
 M: object >luva >rgba >luva ;
 

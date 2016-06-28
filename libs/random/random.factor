@@ -6,17 +6,17 @@ hashtables hashtables.private hash-sets hints io.backend
 io.binary kernel locals math math.bitwise math.constants
 math.functions math.order math.ranges namespaces sequences
 sequences.private sets summary system typed vocabs ;
-QUALIFIED-WITH: alien.c-types c ;
-QUALIFIED-WITH: sets sets ;
+QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: sets sets
 IN: random
 
 SYMBOL: system-random-generator
 SYMBOL: secure-random-generator
 SYMBOL: random-generator
 
-GENERIC#: seed-random 1 ( obj seed -- obj ) ;
-GENERIC: random-32* ( obj -- n ) ;
-GENERIC: random-bytes* ( n obj -- byte-array ) ;
+GENERIC#: seed-random 1 ( obj seed -- obj )
+GENERIC: random-32* ( obj -- n )
+GENERIC: random-bytes* ( n obj -- byte-array )
 
 M: object random-bytes*
     [ integer>fixnum-strict [ <byte-array> ] keep ] dip
@@ -76,7 +76,7 @@ PRIVATE<
         [ 32 shift obj random-32* + ] [ 32 + ] [ 32 - ] tri*
     ] while drop [ m * ] [ neg shift ] bi* ; inline
 
-GENERIC#: (random-integer) 1 ( m obj -- n ) ;
+GENERIC#: (random-integer) 1 ( m obj -- n )
 M: fixnum (random-integer) ( m obj -- n ) random-integer-loop ;
 M: bignum (random-integer) ( m obj -- n ) random-integer-loop ;
 
@@ -85,7 +85,7 @@ M: bignum (random-integer) ( m obj -- n ) random-integer-loop ;
 
 PRIVATE>
 
-GENERIC: random ( obj -- elt ) ;
+GENERIC: random ( obj -- elt )
 
 M: integer random
     [ f ] [ random-integer ] if-zero ;

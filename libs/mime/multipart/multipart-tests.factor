@@ -7,9 +7,9 @@ kernel math.ranges mime.multipart namespaces random
 sequences sorting strings threads tools.test ;
 IN: mime.multipart.tests
 
-CONSTANT: separator1 "----WebKitFormBoundary6odjpVPXIighAE2L" ;
+CONSTANT: separator1 "----WebKitFormBoundary6odjpVPXIighAE2L"
 
-CONSTANT: upload1 "------WebKitFormBoundary6odjpVPXIighAE2L\r\nContent-Disposition: form-data; name=\"file1\"; filename=\"up.txt\"\r\nContent-Type: text/plain\r\n\r\nuploaded!\n\r\n------WebKitFormBoundary6odjpVPXIighAE2L\r\nContent-Disposition: form-data; name=\"file2\"; filename=\"\"\r\n\r\n\r\n------WebKitFormBoundary6odjpVPXIighAE2L\r\nContent-Disposition: form-data; name=\"file3\"; filename=\"\"\r\n\r\n\r\n------WebKitFormBoundary6odjpVPXIighAE2L\r\nContent-Disposition: form-data; name=\"text1\"\r\n\r\nlol\r\n------WebKitFormBoundary6odjpVPXIighAE2L--\r\n" ;
+CONSTANT: upload1 "------WebKitFormBoundary6odjpVPXIighAE2L\r\nContent-Disposition: form-data; name=\"file1\"; filename=\"up.txt\"\r\nContent-Type: text/plain\r\n\r\nuploaded!\n\r\n------WebKitFormBoundary6odjpVPXIighAE2L\r\nContent-Disposition: form-data; name=\"file2\"; filename=\"\"\r\n\r\n\r\n------WebKitFormBoundary6odjpVPXIighAE2L\r\nContent-Disposition: form-data; name=\"file3\"; filename=\"\"\r\n\r\n\r\n------WebKitFormBoundary6odjpVPXIighAE2L\r\nContent-Disposition: form-data; name=\"text1\"\r\n\r\nlol\r\n------WebKitFormBoundary6odjpVPXIighAE2L--\r\n"
 
 : mime-test-stream ( -- stream )
    upload1
@@ -33,8 +33,8 @@ CONSTANT: upload1 "------WebKitFormBoundary6odjpVPXIighAE2L\r\nContent-Dispositi
     "file1" of filename>> "up.txt" =
 ] unit-test
 
-CONSTANT: separator2 "768de80194d942619886d23f1337aa15" ;
-CONSTANT: upload2 "--768de80194d942619886d23f1337aa15\r\nContent-Disposition: form-data; name=\"text\"; filename=\"upload.txt\"\r\nContent-Type: text/plain\r\n\r\nhello\r\n--768de80194d942619886d23f1337aa15--\r\n" ;
+CONSTANT: separator2 "768de80194d942619886d23f1337aa15"
+CONSTANT: upload2 "--768de80194d942619886d23f1337aa15\r\nContent-Disposition: form-data; name=\"text\"; filename=\"upload.txt\"\r\nContent-Type: text/plain\r\n\r\nhello\r\n--768de80194d942619886d23f1337aa15--\r\n"
 
 {
     "upload.txt"
@@ -48,8 +48,8 @@ CONSTANT: upload2 "--768de80194d942619886d23f1337aa15\r\nContent-Disposition: fo
     "text" of [ filename>> ] [ headers>> ] bi
 ] unit-test
 
-CONSTANT: separator3 "3f116598c7f0431b9f98148ed235c822" ;
-CONSTANT: upload3 "--3f116598c7f0431b9f98148ed235c822\r\nContent-Disposition: form-data; name=\"text\"; filename=\"upload.txt\"\r\n\r\nhello\r\n--3f116598c7f0431b9f98148ed235c822\r\nContent-Disposition: form-data; name=\"text2\"; filename=\"upload.txt\"\r\n\r\nhello\r\n--3f116598c7f0431b9f98148ed235c822--\r\n" ;
+CONSTANT: separator3 "3f116598c7f0431b9f98148ed235c822"
+CONSTANT: upload3 "--3f116598c7f0431b9f98148ed235c822\r\nContent-Disposition: form-data; name=\"text\"; filename=\"upload.txt\"\r\n\r\nhello\r\n--3f116598c7f0431b9f98148ed235c822\r\nContent-Disposition: form-data; name=\"text2\"; filename=\"upload.txt\"\r\n\r\nhello\r\n--3f116598c7f0431b9f98148ed235c822--\r\n"
 
 {
     { "text" "text2" }

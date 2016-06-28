@@ -9,13 +9,13 @@ IN: tools.crossref
 
 SYMBOL: crossref
 
-GENERIC: uses ( defspec -- seq ) ;
+GENERIC: uses ( defspec -- seq )
 
 PRIVATE<
 
 SYMBOL: visited
 
-GENERIC#: quot-uses 1 ( obj set -- ) ;
+GENERIC#: quot-uses 1 ( obj set -- )
 
 M: object quot-uses 2drop ;
 
@@ -81,7 +81,7 @@ M: object uses drop f ;
 : get-crossref ( -- crossref )
     crossref get-global [ build-crossref ] unless* ;
 
-GENERIC: irrelevant? ( defspec -- ? ) ;
+GENERIC: irrelevant? ( defspec -- ? )
 
 M: object irrelevant? drop f ;
 
@@ -93,7 +93,7 @@ PRIVATE>
 
 : usage ( defspec -- seq ) get-crossref at members ;
 
-GENERIC: smart-usage ( defspec -- seq ) ;
+GENERIC: smart-usage ( defspec -- seq )
 
 M: object smart-usage usage [ irrelevant? ] reject ;
 

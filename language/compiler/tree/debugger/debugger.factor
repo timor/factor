@@ -18,7 +18,7 @@ IN: compiler.tree.debugger
 ! A simple tool for turning tree IR into quotations and
 ! printing reports, for debugging purposes.
 
-GENERIC: node>quot ( node -- ) ;
+GENERIC: node>quot ( node -- )
 
 MACRO: match-choose ( alist -- quot )
     [ $[ syntax:_ ] ] assoc-map $[ syntax:_ match-cond ] ;
@@ -126,7 +126,7 @@ M: node node>quot drop ;
 : nodes>quot ( node -- quot )
     [ [ node>quot ] each ] [ ] make ;
 
-GENERIC: optimized. ( quot/word -- ) ;
+GENERIC: optimized. ( quot/word -- )
 
 M: word optimized. specialized-def optimized. ;
 

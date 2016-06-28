@@ -5,9 +5,9 @@ io.encodings.binary io.files io.files.temp io.files.unique
 json.reader kernel locals make namespaces sequences urls ;
 IN: google.translate
 
-CONSTANT: google-translate-url "http://ajax.googleapis.com/ajax/services/language/translate" ;
+CONSTANT: google-translate-url "http://ajax.googleapis.com/ajax/services/language/translate"
 
-CONSTANT: maximum-translation-size 5120 ;
+CONSTANT: maximum-translation-size 5120
 
 : parameters>assoc ( text from to -- assoc )
     "|" glue [

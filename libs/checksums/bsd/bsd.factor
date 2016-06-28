@@ -11,4 +11,4 @@ M: bsd checksum-bytes ( bytes checksum -- value )
         + 0xffff bitand
     ] reduce ;
 
-INSTANCE: bsd checksum ;
+INSTANCE: bsd checksum

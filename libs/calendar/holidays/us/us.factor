@@ -72,7 +72,7 @@ HOLIDAY: st-patricks-day march 17 >>day ;
 
 HOLIDAY: ash-wednesday easter 46 days time- ;
 
-ALIAS: first-day-of-lent ash-wednesday ;
+ALIAS: first-day-of-lent ash-wednesday
 
 HOLIDAY: fat-tuesday ash-wednesday 1 days time- ;
 

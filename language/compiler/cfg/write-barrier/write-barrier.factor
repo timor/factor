@@ -16,7 +16,7 @@ SYMBOL: copies
 : resolve-copy ( src -- dst )
     copies get ?at drop ;
 
-GENERIC: eliminate-write-barrier ( insn -- ? ) ;
+GENERIC: eliminate-write-barrier ( insn -- ? )
 
 : fresh-allocation ( vreg -- )
     fresh-allocations get adjoin ;

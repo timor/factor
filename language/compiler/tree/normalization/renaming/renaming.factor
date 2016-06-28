@@ -16,7 +16,7 @@ SYMBOL: rename-map
     [ rename-values ] dip
     rename-map get $[ _ set-at ] 2each ;
 
-GENERIC: rename-node-values* ( node -- node ) ;
+GENERIC: rename-node-values* ( node -- node )
 
 M: #introduce rename-node-values* ;
 

@@ -3,7 +3,7 @@ USING: combinators init io.directories io.pathnames kernel
 namespaces system vocabs ;
 IN: io.files.temp
 
-HOOK: default-temp-directory os ( -- path ) ;
+HOOK: default-temp-directory os ( -- path )
 
 SYMBOL: current-temp-directory
 
@@ -16,7 +16,7 @@ SYMBOL: current-temp-directory
 : with-temp-directory ( quot -- )
     [ temp-directory ] dip with-directory ; inline
 
-HOOK: default-cache-directory os ( -- path ) ;
+HOOK: default-cache-directory os ( -- path )
 
 SYMBOL: current-cache-directory
 

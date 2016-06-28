@@ -6,10 +6,10 @@ sequences alien alien.data classes.struct accessors
 audio.chunked-file audio.loader ;
 IN: audio.wav
 
-CONSTANT: RIFF-MAGIC "RIFF" ;
-CONSTANT: WAVE-MAGIC "WAVE" ;
-CONSTANT: FMT-MAGIC  "fmt " ;
-CONSTANT: DATA-MAGIC "data" ;
+CONSTANT: RIFF-MAGIC "RIFF"
+CONSTANT: WAVE-MAGIC "WAVE"
+CONSTANT: FMT-MAGIC  "fmt "
+CONSTANT: DATA-MAGIC "data"
 
 STRUCT: riff-chunk-header
     { id char[4] }

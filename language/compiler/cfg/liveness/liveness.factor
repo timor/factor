@@ -25,7 +25,7 @@ SYMBOL: edge-live-ins
 
 SYMBOL: base-pointers
 
-GENERIC: visit-insn ( live-set insn -- ) ;
+GENERIC: visit-insn ( live-set insn -- )
 
 ! This would be much better if live-set was a real set
 : kill-defs ( live-set insn -- )
@@ -40,7 +40,7 @@ M: vreg-insn visit-insn ( live-set insn -- )
 
 DEFER: lookup-base-pointer
 
-GENERIC: lookup-base-pointer* ( vreg insn -- vreg/f ) ;
+GENERIC: lookup-base-pointer* ( vreg insn -- vreg/f )
 
 M: ##tagged>integer lookup-base-pointer* nip src>> ;
 

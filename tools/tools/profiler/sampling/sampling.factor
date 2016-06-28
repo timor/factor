@@ -7,8 +7,8 @@ sequences sequences.generalizations sets sorting ;
 IN: tools.profiler.sampling
 
 PRIVATE<
-PRIMITIVE: (get-samples) ( -- samples/f ) ;
-PRIMITIVE: profiling ( ? -- ) ;
+PRIMITIVE: (get-samples) ( -- samples/f )
+PRIMITIVE: profiling ( ? -- )
 PRIVATE>
 
 SYMBOL: samples-per-second
@@ -18,7 +18,7 @@ samples-per-second [ 1,000 ] initialize
 PRIVATE<
 SYMBOL: raw-profile-data
 CONSTANT: ignore-words
-    { signal-handler leaf-signal-handler profiling minor-gc } ;
+    { signal-handler leaf-signal-handler profiling minor-gc }
 
 : ignore-word? ( word -- ? ) ignore-words member? ; inline
 PRIVATE>
@@ -85,7 +85,7 @@ PRIVATE<
 : leaf-callstack? ( callstack -- ? )
     [ ignore-word? ] all? ;
 
-CONSTANT: zero-counts { 0 0 0 0 0 } ;
+CONSTANT: zero-counts { 0 0 0 0 0 }
 
 : sum-counts ( samples -- times )
     zero-counts [ sample-counts-slice v+ ] reduce ;

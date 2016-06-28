@@ -13,7 +13,7 @@ IN: html.templates.chloe.components
     [ render ]
     ? ;
 
-GENERIC: component-tag ( tag class -- ) ;
+GENERIC: component-tag ( tag class -- )
 
 M: singleton-class component-tag ( tag class -- )
     [ "name" required-attr compile-attr ]

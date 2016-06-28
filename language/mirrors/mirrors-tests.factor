@@ -4,7 +4,7 @@ IN: mirrors.tests
 
 TUPLE: foo bar baz ;
 
-C: <foo> foo ;
+C: <foo> foo
 
 { 2 } [ 1 2 <foo> <mirror> assoc-size ] unit-test
 

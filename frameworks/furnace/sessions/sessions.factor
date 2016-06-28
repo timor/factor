@@ -22,7 +22,7 @@ session "SESSIONS"
 : get-session ( id -- session )
     dup [ session get-state ] when ;
 
-GENERIC: init-session* ( responder -- ) ;
+GENERIC: init-session* ( responder -- )
 
 M: object init-session* drop ;
 
@@ -73,7 +73,7 @@ TUPLE: sessions < server-state-manager domain verify? ;
     [ session set ] [ save-session-after ] bi
     sessions get responder>> call-responder ;
 
-CONSTANT: session-id-key "__s" ;
+CONSTANT: session-id-key "__s"
 
 : verify-session ( session -- session )
     sessions get verify?>> [

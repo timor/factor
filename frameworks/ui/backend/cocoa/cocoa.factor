@@ -15,7 +15,7 @@ IN: ui.backend.cocoa
 
 TUPLE: window-handle view window ;
 
-C: <window-handle> window-handle ;
+C: <window-handle> window-handle
 
 SINGLETON: cocoa-ui-backend
 
@@ -40,7 +40,7 @@ PIXEL-FORMAT-ATTRIBUTE-TABLE: NSOpenGLPFA { } H{
     { aux-buffers { $\ NSOpenGLPFAAuxBuffers } }
     { sample-buffers { $\ NSOpenGLPFASampleBuffers } }
     { samples { $\ NSOpenGLPFASamples } }
-} ;
+}
 
 M: cocoa-ui-backend (make-pixel-format)
     nip >NSOpenGLPFA-int-array
@@ -60,7 +60,7 @@ M: cocoa-ui-backend (pixel-format-attribute)
 
 TUPLE: pasteboard handle ;
 
-C: <pasteboard> pasteboard ;
+C: <pasteboard> pasteboard
 
 M: pasteboard clipboard-contents
     handle>> pasteboard-string ;
@@ -121,7 +121,7 @@ CONSTANT: window-control>styleMask
         { textured-background $\ NSTexturedBackgroundWindowMask }
         { normal-title-bar $\ NSTitledWindowMask }
         { dialog-window $\ NSTitledWindowMask }
-    } ;
+    }
 
 : world>styleMask ( world -- n )
     window-controls>> window-control>styleMask symbols>flags ;

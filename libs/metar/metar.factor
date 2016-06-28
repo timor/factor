@@ -11,7 +11,7 @@ IN: metar
 
 TUPLE: station cccc name state country latitude longitude ;
 
-C: <station> station ;
+C: <station> station
 
 PRIVATE<
 
@@ -82,14 +82,14 @@ CONSTANT: pressure-tendency H{
     { "6" "decreasing more slowly" }
     { "7" "decreasing" }
     { "8" "decreasing more quickly" }
-} ;
+}
 
 CONSTANT: lightning H{
     { "CA" "cloud-air lightning" }
     { "CC" "cloud-cloud lightning" }
     { "CG" "cloud-ground lightning" }
     { "IC" "in-cloud lightning" }
-} ;
+}
 
 CONSTANT: weather H{
     { "BC" "patches" }
@@ -123,7 +123,7 @@ CONSTANT: weather H{
     { "TS" "thuderstorm" }
     { "UP" "unknown" }
     { "VA" "volcanic ash" }
-} ;
+}
 
 MEMO: glossary ( -- assoc )
     "vocab:metar/glossary.txt" ascii file-lines
@@ -161,7 +161,7 @@ CONSTANT: compass-directions H{
     { 315.0 "NW" }
     { 337.5 "NNW" }
     { 360.0 "N" }
-} ;
+}
 
 : direction>compass ( direction -- compass )
     22.5 round-to-step compass-directions at ;
@@ -250,7 +250,7 @@ CONSTANT: sky H{
     { "SC" "stratocumulus" }
     { "SCSL" "stratocumulus standing lenticular cloud" }
     { "TCU" "towering cumulus" }
-} ;
+}
 
 : parse-sky-condition ( str -- str' )
     sky ?at [
@@ -277,16 +277,16 @@ CONSTANT: sky H{
     unclip [ string>number ] [ char: A = ] bi*
     [ 100 /f "%.2f Hg" sprintf ] [ "%s hPa" sprintf ] if ;
 
-CONSTANT: re-timestamp R`` \d{6}Z`` ;
-CONSTANT: re-station R`` \w{4}`` ;
-CONSTANT: re-temperature R`` [M]?\d{2}\\/([M]?\d{2})?`` ;
-CONSTANT: re-wind R`` (VRB|\d{3})\d{2,3}(G\d{2,3})?KT`` ;
-CONSTANT: re-wind-variable R`` \d{3}V\d{3}`` ;
-CONSTANT: re-visibility R`` [MP]?\d+(\\/\d+)?SM`` ;
-CONSTANT: re-rvr R`` R\d{2}[RLC]?\\/\d{4}(V\d{4})?FT`` ;
-CONSTANT: re-weather R`` [+-]?(VC)?(\w{2}|\w{4})`` ;
-CONSTANT: re-sky-condition R`` (\w{2,3}\d{3}(\w+)?|\w{3}|CAVOK)`` ;
-CONSTANT: re-altimeter R`` [AQ]\d{4}`` ;
+CONSTANT: re-timestamp R`` \d{6}Z``
+CONSTANT: re-station R`` \w{4}``
+CONSTANT: re-temperature R`` [M]?\d{2}\\/([M]?\d{2})?``
+CONSTANT: re-wind R`` (VRB|\d{3})\d{2,3}(G\d{2,3})?KT``
+CONSTANT: re-wind-variable R`` \d{3}V\d{3}``
+CONSTANT: re-visibility R`` [MP]?\d+(\\/\d+)?SM``
+CONSTANT: re-rvr R`` R\d{2}[RLC]?\\/\d{4}(V\d{4})?FT``
+CONSTANT: re-weather R`` [+-]?(VC)?(\w{2}|\w{4})``
+CONSTANT: re-sky-condition R`` (\w{2,3}\d{3}(\w+)?|\w{3}|CAVOK)``
+CONSTANT: re-altimeter R`` [AQ]\d{4}``
 
 : find-one ( seq quot: ( elt -- ? ) -- seq elt/f )
     dupd find drop [ tail unclip ] [ f ] if* ; inline
@@ -391,7 +391,7 @@ CONSTANT: low-clouds H{
     { 8 "cumulus and stratocumulus" }
     { 9 "cumulonimbus (thunderstorm)" }
     { -1 "not valid" }
-} ;
+}
 
 CONSTANT: mid-clouds H{
     { 1 "altostratus (thin)" }
@@ -404,7 +404,7 @@ CONSTANT: mid-clouds H{
     { 8 "altocumulus (with turrets)" }
     { 9 "altocumulus (chaotic)" }
     { -1 "above overcast" }
-} ;
+}
 
 CONSTANT: high-clouds H{
     { 1 "cirrus (filaments)" }
@@ -417,7 +417,7 @@ CONSTANT: high-clouds H{
     { 8 "cirrostratus (partial)" }
     { 9 "cirrocumulus or cirrocumulus / cirrus / cirrostratus" }
     { -1 "above overcast" }
-} ;
+}
 
 : parse-cloud-cover ( str -- str' )
     "8/" ?head drop first3 [ char: 0 - ] tri@
@@ -462,7 +462,7 @@ CONSTANT: high-clouds H{
 : parse-lightning ( str -- str' )
     "LTG" ?head drop 2 group [ lightning at ] map " " join ;
 
-CONSTANT: re-recent-weather R`` ((\w{2})?[BE]\d{2,4}((\w{2})?[BE]\d{2,4})?)+`` ;
+CONSTANT: re-recent-weather R`` ((\w{2})?[BE]\d{2,4}((\w{2})?[BE]\d{2,4})?)+``
 
 : parse-began/ended ( str -- str' )
     unclip swap
@@ -573,7 +573,7 @@ CONSTANT: re-recent-weather R`` ((\w{2})?[BE]\d{2,4}((\w{2})?[BE]\d{2,4})?)+`` ;
 
 PRIVATE>
 
-GENERIC: metar ( station -- metar ) ;
+GENERIC: metar ( station -- metar )
 
 M: station metar cccc>> metar ;
 
@@ -581,7 +581,7 @@ M: string metar
     "http://weather.noaa.gov/pub/data/observations/metar/stations/%s.TXT"
     sprintf http-get nip ;
 
-GENERIC: metar. ( station -- ) ;
+GENERIC: metar. ( station -- )
 
 M: station metar. cccc>> metar. ;
 
@@ -596,12 +596,12 @@ PRIVATE<
     [ parse-altitude ] [ parse-wind ] bi* prepend
     "wind shear " prepend ;
 
-CONSTANT: re-from-timestamp R`` FM\d{6}`` ;
+CONSTANT: re-from-timestamp R`` FM\d{6}``
 
 : parse-from-timestamp ( str -- str' )
     "FM" ?head drop parse-timestamp ;
 
-CONSTANT: re-valid-timestamp R`` \d{4}\/\d{4}`` ;
+CONSTANT: re-valid-timestamp R`` \d{4}\/\d{4}``
 
 : parse-valid-timestamp ( str -- str' )
     "/" split1 [ "00" append parse-timestamp ] bi@ " to " glue ;
@@ -713,7 +713,7 @@ sky-condition raw ;
 
 PRIVATE>
 
-GENERIC: taf ( station -- taf ) ;
+GENERIC: taf ( station -- taf )
 
 M: station taf cccc>> taf ;
 
@@ -721,7 +721,7 @@ M: string taf
     "http://weather.noaa.gov/pub/data/forecasts/taf/stations/%s.TXT"
     sprintf http-get nip ;
 
-GENERIC: taf. ( station -- ) ;
+GENERIC: taf. ( station -- )
 
 M: station taf. cccc>> taf. ;
 

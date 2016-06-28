@@ -25,7 +25,7 @@ CONSTANT: cleanup-list {
     "factor.image.fresh"
     "libfactor-ffi-test.exp"
     "libfactor-ffi-test.lib"
-} ;
+}
 
 : useless-files ( -- seq )
     cleanup-list image-names [ boot-image-name ] map append

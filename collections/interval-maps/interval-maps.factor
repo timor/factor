@@ -8,9 +8,9 @@ TUPLE: interval-map { array array read-only } ;
 
 PRIVATE<
 
-ALIAS: start first-unsafe ;
-ALIAS: end second-unsafe ;
-ALIAS: value third-unsafe ;
+ALIAS: start first-unsafe
+ALIAS: end second-unsafe
+ALIAS: value third-unsafe
 
 : find-interval ( key interval-map -- interval-node )
     array>> [ start <=> ] with search nip ; inline

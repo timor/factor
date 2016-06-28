@@ -20,7 +20,7 @@ SYMBOLS: local-def-indices local-kill-indices ;
         [ 1 + ] dip [ local-kill-indices get set-at ] with each
     ] if-empty ;
 
-GENERIC: record-insn ( n insn -- ) ;
+GENERIC: record-insn ( n insn -- )
 
 M: ##phi record-insn
     record-defs ;

@@ -52,7 +52,7 @@ TYPEDEF: char char2 ;
 
 SYMBOL: not-c-type
 
-CONSTANT: eleven 11 ;
+CONSTANT: eleven 11
 
 [
     "alien.parser.tests" use-vocab

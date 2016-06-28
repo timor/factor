@@ -6,7 +6,7 @@ math.parser sequences ;
 
 IN: calendar.elapsed
 
-GENERIC: elapsed-time ( seconds -- string ) ;
+GENERIC: elapsed-time ( seconds -- string )
 
 M: real elapsed-time
     dup 0 < [ "negative seconds" throw ] when [
@@ -39,7 +39,7 @@ M: duration elapsed-time
         [ 86400 / "%d days" sprintf ]
     } cond ;
 
-GENERIC: relative-time ( seconds -- string ) ;
+GENERIC: relative-time ( seconds -- string )
 
 M: real relative-time
     [ relative-time-offset ] [

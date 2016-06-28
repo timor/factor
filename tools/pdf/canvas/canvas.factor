@@ -9,7 +9,7 @@ IN: pdf.canvas
 
 TUPLE: margin left right top bottom ;
 
-C: <margin> margin ;
+C: <margin> margin
 
 TUPLE: canvas x y width height margin col-width font stream
 foreground background page-color inset line-height metrics ;

@@ -40,7 +40,7 @@ SYMBOLS: effect-dependency conditional-dependency definition-dependency ;
 : add-depends-on-definition ( word -- )
     definition-dependency depends-on ;
 
-GENERIC: add-depends-on-c-type ( c-type -- ) ;
+GENERIC: add-depends-on-c-type ( c-type -- )
 
 M: void add-depends-on-c-type drop ;
 
@@ -66,7 +66,7 @@ SYMBOL: generic-dependencies
 ! if any fail, the word is recompiled
 SYMBOL: conditional-dependencies
 
-GENERIC: satisfied? ( dependency -- ? ) ;
+GENERIC: satisfied? ( dependency -- ? )
 
 : add-conditional-dependency ( ... class -- )
     boa conditional-dependencies get

@@ -52,9 +52,9 @@ CONSTANT: items {
         T{ item f "towel" 18 12 }
         T{ item f "socks" 4 50 }
         T{ item f "book" 30 10 }
-    } ;
+    }
 
-CONSTANT: limit 400 ;
+CONSTANT: limit 400
 
 : make-table ( -- table )
     items length 1 + [ limit 1 + 0 <array> ] replicate ;

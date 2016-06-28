@@ -8,20 +8,20 @@ IN: alien
 BUILTIN: alien { underlying c-ptr read-only initial: f } expired ;
 BUILTIN: dll { path byte-array read-only initial: B{ } } ;
 
-PRIMITIVE: <callback> ( word return-rewind -- alien ) ;
-PRIMITIVE: <displaced-alien> ( displacement c-ptr -- alien ) ;
-PRIMITIVE: alien-address ( c-ptr -- addr ) ;
-PRIMITIVE: free-callback ( alien -- ) ;
+PRIMITIVE: <callback> ( word return-rewind -- alien )
+PRIMITIVE: <displaced-alien> ( displacement c-ptr -- alien )
+PRIMITIVE: alien-address ( c-ptr -- addr )
+PRIMITIVE: free-callback ( alien -- )
 
 PRIVATE<
-PRIMITIVE: current-callback ( -- n ) ;
+PRIMITIVE: current-callback ( -- n )
 PRIVATE>
 
 PREDICATE: pinned-alien < alien underlying>> not ;
 
 UNION: pinned-c-ptr pinned-alien postpone\ f ;
 
-GENERIC: element-size ( seq -- n ) ; flushable
+GENERIC: element-size ( seq -- n ) flushable
 
 M: byte-array element-size drop 1 ; inline
 
@@ -31,11 +31,11 @@ M: slice element-size seq>> element-size ; inline
 
 M: f element-size drop 1 ; inline
 
-GENERIC: byte-length ( obj -- n ) ; flushable
+GENERIC: byte-length ( obj -- n ) flushable
 
 M: object byte-length [ length ] [ element-size ] bi * ; inline
 
-GENERIC: >c-ptr ( obj -- c-ptr ) ; flushable
+GENERIC: >c-ptr ( obj -- c-ptr ) flushable
 
 M: c-ptr >c-ptr ; inline
 
@@ -50,7 +50,7 @@ M: object >c-ptr underlying>> ; inline
 : binary-object ( obj -- c-ptr n )
     [ >c-ptr ] [ byte-length ] bi ; inline
 
-GENERIC: expired? ( c-ptr -- ? ) ; flushable
+GENERIC: expired? ( c-ptr -- ? ) flushable
 
 M: alien expired? expired>> ;
 

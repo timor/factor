@@ -15,14 +15,14 @@ io.encodings.utf16n windows.errors literals ui.pixel-formats
 ui.pixel-formats.private memoize classes colors
 specialized-arrays classes.struct ;
 SPECIALIZED-ARRAY: POINT
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 IN: ui.backend.windows
 
 SINGLETON: windows-ui-backend
 
 TUPLE: win-base hDC hRC ;
 TUPLE: win < win-base hWnd world title ;
-C: <win> win ;
+C: <win> win
 
 PRIVATE<
 
@@ -51,7 +51,7 @@ PIXEL-FORMAT-ATTRIBUTE-TABLE: WGL_ARB { $\ WGL_SUPPORT_OPENGL_ARB 1 } H{
     { aux-buffers { $\ WGL_AUX_BUFFERS_ARB } }
     { sample-buffers { $\ WGL_SAMPLE_BUFFERS_ARB } }
     { samples { $\ WGL_SAMPLES_ARB } }
-} ;
+}
 
 : has-wglChoosePixelFormatARB? ( world -- ? )
     drop f ;
@@ -77,7 +77,7 @@ CONSTANT: pfd-flag-map H{
     { windowed $\ PFD_DRAW_TO_WINDOW }
     { backing-store $\ PFD_SWAP_COPY }
     { software-rendered $\ PFD_GENERIC_FORMAT }
-} ;
+}
 
 : >pfd-flag ( attribute -- value )
     pfd-flag-map at [ ] [ 0 ] if* ;
@@ -208,7 +208,7 @@ PRIVATE>
     ] with-clipboard ;
 
 TUPLE: pasteboard ;
-C: <pasteboard> pasteboard ;
+C: <pasteboard> pasteboard
 
 M: pasteboard clipboard-contents drop paste ;
 M: pasteboard set-clipboard-contents drop copy ;
@@ -229,7 +229,7 @@ CONSTANT: window-control>style
         { small-title-bar $\ WS_CAPTION }
         { normal-title-bar $\ WS_CAPTION }
         { dialog-window 0 }
-    } ;
+    }
 
 CONSTANT: window-control>ex-style
     H{
@@ -241,7 +241,7 @@ CONSTANT: window-control>ex-style
         { small-title-bar $$[ WS_EX_TOOLWINDOW WS_EX_TOPMOST bitor ] }
         { normal-title-bar $\ WS_EX_APPWINDOW }
         { dialog-window 0 }
-    } ;
+    }
 
 : needs-sysmenu? ( controls -- ? )
     { close-button minimize-button maximize-button } intersects? ;
@@ -311,7 +311,7 @@ CONSTANT: wm-keydown-codes
         { 121 "F10" }
         { 122 "F11" }
         { 123 "F12" }
-    } ;
+    }
 
 : key-state-down? ( key -- ? )
     GetKeyState 16 bit? ;
@@ -340,7 +340,7 @@ CONSTANT: exclude-keys-wm-keydown
         { 17 "CTRL" }
         { 18 "ALT" }
         { 20 "CAPS-LOCK" }
-    } ;
+    }
 
 ! Values are ignored
 CONSTANT: exclude-keys-wm-char
@@ -349,7 +349,7 @@ CONSTANT: exclude-keys-wm-char
         { 9 "TAB" }
         { 13 "RET" }
         { 27 "ESC" }
-    } ;
+    }
 
 : exclude-key-wm-keydown? ( n -- ? )
     exclude-keys-wm-keydown key? ;
@@ -793,7 +793,7 @@ M: windows-ui-backend (ungrab-input) ( handle -- )
     f ClipCursor drop
     1 ShowCursor drop ;
 
-CONSTANT: fullscreen-flags flags{ WS_CAPTION WS_BORDER WS_THICKFRAME } ;
+CONSTANT: fullscreen-flags flags{ WS_CAPTION WS_BORDER WS_THICKFRAME }
 
 : enter-fullscreen ( world -- )
     handle>> hWnd>>

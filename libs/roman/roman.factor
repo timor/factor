@@ -10,10 +10,10 @@ IN: roman
 PRIVATE<
 
 CONSTANT: roman-digits
-    { "m" "cm" "d" "cd" "c" "xc" "l" "xl" "x" "ix" "v" "iv" "i" } ;
+    { "m" "cm" "d" "cd" "c" "xc" "l" "xl" "x" "ix" "v" "iv" "i" }
 
 CONSTANT: roman-values
-    { 1000 900 500 400 100 90 50 40 10 9 5 4 1 } ;
+    { 1000 900 500 400 100 90 50 40 10 9 5 4 1 }
 
 ERROR: roman-range-error n ;
 

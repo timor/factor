@@ -4,7 +4,7 @@ USING: accessors assocs classes continuations kernel make math
 math.parser sequences sets strings ;
 IN: summary
 
-GENERIC: summary ( object -- string ) ;
+GENERIC: summary ( object -- string )
 
 : object-summary ( object -- string ) class-of name>> ; inline
 
@@ -13,7 +13,7 @@ GENERIC: summary ( object -- string ) ;
         [ % " with " % ] [ # ] [ " " % % ] tri*
     ] "" make ;
 
-GENERIC: tuple-summary ( object -- string ) ;
+GENERIC: tuple-summary ( object -- string )
 
 M: assoc tuple-summary
     dup assoc-size "entries" container-summary ;

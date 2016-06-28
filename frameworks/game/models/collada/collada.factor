@@ -5,7 +5,7 @@ hashtables kernel locals math math.parser sequences sequences.deep
 splitting xml xml.data xml.traversal math.order namespaces
 combinators images gpu.shaders io make game.models game.models.util
 io.encodings.ascii game.models.loader specialized-arrays ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAYS: c:float c:uint ;
 IN: game.models.collada
 
@@ -40,7 +40,7 @@ SYMBOLS: up-axis unit-ratio ;
 SINGLETONS: x-up y-up z-up ;
 UNION: rh-up x-up y-up z-up ;
 
-GENERIC: >y-up-axis! ( seq from-axis -- seq ) ;
+GENERIC: >y-up-axis! ( seq from-axis -- seq )
 M: x-up >y-up-axis!
     drop dup
     [

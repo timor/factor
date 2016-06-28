@@ -8,7 +8,7 @@ TUPLE: product-sequence { sequences array read-only } { lengths array read-only 
 : <product-sequence> ( sequences -- product-sequence )
     >array dup [ length ] map product-sequence boa ;
 
-INSTANCE: product-sequence sequence ;
+INSTANCE: product-sequence sequence
 
 M: product-sequence length lengths>> product ;
 

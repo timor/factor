@@ -3,7 +3,7 @@
 USING: alien alien.libraries sequences ;
 IN: windows
 
-CONSTANT: MAX_UNICODE_PATH 32768 ;
+CONSTANT: MAX_UNICODE_PATH 32768
 
 {
     { "advapi32"    "advapi32.dll"       stdcall }

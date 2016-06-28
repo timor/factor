@@ -38,4 +38,4 @@ M: pair delete-at
 M: pair >alist
     [ hash>> >alist ] [ [ key>> ] [ value>> ] bi 2array ] bi suffix ; inline
 
-INSTANCE: pair assoc ;
+INSTANCE: pair assoc

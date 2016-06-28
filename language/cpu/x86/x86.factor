@@ -10,7 +10,7 @@ compiler.units cpu.architecture cpu.x86.assembler
 cpu.x86.assembler.operands cpu.x86.assembler.private cpu.x86.features
 cpu.x86.features.private fry io kernel layouts locals make math
 math.order memory namespaces sequences system vm vocabs ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 FROM: kernel.private => declare ;
 FROM: math => float ;
 IN: cpu.x86
@@ -21,11 +21,11 @@ M: label JUMPcc [ 0 ] dip JUMPcc rc-relative label-fixup ;
 
 M: x86 vector-regs float-regs ;
 
-HOOK: stack-reg cpu ( -- reg ) ;
+HOOK: stack-reg cpu ( -- reg )
 
-HOOK: reserved-stack-space cpu ( -- n ) ;
+HOOK: reserved-stack-space cpu ( -- n )
 
-HOOK: pic-tail-reg cpu ( -- reg ) ;
+HOOK: pic-tail-reg cpu ( -- reg )
 
 : stack@ ( n -- op ) stack-reg swap [+] ;
 
@@ -70,12 +70,12 @@ M: x86 %load-reference
     [ \ f type-number MOV ]
     if* ;
 
-HOOK: ds-reg cpu ( -- reg ) ;
-HOOK: rs-reg cpu ( -- reg ) ;
+HOOK: ds-reg cpu ( -- reg )
+HOOK: rs-reg cpu ( -- reg )
 
 : reg-stack ( n reg -- op ) swap cells neg [+] ;
 
-GENERIC: loc>operand ( loc -- operand ) ;
+GENERIC: loc>operand ( loc -- operand )
 
 M: ds-loc loc>operand n>> ds-reg reg-stack ;
 M: rs-loc loc>operand n>> rs-reg reg-stack ;
@@ -104,7 +104,7 @@ M: x86 %call ( word -- ) 0 CALL rc-relative rel-word-pic ;
     ! See the comment in vm/cpu-x86.hpp
     4 1 + ; inline
 
-HOOK: %prepare-jump cpu ( -- ) ;
+HOOK: %prepare-jump cpu ( -- )
 
 M: x86 %jump ( word -- )
     %prepare-jump
@@ -165,8 +165,8 @@ M: x86 %bit-count POPCNT ;
 
 ! A bit of logic to avoid using MOVSS/MOVSD for reg-reg moves
 ! since this induces partial register stalls
-GENERIC: copy-register* ( dst src rep -- ) ;
-GENERIC: copy-memory* ( dst src rep -- ) ;
+GENERIC: copy-register* ( dst src rep -- )
+GENERIC: copy-memory* ( dst src rep -- )
 
 M: int-rep copy-register* drop MOV ;
 M: tagged-rep copy-register* drop MOV ;
@@ -322,9 +322,9 @@ M:: x86 %box-displaced-alien ( dst displacement base temp base-class -- )
 ! so one day I will fix this properly by adding precoloring to the
 ! register allocator.
 
-HOOK: has-small-reg? cpu ( reg size -- ? ) ;
+HOOK: has-small-reg? cpu ( reg size -- ? )
 
-CONSTANT: have-byte-regs { EAX ECX EDX EBX } ;
+CONSTANT: have-byte-regs { EAX ECX EDX EBX }
 
 M: x86.32 has-small-reg?
     {
@@ -459,7 +459,7 @@ M: x86 %shl int-rep two-operand [ SHL ] emit-shift ;
 M: x86 %shr int-rep two-operand [ SHR ] emit-shift ;
 M: x86 %sar int-rep two-operand [ SAR ] emit-shift ;
 
-HOOK: %vm-field-ptr cpu ( reg offset -- ) ;
+HOOK: %vm-field-ptr cpu ( reg offset -- )
 
 : load-zone-offset ( nursery-ptr -- )
     "nursery" vm offset-of %vm-field-ptr ;
@@ -482,8 +482,8 @@ M:: x86 %allot ( dst size class nursery-ptr -- )
     dst class store-tagged
     nursery-ptr size inc-allot-ptr ;
 
-HOOK: %mark-card cpu ( card temp -- ) ;
-HOOK: %mark-deck cpu ( card temp -- ) ;
+HOOK: %mark-card cpu ( card temp -- )
+HOOK: %mark-deck cpu ( card temp -- )
 
 :: (%write-barrier) ( temp1 temp2 -- )
     temp1 card-bits SHR
@@ -631,15 +631,15 @@ M:: x86 %local-allot ( dst size align offset -- )
 : return-reg ( rep -- reg )
     reg-class-of return-regs at first ;
 
-HOOK: %load-stack-param cpu ( vreg rep n -- ) ;
+HOOK: %load-stack-param cpu ( vreg rep n -- )
 
-HOOK: %store-stack-param cpu ( vreg rep n -- ) ;
+HOOK: %store-stack-param cpu ( vreg rep n -- )
 
-HOOK: %load-reg-param cpu ( vreg rep reg -- ) ;
+HOOK: %load-reg-param cpu ( vreg rep reg -- )
 
-HOOK: %store-reg-param cpu ( vreg rep reg -- ) ;
+HOOK: %store-reg-param cpu ( vreg rep reg -- )
 
-HOOK: %discard-reg-param cpu ( rep reg -- ) ;
+HOOK: %discard-reg-param cpu ( rep reg -- )
 
 : %load-return ( dst rep -- )
     dup return-reg %load-reg-param ;
@@ -647,9 +647,9 @@ HOOK: %discard-reg-param cpu ( rep reg -- ) ;
 : %store-return ( dst rep -- )
     dup return-reg %store-reg-param ;
 
-HOOK: %prepare-var-args cpu ( -- ) ;
+HOOK: %prepare-var-args cpu ( -- )
 
-HOOK: %cleanup cpu ( n -- ) ;
+HOOK: %cleanup cpu ( n -- )
 
 M:: x86 %alien-assembly ( reg-inputs
                          stack-inputs
@@ -679,14 +679,14 @@ M:: x86 %alien-indirect ( src reg-inputs stack-inputs reg-outputs dead-outputs c
         gc-map gc-map-here
     ] %alien-assembly ;
 
-HOOK: %begin-callback cpu ( -- ) ;
+HOOK: %begin-callback cpu ( -- )
 
 M: x86 %callback-inputs ( reg-outputs stack-outputs -- )
     [ [ first3 %load-reg-param ] each ]
     [ [ first3 %load-stack-param ] each ] bi*
     %begin-callback ;
 
-HOOK: %end-callback cpu ( -- ) ;
+HOOK: %end-callback cpu ( -- )
 
 M: x86 %callback-outputs ( reg-inputs -- )
     %end-callback

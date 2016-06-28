@@ -3,9 +3,9 @@
 USING: kernel ui.gadgets ;
 IN: ui.backend.gtk.input-methods
 
-GENERIC: support-input-methods? ( gadget -- ? ) ;
-GENERIC: cursor-surrounding ( gadget -- text cursor-pos ) ;
-GENERIC: delete-cursor-surrounding ( offset count gadget -- ) ;
-GENERIC: cursor-loc&dim ( gadget -- loc dim ) ;
+GENERIC: support-input-methods? ( gadget -- ? )
+GENERIC: cursor-surrounding ( gadget -- text cursor-pos )
+GENERIC: delete-cursor-surrounding ( offset count gadget -- )
+GENERIC: cursor-loc&dim ( gadget -- loc dim )
 
 M: gadget support-input-methods? drop f ;

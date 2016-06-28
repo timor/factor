@@ -15,17 +15,17 @@ IN: alien.data
 
 : little-endian? ( -- ? ) 1 int <ref> char deref 1 = ; foldable
 
-GENERIC: c-array-constructor ( c-type -- word ) ; foldable
+GENERIC: c-array-constructor ( c-type -- word ) foldable
 
-GENERIC: c-(array)-constructor ( c-type -- word ) ; foldable
+GENERIC: c-(array)-constructor ( c-type -- word ) foldable
 
-GENERIC: c-direct-array-constructor ( c-type -- word ) ; foldable
+GENERIC: c-direct-array-constructor ( c-type -- word ) foldable
 
-GENERIC: c-array-type ( c-type -- word ) ; foldable
+GENERIC: c-array-type ( c-type -- word ) foldable
 
-GENERIC: c-array-type? ( c-type -- word ) ; foldable
+GENERIC: c-array-type? ( c-type -- word ) foldable
 
-GENERIC: c-array? ( obj c-type -- ? ) ; foldable
+GENERIC: c-array? ( obj c-type -- ? ) foldable
 
 M: word c-array?
     c-array-type? execute( seq -- array ) ; inline
@@ -33,7 +33,7 @@ M: word c-array?
 M: pointer c-array?
     drop void* c-array? ;
 
-GENERIC: >c-array ( seq c-type -- array ) ;
+GENERIC: >c-array ( seq c-type -- array )
 
 M: word >c-array
     c-array-type new clone-like ; inline
@@ -41,7 +41,7 @@ M: word >c-array
 M: pointer >c-array
     drop void* >c-array ;
 
-GENERIC: <c-array> ( len c-type -- array ) ;
+GENERIC: <c-array> ( len c-type -- array )
 
 M: word <c-array>
     c-array-constructor execute( len -- array ) ; inline
@@ -49,7 +49,7 @@ M: word <c-array>
 M: pointer <c-array>
     drop void* <c-array> ;
 
-GENERIC: (c-array) ( len c-type -- array ) ;
+GENERIC: (c-array) ( len c-type -- array )
 
 M: word (c-array)
     c-(array)-constructor execute( len -- array ) ; inline
@@ -57,7 +57,7 @@ M: word (c-array)
 M: pointer (c-array)
     drop void* (c-array) ;
 
-GENERIC: <c-direct-array> ( alien len c-type -- array ) ;
+GENERIC: <c-direct-array> ( alien len c-type -- array )
 
 M: word <c-direct-array>
     c-direct-array-constructor execute( alien len -- array ) ; inline
@@ -169,7 +169,7 @@ PRIVATE>
     [ drop (local-allots) ] [ swap out-parameters ] 2bi
     (cleanup-allot) ; inline
 
-GENERIC: binary-zero? ( value -- ? ) ;
+GENERIC: binary-zero? ( value -- ? )
 
 M: object binary-zero? drop f ; inline
 M: f binary-zero? drop t ; inline

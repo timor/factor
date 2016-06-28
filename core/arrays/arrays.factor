@@ -5,8 +5,8 @@ IN: arrays
 
 BUILTIN: array { length array-capacity read-only initial: 0 } ;
 
-PRIMITIVE: <array> ( n elt -- array ) ;
-PRIMITIVE: resize-array ( n array -- new-array ) ;
+PRIMITIVE: <array> ( n elt -- array )
+PRIMITIVE: resize-array ( n array -- new-array )
 
 M: array clone (clone) ; inline
 M: array length length>> ; inline
@@ -17,7 +17,7 @@ M: array equal? over array? [ sequence= ] [ 2drop f ] if ;
 M: object new-sequence drop 0 <array> ; inline
 M: f new-sequence drop [ f ] [ 0 <array> ] if-zero ; inline
 
-INSTANCE: array sequence ;
+INSTANCE: array sequence
 
 : >array ( seq -- array ) { } clone-like ;
 : 1array ( x -- array ) 1 swap <array> ; inline

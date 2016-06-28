@@ -33,7 +33,7 @@ SYMBOLS: word-result vocabulary-result article-result ;
 
 TUPLE: more-completions seq search category ;
 
-CONSTANT: max-completions 5 ;
+CONSTANT: max-completions 5
 
 M: more-completions valid-article? drop t ;
 
@@ -74,7 +74,7 @@ M: more-completions article-content
 
 TUPLE: apropos-search text ;
 
-C: <apropos-search> apropos-search ;
+C: <apropos-search> apropos-search
 
 M: apropos-search valid-article? drop t ;
 
@@ -86,7 +86,7 @@ M: apropos-search article-content
 
 M: apropos-search >link ;
 
-INSTANCE: apropos-search topic ;
+INSTANCE: apropos-search topic
 
 : apropos ( str -- )
     [ blank? ] trim <apropos-search> print-topic ;

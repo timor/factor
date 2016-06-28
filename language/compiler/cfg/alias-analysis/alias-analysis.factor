@@ -133,8 +133,8 @@ SYMBOL: ac-counter
     HS{ } clone dead-stores namespaces:set
     0 ac-counter namespaces:set ;
 
-GENERIC: insn-slot# ( insn -- slot#/f ) ;
-GENERIC: insn-object ( insn -- vreg ) ;
+GENERIC: insn-slot# ( insn -- slot#/f )
+GENERIC: insn-object ( insn -- vreg )
 
 M: ##slot insn-slot# drop f ;
 M: ##slot-imm insn-slot# slot>> ;
@@ -152,7 +152,7 @@ M: ##alien-global insn-object drop ##alien-global ;
 M: ##vm-field insn-object drop ##vm-field ;
 M: ##set-vm-field insn-object drop ##vm-field ;
 
-GENERIC: analyze-aliases ( insn -- insn' ) ;
+GENERIC: analyze-aliases ( insn -- insn' )
 
 M: insn analyze-aliases ;
 
@@ -240,7 +240,7 @@ M: alien-call-insn analyze-aliases
     clear-recent-stores
     clear-live-slots ;
 
-GENERIC: eliminate-dead-stores ( insn -- ? ) ;
+GENERIC: eliminate-dead-stores ( insn -- ? )
 
 M: ##set-slot-imm eliminate-dead-stores
     insn#>> dead-stores get in? not ;

@@ -155,13 +155,13 @@ M: cl-event   dispose* handle>> clReleaseEvent        cl-success ;
 TUPLE: cl-buffer-ptr
     { buffer cl-buffer read-only }
     { offset integer   read-only } ;
-C: <cl-buffer-ptr> cl-buffer-ptr ;
+C: <cl-buffer-ptr> cl-buffer-ptr
 
 TUPLE: cl-buffer-range
     { buffer cl-buffer read-only }
     { offset integer   read-only }
     { size   integer   read-only } ;
-C: <cl-buffer-range> cl-buffer-range ;
+C: <cl-buffer-range> cl-buffer-range
 
 SYMBOLS: cl-current-context cl-current-queue cl-current-device ;
 
@@ -176,23 +176,23 @@ PRIVATE<
 : (current-cl-device) ( -- cl-device )
     cl-current-device get ; inline
 
-GENERIC: buffer-access-constant ( buffer-access-mode -- n ) ;
+GENERIC: buffer-access-constant ( buffer-access-mode -- n )
 M: cl-read-write-access buffer-access-constant drop CL_MEM_READ_WRITE ;
 M: cl-read-access       buffer-access-constant drop CL_MEM_READ_ONLY ;
 M: cl-write-access      buffer-access-constant drop CL_MEM_WRITE_ONLY ;
 
-GENERIC: buffer-map-flags ( buffer-access-mode -- n ) ;
+GENERIC: buffer-map-flags ( buffer-access-mode -- n )
 M: cl-read-write-access buffer-map-flags drop CL_MAP_READ CL_MAP_WRITE bitor ;
 M: cl-read-access       buffer-map-flags drop CL_MAP_READ ;
 M: cl-write-access      buffer-map-flags drop CL_MAP_WRITE ;
 
-GENERIC: addressing-mode-constant ( addressing-mode -- n ) ;
+GENERIC: addressing-mode-constant ( addressing-mode -- n )
 M: cl-repeat-addressing        addressing-mode-constant drop CL_ADDRESS_REPEAT ;
 M: cl-clamp-to-edge-addressing addressing-mode-constant drop CL_ADDRESS_CLAMP_TO_EDGE ;
 M: cl-clamp-addressing         addressing-mode-constant drop CL_ADDRESS_CLAMP ;
 M: cl-no-addressing            addressing-mode-constant drop CL_ADDRESS_NONE ;
 
-GENERIC: filter-mode-constant ( filter-mode -- n ) ;
+GENERIC: filter-mode-constant ( filter-mode -- n )
 M: cl-filter-nearest filter-mode-constant drop CL_FILTER_NEAREST ;
 M: cl-filter-linear  filter-mode-constant drop CL_FILTER_LINEAR ;
 
@@ -415,7 +415,7 @@ M: cl-filter-linear  filter-mode-constant drop CL_FILTER_LINEAR ;
     [ handle>> ] 2dip
     [ byte-length ] keep clSetKernelArg cl-success ; inline
 
-GENERIC: bind-kernel-arg ( kernel index data -- ) ;
+GENERIC: bind-kernel-arg ( kernel index data -- )
 M: cl-buffer  bind-kernel-arg bind-kernel-arg-buffer ;
 M: byte-array bind-kernel-arg bind-kernel-arg-data ;
 

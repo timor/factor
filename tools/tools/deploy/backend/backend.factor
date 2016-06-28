@@ -125,6 +125,6 @@ DEFER: ?make-staging-image
 SYMBOL: open-directory-after-deploy?
 t open-directory-after-deploy? set-global
 
-HOOK: deploy* os ( vocab -- ) ;
+HOOK: deploy* os ( vocab -- )
 
-HOOK: deploy-path os ( vocab -- path ) ;
+HOOK: deploy-path os ( vocab -- path )

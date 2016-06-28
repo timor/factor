@@ -7,16 +7,16 @@ IN: windows.directx.d3dx9effect
 
 LIBRARY: d3dx9
 
-CONSTANT: D3DXFX_DONOTSAVESTATE         1 ;
-CONSTANT: D3DXFX_DONOTSAVESHADERSTATE   2 ;
-CONSTANT: D3DXFX_DONOTSAVESAMPLERSTATE  4 ;
+CONSTANT: D3DXFX_DONOTSAVESTATE         1
+CONSTANT: D3DXFX_DONOTSAVESHADERSTATE   2
+CONSTANT: D3DXFX_DONOTSAVESAMPLERSTATE  4
 
 : D3DXFX_NOT_CLONEABLE     ( -- n ) 1 11 shift ; inline
 : D3DXFX_LARGEADDRESSAWARE ( -- n ) 1 17 shift ; inline
 
-CONSTANT: D3DX_PARAMETER_SHARED       1 ;
-CONSTANT: D3DX_PARAMETER_LITERAL      2 ;
-CONSTANT: D3DX_PARAMETER_ANNOTATION   4 ;
+CONSTANT: D3DX_PARAMETER_SHARED       1
+CONSTANT: D3DX_PARAMETER_LITERAL      2
+CONSTANT: D3DX_PARAMETER_ANNOTATION   4
 
 STRUCT: D3DXEFFECT_DESC
     { Creator    LPCSTR }
@@ -202,7 +202,7 @@ FUNCTION: HRESULT
         LPD3DXEFFECT*                   ppEffect,
         LPD3DXBUFFER*                   ppCompilationErrors ) ;
 
-ALIAS: D3DXCreateEffectFromFile D3DXCreateEffectFromFileW ;
+ALIAS: D3DXCreateEffectFromFile D3DXCreateEffectFromFileW
 
 FUNCTION: HRESULT
     D3DXCreateEffectFromResourceA (
@@ -228,7 +228,7 @@ FUNCTION: HRESULT
         LPD3DXEFFECT*                   ppEffect,
         LPD3DXBUFFER*                   ppCompilationErrors ) ;
 
-ALIAS: D3DXCreateEffectFromResource D3DXCreateEffectFromResourceW ;
+ALIAS: D3DXCreateEffectFromResource D3DXCreateEffectFromResourceW
 
 FUNCTION: HRESULT
     D3DXCreateEffect (
@@ -266,7 +266,7 @@ FUNCTION: HRESULT
         LPD3DXEFFECT*                   ppEffect,
         LPD3DXBUFFER*                   ppCompilationErrors ) ;
 
-ALIAS: D3DXCreateEffectFromFileEx D3DXCreateEffectFromFileExW ;
+ALIAS: D3DXCreateEffectFromFileEx D3DXCreateEffectFromFileExW
 
 FUNCTION: HRESULT
     D3DXCreateEffectFromResourceExA (
@@ -294,7 +294,7 @@ FUNCTION: HRESULT
         LPD3DXEFFECT*                   ppEffect,
         LPD3DXBUFFER*                   ppCompilationErrors ) ;
 
-ALIAS: D3DXCreateEffectFromResourceEx D3DXCreateEffectFromResourceExW ;
+ALIAS: D3DXCreateEffectFromResourceEx D3DXCreateEffectFromResourceExW
 
 FUNCTION: HRESULT
     D3DXCreateEffectEx (
@@ -327,7 +327,7 @@ FUNCTION: HRESULT
         LPD3DXEFFECTCOMPILER*           ppCompiler,
         LPD3DXBUFFER*                   ppParseErrors ) ;
 
-ALIAS: D3DXCreateEffectCompilerFromFile D3DXCreateEffectCompilerFromFileW ;
+ALIAS: D3DXCreateEffectCompilerFromFile D3DXCreateEffectCompilerFromFileW
 
 FUNCTION: HRESULT
     D3DXCreateEffectCompilerFromResourceA (
@@ -349,7 +349,7 @@ FUNCTION: HRESULT
         LPD3DXEFFECTCOMPILER*           ppCompiler,
         LPD3DXBUFFER*                   ppParseErrors ) ;
 
-ALIAS: D3DXCreateEffectCompilerFromResource D3DXCreateEffectCompilerFromResourceW ;
+ALIAS: D3DXCreateEffectCompilerFromResource D3DXCreateEffectCompilerFromResourceW
 
 FUNCTION: HRESULT
     D3DXCreateEffectCompiler (

@@ -11,7 +11,7 @@ TUPLE: wrapped-key
 TUPLE: wrapped-hashtable
     { underlying hashtable read-only } ;
 
-GENERIC: wrap-key ( key wrapped-hash -- wrapped-key ) ;
+GENERIC: wrap-key ( key wrapped-hash -- wrapped-key )
 
 PRIVATE<
 
@@ -49,4 +49,4 @@ M: wrapped-hashtable values
 M: wrapped-hashtable equal?
     over wrapped-hashtable? [ [ underlying>> ] same? ] [ 2drop f ] if ;
 
-INSTANCE: wrapped-hashtable assoc ;
+INSTANCE: wrapped-hashtable assoc

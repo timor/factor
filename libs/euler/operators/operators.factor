@@ -77,8 +77,8 @@ PRIVATE<
 PRIVATE>
 
 MIXIN: point
-INSTANCE: sequence point ;
-INSTANCE: number point ;
+INSTANCE: sequence point
+INSTANCE: number point
 
 TYPED:: make-vefs ( pos1: point pos2: point -- edge: b-edge )
     b-rep get set: b-rep

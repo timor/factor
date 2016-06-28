@@ -20,7 +20,7 @@ PRIVATE>
 SYMBOL: base-word-style
 H{ } base-word-style set-global
 
-GENERIC: word-style ( word -- style ) ;
+GENERIC: word-style ( word -- style )
 
 M: word word-style
     [ presented base-word-style get clone [ set-at ] keep ]

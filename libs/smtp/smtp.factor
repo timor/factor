@@ -15,7 +15,7 @@ TUPLE: smtp-config domain server tls? { read-timeout duration } auth ;
 SINGLETON: no-auth
 
 TUPLE: plain-auth username password ;
-C: <plain-auth> plain-auth ;
+C: <plain-auth> plain-auth
 
 : <smtp-config> ( -- smtp-config )
     smtp-config new ; inline
@@ -145,7 +145,7 @@ ERROR: smtp-transaction-failed < smtp-error ;
 
 : get-ok ( -- ) receive-response check-response ;
 
-GENERIC: send-auth ( auth -- ) ;
+GENERIC: send-auth ( auth -- )
 
 M: no-auth send-auth drop ;
 

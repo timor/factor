@@ -3,9 +3,9 @@ namespaces opengl opengl.gl sequences ui ui.gadgets ui.gestures
 ui.gadgets.worlds ui.render accessors combinators literals ;
 IN: opengl.demo-support
 
-CONSTANT: FOV $$[ 2.0 sqrt 1 + ] ;
-CONSTANT: MOUSE-MOTION-SCALE 0.5 ;
-CONSTANT: KEY-ROTATE-STEP 10.0 ;
+CONSTANT: FOV $$[ 2.0 sqrt 1 + ]
+CONSTANT: MOUSE-MOTION-SCALE 0.5
+CONSTANT: KEY-ROTATE-STEP 10.0
 
 SYMBOL: last-drag-loc
 
@@ -14,9 +14,9 @@ TUPLE: demo-world < world yaw pitch distance ;
 : set-demo-orientation ( world yaw pitch distance -- world )
     [ >>yaw ] [ >>pitch ] [ >>distance ] tri* ;
 
-GENERIC: far-plane ( gadget -- z ) ;
-GENERIC: near-plane ( gadget -- z ) ;
-GENERIC: distance-step ( gadget -- dz ) ;
+GENERIC: far-plane ( gadget -- z )
+GENERIC: near-plane ( gadget -- z )
+GENERIC: distance-step ( gadget -- dz )
 
 M: demo-world far-plane ( gadget -- z )
     drop 4.0 ;

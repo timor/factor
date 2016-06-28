@@ -4,8 +4,8 @@ USING: arrays combinators documents fry kernel math sequences
 accessors unicode combinators.short-circuit ;
 IN: documents.elements
 
-GENERIC: prev-elt ( loc document elt -- newloc ) ;
-GENERIC: next-elt ( loc document elt -- newloc ) ;
+GENERIC: prev-elt ( loc document elt -- newloc )
+GENERIC: next-elt ( loc document elt -- newloc )
 
 : prev/next-elt ( loc document elt -- start end )
     [ prev-elt ] [ next-elt ] 3bi ;
@@ -108,7 +108,7 @@ M: one-line-elt next-elt
 
 TUPLE: page-elt { lines read-only } ;
 
-C: <page-elt> page-elt ;
+C: <page-elt> page-elt
 
 M: page-elt prev-elt
     nip
@@ -119,7 +119,7 @@ M: page-elt next-elt
     3dup [ first ] [ last-line# ] [ lines>> ] tri* - >
     [ drop nip doc-end ] [ nip lines>> +line ] if ;
 
-CONSTANT: line-elt T{ page-elt f 1 } ;
+CONSTANT: line-elt T{ page-elt f 1 }
 
 SINGLETON: doc-elt
 

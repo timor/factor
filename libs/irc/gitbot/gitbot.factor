@@ -15,7 +15,7 @@ SYMBOL: nickserv-password
 
 : bot-channel ( -- seq ) "#concatenative" ;
 
-GENERIC: handle-message ( msg -- ) ;
+GENERIC: handle-message ( msg -- )
 
 M: object handle-message drop ;
 

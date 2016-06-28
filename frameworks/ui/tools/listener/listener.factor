@@ -20,7 +20,7 @@ IN: ui.tools.listener
 TUPLE: interactor < source-editor
     output history flag mailbox thread waiting token-model word-model popup ;
 
-INSTANCE: interactor input-stream ;
+INSTANCE: interactor input-stream
 
 : register-self ( interactor -- )
     <mailbox> >>mailbox
@@ -47,7 +47,7 @@ M: interactor manifest>>
 : vocab-exists? ( name -- ? )
     $[ _ { [ lookup-vocab ] [ find-vocab-root ] } 1|| ] [ drop f ] recover ;
 
-GENERIC: (word-at-caret) ( token completion-mode -- obj ) ;
+GENERIC: (word-at-caret) ( token completion-mode -- obj )
 
 M: vocab-completion (word-at-caret)
     drop dup vocab-exists? [ >vocab-link ] [ drop f ] if ;
@@ -92,7 +92,7 @@ M: interactor model-changed
 
 M: interactor stream-element-type drop +character+ ;
 
-GENERIC: (print-input) ( object -- ) ;
+GENERIC: (print-input) ( object -- )
 
 SYMBOL: listener-input-style
 H{
@@ -277,7 +277,7 @@ M: listener-gadget focusable-child*
         } 1&&
     ] (get-listener) ;
 
-GENERIC: listener-input ( obj -- ) ;
+GENERIC: listener-input ( obj -- )
 
 M: input listener-input string>> listener-input ;
 

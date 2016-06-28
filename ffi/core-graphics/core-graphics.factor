@@ -11,23 +11,23 @@ libc math opengl.gl sequences ;
 IN: core-graphics
 
 TYPEDEF: int CGImageAlphaInfo ;
-CONSTANT: kCGImageAlphaNone 0 ;
-CONSTANT: kCGImageAlphaPremultipliedLast 1 ;
-CONSTANT: kCGImageAlphaPremultipliedFirst 2 ;
-CONSTANT: kCGImageAlphaLast 3 ;
-CONSTANT: kCGImageAlphaFirst 4 ;
-CONSTANT: kCGImageAlphaNoneSkipLast 5 ;
-CONSTANT: kCGImageAlphaNoneSkipFirst 6 ;
+CONSTANT: kCGImageAlphaNone 0
+CONSTANT: kCGImageAlphaPremultipliedLast 1
+CONSTANT: kCGImageAlphaPremultipliedFirst 2
+CONSTANT: kCGImageAlphaLast 3
+CONSTANT: kCGImageAlphaFirst 4
+CONSTANT: kCGImageAlphaNoneSkipLast 5
+CONSTANT: kCGImageAlphaNoneSkipFirst 6
 
-CONSTANT: kCGBitmapAlphaInfoMask 0x1f ;
-CONSTANT: kCGBitmapFloatComponents 256 ;
+CONSTANT: kCGBitmapAlphaInfoMask 0x1f
+CONSTANT: kCGBitmapFloatComponents 256
 
-CONSTANT: kCGBitmapByteOrderMask 0x7000 ;
-CONSTANT: kCGBitmapByteOrderDefault 0 ;
-CONSTANT: kCGBitmapByteOrder16Little 4096 ;
-CONSTANT: kCGBitmapByteOrder32Little 8192 ;
-CONSTANT: kCGBitmapByteOrder16Big 12288 ;
-CONSTANT: kCGBitmapByteOrder32Big 16384 ;
+CONSTANT: kCGBitmapByteOrderMask 0x7000
+CONSTANT: kCGBitmapByteOrderDefault 0
+CONSTANT: kCGBitmapByteOrder16Little 4096
+CONSTANT: kCGBitmapByteOrder32Little 8192
+CONSTANT: kCGBitmapByteOrder16Big 12288
+CONSTANT: kCGBitmapByteOrder32Big 16384
 
 : kCGBitmapByteOrder16Host ( -- n )
     little-endian?
@@ -140,7 +140,7 @@ FUNCTION: bool CGImageDestinationFinalize (
 
 FUNCTION: void* CGBitmapContextGetData ( CGContextRef c ) ;
 
-CONSTANT: kCGLRendererGenericFloatID 0x00020400 ;
+CONSTANT: kCGLRendererGenericFloatID 0x00020400
 
 FUNCTION: CGLError CGLSetParameter ( CGLContextObj ctx, CGLContextParameter pname, GLint* params ) ;
 

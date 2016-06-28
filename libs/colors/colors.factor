@@ -12,9 +12,9 @@ TUPLE: rgba < color
 { blue read-only }
 { alpha read-only } ;
 
-C: <rgba> rgba ;
+C: <rgba> rgba
 
-GENERIC: >rgba ( color -- rgba ) ;
+GENERIC: >rgba ( color -- rgba )
 
 M: rgba >rgba ; inline
 
@@ -27,7 +27,7 @@ M: color blue>> >rgba blue>> ;
 
 : opaque? ( color -- ? ) alpha>> 1 number= ;
 
-CONSTANT: transparent T{ rgba f 0.0 0.0 0.0 0.0 } ;
+CONSTANT: transparent T{ rgba f 0.0 0.0 0.0 0.0 }
 
 : inverse-color ( color -- color' )
     >rgba-components [ [ 1.0 swap - ] tri@ ] dip <rgba> ;

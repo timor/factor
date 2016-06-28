@@ -4,7 +4,7 @@ IN: env
 
 SINGLETON: env
 
-INSTANCE: env assoc ;
+INSTANCE: env assoc
 
 M: env at*
     drop os-env dup >boolean ;

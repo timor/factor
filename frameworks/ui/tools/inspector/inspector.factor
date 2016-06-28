@@ -63,7 +63,7 @@ M: inspector-renderer column-titles
         ] tabular-output
     ] <pane-control> ;
 
-GENERIC: make-slot-descriptions ( obj -- seq ) ;
+GENERIC: make-slot-descriptions ( obj -- seq )
 
 M: object make-slot-descriptions
     make-mirror [ <slot-description> ] { } assoc>map ;

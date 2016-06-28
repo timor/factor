@@ -10,7 +10,7 @@ TUPLE: nibble-array
 
 PRIVATE<
 
-CONSTANT: nibble 0b1111 ;
+CONSTANT: nibble 0b1111
 
 : nibbles>bytes ( m -- n ) 1 + 2/ ; inline
 
@@ -69,7 +69,7 @@ M: nibble-array byte-length length nibbles>bytes ;
 
 SYNTAX: \ N{ \ } [ >nibble-array ] parse-literal ;
 
-INSTANCE: nibble-array sequence ;
+INSTANCE: nibble-array sequence
 
 M: nibble-array pprint-delims drop \ N{ \ } ;
 M: nibble-array >pprint-sequence ;

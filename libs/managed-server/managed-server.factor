@@ -13,11 +13,11 @@ TUPLE: managed-client
 input-stream output-stream local-address remote-address
 username object quit? logged-in? ;
 
-HOOK: handle-login threaded-server ( -- username ) ;
-HOOK: handle-managed-client* managed-server ( -- ) ;
-HOOK: handle-already-logged-in managed-server ( -- ) ;
-HOOK: handle-client-join managed-server ( -- ) ;
-HOOK: handle-client-disconnect managed-server ( -- ) ;
+HOOK: handle-login threaded-server ( -- username )
+HOOK: handle-managed-client* managed-server ( -- )
+HOOK: handle-already-logged-in managed-server ( -- )
+HOOK: handle-client-join managed-server ( -- )
+HOOK: handle-client-disconnect managed-server ( -- )
 
 ERROR: already-logged-in username ;
 

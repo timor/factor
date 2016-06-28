@@ -58,13 +58,13 @@ PRIVATE<
 
 TUPLE: rollover seq n ;
 
-C: <rollover> rollover ;
+C: <rollover> rollover
 
 M: rollover length n>> ;
 
 M: rollover nth-unsafe seq>> [ length mod ] keep nth-unsafe ;
 
-INSTANCE: rollover immutable-sequence ;
+INSTANCE: rollover immutable-sequence
 
 : decrypt ( seq key -- seq )
     over length <rollover> swap [ bitxor ] 2map ;

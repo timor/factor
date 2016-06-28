@@ -33,7 +33,7 @@ IN: rosetta-code.ternary-logic
 SINGLETON: m
 UNION: trit t m postpone\ f ;
 
-GENERIC: >trit ( object -- trit ) ;
+GENERIC: >trit ( object -- trit )
 M: trit >trit ;
 
 : tnot ( trit1 -- trit )

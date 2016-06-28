@@ -197,8 +197,8 @@ TYPEDEF: size_t socklen_t ;
 
 TYPEDEF: void* WNDPROC ;
 
-CONSTANT: FALSE 0 ;
-CONSTANT: TRUE 1 ;
+CONSTANT: FALSE 0
+CONSTANT: TRUE 1
 
 : >BOOLEAN ( ? -- 1/0 ) TRUE FALSE ? ; inline
 

@@ -36,11 +36,11 @@ CONSTANT: STYLES H{
     { "MARKUP"   H{ { foreground hexcolor: 0000ff } } }
     { "OPERATOR" H{ { foreground hexcolor: 000000 }
                     { font-style bold } } }
-} ;
+}
 
 CONSTANT: BASE H{
     { font-name "monospace" }
-} ;
+}
 
 PRIVATE>
 
@@ -56,7 +56,7 @@ PRIVATE>
         tokenize-line highlight-tokens
     ] curry each drop ;
 
-GENERIC: highlight. ( obj -- ) ;
+GENERIC: highlight. ( obj -- )
 
 M:: string highlight. ( path -- )
     path utf8 file-lines [

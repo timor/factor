@@ -16,7 +16,7 @@ IN: documents
 
 TUPLE: edit old-string new-string from old-to new-to ;
 
-C: <edit> edit ;
+C: <edit> edit
 
 TUPLE: document < model locs undos redos inside-undo? ;
 
@@ -67,7 +67,7 @@ TUPLE: document < model locs undos redos inside-undo? ;
 : last-line# ( document -- line )
     value>> length 1 - ;
 
-CONSTANT: doc-start { 0 0 } ;
+CONSTANT: doc-start { 0 0 }
 
 : doc-end ( document -- loc )
     [ last-line# ] keep line-end ;

@@ -4,11 +4,11 @@ compiler.units definitions eval generic generic.single
 generic.standard io.streams.string kernel make math
 math.constants math.functions namespaces parser quotations
 sequences specialized-vectors strings tools.test words ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-VECTOR: c:double
 IN: generic.standard.tests
 
-GENERIC: class-of ( x -- y ) ;
+GENERIC: class-of ( x -- y )
 
 M: fixnum class-of drop "fixnum" ;
 M: word   class-of drop "word"   ;
@@ -17,14 +17,14 @@ M: word   class-of drop "word"   ;
 { "word" } [ \ class-of class-of ] unit-test
 [ 3.4 class-of ] must-fail
 
-GENERIC: foobar ( x -- y ) ;
+GENERIC: foobar ( x -- y )
 M: object foobar drop "Hello world" ;
 M: fixnum foobar drop "Goodbye cruel world" ;
 
 { "Hello world" } [ 4 foobar foobar ] unit-test
 { "Goodbye cruel world" } [ 4 foobar ] unit-test
 
-GENERIC: lo-tag-test ( obj -- obj' ) ;
+GENERIC: lo-tag-test ( obj -- obj' )
 
 M: integer lo-tag-test 3 + ;
 M: float lo-tag-test 4 - ;
@@ -36,7 +36,7 @@ M: complex lo-tag-test sq ;
 { -1/2 } [ 1+1/2 lo-tag-test ] unit-test
 { -16 } [ C{ 0 4 } lo-tag-test ] unit-test
 
-GENERIC: hi-tag-test ( obj -- obj' ) ;
+GENERIC: hi-tag-test ( obj -- obj' )
 
 M: string hi-tag-test ", in bed" append ;
 M: integer hi-tag-test 3 + ;
@@ -51,11 +51,11 @@ M: sequence hi-tag-test reverse ;
 
 UNION: funnies quotation float complex ;
 
-GENERIC: funny ( x -- y ) ;
+GENERIC: funny ( x -- y )
 M: funnies funny drop 2 ;
 M: object funny drop 0 ;
 
-GENERIC: union-containment ( x -- y ) ;
+GENERIC: union-containment ( x -- y )
 M: integer union-containment drop 1 ;
 M: number union-containment drop 2 ;
 
@@ -71,17 +71,17 @@ TUPLE: abstract-rectangle < shape width height ;
 
 TUPLE: rectangle < abstract-rectangle ;
 
-C: <rectangle> rectangle ;
+C: <rectangle> rectangle
 
 TUPLE: parallelogram < abstract-rectangle skew ;
 
-C: <parallelogram> parallelogram ;
+C: <parallelogram> parallelogram
 
 TUPLE: circle < shape radius ;
 
-C: <circle> circle ;
+C: <circle> circle
 
-GENERIC: area ( shape -- n ) ;
+GENERIC: area ( shape -- n )
 
 M: abstract-rectangle area [ width>> ] [ height>> ] bi * ;
 
@@ -91,7 +91,7 @@ M: circle area radius>> sq pi * ;
 { 12 } [ 4 3 2 <parallelogram> area ] unit-test
 { t } [ 2 <circle> area 4 pi * = ] unit-test
 
-GENERIC: perimeter ( shape -- n ) ;
+GENERIC: perimeter ( shape -- n )
 
 : rectangle-perimeter ( l w -- n ) + 2 * ;
 
@@ -113,25 +113,25 @@ M: circle perimeter 2 * pi * ;
 
 PREDICATE: very-funny < funnies number? ;
 
-GENERIC: gooey ( x -- y ) ;
+GENERIC: gooey ( x -- y )
 M: very-funny gooey sq ;
 
 { 0.25 } [ 0.5 gooey ] unit-test
 
-GENERIC: empty-method-test ( x -- y ) ;
+GENERIC: empty-method-test ( x -- y )
 M: object empty-method-test ;
 TUPLE: for-arguments-sake ;
-C: <for-arguments-sake> for-arguments-sake ;
+C: <for-arguments-sake> for-arguments-sake
 
 M: for-arguments-sake empty-method-test drop "Hi" ;
 
 TUPLE: another-one ;
-C: <another-one> another-one ;
+C: <another-one> another-one
 
 { "Hi" } [ <for-arguments-sake> empty-method-test empty-method-test ] unit-test
 { T{ another-one f } } [ <another-one> empty-method-test ] unit-test
 
-GENERIC: big-mix-test ( obj -- obj' ) ;
+GENERIC: big-mix-test ( obj -- obj' )
 
 M: object big-mix-test drop "object" ;
 
@@ -171,7 +171,7 @@ M: circle big-mix-test drop "circle" ;
 { "tuple" } [ H{ } big-mix-test ] unit-test
 { "object" } [ \ + big-mix-test ] unit-test
 
-GENERIC: small-lo-tag ( obj -- obj ) ;
+GENERIC: small-lo-tag ( obj -- obj )
 
 M: fixnum small-lo-tag drop "fixnum" ;
 
@@ -194,7 +194,7 @@ M: byte-array small-lo-tag drop "byte-array" ;
 ] must-fail
 { } [ "IN: generic.standard.tests GENERIC: unhappy ( x -- x ) ;" eval( -- ) ] unit-test
 
-GENERIC#: complex-combination 1 ( a b -- c ) ;
+GENERIC#: complex-combination 1 ( a b -- c )
 M: string complex-combination drop ;
 M: object complex-combination nip ;
 
@@ -206,7 +206,7 @@ TUPLE: first-one ;
 TUPLE: second-one ;
 UNION: both first-one union-class ;
 
-GENERIC: wii ( x -- y ) ;
+GENERIC: wii ( x -- y )
 M: both wii drop 3 ;
 M: second-one wii drop 4 ;
 M: tuple-class wii drop 5 ;
@@ -214,7 +214,7 @@ M: integer wii drop 6 ;
 
 { 3 } [ T{ first-one } wii ] unit-test
 
-GENERIC: tag-and-f ( x -- x x ) ;
+GENERIC: tag-and-f ( x -- x x )
 
 M: fixnum tag-and-f 1 ;
 
@@ -229,7 +229,7 @@ M: f tag-and-f 4 ;
 { 3.4 3 } [ 3.4 tag-and-f ] unit-test
 
 ! Issues with forget
-GENERIC: generic-forget-test ( a -- b ) ;
+GENERIC: generic-forget-test ( a -- b )
 
 M: f generic-forget-test ;
 
@@ -282,7 +282,7 @@ TUPLE: executive < senior-manager ;
 
 TUPLE: ceo < executive ;
 
-GENERIC: salary ( person -- n ) ;
+GENERIC: salary ( person -- n )
 
 M: intern salary
     ! Intentional mistake.
@@ -332,7 +332,7 @@ UNION: y a c ;
 
 UNION: z x y ;
 
-GENERIC: funky* ( obj -- ) ;
+GENERIC: funky* ( obj -- )
 
 M: z funky* "z" , drop ;
 
@@ -383,7 +383,7 @@ must-fail-with
 [ "IN: generic.standard.tests GENERIC: foo ( x -- x ) ; inline" eval( -- ) ] must-fail
 
 ! Moving a method from one vocab to another didn't always work
-GENERIC: move-method-generic ( a -- b ) ;
+GENERIC: move-method-generic ( a -- b )
 
 { } [ "IN: generic.standard.tests.a USE: strings USE: generic.standard.tests M: string move-method-generic ;" <string-reader> "move-method-test-1" parse-stream drop ] unit-test
 
@@ -394,7 +394,7 @@ GENERIC: move-method-generic ( a -- b ) ;
 { { string } } [ \ move-method-generic order ] unit-test
 
 ! FORGET: on method wrappers
-GENERIC: forget-test ( a -- b ) ;
+GENERIC: forget-test ( a -- b )
 
 M: integer forget-test 3 + ;
 
@@ -408,20 +408,20 @@ M: integer forget-test 3 + ;
 [ 10 forget-test ] [ no-method? ] must-fail-with
 
 ! Declarations on methods
-GENERIC: flushable-generic ( a -- b ) ; flushable
+GENERIC: flushable-generic ( a -- b ) flushable
 M: integer flushable-generic ;
 
 { t } [ \ flushable-generic flushable? ] unit-test
 { t } [ M\ integer flushable-generic flushable? ] unit-test
 
-GENERIC: non-flushable-generic ( a -- b ) ;
+GENERIC: non-flushable-generic ( a -- b )
 M: integer non-flushable-generic ; flushable
 
 { f } [ \ non-flushable-generic flushable? ] unit-test
 { t } [ M\ integer non-flushable-generic flushable? ] unit-test
 
 ! method-for-object, method-for-class, effective-method
-GENERIC: foozul ( a -- b ) ;
+GENERIC: foozul ( a -- b )
 M: reversed foozul ;
 M: integer foozul ;
 M: slice foozul ;
@@ -438,7 +438,7 @@ M: slice foozul ;
 UNION: amb-union-1a integer float ;
 UNION: amb-union-1b float string ;
 
-GENERIC: amb-generic-1 ( a -- b ) ;
+GENERIC: amb-generic-1 ( a -- b )
 
 M: amb-union-1a amb-generic-1 drop "a" ;
 M: amb-union-1b amb-generic-1 drop "b" ;
@@ -456,7 +456,7 @@ M: amb-union-1b amb-generic-1 drop "b" ;
 UNION: amb-union-2a float string ;
 UNION: amb-union-2b integer float ;
 
-GENERIC: amb-generic-2 ( a -- b ) ;
+GENERIC: amb-generic-2 ( a -- b )
 
 M: amb-union-2a amb-generic-2 drop "a" ;
 M: amb-union-2b amb-generic-2 drop "b" ;
@@ -475,7 +475,7 @@ TUPLE: amb-tuple-a x ;
 TUPLE: amb-tuple-b < amb-tuple-a ;
 PREDICATE: amb-tuple-c < amb-tuple-a x>> 3 = ;
 
-GENERIC: amb-generic-3 ( a -- b ) ;
+GENERIC: amb-generic-3 ( a -- b )
 
 M: amb-tuple-b amb-generic-3 drop "b" ;
 M: amb-tuple-c amb-generic-3 drop "c" ;
@@ -488,7 +488,7 @@ M: amb-tuple-c amb-generic-3 drop "c" ;
 TUPLE: amb-tuple-d ;
 UNION: amb-union-4 amb-tuple-a amb-tuple-d ;
 
-GENERIC: amb-generic-4 ( a -- b ) ;
+GENERIC: amb-generic-4 ( a -- b )
 
 M: amb-tuple-b amb-generic-4 drop "b" ;
 M: amb-union-4 amb-generic-4 drop "4" ;
@@ -504,10 +504,10 @@ M: amb-union-4 amb-generic-4 drop "4" ;
 ] unit-test
 
 MIXIN: amb-mixin-5
-INSTANCE: amb-tuple-a amb-mixin-5 ;
-INSTANCE: amb-tuple-d amb-mixin-5 ;
+INSTANCE: amb-tuple-a amb-mixin-5
+INSTANCE: amb-tuple-d amb-mixin-5
 
-GENERIC: amb-generic-5 ( a -- b ) ;
+GENERIC: amb-generic-5 ( a -- b )
 
 M: amb-tuple-b amb-generic-5 drop "b" ;
 M: amb-mixin-5 amb-generic-5 drop "5" ;
@@ -524,7 +524,7 @@ M: amb-mixin-5 amb-generic-5 drop "5" ;
 
 UNION: amb-union-6 amb-tuple-b amb-tuple-d ;
 
-GENERIC: amb-generic-6 ( a -- b ) ;
+GENERIC: amb-generic-6 ( a -- b )
 
 M: amb-tuple-a amb-generic-6 drop "a" ;
 M: amb-union-6 amb-generic-6 drop "6" ;
@@ -540,10 +540,10 @@ M: amb-union-6 amb-generic-6 drop "6" ;
 ] unit-test
 
 MIXIN: amb-mixin-7
-INSTANCE: amb-tuple-b amb-mixin-7 ;
-INSTANCE: amb-tuple-d amb-mixin-7 ;
+INSTANCE: amb-tuple-b amb-mixin-7
+INSTANCE: amb-tuple-d amb-mixin-7
 
-GENERIC: amb-generic-7 ( a -- b ) ;
+GENERIC: amb-generic-7 ( a -- b )
 
 M: amb-tuple-a amb-generic-7 drop "a" ;
 M: amb-mixin-7 amb-generic-7 drop "7" ;
@@ -564,7 +564,7 @@ PREDICATE: amb-predicate-b < amb-predicate-a 10 mod 4 = ;
 
 UNION: amb-union-8 amb-predicate-b string ;
 
-GENERIC: amb-generic-8 ( a -- b ) ;
+GENERIC: amb-generic-8 ( a -- b )
 
 M: amb-union-8 amb-generic-8 drop "8" ;
 M: amb-predicate-a amb-generic-8 drop "a" ;

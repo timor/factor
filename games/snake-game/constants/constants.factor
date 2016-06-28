@@ -6,6 +6,6 @@ SYMBOLS: :left :right :up :down ;
 
 SYMBOLS: :head :body :tail ;
 
-CONSTANT: snake-game-dim { 12 10 } ;
+CONSTANT: snake-game-dim { 12 10 }
 
-CONSTANT: snake-game-cell-size 20 ;
+CONSTANT: snake-game-cell-size 20

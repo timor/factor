@@ -63,7 +63,7 @@ TUPLE: button-pen
     plain rollover
     pressed selected pressed-selected ;
 
-C: <button-pen> button-pen ;
+C: <button-pen> button-pen
 
 : lookup-button-pen ( button pen -- button pen )
     over find-button {

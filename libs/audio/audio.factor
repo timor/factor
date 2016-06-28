@@ -9,7 +9,7 @@ TUPLE: audio
     { size integer }
     { data c-ptr } ;
 
-C: <audio> audio ;
+C: <audio> audio
 
 ERROR: format-unsupported-by-openal audio ;
 

@@ -6,7 +6,7 @@ IN: furnace.referrer
 
 TUPLE: referrer-check < filter-responder quot ;
 
-C: <referrer-check> referrer-check ;
+C: <referrer-check> referrer-check
 
 M: referrer-check call-responder*
     referrer over quot>> call( referrer -- ? )

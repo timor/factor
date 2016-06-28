@@ -15,7 +15,7 @@ IN: locals.rewrite.point-free
 : read-local-quot ( args obj -- quot )
     local-index neg [ get-local ] curry ;
 
-GENERIC: localize ( args obj -- args quot ) ;
+GENERIC: localize ( args obj -- args quot )
 
 M: local localize dupd read-local-quot ;
 

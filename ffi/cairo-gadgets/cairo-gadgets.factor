@@ -32,7 +32,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: render-cairo* ( gadget -- ) ;
+GENERIC: render-cairo* ( gadget -- )
 
 : render-cairo ( gadget -- alien )
     [

@@ -6,7 +6,7 @@ math.floating-point math.functions ;
 
 IN: math.hashcodes
 
-GENERIC: number-hashcode ( x -- h ) ;
+GENERIC: number-hashcode ( x -- h )
 
 PRIVATE<
 

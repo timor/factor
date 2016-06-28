@@ -15,13 +15,13 @@ native-endianness [ compute-native-endianness ] initialize
 SYMBOL: endianness
 endianness [ native-endianness get-global ] initialize
 
-HOOK: >native-endian native-endianness ( obj n -- bytes ) ;
+HOOK: >native-endian native-endianness ( obj n -- bytes )
 
 M: big-endian >native-endian >be ;
 
 M: little-endian >native-endian >le ;
 
-HOOK: unsigned-native-endian> native-endianness ( obj -- bytes ) ;
+HOOK: unsigned-native-endian> native-endianness ( obj -- bytes )
 
 M: big-endian unsigned-native-endian> be> ;
 
@@ -30,19 +30,19 @@ M: little-endian unsigned-native-endian> le> ;
 : signed-native-endian> ( obj n -- n' )
     [ unsigned-native-endian> ] dip >signed ;
 
-HOOK: >endian endianness ( obj n -- bytes ) ;
+HOOK: >endian endianness ( obj n -- bytes )
 
 M: big-endian >endian >be ;
 
 M: little-endian >endian >le ;
 
-HOOK: endian> endianness ( seq -- n ) ;
+HOOK: endian> endianness ( seq -- n )
 
 M: big-endian endian> be> ;
 
 M: little-endian endian> le> ;
 
-HOOK: unsigned-endian> endianness ( obj -- bytes ) ;
+HOOK: unsigned-endian> endianness ( obj -- bytes )
 
 M: big-endian unsigned-endian> be> ;
 

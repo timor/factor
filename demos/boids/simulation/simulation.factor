@@ -5,8 +5,8 @@ USING: accessors arrays combinators.short-circuit kernel
 locals math math.vectors random sequences ;
 IN: boids.simulation
 
-CONSTANT: width 512 ;
-CONSTANT: height 512 ;
+CONSTANT: width 512
+CONSTANT: height 512
 
 TUPLE: behaviour
     { weight float }
@@ -17,7 +17,7 @@ TUPLE: boid
     { pos array }
     { vel array } ;
 
-C: <boid> boid ;
+C: <boid> boid
 
 : vsum ( vecs -- v )
     { 0.0 0.0 } [ v+ ] reduce ; inline
@@ -52,7 +52,7 @@ C: <boid> boid ;
     boid boids [ behaviour within-neighborhood? ] with filter ;
 
 
-GENERIC: force ( neighbors boid behaviour -- force ) ;
+GENERIC: force ( neighbors boid behaviour -- force )
 
 :: (force) ( boid boids behaviour -- force )
     boid boids behaviour neighbors
@@ -84,9 +84,9 @@ TUPLE: cohesion < behaviour ;
 TUPLE: alignment < behaviour ;
 TUPLE: separation < behaviour ;
 
-C: <cohesion> cohesion ;
-C: <alignment> alignment ;
-C: <separation> separation ;
+C: <cohesion> cohesion
+C: <alignment> alignment
+C: <separation> separation
 
 M: cohesion force ( neighbors boid behaviour -- force )
     drop [ [ pos>> ] map vavg ] [ pos>> ] bi* v- normalize ;

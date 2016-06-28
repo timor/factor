@@ -59,7 +59,7 @@ MACRO: match-cond ( assoc -- quot )
         [ ?if ] 2curry append
     ] reduce ;
 
-GENERIC: replace-patterns ( object -- result ) ;
+GENERIC: replace-patterns ( object -- result )
 M: object replace-patterns ;
 M: match-var replace-patterns get ;
 M: sequence replace-patterns [ replace-patterns ] map ;

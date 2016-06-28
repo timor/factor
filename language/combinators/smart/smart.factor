@@ -7,7 +7,7 @@ stack-checker.backend stack-checker.errors stack-checker.values
 stack-checker.visitor words ;
 IN: combinators.smart
 
-GENERIC: infer-known* ( known -- effect ) ;
+GENERIC: infer-known* ( known -- effect )
 
 : infer-known ( value -- effect )
     known dup (literal-value?) [

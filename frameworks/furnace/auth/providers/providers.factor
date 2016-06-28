@@ -14,11 +14,11 @@ email ticket capabilities profile deleted changed? ;
         swap >>username
         0 >>deleted ;
 
-GENERIC: get-user ( username provider -- user/f ) ;
+GENERIC: get-user ( username provider -- user/f )
 
-GENERIC: update-user ( user provider -- ) ;
+GENERIC: update-user ( user provider -- )
 
-GENERIC: new-user ( user provider -- user/f ) ;
+GENERIC: new-user ( user provider -- user/f )
 
 ! Password recovery support
 

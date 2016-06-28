@@ -31,7 +31,7 @@ ERROR: invalid-op string ;
         [ invalid-op ]
     } case ;
 
-GENERIC: infix-codegen ( ast -- quot/number ) ;
+GENERIC: infix-codegen ( ast -- quot/number )
 
 M: ast-number infix-codegen value>> ;
 

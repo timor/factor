@@ -12,15 +12,15 @@ TUPLE: yuva < color
 { v read-only }
 { alpha read-only } ;
 
-C: <yuva> yuva ;
+C: <yuva> yuva
 
 PRIVATE<
 
-CONSTANT: Wr 0.299 ;
-CONSTANT: Wb 0.114 ;
-CONSTANT: Wg 0.587 ;
-CONSTANT: Umax 0.436 ;
-CONSTANT: Vmax 0.615 ;
+CONSTANT: Wr 0.299
+CONSTANT: Wb 0.114
+CONSTANT: Wg 0.587
+CONSTANT: Umax 0.436
+CONSTANT: Vmax 0.615
 
 PRIVATE>
 
@@ -38,7 +38,7 @@ M: yuva >rgba
         [ 0.0 1.0 clamp ] tri@
     ] dip <rgba> ; inline
 
-GENERIC: >yuva ( color -- yuva ) ;
+GENERIC: >yuva ( color -- yuva )
 
 M: object >yuva >rgba >yuva ;
 

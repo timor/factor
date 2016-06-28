@@ -9,7 +9,7 @@ IN: math.factorials
 MEMO: factorial ( n -- n! )
     dup 1 > [ [1,b] product ] [ drop 1 ] if ;
 
-ALIAS: n! factorial ;
+ALIAS: n! factorial
 
 : factorials ( n -- seq )
     1 swap [0,b] [ dup 1 > [ * ] [ drop ] if dup ] map nip ;
@@ -23,7 +23,7 @@ MEMO: double-factorial ( n -- n!! )
         2 3 ? swap 2 <range> product
     ] if ;
 
-ALIAS: n!! double-factorial ;
+ALIAS: n!! double-factorial
 
 : factorial/ ( n k -- n!/k! )
     {
@@ -46,7 +46,7 @@ ALIAS: n!! double-factorial ;
         ]
     } case ;
 
-ALIAS: pochhammer rising-factorial ;
+ALIAS: pochhammer rising-factorial
 
 : falling-factorial ( x n -- (x)n )
     {

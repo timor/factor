@@ -18,7 +18,7 @@ TUPLE: xml-test id uri sections description type ;
 : parse-tests ( xml -- tests )
     "TEST" tags-named [ >xml-test ] map ;
 
-CONSTANT: base "vocab:xml/tests/xmltest/" ;
+CONSTANT: base "vocab:xml/tests/xmltest/"
 
 : fails? ( quot -- ? )
     [ drop-outputs f ] [ nip drop-inputs t ] bi-curry recover ; inline

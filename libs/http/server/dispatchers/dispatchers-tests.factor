@@ -5,7 +5,7 @@ IN: http.server.dispatchers.tests
 
 TUPLE: mock-responder path ;
 
-C: <mock-responder> mock-responder ;
+C: <mock-responder> mock-responder
 
 M: mock-responder call-responder*
     nip
@@ -57,7 +57,7 @@ main-responder [
 ! Make sure path for default responder isn't chopped
 TUPLE: path-check-responder ;
 
-C: <path-check-responder> path-check-responder ;
+C: <path-check-responder> path-check-responder
 
 M: path-check-responder call-responder*
     drop

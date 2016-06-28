@@ -11,11 +11,11 @@ big-endian on
 : reserved-size ( -- n ) 24 ;
 : lr-save ( -- n ) 4 ;
 
-CONSTANT: ds-reg    14 ;
-CONSTANT: rs-reg    15 ;
-CONSTANT: vm-reg    16 ;
-CONSTANT: ctx-reg   17 ;
-CONSTANT: frame-reg 31 ;
+CONSTANT: ds-reg    14
+CONSTANT: rs-reg    15
+CONSTANT: vm-reg    16
+CONSTANT: ctx-reg   17
+CONSTANT: frame-reg 31
 : nv-int-regs ( -- seq ) 13 31 [a,b] ;
 
 : LOAD32 ( r n -- )

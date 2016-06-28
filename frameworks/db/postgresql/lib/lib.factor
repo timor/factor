@@ -126,7 +126,7 @@ M: postgresql-result-null summary ( obj -- str )
     pq-get-string dup [ string>number ] when ;
 
 TUPLE: postgresql-malloc-destructor alien ;
-C: <postgresql-malloc-destructor> postgresql-malloc-destructor ;
+C: <postgresql-malloc-destructor> postgresql-malloc-destructor
 
 M: postgresql-malloc-destructor dispose ( obj -- )
     alien>> PQfreemem ;

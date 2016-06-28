@@ -5,17 +5,17 @@ http.server.responses http.server.redirection furnace.actions
 furnace.utilities io.encodings.utf8 ;
 IN: furnace.syndication
 
-GENERIC: feed-entry-title ( object -- string ) ;
+GENERIC: feed-entry-title ( object -- string )
 
-GENERIC: feed-entry-date ( object -- timestamp ) ;
+GENERIC: feed-entry-date ( object -- timestamp )
 
-GENERIC: feed-entry-url ( object -- url ) ;
+GENERIC: feed-entry-url ( object -- url )
 
-GENERIC: feed-entry-description ( object -- description ) ;
+GENERIC: feed-entry-description ( object -- description )
 
 M: object feed-entry-description drop f ;
 
-GENERIC: >entry ( object -- entry ) ;
+GENERIC: >entry ( object -- entry )
 
 M: entry >entry ;
 

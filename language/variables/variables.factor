@@ -9,7 +9,7 @@ IN: variables
 PREDICATE: variable < word
     "variable-setter" word-prop >boolean ;
 
-GENERIC: variable-setter ( word -- word' ) ;
+GENERIC: variable-setter ( word -- word' )
 
 M: variable variable-setter "variable-setter" word-prop ;
 M: local-reader variable-setter "local-writer" word-prop ;

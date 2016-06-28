@@ -21,7 +21,7 @@ ERROR: check-use-error value message ;
 : check-def-use ( -- )
     def-use get [ uses>> check-use ] assoc-each ;
 
-GENERIC: check-node* ( node -- ) ;
+GENERIC: check-node* ( node -- )
 
 M: #shuffle check-node*
     [ [ mapping>> values ] [ [ in-d>> ] [ in-r>> ] bi append ] bi subset? [ "Bad mapping inputs" throw ] unless ]
@@ -68,7 +68,7 @@ SYMBOL: datastack
 SYMBOL: retainstack
 SYMBOL: terminated?
 
-GENERIC: check-stack-flow* ( node -- ) ;
+GENERIC: check-stack-flow* ( node -- )
 
 : (check-stack-flow) ( nodes -- )
     [ check-stack-flow* terminated? get not ] all? drop ;

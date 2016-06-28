@@ -10,7 +10,7 @@ IN: classes.tests
 { f } [ 3 null instance? ] unit-test
 
 ! Regression
-GENERIC: method-forget-test ( obj -- obj ) ;
+GENERIC: method-forget-test ( obj -- obj )
 TUPLE: method-forget-class ;
 M: method-forget-class method-forget-test ;
 
@@ -106,7 +106,7 @@ TUPLE: forgotten-predicate-test ;
 { } [ [ \ forgotten-predicate-test forget ] with-compilation-unit ] unit-test
 { f } [ \ forgotten-predicate-test? predicate? ] unit-test
 
-GENERIC: generic-predicate? ( a -- b ) ;
+GENERIC: generic-predicate? ( a -- b )
 
 { } [ "IN: classes.tests TUPLE: generic-predicate ;" eval( -- ) ] unit-test
 

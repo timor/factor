@@ -15,8 +15,8 @@ TUPLE: space-invaders < cpu
     port1 port2i port2o port3o port4lo port4hi port5o
     bitmap sounds looping? ;
 
-CONSTANT: game-width 224 ;
-CONSTANT: game-height 256 ;
+CONSTANT: game-width 224
+CONSTANT: game-height 256
 
 : make-opengl-bitmap ( -- array )
     game-height game-width 3 * * uchar <c-array> ;
@@ -38,15 +38,15 @@ CONSTANT: game-height 256 ;
     [ [ 1 + ] dip nth ]
     [ [ 2 + ] dip nth ] 2tri 3array ;
 
-CONSTANT: SOUND-SHOT         0 ;
-CONSTANT: SOUND-UFO          1 ;
-CONSTANT: SOUND-BASE-HIT     2 ;
-CONSTANT: SOUND-INVADER-HIT  3 ;
-CONSTANT: SOUND-WALK1        4 ;
-CONSTANT: SOUND-WALK2        5 ;
-CONSTANT: SOUND-WALK3        6 ;
-CONSTANT: SOUND-WALK4        7 ;
-CONSTANT: SOUND-UFO-HIT      8 ;
+CONSTANT: SOUND-SHOT         0
+CONSTANT: SOUND-UFO          1
+CONSTANT: SOUND-BASE-HIT     2
+CONSTANT: SOUND-INVADER-HIT  3
+CONSTANT: SOUND-WALK1        4
+CONSTANT: SOUND-WALK2        5
+CONSTANT: SOUND-WALK3        6
+CONSTANT: SOUND-WALK4        7
+CONSTANT: SOUND-UFO-HIT      8
 
 : init-sound ( index cpu filename  -- )
     absolute-path swapd [ sounds>> nth AL_BUFFER ] dip
@@ -288,10 +288,10 @@ M: invaders-gadget draw-gadget*
     [ 224 256 GL_RGB GL_UNSIGNED_BYTE ] dip
     cpu>> bitmap>> glDrawPixels ;
 
-CONSTANT: black {   0   0   0 } ;
-CONSTANT: white { 255 255 255 } ;
-CONSTANT: green {   0 255   0 } ;
-CONSTANT: red   { 255   0   0 } ;
+CONSTANT: black {   0   0   0 }
+CONSTANT: white { 255 255 255 }
+CONSTANT: green {   0 255   0 }
+CONSTANT: red   { 255   0   0 }
 
 : addr>xy ( addr -- point )
     ! Convert video RAM address to base X Y value. point is a {x y}.
@@ -368,7 +368,7 @@ CONSTANT: rom-info {
       { 0x0800 "invaders/invaders.g" }
       { 0x1000 "invaders/invaders.f" }
       { 0x1800 "invaders/invaders.e" }
-} ;
+}
 
 : run-invaders ( -- )
     [

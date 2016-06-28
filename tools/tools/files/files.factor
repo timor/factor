@@ -44,7 +44,7 @@ TUPLE: listing-tool path specs sort ;
 
 TUPLE: file-listing directory-entry file-info ;
 
-C: <file-listing> file-listing ;
+C: <file-listing> file-listing
 
 : <listing-tool> ( path -- listing-tool )
     listing-tool new
@@ -56,7 +56,7 @@ C: <file-listing> file-listing ;
 
 ERROR: unknown-file-spec symbol ;
 
-HOOK: file-spec>string os ( file-listing spec -- string ) ;
+HOOK: file-spec>string os ( file-listing spec -- string )
 
 M: object file-spec>string ( file-listing spec -- string )
     {
@@ -82,7 +82,7 @@ M: object file-spec>string ( file-listing spec -- string )
 : list-files ( listing-tool -- array )
     dup list-slow? [ list-files-slow ] [ list-files-fast ] if ; inline
 
-HOOK: (directory.) os ( path -- lines ) ;
+HOOK: (directory.) os ( path -- lines )
 
 : directory. ( path -- ) (directory.) simple-table. ;
 
@@ -119,7 +119,7 @@ CONSTANT: default-file-systems-spec
     {
         +device-name+ +available-space+ +free-space+ +used-space+
         +total-space+ +percent-used+ +mount-point+
-    } ;
+    }
 
 : file-systems. ( -- )
     default-file-systems-spec print-file-systems ;

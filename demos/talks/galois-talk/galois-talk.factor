@@ -305,7 +305,7 @@ CONSTANT: galois-slides
         "Factor has many cool things that I didn't talk about"
         "Questions?"
     }
-} ;
+}
 
 : galois-talk ( -- ) galois-slides "Galois talk" slides-window ;
 

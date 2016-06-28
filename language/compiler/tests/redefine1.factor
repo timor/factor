@@ -3,7 +3,7 @@ kernel sequences sequences.private classes.mixin generic
 definitions arrays words assocs eval strings ;
 IN: compiler.tests.redefine1
 
-GENERIC: method-redefine-generic-1 ( a -- b ) ;
+GENERIC: method-redefine-generic-1 ( a -- b )
 
 M: integer method-redefine-generic-1 3 + ;
 
@@ -19,7 +19,7 @@ M: integer method-redefine-generic-1 3 + ;
 
 [ 6 ] [ method-redefine-test-1 ] unit-test
 
-GENERIC: method-redefine-generic-2 ( a -- b ) ;
+GENERIC: method-redefine-generic-2 ( a -- b )
 
 M: integer method-redefine-generic-2 3 + ;
 

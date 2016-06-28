@@ -5,8 +5,8 @@ ui.gadgets.borders timers calendar locals strings ui.gadgets.buttons
 combinators math.parser assocs threads ;
 IN: game.input.demos.joysticks
 
-CONSTANT: SIZE { 151 151 } ;
-CONSTANT: INDICATOR-SIZE { 4 4 } ;
+CONSTANT: SIZE { 151 151 }
+CONSTANT: INDICATOR-SIZE { 4 4 }
 : FREQUENCY ( -- f ) 30 recip seconds ;
 
 TUPLE: axis-gadget < gadget indicator z-indicator pov ;
@@ -32,7 +32,7 @@ CONSTANT: pov-polygons
         { pov-down-left  { { 67 90 } { 60 90 } { 60 83 } } }
         { pov-left       { { 65 70 } { 60 75 } { 65 80 } } }
         { pov-up-left    { { 67 60 } { 60 60 } { 60 67 } } }
-    } ;
+    }
 
 : <indicator-gadget> ( color -- indicator )
     indicator-polygon <polygon-gadget> ;

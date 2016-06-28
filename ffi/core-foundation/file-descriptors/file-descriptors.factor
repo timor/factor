@@ -23,8 +23,8 @@ FUNCTION: CFFileDescriptorRef CFFileDescriptorCreate (
     CFFileDescriptorContext* context
 ) ;
 
-CONSTANT: kCFFileDescriptorReadCallBack 1 ;
-CONSTANT: kCFFileDescriptorWriteCallBack 2 ;
+CONSTANT: kCFFileDescriptorReadCallBack 1
+CONSTANT: kCFFileDescriptorWriteCallBack 2
 
 FUNCTION: void CFFileDescriptorEnableCallBacks (
     CFFileDescriptorRef f,

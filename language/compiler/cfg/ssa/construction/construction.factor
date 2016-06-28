@@ -14,7 +14,7 @@ SYMBOL: defs
 
 SYMBOL: defs-multi
 
-GENERIC: compute-insn-defs ( bb insn -- ) ;
+GENERIC: compute-insn-defs ( bb insn -- )
 
 M: insn compute-insn-defs 2drop ;
 
@@ -75,7 +75,7 @@ SYMBOLS: stacks pushed ;
 
 RENAMING: ssa-rename [ gen-name ] [ top-name ] [ ] ;
 
-GENERIC: rename-insn ( insn -- ) ;
+GENERIC: rename-insn ( insn -- )
 
 M: insn rename-insn drop ;
 

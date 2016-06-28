@@ -18,7 +18,7 @@ CONSTANT: validation-output [[
 0000000000000000                 _exit
 0000000000000000                 _printf
 0000000000000000                 dyld_stub_binder
-]] ;
+]]
 
 cpu ppc? [
     { $\ validation-output }

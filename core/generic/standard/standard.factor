@@ -24,7 +24,7 @@ PREDICATE: standard-generic < generic
 PREDICATE: simple-generic < standard-generic
     "combination" word-prop #>> 0 = ;
 
-CONSTANT: simple-combination T{ standard-combination f 0 } ;
+CONSTANT: simple-combination T{ standard-combination f 0 }
 
 : define-simple-generic ( word effect -- )
     [ simple-combination ] dip define-generic ;

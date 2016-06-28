@@ -6,15 +6,15 @@ IN: sequences.modified
 
 TUPLE: modified ;
 
-GENERIC: modified-nth ( n seq -- elt ) ;
+GENERIC: modified-nth ( n seq -- elt )
 M: modified nth modified-nth ;
 M: modified nth-unsafe modified-nth ;
 
-GENERIC: modified-set-nth ( elt n seq -- ) ;
+GENERIC: modified-set-nth ( elt n seq -- )
 M: modified set-nth modified-set-nth ;
 M: modified set-nth-unsafe modified-set-nth ;
 
-INSTANCE: modified virtual-sequence ;
+INSTANCE: modified virtual-sequence
 
 TUPLE: 1modified < modified seq ;
 
@@ -24,7 +24,7 @@ M: modified set-length seq>> set-length ;
 M: 1modified virtual-exemplar seq>> ;
 
 TUPLE: scaled < 1modified c ;
-C: <scaled> scaled ;
+C: <scaled> scaled
 
 : scale ( seq c -- new-seq )
     dupd <scaled> swap like ;
@@ -37,7 +37,7 @@ M:: scaled modified-set-nth ( elt n seq -- )
     elt seq c>> / n seq seq>> set-nth ;
 
 TUPLE: offset < 1modified n ;
-C: <offset> offset ;
+C: <offset> offset
 
 : seq-offset ( seq n -- new-seq )
     dupd <offset> swap like ;
@@ -49,7 +49,7 @@ M:: offset modified-set-nth ( elt n seq -- )
     elt seq n>> - n seq seq>> set-nth ;
 
 TUPLE: summed < modified seqs ;
-C: <summed> summed ;
+C: <summed> summed
 
 M: summed length seqs>> longest length ;
 

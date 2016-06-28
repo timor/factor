@@ -4,7 +4,7 @@ namespaces opengl.gl random sequences ui ui.gadgets
 ui.gadgets.canvas ui.render ;
 IN: maze
 
-CONSTANT: line-width 8 ;
+CONSTANT: line-width 8
 
 SYMBOL: visited
 

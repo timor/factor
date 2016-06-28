@@ -67,10 +67,10 @@ node node-attributes define-=attrs
 
 COMPILE>
 
-ALIAS: --> add-edge ;
-ALIAS: --- add-edge ;
-ALIAS: ~--> add-path ;
-ALIAS: ~--- add-path ;
+ALIAS: --> add-edge
+ALIAS: --- add-edge
+ALIAS: ~--> add-path
+ALIAS: ~--- add-path
 
 SYNTAX: \ graph[ parse-quotation $[ <graph-attributes> @ add ] append! ;
 SYNTAX: \ node[ parse-quotation $[ <node-attributes> @ add ] append! ;

@@ -159,7 +159,7 @@ TUPLE: #alien-callback < node params child ;
 
 : node, ( node -- ) stack-visitor get push ;
 
-GENERIC: inputs/outputs ( #renaming -- inputs outputs ) ;
+GENERIC: inputs/outputs ( #renaming -- inputs outputs )
 
 M: #shuffle inputs/outputs mapping>> unzip swap ;
 M: #copy inputs/outputs [ in-d>> ] [ out-d>> ] bi ;

@@ -5,7 +5,7 @@ compiler.tree compiler.tree.propagation.info kernel math
 sequences ;
 IN: compiler.tree.escape-analysis.check
 
-GENERIC: run-escape-analysis* ( node -- ? ) ;
+GENERIC: run-escape-analysis* ( node -- ? )
 
 : unbox-inputs? ( nodes -- ? )
     {

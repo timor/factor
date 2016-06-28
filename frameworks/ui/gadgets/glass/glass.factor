@@ -6,7 +6,7 @@ ui.gadgets.worlds ui.gadgets.wrappers ui.gestures vectors ;
 FROM: ui.gadgets.wrappers => wrapper ;
 IN: ui.gadgets.glass
 
-GENERIC: hide-glass-hook ( gadget -- ) ;
+GENERIC: hide-glass-hook ( gadget -- )
 
 M: gadget hide-glass-hook drop ;
 

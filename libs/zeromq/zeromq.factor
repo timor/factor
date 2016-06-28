@@ -18,8 +18,8 @@ TUPLE: zmq-error n string ;
 : zmq-version ( -- version )
     { int int int } [ zmq_version ] with-out-parameters 3array ;
 
-GENERIC#: zmq-setopt 2 ( obj name value -- ) ;
-GENERIC#: zmq-getopt 1 ( obj name -- value ) ;
+GENERIC#: zmq-setopt 2 ( obj name value -- )
+GENERIC#: zmq-getopt 1 ( obj name -- value )
 
 TUPLE: zmq-message underlying ;
 

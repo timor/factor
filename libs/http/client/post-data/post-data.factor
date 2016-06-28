@@ -8,11 +8,11 @@ IN: http.client.post-data
 
 TUPLE: measured-stream stream size ;
 
-C: <measured-stream> measured-stream ;
+C: <measured-stream> measured-stream
 
 PRIVATE<
 
-GENERIC: (set-post-data-headers) ( header data -- header ) ;
+GENERIC: (set-post-data-headers) ( header data -- header )
 
 M: sequence (set-post-data-headers)
     length "content-length" pick set-at ;
@@ -31,7 +31,7 @@ PRIVATE>
 
 PRIVATE<
 
-GENERIC: (write-post-data) ( data -- ) ;
+GENERIC: (write-post-data) ( data -- )
 
 M: sequence (write-post-data) write ;
 
@@ -45,7 +45,7 @@ M: object (write-post-data)
     [ [ write-chunk ] each-block ] with-input-stream
     "0;\r\n" ascii encode write ;
 
-GENERIC: >post-data ( object -- post-data ) ;
+GENERIC: >post-data ( object -- post-data )
 
 M: f >post-data ;
 

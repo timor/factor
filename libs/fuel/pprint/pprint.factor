@@ -7,7 +7,7 @@ source-files.errors strings words ;
 
 IN: fuel.pprint
 
-GENERIC: fuel-pprint ( obj -- ) ;
+GENERIC: fuel-pprint ( obj -- )
 
 PRIVATE<
 

@@ -15,7 +15,7 @@ FUNCTION: MCIERROR mciSendStringW (
   HANDLE hwndCallback
 ) ;
 
-ALIAS: mciSendString mciSendStringW ;
+ALIAS: mciSendString mciSendStringW
 
 ERROR: mci-error n ;
 

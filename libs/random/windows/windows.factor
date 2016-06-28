@@ -10,7 +10,7 @@ M: windows-crypto-context dispose* ( tuple -- )
     [ handle>> 0 CryptReleaseContext win32-error=0/f ]
     [ f >>handle drop ] bi ;
 
-CONSTANT: factor-crypto-container "FactorCryptoContainer" ;
+CONSTANT: factor-crypto-container "FactorCryptoContainer"
 
 :: (acquire-crypto-context) ( provider type flags -- handle )
     { HCRYPTPROV } [

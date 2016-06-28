@@ -9,14 +9,14 @@ IN: checksums.murmur
 
 TUPLE: murmur3-32 seed ;
 
-C: <murmur3-32> murmur3-32 ;
+C: <murmur3-32> murmur3-32
 
-CONSTANT: c1 0xcc9e2d51 ;
-CONSTANT: c2 0x1b873593 ;
-CONSTANT: r1 15 ;
-CONSTANT: r2 13 ;
-CONSTANT: m 5 ;
-CONSTANT: n 0xe6546b64 ;
+CONSTANT: c1 0xcc9e2d51
+CONSTANT: c2 0x1b873593
+CONSTANT: r1 15
+CONSTANT: r2 13
+CONSTANT: m 5
+CONSTANT: n 0xe6546b64
 
 PRIVATE<
 
@@ -50,4 +50,4 @@ PRIVATE>
 M: murmur3-32 checksum-bytes ( bytes checksum -- value )
     seed>> 32 bits main-loop end-case avalanche ;
 
-INSTANCE: murmur3-32 checksum ;
+INSTANCE: murmur3-32 checksum

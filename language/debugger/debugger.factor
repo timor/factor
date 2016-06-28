@@ -13,7 +13,7 @@ strings.parser summary system vocabs vocabs.loader vocabs.parser
 words ;
 IN: debugger
 
-GENERIC: error-help ( error -- topic ) ;
+GENERIC: error-help ( error -- topic )
 
 M: object error-help drop f ;
 
@@ -21,7 +21,7 @@ M: tuple error-help class-of ;
 
 M: source-file-error error-help error>> error-help ;
 
-GENERIC: error. ( error -- ) ;
+GENERIC: error. ( error -- )
 
 M: object error. short. ;
 
@@ -95,7 +95,7 @@ M: string error. print ;
 : divide-by-zero-error. ( obj -- )
     "Division by zero" print drop ;
 
-HOOK: signal-error. os ( obj -- ) ;
+HOOK: signal-error. os ( obj -- )
 
 : array-size-error. ( obj -- )
     "Invalid array size: " write dup third .
@@ -337,7 +337,7 @@ M: not-in-a-method-error summary
 M: version-control-merge-conflict summary
     drop "Version control merge conflict in source code" ;
 
-GENERIC: expected>string ( obj -- str ) ;
+GENERIC: expected>string ( obj -- str )
 
 M: f expected>string drop "end of input" ;
 M: word expected>string name>> ;

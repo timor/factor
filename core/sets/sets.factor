@@ -6,24 +6,24 @@ IN: sets
 ! Set protocol
 MIXIN: set
 
-GENERIC: adjoin ( elt set -- ) ;
-GENERIC: ?adjoin ( elt set -- ? ) ;
-GENERIC: in? ( elt set -- ? ) ;
-GENERIC: delete ( elt set -- ) ;
-GENERIC: set-like ( set exemplar -- set' ) ;
-GENERIC: fast-set ( set -- set' ) ;
-GENERIC: members ( set -- seq ) ;
-GENERIC: union ( set1 set2 -- set ) ;
-GENERIC: intersect ( set1 set2 -- set ) ;
-GENERIC: intersects? ( set1 set2 -- ? ) ;
-GENERIC: diff ( set1 set2 -- set ) ;
-GENERIC: subset? ( set1 set2 -- ? ) ;
-GENERIC: set= ( set1 set2 -- ? ) ;
-GENERIC: duplicates ( set -- seq ) ;
-GENERIC: all-unique? ( set -- ? ) ;
-GENERIC: null? ( set -- ? ) ;
-GENERIC: cardinality ( set -- n ) ;
-GENERIC: clear-set ( set -- ) ;
+GENERIC: adjoin ( elt set -- )
+GENERIC: ?adjoin ( elt set -- ? )
+GENERIC: in? ( elt set -- ? )
+GENERIC: delete ( elt set -- )
+GENERIC: set-like ( set exemplar -- set' )
+GENERIC: fast-set ( set -- set' )
+GENERIC: members ( set -- seq )
+GENERIC: union ( set1 set2 -- set )
+GENERIC: intersect ( set1 set2 -- set )
+GENERIC: intersects? ( set1 set2 -- ? )
+GENERIC: diff ( set1 set2 -- set )
+GENERIC: subset? ( set1 set2 -- ? )
+GENERIC: set= ( set1 set2 -- ? )
+GENERIC: duplicates ( set -- seq )
+GENERIC: all-unique? ( set -- ? )
+GENERIC: null? ( set -- ? )
+GENERIC: cardinality ( set -- n )
+GENERIC: clear-set ( set -- )
 
 M: f members drop f ;
 
@@ -115,7 +115,7 @@ PRIVATE<
 PRIVATE>
 
 ! Sequences are sets
-INSTANCE: sequence set ;
+INSTANCE: sequence set
 
 M: sequence in?
     member? ; inline

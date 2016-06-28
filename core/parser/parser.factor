@@ -144,7 +144,7 @@ ERROR: classoid-expected object ;
 
 SYMBOL: quotation-parser
 
-HOOK: parse-quotation quotation-parser ( -- quot ) ;
+HOOK: parse-quotation quotation-parser ( -- quot )
 
 M: f parse-quotation \ ] parse-until >quotation ;
 

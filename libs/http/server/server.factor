@@ -33,9 +33,9 @@ xml.writer
 vocabs ;
 IN: http.server
 
-GENERIC: write-response ( response -- ) ;
+GENERIC: write-response ( response -- )
 
-GENERIC: write-full-response ( request response -- ) ;
+GENERIC: write-full-response ( request response -- )
 
 : write-response-line ( response -- response )
     dup
@@ -103,11 +103,11 @@ SYMBOL: development?
 SYMBOL: benchmark?
 
 ! path is a sequence of path component strings
-GENERIC: call-responder* ( path responder -- response ) ;
+GENERIC: call-responder* ( path responder -- response )
 
 TUPLE: trivial-responder response ;
 
-C: <trivial-responder> trivial-responder ;
+C: <trivial-responder> trivial-responder
 
 M: trivial-responder call-responder* nip response>> clone ;
 

@@ -6,7 +6,7 @@ SINGLETONS: g++ visual-c++ ;
 UNION: c++-abi
     g++ visual-c++ ;
 
-GENERIC: c++>c-abi ( c++-abi -- c-abi ) ;
+GENERIC: c++>c-abi ( c++-abi -- c-abi )
 
 M: g++ c++>c-abi drop cdecl ;
 M: visual-c++ c++>c-abi drop thiscall ;

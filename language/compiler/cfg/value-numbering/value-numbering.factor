@@ -17,7 +17,7 @@ USE: compiler.cfg.value-numbering.slots
 
 IN: compiler.cfg.value-numbering
 
-GENERIC: process-instruction ( insn -- insn' ) ;
+GENERIC: process-instruction ( insn -- insn' )
 
 : redundant-instruction ( insn vn -- insn' )
     [ dst>> ] dip [ swap set-vn ] [ <copy> ] 2bi ;

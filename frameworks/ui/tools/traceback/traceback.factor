@@ -6,7 +6,7 @@ ui.gadgets ui.gadgets.borders ui.gadgets.buttons
 ui.gadgets.labeled ui.gadgets.panes ui.gadgets.scrollers
 ui.gadgets.status-bar ui.gadgets.tables ui.gadgets.toolbar
 ui.theme ui.gadgets.tracks ui.gestures ui.theme.images ui.tools.common ;
-QUALIFIED-WITH: ui.tools.inspector i ;
+QUALIFIED-WITH: ui.tools.inspector i
 IN: ui.tools.traceback
 
 TUPLE: stack-entry object string ;

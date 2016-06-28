@@ -400,7 +400,7 @@ M: evens length length>> ; inline
 
 M: evens nth-unsafe [ 2 * ] [ seq>> nth-unsafe ] bi* ; inline
 
-INSTANCE: evens immutable-sequence ;
+INSTANCE: evens immutable-sequence
 
 TUPLE: odds seq length ;
 
@@ -411,7 +411,7 @@ M: odds length length>> ; inline
 
 M: odds nth-unsafe [ 2 * 1 + ] [ seq>> nth-unsafe ] bi* ; inline
 
-INSTANCE: odds immutable-sequence ;
+INSTANCE: odds immutable-sequence
 
 : until-empty ( seq quot -- )
     [ dup empty? ] swap until drop ; inline

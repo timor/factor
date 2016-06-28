@@ -126,7 +126,7 @@ M: windows link-info ( path -- info )
         ] if
     ] if-zero ;
 
-CONSTANT: path-length $$[ MAX_PATH 1 + ] ;
+CONSTANT: path-length $$[ MAX_PATH 1 + ]
 
 : volume-information ( normalized-path -- volume-name volume-serial max-component flags type )
     { { ushort path-length } DWORD DWORD DWORD { ushort path-length } }
@@ -175,7 +175,7 @@ PRIVATE>
 M: windows file-system-info ( path -- file-system-info )
     normalize-path root-directory (file-system-info) ;
 
-CONSTANT: names-buf-length 16384 ;
+CONSTANT: names-buf-length 16384
 
 : find-first-volume ( -- string handle )
     { { ushort path-length } }

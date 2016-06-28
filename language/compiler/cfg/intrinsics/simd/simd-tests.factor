@@ -85,12 +85,12 @@ IN: compiler.cfg.intrinsics.simd.tests
     ] make-classes ; inline
 
 CONSTANT: signed-reps
-    { char-16-rep short-8-rep int-4-rep longlong-2-rep float-4-rep double-2-rep } ;
+    { char-16-rep short-8-rep int-4-rep longlong-2-rep float-4-rep double-2-rep }
 CONSTANT: all-reps
     {
         char-16-rep short-8-rep int-4-rep longlong-2-rep float-4-rep double-2-rep
         uchar-16-rep ushort-8-rep uint-4-rep ulonglong-2-rep
-    } ;
+    }
 
 TUPLE: scalar-cpu ;
 

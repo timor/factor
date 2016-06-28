@@ -4,8 +4,8 @@ USING: accessors assocs continuations definitions init io
 kernel math math.parser namespaces sequences sorting ;
 IN: source-files.errors
 
-GENERIC: error-file ( error -- file ) ;
-GENERIC: error-line ( error -- line ) ;
+GENERIC: error-file ( error -- file )
+GENERIC: error-line ( error -- line )
 
 M: object error-file drop f ;
 M: object error-line drop f ;
@@ -27,7 +27,7 @@ M: source-file-error compute-restarts error>> compute-restarts ;
 
 TUPLE: error-type-holder type word plural icon quot forget-quot { fatal? initial: t } ;
 
-GENERIC: error-type ( error -- type ) ;
+GENERIC: error-type ( error -- type )
 
 : <definition-error> ( error definition class -- source-file-error )
     new
@@ -64,7 +64,7 @@ error-types [ V{ } clone ] initialize
     [ quot>> call( -- seq ) ] map
     concat ;
 
-GENERIC: errors-changed ( observer -- ) ;
+GENERIC: errors-changed ( observer -- )
 
 SYMBOL: error-observers
 

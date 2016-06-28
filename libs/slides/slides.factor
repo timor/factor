@@ -47,7 +47,7 @@ CONSTANT: stylesheet
                 }
             }
         }
-    } ;
+    }
 
 : $title ( string -- )
     [

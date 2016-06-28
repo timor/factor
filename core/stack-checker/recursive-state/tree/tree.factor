@@ -9,7 +9,7 @@ IN: stack-checker.recursive-state.tree
 
 TUPLE: node value key hashcode left right ;
 
-GENERIC: lookup ( key node -- value/f ) ;
+GENERIC: lookup ( key node -- value/f )
 
 M: f lookup nip ;
 
@@ -21,7 +21,7 @@ M: node lookup
     [ nip value>> ]
     [ decide [ left>> ] [ right>> ] if lookup ] if ;
 
-GENERIC: store ( value key node -- node' ) ;
+GENERIC: store ( value key node -- node' )
 
 M: f store drop dup hashcode f f node boa ;
 

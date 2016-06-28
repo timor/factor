@@ -20,7 +20,7 @@ PRIVATE<
 
 TUPLE: fuzz-test-failure failures predicate trials ;
 
-C: <fuzz-test-failure> fuzz-test-failure ;
+C: <fuzz-test-failure> fuzz-test-failure
 
 M: fuzz-test-failure summary
     [

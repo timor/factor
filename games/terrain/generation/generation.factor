@@ -5,10 +5,10 @@ sequences math.vectors.simd typed ;
 FROM: alien.c-types => float uchar ;
 IN: terrain.generation
 
-CONSTANT: terrain-segment-size { 512 512 } ;
-CONSTANT: terrain-segment-size-vector float-4{ 512.0 512.0 1.0 1.0 } ;
-CONSTANT: terrain-big-noise-scale float-4{ 0.002 0.002 0.002 0.002 } ;
-CONSTANT: terrain-small-noise-scale float-4{ 0.05 0.05 0.05 0.05 } ;
+CONSTANT: terrain-segment-size { 512 512 }
+CONSTANT: terrain-segment-size-vector float-4{ 512.0 512.0 1.0 1.0 }
+CONSTANT: terrain-big-noise-scale float-4{ 0.002 0.002 0.002 0.002 }
+CONSTANT: terrain-small-noise-scale float-4{ 0.05 0.05 0.05 0.05 }
 
 TUPLE: terrain
     { big-noise-table byte-array }

@@ -6,7 +6,7 @@ hash-sets init kernel kernel.private math namespaces sequences
 sets source-files.errors vocabs words ;
 IN: compiler.units
 
-PRIMITIVE: modify-code-heap ( alist update-existing? reset-pics? -- ) ;
+PRIMITIVE: modify-code-heap ( alist update-existing? reset-pics? -- )
 
 SYMBOL: old-definitions
 SYMBOL: new-definitions
@@ -44,7 +44,7 @@ PRIVATE>
 
 SYMBOL: compiler-impl
 
-HOOK: update-call-sites compiler-impl ( class generic -- words ) ;
+HOOK: update-call-sites compiler-impl ( class generic -- words )
 
 : changed-call-sites ( class generic -- )
     update-call-sites [ changed-definition ] each ;
@@ -58,11 +58,11 @@ M: generic update-generic ( class generic -- )
 M: sequence update-methods ( class seq -- )
     implementors [ update-generic ] with each ;
 
-HOOK: recompile compiler-impl ( words -- alist ) ;
+HOOK: recompile compiler-impl ( words -- alist )
 
-HOOK: to-recompile compiler-impl ( -- words ) ;
+HOOK: to-recompile compiler-impl ( -- words )
 
-HOOK: process-forgotten-words compiler-impl ( words -- ) ;
+HOOK: process-forgotten-words compiler-impl ( words -- )
 
 : compile ( words -- )
     recompile t f modify-code-heap ;
@@ -86,7 +86,7 @@ M: f process-forgotten-words drop ;
 
 SYMBOL: definition-observers
 
-GENERIC: definitions-changed ( set obj -- ) ;
+GENERIC: definitions-changed ( set obj -- )
 
 [ V{ } clone definition-observers set-global ]
 "compiler.units" add-startup-hook
@@ -110,7 +110,7 @@ GENERIC: definitions-changed ( set obj -- ) ;
 ! inline caching
 : effect-counter ( -- n ) REDEFINITION-COUNTER special-object ; inline
 
-GENERIC: always-bump-effect-counter? ( defspec -- ? ) ;
+GENERIC: always-bump-effect-counter? ( defspec -- ? )
 
 M: object always-bump-effect-counter? drop f ;
 

@@ -249,7 +249,7 @@ PRIVATE>
 : compression-dissimilarity ( a b -- n )
     compression-lengths + / ;
 
-GENERIC: round-to-even ( x -- y ) ;
+GENERIC: round-to-even ( x -- y )
 
 M: integer round-to-even ; inline
 
@@ -269,7 +269,7 @@ M: float round-to-even
 : round-to-step ( x step -- y )
     [ [ / round ] [ * ] bi ] unless-zero ;
 
-GENERIC: round-away-from-zero ( x -- y ) ;
+GENERIC: round-away-from-zero ( x -- y )
 
 M: integer round-away-from-zero ; inline
 
@@ -307,12 +307,12 @@ PRIVATE>
 ! SYNTAX: .. dup pop scan-object [a,b) suffix! ;
 ! SYNTAX: ... dup pop scan-object [a,b] suffix! ;
 
-GENERIC: sum-squares ( seq -- n ) ;
+GENERIC: sum-squares ( seq -- n )
 M: object sum-squares [ sq ] map-sum ;
 M: iota-tuple sum-squares
     length 1 - [ ] [ 1 + ] [ 1/2 + ] tri * * 3 / ;
 
-GENERIC: sum-cubes ( seq -- n ) ;
+GENERIC: sum-cubes ( seq -- n )
 M: object sum-cubes [ 3 ^ ] map-sum ;
 M: iota-tuple sum-cubes sum sq ;
 

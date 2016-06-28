@@ -4,7 +4,7 @@ IN: tuple-arrays.tests
 
 SYMBOL: mat
 TUPLE: foo bar ; final
-C: <foo> foo ;
+C: <foo> foo
 TUPLE-ARRAY: foo
 
 { 2 } [ 2 <foo-array> dup mat set length ] unit-test

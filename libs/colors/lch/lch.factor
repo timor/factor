@@ -8,7 +8,7 @@ IN: colors.lch
 
 TUPLE: LCHuv l c h alpha ;
 
-C: <LCHuv> LCHuv ;
+C: <LCHuv> LCHuv
 
 PRIVATE<
 
@@ -36,7 +36,7 @@ M: LCHuv >luva
         ]
     ] [ alpha>> ] bi <luva> ;
 
-GENERIC: >LCHuv ( color -- LCHuv ) ;
+GENERIC: >LCHuv ( color -- LCHuv )
 
 M: object >LCHuv >luva >LCHuv ;
 
@@ -58,7 +58,7 @@ M: luva >LCHuv
 
 TUPLE: LCHab l c h alpha ;
 
-C: <LCHab> LCHab ;
+C: <LCHab> LCHab
 
 M: LCHab >rgba >laba >rgba ;
 
@@ -74,7 +74,7 @@ M: LCHab >laba
         ]
     ] [ alpha>> ] bi <laba> ;
 
-GENERIC: >LCHab ( color -- LCHab ) ;
+GENERIC: >LCHab ( color -- LCHab )
 
 M: object >LCHab >laba >LCHab ;
 

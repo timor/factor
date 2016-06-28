@@ -2,7 +2,7 @@ USING: see tools.test io.streams.string math sequences summary
 words ;
 IN: see.tests
 
-CONSTANT: test-const 10 ;
+CONSTANT: test-const 10
 
 { "IN: see.tests\nCONSTANT: test-const 10 inline\n" }
 [ [ \ test-const see ] with-string-writer ] unit-test
@@ -10,7 +10,7 @@ CONSTANT: test-const 10 ;
 { "IN: sequences\nERROR: non-negative-integer-expected n ;\n" }
 [ [ \ non-negative-integer-expected see ] with-string-writer ] unit-test
 
-ALIAS: test-alias + ;
+ALIAS: test-alias +
 
 { "USING: math ;\nIN: see.tests\nALIAS: test-alias + inline\n" }
 [ [ \ test-alias see ] with-string-writer ] unit-test

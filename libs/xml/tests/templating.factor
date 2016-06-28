@@ -3,11 +3,11 @@ accessors xml.data xml.traversal xml.writer generic sequences.deep ;
 IN: xml.tests
 
 CONSTANT: sub-tag
-    T{ name f f "sub" "http://littledan.onigirihouse.com/namespaces/replace" } ;
+    T{ name f f "sub" "http://littledan.onigirihouse.com/namespaces/replace" }
 
 SYMBOL: ref-table
 
-GENERIC: (r-ref) ( xml -- ) ;
+GENERIC: (r-ref) ( xml -- )
 M: tag (r-ref)
     dup sub-tag attr [
         ref-table get at
@@ -27,7 +27,7 @@ CONSTANT: sample-doc [[
 <div f:sub='bar'/>
 <p f:sub='baz'>paragraph</p>
 </body></html>
-]] ;
+]]
 
 CONSTANT: expected-result [[
 <?xml version="1.0" encoding="UTF-8"?>
@@ -43,7 +43,7 @@ CONSTANT: expected-result [[
     <p f:sub="baz"/>
   </body>
 </html>
-]] ;
+]]
 
 : test-refs ( -- string )
     [

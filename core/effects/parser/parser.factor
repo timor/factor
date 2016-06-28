@@ -65,7 +65,7 @@ PRIVATE>
 : parse-call-paren ( accum word -- accum )
     [ ")" parse-effect ] dip 2array append! ;
 
-CONSTANT: in-definition HS{ } ;
+CONSTANT: in-definition HS{ }
 
 ERROR: cant-nest-definitions word ;
 

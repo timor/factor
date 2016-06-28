@@ -7,13 +7,13 @@ opengl.demo-support opengl.gl sequences threads ui ui.gadgets
 ui.gadgets.borders ui.gadgets.buttons ui.gadgets.frames
 ui.gadgets.grids ui.gadgets.labeled ui.gadgets.labels
 ui.gadgets.packs ui.gadgets.sliders ui.render ;
-QUALIFIED-WITH: models.range mr ;
+QUALIFIED-WITH: models.range mr
 IN: boids
 
 TUPLE: boids-gadget < gadget paused boids behaviours dt ;
 
-CONSTANT: initial-population 100 ;
-CONSTANT: initial-dt 5 ;
+CONSTANT: initial-population 100
+CONSTANT: initial-dt 5
 
 : initial-behaviours ( -- seq )
     1.0 75 -0.1 <cohesion>

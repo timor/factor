@@ -477,7 +477,7 @@ TUPLE: bignum-test id m n o ;
     ! [ T{ bignum-test f 1 } select-tuple ] unit-test ;
 
 TUPLE: secret n message ;
-C: <secret> secret ;
+C: <secret> secret
 
 : test-random-id ( -- )
     secret "SECRET"

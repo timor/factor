@@ -5,7 +5,7 @@ IN: tools.deploy.test.7
 
 SYMBOL: my-var
 
-GENERIC: my-generic ( x -- b ) ;
+GENERIC: my-generic ( x -- b )
 
 M: integer my-generic sq ;
 

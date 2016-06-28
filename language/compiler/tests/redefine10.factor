@@ -5,7 +5,7 @@ IN: compiler.tests.redefine10
 ! Mixin redefinition should update predicate call sites
 
 MIXIN: my-mixin
-INSTANCE: fixnum my-mixin ;
+INSTANCE: fixnum my-mixin
 : my-inline-1 ( a -- b ) dup my-mixin instance? [ 1 + ] when ;
 : my-inline-2 ( a -- b ) dup my-mixin? [ 1 + ] when ;
 : my-inline-3 ( a -- b ) dup my-mixin? [ float? ] [ drop f ] if ;
@@ -13,7 +13,7 @@ INSTANCE: fixnum my-mixin ;
 : my-inline-5 ( a -- b ) dup my-mixin? [ fixnum? ] [ drop f ] if ;
 : my-inline-6 ( a -- b ) dup fixnum? [ my-mixin? ] [ drop f ] if ;
 
-GENERIC: fake-float? ( obj -- ? ) ;
+GENERIC: fake-float? ( obj -- ? )
 
 M: float fake-float? drop t ;
 M: object fake-float? drop f ;

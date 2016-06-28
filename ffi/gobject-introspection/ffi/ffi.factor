@@ -39,7 +39,7 @@ IN: gobject-introspection.ffi
 : def-aliases ( aliases -- )
     [ def-alias ] each ;
 
-GENERIC: type>c-type ( type -- c-type ) ;
+GENERIC: type>c-type ( type -- c-type )
 
 M: atomic-type type>c-type get-type-info c-type>> ;
 M: enum-type type>c-type get-type-info c-type>> ;
@@ -65,7 +65,7 @@ PREDICATE: incorrect-type < simple-type name>> not ;
 M: incorrect-type type>c-type drop void* ;
 ! workaround>
 
-GENERIC: parse-const-value ( str data-type -- value ) ;
+GENERIC: parse-const-value ( str data-type -- value )
 
 M: atomic-type parse-const-value
     name>> {
@@ -96,7 +96,7 @@ M: utf8-type parse-const-value drop ;
 : def-bitfield-type ( bitfield -- )
     def-enum-type ;
 
-GENERIC: parameter-type>c-type ( data-type -- c-type ) ;
+GENERIC: parameter-type>c-type ( data-type -- c-type )
 
 M: data-type parameter-type>c-type type>c-type ;
 M: varargs-type parameter-type>c-type drop void* ;
@@ -105,7 +105,7 @@ M: varargs-type parameter-type>c-type drop void* ;
     [ type>> parameter-type>c-type ] keep
     direction>> "in" = [ <pointer> ] unless ;
 
-GENERIC: return-type>c-type ( data-type -- c-type ) ;
+GENERIC: return-type>c-type ( data-type -- c-type )
 
 M: data-type return-type>c-type type>c-type ;
 M: none-type return-type>c-type drop void ;
@@ -142,7 +142,7 @@ M: none-type return-type>c-type drop void ;
 : def-functions ( functions -- )
     [ def-function ] each ;
 
-GENERIC: type>data-type ( type -- data-type ) ;
+GENERIC: type>data-type ( type -- data-type )
 
 M: type type>data-type
     [ simple-type new ] dip name>> >>name ;
@@ -186,7 +186,7 @@ M: type type>data-type
         [ ?suffix-parameters-with-error parameter-names&types ]
     } cleave make-callback-type define-inline ;
 
-GENERIC: field-type>c-type ( data-type -- c-type ) ;
+GENERIC: field-type>c-type ( data-type -- c-type )
 
 M: simple-type field-type>c-type type>c-type ;
 M: inner-callback-type field-type>c-type drop void* ;

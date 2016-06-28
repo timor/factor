@@ -17,7 +17,7 @@ SLOT: file
 : CreateFile-flags ( DWORD -- DWORD )
     flags{ FILE_FLAG_BACKUP_SEMANTICS FILE_FLAG_OVERLAPPED } bitor ;
 
-HOOK: open-append os ( path -- win32-file ) ;
+HOOK: open-append os ( path -- win32-file )
 
 TUPLE: win32-file < win32-handle ptr ;
 
@@ -32,7 +32,7 @@ CONSTANT: share-mode
         FILE_SHARE_READ
         FILE_SHARE_WRITE
         FILE_SHARE_DELETE
-    } ;
+    }
 
 : default-security-attributes ( -- obj )
     SECURITY_ATTRIBUTES <struct>
@@ -42,14 +42,14 @@ TUPLE: FileArgs
     hFile lpBuffer nNumberOfBytesToRead
     lpNumberOfBytesRet lpOverlapped ;
 
-C: <FileArgs> FileArgs ;
+C: <FileArgs> FileArgs
 
 ! Global variable with assoc mapping overlapped to threads
 SYMBOL: pending-overlapped
 
 TUPLE: io-callback port thread ;
 
-C: <io-callback> io-callback ;
+C: <io-callback> io-callback
 
 : <completion-port> ( handle existing -- handle )
      f 1 CreateIoCompletionPort dup win32-error=0/f ;
@@ -213,7 +213,7 @@ M: windows (wait-to-read) ( port -- )
 : select-sets ( socket event -- read-fds write-fds except-fds )
     [ make-fd-set ] dip +input+ = [ f f ] [ f swap f ] if ;
 
-CONSTANT: select-timeval S{ timeval { sec 0 } { usec 1000 } } ;
+CONSTANT: select-timeval S{ timeval { sec 0 } { usec 1000 } }
 
 M: windows wait-for-fd ( handle event -- )
     [ file>> handle>> 1 swap ] dip select-sets select-timeval
@@ -325,7 +325,7 @@ M: windows cwd
 M: windows cd
     SetCurrentDirectory win32-error=0/f ;
 
-CONSTANT: unicode-prefix "\\\\?\\" ;
+CONSTANT: unicode-prefix "\\\\?\\"
 
 M: windows root-directory? ( path -- ? )
     {

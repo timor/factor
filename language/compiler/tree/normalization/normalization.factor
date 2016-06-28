@@ -7,7 +7,7 @@ kernel math math.order namespaces sequences
 stack-checker.backend stack-checker.branches ;
 IN: compiler.tree.normalization
 
-GENERIC: normalize* ( node -- node' ) ;
+GENERIC: normalize* ( node -- node' )
 
 SYMBOL: introduction-stack
 

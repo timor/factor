@@ -15,7 +15,7 @@ IN: io.directories
     [ "resource:" ] dip with-directory ; inline
 
 ! Creating directories
-HOOK: make-directory io-backend ( path -- ) ;
+HOOK: make-directory io-backend ( path -- )
 
 DEFER: make-parent-directories
 
@@ -36,9 +36,9 @@ DEFER: make-parent-directories
 ! Listing directories
 TUPLE: directory-entry name type ;
 
-C: <directory-entry> directory-entry ;
+C: <directory-entry> directory-entry
 
-HOOK: (directory-entries) os ( path -- seq ) ;
+HOOK: (directory-entries) os ( path -- seq )
 
 : directory-entries ( path -- seq )
     normalize-path
@@ -55,12 +55,12 @@ HOOK: (directory-entries) os ( path -- seq ) ;
     $[ "" directory-files @ ] with-directory ; inline
 
 ! Touching files
-HOOK: touch-file io-backend ( path -- ) ;
+HOOK: touch-file io-backend ( path -- )
 
 ! Deleting files
-HOOK: delete-file io-backend ( path -- ) ;
+HOOK: delete-file io-backend ( path -- )
 
-HOOK: delete-directory io-backend ( path -- ) ;
+HOOK: delete-directory io-backend ( path -- )
 
 : ?delete-file ( path -- )
     $[ _ delete-file ] ignore-errors ;
@@ -69,7 +69,7 @@ HOOK: delete-directory io-backend ( path -- ) ;
     over file-name append-path ;
 
 ! Moving and renaming files
-HOOK: move-file io-backend ( from to -- ) ;
+HOOK: move-file io-backend ( from to -- )
 
 : move-file-into ( from to -- )
     to-directory move-file ;
@@ -78,7 +78,7 @@ HOOK: move-file io-backend ( from to -- ) ;
     $[ _ move-file-into ] each ;
 
 ! Copying files
-HOOK: copy-file io-backend ( from to -- ) ;
+HOOK: copy-file io-backend ( from to -- )
 
 M: object copy-file
     make-parent-directories binary <file-writer> [

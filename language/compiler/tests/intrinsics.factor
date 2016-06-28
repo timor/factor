@@ -7,7 +7,7 @@ alien.accessors alien.c-types alien.data alien.syntax alien.strings
 namespaces libc io.encodings.ascii classes compiler.test ;
 FROM: math => float ;
 FROM: alien.c-types => short ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 IN: compiler.tests.intrinsics
 
 ! Make sure that intrinsic ops compile to correct code.

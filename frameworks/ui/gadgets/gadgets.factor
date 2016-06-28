@@ -6,8 +6,8 @@ math.vectors models namespaces sequences threads vectors ;
 IN: ui.gadgets
 
 ! Values for orientation slot
-CONSTANT: horizontal { 1 0 } ;
-CONSTANT: vertical { 0 1 } ;
+CONSTANT: horizontal { 1 0 }
+CONSTANT: vertical { 0 1 }
 
 TUPLE: gadget < rect
 pref-dim
@@ -51,11 +51,11 @@ M: gadget model-changed 2drop ;
         [ [ parent>> ] dip relative-loc ] [ drop loc>> ] 2bi v+
     ] if ;
 
-GENERIC: user-input* ( str gadget -- ? ) ;
+GENERIC: user-input* ( str gadget -- ? )
 
 M: gadget user-input* 2drop t ;
 
-GENERIC: children-on ( rect gadget -- seq ) ;
+GENERIC: children-on ( rect gadget -- seq )
 
 M: gadget children-on nip children>> ;
 
@@ -96,18 +96,18 @@ M: gadget contains-point? ( loc gadget -- ? )
     [ children>> ] dip each ; inline
 
 ! Selection protocol
-GENERIC: gadget-selection? ( gadget -- ? ) ;
+GENERIC: gadget-selection? ( gadget -- ? )
 
 M: gadget gadget-selection? drop f ;
 
-GENERIC: gadget-selection ( gadget -- string/f ) ;
+GENERIC: gadget-selection ( gadget -- string/f )
 
 M: gadget gadget-selection drop f ;
 
 ! Text protocol
-GENERIC: gadget-text* ( gadget -- ) ;
+GENERIC: gadget-text* ( gadget -- )
 
-GENERIC: gadget-text-separator ( gadget -- str ) ;
+GENERIC: gadget-text-separator ( gadget -- str )
 
 M: gadget gadget-text-separator
     orientation>> vertical = "\n" "" ? ;
@@ -139,7 +139,7 @@ SYMBOL: ui-notify-flag
 : layout-queue ( -- queue )
     \ layout-queue get ;
 
-CONSTANT: layout-queue-limit 8000 ;
+CONSTANT: layout-queue-limit 8000
 
 : layout-later ( gadget -- )
     layout-queue [
@@ -171,7 +171,7 @@ PRIVATE<
 
 SYMBOL: in-layout?
 
-GENERIC: dim-changed ( gadget -- ) ;
+GENERIC: dim-changed ( gadget -- )
 
 M: gadget dim-changed
     in-layout? get [ invalidate ] [ invalidate* ] if ;
@@ -183,7 +183,7 @@ M: gadget dim<< ( dim gadget -- )
     [ 2drop ]
     [ [ nip ] [ call-next-method ] 2bi dim-changed ] if ;
 
-GENERIC: pref-dim* ( gadget -- dim ) ;
+GENERIC: pref-dim* ( gadget -- dim )
 
 : pref-dim ( gadget -- dim )
     dup pref-dim>> [ ] [
@@ -195,7 +195,7 @@ GENERIC: pref-dim* ( gadget -- dim ) ;
 
 M: gadget pref-dim* dim>> ;
 
-GENERIC: layout* ( gadget -- ) ;
+GENERIC: layout* ( gadget -- )
 
 M: gadget layout* drop ;
 
@@ -208,11 +208,11 @@ M: gadget layout* drop ;
         dup [ layout ] each-child
     ] when drop ;
 
-GENERIC: graft* ( gadget -- ) ;
+GENERIC: graft* ( gadget -- )
 
 M: gadget graft* drop ;
 
-GENERIC: ungraft* ( gadget -- ) ;
+GENERIC: ungraft* ( gadget -- )
 
 M: gadget ungraft* drop ;
 
@@ -298,7 +298,7 @@ PRIVATE>
     in-layout? get
     [ "Cannot add/remove gadgets in layout*" throw ] when ;
 
-GENERIC: remove-gadget ( gadget parent -- ) ;
+GENERIC: remove-gadget ( gadget parent -- )
 
 M: gadget remove-gadget 2drop ;
 
@@ -377,7 +377,7 @@ PRIVATE>
         [ parent>> child? ]
     } cond ;
 
-GENERIC: focusable-child* ( gadget -- child/t ) ;
+GENERIC: focusable-child* ( gadget -- child/t )
 
 M: gadget focusable-child* drop t ;
 
@@ -385,7 +385,7 @@ M: gadget focusable-child* drop t ;
     dup focusable-child*
     dup t eq? [ drop ] [ nip focusable-child ] if ;
 
-GENERIC: request-focus-on ( child gadget -- ) ;
+GENERIC: request-focus-on ( child gadget -- )
 
 M: gadget request-focus-on parent>> request-focus-on ;
 

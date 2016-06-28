@@ -9,12 +9,12 @@ splitting strings system vm words hints hashtables ;
 IN: tools.memory
 
 PRIVATE<
-PRIMITIVE: (callback-room) ( -- allocator-room ) ;
-PRIMITIVE: (code-blocks) ( -- array ) ;
-PRIMITIVE: (code-room) ( -- allocator-room ) ;
-PRIMITIVE: (data-room) ( -- data-room ) ;
-PRIMITIVE: disable-gc-events ( -- events ) ;
-PRIMITIVE: enable-gc-events ( -- ) ;
+PRIMITIVE: (callback-room) ( -- allocator-room )
+PRIMITIVE: (code-blocks) ( -- array )
+PRIMITIVE: (code-room) ( -- allocator-room )
+PRIMITIVE: (data-room) ( -- data-room )
+PRIMITIVE: disable-gc-events ( -- events )
+PRIMITIVE: enable-gc-events ( -- )
 
 : commas ( n -- str )
     dup 0 < [ neg commas "-" prepend ] [
@@ -251,7 +251,7 @@ M: code-blocks nth-unsafe
     [ cache>> ] [ blocks>> ] bi
     $[ _ nth-unsafe <code-block> ] cache ; inline
 
-INSTANCE: code-blocks immutable-sequence ;
+INSTANCE: code-blocks immutable-sequence
 
 : get-code-blocks ( -- blocks )
     (code-blocks) <code-blocks> ;

@@ -34,7 +34,7 @@ SYMBOL: nfa-table
 : option? ( obj -- ? )
     option-stack get assoc-stack ;
 
-GENERIC: nfa-node ( node -- start-state end-state ) ;
+GENERIC: nfa-node ( node -- start-state end-state )
 
 : add-simple-entry ( obj -- start-state end-state )
     [ next-state next-state 2dup ] dip
@@ -53,7 +53,7 @@ M:: star nfa-node ( node -- start end )
     s1 s3 epsilon-transition
     s2 s3 ;
 
-GENERIC: modify-epsilon ( tag -- newtag ) ;
+GENERIC: modify-epsilon ( tag -- newtag )
 ! Potential off-by-one errors when lookaround nested in lookbehind
 
 M: object modify-epsilon ;
@@ -92,7 +92,7 @@ M: alternation nfa-node ( node -- start end )
     [ nfa-node ] bi@
     alternate-nodes ;
 
-GENERIC: modify-class ( char-class -- char-class' ) ;
+GENERIC: modify-class ( char-class -- char-class' )
 
 M: object modify-class ;
 

@@ -27,7 +27,7 @@ SYMBOL: break-hook
 
 \ break t "break?" set-word-prop
 
-GENERIC: add-breakpoint ( quot -- quot' ) ;
+GENERIC: add-breakpoint ( quot -- quot' )
 
 PRIVATE<
 

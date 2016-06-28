@@ -34,7 +34,7 @@ PRIVATE>
 
 TUPLE: remote-thread node id ;
 
-C: <remote-thread> remote-thread ;
+C: <remote-thread> remote-thread
 
 : send-remote-message ( message node -- )
     binary [ serialize ] with-client ;

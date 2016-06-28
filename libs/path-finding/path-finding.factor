@@ -6,9 +6,9 @@ IN: path-finding
 ! This implements the A* algorithm. See http://en.wikipedia.org/wiki/A*
 
 TUPLE: astar g in-closed-set ;
-GENERIC: cost ( from to astar -- n ) ;
-GENERIC: heuristic ( from to astar -- n ) ;
-GENERIC: neighbours ( node astar -- seq ) ;
+GENERIC: cost ( from to astar -- n )
+GENERIC: heuristic ( from to astar -- n )
+GENERIC: neighbours ( node astar -- seq )
 
 PRIVATE<
 

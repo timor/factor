@@ -82,4 +82,4 @@ FUNCTION: HRESULT
         LPD3DXBUFFER*       ppAdjacency,
         LPGLYPHMETRICSFLOAT pGlyphMetrics ) ;
 
-ALIAS: D3DXCreateText D3DXCreateTextW ;
+ALIAS: D3DXCreateText D3DXCreateTextW

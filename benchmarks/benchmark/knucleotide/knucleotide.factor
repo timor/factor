@@ -6,7 +6,7 @@ math.statistics namespaces math.parser combinators arrays
 sorting formatting grouping fry ;
 IN: benchmark.knucleotide
 
-CONSTANT: knucleotide-in "vocab:benchmark/knucleotide/knucleotide-input.txt" ;
+CONSTANT: knucleotide-in "vocab:benchmark/knucleotide/knucleotide-input.txt"
 
 : discard-lines ( -- )
     readln

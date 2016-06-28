@@ -10,7 +10,7 @@ IN: compiler.cfg.ssa.destruction
 
 PRIVATE<
 
-GENERIC: cleanup-insn ( insn -- ) ;
+GENERIC: cleanup-insn ( insn -- )
 
 : useful-copy? ( insn -- ? )
     [ dst>> ] [ src>> ] bi leaders = not ; inline

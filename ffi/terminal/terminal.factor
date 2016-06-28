@@ -6,7 +6,7 @@ sequences system vocabs ;
 
 IN: terminal
 
-HOOK: (terminal-size) os ( -- columns lines ) ;
+HOOK: (terminal-size) os ( -- columns lines )
 
 "terminal." os name>> append require
 

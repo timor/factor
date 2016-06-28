@@ -10,19 +10,19 @@ PRIVATE<
 
 ! Grapheme breaks
 COMPILE<
-CONSTANT: Any 0 ;
-CONSTANT: L 1 ;
-CONSTANT: V 2 ;
-CONSTANT: T 3 ;
-CONSTANT: LV 4 ;
-CONSTANT: LVT 5 ;
-CONSTANT: Extend 6 ;
-CONSTANT: Control 7 ;
-CONSTANT: CR 8 ;
-CONSTANT: LF 9 ;
-CONSTANT: SpacingMark 10 ;
-CONSTANT: Prepend 11 ;
-CONSTANT: graphemes 12 ;
+CONSTANT: Any 0
+CONSTANT: L 1
+CONSTANT: V 2
+CONSTANT: T 3
+CONSTANT: LV 4
+CONSTANT: LVT 5
+CONSTANT: Extend 6
+CONSTANT: Control 7
+CONSTANT: CR 8
+CONSTANT: LF 9
+CONSTANT: SpacingMark 10
+CONSTANT: Prepend 11
+CONSTANT: graphemes 12
 
 : jamo-class ( ch -- class )
     dup initial? [ drop L ]
@@ -104,20 +104,20 @@ COMPILE>
 
 ! Word breaks
 COMPILE<
-CONSTANT: wOther 0 ;
-CONSTANT: wCR 1 ;
-CONSTANT: wLF 2 ;
-CONSTANT: wNewline 3 ;
-CONSTANT: wExtend 4 ;
-CONSTANT: wFormat 5 ;
-CONSTANT: wKatakana 6 ;
-CONSTANT: wALetter 7 ;
-CONSTANT: wMidLetter 8 ;
-CONSTANT: wMidNum 9 ;
-CONSTANT: wMidNumLet 10 ;
-CONSTANT: wNumeric 11 ;
-CONSTANT: wExtendNumLet 12 ;
-CONSTANT: unicode-words 13 ;
+CONSTANT: wOther 0
+CONSTANT: wCR 1
+CONSTANT: wLF 2
+CONSTANT: wNewline 3
+CONSTANT: wExtend 4
+CONSTANT: wFormat 5
+CONSTANT: wKatakana 6
+CONSTANT: wALetter 7
+CONSTANT: wMidLetter 8
+CONSTANT: wMidNum 9
+CONSTANT: wMidNumLet 10
+CONSTANT: wNumeric 11
+CONSTANT: wExtendNumLet 12
+CONSTANT: unicode-words 13
 
 ! Is there a way to avoid this?
 CONSTANT: word-break-classes H{
@@ -126,7 +126,7 @@ CONSTANT: word-break-classes H{
     { "ALetter" 7 } { "MidLetter" 8 }
     { "MidNum" 9 } { "MidNumLet" 10 } { "Numeric" 11 }
     { "ExtendNumLet" 12 }
-} ;
+}
 
 "word-break-table" create-word-in
 "vocab:unicode/data/WordBreakProperty.txt"

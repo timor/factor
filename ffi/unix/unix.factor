@@ -58,7 +58,7 @@ MACRO:: unix-system-call-allow-eintr ( quot -- quot )
         ] if
     ] ;
 
-HOOK: open-file os ( path flags mode -- fd ) ;
+HOOK: open-file os ( path flags mode -- fd )
 
 : close-file ( fd -- ) [ close ] unix-system-call-allow-eintr drop ;
 

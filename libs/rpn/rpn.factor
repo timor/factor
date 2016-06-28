@@ -7,7 +7,7 @@ IN: rpn
 SINGLETONS: add-insn sub-insn mul-insn div-insn ;
 TUPLE: push-insn value ;
 
-GENERIC: eval-insn ( stack insn -- stack ) ;
+GENERIC: eval-insn ( stack insn -- stack )
 
 : binary-op ( stack quot: ( x y -- z ) -- stack )
     [ uncons uncons swapd ] dip dip cons ; inline

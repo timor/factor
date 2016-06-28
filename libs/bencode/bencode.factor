@@ -3,7 +3,7 @@ io.encodings.ascii io.encodings.string io.streams.string kernel
 math math.parser sequences strings ;
 IN: bencode
 
-GENERIC: >bencode ( obj -- bencode ) ;
+GENERIC: >bencode ( obj -- bencode )
 
 M: integer >bencode
     number>string "i" "e" surround ;

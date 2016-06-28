@@ -45,7 +45,7 @@ MATCH-VARS: ?a ?b ;
 
 TUPLE: foo a b ;
 
-C: <foo> foo ;
+C: <foo> foo
 
 { 1 2 } [
     1 2 <foo> T{ foo f ?a ?b } match [

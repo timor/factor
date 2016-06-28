@@ -4,7 +4,7 @@ USING: accessors alien alien.data alien.destructors assocs
 byte-arrays cuda cuda.ffi destructors fry io.encodings.string
 io.encodings.utf8 kernel locals math namespaces sequences
 strings ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 IN: cuda.memory
 
 : cuda-malloc ( n -- ptr )

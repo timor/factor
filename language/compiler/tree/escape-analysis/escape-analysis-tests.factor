@@ -11,7 +11,7 @@ compiler.tree.checker compiler.tree.def-use compiler.tree.dead-code
 kernel.private vectors ;
 IN: compiler.tree.escape-analysis.tests
 
-GENERIC: count-unboxed-allocations* ( m node -- n ) ;
+GENERIC: count-unboxed-allocations* ( m node -- n )
 
 : (count-unboxed-allocations) ( m node -- n )
     out-d>> first escaping-allocation? [ 1 + ] unless ;
@@ -191,7 +191,7 @@ TUPLE: cons { car read-only } { cdr read-only } ;
 
 TUPLE: rw-box i ;
 
-C: <rw-box> rw-box ;
+C: <rw-box> rw-box
 
 { 0 } [ [ <rw-box> i>> ] count-unboxed-allocations ] unit-test
 
@@ -202,7 +202,7 @@ C: <rw-box> rw-box ;
 
 TUPLE: ro-box { i read-only } ;
 
-C: <ro-box> ro-box ;
+C: <ro-box> ro-box
 
 : tuple-fib ( m -- n )
     dup i>> 1 <= [

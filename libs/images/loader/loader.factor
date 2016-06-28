@@ -22,9 +22,9 @@ PRIVATE>
 
 ! Image Decode
 
-GENERIC#: load-image* 1 ( obj class -- image ) ;
+GENERIC#: load-image* 1 ( obj class -- image )
 
-GENERIC: stream>image* ( stream class -- image ) ;
+GENERIC: stream>image* ( stream class -- image )
 
 : stream>image ( stream class -- image )
     $[ _ &dispose _ stream>image* ] with-destructors ; inline
@@ -50,7 +50,7 @@ M: pathname load-image*
     [ binary <file-reader> ] dip stream>image ;
 
 ! Image Encode
-GENERIC: image>stream ( image extension class -- ) ;
+GENERIC: image>stream ( image extension class -- )
 
 : save-graphic-image ( image path -- )
     dup file-extension dup (image-class) rot

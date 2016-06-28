@@ -7,7 +7,7 @@ IN: graphviz.dot
 
 PRIVATE<
 
-GENERIC: dot. ( obj -- ) ;
+GENERIC: dot. ( obj -- )
 
 ! Graphviz docs claim that there's no semantic difference
 ! between quoted & unquoted IDs, but quoting them is the safest

@@ -12,9 +12,9 @@ M: invalid-baud summary ( invalid-baud -- string )
     baud>> number>string
     "Baud rate " " not supported" surround ;
 
-HOOK: lookup-baud os ( m -- n ) ;
-HOOK: open-serial os ( serial -- serial' ) ;
-HOOK: default-serial-flags os ( m -- n ) ;
+HOOK: lookup-baud os ( m -- n )
+HOOK: open-serial os ( serial -- serial' )
+HOOK: default-serial-flags os ( m -- n )
 M: serial-port dispose* ( serial -- ) stream>> dispose ;
 
 : <serial-port> ( path baud -- obj )

@@ -34,7 +34,7 @@ IN: help.html
 : escape-filename ( string -- filename )
     [ [ escape-char ] each ] "" make ;
 
-GENERIC: topic>filename* ( topic -- name prefix ) ;
+GENERIC: topic>filename* ( topic -- name prefix )
 
 M: word topic>filename*
     dup vocabulary>> [

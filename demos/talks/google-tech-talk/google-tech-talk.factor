@@ -562,7 +562,7 @@ CONSTANT: google-slides
         "Put your prejudices aside and give it a shot!"
     }
     { $slide "Questions?" }
-} ;
+}
 
 : google-talk ( -- )
     google-slides "Google Tech talk" slides-window ;

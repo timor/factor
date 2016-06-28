@@ -101,9 +101,9 @@ write-test-2 "q" set
 
 { 13 } [ 10 let-let-test ] unit-test
 
-GENERIC: lambda-generic ( a b -- c ) ;
+GENERIC: lambda-generic ( a b -- c )
 
-GENERIC#: lambda-generic-1 1 ( a b -- c ) ;
+GENERIC#: lambda-generic-1 1 ( a b -- c )
 
 M:: integer lambda-generic-1 ( a b -- c ) a b * ;
 
@@ -112,7 +112,7 @@ M:: string lambda-generic-1 ( a b -- c )
 
 M:: integer lambda-generic ( a b -- c ) a b lambda-generic-1 ;
 
-GENERIC#: lambda-generic-2 1 ( a b -- c ) ;
+GENERIC#: lambda-generic-2 1 ( a b -- c )
 
 M:: integer lambda-generic-2 ( a b -- c )
     a char: x <string> b lambda-generic ;
@@ -163,7 +163,7 @@ DEFER: xyzzy
 
 { 5 } [ 10 xyzzy ] unit-test
 
-GENERIC: next-method-test ( a -- b ) ;
+GENERIC: next-method-test ( a -- b )
 
 M: integer next-method-test 3 + ;
 
@@ -185,7 +185,7 @@ M:: fixnum next-method-test ( a -- b ) a call-next-method 1 + ;
 
 :: a-word-with-locals ( a b -- ) ;
 
-CONSTANT: new-definition "USING: math ;\nIN: locals.tests\n: a-word-with-locals ( -- x ) 2 3 + ;\n" ;
+CONSTANT: new-definition "USING: math ;\nIN: locals.tests\n: a-word-with-locals ( -- x ) 2 3 + ;\n"
 
 { } [ new-definition eval( -- ) ] unit-test
 
@@ -194,9 +194,9 @@ CONSTANT: new-definition "USING: math ;\nIN: locals.tests\n: a-word-with-locals 
     new-definition =
 ] unit-test
 
-CONSTANT: method-definition "USING: locals.tests sequences ;\nM:: sequence method-with-locals ( a -- y ) a reverse ;\n" ;
+CONSTANT: method-definition "USING: locals.tests sequences ;\nM:: sequence method-with-locals ( a -- y ) a reverse ;\n"
 
-GENERIC: method-with-locals ( x -- y ) ;
+GENERIC: method-with-locals ( x -- y )
 
 M:: sequence method-with-locals ( a -- y ) a reverse ;
 
@@ -379,7 +379,7 @@ ERROR: punned-class x ;
 \ littledan-case-problem-4 def>> must-infer
 ]]
 
-GENERIC: lambda-method-forget-test ( a -- b ) ;
+GENERIC: lambda-method-forget-test ( a -- b )
 
 M:: integer lambda-method-forget-test ( a -- b ) a ;
 
@@ -482,7 +482,7 @@ M:: integer lambda-method-forget-test ( a -- b ) a ;
 { 3 } [ 3 t erg's-set:-bug-2 ] unit-test
 
 ! dharmatech found this problem
-GENERIC: ed's-bug ( a -- b ) ;
+GENERIC: ed's-bug ( a -- b )
 
 M: string ed's-bug reverse ;
 M: integer ed's-bug neg ;

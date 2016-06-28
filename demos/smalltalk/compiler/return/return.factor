@@ -7,7 +7,7 @@ IN: smalltalk.compiler.return
 
 SYMBOL: return-continuation
 
-GENERIC: need-return-continuation? ( ast -- ? ) ;
+GENERIC: need-return-continuation? ( ast -- ? )
 
 M: ast-return need-return-continuation? drop t ;
 

@@ -29,10 +29,10 @@ IN: rosetta-code.arithmetic-evaluation
 ! * Addition/Subtraction (left to right)
 
 TUPLE: operator left right ;
-TUPLE: add < operator ;   C: <add> add ;
-TUPLE: sub < operator ;   C: <sub> sub ;
-TUPLE: mul < operator ;   C: <mul> mul ;
-TUPLE: div < operator ;   C: <div> div ;
+TUPLE: add < operator ;   C: <add> add
+TUPLE: sub < operator ;   C: <sub> sub
+TUPLE: mul < operator ;   C: <mul> mul
+TUPLE: div < operator ;   C: <div> div
 
 EBNF: expr-ast [=[
 spaces   = [\n\t ]*
@@ -53,7 +53,7 @@ exp      =   exp:a spaces "+" fac:b         => [[ a b <add> ]]
 main     = exp:e spaces !(.)                => [[ e ]]
 ]=] ;
 
-GENERIC: eval-ast ( ast -- result ) ;
+GENERIC: eval-ast ( ast -- result )
 
 M: number eval-ast ;
 

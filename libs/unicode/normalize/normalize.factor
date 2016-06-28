@@ -9,15 +9,15 @@ IN: unicode.normalize
 PRIVATE<
 ! Conjoining Jamo behavior
 
-CONSTANT: hangul-base 0xac00 ;
-CONSTANT: hangul-end 0xD7AF ;
-CONSTANT: initial-base 0x1100 ;
-CONSTANT: medial-base 0x1161 ;
-CONSTANT: final-base 0x11a7 ;
+CONSTANT: hangul-base 0xac00
+CONSTANT: hangul-end 0xD7AF
+CONSTANT: initial-base 0x1100
+CONSTANT: medial-base 0x1161
+CONSTANT: final-base 0x11a7
 
-CONSTANT: initial-count 19 ;
-CONSTANT: medial-count 21 ;
-CONSTANT: final-count 28 ;
+CONSTANT: initial-count 19
+CONSTANT: medial-count 21
+CONSTANT: final-count 28
 
 : ?between? ( n/f from to -- ? )
     pick [ between? ] [ 3drop f ] if ; inline

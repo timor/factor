@@ -8,13 +8,13 @@ namespaces parser sbufs sequences sequences.private splitting
 splitting.private strings vectors words ;
 IN: hints
 
-GENERIC: specializer-predicate ( spec -- quot ) ;
+GENERIC: specializer-predicate ( spec -- quot )
 
 M: class specializer-predicate predicate-def ;
 
 M: object specializer-predicate $[ _ eq? ] ;
 
-GENERIC: specializer-declaration ( spec -- class ) ;
+GENERIC: specializer-declaration ( spec -- class )
 
 M: class specializer-declaration ;
 

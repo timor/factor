@@ -51,7 +51,7 @@ PRIVATE<
     [ yaml_emitter_emit ] [ drop yaml-emitter-assert-ok ] 2bi ;
 
 TUPLE: yaml-alias anchor ;
-C: <yaml-alias> yaml-alias ;
+C: <yaml-alias> yaml-alias
 
 SYMBOL: anchors
 
@@ -190,7 +190,7 @@ DEFER: parse-mapping
 : with2 ( param obj quot -- obj curry )
     swapd $[ [ _ ] 2dip @ ] ; inline
 
-GENERIC: (deref-aliases) ( anchors obj -- obj' ) ;
+GENERIC: (deref-aliases) ( anchors obj -- obj' )
 
 M: object (deref-aliases) nip ;
 
@@ -214,7 +214,7 @@ M: assoc (deref-aliases)
 
 : merge-values ( seq -- assoc )
     reverse unclip [ assoc-union ] reduce ;
-GENERIC: merge-value ( assoc value -- assoc' ) ;
+GENERIC: merge-value ( assoc value -- assoc' )
 M: sequence merge-value merge-values merge-value ;
 M: assoc merge-value over assoc-diff assoc-union! ;
 : pop-at* ( key assoc -- value/f ? )
@@ -232,7 +232,7 @@ PRIVATE>
 
 PRIVATE<
 
-GENERIC: apply-merge-keys ( already-applied-set obj -- obj' ) ;
+GENERIC: apply-merge-keys ( already-applied-set obj -- obj' )
 : ?apply-merge-keys ( set obj -- obj' )
     2dup swap in? [ nip ] [ 2dup swap adjoin apply-merge-keys ] if ;
 M: sequence apply-merge-keys
@@ -300,7 +300,7 @@ TUPLE: yaml-anchors objects new-objects next-anchor ;
 : <yaml-anchors> ( -- yaml-anchors )
     IH{ } clone IH{ } clone 0 yaml-anchors boa ;
 
-GENERIC: (replace-aliases) ( yaml-anchors obj -- obj' ) ;
+GENERIC: (replace-aliases) ( yaml-anchors obj -- obj' )
 
 : incr-anchor ( yaml-anchors -- current-anchor )
     [ next-anchor>> ] [
@@ -339,9 +339,9 @@ M: assoc (replace-aliases)
     swap $[ [ _ swap ?replace-aliases ] bi@ ] assoc-map ;
 
 TUPLE: yaml-anchor anchor obj ;
-C: <yaml-anchor> yaml-anchor ;
+C: <yaml-anchor> yaml-anchor
 
-GENERIC: (replace-anchors) ( yaml-anchors obj -- obj' ) ;
+GENERIC: (replace-anchors) ( yaml-anchors obj -- obj' )
 
 : (get-anchor) ( yaml-anchors obj -- anchor/f )
     swap objects>> at ;
@@ -381,7 +381,7 @@ SYMBOL: yaml-write-buffer
         push-all drop 1
     ] yaml_write_handler_t ;
 
-GENERIC: emit-value ( emitter event anchor obj -- ) ;
+GENERIC: emit-value ( emitter event anchor obj -- )
 
 : emit-object ( emitter event obj -- ) [ f ] dip emit-value ;
 

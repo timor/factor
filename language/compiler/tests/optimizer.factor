@@ -9,7 +9,7 @@ compiler.cfg.debugger classes.struct alien.syntax alien.data
 alien.c-types splitting ;
 IN: compiler.tests.optimizer
 
-GENERIC: xyz ( obj -- obj ) ;
+GENERIC: xyz ( obj -- obj )
 M: array xyz xyz ;
 
 [ t ] [ M\ array xyz word-optimized? ] unit-test
@@ -95,7 +95,7 @@ TUPLE: pred-test ;
 [ 0 ] [ 10 iota double-label-2 ] unit-test
 
 ! regression
-GENERIC: void-generic ( obj -- * ) ;
+GENERIC: void-generic ( obj -- * )
 : breakage ( -- * ) "hi" void-generic ;
 [ t ] [ \ breakage word-optimized? ] unit-test
 [ breakage ] must-fail
@@ -189,7 +189,7 @@ GENERIC: void-generic ( obj -- * ) ;
 [ t ] [ 5 [ dup number= ] compile-call ] unit-test
 [ t ] [ \ vector [ \ vector = ] compile-call ] unit-test
 
-GENERIC: detect-number ( obj -- obj ) ;
+GENERIC: detect-number ( obj -- obj )
 M: number detect-number ;
 
 [ 10 f [ <array> 0 + detect-number ] compile-call ] must-fail
@@ -434,7 +434,7 @@ TUPLE: grid-mesh-tuple { length read-only } { step read-only } ;
 
 [ { 1 } "bar" ] [ { 1 } [ [ [ [ "foo" throw ] [ "bar" throw ] recover ] attempt-all f ] [ ] recover ] compile-call ] unit-test
 
-GENERIC: bad-push-test-case ( a -- b ) ;
+GENERIC: bad-push-test-case ( a -- b )
 M: object bad-push-test-case "foo" throw ; inline
 [ { 1 } "bar" ] [ { 1 } [ [ [ [ bad-push-test-case ] [ "bar" throw ] recover ] attempt-all f ] [ ] recover ] compile-call ] unit-test
 

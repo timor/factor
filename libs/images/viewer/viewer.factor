@@ -43,7 +43,7 @@ PRIVATE<
 : update-texture ( image-gadget -- )
     [ image>> ] [ texture>> ] bi
     (update-texture) ;
-GENERIC: texture-size ( texture -- dim ) ;
+GENERIC: texture-size ( texture -- dim )
 M: single-texture texture-size dim>> ;
 
 :: grid-width ( grid element-quot -- width )
@@ -84,7 +84,7 @@ M: image-control model-changed
     swap value>> >>image t >>image-updated? relayout ;
 M: image-control draw-gadget* [ ?update-texture ] [ call-next-method ] bi ;
 PRIVATE>
-GENERIC: set-image ( gadget object -- gadget ) ;
+GENERIC: set-image ( gadget object -- gadget )
 M: image set-image >>image ;
 M: string set-image load-image >>image ;
 M: pathname set-image string>> load-image >>image ;

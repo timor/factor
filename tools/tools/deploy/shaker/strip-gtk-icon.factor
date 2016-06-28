@@ -10,4 +10,4 @@ CONSTANT: get-icon-data
         dup vocab-dir "icon.png" append-path vocab-append-path
         [ exists? ] keep "resource:misc/icons/Factor_128x128.png" ?
         binary file-contents
-    ] ;
+    ]

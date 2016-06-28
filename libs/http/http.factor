@@ -8,7 +8,7 @@ io.encodings.iana io.encodings.binary io.encodings.utf8 io.crlf
 ascii io.encodings.8-bit.latin1 http.parsers base64 mime.types ;
 IN: http
 
-CONSTANT: max-redirects 10 ;
+CONSTANT: max-redirects 10
 
 : (read-header) ( -- alist )
     [ read-?crlf dup f like ] [ parse-header-line ] produce nip ;

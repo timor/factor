@@ -117,7 +117,7 @@ M: ##xor-vector rewrite
         } 1&& ]
     } 1|| ;
 
-GENERIC: vector-not-src ( insn -- vreg ) ;
+GENERIC: vector-not-src ( insn -- vreg )
 
 M: ##not-vector vector-not-src
     src>> ;

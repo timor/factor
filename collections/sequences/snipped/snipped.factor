@@ -22,4 +22,4 @@ M: snipped virtual@
 
 M: snipped virtual-exemplar seq>> ;
 
-INSTANCE: snipped virtual-sequence ;
+INSTANCE: snipped virtual-sequence

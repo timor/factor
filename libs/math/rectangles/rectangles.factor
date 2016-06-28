@@ -39,12 +39,12 @@ SYNTAX: \ rect{ \ } [ ensure-rect-shape first2 <rect> ] parse-literal ;
 : rect-intersect ( rect1 rect2 -- newrect )
     (rect-intersect) <extent-rect> ;
 
-GENERIC: contains-rect? ( rect1 rect2 -- ? ) ;
+GENERIC: contains-rect? ( rect1 rect2 -- ? )
 
 M: rect contains-rect?
     (rect-intersect) [v-] { 0 0 } = ;
 
-GENERIC: contains-point? ( point rect -- ? ) ;
+GENERIC: contains-point? ( point rect -- ? )
 
 M: rect contains-point?
     [ point>rect ] dip contains-rect? ;

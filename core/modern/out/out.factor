@@ -35,11 +35,12 @@ CONSTANT: janky-arities H{
     `IMPORT 1 -- `GIR 1 -- `TEST 1 -- `SELECTOR 1 -- `SIMD-128 1 -- `QUALIFIED 1 --
 
     `ALIAS 2 -- `ARITY 2 -- `C 2 -- `CONSTANT 2 -- `INSTANCE 2 -- `GENERIC 2 -- `PRIMITIVE 2 --
+    `MATH 2 -- `QUALIFIED-WITH 2 --
 
     `GENERIC# 3 -- `PIXEL-FORMAT-ATTRIBUTE-TABLE 3 -- `HOOK 3
-} ;
+}
 
-GENERIC: write-literal ( obj -- ) ;
+GENERIC: write-literal ( obj -- )
 ! M: object write-literal lexed-underlying write ;
 M: string write-literal write ;
 M: slice write-literal [ write-whitespace ] [ write ] bi ;
@@ -224,14 +225,14 @@ M: compound-sequence-literal write-literal
     ] if ; inline recursive
 
 
-GENERIC: fixup-arity ( obj -- seq ) ;
+GENERIC: fixup-arity ( obj -- seq )
 
 ERROR: closing-tag-required2 obj ;
 M: uppercase-colon-literal fixup-arity
     dup tag>> janky-arities ?at [
         $[ _ swap [ any-comment? not ] cut-nth-match swap ] change-payload
         swap 2array
-        ! dup first f >>closing-tag drop
+        dup first f >>closing-tag drop
         ! dup first " ;" >>closing-tag drop
     ] [
         drop

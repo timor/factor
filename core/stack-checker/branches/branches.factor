@@ -107,7 +107,7 @@ SYMBOLS: combinator quotations ;
         terminated?
     } [ dup get ] H{ } map>assoc ;
 
-GENERIC: infer-branch ( literal -- namespace ) ;
+GENERIC: infer-branch ( literal -- namespace )
 
 M: literal-tuple infer-branch
     [
@@ -137,7 +137,7 @@ M: callable infer-branch
     infer-branches
     [ first2 #if, ] dip compute-phi-function ;
 
-GENERIC: curried/composed? ( known -- ? ) ;
+GENERIC: curried/composed? ( known -- ? )
 M: object curried/composed? drop f ;
 M: curried curried/composed? drop t ;
 M: composed curried/composed? drop t ;

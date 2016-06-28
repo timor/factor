@@ -24,10 +24,10 @@ IN: project-euler.206
 PRIVATE<
 
 ! 1020304050607080900 sqrt, rounded up to the nearest 30 ending
-CONSTANT: lo 1010101030 ;
+CONSTANT: lo 1010101030
 
 ! 1929394959697989900 sqrt, rounded down to the nearest 70 ending
-CONSTANT: hi 1389026570 ;
+CONSTANT: hi 1389026570
 
 : form-fitting? ( n -- ? )
     number>digits 2 group [ first ] map

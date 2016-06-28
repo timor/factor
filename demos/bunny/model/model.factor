@@ -3,7 +3,7 @@ http.client io io.encodings.ascii io.files io.files.temp kernel
 locals math math.matrices math.parser math.vectors opengl
 opengl.capabilities opengl.gl opengl.demo-support sequences
 splitting vectors words specialized-arrays alien.data ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAY: c:float
 SPECIALIZED-ARRAY: c:uint
 IN: bunny.model
@@ -42,7 +42,7 @@ IN: bunny.model
 
 : model-path ( -- path ) "bun_zipper.ply" cache-file ;
 
-CONSTANT: model-url "http://duriansoftware.com/joe/media/bun_zipper.ply" ;
+CONSTANT: model-url "http://duriansoftware.com/joe/media/bun_zipper.ply"
 
 : download-bunny ( -- path )
     model-url model-path [ ?download-to ] keep ;
@@ -78,8 +78,8 @@ TUPLE: bunny-buffers array element-array nv ni ;
         [ third length 3 * ]
     } cleave bunny-buffers boa ;
 
-GENERIC: bunny-geom ( geom -- ) ;
-GENERIC: draw-bunny ( geom draw -- ) ;
+GENERIC: bunny-geom ( geom -- )
+GENERIC: draw-bunny ( geom draw -- )
 
 M: bunny-dlist bunny-geom
     list>> glCallList ;

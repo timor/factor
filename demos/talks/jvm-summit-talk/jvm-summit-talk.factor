@@ -350,7 +350,7 @@ CONSTANT: jvm-summit-slides
         "Display control flow graph"
         "Display dominator tree"
     }
-} ;
+}
 
 : jvm-summit-talk ( -- )
     jvm-summit-slides "JVM Summit talk" slides-window ;

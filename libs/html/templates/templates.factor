@@ -8,7 +8,7 @@ IN: html.templates
 
 MIXIN: template
 
-GENERIC: call-template* ( template -- ) ;
+GENERIC: call-template* ( template -- )
 
 M: string call-template* write ;
 

@@ -28,7 +28,7 @@ SYMBOL: phis
 : record-copies ( seq -- )
     copies get $[ dup _ (record-copy) ] each ; inline
 
-GENERIC: visit-insn ( insn -- ) ;
+GENERIC: visit-insn ( insn -- )
 
 M: ##copy visit-insn
     [ dst>> ] [ src>> resolve ] bi
@@ -70,7 +70,7 @@ M: insn visit-insn drop ;
         changed? get
     ] loop ;
 
-GENERIC: update-insn ( insn -- keep? ) ;
+GENERIC: update-insn ( insn -- keep? )
 
 M: ##copy update-insn drop f ;
 

@@ -33,21 +33,21 @@ CONSTANT: T1 {
   {  1  2  2 }
   { -2 -1 -2 }
   {  2  2  3 }
-} ;
+}
 
 CONSTANT: T2 {
   {  1  2  2 }
   {  2  1  2 }
   {  2  2  3 }
-} ;
+}
 
 CONSTANT: T3 {
   { -1 -2 -2 }
   {  2  1  2 }
   {  2  2  3 }
-} ;
+}
 
-CONSTANT: base { 3 4 5 } ;
+CONSTANT: base { 3 4 5 }
 
 TUPLE: triplets-count primitives total ;
 

@@ -32,30 +32,30 @@ CONSTANT: game-devices-matching-seq
         H{ { "DeviceUsage" 6 } { "DeviceUsagePage" 1 } } ! keyboards
         H{ { "DeviceUsage" 7 } { "DeviceUsagePage" 1 } } ! keypads
         H{ { "DeviceUsage" 8 } { "DeviceUsagePage" 1 } } ! multiaxis controllers
-    } ;
+    }
 
 CONSTANT: buttons-matching-hash
-    H{ { "UsagePage" 9 } { "Type" 2 } } ;
+    H{ { "UsagePage" 9 } { "Type" 2 } }
 CONSTANT: keys-matching-hash
-    H{ { "UsagePage" 7 } { "Type" 2 } } ;
+    H{ { "UsagePage" 7 } { "Type" 2 } }
 CONSTANT: x-axis-matching-hash
-    H{ { "UsagePage" 1 } { "Usage" 0x30 } { "Type" 1 } } ;
+    H{ { "UsagePage" 1 } { "Usage" 0x30 } { "Type" 1 } }
 CONSTANT: y-axis-matching-hash
-    H{ { "UsagePage" 1 } { "Usage" 0x31 } { "Type" 1 } } ;
+    H{ { "UsagePage" 1 } { "Usage" 0x31 } { "Type" 1 } }
 CONSTANT: z-axis-matching-hash
-    H{ { "UsagePage" 1 } { "Usage" 0x32 } { "Type" 1 } } ;
+    H{ { "UsagePage" 1 } { "Usage" 0x32 } { "Type" 1 } }
 CONSTANT: rx-axis-matching-hash
-    H{ { "UsagePage" 1 } { "Usage" 0x33 } { "Type" 1 } } ;
+    H{ { "UsagePage" 1 } { "Usage" 0x33 } { "Type" 1 } }
 CONSTANT: ry-axis-matching-hash
-    H{ { "UsagePage" 1 } { "Usage" 0x34 } { "Type" 1 } } ;
+    H{ { "UsagePage" 1 } { "Usage" 0x34 } { "Type" 1 } }
 CONSTANT: rz-axis-matching-hash
-    H{ { "UsagePage" 1 } { "Usage" 0x35 } { "Type" 1 } } ;
+    H{ { "UsagePage" 1 } { "Usage" 0x35 } { "Type" 1 } }
 CONSTANT: slider-matching-hash
-    H{ { "UsagePage" 1 } { "Usage" 0x36 } { "Type" 1 } } ;
+    H{ { "UsagePage" 1 } { "Usage" 0x36 } { "Type" 1 } }
 CONSTANT: wheel-matching-hash
-    H{ { "UsagePage" 1 } { "Usage" 0x38 } { "Type" 1 } } ;
+    H{ { "UsagePage" 1 } { "Usage" 0x38 } { "Type" 1 } }
 CONSTANT: hat-switch-matching-hash
-    H{ { "UsagePage" 1 } { "Usage" 0x39 } { "Type" 1 } } ;
+    H{ { "UsagePage" 1 } { "Usage" 0x39 } { "Type" 1 } }
 
 : device-elements-matching ( device matching-hash -- vector )
     [
@@ -141,7 +141,7 @@ CONSTANT: pov-values
         pov-up pov-up-right pov-right pov-down-right
         pov-down pov-down-left pov-left pov-up-left
         pov-neutral
-    } ;
+    }
 
 : button-value ( value -- f/(0,1] )
     IOHIDValueGetIntegerValue dup zero? [ drop f ] when ;

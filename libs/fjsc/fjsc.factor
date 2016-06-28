@@ -169,8 +169,8 @@ DEFER: expression-parser
 : statement-parser ( -- parser )
     expression-parser ;
 
-GENERIC: (compile) ( ast -- ) ;
-GENERIC: (literal) ( ast -- ) ;
+GENERIC: (compile) ( ast -- )
+GENERIC: (literal) ( ast -- )
 
 M: ast-number (literal)
     value>> number>string , ;
@@ -302,7 +302,7 @@ M: ast-using (compile)
     ] interleave
     "]," , ;
 
-GENERIC: (parse-factor-quotation) ( object -- ast ) ;
+GENERIC: (parse-factor-quotation) ( object -- ast )
 
 M: number (parse-factor-quotation) ( object -- ast )
     ast-number boa ;
@@ -328,7 +328,7 @@ M: hashtable (parse-factor-quotation) ( object -- ast )
 M: wrapper (parse-factor-quotation) ( object -- ast )
     wrapped>> [ name>> ] [ vocabulary>> ] bi ast-word boa ;
 
-GENERIC: fjsc-parse ( object -- ast ) ;
+GENERIC: fjsc-parse ( object -- ast )
 
 M: string fjsc-parse ( object -- ast )
     expression-parser parse ;

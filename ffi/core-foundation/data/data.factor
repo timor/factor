@@ -8,9 +8,9 @@ TYPEDEF: void* CFDataRef ;
 TYPEDEF: void* CFSetRef ;
 
 TYPEDEF: int CFPropertyListMutabilityOptions ;
-CONSTANT: kCFPropertyListImmutable 0 ;
-CONSTANT: kCFPropertyListMutableContainers 1 ;
-CONSTANT: kCFPropertyListMutableContainersAndLeaves 2 ;
+CONSTANT: kCFPropertyListImmutable 0
+CONSTANT: kCFPropertyListMutableContainers 1
+CONSTANT: kCFPropertyListMutableContainersAndLeaves 2
 
 FUNCTION: CFDataRef CFDataCreate ( CFAllocatorRef allocator, UInt8* bytes, CFIndex length ) ;
 

@@ -10,14 +10,14 @@ IN: ui.gestures
 : get-gesture-handler ( gesture gadget -- quot )
     class-of superclasses-of [ "gestures" word-prop ] map assoc-stack ;
 
-GENERIC: handle-gesture ( gesture gadget -- ? ) ;
+GENERIC: handle-gesture ( gesture gadget -- ? )
 
 M: object handle-gesture
     [ nip ]
     [ get-gesture-handler ] 2bi
     dup [ call( gadget -- ) f ] [ 2drop t ] if ;
 
-GENERIC: handles-gesture? ( gesture gadget -- ? ) ;
+GENERIC: handles-gesture? ( gesture gadget -- ? )
 
 M: object handles-gesture? ( gesture gadget -- ? )
     get-gesture-handler >boolean ;
@@ -29,7 +29,7 @@ M: object handles-gesture? ( gesture gadget -- ? )
 
 : gesture-queue ( -- deque ) \ gesture-queue get ;
 
-GENERIC: send-queued-gesture ( request -- ) ;
+GENERIC: send-queued-gesture ( request -- )
 
 TUPLE: send-gesture-tuple gesture gadget ;
 
@@ -77,9 +77,9 @@ M: user-input-tuple send-queued-gesture
     $[ _ \ user-input-tuple queue-gesture ] unless-empty ;
 
 ! Gesture objects
-TUPLE: drag # ;             C: <drag> drag ;
-TUPLE: button-up mods # ;   C: <button-up> button-up ;
-TUPLE: button-down mods # ; C: <button-down> button-down ;
+TUPLE: drag # ;             C: <drag> drag
+TUPLE: button-up mods # ;   C: <button-up> button-up
+TUPLE: button-down mods # ; C: <button-down> button-down
 
 SINGLETONS:
     motion
@@ -119,7 +119,7 @@ CONSTANT: action-gestures
         { "s" save-action }
         { "S" save-as-action }
         { "w" close-action }
-    } ;
+    }
 
 ! Modifiers
 SYMBOLS: C+ A+ M+ S+ ;
@@ -312,9 +312,9 @@ SYMBOL: drag-timer
 : send-action ( world gesture -- )
     swap world-focus propagate-gesture ;
 
-GENERIC: gesture>string ( gesture -- string/f ) ;
+GENERIC: gesture>string ( gesture -- string/f )
 
-HOOK: modifiers>string os ( modifiers -- string ) ;
+HOOK: modifiers>string os ( modifiers -- string )
 
 M: macosx modifiers>string
     [
@@ -329,7 +329,7 @@ M: macosx modifiers>string
 M: object modifiers>string
     [ name>> ] map "" concat-as ;
 
-HOOK: keysym>string os ( keysym -- string ) ;
+HOOK: keysym>string os ( keysym -- string )
 
 M: macosx keysym>string >upper ;
 
@@ -370,7 +370,7 @@ M: zoom-in-action gesture>string drop "Zoom in" ;
 
 M: zoom-out-action gesture>string drop "Zoom out (pinch)" ;
 
-HOOK: action-modifier os ( -- mod ) ;
+HOOK: action-modifier os ( -- mod )
 
 M: object action-modifier C+ ;
 M: macosx action-modifier A+ ;

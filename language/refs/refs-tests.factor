@@ -88,7 +88,7 @@ SYMBOLS: lion giraffe elephant rabbit ;
 
 ! Tuple refs
 TUPLE: foo bar ;
-C: <foo> foo ;
+C: <foo> foo
 
 : test-tuple ( -- tuple )
     rabbit <foo> ;

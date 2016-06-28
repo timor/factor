@@ -5,7 +5,7 @@ alien.syntax environment io.encodings.utf8 kernel libc system unix.ffi
 unix.utilities vocabs ;
 IN: environment.unix
 
-HOOK: environ os ( -- void* ) ;
+HOOK: environ os ( -- void* )
 
 M: unix environ ( -- void* ) &: environ ;
 

@@ -175,7 +175,7 @@ CONSTANT: minneapolis-slides
         "Mailing list: factor-talk@lists.sf.net"
     }
     { $slide "Questions?" }
-} ;
+}
 
 : minneapolis-talk ( -- )
     minneapolis-slides "Minneapolis talk" slides-window ;

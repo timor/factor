@@ -5,7 +5,7 @@ IN: images.viewer.prettyprint
 
 TUPLE: image-section < section image ;
 
-CONSTANT: approx-pixels-per-cell 8 ;
+CONSTANT: approx-pixels-per-cell 8
 
 : <image-section> ( image -- section )
     dup dim>> first approx-pixels-per-cell /i image-section new-section

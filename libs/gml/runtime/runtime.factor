@@ -23,7 +23,7 @@ TUPLE: gml { operand-stack vector } { dictionary-stack vector } ;
 
 : pop-operand ( gml -- value ) operand-stack>> pop ; inline
 
-GENERIC: (exec) ( registers gml obj -- registers gml ) ;
+GENERIC: (exec) ( registers gml obj -- registers gml )
 
 ! A bit of efficiency
 FROM: kernel.private => declare ;
@@ -61,7 +61,7 @@ ERROR: unbound-name { name name } ;
     dupd dictionary-stack>> assoc-stack
     [ ] [ unbound-name ] ?if ; inline
 
-GENERIC: exec-proc ( registers gml proc -- registers gml ) ;
+GENERIC: exec-proc ( registers gml proc -- registers gml )
 
 M:: proc exec-proc ( registers gml proc -- registers gml )
     proc registers>>
@@ -71,7 +71,7 @@ M:: proc exec-proc ( registers gml proc -- registers gml )
 
 FROM: combinators.private => execute-effect-unsafe ;
 
-CONSTANT: primitive-effect ( registers gml -- registers gml ) ;
+CONSTANT: primitive-effect ( registers gml -- registers gml )
 
 M: word exec-proc primitive-effect execute-effect-unsafe ;
 
@@ -119,7 +119,7 @@ EXEC: use-registers
 ! Pathnames
 TUPLE: pathname names ;
 
-C: <pathname> pathname ;
+C: <pathname> pathname
 
 : at-pathname ( pathname assoc -- value )
     swap names>> [ swap ?at [ unbound-name ] unless ] each ;
@@ -130,7 +130,7 @@ EXEC:: pathname ( registers gml obj -- registers gml )
 
 ! List building and stuff
 TUPLE: marker < identity-tuple ;
-CONSTANT: marker T{ marker } ;
+CONSTANT: marker T{ marker }
 
 ERROR: no-marker-found ;
 ERROR: gml-stack-underflow ;

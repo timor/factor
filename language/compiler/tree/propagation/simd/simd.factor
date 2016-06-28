@@ -60,7 +60,7 @@ CONSTANT: vector>vector-intrinsics
         (simd-gather-2)
         (simd-gather-4)
         alien-vector
-    } ;
+    }
 
 CONSTANT: vector-other-intrinsics
     {
@@ -73,7 +73,7 @@ CONSTANT: vector-other-intrinsics
         (simd-vgetmask)
         (simd-select)
         set-alien-vector
-    } ;
+    }
 
 : vector-intrinsics ( -- x )
     vector>vector-intrinsics vector-other-intrinsics append ;

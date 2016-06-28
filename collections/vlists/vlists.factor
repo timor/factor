@@ -48,7 +48,7 @@ M: vlist equal?
 M: vlist like
     drop dup vlist? [ >vlist ] unless ;
 
-INSTANCE: vlist immutable-sequence ;
+INSTANCE: vlist immutable-sequence
 
 SYNTAX: \ VL{ \ } [ >vlist ] parse-literal ;
 
@@ -86,7 +86,7 @@ M: valist >alist
 M: valist assoc-like
     drop dup valist? [ >valist ] unless ;
 
-INSTANCE: valist assoc ;
+INSTANCE: valist assoc
 
 SYNTAX: \ VA{ \ } [ >valist ] parse-literal ;
 

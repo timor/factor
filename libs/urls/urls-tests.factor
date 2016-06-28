@@ -89,7 +89,7 @@ CONSTANT: urls
             }
             "http://foo.com/?a"
         }
-    } ;
+    }
 
 urls [
     [ 1array ] [ [ >url ] curry ] bi* unit-test

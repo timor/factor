@@ -9,7 +9,7 @@ PREDICATE: lambda-word < word "lambda" word-prop >boolean ;
 
 ! Lambdas/locals need to expose their uninterned subwords in order
 ! to make a boot image.
-GENERIC: lambda-subwords ( obj -- ) ;
+GENERIC: lambda-subwords ( obj -- )
 
 M: object lambda-subwords drop ;
 

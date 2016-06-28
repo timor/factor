@@ -7,15 +7,15 @@ locals math math.bitwise math.ranges sequences ;
 
 IN: checksums.xxhash
 
-CONSTANT: prime1 2654435761 ;
-CONSTANT: prime2 2246822519 ;
-CONSTANT: prime3 3266489917 ;
-CONSTANT: prime4 668265263 ;
-CONSTANT: prime5 374761393 ;
+CONSTANT: prime1 2654435761
+CONSTANT: prime2 2246822519
+CONSTANT: prime3 3266489917
+CONSTANT: prime4 668265263
+CONSTANT: prime5 374761393
 
 TUPLE: xxhash seed ;
 
-C: <xxhash> xxhash ;
+C: <xxhash> xxhash
 
 PRIVATE<
 
@@ -71,4 +71,4 @@ M:: xxhash checksum-bytes ( bytes checksum -- value )
     [ -13 shift ] [ bitxor ] bi prime3 w*
     [ -16 shift ] [ bitxor ] bi ;
 
-INSTANCE: xxhash checksum ;
+INSTANCE: xxhash checksum

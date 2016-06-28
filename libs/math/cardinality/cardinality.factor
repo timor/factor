@@ -4,7 +4,7 @@ USING: arrays kernel layouts locals math math.functions
 math.order math.statistics sequences ;
 IN: math.cardinality
 
-GENERIC: trailing-zeros ( m -- n ) ;
+GENERIC: trailing-zeros ( m -- n )
 
 M: fixnum trailing-zeros
     [ fixnum-bits ] [

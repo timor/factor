@@ -47,15 +47,15 @@ ERROR: no-such-responder responder ;
 : resolve-template-path ( pair -- path )
     first2 [ resolve-word-path ] dip append-path ;
 
-GENERIC: modify-query ( query responder -- query' ) ;
+GENERIC: modify-query ( query responder -- query' )
 
 M: object modify-query drop ;
 
-GENERIC: modify-redirect-query ( query responder -- query' ) ;
+GENERIC: modify-redirect-query ( query responder -- query' )
 
 M: object modify-redirect-query drop ;
 
-GENERIC: adjust-url ( url -- url' ) ;
+GENERIC: adjust-url ( url -- url' )
 
 M: url adjust-url
     clone
@@ -65,7 +65,7 @@ M: url adjust-url
 
 M: string adjust-url ;
 
-GENERIC: adjust-redirect-url ( url -- url' ) ;
+GENERIC: adjust-redirect-url ( url -- url' )
 
 M: url adjust-redirect-url
     adjust-url
@@ -73,11 +73,11 @@ M: url adjust-redirect-url
 
 M: string adjust-redirect-url ;
 
-GENERIC: link-attr ( tag responder -- ) ;
+GENERIC: link-attr ( tag responder -- )
 
 M: object link-attr 2drop ;
 
-GENERIC: modify-form ( responder -- xml/f ) ;
+GENERIC: modify-form ( responder -- xml/f )
 
 M: object modify-form drop f ;
 
@@ -89,7 +89,7 @@ M: object modify-form drop f ;
         XML-CHUNK[[ <input type="hidden" value=<-> name=<->/> ]]
     ] [ drop ] if ;
 
-CONSTANT: nested-forms-key "__n" ;
+CONSTANT: nested-forms-key "__n"
 
 : referrer ( -- referrer/f )
     ! Typo is intentional, it's in the HTTP spec!

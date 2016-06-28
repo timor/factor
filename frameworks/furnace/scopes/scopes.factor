@@ -30,7 +30,7 @@ scope f
 ! Destructor
 TUPLE: scope-saver scope manager ;
 
-C: <scope-saver> scope-saver ;
+C: <scope-saver> scope-saver
 
 M: scope-saver dispose
     [ manager>> ] [ scope>> ] bi

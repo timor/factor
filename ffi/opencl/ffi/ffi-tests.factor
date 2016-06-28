@@ -17,7 +17,7 @@ __kernel void square(
     if (i < count)
         output[i] = input[i] * input[i];
 }
-]] ;
+]]
 
 ERROR: cl-error err ;
 : cl-success ( err -- )

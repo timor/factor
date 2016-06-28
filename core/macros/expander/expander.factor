@@ -6,7 +6,7 @@ namespaces quotations sequences sequences.private vectors words
 ;
 IN: macros.expander
 
-GENERIC: expand-macros ( quot -- quot' ) ;
+GENERIC: expand-macros ( quot -- quot' )
 
 SYMBOL: stack
 
@@ -16,13 +16,13 @@ SYMBOL: stack
 : end ( -- )
     stack get [ [ literalize , ] each ] [ delete-all ] bi ;
 
-GENERIC: condomize? ( obj -- ? ) ;
+GENERIC: condomize? ( obj -- ? )
 
 M: array condomize? [ condomize? ] any? ;
 M: callable condomize? [ condomize? ] any? ;
 M: object condomize? drop f ;
 
-GENERIC: condomize ( obj -- obj' ) ;
+GENERIC: condomize ( obj -- obj' )
 
 M: array condomize [ condomize ] map ;
 M: callable condomize [ condomize ] map ;
@@ -31,7 +31,7 @@ M: object condomize ;
 : literal ( obj -- )
     dup condomize? [ condomize ] when stack get push ;
 
-GENERIC: expand-macros* ( obj -- ) ;
+GENERIC: expand-macros* ( obj -- )
 
 M: wrapper expand-macros* wrapped>> literal ;
 

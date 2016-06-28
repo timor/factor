@@ -30,8 +30,8 @@ SYMBOL: fcgi-params
 SYMBOL: fcgi-request
 SYMBOL: stdin-data
 
-CONSTANT: fcgi-version 1 ;
-CONSTANT: socket-path "/chroot/web/var/run/factor.sock" ;
+CONSTANT: fcgi-version 1
+CONSTANT: socket-path "/chroot/web/var/run/factor.sock"
 
 TUPLE: fcgi-header version type request-id content-length
     padding-length reserved ;
@@ -208,7 +208,7 @@ ENUM: fcgi-protocol-status
     "</pre>" append ;
 
 TUPLE: test-responder ;
-C: <test-responder> test-responder ;
+C: <test-responder> test-responder
 M: test-responder call-responder* 2drop test-output <html-content> ;
 
 : do-it ( -- )

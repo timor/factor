@@ -6,18 +6,18 @@ IN: assocs
 
 MIXIN: assoc
 
-GENERIC: at* ( key assoc -- value/f ? ) ;
-GENERIC: value-at* ( value assoc -- key/f ? ) ;
-GENERIC: set-at ( value key assoc -- ) ;
-GENERIC: new-assoc ( capacity exemplar -- newassoc ) ;
-GENERIC: delete-at ( key assoc -- ) ;
-GENERIC: clear-assoc ( assoc -- ) ;
-GENERIC: assoc-size ( assoc -- n ) ;
-GENERIC: assoc-like ( assoc exemplar -- newassoc ) ;
-GENERIC: assoc-clone-like ( assoc exemplar -- newassoc ) ;
-GENERIC: >alist ( assoc -- newassoc ) ;
-GENERIC: keys ( assoc -- keys ) ;
-GENERIC: values ( assoc -- values ) ;
+GENERIC: at* ( key assoc -- value/f ? )
+GENERIC: value-at* ( value assoc -- key/f ? )
+GENERIC: set-at ( value key assoc -- )
+GENERIC: new-assoc ( capacity exemplar -- newassoc )
+GENERIC: delete-at ( key assoc -- )
+GENERIC: clear-assoc ( assoc -- )
+GENERIC: assoc-size ( assoc -- n )
+GENERIC: assoc-like ( assoc exemplar -- newassoc )
+GENERIC: assoc-clone-like ( assoc exemplar -- newassoc )
+GENERIC: >alist ( assoc -- newassoc )
+GENERIC: keys ( assoc -- keys )
+GENERIC: values ( assoc -- values )
 
 M: assoc assoc-like drop ; inline
 
@@ -274,11 +274,11 @@ M: f clear-assoc drop ; inline
 
 M: f assoc-like drop dup assoc-empty? [ drop f ] when ; inline
 
-INSTANCE: sequence assoc ;
+INSTANCE: sequence assoc
 
 TUPLE: enum { seq read-only } ;
 
-C: <enum> enum ;
+C: <enum> enum
 
 M: enum at*
     seq>> 2dup bounds-check?
@@ -299,10 +299,10 @@ M: enum assoc-size seq>> length ; inline
 
 M: enum clear-assoc seq>> delete-all ; inline
 
-INSTANCE: enum assoc ;
+INSTANCE: enum assoc
 
 M: enum length seq>> length ; inline
 
 M: enum nth-unsafe dupd seq>> nth-unsafe 2array ; inline
 
-INSTANCE: enum immutable-sequence ;
+INSTANCE: enum immutable-sequence

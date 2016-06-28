@@ -26,14 +26,14 @@ TUPLE: result doc collection index batch lasterror ;
 : <result> ( -- ) result new result set ; inline
 
 
-CONSTANT: CHECK-KEY f ;
+CONSTANT: CHECK-KEY f
 
-CONSTANT: DOC-SMALL H{ } ;
+CONSTANT: DOC-SMALL H{ }
 
 CONSTANT: DOC-MEDIUM H{ { "integer" 5 }
                         { "number" 5.05 }
                         { "boolean" f }
-                        { "array" { "test" "benchmark" } } } ;
+                        { "array" { "test" "benchmark" } } }
 
 CONSTANT: DOC-LARGE H{ { "base_url" "http://www.example.com/test-me" }
                        { "total_word_count" 6743 }
@@ -103,7 +103,7 @@ CONSTANT: DOC-LARGE H{ { "base_url" "http://www.example.com/test-me" }
                                              "developers" "focus" "building" "mongodb" "mongo"
                                              "10gen" "web" "open" "source" "application" "paas"
                                              "platform-as-a-service" "technology" "helps"
-                                             "developers" "focus" "building" "mongodb" "mongo" } } } ;
+                                             "developers" "focus" "building" "mongodb" "mongo" } } }
 
 : set-doc ( name -- )
     [ result ] dip $[ _ >>doc ] change ; inline

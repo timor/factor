@@ -69,28 +69,28 @@ SYMBOL: stamp
 
 : build-dir ( -- path ) builds-dir get stamp get append-path ;
 
-CONSTANT: load-all-vocabs-file "load-everything-vocabs" ;
-CONSTANT: load-all-errors-file "load-everything-errors" ;
+CONSTANT: load-all-vocabs-file "load-everything-vocabs"
+CONSTANT: load-all-errors-file "load-everything-errors"
 
-CONSTANT: test-all-vocabs-file "test-all-vocabs" ;
-CONSTANT: test-all-errors-file "test-all-errors" ;
+CONSTANT: test-all-vocabs-file "test-all-vocabs"
+CONSTANT: test-all-errors-file "test-all-errors"
 
-CONSTANT: help-lint-vocabs-file "help-lint-vocabs" ;
-CONSTANT: help-lint-errors-file "help-lint-errors" ;
+CONSTANT: help-lint-vocabs-file "help-lint-vocabs"
+CONSTANT: help-lint-errors-file "help-lint-errors"
 
-CONSTANT: compiler-errors-file "compiler-errors" ;
-CONSTANT: compiler-error-messages-file "compiler-error-messages" ;
+CONSTANT: compiler-errors-file "compiler-errors"
+CONSTANT: compiler-error-messages-file "compiler-error-messages"
 
-CONSTANT: boot-time-file "boot-time" ;
-CONSTANT: load-time-file "load-time" ;
-CONSTANT: test-time-file "test-time" ;
-CONSTANT: help-lint-time-file "help-lint-time" ;
-CONSTANT: benchmark-time-file "benchmark-time" ;
-CONSTANT: html-help-time-file "html-help-time" ;
+CONSTANT: boot-time-file "boot-time"
+CONSTANT: load-time-file "load-time"
+CONSTANT: test-time-file "test-time"
+CONSTANT: help-lint-time-file "help-lint-time"
+CONSTANT: benchmark-time-file "benchmark-time"
+CONSTANT: html-help-time-file "html-help-time"
 
-CONSTANT: benchmarks-file "benchmarks" ;
-CONSTANT: benchmark-error-messages-file "benchmark-error-messages" ;
-CONSTANT: benchmark-error-vocabs-file "benchmark-error-vocabs" ;
+CONSTANT: benchmarks-file "benchmarks"
+CONSTANT: benchmark-error-messages-file "benchmark-error-messages"
+CONSTANT: benchmark-error-vocabs-file "benchmark-error-vocabs"
 
 SYMBOL: status-error ! didn't bootstrap, or crashed
 SYMBOL: status-dirty ! bootstrapped but not all tests passed

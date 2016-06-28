@@ -12,7 +12,7 @@ M: ascii encode-char
 
 PRIVATE<
 
-GENERIC: ascii> ( string -- byte-array ) ;
+GENERIC: ascii> ( string -- byte-array )
 
 M: object ascii>
     [ dup 127 <= [ encode-error ] unless ] B{ } map-as ; inline

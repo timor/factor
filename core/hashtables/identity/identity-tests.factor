@@ -2,13 +2,13 @@
 USING: assocs hashtables.identity kernel literals tools.test ;
 IN: hashtables.identity.tests
 
-CONSTANT: the-real-slim-shady "marshall mathers" ;
+CONSTANT: the-real-slim-shady "marshall mathers"
 
 CONSTANT: will
     IH{
         { $\ the-real-slim-shady t }
         { "marshall mathers"    f }
-    } ;
+    }
 
 : please-stand-up ( assoc key -- value )
     of ;
@@ -30,7 +30,7 @@ CONSTANT: will
     t "marshall mathers"  identity-associate =
 ] unit-test
 
-CONSTANT: same-as-it-ever-was "same as it ever was" ;
+CONSTANT: same-as-it-ever-was "same as it ever was"
 
 { IH{ { $\ same-as-it-ever-was $\ same-as-it-ever-was } } }
 [ H{ { $\ same-as-it-ever-was $\ same-as-it-ever-was } } IH{ } assoc-like ] unit-test

@@ -24,7 +24,7 @@ IN: compiler.tree.propagation.inlining
 : propagate-body ( #call -- ? )
     body>> (propagate) t ;
 
-GENERIC: splicing-nodes ( #call word/quot -- nodes/f ) ;
+GENERIC: splicing-nodes ( #call word/quot -- nodes/f )
 
 M: word splicing-nodes splicing-call ;
 

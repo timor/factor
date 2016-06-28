@@ -16,8 +16,8 @@ TUPLE: image-placement
     { image read-only }
     loc ;
 
-CONSTANT: atlas-waste-factor 1.25 ;
-CONSTANT: atlas-padding 1 ;
+CONSTANT: atlas-waste-factor 1.25
+CONSTANT: atlas-padding 1
 
 ERROR: atlas-image-formats-dont-match images ;
 

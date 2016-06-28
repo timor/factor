@@ -8,9 +8,9 @@ FROM: compiler.cfg.instructions.syntax => insn-def-slots
 insn-use-slots insn-temp-slots scalar-rep ;
 IN: compiler.cfg.representations.preferred
 
-GENERIC: defs-vreg-reps ( insn -- reps ) ;
-GENERIC: temp-vreg-reps ( insn -- reps ) ;
-GENERIC: uses-vreg-reps ( insn -- reps ) ;
+GENERIC: defs-vreg-reps ( insn -- reps )
+GENERIC: temp-vreg-reps ( insn -- reps )
+GENERIC: uses-vreg-reps ( insn -- reps )
 
 M: insn defs-vreg-reps drop { } ;
 M: insn temp-vreg-reps drop { } ;

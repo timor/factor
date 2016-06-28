@@ -12,7 +12,7 @@ CONSTANT: mach-map {
     { ppc.64 { "libc6" "64bit" } }
     { x86.32 { "libc6" "x32" } }
     { x86.64 { "libc6" "x86-64" } }
-} ;
+}
 
 : parse-ldconfig-lines ( string -- triple )
     [

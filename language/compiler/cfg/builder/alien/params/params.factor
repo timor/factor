@@ -6,7 +6,7 @@ IN: compiler.cfg.builder.alien.params
 
 SYMBOL: stack-params
 
-GENERIC: alloc-stack-param ( rep -- n ) ;
+GENERIC: alloc-stack-param ( rep -- n )
 
 M: object alloc-stack-param ( rep -- n )
     stack-params get
@@ -29,7 +29,7 @@ M: float-rep alloc-stack-param ( rep -- n )
 : ?dummy-fp-params ( rep -- )
     drop dummy-fp-params? [ float-regs get [ pop* ] unless-empty ] when ;
 
-GENERIC: next-reg-param ( odd-register? rep -- reg ) ;
+GENERIC: next-reg-param ( odd-register? rep -- reg )
 
 M: int-rep next-reg-param
     [ nip ?dummy-stack-params ]

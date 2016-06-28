@@ -9,7 +9,7 @@ TUPLE: funny-dispatcher < dispatcher ;
 
 TUPLE: base-path-check-responder ;
 
-C: <base-path-check-responder> base-path-check-responder ;
+C: <base-path-check-responder> base-path-check-responder
 
 M: base-path-check-responder call-responder*
     2drop

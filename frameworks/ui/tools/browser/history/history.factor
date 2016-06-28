@@ -8,9 +8,9 @@ TUPLE: history owner back forward ;
 : <history> ( owner -- history )
     V{ } clone V{ } clone history boa ;
 
-GENERIC: history-value ( object -- value ) ;
+GENERIC: history-value ( object -- value )
 
-GENERIC: set-history-value ( value object -- ) ;
+GENERIC: set-history-value ( value object -- )
 
 : (add-history) ( history to -- )
     swap owner>> history-value dup [ swap push ] [ 2drop ] if ;

@@ -9,7 +9,7 @@ PREDICATE: predicate-class < class
 
 PRIVATE<
 
-GENERIC: predicate-quot ( class -- quot ) ;
+GENERIC: predicate-quot ( class -- quot )
 
 M: predicate-class predicate-quot
     [

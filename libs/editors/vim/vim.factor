@@ -7,9 +7,9 @@ T{ vim } editor-class set-global
 
 SYMBOL: vim-path
 
-HOOK: find-vim-path editor-class ( -- path ) ;
+HOOK: find-vim-path editor-class ( -- path )
 
-HOOK: vim-ui? editor-class ( -- ? ) ;
+HOOK: vim-ui? editor-class ( -- ? )
 
 SYMBOL: vim-tabs?
 

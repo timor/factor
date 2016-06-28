@@ -9,7 +9,7 @@ xmode.code2html lcs.diff2html farkup io.streams.string
 html html.streams html.forms ;
 IN: html.components
 
-GENERIC: render* ( value name renderer -- xml ) ;
+GENERIC: render* ( value name renderer -- xml )
 
 : render>xml ( name renderer -- xml )
     prepare-value
@@ -27,7 +27,7 @@ GENERIC: render* ( value name renderer -- xml ) ;
 
 PRIVATE<
 
-GENERIC: write-nested ( obj -- ) ;
+GENERIC: write-nested ( obj -- )
 
 M: string write-nested write ;
 
@@ -121,8 +121,8 @@ M: checkbox render*
         checked=<-> name=<->><-></input> ]] ;
 
 ! Link components
-GENERIC: link-title ( obj -- string ) ;
-GENERIC: link-href ( obj -- url ) ;
+GENERIC: link-title ( obj -- string )
+GENERIC: link-href ( obj -- url )
 
 M: string link-title ;
 M: string link-href ;
@@ -132,7 +132,7 @@ M: url link-href ;
 
 TUPLE: simple-link title href ;
 
-C: <simple-link> simple-link ;
+C: <simple-link> simple-link
 
 M: simple-link link-title title>> ;
 M: simple-link link-href href>> ;

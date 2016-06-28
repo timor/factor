@@ -10,15 +10,15 @@ ui.gestures ui.images ui.pens.solid ui.render ui.text ui.theme ;
 IN: ui.gadgets.tables
 
 ! Row rendererer protocol
-GENERIC: prototype-row ( renderer -- columns ) ;
-GENERIC: column-alignment ( renderer -- alignment ) ;
-GENERIC: filled-column ( renderer -- n ) ;
-GENERIC: column-titles ( renderer -- strings ) ;
+GENERIC: prototype-row ( renderer -- columns )
+GENERIC: column-alignment ( renderer -- alignment )
+GENERIC: filled-column ( renderer -- n )
+GENERIC: column-titles ( renderer -- strings )
 
-GENERIC: row-columns ( row renderer -- columns ) ;
-GENERIC: row-value ( row renderer -- object ) ;
-GENERIC: row-color ( row renderer -- color ) ;
-GENERIC: row-value? ( value row renderer -- ? ) ;
+GENERIC: row-columns ( row renderer -- columns )
+GENERIC: row-value ( row renderer -- object )
+GENERIC: row-color ( row renderer -- color )
+GENERIC: row-value? ( value row renderer -- ? )
 
 SINGLETON: trivial-renderer
 
@@ -64,8 +64,8 @@ rows ;
 
 PRIVATE<
 
-GENERIC: cell-dim ( font cell -- width height padding ) ;
-GENERIC: draw-cell ( font cell -- ) ;
+GENERIC: cell-dim ( font cell -- width height padding )
+GENERIC: draw-cell ( font cell -- )
 
 : single-line ( str -- str' )
     dup [ "\r\n" member? ] any? [ string-lines " " join ] when ;
@@ -73,7 +73,7 @@ GENERIC: draw-cell ( font cell -- ) ;
 M: string cell-dim single-line text-dim first2 ceiling 0 ;
 M: string draw-cell single-line draw-text ;
 
-CONSTANT: image-padding 2 ;
+CONSTANT: image-padding 2
 
 M: image-name cell-dim nip image-dim first2 image-padding ;
 M: image-name draw-cell nip draw-image ;

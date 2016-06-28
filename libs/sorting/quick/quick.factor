@@ -48,7 +48,7 @@ PRIVATE>
 : inv-sort-with! ( seq quot: ( elt -- key ) -- )
     [ compare invert-comparison ] curry sort! ; inline
 
-GENERIC: natural-sort! ( seq -- ) ;
+GENERIC: natural-sort! ( seq -- )
 
 M: object natural-sort!  [ <=> ] sort! ;
 M: array natural-sort! [ <=> ] sort! ;

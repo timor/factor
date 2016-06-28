@@ -7,7 +7,7 @@ IN: arrays.shaped
 
 : flat? ( array -- ? ) [ sequence? ] any? not ; inline
 
-GENERIC: array-replace ( object -- shape ) ;
+GENERIC: array-replace ( object -- shape )
 
 M: f array-replace ;
 
@@ -21,12 +21,12 @@ M: sequence array-replace
     ] if ;
 
 TUPLE: uniform-shape shape ;
-C: <uniform-shape> uniform-shape ;
+C: <uniform-shape> uniform-shape
 
 TUPLE: abnormal-shape shape ;
-C: <abnormal-shape> abnormal-shape ;
+C: <abnormal-shape> abnormal-shape
 
-GENERIC: wrap-shape ( object -- shape ) ;
+GENERIC: wrap-shape ( object -- shape )
 
 M: integer wrap-shape
     1array <uniform-shape> ;
@@ -38,7 +38,7 @@ M: sequence wrap-shape
         <abnormal-shape>
     ] if ;
 
-GENERIC: shape ( array -- shape ) ;
+GENERIC: shape ( array -- shape )
 
 M: sequence shape array-replace wrap-shape ;
 
@@ -49,7 +49,7 @@ ERROR: no-negative-shape-components shape ;
 : check-shape-domain ( seq -- seq )
     dup [ 0 < ] any? [ no-negative-shape-components ] when ;
 
-GENERIC: shape-capacity ( shape -- n ) ;
+GENERIC: shape-capacity ( shape -- n )
 
 M: sequence shape-capacity check-shape-domain product ;
 
@@ -65,7 +65,7 @@ ERROR: underlying-shape-mismatch underlying shape ;
 
 ERROR: no-abnormally-shaped-arrays underlying shape ;
 
-GENERIC: check-underlying-shape ( underlying shape -- underlying shape ) ;
+GENERIC: check-underlying-shape ( underlying shape -- underlying shape )
 
 M: abnormal-shape check-underlying-shape
     no-abnormally-shaped-arrays ;
@@ -105,9 +105,9 @@ M: shaped-array shape shape>> ;
 : <col-array> ( underlying shape -- shaped-array )
     col-array make-shaped-array ; inline
 
-GENERIC: >shaped-array ( array -- shaped-array ) ;
-GENERIC: >row-array ( array -- shaped-array ) ;
-GENERIC: >col-array ( array -- shaped-array ) ;
+GENERIC: >shaped-array ( array -- shaped-array )
+GENERIC: >row-array ( array -- shaped-array )
+GENERIC: >col-array ( array -- shaped-array )
 
 M: sequence >shaped-array
     [ { } flatten-as ] [ shape ] bi <shaped-array> ;
@@ -171,7 +171,7 @@ TUPLE: transposed shaped-array ;
 
 TUPLE: row-traverser shaped-array index ;
 
-GENERIC: next-index ( object -- index ) ;
+GENERIC: next-index ( object -- index )
 
 SYNTAX: \ sa{ \ } [ >shaped-array ] parse-literal ;
 

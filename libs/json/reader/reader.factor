@@ -138,7 +138,7 @@ PRIVATE>
 : read-json-objects ( -- objects )
     input-stream get json-read-input ;
 
-GENERIC: json> ( string -- object ) ;
+GENERIC: json> ( string -- object )
 
 M: string json>
     [ read-json-objects first-json-object ] with-string-reader ;

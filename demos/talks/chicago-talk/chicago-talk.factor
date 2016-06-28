@@ -45,7 +45,7 @@ CONSTANT: chicago-slides
       "alias analysis, value numbering, write barrier elimination"
       "linear scan register allocation"
     }
-} ;
+}
 
 : chicago-talk ( -- )
     chicago-slides "Chicago talk" slides-window ;

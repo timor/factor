@@ -46,4 +46,4 @@ M: string like
         ] [ >string ] if
     ] unless ; inline
 
-INSTANCE: sbuf growable ;
+INSTANCE: sbuf growable

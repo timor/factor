@@ -20,8 +20,8 @@ IN: cocoa.dialogs
     dup 0 send\ setCanChooseDirectories:
     dup 0 send\ setAllowsMultipleSelection: ;
 
-CONSTANT: NSOKButton 1 ;
-CONSTANT: NSCancelButton 0 ;
+CONSTANT: NSOKButton 1
+CONSTANT: NSCancelButton 0
 
 : (open-panel) ( panel -- paths )
     dup send\ runModal NSOKButton =

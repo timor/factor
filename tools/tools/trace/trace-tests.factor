@@ -4,7 +4,7 @@ sequences ;
 
 { { 3 2 1 } } [ { 1 2 3 } [ reverse ] trace ] unit-test
 
-GENERIC: method-breakpoint-test ( x -- y ) ;
+GENERIC: method-breakpoint-test ( x -- y )
 
 TUPLE: method-breakpoint-tuple ;
 

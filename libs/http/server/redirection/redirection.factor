@@ -4,7 +4,7 @@ USING: kernel accessors combinators namespaces strings
 logging urls http http.server http.server.responses ;
 IN: http.server.redirection
 
-GENERIC: relative-to-request ( url -- url' ) ;
+GENERIC: relative-to-request ( url -- url' )
 
 M: string relative-to-request ;
 

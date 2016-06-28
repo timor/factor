@@ -140,12 +140,12 @@ CONSTRUCTOR: <message> message ( query -- obj )
 : reverse-ipv4 ( string -- string )
     ipv4>byte-array reverse byte-array>ipv4 ;
 
-CONSTANT: ipv4-arpa-suffix ".in-addr.arpa" ;
+CONSTANT: ipv4-arpa-suffix ".in-addr.arpa"
 
 : ipv4>arpa ( string -- string )
     reverse-ipv4 ipv4-arpa-suffix append ;
 
-CONSTANT: ipv6-arpa-suffix ".ip6.arpa" ;
+CONSTANT: ipv6-arpa-suffix ".ip6.arpa"
 
 : ipv6>arpa ( string -- string )
     ipv6>byte-array
@@ -204,7 +204,7 @@ CONSTANT: ipv6-arpa-suffix ".ip6.arpa" ;
         2 read be> >>preference
         parse-name >>exchange ;
 
-GENERIC: parse-rdata ( n type -- obj ) ;
+GENERIC: parse-rdata ( n type -- obj )
 
 M: object parse-rdata drop read ;
 M: A parse-rdata 2drop 4 read byte-array>ipv4 <a> ;
@@ -257,7 +257,7 @@ ERROR: unsupported-domain-name string ;
         } cleave
     ] B{ } append-outputs-as ;
 
-GENERIC: rdata>byte-array ( rdata type -- obj ) ;
+GENERIC: rdata>byte-array ( rdata type -- obj )
 
 M: A rdata>byte-array drop ipv4>byte-array ;
 
@@ -406,7 +406,7 @@ M: TXT rdata>byte-array
         ! dns-A-query message>a-names [ <ipv4> ] map
     ! ] if ;
 
-HOOK: initial-dns-servers os ( -- sequence ) ;
+HOOK: initial-dns-servers os ( -- sequence )
 
 {
     { [ os windows? ] [ "dns.windows" ] }

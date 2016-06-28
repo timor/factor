@@ -117,7 +117,7 @@ CONSTANT: c-punctuators
         "=" "*=" "/=" "%=" "+=" "-=" "<<=" ">>=" "&=" "^=" "|="
         "," "#" "##"
         "<:" ":>" "<%" "%>" "%:" "%:%:"
-    } ;
+    }
 
 : take-c-punctuator ( sequence-parser -- string/f )
     c-punctuators take-longest ;

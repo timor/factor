@@ -5,11 +5,11 @@ fry io.backend io.timeouts kernel namespaces sequences system
 vocabs ;
 IN: io.monitors
 
-HOOK: init-monitors io-backend ( -- ) ;
+HOOK: init-monitors io-backend ( -- )
 
 M: object init-monitors ;
 
-HOOK: dispose-monitors io-backend ( -- ) ;
+HOOK: dispose-monitors io-backend ( -- )
 
 M: object dispose-monitors ;
 
@@ -48,7 +48,7 @@ TUPLE: file-change path changed monitor ;
         queue>> mailbox-put
     ] [ 3drop ] if ;
 
-HOOK: (monitor) io-backend ( path recursive? mailbox -- monitor ) ;
+HOOK: (monitor) io-backend ( path recursive? mailbox -- monitor )
 
 : <monitor> ( path recursive? -- monitor )
     <mailbox> (monitor) ;

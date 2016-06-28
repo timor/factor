@@ -12,24 +12,24 @@ IN: math.blas.vectors
 
 TUPLE: blas-vector-base underlying length inc ;
 
-INSTANCE: blas-vector-base virtual-sequence ;
+INSTANCE: blas-vector-base virtual-sequence
 
-GENERIC: element-type ( v -- type ) ;
+GENERIC: element-type ( v -- type )
 
-GENERIC: n*V+V! ( alpha x y -- y=alpha*x+y ) ;
-GENERIC: n*V!   ( alpha x -- x=alpha*x ) ;
-GENERIC: V. ( x y -- x.y ) ;
-GENERIC: V.conj ( x y -- xconj.y ) ;
-GENERIC: Vnorm ( x -- norm ) ;
-GENERIC: Vasum ( x -- sum ) ;
-GENERIC: Vswap ( x y -- x=y y=x ) ;
-GENERIC: Viamax ( x -- max-i ) ;
+GENERIC: n*V+V! ( alpha x y -- y=alpha*x+y )
+GENERIC: n*V!   ( alpha x -- x=alpha*x )
+GENERIC: V. ( x y -- x.y )
+GENERIC: V.conj ( x y -- xconj.y )
+GENERIC: Vnorm ( x -- norm )
+GENERIC: Vasum ( x -- sum )
+GENERIC: Vswap ( x y -- x=y y=x )
+GENERIC: Viamax ( x -- max-i )
 
 PRIVATE<
 
-GENERIC: (blas-vector-like) ( data length inc exemplar -- vector ) ;
+GENERIC: (blas-vector-like) ( data length inc exemplar -- vector )
 
-GENERIC: (blas-direct-array) ( blas-vector -- direct-array ) ;
+GENERIC: (blas-direct-array) ( blas-vector -- direct-array )
 
 : shorter-length ( v1 v2 -- length )
     [ length>> ] bi@ min ; inline

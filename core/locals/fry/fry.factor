@@ -17,5 +17,5 @@ M: lambda fry
 M: let fry
     clone [ fry ] change-body ;
 
-INSTANCE: lambda fried ;
-INSTANCE: let    fried ;
+INSTANCE: lambda fried
+INSTANCE: let    fried

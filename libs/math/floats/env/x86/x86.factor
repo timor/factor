@@ -11,11 +11,11 @@ STRUCT: x87-env
     { status ushort }
     { control ushort } ;
 
-HOOK: get-sse-env cpu ( sse-env -- ) ;
-HOOK: set-sse-env cpu ( sse-env -- ) ;
+HOOK: get-sse-env cpu ( sse-env -- )
+HOOK: set-sse-env cpu ( sse-env -- )
 
-HOOK: get-x87-env cpu ( x87-env -- ) ;
-HOOK: set-x87-env cpu ( x87-env -- ) ;
+HOOK: get-x87-env cpu ( x87-env -- )
+HOOK: set-x87-env cpu ( x87-env -- )
 
 : <sse-env> ( -- sse-env )
     sse-env (struct) [ get-sse-env ] keep ;
@@ -32,7 +32,7 @@ M: x87-env (set-fp-env-register)
 M: x86 (fp-env-registers)
     sse2? [ <sse-env> <x87-env> 2array ] [ <x87-env> 1array ] if ;
 
-CONSTANT: sse-exception-flag-bits 0x3f ;
+CONSTANT: sse-exception-flag-bits 0x3f
 CONSTANT: sse-exception-flag>bit
     H{
         { +fp-invalid-operation+ 0x01 }
@@ -40,9 +40,9 @@ CONSTANT: sse-exception-flag>bit
         { +fp-underflow+         0x10 }
         { +fp-zero-divide+       0x04 }
         { +fp-inexact+           0x20 }
-    } ;
+    }
 
-CONSTANT: sse-fp-traps-bits 0x1f80 ;
+CONSTANT: sse-fp-traps-bits 0x1f80
 CONSTANT: sse-fp-traps>bit
     H{
         { +fp-invalid-operation+ 0x0080 }
@@ -50,18 +50,18 @@ CONSTANT: sse-fp-traps>bit
         { +fp-underflow+         0x0800 }
         { +fp-zero-divide+       0x0200 }
         { +fp-inexact+           0x1000 }
-    } ;
+    }
 
-CONSTANT: sse-rounding-mode-bits 0x6000 ;
+CONSTANT: sse-rounding-mode-bits 0x6000
 CONSTANT: sse-rounding-mode>bit
     $$[ H{
         { +round-nearest+ 0x0000 }
         { +round-down+    0x2000 }
         { +round-up+      0x4000 }
         { +round-zero+    0x6000 }
-    } >biassoc ] ;
+    } >biassoc ]
 
-CONSTANT: sse-denormal-mode-bits 0x8040 ;
+CONSTANT: sse-denormal-mode-bits 0x8040
 
 M: sse-env (get-exception-flags) ( register -- exceptions )
     mxcsr>> sse-exception-flag>bit mask> ; inline
@@ -90,7 +90,7 @@ M: sse-env (set-denormal-mode) ( register mode -- register' )
 
 SINGLETON: +fp-x87-stack-fault+
 
-CONSTANT: x87-exception-bits 0x7f ;
+CONSTANT: x87-exception-bits 0x7f
 CONSTANT: x87-exception>bit
     H{
         { +fp-invalid-operation+ 0x01 }
@@ -99,16 +99,16 @@ CONSTANT: x87-exception>bit
         { +fp-zero-divide+       0x04 }
         { +fp-inexact+           0x20 }
         { +fp-x87-stack-fault+   0x40 }
-    } ;
+    }
 
-CONSTANT: x87-rounding-mode-bits 0x0c00 ;
+CONSTANT: x87-rounding-mode-bits 0x0c00
 CONSTANT: x87-rounding-mode>bit
     $$[ H{
         { +round-nearest+ 0x0000 }
         { +round-down+    0x0400 }
         { +round-up+      0x0800 }
         { +round-zero+    0x0c00 }
-    } >biassoc ] ;
+    } >biassoc ]
 
 M: x87-env (get-exception-flags) ( register -- exceptions )
     status>> x87-exception>bit mask> ; inline

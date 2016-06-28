@@ -10,8 +10,8 @@ IN: unix.users
 
 TUPLE: passwd user-name password uid gid gecos dir shell ;
 
-HOOK: new-passwd os ( -- passwd ) ;
-HOOK: passwd>new-passwd os ( passwd -- new-passwd ) ;
+HOOK: new-passwd os ( -- passwd )
+HOOK: passwd>new-passwd os ( passwd -- new-passwd )
 
 PRIVATE<
 
@@ -52,7 +52,7 @@ SYMBOL: user-cache
 : with-user-cache ( quot -- )
     [ <user-cache> user-cache ] dip with-variable ; inline
 
-GENERIC: user-passwd ( obj -- passwd/f ) ;
+GENERIC: user-passwd ( obj -- passwd/f )
 
 M: integer user-passwd ( id -- passwd/f )
     user-cache get
@@ -87,9 +87,9 @@ ERROR: no-user string ;
 
 : user-exists? ( name/id -- ? ) user-id >boolean ;
 
-GENERIC: set-real-user ( string/id -- ) ;
+GENERIC: set-real-user ( string/id -- )
 
-GENERIC: set-effective-user ( string/id -- ) ;
+GENERIC: set-effective-user ( string/id -- )
 
 : (with-real-user) ( string/id quot -- )
     $[ _ set-real-user @ ]

@@ -2,12 +2,12 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors definitions generic generic.single kernel
 kernel.private namespaces quotations sequences words ;
-QUALIFIED-WITH: generic.single.private gsp ;
+QUALIFIED-WITH: generic.single.private gsp
 IN: generic.hook
 
 TUPLE: hook-combination < single-combination var ;
 
-C: <hook-combination> hook-combination ;
+C: <hook-combination> hook-combination
 
 PREDICATE: hook-generic < generic
     "combination" word-prop hook-combination? ;

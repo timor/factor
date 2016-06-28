@@ -115,7 +115,7 @@ CONSTANT: stream-wrapper
                 [ IStream-clone ]
             } }
         } <com-wrapper>
-    ] ;
+    ]
 
 PRIVATE>
 

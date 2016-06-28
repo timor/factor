@@ -24,21 +24,21 @@ IN: ui.backend.cocoa.views
         [ ]
     } case ;
 
-CONSTANT: NSAlphaShiftKeyMask 0x10000 ;
-CONSTANT: NSShiftKeyMask      0x20000 ;
-CONSTANT: NSControlKeyMask    0x40000 ;
-CONSTANT: NSAlternateKeyMask  0x80000 ;
-CONSTANT: NSCommandKeyMask    0x100000 ;
-CONSTANT: NSNumericPadKeyMask 0x200000 ;
-CONSTANT: NSHelpKeyMask       0x400000 ;
-CONSTANT: NSFunctionKeyMask   0x800000 ;
+CONSTANT: NSAlphaShiftKeyMask 0x10000
+CONSTANT: NSShiftKeyMask      0x20000
+CONSTANT: NSControlKeyMask    0x40000
+CONSTANT: NSAlternateKeyMask  0x80000
+CONSTANT: NSCommandKeyMask    0x100000
+CONSTANT: NSNumericPadKeyMask 0x200000
+CONSTANT: NSHelpKeyMask       0x400000
+CONSTANT: NSFunctionKeyMask   0x800000
 
 CONSTANT: modifiers {
         { S+ $\ NSShiftKeyMask }
         { C+ $\ NSControlKeyMask }
         { A+ $\ NSCommandKeyMask }
         { M+ $\ NSAlternateKeyMask }
-    } ;
+    }
 
 CONSTANT: key-codes
     H{
@@ -65,7 +65,7 @@ CONSTANT: key-codes
         { 126 "UP" }
         { 116 "PAGE_UP" }
         { 121 "PAGE_DOWN" }
-    } ;
+    }
 
 : key-code ( event -- string ? )
     dup send\ keyCode key-codes at
@@ -154,7 +154,7 @@ CONSTANT: selector>action H{
     { "saveDocument:" save-action }
     { "saveDocumentAs:" save-as-action }
     { "revertDocumentToSaved:" revert-action }
-} ;
+}
 
 : validate-action ( world selector -- ? validated? )
     selector>action at

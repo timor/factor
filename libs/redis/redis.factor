@@ -93,7 +93,7 @@ IN: redis
 ! Redis object
 TUPLE: redis host port encoding password ;
 
-CONSTANT: default-redis-port 6379 ;
+CONSTANT: default-redis-port 6379
 
 : <redis> ( -- redis )
     redis new

@@ -18,27 +18,27 @@ CONSTANT: light
         -0.8017837257372732
         0.5345224838248488
         0.0
-    } ;
+    }
 
-CONSTANT: oversampling 4 ;
+CONSTANT: oversampling 4
 
-CONSTANT: levels 3 ;
+CONSTANT: levels 3
 
-CONSTANT: size 200 ;
+CONSTANT: size 200
 
 : delta ( -- n ) epsilon sqrt ; inline no-compile
 
 TUPLE: ray { orig double-4 read-only } { dir double-4 read-only } ;
 
-C: <ray> ray ;
+C: <ray> ray
 
 TUPLE: hit { normal double-4 read-only } { lambda float read-only } ;
 
-C: <hit> hit ;
+C: <hit> hit
 
 TUPLE: sphere { center double-4 read-only } { radius float read-only } ;
 
-C: <sphere> sphere ;
+C: <sphere> sphere
 
 : sphere-v ( sphere ray -- v ) [ center>> ] [ orig>> ] bi* v- ; inline no-compile
 
@@ -85,7 +85,7 @@ TUPLE: group < sphere { objs array read-only } ;
         { [ dup sphere? ] [ [ [ sphere-n normalize ] keep <hit> nip ] if-ray-sphere ] }
     } cond ; inline recursive no-compile
 
-CONSTANT: initial-hit T{ hit f double-4{ 0.0 0.0 0.0 0.0 } 1/0. } ;
+CONSTANT: initial-hit T{ hit f double-4{ 0.0 0.0 0.0 0.0 } 1/0. }
 
 : initial-intersect ( ray scene -- hit )
     [ initial-hit ] 2dip intersect-scene ; inline no-compile
@@ -122,7 +122,7 @@ CONSTANT: create-offsets
         double-4{ 1.0 1.0 -1.0 0.0 }
         double-4{ -1.0 1.0 1.0 0.0 }
         double-4{ 1.0 1.0 1.0 0.0 }
-    } ;
+    }
 
 : create-bound ( c r -- sphere ) 3.0 * <sphere> ;
 

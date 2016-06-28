@@ -31,7 +31,7 @@ SYMBOL: loops
         $[ _ t t [ drop _ call( node -- ) ] with-cfg-builder ] with-variable
     ] { } make drop ;
 
-GENERIC: emit-node ( block node -- block' ) ;
+GENERIC: emit-node ( block node -- block' )
 
 : emit-nodes ( block nodes -- block' )
     [ over [ emit-node ] [ drop ] if ] each ;

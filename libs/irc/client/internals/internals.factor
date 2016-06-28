@@ -51,11 +51,11 @@ IN: irc.client.internals
      [ nick>> /LOGIN ]
      bi ;
 
-GENERIC: initialize-chat ( chat -- ) ;
+GENERIC: initialize-chat ( chat -- )
 M: irc-chat         initialize-chat drop ;
 M: irc-channel-chat initialize-chat [ name>> ] [ password>> ] bi /JOIN ;
 
-GENERIC: chat-put ( message obj -- ) ;
+GENERIC: chat-put ( message obj -- )
 M: irc-chat chat-put in-messages>> mailbox-put ;
 M: symbol   chat-put chat> [ chat-put ] [ drop ] if* ;
 M: string   chat-put chat> +server-chat+ or chat-put ;
@@ -66,13 +66,13 @@ M: sequence chat-put [ chat-put ] with each ;
 
 ! Server message handling
 
-GENERIC: message-forwards ( irc-message -- seq ) ;
+GENERIC: message-forwards ( irc-message -- seq )
 M: irc-message   message-forwards drop +server-chat+ ;
 M: to-one-chat   message-forwards chat> ;
 M: to-all-chats  message-forwards drop chats> ;
 M: to-many-chats message-forwards sender>> participant-chats ;
 
-GENERIC: process-message ( irc-message -- ) ;
+GENERIC: process-message ( irc-message -- )
 M: object process-message drop ;
 M: ping   process-message trailing>> /PONG ;
 ! FIXME: it shouldn't be checking for the presence of chat here...
@@ -104,7 +104,7 @@ M: rpl-names-end process-message chat> t >>clear-participants drop ;
 
 ! Client message handling
 
-GENERIC: handle-outgoing-irc ( irc-message -- ? ) ;
+GENERIC: handle-outgoing-irc ( irc-message -- ? )
 M: irc-end     handle-outgoing-irc drop f ;
 M: irc-message handle-outgoing-irc irc-message>string irc-print t ;
 
@@ -120,7 +120,7 @@ M: irc-message handle-outgoing-irc irc-message>string irc-print t ;
     [ irc> exceptions>> push ] when*
     irc> is-running>> [ (handle-disconnect) t ] [ f ] if ;
 
-GENERIC: handle-input ( line/f -- ? ) ;
+GENERIC: handle-input ( line/f -- ? )
 M: string handle-input string>irc-message handle-reader-message t ;
 M: f      handle-input handle-disconnect ;
 
@@ -143,7 +143,7 @@ M: f      handle-input handle-disconnect ;
 : strings>privmsg ( name string -- privmsg )
     " :" prepend append "PRIVMSG " prepend string>irc-message ;
 
-GENERIC: annotate-message ( chat object -- object ) ;
+GENERIC: annotate-message ( chat object -- object )
 M: object     annotate-message nip ;
 M: to-channel annotate-message swap name>> >>channel ;
 M: to-target  annotate-message swap name>> >>target ;
@@ -156,7 +156,7 @@ M: string     annotate-message [ name>> ] dip strings>privmsg ;
     [ in-multiplexer-loop ] "in-multiplexer-loop" spawn-server
     3drop ;
 
-GENERIC: (attach-chat) ( irc-chat -- ) ;
+GENERIC: (attach-chat) ( irc-chat -- )
 
 M: irc-chat (attach-chat)
     irc>
@@ -167,7 +167,7 @@ M: irc-chat (attach-chat)
 M: irc-server-chat (attach-chat)
     irc> [ client<< ] [ chats>> +server-chat+ set-at ] 2bi ;
 
-GENERIC: remove-chat ( irc-chat -- ) ;
+GENERIC: remove-chat ( irc-chat -- )
 M: irc-nick-chat remove-chat name>> unregister-chat ;
 M: irc-server-chat remove-chat drop +server-chat+ unregister-chat ;
 

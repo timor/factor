@@ -31,7 +31,7 @@ M: cache-assoc clear-assoc
 
 M: cache-assoc >alist assoc>> [ value>> ] { } assoc-map-as ;
 
-INSTANCE: cache-assoc assoc ;
+INSTANCE: cache-assoc assoc
 
 M: cache-assoc dispose* clear-assoc ;
 

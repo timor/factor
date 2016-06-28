@@ -4,7 +4,7 @@ byte-arrays classes.struct combinators destructors fry io
 io.files io.encodings.binary kernel libc locals make math
 math.order math.parser ogg ogg.vorbis sequences
 specialized-arrays specialized-vectors ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAYS: c:float c:void* ;
 SPECIALIZED-VECTOR: c:short
 IN: audio.vorbis
@@ -23,7 +23,7 @@ TUPLE: vorbis-stream < disposable
     { temp-state ogg-stream-state }
     { #vorbis-headers integer initial: 0 } ;
 
-CONSTANT: stream-buffer-size 4096 ;
+CONSTANT: stream-buffer-size 4096
 
 ERROR: ogg-error code ;
 ERROR: vorbis-error code ;

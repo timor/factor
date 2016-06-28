@@ -8,9 +8,9 @@ TUPLE: windowed-sequence
     { sequence sequence read-only }
     { n integer } ;
 
-INSTANCE: windowed-sequence sequence ;
+INSTANCE: windowed-sequence sequence
 
-C: <windowed-sequence> windowed-sequence ;
+C: <windowed-sequence> windowed-sequence
 
 M: windowed-sequence nth-unsafe
     [ 1 + ] dip [ n>> dupd [-] swap ] [ sequence>> ] bi <slice> ; inline

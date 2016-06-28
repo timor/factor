@@ -1,7 +1,7 @@
 USING: alien alien.data alien.syntax classes.struct
 compiler.units kernel sequences specialized-arrays
 specialized-arrays.private system tools.test vocabs ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 IN: alien.data.tests
 
 { -1 } [ -1 c:char <ref> c:char deref ] unit-test

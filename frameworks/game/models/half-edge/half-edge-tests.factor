@@ -33,7 +33,7 @@ CONSTANT: cube-edges
         T{ edge { face 5 } { vertex  0 } { opposite-edge  3 } { next-edge 22 } }
         T{ edge { face 5 } { vertex  2 } { opposite-edge 15 } { next-edge 23 } }
         T{ edge { face 5 } { vertex  6 } { opposite-edge 11 } { next-edge 20 } }
-    } ;
+    }
 
 : connect-cube-edges ( -- )
     cube-edges [

@@ -109,7 +109,7 @@ CFSTRING: kUTTypeVCard "public.vcard" ;
 ! Misc. types
 CFSTRING: kUTTypeInkText "com.apple.ink.inktext" ;
 
-CONSTANT: kLSUnknownCreator f ;
+CONSTANT: kLSUnknownCreator f
 
 ERROR: core-foundation-error n ;
 

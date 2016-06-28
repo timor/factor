@@ -1,7 +1,7 @@
 USING: classes classes.tuple kernel sequences vocabs math ;
 IN: benchmark.dispatch1
 
-GENERIC: g ( obj -- obj ) ;
+GENERIC: g ( obj -- obj )
 
 TUPLE: x1 ;
 M: x1 g ;

@@ -7,24 +7,24 @@ calendar calendar.format ;
 IN: yaml.conversion
 
 ! http://yaml.org/type/
-CONSTANT: YAML_MERGE_TAG "tag:yaml.org,2002:merge" ;
-CONSTANT: YAML_VALUE_TAG "tag:yaml.org,2002:value" ;
+CONSTANT: YAML_MERGE_TAG "tag:yaml.org,2002:merge"
+CONSTANT: YAML_VALUE_TAG "tag:yaml.org,2002:value"
 
 ! !!!!!!!!!!!!!!
 ! tag resolution
 ! http://www.yaml.org/spec/1.2/spec.html
 ! 10.3. Core Schema
 
-CONSTANT: re-null R[[ null|Null|NULL|~]] ;
-CONSTANT: re-empty R[[ ]] ;
-CONSTANT: re-bool R[[ true|True|TRUE|false|False|FALSE]] ;
-CONSTANT: re-int10 R[[ [-+]?[0-9]+]] ;
-CONSTANT: re-int8 R[[ 0o[0-7]+]] ;
-CONSTANT: re-int16 R[[ 0x[0-9a-fA-F]+]] ;
-CONSTANT: re-number R[[ [-+]?(\.[0-9]+|[0-9]+(\.[0-9]*)?)([eE][-+]?[0-9]+)?]] ;
-CONSTANT: re-infinity R[[ [-+]?\.(inf|Inf|INF)]] ;
-CONSTANT: re-nan R[[ \.(nan|NaN|NAN)]] ;
-CONSTANT: re-timestamp R[[ [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]|[0-9][0-9][0-9][0-9]-[0-9][0-9]?-[0-9][0-9]?([Tt]|[ \t]+)[0-9][0-9]?:[0-9][0-9]:[0-9][0-9](\.[0-9]*)?([ \t]*(Z|[-+][0-9][0-9]?(:[0-9][0-9])?))?]] ;
+CONSTANT: re-null R[[ null|Null|NULL|~]]
+CONSTANT: re-empty R[[ ]]
+CONSTANT: re-bool R[[ true|True|TRUE|false|False|FALSE]]
+CONSTANT: re-int10 R[[ [-+]?[0-9]+]]
+CONSTANT: re-int8 R[[ 0o[0-7]+]]
+CONSTANT: re-int16 R[[ 0x[0-9a-fA-F]+]]
+CONSTANT: re-number R[[ [-+]?(\.[0-9]+|[0-9]+(\.[0-9]*)?)([eE][-+]?[0-9]+)?]]
+CONSTANT: re-infinity R[[ [-+]?\.(inf|Inf|INF)]]
+CONSTANT: re-nan R[[ \.(nan|NaN|NAN)]]
+CONSTANT: re-timestamp R[[ [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]|[0-9][0-9][0-9][0-9]-[0-9][0-9]?-[0-9][0-9]?([Tt]|[ \t]+)[0-9][0-9]?:[0-9][0-9]:[0-9][0-9](\.[0-9]*)?([ \t]*(Z|[-+][0-9][0-9]?(:[0-9][0-9])?))?]]
 
 : resolve-normal-plain-scalar ( str -- tag )
     {
@@ -41,8 +41,8 @@ CONSTANT: re-timestamp R[[ [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]|[0-9][0-9]
         [ drop YAML_STR_TAG ]
     } cond-case ;
 
-CONSTANT: re-merge R[[ <<]] ;
-CONSTANT: re-value R[[ =]] ;
+CONSTANT: re-merge R[[ <<]]
+CONSTANT: re-value R[[ =]]
 : (resolve-mapping-key-plain-scalar) ( str -- tag )
     {
         { [ re-merge matches? ] [ YAML_MERGE_TAG ] }
@@ -58,7 +58,7 @@ CONSTANT: re-value R[[ =]] ;
 : resolve-plain-scalar ( str mapping-key? -- tag )
     [ resolve-mapping-key-plain-scalar ] [ resolve-normal-plain-scalar ] if ;
 
-CONSTANT: NON-SPECIFIC-TAG "!" ;
+CONSTANT: NON-SPECIFIC-TAG "!"
 
 : resolve-explicit-tag ( tag default-tag -- tag )
     [ drop NON-SPECIFIC-TAG = not ] 2keep ? ;
@@ -82,10 +82,10 @@ CONSTANT: NON-SPECIFIC-TAG "!" ;
 ! !!!!!!!!!!!!!!
 ! yaml -> factor
 
-CONSTANT: YAML_BINARY_TAG "tag:yaml.org,2002:binary" ;
-CONSTANT: YAML_OMAP_TAG "tag:yaml.org,2002:omap" ;
-CONSTANT: YAML_PAIRS_TAG "tag:yaml.org,2002:pairs" ;
-CONSTANT: YAML_SET_TAG "tag:yaml.org,2002:set" ;
+CONSTANT: YAML_BINARY_TAG "tag:yaml.org,2002:binary"
+CONSTANT: YAML_OMAP_TAG "tag:yaml.org,2002:omap"
+CONSTANT: YAML_PAIRS_TAG "tag:yaml.org,2002:pairs"
+CONSTANT: YAML_SET_TAG "tag:yaml.org,2002:set"
 
 : construct-bool ( str -- ? ) R[[ true|True|TRUE]] matches? ;
 
@@ -118,9 +118,9 @@ CONSTANT: YAML_SET_TAG "tag:yaml.org,2002:set" ;
     [ ymd>timestamp ] [ yaml>rfc3339 rfc3339>timestamp ] if ;
 
 TUPLE: yaml-merge ;
-C: <yaml-merge> yaml-merge ;
+C: <yaml-merge> yaml-merge
 TUPLE: yaml-value ;
-C: <yaml-value> yaml-value ;
+C: <yaml-value> yaml-value
 
 : construct-scalar ( scalar-event mapping-key? -- scalar )
     [ drop value>> ] [ resolve-scalar ] 2bi {
@@ -159,8 +159,8 @@ C: <yaml-value> yaml-value ;
 
 ! !!!!!!!!!!!!!!
 ! factor -> yaml
-GENERIC: represent-scalar ( obj -- str ) ;
-GENERIC: yaml-tag ( obj -- tag ) ;
+GENERIC: represent-scalar ( obj -- str )
+GENERIC: yaml-tag ( obj -- tag )
 
 M: string represent-scalar ( obj -- str ) ;
 M: string yaml-tag ( obj -- tag ) drop YAML_STR_TAG ;

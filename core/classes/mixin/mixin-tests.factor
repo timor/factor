@@ -7,15 +7,15 @@ IN: classes.mixin.tests
 ! Test mixins
 MIXIN: sequence-mixin
 
-INSTANCE: array sequence-mixin ;
-INSTANCE: vector sequence-mixin ;
-INSTANCE: slice sequence-mixin ;
+INSTANCE: array sequence-mixin
+INSTANCE: vector sequence-mixin
+INSTANCE: slice sequence-mixin
 
 MIXIN: assoc-mixin
 
-INSTANCE: hashtable assoc-mixin ;
+INSTANCE: hashtable assoc-mixin
 
-GENERIC: collection-size ( x -- y ) ;
+GENERIC: collection-size ( x -- y )
 
 M: sequence-mixin collection-size length ;
 
@@ -34,7 +34,7 @@ FORGET: mx1
 
 MIXIN: mx1
 
-INSTANCE: integer mx1 ;
+INSTANCE: integer mx1
 
 { t } [ integer mx1 class<= ] unit-test
 { f } [ mx1 integer class<= ] unit-test
@@ -85,12 +85,12 @@ USE: io.streams.string
 
 ! Method flattening interfered with mixin update
 MIXIN: flat-mx-1
-TUPLE: flat-mx-1-1 ; INSTANCE: flat-mx-1-1 flat-mx-1 ;
-TUPLE: flat-mx-1-2 ; INSTANCE: flat-mx-1-2 flat-mx-1 ;
-TUPLE: flat-mx-1-3 ; INSTANCE: flat-mx-1-3 flat-mx-1 ;
-TUPLE: flat-mx-1-4 ; INSTANCE: flat-mx-1-4 flat-mx-1 ;
-MIXIN: flat-mx-2     INSTANCE: flat-mx-2 flat-mx-1 ;
-TUPLE: flat-mx-2-1 ; INSTANCE: flat-mx-2-1 flat-mx-2 ;
+TUPLE: flat-mx-1-1 ; INSTANCE: flat-mx-1-1 flat-mx-1
+TUPLE: flat-mx-1-2 ; INSTANCE: flat-mx-1-2 flat-mx-1
+TUPLE: flat-mx-1-3 ; INSTANCE: flat-mx-1-3 flat-mx-1
+TUPLE: flat-mx-1-4 ; INSTANCE: flat-mx-1-4 flat-mx-1
+MIXIN: flat-mx-2     INSTANCE: flat-mx-2 flat-mx-1
+TUPLE: flat-mx-2-1 ; INSTANCE: flat-mx-2-1 flat-mx-2
 
 { t } [ T{ flat-mx-2-1 } flat-mx-1? ] unit-test
 
@@ -131,9 +131,9 @@ TUPLE: a-class ;
 ! Changing a mixin member's metaclass should not remove it from the mixin
 MIXIN: metaclass-change-mixin
 TUPLE: metaclass-change ;
-INSTANCE: metaclass-change metaclass-change-mixin ;
+INSTANCE: metaclass-change metaclass-change-mixin
 
-GENERIC: metaclass-change-generic ( a -- b ) ;
+GENERIC: metaclass-change-generic ( a -- b )
 
 M: metaclass-change-mixin metaclass-change-generic ;
 

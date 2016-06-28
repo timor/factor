@@ -4,9 +4,9 @@ USING: checksums io.binary kernel math sequences
 sequences.private ;
 IN: checksums.crc32
 
-CONSTANT: crc32-polynomial 0xedb88320 ;
+CONSTANT: crc32-polynomial 0xedb88320
 
-CONSTANT: crc32-table V{ } ;
+CONSTANT: crc32-table V{ }
 
 256 iota [
     8 [
@@ -21,7 +21,7 @@ CONSTANT: crc32-table V{ } ;
 
 SINGLETON: crc32
 
-INSTANCE: crc32 checksum ;
+INSTANCE: crc32 checksum
 
 : init-crc32 ( input checksum -- x y input )
     drop [ 0xffffffff dup ] dip ; inline

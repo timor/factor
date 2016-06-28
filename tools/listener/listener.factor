@@ -8,8 +8,8 @@ source-files.errors system vocabs vocabs.loader
 vocabs.parser ;
 IN: listener
 
-GENERIC: stream-read-quot ( stream -- quot/f ) ;
-GENERIC#: prompt. 1 ( stream prompt -- ) ;
+GENERIC: stream-read-quot ( stream -- quot/f )
+GENERIC#: prompt. 1 ( stream prompt -- )
 
 : prompt ( -- str )
     manifest get current-vocab>> [ name>> "IN: " prepend ] [ "" ] if*

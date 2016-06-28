@@ -12,9 +12,9 @@ CONSTANT: signal-names
     "SIGCONT" "SIGCHLD" "SIGTTIN" "SIGTTOU" "SIGIO" "SIGXCPU"
     "SIGXFSZ" "SIGVTALRM" "SIGPROF" "SIGWINCH" "SIGINFO"
     "SIGUSR1" "SIGUSR2"
-} ;
+}
 
-GENERIC: signal-name ( obj -- str/f ) ;
+GENERIC: signal-name ( obj -- str/f )
 
 M: signal signal-name n>> signal-name ;
 

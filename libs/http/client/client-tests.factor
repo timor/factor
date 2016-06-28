@@ -133,7 +133,7 @@ CONSTANT: classic-proxy-settings H{
     { "http.proxy" "http://proxy.private:3128" }
     { "https.proxy" "http://proxysec.private:3128" }
     { "no_proxy" "localhost,127.0.0.1,.allprivate,.a.subprivate,b.subprivate" }
-} ;
+}
 
 { f } [
     classic-proxy-settings [

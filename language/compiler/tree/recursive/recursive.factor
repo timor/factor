@@ -27,7 +27,7 @@ TUPLE: call-graph-node tail? label children calls ;
 
 SYMBOLS: children calls ;
 
-GENERIC: node-call-graph ( tail? node -- ) ;
+GENERIC: node-call-graph ( tail? node -- )
 
 : (build-call-graph) ( tail? nodes -- )
     [ tail-calls ] keep

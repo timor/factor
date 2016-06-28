@@ -6,7 +6,7 @@ regexp.transition-tables sequences sequences.private sets
 strings unicode words ;
 IN: regexp.compiler
 
-GENERIC: question>quot ( question -- quot ) ;
+GENERIC: question>quot ( question -- quot )
 
 SYMBOL: shortest?
 SYMBOL: backwards?
@@ -58,7 +58,7 @@ M: word-break question>quot
     (execution-quot) ;
 
 TUPLE: box contents ;
-C: <box> box ;
+C: <box> box
 
 : condition>quot ( condition -- quot )
     ! Conditions here are for different classes

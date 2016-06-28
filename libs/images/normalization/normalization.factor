@@ -11,8 +11,8 @@ IN: images.normalization
 
 PRIVATE<
 
-CONSTANT: dont-care 127 ;
-CONSTANT: fill-value 255 ;
+CONSTANT: dont-care 127
+CONSTANT: fill-value 255
 
 : permutation ( src dst -- seq )
     swap $[ _ index [ dont-care ] unless* ] { } map-as
@@ -41,7 +41,7 @@ CONSTANT: fill-value 255 ;
     [ [ ] [ dim>> first ] [ stride ] tri ] 2dip
     $[ _ _ _ _ permute ] change-bitmap ;
 
-GENERIC: normalize-component-type* ( image component-type -- image ) ;
+GENERIC: normalize-component-type* ( image component-type -- image )
 
 : normalize-floats ( float-array -- byte-array )
     [ 255.0 * >integer ] B{ } map-as ;

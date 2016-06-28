@@ -6,10 +6,10 @@ io.encodings.binary io.files kernel locals math sequences
 audio.loader ;
 IN: audio.aiff
 
-CONSTANT: FORM-MAGIC "FORM" ;
-CONSTANT: AIFF-MAGIC "AIFF" ;
-CONSTANT: COMM-MAGIC "COMM" ;
-CONSTANT: SSND-MAGIC "SSND" ;
+CONSTANT: FORM-MAGIC "FORM"
+CONSTANT: AIFF-MAGIC "AIFF"
+CONSTANT: COMM-MAGIC "COMM"
+CONSTANT: SSND-MAGIC "SSND"
 
 STRUCT: aiff-chunk-header
     { id char[4] }

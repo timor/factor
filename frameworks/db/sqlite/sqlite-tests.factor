@@ -100,11 +100,11 @@ things "THINGS" {
 
 ! Tables can have different names than the name of the tuple
 TUPLE: foo slot ;
-C: <foo> foo ;
+C: <foo> foo
 foo "BAR" { { "slot" "SOMETHING" INTEGER +not-null+ } } define-persistent
 
 TUPLE: hi bye try ;
-C: <hi> hi ;
+C: <hi> hi
 hi "HELLO" {
     { "bye" "BUHBYE" INTEGER { +foreign-id+ foo "SOMETHING" } }
     { "try" "RETHROW" INTEGER { +foreign-id+ foo "SOMETHING" } }

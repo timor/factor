@@ -5,7 +5,7 @@ IN: sequences.deep
 
 ! All traversal goes in postorder
 
-GENERIC: branch? ( object -- ? ) ;
+GENERIC: branch? ( object -- ? )
 
 M: sequence branch? drop t ;
 M: integer branch? drop f ;

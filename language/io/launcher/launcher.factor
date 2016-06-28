@@ -36,7 +36,7 @@ SYMBOL: +stdout+
 
 TUPLE: appender path ;
 
-C: <appender> appender ;
+C: <appender> appender
 
 SYMBOL: +prepend-environment+
 SYMBOL: +replace-environment+
@@ -68,7 +68,7 @@ SYMBOL: +new-session+
 ! Non-blocking process exit notification facility
 SYMBOL: processes
 
-HOOK: (wait-for-processes) io-backend ( -- ? ) ;
+HOOK: (wait-for-processes) io-backend ( -- ? )
 
 PRIVATE<
 
@@ -106,7 +106,7 @@ SYMBOL: wait-flag
 
 PRIVATE>
 
-GENERIC: >process ( obj -- process ) ;
+GENERIC: >process ( obj -- process )
 
 ERROR: process-already-started process ;
 
@@ -121,7 +121,7 @@ M: process >process
 
 M: object >process <process> swap >>command ;
 
-HOOK: (current-process) io-backend ( -- handle ) ;
+HOOK: (current-process) io-backend ( -- handle )
 
 ERROR: process-was-killed process ;
 
@@ -140,7 +140,7 @@ M: process-was-killed error.
 : wait-for-process ( process -- status )
     [ (wait-for-process) ] with-timeout ;
 
-HOOK: (run-process) io-backend ( process -- handle ) ;
+HOOK: (run-process) io-backend ( process -- handle )
 
 : run-detached ( desc -- process )
     >process [ dup (run-process) process-started ] keep ;
@@ -166,7 +166,7 @@ M: process-failed error.
 : try-process ( desc -- )
     run-process wait-for-success ;
 
-HOOK: (kill-process) io-backend ( process -- ) ;
+HOOK: (kill-process) io-backend ( process -- )
 
 : kill-process ( process -- )
     t >>killed

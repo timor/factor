@@ -12,7 +12,7 @@ TUPLE: participant nick operator voice ;
         [ f f ]
     } cond participant boa ;
 
-GENERIC: has-participant? ( name irc-chat -- ? ) ;
+GENERIC: has-participant? ( name irc-chat -- ? )
 M: irc-chat         has-participant? 2drop f ;
 M: irc-channel-chat has-participant? participants>> key? ;
 

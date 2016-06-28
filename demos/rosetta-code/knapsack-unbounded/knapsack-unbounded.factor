@@ -28,12 +28,12 @@ IN: rosetta-code.knapsack-unbounded
 ! There are four solutions that maximise the value taken. Only
 ! one need be given.
 
-CONSTANT: values { 3000 1800 2500 } ;
-CONSTANT: weights { 0.3 0.2 2.0 } ;
-CONSTANT: volumes { 0.025 0.015 0.002 } ;
+CONSTANT: values { 3000 1800 2500 }
+CONSTANT: weights { 0.3 0.2 2.0 }
+CONSTANT: volumes { 0.025 0.015 0.002 }
 
-CONSTANT: max-weight 25.0 ;
-CONSTANT: max-volume 0.25 ;
+CONSTANT: max-weight 25.0
+CONSTANT: max-volume 0.25
 
 TUPLE: bounty amounts value weight volume ;
 

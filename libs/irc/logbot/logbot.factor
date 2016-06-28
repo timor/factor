@@ -6,9 +6,9 @@ irc.client irc.client.chats irc.logbot.log-line splitting
 irc.messages.base kernel make namespaces sequences threads ;
 IN: irc.logbot
 
-CONSTANT: bot-channel "#concatenative" ;
-CONSTANT: default-log-directory "resource:logs/irc" ;
-CONSTANT: default-nickserv-handle "flogbot2" ;
+CONSTANT: bot-channel "#concatenative"
+CONSTANT: default-log-directory "resource:logs/irc"
+CONSTANT: default-nickserv-handle "flogbot2"
 
 SYMBOL: ircbot-log-directory
 SYMBOL: nickserv-handle
@@ -51,7 +51,7 @@ SYMBOL: current-stream
     [ add-timestamp ] [ timestamp>stream ] bi
     [ stream-print ] [ stream-flush ] bi ;
 
-GENERIC: handle-message ( msg -- ) ;
+GENERIC: handle-message ( msg -- )
 
 M: object      handle-message drop ;
 M: irc-message handle-message [ >log-line ] [ timestamp>> ] bi log-message ;

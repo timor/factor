@@ -29,7 +29,7 @@ M: redirect-responder call-responder* nip to>> <redirect> ;
 
 TUPLE: secure-only < filter-responder ;
 
-C: <secure-only> secure-only ;
+C: <secure-only> secure-only
 
 : secure-connection? ( -- ? ) url get protocol>> "https" = ;
 

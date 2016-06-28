@@ -6,22 +6,22 @@ IN: sequences
 
 MIXIN: sequence
 
-GENERIC: length ( seq -- n ) ; flushable
-GENERIC: set-length ( n seq -- ) ;
-GENERIC: nth ( n seq -- elt ) ; flushable
-GENERIC: set-nth ( elt n seq -- ) ;
-GENERIC: new-sequence ( len seq -- newseq ) ; flushable
-GENERIC: new-resizable ( len seq -- newseq ) ; flushable
-GENERIC: like ( seq exemplar -- newseq ) ; flushable
-GENERIC: clone-like ( seq exemplar -- newseq ) ; flushable
+GENERIC: length ( seq -- n ) flushable
+GENERIC: set-length ( n seq -- )
+GENERIC: nth ( n seq -- elt ) flushable
+GENERIC: set-nth ( elt n seq -- )
+GENERIC: new-sequence ( len seq -- newseq ) flushable
+GENERIC: new-resizable ( len seq -- newseq ) flushable
+GENERIC: like ( seq exemplar -- newseq ) flushable
+GENERIC: clone-like ( seq exemplar -- newseq ) flushable
 
 : new-like ( len exemplar quot -- seq )
     over [ [ new-sequence ] dip call ] dip like ; inline
 
 M: sequence like drop ; inline
 
-GENERIC: lengthen ( n seq -- ) ;
-GENERIC: shorten ( n seq -- ) ;
+GENERIC: lengthen ( n seq -- )
+GENERIC: shorten ( n seq -- )
 
 M: sequence lengthen 2dup length > [ set-length ] [ 2drop ] if ; inline
 M: sequence shorten 2dup length < [ set-length ] [ 2drop ] if ; inline
@@ -51,7 +51,7 @@ M: sequence shorten 2dup length < [ set-length ] [ 2drop ] if ; inline
 
 ERROR: bounds-error index seq ;
 
-GENERIC#: bounds-check? 1 ( n seq -- ? ) ;
+GENERIC#: bounds-check? 1 ( n seq -- ? )
 
 M: integer bounds-check? ( n seq -- ? )
     dupd length < [ 0 >= ] [ drop f ] if ; inline
@@ -65,7 +65,7 @@ ERROR: immutable element index sequence ;
 
 M: immutable-sequence set-nth immutable ;
 
-INSTANCE: immutable-sequence sequence ;
+INSTANCE: immutable-sequence sequence
 
 PRIVATE<
 
@@ -77,11 +77,11 @@ PRIVATE<
 
 : dispatch ( n array -- ) array-nth call ;
 
-GENERIC: resize ( n seq -- newseq ) ; flushable
+GENERIC: resize ( n seq -- newseq ) flushable
 
 ! Unsafe sequence protocol for inner loops
-GENERIC: nth-unsafe ( n seq -- elt ) ; flushable
-GENERIC: set-nth-unsafe ( elt n seq -- ) ;
+GENERIC: nth-unsafe ( n seq -- elt ) flushable
+GENERIC: set-nth-unsafe ( elt n seq -- )
 
 M: sequence nth bounds-check nth-unsafe ; inline
 M: sequence set-nth bounds-check set-nth-unsafe ; inline
@@ -99,7 +99,7 @@ M: f length drop 0 ; inline
 M: f nth-unsafe nip ; inline
 M: f like drop [ f ] when-empty ; inline
 
-INSTANCE: f immutable-sequence ;
+INSTANCE: f immutable-sequence
 
 ! Integer sequences
 TUPLE: iota-tuple { n integer read-only } ;
@@ -113,7 +113,7 @@ ERROR: non-negative-integer-expected n ;
 M: iota-tuple length n>> ; inline
 M: iota-tuple nth-unsafe drop ; inline
 
-INSTANCE: iota-tuple immutable-sequence ;
+INSTANCE: iota-tuple immutable-sequence
 
 PRIVATE<
 
@@ -189,8 +189,8 @@ PRIVATE>
     [ 2drop f ] [ nth-unsafe ] if ; inline
 
 MIXIN: virtual-sequence
-GENERIC: virtual-exemplar ( seq -- seq' ) ;
-GENERIC: virtual@ ( n seq -- n' seq' ) ;
+GENERIC: virtual-exemplar ( seq -- seq' )
+GENERIC: virtual@ ( n seq -- n' seq' )
 
 M: virtual-sequence nth virtual@ nth ; inline
 M: virtual-sequence set-nth virtual@ set-nth ; inline
@@ -199,18 +199,18 @@ M: virtual-sequence set-nth-unsafe virtual@ set-nth-unsafe ; inline
 M: virtual-sequence like virtual-exemplar like ; inline
 M: virtual-sequence new-sequence virtual-exemplar new-sequence ; inline
 
-INSTANCE: virtual-sequence sequence ;
+INSTANCE: virtual-sequence sequence
 
 ! A reversal of an underlying sequence.
 TUPLE: reversed { seq read-only } ;
 
-C: <reversed> reversed ;
+C: <reversed> reversed
 
 M: reversed virtual-exemplar seq>> ; inline
 M: reversed virtual@ seq>> [ length swap - 1 - ] keep ; inline
 M: reversed length seq>> length ; inline
 
-INSTANCE: reversed virtual-sequence ;
+INSTANCE: reversed virtual-sequence
 
 ! A slice of another sequence.
 TUPLE: slice
@@ -258,7 +258,7 @@ M: slice length [ to>> ] [ from>> ] bi - ; inline
 
 : but-last-slice ( seq -- slice ) 1 head-slice* ; inline
 
-INSTANCE: slice virtual-sequence ;
+INSTANCE: slice virtual-sequence
 
 ! One element repeated many times
 TUPLE: repetition
@@ -272,7 +272,7 @@ TUPLE: repetition
 M: repetition length length>> ; inline
 M: repetition nth-unsafe nip elt>> ; inline
 
-INSTANCE: repetition immutable-sequence ;
+INSTANCE: repetition immutable-sequence
 
 PRIVATE<
 
@@ -288,7 +288,7 @@ TUPLE: copy-state
     { dst-i read-only }
     { dst read-only } ;
 
-C: <copy> copy-state ;
+C: <copy> copy-state
 
 : copy-nth-unsafe ( n copy -- )
     [ [ src-i>> + ] [ src>> ] bi nth-unsafe ]
@@ -861,7 +861,7 @@ PRIVATE>
         [ 0 swap copy-unsafe ] keep reverse!
     ] keep like ;
 
-GENERIC: sum-lengths ( seq -- n ) ;
+GENERIC: sum-lengths ( seq -- n )
 
 M: object sum-lengths
     0 [ length + ] reduce ;
@@ -1061,7 +1061,7 @@ PRIVATE>
 : trim ( ... seq quot: ( ... elt -- ... ? ) -- ... newseq )
     [ trim-slice ] [ drop ] 2bi like ; inline
 
-GENERIC: sum ( seq -- n ) ;
+GENERIC: sum ( seq -- n )
 M: object sum 0 [ + ] binary-reduce ; inline
 M: iota-tuple sum length dup 1 - * 2/ ; inline
 M: repetition sum [ elt>> ] [ length>> ] bi * ; inline

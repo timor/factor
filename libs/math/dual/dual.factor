@@ -9,7 +9,7 @@ IN: math.dual
 
 TUPLE: dual ordinary-part epsilon-part ;
 
-C: <dual> dual ;
+C: <dual> dual
 
 ! Ordinary numbers implement the dual protocol by returning
 ! themselves as the ordinary part, and 0 as the epsilon part.

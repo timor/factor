@@ -4,11 +4,11 @@ IN: classes.intersection.tests
 TUPLE: a ;
 TUPLE: a1 < a ; TUPLE: a2 < a ; TUPLE: a3 < a2 ;
 MIXIN: b
-INSTANCE: a3 b ;
-INSTANCE: a1 b ;
+INSTANCE: a3 b
+INSTANCE: a1 b
 INTERSECTION: c a2 b ;
 
-GENERIC: x ( a -- b ) ;
+GENERIC: x ( a -- b )
 
 M: c x drop c ;
 M: a x drop a ;
@@ -29,7 +29,7 @@ TUPLE: t4 < t2 ; TUPLE: t5 < t2 ;
 UNION: m t4 t5 t3 ;
 INTERSECTION: i t2 m ;
 
-GENERIC: g ( a -- b ) ;
+GENERIC: g ( a -- b )
 
 M: i g drop i ;
 M: t4 g drop t4 ;

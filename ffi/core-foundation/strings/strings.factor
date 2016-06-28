@@ -10,20 +10,20 @@ IN: core-foundation.strings
 TYPEDEF: void* CFStringRef ;
 
 TYPEDEF: int CFStringEncoding ;
-CONSTANT: kCFStringEncodingMacRoman 0x0 ;
-CONSTANT: kCFStringEncodingWindowsLatin1 0x0500 ;
-CONSTANT: kCFStringEncodingISOLatin1 0x0201 ;
-CONSTANT: kCFStringEncodingNextStepLatin 0x0B01 ;
-CONSTANT: kCFStringEncodingASCII 0x0600 ;
-CONSTANT: kCFStringEncodingUnicode 0x0100 ;
-CONSTANT: kCFStringEncodingUTF8 0x08000100 ;
-CONSTANT: kCFStringEncodingNonLossyASCII 0x0BFF ;
-CONSTANT: kCFStringEncodingUTF16 0x0100 ;
-CONSTANT: kCFStringEncodingUTF16BE 0x10000100 ;
-CONSTANT: kCFStringEncodingUTF16LE 0x14000100 ;
-CONSTANT: kCFStringEncodingUTF32 0x0c000100 ;
-CONSTANT: kCFStringEncodingUTF32BE 0x18000100 ;
-CONSTANT: kCFStringEncodingUTF32LE 0x1c000100 ;
+CONSTANT: kCFStringEncodingMacRoman 0x0
+CONSTANT: kCFStringEncodingWindowsLatin1 0x0500
+CONSTANT: kCFStringEncodingISOLatin1 0x0201
+CONSTANT: kCFStringEncodingNextStepLatin 0x0B01
+CONSTANT: kCFStringEncodingASCII 0x0600
+CONSTANT: kCFStringEncodingUnicode 0x0100
+CONSTANT: kCFStringEncodingUTF8 0x08000100
+CONSTANT: kCFStringEncodingNonLossyASCII 0x0BFF
+CONSTANT: kCFStringEncodingUTF16 0x0100
+CONSTANT: kCFStringEncodingUTF16BE 0x10000100
+CONSTANT: kCFStringEncodingUTF16LE 0x14000100
+CONSTANT: kCFStringEncodingUTF32 0x0c000100
+CONSTANT: kCFStringEncodingUTF32BE 0x18000100
+CONSTANT: kCFStringEncodingUTF32LE 0x1c000100
 
 FUNCTION: CFStringRef CFStringCreateWithBytes (
     CFAllocatorRef alloc,

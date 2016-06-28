@@ -13,7 +13,7 @@ TUPLE: hsva < color
 { value read-only }
 { alpha read-only } ;
 
-C: <hsva> hsva ;
+C: <hsva> hsva
 
 PRIVATE<
 
@@ -49,7 +49,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: >hsva ( color -- hsva ) ;
+GENERIC: >hsva ( color -- hsva )
 
 M: object >hsva >rgba >hsva ;
 

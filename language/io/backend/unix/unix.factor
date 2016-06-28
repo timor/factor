@@ -9,9 +9,9 @@ unix.stat unix.types ;
 QUALIFIED: io
 IN: io.backend.unix
 
-CONSTANT: file-mode 0o0666 ;
+CONSTANT: file-mode 0o0666
 
-GENERIC: handle-fd ( handle -- fd ) ;
+GENERIC: handle-fd ( handle -- fd )
 
 TUPLE: fd < disposable fd ;
 

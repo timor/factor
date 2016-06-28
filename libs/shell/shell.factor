@@ -10,9 +10,9 @@ IN: shell
 : pwd ( args -- )
     drop current-directory get print ;
 
-CONSTANT: swords { "cd" "pwd" } ;
+CONSTANT: swords { "cd" "pwd" }
 
-GENERIC: expand ( expr -- expr ) ;
+GENERIC: expand ( expr -- expr )
 
 M: object expand ;
 

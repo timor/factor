@@ -5,9 +5,9 @@ IN: io.streams.memory
 
 TUPLE: memory-stream alien ;
 
-C: <memory-stream> memory-stream ;
+C: <memory-stream> memory-stream
 
-INSTANCE: memory-stream input-stream ;
+INSTANCE: memory-stream input-stream
 
 M: memory-stream stream-element-type drop +byte+ ; inline
 

@@ -152,7 +152,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: sort-keys ( obj -- sortedseq ) ;
+GENERIC: sort-keys ( obj -- sortedseq )
 
 M: object sort-keys >alist sort-keys ;
 
@@ -162,7 +162,7 @@ M: sequence sort-keys
 M: hashtable sort-keys
     >alist [ { array } declare first-unsafe ] sort-with ;
 
-GENERIC: sort-values ( obj -- sortedseq ) ;
+GENERIC: sort-values ( obj -- sortedseq )
 
 M: object sort-values >alist sort-values ;
 

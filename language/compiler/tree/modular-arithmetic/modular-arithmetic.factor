@@ -63,7 +63,7 @@ SYMBOL: fixnum-values
 : fixnum-value ( value -- )
     fixnum-values get adjoin ;
 
-GENERIC: compute-modular-candidates* ( node -- ) ;
+GENERIC: compute-modular-candidates* ( node -- )
 
 M: #push compute-modular-candidates*
     [ out-d>> first ] [ literal>> ] bi
@@ -102,7 +102,7 @@ M: node compute-modular-candidates*
     HS{ } clone fixnum-values namespaces:set
     [ compute-modular-candidates* ] each-node ;
 
-GENERIC: only-reads-low-order? ( node -- ? ) ;
+GENERIC: only-reads-low-order? ( node -- ? )
 
 : output-modular? ( #call -- ? )
     out-d>> first modular-value? ;
@@ -129,7 +129,7 @@ SYMBOL: changed?
 : compute-modular-values ( -- )
     [ changed? off (compute-modular-values) changed? get ] loop ;
 
-GENERIC: optimize-modular-arithmetic* ( node -- nodes ) ;
+GENERIC: optimize-modular-arithmetic* ( node -- nodes )
 
 M: #push optimize-modular-arithmetic*
     dup [ out-d>> first modular-value? ] [ literal>> real? ] bi and

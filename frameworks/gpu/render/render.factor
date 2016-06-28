@@ -10,7 +10,7 @@ opengl.gl parser quotations sequences slots sorting
 specialized-arrays strings ui.gadgets.worlds variants
 vocabs.parser words math.vectors.simd ;
 FROM: math => float ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAYS: c:float c:int c:uchar c:ushort c:uint c:void* ;
 IN: gpu.render
 
@@ -46,9 +46,9 @@ VARIANT: uniform-type
 
     texture-uniform ;
 
-ALIAS: mat2x2-uniform mat2-uniform ;
-ALIAS: mat3x3-uniform mat3-uniform ;
-ALIAS: mat4x4-uniform mat4-uniform ;
+ALIAS: mat2x2-uniform mat2-uniform
+ALIAS: mat3x3-uniform mat3-uniform
+ALIAS: mat4x4-uniform mat4-uniform
 
 TUPLE: uniform
     { name         string   read-only initial: "" }
@@ -64,20 +64,20 @@ TUPLE: index-range
     { start integer read-only }
     { count integer read-only } ;
 
-C: <index-range> index-range ;
+C: <index-range> index-range
 
 TUPLE: multi-index-range
     { starts uint-array read-only }
     { counts uint-array read-only } ;
 
-C: <multi-index-range> multi-index-range ;
+C: <multi-index-range> multi-index-range
 
 TUPLE: index-elements
     { ptr read-only }
     { count integer read-only }
     { index-type index-type read-only } ;
 
-C: <index-elements> index-elements ;
+C: <index-elements> index-elements
 
 TUPLE: multi-index-elements
     { buffer maybe{ buffer } read-only }
@@ -85,7 +85,7 @@ TUPLE: multi-index-elements
     { counts uint-array read-only }
     { index-type index-type read-only } ;
 
-C: <multi-index-elements> multi-index-elements ;
+C: <multi-index-elements> multi-index-elements
 
 UNION: vertex-indexes
     index-range
@@ -137,11 +137,11 @@ PRIVATE<
         { triangle-strip-with-adjacency-mode [ GL_TRIANGLE_STRIP_ADJACENCY ] }
     } case ; inline
 
-GENERIC: render-vertex-indexes ( primitive-mode vertex-indexes -- ) ;
+GENERIC: render-vertex-indexes ( primitive-mode vertex-indexes -- )
 
-GENERIC#: render-vertex-indexes-instanced 1 ( primitive-mode vertex-indexes instances -- ) ;
+GENERIC#: render-vertex-indexes-instanced 1 ( primitive-mode vertex-indexes instances -- )
 
-GENERIC: gl-array-element-type ( array -- type ) ;
+GENERIC: gl-array-element-type ( array -- type )
 M: uchar-array  gl-array-element-type drop GL_UNSIGNED_BYTE  ; inline
 M: ushort-array gl-array-element-type drop GL_UNSIGNED_SHORT ; inline
 M: uint-array   gl-array-element-type drop GL_UNSIGNED_INT   ; inline
@@ -189,8 +189,8 @@ M: multi-index-elements render-vertex-indexes
 : (bind-texture-unit) ( texture texture-unit -- )
     swap [ GL_TEXTURE0 + glActiveTexture ] [ bind-texture drop ] bi* ; inline
 
-GENERIC: (bind-uniform-textures) ( program-instance uniform-tuple -- ) ;
-GENERIC: (bind-uniforms) ( program-instance uniform-tuple -- ) ;
+GENERIC: (bind-uniform-textures) ( program-instance uniform-tuple -- )
+GENERIC: (bind-uniforms) ( program-instance uniform-tuple -- )
 
 M: uniform-tuple (bind-uniform-textures)
     2drop ;
@@ -259,32 +259,32 @@ DEFER: uniform-texture-accessors
 UNION: binary-data
     c-ptr specialized-array struct simd-128 ;
 
-GENERIC: >uniform-bool-array ( sequence -- c-array ) ;
-GENERIC: >uniform-int-array ( sequence -- c-array ) ;
-GENERIC: >uniform-uint-array ( sequence -- c-array ) ;
-GENERIC: >uniform-float-array  ( sequence -- c-array ) ;
+GENERIC: >uniform-bool-array ( sequence -- c-array )
+GENERIC: >uniform-int-array ( sequence -- c-array )
+GENERIC: >uniform-uint-array ( sequence -- c-array )
+GENERIC: >uniform-float-array  ( sequence -- c-array )
 
-GENERIC#: >uniform-bvec-array 1 ( sequence dim -- c-array ) ;
-GENERIC#: >uniform-ivec-array 1 ( sequence dim -- c-array ) ;
-GENERIC#: >uniform-uvec-array 1 ( sequence dim -- c-array ) ;
-GENERIC#: >uniform-vec-array  1 ( sequence dim -- c-array ) ;
+GENERIC#: >uniform-bvec-array 1 ( sequence dim -- c-array )
+GENERIC#: >uniform-ivec-array 1 ( sequence dim -- c-array )
+GENERIC#: >uniform-uvec-array 1 ( sequence dim -- c-array )
+GENERIC#: >uniform-vec-array  1 ( sequence dim -- c-array )
 
-GENERIC#: >uniform-matrix 2 ( sequence cols rows -- c-array ) ;
+GENERIC#: >uniform-matrix 2 ( sequence cols rows -- c-array )
 
-GENERIC#: >uniform-matrix-array 2 ( sequence cols rows -- c-array ) ;
+GENERIC#: >uniform-matrix-array 2 ( sequence cols rows -- c-array )
 
-GENERIC: bind-uniform-bvec2 ( index sequence -- ) ;
-GENERIC: bind-uniform-bvec3 ( index sequence -- ) ;
-GENERIC: bind-uniform-bvec4 ( index sequence -- ) ;
-GENERIC: bind-uniform-ivec2 ( index sequence -- ) ;
-GENERIC: bind-uniform-ivec3 ( index sequence -- ) ;
-GENERIC: bind-uniform-ivec4 ( index sequence -- ) ;
-GENERIC: bind-uniform-uvec2 ( index sequence -- ) ;
-GENERIC: bind-uniform-uvec3 ( index sequence -- ) ;
-GENERIC: bind-uniform-uvec4 ( index sequence -- ) ;
-GENERIC: bind-uniform-vec2  ( index sequence -- ) ;
-GENERIC: bind-uniform-vec3  ( index sequence -- ) ;
-GENERIC: bind-uniform-vec4  ( index sequence -- ) ;
+GENERIC: bind-uniform-bvec2 ( index sequence -- )
+GENERIC: bind-uniform-bvec3 ( index sequence -- )
+GENERIC: bind-uniform-bvec4 ( index sequence -- )
+GENERIC: bind-uniform-ivec2 ( index sequence -- )
+GENERIC: bind-uniform-ivec3 ( index sequence -- )
+GENERIC: bind-uniform-ivec4 ( index sequence -- )
+GENERIC: bind-uniform-uvec2 ( index sequence -- )
+GENERIC: bind-uniform-uvec3 ( index sequence -- )
+GENERIC: bind-uniform-uvec4 ( index sequence -- )
+GENERIC: bind-uniform-vec2  ( index sequence -- )
+GENERIC: bind-uniform-vec3  ( index sequence -- )
+GENERIC: bind-uniform-vec4  ( index sequence -- )
 
 M: object >uniform-bool-array [ >c-bool ] int-array{ } map-as ; inline
 M: binary-data >uniform-bool-array ; inline
@@ -555,7 +555,7 @@ PRIVATE<
     dup first sequence?
     [ bind-named-output-attachments ] [ [ drop ] 2dip bind-unnamed-output-attachments ] if ;
 
-GENERIC: bind-transform-feedback-output ( output -- ) ;
+GENERIC: bind-transform-feedback-output ( output -- )
 
 M: buffer bind-transform-feedback-output
     [ GL_TRANSFORM_FEEDBACK_BUFFER 0 ] dip handle>> glBindBufferBase ; inline

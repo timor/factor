@@ -53,7 +53,7 @@ CONSTANT: valid-cube-b-rep
             T{ vertex { position double-4{  1.0 -1.0  1.0  0.0 } } { edge 8 } }
             T{ vertex { position double-4{  1.0  1.0  1.0  0.0 } } { edge 9 } }
         } }
-    } ;
+    }
 
 CONSTANT: missing-face-cube-b-rep
     T{ b-rep
@@ -100,7 +100,7 @@ CONSTANT: missing-face-cube-b-rep
             T{ vertex { position double-4{  1.0  1.0  1.0  0.0 } } { edge 8 } }
             T{ vertex { position double-4{  1.0  1.0  1.0  0.0 } } { edge 9 } }
         } }
-    } ;
+    }
 
 CONSTANT: non-quad-face-cube-b-rep
     T{ b-rep
@@ -149,7 +149,7 @@ CONSTANT: non-quad-face-cube-b-rep
             T{ vertex { position double-4{  1.0  1.0  1.0  0.0 } } { edge 8 } }
             T{ vertex { position double-4{  1.0  1.0  1.0  0.0 } } { edge 9 } }
         } }
-    } ;
+    }
 
 CONSTANT: multi-ringed-face-cube-b-rep
     T{ b-rep
@@ -213,7 +213,7 @@ CONSTANT: multi-ringed-face-cube-b-rep
             T{ vertex { position double-4{  1.0  1.0 -0.5  0.0 } } { edge 26 } }
             T{ vertex { position double-4{  1.0  1.0  0.5  0.0 } } { edge 27 } }
         } }
-    } ;
+    }
 
 CONSTANT: valid-multi-valence-b-rep
     T{ b-rep
@@ -412,7 +412,7 @@ CONSTANT: valid-multi-valence-b-rep
             T{ face { edge  96 } { next-ring f } { base-face 24 } }
             T{ face { edge 100 } { next-ring f } { base-face 25 } }
         } }
-    } ;
+    }
 
 CONSTANT: degenerate-incomplete-face
     T{ b-rep
@@ -433,7 +433,7 @@ CONSTANT: degenerate-incomplete-face
         { faces {
             T{ face { edge 0 } { next-ring f } { base-face 0 } }
         } }
-    } ;
+    }
 
 CONSTANT: partially-degenerate-second-face
     T{ b-rep
@@ -461,7 +461,7 @@ CONSTANT: partially-degenerate-second-face
             T{ face { edge 0 } { next-ring f } { base-face 0 } }
             T{ face { edge 4 } { next-ring f } { base-face 1 } }
         } }
-    } ;
+    }
 
 : nth-when ( index/f seq -- elt/f )
     over [ nth ] [ 2drop f ] if ; inline

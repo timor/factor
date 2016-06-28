@@ -10,8 +10,8 @@ ERROR: bad-mmap-size n ;
 
 PRIVATE<
 
-HOOK: (mapped-file-reader) os ( path length -- address handle ) ;
-HOOK: (mapped-file-r/w) os ( path length -- address handle ) ;
+HOOK: (mapped-file-reader) os ( path length -- address handle )
+HOOK: (mapped-file-r/w) os ( path length -- address handle )
 
 : prepare-mapped-file ( path quot -- mapped-file path' length )
     [
@@ -33,7 +33,7 @@ PRIVATE>
     [ heap-size /i ] keep
     <c-direct-array> ; inline
 
-HOOK: close-mapped-file io-backend ( mmap -- ) ;
+HOOK: close-mapped-file io-backend ( mmap -- )
 
 M: mapped-file dispose* ( mmap -- ) close-mapped-file ;
 

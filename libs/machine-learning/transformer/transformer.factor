@@ -3,6 +3,6 @@
 USING: ;
 IN: machine-learning.transformer
 
-GENERIC: fit-y ( y transformer -- ) ;
-GENERIC: transform-y ( y transformer -- y' ) ;
-GENERIC: inverse-transform-y ( y transformer -- y' ) ;
+GENERIC: fit-y ( y transformer -- )
+GENERIC: transform-y ( y transformer -- y' )
+GENERIC: inverse-transform-y ( y transformer -- y' )

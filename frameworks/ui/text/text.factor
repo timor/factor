@@ -13,28 +13,28 @@ SYMBOL: font-renderer
     dup text-handle>> [ <cache-assoc> >>text-handle ] unless
     text-handle>> ;
 
-HOOK: flush-layout-cache font-renderer ( -- ) ;
+HOOK: flush-layout-cache font-renderer ( -- )
 
 [ flush-layout-cache ] flush-layout-cache-hook set-global
 
-HOOK: string-dim font-renderer ( font string -- dim ) ;
+HOOK: string-dim font-renderer ( font string -- dim )
 
 : string-width ( font string -- w ) string-dim first ; inline
 
 : string-height ( font string -- h ) string-dim second ; inline
 
-HOOK: free-fonts font-renderer ( world -- ) ;
+HOOK: free-fonts font-renderer ( world -- )
 
 : combine-text-dim ( dim1 dim2 -- dim3 )
     [ first2 ] bi@ swapd [ max ] [ + ] 2bi* 2array ; inline
 
 PRIVATE>
 
-HOOK: x>offset font-renderer ( x font string -- n ) ;
+HOOK: x>offset font-renderer ( x font string -- n )
 
-HOOK: offset>x font-renderer ( n font string -- x ) ;
+HOOK: offset>x font-renderer ( n font string -- x )
 
-GENERIC: text-dim ( font text -- dim ) ;
+GENERIC: text-dim ( font text -- dim )
 
 M: string text-dim string-dim ;
 
@@ -45,11 +45,11 @@ M: array text-dim
 
 : text-height ( font text -- h ) text-dim second ;
 
-HOOK: font-metrics font-renderer ( font -- metrics ) ;
+HOOK: font-metrics font-renderer ( font -- metrics )
 
-HOOK: line-metrics font-renderer ( font string -- metrics ) ;
+HOOK: line-metrics font-renderer ( font string -- metrics )
 
-HOOK: string>image font-renderer ( font string -- image loc ) ;
+HOOK: string>image font-renderer ( font string -- image loc )
 
 PRIVATE<
 
@@ -65,7 +65,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: draw-text ( font text -- ) ;
+GENERIC: draw-text ( font text -- )
 
 M: string draw-text draw-string ;
 

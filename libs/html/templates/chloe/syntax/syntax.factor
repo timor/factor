@@ -16,7 +16,7 @@ tags [ H{ } clone ] initialize
 SYNTAX: \ CHLOE:
     scan-token parse-definition define-chloe-tag ;
 
-CONSTANT: chloe-ns "http://factorcode.org/chloe/1.0" ;
+CONSTANT: chloe-ns "http://factorcode.org/chloe/1.0"
 
 : chloe-name? ( name -- ? )
     url>> chloe-ns = ;

@@ -24,7 +24,7 @@ T{ basic-block
         }
     }
 }
-]] ;
+]]
 COMPILE>
 
 HELP: begin-basic-block

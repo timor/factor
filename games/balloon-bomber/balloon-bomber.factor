@@ -17,7 +17,7 @@ CONSTANT: rom-info {
     { 0x1000 "ballbomb/tn03" }
     { 0x1800 "ballbomb/tn04" }
     { 0x4000 "ballbomb/tn05-1" }
-} ;
+}
 
 : run-balloon ( -- )
     [

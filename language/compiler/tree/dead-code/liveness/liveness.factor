@@ -21,14 +21,14 @@ SYMBOL: live-values
     <hashed-dlist> work-list namespaces:set
     H{ { +bottom+ f } } clone live-values namespaces:set ;
 
-GENERIC: mark-live-values* ( node -- ) ;
+GENERIC: mark-live-values* ( node -- )
 
 : mark-live-values ( nodes -- nodes )
     dup [ mark-live-values* ] each-node ; inline
 
 M: node mark-live-values* drop ;
 
-GENERIC: compute-live-values* ( value node -- ) ;
+GENERIC: compute-live-values* ( value node -- )
 
 M: node compute-live-values* 2drop ;
 
@@ -43,7 +43,7 @@ M: node compute-live-values* 2drop ;
 : compute-live-values ( -- )
     work-list get [ iterate-live-values ] slurp-deque ;
 
-GENERIC: remove-dead-code* ( node -- node' ) ;
+GENERIC: remove-dead-code* ( node -- node' )
 
 M: node remove-dead-code* ;
 

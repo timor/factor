@@ -6,13 +6,13 @@ math math.order math.private sequences sequences.private summary
 vectors ;
 IN: heaps
 
-GENERIC: heap-push* ( value key heap -- entry ) ;
-GENERIC: heap-peek ( heap -- value key ) ;
-GENERIC: heap-pop* ( heap -- ) ;
-GENERIC: heap-pop ( heap -- value key ) ;
-GENERIC: heap-delete ( entry heap -- ) ;
-GENERIC: heap-empty? ( heap -- ? ) ;
-GENERIC: heap-size ( heap -- n ) ;
+GENERIC: heap-push* ( value key heap -- entry )
+GENERIC: heap-peek ( heap -- value key )
+GENERIC: heap-pop* ( heap -- )
+GENERIC: heap-pop ( heap -- value key )
+GENERIC: heap-delete ( entry heap -- )
+GENERIC: heap-empty? ( heap -- ? )
+GENERIC: heap-size ( heap -- n )
 
 PRIVATE<
 
@@ -71,7 +71,7 @@ PRIVATE<
     [ heap-size [ >>index ] keep ]
     [ data>> [ set-nth ] 2keep drop ] bi ; inline
 
-GENERIC: heap-compare ( entry1 entry2 heap -- ? ) ;
+GENERIC: heap-compare ( entry1 entry2 heap -- ? )
 
 M: min-heap heap-compare
     drop { entry entry } declare [ key>> ] bi@ after? ; inline

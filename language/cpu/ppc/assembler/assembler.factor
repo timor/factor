@@ -114,16 +114,16 @@ IN: cpu.ppc.assembler
     [ { 0 1 9 11 16 21 } bitfield ] dip insn ;
 
 ! 2.4 Branch Instructions
-GENERIC: B ( target_addr/label -- ) ;
+GENERIC: B ( target_addr/label -- )
 M: integer B ( target_addr -- ) -2 shift 0 0 18 i-insn ;
 
-GENERIC: BL ( target_addr/label -- ) ;
+GENERIC: BL ( target_addr/label -- )
 M: integer BL ( target_addr -- ) -2 shift 0 1 18 i-insn ;
 
 : BA  ( target_addr -- ) -2 shift 1 0 18 i-insn ;
 : BLA ( target_addr -- ) -2 shift 1 1 18 i-insn ;
 
-GENERIC: BC ( bo bi target_addr/label -- ) ;
+GENERIC: BC ( bo bi target_addr/label -- )
 M: integer BC ( bo bi target_addr -- ) -2 shift 0 0 16 b-insn ;
 
 : BCA  ( bo bi target_addr -- ) -2 shift 1 0 16 b-insn ;

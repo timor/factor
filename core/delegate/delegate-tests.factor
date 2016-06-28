@@ -5,14 +5,14 @@ delegate.private assocs see make ;
 IN: delegate.tests
 
 TUPLE: hello this that ;
-C: <hello> hello ;
+C: <hello> hello
 
 TUPLE: goodbye these those ;
-C: <goodbye> goodbye ;
+C: <goodbye> goodbye
 
-GENERIC: foo ( x -- y ) ;
-GENERIC: bar ( a -- b ) ;
-GENERIC#: whoa 1 ( s t -- w ) ;
+GENERIC: foo ( x -- y )
+GENERIC: bar ( a -- b )
+GENERIC#: whoa 1 ( s t -- w )
 PROTOCOL: baz foo { bar 0 } { whoa 1 } ;
 
 : hello-test ( hello/goodbye -- array )
@@ -23,7 +23,7 @@ M: hello foo this>> ;
 M: hello bar hello-test ;
 M: hello whoa [ this>> ] dip + ;
 
-GENERIC: bing ( c -- d ) ;
+GENERIC: bing ( c -- d )
 PROTOCOL: bee bing ;
 CONSULT: hello goodbye those>> ;
 M: hello bing hello-test ;
@@ -41,20 +41,20 @@ M: hello bing hello-test ;
 
 { "IN: delegate.tests\nPROTOCOL: baz foo bar { whoa 1 } ; inline\n" } [ [ baz see ] with-string-writer ] unit-test
 
-GENERIC: one ( a -- b ) ;
+GENERIC: one ( a -- b )
 M: integer one ;
-GENERIC: two ( a -- b ) ;
+GENERIC: two ( a -- b )
 M: integer two ;
-GENERIC: three ( a -- b ) ;
+GENERIC: three ( a -- b )
 M: integer three ;
-GENERIC: four ( a -- b ) ;
+GENERIC: four ( a -- b )
 M: integer four ;
 
 PROTOCOL: alpha one two ;
 PROTOCOL: beta three ;
 
 TUPLE: hey value ;
-C: <hey> hey ;
+C: <hey> hey
 CONSULT: alpha hey value>> 1 + ;
 CONSULT: beta hey value>> 1 - ;
 
@@ -104,7 +104,7 @@ CONSULT: slot-protocol-test-5 slot-protocol-test-4 x>> ;
     a-read-only-slot>>
 ] unit-test
 
-GENERIC: do-me ( x -- ) ;
+GENERIC: do-me ( x -- )
 
 M: f do-me drop ;
 
@@ -209,8 +209,8 @@ DEFER: seq-delegate
     key?
 ] unit-test
 
-GENERIC: broadcastable ( x -- ) ;
-GENERIC: nonbroadcastable ( x -- y ) ;
+GENERIC: broadcastable ( x -- )
+GENERIC: nonbroadcastable ( x -- y )
 
 TUPLE: broadcaster targets ;
 

@@ -7,13 +7,13 @@ combinators.short-circuit ;
 IN: xml.data
 
 TUPLE: interpolated var ;
-C: <interpolated> interpolated ;
+C: <interpolated> interpolated
 
 TUPLE: name
     { space maybe{ string } }
     { main string }
     { url maybe{ string } } ;
-C: <name> name ;
+C: <name> name
 
 : ?= ( object/f object/f -- ? )
     2dup and [ = ] [ 2drop t ] if ;
@@ -35,7 +35,7 @@ C: <name> name ;
     dup name? [ <null-name> ] unless ;
 
 TUPLE: attrs { alist sequence } ;
-C: <attrs> attrs ;
+C: <attrs> attrs
 
 : attr@ ( key alist -- index {key,value} )
     [ assure-name ] dip alist>>
@@ -72,43 +72,43 @@ M: attrs delete-at
 M: attrs clone
     alist>> clone <attrs> ;
 
-INSTANCE: attrs assoc ;
+INSTANCE: attrs assoc
 
 TUPLE: opener { name name } { attrs attrs } ;
-C: <opener> opener ;
+C: <opener> opener
 
 TUPLE: closer { name name } ;
-C: <closer> closer ;
+C: <closer> closer
 
 TUPLE: contained { name name } { attrs attrs } ;
-C: <contained> contained ;
+C: <contained> contained
 
 TUPLE: comment { text string } ;
-C: <comment> comment ;
+C: <comment> comment
 
 TUPLE: directive ;
 
 TUPLE: element-decl < directive
     { name string }
     { content-spec string } ;
-C: <element-decl> element-decl ;
+C: <element-decl> element-decl
 
 TUPLE: attlist-decl < directive
     { name string }
     { att-defs string } ;
-C: <attlist-decl> attlist-decl ;
+C: <attlist-decl> attlist-decl
 
 TUPLE: entity-decl < directive
     { name string }
     { def string }
     { pe? boolean } ;
-C: <entity-decl> entity-decl ;
+C: <entity-decl> entity-decl
 
 TUPLE: system-id { system-literal string } ;
-C: <system-id> system-id ;
+C: <system-id> system-id
 
 TUPLE: public-id { pubid-literal string } { system-literal string } ;
-C: <public-id> public-id ;
+C: <public-id> public-id
 
 UNION: id system-id public-id ;
 
@@ -116,27 +116,27 @@ TUPLE: dtd
     { directives sequence }
     { entities assoc }
     { parameter-entities assoc } ;
-C: <dtd> dtd ;
+C: <dtd> dtd
 
 TUPLE: doctype-decl < directive
     { name string }
     { external-id maybe{ id } }
     { internal-subset maybe{ dtd } } ;
-C: <doctype-decl> doctype-decl ;
+C: <doctype-decl> doctype-decl
 
 TUPLE: notation-decl < directive
     { name string }
     { id string } ;
-C: <notation-decl> notation-decl ;
+C: <notation-decl> notation-decl
 
 TUPLE: instruction { text string } ;
-C: <instruction> instruction ;
+C: <instruction> instruction
 
 TUPLE: prolog
     { version string }
     { encoding string }
     { standalone boolean } ;
-C: <prolog> prolog ;
+C: <prolog> prolog
 
 TUPLE: tag
     { name name }
@@ -155,11 +155,11 @@ TUPLE: tag
 
 ! They also follow the sequence protocol (for children)
 CONSULT: sequence-protocol tag children>> ;
-INSTANCE: tag sequence ;
+INSTANCE: tag sequence
 
 ! They also follow the assoc protocol (for attributes)
 CONSULT: assoc-protocol tag attrs>> ;
-INSTANCE: tag assoc ;
+INSTANCE: tag assoc
 
 CONSULT: name tag name>> ;
 
@@ -184,10 +184,10 @@ TUPLE: xml
     { before sequence }
     { body tag }
     { after sequence } ;
-C: <xml> xml ;
+C: <xml> xml
 
 CONSULT: sequence-protocol xml body>> ;
-INSTANCE: xml sequence ;
+INSTANCE: xml sequence
 
 CONSULT: tag xml body>> ;
 
@@ -218,13 +218,13 @@ PREDICATE: contained-tag < tag children>> empty? ;
 PREDICATE: open-tag < tag children>> empty? not ;
 
 TUPLE: unescaped string ;
-C: <unescaped> unescaped ;
+C: <unescaped> unescaped
 
 UNION: xml-data
     tag comment string directive instruction unescaped ;
 
 TUPLE: xml-chunk seq ;
-C: <xml-chunk> xml-chunk ;
+C: <xml-chunk> xml-chunk
 
 CONSULT: sequence-protocol xml-chunk seq>> ;
-INSTANCE: xml-chunk sequence ;
+INSTANCE: xml-chunk sequence

@@ -7,9 +7,9 @@ ui ui.gadgets.worlds ui.pixel-formats ;
 SPECIALIZED-ARRAY: void*
 IN: chipmunk.demo
 
-CONSTANT: image-width      188 ;
-CONSTANT: image-height     35 ;
-CONSTANT: image-row-length 24 ;
+CONSTANT: image-width      188
+CONSTANT: image-height     35
+CONSTANT: image-row-length 24
 
 CONSTANT: image-bitmap B{
     15 -16 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 7 -64 15 63 -32 -2 0 0 0 0 0 0 0
@@ -44,7 +44,7 @@ CONSTANT: image-bitmap B{
     -25 -8 0 63 -57 -29 -4 -1 -1 -13 -4 127 -64 31 -2 0 15 103 -1 -1 -57 -8 127
     -97 -25 -8 0 63 -61 -61 -4 127 -1 -29 -4 127 -64 15 -8 0 0 55 -1 -1 -121 -8
     127 -97 -25 -8 0 63 -61 -61 -4 127 -1 -29 -4 63 -64 15 -32 0 0 23 -1 -2 3 -16
-    63 15 -61 -16 0 31 -127 -127 -8 31 -1 -127 -8 31 -128 7 -128 0 0 } ;
+    63 15 -61 -16 0 31 -127 -127 -8 31 -1 -127 -8 31 -128 7 -128 0 0 }
 
 :: get-pixel ( x y -- z )
     x -3 shift y image-row-length * + image-bitmap nth

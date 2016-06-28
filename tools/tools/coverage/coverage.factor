@@ -8,7 +8,7 @@ IN: tools.coverage
 
 TUPLE: coverage-state < identity-tuple executed? ;
 
-C: <coverage-state> coverage-state ;
+C: <coverage-state> coverage-state
 
 SYMBOL: covered
 
@@ -19,11 +19,11 @@ SYMBOL: covered
 
 : coverage-off ( -- ) f covered set-global ;
 
-GENERIC: add-coverage ( object -- ) ;
+GENERIC: add-coverage ( object -- )
 
-GENERIC: remove-coverage ( object -- ) ;
+GENERIC: remove-coverage ( object -- )
 
-GENERIC: reset-coverage ( object -- ) ;
+GENERIC: reset-coverage ( object -- )
 
 PRIVATE<
 
@@ -79,7 +79,7 @@ M: string reset-coverage
 M: word reset-coverage
     [ dup coverage-state? [ f >>executed? ] when drop ] each-word ;
 
-GENERIC: coverage ( object -- seq ) ;
+GENERIC: coverage ( object -- seq )
 
 M: string coverage
     [ dup coverage 2array ] map-words ;
@@ -88,7 +88,7 @@ M: word coverage ( word -- seq )
     "coverage" word-prop
     [ drop executed?>> ] assoc-reject values ;
 
-GENERIC: coverage. ( object -- ) ;
+GENERIC: coverage. ( object -- )
 
 M: string coverage.
     [ coverage. ] each-word ;
@@ -107,7 +107,7 @@ M: sequence coverage.
 
 PRIVATE<
 
-GENERIC: count-callables ( object -- n ) ;
+GENERIC: count-callables ( object -- n )
 
 M: string count-callables
     [ count-callables ] map-words sum ;

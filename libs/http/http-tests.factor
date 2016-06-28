@@ -33,7 +33,7 @@ Content-Length: 4
 Content-type: application/octet-stream
 
 blah
-]] ;
+]]
 
 {
     T{ request
@@ -59,7 +59,7 @@ content-type: application/octet-stream
 some-header: 1; 2
 
 blah
-]] ;
+]]
 
 $${ read-request-test-1' } [
     read-request-test-1 lf>crlf
@@ -73,7 +73,7 @@ CONSTANT: read-request-test-2 [[
 HEAD  /bar   HTTP/1.1
 Host: www.sex.com
 
-]] ;
+]]
 
 {
     T{ request
@@ -95,7 +95,7 @@ CONSTANT: read-request-test-2' [[
 HEAD  /bar   HTTP/1.1
 Host: www.sex.com:101
 
-]] ;
+]]
 
 {
     T{ request
@@ -116,12 +116,12 @@ Host: www.sex.com:101
 CONSTANT: read-request-test-3 [[
 GET nested HTTP/1.0
 
-]] ;
+]]
 
 CONSTANT: read-request-test-4 [[
 GET /blah HTTP/1.0
 Host: "www.amazon.com"
-]] ;
+]]
 
 { "www.amazon.com" }
 [
@@ -134,7 +134,7 @@ HTTP/1.1 404 not found
 Content-Type: text/html; charset=UTF-8
 
 blah
-]] ;
+]]
 
 {
     T{ response
@@ -183,7 +183,7 @@ HTTP/1.1 200 Content follows
 Set-Cookie: oo="bar; a=b"; httponly=yes; sid=123456
 
 
-]] ;
+]]
 
 { 2 } [
     read-response-test-2 lf>crlf
@@ -196,7 +196,7 @@ HTTP/1.1 200 Content follows
 Set-Cookie: oo="bar; a=b"; comment="your mom"; httponly=yes
 
 
-]] ;
+]]
 
 { 1 } [
     read-response-test-3 lf>crlf

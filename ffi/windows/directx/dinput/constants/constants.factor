@@ -25,7 +25,7 @@ PRIVATE<
 
 COMPILE<
 
-GENERIC: array-base-type ( c-type -- c-type' ) ;
+GENERIC: array-base-type ( c-type -- c-type' )
 M: object array-base-type ;
 M: array array-base-type first ;
 

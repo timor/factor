@@ -6,13 +6,13 @@ IN: columns
 ! A column of a matrix
 TUPLE: column seq col ;
 
-C: <column> column ;
+C: <column> column
 
 M: column virtual-exemplar seq>> ;
 M: column virtual@ [ col>> swap ] [ seq>> ] bi nth bounds-check ;
 M: column length seq>> length ;
 
-INSTANCE: column virtual-sequence ;
+INSTANCE: column virtual-sequence
 
 : <flipped> ( seq -- seq' )
     dup empty? [ dup first length [ <column> ] with { } map-integers ] unless ;

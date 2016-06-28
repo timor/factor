@@ -5,17 +5,17 @@ math math.order sequences combinators.short-circuit
 io.pathnames ;
 IN: webapps.mason.backend
 
-CONSTANT: +idle+ "idle" ;
-CONSTANT: +starting+ "starting" ;
-CONSTANT: +make-vm+ "make-vm" ;
-CONSTANT: +boot+ "boot" ;
-CONSTANT: +test+ "test" ;
-CONSTANT: +upload+ "upload" ;
-CONSTANT: +finish+ "finish" ;
+CONSTANT: +idle+ "idle"
+CONSTANT: +starting+ "starting"
+CONSTANT: +make-vm+ "make-vm"
+CONSTANT: +boot+ "boot"
+CONSTANT: +test+ "test"
+CONSTANT: +upload+ "upload"
+CONSTANT: +finish+ "finish"
 
-CONSTANT: +dirty+ "status-dirty" ;
-CONSTANT: +error+ "status-error" ;
-CONSTANT: +clean+ "status-clean" ;
+CONSTANT: +dirty+ "status-dirty"
+CONSTANT: +error+ "status-error"
+CONSTANT: +clean+ "status-clean"
 
 TUPLE: builder
 host-name os cpu heartbeat-timestamp

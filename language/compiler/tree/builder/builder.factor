@@ -9,7 +9,7 @@ IN: compiler.tree.builder
 
 PRIVATE<
 
-GENERIC: (build-tree) ( quot -- ) ;
+GENERIC: (build-tree) ( quot -- )
 
 M: callable (build-tree) infer-quot-here ;
 

@@ -60,7 +60,7 @@ observer remove-definition-observer
 
 ! Make sure that non-optimized calls to a generic word which
 ! hasn't been compiled yet work properly
-GENERIC: uncompiled-generic-test ( a -- b ) ;
+GENERIC: uncompiled-generic-test ( a -- b )
 
 M: integer uncompiled-generic-test 1 + ;
 

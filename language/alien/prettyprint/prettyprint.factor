@@ -21,12 +21,12 @@ M: c-type-word definition drop f ;
 M: c-type-word declarations. drop ;
 
 PRIVATE<
-GENERIC: pointer-string ( pointer -- string/f ) ;
+GENERIC: pointer-string ( pointer -- string/f )
 M: object pointer-string drop f ;
 M: word pointer-string [ record-vocab ] [ name>> ] bi ;
 M: pointer pointer-string to>> pointer-string [ char: * suffix ] [ f ] if* ;
 
-GENERIC: c-type-string ( c-type -- string ) ;
+GENERIC: c-type-string ( c-type -- string )
 
 M: word c-type-string [ record-vocab ] [ name>> ] bi ;
 M: pointer c-type-string dup pointer-string [ ] [ unparse ] ?if ;

@@ -12,10 +12,10 @@ COMPILE< "tokyocabinet" {
 
 LIBRARY: tokyocabinet
 
-CONSTANT: TCDBTHASH 0 ;
-CONSTANT: TCDBTBTREE 1 ;
-CONSTANT: TCDBTFIXED 2 ;
-CONSTANT: TCDBTTABLE 3 ;
+CONSTANT: TCDBTHASH 0
+CONSTANT: TCDBTBTREE 1
+CONSTANT: TCDBTFIXED 2
+CONSTANT: TCDBTTABLE 3
 
 ! FIXME: on windows 64bits this isn't correct, because long is 32bits there, and time_t is int64
 TYPEDEF: long tokyo_time_t ;

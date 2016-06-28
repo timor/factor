@@ -14,7 +14,7 @@ CONSTANT: window-control-sets-to-test
         { "Close, minimize, and maximize buttons" { normal-title-bar close-button minimize-button maximize-button } }
         { "Resizable" { normal-title-bar close-button minimize-button maximize-button resize-handles } }
         { "Textured background" { normal-title-bar close-button minimize-button maximize-button resize-handles textured-background } }
-    } ;
+    }
 
 TUPLE: window-controls-demo-world < world
     windows ;

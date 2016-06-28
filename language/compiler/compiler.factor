@@ -28,7 +28,7 @@ SYMBOL: compiled
     init-dependencies
     clear-compiler-error ;
 
-GENERIC: no-compile? ( word -- ? ) ;
+GENERIC: no-compile? ( word -- ? )
 
 M: method no-compile? "method-generic" word-prop no-compile? ;
 
@@ -37,7 +37,7 @@ M: predicate-engine-word no-compile? "owner-generic" word-prop no-compile? ;
 M: word no-compile?
     { [ macro? ] [ "special" word-prop ] [ "no-compile" word-prop ] } 1|| ;
 
-GENERIC: combinator? ( word -- ? ) ;
+GENERIC: combinator? ( word -- ? )
 
 M: method combinator? "method-generic" word-prop combinator? ;
 

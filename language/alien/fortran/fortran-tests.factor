@@ -4,8 +4,8 @@ alien.data alien.fortran alien.fortran.private alien.strings
 classes.struct arrays assocs byte-arrays combinators fry
 generalizations io.encodings.ascii kernel macros
 macros.expander namespaces sequences shuffle tools.test vocabs.parser ;
-QUALIFIED-WITH: alien.c-types c ;
-QUALIFIED-WITH: alien.syntax s ;
+QUALIFIED-WITH: alien.c-types c
+QUALIFIED-WITH: alien.syntax s
 IN: alien.fortran.tests
 
 COMPILE< intel-unix-abi "(alien.fortran-tests)" (add-fortran-library) COMPILE>

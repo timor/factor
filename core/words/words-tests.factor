@@ -50,7 +50,7 @@ SYMBOL: a-symbol
 
 ! See if redefining a generic as a colon def clears some
 ! word props.
-GENERIC: testing ( a -- b ) ;
+GENERIC: testing ( a -- b )
 "IN: words.tests : testing ( -- ) ;" eval( -- )
 
 { f } [ \ testing generic? ] unit-test

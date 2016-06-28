@@ -42,7 +42,7 @@ IN: compiler.cfg.linear-scan.allocation
     2dup spill-at-sync-point?
     [ swap n>> spill f ] [ 2drop t ] if ;
 
-GENERIC: handle ( obj -- ) ;
+GENERIC: handle ( obj -- )
 
 M: live-interval-state handle
     [

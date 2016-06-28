@@ -7,46 +7,46 @@ IN: unix.ffi
 
 COMPILE< "unix.ffi." os name>> append require COMPILE>
 
-CONSTANT: PROT_NONE   0 ;
-CONSTANT: PROT_READ   1 ;
-CONSTANT: PROT_WRITE  2 ;
-CONSTANT: PROT_EXEC   4 ;
+CONSTANT: PROT_NONE   0
+CONSTANT: PROT_READ   1
+CONSTANT: PROT_WRITE  2
+CONSTANT: PROT_EXEC   4
 
-CONSTANT: MAP_FILE    0 ;
-CONSTANT: MAP_SHARED  1 ;
-CONSTANT: MAP_PRIVATE 2 ;
+CONSTANT: MAP_FILE    0
+CONSTANT: MAP_SHARED  1
+CONSTANT: MAP_PRIVATE 2
 
-CONSTANT: SEEK_SET 0 ;
-CONSTANT: SEEK_CUR 1 ;
-CONSTANT: SEEK_END 2 ;
+CONSTANT: SEEK_SET 0
+CONSTANT: SEEK_CUR 1
+CONSTANT: SEEK_END 2
 
 : MAP_FAILED ( -- alien ) -1 <alien> ; inline
 
-CONSTANT: DT_UNKNOWN   0 ;
-CONSTANT: DT_FIFO      1 ;
-CONSTANT: DT_CHR       2 ;
-CONSTANT: DT_DIR       4 ;
-CONSTANT: DT_BLK       6 ;
-CONSTANT: DT_REG       8 ;
-CONSTANT: DT_LNK      10 ;
-CONSTANT: DT_SOCK     12 ;
-CONSTANT: DT_WHT      14 ;
+CONSTANT: DT_UNKNOWN   0
+CONSTANT: DT_FIFO      1
+CONSTANT: DT_CHR       2
+CONSTANT: DT_DIR       4
+CONSTANT: DT_BLK       6
+CONSTANT: DT_REG       8
+CONSTANT: DT_LNK      10
+CONSTANT: DT_SOCK     12
+CONSTANT: DT_WHT      14
 
 : SIG_EFF ( -- obj ) alien: -1 void* <ref> ; inline
 : SIG_DFL ( -- obj ) alien: 0 void* <ref> ; inline
 : SIG_IGN ( -- obj ) alien: 1 void* <ref> ; inline
 
 ! Possible values for 'ai_flags' in 'addrinfo'.
-CONSTANT: AI_PASSIVE        0x0001 ;
-CONSTANT: AI_CANONNAME      0x0002 ;
-CONSTANT: AI_NUMERICHOST    0x0004 ;
-CONSTANT: AI_V4MAPPED       0x0008 ;
-CONSTANT: AI_ALL            0x0010 ;
-CONSTANT: AI_ADDRCONFIG     0x0020 ;
+CONSTANT: AI_PASSIVE        0x0001
+CONSTANT: AI_CANONNAME      0x0002
+CONSTANT: AI_NUMERICHOST    0x0004
+CONSTANT: AI_V4MAPPED       0x0008
+CONSTANT: AI_ALL            0x0010
+CONSTANT: AI_ADDRCONFIG     0x0020
 
-CONSTANT: SHUT_RD     0 ;
-CONSTANT: SHUT_WR     1 ;
-CONSTANT: SHUT_RDWR   2 ;
+CONSTANT: SHUT_RD     0
+CONSTANT: SHUT_WR     1
+CONSTANT: SHUT_RDWR   2
 
 LIBRARY: libc
 
@@ -71,10 +71,10 @@ STRUCT: servent
     { port int }
     { proto c-string } ;
 
-CONSTANT: F_OK 0 ; ! test for existence of file
-CONSTANT: X_OK 1 ; ! test for execute or search permission
-CONSTANT: W_OK 2 ; ! test for write permission
-CONSTANT: R_OK 4 ; ! test for read permission
+CONSTANT: F_OK 0 ! test for existence of file
+CONSTANT: X_OK 1 ! test for execute or search permission
+CONSTANT: W_OK 2 ! test for write permission
+CONSTANT: R_OK 4 ! test for read permission
 
 FUNCTION: int accept ( int s, void* sockaddr, socklen_t* socklen ) ;
 FUNCTION: int access ( c-string path, int amode ) ;
@@ -167,7 +167,7 @@ FUNCTION: dirent* readdir ( DIR* dirp ) ;
 FUNCTION: int readdir_r ( void* dirp, dirent* entry, dirent** result ) ;
 FUNCTION: ssize_t readlink ( c-string path, c-string buf, size_t bufsize ) ;
 
-CONSTANT: PATH_MAX 1024 ;
+CONSTANT: PATH_MAX 1024
 
 FUNCTION: ssize_t recv ( int s, void* buf, size_t nbytes, int flags ) ;
 FUNCTION: ssize_t recvfrom ( int s, void* buf, size_t nbytes, int flags, sockaddr-in* from, socklen_t* fromlen ) ;

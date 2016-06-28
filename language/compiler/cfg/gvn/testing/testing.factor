@@ -9,7 +9,7 @@ math.parser namespaces prettyprint sequences sorting splitting
 tools.annotations ;
 IN: compiler.cfg.gvn.testing
 
-GENERIC: expr>str ( expr -- str ) ;
+GENERIC: expr>str ( expr -- str )
 
 M: integer-expr expr>str value>> number>string ;
 

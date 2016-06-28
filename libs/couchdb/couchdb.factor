@@ -16,7 +16,7 @@ SYMBOL: couch
 
 ! errors
 TUPLE: couchdb-error { data assoc } ;
-C: <couchdb-error> couchdb-error ;
+C: <couchdb-error> couchdb-error
 
 M: couchdb-error error. ( error -- )
     "CouchDB Error: " write data>>
@@ -60,9 +60,9 @@ PREDICATE: file-exists-error < couchdb-error
 ! server
 TUPLE: server { host string } { port integer } { uuids vector } { uuids-to-cache integer } ;
 
-CONSTANT: default-couch-host "localhost" ;
-CONSTANT: default-couch-port 5984 ;
-CONSTANT: default-uuids-to-cache 100 ;
+CONSTANT: default-couch-host "localhost"
+CONSTANT: default-couch-port 5984
+CONSTANT: default-uuids-to-cache 100
 
 : <server> ( host port -- server )
     V{ } clone default-uuids-to-cache server boa ;
@@ -96,7 +96,7 @@ CONSTANT: default-uuids-to-cache 100 ;
 
 ! db
 TUPLE: db { server server } { name string } ;
-C: <db> db ;
+C: <db> db
 
 : (db-url) ( db -- )
     [ server>> server-url % ] [ name>> % ] bi char: / , ; inline

@@ -28,7 +28,7 @@ UNIFORM-TUPLE: raytrace-uniforms
     { "background-color" vec4-uniform f }
     { "light-direction"  vec3-uniform f } ;
 
-CONSTANT: reflection-color { 1.0 0.0 1.0 0.0 } ;
+CONSTANT: reflection-color { 1.0 0.0 1.0 0.0 }
 
 TUPLE: sphere
     { axis array }
@@ -71,7 +71,7 @@ CONSTANT: initial-spheres {
     T{ sphere f { 0.0 1.0  0.0 } {  7.0 0.0 0.0 } 0.02  1.0 { 1.0 0.0 0.0 1.0 } }
     T{ sphere f { 0.0 0.0 -1.0 } { -9.0 0.0 0.0 } 0.03  1.0 { 0.0 1.0 0.0 1.0 } }
     T{ sphere f { 1.0 0.0  0.0 } {  0.0 5.0 0.0 } 0.025 1.0 { 1.0 1.0 0.0 1.0 } }
-} ;
+}
 
 :: set-up-audio ( world -- )
     world audio-engine>> set: audio-engine
@@ -97,7 +97,7 @@ M: raytrace-world begin-game-world
     raytrace-program <program-instance> <window-vertex-array> >>vertex-array
     set-up-audio ;
 
-CONSTANT: fov 0.7 ;
+CONSTANT: fov 0.7
 
 AFTER: raytrace-world resize-world
     dup dim>> dup first2 min >float v/n fov v*n >>fov drop ;

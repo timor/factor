@@ -12,33 +12,33 @@ SPECIALIZED-ARRAY: void*
 SPECIALIZED-ARRAY: uint
 SPECIALIZED-ARRAY: ulonglong
 
-CONSTANT: kFSEventStreamCreateFlagNone 0x00000000 ;
-CONSTANT: kFSEventStreamCreateFlagUseCFTypes 0x00000001 ;
-CONSTANT: kFSEventStreamCreateFlagNoDefer 0x00000002 ;
-CONSTANT: kFSEventStreamCreateFlagWatchRoot 0x00000004 ;
-CONSTANT: kFSEventStreamCreateFlagIgnoreSelf 0x00000008 ;
-CONSTANT: kFSEventStreamCreateFlagFileEvents 0x00000010 ;
+CONSTANT: kFSEventStreamCreateFlagNone 0x00000000
+CONSTANT: kFSEventStreamCreateFlagUseCFTypes 0x00000001
+CONSTANT: kFSEventStreamCreateFlagNoDefer 0x00000002
+CONSTANT: kFSEventStreamCreateFlagWatchRoot 0x00000004
+CONSTANT: kFSEventStreamCreateFlagIgnoreSelf 0x00000008
+CONSTANT: kFSEventStreamCreateFlagFileEvents 0x00000010
 
-CONSTANT: kFSEventStreamEventFlagMustScanSubDirs 0x00000001 ;
-CONSTANT: kFSEventStreamEventFlagUserDropped 0x00000002 ;
-CONSTANT: kFSEventStreamEventFlagKernelDropped 0x00000004 ;
-CONSTANT: kFSEventStreamEventFlagEventIdsWrapped 0x00000008 ;
-CONSTANT: kFSEventStreamEventFlagHistoryDone 0x00000010 ;
-CONSTANT: kFSEventStreamEventFlagRootChanged 0x00000020 ;
-CONSTANT: kFSEventStreamEventFlagMount 0x00000040 ;
-CONSTANT: kFSEventStreamEventFlagUnmount 0x00000080 ;
+CONSTANT: kFSEventStreamEventFlagMustScanSubDirs 0x00000001
+CONSTANT: kFSEventStreamEventFlagUserDropped 0x00000002
+CONSTANT: kFSEventStreamEventFlagKernelDropped 0x00000004
+CONSTANT: kFSEventStreamEventFlagEventIdsWrapped 0x00000008
+CONSTANT: kFSEventStreamEventFlagHistoryDone 0x00000010
+CONSTANT: kFSEventStreamEventFlagRootChanged 0x00000020
+CONSTANT: kFSEventStreamEventFlagMount 0x00000040
+CONSTANT: kFSEventStreamEventFlagUnmount 0x00000080
 
-CONSTANT: kFSEventStreamEventFlagItemCreated 0x00000100 ;
-CONSTANT: kFSEventStreamEventFlagItemRemoved 0x00000200 ;
-CONSTANT: kFSEventStreamEventFlagItemInodeMetaMod 0x00000400 ;
-CONSTANT: kFSEventStreamEventFlagItemRenamed 0x00000800 ;
-CONSTANT: kFSEventStreamEventFlagItemModified 0x00001000 ;
-CONSTANT: kFSEventStreamEventFlagItemFinderInfoMod 0x00002000 ;
-CONSTANT: kFSEventStreamEventFlagItemChangeOwner 0x00004000 ;
-CONSTANT: kFSEventStreamEventFlagItemXattrMod 0x00008000 ;
-CONSTANT: kFSEventStreamEventFlagItemIsFile 0x00010000 ;
-CONSTANT: kFSEventStreamEventFlagItemIsDir 0x00020000 ;
-CONSTANT: kFSEventStreamEventFlagItemIsSymlink 0x00040000 ;
+CONSTANT: kFSEventStreamEventFlagItemCreated 0x00000100
+CONSTANT: kFSEventStreamEventFlagItemRemoved 0x00000200
+CONSTANT: kFSEventStreamEventFlagItemInodeMetaMod 0x00000400
+CONSTANT: kFSEventStreamEventFlagItemRenamed 0x00000800
+CONSTANT: kFSEventStreamEventFlagItemModified 0x00001000
+CONSTANT: kFSEventStreamEventFlagItemFinderInfoMod 0x00002000
+CONSTANT: kFSEventStreamEventFlagItemChangeOwner 0x00004000
+CONSTANT: kFSEventStreamEventFlagItemXattrMod 0x00008000
+CONSTANT: kFSEventStreamEventFlagItemIsFile 0x00010000
+CONSTANT: kFSEventStreamEventFlagItemIsDir 0x00020000
+CONSTANT: kFSEventStreamEventFlagItemIsSymlink 0x00040000
 
 TYPEDEF: uint FSEventStreamCreateFlags ;
 TYPEDEF: uint FSEventStreamEventFlags ;
@@ -54,7 +54,7 @@ STRUCT: FSEventStreamContext
 
 CALLBACK: void FSEventStreamCallback ( FSEventStreamRef streamRef, void* clientCallBackInfo, size_t numEvents, void* eventPaths, FSEventStreamEventFlags* eventFlags, FSEventStreamEventId* eventIds ) ;
 
-CONSTANT: FSEventStreamEventIdSinceNow 0xFFFFFFFFFFFFFFFF ;
+CONSTANT: FSEventStreamEventIdSinceNow 0xFFFFFFFFFFFFFFFF
 
 FUNCTION: FSEventStreamRef FSEventStreamCreate (
     CFAllocatorRef           allocator,

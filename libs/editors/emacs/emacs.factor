@@ -7,7 +7,7 @@ emacsclient editor-class set-global
 
 SYMBOL: emacsclient-path
 
-HOOK: find-emacsclient os ( -- path ) ;
+HOOK: find-emacsclient os ( -- path )
 
 M: object find-emacsclient ( -- path )
     "emacsclient" ?find-in-path ;

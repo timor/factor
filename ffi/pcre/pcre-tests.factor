@@ -13,7 +13,7 @@ IN: pcre.tests
     <compiled-pcre> nametable>>
 ] unit-test
 
-CONSTANT: iso-date "(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})" ;
+CONSTANT: iso-date "(?P<year>\\d{4})-(?P<month>\\d{2})-(?P<day>\\d{2})"
 
 ! On windows the erroffset appears to be set to 0 despite there being
 ! nothing wrong with the regexp.

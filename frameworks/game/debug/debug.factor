@@ -86,13 +86,13 @@ CONSTANT: debug-text-font
        { bold?      f            }
        { italic?    f            }
        { foreground color: white }
-       { background color: black } } ;
+       { background color: black } }
 
 CONSTANT: debug-text-texture-parameters
     T{ texture-parameters
        { wrap              repeat-texcoord }
        { min-filter        filter-linear   }
-       { min-mipmap-filter f               } } ;
+       { min-mipmap-filter f               } }
 
 : text>image ( string color -- image )
     debug-text-font clone swap >>foreground swap string>image drop ;
@@ -159,10 +159,10 @@ CONSTANT: box-vertices
       { { -1  1 -1 } { -1  1  1 } }
       { { -1  1 -1 } {  1  1 -1 } }
       { {  1 -1 -1 } {  1 -1  1 } }
-      { {  1 -1 -1 } {  1  1 -1 } } } ;
+      { {  1 -1 -1 } {  1  1 -1 } } }
 
 CONSTANT: cylinder-vertices
-    $$[ 12 iota [ 2pi 12 / * [ cos ] [ drop 0.0 ] [ sin ] tri 3array ] map ] ;
+    $$[ 12 iota [ 2pi 12 / * [ cos ] [ drop 0.0 ] [ sin ] tri 3array ] map ]
 
 :: scale-cylinder-vertices ( radius half-height verts -- bot-verts top-verts )
     verts

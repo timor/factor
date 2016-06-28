@@ -17,7 +17,7 @@ SYMBOL: has-vertex-array-objects?
     has-gl-version-or-extensions? has-vertex-array-objects? set-global
     "3.0" has-gl-version? opengl-3 opengl-2 ? gpu-api set-global ;
 
-HOOK: init-gpu-api gpu-api ( -- ) ;
+HOOK: init-gpu-api gpu-api ( -- )
 
 M: opengl-2 init-gpu-api
     GL_POINT_SPRITE glEnable ;

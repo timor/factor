@@ -26,7 +26,7 @@ SLOT: history
     history-list over empty? [ nip ] [ members completions ] if ;
 
 TUPLE: word-completion manifest ;
-C: <word-completion> word-completion ;
+C: <word-completion> word-completion
 
 SINGLETONS: vocab-completion color-completion char-completion
 path-completion history-completion ;
@@ -34,7 +34,7 @@ UNION: definition-completion word-completion vocab-completion ;
 UNION: listener-completion definition-completion
 color-completion char-completion path-completion history-completion ;
 
-GENERIC: completion-quot ( interactor completion-mode -- quot ) ;
+GENERIC: completion-quot ( interactor completion-mode -- quot )
 
 : (completion-quot) ( interactor completion-mode quot -- quot' )
     2nip $[ [ { } ] _ if-empty ] ; inline
@@ -46,12 +46,12 @@ M: char-completion completion-quot [ chars-matching ] (completion-quot) ;
 M: path-completion completion-quot [ paths-matching ] (completion-quot) ;
 M: history-completion completion-quot drop $[ _ history-completions ] ;
 
-GENERIC: completion-element ( completion-mode -- element ) ;
+GENERIC: completion-element ( completion-mode -- element )
 
 M: object completion-element drop word-start-elt ;
 M: history-completion completion-element drop one-line-elt ;
 
-GENERIC: completion-banner ( completion-mode -- string ) ;
+GENERIC: completion-banner ( completion-mode -- string )
 
 M: word-completion completion-banner drop "Words" ;
 M: vocab-completion completion-banner drop "Vocabularies" ;
@@ -117,7 +117,7 @@ M: completion-popup focusable-child* table>> ;
     [ completion-mode>> completion-element ]
     bi ;
 
-GENERIC: completion-string ( object -- string ) ;
+GENERIC: completion-string ( object -- string )
 
 M: object completion-string present ;
 
@@ -126,7 +126,7 @@ M: object completion-string present ;
 
 M: method completion-string method-completion-string ;
 
-GENERIC#: accept-completion-hook 1 ( item popup -- ) ;
+GENERIC#: accept-completion-hook 1 ( item popup -- )
 
 : insert-completion ( item popup -- )
     [ completion-string ] [ completion-loc/doc/elt ] bi* set-elt-string ;

@@ -28,7 +28,7 @@ SYMBOL: slot-accesses
 
 TUPLE: slot-access slot# value ;
 
-C: <slot-access> slot-access ;
+C: <slot-access> slot-access
 
 : record-slot-access ( out slot# in -- )
     <slot-access> swap slot-accesses get set-at ;

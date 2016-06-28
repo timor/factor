@@ -44,7 +44,7 @@ CONSTANT: environment-cube-map-mv-matrices
             {  0.0  0.0  1.0  0.0 }
             {  0.0  0.0  0.0  1.0 }
         } }
-    } ;
+    }
 
 GLSL-SHADER: window-vertex-shader vertex-shader [[
 attribute vec2 vertex;
@@ -104,7 +104,7 @@ CONSTANT: window-vertexes
         -1.0  1.0
          1.0 -1.0
          1.0  1.0
-    } ;
+    }
 
 : <window-vertex-buffer> ( -- buffer )
     window-vertexes

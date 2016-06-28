@@ -7,8 +7,8 @@ IN: compiler.tree.propagation.constraints
 
 SYMBOL: constraints
 
-GENERIC: assume* ( constraint -- ) ;
-GENERIC: satisfied? ( constraint -- ? ) ;
+GENERIC: assume* ( constraint -- )
+GENERIC: satisfied? ( constraint -- ? )
 
 M: f assume* drop ;
 
@@ -71,7 +71,7 @@ M: literal-constraint assume*
 
 TUPLE: implication p q ;
 
-C: --> implication ;
+C: --> implication
 
 : maybe-add ( elt seq -- seq' )
     2dup member? [ nip ] [ swap suffix ] if ;
@@ -85,7 +85,7 @@ M: implication assume*
 
 TUPLE: equivalence p q ;
 
-C: <--> equivalence ;
+C: <--> equivalence
 
 M: equivalence assume*
     [ p>> ] [ q>> ] bi

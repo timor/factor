@@ -61,7 +61,7 @@ M: debugger focusable-child*
     ! No restarts for the debugger window
     f f <debugger> "Error" open-status-window ;
 
-GENERIC: error-in-debugger? ( error -- ? ) ;
+GENERIC: error-in-debugger? ( error -- ? )
 
 M: world-error error-in-debugger?
     world>> children>> [ f ] [ first debugger? ] if-empty ;

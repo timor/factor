@@ -17,7 +17,7 @@ STRUCT: particle_t
     { m float    } ;
 SPECIALIZED-ARRAY: particle_t
 
-CONSTANT: gravity { 0.0 -0.1 } ;
+CONSTANT: gravity { 0.0 -0.1 }
 
 :: verlet-integrate-particle ( particle dt -- particle' )
     particle [ p>> ] [ v>> ] bi dt v*n v+
@@ -39,7 +39,7 @@ particle_t-array{
     S{ particle_t f float-array{ 0.3 0.3 } float-array{ 0 0 } 4.0 }
     S{ particle_t f float-array{ 0.5 0.15 } float-array{ 0 0 } 1.0 }
     S{ particle_t f float-array{ 0.5 0.1 } float-array{ 0 0 } 9.0 }
-} ;
+}
 
 : integrate-particles! ( particles dt -- particles )
     [ verlet-integrate-particle ] curry map! ;

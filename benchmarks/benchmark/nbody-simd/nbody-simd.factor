@@ -7,7 +7,7 @@ hints classes.struct specialized-arrays io ;
 IN: benchmark.nbody-simd
 
 : solar-mass ( -- x ) 4 pi sq * ; inline
-CONSTANT: days-per-year 365.24 ;
+CONSTANT: days-per-year 365.24
 
 STRUCT: body
 { location double-4 }

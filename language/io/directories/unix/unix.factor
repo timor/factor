@@ -7,9 +7,9 @@ io.files.types kernel libc literals math sequences system unix
 unix.ffi vocabs ;
 IN: io.directories.unix
 
-CONSTANT: touch-mode flags{ O_WRONLY O_APPEND O_CREAT O_EXCL } ;
+CONSTANT: touch-mode flags{ O_WRONLY O_APPEND O_CREAT O_EXCL }
 
-CONSTANT: mkdir-mode flags{ USER-ALL GROUP-ALL OTHER-ALL } ; ! 0o777
+CONSTANT: mkdir-mode flags{ USER-ALL GROUP-ALL OTHER-ALL } ! 0o777
 
 M: unix touch-file ( path -- )
     normalize-path

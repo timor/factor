@@ -19,9 +19,9 @@ output current input last-line prototype scrolls?
 selection-color caret mark selecting? ;
 
 TUPLE: pane-stream pane ;
-INSTANCE: pane-stream output-stream ;
+INSTANCE: pane-stream output-stream
 
-C: <pane-stream> pane-stream ;
+C: <pane-stream> pane-stream
 
 M: pane-stream stream-element-type drop +character+ ;
 
@@ -145,12 +145,12 @@ PRIVATE>
 
 : <pane> ( -- pane ) f pane new-pane ;
 
-GENERIC: gadget-alt-text ( gadget -- string ) ;
+GENERIC: gadget-alt-text ( gadget -- string )
 
 M: object gadget-alt-text
     class-of name>> "( " " )" surround ;
 
-GENERIC: write-gadget ( gadget stream -- ) ;
+GENERIC: write-gadget ( gadget stream -- )
 
 M: object write-gadget
     [ gadget-alt-text ] dip stream-write ;
@@ -364,7 +364,7 @@ M: paragraph stream-format
 : caret>mark ( pane -- )
     dup caret>> >>mark relayout-1 ;
 
-GENERIC: sloppy-pick-up* ( loc gadget -- n ) ;
+GENERIC: sloppy-pick-up* ( loc gadget -- n )
 
 M: pack sloppy-pick-up* ( loc gadget -- n )
     [ orientation>> ] [ children>> ] bi
@@ -440,5 +440,5 @@ pane H{
     { T{ button-down f f 3 } [ pane-menu ] }
 } set-gestures
 
-GENERIC: content-gadget ( object -- gadget/f ) ;
+GENERIC: content-gadget ( object -- gadget/f )
 M: object content-gadget drop f ;

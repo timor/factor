@@ -22,7 +22,7 @@ CONSTANT: default-world-pixel-format-attributes
     {
         windowed
         double-buffered
-    } ;
+    }
 
 CONSTANT: default-world-window-controls
     {
@@ -31,7 +31,7 @@ CONSTANT: default-world-window-controls
         minimize-button
         maximize-button
         resize-handles
-    } ;
+    }
 
 TUPLE: world < track
     active? focused? grab-input? fullscreen?
@@ -129,7 +129,7 @@ M: world request-focus-on ( child gadget -- )
     [ T{ rgba f 0.0 0.0 0.0 0.0 } ]
     [ T{ rgba f 1.0 1.0 1.0 1.0 } ] if ;
 
-GENERIC#: apply-world-attributes 1 ( world attributes -- world ) ;
+GENERIC#: apply-world-attributes 1 ( world attributes -- world )
 
 M: world apply-world-attributes
     {
@@ -166,9 +166,9 @@ SYMBOL: flush-layout-cache-hook
 
 flush-layout-cache-hook [ [ ] ] initialize
 
-GENERIC: begin-world ( world -- ) ;
-GENERIC: end-world ( world -- ) ;
-GENERIC: resize-world ( world -- ) ;
+GENERIC: begin-world ( world -- )
+GENERIC: end-world ( world -- )
+GENERIC: resize-world ( world -- )
 
 M: world begin-world drop ;
 M: world end-world drop ;
@@ -184,7 +184,7 @@ M: world dim<<
         ] [ drop ] if
     ] bi ;
 
-GENERIC: draw-world* ( world -- ) ;
+GENERIC: draw-world* ( world -- )
 
 M: world draw-world*
     {
@@ -201,7 +201,7 @@ M: world draw-world*
 
 TUPLE: world-error error world ;
 
-C: <world-error> world-error ;
+C: <world-error> world-error
 
 SYMBOL: ui-error-hook ! ( error -- )
 

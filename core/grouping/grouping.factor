@@ -8,11 +8,11 @@ ERROR: groups-error seq n ;
 
 PRIVATE<
 
-GENERIC: group@ ( n groups -- from to seq ) ;
+GENERIC: group@ ( n groups -- from to seq )
 
 TUPLE: chunking { seq read-only } { n read-only } ;
 
-INSTANCE: chunking sequence ;
+INSTANCE: chunking sequence
 
 M: chunking nth group@ <slice> ; inline
 
@@ -90,7 +90,7 @@ TUPLE: circular-slice
     { to integer read-only }
     { seq read-only } ;
 
-INSTANCE: circular-slice virtual-sequence ;
+INSTANCE: circular-slice virtual-sequence
 
 M: circular-slice equal? over circular-slice? [ sequence= ] [ 2drop f ] if ;
 
@@ -103,13 +103,13 @@ M: circular-slice virtual-exemplar seq>> ; inline
 M: circular-slice virtual@
     [ from>> + ] [ seq>> ] bi [ length rem ] keep ; inline
 
-C: <circular-slice> circular-slice ;
+C: <circular-slice> circular-slice
 
 TUPLE: circular-clumps
     { seq read-only }
     { n read-only } ;
 
-INSTANCE: circular-clumps sequence ;
+INSTANCE: circular-clumps sequence
 
 M: circular-clumps length
     seq>> length ; inline

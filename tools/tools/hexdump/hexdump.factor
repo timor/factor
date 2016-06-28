@@ -34,7 +34,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: hexdump. ( byte-array -- ) ;
+GENERIC: hexdump. ( byte-array -- )
 
 M: byte-array hexdump. hexdump-bytes ;
 

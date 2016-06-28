@@ -13,7 +13,7 @@ CONSTANT: wheel-2-3-5-7 $$[
     11 dup 210 + [a,b] [
         { 2 3 5 7 } [ divisor? ] with any? not
     ] B{ } filter-as differences
-] ;
+]
 
 :: each-prime ( upto sieve quot -- )
     11 upto integer>fixnum-strict $[ dup _ <= ] [

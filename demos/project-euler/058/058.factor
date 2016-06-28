@@ -34,7 +34,7 @@ IN: project-euler.058
 
 PRIVATE<
 
-CONSTANT: PERCENT_PRIME 0.1 ;
+CONSTANT: PERCENT_PRIME 0.1
 
 ! The corners of a square of side length n are:
 !    (n-2)² + 1(n-1)

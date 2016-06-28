@@ -3,7 +3,7 @@
 USING: accessors arrays kernel sequences sets smalltalk.ast ;
 IN: smalltalk.compiler.assignment
 
-GENERIC: assigned-locals ( ast -- seq ) ;
+GENERIC: assigned-locals ( ast -- seq )
 
 M: ast-return assigned-locals value>> assigned-locals ;
 

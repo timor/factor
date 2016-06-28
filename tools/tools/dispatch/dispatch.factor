@@ -5,8 +5,8 @@ vm tools.dispatch.private ;
 IN: tools.dispatch
 
 PRIVATE<
-PRIMITIVE: dispatch-stats ( -- stats ) ;
-PRIMITIVE: reset-dispatch-stats ( -- ) ;
+PRIMITIVE: dispatch-stats ( -- stats )
+PRIMITIVE: reset-dispatch-stats ( -- )
 PRIVATE>
 
 SYMBOL: last-dispatch-stats

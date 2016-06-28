@@ -129,10 +129,10 @@ CONSTANT: key-locations H{
 
     { key-keypad-0       { { 190 55 } {  20  10 } } }
     { key-keypad-.       { { 210 55 } {  10  10 } } }
-} ;
+}
 
-CONSTANT: KEYBOARD-SIZE { 230 65 } ;
-CONSTANT: FREQUENCY $$[ 1/30 seconds ] ;
+CONSTANT: KEYBOARD-SIZE { 230 65 }
+CONSTANT: FREQUENCY $$[ 1/30 seconds ]
 
 TUPLE: key-caps-gadget < gadget keys timer ;
 

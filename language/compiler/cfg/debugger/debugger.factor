@@ -15,7 +15,7 @@ prettyprint.sections quotations random sequences vectors words strings ;
 FROM: compiler.cfg.linearization => number-blocks ;
 IN: compiler.cfg.debugger
 
-GENERIC: test-builder ( quot -- cfgs ) ;
+GENERIC: test-builder ( quot -- cfgs )
 
 : build-optimized-tree ( callable/word -- tree )
     reset-vreg-counter
@@ -44,7 +44,7 @@ M: word test-builder
 : test-regs ( quot -- cfgs )
     test-builder { optimize-cfg finalize-cfg } run-passes ;
 
-GENERIC: insn. ( insn -- ) ;
+GENERIC: insn. ( insn -- )
 
 M: ##phi insn.
     clone [ [ [ number>> ] dip ] assoc-map ] change-inputs

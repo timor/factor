@@ -4,7 +4,7 @@ USING: accessors effects io.pathnames kernel math math.parser
 sequences strings vocabs words ;
 IN: present
 
-GENERIC: present ( object -- string ) ;
+GENERIC: present ( object -- string )
 
 M: real present number>string ;
 

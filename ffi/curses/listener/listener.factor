@@ -39,8 +39,8 @@ IN: curses.listener
 
 SINGLETON: curses-listener-stream
 
-INSTANCE: curses-listener-stream input-stream ;
-INSTANCE: curses-listener-stream output-stream ;
+INSTANCE: curses-listener-stream input-stream
+INSTANCE: curses-listener-stream output-stream
 
 M: curses-listener-stream stream-readln
     drop [ curses-stream-readln ] B{ } make utf8 decode ;
@@ -57,7 +57,7 @@ M: curses-listener-stream stream-flush
 M: curses-listener-stream stream-nl
     drop cnl ;
 
-INSTANCE: curses-listener-stream plain-writer ;
+INSTANCE: curses-listener-stream plain-writer
 
 : run-listener ( -- )
     <curses-window> [

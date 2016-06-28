@@ -45,11 +45,11 @@ IN: pdf.layout
 ! FIXME: compress each pdf object to reduce file size?
 
 
-GENERIC: pdf-render ( canvas obj -- remain/f ) ;
+GENERIC: pdf-render ( canvas obj -- remain/f )
 
 M: f pdf-render 2drop f ;
 
-GENERIC: pdf-width ( canvas obj -- n ) ;
+GENERIC: pdf-width ( canvas obj -- n )
 
 PRIVATE<
 
@@ -71,7 +71,7 @@ PRIVATE>
 
 TUPLE: div items style ;
 
-C: <div> div ;
+C: <div> div
 
 M: div pdf-render
     [ style>> set-style ] keep
@@ -143,7 +143,7 @@ M: text pdf-width
 
 TUPLE: hr width ;
 
-C: <hr> hr ;
+C: <hr> hr
 
 M: hr pdf-render
     [ f set-style ] dip
@@ -161,7 +161,7 @@ M: hr pdf-width
 
 TUPLE: br ;
 
-C: <br> br ;
+C: <br> br
 
 M: br pdf-render
     [ f set-style ] dip
@@ -183,7 +183,7 @@ M: pb pdf-width
 
 
 
-CONSTANT: table-cell-padding 5 ;
+CONSTANT: table-cell-padding 5
 
 TUPLE: table-cell contents width ;
 
@@ -205,7 +205,7 @@ M: table-cell pdf-render
 
 TUPLE: table-row cells ;
 
-C: <table-row> table-row ;
+C: <table-row> table-row
 
 ! save y before rendering each cell
 ! set y to max y after all renders
@@ -376,7 +376,7 @@ M: pdf-info pdf-value
 
 TUPLE: pdf-ref object revision ;
 
-C: <pdf-ref> pdf-ref ;
+C: <pdf-ref> pdf-ref
 
 M: pdf-ref pdf-value
     [ object>> ] [ revision>> ] bi "%d %d R" sprintf ;

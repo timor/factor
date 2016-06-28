@@ -8,7 +8,7 @@ IN: irc.logbot.log-line
 : dot-or-parens ( string -- string )
     [ "." ] [ " (" prepend ")." append ] if-empty ;
 
-GENERIC: >log-line ( object -- line ) ;
+GENERIC: >log-line ( object -- line )
 
 M: irc-message >log-line line>> ;
 

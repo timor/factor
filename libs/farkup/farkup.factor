@@ -205,7 +205,7 @@ DEFER: (parse-paragraph)
 : parse-farkup ( string -- farkup )
     string-lines [ dup empty? not ] [ parse-item ] produce nip sift ;
 
-CONSTANT: invalid-url "javascript:alert('Invalid URL in farkup');" ;
+CONSTANT: invalid-url "javascript:alert('Invalid URL in farkup');"
 
 : check-url ( href -- href' )
     {
@@ -220,7 +220,7 @@ CONSTANT: invalid-url "javascript:alert('Invalid URL in farkup');" ;
     [ string-lines ] dip htmlize-lines
     XML-CHUNK[[ <pre><-></pre> ]] ;
 
-GENERIC: (write-farkup) ( farkup -- xml ) ;
+GENERIC: (write-farkup) ( farkup -- xml )
 
 : farkup-inside ( farkup name -- xml )
     <simple-name> swap T{ attrs } swap

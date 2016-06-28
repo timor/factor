@@ -29,8 +29,8 @@ PRIVATE<
 : spec>pairs ( sequence -- intervals )
     [ dup number? [ dup 2array ] when ] map ;
 
-ALIAS: start first-unsafe ;
-ALIAS: end second-unsafe ;
+ALIAS: start first-unsafe
+ALIAS: end second-unsafe
 
 : disjoint? ( node1 node2 -- ? )
     [ end ] [ start ] bi* < ;

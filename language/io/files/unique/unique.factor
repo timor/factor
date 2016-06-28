@@ -7,7 +7,7 @@ IN: io.files.unique
 
 PRIVATE<
 
-HOOK: (touch-unique-file) io-backend ( path -- ) ;
+HOOK: (touch-unique-file) io-backend ( path -- )
 
 PRIVATE>
 

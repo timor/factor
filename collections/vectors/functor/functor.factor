@@ -30,6 +30,6 @@ M: V equal? over V instance? [ sequence= ] [ 2drop f ] if ;
 
 : >V ( seq -- vector ) V new clone-like ; inline
 
-INSTANCE: V growable ;
+INSTANCE: V growable
 
 FUNCTOR>

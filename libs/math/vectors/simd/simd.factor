@@ -5,7 +5,7 @@ math.vectors math.vectors.private math.vectors.simd.intrinsics
 namespaces parser prettyprint.custom quotations sequences
 sequences.generalizations sequences.private vocabs vocabs.loader
 words math.bitwise ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 IN: math.vectors.simd
 
 ERROR: bad-simd-length got expected ;
@@ -15,7 +15,7 @@ COMPILE<
 PRIVATE<
 ! Primitive SIMD constructors
 
-GENERIC: new-underlying ( underlying seq -- seq' ) ;
+GENERIC: new-underlying ( underlying seq -- seq' )
 
 : make-underlying ( seq quot -- seq' )
     dip new-underlying ; inline
@@ -48,9 +48,9 @@ PRIVATE>
 TUPLE: simd-128
     { underlying byte-array read-only initial: $$[ 16 <byte-array> ] } ;
 
-GENERIC: simd-element-type ( obj -- c-type ) ;
-GENERIC: simd-rep ( simd -- rep ) ;
-GENERIC: simd-with ( n exemplar -- v ) ;
+GENERIC: simd-element-type ( obj -- c-type )
+GENERIC: simd-rep ( simd -- rep )
+GENERIC: simd-with ( n exemplar -- v )
 
 M: object simd-element-type drop f ;
 M: object simd-rep drop f ;
@@ -314,7 +314,7 @@ BOA-EFFECT define-inline
 M: A pprint-delims drop \ A{ \ } ;
 SYNTAX: \ A{ \ } [ >A ] parse-literal ;
 
-INSTANCE: A sequence ;
+INSTANCE: A sequence
 
 c:<c-type>
     byte-array >>class

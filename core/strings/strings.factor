@@ -7,12 +7,12 @@ IN: strings
 
 BUILTIN: string { length array-capacity read-only initial: 0 } aux ;
 
-PRIMITIVE: <string> ( n ch -- string ) ;
-PRIMITIVE: resize-string ( n str -- newstr ) ;
+PRIMITIVE: <string> ( n ch -- string )
+PRIMITIVE: resize-string ( n str -- newstr )
 
 PRIVATE<
-PRIMITIVE: set-string-nth-fast ( ch n string -- ) ;
-PRIMITIVE: string-nth-fast ( n string -- ch ) ;
+PRIMITIVE: set-string-nth-fast ( ch n string -- )
+PRIMITIVE: string-nth-fast ( n string -- ch )
 
 : string-hashcode ( str -- n ) 3 slot ; inline
 
@@ -91,4 +91,4 @@ M: string resize resize-string ; inline
 
 M: string new-sequence drop 0 <string> ; inline
 
-INSTANCE: string sequence ;
+INSTANCE: string sequence

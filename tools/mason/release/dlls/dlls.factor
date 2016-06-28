@@ -3,7 +3,7 @@
 USING: io.directories kernel sequences system ;
 IN: mason.release.dlls
 
-HOOK: dll-list os ( -- seq ) ;
+HOOK: dll-list os ( -- seq )
 
 M: object dll-list { } ;
 

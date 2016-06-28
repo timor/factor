@@ -9,7 +9,7 @@ geany editor-class set-global
 
 SYMBOL: geany-path
 
-HOOK: find-geany-path os ( -- path ) ;
+HOOK: find-geany-path os ( -- path )
 
 M: unix find-geany-path "geany" ;
 

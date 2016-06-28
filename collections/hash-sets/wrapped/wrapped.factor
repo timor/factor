@@ -12,7 +12,7 @@ TUPLE: wrapped-key
 TUPLE: wrapped-hash-set
     { underlying hash-set read-only } ;
 
-GENERIC: wrap-key ( key wrapped-hash -- wrapped-key ) ;
+GENERIC: wrap-key ( key wrapped-hash -- wrapped-key )
 
 PRIVATE<
 
@@ -45,6 +45,6 @@ M: wrapped-hash-set members
 M: wrapped-hash-set equal?
     over wrapped-hash-set? [ [ underlying>> ] same? ] [ 2drop f ] if ;
 
-INSTANCE: wrapped-hash-set set ;
+INSTANCE: wrapped-hash-set set
 
 { "hash-sets.wrapped" "prettyprint" } "hash-sets.wrapped.prettyprint" require-when

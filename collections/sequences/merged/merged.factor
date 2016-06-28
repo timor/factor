@@ -5,7 +5,7 @@ sequences.private ;
 IN: sequences.merged
 
 TUPLE: merged seqs ;
-C: <merged> merged ;
+C: <merged> merged
 
 : <2merged> ( seq1 seq2 -- merged ) 2array <merged> ;
 : <3merged> ( seq1 seq2 seq3 -- merged ) 3array <merged> ;
@@ -28,4 +28,4 @@ M: merged virtual@ ( n seq -- n' seq' )
 M: merged virtual-exemplar ( merged -- seq )
     seqs>> ?first ; inline
 
-INSTANCE: merged virtual-sequence ;
+INSTANCE: merged virtual-sequence

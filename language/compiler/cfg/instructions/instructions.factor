@@ -803,7 +803,7 @@ literal: gc-map ;
 
 ! Spills and reloads, inserted by register allocator
 TUPLE: spill-slot { n integer } ;
-C: <spill-slot> spill-slot ;
+C: <spill-slot> spill-slot
 
 VREG-INSN: ##spill
 use: src

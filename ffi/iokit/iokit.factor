@@ -9,98 +9,98 @@ COMPILE<
     when
 COMPILE>
 
-CONSTANT: kIOKitBuildVersionKey   "IOKitBuildVersion" ;
-CONSTANT: kIOKitDiagnosticsKey   "IOKitDiagnostics" ;
+CONSTANT: kIOKitBuildVersionKey   "IOKitBuildVersion"
+CONSTANT: kIOKitDiagnosticsKey   "IOKitDiagnostics"
 
-CONSTANT: kIORegistryPlanesKey   "IORegistryPlanes" ;
-CONSTANT: kIOCatalogueKey    "IOCatalogue" ;
+CONSTANT: kIORegistryPlanesKey   "IORegistryPlanes"
+CONSTANT: kIOCatalogueKey    "IOCatalogue"
 
-CONSTANT: kIOServicePlane    "IOService" ;
-CONSTANT: kIOPowerPlane    "IOPower" ;
-CONSTANT: kIODeviceTreePlane   "IODeviceTree" ;
-CONSTANT: kIOAudioPlane    "IOAudio" ;
-CONSTANT: kIOFireWirePlane   "IOFireWire" ;
-CONSTANT: kIOUSBPlane    "IOUSB" ;
+CONSTANT: kIOServicePlane    "IOService"
+CONSTANT: kIOPowerPlane    "IOPower"
+CONSTANT: kIODeviceTreePlane   "IODeviceTree"
+CONSTANT: kIOAudioPlane    "IOAudio"
+CONSTANT: kIOFireWirePlane   "IOFireWire"
+CONSTANT: kIOUSBPlane    "IOUSB"
 
-CONSTANT: kIOServiceClass    "IOService" ;
+CONSTANT: kIOServiceClass    "IOService"
 
-CONSTANT: kIOResourcesClass   "IOResources" ;
+CONSTANT: kIOResourcesClass   "IOResources"
 
-CONSTANT: kIOClassKey    "IOClass" ;
-CONSTANT: kIOProbeScoreKey   "IOProbeScore" ;
-CONSTANT: kIOKitDebugKey    "IOKitDebug" ;
+CONSTANT: kIOClassKey    "IOClass"
+CONSTANT: kIOProbeScoreKey   "IOProbeScore"
+CONSTANT: kIOKitDebugKey    "IOKitDebug"
 
-CONSTANT: kIOProviderClassKey   "IOProviderClass" ;
-CONSTANT: kIONameMatchKey    "IONameMatch" ;
-CONSTANT: kIOPropertyMatchKey   "IOPropertyMatch" ;
-CONSTANT: kIOPathMatchKey    "IOPathMatch" ;
-CONSTANT: kIOLocationMatchKey   "IOLocationMatch" ;
-CONSTANT: kIOParentMatchKey   "IOParentMatch" ;
-CONSTANT: kIOResourceMatchKey   "IOResourceMatch" ;
-CONSTANT: kIOMatchedServiceCountKey  "IOMatchedServiceCountMatch" ;
+CONSTANT: kIOProviderClassKey   "IOProviderClass"
+CONSTANT: kIONameMatchKey    "IONameMatch"
+CONSTANT: kIOPropertyMatchKey   "IOPropertyMatch"
+CONSTANT: kIOPathMatchKey    "IOPathMatch"
+CONSTANT: kIOLocationMatchKey   "IOLocationMatch"
+CONSTANT: kIOParentMatchKey   "IOParentMatch"
+CONSTANT: kIOResourceMatchKey   "IOResourceMatch"
+CONSTANT: kIOMatchedServiceCountKey  "IOMatchedServiceCountMatch"
 
-CONSTANT: kIONameMatchedKey   "IONameMatched" ;
+CONSTANT: kIONameMatchedKey   "IONameMatched"
 
-CONSTANT: kIOMatchCategoryKey   "IOMatchCategory" ;
-CONSTANT: kIODefaultMatchCategoryKey  "IODefaultMatchCategory" ;
+CONSTANT: kIOMatchCategoryKey   "IOMatchCategory"
+CONSTANT: kIODefaultMatchCategoryKey  "IODefaultMatchCategory"
 
-CONSTANT: kIOUserClientClassKey   "IOUserClientClass" ;
+CONSTANT: kIOUserClientClassKey   "IOUserClientClass"
 
-CONSTANT: kIOUserClientCrossEndianKey   "IOUserClientCrossEndian" ;
-CONSTANT: kIOUserClientCrossEndianCompatibleKey  "IOUserClientCrossEndianCompatible" ;
-CONSTANT: kIOUserClientSharedInstanceKey   "IOUserClientSharedInstance" ;
+CONSTANT: kIOUserClientCrossEndianKey   "IOUserClientCrossEndian"
+CONSTANT: kIOUserClientCrossEndianCompatibleKey  "IOUserClientCrossEndianCompatible"
+CONSTANT: kIOUserClientSharedInstanceKey   "IOUserClientSharedInstance"
 
-CONSTANT: kIOPublishNotification   "IOServicePublish" ;
-CONSTANT: kIOFirstPublishNotification  "IOServiceFirstPublish" ;
-CONSTANT: kIOMatchedNotification   "IOServiceMatched" ;
-CONSTANT: kIOFirstMatchNotification  "IOServiceFirstMatch" ;
-CONSTANT: kIOTerminatedNotification  "IOServiceTerminate" ;
+CONSTANT: kIOPublishNotification   "IOServicePublish"
+CONSTANT: kIOFirstPublishNotification  "IOServiceFirstPublish"
+CONSTANT: kIOMatchedNotification   "IOServiceMatched"
+CONSTANT: kIOFirstMatchNotification  "IOServiceFirstMatch"
+CONSTANT: kIOTerminatedNotification  "IOServiceTerminate"
 
-CONSTANT: kIOGeneralInterest   "IOGeneralInterest" ;
-CONSTANT: kIOBusyInterest    "IOBusyInterest" ;
-CONSTANT: kIOAppPowerStateInterest  "IOAppPowerStateInterest" ;
-CONSTANT: kIOPriorityPowerStateInterest  "IOPriorityPowerStateInterest" ;
+CONSTANT: kIOGeneralInterest   "IOGeneralInterest"
+CONSTANT: kIOBusyInterest    "IOBusyInterest"
+CONSTANT: kIOAppPowerStateInterest  "IOAppPowerStateInterest"
+CONSTANT: kIOPriorityPowerStateInterest  "IOPriorityPowerStateInterest"
 
-CONSTANT: kIOPlatformDeviceMessageKey "IOPlatformDeviceMessage" ;
+CONSTANT: kIOPlatformDeviceMessageKey "IOPlatformDeviceMessage"
 
-CONSTANT: kIOCFPlugInTypesKey   "IOCFPlugInTypes" ;
+CONSTANT: kIOCFPlugInTypesKey   "IOCFPlugInTypes"
 
-CONSTANT: kIOCommandPoolSizeKey         "IOCommandPoolSize" ;
+CONSTANT: kIOCommandPoolSizeKey         "IOCommandPoolSize"
 
-CONSTANT: kIOMaximumBlockCountReadKey "IOMaximumBlockCountRead" ;
-CONSTANT: kIOMaximumBlockCountWriteKey "IOMaximumBlockCountWrite" ;
-CONSTANT: kIOMaximumByteCountReadKey "IOMaximumByteCountRead" ;
-CONSTANT: kIOMaximumByteCountWriteKey "IOMaximumByteCountWrite" ;
-CONSTANT: kIOMaximumSegmentCountReadKey "IOMaximumSegmentCountRead" ;
-CONSTANT: kIOMaximumSegmentCountWriteKey "IOMaximumSegmentCountWrite" ;
-CONSTANT: kIOMaximumSegmentByteCountReadKey "IOMaximumSegmentByteCountRead" ;
-CONSTANT: kIOMaximumSegmentByteCountWriteKey "IOMaximumSegmentByteCountWrite" ;
-CONSTANT: kIOMinimumSegmentAlignmentByteCountKey "IOMinimumSegmentAlignmentByteCount" ;
-CONSTANT: kIOMaximumSegmentAddressableBitCountKey "IOMaximumSegmentAddressableBitCount" ;
+CONSTANT: kIOMaximumBlockCountReadKey "IOMaximumBlockCountRead"
+CONSTANT: kIOMaximumBlockCountWriteKey "IOMaximumBlockCountWrite"
+CONSTANT: kIOMaximumByteCountReadKey "IOMaximumByteCountRead"
+CONSTANT: kIOMaximumByteCountWriteKey "IOMaximumByteCountWrite"
+CONSTANT: kIOMaximumSegmentCountReadKey "IOMaximumSegmentCountRead"
+CONSTANT: kIOMaximumSegmentCountWriteKey "IOMaximumSegmentCountWrite"
+CONSTANT: kIOMaximumSegmentByteCountReadKey "IOMaximumSegmentByteCountRead"
+CONSTANT: kIOMaximumSegmentByteCountWriteKey "IOMaximumSegmentByteCountWrite"
+CONSTANT: kIOMinimumSegmentAlignmentByteCountKey "IOMinimumSegmentAlignmentByteCount"
+CONSTANT: kIOMaximumSegmentAddressableBitCountKey "IOMaximumSegmentAddressableBitCount"
 
-CONSTANT: kIOIconKey "IOIcon" ;
-CONSTANT: kIOBundleResourceFileKey "IOBundleResourceFile" ;
+CONSTANT: kIOIconKey "IOIcon"
+CONSTANT: kIOBundleResourceFileKey "IOBundleResourceFile"
 
-CONSTANT: kIOBusBadgeKey "IOBusBadge" ;
-CONSTANT: kIODeviceIconKey "IODeviceIcon" ;
+CONSTANT: kIOBusBadgeKey "IOBusBadge"
+CONSTANT: kIODeviceIconKey "IODeviceIcon"
 
-CONSTANT: kIOPlatformSerialNumberKey  "IOPlatformSerialNumber" ;
+CONSTANT: kIOPlatformSerialNumberKey  "IOPlatformSerialNumber"
 
-CONSTANT: kIOPlatformUUIDKey  "IOPlatformUUID" ;
+CONSTANT: kIOPlatformUUIDKey  "IOPlatformUUID"
 
-CONSTANT: kIONVRAMDeletePropertyKey  "IONVRAM-DELETE-PROPERTY" ;
-CONSTANT: kIODTNVRAMPanicInfoKey   "aapl,panic-info" ;
+CONSTANT: kIONVRAMDeletePropertyKey  "IONVRAM-DELETE-PROPERTY"
+CONSTANT: kIODTNVRAMPanicInfoKey   "aapl,panic-info"
 
-CONSTANT: kIOBootDeviceKey "IOBootDevice" ;
-CONSTANT: kIOBootDevicePathKey "IOBootDevicePath" ;
-CONSTANT: kIOBootDeviceSizeKey "IOBootDeviceSize" ;
+CONSTANT: kIOBootDeviceKey "IOBootDevice"
+CONSTANT: kIOBootDevicePathKey "IOBootDevicePath"
+CONSTANT: kIOBootDeviceSizeKey "IOBootDeviceSize"
 
-CONSTANT: kOSBuildVersionKey   "OS Build Version" ;
+CONSTANT: kOSBuildVersionKey   "OS Build Version"
 
-CONSTANT: kNilOptions 0 ;
+CONSTANT: kNilOptions 0
 
-CONSTANT: MACH_PORT_NULL 0 ;
-CONSTANT: KERN_SUCCESS 0 ;
+CONSTANT: MACH_PORT_NULL 0
+CONSTANT: KERN_SUCCESS 0
 
 FUNCTION: IOReturn IOMasterPort ( mach_port_t bootstrap, mach_port_t* master ) ;
 

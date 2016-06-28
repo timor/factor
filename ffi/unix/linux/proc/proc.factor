@@ -12,7 +12,7 @@ IN: unix.linux.proc
 ! /proc/cgroups
 
 TUPLE: proc-cmdline string ;
-C: <proc-cmdline> proc-cmdline ;
+C: <proc-cmdline> proc-cmdline
 : parse-proc-cmdline ( -- obj )
     "/proc/cmdline" utf8 file-lines first <proc-cmdline> ;
 
@@ -278,7 +278,7 @@ TUPLE: proc-uptime up idle ;
 
 ! /proc/pid/*
 
-GENERIC#: proc-pid-path 1 ( object string -- path ) ;
+GENERIC#: proc-pid-path 1 ( object string -- path )
 
 M: integer proc-pid-path ( pid string -- path )
     [ "/proc/" ] 2dip

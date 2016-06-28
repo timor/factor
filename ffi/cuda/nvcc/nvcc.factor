@@ -5,7 +5,7 @@ io.launcher io.pathnames kernel locals math sequences splitting
 system ;
 IN: cuda.nvcc
 
-HOOK: nvcc-path os ( -- path ) ;
+HOOK: nvcc-path os ( -- path )
 
 M: object nvcc-path "nvcc" ;
 

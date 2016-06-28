@@ -7,8 +7,8 @@ math math.parser namespaces sequences strings summary
 typed ;
 IN: tar
 
-CONSTANT: zero-checksum 256 ;
-CONSTANT: block-size 512 ;
+CONSTANT: zero-checksum 256
+CONSTANT: block-size 512
 
 SYMBOL: to-link
 
@@ -90,10 +90,10 @@ M: unknown-typeflag summary
     dup name>> read/write-blocks ;
 
 TUPLE: hard-link linkname name ;
-C: <hard-link> hard-link ;
+C: <hard-link> hard-link
 
 TUPLE: symbolic-link linkname name ;
-C: <symbolic-link> symbolic-link ;
+C: <symbolic-link> symbolic-link
 
 ! Hard link, don't call normalize-path
 : typeflag-1 ( header -- )
@@ -205,7 +205,7 @@ C: <symbolic-link> symbolic-link ;
         drop
     ] if ;
 
-GENERIC: do-link ( object -- ) ;
+GENERIC: do-link ( object -- )
 
 M: hard-link do-link
     [ linkname>> ] [ name>> ] bi make-hard-link ;

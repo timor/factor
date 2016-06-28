@@ -26,11 +26,11 @@ SLOT: _mfd
 
 PRIVATE<
 
-CONSTANT: MDB_COLLECTION     "mongodb_collection" ;
-CONSTANT: MDB_SLOTDEF_MAP    "mongodb_slot_map" ;
-CONSTANT: MDB_INDEX_MAP      "mongodb_index_map" ;
-CONSTANT: MDB_USER_KEY       "mongodb_user_key" ;
-CONSTANT: MDB_COLLECTION_MAP "mongodb_collection_map" ;
+CONSTANT: MDB_COLLECTION     "mongodb_collection"
+CONSTANT: MDB_SLOTDEF_MAP    "mongodb_slot_map"
+CONSTANT: MDB_INDEX_MAP      "mongodb_index_map"
+CONSTANT: MDB_USER_KEY       "mongodb_user_key"
+CONSTANT: MDB_COLLECTION_MAP "mongodb_collection_map"
 
 MEMO: id-slot ( class -- slot )
    MDB_USER_KEY word-prop
@@ -51,11 +51,11 @@ M: mdb-persistent id<< ( object value -- )
 
 TUPLE: mdb-tuple-collection < mdb-collection { classes } ;
 
-GENERIC: tuple-collection ( object -- mdb-collection ) ;
+GENERIC: tuple-collection ( object -- mdb-collection )
 
-GENERIC: mdb-slot-map  ( tuple -- assoc ) ;
+GENERIC: mdb-slot-map  ( tuple -- assoc )
 
-GENERIC: mdb-index-map ( tuple -- sequence ) ;
+GENERIC: mdb-index-map ( tuple -- sequence )
 
 PRIVATE<
 
@@ -156,7 +156,7 @@ PRIVATE<
 
 PRIVATE>
 
-GENERIC: <mdb-tuple-collection> ( name -- mdb-tuple-collection ) ;
+GENERIC: <mdb-tuple-collection> ( name -- mdb-tuple-collection )
 M: string <mdb-tuple-collection>
     collection-map [ ] [ key? ] 2bi
     [ at ] [ [ mdb-tuple-collection new dup ] 2dip

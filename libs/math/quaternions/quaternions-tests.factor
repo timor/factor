@@ -2,11 +2,11 @@ IN: math.quaternions.tests
 USING: tools.test math.quaternions kernel math.vectors
 math.constants ;
 
-CONSTANT: q0 { 0 0 0 0 } ;
-CONSTANT: q1 { 1 0 0 0 } ;
-CONSTANT: qi { 0 1 0 0 } ;
-CONSTANT: qj { 0 0 1 0 } ;
-CONSTANT: qk { 0 0 0 1 } ;
+CONSTANT: q0 { 0 0 0 0 }
+CONSTANT: q1 { 1 0 0 0 }
+CONSTANT: qi { 0 1 0 0 }
+CONSTANT: qj { 0 0 1 0 }
+CONSTANT: qk { 0 0 0 1 }
 
 { 1.0 } [ qi norm ] unit-test
 { 1.0 } [ qj norm ] unit-test

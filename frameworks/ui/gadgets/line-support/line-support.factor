@@ -18,11 +18,11 @@ pref-viewport-dim ;
     new
         selection-color >>selection-color ;
 
-GENERIC: line-leading* ( gadget -- n ) ;
+GENERIC: line-leading* ( gadget -- n )
 
 M: line-gadget line-leading* font>> font-metrics leading>> ;
 
-GENERIC: line-leading ( gadget -- n ) ;
+GENERIC: line-leading ( gadget -- n )
 
 M: line-gadget line-leading
     dup line-leading>>
@@ -31,11 +31,11 @@ M: line-gadget line-leading
         [ drop ] [ dupd line-leading<< ] if
     ] ?if ;
 
-GENERIC: line-height* ( gadget -- n ) ;
+GENERIC: line-height* ( gadget -- n )
 
 M: line-gadget line-height* font>> font-metrics height>> ceiling ;
 
-GENERIC: line-height ( gadget -- n ) ;
+GENERIC: line-height ( gadget -- n )
 
 M: line-gadget line-height
     dup line-height>>
@@ -69,7 +69,7 @@ M: line-gadget line-height
 : each-slice-index ( from to seq quot -- )
     [ [ <slice> ] [ drop [a,b) ] 3bi ] dip 2each ; inline
 
-GENERIC: draw-line ( line index gadget -- ) ;
+GENERIC: draw-line ( line index gadget -- )
 
 : draw-lines ( gadget -- )
     {

@@ -6,14 +6,14 @@ sequences.generalizations sequences.private specialized-arrays
 typed ;
 FROM: sequences.private => nth-unsafe ;
 FROM: math.quaternions.private => (q*sign) ;
-QUALIFIED-WITH: alien.c-types c ;
+QUALIFIED-WITH: alien.c-types c
 SPECIALIZED-ARRAY: float-4
 IN: math.matrices.simd
 
 STRUCT: matrix4
     { columns float-4[4] } ;
 
-INSTANCE: matrix4 immutable-sequence ;
+INSTANCE: matrix4 immutable-sequence
 
 M: matrix4 length drop 4 ; inline
 M: matrix4 nth-unsafe columns>> nth-unsafe ; inline
@@ -103,7 +103,7 @@ CONSTANT: identity-matrix4
             float-4{ 0.0 0.0 1.0 0.0 }
             float-4{ 0.0 0.0 0.0 1.0 }
         }
-    } ;
+    }
 
 CONSTANT: zero-matrix4
     S{ matrix4 f
@@ -113,7 +113,7 @@ CONSTANT: zero-matrix4
             float-4{ 0.0 0.0 0.0 0.0 }
             float-4{ 0.0 0.0 0.0 0.0 }
         }
-    } ;
+    }
 
 TYPED:: m4^n ( m: matrix4 n: fixnum -- m^n: matrix4 )
     identity-matrix4 n [ m m4. ] times ;

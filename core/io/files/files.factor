@@ -6,7 +6,7 @@ kernel kernel.private namespaces sequences splitting system ;
 IN: io.files
 
 PRIVATE<
-PRIMITIVE: (exists?) ( path -- ? ) ;
+PRIMITIVE: (exists?) ( path -- ? )
 PRIVATE>
 
 SYMBOL: +retry+ ! just try the operation again without blocking
@@ -15,10 +15,10 @@ SYMBOL: +output+
 
 ! Returns an event to wait for which will ensure completion of
 ! this request
-GENERIC: drain ( port handle -- event/f ) ;
-GENERIC: refill ( port handle -- event/f ) ;
+GENERIC: drain ( port handle -- event/f )
+GENERIC: refill ( port handle -- event/f )
 
-HOOK: wait-for-fd io-backend ( handle event -- ) ;
+HOOK: wait-for-fd io-backend ( handle event -- )
 
 MIXIN: file-reader
 MIXIN: file-writer
@@ -26,11 +26,11 @@ MIXIN: file-writer
 M: file-reader stream-element-type drop +byte+ ; inline
 M: file-writer stream-element-type drop +byte+ ; inline
 
-HOOK: (file-reader) io-backend ( path -- stream ) ;
+HOOK: (file-reader) io-backend ( path -- stream )
 
-HOOK: (file-writer) io-backend ( path -- stream ) ;
+HOOK: (file-writer) io-backend ( path -- stream )
 
-HOOK: (file-appender) io-backend ( path -- stream ) ;
+HOOK: (file-appender) io-backend ( path -- stream )
 
 : <file-reader> ( path encoding -- stream )
     [ normalize-path (file-reader) { file-reader } declare ] dip <decoder> ; inline
@@ -76,9 +76,9 @@ HOOK: (file-appender) io-backend ( path -- stream ) ;
 ! Current directory
 PRIVATE<
 
-HOOK: cd io-backend ( path -- ) ;
+HOOK: cd io-backend ( path -- )
 
-HOOK: cwd io-backend ( -- path ) ;
+HOOK: cwd io-backend ( -- path )
 
 M: object cwd ( -- path ) "." ;
 

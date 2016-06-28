@@ -3,15 +3,15 @@
 USING: sequences kernel ;
 IN: persistent.sequences
 
-GENERIC: ppush ( val seq -- seq' ) ;
+GENERIC: ppush ( val seq -- seq' )
 
 M: sequence ppush swap suffix ;
 
-GENERIC: ppop ( seq -- seq' ) ;
+GENERIC: ppop ( seq -- seq' )
 
 M: sequence ppop but-last ;
 
-GENERIC: new-nth ( val i seq -- seq' ) ;
+GENERIC: new-nth ( val i seq -- seq' )
 
 M: sequence new-nth clone [ set-nth ] keep ;
 

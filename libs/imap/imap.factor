@@ -8,8 +8,8 @@ IN: imap
 
 ERROR: imap4-error ind data ;
 
-CONSTANT: IMAP4_PORT     143 ;
-CONSTANT: IMAP4_SSL_PORT 993 ;
+CONSTANT: IMAP4_PORT     143
+CONSTANT: IMAP4_SSL_PORT 993
 
 ! Converts a timestamp to the format imap4 expects.
 : timestamp>internal-date ( timestamp -- str )

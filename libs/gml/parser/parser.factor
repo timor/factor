@@ -5,7 +5,7 @@ IN: gml.parser
 
 TUPLE: comment string ;
 
-C: <comment> comment ;
+C: <comment> comment
 
 : register-index ( name registers -- n )
     2dup index dup [ 2nip ] [ drop [ nip length ] [ push ] 2bi ] if ;

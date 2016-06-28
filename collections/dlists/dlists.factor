@@ -211,7 +211,7 @@ PRIVATE>
 : push-sorted ( obj dlist -- dlist-node )
     dupd [ before? ] with push-before ; inline
 
-INSTANCE: dlist deque ;
+INSTANCE: dlist deque
 
 SYNTAX: \ DL{ \ } [ >dlist ] parse-literal ;
 

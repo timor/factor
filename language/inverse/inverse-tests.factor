@@ -9,7 +9,7 @@ IN: inverse-tests
 
 TUPLE: foo bar baz ;
 
-C: <foo> foo ;
+C: <foo> foo
 
 { 1 2 } [ 1 2 <foo> [ <foo> ] undo ] unit-test
 
@@ -43,11 +43,11 @@ C: <foo> foo ;
 
 TUPLE: cons car cdr ;
 
-C: <cons> cons ;
+C: <cons> cons
 
 TUPLE: nil ;
 
-C: <nil> nil ;
+C: <nil> nil
 
 : list-sum ( list -- sum )
     {

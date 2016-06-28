@@ -48,7 +48,7 @@ TUPLE: extra-words words ;
 M: extra-words equal?
     over extra-words? [ [ words>> ] bi@ eq? ] [ 2drop f ] if ;
 
-C: <extra-words> extra-words ;
+C: <extra-words> extra-words
 
 ERROR: no-word-in-vocab word vocab ;
 
@@ -214,7 +214,7 @@ PRIVATE>
 
 PRIVATE<
 
-GENERIC: update ( search-path-elt -- valid? ) ;
+GENERIC: update ( search-path-elt -- valid? )
 
 : trim-forgotten ( qualified-vocab -- valid? )
     [ [ nip "forgotten" word-prop ] assoc-reject ] change-words

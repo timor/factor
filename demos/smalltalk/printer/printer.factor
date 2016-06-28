@@ -4,7 +4,7 @@ USING: accessors arrays byte-arrays kernel make math
 math.parser prettyprint sequences smalltalk.ast strings ;
 IN: smalltalk.printer
 
-GENERIC: smalltalk>string ( object -- string ) ;
+GENERIC: smalltalk>string ( object -- string )
 
 M: real smalltalk>string number>string ;
 
@@ -15,7 +15,7 @@ M: string smalltalk>string
         "'" %
     ] "" make ;
 
-GENERIC: array-element>string ( object -- string ) ;
+GENERIC: array-element>string ( object -- string )
 
 M: object array-element>string smalltalk>string ;
 

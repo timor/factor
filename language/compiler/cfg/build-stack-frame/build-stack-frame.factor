@@ -7,7 +7,7 @@ IN: compiler.cfg.build-stack-frame
 
 SYMBOLS: param-area-size allot-area-size allot-area-align ;
 
-GENERIC: compute-stack-frame* ( insn -- ? ) ;
+GENERIC: compute-stack-frame* ( insn -- ? )
 
 M:: ##local-allot compute-stack-frame* ( insn -- ? )
     insn size>> set: s

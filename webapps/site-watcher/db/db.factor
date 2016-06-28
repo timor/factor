@@ -55,7 +55,7 @@ watching-site "WATCHING_SITE" {
 
 TUPLE: spidering-site < watching-site max-depth max-count ;
 
-C: <spidering-site> spidering-site ;
+C: <spidering-site> spidering-site
 
 SLOT: site
 

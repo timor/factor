@@ -46,7 +46,7 @@ UNION: ?integer-float maybe{ integer } maybe{ float } ;
 { f } [ t ?integer-float instance? ] unit-test
 
 TUPLE: foo ;
-GENERIC: lol ( obj -- string ) ;
+GENERIC: lol ( obj -- string )
 M: maybe{ foo } lol drop "lol" ;
 
 { "lol" } [ foo new lol ] unit-test
@@ -54,7 +54,7 @@ M: maybe{ foo } lol drop "lol" ;
 [ 3 lol ] [ no-method? ] must-fail-with
 
 TUPLE: foo2 a ;
-GENERIC: lol2 ( obj -- string ) ;
+GENERIC: lol2 ( obj -- string )
 M: maybe{ foo } lol2 drop "lol2" ;
 M: f lol2 drop "lol22" ;
 

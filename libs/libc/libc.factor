@@ -7,7 +7,7 @@ alien.syntax destructors destructors.private kernel math
 namespaces sequences sets summary system vocabs ;
 IN: libc
 
-HOOK: strerror os ( errno -- str ) ;
+HOOK: strerror os ( errno -- str )
 
 LIBRARY: factor
 

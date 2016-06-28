@@ -48,7 +48,7 @@ M: linked-assoc clear-assoc
 M: linked-assoc clone
     [ assoc>> clone ] [ dlist>> clone ] bi linked-assoc boa ;
 
-INSTANCE: linked-assoc assoc ;
+INSTANCE: linked-assoc assoc
 
 : >linked-hash ( assoc -- assoc )
     [ <linked-hash> ] dip assoc-union! ;

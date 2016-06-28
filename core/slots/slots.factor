@@ -8,8 +8,8 @@ slots.private strings words ;
 IN: slots
 
 PRIVATE<
-PRIMITIVE: set-slot ( value obj n -- ) ;
-PRIMITIVE: slot ( obj m -- value ) ;
+PRIMITIVE: set-slot ( value obj n -- )
+PRIMITIVE: slot ( obj m -- value )
 PRIVATE>
 
 TUPLE: slot-spec name offset class initial read-only ;
@@ -33,7 +33,7 @@ PREDICATE: writer-method < method "writing" word-prop >boolean ;
     [ 2drop make-inline ]
     3tri ;
 
-GENERIC#: reader-quot 1 ( class slot-spec -- quot ) ;
+GENERIC#: reader-quot 1 ( class slot-spec -- quot )
 
 M: object reader-quot
     nip [
@@ -70,7 +70,7 @@ M: object reader-quot
 
 ERROR: bad-slot-value value class ;
 
-GENERIC: instance-check-quot ( obj -- quot ) ;
+GENERIC: instance-check-quot ( obj -- quot )
 
 M: class instance-check-quot ( class -- quot )
     {
@@ -87,7 +87,7 @@ M: object instance-check-quot
         \ unless ,
     ] [ ] make ;
 
-GENERIC#: writer-quot 1 ( class slot-spec -- quot ) ;
+GENERIC#: writer-quot 1 ( class slot-spec -- quot )
 
 M: object writer-quot
     nip
@@ -157,7 +157,7 @@ M: object writer-quot
 
 DEFER: initial-value
 
-GENERIC: initial-value* ( class -- object ? ) ;
+GENERIC: initial-value* ( class -- object ? )
 
 M: class initial-value* drop f f ;
 
@@ -214,7 +214,7 @@ M: anonymous-intersection initial-value*
         [ dup initial-value* ]
     } cond [ drop ] 2dip ;
 
-GENERIC: make-slot ( desc -- slot-spec ) ;
+GENERIC: make-slot ( desc -- slot-spec )
 
 M: string make-slot
     <slot-spec>

@@ -334,7 +334,7 @@ var price = (order == null ? null : order.price);" }
         "Factor has many cool things that I didn't talk about"
         "Questions?"
     }
-} ;
+}
 
 : otug-talk ( -- )
       otug-slides "OTUG talk" slides-window ;

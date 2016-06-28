@@ -47,7 +47,7 @@ ERROR: multiple-defs-error ;
 
 : defined-by ( value -- node ) def-of node>> ;
 
-GENERIC: node-uses-values ( node -- values ) ;
+GENERIC: node-uses-values ( node -- values )
 
 M: #introduce node-uses-values drop f ;
 M: #push node-uses-values drop f ;
@@ -58,7 +58,7 @@ M: #shuffle node-uses-values [ in-d>> ] [ in-r>> ] bi append ;
 M: #alien-callback node-uses-values drop f ;
 M: node node-uses-values in-d>> ;
 
-GENERIC: node-defs-values ( node -- values ) ;
+GENERIC: node-defs-values ( node -- values )
 
 M: #shuffle node-defs-values [ out-d>> ] [ out-r>> ] bi append ;
 M: #branch node-defs-values drop f ;

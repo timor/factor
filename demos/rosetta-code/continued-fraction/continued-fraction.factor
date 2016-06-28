@@ -19,8 +19,8 @@ IN: rosetta-code.continued-fraction
 ! For Pi, use a0 = 3 then aN = 6. bN = (2N − 1)2.
 
 ! Every continued fraction must implement these two words.
-GENERIC: cfrac-a ( n cfrac -- a ) ;
-GENERIC: cfrac-b ( n cfrac -- b ) ;
+GENERIC: cfrac-a ( n cfrac -- a )
+GENERIC: cfrac-b ( n cfrac -- b )
 
 ! square root of 2
 SINGLETON: sqrt2

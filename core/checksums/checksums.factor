@@ -19,11 +19,11 @@ M: checksum-state clone
     call-next-method
     [ clone ] change-bytes ;
 
-GENERIC: initialize-checksum-state ( checksum -- checksum-state ) ;
+GENERIC: initialize-checksum-state ( checksum -- checksum-state )
 
-GENERIC: checksum-block ( bytes checksum-state -- ) ;
+GENERIC: checksum-block ( bytes checksum-state -- )
 
-GENERIC: get-checksum ( checksum-state -- value ) ;
+GENERIC: get-checksum ( checksum-state -- value )
 
 : add-checksum-bytes ( checksum-state data -- checksum-state )
     over bytes>> [ push-all ] keep
@@ -43,11 +43,11 @@ GENERIC: get-checksum ( checksum-state -- value ) ;
 : add-checksum-file ( checksum-state path -- checksum-state )
     normalize-path (file-reader) add-checksum-stream ;
 
-GENERIC: checksum-bytes ( bytes checksum -- value ) ;
+GENERIC: checksum-bytes ( bytes checksum -- value )
 
-GENERIC: checksum-stream ( stream checksum -- value ) ;
+GENERIC: checksum-stream ( stream checksum -- value )
 
-GENERIC: checksum-lines ( lines checksum -- value ) ;
+GENERIC: checksum-lines ( lines checksum -- value )
 
 M: checksum checksum-stream
     [ stream-contents ] dip checksum-bytes ;

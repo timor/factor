@@ -32,23 +32,23 @@ CFSTRING: QTErrorTimeKey "QTErrorTimeKey" ;
 CFSTRING: QTErrorFileSizeKey "QTErrorFileSizeKey" ;
 CFSTRING: QTErrorRecordingSuccesfullyFinishedKey "QTErrorRecordingSuccesfullyFinishedKey" ;
 
-CONSTANT: QTErrorUnknown                                      -1 ;
-CONSTANT: QTErrorIncompatibleInput                          1002 ;
-CONSTANT: QTErrorIncompatibleOutput                         1003 ;
-CONSTANT: QTErrorInvalidInputsOrOutputs                     1100 ;
-CONSTANT: QTErrorDeviceAlreadyUsedbyAnotherSession          1101 ;
-CONSTANT: QTErrorNoDataCaptured                             1200 ;
-CONSTANT: QTErrorSessionConfigurationChanged                1201 ;
-CONSTANT: QTErrorDiskFull                                   1202 ;
-CONSTANT: QTErrorDeviceWasDisconnected                      1203 ;
-CONSTANT: QTErrorMediaChanged                               1204 ;
-CONSTANT: QTErrorMaximumDurationReached                     1205 ;
-CONSTANT: QTErrorMaximumFileSizeReached                     1206 ;
-CONSTANT: QTErrorMediaDiscontinuity                         1207 ;
-CONSTANT: QTErrorMaximumNumberOfSamplesForFileFormatReached 1208 ;
-CONSTANT: QTErrorDeviceNotConnected                         1300 ;
-CONSTANT: QTErrorDeviceInUseByAnotherApplication            1301 ;
-CONSTANT: QTErrorDeviceExcludedByAnotherDevice              1302 ;
+CONSTANT: QTErrorUnknown                                      -1
+CONSTANT: QTErrorIncompatibleInput                          1002
+CONSTANT: QTErrorIncompatibleOutput                         1003
+CONSTANT: QTErrorInvalidInputsOrOutputs                     1100
+CONSTANT: QTErrorDeviceAlreadyUsedbyAnotherSession          1101
+CONSTANT: QTErrorNoDataCaptured                             1200
+CONSTANT: QTErrorSessionConfigurationChanged                1201
+CONSTANT: QTErrorDiskFull                                   1202
+CONSTANT: QTErrorDeviceWasDisconnected                      1203
+CONSTANT: QTErrorMediaChanged                               1204
+CONSTANT: QTErrorMaximumDurationReached                     1205
+CONSTANT: QTErrorMaximumFileSizeReached                     1206
+CONSTANT: QTErrorMediaDiscontinuity                         1207
+CONSTANT: QTErrorMaximumNumberOfSamplesForFileFormatReached 1208
+CONSTANT: QTErrorDeviceNotConnected                         1300
+CONSTANT: QTErrorDeviceInUseByAnotherApplication            1301
+CONSTANT: QTErrorDeviceExcludedByAnotherDevice              1302
 
 FRAMEWORK: /System/Library/Frameworks/QTKit.framework
 

@@ -7,7 +7,7 @@ IN: editors.brackets
 SINGLETON: brackets-editor
 brackets-editor editor-class set-global
 
-HOOK: brackets-path os ( -- path ) ;
+HOOK: brackets-path os ( -- path )
 
 M: macosx brackets-path
     "io.brackets.appshell" find-native-bundle [

@@ -13,7 +13,7 @@ io.streams.byte-array kernel locals math namespaces prettyprint
 quotations sequences sequences.private strings vocabs words ;
 IN: serialize
 
-GENERIC: (serialize) ( obj -- ) ;
+GENERIC: (serialize) ( obj -- )
 
 PRIVATE<
 

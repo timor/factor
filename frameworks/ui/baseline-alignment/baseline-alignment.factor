@@ -8,9 +8,9 @@ SYMBOL: +baseline+
 
 TUPLE: aligned-gadget < gadget baseline cap-height ;
 
-GENERIC: baseline* ( gadget -- y ) ;
+GENERIC: baseline* ( gadget -- y )
 
-GENERIC: baseline ( gadget -- y ) ;
+GENERIC: baseline ( gadget -- y )
 
 M: gadget baseline drop f ;
 
@@ -21,9 +21,9 @@ M: aligned-gadget baseline
         [ drop ] [ dupd baseline<< ] if
     ] ?if ;
 
-GENERIC: cap-height* ( gadget -- y ) ;
+GENERIC: cap-height* ( gadget -- y )
 
-GENERIC: cap-height ( gadget -- y ) ;
+GENERIC: cap-height ( gadget -- y )
 
 M: gadget cap-height drop f ;
 

@@ -68,7 +68,7 @@ SYMBOL: current-test-file
     [ quot infer drop f f ] [ t ] recover ;
 
 TUPLE: did-not-fail ;
-CONSTANT: did-not-fail-literal T{ did-not-fail } ;
+CONSTANT: did-not-fail-literal T{ did-not-fail }
 
 M: did-not-fail summary drop "Did not fail" ;
 

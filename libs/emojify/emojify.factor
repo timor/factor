@@ -866,7 +866,7 @@ CONSTANT: emoji H{
     { ":zap:" "⚡" }
     { ":zero:" "0️⃣" }
     { ":zzz:" "💤" }
-} ;
+}
 
 : emojify ( str -- str' )
     R[[ :([^:])+:]] [ >string emoji at ] re-replace-with ;

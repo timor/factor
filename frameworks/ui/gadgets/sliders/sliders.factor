@@ -28,13 +28,13 @@ TUPLE: elevator < gadget direction ;
 
 : find-slider ( gadget -- slider/f ) [ slider? ] find-parent ;
 
-CONSTANT: elevator-padding 4 ;
+CONSTANT: elevator-padding 4
 
 : elevator-length ( slider -- n )
     [ elevator>> dim>> ] [ orientation>> ] bi v.
     elevator-padding 2 * - ;
 
-CONSTANT: min-thumb-dim 30 ;
+CONSTANT: min-thumb-dim 30
 
 : visible-portion ( slider -- n )
     [ slider-page ]
@@ -87,7 +87,7 @@ CONSTANT: horizontal-thumb-tiles
         { "horizontal-scroller-handle-grip" f }
         { "horizontal-scroller-handle-middle" 1/2 }
         { "horizontal-scroller-handle-right" f }
-    } ;
+    }
 
 CONSTANT: vertical-thumb-tiles
     {
@@ -96,7 +96,7 @@ CONSTANT: vertical-thumb-tiles
         { "vertical-scroller-handle-grip" f }
         { "vertical-scroller-handle-middle" 1/2 }
         { "vertical-scroller-handle-bottom" f }
-    } ;
+    }
 
 : build-thumb ( thumb -- thumb )
     dup orientation>> {

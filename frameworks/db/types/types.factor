@@ -7,20 +7,20 @@ classes.tuple combinators calendar.format classes.singleton
 accessors quotations random db.private ;
 IN: db.types
 
-HOOK: persistent-table db-connection ( -- hash ) ;
-HOOK: compound db-connection ( string obj -- hash ) ;
+HOOK: persistent-table db-connection ( -- hash )
+HOOK: compound db-connection ( string obj -- hash )
 
 TUPLE: sql-spec class slot-name column-name type primary-key modifiers ;
 
 TUPLE: literal-bind key type value ;
-C: <literal-bind> literal-bind ;
+C: <literal-bind> literal-bind
 
 TUPLE: generator-bind slot-name key generator-singleton type ;
-C: <generator-bind> generator-bind ;
+C: <generator-bind> generator-bind
 SINGLETON: random-id-generator
 
 TUPLE: low-level-binding value ;
-C: <low-level-binding> low-level-binding ;
+C: <low-level-binding> low-level-binding
 
 SINGLETONS: +db-assigned-id+ +user-assigned-id+ +random-id+ ;
 UNION: +primary-key+ +db-assigned-id+ +user-assigned-id+ +random-id+ ;
@@ -143,8 +143,8 @@ ERROR: no-sql-type type ;
     modifiers>> [ lookup-modifier ] map " " join
     [ "" ] [ " " prepend ] if-empty ;
 
-HOOK: bind% db-connection ( spec -- ) ;
-HOOK: bind# db-connection ( spec obj -- ) ;
+HOOK: bind% db-connection ( spec -- )
+HOOK: bind# db-connection ( spec obj -- )
 
 ERROR: no-column column ;
 

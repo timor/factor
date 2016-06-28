@@ -3,7 +3,7 @@ USING: accessors debugger io kernel make math.parser
 prettyprint source-files.errors summary ;
 IN: source-files.errors.debugger
 
-CONSTANT: +listener-input+ "<Listener input>" ;
+CONSTANT: +listener-input+ "<Listener input>"
 
 : error-location ( error -- string )
     [

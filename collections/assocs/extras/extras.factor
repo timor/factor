@@ -40,7 +40,7 @@ IN: assocs.extras
     [ [ [ assoc-size ] bi@ + ] [ drop ] 2bi new-assoc ] 2keep
     [ assoc-merge! ] bi@ ;
 
-GENERIC: delete-value-at ( value assoc -- ) ;
+GENERIC: delete-value-at ( value assoc -- )
 
 M: assoc delete-value-at
     [ value-at* ] keep swap [ delete-at ] [ 2drop ] if ;

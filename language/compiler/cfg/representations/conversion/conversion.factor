@@ -7,8 +7,8 @@ IN: compiler.cfg.representations.conversion
 
 ERROR: bad-conversion dst src dst-rep src-rep ;
 
-GENERIC: rep>tagged ( dst src rep -- ) ;
-GENERIC: tagged>rep ( dst src rep -- ) ;
+GENERIC: rep>tagged ( dst src rep -- )
+GENERIC: tagged>rep ( dst src rep -- )
 
 M: int-rep rep>tagged ( dst src rep -- )
     drop tag-bits get ##shl-imm, ;
@@ -53,8 +53,8 @@ M:: scalar-rep tagged>rep ( dst src rep -- )
     temp src int-rep tagged>rep
     dst temp rep ##integer>scalar, ;
 
-GENERIC: rep>int ( dst src rep -- ) ;
-GENERIC: int>rep ( dst src rep -- ) ;
+GENERIC: rep>int ( dst src rep -- )
+GENERIC: int>rep ( dst src rep -- )
 
 M: scalar-rep rep>int ( dst src rep -- )
     ##scalar>integer, ;

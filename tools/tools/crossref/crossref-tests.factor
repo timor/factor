@@ -4,7 +4,7 @@ namespaces source-files generic definitions words accessors
 compiler.units classes ;
 IN: tools.crossref.tests
 
-GENERIC: predicate-test ( a -- b ) ;
+GENERIC: predicate-test ( a -- b )
 
 M: class predicate-test ;
 
@@ -13,7 +13,7 @@ M: generic predicate-test ;
 { f } [ \ + irrelevant? ] unit-test
 { t } [ \ predicate-test "engines" word-prop first irrelevant? ] unit-test
 
-GENERIC: foo ( a b -- c ) ;
+GENERIC: foo ( a b -- c )
 
 M: integer foo + ;
 
@@ -23,7 +23,7 @@ M: integer foo + ;
 { t } [ \ foo usage [ pathname? ] any? ] unit-test
 
 ! Issues with forget
-GENERIC: generic-forget-test-1 ( a b -- c ) ;
+GENERIC: generic-forget-test-1 ( a b -- c )
 
 M: integer generic-forget-test-1 / ;
 
@@ -41,7 +41,7 @@ M: integer generic-forget-test-1 / ;
     [ name>> "integer=>generic-forget-test-1" = ] any?
 ] unit-test
 
-GENERIC: generic-forget-test-2 ( a b -- c ) ;
+GENERIC: generic-forget-test-2 ( a b -- c )
 
 M: sequence generic-forget-test-2 = ;
 

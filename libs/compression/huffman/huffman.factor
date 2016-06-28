@@ -5,7 +5,7 @@ hashtables io kernel locals math math.order math.parser
 math.ranges sequences bitstreams bit-arrays ;
 IN: compression.huffman
 
-QUALIFIED-WITH: bitstreams bs ;
+QUALIFIED-WITH: bitstreams bs
 
 PRIVATE<
 

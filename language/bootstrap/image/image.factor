@@ -31,7 +31,7 @@ CONSTANT: image-names
     {
         "windows-x86.32" "unix-x86.32"
         "windows-x86.64" "unix-x86.64"
-    } ;
+    }
 
 PRIVATE<
 
@@ -39,11 +39,11 @@ PRIVATE<
 ! same type
 TUPLE: eql-wrapper { obj read-only } ;
 
-C: <eql-wrapper> eql-wrapper ;
+C: <eql-wrapper> eql-wrapper
 
 M: eql-wrapper hashcode* obj>> hashcode* ;
 
-GENERIC: (eql?) ( obj1 obj2 -- ? ) ;
+GENERIC: (eql?) ( obj1 obj2 -- ? )
 
 : eql? ( obj1 obj2 -- ? )
     { [ [ class-of ] same? ] [ (eql?) ] } 2&& ;
@@ -64,7 +64,7 @@ M: eql-wrapper equal?
 
 TUPLE: eq-wrapper { obj read-only } ;
 
-C: <eq-wrapper> eq-wrapper ;
+C: <eq-wrapper> eq-wrapper
 
 M: eq-wrapper equal?
     over eq-wrapper? [ [ obj>> ] bi@ eq? ] [ 2drop f ] if ;
@@ -88,14 +88,14 @@ SYMBOL: objects
 
 ! Constants need to be synced with
 !   vm/image.hpp
-CONSTANT: image-magic 0x0f0e0d0c ;
-CONSTANT: image-version 4 ;
+CONSTANT: image-magic 0x0f0e0d0c
+CONSTANT: image-version 4
 
-CONSTANT: data-base 1024 ;
+CONSTANT: data-base 1024
 
-CONSTANT: header-size 10 ;
+CONSTANT: header-size 10
 
-CONSTANT: data-heap-size-offset 3 ;
+CONSTANT: data-heap-size-offset 3
 
 SYMBOL: sub-primitives
 
@@ -186,7 +186,7 @@ H{ } clone special-objects set-global
     [ swap emit-header call align-here ] dip ; inline
 
 ! Read any object for emitting.
-GENERIC: prepare-object ( obj -- ptr ) ;
+GENERIC: prepare-object ( obj -- ptr )
 
 ! Image header
 
@@ -239,7 +239,7 @@ M: fixnum prepare-object
 
 TUPLE: fake-bignum n ;
 
-C: <fake-bignum> fake-bignum ;
+C: <fake-bignum> fake-bignum
 
 M: fake-bignum prepare-object n>> tag-fixnum ;
 

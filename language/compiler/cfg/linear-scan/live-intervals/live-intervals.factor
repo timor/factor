@@ -59,7 +59,7 @@ SYMBOL: live-intervals
 : interval-reg-class ( live-interval -- reg-class )
     vreg>> rep-of reg-class-of ;
 
-GENERIC: compute-live-intervals* ( insn -- ) ;
+GENERIC: compute-live-intervals* ( insn -- )
 
 M: insn compute-live-intervals* drop ;
 
@@ -147,7 +147,7 @@ ERROR: bad-live-interval live-interval ;
 
 TUPLE: sync-point n keep-dst? ;
 
-GENERIC: insn>sync-point ( insn -- sync-point/f ) ;
+GENERIC: insn>sync-point ( insn -- sync-point/f )
 
 M: clobber-insn insn>sync-point
     [ insn#>> ] [ hairy-clobber-insn? not ] bi sync-point boa ;

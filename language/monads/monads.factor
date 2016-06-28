@@ -6,19 +6,19 @@ shuffle ;
 IN: monads
 
 ! Functors
-GENERIC#: fmap 1 ( functor quot -- functor' ) ;
-GENERIC#: <$ 1 ( functor quot -- functor' ) ;
-GENERIC#: $> 1 ( functor quot -- functor' ) ;
+GENERIC#: fmap 1 ( functor quot -- functor' )
+GENERIC#: <$ 1 ( functor quot -- functor' )
+GENERIC#: $> 1 ( functor quot -- functor' )
 
 ! Monads
 
 ! Mixin type for monad singleton classes, used for return/fail only
 MIXIN: monad
 
-GENERIC: monad-of ( mvalue -- singleton ) ;
-GENERIC: return ( value singleton -- mvalue ) ;
-GENERIC: fail ( value singleton -- mvalue ) ;
-GENERIC: >>= ( mvalue -- quot ) ;
+GENERIC: monad-of ( mvalue -- singleton )
+GENERIC: return ( value singleton -- mvalue )
+GENERIC: fail ( value singleton -- mvalue )
+GENERIC: >>= ( mvalue -- quot )
 
 M: monad return monad-of return ;
 M: monad fail   monad-of fail   ;
@@ -44,10 +44,10 @@ M: monad fmap over $[ @ _ return ] bind ;
 
 ! Identity
 SINGLETON: identity-monad
-INSTANCE:  identity-monad monad ;
+INSTANCE:  identity-monad monad
 
 TUPLE: identity value ;
-INSTANCE: identity monad ;
+INSTANCE: identity monad
 
 M: identity monad-of drop identity-monad ;
 
@@ -60,15 +60,15 @@ M: identity >>= value>> $[ _ swap call( x -- y ) ] ;
 
 ! Maybe
 SINGLETON: maybe-monad
-INSTANCE:  maybe-monad monad ;
+INSTANCE:  maybe-monad monad
 
 SINGLETON: nothing
 
 TUPLE: just value ;
-C: <just> just ;
+C: <just> just
 
 UNION: maybe just nothing ;
-INSTANCE: maybe monad ;
+INSTANCE: maybe monad
 
 M: maybe monad-of drop maybe-monad ;
 
@@ -83,16 +83,16 @@ M: just    >>= value>> $[ _ swap call( x -- y ) ] ;
 
 ! Either
 SINGLETON: either-monad
-INSTANCE:  either-monad monad ;
+INSTANCE:  either-monad monad
 
 TUPLE: left value ;
-C: <left> left ;
+C: <left> left
 
 TUPLE: right value ;
-C: <right> right ;
+C: <right> right
 
 UNION: either left right ;
-INSTANCE: either monad ;
+INSTANCE: either monad
 
 M: either monad-of drop either-monad ;
 
@@ -107,8 +107,8 @@ M: right >>= value>> $[ _ swap call( x -- y ) ] ;
 
 ! Arrays
 SINGLETON: array-monad
-INSTANCE:  array-monad monad ;
-INSTANCE:  array monad ;
+INSTANCE:  array-monad monad
+INSTANCE:  array monad
 
 M: array-monad return  drop 1array ;
 M: array-monad fail   2drop { } ;
@@ -119,8 +119,8 @@ M: array >>= $[ _ swap map concat ] ;
 
 ! List
 SINGLETON: list-monad
-INSTANCE:  list-monad monad ;
-INSTANCE:  list monad ;
+INSTANCE:  list-monad monad
+INSTANCE:  list monad
 
 M: list-monad return drop 1list ;
 M: list-monad fail   2drop nil ;
@@ -131,12 +131,12 @@ M: list >>= $[ _ swap lmap-lazy lconcat ] ;
 
 ! State
 SINGLETON: state-monad
-INSTANCE:  state-monad monad ;
+INSTANCE:  state-monad monad
 
 TUPLE: state quot ;
-C: <state> state ;
+C: <state> state
 
-INSTANCE: state monad ;
+INSTANCE: state monad
 
 M: state monad-of drop state-monad ;
 
@@ -156,11 +156,11 @@ M: state >>= $[ _ swap $[ _ mcall first2 @ mcall ] <state> ] ;
 
 ! Reader
 SINGLETON: reader-monad
-INSTANCE:  reader-monad monad ;
+INSTANCE:  reader-monad monad
 
 TUPLE: reader quot ;
-C: <reader> reader ;
-INSTANCE: reader monad ;
+C: <reader> reader
+INSTANCE: reader monad
 
 M: reader monad-of drop reader-monad ;
 
@@ -176,10 +176,10 @@ M: reader >>= $[ _ swap $[ dup _ mcall @ mcall ] <reader> ] ;
 
 ! Writer
 SINGLETON: writer-monad
-INSTANCE:  writer-monad monad ;
+INSTANCE:  writer-monad monad
 
 TUPLE: writer value log ;
-C: <writer> writer ;
+C: <writer> writer
 
 M: writer monad-of drop writer-monad ;
 

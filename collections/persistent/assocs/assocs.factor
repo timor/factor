@@ -3,11 +3,11 @@
 USING: kernel assocs ;
 IN: persistent.assocs
 
-GENERIC: new-at ( value key assoc -- assoc' ) ;
+GENERIC: new-at ( value key assoc -- assoc' )
 
 M: assoc new-at clone [ set-at ] keep ;
 
-GENERIC: pluck-at ( key assoc -- assoc' ) ;
+GENERIC: pluck-at ( key assoc -- assoc' )
 
 M: assoc pluck-at clone [ delete-at ] keep ;
 

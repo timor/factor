@@ -12,7 +12,7 @@ TUPLE: hsla < color
 { lightness read-only }
 { alpha read-only } ;
 
-C: <hsla> hsla ;
+C: <hsla> hsla
 
 PRIVATE<
 
@@ -43,7 +43,7 @@ M: hsla >rgba
         ] if
     ] dip <rgba> ; inline
 
-GENERIC: >hsla ( color -- hsla ) ;
+GENERIC: >hsla ( color -- hsla )
 
 M: object >hsla >rgba >hsla ;
 

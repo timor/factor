@@ -12,7 +12,7 @@ PREDICATE: positive < integer 0 > ;
 { f } [ negative negative class< ] unit-test
 { f } [ positive negative class< ] unit-test
 
-GENERIC: abs ( n -- n ) ;
+GENERIC: abs ( n -- n )
 M: integer abs ;
 M: negative abs -1 * ;
 M: positive abs ;
@@ -27,7 +27,7 @@ TUPLE: tuple-b < tuple-a ;
 
 PREDICATE: tuple-c < tuple-b slot>> ;
 
-GENERIC: ptest ( tuple -- x ) ;
+GENERIC: ptest ( tuple -- x )
 M: tuple-a ptest drop tuple-a ;
 M: tuple-c ptest drop tuple-c ;
 
@@ -36,7 +36,7 @@ M: tuple-c ptest drop tuple-c ;
 
 PREDICATE: tuple-d < tuple-a slot>> ;
 
-GENERIC: ptest' ( tuple -- x ) ;
+GENERIC: ptest' ( tuple -- x )
 M: tuple-a ptest' drop tuple-a ;
 M: tuple-d ptest' drop tuple-d ;
 
@@ -61,7 +61,7 @@ UNION: u tup ;
 { } [ "IN: classes.predicate.tests PREDICATE: u < tup ;" eval( -- ) ] unit-test
 
 ! Changing the metaclass of the predicate superclass should work
-GENERIC: change-meta-test ( a -- b ) ;
+GENERIC: change-meta-test ( a -- b )
 
 TUPLE: change-meta-test-class length ;
 

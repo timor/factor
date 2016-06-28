@@ -9,7 +9,7 @@ IN: compiler.cfg.intrinsics.simd.backend
 
 ! Selection of implementation based on available CPU instructions
 
-GENERIC: insn-available? ( ## -- reps ) ;
+GENERIC: insn-available? ( ## -- reps )
 
 M: object insn-available? drop t ;
 
@@ -71,7 +71,7 @@ M: ##horizontal-shr-vector-imm insn-available? rep>> %horizontal-shr-vector-imm-
 : [vector-op-checked] ( #dup quot -- quot )
     $[ _ ndup [ @ ] { } make dup [ insn-available? ] all? ] ;
 
-GENERIC#: >vector-op-cond 2 ( quot #pick #dup -- quotpair ) ;
+GENERIC#: >vector-op-cond 2 ( quot #pick #dup -- quotpair )
 M:: callable >vector-op-cond ( quot #pick #dup -- quotpair )
     #dup quot [vector-op-checked] $[ 2drop @ ]
     #dup $[ % _ nnip ]
@@ -124,10 +124,10 @@ MACRO: if-literals-match ( quots -- quot )
         ] [ 2drop bad-simd-intrinsic ] if
     ] ;
 
-CONSTANT: [unary]        [ ds-drop  ds-pop ] ;
-CONSTANT: [unary/param]  [ [ -2 <ds-loc> inc-stack ds-pop ] dip ] ;
-CONSTANT: [binary]       [ ds-drop 2inputs ] ;
-CONSTANT: [binary/param] [ [ -2 <ds-loc> inc-stack 2inputs ] dip ] ;
+CONSTANT: [unary]        [ ds-drop  ds-pop ]
+CONSTANT: [unary/param]  [ [ -2 <ds-loc> inc-stack ds-pop ] dip ]
+CONSTANT: [binary]       [ ds-drop 2inputs ]
+CONSTANT: [binary/param] [ [ -2 <ds-loc> inc-stack 2inputs ] dip ]
 CONSTANT: [quaternary]
     [
         ds-drop
@@ -136,7 +136,7 @@ CONSTANT: [quaternary]
         d: 1 peek-loc
         d: 0 peek-loc
         -4 <ds-loc> inc-stack
-    ] ;
+    ]
 
 :: [emit-vector-op] ( trials params-quot op-quot literal-preds -- quot )
     params-quot trials op-quot literal-preds

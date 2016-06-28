@@ -113,7 +113,7 @@ unit-test
         ] keep =
     ] with-interactive-vocabs ;
 
-GENERIC: method-layout ( a -- b ) ;
+GENERIC: method-layout ( a -- b )
 
 M: complex method-layout
     drop
@@ -232,7 +232,7 @@ IN: prettyprint.tests
 TUPLE: class-see-layout ;
 
 IN: prettyprint.tests
-GENERIC: class-see-layout ( x -- y ) ;
+GENERIC: class-see-layout ( x -- y )
 
 USING: prettyprint.tests ;
 M: class-see-layout class-see-layout ;
@@ -282,7 +282,7 @@ M: class-see-layout class-see-layout ;
     [ 2 break 2 \ + (step-into-execute) . ] (remove-breakpoints)
 ] unit-test
 
-GENERIC: generic-see-test-with-f ( obj -- obj ) ;
+GENERIC: generic-see-test-with-f ( obj -- obj )
 
 M: f generic-see-test-with-f ;
 
@@ -309,7 +309,7 @@ INTERSECTION: intersection-see-test sequence number ;
 
 TUPLE: started-out-hustlin' ;
 
-GENERIC: ended-up-ballin' ( a -- b ) ;
+GENERIC: ended-up-ballin' ( a -- b )
 
 M: started-out-hustlin' ended-up-ballin' ; inline
 
@@ -398,7 +398,7 @@ TUPLE: bob a b ;
 { "maybe{ word }\n" } [ [ maybe{ word } . ] with-string-writer ] unit-test
 
 TUPLE: har a ;
-GENERIC: harhar ( obj -- obj ) ;
+GENERIC: harhar ( obj -- obj )
 M: maybe{ har } harhar ;
 M: integer harhar M\ integer harhar drop ;
 {
