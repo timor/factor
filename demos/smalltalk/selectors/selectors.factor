@@ -1,7 +1,7 @@
 ! Copyright (C) 2009, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: arrays combinators effects generic generic.standard
-kernel sequences words lexer ;
+kernel sequences words lexer parser ;
 IN: smalltalk.selectors
 
 SYMBOLS: unary binary keyword ;
@@ -25,4 +25,4 @@ SYMBOLS: unary binary keyword ;
     [ selector>effect ]
     bi define-simple-generic ;
 
-SYNTAX: \ selector\ scan-token selector>generic drop ;
+SYNTAX: \ SELECTOR: scan-escaped-word-string selector>generic drop ;
