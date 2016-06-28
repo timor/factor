@@ -1,6 +1,6 @@
 USING: accessors alien.c-types alien.data arrays calendar colors
 combinators combinators.short-circuit flatland generalizations
-grouping kernel locals math math.intervals math.order
+grouping kernel locals math math.intervals math.order multi-methods
 math.rectangles math.vectors namespaces opengl opengl.gl
 opengl.glu processing.shapes sequences sequences.generalizations
 shuffle threads ui ui.gadgets ui.gestures ui.render ;
@@ -99,12 +99,12 @@ TUPLE: <pong> < gadget paused field ball player computer ;
   T{ <paddle>     { pos { 200 396 } } { dim {  75   4 } } } clone >>player
   T{ <computer>   { pos { 200   0 } } { dim {  75   4 } } } clone >>computer ;
 
-M: <pong> pref-dim* ( <pong> -- dim ) drop { 400 400 } ;
-M: <pong> ungraft*  ( <pong> --     ) t >>paused drop  ;
+syntax:M: <pong> pref-dim* ( <pong> -- dim ) drop { 400 400 } ;
+syntax:M: <pong> ungraft*  ( <pong> --     ) t >>paused drop  ;
 
 ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-M:: <pong> draw-gadget* ( PONG -- )
+syntax:M:: <pong> draw-gadget* ( PONG -- )
 
   PONG computer>> draw
   PONG player>>   draw
