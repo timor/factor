@@ -83,7 +83,7 @@ HELP: file-lines
 { $examples
   { $example
     "USING: io.files io.encodings.utf8 prettyprint sequences ;"
-    "\"resource:core/kernel/kernel.factor\" utf8 file-lines first ."
+    "resource\"core/kernel/kernel.factor\" utf8 file-lines first ."
     "\"! Copyright (C) 2004, 2009 Slava Pestov.\""
   }
 }

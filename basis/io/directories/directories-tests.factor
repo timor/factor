@@ -9,13 +9,13 @@ io.launcher io.pathnames kernel sequences tools.test ;
 ] unit-test
 
 { { "kernel" } } [
-    "resource:core" [
+    resource"core" [
         "." directory-files [ "kernel" = ] filter
     ] with-directory
 ] unit-test
 
 { { "kernel" } } [
-    "resource:core" [
+    resource"core" [
         [ "kernel" = ] filter
     ] with-directory-files
 ] unit-test
@@ -140,7 +140,7 @@ io.launcher io.pathnames kernel sequences tools.test ;
 
     ! copy-file
     { } [
-        "resource:LICENSE.txt" "test" copy-file
+        resource"LICENSE.txt" "test" copy-file
     ] unit-test
 
     ! copy-file-into

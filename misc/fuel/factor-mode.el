@@ -533,7 +533,7 @@ these lines in your .emacs:
     (,factor-setter-regex . 'factor-font-lock-setter-word)
     (,factor-getter-regex . 'factor-font-lock-getter-word)
     (,factor-bad-string-regex . 'factor-font-lock-invalid-syntax)
-    ("\\_<\\(P\\|SBUF\\|DLL\\)\"" 1 'factor-font-lock-parsing-word)
+    ("\\_<\\(p\\|sbuf\\|dll\\)\"" 1 'factor-font-lock-parsing-word)
     (,factor-constant-words-regex . 'factor-font-lock-constant)
     ,(factor-syntax factor-parsing-words-regex '("P"))
     (,"\t" . 'whitespace-highlight-face)))

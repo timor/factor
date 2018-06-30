@@ -78,10 +78,27 @@ ERROR: no-parent-directory path ;
 
 PRIVATE>
 
+GENERIC: vocab-path ( path -- newpath )
+
+GENERIC: absolute-path ( path -- path' )
+
+TUPLE: pathname string ;
+
+C: <pathname> pathname
+
+M: pathname absolute-path string>> absolute-path ;
+
+M: pathname <=> [ string>> ] compare ;
+
+INSTANCE: pathname virtual-sequence
+M: pathname length normalize-path length ;
+M: pathname virtual@ normalize-path ;
+M: pathname virtual-exemplar drop "" ;
+M: pathname string-lines "" like string-lines ;
+
 : absolute-path? ( path -- ? )
     {
         { [ dup empty? ] [ f ] }
-        { [ dup special-path? nip ] [ t ] }
         { [ os windows? ] [ windows-absolute-path? ] }
         { [ dup first path-separator? ] [ t ] }
         [ f ]
@@ -105,6 +122,10 @@ PRIVATE>
         { [ over absolute-path? over first path-separator? and ] [
             [ 2 head ] dip append
         ] }
+        ! { [ over pathname? ] [
+            ! [ [ normalize-path ] dip append-path ] keepd like
+            ! [ append-path ] curry change-string
+        ! ] }
         [ append-relative-path ]
     } cond ;
 
@@ -117,6 +138,7 @@ PRIVATE>
         dup last-path-separator [ 1 + tail ] [
             drop special-path? [ file-name ] when
         ] if
+        ! dup last-path-separator [ 1 + tail ] [ drop ] if
     ] unless ;
 
 : file-stem ( path -- stem )
@@ -139,10 +161,6 @@ HOOK: home io-backend ( -- dir )
 
 M: object home "" resource-path ;
 
-GENERIC: vocab-path ( path -- newpath )
-
-GENERIC: absolute-path ( path -- path' )
-
 M: string absolute-path
     "resource:" ?head [
         trim-head-separators resource-path
@@ -163,10 +181,29 @@ M: string absolute-path
 M: object normalize-path ( path -- path' )
     absolute-path ;
 
-TUPLE: pathname string ;
+TUPLE: resource-pathname < pathname ;
 
-C: <pathname> pathname
+: <resource-pathname> ( string -- resource-pathname )
+    resource-pathname new
+        swap trim-head-separators >>string ; inline
 
-M: pathname absolute-path string>> absolute-path ;
+M: resource-pathname absolute-path string>> resource-path absolute-path ;
+! M: resource-pathname like drop normalize-path <resource-pathname> ;
 
-M: pathname <=> [ string>> ] compare ;
+TUPLE: vocab-pathname < pathname ;
+
+: <vocab-pathname> ( string -- vocab-pathname )
+    vocab-pathname new
+        swap trim-head-separators >>string ; inline
+
+M: vocab-pathname absolute-path string>> vocab-path absolute-path ;
+! M: vocab-pathname like drop normalize-path <vocab-pathname> ;
+
+TUPLE: home-pathname < pathname ;
+
+: <home-pathname> ( string -- home-pathname )
+    home-pathname new
+        swap trim-head-separators >>string ; inline
+
+M: home-pathname absolute-path string>> home prepend-path absolute-path ;
+! M: home-pathname like drop normalize-path <home-pathname> ;

@@ -1,4 +1,4 @@
-USING: accessors io io.streams.string kernel math namespaces
+uSING: accessors io io.streams.string kernel math namespaces
 parser sbufs sequences strings tools.test words ;
 IN: io.tests
 
@@ -76,7 +76,7 @@ M: dumb-writer stream-write1 vector>> push ; inline
     [ vector>> ] tri
 ] unit-test
 
-{ SBUF" asdf" }
+{ sbuf"asdf" }
 [ "asdf" <string-reader> 4 <sbuf> [ stream-copy ] keep ] unit-test
 
 { "asdf" }

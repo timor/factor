@@ -80,7 +80,7 @@ SYNTAX: STRING:
 PRIVATE>
 
 : parse-multiline-string ( end-text -- str )
-    lexer get 1 (parse-multiline-string) ;
+    lexer get 0 (parse-multiline-string) ;
 
 SYNTAX: /* "*/" parse-multiline-string drop ;
 

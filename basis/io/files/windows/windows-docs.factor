@@ -7,7 +7,7 @@ HELP: open-read
 { $examples
   { $unchecked-example
     "USING: io.files.windows prettyprint ;"
-    "\"resource:core/kernel/kernel.factor\" absolute-path open-read ."
+    "resource\"core/kernel/kernel.factor\" absolute-path open-read ."
     "T{ win32-file { handle ALIEN: 234 } { ptr 0 } }"
   }
 } ;

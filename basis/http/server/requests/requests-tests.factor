@@ -134,8 +134,8 @@ hello
 {
     T{ request
         { method "GET" }
-        { url URL" /" }
-        { proxy-url URL" " }
+        { url url"/" }
+        { proxy-url url"" }
         { version "1.0" }
         { header H{ } }
         { cookies V{ } }

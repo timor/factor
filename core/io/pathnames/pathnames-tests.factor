@@ -9,6 +9,8 @@ system tools.test ;
 
 { "freetype6.dll" } [ "resource:freetype6.dll" file-name ] unit-test
 { "freetype6.dll" } [ "resource:/freetype6.dll" file-name ] unit-test
+{ "freetype6.dll" } [ resource"freetype6.dll" file-name ] unit-test
+{ "freetype6.dll" } [ resource"/freetype6.dll" file-name ] unit-test
 
 { "/usr/lib" } [ "/usr" "lib" append-path ] unit-test
 { "/usr/lib" } [ "/usr/" "lib" append-path ] unit-test
@@ -49,7 +51,9 @@ system tools.test ;
 { "bar/foo" } [ "bar/baz" "./..//foo" append-path ] unit-test
 { "bar/foo" } [ "bar/baz" "./../././././././///foo" append-path ] unit-test
 
-{ t } [ "resource:core" absolute-path? ] unit-test
+! No longer a special-path, instead it's a file named "resource:core"
+{ f } [ "resource:core" absolute-path? ] unit-test
+{ t } [ resource"core" absolute-path? ] unit-test
 { f } [ "" absolute-path? ] unit-test
 
 [| path |
@@ -63,6 +67,15 @@ H{
 } [
     [ "../core/bootstrap/stage2.factor" ]
     [ "resource:core/bootstrap/stage2.factor" absolute-path ]
+    unit-test
+] with-variables
+
+H{
+    { current-directory "." }
+    { "resource-path" ".." }
+} [
+    [ "../core/bootstrap/stage2.factor" ]
+    [ resource"core/bootstrap/stage2.factor" absolute-path ]
     unit-test
 ] with-variables
 

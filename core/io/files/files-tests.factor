@@ -241,7 +241,7 @@ CONSTANT: pt-array-1
 ] must-fail
 
 { } [
-    "resource:LICENSE.txt" binary [
+    resource"LICENSE.txt" binary [
         44 read drop
         tell-input 44 assert=
         -44 seek-relative seek-input
@@ -272,7 +272,7 @@ CONSTANT: pt-array-1
 
 { f t t } [
     [
-        "resource:core" normalize-path
+        resource"core" normalize-path
         [ cwd = ] [ cd ] [ cwd = ] tri
     ] cwd '[ _ dup cd cwd = ] [ ] cleanup
 ] unit-test

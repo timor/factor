@@ -131,10 +131,19 @@ M: string pprint*
     dup "\"" "\"" pprint-string ;
 
 M: sbuf pprint*
-    dup "SBUF\" " "\"" pprint-string ;
+    dup "sbuf\"" "\"" pprint-string ;
 
 M: pathname pprint*
-    dup string>> "P\" " "\"" pprint-string ;
+    dup string>> "path\"" "\"" pprint-string ;
+
+M: resource-pathname pprint*
+    dup string>> "resource\"" "\"" pprint-string ;
+
+M: vocab-pathname pprint*
+    dup string>> "vocab-path\"" "\"" pprint-string ;
+
+M: home-pathname pprint*
+    dup string>> "home-path\"" "\"" pprint-string ;
 
 ! Sequences
 : nesting-limit? ( -- ? )

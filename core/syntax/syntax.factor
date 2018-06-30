@@ -90,12 +90,24 @@ IN: bootstrap.syntax
 
     "\"" [ parse-string suffix! ] define-core-syntax
 
-    "SBUF\"" [
-        lexer get skip-blank parse-string >sbuf suffix!
+    "sbuf\"" [
+        parse-string >sbuf suffix!
     ] define-core-syntax
 
-    "P\"" [
-        lexer get skip-blank parse-string <pathname> suffix!
+    "path\"" [
+        parse-string <pathname> suffix!
+    ] define-core-syntax
+
+    "resource\"" [
+        parse-string <resource-pathname> suffix!
+    ] define-core-syntax
+
+    "vocab-path\"" [
+        parse-string <vocab-pathname> suffix!
+    ] define-core-syntax
+
+    "home-path\"" [
+        parse-string <home-pathname> suffix!
     ] define-core-syntax
 
     "[" [ parse-quotation suffix! ] define-core-syntax

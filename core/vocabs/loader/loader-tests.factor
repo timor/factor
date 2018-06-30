@@ -32,7 +32,7 @@ IN: vocabs.loader.tests
 ] unit-test
 
 [
-    "resource:core/vocabs/loader/test/a/a.factor" forget-source
+    resource"core/vocabs/loader/test/a/a.factor" forget-source
     "vocabs.loader.test.a" forget-vocab
 ] with-compilation-unit
 
@@ -44,7 +44,7 @@ IN: vocabs.loader.tests
     [ f ] [ "vocabs.loader.test.a" lookup-vocab source-loaded?>> ] unit-test
 
     [ t ] [
-        "resource:core/vocabs/loader/test/a/a.factor"
+        resource"core/vocabs/loader/test/a/a.factor"
         path>source-file definitions>>
         "v-l-t-a-hello" "vocabs.loader.test.a" lookup-word dup .
         swap first in?
@@ -56,7 +56,7 @@ IN: vocabs.loader.tests
 [
     "IN: vocabs.loader.test.a v-l-t-a-hello"
     <string-reader>
-    "resource:core/vocabs/loader/test/a/a.factor"
+    resource"core/vocabs/loader/test/a/a.factor"
     parse-stream
 ] [ error>> error>> error>> no-word-error? ] must-fail-with
 
@@ -107,10 +107,10 @@ IN: vocabs.loader.tests
 
 { 3 } [ "count-me" get-global ] unit-test
 
-{ { "resource:core/kernel/kernel.factor" 1 } }
+{ { resource"core/kernel/kernel.factor" 1 } }
 [ "kernel" <vocab-link> where ] unit-test
 
-{ { "resource:core/kernel/kernel.factor" 1 } }
+{ { resource"core/kernel/kernel.factor" 1 } }
 [ "kernel" lookup-vocab where ] unit-test
 
 { } [

@@ -40,7 +40,7 @@ HELP: checksum-file
 { $examples
     { $example
         "USING: checksums checksums.crc32 prettyprint ;"
-        "\"resource:LICENSE.txt\" crc32 checksum-file ."
+        "resource\"LICENSE.txt\" crc32 checksum-file ."
         "B{ 125 29 106 28 }"
     }
 } ;

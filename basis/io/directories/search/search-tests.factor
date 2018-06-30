@@ -38,12 +38,12 @@ tools.test ;
 ] unit-test
 
 { t } [
-    "resource:core/math/integers/integers.factor"
+    resource"core/math/integers/integers.factor"
     [ "math.factor" tail? ] find-up-to-root >boolean
 ] unit-test
 
 { f } [
-    "resource:core/math/integers/integers.factor"
+    resource"core/math/integers/integers.factor"
     [ drop f ] find-up-to-root
 ] unit-test
 
