@@ -34,7 +34,6 @@ addons:
       - libsnappy-dev
 before_install:
   - uname -s
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin" ; fi
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install make ; fi
 
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./build.sh deps-macosx ; else ./build.sh deps-apt-get ; fi
