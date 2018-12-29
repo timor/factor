@@ -34,6 +34,7 @@ addons:
       - libsnappy-dev
 before_install:
   - uname -s
+  - echo "$TRAVIS_OS_NAME"
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install make ; fi
 
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./build.sh deps-macosx ; else ./build.sh deps-apt-get ; fi
