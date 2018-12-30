@@ -71,7 +71,7 @@ script:
   - export CI_BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
   - echo "CI_BRANCH=${CI_BRANCH}"
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then
-    %comspec% /k ""C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"" amd64;
+    %comspec% /k ""C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\\vcvarsall.bat"" amd64;
     build.cmd;
     fi
   - if [[ "$TRAVIS_OS_NAME" != "windows" ]]; then DEBUG=1 ./build.sh net-bootstrap < /dev/null; fi
