@@ -277,11 +277,11 @@ find_architecture() {
 
 find_num_cores() {
     $ECHO "Finding num cores..."
-    NUM_CORES=7ZZ
+    NUM_CORES=2
     uname_s=$(uname -s)
     check_ret uname
     case $uname_s in
-        CYGWIN_NT-5.2-WOW64 | *CYGWIN_NT* | *CYGWIN* | MINGW32*) NUM_CORES=$NUMBER_OF_PROCESSORS;;
+        CYGWIN_NT-5.2-WOW64 | *CYGWIN_NT* | *CYGWIN* | MINGW32* | MSYS_NT*) NUM_CORES=$NUMBER_OF_PROCESSORS;;
         *darwin* | *Darwin* | *linux* | *Linux*) NUM_CORES=$(getconf _NPROCESSORS_ONLN);;
     esac
 }
