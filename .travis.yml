@@ -69,7 +69,8 @@ script:
   - echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, TRAVIS_PULL_REQUEST_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH"
   - export CI_BRANCH="${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}"
   - echo "CI_BRANCH=${CI_BRANCH}"
-  - DEBUG=1 ./build.sh net-bootstrap < /dev/null
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then ./build.cmd; fi
+  - if [[ "$TRAVIS_OS_NAME" != "windows" ]]; then DEBUG=1 ./build.sh net-bootstrap < /dev/null; fi
   - "./factor -e='USING: memory vocabs.hierarchy ; \"zealot\" load save'"
   - './factor -run=zealot.cli-changed-vocabs'
   - './factor -run=tools.test `./factor -run=zealot.cli-changed-vocabs | paste -s -d " " -`'
