@@ -136,7 +136,8 @@ HOOK: resolve-symlinks os ( path -- path' )
 M: object resolve-symlinks normalize-path ;
 
 : resource-path ( path -- newpath )
-    "resource-path" get prepend-path ;
+    dup "work" = [ drop "work/" ] when
+    "work/" ?head [ "~/.local/share/factor" ] [ "resource-path" get ] if prepend-path ;
 
 HOOK: home io-backend ( -- dir )
 
