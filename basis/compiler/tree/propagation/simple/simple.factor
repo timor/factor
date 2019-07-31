@@ -63,8 +63,9 @@ ERROR: invalid-outputs #call infos ;
     [ "outputs" word-prop ] bi*
     with-datastack check-outputs ;
 
+! Force literal? to f to prevent non-specified inlining.
 : copy-output-infos ( #call word -- infos )
-    nip "output-infos" word-prop clone ;
+    nip "output-infos" word-prop clone [ f >>literal? ] map ;
 
 : literal-inputs? ( #call -- ? )
     in-d>> [ value-info literal?>> ] all? ;
