@@ -2,11 +2,11 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types arrays assocs classes classes.algebra
 classes.algebra.private classes.maybe classes.tuple.private
-combinators combinators.short-circuit compiler.tree
+combinators combinators.short-circuit compiler compiler.tree
 compiler.tree.propagation.constraints compiler.tree.propagation.info
 compiler.tree.propagation.inlining compiler.tree.propagation.nodes
 compiler.tree.propagation.slots continuations fry kernel make
-sequences sets stack-checker.dependencies words ;
+namespaces sequences sets stack-checker.dependencies words ;
 IN: compiler.tree.propagation.simple
 
 M: #introduce propagate-before
@@ -63,6 +63,9 @@ ERROR: invalid-outputs #call infos ;
     [ "outputs" word-prop ] bi*
     with-datastack check-outputs ;
 
+: copy-output-infos ( #call word -- infos )
+    nip "output-infos" word-prop clone ;
+
 : literal-inputs? ( #call -- ? )
     in-d>> [ value-info literal?>> ] all? ;
 
@@ -118,6 +121,7 @@ ERROR: invalid-outputs #call infos ;
         { [ dup sequence-constructor? ] [ propagate-sequence-constructor ] }
         { [ dup predicate? ] [ propagate-predicate ] }
         { [ dup "outputs" word-prop ] [ call-outputs-quot ] }
+        { [ dup "output-infos" word-prop ] [ copy-output-infos ] }
         [ default-output-value-infos ]
     } cond ;
 
@@ -152,3 +156,7 @@ M: #alien-node propagate-before propagate-alien-invoke ;
 M: #alien-callback propagate-around child>> (propagate) ;
 
 M: #return annotate-node dup in-d>> (annotate-node) ;
+
+M: #return propagate-after
+    word-being-compiled get
+    [ swap node-input-infos "output-infos" set-word-prop ] [ drop ] if* ;

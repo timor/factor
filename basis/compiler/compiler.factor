@@ -12,6 +12,7 @@ stack-checker.inlining vocabs.loader words ;
 IN: compiler
 
 SYMBOL: compiled
+SYMBOL: word-being-compiled
 
 : compile? ( word -- ? )
     ! Don't attempt to compile certain words.
@@ -28,6 +29,7 @@ SYMBOL: compiled
     H{ } clone dependencies namespaces:set
     H{ } clone generic-dependencies namespaces:set
     HS{ } clone conditional-dependencies namespaces:set
+    dup word-being-compiled namespaces:set
     clear-compiler-error ;
 
 GENERIC: no-compile? ( word -- ? )
@@ -66,7 +68,9 @@ M: word combinator? inline? ;
             [ conditional-dependencies get set-dependency-checks ]
             bi
         ] [ drop ] if
-    ] bi ;
+    ] bi
+    f word-being-compiled namespaces:set
+    ;
 
 : deoptimize-with ( word def -- * )
     ! If the word failed to infer, compile it with the
