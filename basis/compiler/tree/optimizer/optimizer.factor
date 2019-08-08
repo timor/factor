@@ -1,6 +1,7 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel namespaces
+accessors
 combinators.short-circuit
 compiler.tree
 compiler.tree.recursive
@@ -44,12 +45,19 @@ ERROR: duplicate-output-infos word infos ;
     ]
     bi and ;
 
+: replace-literal-infos ( infos -- infos )
+    [ dup literal?>> [ drop object-info ] when ] map ;
+
 : update-output-infos ( nodes -- nodes )
     word-being-compiled get [
         dup "output-infos" word-prop [ duplicate-output-infos ] when*
         over should-store-output-infos?
         [
-            [ drop ] [ "output-infos" set-word-prop ] if-empty
+            [ drop ] [
+                [ clone f >>literal? ] map ! This line prevents only literal value propagation
+                ! replace-literal-infos      ! This line prevents literal value info propagation completely
+                "output-infos" set-word-prop
+            ] if-empty
         ] [
             drop
         ] if*

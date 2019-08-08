@@ -1,12 +1,11 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types arrays assocs classes classes.algebra
-classes.algebra.private classes.maybe classes.tuple.private
-combinators combinators.short-circuit compiler.tree
-compiler.tree.propagation.constraints compiler.tree.propagation.info
-compiler.tree.propagation.inlining compiler.tree.propagation.nodes
-compiler.tree.propagation.slots continuations fry io kernel make
-sequences sets stack-checker.dependencies words ;
+classes.algebra.private classes.maybe classes.tuple.private combinators
+combinators.short-circuit compiler.tree compiler.tree.propagation.constraints
+compiler.tree.propagation.info compiler.tree.propagation.inlining
+compiler.tree.propagation.nodes compiler.tree.propagation.slots continuations
+fry io kernel make namespaces sequences sets stack-checker.dependencies words ;
 IN: compiler.tree.propagation.simple
 
 M: #introduce propagate-before
@@ -129,10 +128,14 @@ ERROR: invalid-outputs #call infos ;
     ] recover
     ;
 
+SYMBOL: propagate-output-infos?
+propagate-output-infos? [ f ] initialize
+
 ! This is quite verbose, mainly for catching things which indicate other problems.
 : check-copied-output-infos ( #call word -- ? )
     "output-infos" word-prop
     {
+        { [ propagate-output-infos? get not ] [ 2drop f ] }
         { [ 2dup check-consistent-effects not ] [ 2drop f ] }
         { [ [ word>> name>> ] dip dup null-infos? ]
           [ drop "WARNING: ignoring NULL infos from " prepend write nl f ] }
@@ -146,7 +149,7 @@ ERROR: invalid-outputs #call infos ;
 ! still propagated.
 : copy-output-infos ( #call word -- infos )
     2dup check-copied-output-infos
-    [ nip "output-infos" word-prop clone [ f >>literal? ] map ]
+    [ nip "output-infos" word-prop ]
     [ default-output-value-infos ] if
     ;
 
