@@ -1,12 +1,13 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types arrays assocs classes classes.algebra
-classes.tuple.private combinators combinators.short-circuit compiler
-compiler.tree compiler.tree.propagation.constraints
-compiler.tree.propagation.info compiler.tree.propagation.inlining
-compiler.tree.propagation.mutually-recursive compiler.tree.propagation.nodes
-compiler.tree.propagation.output-infos compiler.tree.propagation.slots
-continuations formatting fry kernel sequences stack-checker.dependencies words ;
+classes.algebra.private classes.maybe classes.tuple.private
+classes.intersection classes.union math.intervals
+combinators combinators.short-circuit compiler.tree
+compiler.tree.propagation.constraints compiler.tree.propagation.info
+compiler.tree.propagation.inlining compiler.tree.propagation.nodes
+compiler.tree.propagation.slots continuations fry kernel make
+sequences sets stack-checker.dependencies words ;
 IN: compiler.tree.propagation.simple
 
 M: #introduce propagate-before
@@ -22,9 +23,19 @@ M: #push propagate-before
 : set-value-infos ( infos values -- )
     [ set-value-info ] 2each ;
 
-GENERIC: declared-interval ( classoid -- int/f )
-M: classoid declared-interval drop f ;
-M: class declared-interval "declared-interval" word-prop ;
+GENERIC: declared-class-interval ( classoid -- int/f )
+M: classoid declared-class-interval drop f ;
+M: class declared-class-interval  { [ "declared-interval" word-prop ] [ class-interval ] } 1|| ;
+M: union-class declared-class-interval
+    class-members [ f ]
+    [
+        [ declared-class-interval full-interval or ] [ interval-union ] map-reduce
+    ] if-empty ;
+M: intersection-class declared-class-interval
+    class-participants [ f ]
+    [
+        [ declared-class-interval full-interval or ] [ interval-intersect ] map-reduce
+    ] if-empty ;
 
 M: #declare propagate-before
     ! We need to force the caller word to recompile when the
@@ -32,7 +43,7 @@ M: #declare propagate-before
     ! now we're making assumptions about their definitions.
     declaration>> [
         [ add-depends-on-class ]
-        [ dup declared-interval <class/interval-info> swap refine-value-info ]
+        [ dup declared-class-interval <class/interval-info> swap refine-value-info ]
         bi
     ] assoc-each ;
 
