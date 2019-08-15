@@ -22,13 +22,17 @@ M: #push propagate-before
 : set-value-infos ( infos values -- )
     [ set-value-info ] 2each ;
 
+GENERIC: declared-interval ( classoid -- int/f )
+M: classoid declared-interval drop f ;
+M: class declared-interval "declared-interval" word-prop ;
+
 M: #declare propagate-before
     ! We need to force the caller word to recompile when the
     ! classes mentioned in the declaration are redefined, since
     ! now we're making assumptions about their definitions.
     declaration>> [
         [ add-depends-on-class ]
-        [ <class-info> swap refine-value-info ]
+        [ dup declared-interval <class/interval-info> swap refine-value-info ]
         bi
     ] assoc-each ;
 
