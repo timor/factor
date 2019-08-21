@@ -6,6 +6,7 @@ combinators combinators.short-circuit compiler.tree
 compiler.tree.propagation.constraints compiler.tree.propagation.info
 compiler.tree.propagation.inlining compiler.tree.propagation.nodes
 compiler.tree.propagation.slots continuations fry kernel make
+io
 namespaces sequences sets stack-checker.dependencies words ;
 IN: compiler.tree.propagation.simple
 
@@ -65,9 +66,6 @@ ERROR: invalid-outputs #call infos ;
     [ "outputs" word-prop ] bi*
     with-datastack check-outputs ;
 
-! Force literal? to f to prevent non-specified inlining.
-: copy-output-infos ( #call word -- infos )
-    nip "output-infos" word-prop clone [ f >>literal? ] map ;
 
 : literal-inputs? ( #call -- ? )
     in-d>> [ value-info literal?>> ] all? ;
@@ -118,6 +116,31 @@ ERROR: invalid-outputs #call infos ;
     "default-output-classes" word-prop
     [ class-infos ] [ out-d>> length object-info <repetition> ] ?if ;
 
+ERROR: null-output-infos word infos ;
+
+: null-infos? ( infos -- ? )
+    [ null-info = ] any? ;
+
+: literal-infos? ( infos -- ? )
+    [ literal?>> ] any? ;
+
+: check-copied-output-infos ( #call infos -- infos )
+    [ word>> name>> ] [ "output-infos" word-prop ] bi*
+    {
+        { [ dup null-infos? ]
+          [ drop "WARNING: ignoring NULL infos from " prepend write nl f ] }
+        { [ dup literal-infos? ]
+          [ drop "WARNING: ignoring LITERAL infos from " prepend write nl f ] }
+        [ 2drop t ]
+    } cond
+    ;
+
+! Force literal? to f to prevent non-specified inlining.
+: copy-output-infos ( #call word -- infos )
+    2dup check-copied-output-infos
+    [ nip "output-infos" word-prop clone [ f >>literal? ] map ]
+    [ default-output-value-infos ] if
+    ;
 : output-value-infos ( #call word -- infos )
     {
         { [ dup \ <tuple-boa> eq? ] [ drop propagate-<tuple-boa> ] }
