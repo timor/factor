@@ -3,7 +3,7 @@
 USING: accessors arrays assocs compiler.cfg.dataflow-analysis
 compiler.cfg.instructions compiler.cfg.linearization
 compiler.cfg.stacks.local fry kernel math math.order namespaces
-sequences ;
+sequences words ;
 QUALIFIED: sets
 IN: compiler.cfg.stacks.padding
 
@@ -48,6 +48,7 @@ CONSTANT: initial-state { { 0 { } } { 0 { } } }
     [ first { } 2array ] map ;
 
 GENERIC: visit-insn ( state insn -- state' )
+\ visit-insn "no-compile" t set-word-prop
 
 M: ##inc visit-insn ( state insn -- state' )
     [ shift-stack ] apply-stack-op ;
