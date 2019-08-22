@@ -5,7 +5,6 @@ combinators.short-circuit compiler.cfg compiler.cfg.builder
 compiler.cfg.builder.alien compiler.cfg.finalization
 compiler.cfg.optimizer compiler.codegen compiler.crossref
 compiler.errors compiler.tree.builder compiler.tree.optimizer
-compiler.tree.propagation.simple
 compiler.units compiler.utilities continuations definitions fry
 generic generic.single io kernel macros make namespaces
 sequences sets stack-checker.dependencies stack-checker.errors
@@ -29,6 +28,7 @@ SYMBOL: compiled
     H{ } clone dependencies namespaces:set
     H{ } clone generic-dependencies namespaces:set
     HS{ } clone conditional-dependencies namespaces:set
+    dup "output-infos" remove-word-prop
     dup word-being-compiled namespaces:set
     clear-compiler-error ;
 

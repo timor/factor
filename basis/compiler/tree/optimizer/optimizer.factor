@@ -1,9 +1,12 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: kernel namespaces
+combinators.short-circuit
+compiler.tree
 compiler.tree.recursive
 compiler.tree.normalization
 compiler.tree.propagation
+compiler.tree.propagation.info
 compiler.tree.cleanup
 compiler.tree.escape-analysis
 compiler.tree.escape-analysis.check
@@ -13,8 +16,11 @@ compiler.tree.def-use
 compiler.tree.dead-code
 compiler.tree.modular-arithmetic
 compiler.tree.finalization
-compiler.tree.checker ;
+compiler.tree.checker
+io math sequences words ;
 IN: compiler.tree.optimizer
+
+SYMBOL: word-being-compiled
 
 SYMBOL: check-optimizer?
 
@@ -22,6 +28,32 @@ SYMBOL: check-optimizer?
     check-optimizer? get [
         dup check-nodes
     ] when ;
+
+! TODO: find better place for stuff below
+ERROR: duplicate-output-infos word infos ;
+
+: should-store-output-infos? ( nodes -- infos/f )
+    ! 2 tail* first2              ! last2
+    [
+      { [ length 2 > ] [ but-last last ] } 1&&
+      #terminate? not
+    ]
+    [ last dup #return?
+      [ "STRANGE: last node not return, not storing outputs" print ] unless
+      node-input-infos
+    ]
+    bi and ;
+
+: update-output-infos ( nodes -- nodes )
+    word-being-compiled get [
+        dup "output-infos" word-prop [ duplicate-output-infos ] when*
+        over should-store-output-infos?
+        [
+            [ drop ] [ "output-infos" set-word-prop ] if-empty
+        ] [
+            drop
+        ] if*
+    ] when* ;
 
 : optimize-tree ( nodes -- nodes' )
     [
@@ -40,4 +72,5 @@ SYMBOL: check-optimizer?
         compute-def-use
         optimize-modular-arithmetic
         finalize
+        update-output-infos
     ] with-scope ;
