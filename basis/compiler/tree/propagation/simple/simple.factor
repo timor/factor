@@ -133,7 +133,7 @@ ERROR: invalid-outputs #call infos ;
 : check-copied-output-infos ( #call word -- ? )
     "output-infos" word-prop
     {
-        { [ 2dup check-consistent-effects ] [ 2drop f ] }
+        { [ 2dup check-consistent-effects not ] [ 2drop f ] }
         { [ [ word>> name>> ] dip dup null-infos? ]
           [ drop "WARNING: ignoring NULL infos from " prepend write nl f ] }
         ! { [ dup literal-infos? ]
