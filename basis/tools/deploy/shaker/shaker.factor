@@ -181,6 +181,7 @@ IN: tools.deploy.shaker
                 "modular-arithmetic"
                 "no-compile"
                 "owner-generic"
+                "output-infos"
                 "outputs"
                 "participants"
                 "predicate"
