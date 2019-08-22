@@ -1,8 +1,8 @@
-USING: accessors arrays assocs compiler.tree
-compiler.tree.propagation.constraints compiler.tree.propagation.copy
+USING: accessors arrays compiler.cfg.debugger compiler.tree
+compiler.tree.debugger compiler.tree.propagation.copy
 compiler.tree.propagation.info compiler.tree.propagation.simple hashtables
-kernel math math.intervals math.private namespaces sequences system tools.test
-words ;
+kernel math math.functions math.intervals math.libm math.private namespaces
+sequences system tools.test ;
 IN: compiler.tree.propagation.simple.tests
 
 : make-value-infos ( classes intervals -- seq )
@@ -151,3 +151,11 @@ cpu x86.64? [
     "mamma mia" <literal-info> 1array setup-value-infos
     { 0 } { 1 } \ >fixnum <#call> dup word>> foldable-call?
 ] unit-test
+
+
+! Call output value propagation
+
+: foo ( -- x ) 2 ;
+: bar ( -- y ) foo sqrt ;
+
+{ fsqrt } [ \ bar build-optimized-tree nodes>quot last ] unit-test
