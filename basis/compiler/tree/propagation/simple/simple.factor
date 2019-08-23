@@ -129,7 +129,7 @@ ERROR: invalid-outputs #call infos ;
     ;
 
 SYMBOL: propagate-output-infos?
-propagate-output-infos? [ f ] initialize
+propagate-output-infos? [ t ] initialize
 
 ! This is quite verbose, mainly for catching things which indicate other problems.
 : check-copied-output-infos ( #call word -- ? )
