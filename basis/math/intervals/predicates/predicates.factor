@@ -1,5 +1,5 @@
-USING: classes.parser classes.predicate combinators.short-circuit continuations
-kernel lexer math.intervals parser sequences words ;
+USING: classes classes.parser classes.predicate combinators.short-circuit
+continuations kernel lexer locals math.intervals parser sequences words ;
 IN: math.intervals.predicates
 
 ERROR: invalid-interval-definition stack ;
@@ -14,13 +14,15 @@ UNION: valid-interval interval full-interval empty-interval-class ;
     [ first ]
     [ invalid-interval-definition ] if ;
 
-: interval>predicate ( interval -- quot )
-    [ interval-contains? ] curry ;
+:: interval>predicate ( superclass interval -- quot: ( obj -- ? ) )
+    [ { [ superclass instance? ] [ interval interval-contains? ] } 1&& ] ;
 PRIVATE>
 
 : define-interval-predicate-class ( class superclass interval -- )
-    [ interval>predicate define-predicate-class ]
-    [ nip "declared-interval" set-word-prop ] 3bi ;
+    [ dupd interval>predicate define-predicate-class ]
+    [ nip "declared-interval" set-word-prop ]
+    [ 2drop predicate-word t "inline" set-word-prop ]
+    3tri ;
 
 SYNTAX: INTERVAL-PREDICATE:
     scan-new-class "<" expect scan-class parse-definition

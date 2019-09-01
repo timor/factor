@@ -397,3 +397,20 @@ generic-comparison-ops [
 \ current-continuation [ object-info ] "outputs" set-word-prop
 \ dummy-1 [ object-info ] "outputs" set-word-prop
 \ dummy-2 [ drop object-info ] "outputs" set-word-prop
+! Interval comparisons are foldable if the interval is literal.  If the input is
+! real and the interval is a subset, it will always contain it.  If it only
+! intersects, it must be determined at run time.  If it does not, it will never
+! match.  If the input is not known to be real, it must also be left to run
+! time.  The case where the input is also literal should be covered by folding.
+: maybe-fold-interval-contains? ( info1 info2 -- info )
+    2dup [ class>> real class<= ] [ literal?>> ] bi* and
+    [
+        [ interval>> ] [ literal>> ] bi*
+        2dup interval-subset? [ 2drop t <literal-info> ]
+        [ intervals-intersect? maybe-or-never ] if
+    ]
+    [ 2drop object-info ] if ;
+
+\ interval-contains? [
+   maybe-fold-interval-contains?
+] "outputs" set-word-prop

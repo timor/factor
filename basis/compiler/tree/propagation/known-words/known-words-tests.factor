@@ -32,3 +32,45 @@ IN: compiler.tree.propagation.known-words.tests
     100 random 2^ >bignum
     [ { bignum } declare 10 /mod ] call nip fixnum?
 ] unit-test
+
+
+! Test interval info folding
+
+! These cases cannot be folded
+${ object-info } [
+    -1 5 [a,b] <interval-info> 0 [a,inf] <literal-info>
+    maybe-fold-interval-contains?
+] unit-test
+
+${ object-info } [
+    -1 5 [a,b] <interval-info>  object-info
+    maybe-fold-interval-contains?
+] unit-test
+
+${ object-info } [
+    object-info -1 5 [a,b] <literal-info>
+    maybe-fold-interval-contains?
+] unit-test
+
+! These cases can never be contained
+${ f <literal-info> } [
+    -1 <literal-info> 0 [a,inf] <literal-info>
+    maybe-fold-interval-contains?
+] unit-test
+
+${ f <literal-info> } [
+    -4 -1 [a,b] <interval-info> 0 [a,inf] <literal-info>
+    maybe-fold-interval-contains?
+] unit-test
+
+
+! These are definitely contained
+${ t <literal-info> } [
+    1 <literal-info> 0 [a,inf] <literal-info>
+    maybe-fold-interval-contains?
+] unit-test
+
+${ t <literal-info> } [
+    0 256 [a,b] <interval-info> 0 [a,inf] <literal-info>
+    maybe-fold-interval-contains?
+] unit-test
