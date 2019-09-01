@@ -172,7 +172,7 @@ MEMO: array-capacity-interval ( -- interval )
                 [ to>>   first2 [ <= ] [ < ] if ]
             } 2&&
         ] if
-    ] if ;
+    ] if ; foldable
 
 : interval-zero? ( int -- ? )
     0 swap interval-contains? ;
