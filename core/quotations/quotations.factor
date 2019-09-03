@@ -33,7 +33,9 @@ M: composed call uncompose [ call ] dip call ;
 M: wrapper equal?
     over wrapper? [ [ wrapped>> ] same? ] [ 2drop f ] if ;
 
-UNION: callable quotation curried composed ;
+UNION: builtin-callable quotation curried composed ;
+MIXIN: callable
+INSTANCE: builtin-callable callable
 
 M: callable equal?
     over callable? [ sequence= ] [ 2drop f ] if ;
