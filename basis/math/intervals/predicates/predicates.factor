@@ -27,3 +27,5 @@ PRIVATE>
 SYNTAX: INTERVAL-PREDICATE:
     scan-new-class "<" expect scan-class parse-definition
     evaluate-interval define-interval-predicate-class ;
+
+PREDICATE: interval-predicate-class < predicate-class "declared-interval" word-prop ;
