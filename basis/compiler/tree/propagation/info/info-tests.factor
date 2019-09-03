@@ -242,3 +242,68 @@ ${
     -100 100 [a,b] array-capacity wrap-interval
     -100 100 [a,b] integer wrap-interval
 ] unit-test
+
+
+
+! Check that literal's don't needlessly inflate the value range
+
+<<
+: test-literal-bignum-info ( -- x )
+    0 <literal-info> bignum >>class ;
+
+: test-fixnum-info ( -- x )
+    fixnum <class-info> ;
+>>
+
+${ test-fixnum-info } [
+    test-fixnum-info
+    test-literal-bignum-info
+    (absorb-literal-info)
+] unit-test
+
+{ f } [
+    test-fixnum-info
+    1.2 <literal-info>
+    (absorb-literal-info)
+] unit-test
+
+! Corner case, where the literal itself is not identified as fixnum
+{ f } [
+    test-fixnum-info
+    0 >bignum <literal-info>
+    (absorb-literal-info)
+] unit-test
+
+${ f } [
+    test-literal-bignum-info
+    test-fixnum-info
+    (absorb-literal-info)
+] unit-test
+
+
+! The commutative version
+{ f } [
+    1 <literal-info>
+    test-fixnum-info clone t >>literal? 2 >>literal
+    absorb-literal-info
+] unit-test
+
+${ test-fixnum-info } [
+    test-literal-bignum-info
+    test-fixnum-info
+    absorb-literal-info
+] unit-test
+
+{ f } [
+    test-fixnum-info
+    1.2 <literal-info>
+    absorb-literal-info
+] unit-test
+
+${ test-fixnum-info }
+[ test-fixnum-info test-literal-bignum-info value-info-union ]
+unit-test
+
+${ test-fixnum-info }
+[ test-literal-bignum-info test-fixnum-info value-info-union ]
+unit-test

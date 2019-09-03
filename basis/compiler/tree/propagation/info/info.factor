@@ -4,8 +4,12 @@ USING: accessors arrays assocs byte-arrays classes
 classes.algebra classes.singleton classes.tuple
 classes.intersection classes.union
 classes.tuple.private combinators combinators.short-circuit
+locals
 compiler.tree.propagation.copy compiler.utilities kernel layouts math
 math.intervals namespaces sequences sequences.private strings
+prettyprint
+formatting
+io
 words ;
 IN: compiler.tree.propagation.info
 
@@ -272,12 +276,70 @@ DEFER: (value-info-union)
     } 2cleave
     init-value-info ;
 
-: value-info-union ( info1 info2 -- info )
+! WIP: If literal infos and non-literal infos are compared or unified, an anonymous union
+! should not be created if the literal is actually an instance of the
+! non-literal class. E.g. unifying (
+! 0: bignum and fixnum )
+: debug-interval-contains ( x int -- f )
+    2dup "value: %u\nint: %u" printf flush
+    interval-contains?
+    dup "returns:%u\n" printf nl flush
+     ;
+
+
+! If one info can contain the other one, return the larger one.
+: (absorb-literal-info) ( must-not-be-literal-info maybe-literal-info -- info/f )
+    { [ [ class>> ] [ literal>> ] bi* swap instance? ]
+      [ [ interval>> ] [ literal>> ] bi* swap
+        interval-contains?
+        ! debug-interval-contains
+      ]
+      [ drop ] } 2&& ;
+
+: absorb-literal-info ( info1 info2 -- info/f )
+    2dup
+    { [ [ literal?>> ] bi@ xor ]
+      [ [ class>> real class<= ] both? ] } 2&&
+    [
+        { [ (absorb-literal-info) ]
+          [ swap (absorb-literal-info) ] } 2||
+    ] [ 2drop f ] if ;
+
+:: debug-absorb-literal ( info1 info2 -- f )
+    ! 2dup "info1: %u\ninfo2: %u" printf
+    info1 info2 absorb-literal-info :> result
+    result [ info1 info2 result "info1: %u\ninfo2: %u\nresult:%u\n\n" printf ] when
+    ! dup "returns:%u\n" printf nl
+    result
+    ;
+
+: old-value-info-union ( info1 info2 -- info )
     {
         { [ dup class>> null-class? ] [ drop ] }
         { [ over class>> null-class? ] [ nip ] }
+        ! [ { [ absorb-literal-info ] [ (value-info-union) ] } 2|| ]
+        ! [ { [ debug-absorb-literal ] [ (value-info-union) ] } 2|| ]
         [ (value-info-union) ]
     } cond ;
+
+: my-value-info-union ( info1 info2 -- info )
+    {
+        { [ dup class>> null-class? ] [ drop ] }
+        { [ over class>> null-class? ] [ nip ] }
+        [ { [ absorb-literal-info ] [ (value-info-union) ] } 2|| ]
+        ! [ { [ debug-absorb-literal ] [ (value-info-union) ] } 2|| ]
+        ! [ (value-info-union) ]
+    } cond ;
+
+:: value-info-union ( info1 info2 -- info )
+    info1 info2
+    [ my-value-info-union ]
+    [ old-value-info-union ] 2bi :> ( new old )
+    new old = [
+        info1 info2 old new
+        "Difference for\n%u\nand\n%u\nold: %u\n new: %u\n\n" printf
+    ] unless
+    new ;
 
 : value-infos-union ( infos -- info )
     [ null-info ]
