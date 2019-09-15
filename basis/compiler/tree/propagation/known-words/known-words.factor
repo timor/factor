@@ -9,6 +9,7 @@ continuations.private fry generic.math hashtables kernel kernel.private layouts
 locals math math.floats.private math.functions math.integers.private
 math.intervals math.libm math.parser math.partial-dispatch math.private
 namespaces sbufs sequences slots.private splitting stack-checker.dependencies
+see
 strings strings.private vectors words ;
 FROM: alien.c-types => (signed-interval) (unsigned-interval) ;
 IN: compiler.tree.propagation.known-words
@@ -406,9 +407,8 @@ generic-comparison-ops [
     ]
     [ 2drop object-info ] if ;
 
-\ interval-contains? [
-   maybe-fold-interval-contains?
-] "outputs" set-word-prop
+\ interval-contains? dup methods swap suffix
+[ [ maybe-fold-interval-contains? ] "outputs" set-word-prop ] each
 
 ! If info from `current-continuation` and the dummies is used, `ifcc` breaks
 \ current-continuation [ object-info ] "outputs" set-word-prop
