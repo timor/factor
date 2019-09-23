@@ -1,9 +1,10 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays assocs classes classes.private
-classes.tuple.private continuations definitions generic
-hash-sets init kernel kernel.private math namespaces sequences
-sets source-files.errors vocabs words ;
+USING: accessors arrays assocs classes classes.private classes.tuple.private
+compiler.tree.propagation.output-infos continuations definitions generic
+formatting
+hash-sets init kernel kernel.private math namespaces prettyprint sequences sets
+source-files.errors vocabs words ;
 IN: compiler.units
 
 PRIMITIVE: modify-code-heap ( alist update-existing? reset-pics? -- )
@@ -167,6 +168,8 @@ M: object always-bump-effect-counter? drop f ;
             recompile
             outdated-tuples get update-tuples
             forgotten-definitions get process-forgotten-definitions
+            ! "Changed-output-infos:" print
+            ! changed-output-infos get [ "%s: %[%s, %]" printf nl ] assoc-each
         ] keep update-existing? reset-pics? modify-code-heap
         bump-effect-counter
         notify-observers
@@ -203,6 +206,7 @@ PRIVATE>
 
 : with-compilation-unit ( quot -- )
     H{ } clone
+    H{ } clone changed-output-infos namespaces:set
     <definitions> new-definitions pick set-at
     <definitions> old-definitions pick set-at
     HS{ } clone forgotten-definitions pick set-at [

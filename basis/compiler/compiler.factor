@@ -5,6 +5,9 @@ combinators.short-circuit compiler.cfg compiler.cfg.builder
 compiler.cfg.builder.alien compiler.cfg.finalization
 compiler.cfg.optimizer compiler.codegen compiler.crossref
 compiler.errors compiler.tree.builder compiler.tree.optimizer
+compiler.tree.propagation.output-infos
+formatting
+debugger
 compiler.units compiler.utilities continuations definitions fry
 generic generic.single io kernel macros make namespaces
 sequences sets stack-checker.dependencies stack-checker.errors
@@ -28,7 +31,6 @@ SYMBOL: compiled
     H{ } clone dependencies namespaces:set
     H{ } clone generic-dependencies namespaces:set
     HS{ } clone conditional-dependencies namespaces:set
-    dup "output-infos" remove-word-prop
     dup word-being-compiled namespaces:set
     clear-compiler-error ;
 
@@ -63,6 +65,7 @@ M: word combinator? inline? ;
     ! word can get recompiled too.
     [ compiled-unxref ]
     [
+        dup update-output-infos
         dup crossref? [
             [ dependencies get generic-dependencies get compiled-xref ]
             [ conditional-dependencies get set-dependency-checks ]
@@ -115,7 +118,11 @@ M: word combinator? inline? ;
     ! If the word contains breakpoints, don't optimize it, since
     ! the walker does not support this.
     dup optimize? [
-        [ [ build-tree ] [ deoptimize ] recover optimize-tree ] keep
+        ! dup "Optimizing: %s" printf nl
+        [ [ build-tree ] [ deoptimize ] recover
+          optimize-tree
+          set-pending-output-infos
+        ] keep
         contains-breakpoints? [ nip deoptimize* ] [ drop ] if
     ] [ deoptimize* ] if ;
 
@@ -170,8 +177,15 @@ M: optimizing-compiler to-recompile ( -- words )
         maybe-changed get new-words get diff
         outdated-conditional-usages %
 
+        ! changed-output-infos get
+        ! dup keys .
+        ! ,
+
         changed-definitions get filter-word-defs dup zip ,
-    ] { } make assoc-combine keys ;
+    ] { } make assoc-combine keys
+    sort-to-recompile
+    ! [ dup topological-sort-cycle? [ error. ] [ rethrow ] when ] recover
+    ;
 
 M: optimizing-compiler process-forgotten-words
     [ delete-compiled-xref ] each ;
