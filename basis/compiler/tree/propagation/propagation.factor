@@ -17,6 +17,7 @@ kernel namespaces ;
 IN: compiler.tree.propagation
 
 : propagate ( nodes -- nodes )
+    dup current-nodes set
     H{ } clone copies set
     H{ } clone 1array value-infos set
     H{ } clone 1array constraints set

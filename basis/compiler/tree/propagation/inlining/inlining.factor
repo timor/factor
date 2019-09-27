@@ -2,6 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs classes.algebra combinators
 combinators.short-circuit compiler.tree compiler.tree.builder
+compiler.tree.propagation.mutually-recursive
 compiler.tree.normalization compiler.tree.propagation.info
 compiler.tree.propagation.nodes compiler.tree.recursive generic
 generic.math generic.single generic.standard kernel locals math
@@ -102,6 +103,14 @@ SYMBOL: history
     call( #call -- word/quot/f )
     object swap eliminate-dispatch ;
 
+! Interface to propagation.mutually-recursive
+! Inline the pruned body and perform propagation
+: inline-recursive-call ( #call word -- ? )
+    drop [ pruned-recursion-inline-body ] keep swap
+    dup current-nodes set >>body
+    [ propagate-body ] keep
+    f swap body<< ;
+
 : (do-inlining) ( #call word -- ? )
     {
         { [ dup never-inline-word? ] [ 2drop f ] }
@@ -109,6 +118,7 @@ SYMBOL: history
         { [ dup standard-generic? ] [ inline-standard-method ] }
         { [ dup math-generic? ] [ inline-math-method ] }
         { [ dup inline? ] [ inline-word ] }
+        { [ over recursive-inline? ] [ inline-recursive-call ] }
         [ 2drop f ]
     } cond ;
 
