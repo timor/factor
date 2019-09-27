@@ -6,11 +6,46 @@ IN: compiler.tree.propagation.output-infos
 
 FROM: namespaces => set ;
 
-TUPLE: depends-on-output-infos word infos ;
-! TUPLE: depends-on-method-output-infos word infos ;
-
 ! Stores the computed output infos of the word currently being compiled
 SYMBOL: compiled-output-infos
+
+! * Single Recursive Propagation
+
+! ** Inlining recursive call sites
+
+! Return nodes with all branches removed that contain the call
+GENERIC: reject-call* ( call node -- nodes )
+M: node reject-call* nip ;
+: child-contains-node? ( child node -- ? )
+    [ over = ] contains-node?
+    nip
+    ;
+
+M: #branch reject-call*
+    swap over children>> [ child-contains-node? ] with any?
+    [ "#branch with call left" throw ] when ;
+
+M: #if reject-call*
+    swap over children>> [ child-contains-node? ] with reject
+    dup length 2 = [ drop ] [ first nip ] if ;
+
+
+
+! * Mutual Recursive Propagation
+! Stores the trace of current nested propagation
+SYMBOL: nesting-trace
+
+! Stores the trees that have been created during nested compilation, so that
+! when the word itself comes up for compilation, the result can be reused.
+SYMBOL: nodes-cache
+
+
+!
+
+! * Old approach: dependencies
+
+TUPLE: depends-on-output-infos word infos ;
+! TUPLE: depends-on-method-output-infos word infos ;
 
 ! Assoc storing which output infos changed in the current compilation unit
 SYMBOL: changed-output-infos
@@ -125,7 +160,7 @@ M: method get-vocab parent-word get-vocab ;
       ] bi ]
     [ drop ] if* ;
 
-! ** Sorting according to deps
+! * Sorting according to deps obsolete
 
 :: all-output-info-dependencies ( vocab -- assoc )
     vocab odeps [ [ word>> ] map [ get-vocab vocab = ] filter ] assoc-map
