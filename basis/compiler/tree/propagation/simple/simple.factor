@@ -2,17 +2,11 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types arrays assocs classes classes.algebra
 classes.algebra.private classes.maybe classes.tuple.private combinators
-combinators.short-circuit compiler.tree compiler.tree.builder
-compiler.tree.optimizer compiler.tree.propagation.constraints
+combinators.short-circuit compiler.tree compiler.tree.propagation.constraints
 compiler.tree.propagation.info compiler.tree.propagation.inlining
-compiler.tree.propagation.nodes compiler.tree.propagation.output-infos
-compiler.tree.propagation.slots continuations formatting fry io kernel make math
-generic
-namespaces prettyprint sequences sets stack-checker.dependencies words ;
+compiler.tree.propagation.nodes compiler.tree.propagation.slots continuations
+fry io kernel make namespaces sequences sets stack-checker.dependencies words ;
 IN: compiler.tree.propagation.simple
-
-SYMBOL: propagation-cache
-! propagation-cache [ H{ } clone ] initialize ! Should only be needed during dev switch
 
 M: #introduce propagate-before
     out-d>> [ object-info swap set-value-info ] each ;
@@ -26,6 +20,7 @@ M: #push propagate-before
 
 : set-value-infos ( infos values -- )
     [ set-value-info ] 2each ;
+
 
 M: #declare propagate-before
     ! We need to force the caller word to recompile when the
@@ -122,13 +117,12 @@ ERROR: invalid-outputs #call infos ;
 : literal-infos? ( infos -- ? )
     [ literal?>> ] any? ;
 
-! TODO: skip this stuff when no infos are given!
 : check-consistent-effects ( #call infos -- ? )
     [ check-outputs ] [
         dup invalid-outputs? [
             2drop
-           [  "FIXME: Inconsistent stack effect output for compiled word: " write
-            word>> name>> print ] with-output>error
+            "FIXME: Inconsistent stack effect output for compiled word: " write
+            word>> name>> print
             f
         ] [ rethrow ] if
     ] recover
@@ -137,14 +131,11 @@ ERROR: invalid-outputs #call infos ;
 SYMBOL: propagate-output-infos?
 propagate-output-infos? [ t ] initialize
 
-! Force literal? to f to prevent non-specified inlining.  Class/Interval info is
-! still propagated.
 ! This is quite verbose, mainly for catching things which indicate other problems.
-: check-copy-output-infos ( #call word -- ? )
+: check-copied-output-infos ( #call word -- ? )
     "output-infos" word-prop
     {
         { [ propagate-output-infos? get not ] [ 2drop f ] }
-        { [ dup not ] [ 2drop f ] }
         { [ 2dup check-consistent-effects not ] [ 2drop f ] }
         { [ [ word>> name>> ] dip dup null-infos? ]
           [ drop "WARNING: ignoring NULL infos from " prepend write nl f ] }
@@ -154,69 +145,12 @@ propagate-output-infos? [ t ] initialize
     } cond
     ;
 
-SYMBOL: custom-fallback-propagation-passes
-
-! : prime-propagation-cache ( word -- )
-!     propagation-cache get [ drop f ] cache drop
-!     ;
-
-! : cached-output-infos ( word -- info/f ? )
-!     propagation-cache get at*
-!     ;
-
-! : update-propagation-cache ( word info -- info )
-!     2dup "storing cached info for %s: %[%s, %]" printf nl
-!     [ propagation-cache get set-at ] keep ;
-
-! : (compute-output-infos) ( #call word -- infos )
-!     dup prime-propagation-cache
-!     dup "computing interim info for %s" printf nl
-!     dup build-tree
-!     custom-fallback-propagation-passes get
-!     [ call( nodes -- nodes ) ]
-!     [ optimize-tree ] if*
-!     should-store-output-infos?
-!     [ update-propagation-cache nip ]
-!     [ default-output-value-infos ] if* ;
-
-! : check-propagation-cycle ( call word cached-infos -- infos )
-!     [ 2nip ]
-!     [ dup "cycle detected for %s" printf nl
-!       default-output-value-infos
-!     ] if* ;
-
-! : compute-output-infos ( call word -- info )
-!     dup cached-output-infos
-!     [ check-propagation-cycle ]
-!     [ drop (compute-output-infos) ] if ;
-
-: get-output-infos ( call word -- info )
-    nip "output-infos" word-prop ;
-    ! [
-    !     propagation-cache get swapd [ "miss" print compute-output-infos ] with cache
-    ! ] keep
-    ! over "Using info for %s: %[%s, %]" printf nl
-    ! compute-output-infos
-
-! :: get-output-infos ( call word -- info )
-!     word "output-infos" word-prop
-!     [
-!         prime-propagation-cache
-!         word cached-output-infos :> ( infos found )
-!         found
-!         [ call word infos check-cached-output-infos ]
-!         [ call word compute-output-infos ] if
-!     ] unless*
-!     ;
-
-! Register conditional dependency here
+! Force literal? to f to prevent non-specified inlining.  Class/Interval info is
+! still propagated.
 : copy-output-infos ( #call word -- infos )
-    ! [
-        2dup check-copy-output-infos
-        [ get-output-infos ]
-        [ default-output-value-infos ] if
-    ! ] keep
-    ! over add-depends-on-output-infos
+    2dup check-copied-output-infos
+    [ nip "output-infos" word-prop ]
+    [ default-output-value-infos ] if
     ;
 
 : output-value-infos ( #call word -- infos )
@@ -248,23 +182,8 @@ M: #call annotate-node
 : propagate-input-infos ( node infos/f -- )
     swap in-d>> refine-value-infos ;
 
-! The method slot seems to have either a single word or a quotation
-: add-output-value-dep ( call word -- )
-    [ copy-output-infos ] keep
-    ! dup  "%s, " printf
-    swap
-    add-depends-on-output-infos ;
-
-: add-output-value-dependencies ( node -- )
-    [ dup word>> add-output-value-dep ]
-    [ dup method>> dup method? [ add-output-value-dep ] [ 2drop ] if ] bi
-    ;
-
 M: #call propagate-after
-    [ dup word>> word>input-infos propagate-input-infos ]
-    [ add-output-value-dependencies ] bi
-    ! [ drop ] bi
-    ;
+    dup word>> word>input-infos propagate-input-infos ;
 
 : propagate-alien-invoke ( node -- )
     [ out-d>> ] [ params>> return>> ] bi
