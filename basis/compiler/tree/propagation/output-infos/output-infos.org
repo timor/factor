@@ -1,0 +1,77 @@
+* Output Value Information Propagation
+** Problem: Compilation order for compilation unit
+Currently:
+1. Throw away all dependency information
+2. Compile words in arbitrary order
+3. If lucky, output info is available for a word currently being compiled
+
+** Recursive compilation
+While compiling a word, if a call has no output information, run the
+compilation for the nested call(TODO: should that only be done for the words in
+the current unit?  Theoretically, if everything has been compiled this way,
+output info should be present.  Maybe warn if it is not in the current unit)  Keep a trace to make sure cycles are
+broken.
+
+If any cycles are detected, this means a mutually recursive dependency.
+*** Built-in Recursion support
+- Single recursion handling seems to be limited to inline recursive combinators
+- Single recursion with calls to the word being defined don't seem to be turned
+  into tail calls?
+
+#+begin_src factor
+  ! Test if this does any form of propagation
+
+  TYPED: baz ( x: fixnum -- y )
+      dup 0 > [ 1 - baz ] [ drop 42 ] if ;
+#+end_src
+- Will not be turned into tail calls
+*** Inlining for type propagation at call sites
+For single recursion:
+
+# - Observation: in a single-recursive DFG, output information of the recursive
+#   call nodes is solely determined by what has been propagated in the base case
+#   paths.
+# - For traversal, This means that if a nested call is hit, the tree must be
+#   treated as if it was not present, and it's output value info will be assumed
+#   to be null-info.  There must be a phi node which unifies this with the base
+#   case at least once!
+# - This means that at this point we must recursively start propagation,
+#   temporarily assuming null-info at the output where we just were.
+# - This can happen multiple times if we have more than one recursive call
+#   site in the body.
+# - TODO Problem(?): What happens if a literal base case is used?  How will
+#   unification at phi be able to infer the full value range?  -> Should not be a
+#   problem, since the literal can only be part of the calculation, a different
+#   one must be the declared one that has been passed as input.  This must have
+#   type information anyways.
+- Observation: Whenever a branch is taken that has a recursive invocation, the
+  return value of that branch can only be computed by a run of the word with
+  that branch removed!
+- This means, that for propagation, each call site must be inlined with the
+  corresponding branch being eliminated.
+- The complexity is factorial(exponential?) in the number of call sites in the graph
+-
+*** Mutual Recursion
+
+It should be possible to reduce the case for mutual recursion to this.  A nested
+propagation trace could look like this: =foo -> bar -> baz -> foo=. This means
+that, while compiling =foo=, we entered a cycle when getting the output info of bar.
+
+**** Strategy 1: handle in the immediate caller
+
+Continuation: Throw a condition to =baz=, that =baz= must be propagated inlining
+=foo=.  This will cause =baz= to encounter the cycle when getting the output infos
+of =bar=.
+New Trace: =foo -> bar -> baz -> bar -> baz=.
+
+Throw a condition to =bar=, that =bar= must be propagated inlining =baz=.
+
+This will cause =bar= to encounter itself, triggering Single recursive compilation.
+
+**** Strategy 2: handle in the detected cycle
+
+Continuation:
+- Return to propagation pass of foo with a list of functions to be inlined for propagation
+- Create a modified tree which splices all of these functions (recursively,
+  until the inline list is empty)
+- Compile as if being single recursive above
