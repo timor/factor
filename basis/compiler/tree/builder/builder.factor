@@ -38,12 +38,17 @@ PRIVATE>
 : build-tree ( word/quot -- nodes )
     [ f ] dip build-tree-with ;
 
+! Convert a tree into a sub-tree which defines out-d
+:: tree>sub-tree ( out-d nodes -- nodes )
+    nodes unclip-last in-d>> :> in-d'
+    {
+        { [ dup not ] [ ] }
+        { [ dup ends-with-terminate? ] [ out-d [ f swap <#push> ] map append ] }
+        [ in-d' out-d [ [ length ] bi@ assert= ] [ <#copy> suffix ] 2bi ]
+    } cond ;
+
 :: build-sub-tree ( in-d out-d word/quot -- nodes/f )
     [
-        in-d word/quot build-tree-with unclip-last in-d>> :> in-d'
-        {
-            { [ dup not ] [ ] }
-            { [ dup ends-with-terminate? ] [ out-d [ f swap <#push> ] map append ] }
-            [ in-d' out-d [ [ length ] bi@ assert= ] [ <#copy> suffix ] 2bi ]
-        } cond
+        in-d word/quot build-tree-with
+        out-d swap tree>sub-tree
     ] [ inference-error? ] ignore-error/f ;
