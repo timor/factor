@@ -1,6 +1,6 @@
 USING: accessors assocs compiler compiler.tree.propagation.info
-compiler.tree.propagation.output-infos compiler.units kernel kernel.private math
-namespaces sequences tools.annotations tools.test words ;
+compiler.tree.propagation.mutually-recursive compiler.units kernel
+kernel.private math namespaces sequences tools.annotations tools.test words ;
 IN: compiler.tree.propagation.output-infos.tests
 
 ! TODO: insert missing unit test!
@@ -40,9 +40,20 @@ IN: compiler.tree.propagation.output-infos.tests
 : fun4 ( x -- y )
     dup 0 > [ 1 - fun4 ] [ drop 42 ] if ;
 
+
+! Should work with compiler.tree.propagation.mutually-recursive:
+{ 42 } [ propagate-recursive? [ { fun4 } test-output-infos values first first literal>> ] with-variable-on ] unit-test
+
 ! [ nested-compilation? [ { fun4 } recompile drop ] with-variable-on ] [ nested-compilation-cycle? ] must-fail-with
 ! After Error Handling:
-{ t } [ nested-compilation? [ { fun4 } test-output-infos values first first object-info = ] with-variable-on ] unit-test
+{ t } [ nested-compilation? [ { fun4 } test-output-infos values first first object-info = ]
+        with-variable-on ] unit-test
+
+! Should refine inlining result with object-info
+{ 42 } [ H{ { propagate-recursive? t }
+            { nested-compilation?  t } }
+         [ { fun4 } test-output-infos values first first literal>> ] with-variables ] unit-test
+
 
 ! Mutual dependencies
 DEFER: fun6
