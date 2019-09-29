@@ -28,29 +28,13 @@ If any cycles are detected, this means a mutually recursive dependency.
 *** Inlining for type propagation at call sites
 For single recursion:
 
-# - Observation: in a single-recursive DFG, output information of the recursive
-#   call nodes is solely determined by what has been propagated in the base case
-#   paths.
-# - For traversal, This means that if a nested call is hit, the tree must be
-#   treated as if it was not present, and it's output value info will be assumed
-#   to be null-info.  There must be a phi node which unifies this with the base
-#   case at least once!
-# - This means that at this point we must recursively start propagation,
-#   temporarily assuming null-info at the output where we just were.
-# - This can happen multiple times if we have more than one recursive call
-#   site in the body.
-# - TODO Problem(?): What happens if a literal base case is used?  How will
-#   unification at phi be able to infer the full value range?  -> Should not be a
-#   problem, since the literal can only be part of the calculation, a different
-#   one must be the declared one that has been passed as input.  This must have
-#   type information anyways.
 - Observation: Whenever a branch is taken that has a recursive invocation, the
   return value of that branch can only be computed by a run of the word with
   that branch removed!
 - This means, that for propagation, each call site must be inlined with the
   corresponding branch being eliminated.
-- The complexity is factorial(exponential?) in the number of call sites in the graph
--
+- The complexity is linear for every branch containing a call site in the graph
+
 *** Mutual Recursion
 
 It should be possible to reduce the case for mutual recursion to this.  A nested
