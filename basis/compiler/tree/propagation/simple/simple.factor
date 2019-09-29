@@ -121,7 +121,7 @@ M: #declare propagate-before
         { [ dup predicate? ] [ propagate-predicate ] }
         { [ dup "outputs" word-prop ] [ call-outputs-quot ] }
         { [ dup "output-infos" word-prop ] [ copy-output-infos ] }
-        { [ dup try-nested-compile ] [ copy-output-infos ] }
+        { [ dup safe-nested-compile ] [ copy-output-infos ] }
         [ default-output-value-infos ]
     } cond ;
 

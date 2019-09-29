@@ -39,7 +39,10 @@ IN: compiler.tree.propagation.output-infos.tests
 ! Single Recursion
 : fun4 ( x -- y )
     dup 0 > [ 1 - fun4 ] [ drop 42 ] if ;
-[ nested-compilation? [ { fun4 } recompile drop ] with-variable-on ] [ nested-compilation-cycle? ] must-fail-with
+
+! [ nested-compilation? [ { fun4 } recompile drop ] with-variable-on ] [ nested-compilation-cycle? ] must-fail-with
+! After Error Handling:
+{ t } [ nested-compilation? [ { fun4 } test-output-infos values first first object-info = ] with-variable-on ] unit-test
 
 ! Mutual dependencies
 DEFER: fun6
@@ -48,4 +51,7 @@ DEFER: fun6
 : fun6 ( x -- y )
     dup 0 > [ 1 - fun5 ] [ drop 69 ] if ;
 
-[ nested-compilation? [ { fun5 fun6 } recompile drop ] with-variable-on ] [ nested-compilation-cycle? ] must-fail-with
+! [ nested-compilation? [ { fun5 fun6 } recompile drop ] with-variable-on ] [ nested-compilation-cycle? ] must-fail-with
+! After Error Handling:
+{ t } [ nested-compilation? [ { fun5 } test-output-infos values first first object-info = ] with-variable-on ] unit-test
+{ t } [ nested-compilation? [ { fun6 } test-output-infos values first first object-info = ] with-variable-on ] unit-test

@@ -5,10 +5,9 @@ combinators.short-circuit compiler.cfg compiler.cfg.builder
 compiler.cfg.finalization compiler.cfg.optimizer compiler.codegen
 compiler.crossref compiler.errors compiler.tree compiler.tree.builder
 compiler.tree.optimizer compiler.tree.propagation.output-infos compiler.units
-compiler.utilities continuations definitions formatting fry generic
-generic.single io kernel macros make namespaces prettyprint sequences sets
-stack-checker.dependencies stack-checker.errors stack-checker.inlining
-vocabs.loader words ;
+compiler.utilities continuations definitions fry generic generic.single io
+kernel macros make namespaces sequences sets stack-checker.dependencies
+stack-checker.errors stack-checker.inlining vocabs.loader words ;
 IN: compiler
 
 SYMBOL: compiled
@@ -169,6 +168,9 @@ SYMBOL: nested-compilation?
     nested-compilation? get and
     [ nested-compile t ]
     [ drop f ] if ;
+
+: safe-nested-compile ( word -- ? )
+    [ try-nested-compile ] [ dup nested-compilation-cycle? [ 2drop f ] [ rethrow ] if ] recover ;
 
 SINGLETON: optimizing-compiler
 
