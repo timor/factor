@@ -35,3 +35,17 @@ IN: compiler.tree.propagation.output-infos.tests
 { integer } [ nested-compilation?
               [ { fun2 fun1 } test-output-infos values first first class>> ]
             with-variable-on ] unit-test
+
+! Single Recursion
+: fun4 ( x -- y )
+    dup 0 > [ 1 - fun4 ] [ drop 42 ] if ;
+[ nested-compilation? [ { fun4 } recompile drop ] with-variable-on ] [ nested-compilation-cycle? ] must-fail-with
+
+! Mutual dependencies
+DEFER: fun6
+: fun5 ( x -- y )
+    dup 0 > [ 1 - fun6 ] [ drop 42 ] if ;
+: fun6 ( x -- y )
+    dup 0 > [ 1 - fun5 ] [ drop 69 ] if ;
+
+[ nested-compilation? [ { fun5 fun6 } recompile drop ] with-variable-on ] [ nested-compilation-cycle? ] must-fail-with
