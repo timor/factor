@@ -2,19 +2,22 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs classes classes.algebra combinators
 combinators.short-circuit compiler.cfg compiler.cfg.builder
-compiler.cfg.builder.alien compiler.cfg.finalization
-compiler.cfg.optimizer compiler.codegen compiler.crossref
-compiler.errors
-compiler.tree
-compiler.tree.propagation.output-infos
-compiler.tree.builder compiler.tree.optimizer
-compiler.units compiler.utilities continuations definitions fry
-generic generic.single io kernel macros make namespaces
-sequences sets stack-checker.dependencies stack-checker.errors
-stack-checker.inlining vocabs.loader words ;
+compiler.cfg.finalization compiler.cfg.optimizer compiler.codegen
+compiler.crossref compiler.errors compiler.tree compiler.tree.builder
+compiler.tree.optimizer compiler.tree.propagation.output-infos compiler.units
+compiler.utilities continuations definitions formatting fry generic
+generic.single io kernel macros make namespaces prettyprint sequences sets
+stack-checker.dependencies stack-checker.errors stack-checker.inlining
+vocabs.loader words ;
 IN: compiler
 
 SYMBOL: compiled
+
+! List of words passed to recompile
+SYMBOL: recompile-set
+
+! Store a trace to detect cycles when compiling nested words
+SYMBOL: nested-compilations
 
 : compile? ( word -- ? )
     ! Don't attempt to compile certain words.
@@ -143,6 +146,28 @@ M: word combinator? inline? ;
         } cleave
     ] with-return ;
 
+! If a nested compilation updated the `compiled` hashtable already, don't do anything
+: maybe-compile-word ( word -- )
+    dup compiled get key?
+    [ drop ]
+    [ compile-word ] if ;
+
+: nested-compile ( word -- )
+    dup nested-compilations member?
+    [ "Nested Compilation cycle for %s" printf nested-compilations get . ]
+    [ [
+            [ nested-compilations [ swap suffix ] change ]
+            [ compile-word ] bi
+        ] with-scope ] if ;
+
+SYMBOL: nested-compilation?
+
+: try-nested-compile ( word -- ? )
+    dup [ compile? ] [ recompile-set get member? ] bi and
+    nested-compilation? get and
+    [ nested-compile t ]
+    [ drop f ] if ;
+
 SINGLETON: optimizing-compiler
 
 M: optimizing-compiler update-call-sites ( class generic -- words )
@@ -156,7 +181,9 @@ M: optimizing-compiler update-call-sites ( class generic -- words )
 M: optimizing-compiler recompile ( words -- alist )
     H{ } clone compiled [
         [ compile? ] filter
-        [ compile-word yield-hook get call( -- ) ] each
+        dup [ "output-infos" remove-word-prop ] each
+        dup recompile-set namespaces:set
+        [ maybe-compile-word yield-hook get call( -- ) ] each
         compiled get >alist
     ] with-variable
     "--- compile done" compiler-message ;

@@ -1,11 +1,12 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types arrays assocs classes classes.algebra
-classes.tuple.private combinators combinators.short-circuit compiler.tree
-compiler.tree.propagation.constraints compiler.tree.propagation.info
-compiler.tree.propagation.inlining compiler.tree.propagation.nodes
-compiler.tree.propagation.output-infos compiler.tree.propagation.slots
-continuations fry kernel sequences stack-checker.dependencies words ;
+classes.tuple.private combinators combinators.short-circuit compiler
+compiler.tree compiler.tree.propagation.constraints
+compiler.tree.propagation.info compiler.tree.propagation.inlining
+compiler.tree.propagation.nodes compiler.tree.propagation.output-infos
+compiler.tree.propagation.slots continuations fry kernel sequences
+stack-checker.dependencies words ;
 IN: compiler.tree.propagation.simple
 
 M: #introduce propagate-before
@@ -120,6 +121,7 @@ M: #declare propagate-before
         { [ dup predicate? ] [ propagate-predicate ] }
         { [ dup "outputs" word-prop ] [ call-outputs-quot ] }
         { [ dup "output-infos" word-prop ] [ copy-output-infos ] }
+        { [ dup try-nested-compile ] [ copy-output-infos ] }
         [ default-output-value-infos ]
     } cond ;
 
