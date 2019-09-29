@@ -15,7 +15,7 @@ IN: compiler.tree.propagation.output-infos.tests
 
 : test-output-infos ( words -- infos )
     [
-        { compile-word maybe-compile-word check-copied-output-infos }
+        { compile-word maybe-compile-word nested-compile }
         [ recompile ] with-watched-words
         drop ]
     [ [ dup "output-infos" word-prop ] map>alist ] bi ;
@@ -31,3 +31,7 @@ IN: compiler.tree.propagation.output-infos.tests
 { integer } [ { fun1 fun2 } test-output-infos values second first class>> ] unit-test
 
 { } [ nested-compilation? [ { fun1 fun2 } recompile drop ] with-variable-on ] unit-test
+
+{ integer } [ nested-compilation?
+              [ { fun2 fun1 } test-output-infos values first first class>> ]
+            with-variable-on ] unit-test

@@ -153,7 +153,7 @@ M: word combinator? inline? ;
     [ compile-word ] if ;
 
 : nested-compile ( word -- )
-    dup nested-compilations member?
+    dup nested-compilations get member?
     [ "Nested Compilation cycle for %s" printf nested-compilations get . ]
     [ [
             [ nested-compilations [ swap suffix ] change ]
