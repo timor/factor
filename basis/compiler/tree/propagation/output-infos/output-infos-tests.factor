@@ -1,5 +1,6 @@
 USING: accessors assocs compiler compiler.tree.propagation.info
 compiler.tree.propagation.mutually-recursive compiler.units kernel
+math.order
 kernel.private math namespaces sequences tools.annotations tools.test words ;
 IN: compiler.tree.propagation.output-infos.tests
 
@@ -8,14 +9,22 @@ IN: compiler.tree.propagation.output-infos.tests
 
 ! * Nested Compilation
 
+: with-opt ( quot -- )
+    H{ { propagate-recursive? t }
+       { nested-compilation? t } } swap with-variables ; inline
+
 : with-watched-words ( words quot -- )
-    [ drop [ watch ] each ]
-    [ nip call ]
-    [ drop [ reset ] each ] 2tri ; inline
+    {
+        [ drop [ reset ] each ]
+        [ drop [ watch ] each ]
+        [ nip call ]
+        [ drop [ reset ] each ]
+    } 2cleave
+    ; inline
 
 : test-output-infos ( words -- infos )
     [
-        { compile-word maybe-compile-word nested-compile }
+        { compile-word maybe-compile-word nested-compile inline-nested-compilation inline-recursive-call }
         [ recompile ] with-watched-words
         drop ]
     [ [ dup "output-infos" word-prop ] map>alist ] bi ;
@@ -71,4 +80,28 @@ DEFER: fun6
 ! Nested compilation with recursive propagation should be able to resolve this
 { fixnum } [ H{ { propagate-recursive? t }
                 { nested-compilation?  t } }
-             [ { fun5 fun6 } test-output-infos values first first  class>> ] with-variables ] unit-test
+             [ { fun6 fun5 } test-output-infos values first first  class>> ] with-variables ] unit-test
+
+! Diverging value info
+
+: fun7 ( x -- y )
+    0 26 clamp
+    dup 13 rem 0 =
+    [ 4 + ] [ 1 + fun7 5 + ] if ;
+
+! Operations after branch return
+
+! Operations after final phi node which cause growth, but not enough to diverge:
+: fun8 ( x -- y )
+    0 26 clamp
+    dup 0 >
+    [ 5 - fun8 ] when
+    4 + ;
+
+
+! Same, but enough to diverge:
+: fun9 ( x -- y )
+    0 26 clamp
+    dup 0 >
+    [ 5 - fun9 ] when
+    6 + ;

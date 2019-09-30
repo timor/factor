@@ -1,6 +1,6 @@
 ! Copyright (C) 2004, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors assocs classes classes.algebra combinators
+USING: accessors arrays assocs classes classes.algebra combinators
 combinators.short-circuit compiler.cfg compiler.cfg.builder
 compiler.cfg.finalization compiler.cfg.optimizer compiler.codegen
 compiler.crossref compiler.errors compiler.tree compiler.tree.builder
@@ -149,7 +149,10 @@ M: word combinator? inline? ;
 : maybe-compile-word ( word -- )
     dup compiled get key?
     [ drop ]
-    [ compile-word ] if ;
+    [
+        [ 1array nested-compilations namespaces:set ]
+        [ compile-word ] bi
+    ] if ;
 
 ERROR: nested-compilation-cycle word ;
 

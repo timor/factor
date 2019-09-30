@@ -66,23 +66,25 @@ When recompiling a list of words:
                could be triggered, recompiling words outside =recompile-set=)
    4. Return from nested compilation.  Leaving the scope introduced by 2.3.
 
+*** Convergence
+Observation: For tail-recursive cases, the propagated output value info should
+always be correct:  If there is any kind of constraint/declaration at the
+beginning of a word, it will also be there at every call site, so that the
+inlined base cases will be propagated correctly.  If there was no constraint in
+the preamble in the first place, then the output will be unconstrained either way.
 
-Vj
-Continuation: Throw a condition to =baz=, that =baz= must be propagated inlining
-=foo=.  This will cause =baz= to encounter the cycle when getting the output infos
-of =bar=.
-New Trace: =foo -> bar -> baz -> bar -> baz=.
+This is different for non-tail-recursive words.  If there is any value info
+growth after the return of a recursive call site, this growth is dependent on
+the number of iterations, and assumed to be divergent.  The way this is checked
+is that the output info, which results from recursive inline propagation at the
+call site is not larger than that of the return value of the outer body after
+propagation.   If it is, then the resulting value interval must be assumed to be
+unbounded.
 
+TODO: check if this is correct: The upper and the lower bound are independent in
+that respect, though.
 
-This will cause =bar= to encounter itself, triggering Single recursive compilation.
-
-The implementation works like this:
-- during compilation of =baz=, while trying to trigger
-
-# **** Strategy 2: handle in the detected cycle
-
-# Continuation:
-# - Return to propagation pass of foo with a list of functions to be inlined for propagation
-# - Create a modified tree which splices all of these functions (recursively,
-#   until the inline list is empty)
-# - Compile as if being single recursive above
+Implementation:
+- When propagating an inlined recursive call site, store the computed (and
+  constrained?) output info in =propagate-after=.  When returning from the outer
+  compilation, compare the
