@@ -9,6 +9,7 @@ compiler.tree.propagation.copy
 compiler.tree.propagation.info
 compiler.tree.propagation.inlining
 compiler.tree.propagation.known-words
+compiler.tree.propagation.mutually-recursive
 compiler.tree.propagation.nodes
 compiler.tree.propagation.recursive
 compiler.tree.propagation.simple

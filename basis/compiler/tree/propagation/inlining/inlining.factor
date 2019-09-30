@@ -105,11 +105,29 @@ SYMBOL: history
 
 ! Interface to propagation.mutually-recursive
 ! Inline the pruned body and perform propagation
+! Undo inlining afterwards
 : inline-recursive-call ( #call word -- ? )
     drop [ pruned-recursion-inline-body ] keep swap
     dup current-nodes set >>body
     [ propagate-body ] keep
     f swap body<< ;
+
+! For inlining all the calls in the cycle, it makes sense to cache the splicing
+! bodies.  This cache should have the same lifetime as the compilation unit
+: nested-propagation-body ( #call word -- nodes )
+    dup "propagation-body" word-prop
+    [ 2nip ]
+    [ [ splicing-body ] keep swap
+      [ "propagation-body" set-word-prop ] keep ]
+    if* ;
+
+! Inline the non-pruned body and perform propagation
+! Undo inlining afterwards
+: inline-nested-compilation ( #call word -- ? )
+    dupd nested-propagation-body >>body
+    [ propagate-body ] keep
+    f swap body<< ;
+
 
 : (do-inlining) ( #call word -- ? )
     {
@@ -119,6 +137,7 @@ SYMBOL: history
         { [ dup math-generic? ] [ inline-math-method ] }
         { [ dup inline? ] [ inline-word ] }
         { [ over recursive-inline? ] [ inline-recursive-call ] }
+        { [ over mutual-recursive-inline? ] [ inline-nested-compilation ] }
         [ 2drop f ]
     } cond ;
 

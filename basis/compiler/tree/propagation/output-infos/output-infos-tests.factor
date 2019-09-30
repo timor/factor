@@ -66,3 +66,9 @@ DEFER: fun6
 ! After Error Handling:
 { t } [ nested-compilation? [ { fun5 } test-output-infos values first first object-info = ] with-variable-on ] unit-test
 { t } [ nested-compilation? [ { fun6 } test-output-infos values first first object-info = ] with-variable-on ] unit-test
+
+
+! Nested compilation with recursive propagation should be able to resolve this
+{ fixnum } [ H{ { propagate-recursive? t }
+                { nested-compilation?  t } }
+             [ { fun5 fun6 } test-output-infos values first first  class>> ] with-variables ] unit-test

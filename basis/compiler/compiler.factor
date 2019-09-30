@@ -182,11 +182,15 @@ M: optimizing-compiler update-call-sites ( class generic -- words )
         [ classes-intersect? ] [ 2drop f ] if
     ] filter ;
 
+: init-nested-compile ( words -- )
+    [ [ "output-infos" remove-word-prop ] each ]
+    [ [ "propagation-body" remove-word-prop ] each ]
+    [ recompile-set namespaces:set ] tri ;
+
 M: optimizing-compiler recompile ( words -- alist )
     H{ } clone compiled [
         [ compile? ] filter
-        dup [ "output-infos" remove-word-prop ] each
-        dup recompile-set namespaces:set
+        [ init-nested-compile ] keep
         [ maybe-compile-word yield-hook get call( -- ) ] each
         compiled get >alist
     ] with-variable

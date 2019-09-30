@@ -37,25 +37,52 @@ For single recursion:
 
 *** Mutual Recursion
 
-It should be possible to reduce the case for mutual recursion to this.  A nested
+With nested compilation, it is possible to reduce the case for mutual recursion
+to the one indicated above.  A nested
 propagation trace could look like this: =foo -> bar -> baz -> foo=. This means
 that, while compiling =foo=, we entered a cycle when getting the output info of bar.
 
-**** Strategy 1: handle in the immediate caller
+In practice, this works like this:
+When recompiling a list of words:
+1. Store set of words into =recompile-set=
+2. For each word:
+   1. Check if word has been compiled by a nested compilation.  If yes, do
+      nothing.  Else:
+   2. Add current word to the nested compilation trace =nested-compilations=
+   3. During propagation, for each =#call= node
+      1. Inlining:
+         1. If the call is to the current word, perform propagation on the inlined
+            pruned body as described above, else:
+         2. If the call is to one of the words in =nested-compilations=, This means
+            we are encountering a dependency cycle during nested compilation.
+            Perform propagation on the inlined body of the =#call='s word.
+      2. Output Value Infos:
+         1. Check for ="output-infos"= of the word being called, if there are none:
+            1. Is the word being called in the =recompile-set=?
+               1. If yes, throw a =nested-compilation-cycle= error
+               2. If no, start nested compilation at 2.2
+            2. If the word is not in the =recompile-set=, use
+               =default-output-value-infos=.  (Alternatively, nested compilation
+               could be triggered, recompiling words outside =recompile-set=)
+   4. Return from nested compilation.  Leaving the scope introduced by 2.3.
 
+
+Vj
 Continuation: Throw a condition to =baz=, that =baz= must be propagated inlining
 =foo=.  This will cause =baz= to encounter the cycle when getting the output infos
 of =bar=.
 New Trace: =foo -> bar -> baz -> bar -> baz=.
 
-Throw a condition to =bar=, that =bar= must be propagated inlining =baz=.
 
 This will cause =bar= to encounter itself, triggering Single recursive compilation.
 
-**** Strategy 2: handle in the detected cycle
+The implementation works like this:
+- during compilation of =baz=, while trying to trigger
 
-Continuation:
-- Return to propagation pass of foo with a list of functions to be inlined for propagation
-- Create a modified tree which splices all of these functions (recursively,
-  until the inline list is empty)
-- Compile as if being single recursive above
+# **** Strategy 2: handle in the detected cycle
+
+# Continuation:
+# - Return to propagation pass of foo with a list of functions to be inlined for propagation
+# - Create a modified tree which splices all of these functions (recursively,
+#   until the inline list is empty)
+# - Compile as if being single recursive above
