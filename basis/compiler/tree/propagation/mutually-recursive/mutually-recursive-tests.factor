@@ -958,3 +958,23 @@ T{ value-info-state
 { f t } [ info1 info2 [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
 { t t } [ info1 info4 [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
 { t f } [ info1 info3 [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
+
+! Making distinction between inputs from base-case branches and recursive call site branches
+
+{
+    V{ T{ value-info-state
+          { class fixnum }
+          { interval
+            T{ interval { from { 20 t } } { to { 45 t } } } } } }
+    T{ value-info-state
+       { class fixnum }
+       { interval T{ interval { from { 34 t } } { to { 60 t } } } } }
+} [ info1 info2 info3 3array { t t f } merge-base-case-infos ] unit-test
+
+
+! Handle divergence detection
+{ -1/0. 50 } [ info1 clone info3 diverge-info interval>> interval>points [ first ] bi@ ] unit-test
+{ 20 1/0. } [ info3 clone info2 diverge-info interval>> interval>points [ first ] bi@ ] unit-test
+{ t } [ info3 clone info4 diverge-info interval>> full-interval? ] unit-test
+
+{ t } [ info1 clone info3 info2 2array swap [ diverge-info ] reduce interval>> full-interval? ] unit-test
