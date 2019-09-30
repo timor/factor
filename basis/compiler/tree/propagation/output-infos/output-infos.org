@@ -85,6 +85,11 @@ TODO: check if this is correct: The upper and the lower bound are independent in
 that respect, though.
 
 Implementation:
-- When propagating an inlined recursive call site, store the computed (and
-  constrained?) output info in =propagate-after=.  When returning from the outer
-  compilation, compare the
+- When propagating an inlined recursive call site and removing any #branch
+  nodes, make note of the corresponding #phi node, as well as which branches
+  have been removed, store this information on a stack.
+- Propagate the inlined pruned recursive tree
+- Continue propagation in the outer tree.  When hitting the stored #phi node:
+  - Check if the value info of the removed branches is less/equal than the one
+    on the non-removed branches.  If not, open the interval to the corresponding side.
+  - Remove the node from the stack

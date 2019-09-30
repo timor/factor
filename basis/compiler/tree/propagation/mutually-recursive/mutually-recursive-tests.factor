@@ -12,14 +12,19 @@ IN: compiler.tree.propagation.mutually-recursive.tests
 : tword ( word -- word )
     "typed-word" word-prop ;
 
+: with-vars ( quot -- )
+    V{ } clone check-call-sites rot with-variable ; inline
+
 :: rec-test ( word -- nodes )
-    propagate-recursive? [ word start-compilation word normalized-tree
+    H{ { propagate-recursive? t }
+       { check-call-sites V{ } } } [ word start-compilation word normalized-tree
                            ! \ is-copy-of watch
+                           \ inline-recursive-call reset
                            \ inline-recursive-call watch
                            propagate
                            ! \ is-copy-of reset
                            \ inline-recursive-call reset
-    ] with-variable-on ;
+    ] with-variables ;
 
 ! * Single call site
 TYPED: baz ( x: fixnum -- y )
@@ -243,6 +248,9 @@ CONSTANT: test-tree
 
 : test-if ( -- if )
     4 test-tree nth ;
+
+: test-phi ( -- phi )
+    5 test-tree nth ;
 
 : test-call ( -- call )
     test-if children>> first third ;
@@ -899,5 +907,24 @@ CONSTANT: foo-tree
 { f } [ foo-call dup clone = ] unit-test
 { t } [ foo-call dup clone call= ] unit-test
 
-{ f } [ foo-call foo-tree [ reject-call ] keep = ] unit-test
-{ f } [ foo-call foo-tree reject-call foo-tree = ] unit-test
+{ f } [ [ foo-call foo-tree [ reject-call ] keep = ] with-vars ] unit-test
+{ f } [ [ foo-call foo-tree reject-call foo-tree = ] with-vars ] unit-test
+
+
+! Associating call sites
+{ t } [
+    test-if { t f } <inlined-call-site>
+    test-tree swap complete-call-site phi>> test-phi = ] unit-test
+
+{ t } [ [ test-call test-if reject-call* drop
+                      check-call-sites get pop
+                      inlined-call-site? ]
+        with-vars ] unit-test
+
+{ t { f t } } [ [
+            test-call test-if reject-call* drop
+            test-tree complete-last-call-site
+            check-call-sites get pop
+            [ phi>> test-phi = ]
+            [ remaining-branches>> ] bi
+          ] with-vars ] unit-test

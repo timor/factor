@@ -12,12 +12,39 @@ SYMBOL: propagate-recursive?
 
 ! We need to have access to the tree currently being traversed if we want to
 ! create pruned versions:
-
 SYMBOL: current-nodes
+
+! Track the phi nodes which need to be checked for value info divergence.  LIFO
+! stack.
+SYMBOL: check-call-sites
 
 ! * Splicing of pruned recursive trees for inlining
 
-! ** Creating the replacement nodes
+! ** Keeping Track of spliced call sites
+
+! Store information on the #branch/#phi pairs that have been removed during pruning
+TUPLE: inlined-call-site
+    branch
+    phi
+    remaining-branches ;
+
+: <inlined-call-site> ( branch remaining-branches -- obj )
+    inlined-call-site new
+    swap >>remaining-branches
+    swap >>branch ;
+
+! Complete call site info
+: complete-call-site ( nodes obj -- obj )
+    [ branch>> swap [ index 1 + ] keep nth ] keep
+    swap >>phi ;
+
+! If we have an incomplete call site info on TOS, the last reject-call* pruned
+! a #branch
+: complete-last-call-site ( nodes -- )
+    check-call-sites get last
+    dup phi>> [ 2drop ] [ complete-call-site drop ] if ;
+
+! ** Creating the replacement tree
 
 ! Return nodes with all branches removed that contain the call.
 GENERIC: reject-call* ( call node -- nodes )
@@ -35,9 +62,13 @@ M: node reject-call* nip ;
 
 M: #branch reject-call*
     swap over children>> [ child-contains-node? not ] with map
+    [ dup [ not ] any?
+      [ <inlined-call-site> check-call-sites get push ]
+      [ 2drop ] if ] 2keep
     >>live-branches ;
 
 M: #if reject-call* call-next-method ;
+
 
 : reject-call ( call nodes -- nodes )
     [ clone ] map-nodes
