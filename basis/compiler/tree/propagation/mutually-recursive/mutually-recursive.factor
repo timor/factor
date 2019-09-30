@@ -114,3 +114,24 @@ ERROR: infinite-recursion-error ;
     word>> nested-compilations get member?
     propagate-recursive? get and ;
 
+! Divergence at phi nodes from recursive call sites
+
+! Return t if the info from the recursive call site has a lower lower bound.
+: lower-bound-diverges? ( base-case-info recursive-info -- t )
+    [ interval>> from>> first ] bi@ > ;
+
+: upper-bound-diverges? ( base-case-info recursive-info -- t )
+    [ interval>> to>> first ] bi@ < ;
+
+: infer-divergence ( #phi call-site -- )
+    2drop ;
+    ! [ [ phi-info-d>> ] [ remaining-branches>> ] bi* ]
+
+: check-phi-divergence ( #phi -- )
+    propagate-recursive? get
+    [
+        check-call-sites get last 2dup phi>> =
+        [ infer-divergence ]
+        [ 2drop ] if
+    ] [ drop ] if
+    ;

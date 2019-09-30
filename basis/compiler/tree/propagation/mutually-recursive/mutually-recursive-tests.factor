@@ -928,3 +928,33 @@ CONSTANT: foo-tree
             [ phi>> test-phi = ]
             [ remaining-branches>> ] bi
           ] with-vars ] unit-test
+
+! Diverging call site info
+CONSTANT: info1
+T{ value-info-state
+   { class fixnum }
+   { interval T{ interval { from { 34 t } } { to { 50 t } } } }
+ }
+
+CONSTANT: info2
+T{ value-info-state
+   { class fixnum }
+   { interval T{ interval { from { 34 t } } { to { 60 t } } } }
+ }
+
+CONSTANT: info3
+T{ value-info-state
+   { class fixnum }
+   { interval T{ interval { from { 20 t } } { to { 45 t } } } }
+ }
+
+CONSTANT: info4
+T{ value-info-state
+   { class fixnum }
+   { interval T{ interval { from { 10 t } } { to { 60 t } } } }
+ }
+
+{ f f } [ info2 info1 [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
+{ f t } [ info1 info2 [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
+{ t t } [ info1 info4 [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
+{ t f } [ info1 info3 [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
