@@ -7,6 +7,7 @@ compiler.crossref compiler.errors compiler.tree compiler.tree.builder
 compiler.tree.optimizer compiler.tree.propagation.output-infos compiler.units
 compiler.utilities continuations definitions fry generic generic.single io
 kernel macros make namespaces sequences sets stack-checker.dependencies
+debugger
 stack-checker.errors stack-checker.inlining vocabs.loader words ;
 IN: compiler
 
@@ -173,7 +174,7 @@ SYMBOL: nested-compilation?
     [ drop f ] if ;
 
 : safe-nested-compile ( word -- ? )
-    [ try-nested-compile ] [ dup nested-compilation-cycle? [ 2drop f ] [ rethrow ] if ] recover ;
+    [ try-nested-compile ] [ dup nested-compilation-cycle? [ error. flush drop f ] [ rethrow ] if ] recover ;
 
 SINGLETON: optimizing-compiler
 
