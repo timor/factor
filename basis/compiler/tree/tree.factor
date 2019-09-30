@@ -4,6 +4,10 @@ USING: accessors arrays assocs kernel namespaces sequences
 stack-checker.visitor vectors ;
 IN: compiler.tree
 
+! We need to have access to the tree currently being traversed if we want to
+! create pruned versions:
+SYMBOL: current-nodes
+
 SYMBOL: word-being-compiled
 
 TUPLE: node < identity-tuple ;

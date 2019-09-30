@@ -1,9 +1,11 @@
 USING: accessors arrays combinators compiler compiler.tree compiler.tree.builder
 compiler.tree.normalization compiler.tree.propagation
-compiler.tree.propagation.copy compiler.tree.propagation.info
-compiler.tree.propagation.inlining compiler.tree.propagation.mutually-recursive
-compiler.tree.recursive kernel kernel.private locals math math.intervals
-math.private namespaces sequences tools.annotations tools.test typed words ;
+compiler.tree.propagation.info compiler.tree.propagation.inlining
+compiler.tree.propagation.mutually-recursive
+compiler.tree.propagation.mutually-recursive.interface
+compiler.tree.propagation.mutually-recursive.pruning compiler.tree.recursive
+kernel kernel.private locals math math.intervals math.private namespaces
+sequences tools.annotations tools.test typed words ;
 IN: compiler.tree.propagation.mutually-recursive.tests
 
 : normalized-tree ( quot/word -- nodes )
@@ -978,3 +980,35 @@ T{ value-info-state
 { t } [ info3 clone info4 diverge-info interval>> full-interval? ] unit-test
 
 { t } [ info1 clone info3 info2 2array swap [ diverge-info ] reduce interval>> full-interval? ] unit-test
+
+CONSTANT: rec-phi T{ #phi
+   { phi-in-d { { 26307994 } { 26307995 } } }
+   { phi-info-d
+     {
+         {
+             T{ value-info-state
+                { class fixnum }
+                { interval T{ interval { from { 20 t } } { to { 45 t } } } }
+              }
+         }
+         {
+             T{ value-info-state
+                { class fixnum }
+                { interval
+                  T{ interval
+                     { from { 42 t } }
+                     { to { 42 t } }
+                   }
+                }
+                { literal 42 }
+                { literal? t }
+              }
+         }
+     }
+   }
+   { out-d V{ 26307479 } }
+   { terminated { f f } }
+ }
+
+{ -1/0. 1/0. } [ rec-phi phi-info-d>> { f t } diverge-phi-infos first interval>> interval>points [ first ] bi@ ] unit-test
+{ 20 45 } [ rec-phi phi-info-d>> { t f } diverge-phi-infos first interval>> interval>points [ first ] bi@ ] unit-test

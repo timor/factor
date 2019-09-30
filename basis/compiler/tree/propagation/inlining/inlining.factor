@@ -2,7 +2,8 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs classes.algebra combinators
 combinators.short-circuit compiler.tree compiler.tree.builder
-compiler.tree.propagation.mutually-recursive
+compiler.tree.propagation.mutually-recursive.interface
+compiler.tree.propagation.mutually-recursive.pruning
 compiler.tree.normalization compiler.tree.propagation.info
 compiler.tree.propagation.nodes compiler.tree.recursive generic
 generic.math generic.single generic.standard kernel locals math
