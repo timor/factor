@@ -5,6 +5,7 @@ combinators.short-circuit compiler.cfg compiler.cfg.builder
 compiler.cfg.finalization compiler.cfg.optimizer compiler.codegen
 compiler.crossref compiler.errors compiler.tree compiler.tree.builder
 compiler.tree.optimizer compiler.tree.propagation.output-infos compiler.units
+compiler.tree.propagation.mutually-recursive.pruning
 compiler.utilities continuations definitions fry generic generic.single io
 kernel macros make namespaces sequences sets stack-checker.dependencies
 debugger
@@ -34,6 +35,7 @@ SYMBOL: nested-compilations
     H{ } clone dependencies namespaces:set
     H{ } clone generic-dependencies namespaces:set
     HS{ } clone conditional-dependencies namespaces:set
+    V{ } clone rec-return-infos namespaces:set
     dup word-being-compiled namespaces:set
     clear-compiler-error ;
 

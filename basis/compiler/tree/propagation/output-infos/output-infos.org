@@ -74,7 +74,8 @@ inlined base cases will be propagated correctly.  If there was no constraint in
 the preamble in the first place, then the output will be unconstrained either way.
 
 This is different for non-tail-recursive words.  If there is any value info
-growth after the return of a recursive call site, this growth is dependent on
+growth after the return of a recursive call site, compared to the return of the
+outer body, this growth is dependent on
 the number of iterations, and assumed to be divergent.  The way this is checked
 is that the output info, which results from recursive inline propagation at the
 call site is not larger than that of the return value of the outer body after
@@ -84,12 +85,15 @@ unbounded.
 TODO: check if this is correct: The upper and the lower bound are independent in
 that respect, though.
 
+
+
 Implementation:
-- When propagating an inlined recursive call site and removing any #branch
-  nodes, make note of the corresponding #phi node, as well as which branches
-  have been removed, store this information on a stack.
-- Propagate the inlined pruned recursive tree
-- Continue propagation in the outer tree.  When hitting the stored #phi node:
-  - Check if the value info of the removed branches is less/equal than the one
-    on the non-removed branches.  If not, open the interval to the corresponding side.
-  - Remove the node from the stack
+- =do-inlining= opens a new scope, and initializes a vector in
+  =rec-return-infos=.
+- =propagate-body= runs on the inlined splicing body
+- an =inline-recursive=, when it returns, pushes the propagated infos onto
+  =rec-return-infos=.  This way, if there is more than one call site, both
+  results can be taken into account
+- When reaching a =#copy= or =#return= node, the =rec-return-infos= are merged
+  and compared to that node's infos, possibly calculating divergence.
+  - an outer =inline-recursive= will then push this info for the surrounding scope

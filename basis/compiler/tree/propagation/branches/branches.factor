@@ -94,8 +94,6 @@ SYMBOL: condition-value
 M: #phi propagate-before ( #phi -- )
     [ annotate-phi-inputs ]
     [ [ phi-info-d>> flip ] [ out-d>> ] bi merge-value-infos ]
-    ! [ check-phi-divergence ]
-    ! tri
     bi
     ;
 

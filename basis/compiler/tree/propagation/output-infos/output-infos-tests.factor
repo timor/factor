@@ -1,7 +1,8 @@
-USING: accessors assocs compiler compiler.tree.propagation.info
-compiler.tree.propagation.mutually-recursive compiler.units kernel
-math.order
-kernel.private math namespaces sequences tools.annotations tools.test words ;
+USING: accessors assocs combinators compiler compiler.tree.propagation.info
+compiler.tree.propagation.inlining
+compiler.tree.propagation.mutually-recursive.interface compiler.units kernel
+kernel.private math math.intervals math.order namespaces sequences tools.test
+words ;
 IN: compiler.tree.propagation.output-infos.tests
 
 ! TODO: insert missing unit test!
@@ -15,10 +16,10 @@ IN: compiler.tree.propagation.output-infos.tests
 
 : with-watched-words ( words quot -- )
     {
-        [ drop [ reset ] each ]
-        [ drop [ watch ] each ]
+        ! [ drop [ reset ] each ]
+        ! [ drop [ watch ] each ]
         [ nip call ]
-        [ drop [ reset ] each ]
+        ! [ drop [ reset ] each ]
     } 2cleave
     ; inline
 
@@ -63,6 +64,13 @@ IN: compiler.tree.propagation.output-infos.tests
             { nested-compilation?  t } }
          [ { fun4 } test-output-infos values first first literal>> ] with-variables ] unit-test
 
+: fun41 ( x -- y )
+    abs dup 10 < [ 5 + ] [ 2 /i fun41 ] if ;
+
+: fun42 ( x -- y )
+    0 42 clamp
+    dup 5 > [ 0 21 clamp 1 - fun42 ] [ 2 + ] if ;
+
 
 ! Mutual dependencies
 DEFER: fun6
@@ -82,22 +90,63 @@ DEFER: fun6
                 { nested-compilation?  t } }
              [ { fun6 fun5 } test-output-infos values first first  class>> ] with-variables ] unit-test
 
-! Diverging value info
+: info-interval-points ( info -- lower upper )
+    interval>> interval>points [ first ] bi@ ;
+
+{ 42 69 } [ [ { fun6 fun5 } test-output-infos values first first info-interval-points ] with-opt ] unit-test
+
+! Diverging value info tests
+
+! Non-tail-recursive operations
+: fun70 ( x -- y )
+    0 26 clamp
+    dup 5 > [ 1 - fun70 7 + ] when ;
 
 : fun7 ( x -- y )
     0 26 clamp
     dup 13 rem 0 =
     [ 4 + ] [ 1 + fun7 5 + ] if ;
 
+{ 4 1/0. } [ [ { fun7 } test-output-infos values first first info-interval-points ] with-opt ] unit-test
+
+! Both call sites cause growth
+: fun71 ( x -- y )
+    0 26 clamp
+    dup 5 > [ dup 10 > [ 1 - fun71 3 + ] [ 1 - fun71 4 + ] if ] when
+    ;
+
+
 ! Operations after branch return
 
-! Operations after final phi node which cause growth, but not enough to diverge:
-: fun8 ( x -- y )
+! Both call sites cause growth, but final subtraction compensates it.
+: fun72 ( x -- y )
     0 26 clamp
+    dup 5 > [ dup 10 > [ 1 - fun72 3 + ] [ 1 - fun72 4 + ] if ] when
+    3 -
+    ;
+
+! Operations after final phi node which cause growth, but not enough to diverge:
+! Unfortunately, we cannot detect them at the moment
+: fun8 ( x -- y )
+    -1 26 clamp
     dup 0 >
     [ 5 - fun8 ] when
     4 + ;
 
+! { 3 34 }
+{ 3 1/0. }
+[ [ { fun8 } test-output-infos values first first info-interval-points ] with-opt ] unit-test
+
+! Same thing, but without branch constraint
+: fun8a ( x -- y )
+    -1 26 clamp
+    dup even?
+    [ 5 - fun8a ] when
+    4 + ;
+
+! { 3 34 }
+{ 3 1/0. }
+[ [ { fun8a } test-output-infos values first first info-interval-points ] with-opt ] unit-test
 
 ! Same, but enough to diverge:
 : fun9 ( x -- y )
@@ -105,3 +154,228 @@ DEFER: fun6
     dup 0 >
     [ 5 - fun9 ] when
     6 + ;
+
+{ 6 1/0. } [ [ { fun9 } test-output-infos values first first info-interval-points ] with-opt ] unit-test
+
+
+! * Mutual recursion inlining
+
+CONSTANT: fun5-tree
+{
+    T{ #introduce { out-d { 10928520 } } }
+    T{ #shuffle
+        { mapping
+            { { 10928511 10928520 } { 10928512 10928520 } }
+        }
+        { in-d V{ 10928520 } }
+        { out-d V{ 10928511 10928512 } }
+    }
+    T{ #push { literal 0 } { out-d { 10928513 } } }
+    T{ #call
+        { word > }
+        { in-d V{ 10928512 10928513 } }
+        { out-d { 10928514 } }
+        { info
+            H{
+                {
+                    10928512
+                    T{ value-info-state
+                        { class object }
+                        { interval full-interval }
+                    }
+                }
+                {
+                    10928513
+                    T{ value-info-state
+                        { class fixnum }
+                        { interval
+                            T{ interval
+                                { from { 0 t } }
+                                { to { 0 t } }
+                            }
+                        }
+                        { literal 0 }
+                        { literal? t }
+                    }
+                }
+                {
+                    10928514
+                    T{ value-info-state
+                        { class object }
+                        { interval full-interval }
+                    }
+                }
+            }
+        }
+    }
+    T{ #if
+        { in-d { 10928514 } }
+        { children
+            {
+                {
+                    T{ #push
+                        { literal 1 }
+                        { out-d { 10928515 } }
+                    }
+                    T{ #call
+                        { word - }
+                        { in-d V{ 10928511 10928515 } }
+                        { out-d { 10928516 } }
+                        { info
+                            H{
+                                {
+                                    10928515
+                                    T{ value-info-state
+                                        { class fixnum }
+                                        { interval
+                                            T{ interval
+                                                { from { 1 t } }
+                                                { to { 1 t } }
+                                            }
+                                        }
+                                        { literal 1 }
+                                        { literal? t }
+                                    }
+                                }
+                                {
+                                    10928516
+                                    T{ value-info-state
+                                        { class real }
+                                        { interval
+                                            T{ interval
+                                                { from
+                                                    { -1 f }
+                                                }
+                                                { to
+                                                    { 1/0. t }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                {
+                                    10928511
+                                    T{ value-info-state
+                                        { class real }
+                                        { interval
+                                            T{ interval
+                                                { from { 0 f } }
+                                                { to
+                                                    { 1/0. t }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    T{ #call
+                        { word fun6 }
+                        { in-d V{ 10928516 } }
+                        { out-d { 10928517 } }
+                        { info
+                            H{
+                                {
+                                    10928516
+                                    T{ value-info-state
+                                        { class real }
+                                        { interval
+                                            T{ interval
+                                                { from
+                                                    { -1 f }
+                                                }
+                                                { to
+                                                    { 1/0. t }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                {
+                                    10928517
+                                    T{ value-info-state
+                                        { class object }
+                                        { interval
+                                            full-interval
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    T{ #shuffle
+                        { mapping { { 10928521 10928517 } } }
+                        { in-d { 10928517 } }
+                        { out-d { 10928521 } }
+                    }
+                }
+                {
+                    T{ #shuffle
+                        { mapping { } }
+                        { in-d V{ 10928511 } }
+                        { out-d V{ } }
+                    }
+                    T{ #push
+                        { literal 42 }
+                        { out-d { 10928518 } }
+                    }
+                    T{ #shuffle
+                        { mapping { { 10928522 10928518 } } }
+                        { in-d { 10928518 } }
+                        { out-d { 10928522 } }
+                    }
+                }
+            }
+        }
+        { live-branches { t t } }
+    }
+    T{ #phi
+        { phi-in-d { { 10928521 } { 10928522 } } }
+        { phi-info-d
+            {
+                {
+                    T{ value-info-state
+                        { class object }
+                        { interval full-interval }
+                    }
+                }
+                {
+                    T{ value-info-state
+                        { class fixnum }
+                        { interval
+                            T{ interval
+                                { from { 42 t } }
+                                { to { 42 t } }
+                            }
+                        }
+                        { literal 42 }
+                        { literal? t }
+                    }
+                }
+            }
+        }
+        { out-d { 10928519 } }
+        { terminated { f f } }
+    }
+    T{ #return
+        { in-d V{ 10928519 } }
+        { info
+            H{
+                {
+                    10928519
+                    T{ value-info-state
+                        { class object }
+                        { interval full-interval }
+                    }
+                }
+            }
+        }
+    }
+}
+
+: fun5-if ( -- #if )
+    4 fun5-tree nth ;
+
+: fun5-call ( -- #call )
+    fun5-if children>> first third ;

@@ -6,7 +6,10 @@ IN: compiler.tree
 
 ! We need to have access to the tree currently being traversed if we want to
 ! create pruned versions:
-SYMBOL: current-nodes
+SYMBOL: current-body
+
+! Recursive return infos in current propagation scope
+SYMBOL: rec-return-infos
 
 SYMBOL: word-being-compiled
 

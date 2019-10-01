@@ -1,5 +1,5 @@
 USING: accessors combinators compiler.tree compiler.tree.propagation.info kernel
-math math.intervals math.private sequences ;
+math math.intervals math.private sequences typed ;
 
 IN: compiler.tree.propagation.mutually-recursive.tests
 

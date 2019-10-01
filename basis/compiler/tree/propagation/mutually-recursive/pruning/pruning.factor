@@ -1,84 +1,83 @@
-USING: accessors combinators.short-circuit compiler.tree compiler.tree.builder
-compiler.tree.cleanup compiler.tree.combinators kernel math namespaces sequences
-;
+USING: accessors assocs combinators combinators.short-circuit compiler.tree
+compiler.tree.builder compiler.tree.cleanup compiler.tree.propagation.info
+compiler.utilities fry grouping kernel locals namespaces sequences ;
 IN: compiler.tree.propagation.mutually-recursive.pruning
 
 ! * Splicing of pruned recursive trees for inlining
 
-! ** Keeping Track of spliced call sites
-
-! Track the phi nodes which need to be checked for value info divergence.  LIFO
-! stack.
-SYMBOL: check-call-sites
-
-
-! Store information on the #branch/#phi pairs that have been removed during pruning
-TUPLE: inlined-call-site
-    branch
-    phi
-    remaining-branches ;
-
-: <inlined-call-site> ( branch remaining-branches -- obj )
-    inlined-call-site new
-    swap >>remaining-branches
-    swap >>branch ;
-
-! Complete call site info
-: complete-call-site ( nodes obj -- obj )
-    [ branch>> swap [ index 1 + ] keep nth ] keep
-    swap >>phi ;
-
-! If we have an incomplete call site info on TOS, the last reject-call* pruned
-! a #branch
-: complete-last-call-site ( nodes -- )
-    check-call-sites get last
-    dup phi>> [ 2drop ] [ complete-call-site drop ] if ;
-
 ! ** Creating the replacement tree
 
-! Return nodes with all branches removed that contain the call.
-GENERIC: reject-call* ( call node -- nodes )
-M: node reject-call* nip ;
+! Like map-nodes, but over #branch-#phi pairs.
+:: map-branches ( ... nodes quot: ( ... #branch #phi -- ... #branch' ) -- ... nodes )
+    nodes f suffix 2 clump [
+        first2 over #branch? [ quot call ] [ drop ] if
+        {
+            { [ dup #branch? ] [ [ [ quot map-branches ] map ] change-children ] }
+            { [ dup #recursive? ] [ [ quot map-branches ] change-child ] }
+            { [ dup #alien-callback? ] [ [ quot map-branches ] change-child ] }
+            [ ]
+        } cond
+    ] map-flat ; inline recursive
 
 ! A call is identical if the output values are the same.
 : call= ( node node -- ? )
     { [ [ #call? ] both? ]
       [ [ out-d>> ] bi@ = ] } 2&& ;
 
-! Same for phi nodes
-! TODO: check if this can be generalized
+! Same for a phi
 : phi= ( node node -- ? )
     { [ [ #phi? ] both? ]
       [ [ out-d>> ] bi@ = ] } 2&& ;
 
 : child-contains-node? ( node child-nodes -- ? )
     [ over call= ] any?
-    nip
+    nip ;
+
+! We need to find the branch where the call in question is in.  The corresponding child nodes are marked as dead code, and the phi node which follows needs to be inlined
+GENERIC: branch-with-call? ( call node -- flags ? )
+M: node branch-with-call? 2drop f f ;
+M: #branch branch-with-call?
+    children>> [ child-contains-node? not ] with map
+    dup [ not ] any? ;
+
+! Like map-nodes, but if an inlined body is detected, traverse this
+:: map-nodes-inline ( ... nodes quot: ( ... node -- ... node' ) -- ... nodes )
+    nodes [
+        quot call
+        {
+            { [ dup #branch? ] [ [ [ quot map-nodes-inline ] map ] change-children ] }
+            { [ dup #recursive? ] [ [ quot map-nodes-inline ] change-child ] }
+            { [ dup #alien-callback? ] [ [ quot map-nodes-inline ] change-child ] }
+            { [ dup { [ #call? ] [ body>> ] } 1&& ] [ body>> quot map-nodes-inline ] }
+            [ ]
+        } cond
+    ] map-flat ; inline recursive
+
+! Find rcall in nodes, remove branch which it is in, return call site
+:: prune-recursive-call ( rcall nodes -- nodes' found )
+    f :> found!
+    nodes
+    [ clone rcall over branch-with-call?
+      [
+          '[ _ [ and ] 2map ] change-live-branches
+          t found!
+      ] [ drop ] if
+    ] map-nodes-inline cleanup-tree found
     ;
 
-M: #branch reject-call*
-    swap over children>> [ child-contains-node? not ] with map
-    [ dup [ not ] any?
-      [ <inlined-call-site> check-call-sites get push ]
-      [ 2drop ] if ] 2keep
-    >>live-branches ;
+: push-rec-return-infos ( values -- )
+    [ [ value-info ] keep rec-return-infos get push-at ] each ;
 
-M: #if reject-call* call-next-method ;
+: get-rec-return-info ( value -- info/f )
+    rec-return-infos get at
+    [ value-infos-union ]
+    [ f ] if* ;
 
-: reject-call ( call nodes -- nodes )
-    [ clone ] map-nodes
-    [ reject-call* ] with map-nodes
-    cleanup-tree
-    ;
-
-! If we didn't change any nodes, this is an error
-ERROR: infinite-recursion-error ;
 : ensure-reject-call ( call nodes -- nodes )
-    [ reject-call ] keep
-    2dup = [ infinite-recursion-error ] [ drop ] if ;
+    prune-recursive-call
+    [ "Did not find recursive call" throw ] unless ;
 
-: pruned-recursion-inline-body ( #call -- nodes )
-    current-nodes get
+: pruned-recursion-inline-body ( #call nodes -- nodes )
     ! dup q. flush
     [ drop out-d>> ]
     [ ensure-reject-call ] 2bi

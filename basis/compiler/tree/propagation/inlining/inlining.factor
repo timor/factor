@@ -104,14 +104,23 @@ SYMBOL: history
     call( #call -- word/quot/f )
     object swap eliminate-dispatch ;
 
+! The output values of the inlined recursive body must be the ones at the input
+! of the last #copy node.
+: push-call-site-info ( nodes -- )
+    last dup #copy? [ "Not a copy node!" throw ] unless
+    in-d>> push-rec-return-infos ;
+
 ! Interface to propagation.mutually-recursive
 ! Inline the pruned body and perform propagation
 ! Undo inlining afterwards
 : inline-recursive-call ( #call word -- ? )
-    drop [ pruned-recursion-inline-body ] keep swap
-    dup current-nodes set >>body
+    drop current-body get [ pruned-recursion-inline-body ] keepd swap
+    [ current-body set ]
+    [ >>body ] bi
     [ propagate-body ] keep
-    f swap body<< ;
+    dup body>> push-call-site-info
+    f swap body<<
+    ;
 
 ! For inlining all the calls in the cycle, it makes sense to cache the splicing
 ! bodies.  This cache should have the same lifetime as the compilation unit
@@ -125,6 +134,7 @@ SYMBOL: history
 ! Inline the non-pruned body and perform propagation
 ! Undo inlining afterwards
 : inline-nested-compilation ( #call word -- ? )
+    H{ } clone rec-return-infos set
     dupd nested-propagation-body >>body
     [ propagate-body ] keep
     f swap body<< ;
