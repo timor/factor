@@ -14,6 +14,7 @@ IN: compiler.tree.propagation.output-infos.tests
     H{ { propagate-recursive? t }
        { nested-compilation? t } } swap with-variables ; inline
 
+! Uncomment stuff for more details
 : with-watched-words ( words quot -- )
     {
         ! [ drop [ reset ] each ]
@@ -30,9 +31,19 @@ IN: compiler.tree.propagation.output-infos.tests
         drop ]
     [ [ dup "output-infos" word-prop ] map>alist ] bi ;
 
+! Brute-force prove that interval inference is not too optimistic
+:: check1 ( word -- ? )
+    [ word 1array test-output-infos values first first interval>> ] with-opt
+    1000 <iota> [ 500 - word execute( x -- x ) ] map minmax [a,b] swap interval-subset?
+    ;
+
 : fun1 ( x -- y ) { fixnum } declare 3 + ;
 
+{ t } [ \ fun1 check1 ] unit-test
+
 : fun2 ( x -- y ) fun1 ;
+
+{ t } [ \ fun2 check1 ] unit-test
 
 { } [ { fun1 fun2 } recompile drop ] unit-test
 
@@ -49,12 +60,6 @@ IN: compiler.tree.propagation.output-infos.tests
 ! Single Recursion
 : fun4 ( x -- y )
     dup 0 > [ 1 - fun4 ] [ drop 42 ] if ;
-
-! Brute-force prove that interval inference is not too optimistic
-:: check1 ( word -- ? )
-    [ word 1array test-output-infos values first first interval>> ] with-opt
-    1000 <iota> [ 500 - word execute( x -- x ) ] map minmax [a,b] swap interval-subset?
-    ;
 
 ! Should work with compiler.tree.propagation.mutually-recursive:
 { 42 } [ propagate-recursive? [ { fun4 } test-output-infos values first first literal>> ] with-variable-on ] unit-test
@@ -185,6 +190,12 @@ DEFER: fun6
 
 { 6 1/0. } [ [ { fun9 } test-output-infos values first first info-interval-points ] with-opt ] unit-test
 
+
+! Unbounded
+: fun10 ( x -- y )
+    dup 0 > [ 1 + fun10 ] when ;
+
+{ t } [ [ { fun10 } test-output-infos values first first interval>> full-interval? ] with-opt ] unit-test
 
 ! * Mutual recursion inlining (unused?)
 
