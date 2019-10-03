@@ -66,12 +66,10 @@ M: #branch branch-with-call?
     ;
 
 : push-rec-return-infos ( values -- )
-    [ [ value-info ] keep rec-return-infos get push-at ] each ;
+    [ [ value-info ] keep rec-return-infos get last push-at ] each ;
 
-: get-rec-return-info ( value -- info/f )
-    rec-return-infos get at
-    [ value-infos-union ]
-    [ f ] if* ;
+: get-rec-return-infos ( value -- infos/f )
+    rec-return-infos get last at ;
 
 : ensure-reject-call ( call nodes -- nodes )
     prune-recursive-call

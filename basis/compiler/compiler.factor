@@ -35,7 +35,6 @@ SYMBOL: nested-compilations
     H{ } clone dependencies namespaces:set
     H{ } clone generic-dependencies namespaces:set
     HS{ } clone conditional-dependencies namespaces:set
-    V{ } clone rec-return-infos namespaces:set
     dup word-being-compiled namespaces:set
     clear-compiler-error ;
 

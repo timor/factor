@@ -60,7 +60,7 @@ T{ value-info-state
 CONSTANT: info2
 T{ value-info-state
    { class fixnum }
-   { interval T{ interval { from { 34 t } } { to { 60 t } } } }
+   { interval T{ interval { from { 35 t } } { to { 60 t } } } }
  }
 
 CONSTANT: info3
@@ -75,15 +75,30 @@ T{ value-info-state
    { interval T{ interval { from { 10 t } } { to { 60 t } } } }
  }
 
-{ f f } [ info2 info1 [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
-{ f t } [ info1 info2 [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
-{ t t } [ info1 info4 [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
-{ t f } [ info1 info3 [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
+{ t f } [ info2 info1 [ interval>> ] bi@ [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
+{ f t } [ info1 info2 [ interval>> ] bi@ [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
+{ t t } [ info1 info4 [ interval>> ] bi@ [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
+{ t f } [ info1 info3 [ interval>> ] bi@ [ lower-bound-diverges? ] [ upper-bound-diverges? ] 2bi ] unit-test
 
 
 ! Handle divergence detection
-{ -1/0. 50 } [ info1 clone info3 diverge-info interval>> interval>points [ first ] bi@ ] unit-test
-{ 20 1/0. } [ info3 clone info2 diverge-info interval>> interval>points [ first ] bi@ ] unit-test
-{ t } [ info3 clone info4 diverge-info interval>> full-interval? ] unit-test
+! On intervals
+CONSTANT: i1 T{ interval { from { -20 t } } { to { 40 t } } }
+CONSTANT: i2 T{ interval { from { -20 t } } { to { 30 t } } }
 
-{ t } [ info1 clone info3 info2 2array swap [ diverge-info ] reduce interval>> full-interval? ] unit-test
+{ -20 30 } [ i1 1array i2 diverge-info-intervals interval>points [ first ] bi@ ] unit-test
+{ -20 1/0. } [ i2 1array i1 diverge-info-intervals interval>points [ first ] bi@ ] unit-test
+
+CONSTANT: i3 T{ interval { from { -25 t } } { to { 30 t } } }
+
+{ -20 30 } [ i3 1array i2 diverge-info-intervals interval>points [ first ] bi@ ] unit-test
+{ -1/0. 30 } [ i2 1array i3 diverge-info-intervals interval>points [ first ] bi@ ] unit-test
+
+{ -20 30 } [ i3 i1 2array i2 diverge-info-intervals interval>points [ first ] bi@ ] unit-test
+{ -20 1/0. } [ i2 i3 2array i1 diverge-info-intervals interval>points [ first ] bi@ ] unit-test
+
+! On infos
+{ 34 50 } [ info3 1array info1 diverge-info interval>> interval>points [ first ] bi@ ] unit-test
+{ 35 1/0. } [ info1 1array info2 diverge-info interval>> interval>points [ first ] bi@ ] unit-test
+{ t } [ info3 1array info4 diverge-info interval>> full-interval? ] unit-test
+{ 34 50 } [ info4 info3 2array info1 diverge-info interval>> interval>points [ first ] bi@ ] unit-test

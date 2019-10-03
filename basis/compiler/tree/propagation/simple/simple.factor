@@ -160,8 +160,4 @@ M: #return propagate-before
     dup call-next-method
     in-d>> diverge-recursive-infos ;
 
-M: #copy propagate-before
-    dup call-next-method
-    in-d>> diverge-recursive-infos ;
-
 M: #return annotate-node dup in-d>> (annotate-node) ;

@@ -50,6 +50,11 @@ IN: compiler.tree.propagation.output-infos.tests
 : fun4 ( x -- y )
     dup 0 > [ 1 - fun4 ] [ drop 42 ] if ;
 
+! Brute-force prove that interval inference is not too optimistic
+:: check1 ( word -- ? )
+    [ word 1array test-output-infos values first first interval>> ] with-opt
+    1000 <iota> [ 500 - word execute( x -- x ) ] map minmax [a,b] swap interval-subset?
+    ;
 
 ! Should work with compiler.tree.propagation.mutually-recursive:
 { 42 } [ propagate-recursive? [ { fun4 } test-output-infos values first first literal>> ] with-variable-on ] unit-test
@@ -64,12 +69,18 @@ IN: compiler.tree.propagation.output-infos.tests
             { nested-compilation?  t } }
          [ { fun4 } test-output-infos values first first literal>> ] with-variables ] unit-test
 
+{ t } [ \ fun4 check1 ] unit-test
+
 : fun41 ( x -- y )
     abs dup 10 < [ 5 + ] [ 2 /i fun41 ] if ;
+
+{ t } [ \ fun41 check1 ] unit-test
 
 : fun42 ( x -- y )
     0 42 clamp
     dup 5 > [ 0 21 clamp 1 - fun42 ] [ 2 + ] if ;
+
+{ t } [ \ fun42 check1 ] unit-test
 
 
 ! Mutual dependencies
@@ -102,10 +113,14 @@ DEFER: fun6
     0 26 clamp
     dup 5 > [ 1 - fun70 7 + ] when ;
 
+{ t } [ \ fun70 check1 ] unit-test
+
 : fun7 ( x -- y )
     0 26 clamp
     dup 13 rem 0 =
     [ 4 + ] [ 1 + fun7 5 + ] if ;
+
+{ t } [ \ fun7 check1 ] unit-test
 
 { 4 1/0. } [ [ { fun7 } test-output-infos values first first info-interval-points ] with-opt ] unit-test
 
@@ -115,6 +130,9 @@ DEFER: fun6
     dup 5 > [ dup 10 > [ 1 - fun71 3 + ] [ 1 - fun71 4 + ] if ] when
     ;
 
+{ t } [ \ fun71 check1 ] unit-test
+
+{ 0 1/0. } [ [ { fun71 } test-output-infos values first first info-interval-points ] with-opt ] unit-test
 
 ! Operations after branch return
 
@@ -125,13 +143,19 @@ DEFER: fun6
     3 -
     ;
 
-! Operations after final phi node which cause growth, but not enough to diverge:
-! Unfortunately, we cannot detect them at the moment
+{ t } [ \ fun72 check1 ] unit-test
+
+{ -3 24 }
+[ [ { fun72 } test-output-infos values first first info-interval-points ] with-opt ] unit-test
+
+! Operations after final phi node which cause growth, but clamping can not be detected.
 : fun8 ( x -- y )
     -1 26 clamp
     dup 0 >
     [ 5 - fun8 ] when
     4 + ;
+
+{ t } [ \ fun8 check1 ] unit-test
 
 ! { 3 34 }
 { 3 1/0. }
@@ -144,6 +168,8 @@ DEFER: fun6
     [ 5 - fun8a ] when
     4 + ;
 
+{ t } [ \ fun8a check1 ] unit-test
+
 ! { 3 34 }
 { 3 1/0. }
 [ [ { fun8a } test-output-infos values first first info-interval-points ] with-opt ] unit-test
@@ -155,10 +181,12 @@ DEFER: fun6
     [ 5 - fun9 ] when
     6 + ;
 
+{ t } [ \ fun9 check1 ] unit-test
+
 { 6 1/0. } [ [ { fun9 } test-output-infos values first first info-interval-points ] with-opt ] unit-test
 
 
-! * Mutual recursion inlining
+! * Mutual recursion inlining (unused?)
 
 CONSTANT: fun5-tree
 {

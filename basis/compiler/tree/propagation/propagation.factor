@@ -14,12 +14,13 @@ compiler.tree.propagation.nodes
 compiler.tree.propagation.recursive
 compiler.tree.propagation.simple
 compiler.tree.propagation.transforms
-kernel namespaces ;
+kernel namespaces
+vectors ;
 IN: compiler.tree.propagation
 
 : propagate ( nodes -- nodes )
     dup current-body set
-    H{ } clone rec-return-infos set
+    H{ } clone 1vector rec-return-infos set
     H{ } clone copies set
     H{ } clone 1array value-infos set
     H{ } clone 1array constraints set

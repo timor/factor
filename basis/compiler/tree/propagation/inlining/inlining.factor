@@ -114,10 +114,12 @@ SYMBOL: history
 ! Inline the pruned body and perform propagation
 ! Undo inlining afterwards
 : inline-recursive-call ( #call word -- ? )
+    H{ } clone rec-return-infos get push
     drop current-body get [ pruned-recursion-inline-body ] keepd swap
     [ current-body set ]
     [ >>body ] bi
     [ propagate-body ] keep
+    rec-return-infos get pop drop       ! Throw away inner recursions
     dup body>> push-call-site-info
     f swap body<<
     ;
@@ -134,7 +136,6 @@ SYMBOL: history
 ! Inline the non-pruned body and perform propagation
 ! Undo inlining afterwards
 : inline-nested-compilation ( #call word -- ? )
-    H{ } clone rec-return-infos set
     dupd nested-propagation-body >>body
     [ propagate-body ] keep
     f swap body<< ;
