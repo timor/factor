@@ -5,11 +5,10 @@ combinators.short-circuit compiler.cfg compiler.cfg.builder
 compiler.cfg.finalization compiler.cfg.optimizer compiler.codegen
 compiler.crossref compiler.errors compiler.tree compiler.tree.builder
 compiler.tree.optimizer compiler.tree.propagation.output-infos compiler.units
-compiler.tree.propagation.mutually-recursive.pruning
-compiler.utilities continuations definitions fry generic generic.single io
-kernel macros make namespaces sequences sets stack-checker.dependencies
-debugger
-stack-checker.errors stack-checker.inlining vocabs.loader words ;
+compiler.utilities continuations debugger definitions formatting fry generic
+generic.single io kernel macros make namespaces sequences sets
+stack-checker.dependencies stack-checker.errors stack-checker.inlining summary
+vocabs.loader words ;
 IN: compiler
 
 SYMBOL: compiled
@@ -156,11 +155,13 @@ M: word combinator? inline? ;
         [ compile-word ] bi
     ] if ;
 
-ERROR: nested-compilation-cycle word ;
+ERROR: nested-compilation-cycle word trace ;
+M: nested-compilation-cycle summary
+    [ word>> ] [ trace>> ] bi "Compilation cycle for %s: %u" sprintf ;
 
 : nested-compile ( word -- )
     dup nested-compilations get member?
-    [ nested-compilation-cycle ]
+    [ nested-compilations get nested-compilation-cycle ]
     [ [
             [ nested-compilations [ swap suffix ] change ]
             [ compile-word ] bi

@@ -4,10 +4,9 @@ USING: accessors alien.c-types arrays assocs classes classes.algebra
 classes.tuple.private combinators combinators.short-circuit compiler
 compiler.tree compiler.tree.propagation.constraints
 compiler.tree.propagation.info compiler.tree.propagation.inlining
-compiler.tree.propagation.mutually-recursive
-compiler.tree.propagation.nodes compiler.tree.propagation.output-infos
-compiler.tree.propagation.slots continuations fry kernel sequences
-stack-checker.dependencies words ;
+compiler.tree.propagation.mutually-recursive compiler.tree.propagation.nodes
+compiler.tree.propagation.output-infos compiler.tree.propagation.slots
+continuations formatting fry kernel sequences stack-checker.dependencies words ;
 IN: compiler.tree.propagation.simple
 
 M: #introduce propagate-before
@@ -103,6 +102,7 @@ M: #declare propagate-before
     [ predicate-output-infos 1array ] 2bi ;
 
 : default-output-value-infos ( #call word -- infos )
+    dup name>> "Using default output infos for: %s\n" printf
     "default-output-classes" word-prop
     [ class-infos ] [ out-d>> length object-info <repetition> ] ?if ;
 
@@ -122,7 +122,9 @@ M: #declare propagate-before
         { [ dup predicate? ] [ propagate-predicate ] }
         { [ dup "outputs" word-prop ] [ call-outputs-quot ] }
         { [ dup "output-infos" word-prop ] [ copy-output-infos ] }
-        { [ dup safe-nested-compile ] [ copy-output-infos ] }
+        { [ dup
+            [ safe-nested-compile ]
+            [ "output-infos" word-prop ] bi and ] [ copy-output-infos ] }
         [ default-output-value-infos ]
     } cond ;
 

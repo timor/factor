@@ -1,12 +1,14 @@
 USING: accessors combinators combinators.short-circuit compiler.tree
-compiler.tree.propagation.info continuations io kernel math namespaces sequences
-words ;
+compiler.tree.propagation.info continuations debugger formatting io kernel math
+namespaces sequences summary words ;
 IN: compiler.tree.propagation.output-infos
 
 FROM: namespaces => set ;
 
 ! * Using Stored Output Infos During Propagation
 ERROR: invalid-outputs #call infos ;
+M: invalid-outputs summary [ #call>> [ out-d>> length ] [ word>> name>> ] bi ]
+    [ infos>> ] bi "Expect %d outputs for call to %s, got: %u" sprintf ;
 
 : check-outputs ( #call infos -- infos )
     over out-d>> over [ length ] bi@ =
@@ -21,9 +23,11 @@ ERROR: invalid-outputs #call infos ;
 : check-consistent-effects ( #call infos -- ? )
     [ check-outputs ] [
         dup invalid-outputs? [
+            error.
+            ! 2drop
+            ! "FIXME: Inconsistent stack effect output for compiled word: " write
+            ! word>> name>> print
             2drop
-            "FIXME: Inconsistent stack effect output for compiled word: " write
-            word>> name>> print
             f
         ] [ rethrow ] if
     ] recover
