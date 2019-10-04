@@ -159,7 +159,12 @@ ERROR: nested-compilation-cycle word trace ;
 M: nested-compilation-cycle summary
     [ word>> ] [ trace>> ] bi "Compilation cycle for %s: %u" sprintf ;
 
+ERROR: deferred-word-call word trace ;
+M: deferred-word-call summary
+    [ word>> ] [ trace>> ] bi "Trying to compile call to deferred word: %s. Trace: %u" sprintf ;
+
 : nested-compile ( word -- )
+    dup deferred? [ nested-compilations get deferred-word-call ] when
     dup nested-compilations get member?
     [ nested-compilations get nested-compilation-cycle ]
     [ [
