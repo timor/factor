@@ -34,6 +34,9 @@ GENERIC: record-title ( obj -- str )
 GENERIC: record-info ( obj -- str/seq )
 GENERIC: record-id ( obj -- id )
 
+
+GENERIC: input-head-labels ( node -- seq )
+
 ! If this is implemented, the graph can be constructed completely assuming every
 ! input port has exactly one edge coming into it.
 GENERIC#: input-port-source 1 ( node id -- node id )
@@ -131,4 +134,8 @@ M: color-edge =color
     ;
 
 : input-edges ( node -- edges )
-    dup (input-ports) [ input-edge ] with map ;
+    [ dup (input-ports) [ input-edge ] with map ]
+    [ input-head-labels ] bi
+    [ [ =headlabel ] 2map ] when*
+    ! drop
+    ;

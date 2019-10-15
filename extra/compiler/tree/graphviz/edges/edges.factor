@@ -26,6 +26,15 @@ M: node input-port-source ( node id -- node id )
 M: node input-edge-label
     nip value-label ;
 
+M: node input-head-labels drop f ;
+M: #call input-head-labels
+    node-input-infos [ value-info-label ] map ;
+M: #return input-head-labels
+    node-input-infos [ value-info-label ] map ;
+M: #phi input-head-labels
+    phi-info-d>> first2 append [ value-info-label ] map ;
+
+
 GENERIC: add-input-edges ( graph node -- graph )
 
 M: node add-input-edges
@@ -115,7 +124,7 @@ M: #branch add-edge-to
     [ call-next-method ] keep
     children>> [ add-edges-between ] each ;
 
-: branch-colors ( -- seq ) { "red" "green" "yellow" } <circular> ;
+: branch-colors ( -- seq ) { "green" "red" "yellow" } <circular> ;
 
 ! : add-edge-unless-terminate ( graph prev next color -- graph )
 !     pick #terminate?
