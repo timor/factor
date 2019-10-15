@@ -69,14 +69,19 @@ PRIVATE>
     [ (deep-annotate) ] with-compilation-unit ;
 
 <PRIVATE
+: callstack-depth ( -- str )
+    get-callstack callstack>array length number>string "(" ")" surround ;
 
-:: trace-quot ( word effect quot str -- quot' )
+! : unparsed-with-id ( obj -- str )
+!     [ [ pprint-cell ] with-string-writer ] [ identity-hashcode ] bi "%s ! #%x\n" sprintf ;
+
+:: trace-quot ( word effect quot: ( effect -- values ) str -- quot' )
     effect quot call :> values
     values length :> n
     [
         [
-            "--- " write str write bl word .
-            n ndup n narray values swap zip simple-table.
+            "--- " write callstack-depth write bl str write bl word .
+            n ndup n narray dup [ identity-hashcode "#%x" sprintf ] map values -rot 3array flip simple-table.
             flush
         ] with-output>error
     ] ; inline
