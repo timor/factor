@@ -5,6 +5,7 @@ IN: compiler.tree.propagation.info.present
 
 
 ! * Presenting Value info
+CONSTANT: non-exp-limit 64
 
 : interval-finite? ( int -- ? )
     interval-length 1/0. = not ;
@@ -27,10 +28,15 @@ GENERIC: class-label ( info -- str )
       [ 2 logn "2^%.1f" sprintf ]
     } cond ;
 
+: maybe-log2-point ( x -- str )
+    dup abs non-exp-limit >
+    [ log2-point ]
+    [ "%.2f" sprintf ] if ;
+
 :: points-label ( from to -- str )
     from second "[" "(" ?
-                      from first dup -1/0. = [ drop "-∞" ] [ log2-point ] if
-                      to first dup 1/0. = [ drop "∞" ] [ log2-point ] if
+                      from first dup -1/0. = [ drop "-∞" ] [ maybe-log2-point ] if
+                      to first dup 1/0. = [ drop "∞" ] [ maybe-log2-point ] if
                       to second "]" ")" ?
     "%s%s,%s%s" sprintf ;
 M: empty-interval interval-label drop "∅" ;
