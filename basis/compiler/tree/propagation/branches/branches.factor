@@ -2,10 +2,11 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs combinators compiler.tree
 compiler.tree.combinators compiler.tree.propagation.constraints
-compiler.tree.propagation.info compiler.tree.propagation.nodes
-compiler.tree.propagation.mutually-recursive
-compiler.tree.propagation.simple fry kernel locals math
-namespaces sequences stack-checker.branches ;
+compiler.tree.propagation.info
+compiler.tree.propagation.mutually-recursive.branch-overrides
+compiler.tree.propagation.mutually-recursive.interface
+compiler.tree.propagation.nodes compiler.tree.propagation.simple fry kernel
+locals math namespaces sequences stack-checker.branches ;
 FROM: sets => union ;
 IN: compiler.tree.propagation.branches
 
@@ -38,8 +39,13 @@ M: #dispatch live-branches
         [ literal>> swap length f <array> [ [ t ] 2dip set-nth ] keep ]
     } cond ;
 
-: live-children ( #branch -- children )
+: (live-children) ( #branch -- children )
     [ children>> ] [ live-branches>> ] bi select-children ;
+
+: live-children ( #branch -- children )
+    propagate-recursive? get
+    [ [ children>> ] [ live-branches>> ] [ ] tri override-children select-children ]
+    [ (live-children) ] if ;
 
 SYMBOL: infer-children-data
 

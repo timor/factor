@@ -34,6 +34,7 @@ SYMBOL: nested-compilations
     H{ } clone dependencies namespaces:set
     H{ } clone generic-dependencies namespaces:set
     HS{ } clone conditional-dependencies namespaces:set
+    dup name>> "Start Compiling: " write print flush
     dup word-being-compiled namespaces:set
     clear-compiler-error ;
 
@@ -137,6 +138,7 @@ M: word combinator? inline? ;
 : compile-word ( word -- )
     ! We return early if the word has breakpoints or if it
     ! failed to infer.
+    nested-compilations get "nested trace: %[%s, %]\n" printf flush
     '[
         _ {
             [ start-compilation ]
@@ -157,15 +159,19 @@ M: word combinator? inline? ;
 
 ERROR: nested-compilation-cycle word trace ;
 M: nested-compilation-cycle summary
-    [ word>> ] [ trace>> ] bi "Compilation cycle for %s: %u" sprintf ;
+    [ word>> ] [ trace>> ] bi "Compilation cycle for %s: %u" sprintf flush ;
 
 ERROR: deferred-word-call word trace ;
 M: deferred-word-call summary
-    [ word>> ] [ trace>> ] bi "Trying to compile call to deferred word: %s. Trace: %u" sprintf ;
+    [ word>> ] [ trace>> ] bi "Trying to compile call to deferred word: %s. Trace: %u" sprintf flush ;
+
+: in-nested-compilation? ( word -- ? )
+    nested-compilations get member? ;
 
 : nested-compile ( word -- )
+    dup name>> "Trying nested compile: " write print flush
     dup deferred? [ nested-compilations get deferred-word-call ] when
-    dup nested-compilations get member?
+    dup in-nested-compilation?
     [ nested-compilations get nested-compilation-cycle ]
     [ [
             [ nested-compilations [ swap suffix ] change ]

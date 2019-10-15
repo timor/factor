@@ -115,6 +115,8 @@ M: #declare propagate-before
     [ default-output-value-infos ] if
     ;
 
+SYMBOL: inhibit-nested-compile?
+
 : output-value-infos ( #call word -- infos )
     {
         { [ dup \ <tuple-boa> eq? ] [ drop propagate-<tuple-boa> ] }
@@ -123,16 +125,21 @@ M: #declare propagate-before
         { [ dup "outputs" word-prop ] [ call-outputs-quot ] }
         { [ dup "output-infos" word-prop ] [ copy-output-infos ] }
         { [ dup
-            [ safe-nested-compile ]
+            [ inhibit-nested-compile? get [ drop f ] [ safe-nested-compile ] if ]
             [ "output-infos" word-prop ] bi and ] [ copy-output-infos ] }
         [ default-output-value-infos ]
     } cond ;
+
+: non-recursive-output-infos ( #call word -- infos )
+    ! dup word-being-compiled get =
+    dup in-nested-compilation?
+    inhibit-nested-compile? [ output-value-infos ] with-variable ;
 
 M: #call propagate-before
     dup word>> {
         { [ 2dup foldable-call? ] [ fold-call ] }
         { [ 2dup do-inlining ] [
-            [ output-value-infos ] [ drop out-d>> ] 2bi refine-value-infos
+              [ non-recursive-output-infos ] [ drop out-d>> ] 2bi refine-value-infos
         ] }
         [
             [ [ output-value-infos ] [ drop out-d>> ] 2bi set-value-infos ]

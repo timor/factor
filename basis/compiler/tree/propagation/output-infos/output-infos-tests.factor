@@ -1,35 +1,15 @@
-USING: accessors assocs combinators compiler compiler.tree.propagation.info
-compiler.tree.propagation.inlining
+USING: accessors arrays assocs compiler compiler.tree
+compiler.tree.propagation.info
 compiler.tree.propagation.mutually-recursive.interface compiler.units kernel
-kernel.private math math.intervals math.order namespaces sequences tools.test
-words ;
+compiler.tree.propagation.output-infos.testing
+kernel.private locals math math.intervals math.order math.statistics namespaces
+sequences tools.test ;
 IN: compiler.tree.propagation.output-infos.tests
 
 ! TODO: insert missing unit test!
 
 
 ! * Nested Compilation
-
-: with-opt ( quot -- )
-    H{ { propagate-recursive? t }
-       { nested-compilation? t } } swap with-variables ; inline
-
-! Uncomment stuff for more details
-: with-watched-words ( words quot -- )
-    {
-        ! [ drop [ reset ] each ]
-        ! [ drop [ watch ] each ]
-        [ nip call ]
-        ! [ drop [ reset ] each ]
-    } 2cleave
-    ; inline
-
-: test-output-infos ( words -- infos )
-    [
-        { compile-word maybe-compile-word nested-compile inline-nested-compilation inline-recursive-call }
-        [ recompile ] with-watched-words
-        drop ]
-    [ [ dup "output-infos" word-prop ] map>alist ] bi ;
 
 ! Brute-force prove that interval inference is not too optimistic
 :: check1 ( word -- ? )

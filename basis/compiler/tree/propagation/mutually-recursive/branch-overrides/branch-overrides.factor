@@ -17,6 +17,11 @@ SYMBOL: branch-overrides
 : exit-branch-overrides-scope ( -- )
     branch-overrides get pop drop ;
 
+:: with-branch-overrides ( quot -- )
+    enter-branch-overrides-scope
+    quot call
+    exit-branch-overrides-scope ; inline
+
 ! Access by values
 : (get-branch-overrides) ( in-d -- flags )
     branch-overrides get assoc-stack ;

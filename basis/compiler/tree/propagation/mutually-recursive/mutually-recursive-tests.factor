@@ -1,15 +1,11 @@
-USING: accessors arrays compiler compiler.tree compiler.tree.builder
-compiler.tree.normalization compiler.tree.propagation
+USING: accessors arrays compiler compiler.tree.propagation
 compiler.tree.propagation.info compiler.tree.propagation.inlining
 compiler.tree.propagation.mutually-recursive
 compiler.tree.propagation.mutually-recursive.interface
-compiler.tree.propagation.mutually-recursive.pruning compiler.tree.recursive
-kernel kernel.private locals math math.intervals namespaces sequences
-tools.annotations tools.test words ;
+compiler.tree.propagation.mutually-recursive.pruning kernel kernel.private
+locals math math.intervals namespaces sequences tools.annotations tools.test
+words ;
 IN: compiler.tree.propagation.mutually-recursive.tests
-
-: normalized-tree ( quot/word -- nodes )
-    build-tree analyze-recursive normalize ;
 
 : tword ( word -- word )
     "typed-word" word-prop ;

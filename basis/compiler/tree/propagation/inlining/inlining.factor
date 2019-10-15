@@ -2,12 +2,14 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs classes.algebra combinators
 combinators.short-circuit compiler.tree compiler.tree.builder
+compiler.tree.normalization compiler.tree.propagation.constraints
+compiler.tree.propagation.copy compiler.tree.propagation.info
+compiler.tree.propagation.mutually-recursive.branch-overrides
 compiler.tree.propagation.mutually-recursive.interface
 compiler.tree.propagation.mutually-recursive.pruning
-compiler.tree.normalization compiler.tree.propagation.info
-compiler.tree.propagation.nodes compiler.tree.recursive generic
-generic.math generic.single generic.standard kernel locals math
-math.partial-dispatch namespaces quotations sequences words ;
+compiler.tree.propagation.nodes compiler.tree.propagation.simple
+compiler.tree.recursive generic generic.math generic.single generic.standard io
+kernel locals math math.partial-dispatch namespaces quotations sequences words ;
 IN: compiler.tree.propagation.inlining
 
 : splicing-call ( #call word -- nodes )
@@ -104,28 +106,48 @@ SYMBOL: history
     call( #call -- word/quot/f )
     object swap eliminate-dispatch ;
 
-! The output values of the inlined recursive body must be the ones at the input
-! of the last #copy node.
-: push-call-site-info ( nodes -- )
-    last dup #copy? [ "Not a copy node!" throw ] unless
-    in-d>> push-rec-return-infos ;
+! Perform propagation on nodes of inlined words.  Separates scope to ensure that
+! duplicate value names are handled correctly.
+:: propagate-inline ( call nodes -- infos ret-values )
+    call in-d>> [ value-info ] map :> input-info
+    call out-d>> :> out-values
+    nodes unclip :> ( nodes' intro )
+    call in-d>> intro out-d>> <#copy> nodes' swap prefix :> nodes'
+    [
+        H{ } clone copies set
+        value-infos [ H{ } clone suffix ] change
+        constraints [ H{ } clone suffix ] change
+        input-info nodes' first in-d>> set-value-infos
+        nodes' (propagate)
+        nodes' last [ in-d>> ] [ node-input-infos ] bi
+    ] with-scope
+    [ out-values set-value-infos ] keep
+    swap
+    ;
 
 ! Interface to propagation.mutually-recursive
 ! Inline the pruned body and perform propagation
 ! Undo inlining afterwards
 : inline-recursive-call ( #call word -- ? )
+    name>> "Inlining recursive call to " write print flush
     H{ } clone rec-return-infos get push
-    drop current-body get [ pruned-recursion-inline-body ] keepd swap
-    [ current-body set ]
-    [ >>body ] bi
-    [ propagate-body ] keep
+    [
+        current-body get over swap pruned-recursion-inline-body
+        [ current-body set ]
+        [ propagate-inline ] bi
+
+        ! [ propagate-body ] keep
+
+    ] with-branch-overrides
     rec-return-infos get pop drop       ! Throw away inner recursions
-    dup body>> push-call-site-info
-    f swap body<<
+    push-rec-return-infos
+    t
     ;
 
 ! For inlining all the calls in the cycle, it makes sense to cache the splicing
 ! bodies.  This cache should have the same lifetime as the compilation unit
+! TODO ensure that there are no problems using cached expansions because of
+! value duplicates.  If there are, use propagate-inline as above.
 : nested-propagation-body ( #call word -- nodes )
     dup "propagation-body" word-prop
     [ 2nip ]

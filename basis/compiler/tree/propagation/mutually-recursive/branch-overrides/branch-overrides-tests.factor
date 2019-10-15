@@ -1,4 +1,5 @@
-USING: compiler.tree.mutually-recursive.branch-overrides fry kernel namespaces
+USING: compiler.tree
+compiler.tree.propagation.mutually-recursive.branch-overrides fry namespaces
 tools.test ;
 IN: compiler.tree.propagation.mutually-recursive.branch-overrides.tests
 

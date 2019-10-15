@@ -1,7 +1,7 @@
 USING: accessors combinators compiler.tree compiler.tree.propagation.info kernel
 math math.intervals math.private sequences typed ;
 
-IN: compiler.tree.propagation.mutually-recursive.tests
+IN: compiler.tree.propagation.mutually-recursive.tests.test-objects
 
 TYPED: baz ( x: fixnum -- y )
     dup 5 > [ 1 - baz ] [ drop 42 ] if ;

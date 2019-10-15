@@ -14,12 +14,14 @@ compiler.tree.propagation.nodes
 compiler.tree.propagation.recursive
 compiler.tree.propagation.simple
 compiler.tree.propagation.transforms
+compiler.tree.propagation.mutually-recursive.branch-overrides
 kernel namespaces
 vectors ;
 IN: compiler.tree.propagation
 
 : propagate ( nodes -- nodes )
     dup current-body set
+    init-branch-overrides
     H{ } clone 1vector rec-return-infos set
     H{ } clone copies set
     H{ } clone 1array value-infos set
