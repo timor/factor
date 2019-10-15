@@ -24,6 +24,9 @@ FROM: namespaces => set ;
 
 ! Use this to make a tree if no particular tree is provided
 ! This is just the regular frontend optimization skipping the finalization step.
+: maybe-eliminate-shuffles ( nodes -- nodes' )
+    keep-shuffle-nodes get [ eliminate-renaming ] unless ;
+
 : treeviz-tree ( word/quot -- nodes )
     build-tree
     [
@@ -41,7 +44,6 @@ FROM: namespaces => set ;
         ?check
         compute-def-use
         optimize-modular-arithmetic
-        keep-shuffle-nodes get [ eliminate-renaming ] unless
     ] with-scope ;
 
 ! ** Generating the graph
@@ -74,7 +76,7 @@ FROM: namespaces => set ;
     ] with-temp-directory ] curry with-ui ;
 
 : treeviz. ( nodes -- )
-    treeviz show-graph ;
+    maybe-eliminate-shuffles treeviz show-graph ;
 
 : actual-def ( word -- code )
     dup typed-word? [ "typed-word" word-prop ] when ;
@@ -86,17 +88,23 @@ FROM: namespaces => set ;
 
 UNION: non-dfg-node #terminate #return-recursive ;
 
-: quot>dfg ( word/quot -- graph )
+: dfgviz ( nodes -- graph )
     H{ { hide-control-edges t }
        { horizontal-layout t }
-       { show-muxes t }
+       { show-muxes f }
        { color-record-edges t }
     } [
-        actual-def treeviz-tree
+        maybe-eliminate-shuffles
         [ dup non-dfg-node? [ drop f ] when ] map-nodes
         show-muxes get [ phi>mux ] when
         treeviz
     ] with-variables ;
+
+: quot>dfg ( word/quot -- graph )
+    actual-def treeviz-tree dfgviz ;
+
+: dfgviz. ( nodes -- )
+    dfgviz show-graph ;
 
 : dfg. ( word/quot -- ) quot>dfg show-graph ;
 
