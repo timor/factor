@@ -170,13 +170,13 @@ MEMO: array-capacity-interval ( -- interval )
     dupd interval-intersect = ;
 
 GENERIC: interval-contains? ( x int -- ? )
-M: empty-interval interval-contains? 2drop f ;
-M: full-interval interval-contains? 2drop t ;
+M: empty-interval interval-contains? 2drop f ; inline
+M: full-interval interval-contains? 2drop t ; inline
 M: interval interval-contains?
     {
         [ from>> first2 [ >= ] [ > ] if ]
         [ to>>   first2 [ <= ] [ < ] if ]
-    } 2&& ;
+    } 2&& ; inline
 
 : interval-zero? ( int -- ? )
     0 swap interval-contains? ;
