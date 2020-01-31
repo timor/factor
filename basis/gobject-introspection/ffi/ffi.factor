@@ -3,7 +3,7 @@
 USING: accessors alien.c-types alien.parser arrays ascii
 classes.parser classes.struct combinators combinators.short-circuit
 gobject-introspection.repository gobject-introspection.types kernel
-locals make math.parser namespaces parser sequences
+locals make math.parser namespaces parser sequences regexp
 splitting.monotonic vocabs.parser words words.constant ;
 IN: gobject-introspection.ffi
 
@@ -67,11 +67,18 @@ M: incorrect-type type>c-type drop void* ;
 
 GENERIC: parse-const-value ( str data-type -- value )
 
+: gint-type-specifier? ( str -- ? )
+    R/ gu?int\d*/ matches? ;
+
+ERROR: parse-const-atomic str ;
+
 M: atomic-type parse-const-value
     name>> {
-        { "gint" [ string>number ] }
-        { "gdouble" [ string>number ] }
-    } case ;
+        { [ dup gint-type-specifier? ] [ drop string>number ] }
+        { [ dup "gdouble" = ] [ drop string>number ] }
+        { [ dup "gchar" = ] [ drop ] }         ! String constants
+        [ parse-const-atomic ]
+    } cond ;
 
 M: utf8-type parse-const-value drop ;
 
