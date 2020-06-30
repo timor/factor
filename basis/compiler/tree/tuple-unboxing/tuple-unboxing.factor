@@ -9,8 +9,23 @@ sequences slots.private stack-checker.branches
 stack-checker.values vectors ;
 IN: compiler.tree.tuple-unboxing
 
+! Second pass per-node operation.  Checks if this has marked for unboxing the
+! node outputs, and, if so, converts a tuple-typed output into a series of #push
+! nodes of the slot values directly.  Only does something (besides recursing)
+! for #calls to `<tuple-boa>` and `slot`, and #introduce nodes.  Calls to
+! `<tuple-boa>` are modified to push the slot values on the stack.  Calls to `slot`
+! are converted to generate the corresponding stack shuffle pattern to access
+! the correct stack element containing the slot value.
+
+! For the #introduce nodes, the input stack element is replaced by (recursively
+! compiled here) slot accessors (TODO: Check whether this actually precludes
+! important inling optimizations, e.g., is the subtree being modified re-propagated?)
+! For `<tuple-boa>` constructors, the constructor is replaced by code which
+! drops the class value.
+
 GENERIC: unbox-tuples* ( node -- node/nodes )
 
+! Used in second pass to query first pass result.
 : unbox-output? ( node -- values )
     out-d>> first unboxed-allocation ;
 
@@ -128,6 +143,7 @@ M: #return-recursive unbox-tuples*
     [ unbox-parameter-quot ] map
     dup [ [ ] = ] all? [ drop [ ] ] [ '[ _ spread ] ] if ;
 
+! This calls the tree compiler recursively
 : unbox-parameters-nodes ( new-values old-values -- nodes )
     [ flatten-values ] [ unbox-parameters-quot ] bi build-sub-tree ;
 
@@ -160,6 +176,9 @@ M: #alien-node unbox-tuples* dup in-d>> assert-not-unboxed ;
 
 M: #alien-callback unbox-tuples* ;
 
+! 2-pass operation in combination with the escape-analysis pass:
+! 1. Scan for (non-)escaping allocations ( compile.tree.escape-analysis )
+! 2. See which can be unboxed ( this ).  Uses map-nodes, thus walking the tree.
 : unbox-tuples ( nodes -- nodes )
     (allocation) escaping-allocations get
     [ nip key? ] curry assoc-all?
