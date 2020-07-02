@@ -102,13 +102,13 @@ CONSTANT: test-val 42
     slot-states get length
 ] unit-test
 
-! Test slot lookup, both with same slot value and slot equivalence
-{ 2 2 f f } [
+! Test slot lookup
+{ 2 f f f } [
     setup-test-values
     { 2 0 1 } {  } \ set-slot <#call>
     set-slot-call-propagate-after
-    0 1 lookup-slot-state copy-of>>
-    0 4 lookup-slot-state copy-of>>
-    0 2 lookup-slot-state
-    0 3 lookup-slot-state
+    0 1 get-slot-state copy-of>>
+    0 4 get-slot-state
+    0 2 get-slot-state
+    0 3 get-slot-state
 ] unit-test

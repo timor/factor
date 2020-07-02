@@ -181,23 +181,13 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
     swap suffix! drop
     ;
 
-
-! Whether the given SLOT-VAL denotes the same slot as STATE when it was written to.
-: slot-matches? ( slot-val state -- ? )
-    [ value-info ] [ slot-info>> ] bi*
-    { [ [ literal?>> ] both? ]
-      [ [ literal>> ] bi@ = ] } 2&& ;
-
-: (lookup-slot-state) ( obj-val slot-val assoc -- value-val/f )
-    swapd at
-    [ ! key-slot-val slot-val state
-        { [ drop = ]
-          [ nipd slot-matches? ]
-        } 3||
-    ] with assoc-find [ nip ] [ 2drop f ] if ;
-
-: lookup-slot-state ( obj-val slot-val -- value-val/f )
-    slot-states get (lookup-slot-state) ;
+! Determine the current state of a slot.
+:: get-slot-state ( obj-val slot-val -- slot-state/f )
+    slot-states get [| state |
+                     state obj-value>> obj-val =
+                     [ state slot-value>> slot-val = ]
+                     [ f ] if
+    ] find nip ;
 
 ! -- End of slot-state stuff
 
