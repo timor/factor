@@ -120,11 +120,9 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 ! | same                                    | both non-literal, different | Interval               | may-alias |
 ! | same                                    | some literal                | Interval               | may-alias |
 
-: same-object? ( s1 s2 -- s1-value ? )
-    [ copy-of>> ] bi@
-    [ drop ] [ [ and ] [ = ] 2bi and ] 2bi ;
+: same-object? ( s1 s2 -- ? ) [ obj-value>> ] bi@ = ;
 
-: literal-object? ( state -- ? ) value-info>> literal?>> ;
+: literal-object? ( state -- ? ) obj-info>> literal?>> ;
 
 : literal-slot? ( state -- ? ) slot-info>> literal?>> ;
 
@@ -132,14 +130,14 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 : same-slot? ( s1 s2 -- ? ) [ slot-value>> ] bi@ = ;
 
 : different-object-classes? ( state1 state2 -- ? )
-    [ value-info>> class>> ] bi@
+    [ obj-info>> class>> ] bi@
     compare-classes +incomparable+ = ;
 
 : merged-slot-interval ( state1 state2 -- interval )
     [ slot-info>> interval>> ] bi@ interval-intersect ;
 
 :: compare-slot-states ( s1 s2 -- symbol )
-    s1 s2 same-object? :> ( obj-val same-obj? )
+    s1 s2 same-object? :> same-obj?
     s1 s2 [ literal-object? ] both? :> both-literal?
     s1 s2 [ literal-object? ] either? :> some-literal?
     s1 s2 [ literal-slot? not ] both? :> both-slots-non-literal?
