@@ -114,7 +114,7 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 ! | X                                       | some literal                | Null                   | unrelated |
 ! | same                                    | both non-literal, same      | not Null               | same-slot |
 ! | same                                    | both non-literal, different | Singular               | same-slot |
-! | same                                    | some literal                | Singular               | same-slot |
+! | same                                    | both literal                | Singular               | same-slot |
 ! | one literal                             | X                           | not Null               | may-alias |
 ! | both non-literal, different             | X                           | not Null               | may-alias |
 ! | same                                    | both non-literal, different | Interval               | may-alias |
@@ -141,7 +141,7 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
     s1 s2 [ literal-object? ] both? :> both-literal?
     s1 s2 [ literal-object? ] either? :> some-literal?
     s1 s2 [ literal-slot? not ] both? :> both-slots-non-literal?
-    s1 s2 [ literal-slot? ] either? :> some-slots-literal?
+    s1 s2 [ literal-slot? ] both? :> both-slots-literal?
     s1 s2 same-slot? :> same-slot-value?
     s1 s2 different-object-classes? :> disjunct-classes?
     s1 s2 merged-slot-interval :> merged-interval
@@ -152,7 +152,7 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
           same-slot-value? and ] [ +same-slot+ ] }
       { [ same-obj? both-slots-non-literal? and
           merged-interval interval-singleton? and ] [ +same-slot+ ] }
-      { [ same-obj? some-slots-literal? and
+      { [ same-obj? both-slots-literal? and
           merged-interval interval-singleton? and ] [ +same-slot+ ] }
       [ +may-alias+ ]
     } cond ;
@@ -164,19 +164,20 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 ! one, and the copy flag is cleared.  For all slot accesses which point to the
 ! same slot, overwrite with the value information and adjust copy flag.
 
-: update-slot-state ( value-val obj-val slot-val -- )
-    <slot-state>
+:: update-slot-state ( value-val obj-val slot-val -- )
+    value-val obj-val slot-val <slot-state> :> new-state
     slot-states get
-    over
-    '[ _ 2dup compare-slot-states
+    [| state | state new-state compare-slot-states
        {
-           { +same-slot+ [ clone [ dup value-info>> ] [ swap >>value-info ] bi*
-                           [ copy-of>> ] [ swap >>copy-of ] bi* ] }
-           { +may-alias+ [ clone [ value-info>> ] [ swap >>value-info ] bi* f
-                           >>copy-of ] }
-           [ drop nip ]
+           { +same-slot+ [ state clone
+                           new-state value-info>> >>value-info
+                           new-state copy-of>> >>copy-of ] }
+           { +may-alias+ [ state clone [ new-state value-info>> value-info-union ]
+                           change-value-info
+                           f >>copy-of ] }
+           [ drop state ]
        } case ] map!
-    swap suffix! drop
+    new-state suffix! drop
     ;
 
 ! Determine the current state of a slot.

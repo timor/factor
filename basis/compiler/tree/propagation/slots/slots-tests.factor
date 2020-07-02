@@ -121,3 +121,18 @@ CONSTANT: test-val 42
     [| a! | 13 a! a ] extract-slots
     [ first ] bi@ compare-slot-states nip
 ] unit-test
+
+{ { +same-slot+ +unrelated+ +may-alias+ } } [
+    [| a b c | 42 a 3 set-slot a 3 slot b 4 slot c 3 slot ] extract-slots
+    [ first ] dip [ compare-slot-states ] with map nip
+] unit-test
+
+{ V{ +may-alias+ +may-alias+ +may-alias+ } } [
+    [| a b c s1 s2 s3 |
+     42 a s1 set-slot
+     69 b s2 set-slot
+     99 c s3 set-slot
+     c 5 slot
+    ] extract-slots
+    first swap [ compare-slot-states ] with map nip
+] unit-test
