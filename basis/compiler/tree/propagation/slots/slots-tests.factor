@@ -54,36 +54,52 @@ CONSTANT: test-val 42
     [ <literal-info> ] map append
     [ length <iota> introduce-values ]
     [ <enumerated> >hashtable 1array value-infos set ] bi
-    H{  } clone slot-states set
+    {  } clone slot-states set
     ;
 
 ! Testing update-slot-state
-{ 0 1 2 } [
+{ 1 } [
     setup-test-values
     2 0 1 update-slot-state
-    slot-states get >alist first first2 >alist first first2
-    copy-of>>
+    slot-states get length
 ] unit-test
 
 ! Test effect of update-slot-state in propagate-after
-{ 0 1 2 } [
+{ 1 } [
     setup-test-values
     { 2 0 1 } {  } \ set-slot <#call>
     set-slot-call-propagate-after
-    slot-states get >alist first first2 >alist first first2
-    copy-of>>
+    slot-states get length
+] unit-test
+
+{ +same-slot+ } [
+    setup-test-values
+    { 2 0 1 } {  } \ set-slot <#call>
+    set-slot-call-propagate-after
+    slot-states get first
+    2 0 1 <slot-state> compare-slot-states
 ] unit-test
 
 ! Test overwrite of slot
-{ 1 0 1 3 } [
+{ 2 } [
     setup-test-values
     { 2 0 1 } {  } \ set-slot <#call>
     set-slot-call-propagate-after
     { 3 0 1 } {  } \ set-slot <#call>
     set-slot-call-propagate-after
-    slot-states get >alist [ length ] keep
-    first first2 >alist first first2
-    copy-of>>
+    slot-states get length
+] unit-test
+
+! Test non-override of slot
+{ 3 } [
+    setup-test-values
+    { 2 0 1 } {  } \ set-slot <#call>
+    set-slot-call-propagate-after
+    { 2 0 3 } {  } \ set-slot <#call>
+    set-slot-call-propagate-after
+    { 2 1 3 } {  } \ set-slot <#call>
+    set-slot-call-propagate-after
+    slot-states get length
 ] unit-test
 
 ! Test slot lookup, both with same slot value and slot equivalence
