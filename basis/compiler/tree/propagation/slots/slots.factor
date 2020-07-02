@@ -3,8 +3,8 @@
 USING: accessors arrays assocs byte-arrays classes classes.algebra classes.tuple
 classes.tuple.private combinators combinators.short-circuit compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
-compiler.tree.propagation.nodes kernel math namespaces sequences slots.private
-strings words ;
+compiler.tree.propagation.nodes kernel locals math math.intervals namespaces
+sequences slots.private strings words ;
 IN: compiler.tree.propagation.slots
 
 ! * Optimizing Local Slot Accesses
@@ -95,14 +95,73 @@ PREDICATE: set-slot-call < #call word>> \ set-slot = ;
 
 
 SYMBOL: slot-states
-TUPLE: slot-state slot-info value-info copy-of ;
+TUPLE: slot-state copy-of value-info obj-value obj-info slot-value slot-info ;
 
-: <slot-state> ( slot-val value-val -- obj )
-    [ [ value-info ] bi@ ] keep slot-state boa ;
+: <slot-state> ( value-val obj-val slot-val -- obj )
+    [ dup value-info ] tri@ slot-state boa ;
+
+! Merging slot states:  During different branches, different slot accesses could
+! have been made.
+
+! When updating slots, perform alias analysis.
+
+SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
+
+! | Objects                                 | Slots                       | Merged Slot-Value-Info | Relation  |
+! |-----------------------------------------+-----------------------------+------------------------+-----------|
+! | both literal, different                 | X                           | X                      | unrelated |
+! | one literal, provably different classes | X                           | X                      | unrelated |
+! | X                                       | some literal                | Null                   | unrelated |
+! | same                                    | both non-literal, same      | not Null               | same-slot |
+! | same                                    | both non-literal, different | Singular               | same-slot |
+! | same                                    | some literal                | Singular               | same-slot |
+! | one literal                             | X                           | not Null               | may-alias |
+! | both non-literal, different             | X                           | not Null               | may-alias |
+! | same                                    | both non-literal, different | Interval               | may-alias |
+! | same                                    | some literal                | Interval               | may-alias |
+
+: same-object? ( s1 s2 -- s1-value ? )
+    [ copy-of>> ] bi@
+    [ drop ] [ [ and ] [ = ] 2bi and ] 2bi ;
+
+: literal-object? ( state -- ? ) value-info>> literal?>> ;
+
+: literal-slot? ( state -- ? ) slot-info>> literal?>> ;
+
+! Symbolic equivalence, not value equivalence!
+: same-slot? ( s1 s2 -- ? ) [ slot-value>> ] bi@ = ;
+
+: different-object-classes? ( state1 state2 -- ? )
+    [ value-info>> class>> ] bi@
+    compare-classes +incomparable+ = ;
+
+: merged-slot-interval ( state1 state2 -- interval )
+    [ slot-info>> interval>> ] bi@ interval-intersect ;
+
+:: compare-slot-states ( s1 s2 -- symbol )
+    s1 s2 same-object? :> ( obj-val same-obj? )
+    s1 s2 [ literal-object? ] both? :> both-literal?
+    s1 s2 [ literal-object? ] either? :> some-literal?
+    s1 s2 [ literal-slot? not ] both? :> both-slots-non-literal?
+    s1 s2 [ literal-slot? ] either? :> some-slots-literal?
+    s1 s2 same-slot? :> same-slot-value?
+    s1 s2 different-object-classes? :> disjunct-classes?
+    s1 s2 merged-slot-interval :> merged-interval
+    { { [ both-literal? same-obj? not and ] [ +unrelated+ ] }
+      { [ some-literal? disjunct-classes? and ] [ +unrelated+ ] }
+      { [ merged-interval empty-interval? ] [ +unrelated+ ] }
+      { [ same-obj? both-slots-non-literal? and
+          same-slot-value? and ] [ +same-slot+ ] }
+      { [ same-obj? both-slots-non-literal? and
+          merged-interval interval-singleton? and ] [ +same-slot+ ] }
+      { [ same-obj? some-slots-literal? and
+          merged-interval interval-singleton? and ] [ +same-slot+ ] }
+      [ +may-alias+ ]
+    } cond ;
 
 ! Find the slot assoc of the obj assoc and record the slot state there
 : update-slot-state ( value-val obj-val slot-val -- )
-    [ nip swap <slot-state> ]
+    [ <slot-state> ]
     [ drop slot-states get [ drop H{  } clone ] cache nip ]
     [ 2nip swap set-at ] 3tri ;
 
@@ -112,13 +171,16 @@ TUPLE: slot-state slot-info value-info copy-of ;
     { [ [ literal?>> ] both? ]
       [ [ literal>> ] bi@ = ] } 2&& ;
 
-: lookup-slot-state ( obj-val slot-val -- value-val/f )
-    swap slot-states get at
-    [ ! ket-slot-val slot-val state
-     { [ drop = ]
-       [ nipd slot-matches? ]
-     } 3||
+: (lookup-slot-state) ( obj-val slot-val assoc -- value-val/f )
+    swapd at
+    [ ! key-slot-val slot-val state
+        { [ drop = ]
+          [ nipd slot-matches? ]
+        } 3||
     ] with assoc-find [ nip ] [ 2drop f ] if ;
+
+: lookup-slot-state ( obj-val slot-val -- value-val/f )
+    slot-states get (lookup-slot-state) ;
 
 ! -- End of slot-state stuff
 
