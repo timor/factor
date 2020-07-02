@@ -102,13 +102,22 @@ CONSTANT: test-val 42
     slot-states get length
 ] unit-test
 
-! Test slot lookup
-{ 2 f f f } [
-    setup-test-values
-    { 2 0 1 } {  } \ set-slot <#call>
-    set-slot-call-propagate-after
-    0 1 get-slot-state copy-of>>
-    0 4 get-slot-state
-    0 2 get-slot-state
-    0 3 get-slot-state
+: propagated-tree ( quot -- nodes )
+    build-tree analyze-recursive normalize propagate
+    cleanup-tree ;
+
+: extract-slots ( quot -- nodes slot-states query-states )
+    propagated-tree dup
+    slot-states get swap [ dup slot-call? [ drop f ] unless ] map-nodes flatten
+    [ f swap in-d>> resolve-copies first2 <slot-state> ] map
+    ;
+
+{ +same-slot+ } [
+    [| a! | 13 a! 14 a! ] extract-slots
+    drop first2 compare-slot-states nip
+] unit-test
+
+{ +same-slot+ } [
+    [| a! | 13 a! a ] extract-slots
+    [ first ] bi@ compare-slot-states nip
 ] unit-test
