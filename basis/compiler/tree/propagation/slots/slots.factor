@@ -106,6 +106,20 @@ TUPLE: slot-state slot-info value-info copy-of ;
     [ drop slot-states get [ drop H{  } clone ] cache nip ]
     [ 2nip swap set-at ] 3tri ;
 
+! Whether the given SLOT-VAL denotes the same slot as STATE when it was written to.
+: slot-matches? ( slot-val state -- ? )
+    [ value-info ] [ slot-info>> ] bi*
+    { [ [ literal?>> ] both? ]
+      [ [ literal>> ] bi@ = ] } 2&& ;
+
+: lookup-slot-state ( obj-val slot-val -- value-val/f )
+    swap slot-states get at
+    [ ! ket-slot-val slot-val state
+     { [ drop = ]
+       [ nipd slot-matches? ]
+     } 3||
+    ] with assoc-find [ nip ] [ 2drop f ] if ;
+
 ! -- End of slot-state stuff
 
 : sequence-constructor? ( word -- ? )

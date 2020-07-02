@@ -45,7 +45,12 @@ CONSTANT: test-slot 5
 CONSTANT: test-val 42
 
 : setup-test-values ( -- )
-    dummy <class-info> 1array ${ test-slot test-val test-val 1 + }
+    dummy <class-info> 1array ${ ! 0
+        test-slot                ! 1
+        test-val                 ! 2
+        test-val 1 +             ! 3
+        5                        ! 4
+    }
     [ <literal-info> ] map append
     [ length <iota> introduce-values ]
     [ <enumerated> >hashtable 1array value-infos set ] bi
@@ -79,4 +84,15 @@ CONSTANT: test-val 42
     slot-states get >alist [ length ] keep
     first first2 >alist first first2
     copy-of>>
+] unit-test
+
+! Test slot lookup, both with same slot value and slot equivalence
+{ 2 2 f f } [
+    setup-test-values
+    { 2 0 1 } {  } \ set-slot <#call>
+    set-slot-call-propagate-after
+    0 1 lookup-slot-state copy-of>>
+    0 4 lookup-slot-state copy-of>>
+    0 2 lookup-slot-state
+    0 3 lookup-slot-state
 ] unit-test
