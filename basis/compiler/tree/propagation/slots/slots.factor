@@ -3,7 +3,7 @@
 USING: accessors arrays assocs byte-arrays classes classes.algebra classes.tuple
 classes.tuple.private combinators combinators.short-circuit compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
-compiler.tree.propagation.nodes kernel locals math math.intervals namespaces
+compiler.tree.propagation.nodes fry kernel locals math math.intervals namespaces
 sequences slots.private strings words ;
 IN: compiler.tree.propagation.slots
 
@@ -159,11 +159,28 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
       [ +may-alias+ ]
     } cond ;
 
-! Find the slot assoc of the obj assoc and record the slot state there
+! * Updating Slot State
+
+! Whenever a set-slot call is encountered, add a slot-state entry to the list.
+! For all slot accesses it can alias to, the value info is unified with the new
+! one, and the copy flag is cleared.  For all slot accesses which point to the
+! same slot, overwrite with the value information and adjust copy flag.
+
 : update-slot-state ( value-val obj-val slot-val -- )
-    [ <slot-state> ]
-    [ drop slot-states get [ drop H{  } clone ] cache nip ]
-    [ 2nip swap set-at ] 3tri ;
+    <slot-state>
+    slot-states get
+    over
+    '[ _ 2dup compare-slot-states
+       {
+           { +same-slot+ [ clone [ dup value-info>> ] [ swap >>value-info ] bi*
+                           [ copy-of>> ] [ swap >>copy-of ] bi* ] }
+           { +may-alias+ [ clone [ value-info>> ] [ swap >>value-info ] bi* f
+                           >>copy-of ] }
+           [ drop nip ]
+       } case ] map!
+    swap suffix! drop
+    ;
+
 
 ! Whether the given SLOT-VAL denotes the same slot as STATE when it was written to.
 : slot-matches? ( slot-val state -- ? )

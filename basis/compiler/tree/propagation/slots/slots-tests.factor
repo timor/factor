@@ -54,7 +54,7 @@ CONSTANT: test-val 42
     [ <literal-info> ] map append
     [ length <iota> introduce-values ]
     [ <enumerated> >hashtable 1array value-infos set ] bi
-    {  } clone slot-states set
+    V{  } clone slot-states set
     ;
 
 ! Testing update-slot-state
