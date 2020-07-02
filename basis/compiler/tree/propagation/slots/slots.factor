@@ -18,11 +18,14 @@ IN: compiler.tree.propagation.slots
     [ [ literal>> ] map ] dip slots>tuple
     <literal-info> ;
 
+! Return a seq with only these value infos which belong to a read-only slot.
 : read-only-slots ( values class -- slots )
     all-slots
     [ read-only>> [ value-info ] [ drop f ] if ] 2map
     f prefix ;
 
+! The first slot seems to be reserved for an array length, always.  Because of
+! that, it is ignored here.  Identity-tuples are not folded in any case.
 : fold-<tuple-boa>? ( values class -- ? )
     [ rest-slice [ dup [ literal?>> ] when ] all? ]
     [ identity-tuple class<= not ]
@@ -40,6 +43,9 @@ IN: compiler.tree.propagation.slots
     all-slots [ offset>> = ] with find nip
     dup [ read-only>> ] when ;
 
+! This one is called when the slot and the object are literal..., but only on
+! read-only slots.  Note that the mechanism which records local slot accesses
+! during propagation has some overlap with this.
 : literal-info-slot ( slot object -- info/f )
     {
         [ class-of read-only-slot? ]
@@ -47,9 +53,10 @@ IN: compiler.tree.propagation.slots
         [ swap slot <literal-info> ]
     } 2&& ;
 
+! This one is called when a literal slot number has been supplied to a slot call
 : value-info-slot ( slot info -- info' )
     {
-        { [ over 0 = ] [ 2drop fixnum <class-info> ] }
+        { [ over 0 = ] [ 2drop fixnum <class-info> ] } ! I think this the array ! length accessor case...
         { [ dup literal?>> ] [ literal>> literal-info-slot ] }
         [ [ 1 - ] [ slots>> ] bi* ?nth ]
     } cond [ object-info ] unless* ;
