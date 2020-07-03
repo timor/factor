@@ -1,10 +1,14 @@
 USING: accessors arrays assocs compiler.tree compiler.tree.builder
 compiler.tree.cleanup compiler.tree.combinators compiler.tree.normalization
-compiler.tree.propagation compiler.tree.propagation.copy
-compiler.tree.propagation.info compiler.tree.propagation.slots
+compiler.tree.propagation compiler.tree.propagation.branches
+compiler.tree.propagation.copy compiler.tree.propagation.info
+compiler.tree.propagation.nodes compiler.tree.propagation.slots
 compiler.tree.recursive hashtables kernel kernel.private literals locals math
-math.intervals namespaces sequences sequences.deep slots.private tools.test ;
+math.intervals namespaces sequences sequences.deep sets slots.private tools.test
+;
 IN: compiler.tree.propagation.slots.tests
+
+FROM: namespaces => set ;
 
 : indexize ( seq -- assoc )
     [ swap 2array ] map-index ;
@@ -206,6 +210,22 @@ ${ 5 42 [a,b] } [
     slot-query-state copy-of>> fixnum?
 ] unit-test
 
+! different objects, different slot literals with equal value, same value
+! slot accesses to any other must be unknown
+${ t f object-info } [
+    [| a b x |
+     x a 11 set-slot
+     x b 11 set-slot
+     a 11 slot
+     a 10 slot
+    ] extract-slots 2nip
+    [ [ obj-value>> ] [ slot-value>> ] bi slot-query-state ] map
+    first2
+    [ copy-of>> fixnum? ]
+    [ [ copy-of>> ] [ value-info>> ] bi ] bi*
+] unit-test
+
+! Annotating node
 { 42 } [
     [| a s1 |
      42 a s1 set-slot
