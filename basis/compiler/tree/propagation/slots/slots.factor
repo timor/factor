@@ -259,6 +259,11 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 ! So we don't update the value information on the value itself, but we can
 ! annotate the #call node's output information without changing the value-info state.
 
+: slot-call-compute-copy-equiv* ( node -- )
+    [ get-slot-call-state copy-of>> ]
+    [ out-d>> first ] bi
+    over [ is-copy-of ] [ 2drop ] if ;
+
 ! -- End of slot-state stuff
 
 : sequence-constructor? ( word -- ? )

@@ -295,3 +295,19 @@ ${ t f object-info } [
     [ length ]
     [ first value-info>> literal>> ] bi
 ] unit-test
+
+! SSA value copy computation
+
+! For copy slot, check that the SSA values of the set-slot call match with the
+! resolved output value after updating copy information
+{ t t } [
+    [| a s1 |
+     42 a s1 set-slot
+     a s1 slot ] extract-slots drop swap
+    extract-slot-calls first
+    [ slot-call-compute-copy-equiv* ]
+    [ out-d>> first resolve-copy ] bi
+    swap first copy-of>>
+    [ [ fixnum? ] both? ]
+    [ = ] 2bi
+] unit-test
