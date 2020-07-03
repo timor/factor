@@ -137,3 +137,21 @@ CONSTANT: test-val 42
     ] extract-slots
     first swap [ compare-slot-states ] with map nip
 ] unit-test
+
+{ V{ 69 70 77 80 81 } 43 } [| |
+    [| a b c s1 s2 s3 |
+     42 a s1 set-slot
+     43 a s1 set-slot
+     69 b s1 set-slot
+     70 b s2 set-slot
+     77 c s3 set-slot
+     80 c s1 set-slot
+     81 c 3 set-slot
+     a { tuple } declare
+     82 { 1 2 3 } 3 set-slot
+     a s1 slot
+    ] extract-slots :> ( nodes states queries )
+    states queries first select-aliasing
+    [ <reversed> [ value-info>> literal>> ] map ]
+    [ value-info>> literal>> ] bi*
+] unit-test

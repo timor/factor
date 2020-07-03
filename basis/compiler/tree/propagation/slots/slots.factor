@@ -161,16 +161,37 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 
 ! Whenever a set-slot call is encountered, add a slot-state entry to the list.
 
-! Determine the current state of a slot.
-:: get-slot-state ( obj-val slot-val -- slot-state/f )
-    slot-states get [| state |
-                     state obj-value>> obj-val =
-                     [ state slot-value>> slot-val = ]
-                     [ f ] if
-    ] find nip ;
 : update-slot-state ( value-val obj-val slot-val -- )
     <slot-state> slot-states get swap suffix! drop ;
 
+! * Querying Slot State
+
+! When accessing a slot value via `slot`, but also (TODO verify) when unifying
+! aliasing info at #phi nodes, the procedure to determine the current slot value
+! is as follows:
+! - Initialize new slot state with null info and the given object and slot values
+! - Iterate over the slot-states list in reverse, for each entry compare:
+!   - If the object value (copy-of) and the slot value match, return that as base case
+!   - If the state may alias, collect entry.
+!   - Otherwise ignore entry
+! - Then reduce slot-state union over the collected entries in forward order.  At
+!   this point, only `+may-alias+` entries should be present.  The unification is
+!   as follows:
+!   - If the object value differs (copy-of), set that to f
+!   - expand the state using value-info-union with the corresponding entry.
+
+:: unify-states ( base-state state -- state' )
+    base-state clone
+    [ state copy-of>> over = [ drop f ] unless ] change-copy-of
+    [ state value-info>> value-info-union ] change-value-info ;
+
+! Search seq in reverse until comparison with QUERY-STATE returns +same-slot+.
+! If found, return that slot-state, otherwise  return QUERY-STATE.  Also return
+! a sequence of all slot-states that may alias during the backwards search.
+:: select-aliasing ( seq query-state -- seq base-state )
+    [ query-state compare-slot-states +may-alias+ = ] selector :> ( picker accum )
+    seq [ picker keep query-state compare-slot-states +same-slot+ = ] find-last nip [ query-state ] unless*
+    accum swap ;
 
 ! -- End of slot-state stuff
 
@@ -231,3 +252,8 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 
 : set-slot-call-propagate-after ( node -- )
     in-d>> resolve-copies first3 update-slot-state ;
+
+! Inputs: value obj n
+M: set-slot-call propagate-after
+    [ set-slot-call-propagate-after ] keep
+    call-next-method ;
