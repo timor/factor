@@ -84,7 +84,7 @@ CONSTANT: test-val 42
 ] unit-test
 
 ! Test overwrite of slot
-{ 2 } [
+{ 1 } [
     setup-test-values
     { 2 0 1 } {  } \ set-slot <#call>
     set-slot-call-propagate-after
@@ -117,11 +117,6 @@ CONSTANT: test-val 42
     slot-states get swap extract-slot-calls
     [ in-d>> resolve-copies first2 <unknown-slot-state> ] map
     ;
-
-{ +same-slot+ } [
-    [| a! | 13 a! 14 a! ] extract-slots
-    drop first2 compare-slot-states nip
-] unit-test
 
 { +same-slot+ } [
     [| a! | 13 a! a ] extract-slots

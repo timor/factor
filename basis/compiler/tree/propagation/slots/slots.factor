@@ -165,7 +165,9 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 ! Whenever a set-slot call is encountered, add a slot-state entry to the list.
 
 : update-slot-state ( value-val obj-val slot-val -- )
-    <slot-state> slot-states get swap suffix! drop ;
+    <slot-state>
+    dup slot-states get [ compare-slot-states +same-slot+ = ] with reject!
+    push ;
 
 ! * Querying Slot State
 
