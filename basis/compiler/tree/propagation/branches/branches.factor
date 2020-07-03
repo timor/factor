@@ -2,9 +2,10 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs combinators compiler.tree
 compiler.tree.combinators compiler.tree.propagation.constraints
-compiler.tree.propagation.info compiler.tree.propagation.nodes
-compiler.tree.propagation.simple fry kernel locals math
-namespaces sequences stack-checker.branches ;
+compiler.tree.propagation.info
+compiler.tree.propagation.slots
+compiler.tree.propagation.nodes compiler.tree.propagation.simple fry kernel
+locals math namespaces sequences stack-checker.branches ;
 FROM: sets => union ;
 IN: compiler.tree.propagation.branches
 
@@ -44,7 +45,9 @@ SYMBOL: infer-children-data
 
 : copy-value-info ( -- )
     value-infos [ H{ } clone suffix ] change
-    constraints [ H{ } clone suffix ] change ;
+    constraints [ H{ } clone suffix ] change
+    slot-states [ clone ] change
+    ;
 
 : no-value-info ( -- )
     value-infos off
@@ -88,6 +91,7 @@ SYMBOL: condition-value
         constraints
         infer-children-data
         value-infos
+        slot-states
     } [ dup get ] H{ } map>assoc ;
 
 M: #phi propagate-before ( #phi -- )

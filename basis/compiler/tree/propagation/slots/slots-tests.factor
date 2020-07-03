@@ -243,3 +243,14 @@ ${ 5 42 [a,b] } [
     [ length ]
     [ [ value-info>> interval>> 5 40 [a,b] = ] all? ] bi
 ] unit-test
+
+! Test branch information
+
+! same object, same slot, different value but with same value-info
+{ 1 5 } [
+    [ [ 5 -rot set-slot ] [ 5 -rot set-slot ] if ] extract-slots 3drop
+    infer-children-data get [ slot-states of ] map
+    merge-slot-states
+    [ length ]
+    [ first value-info>> literal>> ] bi
+] unit-test
