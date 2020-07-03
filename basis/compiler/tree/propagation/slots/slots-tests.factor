@@ -1,5 +1,6 @@
 USING: accessors arrays assocs compiler.tree compiler.tree.propagation.copy
 compiler.tree.propagation.info compiler.tree.propagation.slots hashtables kernel
+sequences.deep compiler.tree.normalization
 math math.intervals namespaces sequences slots.private tools.test ;
 IN: compiler.tree.propagation.slots.tests
 

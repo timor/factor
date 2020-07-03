@@ -160,25 +160,6 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 ! * Updating Slot State
 
 ! Whenever a set-slot call is encountered, add a slot-state entry to the list.
-! For all slot accesses it can alias to, the value info is unified with the new
-! one, and the copy flag is cleared.  For all slot accesses which point to the
-! same slot, overwrite with the value information and adjust copy flag.
-
-:: update-slot-state ( value-val obj-val slot-val -- )
-    value-val obj-val slot-val <slot-state> :> new-state
-    slot-states get
-    [| state | state new-state compare-slot-states
-       {
-           { +same-slot+ [ state clone
-                           new-state value-info>> >>value-info
-                           new-state copy-of>> >>copy-of ] }
-           { +may-alias+ [ state clone [ new-state value-info>> value-info-union ]
-                           change-value-info
-                           f >>copy-of ] }
-           [ drop state ]
-       } case ] map!
-    new-state suffix! drop
-    ;
 
 ! Determine the current state of a slot.
 :: get-slot-state ( obj-val slot-val -- slot-state/f )
@@ -187,6 +168,9 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
                      [ state slot-value>> slot-val = ]
                      [ f ] if
     ] find nip ;
+: update-slot-state ( value-val obj-val slot-val -- )
+    <slot-state> slot-states get swap suffix! drop ;
+
 
 ! -- End of slot-state stuff
 
