@@ -13,6 +13,7 @@ GENERIC: annotate-node ( node -- )
 
 GENERIC: propagate-around ( node -- )
 
+! Establishes a new scope for value copy information, then walks the tree.
 : (propagate) ( nodes -- )
     [ [ compute-copy-equiv ] [ propagate-around ] bi ] each ;
 

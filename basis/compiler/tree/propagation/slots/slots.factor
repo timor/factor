@@ -139,6 +139,8 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 : merged-slot-interval ( state1 state2 -- interval )
     [ slot-info>> interval>> ] bi@ interval-intersect ;
 
+! Determine relation between two slot accesses according to the table.
+! Can be optimized to not make all tests beforehand if necessary
 :: compare-slot-states ( s1 s2 -- symbol )
     s1 s2 same-object? :> same-obj?
     s1 s2 [ literal-object? ] both? :> both-literal?
@@ -163,6 +165,7 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 ! * Updating Slot State
 
 ! Whenever a set-slot call is encountered, add a slot-state entry to the list.
+! Remove all prior states which reference the same value.
 
 : update-slot-state ( value-val obj-val slot-val -- )
     <slot-state>

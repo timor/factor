@@ -195,7 +195,15 @@ literal-infos [ IH{  } clone ] initialize
 : >literal< ( info -- literal literal? )
     [ literal>> ] [ literal?>> ] bi ;
 
-: intersect-literals ( info1 info2 -- literal literal? )
+! If info2 is not literal, return the literal status of info1
+! If info1 is not literal, return the literal status of info2
+! If both infos are literal, the specialized info will only be retained if the
+! two literals are eql.  Otherwise, the literal status is set to false.
+! NOTE: This is interesting:
+! 1. How can two conflicting literal infos collide?
+! 2. This can be used to narrow classes and intervals, but not to "change" the
+! literal value, if present.
+: intersect-literals ( infos1 info2 -- literal literal? )
     {
         { [ dup literal?>> not ] [ drop >literal< ] }
         { [ over literal?>> not ] [ nip >literal< ] }
@@ -224,6 +232,9 @@ DEFER: (value-info-intersect)
         ]
     } cond ;
 
+! The core entry point to actually processing two given value-infos into a new
+! "refined" one.  For all the different parts of the info, it applies
+! "set-intersection" semantics.
 : (value-info-intersect) ( info1 info2 -- info )
     [ <value-info> ] 2dip
     {
@@ -318,6 +329,12 @@ SYMBOL: value-infos
 : set-value-info ( info value -- )
     resolve-copy value-infos get last set-at ;
 
+! This seems to be one of the most crucial interface functions during
+! compilation.  Wherever you would be tempted to modify a value-instance in a
+! certain scope, this should be used to update any information about the value
+! in question.  The underlying mechanism is value-info-intersect, which has
+! 'set-intersection' semantics for all parts of the value info, albeit
+! independent of each other.
 : refine-value-info ( info value -- )
     resolve-copy value-infos get
     [ assoc-stack [ value-info-intersect ] when* ] 2keep
@@ -326,6 +343,8 @@ SYMBOL: value-infos
 : value-literal ( value -- obj ? )
     value-info >literal< ;
 
+! This seems to be a way to convert info into proper booleans.  Used at least
+! for constraint computation on branches.
 : possible-boolean-values ( info -- values )
     class>> {
         { [ dup null-class? ] [ { } ] }

@@ -55,6 +55,11 @@ SYMBOL: infer-children-data
 
 DEFER: collect-variables
 
+! Effective `propagte-before` of #branch nodes
+! `infer-children-data` is set to the values of the several context variables
+! after each branch.  I think together with collect-variables, it looks like
+! this creates a linked list with infer-children-data being the next field, and
+! the others being the data...
 : infer-children ( node -- )
     [ live-children ] [ child-constraints ] bi [
         [

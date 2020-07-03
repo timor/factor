@@ -7,6 +7,25 @@ IN: compiler.tree.propagation.copy
 
 SYMBOL: copies
 
+! Follows back the COPY value through the copies assoc stack, and returns the
+! original "definer".  This is used quite often, especially before "modifying"
+! value information, usually using `refine-value-info`, which also writes back
+! its information to the source copy.  That means that any "use" of a value's
+! info would also have to resolve the copies before accessing the information.
+! Just checked.  in compiler.tree.propagation.info, the `value-info` access does
+! exactly that.  Moral of the story: Never access value infos locally on a node.
+! Currently, copies are created on #renaming nodes, and on the #phi dominators
+! which always follow #branch nodes (I think).
+
+! NOTE: resolve-copy never leaves its scope.  E.g. for branches, the top
+! assoc-stack entry is cloned, so that each branch gets its own "instance" of
+! these assocs, and can modify any value associations independently from the
+! other branches or any parent scope.  On branch return/inlining return, a #copy
+! node is inserted which captures the last value-info states for the code
+! block's output values.
+
+! `compute-copy-equiv` is called before propagation at the nodes
+
 : resolve-copy ( copy -- val ) copies get compress-path ;
 
 : resolve-copies ( copies -- vals )

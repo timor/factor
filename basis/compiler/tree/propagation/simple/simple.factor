@@ -120,6 +120,12 @@ ERROR: invalid-outputs #call infos ;
         [ default-output-value-infos ]
     } cond ;
 
+! The general propagate-before annotate-node propagate-after triad for #calls:
+! 1. fold or inline or compute output value infos -> apply constraints on value infos
+! 2. annotate node with computed value-infos
+! 3. apply input class overrides to input value infos, (but not include them
+!    in the annotated info for the actual node? wtf?)
+
 M: #call propagate-before
     dup word>> {
         { [ 2dup foldable-call? ] [ fold-call ] }
