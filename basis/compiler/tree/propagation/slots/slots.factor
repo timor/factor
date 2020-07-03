@@ -107,18 +107,18 @@ TUPLE: slot-state copy-of value-info obj-value obj-info slot-value slot-info ;
 
 SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 
-! | Objects                                 | Slots                       | Merged Slot-Value-Info | Relation  |
-! |-----------------------------------------+-----------------------------+------------------------+-----------|
-! | both literal, different                 | X                           | X                      | unrelated |
-! | one literal, provably different classes | X                           | X                      | unrelated |
-! | X                                       | some literal                | Null                   | unrelated |
-! | same                                    | both non-literal, same      | not Null               | same-slot |
-! | same                                    | both non-literal, different | Singular               | same-slot |
-! | same                                    | both literal                | Singular               | same-slot |
-! | one literal                             | X                           | not Null               | may-alias |
-! | both non-literal, different             | X                           | not Null               | may-alias |
-! | same                                    | both non-literal, different | Interval               | may-alias |
-! | same                                    | some literal                | Interval               | may-alias |
+! | Objects                     | Slots                       | Merged Slot-Value-Info | Relation  |
+! |-----------------------------+-----------------------------+------------------------+-----------|
+! | both literal, different     | X                           | X                      | unrelated |
+! | provably different classes  | X                           | X                      | unrelated |
+! | X                           | some literal                | Null                   | unrelated |
+! | same                        | both non-literal, same      | not Null               | same-slot |
+! | same                        | both non-literal, different | Singular               | same-slot |
+! | same                        | both literal                | Singular               | same-slot |
+! | one literal                 | X                           | not Null               | may-alias |
+! | both non-literal, different | X                           | not Null               | may-alias |
+! | same                        | both non-literal, different | Interval               | may-alias |
+! | same                        | some literal                | Interval               | may-alias |
 
 : same-object? ( s1 s2 -- ? ) [ obj-value>> ] bi@ = ;
 
@@ -146,7 +146,7 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
     s1 s2 different-object-classes? :> disjunct-classes?
     s1 s2 merged-slot-interval :> merged-interval
     { { [ both-literal? same-obj? not and ] [ +unrelated+ ] }
-      { [ some-literal? disjunct-classes? and ] [ +unrelated+ ] }
+      { [ disjunct-classes? ] [ +unrelated+ ] }
       { [ merged-interval empty-interval? ] [ +unrelated+ ] }
       { [ same-obj? both-slots-non-literal? and
           same-slot-value? and ] [ +same-slot+ ] }
