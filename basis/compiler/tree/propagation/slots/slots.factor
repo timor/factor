@@ -4,7 +4,7 @@ USING: accessors arrays byte-arrays classes classes.algebra classes.tuple
 classes.tuple.private combinators combinators.short-circuit compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.nodes kernel locals math math.intervals namespaces
-sequences slots.private strings words ;
+sequences sequences.merged slots.private strings words ;
 IN: compiler.tree.propagation.slots
 
 ! * Optimizing Local Slot Accesses
@@ -209,6 +209,27 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
     [ in-d>> resolve-copies first2 slot-query-state value-info>> ]
     [ out-d>> first ] bi
     refine-value-info ;
+
+! * Merge Slot States at #phi nodes
+
+! Like other control-flow related context, slot states of different execution
+! branches need to be merged at #phi nodes.  This works as follows:
+! - Map each member of the merged set of slot-states:
+!   - For each other member of the merged set:
+!     - compare both, if either 'same-slot' or 'may-alias', unify
+
+
+! From a sequence of slot-states sequences, compute the slot-states which
+! represent the union of all of those
+:: merge-slot-states ( seq -- states )
+    ! NOTE: for some reason, members of <merged> returns something different
+    ! than members of concat!
+    ! seq <merged> dup :> all-states
+    seq concat members dup :> all-states
+    [| base-state | all-states [ base-state compare-slot-states +unrelated+ = ] reject
+        base-state [ unify-states ] reduce
+    ] map members ;
+
 
 ! -- End of slot-state stuff
 

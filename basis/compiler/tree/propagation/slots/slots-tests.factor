@@ -216,3 +216,30 @@ ${ 5 42 [a,b] } [
     [ annotate-node ]
     [ node-output-infos first literal>> ] tri
 ] unit-test
+
+! Merging sets of states
+
+! 3 identical sets of unrelated accesses merged should be equal to the original
+{ t } [
+    [| a b c |
+     10 a 1 set-slot
+     20 b 2 set-slot
+     30 { 1 2 3 } 3 set-slot
+    ] extract-slots drop nip
+    dup dup 3array merge-slot-states
+    slot-states get set=
+] unit-test
+
+{ 4 t } [
+    [| a b s1 s2 |
+     10 a s1 set-slot
+     20 b s2 set-slot
+    ] extract-slots drop nip
+    [| a b s1 s2 |
+     5 a s1 set-slot
+     40 b s2 set-slot
+    ] extract-slots drop nip
+    2array merge-slot-states
+    [ length ]
+    [ [ value-info>> interval>> 5 40 [a,b] = ] all? ] bi
+] unit-test
