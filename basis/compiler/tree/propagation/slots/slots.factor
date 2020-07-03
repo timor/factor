@@ -204,11 +204,17 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
     slot-states get swap select-aliasing
     [ unify-states ] reduce ;
 
+: get-slot-call-state ( node -- state )
+    in-d>> resolve-copies first2 slot-query-state ;
+
 ! * Update Slot Call Node Information
-: update-slot-call-outputs ( node -- )
-    [ in-d>> resolve-copies first2 slot-query-state value-info>> ]
-    [ out-d>> first ] bi
-    refine-value-info ;
+
+! TODO: update copy info when branching works correctly
+: refine-slot-call-outputs ( node -- )
+    [ out-d>> first ] keep
+    get-slot-call-state [ value-info>> ] [ copy-of>> ] bi
+    [ 2drop ]
+    [ swap refine-value-info ] if ;
 
 ! * Merge Slot States at #phi nodes
 
@@ -230,6 +236,28 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
         base-state [ unify-states ] reduce
     ] map members ;
 
+! * TODO Update slot value info for known copies of
+
+! In order to be able to track identities through local slot accesses, the value
+! copy information must be updated.  Copy information usually comes into play
+! before propagation of #renaming nodes.
+! We should be actually be able to support this by letting a `slot`
+! #call behave like a #renaming node.
+
+! TODO Care must be taken to not mess up value info annotation here.  E.g. if we
+! update value-info, this is always traced back to the resolved copy.
+
+! This means there are two cases for a `slot` #call
+! 1. We prove that this is just a copy of an existing value
+! 2. We don't prove that this is just a copy of an existing value
+
+! In the second case, we simply behave like any #call node should, and set the
+! value info on the output values.
+! In the first case, we additionally behave like a #renaming node first.  This
+! means that when we update the value information, we would overwrite/narrow the
+! existing value information if it differs (TODO: build in check whether it differs).
+! So we don't update the value information on the value itself, but we can
+! annotate the #call node's output information without changing the value-info state.
 
 ! -- End of slot-state stuff
 

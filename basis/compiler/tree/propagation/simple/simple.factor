@@ -127,7 +127,14 @@ M: #call propagate-before
             [ output-value-infos ] [ drop out-d>> ] 2bi refine-value-infos
         ] }
         [
-            [ [ output-value-infos ] [ drop out-d>> ] 2bi set-value-infos ]
+            ! NOTE: changed the following from `set-value-infos` to
+            ! `refine-value-infos` because in the case of a call to `slot`, we
+            ! may set up the output value to be a copy of something else, which
+            ! would then get overwritten here.  If this is a performace hit,
+            ! then we can simply not call this here from the method specialized
+            ! on `slot-call`. TODO: check peformance impact (Quick'n dirty
+            ! interactive test suggests refine-value-infos is faster???)
+            [ [ output-value-infos ] [ drop out-d>> ] 2bi refine-value-infos ]
             [ compute-constraints ]
             2bi
         ]

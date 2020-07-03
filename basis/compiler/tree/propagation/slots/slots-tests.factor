@@ -225,14 +225,35 @@ ${ t f object-info } [
     [ [ copy-of>> ] [ value-info>> ] bi ] bi*
 ] unit-test
 
-! Annotating node
-{ 42 } [
+! Annotating nodes
+
+! If we create a copy, we don't actually modify the value-info states
+{ t 42 f } [
     [| a s1 |
      42 a s1 set-slot
      a s1 slot
+    ] extract-slots nip
+    first [ obj-value>> ] [ slot-value>> ] bi slot-query-state
+    [ copy-of>> fixnum? ] [ value-info>> literal>> ] bi
+    rot
+    extract-slot-calls first
+    [ refine-slot-call-outputs ]
+    [ annotate-node ]
+    [ node-output-infos first literal>> ] tri
+] unit-test
+
+! If we don't create a copy, we modify the value-info states.  This happens if
+! we alias, but infer the same value info.
+{ 42 } [
+    [| a b s1 s2 |
+     42 a s1 set-slot
+     42 b s1 set-slot
+     42 a s2 set-slot
+     42 b s2 set-slot
+     a s1 slot
     ] extract-slots 2drop
     extract-slot-calls first
-    [ update-slot-call-outputs ]
+    [ refine-slot-call-outputs ]
     [ annotate-node ]
     [ node-output-infos first literal>> ] tri
 ] unit-test
