@@ -1,9 +1,9 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays assocs byte-arrays classes classes.algebra classes.tuple
+USING: accessors arrays byte-arrays classes classes.algebra classes.tuple
 classes.tuple.private combinators combinators.short-circuit compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
-compiler.tree.propagation.nodes fry kernel locals math math.intervals namespaces
+compiler.tree.propagation.nodes kernel locals math math.intervals namespaces
 sequences slots.private strings words ;
 IN: compiler.tree.propagation.slots
 
@@ -100,6 +100,9 @@ TUPLE: slot-state copy-of value-info obj-value obj-info slot-value slot-info ;
 : <slot-state> ( value-val obj-val slot-val -- obj )
     [ dup value-info ] tri@ slot-state boa ;
 
+: <unknown-slot-state> ( obj-val slot-val -- obj )
+    [ f object-info ] 2dip [ dup value-info ] bi@ slot-state boa ;
+
 ! Merging slot states:  During different branches, different slot accesses could
 ! have been made.
 
@@ -195,9 +198,15 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 
 ! Return the slot state of a slot read access for a given obj-value and slot-value
 : slot-query-state ( obj-value slot-value -- state )
-    [ f ] 2dip <slot-state>
+    <unknown-slot-state>
     slot-states get swap select-aliasing
     [ unify-states ] reduce ;
+
+! * Update Slot Call Node Information
+: update-slot-call-outputs ( node -- )
+    [ in-d>> resolve-copies first2 slot-query-state value-info>> ]
+    [ out-d>> first ] bi
+    refine-value-info ;
 
 ! -- End of slot-state stuff
 

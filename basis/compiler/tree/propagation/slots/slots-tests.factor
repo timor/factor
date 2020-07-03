@@ -109,10 +109,13 @@ CONSTANT: test-val 42
     build-tree analyze-recursive normalize propagate
     cleanup-tree ;
 
+: extract-slot-calls ( nodes -- seq )
+    [ dup slot-call? [ drop f ] unless ] map-nodes flatten ;
+
 : extract-slots ( quot -- nodes slot-states query-states )
     propagated-tree dup
-    slot-states get swap [ dup slot-call? [ drop f ] unless ] map-nodes flatten
-    [ f swap in-d>> resolve-copies first2 <slot-state> ] map
+    slot-states get swap extract-slot-calls
+    [ in-d>> resolve-copies first2 <unknown-slot-state> ] map
     ;
 
 { +same-slot+ } [
@@ -206,4 +209,15 @@ ${ 5 42 [a,b] } [
     ] extract-slots 2nip
     first [ obj-value>> ] [ slot-value>> ] bi
     slot-query-state copy-of>> fixnum?
+] unit-test
+
+{ 42 } [
+    [| a s1 |
+     42 a s1 set-slot
+     a s1 slot
+    ] extract-slots 2drop
+    extract-slot-calls first
+    [ update-slot-call-outputs ]
+    [ annotate-node ]
+    [ node-output-infos first literal>> ] tri
 ] unit-test
