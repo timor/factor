@@ -193,6 +193,12 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
     seq [ picker keep query-state compare-slot-states +same-slot+ = ] find-last nip [ query-state ] unless*
     accum swap ;
 
+! Return the slot state of a slot read access for a given obj-value and slot-value
+: slot-query-state ( obj-value slot-value -- state )
+    [ f ] 2dip <slot-state>
+    slot-states get swap select-aliasing
+    [ unify-states ] reduce ;
+
 ! -- End of slot-state stuff
 
 : sequence-constructor? ( word -- ? )

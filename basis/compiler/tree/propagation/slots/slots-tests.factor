@@ -1,7 +1,9 @@
-USING: accessors arrays assocs compiler.tree compiler.tree.propagation.copy
-compiler.tree.propagation.info compiler.tree.propagation.slots hashtables kernel
-sequences.deep compiler.tree.normalization
-math math.intervals namespaces sequences slots.private tools.test ;
+USING: accessors arrays assocs compiler.tree compiler.tree.builder
+compiler.tree.cleanup compiler.tree.combinators compiler.tree.normalization
+compiler.tree.propagation compiler.tree.propagation.copy
+compiler.tree.propagation.info compiler.tree.propagation.slots
+compiler.tree.recursive hashtables kernel kernel.private literals locals math
+math.intervals namespaces sequences sequences.deep slots.private tools.test ;
 IN: compiler.tree.propagation.slots.tests
 
 : indexize ( seq -- assoc )
@@ -138,6 +140,20 @@ CONSTANT: test-val 42
     first swap [ compare-slot-states ] with map nip
 ] unit-test
 
+{ V{ +same-slot+ +unrelated+ +unrelated+ +unrelated+ +unrelated+ } } [
+    [| a b s1 s2 |
+     a { tuple } declare
+     b { array } declare
+     10 a s1 set-slot
+     11 b s1 set-slot
+     12 b s2 set-slot
+     20 { 1 2 3 } s1 set-slot
+     30 { 1 2 3 } s2 set-slot
+     a s1 slot
+    ] extract-slots
+    first swap [ compare-slot-states ] with map nip
+] unit-test
+
 { V{ 69 70 77 80 81 } 43 } [| |
     [| a b c s1 s2 s3 |
      42 a s1 set-slot
@@ -154,4 +170,40 @@ CONSTANT: test-val 42
     states queries first select-aliasing
     [ <reversed> [ value-info>> literal>> ] map ]
     [ value-info>> literal>> ] bi*
+] unit-test
+
+${ 5 42 [a,b] } [
+    [| a b c s1 s2 s3 |
+     a { tuple } declare
+     5 a s1 set-slot
+     13 b s2 set-slot
+     99 { 1 2 3 4 } s3 set-slot
+     42 c s3 set-slot
+     a s1 slot
+    ] extract-slots 2nip
+    first [ obj-value>> ] [ slot-value>> ] bi
+    slot-query-state value-info>> interval>>
+] unit-test
+
+{ t } [
+    [| a b s1 s2 |
+     a { tuple } declare
+     b { array } declare
+     5 a s1 set-slot
+     6 b s2 set-slot
+     a s1 slot
+    ] extract-slots 2nip
+    first [ obj-value>> ] [ slot-value>> ] bi
+    slot-query-state copy-of>> fixnum?
+] unit-test
+
+{ t } [
+    [| a b s1 s2 |
+     a { tuple } declare
+     10 a s1 set-slot
+     a b s2 set-slot
+     b s2 slot
+    ] extract-slots 2nip
+    first [ obj-value>> ] [ slot-value>> ] bi
+    slot-query-state copy-of>> fixnum?
 ] unit-test
