@@ -4,7 +4,7 @@ USING: accessors arrays byte-arrays classes classes.algebra classes.tuple
 classes.tuple.private combinators combinators.short-circuit compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.nodes kernel locals math math.intervals namespaces
-sequences sequences.merged slots.private strings words ;
+sequences sequences.merged sets slots.private strings words ;
 IN: compiler.tree.propagation.slots
 
 ! * Optimizing Local Slot Accesses
@@ -95,6 +95,8 @@ PREDICATE: set-slot-call < #call word>> \ set-slot = ;
 
 
 SYMBOL: slot-states
+! NOTE: Initializing here to be able to call refresh-all from master branch image
+slot-states [ V{  } clone ] initialize
 TUPLE: slot-state copy-of value-info obj-value obj-info slot-value slot-info ;
 
 : <slot-state> ( value-val obj-val slot-val -- obj )
@@ -266,6 +268,13 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
     [ get-slot-call-state copy-of>> ]
     [ out-d>> first ] bi
     over [ is-copy-of ] [ 2drop ] if ;
+
+M: slot-call compute-copy-equiv*
+    [ call-next-method ] keep
+    slot-call-compute-copy-equiv*
+    ! drop
+    ;
+
 
 ! -- End of slot-state stuff
 

@@ -111,7 +111,8 @@ CONSTANT: test-val 42
 
 : propagated-tree ( quot -- nodes )
     build-tree analyze-recursive normalize propagate
-    cleanup-tree ;
+    ! cleanup-tree
+    ;
 
 : extract-slot-calls ( nodes -- seq )
     [ dup slot-call? [ drop f ] unless ] map-nodes flatten ;
@@ -227,8 +228,8 @@ ${ t f object-info } [
 
 ! Annotating nodes
 
-! If we create a copy, we don't actually modify the value-info states
-{ t 42 f } [
+! Output info is set via copying info
+{ t 42 42 } [
     [| a s1 |
      42 a s1 set-slot
      a s1 slot
@@ -294,6 +295,24 @@ ${ t f object-info } [
     merge-slot-states
     [ length ]
     [ first value-info>> literal>> ] bi
+] unit-test
+
+! same object, same slot, different value-info
+${ 1 4 8 [a,b] } [
+    [ [ 4 -rot set-slot ] [ 8 -rot set-slot ] if ] extract-slots 3drop
+    infer-children-data get [ slot-states of ] map
+    merge-slot-states
+    [ length ]
+    [ first value-info>> interval>> ] bi
+] unit-test
+
+! same thing, but with locals.
+${ 2 4 8 [a,b] dup } [
+    [| a! | [ 4 a! ] [ 8 a! ] if a ] extract-slots 3drop
+    infer-children-data get [ slot-states of ] map
+    merge-slot-states
+    [ length ]
+    [ [ value-info>> interval>> ] map first2 ] bi
 ] unit-test
 
 ! SSA value copy computation
