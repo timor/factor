@@ -169,8 +169,7 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 ! Whenever a set-slot call is encountered, add a slot-state entry to the list.
 ! Remove all prior states which reference the same value.
 
-: update-slot-state ( value-val obj-val slot-val -- )
-    <slot-state>
+: update-slot-state ( slot-state -- )
     dup slot-states get [ compare-slot-states +same-slot+ = ] with reject!
     push ;
 
@@ -334,7 +333,7 @@ M: slot-call compute-copy-equiv*
     } cond [ object-info ] unless* ;
 
 : set-slot-call-propagate-after ( node -- )
-    in-d>> resolve-copies first3 update-slot-state ;
+    in-d>> resolve-copies first3 slot-call-update-slot-state ; inline
 
 ! Inputs: value obj n
 M: set-slot-call propagate-after

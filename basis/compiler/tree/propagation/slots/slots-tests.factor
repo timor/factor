@@ -64,14 +64,14 @@ CONSTANT: test-val 42
     V{  } clone slot-states set
     ;
 
-! Testing update-slot-state
+! Testing slot-call-update-slot-state
 { 1 } [
     setup-test-values
-    2 0 1 update-slot-state
+    2 0 1 slot-call-update-slot-state
     slot-states get length
 ] unit-test
 
-! Test effect of update-slot-state in propagate-after
+! Test effect of slot-call-update-slot-state in propagate-after
 { 1 } [
     setup-test-values
     { 2 0 1 } {  } \ set-slot <#call>
