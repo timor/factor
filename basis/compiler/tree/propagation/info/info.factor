@@ -3,7 +3,8 @@
 USING: accessors arrays assocs byte-arrays classes
 classes.algebra classes.singleton classes.tuple
 classes.tuple.private combinators combinators.short-circuit
-compiler.tree.propagation.copy compiler.utilities kernel layouts math
+compiler.tree.propagation.copy compiler.utilities kernel
+hashtables.identity layouts math
 math.intervals namespaces sequences sequences.private strings
 words ;
 IN: compiler.tree.propagation.info
@@ -50,9 +51,14 @@ CONSTANT: object-info T{ value-info-state f object full-interval }
 
 DEFER: <literal-info>
 
+! Why is slot info limited to read-only slots?  It must be a precaution because
+! subsequent set-slot accesses haven't been tracked yet, since the only code
+! path that ends up here is through literal tuple info.
+! It looks like it was done in f2ec59d6589d8bf94032ba26a9ad2c01fa8068b0 for
+! fixing an infinite recursion problem with circular slots.  Note that we should
+! be able to fix this by keeping track of copy information.
 : tuple-slot-infos ( tuple -- slots )
-    [ tuple-slots ] [ class-of all-slots ] bi
-    [ read-only>> [ <literal-info> ] [ drop f ] if ] 2map
+    tuple-slots [ <literal-info> ] map
     f prefix ;
 
 UNION: fixed-length array byte-array string ;
@@ -124,6 +130,11 @@ UNION: fixed-length array byte-array string ;
     dup [ interval>> full-interval or ] [ class>> ] bi wrap-interval >>interval
     dup class>> integer class<= [ [ integral-closure ] change-interval ] when ; inline
 
+! This is called on a value-info state whenever it has been (partially) created,
+! or after value-info intersection and union operations.  It normalizes the
+! value info to ensure things like singleton intervals being converted to
+! literals. (TODO rem this note once applicable)  At the moment, it will also
+! destroy any value info on non-read-only slots of tuple literals.
 : init-value-info ( info -- info )
     dup literal?>> [
         init-literal-info
@@ -154,11 +165,20 @@ UNION: fixed-length array byte-array string ;
         swap >>interval
     init-value-info ; foldable
 
+! Keep track of value-info states that are created for literals.  Used for recursion
+! detection.
+SYMBOL: literal-infos
+! Initializing to allow refresh-all from branch
+literal-infos [ IH{  } clone ] initialize
+
 : <literal-info> ( literal -- info )
-    <value-info>
-        swap >>literal
-        t >>literal?
-    init-value-info ; foldable
+    literal-infos get ?at [  ]
+    [ literal-infos get [ <value-info>
+                        swap >>literal
+                        t >>literal?
+                        ] cache
+      init-value-info
+    ] if ;
 
 : <sequence-info> ( length class -- info )
     <value-info>

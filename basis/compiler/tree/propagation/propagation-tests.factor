@@ -934,7 +934,8 @@ TUPLE: littledan-2 { from read-only } { to read-only } ;
 ! Mutable tuples with circularity should not cause problems
 TUPLE: circle me ;
 
-{ } [ circle new dup >>me 1quotation final-info drop ] unit-test
+{ circle } [ circle new dup >>me 1quotation final-info
+             first slots>> second class>> ] unit-test
 
 ! Joe found an oversight
 { V{ integer } } [ [ >integer ] final-classes ] unit-test

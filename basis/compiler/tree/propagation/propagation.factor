@@ -13,10 +13,12 @@ compiler.tree.propagation.nodes
 compiler.tree.propagation.recursive
 compiler.tree.propagation.simple
 compiler.tree.propagation.transforms
+hashtables.identity
 kernel namespaces ;
 IN: compiler.tree.propagation
 
 : propagate ( nodes -- nodes )
+    IH{ } clone literal-infos set
     H{ } clone copies set
     H{ } clone 1array value-infos set
     H{ } clone 1array constraints set
