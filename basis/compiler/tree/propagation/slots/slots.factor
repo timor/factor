@@ -15,8 +15,10 @@ IN: compiler.tree.propagation.slots
 ! multithreading context, we would have to "delete" that assumption if there is
 ! any synchronization primitive before a slot call.
 
+! TODO: maybe use eq? instead of =
 PREDICATE: slot-call < #call word>> \ slot = ;
 PREDICATE: set-slot-call < #call word>> \ set-slot = ;
+PREDICATE: tuple-boa-call < #call word>> \ <tuple-boa> = ;
 
 ! * Implementation Strategy
 ! The `slot-states` context variable holds mappings from SSA-values representing
@@ -105,6 +107,9 @@ TUPLE: slot-state copy-of value-info obj-value obj-info slot-value slot-info ;
 : <unknown-slot-state> ( obj-val slot-val -- obj )
     [ f object-info ] 2dip [ dup value-info ] bi@ slot-state boa ;
 
+: <tuple-boa-slot-state> ( value-val tuple-val slot-n -- obj )
+    [ dup value-info ] dup [ <literal-info> f swap ] tri* slot-state boa ;
+
 ! Merging slot states:  During different branches, different slot accesses could
 ! have been made.
 
@@ -172,6 +177,9 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 : update-slot-state ( slot-state -- )
     dup slot-states get [ compare-slot-states +same-slot+ = ] with reject!
     push ;
+
+: slot-call-update-slot-state ( value-val obj-val slot-val -- )
+    <slot-state> update-slot-state ;
 
 ! * Querying Slot State
 
@@ -360,4 +368,15 @@ M: slot-call compute-copy-equiv*
 ! Inputs: value obj n
 M: set-slot-call propagate-after
     [ set-slot-call-propagate-after ] keep
+    call-next-method ;
+
+: tuple-boa-call-propagate-after ( node -- )
+    [ out-d>> ]
+    [ in-d>> but-last resolve-copies ] bi
+    [| in-value out-value slot-n |
+     in-value out-value slot-n 1 + <tuple-boa-slot-state> update-slot-state
+    ] with each-index ;
+
+M: tuple-boa-call propagate-after
+    [ tuple-boa-call-propagate-after ] keep
     call-next-method ;

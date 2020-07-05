@@ -137,6 +137,9 @@ ${ 1 0 } [
 : extract-slot-calls ( nodes -- seq )
     [ dup slot-call? [ drop f ] unless ] map-nodes flatten ;
 
+: extract-tuple-boa-calls ( nodes -- seq )
+    [ dup tuple-boa-call? [ drop f ] unless ] map-nodes flatten ;
+
 : extract-slots ( quot -- nodes slot-states query-states )
     propagated-tree dup
     slot-states get swap extract-slot-calls
@@ -437,4 +440,28 @@ ${ 2 4 5 [a,b] } [
     swap first copy-of>>
     [ [ fixnum? ] both? ]
     [ = ] 2bi
+] unit-test
+
+! * Tuple-boa and tuple literal slot info
+
+TUPLE: mixed { ro read-only } rw ;
+
+! Propagating SSA value copy information on literal tuples
+{ V{ t t } 2 } [
+    [| x | x dup dup mixed boa ] propagated-tree
+    [ last in-d>> first resolve-copy ] keep
+    extract-tuple-boa-calls first
+    tuple-boa-call-propagate-after
+    slot-states get
+    [ [ copy-of>> = ] with map ]
+    [ length ] bi
+] unit-test
+
+! Same with method call
+{ V{ t t } 2 } [
+    [| x | x dup dup mixed boa ] propagated-tree
+    last in-d>> first resolve-copy
+    slot-states get
+    [ [ copy-of>> = ] with map ]
+    [ length ] bi
 ] unit-test
