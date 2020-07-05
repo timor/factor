@@ -315,7 +315,35 @@ ${ 2 4 8 [a,b] dup } [
     [ [ value-info>> interval>> ] map first2 ] bi
 ] unit-test
 
-! SSA value copy computation
+! same thing, using the interface function from branches
+${ 2 4 8 [a,b] dup } [
+    [| a! | [ 4 a! ] [ 8 a! ] if a ] extract-slots 3drop
+    branch-slot-states
+    slot-states get
+    [ length ]
+    [ [ value-info>> interval>> ] map first2 ] bi
+] unit-test
+
+${ 2 4 8 [a,b] dup } [
+    [| a! | [ 4 a! ] [ 8 a! ] if a ] extract-slots 3drop
+    slot-states get dup .
+    [ length ]
+    [ [ value-info>> interval>> ] map first2 ] bi
+] unit-test
+
+! Setting value before the branch, overriding in one
+! NOTE: after tracking through currieds work, this should only contain 1 slot
+! state
+${ 2 4 5 [a,b] } [
+    [| a! | 4 a! [ 5 a! ] [  ] if a ] extract-slots 3drop
+    infer-children-data get [ slot-states of ] map
+    slot-states get suffix
+    merge-slot-states
+    [ length ]
+    [ first value-info>> interval>> ] bi
+] unit-test
+
+! * SSA value copy computation
 
 ! For copy slot, check that the SSA values of the set-slot call match with the
 ! resolved output value after updating copy information

@@ -182,6 +182,10 @@ M: #phi propagate-before ( #phi -- )
         [ 3drop f ]
     } case assume ;
 
+: branch-slot-states ( -- )
+    infer-children-data get [ slot-states of ] map
+    merge-slot-states slot-states set ;
+
 M: #phi propagate-after ( #phi -- )
     condition-value get [
         [ out-d>> ]
@@ -191,6 +195,7 @@ M: #phi propagate-after ( #phi -- )
             [ possible-boolean-values ] map
             branch-phi-constraints
         ] 3each
+        branch-slot-states
     ] [ drop ] if ;
 
 M: #branch propagate-around
