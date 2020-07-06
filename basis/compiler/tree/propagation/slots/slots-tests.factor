@@ -47,6 +47,10 @@ FROM: namespaces => set ;
     propagate-sequence-constructor first
 ] unit-test
 
+: alias-relations ( slot-states -- assoc )
+    dup dup [ [ compare-slot-states ] keep 2array ] cartesian-map zip
+    [ [ first ] group-by [ [ second ] map ] assoc-map >hashtable ] assoc-map >hashtable ;
+
 TUPLE: dummy a ;
 CONSTANT: test-slot 5
 CONSTANT: test-val 42
