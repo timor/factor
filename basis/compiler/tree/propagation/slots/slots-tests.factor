@@ -87,7 +87,23 @@ CONSTANT: test-val 42
     2 0 1 <slot-state> compare-slot-states
 ] unit-test
 
-! Test overwrite of slot
+! * Test removing assumptions when tuple escapes
+
+: dummy-user ( obj -- ) { dummy } declare [ 1 + ] change-a drop ;
+
+! Feeding copy of tuple to call, can be anything afterwards
+${ 1 0 } [
+    setup-test-values
+    { 2 0 1 } {  } \ set-slot <#call>
+    set-slot-call-propagate-after
+    slot-states get length
+    { 0 } { } \ dummy-user <#call>
+    [ [ compute-copy-equiv ] [ propagate-around ] bi ] keep
+    invalidate-slot-states
+    slot-states get length
+] unit-test
+
+! * Test overwrite of slot
 { 1 } [
     setup-test-values
     { 2 0 1 } {  } \ set-slot <#call>
@@ -97,7 +113,7 @@ CONSTANT: test-val 42
     slot-states get length
 ] unit-test
 
-! Test non-override of slot
+! * Test non-override of slot
 { 3 } [
     setup-test-values
     { 2 0 1 } {  } \ set-slot <#call>
@@ -286,7 +302,57 @@ ${ t f object-info } [
     [ [ value-info>> interval>> 5 40 [a,b] = ] all? ] bi
 ] unit-test
 
-! Test branch information
+! * More testing of removing assumptions on escape
+
+! Everything aliases, nothing can be assumed
+${ 0 object-info dup dup dup  } [
+    [| a b s1 s2 |
+    10 a s1 set-slot
+    11 a s2 set-slot
+    20 b s1 set-slot
+    21 b s2 set-slot
+    a dummy-user
+    a s1 slot
+    a s2 slot
+    b s1 slot
+    b s2 slot ] propagated-tree
+    extract-slot-calls slot-states get swap
+    [ length ] [ [ out-d>> first value-info ] map first4 ] bi*
+] unit-test
+
+! test that unrelated info is unrelated
+{ { 0 0 2 2  } } [
+    [| a b s1 s2 |
+     10 a { dummy } declare s1 set-slot
+     11 a { dummy } declare s2 set-slot
+     20 b { array } declare s1 set-slot
+     21 b { array } declare s2 set-slot
+     a { dummy } declare dummy-user
+     a s1 slot
+     a s2 slot
+     b s1 slot
+     b s2 slot ] propagated-tree
+    extract-slot-calls
+    [ in-d>> resolve-copies first ] map
+    [ obj-aliasing-slot-states ] map
+    [ length ] map
+] unit-test
+
+{ 2 } [
+    [| a b s1 s2 |
+     10 a { dummy } declare s1 set-slot
+     11 a { dummy } declare s2 set-slot
+     20 b { array } declare s1 set-slot
+     21 b { array } declare s2 set-slot
+     a dummy-user
+     a s1 slot
+     a s2 slot
+     b s1 slot
+     b s2 slot ] propagated-tree drop
+    slot-states get length
+] unit-test
+
+! * Test branch information
 
 ! same object, same slot, different value but with same value-info
 { 1 5 } [

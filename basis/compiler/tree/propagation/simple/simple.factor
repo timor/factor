@@ -153,6 +153,7 @@ M: #call annotate-node
     swap in-d>> refine-value-infos ;
 
 M: #call propagate-after
+    dup call-invalidate-slot-states
     dup word>> word>input-infos propagate-input-infos ;
 
 : propagate-alien-invoke ( node -- )

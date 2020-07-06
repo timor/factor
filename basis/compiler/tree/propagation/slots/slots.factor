@@ -3,7 +3,7 @@
 USING: accessors arrays byte-arrays classes classes.algebra classes.tuple
 classes.tuple.private combinators combinators.short-circuit compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
-compiler.tree.propagation.nodes kernel locals math math.intervals namespaces
+compiler.tree.propagation.nodes fry kernel locals math math.intervals namespaces
 sequences sequences.merged sets slots.private strings words ;
 IN: compiler.tree.propagation.slots
 
@@ -219,6 +219,28 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
     get-slot-call-state [ value-info>> ] [ copy-of>> ] bi
     [ 2drop ]
     [ swap refine-value-info ] if ;
+
+! * Remove Assumptions when tuple escapes
+
+ERROR: internal-slot-invalidation-error ;
+
+: obj-aliasing-slot-states ( obj-value -- slot-states )
+    slot-states get [ obj-value>> = ] with filter
+    slot-states get '[ _ swap select-aliasing suffix ] map concat
+    members ;
+
+! For any object that we assume to know anything about its slots, if it is
+! passed to a call, we have to assume that it does whatever with the values, so
+! we delete the slot states and any that it may alias to.
+: invalidate-slot-states ( #call -- )
+    in-d>> resolve-copies
+    [ obj-aliasing-slot-states
+      slot-states get swap diff! drop
+    ] each ;
+
+: call-invalidate-slot-states ( #call -- )
+    dup word>> [ foldable? ] [ flushable? ] [ \ set-slot eq? ] tri or or
+    [ drop ] [ invalidate-slot-states ] if ;
 
 ! * Merge Slot States at #phi nodes
 
