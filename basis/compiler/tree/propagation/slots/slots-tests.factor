@@ -143,6 +143,16 @@ ${ 1 0 } [
     [ in-d>> resolve-copies first2 <unknown-slot-state> ] map
     ;
 
+! * Testing determining aliasing slot calls
+! Testing whether we broke compilation of `extract-slots` and `extract-slot-calls`
+{ +same-slot+ } [
+    [| a! | 13 a! a ]
+    propagated-tree dup
+    slot-states get swap [ dup slot-call? [ drop f ] unless ] map-nodes flatten
+    [ in-d>> resolve-copies first2 <unknown-slot-state> ] map
+    [ first ] bi@ compare-slot-states nip
+] unit-test
+
 { +same-slot+ } [
     [| a! | 13 a! a ] extract-slots
     [ first ] bi@ compare-slot-states nip
