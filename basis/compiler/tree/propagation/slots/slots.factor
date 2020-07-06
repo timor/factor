@@ -4,7 +4,7 @@ USING: accessors arrays byte-arrays classes classes.algebra classes.tuple
 classes.tuple.private combinators combinators.short-circuit compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.nodes fry kernel locals math math.intervals namespaces
-sequences sequences.merged sets slots.private strings words ;
+sequences sets slots.private sorting strings words ;
 IN: compiler.tree.propagation.slots
 
 ! * Optimizing Local Slot Accesses
@@ -101,14 +101,20 @@ SYMBOL: slot-states
 slot-states [ V{  } clone ] initialize
 TUPLE: slot-state copy-of value-info obj-value obj-info slot-value slot-info ;
 
+! Return the value which the slot contains a copy of, f otherwise
+: slot-copy ( slot-state -- value/f )
+    copy-of>> dup length 1 = [ first ] [ drop f ] if ;
+
 : <slot-state> ( value-val obj-val slot-val -- obj )
-    [ dup value-info ] tri@ slot-state boa ;
+    [ [ 1array ] [ value-info ] bi ]
+    [ dup value-info ]
+    dup tri* slot-state boa ;
 
 : <unknown-slot-state> ( obj-val slot-val -- obj )
-    [ f object-info ] 2dip [ dup value-info ] bi@ slot-state boa ;
+    [ { } clone object-info ] 2dip [ dup value-info ] bi@ slot-state boa ;
 
 : <tuple-boa-slot-state> ( value-val tuple-val slot-n -- obj )
-    [ dup value-info ] dup [ <literal-info> f swap ] tri* slot-state boa ;
+    [ [ 1array ] [ value-info ] bi ] dup [ <literal-info> f swap ] tri* slot-state boa ;
 
 ! Merging slot states:  During different branches, different slot accesses could
 ! have been made.
@@ -194,12 +200,12 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 ! - Then reduce slot-state union over the collected entries in forward order.  At
 !   this point, only `+may-alias+` entries should be present.  The unification is
 !   as follows:
-!   - If the object value differs (copy-of), set that to f
+!   - If the object value differs (copy-of), store the additional copy.
 !   - expand the state using value-info-union with the corresponding entry.
 
 :: unify-states ( base-state state -- state' )
     base-state clone
-    [ state copy-of>> over = [ drop f ] unless ] change-copy-of
+    [ state copy-of>> union natural-sort ] change-copy-of
     [ state value-info>> value-info-union ] change-value-info ;
 
 ! Search seq in reverse until comparison with QUERY-STATE returns +same-slot+.
@@ -224,7 +230,7 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 ! TODO: update copy info when branching works correctly
 : refine-slot-call-outputs ( node -- )
     [ out-d>> first ] keep
-    get-slot-call-state [ value-info>> ] [ copy-of>> ] bi
+    get-slot-call-state [ value-info>> ] [ slot-copy ] bi
     [ 2drop ]
     [ swap refine-value-info ] if ;
 
@@ -294,7 +300,7 @@ ERROR: internal-slot-invalidation-error ;
 ! annotate the #call node's output information without changing the value-info state.
 
 : slot-call-compute-copy-equiv* ( node -- )
-    [ get-slot-call-state copy-of>> ]
+    [ get-slot-call-state slot-copy ]
     [ out-d>> first ] bi
     over [ is-copy-of ] [ 2drop ] if ;
 

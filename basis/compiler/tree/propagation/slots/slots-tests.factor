@@ -3,7 +3,7 @@ compiler.tree.cleanup compiler.tree.combinators compiler.tree.normalization
 compiler.tree.propagation compiler.tree.propagation.branches
 compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.nodes compiler.tree.propagation.slots
-compiler.tree.recursive hashtables kernel kernel.private literals locals math
+compiler.tree.recursive grouping.extras hashtables kernel kernel.private literals locals math
 math.intervals namespaces sequences sequences.deep sets slots.private tools.test
 ;
 IN: compiler.tree.propagation.slots.tests
@@ -221,7 +221,7 @@ ${ 5 42 [a,b] } [
     slot-query-state value-info>> interval>>
 ] unit-test
 
-{ t } [
+{ 1 t } [
     [| a b s1 s2 |
      a { tuple } declare
      b { array } declare
@@ -230,10 +230,10 @@ ${ 5 42 [a,b] } [
      a s1 slot
     ] extract-slots 2nip
     first [ obj-value>> ] [ slot-value>> ] bi
-    slot-query-state copy-of>> fixnum?
+    slot-query-state copy-of>> [ length ] [ first fixnum? ] bi
 ] unit-test
 
-{ t } [
+{ 1 t } [
     [| a b s1 s2 |
      a { tuple } declare
      10 a s1 set-slot
@@ -241,7 +241,7 @@ ${ 5 42 [a,b] } [
      b s2 slot
     ] extract-slots 2nip
     first [ obj-value>> ] [ slot-value>> ] bi
-    slot-query-state copy-of>> fixnum?
+    slot-query-state copy-of>> [ length ] [ first fixnum? ] bi
 ] unit-test
 
 ! different objects, different slot literals with equal value, same value
@@ -255,8 +255,8 @@ ${ t f object-info } [
     ] extract-slots 2nip
     [ [ obj-value>> ] [ slot-value>> ] bi slot-query-state ] map
     first2
-    [ copy-of>> fixnum? ]
-    [ [ copy-of>> ] [ value-info>> ] bi ] bi*
+    [ slot-copy fixnum? ]
+    [ [ slot-copy ] [ value-info>> ] bi ] bi*
 ] unit-test
 
 ! Annotating nodes
@@ -268,7 +268,7 @@ ${ t f object-info } [
      a s1 slot
     ] extract-slots nip
     first [ obj-value>> ] [ slot-value>> ] bi slot-query-state
-    [ copy-of>> fixnum? ] [ value-info>> literal>> ] bi
+    [ slot-copy fixnum? ] [ value-info>> literal>> ] bi
     rot
     extract-slot-calls first
     [ refine-slot-call-outputs ]
@@ -437,7 +437,7 @@ ${ 2 4 5 [a,b] } [
     extract-slot-calls first
     [ slot-call-compute-copy-equiv* ]
     [ out-d>> first resolve-copy ] bi
-    swap first copy-of>>
+    swap first slot-copy
     [ [ fixnum? ] both? ]
     [ = ] 2bi
 ] unit-test
@@ -453,7 +453,7 @@ TUPLE: mixed { ro read-only } rw ;
     extract-tuple-boa-calls first
     tuple-boa-call-propagate-after
     slot-states get
-    [ [ copy-of>> = ] with map ]
+    [ [ slot-copy = ] with map ]
     [ length ] bi
 ] unit-test
 
@@ -462,6 +462,6 @@ TUPLE: mixed { ro read-only } rw ;
     [| x | x dup dup mixed boa ] propagated-tree
     last in-d>> first resolve-copy
     slot-states get
-    [ [ copy-of>> = ] with map ]
+    [ [ slot-copy = ] with map ]
     [ length ] bi
 ] unit-test
