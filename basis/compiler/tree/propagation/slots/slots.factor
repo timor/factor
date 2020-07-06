@@ -3,8 +3,8 @@
 USING: accessors arrays byte-arrays classes classes.algebra classes.tuple
 classes.tuple.private combinators combinators.short-circuit compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
-compiler.tree.propagation.nodes fry kernel locals math math.intervals namespaces
-sequences sets slots.private sorting strings words ;
+compiler.tree.propagation.nodes graphs kernel locals math math.intervals
+namespaces sequences sets slots.private sorting strings words ;
 IN: compiler.tree.propagation.slots
 
 ! * Optimizing Local Slot Accesses
@@ -209,18 +209,19 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
     [ state value-info>> value-info-union ] change-value-info ;
 
 ! Search seq in reverse until comparison with QUERY-STATE returns +same-slot+.
-! If found, return that slot-state, otherwise  return QUERY-STATE.  Also return
-! a sequence of all slot-states that may alias during the backwards search.
-:: select-aliasing ( seq query-state -- seq base-state )
+! Return a sequence of all slot-states that may alias during the backwards
+! search, with either the +same-slot+ state or QUERY-STATE appended, if no
+! +same-slot+ has been found.
+:: select-aliasing-read ( seq query-state -- seq )
     [ query-state compare-slot-states +may-alias+ = ] selector :> ( picker accum )
     seq [ picker keep query-state compare-slot-states +same-slot+ = ] find-last nip [ query-state ] unless*
-    accum swap ;
+    accum swap suffix ;
 
 ! Return the slot state of a slot read access for a given obj-value and slot-value
 : slot-query-state ( obj-value slot-value -- state )
     <unknown-slot-state>
-    slot-states get swap select-aliasing
-    [ unify-states ] reduce ;
+    slot-states get swap select-aliasing-read
+    [ ] [ unify-states ] map-reduce ;
 
 : get-slot-call-state ( node -- state )
     in-d>> resolve-copies first2 slot-query-state ;
@@ -238,22 +239,37 @@ SYMBOLS: +same-slot+ +unrelated+ +may-alias+ ;
 
 ERROR: internal-slot-invalidation-error ;
 
-: obj-aliasing-slot-states ( obj-value -- slot-states )
-    slot-states get [ obj-value>> = ] with filter
-    slot-states get '[ _ swap select-aliasing suffix ] map concat
+: obj-value-slot-states ( obj-value -- slot-states )
+    resolve-copy slot-states get [ obj-value>> = ] with filter ;
+
+! Slot states which would have to be considered written to if the one given here has been written to
+: aliasing-slot-states ( slot-state -- slot-states )
+    slot-states get [ compare-slot-states +unrelated+ = not ] with filter ;
+
+! If the contents of a slot state are written to, and the content represents a
+! slot we are tracking, then we would have to consider these objects to be
+! invalid as well
+: dependent-slot-states ( slot-state -- slot-states )
+    copy-of>> [ obj-value-slot-states ] map concat ;
+
+: all-dependent-slot-states ( slot-state -- slot-states )
+    [ aliasing-slot-states dup [ dependent-slot-states ] map concat union ] closure
     members ;
+
+! Remove the slot state from the list, and any which are dependent on it
+: invalidate-slot-state ( slot-state -- )
+    all-dependent-slot-states slot-states get swap diff! drop ;
 
 ! For any object that we assume to know anything about its slots, if it is
 ! passed to a call, we have to assume that it does whatever with the values, so
 ! we delete the slot states and any that it may alias to.
 : invalidate-slot-states ( #call -- )
-    in-d>> resolve-copies
-    [ obj-aliasing-slot-states
-      slot-states get swap diff! drop
+    in-d>> resolve-copies [ obj-value-slot-states [ invalidate-slot-state ] each
     ] each ;
 
 : call-invalidate-slot-states ( #call -- )
-    dup word>> [ foldable? ] [ flushable? ] [ \ set-slot eq? ] tri or or
+    dup
+    { [ body>> ] [ word>> \ set-slot eq? ] [ word>> foldable? ] [ word>> flushable? ] } 1||
     [ drop ] [ invalidate-slot-states ] if ;
 
 ! * Merge Slot States at #phi nodes

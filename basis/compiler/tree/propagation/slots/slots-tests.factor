@@ -190,7 +190,7 @@ ${ 1 0 } [
     first swap [ compare-slot-states ] with map nip
 ] unit-test
 
-{ V{ 69 70 77 80 81 } 43 } [| |
+{ V{ 43 69 70 77 80 81 } } [| |
     [| a b c s1 s2 s3 |
      42 a s1 set-slot
      43 a s1 set-slot
@@ -203,9 +203,20 @@ ${ 1 0 } [
      82 { 1 2 3 } 3 set-slot
      a s1 slot
     ] extract-slots :> ( nodes states queries )
-    states queries first select-aliasing
-    [ <reversed> [ value-info>> literal>> ] map ]
-    [ value-info>> literal>> ] bi*
+    states queries first select-aliasing-read
+    <reversed> [ value-info>> literal>> ] map
+] unit-test
+
+! Querying simple slots should work
+{ 12 13 } [
+    [| a |
+     12 a 3 set-slot
+     13 a 4 set-slot
+     a 3 slot
+     a 4 slot
+    ] extract-slots 2nip
+    [ [ obj-value>> ] [ slot-value>> ] bi slot-query-state value-info>> literal>> ] map
+    first2
 ] unit-test
 
 ${ 5 42 [a,b] } [
@@ -259,7 +270,40 @@ ${ t f object-info } [
     [ [ slot-copy ] [ value-info>> ] bi ] bi*
 ] unit-test
 
-! Annotating nodes
+! * Nested tuples
+TUPLE: dummy2 b ;
+
+: nested-slot-states-quot ( -- quot )
+    [ { dummy dummy2 } declare 42 >>b >>a a>> b>> ] ;
+
+{ V{ 1 2 } } [
+    nested-slot-states-quot propagated-tree drop
+    slot-states get
+    [ all-dependent-slot-states length ] map
+] unit-test
+
+{ V{ 2 2 } } [
+    [ { dummy dummy } declare [ >>a ] [ swap >>a ] 2bi [ a>> ] bi@ ]
+    propagated-tree drop
+    slot-states get
+    [ all-dependent-slot-states length ] map
+] unit-test
+
+{ V{ 1 } } [
+    [ { dummy } declare dup >>a a>> ] propagated-tree drop
+    slot-states get
+    [ all-dependent-slot-states length ] map
+] unit-test
+
+: flushable-dummy-user ( obj -- ) { dummy } declare [ 1 + ] change-a drop ; flushable
+
+{ V{ 2 } } [
+    [ { dummy dummy } declare 69 >>a >>a flushable-dummy-user ] propagated-tree
+    flatten [ dup #call? [ word>> \ flushable-dummy-user eq? ] [ drop f ] if ] filter first
+    in-d>> [ obj-value-slot-states [ all-dependent-slot-states ] map concat length ] map
+] unit-test
+
+! * Annotating nodes
 
 ! Output info is set via copying info
 { t 42 42 } [
@@ -351,7 +395,7 @@ ${ 0 object-info dup dup dup  } [
      b s2 slot ] propagated-tree
     extract-slot-calls
     [ in-d>> resolve-copies first ] map
-    [ obj-aliasing-slot-states ] map
+    [ obj-value-slot-states [ aliasing-slot-states ] map concat members ] map
     [ length ] map
 ] unit-test
 
