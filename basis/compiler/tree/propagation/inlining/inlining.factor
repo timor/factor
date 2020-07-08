@@ -112,8 +112,14 @@ SYMBOL: history
         [ 2drop f ]
     } cond ;
 
+CONSTANT: inline-saved-vars { history }
+
 : do-inlining ( #call word -- ? )
-    [
-        dup custom-inlining? [ 2dup inline-custom ] [ f ] if
-        [ 2drop t ] [ (do-inlining) ] if
-    ] with-scope ;
+    [let
+     inline-saved-vars [ dup get ] H{ } map>assoc :> saved-context
+
+     dup custom-inlining? [ 2dup inline-custom ] [ f ] if
+     [ 2drop t ] [ (do-inlining) ] if
+
+     saved-context inline-saved-vars [ [ of ] keep set ] with each
+    ] ;
