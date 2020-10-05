@@ -3,10 +3,12 @@
 USING: accessors arrays assocs classes.algebra combinators
 combinators.short-circuit compiler.tree compiler.tree.builder
 compiler.tree.normalization compiler.tree.propagation.info
-compiler.tree.propagation.nodes compiler.tree.recursive generic
-generic.math generic.single generic.standard kernel locals math
-math.partial-dispatch namespaces quotations sequences words ;
+compiler.tree.propagation.nodes compiler.tree.recursive generic generic.math
+generic.single generic.standard hashtables.identity kernel locals math
+math.partial-dispatch namespaces quotations sequences sets words ;
 IN: compiler.tree.propagation.inlining
+
+FROM: namespaces => set ;
 
 : splicing-call ( #call word -- nodes )
     [ [ in-d>> ] [ out-d>> ] bi ] dip <#call> 1array ;
@@ -75,14 +77,25 @@ M: callable splicing-nodes splicing-body ;
 ! Method body inlining
 SYMBOL: history
 
-: already-inlined? ( obj -- ? ) history get member-eq? ;
+! Used for quotations
+: already-inlined? ( obj -- ? ) history get assoc-stack ;
 
-: add-to-history ( obj -- ) history [ swap suffix ] change ;
+: add-to-history ( obj -- ) t swap history get last set-at ;
+
+: call-signature ( #call -- classes word )
+    [ in-d>> [ value-info class>> ] map ]
+    [ word>> ] bi ; inline
+
+: method-already-inlined? ( #call -- ? )
+    call-signature history get assoc-stack in? ;
+
+: add-method-to-history ( #call -- )
+    call-signature history get last adjoin-at ;
 
 :: inline-word ( #call word -- ? )
-    word already-inlined? [ f ] [
+    #call method-already-inlined? [ f ] [
         #call word splicing-body [
-            word add-to-history
+            #call add-method-to-history
             #call body<<
             #call propagate-body
         ] [ f ] if*
@@ -117,6 +130,7 @@ CONSTANT: inline-saved-vars { history }
 : do-inlining ( #call word -- ? )
     [let
      inline-saved-vars [ dup get ] H{ } map>assoc :> saved-context
+     history [ IH{ } clone suffix ] change
 
      dup custom-inlining? [ 2dup inline-custom ] [ f ] if
      [ 2drop t ] [ (do-inlining) ] if
