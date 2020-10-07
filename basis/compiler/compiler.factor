@@ -2,15 +2,12 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs classes classes.algebra combinators
 combinators.short-circuit compiler.cfg compiler.cfg.builder
-compiler.cfg.builder.alien compiler.cfg.finalization
-compiler.cfg.optimizer compiler.codegen compiler.crossref
-compiler.errors
-compiler.tree
-compiler.tree.propagation.output-infos
+compiler.cfg.finalization compiler.cfg.optimizer compiler.codegen
+compiler.crossref compiler.errors compiler.nested compiler.tree
 compiler.tree.builder compiler.tree.optimizer
-compiler.units compiler.utilities continuations definitions fry
-generic generic.single io kernel macros make namespaces
-sequences sets stack-checker.dependencies stack-checker.errors
+compiler.tree.propagation.output-infos compiler.units compiler.utilities
+continuations definitions fry generic generic.single io kernel macros make
+namespaces sequences sets stack-checker.dependencies stack-checker.errors
 stack-checker.inlining vocabs.loader words ;
 IN: compiler
 
@@ -134,6 +131,7 @@ M: word combinator? inline? ;
 : compile-word ( word -- )
     ! We return early if the word has breakpoints or if it
     ! failed to infer.
+    nested-compilation-message
     '[
         _ {
             [ start-compilation ]
@@ -153,10 +151,16 @@ M: optimizing-compiler update-call-sites ( class generic -- words )
         [ classes-intersect? ] [ 2drop f ] if
     ] filter ;
 
+: init-nested-compile ( words -- )
+    [ [ "output-infos" remove-word-prop ] each ]
+    [ [ "propagation-body" remove-word-prop ] each ]
+    [ recompile-set namespaces:set ] tri ;
+
 M: optimizing-compiler recompile ( words -- alist )
     H{ } clone compiled [
         [ compile? ] filter
-        [ compile-word yield-hook get call( -- ) ] each
+        [ init-nested-compile ] keep
+        [ maybe-compile-word yield-hook get call( -- ) ] each
         compiled get >alist
     ] with-variable
     "--- compile done" compiler-message ;

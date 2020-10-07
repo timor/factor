@@ -1,11 +1,12 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types arrays assocs classes classes.algebra
-classes.tuple.private combinators combinators.short-circuit compiler.tree
-compiler.tree.propagation.constraints compiler.tree.propagation.info
-compiler.tree.propagation.inlining compiler.tree.propagation.nodes
-compiler.tree.propagation.output-infos compiler.tree.propagation.slots
-continuations fry kernel sequences stack-checker.dependencies words ;
+classes.tuple.private combinators combinators.short-circuit compiler.nested
+compiler.tree compiler.tree.propagation.constraints
+compiler.tree.propagation.info compiler.tree.propagation.inlining
+compiler.tree.propagation.nodes compiler.tree.propagation.output-infos
+compiler.tree.propagation.slots continuations fry kernel namespaces sequences
+stack-checker.dependencies words ;
 IN: compiler.tree.propagation.simple
 
 M: #introduce propagate-before
@@ -113,6 +114,15 @@ M: #declare propagate-before
     [ default-output-value-infos ] if
     ;
 
+SYMBOL: inhibit-nested-compile?
+
+! Kind of a conditional DEFER:
+<<
+"safe-nested-compile" "compiler.nested" lookup-word
+  [ "safe-nested-compile" "compiler.nested" create-word drop ] unless
+>>
+FROM: compiler.nested => safe-nested-compile ;
+
 : output-value-infos ( #call word -- infos )
     {
         { [ dup \ <tuple-boa> eq? ] [ drop propagate-<tuple-boa> ] }
@@ -120,14 +130,22 @@ M: #declare propagate-before
         { [ dup predicate? ] [ propagate-predicate ] }
         { [ dup "outputs" word-prop ] [ call-outputs-quot ] }
         { [ dup "output-infos" word-prop ] [ copy-output-infos ] }
+        { [ dup
+            [ inhibit-nested-compile? get [ drop f ] [ safe-nested-compile ] if ]
+            [ "output-infos" word-prop ] bi and ] [ copy-output-infos ] }
         [ default-output-value-infos ]
     } cond ;
+
+: non-recursive-output-infos ( #call word -- infos )
+    ! dup word-being-compiled get =
+    dup in-nested-compilation?
+    inhibit-nested-compile? [ output-value-infos ] with-variable ;
 
 M: #call propagate-before
     dup word>> {
         { [ 2dup foldable-call? ] [ fold-call ] }
         { [ 2dup do-inlining ] [
-            [ output-value-infos ] [ drop out-d>> ] 2bi refine-value-infos
+              [ non-recursive-output-infos ] [ drop out-d>> ] 2bi refine-value-infos
         ] }
         [
             [ [ output-value-infos ] [ drop out-d>> ] 2bi set-value-infos ]
