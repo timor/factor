@@ -178,7 +178,8 @@ M: word reset-word
     {
         "unannotated-def" "parsing" "inline" "recursive"
         "foldable" "flushable" "reading" "writing" "reader"
-        "writer" "delimiter" "deprecated"
+        "writer" "delimiter" "deprecated" "inline-propagation-infos"
+        "inline-body"
     } remove-word-props ;
 
 : reset-generic ( word -- )

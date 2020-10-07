@@ -117,6 +117,9 @@ ERROR: invalid-outputs #call infos ;
         { [ dup sequence-constructor? ] [ propagate-sequence-constructor ] }
         { [ dup predicate? ] [ propagate-predicate ] }
         { [ dup "outputs" word-prop ] [ call-outputs-quot ] }
+        { [ over body>> not ] [
+              { [ inline-propagation-infos ] [ default-output-value-infos ] } 2||
+          ] }
         [ default-output-value-infos ]
     } cond ;
 

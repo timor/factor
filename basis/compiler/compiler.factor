@@ -2,26 +2,16 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs classes classes.algebra combinators
 combinators.short-circuit compiler.cfg compiler.cfg.builder
-compiler.cfg.builder.alien compiler.cfg.finalization
-compiler.cfg.optimizer compiler.codegen compiler.crossref
-compiler.errors compiler.tree.builder compiler.tree.optimizer
-compiler.units compiler.utilities continuations definitions fry
-generic generic.single io kernel macros make namespaces
-sequences sets stack-checker.dependencies stack-checker.errors
-stack-checker.inlining vocabs.loader words ;
+compiler.cfg.finalization compiler.cfg.optimizer compiler.codegen
+compiler.crossref compiler.errors compiler.tree.builder compiler.tree.optimizer
+compiler.units compiler.utilities continuations definitions fry generic
+generic.single kernel macros make namespaces sequences sets
+stack-checker.dependencies stack-checker.errors stack-checker.inlining
+compiler.messages
+vocabs.loader words ;
 IN: compiler
 
 SYMBOL: compiled
-
-: compile? ( word -- ? )
-    ! Don't attempt to compile certain words.
-    {
-        [ "forgotten" word-prop ]
-        [ inlined-block? ]
-    } 1|| not ;
-
-: compiler-message ( string -- )
-    "trace-compilation" get [ [ print flush ] with-global ] [ drop ] if ;
 
 : start-compilation ( word -- )
     dup name>> compiler-message
@@ -29,6 +19,13 @@ SYMBOL: compiled
     H{ } clone generic-dependencies namespaces:set
     HS{ } clone conditional-dependencies namespaces:set
     clear-compiler-error ;
+
+: compile? ( word -- ? )
+    ! Don't attempt to compile certain words.
+    {
+        [ "forgotten" word-prop ]
+        [ inlined-block? ]
+    } 1|| not ;
 
 GENERIC: no-compile? ( word -- ? )
 
