@@ -7,7 +7,7 @@ compiler.tree.propagation.info compiler.tree.propagation.nodes
 compiler.tree.recursive compiler.utilities continuations generic generic.math
 generic.single generic.standard kernel locals math math.intervals
 math.partial-dispatch namespaces quotations sequences stack-checker.dependencies
-stack-checker.errors words ;
+stack-checker.errors stack-checker.values words ;
 IN: compiler.tree.propagation.inlining
 
 : splicing-call ( #call word -- nodes )
@@ -117,15 +117,30 @@ SYMBOL: history
     dup "inline-propagation-infos" word-prop
     [ nip ] [ H{ } clone [ "inline-propagation-infos" set-word-prop ] keep ] if* ;
 
+UNION: primitive-sequence string byte-array ;
+
 : convex-input-info ( value-info -- value-info )
-    dup interval>> special-interval?
-    [ class>> <class-info> ] unless
+    dup { [ interval>> special-interval? not ]
+          [ literal>> identity-tuple? ]
+          [ literal>> { [ word? ] [ name>> "( gensym )" = ] } 1&& ]
+          [ literal>> quotation? ]
+          [ literal>> { [ primitive-sequence? ] [ empty? not ] } 1&& ]
+    } 1||
+    [ class>> <class-info> ] when
     dup slots>> [
         [ clone ] dip
         [ dup [ convex-input-info ] when ] map
         >>slots
     ] when* ;
-    ! dup literal?>> [ class>> <class-info> ] when ;
+
+    ! dup interval>> special-interval?
+    ! [ class>> <class-info> ] unless
+    ! dup slots>> [
+    !     [ clone ] dip
+    !     [ dup [ convex-input-info ] when ] map
+    !     >>slots
+    ! ] when* ;
+    ! ! dup literal?>> [ class>> <class-info> ] when ;
 
 : inline-signature ( #call -- obj )
     in-d>> [ value-info convex-input-info ] map ;
@@ -143,13 +158,16 @@ SYMBOL: history
 SINGLETON: +inline-recursion+
 SYMBOL: signature-trace
 
-! TODO: can this be memoized? We could also annotate the word...
-: inline-propagation-body ( #call -- nodes/f )
-    [ [ in-d>> ] [ word>> ] bi
+! Make the nodes for propagation, prefix it with a #copy
+:: inline-propagation-body ( #call -- nodes/f )
+    #call [ [ in-d>> ] [ word>> ] bi
       build-tree-with ] curry [ inference-error? ] ignore-error/f
     dup
     { [ length 2 < ] [ penultimate #terminate? ] } 1||
-    [ drop f ] [ analyze-recursive normalize ] if ;
+    [ drop f ] [
+        #call in-d>> dup length [ <value> ] replicate swap <#copy> prefix
+        analyze-recursive normalize
+    ] if ;
 
 : cached-inline-propagation-body ( #call -- nodes/f )
     [ word>> ] keep over "inline-body" word-prop
@@ -158,13 +176,13 @@ SYMBOL: signature-trace
 
 
 : propagate-body-for-infos ( #call infos -- infos/f )
-    over cached-inline-propagation-body
+    swap cached-inline-propagation-body
     [ [
                 value-infos [ H{ } clone suffix ] change
-                [ [ in-d>> ] dip swap [ set-value-info ] 2each ] dip
+                [ first dup #copy? [ in-d>> ] [ drop f ] if [ set-value-info ] 2each ] keep
                 [ (propagate) ] keep last in-d>> [ value-info ] map
             ] with-scope
-    ] [ 2drop f ] if*
+    ] [ drop f ] if*
     ;
 
 : splicing-class-infos ( #call input-infos -- infos/f )
@@ -185,11 +203,8 @@ SYMBOL: signature-trace
         #call sig splicing-class-infos ] unless*
         dup sig info-cache set-at
     ] if ;
-    ! sig info-cache at
-    ! [ +inline-recursion+ sig info-cache set-at
-    !   #call sig splicing-class-infos
-    !   [ sig info-cache set-at ] keep
-    ! ] unless* dup +inline-recursion+? [ drop f ] when ;
+
+! : inline-propagation-info-sanity-check (  /default )
 
 ! NOTE: We don't propagate through generic dispatches.  An optimization could be
 ! to determine whether the input is a proper subset of the generic's method

@@ -4,8 +4,8 @@ compiler.tree.propagation.inlining kernel math sequences tools.test vocabs words
 ;
 IN: compiler.tree.propagation.inlining.tests
 
-: inline-info-caches ( -- assoc )
-    all-words [ dup word-inline-infos-cache ] map>alist
+: inline-info-caches ( words -- assoc )
+    [ dup word-inline-infos-cache ] map>alist
     [ nip assoc-empty? ] assoc-reject ;
 
 : clear-inline-info-caches ( -- )
@@ -15,7 +15,7 @@ IN: compiler.tree.propagation.inlining.tests
 
 : non-trivial-cache? ( assoc -- ? ) [ nip { [ +inline-recursion+? ] [ { [ empty? not ] [ [ object-info = ] all? not ] } 1&& ] } 1|| ] assoc-any? ;
 
-: non-trivial-inline-info-caches ( -- assoc )
+: non-trivial-inline-info-caches ( words -- assoc )
     inline-info-caches [ nip non-trivial-cache? ] assoc-filter ;
 
 : inline-info-cache-overhead ( -- bytes )
