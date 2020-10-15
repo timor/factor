@@ -1,10 +1,10 @@
-USING: accessors assocs combinators.short-circuit compiler.test
-compiler.tree.builder compiler.tree.debugger compiler.tree.optimizer
+USING: accessors arrays assocs combinators.short-circuit compiler.test
+compiler.tree compiler.tree.builder compiler.tree.debugger
+compiler.tree.optimizer compiler.tree.propagation.copy
 compiler.tree.propagation.info compiler.tree.propagation.inline-propagation
-compiler.tree.propagation.copy
-compiler.units
-namespaces
-kernel math memory sequences tools.test vectors vocabs words ;
+compiler.tree.propagation.simple compiler.units io.encodings.utf8 io.files
+kernel literals math memory namespaces prettyprint sequences sorting tools.test
+vectors vocabs words ;
 IN: compiler.tree.propagation.inline-propagation.tests
 
 ! * Interactive Helpers
@@ -31,6 +31,9 @@ IN: compiler.tree.propagation.inline-propagation.tests
         [ "inline-body" word-prop [ size + ] when* ]
         [ "inline-propagation-infos" word-prop [ size + ] when* ] bi
     ] each ;
+
+: write-infos ( path -- )
+    all-words non-trivial-inline-info-caches sort-keys swap utf8 [ ... ] with-file-writer ;
 
 ! * Unit tests
 : swap-only ( x x -- x x ) swap ;
