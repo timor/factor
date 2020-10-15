@@ -53,7 +53,7 @@ ERROR: null-value-info ;
     ! ! dup literal?>> [ class>> <class-info> ] when ;
 
 : inline-signature ( #call -- obj )
-    in-d>> [ value-info class>> ] map ;
+    in-d>> [ value-info class>> ] { } map-as ;
 
 : deliteralize-infos ( #call infos -- infos )
     swap word>> foldable? [ [ class>> <class-info> ] map ] unless ;
@@ -88,16 +88,15 @@ SYMBOL: signature-trace
     [ 2nip ]
     [ inline-propagation-body [ "inline-body" set-word-prop ] keep ] if* ;
 
-: propagate-body-for-infos ( #call input-classes -- infos/f )
-    [ <class-info> ] map
-    swap ! cached-
-    inline-propagation-body
+:: propagate-body-for-infos ( #call input-classes -- infos/f )
+    input-classes [ <class-info> ] map :> input-info
+    #call inline-propagation-body
     [ [
                 value-infos [ H{ } clone suffix ] change
-                [ first dup #copy? [ in-d>> ] [ drop f ] if [ set-value-info ] 2each ] keep
-                [ (propagate) ] keep last in-d>> [ value-info ] map
+                input-info #call in-d>> [ set-value-info ] 2each
+                [ (propagate) ] keep last in-d>> [ value-info ] { } map-as
             ] with-scope
-    ] [ drop f ] if*
+    ] [ f ] if*
     ;
 
 :: splicing-class-infos ( #call input-classes -- infos/f )
@@ -117,10 +116,11 @@ SYMBOL: signature-trace
     word sig 2array signature-trace get member?
     [ +inline-recursion+ ]
     [
-        sig info-cache at
-        [ signature-trace [ word sig 2array suffix ] change
-        #call sig splicing-class-infos ] unless*
-        dup sig info-cache set-at
+        sig info-cache at*
+        [ drop signature-trace [ word sig 2array suffix ] change
+          #call sig splicing-class-infos
+          dup sig info-cache set-at
+        ] unless
     ] if
     ;
 
@@ -139,3 +139,9 @@ SYMBOL: signature-trace
     ] if
     dup trace-non-trivial-infos
     ;
+
+! This needs to be done to all words in a compilation unit that are recompiled together.
+: reset-inline-info-cache ( word -- )
+    [ subwords ] keep suffix
+    [ [ "inline-propagation-infos" remove-word-prop ]
+      [ "inline-body" remove-word-prop ] bi ] each  ;
