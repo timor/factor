@@ -3,7 +3,6 @@
 USING: accessors arrays assocs classes classes.private
 classes.tuple.private continuations definitions generic
 hash-sets init kernel kernel.private math namespaces sequences
-compiler.tree.propagation.inline-propagation
 sets source-files.errors vocabs words ;
 IN: compiler.units
 
@@ -66,7 +65,7 @@ HOOK: to-recompile compiler-impl ( -- words )
 HOOK: process-forgotten-words compiler-impl ( words -- )
 
 : compile ( words -- )
-    dup [ reset-inline-info-cache ] each
+    ! dup [ reset-inline-info-cache ] each
     recompile t f modify-code-heap ;
 
 : filter-word-defs ( defset -- words )

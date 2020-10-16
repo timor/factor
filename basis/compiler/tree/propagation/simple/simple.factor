@@ -1,11 +1,12 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types arrays assocs classes classes.algebra
-classes.tuple.private combinators combinators.short-circuit compiler.tree
-compiler.tree.propagation.constraints compiler.tree.propagation.info
-compiler.tree.propagation.inline-propagation compiler.tree.propagation.inlining
-compiler.tree.propagation.nodes compiler.tree.propagation.slots continuations
-fry kernel sequences stack-checker.dependencies words ;
+classes.tuple.private combinators combinators.short-circuit compiler.messages
+compiler.tree compiler.tree.propagation.constraints
+compiler.tree.propagation.info compiler.tree.propagation.inline-propagation
+compiler.tree.propagation.inlining compiler.tree.propagation.nodes
+compiler.tree.propagation.slots continuations fry kernel locals sequences
+stack-checker.dependencies words ;
 IN: compiler.tree.propagation.simple
 
 M: #introduce propagate-before
@@ -106,9 +107,34 @@ ERROR: invalid-outputs #call infos ;
     [ nip +conditional+ depends-on ]
     [ predicate-output-infos 1array ] 2bi ;
 
+! : default-output-value-infos ( #call word -- infos )
+!     { [ over body>> [ drop f ] [ dupd inline-propagation-infos ] if ]
+!       [ "default-output-classes" word-prop ] } 1||
+!     [ class-infos ] [ out-d>> length object-info <repetition> ] ?if ;
+
 : default-output-value-infos ( #call word -- infos )
     "default-output-classes" word-prop
     [ class-infos ] [ out-d>> length object-info <repetition> ] ?if ;
+
+: report-info-difference ( word default propagated -- )
+    "Computed different output info for: %u %u -> %u" format-compiler-message ;
+
+ERROR: inferred-null-class info1 info2 ;
+
+: assert-class-overlap ( info1 info2 -- )
+    2dup [ [ class>> ] bi@ classes-intersect? ] 2all?
+    [ 2drop ] [ inferred-null-class ] if ;
+
+
+:: compare-inline-propagated-infos ( #call word -- infos )
+    #call word [ default-output-value-infos ]
+    [ inline-propagation-infos [ <class-info> ] map ] 2bi :> ( default inlined )
+    inlined [
+        default inlined 2dup assert-class-overlap
+        sequence= [ word default inlined [ [ class>> ] map ] bi@ report-info-difference ] unless ] when
+    ! default
+    inlined default or
+    ;
 
 : output-value-infos ( #call word -- infos )
     {
@@ -116,10 +142,11 @@ ERROR: invalid-outputs #call infos ;
         { [ dup sequence-constructor? ] [ propagate-sequence-constructor ] }
         { [ dup predicate? ] [ propagate-predicate ] }
         { [ dup "outputs" word-prop ] [ call-outputs-quot ] }
-        { [ over body>> not ] [
-              { [ inline-propagation-infos ] [ default-output-value-infos ] } 2||
-          ] }
-        [ default-output-value-infos ]
+        ! { [ over body>> not ] [
+        !       { [ inline-propagation-infos ] [ default-output-value-infos ] } 2||
+        !   ] }
+        ! [ default-output-value-infos ]
+        [ compare-inline-propagated-infos ]
     } cond ;
 
 M: #call propagate-before

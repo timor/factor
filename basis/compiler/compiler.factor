@@ -7,6 +7,7 @@ compiler.crossref compiler.errors compiler.tree.builder compiler.tree.optimizer
 compiler.units compiler.utilities continuations definitions fry generic
 generic.single kernel macros make namespaces sequences sets
 stack-checker.dependencies stack-checker.errors stack-checker.inlining
+compiler.tree.propagation.inline-propagation
 compiler.messages
 vocabs.loader words ;
 IN: compiler
@@ -147,6 +148,8 @@ M: optimizing-compiler update-call-sites ( class generic -- words )
 M: optimizing-compiler recompile ( words -- alist )
     H{ } clone compiled [
         [ compile? ] filter
+        dup "--- recompiling words: %u" format-compiler-message
+        H{ } clone inline-info-cache namespaces:set
         [ compile-word yield-hook get call( -- ) ] each
         compiled get >alist
     ] with-variable
