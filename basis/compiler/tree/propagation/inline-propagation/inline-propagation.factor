@@ -131,17 +131,15 @@ SYMBOL: signature-trace
 :: cached-inline-propagation-infos ( #call word -- classes/f )
     #call inline-signature :> sig
     word inline-info-cache get [ drop H{ } clone ] cache :> info-cache
-    word sig 2array signature-trace get member?
-    [   signature-trace get word sig 2array "--- Inline Propagation recursion: %u %u" format-compiler-message
-        +inline-recursion+
-     ]
+    sig info-cache at*
+    [ "--- inline info cache hit" compiler-message ]
     [
-        sig info-cache at*
-        [ "--- inline info cache hit" compiler-message ]
+        word sig 2array signature-trace get member?
+        [   drop signature-trace get word sig 2array "--- Inline Propagation recursion: %u %u" format-compiler-message
+            +inline-recursion+ ]
         [ drop signature-trace [ word sig 2array suffix ] change
           #call sig splicing-class-infos
-          dup sig info-cache set-at
-        ] if
+          dup sig info-cache set-at ] if
     ] if
     dup [ #call word>> sig pick "--- inline infos: %u %u %u" format-compiler-message ] when
     ;
