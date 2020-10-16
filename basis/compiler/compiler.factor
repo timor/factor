@@ -3,12 +3,11 @@
 USING: accessors assocs classes classes.algebra combinators
 combinators.short-circuit compiler.cfg compiler.cfg.builder
 compiler.cfg.finalization compiler.cfg.optimizer compiler.codegen
-compiler.crossref compiler.errors compiler.tree.builder compiler.tree.optimizer
-compiler.units compiler.utilities continuations definitions fry generic
-generic.single kernel macros make namespaces sequences sets
+compiler.crossref compiler.errors compiler.messages compiler.tree.builder
+compiler.tree.optimizer compiler.tree.propagation.inline-propagation
+compiler.units compiler.utilities compiler.word-props continuations definitions
+fry generic generic.single kernel macros make namespaces sequences sets
 stack-checker.dependencies stack-checker.errors stack-checker.inlining
-compiler.tree.propagation.inline-propagation
-compiler.messages
 vocabs.loader words ;
 IN: compiler
 
@@ -20,38 +19,6 @@ SYMBOL: compiled
     H{ } clone generic-dependencies namespaces:set
     HS{ } clone conditional-dependencies namespaces:set
     clear-compiler-error ;
-
-: compile? ( word -- ? )
-    ! Don't attempt to compile certain words.
-    {
-        [ "forgotten" word-prop ]
-        [ inlined-block? ]
-    } 1|| not ;
-
-GENERIC: no-compile? ( word -- ? )
-
-M: method no-compile? "method-generic" word-prop no-compile? ;
-
-M: predicate-engine-word no-compile? "owner-generic" word-prop no-compile? ;
-
-M: word no-compile?
-    { [ macro? ] [ "special" word-prop ] [ "no-compile" word-prop ] } 1|| ;
-
-GENERIC: combinator? ( word -- ? )
-
-M: method combinator? "method-generic" word-prop combinator? ;
-
-M: predicate-engine-word combinator? "owner-generic" word-prop combinator? ;
-
-M: word combinator? inline? ;
-
-: ignore-error? ( word error -- ? )
-    ! Ignore some errors on inline combinators, macros, and special
-    ! words such as 'call'.
-    {
-        [ drop no-compile? ]
-        [ [ combinator? ] [ unknown-macro-input? ] bi* and ]
-    } 2|| ;
 
 : finish-compilation ( word -- )
     ! Recompile callers if the word's stack effect changed, then
@@ -90,17 +57,12 @@ M: word combinator? inline? ;
     ! non-optimizing compiler, using its definition. Otherwise,
     ! if the compiler error is not ignorable, use a dummy
     ! definition from 'not-compiled-def' which throws an error.
+    2dup "--- Error during optimization: %u %u" format-compiler-message
     {
         { [ dup inference-error? not ] [ rethrow ] }
         { [ 2dup ignore-error? ] [ ignore-error ] }
         [ remember-error ]
     } cond ;
-
-: optimize? ( word -- ? )
-    {
-        [ single-generic? ]
-        [ primitive? ]
-    } 1|| not ;
 
 : contains-breakpoints? ( -- ? )
     dependencies get keys [ "break?" word-prop ] any? ;
