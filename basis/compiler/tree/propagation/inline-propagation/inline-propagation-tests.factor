@@ -1,13 +1,13 @@
-USING: accessors arrays assocs combinators.short-circuit compiler.test
-compiler.tree compiler.tree.builder compiler.tree.debugger
-compiler.tree.optimizer compiler.tree.propagation.copy
-compiler.tree.propagation.info compiler.tree.propagation.inline-propagation
-compiler.tree.propagation.simple compiler.units io.encodings.utf8 io.files
-kernel literals math memory namespaces prettyprint sequences sorting tools.test
-vectors vocabs words ;
+USING: accessors compiler.test compiler.tree.builder compiler.tree.debugger
+compiler.tree.optimizer compiler.tree.propagation.inline-propagation kernel math
+math.parser.private namespaces sequences strings tools.test ;
 IN: compiler.tree.propagation.inline-propagation.tests
 
 ! * Interactive Helpers
+: final-info' ( word/quot -- seq )
+    [
+        H{ } inline-info-cache set
+        final-info ] with-scope ;
 ! : inline-info-caches ( words -- assoc )
 !     [ dup word-inline-infos-cache ] map>alist
 !     [ nip assoc-empty? ] assoc-reject ;
@@ -53,7 +53,7 @@ GENERIC: hobble ( x -- x )
 M: foo frob a>> 1 + ;
 M: foo hobble [ 2 * ] change-a ;
 TUPLE: bar < foo ;
-M: bar frob a>> number>string ;
+M: bar frob a>> 10 (positive>base) ;
 
 : make-something ( -- x ) 47 bar boa ;
 : do-something ( -- x ) make-something hobble frob ;
