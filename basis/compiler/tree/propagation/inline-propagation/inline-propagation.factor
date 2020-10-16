@@ -4,6 +4,7 @@ compiler.tree.normalization compiler.tree.propagation.info
 compiler.tree.propagation.inlining compiler.tree.propagation.nodes
 compiler.tree.cleanup
 compiler.tree.recursive compiler.utilities continuations formatting generic
+compiler.word-props
 generic.single generic.math
 kernel locals math namespaces sequences stack-checker.dependencies
 stack-checker.errors strings words ;
@@ -56,8 +57,9 @@ ERROR: null-value-info ;
 : inline-signature ( #call -- obj )
     in-d>> [ value-info class>> ] { } map-as ;
 
-: deliteralize-infos ( infos -- classes )
-    [ class>> ] map ;
+: deliteralize-infos ( infos -- classes/f )
+    dup [ null-info = ] any?    ! This happens if inline propagation resulted in termination
+    [ drop f ] [ [ class>> ] map ] if ;
     ! swap word>> foldable? [ [ class>> <class-info> ] map ] unless ;
     ! [ [ f >>literal? f >>literal? ] map ] unless ;
 
@@ -129,6 +131,7 @@ SYMBOL: signature-trace
     dup trivial-infos? not [ "--- Using inline-propagated infos %u" sprintf compiler-message ] [ drop ] if ;
 
 :: cached-inline-propagation-infos ( #call word -- classes/f )
+    word { [ "no-compile" word-prop ] } 1&& [ "nope" throw ] when
     #call inline-signature :> sig
     word inline-info-cache get [ drop H{ } clone ] cache :> info-cache
     sig info-cache at*
@@ -149,6 +152,7 @@ SYMBOL: signature-trace
 ! definers, and compile in the actual dispatch.
 : inline-propagation-infos ( #call word -- classes/f )
     2dup { [ nip primitive? ]
+           ! [ nip no-compile? ]
            [ nip generic? ]
            [ nip never-inline-word? ]
            [ nip custom-inlining? ]
