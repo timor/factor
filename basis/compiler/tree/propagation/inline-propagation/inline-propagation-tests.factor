@@ -65,3 +65,10 @@ M: bar frob a>> 10 (positive>base) ;
 : do-something ( -- x ) make-something hobble frob ;
 
 { string } [ \ do-something final-classes first ] unit-test
+
+! Inlining with repeating slot signature structure results in retain stack overflow
+{ object } [ \ scan-function-name final-info first ] unit-test
+
+
+! This fails, does it also fail in master?
+: blub ( x -- ) { composed } declare call( -- ) ;

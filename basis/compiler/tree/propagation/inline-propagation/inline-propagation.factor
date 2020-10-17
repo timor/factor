@@ -93,13 +93,13 @@ TUPLE: inline-signature { class maybe{ classoid } read-only } { slots array read
 ! dependency on that.  But I'm not sure if that would work, since we wouldn't
 ! modify the words being compiled, but some others.  They would then need to be
 ! added to the outdated set as a kind of dirty-marking.  Could escalate, probably.
-:: record-inline-propagation ( #call signatures output-classes -- )
+:: record-inline-propagation ( #call signatures -- )
     signatures [ class>> ] map :> input-classes
     ! TODO Not sure if the dependency on the classes is actually needed if the
     ! dependencies of all involved methods are correct.  I think at leas the
     ! input classes are important, since the signature calculation depends on
     ! the slot layout.
-    signatures signatures>classes output-classes [ [ add-depends-on-class ] each ] bi@
+    signatures signatures>classes [ add-depends-on-class ] each
     #call word>> :> word
     word parent-word :> generic
     { [ word method? ] [ #call method>> ] } 0&&
@@ -173,6 +173,7 @@ SYMBOL: signature-trace
 : trace-non-trivial-infos ( infos -- )
     dup trivial-infos? not [ "--- Using inline-propagated infos %u" sprintf compiler-message ] [ drop ] if ;
 
+! TODO: misnomer, infos are actually classes
 :: cached-inline-propagation-infos ( #call word -- classes/f )
     word { [ "no-compile" word-prop ] } 1&& [ "nope" throw ] when
     #call call-inline-signature :> sig
@@ -187,7 +188,7 @@ SYMBOL: signature-trace
           #call sig splicing-class-infos
           dup sig info-cache set-at ] if :> infos
         #call word>> sig infos "--- inline infos: %u %u %u" format-compiler-message
-        infos +inline-recursion+? [ #call sig infos record-inline-propagation ] unless
+        infos +inline-recursion+? [ #call sig record-inline-propagation ] unless
         infos
     ] unless
     ;
