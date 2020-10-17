@@ -1,5 +1,5 @@
-USING: accessors compiler.crossref compiler.test compiler.tree.builder
-compiler.tree.debugger compiler.tree.optimizer
+USING: accessors alien.parser assocs compiler.crossref compiler.test
+compiler.tree.builder compiler.tree.debugger compiler.tree.optimizer
 compiler.tree.propagation.inline-propagation fry kernel math math.parser.private
 namespaces sequences strings tools.test vocabs words ;
 IN: compiler.tree.propagation.inline-propagation.tests
@@ -67,8 +67,4 @@ M: bar frob a>> 10 (positive>base) ;
 { string } [ \ do-something final-classes first ] unit-test
 
 ! Inlining with repeating slot signature structure results in retain stack overflow
-{ object } [ \ scan-function-name final-info first ] unit-test
-
-
-! This fails, does it also fail in master?
-: blub ( x -- ) { composed } declare call( -- ) ;
+{ object } [ \ scan-function-name final-classes first ] unit-test

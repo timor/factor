@@ -50,12 +50,23 @@ ERROR: null-value-info ;
 !     !     >>slots
 !     ! ] when* ;
 !     ! ! dup literal?>> [ class>> <class-info> ] when ;
-TUPLE: inline-signature { class maybe{ classoid } read-only } { slots array read-only } ;
 
-: info>signature ( info/f -- sig/f )
+TUPLE: inline-signature { class maybe{ classoid } read-only } { slots array read-only } ;
+CONSTANT: object-signature T{ inline-signature f object }
+! Limit nesting of signatures which would result in inline propagation loops
+CONSTANT: max-signature-depth 10
+
+: (info>signature) ( depth info/f -- sig/f )
     dup
-    [ [ class>> ] [ slots>> [ info>signature ] { } map-as ] bi inline-signature boa ]
-    when ;
+    [
+        [ 1 + ] dip over max-signature-depth >
+        [ 2drop object-signature ]
+        [ swap [ class>> ] [ slots>> [ (info>signature) ] with { } map-as ] with bi inline-signature boa ] if
+    ]
+    [ nip ] if ;
+
+
+: info>signature ( info/f -- sig/f ) 0 swap (info>signature) ;
 
 : call-inline-signature ( #call -- obj )
     in-d>> [ value-info info>signature ] { } map-as ;
@@ -115,7 +126,6 @@ TUPLE: inline-signature { class maybe{ classoid } read-only } { slots array read
     [ word +definition+ depends-on ]
     if ;
     ! dup method? [ record-inline-method-propagation ] [ +definition+ depends-on ] if ;
-
 
 SINGLETON: +inline-recursion+
 SYMBOL: signature-trace
