@@ -183,7 +183,6 @@ SYMBOL: signature-trace
 : trace-non-trivial-infos ( infos -- )
     dup trivial-infos? not [ "--- Using inline-propagated infos %u" sprintf compiler-message ] [ drop ] if ;
 
-! TODO: misnomer, infos are actually classes
 :: cached-inline-propagation-infos ( #call word -- classes/f )
     word { [ "no-compile" word-prop ] } 1&& [ "nope" throw ] when
     #call call-inline-signature :> sig
@@ -196,10 +195,10 @@ SYMBOL: signature-trace
           +inline-recursion+ ]
         [ drop signature-trace [ word sig 2array suffix ] change
           #call sig splicing-class-infos ] if
-        dup sig info-cache set-at :> infos
-        #call word>> sig infos "--- inline infos: %u %u %u" format-compiler-message
-        infos +inline-recursion+? [ #call sig record-inline-propagation ] unless
-        infos
+        dup sig info-cache set-at :> classes
+        #call word>> sig classes "--- inline classes: %u %u %u" format-compiler-message
+        classes +inline-recursion+? [ #call sig record-inline-propagation ] unless
+        classes
     ] unless ;
 
 ! NOTE: We don't propagate through generic dispatches.  An optimization could be
