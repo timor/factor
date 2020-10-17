@@ -30,6 +30,17 @@ M: word splicing-nodes splicing-call ;
 
 M: callable splicing-nodes splicing-body ;
 
+! This one specifies the class, method and body slots of a #call if it is
+! inlined.  It works irrespective of whether the method and body slot have been
+! set already.
+! - If a quotation is provided:
+!   - set the class slot to the provided class (which is always number for math methods???)
+!   - If the method slot of the #call is equal to the provided word
+!     - Assume that body is set, propagate that
+!     - Otherwise compute the nodes based on the #call and the provided
+!       word/quot, update the method and body slot, and propagate the body.
+!       If no nodes have been provided, undo the inlining.
+!
 : eliminate-dispatch ( #call class/f word/quot/f -- ? )
     dup [
         [ >>class ] dip
