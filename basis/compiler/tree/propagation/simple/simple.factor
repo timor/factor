@@ -130,8 +130,9 @@ ERROR: inferred-null-class info1 info2 ;
     #call word [ default-output-value-infos ]
     [ inline-propagation-infos [ <class-info> ] map ] 2bi :> ( default inlined )
     inlined [
-        default inlined 2dup assert-class-overlap
-        sequence= [ word default inlined [ [ class>> ] map ] bi@ report-info-difference ] unless ] when
+        ! default inlined assert-class-overlap
+        ! sequence= [ word default inlined [ [ class>> ] map ] bi@ report-info-difference ] unless
+    ] when
     ! default
     inlined default or
     ;

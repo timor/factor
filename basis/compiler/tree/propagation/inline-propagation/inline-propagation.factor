@@ -1,13 +1,10 @@
-USING: accessors arrays assocs byte-arrays combinators.short-circuit
+USING: accessors arrays assocs byte-arrays classes combinators.short-circuit
 compiler.messages compiler.tree compiler.tree.builder.private
 compiler.tree.normalization compiler.tree.propagation.info
 compiler.tree.propagation.inlining compiler.tree.propagation.nodes
-compiler.tree.cleanup
 compiler.tree.recursive compiler.utilities continuations formatting generic
-compiler.word-props
-generic.single generic.math
-kernel locals math namespaces sequences stack-checker.dependencies
-stack-checker.errors strings words ;
+generic.hook generic.math generic.single kernel locals math namespaces sequences
+stack-checker.dependencies stack-checker.errors strings words ;
 
 IN: compiler.tree.propagation.inline-propagation
 
@@ -15,7 +12,7 @@ IN: compiler.tree.propagation.inline-propagation
 
 ! An assoc storing cached inlined-infos for different value-info inputs for each word
 SYMBOL: inline-info-cache
-inline-info-cache [ H{ } clone ] initialize
+! inline-info-cache [ H{ } clone ] initialize
 
 UNION: primitive-sequence string byte-array array ;
 
@@ -53,12 +50,29 @@ ERROR: null-value-info ;
 !     !     >>slots
 !     ! ] when* ;
 !     ! ! dup literal?>> [ class>> <class-info> ] when ;
+TUPLE: inline-signature { class maybe{ classoid } read-only } { slots array read-only } ;
 
-: inline-signature ( #call -- obj )
-    in-d>> [ value-info class>> ] { } map-as ;
+: info>signature ( info/f -- sig/f )
+    dup
+    [ [ class>> ] [ slots>> [ info>signature ] { } map-as ] bi inline-signature boa ]
+    when ;
 
-: deliteralize-infos ( infos -- classes/f )
-    dup [ null-info = ] any?    ! This happens if inline propagation resulted in termination
+: call-inline-signature ( #call -- obj )
+    in-d>> [ value-info info>signature ] { } map-as ;
+
+: signature>info ( sig/f -- info/f )
+    dup
+    [ [ class>> dup class-interval <class/interval-info> ] [ slots>> [ signature>info ] { } map-as ] bi >>slots ]
+    when ;
+
+: signatures>classes ( seq -- seq )
+    sift
+    [ [ slots>> signatures>classes sift ] [ class>> ] bi prefix ]
+    map concat ;
+
+: value-info-classes ( infos -- classes/f )
+    ! dup [ null-info = ] any?    ! This happens if inline propagation resulted in termination
+    f
     [ drop f ] [ [ class>> ] map ] if ;
     ! swap word>> foldable? [ [ class>> <class-info> ] map ] unless ;
     ! [ [ f >>literal? f >>literal? ] map ] unless ;
@@ -73,13 +87,28 @@ ERROR: null-value-info ;
 ! Note that we only record this on the top-level, which might be wrong if the
 ! parent of a nested specialization is not recompiled when the nested
 ! specialization changes...
-:: record-inline-propagation ( #call input-classes output-classes -- )
-    input-classes output-classes [ [ add-depends-on-class ] each ] bi@
+! TODO This tries to replicate the behavior from propagation.inlining.  No idea
+! whether that is completely correct or whether it would be better to cache the
+! signature->classes transfer functions on the words, and have an extra kind of
+! dependency on that.  But I'm not sure if that would work, since we wouldn't
+! modify the words being compiled, but some others.  They would then need to be
+! added to the outdated set as a kind of dirty-marking.  Could escalate, probably.
+:: record-inline-propagation ( #call signatures output-classes -- )
+    signatures [ class>> ] map :> input-classes
+    ! TODO Not sure if the dependency on the classes is actually needed if the
+    ! dependencies of all involved methods are correct.  I think at leas the
+    ! input classes are important, since the signature calculation depends on
+    ! the slot layout.
+    signatures signatures>classes output-classes [ [ add-depends-on-class ] each ] bi@
     #call word>> :> word
-    word method?
-    [ word parent-word :> generic
+    word parent-word :> generic
+    { [ word method? ] [ #call method>> ] } 0&&
+    [
       generic math-generic?
-      [ number ] [ generic dispatch# input-classes nth ] if :> class
+      [ number ] [
+          generic hook-generic? [ word "method-class" word-prop ]
+          [ generic dispatch# input-classes <reversed> nth ] if
+      ] if :> class
       class generic add-depends-on-generic
       class generic word add-depends-on-method
       ]
@@ -108,43 +137,59 @@ SYMBOL: signature-trace
 !     [ 2nip ]
 !     [ inline-propagation-body [ "inline-body" set-word-prop ] keep ] if* ;
 
-:: propagate-body-for-infos ( #call input-classes -- infos/f )
-    input-classes [ <class-info> ] map :> input-info
+! : deliteralize-info ( info -- info' )
+!     clone f >>literal f >>literal?
+!     dup class>> class-interval >>interval
+!     [ [ dup [ deliteralize-info ] when ] map ] change-slots ;
+
+:: propagate-body-for-infos ( #call signatures -- infos/f )
+    ! #call in-d>> [ value-info deliteralize-info ] map :> input-info
+    signatures [ signature>info ] map :> input-info
+    ! #call word>> input-info "--- Using infos to propagate %u: %u" format-compiler-message
+    ! input-classes [ <class-info> ] map :> input-info
     #call inline-propagation-body
     [ [
+            ! TODO That part I am really not sure about.  The idea is to
+            ! register any class-specific stuff as dependencies while inlining,
+            ! but not the definitions themselves, since anything which is not
+            ! inline would have been added by the stack checker anyways
+            dependencies off
+            ! generic-dependencies off
+            ! conditional-dependencies off
             value-infos [ H{ } clone suffix ] change
             input-info #call in-d>> [ set-value-info ] 2each
             [ (propagate) ] keep last in-d>> [ value-info ] { } map-as
-        ] without-dependencies
+        ] with-scope
     ] [ f ] if* ;
 
-:: splicing-class-infos ( #call input-classes -- infos/f )
-    #call word>> name>> input-classes "--- Propagating nodes for infos: %u inputs: %u " format-compiler-message
-    #call input-classes propagate-body-for-infos
-    deliteralize-infos dup :> res
+:: splicing-class-infos ( #call signatures -- infos/f )
+    #call word>> name>> signatures "--- Propagating nodes for infos: %u inputs: %u " format-compiler-message
+    #call signatures propagate-body-for-infos
+    value-info-classes dup :> res
     [
-        #call input-classes res record-inline-propagation
+        ! #call signatures res record-inline-propagation
     ] [ f ] if* ;
-
 
 : trace-non-trivial-infos ( infos -- )
     dup trivial-infos? not [ "--- Using inline-propagated infos %u" sprintf compiler-message ] [ drop ] if ;
 
 :: cached-inline-propagation-infos ( #call word -- classes/f )
     word { [ "no-compile" word-prop ] } 1&& [ "nope" throw ] when
-    #call inline-signature :> sig
+    #call call-inline-signature :> sig
     word inline-info-cache get [ drop H{ } clone ] cache :> info-cache
     sig info-cache at*
-    [ "--- inline info cache hit" compiler-message ]
+    ! [ "--- inline info cache hit" compiler-message ]
     [
         word sig 2array signature-trace get member?
         [   drop signature-trace get word sig 2array "--- Inline Propagation recursion: %u %u" format-compiler-message
             +inline-recursion+ ]
         [ drop signature-trace [ word sig 2array suffix ] change
           #call sig splicing-class-infos
-          dup sig info-cache set-at ] if
-    ] if
-    dup [ #call word>> sig pick "--- inline infos: %u %u %u" format-compiler-message ] when
+          dup sig info-cache set-at ] if :> infos
+        #call word>> sig infos "--- inline infos: %u %u %u" format-compiler-message
+        infos +inline-recursion+? [ #call sig infos record-inline-propagation ] unless
+        infos
+    ] unless
     ;
 
 ! NOTE: We don't propagate through generic dispatches.  An optimization could be
@@ -154,6 +199,7 @@ SYMBOL: signature-trace
     2dup { [ nip primitive? ]
            ! [ nip no-compile? ]
            [ nip generic? ]
+           ! [ nip "combination" word-prop hook-combination? ]
            [ nip never-inline-word? ]
            [ nip custom-inlining? ]
            [ drop out-d>> empty? ] } 2||

@@ -7,6 +7,7 @@ compiler.tree.propagation.call-effect
 compiler.tree.propagation.constraints
 compiler.tree.propagation.copy
 compiler.tree.propagation.info
+compiler.tree.propagation.inline-propagation
 compiler.tree.propagation.inlining
 compiler.tree.propagation.known-words
 compiler.tree.propagation.nodes
@@ -20,4 +21,6 @@ IN: compiler.tree.propagation
     H{ } clone copies set
     H{ } clone 1array value-infos set
     H{ } clone 1array constraints set
+    ! If per-compilation-unit cache is not initialized, initialize per-word cache here
+    inline-info-cache [ [ H{ } clone ] unless* ] change
     dup (propagate) ;

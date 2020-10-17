@@ -1,6 +1,7 @@
-USING: accessors compiler.test compiler.tree.builder compiler.tree.debugger
-compiler.tree.optimizer compiler.tree.propagation.inline-propagation kernel math
-math.parser.private namespaces sequences strings tools.test ;
+USING: accessors compiler.crossref compiler.test compiler.tree.builder
+compiler.tree.debugger compiler.tree.optimizer
+compiler.tree.propagation.inline-propagation fry kernel math math.parser.private
+namespaces sequences strings tools.test vocabs words ;
 IN: compiler.tree.propagation.inline-propagation.tests
 
 ! * Interactive Helpers
@@ -8,6 +9,11 @@ IN: compiler.tree.propagation.inline-propagation.tests
     [
         H{ } inline-info-cache set
         final-info ] with-scope ;
+
+: bad-deps ( -- deps )
+    all-words dup [ subwords ] map concat append
+    H{ } clone tuck '[ _ dependencies-satisfied? ] reject drop [ nip ] assoc-reject keys ;
+
 ! : inline-info-caches ( words -- assoc )
 !     [ dup word-inline-infos-cache ] map>alist
 !     [ nip assoc-empty? ] assoc-reject ;
