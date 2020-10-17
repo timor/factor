@@ -192,16 +192,15 @@ SYMBOL: signature-trace
     ! [ "--- inline info cache hit" compiler-message ]
     [
         word sig 2array signature-trace get member?
-        [   drop signature-trace get word sig 2array "--- Inline Propagation recursion: %u %u" format-compiler-message
-            +inline-recursion+ ]
+        [ drop signature-trace get word sig 2array "--- Inline Propagation recursion: %u %u" format-compiler-message
+          +inline-recursion+ ]
         [ drop signature-trace [ word sig 2array suffix ] change
-          #call sig splicing-class-infos
-          dup sig info-cache set-at ] if :> infos
+          #call sig splicing-class-infos ] if
+        dup sig info-cache set-at :> infos
         #call word>> sig infos "--- inline infos: %u %u %u" format-compiler-message
         infos +inline-recursion+? [ #call sig record-inline-propagation ] unless
         infos
-    ] unless
-    ;
+    ] unless ;
 
 ! NOTE: We don't propagate through generic dispatches.  An optimization could be
 ! to determine whether the input is a proper subset of the generic's method
