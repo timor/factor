@@ -152,7 +152,7 @@ SYMBOL: signature-trace
 :: propagate-body-for-infos ( #call signatures -- infos/f )
     ! #call in-d>> [ value-info deliteralize-info ] map :> input-info
     signatures [ signature>info ] map :> input-info
-    ! #call word>> input-info "--- Using infos to propagate %u: %u" format-compiler-message
+    ! #call word>> input-info "--- Using infos to propagate %u: %u" 3 format-compiler-message
     ! input-classes [ <class-info> ] map :> input-info
     #call inline-propagation-body
     [ [
@@ -170,37 +170,37 @@ SYMBOL: signature-trace
     ] [ f ] if* ;
 
 :: splicing-class-infos ( #call signatures -- infos/f )
-    #call word>> name>> signatures "--- Propagating nodes for infos: %u inputs: %u " format-compiler-message
+    #call word>> name>> signatures "--- Propagating nodes for infos: %u inputs: %u " 4 format-compiler-message
     #call signatures propagate-body-for-infos
     value-info-classes dup :> res
     [
         ! #call signatures res record-inline-propagation
     ] [ f ] if* ;
 
-: trace-non-trivial-infos ( infos -- )
-    dup trivial-infos? not [ "--- Using inline-propagated infos %u" sprintf compiler-message ] [ drop ] if ;
+! : trace-non-trivial-infos ( infos -- )
+!     dup trivial-infos? not [ "--- Using inline-propagated infos %u" 3 format-compiler-message ] [ drop ] if ;
 
 :: cached-inline-propagation-infos ( #call word -- classes/f )
     word { [ "no-compile" word-prop ] } 1&& [ "nope" throw ] when
     #call call-inline-signature :> sig
     word inline-info-cache get [ drop H{ } clone ] cache :> info-cache
     sig info-cache at*
-    ! [ "--- inline info cache hit" compiler-message ]
+    [ "--- inline info cache hit" 4 compiler-message* ]
     [
         word sig 2array signature-trace get member?
-        [ drop signature-trace get word sig 2array "--- Inline Propagation recursion: %u %u" format-compiler-message
+        [ drop signature-trace get word sig 2array "--- Inline Propagation recursion: %u %u" 2 format-compiler-message
           +inline-recursion+ ]
         [ drop signature-trace [ word sig 2array suffix ] change
           #call sig splicing-class-infos ] if
         dup sig info-cache set-at :> classes
-        #call word>> sig classes "--- inline classes: %u %u %u" format-compiler-message
+        #call word>> sig classes "--- inline classes: %u %u %u" 3 format-compiler-message
         classes +inline-recursion+? [ #call sig record-inline-propagation ] unless
         classes
-    ] unless ;
+    ] if ;
 
 ! NOTE: We don't propagate through generic dispatches.  An optimization could be
 ! to determine whether the input is a proper subset of the generic's method
-! definers, and compile in the actual dispatch.
+! definers, and to inline-propagate all of those and return the union info
 : inline-propagation-infos ( #call word -- classes/f )
     2dup { [ nip primitive? ]
            ! [ nip no-compile? ]

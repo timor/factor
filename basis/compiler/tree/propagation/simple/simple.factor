@@ -118,7 +118,7 @@ ERROR: invalid-outputs #call infos ;
     [ class-infos ] [ out-d>> length object-info <repetition> ] ?if ;
 
 : report-info-difference ( word default propagated -- )
-    "Computed different output info for: %u %u -> %u" format-compiler-message ;
+    "Computed different output info for: %u %u -> %u" 4 format-compiler-message ;
 
 ERROR: inferred-null-class info1 info2 ;
 
@@ -132,7 +132,7 @@ ERROR: inferred-null-class info1 info2 ;
     [ inline-propagation-infos [ <class-info> ] map ] 2bi :> ( default inlined )
     inlined [
         ! default inlined assert-class-overlap
-        ! sequence= [ word default inlined [ [ class>> ] map ] bi@ report-info-difference ] unless
+        default inlined sequence= [ word default inlined [ [ class>> ] map ] bi@ report-info-difference ] unless
     ] when
     ! default
     inlined default or
