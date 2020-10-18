@@ -1,18 +1,15 @@
 USING: accessors arrays assocs byte-arrays classes combinators.short-circuit
 compiler.messages compiler.tree compiler.tree.builder.private
 compiler.tree.normalization compiler.tree.propagation.info
+compiler.tree.propagation.inline-propagation.cache
 compiler.tree.propagation.inlining compiler.tree.propagation.nodes
 compiler.tree.recursive compiler.utilities continuations formatting generic
 generic.hook generic.math generic.single kernel locals math namespaces sequences
 stack-checker.dependencies stack-checker.errors strings words ;
 
 IN: compiler.tree.propagation.inline-propagation
-
-! DOING: not annotating words, also only use classes
-
-! An assoc storing cached inlined-infos for different value-info inputs for each word
-SYMBOL: inline-info-cache
-! inline-info-cache [ H{ } clone ] initialize
+! Make sure that gets loaded!
+USE: compiler.tree.propagation.inline-propagation.known-words
 
 UNION: primitive-sequence string byte-array array ;
 
@@ -208,10 +205,11 @@ SYMBOL: signature-trace
     2dup { [ nip primitive? ]
            ! [ nip no-compile? ]
            [ nip generic? ]
-           ! [ nip "combination" word-prop hook-combination? ]
+           ! [ nip parent-word hook-generic? ] ! Disable any hook methods for now
            [ nip never-inline-word? ]
            [ nip custom-inlining? ]
-           [ drop out-d>> empty? ] } 2||
+           [ drop out-d>> empty? ]
+           [ nip "never-propagate-inline" word-prop ] } 2||
     [ 2drop f ]
     [ cached-inline-propagation-infos
       dup +inline-recursion+? [ drop f ] when

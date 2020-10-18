@@ -4,6 +4,7 @@ USING: accessors alien.c-types arrays assocs classes classes.algebra
 classes.tuple.private combinators combinators.short-circuit compiler.messages
 compiler.tree compiler.tree.propagation.constraints
 compiler.tree.propagation.info compiler.tree.propagation.inline-propagation
+compiler.tree.propagation.inline-propagation.cache
 compiler.tree.propagation.inlining compiler.tree.propagation.nodes
 compiler.tree.propagation.slots continuations fry kernel locals sequences
 stack-checker.dependencies words ;
@@ -147,7 +148,15 @@ ERROR: inferred-null-class info1 info2 ;
         !       { [ inline-propagation-infos ] [ default-output-value-infos ] } 2||
         !   ] }
         ! [ default-output-value-infos ]
-        [ compare-inline-propagated-infos ]
+        [
+            ! inline-propagation?
+            t
+          ! 2dup compare-inline-propagated-infos drop
+          [ compare-inline-propagated-infos ]
+          [
+              default-output-value-infos
+              ] if
+        ]
     } cond ;
 
 M: #call propagate-before

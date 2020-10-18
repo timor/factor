@@ -7,7 +7,7 @@ compiler.tree.propagation.call-effect
 compiler.tree.propagation.constraints
 compiler.tree.propagation.copy
 compiler.tree.propagation.info
-compiler.tree.propagation.inline-propagation
+compiler.tree.propagation.inline-propagation.cache
 compiler.tree.propagation.inlining
 compiler.tree.propagation.known-words
 compiler.tree.propagation.nodes
