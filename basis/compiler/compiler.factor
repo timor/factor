@@ -14,7 +14,7 @@ IN: compiler
 SYMBOL: compiled
 
 : start-compilation ( word -- )
-    dup name>> compiler-message
+    dup name>> 2 compiler-message*
     H{ } clone dependencies namespaces:set
     H{ } clone generic-dependencies namespaces:set
     HS{ } clone conditional-dependencies namespaces:set
@@ -57,7 +57,7 @@ SYMBOL: compiled
     ! non-optimizing compiler, using its definition. Otherwise,
     ! if the compiler error is not ignorable, use a dummy
     ! definition from 'not-compiled-def' which throws an error.
-    2dup "--- Error during optimization: %u %u" format-compiler-message
+    2dup "--- Error during optimization: %u %u" 1 format-compiler-message
     {
         { [ dup inference-error? not ] [ rethrow ] }
         { [ 2dup ignore-error? ] [ ignore-error ] }
@@ -110,12 +110,12 @@ M: optimizing-compiler update-call-sites ( class generic -- words )
 M: optimizing-compiler recompile ( words -- alist )
     H{ } clone compiled [
         [ compile? ] filter
-        dup "--- recompiling words: %u" format-compiler-message
+        dup "--- recompiling words: %u" 1 format-compiler-message
         H{ } clone inline-info-cache namespaces:set
         [ compile-word yield-hook get call( -- ) ] each
         compiled get >alist
     ] with-variable
-    "--- compile done" compiler-message ;
+    "--- compile done" 1 compiler-message* ;
 
 M: optimizing-compiler to-recompile ( -- words )
     [
