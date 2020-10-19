@@ -8,9 +8,8 @@ IN: compiler.tree.propagation.inline-propagation.tests
 
 ! * Interactive Helpers
 : final-info' ( word/quot -- seq )
-    [
-        H{ } clone inline-info-cache set
-        final-info ] with-scope ;
+    [ H{ } clone inline-info-cache set
+      final-info ] with-scope ;
 
 : bad-deps ( -- deps )
     all-words dup [ subwords ] map concat append
@@ -66,6 +65,36 @@ M: wrapper quot= over wrapper? [ [ wrapped>> ] bi@ quot= ] [ 2drop f ] if ;
 
 : check-quots ( words -- assoc )
     opt-quots [ nip first2 quot= ] assoc-reject ;
+
+: final-deps ( word/quot -- assoc )
+    [
+        H{ } clone dependencies namespaces:set
+        H{ } clone generic-dependencies namespaces:set
+        HS{ } clone conditional-dependencies namespaces:set
+        optimized drop
+        get-dependencies-namespace
+    ] with-scope ;
+
+: final-deps' ( word/quot -- assoc ) [ final-deps ] with-inline-propagation ;
+
+: opt-deps ( words -- assoc )
+    [ dup [ [ final-deps ] 1or-error ] [ [ final-deps' ] 1or-error ] bi 2array
+    ]  H{ } map>assoc  ;
+
+: check-deps ( words -- assoc )
+    opt-deps [ nip first2 assoc= ] assoc-reject ;
+
+: deps-diff ( opt-deps -- assoc )
+    [ first2 [
+          [ conditional-dependencies get cardinality
+            generic-dependencies get assoc-size
+            dependencies get values [ +definition+ = ] count
+            3array
+          ] with-variables
+      ] bi@ [ swap - ] 2map ] assoc-map ;
+
+: diff-deps ( words -- assoc )
+    check-deps deps-diff ;
 
 ! : inline-info-caches ( words -- assoc )
 !     [ dup word-inline-infos-cache ] map>alist
@@ -123,3 +152,29 @@ M: bar frob a>> 10 (positive>base) ;
 
 ! Inlining with repeating slot signature structure results in retain stack overflow
 { object } [ \ scan-function-name final-classes first ] inline-test unit-test
+
+! * Understanding inline dependencies
+
+: inlinee-1 ( x x -- x x ) swap swap ; inline
+: inlinee-2 ( x x -- x x ) inlinee-1 ; inline
+: inliner ( x x -- x x ) inlinee-2 ;
+: stupid ( x x -- x x ) swap ;
+: callee-1 ( x x -- x x ) stupid swap 1 + ;
+: callee-2 ( x x -- x x ) callee-1 ;
+: callee-3 ( x x -- x x ) callee-2 ;
+: calling ( x x -- x x ) callee-3 ;
+
+! calling should have a n inline dependency on all 3 callees, but not on stupid
+{ { +definition+ } } [ \ calling final-deps' dependencies of values members ] unit-test
+{ f } [ \ calling final-deps' dependencies of \ stupid of ] unit-test
+
+
+
+! * Dispatch inlining
+
+GENERIC: first-half ( seq -- seq )
+M: sequence first-half dup length 2 /i head-slice ;
+M: slice first-half [ from>> ] [ to>> ] [ seq>> ] tri
+    [ over over - 2 /i + ] dip slice boa ;
+PREDICATE: 1box < array length 1 = ;
+M: 1box first-half drop f ;

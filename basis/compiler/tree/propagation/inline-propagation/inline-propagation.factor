@@ -1,9 +1,11 @@
-USING: accessors arrays assocs byte-arrays classes combinators.short-circuit
-compiler.messages compiler.tree compiler.tree.builder.private
-compiler.tree.normalization compiler.tree.propagation.info
+USING: accessors arrays assocs byte-arrays classes classes.algebra combinators
+combinators.short-circuit compiler.messages compiler.tree
+compiler.tree.builder.private compiler.tree.normalization
+compiler.tree.propagation.info
+compiler.word-props
 compiler.tree.propagation.inline-propagation.cache
 compiler.tree.propagation.inlining compiler.tree.propagation.nodes
-compiler.tree.recursive compiler.utilities continuations formatting generic
+compiler.tree.recursive compiler.utilities continuations effects generic
 generic.hook generic.math generic.single kernel locals math namespaces sequences
 stack-checker.dependencies stack-checker.errors strings words ;
 
@@ -85,47 +87,34 @@ CONSTANT: max-signature-depth 10
     ! swap word>> foldable? [ [ class>> <class-info> ] map ] unless ;
     ! [ [ f >>literal? f >>literal? ] map ] unless ;
 
-: trivial-infos? ( infos -- ? )
-    [ { [ object-info = ] [ class>> union{ t POSTPONE: f } = ] } 1|| ] all? ;
+! * Dependency tracking
+: get-dependencies-namespace ( -- assoc )
+    { dependencies generic-dependencies conditional-dependencies } [ dup get ] H{ } map>assoc ;
 
-! : record-inline-propagation ( #call infos -- )
-!     trivial-infos? [ drop ] [ word>> +definition+ depends-on ] if ;
+SYMBOL: dependencies-stack
 
+: link-dependencies ( -- )
+    dependencies-stack [ get-dependencies-namespace suffix ] change
+    H{ } clone dependencies namespaces:set
+    H{ } clone generic-dependencies namespaces:set
+    HS{ } clone conditional-dependencies namespaces:set ;
 
-! Note that we only record this on the top-level, which might be wrong if the
-! parent of a nested specialization is not recompiled when the nested
-! specialization changes...
-! TODO This tries to replicate the behavior from propagation.inlining.  No idea
-! whether that is completely correct or whether it would be better to cache the
-! signature->classes transfer functions on the words, and have an extra kind of
-! dependency on that.  But I'm not sure if that would work, since we wouldn't
-! modify the words being compiled, but some others.  They would then need to be
-! added to the outdated set as a kind of dirty-marking.  Could escalate, probably.
-:: record-inline-propagation ( #call signatures -- )
-    signatures [ class>> ] map :> input-classes
-    ! TODO Not sure if the dependency on the classes is actually needed if the
-    ! dependencies of all involved methods are correct.  I think at leas the
-    ! input classes are important, since the signature calculation depends on
-    ! the slot layout.
-    signatures signatures>classes [ add-depends-on-class ] each
-    #call word>> :> word
-    word parent-word :> generic
-    { [ word method? ] [ #call method>> ] } 0&&
-    [
-      generic math-generic?
-      [ number ] [
-          generic hook-generic? [ word "method-class" word-prop ]
-          [ generic dispatch# input-classes <reversed> nth ] if
-      ] if :> class
-      class generic add-depends-on-generic
-      class generic word add-depends-on-method
-      ]
-    [ word +definition+ depends-on ]
-    if ;
-    ! dup method? [ record-inline-method-propagation ] [ +definition+ depends-on ] if ;
+: trivial-classes? ( classes -- ? )
+    [ object class= ] all? ;
 
-SINGLETON: +inline-recursion+
-SYMBOL: signature-trace
+: record-inline-propagation ( #call classes -- )
+    trivial-classes?
+    [ drop ]
+    [ dependencies-stack get ?first
+    ! copied record-inlining code from cleanup here due to vocab dependencies
+      [ dup method>>
+        [  dup method>> word? [
+               [ [ class>> ] [ word>> ] bi add-depends-on-generic ] [
+                   [ class>> ] [ word>> ] [ method>> ] tri
+                   add-depends-on-method
+               ] bi
+           ] [ drop ] if ] [ word>> +definition+ depends-on ]
+        if ] with-variables ] if ;
 
 ! Make the nodes for propagation, prefix it with a #copy
 :: inline-propagation-body ( #call -- nodes/f )
@@ -155,18 +144,10 @@ SYMBOL: signature-trace
     ! #call word>> input-info "--- Using infos to propagate %u: %u" 3 format-compiler-message
     ! input-classes [ <class-info> ] map :> input-info
     #call inline-propagation-body
-    [ [
-            ! TODO That part I am really not sure about.  The idea is to
-            ! register any class-specific stuff as dependencies while inlining,
-            ! but not the definitions themselves, since anything which is not
-            ! inline would have been added by the stack checker anyways
-            dependencies off
-            ! generic-dependencies off
-            ! conditional-dependencies off
-            value-infos [ H{ } clone suffix ] change
-            input-info #call in-d>> [ set-value-info ] 2each
-            [ (propagate) ] keep last in-d>> [ value-info ] { } map-as
-        ] with-scope
+    [
+        value-infos [ H{ } clone suffix ] change
+        input-info #call in-d>> [ set-value-info ] 2each
+        [ (propagate) ] keep last in-d>> [ value-info ] { } map-as
     ] [ f ] if* ;
 
 :: splicing-class-infos ( #call signatures -- infos/f )
@@ -180,6 +161,9 @@ SYMBOL: signature-trace
 ! : trace-non-trivial-infos ( infos -- )
 !     dup trivial-infos? not [ "--- Using inline-propagated infos %u" 3 format-compiler-message ] [ drop ] if ;
 
+SINGLETON: +inline-recursion+
+SYMBOL: signature-trace
+
 :: cached-inline-propagation-infos ( #call word -- classes/f )
     word { [ "no-compile" word-prop ] } 1&& [ "nope" throw ] when
     #call call-inline-signature :> sig
@@ -187,29 +171,44 @@ SYMBOL: signature-trace
     sig info-cache at*
     [ "--- inline info cache hit" 4 compiler-message* ]
     [
-        word sig 2array signature-trace get member?
-        [ drop signature-trace get word sig 2array "--- Inline Propagation recursion: %u %u" 2 format-compiler-message
-          +inline-recursion+ ]
-        [ drop signature-trace [ word sig 2array suffix ] change
-          #call sig splicing-class-infos ] if
-        dup sig info-cache set-at :> classes
-        #call word>> sig classes "--- inline classes: %u %u %u" 3 format-compiler-message
-        classes +inline-recursion+? [ #call sig record-inline-propagation ] unless
-        classes
+        [
+            link-dependencies
+            word sig 2array signature-trace get member?
+            [ drop signature-trace get word sig 2array "--- Inline Propagation recursion: %u %u" 2 format-compiler-message
+              +inline-recursion+ ]
+            [ drop signature-trace [ word sig 2array suffix ] change
+              #call sig splicing-class-infos ] if
+            dup sig info-cache set-at :> classes
+            #call word>> sig classes "--- inline classes: %u %u %u" 3 format-compiler-message
+            classes +inline-recursion+? [ #call classes record-inline-propagation ] unless
+            classes
+        ] with-scope
     ] if ;
+
+! * Dispatch Inlining
+! When trying really hard to propagate dispatch, compile in the actual dispatch for propagation
+: make-executer ( method -- quot )
+    dup stack-effect [ execute-effect ] 2curry ;
+
+: dispatch-inlining-quot ( classoid word -- quot )
+    [ "methods" word-prop
+      [ keys [ classes-intersect? ] with filter ] [ extract-keys ] bi
+      sort-methods <reversed> class-predicates [ make-executer ] assoc-map
+    ] keep
+    "default-method" word-prop dup word? [ make-executer ] when suffix
+    [ cond ] curry ;
 
 ! NOTE: We don't propagate through generic dispatches.  An optimization could be
 ! to determine whether the input is a proper subset of the generic's method
 ! definers, and to inline-propagate all of those and return the union info
 : inline-propagation-infos ( #call word -- classes/f )
-    2dup { [ nip primitive? ]
-           ! [ nip no-compile? ]
-           [ nip generic? ]
-           ! [ nip parent-word hook-generic? ] ! Disable any hook methods for now
-           [ nip never-inline-word? ]
-           [ nip custom-inlining? ]
-           [ drop out-d>> empty? ]
-           [ nip "never-propagate-inline" word-prop ] } 2||
+    2dup  { [ nip primitive? ]
+            [ nip generic? ]
+            [ nip never-inline-word? ]
+            [ nip no-compile? ]
+            [ nip custom-inlining? ]
+            [ drop out-d>> empty? ]
+            [ nip "never-propagate-inline" word-prop ] } 2||
     [ 2drop f ]
     [ cached-inline-propagation-infos
       dup +inline-recursion+? [ drop f ] when

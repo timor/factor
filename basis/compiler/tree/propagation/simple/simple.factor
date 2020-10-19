@@ -149,8 +149,8 @@ ERROR: inferred-null-class info1 info2 ;
         !   ] }
         ! [ default-output-value-infos ]
         [
-            ! inline-propagation?
-            t
+            inline-propagation?
+            ! t
           ! 2dup compare-inline-propagated-infos drop
           [ compare-inline-propagated-infos ]
           [
