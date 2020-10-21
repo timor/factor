@@ -58,7 +58,7 @@ SYMBOL: compiled
     ! non-optimizing compiler, using its definition. Otherwise,
     ! if the compiler error is not ignorable, use a dummy
     ! definition from 'not-compiled-def' which throws an error.
-    2dup "--- Error during optimization: %u %u" 1 format-compiler-message
+    2dup "--- Error during optimization: %u %u" 2 format-compiler-message
     {
         { [ dup inference-error? not ] [ rethrow ] }
         { [ 2dup ignore-error? ] [ ignore-error ] }
@@ -111,8 +111,10 @@ M: optimizing-compiler update-call-sites ( class generic -- words )
 M: optimizing-compiler recompile ( words -- alist )
     H{ } clone compiled [
         [ compile? ] filter
-        dup "--- recompiling words: %u" 1 format-compiler-message
-        H{ } clone inline-info-cache namespaces:set
+        dup length "--- recompiling %d words" 1 format-compiler-message
+        dup "--- recompile set: %u" 2 format-compiler-message
+        ! H{ } clone inline-info-cache namespaces:set
+        dup invalidate-inline-info
         [ compile-word yield-hook get call( -- ) ] each
         compiled get >alist
     ] with-variable

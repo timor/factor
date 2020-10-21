@@ -1,10 +1,12 @@
 USING: accessors alien.parser arrays assocs classes classes.algebra
 combinators.short-circuit compiler.crossref compiler.test compiler.tree.builder
 compiler.tree.debugger compiler.tree.optimizer
+compiler.tree.propagation.inline-propagation
 compiler.tree.propagation.inline-propagation.cache continuations effects fry
-kernel math math.parser.private namespaces sequences strings tools.test vocabs
-words ;
+kernel math math.parser.private namespaces prettyprint sequences sets
+stack-checker.dependencies strings tools.test vocabs words ;
 IN: compiler.tree.propagation.inline-propagation.tests
+FROM: namespaces => set ;
 
 ! * Interactive Helpers
 : final-info' ( word/quot -- seq )
@@ -34,6 +36,9 @@ M: wrapper quot= over wrapper? [ [ wrapped>> ] bi@ quot= ] [ 2drop f ] if ;
 
 : optimized' ( word/quot -- nodes )
     [ optimized ] with-inline-propagation ;
+
+: optimized'. ( word/quot -- )
+    optimized' nodes>quot . ;
 
 : final-classes' ( word/quot -- seq )
     [ final-classes ] with-inline-propagation ;
@@ -123,13 +128,16 @@ M: wrapper quot= over wrapper? [ [ wrapped>> ] bi@ quot= ] [ 2drop f ] if ;
 ! : write-infos ( path -- )
 !     all-words non-trivial-inline-info-caches sort-keys swap utf8 [ ... ] with-file-writer ;
 
+! ** Profiling
+: propagation-words ( -- seq ) { propagate-body-for-infos cached-inline-propagation-infos } ;
+
 ! * Unit tests
 : swap-only ( x x -- x x ) swap ;
 : swap-foldable ( x x -- x x ) swap ; foldable
 
 : swap-user ( x x -- x x ) swap-only ;
 
-: inline-test ( quot -- quot ) [ with-inline-propagation ] curry ;
+: inline-test ( quot -- quot ) [ with-inline-propagation ] curry ; inline
 
 { \ t } [ [ 1 2 swap-only + integer? ] build-tree optimize-tree nodes>quot last ] inline-test unit-test
 { \ t } [ [ 1 2 swap-user + integer? ] build-tree optimize-tree nodes>quot last ] inline-test unit-test
@@ -165,10 +173,13 @@ M: bar frob a>> 10 (positive>base) ;
 : calling ( x x -- x x ) callee-3 ;
 
 ! calling should have a n inline dependency on all 3 callees, but not on stupid
-{ { +definition+ } } [ \ calling final-deps' dependencies of values members ] unit-test
+! That test does not work, have to check compiled-crossref instead:
+! { { +definition+ } } [ \ calling final-deps' dependencies of values members ] unit-test
 { f } [ \ calling final-deps' dependencies of \ stupid of ] unit-test
 
-
+: self-caller ( x -- x ) dup 5 > [ 1 - ] [ self-caller ] if ;
+: self-caller-caller ( x -- x ) self-caller ;
+: self-caller-caller' ( x -- x ) self-caller-caller ;
 
 ! * Dispatch inlining
 

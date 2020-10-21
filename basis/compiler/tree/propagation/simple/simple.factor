@@ -132,7 +132,7 @@ ERROR: inferred-null-class info1 info2 ;
     [ inline-propagation-infos [ <class-info> ] map ] 2bi :> ( default inlined )
     inlined [
         ! default inlined assert-class-overlap
-        default inlined sequence= [ word default inlined [ [ class>> ] map ] bi@ report-info-difference ] unless
+        ! default inlined sequence= [ word default inlined [ [ class>> ] map ] bi@ report-info-difference ] unless
     ] when
     ! default
     inlined default or
