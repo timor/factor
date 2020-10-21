@@ -11,9 +11,6 @@ SYMBOL: inline-propagation
 SYMBOL: inline-info-cache
 inline-info-cache [ H{ } clone ] initialize
 
-! TODO only used for debugging when global cache is not active
-: with-inline-info-cache ( quot -- ) [ H{ } clone inline-info-cache ] dip with-variable ; inline
-
 TUPLE: inline-propagation-entry { classes read-only } { dependencies read-only } ;
 C: <inline-propagation-entry> inline-propagation-entry
 ! : cache-inline-propagation-result ( classes deps sig cache -- )

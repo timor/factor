@@ -3,6 +3,7 @@ combinators.short-circuit compiler.crossref compiler.test compiler.tree.builder
 compiler.tree.debugger compiler.tree.optimizer
 compiler.tree.propagation.inline-propagation
 compiler.tree.propagation.inline-propagation.cache continuations effects fry
+compiler.units
 kernel math math.parser.private namespaces prettyprint sequences sets
 stack-checker.dependencies strings tools.test vocabs words ;
 IN: compiler.tree.propagation.inline-propagation.tests
@@ -53,6 +54,9 @@ M: wrapper quot= over wrapper? [ [ wrapped>> ] bi@ quot= ] [ 2drop f ] if ;
 : opt-classes ( words -- assoc )
     [ dup [ [ final-classes ] 1or-error ] [ [ final-classes' ] 1or-error ] bi 2array
     ]  H{ } map>assoc  ;
+
+: with-inline-info-cache ( quot -- ) [ H{ } clone inline-info-cache ] dip with-variable ; inline
+
 
 ! Perform above, but with a shared inline-info cache
 : opt-classes' ( words -- assoc )
@@ -176,10 +180,156 @@ M: bar frob a>> 10 (positive>base) ;
 ! That test does not work, have to check compiled-crossref instead:
 ! { { +definition+ } } [ \ calling final-deps' dependencies of values members ] unit-test
 { f } [ \ calling final-deps' dependencies of \ stupid of ] unit-test
+{
+H{
+    { calling f }
+    {
+        callee-1
+        H{
+            {
+                {
+                    T{ inline-signature { class object } }
+                    T{ inline-signature { class object } }
+                }
+                T{ inline-propagation-entry
+                    { classes { object number } }
+                    { dependencies
+                        H{
+                            { generic-dependencies H{ } }
+                            { conditional-dependencies HS{ } }
+                            { dependencies H{ } }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    {
+        callee-2
+        H{
+            {
+                {
+                    T{ inline-signature { class object } }
+                    T{ inline-signature { class object } }
+                }
+                T{ inline-propagation-entry
+                    { classes { object number } }
+                    { dependencies
+                        H{
+                            { generic-dependencies H{ } }
+                            { conditional-dependencies HS{ } }
+                            { dependencies H{ } }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    {
+        callee-3
+        H{
+            {
+                {
+                    T{ inline-signature { class object } }
+                    T{ inline-signature { class object } }
+                }
+                T{ inline-propagation-entry
+                    { classes { object number } }
+                    { dependencies
+                        H{
+                            { generic-dependencies H{ } }
+                            { conditional-dependencies HS{ } }
+                            { dependencies H{ } }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    {
+        stupid
+        H{
+            {
+                {
+                    T{ inline-signature { class object } }
+                    T{ inline-signature { class object } }
+                }
+                T{ inline-propagation-entry
+                    { classes { object object } }
+                    { dependencies
+                        H{
+                            { generic-dependencies H{ } }
+                            { conditional-dependencies HS{ } }
+                            { dependencies H{ } }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+} [ { callee-1 callee-2 callee-3 calling stupid } dup [ compile ] with-inline-propagation
+       inline-info-cache get extract-keys ] unit-test
 
 : self-caller ( x -- x ) dup 5 > [ 1 - ] [ self-caller ] if ;
 : self-caller-caller ( x -- x ) self-caller ;
 : self-caller-caller' ( x -- x ) self-caller-caller ;
+
+{
+H{
+    {
+        self-caller-caller
+        H{
+            {
+                { T{ inline-signature { class object } } }
+                T{ inline-propagation-entry
+                    { classes { object } }
+                    { dependencies
+                        H{
+                            { generic-dependencies H{ } }
+                            { conditional-dependencies HS{ } }
+                            { dependencies H{ } }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    {
+        self-caller
+        H{
+            {
+                { T{ inline-signature { class real } } }
+                T{ inline-propagation-entry
+                    { classes +inline-recursion+ }
+                    { dependencies
+                        H{
+                            { generic-dependencies H{ } }
+                            { conditional-dependencies HS{ } }
+                            { dependencies H{ } }
+                        }
+                    }
+                }
+            }
+            {
+                { T{ inline-signature { class object } } }
+                T{ inline-propagation-entry
+                    { classes { object } }
+                    { dependencies
+                        H{
+                            { generic-dependencies H{ } }
+                            { conditional-dependencies HS{ } }
+                            { dependencies H{ } }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    { self-caller-caller' f }
+}
+} [ { self-caller self-caller-caller self-caller-caller' } dup [ compile ] with-inline-propagation
+       inline-info-cache get extract-keys ] unit-test
 
 ! * Dispatch inlining
 
