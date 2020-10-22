@@ -1,11 +1,10 @@
-USING: accessors alien.parser arrays assocs classes classes.algebra
+USING: accessors alien.parser arrays assocs benchmark classes classes.algebra
 combinators.short-circuit compiler.crossref compiler.test compiler.tree.builder
 compiler.tree.debugger compiler.tree.optimizer
-compiler.tree.propagation.inline-propagation
 compiler.tree.propagation.inline-propagation.cache continuations effects fry
-compiler.units
-kernel math math.parser.private namespaces prettyprint sequences sets
-stack-checker.dependencies strings tools.test vocabs words ;
+kernel kernel.private math math.parser.private namespaces prettyprint sequences
+sets stack-checker.dependencies strings tools.test vectors vocabs vocabs.loader
+words ;
 IN: compiler.tree.propagation.inline-propagation.tests
 FROM: namespaces => set ;
 
@@ -36,13 +35,13 @@ M: wrapper quot= over wrapper? [ [ wrapped>> ] bi@ quot= ] [ 2drop f ] if ;
     [ build-tree optimize-tree ] with-scope ;
 
 : optimized' ( word/quot -- nodes )
-    [ optimized ] with-inline-propagation ;
+    [ optimized ] with-inline-info-cache ;
 
 : optimized'. ( word/quot -- )
     optimized' nodes>quot . ;
 
 : final-classes' ( word/quot -- seq )
-    [ final-classes ] with-inline-propagation ;
+    [ final-classes ] with-inline-info-cache ;
 
 : 1or-error ( quot: ( x -- x ) -- x/error )
     [ with-scope ] curry [ nip ] recover ; inline
@@ -54,9 +53,6 @@ M: wrapper quot= over wrapper? [ [ wrapped>> ] bi@ quot= ] [ 2drop f ] if ;
 : opt-classes ( words -- assoc )
     [ dup [ [ final-classes ] 1or-error ] [ [ final-classes' ] 1or-error ] bi 2array
     ]  H{ } map>assoc  ;
-
-: with-inline-info-cache ( quot -- ) [ H{ } clone inline-info-cache ] dip with-variable ; inline
-
 
 ! Perform above, but with a shared inline-info cache
 : opt-classes' ( words -- assoc )
@@ -73,7 +69,7 @@ M: wrapper quot= over wrapper? [ [ wrapped>> ] bi@ quot= ] [ 2drop f ] if ;
     all-subwords [ dup [ [ optimized nodes>quot ] 1or-error ] [ [ optimized' nodes>quot ] 1or-error ] bi 2array ] H{ } map>assoc ;
 
 : check-quots ( words -- assoc )
-    opt-quots [ nip first2 quot= ] assoc-reject ;
+    opt-quots [ nip first2 [ quot= ] [ 3drop f ] recover ] assoc-reject ;
 
 : final-deps ( word/quot -- assoc )
     [
@@ -84,14 +80,14 @@ M: wrapper quot= over wrapper? [ [ wrapped>> ] bi@ quot= ] [ 2drop f ] if ;
         get-dependencies-namespace
     ] with-scope ;
 
-: final-deps' ( word/quot -- assoc ) [ final-deps ] with-inline-propagation ;
+: final-deps' ( word/quot -- assoc ) [ final-deps ] with-inline-info-cache ;
 
 : opt-deps ( words -- assoc )
     [ dup [ [ final-deps ] 1or-error ] [ [ final-deps' ] 1or-error ] bi 2array
     ]  H{ } map>assoc  ;
 
 : check-deps ( words -- assoc )
-    opt-deps [ nip first2 assoc= ] assoc-reject ;
+    opt-deps [ nip first2 = ] assoc-reject ;
 
 : deps-diff ( opt-deps -- assoc )
     [ first2 [
@@ -104,6 +100,90 @@ M: wrapper quot= over wrapper? [ [ wrapped>> ] bi@ quot= ] [ 2drop f ] if ;
 
 : diff-deps ( words -- assoc )
     check-deps deps-diff ;
+
+: check-vocab-opt ( vocab-name -- res )
+    dup ".private" append [ dup require vocab-words all-subwords ] bi@ append
+    check-quots ;
+
+: compare-benchmark ( vocab -- res )
+    [ dup reload run-timing-benchmark ] [ [ dup reload ] with-inline-info-cache run-timing-benchmark ] bi
+    2array ;
+
+! recompile set of words with shared inline-cache, record entries in assoc of alists
+: collect-inline-cache ( assoc words -- assoc )
+    [ recompile drop inline-info-cache get [| word cache | cache [ 2array word pick push-at ] assoc-each ] assoc-each ] with-inline-info-cache ;
+
+! ! Check how inline-info-cache scope affects the output classes of words
+! : check-cache-independence ( words -- res )
+!     all-subwords
+!     [ [ "--- Individual" nl print flush [ dup . flush dup [ final-classes' ] 1or-error ] H{ } map>assoc ]
+!       [ "--- Shared" nl print flush dup invalidate-inline-info [ [ dup . flush dup [ final-classes ] 1or-error ] H{ } map>assoc  ] with-inline-info-cache ] bi  ] keep
+!     [| individual shared word | word word individual at word shared at 2array ] 2with H{ } map>assoc
+!     ! [ nip first2 = ] assoc-reject
+!     ;
+
+: collect-by-signatures ( assoc -- assoc )
+    H{ } clone swap [| name pairs | pairs [ first2 :> ( sig entry ) entry name sig 2array pick push-at ] each ] assoc-each ;
+
+: check-inline-cache-consistency ( assoc -- assoc )
+    collect-by-signatures [ nip [ classes>> ] map members length 1 = ] assoc-reject ;
+
+: inline-cache-consistent? ( assoc -- ? )
+    check-inline-cache-consistency assoc-empty? ;
+
+: inconsistent-classes ( assoc -- assoc )
+    check-inline-cache-consistency [ [ classes>> ] map members ] assoc-map ;
+
+ERROR: inconsistent-inline-info-cache cache ;
+
+: check-cache-independence ( words -- cache ? )
+    H{ } clone swap [
+        1array collect-inline-cache
+        ! dup inline-cache-consistent? [ inconsistent-inline-info-cache ] unless
+    ] each dup inline-cache-consistent? ;
+
+! Given a sequence of words whose compilation order causes an inconsistency, bisect backwards until the
+! start and end of the problem are found
+! Find the first index for which the tail sequence returns true
+: (bisect-init) ( seq -- seq start current end )
+    dup length 1 - [ 1 - ] keep dup ;
+
+: bisect-false ( start current end -- start current end )
+    drop [ over - 2 * - 0 max ] 2keep ;
+    ! 2dup swap - 2 * swap [ - 0 max ] dip over ;
+
+: bisect-true ( start current end -- start current end )
+    [ nipd dupd over - 2 /i + ] keep ;
+    ! 2dup swap - 2 /i 1 max - dup ;
+
+! : bisect-continue? ( start current end quot -- start current end quot ? )
+!     ! 2drop =
+!     reach reach = ;
+!     ! 2over = ;
+!     ! { [ drop -1 = ] [ = ] } 2|| ;
+
+: bisect-start ( seq quot -- seq start current end quot )
+    [ (bisect-init) ] dip ;
+
+: bisect-step ( seq start current end quot -- seq start current end quot ? )
+    [ [ reach pick tail-slice ] dip call( slice -- true? )
+      [ [ bisect-false ] unless ] keep
+      ! [ bisect-true ] [ bisect-false ] if
+    ] keep swap ;
+    ! [ pick ] 2dip [ tail-slice ] dip [ call( slice -- true? ) ! seq bad-start good-start good?
+    !                                    [ bisect-good ] [ bisect-bad ] if ! seq bad-start good-start next-start
+    ! ] keep ;
+
+! : bisect-tail ( seq quot: ( slice -- ? ) -- seq start current end ? )
+!     bisect-start [ bisect-continue? [  ] [  ]] [ drop [ bisect-false ] dip ] while
+!     ! drop swap - 1 <= ;
+!     nip ;
+! 15190 f
+! 14166 f (?)
+! 13654 f
+! 13398 t
+! 13142 t
+
 
 ! : inline-info-caches ( words -- assoc )
 !     [ dup word-inline-infos-cache ] map>alist
@@ -132,16 +212,13 @@ M: wrapper quot= over wrapper? [ [ wrapped>> ] bi@ quot= ] [ 2drop f ] if ;
 ! : write-infos ( path -- )
 !     all-words non-trivial-inline-info-caches sort-keys swap utf8 [ ... ] with-file-writer ;
 
-! ** Profiling
-: propagation-words ( -- seq ) { propagate-body-for-infos cached-inline-propagation-infos } ;
-
 ! * Unit tests
 : swap-only ( x x -- x x ) swap ;
 : swap-foldable ( x x -- x x ) swap ; foldable
 
 : swap-user ( x x -- x x ) swap-only ;
 
-: inline-test ( quot -- quot ) [ with-inline-propagation ] curry ; inline
+: inline-test ( quot -- quot ) [ with-inline-info-cache ] curry ; inline
 
 { \ t } [ [ 1 2 swap-only + integer? ] build-tree optimize-tree nodes>quot last ] inline-test unit-test
 { \ t } [ [ 1 2 swap-user + integer? ] build-tree optimize-tree nodes>quot last ] inline-test unit-test
@@ -163,7 +240,9 @@ M: bar frob a>> 10 (positive>base) ;
 { string } [ \ do-something final-classes first ] inline-test unit-test
 
 ! Inlining with repeating slot signature structure results in retain stack overflow
-{ object } [ \ scan-function-name final-classes first ] inline-test unit-test
+{ V{ object object } } [ \ scan-function-name final-classes ] inline-test unit-test
+
+{ V{ object } } [ [ { word vector } declare assoc-stack ] final-classes' ] unit-test
 
 ! * Understanding inline dependencies
 
@@ -180,156 +259,22 @@ M: bar frob a>> 10 (positive>base) ;
 ! That test does not work, have to check compiled-crossref instead:
 ! { { +definition+ } } [ \ calling final-deps' dependencies of values members ] unit-test
 { f } [ \ calling final-deps' dependencies of \ stupid of ] unit-test
-{
-H{
-    { calling f }
-    {
-        callee-1
-        H{
-            {
-                {
-                    T{ inline-signature { class object } }
-                    T{ inline-signature { class object } }
-                }
-                T{ inline-propagation-entry
-                    { classes { object number } }
-                    { dependencies
-                        H{
-                            { generic-dependencies H{ } }
-                            { conditional-dependencies HS{ } }
-                            { dependencies H{ } }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    {
-        callee-2
-        H{
-            {
-                {
-                    T{ inline-signature { class object } }
-                    T{ inline-signature { class object } }
-                }
-                T{ inline-propagation-entry
-                    { classes { object number } }
-                    { dependencies
-                        H{
-                            { generic-dependencies H{ } }
-                            { conditional-dependencies HS{ } }
-                            { dependencies H{ } }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    {
-        callee-3
-        H{
-            {
-                {
-                    T{ inline-signature { class object } }
-                    T{ inline-signature { class object } }
-                }
-                T{ inline-propagation-entry
-                    { classes { object number } }
-                    { dependencies
-                        H{
-                            { generic-dependencies H{ } }
-                            { conditional-dependencies HS{ } }
-                            { dependencies H{ } }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    {
-        stupid
-        H{
-            {
-                {
-                    T{ inline-signature { class object } }
-                    T{ inline-signature { class object } }
-                }
-                T{ inline-propagation-entry
-                    { classes { object object } }
-                    { dependencies
-                        H{
-                            { generic-dependencies H{ } }
-                            { conditional-dependencies HS{ } }
-                            { dependencies H{ } }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-} [ { callee-1 callee-2 callee-3 calling stupid } dup [ compile ] with-inline-propagation
-       inline-info-cache get extract-keys ] unit-test
+
+{ { H{ { generic-dependencies H{ } } { conditional-dependencies HS{ } } { dependencies H{ { + +effect+ } { stupid +effect+ } } } }
+    H{ { generic-dependencies H{ } } { conditional-dependencies HS{ } } { dependencies H{ { callee-1 +definition+ } } } }
+    H{ { generic-dependencies H{ } } { conditional-dependencies HS{ } } { dependencies H{ { callee-2 +definition+ } { callee-1 +definition+ } } } }
+    H{ { generic-dependencies H{ } } { conditional-dependencies HS{ } } { dependencies H{ { callee-1 +definition+ } { callee-2 +definition+ } { callee-3 +definition+ } } } }
+    H{ { generic-dependencies H{ } } { conditional-dependencies HS{ } } { dependencies H{ } } }
+ } } [ { callee-1 callee-2 callee-3 calling stupid } [ final-deps ] map ] inline-test unit-test
 
 : self-caller ( x -- x ) dup 5 > [ 1 - ] [ self-caller ] if ;
 : self-caller-caller ( x -- x ) self-caller ;
 : self-caller-caller' ( x -- x ) self-caller-caller ;
 
-{
-H{
-    {
-        self-caller-caller
-        H{
-            {
-                { T{ inline-signature { class object } } }
-                T{ inline-propagation-entry
-                    { classes { object } }
-                    { dependencies
-                        H{
-                            { generic-dependencies H{ } }
-                            { conditional-dependencies HS{ } }
-                            { dependencies H{ } }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    {
-        self-caller
-        H{
-            {
-                { T{ inline-signature { class real } } }
-                T{ inline-propagation-entry
-                    { classes +inline-recursion+ }
-                    { dependencies
-                        H{
-                            { generic-dependencies H{ } }
-                            { conditional-dependencies HS{ } }
-                            { dependencies H{ } }
-                        }
-                    }
-                }
-            }
-            {
-                { T{ inline-signature { class object } } }
-                T{ inline-propagation-entry
-                    { classes { object } }
-                    { dependencies
-                        H{
-                            { generic-dependencies H{ } }
-                            { conditional-dependencies HS{ } }
-                            { dependencies H{ } }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    { self-caller-caller' f }
-}
-} [ { self-caller self-caller-caller self-caller-caller' } dup [ compile ] with-inline-propagation
-       inline-info-cache get extract-keys ] unit-test
+{ { H{ { generic-dependencies H{ } } { conditional-dependencies HS{ } } { dependencies H{ { self-caller +effect+ } { if +effect+ } { > +effect+ } { - +effect+ } } } }
+    H{ { generic-dependencies H{ } } { conditional-dependencies HS{ } } { dependencies H{ { self-caller +effect+ } } } }
+    H{ { generic-dependencies H{ } } { conditional-dependencies HS{ } } { dependencies H{ { self-caller-caller +effect+ } } } }
+  } } [ { self-caller self-caller-caller self-caller-caller' } [ final-deps ] map ] inline-test unit-test
 
 ! * Dispatch inlining
 

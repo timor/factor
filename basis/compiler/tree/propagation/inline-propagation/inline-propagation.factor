@@ -5,7 +5,7 @@ compiler.tree.propagation.info
 compiler.tree.propagation.inline-propagation.cache
 compiler.tree.propagation.inlining compiler.tree.propagation.nodes
 compiler.tree.recursive compiler.utilities compiler.word-props continuations
-effects generic generic.single hashtables kernel locals math namespaces
+effects fry generic generic.single hashtables kernel locals math namespaces
 sequences sets stack-checker.dependencies stack-checker.errors strings words ;
 
 IN: compiler.tree.propagation.inline-propagation
@@ -127,7 +127,7 @@ ERROR: no-inline-class #call ;
 
 :: splicing-classes ( #call signatures -- classes/f )
     ! #call word>> name>> signatures "--- Propagating nodes for infos: %u inputs: %u " 4 format-compiler-message
-    #call word>> name>> "--- Propagating non-inlined-word inline: %s" 3 format-compiler-message
+    #call word>> name>> signatures "--- Propagating non-inlined-word inline: %s %u" 3 format-compiler-message
     #call signatures propagate-body-for-infos
     value-info-classes dup :> res
     [
@@ -167,32 +167,22 @@ SYMBOL: current-inline-dependencies
 : inline-top-level? ( -- x )
     inline-propagation-depth get 0 = ; inline
 
+: make-dependencies-namespace ( -- hashtable )
+    H{ } clone dependencies associate
+    H{ } clone generic-dependencies pick set-at
+    HS{ } clone conditional-dependencies pick set-at ;
+
 : link-inline-dependencies ( -- )
     inline-top-level?
-    [ H{ } clone dependencies associate
-      H{ } clone generic-dependencies pick set-at
-      HS{ } clone conditional-dependencies pick set-at
-      current-inline-dependencies set
-    ] when ;
-    ! dependencies over [ drop H{ } clone ] cache dependencies set
-    ! generic-dependencies over [ drop H{ } clone ] cache generic-dependencies set
-    ! conditional-dependencies over [ drop HS{ } clone ] cache conditional-dependencies set
-    ! drop ;
-
-! : cache-current-dependencies ( word -- )
-!     inline-top-level?
-!     [ current-inline-dependencies get inline-propagation-dependencies get set-at ]
-!     [ drop ] if ;
+    [
+        make-dependencies-namespace
+        current-inline-dependencies set
+    ] when
+    ;
 
 : with-inline-dependencies ( quot -- )
     inline-top-level? f current-inline-dependencies get ?
     swap with-variables ; inline
-
-! : with-linked-dependencies-old ( word quot -- )
-!     '[ _ link-inline-dependencies @ ] with-scope ; inline
-
-! : with-linked-dependencies ( quot -- )
-!     '[ _ link-inline-dependencies @ ] with-scope ; inline
 
 : trivial-classes? ( classes -- ? )
     [ object class= ] all? ;
@@ -200,7 +190,7 @@ SYMBOL: current-inline-dependencies
 ! We record the additional dependencies in the current-inline-dependencies variable.
 : record-inline-propagation ( #call signature -- )
     ! dependencies-stack get ?first
-    [
+    ! [
         signatures>classes members [ dup object = [ drop ] [ add-depends-on-class ] if ] each
         ! copied record-inlining code from cleanup here due to vocab dependencies
         dup method>>
@@ -211,127 +201,94 @@ SYMBOL: current-inline-dependencies
                   add-depends-on-method
               ] bi
           ] [ drop ] if  ] [ word>> +definition+ depends-on ]
-        if
-    ] with-inline-dependencies ;
+        if ;
+    ! ] with-inline-dependencies ;
 
 ! TODO: check whether we get a recursion problem here with self-dependencies.
 ! If we are at the top-level, include the dependencies in the regular variables
 ! If we are doing nested propagation, copy the dependencies to the current
 ! inline-deps "accumulator" instead
+: copy-dependencies ( namespace -- )
+    [ dependencies of [ depends-on ] assoc-each ]
+    [ generic-dependencies of [ swap add-depends-on-generic ] assoc-each ]
+    [ conditional-dependencies of conditional-dependencies get
+      [ swap union! drop ] [ drop ] if*
+    ] tri ;
+
 : include-inline-dependencies ( entry -- )
     ! inline-propagation-depth get 1 = f current-inline-dependencies get ?
     ! current-inline-dependencies get
     [
         dependencies>>
-        [ dependencies of [ depends-on ] assoc-each ]
-        [ generic-dependencies of [ swap add-depends-on-generic ] assoc-each ]
-        [ conditional-dependencies of conditional-dependencies get
-          [ swap union! drop ] [ drop ] if*
-        ] tri
+        copy-dependencies
     ] with-inline-dependencies ;
 
 ! * Recursion tracking
 SINGLETON: +inline-recursion+
 SYMBOL: signature-trace
 
-! ! [ 0. initial execution _ [| cc | 1. do this with cc, 1a. possibly continue cc ] [| thing | 4. this is done at _ if cc is continued with thing ] ifcc This would happen if cc has not been called ]
-! :: magic ( sig try: ( sig -- classes ) -- classes )
-!     [| cc | signature-trace-continuation [ sig cc 2array suffix ] change try call ] [ drop +inline-recursion+ ] ifcc ; inline
-
 ERROR: inline-propagation-recursion word sig ;
-
-! After this has been done, current-inline-dependencies has been updated with
-! the call that has just been inline-propagated, which is wrong?
-: compute-inline-propagation-classes ( #call word sig -- classes/f )
-    2dup 2array signature-trace get member?
-    [ 3drop +inline-recursion+ ]
-    [
-        [
-            detect-infinite-recursion
-            dependencies off
-            generic-dependencies off
-            conditional-dependencies off
-            inline-propagation-depth inc
-            [ 2array signature-trace [ swap suffix ] change ] keep
-            splicing-classes
-            inline-propagation-depth dec
-            ! [ splicing-classes ]
-            ! [ record-inline-propagation ] 2bi
-        ] with-scope
-    ] if ;
 
 : cache-at-unless-recursion ( classes/f sig info-cache -- cache-entry )
     2dup at dup dup [ classes>> ] when +inline-recursion+?
     [ [ 3drop ] dip ]
     [ drop [ current-inline-dependencies get clone [ clone ] assoc-map <inline-propagation-entry> ] 2dip [ set-at ] keepdd ] if ;
 
-! FIXME: if that structure with link-inline-dependencies works, maybe make a
-! combinator or two?
-: cached-inline-propagation-classes ( #call word -- classes/f )
-    [
-        link-inline-dependencies
-        [ dup call-inline-signature 2dup ] dip ! #call sig #call sig word
-        swap ! #call sig #call word sig
-        ! over call-inline-signature ! #call word sig
-        over inline-info-cache get [ drop H{ } clone ] cache ! #call sig #call word sig info-cache
-        2dup at* [ ! #call sig #call word sig info-cache classes/f
-            "--- inline-info-cache hit" 5 compiler-message*
-            [ 4drop ] dip
-        ] [ ! #call sig #call word sig info-cache f
-            drop
-            dupd [ compute-inline-propagation-classes ] 2dip ! #call sig classes/f sig info-cache
-            cache-at-unless-recursion
-        ] if ! #call sig entry
-        [ dup trivial-classes? [ record-inline-propagation ] [ 2drop  ] if ] dip
-        [ include-inline-dependencies ]
-        [ classes>> ] bi
-    ] with-scope
-    ;
+SYMBOL: inline-trace
+: make-scope ( word sig -- recursion? )
+    2array dup inline-trace get key?
+    [ drop t ]
+    [ make-dependencies-namespace 2array inline-trace [ swap suffix ] change f ] if ;
 
-:: cached-inline-propagation-infos ( #call word -- classes/f )
-    word { [ "no-compile" word-prop ] } 1&& [ "nope" throw ] when
-    #call call-inline-signature :> sig
-    word inline-info-cache get [ drop H{ } clone ] cache :> info-cache
-    sig info-cache at*
-    [
-        word over classes>> "--- inline info cache hit for %u: %u " 5 format-compiler-message
-    ]
-    [
+: with-inline-trace ( ..a word sig quot: ( ..a -- ..b classes ) -- ..b classes/f namespace/recursion )
+    '[ _ _
+        make-scope
+        [ f +inline-recursion+ ]
         [
-            [ link-inline-dependencies
-              inline-propagation-depth inc
-              detect-infinite-recursion
-              ! link-dependencies-old
-              ! word link-inline-dependencies
-              word sig 2array signature-trace get member?
-              [ drop
-                signature-trace get word sig 2array "--- Inline Propagation recursion: %u %u" 4 format-compiler-message
-                word sig inline-propagation-recursion ]
-              [ drop signature-trace [ word sig 2array suffix ] change
-                #call sig splicing-classes ] if ]
-            [ dup { [ inline-propagation-recursion? ] [ word>> word = ] [ sig>> sig = ] } 1&& [ 2drop +inline-recursion+ ] [ rethrow ] if ] recover
-            current-inline-dependencies get <inline-propagation-entry> :> entry
-            entry sig info-cache set-at
-            ! classes current-inline-dependencies get sig info-cache set-at :> classes
-            #call word>> sig entry classes>> "--- inline classes: %u %u %u" 4 format-compiler-message
-            ! entry ! classes +inline-recursion+?
-            ! #call sig record-inline-propagation ] unless
-            entry
-        ] with-scope
-    ] if
-    dup classes>> dup { [ +inline-recursion+? ] [ trivial-classes? ] } 1||
-    [ nip ]
-    [ 
-        swap include-inline-dependencies
-        #call sig record-inline-propagation
-    ]
-    if
-    ! [ include-inline-dependencies ]
-    ! [ classes>> ] bi
-    ! dup  [ #call sig record-inline-propagation ] unless
-    ;
+            dependencies off
+            conditional-dependencies off
+            generic-dependencies off
+            _ call
+            inline-trace get last second
+        ] if
+    ] with-scope ; inline
 
-! * Dispatch Inlining
+: with-current-deps ( quot -- )
+    inline-trace get ?last [ second ] [ f ] if*
+    swap with-variables ; inline
+
+:: compute-inline-propagation-classes ( #call word sig -- classes dependencies )
+    word sig
+    [
+        #call sig splicing-classes
+    ] with-inline-trace ;
+
+:: cached-inline-propagation-classes ( #call word -- classes )
+    word inline-info-cache get [ drop H{ } clone ] cache :> info-cache
+    #call call-inline-signature dup :> sig info-cache [
+        [ #call word ] dip compute-inline-propagation-classes
+        <inline-propagation-entry> ] cache
+    [ classes>> ] [ dependencies>> ] bi :> ( classes deps )
+    { [ classes trivial-classes? ] [ deps +inline-recursion+? ] } 0||
+    [ f ]
+    [ word sig classes "--- classes of %u with %u: %u" 4 format-compiler-message
+      [ #call sig record-inline-propagation
+        deps copy-dependencies ] with-current-deps
+      classes
+    ] if ;
+
+! * TODO Dispatch Inlining
+: call-dispatch-classoid ( #call generic -- classoid )
+    [ dispatch# ] [ in-d>> <reversed> ] bi* nth
+    value-info class>> ;
+
+! : dispatch-useful? ( #call generic -- ? )
+!     dup standard-generic? [ 2drop f ]
+!     [
+!         [ call-dispatch-classoid ] [ "methods" word-prop ] bi
+!         [ first ] map <anonymous-union> class<=
+!     ] if ;
+
 ! When trying really hard to propagate dispatch, compile in the actual dispatch for propagation
 : make-executer ( method -- quot )
     dup stack-effect [ execute-effect ] 2curry ;
@@ -347,7 +304,7 @@ ERROR: inline-propagation-recursion word sig ;
 ! NOTE: We don't propagate through generic dispatches.  An optimization could be
 ! to determine whether the input is a proper subset of the generic's method
 ! definers, and to inline-propagate all of those and return the union info
-: inline-propagation-infos ( #call word -- classes/f )
+: inline-propagation-classes ( #call word -- classes/f )
     2dup  { [ nip primitive? ]
             [ nip generic? ]
             [ nip never-inline-word? ]
@@ -356,15 +313,9 @@ ERROR: inline-propagation-recursion word sig ;
             [ drop out-d>> empty? ]
             [ nip "never-propagate-inline" word-prop ] } 2||
     [ 2drop f ]
-    [ ! cached-inline-propagation-infos
+    [
         cached-inline-propagation-classes
       dup +inline-recursion+? [ drop f ] when
     ] if
     ! dup trace-non-trivial-infos
     ;
-
-! This needs to be done to all words in a compilation unit that are recompiled together.
-! : reset-inline-info-cache ( word -- )
-!     [ subwords ] keep suffix
-!     [ [ "inline-propagation-infos" remove-word-prop ]
-!       [ "inline-body" remove-word-prop ] bi ] each  ;

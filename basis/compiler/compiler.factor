@@ -113,8 +113,11 @@ M: optimizing-compiler recompile ( words -- alist )
         [ compile? ] filter
         dup length "--- recompiling %d words" 1 format-compiler-message
         dup "--- recompile set: %u" 2 format-compiler-message
-        ! H{ } clone inline-info-cache namespaces:set
-        dup invalidate-inline-info
+        inline-propagation?
+        [ inline-info-cache [ H{ } clone ] [ unless* ] curry change ] when
+        inline-info-cache get [ dup invalidate-inline-info ] when
+        ! [ H{ } clone inline-info-cache namespaces:set ] when
+        ! dup invalidate-inline-info
         [ compile-word yield-hook get call( -- ) ] each
         compiled get >alist
     ] with-variable

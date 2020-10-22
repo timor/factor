@@ -2,14 +2,17 @@ USING: accessors assocs compiler.messages fry kernel namespaces sequences
 stack-checker.dependencies ;
 IN: compiler.tree.propagation.inline-propagation.cache
 
+! If this is enabled, a shared inline-info-cache is set for each compilation unit
 SYMBOL: inline-propagation
 : inline-propagation? ( -- ? ) inline-propagation get ;
 
-: with-inline-propagation ( quot -- ) inline-propagation swap with-variable-on ; inline
-
 ! An assoc storing cached inlined-infos for different value-info inputs for each word
 SYMBOL: inline-info-cache
-inline-info-cache [ H{ } clone ] initialize
+! TODO re-enable this once global cache works reliably
+! inline-info-cache [ H{ } clone ] initialize
+
+! Everything run inside this shares an inline-info-cache
+: with-inline-info-cache ( quot -- ) [ H{ } clone inline-info-cache ] dip with-variable ; inline
 
 TUPLE: inline-propagation-entry { classes read-only } { dependencies read-only } ;
 C: <inline-propagation-entry> inline-propagation-entry
@@ -22,10 +25,8 @@ C: <inline-propagation-entry> inline-propagation-entry
 SYMBOL: inline-propagation-dependencies
 inline-propagation-dependencies [ H{ } clone ] initialize
 
-SYMBOL: current-inline-propagation-dependencies
 : get-dependencies-namespace ( -- assoc )
     { dependencies generic-dependencies conditional-dependencies } [ dup get ] H{ } map>assoc ;
-
 
 : invalidate-inline-info ( words -- )
     dup inline-propagation-dependencies get '[ _ delete-at ] each
