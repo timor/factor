@@ -1,10 +1,10 @@
 USING: accessors alien.parser arrays assocs benchmark classes classes.algebra
 combinators.short-circuit compiler.crossref compiler.test compiler.tree.builder
-compiler.tree.debugger compiler.tree.optimizer
-compiler.tree.propagation.inline-propagation.cache continuations effects fry
-kernel kernel.private math math.parser.private namespaces prettyprint sequences
-sets stack-checker.dependencies strings tools.test vectors vocabs vocabs.loader
-words ;
+compiler.tree.combinators compiler.tree.debugger compiler.tree.optimizer
+compiler.tree.propagation.inline-propagation.cache compiler.units continuations
+effects fry kernel kernel.private locals math math.order math.parser.private
+namespaces prettyprint sequences sets stack-checker.dependencies strings
+tools.test vectors vocabs vocabs.loader words ;
 IN: compiler.tree.propagation.inline-propagation.tests
 FROM: namespaces => set ;
 
@@ -46,6 +46,13 @@ M: wrapper quot= over wrapper? [ [ wrapped>> ] bi@ quot= ] [ 2drop f ] if ;
 : 1or-error ( quot: ( x -- x ) -- x/error )
     [ with-scope ] curry [ nip ] recover ; inline
 
+: final-node-count ( word/quot -- n )
+    0 swap
+    optimized [ drop 1 + ] each-node ;
+
+: final-node-count' ( word/quot -- n )
+    [ final-node-count ] with-inline-info-cache ;
+
 : all-subwords ( words -- words )
     [ [ subwords ] keep prefix ] map concat ;
 
@@ -56,7 +63,9 @@ M: wrapper quot= over wrapper? [ [ wrapped>> ] bi@ quot= ] [ 2drop f ] if ;
 
 ! Perform above, but with a shared inline-info cache
 : opt-classes' ( words -- assoc )
-    [ opt-classes ] with-inline-info-cache ;
+    [ [ dup [ [ H{ { inline-info-cache f } { inline-propagation f } } [ final-classes ] with-variables ] 1or-error ] [ [ final-classes' ] 1or-error ] bi 2array
+    ]  H{ } map>assoc ] with-inline-info-cache ;
+    ! t inline-propagation [ [ opt-classes ] with-inline-info-cache ] with-variable ;
 
 : check-classes ( words -- assoc )
     all-subwords opt-classes' [ nip first2 = ] assoc-reject ;

@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2009 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs classes.algebra combinators
-combinators.short-circuit compiler.tree compiler.tree.builder
+combinators.short-circuit compiler.messages compiler.tree compiler.tree.builder
 compiler.tree.normalization compiler.tree.propagation.info
 compiler.tree.propagation.nodes compiler.tree.recursive generic generic.math
 generic.single generic.standard kernel locals math math.partial-dispatch
@@ -67,7 +67,10 @@ M: callable splicing-nodes splicing-body ;
     ] if ;
 
 : inline-standard-method ( #call word -- ? )
-    dupd inlining-standard-method eliminate-dispatch ;
+    2dup
+    dupd inlining-standard-method eliminate-dispatch
+    [ [ swap method>> "Standard Method inlined: %u -> %u" format-to-trace-file ] [ 2drop ] if ] keep
+    ;
 
 : normalize-math-class ( class -- class' )
     {

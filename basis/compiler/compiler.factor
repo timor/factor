@@ -1,6 +1,7 @@
 ! Copyright (C) 2004, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs classes classes.algebra combinators
+classes.tuple.private
 combinators.short-circuit compiler.cfg compiler.cfg.builder
 compiler.cfg.builder.alien
 compiler.cfg.finalization compiler.cfg.optimizer compiler.codegen
@@ -16,6 +17,7 @@ SYMBOL: compiled
 
 : start-compilation ( word -- )
     dup name>> 2 compiler-message*
+    dup [ vocabulary>> [ ":" append ] [ "" ] if* ] [ name>> ] bi "start-compilation: %s%s" format-to-trace-file
     H{ } clone dependencies namespaces:set
     H{ } clone generic-dependencies namespaces:set
     HS{ } clone conditional-dependencies namespaces:set
@@ -58,7 +60,7 @@ SYMBOL: compiled
     ! non-optimizing compiler, using its definition. Otherwise,
     ! if the compiler error is not ignorable, use a dummy
     ! definition from 'not-compiled-def' which throws an error.
-    2dup "--- Error during optimization: %u %u" 2 format-compiler-message
+    ! 2dup "--- Error during optimization: %u %u" 2 format-compiler-message
     {
         { [ dup inference-error? not ] [ rethrow ] }
         { [ 2dup ignore-error? ] [ ignore-error ] }
@@ -111,14 +113,21 @@ M: optimizing-compiler update-call-sites ( class generic -- words )
 M: optimizing-compiler recompile ( words -- alist )
     H{ } clone compiled [
         [ compile? ] filter
-        dup length "--- recompiling %d words" 1 format-compiler-message
-        dup "--- recompile set: %u" 2 format-compiler-message
-        inline-propagation?
-        [ inline-info-cache [ H{ } clone ] [ unless* ] curry change ] when
+        ! dup length "--- recompiling %d words" 1 format-compiler-message
+        ! dup "--- recompile set: %u" 2 format-compiler-message
+        outdated-generics get members [ generic? ] filter [ "Outdated generics: %u" format-to-trace-file ] unless-empty
+        outdated-tuples get dup assoc-empty? [ drop ] [ "Outdated tuples: %u" format-to-trace-file ] if
+
+        dup dup length swap "Recompiling %d words: %u" format-to-trace-file
+        dup dup length swap "Recompiling %d words: %u" 2 format-compiler-message
+        inline-propagation? per-unit?
+        [ H{ } clone inline-info-cache namespaces:set ] when
         inline-info-cache get [ dup invalidate-inline-info ] when
         ! [ H{ } clone inline-info-cache namespaces:set ] when
         ! dup invalidate-inline-info
-        [ compile-word yield-hook get call( -- ) ] each
+        [ compile-word
+          inline-info-cache get [ trace-inline-info-cache-report ] when
+          yield-hook get call( -- ) ] each
         compiled get >alist
     ] with-variable
     "--- compile done" 1 compiler-message* ;

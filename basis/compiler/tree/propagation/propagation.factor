@@ -21,7 +21,5 @@ IN: compiler.tree.propagation
     H{ } clone copies set
     H{ } clone 1array value-infos set
     H{ } clone 1array constraints set
-    ! TODO: remove this once semantics are sorted out
-    ! If per-compilation-unit cache is not initialized, initialize per-word cache here
-    ! inline-info-cache [ [ H{ } clone ] unless* ] change
+    inline-propagation? per-word? [ H{ } clone inline-info-cache set ] when
     dup (propagate) ;

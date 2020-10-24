@@ -127,7 +127,7 @@ ERROR: no-inline-class #call ;
 
 :: splicing-classes ( #call signatures -- classes/f )
     ! #call word>> name>> signatures "--- Propagating nodes for infos: %u inputs: %u " 4 format-compiler-message
-    #call word>> name>> signatures "--- Propagating non-inlined-word inline: %s %u" 3 format-compiler-message
+    #call word>> name>> signatures [ short-signature ] map "--- Propagating non-inlined-word inline: %s %u" format-to-trace-file
     #call signatures propagate-body-for-infos
     value-info-classes dup :> res
     [
@@ -191,7 +191,9 @@ SYMBOL: current-inline-dependencies
 : record-inline-propagation ( #call signature -- )
     ! dependencies-stack get ?first
     ! [
-        signatures>classes members [ dup object = [ drop ] [ add-depends-on-class ] if ] each
+    signatures>classes members
+    dup [ object = ] reject "Adding input class dependencies: %u" format-to-trace-file
+    [ dup object = [ drop ] [ add-depends-on-class ] if ] each
         ! copied record-inlining code from cleanup here due to vocab dependencies
         dup method>>
         [ dup class>> [ no-inline-class ] unless
@@ -261,19 +263,29 @@ SYMBOL: inline-trace
     word sig
     [
         #call sig splicing-classes
-    ] with-inline-trace ;
+        word sig [ short-signature ] map pick "Computed classes for %u %u: %u " format-to-trace-file
+    ] with-inline-trace
+    ;
 
 :: cached-inline-propagation-classes ( #call word -- classes )
     word inline-info-cache get [ drop H{ } clone ] cache :> info-cache
-    #call call-inline-signature dup :> sig info-cache [
-        [ #call word ] dip compute-inline-propagation-classes
-        <inline-propagation-entry> ] cache
+    #call call-inline-signature :> sig
+    sig info-cache at*
+    [ [ inline-info-cache-hits inc ] with-global
+      word sig [ short-signature ] map pick classes>> "Inline Info cache hit: %u %u -> %u" format-to-trace-file
+    ]
+    [
+        drop [ inline-info-cache-misses inc ] with-global
+        #call word sig compute-inline-propagation-classes
+        <inline-propagation-entry> [ sig info-cache set-at ] keep ] if
     [ classes>> ] [ dependencies>> ] bi :> ( classes deps )
     { [ classes trivial-classes? ] [ deps +inline-recursion+? ] } 0||
     [ f ]
-    [ word sig classes "--- classes of %u with %u: %u" 4 format-compiler-message
-      [ #call sig record-inline-propagation
-        deps copy-dependencies ] with-current-deps
+    [ ! word sig classes "--- classes of %u with %u: %u" 4 format-compiler-message
+        [
+            #call sig record-inline-propagation
+            deps copy-dependencies
+        ] with-current-deps
       classes
     ] if ;
 

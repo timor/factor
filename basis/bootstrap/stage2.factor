@@ -3,6 +3,8 @@
 USING: command-line compiler.units continuations definitions io
 io.pathnames kernel math math.parser memory namespaces parser
 parser.notes sequences sets splitting system
+compiler.tree.propagation.inline-propagation.cache
+compiler.messages
 vocabs vocabs.loader ;
 IN: bootstrap.stage2
 
@@ -66,6 +68,9 @@ CONSTANT: default-components
     ! We have to change it back in finish-bootstrap.factor
     f parser-quiet? set-global
 
+    per-unit set-inline-propagation
+    "bootstrap-compilation-trace" compilation-trace-file set-global
+
     default-image-name "output-image" set-global
 
     default-components "include" set-global
@@ -103,6 +108,7 @@ CONSTANT: default-components
     f error set-global
     f original-error set-global
     f error-continuation set-global
+    f compilation-trace-file set-global
     "output-image" get save-image-and-exit
 ] [
     drop

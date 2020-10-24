@@ -1,10 +1,10 @@
 ! Copyright (C) 2007, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays assocs assocs.private classes
-classes.tuple.private compiler.units cpu.architecture hashtables
-hashtables.private io kernel libc math math.parser memory
-namespaces namespaces.private quotations quotations.private
-sbufs sequences sequences.private splitting system vectors
+USING: accessors arrays assocs assocs.private classes classes.tuple.private
+compiler.messages compiler.tree.propagation.inline-propagation.cache
+compiler.units cpu.architecture hashtables hashtables.private io kernel libc
+math math.parser memory namespaces namespaces.private quotations
+quotations.private sbufs sequences sequences.private splitting system vectors
 vocabs vocabs.loader words ;
 FROM: compiler => enable-optimizer ;
 IN: bootstrap.compiler
@@ -120,7 +120,9 @@ gc
 
     "." write flush
 
-    loaded-vocab-names [ vocab-words compile-unoptimized "." write flush ] each
+    loaded-vocab-names [
+        dup "Bootstrap recompile vocab: %u" format-to-trace-file
+        vocab-words compile-unoptimized "." write flush ] each
 
     " done" print flush
 
