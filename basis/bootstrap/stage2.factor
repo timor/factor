@@ -68,7 +68,7 @@ CONSTANT: default-components
     ! We have to change it back in finish-bootstrap.factor
     f parser-quiet? set-global
 
-    per-unit set-inline-propagation
+    f set-inline-propagation
     "bootstrap-compilation-trace" compilation-trace-file set-global
 
     default-image-name "output-image" set-global
