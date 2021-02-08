@@ -1,0 +1,72 @@
+* Lookup-Method procedure in VM,
+
+Entry point: =lookup-method= primitive in =generic.single.private=, implemented
+in vm as =primitive_lookup_method=.  Either called directly from code, or via a
+mega-cache miss inside the VM
+
+- pop methods dispatch table, and object, call =lookup_method(obj, methods)=
+- =lookup_method=
+  - Index the dispatch table by the object tag -> =method=
+  - If =obj= is a tuple, call =lookup_tuple_method=, where =method= is the
+    tuple dispatch array
+  - Otherwise, return =method=
+  - =lookup_tuple_method=
+    - get the tuple =layout= from =obj=
+    - untag the =methods= array as =echelons=
+    - initialize echelon number =echelon= as
+       =min(layout->echelon, length(echelons)-1)=, basically starting at the
+      least-specific subclass.
+    - While the root echelon has not been reached:
+      - get the element at position =echelon= from =echelons= -> =echelon-methods=
+      - if =echelon-methods= is a word, return it. (I think that means that the
+        dispatch is delegated to a word, e.g. a predicate engine)
+      - otherwise, if the entry is not =f=, it is a hash-table:
+        - set =klass= to the nth superclass, which is at offset =2*echelon= in
+          the layout
+        - get the corresponding nth superclass =hashcode= (offset =2*echelon+1=
+          in the layout)
+        - perform a lookup in that hashtable via =search_lookup_hash=, which
+          extracts the corresponding bucket via hash-code bit-masking.  If the
+          element is an array, perform an alist-search for the =klass=,
+          otherwise it was a non-ambiguous hit, so the element itself is the
+          method. (Note: it seems that arrays are always used, even for
+          non-ambiguous hits)
+      - If none of the above steps have returned, decrease =echelon= and repeat.
+    - If nothing has been found at =echelon == 0=, the lookup failed.  This is
+      an error.
+
+* Modification for multiple dispatch lookup
+The procedure described above performs a search for =klass= in the table, which
+is a sequence of dispatch tables.  =echelon= is the index to which table is
+current.  This can be interpreted as an automaton with state transfer and
+lookup.  In this case, the transfer function will return the next upper echelon,
+predicated on whether the correct result has been returned.
+
+It should be possible by turning this into a state machine suitable for one of
+the DFA lookup methods by augmenting it with a second element to return from the
+element, which can be used as the selector for the next echelon table to test.
+
+This will also include instructions on which class to test next.  This is
+straightforward if we turn =klass= into an array, and the current test index
+becomes part of the state.
+
+This turns the whole thing into a simple automaton described by an array of
+state transfer functions.
+
+So far, I have seen two kinds of decision trees being used for that.  One is
+based on class equality tests, the other is based on subtype tests.
+
+** Class equality-based
+Pros:
+- Cheapest low-level test (pointer comparison).
+
+Cons:
+- Probably large overhead in creating the FSM
+  - No subclass range comparisons means that there will probably be a lot of
+    states (compared to subclass tests)
+  - Every added subclass will probably always trigger more table recompilations
+
+** Subclass-based
+Pros and cons opposite to above.  Specifically, the subclass test is normally
+quite expensive.  However, the echelon structure of two layouts should provide
+that result in constant time.
