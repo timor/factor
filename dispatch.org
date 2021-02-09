@@ -1,3 +1,70 @@
+* Definition of generic words
+- Generic word has =def>>= slot which contains quotation to a call to =mega-cache-lookup=.
+- This definition quotation is called when passed to the non-optimizing compiler
+  non-optimizing compiler and thus the =mega-cache-lookup= call is encountered
+  in =quotation_jit::iterate_quotation=, which compiles in a primitive call via
+  =emit_mega_cache_lookup=:
+  - emits a call to =PIC-LOAD= (which I think is the PIC call stub, and in the
+    default implementation simply gets the dispatch#-th argument from the stack)
+  - emits a call to =MEGA-LOOKUP=.  At this point, if there was a cache hit,
+    the following instructions are not executed
+  - emits a stack frame for:
+    - push method table
+    - push dispatch#
+    - push the cache
+    - a call to the miss word, which ends up in =primitve_megacache_lookup=
+
+* TODO PIC
+- two types of caches: =PIC_TAG= and =PIC_TUPLE=, the type is determined by
+  cache contents alone in =determine_inline_cache_type=.  A cold cache starts
+  out as =PIC_TAG= cache.
+** =PIC_TAG= Inline Cache
+- contains jit-compiled successive checks =PIC_CHECK_TAG= which compare the loaded thing
+  (=PIC_LOAD=) with the cache entry keys by simply comparing the object's tag.
+** =PIC_TUPLE= Inline Cache
+- instead of checking the tag, this generates code to CMP the two registers
+  containing the loaded object and the cache entry key.
+** TODO Difference
+It seems like the difference is that the TAG check performs an immediate
+comparison, while the tuple check has to perform an additional load???
+
+I think the idea is that if dispatch is done only on built-in classes, the tag
+comparison is sufficient, while in the case of tuple classes, the pointer to the
+layout has to be compared?
+
+The object to check itself is encoded as tagged object.  If comparing e.g.
+fixnums, then the tag must be compared.  If it is a tuple, the value part of the
+object is a pointer to the layout.  Thus, when comparing tuple classes, the
+layout field of the class has to be fetched for comparison.
+
+??? But does that not mean that if the cache type is set to =PIC_TUPLE=, a
+fixnum could then never be a hit? (or only if it is the exact number?)
+
+* Compilation of generic word calls
+** Non-optimizing compiler
+*** Generic word definition
+- The generic word has been defined with the =pic-def>>= and =pic-tail-def>>=
+  slots which contain factor code defining the inline cache stubs.  These are of
+  the form =[ \ word { ... dispatch-table ... } dispatch# { } inline-cache-miss ]=
+- When finishing a compilation unit, the word is passed to =recompile=.  Since
+  it is not to be optimized, the quotation will be passed to =modify-code-heap=,
+  i.e. =primitive_modify_code_heap=, which will invoke =jit_compile_word=
+- Like for regular words, the =def>>= quotation is jit-compiled via
+  =jit_compile_quotation=
+- Additionally, the same thing is done to the =pic-def>>= and =pic-tail-def>>=
+  slots for the generic word
+*** Generic word call site
+- =primitive_modify_code_heap= → =update_code_heap_words= →
+  =update_word_references= is called on the complete code heap, which iterates
+  over (TODD: what exactly???) some instruction-operands of a code-block, where
+  it dispatches on a relocation type
+- In addition to =RT_ENTRY_POINT=, which seems to compute and return the entry
+  point of the thing being called, there is =RT_ENTRY_POINT_PIC= and
+  =RT_ENTRY_POINT_PIC_TAIL=, which call =compute_entry_point_pic_{tail_}address=
+- That in turn returns the entry point of the compiled code in the =pic-def>>= slot
+- This can be seen via =disassemble= of a word containing a generic call site,
+  which references the corresponding =pic-def= or =pic-tail-def= quotation.
+
 * Lookup-Method procedure in VM,
 
 Entry point: =lookup-method= primitive in =generic.single.private=, implemented
@@ -30,7 +97,7 @@ mega-cache miss inside the VM
           element is an array, perform an alist-search for the =klass=,
           otherwise it was a non-ambiguous hit, so the element itself is the
           method. (Note: it seems that arrays are always used, even for
-          non-ambiguous hits)
+          non-ambiguous hits.  Note 2, )
       - If none of the above steps have returned, decrease =echelon= and repeat.
     - If nothing has been found at =echelon == 0=, the lookup failed.  This is
       an error.
