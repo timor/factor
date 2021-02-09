@@ -38,7 +38,9 @@ SYMBOL: current-method
 ERROR: bad-method-effect ;
 
 : check-method-effect ( effect -- )
-    last-word generic-effect method-effect= [ bad-method-effect ] unless ;
+    last-word
+    [ generic-effect method-effect= [ bad-method-effect ] unless ]
+    [ swap "method-effect" set-word-prop ] 2bi ;
 
 : parse-method-definition ( -- quot )
     scan-datum {
