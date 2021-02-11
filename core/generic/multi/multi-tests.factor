@@ -36,8 +36,13 @@ TUPLE: the-rock < rock ;
 
 GENERIC: beats ( x x -- x )
 ! Specializers are bogus here
+! m4(thing, thing)
 M: thing beats ( x: thing y: thing -- ? ) 2drop f ;
+! m2(scissors, rock)
 M: scissors beats ( x: rock y: scissors -- ? ) 2drop t ;
+! m1(rock, paper)
 M: rock beats ( x: paper y: rock -- ? ) 2drop t ;
+! m3(paper, scissors)
 M: paper beats ( x: scissors y: paper -- ? ) 2drop t ;
+! m5(thing, the-rock)
 M: the-rock beats ( x: the-rock y: thing -- ? ) 2drop t ;
