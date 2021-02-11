@@ -1,6 +1,7 @@
 USING: accessors arrays assocs classes.algebra combinators
-combinators.short-circuit combinators.short-circuit.smart effects generic kernel
-math see sequences sequences.zipped sets vectors words ;
+combinators.short-circuit combinators.short-circuit.smart effects generic
+generic.single generic.single.private generic.standard kernel layouts math
+namespaces see sequences sequences.zipped sets vectors words ;
 
 IN: generic.multi
 
@@ -142,3 +143,57 @@ DEFER: build-dispatch-assoc
 
 : make-dispatch ( tree -- dispatcher )
     V{ } clone 1array swap 0 build-tag-dispatcher ;
+
+! * Compiling the dispatchers
+SYMBOL: default-method
+SYMBOL: engines
+engines [ H{  } clone ] initialize
+GENERIC: compile-dispatcher* ( dispatcher -- obj )
+DEFER: flatten-dispatch
+DEFER: compile-dispatcher
+GENERIC: flatten-dispatch* ( dispatcher -- obj )
+M: object flatten-dispatch* ;
+M: tuple-dispatcher flatten-dispatch*
+    [ flatten-dispatch ] change-assoc ;
+M: tag-dispatcher flatten-dispatch*
+    compile-dispatcher ;
+
+: flatten-dispatch ( assoc -- assoc )
+    [ flatten-dispatch*
+    ] assoc-map ;
+
+: compile-dispatcher ( dispatcher -- obj )
+    [ flatten-dispatch ] change-assoc
+    compile-dispatcher* ;
+
+: multi-mega-cache-quot ( methods n -- quot )
+    make-empty-cache \ mega-cache-lookup [ ] 4sequence ;
+
+: new-dispatcher-word ( dispatcher quotation -- word )
+    "dispatch"  <uninterned-word>
+    engines get [ set-at ] keepd
+    swap "dispatcher" [ set-word-prop ] keepdd ;
+
+! ** Tag Dispatcher
+! Main type of dispatcher, compiles down to a mega-cache-lookup quotation
+M: tag-dispatcher compile-dispatcher*
+    dup
+    [
+        assoc>> [ [ tag-number ] dip ] assoc-map
+        num-types get default-method get <array> <enumerated> swap assoc-union! seq>>
+    ] [ n>> ] bi
+    multi-mega-cache-quot new-dispatcher-word ;
+
+! ** Tuple Dispatcher
+! Compiles down to a subtree inside the tag dispatcher
+
+M: tuple-dispatcher compile-dispatcher*
+    assoc>> echelon-sort ;
+
+! * Interface
+: make-multi-dispatch ( generic -- word engines )
+    H{ } clone engines [
+        generic-dispatch-tree
+        make-dispatch
+        compile-dispatcher engines get
+    ] with-variable ;
