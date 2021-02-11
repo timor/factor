@@ -1,11 +1,15 @@
 USING: accessors arrays assocs classes classes.algebra combinators
-combinators.short-circuit combinators.short-circuit.smart effects kernel math
-sequences sequences.zipped sets words ;
+combinators.short-circuit combinators.short-circuit.smart effects generic kernel
+math see sequences sequences.zipped sets words ;
 
 IN: generic.multi
 
+PREDICATE: multi-method < method "method-effect" word-prop ;
 
-: method-types ( method -- seq ) "method-effect" word-prop effect-in-types reverse ;
+GENERIC: method-types ( method -- seq )
+M: method method-types "method-class" word-prop 1array ;
+M: multi-method method-types
+    "method-effect" word-prop effect-in-types reverse ;
 
 : tuple-echelon ( class -- n ) "layout" word-prop third ;
 
@@ -22,6 +26,8 @@ IN: generic.multi
 : echelon-methods ( class index methods -- seq )
     [ { [ echelon-method? ] [ method-applicable? ] } && ] 2with filter ;
 
+: direct-methods ( class index methods -- seq ) [ nth-type class= ] 2with filter ;
+
 ! Covariant dispatch tuple
 : method< ( method1 method2 -- ? )
     [ method-types ] bi@
@@ -35,7 +41,7 @@ IN: generic.multi
 : assign-dispatch-class ( classes -- echelon classes' )
     unclip tuple-echelon swap ;
 
-: haha? ( methods index -- res )
+: make-dispatch-tree? ( methods index -- res )
     {
         [ drop length 1 > ]
         [ [ first method-types length ] dip > ]
@@ -45,44 +51,17 @@ IN: generic.multi
     ! [ 2drop f ]
     ! [ swap first method-types length < ] if ;
 
-: cleanup-echelon ( assoc -- assoc )
+:: make-dispatch-tree ( methods index  -- res )
+    methods [ method-types index swap nth ] map members
+    sort-classes
+    [| class |
+     ! class tuple-echelon :> echelon
+     class index methods [ direct-methods ] [ applicable-methods ] 3bi over diff
+     :> ( this-echelon rest-methods )
+     this-echelon rest-methods union index 1 + make-dispatch-tree?
+     [ class this-echelon rest-methods union index 1 + make-dispatch-tree 2array ]
+     [ class this-echelon rest-methods 3array ] if
+    ] map ;
 
-
-:: haha ( methods index  -- res )
-       methods [ method-types index swap nth ] map members
-       [| class |
-        ! class tuple-echelon :> echelon
-        class index methods [ echelon-methods ] [ applicable-methods ] 3bi over diff
-        :> ( this-echelon rest-methods )
-        this-echelon rest-methods union index 1 + haha?
-        [ class this-echelon rest-methods union index 1 + haha 2array ]
-        [ class this-echelon rest-methods 3array ] if
-       ] map ;
-
-! : foo ( assoc -- res )
-!     H{ } clone swap
-!     [| method classes |
-!      classes assign-dispatch-class :> ( echelon classes' )
-
-!     ] assoc-each ;
-
-:: distribute-echelon ( assoc -- assoc )
-    H{ } clone :> res
-    assoc [| classes method |
-           classes unclip :> ( rest class )
-           class tuple-echelon :> echelon
-           echelon res [ drop H{ } clone ] cache
-           [ rest method 2array class ] dip push-at
-     ] assoc-each res ;
-
-
-:: echelon-tree ( methods -- tree )
-    H{ } clone :> res
-    methods [
-             method-types
-             [| class index |
-              class tuple-echelon :> echelon
-              index res [ drop H{ } clone ] cache
-              [ class echelon ] dip push-at
-             ] each-index
-    ] each res ;
+: generic-dispatch-tree ( generic -- tree )
+    methods 0 make-dispatch-tree ;
