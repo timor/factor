@@ -1,6 +1,6 @@
-USING: accessors arrays assocs classes classes.algebra combinators
+USING: accessors arrays assocs classes.algebra combinators
 combinators.short-circuit combinators.short-circuit.smart effects generic kernel
-math see sequences sequences.zipped sets words ;
+math see sequences sequences.zipped sets vectors words ;
 
 IN: generic.multi
 
@@ -34,12 +34,16 @@ M: multi-method method-types
     { [ [ class<= ] 2all? ]
       [ <zipped> [ first2 class< ] any? ] } 2&& ;
 
-! Associate dispatch classes to methods
-: methods-classes ( methods -- assoc )
-    [ dup method-types ] map>alist ;
+! ! Associate dispatch classes to methods
+! : methods-classes ( methods -- assoc )
+!     [ dup method-types ] map>alist ;
 
 : assign-dispatch-class ( classes -- echelon classes' )
     unclip tuple-echelon swap ;
+
+: dispatch-methods ( index methods -- assoc )
+    [ [ method-types nth ] keep ] with map>alist ;
+    ! flatten-methods ;
 
 : make-dispatch-tree? ( methods index -- res )
     {
@@ -53,15 +57,88 @@ M: multi-method method-types
 
 :: make-dispatch-tree ( methods index  -- res )
     methods [ method-types index swap nth ] map members
-    sort-classes
+    sort-classes [ flatten-class ] gather
     [| class |
      ! class tuple-echelon :> echelon
      class index methods [ direct-methods ] [ applicable-methods ] 3bi over diff
      :> ( this-echelon rest-methods )
      this-echelon rest-methods union index 1 + make-dispatch-tree?
      [ class this-echelon rest-methods union index 1 + make-dispatch-tree 2array ]
-     [ class this-echelon rest-methods 3array ] if
+     ! Combine into a single list for now
+     ! [ class this-echelon rest-methods 3array ] if
+     [ class this-echelon rest-methods union 2array ] if
     ] map ;
+
+: rebalance-inheritance ( class assoc -- assoc )
+    clone >vector
+    over [ nip class<= ] curry assoc-partition
+    swapd [ set-at ] keep
+    ! [ keys sort-classes ] [ >alist ] bi extract-keys
+    ;
 
 : generic-dispatch-tree ( generic -- tree )
     methods 0 make-dispatch-tree ;
+
+! * Building the engines
+
+TUPLE: tuple-dispatcher assoc n ;
+C: <tuple-dispatcher> tuple-dispatcher
+TUPLE: tag-dispatcher < tuple-dispatcher ;
+C: <tag-dispatcher> tag-dispatcher
+TUPLE: external-dispatcher < tuple-dispatcher ;
+C: <external-dispatcher> external-dispatcher
+
+: new-dispatcher ( assoc n class -- obj )
+    new swap >>n swap >>assoc ;
+
+! cache engines on dispatch index and remaining possibilities
+SYMBOL: handled-dispatch
+
+: flat-dispatch? ( subtree -- ? )
+    [ sequence? not ] all? ;
+
+ERROR: no-dispatch-error class tree n ;
+
+! each index gets their own cache
+: new-cache ( cache class tree n -- cache class tree n )
+    [ V{ } clone suffix ] 3dip ;
+
+: diff-cached ( cache class tree n -- cache class tree n )
+    ! over hashtable?
+    ! [
+        [ pick last diff ] dip
+    ! ] unless
+    ;
+
+: push-cache ( cache class obj tree -- cache class obj )
+    dup flat-dispatch? [ reach last push-all ] [ drop ] if ;
+
+DEFER: build-dispatch-assoc
+: build-dispatch ( cache tree n type -- dispatcher )
+    [ [ build-dispatch-assoc ] keep ] dip new-dispatcher ;
+
+: build-tag-dispatcher ( cache tree n -- dispatcher )
+    [ tuple swap rebalance-inheritance ] dip
+    tag-dispatcher build-dispatch ;
+
+: build-tuple-dispatcher ( cache tree n -- dispatcher )
+    tuple-dispatcher build-dispatch ;
+
+
+! TODO: handle predicates
+: build-dispatch-assoc ( cache tree n -- assoc )
+    [                      ! cache [ class subtree n ]
+        diff-cached
+        [ {
+                { [ over assoc-empty? ] [ 2drop f ] }
+                { [ pick tuple = ] [ [ over ] 2dip build-tuple-dispatcher ] }
+                { [ over flat-dispatch? not ]
+                  [ 1 + [ over V{ } clone suffix ] 2dip build-tag-dispatcher ] }
+                { [ over length 1 = ] [ drop first ] }
+                { [ over length 1 > ] [ no-dispatch-error ] }
+            } cond ] keepd ! cache [ class dispatcher subtree ]
+        push-cache
+    ] curry assoc-map nip ;
+
+: make-dispatch ( tree -- dispatcher )
+    V{ } clone 1array swap 0 build-tag-dispatcher ;
