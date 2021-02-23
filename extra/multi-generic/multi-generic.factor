@@ -1417,13 +1417,10 @@ M: covariant-tuple dispatch-arity classes>> length ;
     n 0 >=
     [ n methods method-dispatch-classes
       [ dup n methods applicable-methods
-        dup length 1 >
-        [ n 1 - covariant-tuple-multi-methods ]
-        ! TODO check sorting
-        [ ?first method>> ] if
+        n 1 - covariant-tuple-multi-methods
       ] map>alist ] [
         ! NOTE: This is where we rely on correct non-ambigutiy
-        methods ?first method>>
+        methods ?last [ method>> ] [ f ] if*
     ] if ;
 
 GENERIC: promote-dispatch-class ( arity class -- class )
