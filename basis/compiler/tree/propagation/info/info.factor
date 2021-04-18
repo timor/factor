@@ -1,11 +1,10 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays assocs byte-arrays classes
-classes.algebra classes.singleton classes.tuple
-classes.tuple.private combinators combinators.short-circuit
-compiler.tree.propagation.copy compiler.utilities kernel layouts math
-math.intervals namespaces sequences sequences.private strings
-words ;
+USING: accessors arrays assocs byte-arrays classes classes.algebra
+classes.singleton classes.tuple classes.tuple.private combinators
+combinators.short-circuit compiler.tree.propagation.copy compiler.utilities
+delegate kernel layouts math math.intervals namespaces sequences
+sequences.private sets stack-checker.values strings words ;
 IN: compiler.tree.propagation.info
 
 : false-class? ( class -- ? ) \ f class<= ;
@@ -27,7 +26,30 @@ TUPLE: value-info-state
     interval
     literal
     literal?
-    slots ;
+    slots
+    backref
+    ;
+
+! Things to put inside value info slot entries
+DEFER: value-info
+DEFER: value-infos
+DEFER: value-info-union
+DEFER: <literal-info>
+DEFER: object-info
+TUPLE: slot-ref definers ;
+C: <slot-ref> slot-ref
+CONSULT: value-info-state slot-ref definers>> [ value-info ] [ value-info-union ] map-reduce ;
+: set-global-value-info ( info value -- )
+    resolve-copy value-infos get first set-at ;
+: <literal-slot-ref> ( literal -- slot-ref )
+    <literal-info>
+    <value>
+    [ introduce-value ]
+    [ set-global-value-info ]
+    [ 1array <slot-ref> ] tri ;
+
+SINGLETON: unknown-slot
+CONSULT: value-info-state unknown-slot drop object-info ;
 
 CONSTANT: null-info T{ value-info-state f null empty-interval }
 
@@ -50,9 +72,10 @@ CONSTANT: object-info T{ value-info-state f object full-interval }
 
 DEFER: <literal-info>
 
+! Literal tuple
 : tuple-slot-infos ( tuple -- slots )
     [ tuple-slots ] [ class-of all-slots ] bi
-    [ read-only>> [ <literal-info> ] [ drop f ] if ] 2map
+    [ read-only>> [ <literal-slot-ref> ] [ drop f ] if ] 2map
     f prefix ;
 
 UNION: fixed-length array byte-array string ;
@@ -67,6 +90,7 @@ UNION: fixed-length array byte-array string ;
 : (slots-with-length) ( length class -- slots )
     "slots" word-prop length 1 - f <array> swap prefix ;
 
+! Literal fixed-length-sequence
 : slots-with-length ( seq -- slots )
     [ length <literal-info> ] [ class-of ] bi (slots-with-length) ;
 
@@ -166,6 +190,7 @@ UNION: fixed-length array byte-array string ;
         [ (slots-with-length) ] dip swap >>slots
     init-value-info ;
 
+! Non-literal tuple info, constructor
 : <tuple-info> ( slots class -- info )
     <value-info>
         swap >>class
@@ -239,8 +264,15 @@ DEFER: (value-info-union)
 
 : union-slots ( info1 info2 -- slots )
     [ slots>> ] bi@
-    2dup [ length ] same?
-    [ [ union-slot ] 2map ] [ 2drop f ] if ;
+    object-info pad-tail-shorter
+    ! 2dup [ length ] same?
+    ! [
+    [ union-slot ] 2map
+    ! ] [ 2drop f ] if
+    ;
+
+SYMBOL: orphan
+orphan [ <value> ] initialize
 
 : (value-info-union) ( info1 info2 -- info )
     [ <value-info> ] 2dip
@@ -249,6 +281,7 @@ DEFER: (value-info-union)
         [ [ interval>> ] bi@ interval-union >>interval ]
         [ union-literals [ >>literal ] [ >>literal? ] bi* ]
         [ union-slots >>slots ]
+        [ [ backref>> ] bi@ union >>backref ]
     } 2cleave
     init-value-info ;
 

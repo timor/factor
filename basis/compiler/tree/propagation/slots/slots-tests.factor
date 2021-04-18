@@ -1,7 +1,7 @@
-USING: accessors arrays byte-arrays compiler.tree
+USING: accessors arrays compiler.test compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
-compiler.tree.propagation.slots hashtables kernel math math.intervals
-namespaces sequences strings tools.test ;
+compiler.tree.propagation.slots hashtables kernel math math.intervals namespaces
+sequences tools.test vectors ;
 IN: compiler.tree.propagation.slots.tests
 
 : indexize ( seq -- assoc )
@@ -10,6 +10,11 @@ IN: compiler.tree.propagation.slots.tests
 : setup-value-infos ( value-infos -- )
     indexize >hashtable 1array value-infos set
     H{ { 0 0 } { 1 1 } { 2 2 } } copies set ;
+
+: with-values ( quot -- )
+    [ H{ } clone copies set
+      H{ } clone 1vector value-infos set
+    ] prepose with-scope ; inline
 
 { t } [
     \ <array> sequence-constructor?
@@ -40,3 +45,20 @@ IN: compiler.tree.propagation.slots.tests
     { 0 1 } { 2 } \ <array> <#call> dup word>>
     propagate-sequence-constructor first
 ] unit-test
+
+TUPLE: foo { a read-only } b ;
+
+! Literal slot propagation on read-only-slots
+! Tuple literal
+{ V{ 42 f } }
+[ [ [ T{ foo f 42 47 } [ a>> ] [ b>> ] bi ] final-literals ] with-values ] unit-test
+
+{ { f t f } }
+[ [ [ T{ foo f 42 47 } ] final-info ] with-values first slots>> [ slot-ref? ] map ] unit-test
+
+! Boa constructor
+{ V{ 42 f } }
+[ [ [ 42 47 foo boa [ a>> ] [ b>> ] bi ] final-literals ] with-values ] unit-test
+
+{ { f t f } }
+[ [ [ 42 47 foo boa ] final-info ] with-values first slots>> [ slot-ref? ] map ] unit-test
