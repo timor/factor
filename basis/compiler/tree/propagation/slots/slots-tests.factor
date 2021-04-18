@@ -103,3 +103,23 @@ TUPLE: foo { a read-only } b ;
 
 { V{ f t f } }
 [ [ [ 42 47 foo boa ] final-info ] with-values first slots>> [ slot-ref? ] map ] unit-test
+
+! TODO: class-info, new
+TUPLE: bar { a read-only initial: 42 } b ;
+
+{ V{ f t f } }
+[ [ [ bar new 47 >>b ] final-info ] with-values first slots>> [ slot-ref? ] map ] unit-test
+
+
+{ { f t f } } [ [
+             T{ foo f 42 47 } <literal-info>
+             T{ foo f 69 55 } <literal-info>
+             value-info-union slots>> [ slot-ref? ] map
+         ] with-values ] unit-test
+
+{ V{ f t f } }
+[ [ [ 11 22 foo boa ] [ 33 44 foo boa ] if ] final-info first
+  slots>> [ slot-ref? ] map ] unit-test
+
+{ V{ T{ interval { from { 11 t } } { to { 33 t } } } full-interval } }
+[ [ [ 11 22 foo boa ] [ 33 44 foo boa ] if [ a>> ] [ b>> ] bi ] final-info [ interval>> ] map ] unit-test

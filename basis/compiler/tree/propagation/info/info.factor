@@ -38,13 +38,29 @@ DEFER: <literal-info>
 DEFER: object-info
 TUPLE: slot-ref { definers read-only } info ;
 
-! : slot-ref-union-info ( slot-ref -- info )
-!     definers>> [ value-info ] [ value-info-union ] map-reduce ;
+! TODO: may be unnecessary
+! Prevent infinite recursion while merging
+SYMBOL: slot-value-history
+
+! If allocating or modifying value info in branch scope, make a virtual phi
+! after branch return
+SYMBOL: inner-slot-ref-values
+: record-slot-ref-value ( value -- )
+    inner-slot-ref-values get [ adjoin ] [ drop ] if* ;
+
+: safe-value-infos-union ( values -- info )
+    [ [ dup slot-value-history get in?
+        [ drop object-info ]
+        [ [ slot-value-history [ swap suffix ] change ]
+          [ value-info ] bi ] if ]
+      [ value-info-union ] map-reduce
+    ] with-scope ;
 
 ! NOTE: dereferencing is done eagerly now.  Could switch to context-sensitivity,
 ! for debugging a comparison to live environment...
 : <slot-ref> ( values -- obj )
-    dup [ value-info ] [ value-info-union ] map-reduce slot-ref boa ;
+    dup safe-value-infos-union slot-ref boa ;
+    ! [ value-info ] [ value-info-union ] map-reduce slot-ref boa ;
 
 : <1slot-ref> ( value -- obj ) 1array <slot-ref> ; inline
 CONSULT: value-info-state slot-ref info>> ;
@@ -53,9 +69,13 @@ CONSULT: value-info-state slot-ref info>> ;
 : <literal-slot-ref> ( literal -- slot-ref )
     <literal-info>
     <value>
-    [ introduce-value ]
-    [ set-global-value-info ]
-    [ 1array <slot-ref> ] tri ;
+    {
+        [ introduce-value ]
+        [ set-global-value-info ]
+        [ record-slot-ref-value ]
+        [ 1array <slot-ref> ]
+    } cleave
+    ;
 
 SINGLETON: unknown-slot
 CONSULT: value-info-state unknown-slot drop object-info ;
@@ -210,7 +230,7 @@ UNION: fixed-length array byte-array string ;
 : <tuple-ref-info> ( slot-values class -- info )
     <value-info>
     swap >>class
-    swap [ dup [ <1slot-ref> ] when ] map >>slots
+    swap [ dup [ resolve-copy [ record-slot-ref-value ] [ <1slot-ref> ] bi ] when ] map >>slots
     init-value-info ;
 
 : >literal< ( info -- literal literal? )
@@ -278,14 +298,20 @@ DEFER: (value-info-union)
         [ (value-info-union) ]
     } cond ;
 
+: slot-ref>info ( ref/info/f -- info/f )
+    dup slot-ref? [ info>> ] when ;
+
+! TODO: Ensure it is valid with regards to escape invalidation to drop reference
+! property here.
+: union-slot-ref ( ref/info1 ref/info2 -- info )
+    2dup [ slot-ref? ] both?
+    [ [ definers>> ] bi@ union <slot-ref> ]
+    [ [ slot-ref>info ] bi@ union-slot ] if ;
+
 : union-slots ( info1 info2 -- slots )
     [ slots>> ] bi@
     object-info pad-tail-shorter
-    ! 2dup [ length ] same?
-    ! [
-    [ union-slot ] 2map
-    ! ] [ 2drop f ] if
-    ;
+    [ union-slot-ref ] 2map ;
 
 SYMBOL: orphan
 orphan [ <value> ] initialize

@@ -1,11 +1,12 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays assocs combinators compiler.tree
+USING: accessors arrays assocs assocs.extras combinators compiler.tree
 compiler.tree.combinators compiler.tree.propagation.constraints
 compiler.tree.propagation.info compiler.tree.propagation.nodes
 compiler.tree.propagation.simple fry kernel locals math
-namespaces sequences stack-checker.branches ;
-FROM: sets => union ;
+namespaces sequences sets stack-checker.branches ;
+! FROM: sets => union ;
+FROM: namespaces => set ;
 IN: compiler.tree.propagation.branches
 
 GENERIC: child-constraints ( node -- seq )
@@ -44,7 +45,8 @@ SYMBOL: infer-children-data
 
 : copy-value-info ( -- )
     value-infos [ H{ } clone suffix ] change
-    constraints [ H{ } clone suffix ] change ;
+    constraints [ H{ } clone suffix ] change
+    V{ } clone inner-slot-ref-values set ;
 
 : no-value-info ( -- )
     value-infos off
@@ -77,7 +79,24 @@ DEFER: collect-variables
 : annotate-phi-inputs ( #phi -- )
     dup phi-in-d>> compute-phi-input-infos >>phi-info-d drop ;
 
+: (lift-slot-ref-values) ( infer-children-data -- assoc )
+    [ [ inner-slot-ref-values of ] gather
+      ! NOTE: re-registers values for upwards propagation
+      dup [ record-slot-ref-value ] each
+    ] keep
+    [| values vars |
+     vars [
+         values [ dup value-info ] H{ } map>assoc
+     ] with-variables
+    ] with map sift
+    [ value-info-union ] assoc-collapse ;
+
+: lift-slot-ref-values ( infer-children-data -- )
+    (lift-slot-ref-values)
+    [ swap set-value-info ] assoc-each ;
+
 : merge-value-infos ( infos outputs -- )
+    infer-children-data get lift-slot-ref-values
     [ [ value-infos-union ] map ] dip set-value-infos ;
 
 SYMBOL: condition-value
@@ -88,6 +107,7 @@ SYMBOL: condition-value
         constraints
         infer-children-data
         value-infos
+        inner-slot-ref-values
     } [ dup get ] H{ } map>assoc ;
 
 M: #phi propagate-before ( #phi -- )
