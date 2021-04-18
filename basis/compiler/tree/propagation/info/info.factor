@@ -48,21 +48,11 @@ SYMBOL: inner-slot-ref-values
 : record-slot-ref-value ( value -- )
     inner-slot-ref-values get [ adjoin ] [ drop ] if* ;
 
-: safe-value-infos-union ( values -- info )
-    [ [ dup slot-value-history get in?
-        [ drop object-info ]
-        [ [ slot-value-history [ swap suffix ] change ]
-          [ value-info ] bi ] if ]
-      [ value-info-union ] map-reduce
-    ] with-scope ;
-
 ! NOTE: dereferencing is done eagerly now.  Could switch to context-sensitivity,
 ! for debugging a comparison to live environment...
-: <slot-ref> ( values -- obj )
-    dup safe-value-infos-union slot-ref boa ;
-    ! [ value-info ] [ value-info-union ] map-reduce slot-ref boa ;
+C: <slot-ref> slot-ref
 
-: <1slot-ref> ( value -- obj ) 1array <slot-ref> ; inline
+: <1slot-ref> ( value -- obj ) [ 1array ] [ value-info ] bi <slot-ref> ; inline
 CONSULT: value-info-state slot-ref info>> ;
 : set-global-value-info ( info value -- )
     resolve-copy value-infos get first set-at ;
@@ -73,7 +63,7 @@ CONSULT: value-info-state slot-ref info>> ;
         [ introduce-value ]
         [ set-global-value-info ]
         [ record-slot-ref-value ]
-        [ 1array <slot-ref> ]
+        [ <1slot-ref> ]
     } cleave
     ;
 
@@ -305,7 +295,10 @@ DEFER: (value-info-union)
 ! property here.
 : union-slot-ref ( ref/info1 ref/info2 -- info )
     2dup [ slot-ref? ] both?
-    [ [ definers>> ] bi@ union <slot-ref> ]
+    [
+        [ [ definers>> ] bi@ union ]
+        [ [ info>> ] bi@ value-info-union ] 2bi
+        <slot-ref> ]
     [ [ slot-ref>info ] bi@ union-slot ] if ;
 
 : union-slots ( info1 info2 -- slots )
