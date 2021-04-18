@@ -36,9 +36,18 @@ DEFER: value-infos
 DEFER: value-info-union
 DEFER: <literal-info>
 DEFER: object-info
-TUPLE: slot-ref definers ;
-C: <slot-ref> slot-ref
-CONSULT: value-info-state slot-ref definers>> [ value-info ] [ value-info-union ] map-reduce ;
+TUPLE: slot-ref { definers read-only } info ;
+
+! : slot-ref-union-info ( slot-ref -- info )
+!     definers>> [ value-info ] [ value-info-union ] map-reduce ;
+
+! NOTE: dereferencing is done eagerly now.  Could switch to context-sensitivity,
+! for debugging a comparison to live environment...
+: <slot-ref> ( values -- obj )
+    dup [ value-info ] [ value-info-union ] map-reduce slot-ref boa ;
+
+: <1slot-ref> ( value -- obj ) 1array <slot-ref> ; inline
+CONSULT: value-info-state slot-ref info>> ;
 : set-global-value-info ( info value -- )
     resolve-copy value-infos get first set-at ;
 : <literal-slot-ref> ( literal -- slot-ref )
@@ -195,6 +204,13 @@ UNION: fixed-length array byte-array string ;
     <value-info>
         swap >>class
         swap >>slots
+    init-value-info ;
+
+! Non-literal tuple info, slot refs instead
+: <tuple-ref-info> ( slot-values class -- info )
+    <value-info>
+    swap >>class
+    swap [ dup [ <1slot-ref> ] when ] map >>slots
     init-value-info ;
 
 : >literal< ( info -- literal literal? )

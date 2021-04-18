@@ -14,17 +14,27 @@ IN: compiler.tree.propagation.slots
     [ "default-output-classes" word-prop first ] bi*
     <sequence-info> 1array ;
 
-: fold-<tuple-boa> ( values class -- info )
+: fold-<tuple-boa> ( infos class -- info )
     [ [ literal>> ] map ] dip slots>tuple
     <literal-info> ;
 
-: read-only-slots ( values class -- slots )
+: read-only-slots ( values class -- slot-infos )
     all-slots
     [ read-only>> [ value-info ] [ drop f ] if ] 2map
     f prefix ;
 
-: fold-<tuple-boa>? ( values class -- ? )
+: read-only-slots-values ( values class -- values )
+    all-slots
+    [ read-only>> [ drop f ] unless ] 2map
+    f prefix ;
+
+: fold-<tuple-boa>? ( infos class -- ? )
     [ rest-slice [ dup [ literal?>> ] when ] all? ]
+    [ identity-tuple class<= not ]
+    bi* and ;
+
+: fold-<tuple-boa>-values? ( values class -- ? )
+    [ rest-slice [ dup [ value-info literal?>> ] when ] all? ]
     [ identity-tuple class<= not ]
     bi* and ;
 
@@ -32,9 +42,20 @@ IN: compiler.tree.propagation.slots
     [ read-only-slots ] keep 2dup fold-<tuple-boa>?
     [ [ rest-slice ] dip fold-<tuple-boa> ] [ <tuple-info> ] if ;
 
-: propagate-<tuple-boa> ( #call -- infos )
+: (propagate-<tuple-boa>-refs) ( values class -- info )
+    [ read-only-slots-values ] keep 2dup fold-<tuple-boa>-values?
+    [ [ rest-slice [ value-info ] map ] dip fold-<tuple-boa> ] [ <tuple-ref-info> ] if ;
+
+: propagate-<tuple-boa>-refs ( #call -- infos )
     in-d>> unclip-last
-    value-info literal>> first (propagate-<tuple-boa>) 1array ;
+    value-info literal>> first (propagate-<tuple-boa>-refs) 1array ; inline
+
+: propagate-<tuple-boa> ( #call -- infos )
+    propagate-<tuple-boa>-refs ;
+
+! : propagate-<tuple-boa> ( #call -- infos )
+!     in-d>> unclip-last
+!     value-info literal>> first (propagate-<tuple-boa>) 1array ;
 
 : read-only-slot? ( n class -- ? )
     all-slots [ offset>> = ] with find nip
