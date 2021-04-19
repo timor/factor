@@ -12,6 +12,7 @@ compiler.tree.propagation.known-words
 compiler.tree.propagation.nodes
 compiler.tree.propagation.recursive
 compiler.tree.propagation.simple
+compiler.tree.propagation.set-slots
 compiler.tree.propagation.transforms
 kernel namespaces ;
 IN: compiler.tree.propagation

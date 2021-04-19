@@ -244,25 +244,15 @@ TUPLE: ro-tuple { a read-only } { b read-only } ;
 [ propagate-rw-slots [ [ 42 47 foo boa ] final-info first slots>> [ slot-ref? ] map >array ] with-variable-on ] unit-test
 
 ! Circularity
-! TODO: Circularity on set-slot?
 
 ! Mutable tuples with circularity should not cause problems
 TUPLE: circle me ;
 
 { { f t } } [ propagate-rw-slots [ circle new dup >>me 1quotation final-info first  ] with-variable-on slots>> [ slot-ref? ] map ] unit-test
 
-! TODO set-slot
 
-{ V{ f t f } } [ [ bar new 47 >>b ] final-info first slots>> [ slot-ref? ] map ] unit-test
-{ V{ f t t } } [ [ [ bar new 47 >>b ] final-info ] with-rw
-                 first slots>> [ slot-ref? ] map
-               ] unit-test
 
-! Existing behavior
-{ V{ 42 f } } [ [ bar new 47 >>b [ a>> ] [ b>> ] bi ] final-literals ] unit-test
-{ V{ 42 f } } [ [ [ bar new 47 >>b [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
+! TODO
+! Back references
 
-! New behavior
-{ V{ f 42 47 } } [ [ [ bar new 47 >>b ] final-info ] with-rw
-                first slots>> [ dup slot-ref? [ literal>> ] when ] map
-              ] unit-test
+! {  } [ [ [  ] final-info first back-ref>> ] with-rw ] unit-test
