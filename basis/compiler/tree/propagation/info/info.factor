@@ -76,8 +76,10 @@ CONSULT: value-info-state slot-ref info>> ;
     [
         [
             dup slot-ref-history [ swap suffix ] change
-            [ <literal-info> ] dip [ set-global-value-info ] keep
-            <1slot-ref>
+            [ <literal-info> ] dip
+            [ set-global-value-info ]
+            [ record-slot-ref-value ]
+            [ <1slot-ref> ] tri
         ] with-scope
     ] if ;
 

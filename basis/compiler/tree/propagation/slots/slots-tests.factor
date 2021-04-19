@@ -125,8 +125,13 @@ TUPLE: bar { a read-only initial: 42 } b ;
              value-info-union slots>> [ slot-ref? ] map
          ] with-values ] unit-test
 
+! Basic branch phi
 { V{ f t f } }
 [ [ [ 11 22 foo boa ] [ 33 44 foo boa ] if ] final-info first
+  slots>> [ slot-ref? ] map ] unit-test
+
+{ V{ f t t } }
+[ [ [ [ 11 22 foo boa ] [ 33 44 foo boa ] if ] final-info ] with-rw first
   slots>> [ slot-ref? ] map ] unit-test
 
 { V{ T{ interval { from { 11 t } } { to { 33 t } } } full-interval } }
