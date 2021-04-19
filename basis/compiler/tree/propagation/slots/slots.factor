@@ -75,8 +75,6 @@ IN: compiler.tree.propagation.slots
       dup [ read-only>> ] when ]
     [ 2drop f ] if ;
 
-! TODO: mask rw-slots here to allow for explicit enabling, then don't kill rw
-! slots on init.
 ! Slot call to literal object.  Will only resolve read-only slots.  Will also
 ! refuse to get slot info if the definition has changed in the meantime
 : literal-info-slot ( slot object -- info/f )
@@ -102,7 +100,6 @@ IN: compiler.tree.propagation.slots
     [ 2drop f ] if ;
 
 ! Step 1: non-literal tuples
-! TODO Step 2: literal tuples
 : value-info-slot-mask-rw ( slot info -- info' )
     {
        { [ over 0 = ] [ 2drop fixnum <class-info> ] }
