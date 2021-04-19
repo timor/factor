@@ -16,6 +16,9 @@ IN: compiler.tree.propagation.slots.tests
       H{ } clone 1vector value-infos set
     ] prepose with-scope ; inline
 
+: with-rw ( quot -- )
+    propagate-rw-slots swap with-variable-on ; inline
+
 { t } [
     \ <array> sequence-constructor?
 ] unit-test
@@ -104,7 +107,12 @@ TUPLE: foo { a read-only } b ;
 { V{ f t f } }
 [ [ [ 42 47 foo boa ] final-info ] with-values first slots>> [ slot-ref? ] map ] unit-test
 
-! TODO: class-info, new
+! New
+{ V{ f t f } } [ [ foo new ] final-info first slots>> [ slot-ref? ] map ] unit-test
+{ V{ f t t } } [ [ [ foo new ] final-info ] with-rw first slots>> [ slot-ref? ] map ] unit-test
+
+
+! TODO: class-info
 TUPLE: bar { a read-only initial: 42 } b ;
 
 { V{ f t f } }
@@ -237,3 +245,19 @@ TUPLE: ro-tuple { a read-only } { b read-only } ;
 TUPLE: circle me ;
 
 { { f t } } [ propagate-rw-slots [ circle new dup >>me 1quotation final-info first  ] with-variable-on slots>> [ slot-ref? ] map ] unit-test
+
+! TODO set-slot
+
+{ V{ f t f } } [ [ bar new 47 >>b ] final-info first slots>> [ slot-ref? ] map ] unit-test
+{ V{ f t t } } [ [ [ bar new 47 >>b ] final-info ] with-rw
+                 first slots>> [ slot-ref? ] map
+               ] unit-test
+
+! Existing behavior
+{ V{ 42 f } } [ [ bar new 47 >>b [ a>> ] [ b>> ] bi ] final-literals ] unit-test
+{ V{ 42 f } } [ [ [ bar new 47 >>b [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
+
+! New behavior
+{ V{ f 42 47 } } [ [ [ bar new 47 >>b ] final-info ] with-rw
+                first slots>> [ dup slot-ref? [ literal>> ] when ] map
+              ] unit-test
