@@ -347,7 +347,7 @@ generic-comparison-ops [
 
 \ slot [
     dup literal?>>
-    [ literal>> swap value-info-slot ] [ 2drop object-info ] if
+    [ literal>> swap value-info-slot-mask-rw ] [ 2drop object-info ] if
 ] "outputs" set-word-prop
 
 \ instance? [

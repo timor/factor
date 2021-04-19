@@ -123,3 +123,109 @@ TUPLE: bar { a read-only initial: 42 } b ;
 
 { V{ T{ interval { from { 11 t } } { to { 33 t } } } full-interval } }
 [ [ [ 11 22 foo boa ] [ 33 44 foo boa ] if [ a>> ] [ b>> ] bi ] final-info [ interval>> ] map ] unit-test
+
+
+! Creating literal now expects slot content on rw slots
+! Original
+{ { f t f } }
+[ T{ foo f 42 47 } tuple-slot-infos [ slot-ref? ] map ] unit-test
+! Modified
+{ { f t t } }
+[ T{ foo f 42 47 } tuple-slot-infos-rw [ slot-ref? ] map ] unit-test
+
+{ { f t f } }
+[ T{ foo f 42 47 } <literal-info> slots>> [ slot-ref? ] map ] unit-test
+
+! Regular behavior on deref
+
+! Slot-ref types
+{ { f t t } }
+[ propagate-rw-slots [ T{ foo f 42 47 } <literal-info> slots>> [ slot-ref? ] map ] with-variable-on ] unit-test
+
+{ { f t t } }
+[ propagate-rw-slots [ [ T{ foo f 42 47 } ] final-info first slots>> [ slot-ref? ] map ] with-variable-on ] unit-test
+! Deref info
+{ { 42 f } }
+[ propagate-rw-slots
+  [ [ T{ foo f 42 47 } [ a>> ] [ b>> ] bi ]
+    final-literals >array ] with-variable-on ] unit-test
+
+{ { 42 f } }
+[ propagate-rw-slots
+  [ [ 42 47 foo boa [ a>> ] [ b>> ] bi ]
+    final-literals >array ] with-variable-on ] unit-test
+
+! Decide to keep rw slots
+{
+    t
+    f
+    t
+    f
+    { f 0 f } foo f
+    { f 0 f } foo f
+    { f 0 1 } foo f
+    { f 0 2 } foo f
+} [
+    42 <literal-info>
+    47 <literal-info>
+    object-info 3array setup-value-infos
+    ! Old behavior
+    42 <literal-info> 47 <literal-info> 2array foo fold-<tuple-boa>? ! t
+    42 <literal-info> object-info 2array foo fold-<tuple-boa>? ! f
+    ! New behavior, rw-slot deactivated, intermediate implementation ( TBR )
+    { f 0 1 } foo fold-<tuple-boa>-values? ! t
+    { f 0 2 } foo fold-<tuple-boa>-values? ! f
+    ! New behavior, rw-slot-deactivated
+    { 0 1 } foo fold-<tuple-boa>-rw? ! { f 0 f } f
+    { 0 2 } foo fold-<tuple-boa>-rw? ! { f 0 f } f
+    ! New behavior, rw-slot activated
+    ! We don't want to fold, but populate slots
+    propagate-rw-slots [
+        { 0 1 } foo fold-<tuple-boa>-rw? ! { f 0 1 } f
+        { 0 2 } foo fold-<tuple-boa>-rw? ! { f 0 2 } f
+    ] with-variable-on
+] unit-test
+
+! Cross-check actual foldable tuple
+TUPLE: ro-tuple { a read-only } { b read-only } ;
+
+! Create slot refs on folding (<literal-info> code path)
+{ { f t t } }
+[ [ 42 47 ro-tuple boa ] final-info first slots>> [ slot-ref? ] map ] unit-test
+{ { f t t } }
+[ propagate-rw-slots [ [ 42 47 ro-tuple boa ] final-info first slots>> [ slot-ref? ] map ] with-variable-on ] unit-test
+
+
+{
+    t
+    f
+    t
+    f
+    { f 0 1 } ro-tuple t
+    { f 0 2 } ro-tuple f
+    { f 0 1 } ro-tuple t
+    { f 0 2 } ro-tuple f
+} [
+    42 <literal-info>
+    47 <literal-info>
+    object-info 3array setup-value-infos
+    ! Old behavior
+    42 <literal-info> 47 <literal-info> 2array ro-tuple fold-<tuple-boa>? ! t
+    42 <literal-info> object-info 2array ro-tuple fold-<tuple-boa>? ! f
+    ! New behavior, rw-slot deactivated, intermediate implementation ( TBR )
+    { f 0 1 } ro-tuple fold-<tuple-boa>-values? ! t
+    { f 0 2 } ro-tuple fold-<tuple-boa>-values? ! f
+    ! New behavior, rw-slot-deactivated
+    { 0 1 } ro-tuple fold-<tuple-boa>-rw? ! { f 0 1 } t
+    { 0 2 } ro-tuple fold-<tuple-boa>-rw? ! { f 0 2 } f
+    ! New behavior, rw-slot activated
+    ! We don't want to fold, but populate slots
+    propagate-rw-slots [
+        { 0 1 } ro-tuple fold-<tuple-boa>-rw? ! { f 0 1 } t
+        { 0 2 } ro-tuple fold-<tuple-boa>-rw? ! { f 0 2 } f
+    ] with-variable-on
+] unit-test
+
+
+{ { f t t } }
+[ propagate-rw-slots [ [ 42 47 foo boa ] final-info first slots>> [ slot-ref? ] map >array ] with-variable-on ] unit-test

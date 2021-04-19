@@ -42,10 +42,22 @@ IN: compiler.tree.propagation.slots
     [ read-only-slots ] keep 2dup fold-<tuple-boa>?
     [ [ rest-slice ] dip fold-<tuple-boa> ] [ <tuple-info> ] if ;
 
+! Check folding like regular.  Otherwise, optionally not kill rw slots.
+: fold-<tuple-boa>-rw? ( values class -- values' class ? )
+    2dup [ read-only-slots-values ] keep 2dup fold-<tuple-boa>-values?
+    [ 2nipd t ]
+    [
+        propagate-rw-slots?
+        [ 2drop [ f prefix ] dip ]
+        [ 2nipd ] if
+        f
+    ] if ;
+
 : (propagate-<tuple-boa>-refs) ( values class -- info )
-    [ read-only-slots-values ] keep 2dup fold-<tuple-boa>-values?
+    fold-<tuple-boa>-rw?
     [ [ rest-slice [ value-info ] map ] dip fold-<tuple-boa> ] [ <tuple-ref-info> ] if ;
 
+! Non-literal construction
 : propagate-<tuple-boa>-refs ( #call -- infos )
     in-d>> unclip-last
     value-info literal>> first (propagate-<tuple-boa>-refs) 1array ; inline
@@ -58,9 +70,15 @@ IN: compiler.tree.propagation.slots
 !     value-info literal>> first (propagate-<tuple-boa>) 1array ;
 
 : read-only-slot? ( n class -- ? )
-    all-slots [ offset>> = ] with find nip
-    dup [ read-only>> ] when ;
+    dup class?
+    [ all-slots [ offset>> = ] with find nip
+      dup [ read-only>> ] when ]
+    [ 2drop f ] if ;
 
+! TODO: mask rw-slots here to allow for explicit enabling, then don't kill rw
+! slots on init.
+! Slot call to literal object.  Will only resolve read-only slots.  Will also
+! refuse to get slot info if the definition has changed in the meantime
 : literal-info-slot ( slot object -- info/f )
     {
         [ class-of read-only-slot? ]
@@ -68,9 +86,26 @@ IN: compiler.tree.propagation.slots
         [ swap slot <literal-info> ]
     } 2&& ;
 
+! TODO: backref handling
+
+! slot call propagation
 : value-info-slot ( slot info -- info' )
     {
         { [ over 0 = ] [ 2drop fixnum <class-info> ] }
         { [ dup literal?>> ] [ literal>> literal-info-slot ] }
         [ [ 1 - ] [ slots>> ] bi* ?nth ]
+    } cond [ object-info ] unless* ;
+
+: mask-rw-slot-access ( slot info -- info'/f )
+    2dup class>> read-only-slot?
+    [ [ 1 - ] [ slots>> ] bi* ?nth ]
+    [ 2drop f ] if ;
+
+! Step 1: non-literal tuples
+! TODO Step 2: literal tuples
+: value-info-slot-mask-rw ( slot info -- info' )
+    {
+       { [ over 0 = ] [ 2drop fixnum <class-info> ] }
+       { [ dup literal?>> ] [ literal>> literal-info-slot ] }
+       [ mask-rw-slot-access ]
     } cond [ object-info ] unless* ;

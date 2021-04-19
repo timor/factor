@@ -42,6 +42,9 @@ TUPLE: slot-ref { definers read-only } info ;
 ! Prevent infinite recursion while merging
 SYMBOL: slot-value-history
 
+SYMBOL: propagate-rw-slots
+: propagate-rw-slots? ( -- ? ) propagate-rw-slots get >boolean ; inline
+
 ! If allocating or modifying value info in branch scope, make a virtual phi
 ! after branch return
 SYMBOL: inner-slot-ref-values
@@ -97,6 +100,9 @@ DEFER: <literal-info>
     [ read-only>> [ <literal-slot-ref> ] [ drop f ] if ] 2map
     f prefix ;
 
+: tuple-slot-infos-rw ( tuple -- slots )
+    tuple-slots [ <literal-slot-ref> ] map f prefix ;
+
 UNION: fixed-length array byte-array string ;
 
 : literal-class ( obj -- class )
@@ -113,12 +119,17 @@ UNION: fixed-length array byte-array string ;
 : slots-with-length ( seq -- slots )
     [ length <literal-info> ] [ class-of ] bi (slots-with-length) ;
 
+! TODO: don't kill rw slots
 : init-literal-info ( info -- info )
     empty-interval >>interval
     dup literal>> literal-class >>class
     dup literal>> {
         { [ dup real? ] [ [a,a] >>interval ] }
-        { [ dup tuple? ] [ tuple-slot-infos >>slots ] }
+        { [ dup tuple? ] [
+              propagate-rw-slots?
+              [ tuple-slot-infos-rw ]
+              [ tuple-slot-infos ] if
+              >>slots ] }
         { [ dup fixed-length? ] [ slots-with-length >>slots ] }
         [ drop ]
     } cond ; inline
