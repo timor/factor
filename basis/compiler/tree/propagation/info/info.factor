@@ -38,9 +38,19 @@ DEFER: <literal-info>
 DEFER: object-info
 TUPLE: slot-ref { definers read-only } info ;
 
-! TODO: may be unnecessary
 ! Prevent infinite recursion while merging
-SYMBOL: slot-value-history
+! Maps literals to values
+SYMBOL: slot-ref-history
+SYMBOL: literal-values
+
+: slot-ref-recursion? ( value -- ? )
+    slot-ref-history get in? ;
+
+: set-global-value-info ( info value -- )
+    resolve-copy value-infos get first set-at ;
+
+: literal>value ( literal -- value )
+    literal-values get [ drop <value> [ introduce-value ] keep ] cache ;
 
 SYMBOL: propagate-rw-slots
 : propagate-rw-slots? ( -- ? ) propagate-rw-slots get >boolean ; inline
@@ -57,18 +67,19 @@ C: <slot-ref> slot-ref
 
 : <1slot-ref> ( value -- obj ) [ 1array ] [ value-info ] bi <slot-ref> ; inline
 CONSULT: value-info-state slot-ref info>> ;
-: set-global-value-info ( info value -- )
-    resolve-copy value-infos get first set-at ;
+
+
 : <literal-slot-ref> ( literal -- slot-ref )
-    <literal-info>
-    <value>
-    {
-        [ introduce-value ]
-        [ set-global-value-info ]
-        [ record-slot-ref-value ]
-        [ <1slot-ref> ]
-    } cleave
-    ;
+    dup literal>value
+    dup slot-ref-recursion?
+    [ 2drop f ]
+    [
+        [
+            dup slot-ref-history [ swap suffix ] change
+            [ <literal-info> ] dip [ set-global-value-info ] keep
+            <1slot-ref>
+        ] with-scope
+    ] if ;
 
 SINGLETON: unknown-slot
 CONSULT: value-info-state unknown-slot drop object-info ;

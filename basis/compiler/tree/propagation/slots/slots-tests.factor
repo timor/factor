@@ -1,7 +1,7 @@
 USING: accessors arrays classes.tuple.private compiler.test compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.slots hashtables kernel math math.intervals namespaces
-sequences stack-checker.values tools.test vectors words ;
+quotations sequences stack-checker.values tools.test vectors words ;
 IN: compiler.tree.propagation.slots.tests
 
 : indexize ( seq -- assoc )
@@ -229,3 +229,11 @@ TUPLE: ro-tuple { a read-only } { b read-only } ;
 
 { { f t t } }
 [ propagate-rw-slots [ [ 42 47 foo boa ] final-info first slots>> [ slot-ref? ] map >array ] with-variable-on ] unit-test
+
+! Circularity
+! TODO: Circularity on set-slot?
+
+! Mutable tuples with circularity should not cause problems
+TUPLE: circle me ;
+
+{ { f t } } [ propagate-rw-slots [ circle new dup >>me 1quotation final-info first  ] with-variable-on slots>> [ slot-ref? ] map ] unit-test
