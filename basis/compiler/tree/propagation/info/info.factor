@@ -83,6 +83,7 @@ M: f defines>> drop f ;
 
 ! NOTE: discarding value, only using for recursion prevention
 ! Returns an info for a literal tuple slot
+! TODO: handle case of nested rw-allocation in literal escaping
 : <literal-slot-ref> ( literal -- info )
     dup literal>value
     dup slot-ref-recursion?
@@ -263,31 +264,6 @@ UNION: fixed-length array byte-array string ;
     swap [ dup [ resolve-copy [ record-inner-value ] [ value-info ] bi ] when ] map >>slots
     init-value-info ;
 
-! ! Use with intersection to add reference-to link
-! : <defines-ref-info> ( value -- info )
-!     <value-info>
-!     object >>class
-!     full-interval >>interval swap
-!     1array f swap <ref-link> >>backref
-!     init-value-info ;
-
-! ! Use with intersection to add referenced-by link
-! : <defined-by-ref-info> ( value -- info )
-!     <value-info>
-!     object >>class
-!     full-interval >>interval swap
-!     1array f <ref-link> >>backref
-!     init-value-info ;
-
-! ! Use with intersection to add reflink
-! : <reflink-info> ( defined-by defines -- info )
-!     <value-info>
-!     object >>class
-!     full-interval >>interval
-!     -rot [ 1array ] bi@ <ref-link> >>backref
-!     init-value-info ;
-
-
 
 : >literal< ( info -- literal literal? )
     [ literal>> ] [ literal?>> ] bi ;
@@ -460,6 +436,13 @@ SYMBOL: value-infos
 : add-value-definition ( defining-value defined-value -- )
     [ set-defining-value ]
     [ swap add-defined-value ] 2bi ;
+
+! Non-recursive
+: invalidate-info ( value -- )
+    [
+        value-info backref>>
+        object-info swap >>backref
+    ] [ set-inner-value-info ] bi ;
 
 : refine-value-info ( info value -- )
     resolve-copy value-infos get

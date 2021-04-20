@@ -1,5 +1,6 @@
 USING: accessors alien arrays byte-arrays classes.algebra
 classes.struct compiler.tree.propagation.copy
+compiler.tree.propagation.escaping
 compiler.tree.propagation.info io.encodings.utf8 kernel literals math
 math.intervals namespaces sequences sequences.private tools.test ;
 IN: compiler.tree.propagation.info.tests
@@ -257,3 +258,28 @@ ${
     1 over <ref-link-also-defines>
     2 over <ref-link-also-defines>
 ] unit-test
+
+: with-values ( quot -- )
+    [ H{ } clone copies set
+      H{ } clone 1vector value-infos set
+      init-escaping-values
+    ] prepose with-scope ; inline
+
+${
+    fixnum <class-info>
+    fixnum <class-info> T{ ref-link f { 1 } { 2 } } >>backref
+    T{ value-info-state
+     { class object }
+     { interval full-interval }
+     { backref T{ ref-link f { 1 } { 2 } } }
+   } }
+
+[ [ { 1 2 3 4 } introduce-values
+    fixnum <class-info>
+    dup 3 set-value-info
+    1 3 set-defining-value
+    2 3 add-defined-value
+    3 value-info
+    3 invalidate-info
+    3 value-info
+  ] with-values ] unit-test
