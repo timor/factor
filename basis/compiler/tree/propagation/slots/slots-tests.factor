@@ -108,6 +108,10 @@ TUPLE: bar { a read-only initial: 42 } b ;
 
 ! Deref info
 { { 42 f } }
+[ [ T{ foo f 42 47 } [ a>> ] [ b>> ] bi ]
+  final-literals >array ] unit-test
+
+{ { 42 47 } }
 [ [ [ T{ foo f 42 47 } [ a>> ] [ b>> ] bi ]
     final-literals >array ] with-rw  ] unit-test
 
@@ -194,6 +198,19 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
 { V{ f f } } [ [ [ baz new [ frob ] keep [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
 
 
-! TODO: recursive
+! Recursive
+! This is really cool, if I may say so myself..
 { T{ baz f 47 42 } } [ 5 [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] call ] unit-test
-{  } [ [ [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] final-info first ] with-rw ] unit-test
+{
+    T{ value-info-state
+       { class baz }
+       { interval full-interval }
+       { slots
+         V{
+             f
+             T{ value-info-state { class integer } { interval T{ interval { from { 42 t } } { to { 1/0. t } } } } }
+             T{ value-info-state { class integer } { interval T{ interval { from { -1/0. t } } { to { 47 t } } } } }
+         }
+       }
+     }
+} [ [ [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] final-info first ] with-rw ] unit-test

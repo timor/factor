@@ -12,7 +12,7 @@ SLOT: a
 
 ! Existing behavior
 { V{ 42 f } } [ [ bar new 47 >>b [ a>> ] [ b>> ] bi ] final-literals ] unit-test
-{ V{ 42 f } } [ [ [ bar new 47 >>b [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
+{ V{ 42 47 } } [ [ [ bar new 47 >>b [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
 ! Invalid write
 { V{ 42 f } } [ [ bar new 66 >>a 47 >>b [ a>> ] [ b>> ] bi ] final-literals ] unit-test
 
@@ -29,9 +29,7 @@ SLOT: a
 { V{ 42 f } }
 [ [ [ [ bar new 11 >>b ] [ bar new 22 >>b ] if [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
 
-! FIXME
-! { V{ 42 11 } }
-{ V{ 42 f } }
+{ V{ 42 11 } }
 [ [ [ [ bar new 11 >>b ] [ bar new 11 >>b ] if [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
 
 ! Initial values
@@ -39,9 +37,7 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
 
 { V{ f f } } [ [ baz new [ a>> ] [ b>> ] bi ] final-literals ] unit-test
 
-! .. but not dereferenced
-! FIXME
-{ V{ f f } } [ [ [ baz new [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
+{ V{ 42 47 } } [ [ [ baz new [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
 
 TUPLE: circle me ;
 ! Circularity on set-slot?
