@@ -437,6 +437,12 @@ SYMBOL: value-infos
     [ set-defining-value ]
     [ swap add-defined-value ] 2bi ;
 
+: read-only-slot? ( n class -- ? )
+    dup class?
+    [ all-slots [ offset>> = ] with find nip
+      dup [ read-only>> ] when ]
+    [ 2drop f ] if ;
+
 ! Non-recursive
 : invalidate-info ( value -- )
     [

@@ -69,12 +69,6 @@ IN: compiler.tree.propagation.slots
 !     in-d>> unclip-last
 !     value-info literal>> first (propagate-<tuple-boa>) 1array ;
 
-: read-only-slot? ( n class -- ? )
-    dup class?
-    [ all-slots [ offset>> = ] with find nip
-      dup [ read-only>> ] when ]
-    [ 2drop f ] if ;
-
 ! TODO: propagate literal slots also on infos, not on literal!
 ! Slot call to literal object.  Will only resolve read-only slots.  Will also
 ! refuse to get slot info if the definition has changed in the meantime
