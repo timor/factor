@@ -49,6 +49,8 @@ SYMBOL: inner-values
 ! Maps literals to values
 SYMBOL: slot-ref-history
 SYMBOL: literal-values
+! TODO: remove after debugging ( or keep as global value numbering? )
+literal-values [ IH{ } clone ] initialize
 
 : slot-ref-recursion? ( value -- ? )
     slot-ref-history get in? ;
@@ -208,6 +210,13 @@ UNION: fixed-length array byte-array string ;
     dup [ interval>> full-interval or ] [ class>> ] bi wrap-interval >>interval
     dup class>> integer class<= [ [ integral-closure ] change-interval ] when ; inline
 
+! If we have object info, and no references, then you got an eff !!1!
+: init-slots ( info -- info )
+    [ [ [ dup object-info = [ drop f ] when ] map ]
+      [ f ] if*
+      dup [ not ] all? [ drop f ] when
+    ] change-slots ; inline
+
 : init-value-info ( info -- info )
     dup literal?>> [
         init-literal-info
@@ -217,6 +226,7 @@ UNION: fixed-length array byte-array string ;
             empty-interval >>interval
         ] [
             init-interval
+            init-slots
             dup [ class>> ] [ interval>> ] bi interval>literal
             [ >>literal ] [ >>literal? ] bi*
             [ fix-capacity-class ] change-class
@@ -443,12 +453,27 @@ SYMBOL: value-infos
       dup [ read-only>> ] when ]
     [ 2drop f ] if ;
 
+: invalidate-slot ( info n class -- info )
+    read-only-slot?
+    [ backref>> object-info clone swap >>backref ] unless ;
+
 ! Non-recursive
-: invalidate-info ( value -- )
-    [
-        value-info backref>>
-        object-info swap >>backref
-    ] [ set-inner-value-info ] bi ;
+! TODO Maybe test here for slots before doing that, or only do it if it is an allocation?
+: <invalidated-slots-info> ( info -- info )
+    clone dup class>> '[
+        [ 1 + over
+          [ _ invalidate-slot ]
+          [ 2drop f ] if
+        ] map-index
+    ] change-slots
+    f >>literal?
+    f >>interval
+    init-value-info
+    ;
+
+: invalidate-slots-info ( value -- )
+    [ value-info <invalidated-slots-info> ]
+    [ set-inner-value-info ] bi ;
 
 : refine-value-info ( info value -- )
     resolve-copy value-infos get

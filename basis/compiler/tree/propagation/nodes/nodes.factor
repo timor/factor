@@ -41,7 +41,11 @@ M: node propagate-around
     {
         [ propagate-reflinks ]
         [ propagate-before ]
-        [ propagate-escape ]
+        [
+            ! Runs after before because we need to know whether the word was inlined
+            propagate-rw-slots?
+            [ propagate-escape ] [ drop ] if
+        ]
         [ annotate-node ]
         [ propagate-after ]
     } cleave ;

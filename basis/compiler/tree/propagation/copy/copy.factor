@@ -12,6 +12,7 @@ SYMBOL: copies
 : resolve-copies ( copies -- vals )
     copies get [ compress-path ] curry map ;
 
+! TODO Confirm that we can get by without equating here for escaping
 : is-copy-of ( val copy -- ) copies get set-at ;
 
 : are-copies-of ( vals copies -- ) [ is-copy-of ] 2each ;

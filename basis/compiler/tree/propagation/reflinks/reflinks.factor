@@ -1,7 +1,8 @@
-USING: accessors assocs classes.algebra classes.tuple.private compiler.tree
-compiler.tree.propagation.copy compiler.tree.propagation.escaping
-compiler.tree.propagation.info compiler.tree.propagation.nodes kernel namespaces
-sequences sets slots.private words ;
+USING: accessors assocs classes.algebra classes.tuple.private
+combinators.short-circuit compiler.tree compiler.tree.propagation.copy
+compiler.tree.propagation.escaping compiler.tree.propagation.info
+compiler.tree.propagation.nodes kernel math namespaces sequences sets
+slots.private words ;
 
 IN: compiler.tree.propagation.reflinks
 
@@ -59,21 +60,35 @@ UNION: storage-class tuple fixed-length ;
 !     2dup <reflink-info>
 !     '[ _ swap refine-value-info ] bi@ ;
 
+! TODO: establish definer link on set-slot call
+
 ! slot ( obj m -- value )
+! TODO TBR
 M: slot-call propagate-reflinks
+    ! drop ;
     [ in-d>> first ]
     [ out-d>> first ] bi add-value-definition ;
 
+!
+! M: tuple-set-slot-call propagate-reflinks
+
+
+: object-escapes? ( value -- ? )
+    resolve-copy value-escapes? ;
+
 ! Recursive!
 : object-escapes ( value -- )
-    dup value-escapes?
+    resolve-copy dup value-escapes?
     [ drop ]                    ! Break recursion
-    [ [ value-escapes ]
-      [ value-info defines>> [ object-escapes ] each ] ] if ;
+    [
+        [ value-escapes ]
+        [ value-info backref>> defines>> [ object-escapes ] each ]
+        [ invalidate-slots-info ] tri
+    ] if ;
 
 ! ! Check if this value has been defined by something that could have escaped
 : value-info-escapes? ( info -- ? )
-    backref>> defined-by>> value-escapes? ;
+    backref>> defined-by>> object-escapes? ;
 
 M: tuple-boa-call propagate-reflinks
     out-d>> first record-allocation ;
@@ -89,16 +104,63 @@ M: #declare propagate-reflinks
 
 ! ** Escape handling
 
+! FIXME: if we had QUALIFY, we could inherit from slot-call
+PREDICATE: literal-slot-call < #call
+    { [ word>> \ slot eq? ]
+      [ in-d>> second value-info { [ literal?>> ] [ literal>> 0 = not ] } 1&& ]
+    } 1&& ; ! Exclude length slot calls
+
+PREDICATE: rw-slot-call < literal-slot-call
+    in-d>> first2 [ value-info class>> ] [ value-info literal>> ] bi* swap read-only-slot? not ;
+
+PREDICATE: flushable-call < #call
+    { [ word>> flushable? ] [ rw-slot-call? not ] } 1&& ;
+PREDICATE: inlined-call < #call body>> >boolean ;
+
+UNION: non-escaping-call flushable-call inlined-call tuple-set-slot-call ;
 
 ! TODO: arrays
-
-PREDICATE: flushable-call < #call word>> flushable? ;
-PREDICATE: inlined-call < #call body>> >boolean ;
-UNION: non-escaping-call flushable-call inlined-call tuple-set-slot-call ;
 
 M: #introduce propagate-escape
     out-d>> [ value-escapes ] each ;
 M: non-escaping-call propagate-escape drop ;
 M: #call propagate-escape
-    [ in-d>> [ value-escapes ] each ]
+    [ in-d>> [ object-escapes ] each ]
     [ out-d>> [ value-escapes ] each ] bi ;
+
+! ** Slot access refinement
+
+! ! TODO: remove regular slot access code
+! : mask-rw-slot-access ( slot info -- info'/f )
+!     2dup
+!     { [ class>> read-only-slot? ]
+!       ! [ { [ 2drop propagate-rw-slots? ]
+!       !     [ valid-rw-slot-access? ] } 2&&
+!       ! ]
+!       [ 2drop propagate-rw-slots? ]
+!     } 2||
+!     [ [ 1 - ] [ slots>> ] bi* ?nth ]
+!     [ 2drop f ] if ;
+
+! ! Step 1: non-literal tuples
+! : value-info-slot-mask-rw ( slot info -- info' )
+!     {
+!         { [ over 0 = ] [ 2drop fixnum <class-info> ] } ! This is a length slot, why no deref?
+!         { [ dup literal?>> propagate-rw-slots? and ] [ mask-rw-slot-access ] }
+!         { [ dup literal?>> ] [ literal>> literal-info-slot ] }
+!         [ mask-rw-slot-access ]
+!     } cond [ object-info ] unless* ;
+
+! Situation: output-value-infos has run.  Now repeat.  For now, only if this is
+! an rw-slot access
+
+! slot ( obj m -- value )
+! TODO technically not part of escape protocol
+M: rw-slot-call propagate-escape
+    [ in-d>> second value-info literal>> ]
+    [ in-d>> first value-info
+      [ 1 - ] [ slots>> ] bi* ?nth
+    ]
+    [ out-d>> first
+      over [ refine-value-info ] [ 2drop ] if
+    ] tri ;

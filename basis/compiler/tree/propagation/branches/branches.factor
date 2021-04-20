@@ -98,9 +98,10 @@ DEFER: collect-variables
     (lift-inner-values)
     [ swap set-value-info ] assoc-each ;
 
+! TODO: handle upwards merging correctly for terminating branches
 : branch-escaping-values ( infer-children-data -- )
     [ [ inner-escaping-values of [ value-escapes ] each ]
-      [ inner-equal-values of [ equate-all-values ] each ]
+      [ inner-equal-values of [ equate-all-values ] each ] bi
     ] each ;
 
 ! NOTE: lifting before setting phi-in is only necessary if recomputation needs
@@ -108,7 +109,7 @@ DEFER: collect-variables
 : merge-value-infos ( infos outputs -- )
     infer-children-data get
     [ lift-inner-values ]
-    [ branch-escaping-values ]
+    [ branch-escaping-values ] bi
     [ [ value-infos-union ] map ] dip set-value-infos ;
 
 SYMBOL: condition-value

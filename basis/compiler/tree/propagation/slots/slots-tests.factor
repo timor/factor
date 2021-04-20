@@ -11,14 +11,6 @@ IN: compiler.tree.propagation.slots.tests
     indexize >hashtable 1array value-infos set
     H{ { 0 0 } { 1 1 } { 2 2 } { 3 3 } } copies set ;
 
-: with-values ( quot -- )
-    [ H{ } clone copies set
-      H{ } clone 1vector value-infos set
-    ] prepose with-scope ; inline
-
-: with-rw ( quot -- )
-    propagate-rw-slots swap with-variable-on ; inline
-
 : info-slot-refs ( info -- seq )
     slots>> [ slot-ref? ] map ;
 
@@ -169,7 +161,7 @@ TUPLE: bar { a read-only initial: 42 } b ;
   [ [ T{ foo f 42 47 } [ a>> ] [ b>> ] bi ]
     final-literals >array ] with-variable-on ] unit-test
 
-{ { 42 f } }
+{ { 42 47 } }
 [ propagate-rw-slots
   [ [ 42 47 foo boa [ a>> ] [ b>> ] bi ]
     final-literals >array ] with-variable-on ] unit-test

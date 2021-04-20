@@ -2,13 +2,14 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs compiler.cfg compiler.cfg.debugger
 compiler.cfg.def-use compiler.cfg.linearization compiler.cfg.registers
-compiler.cfg.representations.preferred compiler.cfg.rpo
-compiler.cfg.stacks compiler.cfg.stacks.local compiler.cfg.utilities
-compiler.tree.builder compiler.tree.checker compiler.tree.def-use
-compiler.tree.normalization compiler.tree.propagation
-compiler.tree.propagation.info compiler.tree.recursive compiler.units
-fry hashtables kernel math namespaces sequences stack-checker
-tools.test vectors vocabs words ;
+compiler.cfg.representations.preferred compiler.cfg.rpo compiler.cfg.stacks
+compiler.cfg.stacks.local compiler.cfg.utilities compiler.tree.builder
+compiler.tree.checker compiler.tree.def-use compiler.tree.normalization
+compiler.tree.propagation.copy
+compiler.tree.propagation.escaping
+compiler.tree.propagation compiler.tree.propagation.info compiler.tree.recursive
+compiler.units continuations hashtables kernel math namespaces sequences
+stack-checker tools.test vectors vocabs words ;
 IN: compiler.test
 
 : decompile ( word -- )
@@ -69,6 +70,9 @@ IN: compiler.test
 : make-edges ( block-map edgelist -- )
     [ [ of ] with map first2 connect-bbs ] with each ;
 
+: propagated-tree ( quot -- nodes )
+    build-tree analyze-recursive normalize propagate ;
+
 : final-info ( quot -- seq )
     build-tree
     analyze-recursive
@@ -83,3 +87,15 @@ IN: compiler.test
 
 : final-literals ( quot -- seq )
     final-info [ literal>> ] map ;
+
+: with-rw ( quot -- )
+    [ propagate-rw-slots on ] prepose
+    [ propagate-rw-slots off ]
+    [ ] cleanup
+    ; inline
+
+: with-values ( quot -- )
+    [ H{ } clone copies set
+      H{ } clone 1vector value-infos set
+      init-escaping-values
+    ] prepose with-scope ; inline

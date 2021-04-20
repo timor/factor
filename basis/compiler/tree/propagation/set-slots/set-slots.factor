@@ -16,6 +16,7 @@ PREDICATE: tuple-set-slot-call < literal-set-slot-call in-d>> second value-info 
 : ensure-slot-vector ( n seq/f -- n seq )
     >vector over 1 + f pad-tail ; inline
 
+! TODO: maybe delegate info creation/manipulation to info.factor?
 M: tuple-set-slot-call propagate-before ( node -- )
     [ call-next-method ] keep
     propagate-rw-slots?

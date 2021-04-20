@@ -7,7 +7,14 @@ FROM: namespaces => set ;
 ! * Tracking escaping values
 ! Taken from escape analysis, because we do this the moment we introduce values in copy
 
+SYMBOL: +escaping+
+
+: <escaping-values> ( -- disjoint-set )
+    <disjoint-set> +escaping+ over add-atom ;
+
 SYMBOL: escaping-values
+! Init for bootstrapping
+escaping-values [ <escaping-values> ] initialize
 
 SYMBOL: inner-escaping-values
 : record-inner-escaping-value ( value -- )
@@ -17,11 +24,6 @@ SYMBOL: inner-equal-values
 : record-inner-equal-values ( values -- )
     inner-equal-values get [ adjoin ] [ drop ] if* ;
 
-SYMBOL: +escaping+
-
-: <escaping-values> ( -- disjoint-set )
-    <disjoint-set> +escaping+ over add-atom ;
-
 : init-escaping-values ( -- )
     <escaping-values> escaping-values set ;
 
@@ -30,10 +32,11 @@ SYMBOL: +escaping+
     [ 2drop ] [ add-atom ] if ; inline
 
 : introduce-escaping-value ( value -- )
-    escaping-values get (introduce-escaping-value) ;
+    escaping-values get [ (introduce-escaping-value) ] [ drop ] if* ;
 
 : introduce-escaping-values ( values -- )
-    escaping-values get '[ _ (introduce-escaping-value) ] each ;
+    escaping-values get dup
+    [ '[ _ (introduce-escaping-value) ] each ] [ 2drop ] if ;
 
 : equate-values ( value1 value2 -- )
     ! 2dup and
@@ -44,7 +47,7 @@ SYMBOL: +escaping+
     ;
 
 : equate-all-values ( values -- )
-    [ [ unclip-slice ] dip
+    [ unclip-slice
       escaping-values get equate-all-with ]
     [ record-inner-equal-values ] bi
     ;
