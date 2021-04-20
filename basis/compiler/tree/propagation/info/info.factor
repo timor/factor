@@ -38,6 +38,13 @@ DEFER: <literal-info>
 DEFER: object-info
 TUPLE: slot-ref { definers read-only } info ;
 
+! If allocating or modifying value info in branch scope, make a virtual phi
+! after branch return
+SYMBOL: inner-values
+
+: record-inner-value ( value -- )
+    inner-values get [ adjoin ] [ drop ] if* ;
+
 ! Prevent infinite recursion while merging
 ! Maps literals to values
 SYMBOL: slot-ref-history
@@ -55,12 +62,6 @@ SYMBOL: literal-values
 SYMBOL: propagate-rw-slots
 : propagate-rw-slots? ( -- ? ) propagate-rw-slots get >boolean ; inline
 
-! If allocating or modifying value info in branch scope, make a virtual phi
-! after branch return
-SYMBOL: inner-slot-ref-values
-: record-slot-ref-value ( value -- )
-    inner-slot-ref-values get [ adjoin ] [ drop ] if* ;
-
 ! NOTE: dereferencing is done eagerly now.  Could switch to context-sensitivity,
 ! for debugging a comparison to live environment...
 C: <slot-ref> slot-ref
@@ -68,18 +69,32 @@ C: <slot-ref> slot-ref
 : <1slot-ref> ( value -- obj ) [ 1array ] [ value-info ] bi <slot-ref> ; inline
 CONSULT: value-info-state slot-ref info>> ;
 
+TUPLE: ref-link { defined-by read-only } { defines read-only } ;
+C: <ref-link> ref-link
+: <ref-link-also-defines> ( value ref-link -- ref-link )
+    [ defined-by>> ] [ defines>> ] bi
+    rot suffix <ref-link> ;
 
-: <literal-slot-ref> ( literal -- slot-ref )
+: <ref-link-defined-by> ( value ref-link -- ref-link )
+    [ 1array ] dip defines>> <ref-link> ;
+
+M: f defined-by>> drop f ;
+M: f defines>> drop f ;
+
+! NOTE: discarding value, only using for recursion prevention
+! Returns an info for a literal tuple slot
+: <literal-slot-ref> ( literal -- info )
     dup literal>value
     dup slot-ref-recursion?
-    [ 2drop f ]
+    [ 2drop object-info ]
     [
         [
-            dup slot-ref-history [ swap suffix ] change
-            [ <literal-info> ] dip
-            [ set-global-value-info ]
-            [ record-slot-ref-value ]
-            [ <1slot-ref> ] tri
+            slot-ref-history [ swap suffix ] change
+            <literal-info>
+            ! [ <literal-info> ] dip
+            ! [ set-global-value-info ]
+            ! [ record-inner-value ]
+            ! [ <1slot-ref> ] tri
         ] with-scope
     ] if ;
 
@@ -110,10 +125,11 @@ DEFER: <literal-info>
 ! Literal tuple
 : tuple-slot-infos ( tuple -- slots )
     [ tuple-slots ] [ class-of all-slots ] bi
-    [ read-only>> [ <literal-slot-ref> ] [ drop f ] if ] 2map
+    [ read-only>> [ <literal-slot-ref> ] [ drop object-info ] if ] 2map
     f prefix ;
 
 : tuple-slot-infos-rw ( tuple -- slots )
+    ! tuple-slots [ <literal-slot-ref> ] map f prefix ;
     tuple-slots [ <literal-slot-ref> ] map f prefix ;
 
 UNION: fixed-length array byte-array string ;
@@ -132,9 +148,9 @@ UNION: fixed-length array byte-array string ;
 : slots-with-length ( seq -- slots )
     [ length <literal-info> ] [ class-of ] bi (slots-with-length) ;
 
-! TODO: don't kill rw slots
 : init-literal-info ( info -- info )
     empty-interval >>interval
+    f >>backref                 ! If something is declared literal, it can not have escaped
     dup literal>> literal-class >>class
     dup literal>> {
         { [ dup real? ] [ [a,a] >>interval ] }
@@ -244,8 +260,34 @@ UNION: fixed-length array byte-array string ;
 : <tuple-ref-info> ( slot-values class -- info )
     <value-info>
     swap >>class
-    swap [ dup [ resolve-copy [ record-slot-ref-value ] [ <1slot-ref> ] bi ] when ] map >>slots
+    swap [ dup [ resolve-copy [ record-inner-value ] [ value-info ] bi ] when ] map >>slots
     init-value-info ;
+
+! ! Use with intersection to add reference-to link
+! : <defines-ref-info> ( value -- info )
+!     <value-info>
+!     object >>class
+!     full-interval >>interval swap
+!     1array f swap <ref-link> >>backref
+!     init-value-info ;
+
+! ! Use with intersection to add referenced-by link
+! : <defined-by-ref-info> ( value -- info )
+!     <value-info>
+!     object >>class
+!     full-interval >>interval swap
+!     1array f <ref-link> >>backref
+!     init-value-info ;
+
+! ! Use with intersection to add reflink
+! : <reflink-info> ( defined-by defines -- info )
+!     <value-info>
+!     object >>class
+!     full-interval >>interval
+!     -rot [ 1array ] bi@ <ref-link> >>backref
+!     init-value-info ;
+
+
 
 : >literal< ( info -- literal literal? )
     [ literal>> ] [ literal?>> ] bi ;
@@ -279,6 +321,13 @@ DEFER: (value-info-intersect)
         ]
     } cond ;
 
+: merge-ref-links ( info1 info2 -- ref-link )
+    [ backref>> ] bi@
+    [ [ defined-by>> ] bi@ union ]
+    [ [ defines>> ] bi@ union ] 2bi
+    2dup [ empty? ] both?
+    [ 2drop f ] [ <ref-link> ] if ;
+
 : (value-info-intersect) ( info1 info2 -- info )
     [ <value-info> ] 2dip
     {
@@ -286,6 +335,9 @@ DEFER: (value-info-intersect)
         [ [ interval>> ] bi@ interval-intersect >>interval ]
         [ intersect-literals [ >>literal ] [ >>literal? ] bi* ]
         [ intersect-slots >>slots ]
+        ! Setting links is explicit, by they can be merged
+        ! ! Ref-links have refinement semantics
+        ! [ merge-ref-links >>backref ]
     } 2cleave
     init-value-info ;
 
@@ -340,7 +392,7 @@ orphan [ <value> ] initialize
         [ [ interval>> ] bi@ interval-union >>interval ]
         [ union-literals [ >>literal ] [ >>literal? ] bi* ]
         [ union-slots >>slots ]
-        [ [ backref>> ] bi@ union >>backref ]
+        [ merge-ref-links >>backref ]
     } 2cleave
     init-value-info ;
 
@@ -389,6 +441,25 @@ SYMBOL: value-infos
 
 : set-value-info ( info value -- )
     resolve-copy value-infos get last set-at ;
+
+! Scope-wise, typically `defined` is a new inner value, while
+! `defined-by` is a changed outer value.
+
+: set-inner-value-info ( info value -- )
+    [ set-value-info ]
+    [ record-inner-value ] bi ;
+
+: set-defining-value ( defining-value defined-value -- )
+    [ value-info clone [ <ref-link-defined-by> ] change-backref ]
+    [ set-inner-value-info ] bi ;
+
+: add-defined-value ( defined-value defining-value -- )
+    [ value-info clone [ <ref-link-also-defines> ] change-backref ]
+    [ set-inner-value-info ] bi ;
+
+: add-value-definition ( defining-value defined-value -- )
+    [ set-defining-value ]
+    [ swap add-defined-value ] 2bi ;
 
 : refine-value-info ( info value -- )
     resolve-copy value-infos get

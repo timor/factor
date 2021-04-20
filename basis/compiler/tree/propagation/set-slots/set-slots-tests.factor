@@ -1,7 +1,14 @@
-USING: accessors compiler.test compiler.tree.propagation.info
-compiler.tree.propagation.slots.tests kernel sequences tools.test ;
+USING: accessors compiler.test compiler.tree.propagation.info kernel namespaces
+sequences tools.test ;
 IN: compiler.tree.propagation.set-slots.tests
 
+: with-rw ( quot -- )
+    propagate-rw-slots swap with-variable-on ; inline
+
+: slot-ref-literals ( info -- seq )
+    slots>> [ dup slot-ref? [ literal>> ] when ] map ;
+
+TUPLE: foo { a read-only } b ;
 TUPLE: bar { a read-only initial: 42 } b ;
 SLOT: a
 
@@ -18,11 +25,11 @@ SLOT: a
 
 ! New behavior
 { V{ f 42 47 } } [ [ [ bar new 47 >>b ] final-info ] with-rw
-                   first slots>> [ dup slot-ref? [ literal>> ] when ] map
+                   first slot-ref-literals
                  ] unit-test
 ! Invalid write
 { V{ f 42 47 } } [ [ [ bar new 66 >>a 47 >>b ] final-info ] with-rw
-                   first slots>> [ dup slot-ref? [ literal>> ] when ] map
+                   first slot-ref-literals
                  ] unit-test
 
 ! Basic branches
@@ -56,12 +63,14 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
 
 ! Slot info is there
 { V{ f 42 47 } } [ [ [ baz new ] final-info ] with-rw
-                   first slots>> [ dup slot-ref? [ literal>> ] when ] map
+                   first slot-ref-literals
                ] unit-test
 
 ! .. but not dereferenced
 ! FIXME
 { V{ f f } } [ [ [ baz new [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
 
+TUPLE: circle me ;
 ! Circularity on set-slot?
+
 { t } [ [ [ circle new dup >>me ] final-info ] with-rw first value-info-state? ] unit-test

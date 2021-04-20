@@ -242,3 +242,18 @@ ${
     -100 100 [a,b] array-capacity wrap-interval
     -100 100 [a,b] integer wrap-interval
 ] unit-test
+
+! ref-links
+{
+    T{ ref-link f f f }
+    T{ ref-link f { 1 } f } }
+[ f f <ref-link> 1 over <ref-link-defined-by> ] unit-test
+
+{ T{ ref-link f f f }
+  T{ ref-link f f { 1 } }
+  T{ ref-link f f { 1 2 } }
+} [
+    f f <ref-link>
+    1 over <ref-link-also-defines>
+    2 over <ref-link-also-defines>
+] unit-test

@@ -1,9 +1,9 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays assocs byte-arrays classes
-classes.algebra classes.tuple classes.tuple.private combinators
-combinators.short-circuit compiler.tree.propagation.info kernel
-math sequences slots.private strings words ;
+USING: accessors arrays byte-arrays classes classes.algebra classes.tuple
+classes.tuple.private combinators combinators.short-circuit
+compiler.tree.propagation.info compiler.tree.propagation.reflinks kernel math
+sequences slots.private strings words ;
 IN: compiler.tree.propagation.slots
 
 : sequence-constructor? ( word -- ? )
@@ -75,6 +75,7 @@ IN: compiler.tree.propagation.slots
       dup [ read-only>> ] when ]
     [ 2drop f ] if ;
 
+! TODO: propagate literal slots also on infos, not on literal!
 ! Slot call to literal object.  Will only resolve read-only slots.  Will also
 ! refuse to get slot info if the definition has changed in the meantime
 : literal-info-slot ( slot object -- info/f )
@@ -84,7 +85,6 @@ IN: compiler.tree.propagation.slots
         [ swap slot <literal-info> ]
     } 2&& ;
 
-! TODO: backref handling
 
 ! slot call propagation
 : value-info-slot ( slot info -- info' )
@@ -94,15 +94,26 @@ IN: compiler.tree.propagation.slots
         [ [ 1 - ] [ slots>> ] bi* ?nth ]
     } cond [ object-info ] unless* ;
 
+! Backref handling
+: valid-rw-slot-access? ( slot info -- ? )
+    [ 1 - ] dip slots>> nth value-info-escapes? not ;
+
+
+! TODO verify that escaping has set this to object-info
 : mask-rw-slot-access ( slot info -- info'/f )
-    2dup class>> read-only-slot?
+    2dup
+    { [ class>> read-only-slot? ]
+      [ { [ 2drop propagate-rw-slots? ]
+          [ valid-rw-slot-access? ] } 2&& ]
+    } 2||
     [ [ 1 - ] [ slots>> ] bi* ?nth ]
     [ 2drop f ] if ;
 
 ! Step 1: non-literal tuples
 : value-info-slot-mask-rw ( slot info -- info' )
     {
-       { [ over 0 = ] [ 2drop fixnum <class-info> ] }
+       { [ over 0 = ] [ 2drop fixnum <class-info> ] } ! This is a length slot, why no deref?
+       { [ dup literal?>> propagate-rw-slots? and ] [ mask-rw-slot-access ] }
        { [ dup literal?>> ] [ literal>> literal-info-slot ] }
        [ mask-rw-slot-access ]
     } cond [ object-info ] unless* ;

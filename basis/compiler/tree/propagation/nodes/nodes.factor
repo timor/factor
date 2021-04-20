@@ -2,6 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
+combinators
 kernel sequences ;
 IN: compiler.tree.propagation.nodes
 
@@ -12,6 +13,10 @@ GENERIC: propagate-after ( node -- )
 GENERIC: annotate-node ( node -- )
 
 GENERIC: propagate-around ( node -- )
+
+GENERIC: propagate-reflinks ( node -- )
+
+GENERIC: propagate-escape ( node -- )
 
 : (propagate) ( nodes -- )
     [ [ compute-copy-equiv ] [ propagate-around ] bi ] each ;
@@ -28,5 +33,15 @@ M: node propagate-after drop ;
 
 M: node annotate-node drop ;
 
+M: node propagate-reflinks drop ;
+
+M: node propagate-escape drop ;
+
 M: node propagate-around
-    [ propagate-before ] [ annotate-node ] [ propagate-after ] tri ;
+    {
+        [ propagate-reflinks ]
+        [ propagate-before ]
+        [ propagate-escape ]
+        [ annotate-node ]
+        [ propagate-after ]
+    } cleave ;

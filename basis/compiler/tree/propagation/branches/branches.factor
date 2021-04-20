@@ -2,9 +2,10 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs assocs.extras combinators compiler.tree
 compiler.tree.combinators compiler.tree.propagation.constraints
-compiler.tree.propagation.info compiler.tree.propagation.nodes
-compiler.tree.propagation.simple fry kernel locals math
-namespaces sequences sets stack-checker.branches ;
+compiler.tree.propagation.escaping compiler.tree.propagation.info
+compiler.tree.propagation.nodes compiler.tree.propagation.reflinks
+compiler.tree.propagation.simple kernel math namespaces sequences sets
+stack-checker.branches ;
 ! FROM: sets => union ;
 FROM: namespaces => set ;
 IN: compiler.tree.propagation.branches
@@ -46,7 +47,9 @@ SYMBOL: infer-children-data
 : copy-value-info ( -- )
     value-infos [ H{ } clone suffix ] change
     constraints [ H{ } clone suffix ] change
-    V{ } clone inner-slot-ref-values set ;
+    V{ } clone inner-values set
+    escaping-values [ clone ] change
+    ;
 
 : no-value-info ( -- )
     value-infos off
@@ -79,10 +82,10 @@ DEFER: collect-variables
 : annotate-phi-inputs ( #phi -- )
     dup phi-in-d>> compute-phi-input-infos >>phi-info-d drop ;
 
-: (lift-slot-ref-values) ( infer-children-data -- assoc )
-    [ [ inner-slot-ref-values of ] gather
+: (lift-inner-values) ( infer-children-data -- assoc )
+    [ [ inner-values of ] gather
       ! NOTE: re-registers values for upwards propagation
-      dup [ record-slot-ref-value ] each
+      dup [ record-inner-value ] each
     ] keep
     [| values vars |
      vars [
@@ -91,12 +94,21 @@ DEFER: collect-variables
     ] with map sift
     [ value-info-union ] assoc-collapse ;
 
-: lift-slot-ref-values ( infer-children-data -- )
-    (lift-slot-ref-values)
+: lift-inner-values ( infer-children-data -- )
+    (lift-inner-values)
     [ swap set-value-info ] assoc-each ;
 
+: branch-escaping-values ( infer-children-data -- )
+    [ [ inner-escaping-values of [ value-escapes ] each ]
+      [ inner-equal-values of [ equate-all-values ] each ]
+    ] each ;
+
+! NOTE: lifting before setting phi-in is only necessary if recomputation needs
+! to take into account branch masking.
 : merge-value-infos ( infos outputs -- )
-    infer-children-data get lift-slot-ref-values
+    infer-children-data get
+    [ lift-inner-values ]
+    [ branch-escaping-values ]
     [ [ value-infos-union ] map ] dip set-value-infos ;
 
 SYMBOL: condition-value
@@ -107,7 +119,7 @@ SYMBOL: condition-value
         constraints
         infer-children-data
         value-infos
-        inner-slot-ref-values
+        inner-values
     } [ dup get ] H{ } map>assoc ;
 
 M: #phi propagate-before ( #phi -- )

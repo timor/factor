@@ -19,6 +19,12 @@ IN: compiler.tree.propagation.slots.tests
 : with-rw ( quot -- )
     propagate-rw-slots swap with-variable-on ; inline
 
+: info-slot-refs ( info -- seq )
+    slots>> [ slot-ref? ] map ;
+
+: slot-ref-literals ( info -- seq )
+    slots>> [ dup slot-ref? [ literal>> ] when ] map ;
+
 { t } [
     \ <array> sequence-constructor?
 ] unit-test
@@ -57,7 +63,7 @@ TUPLE: foo { a read-only } b ;
 [ [ [ T{ foo f 42 47 } [ a>> ] [ b>> ] bi ] final-literals ] with-values ] unit-test
 
 { { f t f } }
-[ [ [ T{ foo f 42 47 } ] final-info ] with-values first slots>> [ slot-ref? ] map ] unit-test
+[ [ [ T{ foo f 42 47 } ] final-info ] with-values first info-slot-refs ] unit-test
 
 ! Existing behavior.  The second value is known because the call to <tuple-info>
 ! would have set this to f
@@ -105,34 +111,34 @@ TUPLE: foo { a read-only } b ;
 [ [ [ 42 47 foo boa [ a>> ] [ b>> ] bi ] final-literals ] with-values ] unit-test
 
 { V{ f t f } }
-[ [ [ 42 47 foo boa ] final-info ] with-values first slots>> [ slot-ref? ] map ] unit-test
+[ [ [ 42 47 foo boa ] final-info ] with-values first info-slot-refs ] unit-test
 
 ! New
-{ V{ f t f } } [ [ foo new ] final-info first slots>> [ slot-ref? ] map ] unit-test
-{ V{ f t t } } [ [ [ foo new ] final-info ] with-rw first slots>> [ slot-ref? ] map ] unit-test
+{ V{ f t f } } [ [ foo new ] final-info first info-slot-refs ] unit-test
+{ V{ f t t } } [ [ [ foo new ] final-info ] with-rw first info-slot-refs ] unit-test
 
 
 ! TODO: class-info
 TUPLE: bar { a read-only initial: 42 } b ;
 
 { V{ f t f } }
-[ [ [ bar new 47 >>b ] final-info ] with-values first slots>> [ slot-ref? ] map ] unit-test
+[ [ [ bar new 47 >>b ] final-info ] with-values first info-slot-refs ] unit-test
 
 
 { { f t f } } [ [
              T{ foo f 42 47 } <literal-info>
              T{ foo f 69 55 } <literal-info>
-             value-info-union slots>> [ slot-ref? ] map
+             value-info-union info-slot-refs
          ] with-values ] unit-test
 
 ! Basic branch phi
 { V{ f t f } }
 [ [ [ 11 22 foo boa ] [ 33 44 foo boa ] if ] final-info first
-  slots>> [ slot-ref? ] map ] unit-test
+  info-slot-refs ] unit-test
 
 { V{ f t t } }
 [ [ [ [ 11 22 foo boa ] [ 33 44 foo boa ] if ] final-info ] with-rw first
-  slots>> [ slot-ref? ] map ] unit-test
+  info-slot-refs ] unit-test
 
 { V{ T{ interval { from { 11 t } } { to { 33 t } } } full-interval } }
 [ [ [ 11 22 foo boa ] [ 33 44 foo boa ] if [ a>> ] [ b>> ] bi ] final-info [ interval>> ] map ] unit-test
@@ -147,16 +153,16 @@ TUPLE: bar { a read-only initial: 42 } b ;
 [ T{ foo f 42 47 } tuple-slot-infos-rw [ slot-ref? ] map ] unit-test
 
 { { f t f } }
-[ T{ foo f 42 47 } <literal-info> slots>> [ slot-ref? ] map ] unit-test
+[ T{ foo f 42 47 } <literal-info> info-slot-refs ] unit-test
 
 ! Regular behavior on deref
 
 ! Slot-ref types
 { { f t t } }
-[ propagate-rw-slots [ T{ foo f 42 47 } <literal-info> slots>> [ slot-ref? ] map ] with-variable-on ] unit-test
+[ propagate-rw-slots [ T{ foo f 42 47 } <literal-info> info-slot-refs ] with-variable-on ] unit-test
 
 { { f t t } }
-[ propagate-rw-slots [ [ T{ foo f 42 47 } ] final-info first slots>> [ slot-ref? ] map ] with-variable-on ] unit-test
+[ propagate-rw-slots [ [ T{ foo f 42 47 } ] final-info first info-slot-refs ] with-variable-on ] unit-test
 ! Deref info
 { { 42 f } }
 [ propagate-rw-slots
@@ -204,9 +210,9 @@ TUPLE: ro-tuple { a read-only } { b read-only } ;
 
 ! Create slot refs on folding (<literal-info> code path)
 { { f t t } }
-[ [ 42 47 ro-tuple boa ] final-info first slots>> [ slot-ref? ] map ] unit-test
+[ [ 42 47 ro-tuple boa ] final-info first info-slot-refs ] unit-test
 { { f t t } }
-[ propagate-rw-slots [ [ 42 47 ro-tuple boa ] final-info first slots>> [ slot-ref? ] map ] with-variable-on ] unit-test
+[ propagate-rw-slots [ [ 42 47 ro-tuple boa ] final-info first info-slot-refs ] with-variable-on ] unit-test
 
 
 {
@@ -241,14 +247,14 @@ TUPLE: ro-tuple { a read-only } { b read-only } ;
 
 
 { { f t t } }
-[ propagate-rw-slots [ [ 42 47 foo boa ] final-info first slots>> [ slot-ref? ] map >array ] with-variable-on ] unit-test
+[ propagate-rw-slots [ [ 42 47 foo boa ] final-info first info-slot-refs >array ] with-variable-on ] unit-test
 
 ! Circularity
 
 ! Mutable tuples with circularity should not cause problems
 TUPLE: circle me ;
 
-{ { f t } } [ propagate-rw-slots [ circle new dup >>me 1quotation final-info first  ] with-variable-on slots>> [ slot-ref? ] map ] unit-test
+{ { f t } } [ propagate-rw-slots [ circle new dup >>me 1quotation final-info first  ] with-variable-on info-slot-refs ] unit-test
 
 
 
@@ -256,3 +262,19 @@ TUPLE: circle me ;
 ! Back references
 
 ! {  } [ [ [  ] final-info first back-ref>> ] with-rw ] unit-test
+
+! Initial values
+TUPLE: baz { a initial: 42 } { b initial: 47 } ;
+
+! Escaping
+: frob ( x -- ) drop ;
+
+{ V{ f f } } [ [ [ baz new [ frob ] keep [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
+
+! FIXME!!!
+{ V{ f f f } } [ [ [ baz new [ frob ] keep ] final-info first slot-ref-literals ] with-rw ] unit-test
+
+
+! TODO: recursive
+{ T{ baz f 47 42 } } [ 5 [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] call ] unit-test
+{  } [ [ [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] final-info first ] with-rw ] unit-test

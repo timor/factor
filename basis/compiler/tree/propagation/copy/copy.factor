@@ -1,8 +1,8 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs compiler.tree compiler.tree.def-use
-compiler.utilities grouping kernel namespaces sequences sets
-stack-checker.branches ;
+compiler.tree.propagation.escaping compiler.utilities grouping kernel namespaces
+sequences stack-checker.branches ;
 IN: compiler.tree.propagation.copy
 
 SYMBOL: copies
@@ -16,10 +16,13 @@ SYMBOL: copies
 
 : are-copies-of ( vals copies -- ) [ is-copy-of ] 2each ;
 
-: introduce-value ( val -- ) copies get conjoin ;
+: introduce-value ( val -- )
+    [ copies get conjoin ]
+    [ introduce-escaping-value ] bi ;
 
 : introduce-values ( vals -- )
-    copies get [ conjoin ] curry each ;
+    [ copies get [ conjoin ] curry each ]
+    [ introduce-escaping-values ] bi ;
 
 GENERIC: compute-copy-equiv* ( node -- )
 
