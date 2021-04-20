@@ -54,3 +54,28 @@ C: <foo> foo
         } cleave
     ] with-values
 ] unit-test
+
+
+! Invalid writes
+! TODO: make sure invalid writes don't break anything !
+! {  } [ [  [ foo new 42 >>a ]  propagated-tree ] with-rw ] unit-test
+! {  } [ [  [ foo new 42 >>a a>> ]  propagated-tree ] with-rw ] unit-test
+
+! Test basic links
+{ 1 2 }
+[ [ [ 11 22 <foo> 42 >>b [ b>> ] keep [ b>> ] keep ] final-info last slots>> third
+  backref>> [ defined-by>> ] [ defines>> ] bi [ length ] bi@
+  ] with-rw ] unit-test
+
+
+! Link merging
+{ 2 2 }
+[ [ [ [ 11 22 <foo> 42 >>b ] [ 11 22 <foo> 43 >>b ] if [ b>> ] keep [ b>> ] keep ] final-info last slots>> third
+    backref>> [ defined-by>> ] [ defines>> ] bi [ length ] bi@
+  ] with-rw ] unit-test
+
+{ 2 4 }
+[ [ [ [ 11 22 <foo> 42 >>b [ b>> ] keep [ b>> ] keep ]
+      [ 11 22 <foo> 43 >>b [ b>> ] keep [ b>> ] keep ] if  ] final-info last slots>> third
+    backref>> [ defined-by>> ] [ defines>> ] bi [ length ] bi@
+  ] with-rw ] unit-test

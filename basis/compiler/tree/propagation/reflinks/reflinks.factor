@@ -60,18 +60,20 @@ UNION: storage-class tuple fixed-length ;
 !     2dup <reflink-info>
 !     '[ _ swap refine-value-info ] bi@ ;
 
-! TODO: establish definer link on set-slot call
+! On set-slot: modify slot value info so that on dereferencing, escape equating
+! works.
+! set-slot ( value obj n -- )
+M: tuple-set-slot-call propagate-reflinks
+    in-d>> first3
+    value-info literal>> set-slot-definer ;
 
+
+! On slot: establish forward link from values that defined the slot contents
+! before.
 ! slot ( obj m -- value )
-! TODO TBR
 M: slot-call propagate-reflinks
-    ! drop ;
-    [ in-d>> first ]
-    [ out-d>> first ] bi add-value-definition ;
-
-!
-! M: tuple-set-slot-call propagate-reflinks
-
+    [ in-d>> first2 value-info literal>> ]
+    [ out-d>> first ] bi swap add-slot-defines ;
 
 : object-escapes? ( value -- ? )
     resolve-copy value-escapes? ;

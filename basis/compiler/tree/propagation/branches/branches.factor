@@ -109,9 +109,11 @@ DEFER: collect-variables
 ! NOTE: lifting before setting phi-in is only necessary if recomputation needs
 ! to take into account branch masking.
 : merge-value-infos ( infos outputs -- )
-    infer-children-data get
-    [ lift-inner-values ]
-    [ branch-escaping-values ] bi
+    propagate-rw-slots? [
+        infer-children-data get
+        [ lift-inner-values ]
+        [ branch-escaping-values ] bi
+    ] when
     [ [ value-infos-union ] map ] dip set-value-infos ;
 
 SYMBOL: condition-value

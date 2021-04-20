@@ -39,7 +39,8 @@ M: node propagate-escape drop ;
 
 M: node propagate-around
     {
-        [ propagate-reflinks ]
+        [ propagate-rw-slots?
+          [ propagate-reflinks ] [ drop ] if ]
         [ propagate-before ]
         [
             ! Runs after before because we need to know whether the word was inlined

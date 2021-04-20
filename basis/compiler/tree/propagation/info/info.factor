@@ -310,7 +310,7 @@ DEFER: (value-info-intersect)
         [ intersect-slots >>slots ]
         ! Setting links is explicit, by they can be merged
         ! ! Ref-links have refinement semantics
-        ! [ merge-ref-links >>backref ]
+        [ merge-ref-links >>backref ]
     } 2cleave
     init-value-info ;
 
@@ -409,17 +409,44 @@ SYMBOL: value-infos
     [ set-value-info ]
     [ record-inner-value ] bi ;
 
-: set-defining-value ( defining-value defined-value -- )
-    [ value-info clone [ <ref-link-defined-by> ] change-backref ]
-    [ set-inner-value-info ] bi ;
+
+: ensure-slots ( slot-num seq/f -- slot-num seq )
+    clone over f pad-tail ; inline
+
+: <defined-slot-info> ( defining-value -- info )
+    dup value-info clone
+    [ <ref-link-defined-by> ] change-backref ;
+
+: <defining-slot-info> ( defined-value defining-info -- info )
+    object-info or clone
+    [ <ref-link-also-defines> ] change-backref ;
+
+! slot-num is slot as passed to set-slot
+:: set-slot-definer ( defining-value defined-object slot-num -- )
+    defined-object value-info :> obj-info
+    obj-info clone [ slot-num swap ensure-slots
+                     [ 1 - ] dip
+                     [
+                         defining-value <defined-slot-info> -rot
+                         set-nth ] keep
+    ] change-slots
+    defined-object set-inner-value-info ;
+
+! On dereferencing, add the value being pulled out will be registered on the
+! slot info.
+:: add-slot-defines ( defining-object defined-value slot-num -- )
+    defining-object value-info :> obj-info
+    obj-info clone [ slot-num swap ensure-slots
+                     [ 1 - ] dip
+                     [
+                         [ defined-value swap <defining-slot-info> ]
+                         change-nth ] keep
+    ] change-slots
+    defining-object set-inner-value-info ;
 
 : add-defined-value ( defined-value defining-value -- )
     [ value-info clone [ <ref-link-also-defines> ] change-backref ]
     [ set-inner-value-info ] bi ;
-
-: add-value-definition ( defining-value defined-value -- )
-    [ set-defining-value ]
-    [ swap add-defined-value ] 2bi ;
 
 : read-only-slot? ( n class -- ? )
     dup class?

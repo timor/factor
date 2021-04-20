@@ -283,3 +283,16 @@ ${
 !     3 invalidate-info
 !     3 value-info
 !   ] with-values ] unit-test
+
+TUPLE: box a ;
+C: <box> box
+
+! TODO
+! ! Refining shouldn't kill backlinks
+! {  }
+! [ [ { 1 2 3 4 } introduce-values
+!     box <class-info> 1 set-value-info
+!     42 <literal-info> 2 set-value-info
+!     2 1 2 set-slot-definer
+!     1 value-info
+!   ] with-values ] unit-test
