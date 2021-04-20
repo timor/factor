@@ -5,17 +5,10 @@ IN: compiler.tree.propagation.set-slots.tests
 : with-rw ( quot -- )
     propagate-rw-slots swap with-variable-on ; inline
 
-: slot-ref-literals ( info -- seq )
-    slots>> [ dup slot-ref? [ literal>> ] when ] map ;
-
 TUPLE: foo { a read-only } b ;
 TUPLE: bar { a read-only initial: 42 } b ;
 SLOT: a
 
-{ V{ f t f } } [ [ bar new 47 >>b ] final-info first slots>> [ slot-ref? ] map ] unit-test
-{ V{ f t t } } [ [ [ bar new 47 >>b ] final-info ] with-rw
-                 first slots>> [ slot-ref? ] map
-               ] unit-test
 
 ! Existing behavior
 { V{ 42 f } } [ [ bar new 47 >>b [ a>> ] [ b>> ] bi ] final-literals ] unit-test
@@ -23,29 +16,14 @@ SLOT: a
 ! Invalid write
 { V{ 42 f } } [ [ bar new 66 >>a 47 >>b [ a>> ] [ b>> ] bi ] final-literals ] unit-test
 
-! New behavior
-{ V{ f 42 47 } } [ [ [ bar new 47 >>b ] final-info ] with-rw
-                   first slot-ref-literals
-                 ] unit-test
-! Invalid write
-{ V{ f 42 47 } } [ [ [ bar new 66 >>a 47 >>b ] final-info ] with-rw
-                   first slot-ref-literals
-                 ] unit-test
 
 ! Basic branches
-{ V{ f t f } }
-[ [ [ bar new 11 >>b ] [ bar new 22 >>b ] if ] final-info first
-  slots>> [ slot-ref? ] map ] unit-test
 
 { V{ 42 f } }
 [ [ [ bar new 11 >>b ] [ bar new 11 >>b ] if [ a>> ] [ b>> ] bi ] final-literals ] unit-test
 
 { V{ 42 f } }
 [ [ [ bar new 11 >>b ] [ bar new 22 >>b ] if [ a>> ] [ b>> ] bi ] final-literals ] unit-test
-
-{ V{ f t t } }
-[ [ [ [ 11 22 foo boa ] [ 33 44 foo boa ] if ] final-info ] with-rw first
-  slots>> [ slot-ref? ] map ] unit-test
 
 ! With rw-propagation
 { V{ 42 f } }
@@ -60,11 +38,6 @@ SLOT: a
 TUPLE: baz { a initial: 42 } { b initial: 47 } ;
 
 { V{ f f } } [ [ baz new [ a>> ] [ b>> ] bi ] final-literals ] unit-test
-
-! Slot info is there
-{ V{ f 42 47 } } [ [ [ baz new ] final-info ] with-rw
-                   first slot-ref-literals
-               ] unit-test
 
 ! .. but not dereferenced
 ! FIXME

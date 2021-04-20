@@ -88,14 +88,11 @@ IN: compiler.test
 : final-literals ( quot -- seq )
     final-info [ literal>> ] map ;
 
-: with-rw ( quot -- )
-    [ propagate-rw-slots on ] prepose
-    [ propagate-rw-slots off ]
-    [ ] cleanup
-    ; inline
-
 : with-values ( quot -- )
     [ H{ } clone copies set
       H{ } clone 1vector value-infos set
       init-escaping-values
     ] prepose with-scope ; inline
+
+: with-rw ( quot -- )
+    propagate-rw-slots [ with-values ] with-variable-on ; inline

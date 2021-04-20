@@ -98,6 +98,8 @@ DEFER: collect-variables
     (lift-inner-values)
     [ swap set-value-info ] assoc-each ;
 
+! TODO: escape merging:
+! Should actually be enough to equate the defined-by>> refs on branch return, then call values escape
 ! TODO: handle upwards merging correctly for terminating branches
 : branch-escaping-values ( infer-children-data -- )
     [ [ inner-escaping-values of [ value-escapes ] each ]

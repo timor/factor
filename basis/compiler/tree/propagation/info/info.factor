@@ -36,7 +36,6 @@ DEFER: value-infos
 DEFER: value-info-union
 DEFER: <literal-info>
 DEFER: object-info
-TUPLE: slot-ref { definers read-only } info ;
 
 ! If allocating or modifying value info in branch scope, make a virtual phi
 ! after branch return
@@ -64,13 +63,6 @@ literal-values [ IH{ } clone ] initialize
 SYMBOL: propagate-rw-slots
 : propagate-rw-slots? ( -- ? ) propagate-rw-slots get >boolean ; inline
 
-! NOTE: dereferencing is done eagerly now.  Could switch to context-sensitivity,
-! for debugging a comparison to live environment...
-C: <slot-ref> slot-ref
-
-: <1slot-ref> ( value -- obj ) [ 1array ] [ value-info ] bi <slot-ref> ; inline
-CONSULT: value-info-state slot-ref info>> ;
-
 TUPLE: ref-link { defined-by read-only } { defines read-only } ;
 C: <ref-link> ref-link
 : <ref-link-also-defines> ( value ref-link -- ref-link )
@@ -94,10 +86,6 @@ M: f defines>> drop f ;
         [
             slot-ref-history [ swap suffix ] change
             <literal-info>
-            ! [ <literal-info> ] dip
-            ! [ set-global-value-info ]
-            ! [ record-inner-value ]
-            ! [ <1slot-ref> ] tri
         ] with-scope
     ] if ;
 
@@ -132,7 +120,6 @@ DEFER: <literal-info>
     f prefix ;
 
 : tuple-slot-infos-rw ( tuple -- slots )
-    ! tuple-slots [ <literal-slot-ref> ] map f prefix ;
     tuple-slots [ <literal-slot-ref> ] map f prefix ;
 
 UNION: fixed-length array byte-array string ;
@@ -350,23 +337,10 @@ DEFER: (value-info-union)
         [ (value-info-union) ]
     } cond ;
 
-: slot-ref>info ( ref/info/f -- info/f )
-    dup slot-ref? [ info>> ] when ;
-
-! TODO: Ensure it is valid with regards to escape invalidation to drop reference
-! property here.
-: union-slot-ref ( ref/info1 ref/info2 -- info )
-    2dup [ slot-ref? ] both?
-    [
-        [ [ definers>> ] bi@ union ]
-        [ [ info>> ] bi@ value-info-union ] 2bi
-        <slot-ref> ]
-    [ [ slot-ref>info ] bi@ union-slot ] if ;
-
 : union-slots ( info1 info2 -- slots )
     [ slots>> ] bi@
     object-info pad-tail-shorter
-    [ union-slot-ref ] 2map ;
+    [ union-slot ] 2map ;
 
 SYMBOL: orphan
 orphan [ <value> ] initialize
