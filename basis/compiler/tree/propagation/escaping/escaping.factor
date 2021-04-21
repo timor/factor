@@ -7,6 +7,8 @@ FROM: namespaces => set ;
 ! * Tracking escaping values
 ! Taken from escape analysis, because we do this the moment we introduce values in copy
 
+SYMBOL: allocations
+
 SYMBOL: +escaping+
 
 : <escaping-values> ( -- disjoint-set )
@@ -25,6 +27,7 @@ SYMBOL: inner-equal-values
     inner-equal-values get [ adjoin ] [ drop ] if* ;
 
 : init-escaping-values ( -- )
+    HS{ } clone allocations set
     <escaping-values> escaping-values set ;
 
 : (introduce-escaping-value) ( values escaping-values -- )
@@ -38,6 +41,10 @@ SYMBOL: inner-equal-values
     escaping-values get dup
     [ '[ _ (introduce-escaping-value) ] each ] [ 2drop ] if ;
 
+: record-allocation ( slot-ref -- )
+    [ allocations get [ adjoin ] [ drop ] if* ]
+    [ introduce-escaping-value ] bi ;
+
 : equate-values ( value1 value2 -- )
     ! 2dup and
     ! [
@@ -45,6 +52,9 @@ SYMBOL: inner-equal-values
         [ 2array record-inner-equal-values ] 2bi
     ! ] [ 2drop ] if
     ;
+
+: equate-values-with ( values value -- )
+    escaping-values get equate-all-with ;
 
 : equate-all-values ( values -- )
     [ unclip-slice

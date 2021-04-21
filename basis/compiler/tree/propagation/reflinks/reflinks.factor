@@ -34,15 +34,26 @@ FROM: namespaces => set ;
     [ [ equate-all-values ] bi@ ]
     [ [ ?first ] bi@ equate-values ] 2bi ;
 
-SYMBOL: allocations
-: record-allocation ( value -- )
-    allocations get [ adjoin ] [ drop ] if* ;
+! * Reflink propagation
 
-PREDICATE: tuple-boa-call < #call word>> \ <tuple-boa> eq? ;
-PREDICATE: slot-call < #call word>> \ slot eq? ;
-PREDICATE: set-slot-call < #call word>> \ set-slot eq? ;
+! ** Predicate hierarchy for class dispatch (what a mess...)
+PREDICATE: flushable-call < #call word>> flushable? ;
+PREDICATE: slot-call < flushable-call word>> \ slot eq? ;
+PREDICATE: literal-slot-call < slot-call
+    in-d>> second value-info { [ literal?>> ] [ literal>> 0 = not ] } 1&& ; ! Exclude length slot calls
+
+PREDICATE: rw-slot-call < literal-slot-call
+    in-d>> first2 [ value-info class>> ] [ value-info literal>> ] bi* swap read-only-slot? not ;
+PREDICATE: tuple-boa-call < flushable-call word>> \ <tuple-boa> eq? ;
+
+PREDICATE: non-flushable-call < #call flushable-call? not ;
+PREDICATE: inlined-call < non-flushable-call body>> >boolean ;
+UNION: non-escaping-call flushable-call inlined-call ;
+
+PREDICATE: set-slot-call < non-flushable-call word>> \ set-slot eq? ;
 PREDICATE: literal-set-slot-call < set-slot-call in-d>> third value-info literal?>> ;
 PREDICATE: tuple-set-slot-call < literal-set-slot-call in-d>> second value-info class>> tuple class<= ;
+
 PREDICATE: tuple-push < #push literal>> tuple? ;
 PREDICATE: mutable-tuple-push < tuple-push literal>> immutable-tuple-class? not ;
 PREDICATE: sequence-push < #push literal>> fixed-length? ;
@@ -77,9 +88,6 @@ M: slot-call propagate-reflinks
     [ in-d>> first2 value-info literal>> ]
     [ out-d>> first ] bi swap add-slot-defines ;
 
-: object-escapes? ( value -- ? )
-    resolve-copy value-escapes? ;
-
 ! Recursive!
 : object-escapes ( value -- )
     resolve-copy dup value-escapes?
@@ -90,9 +98,8 @@ M: slot-call propagate-reflinks
         [ invalidate-slots-info ] tri
     ] if ;
 
-! ! Check if this value has been defined by something that could have escaped
-: value-info-escapes? ( info -- ? )
-    backref>> defined-by>> object-escapes? ;
+! : object-escapes? ( value -- ? )
+!     value-info value-info-escapes? ;
 
 M: tuple-boa-call propagate-reflinks
     out-d>> first record-allocation ;
@@ -108,20 +115,7 @@ M: #declare propagate-reflinks
 
 ! ** Escape handling
 
-! FIXME: if we had QUALIFY, we could inherit from slot-call
-PREDICATE: literal-slot-call < #call
-    { [ word>> \ slot eq? ]
-      [ in-d>> second value-info { [ literal?>> ] [ literal>> 0 = not ] } 1&& ]
-    } 1&& ; ! Exclude length slot calls
-
-PREDICATE: rw-slot-call < literal-slot-call
-    in-d>> first2 [ value-info class>> ] [ value-info literal>> ] bi* swap read-only-slot? not ;
-
-PREDICATE: flushable-call < #call
-    { [ word>> flushable? ] [ rw-slot-call? not ] } 1&& ;
-PREDICATE: inlined-call < #call body>> >boolean ;
-
-UNION: non-escaping-call flushable-call inlined-call tuple-set-slot-call ;
+! UNION: non-escaping-call flushable-call inlined-call tuple-set-slot-call ;
 
 ! TODO: arrays
 
@@ -155,18 +149,3 @@ UNION: non-escaping-call flushable-call inlined-call tuple-set-slot-call ;
 !         [ mask-rw-slot-access ]
 !     } cond [ object-info ] unless* ;
 
-! Situation: output-value-infos has run.  Now repeat.  For now, only if this is
-! an rw-slot access
-
-! slot ( obj m -- value )
-M: rw-slot-call propagate-before
-    [ call-next-method ] keep
-    propagate-rw-slots? [
-        [ in-d>> second value-info literal>> ]
-        [ in-d>> first value-info
-          [ 1 - ] [ slots>> ] bi* ?nth
-        ]
-        [ out-d>> first
-          over [ refine-value-info ] [ 2drop ] if
-        ] tri
-    ] [ drop ] if ;

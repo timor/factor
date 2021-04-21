@@ -1,7 +1,7 @@
 USING: accessors alien arrays byte-arrays classes.algebra classes.struct
-compiler.tree.propagation.copy compiler.tree.propagation.escaping
-compiler.tree.propagation.info io.encodings.utf8 kernel literals math
-math.intervals namespaces sequences sequences.private tools.test vectors ;
+compiler.test compiler.tree.propagation.copy compiler.tree.propagation.info
+io.encodings.utf8 kernel literals math math.intervals namespaces sequences
+sequences.generalizations sequences.private tools.test ;
 IN: compiler.tree.propagation.info.tests
 
 { f } [ 0.0 -0.0 eql? ] unit-test
@@ -258,12 +258,6 @@ ${
     2 over <ref-link-also-defines>
 ] unit-test
 
-: with-values ( quot -- )
-    [ H{ } clone copies set
-      H{ } clone 1vector value-infos set
-      init-escaping-values
-    ] prepose with-scope ; inline
-
 ! ${
 !     fixnum <class-info>
 !     fixnum <class-info> T{ ref-link f { 1 } { 2 } } >>backref
@@ -287,12 +281,108 @@ ${
 TUPLE: box a ;
 C: <box> box
 
-! TODO
-! ! Refining shouldn't kill backlinks
-! {  }
-! [ [ { 1 2 3 4 } introduce-values
-!     box <class-info> 1 set-value-info
-!     42 <literal-info> 2 set-value-info
-!     2 1 2 set-slot-definer
-!     1 value-info
-!   ] with-values ] unit-test
+TUPLE: foo { a read-only initial: 42 } b ;
+
+! Adding slots to objects
+
+{
+    {
+        T{ value-info-state { class object } { interval full-interval } { slot-refs HS{ T{ input-ref { index 0 } } } } }
+        T{ value-info-state { class object } { interval full-interval } { slot-refs HS{ T{ input-ref { index 0 } } } } }
+        T{ value-info-state { class object } { interval full-interval } { slot-refs HS{ T{ input-ref { index 1 } } } } }
+        T{ value-info-state { class object } { interval full-interval } { slot-refs HS{ T{ input-ref { index 1 } } } } }
+        T{ value-info-state
+           { class object }
+           { interval full-interval }
+           { slot-refs HS{ T{ input-ref { index 0 } } T{ tuple-slot-ref { object-value 22 } { slot-num 2 } } } }
+         }
+        T{ value-info-state
+           { class object }
+           { interval full-interval }
+           { slot-refs HS{ T{ input-ref { index 0 } } T{ tuple-slot-ref { object-value 22 } { slot-num 2 } } } }
+         }
+        T{ value-info-state
+           { class object }
+           { interval full-interval }
+           { slot-refs HS{ T{ input-ref { index 1 } } T{ tuple-slot-ref { object-value 22 } { slot-num 3 } } } }
+         }
+        T{ value-info-state
+           { class object }
+           { interval full-interval }
+           { slot-refs HS{ T{ input-ref { index 1 } } T{ tuple-slot-ref { object-value 22 } { slot-num 3 } } } }
+         }
+        T{ value-info-state { class null } { interval empty-interval } }
+        T{ value-info-state { class null } { interval empty-interval } }
+        T{ value-info-state
+           { class foo }
+           { interval full-interval }
+           { slots
+             {
+                 f
+                 T{ value-info-state
+                    { class object }
+                    { interval full-interval }
+                    { slot-refs
+                      HS{ T{ input-ref { index 0 } } T{ tuple-slot-ref { object-value 22 } { slot-num 2 } } }
+                    }
+                  }
+                 T{ value-info-state
+                    { class object }
+                    { interval full-interval }
+                    { slot-refs
+                      HS{ T{ input-ref { index 1 } } T{ tuple-slot-ref { object-value 22 } { slot-num 3 } } }
+                    }
+                  }
+             }
+           }
+         }
+        T{ value-info-state
+           { class foo }
+           { interval full-interval }
+           { slots
+             {
+                 f
+                 T{ value-info-state
+                    { class object }
+                    { interval full-interval }
+                    { slot-refs
+                      HS{ T{ input-ref { index 0 } } T{ tuple-slot-ref { object-value 22 } { slot-num 2 } } }
+                    }
+                  }
+                 T{ value-info-state
+                    { class object }
+                    { interval full-interval }
+                    { slot-refs
+                      HS{ T{ input-ref { index 1 } } T{ tuple-slot-ref { object-value 22 } { slot-num 3 } } }
+                    }
+                  }
+             }
+           }
+         }
+    }
+}
+
+[ [| |
+   { 0 1 22 33 44 55 66 } introduce-values
+   ! existing input value from slot 0
+   object-info 0 set-value-info
+   object-info 1 set-value-info
+   ! #introduce assigns these to its outputs
+   0 <input-ref> <slot-ref-info> 0 refine-value-info
+   1 <input-ref> <slot-ref-info> 1 refine-value-info
+   0 value-info dup clone
+   1 value-info dup clone
+
+   ! tuple boa call, propagate-slot-refs
+   0 22 2 register-tuple-slot-storage
+   0 value-info dup clone
+   1 22 3 register-tuple-slot-storage
+   1 value-info dup clone
+   22 value-info dup clone
+
+   ! tuple boa call, propagate-before
+
+   { f 0 1 } foo <tuple-ref-info> 22 set-value-info ! TODO: inner?
+   22 value-info dup clone
+   12 narray
+] with-rw ] unit-test

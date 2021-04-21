@@ -18,12 +18,10 @@ SYMBOL: copies
 : are-copies-of ( vals copies -- ) [ is-copy-of ] 2each ;
 
 : introduce-value ( val -- )
-    [ copies get conjoin ]
-    [ introduce-escaping-value ] bi ;
+    copies get conjoin ;
 
 : introduce-values ( vals -- )
-    [ copies get [ conjoin ] curry each ]
-    [ introduce-escaping-values ] bi ;
+        copies get [ conjoin ] curry each ;
 
 GENERIC: compute-copy-equiv* ( node -- )
 

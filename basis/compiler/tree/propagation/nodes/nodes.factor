@@ -43,6 +43,7 @@ M: node propagate-slot-refs drop ;
 
 M: node propagate-around
     {
+        ! Set up slot ref connections for storage operations on inputs and outputs:
         [ propagate-rw-slots?
           [
               [ propagate-slot-refs ]
@@ -50,12 +51,16 @@ M: node propagate-around
               [ drop ]
               bi ]
           [ drop ] if ]
+        ! Calculate output value information based on input information
         [ propagate-before ]
+        ! Update the set of escaping values, modify values if they escape ( TODO: probably needs to go after annotation... )
         [
             ! Runs after before because we need to know whether the word was inlined
-            propagate-rw-slots? f and
+            propagate-rw-slots?
             [ propagate-escape ] [ drop ] if
         ]
+        ! Store calculated info at nodes
         [ annotate-node ]
+        ! Update subsequent propagation calls with known additional infos
         [ propagate-after ]
     } cleave ;

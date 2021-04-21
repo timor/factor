@@ -24,10 +24,10 @@ IN: compiler.tree.propagation
     H{ } clone copies set
     H{ } clone 1array value-infos set
     H{ } clone 1array constraints set
-    HS{ } clone allocations set
     ! orphan get
     ! [ introduce-value ]
     ! [ object-info swap set-value-info ] bi
     init-escaping-values
+    unknown-ref introduce-escaping-value
     IH{ } clone literal-values set
     dup (propagate) ;
