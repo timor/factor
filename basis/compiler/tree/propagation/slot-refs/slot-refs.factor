@@ -86,6 +86,16 @@ M: rw-slot-call propagate-before
     propagate-rw-slots? [
         propagate-rw-slot-infos ] [ drop ] if ;
 
+! TODO: back-propagation
+! set-slot ( value obj n -- )
+: propagate-tuple-set-slot-infos ( #call -- )
+    in-d>> first3 [ value-info ] 2dip value-info literal>> override-slot-infos ;
+
+M: tuple-set-slot-call propagate-before
+    [ call-next-method ] keep
+    propagate-rw-slots?
+    [ propagate-tuple-set-slot-infos ] [ drop ] if ;
+
 ! TODO: deliteralize and handle pushes
 
 ! * Escaping slot-refs
