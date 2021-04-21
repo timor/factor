@@ -71,17 +71,20 @@ M: #introduce propagate-slot-refs
 ! an rw-slot access
 
 ! slot ( obj m -- value )
-M: rw-slot-call propagate-slot-refs
-    ! [ call-next-method ] keep
+: propagate-rw-slot-infos ( #call -- )
+    [ in-d>> second value-info literal>> ]
+    [ in-d>> first value-info
+      [ 1 - ] [ slots>> ] bi* ?nth
+    ]
+    [ out-d>> first
+      over [ refine-value-info ] [ 2drop ] if
+    ] tri
+    ;
+
+M: rw-slot-call propagate-before
+    [ call-next-method ] keep
     propagate-rw-slots? [
-        [ in-d>> second value-info literal>> ]
-        [ in-d>> first value-info
-          [ 1 - ] [ slots>> ] bi* ?nth
-        ]
-        [ out-d>> first
-          over [ refine-value-info ] [ 2drop ] if
-        ] tri
-    ] [ drop ] if ;
+        propagate-rw-slot-infos ] [ drop ] if ;
 
 ! TODO: deliteralize and handle pushes
 
@@ -127,6 +130,6 @@ M: rw-slot-call propagate-slot-refs
 
 
 M: non-escaping-call propagate-escape drop ;
-M: #call propagate-escape
-    [ in-d>> call-values-escape ]
-    [ out-d>> call-values-escape ] bi ;
+M: #call propagate-escape drop ;
+    ! [ in-d>> call-values-escape ]
+    ! [ out-d>> call-values-escape ] bi ;
