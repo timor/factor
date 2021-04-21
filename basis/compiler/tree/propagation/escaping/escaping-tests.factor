@@ -98,7 +98,9 @@ C: <foo> foo
 
 ! Escaping tuple escapes
 ! { t } [ [ 11 22 <foo> [ frob ] keep ] return-escapes? first ] unit-test
-{ T{ value-info-state
+{
+
+    T{ value-info-state
      { class foo }
      { interval full-interval }
      { slots { f
@@ -120,8 +122,20 @@ C: <foo> foo
        { slots
          V{
              f
-             T{ value-info-state { class fixnum } { interval T{ interval { from { 42 t } } { to { 42 t } } } } { literal 42 } { literal? t } }
-             T{ value-info-state { class fixnum } { interval T{ interval { from { 47 t } } { to { 47 t } } } } { literal 47 } { literal? t } }
+             T{ value-info-state
+                { class fixnum }
+                { interval T{ interval { from { 42 t } } { to { 42 t } } } }
+                { literal 42 }
+                { literal? t }
+                { slot-refs HS{ T{ tuple-slot-ref { object-value 10005 } { slot-num 2 } } } }
+              }
+             T{ value-info-state
+                { class fixnum }
+                { interval T{ interval { from { 47 t } } { to { 47 t } } } }
+                { literal 47 }
+                { literal? t }
+                { slot-refs HS{ T{ tuple-slot-ref { object-value 10005 } { slot-num 3 } } } }
+              }
          }
        }
      }
@@ -145,7 +159,23 @@ C: <foo> foo
 ${ ${ 42 <literal-info> object-info } >vector }
 [ [ foo new foo-slots ] final-info ] unit-test
 
-${ ${ 42 <literal-info> f <literal-info> } >vector }
+{
+    V{
+        T{ value-info-state
+           { class fixnum }
+           { interval T{ interval { from { 42 t } } { to { 42 t } } } }
+           { literal 42 }
+           { literal? t }
+           { slot-refs HS{ T{ tuple-slot-ref { object-value 10050 } { slot-num 2 } } } }
+         }
+        T{ value-info-state
+           { class POSTPONE: f }
+           { interval empty-interval }
+           { literal? t }
+           { slot-refs HS{ T{ tuple-slot-ref { object-value 10050 } { slot-num 3 } } } }
+         }
+    }
+}
 [ [ [ foo new foo-slots ] final-info ] with-rw ] unit-test
 
 
