@@ -1,4 +1,4 @@
-USING: accessors assocs classes.algebra classes.tuple.private
+USING: accessors assocs classes.algebra classes.tuple classes.tuple.private
 combinators.short-circuit compiler.tree compiler.tree.propagation.copy
 compiler.tree.propagation.escaping compiler.tree.propagation.info
 compiler.tree.propagation.nodes kernel math namespaces sequences sets
@@ -44,6 +44,7 @@ PREDICATE: set-slot-call < #call word>> \ set-slot eq? ;
 PREDICATE: literal-set-slot-call < set-slot-call in-d>> third value-info literal?>> ;
 PREDICATE: tuple-set-slot-call < literal-set-slot-call in-d>> second value-info class>> tuple class<= ;
 PREDICATE: tuple-push < #push literal>> tuple? ;
+PREDICATE: mutable-tuple-push < tuple-push literal>> immutable-tuple-class? not ;
 PREDICATE: sequence-push < #push literal>> fixed-length? ;
 UNION: storage-class tuple fixed-length ;
 
@@ -59,6 +60,7 @@ UNION: storage-class tuple fixed-length ;
 !     [ resolve-copy [ record-slot-ref-value ] keep ] bi@
 !     2dup <reflink-info>
 !     '[ _ swap refine-value-info ] bi@ ;
+
 
 ! On set-slot: modify slot value info so that on dereferencing, escape equating
 ! works.
@@ -123,12 +125,12 @@ UNION: non-escaping-call flushable-call inlined-call tuple-set-slot-call ;
 
 ! TODO: arrays
 
-M: #introduce propagate-escape
-    out-d>> [ value-escapes ] each ;
-M: non-escaping-call propagate-escape drop ;
-M: #call propagate-escape
-    [ in-d>> [ object-escapes ] each ]
-    [ out-d>> [ value-escapes ] each ] bi ;
+! M: #introduce propagate-escape
+!     out-d>> [ value-escapes ] each ;
+! M: non-escaping-call propagate-escape drop ;
+! M: #call propagate-escape
+!     [ in-d>> [ object-escapes ] each ]
+!     [ out-d>> [ value-escapes ] each ] bi ;
 
 ! ** Slot access refinement
 
@@ -157,12 +159,14 @@ M: #call propagate-escape
 ! an rw-slot access
 
 ! slot ( obj m -- value )
-! TODO technically not part of escape protocol
-M: rw-slot-call propagate-escape
-    [ in-d>> second value-info literal>> ]
-    [ in-d>> first value-info
-      [ 1 - ] [ slots>> ] bi* ?nth
-    ]
-    [ out-d>> first
-      over [ refine-value-info ] [ 2drop ] if
-    ] tri ;
+M: rw-slot-call propagate-before
+    [ call-next-method ] keep
+    propagate-rw-slots? [
+        [ in-d>> second value-info literal>> ]
+        [ in-d>> first value-info
+          [ 1 - ] [ slots>> ] bi* ?nth
+        ]
+        [ out-d>> first
+          over [ refine-value-info ] [ 2drop ] if
+        ] tri
+    ] [ drop ] if ;

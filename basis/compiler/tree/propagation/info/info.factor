@@ -4,6 +4,7 @@ USING: accessors arrays assocs byte-arrays classes classes.algebra
 classes.singleton classes.tuple classes.tuple.private combinators
 combinators.short-circuit compiler.tree.propagation.copy compiler.utilities
 delegate kernel layouts math math.intervals namespaces sequences
+hash-sets
 sequences.private sets stack-checker.values strings words ;
 IN: compiler.tree.propagation.info
 
@@ -28,6 +29,7 @@ TUPLE: value-info-state
     literal?
     slots
     backref
+    slot-refs
     ;
 
 ! Things to put inside value info slot entries
@@ -42,6 +44,7 @@ DEFER: object-info
 SYMBOL: inner-values
 
 : record-inner-value ( value -- )
+    resolve-copy
     inner-values get [ adjoin ] [ drop ] if* ;
 
 ! Prevent infinite recursion while merging
@@ -63,17 +66,6 @@ literal-values [ IH{ } clone ] initialize
 SYMBOL: propagate-rw-slots
 : propagate-rw-slots? ( -- ? ) propagate-rw-slots get >boolean ; inline
 
-TUPLE: ref-link { defined-by read-only } { defines read-only } ;
-C: <ref-link> ref-link
-: <ref-link-also-defines> ( value ref-link -- ref-link )
-    [ defined-by>> ] [ defines>> ] bi
-    rot suffix <ref-link> ;
-
-: <ref-link-defined-by> ( value ref-link -- ref-link )
-    [ 1array ] dip defines>> <ref-link> ;
-
-M: f defined-by>> drop f ;
-M: f defines>> drop f ;
 
 ! NOTE: discarding value, only using for recursion prevention
 ! Returns an info for a literal tuple slot
@@ -95,6 +87,48 @@ CONSULT: value-info-state unknown-slot drop object-info ;
 CONSTANT: null-info T{ value-info-state f null empty-interval }
 
 CONSTANT: object-info T{ value-info-state f object full-interval }
+
+! Slot reference protocol
+! Get current value of referenced info
+GENERIC: mutable? ( slot-ref -- ? )
+GENERIC: dereference ( slot-ref -- info )
+GENERIC: weak-update ( new-info slot-ref -- )
+GENERIC: strong-update ( new-info slot-ref -- )
+GENERIC: parent-info ( slot-ref -- info )
+
+! This is a link to the container which contains this info
+TUPLE: tuple-slot-ref { object-value read-only } { slot-num read-only } ;
+C: <tuple-slot-ref> tuple-slot-ref
+M: tuple-slot-ref dereference
+    [ slot-num>> 1 - ] [ object-value>> value-info slots>> ] bi ?nth
+    object-info or ;
+
+! TODO: handle ro here
+M: tuple-slot-ref mutable? drop t ;
+M: tuple-slot-ref parent-info object-value>> value-info ;
+
+TUPLE: input-ref { index read-only } ;
+C: <input-ref> input-ref
+M: input-ref mutable? drop f ;
+M: input-ref dereference drop null-info ;
+M: input-ref weak-update 2drop ;
+M: input-ref strong-update 2drop ;
+M: input-ref parent-info drop null-info ;
+
+
+TUPLE: ref-link { defined-by read-only } { defines read-only } ;
+C: <ref-link> ref-link
+: <ref-link-also-defines> ( value ref-link -- ref-link )
+    [ defined-by>> ] [ defines>> ] bi
+    rot suffix <ref-link> ;
+
+: <ref-link-defined-by> ( value ref-link -- ref-link )
+    [ 1array ] dip defines>> <ref-link> ;
+
+M: f defined-by>> drop f ;
+M: f defines>> drop f ;
+
+! Literalization
 
 : interval>literal ( class interval -- literal literal? )
     dup special-interval? [
@@ -301,6 +335,9 @@ DEFER: (value-info-intersect)
     2dup [ empty? ] both?
     [ 2drop f ] [ <ref-link> ] if ;
 
+: merge-slot-refs ( info1 info2 -- slot-refs )
+    [ slot-refs>> ] bi@ union ;
+
 : (value-info-intersect) ( info1 info2 -- info )
     [ <value-info> ] 2dip
     {
@@ -311,6 +348,7 @@ DEFER: (value-info-intersect)
         ! Setting links is explicit, by they can be merged
         ! ! Ref-links have refinement semantics
         [ merge-ref-links >>backref ]
+        [ merge-slot-refs >>slot-refs ]
     } 2cleave
     init-value-info ;
 
@@ -353,6 +391,7 @@ orphan [ <value> ] initialize
         [ union-literals [ >>literal ] [ >>literal? ] bi* ]
         [ union-slots >>slots ]
         [ merge-ref-links >>backref ]
+        [ merge-slot-refs >>slot-refs ]
     } 2cleave
     init-value-info ;
 
@@ -411,7 +450,7 @@ SYMBOL: value-infos
 
 
 : ensure-slots ( slot-num seq/f -- slot-num seq )
-    clone over f pad-tail ; inline
+    clone over object-info pad-tail ; inline
 
 : <defined-slot-info> ( defining-value -- info )
     dup value-info clone
@@ -421,16 +460,79 @@ SYMBOL: value-infos
     object-info or clone
     [ <ref-link-also-defines> ] change-backref ;
 
+! Change info, but keep slot-ref info
+! Weak update
+: <updated-slot-info> ( new-info slot-info/f -- slot-info )
+    object-info or [ value-info-union ] keep slot-refs>> >>slot-refs ;
+
+! Strong update
+: <override-slot-info> ( new-info slot-info/f -- slot-info )
+    [ clone ] dip
+    object-info or slot-refs>> >>slot-refs ;
+
+! Add slot ref to this value
+
 ! slot-num is slot as passed to set-slot
 :: set-slot-definer ( defining-value defined-object slot-num -- )
     defined-object value-info :> obj-info
     obj-info clone [ slot-num swap ensure-slots
                      [ 1 - ] dip
                      [
-                         defining-value <defined-slot-info> -rot
+                         defining-value resolve-copy <defined-slot-info> -rot
                          set-nth ] keep
     ] change-slots
     defined-object set-inner-value-info ;
+
+! Weak update
+:: update-slot-infos ( new-info object-value slot-num -- )
+    object-value value-info :> obj-info
+    obj-info clone [ slot-num swap ensure-slots
+                     [ 1 - ] dip
+                     [
+                         ! [ new-info swap <updated-slot-info> ]
+                         [ new-info value-info-union ]
+                         change-nth ] keep
+    ] change-slots
+    object-value set-inner-value-info ;
+
+M: tuple-slot-ref weak-update
+    [ object-value>> ] [ slot-num>> ] bi
+    update-slot-infos ;
+
+! Strong update
+:: override-slot-infos ( new-info object-value slot-num -- )
+    object-value value-info :> obj-info
+    obj-info clone [ slot-num swap ensure-slots
+                     [ 1 - ] dip
+                     [
+                         ! [ new-info swap <override-slot-info> ]
+                         [ drop new-info ]
+                         change-nth ] keep
+    ] change-slots
+    object-value set-inner-value-info ;
+
+M: tuple-slot-ref strong-update
+    [ object-value>> ] [ slot-num>> ] bi
+    override-slot-infos ;
+
+: <slot-ref-info> ( slot-ref -- info )
+    object-info clone swap 1array >hash-set
+    >>slot-refs ;
+
+: <slot-info> ( slot-info slot-num -- info )
+    f ensure-slots [ 1 - ] dip [ set-nth ] keep
+    object-info clone swap >>slots ;
+
+DEFER: refine-value-info
+! Register value in slot, return updated info with added slot ref
+:: set-slot-ref ( defined-value defining-object slot-num -- slot-info )
+    defining-object resolve-copy slot-num <tuple-slot-ref> :> new-ref
+    new-ref <slot-ref-info> slot-num <slot-info> defining-object refine-value-info
+    defined-value value-info :> val-info
+    val-info [ HS{ } or clone ] change-slot-refs
+     new-ref over slot-refs>> adjoin
+    [ defined-value set-inner-value-info ] keep ;
+
 
 ! On dereferencing, add the value being pulled out will be registered on the
 ! slot info.

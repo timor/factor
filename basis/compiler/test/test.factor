@@ -5,11 +5,10 @@ compiler.cfg.def-use compiler.cfg.linearization compiler.cfg.registers
 compiler.cfg.representations.preferred compiler.cfg.rpo compiler.cfg.stacks
 compiler.cfg.stacks.local compiler.cfg.utilities compiler.tree.builder
 compiler.tree.checker compiler.tree.def-use compiler.tree.normalization
-compiler.tree.propagation.copy
-compiler.tree.propagation.escaping
-compiler.tree.propagation compiler.tree.propagation.info compiler.tree.recursive
-compiler.units continuations hashtables kernel math namespaces sequences
-stack-checker tools.test vectors vocabs words ;
+compiler.tree.propagation compiler.tree.propagation.copy
+compiler.tree.propagation.escaping compiler.tree.propagation.info
+compiler.tree.recursive compiler.units hashtables kernel math namespaces
+sequences stack-checker stack-checker.values tools.test vectors vocabs words ;
 IN: compiler.test
 
 : decompile ( word -- )
@@ -95,4 +94,8 @@ IN: compiler.test
     ] prepose with-scope ; inline
 
 : with-rw ( quot -- )
-    propagate-rw-slots [ with-values ] with-variable-on ; inline
+    propagate-rw-slots [
+        10000 debug-value-counter set-global
+        debug-counter on
+        with-values
+    ] with-variable-on ; inline

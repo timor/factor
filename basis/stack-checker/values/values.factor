@@ -4,7 +4,10 @@ USING: accessors assocs fry kernel namespaces quotations
 sequences stack-checker.errors stack-checker.recursive-state ;
 IN: stack-checker.values
 
-: <value> ( -- value ) \ <value> counter ;
+SYMBOL: debug-value-counter
+SYMBOL: debug-counter
+
+: <value> ( -- value ) debug-counter get [ debug-value-counter counter ] [ \ <value> counter ] if ;
 
 SYMBOL: known-values
 

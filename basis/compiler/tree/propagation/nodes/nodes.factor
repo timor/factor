@@ -18,6 +18,8 @@ GENERIC: propagate-reflinks ( node -- )
 
 GENERIC: propagate-escape ( node -- )
 
+GENERIC: propagate-slot-refs ( node -- )
+
 : (propagate) ( nodes -- )
     [ [ compute-copy-equiv ] [ propagate-around ] bi ] each ;
 
@@ -37,14 +39,21 @@ M: node propagate-reflinks drop ;
 
 M: node propagate-escape drop ;
 
+M: node propagate-slot-refs drop ;
+
 M: node propagate-around
     {
         [ propagate-rw-slots?
-          [ propagate-reflinks ] [ drop ] if ]
+          [
+              [ propagate-slot-refs ]
+              ! [ propagate-reflinks ]
+              [ drop ]
+              bi ]
+          [ drop ] if ]
         [ propagate-before ]
         [
             ! Runs after before because we need to know whether the word was inlined
-            propagate-rw-slots?
+            propagate-rw-slots? f and
             [ propagate-escape ] [ drop ] if
         ]
         [ annotate-node ]

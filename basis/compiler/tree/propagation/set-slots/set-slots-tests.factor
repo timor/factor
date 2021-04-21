@@ -1,9 +1,6 @@
-USING: accessors compiler.test compiler.tree.propagation.info kernel namespaces
-sequences tools.test ;
+USING: accessors compiler.test compiler.tree.propagation.escaping.tests
+compiler.tree.propagation.info kernel math sequences tools.test ;
 IN: compiler.tree.propagation.set-slots.tests
-
-: with-rw ( quot -- )
-    propagate-rw-slots swap with-variable-on ; inline
 
 TUPLE: foo { a read-only } b ;
 TUPLE: bar { a read-only initial: 42 } b ;
@@ -43,3 +40,19 @@ TUPLE: circle me ;
 ! Circularity on set-slot?
 
 { t } [ [ [ circle new dup >>me ] final-info ] with-rw first value-info-state? ] unit-test
+
+! Nested updates
+TUPLE: box a ;
+C: <box> box
+! Nested non-escaping
+{ 43 } [ 42 <box> [ <box> a>> [ 1 + ] change-a drop ] keep a>> ] unit-test
+{ f } [ [ 42 <box> [ <box> a>> [ 1 + ] change-a drop ] keep a>> ] final-literals first ] unit-test
+! FIXME
+! { 43 }
+{ 42 }
+[ [ 42 <box> [ <box> a>> [ 1 + ] change-a drop ] keep a>> ] rw-literals first ] unit-test
+
+
+! Storing mutable in two different slots, mutate, access changed slots
+{ 43 43 43 } [ 42 <box> [ <box> ] [ <box> ] [  ] tri [ 1 + ] change-a a>> [ [ a>> a>> ] bi@ ] dip ] unit-test
+{ V{ 43 43 43 } } [ [ 42 <box> [ <box> ] [ <box> ] [  ] tri [ 1 + ] change-a a>> [ [ a>> a>> ] bi@ ] dip ] rw-literals ] unit-test

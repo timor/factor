@@ -15,6 +15,7 @@ compiler.tree.propagation.recursive
 compiler.tree.propagation.reflinks
 compiler.tree.propagation.simple
 compiler.tree.propagation.set-slots
+compiler.tree.propagation.slot-refs
 compiler.tree.propagation.transforms
 kernel namespaces ;
 IN: compiler.tree.propagation

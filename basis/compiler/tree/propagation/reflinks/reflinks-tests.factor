@@ -1,6 +1,7 @@
 USING: accessors combinators compiler.test compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.nodes compiler.tree.propagation.reflinks
+compiler.tree.propagation.slot-refs
 generic.single kernel sequences tools.test ;
 IN: compiler.tree.propagation.reflinks.tests
 
