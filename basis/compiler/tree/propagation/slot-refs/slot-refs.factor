@@ -86,6 +86,107 @@ M: rw-slot-call propagate-before
     propagate-rw-slots? [
         propagate-rw-slot-infos ] [ drop ] if ;
 
+! * Backpropagation
+! The regular value info propagation handles duplicates and copies on the value
+! level through copy propagation.  This allows inferring that in e.g.
+! ~[ dup { array } declare ]~, the value beneath top-of-stack(TOS) will also be an
+! array.
+
+! However, the link information is lost when values are assigned to storage
+! locations.  E.g. for some tuple class ~foo~, ~[ { foo } declare 42 >>a ]~, will
+! result in TOS being known to be of class ~foo~, but a dereferencing operation
+! with ~a>>~ will have unknown output.  This is easily fixed by updating the value
+! info for the "a" slot of TOS to contain 42 after the ~42 >>a~ assignment.  This
+! would also apply to a simple duplication as described above.  However, more
+! complex cases are not covered by this:
+! 1. Nesting a container inside another one, dereferencing it multiple times,
+!    changing a slot value.  This will not reflect the changed contents of the
+!    slot is accessed from one of the other dereferenced values.  This is solved
+!    by attaching a slot reference (slotref) to a value when it is stored inside a
+!    container.  On slot update, the list of refs containing the changed container
+!    is looked up, and it's slot information updated.  Then the container is also
+!    marked as changed, and its containing containers updated as well.
+! 2. Letting a container escape.  This is equivalent to setting all the containers
+!    slots, and their slots to unknown values.  This change must then be also be
+!    propagated.
+! 3. Branch return.  If a storage object is propagated via a phi node, it's slots
+!    contain the union information of the merged value info states.  Example:
+
+!    - T1.x= 42;
+!    - T2.x = T1;
+!    - if
+!      - left branch:
+!        - T2.x.x = 43
+!      - right branch
+!        - T3.x = 66
+!        - T2.x = T3
+!    - phi return
+!      T2' = { x= { T1 = {x = 43}, T3 = { x = 66 } } }
+
+
+! A value dererencing would result in the union of the two possibilities:
+! - T2'.x.x = { 43, 66 }
+
+
+! If, however, T1.x.x is subsequently changed, and then T1 or T3 later accessed,
+! it depends on the taken branch whether T1 or T3 has been updated. Thus, we must
+! assume that both could have been set to the new value:
+! - T1'.x = { 42, 44 }
+! - T3'.x = { 66, 44 }
+
+
+! This case is known as a *weak update*.  If the nested tuple is the same ,i.e. T1
+! = T3, then we can infer that T1'.x = 44, and T3'.x = 44 after return.  This is
+! known as a *strong update*.  To decide whether we can perform a strong update,
+! the list of slotrefs at the target locations has to be taken into account.  If
+! the target location can only have been defined by us, then we can override the
+! location.  If the target location can have also been defined by some other
+! access, then we expand the value information.
+
+
+! Slot write update procedure:
+
+! - Explanations:
+!   - The global value info state is just info.  Note
+!     that info is a tree state.  No references exist inside it.  Duplicates are
+!     explicit.  If two values change at the same time somewhere inside the tree,
+!     they must be explicitly synchronized.
+!   - info(Value).slotrefs is the set of storage locations which are known to MAY contain
+!     Value in the current state.
+! - Inputs: container C0, info, S0i, W (new value)
+! - Outputs: none
+! - Current State:
+!   - this level: container C0's slot S0i contains value V, with info(V), i.e
+!     - info(V).slotrefs = { ..., C0.S0i, ... }
+!     - info(C0) = { ..., S0i = info(V), ... }
+!   - possibly higher level:
+!     - some container Cx's slot Sxj MAY contain value C0 with info(C0), i.e.
+!       - info(C0).slotrefs = { ..., Cx.Sxj , ... }
+!       - info(Cx) = { ..., Sxj = info(C0), ... }
+
+! Target State:
+! - info(W)'.slotrefs += C0.S0i
+! - info(C0)' = { ..., S0i = info(W)', ... }
+! - info(Cx)' = { ..., Sxj = info(C0)', ... }
+
+
+! - Procedure notifySlotChange(C0, S0i, info(W))
+!   1. info(W)'.slotrefs += C0.S0i ( register W being contained in
+!   2. info(C0)' = info(C0)' // { S0i = info(W)' } ( merge slot info )
+!   3. toUpdate = { }
+!   4. foreach slotref Cx.Sxj in info(C0).slotrefs
+!      1. fetch slotInfo = info(Cx).Sxj
+!      2. If C0.S0i is not member of slotInfo.slotrefs
+!         1. Target location has been changed in the meantime, don't perform update
+!         2. Else
+!            1. If slotInfo.slotrefs = { C0.S0i } (strong update)
+!               1. slotInfo' = info(C0)'.S0i
+!            2. Else the target has been defined by others also (weak update)
+!               1. slotInfo' += info(C0)'.S0i (union info)
+!            3. toUpdate += { Cx.Sxj, slotInfo' )
+!   5. foreach { Cy.Sy, info } in toUpdate
+!      1. notifySlotChange(Cy, Sy, info)
+
 ! TODO: back-propagation
 ! set-slot ( value obj n -- )
 : propagate-tuple-set-slot-infos ( #call -- )
