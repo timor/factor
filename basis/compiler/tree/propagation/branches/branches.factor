@@ -3,7 +3,7 @@
 USING: accessors arrays assocs assocs.extras combinators compiler.tree
 compiler.tree.combinators compiler.tree.propagation.constraints
 compiler.tree.propagation.escaping compiler.tree.propagation.info
-compiler.tree.propagation.nodes compiler.tree.propagation.reflinks
+compiler.tree.propagation.nodes
 compiler.tree.propagation.simple kernel math namespaces sequences sets
 stack-checker.branches ;
 ! FROM: sets => union ;

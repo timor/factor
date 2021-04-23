@@ -1,8 +1,6 @@
-USING: accessors assocs classes.algebra classes.tuple classes.tuple.private
-combinators.short-circuit compiler.tree compiler.tree.propagation.copy
-compiler.tree.propagation.escaping compiler.tree.propagation.info
-compiler.tree.propagation.nodes kernel math namespaces sequences sets
-slots.private words ;
+USING: accessors classes.algebra classes.tuple classes.tuple.private
+combinators.short-circuit compiler.tree compiler.tree.propagation.info kernel
+sequences slots.private words ;
 
 IN: compiler.tree.propagation.reflinks
 
@@ -28,11 +26,6 @@ FROM: namespaces => set ;
 ! Assert that all values defined by this value have same escape status
 ! Assert that values defind by this value, and values this value defines, have
 ! same escape status
-
-: merge-link-refs ( value-info -- )
-    backref>> [ defined-by>> ] [ defines>> ] bi
-    [ [ equate-all-values ] bi@ ]
-    [ [ ?first ] bi@ equate-values ] 2bi ;
 
 ! * Reflink propagation
 
@@ -71,81 +64,3 @@ UNION: storage-class tuple fixed-length ;
 !     [ resolve-copy [ record-slot-ref-value ] keep ] bi@
 !     2dup <reflink-info>
 !     '[ _ swap refine-value-info ] bi@ ;
-
-
-! On set-slot: modify slot value info so that on dereferencing, escape equating
-! works.
-! set-slot ( value obj n -- )
-M: tuple-set-slot-call propagate-reflinks
-    in-d>> first3
-    value-info literal>> set-slot-definer ;
-
-
-! On slot: establish forward link from values that defined the slot contents
-! before.
-! slot ( obj m -- value )
-M: slot-call propagate-reflinks
-    [ in-d>> first2 value-info literal>> ]
-    [ out-d>> first ] bi swap add-slot-defines ;
-
-! Recursive!
-: object-escapes ( value -- )
-    resolve-copy dup value-escapes?
-    [ drop ]                    ! Break recursion
-    [
-        [ value-escapes ]
-        [ value-info backref>> defines>> [ object-escapes ] each ]
-        [ invalidate-slots-info ] tri
-    ] if ;
-
-! : object-escapes? ( value -- ? )
-!     value-info value-info-escapes? ;
-
-M: tuple-boa-call propagate-reflinks
-    out-d>> first record-allocation ;
-
-M: tuple-push propagate-reflinks
-    out-d>> first record-allocation ;
-
-M: sequence-push propagate-reflinks
-    out-d>> first record-allocation ;
-
-M: #declare propagate-reflinks
-    declaration>> [ storage-class? [ record-allocation ] [ drop ] if ] assoc-each ;
-
-! ** Escape handling
-
-! UNION: non-escaping-call flushable-call inlined-call tuple-set-slot-call ;
-
-! TODO: arrays
-
-! M: #introduce propagate-escape
-!     out-d>> [ value-escapes ] each ;
-! M: non-escaping-call propagate-escape drop ;
-! M: #call propagate-escape
-!     [ in-d>> [ object-escapes ] each ]
-!     [ out-d>> [ value-escapes ] each ] bi ;
-
-! ** Slot access refinement
-
-! ! TODO: remove regular slot access code
-! : mask-rw-slot-access ( slot info -- info'/f )
-!     2dup
-!     { [ class>> read-only-slot? ]
-!       ! [ { [ 2drop propagate-rw-slots? ]
-!       !     [ valid-rw-slot-access? ] } 2&&
-!       ! ]
-!       [ 2drop propagate-rw-slots? ]
-!     } 2||
-!     [ [ 1 - ] [ slots>> ] bi* ?nth ]
-!     [ 2drop f ] if ;
-
-! ! Step 1: non-literal tuples
-! : value-info-slot-mask-rw ( slot info -- info' )
-!     {
-!         { [ over 0 = ] [ 2drop fixnum <class-info> ] } ! This is a length slot, why no deref?
-!         { [ dup literal?>> propagate-rw-slots? and ] [ mask-rw-slot-access ] }
-!         { [ dup literal?>> ] [ literal>> literal-info-slot ] }
-!         [ mask-rw-slot-access ]
-!     } cond [ object-info ] unless* ;
-

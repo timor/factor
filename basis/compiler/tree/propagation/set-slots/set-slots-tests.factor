@@ -1,10 +1,13 @@
-USING: accessors compiler.test compiler.tree.propagation.escaping.tests
+USING: accessors compiler.test
 compiler.tree.propagation.info kernel math sequences tools.test ;
 IN: compiler.tree.propagation.set-slots.tests
 
 TUPLE: foo { a read-only } b ;
 TUPLE: bar { a read-only initial: 42 } b ;
 SLOT: a
+
+: rw-literals ( quot/word -- seq )
+    [ final-literals ] with-rw ;
 
 
 ! Existing behavior

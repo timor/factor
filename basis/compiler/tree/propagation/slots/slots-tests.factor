@@ -198,13 +198,6 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
 { V{ f f } } [ [ [ baz new [ frob ] keep [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
 
 
-: kill-backref ( info -- info )
-    clone f >>backref
-    [ clone [ dup [ kill-backref ] when ] map ] change-slots ;
-
-: final-info-no-backref ( quot/word -- seq )
-    final-info [ kill-backref ] map ;
-
 ! Recursive
 ! This is really cool, if I may say so myself..
 { T{ baz f 47 42 } } [ 5 [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] call ] unit-test
@@ -232,4 +225,4 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
          }
        }
      }
-} [ [ [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] final-info-no-backref first ] with-rw ] unit-test
+} [ [ [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] final-info first ] with-rw ] unit-test

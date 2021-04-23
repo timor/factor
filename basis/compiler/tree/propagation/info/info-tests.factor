@@ -243,41 +243,6 @@ ${
     -100 100 [a,b] integer wrap-interval
 ] unit-test
 
-! ref-links
-{
-    T{ ref-link f f f }
-    T{ ref-link f { 1 } f } }
-[ f f <ref-link> 1 over <ref-link-defined-by> ] unit-test
-
-{ T{ ref-link f f f }
-  T{ ref-link f f { 1 } }
-  T{ ref-link f f { 1 2 } }
-} [
-    f f <ref-link>
-    1 over <ref-link-also-defines>
-    2 over <ref-link-also-defines>
-] unit-test
-
-! ${
-!     fixnum <class-info>
-!     fixnum <class-info> T{ ref-link f { 1 } { 2 } } >>backref
-!     T{ value-info-state
-!      { class object }
-!      { interval full-interval }
-!      { backref T{ ref-link f { 1 } { 2 } } }
-!    } }
-
-! TODO add test for invalidate-slots-info
-! [ [ { 1 2 3 4 } introduce-values
-!     fixnum <class-info>
-!     dup 3 set-value-info
-!     1 3 set-defining-value
-!     2 3 add-defined-value
-!     3 value-info
-!     3 invalidate-info
-!     3 value-info
-!   ] with-values ] unit-test
-
 TUPLE: box a ;
 C: <box> box
 

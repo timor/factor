@@ -29,14 +29,40 @@ TUPLE: value-info-state
     literal
     literal?
     slots
-    backref
+    origin
     slot-refs
     ;
 
-! Things to put inside value info slot entries
 DEFER: value-info
 DEFER: value-infos
 DEFER: value-info-union
+DEFER: set-value-info
+DEFER: set-inner-value-info
+
+TUPLE: lazy-info values ;
+C: <lazy-info> lazy-info
+: lazy-info>info ( obj -- info )
+    values>> [ value-info ] [ value-info-union ] map-reduce ;
+GENERIC: bake-info* ( info -- info )
+! TODO: check circularity
+: bake-info ( info/f -- info/f )
+    dup [ bake-info* ] when ;
+M: value-info-state bake-info*
+    clone f >>slot-refs f >>origin
+    [ [ bake-info ] map ] change-slots ;
+M: lazy-info bake-info*
+    lazy-info>info bake-info ;
+
+CONSULT: value-info-state lazy-info lazy-info>info ;
+: info>values ( value-info -- values )
+    dup lazy-info?
+    [ values>> ]
+    [ <value>
+      [ introduce-value ]
+      [ set-inner-value-info ]
+      [ 1array ] tri ] if ;
+
+! Things to put inside value info slot entries
 DEFER: <literal-info>
 DEFER: object-info
 
@@ -97,9 +123,11 @@ GENERIC: dereference ( slot-ref -- slot-info )
 GENERIC: weak-update ( new-info slot-ref -- )
 GENERIC: strong-update ( new-info slot-ref -- )
 GENERIC: container-info ( slot-ref -- info )
+! GENERIC: nofity-slot-change ( slot-ref -- )
 M: object mutable? drop f ;
 M: object weak-update 2drop ;
 M: object strong-update 2drop ;
+M: object dereference drop null-info ;
 
 
 ! This is a link to the container which contains this info
@@ -113,7 +141,6 @@ M: tuple-slot-ref dereference
 M: tuple-slot-ref mutable? drop t ;
 M: tuple-slot-ref container-info object-value>> value-info ;
 
-! FIXME: TBR
 TUPLE: ro-tuple-slot-ref < tuple-slot-ref ;
 ! NOTE: this is mutable because there can be reference updates!
 ! Regular code will never attempt to modify a read-only slot
@@ -123,27 +150,16 @@ M: ro-tuple-slot-ref weak-update 2drop ;
 TUPLE: input-ref { index read-only } ;
 : <input-ref> ( index -- obj )
     input-ref boa [ record-allocation ] keep ;
-M: input-ref mutable? drop f ;
-M: input-ref dereference drop null-info ;
 M: input-ref container-info drop null-info ;
 
 SINGLETON: limbo
-M: limbo mutable? drop f ;
-M: limbo dereference drop null-info ;
 M: limbo container-info drop null-info ;
 
+TUPLE: literal-allocation literal ;
+C: <literal-allocation> literal-allocation
 
-TUPLE: ref-link { defined-by read-only } { defines read-only } ;
-C: <ref-link> ref-link
-: <ref-link-also-defines> ( value ref-link -- ref-link )
-    [ defined-by>> ] [ defines>> ] bi
-    rot suffix <ref-link> ;
-
-: <ref-link-defined-by> ( value ref-link -- ref-link )
-    [ 1array ] dip defines>> <ref-link> ;
-
-M: f defined-by>> drop f ;
-M: f defines>> drop f ;
+TUPLE: local-allocation value ;
+C: <local-allocation> local-allocation
 
 ! Literalization
 
@@ -191,7 +207,6 @@ UNION: fixed-length array byte-array string ;
 
 : init-literal-info ( info -- info )
     empty-interval >>interval
-    f >>backref                 ! If something is declared literal, it can not have escaped
     dup literal>> literal-class >>class
     dup literal>> {
         { [ dup real? ] [ [a,a] >>interval ] }
@@ -248,12 +263,15 @@ UNION: fixed-length array byte-array string ;
     dup [ interval>> full-interval or ] [ class>> ] bi wrap-interval >>interval
     dup class>> integer class<= [ [ integral-closure ] change-interval ] when ; inline
 
-! If we have object info, and no references, then you got an eff !!1!
 : init-slots ( info -- info )
-    [ [ [ dup object-info = [ drop f ] when ] map ]
-      [ f ] if*
-      dup [ not ] all? [ drop f ] when
-    ] change-slots ; inline
+    propagate-rw-slots?
+    [ [ [ dup [ info>values <lazy-info> ] when ] map ] change-slots ] when
+    ; inline
+
+    ! [ [ [ dup object-info = [ drop f ] when ] map ]
+    !   [ f ] if*
+    !   dup [ not ] all? [ drop f ] when
+    ! ] change-slots ; inline
 
 ! TODO: maybe slot references if something was inferred literal?
 : init-value-info ( info -- info )
@@ -265,12 +283,13 @@ UNION: fixed-length array byte-array string ;
             empty-interval >>interval
         ] [
             init-interval
-            init-slots
+            ! init-slots
             dup [ class>> ] [ interval>> ] bi interval>literal
             [ >>literal ] [ >>literal? ] bi*
             [ fix-capacity-class ] change-class
         ] if
     ] if
+    init-slots
     [ dup null? [ drop f ] when ] change-slot-refs
     ; inline
 
@@ -308,7 +327,9 @@ UNION: fixed-length array byte-array string ;
         swap >>slots
     init-value-info ;
 
-! Non-literal tuple info, slot refs instead
+
+! Taking value-info, but assigning virtuals to the info slots
+! TODO: restore to old code path
 : <tuple-ref-info> ( slot-values class -- info )
     <value-info>
     swap >>class
@@ -327,10 +348,13 @@ UNION: fixed-length array byte-array string ;
         [ drop >literal< ]
     } cond ;
 
-DEFER: value-info-intersect
-
 DEFER: (value-info-intersect)
 
+! ! Is this actually called???
+! : intersect-lazy-slot ( info1 info2 -- info )
+!     [ info>values ] bi@ intersect
+
+! NOTE: destroys lazy info if two different ones meet
 : intersect-slot ( info1 info2 -- info )
     {
         { [ dup not ] [ nip ] }
@@ -349,15 +373,12 @@ DEFER: (value-info-intersect)
         ]
     } cond ;
 
-: merge-ref-links ( info1 info2 -- ref-link )
-    [ backref>> ] bi@
-    [ [ defined-by>> ] bi@ union ]
-    [ [ defines>> ] bi@ union ] 2bi
-    2dup [ empty? ] both?
-    [ 2drop f ] [ <ref-link> ] if ;
 
 : merge-slot-refs ( info1 info2 -- slot-refs )
     [ slot-refs>> ] bi@ union HS{ } set-like ;
+
+: merge-origin ( info1 info2 -- slot-refs )
+    [ origin>> ] bi@ union HS{ } set-like ;
 
 : (value-info-intersect) ( info1 info2 -- info )
     [ <value-info> ] 2dip
@@ -366,10 +387,8 @@ DEFER: (value-info-intersect)
         [ [ interval>> ] bi@ interval-intersect >>interval ]
         [ intersect-literals [ >>literal ] [ >>literal? ] bi* ]
         [ intersect-slots >>slots ]
-        ! Setting links is explicit, by they can be merged
-        ! ! Ref-links have refinement semantics
-        [ merge-ref-links >>backref ]
         [ merge-slot-refs >>slot-refs ]
+        [ merge-origin >>origin ]
     } 2cleave
     init-value-info ;
 
@@ -389,12 +408,15 @@ DEFER: value-info-union
 
 DEFER: (value-info-union)
 
+: union-lazy-slot ( info1 info2 -- info )
+    [ info>values ] bi@ union <lazy-info> ;
+
 ! If f, the other wins (union with null-info)
 : union-slot ( info1 info2 -- info )
     {
         { [ dup not ] [ nip ] }
         { [ over not ] [ drop ] }
-        [ (value-info-union) ]
+        [ propagate-rw-slots? [ union-lazy-slot ] [ (value-info-union) ] if ]
     } cond ;
 
 : union-slots ( info1 info2 -- slots )
@@ -412,8 +434,8 @@ orphan [ <value> ] initialize
         [ [ interval>> ] bi@ interval-union >>interval ]
         [ union-literals [ >>literal ] [ >>literal? ] bi* ]
         [ union-slots >>slots ]
-        [ merge-ref-links >>backref ]
         [ merge-slot-refs >>slot-refs ]
+        [ merge-origin >>origin ]
     } 2cleave
     init-value-info ;
 
@@ -483,14 +505,6 @@ SYMBOL: value-infos
     f ensure-slots-with ; inline
     ! clone over f pad-tail ; inline
 
-: <defined-slot-info> ( defining-value -- info )
-    dup value-info clone
-    [ <ref-link-defined-by> ] change-backref ;
-
-: <defining-slot-info> ( defined-value defining-info -- info )
-    object-info or clone
-    [ <ref-link-also-defines> ] change-backref ;
-
 ! Change info, but keep slot-ref info
 ! Weak update
 : <updated-slot-info> ( new-info slot-info/f -- slot-info )
@@ -500,19 +514,6 @@ SYMBOL: value-infos
 : <override-slot-info> ( new-info slot-info/f -- slot-info )
     [ clone ] dip
     object-info or slot-refs>> >>slot-refs ;
-
-! Add slot ref to this value
-
-! slot-num is slot as passed to set-slot
-:: set-slot-definer ( defining-value defined-object slot-num -- )
-    defined-object value-info :> obj-info
-    obj-info clone [ slot-num swap ensure-slots
-                     [ 1 - ] dip
-                     [
-                         defining-value resolve-copy <defined-slot-info> -rot
-                         set-nth ] keep
-    ] change-slots
-    defined-object set-inner-value-info ;
 
 ! Weak update
 :: update-slot-infos ( new-info object-value slot-num -- )
@@ -580,11 +581,23 @@ DEFER: extend-value-info
 ! the changed CONTAINER value info back through it's slot refs, deciding whether a
 ! strong or weak update is possible at the corresponding allocation.
 
-: register-storage ( stored-value slot-ref -- )
+: register-slot-storage ( stored-value slot-ref -- )
     <slot-ref-info> swap refine-value-info ;
 
 : register-tuple-slot-storage ( stored-value containing-object slot-num -- )
-    make-tuple-slot-ref register-storage ;
+    make-tuple-slot-ref register-slot-storage ;
+
+: register-origin ( value slot-refs -- )
+    object-info clone swap >>origin
+    swap refine-value-info ;
+
+: 1register-origin ( value slot-ref -- )
+    dup record-allocation
+    1array >hash-set register-origin ;
+
+: register-escape ( value -- )
+    object-info clone HS{ limbo } >>origin
+    swap extend-value-info ;
 
 ! :: set-tuple-slot-ref ( defining-value defined-object slot-num -- )
 !     defined-object resolve-copy :> obj-val
@@ -606,24 +619,6 @@ DEFER: extend-value-info
     !  new-ref over slot-refs>> adjoin
     ! [ defined-value set-inner-value-info ] keep ;
 
-
-! On dereferencing, add the value being pulled out will be registered on the
-! slot info.
-! TODO TBR
-:: add-slot-defines ( defining-object defined-value slot-num -- )
-    defining-object value-info :> obj-info
-    obj-info clone [ slot-num swap ensure-slots
-                     [ 1 - ] dip
-                     [
-                         [ defined-value swap <defining-slot-info> ]
-                         change-nth ] keep
-    ] change-slots
-    defining-object set-inner-value-info ;
-
-! unused
-: add-defined-value ( defined-value defining-value -- )
-    [ value-info clone [ <ref-link-also-defines> ] change-backref ]
-    [ set-inner-value-info ] bi ;
 
 : read-only-slot? ( n class -- ? )
     dup class?

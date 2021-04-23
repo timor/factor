@@ -87,10 +87,13 @@ IN: compiler.test
 : final-literals ( quot -- seq )
     final-info [ literal>> ] map ;
 
+: init-values ( -- )
+    H{ } clone copies set
+    H{ } clone 1vector value-infos set
+    init-escaping-values ;
+
 : with-values ( quot -- )
-    [ H{ } clone copies set
-      H{ } clone 1vector value-infos set
-      init-escaping-values
+    [ init-values
     ] prepose with-scope ; inline
 
 : with-rw ( quot -- )

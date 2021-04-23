@@ -20,6 +20,8 @@ GENERIC: propagate-escape ( node -- )
 
 GENERIC: propagate-slot-refs ( node -- )
 
+GENERIC: propagate-origin ( node -- )
+
 : (propagate) ( nodes -- )
     [ [ compute-copy-equiv ] [ propagate-around ] bi ] each ;
 
@@ -41,18 +43,21 @@ M: node propagate-escape drop ;
 
 M: node propagate-slot-refs drop ;
 
+M: node propagate-origin drop ;
+
 M: node propagate-around
     {
         ! Set up slot ref connections for storage operations on inputs and outputs:
-        [ propagate-rw-slots?
-          [
-              [ propagate-slot-refs ]
-              ! [ propagate-reflinks ]
-              [ drop ]
-              bi ]
-          [ drop ] if ]
+        ! [ propagate-rw-slots?
+        !   [
+        !       [ propagate-slot-refs ]
+        !       ! [ propagate-reflinks ]
+        !       [ drop ]
+        !       bi ]
+        !   [ drop ] if ]
         ! Calculate output value information based on input information
         [ propagate-before ]
+        [ propagate-origin ]
         ! Update the set of escaping values, modify values if they escape ( TODO: probably needs to go after annotation... )
         [
             ! Runs after before because we need to know whether the word was inlined

@@ -49,26 +49,23 @@ IN: compiler.tree.propagation.slot-refs
 ! Actual slot info is not changed here, but as part of the propagation process
 ! it should be detected as a strong update.
 ! set-slot ( value obj n -- )
-M: tuple-set-slot-call propagate-slot-refs
-    in-d>> first3
-    [ resolve-copy ] [ value-info literal>> ] bi* register-tuple-slot-storage
-    ! notice-slot-changed ( happens in propagate-before )
-    ;
+! M: tuple-set-slot-call propagate-slot-refs
+!     in-d>> first3
+!     [ resolve-copy ] [ value-info literal>> ] bi* register-tuple-slot-storage
+!     ! notice-slot-changed ( happens in propagate-before )
+!     ;
 
-M: tuple-boa-call propagate-slot-refs
-    [ out-d>> first ]
-    [ in-d>> but-last ] bi
-    [ 2 + register-tuple-slot-storage ] with each-index ;
+! M: tuple-boa-call propagate-slot-refs
+!     [ out-d>> first ]
+!     [ in-d>> but-last ] bi
+!     [ 2 + register-tuple-slot-storage ] with each-index ;
 
 ! TODO: check node selection semantics! ( should propbably be the same as allocation! )
-M: non-escaping-call propagate-slot-refs
-    drop ;
+! M: non-escaping-call propagate-slot-refs
+!     drop ;
 
-M: #call propagate-slot-refs
-    out-d>> [ limbo register-storage ] each ;
-
-M: #introduce propagate-slot-refs
-    out-d>> [ <input-ref> register-storage ] each-index ;
+! M: #call propagate-slot-refs
+!     out-d>> [ limbo register-slot-storage ] each ;
 
 ! ** Change value info for slot calls
 ! Situation: output-value-infos has run.  Now repeat.  For now, only if this is
@@ -258,6 +255,18 @@ M: tuple-set-slot-call propagate-before
     [ call-next-method ] keep
     propagate-rw-slots?
     [ propagate-tuple-set-slot-infos ] [ drop ] if ;
+
+
+! Inform all other containers holding this reference that we also hold it now
+: propagate-tuple-boa-slot-refs ( #call -- )
+    out-d>> first value-info slots>>
+    [ [ slot-refs>> members [ dup mutable? [ notify-slot-change ] [ drop ] if ]
+        each ] when* ] each ;
+
+M: tuple-boa-call propagate-before
+    [ call-next-method ] keep
+    propagate-rw-slots?
+    [ propagate-tuple-boa-slot-refs ] [ drop ] if ;
 
 ! TODO: deliteralize and handle pushes
 

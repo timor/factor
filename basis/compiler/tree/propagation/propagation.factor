@@ -11,8 +11,8 @@ compiler.tree.propagation.info
 compiler.tree.propagation.inlining
 compiler.tree.propagation.known-words
 compiler.tree.propagation.nodes
+compiler.tree.propagation.origins
 compiler.tree.propagation.recursive
-compiler.tree.propagation.reflinks
 compiler.tree.propagation.simple
 compiler.tree.propagation.set-slots
 compiler.tree.propagation.slot-refs
