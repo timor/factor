@@ -217,3 +217,4 @@ C: <box> box
 
 
 ! TODO: Test with mutated invalid literal
+! TODO: circular escapes, nested circular escapes

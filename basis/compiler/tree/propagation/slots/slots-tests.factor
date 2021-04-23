@@ -215,8 +215,20 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
        { slots
          V{
              f
-             T{ value-info-state { class integer } { interval T{ interval { from { 42 t } } { to { 1/0. t } } } } }
-             T{ value-info-state { class integer } { interval T{ interval { from { -1/0. t } } { to { 47 t } } } } }
+             T{ value-info-state
+                { class integer }
+                { interval T{ interval { from { 42 t } } { to { 1/0. t } } } }
+                { slot-refs
+                  HS{ T{ tuple-slot-ref { object-value 10073 } { slot-num 2 } } T{ tuple-slot-ref { object-value 10139 } { slot-num 2 } } }
+                }
+              }
+             T{ value-info-state
+                { class integer }
+                { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
+                { slot-refs
+                  HS{ T{ tuple-slot-ref { object-value 10089 } { slot-num 3 } } T{ tuple-slot-ref { object-value 10139 } { slot-num 3 } } }
+                }
+              }
          }
        }
      }

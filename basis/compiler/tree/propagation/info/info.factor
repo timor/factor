@@ -90,11 +90,17 @@ CONSTANT: object-info T{ value-info-state f object full-interval }
 
 ! Slot reference protocol
 ! Get current value of referenced info
+
+! FIXME: better name would be "updatable..."
 GENERIC: mutable? ( slot-ref -- ? )
-GENERIC: dereference ( slot-ref -- info )
+GENERIC: dereference ( slot-ref -- slot-info )
 GENERIC: weak-update ( new-info slot-ref -- )
 GENERIC: strong-update ( new-info slot-ref -- )
-GENERIC: parent-info ( slot-ref -- info )
+GENERIC: container-info ( slot-ref -- info )
+M: object mutable? drop f ;
+M: object weak-update 2drop ;
+M: object strong-update 2drop ;
+
 
 ! This is a link to the container which contains this info
 TUPLE: tuple-slot-ref { object-value read-only } { slot-num read-only } ;
@@ -105,28 +111,26 @@ M: tuple-slot-ref dereference
 
 ! TODO: handle ro here
 M: tuple-slot-ref mutable? drop t ;
-M: tuple-slot-ref parent-info object-value>> value-info ;
+M: tuple-slot-ref container-info object-value>> value-info ;
 
+! FIXME: TBR
 TUPLE: ro-tuple-slot-ref < tuple-slot-ref ;
-M: ro-tuple-slot-ref mutable? drop f ;
+! NOTE: this is mutable because there can be reference updates!
+! Regular code will never attempt to modify a read-only slot
+M: ro-tuple-slot-ref mutable? drop t ;
 M: ro-tuple-slot-ref weak-update 2drop ;
-M: ro-tuple-slot-ref strong-update 2drop ;
 
 TUPLE: input-ref { index read-only } ;
 : <input-ref> ( index -- obj )
     input-ref boa [ record-allocation ] keep ;
 M: input-ref mutable? drop f ;
 M: input-ref dereference drop null-info ;
-M: input-ref weak-update 2drop ;
-M: input-ref strong-update 2drop ;
-M: input-ref parent-info drop null-info ;
+M: input-ref container-info drop null-info ;
 
-SINGLETON: unknown-ref
-M: unknown-ref mutable? drop f ;
-M: unknown-ref dereference drop null-info ;
-M: unknown-ref weak-update 2drop ;
-M: unknown-ref strong-update 2drop ;
-M: unknown-ref parent-info drop null-info ;
+SINGLETON: limbo
+M: limbo mutable? drop f ;
+M: limbo dereference drop null-info ;
+M: limbo container-info drop null-info ;
 
 
 TUPLE: ref-link { defined-by read-only } { defines read-only } ;
@@ -251,6 +255,7 @@ UNION: fixed-length array byte-array string ;
       dup [ not ] all? [ drop f ] when
     ] change-slots ; inline
 
+! TODO: maybe slot references if something was inferred literal?
 : init-value-info ( info -- info )
     dup literal?>> [
         init-literal-info
@@ -522,8 +527,7 @@ SYMBOL: value-infos
     object-value set-inner-value-info ;
 
 M: tuple-slot-ref weak-update
-    [ object-value>> ] [ slot-num>> ] bi
-    update-slot-infos ;
+    [ object-value>> ] [ slot-num>> ] bi update-slot-infos ;
 
 ! Strong update
 :: override-slot-infos ( new-info object-value slot-num -- )
@@ -538,8 +542,7 @@ M: tuple-slot-ref weak-update
     object-value set-inner-value-info ;
 
 M: tuple-slot-ref strong-update
-    [ object-value>> ] [ slot-num>> ] bi
-    override-slot-infos ;
+    [ object-value>> ] [ slot-num>> ] bi override-slot-infos ;
 
 ! Use with intersection semantics
 : <slot-ref-info> ( slot-ref -- info )
@@ -556,10 +559,6 @@ M: tuple-slot-ref strong-update
     ;
 
 DEFER: refine-value-info
-
-! unused
-: set-slot-ref ( value slot-ref -- )
-    <slot-ref-info> swap refine-value-info ;
 
 DEFER: read-only-slot?
 : make-tuple-slot-ref ( object-value slot-num -- slot-ref )
@@ -584,7 +583,7 @@ DEFER: extend-value-info
 : register-storage ( stored-value slot-ref -- )
     <slot-ref-info> swap refine-value-info ;
 
-: register-tuple-slot-storage ( stored-value contained-object slot-num -- )
+: register-tuple-slot-storage ( stored-value containing-object slot-num -- )
     make-tuple-slot-ref register-storage ;
 
 ! :: set-tuple-slot-ref ( defining-value defined-object slot-num -- )

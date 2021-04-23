@@ -1,54 +1,58 @@
 USING: accessors combinators combinators.short-circuit compiler.tree
 compiler.tree.propagation.escaping compiler.tree.propagation.info
+compiler.tree.propagation.copy
 compiler.tree.propagation.nodes compiler.tree.propagation.reflinks kernel math
-sequences sets ;
+sequences sets sets.extras ;
 
 IN: compiler.tree.propagation.slot-refs
 
-! Find ourselves in other tuples slots.
-! Return whether we are still referenced, and check for a strong definition
-! relation by checking whether our slot-refs are a superset of the target.  If
-! not, other definitions have been involved, thus only weak update is possible.
+! ! Find ourselves in other tuples slots.
+! ! Return whether we are still referenced, and check for a strong definition
+! ! relation by checking whether our slot-refs are a superset of the target.  If
+! ! not, other definitions have been involved, thus only weak update is possible.
 
-: back-ref-slot ( info slot-ref -- strong? current? )
-    [ slot-refs>> ] [ dereference slot-refs>> ] bi*
-    [ swap subset? ] [ intersects? ] 2bi ; inline
-    ! dup dereference slot-refs>>
-    ! [ in? ]
-    ! [ length 1 = ] bi swap ;
+! : back-ref-slot ( info slot-ref -- strong? current? )
+!     [ slot-refs>> ] [ dereference slot-refs>> ] bi*
+!     [ swap subset? ] [ intersects? ] 2bi ; inline
+!     ! dup dereference slot-refs>>
+!     ! [ in? ]
+!     ! [ length 1 = ] bi swap ;
 
-! Check if this value has been defined by something that could have escaped
-! and modified.
-: value-info-escapes? ( info -- ? )
-    slot-refs>> members
-    {
-        ! [ null? ]                 ! Unknown allocation, should not happen!
-        ! proper introduce node
-        [ [ input-ref? ] any? ]
-        [ [ value-escapes? ] any? ] } 1|| ;
-
-
-DEFER: notice-slot-changed
-: notice-slot-ref-changed ( slot-ref -- )
-    dup mutable? [ parent-info notice-slot-changed ] [ drop ] if ;
+! ! Check if this value has been defined by something that could have escaped
+! ! and modified.
+! : value-info-escapes? ( info -- ? )
+!     slot-refs>> members
+!     {
+!         ! [ null? ]                 ! Unknown allocation, should not happen!
+!         ! proper introduce node
+!         [ [ input-ref? ] any? ]
+!         [ [ value-escapes? ] any? ] } 1|| ;
 
 
-! Must ripple through
-: notice-slot-changed ( info -- )
-    dup slot-refs>> members [
-        2dup back-ref-slot
-        [  [ [ strong-update ]
-             [ weak-update ] if ] keepd
-           notice-slot-ref-changed
-        ]
-        [ 3drop ] if
-    ] with each ;
+! DEFER: notice-slot-changed
+! : notice-slot-ref-changed ( slot-ref -- )
+!     dup mutable? [ container-info notice-slot-changed ] [ drop ] if ;
 
+
+! ! Must ripple through
+! : notice-slot-changed ( info -- )
+!     dup slot-refs>> members [
+!         2dup back-ref-slot
+!         [  [ [ strong-update ]
+!              [ weak-update ] if ] keepd
+!            notice-slot-ref-changed
+!         ]
+!         [ 3drop ] if
+!     ] with each ;
+
+! Attach slot-ref info to the value, and update object info with that slot-ref.
+! Actual slot info is not changed here, but as part of the propagation process
+! it should be detected as a strong update.
 ! set-slot ( value obj n -- )
 M: tuple-set-slot-call propagate-slot-refs
     in-d>> first3
-    value-info literal>> register-tuple-slot-storage
-    ! notice-slot-changed
+    [ resolve-copy ] [ value-info literal>> ] bi* register-tuple-slot-storage
+    ! notice-slot-changed ( happens in propagate-before )
     ;
 
 M: tuple-boa-call propagate-slot-refs
@@ -61,10 +65,10 @@ M: non-escaping-call propagate-slot-refs
     drop ;
 
 M: #call propagate-slot-refs
-    out-d>> [ unknown-ref set-slot-ref ] each ;
+    out-d>> [ limbo register-storage ] each ;
 
 M: #introduce propagate-slot-refs
-    out-d>> [ <input-ref> set-slot-ref ] each-index ;
+    out-d>> [ <input-ref> register-storage ] each-index ;
 
 ! ** Change value info for slot calls
 ! Situation: output-value-infos has run.  Now repeat.  For now, only if this is
@@ -157,40 +161,98 @@ M: rw-slot-call propagate-before
 ! - Outputs: none
 ! - Current State:
 !   - this level: container C0's slot S0i contains value V, with info(V), i.e
-!     - info(V).slotrefs = { ..., C0.S0i, ... }
-!     - info(C0) = { ..., S0i = info(V), ... }
+!     - info(V).slotrefs = { C0.S0i }
+!     - info(C0).slots = { ..., S0i = info(V), ... }
 !   - possibly higher level:
-!     - some container Cx's slot Sxj MAY contain value C0 with info(C0), i.e.
-!       - info(C0).slotrefs = { ..., Cx.Sxj , ... }
-!       - info(Cx) = { ..., Sxj = info(C0), ... }
+!     - some container Cx.Sxj and Cy.syl slot MAY contain value C0 with info(C0), i.e.
+!       - info(C0).slotrefs = { Cx.Sxj, Cy.Syl }
+!       - info(Cx).slots = { ..., Sxj = info(C0), ... }
+!       - info(Cy).slots = { ..., Syl = info(C0), ... }
+
 
 ! Target State:
 ! - info(W)'.slotrefs += C0.S0i
 ! - info(C0)' = { ..., S0i = info(W)', ... }
+! - info(C0)'.slotrefs = info(C0).slotrefs = { ..., Cx.Sxj , Cy.Syl, ... }
 ! - info(Cx)' = { ..., Sxj = info(C0)', ... }
-
+! - info(Cy)' = { ..., Syl = info(C0)', ... }
 
 ! - Procedure notifySlotChange(C0, S0i, info(W))
-!   1. info(W)'.slotrefs += C0.S0i ( register W being contained in
-!   2. info(C0)' = info(C0)' // { S0i = info(W)' } ( merge slot info )
-!   3. toUpdate = { }
-!   4. foreach slotref Cx.Sxj in info(C0).slotrefs
-!      1. fetch slotInfo = info(Cx).Sxj
-!      2. If C0.S0i is not member of slotInfo.slotrefs
+!   1. info(C0)' = info(C0)' // { S0i = info(W)' } ( merge slot info )
+!   2. toUpdate = { }
+!   3. foreach slotref Cx.Sxj in info(C0).slotrefs
+!      1. fetch refSlotInfo = info(Cx).Sxj
+!      2. If info(C0).slotrefs ∩ refSlotInfo.slotrefs
 !         1. Target location has been changed in the meantime, don't perform update
 !         2. Else
-!            1. If slotInfo.slotrefs = { C0.S0i } (strong update)
-!               1. slotInfo' = info(C0)'.S0i
+!            1. If info(C0).slotrefs ⊇ refSlotInfo.slotrefs = (strong update)
+!               1. refSlotInfo' = info(C0)'.S0i
 !            2. Else the target has been defined by others also (weak update)
-!               1. slotInfo' += info(C0)'.S0i (union info)
-!            3. toUpdate += { Cx.Sxj, slotInfo' )
-!   5. foreach { Cy.Sy, info } in toUpdate
+!               1. refSlotInfo' += info(C0)'.S0i (union info)
+!            3. toUpdate += { Cx.Sxj, refSlotInfo' )
+!   4. foreach { Cy.Sy, info } in toUpdate
 !      1. notifySlotChange(Cy, Sy, info)
+
+! Actual update:
+! - info(W).slotrefs += C0.S0i ( register W being contained in C0 at S0i )
+! - notifySlotChange(C0, S0i, info(W))
+
+
+! Example, with order of things that must happen
+! - T1.x = 42 -> slotrefs(42) = T1.x
+! - T2.x = T1 -> slotrefs(T1) = T2.x
+! - T3.x = T2 -> slotrefs(T2) = T3.x
+! - T1.x <= 43
+! - Update info for T1 to one which includes the T1.x = 42->43 change:
+! - Tuple Value info slot update: info(T1)' <= T1'{ x= 43 }, commit
+! - T1.x is now 43
+! - Update info for T2 to one which includes the T2.x = T1{ x = 42} -> T1{ x =  43} change:
+! - find T2.x by slot-refs(T1)
+! - find info(T1)' by info(T1)', info(T1)' = T1{ x = 43}
+! - Tuple value info slot update: info(T2)' <= T2'{ x = T1'{ x = 43 } }, commit
+! - Update info for T3 to one which includes the T3.x = T2{ x = T1{ x = 42} } ->
+!   T2{ x = { T1 {  x = 43 } } } change:
+! - find T3.x by slot-refs(T2)
+
+SINGLETONS: strong weak ;
+: slot-ref-membership ( tag-refs slot-refs -- how )
+    { { [ 2dup intersects? not ] [ 2drop f ] }
+      { [ 2dup superset? ] [ 2drop strong ] }
+      [ 2drop weak ]
+    } cond ;
+
+! TODO: move to info?
+! NOTE: different to above, we assume the update has been performed before being called
+! slot-ref list
+! Perform all the linked container updates, return the slot-refs
+! TODO: might have to handle recursive updates here!
+! tag-ref is the one we use to check for updates.
+:: notify-slot-change ( slot-ref -- )
+    V{ } clone :> to-update
+    slot-ref container-info :> new-info
+    new-info slot-refs>> :> tag-refs ! "Siblings"
+    tag-refs members [ mutable? ] filter
+    [| ref |
+     ref dereference :> ref-slot-info
+     tag-refs ref-slot-info slot-refs>> slot-ref-membership
+     ! slot-ref-membership
+     [ strong?
+       [ new-info ref strong-update ]
+       [ new-info ref weak-update ] if
+       ! Notify parents
+       ref container-info slot-refs>> members [ mutable? ] filter
+       to-update push-all
+     ] when*
+    ] each
+    ! Hop up and above
+    to-update members [ notify-slot-change ] each ;
 
 ! TODO: back-propagation
 ! set-slot ( value obj n -- )
 : propagate-tuple-set-slot-infos ( #call -- )
-    in-d>> first3 [ value-info ] 2dip value-info literal>> override-slot-infos ;
+    in-d>> first3
+    [ value-info ] [ resolve-copy ] [ value-info literal>> ] tri*
+    make-tuple-slot-ref [ strong-update ] [ notify-slot-change ] bi ;
 
 M: tuple-set-slot-call propagate-before
     [ call-next-method ] keep
@@ -218,7 +280,7 @@ M: tuple-set-slot-call propagate-before
             [ value-escapes ]
             [ dereference slots>> [ slot-refs>> members [ slot-ref-escapes ] each ] each ]
             [ object-info swap weak-update ]
-            [ notice-slot-ref-changed ]
+            ! [ notice-slot-ref-changed ]
         } cleave
     ] if ;
 

@@ -28,6 +28,6 @@ IN: compiler.tree.propagation
     ! [ introduce-value ]
     ! [ object-info swap set-value-info ] bi
     init-escaping-values
-    unknown-ref introduce-escaping-value
+    limbo introduce-escaping-value
     IH{ } clone literal-values set
     dup (propagate) ;
