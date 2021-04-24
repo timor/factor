@@ -1,7 +1,8 @@
 USING: accessors arrays classes.tuple.private compiler.test compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.slots hashtables kernel math math.intervals
-math.private namespaces sequences stack-checker.values tools.test words ;
+math.partial-dispatch math.private namespaces sequences stack-checker.values
+tools.test words ;
 IN: compiler.tree.propagation.slots.tests
 
 : indexize ( seq -- assoc )
@@ -222,7 +223,158 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
        }
        { origin HS{ T{ call-result { value 10139 } { word <tuple-boa> } } } }
      }
-} [ [ [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] final-info first bake-info ] with-rw ] unit-test
+} [ [ [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] final-info first ] with-rw ] unit-test
 
 TUPLE: box a ;
 C: <box> box
+
+! Keeping a reference outside the loop
+{
+    T{ box { a T{ baz { a 52 } { b 37 } } } }
+    T{ baz { a 52 } { b 37 } }
+}
+[ 10 [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times ] call ] unit-test
+
+{
+V{
+    T{ value-info-state
+        { class box }
+        { interval full-interval }
+        { slots
+            V{
+                f
+                T{ value-info-state
+                    { class baz }
+                    { interval full-interval }
+                    { slots
+                        V{
+                            f
+                            T{ value-info-state
+                                { class integer }
+                                { interval T{ interval { from { 42 t } } { to { 1/0. t } } } }
+                                { origin
+                                    HS{ T{ call-result { value 10239 } { word fixnum+ } } T{ call-result { value 10078 } { word + } } T{ literal-allocation { literal 42 } } }
+                                }
+                            }
+                            T{ value-info-state
+                                { class integer }
+                                { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
+                                { origin
+                                    HS{ T{ call-result { value 10243 } { word fixnum- } } T{ call-result { value 10094 } { word - } } T{ literal-allocation { literal 47 } } }
+                                }
+                            }
+                        }
+                    }
+                    { origin HS{ T{ call-result { value 10153 } { word <tuple-boa> } } } }
+                }
+            }
+        }
+        { origin HS{ T{ call-result { value 10010 } { word <tuple-boa> } } } }
+    }
+    T{ value-info-state
+        { class baz }
+        { interval full-interval }
+        { slots
+            V{
+                f
+                T{ value-info-state
+                    { class integer }
+                    { interval T{ interval { from { 42 t } } { to { 1/0. t } } } }
+                    { origin HS{ T{ call-result { value 10239 } { word fixnum+ } } T{ call-result { value 10078 } { word + } } T{ literal-allocation { literal 42 } } } }
+                }
+                T{ value-info-state
+                    { class integer }
+                    { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
+                    { origin HS{ T{ call-result { value 10243 } { word fixnum- } } T{ call-result { value 10094 } { word - } } T{ literal-allocation { literal 47 } } } }
+                }
+            }
+        }
+        { origin HS{ T{ call-result { value 10153 } { word <tuple-boa> } } } }
+    }
+}
+} [ [ [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times ] final-info ] with-rw ] unit-test
+
+
+! Modifying the slot after the loop
+
+{
+    T{ box { a T{ baz { a 30 } { b 37 } } } }
+    T{ baz { a 30 } { b 37 } }
+}
+[ 10 [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times [ 22 - ] change-a ] call ] unit-test
+
+{
+V{
+    T{ value-info-state
+        { class box }
+        { interval full-interval }
+        { slots
+            V{
+                f
+                T{ value-info-state
+                    { class baz }
+                    { interval full-interval }
+                    { slots
+                        V{
+                            f
+                            T{ value-info-state
+                                { class integer }
+                                { interval T{ interval { from { 20 t } } { to { 1/0. t } } } }
+                                { origin
+                                    HS{
+                                        T{ call-result { value 10345 } { word --integer-fixnum } }
+                                        T{ call-result { value 10125 } { word - } }
+                                        T{ call-result { value 10255 } { word fixnum+ } }
+                                        T{ literal-allocation { literal 42 } }
+                                        T{ call-result { value 10078 } { word + } }
+                                    }
+                                }
+                            }
+                            T{ value-info-state
+                                { class integer }
+                                { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
+                                { origin
+                                    HS{ T{ call-result { value 10259 } { word fixnum- } } T{ call-result { value 10094 } { word - } } T{ literal-allocation { literal 47 } } }
+                                }
+                            }
+                        }
+                    }
+                    { origin HS{ T{ call-result { value 10169 } { word <tuple-boa> } } } }
+                }
+            }
+        }
+        { origin HS{ T{ call-result { value 10010 } { word <tuple-boa> } } } }
+    }
+    T{ value-info-state
+        { class baz }
+        { interval full-interval }
+        { slots
+            V{
+                f
+                T{ value-info-state
+                    { class integer }
+                    { interval T{ interval { from { 20 t } } { to { 1/0. t } } } }
+                    { origin
+                        HS{
+                            T{ call-result { value 10345 } { word --integer-fixnum } }
+                            T{ call-result { value 10255 } { word fixnum+ } }
+                            T{ literal-allocation { literal 42 } }
+                            T{ call-result { value 10125 } { word - } }
+                            T{ call-result { value 10078 } { word + } }
+                        }
+                    }
+                }
+                T{ value-info-state
+                    { class integer }
+                    { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
+                    { origin HS{ T{ call-result { value 10259 } { word fixnum- } } T{ call-result { value 10094 } { word - } } T{ literal-allocation { literal 47 } } } }
+                }
+            }
+        }
+        { origin HS{ T{ call-result { value 10169 } { word <tuple-boa> } } } }
+    }
+}
+}
+[ [ [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times [ 22 - ] change-a ] final-info ] with-rw ] unit-test
+
+! TODO: combine with branches
