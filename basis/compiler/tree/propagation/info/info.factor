@@ -292,6 +292,7 @@ UNION: fixed-length array byte-array string ;
     ] if
     init-slots
     [ dup null? [ drop f ] when ] change-slot-refs
+    [ dup null? [ drop f ] when ] change-origin
     ; inline
 
 : <class/interval-info> ( class interval -- info )
@@ -615,6 +616,10 @@ DEFER: slots-escape
 : slots-escape ( value -- )
     value-info [ slots>> ] [ class>> ] bi
     [ [ 1 + ] dip read-only-slot? [ drop ] [ lazy-info-escapes ] if ] curry each-index ;
+
+: object-escapes ( value -- )
+    [ slots-escape ]
+    [ limbo 1register-origin ] bi ;
 
 ! ! If a value escapes, only it's memory contents can be changed outside.
 ! : register-escape ( value -- )

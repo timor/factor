@@ -170,9 +170,22 @@ C: <box> box
 ! Set-slot
 { T{ box f 43 } } [ box new 42 >>a box new over >>a a>> frob-box ] unit-test
 { 43 } [ box new 42 >>a box new over >>a a>> frob-box a>> ] unit-test
+{ f } [ [ [ box new 42 >>a box new over >>a a>> frob-box a>> ] final-literals first ] with-rw ] unit-test
 { t }
 [ [ box new 42 >>a box new over >>a a>> frob-box ] return-escapes? first ] unit-test
 
+
+! Store in two boxes, keep original and frob it, check if slots in boxes escape correctly
+{ 23 23 } [ foo new 22 >>b [ <box> ] [ <box> ] [ ] tri frob-foo [ a>> b>> ] bi@ ] unit-test
+
+{ V{ 22 22 } }
+[ [ foo new 22 >>b [ <box> ] [ <box> ] [ ] tri drop [ a>> b>> ] bi@ ] rw-literals ] unit-test
+
+{ V{ f f } }
+[ [ foo new 22 >>b [ <box> ] [ <box> ] [ ] tri frob-foo [ a>> b>> ] bi@ ] rw-literals ] unit-test
+
+! Ro-slots not affected
+{ 42 42 } [ foo new 22 >>b [ <box> ] [ <box> ] [ ] tri frob-foo [ a>> a>> ] bi@ ] unit-test
 
 ! TODO: Test with mutated invalid literal
 ! TODO: circular escapes, nested circular escapes

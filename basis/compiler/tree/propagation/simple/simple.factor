@@ -1,12 +1,11 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors alien.c-types arrays assocs classes classes.algebra
-classes.algebra.private classes.maybe classes.tuple.private
-combinators combinators.short-circuit compiler.tree
+classes.tuple.private combinators combinators.short-circuit compiler.tree
 compiler.tree.propagation.constraints compiler.tree.propagation.info
 compiler.tree.propagation.inlining compiler.tree.propagation.nodes
-compiler.tree.propagation.slots continuations fry kernel make
-sequences sets stack-checker.dependencies words ;
+compiler.tree.propagation.origins compiler.tree.propagation.slots continuations
+kernel sequences stack-checker.dependencies words ;
 IN: compiler.tree.propagation.simple
 
 M: #introduce propagate-before
@@ -140,13 +139,15 @@ M: #call annotate-node
     swap in-d>> refine-value-infos ;
 
 M: #call propagate-after
-    dup word>> word>input-infos propagate-input-infos ;
+    [ dup word>> word>input-infos propagate-input-infos ]
+    [ call-in-escapes ] bi ;
 
 : propagate-alien-invoke ( node -- )
     [ out-d>> ] [ params>> return>> ] bi
     [ drop ] [ c-type-class <class-info> swap first set-value-info ] if-void ;
 
 M: #alien-node propagate-before propagate-alien-invoke ;
+M: #alien-node propagate-after in-escapes ;
 
 M: #alien-callback propagate-around child>> (propagate) ;
 

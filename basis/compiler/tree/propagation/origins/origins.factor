@@ -9,14 +9,22 @@ IN: compiler.tree.propagation.origins
 M: #introduce propagate-origin
     out-d>> [ <input-ref> 1register-origin ] each-index ;
 
+! TODO: move input-escapes to propagate-after so annotation of input infos stays correct
 : in-escapes ( node -- )
-    in-d>> [ slots-escape ] each ;
+    in-d>> [ object-escapes ] each ;
 
 : out-escapes ( node -- )
     out-d>> [ limbo 1register-origin ] each ;
 
+GENERIC: call-in-escapes ( #call -- )
+M: #call call-in-escapes
+    in-escapes ;
+M: non-escaping-call call-in-escapes drop ;
+M: set-slot-call call-in-escapes drop ;
+
 M: #call propagate-origin
-    [ in-escapes ] [ out-escapes ] bi ;
+    out-escapes ;
+    ! [ in-escapes ] [ out-escapes ] bi ;
 
 
 M: flushable-call propagate-origin
