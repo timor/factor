@@ -52,9 +52,7 @@ C: <box> box
 ! Nested non-escaping
 { 43 } [ 42 <box> [ <box> a>> [ 1 + ] change-a drop ] keep a>> ] unit-test
 { f } [ [ 42 <box> [ <box> a>> [ 1 + ] change-a drop ] keep a>> ] final-literals first ] unit-test
-! FIXME
-! { 43 }
-{ 42 }
+{ 43 }
 [ [ 42 <box> [ <box> a>> [ 1 + ] change-a drop ] keep a>> ] rw-literals first ] unit-test
 
 ! Helper for checking that slot-nums are handled correctly
@@ -88,3 +86,5 @@ TUPLE: box2 b a ;
 
 ! Same, but change middle reference
 { 43 43 43 } [ 42 <box> dup [ <box> ] [ <box> <box> ] bi over a>> [ 1 + ] change-a drop [ a>> ] [ a>> a>> ] [ a>> a>> a>> ] tri* ] unit-test
+
+! TODO: branches

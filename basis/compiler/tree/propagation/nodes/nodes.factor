@@ -29,7 +29,10 @@ GENERIC: propagate-origin ( node -- )
     [ dup value-info ] H{ } map>assoc ;
 
 : (annotate-node) ( node values -- )
-    extract-value-info >>info drop ; inline
+    extract-value-info [
+        propagate-rw-slots? [ bake-info ] when
+    ] assoc-map
+    >>info drop ; inline
 
 M: node propagate-before drop ;
 

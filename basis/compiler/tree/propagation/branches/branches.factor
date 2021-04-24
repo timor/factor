@@ -53,7 +53,8 @@ SYMBOL: infer-children-data
 
 : no-value-info ( -- )
     value-infos off
-    constraints off ;
+    constraints off
+    inner-values off ;
 
 DEFER: collect-variables
 
@@ -101,18 +102,21 @@ DEFER: collect-variables
 ! TODO: escape merging:
 ! Should actually be enough to equate the defined-by>> refs on branch return, then call values escape
 ! TODO: handle upwards merging correctly for terminating branches
-: branch-escaping-values ( infer-children-data -- )
-    [ [ inner-escaping-values of [ value-escapes ] each ]
-      [ inner-equal-values of [ equate-all-values ] each ] bi
-    ] each ;
+! : branch-escaping-values ( infer-children-data -- )
+!     [ [ inner-escaping-values of [ value-escapes ] each ]
+!       [ inner-equal-values of [ equate-all-values ] each ] bi
+!     ] each ;
 
 ! NOTE: lifting before setting phi-in is only necessary if recomputation needs
 ! to take into account branch masking.
 : merge-value-infos ( infos outputs -- )
     propagate-rw-slots? [
         infer-children-data get
-        [ lift-inner-values ]
-        [ branch-escaping-values ] bi
+        ! [
+            ! lift-inner-values
+        drop
+        ! ]
+        ! [ branch-escaping-values ] bi
     ] when
     [ [ value-infos-union ] map ] dip set-value-infos ;
 

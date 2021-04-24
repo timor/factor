@@ -10,7 +10,7 @@ M: #introduce propagate-origin
     out-d>> [ <input-ref> 1register-origin ] each-index ;
 
 : in-escapes ( node -- )
-    in-d>> [ limbo 1register-origin ] each ;
+    in-d>> [ slots-escape ] each ;
 
 : out-escapes ( node -- )
     out-d>> [ limbo 1register-origin ] each ;
@@ -18,10 +18,12 @@ M: #introduce propagate-origin
 M: #call propagate-origin
     [ in-escapes ] [ out-escapes ] bi ;
 
+
 M: flushable-call propagate-origin
-    out-d>> [ dup <local-allocation> 1register-origin ] each ;
+    [ out-d>> ] [ word>> ] bi '[ dup _ <call-result> 1register-origin ] each ;
 
 M: inlined-call propagate-origin drop ;
+M: set-slot-call propagate-origin drop ;
 
 : register-slot-ref ( #call -- )
     [ out-d>> first ]
@@ -42,7 +44,7 @@ M: literal-slot-call propagate-origin
 !     out-d>> first dup <local-allocation> 1register-origin ;
 
 M: #alien-node propagate-origin
-    out-d>> [ limbo 1register-origin ] each ;
+    [ in-escapes ] [ out-escapes ] bi ;
 
 M: #push propagate-origin
     [ out-d>> first ] [ literal>> ] bi <literal-allocation> 1register-origin ;

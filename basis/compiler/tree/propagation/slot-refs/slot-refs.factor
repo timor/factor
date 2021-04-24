@@ -5,6 +5,7 @@ compiler.tree.propagation.nodes compiler.tree.propagation.reflinks kernel math
 sequences sets sets.extras ;
 
 IN: compiler.tree.propagation.slot-refs
+FROM: compiler.tree.propagation.info => value-escapes ;
 
 ! ! Find ourselves in other tuples slots.
 ! ! Return whether we are still referenced, and check for a strong definition
@@ -28,6 +29,8 @@ IN: compiler.tree.propagation.slot-refs
 !         [ [ input-ref? ] any? ]
 !         [ [ value-escapes? ] any? ] } 1|| ;
 
+: value-info-escapes? ( info -- ? )
+    origin>> limbo swap in? ;
 
 ! DEFER: notice-slot-changed
 ! : notice-slot-ref-changed ( slot-ref -- )
@@ -244,18 +247,6 @@ SINGLETONS: strong weak ;
     ! Hop up and above
     to-update members [ notify-slot-change ] each ;
 
-! TODO: back-propagation
-! set-slot ( value obj n -- )
-: propagate-tuple-set-slot-infos ( #call -- )
-    in-d>> first3
-    [ value-info ] [ resolve-copy ] [ value-info literal>> ] tri*
-    make-tuple-slot-ref [ strong-update ] [ notify-slot-change ] bi ;
-
-M: tuple-set-slot-call propagate-before
-    [ call-next-method ] keep
-    propagate-rw-slots?
-    [ propagate-tuple-set-slot-infos ] [ drop ] if ;
-
 
 ! Inform all other containers holding this reference that we also hold it now
 : propagate-tuple-boa-slot-refs ( #call -- )
@@ -263,10 +254,10 @@ M: tuple-set-slot-call propagate-before
     [ [ slot-refs>> members [ dup mutable? [ notify-slot-change ] [ drop ] if ]
         each ] when* ] each ;
 
-M: tuple-boa-call propagate-before
-    [ call-next-method ] keep
-    propagate-rw-slots?
-    [ propagate-tuple-boa-slot-refs ] [ drop ] if ;
+! M: tuple-boa-call propagate-before
+!     [ call-next-method ] keep
+!     propagate-rw-slots?
+!     [ propagate-tuple-boa-slot-refs ] [ drop ] if ;
 
 ! TODO: deliteralize and handle pushes
 

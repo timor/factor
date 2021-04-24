@@ -8,6 +8,8 @@ kernel locals math math.intervals namespaces sequences ;
 FROM: sequences.private => array-capacity ;
 IN: compiler.tree.propagation.recursive
 
+! For #call-recursive: infos1: latest-input-infos ( in-d in value-infos ),
+! infos2: recursive-phi-infos ( out-d in infos>> of #enter-recursive  )
 : check-fixed-point ( node infos1 infos2 -- )
     [ value-info<= ] 2all?
     [ drop ] [ label>> f >>fixed-point drop ] if ;
@@ -15,6 +17,9 @@ IN: compiler.tree.propagation.recursive
 : latest-input-infos ( node -- infos )
     in-d>> [ value-info ] map ;
 
+! Pulls up info from all call sites to set up comparison with the
+! beginning-of-iteration stack state, which is stored on the input infos of the
+! #enter-recursive loop header.
 : recursive-stacks ( #enter-recursive -- stacks initial )
     [ label>> calls>> [ node>> node-input-infos ] map flip ]
     [ latest-input-infos ] bi ;
@@ -39,6 +44,22 @@ IN: compiler.tree.propagation.recursive
         [ class class-interval ]
     } cond ;
 
+! NOTE: This code would actually modify the info state of the lazy value.
+! Doesn't seem to be the right thing to do though.
+! DEFER: generalize-counter
+! : generalize-lazy-counter ( slot-info' lazy-initial -- )
+!     break
+!     [ lazy-info>info generalize-counter ]
+!     [ values>> [ set-value-info ] with each  ] bi ;
+
+! ! In case we are modifying tuples with lazy slots, we need to generalize the virtuals
+! : generalize-counter-slot ( slot-info' initial -- slot-info )
+!     dup lazy-info? [
+!         [ generalize-lazy-counter ] keep
+!     ] [
+!         generalize-counter
+!     ] if ;
+
 : generalize-counter ( info' initial -- info )
     2dup [ not ] either? [ drop ] [
         2dup [ class>> null-class? ] either? [ drop ] [
@@ -54,6 +75,10 @@ IN: compiler.tree.propagation.recursive
         ] if
     ] if ;
 
+! Takes the recursive call site stack states and the iteration beginning state.
+! The call-site states are all merged into a single virtual call site, and then
+! extended using the entry state.  The result of that is then stored in the loop
+! header out-d value info states and at the out-d infos of the header node.
 : unify-recursive-stacks ( stacks initial -- infos )
     over empty? [ nip ] [
         [
@@ -67,9 +92,12 @@ IN: compiler.tree.propagation.recursive
     [ recursive-stacks unify-recursive-stacks ] keep
     out-d>> set-value-infos ;
 
+SYMBOL: sentinel
 M: #recursive propagate-around ( #recursive -- )
+    0 sentinel set-global
     constraints [ H{ } clone suffix ] change
     [
+        sentinel counter 100 > [ "recursion limit" throw ] when
         constraints [ but-last H{ } clone suffix ] change
 
         child>>

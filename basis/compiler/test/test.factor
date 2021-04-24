@@ -81,6 +81,11 @@ IN: compiler.test
     dup check-nodes
     last node-input-infos ;
 
+! Don't clean up, also retrieve the value info from the state, not the annotation
+: final-value-info ( quot -- seq )
+    propagated-tree
+    last in-d>> [ value-info ] map ;
+
 : final-classes ( quot -- seq )
     final-info [ class>> ] map ;
 
@@ -93,12 +98,13 @@ IN: compiler.test
     init-escaping-values ;
 
 : with-values ( quot -- )
-    [ init-values
+    [
+      10000 debug-value-counter set-global
+      debug-counter on
+      init-values
     ] prepose with-scope ; inline
 
 : with-rw ( quot -- )
     propagate-rw-slots [
-        10000 debug-value-counter set-global
-        debug-counter on
         with-values
     ] with-variable-on ; inline

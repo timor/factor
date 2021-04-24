@@ -1,34 +1,30 @@
-USING: accessors arrays classes.algebra combinators compiler.tree
-compiler.tree.propagation.info compiler.tree.propagation.nodes kernel math
-sequences slots.private vectors ;
+USING: accessors classes compiler.tree.propagation.info
+compiler.tree.propagation.nodes compiler.tree.propagation.reflinks kernel math
+sequences sets ;
 
 IN: compiler.tree.propagation.set-slots
 
 ! * Set slot propagation
 
-! PREDICATE: set-slot-call < #call word>> \ set-slot eq? ;
-! PREDICATE: literal-set-slot-call < set-slot-call in-d>> third value-info literal?>> ;
-! PREDICATE: tuple-set-slot-call < literal-set-slot-call in-d>> second value-info class>> tuple class<= ;
+! set-slot ( value obj n -- )
+: propagate-tuple-set-slot-infos ( #call -- )
+    in-d>> first3
+    [let :> ( value-val obj-val n-val )
+     value-val value-info :> new-info
+     n-val value-info literal>> :> slot-num
+     obj-val value-info slots>> slot-num 1 - swap ?nth :> slot-info
+     slot-info [ lazy-info check-instance
+     values>> members :> virtual-values
+     virtual-values length 1 = [
+         ! Strong update
+         new-info virtual-values first set-inner-value-info
+     ] [
+         ! Weak update
+         virtual-values [ new-info swap extend-value-info ] each
+     ] if ] when*
+    ] ;
 
-! ! ! set-slot ( value obj n -- )
-! ! : propagate-set-slot-call ( value-val obj-val n-val -- info )
-
-! ! TBR
-! : ensure-slot-vector ( n seq/f -- n seq )
-!     >vector over 1 + f pad-tail ; inline
-
-! TODO: maybe delegate info creation/manipulation to info.factor?
-! M: tuple-set-slot-call propagate-before ( node -- )
-!     [ call-next-method ] keep
-!     propagate-rw-slots?
-!     ! f
-!     [ {
-!             ! [ in-d>> first <1slot-ref> ]
-!             [ in-d>> first value-info ]
-!             [ in-d>> third value-info literal>> 1 - ]
-!             [ in-d>> second value-info clone [ V{ } or clone
-!                                                ensure-slot-vector
-!                                                [ set-nth ] keep ] change-slots ]
-!             [ in-d>> second break refine-value-info ]
-!         } cleave
-!     ] [ drop ] if ;
+M: tuple-set-slot-call propagate-before
+    [ call-next-method ] keep
+    propagate-rw-slots?
+    [ propagate-tuple-set-slot-infos ] [ drop ] if ;

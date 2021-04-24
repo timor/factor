@@ -48,8 +48,9 @@ GENERIC: bake-info* ( info -- info )
 : bake-info ( info/f -- info/f )
     dup [ bake-info* ] when ;
 M: value-info-state bake-info*
-    clone f >>slot-refs f >>origin
+    clone
     [ [ bake-info ] map ] change-slots ;
+
 M: lazy-info bake-info*
     lazy-info>info bake-info ;
 
@@ -142,10 +143,7 @@ M: tuple-slot-ref mutable? drop t ;
 M: tuple-slot-ref container-info object-value>> value-info ;
 
 TUPLE: ro-tuple-slot-ref < tuple-slot-ref ;
-! NOTE: this is mutable because there can be reference updates!
-! Regular code will never attempt to modify a read-only slot
-M: ro-tuple-slot-ref mutable? drop t ;
-M: ro-tuple-slot-ref weak-update 2drop ;
+M: ro-tuple-slot-ref mutable? drop f ;
 
 TUPLE: input-ref { index read-only } ;
 : <input-ref> ( index -- obj )
@@ -160,6 +158,9 @@ C: <literal-allocation> literal-allocation
 
 TUPLE: local-allocation value ;
 C: <local-allocation> local-allocation
+
+TUPLE: call-result < local-allocation word ;
+C: <call-result> call-result
 
 ! Literalization
 
@@ -595,9 +596,30 @@ DEFER: extend-value-info
     dup record-allocation
     1array >hash-set register-origin ;
 
-: register-escape ( value -- )
+! TODO Handle recursion
+DEFER: slots-escape
+
+! Non-recursive
+: value-escapes ( value -- )
     object-info clone HS{ limbo } >>origin
     swap extend-value-info ;
+
+! Recursive
+: lazy-info-escapes ( value-info -- )
+    dup lazy-info? [ values>> [
+                         [ slots-escape ]
+                         [ value-escapes ] bi
+                     ]
+                     each ] [ drop ] if ;
+
+: slots-escape ( value -- )
+    value-info [ slots>> ] [ class>> ] bi
+    [ [ 1 + ] dip read-only-slot? [ drop ] [ lazy-info-escapes ] if ] curry each-index ;
+
+! ! If a value escapes, only it's memory contents can be changed outside.
+! : register-escape ( value -- )
+!     [ value-info slots>> [ lazy-info-escapes ] each ]
+!     dup slots-escape ;
 
 ! :: set-tuple-slot-ref ( defining-value defined-object slot-num -- )
 !     defined-object resolve-copy :> obj-val

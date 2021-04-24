@@ -1,7 +1,7 @@
 USING: accessors arrays classes.tuple.private compiler.test compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
-compiler.tree.propagation.slots hashtables kernel math math.intervals namespaces
-quotations sequences stack-checker.values tools.test vectors words ;
+compiler.tree.propagation.slots hashtables kernel math math.intervals
+math.private namespaces sequences stack-checker.values tools.test words ;
 IN: compiler.tree.propagation.slots.tests
 
 : indexize ( seq -- assoc )
@@ -211,18 +211,18 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
              T{ value-info-state
                 { class integer }
                 { interval T{ interval { from { 42 t } } { to { 1/0. t } } } }
-                { slot-refs
-                  HS{ T{ tuple-slot-ref { object-value 10073 } { slot-num 2 } } T{ tuple-slot-ref { object-value 10139 } { slot-num 2 } } }
-                }
+                { origin HS{ T{ call-result { value 10067 } { word + } } T{ literal-allocation { literal 42 } } T{ call-result { value 10219 } { word fixnum+ } } } }
               }
              T{ value-info-state
                 { class integer }
                 { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
-                { slot-refs
-                  HS{ T{ tuple-slot-ref { object-value 10089 } { slot-num 3 } } T{ tuple-slot-ref { object-value 10139 } { slot-num 3 } } }
-                }
+                { origin HS{ T{ call-result { value 10083 } { word - } } T{ call-result { value 10223 } { word fixnum- } } T{ literal-allocation { literal 47 } } } }
               }
          }
        }
+       { origin HS{ T{ call-result { value 10139 } { word <tuple-boa> } } } }
      }
-} [ [ [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] final-info first ] with-rw ] unit-test
+} [ [ [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] final-info first bake-info ] with-rw ] unit-test
+
+TUPLE: box a ;
+C: <box> box
