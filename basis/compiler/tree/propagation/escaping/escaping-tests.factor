@@ -1,4 +1,5 @@
 USING: accessors arrays compiler.test compiler.tree.propagation.escaping
+classes.tuple.private
 compiler.tree.propagation.info compiler.tree.propagation.slot-refs kernel
 kernel.private literals math math.intervals namespaces sequences tools.test
 vectors ;
@@ -132,14 +133,79 @@ C: <foo> foo
 { V{ 42 47 } } [ [ [ 42 47 <foo> [ poke drop ] keep foo-slots ] final-literals ] with-rw ] unit-test
 
 ! Escaping
-! FIXME: invalidation
+TUPLE: box a ;
+C: <box> box
+
+TUPLE: inner a ;
+C: <inner> inner
+{
+V{
+    T{ value-info-state
+        { class inner }
+        { interval full-interval }
+        { slots V{ f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
+        { origin HS{ T{ call-result { value 10004 } { word <tuple-boa> } } } }
+    }
+    T{ value-info-state
+        { class box }
+        { interval full-interval }
+        { slots
+            V{
+                f
+                T{ value-info-state
+                    { class inner }
+                    { interval full-interval }
+                    { slots V{ f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
+                    { origin HS{ T{ call-result { value 10004 } { word <tuple-boa> } } } }
+                }
+            }
+        }
+        { origin HS{ T{ call-result { value 10070 } { word <tuple-boa> } } } }
+    }
+    T{ value-info-state
+        { class inner }
+        { interval full-interval }
+        { slots V{ f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
+        { origin HS{ T{ call-result { value 10004 } { word <tuple-boa> } } T{ tuple-slot-ref { object-value 10070 } { slot-num 2 } } } }
+    }
+    T{ value-info-state
+        { class box }
+        { interval full-interval }
+        { slots
+            V{
+                f
+                T{ value-info-state
+                    { class inner }
+                    { interval full-interval }
+                    { slots V{ f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
+                    { origin HS{ T{ call-result { value 10004 } { word <tuple-boa> } } T{ tuple-slot-ref { object-value 10070 } { slot-num 2 } } } }
+                }
+            }
+        }
+        { origin HS{ T{ call-result { value 10117 } { word <tuple-boa> } } } }
+    }
+    T{ value-info-state
+        { class inner }
+        { interval full-interval }
+        { slots V{ f T{ value-info-state { class object } { interval full-interval } { origin HS{ limbo } } } } }
+        { origin
+            HS{
+                T{ call-result { value 10004 } { word <tuple-boa> } }
+                T{ tuple-slot-ref { object-value 10070 } { slot-num 2 } }
+                T{ tuple-slot-ref { object-value 10117 } { slot-num 2 } }
+            }
+        }
+    }
+}
+} [ [ [ 42 <inner> box new over >>a dup a>> box new over >>a dup a>> [ frob-box ] keep ] final-info ] with-rw ] unit-test
+{ V{ f f f f f } } [ [ [ 42 <inner> box new over >>a dup a>> box new over >>a dup a>> [ frob-box ] keep [ a>> ] 5 napply ] final-literals ] with-rw ] unit-test
+
+
 { T{ foo f 42 48 } } [ 42 47 <foo> [ frob-foo ] keep ] unit-test
 { 42 48 } [ 42 47 <foo> [ frob-foo ] keep [ a>> ] [ b>> ] bi ] unit-test
 { V{ 42 f } } [ [ [ 42 47 <foo> [ frob-foo ] keep [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
 { V{ 42 f } } [ [ [ 42 47 <foo> [ frob-foo ] keep foo-slots ] final-literals ] with-rw ] unit-test
 
-TUPLE: box a ;
-C: <box> box
 ! Nested non-escaping
 { f } [ [ 42 <box> <box> a>> a>> ] final-literals first ] unit-test
 { 42 } [ [ 42 <box> <box> a>> a>> ] rw-literals first ] unit-test
@@ -148,12 +214,18 @@ C: <box> box
 
 ! Nested escape
 
+: mangle ( x -- ) dup a>> 999 swap a<< 888 swap a<< ;
+! Parent escapes, nested structure is changed
+{ T{ box f 888 } T{ inner f 999 } } [ 42 <inner> [ <box> dup mangle ] [ ] bi ] unit-test
+
+! FIXME
+{ t t } [ [ 42 <inner> [ <box> dup mangle ] [ ] bi ] return-escapes? first2 ] unit-test
+{ f } [ [ 42 <inner> [ <box> mangle ] [ ] bi a>> ] rw-literals first ] unit-test
+
 ! Boa call
 { T{ box f 43 } } [ 42 <box> dup <box> a>> frob-box ] unit-test
 { 43  } [ 42 <box> dup <box> a>> frob-box a>> ] unit-test
-! FIXME
-! { t }
-{ f }
+{ t }
 [ [ 42 <box> dup <box> a>> frob-box ] return-escapes? first ] unit-test
 
 ! Literals
@@ -168,11 +240,15 @@ C: <box> box
 
 
 ! Set-slot
+
 { T{ box f 43 } } [ box new 42 >>a box new over >>a a>> frob-box ] unit-test
 { 43 } [ box new 42 >>a box new over >>a a>> frob-box a>> ] unit-test
 { f } [ [ [ box new 42 >>a box new over >>a a>> frob-box a>> ] final-literals first ] with-rw ] unit-test
-{ t }
-[ [ box new 42 >>a box new over >>a a>> frob-box ] return-escapes? first ] unit-test
+{ t } [ box new 42 >>a box new over >>a a>> [ frob-box ] keep eq? ] unit-test
+! FIXME
+{ t t } [ [ box new 42 >>a box new over >>a a>> [ frob-box ] keep ] return-escapes? first2 ] unit-test
+! FIXME
+{ t } [ [ box new 42 >>a box new over >>a a>> frob-box ] return-escapes? first ] unit-test
 
 
 ! Store in two boxes, keep original and frob it, check if slots in boxes escape correctly

@@ -97,6 +97,7 @@ M: #recursive propagate-around ( #recursive -- )
     0 sentinel set-global
     constraints [ H{ } clone suffix ] change
     [
+        bake-lazy-infos on
         sentinel counter 100 > [ "recursion limit" throw ] when
         constraints [ but-last H{ } clone suffix ] change
 

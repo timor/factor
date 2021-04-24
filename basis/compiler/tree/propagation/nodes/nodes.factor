@@ -2,6 +2,7 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors assocs compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
+namespaces
 combinators
 kernel sequences ;
 IN: compiler.tree.propagation.nodes
@@ -28,9 +29,13 @@ GENERIC: propagate-origin ( node -- )
 : extract-value-info ( values -- assoc )
     [ dup value-info ] H{ } map>assoc ;
 
+SYMBOL: bake-lazy-infos
+
 : (annotate-node) ( node values -- )
     extract-value-info [
-        propagate-rw-slots? [ bake-info ] when
+        propagate-rw-slots?
+        bake-lazy-infos get and
+        [ bake-info ] when
     ] assoc-map
     >>info drop ; inline
 

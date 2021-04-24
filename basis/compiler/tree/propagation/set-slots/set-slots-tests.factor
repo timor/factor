@@ -1,5 +1,5 @@
-USING: accessors compiler.test
-compiler.tree.propagation.info kernel math sequences tools.test ;
+USING: accessors compiler.test compiler.tree.propagation.info generalizations
+kernel math sequences tools.test ;
 IN: compiler.tree.propagation.set-slots.tests
 
 TUPLE: foo { a read-only } b ;
@@ -14,8 +14,8 @@ SLOT: a
 { V{ 42 f } } [ [ bar new 47 >>b [ a>> ] [ b>> ] bi ] final-literals ] unit-test
 ! New behavior
 { V{ 42 47 } } [ [ [ bar new 47 >>b [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
-! Invalid write
-{ V{ 42 f } } [ [ bar new 66 >>a 47 >>b [ a>> ] [ b>> ] bi ] final-literals ] unit-test
+! ! Invalid write
+! { V{ f f } } [ [ bar new 66 >>a 47 >>b [ a>> ] [ b>> ] bi ] final-literals ] unit-test
 
 
 ! Basic branches
@@ -86,5 +86,13 @@ TUPLE: box2 b a ;
 
 ! Same, but change middle reference
 { 43 43 43 } [ 42 <box> dup [ <box> ] [ <box> <box> ] bi over a>> [ 1 + ] change-a drop [ a>> ] [ a>> a>> ] [ a>> a>> a>> ] tri* ] unit-test
+
+TUPLE: inner a ;
+C: <inner> inner
+! Transfer with slot retrieval
+{ T{ inner f 43 } T{ box f T{ inner f 43 } } T{ inner f 43 } T{ box f T{ inner f 43 } } T{ inner f 43 } }
+[ 42 <inner> box new over >>a dup a>> box new over >>a dup a>> [ 1 + ] change-a ] unit-test
+
+{ V{ 43 f 43 f 43 } } [ [ [ 42 <inner> box new over >>a dup a>> box new over >>a dup a>> [ 1 + ] change-a [ a>> ] 5 napply ] final-literals ] with-rw ] unit-test
 
 ! TODO: branches

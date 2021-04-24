@@ -6,6 +6,9 @@ IN: compiler.tree.propagation.set-slots
 
 ! * Set slot propagation
 
+
+! Fetch the correct slot from obj's info state.  We expect this to be a lazy
+! slot entry.
 ! set-slot ( value obj n -- )
 : propagate-tuple-set-slot-infos ( #call -- )
     in-d>> first3

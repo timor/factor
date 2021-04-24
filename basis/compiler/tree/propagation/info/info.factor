@@ -5,6 +5,7 @@ classes.singleton classes.tuple classes.tuple.private combinators
 combinators.short-circuit compiler.tree.propagation.copy compiler.utilities
 compiler.tree.propagation.escaping
 delegate kernel layouts math math.intervals namespaces sequences
+graphs
 hash-sets
 sequences.private sets stack-checker.values strings words ;
 IN: compiler.tree.propagation.info
@@ -152,6 +153,7 @@ M: input-ref container-info drop null-info ;
 
 SINGLETON: limbo
 M: limbo container-info drop null-info ;
+CONSTANT: pointer-info T{ value-info-state { class object } { interval full-interval } { origin HS{ limbo } } }
 
 TUPLE: literal-allocation literal ;
 C: <literal-allocation> literal-allocation
@@ -597,54 +599,34 @@ DEFER: extend-value-info
     dup record-allocation
     1array >hash-set register-origin ;
 
-! TODO Handle recursion
-DEFER: slots-escape
+! When escaping, the top-level object's class is retained.  But all contained
+! nested objects are completely invalidated.  If there is a circular reference,
+! the top-level object should also appear in the nested closure, so it will
+! escape as well.
 
-! Non-recursive
-: value-escapes ( value -- )
-    object-info clone HS{ limbo } >>origin
-    swap extend-value-info ;
+: nested-values ( obj -- values )
+    value-info slots>> [ dup lazy-info? [ values>> ] [ drop f ] if ] gather ;
 
-! Recursive
-: lazy-info-escapes ( value-info -- )
-    dup lazy-info? [ values>> [
-                         [ slots-escape ]
-                         [ value-escapes ] bi
-                     ]
-                     each ] [ drop ] if ;
+: escape-closure ( value -- values )
+    [ nested-values ] closure members ;
 
-: slots-escape ( value -- )
-    value-info [ slots>> ] [ class>> ] bi
-    [ [ 1 + ] dip read-only-slot? [ drop ] [ lazy-info-escapes ] if ] curry each-index ;
+: escaping-slot-objects ( obj-value -- values )
+    nested-values [ escape-closure ] gather ;
+
+! Full invalidation
+: invalidate-object ( value -- )
+    pointer-info swap extend-value-info ;
+
+: invalidate-slots ( value -- )
+    ! [ limbo 1register-origin ] ! Only pointers can escape.  The pointers are the slot objects, not the container
+    [
+        value-info clone
+        [ [ dup [ drop pointer-info info>values <lazy-info> ] when ] map ] change-slots
+    ] [ set-value-info ] bi ;
 
 : object-escapes ( value -- )
-    [ slots-escape ]
-    [ limbo 1register-origin ] bi ;
-
-! ! If a value escapes, only it's memory contents can be changed outside.
-! : register-escape ( value -- )
-!     [ value-info slots>> [ lazy-info-escapes ] each ]
-!     dup slots-escape ;
-
-! :: set-tuple-slot-ref ( defining-value defined-object slot-num -- )
-!     defined-object resolve-copy :> obj-val
-!     obj-val slot-num make-tuple-slot-ref :> new-ref
-!     new-ref <slot-ref-info> defining-value refine-inner-value-info
-!     defined-object value-info
-!     ! FIXME: this would be an application for non-mutable sequences
-!     clone dup slots>> slot-num swap ensure-slots [ 1 - ] dip
-!     defining-value value-info swap pick set-nth >>slots
-!     defined-object set-inner-value-info ;
-
-    ! defining-object resolve-copy :> obj-val
-    ! obj-val slot-num make-tuple-slot-ref :> new-ref
-    ! obj-val value-info class>>
-    ! new-ref <slot-ref-info> slot-num <slot-info-for-class> obj-val extend-value-info
-    ! ;
-    ! defined-value value-info :> val-info
-    ! val-info [ HS{ } or clone ] change-slot-refs
-    !  new-ref over slot-refs>> adjoin
-    ! [ defined-value set-inner-value-info ] keep ;
+    [ escaping-slot-objects [ invalidate-object ] each ]
+    [ invalidate-slots ] bi ;
 
 
 : read-only-slot? ( n class -- ? )
@@ -652,30 +634,6 @@ DEFER: slots-escape
     [ all-slots [ offset>> = ] with find nip
       dup [ read-only>> ] when ]
     [ 2drop f ] if ;
-
-! TODO: This destroys reference info.  Ensure that that is not a problem if this
-! is actually used...
-: invalidate-slot ( info n class -- info )
-    read-only-slot?
-    [ drop object-info ] unless ;
-
-! Non-recursive
-! TODO Maybe test here for slots before doing that, or only do it if it is an allocation?
-: <invalidated-slots-info> ( info -- info )
-    clone dup class>> '[
-        [ 1 + over
-          [ _ invalidate-slot ]
-          [ 2drop f ] if
-        ] map-index
-    ] change-slots
-    f >>literal?
-    f >>interval
-    init-value-info
-    ;
-
-: invalidate-slots-info ( value -- )
-    [ value-info <invalidated-slots-info> ]
-    [ set-inner-value-info ] bi ;
 
 ! Intersection semantics
 : refine-value-info ( info value -- )
