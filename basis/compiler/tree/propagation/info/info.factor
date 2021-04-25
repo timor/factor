@@ -42,8 +42,12 @@ DEFER: set-inner-value-info
 
 TUPLE: lazy-info values ;
 C: <lazy-info> lazy-info
+TUPLE: lazy-ro-info < lazy-info ;
+
+C: <lazy-ro-info> lazy-ro-info
 : lazy-info>info ( obj -- info )
     values>> [ value-info ] [ value-info-union ] map-reduce ;
+
 GENERIC: bake-info* ( info -- info )
 ! TODO: check circularity
 : bake-info ( info/f -- info/f )
@@ -266,15 +270,26 @@ UNION: fixed-length array byte-array string ;
     dup [ interval>> full-interval or ] [ class>> ] bi wrap-interval >>interval
     dup class>> integer class<= [ [ integral-closure ] change-interval ] when ; inline
 
-: init-slots ( info -- info )
-    propagate-rw-slots?
-    [ [ [ dup [ info>values <lazy-info> ] when ] map ] change-slots ] when
-    ; inline
+DEFER: read-only-slot?
 
-    ! [ [ [ dup object-info = [ drop f ] when ] map ]
-    !   [ f ] if*
-    !   dup [ not ] all? [ drop f ] when
-    ! ] change-slots ; inline
+: slot-info>lazy-info ( info/f i class -- lazy-info/f )
+    pick [
+        [ info>values ] 2dip
+        [ 1 + ] dip
+        read-only-slot?
+        [ <lazy-ro-info> ] [ <lazy-info> ] if
+    ]
+    [ 3drop f ] if ;
+! FIXME inline
+
+: init-slots ( info -- info )
+    propagate-rw-slots? [
+        dup class>>
+        '[ [ _ slot-info>lazy-info ] map-index
+           [ f ] when-empty
+         ] change-slots
+    ] when
+    ; inline
 
 ! TODO: maybe slot references if something was inferred literal?
 : init-value-info ( info -- info )
@@ -366,7 +381,8 @@ DEFER: (value-info-intersect)
         [ (value-info-intersect) ]
     } cond ;
 
-! If f, then f
+! NOTE: Union semantics! if one info has no info (f), the other info's slots are
+! used.  I.e. the slots slot = f is the same as all object-info.
 : intersect-slots ( info1 info2 -- slots )
     [ slots>> ] bi@ {
         { [ dup not ] [ drop ] }
@@ -565,7 +581,6 @@ M: tuple-slot-ref strong-update
 
 DEFER: refine-value-info
 
-DEFER: read-only-slot?
 : make-tuple-slot-ref ( object-value slot-num -- slot-ref )
     2dup swap value-info class>> read-only-slot?
     [ ro-tuple-slot-ref boa ]
@@ -599,35 +614,41 @@ DEFER: extend-value-info
     dup record-allocation
     1array >hash-set register-origin ;
 
-! When escaping, the top-level object's class is retained.  But all contained
-! nested objects are completely invalidated.  If there is a circular reference,
-! the top-level object should also appear in the nested closure, so it will
-! escape as well.
+! Escaping: A value that has slots has unknown slots after escaping.
+! Slots contain virtual values.  Virtual values represent mutable memory
+! locations.  If a virtual escapes, its info and its slots are unknown
+! afterwards.
+! So: If obj escapes
+! - collect all reachable virtuals
+! - set all virtuals to object-info, UNLESS this virtual was allocated in a
+! read-only location.
 
-: nested-values ( obj -- values )
-    value-info slots>> [ dup lazy-info? [ values>> ] [ drop f ] if ] gather ;
+GENERIC: nested-values* ( info -- lazy-infos )
+M: f nested-values* drop f ;
+M: value-info-state nested-values*
+    slots>> ;
+M: lazy-info nested-values*
+    values>> [ value-info nested-values* ] gather ;
 
-: escape-closure ( value -- values )
-    [ nested-values ] closure members ;
+: escape-closure ( value -- virtuals )
+    [ nested-values* ] closure members ;
 
-: escaping-slot-objects ( obj-value -- values )
-    nested-values [ escape-closure ] gather ;
+: slot-escape-closure ( value -- virtuals )
+    value-info slots>> [ escape-closure ] gather ;
 
 ! Full invalidation
 : invalidate-object ( value -- )
     pointer-info swap extend-value-info ;
 
-: invalidate-slots ( value -- )
-    ! [ limbo 1register-origin ] ! Only pointers can escape.  The pointers are the slot objects, not the container
-    [
-        value-info clone
-        [ [ dup [ drop pointer-info info>values <lazy-info> ] when ] map ] change-slots
-    ] [ set-value-info ] bi ;
+: invalidate-virtual ( value-info -- )
+    dup lazy-info?
+    [ dup lazy-ro-info?
+      [ drop ]
+      [ values>> [ invalidate-object ] each ] if
+    ] [ drop ] if ;
 
 : object-escapes ( value -- )
-    [ escaping-slot-objects [ invalidate-object ] each ]
-    [ invalidate-slots ] bi ;
-
+    slot-escape-closure [ invalidate-virtual ] each ;
 
 : read-only-slot? ( n class -- ? )
     dup class?

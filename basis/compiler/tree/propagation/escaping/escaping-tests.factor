@@ -142,19 +142,19 @@ V{
     T{ value-info-state
         { class inner }
         { interval full-interval }
-        { slots V{ f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
+        { slots { f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
         { origin HS{ T{ call-result { value 10004 } { word <tuple-boa> } } } }
     }
     T{ value-info-state
         { class box }
         { interval full-interval }
         { slots
-            V{
+            {
                 f
                 T{ value-info-state
                     { class inner }
                     { interval full-interval }
-                    { slots V{ f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
+                    { slots { f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
                     { origin HS{ T{ call-result { value 10004 } { word <tuple-boa> } } } }
                 }
             }
@@ -164,19 +164,19 @@ V{
     T{ value-info-state
         { class inner }
         { interval full-interval }
-        { slots V{ f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
+        { slots { f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
         { origin HS{ T{ call-result { value 10004 } { word <tuple-boa> } } T{ tuple-slot-ref { object-value 10070 } { slot-num 2 } } } }
     }
     T{ value-info-state
         { class box }
         { interval full-interval }
         { slots
-            V{
+            {
                 f
                 T{ value-info-state
                     { class inner }
                     { interval full-interval }
-                    { slots V{ f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
+                    { slots { f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
                     { origin HS{ T{ call-result { value 10004 } { word <tuple-boa> } } T{ tuple-slot-ref { object-value 10070 } { slot-num 2 } } } }
                 }
             }
@@ -186,7 +186,7 @@ V{
     T{ value-info-state
         { class inner }
         { interval full-interval }
-        { slots V{ f T{ value-info-state { class object } { interval full-interval } { origin HS{ limbo } } } } }
+        { slots { f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
         { origin
             HS{
                 T{ call-result { value 10004 } { word <tuple-boa> } }
@@ -214,10 +214,32 @@ V{
 ! Nested escape
 
 : mangle ( x -- ) dup a>> 999 swap a<< 888 swap a<< ;
+: mangle-inner ( x -- ) dup a>> 999 swap a<< T{ inner f 777 } swap a<< ;
 ! Parent escapes, nested structure is changed
 { T{ box f 888 } T{ inner f 999 } } [ 42 <inner> [ <box> dup mangle ] [ ] bi ] unit-test
 
-! FIXME
+! Test invalidating shared slot, setting afterwards, may not propagate over!
+{ T{ inner f 999 } T{ box f 888 } } [ 42 <inner> dup <box> [ mangle ] keep ] unit-test
+{ T{ inner f 999 } 888 } [ 42 <inner> dup <box> [ mangle ] [ a>> ] bi ] unit-test
+
+{ T{ inner f 999 } T{ inner f 999 } } [ 42 <inner> dup [ <box> mangle ] keep ] unit-test
+{ T{ inner f 999 } 999 } [ 42 <inner> dup [ <box> mangle ] [ a>> ] bi ] unit-test
+
+{ T{ inner f 43 } T{ inner f 43 } } [ 42 <inner> dup [ <box> mangle ] keep 43 >>a ] unit-test
+{ T{ inner f 999 } T{ inner f 777 } } [ 42 <inner> dup <box> [ mangle-inner ] keep a>> ] unit-test
+{ f } [ 42 <inner> dup <box> [ mangle-inner ] keep a>> = ] unit-test
+{ f } [ 42 <inner> dup <box> [ mangle-inner ] keep a>> eq? ] unit-test
+
+{ t } [ 42 <inner> dup <box> a>> eq? ] unit-test
+! FIXME: Prove identity through slots
+! { t }
+{ f } [ [ 42 <inner> dup <box> a>> eq? ] rw-literals first ] unit-test
+
+{ f } [ 42 <inner> dup <box> [ mangle-inner ] keep a>> = ] unit-test
+{ f } [ [ 42 <inner> dup <box> [ mangle-inner ] keep a>> = ] rw-literals first ] unit-test
+
+! TODO: clone
+
 { t t } [ [ 42 <inner> [ <box> dup mangle ] [ ] bi ] return-escapes? first2 ] unit-test
 { f } [ [ 42 <inner> [ <box> mangle ] [ ] bi a>> ] rw-literals first ] unit-test
 

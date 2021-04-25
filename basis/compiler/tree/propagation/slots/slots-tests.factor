@@ -2,6 +2,7 @@ USING: accessors arrays classes.tuple.private compiler.test compiler.tree
 compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.slots hashtables kernel math math.intervals
 math.partial-dispatch math.private namespaces sequences stack-checker.values
+kernel.private
 tools.test words ;
 IN: compiler.tree.propagation.slots.tests
 
@@ -43,6 +44,7 @@ IN: compiler.tree.propagation.slots.tests
 ] unit-test
 
 TUPLE: foo { a read-only } b ;
+C: <foo> foo
 
 ! Literal slot propagation on read-only-slots
 ! Tuple literal
@@ -115,6 +117,16 @@ TUPLE: bar { a read-only initial: 42 } b ;
 { { 42 47 } }
 [ [ [ T{ foo f 42 47 } [ a>> ] [ b>> ] bi ]
     final-literals >array ] with-rw  ] unit-test
+
+! Declared
+{ 43 48 } [ 43 48 <foo> { foo } declare [ a>> ] [ b>> ] bi ] unit-test
+
+{ 43 f } [ [ 43 48 <foo> [ a>> ] [ b>> ] bi ] final-literals first2 ] unit-test
+{ 43 f } [ [ 43 48 <foo> { foo } declare [ a>> ] [ b>> ] bi ] final-literals first2 ] unit-test
+
+{ 43 48 } [ [ [ 43 48 <foo> [ a>> ] [ b>> ] bi ] final-literals first2 ] with-rw ] unit-test
+{ 43 48 } [  43 48 <foo> { foo } declare [ a>> ] [ b>> ] bi ] unit-test
+{ 43 48 } [ [ [ 43 48 <foo> { foo } declare [ a>> ] [ b>> ] bi ] final-literals first2 ] with-rw ] unit-test
 
 { { 42 47 } }
 [
@@ -207,7 +219,7 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
        { class baz }
        { interval full-interval }
        { slots
-         V{
+         {
              f
              T{ value-info-state
                 { class integer }
@@ -241,13 +253,13 @@ V{
         { class box }
         { interval full-interval }
         { slots
-            V{
+            {
                 f
                 T{ value-info-state
                     { class baz }
                     { interval full-interval }
                     { slots
-                        V{
+                        {
                             f
                             T{ value-info-state
                                 { class integer }
@@ -275,7 +287,7 @@ V{
         { class baz }
         { interval full-interval }
         { slots
-            V{
+            {
                 f
                 T{ value-info-state
                     { class integer }
@@ -309,13 +321,13 @@ V{
         { class box }
         { interval full-interval }
         { slots
-            V{
+            {
                 f
                 T{ value-info-state
                     { class baz }
                     { interval full-interval }
                     { slots
-                        V{
+                        {
                             f
                             T{ value-info-state
                                 { class integer }
@@ -349,7 +361,7 @@ V{
         { class baz }
         { interval full-interval }
         { slots
-            V{
+            {
                 f
                 T{ value-info-state
                     { class integer }

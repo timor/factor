@@ -29,7 +29,9 @@ GENERIC: propagate-origin ( node -- )
 : extract-value-info ( values -- assoc )
     [ dup value-info ] H{ } map>assoc ;
 
+! TODO: remove this after debugging
 SYMBOL: bake-lazy-infos
+bake-lazy-infos [ t ] initialize
 
 : (annotate-node) ( node values -- )
     extract-value-info [
