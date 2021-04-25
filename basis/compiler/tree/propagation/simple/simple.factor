@@ -11,8 +11,11 @@ IN: compiler.tree.propagation.simple
 M: #introduce propagate-before
     out-d>> [ object-info swap set-value-info ] each ;
 
+! TODO: ensure that this is the correct spot for deliteralization!
 M: #push propagate-before
-    [ literal>> <literal-info> ] [ out-d>> first ] bi
+    [ literal>> <literal-info>
+      propagate-rw-slots? [ maybe-deliteralize-tuple ] when
+    ] [ out-d>> first ] bi
     set-value-info ;
 
 : refine-value-infos ( classes/f values -- )

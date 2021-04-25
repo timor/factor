@@ -224,12 +224,12 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
              T{ value-info-state
                 { class integer }
                 { interval T{ interval { from { 42 t } } { to { 1/0. t } } } }
-                { origin HS{ T{ call-result { value 10067 } { word + } } T{ literal-allocation { literal 42 } } T{ call-result { value 10219 } { word fixnum+ } } } }
+                { origin HS{ T{ call-result { value 10067 } { word + } } T{ literal-allocation { literal 42 } } T{ call-result { value 10183 } { word fixnum+ } } } }
               }
              T{ value-info-state
                 { class integer }
                 { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
-                { origin HS{ T{ call-result { value 10083 } { word - } } T{ call-result { value 10223 } { word fixnum- } } T{ literal-allocation { literal 47 } } } }
+                { origin HS{ T{ call-result { value 10083 } { word - } } T{ call-result { value 10187 } { word fixnum- } } T{ literal-allocation { literal 47 } } } }
               }
          }
        }
@@ -265,14 +265,14 @@ V{
                                 { class integer }
                                 { interval T{ interval { from { 42 t } } { to { 1/0. t } } } }
                                 { origin
-                                    HS{ T{ call-result { value 10239 } { word fixnum+ } } T{ call-result { value 10078 } { word + } } T{ literal-allocation { literal 42 } } }
+                                    HS{ T{ call-result { value 10201 } { word fixnum+ } } T{ call-result { value 10078 } { word + } } T{ literal-allocation { literal 42 } } }
                                 }
                             }
                             T{ value-info-state
                                 { class integer }
                                 { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
                                 { origin
-                                    HS{ T{ call-result { value 10243 } { word fixnum- } } T{ call-result { value 10094 } { word - } } T{ literal-allocation { literal 47 } } }
+                                    HS{ T{ call-result { value 10094 } { word - } } T{ call-result { value 10205 } { word fixnum- } } T{ literal-allocation { literal 47 } } }
                                 }
                             }
                         }
@@ -292,12 +292,12 @@ V{
                 T{ value-info-state
                     { class integer }
                     { interval T{ interval { from { 42 t } } { to { 1/0. t } } } }
-                    { origin HS{ T{ call-result { value 10239 } { word fixnum+ } } T{ call-result { value 10078 } { word + } } T{ literal-allocation { literal 42 } } } }
+                    { origin HS{ T{ call-result { value 10201 } { word fixnum+ } } T{ call-result { value 10078 } { word + } } T{ literal-allocation { literal 42 } } } }
                 }
                 T{ value-info-state
                     { class integer }
                     { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
-                    { origin HS{ T{ call-result { value 10243 } { word fixnum- } } T{ call-result { value 10094 } { word - } } T{ literal-allocation { literal 47 } } } }
+                    { origin HS{ T{ call-result { value 10094 } { word - } } T{ call-result { value 10205 } { word fixnum- } } T{ literal-allocation { literal 47 } } } }
                 }
             }
         }
@@ -334,10 +334,10 @@ V{
                                 { interval T{ interval { from { 20 t } } { to { 1/0. t } } } }
                                 { origin
                                     HS{
-                                        T{ call-result { value 10345 } { word --integer-fixnum } }
                                         T{ call-result { value 10125 } { word - } }
-                                        T{ call-result { value 10255 } { word fixnum+ } }
+                                        T{ call-result { value 10295 } { word --integer-fixnum } }
                                         T{ literal-allocation { literal 42 } }
+                                        T{ call-result { value 10217 } { word fixnum+ } }
                                         T{ call-result { value 10078 } { word + } }
                                     }
                                 }
@@ -346,7 +346,7 @@ V{
                                 { class integer }
                                 { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
                                 { origin
-                                    HS{ T{ call-result { value 10259 } { word fixnum- } } T{ call-result { value 10094 } { word - } } T{ literal-allocation { literal 47 } } }
+                                    HS{ T{ call-result { value 10094 } { word - } } T{ call-result { value 10221 } { word fixnum- } } T{ literal-allocation { literal 47 } } }
                                 }
                             }
                         }
@@ -368,10 +368,10 @@ V{
                     { interval T{ interval { from { 20 t } } { to { 1/0. t } } } }
                     { origin
                         HS{
-                            T{ call-result { value 10345 } { word --integer-fixnum } }
-                            T{ call-result { value 10255 } { word fixnum+ } }
-                            T{ literal-allocation { literal 42 } }
                             T{ call-result { value 10125 } { word - } }
+                            T{ call-result { value 10295 } { word --integer-fixnum } }
+                            T{ literal-allocation { literal 42 } }
+                            T{ call-result { value 10217 } { word fixnum+ } }
                             T{ call-result { value 10078 } { word + } }
                         }
                     }
@@ -379,13 +379,14 @@ V{
                 T{ value-info-state
                     { class integer }
                     { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
-                    { origin HS{ T{ call-result { value 10259 } { word fixnum- } } T{ call-result { value 10094 } { word - } } T{ literal-allocation { literal 47 } } } }
+                    { origin HS{ T{ call-result { value 10094 } { word - } } T{ call-result { value 10221 } { word fixnum- } } T{ literal-allocation { literal 47 } } } }
                 }
             }
         }
         { origin HS{ T{ call-result { value 10169 } { word <tuple-boa> } } } }
     }
 }
+
 }
 [ [ [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times [ 22 - ] change-a ] final-info ] with-rw ] unit-test
 

@@ -136,66 +136,6 @@ C: <box> box
 
 TUPLE: inner a ;
 C: <inner> inner
-{
-V{
-    T{ value-info-state
-        { class inner }
-        { interval full-interval }
-        { slots { f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
-        { origin HS{ T{ call-result { value 10004 } { word <tuple-boa> } } } }
-    }
-    T{ value-info-state
-        { class box }
-        { interval full-interval }
-        { slots
-            {
-                f
-                T{ value-info-state
-                    { class inner }
-                    { interval full-interval }
-                    { slots { f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
-                    { origin HS{ T{ call-result { value 10004 } { word <tuple-boa> } } } }
-                }
-            }
-        }
-        { origin HS{ T{ call-result { value 10070 } { word <tuple-boa> } } } }
-    }
-    T{ value-info-state
-        { class inner }
-        { interval full-interval }
-        { slots { f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
-        { origin HS{ T{ call-result { value 10004 } { word <tuple-boa> } } T{ tuple-slot-ref { object-value 10070 } { slot-num 2 } } } }
-    }
-    T{ value-info-state
-        { class box }
-        { interval full-interval }
-        { slots
-            {
-                f
-                T{ value-info-state
-                    { class inner }
-                    { interval full-interval }
-                    { slots { f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
-                    { origin HS{ T{ call-result { value 10004 } { word <tuple-boa> } } T{ tuple-slot-ref { object-value 10070 } { slot-num 2 } } } }
-                }
-            }
-        }
-        { origin HS{ T{ call-result { value 10117 } { word <tuple-boa> } } } }
-    }
-    T{ value-info-state
-        { class inner }
-        { interval full-interval }
-        { slots { f T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ literal-allocation { literal 42 } } limbo } } } } }
-        { origin
-            HS{
-                T{ call-result { value 10004 } { word <tuple-boa> } }
-                T{ tuple-slot-ref { object-value 10070 } { slot-num 2 } }
-                T{ tuple-slot-ref { object-value 10117 } { slot-num 2 } }
-            }
-        }
-    }
-}
-} [ [ [ 42 <inner> box new over >>a dup a>> box new over >>a dup a>> [ frob-box ] keep ] final-info ] with-rw ] unit-test
 { V{ f f f f f } } [ [ [ 42 <inner> box new over >>a dup a>> box new over >>a dup a>> [ frob-box ] keep [ a>> ] 5 napply ] final-literals ] with-rw ] unit-test
 
 
@@ -253,23 +193,20 @@ V{
 { 43 } [ T{ box f 42 } dup <box> a>> frob-box a>> ] unit-test
 
 
-! FIXME
 ! Must be de-literalized
-! { f }
-{ 42 }
+{ f }
 [ [ T{ box f 42 } dup <box> a>> frob-box a>> ] rw-literals first ] unit-test
-! WRONG
-{ T{ value-info-state
-    { class box }
-    { interval empty-interval }
-    { literal T{ box { a 42 } } }
-    { literal? t }
-    { slots { f T{ value-info-state { class fixnum } { interval T{ interval { from { 42 t } } { to { 42 t } } } } { literal 42 } { literal? t } } } }
-    { origin HS{ T{ literal-allocation { literal T{ box { a 42 } } } } } } } }
+{
+    T{ value-info-state
+       { class box }
+       { interval empty-interval }
+       { slots { f T{ value-info-state { class object } { interval full-interval } { origin HS{ limbo } } } } }
+       { origin HS{ T{ literal-allocation { literal T{ box { a 42 } } } } } }
+     }
+}
 [ [ [ T{ box f 42 } dup <box> a>> frob-box ] final-info first ] with-rw ] unit-test
 
-! { t }
-{ f }
+{ t }
 [ [ T{ box f 42 } dup <box> a>> frob-box ] return-escapes? first ] unit-test
 
 ! Nested literal, pulling out the inner one and modifying it
@@ -277,22 +214,29 @@ V{
   T{ inner f 43 }
 } [ T{ box f T{ inner f 42 } } dup a>> 43 >>a ] unit-test
 
-! WRONG
 {
     T{ value-info-state
        { class box }
        { interval empty-interval }
-       { literal T{ box { a T{ inner { a 42 } } } } }
-       { literal? t }
        { slots
          {
              f
              T{ value-info-state
                 { class inner }
                 { interval empty-interval }
-                { literal T{ inner { a 42 } } }
-                { literal? t }
-                { slots { f T{ value-info-state { class fixnum } { interval T{ interval { from { 42 t } } { to { 42 t } } } } { literal 42 } { literal? t } } } }
+                { slots
+                  {
+                      f
+                      T{ value-info-state
+                         { class fixnum }
+                         { interval T{ interval { from { 43 t } } { to { 43 t } } } }
+                         { literal 43 }
+                         { literal? t }
+                         { origin HS{ T{ literal-allocation { literal 43 } } } }
+                       }
+                  }
+                }
+                { origin HS{ T{ literal-allocation { literal T{ inner { a 42 } } } } } }
               }
          }
        }
@@ -301,26 +245,28 @@ V{
     T{ value-info-state
        { class inner }
        { interval empty-interval }
-       { literal T{ inner { a 42 } } }
-       { literal? t }
-       { slots { f T{ value-info-state { class fixnum } { interval T{ interval { from { 42 t } } { to { 42 t } } } } { literal 42 } { literal? t } } } }
-       { origin HS{ T{ tuple-slot-ref { object-value 10001 } { slot-num 2 } } } }
+       { slots
+         {
+             f
+             T{ value-info-state
+                { class fixnum }
+                { interval T{ interval { from { 43 t } } { to { 43 t } } } }
+                { literal 43 }
+                { literal? t }
+                { origin HS{ T{ literal-allocation { literal 43 } } } }
+              }
+         }
+       }
+       { origin HS{ T{ tuple-slot-ref { object-value 10001 } { slot-num 2 } } T{ literal-allocation { literal T{ inner { a 42 } } } } } }
      }
 } [ [ [ T{ box f T{ inner f 42 } } dup a>> 43 >>a ] final-info first2 ] with-rw ] unit-test
 { 43 43 } [ T{ box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] unit-test
-! WRONG
-! { f f }
-{ 42 42 } [ [ T{ box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] rw-literals first2 ] unit-test
-{ f t } [ [ T{ box f T{ inner f 42 } } dup a>> [ frob-box ] keep ] return-escapes? first2 ] unit-test
+{ f f } [ [ T{ box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] rw-literals first2 ] unit-test
+{ t t } [ [ T{ box f T{ inner f 42 } } dup a>> [ frob-box ] keep ] return-escapes? first2 ] unit-test
 
 { T{ box f 888 } 888 } [ T{ box f T{ inner f 42 } } [ mangle ] keep dup a>> ] unit-test
-! WRONG
-! { t t }
-{ f f } [ [ T{ box f T{ inner f 42 } } [ mangle ] keep dup a>> ] return-escapes? first2 ] unit-test
-! WRONG
-! { f f }
-{ T{ box f T{ inner f 42 } } T{ inner f 42 } }
-[ [ T{ box f T{ inner f 42 } } [ mangle ] keep dup a>> ] rw-literals first2 ] unit-test
+ { t t } [ [ T{ box f T{ inner f 42 } } [ mangle ] keep dup a>> ] return-escapes? first2 ] unit-test
+{ f f } [ [ T{ box f T{ inner f 42 } } [ mangle ] keep dup a>> ] rw-literals first2 ] unit-test
 
 ! Verify same behavior with nesting in read-only slots
 TUPLE: ro-box { a read-only } ;
@@ -331,10 +277,8 @@ TUPLE: ro-box { a read-only } ;
 } [ T{ ro-box f T{ inner f 42 } } dup a>> 43 >>a ] unit-test
 
 { 43 43 } [ T{ ro-box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] unit-test
-! WRONG
-! { f f }
-{ 42 42 } [ [ T{ ro-box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] rw-literals first2 ] unit-test
-{ f t } [ [ T{ ro-box f T{ inner f 42 } } dup a>> [ frob-box ] keep ] return-escapes? first2 ] unit-test
+{ f f } [ [ T{ ro-box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] rw-literals first2 ] unit-test
+{ t t } [ [ T{ ro-box f T{ inner f 42 } } dup a>> [ frob-box ] keep ] return-escapes? first2 ] unit-test
 
 ! Set-slot
 

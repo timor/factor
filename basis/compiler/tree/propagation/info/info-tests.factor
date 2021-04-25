@@ -253,3 +253,151 @@ TUPLE: mixed-tup { a read-only } b ;
 { t } [ T{ test-tuple f T{ test-tuple f 47 } } immutable-tuple-literal? ] unit-test
 { f } [ T{ test-tuple f T{ rw-tup f 48 } } immutable-tuple-literal? ] unit-test
 { f } [ T{ test-tuple f T{ mixed-tup f 49 50 } } immutable-tuple-literal? ] unit-test
+
+! Deliteralization
+{
+    T{ value-info-state
+      { class rw-tup }
+      { interval empty-interval }
+      { slots { f T{ value-info-state { class fixnum } { interval T{ interval { from { 42 t } } { to { 42 t } } } } { literal 42 } { literal? t } } } }
+    }
+} [ T{ rw-tup f 42 } <literal-info> deliteralize-slots ] unit-test
+
+{
+  T{ value-info-state
+     { class mixed-tup }
+     { interval empty-interval }
+     { slots
+       {
+           f
+           T{ value-info-state { class fixnum } { interval T{ interval { from { 11 t } } { to { 11 t } } } } { literal 11 } { literal? t } }
+           T{ value-info-state { class fixnum } { interval T{ interval { from { 22 t } } { to { 22 t } } } } { literal 22 } { literal? t } }
+       }
+     }
+   }
+} [ T{ mixed-tup f 11 22 } <literal-info> deliteralize-slots ] unit-test
+
+
+{
+    T{ value-info-state
+       { class rw-tup }
+       { interval empty-interval }
+       { slots
+         {
+             f
+             T{ value-info-state
+                { class test-tuple }
+                { interval empty-interval }
+                { literal T{ test-tuple { x 33 } } }
+                { literal? t }
+                { slots { f T{ value-info-state { class fixnum } { interval T{ interval { from { 33 t } } { to { 33 t } } } } { literal 33 } { literal? t } } } }
+              }
+         }
+       }
+     }
+} [ T{ rw-tup f T{ test-tuple f 33 } } <literal-info> deliteralize-slots ] unit-test
+
+{
+    T{ value-info-state
+       { class test-tuple }
+       { interval empty-interval }
+       { slots
+         {
+             f
+             T{ value-info-state
+                { class rw-tup }
+                { interval empty-interval }
+                { slots { f T{ value-info-state { class fixnum } { interval T{ interval { from { 48 t } } { to { 48 t } } } } { literal 48 } { literal? t } } } }
+                { origin HS{ T{ literal-allocation { literal T{ rw-tup { a 48 } } } } } }
+              }
+         }
+       }
+     }
+} [ T{ test-tuple f T{ rw-tup f 48 } } <literal-info> deliteralize-slots ] unit-test
+
+{
+    T{ value-info-state
+       { class test-tuple }
+       { interval empty-interval }
+       { slots
+         {
+             f
+             T{ value-info-state
+                { class mixed-tup }
+                { interval empty-interval }
+                { slots
+                  {
+                      f
+                      T{ value-info-state { class fixnum } { interval T{ interval { from { 49 t } } { to { 49 t } } } } { literal 49 } { literal? t } }
+                      T{ value-info-state { class fixnum } { interval T{ interval { from { 50 t } } { to { 50 t } } } } { literal 50 } { literal? t } }
+                  }
+                }
+                { origin HS{ T{ literal-allocation { literal T{ mixed-tup { a 49 } { b 50 } } } } } }
+              }
+         }
+       }
+}
+} [ T{ test-tuple f T{ mixed-tup f 49 50 } } <literal-info> deliteralize-slots ] unit-test
+
+{
+    T{ value-info-state
+       { class rw-tup }
+       { interval empty-interval }
+       { literal T{ rw-tup { a T{ rw-tup { a T{ rw-tup { a 55 } } } } } } }
+       { literal? t }
+       { slots
+         {
+             f
+             T{ value-info-state
+                { class rw-tup }
+                { interval empty-interval }
+                { literal T{ rw-tup { a T{ rw-tup { a 55 } } } } }
+                { literal? t }
+                { slots
+                  {
+                      f
+                      T{ value-info-state
+                         { class rw-tup }
+                         { interval empty-interval }
+                         { literal T{ rw-tup { a 55 } } }
+                         { literal? t }
+                         { slots { f T{ value-info-state { class fixnum } { interval T{ interval { from { 55 t } } { to { 55 t } } } } { literal 55 } { literal? t } } } }
+                       }
+                  }
+                }
+              }
+         }
+       }
+     }
+    T{ value-info-state { class rw-tup } { interval empty-interval } { slots { f T{ lazy-info { values { 10005 } } } } } }
+} [ [ T{ rw-tup f T{ rw-tup f T{ rw-tup f 55 } } } <literal-info> dup clone deliteralize-slots ] with-rw ] unit-test
+
+{
+    T{ value-info-state
+       { class rw-tup }
+       { interval empty-interval }
+       { slots
+         {
+             f
+             T{ value-info-state
+                { class rw-tup }
+                { interval empty-interval }
+                { slots
+                  {
+                      f
+                      T{ value-info-state
+                         { class rw-tup }
+                         { interval empty-interval }
+                         { slots { f T{ value-info-state { class fixnum } { interval T{ interval { from { 55 t } } { to { 55 t } } } } { literal 55 } { literal? t } } } }
+                         { origin HS{ T{ literal-allocation { literal T{ rw-tup { a 55 } } } } } }
+                       }
+                  }
+                }
+                { origin HS{ T{ literal-allocation { literal T{ rw-tup { a T{ rw-tup { a 55 } } } } } } } }
+              }
+         }
+       }
+       { origin HS{ T{ literal-allocation { literal T{ rw-tup f T{ rw-tup f T{ rw-tup f 55 } } } } } } }
+     }
+}
+[ [ T{ rw-tup f T{ rw-tup f T{ rw-tup f 55 } } } <literal-info> maybe-deliteralize-tuple bake-info ] with-rw ] unit-test

@@ -50,7 +50,6 @@ PREDICATE: tuple-set-slot-call < literal-set-slot-call in-d>> second value-info 
 PREDICATE: tuple-push < #push literal>> tuple? ;
 PREDICATE: mutable-tuple-push < tuple-push literal>> immutable-tuple-class? not ;
 PREDICATE: sequence-push < #push literal>> fixed-length? ;
-UNION: storage-class tuple fixed-length ;
 
 ! Establishes that defined-by defines defined value
 ! 1. Add defined value to defined-by-s defines set

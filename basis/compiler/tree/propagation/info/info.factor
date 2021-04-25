@@ -123,6 +123,7 @@ CONSTANT: object-info T{ value-info-state f object full-interval }
 ! Slot reference protocol
 ! Get current value of referenced info
 
+! NOTE: protocol currently completely unused
 ! FIXME: better name would be "updatable..."
 GENERIC: mutable? ( slot-ref -- ? )
 GENERIC: dereference ( slot-ref -- slot-info )
@@ -185,8 +186,6 @@ C: <call-result> call-result
 
 : <value-info> ( -- info ) \ value-info-state new ; inline
 
-DEFER: <literal-info>
-
 UNION: fixed-length array byte-array string ;
 UNION: storage-class tuple fixed-length ;
 
@@ -207,6 +206,27 @@ UNION: storage-class tuple fixed-length ;
         ] all? ]
     } 1&& ;
 
+DEFER: init-value-info
+DEFER: maybe-deliteralize-tuple
+! For now, only tuples.  Might apply to arrays, too
+: deliteralize-slots ( literal-info -- info )
+    f >>literal?
+    dup literal>> tuple-slot-infos-rw
+    [ [ maybe-deliteralize-tuple ] [ f ] if* ] map
+    >>slots
+    init-value-info ;
+
+DEFER: add-info-origin
+: maybe-deliteralize-tuple ( literal-info -- info )
+    dup literal>>
+    {
+      [ tuple? ]
+      [ immutable-tuple-literal? not ]
+    } 1&&
+    [ clone
+      dup literal>> <literal-allocation> add-info-origin
+      deliteralize-slots
+    ] when ;
 
 : literal-class ( obj -- class )
     dup singleton-class? [
@@ -311,13 +331,13 @@ DEFER: read-only-slot?
             empty-interval >>interval
         ] [
             init-interval
-            ! init-slots
+            init-slots
             dup [ class>> ] [ interval>> ] bi interval>literal
             [ >>literal ] [ >>literal? ] bi*
             [ fix-capacity-class ] change-class
         ] if
     ] if
-    init-slots
+    ! init-slots ! Literal case should be covered by explicit de-literalization
     [ dup null? [ drop f ] when ] change-slot-refs
     [ dup null? [ drop f ] when ] change-origin
     ; inline
@@ -615,6 +635,9 @@ DEFER: extend-value-info
 
 : register-tuple-slot-storage ( stored-value containing-object slot-num -- )
     make-tuple-slot-ref register-slot-storage ;
+
+: add-info-origin ( info slot-ref -- info )
+    swap clone [ HS{ } or clone [ adjoin ] keep ] change-origin ;
 
 : register-origin ( value slot-refs -- )
     object-info clone swap >>origin
