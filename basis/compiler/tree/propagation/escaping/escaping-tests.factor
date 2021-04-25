@@ -5,13 +5,13 @@ namespaces sequences tools.test ;
 IN: compiler.tree.propagation.escaping.tests
 FROM: compiler.tree.propagation.escaping => value-escapes ;
 
+TUPLE: foo { a read-only initial: 42 } b ;
+C: <foo> foo
+
 
 : frob-box ( x -- ) [ 1 + ] change-a drop ;
 : frob-foo ( x -- ) [ 1 + ] change-b drop ;
 : poke ( x -- x ) ; flushable
-
-TUPLE: foo { a read-only initial: 42 } b ;
-C: <foo> foo
 
 : rw-literals ( quot/word -- seq )
     [ final-literals ] with-rw ;
@@ -252,12 +252,89 @@ V{
 { T{ box f 43 } } [ T{ box f 42 } dup <box> a>> frob-box ] unit-test
 { 43 } [ T{ box f 42 } dup <box> a>> frob-box a>> ] unit-test
 
+
 ! FIXME
 ! Must be de-literalized
+! { f }
+{ 42 }
+[ [ T{ box f 42 } dup <box> a>> frob-box a>> ] rw-literals first ] unit-test
+! WRONG
+{ T{ value-info-state
+    { class box }
+    { interval empty-interval }
+    { literal T{ box { a 42 } } }
+    { literal? t }
+    { slots { f T{ value-info-state { class fixnum } { interval T{ interval { from { 42 t } } { to { 42 t } } } } { literal 42 } { literal? t } } } }
+    { origin HS{ T{ literal-allocation { literal T{ box { a 42 } } } } } } } }
+[ [ [ T{ box f 42 } dup <box> a>> frob-box ] final-info first ] with-rw ] unit-test
+
 ! { t }
 { f }
 [ [ T{ box f 42 } dup <box> a>> frob-box ] return-escapes? first ] unit-test
 
+! Nested literal, pulling out the inner one and modifying it
+{ T{ box f T{ inner f 43 } }
+  T{ inner f 43 }
+} [ T{ box f T{ inner f 42 } } dup a>> 43 >>a ] unit-test
+
+! WRONG
+{
+    T{ value-info-state
+       { class box }
+       { interval empty-interval }
+       { literal T{ box { a T{ inner { a 42 } } } } }
+       { literal? t }
+       { slots
+         {
+             f
+             T{ value-info-state
+                { class inner }
+                { interval empty-interval }
+                { literal T{ inner { a 42 } } }
+                { literal? t }
+                { slots { f T{ value-info-state { class fixnum } { interval T{ interval { from { 42 t } } { to { 42 t } } } } { literal 42 } { literal? t } } } }
+              }
+         }
+       }
+       { origin HS{ T{ literal-allocation { literal T{ box { a T{ inner { a 42 } } } } } } } }
+     }
+    T{ value-info-state
+       { class inner }
+       { interval empty-interval }
+       { literal T{ inner { a 42 } } }
+       { literal? t }
+       { slots { f T{ value-info-state { class fixnum } { interval T{ interval { from { 42 t } } { to { 42 t } } } } { literal 42 } { literal? t } } } }
+       { origin HS{ T{ tuple-slot-ref { object-value 10001 } { slot-num 2 } } } }
+     }
+} [ [ [ T{ box f T{ inner f 42 } } dup a>> 43 >>a ] final-info first2 ] with-rw ] unit-test
+{ 43 43 } [ T{ box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] unit-test
+! WRONG
+! { f f }
+{ 42 42 } [ [ T{ box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] rw-literals first2 ] unit-test
+{ f t } [ [ T{ box f T{ inner f 42 } } dup a>> [ frob-box ] keep ] return-escapes? first2 ] unit-test
+
+{ T{ box f 888 } 888 } [ T{ box f T{ inner f 42 } } [ mangle ] keep dup a>> ] unit-test
+! WRONG
+! { t t }
+{ f f } [ [ T{ box f T{ inner f 42 } } [ mangle ] keep dup a>> ] return-escapes? first2 ] unit-test
+! WRONG
+! { f f }
+{ T{ box f T{ inner f 42 } } T{ inner f 42 } }
+[ [ T{ box f T{ inner f 42 } } [ mangle ] keep dup a>> ] rw-literals first2 ] unit-test
+
+! Verify same behavior with nesting in read-only slots
+TUPLE: ro-box { a read-only } ;
+
+! Nested literal, pulling out the inner one and modifying it
+{ T{ ro-box f T{ inner f 43 } }
+  T{ inner f 43 }
+} [ T{ ro-box f T{ inner f 42 } } dup a>> 43 >>a ] unit-test
+
+{ 43 43 } [ T{ ro-box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] unit-test
+! WRONG
+! { f f }
+{ 42 42 } [ [ T{ ro-box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] rw-literals first2 ] unit-test
+{ f t } [ [ T{ ro-box f T{ inner f 42 } } dup a>> [ frob-box ] keep ] return-escapes? first2 ] unit-test
 
 ! Set-slot
 
@@ -265,9 +342,7 @@ V{
 { 43 } [ box new 42 >>a box new over >>a a>> frob-box a>> ] unit-test
 { f } [ [ [ box new 42 >>a box new over >>a a>> frob-box a>> ] final-literals first ] with-rw ] unit-test
 { t } [ box new 42 >>a box new over >>a a>> [ frob-box ] keep eq? ] unit-test
-! FIXME
 { t t } [ [ box new 42 >>a box new over >>a a>> [ frob-box ] keep ] return-escapes? first2 ] unit-test
-! FIXME
 { t } [ [ box new 42 >>a box new over >>a a>> frob-box ] return-escapes? first ] unit-test
 
 
