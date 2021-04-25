@@ -242,3 +242,14 @@ ${
     -100 100 [a,b] array-capacity wrap-interval
     -100 100 [a,b] integer wrap-interval
 ] unit-test
+
+TUPLE: rw-tup a ;
+TUPLE: mixed-tup { a read-only } b ;
+
+{ f } [ T{ rw-tup f 42 } immutable-tuple-literal? ] unit-test
+{ f } [ T{ mixed-tup f 11 22 } immutable-tuple-literal? ] unit-test
+{ f } [ T{ rw-tup f T{ test-tuple f 33 } } immutable-tuple-literal? ] unit-test
+{ t } [ T{ test-tuple f 42 } immutable-tuple-literal? ] unit-test
+{ t } [ T{ test-tuple f T{ test-tuple f 47 } } immutable-tuple-literal? ] unit-test
+{ f } [ T{ test-tuple f T{ rw-tup f 48 } } immutable-tuple-literal? ] unit-test
+{ f } [ T{ test-tuple f T{ mixed-tup f 49 50 } } immutable-tuple-literal? ] unit-test

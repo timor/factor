@@ -187,6 +187,9 @@ C: <call-result> call-result
 
 DEFER: <literal-info>
 
+UNION: fixed-length array byte-array string ;
+UNION: storage-class tuple fixed-length ;
+
 ! Literal tuple
 : tuple-slot-infos ( tuple -- slots )
     [ tuple-slots ] [ class-of all-slots ] bi
@@ -196,7 +199,14 @@ DEFER: <literal-info>
 : tuple-slot-infos-rw ( tuple -- slots )
     tuple-slots [ <literal-slot-ref> ] map f prefix ;
 
-UNION: fixed-length array byte-array string ;
+: immutable-tuple-literal? ( tuple -- ? )
+    { [ class-of immutable-tuple-class? ]
+      [ tuple-slots [
+            { [ immutable-tuple-literal? ]
+              [ storage-class? not ] } 1||
+        ] all? ]
+    } 1&& ;
+
 
 : literal-class ( obj -- class )
     dup singleton-class? [
