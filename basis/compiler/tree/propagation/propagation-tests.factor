@@ -30,6 +30,7 @@ IN: compiler.tree.propagation.tests
     T{ value-info-state
        { class integer }
        { interval $[ array-capacity-interval ] }
+       { origin HS{ T{ input-ref { index 0 } } } }
     }
 } [
     [ dup "foo" <array> drop ] final-info first
@@ -42,12 +43,16 @@ IN: compiler.tree.propagation.tests
 
 { t } [
     [ dup <byte-array> drop ] final-info first
-    integer-array-capacity <class-info> =
+    integer-array-capacity <class-info>
+    HS{ T{ input-ref { index 0 } } } >>origin
+    =
 ] unit-test
 
 { t } [
     [ dupd resize-byte-array drop ] final-info first
-    integer-array-capacity <class-info> =
+    integer-array-capacity <class-info>
+    HS{ T{ input-ref { index 0 } } } >>origin
+    =
 ] unit-test
 
 ! Strings
@@ -66,7 +71,9 @@ IN: compiler.tree.propagation.tests
 {
     V{ $[
         integer-array-capacity <class-info>
+        HS{ T{ input-ref { index 0 } } } >>origin
         integer <class-info>
+        HS{ T{ input-ref { index 1 } } } >>origin
     ] }
 } [
     [ 2dup <string> drop ] final-info

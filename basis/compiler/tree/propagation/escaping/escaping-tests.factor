@@ -1,8 +1,7 @@
-USING: accessors arrays compiler.test compiler.tree.propagation.escaping
-classes.tuple.private
-compiler.tree.propagation.info compiler.tree.propagation.slot-refs kernel
-kernel.private literals math math.intervals namespaces sequences tools.test
-vectors ;
+USING: accessors classes.tuple.private compiler.test
+compiler.tree.propagation.escaping compiler.tree.propagation.info
+compiler.tree.propagation.slot-refs generalizations kernel math math.intervals
+namespaces sequences tools.test ;
 IN: compiler.tree.propagation.escaping.tests
 FROM: compiler.tree.propagation.escaping => value-escapes ;
 
