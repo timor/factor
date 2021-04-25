@@ -97,8 +97,8 @@ DEFER: collect-variables
     [ value-info-union ] assoc-collapse ;
 
 : lift-inner-values ( infer-children-data -- )
-    (lift-inner-values)
-    [ swap set-value-info ] assoc-each ;
+    propagate-rw-slots? [ (lift-inner-values)
+                          [ swap set-value-info ] assoc-each ] [ drop ] if ;
 
 ! TODO: escape merging:
 ! Should actually be enough to equate the defined-by>> refs on branch return, then call values escape

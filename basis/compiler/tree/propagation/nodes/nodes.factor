@@ -67,7 +67,7 @@ M: node propagate-around
         !   [ drop ] if ]
         ! Calculate output value information based on input information
         [ propagate-before ]
-        [ propagate-origin ]
+        [ propagate-rw-slots? [ propagate-origin ] [ drop ] if ]
         ! Update the set of escaping values, modify values if they escape ( TODO: probably needs to go after annotation... )
         [
             ! Runs after before because we need to know whether the word was inlined

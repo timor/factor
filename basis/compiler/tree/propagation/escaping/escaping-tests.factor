@@ -120,9 +120,8 @@ C: <foo> foo
            { interval T{ interval { from { 42 t } } { to { 42 t } } } }
            { literal 42 }
            { literal? t }
-           { origin HS{ T{ literal-allocation { literal 42 } } T{ tuple-slot-ref { object-value 10491 } { slot-num 2 } } } }
          }
-        T{ value-info-state { class object } { interval full-interval } { origin HS{ T{ tuple-slot-ref { object-value 10491 } { slot-num 3 } } } } }
+        T{ value-info-state { class object } { interval full-interval } }
     }
 }
 [ [ [ foo new foo-slots ] final-info ] with-values ] unit-test

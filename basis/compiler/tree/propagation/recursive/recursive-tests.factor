@@ -78,7 +78,6 @@ IN: compiler.tree.propagation.recursive.tests
            { interval
              T{ interval { from { 1 t } } { to { 1/0. t } } }
            }
-           { origin HS{ T{ input-ref { index 0 } } } }
         }
     }
 } [

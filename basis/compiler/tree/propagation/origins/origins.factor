@@ -11,7 +11,8 @@ M: #introduce propagate-origin
 
 ! TODO: move input-escapes to propagate-after so annotation of input infos stays correct
 : in-escapes ( node -- )
-    in-d>> [ object-escapes ] each ;
+    propagate-rw-slots?
+    [ in-d>> [ object-escapes ] each  ] [ drop ] if ;
 
 : out-escapes ( node -- )
     out-d>> [ limbo 1register-origin ] each ;
@@ -52,7 +53,7 @@ M: literal-slot-call propagate-origin
 !     out-d>> first dup <local-allocation> 1register-origin ;
 
 M: #alien-node propagate-origin
-    [ in-escapes ] [ out-escapes ] bi ;
+    out-escapes ;
 
 M: #push propagate-origin
     [ out-d>> first ] [ literal>> ] bi <literal-allocation> 1register-origin ;

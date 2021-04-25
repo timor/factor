@@ -147,7 +147,9 @@ M: #call propagate-after
     [ drop ] [ c-type-class <class-info> swap first set-value-info ] if-void ;
 
 M: #alien-node propagate-before propagate-alien-invoke ;
-M: #alien-node propagate-after in-escapes ;
+M: #alien-node propagate-after
+    [ call-next-method ]
+    [ in-escapes ] bi ;
 
 M: #alien-callback propagate-around child>> (propagate) ;
 

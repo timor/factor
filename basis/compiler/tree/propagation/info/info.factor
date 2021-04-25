@@ -190,7 +190,7 @@ DEFER: <literal-info>
 ! Literal tuple
 : tuple-slot-infos ( tuple -- slots )
     [ tuple-slots ] [ class-of all-slots ] bi
-    [ read-only>> [ <literal-slot-ref> ] [ drop object-info ] if ] 2map
+    [ read-only>> [ <literal-info> ] [ drop f ] if ] 2map
     f prefix ;
 
 : tuple-slot-infos-rw ( tuple -- slots )
