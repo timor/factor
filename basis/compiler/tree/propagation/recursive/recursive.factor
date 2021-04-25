@@ -1,11 +1,12 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors classes.algebra combinators compiler.tree
+USING: accessors classes classes.algebra combinators compiler.tree
 compiler.tree.combinators compiler.tree.propagation.constraints
 compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.nodes compiler.tree.propagation.simple
-kernel locals math math.intervals namespaces sequences ;
+compiler.utilities kernel math math.intervals namespaces sequences ;
 FROM: sequences.private => array-capacity ;
+FROM: namespaces => set ;
 IN: compiler.tree.propagation.recursive
 
 ! For #call-recursive: infos1: latest-input-infos ( in-d in value-infos ),
@@ -18,7 +19,7 @@ IN: compiler.tree.propagation.recursive
     in-d>> [ value-info ] map ;
 
 ! Pulls up info from all call sites to set up comparison with the
-! beginning-of-iteration stack state, which is stored on the input infos of the
+! beginning-of-loop stack state, which is stored on the input infos of the
 ! #enter-recursive loop header.
 : recursive-stacks ( #enter-recursive -- stacks initial )
     [ label>> calls>> [ node>> node-input-infos ] map flip ]
@@ -92,13 +93,31 @@ IN: compiler.tree.propagation.recursive
     [ recursive-stacks unify-recursive-stacks ] keep
     out-d>> set-value-infos ;
 
+! TODO: Does this work for nested recursion?  Does that even occur?
+! Normally we merge all inner-branch virtual/allocation changes upwards when
+! encountering a #phi node.  However, for recursive propagation, the merging is
+! done explicitly at the loop header, generalizing the counter intervals.  The
+! last nodes of a #recursive's child nodes are always { ... #if #phi
+! #return-recursive } in non-degenerate cases as far as I can tell, where the
+! #phi node is the one which would combine the loop case information with the
+! return case information.  So we explicitly remember to not merge at this phi
+! node, ensuring that counter generalization works.
+! TODO: Check whether this needs to be a pick instead of a no-merge?
+! Lifting the loop case should again result in an infinte loop -> Nope, doesnt
+! Lifting the return case results in an infinite loop. Using the loop case for now.
+SYMBOL: loop-return-phi
+
+: remember-no-merge-phi ( #recursive -- )
+    child>> penultimate loop-return-phi set ;
+
 SYMBOL: sentinel
 M: #recursive propagate-around ( #recursive -- )
     0 sentinel set-global
     constraints [ H{ } clone suffix ] change
+    dup remember-no-merge-phi
     [
         bake-lazy-infos on
-        sentinel counter 100 > [ "recursion limit" throw ] when
+        sentinel counter 10 > [ "recursion limit" throw ] when
         constraints [ but-last H{ } clone suffix ] change
 
         child>>

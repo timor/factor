@@ -4,6 +4,7 @@ USING: accessors arrays assocs assocs.extras combinators compiler.tree
 compiler.tree.combinators compiler.tree.propagation.constraints
 compiler.tree.propagation.escaping compiler.tree.propagation.info
 compiler.tree.propagation.nodes
+compiler.tree.propagation.recursive
 compiler.tree.propagation.simple kernel math namespaces sequences sets
 stack-checker.branches ;
 ! FROM: sets => union ;
@@ -107,17 +108,7 @@ DEFER: collect-variables
 !       [ inner-equal-values of [ equate-all-values ] each ] bi
 !     ] each ;
 
-! NOTE: lifting before setting phi-in is only necessary if recomputation needs
-! to take into account branch masking.
 : merge-value-infos ( infos outputs -- )
-    propagate-rw-slots? [
-        infer-children-data get
-        ! [
-            ! lift-inner-values
-        drop
-        ! ]
-        ! [ branch-escaping-values ] bi
-    ] when
     [ [ value-infos-union ] map ] dip set-value-infos ;
 
 SYMBOL: condition-value
@@ -134,7 +125,10 @@ SYMBOL: condition-value
 M: #phi propagate-before ( #phi -- )
     [ annotate-phi-inputs ]
     [ [ phi-info-d>> flip ] [ out-d>> ] bi merge-value-infos ]
-    bi ;
+    [ loop-return-phi get = infer-children-data get swap
+      [ second 1array ] when lift-inner-values
+    ]
+    tri ;
 
 :: update-constraints ( new old -- )
     new [| key value | key old [ value union ] change-at ] assoc-each ;
