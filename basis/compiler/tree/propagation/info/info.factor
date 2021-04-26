@@ -162,12 +162,11 @@ CONSTANT: pointer-info T{ value-info-state { class object } { interval full-inte
 
 TUPLE: literal-allocation literal ;
 C: <literal-allocation> literal-allocation
-
-TUPLE: local-allocation value ;
-C: <local-allocation> local-allocation
-
-TUPLE: call-result < local-allocation word ;
-C: <call-result> call-result
+: same-literal-allocation? ( allocation literal-allocation -- ? )
+    2dup [ literal-allocation? ] both?
+    [ [ literal>> ] bi@ eq? ]
+    [ 2drop f ] if ;
+SINGLETON: local-allocation
 
 ! Literalization
 

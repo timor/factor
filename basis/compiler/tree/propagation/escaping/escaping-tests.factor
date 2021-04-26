@@ -257,7 +257,7 @@ C: <inner> inner
               }
          }
        }
-       { origin HS{ T{ tuple-slot-ref { object-value 10001 } { slot-num 2 } } T{ literal-allocation { literal T{ inner { a 42 } } } } } }
+       { origin HS{ local-allocation T{ literal-allocation { literal T{ inner { a 42 } } } } } }
      }
 } [ [ [ T{ box f T{ inner f 42 } } dup a>> 43 >>a ] final-info first2 ] with-rw ] unit-test
 { 43 43 } [ T{ box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] unit-test
