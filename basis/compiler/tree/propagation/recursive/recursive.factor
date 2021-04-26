@@ -112,12 +112,11 @@ SYMBOL: loop-return-phi
 
 SYMBOL: sentinel
 M: #recursive propagate-around ( #recursive -- )
-    0 sentinel set-global
     constraints [ H{ } clone suffix ] change
     dup remember-no-merge-phi
     [
         bake-lazy-infos on
-        sentinel counter 10 > [ "recursion limit" throw ] when
+        sentinel counter 100 > [ "recursion limit" throw ] when
         constraints [ but-last H{ } clone suffix ] change
 
         child>>

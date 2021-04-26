@@ -24,6 +24,7 @@ IN: compiler.tree.propagation
     H{ } clone copies set
     H{ } clone 1array value-infos set
     H{ } clone 1array constraints set
+    0 sentinel set-global
     ! orphan get
     ! [ introduce-value ]
     ! [ object-info swap set-value-info ] bi
