@@ -126,7 +126,7 @@ M: #phi propagate-before ( #phi -- )
     [ annotate-phi-inputs ]
     [ [ phi-info-d>> flip ] [ out-d>> ] bi merge-value-infos ]
     [ loop-return-phi get = infer-children-data get swap
-      [ second 1array ] when lift-inner-values
+      [ drop ] [ lift-inner-values ] if
     ]
     tri ;
 

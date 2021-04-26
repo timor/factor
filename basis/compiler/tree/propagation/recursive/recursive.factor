@@ -102,9 +102,6 @@ IN: compiler.tree.propagation.recursive
 ! #phi node is the one which would combine the loop case information with the
 ! return case information.  So we explicitly remember to not merge at this phi
 ! node, ensuring that counter generalization works.
-! TODO: Check whether this needs to be a pick instead of a no-merge?
-! Lifting the loop case should again result in an infinte loop -> Nope, doesnt
-! Lifting the return case results in an infinite loop. Using the loop case for now.
 SYMBOL: loop-return-phi
 
 : remember-no-merge-phi ( #recursive -- )
