@@ -100,9 +100,6 @@ literal-values [ IH{ } clone ] initialize
 : slot-ref-recursion? ( value -- ? )
     slot-ref-history get in? ;
 
-: set-global-value-info ( info value -- )
-    resolve-copy value-infos get first set-at ;
-
 : literal>value ( literal -- value )
     literal-values get [ drop <value> [ introduce-value ] keep ] cache ;
 
@@ -112,7 +109,6 @@ SYMBOL: propagate-rw-slots
 
 ! NOTE: discarding value, only using for recursion prevention
 ! Returns an info for a literal tuple slot
-! TODO: handle case of nested rw-allocation in literal escaping
 ! TODO: wrong name in new slot-ref context
 : <literal-slot-ref> ( literal -- info )
     dup literal>value
@@ -129,44 +125,11 @@ CONSTANT: null-info T{ value-info-state f null empty-interval }
 
 CONSTANT: object-info T{ value-info-state f object full-interval }
 
-! Slot reference protocol
-! Get current value of referenced info
-
-! NOTE: protocol currently completely unused
-! FIXME: better name would be "updatable..."
-GENERIC: mutable? ( slot-ref -- ? )
-GENERIC: dereference ( slot-ref -- slot-info )
-GENERIC: weak-update ( new-info slot-ref -- )
-GENERIC: strong-update ( new-info slot-ref -- )
-GENERIC: container-info ( slot-ref -- info )
-! GENERIC: nofity-slot-change ( slot-ref -- )
-M: object mutable? drop f ;
-M: object weak-update 2drop ;
-M: object strong-update 2drop ;
-M: object dereference drop null-info ;
-
-
-! This is a link to the container which contains this info
-TUPLE: tuple-slot-ref { object-value read-only } { slot-num read-only } ;
-C: <tuple-slot-ref> tuple-slot-ref
-M: tuple-slot-ref dereference
-    [ slot-num>> 1 - ] [ object-value>> value-info slots>> ] bi ?nth
-    object-info or ;
-
-! TODO: handle ro here
-M: tuple-slot-ref mutable? drop t ;
-M: tuple-slot-ref container-info object-value>> value-info ;
-
-TUPLE: ro-tuple-slot-ref < tuple-slot-ref ;
-M: ro-tuple-slot-ref mutable? drop f ;
-
 TUPLE: input-ref { index read-only } ;
 : <input-ref> ( index -- obj )
     input-ref boa [ record-allocation ] keep ;
-M: input-ref container-info drop null-info ;
 
 SINGLETON: limbo
-M: limbo container-info drop null-info ;
 CONSTANT: pointer-info T{ value-info-state { class object } { interval full-interval } { origin HS{ limbo } } }
 
 TUPLE: literal-allocation literal ;
@@ -561,99 +524,15 @@ SYMBOL: value-infos
     [ set-value-info ]
     [ record-inner-value ] bi ;
 
+! TODO: unused.  If this is really not needed, than it means that all inner
+! value changes which have to be transported upwards have value-info-union semantics.
 : refine-inner-value-info ( info value -- )
     resolve-copy dup record-inner-value
     value-infos get
     [ assoc-stack [ value-info-intersect ] when* ] 2keep
     last set-at ;
 
-: ensure-slots-with ( slot-num seq/f padding -- slot-num seq )
-    [ clone over ] dip pad-tail ; inline
-
-: ensure-slots ( slot-num seq/f -- slot-num seq )
-    f ensure-slots-with ; inline
-    ! clone over f pad-tail ; inline
-
-! Change info, but keep slot-ref info
-! Weak update
-: <updated-slot-info> ( new-info slot-info/f -- slot-info )
-    object-info or [ value-info-union ] keep slot-refs>> >>slot-refs ;
-
-! Strong update
-: <override-slot-info> ( new-info slot-info/f -- slot-info )
-    [ clone ] dip
-    object-info or slot-refs>> >>slot-refs ;
-
-! Weak update
-:: update-slot-infos ( new-info object-value slot-num -- )
-    object-value value-info :> obj-info
-    obj-info clone [ slot-num swap ensure-slots
-                     [ 1 - ] dip
-                     [
-                         ! [ new-info swap <updated-slot-info> ]
-                         [ new-info value-info-union ]
-                         change-nth ] keep
-    ] change-slots
-    object-value set-inner-value-info ;
-
-M: tuple-slot-ref weak-update
-    [ object-value>> ] [ slot-num>> ] bi update-slot-infos ;
-
-! Strong update
-:: override-slot-infos ( new-info object-value slot-num -- )
-    object-value value-info :> obj-info
-    obj-info clone [ slot-num swap ensure-slots
-                     [ 1 - ] dip
-                     [
-                         ! [ new-info swap <override-slot-info> ]
-                         [ drop new-info ]
-                         change-nth ] keep
-    ] change-slots
-    object-value set-inner-value-info ;
-
-M: tuple-slot-ref strong-update
-    [ object-value>> ] [ slot-num>> ] bi override-slot-infos ;
-
-! Use with intersection semantics
-: <slot-ref-info> ( slot-ref -- info )
-    object-info clone swap 1array >hash-set
-    >>slot-refs ;
-
-
-! Not using
-! Must be applied with union semantics
-: <slot-info-for-class> ( class slot-info slot-num -- tuple-info )
-    [ <class-info> empty-interval >>interval ] 2dip
-    f ensure-slots [ 1 - ] dip [ set-nth ] keep
-    >>slots
-    ;
-
 DEFER: refine-value-info
-
-: make-tuple-slot-ref ( object-value slot-num -- slot-ref )
-    2dup swap value-info class>> read-only-slot?
-    [ ro-tuple-slot-ref boa ]
-    [ <tuple-slot-ref> ] if
-    dup record-allocation
-    ; inline
-
-
-DEFER: extend-value-info
-! Register value in slot, return updated info with added slot ref
-! 1. Create new slot ref (create)
-! 2. Attach that to the defining value (extend)
-! TODO: below is an extra step, which actually happens before
-! 3. Set tuple slot to updated defining value (override)
-! This then reflects the state of the object and its new slot.
-! Propagation of changes is done in caller context.  This is done by propagating
-! the changed CONTAINER value info back through it's slot refs, deciding whether a
-! strong or weak update is possible at the corresponding allocation.
-
-: register-slot-storage ( stored-value slot-ref -- )
-    <slot-ref-info> swap refine-value-info ;
-
-: register-tuple-slot-storage ( stored-value containing-object slot-num -- )
-    make-tuple-slot-ref register-slot-storage ;
 
 ! clones
 : add-info-origin ( info slot-ref -- info )
@@ -689,6 +568,7 @@ M: lazy-info nested-values*
 : slot-escape-closure ( value -- virtuals )
     value-info slots>> [ escape-closure ] gather ;
 
+DEFER: extend-value-info
 ! Full invalidation
 : invalidate-object ( value -- )
     pointer-info swap extend-value-info ;
@@ -723,9 +603,6 @@ M: lazy-info nested-values*
     resolve-copy value-infos get
     [ assoc-stack [ value-info-union ] when* ] 2keep
     last set-at ;
-
-: value-literal ( value -- obj ? )
-    value-info >literal< ;
 
 : possible-boolean-values ( info -- values )
     class>> {

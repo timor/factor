@@ -1,7 +1,7 @@
-USING: accessors compiler.tree compiler.tree.propagation.info
-compiler.tree.propagation.copy
-compiler.tree.propagation.nodes compiler.tree.propagation.reflinks kernel
-sequences math ;
+USING: accessors combinators.short-circuit compiler.tree
+compiler.tree.propagation.copy compiler.tree.propagation.info
+compiler.tree.propagation.nodes compiler.tree.propagation.special-nodes kernel
+sequences sets ;
 IN: compiler.tree.propagation.origins
 
 ! * Tracking object origins
@@ -39,3 +39,10 @@ M: #alien-node propagate-origin
 
 M: #push propagate-origin
     [ out-d>> first ] [ literal>> ] bi <literal-allocation> 1register-origin ;
+
+: value-info-escapes? ( info -- ? )
+    {
+        [ origin>> limbo swap in? ]
+        [ slots>> [ dup [ value-info-escapes? ] when ] any? ]
+    } 1||
+    ;

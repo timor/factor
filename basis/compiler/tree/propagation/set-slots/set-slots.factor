@@ -1,5 +1,5 @@
 USING: accessors classes compiler.tree.propagation.info
-compiler.tree.propagation.nodes compiler.tree.propagation.reflinks kernel math
+compiler.tree.propagation.nodes compiler.tree.propagation.special-nodes kernel math
 sequences sets ;
 
 IN: compiler.tree.propagation.set-slots
