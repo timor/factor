@@ -177,40 +177,6 @@ UNION: storage-class tuple fixed-length ;
         ] all? ]
     } 1&& ;
 
-DEFER: init-value-info
-DEFER: maybe-deliteralize-tuple
-
-! Break data structure cycles
-SYMBOL: literalization-trace
-! For now, only tuples.  Might apply to arrays, too
-: deliteralize-slots ( literal-info -- info )
-    f >>literal?
-    dup literal>> tuple-slot-infos-rw
-    [ [ maybe-deliteralize-tuple ] [ f ] if* ] map
-    >>slots
-    init-value-info ;
-
-DEFER: <class-info>
-DEFER: add-info-origin
-: safe-deliteralize-slots ( literal-info -- info )
-    dup literal>> dup literalization-trace get member?
-    ! [ [ class>> <class-info> ] dip <literal-allocation> add-info-origin ]
-    [ drop class>> <class-info> ]
-    [ [ literalization-trace [ swap suffix ] change deliteralize-slots ]
-      with-scope ] if ;
-
-DEFER: add-info-origin
-: maybe-deliteralize-tuple ( literal-info -- info )
-    dup literal>>
-    {
-      [ tuple? ]
-      [ immutable-tuple-literal? not ]
-    } 1&&
-    [ clone
-      dup literal>> <literal-allocation> add-info-origin
-      safe-deliteralize-slots
-    ] when ;
-
 : literal-class ( obj -- class )
     dup singleton-class? [
         class-of dup class? [
@@ -303,9 +269,23 @@ DEFER: read-only-slot?
     ] when
     ; inline
 
-! TODO: maybe slot references if something was inferred literal?
+! If we have rw-info, this info has been touched and doesn't need to be
+! initialized again. Alterntively, we need another flag on the value info that
+! indicates modification...
+: has-virtual-slots? ( info -- ? )
+    slots>> [ lazy-info? ] any? ; inline
+
+: maybe-make-literal ( info -- literal literal? )
+    dup has-virtual-slots? [ [ literal>> ] [ literal?>> ] bi ]
+    [ [ class>> ] [ interval>> ] bi interval>literal ] if ;
+
+! Three cases: fresh literal, non-fresh-literal, non-literal
+! non-fresh literal
 : init-value-info ( info -- info )
-    dup literal?>> [
+
+    dup { [ literal?>> ]
+          [ propagate-rw-slots? [ has-virtual-slots? not ] [ drop t ] if ]
+    } 1&& [
         init-literal-info
     ] [
         dup empty-set? [
@@ -313,13 +293,13 @@ DEFER: read-only-slot?
             empty-interval >>interval
         ] [
             init-interval
-            init-slots
-            dup [ class>> ] [ interval>> ] bi interval>literal
+            ! init-slots
+            dup maybe-make-literal
             [ >>literal ] [ >>literal? ] bi*
             [ fix-capacity-class ] change-class
         ] if
     ] if
-    ! init-slots ! Literal case should be covered by explicit de-literalization
+    init-slots ! Literal case should be covered by explicit de-literalization
     [ dup null? [ drop f ] when ] change-slot-refs
     [ dup null? [ drop f ] when ] change-origin
     ; inline

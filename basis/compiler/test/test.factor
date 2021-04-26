@@ -8,7 +8,8 @@ compiler.tree.checker compiler.tree.def-use compiler.tree.normalization
 compiler.tree.propagation compiler.tree.propagation.copy
 compiler.tree.propagation.escaping compiler.tree.propagation.info
 compiler.tree.recursive compiler.units hashtables kernel math namespaces
-sequences stack-checker stack-checker.values tools.test vectors vocabs words ;
+sequences stack-checker stack-checker.values tools.annotations tools.test
+tools.test.private vectors vocabs words ;
 IN: compiler.test
 
 : decompile ( word -- )
@@ -95,7 +96,9 @@ IN: compiler.test
 : init-values ( -- )
     H{ } clone copies set
     H{ } clone 1vector value-infos set
-    init-escaping-values ;
+    init-escaping-values
+    IH{ } clone literal-values set
+    ;
 
 : with-values ( quot -- )
     [

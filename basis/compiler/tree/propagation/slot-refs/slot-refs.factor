@@ -13,11 +13,11 @@ IN: compiler.tree.propagation.slot-refs
       [ 1 - ] [ slots>> ] bi* ?nth
     ]
     [ out-d>> first
-      over [ refine-value-info ] [ 2drop ] if
+      over [ set-value-info ] [ 2drop ] if
     ] tri
     ;
 
-M: rw-slot-call propagate-before
+M: literal-slot-call propagate-before
     [ call-next-method ] keep
     propagate-rw-slots? [
         propagate-rw-slot-infos ] [ drop ] if ;

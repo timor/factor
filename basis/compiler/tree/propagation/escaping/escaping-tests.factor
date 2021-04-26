@@ -1,7 +1,7 @@
-USING: accessors compiler.test compiler.tree.propagation.escaping
-compiler.tree.propagation.info
-compiler.tree.propagation.origins
-generalizations kernel math math.intervals namespaces sequences tools.test ;
+USING: accessors compiler.test compiler.tree.builder compiler.tree.debugger
+compiler.tree.optimizer compiler.tree.propagation.escaping
+compiler.tree.propagation.info compiler.tree.propagation.origins generalizations
+kernel math math.intervals namespaces sequences tools.test ;
 IN: compiler.tree.propagation.escaping.tests
 FROM: compiler.tree.propagation.escaping => value-escapes ;
 
@@ -200,6 +200,8 @@ C: <inner> inner
     T{ value-info-state
        { class box }
        { interval empty-interval }
+       { literal T{ box { a 42 } } }
+       { literal? t }
        { slots { f T{ value-info-state { class object } { interval full-interval } { origin HS{ limbo } } } } }
        { origin HS{ T{ literal-allocation { literal T{ box { a 42 } } } } } }
      }
@@ -214,59 +216,15 @@ C: <inner> inner
   T{ inner f 43 }
 } [ T{ box f T{ inner f 42 } } dup a>> 43 >>a ] unit-test
 
-{
-    T{ value-info-state
-       { class box }
-       { interval empty-interval }
-       { slots
-         {
-             f
-             T{ value-info-state
-                { class inner }
-                { interval empty-interval }
-                { slots
-                  {
-                      f
-                      T{ value-info-state
-                         { class fixnum }
-                         { interval T{ interval { from { 43 t } } { to { 43 t } } } }
-                         { literal 43 }
-                         { literal? t }
-                         { origin HS{ T{ literal-allocation { literal 43 } } } }
-                       }
-                  }
-                }
-                { origin HS{ T{ literal-allocation { literal T{ inner { a 42 } } } } } }
-              }
-         }
-       }
-       { origin HS{ T{ literal-allocation { literal T{ box { a T{ inner { a 42 } } } } } } } }
-     }
-    T{ value-info-state
-       { class inner }
-       { interval empty-interval }
-       { slots
-         {
-             f
-             T{ value-info-state
-                { class fixnum }
-                { interval T{ interval { from { 43 t } } { to { 43 t } } } }
-                { literal 43 }
-                { literal? t }
-                { origin HS{ T{ literal-allocation { literal 43 } } } }
-              }
-         }
-       }
-       { origin HS{ local-allocation T{ literal-allocation { literal T{ inner { a 42 } } } } } }
-     }
-} [ [ [ T{ box f T{ inner f 42 } } dup a>> 43 >>a ] final-info first2 ] with-rw ] unit-test
 { 43 43 } [ T{ box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] unit-test
 { f f } [ [ T{ box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] rw-literals first2 ] unit-test
 { t t } [ [ T{ box f T{ inner f 42 } } dup a>> [ frob-box ] keep ] return-escapes? first2 ] unit-test
 
 { T{ box f 888 } 888 } [ T{ box f T{ inner f 42 } } [ mangle ] keep dup a>> ] unit-test
- { t t } [ [ T{ box f T{ inner f 42 } } [ mangle ] keep dup a>> ] return-escapes? first2 ] unit-test
-{ f f } [ [ T{ box f T{ inner f 42 } } [ mangle ] keep dup a>> ] rw-literals first2 ] unit-test
+{ t t } [ [ T{ box f T{ inner f 42 } } [ mangle ] keep dup a>> ] return-escapes? first2 ] unit-test
+! NOTE: We get a literal in the info, but we won't dereference it on slot calls.
+{ T{ box f T{ inner f 42 } } f }
+[ [ T{ box f T{ inner f 42 } } [ mangle ] keep dup a>> ] rw-literals first2 ] unit-test
 
 ! Verify same behavior with nesting in read-only slots
 TUPLE: ro-box { a read-only } ;
@@ -304,3 +262,9 @@ TUPLE: ro-box { a read-only } ;
 
 ! TODO: Test with mutated invalid literal
 ! TODO: circular escapes, nested circular escapes
+
+! Crosscheck failure from acll-effect-tests
+: optimized-quot ( quot -- quot' )
+    build-tree optimize-tree nodes>quot ;
+
+{ [ 3 ] } [ [ [ 1 2 \ + execute( a b -- c ) ] optimized-quot ] with-rw ] unit-test
