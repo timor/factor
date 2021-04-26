@@ -93,7 +93,6 @@ literal-values [ IH{ } clone ] initialize
 : set-global-value-info ( info value -- )
     resolve-copy value-infos get first set-at ;
 
-! TODO: use in deliteralization
 : literal>value ( literal -- value )
     literal-values get [ drop <value> [ introduce-value ] keep ] cache ;
 
@@ -207,6 +206,9 @@ UNION: storage-class tuple fixed-length ;
 
 DEFER: init-value-info
 DEFER: maybe-deliteralize-tuple
+
+! Break data structure cycles
+SYMBOL: literalization-trace
 ! For now, only tuples.  Might apply to arrays, too
 : deliteralize-slots ( literal-info -- info )
     f >>literal?
@@ -214,6 +216,15 @@ DEFER: maybe-deliteralize-tuple
     [ [ maybe-deliteralize-tuple ] [ f ] if* ] map
     >>slots
     init-value-info ;
+
+DEFER: <class-info>
+DEFER: add-info-origin
+: safe-deliteralize-slots ( literal-info -- info )
+    dup literal>> dup literalization-trace get member?
+    ! [ [ class>> <class-info> ] dip <literal-allocation> add-info-origin ]
+    [ drop class>> <class-info> ]
+    [ [ literalization-trace [ swap suffix ] change deliteralize-slots ]
+      with-scope ] if ;
 
 DEFER: add-info-origin
 : maybe-deliteralize-tuple ( literal-info -- info )
@@ -224,7 +235,7 @@ DEFER: add-info-origin
     } 1&&
     [ clone
       dup literal>> <literal-allocation> add-info-origin
-      deliteralize-slots
+      safe-deliteralize-slots
     ] when ;
 
 : literal-class ( obj -- class )
@@ -635,6 +646,7 @@ DEFER: extend-value-info
 : register-tuple-slot-storage ( stored-value containing-object slot-num -- )
     make-tuple-slot-ref register-slot-storage ;
 
+! clones
 : add-info-origin ( info slot-ref -- info )
     swap clone [ HS{ } or clone [ adjoin ] keep ] change-origin ;
 

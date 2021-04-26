@@ -1,7 +1,7 @@
 USING: accessors alien arrays byte-arrays classes.algebra classes.struct
 compiler.test compiler.tree.propagation.copy compiler.tree.propagation.info
-io.encodings.utf8 kernel literals math math.intervals namespaces sequences
-sequences.generalizations sequences.private tools.test ;
+io.encodings.utf8 kernel literals math math.intervals namespaces quotations
+sequences sequences.private tools.test ;
 IN: compiler.tree.propagation.info.tests
 
 { f } [ 0.0 -0.0 eql? ] unit-test
@@ -401,3 +401,9 @@ TUPLE: mixed-tup { a read-only } b ;
      }
 }
 [ [ T{ rw-tup f T{ rw-tup f T{ rw-tup f 55 } } } <literal-info> maybe-deliteralize-tuple bake-info ] with-rw ] unit-test
+
+
+TUPLE: circle me ;
+
+{ } [ circle new dup >>me 1quotation final-info drop ] unit-test
+{ } [ [ circle new dup >>me 1quotation final-info drop ] with-rw ] unit-test
