@@ -43,8 +43,7 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
 TUPLE: circle me ;
 ! Circularity on set-slot?
 
-! ! FIXME
-! { t } [ [ [ circle new dup >>me ] final-info ] with-rw first value-info-state? ] unit-test
+{ t } [ [ [ circle new dup >>me ] final-info ] with-rw first value-info-state? ] unit-test
 
 ! Nested updates
 TUPLE: box a ;

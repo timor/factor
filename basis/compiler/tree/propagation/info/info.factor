@@ -45,11 +45,22 @@ C: <lazy-info> lazy-info
 TUPLE: lazy-ro-info < lazy-info ;
 
 C: <lazy-ro-info> lazy-ro-info
+
+SYMBOL: lazy-info-trace
+
 : lazy-info>info ( obj -- info )
     values>> [ value-info ] [ value-info-union ] map-reduce ;
 
+DEFER: object-info
+: safe-lazy-info>info ( obj -- info )
+    dup lazy-info-trace get member?
+    [ drop object-info ]
+    [ lazy-info-trace [ over suffix ] change
+      lazy-info>info ] if ;
+
 GENERIC: bake-info* ( info -- info )
-! TODO: check circularity
+! Check circularity
+
 : bake-info ( info/f -- info/f )
     dup [ bake-info* ] when ;
 M: value-info-state bake-info*
@@ -57,7 +68,7 @@ M: value-info-state bake-info*
     [ [ bake-info ] map ] change-slots ;
 
 M: lazy-info bake-info*
-    lazy-info>info bake-info ;
+    [ safe-lazy-info>info bake-info ] with-scope ;
 
 CONSULT: value-info-state lazy-info lazy-info>info ;
 : info>values ( value-info -- values )
@@ -70,7 +81,6 @@ CONSULT: value-info-state lazy-info lazy-info>info ;
 
 ! Things to put inside value info slot entries
 DEFER: <literal-info>
-DEFER: object-info
 
 ! If allocating or modifying value info in branch scope, make a virtual phi
 ! after branch return
@@ -320,7 +330,6 @@ DEFER: read-only-slot?
         [ <lazy-ro-info> ] [ <lazy-info> ] if
     ]
     [ 3drop f ] if ;
-! FIXME inline
 
 : init-slots ( info -- info )
     propagate-rw-slots? [
