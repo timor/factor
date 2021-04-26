@@ -369,8 +369,8 @@ TUPLE: mixed-tup { a read-only } b ;
          }
        }
      }
-    T{ value-info-state { class rw-tup } { interval empty-interval } { slots { f T{ lazy-info { values { 10005 } } } } } }
-} [ [ T{ rw-tup f T{ rw-tup f T{ rw-tup f 55 } } } <literal-info> dup clone deliteralize-slots ] with-rw ] unit-test
+    t
+} [ [ T{ rw-tup f T{ rw-tup f T{ rw-tup f 55 } } } <literal-info> dup clone deliteralize-slots slots>> second lazy-info? ] with-rw ] unit-test
 
 {
     T{ value-info-state
