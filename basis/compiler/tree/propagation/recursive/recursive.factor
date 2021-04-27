@@ -96,31 +96,54 @@ IN: compiler.tree.propagation.recursive
 ! TODO: Does this work for nested recursion?  Does that even occur?
 ! Normally we merge all inner-branch virtual/allocation changes upwards when
 ! encountering a #phi node.  However, for recursive propagation, the merging is
-! done explicitly at the loop header, generalizing the counter intervals.  The
-! last nodes of a #recursive's child nodes are always { ... #if #phi
-! #return-recursive } in non-degenerate cases as far as I can tell, where the
-! #phi node is the one which would combine the loop case information with the
-! return case information.  So we explicitly remember to not merge at this phi
-! node, ensuring that counter generalization works.
+! done explicitly at the loop header, generalizing the counter intervals.
+! The last node is always a #return-recursive.  In every terminating #recursive
+! construct, there is at least one #if #phi pair before that, which separates
+! the control path of loop case and return case.  For this #phi node, we don't
+! merge the virtual value infos, practically assuming that the loop case has
+! been taken.
+! NOTE: The 100% correct thing would be to save virtual info at the leaf nodes
+! just like regular value flow into #call-recursive and #return-recursive nodes.
+! NOTE: Is it enough to only do this for the last #phi nodes in case of multiple
+! call sites?  TODO need to test the non-loop constructs...
+
+! Current state:
+! By not baking the info to the annotated nodes, initial state for comparison is
+! updated as well.  Thus, all termination checks and counter-growers see the
+! same stuff.  Correct behavior:
+! - Compare initial state at loop header with propagated state at call/return
+! site
+! - Keep strong updates by not literalizing in-between via baking
+! - Interval generalization updates iteration state correctly
+! - Last updated iteration state is kept
+
 SYMBOL: loop-return-phi
 
 : remember-no-merge-phi ( #recursive -- )
-    child>> penultimate loop-return-phi set ;
-
+    child>> [ #phi? ] find-last nip loop-return-phi set ;
+SYMBOL: recursion-limit
+recursion-limit [ 120 ] initialize
 SYMBOL: sentinel
+SYMBOL: iteration-virtuals
 M: #recursive propagate-around ( #recursive -- )
     constraints [ H{ } clone suffix ] change
-    dup remember-no-merge-phi
+    ! inner-values [ V{ } clone suffix ] change
+    ! dup remember-no-merge-phi
     [
-        bake-lazy-infos on
-        sentinel counter 10 > [ "recursion limit" throw ] when
+        ! bake-lazy-infos on
+        sentinel counter recursion-limit get > [ "recursion limit" throw ] when
         constraints [ but-last H{ } clone suffix ] change
+        ! inner-values [ V{ } clone suffix ] change
+
 
         child>>
-        [ first compute-copy-equiv ]
-        [ first propagate-recursive-phi ]
-        [ (propagate) ]
-        tri
+        {
+            [ first compute-copy-equiv ]
+            [ first propagate-recursive-phi ]
+            [ (propagate) ]
+            ! [ drop inner-values [ but-last V{ } clone suffix ] change ]
+            ! [ drop watch-virtuals ]
+        } cleave
     ] until-fixed-point ;
 
 : recursive-phi-infos ( node -- infos )

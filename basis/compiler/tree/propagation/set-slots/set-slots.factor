@@ -9,7 +9,12 @@ IN: compiler.tree.propagation.set-slots
 
 ! Fetch the correct slot from obj's info state.  We expect this to be a lazy
 ! slot entry.
-! set-slot ( value obj n -- )
+: strong-update ( info value -- )
+    set-inner-value-info ;
+
+: weak-update ( new-info virtuals -- )
+    [ extend-value-info ] with each ;
+
 : propagate-tuple-set-slot-infos ( #call -- )
     in-d>> first3
     [let :> ( value-val obj-val n-val )
@@ -20,10 +25,10 @@ IN: compiler.tree.propagation.set-slots
      values>> members :> virtual-values
      virtual-values length 1 = [
          ! Strong update
-         new-info virtual-values first set-inner-value-info
+         new-info virtual-values first strong-update
      ] [
          ! Weak update
-         virtual-values [ new-info swap extend-value-info ] each
+         new-info virtual-values weak-update
      ] if ] when*
     ] ;
 

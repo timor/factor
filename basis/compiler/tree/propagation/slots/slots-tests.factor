@@ -390,7 +390,7 @@ V{
 { vector } [ [ [ { vector } declare [ 1 + ] map ] final-classes first ] with-rw ] unit-test
 { vector } [ [ [ V{  } clone [ 1 + ] map ] final-classes first ] with-rw ] unit-test
 
-! Crosscheck recursive problems
+! ! Crosscheck recursive problems
 
 ! Appending to a vector
 { V{ 42 42 42 } } [ 3 [ V{ } clone swap [ 42 over push ] times ] call ] unit-test
@@ -424,7 +424,7 @@ V{
 { V{ 42 42 42 } } [ 3 [ test-append-normal ] call ] unit-test
 { vector } [ [ test-append-normal ] final-classes first ] unit-test
 ! FIXME
-{ vector } [ [ [ test-append-normal ] final-classes first ] with-rw ] unit-test
+{ vector } [ [ [ test-append-normal ] final-info first ] with-rw ] unit-test
 
 ! Not using locals, appending
 : test-append ( limit -- vector )

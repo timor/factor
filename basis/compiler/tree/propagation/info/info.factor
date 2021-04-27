@@ -88,7 +88,7 @@ SYMBOL: inner-values
 
 : record-inner-value ( value -- )
     resolve-copy
-    inner-values get [ adjoin ] [ drop ] if* ;
+    inner-values get ?last [ adjoin ] [ drop ] if* ;
 
 ! Prevent infinite recursion while merging
 ! Maps literals to values

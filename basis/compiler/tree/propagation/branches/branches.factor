@@ -48,7 +48,8 @@ SYMBOL: infer-children-data
 : copy-value-info ( -- )
     value-infos [ H{ } clone suffix ] change
     constraints [ H{ } clone suffix ] change
-    V{ } clone inner-values set
+    inner-values [ V{ } clone suffix ] change
+    ! V{ } clone inner-values set
     escaping-values [ clone ] change
     ;
 
@@ -85,7 +86,7 @@ DEFER: collect-variables
     dup phi-in-d>> compute-phi-input-infos >>phi-info-d drop ;
 
 : (lift-inner-values) ( infer-children-data -- assoc )
-    [ [ inner-values of ] gather
+    [ [ inner-values of ?last ] gather
       ! NOTE: re-registers values for upwards propagation
       dup [ record-inner-value ] each
     ] keep

@@ -28,7 +28,7 @@ GENERIC: propagate-origin ( node -- )
 
 ! TODO: remove this after debugging
 SYMBOL: bake-lazy-infos
-bake-lazy-infos [ t ] initialize
+! bake-lazy-infos [ t ] initialize
 
 : (annotate-node) ( node values -- )
     extract-value-info [
