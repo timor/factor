@@ -1,17 +1,19 @@
 ! Copyright (C) 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays assocs compiler.cfg compiler.cfg.debugger
-compiler.cfg.def-use compiler.cfg.linearization compiler.cfg.registers
+USING: accessors arrays assocs classes classes.tuple combinators.short-circuit
+compiler.cfg compiler.cfg.debugger compiler.cfg.def-use
+compiler.cfg.linearization compiler.cfg.registers
 compiler.cfg.representations.preferred compiler.cfg.rpo compiler.cfg.stacks
 compiler.cfg.stacks.local compiler.cfg.utilities compiler.tree
 compiler.tree.builder compiler.tree.checker compiler.tree.def-use
 compiler.tree.normalization compiler.tree.propagation
-compiler.tree.propagation.copy compiler.tree.propagation.escaping
-compiler.tree.propagation.info compiler.tree.propagation.nodes
-compiler.tree.recursive compiler.units hashtables inspector io kernel math
-namespaces prettyprint sequences stack-checker stack-checker.values
-tools.annotations tools.annotations.private tools.test tools.test.private
-vectors vocabs words ;
+compiler.tree.propagation.branches compiler.tree.propagation.copy
+compiler.tree.propagation.escaping compiler.tree.propagation.info
+compiler.tree.propagation.nodes compiler.tree.propagation.recursive
+compiler.tree.recursive compiler.units continuations formatting hashtables
+inspector io kernel math mirrors namespaces prettyprint sequences stack-checker
+stack-checker.values tools.annotations tools.annotations.private tools.test
+tools.test.private vectors vocabs words ;
 IN: compiler.test
 
 : decompile ( word -- )
@@ -111,6 +113,7 @@ IN: compiler.test
 
 : with-rw ( quot -- )
     propagate-rw-slots [
+        10 recursion-limit set
         with-values
     ] with-variable-on ; inline
 
@@ -120,30 +123,141 @@ IN: compiler.test
 : hack-unit-tests ( -- )
     \ (unit-test) [ [ [ with-rw-prop ] curry ] prepose ] annotate ;
 
-: hack-recursive ( -- )
-    \ value-info<= [ [ "--- value-info<=" print 2dup [ bake-info . ] bi@ ] prepose [ \ value-info<= leaving ] compose ] annotate ;
+: annotate-generalize-counter ( -- )
+    \ generalize-counter dup reset
+    [ [ "--- Entering generalize-counter" print 2dup [ "info': " write ! bake-info
+                                                       ... ] [ "initial: " write ! bake-info
+                                                               ... ] bi* ] prepose
+      [ "--- generalized-counter: " print dup ! bake-info
+        ... ] compose
+    ] annotate ;
+
+: watch-baked-info ( info -- )
+    [ ... ] keep
+    dup { [  ] [ class>> tuple-class? ] } 1&&
+    [ "baked: " write bake-info ... ] [ drop ] if ;
+
+: watch-value-infos ( seq -- )
+    [ dup [ resolve-copy "%d -> %d : " printf ] [ value-info watch-baked-info ] bi ] each ;
 
 : watch-in-d ( node -- )
     "-- in-d-value-info:" print
-    in-d>> [ value-info bake-info ... ] each ;
+    in-d>> watch-value-infos ;
 
 : watch-out-d ( node -- )
     "-- Return: " write dup word>> name>> print
     "-- out-d-value-info:" print
-    out-d>> [ value-info bake-info ... ] each ;
+    out-d>> watch-value-infos ;
+
+: annotate-value-info<= ( -- )
+    \ value-info<= dup reset [ [ "--- Entering value-info<=" print 2dup [ watch-baked-info ] bi@ ] prepose
+                               [ "--- value-info<=: " write dup . ] compose ] annotate ;
+
 
 :: annotate-#call ( node-selector: ( #call -- ? ) -- )
     [ dup #call? node-selector [ drop f ] if ] :> sel
-    \ propagate-before dup reset
+    M\ #call propagate-before dup reset
     [ dup '[ dup sel call
              [ [ dup describe watch-in-d ]
                _
-               [ [ watch-in-d ] [ watch-out-d ] bi ] tri
+               [ watch-out-d ] tri
              ] _ if ]
      ] annotate ;
 
+
+: watch-virtuals ( -- )
+    inner-values get
+    [ [ "virtual %d: " printf ] [ value-info bake-info ... ] bi ] [ each ] curry each ;
+
+: annotate-call-recursive ( -- )
+    M\ #call-recursive propagate-before dup reset
+    [ [ "--- #call-recursive" print watch-virtuals ]
+      prepose
+     ] annotate ;
+
+: annotate-return-recursive ( -- )
+    M\ #return-recursive propagate-before dup reset
+    [ [ "--- #return-recursive" print watch-virtuals ]
+      prepose
+    ] annotate ;
+
+: annotate-virtual-creation ( -- )
+    \ info>values dup reset [
+        [ dup bake-info ... ] prepose
+        [ \ info>values entering ] prepose
+        [ \ info>values leaving ] compose
+    ] annotate ;
+
+: watch-copy ( value -- )
+    dup [ resolve-copy ] [ value-info unparse ] bi "  %d -> %d: %s\n" printf ;
+
+: watch-node ( node -- )
+    dup class-of "Node: %s" printf nl
+    <mirror>
+    [ "in-d" of [ " in-d:" print [ watch-copy ] each ] when* ]
+    [ "out-d" of [ unparse-short " out-d: %s\n" printf ] when* ]
+    [ "declaration" of [ unparse "declaration: %s\n" printf ] when* ]
+    tri
+    ;
+
+: annotate-propagate-around ( -- )
+    \ propagate-around dup reset [ [ dup #shuffle?
+                                     [ dup watch-node ] unless
+                                   ] prepose
+    ] annotate ;
+
+
 : propagation-trace ( quot/word -- nodes vars )
+    \ (lift-inner-values) dup reset watch
+    \ propagate-after dup reset [ [ "Inner values: " write inner-values get ... ] prepose ] annotate
+    \ strong-update dup reset watch
+    \ weak-update dup reset watch
+    annotate-virtual-creation
+    annotate-return-recursive
+    annotate-call-recursive
+    [
+        [ drop t ] annotate-#call
+        [ propagated-tree { copies value-infos } [ dup get ] H{ } map>assoc ] with-values
+    ]
+    [
+        \ (lift-inner-values) reset
+        \ propagate-before reset
+        \ strong-update reset
+        \ weak-update reset
+        \ propagate-after reset
+        \ record-inner-value reset
+        \ info>values reset
+    ] [ ] cleanup
+    ;
+
+
+: annotate-recursive-stacks ( -- )
+    \ recursive-stacks dup reset [
+        [ dup class-of "--- recursive stacks for %s:\n" printf ] prepose
+        [ 2dup [ "stacks: " write ... ] [ "initial: " write ... ] bi* ] compose
+    ] annotate ;
+
+: recursion-trace ( quot/word -- nodes )
+    annotate-recursive-stacks
+    annotate-propagate-around
+    \ (lift-inner-values) dup reset watch
+    M\ #recursive propagate-around dup reset watch
+    annotate-value-info<=
+    annotate-generalize-counter
+    annotate-call-recursive
+    \ strong-update dup reset watch
+    \ weak-update dup reset watch
     [ drop t ] annotate-#call
-    [ propagated-tree { copies value-infos } [ dup get ] H{ } map>assoc ] with-values
-    \ propagate-before reset
+    [ [ propagated-tree ] with-values ]
+    [
+        \ value-info<= reset
+        \ generalize-counter reset
+        \ propagate-before reset
+        \ (lift-inner-values) reset
+        \ weak-update reset
+        \ strong-update reset
+        \ propagate-after reset
+        \ propagate-around reset
+        \ recursive-stacks reset
+    ] [  ] cleanup
     ;
