@@ -113,7 +113,7 @@ M: #recursive propagate-around ( #recursive -- )
     dup remember-no-merge-phi
     [
         bake-lazy-infos on
-        sentinel counter 100 > [ "recursion limit" throw ] when
+        sentinel counter 10 > [ "recursion limit" throw ] when
         constraints [ but-last H{ } clone suffix ] change
 
         child>>

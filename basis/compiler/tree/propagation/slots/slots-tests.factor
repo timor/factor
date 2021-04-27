@@ -1,9 +1,8 @@
-USING: accessors arrays classes.tuple.private compiler.test compiler.tree
-compiler.tree.propagation.copy compiler.tree.propagation.info
-compiler.tree.propagation.slots hashtables kernel math math.intervals
-math.partial-dispatch math.private namespaces sequences stack-checker.values
-kernel.private
-tools.test words ;
+USING: accessors arrays classes.struct classes.tuple.private compiler.test
+compiler.tree compiler.tree.propagation.copy compiler.tree.propagation.info
+compiler.tree.propagation.slots hashtables kernel kernel.private math
+math.intervals namespaces sequences stack-checker.values tools.test vectors
+words ;
 IN: compiler.tree.propagation.slots.tests
 
 : indexize ( seq -- assoc )
@@ -385,3 +384,113 @@ V{
 [ [ [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times [ 22 - ] change-a ] final-info ] with-rw ] unit-test
 
 ! TODO: combine with branches
+
+! Recursive infinite compile loop checks
+
+{ vector } [ [ [ { vector } declare [ 1 + ] map ] final-classes first ] with-rw ] unit-test
+{ vector } [ [ [ V{  } clone [ 1 + ] map ] final-classes first ] with-rw ] unit-test
+
+! Crosscheck recursive problems
+
+! Appending to a vector
+{ V{ 42 42 42 } } [ 3 [ V{ } clone swap [ 42 over push ] times ] call ] unit-test
+{ vector } [ [ V{ } clone swap [ 42 over push ] times ] final-classes first ] unit-test
+{ f } [ [ V{ } clone swap [ 42 over push ] times length ] final-literals first ] unit-test
+{ f } [ [ [ V{ } clone swap [ 42 over push ] times length ] final-literals ] with-rw first ] unit-test
+{ f } [ [ [ { vector } declare swap [ 42 over push ] times length ] final-literals ] with-rw first ] unit-test
+
+! Counter variable in rw-tuple
+: test-loop ( limit num counter-box -- limit num counter-box )
+    [ [ 1 + ] dip [ 1 + ] change-a dup a>> reach < ] loop ; inline
+{ 5 42 T{ box f 5 } } [ 5 37 0 <box> [ test-loop ] call ] unit-test
+{ V{ real number object } } [ [ test-loop ] final-classes ] unit-test
+{ V{ real number object } } [ [ [ test-loop ] final-classes ] with-rw ] unit-test
+
+! using locals
+:: test-loop-locals ( limit num counter-box -- limit num counter-box )
+    limit num [ 1 + counter-box [ 1 + ] change-a drop counter-box a>> pick < ] loop
+    counter-box ; inline
+{ 5 42 T{ box f 5 } } [ 5 37 0 <box> [ test-loop-locals ] call ] unit-test
+{ V{ real number object } } [ [ test-loop-locals ] final-classes ] unit-test
+{ V{ real number object } } [ [ [ test-loop-locals ] final-classes ] with-rw ] unit-test
+
+! Comparison version without box
+: test-append-normal ( limit -- vector )
+    V{ } clone swap
+    0
+    [ dup pick < ] [ 42 reach push 1 + ] while
+    2drop ; inline
+
+{ V{ 42 42 42 } } [ 3 [ test-append-normal ] call ] unit-test
+{ vector } [ [ test-append-normal ] final-classes first ] unit-test
+! FIXME
+{ vector } [ [ [ test-append-normal ] final-classes first ] with-rw ] unit-test
+
+! Not using locals, appending
+: test-append ( limit -- vector )
+    V{ } clone swap
+    0 <box>
+    [ dup a>> pick < ] [ 42 reach push [ 1 + ] change-a ] while
+    2drop ; inline
+
+{ V{ 42 42 42 } } [ 3 [ test-append ] call ] unit-test
+{ vector } [ [ test-append ] final-classes first ] unit-test
+! FIXME
+{ vector } [ [ [ test-append ] final-classes first ] with-rw ] unit-test
+
+! Using locals, appending
+:: test-fun ( limit -- vector )
+    V{ } clone :> acc
+    0 <box> :> counter-box
+    [ counter-box a>> limit < ] [ 42 acc push counter-box [ 1 + ] change-a drop ] while
+    acc ; inline
+
+{ V{ 42 42 42 } } [ 3 [ test-fun ] call ] unit-test
+{ vector } [ [ test-fun ] final-classes first ] unit-test
+{ vector } [ [ [ test-fun ] final-classes first ] with-rw ] unit-test
+
+! Letting the box escape in the loop
+:: test-fun-frob ( limit -- vector )
+    V{ } clone :> acc
+    0 <box> :> counter-box
+    [ counter-box a>> limit < ] [ 42 acc push counter-box [ 1 + ] change-a frob ] while
+    acc ; inline
+
+{ V{ 42 42 42 } } [ 3 [ test-fun-frob ] call ] unit-test
+{ vector } [ [ test-fun-frob ] final-classes first ] unit-test
+{ vector } [ [ [ test-fun-frob ] final-classes first ] with-rw ] unit-test
+
+! Counter variable in rw-tuple, limit in tuple
+:: test-fun-2 ( limit-box -- vector )
+    V{ } clone :> acc
+    0 <box> :> counter-box
+    [ counter-box limit-box [ a>> ] bi@ < ] [ 42 acc push counter-box [ 1 + ] change-a drop ] while
+    acc ; inline
+
+{ V{ 42 42 42 } } [ 3 <box> [ test-fun-2 ] call ] unit-test
+{ vector } [ [ test-fun-2 ] final-classes first ] unit-test
+{ vector } [ [ [ test-fun-2 ] final-classes first ] with-rw ] unit-test
+
+
+! ONLY works when loaded twice
+! TUPLE: circle { me circle } ;
+
+! Infinite runtime loops
+{ null } [ [ [ 1 + dup ] loop ] final-classes first ] unit-test
+{ null } [ [ [ [ 1 + dup ] loop ] final-classes first ] with-rw ] unit-test
+! Recursive access
+{ array } [ [ [ box new [ a>> ] follow ] final-classes first ] with-rw ] unit-test
+{ array } [ [ [ box new [ { box } declare a>> ] follow ] final-classes first ] with-rw ] unit-test
+! Recursive access with slot-declaration
+! { } [ [ [ circle new [ me>> ] follow ] final-info ] with-rw ] unit-test
+
+
+! Test for the #1370 bug
+STRUCT: sbar { s sbar* } ;
+
+{ t } [
+    [ [ sbar <struct> [ s>> ] follow ] final-info ]  with-rw
+    ! [ #recursive? ] find nip
+    ! child>> [ { [ #call? ] [ word>> \ alien-cell = ] } 1&& ] find nip
+    ! >boolean
+] unit-test

@@ -28,7 +28,7 @@ M: #call propagate-origin
 
 ! TODO: This is currently a definition.  This should be inferred if IPO origin
 ! tracking is used.
-M: flushable-call propagate-origin
+M: local-allocating-call propagate-origin
     out-d>> [ local-allocation 1register-origin ] each ;
 
 M: inlined-call propagate-origin drop ;

@@ -3,13 +3,15 @@
 USING: accessors arrays assocs compiler.cfg compiler.cfg.debugger
 compiler.cfg.def-use compiler.cfg.linearization compiler.cfg.registers
 compiler.cfg.representations.preferred compiler.cfg.rpo compiler.cfg.stacks
-compiler.cfg.stacks.local compiler.cfg.utilities compiler.tree.builder
-compiler.tree.checker compiler.tree.def-use compiler.tree.normalization
-compiler.tree.propagation compiler.tree.propagation.copy
-compiler.tree.propagation.escaping compiler.tree.propagation.info
-compiler.tree.recursive compiler.units hashtables kernel math namespaces
-sequences stack-checker stack-checker.values tools.annotations tools.test
-tools.test.private vectors vocabs words ;
+compiler.cfg.stacks.local compiler.cfg.utilities compiler.tree
+compiler.tree.builder compiler.tree.checker compiler.tree.def-use
+compiler.tree.normalization compiler.tree.propagation
+compiler.tree.propagation.copy compiler.tree.propagation.escaping
+compiler.tree.propagation.info compiler.tree.propagation.nodes
+compiler.tree.recursive compiler.units hashtables inspector io kernel math
+namespaces prettyprint sequences stack-checker stack-checker.values
+tools.annotations tools.annotations.private tools.test tools.test.private
+vectors vocabs words ;
 IN: compiler.test
 
 : decompile ( word -- )
@@ -111,3 +113,37 @@ IN: compiler.test
     propagate-rw-slots [
         with-values
     ] with-variable-on ; inline
+
+: with-rw-prop ( quot -- )
+    [ init-values ] prepose propagate-rw-slots swap with-variable-on ; inline
+
+: hack-unit-tests ( -- )
+    \ (unit-test) [ [ [ with-rw-prop ] curry ] prepose ] annotate ;
+
+: hack-recursive ( -- )
+    \ value-info<= [ [ "--- value-info<=" print 2dup [ bake-info . ] bi@ ] prepose [ \ value-info<= leaving ] compose ] annotate ;
+
+: watch-in-d ( node -- )
+    "-- in-d-value-info:" print
+    in-d>> [ value-info bake-info ... ] each ;
+
+: watch-out-d ( node -- )
+    "-- Return: " write dup word>> name>> print
+    "-- out-d-value-info:" print
+    out-d>> [ value-info bake-info ... ] each ;
+
+:: annotate-#call ( node-selector: ( #call -- ? ) -- )
+    [ dup #call? node-selector [ drop f ] if ] :> sel
+    \ propagate-before dup reset
+    [ dup '[ dup sel call
+             [ [ dup describe watch-in-d ]
+               _
+               [ [ watch-in-d ] [ watch-out-d ] bi ] tri
+             ] _ if ]
+     ] annotate ;
+
+: propagation-trace ( quot/word -- nodes vars )
+    [ drop t ] annotate-#call
+    [ propagated-tree { copies value-infos } [ dup get ] H{ } map>assoc ] with-values
+    \ propagate-before reset
+    ;

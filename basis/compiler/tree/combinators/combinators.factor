@@ -18,6 +18,20 @@ IN: compiler.tree.combinators
         ] bi
     ] each ; inline recursive
 
+:: each-node-inline ( ... nodes quot: ( ... node -- ... ) -- ... )
+    nodes [
+        quot
+        [
+            {
+                { [ dup #branch? ] [ children>> [ quot each-node-inline ] each ] }
+                { [ dup #recursive? ] [ child>> quot each-node-inline ] }
+                { [ dup #alien-callback? ] [ child>> quot each-node-inline ] }
+                { [ dup #call? ] [ body>> quot each-node-inline ] }
+                [ drop ]
+            } cond
+        ] bi
+    ] each ; inline recursive
+
 :: map-nodes ( ... nodes quot: ( ... node -- ... node' ) -- ... nodes )
     nodes [
         quot call
@@ -38,6 +52,22 @@ IN: compiler.tree.combinators
                     { [ dup #branch? ] [ children>> [ quot contains-node? ] any? ] }
                     { [ dup #recursive? ] [ child>> quot contains-node? ] }
                     { [ dup #alien-callback? ] [ child>> quot contains-node? ] }
+                    [ drop f ]
+                } cond
+            ]
+        } 1||
+    ] any? ; inline recursive
+
+:: contains-node-inline? ( ... nodes quot: ( ... node -- ... ? ) -- ... ? )
+    nodes [
+        {
+            quot
+            [
+                {
+                    { [ dup #branch? ] [ children>> [ quot contains-node-inline? ] any? ] }
+                    { [ dup #recursive? ] [ child>> quot contains-node-inline? ] }
+                    { [ dup #alien-callback? ] [ child>> quot contains-node-inline? ] }
+                    { [ dup #call? ] [ body>> quot contains-node-inline? ] }
                     [ drop f ]
                 } cond
             ]

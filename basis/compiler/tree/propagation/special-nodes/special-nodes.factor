@@ -1,11 +1,11 @@
-USING: accessors classes.algebra classes.tuple classes.tuple.private
+USING: accessors arrays classes.algebra classes.tuple classes.tuple.private
 combinators.short-circuit compiler.tree compiler.tree.propagation.info kernel
-sequences slots.private words ;
+sequences sets slots.private words ;
 
 IN: compiler.tree.propagation.special-nodes
 
 
-! * Predicate hierarchy for class dispatch
+! * Predicate hierarchy for node dispatch
 PREDICATE: flushable-call < #call word>> flushable? ;
 PREDICATE: slot-call < flushable-call word>> \ slot eq? ;
 PREDICATE: literal-slot-call < slot-call
@@ -17,7 +17,12 @@ PREDICATE: tuple-boa-call < flushable-call word>> \ <tuple-boa> eq? ;
 
 PREDICATE: non-flushable-call < #call flushable-call? not ;
 PREDICATE: inlined-call < non-flushable-call body>> >boolean ;
-UNION: non-escaping-call flushable-call inlined-call ;
+! TODO: check the other primitives, clone sans (clone) etc...
+PREDICATE: safe-primitive-call < non-flushable-call word>> { resize-array } in? ;
+UNION: local-allocating-call flushable-call safe-primitive-call ;
+! PREDICATE: non-inlined-call < non-flushable-call inlined-call? not ;
+! PREDICATE: known-safe-call < non-inlined-call word>> { resize-array } in? ;
+UNION: non-escaping-call flushable-call inlined-call safe-primitive-call ;
 
 PREDICATE: set-slot-call < non-flushable-call word>> \ set-slot eq? ;
 PREDICATE: literal-set-slot-call < set-slot-call in-d>> third value-info literal?>> ;
