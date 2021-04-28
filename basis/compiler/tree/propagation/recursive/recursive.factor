@@ -1,10 +1,11 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors classes classes.algebra combinators compiler.tree
+USING: accessors assocs assocs.extras classes.algebra combinators compiler.tree
 compiler.tree.combinators compiler.tree.propagation.constraints
-compiler.tree.propagation.copy compiler.tree.propagation.info
-compiler.tree.propagation.nodes compiler.tree.propagation.simple
-compiler.utilities kernel math math.intervals namespaces sequences ;
+compiler.tree.propagation.copy compiler.tree.propagation.escaping
+compiler.tree.propagation.info compiler.tree.propagation.nodes
+compiler.tree.propagation.simple kernel math math.intervals namespaces sequences
+sets ;
 FROM: sequences.private => array-capacity ;
 FROM: namespaces => set ;
 IN: compiler.tree.propagation.recursive
@@ -24,6 +25,10 @@ IN: compiler.tree.propagation.recursive
 : recursive-stacks ( #enter-recursive -- stacks initial )
     [ label>> calls>> [ node>> node-input-infos ] map flip ]
     [ latest-input-infos ] bi ;
+
+: recursive-virtual-infos ( seq #enter-recursive -- call-site-assocs initial-assoc )
+    [ label>> calls>> [ node>> virtual-infos>> extract-keys sift-values ] with map ]
+    [ virtual-infos>> extract-keys sift-values ] 2bi ;
 
 : counter-class ( interval class -- class' )
     dup fixnum class<= rot array-capacity-interval interval-subset? and
@@ -45,21 +50,12 @@ IN: compiler.tree.propagation.recursive
         [ class class-interval ]
     } cond ;
 
-! NOTE: This code would actually modify the info state of the lazy value.
-! Doesn't seem to be the right thing to do though.
-! DEFER: generalize-counter
-! : generalize-lazy-counter ( slot-info' lazy-initial -- )
-!     break
-!     [ lazy-info>info generalize-counter ]
-!     [ values>> [ set-value-info ] with each  ] bi ;
-
-! ! In case we are modifying tuples with lazy slots, we need to generalize the virtuals
-! : generalize-counter-slot ( slot-info' initial -- slot-info )
-!     dup lazy-info? [
-!         [ generalize-lazy-counter ] keep
-!     ] [
-!         generalize-counter
-!     ] if ;
+DEFER: generalize-counter
+! Generalizing lazy slots is a no-op, this is done in a separate step.
+: generalize-counter-slot ( slot-info' initial -- slot-info )
+    2dup [ lazy-info? ] either?
+    [ union-slot ]
+    [ generalize-counter ] if ;
 
 : generalize-counter ( info' initial -- info )
     2dup [ not ] either? [ drop ] [
@@ -71,10 +67,19 @@ IN: compiler.tree.propagation.recursive
                     generalize-counter-interval
                 ] 2bi >>interval
             ]
-            [ [ drop ] [ [ slots>> ] bi@ [ generalize-counter ] 2map ] 2bi >>slots ]
+            [ [ drop ] [ [ slots>> ] bi@
+                         [ generalize-counter-slot ] 2map ] 2bi >>slots ]
             bi
         ] if
     ] if ;
+
+! Generalizing virtuals:
+! Each call site and the return node has a virtual-infos assoc.
+! Recusive stacks are unified as regular, out-d of #enter-recursive is set to
+! the result of counter generalization.  The nested virtuals will all have the
+! same values.
+! After that, perform the same thing with the virtuals, ensuring that the info
+! grows accordingly.
 
 ! Takes the recursive call site stack states and the iteration beginning state.
 ! The call-site states are all merged into a single virtual call site, and then
@@ -89,23 +94,24 @@ IN: compiler.tree.propagation.recursive
         ] 2map
     ] if ;
 
+: unify-recursive-virtuals ( call-site-assocs initial-assoc -- assoc )
+    [ [ value-info-union ] assoc-collapse ] dip
+    [ [ generalize-counter ] assoc-merge! ] keep
+    [ value-info-union ] assoc-merge! ;
+
 : propagate-recursive-phi ( #enter-recursive -- )
     [ recursive-stacks unify-recursive-stacks ] keep
     out-d>> set-value-infos ;
 
-! TODO: Does this work for nested recursion?  Does that even occur?
-! Normally we merge all inner-branch virtual/allocation changes upwards when
-! encountering a #phi node.  However, for recursive propagation, the merging is
-! done explicitly at the loop header, generalizing the counter intervals.
-! The last node is always a #return-recursive.  In every terminating #recursive
-! construct, there is at least one #if #phi pair before that, which separates
-! the control path of loop case and return case.  For this #phi node, we don't
-! merge the virtual value infos, practically assuming that the loop case has
-! been taken.
-! NOTE: The 100% correct thing would be to save virtual info at the leaf nodes
-! just like regular value flow into #call-recursive and #return-recursive nodes.
-! NOTE: Is it enough to only do this for the last #phi nodes in case of multiple
-! call sites?  TODO need to test the non-loop constructs...
+: changed-virtuals ( -- seq )
+    inner-values get last
+    virtual-values get intersect members ;
+
+: propagate-recursive-phi-virtuals ( #enter-recursive -- )
+    changed-virtuals swap recursive-virtual-infos
+    unify-recursive-virtuals
+    [ swap set-inner-value-info ] assoc-each ;
+
 
 ! Current state:
 ! By not baking the info to the annotated nodes, initial state for comparison is
@@ -117,32 +123,32 @@ IN: compiler.tree.propagation.recursive
 ! - Interval generalization updates iteration state correctly
 ! - Last updated iteration state is kept
 
-SYMBOL: loop-return-phi
-
-: remember-no-merge-phi ( #recursive -- )
-    child>> [ #phi? ] find-last nip loop-return-phi set ;
 SYMBOL: recursion-limit
 recursion-limit [ 120 ] initialize
 SYMBOL: sentinel
-SYMBOL: iteration-virtuals
+
+: baked-virtual-infos ( -- assoc )
+    H{ } clone
+    virtual-values get members
+    [ [ value-info bake-info ] keep pick set-at ] each ;
+
+: capture-virtuals ( node -- )
+    baked-virtual-infos >>virtual-infos drop ;
+
 M: #recursive propagate-around ( #recursive -- )
     constraints [ H{ } clone suffix ] change
-    ! inner-values [ V{ } clone suffix ] change
-    ! dup remember-no-merge-phi
+    inner-values [ V{ } clone suffix ] change
+    dup child>> first capture-virtuals
     [
-        ! bake-lazy-infos on
         sentinel counter recursion-limit get > [ "recursion limit" throw ] when
         constraints [ but-last H{ } clone suffix ] change
-        ! inner-values [ V{ } clone suffix ] change
-
 
         child>>
         {
             [ first compute-copy-equiv ]
             [ first propagate-recursive-phi ]
+            [ first propagate-recursive-phi-virtuals ]
             [ (propagate) ]
-            ! [ drop inner-values [ but-last V{ } clone suffix ] change ]
-            ! [ drop watch-virtuals ]
         } cleave
     ] until-fixed-point ;
 
@@ -178,6 +184,7 @@ M: #call-recursive propagate-before ( #call-recursive -- )
     ] bi ;
 
 M: #call-recursive annotate-node
+    dup capture-virtuals
     dup [ in-d>> ] [ out-d>> ] bi append (annotate-node) ;
 
 M: #enter-recursive annotate-node
@@ -190,4 +197,5 @@ M: #return-recursive propagate-before ( #return-recursive -- )
     ] unless-loop ;
 
 M: #return-recursive annotate-node
+    dup capture-virtuals
     dup in-d>> (annotate-node) ;

@@ -163,6 +163,12 @@ TUPLE: bar { a read-only initial: 42 } b ;
     ] with-variable-on
 ] unit-test
 
+! TODO Hidden updates
+! TUPLE: obox a ;
+! TUPLE: mbox a ;
+! TUPLE: ibox a ;
+! [ 42 ibox boa mbox boa obox boa [ a>> swap [ a>> 43 swap a<< ] [ a>> 44 swap a<< ] if ] keep ] propagated-tree
+
 ! Cross-check actual foldable tuple
 TUPLE: ro-tuple { a read-only } { b read-only } ;
 
@@ -209,32 +215,15 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
 
 { V{ f f } } [ [ [ baz new [ frob ] keep [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
 
+: slot-intervals ( info -- seq )
+    slots>> [ [ interval>> ] [ f ] if* ] map ;
 
 ! Recursive
 ! This is really cool, if I may say so myself..
 { T{ baz f 47 42 } } [ 5 [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] call ] unit-test
-{
-    T{ value-info-state
-       { class baz }
-       { interval full-interval }
-       { slots
-         {
-             f
-             T{ value-info-state
-                { class integer }
-                { interval T{ interval { from { 42 t } } { to { 1/0. t } } } }
-                { origin HS{ T{ literal-allocation { literal 42 } } local-allocation } }
-              }
-             T{ value-info-state
-                { class integer }
-                { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
-                { origin HS{ local-allocation T{ literal-allocation { literal 47 } } } }
-              }
-         }
-       }
-       { origin HS{ local-allocation } }
-     }
-} [ [ [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] final-info first ] with-rw ] unit-test
+
+{ { f T{ interval { from { 42 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } } }
+[ [ [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] final-info first slot-intervals ] with-rw ] unit-test
 
 TUPLE: box a ;
 C: <box> box
@@ -247,63 +236,10 @@ C: <box> box
 [ 10 [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times ] call ] unit-test
 
 {
-V{
-    T{ value-info-state
-        { class box }
-        { interval full-interval }
-        { slots
-            {
-                f
-                T{ value-info-state
-                    { class baz }
-                    { interval full-interval }
-                    { slots
-                        {
-                            f
-                            T{ value-info-state
-                                { class integer }
-                                { interval T{ interval { from { 42 t } } { to { 1/0. t } } } }
-                                { origin
-                                    HS{ local-allocation T{ literal-allocation { literal 42 } } }
-                                }
-                            }
-                            T{ value-info-state
-                                { class integer }
-                                { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
-                                { origin
-                                    HS{ local-allocation T{ literal-allocation { literal 47 } } }
-                                }
-                            }
-                        }
-                    }
-                    { origin HS{ local-allocation } }
-                }
-            }
-        }
-        { origin HS{ local-allocation } }
-    }
-    T{ value-info-state
-        { class baz }
-        { interval full-interval }
-        { slots
-            {
-                f
-                T{ value-info-state
-                    { class integer }
-                    { interval T{ interval { from { 42 t } } { to { 1/0. t } } } }
-                    { origin HS{ local-allocation T{ literal-allocation { literal 42 } } } }
-                }
-                T{ value-info-state
-                    { class integer }
-                    { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
-                    { origin HS{ local-allocation T{ literal-allocation { literal 47 } } } }
-                }
-            }
-        }
-        { origin HS{ local-allocation } }
-    }
+    { f T{ interval { from { 42 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } }
+    { f T{ interval { from { 42 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } }
 }
-} [ [ [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times ] final-info ] with-rw ] unit-test
+[ [ [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times ] final-info [ first slots>> second slot-intervals ] [ second slot-intervals ] bi ] with-rw ] unit-test
 
 
 ! Modifying the slot after the loop
@@ -315,73 +251,10 @@ V{
 [ 10 [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times [ 22 - ] change-a ] call ] unit-test
 
 {
-V{
-    T{ value-info-state
-        { class box }
-        { interval full-interval }
-        { slots
-            {
-                f
-                T{ value-info-state
-                    { class baz }
-                    { interval full-interval }
-                    { slots
-                        {
-                            f
-                            T{ value-info-state
-                                { class integer }
-                                { interval T{ interval { from { 20 t } } { to { 1/0. t } } } }
-                                { origin
-                                    HS{
-                                        T{ literal-allocation { literal 42 } }
-                                        local-allocation
-                                    }
-                                }
-                            }
-                            T{ value-info-state
-                                { class integer }
-                                { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
-                                { origin
-                                    HS{ local-allocation T{ literal-allocation { literal 47 } } }
-                                }
-                            }
-                        }
-                    }
-                    { origin HS{ local-allocation } }
-                }
-            }
-        }
-        { origin HS{ local-allocation } }
-    }
-    T{ value-info-state
-        { class baz }
-        { interval full-interval }
-        { slots
-            {
-                f
-                T{ value-info-state
-                    { class integer }
-                    { interval T{ interval { from { 20 t } } { to { 1/0. t } } } }
-                    { origin
-                        HS{
-                            local-allocation
-                            T{ literal-allocation { literal 42 } }
-                        }
-                    }
-                }
-                T{ value-info-state
-                    { class integer }
-                    { interval T{ interval { from { -1/0. t } } { to { 47 t } } } }
-                    { origin HS{ local-allocation T{ literal-allocation { literal 47 } } } }
-                }
-            }
-        }
-        { origin HS{ local-allocation } }
-    }
+    { f T{ interval { from { 20 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } }
+    { f T{ interval { from { 20 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } }
 }
-
-}
-[ [ [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times [ 22 - ] change-a ] final-info ] with-rw ] unit-test
+[ [ [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times [ 22 - ] change-a ] final-info [ first slots>> second slot-intervals ] [ second slot-intervals ] bi ] with-rw ] unit-test
 
 ! TODO: combine with branches
 
@@ -390,7 +263,7 @@ V{
 { vector } [ [ [ { vector } declare [ 1 + ] map ] final-classes first ] with-rw ] unit-test
 { vector } [ [ [ V{  } clone [ 1 + ] map ] final-classes first ] with-rw ] unit-test
 
-! ! Crosscheck recursive problems
+! Crosscheck recursive problems
 
 ! Appending to a vector
 { V{ 42 42 42 } } [ 3 [ V{ } clone swap [ 42 over push ] times ] call ] unit-test
@@ -423,8 +296,8 @@ V{
 
 { V{ 42 42 42 } } [ 3 [ test-append-normal ] call ] unit-test
 { vector } [ [ test-append-normal ] final-classes first ] unit-test
-! FIXME
-{ vector } [ [ [ test-append-normal ] final-info first ] with-rw ] unit-test
+{ T{ interval { from { 0 t } } { to { 288230376151711743 t } } } }
+[ [ [ test-append-normal ] final-info first slot-intervals third ] with-rw ] unit-test
 
 ! Not using locals, appending
 : test-append ( limit -- vector )
@@ -435,7 +308,6 @@ V{
 
 { V{ 42 42 42 } } [ 3 [ test-append ] call ] unit-test
 { vector } [ [ test-append ] final-classes first ] unit-test
-! FIXME
 { vector } [ [ [ test-append ] final-classes first ] with-rw ] unit-test
 
 ! Using locals, appending
@@ -472,25 +344,20 @@ V{
 { vector } [ [ [ test-fun-2 ] final-classes first ] with-rw ] unit-test
 
 
-! ONLY works when loaded twice
-! TUPLE: circle { me circle } ;
-
 ! Infinite runtime loops
 { null } [ [ [ 1 + dup ] loop ] final-classes first ] unit-test
 { null } [ [ [ [ 1 + dup ] loop ] final-classes first ] with-rw ] unit-test
 ! Recursive access
 { array } [ [ [ box new [ a>> ] follow ] final-classes first ] with-rw ] unit-test
 { array } [ [ [ box new [ { box } declare a>> ] follow ] final-classes first ] with-rw ] unit-test
-! Recursive access with slot-declaration
-! { } [ [ [ circle new [ me>> ] follow ] final-info ] with-rw ] unit-test
 
 
+! Crosscheck
 ! Test for the #1370 bug
 STRUCT: sbar { s sbar* } ;
 
-{ t } [
+{
+    V{ T{ value-info-state { class array } { interval full-interval } { slots { f } } { origin HS{ local-allocation } } } }
+} [
     [ [ sbar <struct> [ s>> ] follow ] final-info ]  with-rw
-    ! [ #recursive? ] find nip
-    ! child>> [ { [ #call? ] [ word>> \ alien-cell = ] } 1&& ] find nip
-    ! >boolean
 ] unit-test

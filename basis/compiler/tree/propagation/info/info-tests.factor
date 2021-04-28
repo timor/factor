@@ -1,8 +1,10 @@
-USING: accessors alien arrays byte-arrays classes.algebra classes.struct
-compiler.test compiler.tree.propagation.copy compiler.tree.propagation.info
-io.encodings.utf8 kernel literals math math.intervals namespaces quotations
-sequences sequences.private tools.test ;
+USING: accessors alien alien.c-types arrays byte-arrays classes.algebra
+classes.struct compiler.test compiler.tree.propagation.copy
+compiler.tree.propagation.info io.encodings.utf8 kernel literals math
+math.intervals namespaces quotations sequences sequences.private
+specialized-arrays tools.test ;
 IN: compiler.tree.propagation.info.tests
+FROM: math => float ;
 
 { f } [ 0.0 -0.0 eql? ] unit-test
 
@@ -277,7 +279,7 @@ TUPLE: mixed-tup { a read-only } b ;
     { interval empty-interval }
     { literal T{ mixed-tup { a 11 } { b 22 } } }
     { literal? t }
-    { slots { f T{ lazy-ro-info { values { 10003 } } } T{ lazy-info { values { 10004 } } } } }
+    { slots { f T{ lazy-info { values { 10003 } } { ro? t } } T{ lazy-info { values { 10004 } } } } }
    }
  } [ [ T{ mixed-tup f 11 22 } <literal-info> ] with-rw ] unit-test
 
@@ -286,7 +288,7 @@ TUPLE: mixed-tup { a read-only } b ;
     { interval empty-interval }
     { literal T{ test-tuple { x T{ mixed-tup { a 49 } { b 50 } } } } }
     { literal? t }
-    { slots { f T{ lazy-ro-info { values { 10006 } } } } }
+    { slots { f T{ lazy-info { values { 10006 } } { ro? t } } } }
    }
  } [ [ T{ test-tuple f T{ mixed-tup f 49 50 } } <literal-info> ] with-rw ] unit-test
 
@@ -301,3 +303,56 @@ TUPLE: circle me ;
 
 { } [ circle new dup >>me 1quotation final-info drop ] unit-test
 { } [ [ circle new dup >>me 1quotation final-info drop ] with-rw ] unit-test
+
+
+STRUCT: sbar { s sbar* } ;
+
+SPECIALIZED-ARRAY: int
+
+STRUCT: test-struct
+    { x int }
+    { y int } ;
+
+{
+    T{ value-info-state
+       { class test-struct }
+       { interval empty-interval }
+       { literal S{ test-struct { x 12 } { y 20 } } }
+       { literal? t }
+       { slots
+         {
+             f
+             T{ value-info-state
+                { class byte-array }
+                { interval empty-interval }
+                { literal B{ 12 0 0 0 20 0 0 0 } }
+                { literal? t }
+                { slots
+                  { T{ value-info-state { class fixnum } { interval T{ interval { from { 8 t } } { to { 8 t } } } } { literal 8 } { literal? t } } }
+                }
+              }
+         }
+       }
+     }
+} [ S{ test-struct f 12 20 } <literal-info> ] unit-test
+
+{
+    T{ value-info-state
+       { class test-struct }
+       { interval empty-interval }
+       { literal S{ test-struct { x 12 } { y 20 } } }
+       { literal? t }
+       { slots { f T{ lazy-info { values { 10003 } } { ro? t } } } }
+     }
+
+    T{ value-info-state
+       { class byte-array }
+       { interval empty-interval }
+       { literal B{ 12 0 0 0 20 0 0 0 } }
+       { literal? t }
+       { slots { T{ lazy-info { values { 10002 } } { ro? t } } } }
+     }
+
+    T{ value-info-state { class fixnum } { interval T{ interval { from { 8 t } } { to { 8 t } } } } { literal 8 } { literal? t } }
+
+} [ [ S{ test-struct f 12 20 } <literal-info> 10003 value-info 10002 value-info ] with-rw ] unit-test

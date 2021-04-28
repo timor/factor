@@ -24,6 +24,7 @@ IN: compiler.tree.propagation
     H{ } clone copies set
     H{ } clone 1array value-infos set
     H{ } clone 1array constraints set
+    HS{ } clone virtual-values set
     0 sentinel set-global
     ! orphan get
     ! [ introduce-value ]

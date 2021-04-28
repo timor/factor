@@ -19,7 +19,7 @@ TUPLE: #call < node word in-d out-d body method class info ;
         swap >>out-d
         swap >>in-d ;
 
-TUPLE: #call-recursive < node label in-d out-d info ;
+TUPLE: #call-recursive < node label in-d out-d info virtual-infos ;
 
 : <#call-recursive> ( inputs outputs label -- node )
     #call-recursive new
@@ -99,7 +99,7 @@ TUPLE: #recursive < node in-d word label loop? child ;
         swap >>in-d
         swap >>label ;
 
-TUPLE: #enter-recursive < node in-d out-d label info ;
+TUPLE: #enter-recursive < node in-d out-d label info virtual-infos ;
 
 : <#enter-recursive> ( label inputs outputs -- node )
     #enter-recursive new
@@ -107,7 +107,7 @@ TUPLE: #enter-recursive < node in-d out-d label info ;
         swap >>in-d
         swap >>label ;
 
-TUPLE: #return-recursive < #renaming in-d out-d label info ;
+TUPLE: #return-recursive < #renaming in-d out-d label info virtual-infos ;
 
 : <#return-recursive> ( label inputs outputs -- node )
     #return-recursive new

@@ -125,11 +125,8 @@ SYMBOL: condition-value
 
 M: #phi propagate-before ( #phi -- )
     [ annotate-phi-inputs ]
-    [ [ phi-info-d>> flip ] [ out-d>> ] bi merge-value-infos ]
-    [ loop-return-phi get = infer-children-data get swap
-      [ drop ] [ lift-inner-values ] if
-    ]
-    tri ;
+    [ [ phi-info-d>> flip ] [ out-d>> ] bi merge-value-infos ] bi
+    infer-children-data get lift-inner-values ;
 
 :: update-constraints ( new old -- )
     new [| key value | key old [ value union ] change-at ] assoc-each ;

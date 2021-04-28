@@ -1,6 +1,6 @@
 USING: accessors classes compiler.tree.propagation.info
-compiler.tree.propagation.nodes compiler.tree.propagation.special-nodes kernel math
-sequences sets ;
+compiler.tree.propagation.nodes compiler.tree.propagation.special-nodes kernel
+math sequences sets ;
 
 IN: compiler.tree.propagation.set-slots
 
@@ -9,12 +9,6 @@ IN: compiler.tree.propagation.set-slots
 
 ! Fetch the correct slot from obj's info state.  We expect this to be a lazy
 ! slot entry.
-: strong-update ( info value -- )
-    set-inner-value-info ;
-
-: weak-update ( new-info virtuals -- )
-    [ extend-value-info ] with each ;
-
 : propagate-tuple-set-slot-infos ( #call -- )
     in-d>> first3
     [let :> ( value-val obj-val n-val )

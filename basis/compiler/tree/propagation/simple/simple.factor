@@ -5,7 +5,7 @@ classes.tuple.private combinators combinators.short-circuit compiler.tree
 compiler.tree.propagation.constraints compiler.tree.propagation.info
 compiler.tree.propagation.inlining compiler.tree.propagation.nodes
 compiler.tree.propagation.origins compiler.tree.propagation.slots continuations
-kernel sequences stack-checker.dependencies words ;
+kernel namespaces sequences stack-checker.dependencies words ;
 IN: compiler.tree.propagation.simple
 
 M: #introduce propagate-before
@@ -154,5 +154,4 @@ M: #alien-node propagate-after
 M: #alien-callback propagate-around child>> (propagate) ;
 
 M: #return annotate-node dup in-d>>
-    bake-lazy-infos
-    [ (annotate-node) ] with-variable-on ;
+    (annotate-node-baked) ;

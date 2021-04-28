@@ -38,6 +38,10 @@ SYMBOL: bake-lazy-infos
     ] assoc-map
     >>info drop ; inline
 
+: (annotate-node-baked) ( node values -- )
+    bake-lazy-infos
+    [ (annotate-node) ] with-variable-on ; inline
+
 M: node propagate-before drop ;
 
 M: node propagate-after drop ;

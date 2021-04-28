@@ -9,6 +9,14 @@ FROM: namespaces => set ;
 
 SYMBOL: allocations
 
+SYMBOL: virtual-values
+
+: record-virtual-value ( value -- )
+    virtual-values get [ adjoin ] [ drop ] if* ;
+
+: virtual-value? ( value -- ? )
+    virtual-values get in? ;
+
 SYMBOL: +escaping+
 
 : <escaping-values> ( -- disjoint-set )
@@ -22,6 +30,7 @@ SYMBOL: inner-escaping-values
 : record-inner-escaping-value ( value -- )
     inner-escaping-values get [ adjoin ] [ drop ] if* ;
 
+! TBR
 SYMBOL: inner-equal-values
 : record-inner-equal-values ( values -- )
     inner-equal-values get [ adjoin ] [ drop ] if* ;

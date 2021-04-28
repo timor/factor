@@ -31,7 +31,6 @@ TUPLE: value-info-state
     literal?
     slots
     origin
-    slot-refs
     ;
 
 DEFER: value-info
@@ -40,11 +39,15 @@ DEFER: value-info-union
 DEFER: set-value-info
 DEFER: set-inner-value-info
 
-TUPLE: lazy-info values ;
-C: <lazy-info> lazy-info
-TUPLE: lazy-ro-info < lazy-info ;
+ERROR: cannot-set-lazy-info-slots value lazy-info ;
 
-C: <lazy-ro-info> lazy-ro-info
+TUPLE: lazy-info { values read-only } { ro? read-only } ;
+
+: <lazy-info> ( values ro? -- obj )
+    [ members dup [ record-virtual-value ] each ] dip lazy-info boa ; inline
+
+: lazy-ro-info? ( info -- ? )
+    { [ lazy-info? ] [ ro?>> ] } 1&& ;
 
 SYMBOL: lazy-info-trace
 
@@ -71,7 +74,19 @@ M: lazy-info bake-info*
     [ safe-lazy-info>info bake-info ] with-scope ;
 
 CONSULT: value-info-state lazy-info lazy-info>info ;
-: info>values ( value-info -- values )
+
+: unique-definer ( lazy-info -- values ? )
+    values>> members dup length 1 = ;
+
+M: lazy-info class<< cannot-set-lazy-info-slots ;
+M: lazy-info interval<< cannot-set-lazy-info-slots ;
+M: lazy-info literal<< cannot-set-lazy-info-slots ;
+M: lazy-info literal?<< cannot-set-lazy-info-slots ;
+M: lazy-info slots<< cannot-set-lazy-info-slots ;
+M: lazy-info origin<< cannot-set-lazy-info-slots ;
+M: lazy-info virtual-infos<< cannot-set-lazy-info-slots ;
+
+: info>values ( value-info -- seq )
     dup lazy-info?
     [ values>> ]
     [ <value>
@@ -255,8 +270,7 @@ DEFER: read-only-slot?
     pick [
         [ info>values ] 2dip
         [ 1 + ] dip
-        read-only-slot?
-        [ <lazy-ro-info> ] [ <lazy-info> ] if
+        read-only-slot? <lazy-info>
     ]
     [ 3drop f ] if ;
 
@@ -293,14 +307,11 @@ DEFER: read-only-slot?
             empty-interval >>interval
         ] [
             init-interval
-            ! init-slots
             dup maybe-make-literal
             [ >>literal ] [ >>literal? ] bi*
             [ fix-capacity-class ] change-class
         ] if
     ] if
-    init-slots ! Literal case should be covered by explicit de-literalization
-    [ dup null? [ drop f ] when ] change-slot-refs
     [ dup null? [ drop f ] when ] change-origin
     ; inline
 
@@ -323,7 +334,8 @@ DEFER: read-only-slot?
     <value-info>
         swap >>literal
         t >>literal?
-    init-value-info ; foldable
+    init-value-info
+    init-slots ; foldable
 
 : <sequence-info> ( length class -- info )
     <value-info>
@@ -345,7 +357,8 @@ DEFER: read-only-slot?
     <value-info>
     swap >>class
     swap [ dup [ resolve-copy [ record-inner-value ] [ value-info ] bi ] when ] map >>slots
-    init-value-info ;
+    init-value-info
+    init-slots ;
 
 
 : >literal< ( info -- literal literal? )
@@ -385,10 +398,6 @@ DEFER: (value-info-intersect)
         ]
     } cond ;
 
-
-: merge-slot-refs ( info1 info2 -- slot-refs )
-    [ slot-refs>> ] bi@ union HS{ } set-like ;
-
 : merge-origin ( info1 info2 -- slot-refs )
     [ origin>> ] bi@ union HS{ } set-like ;
 
@@ -399,7 +408,6 @@ DEFER: (value-info-intersect)
         [ [ interval>> ] bi@ interval-intersect >>interval ]
         [ intersect-literals [ >>literal ] [ >>literal? ] bi* ]
         [ intersect-slots >>slots ]
-        [ merge-slot-refs >>slot-refs ]
         [ merge-origin >>origin ]
     } 2cleave
     init-value-info ;
@@ -420,15 +428,22 @@ DEFER: value-info-union
 
 DEFER: (value-info-union)
 
+! NOTE: not allowing non-lazy/lazy merging here.  Messes up semantics by
+! magically creating new values on demand.  This means that every info
+! containing a non-f-slot must have been initialized with lazy slots beforehand
+! explicitly.
 : union-lazy-slot ( info1 info2 -- info )
-    [ info>values ] bi@ union <lazy-info> ;
+    [ lazy-info check-instance ] bi@
+    [ [ values>> ] bi@ union ]
+    [ [ ro?>> ] bi@ and ] 2bi <lazy-info> ;
 
 ! If f, the other wins (union with null-info)
 : union-slot ( info1 info2 -- info )
     {
         { [ dup not ] [ nip ] }
         { [ over not ] [ drop ] }
-        [ propagate-rw-slots? [ union-lazy-slot ] [ (value-info-union) ] if ]
+        { [ propagate-rw-slots? [ 2dup [ lazy-info? ] either? ] [ f ] if ] [ union-lazy-slot ] }
+        [ (value-info-union) ]
     } cond ;
 
 : union-slots ( info1 info2 -- slots )
@@ -446,7 +461,6 @@ orphan [ <value> ] initialize
         [ [ interval>> ] bi@ interval-union >>interval ]
         [ union-literals [ >>literal ] [ >>literal? ] bi* ]
         [ union-slots >>slots ]
-        [ merge-slot-refs >>slot-refs ]
         [ merge-origin >>origin ]
     } 2cleave
     init-value-info ;
@@ -542,11 +556,11 @@ M: value-info-state nested-values*
 M: lazy-info nested-values*
     values>> [ value-info nested-values* ] gather ;
 
-: escape-closure ( value -- virtuals )
+: virtuals-closure ( value -- virtuals )
     [ nested-values* ] closure members ;
 
-: slot-escape-closure ( value -- virtuals )
-    value-info slots>> [ escape-closure ] gather ;
+: slot-virtuals-closure ( value -- virtuals )
+    value-info slots>> [ virtuals-closure ] gather ;
 
 DEFER: extend-value-info
 ! Full invalidation
@@ -561,7 +575,7 @@ DEFER: extend-value-info
     ] [ drop ] if ;
 
 : object-escapes ( value -- )
-    slot-escape-closure [ invalidate-virtual ] each ;
+    slot-virtuals-closure [ invalidate-virtual ] each ;
 
 : read-only-slot? ( n class -- ? )
     dup class?
@@ -583,6 +597,20 @@ DEFER: extend-value-info
     resolve-copy value-infos get
     [ assoc-stack [ value-info-union ] when* ] 2keep
     last set-at ;
+
+: strong-update ( info value -- )
+    set-inner-value-info ;
+
+: weak-update ( new-info virtuals -- )
+    [ extend-value-info ] with each ;
+
+: update-lazy-info ( info lazy-info -- )
+    dup { [ lazy-info? ] [ ro?>> not ] } 1&&
+    [ unique-definer
+      [ first strong-update ]
+      [ [ weak-update ] with each ] if ]
+    [ 2drop ] if ;
+
 
 : possible-boolean-values ( info -- values )
     class>> {

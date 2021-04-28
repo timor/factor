@@ -101,6 +101,7 @@ IN: compiler.test
     H{ } clone copies set
     H{ } clone 1vector value-infos set
     init-escaping-values
+    HS{ } clone virtual-values set
     IH{ } clone literal-values set
     ;
 
