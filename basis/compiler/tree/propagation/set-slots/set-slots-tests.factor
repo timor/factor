@@ -33,6 +33,10 @@ SLOT: a
 { V{ 42 11 } }
 [ [ [ [ bar new 11 >>b ] [ bar new 11 >>b ] if [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
 
+! Returning tuples
+{ V{ 42 11 } }
+[ [ [ [ bar new 11 >>b ] [ bar new 33 >>b ] if ] final-info ] with-rw ] unit-test
+
 ! Initial values
 TUPLE: baz { a initial: 42 } { b initial: 47 } ;
 

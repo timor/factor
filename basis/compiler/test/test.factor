@@ -114,7 +114,7 @@ IN: compiler.test
 
 : with-rw ( quot -- )
     propagate-rw-slots [
-        15 recursion-limit set
+        20 recursion-limit set
         with-values
     ] with-variable-on ; inline
 

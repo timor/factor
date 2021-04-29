@@ -1,7 +1,7 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors assocs assocs.extras classes.algebra combinators compiler.tree
-compiler.tree.combinators compiler.tree.propagation.constraints
+USING: accessors arrays assocs assocs.extras classes.algebra combinators
+compiler.tree compiler.tree.combinators compiler.tree.propagation.constraints
 compiler.tree.propagation.copy compiler.tree.propagation.escaping
 compiler.tree.propagation.info compiler.tree.propagation.nodes
 compiler.tree.propagation.simple kernel math math.intervals namespaces sequences
@@ -78,6 +78,8 @@ DEFER: generalize-counter
         ] if
     ] if ;
 
+! TODO: This may be MUCH more easy with freeze/thaw semantics
+
 ! Generalizing virtuals:
 ! Each call site and the return node has a virtual-infos assoc.
 ! Recusive stacks are unified as regular, out-d of #enter-recursive is set to
@@ -147,6 +149,17 @@ SYMBOL: sentinel
     baked-virtual-infos >>virtual-infos drop ;
 
 ! TODO: check that inner-values state is correct after return
+
+! Merge the ones that have been changed in the loop body upwards
+: include-changed-virtuals ( -- )
+    propagate-rw-slots? [
+        inner-values get
+        unclip-last swap
+        [ 1array ]
+        [ unclip-last swapd union suffix ] if-empty
+        inner-values set
+    ] when ;
+
 M: #recursive propagate-around ( #recursive -- )
     constraints [ H{ } clone suffix ] change
     inner-values [ V{ } clone suffix ] change
@@ -162,7 +175,9 @@ M: #recursive propagate-around ( #recursive -- )
             [ first propagate-recursive-phi-virtuals ]
             [ (propagate) ]
         } cleave
-    ] until-fixed-point ;
+    ] until-fixed-point
+    include-changed-virtuals
+    ;
 
 : recursive-phi-infos ( node -- infos )
     label>> enter-recursive>> node-output-infos ;

@@ -85,7 +85,19 @@ DEFER: collect-variables
 : annotate-phi-inputs ( #phi -- )
     dup phi-in-d>> compute-phi-input-infos >>phi-info-d drop ;
 
+
+ERROR: imbalanced-virtuals branch-data ;
+
+: check-inner-values-balanced ( infer-children-data -- )
+    dup [ inner-values of ] map sift
+    [ drop ]
+    [ unclip-slice length
+      '[ length _ = ] all?
+      [ drop ]
+      [ imbalanced-virtuals ] if ] if-empty ;
+
 : (lift-inner-values) ( infer-children-data -- assoc )
+    dup check-inner-values-balanced
     [ [ inner-values of ?last ] gather
       ! NOTE: re-registers values for upwards propagation
       dup [ record-inner-value ] each

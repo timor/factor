@@ -1,8 +1,8 @@
 USING: accessors arrays classes.struct classes.tuple.private compiler.test
 compiler.tree compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.slots hashtables kernel kernel.private math
-math.intervals namespaces sequences stack-checker.values tools.test vectors
-words ;
+math.intervals namespaces quotations sequences sequences.extras
+stack-checker.values tools.test vectors words ;
 IN: compiler.tree.propagation.slots.tests
 
 : indexize ( seq -- assoc )
@@ -257,6 +257,16 @@ TUPLE: bar { a read-only initial: 42 } b ;
     { 0 1 2 } { 3 } \ <tuple-boa> <#call> propagate-<tuple-boa>-refs
 ] unit-test
 
+
+! Checking that nested literals have the same virtual slots when passed around
+TUPLE: box a ;
+C: <box> box
+
+{
+    T{ box f T{ bar f 11 22 } }
+    T{ box f T{ bar f 11 22 } }
+} [ T{ bar f 11 22 } [ <box> ] [ <box> ] bi ] unit-test
+
 ! TODO Hidden updates
 ! TUPLE: obox a ;
 ! TUPLE: mbox a ;
@@ -325,21 +335,24 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
 { { f T{ interval { from { 42 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } } }
 [ [ [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] final-info first slot-intervals ] with-rw ] unit-test
 
-TUPLE: box a ;
-C: <box> box
+: frobn-baz ( baz n -- baz )
+    [ [ 1 + ] change-a [ 1 - ] change-b ] times ; inline
+
+: frob-baz-box ( n -- box baz )
+    baz new [ <box> ] keep rot frobn-baz ; inline
 
 ! Keeping a reference outside the loop
 {
     T{ box { a T{ baz { a 52 } { b 37 } } } }
     T{ baz { a 52 } { b 37 } }
 }
-[ 10 [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times ] call ] unit-test
+[ 10 [ frob-baz-box ] call ] unit-test
 
 {
     { f T{ interval { from { 42 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } }
     { f T{ interval { from { 42 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } }
 }
-[ [ [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times ] final-info [ first slots>> second slot-intervals ] [ second slot-intervals ] bi ] with-rw ] unit-test
+[ [ [ frob-baz-box ] final-info [ first slots>> second slot-intervals ] [ second slot-intervals ] bi ] with-rw ] unit-test
 
 
 ! Modifying the slot after the loop
@@ -348,15 +361,57 @@ C: <box> box
     T{ box { a T{ baz { a 30 } { b 37 } } } }
     T{ baz { a 30 } { b 37 } }
 }
-[ 10 [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times [ 22 - ] change-a ] call ] unit-test
+[ 10 [ frob-baz-box [ 22 - ] change-a ] call ] unit-test
 
 {
     { f T{ interval { from { 20 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } }
     { f T{ interval { from { 20 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } }
 }
-[ [ [ baz new [ <box> ] keep rot [ [ 1 + ] change-a [ 1 - ] change-b ] times [ 22 - ] change-a ] final-info [ first slots>> second slot-intervals ] [ second slot-intervals ] bi ] with-rw ] unit-test
+[ [ [ frob-baz-box [ 22 - ] change-a ] final-info [ first slots>> second slot-intervals ] [ second slot-intervals ] bi ] with-rw ] unit-test
 
-! TODO: combine with branches
+! DOING: combine with branches
+{ T{ box { a T{ baz { a 52 } { b 37 } } } } } [ t 10 [| cond n | baz new [ <box> ] keep cond [ n frobn-baz drop ] [ [ 22 - ] change-a drop ] if ] call ] unit-test
+{ T{ box { a T{ baz { a 20 } { b 47 } } } } } [ f 10 [| cond n | baz new [ <box> ] keep cond [ n frobn-baz drop ] [ [ 22 - ] change-a drop ] if ] call ] unit-test
+
+{ { f T{ interval { from { 20 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } } }
+[ [ [| cond n | baz new [ <box> ] keep cond [ n frobn-baz drop ] [ [ 22 - ] change-a drop ] if ] final-info first slots>> second slot-intervals ] with-rw ] unit-test
+
+! Return via phi
+{ T{ box { a T{ baz { a 52 } { b 37 } } } } T{ baz { a 52 } { b 37 } } }
+[ t 10 [| cond n | baz new [ <box> ] keep cond [ n frobn-baz ] [ [ 22 - ] change-a ] if ] call ] unit-test
+{ T{ box { a T{ baz { a 20 } { b 47 } } } } T{ baz { a 20 } { b 47 } } }
+[ f 10 [| cond n | baz new [ <box> ] keep cond [ n frobn-baz ] [ [ 22 - ] change-a ] if ] call ] unit-test
+
+{
+    { f T{ interval { from { 20 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } }
+    { f T{ interval { from { 20 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } }
+}
+[ [ [| cond n | baz new [ <box> ] keep cond [ n frobn-baz ] [ [ 22 - ] change-a ] if ]
+    final-info [ first slots>> second slot-intervals ] [ second slot-intervals ] bi ] with-rw ] unit-test
+
+! Keeping container on retain-stack instead
+{ T{ box { a T{ baz { a 52 } { b 37 } } } } }
+[ t 10 [| cond n | baz new dup <box> [ cond [ n frobn-baz drop ] [ [ 22 - ] change-a drop ] if ] dip ] call ] unit-test
+{ T{ box { a T{ baz { a 20 } { b 47 } } } } }
+[ f 10 [| cond n | baz new dup <box> [ cond [ n frobn-baz drop ] [ [ 22 - ] change-a drop ] if ] dip ] call ] unit-test
+
+{ { f T{ interval { from { 20 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } } }
+[ [ [| cond n | baz new dup <box> [ cond [ n frobn-baz drop ] [ [ 22 - ] change-a drop ] if ] dip ] final-info first slots>> second slot-intervals ] with-rw ] unit-test
+
+
+! Running loop inside branch, all inner changed values must be propagated outside.
+: foo-quot ( -- quot ) [| cond n | cond [ n frob-baz-box ] [ baz new <box> dup a>> [ 22 - ] change-a ] if ] ;
+
+{ T{ box f T{ baz f 52 37 } } T{ baz f 52 37 } }
+[ t 10 foo-quot call ] unit-test
+{ T{ box f T{ baz f 20 47 } } T{ baz f 20 47 } }
+[ f 10 foo-quot call ] unit-test
+
+{
+    { f T{ interval { from { 20 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } }
+    { f T{ interval { from { 20 t } } { to { 1/0. t } } } T{ interval { from { -1/0. t } } { to { 47 t } } } }
+}
+[ [ foo-quot final-info [ first slots>> second slot-intervals ] [ second slot-intervals ] bi ] with-rw ] unit-test
 
 ! Recursive infinite compile loop checks
 
@@ -479,3 +534,8 @@ STRUCT: sbar { s sbar* } ;
 { V{ vector } } [ [ [ { vector } declare [ [ 1 + ] map ] map ] final-classes ] with-rw ] unit-test
 
 { V{ object } } [ [ [ dup [ [ [ 1 + ] change-last ] each ] each ] final-classes ] with-rw ] unit-test
+
+
+! Crosscheck
+{ V{ array } } [ [ [ [ <=> ] sort ] final-classes ] with-rw ] unit-test
+{ V{ array } } [ [ [ [ <=> ] sort [ <=> ] sort ] final-classes ] with-rw ] unit-test
