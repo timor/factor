@@ -339,10 +339,6 @@ generic-comparison-ops [
 ] "outputs" set-word-prop
 
 ! the output of (clone) has the same type as the input
-: cloned-value-info ( value-info -- value-info' )
-    clone f >>literal f >>literal?
-    [ [ dup [ cloned-value-info ] when ] map ] change-slots ;
-
 \ (clone) [ cloned-value-info ] "outputs" set-word-prop
 
 \ slot [

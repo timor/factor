@@ -91,6 +91,7 @@ CONSULT: value-info-state lazy-info lazy-info>info ;
 : unique-definer ( lazy-info -- values ? )
     values>> members dup length 1 = ;
 
+! Cloning is currently only well-defined during propagation of (clone)
 
 ERROR: cannot-clone-lazy-info lazy-info ;
 M: lazy-info clone cannot-clone-lazy-info ;
@@ -105,13 +106,16 @@ M: lazy-info slots<< cannot-set-lazy-info-slots ;
 M: lazy-info origin<< cannot-set-lazy-info-slots ;
 M: lazy-info virtual-infos<< cannot-set-lazy-info-slots ;
 
+: introduce-virtual-value ( info -- value )
+    <value>
+    [ introduce-value ]
+    [ set-inner-value-info ]
+    [ ] tri ;
+
 : info>values ( value-info -- seq )
     dup lazy-info?
     [ values>> ]
-    [ <value>
-      [ introduce-value ]
-      [ set-inner-value-info ]
-      [ 1array ] tri ] if ;
+    [ introduce-virtual-value 1array ] if ;
 
 ! Things to put inside value info slot entries
 DEFER: <literal-info>
@@ -670,3 +674,22 @@ DEFER: extend-value-info
 
 : word>input-infos ( word -- input-infos/f )
     "input-classes" word-prop class-infos ;
+
+: clone-virtual ( value -- value )
+    value-info introduce-virtual-value ;
+
+
+: clone-lazy-info ( lazy-info -- lazy-info )
+    {
+        [ values>> [ clone-virtual ] map ]
+        [ ro?>> ]
+        [ baked?>> ]
+        [ cached>> ]            ! TODO: re-cache?
+    } cleave lazy-info boa ;
+
+: cloned-value-info ( value-info -- value-info' )
+    clone f >>literal f >>literal?
+    [ [ dup [ dup lazy-info?
+              [ clone-lazy-info ]
+            [ cloned-value-info ] if
+         ] when ] map ] change-slots ;
