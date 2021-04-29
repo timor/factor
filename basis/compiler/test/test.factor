@@ -114,7 +114,7 @@ IN: compiler.test
 
 : with-rw ( quot -- )
     propagate-rw-slots [
-        10 recursion-limit set
+        15 recursion-limit set
         with-values
     ] with-variable-on ; inline
 
@@ -133,13 +133,8 @@ IN: compiler.test
         ... ] compose
     ] annotate ;
 
-: watch-baked-info ( info -- )
-    [ ... ] keep
-    dup { [  ] [ class>> tuple-class? ] } 1&&
-    [ "baked: " write bake-info ... ] [ drop ] if ;
-
 : watch-value-infos ( seq -- )
-    [ dup [ resolve-copy "%d -> %d : " printf ] [ value-info watch-baked-info ] bi ] each ;
+    [ dup [ resolve-copy "%d -> %d : " printf ] [ value-info ... ] bi ] each ;
 
 : watch-in-d ( node -- )
     "-- in-d-value-info:" print
@@ -151,24 +146,19 @@ IN: compiler.test
     out-d>> watch-value-infos ;
 
 : annotate-value-info<= ( -- )
-    \ value-info<= dup reset [ [ "--- Entering value-info<=" print 2dup [ watch-baked-info ] bi@ ] prepose
+    \ value-info<= dup reset [ [ "--- Entering value-info<=" print 2dup [ ... ] bi@ ] prepose
                                [ "--- value-info<=: " write dup . ] compose ] annotate ;
 
 
 :: annotate-#call ( node-selector: ( #call -- ? ) -- )
     [ dup #call? node-selector [ drop f ] if ] :> sel
     M\ #call propagate-before dup reset
-    [ dup '[ dup sel call
-             [ [ dup describe watch-in-d ]
-               _
-               [ watch-out-d ] tri
-             ] _ if ]
-     ] annotate ;
+    [ [ dup describe ] prepose ] annotate ;
 
 
 : watch-virtuals ( -- )
     inner-values get
-    [ [ "virtual %d: " printf ] [ value-info bake-info ... ] bi ] [ each ] curry each ;
+    [ [ "virtual %d: " printf ] [ value-info ... ] bi ] [ each ] curry each ;
 
 : annotate-call-recursive ( -- )
     M\ #call-recursive propagate-before dup reset
@@ -184,18 +174,15 @@ IN: compiler.test
 
 : annotate-virtual-creation ( -- )
     \ info>values dup reset [
-        [ dup bake-info ... ] prepose
+        [ dup ... ] prepose
         [ \ info>values entering ] prepose
         [ \ info>values leaving ] compose
     ] annotate ;
 
-: watch-copy ( value -- )
-    dup [ resolve-copy ] [ value-info unparse ] bi "  %d -> %d: %s\n" printf ;
-
 : watch-node ( node -- )
     dup class-of "Node: %s" printf nl
     <mirror>
-    [ "in-d" of [ " in-d:" print [ watch-copy ] each ] when* ]
+    [ "in-d" of [ " in-d:" print watch-value-infos ] when* ]
     [ "out-d" of [ unparse-short " out-d: %s\n" printf ] when* ]
     [ "declaration" of [ unparse "declaration: %s\n" printf ] when* ]
     tri
@@ -239,6 +226,8 @@ IN: compiler.test
     ] annotate ;
 
 : recursion-trace ( quot/word -- nodes )
+    annotate-virtual-creation
+    \ propagate-recursive-phi-virtuals dup reset watch
     annotate-recursive-stacks
     annotate-propagate-around
     \ (lift-inner-values) dup reset watch
@@ -260,5 +249,7 @@ IN: compiler.test
         \ propagate-after reset
         \ propagate-around reset
         \ recursive-stacks reset
+        \ propagate-recursive-phi-virtuals reset
+        \ info>values reset
     ] [  ] cleanup
     ;
