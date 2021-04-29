@@ -10,7 +10,12 @@ FROM: sequences.private => array-capacity ;
 FROM: namespaces => set ;
 IN: compiler.tree.propagation.recursive
 
-! For #call-recursive: infos1: latest-input-infos ( in-d in value-infos ),
+
+! With virtuals:
+! - Checking for fixed-point using baked infos.  This means we need to bake the
+! infos with the virtual state at their respective call sites.
+
+! For #call-recursive and #return-recursive loops: infos1: latest-input-infos ( in-d in value-infos ),
 ! infos2: recursive-phi-infos ( out-d in infos>> of #enter-recursive  )
 : check-fixed-point ( node infos1 infos2 -- )
     [ value-info<= ] 2all?
@@ -28,7 +33,7 @@ IN: compiler.tree.propagation.recursive
 
 : recursive-virtual-infos ( seq #enter-recursive -- call-site-assocs initial-assoc )
     [ label>> calls>> [ node>> virtual-infos>> extract-keys sift-values ] with map ]
-    [ virtual-infos>> extract-keys sift-values ] 2bi ;
+    [ virtual-infos-in>> extract-keys sift-values ] 2bi ;
 
 : counter-class ( interval class -- class' )
     dup fixnum class<= rot array-capacity-interval interval-subset? and
@@ -132,13 +137,20 @@ SYMBOL: sentinel
     virtual-values get members
     [ [ value-info bake-info ] keep pick set-at ] each ;
 
-: capture-virtuals ( node -- )
+: capture-initial-virtuals ( #enter-recursive -- )
+    baked-virtual-infos >>virtual-infos-in drop ;
+
+: capture-iteration-virtuals ( #enter-recursive -- )
+    baked-virtual-infos >>virtual-infos-out drop ;
+
+: capture-call-site-virtuals ( node -- )
     baked-virtual-infos >>virtual-infos drop ;
 
+! TODO: check that inner-values state is correct after return
 M: #recursive propagate-around ( #recursive -- )
     constraints [ H{ } clone suffix ] change
     inner-values [ V{ } clone suffix ] change
-    dup child>> first capture-virtuals
+    dup child>> first capture-initial-virtuals
     [
         sentinel counter recursion-limit get > [ "recursion limit" throw ] when
         constraints [ but-last H{ } clone suffix ] change
@@ -171,9 +183,20 @@ M: #recursive propagate-around ( #recursive -- )
 : unless-loop ( node quot -- )
     [ dup label>> loop?>> [ drop ] ] dip if ; inline
 
+: bake-with ( infos assoc -- infos )
+    [ value-infos [ swap suffix ] change [ bake-info ] map ] with-scope ;
+
+: baked-recursive-phi-infos ( node -- infos )
+    propagate-rw-slots?
+    [ label>> enter-recursive>>
+      [ node-output-infos ] [ virtual-infos-out>> ] bi
+      bake-with ]
+    [ recursive-phi-infos ] if ;
+
+! TODO: non-loops
 M: #call-recursive propagate-before ( #call-recursive -- )
     [
-        [ ] [ latest-input-infos ] [ recursive-phi-infos ] tri
+        [ ] [ latest-input-infos ] [ baked-recursive-phi-infos ] tri
         check-fixed-point
     ]
     [
@@ -184,18 +207,26 @@ M: #call-recursive propagate-before ( #call-recursive -- )
     ] bi ;
 
 M: #call-recursive annotate-node
-    dup capture-virtuals
+    dup capture-call-site-virtuals
     dup [ in-d>> ] [ out-d>> ] bi append (annotate-node) ;
 
 M: #enter-recursive annotate-node
+    dup capture-iteration-virtuals
     dup out-d>> (annotate-node) ;
+
+! : baked-node-input-infos...
+: baked-node-input-infos ( node -- infos )
+    propagate-rw-slots?
+    [ [ node-input-infos ] [ virtual-infos>> ] bi
+      bake-with ]
+    [ node-input-infos ] if ;
 
 M: #return-recursive propagate-before ( #return-recursive -- )
     [
-        [ ] [ latest-input-infos ] [ node-input-infos ] tri
+        [ ] [ latest-input-infos ] [ baked-node-input-infos ] tri
         check-fixed-point
     ] unless-loop ;
 
 M: #return-recursive annotate-node
-    dup capture-virtuals
+    dup capture-call-site-virtuals
     dup in-d>> (annotate-node) ;

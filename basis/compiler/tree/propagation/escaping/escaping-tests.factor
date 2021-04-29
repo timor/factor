@@ -18,7 +18,7 @@ C: <foo> foo
 
 : return-escapes? ( quot/word -- seq )
     ! [ propagated-tree last in-d>> [ resolve-copy value-escapes? ] map ] with-rw ;
-    [ final-info [ value-info-escapes? ] map escaping-values get allocations get
+    [ final-value-info [ value-info-escapes? ] map escaping-values get allocations get
     ] with-rw
     allocations set
     escaping-values set
@@ -202,11 +202,21 @@ C: <inner> inner
        { interval empty-interval }
        { literal T{ box { a 42 } } }
        { literal? t }
-       { slots { f T{ value-info-state { class object } { interval full-interval } { origin HS{ limbo } } } } }
+       { slots
+         {
+             f
+             T{ lazy-info
+                { values { 10009 } }
+                { cached
+                  T{ value-info-state { class fixnum } { interval T{ interval { from { 42 t } } { to { 42 t } } } } { literal 42 } { literal? t } }
+                }
+              }
+         }
+       }
        { origin HS{ T{ literal-allocation { literal T{ box { a 42 } } } } } }
      }
 }
-[ [ [ T{ box f 42 } dup <box> a>> frob-box ] final-info first ] with-rw ] unit-test
+[ [ [ T{ box f 42 } dup <box> a>> frob-box ] final-value-info first ] with-rw ] unit-test
 
 { t }
 [ [ T{ box f 42 } dup <box> a>> frob-box ] return-escapes? first ] unit-test

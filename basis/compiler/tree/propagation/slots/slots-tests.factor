@@ -81,7 +81,7 @@ C: <foo> foo
 ] unit-test
 
 ! New behavior
-{ { f 42 f } }
+{ { f 42 47 } }
 [
     { 42 47 } [ <literal-info> ] map
     foo "layout" word-prop <literal-info> suffix
@@ -138,8 +138,6 @@ TUPLE: bar { a read-only initial: 42 } b ;
     f
     t
     f
-    { f 0 f } foo f
-    { f 0 f } foo f
     { f 0 1 } foo f
     { f 0 2 } foo f
 } [
@@ -152,15 +150,111 @@ TUPLE: bar { a read-only initial: 42 } b ;
     ! New behavior, rw-slot deactivated, intermediate implementation ( TBR )
     { f 0 1 } foo fold-<tuple-boa>-values? ! t
     { f 0 2 } foo fold-<tuple-boa>-values? ! f
-    ! New behavior, rw-slot-deactivated
-    { 0 1 } foo fold-<tuple-boa>-rw? ! { f 0 f } f
-    { 0 2 } foo fold-<tuple-boa>-rw? ! { f 0 f } f
     ! New behavior, rw-slot activated
     ! We don't want to fold, but populate slots
-    propagate-rw-slots [
-        { 0 1 } foo fold-<tuple-boa>-rw? ! { f 0 1 } f
-        { 0 2 } foo fold-<tuple-boa>-rw? ! { f 0 2 } f
-    ] with-variable-on
+    { 0 1 } foo fold-<tuple-boa>-rw? ! { f 0 1 } f
+    { 0 2 } foo fold-<tuple-boa>-rw? ! { f 0 2 } f
+] unit-test
+
+
+! Old behavior
+{
+    {
+        T{ value-info-state
+           { class curried }
+           { interval empty-interval }
+           { literal [ [ 42 reach push 1 + dup pick < ] loop ] }
+           { literal? t }
+           { slots
+             {
+                 f
+                 T{ value-info-state { class quotation } { interval empty-interval } { literal [ 42 reach push 1 + dup pick < ] } { literal? t } }
+                 T{ value-info-state { class quotation } { interval empty-interval } { literal [ loop ] } { literal? t } }
+             }
+           }
+         }
+    }
+}
+[
+    init-values
+    ! [ [ 42 reach push 1 + dup pick < ] loop ] curried
+    T{ value-info-state         ! 0
+       { class composed }
+       { interval empty-interval }
+       { literal [ 42 reach push 1 + dup pick < ] }
+       { literal? t }
+       { slots
+         {
+             f
+             T{ lazy-info { values { 10327 } } { ro? t } { cached T{ value-info-state { class quotation } { interval empty-interval } { literal [ 42 reach push 1 + ] } { literal? t } } } }
+             T{ lazy-info { values { 10328 } } { ro? t } { cached T{ value-info-state { class quotation } { interval empty-interval } { literal [ dup pick < ] } { literal? t } } } }
+         }
+       }
+     }
+    T{ value-info-state { class quotation } { interval empty-interval } { literal [ loop ] } { literal? t } } ! 1
+    { curried 2 1 tuple 236985587512 curried 348433631669 } <literal-info> ! 2
+    3array setup-value-infos
+    { 0 1 2 } { 3 } \ <tuple-boa> <#call> propagate-<tuple-boa>
+] unit-test
+
+! New behavior
+{ {
+        T{ value-info-state
+           { class curried }
+           { interval full-interval }
+           { literal [ [ 42 reach push 1 + dup pick < ] loop ] }
+           { literal? t }
+           { slots
+             {
+                 f
+                 T{ value-info-state
+                    { class composed }
+                    { interval empty-interval }
+                    { literal [ 42 reach push 1 + dup pick < ] }
+                    { literal? t }
+                    { slots
+                      {
+                          f
+                          T{ lazy-info
+                             { values { 10327 } }
+                             { ro? t }
+                             { cached
+                               T{ value-info-state { class quotation } { interval empty-interval } { literal [ 42 reach push 1 + ] } { literal? t } }
+                             }
+                           }
+                          T{ lazy-info
+                             { values { 10328 } }
+                             { ro? t }
+                             { cached T{ value-info-state { class quotation } { interval empty-interval } { literal [ dup pick < ] } { literal? t } } }
+                           }
+                      }
+                    }
+                  }
+                 T{ value-info-state { class quotation } { interval empty-interval } { literal [ loop ] } { literal? t } }
+             }
+           }
+         }
+ } }
+[
+    init-values
+    ! [ [ 42 reach push 1 + dup pick < ] loop ] curried
+    T{ value-info-state         ! 0
+       { class composed }
+       { interval empty-interval }
+       { literal [ 42 reach push 1 + dup pick < ] }
+       { literal? t }
+       { slots
+         {
+             f
+             T{ lazy-info { values { 10327 } } { ro? t } { cached T{ value-info-state { class quotation } { interval empty-interval } { literal [ 42 reach push 1 + ] } { literal? t } } } }
+             T{ lazy-info { values { 10328 } } { ro? t } { cached T{ value-info-state { class quotation } { interval empty-interval } { literal [ dup pick < ] } { literal? t } } } }
+         }
+       }
+     }
+    T{ value-info-state { class quotation } { interval empty-interval } { literal [ loop ] } { literal? t } } ! 1
+    { curried 2 1 tuple 236985587512 curried 348433631669 } <literal-info> ! 2
+    3array setup-value-infos
+    { 0 1 2 } { 3 } \ <tuple-boa> <#call> propagate-<tuple-boa>-refs
 ] unit-test
 
 ! TODO Hidden updates
@@ -219,6 +313,12 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
     slots>> [ [ interval>> ] [ f ] if* ] map ;
 
 ! Recursive
+
+{ V{ object } } [ [ [ [ 1 + ] map ] final-classes ] with-rw ] unit-test
+
+{ V{ object } } [ [ [ dup [ frob ] each ] final-classes ] with-rw ] unit-test
+
+
 ! This is really cool, if I may say so myself..
 { T{ baz f 47 42 } } [ 5 [ baz new swap [ [ 1 + ] change-a [ 1 -  ] change-b ] times ] call ] unit-test
 
@@ -357,7 +457,25 @@ C: <box> box
 STRUCT: sbar { s sbar* } ;
 
 {
-    V{ T{ value-info-state { class array } { interval full-interval } { slots { f } } { origin HS{ local-allocation } } } }
+    V{ T{ value-info-state { class array } { interval full-interval } { slots { f } } } }
 } [
     [ [ sbar <struct> [ s>> ] follow ] final-info ]  with-rw
 ] unit-test
+
+! Multiple loops
+{ object } [ [ [ [ 1 + ] map [ 1 + ] map ] final-classes first ] with-rw ] unit-test
+
+! Nested loops
+
+
+{ V{ object } } [ [ [ dup [ [ drop ] each ] each ] final-classes ] with-rw ] unit-test
+{ V{ object } } [ [ [ dup [ [ frob ] each ] each ] final-classes ] with-rw ] unit-test
+
+{ { { T{ box f 43 } }  { T{ box f 44 } } } }
+[ { { T{ box f 42 } } { T{ box f 43 } } } [ dup [ [ [ 1 + ] change-a drop ] each ] each ] call ] unit-test
+{ V{ object } } [ [ [ dup [ [ [ 1 + ] change-a drop ] each ] each ] final-classes ] with-rw ] unit-test
+
+{ V{ { 43 } { 44 } } } [ V{ { 42 } { 43 } } [ [ 1 + ] map ] map  ] unit-test
+{ V{ vector } } [ [ [ { vector } declare [ [ 1 + ] map ] map ] final-classes ] with-rw ] unit-test
+
+{ V{ object } } [ [ [ dup [ [ [ 1 + ] change-last ] each ] each ] final-classes ] with-rw ] unit-test

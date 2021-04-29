@@ -39,20 +39,25 @@ DEFER: value-info-union
 DEFER: set-value-info
 DEFER: set-inner-value-info
 
-ERROR: cannot-set-lazy-info-slots value lazy-info ;
+TUPLE: lazy-info { values read-only } { ro? read-only } { cached read-only } { baked? read-only } ;
 
-TUPLE: lazy-info { values read-only } { ro? read-only } ;
+: recompute-lazy-info ( values -- info )
+   [ value-info ] [ value-info-union ] map-reduce ;
 
 : <lazy-info> ( values ro? -- obj )
-    [ members dup [ record-virtual-value ] each ] dip lazy-info boa ; inline
+    [ members dup [ record-virtual-value ] each ] dip
+    over recompute-lazy-info f lazy-info boa ; inline
 
 : lazy-ro-info? ( info -- ? )
     { [ lazy-info? ] [ ro?>> ] } 1&& ;
 
 SYMBOL: lazy-info-trace
 
+! TODO: Can introduce caching, would check for invalidation here
 : lazy-info>info ( obj -- info )
-    values>> [ value-info ] [ value-info-union ] map-reduce ;
+    dup baked?>>
+    [ cached>> ]
+    [ values>> recompute-lazy-info ] if ;
 
 DEFER: object-info
 : safe-lazy-info>info ( obj -- info )
@@ -66,17 +71,31 @@ GENERIC: bake-info* ( info -- info )
 
 : bake-info ( info/f -- info/f )
     dup [ bake-info* ] when ;
+
 M: value-info-state bake-info*
     clone
-    [ [ bake-info ] map ] change-slots ;
+    [ [ bake-info ] map ] change-slots
+    f >>origin
+    ;
 
 M: lazy-info bake-info*
-    [ safe-lazy-info>info bake-info ] with-scope ;
+    [
+        [ values>> ]
+        [ ro?>> ]
+        [ safe-lazy-info>info bake-info ] tri
+        t lazy-info boa
+    ] with-scope ;
 
 CONSULT: value-info-state lazy-info lazy-info>info ;
 
 : unique-definer ( lazy-info -- values ? )
     values>> members dup length 1 = ;
+
+
+ERROR: cannot-clone-lazy-info lazy-info ;
+M: lazy-info clone cannot-clone-lazy-info ;
+
+ERROR: cannot-set-lazy-info-slots value lazy-info ;
 
 M: lazy-info class<< cannot-set-lazy-info-slots ;
 M: lazy-info interval<< cannot-set-lazy-info-slots ;
@@ -432,8 +451,13 @@ DEFER: (value-info-union)
 ! magically creating new values on demand.  This means that every info
 ! containing a non-f-slot must have been initialized with lazy slots beforehand
 ! explicitly.
+ERROR: live-lazy-slot-union info1 info2 ;
+: check-live-lazy-slot ( info1 info2 -- info1 info2 )
+    2dup [ { [ lazy-info? ] [ baked?>> not ] } 1&& ] both?
+    [ live-lazy-slot-union ] unless ; inline
+
 : union-lazy-slot ( info1 info2 -- info )
-    [ lazy-info check-instance ] bi@
+    check-live-lazy-slot
     [ [ values>> ] bi@ union ]
     [ [ ro?>> ] bi@ and ] 2bi <lazy-info> ;
 

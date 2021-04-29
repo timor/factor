@@ -11,6 +11,7 @@ IN: compiler.tree.propagation.slot-refs
     [ in-d>> second value-info literal>> ]
     [ in-d>> first value-info
       [ 1 - ] [ slots>> ] bi* ?nth
+      [ dup lazy-info? [ lazy-info>info ] when ] [ f ] if*
     ]
     [ out-d>> first
       over [ set-value-info ] [ 2drop ] if

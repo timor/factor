@@ -18,6 +18,9 @@ IN: compiler.tree.propagation.slots
     [ [ literal>> ] map ] dip slots>tuple
     <literal-info> ;
 
+: fold-<tuple-boa>-literal ( infos class -- literal )
+    [ [ literal>> ] map ] dip slots>tuple ;
+
 : read-only-slots ( values class -- slot-infos )
     all-slots
     [ read-only>> [ value-info ] [ drop f ] if ] 2map
@@ -46,16 +49,19 @@ IN: compiler.tree.propagation.slots
 : fold-<tuple-boa>-rw? ( values class -- values' class ? )
     2dup [ read-only-slots-values ] keep 2dup fold-<tuple-boa>-values?
     [ 2nipd t ]
-    [
-        propagate-rw-slots?
-        [ 2drop [ f prefix ] dip ]
-        [ 2nipd ] if
-        f
-    ] if ;
+    [ 2drop [ f prefix ] dip f ] if ;
 
+! NOTE: In case of rw slot propagation, we don't create a new literal info for folding.  Instead,
 : (propagate-<tuple-boa>-refs) ( values class -- info )
     fold-<tuple-boa>-rw?
-    [ [ rest-slice [ value-info ] map ] dip fold-<tuple-boa> ] [ <tuple-ref-info> ] if ;
+    [ drop <tuple-ref-info> ]
+    [
+        [ [ rest-slice [ value-info ] map ] dip fold-<tuple-boa>-literal
+          >>literal
+          t >>literal?
+        ]
+        [ 2drop ] if
+    ] 3bi ;
 
 ! Non-literal construction
 : propagate-<tuple-boa>-refs ( #call -- infos )
@@ -63,11 +69,12 @@ IN: compiler.tree.propagation.slots
     value-info literal>> first (propagate-<tuple-boa>-refs) 1array ; inline
 
 : propagate-<tuple-boa> ( #call -- infos )
-    propagate-<tuple-boa>-refs ;
-
-! : propagate-<tuple-boa> ( #call -- infos )
-!     in-d>> unclip-last
-!     value-info literal>> first (propagate-<tuple-boa>) 1array ;
+    propagate-rw-slots?
+    [ propagate-<tuple-boa>-refs ]
+    [
+        in-d>> unclip-last
+        value-info literal>> first (propagate-<tuple-boa>) 1array
+    ] if ;
 
 ! TODO: propagate literal slots also on infos, not on literal!
 ! Slot call to literal object.  Will only resolve read-only slots.  Will also

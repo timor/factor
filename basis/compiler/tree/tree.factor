@@ -99,7 +99,7 @@ TUPLE: #recursive < node in-d word label loop? child ;
         swap >>in-d
         swap >>label ;
 
-TUPLE: #enter-recursive < node in-d out-d label info virtual-infos ;
+TUPLE: #enter-recursive < node in-d out-d label info virtual-infos-in virtual-infos-out ;
 
 : <#enter-recursive> ( label inputs outputs -- node )
     #enter-recursive new
