@@ -254,8 +254,11 @@ UNION: storage-class tuple fixed-length ;
         ] unless
     ] unless ;
 
-: (slots-with-length) ( length class -- slots )
+: (slots-with-length) ( length-info class -- slots )
     "slots" word-prop length 1 - f <array> swap prefix ;
+
+: (slots-with-length-rw) ( length-info class -- slots )
+    [ info>values t <lazy-info> ] dip "slots" word-prop length 1 - f <array> swap prefix ;
 
 ! Literal fixed-length-sequence
 : slots-with-length ( seq -- slots )
@@ -265,9 +268,9 @@ DEFER: value-infos-union
 ! Mis-using slots here: adding an additional one which represents the summary
 ! info for all element accesses
 : slots-with-length-rw ( seq -- slots )
-    [ [ length <literal-info> info>values t <lazy-info> ] [ class-of ] bi
-      (slots-with-length) ]
-    [ [ <literal-info> ] { } map-as  value-infos-union info>values f <lazy-info> ] bi
+    [ [ length <literal-info> ] [ class-of ] bi
+      (slots-with-length-rw) ]
+    [ [ <literal-info> ] { } map-as value-infos-union info>values f <lazy-info> ] bi
     suffix ;
 
 : init-literal-info ( info -- info )
@@ -405,11 +408,18 @@ DEFER: read-only-slot?
     init-value-info
     init-slots ; foldable
 
+! Non-literal sequence constructor
 : <sequence-info> ( length class -- info )
     <value-info>
         over >>class
         [ (slots-with-length) ] dip swap >>slots
     init-value-info ;
+
+: <rw-sequence-info> ( element length class -- info )
+    <value-info>
+    over >>class
+    [ (slots-with-length-rw) ] dip
+    rot info>values f <lazy-info> swapd suffix >>slots ;
 
 ! Non-literal tuple info, constructor
 : <tuple-info> ( slots class -- info )

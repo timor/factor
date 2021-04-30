@@ -42,7 +42,7 @@ SLOT: a
             {
                 f
                 T{ lazy-info
-                    { values { 10058 10101 } }
+                    { values { 10059 10103 } }
                     { ro? t }
                     { cached
                         T{ value-info-state
@@ -55,7 +55,7 @@ SLOT: a
                     }
                 }
                 T{ lazy-info
-                    { values { 10059 10102 } }
+                    { values { 10060 10104 } }
                     { cached
                         T{ value-info-state
                             { class fixnum }

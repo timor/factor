@@ -2,17 +2,38 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays byte-arrays classes classes.algebra classes.tuple
 classes.tuple.private combinators combinators.short-circuit
-compiler.tree.propagation.info kernel math sequences slots.private strings words
-;
+compiler.tree.propagation.info kernel math math.intervals sequences sets
+slots.private strings words ;
 IN: compiler.tree.propagation.slots
 
 : sequence-constructor? ( word -- ? )
     { <array> <byte-array> (byte-array) <string> } member-eq? ;
 
+: sequence-constructor-element/length ( in-d>> word -- element-info length-info )
+    [ { { [ dup { <array> <string> } in? ]
+          [ drop second value-info ] }
+        { [ dup \ (byte-array) eq? ]
+          [ 2drop fixnum 0 255 [a,b] <class/interval-info> ] }
+        { [ dup \ <byte-array> eq? ]
+          [ 2drop 0 <literal-info> ] }
+      } cond ]
+    [ drop first value-info ] 2bi ;
+
+! TODO: incorporate element classes here
+: propagate-sequence-constructor-rw ( #call word -- infos )
+    [ [ in-d>> ] dip sequence-constructor-element/length ]
+    [ nip "default-output-classes" word-prop first ] 2bi
+    <rw-sequence-info> 1array ;
+
 : propagate-sequence-constructor ( #call word -- infos )
-    [ in-d>> first value-info ]
-    [ "default-output-classes" word-prop first ] bi*
-    <sequence-info> 1array ;
+    propagate-rw-slots?
+    [ propagate-sequence-constructor-rw ]
+    [
+        [ in-d>> first value-info ]
+        [ "default-output-classes" word-prop first ] bi*
+        <sequence-info> 1array
+    ] if ;
+
 
 : fold-<tuple-boa> ( infos class -- info )
     [ [ literal>> ] map ] dip slots>tuple

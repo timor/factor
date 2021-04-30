@@ -512,7 +512,7 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
 STRUCT: sbar { s sbar* } ;
 
 {
-    V{ T{ value-info-state { class array } { interval full-interval } { slots { f } } } }
+    V{ T{ value-info-state { class array } { interval full-interval } { slots { f f } } } }
 } [
     [ [ sbar <struct> [ s>> ] follow ] final-info ]  with-rw
 ] unit-test

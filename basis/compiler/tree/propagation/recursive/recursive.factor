@@ -129,7 +129,7 @@ DEFER: generalize-counter
     ] if ;
 
 
-PREDICATE: virtual-tuple-info < value-info-state
+PREDICATE: virtual-container-info < value-info-state
     slots>> [ maybe{ lazy-info } instance? ] all? ;
 
 ! Generalizing virtuals:
@@ -151,7 +151,7 @@ PREDICATE: virtual-tuple-info < value-info-state
             [ generalize-counter ] keep
             value-info-union
             ! thaw-info Doesn't seem to be necessary
-            propagate-rw-slots? [ virtual-tuple-info check-instance ] when
+            propagate-rw-slots? [ virtual-container-info check-instance ] when
         ] 2map
     ] if ;
 
