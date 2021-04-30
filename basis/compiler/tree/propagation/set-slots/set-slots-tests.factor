@@ -73,6 +73,7 @@ SLOT: a
 
 ! Initial values
 TUPLE: baz { a initial: 42 } { b initial: 47 } ;
+C: <baz> baz
 
 { V{ f f } } [ [ baz new [ a>> ] [ b>> ] bi ] final-literals ] unit-test
 
@@ -132,4 +133,30 @@ C: <inner> inner
 
 { V{ 43 f 43 f 43 } } [ [ [ 42 <inner> box new over >>a dup a>> box new over >>a dup a>> [ 1 + ] change-a [ a>> ] 5 napply ] final-literals ] with-rw ] unit-test
 
-! TODO: more branches
+! Non-unique destructive access
+{
+    T{ baz f 42 22 }
+    T{ baz f 33 44 }
+ }
+[ t [ 11 22 <baz> 33 44 <baz> [ rot [ drop 42 >>a drop ] [ nip 42 >>a drop ] if ] 2keep ] call ] unit-test
+
+{
+    T{ baz f 11 22 }
+    T{ baz f 42 44 }
+}
+[ f [ 11 22 <baz> 33 44 <baz> [ rot [ drop 42 >>a drop ] [ nip 42 >>a drop ] if ] 2keep ] call ] unit-test
+
+
+{
+    { T{ interval { from { 11 t } } { to { 42 t } } } T{ interval { from { 22 t } } { to { 22 t } } } }
+    { T{ interval { from { 33 t } } { to { 42 t } } } T{ interval { from { 44 t } } { to { 44 t } } } }
+}
+[ [ [ 11 22 <baz> 33 44 <baz> [ rot [ drop 42 >>a drop ] [ nip 42 >>a drop ] if ] 2keep ]
+    final-info first2 [ slots>> rest [ interval>> ] map ] bi@ ] with-rw ] unit-test
+
+{
+    { T{ interval { from { 11 t } } { to { 77 t } } } T{ interval { from { 22 t } } { to { 80 t } } } }
+    { T{ interval { from { 11 t } } { to { 77 t } } } T{ interval { from { 22 t } } { to { 80 t } } } }
+}
+[ [ [ 11 22 <baz> 33 44 <baz> [ rot [ swap ] when 77 >>a 80 >>b drop ] 2keep ]
+    final-info first2 [ slots>> rest [ interval>> ] map ] bi@ ] with-rw ] unit-test
