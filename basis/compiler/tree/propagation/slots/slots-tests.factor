@@ -1,8 +1,8 @@
 USING: accessors arrays classes.struct classes.tuple.private compiler.test
 compiler.tree compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.slots hashtables kernel kernel.private math
-math.intervals namespaces quotations sequences sequences.extras
-stack-checker.values tools.test vectors words ;
+math.intervals math.order namespaces quotations sequences sequences.extras
+sorting stack-checker.values tools.test vectors words ;
 IN: compiler.tree.propagation.slots.tests
 
 : indexize ( seq -- assoc )
@@ -523,6 +523,7 @@ STRUCT: sbar { s sbar* } ;
 ! Nested loops
 
 
+{ V{ object } } [ [ [ dup [ drop ] each ] final-classes ] with-rw ] unit-test
 { V{ object } } [ [ [ dup [ [ drop ] each ] each ] final-classes ] with-rw ] unit-test
 { V{ object } } [ [ [ dup [ [ frob ] each ] each ] final-classes ] with-rw ] unit-test
 
@@ -539,3 +540,15 @@ STRUCT: sbar { s sbar* } ;
 ! Crosscheck
 { V{ array } } [ [ [ [ <=> ] sort ] final-classes ] with-rw ] unit-test
 { V{ array } } [ [ [ [ <=> ] sort [ <=> ] sort ] final-classes ] with-rw ] unit-test
+
+
+! Crosscheck
+
+TUPLE: littledan-1 { a read-only } ;
+
+: (littledan-1-test) ( a -- ) a>> 1 + littledan-1 boa (littledan-1-test) ; inline recursive
+
+: littledan-1-test ( -- ) 0 littledan-1 boa (littledan-1-test) ; inline
+
+! FIXME
+{ } [ [ [ littledan-1-test ] final-classes drop ] with-rw ] unit-test

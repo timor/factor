@@ -453,17 +453,7 @@ DEFER: value-info-union
 
 DEFER: (value-info-union)
 
-! NOTE: not allowing non-lazy/lazy merging here.  Messes up semantics by
-! magically creating new values on demand.  This means that every info
-! containing a non-f-slot must have been initialized with lazy slots beforehand
-! explicitly.
-ERROR: live-lazy-slot-union info1 info2 ;
-: check-live-lazy-slot ( info1 info2 -- info1 info2 )
-    2dup [ { [ lazy-info? ] [ baked?>> not ] } 1&& ] both?
-    [ live-lazy-slot-union ] unless ; inline
-
 : union-lazy-slot ( info1 info2 -- info )
-    check-live-lazy-slot
     [ [ values>> ] bi@ union ]
     [ [ ro?>> ] bi@ and ] 2bi <lazy-info> ;
 

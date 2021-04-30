@@ -1,5 +1,5 @@
 USING: accessors compiler.test compiler.tree.propagation.info generalizations
-kernel math sequences tools.test ;
+kernel math math.intervals sequences tools.test ;
 IN: compiler.tree.propagation.set-slots.tests
 
 TUPLE: foo { a read-only } b ;
@@ -34,8 +34,42 @@ SLOT: a
 [ [ [ [ bar new 11 >>b ] [ bar new 11 >>b ] if [ a>> ] [ b>> ] bi ] final-literals ] with-rw ] unit-test
 
 ! Returning tuples
-{ V{ 42 11 } }
-[ [ [ [ bar new 11 >>b ] [ bar new 33 >>b ] if ] final-info ] with-rw ] unit-test
+{
+    T{ value-info-state
+        { class bar }
+        { interval full-interval }
+        { slots
+            {
+                f
+                T{ lazy-info
+                    { values { 10058 10101 } }
+                    { ro? t }
+                    { cached
+                        T{ value-info-state
+                            { class fixnum }
+                            { interval T{ interval { from { 42 t } } { to { 42 t } } } }
+                            { literal 42 }
+                            { literal? t }
+                            { origin HS{ T{ literal-allocation { literal 42 } } } }
+                        }
+                    }
+                }
+                T{ lazy-info
+                    { values { 10059 10102 } }
+                    { cached
+                        T{ value-info-state
+                            { class fixnum }
+                            { interval T{ interval { from { 11 t } } { to { 33 t } } } }
+                            { origin HS{ T{ literal-allocation { literal 11 } } T{ literal-allocation { literal 33 } } } }
+                        }
+                    }
+                }
+            }
+        }
+        { origin HS{ local-allocation } }
+    }
+}
+[ [ [ [ bar new 11 >>b ] [ bar new 33 >>b ] if ] final-value-info first ] with-rw ] unit-test
 
 ! Initial values
 TUPLE: baz { a initial: 42 } { b initial: 47 } ;

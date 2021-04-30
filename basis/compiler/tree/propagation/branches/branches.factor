@@ -114,14 +114,12 @@ ERROR: imbalanced-virtuals branch-data ;
                           [ swap set-value-info ] assoc-each ] [ drop ] if ;
 
 ! TODO: escape merging:
-! Should actually be enough to equate the defined-by>> refs on branch return, then call values escape
-! TODO: handle upwards merging correctly for terminating branches
-! : branch-escaping-values ( infer-children-data -- )
-!     [ [ inner-escaping-values of [ value-escapes ] each ]
-!       [ inner-equal-values of [ equate-all-values ] each ] bi
-!     ] each ;
 
 : merge-value-infos ( infos outputs -- )
+    propagate-rw-slots? [
+        infer-children-data get
+        lift-inner-values
+    ] when
     [ [ value-infos-union ] map ] dip set-value-infos ;
 
 SYMBOL: condition-value
@@ -137,8 +135,7 @@ SYMBOL: condition-value
 
 M: #phi propagate-before ( #phi -- )
     [ annotate-phi-inputs ]
-    [ [ phi-info-d>> flip ] [ out-d>> ] bi merge-value-infos ] bi
-    infer-children-data get lift-inner-values ;
+    [ [ phi-info-d>> flip ] [ out-d>> ] bi merge-value-infos ] bi ;
 
 :: update-constraints ( new old -- )
     new [| key value | key old [ value union ] change-at ] assoc-each ;

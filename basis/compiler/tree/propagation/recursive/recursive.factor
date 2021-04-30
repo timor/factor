@@ -131,7 +131,7 @@ DEFER: generalize-counter
 ! - Last updated iteration state is kept
 
 SYMBOL: recursion-limit
-recursion-limit [ 120 ] initialize
+recursion-limit [ 200 ] initialize
 SYMBOL: sentinel
 
 : baked-virtual-infos ( -- assoc )
@@ -171,8 +171,8 @@ M: #recursive propagate-around ( #recursive -- )
         child>>
         {
             [ first compute-copy-equiv ]
-            [ first propagate-recursive-phi ]
             [ first propagate-recursive-phi-virtuals ]
+            [ first propagate-recursive-phi ]
             [ (propagate) ]
         } cleave
     ] until-fixed-point
