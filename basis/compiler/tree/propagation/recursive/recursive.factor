@@ -1,6 +1,6 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays assocs assocs.extras classes.algebra combinators
+USING: accessors arrays assocs assocs.extras classes classes.algebra combinators
 compiler.tree compiler.tree.combinators compiler.tree.propagation.constraints
 compiler.tree.propagation.copy compiler.tree.propagation.escaping
 compiler.tree.propagation.info compiler.tree.propagation.nodes
@@ -9,6 +9,33 @@ sets ;
 FROM: sequences.private => array-capacity ;
 FROM: namespaces => set ;
 IN: compiler.tree.propagation.recursive
+
+
+! * Virtual counter generalization
+! - Treat generalize-counter as a set-slot operation, which performs an update
+!   depending on the values present in the respective header merging.
+! - Generally speaking, any virtuals that have been freshly allocated inside the
+!   loop can only leave the loop via the final phi.  The other case being memory
+!   leaks.
+! - Loop-allocated virtuals should only be able to re-enter the header for
+!   generalization once.  The next iteration, they should have been replaced.
+! - Virtuals update after counter-generalization:
+!   - Destructive slot update of outside-allocated slot, unique definer
+!     { value1(live) value1'(baked) } -> strong-update:
+!     value1'(live) = union value1(live), generalized(value1)
+!   - Destructive slot update of outside-allocated slot, non-unique definer
+!     { value1(live) value2(live) value1'(baked) value2'(baked) }
+!     -> weak update.  Same effect as strong update, though.
+! - TODO Have to figure out how virtual-virtual generalization plays into this.
+!   This may be important for updating virtuals which do not play a part in loop
+!   termination condition.
+!   - Current strategy: (order unclear...)
+!     1. Generalize virtuals based on iteration growth
+!     2. Generalize regular values, treating as set-slot, thus also being able to
+!        extend virtuals value info.
+! - TODO Determine if virtual-virtual growth also has to be accounted for when
+!   checking for fixed-point.  Problem: have to ensure that they actually grow in
+!   the next iteration!.
 
 
 ! With virtuals:
@@ -21,14 +48,23 @@ IN: compiler.tree.propagation.recursive
     [ value-info<= ] 2all?
     [ drop ] [ label>> f >>fixed-point drop ] if ;
 
+: bake-with ( infos assoc -- infos )
+    [ value-infos [ swap suffix ] change [ bake-info ] map ] with-scope ;
+
 : latest-input-infos ( node -- infos )
     in-d>> [ value-info ] map ;
+
+: baked-node-input-infos ( node -- infos )
+    propagate-rw-slots?
+    [ [ node-input-infos ] [ virtual-infos>> ] bi
+      bake-with ]
+    [ node-input-infos ] if ;
 
 ! Pulls up info from all call sites to set up comparison with the
 ! beginning-of-loop stack state, which is stored on the input infos of the
 ! #enter-recursive loop header.
 : recursive-stacks ( #enter-recursive -- stacks initial )
-    [ label>> calls>> [ node>> node-input-infos ] map flip ]
+    [ label>> calls>> [ node>> baked-node-input-infos ] map flip ]
     [ latest-input-infos ] bi ;
 
 : recursive-virtual-infos ( seq #enter-recursive -- call-site-assocs initial-assoc )
@@ -56,29 +92,45 @@ IN: compiler.tree.propagation.recursive
     } cond ;
 
 DEFER: generalize-counter
+! NOTE: we also update read-only slots here!
+: virtuals-to-generalize ( slot-info' initial -- seq )
+    [ dup lazy-info? [ values>> ] [ drop f ] if ] bi@
+    union members ;
+
+: generalize-lazy-counter-slot ( lazy-info' initial-lazy-info -- info )
+    [ [ >info ] bi@ generalize-counter ]
+    [ virtuals-to-generalize weak-update ]
+    [ nip ] 2tri ;
+
 ! Generalizing lazy slots is a no-op, this is done in a separate step.
 : generalize-counter-slot ( slot-info' initial -- slot-info )
     2dup [ lazy-info? ] either?
-    [ union-slot ]
+    [ generalize-lazy-counter-slot ]
     [ generalize-counter ] if ;
 
 : generalize-counter ( info' initial -- info )
     2dup [ not ] either? [ drop ] [
         2dup [ class>> null-class? ] either? [ drop ] [
-            [ clone ] dip
-            [
-                [ drop ] [
-                    [ [ interval>> ] bi@ ] [ drop class>> ] 2bi
-                    generalize-counter-interval
-                ] 2bi >>interval
-            ]
-            [ [ drop ] [ [ slots>> ] bi@
-                         [ generalize-counter-slot ] 2map ] 2bi >>slots ]
-            bi
+            2dup [ lazy-info? ] either? [
+                generalize-lazy-counter-slot
+            ] [
+                [ clone ] dip
+                [
+                    [ drop ] [
+                        [ [ interval>> ] bi@ ] [ drop class>> ] 2bi
+                        generalize-counter-interval
+                    ] 2bi >>interval
+                ]
+                [ [ drop ] [ [ slots>> ] bi@
+                             [ generalize-counter ] 2map ] 2bi >>slots ]
+                bi
+            ] if
         ] if
     ] if ;
 
-! TODO: This may be MUCH more easy with freeze/thaw semantics
+
+PREDICATE: virtual-tuple-info < value-info-state
+    slots>> [ maybe{ lazy-info } instance? ] all? ;
 
 ! Generalizing virtuals:
 ! Each call site and the return node has a virtual-infos assoc.
@@ -98,6 +150,8 @@ DEFER: generalize-counter
             [ value-infos-union ] dip
             [ generalize-counter ] keep
             value-info-union
+            ! thaw-info Doesn't seem to be necessary
+            propagate-rw-slots? [ virtual-tuple-info check-instance ] when
         ] 2map
     ] if ;
 
@@ -198,9 +252,6 @@ M: #recursive propagate-around ( #recursive -- )
 : unless-loop ( node quot -- )
     [ dup label>> loop?>> [ drop ] ] dip if ; inline
 
-: bake-with ( infos assoc -- infos )
-    [ value-infos [ swap suffix ] change [ bake-info ] map ] with-scope ;
-
 : baked-recursive-phi-infos ( node -- infos )
     propagate-rw-slots?
     [ label>> enter-recursive>>
@@ -228,13 +279,6 @@ M: #call-recursive annotate-node
 M: #enter-recursive annotate-node
     dup capture-iteration-virtuals
     dup out-d>> (annotate-node) ;
-
-! : baked-node-input-infos...
-: baked-node-input-infos ( node -- infos )
-    propagate-rw-slots?
-    [ [ node-input-infos ] [ virtual-infos>> ] bi
-      bake-with ]
-    [ node-input-infos ] if ;
 
 M: #return-recursive propagate-before ( #return-recursive -- )
     [

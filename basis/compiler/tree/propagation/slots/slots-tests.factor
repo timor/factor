@@ -544,11 +544,19 @@ STRUCT: sbar { s sbar* } ;
 
 ! Crosscheck
 
+! Creating a new tuple in every iteration, merging at loop head
 TUPLE: littledan-1 { a read-only } ;
 
 : (littledan-1-test) ( a -- ) a>> 1 + littledan-1 boa (littledan-1-test) ; inline recursive
 
 : littledan-1-test ( -- ) 0 littledan-1 boa (littledan-1-test) ; inline
 
-! FIXME
 { } [ [ [ littledan-1-test ] final-classes drop ] with-rw ] unit-test
+
+: (littledan-3-test) ( x -- )
+    length 1 + f <array> (littledan-3-test) ; inline recursive
+
+: littledan-3-test ( -- )
+    0 f <array> (littledan-3-test) ; inline
+
+{ } [ [ [ littledan-3-test ] final-classes drop ] with-rw ] unit-test

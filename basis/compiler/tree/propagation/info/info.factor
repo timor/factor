@@ -61,6 +61,11 @@ SYMBOL: lazy-info-trace
     [ cached>> ]
     [ values>> recompute-lazy-info ] if ;
 
+GENERIC: >info ( info -- info )
+M: value-info-state >info ;
+M: f >info ;
+M: lazy-info >info lazy-info>info ;
+
 DEFER: object-info
 : safe-lazy-info>info ( obj -- info )
     dup lazy-info-trace get member?
@@ -90,6 +95,18 @@ M: lazy-info bake-info*
 
 CONSULT: value-info-state lazy-info lazy-info>info ;
 
+PREDICATE: live-lazy-info < lazy-info baked?>> not ;
+
+GENERIC: thaw-info ( info -- info )
+M: f thaw-info ;
+M: value-info-state thaw-info
+    ! Not cloning, use in init position!
+    ! clone
+    [ [ thaw-info ] map ] change-slots ;
+M: live-lazy-info thaw-info ;
+M: lazy-info thaw-info
+    >lazy-info< 2drop <lazy-info> ;
+
 : unique-definer ( lazy-info -- values ? )
     values>> members dup length 1 = ;
 
@@ -108,16 +125,30 @@ M: lazy-info slots<< cannot-set-lazy-info-slots ;
 M: lazy-info origin<< cannot-set-lazy-info-slots ;
 M: lazy-info virtual-infos<< cannot-set-lazy-info-slots ;
 
-: introduce-virtual-value ( info -- value )
+
+: <virtual-value> ( -- value )
+    <value>
+    [ introduce-value ]
+    [ record-virtual-value ]    ! Not necessary if we have the set of virtuals
+    ! accessible by local definitions only
+    [  ] tri ;
+
+: introduce-virtual-value/info ( info -- value )
     <value>
     [ introduce-value ]
     [ set-inner-value-info ]
     [ ] tri ;
 
+! NOTE: caching on literals here to ensure that propagating over the same #push
+! twice will yield the same virtual-values
+
+! TODO: Check if we need the same for boas.  There it is not apparent at the
+! info what the source is, though.
+
 : info>values ( value-info -- seq )
     dup lazy-info?
     [ values>> ]
-    [ introduce-virtual-value 1array ] if ;
+    [ introduce-virtual-value/info 1array ] if ;
 
 ! Things to put inside value info slot entries
 DEFER: <literal-info>
@@ -145,7 +176,6 @@ literal-values [ IH{ } clone ] initialize
 
 SYMBOL: propagate-rw-slots
 : propagate-rw-slots? ( -- ? ) propagate-rw-slots get >boolean ; inline
-
 
 ! NOTE: discarding value, only using for recursion prevention
 ! Returns an info for a literal tuple slot
@@ -453,16 +483,26 @@ DEFER: value-info-union
 
 DEFER: (value-info-union)
 
+! NOTE: we only keep the values of non-baked union elements here.  This case
+! should anyways only happen during recursive propagation.  For fixed-point
+! checking, it does not matter, because the resulting union is not used.  For
+! regular #phi unions, there should only be live values anyways.  The important
+! case is for loop generalization, where the generalized values for next
+! iteration start need to reflect the effect of the values that we now throw
+! away.  However, that should actually be handled explicitly by counter
+! generalization, which then only keeps the lazy-slot which was introduced into
+! the loop.
 : union-lazy-slot ( info1 info2 -- info )
     [ [ values>> ] bi@ union ]
     [ [ ro?>> ] bi@ and ] 2bi <lazy-info> ;
+
 
 ! If f, the other wins (union with null-info)
 : union-slot ( info1 info2 -- info )
     {
         { [ dup not ] [ nip ] }
         { [ over not ] [ drop ] }
-        { [ propagate-rw-slots? [ 2dup [ lazy-info? ] either? ] [ f ] if ] [ union-lazy-slot ] }
+        { [ propagate-rw-slots? [ 2dup [ lazy-info? ] both? ] [ f ] if ] [ union-lazy-slot ] }
         [ (value-info-union) ]
     } cond ;
 
@@ -612,7 +652,9 @@ DEFER: extend-value-info
 ! Union semantics
 ! always records this as an inner value, because this will only make sense when
 ! treated with phi semantics on branch return.
+! TODO: should never be a lazy info!
 : extend-value-info ( info value -- )
+    [ value-info-state check-instance ] dip
     dup record-inner-value
     resolve-copy value-infos get
     [ assoc-stack [ value-info-union ] when* ] 2keep
@@ -668,7 +710,7 @@ DEFER: extend-value-info
     "input-classes" word-prop class-infos ;
 
 : clone-virtual ( value -- value )
-    value-info introduce-virtual-value ;
+    value-info introduce-virtual-value/info ;
 
 
 : clone-lazy-info ( lazy-info -- lazy-info )
