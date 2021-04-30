@@ -261,6 +261,15 @@ UNION: storage-class tuple fixed-length ;
 : slots-with-length ( seq -- slots )
     [ length <literal-info> ] [ class-of ] bi (slots-with-length) ;
 
+DEFER: value-infos-union
+! Mis-using slots here: adding an additional one which represents the summary
+! info for all element accesses
+: slots-with-length-rw ( seq -- slots )
+    [ [ length <literal-info> info>values t <lazy-info> ] [ class-of ] bi
+      (slots-with-length) ]
+    [ [ <literal-info> ] { } map-as  value-infos-union info>values f <lazy-info> ] bi
+    suffix ;
+
 : init-literal-info ( info -- info )
     empty-interval >>interval
     dup literal>> literal-class >>class
@@ -271,7 +280,11 @@ UNION: storage-class tuple fixed-length ;
               [ tuple-slot-infos-rw ]
               [ tuple-slot-infos ] if
               >>slots ] }
-        { [ dup fixed-length? ] [ slots-with-length >>slots ] }
+        { [ dup fixed-length? ] [
+              propagate-rw-slots?
+              [ slots-with-length-rw ]
+              [ slots-with-length ] if
+              >>slots ] }
         [ drop ]
     } cond ; inline
 

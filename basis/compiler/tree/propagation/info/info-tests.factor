@@ -349,7 +349,7 @@ STRUCT: test-struct
        { interval empty-interval }
        { literal S{ test-struct { x 12 } { y 20 } } }
        { literal? t }
-       { slots { f T{ lazy-info { values { 10003 } } { ro? t } } } }
+       { slots { f T{ lazy-info { values { 10004 } } { ro? t } } } }
      }
 
     T{ value-info-state
@@ -357,9 +357,11 @@ STRUCT: test-struct
        { interval empty-interval }
        { literal B{ 12 0 0 0 20 0 0 0 } }
        { literal? t }
-       { slots { T{ lazy-info { values { 10002 } } { ro? t } } } }
+       { slots { T{ lazy-info { values { 10002 } } { ro? t } } T{ lazy-info { values { 10003 } } } } }
      }
 
     T{ value-info-state { class fixnum } { interval T{ interval { from { 8 t } } { to { 8 t } } } } { literal 8 } { literal? t } }
 
-} [ [ S{ test-struct f 12 20 } <literal-info> clean-baked  10003 value-info clean-baked 10002 value-info ] with-rw ] unit-test
+    T{ value-info-state { class fixnum } { interval T{ interval { from { 0 t } } { to { 20 t } } } } }
+
+} [ [ S{ test-struct f 12 20 } <literal-info> clean-baked 10004 value-info clean-baked 10002 value-info 10003 value-info ] with-rw ] unit-test
