@@ -256,6 +256,13 @@ TUPLE: mixed-tup { a read-only } b ;
 { f } [ T{ test-tuple f T{ rw-tup f 48 } } immutable-tuple-literal? ] unit-test
 { f } [ T{ test-tuple f T{ mixed-tup f 49 50 } } immutable-tuple-literal? ] unit-test
 
+GENERIC: clean-baked* ( info -- info )
+: clean-baked ( info -- info ) clean-baked* ;
+M: f clean-baked* ;
+M: value-info-state clean-baked*
+    clone [ [ clean-baked ] map ] change-slots ;
+M: lazy-info clean-baked*
+    >lazy-info< 2drop f f lazy-info boa ;
 
 {
     T{ value-info-state
@@ -272,7 +279,7 @@ TUPLE: mixed-tup { a read-only } b ;
        { literal? t }
        { slots { f T{ lazy-info { values { 10002 } } } } }
      }
-} [ [ T{ rw-tup f 42 } <literal-info> dup clone init-value-info ] with-rw ] unit-test
+} [ [ T{ rw-tup f 42 } <literal-info> dup clone init-value-info ] with-rw [ clean-baked ] bi@ ] unit-test
 
 { T{ value-info-state
     { class mixed-tup }
@@ -281,7 +288,7 @@ TUPLE: mixed-tup { a read-only } b ;
     { literal? t }
     { slots { f T{ lazy-info { values { 10003 } } { ro? t } } T{ lazy-info { values { 10004 } } } } }
    }
- } [ [ T{ mixed-tup f 11 22 } <literal-info> ] with-rw ] unit-test
+ } [ [ T{ mixed-tup f 11 22 } <literal-info> ] with-rw clean-baked  ] unit-test
 
 { T{ value-info-state
     { class test-tuple }
@@ -290,7 +297,7 @@ TUPLE: mixed-tup { a read-only } b ;
     { literal? t }
     { slots { f T{ lazy-info { values { 10006 } } { ro? t } } } }
    }
- } [ [ T{ test-tuple f T{ mixed-tup f 49 50 } } <literal-info> ] with-rw ] unit-test
+ } [ [ T{ test-tuple f T{ mixed-tup f 49 50 } } <literal-info> ] with-rw clean-baked  ] unit-test
 
 { t } [ T{ rw-tup } <literal-info> dup object-info value-info-intersect = ] unit-test
 { t } [ [ T{ rw-tup } <literal-info> dup object-info value-info-intersect = ] with-rw ] unit-test
@@ -334,7 +341,7 @@ STRUCT: test-struct
          }
        }
      }
-} [ S{ test-struct f 12 20 } <literal-info> ] unit-test
+} [ S{ test-struct f 12 20 } <literal-info> clean-baked ] unit-test
 
 {
     T{ value-info-state
@@ -355,4 +362,4 @@ STRUCT: test-struct
 
     T{ value-info-state { class fixnum } { interval T{ interval { from { 8 t } } { to { 8 t } } } } { literal 8 } { literal? t } }
 
-} [ [ S{ test-struct f 12 20 } <literal-info> 10003 value-info 10002 value-info ] with-rw ] unit-test
+} [ [ S{ test-struct f 12 20 } <literal-info> clean-baked  10003 value-info clean-baked 10002 value-info ] with-rw ] unit-test

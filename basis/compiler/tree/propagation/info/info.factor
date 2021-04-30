@@ -40,6 +40,8 @@ DEFER: set-value-info
 DEFER: set-inner-value-info
 
 TUPLE: lazy-info { values read-only } { ro? read-only } { cached read-only } { baked? read-only } ;
+: >lazy-info< ( lazy-info -- values ro? cached baked? )
+    tuple-slots first4 ;
 
 : recompute-lazy-info ( values -- info )
    [ value-info ] [ value-info-union ] map-reduce ;
