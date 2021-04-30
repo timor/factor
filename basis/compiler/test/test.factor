@@ -1,19 +1,18 @@
 ! Copyright (C) 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays assocs classes classes.tuple combinators.short-circuit
-compiler.cfg compiler.cfg.debugger compiler.cfg.def-use
-compiler.cfg.linearization compiler.cfg.registers
-compiler.cfg.representations.preferred compiler.cfg.rpo compiler.cfg.stacks
-compiler.cfg.stacks.local compiler.cfg.utilities compiler.tree
-compiler.tree.builder compiler.tree.checker compiler.tree.def-use
+USING: accessors arrays assocs classes combinators compiler.cfg
+compiler.cfg.debugger compiler.cfg.def-use compiler.cfg.linearization
+compiler.cfg.registers compiler.cfg.representations.preferred compiler.cfg.rpo
+compiler.cfg.stacks compiler.cfg.stacks.local compiler.cfg.utilities
+compiler.tree compiler.tree.builder compiler.tree.checker compiler.tree.def-use
 compiler.tree.normalization compiler.tree.propagation
 compiler.tree.propagation.branches compiler.tree.propagation.copy
 compiler.tree.propagation.escaping compiler.tree.propagation.info
 compiler.tree.propagation.nodes compiler.tree.propagation.recursive
 compiler.tree.recursive compiler.units continuations formatting hashtables
 inspector io kernel math mirrors namespaces prettyprint sequences stack-checker
-stack-checker.values tools.annotations tools.annotations.private tools.test
-tools.test.private vectors vocabs words ;
+stack-checker.values tools.annotations tools.test tools.test.private vectors
+vocabs words ;
 IN: compiler.test
 
 : decompile ( word -- )
@@ -114,7 +113,7 @@ IN: compiler.test
 
 : with-rw ( quot -- )
     propagate-rw-slots [
-        20 recursion-limit set
+        120 recursion-limit set
         with-values
     ] with-variable-on ; inline
 
@@ -129,7 +128,7 @@ IN: compiler.test
     [ [ "--- Entering generalize-counter" print 2dup [ "info': " write ! bake-info
                                                        ... ] [ "initial: " write ! bake-info
                                                                ... ] bi* ] prepose
-      [ "--- generalized-counter: " print dup ! bake-info
+      [ "--- Leaving generalized-counter: " print dup ! bake-info
         ... ] compose
     ] annotate ;
 
@@ -147,7 +146,7 @@ IN: compiler.test
 
 : annotate-value-info<= ( -- )
     \ value-info<= dup reset [ [ "--- Entering value-info<=" print 2dup [ ... ] bi@ ] prepose
-                               [ "--- value-info<=: " write dup . ] compose ] annotate ;
+                               [ "--- Leaving value-info<=: " write dup . ] compose ] annotate ;
 
 
 :: annotate-#call ( node-selector: ( #call -- ? ) -- )
@@ -173,10 +172,11 @@ IN: compiler.test
     ] annotate ;
 
 : annotate-virtual-creation ( -- )
-    \ info>values dup reset [
-        [ dup ... ] prepose
-        [ \ info>values entering ] prepose
-        [ \ info>values leaving ] compose
+    \ slot-info>lazy-info dup reset [
+        [ "--- Entering slot-info>lazy-info: " write
+          "info: " write pick ... ] prepose
+        [ "--- Leaving slot-info>lazy-info:" print " " write
+          dup ... ] compose
     ] annotate ;
 
 : watch-node ( node -- )
@@ -214,7 +214,7 @@ IN: compiler.test
         \ weak-update reset
         \ propagate-after reset
         \ record-inner-value reset
-        \ info>values reset
+        \ slot-info>lazy-info reset
     ] [ ] cleanup
     ;
 
@@ -223,7 +223,11 @@ IN: compiler.test
     \ recursive-stacks dup reset [
         [ dup class-of "--- recursive stacks for %s:\n" printf ] prepose
         [ 2dup [ "stacks: " write ... ] [ "initial: " write ... ] bi* ] compose
-    ] annotate ;
+    ] annotate
+    \ unify-recursive-stacks dup reset [
+        [ "--- unified stacks: " write dup ... ] compose
+    ] annotate
+    ;
 
 : recursion-trace ( quot/word -- nodes )
     annotate-virtual-creation
@@ -249,7 +253,82 @@ IN: compiler.test
         \ propagate-after reset
         \ propagate-around reset
         \ recursive-stacks reset
+        \ unify-recursive-stacks reset
         \ propagate-recursive-phi-virtuals reset
-        \ info>values reset
+        \ slot-info>lazy-info reset
     ] [  ] cleanup
     ;
+
+: annotate-check-fixed-point ( -- )
+    \ check-fixed-point dup reset [
+        [ pick class-of "--- Entering check-fixed-point : %s\n" printf
+2dup [ "current iteration: " write ... ] [ "last iteration: " write ... ] bi*
+] prepose
+    ] annotate ;
+
+: annotate-union-lazy-slot ( -- )
+    \ union-lazy-slot dup reset [
+        [ "--- Union-lazy-slot: " write 2dup [ ... ] bi@ ] prepose
+        [ "--- Union-lazy-slot result: " write dup ... ] compose
+    ] annotate ;
+
+: watch-copies ( node -- )
+    <mirror>
+    [
+        "in-d" of [
+            "in-d:" print
+            [ dup resolve-copy " %d <- %d\n" printf ] each
+        ] when*
+    ]
+    [
+        "out-d" of [
+            [ "out-d: " print . ] unless-empty
+        ] when*
+    ] bi
+    ;
+
+: annotate-copies ( -- )
+    \ propagate-around dup reset [
+        [ dup
+          {
+              [ class-of "Propagate: %s " printf ]
+              [ dup #call? [ word>> . ] [ drop ] if ]
+              [ dup #push? [ literal>> . ] [ drop nl ] if ]
+              [ watch-copies ]
+          } cleave
+        ] prepose
+    ] annotate ;
+
+: fixed-point-trace ( quot/word -- nodes )
+    annotate-copies
+    annotate-virtual-creation
+    annotate-generalize-counter
+    ! annotate-value-info<=
+    \ value-info<= dup reset watch
+    annotate-check-fixed-point
+    ! annotate-propagate-around
+    annotate-union-lazy-slot
+    annotate-recursive-stacks
+    \ weak-update dup reset watch
+    \ strong-update dup reset watch
+    \ propagate-recursive-phi-virtuals dup reset watch
+    \ propagate-recursive-phi dup reset watch
+    \ generalize-counter-slot dup reset watch
+    \ generalize-lazy-counter-slot dup reset watch
+    [ [ propagated-tree ] with-values ]
+    [
+        \ generalize-counter reset
+        \ propagate-around reset
+        \ value-info<= reset
+        \ slot-info>lazy-info reset
+        \ weak-update reset
+        \ strong-update reset
+        \ check-fixed-point reset
+        \ propagate-recursive-phi-virtuals reset
+        \ propagate-recursive-phi reset
+        \ union-lazy-slot reset
+        \ recursive-stacks reset
+        \ unify-recursive-stacks reset
+        \ generalize-counter-slot reset
+        \ generalize-lazy-counter-slot reset
+    ] [  ] cleanup ;
