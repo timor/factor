@@ -1,4 +1,4 @@
-USING: accessors arrays classes combinators.short-circuit
+USING: accessors arrays classes combinators combinators.short-circuit
 compiler.tree.propagation.info compiler.tree.propagation.nodes
 compiler.tree.propagation.special-nodes kernel math math.intervals sequences ;
 
@@ -66,18 +66,21 @@ PREDICATE: growing-resize-array-call < known-resize-array-call
     [ swap slots>> last lazy-info check-instance
       update-lazy-info-weak ] keepd ;
 
+! Baking input-info here for annotation.  In propagate-after, the input info is
+! modified to have the correct slot again
 : set-length-array ( n-info array-info -- out-info )
     [ 0 update-info-slot ] keep ;
 
-! For a an unknown allocation, we modify the input info!
+! For a an unknown allocation, we don't modify the input info.
 : resize-unknown-array ( n-info array-val -- out-info )
     swap object-info swap array <rw-sequence-info>
-    [ swap set-value-info ] keep ;
+    swap drop ;
 
 GENERIC: propagate-resize-array-output-infos* ( #call -- infos )
 GENERIC: propagate-resize-array-input-infos ( #call -- )
 M: unknown-resize-array-call propagate-resize-array-output-infos*
     in-d>> first2 [ value-info ] bi@ resize-unknown-array ;
+! TODO: inline as [ ]
 M: nop-resize-array-call propagate-resize-array-output-infos*
     in-d>> second value-info ;
 M: shrinking-resize-array-call propagate-resize-array-output-infos*
@@ -96,8 +99,13 @@ M: resize-array-call propagate-before
     propagate-rw-slots?
     [ propagate-resize-array-output-infos ] [ drop ] if ;
 
-! M: resize-array-call propagate-after
-!     [ call-next-method ] keep
-!     propagate-rw-slots?
-!     [ propagate- ]
-!     [  ]
+M: shrinking-resize-array-call propagate-around
+    propagate-rw-slots? [
+        {
+            [ dup in-d>> (annotate-node) ]
+            [ propagate-before ]
+            [ dup out-d>> (annotate-node-also) ]
+            [ propagate-after ]
+        } cleave
+    ]
+    [ call-next-method ] if ;

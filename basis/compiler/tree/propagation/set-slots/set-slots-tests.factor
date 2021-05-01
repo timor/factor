@@ -200,6 +200,13 @@ ${ 0 42 [a,b] 0 42 [a,b] } [ [ 42 0 <array> dup rot [ 0 swap resize-array ] when
 { 42 0 } [ t [ 42 0 <array> dup clone rot [ 0 swap resize-array ] when ] call [ length ] bi@ ] unit-test
 { 42 42 } [ f [ 42 0 <array> dup clone rot [ 0 swap resize-array ] when ] call [ length ] bi@ ] unit-test
 ${ 42 0 42 [a,b] } [ [ 42 0 <array> dup clone rot [ 0 swap resize-array ] when ] final-rw-lengths first2 [ literal>> ] [ interval>> ] bi* ] unit-test
+
+! Operating on declarations only doesn't affect input
+{ 13 13 } [ 42 0 <array> [ { array } declare 13 over resize-array ] call [ length ] bi@ ] unit-test
+${ f 13 }
+[ [ { array } declare 13 over resize-array ] final-rw-lengths first2 literal>> ] unit-test
+{ 13 42 } [ 13 0 <array> [ { array } declare 42 over resize-array ] call [ length ] bi@ ] unit-test
+
 ! TODO elements
 
 

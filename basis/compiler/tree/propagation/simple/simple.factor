@@ -154,4 +154,4 @@ M: #alien-node propagate-after
 M: #alien-callback propagate-around child>> (propagate) ;
 
 M: #return annotate-node dup in-d>>
-    (annotate-node-baked) ;
+    (annotate-node) ;

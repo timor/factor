@@ -23,24 +23,21 @@ GENERIC: propagate-origin ( node -- )
 : (propagate) ( nodes -- )
     [ [ compute-copy-equiv ] [ propagate-around ] bi ] each ;
 
-: extract-value-info ( values -- assoc )
-    [ dup value-info ] H{ } map>assoc ;
-
 ! TODO: remove this after debugging
-SYMBOL: bake-lazy-infos
+! SYMBOL: bake-lazy-infos
 ! bake-lazy-infos [ t ] initialize
 
-: (annotate-node) ( node values -- )
-    extract-value-info [
-        propagate-rw-slots?
-        bake-lazy-infos get and
-        [ bake-info ] when
-    ] assoc-map
-    >>info drop ; inline
+: extract-value-info ( values -- assoc )
+    [ dup value-info
+      propagate-rw-slots?
+      [ bake-info ] when
+    ] H{ } map>assoc ;
 
-: (annotate-node-baked) ( node values -- )
-    bake-lazy-infos
-    [ (annotate-node) ] with-variable-on ; inline
+: (annotate-node) ( node values -- )
+    extract-value-info >>info drop ; inline
+
+: (annotate-node-also) ( node values -- )
+    extract-value-info swap [ assoc-union ] change-info drop ;
 
 M: node propagate-before drop ;
 
