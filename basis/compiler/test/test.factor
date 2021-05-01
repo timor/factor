@@ -8,6 +8,7 @@ compiler.tree compiler.tree.builder compiler.tree.checker compiler.tree.def-use
 compiler.tree.normalization compiler.tree.propagation
 compiler.tree.propagation.branches compiler.tree.propagation.copy
 compiler.tree.propagation.escaping compiler.tree.propagation.info
+compiler.tree.propagation.info.private
 compiler.tree.propagation.nodes compiler.tree.propagation.recursive
 compiler.tree.recursive compiler.units continuations formatting hashtables
 inspector io kernel math mirrors namespaces prettyprint sequences stack-checker
@@ -118,7 +119,9 @@ IN: compiler.test
     ] with-variable-on ; inline
 
 : with-rw-prop ( quot -- )
-    [ init-values ] prepose propagate-rw-slots swap with-variable-on ; inline
+    [ propagate-rw-slots on ] prepose
+    [ propagate-rw-slots off ] [ ] cleanup ; inline
+    ! [ init-values ] prepose propagate-rw-slots swap with-variable-on ; inline
 
 : hack-unit-tests ( -- )
     \ (unit-test) [ [ [ with-rw-prop ] curry ] prepose ] annotate ;
