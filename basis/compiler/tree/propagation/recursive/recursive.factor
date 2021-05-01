@@ -3,7 +3,7 @@
 USING: accessors arrays assocs assocs.extras classes classes.algebra combinators
 compiler.tree compiler.tree.combinators compiler.tree.propagation.constraints
 compiler.tree.propagation.copy compiler.tree.propagation.escaping
-compiler.tree.propagation.info compiler.tree.propagation.nodes
+compiler.tree.propagation.info compiler.tree.propagation.info.private compiler.tree.propagation.nodes
 compiler.tree.propagation.simple kernel math math.intervals namespaces sequences
 sets ;
 FROM: sequences.private => array-capacity ;

@@ -683,19 +683,25 @@ DEFER: extend-value-info
     [ assoc-stack [ value-info-union ] when* ] 2keep
     last set-at ;
 
+<PRIVATE
 : strong-update ( info value -- )
     set-inner-value-info ;
 
 : weak-update ( new-info virtuals -- )
     [ extend-value-info ] with each ;
+PRIVATE>
 
+! NOTE: allowing read-only slot writes here for cases like resize-array
 : update-lazy-info ( info lazy-info -- )
-    dup { [ lazy-info? ] [ ro?>> not ] } 1&&
+    dup { [ lazy-info? ] ! [ ro?>> not ]
+    } 1&&
     [ unique-definer
       [ first strong-update ]
-      [ [ weak-update ] with each ] if ]
+      [ weak-update ] if ]
     [ 2drop ] if ;
 
+: update-lazy-info-weak ( info lazy-info -- )
+    values>> weak-update ;
 
 : possible-boolean-values ( info -- values )
     class>> {
