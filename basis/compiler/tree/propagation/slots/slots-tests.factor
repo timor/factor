@@ -512,9 +512,27 @@ TUPLE: baz { a initial: 42 } { b initial: 47 } ;
 STRUCT: sbar { s sbar* } ;
 
 {
-    V{ T{ value-info-state { class array } { interval full-interval } { slots { f f } } } }
+    T{ value-info-state
+       { class array }
+       { interval full-interval }
+       { slots
+         {
+             T{ lazy-info
+                { values { 11237 10442 11361 11362 } }
+                { ro? t }
+                { cached T{ value-info-state { class integer } { interval full-interval } } }
+                { baked? t }
+              }
+             T{ lazy-info
+                { values { 11238 10443 11363 11364 } }
+                { cached T{ value-info-state { class union{ fixnum POSTPONE: f } } { interval T{ interval { from { 0 t } } { to { 0 t } } } } } }
+                { baked? t }
+              }
+         }
+       }
+     }
 } [
-    [ [ sbar <struct> [ s>> ] follow ] final-info ]  with-rw
+    [ [ sbar <struct> [ s>> ] follow ] final-info first ]  with-rw
 ] unit-test
 
 ! Multiple loops

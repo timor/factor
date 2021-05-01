@@ -1,5 +1,5 @@
-USING: accessors compiler.test compiler.tree.propagation.info generalizations
-kernel math math.intervals sequences tools.test ;
+USING: accessors arrays compiler.test compiler.tree.propagation.info generalizations
+kernel kernel.private literals math math.intervals sequences tools.test ;
 IN: compiler.tree.propagation.set-slots.tests
 
 TUPLE: foo { a read-only } b ;
@@ -160,3 +160,51 @@ C: <inner> inner
 }
 [ [ [ 11 22 <baz> 33 44 <baz> [ rot [ swap ] when 77 >>a 80 >>b drop ] 2keep ]
     final-info first2 [ slots>> rest [ interval>> ] map ] bi@ ] with-rw ] unit-test
+
+! Resize-array
+
+! Lenghts
+: final-rw-lengths ( quot/word -- infos )
+    [ final-info [ slots>> ?first ] map ] with-rw ;
+
+{ 0 } [ { 1 2 3 } [ { array } declare 0 swap resize-array length ] call ] unit-test
+{ 0 } [ [ { } ] final-rw-lengths first literal>> ] unit-test
+! { f } [ [ { } 33 suffix ] final-literals first ] unit-test
+! { 1 } [ [ [ { } 34 suffix ] final-info ] with-rw ] unit-test
+! { 1 } [ [ { } 34 suffix ] final-rw-lengths first literal>> ] unit-test
+! { 1 } [ [ { } 35 suffix ] final-rw-lengths first literal>> ] unit-test
+{ 42 } [ [ { } 42 swap resize-array ] final-rw-lengths first literal>> ] unit-test
+{ 0 } [ [ { 1 2 3 } 0 swap resize-array ] final-rw-lengths first literal>> ] unit-test
+{ { } } [ { 1 2 3 } [ { array } declare 0 swap resize-array ] call ] unit-test
+{ 0 } [ [ { array } declare 0 swap resize-array ] final-rw-lengths first literal>> ] unit-test
+{ 42 } [ [ { array } declare 42 swap resize-array ] final-rw-lengths first literal>> ] unit-test
+{ 42 42 } [ [ { array } declare 42 over resize-array ] final-rw-lengths first2 [ literal>> ] bi@ ] unit-test
+{ 42 } [ [ { array } declare 42 swap resize-array ] final-rw-lengths first literal>> ] unit-test
+! Not inventing slots based on declaration only
+{ f } [ [ { array } declare ] final-rw-lengths first ] unit-test
+${ 0 42 [a,b] } [ [ { } swap [ 42 swap resize-array ] when ] final-rw-lengths first interval>> ] unit-test
+${ 0 42 [a,b] } [ [ { } clone swap [ 42 swap resize-array ] when ] final-rw-lengths first interval>> ] unit-test
+${ 0 42 [a,b] } [ [ { } clone swap [ 42 clone swap resize-array ] when ] final-rw-lengths first interval>> ] unit-test
+${ 0 42 [a,b] } [ [ { } swap [ 42 clone swap resize-array ] when ] final-rw-lengths first interval>> ] unit-test
+{ 0 0 } [ f [ { } dup rot [ 42 swap resize-array ] when ] call [ length ] bi@ ] unit-test
+{ 0 42 } [ t [ { } dup rot [ 42 swap resize-array ] when ] call [ length ] bi@ ] unit-test
+${ 0 0 42 [a,b] } [ [ { } dup rot [ 42 swap resize-array ] when ] final-rw-lengths first2 [ literal>> ] [ interval>> ] bi* ] unit-test
+${ 0 0 42 [a,b] } [ [ { } dup clone rot [ 42 swap resize-array ] when ] final-rw-lengths first2 [ literal>> ] [ interval>> ] bi* ] unit-test
+
+{ 0 0 } [ t [ 42 0 <array> dup rot [ 0 swap resize-array ] when ] call [ length ] bi@ ] unit-test
+{ 42 42 } [ f [ 42 0 <array> dup rot [ 0 swap resize-array ] when ] call [ length ] bi@ ] unit-test
+${ 0 42 [a,b] 0 42 [a,b] } [ [ 42 0 <array> dup rot [ 0 swap resize-array ] when ] final-rw-lengths first2 [ interval>> ] [ interval>> ] bi* ] unit-test
+${ 0 42 [a,b] 0 42 [a,b] } [ [ 42 0 <array> dup rot [ 0 swap resize-array ] when ] final-rw-lengths first2 [ interval>> ] [ interval>> ] bi* ] unit-test
+
+{ 42 0 } [ t [ 42 0 <array> dup clone rot [ 0 swap resize-array ] when ] call [ length ] bi@ ] unit-test
+{ 42 42 } [ f [ 42 0 <array> dup clone rot [ 0 swap resize-array ] when ] call [ length ] bi@ ] unit-test
+${ 42 0 42 [a,b] } [ [ 42 0 <array> dup clone rot [ 0 swap resize-array ] when ] final-rw-lengths first2 [ literal>> ] [ interval>> ] bi* ] unit-test
+! TODO elements
+
+
+! Resize-array on a nested array
+
+{ 42 13 } [ 13 0 <array> [ <box> a>> 42 swap resize-array ] keep [ length ] bi@ ] unit-test
+{ 42 13 } [ [ 13 0 <array> [ <box> a>> 42 swap resize-array ] keep ] final-rw-lengths first2 [ literal>> ] bi@ ] unit-test
+{ 13 13 } [ 42 0 <array> [ <box> a>> 13 swap resize-array ] keep [ length ] bi@ ] unit-test
+{ 13 13 } [ [ 42 0 <array> [ <box> a>> 13 swap resize-array ] keep ] final-rw-lengths first2 [ literal>> ] bi@ ] unit-test

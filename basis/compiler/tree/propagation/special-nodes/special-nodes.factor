@@ -1,5 +1,6 @@
 USING: accessors arrays classes.algebra classes.tuple classes.tuple.private
 combinators.short-circuit compiler.tree compiler.tree.propagation.info kernel
+kernel.private
 sequences sets slots.private words ;
 
 IN: compiler.tree.propagation.special-nodes
@@ -16,9 +17,12 @@ PREDICATE: rw-slot-call < literal-slot-call
 PREDICATE: tuple-boa-call < flushable-call word>> \ <tuple-boa> eq? ;
 
 PREDICATE: non-flushable-call < #call flushable-call? not ;
+PREDICATE: resize-array-call < non-flushable-call word>> \ resize-array eq? ;
 PREDICATE: inlined-call < non-flushable-call body>> >boolean ;
 ! TODO: check the other primitives, clone sans (clone) etc...
-PREDICATE: safe-primitive-call < non-flushable-call word>> { resize-array } in? ;
+! PREDICATE: safe-primitive-call < non-flushable-call word>>
+!     { resize-array } in? ;
+UNION: safe-primitive-call resize-array-call ;
 UNION: local-allocating-call flushable-call safe-primitive-call ;
 ! PREDICATE: non-inlined-call < non-flushable-call inlined-call? not ;
 ! PREDICATE: known-safe-call < non-inlined-call word>> { resize-array } in? ;
