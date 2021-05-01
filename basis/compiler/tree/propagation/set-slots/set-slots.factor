@@ -1,4 +1,4 @@
-USING: accessors classes combinators combinators.short-circuit
+USING: accessors arrays classes combinators.short-circuit
 compiler.tree.propagation.info compiler.tree.propagation.nodes
 compiler.tree.propagation.special-nodes kernel math math.intervals sequences ;
 
@@ -38,6 +38,17 @@ M: tuple-set-slot-call propagate-before
 : length-info<= ( info info -- ? )
     [ interval>> ] bi@ interval> not ;
 
+PREDICATE: known-resize-array-call < resize-array-call
+    in-d>> second value-info slots>> ;
+PREDICATE: unknown-resize-array-call < resize-array-call
+    known-resize-array-call? not ;
+PREDICATE: shrinking-resize-array-call < known-resize-array-call
+    in-d>> first2 [ value-info ] bi@ slots>> first length-info<= ;
+PREDICATE: nop-resize-array-call < shrinking-resize-array-call
+    in-d>> first2 [ value-info ] bi@ slots>> first length-info= ;
+PREDICATE: growing-resize-array-call < known-resize-array-call
+    shrinking-resize-array-call? not ;
+
 ! Strong or weak, depending on virtual definer uniqueness.
 : update-info-slot ( new-info container-info slot-num -- )
     swap slots>> nth lazy-info check-instance
@@ -48,7 +59,6 @@ M: tuple-set-slot-call propagate-before
     cloned-value-info
     ! Should always be a strong update
     [ 0 update-info-slot ] keep ;
-    ! [ unclip-slice drop swap prefix ] change-slots ;
 
 ! Modify the virtual representing the contents to include the default element
 ! after resize.  For arrays: f, for byte-arrays: 0.
@@ -64,29 +74,30 @@ M: tuple-set-slot-call propagate-before
     swap object-info swap array <rw-sequence-info>
     [ swap set-value-info ] keep ;
 
-    ! [  ]
-    ! [ object-info -rot value- ]
-    ! [ value-info clone swap over class>> (slots-with-length-rw) >>slots
-    !   object-info include-default-slot-content
-    ! ] [ [ set-value-info ] keepd ] bi ;
-: (propagate-resize-array-infos) ( n-info array-val -- out-info )
-    { { [ dup value-info slots>> not ]
-        [ resize-unknown-array ] }
-      { [ 2dup value-info slots>> first length-info= ] [ value-info nip ] }
-      { [ 2dup value-info slots>> first length-info<= ] [ value-info set-length-array ] }
-      [ value-info allocates-larger-array f <literal-info> include-default-slot-content ]
-    } cond ;
+GENERIC: propagate-resize-array-output-infos* ( #call -- infos )
+GENERIC: propagate-resize-array-input-infos ( #call -- )
+M: unknown-resize-array-call propagate-resize-array-output-infos*
+    in-d>> first2 [ value-info ] bi@ resize-unknown-array ;
+M: nop-resize-array-call propagate-resize-array-output-infos*
+    in-d>> second value-info ;
+M: shrinking-resize-array-call propagate-resize-array-output-infos*
+    in-d>> first2 [ value-info ] bi@ set-length-array ;
+M: growing-resize-array-call propagate-resize-array-output-infos*
+    in-d>> first2 [ value-info ] bi@ allocates-larger-array
+    f <literal-info> include-default-slot-content ;
 
 ! resize-array ( n array -- array )
-: propagate-resize-array-infos ( #call -- )
-    [
-        in-d>> first2
-        [ value-info ] dip
-        (propagate-resize-array-infos) ]
-    [ out-d>> first ] bi
-    set-value-info ;
+: propagate-resize-array-output-infos ( #call -- )
+    [ propagate-resize-array-output-infos* ]
+    [ out-d>> first ] bi set-value-info ;
 
 M: resize-array-call propagate-before
     [ call-next-method ] keep
     propagate-rw-slots?
-    [ propagate-resize-array-infos ] [ drop ] if ;
+    [ propagate-resize-array-output-infos ] [ drop ] if ;
+
+! M: resize-array-call propagate-after
+!     [ call-next-method ] keep
+!     propagate-rw-slots?
+!     [ propagate- ]
+!     [  ]

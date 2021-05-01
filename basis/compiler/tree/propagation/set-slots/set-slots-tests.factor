@@ -178,7 +178,8 @@ C: <inner> inner
 { { } } [ { 1 2 3 } [ { array } declare 0 swap resize-array ] call ] unit-test
 { 0 } [ [ { array } declare 0 swap resize-array ] final-rw-lengths first literal>> ] unit-test
 { 42 } [ [ { array } declare 42 swap resize-array ] final-rw-lengths first literal>> ] unit-test
-{ 42 42 } [ [ { array } declare 42 over resize-array ] final-rw-lengths first2 [ literal>> ] bi@ ] unit-test
+{ 3 42 } [ { 1 2 3 } [ { array } declare 42 over resize-array ] call [ length ] bi@ ] unit-test
+{ f 42 } [ [ { array } declare 42 over resize-array ] final-rw-lengths first2 literal>> ] unit-test
 { 42 } [ [ { array } declare 42 swap resize-array ] final-rw-lengths first literal>> ] unit-test
 ! Not inventing slots based on declaration only
 { f } [ [ { array } declare ] final-rw-lengths first ] unit-test
