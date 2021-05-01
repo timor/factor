@@ -740,10 +740,11 @@ DEFER: extend-value-info
     {
         [ values>> [ clone-virtual ] map ]
         [ ro?>> ]
-        [ baked?>> ]
         [ cached>> ]            ! TODO: re-cache?
+        [ baked?>> ]
     } cleave lazy-info boa ;
 
+! Fresh slots allocation
 : cloned-value-info ( value-info -- value-info' )
     clone f >>literal f >>literal?
     [ [ dup [ dup lazy-info?
