@@ -208,6 +208,11 @@ M: interval interval-singleton?
     [ [ first ] bi@ number= ]
     [ 2drop f ] if ;
 
+: singleton-interval>point ( int -- n/f )
+    dup interval-singleton?
+    [ interval>points drop first ]
+    [ drop f ] if ;
+
 GENERIC: interval-length ( int -- n )
 M: empty-interval interval-length drop 0 ;
 M: full-interval interval-length drop 1/0. ;
