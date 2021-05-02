@@ -212,7 +212,7 @@ IN: compiler.test
 
 : propagation-trace ( quot/word -- nodes vars )
     \ (lift-inner-values) dup reset watch
-    \ propagate-after dup reset [ [ "Inner values: " write inner-values get ... ] prepose ] annotate
+    ! \ propagate-after dup reset [ [ "Inner values: " write inner-values get ... ] prepose ] annotate
     \ strong-update dup reset watch
     \ weak-update dup reset watch
     annotate-virtual-creation
@@ -227,7 +227,7 @@ IN: compiler.test
         \ propagate-before reset
         \ strong-update reset
         \ weak-update reset
-        \ propagate-after reset
+        ! \ propagate-after reset
         \ record-inner-value reset
         \ slot-info>lazy-info reset
     ] [ ] cleanup
