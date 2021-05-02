@@ -207,12 +207,20 @@ ${ f 13 }
 [ [ { array } declare 13 over resize-array ] final-rw-lengths first2 literal>> ] unit-test
 { 13 42 } [ 13 0 <array> [ { array } declare 42 over resize-array ] call [ length ] bi@ ] unit-test
 
-! TODO elements
-
-
 ! Resize-array on a nested array
 
 { 42 13 } [ 13 0 <array> [ <box> a>> 42 swap resize-array ] keep [ length ] bi@ ] unit-test
 { 42 13 } [ [ 13 0 <array> [ <box> a>> 42 swap resize-array ] keep ] final-rw-lengths first2 [ literal>> ] bi@ ] unit-test
 { 13 13 } [ 42 0 <array> [ <box> a>> 13 swap resize-array ] keep [ length ] bi@ ] unit-test
 { 13 13 } [ [ 42 0 <array> [ <box> a>> 13 swap resize-array ] keep ] final-rw-lengths first2 [ literal>> ] bi@ ] unit-test
+
+{ [ { 1 2 3 } 3 swap resize-array ] } [ [ { 1 2 3 } 3 swap resize-array ] optimize-quot ] unit-test
+{ [ { 1 2 3 } ] } [ [ [ { 1 2 3 } 3 swap resize-array ] optimize-quot ] with-rw ] unit-test
+
+{ [ { 1 2 3 } 5 swap resize-array ] } [ [ [ { 1 2 3 } 5 swap resize-array ] optimize-quot ] with-rw ] unit-test
+
+! We de-literalize on shrinkage, even when essentially copying input info
+{ [ { 1 2 3 } 0 swap resize-array ] } [  [ { 1 2 3 } 0 swap resize-array ] optimize-quot ] unit-test
+{ [ { 1 2 3 } 0 swap resize-array ] } [ [ [ { 1 2 3 } 0 swap resize-array ] optimize-quot ] with-rw ] unit-test
+
+! TODO element access

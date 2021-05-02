@@ -5,10 +5,17 @@ compiler.tree.propagation.special-nodes kernel math math.intervals sequences ;
 IN: compiler.tree.propagation.set-slots
 
 ! * Set slot propagation
+! Strong or weak, depending on virtual definer uniqueness.
+: update-info-slot ( new-info container-info n -- )
+    swap slots>> nth lazy-info check-instance
+    update-lazy-info ;
 
-! FIXME: perform input info manipulation after annotation!!!
-! At least for resize-array
+! Modify the virtual representing the contents to include the given element info.
+: include-slot-content ( array-info element-info -- array-info )
+    [ swap slots>> last lazy-info check-instance
+      update-lazy-info-weak ] keepd ;
 
+! ** Tuple set slot call
 ! Fetch the correct slot from obj's info state.  We expect this to be a lazy
 ! slot entry.
 : propagate-tuple-set-slot-infos ( #call -- )
@@ -28,6 +35,30 @@ M: tuple-set-slot-call propagate-before
     propagate-rw-slots?
     [ propagate-tuple-set-slot-infos ] [ drop ] if ;
 
+! ** Array/Fixed-length set-slot call
+! Concerns strings, byte arrays and arrays.  If the length is one, destructive
+! updates may be strong, depending on slot uniqueness.  If it is longer, it is
+! treated as summary allocation, and only weak updates are tracked.
+
+! set-slot ( value obj n -- )
+: propagate-sequence-set-slot-infos ( #call strong? -- )
+    swap in-d>> first2
+    [ value-info ] bi@
+    rot [ dup slots>> length 1 - update-info-slot ]
+    [ swap include-slot-content drop ] if ;
+
+GENERIC: propagate-set-slot ( #call -- )
+M: box-set-slot-call propagate-set-slot
+    t propagate-sequence-set-slot-infos ;
+M: sequence-set-slot-call propagate-set-slot
+    f propagate-sequence-set-slot-infos ;
+
+M: sequence-set-slot-call propagate-before
+    [ call-next-method ] keep
+    propagate-rw-slots?
+    [ propagate-set-slot ] [ drop ] if ;
+
+! ** Resize-array
 ! Resize-array must be assumed to set the length slot if the length is smaller
 ! or equal than the current, but will allocate a new array otherwise.
 
@@ -49,27 +80,17 @@ PREDICATE: nop-resize-array-call < shrinking-resize-array-call
 PREDICATE: growing-resize-array-call < known-resize-array-call
     shrinking-resize-array-call? not ;
 
-! Strong or weak, depending on virtual definer uniqueness.
-: update-info-slot ( new-info container-info slot-num -- )
-    swap slots>> nth lazy-info check-instance
-    update-lazy-info ;
-
 ! If array is newly allocated, resulting storage will not share slots
 : allocates-larger-array ( n-info array-info -- out-info )
     cloned-value-info
     ! Should always be a strong update
     [ 0 update-info-slot ] keep ;
 
-! Modify the virtual representing the contents to include the default element
-! after resize.  For arrays: f, for byte-arrays: 0.
-: include-default-slot-content ( array-info element-info -- array-info )
-    [ swap slots>> last lazy-info check-instance
-      update-lazy-info-weak ] keepd ;
-
-! Baking input-info here for annotation.  In propagate-after, the input info is
-! modified to have the correct slot again
 : set-length-array ( n-info array-info -- out-info )
-    [ 0 update-info-slot ] keep ;
+    [ 0 update-info-slot ] keep
+    clone
+    f >>literal
+    f >>literal? ;
 
 ! For a an unknown allocation, we don't modify the input info.
 : resize-unknown-array ( n-info array-val -- out-info )
@@ -87,7 +108,7 @@ M: shrinking-resize-array-call propagate-resize-array-output-infos*
     in-d>> first2 [ value-info ] bi@ set-length-array ;
 M: growing-resize-array-call propagate-resize-array-output-infos*
     in-d>> first2 [ value-info ] bi@ allocates-larger-array
-    f <literal-info> include-default-slot-content ;
+    f <literal-info> include-slot-content ;
 
 ! resize-array ( n array -- array )
 : propagate-resize-array-output-infos ( #call -- )
@@ -104,8 +125,13 @@ M: shrinking-resize-array-call propagate-around
         {
             [ dup in-d>> (annotate-node) ]
             [ propagate-before ]
+            [ in-d>> second
+              [ value-info clone f >>literal f >>literal? ]
+              [ set-value-info ] bi ]
             [ dup out-d>> (annotate-node-also) ]
             [ propagate-after ]
         } cleave
     ]
     [ call-next-method ] if ;
+
+! TODO resize-byte-array

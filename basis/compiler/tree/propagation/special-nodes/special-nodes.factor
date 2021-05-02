@@ -31,6 +31,10 @@ UNION: non-escaping-call flushable-call inlined-call safe-primitive-call ;
 PREDICATE: set-slot-call < non-flushable-call word>> \ set-slot eq? ;
 PREDICATE: literal-set-slot-call < set-slot-call in-d>> third value-info literal?>> ;
 PREDICATE: tuple-set-slot-call < literal-set-slot-call in-d>> second value-info class>> tuple class<= ;
+PREDICATE: sequence-set-slot-call < literal-set-slot-call in-d>> second
+    value-info class>> fixed-length class<= ;
+PREDICATE: box-set-slot-call < sequence-set-slot-call in-d>> second value-info
+    slots>> dup [ ?first dup [ literal>> 1 = ] when ] when ;
 
 PREDICATE: tuple-push < #push literal>> tuple? ;
 PREDICATE: mutable-tuple-push < tuple-push literal>> immutable-tuple-class? not ;
