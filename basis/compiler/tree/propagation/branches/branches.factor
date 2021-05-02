@@ -77,7 +77,7 @@ DEFER: collect-variables
         '[
             _ [
                 dup +bottom+ eq?
-                [ drop null-info ] [ value-info ] if
+                [ drop null-info ] [ value-info propagate-rw-slots? [ bake-info ] when ] if
             ] with-variables
         ] map
     ] 2map ;
