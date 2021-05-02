@@ -1,4 +1,5 @@
 USING: namespaces assocs sequences compiler.tree.builder
+compiler.test
 compiler.tree.dead-code compiler.tree.def-use compiler.tree
 compiler.tree.combinators compiler.tree.propagation
 compiler.tree.cleanup compiler.tree.escape-analysis
@@ -61,18 +62,6 @@ IN: compiler.tree.dead-code.tests
 { 0 } [ [ [ 1 ] [ 2 ] compose call + drop ] count-live-values ] unit-test
 
 { 3 } [ [ 10 [ ] times ] count-live-values ] unit-test
-
-: optimize-quot ( quot -- quot' )
-    build-tree
-    analyze-recursive
-    normalize
-    propagate
-    cleanup-tree
-    escape-analysis
-    unbox-tuples
-    compute-def-use
-    remove-dead-code
-    "no-check" get [ dup check-nodes ] unless nodes>quot ;
 
 { [ drop 1 ] } [ [ [ 1 ] dip drop ] optimize-quot ] unit-test
 

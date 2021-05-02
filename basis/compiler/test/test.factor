@@ -77,6 +77,18 @@ IN: compiler.test
 : propagated-tree ( quot -- nodes )
     build-tree analyze-recursive normalize propagate ;
 
+: optimize-quot ( quot -- quot' )
+    build-tree
+    analyze-recursive
+    normalize
+    propagate
+    cleanup-tree
+    escape-analysis
+    unbox-tuples
+    compute-def-use
+    remove-dead-code
+    "no-check" get [ dup check-nodes ] unless nodes>quot ;
+
 : final-info ( quot -- seq )
     build-tree
     analyze-recursive
