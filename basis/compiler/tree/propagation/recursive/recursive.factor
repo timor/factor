@@ -150,7 +150,7 @@ PREDICATE: virtual-container-info < value-info-state
             [ value-infos-union ] dip
             [ generalize-counter ] keep
             value-info-union
-            ! thaw-info Doesn't seem to be necessary
+            thaw-info
             propagate-rw-slots? [ virtual-container-info check-instance ] when
         ] 2map
     ] if ;

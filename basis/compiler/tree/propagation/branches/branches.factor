@@ -120,7 +120,7 @@ ERROR: imbalanced-virtuals branch-data ;
         infer-children-data get
         lift-inner-values
     ] when
-    [ [ value-infos-union ] map ] dip set-value-infos ;
+    [ [ value-infos-union propagate-rw-slots? [ thaw-info ] when ] map ] dip set-value-infos ;
 
 SYMBOL: condition-value
 
