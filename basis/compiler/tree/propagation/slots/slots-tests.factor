@@ -1,6 +1,6 @@
 USING: accessors arrays classes.struct classes.tuple.private compiler.test
 compiler.tree compiler.tree.propagation.copy compiler.tree.propagation.info
-compiler.tree.propagation.slots hashtables kernel kernel.private math
+compiler.tree.propagation.slots hashtables kernel kernel.private make math
 math.intervals math.order namespaces quotations sequences sequences.extras
 sorting stack-checker.values tools.test vectors words ;
 IN: compiler.tree.propagation.slots.tests
@@ -525,7 +525,8 @@ STRUCT: sbar { s sbar* } ;
               }
              T{ lazy-info
                 { values { 11238 10443 11363 11364 } }
-                { cached T{ value-info-state { class union{ fixnum POSTPONE: f } } { interval T{ interval { from { 0 t } } { to { 0 t } } } } } }
+                ! TODO Where does the fixnum come from?
+                { cached T{ value-info-state { class union{ sbar fixnum POSTPONE: f } } { interval full-interval } } }
                 { baked? t }
               }
          }
@@ -578,3 +579,11 @@ TUPLE: littledan-1 { a read-only } ;
     0 f <array> (littledan-3-test) ; inline
 
 { } [ [ [ littledan-3-test ] final-classes drop ] with-rw ] unit-test
+
+! Crosscheck
+{ "ABCD" } [ [ [ [ "ABCD" [ , ] each ] "" make ] compile-call ] with-rw ] unit-test
+
+{ H{ { "key" "value" } } }
+[ [ [ [ "value" "key" ,, ] H{ } make ] compile-call ] with-rw ] unit-test
+
+{ { { 1 2 } } } [ [ [ [ 2 1 ,, ] { } make ] compile-call ] with-rw ] unit-test

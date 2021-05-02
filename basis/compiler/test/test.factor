@@ -4,16 +4,17 @@ USING: accessors arrays assocs classes combinators compiler.cfg
 compiler.cfg.debugger compiler.cfg.def-use compiler.cfg.linearization
 compiler.cfg.registers compiler.cfg.representations.preferred compiler.cfg.rpo
 compiler.cfg.stacks compiler.cfg.stacks.local compiler.cfg.utilities
-compiler.tree compiler.tree.builder compiler.tree.checker compiler.tree.def-use
-compiler.tree.normalization compiler.tree.propagation
-compiler.tree.propagation.branches compiler.tree.propagation.copy
-compiler.tree.propagation.escaping compiler.tree.propagation.info
-compiler.tree.propagation.info.private
+compiler.tree compiler.tree.builder compiler.tree.checker compiler.tree.cleanup
+compiler.tree.dead-code compiler.tree.debugger compiler.tree.def-use
+compiler.tree.escape-analysis compiler.tree.normalization
+compiler.tree.propagation compiler.tree.propagation.branches
+compiler.tree.propagation.copy compiler.tree.propagation.escaping
+compiler.tree.propagation.info compiler.tree.propagation.info.private
 compiler.tree.propagation.nodes compiler.tree.propagation.recursive
-compiler.tree.recursive compiler.units continuations formatting hashtables
-inspector io kernel math mirrors namespaces prettyprint sequences stack-checker
-stack-checker.values tools.annotations tools.test tools.test.private vectors
-vocabs words ;
+compiler.tree.recursive compiler.tree.tuple-unboxing compiler.units
+continuations formatting hashtables inspector io kernel math mirrors namespaces
+prettyprint sequences stack-checker stack-checker.values tools.annotations
+tools.test tools.test.private vectors vocabs words ;
 IN: compiler.test
 
 : decompile ( word -- )

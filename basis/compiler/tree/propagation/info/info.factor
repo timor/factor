@@ -38,17 +38,24 @@ DEFER: value-infos
 DEFER: value-info-union
 DEFER: set-value-info
 DEFER: set-inner-value-info
+DEFER: object-info
 
 TUPLE: lazy-info { values read-only } { ro? read-only } { cached read-only } { baked? read-only } ;
 : >lazy-info< ( lazy-info -- values ro? cached baked? )
     tuple-slots first4 ;
 
 : recompute-lazy-info ( values -- info )
-   [ value-info ] [ value-info-union ] map-reduce ;
+    f over in?
+    [ drop object-info ]
+    [ [ value-info ] [ value-info-union ] map-reduce ] if ;
 
 : <lazy-info> ( values ro? -- obj )
     [ members dup [ record-virtual-value ] each ] dip
     over recompute-lazy-info f lazy-info boa ; inline
+
+: <include-invalid-slot> ( lazy-info -- lazy-info )
+    values>> f 1array union
+    f <lazy-info> ;
 
 : lazy-ro-info? ( info -- ? )
     { [ lazy-info? ] [ ro?>> ] } 1&& ;
@@ -66,7 +73,6 @@ M: value-info-state >info ;
 M: f >info ;
 M: lazy-info >info lazy-info>info ;
 
-DEFER: object-info
 : safe-lazy-info>info ( obj -- info )
     dup lazy-info-trace get member?
     [ drop object-info ]
@@ -519,13 +525,22 @@ DEFER: (value-info-union)
     [ [ values>> ] bi@ union ]
     [ [ ro?>> ] bi@ and ] 2bi <lazy-info> ;
 
+! Expect only f as non-lazy second partner here.
+: union-lazy-slot/unknown ( info1 info2 -- info )
+    dup lazy-info? [ swap ] when
+    \ f check-instance drop
+    <include-invalid-slot> ;
 
-! If f, the other wins (union with null-info)
+
+! If f, then f.  f thus represents object-info.  We must not lose any lazy info
+! values here though because of escape analysis.  If non-virtual slots meet
+! virtuals, we invalidate the slot by including f in the values.
 : union-slot ( info1 info2 -- info )
     {
+        { [ propagate-rw-slots? [ 2dup [ lazy-info? ] both? ] [ f ] if ] [ union-lazy-slot ] }
+        { [ propagate-rw-slots? [ 2dup [ lazy-info? ] either? ] [ f ] if ] [ union-lazy-slot/unknown ] }
         { [ dup not ] [ nip ] }
         { [ over not ] [ drop ] }
-        { [ propagate-rw-slots? [ 2dup [ lazy-info? ] both? ] [ f ] if ] [ union-lazy-slot ] }
         [ (value-info-union) ]
     } cond ;
 
