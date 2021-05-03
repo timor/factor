@@ -1,5 +1,6 @@
 USING: accessors arrays compiler.test compiler.tree.propagation.info generalizations
-kernel kernel.private literals math math.intervals sequences tools.test ;
+kernel kernel.private literals math math.intervals sequences tools.test
+slots.private ;
 IN: compiler.tree.propagation.set-slots.tests
 
 TUPLE: foo { a read-only } b ;
@@ -224,4 +225,9 @@ ${ f 13 }
 { [ { 1 2 3 } 0 swap resize-array ] } [  [ { 1 2 3 } 0 swap resize-array ] optimize-quot ] unit-test
 { [ { 1 2 3 } 0 swap resize-array ] } [ [ [ { 1 2 3 } 0 swap resize-array ] optimize-quot ] with-rw ] unit-test
 
+! Regression
+{ f } [ [ [ { array } declare [ 2 set-slot ] keep ] final-literals first ] with-rw ] unit-test
+{ 3 } [ [ 3 1 2 2array [ { array } declare [ 2 set-slot ] keep ] compile-call first ] with-rw ] unit-test
+
 ! TODO element access/locals
+! TODO shape info

@@ -110,6 +110,7 @@ ERROR: invalid-outputs #call infos ;
     "default-output-classes" word-prop
     [ class-infos ] [ out-d>> length object-info <repetition> ] ?if ;
 
+! Why no generic?
 : output-value-infos ( #call word -- infos )
     {
         { [ dup \ <tuple-boa> eq? ] [ drop propagate-<tuple-boa> ] }

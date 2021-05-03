@@ -5,12 +5,13 @@ compiler.cfg.debugger compiler.cfg.def-use compiler.cfg.linearization
 compiler.cfg.registers compiler.cfg.representations.preferred compiler.cfg.rpo
 compiler.cfg.stacks compiler.cfg.stacks.local compiler.cfg.utilities
 compiler.tree compiler.tree.builder compiler.tree.checker compiler.tree.cleanup
-compiler.tree.dead-code compiler.tree.debugger compiler.tree.def-use
-compiler.tree.escape-analysis compiler.tree.normalization
-compiler.tree.propagation compiler.tree.propagation.branches
-compiler.tree.propagation.copy compiler.tree.propagation.escaping
-compiler.tree.propagation.info compiler.tree.propagation.info.private
-compiler.tree.propagation.nodes compiler.tree.propagation.recursive
+compiler.tree.combinators compiler.tree.dead-code compiler.tree.debugger
+compiler.tree.def-use compiler.tree.escape-analysis compiler.tree.normalization
+compiler.tree.optimizer compiler.tree.propagation
+compiler.tree.propagation.branches compiler.tree.propagation.copy
+compiler.tree.propagation.escaping compiler.tree.propagation.info
+compiler.tree.propagation.info.private compiler.tree.propagation.nodes
+compiler.tree.propagation.recursive compiler.tree.propagation.slot-refs
 compiler.tree.recursive compiler.tree.tuple-unboxing compiler.units
 continuations formatting hashtables inspector io kernel math mirrors namespaces
 prettyprint sequences stack-checker stack-checker.values tools.annotations
@@ -210,6 +211,36 @@ IN: compiler.test
                                    ] prepose
     ] annotate ;
 
+: annotate-slot-calls ( -- )
+    \ propagate-slot-call* subwords
+    [ dup reset watch ] each ;
+
+: watch-copies ( node -- )
+    <mirror>
+    [
+        "in-d" of [
+            "in-d:" print
+            [ dup resolve-copy " %d <- %d\n" printf ] each
+        ] when*
+    ]
+    [
+        "out-d" of [
+            [ "out-d: " print . ] unless-empty
+        ] when*
+    ] bi
+    ;
+
+: annotate-copies ( -- )
+    \ propagate-around dup reset [
+        [ dup
+          {
+              [ class-of "Propagate: %s " printf ]
+              [ dup #call? [ word>> . ] [ drop ] if ]
+              [ dup #push? [ literal>> . ] [ drop nl ] if ]
+              [ watch-copies ]
+          } cleave
+        ] prepose
+    ] annotate ;
 
 : propagation-trace ( quot/word -- nodes vars )
     \ (lift-inner-values) dup reset watch
@@ -219,18 +250,23 @@ IN: compiler.test
     annotate-virtual-creation
     annotate-return-recursive
     annotate-call-recursive
+    annotate-slot-calls
+    ! annotate-propagate-around
+    annotate-copies
     [
-        [ drop t ] annotate-#call
+        ! [ drop t ] annotate-#call
         [ propagated-tree { copies value-infos } [ dup get ] H{ } map>assoc ] with-values
     ]
     [
         \ (lift-inner-values) reset
         \ propagate-before reset
+        \ propagate-around reset
         \ strong-update reset
         \ weak-update reset
         ! \ propagate-after reset
         \ record-inner-value reset
         \ slot-info>lazy-info reset
+        \ propagate-slot-call* reset
     ] [ ] cleanup
     ;
 
@@ -288,33 +324,6 @@ IN: compiler.test
         [ "--- Union-lazy-slot result: " write dup ... ] compose
     ] annotate ;
 
-: watch-copies ( node -- )
-    <mirror>
-    [
-        "in-d" of [
-            "in-d:" print
-            [ dup resolve-copy " %d <- %d\n" printf ] each
-        ] when*
-    ]
-    [
-        "out-d" of [
-            [ "out-d: " print . ] unless-empty
-        ] when*
-    ] bi
-    ;
-
-: annotate-copies ( -- )
-    \ propagate-around dup reset [
-        [ dup
-          {
-              [ class-of "Propagate: %s " printf ]
-              [ dup #call? [ word>> . ] [ drop ] if ]
-              [ dup #push? [ literal>> . ] [ drop nl ] if ]
-              [ watch-copies ]
-          } cleave
-        ] prepose
-    ] annotate ;
-
 : fixed-point-trace ( quot/word -- nodes )
     annotate-copies
     annotate-virtual-creation
@@ -348,3 +357,41 @@ IN: compiler.test
         \ generalize-counter-slot reset
         \ generalize-lazy-counter-slot reset
     ] [  ] cleanup ;
+
+
+! Converting lazy info stuff back into regular info for comparisons
+! Must be baked!
+GENERIC: >regular-info ( value-info -- valu-info )
+M: f >regular-info ;
+M: value-info-state >regular-info
+    clone f >>origin
+    [ [ >regular-info dup object-info = [ drop f ] when ] map dup [ ] any? [ drop f ] unless ] change-slots ;
+M: lazy-info >regular-info
+    cached>> >regular-info ;
+
+
+: tree-size ( nodes -- n )
+    0 swap [ drop 1 + ] each-node ;
+
+: report-difference ( tree1 tree2 -- tree2 )
+    [ [ tree-size ] bi@ 2dup =
+      [ 2drop ]
+      [ "-- Nodes differ! :%d %d" printf flush ] if
+    ] keep ;
+
+: report-info-difference ( word tree1 tree2 -- )
+    [ last node-input-infos [ >regular-info ] map ] bi@ 2dup = [ 3drop ]
+    [ "Infos differ: " print rot . [ ... ] bi@ ] if ;
+
+: compare-rw-nodes ( quot/word -- )
+    dup [ build-tree optimize-tree ]
+    [ [ build-tree optimize-tree ] with-rw-prop ] bi
+    2dup [ tree-size ] bi@ = [ "Tree size differ:" print pick . ] unless
+    report-info-difference ;
+
+: compare-rw-opt. ( quot/word -- )
+    [ optimized. ]
+    [ [ optimized. ] with-rw-prop ] bi ;
+
+: compare-rw-word ( quot/word -- )
+    dup generic? [ subwords [ compare-rw-nodes ] each ] [ compare-rw-nodes ] if ;

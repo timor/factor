@@ -1,7 +1,9 @@
-USING: accessors compiler.test compiler.tree.builder compiler.tree.debugger
-compiler.tree.optimizer compiler.tree.propagation.escaping
-compiler.tree.propagation.info compiler.tree.propagation.origins generalizations
-kernel math math.intervals namespaces sequences tools.test ;
+USING: accessors arrays compiler.test compiler.tree.builder
+compiler.tree.debugger compiler.tree.optimizer
+compiler.tree.propagation.escaping compiler.tree.propagation.info
+compiler.tree.propagation.origins compiler.tree.propagation.slots.tests
+generalizations kernel kernel.private math math.intervals namespaces sequences
+tools.test ;
 IN: compiler.tree.propagation.escaping.tests
 FROM: compiler.tree.propagation.escaping => value-escapes ;
 
@@ -238,6 +240,19 @@ C: <inner> inner
 
 ! Verify same behavior with nesting in read-only slots
 TUPLE: ro-box { a read-only } ;
+C: <ro-box> ro-box
+
+! Nested non-literals, pulling out inner one and modifying it
+
+{ T{ ro-box f T{ inner f 43 } }
+  T{ inner f 43 }
+} [ 42 <inner> <ro-box> dup a>> 43 >>a ] unit-test
+{ 43 43 } [ 42 <inner> <ro-box> dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] unit-test
+{ f f } [ [ 42 <inner> <ro-box> dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ]
+          rw-literals first2 ] unit-test
+{ t t } [ [ 42 <inner> <ro-box> dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ]
+          return-escapes? first2
+        ] unit-test
 
 ! Nested literal, pulling out the inner one and modifying it
 { T{ ro-box f T{ inner f 43 } }
@@ -247,6 +262,8 @@ TUPLE: ro-box { a read-only } ;
 { 43 43 } [ T{ ro-box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] unit-test
 { f f } [ [ T{ ro-box f T{ inner f 42 } } dup a>> [ frob-box ] keep [ a>> a>> ] [ a>> ] bi* ] rw-literals first2 ] unit-test
 { t t } [ [ T{ ro-box f T{ inner f 42 } } dup a>> [ frob-box ] keep ] return-escapes? first2 ] unit-test
+
+{ t } [ [ foo new dup ro-box boa a>> frob-box ] return-escapes? first ] unit-test
 
 ! Set-slot
 
@@ -278,3 +295,35 @@ TUPLE: ro-box { a read-only } ;
     build-tree optimize-tree nodes>quot ;
 
 { [ 3 ] } [ [ [ 1 2 \ + execute( a b -- c ) ] optimized-quot ] with-rw ] unit-test
+
+: frob-array ( array -- ) drop ;
+! Escaping in arrays
+{ t } [ [ foo new dup 1array frob-array ] return-escapes? first ] unit-test
+{ t } [ [ foo new 1 f <array> 2dup 0 swap set-nth frob-array ] return-escapes? first ] unit-test
+{ t } [ [ { array } declare foo new swap 2dup 0 swap set-nth frob-array ] return-escapes? first ] unit-test
+
+! Strong updates in single-element arrays
+{ f t } [ [| |
+         foo new :> f1
+         foo new :> f2
+         f1 1array :> arr
+         f2 0 arr set-nth
+         arr frob-array
+         f1 f2
+        ] return-escapes? first2 ] unit-test
+
+! Weak updates in single-element arrays
+{ t t } [ [| |
+           foo new :> f1
+           foo new :> f2
+           f1 f 2array :> arr
+           f2 0 arr set-nth
+           arr frob-array
+           f1 f2
+          ] return-escapes? first2 ] unit-test
+
+! Escaping after allocating and retrieving from array slots
+{ t } [ [ foo new dup 11 2array first frob-array ] return-escapes? first ] unit-test
+{ t } [ [ foo new dup 11 swap 2array first frob-array ] return-escapes? first ] unit-test
+{ t } [ [ foo new dup 11 2array second frob-array ] return-escapes? first ] unit-test
+{ t } [ [ foo new dup 11 swap 2array second frob-array ] return-escapes? first ] unit-test

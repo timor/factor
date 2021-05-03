@@ -30,7 +30,7 @@ IN: compiler.tree.propagation.set-slots
      ] when*
     ] ;
 
-M: tuple-set-slot-call propagate-before
+M: tuple-set-slot-call propagate-after
     [ call-next-method ] keep
     propagate-rw-slots?
     [ propagate-tuple-set-slot-infos ] [ drop ] if ;
@@ -40,9 +40,16 @@ M: tuple-set-slot-call propagate-before
 ! updates may be strong, depending on slot uniqueness.  If it is longer, it is
 ! treated as summary allocation, and only weak updates are tracked.
 
+: ensure-obj-slots ( value -- )
+    dup value-info dup slots>>
+    [ 2drop ]
+    [ clone add-unknown-sequence-slots
+      swap set-value-info
+    ] if ;
+
 ! set-slot ( value obj n -- )
 : propagate-sequence-set-slot-infos ( #call strong? -- )
-    swap in-d>> first2
+    swap in-d>> first2 dup ensure-obj-slots
     [ value-info ] bi@
     rot [ dup slots>> length 1 - update-info-slot ]
     [ swap include-slot-content drop ] if ;
@@ -53,10 +60,20 @@ M: box-set-slot-call propagate-set-slot
 M: sequence-set-slot-call propagate-set-slot
     f propagate-sequence-set-slot-infos ;
 
-M: sequence-set-slot-call propagate-before
+M: sequence-set-slot-call propagate-after
     [ call-next-method ] keep
     propagate-rw-slots?
     [ propagate-set-slot ] [ drop ] if ;
+
+! set-slot calls where either the slot is unknown, or the container has no slots
+! specified.  This concerns set-nth calls with unknown index, and sequences that
+! have not been allocated locally.
+
+M: non-literal-sequence-set-slot-call propagate-after
+    [ call-next-method ] keep
+    propagate-rw-slots?
+    [ f propagate-sequence-set-slot-infos ]
+    [ drop ] if ;
 
 ! ** Resize-array
 ! Resize-array must be assumed to set the length slot if the length is smaller

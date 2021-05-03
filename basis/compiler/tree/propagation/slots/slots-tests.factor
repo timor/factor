@@ -2,6 +2,8 @@ USING: accessors arrays classes.struct classes.tuple.private compiler.test
 compiler.tree compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.slots hashtables kernel kernel.private make math
 math.intervals math.order namespaces quotations sequences sequences.extras
+literals
+slots.private
 sorting stack-checker.values tools.test vectors words ;
 IN: compiler.tree.propagation.slots.tests
 
@@ -517,23 +519,17 @@ STRUCT: sbar { s sbar* } ;
        { interval full-interval }
        { slots
          {
-             T{ lazy-info
-                { values { 11237 10442 11361 11362 } }
-                { ro? t }
-                { cached T{ value-info-state { class integer } { interval full-interval } } }
-                { baked? t }
-              }
-             T{ lazy-info
-                { values { 11238 10443 11363 11364 } }
-                ! TODO Where does the fixnum come from?
-                { cached T{ value-info-state { class union{ sbar fixnum POSTPONE: f } } { interval full-interval } } }
-                { baked? t }
+             T{ value-info-state { class integer } { interval full-interval } }
+             T{ value-info-state
+                { class union{ sbar fixnum POSTPONE: f } }
+                { interval full-interval }
+                { slots { f T{ value-info-state { class object } { interval full-interval } } } }
               }
          }
        }
      }
 } [
-    [ [ sbar <struct> [ s>> ] follow ] final-info first ]  with-rw
+    [ [ sbar <struct> [ s>> ] follow ] final-info first >regular-info ]  with-rw
 ] unit-test
 
 ! Multiple loops
@@ -587,3 +583,32 @@ TUPLE: littledan-1 { a read-only } ;
 [ [ [ [ "value" "key" ,, ] H{ } make ] compile-call ] with-rw ] unit-test
 
 { { { 1 2 } } } [ [ [ [ 2 1 ,, ] { } make ] compile-call ] with-rw ] unit-test
+
+! Array slot access
+${ 1 2 [a,b] dup } [ [ [ { 1 2 } [ first ] [ second ] bi ] final-info [ interval>> ] map first2 ] with-rw ] unit-test
+
+! Crosscheck
+! Fails when hacking the unit tests to use with-rw with compile-call
+: foo2 ( -- ) ;
+${ 1 2 [a,b] dup dup } [ [ [ { 1 2 } dup 2 slot swap 3 slot [ foo2 ] keep ] final-info [ interval>> ] map first3 ] with-rw ] unit-test
+
+! Regression: redefine22.factor, uses rw-slots-on for whole unit compilation.
+! Failing call trace: ... 1register-origin record-allocation M\ hash-set adjoin
+! M\ tuple hashcode*
+! M\ sequence hashcode*
+! M\ object length on T{ ttt }
+
+! Possible compiler bug in these words:
+{  rewrite-element
+?delete
+new-sequence
+summary
+sort-keys
+>alist
+like
+clear-assoc
+set-nth-unsafe
+set-like
+hashcode*
+lengthen
+count-inputs/predicate-engine } drop

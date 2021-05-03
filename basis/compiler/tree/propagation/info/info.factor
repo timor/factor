@@ -87,9 +87,7 @@ GENERIC: bake-info* ( info -- info )
 
 M: value-info-state bake-info*
     clone
-    [ [ bake-info ] map ] change-slots
-    f >>origin
-    ;
+    [ [ bake-info ] map ] change-slots ;
 
 M: lazy-info bake-info*
     [
@@ -427,6 +425,12 @@ DEFER: read-only-slot?
     [ (slots-with-length-rw) ] dip
     rot info>values f <lazy-info> swapd suffix >>slots ;
 
+! TODO: do the same with unknown tuple slots, additionally taking into account
+! declared slot classes.
+: add-unknown-sequence-slots ( info -- info )
+    pointer-info over class>> (slots-with-length-rw)
+    pointer-info info>values f <lazy-info> suffix >>slots ;
+
 ! Non-literal tuple info, constructor
 : <tuple-info> ( slots class -- info )
     <value-info>
@@ -521,9 +525,6 @@ DEFER: (value-info-union)
 ! away.  However, that should actually be handled explicitly by counter
 ! generalization, which then only keeps the lazy-slot which was introduced into
 ! the loop.
-: union-lazy-slot ( info1 info2 -- info )
-    [ [ values>> ] bi@ union ]
-    [ [ ro?>> ] bi@ and ] 2bi <lazy-info> ;
 
 ! Expect only f as non-lazy second partner here.
 : union-lazy-slot/unknown ( info1 info2 -- info )
@@ -531,14 +532,22 @@ DEFER: (value-info-union)
     \ f check-instance drop
     <include-invalid-slot> ;
 
+: union-lazy-slot ( info1 info2 -- info )
+    2dup [ not ] either?
+    [ union-lazy-slot/unknown ]
+    [
+        [ lazy-info check-instance ] bi@
+        [ [ values>> ] bi@ union ]
+        [ [ ro?>> ] bi@ and ] 2bi <lazy-info> ] if ;
+
 
 ! If f, then f.  f thus represents object-info.  We must not lose any lazy info
 ! values here though because of escape analysis.  If non-virtual slots meet
 ! virtuals, we invalidate the slot by including f in the values.
 : union-slot ( info1 info2 -- info )
     {
-        { [ propagate-rw-slots? [ 2dup [ lazy-info? ] both? ] [ f ] if ] [ union-lazy-slot ] }
-        { [ propagate-rw-slots? [ 2dup [ lazy-info? ] either? ] [ f ] if ] [ union-lazy-slot/unknown ] }
+        ! { [ propagate-rw-slots? [ 2dup [ lazy-info? ] both? ] [ f ] if ] [ union-lazy-slot ] }
+        { [ propagate-rw-slots? [ 2dup [ lazy-info? ] either? ] [ f ] if ] [ union-lazy-slot ] }
         { [ dup not ] [ nip ] }
         { [ over not ] [ drop ] }
         [ (value-info-union) ]

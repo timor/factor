@@ -21,7 +21,8 @@ GENERIC: call-in-escapes ( #call -- )
 M: #call call-in-escapes
     in-escapes ;
 M: non-escaping-call call-in-escapes drop ;
-M: set-slot-call call-in-escapes drop ;
+M: literal-set-slot-call call-in-escapes drop ;
+M: non-literal-sequence-set-slot-call call-in-escapes drop ;
 
 M: #call propagate-origin
     out-escapes ;
