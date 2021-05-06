@@ -207,8 +207,8 @@ DEFER: (value-info-intersect)
 
 : intersect-slot ( info1 info2 -- info )
     {
-        { [ dup not ] [ nip ] }
-        { [ over not ] [ drop ] }
+        { [ dup not ] [ drop ] }
+        { [ over not ] [ nip ] }
         [ (value-info-intersect) ]
     } cond ;
 
