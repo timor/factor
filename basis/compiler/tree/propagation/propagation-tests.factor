@@ -1,13 +1,13 @@
-USING: accessors alien alien.accessors alien.c-types alien.data arrays
-assocs byte-arrays classes classes.algebra classes.struct
-classes.tuple.private combinators.short-circuit compiler.test
-compiler.tree compiler.tree.builder compiler.tree.debugger
-compiler.tree.optimizer compiler.tree.propagation.info effects fry
-generic.single hashtables kernel kernel.private layouts literals
-locals math math.floats.private math.functions math.integers.private
-math.intervals math.libm math.order math.private quotations sequences
-sequences.private sets slots.private sorting specialized-arrays
-strings strings.private system tools.test vectors vocabs words ;
+USING: accessors alien alien.accessors alien.c-types alien.data arrays assocs
+byte-arrays classes classes.algebra classes.struct classes.tuple.private
+combinators.short-circuit compiler.test compiler.tree compiler.tree.builder
+compiler.tree.checker compiler.tree.debugger compiler.tree.optimizer
+compiler.tree.propagation.info effects generic.single hashtables kernel
+kernel.private layouts literals math math.floats.private math.functions
+math.integers.private math.intervals math.libm math.order math.private
+namespaces quotations sequences sequences.private sets slots.private sorting
+specialized-arrays strings strings.private system tools.test vectors vocabs
+words ;
 FROM: math => float ;
 SPECIALIZED-ARRAY: double
 SPECIALIZED-ARRAY: void*
@@ -142,9 +142,9 @@ IN: compiler.tree.propagation.tests
 
 { integer } [ [ { integer } declare bitnot ] final-math-class ] unit-test
 
-{ null } [ [ { null null } declare + ] final-math-class ] unit-test
+{ null } [ [ { null null } declare + ] allow-null-info [ final-math-class ] with-variable-on ] unit-test
 
-{ null } [ [ { null fixnum } declare + ] final-math-class ] unit-test
+{ null } [ [ { null fixnum } declare + ] allow-null-info [ final-math-class ] with-variable-on ] unit-test
 
 { float } [ [ { float fixnum } declare + ] final-math-class ] unit-test
 

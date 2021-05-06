@@ -1,9 +1,9 @@
 ! Copyright (C) 2008 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs columns combinators compiler.tree
-compiler.tree.combinators compiler.tree.def-use
-compiler.tree.recursive continuations grouping kernel math
-namespaces sequences sets vectors ;
+compiler.tree.combinators compiler.tree.def-use compiler.tree.propagation.info
+compiler.tree.recursive continuations grouping kernel math namespaces sequences
+sets vectors ;
 IN: compiler.tree.checker
 
 ! Check some invariants; this can help catch compiler bugs.
@@ -58,10 +58,12 @@ ERROR: check-node-error node error ;
 
 : check-node ( node -- )
     [
-        [ node-uses-values check-values ]
-        [ node-defs-values check-values ]
-        [ check-node* ]
-        tri
+        {
+            [ node-uses-values check-values ]
+            [ node-defs-values check-values ]
+            [ check-node* ]
+        }
+        cleave
     ] [ check-node-error ] recover ;
 
 SYMBOL: datastack
@@ -70,8 +72,18 @@ SYMBOL: terminated?
 
 GENERIC: check-stack-flow* ( node -- )
 
+ERROR: node-has-null-info node ;
+SYMBOL: allow-null-info
+
+GENERIC: check-node-info ( node -- )
+M: node check-node-info drop ;
+M: #call check-node-info
+    dup info>> values [ empty-set? ] any?
+    [ terminated? get allow-null-info get or [ drop ] [ node-has-null-info ] if ] [ drop ] if ;
+
+
 : (check-stack-flow) ( nodes -- )
-    [ check-stack-flow* terminated? get not ] all? drop ;
+    [ [ check-stack-flow* ] [ check-node-info ] bi terminated? get not ] all? drop ;
 
 : init-stack-flow ( -- )
     V{ } clone datastack namespaces:set
