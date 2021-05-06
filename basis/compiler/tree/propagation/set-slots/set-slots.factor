@@ -1,6 +1,7 @@
-USING: accessors arrays classes combinators combinators.short-circuit
-compiler.tree.propagation.info compiler.tree.propagation.nodes
-compiler.tree.propagation.special-nodes kernel math math.intervals sequences ;
+USING: accessors arrays byte-arrays classes combinators
+combinators.short-circuit compiler.tree.propagation.info
+compiler.tree.propagation.nodes compiler.tree.propagation.special-nodes kernel
+math math.intervals sequences strings ;
 
 IN: compiler.tree.propagation.set-slots
 
@@ -92,58 +93,65 @@ M: non-literal-sequence-set-slot-call propagate-after
 : length-info<= ( info info -- ? )
     [ interval>> ] bi@ interval> not ;
 
-PREDICATE: known-resize-array-call < resize-array-call
+PREDICATE: known-resize-sequence-call < resize-sequence-call
     in-d>> second value-info slots>> ;
-PREDICATE: unknown-resize-array-call < resize-array-call
-    known-resize-array-call? not ;
-PREDICATE: shrinking-resize-array-call < known-resize-array-call
+PREDICATE: unknown-resize-sequence-call < resize-sequence-call
+    known-resize-sequence-call? not ;
+PREDICATE: shrinking-resize-sequence-call < known-resize-sequence-call
     in-d>> first2 [ value-info ] bi@ slots>> first length-info<= ;
-PREDICATE: nop-resize-array-call < shrinking-resize-array-call
+PREDICATE: nop-resize-sequence-call < shrinking-resize-sequence-call
     in-d>> first2 [ value-info ] bi@ slots>> first length-info= ;
-PREDICATE: growing-resize-array-call < known-resize-array-call
-    shrinking-resize-array-call? not ;
+PREDICATE: growing-resize-sequence-call < known-resize-sequence-call
+    shrinking-resize-sequence-call? not ;
 
 ! If array is newly allocated, resulting storage will not share slots
-: allocates-larger-array ( n-info array-info -- out-info )
+: allocates-larger-sequence ( n-info array-info -- out-info )
     cloned-value-info
     ! Should always be a strong update
     [ 0 update-info-slot ] keep ;
 
-: set-length-array ( n-info array-info -- out-info )
+: set-length-sequence ( n-info array-info -- out-info )
     [ 0 update-info-slot ] keep
     clone
     f >>literal
     f >>literal? ;
 
 ! For a an unknown allocation, we don't modify the input info.
-: resize-unknown-array ( n-info array-val -- out-info )
+: resize-unknown-sequence ( n-info array-val -- out-info )
     swap object-info swap array <rw-sequence-info>
     swap drop ;
 
-GENERIC: propagate-resize-array-output-infos* ( #call -- infos )
+: default-element-info ( class -- info )
+    { { string [ 0 ] }
+      { byte-array [ 0 ] }
+      { array [ f ] }
+    } case <literal-info> ;
+
+GENERIC: propagate-resize-sequence-output-infos* ( #call -- infos )
 GENERIC: propagate-resize-array-input-infos ( #call -- )
-M: unknown-resize-array-call propagate-resize-array-output-infos*
-    in-d>> first2 [ value-info ] bi@ resize-unknown-array ;
+M: unknown-resize-sequence-call propagate-resize-sequence-output-infos*
+    in-d>> first2 [ value-info ] bi@ resize-unknown-sequence ;
 ! TODO: inline as [ ]
-M: nop-resize-array-call propagate-resize-array-output-infos*
+M: nop-resize-sequence-call propagate-resize-sequence-output-infos*
     in-d>> second value-info ;
-M: shrinking-resize-array-call propagate-resize-array-output-infos*
-    in-d>> first2 [ value-info ] bi@ set-length-array ;
-M: growing-resize-array-call propagate-resize-array-output-infos*
-    in-d>> first2 [ value-info ] bi@ allocates-larger-array
-    f <literal-info> swap [ include-summary-slot-content ] keep ;
+M: shrinking-resize-sequence-call propagate-resize-sequence-output-infos*
+    in-d>> first2 [ value-info ] bi@ set-length-sequence ;
+M: growing-resize-sequence-call propagate-resize-sequence-output-infos*
+    in-d>> first2 [ value-info ] bi@ allocates-larger-sequence
+    [ class>> default-element-info ] keep
+    [ include-summary-slot-content ] keep ;
 
 ! resize-array ( n array -- array )
-: propagate-resize-array-output-infos ( #call -- )
-    [ propagate-resize-array-output-infos* ]
+: propagate-resize-sequence-output-infos ( #call -- )
+    [ propagate-resize-sequence-output-infos* ]
     [ out-d>> first ] bi set-value-info ;
 
-M: resize-array-call propagate-before
+M: resize-sequence-call propagate-before
     [ call-next-method ] keep
     propagate-rw-slots?
-    [ propagate-resize-array-output-infos ] [ drop ] if ;
+    [ propagate-resize-sequence-output-infos ] [ drop ] if ;
 
-M: shrinking-resize-array-call propagate-around
+M: shrinking-resize-sequence-call propagate-around
     propagate-rw-slots? [
         {
             [ dup in-d>> (annotate-node) ]

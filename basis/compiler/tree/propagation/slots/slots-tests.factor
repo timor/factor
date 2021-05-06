@@ -581,9 +581,13 @@ TUPLE: littledan-1 { a read-only } ;
 ${ 1 2 [a,b] dup } [ [ [ { 1 2 } [ first ] [ second ] bi ] final-info [ interval>> ] map first2 ] with-rw ] unit-test
 
 ! Crosscheck
-! Fails when hacking the unit tests to use with-rw with compile-call
 : foo2 ( -- ) ;
 ${ 1 2 [a,b] dup dup } [ [ [ { 1 2 } dup 2 slot swap 3 slot [ foo2 ] keep ] final-info [ interval>> ] map first3 ] with-rw ] unit-test
+
+! FIXME
+! Hangs when hacking the unit tests to use with-rw with compile-call
+[ 1 2 2 ]
+[ { 1 2 } [ [ dup 2 slot swap 3 slot [ foo2 ] keep ] compile-call ] with-rw ] unit-test
 
 ! Regression: redefine22.factor, uses rw-slots-on for whole unit compilation.
 ! Failing call trace: ... 1register-origin record-allocation M\ hash-set adjoin

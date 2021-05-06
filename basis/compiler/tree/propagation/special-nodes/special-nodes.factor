@@ -43,12 +43,15 @@ PREDICATE: tuple-boa-call < flushable-call word>> \ <tuple-boa> eq? ;
 
 PREDICATE: non-flushable-call < #call flushable-call? not ;
 PREDICATE: resize-array-call < non-flushable-call word>> \ resize-array eq? ;
+PREDICATE: resize-string-call < non-flushable-call word>> \ resize-string eq? ;
+PREDICATE: resize-byte-array-call < non-flushable-call word>> \ resize-byte-array eq? ;
+UNION: resize-sequence-call resize-array-call resize-string-call resize-byte-array-call ;
 PREDICATE: inlined-call < non-flushable-call body>> >boolean ;
 ! TODO: check the other primitives, clone sans (clone) etc...
 ! PREDICATE: safe-primitive-call < non-flushable-call word>>
 !     { resize-array } in? ;
-UNION: safe-primitive-call resize-array-call ;
-UNION: local-allocating-call flushable-call safe-primitive-call ;
+UNION: safe-primitive-call resize-sequence-call ;
+UNION: local-allocating-call flushable-call resize-sequence-call ;
 ! PREDICATE: non-inlined-call < non-flushable-call inlined-call? not ;
 ! PREDICATE: known-safe-call < non-inlined-call word>> { resize-array } in? ;
 UNION: non-escaping-call flushable-call inlined-call safe-primitive-call ;
