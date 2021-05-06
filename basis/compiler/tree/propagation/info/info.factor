@@ -469,8 +469,8 @@ DEFER: (value-info-intersect)
 ! NOTE: destroys lazy info if two different ones meet
 : intersect-slot ( info1 info2 -- info )
     {
-        { [ dup not ] [ nip ] }
-        { [ over not ] [ drop ] }
+        { [ dup not ] [ drop ] }
+        { [ over not ] [ nip ] }
         [ (value-info-intersect) ]
     } cond ;
 
