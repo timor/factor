@@ -45,5 +45,6 @@ M: #push propagate-origin
     {
         [ origin>> limbo swap in? ]
         [ slots>> [ dup [ value-info-escapes? ] when ] any? ]
+        [ summary-slot>> dup [ value-info-escapes? ] when ]
     } 1||
     ;

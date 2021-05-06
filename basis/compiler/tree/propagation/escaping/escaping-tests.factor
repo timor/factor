@@ -1,7 +1,7 @@
 USING: accessors arrays compiler.test compiler.tree.builder
 compiler.tree.debugger compiler.tree.optimizer
 compiler.tree.propagation.escaping compiler.tree.propagation.info
-compiler.tree.propagation.origins compiler.tree.propagation.slots.tests
+compiler.tree.propagation.origins
 generalizations kernel kernel.private math math.intervals namespaces sequences
 tools.test ;
 IN: compiler.tree.propagation.escaping.tests

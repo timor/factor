@@ -4,6 +4,7 @@ compiler.tree.propagation.slots hashtables kernel kernel.private make math
 math.intervals math.order namespaces quotations sequences sequences.extras
 literals
 slots.private
+strings.private
 sorting stack-checker.values tools.test vectors words ;
 IN: compiler.tree.propagation.slots.tests
 
@@ -517,16 +518,8 @@ STRUCT: sbar { s sbar* } ;
     T{ value-info-state
        { class array }
        { interval full-interval }
-       { slots
-         {
-             T{ value-info-state { class integer } { interval full-interval } }
-             T{ value-info-state
-                { class union{ sbar fixnum POSTPONE: f } }
-                { interval full-interval }
-                { slots { f T{ value-info-state { class object } { interval full-interval } } } }
-              }
-         }
-       }
+       { slots { T{ value-info-state { class integer } { interval full-interval } } } }
+       { summary-slot T{ value-info-state { class union{ sbar fixnum POSTPONE: f } } { interval full-interval } } }
      }
 } [
     [ [ sbar <struct> [ s>> ] follow ] final-info first >regular-info ]  with-rw
@@ -599,16 +592,41 @@ ${ 1 2 [a,b] dup dup } [ [ [ { 1 2 } dup 2 slot swap 3 slot [ foo2 ] keep ] fina
 ! M\ object length on T{ ttt }
 
 ! Possible compiler bug in these words:
-{  rewrite-element
-?delete
-new-sequence
-summary
-sort-keys
->alist
-like
-clear-assoc
-set-nth-unsafe
-set-like
-hashcode*
-lengthen
-count-inputs/predicate-engine } drop
+! {  rewrite-element
+! ?delete
+! new-sequence
+! summary
+! sort-keys
+! >alist
+! like
+! clear-assoc
+! set-nth-unsafe
+! set-like
+! hashcode*
+! lengthen
+! count-inputs/predicate-engine } drop
+
+! Hack-unit-tests on core vocab hangs on tuple test
+
+! \ thread "slots" word-prop "slots" set
+! { } [
+!     [
+!         \ thread tuple { "xxx" } "slots" get append
+!         define-tuple-class
+!     ] with-compilation-unit
+
+!     [ 1337 sleep ] "Test" spawn drop
+
+!     [
+!         \ thread tuple "slots" get
+!         define-tuple-class
+!     ] with-compilation-unit
+! ] unit-test
+
+! Regression after hacking unit tests, Memory protection fault
+! Problem: inferring null-info when coercing a fixnum to a byte-array
+! Solution: allow declarations to set class info if intersection would be empty.
+{ T{ interval { from { 0 t } } { to { 8388607 t } } } }
+[ [ [ "\u123456bc" string-nth ] final-info first interval>> ] with-rw ] unit-test
+
+{ 1193046 } [ [ 0 [ "\u123456bc" string-nth ] compile-call ] with-rw ] unit-test

@@ -1,8 +1,8 @@
-USING: accessors combinators combinators.short-circuit compiler.tree
+USING: accessors classes classes.tuple.private combinators
+combinators.short-circuit compiler.tree compiler.tree.propagation.copy
 compiler.tree.propagation.escaping compiler.tree.propagation.info
-compiler.tree.propagation.copy
-compiler.tree.propagation.nodes compiler.tree.propagation.special-nodes kernel math
-sequences sets sets.extras ;
+compiler.tree.propagation.nodes compiler.tree.propagation.special-nodes kernel
+math sequences sets sets.extras ;
 
 IN: compiler.tree.propagation.slot-refs
 
@@ -26,6 +26,10 @@ GENERIC: propagate-slot-call* ( #call -- info/f )
       [ dup lazy-info? [ lazy-info>info ] when ] [ pointer-info ] if*
     ] bi ;
 
+: summary-slot-access ( #call -- info )
+    in-d>> first value-info summary-slot>>
+    [ lazy-info check-instance lazy-info>info ] [ pointer-info ] if* ;
+
 M: rw-tuple-slot-call propagate-slot-call*
     strong-slot-access ;
 
@@ -33,23 +37,34 @@ M: ro-slot-call propagate-slot-call*
     strong-slot-access ;
 
 M: box-rw-slot-call propagate-slot-call*
-    strong-slot-access ;
+    summary-slot-access ;
 
 : slot-access-union ( slots -- info )
     [ pointer-info ]
-    [ [ ] [ union-lazy-slot ] map-reduce ] if-empty ;
+    [ [ ] [ union-lazy-slot ] map-reduce lazy-info>info ] if-empty ;
 
+! Known that we don't access the length slot
 M: sequence-rw-slot-call propagate-slot-call*
-    in-d>> first value-info slots>> dup [ rest-slice ] when
-    slot-access-union ;
+    summary-slot-access ;
 
+! Could be anything. Include everything we know
 M: slot-call propagate-slot-call*
-    in-d>> first value-info slots>>
-    slot-access-union ;
+    in-d>> first value-info
+    [ slots>> slot-access-union ]
+    [ summary-slot>> [ lazy-info>info ] [ pointer-info ] if* ] bi
+    value-info-union ;
+
+! NOTE: we check literal>> instead of literal?>>, because
+! pseudo-deliteralization keeps the literal slot.
+: propagate-slot-call ( #call -- info )
+    dup in-d>> first value-info literal>>
+    [ layout-up-to-date? ] [ t ] if*
+    [ propagate-slot-call* ]
+    [ drop pointer-info ] if ;
 
 M: slot-call propagate-before
     propagate-rw-slots? [
-        [ propagate-slot-call* ]
+        [ propagate-slot-call ]
         [ over [ out-d>> first set-value-info ] [ 2drop ] if ] bi
     ]
     [ call-next-method ] if ;

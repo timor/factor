@@ -30,6 +30,7 @@ TUPLE: value-info-state
     literal
     literal?
     slots
+    summary-slot
     origin
     ;
 
@@ -87,7 +88,9 @@ GENERIC: bake-info* ( info -- info )
 
 M: value-info-state bake-info*
     clone
-    [ [ bake-info ] map ] change-slots ;
+    [ [ bake-info ] map ] change-slots
+    [ bake-info ] change-summary-slot
+    ;
 
 M: lazy-info bake-info*
     [
@@ -269,13 +272,10 @@ UNION: storage-class tuple fixed-length ;
     [ length <literal-info> ] [ class-of ] bi (slots-with-length) ;
 
 DEFER: value-infos-union
-! Mis-using slots here: adding an additional one which represents the summary
-! info for all element accesses
-: slots-with-length-rw ( seq -- slots )
+: slots-with-length-rw ( seq -- slots summary-slot )
     [ [ length <literal-info> ] [ class-of ] bi
       (slots-with-length-rw) ]
-    [ [ <literal-info> ] { } map-as value-infos-union info>values f <lazy-info> ] bi
-    suffix ;
+    [ [ <literal-info> ] { } map-as value-infos-union info>values f <lazy-info> ] bi ;
 
 : init-literal-info ( info -- info )
     empty-interval >>interval
@@ -289,9 +289,9 @@ DEFER: value-infos-union
               >>slots ] }
         { [ dup fixed-length? ] [
               propagate-rw-slots?
-              [ slots-with-length-rw ]
-              [ slots-with-length ] if
-              >>slots ] }
+              [ slots-with-length-rw [ >>slots ] [ >>summary-slot ] bi* ]
+              [ slots-with-length >>slots ] if
+          ] }
         [ drop ]
     } cond ; inline
 
@@ -419,17 +419,20 @@ DEFER: read-only-slot?
         [ (slots-with-length) ] dip swap >>slots
     init-value-info ;
 
+: add-summary-slot ( info -- info )
+    pointer-info info>values f <lazy-info> >>summary-slot ;
+
 : <rw-sequence-info> ( element length class -- info )
     <value-info>
     over >>class
-    [ (slots-with-length-rw) ] dip
-    rot info>values f <lazy-info> swapd suffix >>slots ;
+    [ (slots-with-length-rw) ] dip swap >>slots
+    swap info>values f <lazy-info> >>summary-slot ;
 
-! TODO: do the same with unknown tuple slots, additionally taking into account
-! declared slot classes.
-: add-unknown-sequence-slots ( info -- info )
-    pointer-info over class>> (slots-with-length-rw)
-    pointer-info info>values f <lazy-info> suffix >>slots ;
+! ! TODO: do the same with unknown tuple slots, additionally taking into account
+! ! declared slot classes.
+! : add-unknown-sequence-slots ( info -- info )
+!     pointer-info over class>> (slots-with-length-rw)
+!     pointer-info info>values f <lazy-info> suffix >>slots ;
 
 ! Non-literal tuple info, constructor
 : <tuple-info> ( slots class -- info )
@@ -462,19 +465,19 @@ DEFER: read-only-slot?
 
 DEFER: (value-info-intersect)
 
-! ! Is this actually called???
-! : intersect-lazy-slot ( info1 info2 -- info )
-!     [ info>values ] bi@ intersect
+ERROR: lazy-info-intersection info1 info2 ;
 
 ! NOTE: destroys lazy info if two different ones meet
+! TODO: actually catch that case, because this might mean we lose virtuals!
 : intersect-slot ( info1 info2 -- info )
     {
+        { [ 2dup [ lazy-info? ] both? ] [ lazy-info-intersection ] }
         { [ dup not ] [ drop ] }
         { [ over not ] [ nip ] }
         [ (value-info-intersect) ]
     } cond ;
 
-! NOTE: Union semantics! if one info has no info (f), the other info's slots are
+! NOTE: Semantics: if one info has no slots info (f), the other info's slots are
 ! used.  I.e. the slots slot = f is the same as all object-info.
 : intersect-slots ( info1 info2 -- slots )
     [ slots>> ] bi@ {
@@ -496,6 +499,7 @@ DEFER: (value-info-intersect)
         [ [ interval>> ] bi@ interval-intersect >>interval ]
         [ intersect-literals [ >>literal ] [ >>literal? ] bi* ]
         [ intersect-slots >>slots ]
+        [ [ summary-slot>> ] bi@ intersect-slot >>summary-slot ]
         [ merge-origin >>origin ]
     } 2cleave
     init-value-info ;
@@ -558,6 +562,11 @@ DEFER: (value-info-union)
     f pad-tail-shorter
     [ union-slot ] 2map ;
 
+! TODO: could be possible to simplify tuple lazy slot stuff again...
+: union-summary-slot ( info1 info2 -- slot )
+    [ summary-slot>> ] bi@
+    union-slot ;
+
 SYMBOL: orphan
 orphan [ <value> ] initialize
 
@@ -568,6 +577,7 @@ orphan [ <value> ] initialize
         [ [ interval>> ] bi@ interval-union >>interval ]
         [ union-literals [ >>literal ] [ >>literal? ] bi* ]
         [ union-slots >>slots ]
+        [ union-summary-slot >>summary-slot ]
         [ merge-origin >>origin ]
     } 2cleave
     init-value-info ;
@@ -659,7 +669,9 @@ DEFER: refine-value-info
 GENERIC: nested-values* ( info -- lazy-infos )
 M: f nested-values* drop f ;
 M: value-info-state nested-values*
-    slots>> ;
+    [ slots>> ]
+    [ summary-slot>> ] bi suffix ;
+
 M: lazy-info nested-values*
     values>> [ value-info nested-values* ] gather ;
 
@@ -667,7 +679,9 @@ M: lazy-info nested-values*
     [ nested-values* ] closure members ;
 
 : slot-virtuals-closure ( value -- virtuals )
-    value-info slots>> [ virtuals-closure ] gather ;
+    value-info
+    [ slots>> [ virtuals-closure ] gather ]
+    [ summary-slot>> virtuals-closure ] bi append members ;
 
 DEFER: extend-value-info
 ! Full invalidation

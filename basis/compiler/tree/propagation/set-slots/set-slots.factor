@@ -10,11 +10,6 @@ IN: compiler.tree.propagation.set-slots
     swap slots>> nth lazy-info check-instance
     update-lazy-info ;
 
-! Modify the virtual representing the contents to include the given element info.
-: include-slot-content ( array-info element-info -- array-info )
-    [ swap slots>> last lazy-info check-instance
-      update-lazy-info-weak ] keepd ;
-
 ! ** Tuple set slot call
 ! Fetch the correct slot from obj's info state.  We expect this to be a lazy
 ! slot entry.
@@ -41,18 +36,27 @@ M: tuple-set-slot-call propagate-after
 ! treated as summary allocation, and only weak updates are tracked.
 
 : ensure-obj-slots ( value -- )
-    dup value-info dup slots>>
+    dup value-info dup summary-slot>>
     [ 2drop ]
-    [ clone add-unknown-sequence-slots
+    [ clone add-summary-slot
       swap set-value-info
     ] if ;
+
+! Modify the virtual representing the contents to include the given element info.
+: include-summary-slot-content ( element-info array-info -- )
+    summary-slot>> lazy-info check-instance
+    update-lazy-info-weak ;
+
+: update-summary-slot ( new-info conainer-info -- )
+    summary-slot>> lazy-info check-instance
+    update-lazy-info ;
 
 ! set-slot ( value obj n -- )
 : propagate-sequence-set-slot-infos ( #call strong? -- )
     swap in-d>> first2 dup ensure-obj-slots
     [ value-info ] bi@
-    rot [ dup slots>> length 1 - update-info-slot ]
-    [ swap include-slot-content drop ] if ;
+    rot [ update-summary-slot ]
+    [ include-summary-slot-content ] if ;
 
 GENERIC: propagate-set-slot ( #call -- )
 M: box-set-slot-call propagate-set-slot
@@ -125,7 +129,7 @@ M: shrinking-resize-array-call propagate-resize-array-output-infos*
     in-d>> first2 [ value-info ] bi@ set-length-array ;
 M: growing-resize-array-call propagate-resize-array-output-infos*
     in-d>> first2 [ value-info ] bi@ allocates-larger-array
-    f <literal-info> include-slot-content ;
+    f <literal-info> swap [ include-summary-slot-content ] keep ;
 
 ! resize-array ( n array -- array )
 : propagate-resize-array-output-infos ( #call -- )
