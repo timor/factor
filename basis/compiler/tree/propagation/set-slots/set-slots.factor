@@ -63,6 +63,8 @@ M: box-set-slot-call propagate-set-slot
     t propagate-sequence-set-slot-infos ;
 M: sequence-set-slot-call propagate-set-slot
     f propagate-sequence-set-slot-infos ;
+M: string-aux-writer propagate-set-slot
+    propagate-tuple-set-slot-infos ;
 
 M: sequence-set-slot-call propagate-after
     [ call-next-method ] keep

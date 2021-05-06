@@ -625,7 +625,7 @@ ${ 1 2 [a,b] dup dup } [ [ [ { 1 2 } dup 2 slot swap 3 slot [ foo2 ] keep ] fina
 
 ! Regression after hacking unit tests, Memory protection fault
 ! Problem: inferring null-info when coercing a fixnum to a byte-array
-! Solution: allow declarations to set class info if intersection would be empty.
+! Solution: Handle string's aux slot like a tuple slot
 { T{ interval { from { 0 t } } { to { 8388607 t } } } }
 [ [ [ "\u123456bc" string-nth ] final-info first interval>> ] with-rw ] unit-test
 

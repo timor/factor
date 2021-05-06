@@ -47,6 +47,9 @@ M: box-rw-slot-call propagate-slot-call*
 M: sequence-rw-slot-call propagate-slot-call*
     summary-slot-access ;
 
+M: string-aux-reader propagate-slot-call*
+    strong-slot-access ;
+
 ! Could be anything. Include everything we know
 M: slot-call propagate-slot-call*
     in-d>> first value-info

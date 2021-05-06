@@ -1,7 +1,6 @@
-USING: accessors arrays classes.algebra classes.tuple classes.tuple.private
-combinators.short-circuit compiler.tree compiler.tree.propagation.info kernel
-kernel.private
-sequences sets slots.private words ;
+USING: accessors arrays byte-arrays classes.algebra classes.tuple
+classes.tuple.private combinators.short-circuit compiler.tree
+compiler.tree.propagation.info kernel sequences slots.private strings words ;
 
 IN: compiler.tree.propagation.special-nodes
 
@@ -28,6 +27,9 @@ PREDICATE: sequence-rw-slot-call < slot-call
     in-d>> first2 [ value-info ] bi@
     [ class>> fixed-length class<= ]
     [ { [ literal?>> ] [ literal>> 1 = ] } 1&& not ] bi* and ;
+
+PREDICATE: string-aux-reader < sequence-rw-slot-call
+    in-d>> first2 [ value-info class>> string eq? ] [ value-info literal>> 2 = ] bi* and ;
 
 : length-slot-literal ( value -- n/f )
     value-info slots>> ?first dup
@@ -56,6 +58,8 @@ PREDICATE: literal-set-slot-call < set-slot-call in-d>> third value-info literal
 PREDICATE: tuple-set-slot-call < literal-set-slot-call in-d>> second value-info class>> tuple class<= ;
 PREDICATE: sequence-set-slot-call < literal-set-slot-call in-d>> second
     value-info class>> fixed-length class<= ;
+PREDICATE: string-aux-writer < sequence-set-slot-call
+    in-d>> { [ second value-info class>> string eq? ] [ third value-info literal>> 2 = ] } 1&& ;
 PREDICATE: box-set-slot-call < sequence-set-slot-call
     in-d>> second length-slot-literal 1 = ;
 PREDICATE: non-literal-sequence-set-slot-call < set-slot-call
