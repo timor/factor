@@ -13,9 +13,9 @@ compiler.tree.propagation.escaping compiler.tree.propagation.info
 compiler.tree.propagation.info.private compiler.tree.propagation.nodes
 compiler.tree.propagation.recursive compiler.tree.propagation.slot-refs
 compiler.tree.recursive compiler.tree.tuple-unboxing compiler.units
-continuations formatting hashtables inspector io kernel math mirrors namespaces
-prettyprint sequences stack-checker stack-checker.values tools.annotations
-tools.test tools.test.private vectors vocabs words ;
+continuations formatting generic hashtables inspector io kernel math mirrors
+namespaces prettyprint sequences stack-checker stack-checker.values
+tools.annotations tools.test tools.test.private vectors vocabs words ;
 IN: compiler.test
 
 : decompile ( word -- )
@@ -77,7 +77,7 @@ IN: compiler.test
     [ [ of ] with map first2 connect-bbs ] with each ;
 
 : propagated-tree ( quot -- nodes )
-    build-tree analyze-recursive normalize propagate ;
+    build-tree analyze-recursive normalize propagate compute-def-use dup check-nodes ;
 
 : optimize-quot ( quot -- quot' )
     build-tree
@@ -133,8 +133,8 @@ IN: compiler.test
     ] with-variable-on ; inline
 
 : with-rw-prop ( quot -- )
-    [ propagate-rw-slots on ] prepose
-    [ propagate-rw-slots off ] [ ] cleanup ; inline
+    [ propagate-rw-slots on check-optimizer? on ] prepose
+    [ propagate-rw-slots off check-optimizer? off ] [ ] cleanup ; inline
     ! [ init-values ] prepose propagate-rw-slots swap with-variable-on ; inline
 
 : hack-unit-tests ( -- )
@@ -251,8 +251,8 @@ IN: compiler.test
     annotate-return-recursive
     annotate-call-recursive
     annotate-slot-calls
-    ! annotate-propagate-around
-    annotate-copies
+    annotate-propagate-around
+    ! annotate-copies
     [
         ! [ drop t ] annotate-#call
         [ propagated-tree { copies value-infos } [ dup get ] H{ } map>assoc ] with-values
@@ -365,7 +365,8 @@ GENERIC: >regular-info ( value-info -- valu-info )
 M: f >regular-info ;
 M: value-info-state >regular-info
     clone f >>origin
-    [ [ >regular-info dup object-info = [ drop f ] when ] map dup [ ] any? [ drop f ] unless ] change-slots ;
+    [ [ >regular-info dup object-info = [ drop f ] when ] map dup [ ] any? [ drop f ] unless ] change-slots
+    [ >regular-info dup object-info = [ drop f ] when ] change-summary-slot ;
 M: lazy-info >regular-info
     cached>> >regular-info ;
 
