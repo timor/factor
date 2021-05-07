@@ -4,6 +4,7 @@ USING: kernel sequences compiler.units vocabs tools.test definitions ;
 TUPLE: ttt ;
 INSTANCE: ttt sequence
 M: ttt new-sequence 2drop ttt new ;
+M: ttt length drop 0 ;
 
 : www-1 ( a -- b ) T{ ttt } new-sequence ;
 

@@ -610,6 +610,28 @@ ${ 1 2 [a,b] dup dup } [ [ [ { 1 2 } dup 2 slot swap 3 slot [ foo2 ] keep ] fina
 ! lengthen
 ! count-inputs/predicate-engine } drop
 
+! Crosscheck redefine22.factor
+! However, the problem here is simply that ttt doesn't correctly implement the
+! sequence protocol, so hashing on the literal fails.
+TUPLE: ttt ;
+INSTANCE: ttt sequence
+M: ttt new-sequence 2drop ttt new ;
+M: ttt length drop 0 ;
+
+: www-1 ( a -- b ) T{ ttt } new-sequence ;
+
+{ } [ [ [ \ ttt forget ] with-compilation-unit ] with-rw ] unit-test
+
+TUPLE: ttt1 a ;
+: www-2 ( a -- a b ) T{ ttt1 f T{ ttt1 f 47 } } a>> a>> ;
+
+{ } [ [ [ \ ttt1 forget ] with-compilation-unit ] with-rw ] unit-test
+
+! TODO
+! If we have literals of forgotten classes, we may not assume anything about the
+! slots, although it shouldn't matter since any word that actually depends on a
+! word with a forgotten literal cannot be called safely?
+
 ! Hack-unit-tests on core vocab hangs on tuple test
 
 ! \ thread "slots" word-prop "slots" set
