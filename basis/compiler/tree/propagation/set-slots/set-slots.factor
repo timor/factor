@@ -1,7 +1,7 @@
 USING: accessors arrays byte-arrays classes combinators
 combinators.short-circuit compiler.tree.propagation.info
 compiler.tree.propagation.nodes compiler.tree.propagation.special-nodes kernel
-math math.intervals sequences strings ;
+math math.intervals sequences strings words ;
 
 IN: compiler.tree.propagation.set-slots
 
@@ -93,8 +93,12 @@ M: non-literal-sequence-set-slot-call propagate-after
 : length-info<= ( info info -- ? )
     [ interval>> ] bi@ interval> not ;
 
+! We have slot info on the sequence
 PREDICATE: known-resize-sequence-call < resize-sequence-call
     in-d>> second value-info slots>> ;
+
+! Unknown resize sequence call means we assume that input has either been
+! changed or not (  )
 PREDICATE: unknown-resize-sequence-call < resize-sequence-call
     known-resize-sequence-call? not ;
 PREDICATE: shrinking-resize-sequence-call < known-resize-sequence-call
@@ -117,9 +121,8 @@ PREDICATE: growing-resize-sequence-call < known-resize-sequence-call
     f >>literal? ;
 
 ! For a an unknown allocation, we don't modify the input info.
-: resize-unknown-sequence ( n-info array-val -- out-info )
-    swap object-info swap array <rw-sequence-info>
-    swap drop ;
+: resize-unknown-sequence ( n-info sequence-info class -- out-info )
+    [ drop object-info swap ] dip <rw-sequence-info> ;
 
 : default-element-info ( class -- info )
     { { string [ 0 ] }
@@ -127,10 +130,12 @@ PREDICATE: growing-resize-sequence-call < known-resize-sequence-call
       { array [ f ] }
     } case <literal-info> ;
 
-GENERIC: propagate-resize-sequence-output-infos* ( #call -- infos )
+GENERIC: propagate-resize-sequence-output-infos* ( #call -- info )
 GENERIC: propagate-resize-array-input-infos ( #call -- )
 M: unknown-resize-sequence-call propagate-resize-sequence-output-infos*
-    in-d>> first2 [ value-info ] bi@ resize-unknown-sequence ;
+    [ in-d>> first2 [ value-info ] bi@ ]
+    [ word>> "default-output-classes" word-prop first ] bi
+    resize-unknown-sequence ;
 ! TODO: inline as [ ]
 M: nop-resize-sequence-call propagate-resize-sequence-output-infos*
     in-d>> second value-info ;
@@ -144,7 +149,7 @@ M: growing-resize-sequence-call propagate-resize-sequence-output-infos*
 ! resize-array ( n array -- array )
 : propagate-resize-sequence-output-infos ( #call -- )
     [ propagate-resize-sequence-output-infos* ]
-    [ out-d>> first ] bi set-value-info ;
+    [ out-d>> first ] bi refine-value-info ;
 
 M: resize-sequence-call propagate-before
     [ call-next-method ] keep
@@ -159,8 +164,8 @@ M: shrinking-resize-sequence-call propagate-around
             [ in-d>> second
               [ value-info clone f >>literal f >>literal? ]
               [ set-value-info ] bi ]
-            [ dup out-d>> (annotate-node-also) ]
             [ propagate-after ]
+            [ dup out-d>> (annotate-node-also) ]
         } cleave
     ]
     [ call-next-method ] if ;
