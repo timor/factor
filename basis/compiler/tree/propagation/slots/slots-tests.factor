@@ -2,9 +2,10 @@ USING: accessors arrays classes.struct classes.tuple.private compiler.test
 compiler.tree compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.slots hashtables kernel kernel.private make math
 math.intervals math.order namespaces quotations sequences sequences.extras
-literals
+literals definitions compiler.units
 slots.private
 strings.private
+namespaces.private
 sorting stack-checker.values tools.test vectors words ;
 IN: compiler.tree.propagation.slots.tests
 
@@ -584,10 +585,12 @@ ${ 1 2 [a,b] dup } [ [ [ { 1 2 } [ first ] [ second ] bi ] final-info [ interval
 : foo2 ( -- ) ;
 ${ 1 2 [a,b] dup dup } [ [ [ { 1 2 } dup 2 slot swap 3 slot [ foo2 ] keep ] final-info [ interval>> ] map first3 ] with-rw ] unit-test
 
-! FIXME
-! Hangs when hacking the unit tests to use with-rw with compile-call
-[ 1 2 2 ]
-[ { 1 2 } [ [ dup 2 slot swap 3 slot [ foo2 ] keep ] compile-call ] with-rw ] unit-test
+! Problem: initializing on the literal during folding of call to global resulted
+! in a huge tree dive into the full hashtable content.  This was not only
+! extremely slow and memory/cpu intensive, but resulted in an error during
+! (fold-call), which caused `global` not to be folded away correctly
+{ t } [ [ [ global namespaces.private:>n get namespaces.private:ndrop ]
+        optimize-quot ] with-rw first global-hashtable? ] unit-test
 
 ! Regression: redefine22.factor, uses rw-slots-on for whole unit compilation.
 ! Failing call trace: ... 1register-origin record-allocation M\ hash-set adjoin

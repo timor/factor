@@ -2,11 +2,9 @@
 ! See http://factorcode.org/license.txt for BSD license.
 USING: accessors arrays assocs byte-arrays classes classes.algebra
 classes.singleton classes.tuple classes.tuple.private combinators
-combinators.short-circuit compiler.tree.propagation.copy compiler.utilities
-compiler.tree.propagation.escaping
-delegate kernel layouts math math.intervals namespaces sequences
-graphs
-hash-sets
+combinators.short-circuit compiler.tree.propagation.copy
+compiler.tree.propagation.escaping compiler.utilities continuations delegate
+graphs hash-sets kernel layouts math math.intervals namespaces sequences
 sequences.private sets stack-checker.values strings words ;
 IN: compiler.tree.propagation.info
 
@@ -168,22 +166,24 @@ SYMBOL: inner-values
     resolve-copy
     inner-values get ?last [ adjoin ] [ drop ] if* ;
 
+SYMBOL: propagate-rw-slots
+: propagate-rw-slots? ( -- ? ) propagate-rw-slots get >boolean ; inline
+
 ! Prevent infinite recursion while merging
 ! Maps literals to values
 SYMBOL: slot-ref-history
 SYMBOL: literal-values
 ! TODO: remove after debugging ( or keep as global value numbering? )
 literal-values [ IH{ } clone ] initialize
+ERROR: rabbit-hole ;
 
 : slot-ref-recursion? ( value -- ? )
-    slot-ref-history get in? ;
+    slot-ref-history get
+    dup length 5 > [ 2drop rabbit-hole ] [ member? ] if ;
 
 : literal>value ( literal -- value )
     literal-values get [ drop <value> [ introduce-value ] keep ] cache ;
-
-SYMBOL: propagate-rw-slots
-: propagate-rw-slots? ( -- ? ) propagate-rw-slots get >boolean ; inline
-
+DEFER: <inner-literal-info>
 ! NOTE: discarding value, only using for recursion prevention
 ! Returns an info for a literal tuple slot
 ! TODO: wrong name in new slot-ref context
@@ -194,7 +194,7 @@ SYMBOL: propagate-rw-slots
     [
         [
             slot-ref-history [ swap suffix ] change
-            <literal-info>
+            <inner-literal-info>
         ] with-scope
     ] if ;
 
@@ -405,12 +405,12 @@ DEFER: read-only-slot?
         swap >>interval
     init-value-info ; foldable
 
+: <inner-literal-info> ( literal -- info )
+    <value-info> swap >>literal t >>literal? init-value-info init-slots ;
+
 : <literal-info> ( literal -- info )
-    <value-info>
-        swap >>literal
-        t >>literal?
-    init-value-info
-    init-slots ; foldable
+    [ <inner-literal-info> ]
+    [ dup rabbit-hole? [ propagate-rw-slots off 2drop object-info ] [ rethrow ] if ] recover ;
 
 ! Non-literal sequence constructor
 : <sequence-info> ( length class -- info )
