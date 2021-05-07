@@ -365,7 +365,7 @@ GENERIC: >regular-info ( value-info -- valu-info )
 M: f >regular-info ;
 M: value-info-state >regular-info
     clone f >>origin
-    [ [ >regular-info dup object-info = [ drop f ] when ] map dup [ ] any? [ drop f ] unless ] change-slots
+    [ [ >regular-info dup object-info = [ drop f ] when ] map >vector dup [ ] any? [ drop f ] unless ] change-slots
     [ >regular-info dup object-info = [ drop f ] when ] change-summary-slot ;
 M: lazy-info >regular-info
     cached>> >regular-info ;

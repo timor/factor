@@ -519,7 +519,7 @@ STRUCT: sbar { s sbar* } ;
     T{ value-info-state
        { class array }
        { interval full-interval }
-       { slots { T{ value-info-state { class integer } { interval full-interval } } } }
+       { slots V{ T{ value-info-state { class integer } { interval full-interval } } } }
        { summary-slot T{ value-info-state { class union{ sbar fixnum POSTPONE: f } } { interval full-interval } } }
      }
 } [

@@ -262,14 +262,14 @@ TUPLE: mixed-tup { a read-only } b ;
        { interval empty-interval }
        { literal T{ rw-tup { a 42 } } }
        { literal? t }
-       { slots { f T{ value-info-state { class fixnum } { interval T{ interval { from { 42 t } } { to { 42 t } } } } { literal 42 } { literal? t } } } }
+       { slots V{ f T{ value-info-state { class fixnum } { interval T{ interval { from { 42 t } } { to { 42 t } } } } { literal 42 } { literal? t } } } }
      }
     T{ value-info-state
        { class rw-tup }
        { interval empty-interval }
        { literal T{ rw-tup { a 42 } } }
        { literal? t }
-       { slots { f T{ value-info-state { class fixnum } { interval T{ interval { from { 42 t } } { to { 42 t } } } } { literal 42 } { literal? t } } } }
+       { slots V{ f T{ value-info-state { class fixnum } { interval T{ interval { from { 42 t } } { to { 42 t } } } } { literal 42 } { literal? t } } } }
      }
 } [ [ T{ rw-tup f 42 } <literal-info> dup clone init-value-info ] with-rw [ >regular-info ] bi@ ] unit-test
 
@@ -280,7 +280,7 @@ TUPLE: mixed-tup { a read-only } b ;
        { literal T{ mixed-tup { a 11 } { b 22 } } }
        { literal? t }
        { slots
-         {
+         V{
              f
              T{ value-info-state { class fixnum } { interval T{ interval { from { 11 t } } { to { 11 t } } } } { literal 11 } { literal? t } }
              T{ value-info-state { class fixnum } { interval T{ interval { from { 22 t } } { to { 22 t } } } } { literal 22 } { literal? t } }
@@ -296,7 +296,7 @@ TUPLE: mixed-tup { a read-only } b ;
        { literal T{ test-tuple { x T{ mixed-tup { a 49 } { b 50 } } } } }
        { literal? t }
        { slots
-         {
+         V{
              f
              T{ value-info-state
                 { class mixed-tup }
@@ -304,7 +304,7 @@ TUPLE: mixed-tup { a read-only } b ;
                 { literal T{ mixed-tup { a 49 } { b 50 } } }
                 { literal? t }
                 { slots
-                  {
+                  V{
                       f
                       T{ value-info-state { class fixnum } { interval T{ interval { from { 49 t } } { to { 49 t } } } } { literal 49 } { literal? t } }
                       T{ value-info-state { class fixnum } { interval T{ interval { from { 50 t } } { to { 50 t } } } } { literal 50 } { literal? t } }
@@ -344,7 +344,7 @@ STRUCT: test-struct
        { literal S{ test-struct { x 12 } { y 20 } } }
        { literal? t }
        { slots
-         {
+         V{
              f
              T{ value-info-state
                 { class byte-array }
@@ -352,7 +352,7 @@ STRUCT: test-struct
                 { literal B{ 12 0 0 0 20 0 0 0 } }
                 { literal? t }
                 { slots
-                  { T{ value-info-state { class fixnum } { interval T{ interval { from { 8 t } } { to { 8 t } } } } { literal 8 } { literal? t } } }
+                  V{ T{ value-info-state { class fixnum } { interval T{ interval { from { 8 t } } { to { 8 t } } } } { literal 8 } { literal? t } } }
                 }
               }
          }
