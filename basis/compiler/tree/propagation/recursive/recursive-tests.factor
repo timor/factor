@@ -1,4 +1,4 @@
-USING: accessors compiler.tree compiler.tree.builder
+USING: accessors compiler.test compiler.tree compiler.tree.builder
 compiler.tree.optimizer compiler.tree.propagation.info
 compiler.tree.propagation.recursive kernel kernel.private layouts
 literals math math.intervals sequences sequences.private tools.test ;
@@ -82,5 +82,5 @@ IN: compiler.tree.propagation.recursive.tests
     }
 } [
     \ integer-loop build-tree optimize-tree
-    [ #if? ] filter second children>> first first recursive-phi-infos
+    [ #if? ] filter second children>> first first recursive-phi-infos [ >regular-info ] map
 ] unit-test
