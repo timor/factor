@@ -659,3 +659,6 @@ TUPLE: ttt1 a ;
 [ [ [ "\u123456bc" string-nth ] final-info first interval>> ] with-rw ] unit-test
 
 { 1193046 } [ [ 0 [ "\u123456bc" string-nth ] compile-call ] with-rw ] unit-test
+
+
+! Bootstrapping hangs on load-components

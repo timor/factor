@@ -140,17 +140,20 @@ IN: compiler.test
 : hack-unit-tests ( -- )
     \ (unit-test) [ [ [ with-rw-prop ] curry ] prepose ] annotate ;
 
+: debug. ( obj -- )
+    ...
+
 : annotate-generalize-counter ( -- )
     \ generalize-counter dup reset
     [ [ "--- Entering generalize-counter" print 2dup [ "info': " write ! bake-info
-                                                       ... ] [ "initial: " write ! bake-info
-                                                               ... ] bi* ] prepose
+                                                       debug. ] [ "initial: " write ! bake-info
+                                                               debug. ] bi* ] prepose
       [ "--- Leaving generalized-counter: " print dup ! bake-info
-        ... ] compose
+        debug. ] compose
     ] annotate ;
 
 : watch-value-infos ( seq -- )
-    [ dup [ resolve-copy "%d -> %d : " printf ] [ value-info ... ] bi ] each ;
+    [ dup [ resolve-copy "%d -> %d : " printf ] [ value-info debug. ] bi ] each ;
 
 : watch-in-d ( node -- )
     "-- in-d-value-info:" print
@@ -162,7 +165,7 @@ IN: compiler.test
     out-d>> watch-value-infos ;
 
 : annotate-value-info<= ( -- )
-    \ value-info<= dup reset [ [ "--- Entering value-info<=" print 2dup [ ... ] bi@ ] prepose
+    \ value-info<= dup reset [ [ "--- Entering value-info<=" print 2dup [ debug. ] bi@ ] prepose
                                [ "--- Leaving value-info<=: " write dup . ] compose ] annotate ;
 
 
@@ -174,7 +177,7 @@ IN: compiler.test
 
 : watch-virtuals ( -- )
     inner-values get
-    [ [ "virtual %d: " printf ] [ value-info ... ] bi ] [ each ] curry each ;
+    [ [ "virtual %d: " printf ] [ value-info debug. ] bi ] [ each ] curry each ;
 
 : annotate-call-recursive ( -- )
     M\ #call-recursive propagate-before dup reset
@@ -191,9 +194,9 @@ IN: compiler.test
 : annotate-virtual-creation ( -- )
     \ slot-info>lazy-info dup reset [
         [ "--- Entering slot-info>lazy-info: " write
-          "info: " write pick ... ] prepose
+          "info: " write pick debug. ] prepose
         [ "--- Leaving slot-info>lazy-info:" print " " write
-          dup ... ] compose
+          dup debug. ] compose
     ] annotate ;
 
 : watch-node ( node -- )
@@ -244,7 +247,7 @@ IN: compiler.test
 
 : propagation-trace ( quot/word -- nodes vars )
     \ (lift-inner-values) dup reset watch
-    ! \ propagate-after dup reset [ [ "Inner values: " write inner-values get ... ] prepose ] annotate
+    ! \ propagate-after dup reset [ [ "Inner values: " write inner-values get debug. ] prepose ] annotate
     \ strong-update dup reset watch
     \ weak-update dup reset watch
     annotate-virtual-creation
@@ -274,10 +277,10 @@ IN: compiler.test
 : annotate-recursive-stacks ( -- )
     \ recursive-stacks dup reset [
         [ dup class-of "--- recursive stacks for %s:\n" printf ] prepose
-        [ 2dup [ "stacks: " write ... ] [ "initial: " write ... ] bi* ] compose
+        [ 2dup [ "stacks: " write debug. ] [ "initial: " write debug. ] bi* ] compose
     ] annotate
     \ unify-recursive-stacks dup reset [
-        [ "--- unified stacks: " write dup ... ] compose
+        [ "--- unified stacks: " write dup debug. ] compose
     ] annotate
     ;
 
@@ -314,14 +317,14 @@ IN: compiler.test
 : annotate-check-fixed-point ( -- )
     \ check-fixed-point dup reset [
         [ pick class-of "--- Entering check-fixed-point : %s\n" printf
-2dup [ "current iteration: " write ... ] [ "last iteration: " write ... ] bi*
+2dup [ "current iteration: " write debug. ] [ "last iteration: " write debug. ] bi*
 ] prepose
     ] annotate ;
 
 : annotate-union-lazy-slot ( -- )
     \ union-lazy-slot dup reset [
-        [ "--- Union-lazy-slot: " write 2dup [ ... ] bi@ ] prepose
-        [ "--- Union-lazy-slot result: " write dup ... ] compose
+        [ "--- Union-lazy-slot: " write 2dup [ debug. ] bi@ ] prepose
+        [ "--- Union-lazy-slot result: " write dup debug. ] compose
     ] annotate ;
 
 : fixed-point-trace ( quot/word -- nodes )
@@ -382,7 +385,7 @@ M: lazy-info >regular-info
 
 : report-info-difference ( word tree1 tree2 -- )
     [ last node-input-infos [ >regular-info ] map ] bi@ 2dup = [ 3drop ]
-    [ "Infos differ: " print rot . [ ... ] bi@ ] if ;
+    [ "Infos differ: " print rot . [ debug. ] bi@ ] if ;
 
 : compare-rw-nodes ( quot/word -- )
     dup [ build-tree optimize-tree ]

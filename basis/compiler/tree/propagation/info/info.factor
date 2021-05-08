@@ -38,6 +38,7 @@ DEFER: value-info-union
 DEFER: set-value-info
 DEFER: set-inner-value-info
 DEFER: object-info
+DEFER: limbo
 
 TUPLE: lazy-info { values read-only } { ro? read-only } { cached read-only } { baked? read-only } ;
 : >lazy-info< ( lazy-info -- values ro? cached baked? )
@@ -177,6 +178,9 @@ SYMBOL: literal-values
 literal-values [ IH{ } clone ] initialize
 ERROR: rabbit-hole ;
 
+SINGLETON: limbo
+CONSTANT: pointer-info T{ value-info-state { class object } { interval full-interval } { origin HS{ limbo } } }
+
 : slot-ref-recursion? ( value -- ? )
     slot-ref-history get
     dup length 5 > [ 2drop rabbit-hole ] [ member? ] if ;
@@ -190,7 +194,7 @@ DEFER: <inner-literal-info>
 : <literal-slot-ref> ( literal -- info )
     dup literal>value
     dup slot-ref-recursion?
-    [ 2drop object-info ]
+    [ 2drop pointer-info ]
     [
         [
             slot-ref-history [ swap suffix ] change
@@ -201,21 +205,6 @@ DEFER: <inner-literal-info>
 CONSTANT: null-info T{ value-info-state f null empty-interval }
 
 CONSTANT: object-info T{ value-info-state f object full-interval }
-
-TUPLE: input-ref { index read-only } ;
-: <input-ref> ( index -- obj )
-    input-ref boa [ record-allocation ] keep ;
-
-SINGLETON: limbo
-CONSTANT: pointer-info T{ value-info-state { class object } { interval full-interval } { origin HS{ limbo } } }
-
-TUPLE: literal-allocation literal ;
-C: <literal-allocation> literal-allocation
-: same-literal-allocation? ( allocation literal-allocation -- ? )
-    2dup [ literal-allocation? ] both?
-    [ [ literal>> ] bi@ eq? ]
-    [ 2drop f ] if ;
-SINGLETON: local-allocation
 
 ! Literalization
 
@@ -645,16 +634,12 @@ SYMBOL: value-infos
 
 DEFER: refine-value-info
 
-! clones
-: add-info-origin ( info slot-ref -- info )
-    swap clone [ HS{ } or clone [ adjoin ] keep ] change-origin ;
-
 : register-origin ( value slot-refs -- )
     object-info clone swap >>origin
     swap refine-value-info ;
 
 : 1register-origin ( value slot-ref -- )
-    dup record-allocation
+    dup record-allocation       ! TODO: record allocation probably not needed?
     1array >hash-set register-origin ;
 
 ! Escaping: A value that has slots has unknown slots after escaping.
@@ -695,7 +680,7 @@ DEFER: extend-value-info
       [ values>> [ invalidate-object ] each ] if
     ] [ drop ] if ;
 
-: object-escapes ( value -- )
+: container-escapes ( value -- )
     slot-virtuals-closure [ invalidate-virtual ] each ;
 
 : read-only-slot? ( n class -- ? )

@@ -7,6 +7,10 @@ tools.test ;
 IN: compiler.tree.propagation.escaping.tests
 FROM: compiler.tree.propagation.escaping => value-escapes ;
 
+! Escaping
+TUPLE: box a ;
+C: <box> box
+
 TUPLE: foo { a read-only initial: 42 } b ;
 C: <foo> foo
 
@@ -132,10 +136,6 @@ C: <foo> foo
 
 { V{ 42 47 } } [ [ [ 42 47 <foo> [ poke drop ] keep foo-slots ] final-literals ] with-rw ] unit-test
 
-! Escaping
-TUPLE: box a ;
-C: <box> box
-
 TUPLE: inner a ;
 C: <inner> inner
 { V{ f f f f f } } [ [ [ 42 <inner> box new over >>a dup a>> box new over >>a dup a>> [ frob-box ] keep [ a>> ] 5 napply ] final-literals ] with-rw ] unit-test
@@ -215,7 +215,7 @@ C: <inner> inner
               }
          }
        }
-       { origin HS{ T{ literal-allocation { literal T{ box { a 42 } } } } } }
+       { origin HS{ literal-allocation } }
      }
 }
 [ [ [ T{ box f 42 } dup <box> a>> frob-box ] final-value-info first ] with-rw ] unit-test
@@ -327,3 +327,8 @@ C: <ro-box> ro-box
 { t } [ [ foo new dup 11 swap 2array first frob-array ] return-escapes? first ] unit-test
 { t } [ [ foo new dup 11 2array second frob-array ] return-escapes? first ] unit-test
 { t } [ [ foo new dup 11 swap 2array second frob-array ] return-escapes? first ] unit-test
+
+! Inner slots of magical call results unknown
+{ f } [ [ global ] return-escapes? first ] unit-test
+{ t } [ [ "include" get-global ] return-escapes? first ] unit-test
+{ f } [ [ "include" get-global ] rw-literals first ] unit-test
