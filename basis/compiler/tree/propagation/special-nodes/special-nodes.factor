@@ -31,6 +31,9 @@ PREDICATE: sequence-rw-slot-call < slot-call
 PREDICATE: string-aux-reader < sequence-rw-slot-call
     in-d>> first2 [ value-info class>> string eq? ] [ value-info literal>> 2 = ] bi* and ;
 
+PREDICATE: sequence-constructor-call < flushable-call word>>
+    { <array> <byte-array> (byte-array) <string> } member-eq? ;
+
 : length-slot-literal ( value -- n/f )
     value-info slots>> ?first dup
     [ [ literal?>> ] [ literal>> ] bi and ]
@@ -51,7 +54,8 @@ PREDICATE: inlined-call < non-flushable-call body>> >boolean ;
 ! PREDICATE: safe-primitive-call < non-flushable-call word>>
 !     { resize-array } in? ;
 UNION: safe-primitive-call resize-sequence-call ;
-UNION: local-allocating-call flushable-call resize-sequence-call ;
+UNION: local-allocating-call ! flushable-call
+    resize-sequence-call tuple-boa-call sequence-constructor-call ;
 ! PREDICATE: non-inlined-call < non-flushable-call inlined-call? not ;
 ! PREDICATE: known-safe-call < non-inlined-call word>> { resize-array } in? ;
 UNION: non-escaping-call flushable-call inlined-call safe-primitive-call ;

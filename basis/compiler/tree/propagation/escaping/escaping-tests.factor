@@ -1,9 +1,8 @@
-USING: accessors arrays compiler.test compiler.tree.builder
+USING: accessors arrays classes compiler.test compiler.tree.builder
 compiler.tree.debugger compiler.tree.optimizer
 compiler.tree.propagation.escaping compiler.tree.propagation.info
-compiler.tree.propagation.origins
-generalizations kernel kernel.private math math.intervals namespaces sequences
-tools.test ;
+compiler.tree.propagation.origins generalizations kernel kernel.private math
+math.intervals namespaces namespaces.private sequences tools.test ;
 IN: compiler.tree.propagation.escaping.tests
 FROM: compiler.tree.propagation.escaping => value-escapes ;
 
@@ -94,14 +93,9 @@ C: <foo> foo
 
 ! ! foldable only takes non-mutable inputs per definition, so cannot propagate through
 : foldable-magic (  x -- x  ) 1 + ; foldable
-{ f } [ [ foldable-magic ] return-escapes? first ] unit-test
+{ t } [ [ foldable-magic ] return-escapes? first ] unit-test
 
-! TODO: this could be considered a propagate-after extension:  If a literal
-! input was given to a foldable word
-{ f f } [ [ dup foldable-magic ] return-escapes? first2 ] unit-test
-
-! ! TODO: Handle declare! (probably expensive, maybe keep track of allocations?)
-
+{ f t } [ [ dup foldable-magic ] return-escapes? first2 ] unit-test
 
 
 ! ! Accessing slots should not let the object escape
@@ -329,6 +323,8 @@ C: <ro-box> ro-box
 { t } [ [ foo new dup 11 swap 2array second frob-array ] return-escapes? first ] unit-test
 
 ! Inner slots of magical call results unknown
-{ f } [ [ global ] return-escapes? first ] unit-test
+{ t } [ [ global ] return-escapes? first ] unit-test
+{ global-box } [ [ "include" global box-at ] final-literals first class-of ] unit-test
+{ global-box } [ [ [ "include" global box-at ] final-literals first ] with-rw class-of ] unit-test
 { t } [ [ "include" get-global ] return-escapes? first ] unit-test
 { f } [ [ "include" get-global ] rw-literals first ] unit-test

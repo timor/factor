@@ -41,6 +41,8 @@ M: #call propagate-origin
 ! tracking is used.
 ! NOTE: Until IPO origin tracking is used, considering this only safe for the
 ! container object.
+! NOTE: Until IPO origin tracking, only use this for constructors, consider all
+! call results being from limbo for now
 M: local-allocating-call propagate-origin
     out-d>> [ local-allocation 1register-origin ] each ;
 
