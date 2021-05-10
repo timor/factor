@@ -140,8 +140,12 @@ IN: compiler.test
     [ propagate-rw-slots off check-optimizer? off ] [ ] cleanup ; inline
     ! [ init-values ] prepose propagate-rw-slots swap with-variable-on ; inline
 
-: hack-unit-tests ( -- )
+: hack-unit-tests-rw ( -- )
     \ (unit-test) [ [ [ with-rw-prop ] curry ] prepose ] annotate ;
+
+
+: hack-unit-tests-rw-compile ( -- )
+        \ (unit-test) [ [ [ compile-call ] curry [ with-rw-prop ] curry ] prepose ] annotate ;
 
 : debug. ( obj -- )
     [ . ] H{ { nesting-limit 20 }

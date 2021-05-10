@@ -659,9 +659,6 @@ TUPLE: ttt1 a ;
 { 1193046 } [ [ 0 [ "\u123456bc" string-nth ] compile-call ] with-rw ] unit-test
 
 
-! Bootstrapping hangs on load-components
-
-
 ! some sanity checks because stuff is optimized out
 { { { "foo" "bar" } } { { "foo" "bar" } } }
 [ { "foo\nbar" } [ [ input-stream get stream-lines ] with-string-reader ] compare-compile-call ] unit-test
@@ -679,3 +676,7 @@ TUPLE: ttt1 a ;
 
 { { 1230000.0 } { 1230000.0 } }
 [ { "123.0e4" } [ string>number ] compare-compile-call ] unit-test
+
+! Bootstrapping takes forever on
+! reorder-back reorder-loop reorder
+! Probably recursing into class-map
