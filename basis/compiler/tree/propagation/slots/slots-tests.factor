@@ -1,12 +1,10 @@
 USING: accessors arrays classes.struct classes.tuple.private compiler.test
 compiler.tree compiler.tree.propagation.copy compiler.tree.propagation.info
-compiler.tree.propagation.slots hashtables kernel kernel.private make math
-math.intervals math.order namespaces quotations sequences sequences.extras
-literals definitions compiler.units
-slots.private
-strings.private
-namespaces.private
-sorting stack-checker.values tools.test vectors words ;
+compiler.tree.propagation.slots compiler.units definitions hashtables io
+io.streams.string kernel kernel.private literals make math math.intervals
+math.order math.parser namespaces namespaces.private quotations sequences
+sequences.extras slots.private sorting stack-checker.values strings.private
+tools.test vectors words ;
 IN: compiler.tree.propagation.slots.tests
 
 : indexize ( seq -- assoc )
@@ -662,3 +660,22 @@ TUPLE: ttt1 a ;
 
 
 ! Bootstrapping hangs on load-components
+
+
+! some sanity checks because stuff is optimized out
+{ { { "foo" "bar" } } { { "foo" "bar" } } }
+[ { "foo\nbar" } [ [ input-stream get stream-lines ] with-string-reader ] compare-compile-call ] unit-test
+
+{ { { "foo" "bar" } } { { "foo" "bar" } } }
+[ f [ "foo\nbar" [ input-stream get stream-lines ] with-string-reader ] compare-compile-call  ] unit-test
+
+! TODO: do above on larger seqeunces?
+
+{ { 1234 } { 1234 } }
+[ { "1234" 10 } [ base> ] compare-compile-call ] unit-test
+
+{ { 4660 } { 4660 } }
+[ { "1234" 16 } [ base> ] compare-compile-call ] unit-test
+
+{ { 1230000.0 } { 1230000.0 } }
+[ { "123.0e4" } [ string>number ] compare-compile-call ] unit-test

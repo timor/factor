@@ -1,10 +1,11 @@
 ! Copyright (C) 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays assocs classes combinators compiler.cfg
-compiler.cfg.debugger compiler.cfg.def-use compiler.cfg.linearization
-compiler.cfg.registers compiler.cfg.representations.preferred compiler.cfg.rpo
-compiler.cfg.stacks compiler.cfg.stacks.local compiler.cfg.utilities
-compiler.tree compiler.tree.builder compiler.tree.checker compiler.tree.cleanup
+USING: accessors arrays assocs assocs.extras classes combinators
+combinators.short-circuit compiler.cfg compiler.cfg.debugger
+compiler.cfg.def-use compiler.cfg.linearization compiler.cfg.registers
+compiler.cfg.representations.preferred compiler.cfg.rpo compiler.cfg.stacks
+compiler.cfg.stacks.local compiler.cfg.utilities compiler.tree
+compiler.tree.builder compiler.tree.checker compiler.tree.cleanup
 compiler.tree.combinators compiler.tree.dead-code compiler.tree.debugger
 compiler.tree.def-use compiler.tree.escape-analysis compiler.tree.normalization
 compiler.tree.optimizer compiler.tree.propagation
@@ -13,9 +14,11 @@ compiler.tree.propagation.escaping compiler.tree.propagation.info
 compiler.tree.propagation.info.private compiler.tree.propagation.nodes
 compiler.tree.propagation.recursive compiler.tree.propagation.slot-refs
 compiler.tree.recursive compiler.tree.tuple-unboxing compiler.units
-continuations formatting generic hashtables inspector io kernel math mirrors
-namespaces prettyprint sequences stack-checker stack-checker.values
-tools.annotations tools.test tools.test.private vectors vocabs words ;
+continuations debugger formatting generic hashtables inspector io kernel lcs
+math math.functions math.statistics mirrors namespaces prettyprint
+prettyprint.config sequences sorting stack-checker stack-checker.branches
+stack-checker.values strings tools.annotations tools.test tools.test.private
+vectors vocabs words ;
 IN: compiler.test
 
 : decompile ( word -- )
@@ -141,7 +144,12 @@ IN: compiler.test
     \ (unit-test) [ [ [ with-rw-prop ] curry ] prepose ] annotate ;
 
 : debug. ( obj -- )
-    ...
+    [ . ] H{ { nesting-limit 20 }
+             { line-limit f }
+             { length-limit 100 }
+             { string-limit? t }
+             { c-object-pointers? t } }
+    clone swap with-variables ;
 
 : annotate-generalize-counter ( -- )
     \ generalize-counter dup reset
@@ -152,8 +160,15 @@ IN: compiler.test
         debug. ] compose
     ] annotate ;
 
+: value-info. ( x -- )
+    value-info thaw-info debug. ;
+
 : watch-value-infos ( seq -- )
-    [ dup [ resolve-copy "%d -> %d : " printf ] [ value-info debug. ] bi ] each ;
+    [ dup [ resolve-copy "%d → %d : " printf ] [ value-info. ] bi ] each ;
+
+: watch-phi-in ( seq -- )
+    infer-children-data get [ value-infos of ] map
+    [ value-infos [ [ dup +bottom+ eq? [ . ] [ [ "%d: " printf ] [ value-info. ] bi ] if ] each ] with-variable ] 2each ;
 
 : watch-in-d ( node -- )
     "-- in-d-value-info:" print
@@ -177,7 +192,7 @@ IN: compiler.test
 
 : watch-virtuals ( -- )
     inner-values get
-    [ [ "virtual %d: " printf ] [ value-info debug. ] bi ] [ each ] curry each ;
+    [ [ "virtual %d: " printf ] [ value-info. ] bi ] [ each ] curry each ;
 
 : annotate-call-recursive ( -- )
     M\ #call-recursive propagate-before dup reset
@@ -199,19 +214,48 @@ IN: compiler.test
           dup debug. ] compose
     ] annotate ;
 
+SYMBOL: call-level
+call-level [ 0 ] initialize
+
+: call-level-string ( -- str )
+    call-level get round 1 + CHAR: - <string> ;
+
+: watch-enter-node ( -- )
+    call-level-string write "> " write ;
+
+: watch-leave-node ( -- )
+    call-level-string write "< " write ;
+
+: watch-node-header ( node -- )
+    [ class-of "Node: %s" printf ]
+    [ dup #call? [ word>> " %s" printf ] [ drop ] if ] bi
+    nl ;
+
 : watch-node ( node -- )
-    dup class-of "Node: %s" printf nl
+    watch-enter-node
+    dup watch-node-header
     <mirror>
     [ "in-d" of [ " in-d:" print watch-value-infos ] when* ]
-    [ "out-d" of [ unparse-short " out-d: %s\n" printf ] when* ]
+    [ "phi-in-d" of [ " phi-in-d:" print watch-phi-in ] when* ]
+    ! [ "out-d" of [ unparse-short " out-d: %s\n" printf ] when* ]
     [ "declaration" of [ unparse "declaration: %s\n" printf ] when* ]
     tri
     ;
 
+: watch-out-vals ( node -- )
+    watch-leave-node
+    dup watch-node-header
+    <mirror>
+    "out-d" of [ " out-d:" print watch-value-infos ] when* ;
+
 : annotate-propagate-around ( -- )
-    \ propagate-around dup reset [ [ dup #shuffle?
-                                     [ dup watch-node ] unless
-                                   ] prepose
+    \ propagate-around dup reset [ [
+            dup #branch? [ call-level 1/2 swap +@ ] when
+            dup #phi? [ call-level dec ] when
+            dup #shuffle?
+            [ dup watch-node ] unless
+        ] prepose
+                                   '[ _ keep dup #shuffle? [ drop ] [ watch-out-vals ] if ]
     ] annotate ;
 
 : annotate-slot-calls ( -- )
@@ -374,6 +418,14 @@ M: lazy-info >regular-info
     cached>> >regular-info ;
 
 
+: both-trees ( quot/word -- nodes nodes-rw )
+    [ build-tree optimize-tree ]
+    [ [ build-tree optimize-tree ] with-rw-prop ] bi ;
+
+: both-quots ( quot/word -- quot quot-rw )
+    [ optimize-quot ]
+    [ [ optimize-quot ] with-rw ] bi ;
+
 : tree-size ( nodes -- n )
     0 swap [ drop 1 + ] each-node ;
 
@@ -387,15 +439,88 @@ M: lazy-info >regular-info
     [ last node-input-infos [ >regular-info ] map ] bi@ 2dup = [ 3drop ]
     [ "Infos differ: " print rot . [ debug. ] bi@ ] if ;
 
-: compare-rw-nodes ( quot/word -- )
-    dup [ build-tree optimize-tree ]
-    [ [ build-tree optimize-tree ] with-rw-prop ] bi
-    2dup [ tree-size ] bi@ = [ "Tree size differ:" print pick . ] unless
-    report-info-difference ;
+: catch-optimization-error ( quot: ( quot/word --  ) --  )
+    [ swap "Error optimizing: " write . error. ] recover ; inline
+
+: compare-rw-treesize ( quot/word -- )
+    [ dup both-trees
+      2dup [ tree-size ] bi@ = [ "Tree size differ:" print pick . ] unless
+      report-info-difference ] catch-optimization-error ;
 
 : compare-rw-opt. ( quot/word -- )
-    [ optimized. ]
-    [ [ optimized. ] with-rw-prop ] bi ;
+    [ [ optimized. ]
+      [ [ optimized. ] with-rw-prop ] bi ]
+    catch-optimization-error ;
 
 : compare-rw-word ( quot/word -- )
-    dup generic? [ subwords [ compare-rw-nodes ] each ] [ compare-rw-nodes ] if ;
+    dup generic? [ subwords [ compare-rw-treesize ] each ] [ compare-rw-treesize ] if ;
+
+: node-type ( node -- obj )
+    dup #call? [ [ class-of ] [ word>> ] bi 2array ] [ class-of ] if ;
+
+: node-counts ( nodes -- assoc )
+    [ node-type ] collector [ each-node ] dip
+    histogram ;
+
+: node-counts-difference ( nodes nodes -- assoc )
+    [ node-counts ] bi@ [ - ] assoc-merge [ zero? ] reject-values sort-values ;
+
+: compare-node-counts ( quot/word -- )
+    [ [ both-trees node-counts-difference ] keep
+      over assoc-empty? [ 2drop ] [ "Node counts differ: %u\n" printf . ] if
+    ] catch-optimization-error ;
+
+: flatten-nodes ( nodes -- seq )
+    [ ] collector [ each-node ] dip ;
+
+TUPLE: compare-box node ;
+GENERIC: node=* ( node node -- ? )
+M: node node=* 2drop t ;
+M: #call node=* [ word>> ] bi@ = ;
+: node= ( node node -- ? )
+    2dup [ class-of ] bi@ =
+    [ node=* ] [ 2drop f ] if ;
+! : call= ( node node -- ? )
+!     { [ [ #call? ] both? ] [ [ word>> ] bi@ = ] } 2&& ;
+
+! : node= ( node node -- ? )
+!     { [ [ #call? not ] both? ] [ [ class-of ] bi@ = ] } 2&& ;
+
+! : if= ( node node -- ? )
+
+M: compare-box equal?
+    over compare-box?
+    [ [ node>> ] bi@ node= ] [ 2drop f ] if ;
+
+: compare-seq ( nodes nodes -- seq seq )
+    [ [ compare-box boa ] collector [ each-node ] dip ] bi@ ;
+
+: diff-nodes ( nodes nodes -- seq )
+    compare-seq
+    lcs-diff [ retain? ] reject [ dup item>> node>> dup #shuffle? [ 2drop f ] [ >>item ] if ] map sift ;
+
+: diff-rw-nodes ( quot/word -- )
+    [ [ both-trees diff-nodes ] keep
+      over empty? [ 2drop ] [ "Nodes differ: %u\n" printf .  ] if
+    ] catch-optimization-error ;
+
+: diff-rw-word ( word -- )
+    dup generic? [ subwords [ diff-rw-nodes ] each ] [ diff-rw-nodes ] if ;
+
+:: compare-compile-call ( inputs quot -- seq seq )
+    inputs [ quot compile-call ] with-datastack
+    inputs [ [ quot compile-call ] with-rw ] with-datastack ;
+
+
+: debug-call-infos ( node -- )
+    [ node-input-infos ! [ >regular-info ] map
+      "Inputs: " print debug. ]
+    [ node-output-infos ! [ >regular-info ] map
+      "Outputs: " print debug. ] bi ;
+
+: output-info-trace ( quot/word -- nodes )
+    M\ #call annotate-node [ [ dup word>> name>> "Call: " write print ] prepose
+                             '[ _ keep debug-call-infos ]
+    ] annotate
+    [ [ propagated-tree ] with-values ]
+    [ M\ #call annotate-node reset ] [  ] cleanup ;
