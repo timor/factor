@@ -4,8 +4,8 @@ USING: accessors arrays assocs byte-arrays classes classes.algebra
 classes.singleton classes.tuple classes.tuple.private combinators
 combinators.short-circuit compiler.tree.propagation.copy
 compiler.tree.propagation.escaping compiler.utilities continuations delegate
-graphs hash-sets kernel layouts math math.intervals namespaces sequences
-sequences.private sets stack-checker.values strings words ;
+graphs hash-sets hashtables kernel layouts math math.intervals namespaces
+sequences sequences.private sets stack-checker.values strings words ;
 IN: compiler.tree.propagation.info
 
 : false-class? ( class -- ? ) \ f class<= ;
@@ -187,7 +187,12 @@ CONSTANT: pointer-info T{ value-info-state { class object } { interval full-inte
 
 : literal>value ( literal -- value )
     literal-values get [ drop <value> [ introduce-value ] keep ] cache ;
+
 DEFER: <inner-literal-info>
+DEFER: <class-info>
+: unsafe-literal? ( x -- x )
+    { [ hashtable? ] [ continuation? ] } 1|| ;
+
 ! NOTE: discarding value, only using for recursion prevention
 ! Returns an info for a literal tuple slot
 ! TODO: wrong name in new slot-ref context
@@ -196,10 +201,12 @@ DEFER: <inner-literal-info>
     dup slot-ref-recursion?
     [ 2drop pointer-info ]
     [
-        [
+        ! NOTE: not diving into hashtables for now, correct fix would probably involve handling literals lazily in general
+        over unsafe-literal? [ drop class-of <class-info> ]
+        [ [
             slot-ref-history [ swap suffix ] change
             <inner-literal-info>
-        ] with-scope
+            ] with-scope ] if
     ] if ;
 
 CONSTANT: null-info T{ value-info-state f null empty-interval }
