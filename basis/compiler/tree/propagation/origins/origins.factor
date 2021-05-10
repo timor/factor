@@ -1,7 +1,7 @@
 USING: accessors combinators.short-circuit compiler.tree
-compiler.tree.propagation.escaping compiler.tree.propagation.info
-compiler.tree.propagation.nodes compiler.tree.propagation.special-nodes kernel
-sequences sets ;
+compiler.tree.propagation.call-effect compiler.tree.propagation.escaping
+compiler.tree.propagation.info compiler.tree.propagation.nodes
+compiler.tree.propagation.special-nodes kernel sequences sets ;
 IN: compiler.tree.propagation.origins
 
 ! * Tracking object origins
@@ -66,8 +66,15 @@ M: slot-call propagate-origin
 M: #alien-node propagate-origin
     out-escapes ;
 
+! NOTE: Results of #push calls are generally safe, because they are inserted by
+! local code.  Except for when the compiler
+! inserts them and keeps a reference to them...
+: unsafe-push? ( #push -- ? )
+    literal>> inline-cache? ;
+
 M: #push propagate-origin
-    out-d>> [ literal-allocation 1register-origin ] each ;
+    [ unsafe-push? limbo literal-allocation ? ]
+    [ out-d>> first swap 1register-origin ] bi ;
 
 : value-info-escapes? ( info -- ? )
     {
