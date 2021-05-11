@@ -22,6 +22,9 @@ M: ratio eql? over ratio? [ = ] [ 2drop f ] if ;
 M: float eql? over float? [ [ double>bits ] same? ] [ 2drop f ] if ;
 M: complex eql? over complex? [ = ] [ 2drop f ] if ;
 
+! TODO: May-be keep per unit?
+SYMBOL: literal-info-cache
+
 TUPLE: value-info-state
     class
     interval
@@ -124,9 +127,24 @@ UNION: fixed-length array byte-array string ;
     dup [ interval>> full-interval or ] [ class>> ] bi wrap-interval >>interval
     dup class>> integer class<= [ [ integral-closure ] change-interval ] when ; inline
 
+! FIXME: Providing this to make unit tests succeed, should maybe change the
+! environment for them instead?
+: ?cache ( ... key assoc quot: ( ... key -- ... value ) -- ... value )
+    over [ cache ] [ nip call ] if ; inline
+
+: get-cached-literal-info ( literal -- info fresh? )
+    literal-info-cache get
+    2dup at
+    [ 2nip f ]
+    [ [ <value-info> swap >>literal t >>literal? ] ?cache t ] if* ;
+
+: init-cached-literal-info ( info -- info )
+    literal>> get-cached-literal-info
+    [ init-literal-info ] when ;
+
 : init-value-info ( info -- info )
     dup literal?>> [
-        init-literal-info
+        init-cached-literal-info
     ] [
         dup empty-set? [
             null >>class
