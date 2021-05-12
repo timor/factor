@@ -112,12 +112,9 @@ vector>vector-intrinsics [ { byte-array } "default-output-classes" set-word-prop
 
 \ (simd-vgetmask) { fixnum } "default-output-classes" set-word-prop
 
-: clone-with-value-infos ( node -- node' )
-    clone dup in-d>> extract-value-info >>info ;
-
 : try-intrinsic ( node intrinsic-quot -- ? )
     '[
-        _ clone-with-value-infos
+        _ clone
         _ with-dummy-cfg-builder
         t
     ] [ drop f ] recover ;

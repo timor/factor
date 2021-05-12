@@ -10,7 +10,7 @@ IN: compiler.tree.propagation.slots
     { <array> <byte-array> (byte-array) <string> } member-eq? ;
 
 : propagate-sequence-constructor ( #call word -- infos )
-    [ in-d>> first value-info ]
+    [ node-input-infos first ]
     [ "default-output-classes" word-prop first ] bi*
     <sequence-info> 1array ;
 

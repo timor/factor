@@ -13,7 +13,7 @@ IN: compiler.tree.propagation.recursive
     [ drop ] [ label>> f >>fixed-point drop ] if ;
 
 : latest-input-infos ( node -- infos )
-    in-d>> [ value-info ] map ;
+    node-input-infos ; inline
 
 : recursive-stacks ( #enter-recursive -- stacks initial )
     [ label>> calls>> [ node>> node-input-infos ] map flip ]
@@ -69,6 +69,7 @@ IN: compiler.tree.propagation.recursive
 
 M: #recursive propagate-around ( #recursive -- )
     constraints [ H{ } clone suffix ] change
+    dup child>> first (annotate-in-d)
     [
         constraints [ but-last H{ } clone suffix ] change
 
@@ -110,15 +111,20 @@ M: #call-recursive propagate-before ( #call-recursive -- )
         ] unless-loop
     ] bi ;
 
+M: #call-recursive annotate-inputs
+    (annotate-in-d) ;
+
 M: #call-recursive annotate-node
-    dup [ in-d>> ] [ out-d>> ] bi append (annotate-node) ;
+    dup out-d>> (annotate-node-also) ;
 
 M: #enter-recursive annotate-node
-    dup out-d>> (annotate-node) ;
+    dup out-d>> (annotate-node-also) ;
 
+! NOTE: not pre-annotating here because #return-recursive doesn't use output
+! infos for state saving
 M: #return-recursive propagate-before ( #return-recursive -- )
     [
-        [ ] [ latest-input-infos ] [ node-input-infos ] tri
+        [ ] [ in-d>> [ value-info ] map ] [ node-input-infos ] tri
         check-fixed-point
     ] unless-loop ;
 

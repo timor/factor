@@ -58,16 +58,16 @@ ERROR: invalid-outputs #call infos ;
 
 : call-outputs-quot ( #call word -- infos )
     dupd
-    [ in-d>> [ value-info ] map ]
+    [ node-input-infos ]
     [ "outputs" word-prop ] bi*
     with-datastack check-outputs ;
 
 : literal-inputs? ( #call -- ? )
-    in-d>> [ value-info literal?>> ] all? ;
+    node-input-infos [ literal?>> ] all? ;
 
 : input-classes-match? ( #call word -- ? )
-    [ in-d>> ] [ "input-classes" word-prop ] bi*
-    [ [ value-info literal>> ] dip instance? ] 2all? ;
+    [ node-input-infos ] [ "input-classes" word-prop ] bi*
+    [ [ literal>> ] dip instance? ] 2all? ;
 
 : foldable-call? ( #call word -- ? )
     {
@@ -77,7 +77,7 @@ ERROR: invalid-outputs #call infos ;
     } 2&& ;
 
 : (fold-call) ( #call word -- info )
-    [ [ out-d>> ] [ in-d>> [ value-info literal>> ] map ] bi ] [ '[ _ execute ] ] bi*
+    [ [ out-d>> ] [ node-input-infos [ literal>> ] map ] bi ] [ '[ _ execute ] ] bi*
     '[ _ _ with-datastack [ <literal-info> ] map nip ]
     [ drop length [ object-info ] replicate ]
     recover ;
@@ -102,7 +102,7 @@ ERROR: invalid-outputs #call infos ;
     if ;
 
 : propagate-predicate ( #call word -- infos )
-    [ in-d>> first value-info ]
+    [ node-input-infos first ]
     [ "predicating" word-prop ] bi*
     [ nip +conditional+ depends-on ]
     [ predicate-output-infos 1array ] 2bi ;
@@ -134,7 +134,7 @@ M: #call propagate-before
     } cond ;
 
 M: #call annotate-node
-    dup [ in-d>> ] [ out-d>> ] bi append (annotate-node) ;
+    dup out-d>> (annotate-node-also) ;
 
 : propagate-input-infos ( node infos/f -- )
     swap in-d>> refine-value-infos ;

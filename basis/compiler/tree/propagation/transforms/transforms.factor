@@ -15,15 +15,15 @@ IN: compiler.tree.propagation.transforms
 \ equal? [
     ! If first input has a known type and second input is an
     ! object, we convert this to [ swap equal? ].
-    in-d>> first2 value-info class>> object class= [
-        value-info class>> \ equal? method-for-class
+    node-input-infos first2 class>> object class= [
+        class>> \ equal? method-for-class
         [ swap equal? ] f ?
     ] [ drop f ] if
 ] "custom-inlining" set-word-prop
 
-: rem-custom-inlining ( inputs -- quot/f )
-    dup first value-info class>> integer class<= [
-        second value-info literal>> dup integer?
+: rem-custom-inlining ( input-infos -- quot/f )
+    dup first class>> integer class<= [
+        second literal>> dup integer?
         [ power-of-2? [ 1 - bitand ] f ? ] [ drop f ] if
     ] [ drop f ] if ;
 
@@ -34,13 +34,13 @@ IN: compiler.tree.propagation.transforms
     fixnum-mod
 } [
     [
-        in-d>> dup first value-info interval>> [0,inf] interval-subset?
+        node-input-infos dup first interval>> [0,inf] interval-subset?
         [ rem-custom-inlining ] [ drop f ] if
     ] "custom-inlining" set-word-prop
 ] each
 
 \ rem [
-    in-d>> rem-custom-inlining
+    node-input-infos rem-custom-inlining
 ] "custom-inlining" set-word-prop
 
 : non-negative-fixnum? ( obj -- ? )
@@ -74,7 +74,7 @@ IN: compiler.tree.propagation.transforms
     bitand
 } [
     [
-        in-d>> first2 [ value-info ] bi@ {
+        node-input-infos first2 {
             {
                 [ 2dup zero-bitand? ]
                 [ nip class>> bignum = 0 >bignum 0 ? '[ 2drop _ ] ]
@@ -106,7 +106,7 @@ IN: compiler.tree.propagation.transforms
 
 ! Speeds up 2^
 : 2^? ( #call -- ? )
-    in-d>> first value-info literal>> 1 eq? ;
+    node-input-infos first literal>> 1 eq? ;
 
 : shift-2^ ( -- quot )
     cell-bits tag-bits get - 1 -
@@ -120,7 +120,7 @@ IN: compiler.tree.propagation.transforms
 
 ! Speeds up 2/
 : 2/? ( #call -- ? )
-    in-d>> second value-info literal>> -1 eq? ;
+    node-input-infos second literal>> -1 eq? ;
 
 : shift-2/ ( -- quot )
     [
@@ -141,7 +141,7 @@ IN: compiler.tree.propagation.transforms
 
 { /i fixnum/i fixnum/i-fast bignum/i } [
     [
-        in-d>> first2 [ value-info ] bi@ {
+        node-input-infos first2 {
             [ drop class>> integer class<= ]
             [ drop interval>> 0 [a,a] interval>= ]
             [ nip literal>> integer? ]
@@ -152,7 +152,7 @@ IN: compiler.tree.propagation.transforms
 
 ! Generate more efficient code for common idiom
 \ clone [
-    in-d>> first value-info literal>> {
+    node-input-infos first literal>> {
         { V{ } [ [ drop { } 0 vector boa ] ] }
         { H{ } [ [ drop 0 <hashtable> ] ] }
         { HS{ } [ [ drop 0 <hash-set> ] ] }
@@ -168,8 +168,7 @@ ERROR: bad-partial-eval quot word ;
 
 :: define-partial-eval ( word quot n -- )
     word [
-        in-d>> n tail*
-        [ value-info ] map
+        node-input-infos n tail*
         dup [ literal?>> ] all? [
             [ literal>> ] map
             n firstn
@@ -316,7 +315,7 @@ M\ sets:set intersect [ intersect-quot ] 1 define-partial-eval
 M\ sets:set intersects? [ intersects?-quot ] 1 define-partial-eval
 
 : bit-quot ( #call -- quot/f )
-    in-d>> second value-info interval>> 0 fixnum-bits [a,b] interval-subset?
+    node-input-infos second interval>> 0 fixnum-bits [a,b] interval-subset?
     [ [ integer>fixnum ] dip fixnum-bit? ] f ? ;
 
 \ bit? [ bit-quot ] "custom-inlining" set-word-prop
@@ -324,12 +323,12 @@ M\ sets:set intersects? [ intersects?-quot ] 1 define-partial-eval
 ! Speeds up sum-file, sort and reverse-complement benchmarks by
 ! compiling decoder-readln better
 \ push [
-    in-d>> second value-info class>> growable class<=
+    node-input-infos second class>> growable class<=
     [ \ push def>> ] [ f ] if
 ] "custom-inlining" set-word-prop
 
 : custom-inline-fixnum ( #call method -- y )
-    [ in-d>> first value-info class>> fixnum \ f class-or class<= ] dip
+    [ node-input-infos first class>> fixnum \ f class-or class<= ] dip
     '[ [ dup [ _ no-method ] unless ] ] [ f ] if ;
 
 ! Speeds up fasta benchmark
@@ -345,7 +344,7 @@ M\ sets:set intersects? [ intersects?-quot ] 1 define-partial-eval
 
 ! Eliminates a few redundant checks here and there
 \ both-fixnums? [
-    in-d>> first2 [ value-info class>> ] bi@ {
+    node-input-infos first2 [ class>> ] bi@ {
         { [ 2dup [ fixnum classes-intersect? not ] either? ] [ [ 2drop f ] ] }
         { [ 2dup [ fixnum class<= ] both? ] [ [ 2drop t ] ] }
         { [ dup fixnum class<= ] [ [ drop fixnum? ] ] }
