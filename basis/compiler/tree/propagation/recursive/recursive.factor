@@ -1,6 +1,6 @@
 ! Copyright (C) 2008, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors classes.algebra combinators compiler.tree
+USING: accessors classes.algebra combinators combinators.short-circuit compiler.tree
 compiler.tree.combinators compiler.tree.propagation.constraints
 compiler.tree.propagation.copy compiler.tree.propagation.info
 compiler.tree.propagation.nodes compiler.tree.propagation.simple
@@ -39,6 +39,10 @@ IN: compiler.tree.propagation.recursive
         [ class class-interval ]
     } cond ;
 
+: deliteralize-grown-interval ( info -- info )
+    dup interval>> { [ empty-interval? ] [ interval-singleton? ] } 1||
+    [ f >>literal? ] unless ; inline
+
 : generalize-counter ( info' initial -- info )
     2dup [ not ] either? [ drop ] [
         2dup [ class>> null-class? ] either? [ drop ] [
@@ -48,6 +52,7 @@ IN: compiler.tree.propagation.recursive
                     [ [ interval>> ] bi@ ] [ drop class>> ] 2bi
                     generalize-counter-interval
                 ] 2bi >>interval
+                deliteralize-grown-interval
             ]
             [ [ drop ] [ [ slots>> ] bi@ [ generalize-counter ] 2map ] 2bi >>slots ]
             bi
