@@ -8,6 +8,15 @@ alien.libraries.finder alien.syntax classes.struct combinators
 kernel quotations system vocabs raylib.ffi ;
 IN: raylib.modules.gui
 
+<<
+"raygui" {
+    ! { [ os windows? ] [ "raylib.dll" ] }
+    ! { [ os macosx? ] [ "libraylib.dylib" ] }
+    { [ os unix? ] [ "libraygui.so" ] }
+} cond cdecl add-library
+
+>>
+LIBRARY: raygui
 ! Enumerations ----------------------------------------------------------
 
 ! Gui global state enum

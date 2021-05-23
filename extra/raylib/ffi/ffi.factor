@@ -1118,10 +1118,6 @@ FUNCTION-ALIAS:  set-audiostream-buffersize-default void SetAudioStreamBufferSiz
 ! ------------------------------------------------------------
 ! Load modules depending on what the installed dll/so supports
 ! -----------------------------------------------------------
-"raylib" lookup-library dll>> dup
+"raylib" lookup-library dll>>
 ! Check for ricons symbols
 "DrawIcon" swap dlsym  [ "raylib.modules.ricons" require ] when
-! Check for gui symbols
-"GuiEnable" swap dlsym [ "raylib.modules.gui"    require ] when 
-
-
