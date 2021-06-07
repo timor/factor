@@ -1,8 +1,8 @@
 ! Copyright (C) 2006, 2010 Slava Pestov, Daniel Ehrenberg.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays assocs kernel kernel.private math
-math.order math.private quotations sequences sequences.private
-sets sorting words ;
+USING: accessors arrays assocs combinators.smart generalizations kernel
+kernel.private math math.order math.private quotations sequences
+sequences.private sets sorting words ;
 IN: combinators
 
 ! Most of these combinators have compile-time expansions in
@@ -190,3 +190,33 @@ PRIVATE>
 
 : to-fixed-point ( ... object quot: ( ... object(n) -- ... object(n+1) ) -- ... object(n) )
     [ keep over = ] keep [ to-fixed-point ] curry unless ; inline recursive
+
+:: with-prev* ( quot: ( ..a elt -- ..b ) initial -- quot: ( ..a prev elt -- ..b ) )
+    initial :> last! [ [ last swap ] quot compose keep last! ] ; inline
+
+SINGLETON: +start+
+SINGLETON: +end+
+
+: with-prev ( quot: ( ..a elt -- ..b ) -- quot: ( ..a prev elt -- ..b ) )
+    +start+ with-prev* ; inline
+
+! Called once for each pair, returns +start+ on first invocation
+
+<PRIVATE
+: nopping ( quot dummy -- quot )
+    [ [ dropping ] [ outputs ] bi ] dip swap
+    '[ _ _ dupn ] compose ; inline
+PRIVATE>
+
+: nop-start ( quot: ( ..a elt next -- ..b ) default -- quot: ( ..a elt next -- ..b ) )
+    [ nopping ] keepd '[ over +start+? _ _ if ] ; inline
+
+! Works only for sequences
+: with-next* ( seq quot: ( ..a elt -- ..b ) initial -- seq quot: ( ..a elt next -- ..b ) )
+    [ { +end+ } cord-append ] 2dip with-prev* ; inline
+
+: with-next ( seq quot: ( ..a elt -- ..b ) -- seq quot: ( ..a elt next -- ..b ) )
+    [ unclip-slice ] dip swap with-next* ; inline
+
+: nop-end ( quot: ( ..a elt next -- ..b ) default -- quot: ( ..a elt next -- ..b ) )
+    [ nopping ] keepd '[ dup +end+? _ _ if ] ; inline

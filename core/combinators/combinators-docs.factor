@@ -220,6 +220,7 @@ ARTICLE: "combinators" "Combinators"
     "compositional-combinators"
     "combinators.short-circuit"
     "combinators.smart"
+    "combinators.sequential"
     "combinators-quot"
     "generalizations"
 }
