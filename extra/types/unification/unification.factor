@@ -33,7 +33,7 @@ TUPLE: type-var < identity-tuple { name string read-only } ;
 INSTANCE: type-var type-expr
 C: <type-var> type-var
 
-TUPLE: type-const < identity-tuple { name string read-only } ;
+TUPLE: type-const < identity-tuple { obj read-only } ;
 INSTANCE: type-const type-expr
 C: <type-const> type-const
 
@@ -69,6 +69,9 @@ M: row-var-assignment occurs?*
 M: type-var occurs?*
     eq? nip ;
 
+M: type-const occurs?*
+    3drop f ;
+
 M:: fun-type occurs?* ( context var expr -- ? )
     { [ context var expr consumption>> occurs? ]
       [ context var expr production>> occurs? ]
@@ -103,6 +106,8 @@ M: fun-type vars
 GENERIC: subst-var ( new old type-expr -- type-expr subst? )
 M: type-var subst-var
     2dup = [ 2drop t ] [ 2nip f ] if ;
+M: type-const subst-var
+    2nip f ;
 M: row-var subst-var
     2dup = [ 2drop t ] [ 2nip f ] if ;
 M:: fun-type subst-var ( new old expr -- expr subst? )
@@ -153,10 +158,10 @@ SYMBOL: mappings
     [ H{ } clone mappings ] dip with-variable ; inline
 
 ! ( ... var: type ... )
+! NOTE: not supporting quantifier here yet, only types!  Those would need
+! constraint support for dependent typing
 M: pair element>type-expr
-    dup second effect?
-    [ second element>type-expr ]
-    [ first element>type-expr ] if ;
+    second element>type-expr ;
 
 M: string element>type-expr
     mappings get [ <type-var> ] cache ;
@@ -330,6 +335,10 @@ GENERIC: type-expr>element ( e -- elt )
 
 M: type-var type-expr>element
     ensure-unique-name ;
+
+! NOTE: analogous to forward conversion, the return name has no meaning!
+M: type-const type-expr>element
+    "x" swap obj>> 2array ;
 
 ERROR: unexpected-row-var-in-configuration type-expr ;
 M: row-var type-expr>element
