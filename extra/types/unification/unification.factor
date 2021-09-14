@@ -110,9 +110,17 @@ GENERIC: vars ( type-expr -- seq )
 M: sequence vars [ vars ] gather ;
 M: type-var vars 1array ;
 M: row-var vars 1array ;
+M: type-const vars drop f ;
 M: fun-type vars
     [ consumption>> vars ]
     [ production>> vars ] bi append members ;
+M: context vars
+   equations>> vars ;
+M: equation vars
+    [ rhs>> vars ] [ lhs>> vars ] bi append members ;
+M: row-var-assignment vars
+    expressions>> vars ;
+
 
 ! ** Substitution
 GENERIC: subst-var ( new-expr old-var type-expr -- type-expr subst? )
@@ -289,8 +297,22 @@ SINGLETON: keep-eqn
     [ maybe-keep-eliminated ] bi
     ;
 
+ERROR: recursive-equation context eqn ;
+
+:: check-new-equation-for-recursion ( context new-eq -- )
+    new-eq lhs>> :> lhs
+    lhs type-var?
+    [
+        context lhs new-eq rhs>> occurs?
+        [ context new-eq recursive-equation ] when
+    ] when ;
+
+: check-for-recursion ( context new-eqs -- context new-eqs )
+    2dup [ check-new-equation-for-recursion ] with each ;
+
 : update-context-with-equations ( context old-eq new-eqs -- context )
     [ remove-equation-from-context ] dip
+    check-for-recursion
     '[ _ append ] change-equations ; ! NOTE: possibly prepending here could make a huge difference?
 
 
@@ -369,7 +391,6 @@ ERROR: not-a-unifier context ;
     append
     dup valid-reverse-equations append
     ;
-
 
 ! ! NOTE: this presupposes that the context contains a valid unifier!
 : substitute-with-context ( context expr -- expr' )

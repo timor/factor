@@ -1,5 +1,5 @@
 ! See http://factorcode.org/license.txt for BSD license.
-USING: kernel math tools.test types.unification ;
+USING: accessors kernel math sequences sorting tools.test types.unification ;
 IN: types.unification.tests
 
 { ( ... -- ... y x ) } [ ( -- x y ) ( a b -- b a ) unify-effects ] unit-test
@@ -41,6 +41,21 @@ IN: types.unification.tests
 
 { ( ... x: integer -- ... x: integer x: integer ) }
 [ ( a -- a a ) ( x: integer -- y: integer ) unify-effects ] unit-test
+
+{ ( ..a b quot: ( ..a -- ..c ) -- ..c b quot: ( ..a b quot: ( ..a -- ..c ) --
+    ..a b quot: ( ..a -- ..c ) ) ) }
+[
+    ( ... -- ... quot: ( ... -- ... ) quot: ( ..a b quot: ( ..a -- ..c ) -- ..c b ) )
+    ( ..a b quot: ( ..a -- ..c ) -- ..c b )
+    unify-effects ] unit-test
+
+{ { "a" "b" "b" "c" "c" } }
+[
+    ( ... -- ... quot: ( ... -- ... ) quot: ( ..a b quot: ( ..a -- ..c ) -- ..c b ) )
+    ( ..a b quot: ( ..a -- ..c ) -- ..c b )
+    effects-unifier vars
+    [ name>> ] map natural-sort
+] unit-test
 
 ! Back conversion naming tests
 { "x" "x1" } [ [ "x" <type-var> "x" <type-var> [ ensure-unique-name ] bi@ ] with-fresh-names ] unit-test
