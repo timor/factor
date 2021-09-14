@@ -70,7 +70,9 @@ PREDICATE: valid-row-var-assignment < row-var-assignment
 
 GENERIC: occurs?* ( context var type-expr -- ? )
 :: occurs? ( context var expr -- ? )
-    var expr context occurs>> [ [ context ] 2dip occurs?* ] 2cache ;
+    context
+    [ var expr context occurs>> [ [ context ] 2dip occurs?* ] 2cache ]
+    [ context var expr occurs?* ] if ;
 
 M: sequence occurs?*
     [ occurs? ] with with any? ;
@@ -202,13 +204,12 @@ M: class element>type-expr
 ! non-provided row variables are always fresh
 : ensure-row-var ( string/f -- row-var )
     [ mappings get [ <row-var> ] cache ]
-    [ "." <row-var> ] if* ;
+    [ "r" <row-var> ] if* ;
 
-! If neither effect is specified, use ".", but quantified for both sides
 : effect-row-vars ( effect -- in-var out-var )
     [ in-var>> ] [ out-var>> ] bi
     2dup [ not ] both?
-    [ 2drop "." <row-var> dup ]
+    [ 2drop "r" <row-var> dup ]
     [ [ ensure-row-var ] bi@ ]
     if ;
 
@@ -436,9 +437,7 @@ M: row-var mappings-for-var drop row-var-mappings get ;
     ] unless ;
 
 : ensure-unique-name ( type-var -- string )
-    dup name>> "." =
-    [ name>> ]
-    [ [ name>> ] keep unique-name-suffix append ] if ;
+    [ name>> ] keep unique-name-suffix append ;
 
 M: type-var type-expr>element
     ensure-unique-name ;
@@ -451,21 +450,43 @@ ERROR: unexpected-row-var-in-configuration type-expr ;
 M: row-var type-expr>element
     unexpected-row-var-in-configuration ;
 
-: shave-off-var-effect ( fun-type -- in-var out-var c-seq p-seq )
-    [ consumption>> ] [ production>> ] bi
-    [ unclip-slice ensure-unique-name swap ] bi@ swapd ;
+:: remove-ellipses ( fun-type -- cons-row prod-row consumption production )
+    fun-type [ consumption>> ] [ production>> ] bi
+    :> ( cons prod )
+    cons prod [ unclip-slice ] bi@ :> ( cons1 r1 prod2 r2 )
+    r1 r2 = [
+        {
+            ! FIXME: could be expensive without context cache
+            [ f r1 cons1 occurs? ]
+            [ f r2 cons1 occurs? ]
+            [ f r1 prod2 occurs? ]
+            [ f r2 prod2 occurs? ]
+        } 0||
+        [ r1 r2 cons1 prod2 ]
+        [ f f cons1 prod2 ] if
+    ] [ r1 r2 cons1 prod2 ] if ;
+
+: extract-var-effect ( fun-type -- in-var out-var c-seq p-seq )
+    remove-ellipses
+    [ [ dup [ name>> ] when ] bi@ ] 2dip
+    ;
+    ! [ [ unclip-slice ensure-unique-name swap ] bi@ ]
+    ! [ f f ] if
+    ! [ [ consumption>> ] [ production>> ] bi ] dip
+    ! [  ]
+    ! [ unclip-slice ensure-unique-name swap ] bi@ swapd ;
 
 ! TODO: Possibly cut out variable effect here for replicating existing behavior
 M: fun-type type-expr>element
-    shave-off-var-effect
+    extract-var-effect
     [ configuration>elements ] bi@
     swapd <variable-effect>
     "quot" swap 2array ;
 
-: fun-type>effect ( fun-type -- effect )
+: fun-type>effect-element ( fun-type -- effect )
     [ type-expr>element ] with-fresh-mappings ;
 
 ! Probably makes sense to keep the constraints here
 ! once implemented using constraints
 : unify-effects ( effect1 effect2 -- effect3 )
-    unify-effects-to-type fun-type>effect second ;
+    unify-effects-to-type fun-type>effect-element second ;

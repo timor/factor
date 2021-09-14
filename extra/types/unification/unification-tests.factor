@@ -2,9 +2,19 @@
 USING: accessors kernel math sequences sorting tools.test types.unification ;
 IN: types.unification.tests
 
-{ ( ... -- ... y x ) } [ ( -- x y ) ( a b -- b a ) unify-effects ] unit-test
-{ ( ..r -- ..r y x ) } [ ( ..r -- ..r x y ) ( ..s a b -- ..s b a ) unify-effects ] unit-test
-{ ( ..r -- ..r y x c ) } [ ( ..r -- ..r x y ) ( ..s a b -- ..s b a c ) unify-effects ] unit-test
+! basic round-trip test
+{ ( a -- b ) }
+[ ( a -- b ) effect>type-expr fun-type>effect-element second ] unit-test
+
+{ ( a -- b ) }
+[ ( ..r a -- ..r b ) effect>type-expr fun-type>effect-element second ] unit-test
+
+{ ( ..r a -- ..s b ) }
+[ ( ..r a -- ..s b ) effect>type-expr fun-type>effect-element second ] unit-test
+
+{ ( -- y x ) } [ ( -- x y ) ( a b -- b a ) unify-effects ] unit-test
+{ ( -- y x ) } [ ( ..r -- ..r x y ) ( ..s a b -- ..s b a ) unify-effects ] unit-test
+{ ( -- y x c ) } [ ( ..r -- ..r x y ) ( ..s a b -- ..s b a c ) unify-effects ] unit-test
 
 : c-effect-named-rows ( -- effect )
     ( ..rho a1 -- ..rho b: ( ..sigma -- ..sigma a1 ) ) ;
@@ -15,31 +25,37 @@ IN: types.unification.tests
 : swap-effect ( -- effect )
     ( a2 b2 -- b2 a2 ) ;
 
-{ ( ... a2 a1 -- ... quot: ( ..sigma -- ..sigma a1 ) a2 )  }
+{ ( a2 a1 -- quot: ( -- a1 ) a2 ) }
 [ c-effect-named-rows swap-effect unify-effects ] unit-test
 
-{ ( ... a2 a1 -- ... quot: ( ... -- ... a1 ) a2 ) }
+{ ( a2 a1 -- quot: ( -- a1 ) a2 ) }
 [ c-effect-unnamed-rows swap-effect unify-effects ] unit-test
 
-{ ( ..s a b x -- ..s a y b ) }
+{ ( ..a -- ..c ) }
+[ ( ..a -- ..b ) ( ..b -- ..c ) unify-effects ] unit-test
+
+{ ( ..a -- ..c ) }
+[ ( ..a -- ..b ) ( ..d -- ..c ) unify-effects ] unit-test
+
+{ ( a b x -- a y b ) }
 [ ( ..r x -- ..r y ) ( ..s a b c -- ..s a c b ) unify-effects ] unit-test
 
-{ ( ... a b x -- ... a y b ) }
+{ ( a b x -- a y b ) }
 [ ( x -- y ) ( a b c -- a c b ) unify-effects ] unit-test
 
-{ ( ... x: integer x: integer -- ... x: integer x: integer ) }
+{ ( x: integer x: integer -- x: integer x: integer ) }
 [ ( a: integer b: integer -- c: integer ) ( x -- x x ) unify-effects ] unit-test
 
-{ ( ... -- ... x: integer ) }
+{ ( -- x: integer ) }
 [ ( -- x: integer ) ( a -- a ) unify-effects ] unit-test
 
-{ ( ... x: integer -- ... x: integer ) }
+{ ( x: integer -- x: integer ) }
 [ ( x: integer -- y ) ( a -- a: integer ) unify-effects ] unit-test
 
-{ ( ... -- ... x: integer x: integer ) }
+{ ( -- x: integer x: integer ) }
 [ ( -- x: integer ) ( a -- a a ) unify-effects ] unit-test
 
-{ ( ... x: integer -- ... x: integer x: integer ) }
+{ ( x: integer -- x: integer x: integer ) }
 [ ( a -- a a ) ( x: integer -- y: integer ) unify-effects ] unit-test
 
 { ( ..a b quot: ( ..a -- ..c ) -- ..c b quot: ( ..a b quot: ( ..a -- ..c ) --
@@ -48,6 +64,10 @@ IN: types.unification.tests
     ( ... -- ... quot: ( ... -- ... ) quot: ( ..a b quot: ( ..a -- ..c ) -- ..c b ) )
     ( ..a b quot: ( ..a -- ..c ) -- ..c b )
     unify-effects ] unit-test
+
+: evil-effects ( -- effect effect )
+    ( ... -- ... quot: ( ... -- ... ) quot: ( ..a b quot: ( ..a -- ..c ) -- ..c b ) )
+    ( ..a b quot: ( ..a -- ..c ) -- ..c b ) ;
 
 { { "a" "b" "b" "c" "c" } }
 [

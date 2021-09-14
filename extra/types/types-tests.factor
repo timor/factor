@@ -5,19 +5,22 @@ IN: types.tests
 { ( x: fixnum x: fixnum -- x: integer ) }
 [ [ fixnum+ ] infer-type ] unit-test
 
-{ ( ... x: fixnum -- ... x: integer ) }
+{ ( x: fixnum -- x: integer ) }
 [ [ 1 fixnum+ ] infer-type ] unit-test
 
-{ ( ... x: fixnum -- ... x: integer ) }
+{ ( x: fixnum -- x: integer ) }
 [ [ [ 1 fixnum+ ] call ] infer-type ] unit-test
 
-{ ( ... x: fixnum -- ... x: fixnum x: integer ) }
+{ ( x: fixnum -- x: fixnum x: integer ) }
 [ [ dup 1 fixnum+ ] infer-type ] unit-test
 
 { ( ..a b quot: ( ..a -- ..c ) quot: ( ..c b -- ..b ) -- ..b ) }
 [ [ bi* ] infer-type ] unit-test
 
-{  }
+{ ( ..a b quot: ( ..a -- ..c ) -- ..c b ) }
+[ [ [ ] [ dip ] dip call ] infer-type ] unit-test
+
+{ ( ..a x: fixnum quot: ( ..a -- ..r ) -- ..r x: integer ) }
 [ [ [ 1 fixnum+ ] [ dip ] dip call ] infer-type ] unit-test
 
 {  }
