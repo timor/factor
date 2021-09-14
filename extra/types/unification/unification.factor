@@ -1,5 +1,5 @@
 USING: accessors arrays assocs classes combinators combinators.short-circuit
-effects kernel math math.parser namespaces sequences sets strings ;
+effects kernel make math math.parser namespaces sequences sets strings ;
 
 IN: types.unification
 
@@ -16,10 +16,12 @@ INSTANCE: sequence type-expr
 
 TUPLE: context
     occurs                      ! cache occurrences
-    equations ;
+    equations
+    eliminated                  ! we keep eliminated equalities here for later substitution
+    ;
 
 : <context> ( eqs -- obj )
-    H{ } clone swap context boa ;
+    H{ } clone swap f context boa ;
 
 TUPLE: equation < identity-tuple
     { lhs type-expr read-only }
@@ -34,6 +36,12 @@ INSTANCE: type-var type-expr
 C: <type-var> type-var
 
 TUPLE: type-const < identity-tuple { obj read-only } ;
+! NOTE: this would need to be some kind of type-equality relationship here,
+! unless we replace the whole thing with inclusion constraints...
+M: type-const equal?
+    { [ drop type-const? ]
+        [ [ obj>> ] bi@ = ] } 2&& ;
+
 INSTANCE: type-const type-expr
 C: <type-const> type-const
 
@@ -49,10 +57,14 @@ C: <row-var> row-var
 ! Either we use make to interpolate the row-var catch bindings, or we
 ! use an explicit expression for that, which sort of makes sense since it's
 ! defined as a different kind anyways...
+! TODO Should maybe rename this to configuration or something
 TUPLE: row-var-assignment
     { expressions read-only } ;
 INSTANCE: row-var-assignment type-expr
 C: <row-var=> row-var-assignment
+
+PREDICATE: valid-row-var-assignment < row-var-assignment
+    expressions>> rest-slice [ row-var? not ] all? ;
 
 ! ** Occurrence
 
@@ -103,7 +115,7 @@ M: fun-type vars
     [ production>> vars ] bi append members ;
 
 ! ** Substitution
-GENERIC: subst-var ( new old type-expr -- type-expr subst? )
+GENERIC: subst-var ( new-expr old-var type-expr -- type-expr subst? )
 M: type-var subst-var
     2dup = [ 2drop t ] [ 2nip f ] if ;
 M: type-const subst-var
@@ -131,7 +143,7 @@ M: sequence subst-var
 
 M: row-var-assignment subst-var
     [ expressions>> subst-var ] keep swap
-    [ [ drop <row-var=> ]
+    [ [ drop <row-var=> valid-row-var-assignment check-instance ]
       [ nip ] if  ] keep ;
 
 M:: equation subst-var ( new old e -- equation subst? )
@@ -154,8 +166,14 @@ M:: equation subst-var ( new old e -- equation subst? )
 GENERIC: element>type-expr ( element -- type-expr )
 ! TODO: actual types ( approach: create set of constraints already when converting? )
 SYMBOL: mappings
+! FIXME: only used to separate reconstruction name space...
+SYMBOL: row-var-mappings
+
 : with-fresh-names ( quot -- )
     [ H{ } clone mappings ] dip with-variable ; inline
+
+: with-fresh-mappings ( quot -- )
+    H{ } clone row-var-mappings [ with-fresh-names ] with-variable ; inline
 
 ! ( ... var: type ... )
 ! NOTE: not supporting quantifier here yet, only types!  Those would need
@@ -194,7 +212,7 @@ M: class element>type-expr
     <fun-type> ;
 
 : effect>type-expr ( effect -- type-expr )
-    [ (effect>type-expr) ] with-fresh-names ;
+    [ (effect>type-expr) ] with-fresh-mappings ;
 
 M: effect element>type-expr
     (effect>type-expr) ;
@@ -224,7 +242,7 @@ PREDICATE: empty-sequence < sequence empty? ;
     2dup [ length 1 = ] [ length 1 = not ] bi* and
     [ swap ] when
     2dup [ length 1 = not ] [ length 1 = ] bi* and ! rest-decompose
-    [ first swap <row-var=> 2array 1array ]
+    [ first swap <row-var=> valid-row-var-assignment check-instance 2array 1array ]
     [ [ unclip-last-slice ] bi@
       swapd [ 2array ] 2bi@ 2array
     ] if ;
@@ -232,7 +250,8 @@ PREDICATE: empty-sequence < sequence empty? ;
 SINGLETON: keep-eqn
 
 : unify-type-var ( context eqn var expr -- new-eqs )
-    { { [ dup type-var? ] [ 4drop keep-eqn ] }
+    {
+        ! { [ dup type-var? ] [ 4drop keep-eqn ] }
       { [ 4dup eliminate-var? ] [ nipd eliminate-var f ] } ! eliminate
       [ 4drop keep-eqn ]
     } cond ;
@@ -249,6 +268,9 @@ SINGLETON: keep-eqn
       { [ 2dup [ fun-type? ] both? ]
         [ [ [ consumption>> ] [ production>> ] bi ] bi@
           swapd [ 2array ] 2bi@ 2array 2nip ] }
+      { [ 2dup [ row-var-assignment? ] both? ]
+        [ 2nipd [ expressions>> ] bi@ unify-stacks ] }
+      [ unification-conflict ]
     } cond ;
 
 ! Current strategy, probably too dumb:
@@ -258,11 +280,25 @@ SINGLETON: keep-eqn
 !   - if anything changed, update set of equations, repeat
 !   - if pass reports no changes, done
 
-:: update-context-with-equations ( context old-eq new-eqs -- context )
-    context [
-        old-eq swap remove-eq
-        new-eqs append ! NOTE: possibly prepending here could make a huge difference?
-    ] change-equations ;
+: maybe-keep-eliminated ( context old-eq -- context )
+    dup lhs>> type-var?
+    [ swap [ swap suffix ] change-eliminated ] [ drop ] if ;
+
+: remove-equation-from-context ( context old-eq -- context )
+    [ swap [ remove-eq ] with change-equations ]
+    [ maybe-keep-eliminated ] bi
+    ;
+
+: update-context-with-equations ( context old-eq new-eqs -- context )
+    [ remove-equation-from-context ] dip
+    '[ _ append ] change-equations ; ! NOTE: possibly prepending here could make a huge difference?
+
+
+! :: update-context-with-equations ( context old-eq new-eqs -- context )
+!     context [
+!         old-eq swap remove-eq
+!         new-eqs append !
+!     ] change-equations ;
 
 : unify-equation ( context equation -- context changed? )
     ! break
@@ -277,34 +313,68 @@ SINGLETON: keep-eqn
     dup equations>>
     [ unify-equation ] any? ;
 
-! This is needed because if we want to substitute vars in the resulting fun
-! type, binding-only equalities are not guaranteed to be on the lhs.
-! Or there is a bug in the unifier.
-: add-reverse-substitutions ( context -- context )
-    dup equations>>
-    [ [ lhs>> ] [ rhs>> ] bi
-      dup type-var?
-      [ swap <equation> ]
-      [ 2drop f ] if
-    ] map sift
-    '[ _ append ] change-equations ;
-
 : unify-context ( context -- context )
     [ unify-context-pass ] loop
-    add-reverse-substitutions ;
+    ! f >>occurs
+    ;
 
 ! Calculate substitutions
 : unify-configurations ( seq1 seq2 -- context )
     <equation> 1array <context> unify-context ;
 
-: effects-unifier ( effect1 effect2 -- seq )
+: effects-unifier ( effect1 effect2 -- context )
     [ effect>type-expr ] bi@
-    [ production>> ] [ consumption>> ] bi* unify-configurations
-    equations>> ;
+    [ production>> ] [ consumption>> ] bi* unify-configurations ;
+
+! Context is fully unified iff:
+! - lhs are distinct variables
+! - no lhs occurs in any rhs (this cannot be checked if we allow recursive expressions?)
+
+: var-in-rhs? ( context var -- ? )
+    over equations>> [ rhs>> ] map
+    [ occurs? ] 2with any? ;
+
+ERROR: not-a-unifier context ;
+
+: check-context-unification ( context -- context )
+    dup equations>> [ lhs>> ] map
+    {
+        [ [ type-var? ] all? ]
+        [ all-unique? ]
+        [ dupd [ var-in-rhs? ] with any? not ]
+    } 1&&
+    [ not-a-unifier ] unless ;
+
+! This is needed because if we want to substitute vars in the resulting fun
+! type, binding-only equalities are not guaranteed to be on the lhs.
+! Or there is a bug in the unifier.
+! : add-reverse-substitutions ( context -- context )
+!     dup equations>>
+!     [ [ lhs>> ] [ rhs>> ] bi
+!       dup type-var?
+!       [ swap <equation> ]
+!       [ 2drop f ] if
+!     ] map sift
+!     '[ _ append ] change-equations ;
+
+: valid-reverse-equations ( equations -- equations )
+    [ [ lhs>> ] [ rhs>> ] bi dup type-var?
+      [ swap <equation> ]
+      [ 2drop f ] if
+    ] map sift ;
+
+: context-unifier-equations ( context -- equations )
+    [ equations>> ]
+    [ eliminated>> ] bi
+    append
+    dup valid-reverse-equations append
+    ;
+
 
 ! ! NOTE: this presupposes that the context contains a valid unifier!
 : substitute-with-context ( context expr -- expr' )
-    [ equations>> ] dip
+    [ check-context-unification ] dip
+    [ context-unifier-equations ] dip
     [ swap [ [ rhs>> ] [ lhs>> ] bi ] dip subst-var drop ] reduce ;
 
 : substitute-configurations ( context seq1 seq2 -- seq1' seq2' )
@@ -323,15 +393,31 @@ GENERIC: type-expr>element ( e -- elt )
 : configuration>elements ( seq -- seq )
     [ type-expr>element ] map ;
 
+! Unique var names: check if var is present (eq)
+! If present, suffix has been calculated
+! Check if
+
+GENERIC: mappings-for-var ( type-var -- assoc )
+M: type-var mappings-for-var drop mappings get ;
+M: row-var mappings-for-var drop row-var-mappings get ;
+
+: suffix-for-new-var ( type-var -- string )
+    [ name>> ] [ mappings-for-var ] bi
+    [ [ -1 or 1 + ] change-at ]
+    [ at ] 2bi
+    [ "" ] [ number>string ] if-zero ;
+
 : unique-name-suffix ( type-var -- string )
     mappings get ?at
-    [ dup name>> mappings get [ drop -1 ] cache 1 + ! var counter
-      [ "" ] [ number>string ] if-zero ! var suffix
-      [ swap mappings get set-at ] keep
+    [
+        [ suffix-for-new-var ] keep
+        [ mappings get set-at ] keepd
     ] unless ;
 
 : ensure-unique-name ( type-var -- string )
-    [ name>> ] [ unique-name-suffix ] bi append ;
+    dup name>> "." =
+    [ name>> ]
+    [ [ name>> ] keep unique-name-suffix append ] if ;
 
 M: type-var type-expr>element
     ensure-unique-name ;
@@ -356,7 +442,7 @@ M: fun-type type-expr>element
     "quot" swap 2array ;
 
 : fun-type>effect ( fun-type -- effect )
-    [ type-expr>element ] with-fresh-names ;
+    [ type-expr>element ] with-fresh-mappings ;
 
 ! Probably makes sense to keep the constraints here
 ! once implemented using constraints

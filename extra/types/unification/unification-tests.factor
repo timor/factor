@@ -1,5 +1,5 @@
 ! See http://factorcode.org/license.txt for BSD license.
-USING: math tools.test types.unification ;
+USING: kernel math tools.test types.unification ;
 IN: types.unification.tests
 
 { ( ... -- ... y x ) } [ ( -- x y ) ( a b -- b a ) unify-effects ] unit-test
@@ -29,3 +29,18 @@ IN: types.unification.tests
 
 { ( ... x: integer x: integer -- ... x: integer x: integer ) }
 [ ( a: integer b: integer -- c: integer ) ( x -- x x ) unify-effects ] unit-test
+
+{ ( ... -- ... x: integer ) }
+[ ( -- x: integer ) ( a -- a ) unify-effects ] unit-test
+
+{ ( ... x: integer -- ... x: integer ) }
+[ ( x: integer -- y ) ( a -- a: integer ) unify-effects ] unit-test
+
+{ ( ... -- ... x: integer x: integer ) }
+[ ( -- x: integer ) ( a -- a a ) unify-effects ] unit-test
+
+{ ( ... x: integer -- ... x: integer x: integer ) }
+[ ( a -- a a ) ( x: integer -- y: integer ) unify-effects ] unit-test
+
+! Back conversion naming tests
+{ "x" "x1" } [ [ "x" <type-var> "x" <type-var> [ ensure-unique-name ] bi@ ] with-fresh-names ] unit-test
