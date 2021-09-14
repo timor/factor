@@ -104,6 +104,8 @@ GENERIC: parent-word ( word -- word/f )
 M: word parent-word drop f ;
 
 : define ( word def -- )
+    over "declared-type-scheme" remove-word-prop
+    over "inferred-type-scheme" remove-word-prop
     over changed-definition [ ] like >>def drop ;
 
 : changed-effect ( word -- )
