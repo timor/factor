@@ -1,7 +1,10 @@
-USING: accessors arrays assocs classes combinators combinators.short-circuit
-effects kernel make math math.parser namespaces sequences sets strings ;
+USING: accessors arrays ascii classes combinators combinators.short-circuit
+effects io kernel make math math.parser namespaces sequences sequences.extras sets
+strings ;
 
 IN: types.unification
+
+FROM: namespaces => set ;
 
 ! Syntactic first-order unification with row variables
 ! Note that types here are not factor classes, so some would call these kinds,
@@ -12,16 +15,40 @@ IN: types.unification
 MIXIN: type-expr
 INSTANCE: sequence type-expr
 
+! * Context variables
+! Holds the current equation which is considered to not be part of the equation
+! set while being tested
+SYMBOL: current-equation
+SYMBOL: name-bindings
+SYMBOL: var-name-counters
+SYMBOL: equations
+SYMBOL: eliminated
+SYMBOL: occurs-cache
+! Try performing substitutions as we go in target equations
+SYMBOL: targets
+
+: with-unification-context ( quot -- )
+    '[
+        H{ } clone name-bindings set
+        H{ } clone var-name-counters set
+        H{ } clone occurs-cache set
+        targets off
+        eliminated off
+        equations off
+        current-equation off
+        _ call
+    ] with-scope ; inline
+
 ! * Algorithmic Structures
 
-TUPLE: context
-    occurs                      ! cache occurrences
-    equations
-    eliminated                  ! we keep eliminated equalities here for later substitution
-    ;
+! TUPLE: context
+!     occurs                      ! cache occurrences
+!     equations
+!     eliminated                  ! we keep eliminated equalities here for later substitution
+!     ;
 
-: <context> ( eqs -- obj )
-    H{ } clone swap f context boa ;
+! : <context> ( eqs -- obj )
+!     H{ } clone swap f context boa ;
 
 TUPLE: equation < identity-tuple
     { lhs type-expr read-only }
@@ -68,42 +95,42 @@ PREDICATE: valid-row-var-assignment < row-var-assignment
 
 ! ** Occurrence
 
-GENERIC: occurs?* ( context var type-expr -- ? )
-:: occurs? ( context var expr -- ? )
-    context
-    [ var expr context occurs>> [ [ context ] 2dip occurs?* ] 2cache ]
-    [ context var expr occurs?* ] if ;
+GENERIC: occurs?* ( var type-expr -- ? )
+: occurs? ( var expr -- ? )
+    occurs-cache get
+    [ [ occurs?* ] 2cache ]
+    [ occurs?* ] if* ;
 
 M: sequence occurs?*
-    [ occurs? ] with with any? ;
+    [ occurs? ] with any? ;
 
 M: row-var-assignment occurs?*
-    expressions>> occurs?* ;
+    expressions>> occurs? ;
 
 M: type-var occurs?*
-    eq? nip ;
+    eq? ;
 
 M: type-const occurs?*
-    3drop f ;
+    2drop f ;
 
-M:: fun-type occurs?* ( context var expr -- ? )
-    { [ context var expr consumption>> occurs? ]
-      [ context var expr production>> occurs? ]
-    } 0|| ;
+M: fun-type occurs?* ( var expr -- ? )
+    { [ consumption>> occurs? ]
+      [ production>> occurs? ]
+    } 2|| ;
 
-M: equation occurs?* ( context var equation -- ? )
+M: equation occurs?*
     { [ lhs>> occurs? ]
-      [ rhs>> occurs? ] } 3|| ;
+      [ rhs>> occurs? ] } 2|| ;
 
 ! Helper: modify a predicate so it skips a test for a specific value of elt,
 ! returns instead instead
 :: skip= ( pred: ( obj -- ? ) elt instead -- pred: ( obj -- ? ) )
     [ dup elt = [ drop instead ] pred if ] ; inline
 
-:: occurs-in-problem? ( context eqn var -- ? )
-    context equations>>
-    [| e | context var e occurs? ]
-    eqn f skip= any? ;
+:: occurs-in-problem? ( var -- ? )
+    equations get
+    [| e | var e occurs? ]
+    current-equation get f skip= any? ;
 
 ! ** Enumerating variables
 
@@ -116,8 +143,6 @@ M: type-const vars drop f ;
 M: fun-type vars
     [ consumption>> vars ]
     [ production>> vars ] bi append members ;
-M: context vars
-   equations>> vars ;
 M: equation vars
     [ rhs>> vars ] [ lhs>> vars ] bi append members ;
 M: row-var-assignment vars
@@ -164,23 +189,30 @@ M:: equation subst-var ( new old e -- equation subst? )
     [ e f ] if ;
 
 : subst-var-in-equations ( new old equations -- equations )
-    [ subst-var drop ] 2with map ;
+    [ dup current-equation get =
+      [ 2nip ]
+      [ subst-var drop ] if
+     ] 2with map ;
 
 ! destructive
-: subst-var-in-context ( var replacement context -- )
-    swapd
-    [ equations>> subst-var-in-equations ]
-    [ equations<< ] bi ;
+: subst-var-in-context ( var replacement -- )
+    [ swap equations [ subst-var-in-equations ] change ]
+    ! [ swap eliminated [ subst-var-in-equations ] change ] 2bi
+    [ swap targets [ subst-var-in-equations ] change ] 2bi
+    ;
+    ! [ equations>> subst-var-in-equations ]
+    ! [ equations<< ] bi ;
 
 ! ** Conversion
 GENERIC: element>type-expr ( element -- type-expr )
 ! TODO: actual types ( approach: create set of constraints already when converting? )
-SYMBOL: mappings
+! Maps names to type-vars
+SYMBOL: type-var-mappings
 ! FIXME: only used to separate reconstruction name space...
 SYMBOL: row-var-mappings
 
 : with-fresh-names ( quot -- )
-    [ H{ } clone mappings ] dip with-variable ; inline
+    [ H{ } clone type-var-mappings ] dip with-variable ; inline
 
 : with-fresh-mappings ( quot -- )
     H{ } clone row-var-mappings [ with-fresh-names ] with-variable ; inline
@@ -192,7 +224,7 @@ M: pair element>type-expr
     second element>type-expr ;
 
 M: string element>type-expr
-    mappings get [ <type-var> ] cache ;
+    type-var-mappings get [ <type-var> ] cache ;
 
 M: class element>type-expr
     <type-const> ;
@@ -203,8 +235,9 @@ M: class element>type-expr
 
 ! non-provided row variables are always fresh
 : ensure-row-var ( string/f -- row-var )
-    [ mappings get [ <row-var> ] cache ]
-    [ "r" <row-var> ] if* ;
+    row-var-mappings get [ <row-var> ] cache ;
+    ! [ type-var-mappings get [ <row-var> ] cache ]
+    ! [ "r" <row-var> ] if* ;
 
 : effect-row-vars ( effect -- in-var out-var )
     [ in-var>> ] [ out-var>> ] bi
@@ -220,7 +253,10 @@ M: class element>type-expr
     swapd [ consumption/production>type-expr ] 2bi@
     <fun-type> ;
 
+! This parses an effect with new name bindings.  This ensures that any names
+! inside are unique.  This is used on the top level to add equations.
 : effect>type-expr ( effect -- type-expr )
+    ! (effect>type-expr) ;
     [ (effect>type-expr) ] with-fresh-mappings ;
 
 M: effect element>type-expr
@@ -231,19 +267,19 @@ M: configuration element>type-expr
 
 ! * Unification
 
-ERROR: unification-conflict context equation lhs rhs ;
-
-: eliminate-var? ( context eqn var rhs -- ? )
-    { [ nipd occurs? not ]
-      [ drop occurs-in-problem? ]
-    } 4 n&& ;
+ERROR: unification-conflict equation lhs rhs ;
 
 ! If var1 is not in term, and var1 occurs anywhere in the problem, substitute
 ! and remove
+: eliminate-var? ( var rhs -- ? )
+    { [ occurs? not ]
+      [ drop occurs-in-problem? ]
+    } 2&& ;
+
 
 ! destructive
-: eliminate-var ( context var replacement -- )
-    rot subst-var-in-context ;
+: eliminate-var ( var replacement -- )
+    subst-var-in-context ;
 
 PREDICATE: empty-sequence < sequence empty? ;
 
@@ -251,35 +287,48 @@ PREDICATE: empty-sequence < sequence empty? ;
     2dup [ length 1 = ] [ length 1 = not ] bi* and
     [ swap ] when
     2dup [ length 1 = not ] [ length 1 = ] bi* and ! rest-decompose
-    [ first swap <row-var=> valid-row-var-assignment check-instance 2array 1array ]
+    [ first swap <row-var=> valid-row-var-assignment check-instance
+      2array 1array ]
     [ [ unclip-last-slice ] bi@
       swapd [ 2array ] 2bi@ 2array
     ] if ;
 
 SINGLETON: keep-eqn
 
-: unify-type-var ( context eqn var expr -- new-eqs )
+! Several cases:
+! 1. var = exprn -> eliminate or keep
+! 1. var1 = var2 -> if var2 does not occur in problem, keep
+! 1. var1 = var2 -> if var2 does occur in problem -> swap
+
+: swap? ( lhs rhs -- ? )
     {
-        ! { [ dup type-var? ] [ 4drop keep-eqn ] }
-      { [ 4dup eliminate-var? ] [ nipd eliminate-var f ] } ! eliminate
-      [ 4drop keep-eqn ]
-    } cond ;
+        [ [ type-var? not ] [ type-var? ] bi* and ]
+        [ { [ [ type-var? ] both? ]
+            [ [ occurs-in-problem? not ] [ occurs-in-problem? ] bi* and ]
+          } 2&& ]
+    } 2|| ;
+
+
+: unify-type-var ( var expr -- new-eqs )
+    2dup eliminate-var?
+    [ eliminate-var f ]
+    [ 2drop keep-eqn ] if ;
 
 ! TODO: make sure that row-var = type-var throws an error?
 ! TODO: make sure that only row-vars can match stack sequences
-: unify-type-exprs ( context eqn lhs rhs -- new-eqs )
-    { { [ 2dup eq? ] [ 4drop f ] } ! delete1 (cheap)
+: unify-type-exprs ( lhs rhs -- new-eqs )
+    { { [ 2dup = ] [ 2drop f ] } ! delete (expensive)
+      { [ 2dup [ sequence? ] both? ] [ unify-stacks ] } ! stack-decompose
+      { [ 2dup swap? ] [ swap 2array 1array ] } ! swap
       { [ over type-var? ] [ unify-type-var ] }
-      { [ dup type-var? ] [ swap 2array 1array 2nip ] } ! swap
-      { [ 2dup [ empty-sequence? ] both? ] [ 4drop f ] } ! delete2, matching ! stacks completely decomposed (cheap?)
-      { [ 2dup [ sequence? ] both? ] [ 2nipd unify-stacks ] } ! stack-decompose
-      { [ 2dup = ] [ 4drop f ] } ! delete3 (recursive)
+      ! { [ 2dup [ empty-sequence? ] both? ] [ 2drop f ] } ! delete2, matching ! stacks completely decomposed (cheap?)
+      ! { [ 2dup = ] [ 2drop f ] } ! delete3 (recursive)
       { [ 2dup [ fun-type? ] both? ]
         [ [ [ consumption>> ] [ production>> ] bi ] bi@
-          swapd [ 2array ] 2bi@ 2array 2nip ] }
+          swapd [ 2array ] 2bi@ 2array ] }
       { [ 2dup [ row-var-assignment? ] both? ]
-        [ 2nipd [ expressions>> ] bi@ unify-stacks ] }
-      [ unification-conflict ]
+        [ [ expressions>> ] bi@ unify-stacks ] }
+      [ current-equation get unification-conflict ]
     } cond ;
 
 ! Current strategy, probably too dumb:
@@ -289,63 +338,70 @@ SINGLETON: keep-eqn
 !   - if anything changed, update set of equations, repeat
 !   - if pass reports no changes, done
 
-: maybe-keep-eliminated ( context old-eq -- context )
+: maybe-keep-eliminated ( old-eq -- )
     dup lhs>> type-var?
-    [ swap [ swap suffix ] change-eliminated ] [ drop ] if ;
+    [ eliminated [ swap suffix ] change ] [ drop ] if ;
 
-: remove-equation-from-context ( context old-eq -- context )
-    [ swap [ remove-eq ] with change-equations ]
-    [ maybe-keep-eliminated ] bi
-    ;
+: remove-equation-from-context ( old-eq -- )
+    [ equations [ remove-eq ] change ]
+    [ maybe-keep-eliminated ] bi ;
 
-ERROR: recursive-equation context eqn ;
+ERROR: recursive-equation eqn ;
 
-:: check-new-equation-for-recursion ( context new-eq -- )
+:: check-new-equation-for-recursion ( new-eq -- )
     new-eq lhs>> :> lhs
     lhs type-var?
     [
-        context lhs new-eq rhs>> occurs?
-        [ context new-eq recursive-equation ] when
+        lhs new-eq rhs>> occurs?
+        [ new-eq recursive-equation ] when
     ] when ;
 
-: check-for-recursion ( context new-eqs -- context new-eqs )
-    2dup [ check-new-equation-for-recursion ] with each ;
+: check-for-recursion ( new-eqs -- new-eqs )
+    dup [ check-new-equation-for-recursion ] each ;
 
-: update-context-with-equations ( context old-eq new-eqs -- context )
+: update-context-with-equations ( old-eq new-eqs -- )
     [ remove-equation-from-context ] dip
     check-for-recursion
-    '[ _ append ] change-equations ; ! NOTE: possibly prepending here could make a huge difference?
+    equations [ swap append ] with change ; ! NOTE: possibly prepending here could make a huge difference?
 
-
-! :: update-context-with-equations ( context old-eq new-eqs -- context )
-!     context [
-!         old-eq swap remove-eq
-!         new-eqs append !
-!     ] change-equations ;
-
-: unify-equation ( context equation -- context changed? )
-    ! break
-    2dup dup [ lhs>> ] [ rhs>> ] bi
+: unify-equation ( equation -- changed? )
+    dup current-equation set
+    dup [ lhs>> ] [ rhs>> ] bi
     unify-type-exprs dup keep-eqn?
     [ 2drop f ]
     [ [ <equation> ] { } assoc>map
       update-context-with-equations t
     ] if ;
 
-: unify-context-pass ( context -- context changed? )
-    dup equations>>
+DEFER: pprint-context
+DEFER: pprint-unifier
+: unify-context-pass ( -- changed? )
+    pprint-context
+    equations get
+    ! dup equations>>
     [ unify-equation ] any? ;
 
-: unify-context ( context -- context )
-    [ unify-context-pass ] loop
+ERROR: safe-loop-count-exceeded ;
+
+:: safe-loop ( ... pred: ( ... -- ... ? ) limit -- ... )
+    0 \ safe-loop set-global
+    [ \ safe-loop counter limit >= [ safe-loop-count-exceeded ] pred if ] loop ; inline
+
+: unify-context ( equations -- )
+    ! [
+        equations set
+        [ unify-context-pass
+        ] 500 safe-loop
+        pprint-unifier
+    ! ] with-fresh-mappings
     ! f >>occurs
     ;
 
 ! Calculate substitutions
-: unify-configurations ( seq1 seq2 -- context )
-    <equation> 1array <context> unify-context ;
+: unify-configurations ( seq1 seq2 -- )
+    <equation> 1array unify-context ;
 
-: effects-unifier ( effect1 effect2 -- context )
+: effects-unifier ( effect1 effect2 -- )
     [ effect>type-expr ] bi@
     [ production>> ] [ consumption>> ] bi* unify-configurations ;
 
@@ -353,62 +409,94 @@ ERROR: recursive-equation context eqn ;
 ! - lhs are distinct variables
 ! - no lhs occurs in any rhs (this cannot be checked if we allow recursive expressions?)
 
-: var-in-rhs? ( context var -- ? )
-    over equations>> [ rhs>> ] map
-    [ occurs? ] 2with any? ;
+: var-in-rhs? ( var -- ? )
+    equations get [ rhs>> occurs? ] with any? ;
 
-ERROR: not-a-unifier context ;
+ERROR: not-a-unifier equations ;
 
-: check-context-unification ( context -- context )
-    dup equations>> [ lhs>> ] map
+: check-unifier ( equations -- equations )
+    dup [ lhs>> ] map
     {
         [ [ type-var? ] all? ]
         [ all-unique? ]
-        [ dupd [ var-in-rhs? ] with any? not ]
+        [ [ var-in-rhs? ] any? not ]
     } 1&&
     [ not-a-unifier ] unless ;
 
 ! This is needed because if we want to substitute vars in the resulting fun
 ! type, binding-only equalities are not guaranteed to be on the lhs.
 ! Or there is a bug in the unifier.
-! : add-reverse-substitutions ( context -- context )
-!     dup equations>>
-!     [ [ lhs>> ] [ rhs>> ] bi
-!       dup type-var?
-!       [ swap <equation> ]
-!       [ 2drop f ] if
-!     ] map sift
-!     '[ _ append ] change-equations ;
-
 : valid-reverse-equations ( equations -- equations )
     [ [ lhs>> ] [ rhs>> ] bi dup type-var?
       [ swap <equation> ]
       [ 2drop f ] if
     ] map sift ;
 
-: context-unifier-equations ( context -- equations )
-    [ equations>> ]
-    [ eliminated>> ] bi
-    append
-    dup valid-reverse-equations append
+: context-unifier-equations ( -- equations )
+    equations get
+    eliminated get
+    drop
+    ! append
+    check-unifier
+    ! NOTE: Completely unsure whether this is legal!
+    ! dup valid-reverse-equations append
     ;
 
 ! ! NOTE: this presupposes that the context contains a valid unifier!
-: substitute-with-context ( context expr -- expr' )
-    [ check-context-unification ] dip
+: substitute-with-context ( expr -- expr' )
+    equations get check-unifier drop
     [ context-unifier-equations ] dip
     [ swap [ [ rhs>> ] [ lhs>> ] bi ] dip subst-var drop ] reduce ;
 
-: substitute-configurations ( context seq1 seq2 -- seq1' seq2' )
-    [ [ substitute-with-context ] keepd ]
-    [ substitute-with-context ] bi* ;
+: substitute-configurations ( seq1 seq2 -- seq1' seq2' )
+    [ substitute-with-context ] bi@ ;
+    ! [ substitute-with-context ] bi* ;
+
+GENERIC: simplify* ( type-expr -- type-expr' )
+M: sequence simplify* [ simplify* ] map ;
+
+SYMBOL: bound-row-vars
+: bound-row-var? ( type-var -- ? )
+    bound-row-vars get member? ;
+
+M:: fun-type simplify* ( type-expr -- type-expr' )
+    type-expr [ consumption>> ] [ production>> ] bi :> ( lhs rhs )
+    lhs rhs [ unclip-slice ] bi@ :> ( lrest l1 rrest r1 )
+    l1 r1 { [ [ bound-row-var? not ] both? ] [ = ] } 2&&
+    [
+        {
+            [ l1 lrest occurs? ]
+            [ r1 lrest occurs? ]
+            [ l1 rrest occurs? ]
+            [ r1 rrest occurs? ]
+        } 0||
+        [ f ] [ t ] if
+    ] [ f ] if
+
+    [ lrest simplify* rrest simplify* <fun-type> ]
+    [ bound-row-vars [ l1 suffix r1 suffix ] change
+      lhs simplify* rhs simplify* <fun-type>
+    ] if ;
+
+M: type-expr simplify* ;
+
+: simplify ( type-expr -- type-expr' )
+    { } bound-row-vars [ simplify* ] with-variable ;
 
 : unify-effects-to-type ( effect1 effect2 -- fun-type )
     [ effect>type-expr ] bi@
-    [ [ production>> ] [ consumption>> ] bi* unify-configurations ]
-    [ [ consumption>> ] [ production>> ] bi* substitute-configurations
-      <fun-type> ]
-    2bi ;
+    [ [ consumption>> ] [ production>> ] bi* 2array targets set ]
+    [ [ production>> ] [ consumption>> ] bi* unify-configurations ] 2bi
+    targets get first2
+    substitute-configurations
+    <fun-type>
+    ! simplify
+    ;
+    ! [ [ consumption>> ] [ production>> ] bi* substitute-configurations
+    !   <fun-type>
+    !   ! simplify
+    ! ]
+    ! 2bi ;
 
 ! * Back Conversion
 GENERIC: type-expr>element ( e -- elt )
@@ -420,24 +508,39 @@ GENERIC: type-expr>element ( e -- elt )
 ! Check if
 
 GENERIC: mappings-for-var ( type-var -- assoc )
-M: type-var mappings-for-var drop mappings get ;
+M: type-var mappings-for-var drop type-var-mappings get ;
 M: row-var mappings-for-var drop row-var-mappings get ;
 
-: suffix-for-new-var ( type-var -- string )
-    [ name>> ] [ mappings-for-var ] bi
-    [ [ -1 or 1 + ] change-at ]
-    [ at ] 2bi
-    [ "" ] [ number>string ] if-zero ;
+GENERIC: counters-for-var ( type-var -- assoc )
+M: type-var counters-for-var drop type-var-mappings get ;
+M: row-var counters-for-var drop row-var-mappings get ;
 
-: unique-name-suffix ( type-var -- string )
-    mappings get ?at
-    [
-        [ suffix-for-new-var ] keep
-        [ mappings get set-at ] keepd
-    ] unless ;
+: bound-var? ( type-var -- ? )
+    name-bindings get key? ;
+
+: register-bound-var ( type-var str -- )
+    swap name-bindings get set-at ;
+
+: var-basename ( name -- prefix )
+    [ digit? ] trim-tail ;
+
+:: inc-at* ( key assoc -- n )
+    key assoc at
+    ?1+ [ key assoc set-at ] keep ;
+
+: next-suffix ( basename -- str )
+    var-name-counters get inc-at* [ "" ] [ number>string ] if-zero ;
+
+: new-var-name ( name -- name )
+   var-basename dup next-suffix append ;
+
+: bind-new-name ( type-var -- str )
+    dup name>> new-var-name
+    [ register-bound-var ] keep ;
 
 : ensure-unique-name ( type-var -- string )
-    [ name>> ] keep unique-name-suffix append ;
+    name-bindings get ?at
+    [ bind-new-name ] unless ;
 
 M: type-var type-expr>element
     ensure-unique-name ;
@@ -450,31 +553,30 @@ ERROR: unexpected-row-var-in-configuration type-expr ;
 M: row-var type-expr>element
     unexpected-row-var-in-configuration ;
 
-:: remove-ellipses ( fun-type -- cons-row prod-row consumption production )
-    fun-type [ consumption>> ] [ production>> ] bi
-    :> ( cons prod )
-    cons prod [ unclip-slice ] bi@ :> ( cons1 r1 prod2 r2 )
-    r1 r2 = [
-        {
-            ! FIXME: could be expensive without context cache
-            [ f r1 cons1 occurs? ]
-            [ f r2 cons1 occurs? ]
-            [ f r1 prod2 occurs? ]
-            [ f r2 prod2 occurs? ]
-        } 0||
-        [ r1 r2 cons1 prod2 ]
-        [ f f cons1 prod2 ] if
-    ] [ r1 r2 cons1 prod2 ] if ;
+! :: remove-ellipses ( fun-type -- cons-row prod-row consumption production )
+!     fun-type [ consumption>> ] [ production>> ] bi
+!     :> ( cons prod )
+!     cons prod [ unclip-slice ] bi@ :> ( cons1 r1 prod2 r2 )
+!     r1 r2 = [
+!         {
+!             ! FIXME: could be expensive without context cache
+!             [ r1 cons1 occurs? ]
+!             [ r2 cons1 occurs? ]
+!             [ r1 prod2 occurs? ]
+!             [ r2 prod2 occurs? ]
+!             [ t ]
+!         } 0||
+!         [ r1 r2 cons1 prod2 ]
+!         [ f f cons1 prod2 ] if
+!     ] [ r1 r2 cons1 prod2 ] if ;
 
 : extract-var-effect ( fun-type -- in-var out-var c-seq p-seq )
-    remove-ellipses
-    [ [ dup [ name>> ] when ] bi@ ] 2dip
+    [ consumption>> ] [ production>> ] bi
+    2dup [ ?first row-var? ] both?
+    [ [ unclip-slice ensure-unique-name swap ] bi@ swapd ]
+    [ [ f f ] 2dip ] if
+    ! [ [ dup [ ensure-unique-name ] when ] bi@ ] 2dip
     ;
-    ! [ [ unclip-slice ensure-unique-name swap ] bi@ ]
-    ! [ f f ] if
-    ! [ [ consumption>> ] [ production>> ] bi ] dip
-    ! [  ]
-    ! [ unclip-slice ensure-unique-name swap ] bi@ swapd ;
 
 ! TODO: Possibly cut out variable effect here for replicating existing behavior
 M: fun-type type-expr>element
@@ -483,10 +585,77 @@ M: fun-type type-expr>element
     swapd <variable-effect>
     "quot" swap 2array ;
 
-: fun-type>effect-element ( fun-type -- effect )
-    [ type-expr>element ] with-fresh-mappings ;
+: fun-type>effect ( fun-type -- effect )
+    type-expr>element second ;
 
 ! Probably makes sense to keep the constraints here
 ! once implemented using constraints
+: unify-effects* ( effect1 effect2 -- effect3 )
+    unify-effects-to-type fun-type>effect ;
+
 : unify-effects ( effect1 effect2 -- effect3 )
-    unify-effects-to-type fun-type>effect-element second ;
+    ! unify-effects* ;
+    [ unify-effects* ] with-unification-context ;
+
+! * Prettyprint type expressions for debugging
+
+GENERIC: pp-type* ( type-expr -- )
+M: equation pp-type*
+    [ lhs>> pp-type* "  =  " write ]
+    [ rhs>> pp-type* ] bi ;
+
+M: type-var pp-type*
+    ensure-unique-name write ;
+
+M: row-var pp-type*
+    ensure-unique-name ".." prepend write ;
+
+M: sequence pp-type*
+    [ "∅" write ]
+    [
+        "{" write
+        unclip-slice pp-type*
+        [ " " write pp-type* ] each
+        "}" write
+    ] if-empty ;
+
+M: row-var-assignment pp-type*
+    "<" write expressions>> pp-type* ">" write ;
+
+M: type-const pp-type*
+    obj>> pprint ;
+
+M: fun-type pp-type*
+    "(" write
+      [ consumption>> pp-type*
+        " ⟶ " write
+      ] [ production>> pp-type* ] bi
+      ")" write ;
+
+: pprint-context ( -- )
+    nl "Context:" print
+    ! [
+        equations get
+        [ pp-type* nl ] each
+    ! ] with-fresh-mappings
+    eliminated get [
+        "Eliminated:" print
+        [ pp-type* nl ] each
+    ] when*
+    targets get [
+        "Targets:" print
+        [ pp-type* nl ] each
+    ] when*
+    ;
+
+: pprint-unifier ( -- )
+    nl "Unifier:" print
+    pprint-context
+    "Substitutions:" print
+    context-unifier-equations
+    [ pp-type* nl ] each
+    ;
+
+: pp-type ( type-expr -- )
+    pp-type* ;
+    ! [ pp-type* ] with-fresh-mappings ;
