@@ -19,9 +19,13 @@ INSTANCE: sequence type-expr
 ! Holds the current equation which is considered to not be part of the equation
 ! set while being tested
 SYMBOL: current-equation
+! Mapping type-vars to unique names
 SYMBOL: name-bindings
 SYMBOL: var-name-counters
+
+! Set of equations in the problem
 SYMBOL: equations
+! TODO TBR? set of eliminated equations
 SYMBOL: eliminated
 SYMBOL: occurs-cache
 ! Try performing substitutions as we go in target equations
@@ -81,6 +85,13 @@ C: <fun-type> fun-type
 TUPLE: row-var < type-var ;
 C: <row-var> row-var
 
+! ∀-Quantified type scheme
+! Regarding substitution, this will only substitute free variables in expr
+! When encountered for unification, this will return expr with fresh variables for every bound-var in expr ;
+TUPLE: type-scheme quantified-vars expr ;
+C: <type-scheme> type-scheme
+INSTANCE: type-scheme type-expr
+
 ! Either we use make to interpolate the row-var catch bindings, or we
 ! use an explicit expression for that, which sort of makes sense since it's
 ! defined as a different kind anyways...
@@ -95,6 +106,7 @@ PREDICATE: valid-row-var-assignment < row-var-assignment
 
 ! ** Occurrence
 
+! Check for free occurrence.  Quantified occurence is treated as black box
 GENERIC: occurs?* ( var type-expr -- ? )
 : occurs? ( var expr -- ? )
     occurs-cache get
@@ -118,6 +130,11 @@ M: fun-type occurs?* ( var expr -- ? )
       [ production>> occurs? ]
     } 2|| ;
 
+M: type-scheme occurs?*
+    { [ quantified-vars>> in? not ]
+      [ expr>> occurs? ]
+    } 2&& ;
+
 M: equation occurs?*
     { [ lhs>> occurs? ]
       [ rhs>> occurs? ] } 2|| ;
@@ -134,7 +151,6 @@ M: equation occurs?*
 
 ! ** Enumerating variables
 
-! possibly unused?
 GENERIC: vars ( type-expr -- seq )
 M: sequence vars [ vars ] gather ;
 M: type-var vars 1array ;
@@ -148,8 +164,9 @@ M: equation vars
 M: row-var-assignment vars
     expressions>> vars ;
 
-
 ! ** Substitution
+
+! List of variables which are not to be substituted
 GENERIC: subst-var ( new-expr old-var type-expr -- type-expr subst? )
 M: type-var subst-var
     2dup = [ 2drop t ] [ 2nip f ] if ;
@@ -163,6 +180,16 @@ M:: fun-type subst-var ( new old expr -- expr subst? )
     csub? psub? or
     [ con prod <fun-type> t ]
     [ expr f ] if ;
+
+! Don't substitute quantified variables
+M:: type-scheme subst-var ( new old expr -- expr' subst? )
+    expr quantified-vars>> :> qvars
+    old qvars in?
+    [ expr f ]
+    [ new old expr expr>> subst-var
+      [ qvars swap <type-scheme> t ]
+      [ drop expr f ] if
+    ] if ;
 
 : expand-row-var-assignments ( seq -- seq )
     dup '[ _ [ dup row-var-assignment?
@@ -220,14 +247,73 @@ SYMBOL: row-var-mappings
 ! ( ... var: type ... )
 ! NOTE: not supporting quantifier here yet, only types!  Those would need
 ! constraint support for dependent typing
+
+SYMBOL: quantifier-stack
+! If we are not currently inside a quantification scope, then we assume
+! universal quantification
+: quantified? ( type-var -- ? )
+    quantifier-stack get
+    [ drop t ] [ [ in? ] with any? ] if-empty ;
+
+: quantify-var ( type-var -- )
+    dup quantified?
+    [ drop ] [ quantifier-stack get [ swap suffix ] change-last ] if ;
+
+: collect-quantifiers ( quot -- seq )
+    '[ quantifier-stack [ { } suffix ] change
+       @
+       quantifier-stack get last
+    ] with-scope ; inline
+
 M: pair element>type-expr
     second element>type-expr ;
 
 M: string element>type-expr
-    type-var-mappings get [ <type-var> ] cache ;
+    type-var-mappings get [ <type-var> ] cache
+    dup quantify-var ;
 
 M: class element>type-expr
     <type-const> ;
+
+
+! ** Conversion to Type Schemes
+! DOING: reworking effect transformation into type schemes.  When parsing, all
+! vars inside the body with the same name refer to the same type expression An
+! effect will produce a type-scheme type-expr which has all vars quantified,
+! EXCEPT the ones which already have been quantified in an outer scope.
+! Whenever we parse the consumption of an effect, a new quantifier scope is
+! opened.  This provides somthingh which I suspect is similar to let
+! polyphormism...?
+! Example: ( ..r1 -- ..r1 quot: ( ..a -- ..b ) quot: ( ..a -- ..b ) )
+! 1. Outer scope, lhs:
+!    1. quantify ..r1 in outer scope
+! 2. Outer scope, rhs
+!    1. Use quantified ..r1
+!    2. First quotation Inner scope
+!       1. lhs:
+!          1. Quantify ..a in inner scope
+!       2. rhs:
+!          1. ..b free in inner scope
+!    3. Second quotation Inner scope
+!       1. lhs:
+!          1. Quantify ..a in inner scope
+!       2. rhs:
+!          1. ..b free in inner scope
+
+
+! Result:
+! ∀r1.(..r1 → ..r1 ∀a.(a → b) ∀a.(a → b))
+
+! Example: ( ..a1 b quot1: ( ..a1 -- ..c ) quot2: ( ..c b -- ..b2 ) -- ..b2 )
+! - ..a1 and b outer scope lhs bindings
+! - ..c free in quot1 scope, but part of lhs in outer scope
+! - ..c in quot2 now quantified in outer scope already, b also
+! - ..b2 free in quot2 scope, but quantified in outer scope
+! - ..b2 then quantified correctly in outer scope when rhs is parsed
+
+
+! Result:
+! ∀a1,b,c,b2.(..a1 b ∀(..a1 → ..c) ∀(..c b → ..b2) → ..b2)
 
 : consumption/production>type-expr ( row-var elements -- type-expr )
     [ element>type-expr ] map
@@ -245,23 +331,58 @@ M: class element>type-expr
     [ 2drop "r" <row-var> dup ]
     [ [ ensure-row-var ] bi@ ]
     if ;
+    ! Maybe quantify the input row var
+    ! [ dup quantify-var ] dip ;
 
 ! Construct type expressions from effects
-: (effect>type-expr) ( effect -- type-expr )
-    [ effect-row-vars ]
-    [ in>> ] [ out>> ] tri
-    swapd [ consumption/production>type-expr ] 2bi@
-    <fun-type> ;
+:: (effect>type-scheme) ( effect -- type-expr )
+    effect [ effect-row-vars ]
+    [ in>> ] [ out>> ] tri :> ( in-var out-var cons prod )
+    [ in-var dup quantify-var
+      cons [ element>type-expr ] map
+      swap prefix
+    ] collect-quantifiers :> qvars
+    prod [ element>type-expr ] map
+    out-var dup quantify-var
+    prefix <fun-type>
+    qvars swap <type-scheme> ;
+    ! [  ]
+    ! swapd [ consumption/production>type-expr ] 2bi@
+    ! <fun-type> ;
 
-! This parses an effect with new name bindings.  This ensures that any names
-! inside are unique.  This is used on the top level to add equations.
+GENERIC: fresh-var-from ( type-var -- type-var )
+M: type-var fresh-var-from
+    name>> <type-var> ;
+M: row-var fresh-var-from
+    name>> <row-var> ;
+
+! Instantiating a type scheme with fresh variables for unification
+: instantiate-type-scheme ( type-scheme -- type-expr )
+    [ expr>> ]
+    [ quantified-vars>> ] bi
+    [ [ fresh-var-from ] keep rot subst-var drop ] each ;
+
+! ! This parses an effect with new name bindings.  This ensures that any names
+! ! inside are unique.  This is used on the top level to add equations.
+! : effect>type-expr ( effect -- type-expr )
+!     ! (effect>type-expr) ;
+!     [ (effect>type-expr) ] with-fresh-mappings ;
+
+! : effect>type-scheme ( effect -- type-expr )
+!     [ quantifier-stack [ { } clone suffix ]
+!       (effect>type-expr)
+!     ] with-scope ;
+
+! NOTE: creates new name binding scope, use only top-level or quote-nested
 : effect>type-expr ( effect -- type-expr )
     ! (effect>type-expr) ;
-    [ (effect>type-expr) ] with-fresh-mappings ;
+    [ (effect>type-scheme) ] with-fresh-mappings ;
 
 M: effect element>type-expr
-    (effect>type-expr) ;
+    (effect>type-scheme) ;
+    ! (effect>type-expr) ;
 
+! FIXME: used?
 M: configuration element>type-expr
     elements>> [ element>type-expr ] map ;
 
@@ -314,15 +435,20 @@ SINGLETON: keep-eqn
     [ eliminate-var f ]
     [ 2drop keep-eqn ] if ;
 
+DEFER: pp-type
 ! TODO: make sure that row-var = type-var throws an error?
 ! TODO: make sure that only row-vars can match stack sequences
 : unify-type-exprs ( lhs rhs -- new-eqs )
+    "step:" print
+    2dup [ pp-type nl ] bi@ nl
     { { [ 2dup = ] [ 2drop f ] } ! delete (expensive)
       { [ 2dup [ sequence? ] both? ] [ unify-stacks ] } ! stack-decompose
       { [ 2dup swap? ] [ swap 2array 1array ] } ! swap
       { [ over type-var? ] [ unify-type-var ] }
       ! { [ 2dup [ empty-sequence? ] both? ] [ 2drop f ] } ! delete2, matching ! stacks completely decomposed (cheap?)
       ! { [ 2dup = ] [ 2drop f ] } ! delete3 (recursive)
+      { [ 2dup [ type-scheme? ] both? ]
+       [ [ instantiate-type-scheme ] bi@ 2array 1array ] } ! T-COMP
       { [ 2dup [ fun-type? ] both? ]
         [ [ [ consumption>> ] [ production>> ] bi ] bi@
           swapd [ 2array ] 2bi@ 2array ] }
@@ -485,6 +611,8 @@ M: type-expr simplify* ;
 
 : unify-effects-to-type ( effect1 effect2 -- fun-type )
     [ effect>type-expr ] bi@
+    ! NOTE: expecting type schemes here
+    [ instantiate-type-scheme ] bi@
     [ [ consumption>> ] [ production>> ] bi* 2array targets set ]
     [ [ production>> ] [ consumption>> ] bi* unify-configurations ] 2bi
     targets get first2
@@ -578,7 +706,9 @@ M: row-var type-expr>element
     ! [ [ dup [ ensure-unique-name ] when ] bi@ ] 2dip
     ;
 
-! TODO: Possibly cut out variable effect here for replicating existing behavior
+M: type-expr type-expr>element
+    instantiate-type-scheme type-expr>element ;
+
 M: fun-type type-expr>element
     extract-var-effect
     [ configuration>elements ] bi@
@@ -631,6 +761,14 @@ M: fun-type pp-type*
         " ⟶ " write
       ] [ production>> pp-type* ] bi
       ")" write ;
+
+! TODO: probably wrong
+M: type-scheme pp-type*
+    "∀" write
+    [ quantified-vars>> [ ensure-unique-name ] map "," join write ]
+    [ ".(" write
+        expr>> pp-type*
+         ")" write ] bi ;
 
 : pprint-context ( -- )
     nl "Context:" print
