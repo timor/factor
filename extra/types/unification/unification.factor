@@ -31,6 +31,11 @@ SYMBOL: occurs-cache
 ! Try performing substitutions as we go in target equations
 SYMBOL: targets
 
+
+SYMBOL: debug
+: when-debug ( quot level -- )
+    debug get 0 or <= [ call ] [ drop ] if ; inline
+
 : with-unification-context ( quot -- )
     '[
         H{ } clone name-bindings set
@@ -145,9 +150,13 @@ M: equation occurs?*
     [ dup elt = [ drop instead ] pred if ] ; inline
 
 :: occurs-in-problem? ( var -- ? )
-    equations get
-    [| e | var e occurs? ]
-    current-equation get f skip= any? ;
+    { [ equations get
+        [| e | var e occurs? ]
+        current-equation get f skip= any? ]
+      [ targets get
+        [ var swap occurs? ] any?
+      ]
+    } 0|| ;
 
 ! ** Enumerating variables
 
@@ -181,10 +190,16 @@ M:: fun-type subst-var ( new old expr -- expr subst? )
     [ con prod <fun-type> t ]
     [ expr f ] if ;
 
-! Don't substitute quantified variables
+! ! TODO: It may be necessary to establish this as separate constraint set
+! : add-constraint ( new existing -- )
+!     2dup <equation> 1array f swap update-context-with-equations
+!     ;
+
+! Substitute quantified variables, but establish constraints?
+! For now, substitute quantified variables, causing next quantification to fail
 M:: type-scheme subst-var ( new old expr -- expr' subst? )
     expr quantified-vars>> :> qvars
-    old qvars in?
+    old qvars in? drop f
     [ expr f ]
     [ new old expr expr>> subst-var
       [ qvars swap <type-scheme> t ]
@@ -221,8 +236,8 @@ M:: equation subst-var ( new old e -- equation subst? )
       [ subst-var drop ] if
      ] 2with map ;
 
-! destructive
 : subst-var-in-context ( var replacement -- )
+    ! [ swap equations [ subst-var-in-equations ] change ] call
     [ swap equations [ subst-var-in-equations ] change ]
     ! [ swap eliminated [ subst-var-in-equations ] change ] 2bi
     [ swap targets [ subst-var-in-equations ] change ] 2bi
@@ -249,21 +264,36 @@ SYMBOL: row-var-mappings
 ! constraint support for dependent typing
 
 SYMBOL: quantifier-stack
+
+! This is used to stop collecting quantifier scope in effect output positions
+SYMBOL: inhibit-collect-quantifiers
 ! If we are not currently inside a quantification scope, then we assume
 ! universal quantification
 : quantified? ( type-var -- ? )
     quantifier-stack get
     [ drop t ] [ [ in? ] with any? ] if-empty ;
 
-: quantify-var ( type-var -- )
-    dup quantified?
-    [ drop ] [ quantifier-stack get [ swap suffix ] change-last ] if ;
+: inner-quantified? ( type-var -- ? )
+    quantifier-stack get
+    [ drop t ] [ last in? ] if-empty ;
 
-: collect-quantifiers ( quot -- seq )
+: quantify-var ( type-var -- )
+    inhibit-collect-quantifiers get
+    [ drop ]
+    [ dup quantified?
+      ! dup inner-quantified?
+      [ drop ] [ quantifier-stack get [ swap suffix ] change-last ] if ] if ;
+
+: collecting-quantifiers ( quot -- seq )
     '[ quantifier-stack [ { } suffix ] change
+       inhibit-collect-quantifiers off
        @
        quantifier-stack get last
-    ] with-scope ; inline
+    ] with-scope
+    ; inline
+
+: not-collecting-quantifiers ( quot -- )
+    inhibit-collect-quantifiers swap with-variable-on ; inline
 
 M: pair element>type-expr
     second element>type-expr ;
@@ -341,9 +371,11 @@ M: class element>type-expr
     [ in-var dup quantify-var
       cons [ element>type-expr ] map
       swap prefix
-    ] collect-quantifiers :> qvars
-    prod [ element>type-expr ] map
-    out-var dup quantify-var
+    ] collecting-quantifiers :> qvars
+    ! [
+        prod [ element>type-expr ] map
+        out-var dup quantify-var
+    ! ] not-collecting-quantifiers
     prefix <fun-type>
     qvars swap <type-scheme> ;
     ! [  ]
@@ -395,7 +427,9 @@ ERROR: unification-conflict equation lhs rhs ;
 : eliminate-var? ( var rhs -- ? )
     { [ occurs? not ]
       [ drop occurs-in-problem? ]
-    } 2&& ;
+    } 2&&
+    drop f
+    ;
 
 
 ! destructive
@@ -439,8 +473,10 @@ DEFER: pp-type
 ! TODO: make sure that row-var = type-var throws an error?
 ! TODO: make sure that only row-vars can match stack sequences
 : unify-type-exprs ( lhs rhs -- new-eqs )
-    "step:" print
-    2dup [ pp-type nl ] bi@ nl
+    [
+        "step:" print
+        2dup [ pp-type nl ] bi@ nl
+    ] 3 when-debug
     { { [ 2dup = ] [ 2drop f ] } ! delete (expensive)
       { [ 2dup [ sequence? ] both? ] [ unify-stacks ] } ! stack-decompose
       { [ 2dup swap? ] [ swap 2array 1array ] } ! swap
@@ -502,7 +538,7 @@ ERROR: recursive-equation eqn ;
 DEFER: pprint-context
 DEFER: pprint-unifier
 : unify-context-pass ( -- changed? )
-    pprint-context
+    [ pprint-context ] 2 when-debug
     equations get
     ! dup equations>>
     [ unify-equation ] any? ;
@@ -518,7 +554,7 @@ ERROR: safe-loop-count-exceeded ;
         equations set
         [ unify-context-pass
         ] 500 safe-loop
-        pprint-unifier
+        [ pprint-unifier ] 1 when-debug
     ! ] with-fresh-mappings
     ! f >>occurs
     ;
@@ -545,7 +581,7 @@ ERROR: not-a-unifier equations ;
     {
         [ [ type-var? ] all? ]
         [ all-unique? ]
-        [ [ var-in-rhs? ] any? not ]
+        ! [ [ var-in-rhs? ] any? not ]
     } 1&&
     [ not-a-unifier ] unless ;
 
@@ -563,14 +599,26 @@ ERROR: not-a-unifier equations ;
     eliminated get
     drop
     ! append
-    check-unifier
+    ! check-unifier
     ! NOTE: Completely unsure whether this is legal!
     ! dup valid-reverse-equations append
     ;
 
+! Apply all substitutions, in rest of substitutions and in targets
+:: substitute-in-targets ( -- )
+    equations get
+    check-unifier :> eqns!
+    [ eqns empty? ] [
+        eqns unclip-slice :> ( rest next )
+        next [ rhs>> ] [ lhs>> ] bi :> ( new old )
+        rest [ new old rot subst-var drop ] map eqns!
+        targets [ [ new old rot subst-var drop ] map ] change
+    ] until ;
+
+
 ! ! NOTE: this presupposes that the context contains a valid unifier!
 : substitute-with-context ( expr -- expr' )
-    equations get check-unifier drop
+    ! equations get check-unifier drop
     [ context-unifier-equations ] dip
     [ swap [ [ rhs>> ] [ lhs>> ] bi ] dip subst-var drop ] reduce ;
 
@@ -609,16 +657,24 @@ M: type-expr simplify* ;
 : simplify ( type-expr -- type-expr' )
     { } bound-row-vars [ simplify* ] with-variable ;
 
+DEFER: pp-type
 : unify-effects-to-type ( effect1 effect2 -- fun-type )
     [ effect>type-expr ] bi@
     ! NOTE: expecting type schemes here
-    [ instantiate-type-scheme ] bi@
+    [ expr>> ] bi@
+    [
+        "Unify expressions:" print
+        2dup [ pp-type nl ] bi@
+    ] 1 when-debug
     [ [ consumption>> ] [ production>> ] bi* 2array targets set ]
     [ [ production>> ] [ consumption>> ] bi* unify-configurations ] 2bi
+    substitute-in-targets
     targets get first2
-    substitute-configurations
+    ! substitute-configurations
     <fun-type>
-    ! simplify
+    [ "Substituted: " write dup pp-type nl ] 1 when-debug
+    simplify
+    [ "Simplified: " write dup pp-type nl ] 1 when-debug
     ;
     ! [ [ consumption>> ] [ production>> ] bi* substitute-configurations
     !   <fun-type>
@@ -706,7 +762,7 @@ M: row-var type-expr>element
     ! [ [ dup [ ensure-unique-name ] when ] bi@ ] 2dip
     ;
 
-M: type-expr type-expr>element
+M: type-scheme type-expr>element
     instantiate-type-scheme type-expr>element ;
 
 M: fun-type type-expr>element
@@ -718,14 +774,27 @@ M: fun-type type-expr>element
 : fun-type>effect ( fun-type -- effect )
     type-expr>element second ;
 
+! Make sure that conversion and back do the same thing
+ERROR: inconsistent-self-inference e1 e2 ;
+: validate-scheme ( effect -- )
+    dup effect>type-expr [ type-expr>element second ] with-unification-context
+    2dup effect= [ 2drop ] [ inconsistent-self-inference ] if ;
+
 ! Probably makes sense to keep the constraints here
 ! once implemented using constraints
 : unify-effects* ( effect1 effect2 -- effect3 )
-    unify-effects-to-type fun-type>effect ;
+    unify-effects-to-type fun-type>effect
+    ! "Re-interpreted effect:" print
+    ! dup effect>type-expr pp-type nl
+    ;
 
 : unify-effects ( effect1 effect2 -- effect3 )
+    [ 2dup "Effects to unify: " print [ . ] bi@ ] 1 when-debug
     ! unify-effects* ;
-    [ unify-effects* ] with-unification-context ;
+    [ unify-effects* ] with-unification-context
+    [ "Unified effect:" print dup . nl ] 1 when-debug
+    ! dup validate-scheme
+    ;
 
 ! * Prettyprint type expressions for debugging
 

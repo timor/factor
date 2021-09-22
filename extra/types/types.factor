@@ -1,5 +1,5 @@
 USING: accessors arrays classes combinators combinators.short-circuit effects
-generic kernel namespaces quotations sequences sets typed.syntax types.syntax
+generic kernel namespaces quotations sequences sets types.syntax
 types.unification words ;
 
 IN: types
@@ -17,10 +17,14 @@ DEFER: infer-word-type
     dup infer-word-type
     [ "inferred-type-scheme" set-word-prop ] keep ;
 
+: reset-type-caches ( -- )
+    all-words [ "inferred-type-scheme" remove-word-prop ] each ;
+
 : type-of-normal-word ( word -- type )
     { [ "declared-type-scheme" word-prop ]
-      [ "inferred-type-scheme" word-prop ]
-      [ cache-infer-type ]
+      ! [ "inferred-type-scheme" word-prop ]
+      ! [ cache-infer-type ]
+      [ infer-word-type ]
       ! [ unknown-type-scheme ]
     } 1|| ;
 
@@ -62,11 +66,12 @@ M: \ dip type-of drop
     ( ..a b quot: ( ..a -- ..c ) -- ..c b ) ;
 M: \ if type-of drop
     ( ..a ?: boolean true: ( ..a -- ..b ) false: ( ..a -- ..b ) -- ..b ) ;
+! TODO: curry
 
 ! That's an interesting one, because ..a needs to be fully inferred for this to
 ! be typed
 M: \ loop type-of drop
-    ( ..a pred: ( ..a -- ..a ?: boolean ) -- ..a ) ;
+    ( ..a pred: ( ..a -- ..a ? ) -- ..a ) ;
 
 ! * Retrieving declared types for recursive cases
 ! For recursive words, we actually need to turn the declared effect into a type
@@ -104,7 +109,9 @@ M: generic infer-type
 M: quotation infer-type
     [ ( -- ) ]
     [ unclip-slice type-of
-      [ type-of unify-effects ] reduce
+      ! [
+          [ type-of unify-effects ] reduce
+      ! ] with-unification-context
     ] if-empty ;
 
 : quote-type ( type name -- effect )
