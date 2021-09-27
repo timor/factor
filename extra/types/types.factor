@@ -55,6 +55,9 @@ M: word type-of ( word -- type )
 : constantly ( x -- quot: ( -- x ) )
     [ ] curry
     ; ( ..a x -- ..a quot: ( ..b -- ..b x ) ) typed
+: quote ( x -- quot: ( -- x ) )
+    1quotation
+    ; ( ..a x -- ..a quot: ( ..b -- ..b x ) ) typed
 
 ! M: \ swap type-of drop
 !     ( a b -- b a ) ;
@@ -106,6 +109,7 @@ M: word infer-type
 M: generic infer-type
     unknown-type-scheme ;
 
+FROM: types.bn-unification => unify-effects ;
 M: quotation infer-type
     [ ( -- ) ]
     [ unclip-slice type-of

@@ -1,4 +1,4 @@
-USING: kernel math math.private tools.test types ;
+USING: kernel math math.private tools.test types types.bn-unification ;
 
 IN: types.tests
 
@@ -14,14 +14,18 @@ IN: types.tests
 { ( x: fixnum -- x: fixnum x: integer ) }
 [ [ dup 1 fixnum+ ] infer-type ] unit-test
 
-{ ( ..a1 b quot: ( ..a1 -- ..c ) quot: ( ..c b -- ..b2 ) -- ..b2 ) }
+{ ( ..a b quot: ( ..a -- ..c ) quot: ( ..c b -- ..b ) -- ..b ) }
 [ [ bi* ] infer-type ] unit-test
 
-{ ( ..a1 b2 x quot: ( ..a1 -- ..c1 ) quot: ( ..c1 b2 -- ..c ) quot: ( ..c x -- ..b1 ) -- ..b1 ) }
+{ ( ..a b b3 quot: ( ..a -- ..c ) quot: ( ..c b -- ..c1 ) quot: ( ..c1 b3 -- ..b ) -- ..b ) }
 [ [ tri* ] infer-type ] unit-test
 
-{ ( ..a1 b quot: ( ..a1 -- ..c ) -- ..c b ) }
+{ ( ..a b quot: ( ..a -- ..c ) -- ..c b ) }
 [ [ [ ] [ dip ] dip call ] infer-type ] unit-test
+
+! FIXME: above works, this does not
+{ ( ..a b quot: ( ..a -- ..c ) -- ..c b ) }
+[ [ [ ] ] infer-type [ [ dip ] dip call ] infer-type unify-effects ] unit-test
 
 { ( ..a b quot: ( ..a -- ..c ) -- ..c b ) }
 [ [ [ ] bi* ] infer-type ] unit-test
@@ -32,12 +36,6 @@ IN: types.tests
 { ( ..a x: fixnum quot: ( ..a -- ..r1 ) -- ..r1 x: integer ) }
 [ [ [ 1 fixnum+ ] bi* ] infer-type ] unit-test
 
-
-! composition must work both ways
-{  }
-[ [ [ dip ] ] infer-type [ dip call ] infer-type unify-effects ] unit-test
-{  }
-[ [ [ dip ] call ] infer-type [ call ] infer-type unify-effects ] unit-test
 
 { ( ..r x quot: ( ..r x -- ..b ) quot: ( ..b x -- ..b2 ) -- ..b2 ) }
 [ \ bi infer-type ] unit-test
