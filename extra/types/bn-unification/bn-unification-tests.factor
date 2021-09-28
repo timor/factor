@@ -1,4 +1,5 @@
-USING: kernel tools.test types types.bn-unification ;
+USING: io kernel math prettyprint sequences tools.test types
+types.bn-unification ;
 IN: types.bn-unification.tests
 
 {  }
@@ -134,3 +135,50 @@ IN: types.bn-unification.tests
   unify-effects
 ] unit-test
 
+! [ [  ] bi* ] works when inlining bi*, when composing these two, not so much...
+! NOTE: seems to be renaming problem...?
+
+! [ [  ] [ dip ] ] ∘ [ dip call ]
+{ ( ..a b quot: ( ..a -- ..c ) -- ..c b ) }
+[
+    ( ..r -- ..r quot: ( ..r1 -- ..r1 ) quot: ( ..a b quot: ( ..a -- ..c ) -- ..c b ) )
+    ( ..a quot: ( ..a1 -- ..b ) quot: ( ..a -- ..a1 ) -- ..b )
+    unify-effects
+] unit-test
+
+{ ( ..A2 b2 quot: ( ..A2 -- ..C2 ) -- ..C2 b2 ) }
+[
+    ( ..r1 -- ..r1 quot: ( ..s1 -- ..s1 ) quot: ( ..A2 b2 quot: ( ..A2 -- ..C2 ) -- ..C2 b2 ) )
+    ( ..A3 quot: ( ..A4 -- ..B4 ) quot: ( ..A3 -- ..A4 ) -- ..B4 )
+    unify-effects
+] unit-test
+
+! [ [  ] ] ∘ [ [ dip ] dip call ]
+
+{ ( ..A2 b2 quot: ( ..A2 -- ..C2 ) -- ..C2 b2 ) }
+[
+   ( ..r1 -- ..r1 quot: ( ..s1 -- ..s1 ) )
+   ( ..A2 b2 quot: ( ..A2 -- ..C2 ) quot: ( ..C2 b2 -- ..B2 ) -- ..B2 )
+   unify-effects
+] unit-test
+
+{ ( ..a x quot: ( ..a -- ..c ) -- ..c x ) }
+[
+    ( ..d -- ..d quot: ( ..e -- ..e ) )
+    ( ..a x quot: ( ..a -- ..c ) quot: ( ..c x -- ..b ) -- ..b )
+    unify-effects
+] unit-test
+
+{ ( ..a b quot: ( ..a -- ..c ) -- ..c b ) }
+[
+    ( ..d -- ..d quot: ( ..e -- ..e ) )
+    ( ..a b quot: ( ..a -- ..c ) quot: ( ..c b -- ..b ) -- ..b )
+    unify-effects
+] unit-test
+
+{ ( ..a b quot: ( ..a -- ..c ) -- ..c b ) }
+[
+    ( -- quot: ( -- ) )
+    ( ..a b quot: ( ..a -- ..c ) quot: ( ..c b -- ..b ) -- ..b )
+    unify-effects
+] unit-test

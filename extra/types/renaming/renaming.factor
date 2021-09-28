@@ -1,5 +1,6 @@
-USING: accessors arrays ascii assocs combinators effects hash-sets kernel math
-math.parser namespaces sequences sequences.extras sets strings words ;
+USING: accessors arrays ascii assocs classes.algebra combinators
+combinators.short-circuit effects hash-sets kernel math math.parser namespaces
+sequences sequences.extras sets strings words ;
 
 IN: types.renaming
 
@@ -35,7 +36,7 @@ SYMBOL: name-counters
     name-counters get [ 0 or 1 + dup ] change-at ;
 
 SYMBOL: bound-names
-SYMBOL: mappings
+SYMBOLS: mappings row-var-mappings ;
 
 : ensure-unique-var ( varname -- varname )
     dup bound-names get in?
@@ -59,7 +60,7 @@ M: anon-effect name>vars*
     swapd <variable-effect> ;
 
 : map-rowvarname ( str -- varname )
-    mappings get [ trim-varname <rowvarname> ensure-unique-var ] cache ;
+    row-var-mappings get [ trim-varname <rowvarname> ensure-unique-var ] cache ;
 
 M: effect name>vars*
     {
@@ -83,6 +84,7 @@ M: pair name>vars*
 : name>vars ( effect -- effect )
     [ HS{ } clone bound-names set
       H{ } clone mappings set
+      H{ } clone row-var-mappings set
       name>vars*
     ] with-name-counters ;
 

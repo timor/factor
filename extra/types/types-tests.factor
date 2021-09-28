@@ -30,17 +30,17 @@ IN: types.tests
 { ( ..a b quot: ( ..a -- ..c ) -- ..c b ) }
 [ [ [ ] bi* ] infer-type ] unit-test
 
-{ ( ..a1 x: fixnum quot: ( ..a1 -- ..r ) -- ..r x: integer ) }
+{ ( ..a x: fixnum quot: ( ..a -- ..r ) -- ..r x: integer ) }
 [ [ [ 1 fixnum+ ] [ dip ] dip call ] infer-type ] unit-test
 
-{ ( ..a x: fixnum quot: ( ..a -- ..r1 ) -- ..r1 x: integer ) }
+{ ( ..a x: fixnum quot: ( ..a -- ..c ) -- ..c x: integer ) }
 [ [ [ 1 fixnum+ ] bi* ] infer-type ] unit-test
 
 
-{ ( ..r x quot: ( ..r x -- ..b ) quot: ( ..b x -- ..b2 ) -- ..b2 ) }
+{ ( ..r1 b quot: ( ..r1 b -- ..c ) quot: ( ..c b -- ..b ) -- ..b ) }
 [ \ bi infer-type ] unit-test
 
-{  }
+{ ( ..c b b quot: ( ..c b -- ..c ) -- ..c ) }
 [ \ bi@ infer-type ] unit-test
 
 {  }

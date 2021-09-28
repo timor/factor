@@ -164,15 +164,23 @@ M: proper-term lift*
 
 ! Modification: If trying to eliminate a recursive term, simply drop the equation
 ! The equation should already be removed from the problem so simply continue.
+! Alternative approach: substitute anyways
 :: elim ( subst problem vname term -- subst )
     vname term occurs? [ vname term recursive-term ]
     ! vname term occurs? [
+    !     "Skipping recursion: " write vname pp* " = " write term pp
     !     subst problem solve
     ! ]
+    ! vname term occurs? [
+    !     "Ignoring recursion: " write vname pp* " = " write term pp
+    !     ! vname term 2array prefix
+    !     ! problem [ [ vname term elim-in-term ] bi@ ] assoc-map solve
+    ! ] when
     [ subst [ vname term elim-in-term ] map-values
         vname term 2array prefix
         problem [ [ vname term elim-in-term ] bi@ ] assoc-map solve ]
     if
+    ! call
     ;
 
 : unify ( term1 term2 -- subst )
@@ -307,6 +315,7 @@ M: effect simplify*
 
 : unify-effects ( effect1 effect2 -- effect )
     effects>unifier
+    "Result: " print dup pp-subst
     [ resubst ] curry bi@
     [ stk>effect ] bi@ <variable-effect>
     simplify

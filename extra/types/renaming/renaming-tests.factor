@@ -24,3 +24,16 @@ IN: types.renaming.tests
 { "( ..r0 -- ..r0 x0: integer y0: fixnum )"
   "( ..r1 -- ..r1 x1: integer y1: fixnum )" }
 [ ( ..r -- ..r x: integer y: fixnum ) dup rename-effects [ effect>string ] bi@ ] unit-test
+
+{ "( ..r0 -- ..r0 quot0: ( ..r1 -- ..r1 ) )" }
+[ ( -- quot: ( -- ) ) name>vars effect>string ] unit-test
+
+{ "( ..a0 b0 quot0: ( ..a0 -- ..c0 ) quot2: ( ..c0 b0 -- ..b0 ) -- ..b0 )" }
+[ ( ..a b quot: ( ..a -- ..c ) quot2: ( ..c b -- ..b ) -- ..b )
+  name>vars effect>string ] unit-test
+
+{ "( ..a0 x0 quot0: ( ..a0 -- ..c0 ) quot0: ( ..c0 x0 -- ..b0 ) -- ..b0 )" }
+[ ( ..a x quot: ( ..a -- ..c ) quot: ( ..c x -- ..b ) -- ..b ) name>vars effect>string ] unit-test
+
+{ "( ..a0 b0 quot0: ( ..a0 -- ..c0 ) quot0: ( ..c0 b0 -- ..b0 ) -- ..b0 )" }
+[ ( ..a b quot: ( ..a -- ..c ) quot: ( ..c b -- ..b ) -- ..b ) name>vars effect>string ] unit-test
