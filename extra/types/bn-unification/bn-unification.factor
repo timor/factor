@@ -11,12 +11,6 @@ TUPLE: proper-term
     { args sequence } ;
 C: <proper-term> proper-term
 
-: lcounter ( symbol -- int )
-    [ 0 or 1 + dup ] change ;
-
-: with-local-counter ( symbol quot -- )
-    [ 0 swap ] dip with-variable ; inline
-
 SYMBOLS: lst nil ;
 : cons ( car cdr -- cons )
     2array lst swap <proper-term> ;
@@ -40,19 +34,6 @@ ERROR: need-dotted-list ;
 
 SYMBOLS: -- stk const ;
 
-SYMBOL: bindings
-: with-bindings ( quot -- )
-    [ H{ } clone bindings ] dip with-variable ; inline
-
-: clear-bindings ( -- )
-    H{ } clone bindings set ;
-
-: name-id ( str -- n )
-    bindings get [ new-id-for ] cache ;
-
-: fresh-name-id ( str -- n )
-    bindings get [ new-id-for dup ] change-at ;
-
 GENERIC: effect>term ( effect -- term )
 M: word effect>term f <proper-term> ;
 ! M: string effect>term dup name-id <varname> ;
@@ -61,57 +42,11 @@ M: pair effect>term second effect>term ;
 ! M: rowvarname effect>term ;
 M: varname effect>term ;
 M: effect effect>term
-    ! [
     [ [ in>> ] [ in-var>> ] bi prefix ]
     [ [ out>> ] [ out-var>> ] bi  prefix ] bi
     [ [ effect>term ] map>lst 1array stk swap <proper-term> ] bi@
     2array -- swap <proper-term>
-    ! ] with-bindings
     ;
-
-! Renaming
-! Uniquify effect row var names
-! SYMBOL: taken-names
-! GENERIC: uniq-row-vars ( effect-element -- effect-element )
-! M: pair uniq-row-vars
-!     [ uniq-row-vars ] map ;
-! M: effect uniq-row-vars
-!     dup [ in-var>> ] [ out-var>> ] bi and
-!     [  ] unless ;
-!     [ first uniq-row-vars ] [ second ]
-
-! ! Uniquify var names in terms
-! ! Collect var names of first effect
-! GENERIC: var-names ( term -- seq )
-! M: varname var-names name>> 1array ;
-! M: rowvarname var-names drop f ;
-! M: proper-term var-names args>> [ var-names ] gather ;
-! GENERIC: rowvar-names ( term -- seq )
-! M: varname rowvar-names drop f ;
-! M: rowvarname rowvar-names name>> 1array ;
-! M: proper-term rowvar-names args>> [ var-names ] gather ;
-
-! GENERIC: rename-vars-with ( taken-names term -- term )
-! M:: var-name rename-vars-with ( taken v -- term )
-!     v name>> taken member?
-!     [ v name>> dup new-id-for <varname> ]
-!     [ v ] if ;
-! M: rowvarname rename-vars-with nip ;
-! M: proper-term rename-vars-with
-!     [ symbol>> ] [ args>> [ rename-vars-with ] map ] bi
-!     <proper-term> ;
-
-! GENERIC: rename-row-vars-with ( taken-names term -- term )
-! M: var-name rename-row-vars-with nip ;
-! M: proper-term rename-row-vars-with
-!     [ symbol>> ] [ args>> [ rename-row-vars-with ] map ] bi
-!     <proper-term> ;
-! M:: rowvarname rename-row-vars-with ( taken rv -- term )
-!     rv name>> taken member?
-!     [ rv name>> dup new-id-for <rowvarname> ]
-!     [ rv ] if ;
-
-! :
 
 ! Elimination
 
