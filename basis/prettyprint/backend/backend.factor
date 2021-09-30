@@ -11,7 +11,7 @@ sequences strings vectors words ;
 QUALIFIED: sets
 IN: prettyprint.backend
 
-M: effect pprint* effect>string text ;
+M: effect-type pprint* effect>string text ;
 
 : ?effect-height ( word -- n )
     stack-effect [ effect-height ] [ 0 ] if* ;

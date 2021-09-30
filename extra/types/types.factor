@@ -1,15 +1,14 @@
 USING: accessors arrays classes combinators combinators.short-circuit effects
-generic kernel namespaces quotations sequences sets types.syntax
-types.unification words ;
+generic kernel namespaces quotations sequences sets types.base-types
+types.syntax vocabs words ;
 
 IN: types
 
 FROM: namespaces => set ;
 
-
 ! * Predefined Type Schemes
 ! Retrieves typing judgments
-GENERIC: type-of ( word -- type )
+GENERIC: type-of* ( word -- type )
 ERROR: unknown-type-scheme word ;
 
 DEFER: infer-word-type
@@ -40,10 +39,10 @@ DEFER: infer-word-type
 : type-of-shuffle-word ( word -- type )
     "shuffle" word-prop ;
 
-M: generic type-of ( word -- type )
+M: generic type-of* ( word -- type )
     unknown-type-scheme ;
 
-M: word type-of ( word -- type )
+M: word type-of* ( word -- type )
     { { [ dup "input-classes" word-prop ] [ type-of-bootstrap-word ] }
       { [ dup "shuffle" word-prop ] [ type-of-shuffle-word ] }
       { [ dup "primitive" word-prop ] [ unknown-type-scheme ] }
@@ -59,21 +58,29 @@ M: word type-of ( word -- type )
     1quotation
     ; ( ..a x -- ..a quot: ( ..b -- ..b x ) ) typed
 
-! M: \ swap type-of drop
+! M: \ swap type-of* drop
 !     ( a b -- b a ) ;
-M: \ compose type-of drop
+M: \ compose type-of* drop
     ( ... quot1: ( ..a -- ..b ) quot2: ( ..b -- ..c ) -- ... quot: ( ..a -- ..c ) ) ;
-M: \ call type-of drop
+M: \ call type-of* drop
     ( ..a quot: ( ..a -- ..b ) -- ..b ) ;
-M: \ dip type-of drop
+M: \ dip type-of* drop
     ( ..a b quot: ( ..a -- ..c ) -- ..c b ) ;
-M: \ if type-of drop
+M: \ if type-of* drop
     ( ..a ?: boolean true: ( ..a -- ..b ) false: ( ..a -- ..b ) -- ..b ) ;
-! TODO: curry
+
+! swap constantly swap compose
+M: \ curry type-of* drop
+    ( x quot: (  ..a x -- ..c ) -- quot: ( ..a -- ..c ) ) ;
+M: \ dup type-of* drop
+    { "x" } { "x" } "x" <dup-type> suffix <effect> ;
+! M: \ dup type-of* drop
+!     { "x" } { "x" "x" } <effect> ;
+
 
 ! That's an interesting one, because ..a needs to be fully inferred for this to
 ! be typed
-M: \ loop type-of drop
+M: \ loop type-of* drop
     ( ..a pred: ( ..a -- ..a ? ) -- ..a ) ;
 
 ! * Retrieving declared types for recursive cases
@@ -110,8 +117,12 @@ M: generic infer-type
     unknown-type-scheme ;
 
 FROM: types.bn-unification => unify-effects ;
+GENERIC: type-of ( obj -- fun-type )
+
+M: object type-of
+    type-of* effect>term ;
 M: quotation infer-type
-    [ ( -- ) ]
+    [ ( -- ) effect>term ]
     [ unclip-slice type-of
       ! [
           [ type-of unify-effects ] reduce
@@ -123,6 +134,6 @@ M: quotation infer-type
 
 ! This is debatable, because typing it requires inference...
 M: quotation type-of
-    infer-type "quot" quote-type ;
+    infer-type ;
 
-M: object type-of class-of "x" quote-type ;
+M: object type-of* class-of "x" quote-type ;

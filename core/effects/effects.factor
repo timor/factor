@@ -6,12 +6,14 @@ math.order math.parser sequences sequences.private strings words ;
 IN: effects
 
 ! Call effects
+MIXIN: effect-type
 TUPLE: effect
 { in array read-only }
 { out array read-only }
 { terminated? read-only }
 { in-var read-only }
 { out-var read-only } ;
+INSTANCE: effect effect-type
 
 ! Stack variable values
 TUPLE: configuration elements ;
@@ -32,10 +34,9 @@ C: <configuration> configuration
 : effect-height ( effect -- n )
     [ out>> length ] [ in>> length ] bi - ; inline
 
-: variable-effect? ( effect -- ? )
+PREDICATE: variable-effect < effect
     [ in-var>> ] [ out-var>> ] bi or ;
-
-: bivariable-effect? ( effect -- ? )
+PREDICATE: bivariable-effect < effect
     [ in-var>> ] [ out-var>> ] bi = not ;
 
 : effect<= ( effect1 effect2 -- ? )
