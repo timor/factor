@@ -1,6 +1,6 @@
-USING: accessors arrays assocs assocs.extras classes combinators effects
-hashtables io kernel sequences sequences.zipped terms types.base-types
-types.function-types types.renaming ;
+USING: accessors arrays assocs assocs.extras classes combinators
+combinators.short-circuit effects hashtables io kernel math math.order sequences
+sequences.zipped terms types.base-types types.function-types types.renaming ;
 
 IN: types.bn-unification
 
@@ -50,7 +50,7 @@ FROM: namespaces => set ;
 
 ! Elimination
 
-ERROR: term-mismatch t1 t2 ;
+ERROR: proper-term-mismatch t1 t2 ;
 ERROR: recursive-term vname term ;
 
 DEFER: pp
@@ -59,24 +59,98 @@ DEFER: pp*
     [ [ pp* " = " write ] [ pp ] bi* ] assoc-each ;
 
 DEFER: elim
+! NOTE This is important: For some reason, being eager with substituting the
+! recursive types leads to intermediate recursive terms.  Actually, I'm not
+! really sure they are intermediate...
+! For now the solution seems to be to postpone solving the recursion equation
+! until the end
+DEFER: solve
+
+! NOTE: Approach right now is to carry the dup onto the right side
+: solve-dup-type-var ( subst problem dup-var term -- subst  )
+    ! [ -1 swap change-term-var-order dup ] dip <rec-type> elim ;
+    [ -1 swap change-term-var-order dup ] dip <rec-type> 2array suffix solve ;
+
+: lift ( subst term -- term )
+    "Lift: " write [ dup pp-subst ] [ "in term:" write dup pp* ] bi*
+    [ lift* ] keep over
+    = [ dup " => " write pp ] [ nl ] if ;
+
+! Re-instantiation rule: M = rec(x|E(x)) => M' = E(M)
+:: solve-rec-type ( subst problem term1 term2 -- subst )
+    term2 [ rec-var>> ] [ element>> ] bi :> ( rv expr )
+    term1 :> inst-var
+    inst-var rv associate expr lift :> instantiated
+    ! NOTE: again 2 possibilities: 1. solve immediately, 2. solve last
+    subst problem inst-var propagate-duplication instantiated 2array
+    ! prefix solve
+    suffix solve
+    ;
+
+: not-a-dup-type-var ( subst problem term1 term2 -- subst )
+    dup rec-type? [ swap ] unless
+    dup rec-type? not
+    [ proper-term-mismatch ]
+    [ solve-rec-type ] if ;
+
+: term-mismatch ( subst problem term1 term2 -- subst )
+    over dup-type-var? [ swap ] unless
+    over dup-type-var? not
+    ! [ not-a-dup-type-var ]
+    [ proper-term-mismatch ]
+    [ solve-dup-type-var ] if ;
+
+DEFER: solve1
+! : solve-dup-type ( subst problem dup-term rhs -- subst )
+!     [ element>> ] [ propagate-duplication ] bi*
+!     ! propagate-duplication
+!     solve1 ;
+
+: solve-dup-type ( subst problem dup-term rhs -- subst )
+    [ element>> dup ] dip <rec-type> 2array suffix solve ;
+! [ propagate-duplication ] bi*
+!     ! propagate-duplication
+!     solve1 ;
+
+
+: solve-drop-type ( subst problem drop-term rhs -- subst )
+    nip [ propagate-duplication ] keep solve1 ;
+
+: solve1 ( subst problem lhs rhs -- subst )
+    "Solve1:" print
+    2dup [ "! " write pp* " = " write ] [ pp ] bi*
+    {
+        { [ dup drop-type? ]
+          [ swap solve1 ] }
+        { [ over drop-type? ]
+          [ solve-drop-type ] }
+        { [ over base-type-var? ] [
+              2dup = [ 2drop solve ]
+              [ elim ] if ] }
+        { [ dup base-type-var? ] [
+              swap elim ] }
+        ! { [ over term-var? ] [
+        !       2dup = [ 2drop solve ]
+        !       [ elim ] if ] }
+        ! { [ dup term-var? ] [
+        !       swap elim ] }
+        { [ dup dup-type? ]
+          [ swap solve-dup-type ] }
+        { [ over dup-type? ]
+          [ solve-dup-type ] }
+        { [ 2dup [ proper-term? ] both? ] [
+              2dup [ class-of ] bi@ =
+              [ [ args>> ] bi@ <zipped> prepend solve ]
+              [ proper-term-mismatch ] if
+          ] }
+        [ term-mismatch ]
+    } cond ;
+
 : solve ( subst problem -- subst )
     [
-        "Solve:" print
         over pp-subst
         unclip-slice first2
-        2dup [ pp ] bi@
-        {
-            { [ over term-var? ] [
-                2dup = [ 2drop solve ]
-                [ elim ] if ] }
-            { [ dup term-var? ] [
-                swap elim ] }
-            { [ 2dup [ proper-term? ] both? ] [
-                  2dup [ class-of ] bi@ =
-                  [ [ args>> ] bi@ <zipped> prepend solve ]
-                  [ term-mismatch ] if
-            ] }
-        } cond
+        solve1
     ] unless-empty ;
 
 ! GENERIC: occurs? ( varname term -- ? )
@@ -86,11 +160,6 @@ DEFER: elim
 ! DEFER: pp*
 ! ! Return a substituter?
 ! GENERIC: lift* ( subst term -- term )
-: lift ( subst term -- term )
-    "Lift: " write [ dup pp-subst ] [ "in term:" write dup pp ] bi*
-    [ lift* ] keep over
-    = [ dup " => " write pp ] unless ;
-
 ! M: varname lift*
 !     { [ of ] [ nip ] } 2|| ;
 ! M: proper-term lift*
@@ -103,7 +172,7 @@ DEFER: elim
 ! The equation should already be removed from the problem so simply continue.
 ! Alternative approach: substitute anyways
 :: elim ( subst problem vname term -- subst )
-    vname term occurs? [ vname term recursive-term ]
+    vname term occurs-free? [ vname term recursive-term ]
     ! vname term occurs? [
     !     "Skipping recursion: " write vname pp* " = " write term pp
     !     subst problem solve
@@ -113,7 +182,9 @@ DEFER: elim
     !     ! vname term 2array prefix
     !     ! problem [ [ vname term elim-in-term ] bi@ ] assoc-map solve
     ! ] when
-    [ subst [ vname term elim-in-term ] map-values
+    [
+        subst [ [ vname term elim-in-term ] bi@ ] assoc-map
+        ! subst [ vname term elim-in-term ] map-values
         vname term 2array prefix
         problem [ [ vname term elim-in-term ] bi@ ] assoc-map solve ]
     if
@@ -138,6 +209,8 @@ DEFER: elim
 : effects>unifier ( fun-type1 fun-type2 -- consumption production subst )
     ! [ effect>term ] bi@
     rename-2-terms
+    "Computing unifier:" print
+    2dup [ pp ] bi@
     ! [
         [ [ consumption>> ] [ production>> ] bi* ]
         [ [ production>> ] [ consumption>> ] bi* unify ] 2bi
@@ -259,10 +332,74 @@ M: proper-term pp* effect>string write ;
 ! : simplify ( effect -- effect )
 !     HS{ } clone bound-row-vars [ simplify* ] with-variable ;
 
+! Noticed that not all substitutions are oriented correctly in the final unifier
+! necessarily.  Hopefully that's not a bug?  Re-orienting the substitutions in
+! case there is ambiguity, so that it is used in the problem.
+! If the rhs is a term-var, and the lhs does not appear in the target terms,
+! then swap the substitution pair
+: re-orient-subst-pair ( terms varname replacement -- varname replacement )
+    dup term-var?
+    [| terms lhs rhs |
+     lhs terms [ occurs-free? ] with any?
+     [ lhs rhs ]
+     [ rhs lhs ] if
+    ] [ nipd ] if ;
+
+: re-orient-subst ( consumption production subst -- consumption production subst )
+    [ 2dup 2array ] dip [ swapd re-orient-subst-pair ] with assoc-map ;
+
+GENERIC: convert-var-orders* ( assoc level term -- assoc term )
+M: type-var convert-var-orders*
+    [ type-var-key pick push-at ]
+    [ [ name>> ] [ id>> ] bi rot type-var boa ] 2bi
+    ;
+M: dup-type convert-var-orders*
+    [ 1 + ] [ element>> ] bi* convert-var-orders* ;
+M: proper-term convert-var-orders*
+    [ convert-var-orders* ] with map-args ;
+
+: convert-var-orders ( term -- assoc term )
+    [ H{ } clone 0 ] dip convert-var-orders*
+    [ [ infimum ] map-values ] dip ;
+
+GENERIC: adjust-var-orders* ( assoc term -- term )
+M: type-var adjust-var-orders*
+    [ type-var-key swap at 0 or neg ] keep change-term-var-order ;
+M: proper-term adjust-var-orders*
+    [ adjust-var-orders* ] with map-args ;
+
+: normalize-var-orders ( term -- term )
+    convert-var-orders adjust-var-orders* ;
+
+GENERIC: normalize-recs ( term -- term )
+: reducible-rec-type? ( rec-type -- ? )
+    [ rec-var>> ] [ element>> ] bi
+    ! occurs-free? not ;
+    { [ = ] [ occurs-free? not ] } 2|| ;
+
+M: rec-type normalize-recs
+    dup reducible-rec-type?
+    [ element>> normalize-recs ]
+    [ [ normalize-recs ] map-args ] if ;
+    ! [ [ rec-var>> ] [ element>> ] bi normalize-recs <rec-type> ]
+    ! ;
+    ! dup [ rec-var>> ] [ element>> ] bi normalize-recs
+    ! [ occurs-free? ] keep swap
+    ! [ drop ] [ nip ] if ;
+M: type-var normalize-recs ;
+M: proper-term normalize-recs
+    [ normalize-recs ] map-args ;
+
+! : normalize-fun-type ( fun-type -- fun-type )
+
 : unify-effects ( effect1 effect2 -- effect )
-    effects>unifier
+    effects>unifier ! For dup expansion
+    ! re-orient-subst
     "Result: " print dup pp-subst
     [ resubst ] curry bi@ <fun-type>
+    normalize-recs
+    normalize-var-orders
+    effect>term
     ! [ stk>effect ] bi@ <variable-effect>
     ! simplify
     ;

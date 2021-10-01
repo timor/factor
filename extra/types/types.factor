@@ -1,6 +1,6 @@
 USING: accessors arrays classes combinators combinators.short-circuit effects
 generic kernel namespaces quotations sequences sets types.base-types
-types.syntax vocabs words ;
+types.function-types types.syntax vocabs words ;
 
 IN: types
 
@@ -44,7 +44,7 @@ M: generic type-of* ( word -- type )
 
 M: word type-of* ( word -- type )
     { { [ dup "input-classes" word-prop ] [ type-of-bootstrap-word ] }
-      { [ dup "shuffle" word-prop ] [ type-of-shuffle-word ] }
+      ! { [ dup "shuffle" word-prop ] [ type-of-shuffle-word ] }
       { [ dup "primitive" word-prop ] [ unknown-type-scheme ] }
       ! { [ dup "special" word-prop ] [ unknown-type-scheme ] }
       [ type-of-normal-word ]
@@ -52,36 +52,77 @@ M: word type-of* ( word -- type )
 
 ! constantly
 : constantly ( x -- quot: ( -- x ) )
-    [ ] curry
-    ; ( ..a x -- ..a quot: ( ..b -- ..b x ) ) typed
-: quote ( x -- quot: ( -- x ) )
-    1quotation
-    ; ( ..a x -- ..a quot: ( ..b -- ..b x ) ) typed
+    [ ] curry ;
+: unit ( x -- quot: ( -- x ) )
+    1quotation ;
+    ! ; ( ..a x -- ..a quot: ( ..b -- ..b x ) ) typed
+: k ( ..a quot1 quot2: ( ..a -- ..b ) -- ..b )
+    nip call ; inline
 
-! M: \ swap type-of* drop
-!     ( a b -- b a ) ;
-M: \ compose type-of* drop
-    ( ... quot1: ( ..a -- ..b ) quot2: ( ..b -- ..c ) -- ... quot: ( ..a -- ..c ) ) ;
-M: \ call type-of* drop
-    ( ..a quot: ( ..a -- ..b ) -- ..b ) ;
-M: \ dip type-of* drop
-    ( ..a b quot: ( ..a -- ..c ) -- ..c b ) ;
-M: \ if type-of* drop
-    ( ..a ?: boolean true: ( ..a -- ..b ) false: ( ..a -- ..b ) -- ..b ) ;
+! : cake (  )
+
+! * Minimal Combinator Base
+! Complete bases
+! 1. call, dip, curry, dup, drop
+! 2. curry, keep, k
+! 3. cake, k
+
+! ( ..a drop(x) quot: ( ..a -- ..b ) -- ..b ) ;
+M: \ k type-of* drop
+    "a" "x" <drop-type> { "quot" ( ..a -- ..b ) } 2array
+    "b" { } <variable-effect> ;
+    ! ( ..a x quot: ( ..a -- ..b ) -- ..b ) ;
 
 ! swap constantly swap compose
 M: \ curry type-of* drop
     ( x quot: (  ..a x -- ..c ) -- quot: ( ..a -- ..c ) ) ;
-M: \ dup type-of* drop
-    { "x" } { "x" } "x" <dup-type> suffix <effect> ;
-! M: \ dup type-of* drop
-!     { "x" } { "x" "x" } <effect> ;
 
+! ( ..r x quot: ( ..r x -- ..s ) -- ..s dup(x) )
+M: \ keep type-of* drop
+    "r" { "x" { "quot" ( ..r x -- ..s ) } }
+    "s" "x" <dup-type> 1array <variable-effect> ;
+
+DEFER: infer-type
+! * Derived basic Combinators
+M: \ dup type-of* drop
+    [ [ ] keep ] infer-type ;
+
+M: \ drop type-of* drop
+    [ [ ] k ] infer-type ;
+
+M: \ call type-of* drop
+    [ dup k ] infer-type ;
+
+M: \ nip type-of* drop
+    [ [ drop drop ] keep ] infer-type ;
+
+M: \ dip type-of* drop
+    [ [ [ drop drop ] keep call ] curry keep ] infer-type ;
+
+M: \ swap type-of* drop
+    [ [ ] curry dip ] infer-type ;
+
+! M: \ drop type-of* drop
+!     [ [ ] k ] type-of* ;
+
+! M: \ swap type-of* drop
+!     ( a b -- b a ) ;
+! M: \ compose type-of* drop
+!     ( ... quot1: ( ..a -- ..b ) quot2: ( ..b -- ..c ) -- ... quot: ( ..a -- ..c ) ) ;
+! M: \ call type-of* drop
+!     ( ..a quot: ( ..a -- ..b ) -- ..b ) ;
+! M: \ dip type-of* drop
+!     ( ..a b quot: ( ..a -- ..c ) -- ..c b ) ;
+! M: \ if type-of* drop
+!     ( ..a ?: boolean true: ( ..a -- ..b ) false: ( ..a -- ..b ) -- ..b ) ;
+
+! M: \ dup type-of* drop
+!     { "x" } { "x" } "x" <dup-type> suffix <effect> ;
 
 ! That's an interesting one, because ..a needs to be fully inferred for this to
 ! be typed
-M: \ loop type-of* drop
-    ( ..a pred: ( ..a -- ..a ? ) -- ..a ) ;
+! M: \ loop type-of* drop
+!     ( ..a pred: ( ..a -- ..a ? ) -- ..a ) ;
 
 ! * Retrieving declared types for recursive cases
 ! For recursive words, we actually need to turn the declared effect into a type
@@ -92,6 +133,9 @@ M: \ loop type-of* drop
 ! * Quotation type inference
 ! TODO: clean up terminology.  Currently types and effects are used a bit inconsistently
 GENERIC: infer-type ( obj -- effect )
+
+M: \ over type-of* drop
+    { "x" "y" } dup "x" <dup-type> suffix <effect> ;
 
 ! TODO: catch recursion, which needs to depend on predefined stack effects
 ! TODO: make sure that type caching cannot become inconsistent when only parts
@@ -120,7 +164,7 @@ FROM: types.bn-unification => unify-effects ;
 GENERIC: type-of ( obj -- fun-type )
 
 M: object type-of
-    type-of* effect>term ;
+    type-of* effect>term normalize-fun-type ;
 M: quotation infer-type
     [ ( -- ) effect>term ]
     [ unclip-slice type-of
@@ -133,7 +177,7 @@ M: quotation infer-type
     swap 2array 1array { } swap <effect> ;
 
 ! This is debatable, because typing it requires inference...
-M: quotation type-of
-    infer-type ;
+M: quotation type-of*
+    infer-type "quot" quote-type ;
 
 M: object type-of* class-of "x" quote-type ;

@@ -2,6 +2,14 @@ USING: kernel math math.private tools.test types types.bn-unification ;
 
 IN: types.tests
 
+! Invariant:
+{  }
+[ [ dup drop ] infer-type ] unit-test
+
+! Invariant:
+{  }
+[ [ [ drop ] keep ] infer-type ] unit-test
+
 { ( x: fixnum x: fixnum -- x: integer ) }
 [ [ fixnum+ ] infer-type ] unit-test
 

@@ -1,5 +1,5 @@
-USING: accessors ascii assocs hash-sets kernel math math.parser namespaces
-sequences.extras sets terms types.base-types ;
+USING: accessors arrays ascii assocs hash-sets kernel math math.parser
+namespaces sequences.extras sets terms types.base-types ;
 
 IN: types.renaming
 
@@ -78,6 +78,9 @@ GENERIC: next-var-name ( varname -- varname )
 M: type-var next-var-name
     [ name>> ] [ id>> 1 + ] [ order>> ] tri type-var boa ;
 
+: type-var-key ( type-var -- key )
+    [ name>> ] [ id>> ] bi 0 type-var boa ;
+
 : ensure-unique-var ( varname -- varname )
     dup bound-names get in?
     [ next-var-name ensure-unique-var ]
@@ -98,9 +101,21 @@ M: type-var next-var-name
 
 SYMBOL: renamings
 GENERIC: rename-vars* ( term -- term )
+: ensure-unique-type-var ( type-var -- type-var )
+    dup type-var-key bound-names get in?
+    [ next-var-name rename-vars* ]
+    [ dup type-var-key bound-names get adjoin ] if
+    ;
+
 M: type-const rename-vars* ;
 M: type-var rename-vars*
-    renamings get [ ensure-unique-var ] cache ;
+    [ type-var-key renamings get [ ensure-unique-var ] cache
+      [ name>> ] [ id>> ] bi
+    ]
+    [ order>> ] bi type-var boa
+    ;
+! M: dup-type-var rename-vars*
+!     renamings get [ ensure-unique-var ] cache ;
 M: proper-term rename-vars*
     [ rename-vars* ] map-args ;
 

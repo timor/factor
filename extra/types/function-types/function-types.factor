@@ -1,5 +1,6 @@
-USING: accessors arrays ascii classes combinators effects kernel lists make math
-sequences strings terms types.base-types types.renaming ;
+USING: accessors arrays ascii assocs classes combinators effects kernel lists
+make math.parser namespaces sequences strings terms types.base-types
+types.renaming types.util ;
 
 IN: types.function-types
 
@@ -18,13 +19,18 @@ M: fun-type args>>
     [ consumption>> ] [ production>> ] bi 2array ;
 M: fun-type from-args* drop
     first2 <fun-type> ;
-! TODO: move to lists vocab
-: list*>array ( list -- array lastcdr )
-    { } swap [ dup list? ] [ uncons [ suffix ] dip ] while ;
 : configuration>string ( list -- string )
     [ list*>array [ <reversed> ] dip prefix
       [ " " % ] [ effect>string % ] interleave ] "" make ;
 M: list effect>string configuration>string ;
+
+M: fun-type propagate-duplication
+    [ propagate-duplication ] map-args ;
+M: fun-type propagate-drop
+    [ propagate-drop ] map-args ;
+! [ consumption>> ] [ production>> ] bi
+! [ propagate-duplication ] lmap*
+! <fun-type> ;
 
 M: fun-type effect>string
     [
@@ -35,7 +41,7 @@ M: fun-type effect>string
     ] "" make ;
 
 M: type-var effect>string
-    [ name>> ] [ id>> number>string append ]
+    [ name>> ] [ id>> [ number>string append ] unless-zero ]
     [ order>> CHAR: ' <string> append ] tri ;
 
 M: rec-type effect>string
@@ -44,19 +50,21 @@ M: rec-type effect>string
     [ element>> effect>string append ] bi
     ")" append ;
 
-M: drop-type effect>string element>> effect>string "drop(" ")" surround ;
+M: drop-type effect>string element>> effect>string "↓(" ")" surround ;
 
-M: dup-type effect>string element>> effect>string "dup(" ")" surround ;
+M: dup-type effect>string element>> effect>string "(" ")'" surround ;
 
 M: type-const effect>string thing>> effect>string ;
 
 GENERIC: effect-element>term ( element -- term )
 ! NOTE: This is needed so that old and new effects work together using type-of
-M: fun-type effect-element>term ;
-
-! TODO: move to lists vocab
-: sequence>list* ( sequence lastcdr -- list )
-    [ <reversed> ] dip [ swons ] reduce ;
+! M: fun-type effect-element>term ;
+M: type-var effect-element>term mappings get [ ensure-unique-var ] cache ;
+M: dup-type-var effect-element>term
+    -1 swap change-term-var-order effect-element>term
+    <dup-type> ;
+M: proper-term effect-element>term
+    [ effect-element>term ] map-args ;
 
 : make-configuration ( elements var-element -- term )
     [ [ effect-element>term ] map <reversed> ] [  ] bi* sequence>list* ;
@@ -85,19 +93,12 @@ M: class effect-element>term
 M: string effect-element>term
     map-varname ;
 
-GENERIC: change-term-var-order ( amount term -- term )
-M: type-var change-term-var-order
-    swap [ [ name>> ] [ id>> ] [ order>> ] tri ] dip
-    + type-var boa ;
-M: type-const change-term-var-order nip ;
-M: proper-term change-term-var-order
-    [ change-term-var-order ] with map-args ;
-
-: propagate-duplication ( term -- term )
-    1 swap change-term-var-order ;
-
 M: dup-type effect-element>term
     element>> effect-element>term propagate-duplication ;
+    ! <dup-type> ;
+
+M: drop-type effect-element>term
+    element>> effect-element>term propagate-drop ;
 
 : effect>term ( effect -- fun-type )
     [
