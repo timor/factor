@@ -102,6 +102,9 @@ M: \ dip type-of* drop
 M: \ swap type-of* drop
     [ [ ] curry dip ] infer-type ;
 
+M: \ 2dup type-of* drop
+    [ over over ] infer-type ;
+
 ! M: \ drop type-of* drop
 !     [ [ ] k ] type-of* ;
 
@@ -164,7 +167,9 @@ FROM: types.bn-unification => unify-effects ;
 GENERIC: type-of ( obj -- fun-type )
 
 M: object type-of
-    type-of* effect>term normalize-fun-type ;
+    type-of* effect>term
+    ! normalize-fun-type
+    ;
 M: quotation infer-type
     [ ( -- ) effect>term ]
     [ unclip-slice type-of

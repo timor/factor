@@ -82,7 +82,7 @@ ERROR: cannot-dup-recursive-type rec-type ;
 M: rec-type change-term-var-order cannot-dup-recursive-type ;
 ! Note: only free args!
 M: rec-type lift*
-    [ [ clone ] dip
+    [ [ clone >hashtable ] dip
       [ rec-var>> over delete-at ] [ element>> ] bi
       lift* ]
     [ rec-var>> ] bi swap <rec-type> ;

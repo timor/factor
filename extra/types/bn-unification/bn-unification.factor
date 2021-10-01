@@ -71,10 +71,16 @@ DEFER: solve
     ! [ -1 swap change-term-var-order dup ] dip <rec-type> elim ;
     [ -1 swap change-term-var-order dup ] dip <rec-type> 2array suffix solve ;
 
-: lift ( subst term -- term )
-    "Lift: " write [ dup pp-subst ] [ "in term:" write dup pp* ] bi*
-    [ lift* ] keep over
-    = [ dup " => " write pp ] [ nl ] if ;
+:: lift ( subst term -- term )
+    subst term lift* :> result
+    term result = [
+        "Lift: " write subst pp-subst "in term:" write
+        term pp* " => " write result pp
+    ] unless
+    result
+    ;
+    ! [ lift* ] keep over
+    ! = [ dup " => " write pp ] [ nl ] if ;
 
 ! Re-instantiation rule: M = rec(x|E(x)) => M' = E(M)
 :: solve-rec-type ( subst problem term1 term2 -- subst )
@@ -183,8 +189,8 @@ DEFER: solve1
     !     ! problem [ [ vname term elim-in-term ] bi@ ] assoc-map solve
     ! ] when
     [
-        subst [ [ vname term elim-in-term ] bi@ ] assoc-map
-        ! subst [ vname term elim-in-term ] map-values
+        ! subst [ [ vname term elim-in-term ] bi@ ] assoc-map
+        subst [ vname term elim-in-term ] map-values
         vname term 2array prefix
         problem [ [ vname term elim-in-term ] bi@ ] assoc-map solve ]
     if
