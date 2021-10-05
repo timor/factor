@@ -97,10 +97,13 @@ M: \ nip type-of* drop
     [ [ drop drop ] keep ] infer-type ;
 
 M: \ dip type-of* drop
-    [ [ [ drop drop ] keep call ] curry keep ] infer-type ;
+    [ [ nip call ] curry keep ] infer-type ;
 
 M: \ swap type-of* drop
     [ [ ] curry dip ] infer-type ;
+
+M: \ over type-of* drop
+    [ swap [ swap ] keep ] infer-type ;
 
 M: \ 2dup type-of* drop
     [ over over ] infer-type ;
@@ -136,9 +139,6 @@ M: \ 2dup type-of* drop
 ! * Quotation type inference
 ! TODO: clean up terminology.  Currently types and effects are used a bit inconsistently
 GENERIC: infer-type ( obj -- effect )
-
-M: \ over type-of* drop
-    { "x" "y" } dup "x" <dup-type> suffix <effect> ;
 
 ! TODO: catch recursion, which needs to depend on predefined stack effects
 ! TODO: make sure that type caching cannot become inconsistent when only parts

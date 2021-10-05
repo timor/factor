@@ -1,4 +1,5 @@
 USING: accessors arrays assocs combinators.short-circuit kernel lists sequences
+sets
 ;
 
 IN: terms
@@ -56,3 +57,11 @@ ERROR: trying-to-lift-in-end-of-list ;
 M: +nil+ lift* trying-to-lift-in-end-of-list ;
 M: +nil+ args>> drop f ;
 M: +nil+ from-args* 2drop +nil+ ;
+
+GENERIC: term-vars ( term -- seq )
+M: term-var term-vars 1array ;
+M: proper-term term-vars
+    { } clone swap [ term-vars union ] each-arg ;
+
+: subst-in-term ( target-term vname term -- target-term )
+    swap associate swap lift ;

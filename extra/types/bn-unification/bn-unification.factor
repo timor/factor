@@ -66,10 +66,10 @@ DEFER: elim
 ! until the end
 DEFER: solve
 
-! NOTE: Approach right now is to carry the dup onto the right side
-: solve-dup-type-var ( subst problem dup-var term -- subst  )
-    ! [ -1 swap change-term-var-order dup ] dip <rec-type> elim ;
-    [ -1 swap change-term-var-order dup ] dip <rec-type> 2array suffix solve ;
+! ! NOTE: Approach right now is to carry the dup onto the right side
+! : solve-dup-type-var ( subst problem dup-var term -- subst  )
+!     ! [ -1 swap change-term-var-order dup ] dip <rec-type> elim ;
+!     [ -1 swap change-term-var-order dup ] dip <rec-type> 2array suffix solve ;
 
 :: lift ( subst term -- term )
     subst term lift* :> result
@@ -83,28 +83,28 @@ DEFER: solve
     ! = [ dup " => " write pp ] [ nl ] if ;
 
 ! Re-instantiation rule: M = rec(x|E(x)) => M' = E(M)
-:: solve-rec-type ( subst problem term1 term2 -- subst )
-    term2 [ rec-var>> ] [ element>> ] bi :> ( rv expr )
-    term1 :> inst-var
-    inst-var rv associate expr lift :> instantiated
-    ! NOTE: again 2 possibilities: 1. solve immediately, 2. solve last
-    subst problem inst-var propagate-duplication instantiated 2array
-    ! prefix solve
-    suffix solve
-    ;
+! :: solve-rec-type ( subst problem term1 term2 -- subst )
+!     term2 [ rec-var>> ] [ element>> ] bi :> ( rv expr )
+!     term1 :> inst-var
+!     inst-var rv associate expr lift :> instantiated
+!     ! NOTE: again 2 possibilities: 1. solve immediately, 2. solve last
+!     subst problem inst-var propagate-duplication instantiated 2array
+!     ! prefix solve
+!     suffix solve
+!     ;
 
-: not-a-dup-type-var ( subst problem term1 term2 -- subst )
-    dup rec-type? [ swap ] unless
-    dup rec-type? not
-    [ proper-term-mismatch ]
-    [ solve-rec-type ] if ;
+! : not-a-dup-type-var ( subst problem term1 term2 -- subst )
+!     dup rec-type? [ swap ] unless
+!     dup rec-type? not
+!     [ proper-term-mismatch ]
+!     [ solve-rec-type ] if ;
 
-: term-mismatch ( subst problem term1 term2 -- subst )
-    over dup-type-var? [ swap ] unless
-    over dup-type-var? not
-    ! [ not-a-dup-type-var ]
-    [ proper-term-mismatch ]
-    [ solve-dup-type-var ] if ;
+! : term-mismatch ( subst problem term1 term2 -- subst )
+!     over dup-type-var? [ swap ] unless
+!     over dup-type-var? not
+!     ! [ not-a-dup-type-var ]
+!     [ proper-term-mismatch ]
+!     [ solve-dup-type-var ] if ;
 
 DEFER: solve1
 ! : solve-dup-type ( subst problem dup-term rhs -- subst )
@@ -118,9 +118,26 @@ DEFER: solve1
 !     ! propagate-duplication
 !     solve1 ;
 
+! Drop types.  Equation is drop(foo) = M.
+! Effect is to take all variables in M, and immediately count down all
+! occurrences of the corresponding variables above n for all x(n) ∊ M
+! Unfortunately, orders may be messed up, if any lhs changes in the substitutions, this could be
+! problematic.
+: map-rhs ( eqs quot: ( term -- term ) -- eqs )
+    map-values ; inline
+
+: map-problem ( eqs quot: ( term -- term ) -- eqs )
+    '[ _ bi@ ] assoc-map ; inline
 
 : solve-drop-type ( subst problem drop-term rhs -- subst )
-    nip [ propagate-duplication ] keep solve1 ;
+    nip term-vars [
+        [ swap lower-var-order ] curry
+        [ map-problem ] [ map-problem ] bi-curry bi*
+    ] each
+    solve
+    ;
+    ! free-vars
+    ! nip [ propagate-duplication ] keep solve1 ;
 
 : solve1 ( subst problem lhs rhs -- subst )
     "Solve1:" print
@@ -130,26 +147,26 @@ DEFER: solve1
           [ swap solve1 ] }
         { [ over drop-type? ]
           [ solve-drop-type ] }
-        { [ over base-type-var? ] [
+        { [ over type-var? ] [
               2dup = [ 2drop solve ]
               [ elim ] if ] }
-        { [ dup base-type-var? ] [
+        { [ dup type-var? ] [
               swap elim ] }
         ! { [ over term-var? ] [
         !       2dup = [ 2drop solve ]
         !       [ elim ] if ] }
         ! { [ dup term-var? ] [
         !       swap elim ] }
-        { [ dup dup-type? ]
-          [ swap solve-dup-type ] }
-        { [ over dup-type? ]
-          [ solve-dup-type ] }
+        ! { [ dup dup-type? ]
+        !   [ swap solve-dup-type ] }
+        ! { [ over dup-type? ]
+        !   [ solve-dup-type ] }
         { [ 2dup [ proper-term? ] both? ] [
               2dup [ class-of ] bi@ =
               [ [ args>> ] bi@ <zipped> prepend solve ]
               [ proper-term-mismatch ] if
           ] }
-        [ term-mismatch ]
+        [ proper-term-mismatch ]
     } cond ;
 
 : solve ( subst problem -- subst )
@@ -171,9 +188,6 @@ DEFER: solve1
 ! M: proper-term lift*
 !     [ args>> [ lift* ] with map ] [ symbol>> ] bi swap <proper-term> ;
 
-: elim-in-term ( target-term vname term -- target-term )
-    swap associate swap lift ;
-
 ! Modification: If trying to eliminate a recursive term, simply drop the equation
 ! The equation should already be removed from the problem so simply continue.
 ! Alternative approach: substitute anyways
@@ -186,13 +200,13 @@ DEFER: solve1
     ! vname term occurs? [
     !     "Ignoring recursion: " write vname pp* " = " write term pp
     !     ! vname term 2array prefix
-    !     ! problem [ [ vname term elim-in-term ] bi@ ] assoc-map solve
+    !     ! problem [ [ vname term subst-in-term ] bi@ ] assoc-map solve
     ! ] when
     [
-        ! subst [ [ vname term elim-in-term ] bi@ ] assoc-map
-        subst [ vname term elim-in-term ] map-values
+        ! subst [ [ vname term subst-in-term ] bi@ ] assoc-map
+        subst [ vname term subst-in-term ] map-values
         vname term 2array prefix
-        problem [ [ vname term elim-in-term ] bi@ ] assoc-map solve ]
+        problem [ [ vname term subst-in-term ] bi@ ] assoc-map solve ]
     if
     ! call
     ;
@@ -212,8 +226,8 @@ DEFER: solve1
 !     ! ] with-name-counters
 !     ;
 
-: effects>unifier ( fun-type1 fun-type2 -- consumption production subst )
-    ! [ effect>term ] bi@
+: effects>unifier ( effect-type1 effect-type2 -- consumption production subst )
+    [ effect>term ] bi@
     rename-2-terms
     "Computing unifier:" print
     2dup [ pp ] bi@
@@ -354,28 +368,42 @@ M: proper-term pp* effect>string write ;
 : re-orient-subst ( consumption production subst -- consumption production subst )
     [ 2dup 2array ] dip [ swapd re-orient-subst-pair ] with assoc-map ;
 
-GENERIC: convert-var-orders* ( assoc level term -- assoc term )
-M: type-var convert-var-orders*
-    [ type-var-key pick push-at ]
-    [ [ name>> ] [ id>> ] bi rot type-var boa ] 2bi
-    ;
-M: dup-type convert-var-orders*
-    [ 1 + ] [ element>> ] bi* convert-var-orders* ;
-M: proper-term convert-var-orders*
-    [ convert-var-orders* ] with map-args ;
+GENERIC: collect-min-var-orders* ( assoc term -- assoc )
+M: type-var collect-min-var-orders*
+    [ order>> ] [ type-var-key ] bi pick [ [ min ] when* ] change-at ;
+M: proper-term collect-min-var-orders*
+    [ collect-min-var-orders* ] each-arg ;
 
-: convert-var-orders ( term -- assoc term )
-    [ H{ } clone 0 ] dip convert-var-orders*
-    [ [ infimum ] map-values ] dip ;
-
-GENERIC: adjust-var-orders* ( assoc term -- term )
-M: type-var adjust-var-orders*
-    [ type-var-key swap at 0 or neg ] keep change-term-var-order ;
-M: proper-term adjust-var-orders*
-    [ adjust-var-orders* ] with map-args ;
+: collect-min-var-orders ( term -- assoc )
+    H{ } clone swap collect-min-var-orders* ;
 
 : normalize-var-orders ( term -- term )
-    convert-var-orders adjust-var-orders* ;
+    dup collect-min-var-orders
+    [ neg swap rot change-term-var-orders ] assoc-each ;
+
+
+! GENERIC: convert-var-orders* ( assoc level term -- assoc term )
+! M: type-var convert-var-orders*
+!     [ type-var-key pick push-at ]
+!     [ [ name>> ] [ id>> ] bi rot type-var boa ] 2bi
+!     ;
+! M: dup-type-var convert-var-orders*
+!     [ 1 + ] [ element>> ] bi* convert-var-orders* ;
+! M: proper-term convert-var-orders*
+!     [ convert-var-orders* ] with map-args ;
+
+! : convert-var-orders ( term -- assoc term )
+!     [ H{ } clone 0 ] dip convert-var-orders*
+!     [ [ infimum ] map-values ] dip ;
+
+! GENERIC: adjust-var-orders* ( assoc term -- term )
+! M: type-var adjust-var-orders*
+!     [ type-var-key swap at 0 or neg ] keep change-term-var-order ;
+! M: proper-term adjust-var-orders*
+!     [ adjust-var-orders* ] with map-args ;
+
+! : normalize-var-orders ( term -- term )
+!     convert-var-orders adjust-var-orders* ;
 
 GENERIC: normalize-recs ( term -- term )
 : reducible-rec-type? ( rec-type -- ? )
@@ -397,15 +425,17 @@ M: proper-term normalize-recs
     [ normalize-recs ] map-args ;
 
 ! : normalize-fun-type ( fun-type -- fun-type )
+: normalize-effect-type ( fun-type -- effect-type )
+    normalize-var-orders ;
 
 : unify-effects ( effect1 effect2 -- effect )
     effects>unifier ! For dup expansion
     ! re-orient-subst
     "Result: " print dup pp-subst
     [ resubst ] curry bi@ <fun-type>
-    normalize-recs
+    ! normalize-recs
     normalize-var-orders
-    effect>term
+    ! effect>term
     ! [ stk>effect ] bi@ <variable-effect>
     ! simplify
     ;

@@ -1,5 +1,5 @@
 USING: accessors arrays ascii assocs classes combinators effects kernel lists
-make math.parser namespaces sequences strings terms types.base-types
+make math math.parser namespaces sequences strings terms types.base-types
 types.renaming types.util ;
 
 IN: types.function-types
@@ -24,8 +24,6 @@ M: fun-type from-args* drop
       [ " " % ] [ effect>string % ] interleave ] "" make ;
 M: list effect>string configuration>string ;
 
-M: fun-type propagate-duplication
-    [ propagate-duplication ] map-args ;
 M: fun-type propagate-drop
     [ propagate-drop ] map-args ;
 ! [ consumption>> ] [ production>> ] bi
@@ -42,7 +40,7 @@ M: fun-type effect>string
 
 M: type-var effect>string
     [ name>> ] [ id>> [ number>string append ] unless-zero ]
-    [ order>> CHAR: ' <string> append ] tri ;
+    [ order>> [ number>string "⟨" "⟩" surround append ] unless-zero ] tri ;
 
 M: rec-type effect>string
     [ rec-var>> effect>string
@@ -60,9 +58,9 @@ GENERIC: effect-element>term ( element -- term )
 ! NOTE: This is needed so that old and new effects work together using type-of
 ! M: fun-type effect-element>term ;
 M: type-var effect-element>term mappings get [ ensure-unique-var ] cache ;
-M: dup-type-var effect-element>term
-    -1 swap change-term-var-order effect-element>term
-    <dup-type> ;
+! M: dup-type-var effect-element>term
+!     -1 swap change-term-var-order effect-element>term
+!     <dup-type> ;
 M: proper-term effect-element>term
     [ effect-element>term ] map-args ;
 
@@ -94,8 +92,9 @@ M: string effect-element>term
     map-varname ;
 
 M: dup-type effect-element>term
-    element>> effect-element>term propagate-duplication ;
-    ! <dup-type> ;
+    element>> effect-element>term
+    type-var check-instance
+    1 swap change-type-var-order ;
 
 M: drop-type effect-element>term
     element>> effect-element>term propagate-drop ;
