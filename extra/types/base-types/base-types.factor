@@ -210,30 +210,37 @@ INSTANCE: succ-type proper-term
 M: succ-type args>> element>> 1array ;
 M: succ-type from-args* drop first <succ> ;
 
+UNION: PS pred-type succ-type ;
+
+GENERIC: simplify-psd ( term -- term )
 GENERIC: propagate-pred ( term -- term )
-! M: term-var propagate-pred <pred> ;
-! M: proper-term propagate-pred
-!     [ propagate-pred ] map-args ;
+M: term-var propagate-pred <pred> ;
+M: proper-term propagate-pred
+    [ propagate-pred ] map-args ;
 M: pred-type lift*
-    element>> lift* <pred> ;
+    element>> lift* <pred>
+    simplify-psd
+    ;
 !     ! element>> lift*
 !     dup { [ drop-type? ] [ succ-type? ] } 1||
 !     [ element>> ]
 !     [ propagate-pred ] if ;
 ! M: drop-type propagate-pred <pred> ;
-M: term propagate-pred <pred> ;
+! M: term propagate-pred <pred> ;
 
 GENERIC: propagate-succ ( term -- term )
-! M: term-var propagate-succ <succ> ;
-! M: proper-term propagate-succ
-!     [ propagate-succ ] map-args ;
+M: term-var propagate-succ <succ> ;
+M: proper-term propagate-succ
+    [ propagate-succ ] map-args ;
 M: succ-type lift*
-    element>> lift* <succ> ;
+    element>> lift* <succ>
+    simplify-psd
+    ;
     ! element>> lift*
     ! dup { [ drop-type? ] [ pred-type? ] } 1||
     ! [ element>> ]
     ! [ propagate-succ ] if ;
-M: term propagate-succ <succ> ;
+! M: term propagate-succ <succ> ;
 ! M: drop-type propagate-succ <succ> ;
 
 ! This collects constraints between variables of different orders
@@ -249,14 +256,14 @@ M: term propagate-succ <succ> ;
         ! Dropping this also makes swap work
         ! Same with nip
         ! Having both seems to need distribution for swap
-      ! drop f
+      drop f
       ]
       [ [ <succ> ] dip swap 2array
         ! NOTE: dropping this for now
         ! Dropping this also makes call work
         ! Dropping this makes swap work
         ! Same with nip here
-        drop f
+        ! drop f
       ] 2bi
       2array
     ] map concat
@@ -275,7 +282,6 @@ M: term propagate-succ <succ> ;
     ! ] map concat ;
 
 ! ** Simplification
-GENERIC: simplify-psd ( term -- term )
 M: term simplify-psd ;
 M: proper-term simplify-psd
     [ simplify-psd ] map-args ;
@@ -304,7 +310,8 @@ M: pred-type simplify-psd
 
 M: drop-type simplify-psd
     element>> simplify-psd
-    dup pred-type?
+    ! dup pred-type?
+    dup PS?
     [ element>> ] [ <drop> ] if ;
 
 ! ** Normalize drop types

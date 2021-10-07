@@ -54,8 +54,6 @@ M: dup-type effect>string element>> effect>string "(" ")'" surround ;
 
 M: type-const effect>string thing>> effect>string ;
 
-M: unique-var effect>string name>> "$" prepend ;
-
 GENERIC: effect-element>term ( element -- term )
 ! NOTE: This is needed so that old and new effects work together using type-of
 ! M: fun-type effect-element>term ;
@@ -65,7 +63,6 @@ M: type-var effect-element>term mappings get [ ensure-unique-var ] cache ;
 !     <dup-type> ;
 M: proper-term effect-element>term
     [ effect-element>term ] map-args ;
-M: unique-var effect-element>term name>> "U" prepend ;
 
 : make-configuration ( elements var-element -- term )
     [ [ effect-element>term ] map <reversed> ] [  ] bi* sequence>list* ;

@@ -170,7 +170,6 @@ DEFER: solve1
 !         [ skip-eqn ]
 !     } cond ;
 
-UNION: PS pred-type succ-type ;
 UNION: PSD PS drop-type ;
 
 ! Normalized, possible forms here:
@@ -192,36 +191,45 @@ UNION: PSD PS drop-type ;
     2dup { [ [ succ-type? ] both? ] [ [ pred-type? ] both? ] } 2||
     [ [ element>> ] bi@ ] ?1eqn ;
 
+! PREDICATE: drop-var < drop-type element>> term-var? ;
+
+: should-swap-PS? ( lhs rhs -- ? )
+    [ drop-type? ] [ { [ PS? ] [ element>> term-var? ] } 1&& ] bi* or ;
+
 : decompose-swap-P ( lhs rhs -- eqns/f )
     dup pred-type? [ swap ] unless
-    dup pred-type? [
-        [ <succ> ] [ element>> ] bi* [ simplify-psd ] bi@
+    dup pred-type?
+    2over should-swap-PS? and [
+        [ propagate-succ ] [ element>> ] bi* [ simplify-psd ] bi@
     ] ?1eqn ;
 
 : decompose-swap-S ( lhs rhs -- eqns/f )
     dup succ-type? [ swap ] unless
-    dup succ-type? [
-        [ <pred> ] [ element>> ] bi* [ simplify-psd ] bi@
+    dup succ-type?
+    2over should-swap-PS? and [
+        [ propagate-pred ] [ element>> ] bi* [ simplify-psd ] bi@
     ] ?1eqn ;
 
-: decompose-swap-PS ( lhs rhs -- eqns/f )
-    2dup [ { [ PS? ] [ element>> term-var? ] } 1&& ] either?
-    [ { [ decompose-swap-P ] [ decompose-swap-S ] } 2|| ]
-    [ 2drop f ] if
-    ;
+! : decompose-swap-PS ( lhs rhs -- eqns/f )
+!     2dup [ { [ PS? ] [ element>> term-var? ] } 1&& ] either?
+!     [ { [ decompose-swap-P ] [ decompose-swap-S ] } 2|| ]
+!     [ 2drop f ] if
+!     ;
 
 : decompose-D ( lhs rhs -- eqns/f )
-    dup drop-type? [ swap ] unless
-    dup drop-type?
-    2over [ PS? ] either? and
-    ! NOTE: could be wrong here because of stuff
-    [ decompose-swap-PS ]
-    [ 2drop f ] if ;
+    2dup { [ [ drop-type? ] either? ] [ [ PSD? ] both? ] } 2&&
+    [ [ element>> ] bi@ ] ?1eqn ;
+    ! dup drop-type? [ swap ] unless
+    ! dup drop-type?
+    ! 2over [ PS? ] either? and
+    ! ! NOTE: could be wrong here because of stuff
+    ! [ decompose-swap-PS ]
+    ! [ 2drop f ] if ;
 
 : decompose-PS-args ( lhs PS-term -- lhs rhs )
     dup pred-type?
-    [ element>> [ <pred> ] map-args ]
-    [ element>> [ <succ> ] map-args ] if ;
+    [ element>> [ propagate-pred ] map-args ]
+    [ element>> [ propagate-succ ] map-args ] if ;
 
 : decompose-PS-term ( lhs rhs -- eqns/f )
     dup PS? [ swap ] unless
@@ -231,59 +239,13 @@ UNION: PSD PS drop-type ;
 : decompose-PS-problems ( lhs rhs -- eqns )
     {
         [ decompose-same ]
-        [ decompose-D ]
-        [ decompose-swap-PS ]
+        ! [ decompose-D ]
+        ! [ decompose-swap-PS ]
+        [ decompose-swap-P ]
+        [ decompose-swap-S ]
         [ decompose-PS-term ]
         [ proper-term-mismatch ]
     } 2|| ;
-
-
-! : decompose-same? ( lhs rhs -- ? )
-!     { [ [ succ-type? ] both? ] [ [ pred-type? ] both? ] } 2|| ;
-
-! : decompose-P-swap ( Pb foo -- eqns )
-!     [ element>> ] [ <succ> ] bi* [ simplify-psd ] bi@ 2array 1array ;
-
-! : decompose-swap-S ( foo Sa -- eqns )
-!     [ <pred> ] [ element>> ] bi* [ simplify-psd ] bi@ 2array 1array ;
-
-! : decompose-PS ( Pb Sa -- eqns )
-!     [ decompose-P-swap ]
-!     [ decompose-swap-S ] 2bi append ;
-
-! : decompose-foo-P ( foo Pb -- eqns )
-!     element>> [ <pred> ] map-args 2array 1array ;
-
-! : decompose-foo-S ( foo Sa -- eqns )
-!     element>> [ <succ> ] map-args 2array 1array ;
-
-! UNION: swap-solvable-PS-term drop-type term-var ;
-! PREDICATE: swap-solvable-PSD-term < PSD element>> term-var? ;
-
-! : decompose-PS-problems ( lhs rhs -- eqns )
-!     2dup decompose-same? [ [ element>> simplify-psd ] bi@ 2array 1array ]
-!     [ dup succ-type? [ swap ] unless
-!       ! Possibilities: Pb = Sa, Pb = Dx, Pb = foo, Dx = foo, foo = Sb
-!           2dup [ pred-type? ] [ succ-type? ] bi* and
-!           [ decompose-PS ] [
-!               dup swap-solvable-PSD-term? [ swap ] unless
-!               dup swap-solvable-PSD-term?
-!               [ dup pred-type?
-!                 [ decompose-swap-P ]
-!                 [ decompose-swap-S ] if
-!               ] [
-!                   dup PS? [ swap ] unless
-!                   { { [ dup pred-type? ]
-!                       [ decompose-foo-P ] }
-!                     { [ dup succ-type? ]
-!                       [ decompose-foo-S ]
-!                     }
-!                     [ proper-term-mismatch ]
-!                   } cond
-!               ] if
-!           ] if
-!     ] if ;
-
 
 : solve-decompose-PS ( subst problem lhs rhs -- subst )
     dup pred-type?
