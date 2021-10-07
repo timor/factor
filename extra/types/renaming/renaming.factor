@@ -78,9 +78,6 @@ GENERIC: next-var-name ( varname -- varname )
 M: type-var next-var-name
     [ name>> ] [ id>> 1 + ] [ order>> ] tri type-var boa ;
 
-: type-var-key ( type-var -- key )
-    [ name>> ] [ id>> ] bi 0 type-var boa ;
-
 : ensure-unique-var ( varname -- varname )
     dup bound-names get in?
     [ next-var-name ensure-unique-var ]
@@ -125,6 +122,7 @@ M: proper-term rename-vars*
 !     element>> rename-vars* <dup-type> ;
 M: rec-type rename-vars*
     [ rec-var>> rename-vars* ] [ element>> rename-vars* ] bi
+    ! swap <unique-var> [ subst-in-term ] keep swap
     <rec-type> ;
 ! M: sequence rename-vars*
 !     [ rename-vars* ] map ;
@@ -135,6 +133,9 @@ M: rec-type rename-vars*
 !         [ out-var>> rename-vars* ]
 !         [ out>> rename-vars* ]
 !     } cleave <variable-effect> ;
+
+M: drop-type rename-vars*
+    element>> rename-vars* <drop> ;
 
 : rename-vars ( bound term -- bound' term' )
     [ swap HS{ } clone or bound-names set

@@ -69,7 +69,11 @@ M: word type-of* ( word -- type )
 
 ! ( ..a drop(x) quot: ( ..a -- ..b ) -- ..b ) ;
 M: \ k type-of* drop
-    "a" "x" <drop-type> { "quot" ( ..a -- ..b ) } 2array
+    ! "a" "x" { "quot" ( ..a -- ..b ) } 2array
+    ! "b" { } <variable-effect> ;
+    ! "a" "d" <drop> { "quot" ( ..a -- ..b ) } 2array
+    ! "b" { } <variable-effect> ;
+    "a" +drop+ { "quot" ( ..a -- ..b ) } 2array
     "b" { } <variable-effect> ;
     ! ( ..a x quot: ( ..a -- ..b ) -- ..b ) ;
 
@@ -81,6 +85,13 @@ M: \ curry type-of* drop
 M: \ keep type-of* drop
     "r" { "x" { "quot" ( ..r x -- ..s ) } }
     "s" "x" <dup-type> 1array <variable-effect> ;
+
+! Effects for testing
+: dupdupswap ( x -- x x2 x1 ) dup dup swap ;
+M: \ dupdupswap type-of* drop
+    "r" "a" 1array
+    "r" "a" "a" <dup-type> <dup-type> "a" <dup-type> 3array
+    <variable-effect> ;
 
 DEFER: infer-type
 ! * Derived basic Combinators

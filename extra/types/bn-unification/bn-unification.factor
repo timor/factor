@@ -51,12 +51,14 @@ FROM: namespaces => set ;
 ! Elimination
 
 ERROR: proper-term-mismatch t1 t2 ;
-ERROR: recursive-term vname term ;
+ERROR: recursive-term-error vname term ;
 
 DEFER: pp
-DEFER: pp*
+GENERIC: pp* ( term -- )
 : pp-subst ( subst -- )
     [ [ pp* " = " write ] [ pp ] bi* ] assoc-each ;
+M: assoc pp*
+    pp-subst ;
 
 DEFER: elim
 ! NOTE This is important: For some reason, being eager with substituting the
@@ -129,28 +131,186 @@ DEFER: solve1
 : map-problem ( eqs quot: ( term -- term ) -- eqs )
     '[ _ bi@ ] assoc-map ; inline
 
-: solve-drop-type ( subst problem drop-term rhs -- subst )
-    nip term-vars [
-        [ swap lower-var-order ] curry
-        [ map-problem ] [ map-problem ] bi-curry bi*
-    ] each
-    solve
-    ;
+! : solve-drop-type ( subst problem drop-term rhs -- subst )
+!     nip term-vars [
+!         [ swap lower-var-order ] curry
+!         [ map-problem ] [ map-problem ] bi-curry bi*
+!     ] each
+!     solve
+!     ;
     ! free-vars
     ! nip [ propagate-duplication ] keep solve1 ;
+
+: skip-eqn ( subst problem lhs rhs -- subst )
+    "Discarding equation: " write 2dup [ pp* " = " write ] [ pp ] bi*
+    proper-term-mismatch
+    2drop solve ;
+
+! NOTE: Should be the same as solving Pa=x and Sa = x in parallel! ( but doesnt seem to )
+: solve-drop-type ( subst problem drop-term rhs -- subst )
+    nip <unique-var> <drop>
+    ! nip <unique-var>
+    solve1
+    ;
+: solve-drop-type-doesnt-work ( subst problem drop-term rhs -- subst )
+    nip
+    <unique-var>
+    [ [ <pred> ] dip 2array ]
+    [ [ <succ> ] dip 2array ] 2bi 2array
+    ! break
+    prepend solve ;
+
+
+! : maybe-solve-drop ( subst problem lhs rhs -- subst )
+!     {
+!         { [ dup drop-type? ]
+!           [ swap solve-drop-type ] }
+!         { [ over drop-type? ]
+!           [ solve-drop-type ] }
+!         [ skip-eqn ]
+!     } cond ;
+
+UNION: PS pred-type succ-type ;
+UNION: PSD PS drop-type ;
+
+! Normalized, possible forms here:
+! 1. Pa = Pb
+! 2. Sa = Sb
+! 3. Sa = Pb
+! 4. foo = Pb
+! 5. foo = Sb
+! 6. Dx = Pb
+! 7. Dx = Sb
+! 7. Sb = foo
+! 8. Sb = Dx
+
+: ?1eqn ( lhs rhs ? quot -- eqns/f )
+    '[ @ 2array 1array ]
+    [ 2drop f ] if ; inline
+
+: decompose-same ( lhs rhs -- eqns/f )
+    2dup { [ [ succ-type? ] both? ] [ [ pred-type? ] both? ] } 2||
+    [ [ element>> ] bi@ ] ?1eqn ;
+
+: decompose-swap-P ( lhs rhs -- eqns/f )
+    dup pred-type? [ swap ] unless
+    dup pred-type? [
+        [ <succ> ] [ element>> ] bi* [ simplify-psd ] bi@
+    ] ?1eqn ;
+
+: decompose-swap-S ( lhs rhs -- eqns/f )
+    dup succ-type? [ swap ] unless
+    dup succ-type? [
+        [ <pred> ] [ element>> ] bi* [ simplify-psd ] bi@
+    ] ?1eqn ;
+
+: decompose-swap-PS ( lhs rhs -- eqns/f )
+    2dup [ { [ PS? ] [ element>> term-var? ] } 1&& ] either?
+    [ { [ decompose-swap-P ] [ decompose-swap-S ] } 2|| ]
+    [ 2drop f ] if
+    ;
+
+: decompose-D ( lhs rhs -- eqns/f )
+    dup drop-type? [ swap ] unless
+    dup drop-type?
+    2over [ PS? ] either? and
+    ! NOTE: could be wrong here because of stuff
+    [ decompose-swap-PS ]
+    [ 2drop f ] if ;
+
+: decompose-PS-args ( lhs PS-term -- lhs rhs )
+    dup pred-type?
+    [ element>> [ <pred> ] map-args ]
+    [ element>> [ <succ> ] map-args ] if ;
+
+: decompose-PS-term ( lhs rhs -- eqns/f )
+    dup PS? [ swap ] unless
+    dup element>> args>>
+    [ decompose-PS-args ] ?1eqn ;
+
+: decompose-PS-problems ( lhs rhs -- eqns )
+    {
+        [ decompose-same ]
+        [ decompose-D ]
+        [ decompose-swap-PS ]
+        [ decompose-PS-term ]
+        [ proper-term-mismatch ]
+    } 2|| ;
+
+
+! : decompose-same? ( lhs rhs -- ? )
+!     { [ [ succ-type? ] both? ] [ [ pred-type? ] both? ] } 2|| ;
+
+! : decompose-P-swap ( Pb foo -- eqns )
+!     [ element>> ] [ <succ> ] bi* [ simplify-psd ] bi@ 2array 1array ;
+
+! : decompose-swap-S ( foo Sa -- eqns )
+!     [ <pred> ] [ element>> ] bi* [ simplify-psd ] bi@ 2array 1array ;
+
+! : decompose-PS ( Pb Sa -- eqns )
+!     [ decompose-P-swap ]
+!     [ decompose-swap-S ] 2bi append ;
+
+! : decompose-foo-P ( foo Pb -- eqns )
+!     element>> [ <pred> ] map-args 2array 1array ;
+
+! : decompose-foo-S ( foo Sa -- eqns )
+!     element>> [ <succ> ] map-args 2array 1array ;
+
+! UNION: swap-solvable-PS-term drop-type term-var ;
+! PREDICATE: swap-solvable-PSD-term < PSD element>> term-var? ;
+
+! : decompose-PS-problems ( lhs rhs -- eqns )
+!     2dup decompose-same? [ [ element>> simplify-psd ] bi@ 2array 1array ]
+!     [ dup succ-type? [ swap ] unless
+!       ! Possibilities: Pb = Sa, Pb = Dx, Pb = foo, Dx = foo, foo = Sb
+!           2dup [ pred-type? ] [ succ-type? ] bi* and
+!           [ decompose-PS ] [
+!               dup swap-solvable-PSD-term? [ swap ] unless
+!               dup swap-solvable-PSD-term?
+!               [ dup pred-type?
+!                 [ decompose-swap-P ]
+!                 [ decompose-swap-S ] if
+!               ] [
+!                   dup PS? [ swap ] unless
+!                   { { [ dup pred-type? ]
+!                       [ decompose-foo-P ] }
+!                     { [ dup succ-type? ]
+!                       [ decompose-foo-S ]
+!                     }
+!                     [ proper-term-mismatch ]
+!                   } cond
+!               ] if
+!           ] if
+!     ] if ;
+
+
+: solve-decompose-PS ( subst problem lhs rhs -- subst )
+    dup pred-type?
+    [ swap ] unless
+    decompose-PS-problems
+    break
+    prepend solve ;
+
+: solve-rec-type ( subst problem rec-type rhs -- subst )
+    swap instantiate-rec-type solve1 ;
+
 
 : solve1 ( subst problem lhs rhs -- subst )
     "Solve1:" print
     2dup [ "! " write pp* " = " write ] [ pp ] bi*
     {
-        { [ dup drop-type? ]
+        { [ dup { [ +drop+-type? ] [ rec-type? ] } 1|| ]
           [ swap solve1 ] }
-        { [ over drop-type? ]
+        { [ over +drop+-type? ]
           [ solve-drop-type ] }
-        { [ over type-var? ] [
+        { [ over rec-type? ]
+          [ solve-rec-type ]
+        }
+        { [ over term-var? ] [
               2dup = [ 2drop solve ]
               [ elim ] if ] }
-        { [ dup type-var? ] [
+        { [ dup term-var? ] [
               swap elim ] }
         ! { [ over term-var? ] [
         !       2dup = [ 2drop solve ]
@@ -164,14 +324,28 @@ DEFER: solve1
         { [ 2dup [ proper-term? ] both? ] [
               2dup [ class-of ] bi@ =
               [ [ args>> ] bi@ <zipped> prepend solve ]
-              [ proper-term-mismatch ] if
+              [
+                  ! skip-eqn
+                  2dup [ PS? ] either?
+                  [ solve-decompose-PS ]
+                  [ skip-eqn ] if
+                  ! maybe-solve-drop
+                  ! proper-term-mismatch
+              ] if
           ] }
-        [ proper-term-mismatch ]
+        [
+            skip-eqn
+            ! proper-term-mismatch
+        ]
     } cond ;
+
+: pp-problem ( subst problem -- )
+    nl "Problem:" print pp*
+    "Substitutions:" print pp ;
 
 : solve ( subst problem -- subst )
     [
-        over pp-subst
+        2dup pp-problem
         unclip-slice first2
         solve1
     ] unless-empty ;
@@ -188,11 +362,20 @@ DEFER: solve1
 ! M: proper-term lift*
 !     [ args>> [ lift* ] with map ] [ symbol>> ] bi swap <proper-term> ;
 
+: elim-rec ( subst problem vname term -- subst )
+    dupd abstract-rec-type elim ;
+
+: subst-in-term ( target-term vname term -- target-term )
+    swap associate swap lift ;
+
 ! Modification: If trying to eliminate a recursive term, simply drop the equation
 ! The equation should already be removed from the problem so simply continue.
 ! Alternative approach: substitute anyways
 :: elim ( subst problem vname term -- subst )
-    vname term occurs-free? [ vname term recursive-term ]
+    vname term occurs-free? [ subst problem vname term elim-rec ]
+    ! vname term occurs-free? drop f [ subst problem vname term elim-rec ]
+    ! vname term occurs-free? [ vname term recursive-term-error ]
+
     ! vname term occurs? [
     !     "Skipping recursion: " write vname pp* " = " write term pp
     !     subst problem solve
@@ -214,6 +397,9 @@ DEFER: solve1
 : unify ( term1 term2 -- subst )
     2array 1array f swap solve ;
 
+: unify-with-constraints ( eqns term1 term2 -- subst )
+    2array prefix f swap solve ;
+
 ! : effect-terms ( effect1 effect2 -- term1 term2 )
 !     [ effect>term ]
 !     rename-effects
@@ -229,11 +415,13 @@ DEFER: solve1
 : effects>unifier ( effect-type1 effect-type2 -- consumption production subst )
     [ effect>term ] bi@
     rename-2-terms
+    [ [ get-constraints ] bi@ append ] 2keep
     "Computing unifier:" print
     2dup [ pp ] bi@
+    "Constraints:" print pick pp
     ! [
-        [ [ consumption>> ] [ production>> ] bi* ]
-        [ [ production>> ] [ consumption>> ] bi* unify ] 2bi
+        [ [ production>> ] [ consumption>> ] bi* unify-with-constraints ]
+        [ [ consumption>> ] [ production>> ] bi* ] 2bi rot
     ! ] with-name-counters
     ;
 
@@ -279,19 +467,21 @@ DEFER: solve1
 !     term>effect* second ;
 
 ! * Prettyprinting
-GENERIC: pp* ( term -- )
+M: term pp* effect>string write ;
 ! M: varname pp* [ name>> ] [ id>> ] bi number>string append write ;
-M: type-var pp* effect>string write ;
+! M: type-var pp* effect>string write ;
 ! M: type-var pp*
 !     [ name>> ]
 !     [ id>> number>string append ]
 !     [ order>> CHAR: ' <string> append ] tri write ;
-M: proper-term pp* effect>string write ;
+! M: proper-term pp* effect>string write ;
 ! M: fun-type pp* effect>string write ;
 ! M: proper-term pp*
 !     [ symbol>> name>> write ] [ "(" write args>> [ ", " write ] [ pp* ] interleave ] bi
 !       ")" write ;
 ! M: word pp* name>> write ;
+
+! M: drop-type pp* effect>string write ;
 
 : pp ( term -- ) pp* nl ;
 
@@ -299,74 +489,6 @@ M: proper-term pp* effect>string write ;
 ! * Whole turn
 : resubst ( term subst -- term )
     [ 1array swap lift ] each ;
-
-! Note: works on original stuff (non-varname effect string elements)
-! GENERIC: simplify* ( effect -- effect )
-! M: string simplify* ;
-! M: sequence simplify* [ simplify* ] map ;
-! PREDICATE: nonvariable-effect < effect [ in-var>> ] [ out-var>> ] bi { [ or ] [ = ] } 2&& ;
-
-! SYMBOL: bound-row-vars
-! GENERIC: row-varname-used? ( name effect -- ? )
-
-! M: word row-varname-used? 2drop f ;
-! M: string row-varname-used? 2drop f ;
-! M: sequence row-varname-used?
-!     [ row-varname-used? ] with any? ;
-! M: effect row-varname-used?
-!     {
-!         [ drop bound-row-vars get in? ]
-!         [ in-var>> = ]
-!         [ out-var>> = ]
-!         [ in>> row-varname-used? ]
-!         [ out>> row-varname-used? ]
-!     } 2|| ;
-
-! : row-vars-used? ( effect -- ? )
-!     [let { [ in-var>> ] [ out-var>> ] [ in>> ] [ out>> ] } cleave
-!      :> ( iv ov in out )
-!      {
-!          [ iv bound-row-vars get in? ]
-!          [ ov bound-row-vars get in? ]
-!          [ iv in row-varname-used? ]
-!          [ iv out row-varname-used? ]
-!          [ ov in row-varname-used? ]
-!          [ ov out row-varname-used? ] } 0||
-!     ] ;
-
-! PREDICATE: redundant-var-effect < nonvariable-effect row-vars-used? not ;
-! M: redundant-var-effect simplify*
-!     [ in>> ] [ out>> ] bi <effect>
-!     simplify* ;
-
-! M: word simplify* ;
-! M: effect simplify*
-!     dup [ in-var>> ] [ out-var>> ] bi [ bound-row-vars get adjoin ] bi@
-!     {
-!         [ in-var>> ]
-!         [ in>> simplify* ]
-!         [ out-var>> ]
-!         [ out>> simplify* ]
-!     } cleave <variable-effect> ;
-
-! : simplify ( effect -- effect )
-!     HS{ } clone bound-row-vars [ simplify* ] with-variable ;
-
-! Noticed that not all substitutions are oriented correctly in the final unifier
-! necessarily.  Hopefully that's not a bug?  Re-orienting the substitutions in
-! case there is ambiguity, so that it is used in the problem.
-! If the rhs is a term-var, and the lhs does not appear in the target terms,
-! then swap the substitution pair
-: re-orient-subst-pair ( terms varname replacement -- varname replacement )
-    dup term-var?
-    [| terms lhs rhs |
-     lhs terms [ occurs-free? ] with any?
-     [ lhs rhs ]
-     [ rhs lhs ] if
-    ] [ nipd ] if ;
-
-: re-orient-subst ( consumption production subst -- consumption production subst )
-    [ 2dup 2array ] dip [ swapd re-orient-subst-pair ] with assoc-map ;
 
 GENERIC: collect-min-var-orders* ( assoc term -- assoc )
 M: type-var collect-min-var-orders*
@@ -381,61 +503,42 @@ M: proper-term collect-min-var-orders*
     dup collect-min-var-orders
     [ neg swap rot change-term-var-orders ] assoc-each ;
 
+GENERIC: simplify-rec ( term -- term )
+M: term simplify-rec ;
+M: proper-term simplify-rec
+    [ simplify-rec ] map-args ;
+: unused-binding? ( rec-type -- ? )
+    [ rec-var>> ] [ element>> ] bi occurs-free? not ;
+: trivial-body? ( rec-type -- ? )
+    [ rec-var>> ] [ element>> ] bi = ;
+M: rec-type simplify-rec
+    dup { [ unused-binding? ] [ trivial-body? ] } 1||
+    [ element>> ] when ;
 
-! GENERIC: convert-var-orders* ( assoc level term -- assoc term )
-! M: type-var convert-var-orders*
-!     [ type-var-key pick push-at ]
-!     [ [ name>> ] [ id>> ] bi rot type-var boa ] 2bi
-!     ;
-! M: dup-type-var convert-var-orders*
-!     [ 1 + ] [ element>> ] bi* convert-var-orders* ;
-! M: proper-term convert-var-orders*
-!     [ convert-var-orders* ] with map-args ;
 
-! : convert-var-orders ( term -- assoc term )
-!     [ H{ } clone 0 ] dip convert-var-orders*
-!     [ [ infimum ] map-values ] dip ;
-
-! GENERIC: adjust-var-orders* ( assoc term -- term )
-! M: type-var adjust-var-orders*
-!     [ type-var-key swap at 0 or neg ] keep change-term-var-order ;
-! M: proper-term adjust-var-orders*
-!     [ adjust-var-orders* ] with map-args ;
-
-! : normalize-var-orders ( term -- term )
-!     convert-var-orders adjust-var-orders* ;
-
-GENERIC: normalize-recs ( term -- term )
-: reducible-rec-type? ( rec-type -- ? )
-    [ rec-var>> ] [ element>> ] bi
-    ! occurs-free? not ;
-    { [ = ] [ occurs-free? not ] } 2|| ;
-
-M: rec-type normalize-recs
-    dup reducible-rec-type?
-    [ element>> normalize-recs ]
-    [ [ normalize-recs ] map-args ] if ;
-    ! [ [ rec-var>> ] [ element>> ] bi normalize-recs <rec-type> ]
-    ! ;
-    ! dup [ rec-var>> ] [ element>> ] bi normalize-recs
-    ! [ occurs-free? ] keep swap
-    ! [ drop ] [ nip ] if ;
-M: type-var normalize-recs ;
-M: proper-term normalize-recs
-    [ normalize-recs ] map-args ;
-
-! : normalize-fun-type ( fun-type -- fun-type )
+! This should return something that can be used on the typed effect level
 : normalize-effect-type ( fun-type -- effect-type )
-    normalize-var-orders ;
+    "Result type: " write dup pp
+    simplify-psd
+    "Simplified Pred/Succ: " write dup pp
+    eliminate-drop-terms
+    "Eliminated drops: " write dup pp
+    simplify-rec
+    "Simplified Recursion: " write dup pp
+    convert-to-vars
+    ! eliminate-pred/succ ; replaced by convert-to-vars
+    ! normalize-var-orders
+    ;
 
 : unify-effects ( effect1 effect2 -- effect )
     effects>unifier ! For dup expansion
     ! re-orient-subst
-    "Result: " print dup pp-subst
-    [ resubst ] curry bi@ <fun-type>
-    ! normalize-recs
-    normalize-var-orders
-    ! effect>term
-    ! [ stk>effect ] bi@ <variable-effect>
-    ! simplify
+    "Unifier: " print dup pp-subst
+    [ <fun-type> ] dip
+    "Target: " write over pp
+    ! [ resubst ] curry bi@ <fun-type>
+    resubst
+    "Substituted: " write dup pp
+    normalize-effect-type
+    "Normalized: " write dup pp
     ;

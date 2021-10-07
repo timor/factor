@@ -40,19 +40,21 @@ M: fun-type effect>string
 
 M: type-var effect>string
     [ name>> ] [ id>> [ number>string append ] unless-zero ]
-    [ order>> [ number>string "⟨" "⟩" surround append ] unless-zero ] tri ;
+    [ order>> [ number>superscript append ] unless-zero ] tri ;
 
 M: rec-type effect>string
     [ rec-var>> effect>string
-      "rec(" "|" surround  ]
-    [ element>> effect>string append ] bi
-    ")" append ;
+      "μ" "." surround  ]
+    [ element>> effect>string append ] bi ;
 
-M: drop-type effect>string element>> effect>string "↓(" ")" surround ;
+
+M: drop-type effect>string element>> effect>string "𝓓" prepend ;
 
 M: dup-type effect>string element>> effect>string "(" ")'" surround ;
 
 M: type-const effect>string thing>> effect>string ;
+
+M: unique-var effect>string name>> "$" prepend ;
 
 GENERIC: effect-element>term ( element -- term )
 ! NOTE: This is needed so that old and new effects work together using type-of
@@ -63,6 +65,7 @@ M: type-var effect-element>term mappings get [ ensure-unique-var ] cache ;
 !     <dup-type> ;
 M: proper-term effect-element>term
     [ effect-element>term ] map-args ;
+M: unique-var effect-element>term name>> "U" prepend ;
 
 : make-configuration ( elements var-element -- term )
     [ [ effect-element>term ] map <reversed> ] [  ] bi* sequence>list* ;
@@ -97,7 +100,18 @@ M: dup-type effect-element>term
     1 swap change-type-var-order ;
 
 M: drop-type effect-element>term
-    element>> effect-element>term propagate-drop ;
+    element>> effect-element>term
+    ! <pred> ;
+    <drop> ;
+
+
+! * Pred/Succ
+M: pred-type effect>string
+    element>> effect>string "𝓟" prepend ;
+M: succ-type effect>string
+    element>> effect>string "𝓢" prepend ;
+
+! * Interface
 
 : effect>term ( effect -- fun-type )
     [

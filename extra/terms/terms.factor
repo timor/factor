@@ -62,6 +62,3 @@ GENERIC: term-vars ( term -- seq )
 M: term-var term-vars 1array ;
 M: proper-term term-vars
     { } clone swap [ term-vars union ] each-arg ;
-
-: subst-in-term ( target-term vname term -- target-term )
-    swap associate swap lift ;
