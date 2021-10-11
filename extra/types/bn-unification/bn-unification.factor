@@ -262,13 +262,13 @@ UNION: PSD PS drop-type ;
     "Solve1:" print
     2dup [ "! " write pp* " = " write ] [ pp ] bi*
     {
-        { [ dup { [ +drop+-type? ] [ rec-type? ] } 1|| ]
-          [ swap solve1 ] }
-        { [ over +drop+-type? ]
-          [ solve-drop-type ] }
-        { [ over rec-type? ]
-          [ solve-rec-type ]
-        }
+        ! { [ dup { [ +drop+-type? ] [ rec-type? ] } 1|| ]
+        !   [ swap solve1 ] }
+        ! { [ over +drop+-type? ]
+        !   [ solve-drop-type ] }
+        ! { [ over rec-type? ]
+        !   [ solve-rec-type ]
+        ! }
         { [ over term-var? ] [
               2dup = [ 2drop solve ]
               [ elim ] if ] }
@@ -283,16 +283,16 @@ UNION: PSD PS drop-type ;
         !   [ swap solve-dup-type ] }
         ! { [ over dup-type? ]
         !   [ solve-dup-type ] }
+        { [ 2dup [ alt-type? ] either? ]
+          [ "need to solve alt-type" 3array throw ] }
+        { [ 2dup [ alt-type? ] both? ]
+          [ "both-sided alternative decomposition " 3array throw ] }
         { [ 2dup [ proper-term? ] both? ] [
               2dup [ class-of ] bi@ =
               [ [ args>> ] bi@ <zipped> prepend solve ]
               [
-                  ! skip-eqn
-                  2dup [ PS? ] either?
-                  [ solve-decompose-PS ]
-                  [ skip-eqn ] if
-                  ! maybe-solve-drop
-                  ! proper-term-mismatch
+                  ! TODO: maybe decompose alternative template
+                  skip-eqn
               ] if
           ] }
         [
@@ -377,7 +377,8 @@ UNION: PSD PS drop-type ;
 : effects>unifier ( effect-type1 effect-type2 -- consumption production subst )
     [ effect>term ] bi@
     rename-2-terms
-    [ [ get-constraints ] bi@ append ] 2keep
+    ! [ [ get-constraints ] bi@ append ] 2keep
+    [ f ] 2dip
     "Computing unifier:" print
     2dup [ pp ] bi@
     "Constraints:" print pick pp
@@ -481,15 +482,15 @@ M: rec-type simplify-rec
 ! This should return something that can be used on the typed effect level
 : normalize-effect-type ( fun-type -- effect-type )
     "Result type: " write dup pp
-    simplify-psd
-    "Simplified Pred/Succ: " write dup pp
-    eliminate-drop-terms
-    "Eliminated drops: " write dup pp
-    simplify-rec
-    "Simplified Recursion: " write dup pp
-    convert-to-vars
+    ! eliminate-drop-terms
+    ! "Eliminated drops: " write dup pp
+    ! simplify-rec
+    ! "Simplified Recursion: " write dup pp
+    ! convert-to-vars
     ! eliminate-pred/succ ; replaced by convert-to-vars
     ! normalize-var-orders
+    clean-up-alternatives
+    "Remove Unused alternatives: " write dup pp
     ;
 
 : unify-effects ( effect1 effect2 -- effect )

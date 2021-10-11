@@ -1,6 +1,6 @@
 USING: accessors arrays ascii assocs classes combinators effects kernel lists
-make math math.parser namespaces sequences strings terms types.base-types
-types.renaming types.util ;
+make math math.parser math.statistics namespaces sequences strings terms
+types.base-types types.renaming types.util ;
 
 IN: types.function-types
 
@@ -107,6 +107,46 @@ M: pred-type effect>string
     element>> effect>string "𝓟" prepend ;
 M: succ-type effect>string
     element>> effect>string "𝓢" prepend ;
+
+! * Alternative Type
+
+M: alt-type effect>string
+    alternatives>> [ effect>string ] map "|" join
+    "(" ")" surround ;
+
+! * Linearity
+! Remove alternatives whose variables are not used
+: unused-var? ( counts var -- ? )
+    ?of [ 2 < ] [ drop t ] if ;
+
+! TODO: check semantics here regarding all/any usage
+: unused-alternative? ( counts term -- ? )
+    term-vars [ unused-var? ] with all? ;
+
+: var-usage ( term -- counts )
+    term-vars histogram ;
+
+GENERIC: clean-up-alternatives* ( counts term -- term )
+M: alt-type clean-up-alternatives*
+    dupd alternatives>> [ clean-up-alternatives* ] with map
+    [ unused-alternative? ] with reject
+    dup length 1 = [ first ] [ <alt-type> ] if ;
+M: term clean-up-alternatives* nip ;
+M: proper-term clean-up-alternatives*
+    [ clean-up-alternatives* ] with map-args ;
+
+: clean-up-alternatives ( term -- term )
+    [ var-usage ]
+    [ clean-up-alternatives* ] bi ;
+
+ERROR: non-linear-function-type type var ;
+: assert-linear-type ( fun-type -- fun-type )
+    dup var-usage [
+        dup 2 >
+        [ non-linear-function-type ]
+        [ 2drop ] if
+    ] assoc-each ;
+
 
 ! * Interface
 

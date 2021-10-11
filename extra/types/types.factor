@@ -88,11 +88,13 @@ M: \ curry type-of* drop
     ! [ cake drop ] infer-type ;
 
 ! ( ..r x quot: ( ..r x -- ..s ) -- ..s dup(x) )
-! Alternative
-! ( ..r x quot: ( ..r P(x) -- ..s ) -- ..s S(x) )
+! With Alternatives
+! ( ..rho alt(b|b1) quot: ( ..rho b -- ..C ) -- ..C b1 )
 M: \ keep type-of* drop
-    "r" { "x" { "quot" ( ..r x -- ..s ) } }
-    "s" "x" 1array <variable-effect>
+    "R" { "b" "b1" } <alt-type> ( ..R b -- ..C ) 2array
+    "C" { "b1" } <variable-effect> ;
+    ! "r" { "x" { "quot" ( ..r x -- ..s ) } }
+    ! "s" "x" 1array <variable-effect>
     ! "r" { "x" { "quot" ( ..r x -- ..s ) } }
     ! "s" "x" <dup-type> 1array <variable-effect> ;
     ! "r"
@@ -101,7 +103,7 @@ M: \ keep type-of* drop
     !      2array
     ! 2array
     ! "s" "x" <succ> 1array <variable-effect>
-    ;
+    ! ;
 
 ! ** Cake base
 
@@ -114,19 +116,19 @@ M: \ keep type-of* drop
     ! [ curry ]
     ! [ take ] 2bi ;
 
-M: \ cake type-of* drop
-    ! ( ..r b quotA: ( ..A b -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A -- ..C b ) ) ;
-    ! ( ..r b quotA: ( ..A -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A -- ..C b ) ) ;
-    ! ( ..r b quotA: ( ..A b -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A b -- ..C b ) ) ;
-    ( ..r b quotA: ( ..A x -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A -- ..C b ) ) ;
-    ! ( ..r b quotA: ( ..A x -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A b -- ..C b ) ) ;
+! M: \ cake type-of* drop
+!     ! ( ..r b quotA: ( ..A b -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A -- ..C b ) ) ;
+!     ! ( ..r b quotA: ( ..A -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A -- ..C b ) ) ;
+!     ! ( ..r b quotA: ( ..A b -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A b -- ..C b ) ) ;
+!     ( ..r b quotA: ( ..A x -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A -- ..C b ) ) ;
+!     ! ( ..r b quotA: ( ..A x -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A b -- ..C b ) ) ;
 
 ! Effects for testing
 : dupdupswap ( x -- x x2 x1 ) dup dup swap ;
-M: \ dupdupswap type-of* drop
-    "r" "a" 1array
-    "r" "a" "a" <dup-type> <dup-type> "a" <dup-type> 3array
-    <variable-effect> ;
+! M: \ dupdupswap type-of* drop
+!     "r" "a" 1array
+!     "r" "a" "a" <dup-type> <dup-type> "a" <dup-type> 3array
+!     <variable-effect> ;
 
 ! * Derived basic Combinators
 M: \ dup type-of* drop
@@ -158,6 +160,14 @@ M: \ 2dup type-of* drop
 
 M: \ compose type-of* drop
     [ [ [ call ] dip call ] curry curry ] infer-type ;
+
+M: \ pick type-of* drop
+    [ [ dup ] 2dip [ swap ] dip swap ] infer-type ;
+
+M: \ rot type-of* drop
+    [ [ swap ] bi@ ] infer-type ;
+
+: m ( -- ) dup call ; inline
 
 ! M: \ drop type-of* drop
 !     [ [ ] k ] type-of* ;
@@ -217,6 +227,7 @@ M: generic infer-type
 FROM: types.bn-unification => unify-effects ;
 : type-of ( obj -- fun-type )
     type-of* effect>term
+    assert-linear-type
     ! normalize-fun-type
     ;
 M: quotation infer-type

@@ -1,10 +1,22 @@
-USING: kernel math math.private tools.test types types.bn-unification ;
+USING: accessors io kernel math math.private prettyprint sequences tools.test
+types types.bn-unification ;
 
 IN: types.tests
 
 ! Invariant:
 {  }
 [ [ dup drop ] infer-type ] unit-test
+
+! Show all important types
+: comb-types ( -- )
+    { k curry keep dup drop call nip dip swap over 2dup compose take cake
+      2dip 3dip
+      pick rot
+      bi* bi bi@ tri tri* tri@
+      2keep 2over keepd
+    }
+    [ dup type-of 2array ] map
+    [ [ name>> write ": " write ] [ pp ] bi* ] assoc-each ;
 
 ! Invariant:
 {  }

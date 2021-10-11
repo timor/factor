@@ -377,3 +377,15 @@ M: pred-type reconvert-to-vars
 
 : eliminate-pred/succ ( term -- term )
     [ H{ } clone 0 ] dip reconvert-to-vars nip ;
+
+! * Input instantiation
+! This is used to capture the notion that input quotations can be different
+! instances, yet must match the same type.  When unifying, the alternatives are
+! instantiated with fresh variables on the other side
+! TODO: check if there is need to distinguish what is instantiated
+
+TUPLE: alt-type alternatives ;
+C: <alt-type> alt-type
+INSTANCE: alt-type proper-term
+M: alt-type args>> alternatives>> ;
+M: alt-type from-args* drop <alt-type> ;

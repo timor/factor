@@ -61,4 +61,4 @@ M: +nil+ from-args* 2drop +nil+ ;
 GENERIC: term-vars ( term -- seq )
 M: term-var term-vars 1array ;
 M: proper-term term-vars
-    { } clone swap [ term-vars union ] each-arg ;
+    { } clone swap [ term-vars append ] each-arg ;
