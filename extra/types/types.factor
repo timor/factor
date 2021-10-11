@@ -59,8 +59,6 @@ M: word type-of* ( word -- type )
 : k ( ..a quot1 quot2: ( ..a -- ..b ) -- ..b )
     nip call ; inline
 
-! : cake (  )
-
 ! * Minimal Combinator Base
 ! Complete bases
 ! 1. call, dip, curry, dup, drop
@@ -69,22 +67,59 @@ M: word type-of* ( word -- type )
 
 ! ( ..a drop(x) quot: ( ..a -- ..b ) -- ..b ) ;
 M: \ k type-of* drop
-    ! "a" "x" { "quot" ( ..a -- ..b ) } 2array
-    ! "b" { } <variable-effect> ;
+    "a" "x" { "quot" ( ..a -- ..b ) } 2array
+    "b" { } <variable-effect> ;
     ! "a" "d" <drop> { "quot" ( ..a -- ..b ) } 2array
     ! "b" { } <variable-effect> ;
-    "a" +drop+ { "quot" ( ..a -- ..b ) } 2array
-    "b" { } <variable-effect> ;
+    ! "a" "d" <dup-type> { "quot" ( ..a -- ..b ) } 2array
+    ! "b" { } <variable-effect> ;
+    ! "a" +drop+ { "quot" ( ..a -- ..b ) } 2array
+    ! "b" { } <variable-effect> ;
     ! ( ..a x quot: ( ..a -- ..b ) -- ..b ) ;
 
 ! swap constantly swap compose
+DEFER: cake
+DEFER: infer-type
 M: \ curry type-of* drop
     ( x quot: (  ..a x -- ..c ) -- quot: ( ..a -- ..c ) ) ;
+    ! ( x quot: ( ..a y -- ..c ) -- quot: ( ..a -- ..c ) ) ;
+    ! cake base:
+    ! [ cake [ ] k ] infer-type ;
+    ! [ cake drop ] infer-type ;
 
 ! ( ..r x quot: ( ..r x -- ..s ) -- ..s dup(x) )
+! Alternative
+! ( ..r x quot: ( ..r P(x) -- ..s ) -- ..s S(x) )
 M: \ keep type-of* drop
     "r" { "x" { "quot" ( ..r x -- ..s ) } }
-    "s" "x" <dup-type> 1array <variable-effect> ;
+    "s" "x" 1array <variable-effect>
+    ! "r" { "x" { "quot" ( ..r x -- ..s ) } }
+    ! "s" "x" <dup-type> 1array <variable-effect> ;
+    ! "r"
+    !  "x" "quot"
+    !      "r" "x" <pred> 1array "s" { } <variable-effect>
+    !      2array
+    ! 2array
+    ! "s" "x" <succ> 1array <variable-effect>
+    ;
+
+! ** Cake base
+
+: take ( ..r b a -- ..r quot )
+    [ dip ] curry curry ; inline
+    ! swap '[ @ _ ] ;
+
+: cake ( ..r b quotA: ( ..A b -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A -- ..C b ) )
+    2dup take [ curry ] dip ;
+    ! [ curry ]
+    ! [ take ] 2bi ;
+
+M: \ cake type-of* drop
+    ! ( ..r b quotA: ( ..A b -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A -- ..C b ) ) ;
+    ! ( ..r b quotA: ( ..A -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A -- ..C b ) ) ;
+    ! ( ..r b quotA: ( ..A b -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A b -- ..C b ) ) ;
+    ( ..r b quotA: ( ..A x -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A -- ..C b ) ) ;
+    ! ( ..r b quotA: ( ..A x -- ..C ) -- ..r quot: ( ..A -- ..C ) quot: ( ..A b -- ..C b ) ) ;
 
 ! Effects for testing
 : dupdupswap ( x -- x x2 x1 ) dup dup swap ;
@@ -93,22 +128,24 @@ M: \ dupdupswap type-of* drop
     "r" "a" "a" <dup-type> <dup-type> "a" <dup-type> 3array
     <variable-effect> ;
 
-DEFER: infer-type
 ! * Derived basic Combinators
 M: \ dup type-of* drop
     [ [ ] keep ] infer-type ;
+    ! [ [ ] cake dip dip ] infer-type ;
 
 M: \ drop type-of* drop
     [ [ ] k ] infer-type ;
 
 M: \ call type-of* drop
     [ dup k ] infer-type ;
+    ! [ [ [ ] ] dip k ] infer-type ;
 
 M: \ nip type-of* drop
     [ [ drop drop ] keep ] infer-type ;
 
 M: \ dip type-of* drop
     [ [ nip call ] curry keep ] infer-type ;
+    ! [ cake k ] infer-type ;
 
 M: \ swap type-of* drop
     [ [ ] curry dip ] infer-type ;
@@ -118,6 +155,9 @@ M: \ over type-of* drop
 
 M: \ 2dup type-of* drop
     [ over over ] infer-type ;
+
+M: \ compose type-of* drop
+    [ [ [ call ] dip call ] curry curry ] infer-type ;
 
 ! M: \ drop type-of* drop
 !     [ [ ] k ] type-of* ;
@@ -175,9 +215,7 @@ M: generic infer-type
     unknown-type-scheme ;
 
 FROM: types.bn-unification => unify-effects ;
-GENERIC: type-of ( obj -- fun-type )
-
-M: object type-of
+: type-of ( obj -- fun-type )
     type-of* effect>term
     ! normalize-fun-type
     ;
@@ -195,5 +233,7 @@ M: quotation infer-type
 ! This is debatable, because typing it requires inference...
 M: quotation type-of*
     infer-type "quot" quote-type ;
+
+M: class type-of* "x" quote-type ;
 
 M: object type-of* class-of "x" quote-type ;
