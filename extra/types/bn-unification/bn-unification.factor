@@ -258,12 +258,23 @@ UNION: PSD PS drop-type ;
     swap instantiate-rec-type solve1 ;
 
 : solve-choice ( subst problem lhs rhs -- subst )
-    dup alt-type? [ swap ] unless
+    dup sum-type? [ swap ] unless
     instantiate-alternatives prepend solve ;
 
+: solve-matches ( subst problem lhs rhs -- subst )
+    dup all-type? [ swap ] unless
+    alternatives>> [ 2array ] with map prepend solve ;
+
+! NOTE: promoting here!
+: solve-conditional ( subst problem lhs rhs -- subst )
+    over maybe-type? [ swap ] unless
+    <unique-var> swap <maybe-type> solve1 ;
+
 : solve1 ( subst problem lhs rhs -- subst )
-    "Solve1:" print
-    2dup [ "! " write pp* " = " write ] [ pp ] bi*
+    f [
+        "Solve1:" print
+        2dup [ "! " write pp* " = " write ] [ pp ] bi*
+    ] when
     {
         ! { [ dup { [ +drop+-type? ] [ rec-type? ] } 1|| ]
         !   [ swap solve1 ] }
@@ -272,6 +283,9 @@ UNION: PSD PS drop-type ;
         ! { [ over rec-type? ]
         !   [ solve-rec-type ]
         ! }
+        { [ 2dup [ +any+? ] either? ]
+          [ 2drop solve ]
+        }
         { [ over term-var? ] [
               2dup = [ 2drop solve ]
               [ elim ] if ] }
@@ -286,17 +300,24 @@ UNION: PSD PS drop-type ;
         !   [ swap solve-dup-type ] }
         ! { [ over dup-type? ]
         !   [ solve-dup-type ] }
-        { [ 2dup [ alt-type? ] either? ]
+        { [ 2dup [ sum-type? ] both? ]
+          [ "both-sided alternative decomposition " 3array throw ] }
+        { [ 2dup [ all-type? ] either? ]
+          [ solve-matches ]
+        }
+        { [ 2dup [ sum-type? ] either? ]
           [ solve-choice ]
           ! [ "need to solve alt-type" 3array throw ]
         }
-        { [ 2dup [ alt-type? ] both? ]
-          [ "both-sided alternative decomposition " 3array throw ] }
+        ! NOTE: allowing here because of expansion
+        ! { [ 2dup [ maybe-type? ] both? ]
+        !   [ "both-sided conditional term" 3array throw ] }
+        { [ 2dup { [ [ maybe-type? ] either? ] [ [ maybe-type? ] both? not ] } 2&& ]
+          [ solve-conditional ] }
         { [ 2dup [ proper-term? ] both? ] [
               2dup [ class-of ] bi@ =
               [ [ args>> ] bi@ <zipped> prepend solve ]
               [
-                  ! TODO: maybe decompose alternative template
                   skip-eqn
               ] if
           ] }
@@ -312,7 +333,7 @@ UNION: PSD PS drop-type ;
 
 : solve ( subst problem -- subst )
     [
-        2dup pp-problem
+        f [ 2dup pp-problem ] when
         unclip-slice first2
         solve1
     ] unless-empty ;
@@ -495,8 +516,8 @@ M: rec-type simplify-rec
     ! eliminate-pred/succ ; replaced by convert-to-vars
     ! normalize-var-orders
     ! TODO: somehow not cleaning up doesnt work.  Bug in renaming???
-    clean-up-alternatives
-    "Remove Unused alternatives: " write dup pp
+    cleanup-fun-type
+    "Remove Unused variables: " write dup pp
     ;
 
 : unify-effects ( effect1 effect2 -- effect )

@@ -61,14 +61,35 @@ M: word type-of* ( word -- type )
 
 ! * Minimal Combinator Base
 ! Complete bases
-! 1. call, dip, curry, dup, drop
-! 2. curry, keep, k
-! 3. cake, k
+! 1. call, dip, curry, dup, drop, [ ]
+! 2. curry, keep, k, [ ]
+! 3. cake, k, [ ]
+! 4. cake, if, [ ], f
+! 5. curry, keep, fi, [ ], f
 
-! ( ..a drop(x) quot: ( ..a -- ..b ) -- ..b ) ;
+M: \ +any+ type-of* ;
+
+: fi ( true false ? -- )
+    rot if ; inline
+M: \ fi type-of* drop
+    "c" "A1" <maybe-type> "A2" 2array <all-type>
+    { { "true" ( ..A1 -- ..B1 ) } { "false" ( ..A2 -- ..B2 ) } "c" }
+    "c" "B1" <maybe-type> "B2" 2array <all-type>
+    { } <variable-effect> ;
+
+! For now, using conditional triplets and f :
+! ( (A1[c!=f]|A2) c ( A1 → B1 ) ( A2 → B2 ) → (B1[c!=f]|B2) )
+
+DEFER: infer-type
 M: \ k type-of* drop
-    "a" "x" { "quot" ( ..a -- ..b ) } 2array
-    "b" { } <variable-effect> ;
+    [ f fi ] infer-type ;
+    ! "a" "x" { "quot" ( ..a -- ..b ) } 2array
+    ! "b" { } <variable-effect> ;
+    ! { "A1" "A2" } <sum-type> { "dropped" ( ..A1 -- ..B1 ) } { "quot" ( ..A2 -- ..B2 ) } 2array
+    ! "B2" { } <variable-effect> ;
+
+    ! "a" "x" { "quot" ( ..a -- ..b ) } 2array
+    ! "b" { } <variable-effect> ;
     ! "a" "d" <drop> { "quot" ( ..a -- ..b ) } 2array
     ! "b" { } <variable-effect> ;
     ! "a" "d" <dup-type> { "quot" ( ..a -- ..b ) } 2array
@@ -76,10 +97,12 @@ M: \ k type-of* drop
     ! "a" +drop+ { "quot" ( ..a -- ..b ) } 2array
     ! "b" { } <variable-effect> ;
     ! ( ..a x quot: ( ..a -- ..b ) -- ..b ) ;
+    ! ( ..A dropped: ( ..A -- ..C ) quot: ( ..C -- ..B ) -- ..B ) ;
+    ! ( ..A dropped: ( ..A -- ..C ) quot: ( ..A -- ..B ) -- ..B ) ;
+
 
 ! swap constantly swap compose
 DEFER: cake
-DEFER: infer-type
 M: \ curry type-of* drop
     ( x quot: (  ..a x -- ..c ) -- quot: ( ..a -- ..c ) ) ;
     ! ( x quot: ( ..a y -- ..c ) -- quot: ( ..a -- ..c ) ) ;
@@ -91,7 +114,7 @@ M: \ curry type-of* drop
 ! With Alternatives
 ! ( ..rho alt(b|b1) quot: ( ..rho b -- ..C ) -- ..C b1 )
 M: \ keep type-of* drop
-    "R" { "b" "b1" } <alt-type> ( ..R b -- ..C ) 2array
+    "R" { "b" "b1" } <sum-type> ( ..R b -- ..C ) 2array
     "C" { "b1" } <variable-effect> ;
     ! "r" { "x" { "quot" ( ..r x -- ..s ) } }
     ! "s" "x" 1array <variable-effect>
@@ -158,6 +181,9 @@ M: \ over type-of* drop
 M: \ 2dup type-of* drop
     [ over over ] infer-type ;
 
+M: \ dupd type-of* drop
+    [ [ dup ] dip ] infer-type ;
+
 M: \ compose type-of* drop
     [ [ [ call ] dip call ] curry curry ] infer-type ;
 
@@ -167,36 +193,29 @@ M: \ pick type-of* drop
 M: \ rot type-of* drop
     [ [ swap ] bi@ ] infer-type ;
 
+M: \ -rot type-of* drop
+    [ rot rot ] infer-type ;
+
+M: \ if type-of* drop
+    [ rot fi ] infer-type ;
+
 : m ( -- ) dup call ; inline
 
-
-! ( (A1|A2) bool ( A1 → B ) ( A2 → B ) → B )
-! or:
-! ( (A1|A2) bool ( A1 → B1 ) ( A2 → B2 ) → (B1|B2) )
-! or:
-! ( (A1|A2) (R -> R boolean ) ( A1 → B1 ) ( A2 → B2 ) → (B1|B2) )
-M: \ if type-of* drop
-    ! { "A1" "A2" } <alt-type> { "?" boolean } { "true" ( ..A1 -- ..B ) } { "false" ( ..A2 -- ..B ) } 3array
-    ! "B" { } <variable-effect> ;
-    ! { "A1" "A2" } <alt-type> { "?" boolean } { "true" ( ..A1 -- ..B1 ) } { "false" ( ..A2 -- ..B2 ) } 3array
-    ! { "B1" "B2" } <alt-type> { } <variable-effect> ;
-    { "A1" "A2" } <alt-type> { "?" ( ..R -- ..R boolean ) } { "true" ( ..A1 -- ..B1 ) } { "false" ( ..A2 -- ..B2 ) } 3array
-    { "B1" "B2" } <alt-type> { } <variable-effect> ;
-    ! ( ..a ?: boolean true: ( ..a -- ..b ) false: ( ..a -- ..b ) -- ..b ) ;
 
 ! M: \ dup type-of* drop
 !     { "x" } { "x" } "x" <dup-type> suffix <effect> ;
 
 ! That's an interesting one, because ..a needs to be fully inferred for this to
 ! be typed
-! M: \ loop type-of* drop
-!     ( ..a pred: ( ..a -- ..a ? ) -- ..a ) ;
+M: \ loop type-of* drop
+    ( ..a pred: ( ..a -- ..a ? ) -- ..a ) ;
 
 ! * Retrieving declared types for recursive cases
 ! For recursive words, we actually need to turn the declared effect into a type
 ! for the inner invocations
 : recursive-call-type ( word -- type )
-    "declared-effect" word-prop ;
+    ! "declared-effect" word-prop ;
+    drop ( ..prev -- ..next ) ;
 
 ! * Quotation type inference
 ! TODO: clean up terminology.  Currently types and effects are used a bit inconsistently
@@ -228,9 +247,10 @@ M: generic infer-type
 FROM: types.bn-unification => unify-effects ;
 : type-of ( obj -- fun-type )
     type-of* effect>term
-    assert-linear-type
+    ! assert-linear-type
     ! normalize-fun-type
     ;
+
 M: quotation infer-type
     [ ( -- ) effect>term ]
     [ unclip-slice type-of

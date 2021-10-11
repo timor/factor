@@ -14,6 +14,10 @@ IN: types.tests
       pick rot
       bi* bi bi@ tri tri* tri@
       2keep 2over keepd
+      if ? unless when
+      dupd
+      either? both?
+      m
     }
     [ dup type-of 2array ] map
     [ [ name>> write ": " write ] [ pp ] bi* ] assoc-each ;

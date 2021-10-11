@@ -107,6 +107,8 @@ INSTANCE: type-const proper-term
 M: type-const args>> drop f ;
 M: type-const change-type-var-order nip ;
 
+PREDICATE: f-type < type-const thing>> \ f = ;
+
 TUPLE: dup-type element ;
 C: <dup-type> dup-type
 INSTANCE: dup-type proper-term
@@ -384,11 +386,11 @@ M: pred-type reconvert-to-vars
 ! instantiated with fresh variables on the other side
 ! TODO: check if there is need to distinguish what is instantiated
 
-TUPLE: alt-type alternatives ;
-C: <alt-type> alt-type
-INSTANCE: alt-type proper-term
-M: alt-type args>> alternatives>> ;
-M: alt-type from-args* drop <alt-type> ;
+TUPLE: sum-type alternatives ;
+C: <sum-type> sum-type
+INSTANCE: sum-type proper-term
+M: sum-type args>> alternatives>> ;
+M: sum-type from-args* drop <sum-type> ;
 
 : new-var-substitution ( term -- assoc )
     term-vars members [ dup 1 swap change-type-var-order ] H{ } map>assoc ;
@@ -402,3 +404,19 @@ M: alt-type from-args* drop <alt-type> ;
 
 : instantiate-alternatives ( term alternatives -- pairs )
     alternatives>> [ instantiate1 2array ] map nip ;
+
+! * Conditional type
+
+! This is probably already a form of dependent type, although pretty much the
+! simplest one I can think of: This type will desugar into +any+ iff the
+! condition is = f
+TUPLE: maybe-type condition type ;
+C: <maybe-type> maybe-type
+INSTANCE: maybe-type proper-term
+M: maybe-type args>> [ condition>> ] [ type>> ] bi 2array ;
+M: maybe-type from-args* drop first2 <maybe-type> ;
+
+! NOTE: this is a bad name, and also not a sum type
+TUPLE: all-type < sum-type ;
+C: <all-type> all-type
+M: all-type from-args* drop <all-type> ;

@@ -52,7 +52,7 @@ M: drop-type effect>string element>> effect>string "𝓓" prepend ;
 
 M: dup-type effect>string element>> effect>string "(" ")'" surround ;
 
-M: type-const effect>string thing>> effect>string ;
+M: type-const effect>string thing>> name>> ;
 
 GENERIC: effect-element>term ( element -- term )
 ! NOTE: This is needed so that old and new effects work together using type-of
@@ -113,11 +113,19 @@ M: pred-type effect>string
 M: succ-type effect>string
     element>> effect>string "𝓢" prepend ;
 
-! * Alternative Type
+! * Choice Types
 
-M: alt-type effect>string
-    alternatives>> [ effect>string ] map "|" join
+M: sum-type effect>string
+    alternatives>> [ effect>string ] map "/" join
     "(" ")" surround ;
+
+M: all-type effect>string
+    alternatives>> [ effect>string ] map " ⊕ " join
+    "(" ")" surround ;
+
+M: maybe-type effect>string
+    [ type>> effect>string ]
+    [ condition>> effect>string "[!" "]" surround ] bi append ;
 
 ! * Linearity
 ! Remove alternatives whose variables are not used
@@ -131,18 +139,59 @@ M: alt-type effect>string
 : var-usage ( term -- counts )
     term-vars histogram ;
 
-GENERIC: clean-up-alternatives* ( counts term -- term )
-M: alt-type clean-up-alternatives*
-    dupd alternatives>> [ clean-up-alternatives* ] with map
-    [ unused-alternative? ] with reject
-    dup length 1 = [ first ] [ <alt-type> ] if ;
-M: term clean-up-alternatives* nip ;
-M: proper-term clean-up-alternatives*
-    [ clean-up-alternatives* ] with map-args ;
+SINGLETON: +any+
+INSTANCE: +any+ proper-term
+M: +any+ args>> drop f ;
+M: +any+ effect>string drop "⋆" ;
+M: +any+ effect-element>term ;
 
-: clean-up-alternatives ( term -- term )
+! All type variables that don't appear twice (except for conds of maybe-types,
+! which may appear at least thrice) Are replaced by wildcards.  This should
+! ensure keeping linear types
+! TODO: might need to handle maybe-type case specially?
+GENERIC: mark-unused ( counts term -- term )
+M: term-var mark-unused
+    [ unused-var? ] keep swap
+    [ drop +any+ ] when ;
+M: proper-term mark-unused
+    [ mark-unused ] with map-args ;
+
+! Note that this may be needed multiple times!
+GENERIC: sweep-unused ( term -- changed? term )
+M: proper-term sweep-unused
+    f swap [ sweep-unused [ or ] dip ] map-args
+    dup args>> [ f ] [ [ +any+? ] all? ] if-empty
+    [ 2drop t +any+ ] when ;
+M: term-var sweep-unused f swap ;
+: sweep-fun-type ( changed? term -- changed? term )
+    dup production>> +any+? [ 2drop t +any+ ] when ;
+M: fun-type sweep-unused
+    call-next-method
+    dup fun-type? [ sweep-fun-type ] when ;
+: sweep-sum-type ( changed? term -- changed? term )
+    dup alternatives>> [ +any+? ] any?
+    [ [ drop t ]
+      [ alternatives>> [ +any+? ] reject
+        dup length 1 = [ first ] [ <sum-type> ] if
+      ] bi* ] when ;
+M: sum-type sweep-unused
+    call-next-method
+    dup sum-type? [ sweep-sum-type ] when ;
+M: maybe-type sweep-unused
+    call-next-method
+    dup condition>>
+    { { [ dup f-type? ] [ 3drop t +any+ ] }
+      { [ dup +any+? ] [ drop [ drop t ] [ type>> ] bi* ] }
+      [ drop ]
+    } cond ;
+
+: cleanup-unused ( term -- term changed? )
     [ var-usage ]
-    [ clean-up-alternatives* ] bi ;
+    [ mark-unused ] bi
+    sweep-unused swap ;
+
+: cleanup-fun-type ( term -- term )
+    [ cleanup-unused ] loop ;
 
 ERROR: non-linear-function-type type var ;
 : assert-linear-type ( fun-type -- fun-type )
