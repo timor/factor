@@ -4,7 +4,7 @@ types types.bn-unification ;
 IN: types.tests
 
 ! Invariant:
-{  }
+{ ( ..R2 b -- ..R2 b ) }
 [ [ dup drop ] infer-type ] unit-test
 
 ! Show all important types

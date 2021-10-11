@@ -257,6 +257,9 @@ UNION: PSD PS drop-type ;
 : solve-rec-type ( subst problem rec-type rhs -- subst )
     swap instantiate-rec-type solve1 ;
 
+: solve-choice ( subst problem lhs rhs -- subst )
+    dup alt-type? [ swap ] unless
+    instantiate-alternatives prepend solve ;
 
 : solve1 ( subst problem lhs rhs -- subst )
     "Solve1:" print
@@ -284,7 +287,9 @@ UNION: PSD PS drop-type ;
         ! { [ over dup-type? ]
         !   [ solve-dup-type ] }
         { [ 2dup [ alt-type? ] either? ]
-          [ "need to solve alt-type" 3array throw ] }
+          [ solve-choice ]
+          ! [ "need to solve alt-type" 3array throw ]
+        }
         { [ 2dup [ alt-type? ] both? ]
           [ "both-sided alternative decomposition " 3array throw ] }
         { [ 2dup [ proper-term? ] both? ] [
@@ -489,6 +494,7 @@ M: rec-type simplify-rec
     ! convert-to-vars
     ! eliminate-pred/succ ; replaced by convert-to-vars
     ! normalize-var-orders
+    ! TODO: somehow not cleaning up doesnt work.  Bug in renaming???
     clean-up-alternatives
     "Remove Unused alternatives: " write dup pp
     ;

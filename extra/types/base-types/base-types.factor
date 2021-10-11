@@ -389,3 +389,16 @@ C: <alt-type> alt-type
 INSTANCE: alt-type proper-term
 M: alt-type args>> alternatives>> ;
 M: alt-type from-args* drop <alt-type> ;
+
+: new-var-substitution ( term -- assoc )
+    term-vars members [ dup 1 swap change-type-var-order ] H{ } map>assoc ;
+
+: instantiate-term ( term -- term )
+    [ new-var-substitution ]
+    [ lift* ] bi ;
+
+: instantiate1 ( template term -- template' instance term )
+    [ [ instantiate-term ] keep ] dip ;
+
+: instantiate-alternatives ( term alternatives -- pairs )
+    alternatives>> [ instantiate1 2array ] map nip ;

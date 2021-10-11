@@ -70,12 +70,17 @@ M: proper-term effect-element>term
 M: pair effect-element>term
     second effect-element>term ;
 
+: row-effect-element>term ( element -- term )
+    dup string?
+    [ capitalize map-varname ]
+    [ effect-element>term ] if ;
+
 M: variable-effect effect-element>term
     {
         [ in>> ]
-        [ in-var>> capitalize map-varname make-configuration ]
+        [ in-var>> row-effect-element>term  make-configuration ]
         [ out>> ]
-        [ out-var>> capitalize map-varname make-configuration ]
+        [ out-var>> row-effect-element>term make-configuration ]
     } cleave <fun-type> ;
 
 PREDICATE: anon-effect < effect variable-effect? not ;

@@ -169,19 +169,20 @@ M: \ rot type-of* drop
 
 : m ( -- ) dup call ; inline
 
-! M: \ drop type-of* drop
-!     [ [ ] k ] type-of* ;
 
-! M: \ swap type-of* drop
-!     ( a b -- b a ) ;
-! M: \ compose type-of* drop
-!     ( ... quot1: ( ..a -- ..b ) quot2: ( ..b -- ..c ) -- ... quot: ( ..a -- ..c ) ) ;
-! M: \ call type-of* drop
-!     ( ..a quot: ( ..a -- ..b ) -- ..b ) ;
-! M: \ dip type-of* drop
-!     ( ..a b quot: ( ..a -- ..c ) -- ..c b ) ;
-! M: \ if type-of* drop
-!     ( ..a ?: boolean true: ( ..a -- ..b ) false: ( ..a -- ..b ) -- ..b ) ;
+! ( (A1|A2) bool ( A1 → B ) ( A2 → B ) → B )
+! or:
+! ( (A1|A2) bool ( A1 → B1 ) ( A2 → B2 ) → (B1|B2) )
+! or:
+! ( (A1|A2) (R -> R boolean ) ( A1 → B1 ) ( A2 → B2 ) → (B1|B2) )
+M: \ if type-of* drop
+    ! { "A1" "A2" } <alt-type> { "?" boolean } { "true" ( ..A1 -- ..B ) } { "false" ( ..A2 -- ..B ) } 3array
+    ! "B" { } <variable-effect> ;
+    ! { "A1" "A2" } <alt-type> { "?" boolean } { "true" ( ..A1 -- ..B1 ) } { "false" ( ..A2 -- ..B2 ) } 3array
+    ! { "B1" "B2" } <alt-type> { } <variable-effect> ;
+    { "A1" "A2" } <alt-type> { "?" ( ..R -- ..R boolean ) } { "true" ( ..A1 -- ..B1 ) } { "false" ( ..A2 -- ..B2 ) } 3array
+    { "B1" "B2" } <alt-type> { } <variable-effect> ;
+    ! ( ..a ?: boolean true: ( ..a -- ..b ) false: ( ..a -- ..b ) -- ..b ) ;
 
 ! M: \ dup type-of* drop
 !     { "x" } { "x" } "x" <dup-type> suffix <effect> ;
@@ -238,8 +239,20 @@ M: quotation infer-type
       ! ] with-unification-context
     ] if-empty ;
 
+M: composed infer-type
+    >quotation infer-type ;
+
+M: curried infer-type
+    >quotation infer-type ;
+
 : quote-type ( type name -- effect )
     swap 2array 1array { } swap <effect> ;
+
+M: curried type-of*
+    >quotation type-of* ;
+
+M: composed type-of*
+    >quotation type-of* ;
 
 ! This is debatable, because typing it requires inference...
 M: quotation type-of*
