@@ -1,5 +1,7 @@
-USING: accessors arrays assocs combinators.short-circuit grouping hashtables
-kernel math math.parser namespaces sequences sets sorting strings terms ;
+USING: accessors arrays assocs classes.tuple combinators
+combinators.short-circuit compiler.tree.propagation.info grouping hashtables
+kernel math math.intervals namespaces sequences sets sorting strings terms
+types.algebra ;
 
 IN: types.base-types
 
@@ -31,7 +33,8 @@ INSTANCE: type-var term-var
 ! INSTANCE: unique-var term-var
 : <unique-var> ( -- obj )
     "U" \ <unique-var> counter <type-var> ;
-
+: <unique-named-var> ( type-var -- obj )
+    name>> \ <unique-var> counter <type-var> ;
 : base-var= ( type-var1 type-var2 -- ? )
     { [ [ name>> ] bi@ = ]
       [ [ id>> ] bi@ = ]
@@ -107,7 +110,10 @@ INSTANCE: type-const proper-term
 M: type-const args>> drop f ;
 M: type-const change-type-var-order nip ;
 
+M: type-const term-value-type thing>> ;
+
 PREDICATE: f-type < type-const thing>> \ f = ;
+: <f-type> ( -- type ) \ f <type-const> ;
 
 TUPLE: dup-type element ;
 C: <dup-type> dup-type
@@ -195,6 +201,8 @@ M: type-var change-term-var-orders
     2dup base-var=
     [ nip change-type-var-order ]
     [ 2nip ] if ;
+
+M: type-var term-value-type drop object ;
 
 M: proper-term change-term-var-orders
    [ change-term-var-orders ] 2with map-args ;
@@ -342,7 +350,6 @@ M: term-var collect-drops*
 : eliminate-drop-terms ( term -- term )
     [ eliminate-drop-step ] loop ;
 
-
 ! ** Conversion to ordered variables
 ! Non-normalizing
 GENERIC: convert-to-vars ( term -- term )
@@ -386,6 +393,7 @@ M: pred-type reconvert-to-vars
 ! instantiated with fresh variables on the other side
 ! TODO: check if there is need to distinguish what is instantiated
 
+! Intersection behavior
 TUPLE: sum-type alternatives ;
 C: <sum-type> sum-type
 INSTANCE: sum-type proper-term
@@ -395,28 +403,173 @@ M: sum-type from-args* drop <sum-type> ;
 : new-var-substitution ( term -- assoc )
     term-vars members [ dup 1 swap change-type-var-order ] H{ } map>assoc ;
 
-: instantiate-term ( term -- term )
+GENERIC: instantiate-term ( term -- term )
+
+! NOTE: highly experimental.  We instantiate something, thus assuming nothing
+! about the types!
+! Doesnt seem to be correct, actually
+! M: type-const instantiate-term drop <unique-var> ;
+
+M: proper-term instantiate-term
     [ new-var-substitution ]
     [ lift* ] bi ;
 
 : instantiate1 ( template term -- template' instance term )
     [ [ instantiate-term ] keep ] dip ;
 
-: instantiate-alternatives ( term alternatives -- pairs )
-    alternatives>> [ instantiate1 2array ] map nip ;
+: instantiate-bound-vars ( term vars -- term )
+    [ dup <unique-named-var> ] H{ } map>assoc
+    swap lift* ;
+
+: free-var-substitutions ( vars -- copy1-subst copy2-subst problem-subst )
+    dup [ [ dup <unique-named-var> ] { } map>assoc ] bi@
+    2dup [ [ first2 ] [ second ] bi* 2array <sum-type> 2array ] 2map ;
+
+: instantiate-copies ( term -- term1 term2 subst )
+    dup dup bound/free-vars
+    [ [ instantiate-bound-vars ] curry bi@ ] dip
+    free-var-substitutions
+    [ swapd [ swap lift* ] 2bi@ ] dip ;
+
+: instantiate-alternatives ( term sum-type -- pairs )
+    swap [ alternatives>> first2 ] dip instantiate-copies
+    [ swapd [ 2array ] 2bi@ 2array ] dip prepend ;
+
+! : instantiate-alternatives ( term alternatives -- pairs )
+!     alternatives>> [ instantiate1 2array ] map nip ;
 
 ! * Conditional type
+
+TUPLE: conditional-type condition type ;
+INSTANCE: conditional-type proper-term
+M: conditional-type args>> [ condition>> ] [ type>> ] bi 2array ;
 
 ! This is probably already a form of dependent type, although pretty much the
 ! simplest one I can think of: This type will desugar into +any+ iff the
 ! condition is = f
-TUPLE: maybe-type condition type ;
+TUPLE: maybe-type < conditional-type ;
 C: <maybe-type> maybe-type
 INSTANCE: maybe-type proper-term
-M: maybe-type args>> [ condition>> ] [ type>> ] bi 2array ;
 M: maybe-type from-args* drop first2 <maybe-type> ;
 
+TUPLE: subtype typee supertype ;
+C: <subtype> subtype
+INSTANCE: subtype proper-term
+M: subtype args>> [ typee>> ] [ supertype>> ] bi 2array ;
+M: subtype from-args* drop first2 <subtype> ;
+
+
 ! NOTE: this is a bad name, and also not a sum type
+! Disjoint union behavior
 TUPLE: all-type < sum-type ;
 C: <all-type> all-type
 M: all-type from-args* drop <all-type> ;
+
+TUPLE: choice-type cond then else ;
+C: <choice-type> choice-type
+INSTANCE: choice-type proper-term
+: simplify-choice-condition ( changed? choice -- changed? choice )
+    dup cond>>
+    { { [ dup t <type-const> term-types-intersect? not ]
+        [ drop else>> [ drop t ] dip ] }
+      { [ dup <f-type> term-types-intersect? not ]
+        [ drop then>> [ drop t ] dip ] }
+      [ drop ]
+    } cond ;
+
+M: choice-type simplify-term*
+    call-next-method
+    simplify-choice-condition ;
+
+
+! * Variance
+TUPLE: variant-type type ;
+: new-variant ( type class -- obj ) new swap >>type ;
+
+INSTANCE: variant-type term-var
+M: variant-type args>> type>> 1array ;
+
+! ! Interestingly, when thinking only of functions, then lhs and rhs directly
+! ! corresponds to contravariant-type and covariant, respectively.
+! TUPLE: covariant-type < variant-type ;
+! C: <covariant> covariant-type
+! M: covariant-type from-args* drop
+!     first <covariant> ;
+
+! TUPLE: contravariant-type < variant-type ;
+! C: <contravariant> contravariant-type
+! M: contravariant-type from-args* drop
+!     first <contravariant> ;
+
+! TUPLE: invariant-type < variant-type ;
+! C: <invariant> invariant-type
+! M: invariant-type from-args* drop
+!     first <invariant> ;
+
+! GENERIC: make-variant ( class type -- type )
+! M: proper-term make-variant
+!     [ make-variant ] with map-args ;
+! M: term-var make-variant
+!     swap new-variant ;
+SINGLETONS: +in+ +co+ +contra+ ;
+UNION: variance +in+ +co+ +contra+ ;
+GENERIC: type-variance ( proper-term -- seq )
+M: proper-term type-variance
+    args>> length +in+ <array> ;
+
+! * Annotations
+! Elimination of annotations: When substituting into a target, the annotations
+! have to be merged.  E.g. elim ( .. vname term -- term ) is called with vname
+! being a possibly annotated term-var, and term being the thing that is
+! replaced.  Note that we need to keep track of the variance, i.e. the resulting
+! annotation can be different for the same variable, depending on which position
+! it is in.
+
+! ! Annotations is an assoc from annotation class to annotation value
+! TUPLE: annotated-term-var < term-var type-var annotations ;
+! GENERIC: lift-annotation ( source-variance variable-variance variable term-variance term )
+
+! * Data types
+
+
+! ** Symbolic computation
+! INSTANCE: value-info-state proper-term ;
+
+! In addition to the type constants, these are actual types which represent
+! values other than words to be executed.
+! Base type for representing maps and sequences alike
+! TUPLE: entry key value ;
+! INSTANCE: entry proper-term ;
+! TUPLE: record-type { mappings list } ;
+! INSTANCE: record-type proper-term
+
+
+! Partial constructor
+! During unification, this must actually match against stack elements.  Problem:
+! we only know that this
+! TUPLE: tuple-type class { slots list } ;
+! INSTANCE: tuple-type proper-term
+
+! ** Complex types
+INSTANCE: value-info-state proper-term
+INSTANCE: interval proper-term
+
+TUPLE: sequence-type length-type element-type ;
+C: <sequence-type> sequence-type
+INSTANCE: sequence-type proper-term
+
+! Declared tuple type, non-parametric
+TUPLE: tuple-type class slot-types ;
+C: <tuple-type> tuple-type
+INSTANCE: tuple-type proper-term
+M: tuple-type args>> slot-types>> ;
+M: tuple-type from-args* class>> swap <tuple-type> ;
+M: tuple-type type-variance
+    class>> all-slots [ read-only>> +co+ +in+ ? ] map ;
+
+
+TUPLE: union-type members ;
+C: <union-type> union-type
+INSTANCE: union-type proper-term
+M: union-type from-args* drop <union-type> ;
+M: union-type args>> members>> ;

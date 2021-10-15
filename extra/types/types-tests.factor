@@ -10,20 +10,20 @@ IN: types.tests
 ! Show all important types
 : comb-types ( -- )
     { k curry keep dup drop call nip dip swap over 2dup compose take cake
-      2dip 3dip
+      2dip 3dip 2drop 3dup 3drop 2nip
       pick rot
       bi* bi bi@ tri tri* tri@
-      2keep 2over keepd
+      2keep 2over keepd swapd
       if ? unless when
       dupd
       either? both?
-      m
+      m loop while
     }
     [ dup type-of 2array ] map
     [ [ name>> write ": " write ] [ pp ] bi* ] assoc-each ;
 
 ! Invariant:
-{  }
+{ }
 [ [ [ drop ] keep ] infer-type ] unit-test
 
 { ( x: fixnum x: fixnum -- x: integer ) }

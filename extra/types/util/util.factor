@@ -1,4 +1,4 @@
-USING: assocs kernel lists math.parser sequences ;
+USING: assocs kernel lists math math.parser namespaces sequences ;
 
 IN: types.util
 
@@ -6,7 +6,7 @@ IN: types.util
 
 ! TODO: move to lists vocab
 : list*>array ( list -- array lastcdr )
-    { } swap [ dup list? ] [ uncons [ suffix ] dip ] while ;
+    { } swap [ dup cons-state? ] [ uncons [ suffix ] dip ] while ;
 
 ! TODO: move to lists vocab
 : sequence>list* ( sequence lastcdr -- list )
@@ -33,6 +33,40 @@ CONSTANT: superscript-table H{
     { CHAR: - CHAR: ⁻ }
 }
 
+CONSTANT: subscript-table H{
+    { CHAR: 0 CHAR: ₀ }
+    { CHAR: 1 CHAR: ₁ }
+    { CHAR: 2 CHAR: ₂ }
+    { CHAR: 3 CHAR: ₃ }
+    { CHAR: 4 CHAR: ₄ }
+    { CHAR: 5 CHAR: ₆ }
+    { CHAR: 6 CHAR: ₇ }
+    { CHAR: 7 CHAR: ₈ }
+    { CHAR: 8 CHAR: ₉ }
+    { CHAR: 9 CHAR: ₉ }
+    { CHAR: - CHAR: ₋ }
+}
+
+: lookup-chars ( assoc string -- string )
+    [ ?at drop ] curry map ;
+
 : number>superscript ( n -- string )
-    number>string
-    superscript-table [ ?at drop ] curry map ;
+    number>string superscript-table lookup-chars ;
+
+: number>subscript ( n -- string )
+    number>string subscript-table lookup-chars ;
+
+! Reverse if
+: fi ( true false ? -- )
+    -rot if ; inline
+
+SYMBOL: debug-unify
+: when-debug ( quot level -- )
+    [ ] swap debug-unify get -1 or <= fi ; inline
+
+: spprint ( obj -- str )
+    [ pprint ] with-string-writer ;
+
+ERROR: different-lengths seq1 seq2 ;
+: assert-same-length ( seq1 seq2 -- seq1 seq2 )
+    2dup [ length ] bi@ = not [ different-lengths ] when ;

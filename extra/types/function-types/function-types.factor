@@ -1,9 +1,10 @@
-USING: accessors arrays ascii assocs classes combinators effects kernel lists
-make math math.parser math.statistics namespaces sequences strings terms
-types.base-types types.renaming types.util ;
+USING: accessors arrays ascii assocs classes combinators effects formatting
+kernel lists make math math.parser math.statistics namespaces sequences sets strings
+terms types.base-types types.renaming types.util ;
 
 IN: types.function-types
 
+FROM: namespaces => set ;
 ! * Function types, which correspond to effects
 ! A single var type indicates that this is only the row variable
 ! UNION: configuration-type list type-var ;
@@ -23,6 +24,7 @@ M: fun-type from-args* drop
     [ list*>array [ <reversed> ] dip prefix
       [ " " % ] [ effect>string % ] interleave ] "" make ;
 M: list effect>string configuration>string ;
+M: +nil+ effect>string drop "" ;
 
 M: fun-type propagate-drop
     [ propagate-drop ] map-args ;
@@ -52,7 +54,7 @@ M: drop-type effect>string element>> effect>string "𝓓" prepend ;
 
 M: dup-type effect>string element>> effect>string "(" ")'" surround ;
 
-M: type-const effect>string thing>> name>> ;
+M: type-const effect>string thing>> [ spprint "'" prepend ] [ "𝐅" ] if* ;
 
 GENERIC: effect-element>term ( element -- term )
 ! NOTE: This is needed so that old and new effects work together using type-of
@@ -64,11 +66,21 @@ M: type-var effect-element>term mappings get [ ensure-unique-var ] cache ;
 M: proper-term effect-element>term
     [ effect-element>term ] map-args ;
 
+! NOTE: this here is value level!!! Right now, type-const f and f is treated identically
+M: f effect-element>term <type-const> ;
+M: f-type effect>string drop "𝐅" ;
+
+: finite-effect>configurations ( effect -- consumption production )
+    [ in>> ] [ out>> ] bi
+    [ <reversed> "A" sequence>list* ] bi@ ;
+
 : make-configuration ( elements var-element -- term )
     [ [ effect-element>term ] map <reversed> ] [  ] bi* sequence>list* ;
 
 M: pair effect-element>term
     second effect-element>term ;
+    ! first2 [ effect-element>term ] bi@
+    ! <subtype> ;
 
 : row-effect-element>term ( element -- term )
     dup string?
@@ -78,16 +90,19 @@ M: pair effect-element>term
 M: variable-effect effect-element>term
     {
         [ in>> ]
-        [ in-var>> row-effect-element>term  make-configuration ]
+        [ in-var>> row-effect-element>term make-configuration ]
         [ out>> ]
         [ out-var>> row-effect-element>term make-configuration ]
-    } cleave <fun-type> ;
+    } cleave
+    ! [ <contravariant> ] [ <covariant> ] bi*
+    <fun-type> ;
 
 PREDICATE: anon-effect < effect variable-effect? not ;
 M: anon-effect effect-element>term
     [ in>> ] [ out>> ] bi
     "R" 0 <type-var> ensure-unique-var
     [ make-configuration ] curry bi@
+    ! [ <contravariant> ] [ <covariant> ] bi*
     <fun-type> ;
 
 M: class effect-element>term
@@ -123,21 +138,29 @@ M: all-type effect>string
     alternatives>> [ effect>string ] map " ⊕ " join
     "(" ")" surround ;
 
-M: maybe-type effect>string
+GENERIC: conditional-effect>string ( conditional-type -- condition-string )
+
+M: conditional-type effect>string
     [ type>> effect>string ]
-    [ condition>> effect>string "[!" "]" surround ] bi append ;
+    [ conditional-effect>string "[" "]" surround ] bi append ;
+
+M: maybe-type conditional-effect>string
+    condition>> effect>string "!" prepend ;
+
+M: subtype effect>string
+    [ typee>> effect>string ]
+    [ supertype>> effect>string ] bi "⊆" glue ;
 
 ! * Linearity
 ! Remove alternatives whose variables are not used
 : unused-var? ( counts var -- ? )
+    ! type-var-key ?of [ 2 < ] [ drop t ] if ;
     ?of [ 2 < ] [ drop t ] if ;
 
 ! TODO: check semantics here regarding all/any usage
+! TBR
 : unused-alternative? ( counts term -- ? )
     term-vars [ unused-var? ] with all? ;
-
-: var-usage ( term -- counts )
-    term-vars histogram ;
 
 SINGLETON: +any+
 INSTANCE: +any+ proper-term
@@ -177,14 +200,22 @@ M: fun-type sweep-unused
 M: sum-type sweep-unused
     call-next-method
     dup sum-type? [ sweep-sum-type ] when ;
+! type[!a] -> type[!a]
+! type[!'f] -> +any+
+! type[!'1] -> type
+
+! Neutral element for xor-type is f?
 M: maybe-type sweep-unused
     call-next-method
     dup condition>>
     { { [ dup f-type? ] [ 3drop t +any+ ] }
+      ! { [ dup type-const? ]
+      !   [ drop [ drop t ] [ type>> ] bi* ] }
       { [ dup +any+? ] [ drop [ drop t ] [ type>> ] bi* ] }
       [ drop ]
     } cond ;
 
+! TODO: possibly that can already be done in the unifier?
 : cleanup-unused ( term -- term changed? )
     [ var-usage ]
     [ mark-unused ] bi
@@ -193,6 +224,22 @@ M: maybe-type sweep-unused
 : cleanup-fun-type ( term -- term )
     [ cleanup-unused ] loop ;
 
+! GENERIC: linearize-fun-type
+GENERIC: source-vars ( fun-type -- seq )
+M: proper-term source-vars
+    { } swap [ source-vars union ] each-arg ;
+M: fun-type source-vars
+    consumption>> source-vars ;
+M: term-var source-vars 1array ;
+! : duplicate-usage ( fun-type -- assoc )
+!     production>> var-usage
+!     [ consumption>> term-vars members ] [ production>> var-usage ] bi
+!     [ 1 > ] filter-values
+!     extract-keys ;
+
+! : linearize-term ( term -- term )
+!     dup var-usage
+
 ERROR: non-linear-function-type type var ;
 : assert-linear-type ( fun-type -- fun-type )
     dup var-usage [
@@ -200,6 +247,85 @@ ERROR: non-linear-function-type type var ;
         [ non-linear-function-type ]
         [ 2drop ] if
     ] assoc-each ;
+
+! C: <blackbox-type> blackbox-type
+! M: blackbox-type from-args* word>>
+!     [ first2 ] dip <blackbox-type> ;
+! M: blackbox-type term-vars
+!     [ consumption>> list*>array drop [ term-vars ] gather ]
+!     [ production>> term-vars append ] bi dup append ;
+! M: blackbox-type effect>string
+!     [ consumption>> configuration>string ]
+!     [ word>> name>> " " " " surround append ]
+!     [ production>> configuration>string append ] tri
+!     "[" "]" surround ;
+
+
+! TUPLE: blackbox-type word input-fun-type output-fun-type ;
+! C: <blackbox-type> blackbox-type ;
+! INSTANCE: blackbox-type proper-term
+! M: blackbox-type args>>
+!     [ input-fun-type>> ]
+!     [ output-fun-type>> ] bi 2array ;
+!     wrapper-type>> 1array ;
+! M: blackbox-type from-args*
+!     word>> swap first2 <blackbox-type> ;
+! : blackbox-effect-string ( blackbox-type -- string )
+!     [ input-fun-type>> production>> configuration>string ]
+!     [ word>> name " " dup surround append ]
+!     [ output-fun-type>> consumption>> configuration>string append ] tri
+!     "[" "]" surround ;
+! M: blackbox-type effect>string
+!     [ input-fun-type>> consumption>> configuration>string ]
+!     [ blackbox-effect-string " " dup surround append ]
+!     [ output-fun-type>> production>> configuration>string append ] tri
+!     "(" ")" surround ;
+! M: blackbox-type args>>
+!     [ inputs>> ] [ outputs>> ] bi append ;
+! M: blackbox-type from-args* word>>
+!     [ first2 ] dip word>> <primitive-type> ;
+! M: blackbox-type type-variance
+!     [ inputs>> ] [ outputs>> ] bi
+!     [ length +contra+ <array> ]
+!     [ length +co+ <array> ] bi* append ;
+
+! M: blackbox-type effect>string
+!     [ word>> name>> "[" "]" surround ]
+!     [ call-next-method ] bi append ;
+!     ! [ args-effect-strings ] bi " " join "(" ")" surround append ;
+
+
+! * Variance
+
+M: fun-type type-variance
+    drop { +contra+ +co+ } ;
+
+GENERIC: variance>string ( variance -- string )
+M: +in+ variance>string drop "⁼" ;
+M: +co+ variance>string drop "⁺" ;
+M: +contra+ variance>string drop "⁻" ;
+
+: args-effect-strings ( type -- seq )
+    [ type-variance ] [ args>> ] bi
+    [ [ variance>string ] [ effect>string ] bi* append ] 2map ;
+
+M: proper-term effect>string
+    [ class-of name>> ] [ args-effect-strings ] bi
+    " " join " " prepend append "T{" "}" surround ;
+
+! * Variable depth
+! Having more row effects than one is not allowed usually.  So we need to insert
+! a marker when unifying.
+! TUPLE: macro-call n quot args ;
+! C: <macro-type> macrro
+! INSTANCE: macro-type proper-term
+! M: macro-type args>> drop f ;
+
+! * Some printing
+M: choice-type effect>string
+    [ cond>> effect>string "?[" append ]
+    [ then>> effect>string ":" append append ]
+    [ else>> effect>string append "]" append ] tri ;
 
 
 ! * Interface

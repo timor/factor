@@ -1,11 +1,12 @@
 USING: accessors arrays assocs assocs.extras classes combinators
-combinators.short-circuit effects hashtables io kernel math math.order sequences
-sequences.zipped terms types.base-types types.function-types types.renaming ;
+combinators.short-circuit effects hashtables io kernel math math.order
+namespaces prettyprint sequences sequences.zipped terms tools.continuations
+types.algebra types.base-types types.function-types types.renaming types.util
+types.value-types ;
 
 IN: types.bn-unification
 
 FROM: namespaces => set ;
-
 ! TUPLE: proper-term
 !     { symbol }
 !     { args sequence } ;
@@ -75,7 +76,9 @@ DEFER: solve
 
 :: lift ( subst term -- term )
     subst term lift* :> result
-    term result = [
+    term result =
+    t or
+    [
         "Lift: " write subst pp-subst "in term:" write
         term pp* " => " write result pp
     ] unless
@@ -257,24 +260,45 @@ UNION: PSD PS drop-type ;
 : solve-rec-type ( subst problem rec-type rhs -- subst )
     swap instantiate-rec-type solve1 ;
 
-: solve-choice ( subst problem lhs rhs -- subst )
+
+! Instantiation: One side is a template, the other is a duplicate-sum-type
+! thingy.  The template needs to be duplicated and instantiated with fresh
+! variables, and a substituter added to the problem that replaces the original
+! variables in the template with the duplicates.
+: solve-instance ( subst problem lhs rhs -- subst )
     dup sum-type? [ swap ] unless
     instantiate-alternatives prepend solve ;
 
-: solve-matches ( subst problem lhs rhs -- subst )
-    dup all-type? [ swap ] unless
-    alternatives>> [ 2array ] with map prepend solve ;
+: solve-choice ( subst problem lhs rhs -- subst )
+    dup choice-type? [ swap ] unless
+    [ then>> ] [ else>> ] bi 2array [ 2array ] with map prepend solve ;
 
 ! NOTE: promoting here!
 : solve-conditional ( subst problem lhs rhs -- subst )
     over maybe-type? [ swap ] unless
-    <unique-var> swap <maybe-type> solve1 ;
+    <unique-var> swap <maybe-type> swap solve1 ;
+
+GENERIC: proper-term-type ( proper-term -- type )
+
+M: proper-term proper-term-type
+    class-of ;
+M: type-const proper-term-type
+    thing>> ;
+
+M: type-const term-value-type thing>> ;
+! M: lazy-computation term-value-type
+!     word>> stack-effect effect-out-types
+!     dup length 1 = not
+!     [ "trying to take result of non-applicative lazy computation" throw ] when
+!     first ;
+
+UNION: data-type type-const lazy-computation ;
 
 : solve1 ( subst problem lhs rhs -- subst )
-    f [
+    [
         "Solve1:" print
         2dup [ "! " write pp* " = " write ] [ pp ] bi*
-    ] when
+    ] 3 when-debug
     {
         ! { [ dup { [ +drop+-type? ] [ rec-type? ] } 1|| ]
         !   [ swap solve1 ] }
@@ -302,20 +326,27 @@ UNION: PSD PS drop-type ;
         !   [ solve-dup-type ] }
         { [ 2dup [ sum-type? ] both? ]
           [ "both-sided alternative decomposition " 3array throw ] }
-        { [ 2dup [ all-type? ] either? ]
-          [ solve-matches ]
-        }
-        { [ 2dup [ sum-type? ] either? ]
+        { [ 2dup { [ [ choice-type? ] either? ] [ [ choice-type? ] both? not ] } 2&& ]
           [ solve-choice ]
-          ! [ "need to solve alt-type" 3array throw ]
+        }
+        { [ 2dup { [ [ sum-type? ] either? ] [ [ sum-type? ] both? not ] } 2&& ]
+          [ solve-instance ]
         }
         ! NOTE: allowing here because of expansion
         ! { [ 2dup [ maybe-type? ] both? ]
         !   [ "both-sided conditional term" 3array throw ] }
         { [ 2dup { [ [ maybe-type? ] either? ] [ [ maybe-type? ] both? not ] } 2&& ]
           [ solve-conditional ] }
+        ! TODO: This should probably take into account variance position here.
+        ! I guess allowing only intersection of base types is the most one can
+        ! get out of syntax-directed typing...
+        { [ 2dup [ data-type? ] both? ]
+          [ 2dup [ term-value-type ] bi@ value-types-intersect?
+            [ 2drop solve ]
+            [ skip-eqn ] if ]
+        }
         { [ 2dup [ proper-term? ] both? ] [
-              2dup [ class-of ] bi@ =
+              2dup [ proper-term-type ] bi@ =
               [ [ args>> ] bi@ <zipped> prepend solve ]
               [
                   skip-eqn
@@ -333,7 +364,7 @@ UNION: PSD PS drop-type ;
 
 : solve ( subst problem -- subst )
     [
-        f [ 2dup pp-problem ] when
+        [ 2dup pp-problem ] 2 when-debug
         unclip-slice first2
         solve1
     ] unless-empty ;
@@ -360,9 +391,9 @@ UNION: PSD PS drop-type ;
 ! The equation should already be removed from the problem so simply continue.
 ! Alternative approach: substitute anyways
 :: elim ( subst problem vname term -- subst )
-    vname term occurs-free? [ subst problem vname term elim-rec ]
+    ! vname term occurs-free? [ subst problem vname term elim-rec ]
     ! vname term occurs-free? drop f [ subst problem vname term elim-rec ]
-    ! vname term occurs-free? [ vname term recursive-term-error ]
+    vname term occurs-free? [ vname term recursive-term-error ]
 
     ! vname term occurs? [
     !     "Skipping recursion: " write vname pp* " = " write term pp
@@ -405,9 +436,11 @@ UNION: PSD PS drop-type ;
     rename-2-terms
     ! [ [ get-constraints ] bi@ append ] 2keep
     [ f ] 2dip
-    "Computing unifier:" print
-    2dup [ pp ] bi@
-    "Constraints:" print pick pp
+    [
+        "Computing unifier:" print
+        2dup [ . ] bi@
+        "Constraints:" print pick pp
+    ] 1 when-debug
     ! [
         [ [ production>> ] [ consumption>> ] bi* unify-with-constraints ]
         [ [ consumption>> ] [ production>> ] bi* ] 2bi rot
@@ -507,7 +540,7 @@ M: rec-type simplify-rec
 
 ! This should return something that can be used on the typed effect level
 : normalize-effect-type ( fun-type -- effect-type )
-    "Result type: " write dup pp
+    [ "Result type: " write dup pp ] 2 when-debug
     ! eliminate-drop-terms
     ! "Eliminated drops: " write dup pp
     ! simplify-rec
@@ -516,19 +549,21 @@ M: rec-type simplify-rec
     ! eliminate-pred/succ ; replaced by convert-to-vars
     ! normalize-var-orders
     ! TODO: somehow not cleaning up doesnt work.  Bug in renaming???
-    cleanup-fun-type
-    "Remove Unused variables: " write dup pp
+    ! cleanup-fun-type
+    [ simplify-term* cleanup-unused swap [ or ] dip swap ] loop
+    ! simplify-term
+    [ "Simplified: " write dup pp ] 2 when-debug
     ;
 
 : unify-effects ( effect1 effect2 -- effect )
     effects>unifier ! For dup expansion
     ! re-orient-subst
-    "Unifier: " print dup pp-subst
+    [ "Unifier: " print dup pp-subst ] 2 when-debug
     [ <fun-type> ] dip
-    "Target: " write over pp
+    [ "Target: " write over pp ] 2 when-debug
     ! [ resubst ] curry bi@ <fun-type>
     resubst
-    "Substituted: " write dup pp
+    [ "Substituted: " write dup pp ] 2 when-debug
     normalize-effect-type
-    "Normalized: " write dup pp
+    [ "Normalized: " write dup pp nl ] 1 when-debug
     ;

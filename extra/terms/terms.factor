@@ -1,6 +1,5 @@
-USING: accessors arrays assocs combinators.short-circuit kernel lists sequences
-sets
-;
+USING: accessors arrays assocs classes classes.tuple combinators.short-circuit
+kernel lists sequences ;
 
 IN: terms
 
@@ -25,6 +24,12 @@ SLOT: args
     over constant-term?
     [ 2drop ]
     [ [ args>> ] dip each ] if ; inline
+
+! Can we do that generically?
+M: proper-term args>> tuple-slots ;
+M: proper-term from-args*
+    over empty? [ nip ]
+    [ class-of slots>tuple ] if ;
 
 ERROR: term-var-has-no-args term-var ;
 M: term-var args>> term-var-has-no-args ;
@@ -62,3 +67,20 @@ GENERIC: term-vars ( term -- seq )
 M: term-var term-vars 1array ;
 M: proper-term term-vars
     { } clone swap [ term-vars append ] each-arg ;
+
+: var-usage ( term -- counts )
+    ! term-vars [ type-var-key ] map histogram ;
+    term-vars histogram ;
+
+! In linear terms, there are either 2 occurrences, then it it is a bound
+! variable, or there is 1 occurrence, then it is a free variable.
+: bound/free-vars ( term -- bound-vars free-vars )
+    var-usage [ nip 1 = not ] assoc-partition [ keys ] bi@  ;
+
+! * Simplification protocol
+GENERIC: simplify-term* ( term -- changed? term )
+M: term-var simplify-term* f swap ;
+M: proper-term simplify-term*
+    f swap [ simplify-term* [ or ] dip ] map-args ;
+: simplify-term ( term -- term )
+    [ simplify-term* swap ] loop ;
