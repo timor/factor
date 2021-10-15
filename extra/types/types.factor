@@ -1,8 +1,8 @@
 USING: accessors arrays assocs classes classes.tuple combinators
 combinators.short-circuit effects generic io kernel kernel.private lists
-macros.expander math namespaces prettyprint quotations sequences sets
-types.base-types types.function-types types.util types.value-types vocabs words
-;
+macros.expander math namespaces prettyprint quotations sequences
+sequences.private sets types.base-types types.function-types types.util
+types.value-types vocabs words ;
 
 IN: types
 
@@ -321,8 +321,11 @@ M: \ 2nip type-of* drop
 ! For recursive words, we actually need to turn the declared effect into a type
 ! for the inner invocations
 : recursive-call-type ( word -- type )
-    "declared-effect" word-prop ;
-    ! drop ( ..prev -- ..next ) ;
+    {
+        [ "declared-type-scheme" word-prop ]
+        ! [ "declared-effect" word-prop ]
+        [ drop ( ..prev -- ..next ) ]
+    } 1|| ;
 
 ! * Quotation type inference
 ! TODO: clean up terminology.  Currently types and effects are used a bit inconsistently

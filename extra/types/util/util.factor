@@ -1,4 +1,5 @@
-USING: assocs kernel lists math math.parser namespaces sequences ;
+USING: assocs effects io.streams.string kernel lists make math math.parser
+namespaces prettyprint sequences ;
 
 IN: types.util
 
@@ -70,3 +71,6 @@ SYMBOL: debug-unify
 ERROR: different-lengths seq1 seq2 ;
 : assert-same-length ( seq1 seq2 -- seq1 seq2 )
     2dup [ length ] bi@ = not [ different-lengths ] when ;
+
+: next-free-suffix ( prefix assoc -- suffix )
+    2dup inc-at at ;

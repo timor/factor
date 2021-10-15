@@ -292,7 +292,7 @@ M: type-const term-value-type thing>> ;
 !     [ "trying to take result of non-applicative lazy computation" throw ] when
 !     first ;
 
-UNION: data-type type-const lazy-computation ;
+UNION: data-type type-const eval-result ;
 
 : solve1 ( subst problem lhs rhs -- subst )
     [
@@ -300,13 +300,6 @@ UNION: data-type type-const lazy-computation ;
         2dup [ "! " write pp* " = " write ] [ pp ] bi*
     ] 3 when-debug
     {
-        ! { [ dup { [ +drop+-type? ] [ rec-type? ] } 1|| ]
-        !   [ swap solve1 ] }
-        ! { [ over +drop+-type? ]
-        !   [ solve-drop-type ] }
-        ! { [ over rec-type? ]
-        !   [ solve-rec-type ]
-        ! }
         { [ 2dup [ +any+? ] either? ]
           [ 2drop solve ]
         }
@@ -315,15 +308,6 @@ UNION: data-type type-const lazy-computation ;
               [ elim ] if ] }
         { [ dup term-var? ] [
               swap elim ] }
-        ! { [ over term-var? ] [
-        !       2dup = [ 2drop solve ]
-        !       [ elim ] if ] }
-        ! { [ dup term-var? ] [
-        !       swap elim ] }
-        ! { [ dup dup-type? ]
-        !   [ swap solve-dup-type ] }
-        ! { [ over dup-type? ]
-        !   [ solve-dup-type ] }
         { [ 2dup [ sum-type? ] both? ]
           [ "both-sided alternative decomposition " 3array throw ] }
         { [ 2dup { [ [ choice-type? ] either? ] [ [ choice-type? ] both? not ] } 2&& ]
@@ -540,6 +524,7 @@ M: rec-type simplify-rec
 
 ! This should return something that can be used on the typed effect level
 : normalize-effect-type ( fun-type -- effect-type )
+    simplify-var-names
     [ "Result type: " write dup pp ] 2 when-debug
     ! eliminate-drop-terms
     ! "Eliminated drops: " write dup pp

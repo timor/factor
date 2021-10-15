@@ -147,3 +147,11 @@ M: drop-type rename-vars*
 : rename-2-terms ( term1 term2 -- term1 term2' )
     [ f swap rename-vars swap ]
     [ rename-vars ] bi* nip ;
+
+: new-term-vars ( term -- subst )
+    term-vars
+    H{ } clone H{ } clone
+    '[ dup _ [ name>> dup _ next-free-suffix <type-var> ] cache 2array ] map ;
+
+: simplify-var-names ( term -- term )
+    [ new-term-vars ] [ lift* ] bi ;

@@ -34,7 +34,7 @@ INSTANCE: type-var term-var
 : <unique-var> ( -- obj )
     "U" \ <unique-var> counter <type-var> ;
 : <unique-named-var> ( type-var -- obj )
-    name>> \ <unique-var> counter <type-var> ;
+    \ <unique-var> counter <type-var> ;
 : base-var= ( type-var1 type-var2 -- ? )
     { [ [ name>> ] bi@ = ]
       [ [ id>> ] bi@ = ]
@@ -399,6 +399,10 @@ C: <sum-type> sum-type
 INSTANCE: sum-type proper-term
 M: sum-type args>> alternatives>> ;
 M: sum-type from-args* drop <sum-type> ;
+M: sum-type simplify-term*
+    call-next-method
+    dup alternatives>> all-equal?
+    [ alternatives>> first [ drop t ] dip ] when ;
 
 : new-var-substitution ( term -- assoc )
     term-vars members [ dup 1 swap change-type-var-order ] H{ } map>assoc ;
@@ -418,11 +422,11 @@ M: proper-term instantiate-term
     [ [ instantiate-term ] keep ] dip ;
 
 : instantiate-bound-vars ( term vars -- term )
-    [ dup <unique-named-var> ] H{ } map>assoc
+    [ dup name>> <unique-named-var> ] H{ } map>assoc
     swap lift* ;
 
 : free-var-substitutions ( vars -- copy1-subst copy2-subst problem-subst )
-    dup [ [ dup <unique-named-var> ] { } map>assoc ] bi@
+    dup [ [ dup name>> <unique-named-var> ] { } map>assoc ] bi@
     2dup [ [ first2 ] [ second ] bi* 2array <sum-type> 2array ] 2map ;
 
 : instantiate-copies ( term -- term1 term2 subst )
@@ -477,9 +481,15 @@ INSTANCE: choice-type proper-term
       [ drop ]
     } cond ;
 
+: simplify-identical-choice ( changed? choice -- changed? choice )
+    dup [ then>> ] [ else>> ] bi =
+    [ else>> [ drop t ] dip ] when ;
+
 M: choice-type simplify-term*
     call-next-method
-    simplify-choice-condition ;
+    dup choice-type? [ simplify-choice-condition ] when
+    dup choice-type? [ simplify-identical-choice ] when
+    ;
 
 
 ! * Variance
