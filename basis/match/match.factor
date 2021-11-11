@@ -2,9 +2,8 @@
 ! See http://factorcode.org/license.txt for BSD license.
 !
 ! Based on pattern matching code from Paul Graham's book 'On Lisp'.
-USING: assocs classes classes.tuple combinators kernel lexer
-macros make namespaces parser quotations sequences summary words
-;
+USING: assocs classes classes.tuple combinators kernel lexer make namespaces
+parser quotations sequences summary words ;
 IN: match
 
 SYMBOL: _
@@ -20,7 +19,9 @@ SYMBOL: _
 SYNTAX: MATCH-VARS: ! vars ...
     ";" [ define-match-var ] each-token ;
 
-PREDICATE: match-var < word "match-var" word-prop ;
+MIXIN: match-var
+PREDICATE: match-var-word < word "match-var" word-prop ;
+INSTANCE: match-var-word match-var
 
 : set-match-var ( value var -- ? )
     building get ?at [ = ] [ ,, t ] if ;
