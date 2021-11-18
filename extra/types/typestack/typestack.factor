@@ -109,7 +109,7 @@ M: \ type-and type-transfer*
 ! type fragments, i.e. first-class type transfers.
 : literal-type-transfer ( typestack thing -- quotation undo-quotation )
     nip
-    dup type? [ type-of ] unless 1quotation [ drop ] ;
+    dup base-type? [ type-of ] unless 1quotation [ drop ] ;
 
 ! ERROR: macro-not-expanded word ;
 

@@ -31,23 +31,23 @@ VARIANT: syntactic-type
     declared: { value class }
     ;
 
-VARIANT: type
+VARIANT: base-type
     +1+
     +0+
     atomic: { class }
     literal: { value class }
     quotation-type: { consumption production }
     intersection-type: { types }
-    not-type: { type } ! May only hold atomic or literals or quotations
-    union-type: { types } ! Top-level type in normal-form
+    not-type: { base-type } ! May only hold atomic or literals or quotations
+    union-type: { types } ! Top-level base-type in normal-form
     ;
 
-: if-null ( class null-quot else-quot -- type )
+: if-null ( class null-quot else-quot -- base-type )
     pick null = [ drop nip call ]
     [ nip call ] if ; inline
 
 DEFER: intersect-types
-: intersect-union ( type1 union-types -- type )
+: intersect-union ( type1 union-types -- base-type )
     members [ intersect-types ] with map <union-type> ;
 
 ERROR: null-here-means-error-somewhere-else ;
@@ -59,17 +59,17 @@ ERROR: null-here-means-error-somewhere-else ;
     clone [ adjoin ] keep ;
 
 ! TODO: this is just a test here, not actually performing nested intersection!
-: intersect-quotation-types ( cons1 cons2 prod1 prod2 -- type )
+: intersect-quotation-types ( cons1 cons2 prod1 prod2 -- base-type )
     2over [ list>array ] bi@ [ intersect-types +0+? not ] 2all?
     [ swapd [ <quotation-type> ] 2bi@ 2array >hash-set <intersection-type> ]
     [ 4drop +0+ ] if ;
 
-: intersect-types ( type1 type2 -- type )
+: intersect-types ( type1 type2 -- base-type )
     2dup [ +1+? ] either? [ dup +1+? [ drop ] [ nip ] if ]
     [
         2dup [ +0+? ] either? [ 2drop +0+ ]
         [
-            { { atomic [ swap  ! class type
+            { { atomic [ swap  ! class base-type
                          {
                              { atomic [ class-and [ +0+ ] [ <atomic> ] if-null ] }
                              { literal [ swapd class-and [ drop +0+ ] [ <literal> ] if-null ] }
@@ -78,7 +78,7 @@ ERROR: null-here-means-error-somewhere-else ;
                              { not-type [ <not-type> [ <atomic> ] dip 2array >hash-set <intersection-type> ] }
                              { union-type [ [ <atomic> ] dip intersect-union ] }
                          } match ] }
-              { literal [ rot ! value class type
+              { literal [ rot ! value class base-type
                           {
                               { atomic [ <atomic> [ <literal> ] dip intersect-types ] } ! symmetric to above
                               { literal [ swapd 2over = [ class-and error-if-null nip <literal> ] [ 4drop +0+ ] if ] }
@@ -87,7 +87,7 @@ ERROR: null-here-means-error-somewhere-else ;
                               { not-type [ [ <literal> dup ] dip intersect-types +0+? [ drop +0+ ] unless ] }
                               { union-type [ [ <literal> ] dip intersect-union ] }
                           } match ] }
-              { quotation-type [ rot ! consumption production type ]
+              { quotation-type [ rot ! consumption production base-type ]
                                  {
                                      { atomic [ <atomic> [ <quotation-type> ] dip intersect-types ] }
                                      { literal [ 4drop +0+ ] }
@@ -96,7 +96,7 @@ ERROR: null-here-means-error-somewhere-else ;
                                      { not-type [ <not-type> [ <quotation-type> ] dip 2array >hash-set <intersection-type> ] }
                                      { union-type [ [ <quotation-type> ] dip intersect-union ] }
                                  } match ] }
-              { intersection-type [ swap ! intersection-types type
+              { intersection-type [ swap ! intersection-types base-type
                                     {
                                         { atomic [ <atomic> [ <intersection-type> ] dip intersect-types ] }
                                         { literal [ <literal> [ <intersection-type> ] dip intersect-types ] }
@@ -105,7 +105,7 @@ ERROR: null-here-means-error-somewhere-else ;
                                         { not-type [ <not-type> swap add-to-set <intersection-type> ] }
                                         { union-type [ [ <intersection-type> ] dip intersect-union ] }
                                     } match ] }
-              { not-type [ swap ! not-type type
+              { not-type [ swap ! not-type base-type
                            {
                                { atomic [ <atomic> [ <not-type> ] dip intersect-types ] }
                                { literal [ <literal> [ <not-type> ] dip intersect-types ] }
@@ -120,26 +120,26 @@ ERROR: null-here-means-error-somewhere-else ;
     ] if ;
 
 ! Convert a value to a type, first approximation is literals
-GENERIC: type-of ( thing -- type )
+GENERIC: type-of ( thing -- base-type )
 M: object type-of dup class-of <literal> ;
 
 ! * Algebra interface
 ! This is akin to class-and, class-or, etc
 
-: type= ( type type -- ? )
+: type= ( base-type base-type -- ? )
     ! TODO
     = ;
 
-: type-and ( type type -- type )
+: type-and ( base-type base-type -- base-type )
     2dup type= [ drop ] [ intersect-types ] if ;
 
-: type-or ( type type -- type )
+: type-or ( base-type base-type -- base-type )
     2dup type= [ drop ] [ 2array <union-type> ] if ;
 
 
 ! * Back conversion into base classes, possibly less precise
 
-: type>class ( type -- classoid )
+: type>class ( base-type -- classoid )
     { { +1+ [ object ] }
       { +0+ [ null ] }
       { atomic [ ] }
