@@ -9,3 +9,14 @@ IN: types.typestack.tests
 
 { { } { integer 1 2 } }
 [ { 1 2 } { integer fixnum bool } ?pop-types ] unit-test
+
+
+{ ( :object -- :object :object :object ) }
+[ [ dup dup ] infer-effect ] unit-test
+
+{ ( :object :object -- ) }
+[ [ drop drop ] infer-effect ] unit-test
+
+{ ( -- :fixnum :fixnum ) }
+
+[ [ 1 dup ] infer-effect ] unit-test

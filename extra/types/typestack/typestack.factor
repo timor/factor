@@ -1,5 +1,6 @@
-USING: accessors arrays continuations effects kernel macros math namespaces
-quotations sequences types.algebraic words ;
+USING: accessors arrays combinators continuations effects kernel macros
+macros.expander math namespaces quotations sequences tools.continuations
+types.algebraic words ;
 
 IN: types.typestack
 
@@ -44,18 +45,6 @@ IN: types.typestack
 
 ! Same as forward calculation, but swap undo-quotation and rest-of-quotation
 
-! Re-propagation
-! State:
-! - output-typestack
-! - Rest of quotation
-! Input:
-! - input-typestack
-! - trace
-! Output: fully typed trace
-
-! 1. Take all words from the trace, and form new quotation.
-! 2. Perform forward pass
-
 ! ** Typestack handling
 
 ! Non-destructive
@@ -77,64 +66,121 @@ IN: types.typestack
     [ 2dup [ length ] bi@ swap - head swap append { } swap ]
     [ length pop-types ] if ;
 
-! ** Iteration data structure
-TUPLE: call-record inputs word ;
-C: <call-record> call-record
-ERROR: saving-macro-call typestack word ;
+! * Computation-based type transfer description
+! The idea is to provide unification infrastructure here for forward/backwards calculations
+
+TUPLE: infer-state undo-quotation typestack rest-quot ;
+C: <infer-state> infer-state
+
+: compose-undo ( infer-state undo-quotation -- infer-state )
+    [ prepose ] curry change-undo-quotation ;
+
+: prepose-code ( infer-state quot -- infer-state )
+    [ prepose ] curry change-rest-quot ;
+
+: next-word ( infer-state -- infer-state word/f )
+    dup rest-quot>> [ f f ] [ unclip ] if-empty
+    [ [ >>rest-quot ] dip ] [ drop f ] if* ;
+
+: start-infer ( quot -- infer-state )
+    [ [ ] { } ] dip <infer-state> ;
+
+PREDICATE: inline-word < word inline? ;
+
+! TODO: cache expansions? based on =, type=?
+GENERIC: type-transfer* ( input-typestack word -- quotation undo-quotation )
+
+ERROR: undefined-primitive-type-transfer word ;
+: primitive-type-transfer ( typestack word -- quotation undo-quotation )
+    { { [ dup \ dup eq? ] [ 2drop [ dup ] [ type-and ] ] }
+      { [ dup \ drop eq? ] [ drop { object } ?pop-types nip first 1quotation [ drop ] swap ] }
+      { [ dup \ swap eq? ] [ 2drop [ swap ] dup ] }
+      [ undefined-primitive-type-transfer ]
+    } cond ;
+
+M: \ type-and type-transfer*
+    1quotation nip [ dup ] ;
 
 
-: make-call-record ( input-types word -- record )
-    dup macro? [ saving-macro-call ] when
-    [ stack-effect in>> length peek-types ]
-    keep <call-record> ;
+! TODO: emulate =/fail?
+! NOTE: We assume a typestack that has types as element types.  The only
+! exception here is literal value-level values, which are elevated to literal types
+! Also, quotations are not converted here, since they are treated as
+! type fragments, i.e. first-class type transfers.
+: literal-type-transfer ( typestack thing -- quotation undo-quotation )
+    nip
+    dup type? [ type-of ] unless 1quotation [ drop ] ;
 
+! ERROR: macro-not-expanded word ;
 
-: save-call ( trace typestack word -- trace )
-    make-call-record suffix ;
+: element-type-transfer ( typestack word -- quotation undo-quotation )
+    { { [ dup primitive? ] [ primitive-type-transfer ] }
+      { [ dup word? ] [ type-transfer* ] }
+      [ literal-type-transfer ]
+    } cond ;
 
-: save-literal-record ( trace typestack word -- trace )
-    nip f <call-record> suffix ;
+: apply-type-quot ( infer-state quotation -- infer-state )
+    '[ _ with-datastack ] change-typestack ;
 
-GENERIC: execute-type ( trace typestack word -- trace typestack )
-M: object execute-type
-    [ type-of push-type ]
-    [ save-literal-record ] bi ;
+: pop-macro-literals ( typestack word -- typestack literals )
+    macro-effect
+    pop-types
+    [ value>> ] map ;
 
-! Returns the intersected types, but removes them from the typestack for the
-! word to push its output types after that
-: pop-input-types ( typestack word -- typestack types )
-    stack-effect effect-in-types
-    [ ?pop-types ]
-    [ [ intersect-types ] 2map ] bi ;
+: expand-infer-inline ( infer-state typestack word -- infer-state )
+    nip def>> prepose-code ;
 
-: push-output-types ( typestack record  )
+: expand-infer-macro ( infer-state typestack word -- infer-state )
+    [ pop-macro-literals [ >>typestack ] dip ]
+    [ macro-quot with-datastack last ] bi
+    prepose-code ;
 
-M: word execute-type
-    [ ensure-in-effect-types ]
-    [ save-call ] bi ;
-    [ effect-in-types assert-in-effect-types ]
-    [ in>> length pop-types ]
-    [ effect-out-types swap [ +0+? ] any? [ length +0+ <array> ] when push-types ] tri
-    ;
+: pad-head-shorter ( seq seq elt -- seq seq )
+    [ [ <reversed> ] bi@ ] dip pad-tail-shorter [ <reversed> ] bi@ ;
 
-SYMBOL: word-trace
-! TODO: find fixpoint
-ERROR: recursive-inference word ;
-! M: word execute-type
-!     dup word-trace get member? [ recursive-inference ]
-!     [
-!         [ word-trace get  ]
-!         def>> ] [ execute-type ] each ;
+: pad-typestack ( typestack input-types -- typestack input-types )
+    object <atomic> pad-head-shorter ;
 
-! Primitive base
-M: \ dup execute-type drop
-    [ dup ] with-datastack ;
+! TODO: optimize type-anding only on the common seqence?
+: ensure-inputs ( typestack word -- typestack )
+    dup word?
+    [ stack-effect effect-in-types [ <atomic> ] map
+      pad-typestack
+      [ type-and ] 2map ] [ drop ] if ;
 
-M: \ drop execute-type drop
-    [ drop ] with-datastack ;
+: infer-step ( infer-state word -- infer-state )
+    [ [ ensure-inputs ] curry change-typestack ] keep
+    [ dup typestack>> ] dip
+    { { [ dup macro? ] [ expand-infer-macro ] }
+      { [ dup inline? ] [ expand-infer-inline ] }
+      [ element-type-transfer
+        [ apply-type-quot ] dip
+        compose-undo
+      ]
+    } cond ;
 
-! DEFER: infer-quotation-type ! quotation
-M: \ call execute-type drop
-    >quotation [ execute-type ] each ;
+: run-infer ( infer-step -- infer-step )
+    [
+        next-word [ infer-step t ]
+        [ f ] if*
+    ] loop ;
 
-PREDICATE: empty-quotation < quotation empty? ;
+: type-quot-forward ( quot -- infer-state )
+    start-infer
+    run-infer ;
+
+: reverse-inference ( infer-state -- infer-state )
+    \ infer-state unboa spin <infer-state> ;
+
+! Note: only interesting for interface purposes?
+: infer-in/out ( quotation -- input-types output-types )
+    type-quot-forward
+    [ typestack>> ]
+    [ reverse-inference run-infer typestack>> ] bi
+    swap ;
+
+M: quotation type-of
+    infer-in/out <quotation-type> ;
+
+: infer-effect ( quotation -- effect )
+    type-of type>class ;
