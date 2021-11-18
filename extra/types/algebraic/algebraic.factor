@@ -1,5 +1,5 @@
-USING: accessors alien arrays byte-arrays classes classes.algebra effects
-hash-sets kernel lists math quotations sequences sets strings variants words ;
+USING: alien arrays byte-arrays classes classes.algebra hash-sets kernel lists
+math quotations sequences sets strings variants words ;
 
 IN: types.algebraic
 
@@ -58,6 +58,7 @@ ERROR: null-here-means-error-somewhere-else ;
 : add-to-set ( value set -- set )
     clone [ adjoin ] keep ;
 
+! TODO: this is just a test here, not actually performing nested intersection!
 : intersect-quotation-types ( cons1 cons2 prod1 prod2 -- type )
     2over [ list>array ] bi@ [ intersect-types +0+? not ] 2all?
     [ swapd [ <quotation-type> ] 2bi@ 2array >hash-set <intersection-type> ]
@@ -123,25 +124,3 @@ ERROR: null-here-means-error-somewhere-else ;
 GENERIC: type-of ( thing -- type )
 M: object type-of dup class-of <literal> ;
 
-: push-type ( stack type -- stack )
-    suffix ;
-
-: pop-types ( stack n -- stack types )
-    cut* ;
-
-: push-types ( stack types -- stack )
-    append ;
-
-GENERIC: execute-type ( stack word -- stack )
-M: object execute-type
-    type-of push-type ;
-: assert-in-effect-types ( stack types -- stack )
-    [ length pop-types ]
-    [ [ intersect-types ] 2map ] bi
-    push-types ;
-M: word execute-type
-    stack-effect
-    [ effect-in-types assert-in-effect-types ]
-    [ in>> length pop-types ]
-    [ effect-out-types swap [ +0+? ] any? [ length +0+ <array> ] when push-types ] tri
-    ;
