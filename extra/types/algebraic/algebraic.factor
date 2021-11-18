@@ -137,3 +137,15 @@ M: object type-of dup class-of <literal> ;
     2dup type= [ drop ] [ 2array <union-type> ] if ;
 
 
+! * Back conversion into base classes, possibly less precise
+
+: type>class ( type -- classoid )
+    { { +1+ [ object ] }
+      { +0+ [ null ] }
+      { atomic [ ] }
+      { literal [ nip ] }
+      { quotation-type [ [ [ type>class f swap 2array ] map ] bi@ <effect> ] }
+      { intersection-type [ type>class ] [ class-and ] map-reduce }
+      { not-type [ type>class class-not ] }
+      { union-type [ [ type>class ] [ class-or ] map-reduce ] }
+    } match ;
