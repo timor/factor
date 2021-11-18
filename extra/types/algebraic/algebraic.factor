@@ -64,7 +64,6 @@ ERROR: null-here-means-error-somewhere-else ;
     [ swapd [ <quotation-type> ] 2bi@ 2array >hash-set <intersection-type> ]
     [ 4drop +0+ ] if ;
 
-
 : intersect-types ( type1 type2 -- type )
     2dup [ +1+? ] either? [ dup +1+? [ drop ] [ nip ] if ]
     [
@@ -123,4 +122,18 @@ ERROR: null-here-means-error-somewhere-else ;
 ! Convert a value to a type, first approximation is literals
 GENERIC: type-of ( thing -- type )
 M: object type-of dup class-of <literal> ;
+
+! * Algebra interface
+! This is akin to class-and, class-or, etc
+
+: type= ( type type -- ? )
+    ! TODO
+    = ;
+
+: type-and ( type type -- type )
+    2dup type= [ drop ] [ intersect-types ] if ;
+
+: type-or ( type type -- type )
+    2dup type= [ drop ] [ 2array <union-type> ] if ;
+
 
