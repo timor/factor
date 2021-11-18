@@ -1,9 +1,8 @@
 ! Copyright (C) 2009 Joe Groff.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays classes classes.mixin classes.parser
-classes.singleton classes.tuple classes.tuple.parser
-classes.union combinators inverse kernel lexer macros make
-parser quotations sequences slots splitting words ;
+USING: accessors arrays classes classes.mixin classes.parser classes.singleton
+classes.tuple classes.tuple.parser combinators inverse kernel lexer make parser
+quotations sequences slots splitting words ;
 IN: variants
 
 PREDICATE: variant-class < mixin-class "variant?" word-prop ;
@@ -66,6 +65,23 @@ M: object (match-branch)
 : ?class ( object -- class )
     dup word? [ class-of ] unless ;
 
-MACRO: match ( branches -- quot )
+: match-expansion ( spec -- quot )
     [ dup callable? [ first2 (match-branch) 2array ] unless ] map
     [ \ dup \ ?class ] dip \ case [ ] 4sequence ;
+
+GENERIC: cond-match-prefix ( class -- quot )
+M: singleton-class cond-match-prefix
+    drop [ drop ] ;
+M: object cond-match-prefix
+    \ unboa [ ] 2sequence ;
+
+: cond-match-branch ( class quot -- cond-quot then-quot )
+    [ dup cond-match-prefix ] dip compose
+    [ \ dup swap \ instance? [ ] 3sequence ] dip ;
+
+: cond-match-expansion ( branches -- quot )
+    [ dup callable? [ first2 cond-match-branch 2array ] unless ] map
+    [ cond ] curry ;
+
+MACRO: match ( branches -- quot )
+    cond-match-expansion ;
