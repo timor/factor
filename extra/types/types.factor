@@ -27,7 +27,11 @@ SYNTAX: ATOM: scan-new-class define-atom-predicate ;
 GENERIC: dnf-and* ( classoid classoid -- classoid )
 GENERIC: dnf-or* ( classoid classoid -- classoid )
 : rank ( classoid classoid -- classoid classoid )
+    [ normalize-class ] bi@
     2dup [ rank-class ] bi@ > [ swap ] when ;
+
+! ** Intersection
+
 ! ranks 1-2
 : <2and> ( class1 class2 -- classoid )
     {
@@ -38,6 +42,10 @@ GENERIC: dnf-or* ( classoid classoid -- classoid )
         [ 2array <anonymous-intersection> ]
     } cond ;
 
+: dnf-and ( classoid classoid -- classoid )
+    2dup = [ drop ]
+    [ rank dnf-and* ] if ;
+
 M: class dnf-and*
     <2and> ;
 ! rank 2
@@ -45,16 +53,21 @@ M: anonymous-predicate dnf-and*
     <2and> ;
 ! rank 3
 M: anonymous-complement dnf-and*
-    { { [ over anonymous-complement? ] [ [ class>> ] bi@ dnf-or* ] }
-      { [ 2dup class>> = ] [ 2drop null ] }
-      [ <2and> ]
+    {
+        { [ over anonymous-complement? ] [ [ class>> ] bi@ dnf-or* ] }
+        { [ 2dup class>> = ] [ 2drop null ] }
+        [ <2and> ]
     } cond ;
 ! rank 4+5
 M: anonymous-intersection dnf-and*
     { { [ over rank-class 3 <
-        ] [ participants>> 2dup swap
-            [ classes-intersect? ] with any?
-            [ swap prefix <anonymous-intersection> ]
+        ] [ participants>> 2dup
+            [ classes-intersect? ] with all?
+            [
+                2dup [ class<= ] with all?
+                [ drop ]
+                [ swap prefix <anonymous-intersection> ] if
+            ]
             [ 2drop null ] if
           ] }
       { [ over anonymous-complement? ]
@@ -67,9 +80,65 @@ M: anonymous-intersection dnf-and*
     } cond ;
 ! rank 6+7
 M: anonymous-union dnf-and*
+    { { [ over rank-class 5 < ] [
+            members>>
+            [ dnf-and* ] with map <anonymous-union>
+            ! 2dup [ class<= ] with all?
+            ! [ nip <anonymous-union> ]
+            ! [ swap prefix <anonymous-union> ]
+            ! if
+        ] }
+      ! { [ over anonymous-complement? ]
+      !   [ members>> 2dup [ class>> ] dip
+      !     member? [ 2drop object ]
+      !     [ swap prefix <anonymous-union> ] if ] }
+      ! { [ over anonymous-intersection? ]
+      !   [ members>> [ dnf-and* ] with map <anonymous-union> ] }
+      { [ over anonymous-union? ]
+        [ [ members>> ] dip [ dnf-and* ] curry gather <anonymous-union> ] }
+    } cond ;
+! >8 (mixin)
+M: classoid dnf-and*
+    <2and> ;
+
+! ** Union
+
+: <2or> ( class1 class2 -- classoid )
+    {
+        ! { [ 2dup classes-intersect? not ]
+        !   [ 2drop null ] }
+        { [ 2dup class<= ] [ nip ] }
+        { [ 2dup swap class<= ] [ drop ] }
+        [ 2array <anonymous-union> ]
+    } cond ;
+
+: dnf-or ( classoid classoid -- classoid )
+    2dup = [ drop ]
+    [ rank dnf-or* ] if ;
+
+! ranks 1-2
+M: class dnf-or*
+    <2or> ;
+! rank 2
+M: anonymous-predicate dnf-or*
+    <2or> ;
+! rank 3
+M: anonymous-complement dnf-or*
+    {
+        { [ over anonymous-complement? ] [ [ class>> ] bi@ dnf-and* ] }
+        { [ 2dup class>> = ] [ 2drop null ] }
+        [ <2and> ]
+    } cond ;
+! rank 4+5
+M: anonymous-intersection dnf-or*
+    { { [ over rank-class 5 < ]
+        [ <2or> ] }
+    } cond ;
+! rank 6+7
+M: anonymous-union dnf-or*
     { { [ over rank-class 3 < ] [
             members>>
-            2dup [ class<= ] curry all?
+            2dup [ class<= ] with all?
             [ nip <anonymous-union> ]
             [ swap prefix <anonymous-union> ]
             if ] }
@@ -83,9 +152,8 @@ M: anonymous-union dnf-and*
         [ [ members>> ] dip [ dnf-and* ] curry gather <anonymous-union> ] }
     } cond ;
 ! >8 (mixin)
-M: classoid dnf-and*
-    <2and> ;
-
+M: classoid dnf-or*
+    <2or> ;
 
 ! List of intersections
 ! TUPLE: dnf positives negatives ;
