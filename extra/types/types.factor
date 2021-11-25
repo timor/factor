@@ -5,8 +5,30 @@ sequences sets types.parametric variants ;
 IN: types
 
 MIXIN: type
+! * Language of types
+
+
 
 INSTANCE: classoid type
+INSTANCE: effect type
+
+GENERIC: type<= ( type1 type2 -- ? )
+M: classoid type<=
+    over classoid?
+    [ class<= ] [ "undefined comparison" throw ] if ;
+
+! Covariant assumption!
+: configuration<= ( ts1 ts2 -- ? )
+    2dup shorter? [ 2drop f ] [
+        [ type<= ] 2all?
+    ] if ;
+M: sequence type<= ( types1 types2 -- ? )
+    configuration<= ;
+M: effect type<= ( effect1 effect2 -- ? )
+    { [ effect<= ]
+      [ [ effect-in-types ] bi@ swap configuration<= ]
+      [ [ effect-out-types ] bi@ configuration<= ] } 2&& ;
+
 
 ! This is used to convert literal values into corresponding type-values
 GENERIC: type-of ( thing -- base-type )
