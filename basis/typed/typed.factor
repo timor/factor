@@ -27,9 +27,10 @@ PREDICATE: typed-word < word "typed-word" word-prop >boolean ;
     } 1&& ;
 
 ! typed inputs
+PREDICATE: untyped-effect-element < object { [ object = ] [ effect? ] } 1|| ;
 
 : typed-stack-effect? ( effect -- ? )
-    [ object = ] all? not ;
+    [ untyped-effect-element? ] all? not ;
 
 : add-depends-on-unboxing ( class -- )
     [ dup tuple-layout add-depends-on-tuple-layout ]

@@ -86,6 +86,7 @@ M: effect effect>string
 GENERIC: effect>type ( obj -- type )
 M: object effect>type drop object ;
 M: word effect>type ;
+M: effect effect>type ;
 M: pair effect>type second-unsafe effect>type ;
 M: classoid effect>type ;
 
