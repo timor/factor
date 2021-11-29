@@ -14,6 +14,9 @@ IN: types.bidi
 
 ! * Bidirectional ping/pong inference
 
+! Turn words into eval step tuples as we move from left to right.
+! eval steps a
+
 GENERIC: apply* ( before-stack word -- after-stack )
 GENERIC: reverse ( before-stack word -- quotation )
 
@@ -33,7 +36,8 @@ M: word out-types
     [ [ class-and ] 2map ] when* ;
 
 M: object in-types drop f ;
-M: object out-types type-of 1array ;
+! M: object out-types type-of 1array ;
+M: object out-types 1array ;
 
 : pad-head-shorter ( seq seq elt -- seq seq )
     [ [ <reversed> ] bi@ ] dip pad-tail-shorter [ <reversed> ] bi@ ;
@@ -98,7 +102,65 @@ M: \ dip apply* drop
 M: \ curry apply* fold-accept-error ;
 M: \ compose apply* fold-accept-error ;
 
-: run ( quot -- penultimate-stack last-stack undos )
-    f last-stack set
-    [ ] undos set
-    { } swap [ apply ] each last-stack get swap undos get ;
+! : run ( quot -- penultimate-stack last-stack undos )
+!     f last-stack set
+!     [ ] undos set
+!     { } swap [ apply ] each last-stack get swap undos get ;
+
+! * Linked eval states
+TUPLE: eval-state word inputs outputs future history ;
+
+: <begin-eval> ( code -- obj )
+    eval-state new
+    swap >>future ;
+
+: last-outputs ( eval-state -- seq )
+    history>> dup [ outputs>> ] when ;
+
+: step-end? ( eval-state -- ? )
+    future>> empty? ;
+
+GENERIC: constrain-inputs ( inputs word -- inputs )
+M: object constrain-inputs
+    apply-in-types ;
+GENERIC: calculate-outputs ( inputs word -- outputs )
+M: object calculate-outputs
+    nip out-types ;
+PREDICATE: shuffle-word < word "shuffle" word-prop >boolean ;
+M: shuffle calculate-outputs
+    "shuffle" word-prop shuffle ;
+
+! \
+
+ERROR: empty-inputs inputs word ;
+: step ( eval-state -- eval-state keep-going? )
+    [let :> s
+     s step-end?
+     [ s f ]
+     [
+         s future>> unclip :> ( rest word )
+         word inline?
+         [ s [ word def>> prepose ] change-future step ]
+         [
+             s last-outputs :> inputs
+             inputs word constrain-inputs :> new-inputs
+             new-inputs [ null = ] any? [ new-inputs word empty-inputs ] when
+             new-inputs word calculate-outputs :> outputs
+             eval-state new
+             word >>word
+             new-inputs >>inputs
+             outputs >>outputs
+             s >>history
+             rest >>future
+             t
+         ] if
+     ] if
+    ] ;
+
+: step-back ( eval-state -- eval-state keep-going? )
+    [let :> s
+     s
+    ] ;
+
+: run ( quot -- eval-state )
+    <begin-eval> [ step ] loop ;
