@@ -1,15 +1,22 @@
 ! Copyright (C) 2006, 2010 Slava Pestov.
 ! See http://factorcode.org/license.txt for BSD license.
-USING: accessors arrays classes combinators kernel make math
+USING: accessors arrays classes classes.private combinators kernel make math
+quotations
 math.order math.parser sequences sequences.private strings words ;
 IN: effects
 
+! Call effects
 TUPLE: effect
 { in array read-only }
 { out array read-only }
 { terminated? read-only }
 { in-var read-only }
 { out-var read-only } ;
+
+! Stack variable values
+TUPLE: configuration elements ;
+: <configuration> ( elements -- obj )
+    >array configuration boa ;
 
 : ?terminated ( out -- out terminated? )
     dup { "*" } = [ drop { } t ] [ f ] if ;
@@ -51,7 +58,7 @@ TUPLE: effect
 
 GENERIC: effect>string ( obj -- str )
 M: string effect>string ;
-M: object effect>string drop "object" ;
+M: object effect>string class-of class-name "=" prepend ;
 M: word effect>string name>> ;
 M: integer effect>string number>string ;
 M: pair effect>string
@@ -80,6 +87,13 @@ M: effect effect>string
         dup out>> stack-picture%
         dup terminated?>> [ "* " % ] when
         drop
+        ")" %
+    ] "" make ;
+
+: configuration>string ( configuration -- string )
+    [
+        "( " %
+        elements>> stack-picture%
         ")" %
     ] "" make ;
 

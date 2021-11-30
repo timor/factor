@@ -13,6 +13,8 @@ IN: prettyprint.backend
 
 M: effect pprint* effect>string text ;
 
+M: configuration pprint* configuration>string text ;
+
 : ?effect-height ( word -- n )
     stack-effect [ effect-height ] [ 0 ] if* ;
 

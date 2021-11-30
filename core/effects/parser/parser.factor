@@ -10,7 +10,7 @@ DEFER: parse-effect
 ERROR: bad-effect ;
 ERROR: invalid-row-variable ;
 ERROR: row-variable-can't-have-type ;
-ERROR: stack-effect-omits-dashes ;
+ERROR: stack-effect-omits-dashes elements ;
 
 SYMBOL: effect-var
 
@@ -21,6 +21,7 @@ SYMBOL: effect-var
 : row-variable? ( token -- token' ? ) ".." ?head ; inline
 : standalone-type? ( token -- token' ? ) ":" ?head ; inline
 
+! Parses row variables
 : parse-effect-var ( first? var name -- var )
     nip
     [ ":" ?tail [ row-variable-can't-have-type ] when ] curry
@@ -42,7 +43,7 @@ PRIVATE>
     scan-token {
         { [ end-token? ] [ drop nip f ] }
         { [ effect-opener? ] [ bad-effect ] }
-        { [ effect-closer? ] [ stack-effect-omits-dashes ] }
+        { [ effect-closer? ] [ building get stack-effect-omits-dashes ] }
         { [ row-variable? ] [ parse-effect-var t ] }
         [
             nipd standalone-type?
@@ -58,6 +59,13 @@ PRIVATE>
 : parse-effect ( end -- effect )
     [ "--" parse-effect-tokens ] dip parse-effect-tokens
     <variable-effect> ;
+
+: parse-effect-or-configuration ( end -- effect/configuration )
+    [ "--" parse-effect-tokens rot parse-effect-tokens <variable-effect> ]
+    [ dup stack-effect-omits-dashes?
+      [ nip elements>> <configuration> ]
+      [ rethrow ] if
+    ] recover ;
 
 : scan-effect ( -- effect )
     "(" expect ")" parse-effect ;
