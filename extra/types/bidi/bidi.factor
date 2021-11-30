@@ -6,6 +6,11 @@ words ;
 
 IN: types.bidi
 
+! * Gradual typing semantics
+! This is the unknown type.  It is only defined for gradual matching, and cannot
+! be used to perform comparison.
+SINGLETON: ??
+
 ! * Admitting sets of types on the stack
 ! This represents the variance directly
 ! NOTE: not using, using literal types because otherwise we need to define a new
@@ -18,14 +23,17 @@ IN: types.bidi
     [ drop ] [ 2drop null ] if ;
 
 : trace-and ( value-set type2 -- value-set )
-    { { [ over classoid? ] [ class-and ] }
-      { [ dup effect? ] [ effect-and ] }
-      { [ dup classoid? ] [ 2dup instance? [ drop ] [ 2drop null ] if ] }
-      ! NOTE: this should never be called if we are working on type level!
-      ! [ 2dup =
-      !   [ drop ]
-      !   [ 2drop null ] if
-      ! ]
+    {
+        { [ dup ??? ] [ drop ] }
+        { [ over ??? ] [ nip ] }
+        { [ over classoid? ] [ class-and ] }
+        { [ dup effect? ] [ effect-and ] }
+        { [ dup classoid? ] [ 2dup instance? [ drop ] [ 2drop null ] if ] }
+        ! NOTE: this should never be called if we are working on type level!
+        ! [ 2dup =
+        !   [ drop ]
+        !   [ 2drop null ] if
+        ! ]
     } cond ;
 
 ! * Bidirectional ping/pong inference
@@ -37,6 +45,8 @@ GENERIC: apply* ( before-stack word -- after-stack )
 GENERIC: type-inverse ( before-stack word -- quotation )
 M: \ drop type-inverse drop
     last 1quotation ;
+M: \ nip type-inverse drop
+    [ length 2 - ] keep nth [ swap ] curry ;
 M: \ dup type-inverse drop
     drop [ trace-and ] ;
 M: \ swap type-inverse drop
@@ -54,7 +64,6 @@ M: object type-inverse
     <literal-type> value-inverse ;
 M: type type-inverse
     value-inverse ;
-
 
 ! These are used to convert stack element types into a form where we can perform
 ! type computation on.
@@ -130,7 +139,7 @@ M: object out-types* <literal-type> 1array ;
     [ [ <reversed> ] bi@ ] dip pad-tail-shorter [ <reversed> ] bi@ ;
 
 : pad-typestack ( typestack input-types -- typestack input-types )
-    object pad-head-shorter ;
+    ?? pad-head-shorter ;
 
 : apply-types ( typestack types -- typestack )
     pad-typestack
@@ -173,7 +182,6 @@ M: object apply-word-effect
 ERROR: fold-failed preceding-error ;
 : fold-application ( before-stack word -- after-stack )
     [ 1quotation with-datastack ] [ fold-failed ] recover ;
-
 
 M: word apply*
     dup "shuffle" word-prop
@@ -219,7 +227,7 @@ GENERIC: definition ( obj -- quot/f )
 M: object definition drop f ;
 M: type definition drop f ;
 
-PREDICATE: special-word < word { if drop swap dup declare } member? ;
+PREDICATE: special-word < word { ? drop swap dup declare call } member? ;
 PREDICATE: nodef-word < word def>> not ;
 PREDICATE: recursive-base-word < word [ 1quotation ] [ def>> ] bi = ;
 UNION: base-word special-word nodef-word recursive-base-word ;
@@ -228,8 +236,7 @@ PREDICATE: non-special-word < word { [ base-word? not ] [ type? not ] } 1&& ;
 PREDICATE: inline-word < non-special-word inline? ;
 ! { [ base-word? not ] [ type? not ] [ inline? ] } 1&& ;
 M: inline-word definition def>> ;
-M: \ call definition drop
-    [ t swap dup if ] ;
+M: \ if definition def>> ;
 
 PREDICATE: normal-word < non-special-word inline? not ;
 
@@ -248,7 +255,7 @@ M: normal-word definition
         out-types >quotation compose
     ] tri ;
 
-! PREDICATE: shuffle-word < word "shuffle" word-prop >boolean ;
+PREDICATE: shuffle-word < word "shuffle" word-prop >boolean ;
 ! This is the word which performs the actual dependent effect type
 ! calculations.  Regular words operate element-wise, while e.g. shuffle words
 ! actually swap type elements.
@@ -263,10 +270,10 @@ M: object map-type ( stack w -- stack )
     ! stack-in w apply-word-effect :> stack-out
     ! stack-out stack-in stack-out [ >array ] bi@ <effect> ;
     apply-word-effect ;
-! M: shuffle-word map-type
-!     [ <reversed> ] dip
-!     "shuffle" word-prop shuffle
-!     <reversed> ;
+M: shuffle-word map-type
+    ! [ <reversed> ] dip
+    "shuffle" word-prop shuffle ;
+    ! reverse ;
 
 ! NOTE: the type-inverse of a declare is pushing it's spec, This is the point where
 ! we actually propagate type-information backwards
@@ -331,7 +338,7 @@ ERROR: incompatible-inputs inputs word ;
 GENERIC: constrain-inputs ( inputs word -- inputs )
 ! NOTE: only doing length here!
 M: object constrain-inputs
-    in-types length object <repetition> apply-types ;
+    in-types length ?? <repetition> apply-types ;
     ! apply-in-types ;
 
 : <type-effect> ( in-types out-types -- effect )
@@ -369,9 +376,13 @@ SYMBOL: inline-call-stack
       [ rest inverse-type-quot compose ] if
     ] each ;
 
-! : infer-type ( quot -- effect )
-!     f swap map-types
-!     [ inverse-type-quot ]
+! Helper
+: type. ( quot -- )
+    f swap map-types . . ;
+
+: infer-type ( quot -- effect )
+    f swap map-types
+    [ inverse-type-quot map-types drop ] keepd <type-effect> ;
 
 ! : <begin-eval> ( code -- obj )
 !     eval-state new
