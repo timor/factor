@@ -1,7 +1,7 @@
-USING: accessors arrays assocs classes classes.algebra combinators
-combinators.short-circuit compiler.utilities continuations effects kernel kernel.private
-layouts math math.intervals namespaces quotations sequences stack-checker types
-types.parametric.effects types.parametric.intervals types.parametric.literal
+USING: accessors arrays assocs classes classes.algebra classes.algebra.private
+combinators combinators.short-circuit compiler.utilities continuations effects
+kernel kernel.private math math.combinatorics namespaces prettyprint quotations
+sequences stack-checker types types.parametric.effects types.parametric.literal
 words ;
 
 IN: types.bidi
@@ -9,7 +9,12 @@ IN: types.bidi
 ! * Gradual typing semantics
 ! This is the unknown type.  It is only defined for gradual matching, and cannot
 ! be used to perform comparison.
-SINGLETON: ??
+! Currently, it cannot be used for class algebra, because its interpretation as
+! value set must be made explicit.  This is the task of the trace-and/trace-or words.
+: class\ ( class1 class2 -- class )
+    class-not class-and ;
+! SYMBOL: ??
+! : ??? ( obj -- ? ) ?? eq? ;
 
 ! * Admitting sets of types on the stack
 ! This represents the variance directly
@@ -22,6 +27,7 @@ SINGLETON: ??
     } cond
     [ drop ] [ 2drop null ] if ;
 
+! Gradual types
 : trace-and ( value-set type2 -- value-set )
     {
         { [ dup ??? ] [ drop ] }
@@ -30,11 +36,60 @@ SINGLETON: ??
         { [ dup effect? ] [ effect-and ] }
         { [ dup classoid? ] [ 2dup instance? [ drop ] [ 2drop null ] if ] }
         ! NOTE: this should never be called if we are working on type level!
-        ! [ 2dup =
-        !   [ drop ]
-        !   [ 2drop null ] if
-        ! ]
+        ! NOTENOTE: but we are not, we are working on value set level!
+        [ 2dup =
+          [ drop ]
+          [ 2drop null ] if
+        ]
     } cond ;
+
+! TUPLE: trace-union members ;
+GENERIC: unknown? ( gtype -- ? )
+M: ?? unknown? drop t ;
+! M: trace-union unknown?
+!     members>> [ unknown? ] any? ;
+M: object unknown? drop f ;
+M: anonymous-union unknown?
+    members>> [ unknown? ] any? ;
+M: anonymous-intersection unknown?
+    participants>> [ unknown? ] any? ;
+
+
+! Used when we need to compare on value set level
+GENERIC: concretize ( gtype -- class )
+M: ?? concretize drop union{ object null } ;
+M: classoid concretize ;
+! M: trace-union concretize
+!     members>> [ concretize ] map <anonymous-union> ;
+
+! NOTE: this is not strictly a concretization of a gradual type, but serves to
+! be able to employ the underlying class algebra system even for values, which
+! represent the type that only contains that value, e.g. an anonymous equality
+! predicate.
+! M: object concretize <literal-type> ;
+
+M: anonymous-union concretize
+    members>> [ concretize ] map <anonymous-union> ;
+M: anonymous-intersection concretize
+    participants>> [ concretize ] map <anonymous-intersection> ;
+! M: object concretize ;
+! Gradual types
+! This is used to compute element-wise unions that can be used on the type stack
+: trace-or ( value-set type2 -- value-set )
+    {
+        { [ 2dup = ] [ drop ] }
+        { [ 2dup [ type? ] both? ] [ class-or ] }
+      !   { [ 2dup [ type? not ] both? ] [ 2drop null ] }
+      !   { [ 2dup [ unknown? ] either? ] [ 2array trace-union boa ] }
+      ! { [ 2dup [ classoid? ] both? ] [ class-or ] }
+      [ [ dup type? [ <literal-type> ] unless ] bi@ class-or ]
+    } cond ;
+    ! class-or ;
+
+    ! For primitive parallel constructs, we must ensure that only one path is taken
+    ! under runtime interpretation.  Possibly expensive.
+ : any-intersect? ( classes -- pair/f )
+     2 [ first2 classes-intersect? ] find-combination ;
 
 ! * Bidirectional ping/pong inference
 
@@ -49,15 +104,25 @@ M: \ nip type-inverse drop
     [ length 2 - ] keep nth [ swap ] curry ;
 M: \ dup type-inverse drop
     drop [ trace-and ] ;
+M: \ trace-and type-inverse drop
+    drop [ dup ] ;
 M: \ swap type-inverse drop
     drop [ swap ] ;
 M: configuration type-inverse 2drop [ ] ;
-M: \ declare type-inverse 2drop [ ] ;
-    ! last 1quotation ;
+
+! NOTE: the type-inverse of a declare is pushing it's spec so it will be deleted
+! by the preceding spec literal.  This differs from using configurations as declaration
+! construct because this here has macro semantics due to literal inputs on the stack.
+M: \ declare type-inverse drop
+     last 1quotation ;
+
+: types>declaration ( types -- quot )
+    >array [ declare ] curry ;
+
 M: word type-inverse "undefined type-inverse" 2array throw ;
 : value-inverse ( before-stack obj -- quotation )
-    nip
-    f swap 2array 1array <configuration> [ drop ] curry ;
+    nip 1array types>declaration [ drop ] compose ;
+    ! f swap 2array 1array <configuration> [ drop ] curry ;
 ! nip 1array [ declare drop ] curry ;
 
 M: object type-inverse
@@ -82,25 +147,25 @@ M: effect effect>gtype
     } cleave <variable-effect> <typed-quotation> ] if ;
 M: configuration effect>gtype
     elements>> effect-types>gtype <configuration> ;
-M: object effect>gtype <literal-type> ;
+M: object effect>gtype ;
 M: type effect>gtype ;
-M: \ fixnum effect>gtype drop
-    fixnum most-negative-fixnum most-positive-fixnum [a,b] <interval-type> ;
+! M: \ fixnum effect>gtype drop
+!     fixnum most-negative-fixnum most-positive-fixnum [a,b] <interval-type> ;
 ! TODO: This should probably be an ad-hoc conversion at call-sites!
-M: class effect>gtype
-    dup real class<=
-    [ [-inf,inf] <interval-type> ] when ;
+! M: class effect>gtype
+!     dup real class<=
+!     [ [-inf,inf] <interval-type> ] when ;
 
 ! These are used to pre-filter
 GENERIC: in-types* ( word -- seq )
 GENERIC: out-types* ( word -- seq )
 : in-types ( word -- seq )
-    in-types* [ effect>gtype ] map ;
+    in-types* [ effect>gtype ] map >array ;
 : out-types ( word -- seq )
-    out-types* [ effect>gtype ] map ;
+    out-types* [ effect>gtype ] map >array ;
 
 : effect-type-raw ( obj -- type )
-    dup pair? [ second ] [ drop object ] if ;
+    dup pair? [ second ] [ drop ?? ] if ;
 : raw-in-types ( effect -- types )
     in>> [ effect-type-raw ] map ;
 : raw-out-types ( effect -- types )
@@ -110,19 +175,19 @@ M: effect out-types* raw-out-types ;
 M: word in-types*
     [ stack-effect raw-in-types ] keep
     "input-classes" word-prop
-    [ [ class-and ] 2map ] when*
+    [ [ trace-and ] 2map ] when*
     ;
 M: \ call in-types* drop
     { callable } ;
 M: word out-types*
-    [ stack-effect effect-out-types ] keep
+    [ stack-effect raw-out-types ] keep
     "default-output-classes" word-prop
-    [ [ class-and ] 2map ] when* ;
+    [ [ trace-and ] 2map ] when* ;
 
 ! Since we use configurations as declarations, the input types only affect the
 ! effect depth
-: types>configuration ( types -- obj )
-    [ f swap 2array ] map <configuration> ;
+! : types>configuration ( types -- obj )
+!     [ f swap 2array ] map <configuration> ;
 
 : configuration>types ( configuration -- types )
     elements>> [ dup pair? [ second ] [ drop object ] if ] map ;
@@ -133,7 +198,8 @@ M: configuration out-types* configuration>types ;
 
 M: object in-types* drop f ;
 ! M: object out-types* type-of 1array ;
-M: object out-types* <literal-type> 1array ;
+! M: object out-types* <literal-type> 1array ;
+M: object out-types* 1array ;
 
 : pad-head-shorter ( seq seq elt -- seq seq )
     [ [ <reversed> ] bi@ ] dip pad-tail-shorter [ <reversed> ] bi@ ;
@@ -144,6 +210,12 @@ M: object out-types* <literal-type> 1array ;
 : apply-types ( typestack types -- typestack )
     pad-typestack
     [ trace-and ] 2map ;
+
+! NOTE: only used in a left-to-right context right now in declarations.  The
+! idea is that we carry over unknowns from the left while assuming actual values
+! on the right
+: apply-concretized-types ( typestack types -- typestack )
+    pad-typestack [ concretize ] map [ class-and ] 2map ;
 
 : apply-in-types ( typestack word -- typestack )
     in-types apply-types ;
@@ -169,9 +241,12 @@ M: object apply*
 
 GENERIC: apply-word-effect ( before-stack word -- after-stack )
 
-M: word apply-word-effect
+: apply-static-effect ( before-stack obj -- after-stack )
     [ in-types length head* ]
     [ out-types append ] bi ;
+M: word apply-word-effect
+     apply-static-effect ;
+! NOTE: unused until we can execute configurations!
 M: configuration apply-word-effect
     M\ word apply-word-effect execute ;
 M: type apply-word-effect
@@ -227,11 +302,11 @@ GENERIC: definition ( obj -- quot/f )
 M: object definition drop f ;
 M: type definition drop f ;
 
-PREDICATE: special-word < word { ? drop swap dup declare call } member? ;
+PREDICATE: special-word < word { drop swap dup declare call trace-and } member? ;
 PREDICATE: nodef-word < word def>> not ;
 PREDICATE: recursive-base-word < word [ 1quotation ] [ def>> ] bi = ;
 UNION: base-word special-word nodef-word recursive-base-word ;
-M: base-word definition drop f ;
+! M: base-word definition drop f ;
 PREDICATE: non-special-word < word { [ base-word? not ] [ type? not ] } 1&& ;
 PREDICATE: inline-word < non-special-word inline? ;
 ! { [ base-word? not ] [ type? not ] [ inline? ] } 1&& ;
@@ -243,7 +318,7 @@ PREDICATE: normal-word < non-special-word inline? not ;
 : word>declare-quot ( word -- quot )
     in-types
     [ [  ] ]
-    [ types>configuration 1quotation ] if-empty ;
+    [ types>declaration ] if-empty ;
 M: normal-word definition
     [ word>declare-quot ]
     [ in-types
@@ -266,30 +341,42 @@ M: \ drop map-type drop
     but-last ;
 M: \ dup map-type drop
     dup last suffix ;
+! Self-evaluating, basically unconditional folding to ensure that we don't end
+! up with lazy nested inference inverses
+M: \ trace-and map-type drop
+    2 cut* first2 trace-and suffix ;
+
 M: object map-type ( stack w -- stack )
     ! stack-in w apply-word-effect :> stack-out
     ! stack-out stack-in stack-out [ >array ] bi@ <effect> ;
     apply-word-effect ;
+: shuffle-stack ( stack effect -- stack )
+    shuffle-mapping
+    [ supremum 1 + cut* ]
+    [ swap nths ] bi append ;
 M: shuffle-word map-type
-    ! [ <reversed> ] dip
-    "shuffle" word-prop shuffle ;
-    ! reverse ;
+    "shuffle" word-prop shuffle-stack ;
+    ! "undefined shuffle" 2array throw ;
+    ! ! [ <reversed> ] dip
+    ! "shuffle" word-prop shuffle ;
+    ! ! reverse ;
 
-! NOTE: the type-inverse of a declare is pushing it's spec, This is the point where
-! we actually propagate type-information backwards
 ERROR: declared-null-value stack ;
 PREDICATE: declaration < array ;
-: apply-input-types/check ( stack types -- stack )
+: apply-types/check ( stack types -- stack )
     apply-types dup [ null = ] any? [ declared-null-value ] when ;
 
+! NOTE: This word works on the value level.  This means that we concretize the
+! type, thus actually performing the assumptions.  If we are presented with an
+! unknown type, it should be preserved through the type check
 M: \ declare map-type drop
     ! Compile-time literal check!
     unclip-last declaration check-instance
-    apply-input-types/check
+    apply-concretized-types
     ;
 
 M: configuration map-type
-    configuration>types apply-input-types/check ;
+    configuration>types apply-types/check ;
     ! out-types append ;
 
 DEFER: map-types
@@ -315,7 +402,36 @@ ERROR: incompatible-inputs inputs word ;
     unzip "dispatch" prefix swap
     [ ] [ [ class-or ] 2map ] map-reduce ;
 
+! Singular point for dispatch introduction.
+! TODO: this could also be defined on optimizations word property
+TUPLE: parallel alternatives ;
+C: <parallel> parallel
+INSTANCE: parallel type
+M: \ ? definition drop
+    [
+        T{ parallel f {
+               [ drop ( :not{ POSTPONE: f } :?? ) nip ]
+               [ nip ( :POSTPONE: f :?? ) nip ]
+           } }
+    ] ;
 
+! TODO: make sure that contagion of ?? is correct
+: stack-or ( stack1 stack2 -- stack )
+    ?? pad-head-shorter
+    [ trace-or ] 2map ;
+
+ERROR: no-applicable-code-path ;
+: map-type-parallel ( stack parallel -- trace-elt stack )
+    alternatives>> [
+        map-types 2array
+    ] with map
+    ! { stack trace } pairs
+    unzip swap [ no-applicable-code-path ]
+    [ [ ] [ stack-or ] map-reduce ] if-empty
+    [ <parallel> ] dip ;
+
+
+! NOTE: being replaced by lazy dispatch using ?
 : map-if ( stack -- trace-elt stack )
     2 cut* first2
     [let
@@ -329,11 +445,16 @@ ERROR: incompatible-inputs inputs word ;
      ! [ \ if prefix swap ] bi swap
     ] ;
 
-! M: \ call map-type ( stack w -- stack )
-!     drop
-!     unclip-last dup callable? [
-!     ]
-!     [ suffix \ call apply-word-effect ] if ;
+! For call, there are also different cases.  Literal expansion is done in
+! definition expansion, which is basically also only an optimization...
+! : call ( ..a quot: ( ..a -- ..b ) -- ..b )
+! Call: considered inline.  Has to calculate outputs based on inputs and given
+! quotation.
+! If we have a quotation, we actually run it, and compute the outputs?
+! If we only have a type, we apply the type.  That's what we do for now.
+! M: \ call map-type drop
+!     unclip-last apply-static-effect ;
+! M: \ call definition
 
 GENERIC: constrain-inputs ( inputs word -- inputs )
 ! NOTE: only doing length here!
@@ -344,7 +465,21 @@ M: object constrain-inputs
 : <type-effect> ( in-types out-types -- effect )
     [ [ f swap 2array ] map ] bi@
     <effect> ;
-
+! DEFER: trace
+! CONSTANT: trace-seq $[ sequence trace <sequence-type> ]
+! VARIANT: trace
+!     opaque: { word effect }
+!     inline: { word { body trace-seq } }
+!     parallel: { word { cases } }
+! Valid records in the trace language:
+! { word ( ?? → ?? ) } opaque call
+! { word records... } substituted inline definition
+! { parallel( traces ) union-effect } disjoint union execution
+! NOTE: union effects are element-wise on input and output effect elements.
+! This represents a convex cover of input/output behavior, and can be used for
+! applying input types to simplify ruling out possible alternatives:  If two convex
+! covers don't overlap, than there is no possiblity for any of its member sets
+! to overlap either
 
 SYMBOL: inline-call-stack
 :: map-types ( stack quot -- stack trace )
@@ -360,8 +495,12 @@ SYMBOL: inline-call-stack
                  w prefix
                 ]
                 [
-                    w \ if eq?
-                    [ stack-in [ map-if tuck ] keep swap <type-effect> 2array ]
+                    w parallel? [
+                        stack-in w map-type-parallel :> ( elt stack-out )
+                        stack-out elt stack-in stack-out <type-effect> 2array
+                        ! [ w map-type-parallel ] keep swap <type-effect> w swap 2array
+                        ! stack-in [ map-if tuck ] keep swap <type-effect> 2array
+                    ]
                     [ stack-in w map-type stack-in over [ >array ] bi@ <type-effect>
                       w swap 2array
                     ] if
@@ -378,60 +517,12 @@ SYMBOL: inline-call-stack
 
 ! Helper
 : type. ( quot -- )
-    f swap map-types . . ;
+    f swap map-types [ . . ] keep
+    inverse-type-quot .
+    ;
 
-: infer-type ( quot -- effect )
-    f swap map-types
-    [ inverse-type-quot map-types drop ] keepd <type-effect> ;
+! : infer-type ( quot -- effect )
+!     f swap map-types
+!     [ inverse-type-quot map-types drop ] keepd <type-effect> ;
 
-! : <begin-eval> ( code -- obj )
-!     eval-state new
-!     swap >>future ;
-
-! : last-outputs ( eval-state -- seq )
-!     history>> dup [ outputs>> ] when ;
-
-! : step-end? ( eval-state -- ? )
-!     future>> empty? ;
-
-! GENERIC: calculate-outputs ( inputs word -- outputs )
-! M: object calculate-outputs
-!     nip out-types* ;
-! PREDICATE: shuffle-word < word "shuffle" word-prop >boolean ;
-! M: shuffle calculate-outputs
-!     "shuffle" word-prop shuffle ;
-
-! ! \
-
-! ERROR: empty-inputs inputs word ;
-! : step ( eval-state -- eval-state keep-going? )
-!     [let :> s
-!      s step-end?
-!      [ s f ]
-!      [
-!          s future>> unclip :> ( rest word )
-!          word inline?
-!          [ s [ word def>> prepose ] change-future step ]
-!          [
-!              s last-outputs :> inputs
-!              inputs word constrain-inputs :> new-inputs
-!              new-inputs [ null = ] any? [ new-inputs word empty-inputs ] when
-!              new-inputs word calculate-outputs :> outputs
-!              eval-state new
-!              word >>word
-!              new-inputs >>inputs
-!              outputs >>outputs
-!              s >>history
-!              rest >>future
-!              t
-!          ] if
-!      ] if
-!     ] ;
-
-! : step-back ( eval-state -- eval-state keep-going? )
-!     [let :> s
-!      s
-!     ] ;
-
-! : run ( quot -- eval-state )
-!     <begin-eval> [ step ] loop ;
+! M: callable type-of infer-type ;
