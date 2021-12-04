@@ -276,7 +276,7 @@ CONSTANT: all-primitives {
             { "over" ( x y -- x y x ) f f f f }
             { "pick" ( x y z -- x y z x ) f f f f }
             { "swap" ( x y -- y x ) f f f f }
-            { "eq?" ( obj1 obj2 -- ? ) f { object object } { object } make-foldable }
+            { "eq?" ( obj1 obj2 -- ? ) f { object object } { boolean } make-foldable }
         }
     }
     {
@@ -409,7 +409,7 @@ CONSTANT: all-primitives {
         {
             {
                 "both-fixnums?" ( x y -- ? ) f
-                { object object } { object } make-foldable
+                { object object } { boolean } make-foldable
             }
             {
                 "fixnum+fast" ( x y -- z ) f
@@ -477,19 +477,19 @@ CONSTANT: all-primitives {
             }
             {
                 "fixnum<" ( x y -- ? ) f
-                { fixnum fixnum } { object } make-foldable
+                { fixnum fixnum } { boolean } make-foldable
             }
             {
                 "fixnum<=" ( x y -- z ) f
-                { fixnum fixnum } { object } make-foldable
+                { fixnum fixnum } { boolean } make-foldable
             }
             {
                 "fixnum>" ( x y -- ? ) f
-                { fixnum fixnum } { object } make-foldable
+                { fixnum fixnum } { boolean } make-foldable
             }
             {
                 "fixnum>=" ( x y -- ? ) f
-                { fixnum fixnum } { object } make-foldable
+                { fixnum fixnum } { boolean } make-foldable
             }
             {
                 "bignum*" ( x y -- z ) "bignum_multiply"
@@ -549,23 +549,23 @@ CONSTANT: all-primitives {
             }
             {
                 "bignum<" ( x y -- ? ) "bignum_less"
-                { bignum bignum } { object } make-foldable
+                { bignum bignum } { boolean } make-foldable
             }
             {
                 "bignum<=" ( x y -- ? ) "bignum_lesseq"
-                { bignum bignum } { object } make-foldable
+                { bignum bignum } { boolean } make-foldable
             }
             {
                 "bignum=" ( x y -- ? ) "bignum_eq"
-                { bignum bignum } { object } make-foldable
+                { bignum bignum } { boolean } make-foldable
             }
             {
                 "bignum>" ( x y -- ? ) "bignum_greater"
-                { bignum bignum } { object } make-foldable
+                { bignum bignum } { boolean } make-foldable
             }
             {
                 "bignum>=" ( x y -- ? ) "bignum_greatereq"
-                { bignum bignum } { object } make-foldable
+                { bignum bignum } { boolean } make-foldable
             }
             {
                 "bignum>fixnum" ( x -- y ) "bignum_to_fixnum"
@@ -622,23 +622,23 @@ CONSTANT: all-primitives {
             }
             {
                 "float<" ( x y -- ? ) "float_less"
-                { float float } { object } make-foldable
+                { float float } { boolean } make-foldable
             }
             {
                 "float<=" ( x y -- ? ) "float_lesseq"
-                { float float } { object } make-foldable
+                { float float } { boolean } make-foldable
             }
             {
                 "float=" ( x y -- ? ) "float_eq"
-                { float float } { object } make-foldable
+                { float float } { boolean } make-foldable
             }
             {
                 "float>" ( x y -- ? ) "float_greater"
-                { float float } { object } make-foldable
+                { float float } { boolean } make-foldable
             }
             {
                 "float>=" ( x y -- ? ) "float_greatereq"
-                { float float } { object } make-foldable
+                { float float } { boolean } make-foldable
             }
             {
                 "float>bignum" ( x -- y ) "float_to_bignum"
