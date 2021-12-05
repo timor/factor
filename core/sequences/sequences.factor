@@ -934,6 +934,7 @@ PRIVATE>
 
 : shorter? ( seq1 seq2 -- ? ) [ length ] bi@ < ; inline
 : longer? ( seq1 seq2 -- ? ) [ length ] bi@ > ; inline
+: same-length? ( seq1 seq1 -- ? )  [ length ] same? ; inline
 : shorter ( seq1 seq2 -- seq ) [ [ length ] bi@ <= ] 2keep ? ; inline
 : longer ( seq1 seq2 -- seq ) [ [ length ] bi@ >= ] 2keep ? ; inline
 
