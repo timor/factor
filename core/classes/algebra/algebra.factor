@@ -92,6 +92,12 @@ M: wrapper class-name
     [ superclass-of class-name "_" append ]
     [ wrapped>> singleton-suffix append ] bi ;
 
+! Gradual type
+SINGLETON: ??
+INSTANCE: ?? classoid
+M: ?? rank-class drop 9 ;
+M: ?? (classes-intersect?) 2drop t ;
+
 : only-classoid? ( obj -- ? )
     dup classoid? [ class? not ] [ drop f ] if ;
 
@@ -207,24 +213,27 @@ PREDICATE: empty-intersection < anonymous-intersection participants>> empty? ;
 : (class<=) ( first second -- ? )
     2dup eq? [ 2drop t ] [
         [ normalize-class ] bi@
-        2dup superclass<= [ 2drop t ] [
-            {
-                { [ 2dup eq? ] [ 2drop t ] }
-                { [ dup empty-intersection? ] [ 2drop t ] }
-                { [ over empty-union? ] [ 2drop t ] }
-                { [ 2dup [ anonymous-complement? ] both? ] [ anonymous-complement<= ] }
-                { [ over anonymous-union? ] [ left-anonymous-union<= ] }
-                { [ over nontrivial-anonymous-intersection? ] [ left-anonymous-intersection<= ] }
-                { [ over nontrivial-anonymous-complement? ] [ left-anonymous-complement<= ] }
-                { [ dup class-members ] [ right-union<= ] }
-                { [ dup anonymous-union? ] [ right-anonymous-union<= ] }
-                { [ dup anonymous-intersection? ] [ right-anonymous-intersection<= ] }
                 { [ dup anonymous-complement? ] [ class>> classes-intersect? not ] }
-                { [ 2dup [ wrapper? ] both? ] [ = ] }
-                { [ over wrapper? ] [ left-wrapper<= ] }
-                { [ dup wrapper? ] [ right-wrapper<= ] }
-                [ 2drop f ]
-            } cond
+        2dup [ ??? ] either? [ 2drop f ] [
+            2dup superclass<= [ 2drop t ] [
+                {
+                    { [ 2dup eq? ] [ 2drop t ] }
+                    { [ dup empty-intersection? ] [ 2drop t ] }
+                    { [ over empty-union? ] [ 2drop t ] }
+                    { [ 2dup [ anonymous-complement? ] both? ] [ anonymous-complement<= ] }
+                    { [ over anonymous-union? ] [ left-anonymous-union<= ] }
+                    { [ over nontrivial-anonymous-intersection? ] [ left-anonymous-intersection<= ] }
+                    { [ over nontrivial-anonymous-complement? ] [ left-anonymous-complement<= ] }
+                    { [ dup class-members ] [ right-union<= ] }
+                    { [ dup anonymous-union? ] [ right-anonymous-union<= ] }
+                    { [ dup anonymous-intersection? ] [ right-anonymous-intersection<= ] }
+                    { [ dup anonymous-complement? ] [ class>> classes-intersect? not ] }
+                    { [ 2dup [ wrapper? ] both? ] [ = ] }
+                    { [ over wrapper? ] [ left-wrapper<= ] }
+                    { [ dup wrapper? ] [ right-wrapper<= ] }
+                    [ 2drop f ]
+                } cond
+            ] if
         ] if
     ] if ;
 
@@ -290,6 +299,7 @@ M: anonymous-complement (classes-intersect?)
 
 : (class-not) ( class -- complement )
     {
+        { [ dup ??? ] [ ] }
         { [ dup anonymous-complement? ] [ class>> ] }
         { [ dup object eq? ] [ drop null ] }
         { [ dup null eq? ] [ drop object ] }
