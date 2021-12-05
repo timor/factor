@@ -202,6 +202,17 @@ PREDICATE: nontrivial-anonymous-complement < anonymous-complement
 PREDICATE: empty-union < anonymous-union members>> empty? ;
 
 PREDICATE: empty-intersection < anonymous-intersection participants>> empty? ;
+! NOTE: this is only asks for the inverse in the subdomain of the class, since
+! superclass ordering has already been checked
+GENERIC: custom-class-complement? ( class -- ? )
+GENERIC: custom-class-complement ( class -- class )
+M: object custom-class-complement? drop f ;
+
+
+GENERIC: custom-class-order? ( class -- ? )
+M: object custom-class-order? drop f ;
+GENERIC: custom-class<= ( first second -- ? )
+
 
 
 : left-wrapper<= ( wrapper non-wrapper -- ? )
@@ -213,7 +224,6 @@ PREDICATE: empty-intersection < anonymous-intersection participants>> empty? ;
 : (class<=) ( first second -- ? )
     2dup eq? [ 2drop t ] [
         [ normalize-class ] bi@
-                { [ dup anonymous-complement? ] [ class>> classes-intersect? not ] }
         2dup [ ??? ] either? [ 2drop f ] [
             2dup superclass<= [ 2drop t ] [
                 {
@@ -231,6 +241,8 @@ PREDICATE: empty-intersection < anonymous-intersection participants>> empty? ;
                     { [ 2dup [ wrapper? ] both? ] [ = ] }
                     { [ over wrapper? ] [ left-wrapper<= ] }
                     { [ dup wrapper? ] [ right-wrapper<= ] }
+                    ! { [ dup custom-class-order? ] [ class-not classes-intersect? not ] }
+                    { [ dup custom-class-complement? ] [ custom-class-complement classes-intersect? not ] }
                     [ 2drop f ]
                 } cond
             ] if
