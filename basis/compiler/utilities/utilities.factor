@@ -25,6 +25,10 @@ IN: compiler.utilities
 : pad-tail-shorter ( seq1 seq2 elt -- seq1' seq2' )
     2over longer length swap [ pad-tail ] 2curry bi@ ;
 
+: pad-head-shorter ( seq seq elt -- seq seq )
+    [ [ <reversed> ] bi@ ] dip pad-tail-shorter [ <reversed> ] bi@ ;
+
+
 SYMBOL: yield-hook
 
 yield-hook [ [ ] ] initialize
