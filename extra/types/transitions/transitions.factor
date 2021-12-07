@@ -382,7 +382,7 @@ DEFER: infer-word-transfer ! ( word -- transfer )
 
 GENERIC: transfer-quots ( state-in word -- transfer )
 : cached-word-transfer ( word -- transfer )
-    word-transfers [ infer-word-transfer ] cache ;
+    word-transfers get [ infer-word-transfer ] cache ;
 
 M: object transfer-quots
     compute-transfer-quots ;
@@ -400,13 +400,15 @@ M: primitive-data-op transfer-quots
 ERROR: recursive-word-transfer-inference word ;
 
 ! Adds to the variables
-:: apply-word-transfer ( state-in word -- state-out )
-    state-in word ensure-inputs
-    transfer-quots first2 :> ( transfer undo )
-    state-in transfer [ with-datastack ] assoc-merge dup :> state-out
-    transitions [ state-in state-out word <transfer> suffix ] change
-    word-transfers [ transfer [ compose ] assoc-merge ] change
-    word-undos [ undo [ swap compose ] assoc-merge ] change ;
+: apply-word-transfer ( state-in word -- state-out )
+    [let
+     ensure-inputs 2dup :> ( state-in word )
+     transfer-quots first2 :> ( transfer undo )
+     state-in transfer [ with-datastack ] assoc-merge dup :> state-out
+     transitions [ state-in state-out word <transfer> suffix ] change
+     word-transfers [ transfer [ compose ] assoc-merge ] change
+     word-undos [ undo [ swap compose ] assoc-merge ] change
+    ] ;
 
 : apply-quotation-transfer ( state-in code -- )
     ! over [ nip dup first ensure-state-in-types length in>state swap ] unless
@@ -418,7 +420,6 @@ ERROR: recursive-word-transfer-inference word ;
     H{ } word-undos set
     transitions off
     f swap def>> apply-quotation-transfer ;
-
 
 : infer-word-transfer ( word -- transfer )
     dup inference-word-nesting get in? [ recursive-word-transfer-inference ] when

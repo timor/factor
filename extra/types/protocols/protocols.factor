@@ -85,7 +85,7 @@ INSTANCE: \ value-id type-key
 
 ! NOTE: transfers are also not assumed to be undoable right now... As long as
 ! transitions can be rolled back atomically, that should not be a problem...
-GENERIC: primitive-transfer ( primitive type-value-class -- transfer-quot )
+GENERIC: primitive-transfer ( state-in primitive type-value-class -- transfer-quot )
 ! NOTE: undos are not assumed to be undoable right now...
 GENERIC: primitive-undo ( state-in primitive type-value-class -- undo-quot )
 GENERIC: value>type ( value type-value-class -- type-value )
@@ -116,19 +116,20 @@ GENERIC: top-type-value ( type-value-class -- object )
 GENERIC: bottom-type-value ( type-value-class -- object )
 ! Used for inputs
 GENERIC: unknown-type-value ( type-value-class -- object )
+M: type-key unknown-type-value drop ?? ;
 
-ERROR: undefined-primitive-type-transfer primitive type-key ;
+ERROR: undefined-primitive-type-transfer state-in primitive type-key ;
 ERROR: undefined-primitive-type-undo state-in primitive type-key ;
 
-UNION: primitive-data-op \ dup \ drop \ swap \ declare ;
+UNION: primitive-data-op \ dup \ drop \ swap ;
 
 : constantly ( value -- quot )
     literalize 1quotation ;
 
 M: type-key primitive-transfer
     {
-        { [ over primitive-data-op? ] [ drop 1quotation ] }
-        { [ over word? not ] [ value>type constantly ] }
+        { [ over primitive-data-op? ] [ drop 1quotation nip ] }
+        { [ over word? not ] [ value>type constantly nip ] }
         [ undefined-primitive-type-transfer ]
     } cond ;
     ! over [ primitive-data-op? ] [ drop 1quotation ]
@@ -141,35 +142,59 @@ M: type-key primitive-undo
     { { [ over \ drop eq? ] [ nip of last constantly ] }
       { [ over \ swap eq? ] [ 3drop [ swap ] ] }
       { [ over \ dup eq? ] [ nip undo-dup ] }
-      { [ over \ declare eq? ] [ 3drop [ ] ] }
       { [ over word? not ] [ 3drop [ drop ] ] }
       [ undefined-primitive-type-undo ]
     } cond ;
 
 ERROR: not-a-primitive-transfer word ;
 
-:: ensure-state-in ( state-in word key -- state-in word key )
-    key state-in [
-        word in-types length
+:: ensure-state-in ( state-in word -- state-in )
+    word in-types length :> n
+    state-in [| key state |
+        state n
         key unknown-type-value pad-head
-    ] changed-at word key ;
+        key swap
+    ] assoc-map ;
+
+ERROR: invalid-declaration spec ;
+:: ensure-declaration-in ( state-in -- state-in )
+    state-in class of ?last :> spec
+    spec wrapper? [ spec invalid-declaration ] unless
+    spec wrapped>> :> spec
+    spec length :> n
+    state-in [| key state |
+        state unclip-last-slice :> ( value-state decl )
+        value-state n key unknown-type-value pad-head
+        spec key apply-declaration
+        decl suffix key swap
+     ] assoc-map  ;
 
 ! Interface function
+! Used to ensure that undo and transfer functions have correct setup
+: empty-state ( -- state-in )
+    all-type-keys [ { } ] H{ } map>assoc ;
+
 : ensure-inputs ( state-in word -- state-in word )
-    [ H{ } or ] dip
-    all-type-keys [ ensure-state-in drop ] each ;
+    [ [ empty-state ] unless* ] dip
+    dup \ declare eq?
+    [ [ ensure-declaration-in ] dip ]
+    [ [ ensure-state-in ] keep ] if ;
+    ! all-type-keys [
+    !     ensure-state-in
+    ! ] each ;
 
 : compute-key-undo ( state-in word key -- undo-quot )
-    ensure-state-in primitive-undo ;
+    primitive-undo ;
+    ! [ ensure-state-in ] keep primitive-undo ;
 
-: compute-key-transfer ( word key -- quot )
+: compute-key-transfer ( state-in word key -- quot )
     primitive-transfer ;
 
 ! Return two assocs, one for the transfer, one for the undo
 : compute-transfer-quots ( state-in word -- transfer )
     all-type-keys
     [ [ [ compute-key-undo ] keep swap ] 2with H{ } map>assoc ]
-    [ [ [ compute-key-transfer ] keep swap ] with H{ } map>assoc ] 2bi swap 2array ;
+    [ [ [ compute-key-transfer ] keep swap ] 2with H{ } map>assoc ] 3bi swap 2array ;
     ! [ [ [ compute-key-undo ] ] 2with H{ } map>assoc ]
     ! [ [ dup compute-key-transfer ] with ]
 
@@ -191,25 +216,25 @@ M: \ value-id type-value-undo-split drop
 M: \ value-id type-value-merge drop ;
 M: \ value-id type-value-undo-merge 2drop ;
 M: \ value-id value>type nip counter ;
+M: \ value-id apply-declaration 2drop ;
 
 ! * Class algebra
-GENERIC: class-primitive-transfer ( primitive -- transfer-quot/f )
-M: object class-primitive-transfer drop f ;
-M: \ class unknown-type-value drop ?? ;
+GENERIC: class-primitive-transfer ( state-in primitive -- transfer-quot/f )
+M: object class-primitive-transfer 2drop f ;
+! M: \ class unknown-type-value drop ?? ;
 M: \ class type-value-merge drop [ ] [ class-or ] map-reduce ;
 M: \ class type-value-undo-merge drop class-and ;
 M: \ class type-value-undo-split drop class-and ;
 M: \ class value>type drop <wrapper> ;
 M: \ class primitive-transfer
-    over class-primitive-transfer [ 2nip ] [ call-next-method ] if* ;
-ERROR: literal-expected object ;
-: expect-literal ( wrapper -- value )
-    dup wrapper? [ wrapped>> ] [ literal-expected ] if ;
-M: \ declare class-primitive-transfer drop
-    [ expect-literal class-and ] ;
+    [ 2dup class-primitive-transfer ] dip swap [ 3nip ] [ call-next-method ] if* ;
+! NOTE: assuming that declarations can actually be gradual, we only concretize
+! the value here, because the declaration might actually be incomplete...
+M: \ class apply-declaration drop
+    [ [ concretize ] dip class-and ] 2map ;
 
 ! * Interval computations
-M: \ interval unknown-type-value drop full-interval ;
+! M: \ interval unknown-type-value drop ?? ;
 M: \ interval type-value-merge drop [ ] [ interval-union ] map-reduce ;
 M: \ interval type-value-undo-merge drop interval-intersect ;
 ! NOTE: backwards assumption propagation creates union behavior here? Is that
@@ -222,11 +247,15 @@ M: \ interval value>type
 
 ! TODO: Concretize correctly according to variance!
 ! In the first approximation, only invariant conversions are safe.
-GENERIC: invariant>interval ( obj type-value-class -- interval )
-M: object invariant>interval 2drop ?? ;
+! GENERIC: invariant>interval ( obj type-value-class -- interval )
+! M: type-key invariant>interval 2drop ?? ;
 ! Delegate to classoid value
 GENERIC: class-invariant>interval ( classoid -- interval )
-M: \ class invariant>interval
-    drop class-invariant>interval ;
+! M: \ class invariant>interval
+!     drop class-invariant>interval ;
+
 M: classoid class-invariant>interval drop ?? ;
 M: math-class class-invariant>interval class-interval ;
+M: \ interval apply-declaration drop
+    [ class-invariant>interval ] map
+    [ dup ??? [ drop ] [ interval-intersect ] if ] 2map ;
