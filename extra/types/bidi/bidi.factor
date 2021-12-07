@@ -1,8 +1,7 @@
 USING: accessors arrays assocs classes classes.algebra classes.algebra.private
 combinators combinators.short-circuit compiler.utilities continuations effects
 kernel kernel.private math math.combinatorics namespaces prettyprint quotations
-sequences stack-checker types types.parametric.effects types.parametric.literal
-words ;
+sequences types types.parametric.effects types.protocols words ;
 
 IN: types.bidi
 
@@ -17,12 +16,23 @@ IN: types.bidi
 ! : ??? ( obj -- ? ) ?? eq? ;
 
 ! * Admitting sets of types on the stack
-! This represents the variance directly
-! NOTE: not using, using literal types because otherwise we need to define a new
-! union type that can hold values
-: effect-and ( value-set effect -- value-set )
-    { { [ over effect? ] [ 2dup effect<= ] }
-      { [ over quotation? ] [ [ [ infer ] dip 2dup effect<= ] ] }
+! TODO: actual type containment?  This right now is only intended and called for
+! out→in contexts..
+! NOTE: Intersection of variable effects can only be a variable effect if both
+! have been variable...
+! Variance: ( x -- x ) < ( ..a x -- ..a x ) < ( ..a x -- ..b x )
+! Intersections: ( x -- x ) ( x -- x x ) = null
+! The more parameters are specified in the input, the more specific the effect is
+! The more unspecified parameter
+! The
+
+: effect-and ( effect effect -- value-set )
+    over bivariable-effect? [ swap ] when
+    {
+      { [ over effect? ] [ 2dup effect<= ] }
+      ! { [ over quotation? ] [ [ [ infer ] dip 2dup effect<= ] ] }
+        ! { [ over bivariable-effect? ] [  ] }
+        ! { [ dup [ bivariable-effect? ] ] [ [ type>classoid ] class-and ] }
       [ f ]
     } cond
     [ drop ] [ 2drop null ] if ;
@@ -32,9 +42,9 @@ IN: types.bidi
     {
         { [ dup ??? ] [ drop ] }
         { [ over ??? ] [ nip ] }
-        { [ over classoid? ] [ class-and ] }
-        { [ dup effect? ] [ effect-and ] }
-        { [ dup classoid? ] [ 2dup instance? [ drop ] [ 2drop null ] if ] }
+        { [ dup classoid? ] [ [ type>classoid ] dip class-and ] }
+        { [ dup effect? ] [ [ type>effect ] dip effect-and ] }
+        ! { [ dup classoid? ] [ 2dup instance? [ drop ] [ 2drop null ] if ] }
         ! NOTE: this should never be called if we are working on type level!
         ! NOTENOTE: but we are not, we are working on value set level!
         [ 2dup =
@@ -82,7 +92,7 @@ M: anonymous-intersection concretize
       !   { [ 2dup [ type? not ] both? ] [ 2drop null ] }
       !   { [ 2dup [ unknown? ] either? ] [ 2array trace-union boa ] }
       ! { [ 2dup [ classoid? ] both? ] [ class-or ] }
-      [ [ dup type? [ <literal-type> ] unless ] bi@ class-or ]
+      ! [ [ dup type? [ <wrapper> ] unless ] bi@ class-or ]
     } cond ;
     ! class-or ;
 
@@ -126,9 +136,19 @@ M: word type-inverse "undefined type-inverse" 2array throw ;
 ! nip 1array [ declare drop ] curry ;
 
 M: object type-inverse
-    <literal-type> value-inverse ;
+    <wrapper> value-inverse ;
+    ! <literal-type> value-inverse ;
 M: type type-inverse
     value-inverse ;
+
+ERROR: literal-type-expected type ;
+: literal>value ( type -- value )
+    dup wrapper? [ literal-type-expected ] unless
+    wrapped>> ;
+
+: test-literal ( type class -- ? )
+    over wrapper? [ [ wrapped>> ] dip instance? ]
+    [ 2drop f ] if ;
 
 ! These are used to convert stack element types into a form where we can perform
 ! type computation on.
@@ -160,9 +180,11 @@ M: type effect>gtype ;
 GENERIC: in-types* ( word -- seq )
 GENERIC: out-types* ( word -- seq )
 : in-types ( word -- seq )
-    in-types* [ effect>gtype ] map >array ;
+    in-types* ! [ effect>gtype ] map >array
+    ;
 : out-types ( word -- seq )
-    out-types* [ effect>gtype ] map >array ;
+    out-types* ! [ effect>gtype ] map >array
+    ;
 
 : effect-type-raw ( obj -- type )
     dup pair? [ second ] [ drop ?? ] if ;
@@ -201,9 +223,6 @@ M: object in-types* drop f ;
 ! M: object out-types* <literal-type> 1array ;
 M: object out-types* 1array ;
 
-: pad-head-shorter ( seq seq elt -- seq seq )
-    [ [ <reversed> ] bi@ ] dip pad-tail-shorter [ <reversed> ] bi@ ;
-
 : pad-typestack ( typestack input-types -- typestack input-types )
     ?? pad-head-shorter ;
 
@@ -217,6 +236,7 @@ M: object out-types* 1array ;
 : apply-concretized-types ( typestack types -- typestack )
     pad-typestack [ concretize ] map [ class-and ] 2map ;
 
+! XXX
 : apply-in-types ( typestack word -- typestack )
     in-types apply-types ;
 
@@ -241,18 +261,24 @@ M: object apply*
 
 GENERIC: apply-word-effect ( before-stack word -- after-stack )
 
-: apply-static-effect ( before-stack obj -- after-stack )
-    [ in-types length head* ]
-    [ out-types append ] bi ;
+: apply-static-effect ( before-stack effect -- after-stack )
+    { { [ dup terminated?>> ] [ 2drop { ?? } ] }
+      { [ dup bivariable-effect? ] [ nip out-types ] }
+      [
+          [ in-types length head* ]
+          [ out-types append ] bi
+      ]
+    } cond ;
+
 M: word apply-word-effect
-     apply-static-effect ;
+     stack-effect apply-static-effect ;
 ! NOTE: unused until we can execute configurations!
-M: configuration apply-word-effect
-    M\ word apply-word-effect execute ;
+! M: configuration apply-word-effect
+!     M\ word apply-word-effect execute ;
 M: type apply-word-effect
     suffix ;
 M: object apply-word-effect
-    suffix ;
+    <wrapper> suffix ;
 
 ERROR: fold-failed preceding-error ;
 : fold-application ( before-stack word -- after-stack )
@@ -302,11 +328,18 @@ GENERIC: definition ( obj -- quot/f )
 M: object definition drop f ;
 M: type definition drop f ;
 
+! NOTE: doing this beforehand because ordering will try to check the predicate
+! quotation for wrapper tests, but that fails if the class to check against has
+! not been compiled yet
+! TODO check if this is needed after implementing lazyness correctly for wrapper
+! predicate defs...
+<<
 PREDICATE: special-word < word { drop swap dup declare call trace-and } member? ;
 PREDICATE: nodef-word < word def>> not ;
 PREDICATE: recursive-base-word < word [ 1quotation ] [ def>> ] bi = ;
 UNION: base-word special-word nodef-word recursive-base-word ;
 ! M: base-word definition drop f ;
+>>
 PREDICATE: non-special-word < word { [ base-word? not ] [ type? not ] } 1&& ;
 PREDICATE: inline-word < non-special-word inline? ;
 ! { [ base-word? not ] [ type? not ] [ inline? ] } 1&& ;
@@ -362,7 +395,7 @@ M: shuffle-word map-type
     ! ! reverse ;
 
 ERROR: declared-null-value stack ;
-PREDICATE: declaration < array ;
+PREDICATE: declaration < wrapper wrapped>> array? ;
 : apply-types/check ( stack types -- stack )
     apply-types dup [ null = ] any? [ declared-null-value ] when ;
 
@@ -372,6 +405,7 @@ PREDICATE: declaration < array ;
 M: \ declare map-type drop
     ! Compile-time literal check!
     unclip-last declaration check-instance
+    wrapped>>
     apply-concretized-types
     ;
 
@@ -452,8 +486,10 @@ ERROR: no-applicable-code-path ;
 ! quotation.
 ! If we have a quotation, we actually run it, and compute the outputs?
 ! If we only have a type, we apply the type.  That's what we do for now.
-! M: \ call map-type drop
-!     unclip-last apply-static-effect ;
+M: \ call map-type drop
+    unclip-last
+    type>effect apply-static-effect ;
+    ! unclip-last apply-static-effect ;
 ! M: \ call definition
 
 GENERIC: constrain-inputs ( inputs word -- inputs )

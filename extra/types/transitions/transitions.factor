@@ -1,10 +1,11 @@
-USING: accessors arrays assocs classes classes.algebra combinators
-combinators.short-circuit continuations generic generic.single kernel
-kernel.private namespaces quotations sequences sets types.bidi
-types.parametric.literal words ;
+USING: accessors arrays assocs assocs.extras classes classes.algebra combinators
+combinators.short-circuit continuations generic generic.math generic.single
+kernel namespaces quotations sequences sets types.bidi types.expander
+types.protocols words ;
 
 IN: types.transitions
 
+FROM: namespaces => set ;
 ! * Composition of state transitions
 
 ! IR for ping/pong inference
@@ -12,8 +13,8 @@ IN: types.transitions
 ! ** Transition element
 TUPLE: transition
     word state-in state-out ! prev next
-    id
-    ;
+    id ;
+
 : new-transition ( word class -- obj )
     new swap >>word
     \ transition counter >>id
@@ -24,8 +25,12 @@ TUPLE: transition
     [ out-types >>state-out ] bi ;
 
 : <atomic-transition> ( word -- obj )
-    [ transition new-transition ]
+    transition new-transition ;
+
+: <preset-atomic-transition> ( word -- obj )
+    [ <atomic-transition> ]
     [ init-state ] bi ;
+
 
 TUPLE: parallel-transition < transition bodies ;
 
@@ -145,8 +150,14 @@ M: predicate parallel-defs
     [ <parallel-transition> ]
     [ dup inline-def?
       [ dup def>> <inline-transition> ]
-      [ <atomic-transition> ] if
+      [ <preset-atomic-transition> ] if
     ] if* ;
+
+: <dependent-transition> ( state-in word -- obj )
+    swap over type-expand
+    [ <inline-transition> ]
+    [ <preset-atomic-transition> ] if* ;
+
 
 ! :: connect-transitions ( prev next -- )
 !     { [ prev next>> ] [ next prev>> ] } 1||
@@ -215,11 +226,11 @@ GENERIC: replace-transition ( transition -- transition )
 M: transition replace-transition? drop f ;
 PREDICATE: call-transition < transition word>> \ call eq? ;
 M: call-transition replace-transition?
-    state-in>> last callable literal>value nip ;
+    state-in>> last callable test-literal ;
 M: call-transition replace-transition
     {
         [ word>> <wrapper> ]
-        [ state-in>> last callable literal>value drop
+        [ state-in>> last literal>value
           [ drop ] prepose <inline-transition> ]
         [ state-in>> >>state-in ]
         [ state-out>> >>state-out ]
@@ -344,3 +355,87 @@ DEFER: run-quot-with
 !     [ last state-out>> ] bi <type-effect> ;
 
 ! : apply-compound ( inputs compound-transition -- compound-transition )
+
+! ** Interleaved with expansion and modular-type-transfer
+
+! Transition sequence elements are either words, or already instantiated
+! transition objects, for now, only assume words, e.g. no redo-history keeping
+: initial-transition-inputs ( left -- state-in )
+    ?last [ state-out>> ] [ H{ } ] if* ;
+
+! Possibly recursing
+SYMBOL: inline-history
+
+
+! : step-word ( left word -- transition )
+!     [ initial-transition-inputs ] dip
+!     2dup type-expand
+
+TUPLE: transfer-record state-in state-out code ;
+C: <transfer> transfer-record
+SYMBOL: transitions
+SYMBOL: word-transfers
+SYMBOL: word-undos
+SYMBOL: inference-word-nesting
+
+DEFER: infer-word-transfer ! ( word -- transfer )
+
+GENERIC: transfer-quots ( state-in word -- transfer )
+: cached-word-transfer ( word -- transfer )
+    word-transfers [ infer-word-transfer ] cache ;
+
+M: object transfer-quots
+    compute-transfer-quots ;
+
+! Throws away state information
+M: word transfer-quots
+    nip cached-word-transfer ;
+
+M: recursive-primitive transfer-quots
+    compute-transfer-quots ;
+
+M: primitive-data-op transfer-quots
+    compute-transfer-quots ;
+
+ERROR: recursive-word-transfer-inference word ;
+
+! Adds to the variables
+:: apply-word-transfer ( state-in word -- state-out )
+    state-in word ensure-inputs
+    transfer-quots first2 :> ( transfer undo )
+    state-in transfer [ with-datastack ] assoc-merge dup :> state-out
+    transitions [ state-in state-out word <transfer> suffix ] change
+    word-transfers [ transfer [ compose ] assoc-merge ] change
+    word-undos [ undo [ swap compose ] assoc-merge ] change ;
+
+: apply-quotation-transfer ( state-in code -- )
+    ! over [ nip dup first ensure-state-in-types length in>state swap ] unless
+    [ apply-word-transfer ] each drop ;
+
+! Top-level call transfer semantics, input-independent assumption
+: compute-word-transfer ( word -- )
+    H{ } word-transfers set
+    H{ } word-undos set
+    transitions off
+    f swap def>> apply-quotation-transfer ;
+
+
+: infer-word-transfer ( word -- transfer )
+    dup inference-word-nesting get in? [ recursive-word-transfer-inference ] when
+    [ inference-word-nesting [ over suffix ] change
+      compute-word-transfer
+      word-transfers get
+      word-undos get 2array
+    ] with-scope ;
+
+! TODO: dedup!
+: quotation-transfer ( quot -- transfer )
+    [
+        H{ } word-transfers set
+        H{ } word-undos set
+        transitions off
+        f swap apply-quotation-transfer
+        transitions get
+        word-transfers get
+        word-undos get 3array
+    ] with-scope ;

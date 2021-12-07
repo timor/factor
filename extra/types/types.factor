@@ -2,7 +2,7 @@ USING: accessors classes classes.algebra classes.tuple combinators.short-circuit
 effects kernel sequences words ;
 
 IN: types
-USE: types.transitions.known-words
+! USE: types.transitions.known-words
 ! * Language of types
 GENERIC: type<= ( type1 type2 -- ? )
 : type= ( type type -- ? )

@@ -1,6 +1,6 @@
 USING: accessors arrays classes.algebra classes.algebra.private combinators
-combinators.short-circuit effects kernel quotations sequences types
-types.parametric types.parametric.literal types.typestack ;
+combinators.short-circuit compiler.utilities effects kernel quotations sequences
+stack-checker types types.parametric types.protocols ;
 
 IN: types.parametric.effects
 
@@ -8,6 +8,7 @@ IN: types.parametric.effects
 ! * Effect types and typed quotations
 TUPLE: effect-type < anonymous-predicate
     effect ;
+M: effect-type type>classoid ;
 
 : check-quotation ( quotation quotation-type -- ? )
     ! [ infer-effect ] dip effect<= ;
@@ -31,6 +32,7 @@ TUPLE: effect-type < anonymous-predicate
 
 ! M: effect type-of <typed-quotation> ;
 M: effect type-of ;
+M: effect type>classoid <typed-quotation> ;
 
 PREDICATE: empty-quotation < quotation empty? ;
 CONSTANT: empty-quotation-type T{ effect-type f callable [ drop empty-quotation? ] ( -- ) }

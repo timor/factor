@@ -50,10 +50,10 @@ M: literal-type parameter-classes-intersect?
     [ 2drop t ] if ;
 
 ! Recover the literal from the type, or return the value itself
-: literal>value ( type class -- value ? )
-    { { [ 2dup instance? ] [ drop t ] }
-      { [ over literal-type? ] [ 2dup class<= [ drop value>> t ] [ drop f ] if ] }
-      [ drop f ]
-    } cond ;
+! : literal>value ( type class -- value ? )
+!     { { [ 2dup instance? ] [ drop t ] }
+!       { [ over literal-type? ] [ 2dup class<= [ drop value>> t ] [ drop f ] if ] }
+!       [ drop f ]
+!     } cond ;
 
 M: object type-of <literal-type> ;
