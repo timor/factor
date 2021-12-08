@@ -1,6 +1,6 @@
-USING: accessors arrays assocs classes classes.algebra combinators
-compiler.tree.propagation.info effects generic.math kernel kernel.private math
-math.intervals namespaces persistent.assocs quotations sequences stack-checker
+USING: accessors arrays assocs assocs.extras classes classes.algebra combinators
+compiler.tree.propagation.info continuations effects generic.math kernel
+kernel.private math math.intervals namespaces quotations sequences stack-checker
 types.bidi words ;
 
 IN: types.protocols
@@ -114,6 +114,8 @@ GENERIC: type-value-undo-split ( v> <v' type-value-class -- v< )
 ! ! Default is to assume regular branch-independent reverse fanout.
 GENERIC: top-type-value ( type-value-class -- object )
 GENERIC: bottom-type-value ( type-value-class -- object )
+! This is used to check a state whether it would lead to a divergent calculation
+GENERIC: type-value-diverges? ( type-value type-value-class -- ? )
 ! Used for inputs
 GENERIC: unknown-type-value ( type-value-class -- object )
 M: type-key unknown-type-value drop ?? ;
@@ -203,6 +205,14 @@ ERROR: invalid-declaration spec ;
     over ??? [ swapd ] when
     pick ??? [ drop nip ] [ call( x x -- x ) ] if ;
 
+ERROR: inferred-divergent-state state-assoc ;
+: divergent? ( state-assoc -- ? )
+    [ swap [ type-value-diverges? ] curry any? ] assoc-any? ;
+
+: apply-transfers ( state-assoc quot-assoc -- state-assoc )
+    [ with-datastack ] assoc-merge
+    dup divergent? [ inferred-divergent-state ] when ;
+
 ! * Value Ids
 ! Created for unknown values.  Dup'd values actually have the same id.
 ! Sets of values constitute disjoint unions.
@@ -215,6 +225,7 @@ M: \ value-id type-value-merge drop ;
 M: \ value-id type-value-undo-merge 2drop ;
 M: \ value-id value>type nip counter ;
 M: \ value-id apply-declaration 2drop ;
+M: \ value-id type-value-diverges? 2drop f ;
 
 ! * Class algebra
 GENERIC: class-primitive-transfer ( state-in primitive -- transfer-quot/f )
@@ -230,6 +241,7 @@ M: \ class primitive-transfer
 ! the value here, because the declaration might actually be incomplete...
 M: \ class apply-declaration drop
     [ [ concretize ] dip class-and ] 2map ;
+M: \ class type-value-diverges? drop null = ;
 
 ! * Interval computations
 ! M: \ interval unknown-type-value drop full-interval ;
@@ -244,6 +256,7 @@ M: \ interval type-value-undo-merge drop interval-intersect ;
 M: \ interval type-value-undo-split drop [ interval-intersect ] or-unknown ;
 M: \ interval value>type
     over number? [ drop [a,a] ] [ call-next-method ] if ;
+M: \ interval type-value-diverges? drop empty-interval = ;
 
 ! TODO: Concretize correctly according to variance!
 ! In the first approximation, only invariant conversions are safe.

@@ -404,10 +404,6 @@ M: primitive-data-op transfer-quots
 
 ERROR: recursive-word-transfer-inference word ;
 
-
-: apply-transfers ( state-assoc quot-assoc -- state-assoc )
-    [ with-datastack ] assoc-merge ;
-
 DEFER: apply-quotation-transfer
 
 ! Adds to the variables
