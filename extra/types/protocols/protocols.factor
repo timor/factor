@@ -121,7 +121,7 @@ M: type-key unknown-type-value drop ?? ;
 ERROR: undefined-primitive-type-transfer state-in primitive type-key ;
 ERROR: undefined-primitive-type-undo state-in primitive type-key ;
 
-UNION: primitive-data-op \ dup \ drop \ swap ;
+UNION: primitive-data-op \ dup \ drop \ swap \ rot ;
 
 : constantly ( value -- quot )
     literalize 1quotation ;
@@ -132,27 +132,31 @@ M: type-key primitive-transfer
         { [ over word? not ] [ value>type constantly nip ] }
         [ undefined-primitive-type-transfer ]
     } cond ;
-    ! over [ primitive-data-op? ] [ drop 1quotation ]
-    ! [ undefined-primitive-type-transfer ] if ;
 
 : undo-dup ( state-in class -- quot: ( x x -- x ) )
-    [ of last ] keep [ type-value-undo-split ] 2curry ;
+    nip [ type-value-undo-split ] curry ;
 
 M: type-key primitive-undo
     { { [ over \ drop eq? ] [ nip of last constantly ] }
       { [ over \ swap eq? ] [ 3drop [ swap ] ] }
       { [ over \ dup eq? ] [ nip undo-dup ] }
+      { [ over \ rot eq? ] [ 3drop [ -rot ] ] }
       { [ over word? not ] [ 3drop [ drop ] ] }
       [ undefined-primitive-type-undo ]
     } cond ;
 
 ERROR: not-a-primitive-transfer word ;
 
+: pad-state ( state-in n key -- state-in )
+    2over [ length ] dip <
+    [ [ unknown-type-value ] curry replicate prepend ]
+    [ 2drop ] if ;
+
 :: ensure-state-in ( state-in word -- state-in )
     word in-types length :> n
     state-in [| key state |
         state n
-        key unknown-type-value pad-head
+        key pad-state
         key swap
     ] assoc-map ;
 
@@ -164,7 +168,7 @@ ERROR: invalid-declaration spec ;
     spec length :> n
     state-in [| key state |
         state unclip-last-slice :> ( value-state decl )
-        value-state n key unknown-type-value pad-head
+        value-state n key pad-state
         spec key apply-declaration
         decl suffix key swap
      ] assoc-map  ;
@@ -179,13 +183,9 @@ ERROR: invalid-declaration spec ;
     dup \ declare eq?
     [ [ ensure-declaration-in ] dip ]
     [ [ ensure-state-in ] keep ] if ;
-    ! all-type-keys [
-    !     ensure-state-in
-    ! ] each ;
 
 : compute-key-undo ( state-in word key -- undo-quot )
     primitive-undo ;
-    ! [ ensure-state-in ] keep primitive-undo ;
 
 : compute-key-transfer ( state-in word key -- quot )
     primitive-transfer ;
@@ -195,15 +195,13 @@ ERROR: invalid-declaration spec ;
     all-type-keys
     [ [ [ compute-key-undo ] keep swap ] 2with H{ } map>assoc ]
     [ [ [ compute-key-transfer ] keep swap ] 2with H{ } map>assoc ] 3bi swap 2array ;
-    ! [ [ [ compute-key-undo ] ] 2with H{ } map>assoc ]
-    ! [ [ dup compute-key-transfer ] with ]
-
-    ! [ [ [ compute-key-undo ]
-    !                   [ compute-key-transfer ] 2bi swap
-    !                   2array ] keep swap ] 2with H{ } map>assoc ;
 
 : in>state ( n -- state-in )
     all-type-keys [ swap ?? <array> ] with H{ } map>assoc ;
+
+: or-unknown ( type1 type2 quot: ( type1 type2 -- type ) -- type )
+    over ??? [ swapd ] when
+    pick ??? [ drop nip ] [ call( x x -- x ) ] if ;
 
 ! * Value Ids
 ! Created for unknown values.  Dup'd values actually have the same id.
@@ -234,14 +232,16 @@ M: \ class apply-declaration drop
     [ [ concretize ] dip class-and ] 2map ;
 
 ! * Interval computations
-! M: \ interval unknown-type-value drop ?? ;
+! M: \ interval unknown-type-value drop full-interval ;
 M: \ interval type-value-merge drop [ ] [ interval-union ] map-reduce ;
 M: \ interval type-value-undo-merge drop interval-intersect ;
 ! NOTE: backwards assumption propagation creates union behavior here? Is that
 ! correct?  In case of class, the value could not have disjoint classes to be
 ! valid in different branches.  However, the same is absolutely not true for intervals...
 ! TODO: this could be a point to inject polyhedral propagation?
-M: \ interval type-value-undo-split drop interval-union ;
+! No, just seems to be wrong...
+! M: \ interval type-value-undo-split drop interval-union ;
+M: \ interval type-value-undo-split drop [ interval-intersect ] or-unknown ;
 M: \ interval value>type
     over number? [ drop [a,a] ] [ call-next-method ] if ;
 
@@ -258,4 +258,6 @@ M: classoid class-invariant>interval drop ?? ;
 M: math-class class-invariant>interval class-interval ;
 M: \ interval apply-declaration drop
     [ class-invariant>interval ] map
-    [ dup ??? [ drop ] [ interval-intersect ] if ] 2map ;
+    [
+        [ interval-intersect ] or-unknown
+    ] 2map ;

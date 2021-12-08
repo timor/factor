@@ -1,5 +1,6 @@
-USING: accessors assocs combinators continuations kernel macros macros.expander
-math quotations sequences types.protocols words ;
+USING: accessors assocs combinators continuations generalizations kernel
+kernel.private macros macros.expander math memoize namespaces quotations
+sequences types.protocols words ;
 
 IN: types.expander
 
@@ -11,18 +12,10 @@ IN: types.expander
 SYMBOL: must-inline?
 
 GENERIC: type-expand* ( state-in word -- code/f )
-MEMO: type-expand ( state-in word -- code/f )
+: type-expand ( state-in word -- code/f )
     type-expand* ;
 
-: reset-expansions ( -- )
-    \ type-expand reset-memoized ;
-
-PREDICATE: recursive-primitive < word [ def>> ] [ 1quotation ] bi = ;
 M: object type-expand* 2drop f ;
-
-ERROR: undefined-primitive-expansion word ;
-M: recursive-primitive type-expand*
-    undefined-primitive-expansion ;
 
 : macro-literals ( state-in macro -- seq ? )
     [ literal-value of ] [ macro-effect ] bi*
@@ -41,16 +34,18 @@ ERROR: static-macro-expansion-error inputs macro-quot error ;
     must-inline? on
     ;
 
-: type-expand-macro ( state-in macro -- code )
+MEMO: type-expand-macro ( state-in macro -- code )
     [ nip macro-quot ]
     [ macro-literals ] 2bi
     [ swap expand-static-macro ]
     [ drop expand-dynamic-macro ] if ;
 
-M: word type-expand*
-    { { [ dup macro? ] [ type-expand-macro ] }
-      { [ dup inline? ] [ nip def>> ] }
-      [ 2drop f ]
-    } cond ;
+: reset-expansions ( -- )
+    \ type-expand-macro reset-memoized ;
 
-M: \ declare type-expand*
+M: word type-expand* 2drop f ;
+M: \ nip type-expand* 2drop [ swap drop ] ;
+M: \ ? type-expand* 2drop
+    { [ { POSTPONE: f ?? object } declare nip nip ]
+      [ { not{ POSTPONE: f } object ?? } declare drop nip ]
+    } ;

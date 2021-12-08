@@ -342,8 +342,8 @@ DEFER: run-quot-with
 : quot>trace ( quot -- left right )
     quot>transition f swap ;
 
-: run-quot ( quot -- trace changed? )
-    quot>trace run-right ;
+! : run-quot ( quot -- trace changed? )
+!     quot>trace run-right ;
     ! quot>transition f swap ping-pong ;
     ! [ {  } ] [
     !     quot>transition
@@ -361,7 +361,7 @@ DEFER: run-quot-with
 ! Transition sequence elements are either words, or already instantiated
 ! transition objects, for now, only assume words, e.g. no redo-history keeping
 : initial-transition-inputs ( left -- state-in )
-    ?last [ state-out>> ] [ H{ } ] if* ;
+    ?last [ state-out>> ] [ H{ } clone ] if* ;
 
 ! Possibly recursing
 SYMBOL: inline-history
@@ -374,15 +374,18 @@ SYMBOL: inline-history
 TUPLE: transfer-record state-in state-out code ;
 C: <transfer> transfer-record
 SYMBOL: transitions
-SYMBOL: word-transfers
-SYMBOL: word-undos
+SYMBOL: current-transfer
+SYMBOL: current-undo
 SYMBOL: inference-word-nesting
+SYMBOL: word-transfers
 
 DEFER: infer-word-transfer ! ( word -- transfer )
 
 GENERIC: transfer-quots ( state-in word -- transfer )
 : cached-word-transfer ( word -- transfer )
-    word-transfers get [ infer-word-transfer ] cache ;
+    word-transfers get
+    [ [ infer-word-transfer ] cache ]
+    [ infer-word-transfer ] if* ;
 
 M: object transfer-quots
     compute-transfer-quots ;
@@ -390,6 +393,8 @@ M: object transfer-quots
 ! Throws away state information
 M: word transfer-quots
     nip cached-word-transfer ;
+
+PREDICATE: recursive-primitive < word [ def>> ] [ 1quotation ] bi = ;
 
 M: recursive-primitive transfer-quots
     compute-transfer-quots ;
@@ -399,44 +404,68 @@ M: primitive-data-op transfer-quots
 
 ERROR: recursive-word-transfer-inference word ;
 
+
+: apply-transfers ( state-assoc quot-assoc -- state-assoc )
+    [ with-datastack ] assoc-merge ;
+
+DEFER: apply-quotation-transfer
+
 ! Adds to the variables
+: compose-transfers ( quot-assoc quot-assoc -- composed-assoc )
+    [ compose ] assoc-merge ;
+
+: prepose-transfers ( quot-assoc quot-assoc -- composed-assoc )
+    [ prepose ] assoc-merge ;
+
 : apply-word-transfer ( state-in word -- state-out )
     [let
-     ensure-inputs 2dup :> ( state-in word )
-     transfer-quots first2 :> ( transfer undo )
-     state-in transfer [ with-datastack ] assoc-merge dup :> state-out
-     transitions [ state-in state-out word <transfer> suffix ] change
-     word-transfers [ transfer [ compose ] assoc-merge ] change
-     word-undos [ undo [ swap compose ] assoc-merge ] change
+     ensure-inputs :> ( state-in word )
+     state-in word type-expand :> cases
+     cases quotation? [ state-in cases apply-quotation-transfer ]
+     [
+         state-in word transfer-quots first2 :> ( transfer undo )
+         state-in transfer apply-transfers dup :> state-out
+         transitions [ state-in state-out word <transfer> suffix ] change
+         current-transfer [ transfer compose-transfers ] change
+         current-undo [ undo prepose-transfers ] change
+     ] if
     ] ;
 
-: apply-quotation-transfer ( state-in code -- )
-    ! over [ nip dup first ensure-state-in-types length in>state swap ] unless
-    [ apply-word-transfer ] each drop ;
+: apply-quotation-transfer ( state-in code -- state-out )
+    [ apply-word-transfer ] each ;
 
 ! Top-level call transfer semantics, input-independent assumption
 : compute-word-transfer ( word -- )
-    H{ } word-transfers set
-    H{ } word-undos set
+    H{ } current-transfer set
+    H{ } current-undo set
     transitions off
-    f swap def>> apply-quotation-transfer ;
+    f swap def>> apply-quotation-transfer drop ;
 
 : infer-word-transfer ( word -- transfer )
+    reset-expansions
     dup inference-word-nesting get in? [ recursive-word-transfer-inference ] when
     [ inference-word-nesting [ over suffix ] change
       compute-word-transfer
-      word-transfers get
-      word-undos get 2array
+      current-transfer get
+      current-undo get 2array
     ] with-scope ;
 
 ! TODO: dedup!
 : quotation-transfer ( quot -- transfer )
+    reset-expansions
     [
-        H{ } word-transfers set
-        H{ } word-undos set
+        H{ } current-transfer set
+        H{ } current-undo set
         transitions off
-        f swap apply-quotation-transfer
+        f swap apply-quotation-transfer drop
         transitions get
-        word-transfers get
-        word-undos get 3array
+        current-transfer get
+        current-undo get 3array
     ] with-scope ;
+
+: undo-transfer ( transfer -- state-in )
+    [ first last state-out>> ] [ third ] bi
+    apply-transfers ;
+
+: run-quot ( quot -- res res )
+    quotation-transfer dup undo-transfer ;
