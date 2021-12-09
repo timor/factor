@@ -1,7 +1,7 @@
 USING: accessors arrays assocs classes classes.algebra classes.algebra.private
 combinators combinators.short-circuit compiler.utilities continuations effects
 kernel kernel.private math math.combinatorics namespaces prettyprint quotations
-sequences types types.parametric.effects types.protocols words ;
+sequences stack-checker types types.parametric.effects words ;
 
 IN: types.bidi
 
@@ -36,6 +36,37 @@ IN: types.bidi
       [ f ]
     } cond
     [ drop ] [ 2drop null ] if ;
+
+! ** General classoid coercion
+! Needed for things that can be used during type inference but need to be
+! compared to actual values...
+GENERIC: type>classoid ( type -- classoid )
+M: classoid type>classoid ;
+
+! ** Effect type normalization
+! Multiple-dispatch would be nice...
+GENERIC: type>effect ( type -- effect )
+PREDICATE: callable-class < class callable class<= ;
+PREDICATE: literal-callable < wrapper wrapped>> callable? ;
+
+! NOTE: not calling nested inference here.  If that is intended, it has to be
+! made explicit during stepping using expansion.
+M: literal-callable type>effect wrapped>> infer ;
+
+: unknown-effect ( -- effect )
+    "a" { } "b" { } <variable-effect> ;
+
+M: callable-class type>effect drop
+    unknown-effect ;
+
+: error-effect ( -- effect )
+    { } dup t <terminated-effect> ;
+
+M: class type>effect drop error-effect ;
+
+ERROR: unconcretized-effect-coercion ;
+
+M: ?? type>effect unconcretized-effect-coercion ;
 
 ! Gradual types
 : trace-and ( value-set type2 -- value-set )

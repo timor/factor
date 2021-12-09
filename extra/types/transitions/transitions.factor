@@ -1,6 +1,6 @@
 USING: accessors arrays assocs assocs.extras classes classes.algebra combinators
 combinators.short-circuit continuations generic generic.math generic.single
-kernel namespaces quotations sequences sets types.bidi types.expander
+kernel namespaces quotations sequences sets types types.bidi types.expander
 types.protocols words ;
 
 IN: types.transitions
@@ -372,12 +372,15 @@ SYMBOL: inline-history
 !     2dup type-expand
 
 TUPLE: transfer-record state-in state-out code ;
-C: <transfer> transfer-record
+C: <transfer-record> transfer-record
 SYMBOL: transitions
 SYMBOL: current-transfer
 SYMBOL: current-undo
 SYMBOL: inference-word-nesting
 SYMBOL: word-transfers
+
+TUPLE: transfer records transfer-quots undo-quots ;
+C: <transfer> transfer
 
 DEFER: infer-word-transfer ! ( word -- transfer )
 
@@ -422,27 +425,29 @@ DEFER: apply-quotation-transfer
 DEFER: infer-branch-transfer
 DEFER: pong-ping
 
-:: apply-parallel-transfer ( state-in cases -- state-out )
-    state-in pong-ping cases [
-        infer-branch-transfer
-        [ 2array ] when*
-    ] with map sift unzip
-    :> ( out-states transfers )
-    ! transfers
-    ! first3 :> ( trans branch-transfers branch-undos )
-    all-type-keys [ dup
-                    [ transfers [ second ] map [ at ] with map ]
-                    [ make-disjunctive-transfer ] bi
-    ] H{ } map>assoc current-transfer [ swap compose-transfers ] change
-    all-type-keys [ dup
-                    [ transfers [ third ] map [ at ] with map ]
-                    [ make-disjunctive-transfer ] bi
-    ] H{ } map>assoc current-undo [ swap prepose-transfers ] change
-    out-states merge-all-states :> state-out
-    transitions [
-        state-in state-out transfers [ first ] map <transfer> suffix ] change
-    state-out
-    ;
+! :: apply-parallel-transfer ( state-in cases -- state-out )
+: apply-parallel-transfer ( state-in cases -- state-out )
+    drop ;
+    ! state-in pong-ping cases [
+    !     infer-branch-transfer
+    !     [ 2array ] when*
+    ! ] with map sift unzip
+    ! :> ( out-states transfers )
+    ! ! transfers
+    ! ! first3 :> ( trans branch-transfers branch-undos )
+    ! all-domains [ dup
+    !                 [ transfers [ second ] map [ at ] with map ]
+    !                 [ make-disjunctive-transfer ] bi
+    ! ] H{ } map>assoc current-transfer [ swap compose-transfers ] change
+    ! all-domains [ dup
+    !                 [ transfers [ third ] map [ at ] with map ]
+    !                 [ make-disjunctive-transfer ] bi
+    ! ] H{ } map>assoc current-undo [ swap prepose-transfers ] change
+    ! out-states merge-states :> state-out
+    ! transitions [
+    !     state-in state-out transfers [ first ] map <transfer-record> suffix ] change
+    ! state-out
+    ! ;
 
 
 : apply-word-transfer ( state-in word -- state-out )
@@ -456,7 +461,7 @@ DEFER: pong-ping
          [
              state-in word transfer-quots first2 :> ( transfer undo )
              state-in transfer apply-transfers dup :> state-out
-             transitions [ state-in state-out word <transfer> suffix ] change
+             transitions [ state-in state-out word <transfer-record> suffix ] change
              current-transfer [ transfer compose-transfers ] change
              current-undo [ undo prepose-transfers ] change
          ] if
@@ -490,7 +495,7 @@ DEFER: pong-ping
         apply-quotation-transfer
         transitions get
         current-transfer get
-        current-undo get 3array
+        current-undo get <transfer>
     ] with-scope ;
 
 ! TODO: dedup!
@@ -503,11 +508,11 @@ DEFER: pong-ping
         f swap apply-quotation-transfer drop
         transitions get
         current-transfer get
-        current-undo get 3array
+        current-undo get <transfer>
     ] with-scope ;
 
 : undo-transfer ( transfer -- state-in )
-    [ first last state-out>> ] [ third ] bi
+    [ records>> last state-out>> ] [ undo-quots>> ] bi
     apply-transfers ;
 
 : pong-ping ( state-in -- state-in )
@@ -521,4 +526,4 @@ DEFER: pong-ping
     ! [ run-quot ] keep
     ! infer-branch-transfer
     ! [ [ first last state-out>> ] dip 2dup = [ drop ] [ "unstable" throw ] if ] dip ;
-    run-quot swap first dup last state-out>> swapd ;
+    run-quot swap records>> dup last state-out>> swapd ;

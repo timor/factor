@@ -1,8 +1,37 @@
 USING: accessors classes classes.algebra classes.tuple combinators.short-circuit
-effects kernel sequences words ;
+effects kernel math.intervals sequences words ;
 
 IN: types
 ! USE: types.transitions.known-words
+
+! * Abstract Domains
+MIXIN: domain
+
+! Hacky...
+: all-domains ( -- classes )
+    domain class-members [ wrapped>> ] map ;
+
+
+! ** Domain-specific operations
+GENERIC: value>type ( value domain -- domain-value )
+GENERIC: unknown-type-value ( domain -- domain-value )
+GENERIC: apply-domain-declaration ( domain-value spec-value domain -- domain-value )
+! This is used to check a state whether it would lead to a divergent calculation
+GENERIC: domain-value-diverges?* ( type-value domain -- ? )
+: domain-value-diverges? ( type-value domain -- ? )
+    over ??? [ 2drop f ] [ domain-value-diverges?* ] if ;
+
+! Forward merge of split control path
+GENERIC: type-value-merge ( outn> domain -- >out )
+! Undo Forward merge back into split-control path
+GENERIC: type-value-undo-merge ( out_i< out< domain -- <out_i )
+
+! ** Predefined domains
+SINGLETON: value-id
+INSTANCE: \ class domain
+INSTANCE: \ interval domain
+INSTANCE: \ value-id domain
+
 ! * Language of types
 GENERIC: type<= ( type1 type2 -- ? )
 : type= ( type type -- ? )

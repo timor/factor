@@ -1,8 +1,8 @@
-USING: accessors arrays assocs assocs.extras classes classes.algebra combinators
-combinators.smart compiler.tree.propagation.info continuations effects
-generalizations generic.math kernel kernel.private math math.intervals
-namespaces quotations sequences sequences.generalizations sets stack-checker
-types.bidi words ;
+USING: accessors arrays assocs assocs.extras classes classes.algebra columns
+combinators combinators.smart compiler.tree.propagation.info continuations
+generalizations generic.math grouping kernel kernel.private math math.intervals
+namespaces quotations sequences sequences.generalizations sets types types.bidi
+types.type-values types.util words ;
 
 IN: types.protocols
 ! * Type normalization protocols
@@ -15,37 +15,6 @@ IN: types.protocols
 ! - callables need to be cast to effects (arrow types)
 ! - numeric type calculations are performed on intervals
 
-! ** General classoid coercion
-! Needed for things that can be used during type inference but need to be
-! compared to actual values...
-GENERIC: type>classoid ( type -- classoid )
-M: classoid type>classoid ;
-
-! ** Effect type normalization
-! Multiple-dispatch would be nice...
-GENERIC: type>effect ( type -- effect )
-PREDICATE: callable-class < class callable class<= ;
-PREDICATE: literal-callable < wrapper wrapped>> callable? ;
-
-! NOTE: not calling nested inference here.  If that is intended, it has to be
-! made explicit during stepping using expansion.
-M: literal-callable type>effect wrapped>> infer ;
-
-: unknown-effect ( -- effect )
-    "a" { } "b" { } <variable-effect> ;
-
-M: callable-class type>effect drop
-        unknown-effect ;
-
-: error-effect ( -- effect )
-    { } dup t <terminated-effect> ;
-
-M: class type>effect drop error-effect ;
-
-ERROR: unconcretized-effect-coercion ;
-
-M: ?? type>effect unconcretized-effect-coercion ;
-
 ! * Other approach: modular value info
 ! quots are a hashtable of orthogonal lattices that are traversed in parallel,
 ! each entry having two elements, a forward and a backwards quot.
@@ -56,50 +25,39 @@ M: ?? type>effect unconcretized-effect-coercion ;
 ! slot-access?
 
 ! Protocol:
-! For each type key we need: bottom and top value,
+! For each domain we need: bottom and top value,
 ! Conversion from class
 ! Conversion from value
 ! Meet and join operations?
 ! (Least) upper bound: join
 ! (Greatest) lower bound: meet
 
-! Type keys must be independent.  Information of different states may only
+! Domains must be independent.  Information of different states may only
 ! combined to decide on what code to generate next.  This is some form of
 ! independence guarantee so it does not matter whether we compute the compound
 ! of a word or its constituents.
 
-MIXIN: type-key
 TUPLE: literal-value value ;
 ! TUPLE: class-value class ;
 ! TUPLE: interval-value interval ;
-TUPLE: relation value ;
-TUPLE: eql-to < relation ;
-TUPLE: less-than < relation ;
-TUPLE: greater-than < relation ;
-SINGLETON: value-id
-! INSTANCE: \ literal-value type-key
-INSTANCE: \ class type-key
-INSTANCE: \ interval type-key
-INSTANCE: \ relation type-key
-INSTANCE: \ value-id type-key
-
-! Hacky...
-: all-type-keys ( -- classes )
-    type-key class-members [ wrapped>> ] map ;
+! TUPLE: relation value ;
+! TUPLE: eql-to < relation ;
+! TUPLE: less-than < relation ;
+! TUPLE: greater-than < relation ;
+! INSTANCE: \ literal-value domain
+! INSTANCE: \ relation domain
 
 ! NOTE: transfers are also not assumed to be undoable right now... As long as
 ! transitions can be rolled back atomically, that should not be a problem...
-GENERIC: primitive-transfer ( state-in primitive type-value-class -- transfer-quot )
+GENERIC: primitive-transfer ( state-in primitive domain -- transfer-quot )
 ! NOTE: undos are not assumed to be undoable right now...
-GENERIC: primitive-undo ( state-in primitive type-value-class -- undo-quot )
-GENERIC: value>type ( value type-value-class -- type-value )
-M: type-key value>type 2drop ?? ;
+GENERIC: primitive-undo ( state-in primitive domain -- undo-quot )
+M: domain value>type 2drop ?? ;
 
 ! There is access to a branch-id for identification
 : branch-id ( -- id )
     \ branch-id get ;
 
-GENERIC: apply-declaration ( state-in spec type-value-class -- state-in )
 
 ! Used when undo'ing duplication, i.e. the properties an output value must have to be
 ! compatible with two different input positions.
@@ -115,41 +73,35 @@ C: <xor> xor-prop
 
 ! Combine different outputs
 ! Forward merge after exclusive control-path split
-GENERIC: type-value-merge ( outn> type-value-class -- >out )
-M: type-key type-value-merge drop <xor> ;
 ! Backprop merged into exclusive control-paths
 ! XXX
-GENERIC: type-value-undo-merge ( out_i< out< type-value-class -- <out )
-M: type-key type-value-undo-merge drop <and> ;
-GENERIC: type-values-intersect? ( type-value1 type-value2 type-value-class -- ? )
+! M: domain type-value-undo-merge drop <and> ;
+GENERIC: type-values-intersect? ( type-value1 type-value2 domain -- ? )
 ! Re-Combination of data-path-split
-GENERIC: type-value-undo-dup ( v> <v' type-value-class -- v< )
+GENERIC: type-value-undo-dup ( v> <v' domain -- v< )
 ! Backprop into common history of exclusive control-paths
 ! GENERIC: type-value-undo-split ( v> <out )
-! GENERIC: type-value-join* ( out1> out2> type-value-class -- >out' )
+! GENERIC: type-value-join* ( out1> out2> domain -- >out' )
 ! ! NOTE: intended for intersection behavior when parallel-execution joins are
 ! ! propagated backwards
-! GENERIC: type-value-undo-join* ( out1> <out' type-value-class -- out1< )
-! ! GENERIC: type-value-join* ( x1< x2< x1> type-value-class -- <x1 )
-! GENERIC: type-value-meet* ( x1 x2  type-value-class -- x'> )
+! GENERIC: type-value-undo-join* ( out1> <out' domain -- out1< )
+! ! GENERIC: type-value-join* ( x1< x2< x1> domain -- <x1 )
+! GENERIC: type-value-meet* ( x1 x2  domain -- x'> )
 ! ! Default is to assume regular branch-independent reverse fanout.
-GENERIC: top-type-value ( type-value-class -- object )
-GENERIC: bottom-type-value ( type-value-class -- object )
-! This is used to check a state whether it would lead to a divergent calculation
-GENERIC: type-value-diverges? ( type-value type-value-class -- ? )
+GENERIC: top-type-value ( domain -- object )
+GENERIC: bottom-type-value ( domain -- object )
 ! Used for inputs
-GENERIC: unknown-type-value ( type-value-class -- object )
-M: type-key unknown-type-value drop ?? ;
+M: domain unknown-type-value drop ?? ;
 
-ERROR: undefined-primitive-type-transfer state-in primitive type-key ;
-ERROR: undefined-primitive-type-undo state-in primitive type-key ;
+ERROR: undefined-primitive-type-transfer state-in primitive domain ;
+ERROR: undefined-primitive-type-undo state-in primitive domain ;
 
 UNION: primitive-data-op \ dup \ drop \ swap \ rot ;
 
 : constantly ( value -- quot )
     literalize 1quotation ;
 
-M: type-key primitive-transfer
+M: domain primitive-transfer
     {
         { [ over primitive-data-op? ] [ drop 1quotation nip ] }
         { [ over word? not ] [ value>type constantly nip ] }
@@ -168,7 +120,7 @@ M: type-key primitive-transfer
         2dup = [ drop ]
         [ [ <and> ] or-unknown ] if ] ;
 
-M: type-key primitive-undo
+M: domain primitive-undo
     { { [ over \ drop eq? ] [ nip of last constantly ] }
       { [ over \ swap eq? ] [ 3drop [ swap ] ] }
       { [ over \ dup eq? ] [ nip undo-dup ] }
@@ -179,37 +131,41 @@ M: type-key primitive-undo
 
 ERROR: not-a-primitive-transfer word ;
 
-: pad-state ( state-in n key -- state-in )
-    [ over length - ] dip
-    over 0 >
-    [ [ unknown-type-value ] curry replicate prepend ]
-    [ 2drop ] if ;
+: pad-state ( state-in n -- state-in )
+    over length -
+    dup 0 >
+    [ [ <??> ] replicate prepend ]
+    [ drop ] if ;
 
-:: ensure-state-in ( state-in word -- state-in )
-    word in-types length :> n
-    state-in [| key state |
-        state n
-        key pad-state
-        key swap
-    ] assoc-map ;
+! :: ensure-state-in ( state-in word -- state-in )
+!     word in-types length :> n
+!     state-in [| state |
+!         state n pad-state
+!     ] map ;
+
+: ensure-state-in ( state-in word -- state-in )
+    in-types length pad-state ;
+    ! state-in [| state |
+    !     state n pad-state
+    ! ] map ;
 
 ERROR: invalid-declaration spec ;
 :: ensure-declaration-in ( state-in -- state-in )
-    state-in class of ?last :> spec
+    state-in ?last :> spec
     spec wrapper? [ spec invalid-declaration ] unless
     spec wrapped>> :> spec
     spec length :> n
-    state-in [| key state |
-        state unclip-last-slice :> ( value-state decl )
-        value-state n key pad-state
-        spec key apply-declaration
-        decl suffix key swap
-     ] assoc-map  ;
+    state-in unclip-last-slice :> ( value-state decl-type-value )
+    value-state [
+        spec apply-declaration
+    ] map
+    decl-type-value suffix ;
 
 ! Interface function
 ! Used to ensure that undo and transfer functions have correct setup
 : empty-state ( -- state-in )
-    all-type-keys [ { } ] H{ } map>assoc ;
+    f ;
+    ! all-domains [ { } ] H{ } map>assoc ;
 
 : ensure-inputs ( state-in word -- state-in word )
     [ [ empty-state ] unless* ] dip
@@ -225,53 +181,76 @@ ERROR: invalid-declaration spec ;
 
 ! Return two assocs, one for the transfer, one for the undo
 : compute-transfer-quots ( state-in word -- transfer )
-    all-type-keys
+    all-domains
     [ [ [ compute-key-undo ] keep swap ] 2with H{ } map>assoc ]
     [ [ [ compute-key-transfer ] keep swap ] 2with H{ } map>assoc ] 3bi swap 2array ;
 
 : in>state ( n -- state-in )
-    all-type-keys [ swap ?? <array> ] with H{ } map>assoc ;
+    all-domains [ swap ?? <array> ] with H{ } map>assoc ;
 
 : xor-merge ( states -- state )
     ! members dup length 1 = [ first ] [ <xor> ] if ;
     [ dup sequence? [ 1array ] unless ] gather
     dup length 1 = [ first ] when ;
 
-:: merge-states ( key-states key -- key-states )
-    key-states [ length ] map supremum :> d
-    key-states [ d key pad-state ] map
-    flip [ xor-merge ] map ;
+: merge-states ( list-of-list-of-type-values -- list-of-type-values )
+    dup [ length ] <mapped> all-equal? [ "unbalanced-states" 2array throw ] unless
+    <flipped> [ concat members ] map flip ;
 
-:: merge-all-states ( states-assoc -- states-assoc )
-    all-type-keys
-    [| key |
-     states-assoc [ key of ] map :> key-states
-     key-states key merge-states
-     ! ! sequence of states
-     ! ! combine stack elements position-wise
-     ! key-states [ length ] map supremum :> d
-     ! key-states [ d key pad-state ] map
-     ! flip [ key type-value-merge ] map
-     key swap
-    ] H{ } map>assoc ;
+ERROR: inferred-divergent-state state ;
+: divergent? ( state -- ? )
+    ! [ swap [ domain-value-diverges?* ] curry any? ] assoc-any? ;
+    [ divergent-type-value? ] any? ;
 
-ERROR: inferred-divergent-state state-assoc ;
-: divergent? ( state-assoc -- ? )
-    [ swap [ type-value-diverges? ] curry any? ] assoc-any? ;
-
-: apply-transfers ( state-assoc quot-assoc -- state-assoc )
-    [ with-datastack ] assoc-merge
+: apply-transfers ( state quot-assoc -- state )
+    with-domain-stacks
+    ! [ with-domain ] assoc-merge
     dup divergent? [ inferred-divergent-state ] when ;
 
-: make-disjunctive-transfer ( quots key -- quot )
-    [ dup [ [ inputs ] map supremum ] [ [ outputs ] map supremum ] bi ] dip
-    swap '[ _ [ [ output>array ] curry preserving ] map [ _ ndrop ] dip _ merge-states _ firstn ] ;
+! ** Forward-parallel-transfer
+! The problem is that we have to leave the first-class environment here and
+! trampoline up.  Since the transfer itself has been performed already, we know:
+! - The input state of the transfer
+! - The output state of the transfer
+! - The transition sequence of the transfer
+
+! What we don't know is the exact depth it has accessed.  We can infer this from
+! the accumulated transfer quotation though.
+
+! Assuming an inferred branch transfer quotation :q ( ..a -- ..b ) with input
+! number i and output number o.
+
+! Build a trampoline quotation which calls q and collects the output, but leaves
+! the inputs on the stack.
+
+! Do this for all branch transfers.
+! Then build a cleave sequence, which in turn accumulates all the corresponding
+! output stacks, drop the inputs, push the sequences and call the merger.
+
+: parallel>merge ( quots -- quot )
+    dup [ [ inputs ] map supremum ] [ [ outputs ] map supremum ] bi
+    '[ _ [ [ output>array ] curry preserving ] map [ _ ndrop ] dip merge-states _ firstn ] ;
+
+
+! This is a runtime version of declare that performs the type intersection
+! operation and throws an error if a null value has been obtained.
+: declare-value-type ( declaration -- )
+    [  ] !
+
+! For the undo direction, we need the same thing but use the stored outputs of the
+! already inferred branch transfer as a mask to synthesize a declaration that
+! ensures that the branch will cut out as much disjunction information as possible.
+! For each domain, there is a sequence of undo quotations.  For each undo quotation
+: parallel<merge ( states quots -- quot )
+
+
+
 
 ! ! This is heavy machinery...should infer and build all that at construction time already!!!
 ! : apply-key-branches ( ..a quots key -- ..b )
 !     over
 !     [ [ with-datastack ] with map ] dip
-!     [ [ type-value-diverges? ] curry reject ]
+!     [ [ domain-value-diverges?* ] curry reject ]
 !     [ merge-states ] bi ; inline
 
 ! * Value Ids
@@ -285,8 +264,8 @@ M: \ value-id type-value-undo-dup drop
 ! M: \ value-id type-value-merge drop ;
 M: \ value-id type-value-undo-merge 2drop ;
 M: \ value-id value>type nip counter ;
-M: \ value-id apply-declaration 2drop ;
-M: \ value-id type-value-diverges? 2drop f ;
+M: \ value-id apply-domain-declaration 2drop ;
+M: \ value-id domain-value-diverges?* 2drop f ;
 
 ! * Class algebra
 GENERIC: class-primitive-transfer ( state-in primitive -- transfer-quot/f )
@@ -303,10 +282,10 @@ M: \ class primitive-transfer
 ! NOTE2: actually, concretize both here, the declaration only needs to be
 ! gradual because we could be able to infer non-gradual declarations
 
-M: \ class apply-declaration drop
+M: \ class apply-domain-declaration drop
     ! [ [ concretize ] dip class-and ] 2map ;
     [ [ concretize ] bi@ class-and ] 2map ;
-M: \ class type-value-diverges? drop null = ;
+M: \ class domain-value-diverges?* drop null = ;
 
 ! * Interval computations
 ! M: \ interval unknown-type-value drop full-interval ;
@@ -321,12 +300,12 @@ M: \ interval type-value-undo-merge drop interval-intersect ;
 M: \ interval type-value-undo-dup drop [ interval-intersect ] or-unknown ;
 M: \ interval value>type
     over number? [ drop [a,a] ] [ call-next-method ] if ;
-M: \ interval type-value-diverges? drop empty-interval = ;
+M: \ interval domain-value-diverges?* drop empty-interval = ;
 
 ! TODO: Concretize correctly according to variance!
 ! In the first approximation, only invariant conversions are safe.
-! GENERIC: invariant>interval ( obj type-value-class -- interval )
-! M: type-key invariant>interval 2drop ?? ;
+! GENERIC: invariant>interval ( obj domain -- interval )
+! M: domain invariant>interval 2drop ?? ;
 ! Delegate to classoid value
 GENERIC: class-invariant>interval ( classoid -- interval )
 ! M: \ class invariant>interval
@@ -334,7 +313,7 @@ GENERIC: class-invariant>interval ( classoid -- interval )
 
 M: classoid class-invariant>interval drop ?? ;
 M: math-class class-invariant>interval class-interval ;
-M: \ interval apply-declaration drop
+M: \ interval apply-domain-declaration drop
     [ class-invariant>interval ] map
     [
         [ interval-intersect ] or-unknown
@@ -343,9 +322,9 @@ M: \ interval apply-declaration drop
 ! * Slots:
 ! Carry over complete computation history!!!!!!!
 
-! * Relations
-! These are going to be hard because we need to be able to transfer them
-! locally.
-! Could possibly be represented by tuples of relative numbers?
-M: \ relation type-value-diverges? 2drop f ;
-M: \ relation apply-declaration 2drop ;
+! ! * Relations
+! ! These are going to be hard because we need to be able to transfer them
+! ! locally.
+! ! Could possibly be represented by tuples of relative numbers?
+! M: \ relation domain-value-diverges?* 2drop f ;
+! M: \ relation apply-domain-declaration 2drop ;
