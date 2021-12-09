@@ -46,6 +46,6 @@ MEMO: type-expand-macro ( state-in macro -- code )
 M: word type-expand* 2drop f ;
 M: \ nip type-expand* 2drop [ swap drop ] ;
 M: \ ? type-expand* 2drop
-    { [ { POSTPONE: f ?? object } declare nip nip ]
-      [ { not{ POSTPONE: f } object ?? } declare drop nip ]
+    { [ { POSTPONE: f ?? ?? } declare nip nip ]
+      [ { not{ POSTPONE: f } ?? ?? } declare drop nip ]
     } ;

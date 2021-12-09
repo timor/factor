@@ -1,6 +1,7 @@
 USING: accessors arrays assocs assocs.extras classes classes.algebra combinators
-compiler.tree.propagation.info continuations effects generic.math kernel
-kernel.private math math.intervals namespaces quotations sequences stack-checker
+combinators.smart compiler.tree.propagation.info continuations effects
+generalizations generic.math kernel kernel.private math math.intervals
+namespaces quotations sequences sequences.generalizations sets stack-checker
 types.bidi words ;
 
 IN: types.protocols
@@ -71,12 +72,15 @@ MIXIN: type-key
 TUPLE: literal-value value ;
 ! TUPLE: class-value class ;
 ! TUPLE: interval-value interval ;
-TUPLE: related-values relations ;
+TUPLE: relation value ;
+TUPLE: eql-to < relation ;
+TUPLE: less-than < relation ;
+TUPLE: greater-than < relation ;
 SINGLETON: value-id
 ! INSTANCE: \ literal-value type-key
 INSTANCE: \ class type-key
 INSTANCE: \ interval type-key
-! INSTANCE: \ related-values type-key
+INSTANCE: \ relation type-key
 INSTANCE: \ value-id type-key
 
 ! Hacky...
@@ -101,10 +105,27 @@ GENERIC: apply-declaration ( state-in spec type-value-class -- state-in )
 ! compatible with two different input positions.
 ! TODO: name correct?
 
+! NOTE: we could try to enforce that the order actually matters?
+TUPLE: and-prop p1 p2 ;
+C: <and> and-prop
+TUPLE: xor-prop props ;
+C: <xor> xor-prop
+! TUPLE: not-prop prop ;
+! C: <not> not-prop
+
 ! Combine different outputs
+! Forward merge after exclusive control-path split
 GENERIC: type-value-merge ( outn> type-value-class -- >out )
+M: type-key type-value-merge drop <xor> ;
+! Backprop merged into exclusive control-paths
+! XXX
 GENERIC: type-value-undo-merge ( out_i< out< type-value-class -- <out )
-GENERIC: type-value-undo-split ( v> <v' type-value-class -- v< )
+M: type-key type-value-undo-merge drop <and> ;
+GENERIC: type-values-intersect? ( type-value1 type-value2 type-value-class -- ? )
+! Re-Combination of data-path-split
+GENERIC: type-value-undo-dup ( v> <v' type-value-class -- v< )
+! Backprop into common history of exclusive control-paths
+! GENERIC: type-value-undo-split ( v> <out )
 ! GENERIC: type-value-join* ( out1> out2> type-value-class -- >out' )
 ! ! NOTE: intended for intersection behavior when parallel-execution joins are
 ! ! propagated backwards
@@ -135,8 +156,17 @@ M: type-key primitive-transfer
         [ undefined-primitive-type-transfer ]
     } cond ;
 
+! : undo-dup ( state-in class -- quot: ( x x -- x ) )
+!     nip [ type-value-undo-dup ] curry ;
+
+: or-unknown ( type1 type2 quot: ( type1 type2 -- type ) -- type )
+    over ??? [ swapd ] when
+    pick ??? [ drop nip ] [ call( x x -- x ) ] if ;
+
 : undo-dup ( state-in class -- quot: ( x x -- x ) )
-    nip [ type-value-undo-split ] curry ;
+    2drop [
+        2dup = [ drop ]
+        [ [ <and> ] or-unknown ] if ] ;
 
 M: type-key primitive-undo
     { { [ over \ drop eq? ] [ nip of last constantly ] }
@@ -150,7 +180,8 @@ M: type-key primitive-undo
 ERROR: not-a-primitive-transfer word ;
 
 : pad-state ( state-in n key -- state-in )
-    2over [ length ] dip <
+    [ over length - ] dip
+    over 0 >
     [ [ unknown-type-value ] curry replicate prepend ]
     [ 2drop ] if ;
 
@@ -201,9 +232,28 @@ ERROR: invalid-declaration spec ;
 : in>state ( n -- state-in )
     all-type-keys [ swap ?? <array> ] with H{ } map>assoc ;
 
-: or-unknown ( type1 type2 quot: ( type1 type2 -- type ) -- type )
-    over ??? [ swapd ] when
-    pick ??? [ drop nip ] [ call( x x -- x ) ] if ;
+: xor-merge ( states -- state )
+    ! members dup length 1 = [ first ] [ <xor> ] if ;
+    [ dup sequence? [ 1array ] unless ] gather
+    dup length 1 = [ first ] when ;
+
+:: merge-states ( key-states key -- key-states )
+    key-states [ length ] map supremum :> d
+    key-states [ d key pad-state ] map
+    flip [ xor-merge ] map ;
+
+:: merge-all-states ( states-assoc -- states-assoc )
+    all-type-keys
+    [| key |
+     states-assoc [ key of ] map :> key-states
+     key-states key merge-states
+     ! ! sequence of states
+     ! ! combine stack elements position-wise
+     ! key-states [ length ] map supremum :> d
+     ! key-states [ d key pad-state ] map
+     ! flip [ key type-value-merge ] map
+     key swap
+    ] H{ } map>assoc ;
 
 ERROR: inferred-divergent-state state-assoc ;
 : divergent? ( state-assoc -- ? )
@@ -213,15 +263,26 @@ ERROR: inferred-divergent-state state-assoc ;
     [ with-datastack ] assoc-merge
     dup divergent? [ inferred-divergent-state ] when ;
 
+: make-disjunctive-transfer ( quots key -- quot )
+    [ dup [ [ inputs ] map supremum ] [ [ outputs ] map supremum ] bi ] dip
+    swap '[ _ [ [ output>array ] curry preserving ] map [ _ ndrop ] dip _ merge-states _ firstn ] ;
+
+! ! This is heavy machinery...should infer and build all that at construction time already!!!
+! : apply-key-branches ( ..a quots key -- ..b )
+!     over
+!     [ [ with-datastack ] with map ] dip
+!     [ [ type-value-diverges? ] curry reject ]
+!     [ merge-states ] bi ; inline
+
 ! * Value Ids
 ! Created for unknown values.  Dup'd values actually have the same id.
 ! Sets of values constitute disjoint unions.
 M: \ value-id unknown-type-value
     counter ;
 ERROR: incoherent-split-undo id1 id2 ;
-M: \ value-id type-value-undo-split drop
+M: \ value-id type-value-undo-dup drop
     2dup = [ drop ] [ incoherent-split-undo ] if ;
-M: \ value-id type-value-merge drop ;
+! M: \ value-id type-value-merge drop ;
 M: \ value-id type-value-undo-merge 2drop ;
 M: \ value-id value>type nip counter ;
 M: \ value-id apply-declaration 2drop ;
@@ -231,29 +292,33 @@ M: \ value-id type-value-diverges? 2drop f ;
 GENERIC: class-primitive-transfer ( state-in primitive -- transfer-quot/f )
 M: object class-primitive-transfer 2drop f ;
 ! M: \ class unknown-type-value drop ?? ;
-M: \ class type-value-merge drop [ ] [ class-or ] map-reduce ;
+! M: \ class type-value-merge drop [ ] [ class-or ] map-reduce ;
 M: \ class type-value-undo-merge drop class-and ;
-M: \ class type-value-undo-split drop class-and ;
+M: \ class type-value-undo-dup drop class-and ;
 M: \ class value>type drop <wrapper> ;
 M: \ class primitive-transfer
     [ 2dup class-primitive-transfer ] dip swap [ 3nip ] [ call-next-method ] if* ;
 ! NOTE: assuming that declarations can actually be gradual, we only concretize
 ! the value here, because the declaration might actually be incomplete...
+! NOTE2: actually, concretize both here, the declaration only needs to be
+! gradual because we could be able to infer non-gradual declarations
+
 M: \ class apply-declaration drop
-    [ [ concretize ] dip class-and ] 2map ;
+    ! [ [ concretize ] dip class-and ] 2map ;
+    [ [ concretize ] bi@ class-and ] 2map ;
 M: \ class type-value-diverges? drop null = ;
 
 ! * Interval computations
 ! M: \ interval unknown-type-value drop full-interval ;
-M: \ interval type-value-merge drop [ ] [ interval-union ] map-reduce ;
+! M: \ interval type-value-merge drop [ ] [ interval-union ] map-reduce ;
 M: \ interval type-value-undo-merge drop interval-intersect ;
 ! NOTE: backwards assumption propagation creates union behavior here? Is that
 ! correct?  In case of class, the value could not have disjoint classes to be
 ! valid in different branches.  However, the same is absolutely not true for intervals...
 ! TODO: this could be a point to inject polyhedral propagation?
 ! No, just seems to be wrong...
-! M: \ interval type-value-undo-split drop interval-union ;
-M: \ interval type-value-undo-split drop [ interval-intersect ] or-unknown ;
+! M: \ interval type-value-undo-dup drop interval-union ;
+M: \ interval type-value-undo-dup drop [ interval-intersect ] or-unknown ;
 M: \ interval value>type
     over number? [ drop [a,a] ] [ call-next-method ] if ;
 M: \ interval type-value-diverges? drop empty-interval = ;
@@ -274,3 +339,13 @@ M: \ interval apply-declaration drop
     [
         [ interval-intersect ] or-unknown
     ] 2map ;
+
+! * Slots:
+! Carry over complete computation history!!!!!!!
+
+! * Relations
+! These are going to be hard because we need to be able to transfer them
+! locally.
+! Could possibly be represented by tuples of relative numbers?
+M: \ relation type-value-diverges? 2drop f ;
+M: \ relation apply-declaration 2drop ;

@@ -333,11 +333,11 @@ DEFER: run-quot-with
 : run-left ( left right -- left changed? )
     f changed [ [ over empty? ] [ step-left ] until nip changed get ] with-variable ;
 
-: ping-pong ( left right -- left )
-    run-right drop
-    1 cut* run-left drop
-    f swap run-right [ "unstable" throw ] when
-    ;
+! : ping-pong ( left right -- left )
+!     run-right drop
+!     1 cut* run-left drop
+!     f swap run-right [ "unstable" throw ] when
+!     ;
 
 : quot>trace ( quot -- left right )
     quot>transition f swap ;
@@ -413,17 +413,53 @@ DEFER: apply-quotation-transfer
 : prepose-transfers ( quot-assoc quot-assoc -- composed-assoc )
     [ prepose ] assoc-merge ;
 
+! TODO: backprop per branch?
+! Yes.  The reason is because we are collecting a new undo quotation.  That is
+! only valid until this branch.
+! TODO: or more generally, always pong-ping if a declaration has been encountered?
+! TODO: or even more generally, always pong-ping if input application has
+! changed anything???
+DEFER: infer-branch-transfer
+DEFER: pong-ping
+
+:: apply-parallel-transfer ( state-in cases -- state-out )
+    state-in pong-ping cases [
+        infer-branch-transfer
+        [ 2array ] when*
+    ] with map sift unzip
+    :> ( out-states transfers )
+    ! transfers
+    ! first3 :> ( trans branch-transfers branch-undos )
+    all-type-keys [ dup
+                    [ transfers [ second ] map [ at ] with map ]
+                    [ make-disjunctive-transfer ] bi
+    ] H{ } map>assoc current-transfer [ swap compose-transfers ] change
+    all-type-keys [ dup
+                    [ transfers [ third ] map [ at ] with map ]
+                    [ make-disjunctive-transfer ] bi
+    ] H{ } map>assoc current-undo [ swap prepose-transfers ] change
+    out-states merge-all-states :> state-out
+    transitions [
+        state-in state-out transfers [ first ] map <transfer> suffix ] change
+    state-out
+    ;
+
+
 : apply-word-transfer ( state-in word -- state-out )
     [let
      ensure-inputs :> ( state-in word )
      state-in word type-expand :> cases
      cases quotation? [ state-in cases apply-quotation-transfer ]
      [
-         state-in word transfer-quots first2 :> ( transfer undo )
-         state-in transfer apply-transfers dup :> state-out
-         transitions [ state-in state-out word <transfer> suffix ] change
-         current-transfer [ transfer compose-transfers ] change
-         current-undo [ undo prepose-transfers ] change
+         cases array?
+         [ state-in cases apply-parallel-transfer ]
+         [
+             state-in word transfer-quots first2 :> ( transfer undo )
+             state-in transfer apply-transfers dup :> state-out
+             transitions [ state-in state-out word <transfer> suffix ] change
+             current-transfer [ transfer compose-transfers ] change
+             current-undo [ undo prepose-transfers ] change
+         ] if
      ] if
     ] ;
 
@@ -446,8 +482,19 @@ DEFER: apply-quotation-transfer
       current-undo get 2array
     ] with-scope ;
 
+: infer-branch-transfer ( state-in quot -- state-out/f transfer/f )
+    [
+        H{ } current-transfer set
+        H{ } current-undo set
+        transitions off
+        apply-quotation-transfer
+        transitions get
+        current-transfer get
+        current-undo get 3array
+    ] with-scope ;
+
 ! TODO: dedup!
-: quotation-transfer ( quot -- transfer )
+: ping ( quot -- transfer )
     reset-expansions
     [
         H{ } current-transfer set
@@ -463,5 +510,15 @@ DEFER: apply-quotation-transfer
     [ first last state-out>> ] [ third ] bi
     apply-transfers ;
 
-: run-quot ( quot -- res res )
-    quotation-transfer dup undo-transfer ;
+: pong-ping ( state-in -- state-in )
+    current-undo get apply-transfers
+    current-transfer get apply-transfers ;
+
+: run-quot ( quot -- transfer state-in )
+    ping dup undo-transfer ;
+
+: ping-pong ( quot -- transfer state-in state-out )
+    ! [ run-quot ] keep
+    ! infer-branch-transfer
+    ! [ [ first last state-out>> ] dip 2dup = [ drop ] [ "unstable" throw ] if ] dip ;
+    run-quot swap first dup last state-out>> swapd ;
