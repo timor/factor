@@ -1,7 +1,7 @@
-USING: accessors arrays assocs assocs.extras classes classes.algebra combinators
-combinators.short-circuit continuations generic generic.math generic.single
-kernel namespaces quotations sequences sets types types.bidi types.expander
-types.protocols words ;
+USING: accessors arrays assocs assocs.extras classes classes.algebra columns
+combinators combinators.short-circuit continuations generic generic.math
+generic.single kernel namespaces quotations sequences sets types.bidi
+types.expander types.protocols types.type-values words ;
 
 IN: types.transitions
 
@@ -379,9 +379,6 @@ SYMBOL: current-undo
 SYMBOL: inference-word-nesting
 SYMBOL: word-transfers
 
-TUPLE: transfer records transfer-quots undo-quots ;
-C: <transfer> transfer
-
 DEFER: infer-word-transfer ! ( word -- transfer )
 
 GENERIC: transfer-quots ( state-in word -- transfer )
@@ -427,7 +424,15 @@ DEFER: pong-ping
 
 ! :: apply-parallel-transfer ( state-in cases -- state-out )
 : apply-parallel-transfer ( state-in cases -- state-out )
-    drop ;
+    dupd [ infer-branch-transfer 2array ] with map
+    unzip
+    [ [ <flipped> [ squish-type-values ] map ] keep ] dip
+    [ all-parallel>merge current-transfer [ swap compose-transfers ] change ]
+    [ all-parallel<merge current-undo [ swap prepose-transfers ] change ]
+    [ [ [ records>> ] map <transfer-record> transitions [ swap suffix ] change ]
+      keepd ] tri ;
+
+    ! drop ;
     ! state-in pong-ping cases [
     !     infer-branch-transfer
     !     [ 2array ] when*
@@ -526,4 +531,9 @@ DEFER: pong-ping
     ! [ run-quot ] keep
     ! infer-branch-transfer
     ! [ [ first last state-out>> ] dip 2dup = [ drop ] [ "unstable" throw ] if ] dip ;
-    run-quot swap records>> dup last state-out>> swapd ;
+    run-quot swap dup records>> last state-out>> swapd ;
+
+! First run on the transition, infer the principal input type.  Then re-run the
+! compiled type quotations to verify the same result holds
+: ping-pong-ping ( quot -- in out2 out1 )
+    ping-pong [ swap dupd transfer-quots>> apply-transfers ] dip ;

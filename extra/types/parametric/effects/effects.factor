@@ -1,6 +1,6 @@
 USING: accessors arrays classes.algebra classes.algebra.private combinators
 combinators.short-circuit compiler.utilities effects kernel quotations sequences
-stack-checker types types.parametric types.protocols ;
+stack-checker types types.bidi types.parametric ;
 
 IN: types.parametric.effects
 

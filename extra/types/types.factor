@@ -15,16 +15,29 @@ MIXIN: domain
 ! ** Domain-specific operations
 GENERIC: value>type ( value domain -- domain-value )
 GENERIC: unknown-type-value ( domain -- domain-value )
-GENERIC: apply-domain-declaration ( domain-value spec-value domain -- domain-value )
+GENERIC: apply-class-declaration ( domain-values decl-spec domain -- domain-value )
+
 ! This is used to check a state whether it would lead to a divergent calculation
-GENERIC: domain-value-diverges?* ( type-value domain -- ? )
-: domain-value-diverges? ( type-value domain -- ? )
+GENERIC: domain-value-diverges?* ( domain-value domain -- ? )
+: domain-value-diverges? ( domain-value domain -- ? )
     over ??? [ 2drop f ] [ domain-value-diverges?* ] if ;
 
 ! Forward merge of split control path
 GENERIC: type-value-merge ( outn> domain -- >out )
 ! Undo Forward merge back into split-control path
-GENERIC: type-value-undo-merge ( out_i< out< domain -- <out_i )
+GENERIC: type-value-undo-merge ( out< out_i< domain -- <out_i )
+! Undo split back into common history of exclusive control-paths
+GENERIC: type-value-undo-split ( v> <out domain -- v< )
+
+! Covariant concretization
+: and-unknown ( type1 type2 quot: ( type1 type2 -- type ) -- type )
+    over ??? [ swapd ] when
+    pick ??? [ drop nip ] [ call( x x -- x ) ] if ;
+
+! Covariant concretization
+: or-unknown ( type1 type2 quot: ( type1 type2 -- type ) -- type )
+    2over [ ??? ] either?
+    [ 3drop ?? ] [ call( x x -- x ) ] if ;
 
 ! ** Predefined domains
 SINGLETON: value-id

@@ -1,6 +1,5 @@
-USING: accessors assocs combinators continuations generalizations kernel
-kernel.private macros macros.expander math memoize namespaces quotations
-sequences types.protocols words ;
+USING: assocs classes.algebra continuations kernel kernel.private
+macros.expander math memoize namespaces sequences types.protocols words ;
 
 IN: types.expander
 
