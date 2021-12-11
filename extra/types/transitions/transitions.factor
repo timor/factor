@@ -434,9 +434,14 @@ DEFER: pong-ping
 !      ] 2curry
 !     map-domains ;
 
+ERROR: stuck-branch ;
 ! :: apply-parallel-transfer ( state-in cases -- state-out )
 : apply-parallel-transfer ( state-in cases -- state-out )
-    dupd [ infer-branch-transfer 2array ] with map
+    dupd [ [ infer-branch-transfer 2array ]
+           [ dup inferred-divergent-state? [ 3drop f ] [ rethrow ] if ]
+           recover
+    ] with map sift
+    dup empty? [ stuck-branch ] when
     unzip ! out-states transfers
     [ [ <flipped> [ squish-type-values ] map ] keep ] dip
     [ all-parallel>merge current-transfer [ swap compose-transfers ] change ]
@@ -546,6 +551,6 @@ DEFER: pong-ping
     run-quot swap dup records>> last state-out>> swapd ;
 
 ! First run on the transition, infer the principal input type.  Then re-run the
-! compiled type quotations to verify the same result holds
-: ping-pong-ping ( quot -- in out2 out1 )
-    ping-pong [ swap dupd transfer-quots>> apply-transfers ] dip ;
+! compiled type quotations on the new inputs.
+: ping-pong-ping ( quot -- in out1 out2 )
+    ping-pong [ swap dupd transfer-quots>> apply-transfers ] dip swap ;

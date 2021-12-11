@@ -32,6 +32,8 @@ GENERIC: type-value-perform-split ( in> i domain -- >in )
 M: domain type-value-perform-split 2drop ;
 ! Undo split back into common history of exclusive control-paths
 GENERIC: type-value-undo-split ( <out domain -- v< )
+! Re-Combination of data-path-split
+GENERIC: type-value-undo-dup ( v> <v' domain -- v< )
 
 ! Used for returning domain neutral union element
 GENERIC: bottom-type-value ( domain -- object )

@@ -53,13 +53,15 @@ M: \ class pprint-domain-value* drop
     [ word-name* ] if ;
 GENERIC: >bound-string ( number -- str )
 M: number >bound-string
-    abs 2 logn "2^%.1f" sprintf ;
+    2 logn "2^%.1f" sprintf ;
 M: fixnum >bound-string
-    dup abs 1024 <= [ number>string ] [ call-next-method ] if ;
+    dup 1024 <= [ number>string ] [ call-next-method ] if ;
+M: \= 1/0. >bound-string drop "∞" ;
 
 : interval-bound>string ( number -- str )
     [ 0 < "-" "" ? ]
-    [ >bound-string ] bi append ;
+    [ abs >bound-string ] bi append
+    ;
 
 M: \ interval pprint-domain-value* drop
     [ from>> first2 swap

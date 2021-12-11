@@ -86,8 +86,6 @@ C: <xor> xor-prop
 ! XXX
 ! M: domain type-value-undo-merge drop <and> ;
 GENERIC: type-values-intersect? ( type-value1 type-value2 domain -- ? )
-! Re-Combination of data-path-split
-GENERIC: type-value-undo-dup ( v> <v' domain -- v< )
 ! GENERIC: type-value-join* ( out1> out2> domain -- >out' )
 ! ! NOTE: intended for intersection behavior when parallel-execution joins are
 ! ! propagated backwards
@@ -131,7 +129,7 @@ M: domain primitive-transfer
 !     nip [ type-value-undo-dup ] curry ;
 
 : undo-dup ( state-in class -- quot: ( x x -- x ) )
-    nip '[ 2dup = [ drop ] [ [ _ type-value-undo-split ] and-unknown ] if ] ;
+    nip '[ 2dup = [ drop ] [  _ type-value-undo-dup ] if ] ;
     ! 2drop [
     !     2dup = [ drop ]
     !     [ [ <and> ] and-unknown ] if ] ;
@@ -277,8 +275,9 @@ ERROR: inferred-divergent-state state ;
 ! output stacks, drop the inputs, push the sequences and call the merger.
 
 : split-intro ( n i dom -- quot: ( in> -- >in ) )
-    [ type-value-perform-split ] 2curry <repetition>
-    [ spread ] curry ;
+    ! [ type-value-perform-split ] 2curry <repetition>
+    ! [ spread ] curry ;
+    3drop [  ] ;
 
 ERROR: divergent-type-transfer ;
 
@@ -460,6 +459,8 @@ GENERIC: class-invariant>interval ( classoid -- interval )
 
 M: classoid class-invariant>interval drop ?? ;
 M: math-class class-invariant>interval class-interval ;
+M: wrapper class-invariant>interval wrapped>>
+    interval value>type ;
 M: \ interval apply-class-declaration drop
     [ class-invariant>interval ] map
     [
