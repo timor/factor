@@ -1,5 +1,5 @@
 USING: accessors classes classes.algebra classes.tuple combinators.short-circuit
-effects kernel math.intervals sequences words ;
+effects kernel math.intervals sequences words variants ;
 
 IN: types
 ! USE: types.transitions.known-words
@@ -22,12 +22,19 @@ GENERIC: domain-value-diverges?* ( domain-value domain -- ? )
 : domain-value-diverges? ( domain-value domain -- ? )
     over ??? [ 2drop f ] [ domain-value-diverges?* ] if ;
 
-! Forward merge of split control path
+! Forward merge of split control paths
 GENERIC: type-value-merge ( outn> domain -- >out )
 ! Undo Forward merge back into split-control path
 GENERIC: type-value-undo-merge ( out< out_i< domain -- <out_i )
+! Forward split into exclusive control paths
+! i - branch index
+GENERIC: type-value-perform-split ( in> i domain -- >in )
+M: domain type-value-perform-split 2drop ;
 ! Undo split back into common history of exclusive control-paths
-GENERIC: type-value-undo-split ( v> <out domain -- v< )
+GENERIC: type-value-undo-split ( <out domain -- v< )
+
+! Used for returning domain neutral union element
+GENERIC: bottom-type-value ( domain -- object )
 
 ! Covariant concretization
 : and-unknown ( type1 type2 quot: ( type1 type2 -- type ) -- type )
@@ -40,9 +47,13 @@ GENERIC: type-value-undo-split ( v> <out domain -- v< )
     [ 3drop ?? ] [ call( x x -- x ) ] if ;
 
 ! ** Predefined domains
-SINGLETON: value-id
+! SINGLETON: value-id
 INSTANCE: \ class domain
 INSTANCE: \ interval domain
+VARIANT: value-id
+    +undefined-value+
+    scalar: { id }
+    branched: { { base value-id } { branch-id } } ;
 INSTANCE: \ value-id domain
 
 ! * Language of types

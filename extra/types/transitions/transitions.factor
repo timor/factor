@@ -422,13 +422,25 @@ DEFER: apply-quotation-transfer
 DEFER: infer-branch-transfer
 DEFER: pong-ping
 
+! : make-parallel-transfer ( out-states transfers -- transfer-assoc )
+!     [| dom branch-outs branch-transfers |
+!      branch-outs branch-transfers
+!      [| out-state branch-transfer i |
+!       branch-transfer transfer-in/out :> in out
+!       branch-transfer transfer-quots>> dom of :> branch-quot
+!       branch-quot in i dom augment-branch-quot
+
+!      ] 2map-index
+!      ] 2curry
+!     map-domains ;
+
 ! :: apply-parallel-transfer ( state-in cases -- state-out )
 : apply-parallel-transfer ( state-in cases -- state-out )
     dupd [ infer-branch-transfer 2array ] with map
-    unzip
+    unzip ! out-states transfers
     [ [ <flipped> [ squish-type-values ] map ] keep ] dip
     [ all-parallel>merge current-transfer [ swap compose-transfers ] change ]
-    [ all-parallel<merge current-undo [ swap prepose-transfers ] change ]
+    [ all-parallel<unsplit current-undo [ swap prepose-transfers ] change ]
     [ [ [ records>> ] map <transfer-record> transitions [ swap suffix ] change ]
       keepd ] tri ;
 

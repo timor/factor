@@ -1,8 +1,8 @@
 USING: accessors arrays assocs assocs.extras classes classes.algebra columns
-combinators combinators.smart compiler.tree.propagation.info generalizations
-generic.math grouping hash-sets kernel kernel.private math math.intervals
-namespaces quotations sequences sequences.generalizations sets types types.bidi
-types.type-values types.util words ;
+combinators combinators.smart compiler.tree.propagation.info continuations
+generalizations generic.math grouping hash-sets kernel kernel.private math
+math.intervals namespaces quotations sequences sequences.generalizations sets
+types types.bidi types.type-values types.util words ;
 
 IN: types.protocols
 ! * Type normalization protocols
@@ -17,6 +17,12 @@ IN: types.protocols
 
 ! * Other approach: modular value info
 TUPLE: transfer records transfer-quots undo-quots ;
+: transfer-in/out ( transfer -- in out )
+    transfer-quots>> values
+    [ inputs/outputs 2array ] map <flipped>
+    first2 2dup [ all-equal? ] both? [ "unbalanced-branch-transfer" 3array throw ] unless
+    [ first ] bi@ ;
+
 C: <transfer> transfer
 
 ! quots are a hashtable of orthogonal lattices that are traversed in parallel,
@@ -90,7 +96,6 @@ GENERIC: type-value-undo-dup ( v> <v' domain -- v< )
 ! GENERIC: type-value-meet* ( x1 x2  domain -- x'> )
 ! ! Default is to assume regular branch-independent reverse fanout.
 GENERIC: top-type-value ( domain -- object )
-GENERIC: bottom-type-value ( domain -- object )
 ! Used for inputs
 M: domain unknown-type-value drop ?? ;
 
@@ -99,12 +104,25 @@ ERROR: undefined-primitive-type-undo state-in primitive domain ;
 
 UNION: primitive-data-op \ dup \ drop \ swap \ rot ;
 
+! Pseudo-ops
+! SYMBOL: split-control ! ( ..a vals -- ..b branch-vals ) [ split-control ]
+! n - number of stack items into branch
+! i - branch index
+SYMBOL: split> ! ( ..b n i -- ..c )
+SYMBOL: >merge   ! ( ..c n -- ..d branch-states )
+SYMBOL: merge> ! ( ..d branch-states -- ..e merged )
+UNION: control-pseudo-op \ split> \ >merge \ merge> ;
+
+GENERIC: control-transfer-quot ( state-in word domain -- transfer )
+GENERIC: control-undo-quot ( state-in word domain -- undo )
+
 : constantly ( value -- quot )
     literalize 1quotation ;
 
 M: domain primitive-transfer
     {
         { [ over primitive-data-op? ] [ drop 1quotation nip ] }
+        { [ over control-pseudo-op? ] [ control-transfer-quot ] }
         { [ over word? not ] [ value>type constantly nip ] }
         [ undefined-primitive-type-transfer ]
     } cond ;
@@ -124,6 +142,7 @@ M: domain primitive-undo
       { [ over \ dup eq? ] [ nip undo-dup ] }
       { [ over \ rot eq? ] [ 3drop [ -rot ] ] }
       { [ over word? not ] [ 3drop [ drop ] ] }
+      { [ over control-pseudo-op? ] [ control-undo-quot ] }
       [ undefined-primitive-type-undo ]
     } cond ;
 
@@ -212,15 +231,15 @@ ERROR: invalid-declaration spec ;
 !     dup [ length ] <mapped> all-equal? [ "unbalanced-states" 2array throw ] unless
 !     <flipped> [ concat members ] map flip ;
 
-:: merge-states ( domain-states key -- domain-states )
-    domain-states [ length ] map supremum :> d
-    domain-states [ d key pad-domain-state ] map
-    flip [ key type-value-merge ] map ;
+! :: merge-states ( domain-states key -- domain-states )
+!     domain-states [ length ] map supremum :> d
+!     domain-states [ d key pad-domain-state ] map
+!     flip [ key type-value-merge ] map ;
 
-:: unsplit-states ( domain-states key -- domain-states )
-    domain-states [ length ] map supremum :> d
-    domain-states [ d key pad-domain-state ] map
-    flip [ key type-value-undo-split ] map ;
+! :: unsplit-states ( domain-states key -- domain-states )
+!     domain-states [ length ] map supremum :> d
+!     domain-states [ d key pad-domain-state ] map
+!     flip [ key type-value-undo-split ] map ;
 
 
 ! : merge-all-states ( type-values -- type-value )
@@ -257,53 +276,107 @@ ERROR: inferred-divergent-state state ;
 ! Then build a cleave sequence, which in turn accumulates all the corresponding
 ! output stacks, drop the inputs, push the sequences and call the merger.
 
-: parallel>merge ( quots dom merge-quot -- quot )
-    [ dup [ [ inputs ] map supremum ] [ [ outputs ] map supremum ] bi ] 2dip
-    rot '[ _ [ [ output>array ] curry preserving ] map [ _ ndrop ] dip _ _ _ firstn ] ;
+: split-intro ( n i dom -- quot: ( in> -- >in ) )
+    [ type-value-perform-split ] 2curry <repetition>
+    [ spread ] curry ;
+
+ERROR: divergent-type-transfer ;
+
+: collect-outro ( quot n -- quot: ( ..a n -- ..b values' ) )
+    '[ @ _ narray ] ;
+
+: augment-branch-transfer-quot ( branch-quot in out i dom -- quot )
+    rot
+    [ split-intro prepose ] dip
+    collect-outro
+    ;
+
+: augment-branch-transfer-quots ( quots in out dom -- quots )
+    '[ _ _ rot _ augment-branch-transfer-quot ] map-index ;
+
+: parallelize ( quots in -- quot: ( ..a -- ..b branch-values ) )
+    '[ _ [ preserving ] map [ _ ndrop ] dip ] ;
+
+: parallel>collect ( branch-quots in out dom -- quot )
+    pick [ augment-branch-transfer-quots ] dip
+    parallelize  ;
+
+SINGLETON: +bottom+
+: combine-push ( out quot: ( type-values -- type-value ) -- quot )
+    swap
+    '[ [ +bottom+? ] reject <flipped> _ map _ firstn ] ;
+
+: parallel>merge ( branch-quots in out dom -- quot )
+    [ parallel>collect ] 2keep
+    '[ _ type-value-merge ] combine-push compose ;
 
 : all-parallel>merge ( transfers -- quots-assoc )
-    [ transfer-quots>> ] <mapped>
-    [
-        swap [ [ of ] curry map ] keep [ merge-states ] parallel>merge
+    [| dom transfers |
+     transfers dup first transfer-in/out :> ( in out )
+     [ transfer-quots>> dom of ] map in out dom parallel>merge
     ] curry map-domains ;
 
+! ** Undo parallel-transfer
 : check-divergence ( value domain -- value )
     dupd domain-value-diverges?
-    [ "domain-declaration-diverges" 1array throw ] when ;
+    [ divergent-type-transfer throw ] when ;
+
 
 ! This is a runtime version of declare that performs the type intersection
 ! operation and throws an error if a null value has been obtained.
-: undo-merge-masker ( mask-types domain -- quot )
+: mask-undo-split ( domain-values domain -- quot: ( ..a -- ..b ) )
     [ [ [ type-value-undo-merge ] [ check-divergence ] bi ] 2curry ] curry
     map [ spread ] curry ;
+
+: collect-undo-outro ( quot outn -- quot: ( ..a n -- ..b values' ) )
+    over '[ [ @ _ narray ]
+       [ dup divergent-type-transfer?
+         [ drop _ nullary +bottom+ ]
+         [ rethrow ] if
+       ] recover
+    ] ;
+
+: augment-branch-undo-quot ( undo-out branch-quot branch-state dom -- quot )
+    mask-undo-split prepose swap collect-undo-outro ;
+
+: parallel<collect ( branch-quots branch-states undo-out undo-in dom -- quot )
+    swap [ [ [ -rot ] dip augment-branch-undo-quot ] 2curry 2map ] dip
+    parallelize
+    ;
+
+: parallel<unsplit ( branch-quots branch-states undo-out undo-in dom -- quot )
+    [ parallel<collect ] 3keep nip
+    '[ _ type-value-undo-split ] combine-push compose ;
 
 ! For the undo direction, we need the same thing but use the stored outputs of the
 ! already inferred branch transfer as a mask to synthesize a declaration that
 ! ensures that the branch will cut out as much disjunction information as possible.
 ! For each domain, there is a sequence of undo quotations.  For each undo
 ! quotation, we need to insert the domain declarations separately.
-: parallel<unsplit ( branch-value-types quots dom -- quot )
-    tuck [ [ undo-merge-masker ] curry map ] 2dip
-    [ [ compose ] 2map ] dip
-    [ unsplit-states ] parallel>merge ;
 
 ! transfers
 ! { transfer1{ records... undo-quots... }
 !   transfer2{ records... undo-quots... } }
 : all-parallel<unsplit ( out-states transfers -- quots-assoc )
-    ! [ [ records>> last state-out>> ] <mapped> ]
-    ! [ [ undo-quots>> ] <mapped> ] bi
-    [ undo-quots>> ] <mapped>
-    [| dom branch-outs branch-undos |
-     branch-outs branch-undos [| out-types undo-assoc |
-         out-types unzip-domains dom of
-         undo-assoc dom of 2array
-     ] 2map
-     ] 2curry map-domains
-    [| dom pairs |
-     pairs flip first2 dom parallel<unsplit
-     dom swap
-    ] assoc-map ;
+    [| dom branch-states branch-transfers |
+     branch-states [ [ dom of ] map ] map :> domain-states
+     branch-transfers dup first transfer-in/out :> ( out in )
+     [ undo-quots>> dom of ] map domain-states out in dom
+     parallel<unsplit
+    ] 2curry map-domains ;
+    ! ! [ [ records>> last state-out>> ] <mapped> ]
+    ! ! [ [ undo-quots>> ] <mapped> ] bi
+    ! [ undo-quots>> ] <mapped>
+    ! [| dom branch-outs branch-undos |
+    !  branch-outs branch-undos [| out-types undo-assoc |
+    !      out-types unzip-domains dom of
+    !      undo-assoc dom of 2array
+    !  ] 2map
+    !  ] 2curry map-domains
+    ! [| dom pairs |
+    !  pairs flip first2 dom parallel<unsplit
+    !  dom swap
+    ! ] assoc-map ;
 
 
 ! ! This is heavy machinery...should infer and build all that at construction time already!!!
@@ -315,17 +388,23 @@ ERROR: inferred-divergent-state state ;
 
 ! * Value Ids
 ! Created for unknown values.  Dup'd values actually have the same id.
-! Sets of values constitute disjoint unions.
+! Sets of values have conjunctive behavior, i.e. whatever is there has been part
+! of these values.
+! For unknown values we create an id but also leave the unknown type.  This
+! ensures that we can propagate different values along later-on.
 M: \ value-id unknown-type-value
-    counter 1array >hash-set ;
+    counter <scalar> ?? 2array >hash-set ;
 ERROR: incoherent-split-undo id1 id2 ;
 M: \ value-id type-value-undo-dup drop
     2dup = [ drop ] [ incoherent-split-undo ] if ;
 M: \ value-id type-value-merge drop union-all ; ! NOTE: ?? is not a top value of the lattice.
+M: \ value-id type-value-undo-split type-value-merge ;
 M: \ value-id type-value-undo-merge drop intersect ;
-M: \ value-id value>type nip counter 1array >hash-set ;
+M: \ value-id value>type nip counter <scalar> 1array >hash-set ;
 M: \ value-id apply-class-declaration 2drop ;
 M: \ value-id domain-value-diverges?* drop null? ;
+M: \ value-id type-value-perform-split drop
+    [ members ] dip [ <branched> ] curry map >hash-set ;
 ! M: \ value-id apply-domain-declaration drop intersect ;
 
 ! * Class algebra
@@ -349,6 +428,8 @@ M: \ class apply-class-declaration drop
     [ [ class-and ] and-unknown ] 2map-suffix ;
 M: \ class domain-value-diverges?* drop null = ;
 ! M: \ class apply-domain-declaration drop
+M: \ class bottom-type-value drop null ;
+M: \ class type-value-undo-split type-value-merge ;
 
 ! * Interval computations
 ! M: \ interval unknown-type-value drop full-interval ;
@@ -364,6 +445,9 @@ M: \ interval type-value-undo-dup drop [ interval-intersect ] and-unknown ;
 M: \ interval value>type
     over number? [ drop [a,a] ] [ call-next-method ] if ;
 M: \ interval domain-value-diverges?* drop empty-interval = ;
+M: \ interval type-value-undo-split
+    type-value-merge ;
+
 
 ! TODO: Concretize correctly according to variance!
 ! In the first approximation, only invariant conversions are safe.

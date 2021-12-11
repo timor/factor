@@ -2,7 +2,7 @@ USING: accessors arrays assocs assocs.extras classes classes.algebra
 classes.private columns combinators.short-circuit continuations delegate
 delegate.protocols formatting grouping hashtables kernel math math.functions
 math.intervals math.parser prettyprint.backend prettyprint.custom sequences
-sequences.zipped sets types types.util ;
+sequences.zipped sets types types.util variants ;
 
 IN: types.type-values
 
@@ -69,9 +69,18 @@ M: \ interval pprint-domain-value* drop
       [ interval-bound>string ] [ "]" ")" ? ] bi*
       append append
      ] bi ;
+
+: value-id>str ( value-id -- str )
+    dup ??? [ word-name* ]
+    [ {
+       { +undefined-value+ [ "?VAL" ] }
+       { scalar [ number>string ] }
+       { branched [ [ value-id>str ] [ number>string ] bi* "." glue ] }
+    } match ] if ;
+
 M: \ value-id pprint-domain-value* drop
     ! "%u" sprintf ;
-    members [ "#%d" sprintf ] map " " join "{" "}" surround ;
+    members [ value-id>str "#%s" sprintf ] map " " join "{" "}" surround ;
 
 ! Destructive
 : normalize-type-value ( type-value -- type-value )
