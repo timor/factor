@@ -25,8 +25,8 @@ TUPLE: anonymous-intersection { participants read-only } ;
 INSTANCE: anonymous-intersection classoid
 
 : <anonymous-intersection> ( participants -- classoid )
-    [ classoid check-instance ] map
-    members dup length 1 =
+    [ classoid check-instance dup anonymous-intersection? [ members>> ] [ 1array ] if ] gather
+    dup length 1 =
     [ first ] [ sort-classes f like anonymous-intersection boa ] if ;
 
 M: anonymous-intersection rank-class drop 4 ;
@@ -271,13 +271,16 @@ M: anonymous-complement (classes-intersect?)
         { +eq+ [ nip ] }
         { +incomparable+ [
             2dup classes-intersect? [
-                [ normalize-class ] bi@ {
-                    { [ dup anonymous-union? ] [ anonymous-union-and ] }
-                    { [ dup anonymous-intersection? ] [ anonymous-intersection-and ] }
-                    { [ over anonymous-union? ] [ swap anonymous-union-and ] }
-                    { [ over anonymous-intersection? ] [ swap anonymous-intersection-and ] }
-                    [ 2array <anonymous-intersection> ]
-                } cond
+                2dup [ ??? ] either? [ 2array <anonymous-intersection> ]
+                [
+                    [ normalize-class ] bi@ {
+                        { [ dup anonymous-union? ] [ anonymous-union-and ] }
+                        { [ dup anonymous-intersection? ] [ anonymous-intersection-and ] }
+                        { [ over anonymous-union? ] [ swap anonymous-union-and ] }
+                        { [ over anonymous-intersection? ] [ swap anonymous-intersection-and ] }
+                        [ 2array <anonymous-intersection> ]
+                    } cond
+                ] if
             ] [ 2drop null ] if
         ] }
     } case ;
