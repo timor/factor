@@ -68,32 +68,10 @@ M: domain value>type 2drop ?? ;
     \ branch-id get ;
 
 
-! Used when undo'ing duplication, i.e. the properties an output value must have to be
-! compatible with two different input positions.
-! TODO: name correct?
-
-! NOTE: we could try to enforce that the order actually matters?
-TUPLE: and-prop p1 p2 ;
-C: <and> and-prop
-TUPLE: xor-prop props ;
-C: <xor> xor-prop
-! TUPLE: not-prop prop ;
-! C: <not> not-prop
-
-! Combine different outputs
-! Forward merge after exclusive control-path split
-! Backprop merged into exclusive control-paths
-! XXX
-! M: domain type-value-undo-merge drop <and> ;
+! UNUSED interesting...
 GENERIC: type-values-intersect? ( type-value1 type-value2 domain -- ? )
-! GENERIC: type-value-join* ( out1> out2> domain -- >out' )
-! ! NOTE: intended for intersection behavior when parallel-execution joins are
-! ! propagated backwards
-! GENERIC: type-value-undo-join* ( out1> <out' domain -- out1< )
-! ! GENERIC: type-value-join* ( x1< x2< x1> domain -- <x1 )
-! GENERIC: type-value-meet* ( x1 x2  domain -- x'> )
-! ! Default is to assume regular branch-independent reverse fanout.
 GENERIC: top-type-value ( domain -- object )
+
 ! Used for inputs
 M: domain unknown-type-value drop ?? ;
 
@@ -125,14 +103,8 @@ M: domain primitive-transfer
         [ undefined-primitive-type-transfer ]
     } cond ;
 
-! : undo-dup ( state-in class -- quot: ( x x -- x ) )
-!     nip [ type-value-undo-dup ] curry ;
-
 : undo-dup ( state-in class -- quot: ( x x -- x ) )
     nip '[ 2dup = [ drop ] [  _ type-value-undo-dup ] if ] ;
-    ! 2drop [
-    !     2dup = [ drop ]
-    !     [ [ <and> ] and-unknown ] if ] ;
 
 M: domain primitive-undo
     { { [ over \ drop eq? ] [ nip [ last ] dip of constantly ] }
@@ -152,23 +124,8 @@ ERROR: not-a-primitive-transfer word ;
     [ [ <??> ] replicate prepend ]
     [ drop ] if ;
 
-: pad-domain-state ( state-in n domain -- state-in )
-    [ over length - ] dip swap
-    dup 0 >
-    [ [ unknown-type-value ] curry replicate prepend ]
-    [ 2drop ] if ;
-
-! :: ensure-state-in ( state-in word -- state-in )
-!     word in-types length :> n
-!     state-in [| state |
-!         state n pad-state
-!     ] map ;
-
 : ensure-state-in ( state-in word -- state-in )
     in-types length pad-state ;
-    ! state-in [| state |
-    !     state n pad-state
-    ! ] map ;
 
 ERROR: invalid-declaration spec ;
 :: ensure-declaration-in ( state-in -- state-in )
@@ -185,7 +142,6 @@ ERROR: invalid-declaration spec ;
 ! Used to ensure that undo and transfer functions have correct setup
 : empty-state ( -- state-in )
     f ;
-    ! all-domains [ { } ] H{ } map>assoc ;
 
 : ensure-inputs ( state-in word -- state-in word )
     [ [ empty-state ] unless* ] dip
@@ -201,57 +157,17 @@ ERROR: invalid-declaration spec ;
 
 ! Return two assocs, one for the transfer, one for the undo
 : compute-transfer-quots ( state-in word -- transfer )
-    ! swap unzip-domains
-    ! [
-    !     [| dom word state |
-    !      state word dom compute-key-transfer dom swap
-    !     ] with assoc-map
-    ! ] [
-    !     [| dom word state |
-    !      state word dom compute-key-undo dom swap
-    !     ] with assoc-map
-    ! ] 2bi 2array ;
-    ! [ unzip-domains ] dip
-    ! compute-forward-transfer-quots
     all-domains
     [ [ [ compute-key-undo ] keep swap ] 2with H{ } map>assoc ]
     [ [ [ compute-key-transfer ] keep swap ] 2with H{ } map>assoc ] 3bi swap 2array ;
 
-: in>state ( n -- state-in )
-    all-domains [ swap ?? <array> ] with H{ } map>assoc ;
-
-: xor-merge ( states -- state )
-    ! members dup length 1 = [ first ] [ <xor> ] if ;
-    [ dup sequence? [ 1array ] unless ] gather
-    dup length 1 = [ first ] when ;
-
-! : merge-states ( list-of-list-of-type-values -- list-of-type-values )
-!     dup [ length ] <mapped> all-equal? [ "unbalanced-states" 2array throw ] unless
-!     <flipped> [ concat members ] map flip ;
-
-! :: merge-states ( domain-states key -- domain-states )
-!     domain-states [ length ] map supremum :> d
-!     domain-states [ d key pad-domain-state ] map
-!     flip [ key type-value-merge ] map ;
-
-! :: unsplit-states ( domain-states key -- domain-states )
-!     domain-states [ length ] map supremum :> d
-!     domain-states [ d key pad-domain-state ] map
-!     flip [ key type-value-undo-split ] map ;
-
-
-! : merge-all-states ( type-values -- type-value )
-
-
 ERROR: inferred-divergent-state state ;
 : divergent? ( state -- ? )
-    ! [ swap [ domain-value-diverges?* ] curry any? ] assoc-any? ;
     [ divergent-type-value? ] any? ;
 
 ! Apply a transfer assoc to the state.  Check if any of the resulting states are divergent ;
 : apply-transfers ( state quot-assoc -- state )
     with-domain-stacks
-    ! [ with-domain ] assoc-merge
     dup divergent? [ inferred-divergent-state ] when ;
 
 ! ** Forward-parallel-transfer
@@ -363,27 +279,6 @@ SINGLETON: +bottom+
      [ undo-quots>> dom of ] map domain-states out in dom
      parallel<unsplit
     ] 2curry map-domains ;
-    ! ! [ [ records>> last state-out>> ] <mapped> ]
-    ! ! [ [ undo-quots>> ] <mapped> ] bi
-    ! [ undo-quots>> ] <mapped>
-    ! [| dom branch-outs branch-undos |
-    !  branch-outs branch-undos [| out-types undo-assoc |
-    !      out-types unzip-domains dom of
-    !      undo-assoc dom of 2array
-    !  ] 2map
-    !  ] 2curry map-domains
-    ! [| dom pairs |
-    !  pairs flip first2 dom parallel<unsplit
-    !  dom swap
-    ! ] assoc-map ;
-
-
-! ! This is heavy machinery...should infer and build all that at construction time already!!!
-! : apply-key-branches ( ..a quots key -- ..b )
-!     over
-!     [ [ with-datastack ] with map ] dip
-!     [ [ domain-value-diverges?* ] curry reject ]
-!     [ merge-states ] bi ; inline
 
 ! * Value Ids
 ! Created for unknown values.  Dup'd values actually have the same id.
@@ -404,34 +299,25 @@ M: \ value-id apply-class-declaration 2drop ;
 M: \ value-id domain-value-diverges?* drop null? ;
 M: \ value-id type-value-perform-split drop
     [ members ] dip [ <branched> ] curry map >hash-set ;
-! M: \ value-id apply-domain-declaration drop intersect ;
 
 ! * Class algebra
 GENERIC: class-primitive-transfer ( state-in primitive -- transfer-quot/f )
 M: object class-primitive-transfer 2drop f ;
-! M: \ class unknown-type-value drop ?? ;
 M: \ class type-value-merge drop [ ] [ class-or ] map-reduce ;
 M: \ class type-value-undo-merge drop class-and ;
 M: \ class type-value-undo-dup drop class-and ;
 M: \ class value>type drop <wrapper> ;
 M: \ class primitive-transfer
     [ 2dup class-primitive-transfer ] dip swap [ 3nip ] [ call-next-method ] if* ;
-! NOTE: assuming that declarations can actually be gradual, we only concretize
-! the value here, because the declaration might actually be incomplete...
-! NOTE2: actually, concretize both here, the declaration only needs to be
-! gradual because we could be able to infer non-gradual declarations
 
+! NOTE: Concretization necessary here?
 M: \ class apply-class-declaration drop
-    ! [ [ concretize ] dip class-and ] 2map ;
-    ! [ [ concretize ] bi@ class-and ] 2map ;
     [ [ class-and ] and-unknown ] 2map-suffix ;
 M: \ class domain-value-diverges?* drop null = ;
-! M: \ class apply-domain-declaration drop
 M: \ class bottom-type-value drop null ;
 M: \ class type-value-undo-split type-value-merge ;
 
 ! * Interval computations
-! M: \ interval unknown-type-value drop full-interval ;
 M: \ interval type-value-merge drop [ ] [ [ interval-union ] or-unknown ] map-reduce ;
 M: \ interval type-value-undo-merge drop [ interval-intersect ] and-unknown ;
 ! NOTE: backwards assumption propagation creates union behavior here? Is that
@@ -454,8 +340,6 @@ M: \ interval type-value-undo-split
 ! M: domain invariant>interval 2drop ?? ;
 ! Delegate to classoid value
 GENERIC: class-invariant>interval ( classoid -- interval )
-! M: \ class invariant>interval
-!     drop class-invariant>interval ;
 
 M: classoid class-invariant>interval drop ?? ;
 M: math-class class-invariant>interval class-interval ;
