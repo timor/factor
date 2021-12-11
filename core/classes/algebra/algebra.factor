@@ -271,7 +271,7 @@ M: anonymous-complement (classes-intersect?)
         { +eq+ [ nip ] }
         { +incomparable+ [
             2dup classes-intersect? [
-                2dup [ ??? ] either? [ 2array <anonymous-intersection> ]
+                2dup [ ??? ] either? [ class-or ]
                 [
                     [ normalize-class ] bi@ {
                         { [ dup anonymous-union? ] [ anonymous-union-and ] }
