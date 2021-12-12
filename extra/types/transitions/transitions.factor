@@ -1,7 +1,6 @@
-USING: accessors arrays assocs assocs.extras classes classes.algebra columns
-combinators combinators.short-circuit continuations generic generic.math
-generic.single kernel namespaces quotations sequences sets types.bidi
-types.expander types.protocols types.type-values words ;
+USING: accessors arrays assocs assocs.extras columns continuations kernel
+kernel.private namespaces quotations sequences sets types.expander
+types.protocols types.type-values words ;
 
 IN: types.transitions
 
@@ -44,6 +43,8 @@ M: recursive-primitive transfer-quots
 
 M: primitive-data-op transfer-quots
     compute-transfer-quots ;
+M: \ declare transfer-quots
+    compute-transfer-quots ;
 
 ERROR: recursive-word-transfer-inference word ;
 
@@ -81,7 +82,7 @@ ERROR: stuck-branch ;
 ! :: apply-parallel-transfer ( state-in cases -- state-out )
 : apply-parallel-transfer ( state-in cases -- state-out )
     dupd [ [ infer-branch-transfer 2array ]
-           [ dup inferred-divergent-state? [ 3drop f ] [ rethrow ] if ]
+           [ dup divergent-type-transfer? [ 3drop f ] [ rethrow ] if ]
            recover
     ] with map sift
     dup empty? [ stuck-branch ] when

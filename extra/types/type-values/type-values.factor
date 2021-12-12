@@ -136,7 +136,10 @@ M: \ value-id pprint-domain-value* drop
 
 ! Stack of type infos.  Split according to domains.  Elements are members of the domain.
 ! Applies each domain quotation to the domain stack, returns the combined type-values
+: with-domain-stack ( domain-values quot -- domain-values )
+    with-datastack ;
+
 : with-domain-stacks ( values quot-assoc -- values )
     [ unzip-domains ] dip
-    [ with-datastack ] assoc-merge
+    [ with-domain-stack ] assoc-merge
     zip-domains ;

@@ -16,6 +16,11 @@ MIXIN: domain
 GENERIC: value>type ( value domain -- domain-value )
 GENERIC: unknown-type-value ( domain -- domain-value )
 GENERIC: apply-class-declaration ( domain-values decl-spec domain -- domain-value )
+GENERIC: apply-domain-declaration ( domain-value domain-decl domain -- domain-value )
+GENERIC: class>domain-declaration ( class-decl domain -- domain-decl )
+! NOTE: The results of these are interpreted as intersection!
+GENERIC: domain>class-declaration ( domain-decl domain -- class-decl )
+
 
 ! This is used to check a state whether it would lead to a divergent calculation
 GENERIC: domain-value-diverges?* ( domain-value domain -- ? )

@@ -47,14 +47,6 @@ C: <transfer> transfer
 ! of a word or its constituents.
 
 TUPLE: literal-value value ;
-! TUPLE: class-value class ;
-! TUPLE: interval-value interval ;
-! TUPLE: relation value ;
-! TUPLE: eql-to < relation ;
-! TUPLE: less-than < relation ;
-! TUPLE: greater-than < relation ;
-! INSTANCE: \ literal-value domain
-! INSTANCE: \ relation domain
 
 ! NOTE: transfers are also not assumed to be undoable right now... As long as
 ! transitions can be rolled back atomically, that should not be a problem...
@@ -95,22 +87,54 @@ GENERIC: control-undo-quot ( state-in word domain -- undo )
 : constantly ( value -- quot )
     literalize 1quotation ;
 
+! Thrown by inferred quotations
+ERROR: divergent-type-transfer ;
+
+: apply-domain-declaration/check ( domain-value domain-decl domain -- domain-value )
+    [ apply-domain-declaration ]
+    [ dupd domain-value-diverges? [ divergent-type-transfer ] when ] bi ;
+
+! Declaration is expanded into a spread of per-value domain declaration
+! applications.  These are bi-directional bottle-necks.
+! Declarations could be seen as the prototypical type-target macro-expansion?
+: make-class-declaration-quot ( decls domain -- quot )
+    [ class>domain-declaration ] keep
+    [ [ apply-domain-declaration/check ] 2curry ] curry
+    map [ spread ] curry ;
+
+ERROR: invalid-declaration spec ;
+
+: domain-declaration-transfer ( state-in domain -- quot )
+    swap ?last dup [ invalid-declaration ] unless
+    class of dup wrapper? [ invalid-declaration ] unless
+    wrapped>> swap make-class-declaration-quot ;
+
+
 M: domain primitive-transfer
     {
         { [ over primitive-data-op? ] [ drop 1quotation nip ] }
         { [ over control-pseudo-op? ] [ control-transfer-quot ] }
         { [ over word? not ] [ value>type constantly nip ] }
+        { [ over \ declare eq? ] [ nip domain-declaration-transfer [ drop ]
+                                   prepose ] }
         [ undefined-primitive-type-transfer ]
     } cond ;
 
 : undo-dup ( state-in class -- quot: ( x x -- x ) )
     nip '[ 2dup = [ drop ] [  _ type-value-undo-dup ] if ] ;
 
+: drop-saver ( state-in class -- quot )
+    [ last ] dip of constantly ;
+
 M: domain primitive-undo
-    { { [ over \ drop eq? ] [ nip [ last ] dip of constantly ] }
+    { { [ over \ drop eq? ] [ nip drop-saver ] }
       { [ over \ swap eq? ] [ 3drop [ swap ] ] }
       { [ over \ dup eq? ] [ nip undo-dup ] }
       { [ over \ rot eq? ] [ 3drop [ -rot ] ] }
+      { [ over \ declare eq? ] [ nip
+                                 [ domain-declaration-transfer ]
+                                 [ drop-saver ] 2bi compose
+                               ] }
       { [ over word? not ] [ 3drop [ drop ] ] }
       { [ over control-pseudo-op? ] [ control-undo-quot ] }
       [ undefined-primitive-type-undo ]
@@ -127,16 +151,20 @@ ERROR: not-a-primitive-transfer word ;
 : ensure-state-in ( state-in word -- state-in )
     in-types length pad-state ;
 
-ERROR: invalid-declaration spec ;
+! NOTE: not actually applying declarations here, as that is done during the
+! domain-specific transfer.  We only have to ensure there are enough arguments
+! on the type stack.
 :: ensure-declaration-in ( state-in -- state-in )
     state-in ?last :> spec
     spec class of wrapper? [ spec invalid-declaration ] unless
     spec class of wrapped>> :> spec
     spec length :> n
-    state-in unclip-last-slice :> ( value-state decl-type-value )
-    value-state n pad-state
-    spec apply-declaration
-    decl-type-value suffix ;
+    state-in n 1 + pad-state
+    ! state-in unclip-last-slice :> ( value-state decl-type-value )
+    ! value-state n pad-state
+    ! spec apply-declaration
+    ! decl-type-value suffix
+    ;
 
 ! Interface function
 ! Used to ensure that undo and transfer functions have correct setup
@@ -195,10 +223,17 @@ ERROR: inferred-divergent-state state ;
     ! [ spread ] curry ;
     3drop [  ] ;
 
-ERROR: divergent-type-transfer ;
+SINGLETON: +bottom+
+: collect-outro ( quot outn -- quot: ( ..a n -- ..b values' ) )
+    over '[ [ @ _ narray ]
+            [ dup divergent-type-transfer?
+              [ drop _ nullary +bottom+ ]
+              [ rethrow ] if
+            ] recover
+    ] ;
 
-: collect-outro ( quot n -- quot: ( ..a n -- ..b values' ) )
-    '[ @ _ narray ] ;
+! : collect-outro ( quot n -- quot: ( ..a n -- ..b values' ) )
+!     '[ @ _ narray ] ;
 
 : augment-branch-transfer-quot ( branch-quot in out i dom -- quot )
     rot
@@ -216,7 +251,6 @@ ERROR: divergent-type-transfer ;
     pick [ augment-branch-transfer-quots ] dip
     parallelize  ;
 
-SINGLETON: +bottom+
 : combine-push ( out quot: ( type-values -- type-value ) -- quot )
     swap
     '[ [ +bottom+? ] reject <flipped> _ map _ firstn ] ;
@@ -243,16 +277,16 @@ SINGLETON: +bottom+
     [ [ [ type-value-undo-merge ] [ check-divergence ] bi ] 2curry ] curry
     map [ spread ] curry ;
 
-: collect-undo-outro ( quot outn -- quot: ( ..a n -- ..b values' ) )
-    over '[ [ @ _ narray ]
-       [ dup divergent-type-transfer?
-         [ drop _ nullary +bottom+ ]
-         [ rethrow ] if
-       ] recover
-    ] ;
+! : collect-undo-outro ( quot outn -- quot: ( ..a n -- ..b values' ) )
+!     over '[ [ @ _ narray ]
+!        [ dup divergent-type-transfer?
+!          [ drop _ nullary +bottom+ ]
+!          [ rethrow ] if
+!        ] recover
+!     ] ;
 
 : augment-branch-undo-quot ( undo-out branch-quot branch-state dom -- quot )
-    mask-undo-split prepose swap collect-undo-outro ;
+    mask-undo-split prepose swap collect-outro ;
 
 : parallel<collect ( branch-quots branch-states undo-out undo-in dom -- quot )
     swap [ [ [ -rot ] dip augment-branch-undo-quot ] 2curry 2map ] dip
@@ -299,13 +333,15 @@ M: \ value-id apply-class-declaration 2drop ;
 M: \ value-id domain-value-diverges?* drop null? ;
 M: \ value-id type-value-perform-split drop
     [ members ] dip [ <branched> ] curry map >hash-set ;
+M: \ value-id class>domain-declaration drop ;
+M: \ value-id apply-domain-declaration 2drop ;
 
 ! * Class algebra
 GENERIC: class-primitive-transfer ( state-in primitive -- transfer-quot/f )
 M: object class-primitive-transfer 2drop f ;
 M: \ class type-value-merge drop [ ] [ class-or ] map-reduce ;
 M: \ class type-value-undo-merge drop class-and ;
-M: \ class type-value-undo-dup drop class-and ;
+M: \ class type-value-undo-dup drop [ class-and ] and-unknown ;
 M: \ class value>type drop <wrapper> ;
 M: \ class primitive-transfer
     [ 2dup class-primitive-transfer ] dip swap [ 3nip ] [ call-next-method ] if* ;
@@ -316,6 +352,9 @@ M: \ class apply-class-declaration drop
 M: \ class domain-value-diverges?* drop null = ;
 M: \ class bottom-type-value drop null ;
 M: \ class type-value-undo-split type-value-merge ;
+M: \ class class>domain-declaration drop ;
+M: \ class apply-domain-declaration drop
+    [ class-and ] and-unknown ;
 
 ! * Interval computations
 M: \ interval type-value-merge drop [ ] [ [ interval-union ] or-unknown ] map-reduce ;
@@ -345,10 +384,15 @@ M: classoid class-invariant>interval drop ?? ;
 M: math-class class-invariant>interval class-interval ;
 M: wrapper class-invariant>interval wrapped>>
     interval value>type ;
-M: \ interval apply-class-declaration drop
-    [ class-invariant>interval ] map
-    [
-        [ interval-intersect ] and-unknown
+M: \ interval class>domain-declaration drop
+    [ class-invariant>interval ] map ;
+M: \ interval apply-domain-declaration drop
+    [ interval-intersect ] and-unknown ;
+M: \ interval apply-class-declaration
+    [ class>domain-declaration ] keep
+    '[
+        _ apply-domain-declaration
+        ! [ interval-intersect ] and-unknown
     ] 2map-suffix ;
 
 ! * Slots:
