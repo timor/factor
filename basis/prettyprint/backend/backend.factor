@@ -3,7 +3,7 @@
 USING: accessors arrays assocs byte-arrays byte-vectors classes
 classes.algebra.private classes.maybe classes.private
 classes.tuple combinators combinators.short-circuit
-continuations effects generic hash-sets hashtables io.pathnames
+continuations effects generic hash-sets hashtables io io.pathnames
 io.styles kernel lists make math math.order math.parser
 namespaces prettyprint.config prettyprint.custom
 prettyprint.sections prettyprint.stylesheet quotations sbufs
@@ -11,7 +11,47 @@ sequences strings vectors words ;
 QUALIFIED: sets
 IN: prettyprint.backend
 
-M: effect pprint* effect>string text ;
+<PRIVATE
+: effect-text ( str -- )
+    base-effect-style get styled-text ;
+
+: pprint-var ( var -- )
+    [ ".." prepend effect-text ] when* ;
+
+TUPLE: anon-type-section < block  ;
+
+: <anon-type ( -- )
+    anon-type-section new-block
+    (<block) ;
+
+M: anon-type-section short-section
+    base-effect-style get [ ":" write ] with-style call-next-method ;
+
+M: anon-type-section long-section
+    base-effect-style get [ ":" write ] with-style call-next-method ;
+
+: pprint-configuration ( seq -- )
+    [ dup pair? [ first2
+                  swap
+                  [ ":" append effect-text pprint* ]
+                  [ <anon-type pprint* block> ] if*
+                ]
+      [ effect-text ] if ] each ;
+PRIVATE>
+
+: pprint-effect ( effect -- )
+    <flow "(" effect-text
+            dup in-var>> pprint-var
+            dup in>> pprint-configuration
+            "--" effect-text
+            dup out-var>> pprint-var
+            dup out>> pprint-configuration
+            terminated?>> [ "*" effect-text ] when
+            ")" effect-text
+    block> ;
+
+M: effect pprint*
+    pprint-effect ;
 
 M: configuration pprint* configuration>string text ;
 
@@ -98,9 +138,6 @@ M: float pprint*
     ] if ;
 
 M: f pprint* drop \ f pprint-word ;
-
-: pprint-effect ( effect -- )
-    [ effect>string ] [ effect-style ] bi styled-text ;
 
 ! Strings
 : ch>ascii-escape ( ch -- ch' ? )
