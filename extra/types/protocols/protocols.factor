@@ -46,8 +46,6 @@ C: <transfer> transfer
 ! independence guarantee so it does not matter whether we compute the compound
 ! of a word or its constituents.
 
-TUPLE: literal-value value ;
-
 ! NOTE: transfers are also not assumed to be undoable right now... As long as
 ! transitions can be rolled back atomically, that should not be a problem...
 GENERIC: primitive-transfer ( state-in primitive domain -- transfer-quot )
@@ -89,10 +87,14 @@ GENERIC: control-undo-quot ( state-in word domain -- undo )
 
 ! Thrown by inferred quotations
 ERROR: divergent-type-transfer ;
+SYMBOL: stuck-transfers
+: diverges ( -- )
+    stuck-transfers on
+    divergent-type-transfer ;
 
 : apply-domain-declaration/check ( domain-value domain-decl domain -- domain-value )
     [ apply-domain-declaration ]
-    [ dupd domain-value-diverges? [ divergent-type-transfer ] when ] bi ;
+    [ dupd domain-value-diverges? [ diverges ] when ] bi ;
 
 ! Declaration is expanded into a spread of per-value domain declaration
 ! applications.  These are bi-directional bottle-necks.
@@ -186,8 +188,8 @@ ERROR: not-a-primitive-transfer word ;
 ! Return two assocs, one for the transfer, one for the undo
 : compute-transfer-quots ( state-in word -- transfer )
     all-domains
-    [ [ [ compute-key-undo ] keep swap ] 2with H{ } map>assoc ]
-    [ [ [ compute-key-transfer ] keep swap ] 2with H{ } map>assoc ] 3bi swap 2array ;
+    [ [ [ compute-key-transfer ] keep swap ] 2with H{ } map>assoc ]
+    [ [ [ compute-key-undo ] keep swap ] 2with H{ } map>assoc ] 3bi 2array ;
 
 ERROR: inferred-divergent-state state ;
 : divergent? ( state -- ? )
@@ -268,7 +270,7 @@ SINGLETON: +bottom+
 ! ** Undo parallel-transfer
 : check-divergence ( value domain -- value )
     dupd domain-value-diverges?
-    [ divergent-type-transfer throw ] when ;
+    [ diverges ] when ;
 
 
 ! This is a runtime version of declare that performs the type intersection

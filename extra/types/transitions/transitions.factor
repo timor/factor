@@ -1,6 +1,6 @@
-USING: accessors arrays assocs assocs.extras columns continuations kernel
-kernel.private namespaces quotations sequences sets types.expander
-types.protocols types.type-values words ;
+USING: accessors arrays assocs assocs.extras classes classes.algebra columns
+continuations effects kernel kernel.private math namespaces quotations sequences
+sets strings types types.expander types.protocols types.type-values words ;
 
 IN: types.transitions
 
@@ -78,14 +78,13 @@ DEFER: pong-ping
 !      ] 2curry
 !     map-domains ;
 
-ERROR: stuck-branch ;
 ! :: apply-parallel-transfer ( state-in cases -- state-out )
 : apply-parallel-transfer ( state-in cases -- state-out )
     dupd [ [ infer-branch-transfer 2array ]
            [ dup divergent-type-transfer? [ 3drop f ] [ rethrow ] if ]
            recover
     ] with map sift
-    dup empty? [ stuck-branch ] when
+    dup empty? [ diverges ] when
     unzip ! out-states transfers
     [ [ <flipped> [ squish-type-values ] map ] keep ] dip
     [ all-parallel>merge current-transfer [ swap compose-transfers ] change ]
@@ -120,7 +119,7 @@ ERROR: stuck-branch ;
     [let
      ensure-inputs :> ( state-in word )
      state-in word type-expand :> cases
-     cases quotation? [ state-in cases apply-quotation-transfer ]
+     cases callable? [ state-in cases apply-quotation-transfer ]
      [
          cases array?
          [ state-in cases apply-parallel-transfer ]
@@ -153,11 +152,14 @@ ERROR: stuck-branch ;
       current-undo get 2array
     ] with-scope ;
 
+: init-straight-line-inference ( -- )
+    H{ } current-transfer set
+    H{ } current-undo set
+    transitions off ;
+
 : infer-branch-transfer ( state-in quot -- state-out/f transfer/f )
     [
-        H{ } current-transfer set
-        H{ } current-undo set
-        transitions off
+        init-straight-line-inference
         apply-quotation-transfer
         transitions get
         current-transfer get
@@ -168,9 +170,7 @@ ERROR: stuck-branch ;
 : ping ( quot -- transfer )
     reset-expansions
     [
-        H{ } current-transfer set
-        H{ } current-undo set
-        transitions off
+        init-straight-line-inference
         f swap apply-quotation-transfer drop
         transitions get
         current-transfer get
@@ -198,3 +198,48 @@ ERROR: stuck-branch ;
 ! compiled type quotations on the new inputs.
 : ping-pong-ping ( quot -- in out1 out2 )
     ping-pong [ swap dupd transfer-quots>> apply-transfers ] dip swap ;
+
+: run-pass ( input-state quot -- input-state quot/transfer dead-branches? )
+    ! reset-expansions
+    [
+        init-straight-line-inference
+        [ apply-quotation-transfer ] keep
+        [
+            current-undo get
+            apply-transfers
+            stuck-transfers get
+        ] dip swap
+        [ [ drop transitions get ] unless ] keep
+    ] with-scope ;
+
+: infer-transitions ( quot -- inputs transitions )
+    f swap [ run-pass ] loop ;
+
+: dependent-ids ( value-ids -- value-ids )
+    H{ } clone swap [ over inc-at ] each
+    [ 1 > ] filter-values keys ;
+
+: effect-var-names ( state-in state-out -- assoc )
+    [ [ value-id of members ] map concat [ ??? ] reject ] bi@ append
+    dependent-ids
+    [ CHAR: a H{ } clone ] dip
+    [ [ [ [ 1 + ] keep 1string ] 2dip swap set-at ] with each ]
+    keepd nip ;
+
+! TODO: include other domains?
+: state>configuration ( names types -- seq )
+    [
+        [ value-id of
+          members [ ??? ] reject
+          [ of ] with map sift
+          [ f ] [ "|" join ] if-empty
+        ]
+        [ class of dup ???
+          [ drop ]
+          [ 2array ] if
+        ] bi ] with map ;
+
+: infer-type ( quot -- effect )
+    infer-transitions last state-out>>
+    2dup effect-var-names
+    [ swap state>configuration { } or ] curry bi@ <effect> ;
