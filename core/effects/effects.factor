@@ -74,7 +74,7 @@ M: pair effect>string
     [ effect>string % CHAR: \s , ] each ;
 
 : var-picture% ( var -- )
-    [ ".." % % CHAR: \s , ] when* ;
+    [ effect>string ".." % % CHAR: \s , ] when* ;
 
 PRIVATE>
 
