@@ -92,6 +92,7 @@ IN: stack-checker.known-words
 } [ "shuffle" set-word-prop ] assoc-each
 
 : check-declaration ( declaration -- declaration )
+    dup sequence? [ [ dup effect? [ drop callable ] when ] map ] when
     dup { [ array? ] [ [ classoid? ] all? ] } 1&&
     [ bad-declaration-error ] unless ;
 
