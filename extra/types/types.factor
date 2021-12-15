@@ -1,5 +1,5 @@
 USING: accessors classes classes.algebra classes.tuple combinators.short-circuit
-effects kernel math.intervals sequences words variants ;
+effects kernel math.intervals quotations sequences variants words ;
 
 IN: types
 ! USE: types.transitions.known-words
@@ -20,7 +20,8 @@ GENERIC: apply-domain-declaration ( domain-value domain-decl domain -- domain-va
 GENERIC: class>domain-declaration ( class-decl domain -- domain-decl )
 ! NOTE: The results of these are interpreted as intersection!
 GENERIC: domain>class-declaration ( domain-decl domain -- class-decl )
-
+! Used when a domain value must be generated from scratch from a class declaration
+GENERIC: class>domain-value ( class-value domain -- domain-value )
 
 ! This is used to check a state whether it would lead to a divergent calculation
 GENERIC: domain-value-diverges?* ( domain-value domain -- ? )
@@ -54,14 +55,32 @@ GENERIC: bottom-type-value ( domain -- object )
     [ 3drop ?? ] [ call( x x -- x ) ] if ;
 
 ! ** Predefined domains
-! SINGLETON: value-id
+
+! *** Factor classes/classoids
+
 INSTANCE: \ class domain
+
+! *** Interval arithmetic
+
 INSTANCE: \ interval domain
+
+! *** Value ids for intermediate results
+
 VARIANT: value-id
     +undefined-value+
     scalar: { id }
     branched: { { base value-id } { branch-id } } ;
 INSTANCE: \ value-id domain
+
+! *** Interfaces
+
+! INSTANCE: \ effect domain
+
+! ** Access to the type stack
+
+! Used to directly manipulate the type stacks
+! : push-types ( domain-quotations -- )
+!     drop ;
 
 ! * Language of types
 GENERIC: type<= ( type1 type2 -- ? )
@@ -70,8 +89,6 @@ GENERIC: type<= ( type1 type2 -- ? )
         [ type<= ]
         [ swap type<= ]
     } 2&& ;
-
-
 ! This is used to convert literal values into corresponding type-values
 GENERIC: type-of ( thing -- base-type )
 M: f type-of class-of ;

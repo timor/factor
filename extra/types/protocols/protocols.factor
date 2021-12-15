@@ -1,8 +1,8 @@
 USING: accessors arrays assocs assocs.extras classes classes.algebra columns
 combinators combinators.smart compiler.tree.propagation.info continuations
-generalizations generic.math grouping hash-sets kernel kernel.private math
-math.intervals namespaces quotations sequences sequences.generalizations sets
-types types.bidi types.type-values types.util words ;
+effects generalizations generic.math grouping hash-sets kernel kernel.private
+math math.intervals namespaces quotations sequences sequences.generalizations
+sets types types.bidi types.type-values types.util words ;
 
 IN: types.protocols
 ! * Type normalization protocols
@@ -16,14 +16,33 @@ IN: types.protocols
 ! - numeric type calculations are performed on intervals
 
 ! * Other approach: modular value info
-TUPLE: transfer records transfer-quots undo-quots ;
+
+! NOTE: this would be the approach where we wrap transitions in class objects
+! A simpler approach is maybe to have transitions pushed onto the type value
+! stack directly? That way, it is guaranteed that if quotations are constructed
+! and used as data, they have to pass by the type checker first before being "elevated".
+
+! Reflective!
+! : [??] ( -- type-value )
+!     <??> <??> f <transition> >value ;
+
+! Container to hold accumulated inference state
+TUPLE: transfer
+    records
+    transfer-quots
+    undo-quots
+    id-in
+    id-out ;
+
 : transfer-in/out ( transfer -- in out )
     transfer-quots>> values
     [ inputs/outputs 2array ] map <flipped>
     first2 2dup [ all-equal? ] both? [ "unbalanced-branch-transfer" 3array throw ] unless
     [ first ] bi@ ;
 
-C: <transfer> transfer
+! For inferring row effects
+: <transfer> ( records transfer-quotes undo-quots -- obj )
+    f f transfer boa ;
 
 ! quots are a hashtable of orthogonal lattices that are traversed in parallel,
 ! each entry having two elements, a forward and a backwards quot.
@@ -111,6 +130,13 @@ ERROR: invalid-declaration spec ;
     class of dup wrapper? [ invalid-declaration ] unless
     wrapped>> swap make-class-declaration-quot ;
 
+! : type-push-transfer ( state-in domain -- quot )
+!     of [ literalize ] map >quotation ;
+! ERROR: cannot-execute-abstract-operation ;
+! ERROR: type-conditional-drop-failed ;
+! : push-type ( ..a type domain -- ..t )
+!     cannot-execute-abstract-operation ;
+! : drop-type ( elt type -- )
 
 M: domain primitive-transfer
     {
@@ -119,6 +145,7 @@ M: domain primitive-transfer
         { [ over word? not ] [ value>type constantly nip ] }
         { [ over \ declare eq? ] [ nip domain-declaration-transfer [ drop ]
                                    prepose ] }
+        ! { [ over \ push-types eq? ] [ nip type-push-transfer ] [ drop ] prepose }
         [ undefined-primitive-type-transfer ]
     } cond ;
 
@@ -161,12 +188,7 @@ ERROR: not-a-primitive-transfer word ;
     spec class of wrapper? [ spec invalid-declaration ] unless
     spec class of wrapped>> :> spec
     spec length :> n
-    state-in n 1 + pad-state
-    ! state-in unclip-last-slice :> ( value-state decl-type-value )
-    ! value-state n pad-state
-    ! spec apply-declaration
-    ! decl-type-value suffix
-    ;
+    state-in n 1 + pad-state ;
 
 ! Interface function
 ! Used to ensure that undo and transfer functions have correct setup
@@ -335,8 +357,9 @@ M: \ value-id apply-class-declaration 2drop ;
 M: \ value-id domain-value-diverges?* drop null? ;
 M: \ value-id type-value-perform-split drop
     [ members ] dip [ <branched> ] curry map >hash-set ;
-M: \ value-id class>domain-declaration drop ;
+M: \ value-id class>domain-declaration drop length ?? <repetition> ;
 M: \ value-id apply-domain-declaration 2drop ;
+M: \ value-id class>domain-value nip unknown-type-value ;
 
 ! * Class algebra
 GENERIC: class-primitive-transfer ( state-in primitive -- transfer-quot/f )
@@ -357,6 +380,8 @@ M: \ class type-value-undo-split type-value-merge ;
 M: \ class class>domain-declaration drop ;
 M: \ class apply-domain-declaration drop
     [ class-and ] and-unknown ;
+! TODO: any concretization necessary?
+M: \ class class>domain-value drop ;
 
 ! * Interval computations
 M: \ interval type-value-merge drop [ ] [ [ interval-union ] or-unknown ] map-reduce ;
@@ -373,7 +398,6 @@ M: \ interval value>type
 M: \ interval domain-value-diverges?* drop empty-interval = ;
 M: \ interval type-value-undo-split
     type-value-merge ;
-
 
 ! TODO: Concretize correctly according to variance!
 ! In the first approximation, only invariant conversions are safe.
@@ -396,6 +420,93 @@ M: \ interval apply-class-declaration
         _ apply-domain-declaration
         ! [ interval-intersect ] and-unknown
     ] 2map-suffix ;
+M: \ interval class>domain-value drop
+    class-invariant>interval ;
+
+! * Interfaces
+! Normal form: Union of intersections
+: 1interface ( effect -- if )
+    1array 1array ;
+
+: interface-and ( if1 if2 -- if3 )
+    [ [ append members ] cartesian-map concat ] and-unknown ;
+
+: interface-or ( if1 if2 -- if3 )
+    2dup = [ drop ]
+    [
+        over ??? [ swap ] when
+        dup ??? [ suffix ]
+        [ append ] if members
+    ] if ;
+
+M: \ effect value>type drop
+    [ ] =
+    [ \ effect counter { } 2dup <variable-effect> 1interface ]
+    [ ?? ] if ;
+
+M: \ effect class>domain-declaration drop
+    [
+        { { [ dup effect? ] [ 1interface ] }
+          { [ dup callable class<= ]
+            [ drop \ effect counter { } \ effect counter over
+              <variable-effect> 1interface ] }
+          [ drop ?? ]
+        } cond
+    ] map ;
+
+! NOTE: we do NOT perform any constraint magic here.  Anything dependent must
+! be injected via the inferred type transfer quotations.  An effect is only a
+! projection of a state difference.
+M: \ effect apply-domain-declaration drop
+    interface-and ;
+
+! Not solving halting problem here...
+M: \ effect domain-value-diverges?* 2drop f ;
+
+! M: \ transition apply-domain-declaration drop
+!     [ declare-transition ] and-unknown ;
+
+
+! ! TODO: Formalize and document stack state relation semantics induced by transitions
+! ! Ok this is the difficult one.  This will need to treat a transition as type to
+! ! cast into.  Interpreted question is: Can present transition be used instead of
+! ! declared transition?  But it has to be interpreted in terms of intersection!
+! ! Heights can be interpreted as kind of dependent interval types.
+! : transition-takes ( transition -- bounded num )
+!     state-in>>
+!     [ length ] [ row-state? ] bi
+!     [ [a,inf] ] [ [a,a] ] if ;
+
+! : transition-puts ( transition -- bounded num )
+!     state-out>>
+!     [ length ] [ row-state? ] bi
+!     [ [a,inf] ] [ [a,a] ] if ;
+
+! : transition-height ( transition -- bounded num )
+!     [ transition-puts ]
+!     [ transition-takes interval- ]
+!     [ bivariable-transition? ] tri
+!     [  ]
+
+! : interface-and ( if1 if2 -- if )
+!         ransition-and ( transition1 transition2 -- transition )
+!     [ [ state-in>> ] bi@ consumption-and ]
+!     [ [ state-out>> ] bi@ production-and ] 2bi
+
+
+! ! Is there a way to turn effect1 into effect2 by row-var substitution?
+! : transition-height ( transition -- in out )
+!     [ state-in>> ] [ state-in>> ] bi
+!     2dup [ sequence? ] both?
+!     [ [ length ] bi@  ]
+!     [ dup sequence? [ length ] [ drop f ] if ] bi@ ;
+
+! : effect-height-compatible? ( transition transition-decl -- ? )
+!     { { [ 2dup [ bivariable-transition? ] either? ] [ 2drop t ] }
+!       { [  ] }
+!     }
+
+! : declare-transition ( domain-value domain-decl -- domain-value )
 
 ! * Slots:
 ! Carry over complete computation history!!!!!!!

@@ -1,8 +1,8 @@
 USING: accessors arrays assocs assocs.extras classes classes.algebra
 classes.private columns combinators.short-circuit continuations delegate
-delegate.protocols formatting grouping hashtables kernel math math.functions
-math.intervals math.parser prettyprint.backend prettyprint.custom sequences
-sequences.zipped sets types types.util variants ;
+delegate.protocols effects formatting grouping hashtables kernel math
+math.functions math.intervals math.parser prettyprint.backend prettyprint.custom
+sequences sequences.zipped sets types types.util variants words ;
 
 IN: types.type-values
 
@@ -11,6 +11,9 @@ TUPLE: type-value map ;
 M: type-value clone
     call-next-method
     [ clone ] change-map ;
+
+! expensive checking
+PREDICATE: type-stack < sequence [ type-value? ] all? ;
 
 CONSULT: assoc-protocol type-value
     map>> ;
@@ -31,10 +34,15 @@ CONSULT: assoc-protocol type-value
     all-domains [ tuck value>type ] with H{ } map>assoc
     type-value boa ;
 
+: decl>value ( class-decl -- type-value )
+    [ swap class>domain-value ] curry map-domains
+    type-value boa ;
+
 ! ** Disjoint union of type values
 TUPLE: disjoint-union values ;
 
 GENERIC: pprint-domain-value* ( type-value domain -- str )
+M: object pprint-domain-value* nip class-name ;
 : pprint-domain-value ( type-value domain -- str )
     over sequence?
     [ [ pprint-domain-value ] curry map " " join "{" "}" surround ]
@@ -46,11 +54,16 @@ GENERIC: pprint-domain-value* ( type-value domain -- str )
     "|" join "V(" ")" pprint-string ;
 
 M: type-value pprint* pprint-type-value ;
+! TODO fix FUBAR and correctly switch to pprint implementation...
+M: \ effect pprint-domain-value* drop effect>string ;
 
+! TODO
 ! FUBAR with the prettyprinting protocol here, I simply don't understand it....
 M: \ class pprint-domain-value* drop
-    dup wrapper? [ class-name ]
-    [ word-name* ] if ;
+    dup word? [ word-name* ]
+    [ class-name ] if ;
+    ! dup wrapper? [ class-name ]
+    ! [ word-name* ] if ;
 GENERIC: >bound-string ( number -- str )
 M: number >bound-string
     2 logn "2^%.1f" sprintf ;
@@ -93,12 +106,9 @@ M: \ value-id pprint-domain-value* drop
     [ [ dup { [ sequence? ] [ length 1 = ] } 1&& [ first ] when ] assoc-map ] change-map ;
 
 ! Copies
-: map-value-domains ( type-value quot: ( domain-value domain -- domain-value ) -- type-value )
-    ! [ map>> ] dip
-    '[ swap _ keep swap members
-    ] assoc-map type-value boa
-    ! simplify-type-value
-    ; inline
+:: map-value-domains ( type-val quot: ( domain-value domain -- domain-value ) -- type-value )
+    type-val [| dom dom-val | dom-val dom quot call( x x -- x ) dom swap ] assoc-map
+    type-value boa ;
 
 : divergent-type-value? ( type-value -- ? )
     [ dup sequence? [ 1array ] unless swap [ domain-value-diverges? ] curry any? ] assoc-any? ;
@@ -106,7 +116,6 @@ M: \ value-id pprint-domain-value* drop
 : unzip-domains ( type-values -- assoc )
     all-domains [ [ [ of ] curry <mapped> ] keep swap ] with
     H{ } map>assoc ;
-
 
 : zip-domains ( assoc -- type-values )
     dup values [ length ] <mapped> all-equal?
@@ -139,7 +148,7 @@ M: \ value-id pprint-domain-value* drop
 : with-domain-stack ( domain-values quot -- domain-values )
     with-datastack ;
 
-: with-domain-stacks ( values quot-assoc -- values )
+TYPED: with-domain-stacks ( values: type-stack quot-assoc -- values: type-stack )
     [ unzip-domains ] dip
     [ with-domain-stack ] assoc-merge
     zip-domains ;

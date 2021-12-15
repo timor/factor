@@ -1,6 +1,6 @@
-USING: accessors assocs classes classes.algebra combinators continuations
-effects generalizations kernel kernel.private macros.expander math memoize
-namespaces quotations sequences words ;
+USING: accessors arrays assocs classes classes.algebra classes.algebra.private
+combinators continuations effects generalizations kernel kernel.private
+macros.expander math memoize namespaces quotations sequences sets words ;
 
 IN: types.expander
 
@@ -9,8 +9,6 @@ IN: types.expander
 
 ! Can be used to read whether this contained run-time calls, e.g. the
 ! surrounding definition will have to be inlined.
-SYMBOL: must-inline?
-
 GENERIC: type-expand* ( state-in word -- code/f )
 : type-expand ( state-in word -- code/f )
     type-expand* ;
@@ -36,7 +34,7 @@ ERROR: static-macro-expansion-error inputs macro-quot error ;
     [ with-datastack last ]
     [ static-macro-expansion-error ]
     recover
-    must-inline? on
+    ! must-inline? on
     ;
 
 MEMO: type-expand-macro ( state-in macro -- code )
@@ -68,7 +66,23 @@ M: \ ? type-expand* 2drop
       [ { not{ POSTPONE: f } ?? ?? } declare drop nip ]
     } ;
 
+ERROR: invalid-literal-call-argument thing ;
+GENERIC: type>quotations ( classoid -- quots )
+M: wrapper type>quotations
+    wrapped>> dup callable? [ 1array ] [ drop f ] if ;
+M: anonymous-union type>quotations
+    members>> [ type>quotations ] gather
+    dup [ ] all? [ drop f ] unless ;
+M: classoid type>quotations drop f 1array ;
+
 M: \ call type-expand* drop
-    1 macro-literals
-    [ [ dropper ] [ first ] bi compose ]
-    [ drop f ] if ;
+    ?last
+    [
+        class of type>quotations sift
+        [ f ] [ [ [ drop ] prepose ] map dup length 1 = [ first ] when ] if-empty
+    ]
+    [ f ] if* ;
+
+! : declare-dropper ( effect-elements -- quot )
+!     [ dup pair? [ second ] [ drop ?? ] if ] map
+!     [ [ declare ] curry ] [ length [ drop ] n*quot ] bi compose ;
