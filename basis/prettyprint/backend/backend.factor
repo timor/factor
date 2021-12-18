@@ -39,14 +39,18 @@ M: anon-type-section long-section
       [ effect-text ] if ] each ;
 PRIVATE>
 
+: pprint-effect-elements ( effect -- )
+    dup in-var>> pprint-var
+    dup in>> pprint-configuration
+    "--" effect-text
+    dup out-var>> pprint-var
+    dup out>> pprint-configuration
+    terminated?>> [ "*" effect-text ] when
+    ;
+
 : pprint-effect ( effect -- )
     <flow "(" effect-text
-            dup in-var>> pprint-var
-            dup in>> pprint-configuration
-            "--" effect-text
-            dup out-var>> pprint-var
-            dup out>> pprint-configuration
-            terminated?>> [ "*" effect-text ] when
+            pprint-effect-elements
             ")" effect-text
     block> ;
 
