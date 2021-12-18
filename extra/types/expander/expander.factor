@@ -1,6 +1,7 @@
 USING: accessors arrays assocs classes classes.algebra classes.algebra.private
-combinators continuations effects generalizations inverse kernel kernel.private
-macros.expander math memoize quotations sequences sets words ;
+classes.builtin combinators combinators.smart continuations effects
+generalizations inverse kernel kernel.private macros.expander math memoize
+namespaces quotations sequences sets words ;
 
 IN: types.expander
 
@@ -84,6 +85,11 @@ M: \ call type-expand* drop
     ]
     [ f ] if* ;
 
+: run-type-macro ( stack quot -- quot/f )
+    2dup [ length ] [ inputs ] bi* >=
+    [ with-datastack last ]
+    [ 2drop f ] if ;
+
 ! : declare-dropper ( effect-elements -- quot )
 !     [ dup pair? [ second ] [ drop ?? ] if ] map
 !     [ [ declare ] curry ] [ length [ drop ] n*quot ] bi compose ;
@@ -100,4 +106,28 @@ M: \ call type-expand* drop
     [ 1quotation compose ]
     [ drop f ] if* ;
 
-! M: \ + type-expand*
+: (expand-tag) ( type-value -- quot/f )
+    class of builtins get
+    [ class= ] with find
+    nip [ "type" word-prop '[ drop _ ] ]
+    [ num-types get ] if* ;
+
+M: \ tag type-expand* drop
+    [ (expand-tag) ] run-type-macro ;
+
+: definitely-same-value? ( value1 value2 -- ? )
+    [ value-id of ] bi@ = ;
+    ! { [ [ cardinality 1 = ] both? ]
+    !   [ [ members first ??? ] either? not ]
+    !   [ [ members first ] same? ]
+    ! } 2&& ;
+
+: definitely-different-value? ( value1 value2 -- ? )
+    type-values-intersect? not ;
+
+M: \ eq? type-expand* drop
+    [ { { [ 2dup definitely-same-value? ] [ 2drop [ 2drop t ] ] }
+        { [ 2dup definitely-different-value? ] [ 2drop [ 2drop f ] ] }
+        [ 2drop f ]
+      } cond
+    ] run-type-macro ;

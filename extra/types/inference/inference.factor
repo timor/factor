@@ -156,7 +156,7 @@ TUPLE: input id ;
     [ make-enough ]
     [ apply-declaration ] bi ;
 
-SYMBOLS: quot-done quot-todo ;
+SYMBOLS: quot-done quot-todo stack-in ;
 
 : cut-words ( n -- )
     quot-done [ swap head* ] change ;
@@ -184,7 +184,7 @@ DEFER: apply-inputs
 
 : rewind ( stack -- stack )
     quot-done get
-    [ <configuration> unadd-word { } ]
+    [ dup stack-in set ]
     [ unclip-last swap quot-done namespaces:set
       [ undo-word ]
       [ constrain-inputs ] bi
@@ -224,7 +224,10 @@ DEFER: apply-quotation
     [ drop f ] if ;
 
 : literal? ( obj -- ? )
-    { [ word? not ] [ type-call? not ] } 1&& ;
+    { [ word? not ]
+      [ type-call? not ]
+      [ configuration? not ]
+    } 1&& ;
 
 : ?cut* ( seq n -- seq1 seq2/f )
     over length over >=
@@ -241,7 +244,7 @@ DEFER: apply-quotation
           dup [ literal? ] all?
           [ swap quot-done set ]
           [ 2drop f ] if
-      ] when* ]
+      ] [ drop f ] if* ]
     [ drop f ] if
     ;
 
@@ -257,9 +260,15 @@ DEFER: apply-quotation
     ]
     [ drop f ] if* ;
 
+: ?transform-word ( stack word -- stack quot/f )
+    { [ ?fold-word ]
+      [ dupd type-expand ]
+    } 1||
+    ;
+
 DEFER: (apply-quotation)
 : perform-word ( stack word -- stack )
-    [ ?fold-word ] keep swap
+    [ ?transform-word ] keep swap
     [ nip (apply-quotation) ]
     [ do-word ] if* ;
 
@@ -275,33 +284,41 @@ DEFER: (apply-quotation)
     ! [ perform-word ] bi ;
 
 : (apply-quotation) ( stack quot -- stack )
-    quot-todo set
-    [ ] quot-done set
-    forward
-    dup empty? [ <configuration> add-word { } ] unless
-    ;
+    quot-todo [ compose ] change
+    forward ;
+    ! dup empty? [ stack-out set { } ] unless ;
 
-: apply-quotation ( stack quot -- stack )
-    [ (apply-quotation) ] with-scope ;
+: stacks>effect ( in-stack out-stack -- effect )
+    [ [ f swap 2array ] map { } or ] bi@ <effect> ;
+
+: apply-quotation ( stack quot -- typed-call )
+    [
+        [ ] quot-todo set
+        [ ] quot-done set
+        stack-in off
+        (apply-quotation)
+        stack-in get swap
+        stacks>effect
+        quot-done get
+        <type-call>
+    ] with-scope ;
 
 M: object undo-word
+    dup unadd-word
     out-classes
     [ apply-declaration
       dup divergent-stack? [ divergent-undo ] when ]
     [ length head* ] bi ;
 
-! Inputs have been constrained already
-
-M: object do-word
+: do-value ( stack word -- stack )
     [ >value suffix ]
     [ add-word ] bi ;
-    ! [ n-in head* ]
-    ! [ out-classes [ decl>value suffix ] each ]
-    ! [ add-word ] tri ;
 
-! : maybe-fold ( stack word -- stack )
-!     dupd [ n-in macro-literals ] keep swap
-!     [  ]
+M: object do-word
+    do-value ;
+
+M: wrapper do-word
+    wrapped>> do-value ;
 
 : pop-macro-inputs ( stack n -- stack seq/f )
     2dup macro-literals
@@ -309,21 +326,17 @@ M: object do-word
     [ 2drop f ] if ;
 
 SYMBOL: word-stack
-! TODO: do we keep the configuration in the code?
 : do-inputs ( stack effect -- stack types )
     ! in>> length cut* <configuration> add-word ;
     in>> length cut* ;
 
-: do-outputs ( stack effect -- stack types )
-    effect-out-types [ decl>value ] map [ append ] keep ;
-
-: stacks>effect ( in-stack out-stack -- effect )
-    [ [ f swap 2array ] map ] bi@ <effect> ;
+: do-outputs ( stack word -- stack types )
+    out-classes [ decl>value ] map [ append ] keep ;
 
 :: do-static-effect ( stack word -- stack )
     word stack-effect :> e
     stack e do-inputs :> ( stack in-types )
-    stack e do-outputs :> ( stack out-types )
+    stack word do-outputs :> ( stack out-types )
     in-types out-types stacks>effect word 1quotation <type-call> add-word
     stack ;
     ! dup stack-effect
@@ -342,29 +355,41 @@ M: word do-word
 
 ! Invariant undo: If we could have produced the outputs, assume we did.
 ! Annotation is not done on the way back
-ERROR: incompatible-outputs ;
-: undo-outputs ( stack effect -- stack )
-    [ effect-out-types [ decl>value ] map stacks-intersect? ] 2keep rot
-    [ out>> length head* ]
+ERROR: incompatible-outputs stack types ;
+
+: undo-type-outputs ( stack types -- stack )
+    2dup stacks-intersect?
+    [ length head* ]
     [ incompatible-outputs ] if ;
 
-! Invariant undo: push unknown inputs.  Any declaration to refine this should
-! have been present in the forward direction
-: undo-inputs ( stack effect -- stack )
-    effect-in-types [ decl>value ] map append ;
+! : undo-effect-outputs ( stack effect -- stack )
+!     [ effect-out-types [ decl>value ] map stacks-intersect? ] 2keep rot
+!     [ out>> length head* ]
+!     [ incompatible-outputs ] if ;
 
-: undo-static-effect ( stack word -- stack )
-    dup stack-effect
-    [ nip undo-outputs ]
-    [ drop unadd-word ]
-    [ nip undo-inputs ] 2tri ;
+! ! Invariant undo: push unknown inputs.  Any declaration to refine this should
+! ! have been present in the forward direction
+! : undo-effect-inputs ( stack effect -- stack )
+!     effect-in-types [ decl>value ] map append ;
+
+! : undo-static-effect ( stack word -- stack )
+!     dup stack-effect
+!     [ nip undo-effect-outputs ]
+!     [ drop unadd-word ]
+!     [ nip undo-effect-inputs ] 2tri ;
+
+: spec>types ( seq -- seq )
+    [ dup pair? [ second ] when ] map ;
+
+M: static-type-call undo-word ( stack word -- stack )
+    [ type-spec>> out>> spec>types undo-type-outputs ]
+    [ quot>> quot-todo [ compose ] change ]
+    [ type-spec>> in>> spec>types append ] tri ;
 
 
-! M: word undo-word "undefined undo" 2array throw ;
-M: word undo-word
-    undo-static-effect ;
-    ! "undefined undo" 2array throw ;
-
+M: word undo-word "undefined undo" 2array throw ;
+! M: word undo-word
+!     undo-static-effect ;
 
 M: \ swap do-word
     dup add-word do-immediate ;
@@ -386,12 +411,6 @@ M: configuration do-word
 
 M: configuration undo-word
     apply-configuration ;
-
-    ! elements>> intersect-type-values
-    ! [ elements>> stacks-intersect? ] keep swap
-    ! [ length head* ]
-    ! [ quot-done get quot-todo get configuration-mismatch ] if ;
-
 
 ! * Abstracting the operations
 ! Folding: works each word from left to right, putting literals on the stack,
@@ -489,4 +508,4 @@ M: configuration undo-word
 ! * Interface
 
 : magic ( quot -- quot )
-    [ { } swap (apply-quotation) quot-done get ] with-scope nip ;
+    [ { } swap apply-quotation ] with-scope ;

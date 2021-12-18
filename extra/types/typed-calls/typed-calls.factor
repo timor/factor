@@ -27,14 +27,6 @@ M: object >type-call
     } cleave
     [ [ [ dup pair? [ first ] when ] dip 2array ] 2map ] 2bi@
     <effect> ;
-    ! [ stack-effect ]
-    ! [ in-classes ]
-    ! [ out-classes ] bi <effect> ;
-    ! stack-effect effect unboa
-    ! [
-    !     [ [ dup pair? [ first2 decl>value ]
-    !         [ <??> ] if 2array ] map ] bi@
-    ! ] 3dip effect boa ;
 
 : static-type-call ( word -- type-call )
     [ word>type-effect ]

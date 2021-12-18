@@ -107,19 +107,6 @@ M: \ interval apply-class-declaration
 M: \ interval class>domain-value drop
     class-invariant>interval ;
 
-
-: value-id>str ( value-id -- str )
-    dup ??? [ word-name* ]
-    [ {
-       { +undefined-value+ [ "?VAL" ] }
-       { scalar [ number>string ] }
-       { branched [ [ value-id>str ] [ number>string ] bi* "." glue ] }
-    } match ] if ;
-
-M: \ value-id pprint-domain-value* drop
-    ! "%u" sprintf ;
-    members [ value-id>str "#%s" sprintf ] map " " join "{" "}" surround ;
-
 ! Destructive
 : normalize-type-value ( type-value -- type-value )
     [ [ dup sequence? [ 1array ] unless ] assoc-map ] change-map ;
@@ -202,35 +189,36 @@ TYPED: with-domain-stacks ( values: type-stack quot-assoc -- values: type-stack 
         ] 2curry map-domains
     ] if ;
 
+: type-values-intersect? ( value1 value2 -- ? )
+    intersect-type-values divergent-type-value? not ;
+
 : intersect-type-stack ( stack values -- stack )
     [
         intersect-type-values
     ] 2map-suffix ;
 
-! * Value Ids
+! * (Moved, TBR) Value Ids
 ! Created for unknown values.  Dup'd values actually have the same id.
 ! Sets of values have conjunctive behavior, i.e. whatever is there has been part
 ! of these values.
 ! For unknown values we create an id but also leave the unknown type.  This
 ! ensures that we can propagate different values along later-on.
-M: \ value-id unknown-type-value
-    counter <scalar> ?? 2array >hash-set ;
-ERROR: incoherent-split-undo id1 id2 ;
-M: \ value-id type-value-undo-dup drop
-    2dup = [ drop ] [ incoherent-split-undo ] if ;
-M: \ value-id type-value-merge drop union-all ; ! NOTE: ?? is not a top value of the lattice.
-M: \ value-id type-value-undo-split type-value-merge ;
-M: \ value-id type-value-undo-merge drop intersect ;
-M: \ value-id value>type nip counter <scalar> 1array >hash-set ;
-M: \ value-id apply-class-declaration 2drop ;
-M: \ value-id domain-value-diverges?* drop null? ;
-M: \ value-id type-value-perform-split drop
-    [ members ] dip [ <branched> ] curry map >hash-set ;
-M: \ value-id class>domain-declaration drop length ?? <repetition> ;
-M: \ value-id apply-domain-declaration 2drop ;
-M: \ value-id class>domain-value nip unknown-type-value ;
-! M: \ value-id domain-intersects? drop intersects? ;
-M: \ value-id domain-intersect drop intersect ;
+! ERROR: incoherent-split-undo id1 id2 ;
+! M: \ value-id type-value-undo-dup drop
+!     2dup = [ drop ] [ incoherent-split-undo ] if ;
+! M: \ value-id type-value-merge drop union-all ; ! NOTE: ?? is not a top value of the lattice.
+! M: \ value-id type-value-undo-split type-value-merge ;
+! M: \ value-id type-value-undo-merge drop intersect ;
+! M: \ value-id value>type nip counter <scalar> 1array >hash-set ;
+! M: \ value-id apply-class-declaration 2drop ;
+! M: \ value-id domain-value-diverges?* drop null? ;
+! M: \ value-id type-value-perform-split drop
+!     [ members ] dip [ <branched> ] curry map >hash-set ;
+! M: \ value-id class>domain-declaration drop length ?? <repetition> ;
+! M: \ value-id apply-domain-declaration 2drop ;
+! M: \ value-id class>domain-value nip unknown-type-value ;
+! ! M: \ value-id domain-intersects? drop intersects? ;
+! M: \ value-id domain-intersect drop intersect ;
 
 ! * Class algebra
 M: \ class type-value-merge drop [ ] [ class-or ] map-reduce ;

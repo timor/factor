@@ -80,7 +80,7 @@ INSTANCE: \ class domain
 ! [ stack-effect effect-in-types ]
 ! [ drop f ] if ;
 
-: out-classes ( word -- n )
+: out-classes ( word -- seq )
     { [ "default-output-classes" word-prop? ]
       [ dup word? [ stack-effect out>> length object <repetition>
                   ] [ <wrapper> 1array ] if ]
@@ -95,11 +95,11 @@ INSTANCE: \ interval domain
 
 ! *** Value ids for intermediate results
 
-VARIANT: value-id
-    +undefined-value+
-    scalar: { id }
-    branched: { { base value-id } { branch-id } } ;
-INSTANCE: \ value-id domain
+! VARIANT: value-id
+!     +undefined-value+
+!     scalar: { id }
+!     branched: { { base value-id } { branch-id } } ;
+! INSTANCE: \ value-id domain
 
 ! *** Interfaces
 
@@ -189,6 +189,7 @@ M: effect type<= ( effect1 effect2 -- ? )
     { [ effect<= ]
       [ [ effect-in-types ] bi@ swap configuration<= ]
       [ [ effect-out-types ] bi@ configuration<= ] } 2&& ;
+
 
 
 GENERIC: type-or ( type type -- type )

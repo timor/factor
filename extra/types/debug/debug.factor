@@ -23,4 +23,5 @@ IN: types.debug
     { do-word undo-word apply-inputs } [ annotate-type-step ] each
     \ rewind watch
     \ forward dup '[ [ _ (forward.) ] prepose ] annotate
+    \ ?transform-word watch
     ;
