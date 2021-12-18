@@ -53,7 +53,11 @@ PRIVATE>
 M: effect pprint*
     pprint-effect ;
 
-M: configuration pprint* configuration>string text ;
+M: configuration pprint* pprint-object ;
+M: configuration >pprint-sequence elements>> ;
+DEFER: )
+M: configuration pprint-delims drop \ ( \ ) ;
+
 
 : ?effect-height ( word -- n )
     stack-effect [ effect-height ] [ 0 ] if* ;
