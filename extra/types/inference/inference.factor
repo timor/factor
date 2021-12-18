@@ -1,6 +1,7 @@
-USING: accessors arrays combinators.short-circuit continuations effects inverse
-kernel kernel.private make math namespaces persistent.vectors quotations
-sequences sets types.expander types.type-values types.util words ;
+USING: accessors arrays combinators combinators.short-circuit continuations
+effects inverse kernel kernel.private make math namespaces persistent.vectors
+quotations sequences types types.expander types.type-values types.typed-calls
+types.util words ;
 
 IN: types.inference
 
@@ -146,32 +147,12 @@ SYMBOL: folded?
 TUPLE: input id ;
 : <input> ( -- val ) input counter input boa ;
 
-! TODO: add cached types here
-: in-types ( word -- seq )
-    { [ "input-classes" word-prop? ]
-      [ dup word? [ stack-effect in>> length object <repetition> ] [ drop f ] if ]
-    } 1|| ;
-    ! dup { [ primitive? ] [ "input-classes" word-prop ] }
-    ! [ "input-classes" word ]
-    ! dup word?
-    ! [ stack-effect effect-in-types ]
-    ! [ drop f ] if ;
-
-: out-types ( word -- n )
-    { [ "default-output-classes" word-prop? ]
-      [ dup word? [ stack-effect out>> length object <repetition>
-                  ] [ <wrapper> 1array ] if ]
-    } 1|| ;
-    ! dup word?
-    ! [ stack-effect effect-out-types ]
-    ! [ <wrapper> 1array ] if ;
-
 : make-enough ( stack in-decls -- stack )
     dupd ?shorter
     [ [ <??> ] replicate prepend ] when* ;
 
 : constrain-inputs ( stack word -- stack )
-    in-types
+    in-classes
     [ make-enough ]
     [ apply-declaration ] bi ;
 
@@ -233,8 +214,56 @@ DEFER: apply-word
 
 GENERIC: do-word ( stack word -- stack )
 
+DEFER: apply-quotation
+
+: fold? ( word -- ? )
+    dup word?
+    [ { [ foldable? ]
+      [ "shuffle" word-prop? ]
+      } 1|| ]
+    [ drop f ] if ;
+
+: literal? ( obj -- ? )
+    { [ word? not ] [ type-call? not ] } 1&& ;
+
+: ?cut* ( seq n -- seq1 seq2/f )
+    over length over >=
+    [ cut* ]
+    [ drop f ] if ;
+
+: n-in ( x -- x )
+    in-classes length ;
+
+: fold-literals ( word -- seq/f )
+    dup fold?
+    [ n-in quot-done get swap ?cut*
+      [
+          dup [ literal? ] all?
+          [ swap quot-done set ]
+          [ 2drop f ] if
+      ] when* ]
+    [ drop f ] if
+    ;
+
+: kill-literals ( stack seq/f -- stack )
+    length head* ;
+
+: ?fold-word ( stack word -- stack quot/f )
+    dup fold-literals
+    [
+        [ nip kill-literals ]
+        [ swap 1quotation with-datastack [ literalize ] [ ] map-as ]
+        2bi
+    ]
+    [ drop f ] if* ;
+
+DEFER: (apply-quotation)
 : perform-word ( stack word -- stack )
-    do-word ;
+    [ ?fold-word ] keep swap
+    [ nip (apply-quotation) ]
+    [ do-word ] if* ;
+
+    ! do-word ;
     ! dupd do-word with-datastack ;
     ! 2dup type-expand
     ! [  ]
@@ -249,28 +278,25 @@ GENERIC: do-word ( stack word -- stack )
     quot-todo set
     [ ] quot-done set
     forward
-    <configuration> add-word { }
+    dup empty? [ <configuration> add-word { } ] unless
     ;
 
 : apply-quotation ( stack quot -- stack )
     [ (apply-quotation) ] with-scope ;
 
 M: object undo-word
-    out-types
+    out-classes
     [ apply-declaration
       dup divergent-stack? [ divergent-undo ] when ]
     [ length head* ] bi ;
 
 ! Inputs have been constrained already
 
-: n-in ( x -- x )
-    in-types length ;
-
 M: object do-word
     [ >value suffix ]
     [ add-word ] bi ;
     ! [ n-in head* ]
-    ! [ out-types [ decl>value suffix ] each ]
+    ! [ out-classes [ decl>value suffix ] each ]
     ! [ add-word ] tri ;
 
 ! : maybe-fold ( stack word -- stack )
@@ -283,56 +309,36 @@ M: object do-word
     [ 2drop f ] if ;
 
 SYMBOL: word-stack
-: fold? ( word -- ? )
-    { [ foldable? ]
-      [ "shuffle" word-prop? ]
-    } 1|| ;
-
-! :: ?fold-word ( stack word -- stack ? )
-!     word fold?
-!     [ word n-in :> n
-!       stack n pop-macro-inputs :> ( stack inputs )
-!       inputs
-!       [ word 1quotation with-datastack
-!         n cut-words
-!         [ literalize add-word ] each
-!       ]
-!       [ stack f ] if*
-!     ]
-!     [ stack f ] if ;
-!     ! dup fold?
-!     ! [ [ n-in pop-macro-inputs ] keep swap
-!     !   [ swap 1quotation with-datastack
-!     !     [ literalize add-word ] each
-!     !     t ]
-!     !   [ drop f ] if* ]
-!     ! [ drop f ] if ;
-
 ! TODO: do we keep the configuration in the code?
-: do-inputs ( stack effect -- stack )
-    in>> length cut* <configuration> add-word ;
+: do-inputs ( stack effect -- stack types )
+    ! in>> length cut* <configuration> add-word ;
+    in>> length cut* ;
 
-: do-outputs ( stack effect -- stack )
-    effect-out-types [ decl>value ] map append ;
+: do-outputs ( stack effect -- stack types )
+    effect-out-types [ decl>value ] map [ append ] keep ;
 
-: do-static-effect ( stack word -- stack )
-    dup stack-effect
-    [ nip do-inputs ]
-    [ drop add-word ]
-    [ nip do-outputs ] 2tri ;
+: stacks>effect ( in-stack out-stack -- effect )
+    [ [ f swap 2array ] map ] bi@ <effect> ;
+
+:: do-static-effect ( stack word -- stack )
+    word stack-effect :> e
+    stack e do-inputs :> ( stack in-types )
+    stack e do-outputs :> ( stack out-types )
+    in-types out-types stacks>effect word 1quotation <type-call> add-word
+    stack ;
+    ! dup stack-effect
+    ! [ nip do-inputs ]
+    ! [ drop add-word ]
+    ! [ nip do-outputs ] 2tri
+    ! ;
+
+: do-immediate ( stack word -- stack )
+    1quotation with-datastack ;
 
 M: word do-word
-    ! dup word-stack get in? [ "recursive" 2array throw ] when
-    ! word-stack get over suffix word-stack [
-        do-static-effect
-    ;
-    ! ] with-variable ;
-    ! [ ?fold-word ] keep swap
-    ! [ drop ]
-    ! [
-    !       word-stack get over suffix word-stack
-    !       [ def>> apply-quotation ] with-variable
-    ! ] if ;
+    { { [ dup "shuffle" word-prop ] [ dup add-word do-immediate ] }
+      [ do-static-effect  ]
+    } cond ;
 
 ! Invariant undo: If we could have produced the outputs, assume we did.
 ! Annotation is not done on the way back
@@ -360,9 +366,6 @@ M: word undo-word
     ! "undefined undo" 2array throw ;
 
 
-: do-immediate ( stack word -- stack )
-    1quotation with-datastack ;
-
 M: \ swap do-word
     dup add-word do-immediate ;
 
@@ -389,11 +392,6 @@ M: configuration undo-word
     ! [ length head* ]
     ! [ quot-done get quot-todo get configuration-mismatch ] if ;
 
-
-! Interface
-
-: magic ( quot -- quot )
-    [ { } swap (apply-quotation) quot-done get ] with-scope nip ;
 
 ! * Abstracting the operations
 ! Folding: works each word from left to right, putting literals on the stack,
@@ -457,4 +455,38 @@ M: configuration undo-word
 ! on the stack.  This actually really removes the word from the code, along with
 ! the corresponding inputs on the stack
 
-! * Type configuration annotation
+! It is still possible to do this on the type stack, though.  We would simply
+! not add any stack literals to the quotation until we hit a non-foldable call.
+
+! The corresponding algorithm:
+! State: typestack, todo-quot, done-quot
+! 1. For each word in todo-quot:
+!    - Apply the word inputs to the current stack.  If they changed, rewind
+!    - Otherwise
+!      1. If the word is an object, push its type, add it to done-quot
+!      2. Try folding:
+!         - If the word is foldable
+!           - Try to take the literals from done-quot, removing them, drop corresponding elements
+!             from the type stack
+!           - Run the word on the literals, quotationize, recurse
+!      3. Else if the word has a transformation
+!         - Try to take the literals from done-quot, not removing them
+!         - Compute the equivalent definition, prepend droppers, recurse
+!         - This includes inline words
+!      4. Else if the word has a type-based transformation
+!         - Same thing as above
+!      5. Otherwise
+!         - Compute a typed word call, append it to the quotation
+
+
+! * Type transfers
+! Operations that are applied to the type stack.  For static primitive words,
+! this amounts to caching a configuration that is inserted
+
+! : add-types ( quotation -- quotation )
+!     [ >type-call ] map ;
+
+! * Interface
+
+: magic ( quot -- quot )
+    [ { } swap (apply-quotation) quot-done get ] with-scope nip ;

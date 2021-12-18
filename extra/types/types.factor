@@ -1,5 +1,6 @@
-USING: accessors classes classes.algebra classes.tuple combinators.short-circuit
-effects kernel math.intervals quotations sequences variants words ;
+USING: accessors arrays assocs classes classes.algebra classes.tuple
+combinators.short-circuit effects kernel math.intervals sequences variants words
+;
 
 IN: types
 ! USE: types.transitions.known-words
@@ -67,6 +68,26 @@ GENERIC: domain-intersect ( val1 val2 domain -- val )
 ! *** Factor classes/classoids
 
 INSTANCE: \ class domain
+
+! TODO: add cached types here?
+: in-classes ( word -- seq )
+    { [ "input-classes" word-prop? ]
+      [ dup word? [ stack-effect in>> length object <repetition> ] [ drop f ] if ]
+    } 1|| ;
+! dup { [ primitive? ] [ "input-classes" word-prop ] }
+! [ "input-classes" word ]
+! dup word?
+! [ stack-effect effect-in-types ]
+! [ drop f ] if ;
+
+: out-classes ( word -- n )
+    { [ "default-output-classes" word-prop? ]
+      [ dup word? [ stack-effect out>> length object <repetition>
+                  ] [ <wrapper> 1array ] if ]
+    } 1|| ;
+! dup word?
+! [ stack-effect effect-out-types ]
+! [ <wrapper> 1array ] if ;
 
 ! *** Interval arithmetic
 
