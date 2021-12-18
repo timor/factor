@@ -24,3 +24,17 @@ M: mapped nth-unsafe
         cut-slice swap
     ] dip swap
     [ 2map ] dip prepend ; inline
+
+: each-with-rest ( ... seq quot: ( ... rest elt -- ... ) -- ... )
+    [ [ length ] keep ] dip
+    '[
+        _ [ swap tail-slice ] [ nth ] 2bi @
+    ] each-integer ; inline
+
+: ?shorter ( seq1 <seq2 -- n/f )
+    2dup shorter?
+    [ [ length ] bi@ swap - ]
+    [ 2drop f ] if ;
+
+: ?missing ( seq n -- seq n/f )
+    dupd [ length ] dip - dup 0 < [ neg ] [ drop f ] if ;

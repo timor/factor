@@ -1,8 +1,8 @@
 USING: accessors arrays assocs assocs.extras classes classes.algebra columns
 combinators continuations effects generalizations kernel kernel.private math
 math.parser namespaces quotations sequences sets shuffle strings typed types
-types.bidi types.expander types.parametric.effects types.protocols
-types.type-values words ;
+types.bidi types.parametric.effects types.protocols types.type-values types.util
+words ;
 
 IN: types.transitions
 
@@ -137,11 +137,6 @@ ERROR: non-literal-call ;
 ! provided it
 ERROR: call-effect-without-effect ;
 ERROR: invalid-call-effect-effect thing ;
-
-! Returns pairs { declarations type-values }
-: effect>class/type-values ( effect -- in-values out-values )
-    [ in>> ] [ out>> ] bi
-    [ [ dup pair? [ second ] [ drop ?? ] if dup decl>value 2array ] map ] bi@ ;
 
 ! call-effect forward-transfers:
 ! ..a callable effect → ..b
@@ -315,12 +310,6 @@ DEFER: stacks>effect
     stack-id-out set
     compute-call-effect
     ;
-
-: each-with-rest ( ... seq quot: ( ... rest elt -- ... ) -- ... )
-    [ [ length ] keep ] dip
-    '[
-        _ [ swap tail-slice ] [ nth ] 2bi @
-    ] each-integer ; inline
 
 : apply-quotation-transfer ( state-in code -- state-out )
     [| c state-in code |

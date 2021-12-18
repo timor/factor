@@ -1,8 +1,7 @@
-USING: accessors arrays assocs assocs.extras classes classes.algebra columns
-combinators combinators.smart compiler.tree.propagation.info continuations
-effects generalizations generic.math grouping hash-sets kernel kernel.private
-math math.intervals namespaces quotations sequences sequences.generalizations
-sets types types.bidi types.type-values types.util words ;
+USING: accessors arrays assocs classes classes.algebra columns combinators
+combinators.smart continuations effects generalizations kernel kernel.private
+math namespaces quotations sequences sequences.generalizations sets types
+types.bidi types.transfers types.type-values words ;
 
 IN: types.protocols
 ! * Type normalization protocols
@@ -25,20 +24,6 @@ IN: types.protocols
 ! Reflective!
 ! : [??] ( -- type-value )
 !     <??> <??> f <transition> >value ;
-
-! Container to hold accumulated inference state
-TUPLE: transfer
-    records
-    transfer-quots
-    undo-quots
-    id-in
-    id-out ;
-
-: transfer-in/out ( transfer -- in out )
-    transfer-quots>> values
-    [ inputs/outputs 2array ] map <flipped>
-    first2 2dup [ all-equal? ] both? [ "unbalanced-branch-transfer" 3array throw ] unless
-    [ first ] bi@ ;
 
 ! For inferring row effects
 : <transfer> ( records transfer-quotes undo-quots -- obj )
@@ -70,7 +55,6 @@ TUPLE: transfer
 GENERIC: primitive-transfer ( state-in primitive domain -- transfer-quot )
 ! NOTE: undos are not assumed to be undoable right now...
 GENERIC: primitive-undo ( state-in primitive domain -- undo-quot )
-M: domain value>type 2drop ?? ;
 
 ! There is access to a branch-id for identification
 : branch-id ( -- id )
@@ -82,7 +66,7 @@ GENERIC: type-values-intersect? ( type-value1 type-value2 domain -- ? )
 GENERIC: top-type-value ( domain -- object )
 
 ! Used for inputs
-M: domain unknown-type-value drop ?? ;
+! M: domain unknown-type-value drop ?? ;
 
 ERROR: undefined-primitive-type-transfer state-in primitive domain ;
 ERROR: undefined-primitive-type-undo state-in primitive domain ;
@@ -285,7 +269,7 @@ SINGLETON: +bottom+
 
 : all-parallel>merge ( transfers -- quots-assoc )
     [| dom transfers |
-     transfers dup first transfer-in/out :> ( in out )
+     transfers dup first [ in>> ] [ out>> ] bi :> ( in out )
      [ transfer-quots>> dom of ] map in out dom parallel>merge
     ] curry map-domains ;
 
@@ -333,95 +317,16 @@ SINGLETON: +bottom+
 : all-parallel<unsplit ( out-states transfers -- quots-assoc )
     [| dom branch-states branch-transfers |
      branch-states [ [ dom of ] map ] map :> domain-states
-     branch-transfers dup first transfer-in/out :> ( out in )
+     branch-transfers dup first [ in>> ] [ out>> ] bi :> ( out in )
      [ undo-quots>> dom of ] map domain-states out in dom
      parallel<unsplit
     ] 2curry map-domains ;
-
-! * Value Ids
-! Created for unknown values.  Dup'd values actually have the same id.
-! Sets of values have conjunctive behavior, i.e. whatever is there has been part
-! of these values.
-! For unknown values we create an id but also leave the unknown type.  This
-! ensures that we can propagate different values along later-on.
-M: \ value-id unknown-type-value
-    counter <scalar> ?? 2array >hash-set ;
-ERROR: incoherent-split-undo id1 id2 ;
-M: \ value-id type-value-undo-dup drop
-    2dup = [ drop ] [ incoherent-split-undo ] if ;
-M: \ value-id type-value-merge drop union-all ; ! NOTE: ?? is not a top value of the lattice.
-M: \ value-id type-value-undo-split type-value-merge ;
-M: \ value-id type-value-undo-merge drop intersect ;
-M: \ value-id value>type nip counter <scalar> 1array >hash-set ;
-M: \ value-id apply-class-declaration 2drop ;
-M: \ value-id domain-value-diverges?* drop null? ;
-M: \ value-id type-value-perform-split drop
-    [ members ] dip [ <branched> ] curry map >hash-set ;
-M: \ value-id class>domain-declaration drop length ?? <repetition> ;
-M: \ value-id apply-domain-declaration 2drop ;
-M: \ value-id class>domain-value nip unknown-type-value ;
-
-! * Class algebra
-GENERIC: class-primitive-transfer ( state-in primitive -- transfer-quot/f )
-M: object class-primitive-transfer 2drop f ;
-M: \ class type-value-merge drop [ ] [ class-or ] map-reduce ;
-M: \ class type-value-undo-merge drop class-and ;
-M: \ class type-value-undo-dup drop [ class-and ] and-unknown ;
-M: \ class value>type drop <wrapper> ;
-M: \ class primitive-transfer
-    [ 2dup class-primitive-transfer ] dip swap [ 3nip ] [ call-next-method ] if* ;
-
-! NOTE: Concretization necessary here?
-M: \ class apply-class-declaration drop
-    [ [ class-and ] and-unknown ] 2map-suffix ;
-M: \ class domain-value-diverges?* drop null = ;
-M: \ class bottom-type-value drop null ;
-M: \ class type-value-undo-split type-value-merge ;
-M: \ class class>domain-declaration drop ;
-M: \ class apply-domain-declaration drop
-    [ class-and ] and-unknown ;
-! TODO: any concretization necessary?
-M: \ class class>domain-value drop ;
-
-! * Interval computations
-M: \ interval type-value-merge drop [ ] [ [ interval-union ] or-unknown ] map-reduce ;
-M: \ interval type-value-undo-merge drop [ interval-intersect ] and-unknown ;
-! NOTE: backwards assumption propagation creates union behavior here? Is that
-! correct?  In case of class, the value could not have disjoint classes to be
-! valid in different branches.  However, the same is absolutely not true for intervals...
-! TODO: this could be a point to inject polyhedral propagation?
-! No, just seems to be wrong...
-! M: \ interval type-value-undo-dup drop interval-union ;
-M: \ interval type-value-undo-dup drop [ interval-intersect ] and-unknown ;
-M: \ interval value>type
-    over number? [ drop [a,a] ] [ call-next-method ] if ;
-M: \ interval domain-value-diverges?* drop empty-interval = ;
-M: \ interval type-value-undo-split
-    type-value-merge ;
 
 ! TODO: Concretize correctly according to variance!
 ! In the first approximation, only invariant conversions are safe.
 ! GENERIC: invariant>interval ( obj domain -- interval )
 ! M: domain invariant>interval 2drop ?? ;
 ! Delegate to classoid value
-GENERIC: class-invariant>interval ( classoid -- interval )
-
-M: classoid class-invariant>interval drop ?? ;
-M: math-class class-invariant>interval class-interval ;
-M: wrapper class-invariant>interval wrapped>>
-    interval value>type ;
-M: \ interval class>domain-declaration drop
-    [ class-invariant>interval ] map ;
-M: \ interval apply-domain-declaration drop
-    [ interval-intersect ] and-unknown ;
-M: \ interval apply-class-declaration
-    [ class>domain-declaration ] keep
-    '[
-        _ apply-domain-declaration
-        ! [ interval-intersect ] and-unknown
-    ] 2map-suffix ;
-M: \ interval class>domain-value drop
-    class-invariant>interval ;
 
 ! * Interfaces
 ! Normal form: Union of intersections
@@ -508,12 +413,8 @@ M: \ effect domain-value-diverges?* 2drop f ;
 
 ! : declare-transition ( domain-value domain-decl -- domain-value )
 
-! * Slots:
-! Carry over complete computation history!!!!!!!
+GENERIC: class-primitive-transfer ( state-in primitive -- transfer-quot/f )
+M: object class-primitive-transfer 2drop f ;
 
-! ! * Relations
-! ! These are going to be hard because we need to be able to transfer them
-! ! locally.
-! ! Could possibly be represented by tuples of relative numbers?
-! M: \ relation domain-value-diverges?* 2drop f ;
-! M: \ relation apply-class-declaration 2drop ;
+M: \ class primitive-transfer
+    [ 2dup class-primitive-transfer ] dip swap [ 3nip ] [ call-next-method ] if* ;

@@ -1,6 +1,6 @@
 USING: accessors arrays assocs classes classes.algebra classes.algebra.private
-combinators continuations effects generalizations kernel kernel.private
-macros.expander math memoize namespaces quotations sequences sets words ;
+combinators continuations effects generalizations inverse kernel kernel.private
+macros.expander math memoize quotations sequences sets words ;
 
 IN: types.expander
 
@@ -37,7 +37,8 @@ ERROR: static-macro-expansion-error inputs macro-quot error ;
     ! must-inline? on
     ;
 
-MEMO: type-expand-macro ( state-in macro -- code )
+! MEMO: type-expand-macro ( state-in macro -- code )
+: type-expand-macro ( state-in macro -- code )
     [ nip macro-quot ]
     [ macro-effect macro-literals ] 2bi
     [ swap expand-static-macro ]
@@ -86,3 +87,17 @@ M: \ call type-expand* drop
 ! : declare-dropper ( effect-elements -- quot )
 !     [ dup pair? [ second ] [ drop ?? ] if ] map
 !     [ [ declare ] curry ] [ length [ drop ] n*quot ] bi compose ;
+: (expand-commutative) ( a b -- quot/f )
+    {
+        { [ [ <wrapper> ] bi@ ]
+          [ [  ] 2curry [ 2drop ] prepose ] }
+        { [ <wrapper> swap ] [ nip 1quotation [ swap drop ] prepose ] }
+        { [  ] [ 2drop f ] }
+    } switch ;
+
+: expand-commutative ( stack word -- quot/f )
+    [ [ (expand-commutative) ] with-datastack last ] dip swap
+    [ 1quotation compose ]
+    [ drop f ] if* ;
+
+! M: \ + type-expand*

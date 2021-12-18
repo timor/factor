@@ -7,13 +7,17 @@ IN: types
 ! * Abstract Domains
 MIXIN: domain
 
-! Hacky...
+! Hacky...?
 : all-domains ( -- classes )
     domain class-members [ wrapped>> ] map ;
 
+: map-domains ( quot: ( ..a key -- ..b elt ) -- assoc )
+    all-domains [ swap keep swap ] with
+    H{ } map>assoc ; inline
 
 ! ** Domain-specific operations
 GENERIC: value>type ( value domain -- domain-value )
+M: domain value>type 2drop ?? ;
 GENERIC: unknown-type-value ( domain -- domain-value )
 GENERIC: apply-class-declaration ( domain-values decl-spec domain -- domain-value )
 GENERIC: apply-domain-declaration ( domain-value domain-decl domain -- domain-value )
@@ -43,6 +47,10 @@ GENERIC: type-value-undo-dup ( v> <v' domain -- v< )
 
 ! Used for returning domain neutral union element
 GENERIC: bottom-type-value ( domain -- object )
+
+! Check if values are compatible
+! GENERIC: domain-intersects? ( val1 val2 domain -- ? )
+GENERIC: domain-intersect ( val1 val2 domain -- val )
 
 ! Covariant concretization
 : and-unknown ( type1 type2 quot: ( type1 type2 -- type ) -- type )
@@ -74,6 +82,10 @@ INSTANCE: \ value-id domain
 
 ! *** Interfaces
 
+MIXIN: interface
+INSTANCE: effect interface
+! INSTANCE: \ interface domain
+! effect transfer ;
 ! INSTANCE: \ effect domain
 
 ! ** Access to the type stack
