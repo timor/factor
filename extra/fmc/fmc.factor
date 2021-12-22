@@ -1,5 +1,5 @@
-USING: accessors arrays combinators effects kernel namespaces quotations
-sequences sets strings typed types.util variants words ;
+USING: accessors arrays combinators compiler.tree.debugger effects kernel
+namespaces quotations sequences sets strings typed types.util variants words ;
 
 IN: fmc
 
@@ -23,15 +23,17 @@ VARIANT: fmc-term
     ;
 
 SINGLETON: +retain+
-PREDICATE: fmc-seq < sequence [ fmc-term? ] all? ;
+UNION: fmc-seq-term sequence fmc-term ;
+PREDICATE: fmc-seq < sequence [ fmc-seq-term? ] all? ;
 UNION: fmc-proper +unit+ ! fmc-const
     fmc-var fmc-appl fmc-abs ;
 UNION: fmc fmc-seq fmc-proper ;
 
 GENERIC: >fmc* ( object -- term: fmc )
-M: object >fmc* <fmc-prim> 1array ;
+TYPED: <fmc-const> ( obj -- e: fmc-seq ) <fmc-prim> 1array ;
+M: object >fmc* <fmc-const> ;
 
-M: quotation >fmc* [ >fmc* ] map concat ;
+M: quotation >fmc* [ >fmc* ] map concat 1array ;
 PREDICATE: shuffle-word < word "shuffle" word-prop ;
 
 SYMBOL: word-stack
@@ -64,13 +66,32 @@ ERROR: recursive-fmc word ;
 TYPED: word>fmc ( word -- term: fmc )
     dup word-stack get in? [ recursive-fmc ] when
     { { [ dup shuffle-word? ] [ shuffle>fmc ] }
-      { [ dup primitive? ] [ <fmc-prim> 1array ] }
+      { [ dup primitive? ] [ <fmc-const> ] }
+      { [ dup { call } in? ] [ <fmc-const> ] }
       [ word-stack get over suffix word-stack
         [ exec>fmc ] with-variable ]
     } cond ;
 
 M: word >fmc*
     word>fmc ;
+
+! * Special primitives
+
+M: \ dip >fmc* drop
+    [ >R call R> ] >fmc* ;
+
+M: \ >R >fmc* drop
+    "v" uvar <varname>
+    [ f <loc-pop> ]
+    [ +retain+ <loc-push> ] bi 2array ;
+
+M: \ R> >fmc* drop
+    "v" uvar <varname>
+    [ +retain+ <loc-pop> ]
+    [ f <loc-push> ] bi 2array ;
+
+
+! * Term operations
 
 ! Compose N;M -> (N.M)
 DEFER: subst-fmc
@@ -105,22 +126,32 @@ TYPED:: subst-fmc ( m: fmc-proper v: fmc-var n: fmc-proper -- m/xn: fmc-proper )
     } match ;
 
 ERROR: invalid-fmc-seq ;
-TYPED: fmc-seq>proper ( seq: fmc-seq -- term: fmc-proper )
+TYPED: seq>proper ( seq: fmc-seq -- term: fmc-proper )
     [ +unit+ ]
     [ unclip-slice
       {
           { +unit+ [ invalid-fmc-seq ] }
-          { varname [ <varname> [ fmc-seq>proper ] dip <fmc-var> ] }
-          { loc-push [ <loc-push> [ fmc-seq>proper ] dip <fmc-appl> ] }
-          { loc-pop [ <loc-pop> [ fmc-seq>proper ] dip <fmc-abs> ] }
-          { fmc-prim [ <fmc-prim> [ fmc-seq>proper ] dip <fmc-var> ] }
+          { varname [ <varname> [ seq>proper ] dip <fmc-var> ] }
+          { loc-push [ <loc-push> [ seq>proper ] dip <fmc-appl> ] }
+          { loc-pop [ <loc-pop> [ seq>proper ] dip <fmc-abs> ] }
+          { fmc-prim [ <fmc-prim> [ seq>proper ] dip <fmc-var> ] }
           ! TODO: support composition
-          [ invalid-fmc-seq ]
+          [ dup sequence? [ [ seq>proper ] bi@ f <loc-push> <fmc-appl> ]
+            [ invalid-fmc-seq ] if ]
       } match
     ] if-empty ;
 
 TYPED: >fmc ( obj -- term: fmc-proper )
-    >fmc* fmc-seq>proper ;
+    >fmc* first
+    seq>proper ;
+
+TYPED: proper>seq ( term: fmc-proper -- seq: fmc-seq )
+    {
+        { +unit+ [ f ] }
+        { fmc-var [ [ proper>seq ] dip prefix ] }
+        { fmc-abs [ [ proper>seq ] dip prefix ] }
+        { fmc-appl [ [ proper>seq ] dip prefix ] }
+    } match ;
 
 ! * Beta reduction
 ! Walk from left to right through expression
