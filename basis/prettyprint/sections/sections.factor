@@ -181,7 +181,9 @@ TUPLE: block < section sections ;
 : end-group ( -- )
     last-section t >>end-group? drop ;
 
-: advance ( section -- )
+GENERIC: advance ( section -- )
+
+M: section advance
     {
         [ start>> pprinter get last-newline>> = not ]
         [ short-section? ]
