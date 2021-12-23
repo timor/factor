@@ -78,7 +78,7 @@ M: word >fmc*
 ! * Special primitives
 
 M: \ dip >fmc* drop
-    [ >R call R> ] >fmc* ;
+    [ swap >R call R> ] >fmc* first ;
 
 M: \ >R >fmc* drop
     "v" uvar <varname>
