@@ -5,33 +5,33 @@ IN: fmc
 
 ! * Willem Heijltjes Functional Machine Calculus
 
-! VARIANT: lc-term
-!     lc-appl: { left right }
-!     lc-abstr: { var body }
-! Two ways of representing: ordered list of term-parts
-! Composition of objects
+! Two ways of representing: ordered list of term-parts, or tree of binary terms
+
+TUPLE: varname { name string } ;
+C: <varname> varname
+TUPLE: fmc-prim obj ;
+C: <fmc-prim> fmc-prim
+TUPLE: loc-push body { loc maybe{ word } } ;
+C: <loc-push> loc-push
+TUPLE: loc-pop { var maybe{ varname } } { loc maybe{ word } } ;
+C: <loc-pop> loc-pop
+
 VARIANT: fmc-term
     +unit+
-    varname: { { name string } }
-    loc-push: { body { loc maybe{ word } } }
-    loc-pop: { { var maybe{ varname } } { loc maybe{ word } } }
-    fmc-prim: { obj }
     fmc-var: { { cont fmc-term } { var maybe{ union{ varname fmc-prim } } } }
-    ! fmc-const: { { prim fmc-prim } { cont fmc-term } }
     fmc-appl: { { cont fmc-term } { push loc-push } }
     fmc-abs: { { cont fmc-term } { pop loc-pop } }
     ;
 
 SINGLETON: +retain+
-UNION: fmc-seq-term sequence fmc-term ;
+UNION: fmc-seq-term fmc-term varname fmc-prim loc-push loc-pop ;
 PREDICATE: fmc-seq < sequence [ fmc-seq-term? ] all? ;
-UNION: fmc-proper +unit+ ! fmc-const
-    fmc-var fmc-appl fmc-abs ;
-UNION: fmc fmc-seq fmc-proper ;
+UNION: fmc fmc-seq fmc-term ;
 
 GENERIC: >fmc* ( object -- term: fmc )
-TYPED: <fmc-const> ( obj -- e: fmc-seq ) <fmc-prim> 1array ;
-M: object >fmc* <fmc-const> ;
+TYPED: <const> ( obj -- e: fmc-seq ) <fmc-prim> 1array ;
+M: object >fmc* <const> ;
+PREDICATE: fmc-const < fmc-var var>> fmc-prim? ;
 
 M: quotation >fmc* [ >fmc* ] map concat 1array ;
 PREDICATE: shuffle-word < word "shuffle" word-prop ;
@@ -50,11 +50,11 @@ TYPED: word-intro ( word -- term: fmc )
 ! TODO: recursive
 ! TYPED: recursive>fmc ( word -- term: fmc )
 
-TYPED: exec>fmc ( word -- term: fmc )
+TYPED: exec>fmc ( word -- term: fmc-seq )
     [ word-intro ]
-    [ def>> >fmc* ] bi append ;
+    [ def>> >fmc* first ] bi append ;
 
-TYPED: shuffle>fmc ( word -- term: fmc )
+TYPED: shuffle>fmc ( word -- term: fmc-seq )
     "shuffle" word-prop
     [ in>> ] [ out>> ] bi uvar-shuffle
     [ [ <varname> ] map ] bi@
@@ -66,8 +66,8 @@ ERROR: recursive-fmc word ;
 TYPED: word>fmc ( word -- term: fmc )
     dup word-stack get in? [ recursive-fmc ] when
     { { [ dup shuffle-word? ] [ shuffle>fmc ] }
-      { [ dup primitive? ] [ <fmc-const> ] }
-      { [ dup { call } in? ] [ <fmc-const> ] }
+      { [ dup primitive? ] [ <const> ] }
+      { [ dup { call } in? ] [ <const> ] }
       [ word-stack get over suffix word-stack
         [ exec>fmc ] with-variable ]
     } cond ;
@@ -103,14 +103,14 @@ TYPED: fresh-pop-subst ( pop: loc-pop -- fresh: fmc-var old: fmc-var pop': loc-p
     dup fresh-pop
     [ [ var>> ] bi@ ] keep ;
 
-TYPED: compose-fmc ( m: fmc-proper n: fmc-proper -- n.m: fmc-proper )
+TYPED: compose-fmc ( m: fmc-term n: fmc-term -- n.m: fmc-term )
     { { +unit+ [ ] }
       { fmc-var [ [ compose-fmc ] dip <fmc-var> ] }
       { fmc-appl [ [ compose-fmc ] dip <fmc-appl> ] }
       { fmc-abs [ fresh-pop-subst [ rot subst-fmc compose-fmc ] dip <fmc-abs> ] }
     } match ;
 
-TYPED:: subst-fmc ( m: fmc-proper v: fmc-var n: fmc-proper -- m/xn: fmc-proper )
+TYPED:: subst-fmc ( m: fmc-term v: fmc-var n: fmc-term -- m/xn: fmc-term )
     n { { +unit+ [ +unit+ ] }
       { fmc-var [| cont name | name v name>> = [ m m v cont subst-fmc compose-fmc ]
                  [ m v cont subst-fmc name <fmc-var> ] if
@@ -126,26 +126,33 @@ TYPED:: subst-fmc ( m: fmc-proper v: fmc-var n: fmc-proper -- m/xn: fmc-proper )
     } match ;
 
 ERROR: invalid-fmc-seq ;
-TYPED: seq>proper ( seq: fmc-seq -- term: fmc-proper )
+
+GENERIC: seq-term>proper ( seq: fmc-seq-term -- term: fmc-term )
+! TYPED: seq>proper ( seq: fmc-seq -- term: fmc-term )
+TYPED: seq>proper ( seq: sequence -- term: fmc-term )
     [ +unit+ ]
     [ unclip-slice
       {
           { +unit+ [ invalid-fmc-seq ] }
-          { varname [ <varname> [ seq>proper ] dip <fmc-var> ] }
-          { loc-push [ <loc-push> [ seq>proper ] dip <fmc-appl> ] }
-          { loc-pop [ <loc-pop> [ seq>proper ] dip <fmc-abs> ] }
-          { fmc-prim [ <fmc-prim> [ seq>proper ] dip <fmc-var> ] }
-          ! TODO: support composition
-          [ dup sequence? [ [ seq>proper ] bi@ f <loc-push> <fmc-appl> ]
+          { varname [ <varname> [ seq-term>proper ] dip <fmc-var> ] }
+          { loc-push [ <loc-push> [ seq-term>proper ] dip <fmc-appl> ] }
+          { loc-pop [ <loc-pop> [ seq-term>proper ] dip <fmc-abs> ] }
+          { fmc-prim [ <fmc-prim> [ seq-term>proper ] dip <fmc-var> ] }
+          [ dup sequence? [ [ seq-term>proper ] bi@ f <loc-push> <fmc-appl> ]
             [ invalid-fmc-seq ] if ]
       } match
     ] if-empty ;
 
-TYPED: >fmc ( obj -- term: fmc-proper )
-    >fmc* first
-    seq>proper ;
+M: sequence seq-term>proper seq>proper ;
+M: fmc-seq-term seq-term>proper
+    1array seq>proper ;
 
-TYPED: proper>seq ( term: fmc-proper -- seq: fmc-seq )
+TYPED: >fmc ( obj -- term: fmc-term )
+    [ >fmc* first
+      seq-term>proper ] with-var-names ;
+
+! FIXME
+TYPED: proper>seq ( term: fmc-term -- seq: fmc-seq )
     {
         { +unit+ [ f ] }
         { fmc-var [ [ proper>seq ] dip prefix ] }
