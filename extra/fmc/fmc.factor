@@ -1,4 +1,4 @@
-USING: accessors arrays combinators compiler.tree.debugger effects kernel
+USING: accessors arrays assocs combinators compiler.tree.debugger effects kernel
 namespaces quotations sequences sets strings typed types.util variants words ;
 
 IN: fmc
@@ -26,9 +26,9 @@ VARIANT: fmc-term
 SINGLETON: +retain+
 UNION: fmc-seq-term fmc-term varname fmc-prim loc-push loc-pop ;
 PREDICATE: fmc-seq < sequence [ fmc-seq-term? ] all? ;
-UNION: fmc fmc-seq fmc-term ;
+UNION: fmc fmc-seq-term fmc-term ;
 
-GENERIC: >fmc* ( object -- term: fmc )
+GENERIC: >fmc* ( object -- term: fmc-seq )
 TYPED: <const> ( obj -- e: fmc-seq ) <fmc-prim> 1array ;
 M: object >fmc* <const> ;
 PREDICATE: fmc-const < fmc-var var>> fmc-prim? ;
@@ -38,7 +38,7 @@ PREDICATE: shuffle-word < word "shuffle" word-prop ;
 
 SYMBOL: word-stack
 
-TYPED: word-intro ( word -- term: fmc )
+TYPED: word-intro ( word -- term: fmc-seq )
     stack-effect effect-in-names
     [ uvar <varname> ] map
     [ [ f <loc-pop> ] map ]
@@ -63,7 +63,7 @@ TYPED: shuffle>fmc ( word -- term: fmc-seq )
 
 ERROR: recursive-fmc word ;
 
-TYPED: word>fmc ( word -- term: fmc )
+TYPED: word>fmc ( word -- term: fmc-seq )
     dup word-stack get in? [ recursive-fmc ] when
     { { [ dup shuffle-word? ] [ shuffle>fmc ] }
       { [ dup primitive? ] [ <const> ] }
@@ -94,36 +94,67 @@ M: \ R> >fmc* drop
 ! * Term operations
 
 ! Compose N;M -> (N.M)
-DEFER: subst-fmc
+DEFER: (subst-fmc)
 TYPED: <fresh> ( n: varname -- n': varname )
     name>> uvar <varname> ;
 TYPED: fresh-pop ( pop: loc-pop -- pop': loc-pop )
     loc-pop unboa [ <fresh> ] dip loc-pop boa ;
-TYPED: fresh-pop-subst ( pop: loc-pop -- fresh: fmc-var old: fmc-var pop': loc-pop )
+TYPED: fresh-pop-subst ( pop: loc-pop -- old: varname fresh: varname pop': loc-pop )
     dup fresh-pop
-    [ [ var>> ] bi@ ] keep ;
+    [ [ var>> ] bi@ swap ] keep ;
 
-TYPED: compose-fmc ( m: fmc-term n: fmc-term -- n.m: fmc-term )
+TYPED: (compose-fmc) ( m: fmc-term n: fmc-term -- n.m: fmc-term )
     { { +unit+ [ ] }
-      { fmc-var [ [ compose-fmc ] dip <fmc-var> ] }
-      { fmc-appl [ [ compose-fmc ] dip <fmc-appl> ] }
-      { fmc-abs [ fresh-pop-subst [ rot subst-fmc compose-fmc ] dip <fmc-abs> ] }
+      { fmc-var [ [ (compose-fmc) ] dip <fmc-var> ] }
+      { fmc-appl [ [ (compose-fmc) ] dip <fmc-appl> ] }
+      { fmc-abs [ fresh-pop-subst [ rot (subst-fmc) (compose-fmc) ] dip <fmc-abs> ] }
     } match ;
 
-TYPED:: subst-fmc ( m: fmc-term v: fmc-var n: fmc-term -- m/xn: fmc-term )
+! If we carry over a var-name, then it is composed as a single fmc-var
+TYPED: ensure-fmc-term ( m: fmc -- m': fmc-term )
+    dup varname? [ +unit+ swap <fmc-var> ] when ;
+TYPED:: (subst-fmc) ( m: union{ fmc-term varname } v: varname n: fmc -- m/xn: fmc )
     n { { +unit+ [ +unit+ ] }
-      { fmc-var [| cont name | name v name>> = [ m m v cont subst-fmc compose-fmc ]
-                 [ m v cont subst-fmc name <fmc-var> ] if
+        { fmc-var [| cont name | name v = [ m ensure-fmc-term
+                                            m v cont (subst-fmc) (compose-fmc) ]
+                 [ m v cont (subst-fmc) name <fmc-var> ] if
                 ] }
-      { fmc-appl [| cont lpush | m v cont subst-fmc m v lpush subst-fmc <fmc-appl> ] }
-      { loc-push [| body loc | m v body subst-fmc loc <loc-push> ] }
+      { fmc-appl [| cont lpush | m v cont (subst-fmc) m v lpush (subst-fmc) <fmc-appl> ] }
+      { loc-push [| body loc | m v body (subst-fmc) loc <loc-push> ] }
       { fmc-abs  [| cont lpop | lpop var>> v =
                    [ cont lpop <fmc-abs> ]
                    [ lpop fresh-pop-subst :> ( z y lpop1 )
-                     m v z y cont subst-fmc subst-fmc lpop1 <fmc-abs>
+                     m v z y cont (subst-fmc) (subst-fmc) lpop1 <fmc-abs>
                    ] if
                   ] }
     } match ;
+
+SYMBOL: renamings
+: ?var-name ( name -- name )
+    renamings get [ uvar ] cache ;
+DEFER: (rename-fmc)
+TYPED: rename-in-order ( cont: fmc m: fmc -- cont: fmc m: fmc )
+    (rename-fmc) [ (rename-fmc) ] dip ;
+
+TYPED: (rename-fmc) ( m: fmc -- m: fmc )
+    { { +unit+ [ +unit+ ] }
+      { fmc-var [ rename-in-order <fmc-var> ] }
+      { fmc-appl [ rename-in-order <fmc-appl> ] }
+      { fmc-abs [ rename-in-order <fmc-abs> ] }
+      { fmc-prim [ <fmc-prim> ] }
+      { varname [ ?var-name <varname> ] }
+      { loc-pop [ [ (rename-fmc) ] dip <loc-pop> ] }
+      { loc-push [ [ (rename-fmc) ] dip <loc-push> ] }
+    } match ;
+
+TYPED: rename-fmc ( m: fmc -- m: fmc )
+    H{ } clone renamings [ (rename-fmc) ] with-variable ;
+
+TYPED: compose-fmc ( n: fmc-term m: fmc-term -- n.m: fmc-term )
+    swap
+    [ [ rename-fmc ] dip (compose-fmc) ] with-var-names ;
+TYPED: subst-fmc ( m: fmc-term v: varname n: fmc-term -- m/xn: fmc-term )
+    [ [ rename-fmc ] dip (subst-fmc) ] with-var-names ;
 
 ERROR: invalid-fmc-seq ;
 
@@ -135,7 +166,7 @@ TYPED: seq>proper ( seq: sequence -- term: fmc-term )
       {
           { +unit+ [ invalid-fmc-seq ] }
           { varname [ <varname> [ seq-term>proper ] dip <fmc-var> ] }
-          { loc-push [ <loc-push> [ seq-term>proper ] dip <fmc-appl> ] }
+          { loc-push [ [ [ seq-term>proper ] bi@ ] dip <loc-push> <fmc-appl> ] }
           { loc-pop [ <loc-pop> [ seq-term>proper ] dip <fmc-abs> ] }
           { fmc-prim [ <fmc-prim> [ seq-term>proper ] dip <fmc-var> ] }
           [ dup sequence? [ [ seq-term>proper ] bi@ f <loc-push> <fmc-appl> ]
@@ -161,6 +192,8 @@ TYPED: proper>seq ( term: fmc-term -- seq: fmc-seq )
     } match ;
 
 ! * Beta reduction
+! TYPED: beta ( term: fmc-term -- fmc-term )
+! TUPLE: state { memory assoc } { term fmc } ;
 ! Walk from left to right through expression
 ! For each term:
 ! - If substitution defined, no substitution defined, store itself as substitution
