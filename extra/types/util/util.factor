@@ -1,5 +1,7 @@
-USING: accessors assocs kernel math math.parser namespaces quotations sequences
-sequences.extras sequences.private strings unicode ;
+USING: accessors assocs colors.constants combinators.short-circuit io io.styles
+kernel math math.parser namespaces prettyprint.backend prettyprint.custom
+prettyprint.sections quotations sequences sequences.private strings unicode
+words ;
 
 IN: types.util
 
@@ -87,3 +89,49 @@ SYMBOL: var-names
 : uvar-shuffle ( in out -- in out )
     [ [ uvar ] map ] dip
     [ get-name-suffix ] map ;
+
+! ! * Prettyprinting compact stuff
+TUPLE: separator-block < flow separator ;
+: <separated-block> ( separator -- obj )
+    dup length separator-block
+    new-section V{ } clone >>sections
+    swap >>separator ;
+
+: <separated ( separator -- )
+    <separated-block> (<block) ;
+
+M: separator-block advance
+    dup {
+        [ start>> pprinter get last-newline>> = not ]
+        [ short-section? ]
+    } 1&& swap separator>> '[ H{ { foreground COLOR: solarized-base0 } } [ _ write ] with-style ] when ;
+
+: <nosep ( -- )
+    "" <separated ;
+
+: delim-text ( start? obj -- )
+    [ dup word? [ pprint-word drop ] [ text [ start-group ] [ end-group ] if ] if ] [ drop ] if* ;
+
+: pprint-compact ( object separator -- )
+    '[
+        <nosep
+        ! <flow
+        dup pprint-delims [
+            <nosep
+            dup pprint-narrow? <inset
+            <nosep t swap delim-text block>
+            <nosep
+            >pprint-sequence
+
+            do-length-limit
+            [ [ _ <separated pprint* block> ] each ] dip
+            [ number>string "~" " more~" surround text ] when*
+
+            block>
+            block>
+            block>
+        ] dip <nosep f swap delim-text block>
+        end-group
+        block>
+        ! block>
+    ] check-recursion ;
