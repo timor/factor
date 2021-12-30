@@ -7,5 +7,8 @@ IN: fmc.tests
 
 [ [ rec ] >fmc ] must-fail
 
-{ "λ⟨x1⟩·λ⟨y1⟩·[x1]λ·[y1]λ·λ⟨a1⟩·λ⟨b1⟩·[b1]λ·[a1]λ·fixnum+·✴" }
+{ "λ⟨x1⟩·λ⟨y1⟩·[x1·✴]λ·[y1·✴]λ·λ⟨a1⟩·λ⟨b1⟩·[b1·✴]λ·[a1·✴]λ·fixnum+·✴" }
 [ [ [ swap add ] >fmc pprint-fmc ] with-var-names ] unit-test
+
+{ "λ⟨x1⟩·λ⟨y1⟩·[x1·✴]λ·[y1·✴]λ·fixnum+·✴" }
+[ [ [ swap add ] >fmc beta pprint-fmc ] with-var-names ] unit-test

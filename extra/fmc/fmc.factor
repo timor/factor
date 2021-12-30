@@ -1,5 +1,6 @@
-USING: accessors arrays assocs combinators compiler.tree.debugger effects kernel
-namespaces quotations sequences sets strings typed types.util variants words ;
+USING: accessors arrays assocs combinators combinators.short-circuit
+compiler.tree.debugger effects kernel math namespaces quotations sequences sets
+strings typed types.util variants words ;
 
 IN: fmc
 
@@ -15,6 +16,7 @@ TUPLE: loc-push body { loc maybe{ word } } ;
 C: <loc-push> loc-push
 TUPLE: loc-pop { var maybe{ varname } } { loc maybe{ word } } ;
 C: <loc-pop> loc-pop
+UNION: loc-op loc-push loc-pop ;
 
 VARIANT: fmc-term
     +unit+
@@ -24,7 +26,8 @@ VARIANT: fmc-term
     ;
 
 SINGLETON: +retain+
-UNION: fmc-seq-term fmc-term varname fmc-prim loc-push loc-pop ;
+UNION: fmc-seq-term ! fmc-term
+    varname fmc-prim loc-push loc-pop ;
 PREDICATE: fmc-seq < sequence [ fmc-seq-term? ] all? ;
 UNION: fmc fmc-seq-term fmc-term ;
 
@@ -67,7 +70,7 @@ TYPED: word>fmc ( word -- term: fmc-seq )
     dup word-stack get in? [ recursive-fmc ] when
     { { [ dup shuffle-word? ] [ shuffle>fmc ] }
       { [ dup primitive? ] [ <const> ] }
-      { [ dup { call } in? ] [ <const> ] }
+      ! { [ dup { call } in? ] [ <const> ] }
       [ word-stack get over suffix word-stack
         [ exec>fmc ] with-variable ]
     } cond ;
@@ -90,6 +93,30 @@ M: \ R> >fmc* drop
     [ +retain+ <loc-pop> ]
     [ f <loc-push> ] bi 2array ;
 
+M: \ call >fmc* drop
+    "q" uvar <varname>
+    [ f <loc-pop> ] keep 2array ;
+
+! Takes two args from the stack
+! Top-most is a callable
+! Below that is an object
+! When called: 1. push object
+! 2. Call callable
+M: \ curry >fmc* drop
+    [let
+     "o" uvar <varname> :> o
+     "c" uvar <varname> :> c
+     c f <loc-pop>
+     o f <loc-pop>
+     o f <loc-push>
+     c 2array 3array
+    ] ;
+
+M: \ compose >fmc* drop
+    "ca" uvar <varname>
+    "cb" uvar <varname>
+    [ swap [ f <loc-pop> ] bi@ ] 2keep
+    2array 3array ;
 
 ! * Term operations
 
@@ -115,8 +142,8 @@ TYPED: ensure-fmc-term ( m: fmc -- m': fmc-term )
     dup varname? [ +unit+ swap <fmc-var> ] when ;
 TYPED:: (subst-fmc) ( m: union{ fmc-term varname } v: varname n: fmc -- m/xn: fmc )
     n { { +unit+ [ +unit+ ] }
-        { fmc-var [| cont name | name v = [ m ensure-fmc-term
-                                            m v cont (subst-fmc) (compose-fmc) ]
+        { fmc-var [| cont name | name v = [ m v cont (subst-fmc)
+                                            m ensure-fmc-term (compose-fmc) ]
                  [ m v cont (subst-fmc) name <fmc-var> ] if
                 ] }
       { fmc-appl [| cont lpush | m v cont (subst-fmc) m v lpush (subst-fmc) <fmc-appl> ] }
@@ -174,6 +201,7 @@ TYPED: seq>proper ( seq: sequence -- term: fmc-term )
       } match
     ] if-empty ;
 
+M: fmc-term seq-term>proper ;
 M: sequence seq-term>proper seq>proper ;
 M: fmc-seq-term seq-term>proper
     1array seq>proper ;
@@ -192,43 +220,92 @@ TYPED: proper>seq ( term: fmc-term -- seq: fmc-seq )
     } match ;
 
 ! * Beta reduction
-! TYPED: beta ( term: fmc-term -- fmc-term )
-! TUPLE: state { memory assoc } { term fmc } ;
-! Walk from left to right through expression
-! For each term:
-! - If substitution defined, no substitution defined, store itself as substitution
-! - If an application: push to stack
-! - If an abstraction-pop x: try to pop from stack A
-!   - If stack empty, do nothing
-!   - Otherwise, pop M from stack A, set substitution of M to f, set substitution of x to M
+! Run through fmc terms in continuation form, using a term stack to perform beta
+! reduction.  The resulting stack should be in sequential-term form
+! TYPED: push-cont ( stack: fmc-seq cont: fmc-term m: fmc-seq-term -- stack': fmc-seq cont: fmc-term )
+!     swap [ suffix ] dip ;
+
+TYPED: blocking-loc-op? ( m: fmc-seq-term lpop: loc-pop -- ? )
+    { [ drop loc-pop? ] [ [ loc>> ] same? ] } 2&& ;
+
+TYPED: blocking-seq-term? ( m: fmc-seq-term lpop: loc-pop -- ? )
+    {
+        [ drop loc-op? not ]
+        [ blocking-loc-op? ]
+    } 2|| ;
+
+TYPED: matching-loc-push? ( m: fmc-seq-term lpop: loc-pop -- ? )
+    { [ drop loc-push? ] [ [ loc>> ] same? ] } 2&& ;
+
+TYPED:: peek-loc ( stack: fmc-seq lpop: loc-pop -- i: maybe{ integer } m: maybe{ fmc-term } )
+    stack [ lpop { [ blocking-seq-term? ] [ matching-loc-push? ] } 2|| ]
+    find-last
+    [ dup lpop matching-loc-push? [ body>> ] [ 2drop f f ] if ]
+    [ f ] if* ;
+
+! Search terminates:
+! Found primitive -> no luck ! TODO: this can be changed if we couple
+! primitives to locs for multi-machine mode
+! Found loc-pop on different loc stack -> skip
+! Found loc-push on different loc stack -> skip
+! Found loc-push on same loc stack -> luck
+! Found loc-pop on same loc stack -> no luck
+! Found nothing -> no luck
+TYPED: pop-loc ( stack: fmc-seq lpop: loc-pop -- stack: fmc-seq m: maybe{ fmc-term } )
+    dupd peek-loc
+    [ [ swap remove-nth ] dip ]
+    [ drop f ] if* ;
+
+! TYPED: inline-call? ( stack: fmc-seq m: fmc-seq-term -- stack: fmc-seq m: maybe{ fmc-term } )
+!     dup call-primop?
+!     [ over peek-lambda
+!       [ [ nip swap remove-nth ] dip ]
+!       [ drop f ] if* ]
+!     [ drop f ] if ;
+
+! DEFER: (beta)
+! TYPED:: maybe-inline-call ( stack: fmc-seq
+!                             cont: fmc-term
+!                             m: fmc-seq-term
+!                                 --
+!                                 stack': fmc-seq
+!                                 cont: fmc-term
+!                                 m: maybe{ fmc-seq-term } )
+!     stack m inline-call?
+!     [ (beta) cont f ]
+!     [ cont m ] if* ;
+
+TYPED: push-cont ( stack: fmc-seq cont: fmc-term m: fmc-seq-term -- stack': fmc-seq cont: fmc-term )
+    ! maybe-inline-call
+    ! [ swap [ suffix ] dip ] when* ;
+    swap [ suffix ] dip ;
 
 
-! TYPED: substitute ( subst: assoc term: fmc )
+TYPED:: find-loc-push ( stack: fmc-seq cont: fmc-term loc: loc-pop
+                    --
+                    stack': fmc-seq
+                    cont: fmc-term
+                    loc: loc-pop
+                    term/f: maybe{ fmc-term } )
+    stack loc pop-loc
+    [ cont loc ] dip ;
 
+! TYPED:: beta-subst ( m: union{ fmc-term varname } v: varname n: fmc -- m/xn: fmc )
+!     (subst-fmc) ;
 
+TYPED: (beta) ( stack: fmc-seq m: fmc-term -- stack: fmc-seq )
+    {
+        { +unit+ [ ] }          ! NOP
+        { fmc-var [ push-cont (beta) ] }
+        { fmc-appl [ push-cont (beta) ] }
+        { fmc-abs [ find-loc-push
+                    [| cont lpop term |
+                     term lpop var>> cont (subst-fmc) (beta)
+                    ]
+                    [ push-cont (beta) ] if*
+                  ] }
+    } match ;
 
-
-
-! TYPED:: (beta) ( stacks bindings term: fmc -- n: fmc )
-!     term {
-!         { +unit+ [ +unit+ ] }
-!         { varname [ over at? [ [ swap pluck-at ] dip (beta) ] [ <varname> ] if ] }
-!         { loc-push }
-!     } match ;
-
-! TYPED: subst ( repl: assoc e: fmc -- term: fmc )
-!     {
-!         {  }
-!         [ nip ]
-!     } match
-
-! SYMBOLS: stacks bindings ;
-! : (beta) ( fmc -- )
-!     [
-!         [
-!             {
-!                 { loc-push stacks }
-!                 [ drop ]
-!             } match
-!         ] each
-!     ] over ;
+TYPED: beta ( term: fmc-term -- term': fmc-term )
+    [ rename-fmc f swap (beta) ] with-var-names
+    seq>proper ;
