@@ -1,6 +1,6 @@
 USING: accessors arrays assocs combinators combinators.short-circuit
-compiler.tree.debugger effects kernel math namespaces quotations sequences sets
-strings typed types.util variants words ;
+compiler.tree.debugger effects generalizations kernel math namespaces quotations
+sequences sets strings typed types.util variants words ;
 
 IN: fmc
 
@@ -12,6 +12,8 @@ TUPLE: varname { name string } ;
 C: <varname> varname
 TUPLE: fmc-prim obj ;
 C: <fmc-prim> fmc-prim
+TUPLE: prim-call word out-names ;
+C: <prim-call> prim-call
 TUPLE: loc-push body { loc maybe{ word } } ;
 C: <loc-push> loc-push
 TUPLE: loc-pop { var maybe{ varname } } { loc maybe{ word } } ;
@@ -26,14 +28,17 @@ VARIANT: fmc-term
     ;
 
 SINGLETON: +retain+
+SINGLETON: +omega+
 UNION: fmc-seq-term ! fmc-term
-    varname fmc-prim loc-push loc-pop ;
-PREDICATE: fmc-seq < sequence [ fmc-seq-term? ] all? ;
+    varname fmc-prim prim-call loc-push loc-pop ;
+: fmc-sequence? ( seq -- ? )
+    [ dup sequence? [ fmc-sequence? ] [ fmc-seq-term? ] if ] all? ;
+PREDICATE: fmc-seq < sequence fmc-sequence? ;
 UNION: fmc fmc-seq-term fmc-term ;
 
 GENERIC: >fmc* ( object -- term: fmc-seq )
 TYPED: <const> ( obj -- e: fmc-seq ) <fmc-prim> 1array ;
-M: object >fmc* <const> ;
+M: object >fmc* <const> f <loc-push> 1array ;
 PREDICATE: fmc-const < fmc-var var>> fmc-prim? ;
 
 M: quotation >fmc* [ >fmc* ] map concat 1array ;
@@ -43,7 +48,7 @@ SYMBOL: word-stack
 
 TYPED: word-intro ( word -- term: fmc-seq )
     stack-effect effect-in-names
-    [ uvar <varname> ] map
+    [ "i" or uvar <varname> ] map
     [ [ f <loc-pop> ] map ]
     [ <reversed> [ f <loc-push> ] map ] bi append ;
 
@@ -56,6 +61,7 @@ TYPED: word-intro ( word -- term: fmc-seq )
 TYPED: exec>fmc ( word -- term: fmc-seq )
     [ word-intro ]
     [ def>> >fmc* first ] bi append ;
+    ! def>> >fmc* first ;
 
 TYPED: shuffle>fmc ( word -- term: fmc-seq )
     "shuffle" word-prop
@@ -66,10 +72,67 @@ TYPED: shuffle>fmc ( word -- term: fmc-seq )
 
 ERROR: recursive-fmc word ;
 
+! : out-locs ( effect -- out-locs )
+!     effect-out-names [ "o" or uvar ] map ;
+
+: access-vars ( word -- in-vars out-vars )
+    stack-effect
+    [ effect-in-names [ "i" or uvar <varname> ] map ]
+    [ effect-out-names [ "o" or uvar <varname> ] map ] bi ;
+
+TYPED: lazy-call ( word in-vars out-vars -- term: fmc-seq )
+    [ <const> ]
+    [ append  ]
+    [ append ] tri* ;
+
+! ! Template: foo  ... ⟨i1⟩ ⟨i2⟩ [ i1 i2 + o1 o2 ] [ o1 ] [ o2 ] ...
+! TYPED: prim-call>fmc ( word -- term: fmc-seq )
+!     dup
+!     access-vars
+!     [ lazy-call 1array ] 2keep
+!     [ [ f <loc-pop> ] map prepend ]
+!     [ [ f <loc-push> ] map append ] bi* ;
+!     ! [ <const> ]
+!     ! stack-effect effect-out-names [ "o" or uvar <varname> ] map ;
+
+TYPED: call-preamble ( in-vars out-vars -- term: fmc-seq )
+    ! [ [ f <loc-pop> ] map ]
+    ! [ [ +omega+ <loc-pop> ] map ] bi* append ;
+    drop [ f <loc-pop> ] map ;
+
+TYPED: call-postamble ( in-vars out-vars -- term: fmc-seq )
+    nip
+    [ <reversed> [ +omega+ <loc-pop> ] map ]
+    [ [ f <loc-push> ] map ] bi append ;
+    ! nip
+    ! [ f <loc-push> ] map ;
+
+TYPED: call-expr ( word in-vars out-vars -- term: fmc-seq )
+    drop
+    [ <const> ] dip append 1array 1array ;
+
+! Template: foo  ... λ⟨i1⟩ λ⟨i2⟩ foo ω⟨o1⟩ ω⟨o2⟩ [o1]λ [o2]λ ...
+! Could implement folding on omega stack?
+TYPED: prim-call>fmc ( word -- term: fmc-seq )
+    dup access-vars
+    [ call-expr ] 2keep
+    ! [ <const> ] [ access-vars ] bi
+    [ call-preamble prepend ]
+    [ call-postamble append ] 2bi ;
+
+! TYPED: prim-call>fmc ( word -- term: fmc-seq )
+!     ! [ word-intro ]
+!     ! [ dup stack-effect effect-out-names [ "o" or uvar ] map ] bi
+!     ! [ <prim-call> suffix ] keep [ <varname> ] map append ;
+!     [ stack-effect in>> length [ curry ] n*quot >quotation >fmc* first ]
+!     [ <const> ] bi prefix ;
+
+
 TYPED: word>fmc ( word -- term: fmc-seq )
     dup word-stack get in? [ recursive-fmc ] when
     { { [ dup shuffle-word? ] [ shuffle>fmc ] }
       { [ dup primitive? ] [ <const> ] }
+      ! { [ dup primitive? ] [ prim-call>fmc ] }
       ! { [ dup { call } in? ] [ <const> ] }
       [ word-stack get over suffix word-stack
         [ exec>fmc ] with-variable ]
@@ -104,7 +167,7 @@ M: \ call >fmc* drop
 ! 2. Call callable
 M: \ curry >fmc* drop
     [let
-     "o" uvar <varname> :> o
+     "p" uvar <varname> :> o
      "c" uvar <varname> :> c
      c f <loc-pop>
      o f <loc-pop>
@@ -228,9 +291,18 @@ TYPED: proper>seq ( term: fmc-term -- seq: fmc-seq )
 TYPED: blocking-loc-op? ( m: fmc-seq-term lpop: loc-pop -- ? )
     { [ drop loc-pop? ] [ [ loc>> ] same? ] } 2&& ;
 
+TYPED: blocking-primitive? ( m: fmc-seq-term lpop: loc-pop -- ? )
+    { [ drop fmc-prim? ]
+      [ nip loc>> not ]
+    } 2&& ;
+
+
 TYPED: blocking-seq-term? ( m: fmc-seq-term lpop: loc-pop -- ? )
     {
-        [ drop loc-op? not ]
+        ! [ drop loc-op? not ]
+        [ drop varname? ]
+        ! [ drop prim-call? ]
+        [ blocking-primitive? ]
         [ blocking-loc-op? ]
     } 2|| ;
 
@@ -245,7 +317,9 @@ TYPED:: peek-loc ( stack: fmc-seq lpop: loc-pop -- i: maybe{ integer } m: maybe{
 
 ! Search terminates:
 ! Found primitive -> no luck ! TODO: this can be changed if we couple
-! primitives to locs for multi-machine mode
+! primitives to locs for multi-machine mode?
+! At least it should be true for the retain stack, since primitives could be
+! substituted with push and pops on the main stack...
 ! Found loc-pop on different loc stack -> skip
 ! Found loc-push on different loc stack -> skip
 ! Found loc-push on same loc stack -> luck
@@ -290,8 +364,8 @@ TYPED:: find-loc-push ( stack: fmc-seq cont: fmc-term loc: loc-pop
     stack loc pop-loc
     [ cont loc ] dip ;
 
-! TYPED:: beta-subst ( m: union{ fmc-term varname } v: varname n: fmc -- m/xn: fmc )
-!     (subst-fmc) ;
+TYPED: beta-subst ( m: union{ fmc-term varname } v: varname n: fmc -- m/xn: fmc )
+    (subst-fmc) ;
 
 TYPED: (beta) ( stack: fmc-seq m: fmc-term -- stack: fmc-seq )
     {
@@ -300,7 +374,7 @@ TYPED: (beta) ( stack: fmc-seq m: fmc-term -- stack: fmc-seq )
         { fmc-appl [ push-cont (beta) ] }
         { fmc-abs [ find-loc-push
                     [| cont lpop term |
-                     term lpop var>> cont (subst-fmc) (beta)
+                     term lpop var>> cont beta-subst (beta)
                     ]
                     [ push-cont (beta) ] if*
                   ] }
@@ -309,3 +383,23 @@ TYPED: (beta) ( stack: fmc-seq m: fmc-term -- stack: fmc-seq )
 TYPED: beta ( term: fmc-term -- term': fmc-term )
     [ rename-fmc f swap (beta) ] with-var-names
     seq>proper ;
+
+! * Conditionals
+! - Need row-binders for unknown stack configurations
+! - Row-binders are placed in front of quotation call sites?
+! - To support imperative targets, we need to be able to run mutex branches
+! - These can not have a return value.  All conditional operation results must
+!   be side-effect assignments (except for the ternary conditional)
+
+! * TODO Extracting location/variable info
+
+! - Pop operations on main lambda stack can be interpreted as building a parameter
+!   list, establishing locals bindings.
+! - Applications on the lambda stack only make sense if they remain in applicative
+!   order?
+! - Primitive operations on the stack are not defined by any kind of expression,
+!   only implicit using their execution semantics
+! - Two approaches to build up value-level expressions
+!   1. Build up quoted push actions that can be threaded as expressions
+!   2. Convert lambda stack operations into per-(intermediate-)result location
+!      operations, assuming mutable variables

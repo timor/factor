@@ -14,7 +14,7 @@ GENERIC: pprint-fmc* ( obj -- )
     [ pprint ] with-string-writer ;
 
 : fmc. ( obj -- )
-    pprint ;
+    pprint nl ;
 
 SYMBOL: ✴
 M: +unit+ pprint* drop ✴ pprint* ;
@@ -26,6 +26,7 @@ M: varname pprint-fmc* name>> fmc, ;
 GENERIC: pprint-loc-name ( obj -- str )
 M: word pprint-loc-name name>> ;
 M: +retain+ pprint-loc-name drop "ρ" ;
+M: +omega+ pprint-loc-name drop "ω" ;
 M: f pprint-loc-name drop "λ" ;
 : pprint-fmc-loc ( loc-op -- )
     loc>> pprint-loc-name fmc, ;
