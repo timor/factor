@@ -384,12 +384,29 @@ TYPED: beta ( term: fmc-term -- term': fmc-term )
     [ rename-fmc f swap (beta) ] with-var-names
     seq>proper ;
 
+! * Expansion?
+
+! - FMC differentiates between reduction and execution phase
+! - Reduction: no computation at all
+! - Computation: no term manipulation
+! - Could consider first pass (all passes?) as quotation-once-removed
+!   Are these strategies the same?:
+!   1. Beta-reduce, re-run with stacks (no interleaving)
+!   2. Beta-reduce, but when pushing a primitive, actually run it (interleaving)
+! - Also, for both, do we need to distinguish between:
+!   1. Err when not enough items are on the stack
+!   2. Ignore when not enough items are on the stack
+! - Does FMC have progn semantics with respect to terms? With respect to the last
+!   argument on the stack during reduction?
+
 ! * Conditionals
 ! - Need row-binders for unknown stack configurations
 ! - Row-binders are placed in front of quotation call sites?
 ! - To support imperative targets, we need to be able to run mutex branches
 ! - These can not have a return value.  All conditional operation results must
 !   be side-effect assignments (except for the ternary conditional)
+! - Alternatively, is there some kind of pattern to a call?, e.g.:
+!   ~[ foo bar ] call~ → ~λ⟨a..⟩ [ [a..]λ foo bar ] λ⟨i⟩ i
 
 ! * TODO Extracting location/variable info
 
@@ -403,3 +420,12 @@ TYPED: beta ( term: fmc-term -- term': fmc-term )
 !   1. Build up quoted push actions that can be threaded as expressions
 !   2. Convert lambda stack operations into per-(intermediate-)result location
 !      operations, assuming mutable variables
+! - Could also argue that a lobotimized piece of code(i.e. using explicitly named
+!   values, variables), is a straight-line composition of effect-only loc
+!   operations?  However, concatenating variable-name-dependent continuation
+!   expressions seems only possible if the var access ops have already been
+!   inserted with the correct names, i.e. they have to be known in each piece of
+!   code beforehand.  Otherwise, how would some operation in a subsequent piece of
+!   code look where to pop from?  Alternatively, invent new locations on the fly
+!   for every value that needs to be identified?  How to handle unique naming
+!   then?  Original FMC does not allow for passing location names...
