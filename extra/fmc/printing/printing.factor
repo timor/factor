@@ -1,7 +1,7 @@
-USING: accessors arrays colors.constants fmc formatting io.streams.string
-io.styles kernel make math namespaces present prettyprint prettyprint.backend
+USING: accessors arrays colors.constants fmc formatting io io.streams.string
+io.styles kernel lists make math namespaces present prettyprint
 prettyprint.config prettyprint.custom prettyprint.sections sequences types.util
-variants words ;
+words ;
 
 IN: fmc.printing
 
@@ -17,8 +17,8 @@ GENERIC: pprint-fmc* ( obj -- )
     pprint nl ;
 
 SYMBOL: ✴
-M: +unit+ pprint* drop ✴ pprint* ;
-M: +unit+ pprint-fmc* drop "✴" fmc, ;
+! M: +unit+ pprint* drop ✴ pprint* ;
+M: +nil+ pprint-fmc* drop "✴" fmc, ;
 
 M: varname pprint* name>> H{ { foreground COLOR: solarized-blue } } styled-text ;
 M: varname pprint-fmc* name>> fmc, ;
@@ -27,6 +27,8 @@ GENERIC: pprint-loc-name ( obj -- str )
 M: word pprint-loc-name name>> ;
 M: +retain+ pprint-loc-name drop "ρ" ;
 M: +omega+ pprint-loc-name drop "ω" ;
+M: +psi+ pprint-loc-name drop "ψ" ;
+M: +tau+ pprint-loc-name drop "τ" ;
 M: f pprint-loc-name drop "λ" ;
 : pprint-fmc-loc ( loc-op -- )
     loc>> pprint-loc-name fmc, ;
@@ -63,29 +65,11 @@ M: fmc-prim pprint* obj>> pprint* ;
 M: fmc-prim pprint-fmc*
     obj>> present fmc, ;
 
-M: fmc-var pprint* "·" pprint-compact ;
-M: fmc-var pprint-delims drop f f ;
-M: fmc-var >pprint-sequence
-    [ var>> ]
-    [ cont>> ] bi 2array ;
-
-: pprint-cont ( obj -- )
-    "·" fmc, cont>> pprint-fmc* ;
-
-M: fmc-var pprint-fmc*
-    [ var>> pprint-fmc* ]
-    [ pprint-cont ] bi ;
-
-M: fmc-term pprint* "·" pprint-compact ;
-M: fmc-term pprint-delims drop f f ! "(" ")"
+M: fmc-cons pprint* "·" pprint-compact ;
+M: fmc-cons pprint-delims drop f f ! "(" ")"
     ;
-M: fmc-term >pprint-sequence
-    { { +unit+ [ +unit+ 1array ] }
-      { fmc-var [ [ >pprint-sequence ] dip prefix ] }
-      { fmc-abs [ [ >pprint-sequence ] dip prefix ] }
-      { fmc-appl [ [ >pprint-sequence ] dip prefix ] }
-     } match ;
-
+M: fmc-cons >pprint-sequence
+    list>array ✴ suffix ;
 ! Convenience
 
 : >fmc. ( object -- )

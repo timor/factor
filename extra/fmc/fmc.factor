@@ -1,6 +1,6 @@
-USING: accessors arrays assocs combinators combinators.short-circuit
-compiler.tree.debugger effects generalizations kernel math namespaces quotations
-sequences sets strings typed types.util variants words ;
+USING: accessors arrays assocs classes combinators combinators.short-circuit
+compiler.tree.debugger effects kernel lists math namespaces quotations sequences
+sets strings typed types.util variants words ;
 
 IN: fmc
 
@@ -8,6 +8,7 @@ IN: fmc
 
 ! Two ways of representing: ordered list of term-parts, or tree of binary terms
 
+! Evaluated location specifier: word or string
 TUPLE: varname { name string } ;
 C: <varname> varname
 TUPLE: fmc-prim obj ;
@@ -20,28 +21,52 @@ TUPLE: loc-pop { var maybe{ varname } } { loc maybe{ word } } ;
 C: <loc-pop> loc-pop
 UNION: loc-op loc-push loc-pop ;
 
-VARIANT: fmc-term
-    +unit+
-    fmc-var: { { cont fmc-term } { var maybe{ union{ varname fmc-prim } } } }
-    fmc-appl: { { cont fmc-term } { push loc-push } }
-    fmc-abs: { { cont fmc-term } { pop loc-pop } }
-    ;
-
 SINGLETON: +retain+
 SINGLETON: +omega+
+SINGLETON: +tau+
+SINGLETON: +psi+
 UNION: fmc-seq-term ! fmc-term
     varname fmc-prim prim-call loc-push loc-pop ;
 : fmc-sequence? ( seq -- ? )
     [ dup sequence? [ fmc-sequence? ] [ fmc-seq-term? ] if ] all? ;
 PREDICATE: fmc-seq < sequence fmc-sequence? ;
+TUPLE: fmc-cons < cons-state ;
+C: <fmc-cons> fmc-cons
+M: \ fmc-cons swons*
+    drop swap fmc-cons boa ;
+UNION: fmc-atom fmc-seq-term ;
+
+UNION: proper-fmc-cdr +nil+ fmc-cons ;
+: (proper-fmc-list?) ( obj -- ? )
+    dup fmc-cons?
+    [ uncons [ { [ fmc-atom? ] [ (proper-fmc-list?) ] } 1|| ] [ proper-fmc-cdr? ] bi* and ]
+    [ drop f ] if
+    ;
+PREDICATE: proper-fmc-list < fmc-cons (proper-fmc-list?) ;
+
+UNION: fmc-term +nil+ proper-fmc-list ;
+PREDICATE: fmc-var < fmc-cons car varname? ;
+TYPED: <fmc-var> ( cont: fmc-term var: varname -- term: fmc-var ) fmc-cons swons* ;
+PREDICATE: fmc-appl < fmc-cons car loc-push? ;
+TYPED: <fmc-appl> ( cont: fmc-term push: loc-push -- term: fmc-appl ) fmc-cons swons* ;
+PREDICATE: fmc-abs < fmc-cons car loc-pop? ;
+TYPED: <fmc-abs> ( cont: fmc-term pop: loc-pop -- term: fmc-abs ) fmc-cons swons* ;
+PREDICATE: fmc-const < fmc-cons car fmc-prim? ;
+TYPED: <fmc-const> ( cont: fmc-term obj: fmc-prim -- term: fmc-const ) fmc-cons swons* ;
+
 UNION: fmc fmc-seq-term fmc-term ;
 
 GENERIC: >fmc* ( object -- term: fmc-seq )
 TYPED: <const> ( obj -- e: fmc-seq ) <fmc-prim> 1array ;
-M: object >fmc* <const> f <loc-push> 1array ;
-PREDICATE: fmc-const < fmc-var var>> fmc-prim? ;
+M: object >fmc*
+    [ <const> +psi+ <loc-push> ]
+    [ class-of <const> +tau+ <loc-push> ] bi 2array ;
 
-M: quotation >fmc* [ >fmc* ] map concat 1array ;
+
+DEFER: seq>proper
+M: quotation >fmc* [ >fmc* ] map concat ! seq>proper f <loc-push>
+    ! f <loc-push>
+    1array ;
 PREDICATE: shuffle-word < word "shuffle" word-prop ;
 
 SYMBOL: word-stack
@@ -95,6 +120,16 @@ TYPED: lazy-call ( word in-vars out-vars -- term: fmc-seq )
 !     ! [ <const> ]
 !     ! stack-effect effect-out-names [ "o" or uvar <varname> ] map ;
 
+! Alternative: return through locs?
+! [ fixnum+ ] → [ [ fixnum+ ] call ] → [ [ fixnum+ ] ⟨x⟩ x ]
+! ! → [ fixnum+ ⟨x⟩ c⟨_⟩ [x]c [ c⟨y⟩ [y]c [y] ] ]
+! → [ fixnum+ ⟨x⟩ c⟨_⟩ [x]c [ c⟨y⟩ [y]c [y] ] ]
+! → [ ⟨b⟩ ⟨a⟩ [ a b fixnum+ ⟨x⟩ c⟨_⟩ [x]c ]emit c⟨y⟩ [y]c [y] ]
+
+! Alternative: insert inference markers?
+! [ [ + ] [ - ] if ]
+
+
 TYPED: call-preamble ( in-vars out-vars -- term: fmc-seq )
     ! [ [ f <loc-pop> ] map ]
     ! [ [ +omega+ <loc-pop> ] map ] bi* append ;
@@ -115,7 +150,8 @@ TYPED: call-expr ( word in-vars out-vars -- term: fmc-seq )
 ! Could implement folding on omega stack?
 TYPED: prim-call>fmc ( word -- term: fmc-seq )
     dup access-vars
-    [ call-expr ] 2keep
+    ! [ call-expr ] 2keep
+    [ <const> ] 2dip
     ! [ <const> ] [ access-vars ] bi
     [ call-preamble prepend ]
     [ call-postamble append ] 2bi ;
@@ -158,7 +194,8 @@ M: \ R> >fmc* drop
 
 M: \ call >fmc* drop
     "q" uvar <varname>
-    [ f <loc-pop> ] keep 2array ;
+    [ f <loc-pop> ]
+    [ +psi+ <loc-push> ] bi 2array ;
 
 ! Takes two args from the stack
 ! Top-most is a callable
@@ -194,48 +231,59 @@ TYPED: fresh-pop-subst ( pop: loc-pop -- old: varname fresh: varname pop': loc-p
     [ [ var>> ] bi@ swap ] keep ;
 
 TYPED: (compose-fmc) ( m: fmc-term n: fmc-term -- n.m: fmc-term )
-    { { +unit+ [ ] }
-      { fmc-var [ [ (compose-fmc) ] dip <fmc-var> ] }
-      { fmc-appl [ [ (compose-fmc) ] dip <fmc-appl> ] }
-      { fmc-abs [ fresh-pop-subst [ rot (subst-fmc) (compose-fmc) ] dip <fmc-abs> ] }
-    } match ;
+    [ ]
+    {
+        { +nil+ [ drop (compose-fmc) ] }
+        { varname [ [ (compose-fmc) ] dip <fmc-var> ] }
+        { fmc-prim [ [ (compose-fmc) ] dip <fmc-const> ] }
+        { loc-push [ [ (compose-fmc) ] dip <fmc-appl> ] }
+        { loc-pop [ fresh-pop-subst [ rot (subst-fmc) (compose-fmc) ] dip <fmc-abs> ] }
+    } lmatch ;
 
 ! If we carry over a var-name, then it is composed as a single fmc-var
 TYPED: ensure-fmc-term ( m: fmc -- m': fmc-term )
-    dup varname? [ +unit+ swap <fmc-var> ] when ;
+    dup varname? [ +nil+ swap <fmc-var> ] when ;
+
+! Substitute M for x in N
 TYPED:: (subst-fmc) ( m: union{ fmc-term varname } v: varname n: fmc -- m/xn: fmc )
-    n { { +unit+ [ +unit+ ] }
-        { fmc-var [| cont name | name v = [ m v cont (subst-fmc)
+    n [ n ] {
+        ! { +nil+ [ +nil+ ] }
+        { varname [| cont name | name v = [ m v cont (subst-fmc)
                                             m ensure-fmc-term (compose-fmc) ]
-                 [ m v cont (subst-fmc) name <fmc-var> ] if
-                ] }
-      { fmc-appl [| cont lpush | m v cont (subst-fmc) m v lpush (subst-fmc) <fmc-appl> ] }
-      { loc-push [| body loc | m v body (subst-fmc) loc <loc-push> ] }
-      { fmc-abs  [| cont lpop | lpop var>> v =
-                   [ cont lpop <fmc-abs> ]
-                   [ lpop fresh-pop-subst :> ( z y lpop1 )
-                     m v z y cont (subst-fmc) (subst-fmc) lpop1 <fmc-abs>
-                   ] if
+                   [ m v cont (subst-fmc) name <fmc-var> ] if
                   ] }
-    } match ;
+        { loc-push [| cont lpush | m v cont (subst-fmc) m v lpush
+                    loc-push unboa
+                    [ (subst-fmc) ] dip loc-push boa <fmc-appl> ] }
+        { loc-pop  [| cont lpop | lpop var>> v =
+                    [ cont lpop <fmc-abs> ]
+                    [ lpop fresh-pop-subst :> ( z y lpop1 )
+                      m v z y cont (subst-fmc) (subst-fmc) lpop1 <fmc-abs>
+                    ] if
+                   ] }
+        { fmc-prim [| cont prim | m v cont (subst-fmc) prim <fmc-const> ] }
+    } lmatch ;
 
 SYMBOL: renamings
 : ?var-name ( name -- name )
-    renamings get [ uvar ] cache ;
+    name>> renamings get [ uvar ] cache
+    <varname> ;
 DEFER: (rename-fmc)
 TYPED: rename-in-order ( cont: fmc m: fmc -- cont: fmc m: fmc )
     (rename-fmc) [ (rename-fmc) ] dip ;
 
 TYPED: (rename-fmc) ( m: fmc -- m: fmc )
-    { { +unit+ [ +unit+ ] }
-      { fmc-var [ rename-in-order <fmc-var> ] }
-      { fmc-appl [ rename-in-order <fmc-appl> ] }
-      { fmc-abs [ rename-in-order <fmc-abs> ] }
-      { fmc-prim [ <fmc-prim> ] }
-      { varname [ ?var-name <varname> ] }
-      { loc-pop [ [ (rename-fmc) ] dip <loc-pop> ] }
-      { loc-push [ [ (rename-fmc) ] dip <loc-push> ] }
-    } match ;
+    {
+        ! { +nil+ [ +nil+ ] }
+        { varname [ ?var-name ] }
+        { fmc-prim [ ] }
+        [
+            {
+                { loc-pop [ [ ?var-name ] dip <loc-pop> ] }
+                { loc-push [ [ (rename-fmc) ] dip <loc-push> ] }
+            } match
+        ]
+    } fmc-cons lmatch-map-as ;
 
 TYPED: rename-fmc ( m: fmc -- m: fmc )
     H{ } clone renamings [ (rename-fmc) ] with-variable ;
@@ -248,39 +296,36 @@ TYPED: subst-fmc ( m: fmc-term v: varname n: fmc-term -- m/xn: fmc-term )
 
 ERROR: invalid-fmc-seq ;
 
+! Used when sequence of fmc terms is expected
+GENERIC: seq>proper ( seq: union{ fmc-seq-term fmc-seq } -- term: fmc-term )
+! Used in sequence context
 GENERIC: seq-term>proper ( seq: fmc-seq-term -- term: fmc-term )
-! TYPED: seq>proper ( seq: fmc-seq -- term: fmc-term )
-TYPED: seq>proper ( seq: sequence -- term: fmc-term )
-    [ +unit+ ]
-    [ unclip-slice
-      {
-          { +unit+ [ invalid-fmc-seq ] }
-          { varname [ <varname> [ seq-term>proper ] dip <fmc-var> ] }
-          { loc-push [ [ [ seq-term>proper ] bi@ ] dip <loc-push> <fmc-appl> ] }
-          { loc-pop [ <loc-pop> [ seq-term>proper ] dip <fmc-abs> ] }
-          { fmc-prim [ <fmc-prim> [ seq-term>proper ] dip <fmc-var> ] }
-          [ dup sequence? [ [ seq-term>proper ] bi@ f <loc-push> <fmc-appl> ]
-            [ invalid-fmc-seq ] if ]
-      } match
-    ] if-empty ;
 
-M: fmc-term seq-term>proper ;
-M: sequence seq-term>proper seq>proper ;
-M: fmc-seq-term seq-term>proper
-    1array seq>proper ;
+! NOTE: converting nested code sequences to quotation pushes onto the default stack here!
+TYPED: (seq>proper) ( seq: sequence -- term: fmc-term )
+    <reversed> nil [
+        ! dup sequence? [ seq>proper f <loc-push> ] when
+        seq-term>proper
+        fmc-cons swons*
+    ] reduce ;
+
+M: sequence seq>proper (seq>proper) ;
+! A proper fmc-cons can be present where a sequence is expected.
+M: fmc-term seq>proper ;
+M: sequence seq-term>proper seq>proper f <loc-push> ;
+M: fmc-seq-term seq-term>proper ;
+M: loc-push seq-term>proper
+    loc-push unboa [ seq>proper ] dip loc-push boa ;
+M: fmc-seq-term seq>proper nil fmc-cons cons* ;
 
 TYPED: >fmc ( obj -- term: fmc-term )
     [ >fmc* first
-      seq-term>proper ] with-var-names ;
+      seq>proper
+    ] with-var-names ;
 
 ! FIXME
 TYPED: proper>seq ( term: fmc-term -- seq: fmc-seq )
-    {
-        { +unit+ [ f ] }
-        { fmc-var [ [ proper>seq ] dip prefix ] }
-        { fmc-abs [ [ proper>seq ] dip prefix ] }
-        { fmc-appl [ [ proper>seq ] dip prefix ] }
-    } match ;
+    list>array ;
 
 ! * Beta reduction
 ! Run through fmc terms in continuation form, using a term stack to perform beta
@@ -291,11 +336,11 @@ TYPED: proper>seq ( term: fmc-term -- seq: fmc-seq )
 TYPED: blocking-loc-op? ( m: fmc-seq-term lpop: loc-pop -- ? )
     { [ drop loc-pop? ] [ [ loc>> ] same? ] } 2&& ;
 
+! FIXME: check if blocking semantics are correct here!
 TYPED: blocking-primitive? ( m: fmc-seq-term lpop: loc-pop -- ? )
     { [ drop fmc-prim? ]
       [ nip loc>> not ]
     } 2&& ;
-
 
 TYPED: blocking-seq-term? ( m: fmc-seq-term lpop: loc-pop -- ? )
     {
@@ -330,28 +375,10 @@ TYPED: pop-loc ( stack: fmc-seq lpop: loc-pop -- stack: fmc-seq m: maybe{ fmc-te
     [ [ swap remove-nth ] dip ]
     [ drop f ] if* ;
 
-! TYPED: inline-call? ( stack: fmc-seq m: fmc-seq-term -- stack: fmc-seq m: maybe{ fmc-term } )
-!     dup call-primop?
-!     [ over peek-lambda
-!       [ [ nip swap remove-nth ] dip ]
-!       [ drop f ] if* ]
-!     [ drop f ] if ;
-
-! DEFER: (beta)
-! TYPED:: maybe-inline-call ( stack: fmc-seq
-!                             cont: fmc-term
-!                             m: fmc-seq-term
-!                                 --
-!                                 stack': fmc-seq
-!                                 cont: fmc-term
-!                                 m: maybe{ fmc-seq-term } )
-!     stack m inline-call?
-!     [ (beta) cont f ]
-!     [ cont m ] if* ;
-
+! ! Performing inner reductions here.
+DEFER: (beta)
 TYPED: push-cont ( stack: fmc-seq cont: fmc-term m: fmc-seq-term -- stack': fmc-seq cont: fmc-term )
-    ! maybe-inline-call
-    ! [ swap [ suffix ] dip ] when* ;
+    dup loc-push? [ loc-push unboa [ f swap (beta) ] dip loc-push boa ] when
     swap [ suffix ] dip ;
 
 
@@ -367,22 +394,22 @@ TYPED:: find-loc-push ( stack: fmc-seq cont: fmc-term loc: loc-pop
 TYPED: beta-subst ( m: union{ fmc-term varname } v: varname n: fmc -- m/xn: fmc )
     (subst-fmc) ;
 
-TYPED: (beta) ( stack: fmc-seq m: fmc-term -- stack: fmc-seq )
-    {
-        { +unit+ [ ] }          ! NOP
-        { fmc-var [ push-cont (beta) ] }
-        { fmc-appl [ push-cont (beta) ] }
-        { fmc-abs [ find-loc-push
+TYPED: (beta) ( stack: fmc-seq m: fmc-term -- term: fmc-term )
+    [ seq>proper ] {
+        { +nil+ [ drop (beta) ] }          ! NOP
+        { varname [ push-cont (beta) ] }
+        { fmc-prim [ push-cont (beta) ] }
+        { loc-push [ push-cont (beta) ] }
+        { loc-pop [ find-loc-push
                     [| cont lpop term |
                      term lpop var>> cont beta-subst (beta)
                     ]
                     [ push-cont (beta) ] if*
                   ] }
-    } match ;
+    } lmatch ;
 
 TYPED: beta ( term: fmc-term -- term': fmc-term )
-    [ rename-fmc f swap (beta) ] with-var-names
-    seq>proper ;
+    [ rename-fmc f swap (beta) ] with-var-names ;
 
 ! * Expansion?
 
@@ -398,6 +425,34 @@ TYPED: beta ( term: fmc-term -- term': fmc-term )
 !   2. Ignore when not enough items are on the stack
 ! - Does FMC have progn semantics with respect to terms? With respect to the last
 !   argument on the stack during reduction?
+! - Simply quote-accumulate code on expression/literal stack? (Smells like B from SKYFEB...)
+!   - e.g.: call → λ⟨x⟩ [x]ψ
+!   - Strategy then: translate into code-building code
+!   - beta-reduce with (partial) evaluation?
+!   - Could then fetch the FMC-Sequence from ψ after the run...
+!   - Would that work with both in parallel???, e.g.
+!     - call → λ⟨x⟩ [x]ψ x
+!     - probably not...
+!     - could use that for parallel type computation, though...
+!     - Also, scoping probably does not work as expected? Nested quotations?
+!   - With types?
+!     - ~1~ :: ~[ 1 ]ψ [ fixnum ]τ~
+!     - macro semantics ~+~ :: ~ψ⟨x⟩ [x] fixnum instance? [ [ fixnum+ ]ψ ] [ [ foo+ ]ψ ] if~
+!     - value-set semantics ~+~ :: ~τ⟨x⟩ [x] fixnum class<= [ fixnum+ ] [ foo+ ] ? ⟨y⟩ [y]ψ~
+!     - ^ could be implemented with SKYFEB extensions, i.e. recursive macro invocations...
+!   - Type-driven code-selection during reduction
+!   - If reduction still has type-code left, erasure would then be performed by
+!     running an eager pass on the expander code, interpreting the ~τ~ location as
+!     ~[ object ] constantly~.
+!   - Macro-expansion would be actual computation on main stack, but folding is
+!     performed when pushing onto the ψ stack.  Could wrap this in some ~try-fold~
+!     primitive, which causes evaluation if possible during beta-reduction.
+!     - Folding ~+~: ~[ [ + ] try-fold ]ψ~
+!   - However, more general, it is probably better to treat every unquoted word as
+!     something that can be immediately executed if foldable, but when reducing
+!     in expansion context, treat all computations as foldable...
+!   - This approach should result in only having bare variables in a term if it is
+!     not inferable
 
 ! * Conditionals
 ! - Need row-binders for unknown stack configurations
@@ -407,6 +462,39 @@ TYPED: beta ( term: fmc-term -- term': fmc-term )
 !   be side-effect assignments (except for the ternary conditional)
 ! - Alternatively, is there some kind of pattern to a call?, e.g.:
 !   ~[ foo bar ] call~ → ~λ⟨a..⟩ [ [a..]λ foo bar ] λ⟨i⟩ i
+
+! : push-outputs ( quot  )
+
+! : linearize-if (  )
+
+! * FMC Types, variable locations for control flow?
+! - Types are indexed by location
+! - Location actions, e.g. reads and writes/push/pop to other locations are
+!   reflected in the signature: e.g.
+!   - update cell c :: set c = ⟨x⟩.c⟨_⟩.[x]c : ℤ c(ℤ) ⇒ c(ℤ)
+!   - printing :: print = ⟨x⟩.[x]out : ℤ ⇒ out(ℤ)
+!   - Destructive Stream access :: rand = rnd⟨x⟩.[x] : rnd(ℤ) ⇒ ℤ
+!   - ...
+! - Explicit composition of lambda stacks?
+! - ~[ + ] [ - ] if~
+!   → [ λ₁⟨x⟩ λ₁⟨y⟩ [x]λ₁ [y]λ₁ + ]λ [ λ₂⟨x⟩ λ₂⟨y⟩ [x]λ₂ [y]λ₂ - ]λ if
+
+!   In types: ~[ + ] [ - ]~ : (λ₁(ℤ) λ₁(ℤ) ⇒ λ₁(ℤ)) (λ₂(ℤ) λ₂(ℤ) ⇒ λ₂(ℤ)) ?
+
+!   - Or curried, but then we need to have row variables as inference place-holders?
+!   - .. [ foo ] call → .. M [ M foo ] ⟨x⟩ x
+!     → [ + ] [ - ] if
+!     → [ + ]λ₁ [ - ]λ₂ ⟨x⟩ if
+!     → [ [y] [x] λ₁⟨x⟩ λ₁⟨y⟩ [x]λ₁ [y]λ₁ + ]λ
+!       [ [y] [x] λ₂⟨x⟩ λ₂⟨y⟩ [x]λ₂ [y]λ₂ - ]λ if
+
+!     → λ⟨x⟩ λ⟨y⟩ [ [y] [x] λ₁⟨x⟩ λ₁⟨y⟩ [x]λ₁ [y]λ₁ + ]λ
+!       [ [y] [x] λ₂⟨x⟩ λ₂⟨y⟩ [x]λ₂ [y]λ₂ - ]λ if
+
+
+! - Problem with control flow is that the continuation of two different
+!   expressions is the same
+! - Above approach could be used to write down both branches in parallel?
 
 ! * TODO Extracting location/variable info
 
@@ -429,3 +517,7 @@ TYPED: beta ( term: fmc-term -- term': fmc-term )
 !   code look where to pop from?  Alternatively, invent new locations on the fly
 !   for every value that needs to be identified?  How to handle unique naming
 !   then?  Original FMC does not allow for passing location names...
+
+! * Channel Semantics?
+! Ref: SASL technical report
+! - have streams that are
