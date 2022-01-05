@@ -26,8 +26,12 @@ M: mixin-class rank-class drop 8 ;
     [ drop t "mixin" set-word-prop ]
     2tri ;
 
+: mixin-member-eq? ( elt seq -- ? )
+    over wrapper? [ member? ]
+    [ member-eq? ] if ; inline
+
 : if-mixin-member? ( class mixin true false -- )
-    [ 2dup class-members member-eq? ] 2dip if ; inline
+    [ 2dup class-members mixin-member-eq? ] 2dip if ; inline
 
 : change-mixin-class ( class mixin quot -- )
     [ [ class-members swap bootstrap-word ] dip call ] [ drop ] 2bi

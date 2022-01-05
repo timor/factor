@@ -92,6 +92,18 @@ M: wrapper class-name
     [ superclass-of class-name "_" append ]
     [ wrapped>> singleton-suffix append ] bi ;
 
+! For implementing word interface
+! NOTE: not using vocabulary name here!
+M: wrapper name>>
+    class-name ;
+
+M: wrapper vocabulary>>
+    superclass-of vocabulary>> ;
+
+! Copy-pasted from M\ word <=>
+M: wrapper <=>
+    [ [ name>> ] [ vocabulary>> ] bi 2array ] compare ;
+
 ! Gradual type
 SINGLETON: ??
 INSTANCE: ?? classoid
