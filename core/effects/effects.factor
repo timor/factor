@@ -107,8 +107,17 @@ M: classoid effect>type ;
 : effect-in-types ( effect -- input-types )
     in>> [ effect>type ] map ;
 
-: effect-out-types ( effect -- input-types )
+: effect>name ( effect-element -- str/f )
+    dup pair? [ first ] when ;
+
+: effect-in-names ( effect -- input-names )
+    in>> [ effect>name ] map ;
+
+: effect-out-types ( effect -- output-types )
     out>> [ effect>type ] map ;
+
+: effect-out-names ( effect -- output-names )
+    out>> [ effect>name ] map ;
 
 GENERIC: stack-effect ( word -- effect/f )
 
