@@ -8,16 +8,38 @@ IN: fmc
 
 ! Two ways of representing: ordered list of term-parts, or tree of binary terms
 
-! Evaluated location specifier: word or string
 TUPLE: varname { name string } ;
 C: <varname> varname
+
+TUPLE: typed-varname < varname type ;
+C: <typed-varname> typed-varname
+
+TYPED: type-var ( var: varname type -- var': typed-varname )
+    [ name>> ] dip <typed-varname> ;
+
+: type-of ( obj -- type )
+    { { [ dup varname? ] [ drop object ] }
+      { [ dup typed-varname? ] [ type>> ] }
+      [ class-of ]
+    } cond
+    ; foldable
+
+! Evaluated location specifier: word or string.  Variables possible, this will
+! immediately stop execution
+
+TUPLE: var-loc { var } ;
+C: <var-loc> var-loc
+PREDICATE: proper-var-loc < var-loc var>> { [ varname? ] [ var-loc? ] } 1|| ;
+
+UNION: fmc-loc word var-loc POSTPONE: f ;
+
 TUPLE: fmc-prim obj ;
 C: <fmc-prim> fmc-prim
 TUPLE: prim-call word out-names ;
 C: <prim-call> prim-call
-TUPLE: loc-push body { loc maybe{ word } } ;
+TUPLE: loc-push body { loc fmc-loc } ;
 C: <loc-push> loc-push
-TUPLE: loc-pop { var maybe{ varname } } { loc maybe{ word } } ;
+TUPLE: loc-pop { var maybe{ varname } } { loc fmc-loc } ;
 C: <loc-pop> loc-pop
 UNION: loc-op loc-push loc-pop ;
 
@@ -25,6 +47,7 @@ SINGLETON: +retain+
 SINGLETON: +omega+
 SINGLETON: +tau+
 SINGLETON: +psi+
+SINGLETON: +alpha+
 UNION: fmc-seq-term ! fmc-term
     varname fmc-prim prim-call loc-push loc-pop ;
 : fmc-sequence? ( seq -- ? )
@@ -58,22 +81,25 @@ UNION: fmc fmc-seq-term fmc-term ;
 
 GENERIC: >fmc* ( object -- term: fmc-seq )
 TYPED: <const> ( obj -- e: fmc-seq ) <fmc-prim> 1array ;
-M: object >fmc*
-    [ <const> +psi+ <loc-push> ]
-    [ class-of <const> +tau+ <loc-push> ] bi 2array ;
+M: object >fmc* <const> ;
+    ! [ <const> +psi+ <loc-push> ]
+    ! [ class-of <const> +tau+ <loc-push> ] bi 2array ;
 
 
 DEFER: seq>proper
-M: quotation >fmc* [ >fmc* ] map concat ! seq>proper f <loc-push>
+M: callable >fmc* [ >fmc* ] map concat ! seq>proper f <loc-push>
     ! f <loc-push>
     1array ;
 PREDICATE: shuffle-word < word "shuffle" word-prop ;
 
 SYMBOL: word-stack
 
+TYPED: <uvar> ( name: string -- var: varname )
+    uvar <varname> ;
+
 TYPED: word-intro ( word -- term: fmc-seq )
     stack-effect effect-in-names
-    [ "i" or uvar <varname> ] map
+    [ "i" or <uvar> ] map
     [ [ f <loc-pop> ] map ]
     [ <reversed> [ f <loc-push> ] map ] bi append ;
 
@@ -88,12 +114,15 @@ TYPED: exec>fmc ( word -- term: fmc-seq )
     [ def>> >fmc* first ] bi append ;
     ! def>> >fmc* first ;
 
-TYPED: shuffle>fmc ( word -- term: fmc-seq )
-    "shuffle" word-prop
-    [ in>> ] [ out>> ] bi uvar-shuffle
-    [ [ <varname> ] map ] bi@
-    [ [ f <loc-pop> ] map ]
-    [ <reversed> [ f <loc-push> ] map ] bi* append ;
+TYPED: loc-shuffle>fmc ( in-vars out-vars loc: fmc-loc -- term: fmc-seq )
+    dup '[ [ _ <loc-pop> ] map ]
+    swap '[ <reversed> [ _ <loc-push> ] map ] bi* append ;
+
+TYPED: shuffle>fmc ( word locs -- term: fmc-seq )
+    swap "shuffle" word-prop
+    '[ [ _ [ in>> ] [ out>> ] bi uvar-shuffle
+         [ [ <varname> ] map ] bi@ ] dip
+       loc-shuffle>fmc ] map concat ;
 
 ERROR: recursive-fmc word ;
 
@@ -102,8 +131,8 @@ ERROR: recursive-fmc word ;
 
 : access-vars ( word -- in-vars out-vars )
     stack-effect
-    [ effect-in-names [ "i" or uvar <varname> ] map ]
-    [ effect-out-names [ "o" or uvar <varname> ] map ] bi ;
+    [ effect-in-names [ "i" or <uvar> ] map ]
+    [ effect-out-names [ "o" or <uvar> ] map ] bi ;
 
 TYPED: lazy-call ( word in-vars out-vars -- term: fmc-seq )
     [ <const> ]
@@ -118,7 +147,7 @@ TYPED: lazy-call ( word in-vars out-vars -- term: fmc-seq )
 !     [ [ f <loc-pop> ] map prepend ]
 !     [ [ f <loc-push> ] map append ] bi* ;
 !     ! [ <const> ]
-!     ! stack-effect effect-out-names [ "o" or uvar <varname> ] map ;
+!     ! stack-effect effect-out-names [ "o" or <uvar> ] map ;
 
 ! Alternative: return through locs?
 ! [ fixnum+ ] → [ [ fixnum+ ] call ] → [ [ fixnum+ ] ⟨x⟩ x ]
@@ -166,7 +195,7 @@ TYPED: prim-call>fmc ( word -- term: fmc-seq )
 
 TYPED: word>fmc ( word -- term: fmc-seq )
     dup word-stack get in? [ recursive-fmc ] when
-    { { [ dup shuffle-word? ] [ shuffle>fmc ] }
+    { { [ dup shuffle-word? ] [ { f } shuffle>fmc ] }
       { [ dup primitive? ] [ <const> ] }
       ! { [ dup primitive? ] [ prim-call>fmc ] }
       ! { [ dup { call } in? ] [ <const> ] }
@@ -183,19 +212,20 @@ M: \ dip >fmc* drop
     [ swap >R call R> ] >fmc* first ;
 
 M: \ >R >fmc* drop
-    "v" uvar <varname>
+    "v" <uvar>
     [ f <loc-pop> ]
     [ +retain+ <loc-push> ] bi 2array ;
 
 M: \ R> >fmc* drop
-    "v" uvar <varname>
+    "v" <uvar>
     [ +retain+ <loc-pop> ]
     [ f <loc-push> ] bi 2array ;
 
 M: \ call >fmc* drop
-    "q" uvar <varname>
+    "q" <uvar>
     [ f <loc-pop> ]
-    [ +psi+ <loc-push> ] bi 2array ;
+    ! [ +psi+ <loc-push> ] bi 2array ;
+    keep 2array ;
 
 ! Takes two args from the stack
 ! Top-most is a callable
@@ -204,8 +234,8 @@ M: \ call >fmc* drop
 ! 2. Call callable
 M: \ curry >fmc* drop
     [let
-     "p" uvar <varname> :> o
-     "c" uvar <varname> :> c
+     "p" <uvar> :> o
+     "c" <uvar> :> c
      c f <loc-pop>
      o f <loc-pop>
      o f <loc-push>
@@ -213,8 +243,8 @@ M: \ curry >fmc* drop
     ] ;
 
 M: \ compose >fmc* drop
-    "ca" uvar <varname>
-    "cb" uvar <varname>
+    "ca" <uvar>
+    "cb" <uvar>
     [ swap [ f <loc-pop> ] bi@ ] 2keep
     2array 3array ;
 
@@ -223,7 +253,7 @@ M: \ compose >fmc* drop
 ! Compose N;M -> (N.M)
 DEFER: (subst-fmc)
 TYPED: <fresh> ( n: varname -- n': varname )
-    name>> uvar <varname> ;
+    name>> <uvar> ;
 TYPED: fresh-pop ( pop: loc-pop -- pop': loc-pop )
     loc-pop unboa [ <fresh> ] dip loc-pop boa ;
 TYPED: fresh-pop-subst ( pop: loc-pop -- old: varname fresh: varname pop': loc-pop )

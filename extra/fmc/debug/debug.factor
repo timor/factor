@@ -28,6 +28,6 @@ IN: fmc.debug
 : febug ( -- )
     \ (beta) [ [ beta-state. ] prepose ] annotate
     ! \ beta-subst watch
-    \ (subst-fmc) [ '[ _ 3keep reach fmc-subst. ] ] annotate
+    ! \ (subst-fmc) [ '[ _ 3keep reach fmc-subst. ] ] annotate
     \ beta-subst [ [ 3dup beta-subst.-1 ] prepose [ dup beta-subst.-2 ] compose ] annotate
     ;

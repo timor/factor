@@ -1,5 +1,5 @@
-USING: accessors assocs fmc kernel lists persistent.assocs quotations sequences
-typed types.util ;
+USING: accessors arrays assocs fmc kernel lists math namespaces
+persistent.assocs quotations sequences typed types.util ;
 
 IN: fmc.states
 
@@ -16,9 +16,12 @@ TUPLE: fmc-state
     { term fmc-term read-only initial: +nil+ } ;
 C: <fmc-state> fmc-state
 
+TYPED: init-fmc-state ( term: fmc-term -- state: fmc-state )
+    H{ } swap <fmc-state> ;
+
 TYPED: >fmc-state ( quot: callable -- state: fmc-state )
     >fmc beta
-    H{ } swap <fmc-state> ;
+    init-fmc-state ;
 
 TYPED: head-term ( state: fmc-state -- term/f: maybe{ fmc-seq-term } )
     term>> [ f ] { [ nip ] } lmatch ; inline
@@ -48,8 +51,20 @@ UNION: non-stuck-state application-state non-stuck-abstraction ;
 
 GENERIC: step-fmc* ( state: fmc-state -- memory: fmc-memory term: fmc-term )
 
+TYPED:: check-confluence ( state: fmc-state state': fmc-state continue?: boolean --
+                          state': fmc-state continue?: boolean )
+    continue?
+    [ state state' =
+      [ state state' "fmc-step-didnt-change-state" 3array throw ]
+      [ state' t ] if
+    ]
+    [ state' f ] if ;
+
+TYPED: safe-step-fmc ( state: fmc-state -- state': fmc-state continue?: boolean )
+    dup step-fmc* <fmc-state> dup non-stuck-state?
+    check-confluence ;
+
 TYPED: step-fmc ( state: fmc-state -- state': fmc-state continue?: boolean )
-    break
     step-fmc* <fmc-state>
     dup non-stuck-state? ;
 
@@ -74,5 +89,11 @@ M: application-state step-fmc*
 
 PREDICATE: fmc-trace < sequence [ fmc-state? ] all? ;
 
+SYMBOL: watchdog
+
 TYPED: run-fmc ( state: fmc-state -- trace: fmc-trace )
-    [ step-fmc ] [ dup ] produce swap suffix ;
+    0 watchdog [
+        watchdog get 100 > [ "runaway fmc" 2array throw ] [ watchdog inc ] if
+        [ safe-step-fmc ] [ dup ] produce swap suffix
+    ] with-variable
+    ;
