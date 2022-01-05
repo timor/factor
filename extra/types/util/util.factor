@@ -1,7 +1,7 @@
-USING: accessors assocs colors.constants combinators.short-circuit io io.styles
-kernel math math.parser namespaces prettyprint.backend prettyprint.custom
-prettyprint.sections quotations sequences sequences.private strings unicode
-words ;
+USING: accessors arrays assocs classes colors.constants combinators
+combinators.short-circuit io io.styles kernel lists math math.parser namespaces
+prettyprint.backend prettyprint.custom prettyprint.sections quotations sequences
+sequences.private strings typed unicode words ;
 
 IN: types.util
 
@@ -135,3 +135,56 @@ M: separator-block advance
         block>
         ! block>
     ] check-recursion ;
+
+! * Working with typed lists
+PREDICATE: lmatch-pair < pair first2 [ classoid? ] [ callable? ] bi* and ;
+PREDICATE: lmatch-specs < sequence unclip-last { [ drop [ lmatch-pair? ] all? ]
+                                                 [ nip union{ callable lmatch-pair } instance? ] } 2&& ;
+GENERIC: lmatch-branch-cond ( branch-spec -- quot )
+M: callable lmatch-branch-cond drop [ t ] ;
+M: lmatch-pair lmatch-branch-cond first '[ dup _ instance? ] ;
+GENERIC: lmatch-branch-body ( branch-spec -- quot )
+M: callable lmatch-branch-body ;
+M: lmatch-pair lmatch-branch-body second ;
+TYPED: lmatch-branches ( branches: lmatch-specs -- branches )
+    [ [ lmatch-branch-cond ] [ lmatch-branch-body ] bi 2array ] map ;
+
+TYPED: wrap-nil-lmatch ( nil-case: callable branches -- quot )
+    '[
+        dup +nil+?
+        [ drop @ ]
+        [ unswons _
+          cond ] if
+    ] ;
+    ! swap [ drop ] prepose [ dup +nil+? ] swap 2array prefix ;
+
+MACRO: lmatch ( nil-case branches -- quot )
+    lmatch-branches wrap-nil-lmatch ;
+    ! prepend-nil-case '[
+    !     _ cond
+    ! ] ;
+
+: dipd ( ..a x y quot: ( ..a y -- ..b ) -- ..b x )
+    rot [ call ] dip ; inline
+
+! Typed conses
+GENERIC: swons* ( cdr car class -- cons )
+M: \ cons-state swons* drop swons ;
+: cons* ( car cdr class -- cons )
+    [ swap ] dip swons* ; inline
+
+: lreverse-as ( list cons-class -- new-list )
+    nil swap '[ _ swons* ] foldl ;
+
+: lmap-as ( ... list quot: ( ... elt -- ... newelt ) cons-class -- ... result )
+    [ [ nil ] dip ] dip [ '[ swapd dip _ cons* ] curry foldl ] keep lreverse-as ; inline
+
+MACRO: lmatch-map-as ( branches cons-class -- quot )
+    [ lmatch-branches ] dip
+    '[ [ _ cond ] _ lmap-as ] ;
+
+! MACRO: lmatch-filter ( cases -- quot )
+!     dup [ first2 '[ _ dipd cons ] 2array ] map
+!     '[ [ +nil+ ]
+!        _ lmatch
+!     ] ;
