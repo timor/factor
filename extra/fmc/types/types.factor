@@ -1,4 +1,5 @@
-USING: accessors assocs fmc kernel lists match namespaces typed types.util ;
+USING: accessors arrays assocs combinators combinators.short-circuit fmc kernel
+lists make match namespaces sequences typed types.util ;
 
 IN: fmc.types
 
@@ -8,15 +9,25 @@ IN: fmc.types
 TUPLE: fmc-type in out ;
 C: <fmc-type> fmc-type
 
+! NOTE: unused?
 TUPLE: type-var name ;
 C: <type-var> type-var
+
 TUPLE: row-type-var name ;
 C: <row-type-var> row-type-var
 
 INSTANCE: type-var match-var
 INSTANCE: row-type-var match-var
 
-UNION: type-term fmc-type type-var list ;
+! Special structure that can be used to match rests in lists
+TUPLE: row-cons < cons-state ;
+C: <row-cons> row-cons
+M: \ row-cons swons* drop swap <row-cons> ;
+
+TUPLE: composition upper lower ;
+C: <composition> composition
+
+UNION: type-term fmc-type type-var list composition ;
 
 TYPED: add-to-consumption ( type: fmc-type tterm: type-term -- type': fmc-type )
     ! [ in>> swap suffix ]
@@ -27,11 +38,13 @@ TYPED: add-to-consumption ( type: fmc-type tterm: type-term -- type': fmc-type )
     "ρ" uvar <type-var> ;
 
 TYPED: <unit-type> ( -- type: fmc-type )
-    "τ" uvar <row-type-var> dup <fmc-type> ;
+    "τ" uvar <row-type-var> ! nil <row-cons>
+    dup <fmc-type> ;
 
 TYPED: <unknown-type> ( -- type: fmc-type )
-    "σ" uvar <row-type-var>
-    "υ" uvar <row-type-var> <fmc-type> ;
+    "σ" uvar <row-type-var> ! nil <row-cons>
+    "υ" uvar <row-type-var> ! nil <row-cons>
+    <fmc-type> ;
 
 ! TYPED: <pop-type> ( -- type: fmc-type )
 !     <
@@ -52,16 +65,16 @@ SYMBOL: context
         dup match-var? [ ,, ] [ 2drop ] if
       ] assoc-each ] H{ } make ;
 
-TYPED:: solve-abs ( var: maybe{ fmc-type } cont: maybe{ fmc-type } result: maybe{ fmc-type }
-                   -- var: type-term cont-type: fmc-type result-type: fmc-type )
-    var [ <unknown-type> ] unless* :> var
-    cont [ <unknown-type> ] unless* :> cont
-    result [ var cont in>> cons cont out>> <fmc-type> ] unless* :> result
-    cont result bi-match
-    [ var replace-patterns
-      cont replace-patterns
-      result replace-patterns
-    ] with-variables ;
+! TYPED:: solve-abs ( var: maybe{ fmc-type } cont: maybe{ fmc-type } result: maybe{ fmc-type }
+!                    -- var: type-term cont-type: fmc-type result-type: fmc-type )
+!     var [ <unknown-type> ] unless* :> var
+!     cont [ <unknown-type> ] unless* :> cont
+!     result [ var cont in>> cons cont out>> <fmc-type> ] unless* :> result
+!     cont result bi-match
+!     [ var replace-patterns
+!       cont replace-patterns
+!       result replace-patterns
+!     ] with-variables ;
 
 : list-end? ( thing -- ? )
     { [ nil? ] [ list? not ] } 1|| ;
@@ -133,14 +146,15 @@ TYPED: unify-transfer ( type1: fmc-type type2: fmc-type -- type1: fmc-type type2
     [ [ replace-patterns ] bi@ ] with-variables ;
 
 
-TYPED:: solve-var ( var: type-term cont: maybe{ fmc-type } result: maybe{ fmc-type }
-                    -- var: fmc-type cont: fmc-type result: fmc-type )
-    var [ <unknown-type> ] unless* :> var
-    cont result and not [ <unknown-type> ] [ f ] if :> common
-    cont [ var out>> common in>> 2array common out>> <fmc-type> ] unless* :> cont
-    result [ var in>> common in>> 2array common out>> <fmc-type> ] unless* :> result
-    var cont unify-composition :> ( var cont )
-    cont result unify-transfer
+! TYPED:: solve-var ( var: type-term cont: maybe{ fmc-type } result: maybe{ fmc-type }
+!                     -- var: fmc-type cont: fmc-type result: fmc-type )
+!     var [ <unknown-type> ] unless* :> var
+!     cont result and not [ <unknown-type> ] [ f ] if :> common
+!     cont [ var out>> common in>> 2array common out>> <fmc-type> ] unless* :> cont
+!     result [ var in>> common in>> 2array common out>> <fmc-type> ] unless* :> result
+!     var cont unify-composition :> ( var cont )
+!     cont result unify-transfer
+!     ;
 
     ! [ var out>> cont in>> match-composition %%
     !   cont out>> result out>> match %%
@@ -153,30 +167,161 @@ TYPED:: solve-var ( var: type-term cont: maybe{ fmc-type } result: maybe{ fmc-ty
     !     result replace-patterns clean-fmc-type
     ! ] with-variables ;
 
-TYPED:: solve-appl ( body: maybe{ fmc-type } cont: maybe{ fmc-type } result: maybe{ fmc-type }
-                     -- body: type-term cont: fmc-type result: fmc-type )
-    body [ <unknown-type> ] unless* :> body
-    result [ <unknown-type> ] unless* :> result
-    cont [ result [ in>> body swons ] [ out>> ] bi <fmc-type> ] unless* :> cont
-    cont result bi-match
-    [
-        body replace-patterns
-        cont replace-patterns
-        result replace-patterns
+! TYPED:: solve-appl ( body: maybe{ fmc-type } cont: maybe{ fmc-type } result: maybe{ fmc-type }
+!                      -- body: type-term cont: fmc-type result: fmc-type )
+!     body [ <unknown-type> ] unless* :> body
+!     result [ <unknown-type> ] unless* :> result
+!     cont [ result [ in>> body swons ] [ out>> ] bi <fmc-type> ] unless* :> cont
+!     cont result bi-match
+!     [
+!         body replace-patterns
+!         cont replace-patterns
+!         result replace-patterns
+!     ] with-variables ;
+
+DEFER: type-of*
+TYPED:: type-of/abs ( cont: fmc-term lpop: loc-pop -- type: fmc-type )
+    lpop var>> :> var
+    var get [ <unknown-type> ] unless* :> var-type
+    [ var-type var set
+      cont type-of*
+      var get
+    ] with-scope :> ( cont-type var-type )
+    cont-type [ in>> var-type swons ] [ out>> ] bi <fmc-type> ;
+
+GENERIC: uncons-input ( in -- car cdr )
+M: list uncons-input uncons ;
+M: row-type-var uncons-input nil swap ;
+
+TYPED:: type-of/app ( cont: fmc-term lpush: loc-push -- type: fmc-type )
+    lpush body>> type-of* :> body-type
+    cont type-of* [ in>> ] [ out>> ] bi :> ( rho+sigma tau )
+    rho+sigma uncons-input :> ( rho sigma )
+    body-type rho solve-eq
+    [ sigma subst
+      tau subst
+      <fmc-type>
     ] with-variables ;
+    ! sigma tau <fmc-type> ;
+
+! : compose-type-lists ( car-types1 cdr-types2 -- types )
+!     { { [ 2dup [ nil? ] both? ] [ 2drop nil ] }
+!       { [ 2dup [ list? ] both? ] [ list* ] }
+!       [ <composition> ]
+!     } cond ;
+
+! ERROR: ambiguous-composition type1 type2 ;
+! PREDICATE: composed-output < fmc-type out>> composition? ;
+! PREDICATE: composed-input < fmc-type in>> composition? ;
+
+! Row effects:
+! variable: L{ … . row-type-var }
+! empty stack: L{ ... . nil }
+! M: composition decompose-right
+!     over composition? [ f ]
+!     [ upper>> t ] if ;
+! M: composition decompose-left
+!     dup composition? [ f ]
+!     [ [ lower>> t ] dip t ] if ;
+! GENERIC: solve-composition ( type1: fmc-type type2: fmc-type -- type: fmc-type )
+
+! TYPED: solve-strict-composition ( type1: fmc-type type2: fmc-type -- type: fmc-type )
+!     [ [ out>> ] [ in>> ] bi* solve-eq drop ]
+!     [ [ in>> ] [ out>> ] bi* ] 2bi ;
+
+! TYPED:: solve-input-composition ( type1: fmc-type type2: composed-input -- type: fmc-type )
+!     type1 [ in>> ] [ out>> ] :> ( rho sigma )
+!     type2 [ in>> [ type1>> ] [ type2>> ] bi ] [ out>> ] :> ( rho-upsilon tau )
+
+! M: composed-input solve-composition
+!     over composed-output? [ ambiguous-composition ] when
+!     solve-input-composition ;
+! M: fmc-type solve-composition
+!     over composed-output? [ solve-output-composition ]
+!     [ solve-strict-composition ] if ;
+
+! TYPED: solve-composition ( type1: fmc-type type2: fmc-type -- type: fmc-type )
+!     { { [ 2dup [ composed-out ] ] } }
+! : atom? ( obj -- ? ) list? not ;
+! INSTANCE: row-cons match-var
+M: row-cons decompose-right
+    call-next-method
+    [ car>> [ 1array ] bi@ t ] unless* ;
+M: row-cons decompose-left
+    call-next-method
+    [ [ car>> ] dip [ 1array ] bi@ t ] unless* ;
+! M: row-cons subst
+!     [ car get ] keep or ;
+! M: row-cons subst
+!     [ get ]
+ERROR: free-var cont varname ;
+TYPED:: type-of/var ( cont: fmc-term var: varname -- type: fmc-type )
+    ! var get [ cont var free-var ] unless* :> var-type
+    ! ! cont type-of* [ in>> ] [ out>> ] bi :> ( in2 upsilon )
+    ! ! var-type [ in>> ] [ out>> ] bi :> ( rho out1 )
+    ! ! "σ" uvar <row-type-var> :> sigma
+    ! ! "τ" uvar <row-type-var> :> tau
+    ! ! sigma tau cons :> sigma-tau
+    ! ! rho tau cons :> rho-tau
+    ! ! sigma-tau rho-tau solve-eq
+    ! ! [ rho subst sigma subst <fmc-type>
+    ! !   rho-tau subst upsilon subst <fmc-type>
+    ! ! ] with-variables :> ( var-type result-type )
+    ! ! var-type var set
+    ! ! result-type ;
+    ! cont type-of* [ in>> ] [ out>> ] bi :> ( in2 out2 )
+    ! var-type [ in>> ] [ out>> ] bi :> ( rho sigma )
+    ! ! "σ" uvar <row-type-var> :> sigma
+    ! "ττ" uvar <row-type-var> :> tau
+    ! "υυ" uvar <row-type-var> nil <row-cons> :> upsilon
+    ! ! sigma tau cons :> sigma-tau
+    ! ! rho tau cons :> rho-tau
+    ! ! sigma-tau rho-tau solve-eq
+    ! sigma tau list* :> sigma-tau
+    ! rho tau list* :> rho-tau
+    ! sigma-tau in2 2array
+    ! sigma-tau rho-tau 2array
+    ! upsilon out2 2array
+    ! 3array solve
+    ! [ rho subst sigma subst <fmc-type>
+    !   rho-tau subst upsilon subst <fmc-type>
+    ! ] with-variables :> ( var-type result-type )
+    ! var-type var set
+    ! result-type ;
+    var get [ cont var free-var ] unless* :> var-type
+    var-type [ in>> ] [ out>> ] bi :> ( in1 out1 )
+    cont type-of* [ in>> ] [ out>> ] bi :> ( in2 out2 )
+    out1 in2 solve-eq
+    [
+        in1 subst :> in1'
+        in1' out1 subst <fmc-type>
+        in2 subst out2 subst <fmc-type>
+    ] with-variables :> ( var-type result-type )
+    var-type var set
+    result-type ;
+
+! TYPED: type-of* ( term: fmc-term -- type: fmc-type )
+!     [ <unit-type> ] {
+!         { loc-pop [ var>> context get [ drop <unknown-type> ] cache
+!                     swap type-of* f solve-abs 2nip ] }
+!         { varname [ context get [ drop <unknown-type> ] cache
+!                     swap type-of* f solve-var 2nip ] }
+!         { loc-push [ body>> type-of* swap type-of* f solve-appl 2nip ] }
+!     } lmatch ;
 
 TYPED: type-of* ( term: fmc-term -- type: fmc-type )
     [ <unit-type> ] {
-        { loc-pop [ var>> context get [ drop <unknown-type> ] cache
-                    swap type-of* f solve-abs 2nip ] }
-        { varname [ context get [ drop <unknown-type> ] cache
-                    swap type-of* f solve-var 2nip ] }
-        { loc-push [ body>> type-of* swap type-of* f solve-appl 2nip ] }
+        { loc-pop [ type-of/abs ] }
+        { varname [ type-of/var ] }
+        { loc-push [ type-of/app ] }
     } lmatch ;
 
+! TYPED: type-of ( term: fmc-term -- type: fmc-type )
+!     [ H{ } clone context [ type-of* ] with-variable ]
+!     with-var-names ;
+
 TYPED: type-of ( term: fmc-term -- type: fmc-type )
-    [ H{ } clone context [ type-of* ] with-variable ]
-    with-var-names ;
+    [ type-of* ] with-var-names ;
 
 ! GENERIC: in>out ( in-types term: fmc-term -- in-types )
 ! GENERIC: in<out ( out-types term: fmc-term -- in-types )
