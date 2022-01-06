@@ -1,9 +1,12 @@
-USING: accessors arrays assocs classes colors.constants combinators
-combinators.short-circuit io io.styles kernel lists math math.parser namespaces
-prettyprint.backend prettyprint.custom prettyprint.sections quotations sequences
-sequences.private strings typed unicode words ;
+USING: accessors arrays assocs assocs.extras classes classes.algebra
+classes.tuple colors.constants combinators combinators.short-circuit hashtables
+io io.styles kernel lists match math math.parser namespaces prettyprint.backend
+prettyprint.custom prettyprint.sections quotations sequences sequences.private
+strings typed unicode words ;
 
 IN: types.util
+
+FROM: syntax => _ ;
 
 TUPLE: mapped
     { seq sequence read-only }
@@ -188,3 +191,76 @@ MACRO: lmatch-map-as ( branches cons-class -- quot )
 !     '[ [ +nil+ ]
 !        _ lmatch
 !     ] ;
+
+! * Unification
+! Baader/Nipkow
+GENERIC: subst ( term -- term )
+M: object subst ;
+M: match-var subst [ get ] keep or ;
+M: sequence subst [ subst ] map ;
+M: tuple subst tuple>array subst >tuple ;
+
+: lift ( term subst -- term )
+    swap [ subst ] curry with-variables ;
+
+GENERIC: occurs? ( var term -- ? )
+M: object occurs? 2drop f ;
+M: match-var occurs? = ;
+M: sequence occurs? [ occurs? ] with any? ;
+M: tuple occurs? tuple-slots occurs? ;
+
+ERROR: rebuilds-identity-tuple term ;
+M: identity-tuple subst rebuilds-identity-tuple ;
+
+ERROR: incompatible-terms term1 term2 ;
+
+! Tried first
+GENERIC#: decompose-left 1 ( term1 term2 -- terms1 terms2 cont? )
+GENERIC: decompose-right ( term1 term2 -- terms1 terms2 cont? )
+M: object decompose-right f ;
+M: object decompose-left decompose-right ;
+M: tuple decompose-right
+    2dup [ class-of ] same?
+    [ [ tuple-slots ] bi@ t ] [ f ] if ;
+M: sequence decompose-right
+    2dup { [ drop sequence? ] [ [ length ] same? ] } 2&& ;
+
+: decompose ( term1 term2 -- term1 term2 cont? )
+    {
+        [
+            { [ decompose-left ] [ decompose-right ] } 0||
+            [ 2dup = [ f ] [ incompatible-terms ] if ] unless*
+        ]
+    } cond ;
+
+DEFER: elim
+: (solve) ( subst problem -- subst )
+    [ unclip first2
+       { { [ over match-var? ] [ 2dup = [ 2drop (solve) ] [ elim ] if ] }
+         { [ dup match-var? ] [ swap elim ] }
+         [ decompose [ zip prepend ] [ 2drop ] if (solve) ]
+       } cond ] unless-empty ;
+
+ERROR: recursive-term-error subst problem var term ;
+SINGLETON: +keep+
+SYMBOL: on-recursive-term
+: recursive-term ( subst problem var term -- subst )
+    on-recursive-term get
+    [ dup +keep+? [ 3drop (solve) ] [ nip elim ] if ]
+    [ recursive-term-error ] if* ;
+
+: elim ( subst problem var term -- subst )
+    2dup occurs? [ recursive-term ]
+    [ swap associate
+      [ [ [ lift ] curry map-values ] keep assoc-union ]
+      [ [ [ lift ] curry bi@ ] curry assoc-map ] bi-curry bi*
+      (solve) ] if ;
+
+: solve ( problem -- subst )
+    H{ } clone swap (solve) ;
+
+: solve-eq ( term1 term2 -- subst )
+    2array 1array solve ;
+
+: solve-in ( term eqns -- term subst )
+    solve [ lift ] keep ;
