@@ -37,13 +37,18 @@ TYPED: add-to-consumption ( type: fmc-type tterm: type-term -- type': fmc-type )
 : <fresh-type-var> ( -- obj )
     "ρ" uvar <type-var> ;
 
+TYPED: <urow-var> ( name -- var: row-type-var )
+    uvar <row-type-var> ;
+
 TYPED: <unit-type> ( -- type: fmc-type )
-    "τ" uvar <row-type-var> ! nil <row-cons>
-    dup <fmc-type> ;
+    "τ" <urow-var> ! nil <row-cons>
+    ! dup
+    [ nil cons ] keep
+    <fmc-type> ;
 
 TYPED: <unknown-type> ( -- type: fmc-type )
-    "σ" uvar <row-type-var> ! nil <row-cons>
-    "υ" uvar <row-type-var> ! nil <row-cons>
+    "ρ" <urow-var> ! nil <row-cons>
+    "σ" <urow-var> ! nil <row-cons>
     <fmc-type> ;
 
 ! TYPED: <pop-type> ( -- type: fmc-type )
@@ -259,8 +264,8 @@ TYPED:: type-of/var ( cont: fmc-term var: varname -- type: fmc-type )
     ! var get [ cont var free-var ] unless* :> var-type
     ! ! cont type-of* [ in>> ] [ out>> ] bi :> ( in2 upsilon )
     ! ! var-type [ in>> ] [ out>> ] bi :> ( rho out1 )
-    ! ! "σ" uvar <row-type-var> :> sigma
-    ! ! "τ" uvar <row-type-var> :> tau
+    ! ! "σ" <urow-var> :> sigma
+    ! ! "τ" <urow-var> :> tau
     ! ! sigma tau cons :> sigma-tau
     ! ! rho tau cons :> rho-tau
     ! ! sigma-tau rho-tau solve-eq
@@ -271,9 +276,9 @@ TYPED:: type-of/var ( cont: fmc-term var: varname -- type: fmc-type )
     ! ! result-type ;
     ! cont type-of* [ in>> ] [ out>> ] bi :> ( in2 out2 )
     ! var-type [ in>> ] [ out>> ] bi :> ( rho sigma )
-    ! ! "σ" uvar <row-type-var> :> sigma
-    ! "ττ" uvar <row-type-var> :> tau
-    ! "υυ" uvar <row-type-var> nil <row-cons> :> upsilon
+    ! ! "σ" <urow-var> :> sigma
+    ! "ττ" <urow-var> :> tau
+    ! "υυ" <urow-var> nil <row-cons> :> upsilon
     ! ! sigma tau cons :> sigma-tau
     ! ! rho tau cons :> rho-tau
     ! ! sigma-tau rho-tau solve-eq
@@ -322,6 +327,46 @@ TYPED: type-of* ( term: fmc-term -- type: fmc-type )
 
 TYPED: type-of ( term: fmc-term -- type: fmc-type )
     [ type-of* ] with-var-names ;
+
+DEFER: (build-type)
+TYPED:: build/abs ( cont: fmc-term lpop: loc-pop -- type: fmc-type )
+    lpop var>> :> var
+    <fresh-type-var> [ var set ] keep :> var-type
+    cont (build-type) :> cont-type
+    "σ_abs" <urow-var> "τ_abs" <urow-var> :> ( sigma tau )
+    tau cont-type out>> 2array ,
+    sigma cont-type in>> 2array ,
+    var-type sigma cons tau <fmc-type> ;
+
+TYPED:: build/var ( cont: fmc-term var: varname -- type: fmc-type )
+    var get dup [ var "free var" 2array throw ] unless :> var-type
+    "τ_var" <urow-var> "υ_var" <urow-var> :> ( tau upsilon )
+    "ρ_var" <urow-var> "σ_var" <urow-var> :> ( rho sigma )
+    cont (build-type) :> cont-type
+    sigma tau cons cont-type in>> 2array ,
+    upsilon cont-type out>> 2array ,
+    var-type rho sigma <fmc-type> 2array ,
+    rho tau cons upsilon <fmc-type> ;
+
+TYPED:: build/app ( cont: fmc-term lpush: loc-push -- type: fmc-type )
+    lpush body>> (build-type) :> body-type
+    cont (build-type) :> cont-type
+    "σ_app" <urow-var> "τ_app" <urow-var> :> ( sigma tau )
+    body-type sigma cons cont-type in>> 2array ,
+    tau cont-type out>> 2array ,
+    sigma tau <fmc-type> ;
+
+TYPED: (build-type) ( term: fmc-term -- type: fmc-type )
+    [ <unit-type> ] {
+        { varname [ build/var ] }
+        { loc-pop [ build/abs ] }
+        { loc-push [ build/app ] }
+    } lmatch
+    ;
+
+TYPED: build-type ( term: fmc-term -- type: fmc-type problem )
+    [ [ (build-type) ] { } make ] with-var-names ;
+
 
 ! GENERIC: in>out ( in-types term: fmc-term -- in-types )
 ! GENERIC: in<out ( out-types term: fmc-term -- in-types )

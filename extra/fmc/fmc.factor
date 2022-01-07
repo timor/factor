@@ -11,18 +11,18 @@ IN: fmc
 TUPLE: varname { name string } ;
 C: <varname> varname
 
-TUPLE: typed-varname < varname type ;
-C: <typed-varname> typed-varname
+! TUPLE: typed-varname < varname type ;
+! C: <typed-varname> typed-varname
 
-TYPED: type-var ( var: varname type -- var': typed-varname )
-    [ name>> ] dip <typed-varname> ;
+! TYPED: type-var ( var: varname type -- var': typed-varname )
+!     [ name>> ] dip <typed-varname> ;
 
-: type-of ( obj -- type )
-    { { [ dup varname? ] [ drop object ] }
-      { [ dup typed-varname? ] [ type>> ] }
-      [ class-of ]
-    } cond
-    ; foldable
+! : type-of ( obj -- type )
+!     { { [ dup varname? ] [ drop object ] }
+!       { [ dup typed-varname? ] [ type>> ] }
+!       [ class-of ]
+!     } cond
+!     ; foldable
 
 ! Evaluated location specifier: word or string.  Variables possible, this will
 ! immediately stop execution
@@ -59,10 +59,10 @@ M: \ fmc-cons swons*
     drop swap fmc-cons boa ;
 UNION: fmc-atom fmc-seq-term ;
 
-UNION: proper-fmc-cdr +nil+ fmc-cons ;
+UNION: fmc-list +nil+ fmc-cons ;
 : (proper-fmc-list?) ( obj -- ? )
     dup fmc-cons?
-    [ uncons [ { [ fmc-atom? ] [ (proper-fmc-list?) ] } 1|| ] [ proper-fmc-cdr? ] bi* and ]
+    [ uncons [ { [ fmc-atom? ] [ (proper-fmc-list?) ] } 1|| ] [ fmc-list? ] bi* and ]
     [ drop f ] if
     ;
 PREDICATE: proper-fmc-list < fmc-cons (proper-fmc-list?) ;
@@ -209,17 +209,22 @@ M: word >fmc*
 ! * Special primitives
 
 M: \ dip >fmc* drop
-    [ swap >R call R> ] >fmc* first ;
+    "q" <uvar>
+    "x" <uvar>
+    [ [ f <loc-pop> ] [ f <loc-pop> ] bi* ]
+    [ [ ] [ f <loc-push> ] bi* ] 2bi
+    4array ;
+    ! [ swap >R call R> ] >fmc* first ;
 
-M: \ >R >fmc* drop
-    "v" <uvar>
-    [ f <loc-pop> ]
-    [ +retain+ <loc-push> ] bi 2array ;
+! M: \ >R >fmc* drop
+!     "v" <uvar>
+!     [ f <loc-pop> ]
+!     [ +retain+ <loc-push> ] bi 2array ;
 
-M: \ R> >fmc* drop
-    "v" <uvar>
-    [ +retain+ <loc-pop> ]
-    [ f <loc-push> ] bi 2array ;
+! M: \ R> >fmc* drop
+!     "v" <uvar>
+!     [ +retain+ <loc-pop> ]
+!     [ f <loc-push> ] bi 2array ;
 
 M: \ call >fmc* drop
     "q" <uvar>

@@ -1,7 +1,7 @@
-USING: accessors arrays colors.constants fmc formatting io io.streams.string
-io.styles kernel lists make math namespaces present prettyprint
-prettyprint.config prettyprint.custom prettyprint.sections sequences types.util
-words ;
+USING: accessors arrays colors.constants fmc fmc.types formatting io
+io.streams.string io.styles kernel lists make math namespaces present
+prettyprint prettyprint.config prettyprint.custom prettyprint.sections sequences
+types.util words ;
 
 IN: fmc.printing
 
@@ -75,3 +75,14 @@ M: fmc-cons >pprint-sequence
 : >fmc. ( object -- )
     nesting-limit get dup [ 100 + ] when nesting-limit
     [ >fmc fmc. ] with-variable ;
+
+! Print types
+SYMBOL: ⇒
+M: fmc-type pprint* " " pprint-compact ;
+M: fmc-type pprint-delims drop "(" ")" ;
+M: fmc-type >pprint-sequence
+    [ in>> ⇒ ]
+    [ out>> ] bi 3array ;
+
+M: type-var pprint* name>> H{ { foreground COLOR: solarized-green } } styled-text ;
+M: row-type-var pprint* name>> H{ { foreground COLOR: solarized-orange } } styled-text ;
