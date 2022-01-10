@@ -1,7 +1,8 @@
-USING: accessors arrays assocs colors.constants combinators io.styles kernel
-lexer lists lists.private locals.rewrite make match math namespaces parser
-prettyprint.custom prettyprint.stylesheet quotations sequences strings typed
-types.util variants vocabs.parser ;
+USING: accessors arrays assocs colors.constants combinators
+combinators.short-circuit io.styles kernel lexer lists locals.rewrite make match
+math namespaces parser prettyprint.backend prettyprint.custom
+prettyprint.sections prettyprint.stylesheet quotations sequences strings typed
+types.util variants vocabs.parser words ;
 
 IN: skyfeb
 ! QUALIFIED-WITH: match pm
@@ -23,22 +24,27 @@ INSTANCE: app list
 M: app car left>> ;
 M: app cdr right>> ;
 
-UNION: operator S K Y F E B ;
+! PREDICATE: skyfeb-atom < word "skyfeb-def" word-prop not ;
+PREDICATE: skyfeb-word < word "skyfeb-def" word-prop ;
+SINGLETONS: I -> || L let letrec ;
+UNION: syntax-sugar I -> || L let letrec ;
 ! Syntax sugar, can be in parsed terms, but must be reduced
-SINGLETONS: I -> || L ;
-UNION: syntax-sugar I -> || L ;
+
+UNION: term skyfeb-term match-var syntax-sugar ;
+PREDICATE: opaque-operator < object { [ skyfeb-word? ] [ term? ] } 1|| not ;
+UNION: operator S K Y F E B opaque-operator ;
 
 TYPED: arity ( op: operator -- n: integer )
-    H{ { Y 1 }
-       { K 2 }
-       { S 3 }
-       { F 3 }
-       { E 4 }
+    H{
+        { Y 1 }
+        { K 2 }
+        { S 3 }
+        { F 3 }
+        { E 4 }
     } at ;
 
 PREDICATE: operator-app < app left>> operator? ;
 
-UNION: term skyfeb-term match-var +nil+ syntax-sugar ;
 DEFER: >skyfeb
 GENERIC: >skyfeb-atom ( obj -- term: term )
 M: string >skyfeb-atom <var> ;
@@ -47,8 +53,10 @@ M: object >skyfeb-atom ;
 M: syntax-sugar >skyfeb-atom ;
 ! M: array >skyfeb-atom nil suffix items>list >skyfeb ;
 M: array >skyfeb-atom >skyfeb ;
+! M: bapp-pre-term >skyfeb-atom [  ]
 ! M: list >skyfeb-atom >skyfeb ;
 M: term >skyfeb-atom ;
+! M: constant >skyfeb-atom "constant" word-prop ;
 
 M: app rewrite-element
     dup rewrite-literal? [
@@ -85,7 +93,9 @@ M: app factorable? drop f ;
 PREDICATE: compound < operator-app factorable? ;
 
 : parse-skyfeb-literal ( accum -- accum )
-    \ } [ >skyfeb dup match-var? [ literalize ] when ] parse-literal ;
+    \ } [ >skyfeb ! dup match-var? [ literalize ] when
+          literalize
+        ] parse-literal ;
 
 SYNTAX: SF{  parse-skyfeb-literal ;
 
@@ -116,3 +126,5 @@ M: var pprint*
     [ H{ { foreground COLOR: solarized-blue } }
       base-string-style [ name>> pprint* ] with-variable ]
     [ \ VAR{ pprint-word name>> text \ } pprint-word ] if ;
+
+SYNTAX: SKY: scan-new "{" expect [ parse-skyfeb-literal unclip-last-slice ] dip swap "skyfeb-def" set-word-prop ;
