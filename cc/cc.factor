@@ -1,5 +1,6 @@
-USING: accessors continuations kernel math multiline peg peg.ebnf sequences
-strings typed variants ;
+USING: accessors continuations io.streams.string kernel match math multiline
+parser peg peg.ebnf prettyprint prettyprint.backend prettyprint.custom
+prettyprint.sections sequences strings typed variants ;
 
 IN: cc
 
@@ -11,7 +12,6 @@ VARIANT: ccn-term
     I
     var: { name }
     app: { left right }
-    ! tapp: { left right }
     mapping: { var term }
     ext: { prev mapping }
     abs: { subst var term }
@@ -20,7 +20,6 @@ VARIANT: ccn-term
 TUPLE: tapp < app ;
 C: <tapp> tapp
 
-! Name              = !(Keyword) iName => [[ ast-name boa ]]
 VARIANT: ccn-token
     tag
     impl-app
@@ -28,15 +27,20 @@ VARIANT: ccn-token
     close
     ->
     dcol
-    id: { name }
+    abbrev: { name }
     lbracket
     rbracket
     dot
     ;
 
-SINGLETON: +in+
-UNION: operator tag impl-app -> dcol dot +in+ ;
-UNION: operand I var id ;
+SINGLETONS: +bind+ ;
+TUPLE: bind-op subst var ;
+C: <bind-op> bind-op
+TUPLE: lam var body ;
+C: <lam> lam
+
+UNION: operator tag impl-app -> dcol dot +bind+ ;
+UNION: operand I var match-var ;
 
 
 EBNF: tokenize-ccn
@@ -50,27 +54,29 @@ EBNF: tokenize-ccn
      Spaces            = Space* => [[ ignore ]]
      NameFirst         = Letter
      NameRest          = Letter | Digit
-     Keyword           = ("I" => [[ drop I ]]) !(NameRest)
+     Keyword           = ("I" => [[ drop I ]] ) !(NameRest)
      iName             = NameFirst NameRest* => [[ first2 swap prefix >string ]]
-     Name              = !(Keyword) iName => [[ <id> ]]
+     SVarName          = "?" NameRest* => [[ first2 >string swap prepend ]]
+     Name              = !(Keyword) iName
+     Id                = Name => [[ <var> ]]
      LB                = "[" => [[ drop lbracket ]]
      RB                = "]" => [[ drop rbracket ]]
      Open              = "(" => [[ drop open ]]
      Close             = ")" => [[ drop close ]]
      DCol              = "::" => [[ drop dcol ]]
      Tag               = "@" => [[ drop tag ]]
-     Arrow             = "->" => [[ drop -> ]]
+     Arrow             = ("->" | "⟼") => [[ drop -> ]]
      Dot               = "." => [[ drop dot ]]
-     Special           = Open | Close | DCol | Tag | Arrow | Dot | LB | RB
-     Tok               = Spaces (Name | Keyword | Special)
+     Abbrev             = "," Spaces Tok => [[ second <abbrev> ]]
+     SVar              = "<" Spaces SVarName Spaces ">" => [[ second parse-datum <var> ]]
+     PVar              = SVarName => [[ parse-datum ]]
+     Special           = SVar | Abbrev | PVar | Open | Close | DCol | Tag | Arrow | Dot | LB | RB
+     Tok               = Spaces (Id | Keyword | Special)
      Toks              = Tok* Spaces
  ]=]
 
 
-TUPLE: bind-op subst var ;
-C: <bind-op> bind-op
-
-UNION: left-bound open operator lbracket rbracket ;
+UNION: left-bound open operator lbracket rbracket abbrev ;
 GENERIC: add-app-op ( last this -- ? )
 M: operand add-app-op drop
     left-bound? not ;
@@ -92,15 +98,21 @@ GENERIC: push-postfix* ( pf obj -- pf )
 
 M: operand push-postfix*
     suffix ;
+M: ccn-term push-postfix*
+    suffix ;
 M: impl-app push-postfix* drop
     [ <app> ] with-datastack ;
 M: tag push-postfix* drop
     [ <tapp> ] with-datastack ;
-M: +in+ push-postfix* drop
-    [ <bind-op> ] with-datastack ;
+! TYPED: make-abs ( subst :lam -- :abs )
+!     [ var>> ] [ body>> ] bi <abs> ;
 TYPED: make-abs ( :bind-op body -- :abs )
     [ [ subst>> ] [ var>> ] bi ] dip <abs> ;
+M: +bind+ push-postfix* drop
+    [ <bind-op> ] with-datastack ;
+    ! [ make-abs ] with-datastack ;
 M: dot push-postfix* drop
+    ! [ <lam> ] with-datastack ;
     [ make-abs ] with-datastack ;
 M: -> push-postfix* drop
     [ <mapping> ] with-datastack ;
@@ -114,10 +126,17 @@ M: dcol push-postfix* drop
     suffix ;
 
 MEMO: precedence ( operator -- n )
-    { f open dcol -> impl-app dot +in+ tag } index ;
+    { f open dcol -> impl-app dot +bind+ tag  } index ;
+
+GENERIC#: precedence>= 1 ( op1 op2 -- ? )
+
+M: object precedence>=
+    [ precedence ] bi@ >= ;
+M: dot precedence>=
+    2dup = [ 2drop f ] [ call-next-method ] if ;
 
 : compare-op> ( stack obj -- ? )
-    [ ?last ] dip [ precedence ] bi@ >= ;
+    [ ?last ] dip precedence>= ;
 
 : exchange ( pf stack -- pf stack )
     unclip-last-slice push-postfix ;
@@ -126,19 +145,29 @@ MEMO: precedence ( operator -- n )
     unclip-last-slice dup open?
     [ drop ] [ push-postfix unwind ] if ;
 
-: handle-operator ( pf stack oper -- pf stack )
+GENERIC: handle-operator ( pf stack oper -- pf stack )
+
+! When encountering binder
+M: operator handle-operator
     [ 2dup compare-op> ] [ [ exchange ] dip ] while
     push-operator ;
 
 : parse-ccn-token ( postfix stack token -- postfix stack )
     {
-        { id [ <var> push-postfix ] }
-        { I [ I push-postfix ] }
+        ! { var [ <var> push-postfix ] }
+        { abbrev [ [ dcol handle-operator ] dip
+                   [ push-postfix -> handle-operator ]
+                   [ push-postfix ] bi
+                 ] }
         { open [ open push-operator ] }
         { lbracket [ open push-operator ] }
         { close [ unwind ] }
-        { rbracket [ unwind +in+ handle-operator ] }
-        [ handle-operator ]
+        { rbracket [ unwind +bind+ handle-operator ] }
+        [
+            dup operator?
+            [ handle-operator ]
+            [ push-postfix ] if
+        ]
     } match ;
 
 : parse-ccn ( str -- term )
@@ -152,19 +181,23 @@ GENERIC: pprint-ccn* ( term -- str )
     "(" ")" surround ;
 M: var pprint-ccn*
     name>> ;
+PREDICATE: var-match-var < var name>> match-var? ;
+M: var-match-var pprint-ccn*
+    name>> [ pprint ] with-string-writer "<" ">" surround ;
+SYNTAX: ⟼ -> suffix! ;
 M: mapping pprint-ccn*
     [ var>> pprint-ccn* ]
     [ term>> pprint-ccn* ] bi
-    "->" glue ;
+    " ⟼ " glue ;
 M: ext pprint-ccn*
     [ prev>> pprint-ccn* ]
     [ mapping>> pprint-ccn* ] bi
-    "::" glue ;
+    " :: " glue enclose ;
 M: abs pprint-ccn*
     [ subst>> pprint-ccn* "[" "]" surround ]
     [ var>> pprint-ccn* append ]
     [ term>> pprint-ccn* ] tri
-    "." glue ;
+    "." glue enclose ;
 M: app pprint-ccn*
     [ left>> pprint-ccn* ]
     [ right>> pprint-ccn* ] bi
@@ -174,8 +207,13 @@ M: tapp pprint-ccn*
     [ right>> pprint-ccn* ] bi
     "@" glue enclose ;
 M: I pprint-ccn* name>> ;
+! M: object pprint-ccn*
+!     [ pprint ] with-string-writer "," prepend ;
+M: match-var pprint-ccn*
+    [ pprint ] with-string-writer ;
 
 M: ccn-term pprint*
     \ CCN{ pprint-word
     pprint-ccn* text
     \ } pprint-word ;
+
