@@ -7,7 +7,7 @@ FROM: variants => match ;
 
 ! * Closure calculus
 ! ** CCN
-VARIANT: cc-term
+VARIANT: ccn-term
     I
     var: { name }
     app: { left right }
@@ -143,4 +143,39 @@ MEMO: precedence ( operator -- n )
 
 : parse-ccn ( str -- term )
     tokenize-ccn normalize-ccn [ f f ] dip [ parse-ccn-token ] each
-    drop ;
+    drop last ;
+
+SYNTAX: CCN{ "}" parse-multiline-string parse-ccn suffix! ;
+
+GENERIC: pprint-ccn* ( term -- str )
+: enclose ( str -- str )
+    "(" ")" surround ;
+M: var pprint-ccn*
+    name>> ;
+M: mapping pprint-ccn*
+    [ var>> pprint-ccn* ]
+    [ term>> pprint-ccn* ] bi
+    "->" glue ;
+M: ext pprint-ccn*
+    [ prev>> pprint-ccn* ]
+    [ mapping>> pprint-ccn* ] bi
+    "::" glue ;
+M: abs pprint-ccn*
+    [ subst>> pprint-ccn* "[" "]" surround ]
+    [ var>> pprint-ccn* append ]
+    [ term>> pprint-ccn* ] tri
+    "." glue ;
+M: app pprint-ccn*
+    [ left>> pprint-ccn* ]
+    [ right>> pprint-ccn* ] bi
+    " " glue enclose ;
+M: tapp pprint-ccn*
+    [ left>> pprint-ccn* ]
+    [ right>> pprint-ccn* ] bi
+    "@" glue enclose ;
+M: I pprint-ccn* name>> ;
+
+M: ccn-term pprint*
+    \ CCN{ pprint-word
+    pprint-ccn* text
+    \ } pprint-word ;
