@@ -1,6 +1,7 @@
 USING: accessors continuations io.streams.string kernel match math multiline
 parser peg peg.ebnf prettyprint prettyprint.backend prettyprint.custom
-prettyprint.sections sequences strings typed variants ;
+prettyprint.sections sequences strings typed variants vocabs.parser words
+words.constant ;
 
 IN: cc
 
@@ -19,6 +20,9 @@ VARIANT: ccn-term
 
 TUPLE: tapp < app ;
 C: <tapp> tapp
+
+TUPLE: ref word ;
+C: <ref> ref
 
 VARIANT: ccn-token
     tag
@@ -40,8 +44,15 @@ TUPLE: lam var body ;
 C: <lam> lam
 
 UNION: operator tag impl-app -> dcol dot +bind+ ;
-UNION: operand I var match-var ;
+UNION: operand I var match-var ref ;
 
+GENERIC: ccn-def ( word -- term/f )
+M: f ccn-def ;
+M: word ccn-def "ccn-def" word-prop ;
+M: constant ccn-def "constant" word-prop ;
+: <var-or-ref> ( name -- term )
+    dup search dup ccn-def [ <ref> nip ]
+    [ drop <var> ] if ;
 
 EBNF: tokenize-ccn
 [=[
@@ -52,13 +63,13 @@ EBNF: tokenize-ccn
      WhiteSpace        = [ \t\v\f\xa0\u00feff\u001680\u002000\u002001\u002002\u002003\u002004\u002005\u002006\u002007\u002008\u002009\u00200a\u00202f\u00205f\u003000]
      Space             = WhiteSpace | LineTerminator
      Spaces            = Space* => [[ ignore ]]
-     NameFirst         = Letter
-     NameRest          = Letter | Digit
+     NameFirst         = Letter | "_" => [[ CHAR: _ ]]
+     NameRest          = NameFirst | Digit
      Keyword           = ("I" => [[ drop I ]] ) !(NameRest)
      iName             = NameFirst NameRest* => [[ first2 swap prefix >string ]]
      SVarName          = "?" NameRest* => [[ first2 >string swap prepend ]]
      Name              = !(Keyword) iName
-     Id                = Name => [[ <var> ]]
+     Id                = Name => [[ <var-or-ref> ]]
      LB                = "[" => [[ drop lbracket ]]
      RB                = "]" => [[ drop rbracket ]]
      Open              = "(" => [[ drop open ]]
@@ -67,7 +78,7 @@ EBNF: tokenize-ccn
      Tag               = "@" => [[ drop tag ]]
      Arrow             = ("->" | "⟼") => [[ drop -> ]]
      Dot               = "." => [[ drop dot ]]
-     Abbrev             = "," Spaces Tok => [[ second <abbrev> ]]
+     Abbrev            = "," Spaces Tok => [[ second <abbrev> ]]
      SVar              = "<" Spaces SVarName Spaces ">" => [[ second parse-datum <var> ]]
      PVar              = SVarName => [[ parse-datum ]]
      Special           = SVar | Abbrev | PVar | Open | Close | DCol | Tag | Arrow | Dot | LB | RB
@@ -189,6 +200,8 @@ M: mapping pprint-ccn*
     [ var>> pprint-ccn* ]
     [ term>> pprint-ccn* ] bi
     " ⟼ " glue ;
+M: ref pprint-ccn*
+    word>> name>> ;
 M: ext pprint-ccn*
     [ prev>> pprint-ccn* ]
     [ mapping>> pprint-ccn* ] bi
@@ -207,8 +220,7 @@ M: tapp pprint-ccn*
     [ right>> pprint-ccn* ] bi
     "@" glue enclose ;
 M: I pprint-ccn* name>> ;
-! M: object pprint-ccn*
-!     [ pprint ] with-string-writer "," prepend ;
+
 M: match-var pprint-ccn*
     [ pprint ] with-string-writer ;
 
