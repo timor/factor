@@ -55,3 +55,26 @@ MEMO: rewrite-ccn-step ( term -- term ? )
 
 : rewrite-ccn ( term -- term )
     [ rewrite-ccn-step ] loop ;
+
+CONSTANT: omega CCN{ [I]z.[I,z]f.[I,z,f]x.f@(z@z@f)@x }
+CONSTANT: Y CCN{ [I :: z -> _omega]f.[I,z,f]x.f@(z@z@f)@x }
+
+! Functional Pearl, Scott encodings
+
+CONSTANT: Nil CCN{ [I]f.[I,f]g.f }
+CONSTANT: Cons CCN{ [I]x.[I,x]xs.[I,x,xs]f.[I,x,xs,f]g.(g x xs) }
+CONSTANT: Head CCN{ [I]xs.(xs undef [I]x.[I,x]xs.x) }
+CONSTANT: Tail CCN{ [I]xs.(xs undef [I]x.[I,x]xs.xs) }
+
+CONSTANT: True CCN{ [I]a.[I,a]b.a }
+CONSTANT: False CCN{ [I]a.[I,a]b.b }
+CONSTANT: Ifte CCN{ [I]t.t }
+
+CONSTANT: Zero CCN{ [I]f.[I,f]g.f }
+CONSTANT: Suc CCN{ [I]n.[I,n]f.[I,n,f]g.(g n) }
+CONSTANT: Pred CCN{ [I]n.(n undef [I]m.m) }
+CONSTANT: One CCN{ Suc Zero }
+
+! CONSTANT: Add0 CCN{ [I]n.[I,n]m.( n m [I,m]n.(Suc (Add0 n m) ) ) }
+CONSTANT: Add_ CCN{ [I]add.[I,add]n.[I,add,n]m.(n m [I,add,m]n.(Suc (add add n m))) }
+CONSTANT: Add CCN{ Add_ Add_ }
