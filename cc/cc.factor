@@ -187,6 +187,13 @@ M: operator handle-operator
 
 SYNTAX: CCN{ "}" parse-multiline-string parse-ccn suffix! ;
 
+! Allow recursive definitions!
+SYNTAX: CCN:
+    scan-new-word
+    [ t "ccn-def" set-word-prop ] keep
+    ";" parse-multiline-string parse-ccn define-constant ;
+
+
 GENERIC: pprint-ccn* ( term -- str )
 : enclose ( str -- str )
     "(" ")" surround ;
@@ -228,4 +235,3 @@ M: ccn-term pprint*
     \ CCN{ pprint-word
     pprint-ccn* text
     \ } pprint-word ;
-

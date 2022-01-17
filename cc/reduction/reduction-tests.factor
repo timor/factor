@@ -10,3 +10,9 @@ IN: cc.reduction.tests
 
 { CCN{ a@a } }
 [ CCN{ ([I]x.x@x)a } rewrite-ccn ] unit-test
+
+{ CCN{ True } }
+[ CCN{ Zerop Zero } rewrite-ccn ] unit-test
+
+{ CCN{ False } }
+[ CCN{ Zerop One } rewrite-ccn ] unit-test
