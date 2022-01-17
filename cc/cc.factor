@@ -235,3 +235,6 @@ M: ccn-term pprint*
     \ CCN{ pprint-word
     pprint-ccn* text
     \ } pprint-word ;
+
+M: ref pprint*
+    M\ ccn-term pprint* execute ;

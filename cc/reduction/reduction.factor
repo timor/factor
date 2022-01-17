@@ -1,4 +1,5 @@
-USING: cc classes classes.tuple kernel match sequences ;
+USING: accessors cc classes classes.tuple combinators kernel match namespaces
+sequences ;
 
 IN: cc.reduction
 
@@ -92,9 +93,17 @@ CONSTANT: Pred CCN{ [I]n.(n undef [I]m.m) }
 CONSTANT: One CCN{ Suc Zero }
 CCN: Zerop [I]x.( x True [I]n.False ) ;
 
-CCN: Add [I]n.[I,n]m.( n m [I,m]n.(Suc (Add n m) ) ) ;
+! NOTE: The Direct recursive functions do not preserve normal forms (Infinite reduction when fed bullshit)
+CCN: Add_rec [I]n.[I,n]m.( n m [I,m]n.(Suc (Add_rec n m) ) ) ;
 CONSTANT: Add_ CCN{ [I]add.[I,add]n.[I,add,n]m.(n m [I,add,m]n.(Suc (add add n m))) }
 CONSTANT: Add2 CCN{ Add_ Add_ }
-CCN: Add_y Y ([I]add.[I,add]n.[I,add,n]m.(n m [I,add,m]n.(Suc add n m))) ;
+CCN: Add Y ([I]add.[I,add]n.[I,add,n]m.(n m [I,add,m]n.(Suc add n m))) ;
 
-CCN: Length [I]x.(x Zero ([I]x.[I,x]xs.(Suc (Length xs)))) ;
+CCN: Length_rec [I]x.(x Zero ([I]x.[I,x]xs.(Suc (Length_rec xs)))) ;
+CCN: Length Y [I]Ly.[I,Ly]x.(x Zero ([I,Ly]x.[I,Ly,x]xs.(Suc (Ly xs)))) ;
+
+! Right fold
+CCN: FoldList Y [I]Fl.[I,Fl]f.[I,Fl,f]def.[I,Fl,f,def]xs.( xs def ([I,Fl,f,def]h.[I,Fl,f,def,h]tl.(f h (Fl f def tl )))) ;
+CCN: SumFold [I]xs.(FoldList Add Zero xs) ;
+
+! CCN: Eval Y [I]Ev.
