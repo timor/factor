@@ -1,7 +1,5 @@
-USING: accessors continuations io.streams.string kernel match math multiline
-parser peg peg.ebnf prettyprint prettyprint.backend prettyprint.custom
-prettyprint.sections sequences strings typed variants vocabs.parser words
-words.constant ;
+USING: accessors continuations kernel match math multiline parser peg peg.ebnf
+sequences strings typed variants vocabs.parser words words.constant ;
 
 IN: cc
 
@@ -115,15 +113,11 @@ M: impl-app push-postfix* drop
     [ <app> ] with-datastack ;
 M: tag push-postfix* drop
     [ <tapp> ] with-datastack ;
-! TYPED: make-abs ( subst :lam -- :abs )
-!     [ var>> ] [ body>> ] bi <abs> ;
 TYPED: make-abs ( :bind-op body -- :abs )
     [ [ subst>> ] [ var>> ] bi ] dip <abs> ;
 M: +bind+ push-postfix* drop
     [ <bind-op> ] with-datastack ;
-    ! [ make-abs ] with-datastack ;
 M: dot push-postfix* drop
-    ! [ <lam> ] with-datastack ;
     [ make-abs ] with-datastack ;
 M: -> push-postfix* drop
     [ <mapping> ] with-datastack ;
@@ -165,7 +159,6 @@ M: operator handle-operator
 
 : parse-ccn-token ( postfix stack token -- postfix stack )
     {
-        ! { var [ <var> push-postfix ] }
         { abbrev [ [ dcol handle-operator ] dip
                    [ push-postfix -> handle-operator ]
                    [ push-postfix ] bi
@@ -185,49 +178,3 @@ M: operator handle-operator
     tokenize-ccn normalize-ccn-tokens [ f f ] dip [ parse-ccn-token ] each
     drop last ;
 
-SYNTAX: CCN{ "}" parse-multiline-string parse-ccn suffix! ;
-
-GENERIC: pprint-ccn* ( term -- str )
-: enclose ( str -- str )
-    "(" ")" surround ;
-M: var pprint-ccn*
-    name>> ;
-PREDICATE: var-match-var < var name>> match-var? ;
-M: var-match-var pprint-ccn*
-    name>> [ pprint ] with-string-writer "<" ">" surround ;
-SYNTAX: ⟼ -> suffix! ;
-M: mapping pprint-ccn*
-    [ var>> pprint-ccn* ]
-    [ term>> pprint-ccn* ] bi
-    " ⟼ " glue ;
-M: ref pprint-ccn*
-    word>> name>> ;
-M: ext pprint-ccn*
-    [ prev>> pprint-ccn* ]
-    [ mapping>> pprint-ccn* ] bi
-    " :: " glue enclose ;
-M: abs pprint-ccn*
-    [ subst>> pprint-ccn* "[" "]" surround ]
-    [ var>> pprint-ccn* append ]
-    [ term>> pprint-ccn* ] tri
-    "." glue enclose ;
-M: app pprint-ccn*
-    [ left>> pprint-ccn* ]
-    [ right>> pprint-ccn* ] bi
-    " " glue enclose ;
-M: tapp pprint-ccn*
-    [ left>> pprint-ccn* ]
-    [ right>> pprint-ccn* ] bi
-    "@" glue enclose ;
-M: I pprint-ccn* name>> ;
-
-M: match-var pprint-ccn*
-    [ pprint ] with-string-writer ;
-
-M: ccn-term pprint*
-    \ CCN{ pprint-word
-    pprint-ccn* text
-    \ } pprint-word ;
-
-M: ref pprint*
-    M\ ccn-term pprint* execute ;
