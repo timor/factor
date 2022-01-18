@@ -65,7 +65,7 @@ EBNF: tokenize-ccn
      Spaces            = Space* => [[ ignore ]]
      NameFirst         = Letter | "_" => [[ CHAR: _ ]]
      NameRest          = NameFirst | Digit
-     Keyword           = ("I" => [[ drop I ]] ) !(NameRest)
+     Keyword           = ("I" => [[ drop I ]]) !(NameRest)
      iName             = NameFirst NameRest* => [[ first2 swap prefix >string ]]
      SVarName          = "?" NameRest* => [[ first2 >string swap prepend ]]
      Name              = !(Keyword) iName
@@ -97,7 +97,7 @@ M: lbracket add-app-op drop
     left-bound? not ;
 M: object add-app-op 2drop f ;
 
-: normalize-ccn ( tokens -- tokens )
+: normalize-ccn-tokens ( tokens -- tokens )
     1 cut-slice
     [
         2dup [ last ] dip
@@ -182,17 +182,10 @@ M: operator handle-operator
     } match ;
 
 : parse-ccn ( str -- term )
-    tokenize-ccn normalize-ccn [ f f ] dip [ parse-ccn-token ] each
+    tokenize-ccn normalize-ccn-tokens [ f f ] dip [ parse-ccn-token ] each
     drop last ;
 
 SYNTAX: CCN{ "}" parse-multiline-string parse-ccn suffix! ;
-
-! Allow recursive definitions!
-SYNTAX: CCN:
-    scan-new-word
-    [ t "ccn-def" set-word-prop ] keep
-    ";" parse-multiline-string parse-ccn define-constant ;
-
 
 GENERIC: pprint-ccn* ( term -- str )
 : enclose ( str -- str )

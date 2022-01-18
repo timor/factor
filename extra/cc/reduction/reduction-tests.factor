@@ -1,4 +1,4 @@
-USING: cc cc.reduction tools.test ;
+USING: cc cc.reduction tools.test cc.simple ;
 
 IN: cc.reduction.tests
 
@@ -16,3 +16,12 @@ IN: cc.reduction.tests
 
 { CCN{ False } }
 [ CCN{ Zerop One } rewrite-ccn ] unit-test
+
+{ CCN{ One } }
+[ CCN{ Length ( Cons foo Nil ) } rewrite-ccn ] unit-test
+
+{ CCN{ False } }
+[ CCN{ Zerop (Length ( Cons foo Nil )) } rewrite-ccn ] unit-test
+
+{ CCN{ True } }
+[ CCN{ Zerop (Length Nil ) } rewrite-ccn ] unit-test

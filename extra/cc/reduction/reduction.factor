@@ -1,5 +1,5 @@
-USING: accessors cc classes classes.tuple combinators kernel match namespaces
-sequences ;
+USING: accessors assocs cc classes classes.tuple combinators kernel match
+namespaces sequences ;
 
 IN: cc.reduction
 
@@ -20,23 +20,17 @@ M: var decompose-ccn f ;
 : deref ( word -- term )
     ccn-def ;
 
-SYMBOL: normalize?
 : rewrite-ccn-step ( term -- term ? )
     {
         { CCN{ <?x> ?t } [ CCN{ <?x> @ ?t } sub ] } ! 1
         { CCN{ (?s@?t)?u } [ CCN{ (?s@?t)@?u } sub ] } ! 2
+        ! (λ[σ]x.t)u => (σ::x→u)t
         { CCN{ ([?sig]<?x>.?t)?u } ! 3
           [ CCN{ (?sig :: <?x> -> ?u)?t } sub ] if }
-        { T{ app f T{ ref f ?x } ?u } ! 3.1
-          [| | ?x deref :> rr T{ app f rr ?u } sub ] }
         { CCN{ I ?u } [ ?u t ] } ! 4
         { CCN{ (?sig :: <?x> -> ?t)<?x> } [ ?t t ] } ! 5
         { CCN{ (?sig :: <?x> -> ?t)<?z> } ! 6
           [ CCN{ ?sig <?z> } sub ] }
-        ! TODO: dangerous? If we see a ref, we know it's closed, so we can just drop the env?
-        { T{ app f T{ ext f ?sig ?t } T{ ref f ?u } }
-          [ T{ ref f ?u } sub ]
-        }
         { CCN{ (?sig :: <?x> -> ?t)(?u@?v) } ! 7
           [ CCN{ ((?sig :: <?x> -> ?t)?u)((?sig :: <?x> -> ?t)?v) } sub ] }
         { CCN{ (?sig :: <?x> -> ?t)([?rho]<?z>.?s) } ! 8
@@ -46,14 +40,9 @@ SYMBOL: normalize?
         { CCN{ (?sig :: <?x> -> ?t)(?rho :: <?z> -> ?u) } ! 10
           [ CCN{ (?sig :: <?x> -> ?t)?rho :: <?z> -> (?sig :: <?x> -> ?t)?u } sub ]
         }
-        ! Deref mappings in immediate position
-        ! NOTE: Too eager, not needed?
-        ! { T{ ext f ?sig T{ mapping f ?x T{ ref f ?t } } }
-        !   [| | ?t deref :> tt T{ ext f ?sig T{ mapping f ?x tt } } sub ]
-        ! }
         [
             {
-                { [ normalize? get [ dup ref? ] [ f ] if ] [ word>> deref t ] }
+                { [ dup ref? ] [ word>> deref t ] }
                 { [ dup ccn-term? ] [ decompose-ccn ] }
                 [ f ]
             } cond
@@ -70,40 +59,50 @@ MEMO: rewrite-ccn-step-cached ( term -- term ? )
 MEMO: rewrite-ccn-cached ( term -- term )
     rewrite-ccn-uncached ;
 
-: rewrite-ccn ( term -- term )
+SYMBOL: normal-cache
+normal-cache [ H{ } clone ] initialize
+
+: find-cached-ref ( term -- term ? )
+    normal-cache get ?at
+    [ <ref> t ] [ f ] if ;
+GENERIC: find-ccn-ref ( term -- term )
+M: object find-ccn-ref ;
+M: var find-ccn-ref ;
+M: I find-ccn-ref ;
+M: app find-ccn-ref
+    find-cached-ref
+    [
+        [ left>> find-ccn-ref ]
+        [ right>> find-ccn-ref ] bi
+        <app>
+    ] unless ;
+
+M: tapp find-ccn-ref
+    find-cached-ref
+    [
+        [ left>> find-ccn-ref ]
+        [ right>> find-ccn-ref ] bi
+        <tapp>
+    ] unless ;
+
+M: abs find-ccn-ref
+    find-cached-ref
+    [
+        [ subst>> find-ccn-ref ]
+        [ var>> ]
+        [ term>> find-ccn-ref ] tri
+        <abs>
+    ] unless ;
+
+M: mapping find-ccn-ref
+    [ var>> ]
+    [ term>> find-ccn-ref ] bi <mapping> ;
+M: ext find-ccn-ref
+    [ prev>> find-ccn-ref ]
+    [ mapping>> find-ccn-ref ] bi <ext> ;
+
+: reduce-ccn ( term -- term )
     rewrite-ccn-cached ;
 
-CONSTANT: omega CCN{ [I]z.[I,z]f.[I,z,f]x.f@(z@z@f)@x }
-CONSTANT: Y CCN{ [I :: z -> omega]f.[I,z,f]x.f@(z@z@f)@x }
-
-! Functional Pearl, Scott encodings
-
-CONSTANT: Nil CCN{ [I]f.[I,f]g.f }
-CONSTANT: Cons CCN{ [I]x.[I,x]xs.[I,x,xs]f.[I,x,xs,f]g.(g x xs) }
-CONSTANT: Head CCN{ [I]xs.(xs undef [I]x.[I,x]xs.x) }
-CONSTANT: Tail CCN{ [I]xs.(xs undef [I]x.[I,x]xs.xs) }
-
-CONSTANT: True CCN{ [I]a.[I,a]b.a }
-CONSTANT: False CCN{ [I]a.[I,a]b.b }
-CONSTANT: Ifte CCN{ [I]t.t }
-
-CONSTANT: Zero CCN{ [I]f.[I,f]g.f }
-CONSTANT: Suc CCN{ [I]n.[I,n]f.[I,n,f]g.(g n) }
-CONSTANT: Pred CCN{ [I]n.(n undef [I]m.m) }
-CONSTANT: One CCN{ Suc Zero }
-CCN: Zerop [I]x.( x True [I]n.False ) ;
-
-! NOTE: The Direct recursive functions do not preserve normal forms (Infinite reduction when fed bullshit)
-CCN: Add_rec [I]n.[I,n]m.( n m [I,m]n.(Suc (Add_rec n m) ) ) ;
-CONSTANT: Add_ CCN{ [I]add.[I,add]n.[I,add,n]m.(n m [I,add,m]n.(Suc (add add n m))) }
-CONSTANT: Add2 CCN{ Add_ Add_ }
-CCN: Add Y ([I]add.[I,add]n.[I,add,n]m.(n m [I,add,m]n.(Suc add n m))) ;
-
-CCN: Length_rec [I]x.(x Zero ([I]x.[I,x]xs.(Suc (Length_rec xs)))) ;
-CCN: Length Y [I]Ly.[I,Ly]x.(x Zero ([I,Ly]x.[I,Ly,x]xs.(Suc (Ly xs)))) ;
-
-! Right fold
-CCN: FoldList Y [I]Fl.[I,Fl]f.[I,Fl,f]def.[I,Fl,f,def]xs.( xs def ([I,Fl,f,def]h.[I,Fl,f,def,h]tl.(f h (Fl f def tl )))) ;
-CCN: SumFold [I]xs.(FoldList Add Zero xs) ;
-
-! CCN: Eval Y [I]Ev.
+: rewrite-ccn ( term -- term )
+    reduce-ccn find-ccn-ref ;
