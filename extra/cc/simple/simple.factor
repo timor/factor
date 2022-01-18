@@ -1,4 +1,4 @@
-USING: cc cc.defined ;
+USING: cc.defined ;
 
 IN: cc.simple
 

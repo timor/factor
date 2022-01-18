@@ -1,5 +1,5 @@
-USING: accessors assocs cc classes classes.tuple combinators kernel match
-namespaces sequences ;
+USING: accessors assocs cc cc.defined classes classes.tuple combinators kernel
+match namespaces sequences ;
 
 IN: cc.reduction
 
