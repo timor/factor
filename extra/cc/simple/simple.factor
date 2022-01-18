@@ -40,10 +40,9 @@ CCN: Length Y [I]Ly.[I,Ly]x.(x Zero ([I,Ly]x.[I,Ly,x]xs.(Suc (Ly xs)))) ;
 
 ! Right fold
 CCN: FoldList Y [I]Fl.[I,Fl]f.[I,Fl,f]def.[I,Fl,f,def]xs.( xs def ([I,Fl,f,def]h.[I,Fl,f,def,h]tl.(f h (Fl f def tl )))) ;
-CCN: SumFold [I]xs.(FoldList Add2 Zero xs) ;
+CCN: SumFold [I]xs.(FoldList Add Zero xs) ;
 
 CCN: Swapply [I]x.[I,x]y.(y x) ;
-
 
 ! Mapping stacks to stacks
 ! This only makes sense in a list context?
@@ -55,3 +54,7 @@ CCN: Dup [I]x.(x undef [I]x.[I,x]xs.(Cons x (Cons x xs))) ;
 
 CCN: Eval [I]xs.(FoldList Swapply I xs) ;
 CCN: K [I]x.[I,x]y.x ;
+
+CCN: Exec [I]l.((I :: tos -> (Head l) :: rest -> (Tail l))(
+                    (I :: sos -> (Head rest) :: cont -> (Tail rest))(
+                        (Cons (tos sos) cont) ) ) ) ;

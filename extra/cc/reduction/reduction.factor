@@ -1,5 +1,5 @@
-USING: accessors assocs cc cc.defined classes classes.tuple combinators kernel
-match namespaces sequences ;
+USING: accessors assocs assocs.extras cc classes classes.tuple combinators
+kernel match namespaces sequences ;
 
 IN: cc.reduction
 
@@ -12,7 +12,7 @@ MATCH-VARS: ?x ?s ?t ?u ?v ?z ?sig ?rho ;
 DEFER: rewrite-ccn-step
 GENERIC: decompose-ccn ( term -- term ? )
 M: I decompose-ccn f ;
-M: ccn-term decompose-ccn
+M: cc-term decompose-ccn
     [ tuple-slots f swap [ rewrite-ccn-step swap [ or ] dip ] map swap ]
     [ swap [ class-of slots>tuple ] dip ] bi ;
 M: var decompose-ccn f ;
@@ -43,7 +43,7 @@ M: var decompose-ccn f ;
         [
             {
                 { [ dup ref? ] [ word>> deref t ] }
-                { [ dup ccn-term? ] [ decompose-ccn ] }
+                { [ dup cc-term? ] [ decompose-ccn ] }
                 [ f ]
             } cond
         ]
@@ -62,8 +62,15 @@ MEMO: rewrite-ccn-cached ( term -- term )
 SYMBOL: normal-cache
 normal-cache [ H{ } clone ] initialize
 
+: register-normal-form ( ref term -- )
+    over normal-cache [ [ = ] with reject-values ] change-global
+    normal-cache get-global set-at ;
+
+: reset-normal-forms ( -- )
+    H{ } clone normal-cache set-global ;
+
 : find-cached-ref ( term -- term ? )
-    normal-cache get ?at
+    normal-cache get-global ?at
     [ <ref> t ] [ f ] if ;
 GENERIC: find-ccn-ref ( term -- term )
 M: object find-ccn-ref ;

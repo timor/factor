@@ -1,20 +1,18 @@
-USING: accessors assocs cc cc.reduction io.streams.string kernel match multiline
-namespaces parser prettyprint prettyprint.backend prettyprint.custom
-prettyprint.sections sequences words words.constant ;
+USING: accessors cc cc.reduction io.streams.string kernel match multiline parser
+prettyprint prettyprint.backend prettyprint.custom prettyprint.sections
+sequences words words.constant ;
 IN: cc.defined
 
 
-: define-ccn ( word ccn-term -- )
+: define-ccn ( word cc-term -- )
     [ define-constant ]
-    [ rewrite-ccn normal-cache get set-at ] 2bi ;
+    [ reduce-ccn register-normal-form ] 2bi ;
 
 ! Allow recursive definitions!
 SYNTAX: CCN:
     scan-new-word
     [ t "ccn-def" set-word-prop ] keep
     ";" parse-multiline-string parse-ccn define-ccn ;
-
-SYNTAX: CCN{ "}" parse-multiline-string parse-ccn suffix! ;
 
 GENERIC: pprint-ccn* ( term -- str )
 : enclose ( str -- str )
@@ -53,10 +51,10 @@ M: I pprint-ccn* name>> ;
 M: match-var pprint-ccn*
     [ pprint ] with-string-writer ;
 
-M: ccn-term pprint*
+M: cc-term pprint*
     \ CCN{ pprint-word
     pprint-ccn* text
     \ } pprint-word ;
 
 M: ref pprint*
-    M\ ccn-term pprint* execute ;
+    M\ cc-term pprint* execute ;

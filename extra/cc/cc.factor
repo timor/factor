@@ -6,9 +6,10 @@ IN: cc
 FROM: variants => match ;
 
 ! * Closure calculus
-! ** CCN
-VARIANT: ccn-term
+! ** CCN+CCDB
+VARIANT: cc-term
     I
+    J
     var: { name }
     app: { left right }
     mapping: { var term }
@@ -107,7 +108,7 @@ GENERIC: push-postfix* ( pf obj -- pf )
 
 M: operand push-postfix*
     suffix ;
-M: ccn-term push-postfix*
+M: cc-term push-postfix*
     suffix ;
 M: impl-app push-postfix* drop
     [ <app> ] with-datastack ;
@@ -178,3 +179,4 @@ M: operator handle-operator
     tokenize-ccn normalize-ccn-tokens [ f f ] dip [ parse-ccn-token ] each
     drop last ;
 
+SYNTAX: CCN{ "}" parse-multiline-string parse-ccn suffix! ;
