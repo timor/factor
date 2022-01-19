@@ -60,9 +60,14 @@ MACRO: match-cond ( assoc -- quot )
         [ ?if ] 2curry append
     ] reduce ;
 
+SYMBOL: replace-partial?
 GENERIC: replace-patterns ( object -- result )
 M: object replace-patterns ;
-M: match-var replace-patterns get ;
+M: match-var replace-patterns
+    dup get
+    [ nip ]
+    [ replace-partial? get [ drop f ] unless ] if* ;
+
 M: sequence replace-patterns [ replace-patterns ] map ;
 M: tuple replace-patterns tuple>array replace-patterns >tuple ;
 
