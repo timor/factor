@@ -75,7 +75,7 @@ M: fixpoint-subst-app cleanup-match
     reject-fixpoint ;
 
 : reduce-all ( term -- term ? )
-    f swap [ spc-reduce-step tuck [ or ] 2dip ] loop
+    f swap [ spc-reduce-step tuck [ or ] 2dip ] co-loop
     swap ;
 
 : reduce-app ( left right -- left right ? )
@@ -87,7 +87,7 @@ TYPED: distribute-reduction ( term: app-term -- term ? )
     [ 2drop f ] if ;
 
 M: sp-redex spc-reduce-step
-    [ distribute-reduction ] loop
+    [ distribute-reduction ] co-loop
     spc-reduce-redex ;
 
 M: app-term spc-reduce-step

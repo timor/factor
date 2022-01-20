@@ -74,9 +74,10 @@ M: string id-part string>id-name nip ; inline
 M: string <id-name> [ name-part ] dip number>string append ;
 
 SYMBOL: var-names
+var-names [ H{ } clone ] initialize
 
 : reset-var-names ( -- )
-    var-names H{ } clone set ;
+    H{ } clone var-names set-global ;
 
 : with-var-names ( quot -- )
     [ H{ } clone var-names ] dip
@@ -264,3 +265,7 @@ SYMBOL: on-recursive-term
 
 : solve-in ( term eqns -- term subst )
     solve [ lift ] keep ;
+
+! * Preventing loop freezes
+: co-loop ( ... pred: ( ... -- ... ? ) -- ... )
+    [ yield ] compose loop ; inline
