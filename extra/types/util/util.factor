@@ -2,7 +2,7 @@ USING: accessors arrays assocs assocs.extras classes classes.algebra
 classes.tuple colors.constants combinators combinators.short-circuit hashtables
 io io.styles kernel lists match math math.parser namespaces prettyprint.backend
 prettyprint.custom prettyprint.sections quotations sequences sequences.private
-strings typed unicode words ;
+strings threads typed unicode words ;
 
 IN: types.util
 
@@ -193,6 +193,16 @@ MACRO: lmatch-map-as ( branches cons-class -- quot )
 !        _ lmatch
 !     ] ;
 
+: list-class ( list -- class )
+    dup { [ nil? ] [ list? not ] } 1|| [ drop cons-state ]
+    [ class-of ] if ;
+
+
+! Improper lists
+: list* ( list cdr -- list )
+    2dup [ list-class ] bi@ class-and
+    '[ _ swons* ] foldr ;
+
 ! * Unification
 ! Baader/Nipkow
 GENERIC: subst ( term -- term )
@@ -265,6 +275,13 @@ SYMBOL: on-recursive-term
 
 : solve-in ( term eqns -- term subst )
     solve [ lift ] keep ;
+
+! * Cache with hit indicator
+
+:: ?cache ( ... key assoc quot: ( ... key -- ... value ) -- ... value hit? )
+    key assoc at* :> ( val hit? )
+    hit? [ val t ]
+    [ key quot call( ... key -- ... value ) [ key assoc set-at ] keep f ] if ; inline
 
 ! * Preventing loop freezes
 : co-loop ( ... pred: ( ... -- ... ? ) -- ... )

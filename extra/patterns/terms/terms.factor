@@ -107,5 +107,3 @@ UNION: match-result assoc undefined none ;
 PREDICATE: constructor < word match-var? not ;
 
 PREDICATE: compound < app-term head-term constructor? ;
-UNION: data constructor compound ;
-UNION: matchable data pcase ;

@@ -1,12 +1,14 @@
 USING: accessors assocs combinators combinators.short-circuit continuations
-hashtables kernel match namespaces patterns.terms sets typed words
-words.constant ;
+hashtables kernel match namespaces patterns.terms sets typed types.util ;
 
 IN: patterns.static
 
 FROM: patterns.terms => undefined ;
 
 ! * Static pattern calculus
+
+UNION: data constructor compound ;
+UNION: matchable data pcase ;
 
 TYPED: disjoint-domains? ( s1: assoc s2: assoc -- ? )
     [ keys ] bi@ intersects? not ;
