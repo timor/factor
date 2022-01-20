@@ -286,3 +286,17 @@ SYMBOL: on-recursive-term
 ! * Preventing loop freezes
 : co-loop ( ... pred: ( ... -- ... ? ) -- ... )
     [ yield ] compose loop ; inline
+
+! * (Re-)Construction
+
+:: neq? ( n -- quot )
+    [ [ eq? ] 2 n mnapply ] [ and ] reduce-outputs ; inline
+
+:: ?rebuild ( ..a orig decons: ( ..a orig -- ..b ) quot: ( ..b -- ..c ) recons: ( ..c -- ..d obj ) -- ..d obj )
+    decons outputs :> n
+    orig decons call
+    quot [ ] n nbi
+    ! quot n nkeep
+    [ n neq? ] n ncurry preserving
+    [ n ndrop orig ]
+    recons if ; inline

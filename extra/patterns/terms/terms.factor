@@ -1,5 +1,7 @@
-USING: accessors arrays assocs combinators.short-circuit kernel lists match math
-parser prettyprint.custom sequences types.util vectors words words.constant ;
+USING: accessors arrays assocs classes combinators combinators.short-circuit
+hashtables kernel lexer lists make match math namespaces parser
+prettyprint.backend prettyprint.custom prettyprint.sections quotations sequences
+sets typed types.util vectors vocabs.parser words words.constant ;
 
 IN: patterns.terms
 
@@ -38,17 +40,20 @@ M: app-seq new-app-term
 
 SINGLETON: nomatch
 
-: <psym> ( name -- pattern-symbol )
+: <upsym> ( name -- pattern-symbol )
     uvar <uninterned-word> [ t "pattern-symbol" set-word-prop ] keep ;
+
+: <psym> ( name -- pattern-symbol )
+    f <word> dup t "pattern-symbol" set-word-prop ;
 
 PREDICATE: pattern-symbol < word "pattern-symbol" word-prop? ;
 INSTANCE: pattern-symbol match-var
-
+PREDICATE: host-constructor < word match-var? not ;
 
 TUPLE: pcase pattern body ;
 C: <pcase> pcase
-TUPLE: special-case < pcase rest ;
-C: <special-case> special-case
+TUPLE: special-pcase < pcase rest ;
+C: <special-pcase> special-pcase
 
 SYMBOL: ->
 SYMBOL: |
@@ -59,53 +64,168 @@ M: pcase >pprint-sequence
     [ pattern>> ] [ body>> ] bi
     [ maybe-seq ] bi@ { -> } glue ;
 
-PREDICATE: pattern-def < constant "constant" word-prop pcase? ;
-UNION: pattern-case pattern-def pcase ;
+! Dynamic match case structure
+TUPLE: case binding-syms pattern body ;
+C: <case> case
+TUPLE: special-dcase < case rest ;
+C: <special-dcase> special-dcase
+
+
+PREDICATE: pattern-def < constant "constant" word-prop
+    { [ case? ] [ pcase? ] } 1|| ;
+MIXIN: reduction-defined
+INSTANCE: pattern-def reduction-defined
+INSTANCE: case reduction-defined
+INSTANCE: pcase reduction-defined
+
 GENERIC: >pattern ( obj -- pattern/f )
 M: object >pattern drop f ;
 M: pattern-def >pattern "constant" word-prop >pattern ;
 M: pcase >pattern ;
 
-! TUPLE: special-case pcase default ;
-! C: <special-case> special-case
+! "Wrapper" around other words
+TUPLE: match-sym word ;
+C: <msym> match-sym
+
+SYNTAX: M< scan-object ">" expect match-var check-instance <msym> suffix! ;
+M: match-sym pprint*
+    \ M< pprint-word
+    word>> pprint*
+    ">" text ;
+
+
+! TUPLE: special-pcase pcase default ;
+! C: <special-pcase> special-pcase
 ! Cond structure
 ! : <extension> ( cases default -- case )
 !     [ <reversed> ] dip
-!     [ first2 <pcase> swap <special-case> ] reduce ;
+!     [ first2 <pcase> swap <special-pcase> ] reduce ;
 
-:: (desugar-special-case) ( p s r -- pattern )
-    "x" <psym> :> x
-    "y" <psym> :> y
-    "z" <psym> :> z
+:: (desugar-special-pcase) ( p s r -- pattern )
+    "x" <upsym> :> x
+    "y" <upsym> :> y
+    "z" <upsym> :> z
     x
     { nomatch y } y <pcase>
     p z { nomatch s } <pcase> <pcase> x { r x } 3array
     2array <pcase> ;
 
-! NOTE: memoizing this to be able to catch fixpoints?
-MEMO: desugar-special-case ( special-case -- pattern )
-    [ pattern>> ] [ body>> ] [ rest>> ] tri (desugar-special-case) ;
-
-M: special-case >pattern desugar-special-case ;
-
 : <extension> ( cases default -- case )
     [ <reversed> ] dip
-    [ first2 rot <special-case> ] reduce ;
+    [ first2 rot <special-pcase> ] reduce ;
 
 SYNTAX: Ext{ -> parse-until \ | parse-until \ } parse-until
-    [ maybe-unseq ] tri@ <special-case> suffix! ;
+    [ maybe-unseq ] tri@ <special-pcase> suffix! ;
 
-M: special-case pprint-delims drop \ Ext{ \ } ;
-M: special-case >pprint-sequence
+M: special-pcase pprint-delims drop \ Ext{ \ } ;
+M: special-pcase >pprint-sequence
     [ call-next-method \ | suffix ]
     [ rest>> suffix ] bi ;
 
+: <dlam> ( var body -- term )
+    [ [ 1array ] [ <msym> ] bi ] dip <case> ;
 
+:: (desugar-dynamic-special-case) ( theta p s r -- term  )
+    "x" <upsym> :> x
+    x <msym> :> xhat
+    "y" <upsym> :> y
+    y <msym> :> yhat
+    "z" <upsym> :> z
+    z <msym> :> zhat
+    x
+    y 1array { nomatch yhat } y <case>
+    theta p z { nomatch s } <dlam> <case> x { r x } 3array
+    2array <dlam> ;
+
+! NOTE: memoizing this to be able to catch fixpoints?
+MEMO: desugar-special-pcase ( special-pcase -- pattern )
+    [ pattern>> ] [ body>> ] [ rest>> ] tri
+    (desugar-special-pcase) ;
+
+MEMO: desugar-special-dcase ( special-dcase -- pattern )
+    { [ binding-syms>> ] [ pattern>> ] [ body>> ] [ rest>> ] } cleave
+    (desugar-dynamic-special-case) ;
+
+M: special-pcase >pattern
+    desugar-special-pcase ;
+M: special-dcase >pattern
+    desugar-special-dcase ;
+M: case >pattern ;
+
+: build-case-ext ( accum bindings lhs rhs cont -- accum )
+    [ <case> ]
+    [ maybe-unseq <special-dcase> ] if-empty suffix! ;
+
+SYNTAX: P<
+    "[" expect "]" [ dup <psym> 2array ] map-tokens >hashtable
+    [ values ] keep
+    [ -> parse-until maybe-unseq
+      | parse-until maybe-unseq
+      \ > parse-until ] with-words build-case-ext ;
+
+: >pprint-dcase-seq ( bindings lhs rhs -- seq )
+    [
+        [ >quotation , ]
+        [ % -> , ]
+        [ % | , ] tri*
+    ] { } make ;
+
+M: case pprint* pprint-object ;
+M: case pprint-delims drop \ P< \ > ;
+M: case >pprint-sequence
+    [ binding-syms>> ] [ pattern>> ] [ body>> ] tri
+    [ maybe-seq ] bi@ >pprint-dcase-seq ;
+
+SYMBOL: assume-alpha=?
+
+! TODO: this is probably wrong!
+: naive-alpha= ( case1 case2 -- ? )
+    assume-alpha=? [ match ] with-variable-off
+    {
+      [ ]
+      [ [ [ match-var? ] both? ] assoc-all? ]
+      [ [ keys ] [ values ] bi intersects? not ]
+    } 1&& ;
+
+M: case equal?
+    assume-alpha=? get
+    [ naive-alpha= ]
+    [ call-next-method ] if ;
+
+: with-alpha= ( quot -- )
+    assume-alpha=? swap with-variable-on ; inline
+
+M: special-dcase >pprint-sequence
+    [ call-next-method ]
+    [ rest>> maybe-seq append ] bi ;
+
+
+PREDICATE: case-def < constant "constant" word-prop case? ;
+
+! Result of applying match, which must be turned into a match-application
 SINGLETONS: undefined none ;
 UNION: match-result assoc undefined none ;
 
-PREDICATE: constructor < word match-var? not ;
-
-PREDICATE: compound < app-term head-term constructor? ;
-
 PREDICATE: host-data < object { [ app-term? not ] [ match-var? not ] } 1&& ;
+
+! Result of rule application, which can be acted upon to modify the term
+TUPLE: subst-app subst term ;
+C: <subst-app> subst-app
+UNION: match-app subst-app nomatch ;
+
+TYPED: disjoint-domains? ( s1: assoc s2: assoc -- ? )
+    [ keys ] bi@ intersects? not ;
+
+TYPED: match-disjoint-union ( m1: match-result m2: match-result -- m: match-result )
+    {
+        { [ 2dup [ undefined? ] either? ] [ 2drop undefined ] }
+        { [ 2dup { [ [ assoc? ] both? ] [ disjoint-domains? ] } 2&& ]
+          [ assoc-union ] }
+        [ 2drop none ]
+    } cond ;
+
+GENERIC#: match-rule 1 ( match-result term -- match-app )
+M: assoc match-rule <subst-app> ;
+M: none match-rule 2drop nomatch ;
+ERROR: undefined-match term ;
+M: undefined match-rule undefined-match ;
