@@ -1,5 +1,5 @@
-USING: accessors arrays assocs kernel lists match math parser prettyprint.custom
-sequences types.util vectors words words.constant ;
+USING: accessors arrays assocs combinators.short-circuit kernel lists match math
+parser prettyprint.custom sequences types.util vectors words words.constant ;
 
 IN: patterns.terms
 
@@ -107,3 +107,5 @@ UNION: match-result assoc undefined none ;
 PREDICATE: constructor < word match-var? not ;
 
 PREDICATE: compound < app-term head-term constructor? ;
+
+PREDICATE: host-data < object { [ app-term? not ] [ match-var? not ] } 1&& ;

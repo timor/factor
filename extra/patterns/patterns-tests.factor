@@ -28,3 +28,13 @@ SYMBOL: foo
 ! Seems to!  Don't know if this is because of the naive fixpoint check though...
 { { Cons { foo ?s } { Cons { foo ?t } Nil } } }
 [ { mapList foo { Cons ?s { Cons ?t Nil } } } spc-reduce ] unit-test
+
+SYMBOLS: Leaf Node ;
+DEFER: mapTree
+CONSTANT: mapTree P{ ?f ->
+                     Ext{ Leaf ?x -> Leaf { ?f ?x } |
+                          P{ Node ?x ?y -> Node { mapTree ?f ?x } { mapTree ?f ?y }
+                           } } }
+
+{ { Node { Leaf { foo 5 } } { Leaf { foo 6 } } } }
+[ { mapTree foo { Node { Leaf 5 } { Leaf 6 } } } spc-reduce ] unit-test

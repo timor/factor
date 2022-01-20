@@ -7,7 +7,7 @@ FROM: patterns.terms => undefined ;
 
 ! * Static pattern calculus
 
-UNION: data constructor compound ;
+UNION: data constructor compound host-data ;
 UNION: matchable data pcase ;
 
 TYPED: disjoint-domains? ( s1: assoc s2: assoc -- ? )
