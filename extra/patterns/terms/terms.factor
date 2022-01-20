@@ -1,5 +1,5 @@
 USING: accessors arrays assocs kernel lists match math parser prettyprint.custom
-sequences types.util vectors words ;
+sequences types.util vectors words words.constant ;
 
 IN: patterns.terms
 
@@ -47,14 +47,24 @@ INSTANCE: pattern-symbol match-var
 
 TUPLE: pcase pattern body ;
 C: <pcase> pcase
+TUPLE: special-case < pcase rest ;
+C: <special-case> special-case
 
 SYMBOL: ->
+SYMBOL: |
 SYNTAX: P{ -> parse-until \ } parse-until [ maybe-unseq ] bi@ <pcase> suffix! ;
 M: pcase pprint* pprint-object ;
 M: pcase pprint-delims drop \ P{ \ } ;
 M: pcase >pprint-sequence
     [ pattern>> ] [ body>> ] bi
     [ maybe-seq ] bi@ { -> } glue ;
+
+PREDICATE: pattern-def < constant "constant" word-prop pcase? ;
+UNION: pattern-case pattern-def pcase ;
+GENERIC: >pattern ( obj -- pattern/f )
+M: object >pattern drop f ;
+M: pattern-def >pattern "constant" word-prop >pattern ;
+M: pcase >pattern ;
 
 ! TUPLE: special-case pcase default ;
 ! C: <special-case> special-case
@@ -63,7 +73,7 @@ M: pcase >pprint-sequence
 !     [ <reversed> ] dip
 !     [ first2 <pcase> swap <special-case> ] reduce ;
 
-:: <special-case> ( p s r -- term )
+:: (desugar-special-case) ( p s r -- pattern )
     "x" <psym> :> x
     "y" <psym> :> y
     "z" <psym> :> z
@@ -72,9 +82,24 @@ M: pcase >pprint-sequence
     p z { nomatch s } <pcase> <pcase> x { r x } 3array
     2array <pcase> ;
 
+! NOTE: memoizing this to be able to catch fixpoints?
+MEMO: desugar-special-case ( special-case -- pattern )
+    [ pattern>> ] [ body>> ] [ rest>> ] tri (desugar-special-case) ;
+
+M: special-case >pattern desugar-special-case ;
+
 : <extension> ( cases default -- case )
     [ <reversed> ] dip
     [ first2 rot <special-case> ] reduce ;
+
+SYNTAX: Ext{ -> parse-until \ | parse-until \ } parse-until
+    [ maybe-unseq ] tri@ <special-case> suffix! ;
+
+M: special-case pprint-delims drop \ Ext{ \ } ;
+M: special-case >pprint-sequence
+    [ call-next-method \ | suffix ]
+    [ rest>> suffix ] bi ;
+
 
 SINGLETONS: undefined none ;
 UNION: match-result assoc undefined none ;

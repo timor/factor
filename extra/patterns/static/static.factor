@@ -34,10 +34,10 @@ M: match-var matching
 M: constructor matching
     2dup = [ 2drop f ]
     [ call-next-method ] if ;
-: destructure-match ( compound-term compound-pattern -- result )
+: destructure-match ( compound-term app-term -- result )
     [ left/right ] bi@ swapd
     [ matching ] 2bi@ match-disjoint-union ;
-M: compound matching
+M: app-term matching
     over compound? [ destructure-match ]
     [ call-next-method ] if ;
 M: object matching
@@ -45,12 +45,6 @@ M: object matching
 
 TYPED: do-match-rule ( pattern: pcase term -- result: match-app )
     swap [ pattern>> ] [ body>> ] bi [ matching ] dip match-rule ;
-
-PREDICATE: pattern-def < constant "constant" word-prop pcase? ;
-UNION: pattern-case pattern-def pcase ;
-GENERIC: >pattern ( obj -- obj/pattern )
-M: object >pattern ;
-M: pattern-def >pattern "constant" word-prop ;
 
 PREDICATE: sp-redex < app-term left/right drop pattern-case? ;
 ! Static reduction
@@ -66,6 +60,7 @@ TYPED: apply-subst ( res: match-app -- term )
     [ replace-partial? [ replace-patterns ] with-variable-on ] with-variables ;
 
 M: subst-app cleanup-match apply-subst t ;
+! M: subst-app cleanup-match t ;
 M: fixpoint-subst-app cleanup-match
     term>> f ;
 
@@ -73,7 +68,7 @@ M: fixpoint-subst-app cleanup-match
     [ tuck = not ]
     [ nip f ] if ;
 
-M: sp-redex spc-reduce-step
+: spc-reduce-redex ( term -- term ?  )
     dup
     [ left/right [ >pattern ] dip do-match-rule cleanup-match ]
     [ dup undefined-match? [ drop f ] [ rethrow ] if ] recover
@@ -86,12 +81,20 @@ M: sp-redex spc-reduce-step
 : reduce-app ( left right -- left right ? )
     [ reduce-all ] bi@ swapd or ;
 
-M: app-term spc-reduce-step
+TYPED: distribute-reduction ( term: app-term -- term ? )
     dup left/right reduce-app
     [ rot new-app-term t ]
     [ 2drop f ] if ;
 
+M: sp-redex spc-reduce-step
+    [ distribute-reduction ] loop
+    spc-reduce-redex ;
+
+M: app-term spc-reduce-step
+    distribute-reduction ;
+
 M: object spc-reduce-step f ;
 
 : spc-reduce ( term -- term )
-    [ spc-reduce-step ] loop ;
+    reduce-all drop ;
+    ! [ spc-reduce-step ] loop ;

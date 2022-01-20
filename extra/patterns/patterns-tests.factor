@@ -3,7 +3,7 @@ IN: patterns.tests
 
 SYMBOL: Rec
 
-MATCH-VARS: ?x ?f ;
+MATCH-VARS: ?x ?y ?z ?f ;
 CONSTANT: omega P{ Rec ?x -> ?x { Rec ?x } }
 CONSTANT: fix P{ ?f -> omega { Rec P{ ?x -> ?f { omega ?x } } } }
 
@@ -12,3 +12,10 @@ CONSTANT: fix P{ ?f -> omega { Rec P{ ?x -> ?f { omega ?x } } } }
 
 { { omega { Rec P{ ?x -> ?f { omega ?x } } } } }
 [ { fix ?f } spc-reduce ] unit-test
+
+SYMBOLS: Nil Cons ;
+DEFER: _append
+CONSTANT: _append Ext{ Nil -> P{ ?z -> ?z } | P{ Cons ?x ?y -> P{ ?z -> Cons ?x { _append ?y ?z } } } }
+
+{ { Cons ?r { Cons ?s { Cons ?t Nil } } } }
+[ { _append { Cons ?r Nil } { Cons ?s { Cons ?t Nil } } } spc-reduce ] unit-test
