@@ -1,6 +1,5 @@
-USING: accessors arrays assocs assocs.extras combinators.short-circuit
-hashtables kernel match patterns.reduction patterns.terms sequences sets typed
-types.util ;
+USING: accessors arrays assocs assocs.extras hashtables kernel match
+patterns.reduction patterns.terms sequences sets typed types.util ;
 
 IN: patterns.dynamic
 
@@ -16,7 +15,7 @@ GENERIC: fv ( term -- set )
 M: match-var fv 1array ;
 M: assoc fv [ fv ] map-values ;
 M: app-term fv
-    [ left>> ] [ right>> ] bi
+    left/right
     [ fv ] bi@ union ;
 
 ! Static case
@@ -34,7 +33,7 @@ M: case fv
 GENERIC: fm ( term -- set )
 M: match-var fm drop f ;
 M: match-sym fm word>> 1array ;
-M: app-term fm [ left>> ] [ right>> ] bi [ fm ] bi@ union ;
+M: app-term fm left/right [ fm ] bi@ union ;
 M: case fm
     [ pattern>> fm ]
     [ binding-syms>> diff ]
@@ -56,22 +55,22 @@ M: sequence avoids?
 
 GENERIC: vsubst ( subst term -- term )
 M: match-var vsubst ?of drop ;
-:: maybe-rebuild-app-term ( left right orig -- app-term )
-    { [ orig left>> left eq? ] [ orig right>> right eq? ] } 0&&
-    [ orig ]
-    [ left right orig new-app-term ] if ;
+! :: maybe-rebuild-app-term ( left right orig -- app-term )
+!     { [ orig left>> left eq? ] [ orig right>> right eq? ] } 0&&
+!     [ orig ]
+!     [ left right orig new-app-term ] if ;
 
 M:: app-term vsubst ( subst term -- term )
-    term [ [ left>> ] [ right>> ] bi ]
+    term [ left/right ]
     [ [ subst swap vsubst ] bi@ ]
     [ term new-app-term ] ?rebuild ;
 
 M: match-sym vsubst nip ;
 
-TYPED:: maybe-rebuild-case-term ( bindings pattern body orig: case -- case-term )
-    { [ orig pattern>> pattern eq? ] [ orig body>> body eq? ] } 0&&
-    [ orig ]
-    [ bindings pattern body <case> ] if ;
+! TYPED:: maybe-rebuild-case-term ( bindings pattern body orig: case -- case-term )
+!     { [ orig pattern>> pattern eq? ] [ orig body>> body eq? ] } 0&&
+!     [ orig ]
+!     [ bindings pattern body <case> ] if ;
 
 M:: case vsubst ( subst term -- term )
     subst term binding-syms>> avoids?
@@ -81,6 +80,7 @@ M:: case vsubst ( subst term -- term )
       ?rebuild ]
     [ term ] if ;
 
+! NOTE: specific case for msubst really needed?
 GENERIC: msubst ( subst term -- term )
 M: match-var msubst nip ;
 M: match-sym msubst
@@ -90,7 +90,7 @@ M: match-sym msubst
     [ nip ] if ;
 
 M:: app-term msubst ( subst term -- term )
-    term [ [ left>> ] [ right>> ] bi ]
+    term [ left/right ]
     [ [ subst swap msubst ] bi@ ]
     [ term new-app-term ] ?rebuild ;
 
@@ -102,10 +102,10 @@ M:: case msubst ( subst term -- term )
       ?rebuild ]
     [ term ] if ;
 
-! NOTE: specific case for msubst really needed?
-UNION: matchable host-constructor match-sym ;
-PREDICATE: data-compound < app-term head-term matchable? ;
-UNION: data matchable data-compound ;
+UNION: matchable-symbol host-constructor match-sym ;
+
+PREDICATE: data-compound < app-term head-term matchable-symbol? ;
+UNION: matchable matchable-symbol data-compound host-data ;
 
 GENERIC: basic-matching ( term seq pattern -- result: match-result )
 M:: match-sym basic-matching ( term seq pattern -- result: match-result )
@@ -119,11 +119,12 @@ M: matchable basic-matching
     [ call-next-method ] if ;
 
 M:: app-term basic-matching ( term seq pattern -- result: match-result )
-    pattern [ left>> ] [ right>> ] bi :> ( l r )
+    pattern left/right :> ( l r )
     l r [ matchable? ] both?
     [
-        term seq l basic-matching
-        term seq r basic-matching
+        term left/right :> ( tl tr )
+        tl seq l basic-matching
+        tr seq r basic-matching
         match-disjoint-union
     ] [ term seq pattern call-next-method ] if ;
 

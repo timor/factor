@@ -206,7 +206,9 @@ PREDICATE: case-def < constant "constant" word-prop case? ;
 SINGLETONS: undefined none ;
 UNION: match-result assoc undefined none ;
 
-PREDICATE: host-data < object { [ app-term? not ] [ match-var? not ] } 1&& ;
+PREDICATE: host-data < object { [ app-term? not ] [ match-var? not ] [ reduction-defined? not ]
+                                [ match-sym? not ]
+    } 1&& ;
 
 ! Result of rule application, which can be acted upon to modify the term
 TUPLE: subst-app subst term ;

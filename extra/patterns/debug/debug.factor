@@ -1,4 +1,4 @@
-USING: formatting io kernel namespaces patterns.static patterns.terms
+USING: formatting io kernel namespaces patterns.reduction patterns.terms
 tools.annotations ;
 
 IN: patterns.debug
@@ -16,7 +16,6 @@ IN: patterns.debug
 
 :: wrap-do-match ( def -- quot )
     [ <mid> [ rule-start. def call( pattern term -- result ) ] keep rule-match. ] ;
-
 
 : pebug ( -- )
     \ do-match-rule
