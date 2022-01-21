@@ -1,6 +1,8 @@
 USING: match patterns.reduction patterns.terms tools.test ;
 IN: patterns.tests
 
+USE: patterns.static
+
 SYMBOL: Rec
 
 MATCH-VARS: ?x ?y ?z ?f ?r ?s ?t ;

@@ -1,5 +1,6 @@
-USING: kernel match math namespaces patterns.dynamic patterns.reduction
-patterns.terms patterns.tests sequences tools.test ;
+USING: arrays combinators.short-circuit kernel make match math namespaces
+patterns.dynamic patterns.reduction patterns.terms patterns.tests sequences
+tools.test ;
 
 IN: patterns.dynamic.tests
 
@@ -63,3 +64,15 @@ PREDICATE: repr-cons < sequence { [ length 3 = ] [ first Cons = ] } 1&& ;
 
 { "b" }
 [ { _elim { Cons CHAR: a } } "ab" seq>repr suffix pc-reduce repr>string ] unit-test
+
+{ nomatch }
+! NOTE: If stuck, this will be returned instead:
+! { { P< [ y ] P< [ ?x ] M< ?x > -> Nil | > M< y > -> y | > Nil } }
+[ _elim \ ?x Nil <dlam> Nil 3array pc-reduce ] unit-test
+
+DEFER: elim*
+CONSTANT: elim* P< [ x ] M< x > -> P< [ y ] x M< y > -> elim* x y | P< [ y ] M< y > -> y | > > | >
+
+! Only works if inner reduction is not applied!
+{ "bca" }
+[ { elim* { Cons CHAR: a } } "aaabca" seq>repr suffix pc-reduce repr>string ] unit-test

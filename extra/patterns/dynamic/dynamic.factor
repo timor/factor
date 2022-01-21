@@ -1,13 +1,20 @@
-USING: accessors arrays assocs assocs.extras hashtables kernel match
-patterns.reduction patterns.terms sequences sets typed types.util ;
+USING: accessors arrays assocs assocs.extras combinators.short-circuit
+hashtables kernel match patterns.reduction patterns.terms sequences sets typed
+types.util ;
 
 IN: patterns.dynamic
 
 FROM: syntax => _ ;
 FROM: patterns.terms => undefined ;
 
+UNION: matchable-symbol host-constructor match-sym ;
+
+PREDICATE: data-compound < app-term head-term matchable-symbol? ;
+UNION: data-structure matchable-symbol data-compound host-data ;
+UNION: matchable data-structure case ;
+
 ! Dynamic pattern calculus term syntax
-UNION: term match-var match-sym app-term case case-def ;
+UNION: term match-var matchable app-term case case-def ;
 
 ! * Substitution Formals
 
@@ -102,11 +109,6 @@ M:: case msubst ( subst term -- term )
       ?rebuild ]
     [ term ] if ;
 
-UNION: matchable-symbol host-constructor match-sym ;
-
-PREDICATE: data-compound < app-term head-term matchable-symbol? ;
-UNION: matchable matchable-symbol data-compound host-data ;
-
 GENERIC: basic-matching ( term seq pattern -- result: match-result )
 M:: match-sym basic-matching ( term seq pattern -- result: match-result )
     pattern word>> :> var
@@ -120,13 +122,24 @@ M: matchable basic-matching
 
 M:: app-term basic-matching ( term seq pattern -- result: match-result )
     pattern left/right :> ( l r )
-    l r [ matchable? ] both?
+    { [ term app-term? ]
+      [ l r [ matchable? ] both? ] } 0&&
     [
         term left/right :> ( tl tr )
         tl seq l basic-matching
         tr seq r basic-matching
         match-disjoint-union
     ] [ term seq pattern call-next-method ] if ;
+
+! This results in an endless loop when using recursive definitions without using
+! Solution: (?)
+! Only reduce patterns recursively.  This should be safe if we have only
+! left-linear patterns...
+
+M: case pc-reduce-step ( term -- term ? )
+    dup pattern>> reduce-all
+    [ [ [ binding-syms>> ] [ body>> ] bi ] dip swapd <case> t ]
+    [ drop f ] if ;
 
 M: object basic-matching ( term seq pattern -- result: match-result )
     nip [ matchable? ] both? none undefined ? ;

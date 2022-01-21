@@ -38,11 +38,11 @@ M: fixpoint-subst-app cleanup-match
     f swap [ pc-reduce-step tuck [ or ] 2dip ] co-loop
     swap ;
 
-: reduce-app ( left right -- left right ? )
+: reduce-2 ( left right -- left right ? )
     [ reduce-all ] bi@ swapd or ;
 
 TYPED: distribute-reduction ( term: app-term -- term ? )
-    dup left/right reduce-app
+    dup left/right reduce-2
     [ rot new-app-term t ]
     [ 2drop f ] if ;
 
@@ -57,4 +57,3 @@ M: object pc-reduce-step f ;
 
 : pc-reduce ( term -- term )
     reduce-all drop ;
-    ! [ pc-reduce-step ] loop ;

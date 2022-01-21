@@ -199,7 +199,6 @@ M: special-dcase >pprint-sequence
     [ call-next-method ]
     [ rest>> maybe-seq append ] bi ;
 
-
 PREDICATE: case-def < constant "constant" word-prop case? ;
 
 ! Result of applying match, which must be turned into a match-application
