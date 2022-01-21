@@ -48,7 +48,10 @@ SINGLETON: nomatch
 
 PREDICATE: pattern-symbol < word "pattern-symbol" word-prop? ;
 INSTANCE: pattern-symbol match-var
-PREDICATE: host-constructor < word match-var? not ;
+! Wildcard
+SINGLETON: __
+
+PREDICATE: host-constructor < word { [ __? ] [ match-var? ] } 1|| not ;
 
 TUPLE: pcase pattern body ;
 C: <pcase> pcase
@@ -65,7 +68,7 @@ M: pcase >pprint-sequence
     [ maybe-seq ] bi@ { -> } glue ;
 
 ! Dynamic match case structure
-TUPLE: case binding-syms pattern body ;
+TUPLE: case { binding-syms sequence } pattern body ;
 C: <case> case
 TUPLE: special-dcase < case rest ;
 C: <special-dcase> special-dcase
@@ -79,9 +82,9 @@ INSTANCE: case reduction-defined
 INSTANCE: pcase reduction-defined
 
 GENERIC: >pattern ( obj -- pattern/f )
-M: object >pattern drop f ;
+M: object >pattern ;
 M: pattern-def >pattern "constant" word-prop >pattern ;
-M: pcase >pattern ;
+! M: pcase >pattern ;
 
 ! "Wrapper" around other words
 TUPLE: match-sym word ;
@@ -162,6 +165,10 @@ SYNTAX: P<
     [ -> parse-until maybe-unseq
       | parse-until maybe-unseq
       \ > parse-until ] with-words build-case-ext ;
+
+SYNTAX: lam{ scan-token [ <psym> ] keep [ drop 1array ] [ drop <msym> ] [ associate ] 2tri
+             [ \ } parse-until maybe-unseq ] with-words
+    f build-case-ext ;
 
 : >pprint-dcase-seq ( bindings lhs rhs -- seq )
     [

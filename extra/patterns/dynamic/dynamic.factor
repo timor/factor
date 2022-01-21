@@ -10,7 +10,7 @@ FROM: patterns.terms => undefined ;
 UNION: matchable-symbol host-constructor match-sym ;
 
 PREDICATE: data-compound < app-term head-term matchable-symbol? ;
-UNION: data-structure matchable-symbol data-compound host-data ;
+UNION: data-structure matchable-symbol data-compound host-data __ ;
 UNION: matchable data-structure case ;
 
 ! Dynamic pattern calculus term syntax
@@ -120,6 +120,8 @@ M: matchable basic-matching
     pick over = [ 3drop f ]
     [ call-next-method ] if ;
 
+M: __ basic-matching 3drop f ;
+
 M:: app-term basic-matching ( term seq pattern -- result: match-result )
     pattern left/right :> ( l r )
     { [ term app-term? ]
@@ -138,7 +140,7 @@ M:: app-term basic-matching ( term seq pattern -- result: match-result )
 
 M: case pc-reduce-step ( term -- term ? )
     dup pattern>> reduce-all
-    [ [ [ binding-syms>> ] [ body>> ] bi ] dip swapd <case> t ]
+    [ [ [ binding-syms>> ] [ body>> ] bi ] dip swap <case> t ]
     [ drop f ] if ;
 
 M: object basic-matching ( term seq pattern -- result: match-result )

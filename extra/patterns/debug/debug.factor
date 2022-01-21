@@ -7,10 +7,10 @@ IN: patterns.debug
     \ <mid> counter ;
 
 : rule-start. ( pattern term id -- pattern term )
-    2over ">>(%d)Apply Pattern %u on %u" printf nl ;
+    2over swap ">>(%d)Apply Term %u \n on Pattern: %u" printf nl ;
 
 : rule-match. ( result id -- result )
-    ">>(%d)" printf
+    "<<(%d)" printf
     dup nomatch? [ "Nomatch" print ]
     [ dup "Success: %u" printf nl ] if ;
 
