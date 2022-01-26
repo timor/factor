@@ -12,9 +12,9 @@ GENERIC: left/right ( app -- left right )
 GENERIC: head-term ( term -- term )
 GENERIC: new-app-term ( left right exemplar -- app-term )
 
-INSTANCE: list app-term
-M: list left/right uncons ;
-M: list head-term car ;
+INSTANCE: cons-state app-term
+M: cons-state left/right uncons ;
+M: cons-state head-term car ;
 M: cons-state new-app-term drop
     cons ;
 
@@ -74,9 +74,11 @@ TUPLE: special-dcase < case rest ;
 C: <special-dcase> special-dcase
 
 
+MIXIN: reduction-defined
 PREDICATE: pattern-def < constant "constant" word-prop
     { [ case? ] [ pcase? ] } 1|| ;
-MIXIN: reduction-defined
+PREDICATE: term-def < word "pattern" word-prop ;
+INSTANCE: term-def reduction-defined
 INSTANCE: pattern-def reduction-defined
 INSTANCE: case reduction-defined
 INSTANCE: pcase reduction-defined
@@ -84,6 +86,7 @@ INSTANCE: pcase reduction-defined
 GENERIC: >pattern ( obj -- pattern/f )
 M: object >pattern ;
 M: pattern-def >pattern "constant" word-prop >pattern ;
+M: term-def >pattern "pattern" word-prop ;
 ! M: pcase >pattern ;
 
 ! "Wrapper" around other words

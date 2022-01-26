@@ -1,4 +1,5 @@
-USING: match patterns.reduction patterns.terms tools.test ;
+USING: continuations kernel lists match math patterns.reduction patterns.terms
+quotations tools.test words ;
 IN: patterns.tests
 
 USE: patterns.static
@@ -40,3 +41,30 @@ CONSTANT: mapTree P{ ?f ->
 
 { { Node { Leaf { foo 5 } } { Leaf { foo 6 } } } }
 [ { mapTree foo { Node { Leaf 5 } { Leaf 6 } } } pc-reduce ] unit-test
+
+! Some Stack experiments
+
+! : >stack ( seq -- term )
+!     [ Push swap 2array ] map concat ;
+! GENERIC: >term ( obj -- term )
+! M: object >term { Push }
+SYMBOLS: Val Quot Stack Push ;
+! \ swap P< [ x y ] { Val M< x > } { Val < y > } -> { Val y } { Val x } | > "pattern" set-word-prop
+! \ drop P< [ x ] Val M< x > -> | > "pattern" set-word-prop
+! \ dup P< [ x ] Val M< x > -> { Val x } { Val x } | > "pattern" set-word-prop
+
+! Eval Push -> x
+! Eval Word x -> Eval Word Push { Eval x }
+! Eval { 1 2 dup } ->
+
+
+! Eval Push x -> x
+! Eval Word x y -> Eval
+M: callable pc-reduce-step
+    [ call( -- term ) t ] [ drop f ] recover ;
+
+CONSTANT: Plus lam{ x lam{ y [ x y + ] } }
+
+\ swap P< [ x y r ] L{ M< x > M< y > . M< r > } -> L{ y x . r } | > "pattern" set-word-prop
+\ drop P< [ x r ] L{ M< x > . M< r > } -> r | > "pattern" set-word-prop
+\ dup P< [ x r ]  L{ M< x > . M< r > } -> L{ x x . r } | > "pattern" set-word-prop

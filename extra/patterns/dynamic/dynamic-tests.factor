@@ -1,6 +1,6 @@
 USING: arrays combinators.short-circuit kernel make match math math.functions
-namespaces patterns.dynamic patterns.reduction patterns.terms patterns.tests
-sequences tools.test typed ;
+namespaces patterns.dynamic patterns.reduction patterns.terms sequences
+tools.test typed ;
 
 IN: patterns.dynamic.tests
 
@@ -11,9 +11,9 @@ FROM: syntax => _ ;
 MATCH-VARS: ?x ?y ;
 
 { none }
-[ M< ?x > { ?y } M< ?x >  dynamic-matching ] unit-test
+[ M< ?x > { ?y } M< ?x > dynamic-matching ] unit-test
 
-SYMBOLS: a b Nil ;
+SYMBOLS: a b Nil Cons ;
 
 CONSTANT: _elim P< [ x ] M< x > -> P< [ y ] x M< y > -> y | > | >
 

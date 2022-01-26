@@ -55,5 +55,8 @@ M: app-term pc-reduce-step
 
 M: object pc-reduce-step f ;
 
+M: term-def pc-reduce-step
+    >pattern pc-reduce-step ;
+
 : pc-reduce ( term -- term )
     reduce-all drop ;
