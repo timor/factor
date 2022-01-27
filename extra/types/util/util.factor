@@ -1,8 +1,9 @@
 USING: accessors arrays assocs assocs.extras classes classes.algebra
-classes.tuple colors.constants combinators combinators.short-circuit hashtables
-io io.styles kernel lists match math math.parser namespaces prettyprint.backend
-prettyprint.custom prettyprint.sections quotations sequences sequences.private
-strings threads typed unicode words ;
+classes.tuple colors.constants combinators combinators.short-circuit
+combinators.smart continuations generalizations hashtables io io.styles kernel
+lists match math math.parser mirrors namespaces prettyprint.backend
+prettyprint.custom prettyprint.sections quotations sequences sequences.extras
+sequences.private sets strings threads typed unicode words ;
 
 IN: types.util
 
@@ -206,13 +207,18 @@ MACRO: lmatch-map-as ( branches cons-class -- quot )
 ! * Unification
 ! Baader/Nipkow
 GENERIC: subst ( term -- term )
-M: object subst ;
-M: match-var subst [ get ] keep or ;
+! M: object subst ;
+! M: match-var subst [ get ] keep or ;
+
+SYMBOL: current-subst
+: get-current-subst ( obj -- obj/f )
+    current-subst get at ;
+M: object subst [ get-current-subst ] keep or ;
 M: sequence subst [ subst ] map ;
 M: tuple subst tuple>array subst >tuple ;
 
 : lift ( term subst -- term )
-    swap [ subst ] curry with-variables ;
+    current-subst [ subst ] with-variable ;
 
 GENERIC: occurs? ( var term -- ? )
 M: object occurs? 2drop f ;
@@ -267,14 +273,22 @@ SYMBOL: on-recursive-term
       [ [ [ lift ] curry bi@ ] curry assoc-map ] bi-curry bi*
       (solve) ] if ;
 
-: solve ( problem -- subst )
-    H{ } clone swap (solve) ;
+: solve ( subst problem -- subst )
+    [ (solve) ]
+    [ dup incompatible-terms? [ 3drop f ] [ rethrow ] if ]
+    recover ;
+
+: solve-problem ( problem -- subst )
+    H{ } clone swap solve ;
+
+: solve-next ( subst problem -- subst )
+    swap >alist append solve-problem ;
 
 : solve-eq ( term1 term2 -- subst )
-    2array 1array solve ;
+    2array 1array solve-problem ;
 
 : solve-in ( term eqns -- term subst )
-    solve [ lift ] keep ;
+    solve-problem [ lift ] keep ;
 
 ! * Cache with hit indicator
 
@@ -300,3 +314,6 @@ SYMBOL: on-recursive-term
     [ n neq? ] n ncurry preserving
     [ n ndrop orig ]
     recons if ; inline
+
+: remove-nths ( indices seq -- seq )
+   [ swap in? not nip ] with filter-index ; inline
