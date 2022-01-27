@@ -15,6 +15,7 @@ SYMBOL: __    ! anonymous variable   in prolog: _
 SYMBOL: ;;    ! disjunction, or      in prolog: ;
 SYMBOL: \+    ! negation             in prolog: not, \+
 
+MIXIN: user-logic-var
 <PRIVATE
 
 <<
@@ -31,8 +32,11 @@ SINGLETON: ANONYMOUSE-LOGIC-VAR
 INSTANCE: NORMAL-LOGIC-VAR LOGIC-VAR
 INSTANCE: ANONYMOUSE-LOGIC-VAR LOGIC-VAR
 
-: logic-var? ( obj -- ? )
+: logic-symbol? ( obj -- ? )
     dup symbol? [ get LOGIC-VAR? ] [ drop f ] if ; inline
+
+: logic-var? ( obj -- ? )
+    { [ user-logic-var? ] [ logic-symbol? ] } 1|| ;
 
 SYMBOLS: *trace?* *trace-depth* ;
 
