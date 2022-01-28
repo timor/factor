@@ -1,5 +1,6 @@
-USING: accessors arrays assocs combinators combinators.short-circuit kernel
-logic logic.private match math namespaces sequences sets typed types.util ;
+USING: accessors arrays combinators combinators.short-circuit kernel lexer logic
+logic.private namespaces parser prettyprint.custom sequences sets typed
+types.util ;
 
 IN: chr
 
@@ -116,3 +117,25 @@ TYPED: chr-step ( P F E: chrs D: builtins -- P F E: chrs D: builtins ? )
 
 : with-chr-trace ( quot -- )
     [ f chr-trace ] dip with-variable ; inline
+
+: parse-array ( end -- seq )
+    parse-until [ f ] [ >array ] if-empty ; inline
+
+SYMBOLS: | -- // ;
+SYNTAX: CHR{ \ // parse-array \ -- parse-array \ | parse-array \ } parse-array [ t ] when-empty chr boa suffix! ;
+SYNTAX: ={ scan-object scan-object "}" expect eq boa suffix! ;
+
+M: eq pprint* pprint-object ;
+M: eq pprint-delims drop \ ={ \ } ;
+M: eq >pprint-sequence [ v1>> ] [ v2>> ] bi 2array ;
+
+: pprint-chr ( chr -- )
+    <flow \ CHR{ pprint-word
+    { [ keep>> pprint-elements \ // pprint-word ]
+      [ remove>> pprint-elements \ -- pprint-word ]
+      [ guard>> pprint-elements \ | pprint-word ]
+      [ body>> dup t = [ drop ] [ pprint-elements ] if ]
+    } cleave
+    \ } pprint-word block> ;
+
+M: chr pprint* pprint-chr ;
