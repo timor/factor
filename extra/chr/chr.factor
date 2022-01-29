@@ -44,8 +44,16 @@ M:: factlog-theory apply-builtin ( F E D B -- F E D ? )
 PREDICATE: builtins < sequence [ builtin-constraint? ] all? ;
 PREDICATE: chrs < sequence [ chr-constraint? ] all? ;
 
-TUPLE: chr keep remove guard body ;
+TUPLE: chr heads nkept guard body ;
 PREDICATE: propagate-chr < chr remove>> empty? ;
+SLOT: keep
+SLOT: remove
+: keep/remove ( chr -- seq seq )
+    [ heads>> ] [ nkept>> ] bi cut-slice ; inline
+M: chr keep>> ( chr -- seq )
+    keep/remove drop ; inline
+M: chr remove>> ( chr -- seq )
+    keep/remove nip ; inline
 
 TYPED:: chr-solve ( F E: chrs D: builtins -- F E: chrs D: builtins ? )
     F unclip :> ( F2 B )
