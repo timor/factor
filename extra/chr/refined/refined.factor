@@ -126,12 +126,14 @@ SYMBOLS: program exec-stack store builtins match-trace current-index ;
 
 ! For adding things to the exec stack
 GENERIC: child-atoms ( obj -- seq/f )
-M: object child-atoms drop f ;
-M: string child-atoms drop f ;
-M: byte-array child-atoms drop f ;
+M: object child-atoms drop { } ;
+M: word child-atoms drop f ;
+M: string child-atoms drop { } ;
+M: byte-array child-atoms drop { } ;
 M: sequence child-atoms ;
 M: tuple child-atoms tuple-slots ;
 M: eq child-atoms [ v1>> ] [ v2>> ] bi 2array ;
+M: match-var child-atoms drop f ;
 ! M: id-cons child-atoms constraint-args ;
 
 : atoms ( obj -- seq )
