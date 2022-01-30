@@ -28,7 +28,7 @@ SINGLETON: gcd
 CONSTANT: gcd-prog {
     CHR{ // { gcd 0 } -- | }
     CHR{ { gcd ?i } // { gcd ?j } -- [ ?j ?i >= ] |
-         !={ ?k [ ?j ?i - ] }
+         is={ ?k [ ?j ?i - ] }
          { gcd ?k }
        }
 }

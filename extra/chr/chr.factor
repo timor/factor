@@ -190,7 +190,7 @@ TYPED: chr-run ( P F E: chrs D: builtins -- P F E: chrs D: builtins )
 SYMBOLS: | -- // ;
 SYNTAX: CHR{ \ // parse-array dup length [ \ -- parse-array append ] dip \ | parse-array \ } parse-array [ t ] when-empty chr boa suffix! ;
 SYNTAX: ={ scan-object scan-object "}" expect <eq> suffix! ;
-SYNTAX: !={ scan-object scan-object callable check-instance "}" expect set-eq boa suffix! ;
+SYNTAX: is={ scan-object scan-object callable check-instance "}" expect set-eq boa suffix! ;
 
 ! TUPLE: cont name ;
 ! INSTANCE: cont match-var
