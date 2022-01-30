@@ -137,7 +137,7 @@ M: match-var child-atoms drop f ;
 ! M: id-cons child-atoms constraint-args ;
 
 : atoms ( obj -- seq )
-    [ child-atoms ] [ match-var? not ] deep-find-all ;
+    [ child-atoms ] [ drop t ] deep-find-all ;
 
 TYPED: store-atoms ( c: chr-cons -- c: chr-cons )
     dup cons>> constraint-args atoms >>atoms ;
@@ -259,14 +259,14 @@ TYPED:: try-simpligate ( c: active-cons -- ir add propagate? ? )
     ;
 
 TYPED: simpligate ( c: active-cons -- ? )
-    dup try-simpligate
-    [| c ir add prop? |
-     prop? [ c push-cons ] when
-     exec-stack [ add prepend ] change
-     store [ [ id>> ir in? ] reject ] change
-     t
-    ]
-    [ 4drop f ] if ;
+    dup dup occs>> empty? [ 2drop f ]
+    [ try-simpligate
+      [| c ir add prop? |
+       prop? [ c push-cons ] when
+       exec-stack [ add prepend ] change
+       store [ [ id>> ir in? ] reject ] change
+       t ]
+      [ 4drop f ] if ] if ;
 
 TYPED:: default/drop ( ac: active-cons -- ? )
     ac j>> 1 + :> j2
@@ -291,7 +291,7 @@ SYMBOL: chr-state-sentinel
 
 : chr-loop ( -- state )
     [ 0 chr-state-sentinel set
-      [ chr-state-sentinel get 50 > [ "runaway" throw ] when
+      [ chr-state-sentinel get 500 > [ "runaway" throw ] when
         chr-state-sentinel inc
         chr-trans
         ! chr.
