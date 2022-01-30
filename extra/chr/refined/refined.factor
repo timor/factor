@@ -100,14 +100,7 @@ M: id-cons constraint-args cons>> constraint-args ;
     ] each-index
     [ sort-chr-index >array ] map-values ;
 
-! : wrap-rule-constraints ( rules -- rules )
-!     [ clone
-!       [ [ wrap-cons ] map ] change-heads
-!       [ dup t = [ [ wrap-cons ] map ] unless ] change-body
-!     ] map ;
-
 : read-chr ( rules -- chr-prog )
-    ! dup wrap-rule-constraints
     dup index-rules f <chr-prog> ;
 
 SYMBOLS: program exec-stack store builtins match-trace current-index ;
@@ -144,10 +137,13 @@ M: eq child-atoms [ v1>> ] [ v2>> ] bi 2array ;
 : atoms ( obj -- seq )
     [ child-atoms ] [ match-var? not ] deep-find-all ;
 
+TYPED: store-atoms ( c: chr-cons -- c: chr-cons )
+    dup cons>> constraint-args atoms >>atoms ;
+
 : wrap-cons ( obj -- constraint )
     dup builtin-constraint?
-    [ dup atoms <builtin-cons> ]
-    [ dup constraint-args atoms <chr-cons> ] if ;
+    [ f <builtin-cons> ]
+    [ f <chr-cons> ] if ;
 
 : init-chr-state ( rules query -- )
     reset-chr-state
@@ -156,7 +152,8 @@ M: eq child-atoms [ v1>> ] [ v2>> ] bi 2array ;
 
 ! * Transitions
 TYPED: identify-cons ( c: chr-cons -- c: id-cons )
-    current-index [ 0 or 1 + dup ] change <id-cons> ;
+    store-atoms current-index [ 0 or 1 + dup ] change
+    <id-cons> ;
 
 TYPED: activate-cons ( c: id-cons -- c: active-cons )
     dup cons>> constraint-type program get occur-index>> at 0
@@ -175,28 +172,27 @@ TYPED: activate-cons ( c: id-cons -- c: active-cons )
     if-empty ;
 
 ! Run builtin. Interface is telling renamings and waking corresponding constraints.
-GENERIC: tell ( cons -- subst )
+GENERIC: tell ( cons -- subst store? )
 
 M: eq tell
-    [ v1>> ] [ v2>> ] bi 2array 1array ;
+    [ v1>> ] [ v2>> ] bi 2array 1array t ;
+M: set-eq tell
+    [ v1>> ] [ v2>> ] bi call( -- val ) <eq> tell drop f ;
 
-! :: standard-wakeup-set ( atoms -- ids )
-!     [ store get [| c | c cons>> atoms>> atoms intersect? [ c , ] when ]
-!       each ] { } make ;
-: standard-wakeup-set ( atoms -- ids )
+: standard-wakeup-set ( subst -- ids )
+    values
     store get [ cons>> atoms>> intersects? ] with find-all [ second ] <mapped> ;
 
 ! TODO
 TYPED:: solve-builtin ( c: builtin-cons -- )
-    ! break
-    c cons>> tell :> subst
+    c cons>> tell :> ( subst store? )
     { exec-stack store builtins }
     [ [ subst lift ] change ] each
-    c atoms>> standard-wakeup-set :> to-wakeup
+    subst standard-wakeup-set :> to-wakeup
     exec-stack get :> estack
     to-wakeup members [ estack [ dup active-cons? [ cons>> ] when ] <mapped> member? ] reject
     exec-stack [ append ] change
-    builtins [ c suffix ] change ;
+    store? [ builtins [ c suffix ] change ] when ;
 
 : solve ( cons -- ? )
     dup builtin-cons?
@@ -217,30 +213,30 @@ M: chr-cons activate
     activate ;
 M: id-cons activate activate-cons push-cons t ;
 
-! : activate ( c: cons -- ? )
-!     activate ;
-
-! : reactivate ( c: -- ? )
-!     peek-cons maybe-activate-cons ;
-
-! :: wrap-builtin-backref ( b subst -- cons )
-!     subst values :> touches
-!     b subst lift touches <builtin-cons> ;
+! Hs: pairs of index, head
+! inds: pairs of { head-index E-index }
+:: find-heads-index ( Hs E without-E subst! -- subst inds )
+    Hs [ subst f ]
+    [ unclip-slice :> ( r hind )
+      hind first2 :> ( hi h )
+      E [| H i | i without-E in? [ f ]
+         [ subst h H 2array 1array solve-next [ subst! t ] [ f ] if* ] if
+        ] find-index :> ( i h2 )
+      i [ r E without-E i suffix subst find-heads-index { hi i } suffix ] [ f f ] if
+    ] if-empty ;
 
 TYPED:: try-simpligate ( c: active-cons -- ir add propagate? ? )
-    ! break
     c cons>> :> idc
     idc cons>> cons>> :> hc
     c [ j>> ] [ occs>> ] bi nth first2
     [ program get rules>> nth ] dip :> ( H rj )
-    idc store get remove :> S
+    store get :> S
+    idc S index :> i_act
     S [ cons>> cons>> ] <mapped> :> E
     hc rj H heads>> nth solve-eq :> subst
-    rj H heads>> remove-nth :> H1
-    H1 E f subst find-heads :> ( sh ih )
-    H ih [ S nth id>> ] map >hash-set [ rj swap adjoin ] keep 2array :> tsig
-    ! { [ sk ] [ H keep>> empty? ] } 0||
-    ! [ H remove>> E ik sk find-heads :> ( sr ir )
+    rj H heads>> <enumerated> remove-nth :> H1
+    H1 E i_act 1array subst find-heads-index :> ( sh ih_pairs )
+    H ih_pairs values [ S nth id>> ] map >hash-set [ rj swap adjoin ] keep 2array :> tsig
     H nkept>> :> nk
     nk H heads>> length = :> prop?
       { [ sh ]
@@ -248,7 +244,8 @@ TYPED:: try-simpligate ( c: active-cons -- ir add propagate? ? )
       } 0&&
       [
           H guard>> [ sh lift builtin-applies? ] all? [
-              ih [ nk >= ] filter :> ir
+              ih_pairs [ nk >= ] filter-keys values [ S nth id>> ] map :> ir
+              ! ir: indices in s to remove
               H body>> dup t = [ drop f ] [ [ sh lift wrap-cons ] map ] if :> add
               prop? [ match-trace [ tsig suffix ] change ] when
               rj nk < ! true: propagate false: simplify
@@ -256,14 +253,12 @@ TYPED:: try-simpligate ( c: active-cons -- ir add propagate? ? )
               [ ir idc id>> suffix add f ] if
               t
           ] [ f f f f ] if
-      ] [ f f f f ] if ! ]
-    ! [ E f ] if
+      ] [ f f f f ] if
     ;
 
 TYPED: simpligate ( c: active-cons -- ? )
     dup try-simpligate
     [| c ir add prop? |
-     ! break
      prop? [ c push-cons ] when
      exec-stack [ add prepend ] change
      store [ [ id>> ir in? ] reject ] change
@@ -286,7 +281,6 @@ TYPED:: default/drop ( ac: active-cons -- ? )
     [ exec-stack [ unclip-slice swap ] change
     { [ solve ]
       [ activate ]
-      ! [ reactivate ]
       [ simpligate ]
       [ default/drop ]
     } 1|| ] if ;

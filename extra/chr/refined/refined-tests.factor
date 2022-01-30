@@ -1,10 +1,7 @@
 USING: chr chr.refined logic match tools.test ;
-IN: chr.refined.tests
 
 MATCH-VARS: ?x ?y ?z ;
-! INSTANCE: match-var user-logic-var
-LOGIC-VARS: A B C ;
-! SYMBOLS: A B C ;
+SYMBOLS: A B C ;
 SINGLETON: leq
 
 ! H_keep \ H_remove => G | B
@@ -25,3 +22,22 @@ CONSTANT: leq-ex {
 { { }
   { ={ A B } ={ C B } } }
 [ leq-ex { { leq A B } { leq B C } { leq C A } } chr-run-refined ] unit-test
+
+MATCH-VARS: ?i ?j ?k ;
+SINGLETON: gcd
+CONSTANT: gcd-prog {
+    CHR{ // { gcd 0 } -- | }
+    CHR{ { gcd ?i } // { gcd ?j } -- [ ?j ?i >= ] |
+         !={ ?k [ ?j ?i - ] }
+         { gcd ?k }
+       }
+}
+
+{ { { gcd 3 } } f }
+[ gcd-prog { { gcd 6 } { gcd 9 } } chr-run-refined ] unit-test
+
+{ { { gcd 3 } } f }
+[ gcd-prog { { gcd 9 } { gcd 6 } } chr-run-refined ] unit-test
+
+{ { { gcd 1 } } f }
+[ gcd-prog { { gcd 11 } { gcd 13 } } chr-run-refined ] unit-test
