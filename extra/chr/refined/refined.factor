@@ -1,7 +1,7 @@
 USING: accessors arrays assocs assocs.extras byte-arrays chr classes.tuple
 combinators.short-circuit hash-sets kernel match math math.order namespaces
-prettyprint sequences sequences.extras sets sorting strings typed types.util
-words ;
+prettyprint quotations sequences sequences.extras sets sorting strings typed
+types.util words ;
 
 IN: chr.refined
 
@@ -174,12 +174,27 @@ TYPED: activate-cons ( c: id-cons -- c: active-cons )
     if-empty ;
 
 ! Run builtin. Interface is telling renamings and waking corresponding constraints.
-GENERIC: tell ( cons -- subst store? )
+GENERIC: tell ( cons -- subst store )
 
 M: eq tell
-    [ v1>> ] [ v2>> ] bi 2array 1array t ;
+    [ [ v1>> ] [ v2>> ] bi 2array 1array ] keep ;
 M: set-eq tell
     [ v1>> ] [ v2>> ] bi call( -- val ) <eq> tell drop f ;
+
+! Generated variable.  Not a match-var, but a child-atom to consider
+TUPLE: gvar { name read-only } ;
+C: <gvar> gvar
+M: gvar child-atoms drop f ;
+M: gvar subst var-subst ;
+
+M: generator tell
+    [ body>> ]
+    [ vars>> [ dup dup word? [ name>> ] when uvar <gvar> ] H{ } map>assoc ] bi lift
+    [ wrap-cons ] map
+    exec-stack [ append ] change f f ;
+
+M: callable tell
+    call( -- builtin-res ) f swap ;
 
 : standard-wakeup-set ( subst -- ids )
     values
@@ -187,14 +202,15 @@ M: set-eq tell
 
 ! TODO
 TYPED:: solve-builtin ( c: builtin-cons -- )
-    c cons>> tell :> ( subst store? )
+    c cons>> tell :> ( subst to-store )
     { exec-stack store builtins }
     [ [ subst lift ] change ] each
     subst standard-wakeup-set :> to-wakeup
     exec-stack get :> estack
     to-wakeup members [ estack [ dup active-cons? [ cons>> ] when ] <mapped> member? ] reject
     exec-stack [ append ] change
-    store? [ builtins [ c suffix ] change ] when ;
+    to-store [ ! f <builtin-cons>
+               builtins [ swap suffix ] change ] when* ;
 
 : solve ( cons -- ? )
     dup builtin-cons?
@@ -302,8 +318,9 @@ SYMBOL: chr-state-sentinel
 : chr-run-refined ( rules query -- store builtins )
     [ init-chr-state chr-loop
       [ store of [ cons>> cons>> ] map ]
-      [ builtins of [ cons>> ] map ] bi
-    ] with-scope ;
+      [ builtins of ! [ cons>> ] map
+      ] bi
+    ] with-var-names ;
 
 ! * Debug
 SYMBOL: saved-state

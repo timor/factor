@@ -1,4 +1,4 @@
-USING: chr kernel logic match sequences tools.test ;
+USING: chr logic match sequences tools.test ;
 IN: chr.tests
 
 

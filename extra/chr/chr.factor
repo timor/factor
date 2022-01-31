@@ -1,7 +1,8 @@
-USING: accessors arrays classes combinators combinators.short-circuit formatting
-kernel lexer logic logic.private math namespaces parser prettyprint.backend
-prettyprint.custom prettyprint.sections quotations sequences sets typed
-types.util ;
+USING: accessors arrays assocs chr.refined classes colors.constants combinators
+combinators.short-circuit formatting io.styles kernel lexer logic logic.private
+math namespaces parser prettyprint.backend prettyprint.custom
+prettyprint.sections prettyprint.stylesheet quotations sequences sets typed
+types.util words ;
 
 IN: chr
 
@@ -37,20 +38,20 @@ TUPLE: set-eq < eq ;
 M: set-eq apply-builtin ( F E D B -- F E D ? )
     handle-set-eq apply-builtin ;
 
-M: f builtin-constraint? eq? ;
+TUPLE: generator vars body ;
+C: <generator> generator
+
+UNION: standard-builtin eq generator callable ;
+M: f builtin-constraint? standard-builtin? ;
 GENERIC: test-builtin ( G -- ? )
 M: f builtin-applies?
     test-builtin ;
 M: eq test-builtin
-    { [ eq? ] [ [ v1>> ] [ v2>> ] bi = ] } 1&& ;
+    [ v1>> ] [ v2>> ] bi = ;
 M: set-eq test-builtin
     "error" throw ;
 M: callable test-builtin
     call( -- ? ) ;
-    ! B [ v1>> ] [ v2>> ] bi :> ( v1 quot )
-    ! quot call( -- v ) :> vnew
-    ! B handle-set-eq :> B2
-    ! F v1 vnew <eq> prefix E D t ;
 
 SINGLETON: factlog-theory
 M: factlog-theory builtin-constraint?
@@ -79,8 +80,6 @@ M: chr remove>> ( chr -- seq )
 TYPED:: chr-solve ( F E: chrs D: builtins -- F E: chrs D: builtins ? )
     F unclip :> ( F2 B )
     F2 E D B apply-builtin ;
-    ! ok [ F2 E D2 t ]
-    ! [ F E D f ] if ;
 
 TYPED:: chr-introduce ( F E: chrs D: builtins -- F E: chrs D: builtins ? )
     F unclip :> ( F2 C )
@@ -106,27 +105,6 @@ SYMBOL: chr-trace
         ] find-index :> ( i h2 )
       i [ r E without i suffix subst find-heads i suffix ] [ f f ] if
     ] if-empty ;
-
-! Returns pairs { index subst }
-:: find-head ( Hs E -- Hs res )
-    V{ } clone :> res
-    Hs unclip-slice :> ( r h )
-    E [| H i | h H solve-eq [ i swap 2array res push ] when* ] each-index
-    r res ;
-
-! ! Returns pairs { subst inds }
-! :: find-all-heads ( Hs E -- res )
-!     V{ } clone :> res
-!     Hs [| h |
-!         E [| H | f h H 2array 1array solve-next ]
-!     ] each ;
-!     Hs [ subst f ]
-!     [ unclip-slice :> ( r h )
-!       E [| H i | i without in? [ f ]
-!          [ subst h H 2array 1array solve-next [ subst! t ] [ f ] if* ] if
-!         ] each-index
-!       i [ r E without { i } union subst find-heads i suffix ] [ f f ] if
-!     ] if-empty ;
 
 ! Return Store with removed occurrences, indicate if successful
 TYPED:: try-rule-match ( H: chr E: chrs -- E B/? )
@@ -192,17 +170,23 @@ SYNTAX: CHR{ \ // parse-array dup length [ \ -- parse-array append ] dip \ | par
 SYNTAX: ={ scan-object scan-object "}" expect <eq> suffix! ;
 SYNTAX: is={ scan-object scan-object callable check-instance "}" expect set-eq boa suffix! ;
 
-! TUPLE: cont name ;
-! INSTANCE: cont match-var
-! : <cont> ( -- obj )
-!     \ cont counter "?r"
-
-! SYNTAX: L[ \ ] parse-until <reversed> >list  ;
-
 M: eq pprint* pprint-object ;
 M: eq pprint-delims drop \ ={ \ } ;
-M: set-eq pprint-delims drop \ !={ \ } ;
+M: set-eq pprint-delims drop \ is={ \ } ;
 M: eq >pprint-sequence [ v1>> ] [ v2>> ] bi 2array ;
+
+! Explicit instantiation.  These create fresh bindings for the variables before the bar
+! This happens after substitution
+! instance{ a b c d | rules }
+SYNTAX: gen{ \ | parse-until \ } parse-until <generator> suffix! ;
+M: generator pprint* pprint-object ;
+M: generator pprint-delims drop \ gen{ \ } ;
+M: generator >pprint-sequence
+    [ vars>> \ | suffix ] [ body>> ] bi append ;
+M: gvar word-name* name>> ;
+M: gvar word-style
+    presented H{ { foreground COLOR: solarized-blue } } clone [ set-at ] keep ;
+M: gvar pprint* pprint-word ;
 
 : pprint-chr ( chr -- )
     <flow \ CHR{ pprint-word
