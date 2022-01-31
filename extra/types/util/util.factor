@@ -1,9 +1,9 @@
 USING: accessors arrays assocs assocs.extras classes classes.algebra
 classes.tuple colors.constants combinators combinators.short-circuit
-combinators.smart continuations generalizations hashtables io io.styles kernel
-lists match math math.parser mirrors namespaces prettyprint.backend
-prettyprint.custom prettyprint.sections quotations sequences sequences.extras
-sequences.private sets strings threads typed unicode words ;
+combinators.smart continuations generalizations graphs hashtables io io.styles
+kernel lists make match math math.order math.parser mirrors namespaces
+prettyprint.backend prettyprint.custom prettyprint.sections quotations sequences
+sequences.extras sequences.private sets strings threads typed unicode words ;
 
 IN: types.util
 
@@ -16,10 +16,10 @@ TUPLE: mapped
 C: <mapped> mapped
 
 INSTANCE: mapped immutable-sequence
-M: mapped length seq>> length ;
+M: mapped length seq>> length ; inline
 M: mapped nth-unsafe
     [ seq>> nth-unsafe ]
-    [ at-quot>> call( elt -- elt ) ] bi ;
+    [ at-quot>> call( elt -- elt ) ] bi ; inline
 
 ! Like 2map, but will return prefix of longer sequence prepended
 ! 2map ( ... seq1 seq2 quot: ( ... elt1 elt2 -- ... newelt ) -- ... newseq )
@@ -71,7 +71,7 @@ GENERIC: name-part ( id-name -- str )
 GENERIC: id-part ( id-name -- id/f )
 GENERIC#: <id-name> 1 ( id-name id -- id-name )
 M: string name-part string>id-name drop ; inline
-M: string id-part string>id-name nip ; inline
+M: string id-part string>id-name nip string>number ; inline
 M: string <id-name> [ name-part ] dip number>string append ;
 
 SYMBOL: var-names
@@ -87,8 +87,13 @@ var-names [ H{ } clone ] initialize
 : get-name-suffix ( key -- name )
     dup name-part var-names get at <id-name> ;
 
+: update-var-suffix ( key -- )
+    [ id-part 0 or ]
+    [ name-part var-names get ] bi
+    [ 0 or max 1 + ] change-at ; inline
+
 : uvar ( key -- name )
-    [ name-part var-names get inc-at ]
+    [ update-var-suffix ]
     [ get-name-suffix ] bi ;
 
 : uvar-shuffle ( in out -- in out )
@@ -213,7 +218,10 @@ GENERIC: subst ( term -- term )
 SYMBOL: current-subst
 : get-current-subst ( obj -- obj/f )
     current-subst get at ;
-M: object subst [ get-current-subst ] keep or ;
+: var-subst ( obj -- obj/f )
+    [ get-current-subst ] keep or ; inline
+M: object subst var-subst ;
+M: match-var subst var-subst ;
 M: sequence subst [ subst ] map ;
 M: tuple subst tuple>array subst >tuple ;
 
@@ -317,3 +325,18 @@ SYMBOL: on-recursive-term
 
 : remove-nths ( indices seq -- seq )
    [ swap in? not nip ] with filter-index ; inline
+
+! * Finding subterms
+! Things can either returns childs or be an atom
+! If returning empty sequence, don't keep tracking
+! If returning f, treat as atom
+! Test is only called on atoms
+
+:: (deep-find-all) ( obj destructure: ( obj -- elts ) test: ( obj -- ? ) -- )
+    ! obj test call( obj -- ? ) [ , ] [ drop ] when
+    obj [| o | o destructure call( obj -- elts ) :> elts
+         elts [ o test call( obj -- ? ) [ o , ] when f ] unless*
+    ] closure drop ;
+
+: deep-find-all ( obj destructure: ( obj -- elts ) test: ( obj -- ? ) -- elts )
+    [ (deep-find-all) ] { } make ;
