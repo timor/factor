@@ -1,5 +1,5 @@
-USING: chr chr.refined kernel match math sequences sorting tools.test types.util
-words ;
+USING: chr chr.parser chr.refined kernel match math math.order sequences sorting
+tools.test types.util words ;
 IN: chr.refined.tests
 
 MATCH-VARS: ?x ?y ?z ;

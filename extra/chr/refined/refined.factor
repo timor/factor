@@ -1,7 +1,7 @@
 USING: accessors arrays assocs assocs.extras byte-arrays chr classes.tuple
 combinators.short-circuit hash-sets kernel match math math.order namespaces
-prettyprint quotations sequences sequences.extras sets sorting strings typed
-types.util words ;
+quotations sequences sequences.extras sets sorting strings typed types.util
+words ;
 
 IN: chr.refined
 
@@ -69,8 +69,6 @@ C: <active-cons> active-cons
 TUPLE: chr-prog rules occur-index var-index ;
 C: <chr-prog> chr-prog
 
-TUPLE: chr-state stack store builtins trace n vars ;
-
 ! Needs to be implemented by non-builtins
 GENERIC: constraint-type ( obj -- type )
 GENERIC: constraint-args ( obj -- args )
@@ -101,27 +99,6 @@ M: id-cons constraint-args cons>> constraint-args ;
 
 : read-chr ( rules -- chr-prog )
     dup index-rules f <chr-prog> ;
-
-SYMBOLS: program exec-stack store builtins match-trace current-index ;
-
-: reset-chr-state ( -- )
-    exec-stack off
-    store off
-    builtins off
-    match-trace off
-    0 current-index set ;
-
-: with-new-chr-state ( quot -- )
-    [ reset-chr-state ] prepose with-scope ; inline
-
-: get-chr-state ( -- assoc )
-    { exec-stack store builtins match-trace current-index }
-    [ dup get ] H{ } map>assoc ;
-
-: chr. ( -- )
-    program get .
-    get-chr-state . ;
-
 
 ! For adding things to the exec stack
 GENERIC: child-atoms ( obj -- seq/f )
@@ -285,7 +262,6 @@ TYPED:: default/drop ( ac: active-cons -- ? )
     [ ac cons>> occs j2 <active-cons> push-cons ] unless
     t ;
 
-
 : chr-trans ( -- ? )
     exec-stack get empty?
     [ f ]
@@ -314,14 +290,3 @@ SYMBOL: chr-state-sentinel
       [ builtins of ! [ cons>> ] map
       ] bi
     ] with-var-names ;
-
-! * Debug
-SYMBOL: saved-state
-: save-chr ( -- )
-    program get
-    get-chr-state 2array saved-state set ;
-
-: load-chr ( -- )
-    saved-state get
-    first2 [ swap set ] assoc-each
-    program set ;

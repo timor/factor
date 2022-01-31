@@ -1,4 +1,4 @@
-USING: chr match sequences tools.test ;
+USING: chr chr.parser match sequences tools.test ;
 IN: chr.tests
 
 
