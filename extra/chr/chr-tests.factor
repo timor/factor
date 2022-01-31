@@ -1,11 +1,9 @@
-USING: chr logic match sequences tools.test ;
+USING: chr match sequences tools.test ;
 IN: chr.tests
 
 
 MATCH-VARS: ?x ?y ?z ;
-! INSTANCE: match-var user-logic-var
-LOGIC-VARS: A B C ;
-! SYMBOLS: A B C ;
+SYMBOLS: A B C ;
 SINGLETON: leq
 
 ! H_keep \ H_remove => G | B

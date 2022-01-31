@@ -1,8 +1,7 @@
-USING: accessors arrays assocs chr.refined classes colors.constants combinators
+USING: accessors arrays chr.refined classes colors.constants combinators
 combinators.short-circuit formatting io.styles kernel lexer logic logic.private
 math namespaces parser prettyprint.backend prettyprint.custom
-prettyprint.sections prettyprint.stylesheet quotations sequences sets typed
-types.util words ;
+prettyprint.sections quotations sequences sets typed types.util ;
 
 IN: chr
 
@@ -183,10 +182,22 @@ M: generator pprint* pprint-object ;
 M: generator pprint-delims drop \ gen{ \ } ;
 M: generator >pprint-sequence
     [ vars>> \ | suffix ] [ body>> ] bi append ;
-M: gvar word-name* name>> ;
-M: gvar word-style
-    presented H{ { foreground COLOR: solarized-blue } } clone [ set-at ] keep ;
-M: gvar pprint* pprint-word ;
+
+! Generated variable.  Not a match-var, but a child-atom to consider
+TUPLE: gvar { name read-only } ;
+C: <gvar> gvar
+M: gvar child-atoms drop f ;
+M: gvar subst var-subst ;
+
+SYNTAX: G{ scan-token "}" expect <gvar> suffix! ;
+
+! M: gvar word-name* name>> ;
+! M: gvar word-style
+!     presented H{ { foreground COLOR: solarized-blue } } clone [ set-at ] keep ;
+M: gvar pprint*
+    \ G{ pprint-word
+         name>> H{ { foreground COLOR: solarized-blue } } styled-text
+         \ } pprint-word ;
 
 : pprint-chr ( chr -- )
     <flow \ CHR{ pprint-word

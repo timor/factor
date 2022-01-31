@@ -28,26 +28,27 @@ FROM: namespaces => set ;
 ! - Activate transition: initiates sequence of searches for partner constraints to
 !   match rule heads.
 ! - Adding built-in initiates similar searches for rules, causes Reactivate to all
-!   constraints whose args might be effected???
-! - Fixed constraints are not reactivated ???
+!   constraints whose args might be affected
+! - Fixed constraints are not reactivated
 !   - Fixed: additional built-in constraint cannot alter entailment of guards on
 !     these arguments
 !   - -> Only wake CHR constraints whose variables are further constraint by newly
 !     added constraint
 !   - A variable which can only take one value to satisfy B is fixed
-!     - constraint c fixed if vars(c) ⊆ fixed(B) ???
+!     - constraint c is fixed if vars(c) ⊆ fixed(B)
 
 
 ! - Traversal: active constraint tries its occurrences in top-down right-to-left order
-! - Activating or Reactivating /occurrences/ constraints???
+! - Activating or Reactivating /occurrenced/ constraints
 ! - occurrenced identified constraints c#i:j : only matches with j'th occurrence
-!   of constraint c are considered when constraint is active....???
+!   of constraint c are considered when constraint is active.
+!   - For each constraint type, an index is computed to steer match attempts
 
-! - Each active constraint traverses its different occurrences (how can that be?)
+! - Each active constraint traverses its different occurrences
 !   via the Default transitions, finally being Dropped
 
 ! Interaction with builtin solver:
-! - /telling/: New constraints added to CHR store
+! - /telling/: Provide substitution, new constraint added to CHR store
 ! - /asking/: Check entailments in guards
 ! - Alert CHR handlers when changes in builtin constraint store might cause
 !   (previously failing) entailment tests to succeed.
@@ -67,8 +68,6 @@ C: <active-cons> active-cons
 
 TUPLE: chr-prog rules occur-index var-index ;
 C: <chr-prog> chr-prog
-! TUPLE: susp type args id alive? activated? stored? ;
-! TUPLE: store n ;
 
 TUPLE: chr-state stack store builtins trace n vars ;
 
@@ -180,12 +179,6 @@ M: eq tell
     [ [ v1>> ] [ v2>> ] bi 2array 1array ] keep ;
 M: set-eq tell
     [ v1>> ] [ v2>> ] bi call( -- val ) <eq> tell drop f ;
-
-! Generated variable.  Not a match-var, but a child-atom to consider
-TUPLE: gvar { name read-only } ;
-C: <gvar> gvar
-M: gvar child-atoms drop f ;
-M: gvar subst var-subst ;
 
 M: generator tell
     [ body>> ]
