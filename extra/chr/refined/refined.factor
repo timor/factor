@@ -200,20 +200,32 @@ TYPED:: solve-builtin ( c: builtin-cons -- )
                [ builtins [ swap suffix ] change ] if
      ] when*
 
+    ! debug
+    "solve" f "wake" to-wakeup [ id>> ] map 2array { "told" to-store } suffix
+    log-chr
+
+    ;
 
 : solve ( cons -- ? )
     dup builtin-cons?
     [ solve-builtin t ]
     [ drop f ] if ;
 
-GENERIC: activate ( cons -- ? )
-M: object activate drop f ;
-M: chr-cons activate
+GENERIC: activate* ( cons -- ? )
+M: object activate* drop f ;
+M: chr-cons activate*
     identify-cons
     ! TODO: or suffix?
     store [ over prefix ] change
-    activate ;
-M: id-cons activate activate-cons push-cons t ;
+    activate* ;
+M: id-cons activate* activate-cons push-cons t ;
+
+:: activate ( c -- ? )
+    c activate* dup
+    [ c chr-cons?
+      [ "activate" f store get first id>> ]
+      [ "reactivate" f c id>> ] if
+      log-chr ] when ;
 
 ! Hs: pairs of index, head
 ! inds: pairs of { head-index E-index }
@@ -227,10 +239,13 @@ M: id-cons activate activate-cons push-cons t ;
       i [ r E without-E i suffix subst find-heads-index { hi i } suffix ] [ f f ] if
     ] if-empty ;
 
+TYPED: deref-occurrence ( c: active-cons -- i_rule rj )
+    [ j>> ] [ occs>> ] bi nth first2 ;
+
 TYPED:: try-simpligate ( c: active-cons -- ir add propagate? ? )
     c cons>> :> idc
     idc cons>> cons>> :> hc
-    c [ j>> ] [ occs>> ] bi nth first2
+    c deref-occurrence
     [ program get rules>> nth ] dip :> ( H rj )
     store get :> S
     idc S index :> i_act
@@ -267,17 +282,30 @@ TYPED: simpligate ( c: active-cons -- ? )
       [| c ir add prop? |
        prop? [ c push-cons ] when
        exec-stack [ add prepend ] change
+       ! store get [ id>> ir in? ] filter :> rem ! Only for debugging!
+       ! store get <enumerated> [ id>> ir in? ] filter-values :> rem ! Only for debugging!
        store [ [ id>> ir in? ] reject ] change
-       t ]
+       t
+
+       ! Add log-entry TODO make conditional on flag
+       c deref-occurrence :> ( i_rule rj )
+       i_rule program get rules>> nth :> rule
+       prop? "propagate" "simplify" ? rule named-chr? [ rule rule-name>> ] [ i_rule ] if rj 2array
+       { { "remove" ir } { "add" add } } log-chr
+
+      ]
       [ 4drop f ] if ] if ;
 
 TYPED:: default/drop ( ac: active-cons -- ? )
     ac j>> 1 + :> j2
     ac occs>> :> occs
     occs length :> njs
-    j2 njs >=
+    j2 njs >= dup :> drop?
     [ ac cons>> occs j2 <active-cons> push-cons ] unless
-    t ;
+    t
+
+    drop? "drop" "default" ? f j2 log-chr
+    ;
 
 : chr-trans ( -- ? )
     exec-stack get empty?
