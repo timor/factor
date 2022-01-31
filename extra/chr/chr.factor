@@ -25,12 +25,17 @@ HOOK: builtin-constraint? theory ( constraint -- ? )
 ! M: f apply-builtin swap suffix t ;
 ! M: f builtin-applies? call( -- ? ) ;
 GENERIC: apply-builtin ( F E D B -- F E D ? )
-TUPLE: eq v1 v2 ; C: <eq> eq
+TUPLE: binary-constraint v1 v2 ;
+: new-binary-constraint ( v1 v2 class -- obj )
+    new swap >>v2 swap >>v1 ; inline
+TUPLE: eq < binary-constraint ;
+: <eq> ( v1 v2 -- obj ) eq new-binary-constraint ; inline
 M:: eq apply-builtin ( F E D B -- F E D ? )
     B [ v1>> ] [ v2>> ] bi 2array 1array :> subst
     F E [ subst lift ] bi@ D t ;
 
-TUPLE: set-eq < eq ;
+TUPLE: set-eq < binary-constraint ;
+: <set-eq> ( v1 v2 -- obj ) set-eq new-binary-constraint ; inline
 : handle-set-eq ( constraint -- constraint )
     [ v1>> ] [ v2>> ] bi call( -- x ) <eq> ;
 M: set-eq apply-builtin ( F E D B -- F E D ? )
@@ -39,11 +44,11 @@ M: set-eq apply-builtin ( F E D B -- F E D ? )
 TUPLE: generator vars body ;
 C: <generator> generator
 
-UNION: standard-builtin eq generator callable ;
+UNION: standard-builtin binary-constraint generator callable ;
 M: f builtin-constraint? standard-builtin? ;
 GENERIC: test-builtin ( G -- ? )
 M: f builtin-applies?
-    test-builtin ;
+    [ test-builtin ] [ 2drop f ] recover ;
 M: eq test-builtin
     [ v1>> ] [ v2>> ] bi = ;
 M: set-eq test-builtin
@@ -61,7 +66,9 @@ M:: factlog-theory apply-builtin ( F E D B -- F E D ? )
 
 ! M: factlog-theory builtin-applies?
 
+<PRIVATE
 PREDICATE: builtins < sequence [ builtin-constraint? ] all? ;
+PRIVATE>
 PREDICATE: chrs < sequence [ chr-constraint? ] all? ;
 
 TUPLE: chr heads nkept guard body ;

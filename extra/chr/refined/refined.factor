@@ -1,7 +1,7 @@
-USING: accessors arrays assocs assocs.extras byte-arrays chr classes.tuple
-combinators.short-circuit hash-sets kernel match math math.order namespaces
-quotations sequences sequences.extras sets sorting strings typed types.util
-words ;
+USING: accessors arrays assocs assocs.extras byte-arrays chr chr.debug chr.state
+classes.tuple combinators.short-circuit hash-sets kernel match math math.order
+namespaces quotations sequences sequences.extras sets sorting strings typed
+types.util words ;
 
 IN: chr.refined
 
@@ -108,7 +108,7 @@ M: string child-atoms drop { } ;
 M: byte-array child-atoms drop { } ;
 M: sequence child-atoms ;
 M: tuple child-atoms tuple-slots ;
-M: eq child-atoms [ v1>> ] [ v2>> ] bi 2array ;
+M: binary-constraint child-atoms [ v1>> ] [ v2>> ] bi 2array ;
 M: match-var child-atoms drop f ;
 ! M: id-cons child-atoms constraint-args ;
 
@@ -152,8 +152,11 @@ TYPED: activate-cons ( c: id-cons -- c: active-cons )
 ! Run builtin. Interface is telling renamings and waking corresponding constraints.
 GENERIC: tell ( cons -- subst store )
 
+M: binary-constraint tell f swap ;
+
 M: eq tell
     [ [ v1>> ] [ v2>> ] bi 2array 1array ] keep ;
+
 M: set-eq tell
     [ v1>> ] [ v2>> ] bi call( -- val ) <eq> tell drop f ;
 
@@ -166,30 +169,41 @@ M: generator tell
 M: callable tell
     call( -- builtin-res ) f swap ;
 
-: standard-wakeup-set ( subst -- ids )
-    values
+! Check if the builtin is trivial.  This is convenience
+GENERIC: keep-guard? ( builtin-cons -- ? )
+M: eq keep-guard? [ v1>> ] [ v2>> ] bi = not ;
+! Don't keep around callables per default.  If these are supposed to be part of
+! protocol, then create a custom constraint in the theory!
+M: callable keep-guard? drop f ;
+M: object keep-guard? drop t ;
+M: binary-constraint keep-guard?
+    [ v1>> ] [ v2>> ] bi [ number? ] both? not ;
+
+GENERIC: wake-up-set ( cons -- atoms )
+M: object wake-up-set drop f ;
+M: binary-constraint wake-up-set atoms ;
+: calculate-wakeup-set ( subst cons -- ids )
+    [ values ] [ wake-up-set ] bi* append
     store get [ cons>> atoms>> intersects? ] with find-all [ second ] <mapped> ;
 
-! TODO
 TYPED:: solve-builtin ( c: builtin-cons -- )
-    c cons>> tell :> ( subst to-store )
+    c cons>> tell :> ( subst c2 )
+    c2 keep-guard? [ c2 ] [ f ] if :> to-store
     { exec-stack store builtins }
     [ [ subst lift ] change ] each
-    subst standard-wakeup-set :> to-wakeup
+    subst c2 calculate-wakeup-set :> to-wakeup
     exec-stack get :> estack
     to-wakeup members [ estack [ dup active-cons? [ cons>> ] when ] <mapped> member? ] reject
     exec-stack [ append ] change
-    to-store [ ! f <builtin-cons>
-               builtins [ swap suffix ] change ] when* ;
+    to-store [ dup builtins get in?
+               [ drop ]
+               [ builtins [ swap suffix ] change ] if
+     ] when*
+
 
 : solve ( cons -- ? )
     dup builtin-cons?
     [ solve-builtin t ]
-    [ drop f ] if ;
-
-: maybe-activate-cons ( cons -- ? )
-    dup id-cons?
-    [ activate-cons push-cons t ]
     [ drop f ] if ;
 
 GENERIC: activate ( cons -- ? )
@@ -231,7 +245,8 @@ TYPED:: try-simpligate ( c: active-cons -- ir add propagate? ? )
         [ { [ prop? ] [ tsig match-trace get in? ] } 0&& not ]
       } 0&&
       [
-          H guard>> [ sh lift builtin-applies? ] all? [
+          H guard>> [ sh lift ] map :> B1
+          B1 [ builtin-applies? ] all? [
               ih_pairs [ nk >= ] filter-keys values [ S nth id>> ] map :> ir
               ! ir: indices in s to remove
               H body>> dup t = [ drop f ] [ [ sh lift wrap-cons ] map ] if :> add
@@ -240,6 +255,8 @@ TYPED:: try-simpligate ( c: active-cons -- ir add propagate? ? )
               [ ir add t ]
               [ ir idc id>> suffix add f ] if
               t
+              ! Note: modifying state here already!
+              builtins [ B1 [ keep-guard? ] filter append ] change
           ] [ f f f f ] if
       ] [ f f f f ] if
     ;
@@ -281,12 +298,15 @@ SYMBOL: chr-state-sentinel
         chr-trans
         ! chr.
       ] loop
+      ! FIXME: there should probably be a better point to check when builtin
+      ! guards are to be kept! Need to keep track of modification in guard store
+      ! for that when applying substitutions
+      builtins [ [ keep-guard? ] filter members ] change
       get-chr-state
     ] with-scope ;
 
 : chr-run-refined ( rules query -- store builtins )
     [ init-chr-state chr-loop
       [ store of [ cons>> cons>> ] map ]
-      [ builtins of ! [ cons>> ] map
-      ] bi
+      [ builtins of ] bi
     ] with-var-names ;

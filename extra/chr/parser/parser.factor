@@ -13,14 +13,23 @@ SYMBOLS: | -- // ;
 
 SYNTAX: CHR{ \ } parse-chr-rule chr new-chr suffix! ;
 SYNTAX: ={ scan-object scan-object "}" expect <eq> suffix! ;
-SYNTAX: is={ scan-object scan-object callable check-instance "}" expect set-eq boa suffix! ;
+SYNTAX: is={ scan-object scan-object callable check-instance "}" expect <set-eq> suffix! ;
+SYNTAX: 2{ scan-class [ scan-object scan-object ] dip "}" expect new-binary-constraint suffix! ;
 
 SYNTAX: CHR: scan-token "@" expect \ ; parse-chr-rule <named-chr> suffix! ;
 
-M: eq pprint* pprint-object ;
+M: binary-constraint pprint* pprint-object ;
+M: binary-constraint pprint-delims drop \ 2{ \ } ;
+: pprint-binary-args ( binary-constraint -- seq )
+    [ v1>> ] [ v2>> ] bi 2array ;
+
+M: binary-constraint >pprint-sequence
+    [ pprint-binary-args ] [ class-of prefix ] bi ;
+
 M: eq pprint-delims drop \ ={ \ } ;
+M: eq >pprint-sequence pprint-binary-args ;
 M: set-eq pprint-delims drop \ is={ \ } ;
-M: eq >pprint-sequence [ v1>> ] [ v2>> ] bi 2array ;
+M: set-eq >pprint-sequence pprint-binary-args ;
 
 ! Explicit instantiation.  These create fresh bindings for the variables before the bar
 ! This happens after substitution

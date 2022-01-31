@@ -1,5 +1,5 @@
-USING: chr chr.parser chr.refined kernel match math math.order sequences sorting
-tools.test types.util words ;
+USING: accessors chr chr.parser chr.refined combinators.short-circuit kernel
+match math math.order sequences sorting tools.test types.util words ;
 IN: chr.refined.tests
 
 MATCH-VARS: ?x ?y ?z ;
@@ -153,3 +153,44 @@ CONSTANT: stack-ex {
     { Retval "s2" 1 T{ gvar f "?b1" } }
     { Start "s0" } } }
 [ stack-ex { { StartInfer "s0" [ swap swap ] } } chr-run-refined drop natural-sort ] unit-test
+
+! More examples from book slides, test simple extensions
+
+! Handle symbolic equality
+
+<< TUPLE: _<= < binary-constraint ;
+M: _<= test-builtin
+    [ v1>> ] [ v2>> ] bi { [ = ] [ <= ] } 2|| ;
+>>
+
+<< TUPLE: _< < binary-constraint ;
+M: _< test-builtin
+    [ v1>> ] [ v2>> ] bi < ;
+>>
+
+! This one only keeps one chr instance and runs only builtins
+! NOTE: changing order here because of refined semantics
+CONSTANT: min-ex {
+    CHR{ { min ?x ?y ?z } // -- | 2{ _<= ?z ?x } 2{ _<= ?z ?y } }
+    CHR{ // { min ?x ?y ?z } -- 2{ _<= ?x ?y } | ={ ?z ?x } }
+    CHR{ // { min ?x ?y ?z } -- 2{ _<= ?y ?x } | ={ ?z ?y } }
+    CHR{ // { min ?x ?y ?z } -- 2{ _< ?z ?x  } | ={ ?y ?z } }
+    CHR{ // { min ?x ?y ?z } -- 2{ _< ?z ?x  } | ={ ?x ?z } }
+}
+
+SYMBOL: M
+{ { } { ={ M 1 } } }
+[ min-ex { { min 1 2 M } } chr-run-refined ] unit-test
+
+! Relies on guard test errors being interpreted as failures
+{ { } { 2{ _<= A A } ={ M A } } }
+[ min-ex { { min A A M } } chr-run-refined ] unit-test
+
+! { { { min A B M } } { 2{ _<= A B } } }
+! NOTE: would need actual theory that tells equality in the background for this
+{ { { min A B M } } { 2{ _<= M A } 2{ _<= M B } 2{ _<= A B } } }
+[ min-ex { { min A B M } 2{ _<= A B } } chr-run-refined ] unit-test
+
+! NOTE: same here
+{ { { min A 2 2 } } { 2{ _<= 2 A } } }
+[ min-ex { { min A 2 2 } } chr-run-refined ] unit-test
