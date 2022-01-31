@@ -66,6 +66,16 @@ PREDICATE: builtins < sequence [ builtin-constraint? ] all? ;
 PREDICATE: chrs < sequence [ chr-constraint? ] all? ;
 
 TUPLE: chr heads nkept guard body ;
+: new-chr ( heads nkept guard body class -- obj )
+    new
+    swap >>body
+    swap >>guard
+    swap >>nkept
+    swap >>heads ;
+TUPLE: named-chr < chr rule-name ;
+: <named-chr> ( name heads nkept guard body -- obj )
+    named-chr new-chr swap >>rule-name ;
+
 SLOT: keep
 SLOT: remove
 PREDICATE: propagate-chr < chr remove>> empty? ;
@@ -165,9 +175,15 @@ TYPED: chr-run ( P F E: chrs D: builtins -- P F E: chrs D: builtins )
     parse-until [ f ] [ >array ] if-empty ; inline
 
 SYMBOLS: | -- // ;
-SYNTAX: CHR{ \ // parse-array dup length [ \ -- parse-array append ] dip \ | parse-array \ } parse-array [ t ] when-empty chr boa suffix! ;
+: parse-chr-rule ( delim -- heads nkept guard body )
+    [ \ // parse-array dup length [ \ -- parse-array append ] dip \ | parse-array ] dip parse-array
+    [ t ] when-empty ;
+
+SYNTAX: CHR{ \ } parse-chr-rule chr new-chr suffix! ;
 SYNTAX: ={ scan-object scan-object "}" expect <eq> suffix! ;
 SYNTAX: is={ scan-object scan-object callable check-instance "}" expect set-eq boa suffix! ;
+
+SYNTAX: CHR: scan-token "@" expect \ ; parse-chr-rule <named-chr> suffix! ;
 
 M: eq pprint* pprint-object ;
 M: eq pprint-delims drop \ ={ \ } ;
@@ -191,20 +207,22 @@ M: gvar subst var-subst ;
 
 SYNTAX: G{ scan-token "}" expect <gvar> suffix! ;
 
-! M: gvar word-name* name>> ;
-! M: gvar word-style
-!     presented H{ { foreground COLOR: solarized-blue } } clone [ set-at ] keep ;
 M: gvar pprint*
     \ G{ pprint-word
          name>> H{ { foreground COLOR: solarized-blue } } styled-text
          \ } pprint-word ;
 
-: pprint-chr ( chr -- )
-    <flow \ CHR{ pprint-word
+: pprint-chr-content ( chr -- )
     { [ keep/remove [ pprint-elements \ // pprint-word ] [ pprint-elements ] bi* ]
       [ \ -- pprint-word guard>> pprint-elements \ | pprint-word ]
       [ body>> dup t = [ drop ] [ pprint-elements ] if ]
-    } cleave
+    } cleave ;
+
+: pprint-chr ( chr -- )
+    <flow \ CHR{ pprint-word
+                 pprint-chr-content
     \ } pprint-word block> ;
 
-M: chr pprint* pprint-chr ;
+M: chr pprint* <flow \ CHR{ pprint-word pprint-chr-content \ } pprint-word block> ;
+M: named-chr pprint* <flow \ CHR: pprint-word [ rule-name>> text "@" text ] keep
+    pprint-chr-content \ ; pprint-word block> ;
