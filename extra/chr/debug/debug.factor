@@ -48,3 +48,7 @@ SYMBOL: debug-chr
 
 : log-chr ( transition rule-id delta -- )
     debug-chr? [ <chr-log-entry> . ] [ 3drop ] if ;
+
+
+: chrebug ( -- )
+    \ kill-chr [ [ store get . ] prepose ] annotate ;

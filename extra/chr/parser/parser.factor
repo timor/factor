@@ -3,8 +3,10 @@ kernel lexer parser prettyprint.backend prettyprint.custom prettyprint.sections
 quotations sequences ;
 
 IN: chr.parser
+
+! Lexical representation
 : parse-array ( end -- seq )
-    parse-until [ f ] [ >array ] if-empty ; inline
+    parse-until [ f ] [ >array ] if-empty ;
 
 SYMBOLS: | -- // ;
 : parse-chr-rule ( delim -- heads nkept guard body )
@@ -12,24 +14,24 @@ SYMBOLS: | -- // ;
     [ t ] when-empty ;
 
 SYNTAX: CHR{ \ } parse-chr-rule chr new-chr suffix! ;
-SYNTAX: ={ scan-object scan-object "}" expect <eq> suffix! ;
-SYNTAX: is={ scan-object scan-object callable check-instance "}" expect <set-eq> suffix! ;
-SYNTAX: 2{ scan-class [ scan-object scan-object ] dip "}" expect new-binary-constraint suffix! ;
+! SYNTAX: ={ scan-object scan-object "}" expect <eq> suffix! ;
+! SYNTAX: is={ scan-object scan-object callable check-instance "}" expect <set-eq> suffix! ;
+! SYNTAX: 2{ scan-class [ scan-object scan-object ] dip "}" expect new-binary-constraint suffix! ;
 
 SYNTAX: CHR: scan-token "@" expect \ ; parse-chr-rule <named-chr> suffix! ;
 
-M: binary-constraint pprint* pprint-object ;
-M: binary-constraint pprint-delims drop \ 2{ \ } ;
-: pprint-binary-args ( binary-constraint -- seq )
-    [ v1>> ] [ v2>> ] bi 2array ;
+! M: binary-constraint pprint* pprint-object ;
+! M: binary-constraint pprint-delims drop \ 2{ \ } ;
+! : pprint-binary-args ( binary-constraint -- seq )
+!     [ v1>> ] [ v2>> ] bi 2array ;
 
-M: binary-constraint >pprint-sequence
-    [ pprint-binary-args ] [ class-of prefix ] bi ;
+! M: binary-constraint >pprint-sequence
+!     [ pprint-binary-args ] [ class-of prefix ] bi ;
 
-M: eq pprint-delims drop \ ={ \ } ;
-M: eq >pprint-sequence pprint-binary-args ;
-M: set-eq pprint-delims drop \ is={ \ } ;
-M: set-eq >pprint-sequence pprint-binary-args ;
+! M: eq pprint-delims drop \ ={ \ } ;
+! M: eq >pprint-sequence pprint-binary-args ;
+! M: set-eq pprint-delims drop \ is={ \ } ;
+! M: set-eq >pprint-sequence pprint-binary-args ;
 
 ! Explicit instantiation.  These create fresh bindings for the variables before the bar
 ! This happens after substitution
