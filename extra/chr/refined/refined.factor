@@ -1,7 +1,7 @@
 USING: accessors arrays assocs assocs.extras byte-arrays chr chr.debug chr.state
 classes.tuple combinators.short-circuit hash-sets kernel match math math.order
-namespaces quotations sequences sequences.extras sets sorting strings typed
-types.util words ;
+namespaces prettyprint quotations sequences sequences.extras sets sorting
+strings typed types.util words ;
 
 IN: chr.refined
 
@@ -53,18 +53,6 @@ FROM: namespaces => set ;
 ! - Alert CHR handlers when changes in builtin constraint store might cause
 !   (previously failing) entailment tests to succeed.
 
-
-! Internal form in program
-TUPLE: chr-cons cons atoms ;
-C: <chr-cons> chr-cons
-
-TUPLE: builtin-cons cons atoms ;
-C: <builtin-cons> builtin-cons
-
-TUPLE: id-cons { cons maybe{ chr-cons } } id ;
-C: <id-cons> id-cons
-TUPLE: active-cons { cons maybe{ id-cons } } occs j ;
-C: <active-cons> active-cons
 
 TUPLE: chr-prog rules occur-index var-index ;
 C: <chr-prog> chr-prog
@@ -186,11 +174,24 @@ M: binary-constraint wake-up-set atoms ;
     [ values ] [ wake-up-set ] bi* append
     store get [ cons>> atoms>> intersects? ] with find-all [ second ] <mapped> ;
 
+! TODO: formalize constraint building/substitution/args/reconstruction protocol!
+GENERIC#: lift-cons 1 ( cons subst -- cons )
+M: sequence lift-cons
+    [ lift-cons ] curry map ;
+M: active-cons lift-cons
+    [ lift-cons ] curry change-cons ;
+M: id-cons lift-cons
+    [ lift-cons ] curry change-cons ;
+! NOTE: changing atoms along!
+M: chr-cons lift-cons lift ;
+M: builtin-cons lift-cons lift ;
+M: binary-constraint lift-cons lift ;
+
 TYPED:: solve-builtin ( c: builtin-cons -- )
     c cons>> tell :> ( subst c2 )
     c2 keep-guard? [ c2 ] [ f ] if :> to-store
     { exec-stack store builtins }
-    [ [ subst lift ] change ] each
+    [ [ subst lift-cons ] change ] each
     subst c2 calculate-wakeup-set :> to-wakeup
     exec-stack get :> estack
     to-wakeup members [ estack [ dup active-cons? [ cons>> ] when ] <mapped> member? ] reject
@@ -324,7 +325,7 @@ SYMBOL: chr-state-sentinel
       [ chr-state-sentinel get 500 > [ "runaway" throw ] when
         chr-state-sentinel inc
         chr-trans
-        ! chr.
+        debug-chr? [ chr. ] when
       ] loop
       ! FIXME: there should probably be a better point to check when builtin
       ! guards are to be kept! Need to keep track of modification in guard store
@@ -338,3 +339,11 @@ SYMBOL: chr-state-sentinel
       [ store of [ cons>> cons>> ] map ]
       [ builtins of ] bi
     ] with-var-names ;
+
+
+: do-chr ( program query -- store builtins )
+    over .
+    debug-chr [
+        chr-run-refined
+        2dup [ . ] bi@
+    ] with-variable-on ;

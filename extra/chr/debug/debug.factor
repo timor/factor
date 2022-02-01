@@ -1,10 +1,34 @@
-USING: assocs chr.state kernel namespaces prettyprint ;
+USING: accessors arrays assocs chr chr.state classes combinators formatting io
+kernel namespaces prettyprint sequences ;
 
 IN: chr.debug
 
+: id-cons. ( seq -- )
+    [ [ id>> ] [ cons>> cons>> ] bi 2array ] map . ;
+
+: classify-consts ( -- assoc )
+    exec-stack get [ class-of ] collect-by ;
+
+: exec-stack. ( -- )
+    classify-consts
+    {
+        [ active-cons of [ "Activated: " write [ cons>> ] map id-cons. ] unless-empty ]
+        [ id-cons of [ "Identified: " write id-cons. ] unless-empty ]
+        [ chr-cons of [ "New-Chr: " write [ cons>> ] map . ] unless-empty ]
+        [ builtin-cons of [ "New-Builtin: " write [ cons>> ] map . ] unless-empty ]
+    } cleave ;
+
+: chr-consts. ( -- )
+    "Store: " write store get id-cons. ;
+
+: builtins. ( -- )
+    "Builtins: " write builtins get . ;
 
 : chr. ( -- )
-    get-chr-state . ;
+    current-index get "N: %d\n" printf
+    exec-stack.
+    chr-consts.
+    builtins. ;
 
 ! * Debug
 SYMBOL: saved-state

@@ -1,6 +1,6 @@
 USING: accessors arrays chr.refined combinators combinators.short-circuit
-formatting kernel logic logic.private math namespaces quotations sequences sets
-typed types.util ;
+continuations formatting kernel logic logic.private math namespaces quotations
+sequences sets typed types.util ;
 
 IN: chr
 
@@ -91,6 +91,19 @@ M: chr keep>> ( chr -- seq )
     keep/remove drop ; inline
 M: chr remove>> ( chr -- seq )
     keep/remove nip ; inline
+
+! Internal Constraints form in program
+TUPLE: chr-cons cons atoms ;
+C: <chr-cons> chr-cons
+
+TUPLE: builtin-cons cons atoms ;
+C: <builtin-cons> builtin-cons
+
+TUPLE: id-cons { cons maybe{ chr-cons } } id ;
+C: <id-cons> id-cons
+TUPLE: active-cons { cons maybe{ id-cons } } occs j ;
+C: <active-cons> active-cons
+
 
 ! Generated variable.  Not a match-var, but a child-atom to consider
 TUPLE: gvar { name read-only } ;
