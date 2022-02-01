@@ -175,7 +175,7 @@ CONSTANT: min-ex {
     CHR{ // { min ?x ?y ?z } -- 2{ _<= ?x ?y } | ={ ?z ?x } }
     CHR{ // { min ?x ?y ?z } -- 2{ _<= ?y ?x } | ={ ?z ?y } }
     CHR{ // { min ?x ?y ?z } -- 2{ _< ?z ?x  } | ={ ?y ?z } }
-    CHR{ // { min ?x ?y ?z } -- 2{ _< ?z ?x  } | ={ ?x ?z } }
+    CHR{ // { min ?x ?y ?z } -- 2{ _< ?z ?y  } | ={ ?x ?z } }
 }
 
 SYMBOL: M
