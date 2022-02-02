@@ -171,3 +171,10 @@ PREDICATE: eq-constraint < fiat-pred-array first \ = eq? ;
 M: eq-constraint test-constraint
     swap [ [ second ] [ third ] bi ] dip
     [ lift ] curry bi@ = ;
+
+GENERIC: apply-substitution ( subst chr-constraint -- chr-constraint )
+M: chr-pred apply-substitution
+    [ tuple-slots swap lift ]
+    [ class-of ] bi slots>tuple ;
+M: fiat-pred-array apply-substitution
+    unclip-slice [ swap lift ] dip prefix ;

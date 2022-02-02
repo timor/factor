@@ -112,7 +112,7 @@ DEFER: activate-new
 : run-rule-body ( rule-id bindings -- )
     [ program get rules>> nth ] dip
     swap body>> dup t =
-    [ 2drop ] [ [ swap lift activate-new ] with each ] if
+    [ 2drop ] [ [ apply-substitution activate-new ] with each ] if
     ;
 
 : simplify-constraints ( trace -- )
