@@ -26,7 +26,12 @@ SYMBOLS: program exec-stack store builtins match-trace current-index ;
 
 ! Operational interface
 TUPLE: chr-suspension
-    type args id alive activated stored hist ;
+    constraint id alive activated stored hist ;
+
+SLOT: type
+SLOT: args
+M: chr-suspension type>> constraint>> constraint-type ;
+M: chr-suspension args>> constraint>> constraint-args ;
 
 ! This is an interface var, which can change during rule processing
 SYMBOL: substitutions
@@ -39,29 +44,30 @@ SINGLETON: rule-fail
     [ value swap subst set-at ] if ;
 
 TYPED: create-chr ( c: chr-constraint -- id )
-    chr-suspension new swap
-    [ constraint-type >>type ]
-    [ constraint-args >>args ] bi
+    chr-suspension new swap >>constraint
     t >>alive
     current-index [ 0 or 1 + dup ] change [ >>id ] keep
     [ store get set-at ] keep ;
 
-GENERIC: constraint-fixed? ( chr-constraint -- ? )
-
-: reactivate-all ( -- )
-    store get [ nip dup constraint-fixed? [ drop ] [ t >>activated drop ] if ] assoc-each ;
-
-: reactivate ( id -- )
-    store get at t >>activated drop ;
-
-:: kill-chr ( id -- )
-    store get dup id of
-    [ f >>alive drop id swap delete-at ]
-    [ drop ] if* ;
+DEFER: activate
 
 : alive? ( id -- ? )
     store get at [ alive>> ] [ f ] if* ;
 
+: reactivate ( id -- )
+    dup alive? [ activate ] [ drop ] if ;
+    ! store get at t >>activated drop ;
+
+: reactivate-all ( -- )
+    store get [ constraint>> constraint-fixed? [ drop ] [ reactivate ] if ] assoc-each ;
+
+:: kill-chr ( id -- )
+    store get dup id of
+    [ f >>alive drop id
+      ! 2drop
+      swap delete-at
+    ]
+    [ drop ] if* ;
 ! * Matching
 ! Matching: Todo-list of things to try
 
@@ -102,15 +108,15 @@ GENERIC: constraint-fixed? ( chr-constraint -- ? )
     swap guard>> [ test-constraint ] with all? ;
 
 ! TODO: Don't use t as special true value in body anymore...
-DEFER: activate
+DEFER: activate-new
 : run-rule-body ( rule-id bindings -- )
     [ program get rules>> nth ] dip
     swap body>> dup t =
-    [ 2drop ] [ [ swap lift activate ] with each ] if
+    [ 2drop ] [ [ swap lift activate-new ] with each ] if
     ;
 
 : simplify-constraints ( trace -- )
-    [ [ kill-chr ] [ drop ] if ] assoc-each ;
+    [ [ drop ] [ kill-chr ] if ] assoc-each ;
 
 : fire-rule ( rule-id trace bindings -- )
     { [ nip check-guards ]
@@ -123,7 +129,8 @@ DEFER: activate
 ! rule-id { { id0 keep0 } ...{ id1 keep1} } bindings
 :: (run-occurrence) ( rule-id trace bindings partners -- )
     partners empty? [
-        rule-id trace bindings fire-rule
+        trace [ drop alive? ] assoc-all?
+        [ rule-id trace bindings fire-rule ] when
     ] [
         partners unclip-slice :> ( rest next )
         next first2 :> ( keep-partner pc )
@@ -146,17 +153,18 @@ DEFER: activate
     c args>> arg-vars solve-eq
     [ partners (run-occurrence) ] [ 2drop ] if* ;
 
-: activate-constraint ( id -- )
+: activate ( id -- )
     store get at
     dup type>> program get schedule>> at
     [ run-occurrence ] with each ;
 
 SYMBOL: sentinel
-: activate ( c -- )
+: activate-new ( c -- )
     sentinel get
-    [ 100 > [ "runaway" throw ] when
+    [ 500 > [ "runaway" throw ] when
       sentinel inc ] when*
-    create-chr activate-constraint ;
+    dup builtin-constraint? [ reactivate-all ] when
+    create-chr activate ;
 
 : with-chr-prog ( prog quot -- )
     [ LH{ } clone store set
@@ -166,4 +174,4 @@ SYMBOL: sentinel
 
 : run-chr-query ( prog query -- store )
     [ pred>constraint ] map
-    [ 0 sentinel set [ activate ] each store get ] curry with-chr-prog ;
+    [ 0 sentinel set [ activate-new ] each store get [ constraint>> ] map-values ] curry with-chr-prog ;

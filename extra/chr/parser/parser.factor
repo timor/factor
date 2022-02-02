@@ -8,6 +8,9 @@ IN: chr.parser
 : parse-array ( end -- seq )
     parse-until [ f ] [ >array ] if-empty ;
 
+! This needs to have the constraint class already defined!
+SYNTAX: P{ \ } parse-array pred>constraint suffix! ;
+
 SYMBOLS: | -- // ;
 : parse-chr-rule ( delim -- heads nkept guard body )
     [ \ // parse-array dup length [ \ -- parse-array append ] dip \ | parse-array ] dip parse-array
@@ -63,3 +66,7 @@ M: gvar pprint*
 M: chr pprint* <flow \ CHR{ pprint-word pprint-chr-content \ } pprint-word block> ;
 M: named-chr pprint* <flow \ CHR: pprint-word [ rule-name>> text "@" text ] keep
     pprint-chr-content \ ; pprint-word block> ;
+
+M: chr-pred pprint* pprint-object ;
+M: chr-pred pprint-delims drop \ P{ \ } ;
+M: chr-pred >pprint-sequence [ constraint-args ] [ constraint-type prefix ] bi ;

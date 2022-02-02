@@ -157,4 +157,17 @@ GENERIC: match-constraint ( bindings store-args chr -- bindings )
 M: chr-pred match-constraint
     constraint-args 2array 1array solve-next ;
 
+! Called on constraints in ask position
 GENERIC: test-constraint ( bindings chr -- ? )
+! TODO move this to activation!
+GENERIC: constraint-fixed? ( chr-constraint -- ? )
+M: chr-constraint constraint-fixed? constraint-args atoms empty? ;
+
+! In the first approximation, this is used to reactivate all constraints
+MIXIN: builtin-constraint
+INSTANCE: fiat-pred-array builtin-constraint
+
+PREDICATE: eq-constraint < fiat-pred-array first \ = eq? ;
+M: eq-constraint test-constraint
+    swap [ [ second ] [ third ] bi ] dip
+    [ lift ] curry bi@ = ;
