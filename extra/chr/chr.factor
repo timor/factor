@@ -1,6 +1,6 @@
 USING: accessors arrays assocs assocs.extras classes classes.algebra
 classes.tuple combinators.short-circuit continuations kernel make match math
-math.order quotations sequences sorting typed types.util words ;
+math.order quotations sequences sets sorting typed types.util words ;
 
 IN: chr
 
@@ -65,8 +65,15 @@ M: pred-array pred>constraint
     unclip-slice slots>tuple ;
 
 ! Program itself
-TUPLE: chr-prog rules occur-index schedule vars ;
+TUPLE: chr-prog
+    rules
+    occur-index
+    schedule
+    local-vars
+    existential-vars ;
+
 C: <chr-prog> chr-prog
+
 TUPLE: constraint-schedule
     { occurrence read-only }
     { keep-active? read-only }
@@ -124,15 +131,34 @@ TYPED: internalize-constraint ( lexical-rep -- c: chr-constraint )
     ] with assoc-map ;
 
 : collect-vars ( rules -- set )
-    vars ;
+    vars members ;
 
-: read-chr ( rules -- chr-prog )
-    [ internalize-rule ] map dup index-rules
+ERROR: existential-guard-vars rule ;
+:: rule-existentials ( rule -- set )
+    rule
+    [ heads>> vars ]
+    [ guard>> vars ]
+    [ body>> vars  ] tri :> ( vh vg vb )
+    vb vh diff :> existentials
+    vg members [ vh in? not ] any? [ rule existential-guard-vars ] when
+    existentials
+    ;
+
+: collect-existential-vars ( rules -- seq )
+    [ rule-existentials ] map ;
+
+: read-chr ( rules -- rules )
+    [ internalize-rule ] map ;
+
+: load-chr ( rules -- chr-prog )
+    read-chr dup index-rules
     2dup make-schedule
-    pick collect-vars <chr-prog> ;
+    pick
+    [ collect-vars ]
+    [ collect-existential-vars ] bi
+    <chr-prog> ;
 
-
-UNION: chr-atom word match-var ;
+UNION: chr-atom match-var ;
 GENERIC: atoms* ( obj -- )
 : atoms ( obj -- seq )
     [ atoms* ] { } make ;

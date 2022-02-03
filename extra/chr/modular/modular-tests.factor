@@ -4,8 +4,8 @@ IN: chr.modular.tests
 
 TUPLE: leq < chr-pred v1 v2 ;
 
-SYMBOLS: A B C ;
-! TERM-VARS: A B C ;
+! SYMBOLS: A B C ;
+TERM-VARS: A B C ;
 
 
 TERM-VARS: ?x ?y ?z ;

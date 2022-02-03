@@ -39,7 +39,7 @@ SYMBOL: substitutions
 SINGLETON: rule-fail
 
 : local-var? ( variable -- ? )
-    [ program get vars>> in? ] [ f ] if* ;
+    [ program get local-vars>> in? ] [ f ] if* ;
 
 DEFER: activate-new
 ! Interface for builtin solvers!
@@ -226,7 +226,8 @@ M: chr-suspension apply-substitution*
 
 : with-chr-prog ( prog quot -- )
     [ LH{ } clone store set
-      read-chr program set
+      load-chr dup program set
+      local-vars>> valid-match-vars set
       H{ } clone substitutions set
       <disjoint-set> defined-equalities set
       0 current-index set
