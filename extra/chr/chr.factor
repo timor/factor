@@ -1,6 +1,6 @@
-USING: accessors arrays assocs assocs.extras byte-arrays classes classes.algebra
-classes.tuple continuations hash-sets kernel make match math math.order
-quotations sequences sorting strings typed types.util words ;
+USING: accessors arrays assocs assocs.extras classes classes.algebra
+classes.tuple combinators.short-circuit continuations kernel make match math
+math.order quotations sequences sorting typed types.util words ;
 
 IN: chr
 
@@ -37,6 +37,7 @@ TUPLE: active-cons { cons maybe{ id-cons } } occs j ;
 C: <active-cons> active-cons
 
 ! Generated variable.  Not a match-var, but a child-atom to consider
+! TODO: make identity-tuple?
 TUPLE: gvar { name read-only } ;
 C: <gvar> gvar
 ! M: gvar child-atoms drop f ;
@@ -55,8 +56,7 @@ M: chr-constraint pred>constraint ;
 ! Simplest representation
 PREDICATE: pred-head-word < word chr-pred class<= ;
 PREDICATE: pred-array < array ?first pred-head-word? ;
-PREDICATE: fiat-pred-array < array ?first "chr-pred-head" word-prop? ;
-\ = t "chr-pred-head" set-word-prop
+PREDICATE: fiat-pred-array < array ?first { [ word? ] [ pred-head-word? not ] } 1&& ;
 INSTANCE: fiat-pred-array chr-constraint
 
 M: pred-array pred>constraint
@@ -108,7 +108,6 @@ TYPED: internalize-constraint ( lexical-rep -- c: chr-constraint )
 ! Return an assoc of schedules per constraint type, which are sequences of
 ! { occ keep-active { keep-partner partner-type } } entries
 : make-schedule ( rules occur-index -- schedule )
-    ! [ rules>> ] [ occur-index>> ] bi
     [| rules occs |
      occs
      [ dup first2 [ rules nth ] dip :> ( rule occ-hi )
@@ -130,29 +129,36 @@ TYPED: internalize-constraint ( lexical-rep -- c: chr-constraint )
     2dup make-schedule
     pick collect-vars <chr-prog> ;
 
-! For adding things to the exec stack
-GENERIC: child-atoms ( obj -- seq/f )
-M: object child-atoms drop { } ;
-M: word child-atoms drop f ;
-M: string child-atoms drop { } ;
-M: byte-array child-atoms drop { } ;
-M: sequence child-atoms ;
-M: tuple child-atoms tuple-slots ;
-M: match-var child-atoms drop f ;
-! NOTE: this is important for nesting!!!
-M: chr-constraint child-atoms constraint-args ;
 
+UNION: chr-atom word match-var ;
+GENERIC: atoms* ( obj -- )
 : atoms ( obj -- seq )
-    [ child-atoms ] [ drop t ] deep-find-all ;
+    [ atoms* ] { } make ;
+M: object atoms* drop ;
+M: chr-atom atoms* , ;
+M: array atoms* [ atoms* ] each ;
+M: tuple atoms* tuple-slots atoms* ;
+M: chr-constraint atoms*
+    constraint-args atoms* ;
+
+! ! For adding things to the exec stack
+! GENERIC: child-atoms ( obj -- seq/f )
+! M: object child-atoms drop { } ;
+! M: word child-atoms drop f ;
+! M: string child-atoms drop { } ;
+! M: byte-array child-atoms drop { } ;
+! M: sequence child-atoms ;
+! M: tuple child-atoms tuple-slots ;
+! M: match-var child-atoms drop f ;
+! ! NOTE: this is important for nesting!!!
+! M: chr-constraint child-atoms constraint-args ;
+
+! : atoms ( obj -- seq )
+!     [ child-atoms ] [ drop t ] deep-find-all ;
 
 ! Wakeup set
 GENERIC: wake-up-set ( constraint -- atoms )
 M: chr-constraint wake-up-set atoms ;
-
-
-GENERIC: match-constraint ( bindings store-args chr -- bindings )
-M: chr-pred match-constraint
-    constraint-args 2array 1array solve-next ;
 
 ! Called on constraints in ask position
 GENERIC: test-constraint ( bindings chr -- ? )
@@ -160,22 +166,21 @@ GENERIC: test-constraint ( bindings chr -- ? )
 GENERIC: constraint-fixed? ( chr-constraint -- ? )
 M: chr-constraint constraint-fixed? constraint-args atoms empty? ;
 
-! In the first approximation, this is used to reactivate all constraints
-MIXIN: builtin-constraint
-INSTANCE: fiat-pred-array builtin-constraint
-
 GENERIC: apply-substitution* ( subst chr-constraint -- chr-constraint )
 M: chr-pred apply-substitution*
     [ tuple-slots swap lift ]
     [ class-of ] bi slots>tuple ;
-M: fiat-pred-array apply-substitution*
-    unclip-slice [ swap lift ] dip prefix ;
+! M: fiat-pred-array apply-substitution*
+!     unclip-slice [ swap lift ] dip prefix ;
 
 ! * Arbitrary guards
 INSTANCE: callable chr-constraint
-! M: callable apply-substitution* swap lift ;
+M: callable apply-substitution* swap lift ;
+: test-callable ( callable -- ? )
+    [ call( -- ? ) ] [ 2drop f ] recover ;
+
 M: callable test-constraint
-    swap lift [ call( -- ? ) ] [ 2drop f ] recover ;
+    swap lift test-callable ;
 
 ! * Existential callout
 TUPLE: generator vars body ;

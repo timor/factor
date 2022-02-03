@@ -48,9 +48,14 @@ SYMBOL: debug-chr
 : log-chr ( transition rule-id delta -- )
     debug-chr? [ <chr-log-entry> . ] [ 3drop ] if ;
 
+: chr-state. ( -- )
+    store get "Store: %u\n" printf ;
+
 : chrebug ( -- )
     \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate
-    \ kill-chr [ [ dup "Killing id %d in Store: " printf store get . ] prepose ] annotate
+    \ kill-chr [ [ dup "Killing id %d\n" printf  ] prepose ] annotate
     \ run-rule-body [ [ 2dup [ dup program get rules>> nth ] dip "Running Rule %d: %u\n with substitution:\n %u\n" printf ] prepose ] annotate
     \ activate-new [ [ dup "Activating new constraint: %u\n" printf ] prepose ] annotate
+    \ activate [ [ chr-state. dup "Activating: %d\n" printf ] prepose ] annotate
+    \ test-callable [ [ dup "Builtin Test: " write . ] prepose [ dup " ==> %u\n" printf ] compose ] annotate
     ;

@@ -1,6 +1,6 @@
-USING: accessors arrays assocs assocs.extras chr chr.equality
-combinators.short-circuit kernel linked-assocs math namespaces sequences sets
-typed types.util words ;
+USING: accessors arrays assocs assocs.extras chr combinators
+combinators.short-circuit disjoint-sets kernel linked-assocs math namespaces
+quotations sequences sets typed types.util words ;
 
 IN: chr.state
 
@@ -38,11 +38,29 @@ M: chr-suspension args>> constraint>> constraint-args ;
 SYMBOL: substitutions
 SINGLETON: rule-fail
 
+: local-var? ( variable -- ? )
+    [ program get vars>> in? ] [ f ] if* ;
+
+DEFER: activate-new
 ! Interface for builtin solvers!
-:: add-subst ( value key -- )
-    substitutions get :> subst
-    subst key ?at [ value = [ rule-fail throw ] unless ]
-    [ value swap subst set-at ] if ;
+: maybe-add-atom ( x ds -- )
+    2dup disjoint-set-member?
+    [ 2drop ] [ add-atom ] if ; inline
+: assume-equal ( a b ds -- )
+    {
+        [ nipd maybe-add-atom ]
+        [ nip maybe-add-atom ]
+        [ equate ]
+    }
+    3cleave ;
+
+: add-equal ( value key -- new )
+    2dup [ local-var? ] either?
+    [ "equating locals!" throw ] when
+    [ defined-equalities get assume-equal ]
+    [ 2array \ = prefix 1array ] 2bi ;
+
+    ! substitutions get set-at ; inline
 
 TYPED: create-chr ( c: chr-constraint -- id )
     chr-suspension new swap >>constraint
@@ -110,15 +128,13 @@ DEFER: activate
 
 : apply-substitution ( subst constraint -- constraint )
     apply-substitution* ;
-    ! [ program get vars>> swap extract-keys ] dip apply-substitution* ;
 
 ! TODO: Don't use t as special true value in body anymore...
 DEFER: activate-new
 : run-rule-body ( rule-id bindings -- )
     [ program get rules>> nth ] dip
     swap body>> dup t =
-    [ 2drop ] [ [ apply-substitution activate-new ] with each ] if
-    ;
+    [ 2drop ] [ [ apply-substitution activate-new ] with each ] if ;
 
 : simplify-constraints ( trace -- )
     [ [ drop ] [ kill-chr ] if ] assoc-each ;
@@ -129,6 +145,12 @@ DEFER: activate-new
       [ drop nip simplify-constraints t ]
       [ nip run-rule-body t ]
     } 3&& drop ;
+
+: start-match ( var-term arg-term -- subst )
+    2array 1array H{ } clone swap solve-next ;
+
+: match-constraint ( bindings args constraint -- bindings )
+    constraint-args swap 2array 1array solve-next ; inline
 
 ! Every level is passed the following info:
 ! rule-id { { id0 keep0 } ...{ id1 keep1} } bindings
@@ -150,45 +172,49 @@ DEFER: activate-new
         ] assoc-each
     ] if ;
 
+
 :: run-occurrence ( c schedule --  )
     c id>> :> active-id
     schedule [ occurrence>> first ] [ arg-vars>> ] [ partners>> ] tri
     :> ( rule-id arg-vars partners )
     rule-id active-id schedule keep-active?>> 2array 1array
-    c args>> arg-vars solve-eq
+    arg-vars c args>> start-match
     [ partners (run-occurrence) ] [ 2drop ] if* ;
 
+SYMBOL: sentinel
+
+: recursion-check ( -- )
+    sentinel get 50 > [ "runaway" throw ] when
+    sentinel inc ;
+
 : activate ( id -- )
+    recursion-check
     store get at
     dup type>> program get schedule>> at
     [ run-occurrence ] with each ;
 
-SYMBOL: sentinel
 GENERIC: activate-new ( c -- )
 
 M: chr-constraint activate-new
-    sentinel get
-    [ 500 > [ "runaway" throw ] when
-      sentinel inc ] when*
-    dup builtin-constraint? [ reactivate-all ] when
+    recursion-check
     create-chr activate ;
 
 M: generator activate-new
     [ body>> ]
-    [ vars>> [ dup dup word? [ name>> ] when uvar <gvar> ! dup eq-constraints get add-atom
+    [ vars>> [ dup dup word? [ name>> ] when uvar <gvar>
              ] H{ } map>assoc ] bi lift
     [ activate-new ] each ;
 
-M: eq-constraint test-constraint
-    swap [ [ second ] [ third ] bi ] dip
-    [ lift ] curry bi@ test-eq ;
+! Interface for builtin solving
+! NOTE: This tests alpha-equality
+: test-eq ( lhs rhs -- ? )
+    solve-eq { [  ] [ assoc-empty? ] } 1&& ;
 
-M: eq-constraint activate-new
-    dup constraint-args first2
-    eq-constraints get 3dup safe-equiv?
-    [ 3drop ]
-    [ add-equate ] if
-    call-next-method ;
+M: callable activate-new
+    recursion-check
+    call( -- new )
+    reactivate-all
+    [ activate-new ] each ;
 
 ! TODO: check whether in-place store modification is sound
 M: chr-suspension apply-substitution*
@@ -197,9 +223,13 @@ M: chr-suspension apply-substitution*
 : with-chr-prog ( prog quot -- )
     [ LH{ } clone store set
       read-chr program set
+      H{ } clone substitutions set
+      <disjoint-set> defined-equalities set
       0 current-index set
     ] prepose with-var-names ; inline
 
 : run-chr-query ( prog query -- store )
     [ pred>constraint ] map
-    [ 0 sentinel set [ activate-new ] each store get [ constraint>> ] map-values ] curry with-chr-prog ;
+    [ 0 sentinel set
+      [ activate-new ] each store get [ constraint>> ] map-values
+    ] curry with-chr-prog ;

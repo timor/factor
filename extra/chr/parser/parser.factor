@@ -1,6 +1,6 @@
-USING: accessors arrays chr classes colors.constants combinators io.styles
-kernel lexer parser prettyprint.backend prettyprint.custom prettyprint.sections
-quotations sequences ;
+USING: accessors arrays chr chr.state colors.constants combinators io.styles
+kernel lexer match parser prettyprint.backend prettyprint.custom
+prettyprint.sections sequences words words.symbol ;
 
 IN: chr.parser
 
@@ -17,24 +17,8 @@ SYMBOLS: | -- // ;
     [ t ] when-empty ;
 
 SYNTAX: CHR{ \ } parse-chr-rule chr new-chr suffix! ;
-! SYNTAX: ={ scan-object scan-object "}" expect <eq> suffix! ;
-! SYNTAX: is={ scan-object scan-object callable check-instance "}" expect <set-eq> suffix! ;
-! SYNTAX: 2{ scan-class [ scan-object scan-object ] dip "}" expect new-binary-constraint suffix! ;
 
 SYNTAX: CHR: scan-token "@" expect \ ; parse-chr-rule <named-chr> suffix! ;
-
-! M: binary-constraint pprint* pprint-object ;
-! M: binary-constraint pprint-delims drop \ 2{ \ } ;
-! : pprint-binary-args ( binary-constraint -- seq )
-!     [ v1>> ] [ v2>> ] bi 2array ;
-
-! M: binary-constraint >pprint-sequence
-!     [ pprint-binary-args ] [ class-of prefix ] bi ;
-
-! M: eq pprint-delims drop \ ={ \ } ;
-! M: eq >pprint-sequence pprint-binary-args ;
-! M: set-eq pprint-delims drop \ is={ \ } ;
-! M: set-eq >pprint-sequence pprint-binary-args ;
 
 ! Explicit instantiation.  These create fresh bindings for the variables before the bar
 ! This happens after substitution
@@ -70,3 +54,17 @@ M: named-chr pprint* <flow \ CHR: pprint-word [ rule-name>> text "@" text ] keep
 M: chr-pred pprint* pprint-object ;
 M: chr-pred pprint-delims drop \ P{ \ } ;
 M: chr-pred >pprint-sequence [ constraint-args ] [ constraint-type prefix ] bi ;
+
+PREDICATE: term-var < word "term-var" word-prop ;
+INSTANCE: term-var match-var
+
+: define-term-var ( name -- )
+    create-word-in [ define-symbol ] [ t "term-var" set-word-prop ] bi ;
+
+M: term-var reset-word
+    [ call-next-method ] [ f "term-var" set-word-prop ] bi ;
+
+SYNTAX: TERM-VARS: ";" [ define-term-var ] each-token ;
+
+ALIAS: == test-eq
+ALIAS: ==! add-equal
