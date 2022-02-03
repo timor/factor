@@ -1,7 +1,6 @@
 USING: accessors arrays assocs assocs.extras byte-arrays classes classes.algebra
-classes.tuple combinators combinators.short-circuit continuations formatting
-kernel logic logic.private match math math.order namespaces quotations sequences
-sets sorting strings typed types.util words ;
+classes.tuple continuations hash-sets kernel make match math math.order
+quotations sequences sorting strings typed types.util words ;
 
 IN: chr
 
@@ -9,12 +8,6 @@ FROM: namespaces => set ;
 
 ! * Constraint Handling Rules
 
-! Constraint store: Sequence of constraints denoting a conjunction
-! ⟨F,E,D⟩ where F: Goal Store, D, E, accumulator/simplifier Store
-
-
-TUPLE: generator vars body ;
-C: <generator> generator
 
 TUPLE: chr heads nkept guard body ;
 : new-chr ( heads nkept guard body class -- obj )
@@ -48,6 +41,7 @@ TUPLE: gvar { name read-only } ;
 C: <gvar> gvar
 ! M: gvar child-atoms drop f ;
 M: gvar subst var-subst ;
+M: gvar vars* , ;
 
 MIXIN: chr-constraint
 
@@ -69,7 +63,7 @@ M: pred-array pred>constraint
     unclip-slice slots>tuple ;
 
 ! Program itself
-TUPLE: chr-prog rules occur-index schedule ;
+TUPLE: chr-prog rules occur-index schedule vars ;
 C: <chr-prog> chr-prog
 TUPLE: constraint-schedule
     { occurrence read-only }
@@ -128,10 +122,13 @@ TYPED: internalize-constraint ( lexical-rep -- c: chr-constraint )
       ] map
     ] with assoc-map ;
 
+: collect-vars ( rules -- set )
+    vars ;
+
 : read-chr ( rules -- chr-prog )
     [ internalize-rule ] map dup index-rules
-    2dup make-schedule <chr-prog> ;
-
+    2dup make-schedule
+    pick collect-vars <chr-prog> ;
 
 ! For adding things to the exec stack
 GENERIC: child-atoms ( obj -- seq/f )
@@ -167,14 +164,24 @@ M: chr-constraint constraint-fixed? constraint-args atoms empty? ;
 MIXIN: builtin-constraint
 INSTANCE: fiat-pred-array builtin-constraint
 
-PREDICATE: eq-constraint < fiat-pred-array first \ = eq? ;
-M: eq-constraint test-constraint
-    swap [ [ second ] [ third ] bi ] dip
-    [ lift ] curry bi@ = ;
-
-GENERIC: apply-substitution ( subst chr-constraint -- chr-constraint )
-M: chr-pred apply-substitution
+GENERIC: apply-substitution* ( subst chr-constraint -- chr-constraint )
+M: chr-pred apply-substitution*
     [ tuple-slots swap lift ]
     [ class-of ] bi slots>tuple ;
-M: fiat-pred-array apply-substitution
+M: fiat-pred-array apply-substitution*
     unclip-slice [ swap lift ] dip prefix ;
+
+! * Arbitrary guards
+INSTANCE: callable chr-constraint
+! M: callable apply-substitution* swap lift ;
+M: callable test-constraint
+    swap lift [ call( -- ? ) ] [ 2drop f ] recover ;
+
+! * Existential callout
+TUPLE: generator vars body ;
+C: <generator> generator
+INSTANCE: generator chr-constraint
+M: generator pred>constraint
+    clone [ [ pred>constraint ] map ] change-body ;
+M: generator apply-substitution*
+    clone [ [ apply-substitution* ] with map ] change-body ;

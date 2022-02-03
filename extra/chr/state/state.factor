@@ -1,5 +1,6 @@
-USING: accessors arrays assocs assocs.extras chr combinators.short-circuit
-kernel linked-assocs math namespaces sequences sets typed types.util ;
+USING: accessors arrays assocs assocs.extras chr chr.equality
+combinators.short-circuit kernel linked-assocs math namespaces sequences sets
+typed types.util words ;
 
 IN: chr.state
 
@@ -107,6 +108,10 @@ DEFER: activate
     [ program get rules>> nth ] dip
     swap guard>> [ test-constraint ] with all? ;
 
+: apply-substitution ( subst constraint -- constraint )
+    apply-substitution* ;
+    ! [ program get vars>> swap extract-keys ] dip apply-substitution* ;
+
 ! TODO: Don't use t as special true value in body anymore...
 DEFER: activate-new
 : run-rule-body ( rule-id bindings -- )
@@ -159,18 +164,41 @@ DEFER: activate-new
     [ run-occurrence ] with each ;
 
 SYMBOL: sentinel
-: activate-new ( c -- )
+GENERIC: activate-new ( c -- )
+
+M: chr-constraint activate-new
     sentinel get
     [ 500 > [ "runaway" throw ] when
       sentinel inc ] when*
     dup builtin-constraint? [ reactivate-all ] when
     create-chr activate ;
 
+M: generator activate-new
+    [ body>> ]
+    [ vars>> [ dup dup word? [ name>> ] when uvar <gvar> ! dup eq-constraints get add-atom
+             ] H{ } map>assoc ] bi lift
+    [ activate-new ] each ;
+
+M: eq-constraint test-constraint
+    swap [ [ second ] [ third ] bi ] dip
+    [ lift ] curry bi@ test-eq ;
+
+M: eq-constraint activate-new
+    dup constraint-args first2
+    eq-constraints get 3dup safe-equiv?
+    [ 3drop ]
+    [ add-equate ] if
+    call-next-method ;
+
+! TODO: check whether in-place store modification is sound
+M: chr-suspension apply-substitution*
+    [ apply-substitution* ] change-constraint ;
+
 : with-chr-prog ( prog quot -- )
     [ LH{ } clone store set
       read-chr program set
       0 current-index set
-    ] prepose with-scope ; inline
+    ] prepose with-var-names ; inline
 
 : run-chr-query ( prog query -- store )
     [ pred>constraint ] map
