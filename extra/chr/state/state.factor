@@ -194,6 +194,8 @@ SYMBOL: sentinel
     [ run-occurrence ] with each ;
 
 GENERIC: activate-new ( c -- )
+M: sequence activate-new
+    [ activate-new ] each ;
 
 M: chr-constraint activate-new
     recursion-check
@@ -205,6 +207,8 @@ M: generator activate-new
              ] H{ } map>assoc ] bi lift
     [ activate-new ] each ;
 
+M: true activate-new drop ;
+
 ! Interface for builtin solving
 ! NOTE: This tests alpha-equality
 : test-eq ( lhs rhs -- ? )
@@ -214,7 +218,7 @@ M: callable activate-new
     recursion-check
     call( -- new )
     reactivate-all
-    [ activate-new ] each ;
+    activate-new ;
 
 ! TODO: check whether in-place store modification is sound
 M: chr-suspension apply-substitution*

@@ -45,6 +45,8 @@ M: gvar subst var-subst ;
 M: gvar vars* , ;
 
 MIXIN: chr-constraint
+SINGLETON: true
+INSTANCE: true chr-constraint
 
 TUPLE: chr-pred ;
 INSTANCE: chr-pred chr-constraint
@@ -167,6 +169,7 @@ GENERIC: constraint-fixed? ( chr-constraint -- ? )
 M: chr-constraint constraint-fixed? constraint-args atoms empty? ;
 
 GENERIC: apply-substitution* ( subst chr-constraint -- chr-constraint )
+M: true apply-substitution* nip ;
 M: chr-pred apply-substitution*
     [ tuple-slots swap lift ]
     [ class-of ] bi slots>tuple ;
