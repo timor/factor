@@ -1,9 +1,10 @@
 USING: accessors arrays assocs assocs.extras classes classes.algebra
 classes.tuple colors.constants combinators combinators.short-circuit
-combinators.smart continuations generalizations graphs hashtables io io.styles
-kernel lists make match math math.order math.parser mirrors namespaces
-prettyprint.backend prettyprint.custom prettyprint.sections quotations sequences
-sequences.extras sequences.private sets strings threads typed unicode words ;
+combinators.smart continuations disjoint-sets generalizations graphs hashtables
+io io.styles kernel lists make match math math.order math.parser mirrors
+namespaces prettyprint.backend prettyprint.custom prettyprint.sections
+quotations sequences sequences.extras sequences.private sets strings threads
+typed unicode words ;
 
 IN: types.util
 
@@ -212,15 +213,23 @@ MACRO: lmatch-map-as ( branches cons-class -- quot )
 ! * Unification
 ! Baader/Nipkow
 GENERIC: subst ( term -- term )
-! M: object subst ;
-! M: match-var subst [ get ] keep or ;
+
+GENERIC: vars* ( obj -- )
+M: object vars* drop ;
+M: match-var vars* , ;
+M: sequence vars* [ vars* ] each ;
+M: tuple vars* tuple-slots vars* ;
+: vars ( obj -- seq )
+    [ vars* ] { } make ;
 
 SYMBOL: current-subst
 : get-current-subst ( obj -- obj/f )
     current-subst get at ;
 : var-subst ( obj -- obj/f )
     [ get-current-subst ] keep or ; inline
-M: object subst var-subst ;
+
+! M: object subst var-subst ;
+M: object subst ;
 M: match-var subst var-subst ;
 M: sequence subst [ subst ] map ;
 M: tuple subst tuple>array subst >tuple ;
@@ -258,13 +267,31 @@ M: sequence decompose-right
         ]
     } cond ;
 
+SYMBOL: defined-equalities
+:: defined-equal? ( v1 v2 -- ? )
+    defined-equalities get
+    [| ds |
+     v1 v2 [ ds disjoint-set-member? ] both?
+     [ v1 v2 ds equiv? ] [ f ] if
+     ] [ f ] if* ; inline
+
+SYMBOL: valid-match-vars
+: valid-match-var? ( var -- ? )
+    dup match-var? [
+        valid-match-vars get
+        [ in? ] [ drop t ] if*
+    ] [ drop f ] if ; inline
+
 DEFER: elim
 : (solve) ( subst problem -- subst )
     [ unclip first2
-       { { [ over match-var? ] [ 2dup = [ 2drop (solve) ] [ elim ] if ] }
-         { [ dup match-var? ] [ swap elim ] }
-         [ decompose [ zip prepend ] [ 2drop ] if (solve) ]
-       } cond ] unless-empty ;
+      {
+          { [ 2dup defined-equal? ] [ 2drop (solve) ] }
+          { [ over valid-match-var? ] [ 2dup = [ 2drop (solve) ] [ elim ] if ] }
+          { [ dup valid-match-var? ] [ swap elim ] }
+          { [ 2dup = ] [ 2drop (solve) ] }
+          [ decompose [ zip prepend ] [ 2drop ] if (solve) ]
+       } cond ] unless-empty ; inline recursive
 
 ERROR: recursive-term-error subst problem var term ;
 SINGLETON: +keep+
@@ -279,21 +306,24 @@ SYMBOL: on-recursive-term
     [ swap associate
       [ [ [ lift ] curry map-values ] keep assoc-union ]
       [ [ [ lift ] curry bi@ ] curry assoc-map ] bi-curry bi*
-      (solve) ] if ;
+      (solve) ] if ; inline recursive
 
 : solve ( subst problem -- subst )
     [ (solve) ]
     [ dup incompatible-terms? [ 3drop f ] [ rethrow ] if ]
-    recover ;
+    recover ; inline
 
 : solve-problem ( problem -- subst )
-    H{ } clone swap solve ;
+    H{ } clone swap solve ; inline
 
 : solve-next ( subst problem -- subst )
-    swap >alist append solve-problem ;
+    swap >alist append solve-problem ; inline
 
 : solve-eq ( term1 term2 -- subst )
-    2array 1array solve-problem ;
+    2array 1array solve-problem ; inline
+
+: solve-eq-with ( subst term1 term2 -- subst )
+    2array 1array solve-next ;
 
 : solve-in ( term eqns -- term subst )
     solve-problem [ lift ] keep ;
