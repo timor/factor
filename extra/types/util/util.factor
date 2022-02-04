@@ -213,6 +213,7 @@ MACRO: lmatch-map-as ( branches cons-class -- quot )
 ! * Unification
 ! Baader/Nipkow
 GENERIC: subst ( term -- term )
+SINGLETON: __
 
 GENERIC: vars* ( obj -- )
 M: object vars* drop ;
@@ -233,6 +234,7 @@ M: object subst ;
 M: match-var subst var-subst ;
 M: sequence subst [ subst ] map ;
 M: tuple subst tuple>array subst >tuple ;
+M: wrapper subst wrapped>> subst <wrapper> ;
 
 : lift ( term subst -- term )
     current-subst [ subst ] with-variable ;
@@ -286,6 +288,7 @@ DEFER: elim
 : (solve) ( subst problem -- subst )
     [ unclip first2
       {
+          { [ 2dup [ __? ] either? ] [ 2drop (solve) ] }
           { [ 2dup defined-equal? ] [ 2drop (solve) ] }
           { [ over valid-match-var? ] [ 2dup = [ 2drop (solve) ] [ elim ] if ] }
           { [ dup valid-match-var? ] [ swap elim ] }
