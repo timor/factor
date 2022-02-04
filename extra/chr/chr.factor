@@ -5,6 +5,7 @@ math.order quotations sequences sets sorting typed types.util words ;
 IN: chr
 
 FROM: namespaces => set ;
+FROM: syntax => _ ;
 
 ! * Constraint Handling Rules
 
@@ -89,6 +90,14 @@ M: chr-pred constraint-args tuple-slots ;
 M: fiat-pred-array constraint-type first ;
 M: fiat-pred-array constraint-args rest-slice ;
 
+! * Existential callout
+TUPLE: generator vars body ;
+C: <generator> generator
+INSTANCE: generator chr-constraint
+M: generator pred>constraint
+    clone [ [ pred>constraint ] map ] change-body ;
+
+! * Rule processing
 : sort-chr-index ( coords -- cords )
     [ 2dup [ first ] bi@ <=> dup +eq+ =
       [ drop [ second ] bi@ >=< ]
@@ -150,14 +159,28 @@ ERROR: existential-guard-vars rule ;
 : read-chr ( rules -- rules )
     [ internalize-rule ] map ;
 
+! NOTE: destructive!
+! FIXME: may be better to do that stuff per rule, not per program?
+: insert-generators! ( rule vars -- rule )
+    [
+        '[ _ swap <generator> 1array ] change-body
+    ] unless-empty ;
+
+! Destructive!
+: convert-existentials! ( chr-prog -- chr-prog )
+    dup [ rules>> ] [ existential-vars>> ] bi
+    [ insert-generators! ] 2map >>rules ;
+
 : load-chr ( rules -- chr-prog )
     read-chr dup index-rules
     2dup make-schedule
     pick
     [ collect-vars ]
     [ collect-existential-vars ] bi
-    <chr-prog> ;
+    <chr-prog>
+    convert-existentials! ;
 
+! TODO: properly fix the variable set in the suspension instead of this mess...
 UNION: chr-atom match-var ;
 GENERIC: atoms* ( obj -- )
 : atoms ( obj -- seq )
@@ -168,21 +191,7 @@ M: array atoms* [ atoms* ] each ;
 M: tuple atoms* tuple-slots atoms* ;
 M: chr-constraint atoms*
     constraint-args atoms* ;
-
-! ! For adding things to the exec stack
-! GENERIC: child-atoms ( obj -- seq/f )
-! M: object child-atoms drop { } ;
-! M: word child-atoms drop f ;
-! M: string child-atoms drop { } ;
-! M: byte-array child-atoms drop { } ;
-! M: sequence child-atoms ;
-! M: tuple child-atoms tuple-slots ;
-! M: match-var child-atoms drop f ;
-! ! NOTE: this is important for nesting!!!
-! M: chr-constraint child-atoms constraint-args ;
-
-! : atoms ( obj -- seq )
-!     [ child-atoms ] [ drop t ] deep-find-all ;
+M: callable atoms* [ atoms* ] each ;
 
 ! Wakeup set
 GENERIC: wake-up-set ( constraint -- atoms )
@@ -190,7 +199,7 @@ M: chr-constraint wake-up-set atoms ;
 
 ! Called on constraints in ask position
 GENERIC: test-constraint ( bindings chr -- ? )
-! TODO move this to activation!
+! TODO track open replacements on suspension?
 GENERIC: constraint-fixed? ( chr-constraint -- ? )
 M: chr-constraint constraint-fixed? constraint-args atoms empty? ;
 
@@ -199,8 +208,19 @@ M: true apply-substitution* nip ;
 M: chr-pred apply-substitution*
     [ tuple-slots swap lift ]
     [ class-of ] bi slots>tuple ;
-! M: fiat-pred-array apply-substitution*
-!     unclip-slice [ swap lift ] dip prefix ;
+M: fiat-pred-array apply-substitution*
+    unclip-slice [ swap lift ] dip prefix ;
+
+M: generator apply-substitution*
+    clone [ [ apply-substitution* ] with map ] change-body ;
+
+! This one is generated, and reflects the modifications to the internal equality
+! state.  It can be matched on, but it is kind of a "passive" builtin, generated
+! by the "==!" command
+! TODO: perhaps also insert the reflexive constraint? Normaly shouldn't be
+! needed, since regular tests should be conducted using ==, but it allows
+! "exporting" the equality solver state
+PREDICATE: eq-constraint < fiat-pred-array first \ = eq? ;
 
 ! * Arbitrary guards
 INSTANCE: callable chr-constraint
@@ -211,11 +231,3 @@ M: callable apply-substitution* swap lift ;
 M: callable test-constraint
     swap lift test-callable ;
 
-! * Existential callout
-TUPLE: generator vars body ;
-C: <generator> generator
-INSTANCE: generator chr-constraint
-M: generator pred>constraint
-    clone [ [ pred>constraint ] map ] change-body ;
-M: generator apply-substitution*
-    clone [ [ apply-substitution* ] with map ] change-body ;

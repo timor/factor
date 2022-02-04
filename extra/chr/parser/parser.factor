@@ -1,4 +1,4 @@
-USING: accessors arrays chr chr.state colors.constants combinators io.styles
+USING: accessors arrays chr colors.constants combinators io.styles
 kernel lexer match parser prettyprint.backend prettyprint.custom
 prettyprint.sections sequences words words.symbol ;
 
@@ -65,6 +65,3 @@ M: term-var reset-word
     [ call-next-method ] [ f "term-var" set-word-prop ] bi ;
 
 SYNTAX: TERM-VARS: ";" [ define-term-var ] each-token ;
-
-ALIAS: == test-eq
-ALIAS: ==! add-equal

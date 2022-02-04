@@ -1,6 +1,6 @@
-USING: accessors arrays assocs assocs.extras chr combinators
-combinators.short-circuit disjoint-sets kernel linked-assocs math namespaces
-quotations sequences sets typed types.util words ;
+USING: accessors arrays assocs assocs.extras chr chr.parser combinators
+combinators.short-circuit disjoint-sets hash-sets kernel linked-assocs math
+namespaces quotations sequences sets typed types.util words ;
 
 IN: chr.state
 
@@ -27,7 +27,7 @@ SYMBOLS: program exec-stack store builtins match-trace current-index ;
 
 ! Operational interface
 TUPLE: chr-suspension
-    constraint id alive activated stored hist ;
+    constraint id alive activated stored hist vars ;
 
 SLOT: type
 SLOT: args
@@ -54,31 +54,45 @@ DEFER: activate-new
     }
     3cleave ;
 
+DEFER: reactivate
+:: wake-equal ( v k -- )
+    store get [| id sus |
+               sus vars>> :> vs
+               { [ v vs in? ] [ k vs in? ] } 0||
+               [ id reactivate ] when
+    ] assoc-each ;
+
+DEFER: test-eq
 : add-equal ( value key -- new )
     2dup [ local-var? ] either?
     [ "equating locals!" throw ] when
-    [ defined-equalities get assume-equal ]
-    [ 2array \ = prefix 1array ] 2bi ;
+    2dup test-eq
+    [ 2drop f ]
+    [ [ defined-equalities get assume-equal ]
+      [ 2array \ = prefix 1array ]
+      [ wake-equal ]
+      2tri ] if ;
 
     ! substitutions get set-at ; inline
 
 TYPED: create-chr ( c: chr-constraint -- id )
-    chr-suspension new swap >>constraint
+    chr-suspension new swap
+    [ >>constraint ]
+    [ vars >hash-set >>vars ] bi
     t >>alive
     current-index [ 0 or 1 + dup ] change [ >>id ] keep
     [ store get set-at ] keep ;
 
-DEFER: activate
-
 : alive? ( id -- ? )
     store get at [ alive>> ] [ f ] if* ;
 
+DEFER: activate
 : reactivate ( id -- )
     dup alive? [ activate ] [ drop ] if ;
     ! store get at t >>activated drop ;
 
-: reactivate-all ( -- )
-    store get [ constraint>> constraint-fixed? [ drop ] [ reactivate ] if ] assoc-each ;
+! : reactivate-all ( -- )
+!     store get [ constraint>> constraint-fixed? [ drop ] [ reactivate ] if ] assoc-each ;
 
 :: kill-chr ( id -- )
     store get dup id of
@@ -130,7 +144,6 @@ DEFER: activate
     apply-substitution* ;
 
 ! TODO: Don't use t as special true value in body anymore...
-DEFER: activate-new
 : run-rule-body ( rule-id bindings -- )
     [ program get rules>> nth ] dip
     swap body>> dup t =
@@ -184,14 +197,22 @@ DEFER: activate-new
 SYMBOL: sentinel
 
 : recursion-check ( -- )
-    sentinel get 50 > [ "runaway" throw ] when
+    sentinel get 500 > [ "runaway" throw ] when
     sentinel inc ;
 
+! TODO: check if that is needed to make sure tail recursion works!
+! Don't reactivate ourselves, don't reactivate more than once!
 : activate ( id -- )
-    recursion-check
     store get at
-    dup type>> program get schedule>> at
-    [ run-occurrence ] with each ;
+    dup activated>>
+    [ drop ]
+    [
+        dup t >>activated
+        recursion-check
+        dup type>> program get schedule>> at
+        [ run-occurrence ] with each
+        f >>activated drop
+    ] if ;
 
 GENERIC: activate-new ( c -- )
 M: sequence activate-new
@@ -205,7 +226,7 @@ M: generator activate-new
     [ body>> ]
     [ vars>> [ dup dup word? [ name>> ] when uvar <gvar>
              ] H{ } map>assoc ] bi lift
-    [ activate-new ] each ;
+    activate-new ;
 
 M: true activate-new drop ;
 
@@ -217,7 +238,7 @@ M: true activate-new drop ;
 M: callable activate-new
     recursion-check
     call( -- new )
-    reactivate-all
+    ! reactivate-all
     activate-new ;
 
 ! TODO: check whether in-place store modification is sound
@@ -233,8 +254,23 @@ M: chr-suspension apply-substitution*
       0 current-index set
     ] prepose with-var-names ; inline
 
+! Replace all remaining variables with their equivalents
+:: replace-equalities ( c -- c )
+    c eq-constraint? [ c ]
+    [ defined-equalities get :> ds
+      c vars [| v | v
+              v ds disjoint-set-member?
+              [ v ds representative ] [ f ] if
+             ] H{ } map>assoc sift-values
+      c apply-substitution ] if ;
+
 : run-chr-query ( prog query -- store )
     [ pred>constraint ] map
     [ 0 sentinel set
-      [ activate-new ] each store get [ constraint>> ] map-values
+      [ activate-new ] each store get [ constraint>> replace-equalities ] map-values
     ] curry with-chr-prog ;
+
+! TODO: move builtin into extra vocab?
+
+ALIAS: == test-eq
+ALIAS: ==! add-equal

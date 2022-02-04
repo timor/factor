@@ -49,7 +49,7 @@ SYMBOL: debug-chr
     debug-chr? [ <chr-log-entry> . ] [ 3drop ] if ;
 
 : chr-state. ( -- )
-    store get "Store: %u\n" printf ;
+    store get "Store: " print . ;
 
 : chrebug ( -- )
     \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate
