@@ -1,6 +1,6 @@
-USING: accessors arrays assocs assocs.extras classes classes.algebra
-classes.tuple combinators.short-circuit continuations kernel make match math
-math.order quotations sequences sets sorting typed types.util words ;
+USING: accessors arrays classes classes.algebra classes.tuple
+combinators.short-circuit continuations kernel make match quotations sequences
+types.util words sets ;
 
 IN: chr
 
@@ -10,7 +10,7 @@ FROM: syntax => _ ;
 ! * Constraint Handling Rules
 
 
-TUPLE: chr heads nkept guard body ;
+TUPLE: chr heads nkept guard body match-vars ;
 : new-chr ( heads nkept guard body class -- obj )
     new
     swap >>body
@@ -38,49 +38,41 @@ TUPLE: active-cons { cons maybe{ id-cons } } occs j ;
 C: <active-cons> active-cons
 
 ! Generated variable.  Not a match-var, but a child-atom to consider
+! FIXME: need this as match-var!
 ! TODO: make identity-tuple?
 TUPLE: gvar { name read-only } ;
+INSTANCE: gvar match-var
 C: <gvar> gvar
 ! M: gvar child-atoms drop f ;
 M: gvar subst var-subst ;
 M: gvar vars* , ;
 
-MIXIN: chr-constraint
+! Things that can be activated
+MIXIN: constraint
 SINGLETON: true
-INSTANCE: true chr-constraint
+SINGLETON: false
+INSTANCE: true constraint
+INSTANCE: false constraint
 
 TUPLE: chr-pred ;
-INSTANCE: chr-pred chr-constraint
+INSTANCE: chr-pred constraint
 
 ! Turn lexical representation into constraint object
 GENERIC: pred>constraint ( obj -- chr-pred )
-M: chr-constraint pred>constraint ;
+M: constraint pred>constraint ;
 
 ! Simplest representation
 PREDICATE: pred-head-word < word chr-pred class<= ;
 PREDICATE: pred-array < array ?first pred-head-word? ;
 PREDICATE: fiat-pred-array < array ?first { [ word? ] [ pred-head-word? not ] } 1&& ;
-INSTANCE: fiat-pred-array chr-constraint
+
+! Things that are considered non-builtin constraints
+UNION: chr-constraint fiat-pred-array chr-pred ;
+INSTANCE: chr-constraint constraint
+
 
 M: pred-array pred>constraint
     unclip-slice slots>tuple ;
-
-! Program itself
-TUPLE: chr-prog
-    rules
-    occur-index
-    schedule
-    local-vars
-    existential-vars ;
-
-C: <chr-prog> chr-prog
-
-TUPLE: constraint-schedule
-    { occurrence read-only }
-    { keep-active? read-only }
-    { arg-vars read-only }
-    { partners read-only } ;
-C: <constraint-schedule> constraint-schedule
 
 GENERIC: constraint-type ( obj -- type )
 GENERIC: constraint-args ( obj -- args )
@@ -93,92 +85,9 @@ M: fiat-pred-array constraint-args rest-slice ;
 ! * Existential callout
 TUPLE: generator vars body ;
 C: <generator> generator
-INSTANCE: generator chr-constraint
+INSTANCE: generator constraint
 M: generator pred>constraint
     clone [ [ pred>constraint ] map ] change-body ;
-
-! * Rule processing
-: sort-chr-index ( coords -- cords )
-    [ 2dup [ first ] bi@ <=> dup +eq+ =
-      [ drop [ second ] bi@ >=< ]
-      [ 2nip ] if
-    ] sort ;
-
-: index-rules ( chrs -- index )
-    H{ } clone swap
-    [ swap heads>>
-      [ rot [ 2array ] dip constraint-type pick push-at ] with each-index
-    ] each-index
-    [ sort-chr-index >array ] map-values ;
-
-TYPED: internalize-constraint ( lexical-rep -- c: chr-constraint )
-    pred>constraint ; inline
-
-: internalize-constraints ( seq -- seq )
-    dup t = [ [ internalize-constraint ] map ] unless ;
-
-: internalize-rule ( chr-rule -- chr-rule )
-    clone
-    [ internalize-constraints ] change-heads
-    [ internalize-constraints ] change-guard
-    [ internalize-constraints ] change-body ;
-
-! Return an assoc of schedules per constraint type, which are sequences of
-! { occ keep-active { keep-partner partner-type } } entries
-: make-schedule ( rules occur-index -- schedule )
-    [| rules occs |
-     occs
-     [ dup first2 [ rules nth ] dip :> ( rule occ-hi )
-         rule nkept>> :> nk
-         occ-hi nk <
-         occ-hi rule heads>> nth constraint-args
-         V{ } clone
-         rule heads>> [| c i | i occ-hi = not [ i nk < c 2array suffix! ] when ] each-index
-         >array
-         <constraint-schedule>
-      ] map
-    ] with assoc-map ;
-
-: collect-vars ( rules -- set )
-    vars members ;
-
-ERROR: existential-guard-vars rule ;
-:: rule-existentials ( rule -- set )
-    rule
-    [ heads>> vars ]
-    [ guard>> vars ]
-    [ body>> vars  ] tri :> ( vh vg vb )
-    vb vh diff :> existentials
-    vg members [ vh in? not ] any? [ rule existential-guard-vars ] when
-    existentials
-    ;
-
-: collect-existential-vars ( rules -- seq )
-    [ rule-existentials ] map ;
-
-: read-chr ( rules -- rules )
-    [ internalize-rule ] map ;
-
-! NOTE: destructive!
-! FIXME: may be better to do that stuff per rule, not per program?
-: insert-generators! ( rule vars -- rule )
-    [
-        '[ _ swap <generator> 1array ] change-body
-    ] unless-empty ;
-
-! Destructive!
-: convert-existentials! ( chr-prog -- chr-prog )
-    dup [ rules>> ] [ existential-vars>> ] bi
-    [ insert-generators! ] 2map >>rules ;
-
-: load-chr ( rules -- chr-prog )
-    read-chr dup index-rules
-    2dup make-schedule
-    pick
-    [ collect-vars ]
-    [ collect-existential-vars ] bi
-    <chr-prog>
-    convert-existentials! ;
 
 ! TODO: properly fix the variable set in the suspension instead of this mess...
 UNION: chr-atom match-var ;
@@ -189,21 +98,21 @@ M: object atoms* drop ;
 M: chr-atom atoms* , ;
 M: array atoms* [ atoms* ] each ;
 M: tuple atoms* tuple-slots atoms* ;
-M: chr-constraint atoms*
+M: constraint atoms*
     constraint-args atoms* ;
 M: callable atoms* [ atoms* ] each ;
 
 ! Wakeup set
 GENERIC: wake-up-set ( constraint -- atoms )
-M: chr-constraint wake-up-set atoms ;
+M: constraint wake-up-set atoms ;
 
 ! Called on constraints in ask position
 GENERIC: test-constraint ( bindings chr -- ? )
 ! TODO track open replacements on suspension?
-GENERIC: constraint-fixed? ( chr-constraint -- ? )
-M: chr-constraint constraint-fixed? constraint-args atoms empty? ;
+GENERIC: constraint-fixed? ( constraint -- ? )
+M: constraint constraint-fixed? constraint-args atoms empty? ;
 
-GENERIC: apply-substitution* ( subst chr-constraint -- chr-constraint )
+GENERIC: apply-substitution* ( subst constraint -- constraint )
 M: true apply-substitution* nip ;
 M: chr-pred apply-substitution*
     [ tuple-slots swap lift ]
@@ -223,7 +132,7 @@ M: generator apply-substitution*
 PREDICATE: eq-constraint < fiat-pred-array first \ = eq? ;
 
 ! * Arbitrary guards
-INSTANCE: callable chr-constraint
+INSTANCE: callable constraint
 M: callable apply-substitution* swap lift ;
 : test-callable ( callable -- ? )
     [ call( -- ? ) ] [ 2drop f ] recover ;
@@ -231,3 +140,21 @@ M: callable apply-substitution* swap lift ;
 M: callable test-constraint
     swap lift test-callable ;
 
+TYPED: internalize-constraint ( lexical-rep -- c: constraint )
+    pred>constraint ; inline
+
+: internalize-constraints ( seq -- seq )
+    dup t = [ [ internalize-constraint ] map ] unless ;
+
+! Returns all vars in the heads and guard
+: rule-match-vars ( chr-rule -- seq )
+    [ heads>> vars ]
+    [ guard>> vars ] bi union ;
+
+: internalize-rule ( chr-rule -- chr-rule )
+    clone
+    [ internalize-constraints ] change-heads
+    [ internalize-constraints ] change-guard
+    [ internalize-constraints ] change-body
+    dup rule-match-vars >>match-vars
+    ;

@@ -101,6 +101,14 @@ var-names [ H{ } clone ] initialize
     [ [ uvar ] map ] dip
     [ get-name-suffix ] map ;
 
+! Named gensym
+: usym ( name -- word )
+    uvar <uninterned-word> ;
+
+: umatchvar ( name -- word )
+    usym dup
+    t "match-var" set-word-prop ;
+
 ! ! * Prettyprinting compact stuff
 TUPLE: separator-block < flow separator ;
 : <separated-block> ( separator -- obj )

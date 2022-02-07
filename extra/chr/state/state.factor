@@ -1,4 +1,4 @@
-USING: accessors arrays assocs assocs.extras chr chr.parser combinators
+USING: accessors arrays assocs assocs.extras chr chr.programs combinators
 combinators.short-circuit disjoint-sets hash-sets kernel linked-assocs math
 namespaces quotations sequences sets typed types.util words ;
 
@@ -75,7 +75,7 @@ DEFER: test-eq
 
     ! substitutions get set-at ; inline
 
-TYPED: create-chr ( c: chr-constraint -- id )
+TYPED: create-chr ( c: constraint -- id )
     chr-suspension new swap
     [ >>constraint ]
     [ vars >hash-set >>vars ] bi
@@ -146,8 +146,9 @@ DEFER: activate
 ! TODO: Don't use t as special true value in body anymore...
 : run-rule-body ( rule-id bindings -- )
     [ program get rules>> nth ] dip
-    swap body>> dup t =
-    [ 2drop ] [ [ apply-substitution activate-new ] with each ] if ;
+    ! swap body>> dup t =
+    ! [ 2drop ] [ [ apply-substitution activate-new ] with each ] if ;
+    swap body>> [ apply-substitution activate-new ] with each ;
 
 : simplify-constraints ( trace -- )
     [ [ drop ] [ kill-chr ] if ] assoc-each ;
@@ -197,28 +198,29 @@ DEFER: activate
 SYMBOL: sentinel
 
 : recursion-check ( -- )
-    sentinel get 500 > [ "runaway" throw ] when
+    ! sentinel get 500 > [ "runaway" throw ] when
     sentinel inc ;
 
 ! TODO: check if that is needed to make sure tail recursion works!
 ! Don't reactivate ourselves, don't reactivate more than once!
 : activate ( id -- )
     store get at
-    dup activated>>
-    [ drop ]
-    [
-        dup t >>activated
-        recursion-check
+    ! dup activated>>
+    ! [ drop ]
+    ! [
+    !     dup t >>activated
+    !     recursion-check
         dup type>> program get schedule>> at
         [ run-occurrence ] with each
-        f >>activated drop
-    ] if ;
+    !     f >>activated drop
+    ! ] if
+    ;
 
 GENERIC: activate-new ( c -- )
 M: sequence activate-new
     [ activate-new ] each ;
 
-M: chr-constraint activate-new
+M: constraint activate-new
     recursion-check
     create-chr activate ;
 

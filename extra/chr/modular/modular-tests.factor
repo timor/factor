@@ -1,10 +1,9 @@
-USING: chr chr.modular chr.parser chr.state kernel linked-assocs make math
-tools.test ;
+USING: assocs chr chr.modular chr.parser chr.state chr.tests kernel
+linked-assocs make math sequences sets tools.test types.util ;
 IN: chr.modular.tests
 
 TUPLE: leq < chr-pred v1 v2 ;
 
-! SYMBOLS: A B C ;
 TERM-VARS: A B C ;
 
 
@@ -70,20 +69,20 @@ TERM-VARS: ?k ;
 ! This is the example from the CHRat paper
 ! rule-name @ Hk... \ Hr... <=> G.. | B ;
 ! CHR{ Hk.. // Hr.. -- G.. | B }
-CONSTANT: leq-solver-chrat {
+CHRAT: leq-solver-chrat { leq }
     CHR{ // { leq ?x ?x } -- | }
     CHR{ // { leq ?x ?y } { leq ?y ?x } -- | [ ?x ?y ==! ] }
     CHR{ { leq ?x ?y } { leq ?y ?z } // -- | { leq ?x ?z } }
     CHR{ { leq ?x ?y } // { leq ?x ?y } -- | }
 
-    ! Entailment
-    CHR{ { leq ?x ?y } // { ask { leq ?x ?y } ?k } -- | { entailed ?k } }
+    ! ! Entailment
     ! Reflexive case handled specially, not entirely sure what the formal
     ! reasoning is behind that...
-    CHR{ // { ask { leq ?x ?x } ?k } -- | { entailed ?k } }
+    CHR{ // { ask { leq ?x ?x } } -- | { entailed { leq ?x ?x } } }
     ! This is a shortcut to the underlying host:
-    CHR{ // { ask { leq ?x ?y } ?k } -- [ ?x ?y <= ] | { entailed ?k } }
-}
+    ! If we can prove the opposite, return that!
+    CHR{ // { ask { leq ?x ?y } } -- [ ?x ?y <= ] | { entailed { leq ?x ?y } } }
+;
 
 {
     LH{ { 5 { = C A } } { 6 { = C B } } }
@@ -115,6 +114,7 @@ SYMBOL: D
         { { leq A B } { leq C A } { leq B C } [ A B == [ t , ] [ f , ] if f ] } run-chr-query drop
     ] {  } make
 ] unit-test
+
 ! CHRat paper example
 ! component min_solver .
 ! import leq /2 from leq_solver .
@@ -128,26 +128,105 @@ SYMBOL: D
 ! ask(min(X, Y, Y), K) <=> leq(Y, X) | entailed(K).
 
 
-TUPLE: some < chr-pred arg ;
-! Manually transformed example
 TUPLE: min < chr-pred a b c ;
-SYMBOLS: r1 r2 r3 r4 ;
-TERM-VARS: ?k0 ;
-CONSTANT: chrat-min {
-    CHR{ { min ?x ?y ?z } // { ask { min ?x ?y ?z } ?k } -- | { entailed ?k } }
+! SYMBOLS: r1 r2 r3 r4 r5 r6 r7 ;
+! TERM-VARS: ?k0 ?m ;
+! CONSTANT: chrat-min {
+CHRAT: chrat-min { min }
+    CHR{ { min ?x ?y ?z } // { ask { min ?x ?y ?z } } -- | { entailed { min ?x ?y ?z } } }
 
-    CHR{ { min ?x ?y ?z } // -- | gen{ ?k | { ask { leq ?x ?y } ?k } { some { r1 ?x ?y ?z ?k } } } }
-    CHR{ // { some { r1 ?x ?y ?z ?k } } { min ?x ?y ?z } { entailed ?k } -- | [ ?z ?x ==! ] }
+    CHR{ // { min ?x ?y ?z } -- { leq ?x ?y } | [ ?z ?x ==! ] }
+    ! NOTE: the second constraint makes sure the continuation is linked to the initial query, but that could have been done with the
 
-    CHR{ { min ?x ?y ?z } // -- | gen{ ?k | { ask { leq ?y ?x } ?k } { some { r2 ?x ?y ?z ?k } } } }
-    CHR{ // { some { r2 ?x ?y ?z ?k } } { min ?x ?y ?z } { entailed ?k } -- | [ ?z ?y ==! ] }
+    CHR{ // { min ?x ?y ?z } -- { leq ?y ?x } | [ ?z ?y ==! ] }
 
     CHR{ { min ?x ?y ?z } // -- | { leq ?z ?x } { leq ?z ?y } }
 
-    ! NOTE: do we need to instantiate k0 here? If we never modify the internal store, call-stack semantics should prohibit invalid substitutions, no?
-    CHR{ { ask { min ?x ?y ?x } ?k } // -- | gen{ ?k0 | { ask { leq ?x ?y } ?k0 } { some { r3 ?x ?y ?k ?k0 } } } }
-    CHR{ // { some { r3 ?x ?y ?k ?k0 } } { ask { min ?x ?y ?x } ?k } { entailed ?k0 } -- | { entailed { min ?x ?y ?x } } { entailed ?k } }
+    CHR{ // { ask { min ?x ?y ?x } } -- { leq ?x ?y } | { entailed { min ?x ?y ?y } } }
 
-    CHR{ { ask { min ?x ?y ?y } ?k } // -- | gen{ ?k0 | { ask { leq ?y ?x } ?k0 } { some { r4 ?x ?y ?k ?k0 } } } }
-    CHR{ // { some { r4 ?x ?y ?k ?k0 } } { ask { min ?x ?y ?y } ?k } { entailed ?k0 } -- | { entailed { min ?x ?y ?y } } { entailed ?k } }
+    CHR{ // { ask { min ?x ?y ?y } } -- { leq ?y ?x } | { entailed { min ?x ?y ?y } } }
+;
+
+TERM-VARS: X Y Z M ;
+: combined ( -- rules )
+    leq-solver-chrat chrat-min append ;
+{ LH{ { 5 { = M 1 } } } }
+[ combined { { min 1 1 M } } run-chr-query ] unit-test
+
+{ t }
+[ combined { { min 1 2 M } } run-chr-query values { = M 1 } swap in? ] unit-test
+
+{ t }
+[ combined { { min 2 1 M } } run-chr-query values { = M 1 } swap in? ] unit-test
+
+{ t }
+[ combined { { min A A M } } run-chr-query values { = M A } swap in? ] unit-test
+
+{
+    LH{ { 1 P{ leq Z Y } } { 6 { = Z X } } }
 }
+[ combined { { leq X Y } { min X Y Z } } run-chr-query ] unit-test
+
+! * Comparison example
+! Example: comparisons
+! #+begin_example
+! export le/2, ge/2, lt/2, gt/2, ne/2.
+
+! ne(X, X) <=> false.
+! lt(X, Y) \ ask(ne(X, Y)) <=> entailed(ne(X, Y)).
+
+! le(X, X) <=> true.
+! le(X, Y), le(Y, X) <=> X = Y.
+! le(X, Y), le(Y, Z) ==> le(X, Z).
+! le(X, Y) \ le(X, Y) <=> true.
+
+! le(X, Y) \ ask(le(X, Y)) <=> entailed(le(X, Y)).
+! lt(X, Y) \ ask(le(X, Y)) <=> entailed(lt(X, Y)).
+
+! ge(X, Y) <=> le(Y, X).
+
+! le(X, Y) \ ask(ge(Y, X)) <=> entailed(ge(Y, X)).
+
+! le(X, Y), ne(X, Y) <=> lt(X, Y).
+
+! lt(X, X) <=> false.
+! lt(X, Y)  ==> le(Y, Z) | lt(X, Z).
+! lt(X, Y) \ lt(X, Y) <=> true.
+
+! lt(X, Y) \ ask(lt(X, Y)) <=> entailed(lt(X, Y)).
+
+! gt(X, Y) <=> lt(Y, X).
+! #+end_example
+
+TUPLE: le < chr-pred x y ;
+TUPLE: ge < chr-pred x y ;
+TUPLE: lt < chr-pred x y ;
+TUPLE: gt < chr-pred x y ;
+TUPLE: ne < chr-pred x y ;
+CHRAT: chrat-comp { le ge lt gt ne }
+    CHR{ // { ne ?x ?x } -- | false }
+    CHR{ { lt ?x ?y } // { ask { ne ?x ?y } } -- | { entailed { ne ?x ?y } } }
+    CHR{ // { le ?x ?x } -- | }
+    CHR{ { le ?x ?y } // { le ?y ?x } -- | [ ?x ?y ==! ] }
+    CHR{ { le ?x ?y } { le ?y ?z } // -- | { le ?x ?z } }
+    CHR{ { le ?x ?y } // { ask { le ?x ?y } } -- | { entailed { le ?x ?y } } }
+    CHR{ { lt ?x ?y } // { ask { le ?x ?y } } -- | { entailed { lt ?x ?y } } }
+
+    ! Normalize
+    CHR{ // { ge ?x ?y } -- | { le ?y ?x } }
+
+    CHR{ { le ?x ?y } // { ask { ge ?y ?x } } -- | { entailed { ge ?y ?x } } }
+
+    CHR{ // { le ?x ?y } { ne ?x ?y } -- | { lt ?x ?y } }
+
+    CHR{ // { lt ?x ?y } -- | false }
+    ! Existential guard!
+    CHR{ { lt ?x ?y } // -- { le ?y ?z } | { lt ?x ?z } }
+    CHR{ { lt ?x ?y } // { lt ?x ?y } -- | }
+
+    ! Trivial Entailment
+    CHR{ { lt ?x ?y } // { ask { lt ?x ?y } } -- | { entailed { lt ?x ?y } } }
+
+    ! Normalize
+    CHR{ // { gt ?x ?y } -- | { lt ?y ?x } }
+;

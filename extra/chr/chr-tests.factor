@@ -1,5 +1,5 @@
-USING: accessors assocs chr chr.parser chr.state kernel linked-assocs math
-sequences tools.test types.util words ;
+USING: accessors assocs chr chr.parser chr.programs chr.state kernel
+linked-assocs math sequences tools.test types.util words ;
 IN: chr.tests
 
 
@@ -30,13 +30,6 @@ CONSTANT: var-test {
 { { ?x ?y ?z } { { ?z } {  } } }
 [ var-test load-chr [ local-vars>> ] [ existential-vars>> ] bi ] unit-test
 
-
-! For now, we don't support existential guards, only existential bodies
-CONSTANT: invalid-test {
-    CHR{ { = ?x ?y } // -- { = ?y ?z } | }
-}
-
-[ invalid-test load-chr ] [ existential-guard-vars? ] must-fail-with
 
 ! Passing Stuff via stack?
 SYMBOLS: Stack State Word Before After Conn In Out Defs Def Comp Push Pop ShiftPop

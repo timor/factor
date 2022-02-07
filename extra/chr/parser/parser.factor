@@ -1,6 +1,7 @@
-USING: accessors arrays chr colors.constants combinators io.styles
-kernel lexer match parser prettyprint.backend prettyprint.custom
-prettyprint.sections sequences words words.symbol ;
+USING: accessors arrays chr chr.modular classes.parser classes.tuple.parser
+colors.constants combinators io.styles kernel lexer make match parser
+prettyprint.backend prettyprint.custom prettyprint.sections sequences words
+words.symbol ;
 
 IN: chr.parser
 
@@ -13,8 +14,7 @@ SYNTAX: P{ \ } parse-array pred>constraint suffix! ;
 
 SYMBOLS: | -- // ;
 : parse-chr-rule ( delim -- heads nkept guard body )
-    [ \ // parse-array dup length [ \ -- parse-array append ] dip \ | parse-array ] dip parse-array
-    [ t ] when-empty ;
+    [ \ // parse-array dup length [ \ -- parse-array append ] dip \ | parse-array ] dip parse-array ;
 
 SYNTAX: CHR{ \ } parse-chr-rule chr new-chr suffix! ;
 
@@ -27,7 +27,7 @@ SYNTAX: gen{ \ | parse-until \ } parse-until <generator> suffix! ;
 M: generator pprint* pprint-object ;
 M: generator pprint-delims drop \ gen{ \ } ;
 M: generator >pprint-sequence
-    [ vars>> \ | suffix ] [ body>> ] bi append ;
+    [ vars>> \ | suffix ] [ body>> ] bi suffix ;
 
 SYNTAX: G{ scan-token "}" expect <gvar> suffix! ;
 
@@ -39,7 +39,8 @@ M: gvar pprint*
 : pprint-chr-content ( chr -- )
     { [ keep/remove [ pprint-elements \ // pprint-word ] [ pprint-elements ] bi* ]
       [ \ -- pprint-word guard>> pprint-elements \ | pprint-word ]
-      [ body>> dup t = [ drop ] [ pprint-elements ] if ]
+      ! [ body>> dup t = [ drop ] [ pprint-elements ] if ]
+      [ body>> pprint-elements ]
     } cleave ;
 
 : pprint-chr ( chr -- )
@@ -65,3 +66,11 @@ M: term-var reset-word
     [ call-next-method ] [ f "term-var" set-word-prop ] bi ;
 
 SYNTAX: TERM-VARS: ";" [ define-term-var ] each-token ;
+
+
+! * CHRat Contract
+
+SYNTAX: CHRAT: scan-new-word
+    "{" expect \ } parse-array
+    \ ; parse-until dup [ chr? ] all? [ "invalid-chr-prog" throw ] unless
+    define-chrat-prog ;
