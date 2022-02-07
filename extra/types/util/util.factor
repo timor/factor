@@ -4,6 +4,7 @@ combinators.smart continuations disjoint-sets generalizations graphs hashtables
 io io.styles kernel lists make match math math.order math.parser mirrors
 namespaces prettyprint.backend prettyprint.custom prettyprint.sections
 quotations sequences sequences.extras sequences.private sets strings threads
+graphs.private
 typed unicode words ;
 
 IN: types.util
@@ -381,3 +382,10 @@ SYMBOL: on-recursive-term
 
 : deep-find-all ( obj destructure: ( obj -- elts ) test: ( obj -- ? ) -- elts )
     [ (deep-find-all) ] { } make ;
+
+! * Forest Closure
+
+:: forest-as ( vertices quot: ( vertex -- edges ) exemplar -- set )
+    exemplar new-empty-set-like :> s
+    vertices [ dup s in? [ drop ] [ s quot (closure) ] if ] each
+    s ; inline
