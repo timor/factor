@@ -18,12 +18,24 @@ TUPLE: Instance < chr-pred val s ;
 TUPLE: ExpectInstance < chr-pred val s ;
 TUPLE: DeclareTos < state-pred s ;
 
-TUPLE: Pop < trans-pred val ;
-TUPLE: Pops < trans-pred val ;
 TUPLE: Push < trans-pred val ;
-TUPLE: Pushes < trans-pred val ;
-TUPLE: ShiftPush < trans-pred d ;
-TUPLE: ShiftPop < trans-pred d ;
+
+TUPLE: AssumeEffect < trans-pred effect ;
+
+! Word level
+TUPLE: Exec < trans-pred obj ;
+TUPLE: ExecWord < trans-pred word ;
+TUPLE: Generic < trans-pred word ;
+TUPLE: Definition < chr-pred word quot ;
+TUPLE: Literal < chr-pred val obj ;
+
+! Definition level
+TUPLE: InlineCall < trans-pred word quot ;
+TUPLE: Call < trans-pred word quot ;
+
+! Data split
+TUPLE: Split < chr-pred from to ;
+
 
 ! Boolean if then else, cond is a value, the other two are states
 TUPLE: BranchIf < trans-pred cond strue sfalse ;
@@ -36,8 +48,11 @@ TUPLE: InferUnknown < trans-pred val ;
 : sub-state ( symbol -- symbol )
     name>> "." append uvar <term-var> ;
 
+SINGLETON: +top+
+
 : seq-state ( symbol -- symbol )
-    name>> uvar <term-var> ;
+    dup +top+? [ drop new-state ]
+    [ name>> uvar <term-var> ] if ;
 
 SYMBOLS: state-in-var state-out-var ;
 

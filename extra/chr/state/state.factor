@@ -1,12 +1,13 @@
 USING: accessors arrays assocs assocs.extras chr chr.programs combinators
-combinators.short-circuit disjoint-sets hash-sets kernel linked-assocs math
-namespaces quotations sequences sets typed types.util words ;
+combinators.short-circuit disjoint-sets hash-sets kernel linked-assocs match
+math namespaces quotations sequences sets typed types.util words ;
 
 IN: chr.state
 
 TUPLE: chr-state stack store builtins trace n vars ;
 
 FROM: namespaces => set ;
+FROM: syntax => _ ;
 
 SYMBOLS: program exec-stack store builtins match-trace current-index ;
 
@@ -67,9 +68,28 @@ DEFER: reactivate
 : test-eq ( lhs rhs -- ? )
     solve-eq { [  ] [ assoc-empty? ] } 1&& ;
 
+: known? ( obj -- ? )
+    match-var? not ; inline
+
+! Keep track of ground terms for equivalence classes
+SYMBOL: ground-values
+
+:: define-ground-value ( var value -- )
+    var ground-values get
+    [| old | old [ old value = [ old ] [ "contradiction" throw ] if ]
+      [ value ] if
+    ] change-at ;
+
+: maybe-define-ground-value ( v1 v2 -- )
+    dup match-var? [ swap ] when
+    dup match-var? [ 2drop ] [
+        define-ground-value
+    ] if ;
+
 : add-equal ( value key -- new )
     2dup [ local-var? ] either?
     [ "equating locals!" throw ] when
+    2dup maybe-define-ground-value
     2dup test-eq
     [ 2drop f ]
     [ [ defined-equalities get assume-equal ]
@@ -256,14 +276,33 @@ M: chr-suspension apply-substitution*
     [ defined-equalities get :> ds
       c vars [| v | v
               v ds disjoint-set-member?
-              [ v ds representative ] [ f ] if
+              [ v ds representative
+                ground-values get ?at drop
+              ] [ f ] if
              ] H{ } map>assoc sift-values
       c apply-substitution ] if ;
+
+! : substitutions ( constraints -- substs )
+!     [ constraint-args first2 2array ] map solve-problem ;
+
+! : replace-equalities ( constraints -- constraints )
+!     dup values [ constraint>> ] map [ eq-constraint? ] filter
+!     [ constraint-args first2 2array 1array
+!       '[ _ swap apply-substitution constraint>> ] map-values ] each ;
+    ! [ values [ constraint>> ] map
+    !   [ eq-constraint? ] filter
+    !   substitutions ] keep
+    ! ! [ nip eq-constraint? ] assoc-partition
+    ! [ apply-substitution ] with map-values ;
 
 : run-chr-query ( prog query -- store )
     [ pred>constraint ] map
     [ 0 sentinel set
-      [ activate-new ] each store get [ constraint>> replace-equalities ] map-values
+      H{ } clone ground-values set
+      [ activate-new ] each
+      store get
+      ! replace-equalities
+      [ constraint>> replace-equalities ] map-values
     ] curry with-chr-prog ;
 
 : run-chrat-query ( query -- store )

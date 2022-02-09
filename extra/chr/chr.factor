@@ -1,6 +1,6 @@
 USING: accessors arrays classes classes.algebra classes.tuple
 combinators.short-circuit continuations kernel make match quotations sequences
-types.util words sets ;
+sets typed types.util words ;
 
 IN: chr
 
