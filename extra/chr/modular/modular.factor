@@ -8,12 +8,13 @@ IN: chr.modular
 ! leq(X, Y) \ ask(leq(X, Y), K) <=> entailed(K).
 ! ask(leq(X, X), K) <=> entailed(K).
 
-PREDICATE: chrat-pred < chr-pred "chrat-solver" word-prop ;
-M: chrat-pred reset-word
-    [ call-next-method ]
-    [ f "chrat-solver" set-word-prop ] bi ;
-
-! TUPLE: chrat-pred < chr-pred ;
+! FIXME: Useful dependency handling?  Maybe use class methods...
+PREDICATE: chrat-pred-class < tuple-class "chrat-solver" word-prop ;
+PREDICATE: chrat-pred < chr-pred constraint-type "chrat-solver" word-prop ;
+! PREDICATE: chrat-pred-word < tuple-class "chrat-solver" word-prop ;
+! M: chrat-pred-word reset-word
+!     [ call-next-method ]
+!     [ f "chrat-solver" set-word-prop ] bi ;
 
 ! Public
 TUPLE: ask < chr-pred pred ;
@@ -214,15 +215,37 @@ M: chr expand-ask/tell ;
     [ entailed boa 1array ] bi
     <named-chr> ;
 
-ERROR: redefining-chr-solver solver word ;
+! ERROR: redefining-chr-solver solver word ;
 
 : set-defined-solver ( solver word -- )
-    dup "chrat-solver" word-prop
-    [ redefining-chr-solver ]
-    [ swap "chrat-solver" swap set-word-prop ] if ;
+    swap "chrat-solver" set-word-prop ;
+    ! dup "chrat-solver" word-prop
+    ! [ redefining-chr-solver ]
+    ! [ swap "chrat-solver" set-word-prop ] if ;
+
+GENERIC: pred>chrat-definer ( pred -- rules )
+
+! FIXME: Defining on words/classes here is a mess...
+M: chr-pred pred>chrat-definer drop f ;
+M: chrat-pred pred>chrat-definer
+    constraint-type "chrat-solver" word-prop ;
+M: chrat-pred-class pred>chrat-definer
+    "chrat-solver" word-prop ;
+
+: chrat-solver-rules ( word -- rules )
+    "constant" word-prop ;
+
+: chrat-solver-deps ( word -- rules )
+    "chrat-deps" word-prop ;
+
+
+SYMBOL: chrat-imports
+: set-chrat-deps ( word -- )
+    chrat-imports get [ "chrat-deps" [ append ] with change-word-prop ] [ drop ] if* ;
 
 : define-chrat-prog ( word exports rules -- )
     2over [ set-defined-solver ] with each
     swap [ make-default-entailment-rule ] map prepend
     [ internalize-rule ] map
-    define-constant ;
+    [ define-constant ] keepd
+    set-chrat-deps ;

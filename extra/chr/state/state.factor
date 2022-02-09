@@ -62,7 +62,11 @@ DEFER: reactivate
                [ id reactivate ] when
     ] assoc-each ;
 
-DEFER: test-eq
+! Interface for builtin solving
+! NOTE: This tests alpha-equality
+: test-eq ( lhs rhs -- ? )
+    solve-eq { [  ] [ assoc-empty? ] } 1&& ;
+
 : add-equal ( value key -- new )
     2dup [ local-var? ] either?
     [ "equating locals!" throw ] when
@@ -72,8 +76,6 @@ DEFER: test-eq
       [ 2array \ = prefix 1array ]
       [ wake-equal ]
       2tri ] if ;
-
-    ! substitutions get set-at ; inline
 
 TYPED: create-chr ( c: constraint -- id )
     chr-suspension new swap
@@ -89,10 +91,6 @@ TYPED: create-chr ( c: constraint -- id )
 DEFER: activate
 : reactivate ( id -- )
     dup alive? [ activate ] [ drop ] if ;
-    ! store get at t >>activated drop ;
-
-! : reactivate-all ( -- )
-!     store get [ constraint>> constraint-fixed? [ drop ] [ reactivate ] if ] assoc-each ;
 
 :: kill-chr ( id -- )
     store get dup id of
@@ -232,14 +230,10 @@ M: generator activate-new
 
 M: true activate-new drop ;
 
-! Interface for builtin solving
-! NOTE: This tests alpha-equality
-: test-eq ( lhs rhs -- ? )
-    solve-eq { [  ] [ assoc-empty? ] } 1&& ;
-
 M: callable activate-new
     recursion-check
     call( -- new )
+    pred>constraint
     ! reactivate-all
     activate-new ;
 
@@ -271,6 +265,9 @@ M: chr-suspension apply-substitution*
     [ 0 sentinel set
       [ activate-new ] each store get [ constraint>> replace-equalities ] map-values
     ] curry with-chr-prog ;
+
+: run-chrat-query ( query -- store )
+    prepare-query run-chr-query ;
 
 ! TODO: move builtin into extra vocab?
 

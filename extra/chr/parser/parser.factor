@@ -1,7 +1,7 @@
-USING: accessors arrays chr chr.modular classes.parser classes.tuple.parser
-colors.constants combinators io.styles kernel lexer make match parser
-prettyprint.backend prettyprint.custom prettyprint.sections sequences words
-words.symbol ;
+USING: accessors arrays assocs chr chr.modular classes.parser
+classes.tuple.parser colors.constants combinators hashtables io.styles kernel
+lexer make match parser prettyprint.backend prettyprint.custom
+prettyprint.sections sequences vocabs.parser words words.symbol ;
 
 IN: chr.parser
 
@@ -20,10 +20,30 @@ SYNTAX: CHR{ \ } parse-chr-rule chr new-chr suffix! ;
 
 SYNTAX: CHR: scan-token "@" expect \ ; parse-chr-rule <named-chr> suffix! ;
 
+PREDICATE: term-var < word "term-var" word-prop ;
+INSTANCE: term-var match-var
+
+: define-term-var ( name -- )
+    create-word-in [ define-symbol ] [ t "term-var" set-word-prop ] bi ;
+
+M: term-var pprint*
+    name>> H{ { foreground COLOR: solarized-blue } } styled-text ;
+
+M: term-var reset-word
+    [ call-next-method ] [ f "term-var" set-word-prop ] bi ;
+
+SYNTAX: TERM-VARS: ";" [ define-term-var ] each-token ;
+
+: <term-var> ( name -- var )
+    <uninterned-word>
+    dup t "term-var" set-word-prop ;
+
 ! Explicit instantiation.  These create fresh bindings for the variables before the bar
 ! This happens after substitution
 ! instance{ a b c d | rules }
-SYNTAX: gen{ \ | parse-until \ } parse-until <generator> suffix! ;
+SYNTAX: gen{ \ | parse-array \ } parse-array <generator> suffix! ;
+SYNTAX: GEN{ "|" [ dup <term-var> 2array ] map-tokens >hashtable
+             [ values ] keep [ \ } parse-array ] with-words <generator> suffix! ;
 M: generator pprint* pprint-object ;
 M: generator pprint-delims drop \ gen{ \ } ;
 M: generator >pprint-sequence
@@ -56,21 +76,14 @@ M: chr-pred pprint* pprint-object ;
 M: chr-pred pprint-delims drop \ P{ \ } ;
 M: chr-pred >pprint-sequence [ constraint-args ] [ constraint-type prefix ] bi ;
 
-PREDICATE: term-var < word "term-var" word-prop ;
-INSTANCE: term-var match-var
-
-: define-term-var ( name -- )
-    create-word-in [ define-symbol ] [ t "term-var" set-word-prop ] bi ;
-
-M: term-var reset-word
-    [ call-next-method ] [ f "term-var" set-word-prop ] bi ;
-
-SYNTAX: TERM-VARS: ";" [ define-term-var ] each-token ;
-
+: parse-chr-body ( end -- seq )
+    parse-array dup [ chr? ] all? [ "invalid-chr-prog" throw ] unless ;
 
 ! * CHRat Contract
 
+SYNTAX: IMPORT: scan-word chrat-imports [ swap suffix ] change ;
+
 SYNTAX: CHRAT: scan-new-word
     "{" expect \ } parse-array
-    \ ; parse-until dup [ chr? ] all? [ "invalid-chr-prog" throw ] unless
-    define-chrat-prog ;
+    f chrat-imports [ \ ; parse-chr-body
+          define-chrat-prog ] with-variable ;

@@ -18,6 +18,9 @@ TUPLE: chr heads nkept guard body match-vars ;
     swap >>nkept
     swap >>heads ;
 
+: new-prop-chr ( heads guard body class -- obj )
+    [ dup length ] 3dip new-chr ;
+
 TUPLE: named-chr < chr rule-name ;
 : <named-chr> ( name heads nkept guard body -- obj )
     named-chr new-chr swap >>rule-name ;
@@ -73,6 +76,8 @@ INSTANCE: chr-constraint constraint
 
 M: pred-array pred>constraint
     unclip-slice slots>tuple ;
+
+M: sequence pred>constraint [ pred>constraint ] map ;
 
 GENERIC: constraint-type ( obj -- type )
 GENERIC: constraint-args ( obj -- args )

@@ -1,5 +1,6 @@
-USING: assocs chr chr.modular chr.parser chr.state chr.tests kernel
-linked-assocs make math sequences sets tools.test types.util ;
+USING: accessors arrays assocs chr chr.factor chr.modular chr.parser chr.state
+combinators.short-circuit grouping kernel linked-assocs macros.expander make
+math quotations sequences sets tools.test types.util words ;
 IN: chr.modular.tests
 
 TUPLE: leq < chr-pred v1 v2 ;
@@ -219,14 +220,91 @@ CHRAT: chrat-comp { le ge lt gt ne }
 
     CHR{ // { le ?x ?y } { ne ?x ?y } -- | { lt ?x ?y } }
 
-    CHR{ // { lt ?x ?y } -- | false }
+    CHR{ // { lt ?x ?x } -- | false }
+
     ! Existential guard!
     CHR{ { lt ?x ?y } // -- { le ?y ?z } | { lt ?x ?z } }
     CHR{ { lt ?x ?y } // { lt ?x ?y } -- | }
 
-    ! Trivial Entailment
-    CHR{ { lt ?x ?y } // { ask { lt ?x ?y } } -- | { entailed { lt ?x ?y } } }
-
     ! Normalize
     CHR{ // { gt ?x ?y } -- | { lt ?y ?x } }
 ;
+
+! * Stack inference
+
+! Intermediate representation language:
+TUPLE: Call < state-pred word token ;
+TUPLE: CallRet < state-pred word token ;
+TUPLE: RecursiveCall < Call back ;
+
+TERM-VARS: ?u ?v ?w ?r ?s ?t ?n ?a ?b ?q ;
+
+! Link helper
+TUPLE: Link < chr-pred a b c ;
+TUPLE: link-seq < chr-pred pred succ o ;
+CHRAT: call-seq { link-seq }
+! CHR{ { Word ?s ?t __ } // -- | { Link ?s ?t } }
+CHR{ { Link ?s ?t ?u } // { Link ?s ?t ?u } -- | }
+! CHR{ { Link ?s ?t ?t } // { Link ?s ?t ?u } -- | { Link ?s ?u ?u } }
+! CHR{ { Link ?s ?s ?t } // { Link ?s ?s ?u } -- | { Link ?s ?u ?u } }
+! CHR{ // { ask { link-seq ?s ?s ?s } } -- | { entailed { link-seq ?s ?s ?s } } }
+CHR{ { Link ?s ?t ?t } // { ask { link-seq ?s ?t ?t } } -- | { entailed { link-seq ?s ?t ?t } } }
+CHR{ { Word ?r ?s } { Word ?s ?t } // { Link ?s ?t ?t } -- | { Link ?r ?s ?s } }
+;
+
+! State-specific
+TUPLE: Val < state-pred n val ;
+TUPLE: Pop < trans-pred val ;
+TUPLE: Push < trans-pred val ;
+TUPLE: ShiftPush < trans-pred d ;
+TUPLE: ShiftPop < trans-pred d ;
+TUPLE: Transition < trans-pred ;
+
+! Initial representation
+: quot>chr ( callable -- constraints )
+    "si" usym 1array over length 1 - [ "s" usym suffix ] times "so" usym suffix
+    2 <clumps> [ first2 rot Word boa ] 2map ;
+
+! Minimum-element transition solver.
+CHRAT: stack-ops {  }
+CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?a } -- | }
+CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?b } -- | [ ?b ?a ==! ] }
+;
+
+TUPLE: Infer < trans-pred quot ;
+
+CHRAT: infer-stack { Word }
+CHR: infer-quot @ { Word ?s ?t ?q } // -- [ ?q callable? ] |  { Infer ?s ?t ?q } ;
+CHR: infer-macro @ { Word ?s ?t ?w } // -- [ W{ ?w } macro-quot ] |
+    [| | W{ ?w } macro-quot '[ _ call call ] :> body { Word ?s ?t body } ] ;
+CHR: infer-recursive @ { Call ?s ?w ?t } // { Word ?u ?v ?w } -- { link-seq ?s ?u ?u } |
+    { RecursiveCall ?u ?w ?t ?s } ;
+CHR: infer-inline @ // { Word ?s ?t ?w } -- [ W{ ?w } { [ word? ] [ inline? ] } 1&& ] |
+    [ W{ ?w } def>> '{ { Word ?s ?u _ } { Call ?s ?w ?x } { CallRet ?s ?w ?x } } ] ;
+CHR: infer-literal @ { Word ?s ?t ?w } // -- | { Push ?s ?t ?w } ;
+;
+
+! * Type inference, modular
+! Context
+TUPLE: Disjoint < chr-pred s1 s2 ;
+TUPLE: Sub < chr-pred val s ;
+TUPLE: Nosub < chr-pred val s ;
+CHRAT: solve-sub { Disjoint Sub Nosub }
+! CHR{ { Sub ?v ?s } { Nosub ?v ?s } // { Instance ?v ?s } -- | }
+CHR{ { Sub ?v ?s } { Nosub ?v ?t } // { Instance ?v ?s } -- | }
+CHR{ { = ?v ?x } { Nosub ?x ?y } // -- | { Nosub ?v ?y } }
+CHR{ { = ?v ?x } { Sub ?x ?y } // -- | { Sub ?v ?y } }
+
+;
+
+! * Building constraints based on words
+! GENERIC: word-constraints ( state-in state-out word -- seq )
+! M:: \ if word-constraints ( si so word )
+!     gen{ "c" "then" "else" |
+!          { Val si 2 "c" }
+!          { Val si 1 "then" }
+!          { Val si 0 "else" }
+!          { Instance "c" boolean }
+!          { Instance "then" callable }
+!          { Instance "else" callable }
+!     } ;

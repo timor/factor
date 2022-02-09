@@ -117,7 +117,8 @@ CONSTANT: stack-ex {
     CHR{ { ShiftPush ?s ?t ?d } { State ?t ?n ?a } // -- [ ?n ?d >= ] |
          [| | ?n ?d - :> l { State ?s l ?a } ]
        }
-    CHR{ // { Infer1 ?s ?t ?a } -- [ W{ ?a } word? ] | { Word ?s ?t ?a } }
+    ! CHR{ // { Infer1 ?s ?t ?a } -- [ W{ ?a } word? ] | { Word ?s ?t ?a } }
+    CHR{ // { Infer1 ?s ?t ?a } -- [ ?a word? ] | { Word ?s ?t ?a } }
     CHR{ // { Infer ?s [ ] } -- | { Return ?s } }
     CHR{ // { Infer ?s ?q } -- |
          [| | ?q first :> a

@@ -1,5 +1,5 @@
-USING: accessors arrays assocs assocs.extras chr chr.modular classes kernel math
-math.order sequences sets sorting types.util words ;
+USING: accessors arrays assocs assocs.extras chr chr.modular kernel math
+math.order sequences sets sorting types.util ;
 
 IN: chr.programs
 
@@ -95,20 +95,34 @@ ERROR: existential-guard-vars rule ;
     <chr-prog>
     convert-existentials! ;
 
-: rule-depends-on-preds ( rule -- seq )
-    guard>> [ chrat-pred? ] filter [ class-of ] map members ;
+: rule-depends-on-preds ( rule -- words )
+    guard>> [ chrat-pred? ] filter [ constraint-type ] map members ;
 
-: rules-depend-on-preds ( rules -- seq )
+: rules-depend-on-preds ( rules -- words )
     [ rule-depends-on-preds ] gather ;
 
-: pred-depends-on-rules ( pred -- seq )
-    dup chrat-pred? [ class-of "chrat-prog" word-prop ] [ drop f ] if ;
+: pred-depends-on-solvers ( pred -- seq )
+    pred>chrat-definer [ chrat-solver-deps ] keep suffix ;
+
+: solver-depends-on-preds ( word -- seq )
+    chrat-solver-rules [ rule-depends-on-preds ] gather ;
+
+: solvers-depend-on-preds ( seq -- seq )
+    [ solver-depends-on-preds ] gather ;
+
+: pred-depends-on-rules ( word -- seq )
+    dup chrat-pred-class? [ pred>chrat-definer [ chrat-solver-rules ] [ chrat-solver-deps ] bi append ] [ drop f ] if ;
 
 : collect-chrat-rules ( constraints -- rules )
-    [ chrat-pred? ] filter [ pred-depends-on-rules
-                             rules-depend-on-preds
+    [ chrat-pred? ] filter [ constraint-type pred-depends-on-solvers ] gather
+    ! [ pred-depends-on-rules
+    !   rules-depend-on-preds
+    ! ] V{ } forest-as
+    [
+        solver-depends-on-preds
+        [ pred-depends-on-solvers ] gather
     ] V{ } forest-as
-    [ class-of "chrat-prog" word-prop ] gather ;
+    [ chrat-solver-rules ] gather ;
 
 : prepare-query ( query -- program query )
     [ pred>constraint ] map [ collect-chrat-rules ] keep ;
