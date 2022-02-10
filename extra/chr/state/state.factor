@@ -244,7 +244,8 @@ M: constraint activate-new
 
 M: generator activate-new
     [ body>> ]
-    [ vars>> [ dup dup word? [ name>> ] when uvar <gvar>
+    ! [ vars>> [ dup dup word? [ name>> ] when uvar <gvar>
+    [ vars>> [ dup dup word? [ name>> ] when uvar <term-var>
              ] H{ } map>assoc ] bi lift
     activate-new ;
 

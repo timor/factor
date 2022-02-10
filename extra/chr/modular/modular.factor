@@ -1,5 +1,5 @@
 USING: accessors arrays assocs chr classes.tuple combinators kernel math
-sequences sets types.util vectors words words.constant ;
+namespaces sequences sets types.util vectors words words.constant ;
 
 IN: chr.modular
 

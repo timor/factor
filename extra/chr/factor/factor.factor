@@ -21,6 +21,7 @@ TUPLE: DeclareTos < state-pred s ;
 TUPLE: Push < trans-pred val ;
 
 TUPLE: AssumeEffect < trans-pred effect ;
+TUPLE: InferredEffect < trans-pred effect ;
 
 ! Word level
 TUPLE: Exec < trans-pred obj ;
@@ -45,14 +46,16 @@ TUPLE: InferUnknown < trans-pred val ;
 : new-state ( -- symbol )
     "s" uvar <term-var> ;
 
+SINGLETON: +top+
+SINGLETON: +end+
+
 : sub-state ( symbol -- symbol )
+    dup +top+? [ drop new-state ] when
     name>> "." append uvar <term-var> ;
 
-SINGLETON: +top+
-
 : seq-state ( symbol -- symbol )
-    dup +top+? [ drop new-state ]
-    [ name>> uvar <term-var> ] if ;
+    dup +top+? [ drop new-state ] when
+    name>> uvar <term-var>  ;
 
 SYMBOLS: state-in-var state-out-var ;
 

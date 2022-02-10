@@ -6,7 +6,7 @@ IN: chr.factor.quotations
 FROM: syntax => _ ;
 
 ! * Quotation Inference
-TERM-VARS: ?e ?i ?l ?o ?p ?q ?r ?s ?t ?u ?a ?b ?c ?d ?n ?m ?v ?w ?x ?y ?z ;
+TERM-VARS: ?e ?i ?l ?o ?p ?q ?r ?s ?t ?u ?a ?b ?c ?d ?n ?m ?v ?w ?x ?xs ?y ?z ;
 
 ! ! ** Keep track of word sequencing
 ! TUPLE: word-link < chr-pred a b c ;
@@ -44,6 +44,7 @@ TUPLE: Swap < trans-pred ;
 : elt-vars ( seq -- seq )
     [ swap dup pair? [ first ] when
       [ nip ] [ number>string "v" prepend ] if*
+      uvar
       <term-var>
     ] map-index ;
 
@@ -90,35 +91,15 @@ CHR: shiftstack-right @ { ShiftStack ?t ?u ?i ?o } { Val ?u ?n ?a } // -- [ ?n ?
      | [| | ?n ?o ?i - - :> m { Val ?t m ?a } ] ;
 
 
-! ShiftPop
-! ---↗  /------
-! -----/ ↗-----
-! ! Request from left
-CHR{ { ShiftPop ?s ?t ?d } { Val ?s ?n ?a } // -- [ ?n ?d >= ] |
-     [| | ?n ?d - :> l
-      { Val ?t l ?a }
-     ]
-   }
-! ! Request from right
-CHR{ { ShiftPop ?s ?t ?d } { Val ?t ?n ?a } // -- |
-     [| | ?n ?d + :> l
-      { Val ?s l ?a }
-     ]
-   }
-
-! ShiftPush
-! ----\  ↘------
-! ---↘ \--------
-! ! Request from left
-CHR{ { ShiftPush ?s ?t ?d } { Val ?s ?n ?a } // -- |
-     [| | ?n ?d + :> l { Val ?t l ?a } ]
-   }
-! ! Request from right
-CHR{ { ShiftPush ?s ?t ?d } { Val ?t ?n ?a } // -- [ ?n ?d >= ] |
-     [| | ?n ?d - :> l { Val ?s l ?a } ]
-   }
-
 ! Transitivity
+CHR: shiftstack-trans @
+// { ShiftStack ?s ?t ?a ?b } { ShiftStack ?t ?u ?c ?d } -- |
+[| |
+ ?a ?c ?b [-] + :> i1
+ ?b ?c [-] ?d + :> o2
+ { ShiftStack ?s ?u i1 o2 }
+] ;
+
 ! CHR{ // { ShiftPop ?s ?t ?d } { ShiftPop ?t ?u ?e } -- |
 !      [| | ?d ?e + :> l { ShiftPop ?s ?u l } ]
 !    }
@@ -130,14 +111,14 @@ CHR{ { ShiftPush ?s ?t ?d } { Val ?t ?n ?a } // -- [ ?n ?d >= ] |
 ! ** Effects
 ! This handles constraints that use stack effect defs to establish facts about
 ! program states
-! TUPLE: In < trans-pred list ;
-! TUPLE: Out < trans-pred list ;
+! TUPLE: Stack < trans-pred list ;
+! TUPLE: Stack < trans-pred list ;
 ! TUPLE: DeclaredEffect < chr-pred val effect ;
 ! CHRAT: effect-constraints { }
 !     CHR{ // { Effect ?s ?u ?x } -- | }
-!     CHR{ // { In ?s ?t +nil+ } -- | }
-!     CHR{ // { In ?s ?t L{ { ?v ?u } } } --
-!          | [| | ?l uncons :> ( next rest ) { { In ?s ?t ?rest } Pops {  } } ]
+!     CHR{ // { Stack ?s ?t +nil+ } -- | }
+!     CHR{ // { Stack ?s ?t L{ { ?v ?u } } } --
+!          | [| | ?l uncons :> ( next rest ) { { Stack ?s ?t ?rest } Pops {  } } ]
 !     }
 
 ! ;
@@ -153,10 +134,10 @@ CHRAT: def/use { }
 TERM-VARS: ?beg ;
 
 TUPLE: ExecUnknown < Exec ;
-TUPLE: BeginQuot < state-pred quot ;
-TUPLE: EndQuot < chr-pred beg end ;
+TUPLE: InlineQuot < trans-pred quot ;
+TUPLE: EndQuot < trans-pred ;
 TUPLE: Infer < chr-pred beg s quot ;
-TUPLE: InferQuotHere < chr-pred quot ;
+TUPLE: InferToplevelQuot < chr-pred quot ;
 TUPLE: InferDef < chr-pred word ;
 TUPLE: Linkback < chr-pred beg states ;
 TUPLE: Entry < state-pred word ;
@@ -181,6 +162,7 @@ CHR{ { Linkback ?s ?l } // { Link ?t ?u } -- [ ?t ?l in? ] | { Link ?s ?u } }
     ;
 
 ! ** Word-level Inference
+TUPLE: Stack < state-pred n vars ;
 TUPLE: Prim < Word ;
 CHRAT: infer-stack { Word }
 IMPORT: stack-ops
@@ -206,11 +188,28 @@ CHR{ { Word ?s ?t ?w } // -- |
      [| | ?w stack-effect :> e { AssumeEffect ?s ?t e } ] }
 ! CHR{ { Word ?s ?t ?w } // -- [ W{ \ ?w } \ tell-chr* ?lookup-method ] | [ ?s ?t ?w tell-chr ] }
 ! CHR{ // { Word ?s ?t ?w } -- [ ?w inline? ] | { InlineCall ?s ?t ?w } }
+
+! Inferred stack elements
+CHR{ { EndQuot ?s ?t } { ShiftStack ?s ?t ?i ?o } // -- |
+     [| | ?i 1 - :> ni ?o 1 - :> no
+      { { Stack ?s ni { } }
+        { Stack ?t no { } } } ] }
+
+CHR{ { Val ?s ?n ?a } // { Stack ?s ?n ?l } -- [ ?n 0 >= ] |
+     [| | ?n 1 - :> m ?l ?a suffix :> a2 { Stack ?s m a2 } ]
+   }
+
+CHR{ // { Stack ?s -1 ?i } { Stack ?t -1 ?o } -- | [| |
+         ! ?i ?o [ [ name>> ] map ] bi@ <effect> :> e
+         { InferredEffect ?s ?t { ?i ?o } }
+                                              ] }
+CHR{ { Stack ?s ?n __ } // -- [ ?n 0 >= ] | { Val ?s ?n ?x } }
     ;
 
 
 ! ** Syntactic expansion
-CHRAT: expand-quot { InferDef InferQuotHere }
+TUPLE: BeginQuot < trans-pred ;
+CHRAT: expand-quot { InferDef InferToplevelQuot }
 IMPORT: call-stack
 IMPORT: infer-stack
 IMPORT: stack-ops
@@ -220,40 +219,47 @@ CHR{ // { InferDef ?w } -- [ ?w deferred? not ] |
       ?w :> w
       {
           { Entry +top+ w }
-          { BeginQuot +top+ def }
+          { InlineQuot +top+ +end+ def }
       }
      ] }
 
-CHR{ { BeginQuot ?s ?q } // -- | [| | ?s seq-state :> si { { Linkback ?s { si } } { Infer ?s si ?q } } ] }
-CHR{ // { InferQuotHere ?q } -- | [ +top+ ?q BeginQuot boa ] }
-CHR{ // { Infer ?beg ?s [ ] } -- | { EndQuot ?beg ?s } }
-CHR{ // { Infer ?beg ?s ?q } { Linkback ?beg ?a } -- |
+CHR{ { InlineQuot ?s ?t ?q } // -- | [| |
+                                  ! ?s sub-state :> si
+                                  ?s seq-state :> si
+                                  { { Linkback ?s { si }
+                                    } { BeginQuot ?s si } { Infer si si ?q } } ] }
+! CHR{ { InlineQuot ?s ?t ?q } // -- | [| |
+!                                      ?s sub-state :> si
+!                                      { { Linkback ?s { si } } { Infer si se ?q } } ] }
+CHR{ // { InferToplevelQuot ?q } -- | [ +top+ +end+ ?q InlineQuot boa ] }
+CHR{ { BeginQuot ?r ?beg } // { Infer ?beg ?s [ ] } -- | { EndQuot ?beg ?s } }
+CHR{ { BeginQuot ?r ?beg } // { Linkback ?r ?a } { Infer ?beg ?s ?q } -- |
      [| | ?q unclip :> ( rest w ) ?s seq-state :> sn
       ?a sn suffix :> a2
-      { { Exec ?s sn w } { Infer ?beg sn rest } { Linkback ?beg a2 } } ] }
+      { { Exec ?s sn w } { Infer ?beg sn rest } { Linkback ?r a2 } } ] }
 ! CHR{ // { Exec ?s ?t ?w } -- [ ?w word? ]
 !      | [ ?w deferred? { ExecUnknown ?s ?t ?w } { CheckExec ?s ?t ?w } ? ] }
 CHR{ // { Exec ?s ?t ?w } -- [ ?w word? ] | { CheckExec ?s ?t ?w } }
 CHR{ // { Exec ?s ?t ?w } -- [ ?w known? ] | { Push ?s ?t ?w } }
 CHR{ // { ExecWord ?s ?t ?w } -- [ ?w inline? ]
      | [| | ?w def>> :> def { InlineCall ?s ?t ?w def } ] }
-CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w } { BeginQuot ?s ?d } }
+CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w } { InlineQuot ?s ?t ?d } }
 CHR{ // { ExecWord ?s ?t ?w } -- | { Word ?s ?t ?w } }
 ;
 
 ! * Interface
 ! : chrat-infer ( quot -- constraints )
-!     '{ { InferQuotHere _ } } run-chrat-query ;
+!     '{ { InferToplevelQuot _ } } run-chrat-query ;
 
 :: chrat-infer-with ( prog w -- constraints )
     prog
     w word?
     ! [ expand-quot swap '{ { InferDef _ } } run-chr-query ]
     [ { { InferDef w } } run-chr-query ]
-    [ { { InferQuotHere w } } run-chr-query ] if ;
+    [ { { InferToplevelQuot w } } run-chr-query ] if ;
 
 : chrat-infer ( quot/word -- constraints )
     dup word?
     ! [ expand-quot swap '{ { InferDef _ } } run-chr-query ]
     [ '{ { InferDef _ } } run-chrat-query ]
-    [ '{ { InferQuotHere _ } } run-chrat-query ] if ;
+    [ '{ { InferToplevelQuot _ } } run-chrat-query ] if ;
