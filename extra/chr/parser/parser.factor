@@ -1,7 +1,7 @@
-USING: accessors arrays assocs chr chr.modular classes.parser
-classes.tuple.parser colors.constants combinators hashtables io.styles kernel
-lexer make match parser prettyprint.backend prettyprint.custom
-prettyprint.sections sequences vocabs.parser words words.symbol ;
+USING: accessors arrays assocs chr chr.modular colors.constants combinators
+hashtables io.styles kernel lexer match namespaces parser prettyprint.backend
+prettyprint.custom prettyprint.sections sequences vocabs.parser words
+words.symbol ;
 
 IN: chr.parser
 

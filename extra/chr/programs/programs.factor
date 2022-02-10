@@ -102,7 +102,7 @@ ERROR: existential-guard-vars rule ;
     [ rule-depends-on-preds ] gather ;
 
 : pred-depends-on-solvers ( pred -- seq )
-    pred>chrat-definer [ chrat-solver-deps ] keep suffix ;
+    pred>chrat-definer [ chrat-solver-deps ] keep prefix ;
 
 : solver-depends-on-preds ( word -- seq )
     chrat-solver-rules [ rule-depends-on-preds ] gather ;
@@ -113,16 +113,15 @@ ERROR: existential-guard-vars rule ;
 : pred-depends-on-rules ( word -- seq )
     dup chrat-pred-class? [ pred>chrat-definer [ chrat-solver-rules ] [ chrat-solver-deps ] bi append ] [ drop f ] if ;
 
-: collect-chrat-rules ( constraints -- rules )
+: collect-chrat-solvers ( constraints -- solvers )
     [ chrat-pred? ] filter [ constraint-type pred-depends-on-solvers ] gather
-    ! [ pred-depends-on-rules
-    !   rules-depend-on-preds
-    ! ] V{ } forest-as
     [
         solver-depends-on-preds
         [ pred-depends-on-solvers ] gather
-    ] V{ } forest-as
-    [ chrat-solver-rules ] gather ;
+    ] V{ } forest-as ;
+
+: collect-chrat-rules ( constraints -- rules )
+    collect-chrat-solvers <reversed> [ chrat-solver-rules ] gather ;
 
 : prepare-query ( query -- program query )
     [ pred>constraint ] map [ collect-chrat-rules ] keep ;

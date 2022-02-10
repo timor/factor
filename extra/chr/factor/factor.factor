@@ -37,6 +37,9 @@ TUPLE: Call < trans-pred word quot ;
 ! Data split
 TUPLE: Split < chr-pred from to ;
 
+! Known Stack states
+TUPLE: InferredStack < state-pred n vars ;
+! TUPLE: BoundedEffect < trans-pred ;
 
 ! Boolean if then else, cond is a value, the other two are states
 TUPLE: BranchIf < trans-pred cond strue sfalse ;

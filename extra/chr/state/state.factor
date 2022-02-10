@@ -68,11 +68,18 @@ DEFER: reactivate
 : test-eq ( lhs rhs -- ? )
     solve-eq { [  ] [ assoc-empty? ] } 1&& ;
 
-: known? ( obj -- ? )
-    match-var? not ; inline
-
 ! Keep track of ground terms for equivalence classes
 SYMBOL: ground-values
+: ?ground-value ( var -- val/key )
+    ground-values get ?at drop ;
+
+: known? ( obj -- ? )
+    dup match-var? [ ?ground-value ] when
+    match-var? not ; inline
+
+! : known ( obj -- val )
+!     dup match-var? [ ?ground-value ] when
+!     dup [ "unknown" throw ] unless ;
 
 :: define-ground-value ( var value -- )
     var ground-values get
@@ -158,7 +165,11 @@ DEFER: activate
     [ program get rules>> nth ] dip
     swap guard>> [ test-constraint ] with all? ;
 
+: substitute-ground-values ( subst -- subst )
+    [ ?ground-value ] map-values ;
+
 : apply-substitution ( subst constraint -- constraint )
+    [ substitute-ground-values ] dip
     apply-substitution* ;
 
 ! TODO: Don't use t as special true value in body anymore...
@@ -278,7 +289,7 @@ M: chr-suspension apply-substitution*
       c vars [| v | v
               v ds disjoint-set-member?
               [ v ds representative
-                ground-values get ?at drop
+                ?ground-value
               ] [ f ] if
              ] H{ } map>assoc sift-values
       c apply-substitution ] if ;
