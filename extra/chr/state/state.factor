@@ -125,15 +125,30 @@ DEFER: apply-substitution
     [ replace-in-store ]
     [ defined-equalities get assume-equal ] 2bi ;
 
-: add-equal ( value key -- new )
+TUPLE: equiv-activation { a read-only } { b read-only } { wakeup read-only } ;
+C: <equiv-activation> equiv-activation
+
+: add-2-equal ( value key -- new )
     2dup [ local-var? ] either?
     [ "equating locals!" throw ] when
     2dup = [ 2drop f ]
-    [ 2dup wakeup-set
-      2over equate-in-store
-      [ reactivate ] each
-      2array \ = prefix 1array
-    ] if ;
+    [ 2dup wakeup-set <equiv-activation> ] if ;
+
+
+
+: add-equal ( assoc -- new )
+    [ add-2-equal ] { } assoc>map sift
+    [ [ [ a>> ] [ b>> ] bi equate-in-store ] each ]
+    [ [ wakeup>> [ reactivate ] each ] each ]
+    [ [ [ a>> ] [ b>> ] bi 2array \ = prefix 1array ] map ] tri ;
+    ! 2dup [ local-var? ] either?
+    ! [ "equating locals!" throw ] when
+    ! 2dup = [ 2drop f ]
+    ! [ 2dup wakeup-set
+    !   2over equate-in-store
+    !   [ reactivate ] each
+    !   2array \ = prefix 1array
+    ! ] if ;
     ! 2dup test-eq
     ! [ 2drop f ]
     ! [
@@ -144,6 +159,12 @@ DEFER: apply-substitution
     !         [ wake-equal ]
     !     }
     !     2cleave ] if ;
+
+ERROR: cannot-make-equal lhs rhs ;
+: make-equal ( lhs rhs -- new )
+    2dup valid-match-vars [ solve-eq ] with-variable-off
+    [ 2nip add-equal ]
+    [ cannot-make-equal ] if* ;
 
 TYPED: create-chr ( c: constraint -- id )
     chr-suspension new swap
@@ -196,7 +217,7 @@ DEFER: activate
 
 :: check/update-history ( rule-id trace -- ? )
     trace keys :> matched
-    matched rule-id prefix :> sig
+    matched natural-sort rule-id prefix :> sig
     matched store get extract-keys values sift :> stored-cs
     sig stored-cs [ hist>> in? ] with all?
     [ f ]
@@ -374,4 +395,4 @@ M:: chr-suspension apply-substitution* ( subst c -- c )
 ! TODO: move builtin into extra vocab?
 
 ALIAS: == test-eq
-ALIAS: ==! add-equal
+ALIAS: ==! make-equal

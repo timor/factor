@@ -10,6 +10,11 @@ IN: chr.modular
 
 ! FIXME: Useful dependency handling?  Maybe use class methods...
 PREDICATE: chrat-pred-class < tuple-class "chrat-solver" word-prop ;
+PREDICATE: chrat-solver < word "chrat-deps" word-prop ;
+M: chrat-solver reset-word
+    [ call-next-method ]
+    [ "chrat-deps" remove-word-prop ] bi ;
+
 PREDICATE: chrat-pred < chr-pred constraint-type "chrat-solver" word-prop ;
 ! PREDICATE: chrat-pred-word < tuple-class "chrat-solver" word-prop ;
 ! M: chrat-pred-word reset-word
@@ -145,7 +150,7 @@ C: <cont-spec> cont-spec
     {
         [ guards>> >>guard ]
         [ asks>> ]
-        [ exists>> append ]
+        ! [ exists>> append ]
         [ cont-spec-term suffix >>body ]
     } cleave
     dup heads>> length >>nkept ;

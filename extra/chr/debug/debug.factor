@@ -1,5 +1,5 @@
-USING: accessors arrays assocs chr chr.state classes combinators formatting io
-kernel namespaces prettyprint sequences tools.annotations ;
+USING: accessors arrays assocs chr chr.programs chr.state classes combinators
+formatting io kernel namespaces prettyprint sequences tools.annotations ;
 
 IN: chr.debug
 
@@ -14,4 +14,6 @@ IN: chr.debug
     \ activate [ [ chr-state. dup "Activating: %d\n" printf ] prepose ] annotate
     \ test-callable [ [ dup "Builtin Test: " write . ] prepose [ dup " ==> %u\n" printf ] compose ] annotate
     \ run-occurrence [ [ dup occurrence>> "Try Occurrence %u with Allowed Vars: " printf dup rule-vars>> . ] prepose ] annotate
+    \ collect-chrat-solvers [ [ "Solvers for Program: " write dup . ] compose ] annotate
+    \ load-chr [ [ "Rewritten Program: " write dup rules>> <enumerated> >array . ] compose ] annotate
     ;

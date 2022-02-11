@@ -1,5 +1,5 @@
-USING: accessors arrays chr chr.factor chr.factor.words chr.parser chr.programs
-chr.state effects generic kernel math math.order math.parser sequences sets
+USING: accessors arrays chr chr.factor chr.factor.words chr.modular chr.parser
+chr.programs chr.state generic kernel math math.order math.parser sequences sets
 types.util words ;
 
 IN: chr.factor.quotations
@@ -39,16 +39,17 @@ TUPLE: ShiftPush < trans-pred d ;
 TUPLE: ShiftPop < trans-pred d ;
 
 TUPLE: ShiftStack < trans-pred n-in n-out ;
-TUPLE: Swap < trans-pred ;
+
+TUPLE: Shuffle < trans-pred mapping ;
 
 : elt-vars ( seq -- seq )
     [ swap dup pair? [ first ] when
       [ nip ] [ number>string "v" prepend ] if*
       uvar
       <term-var>
-    ] map-index ;
+    ] map-index <reversed> ;
 
-CHRAT: stack-ops { Pops Pushes }
+CHRAT: stack-ops { }
 CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?a } -- | }
 CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?b } -- | [ ?b ?a ==! ] }
 
@@ -64,24 +65,6 @@ CHR{ { Val __ ?n __ } // -- [ ?n 0 < ] | [ "error" throw ] }
 ! CHR{ // { Pop ?s ?t ?a } -- |
 !      { Val ?s 0 ?a }
 !      { ShiftPop ?s ?t 1 } }
-
-CHR{ { AssumeEffect ?s ?t ?e } // -- |
-     [| | ?e [ in>> ] [ out>> ] bi 2dup :> ( i o )
-      [ length ] bi@ :> ( ni no )
-      f
-      ?e bivariable-effect? [ { ShiftStack ?s ?t ni no } suffix ] unless
-      i [ elt-vars ?s swap Pops boa suffix ] unless-empty
-      o [ elt-vars ?t swap Pushes boa suffix ] unless-empty
-     ] }
-
-! CHR{ // { Pushes ?s ?t ?a } -- | [ ?a [ f ] [| seq | seq unclip :> ( rest e ) ?s sub-state :> s1 { { Pushes s1 ?t rest } { Push ?s s1 e } } ] if-empty ] }
-! CHR{ // { Push ?s ?t { ?a ?u } } -- | { Push ?s ?t ?a } { Instance ?a ?u } }
-CHR{ { Push ?s ?t ?b } // -- |
-     { Val ?t 0 ?b }
-     ! { ShiftPush ?s ?t 1 }
-     { ShiftStack ?s ?t 0 1 }
-     { Pushes ?t { ?b } }
-   }
 
 ! Request from left
 CHR: shiftstack-left @ { ShiftStack ?s ?t ?i ?o } { Val ?s ?n ?a } // -- [ ?n ?i >= ]
@@ -140,12 +123,14 @@ TUPLE: Unused < chr-pred val ;
 CHRAT: def/use { }
     ;
 
-TERM-VARS: ?beg ;
+TERM-VARS: ?beg ?parm ;
 
 TUPLE: Prim < Word ;
 TUPLE: ExecUnknown < Exec ;
-TUPLE: InlineQuot < trans-pred quot ;
-TUPLE: InlinedQuot < InlineQuot ;
+TUPLE: InlineQuot < trans-pred val ;
+TUPLE: InlineLiteralQuot < trans-pred quot ;
+! TUPLE: InlineDip < InlineLiteralQuot quot saved ;
+TUPLE: InlinedQuot < InlineLiteralQuot ;
 TUPLE: BeginQuot < trans-pred ;
 TUPLE: EndQuot < trans-pred ;
 TUPLE: Infer < chr-pred beg s quot ;
@@ -157,8 +142,8 @@ TUPLE: LinkStates < trans-pred ;
 TUPLE: InsertState < trans-pred between ;
 TUPLE: Entry < state-pred word ;
 TUPLE: CallFrame < chr-pred caller-start callee-start callee-end caller-end ;
-TUPLE: InferBetween < trans-pred quot ;
-TUPLE: InferredBetween < trans-pred quot ;
+TUPLE: InferBetween < trans-pred entry-state quot ;
+TUPLE: InferredBetween < trans-pred entry-state exit-state quot ;
 
 ! ** Call-Graph-Inference
 TUPLE: CheckExec < trans-pred word ;
@@ -226,21 +211,18 @@ CHR{ // { Word ?r ?u dip } -- |
      { ShiftStack ?r ?s 2 0 }
      { InsertState ?r ?u ?s }
      ! { LinkStates ?r ?s }
-     ! { InlineQuot ?s ?t ?q }
+     ! { InlineLiteralQuot ?s ?t ?q }
      { ShiftStack ?t ?u 0 1 }
      { Val ?u 0 ?a }
      { InsertState ?s ?u ?t }
      ! { LinkStates ?t ?u }
    }
 
-CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }
-CHR{ { Word ?s ?t ?w } // -- |
-     [| | ?w chrat-effect :> e { AssumeEffect ?s ?t e } ] }
 ! CHR{ { Word ?s ?t ?w } // -- [ W{ \ ?w } \ tell-chr* ?lookup-method ] | [ ?s ?t ?w tell-chr ] }
 ! CHR{ // { Word ?s ?t ?w } -- [ ?w inline? ] | { InlineCall ?s ?t ?w } }
 
 ! Inferred stack elements
-CHR{ { InlineQuot ?r ?u __ } { ShiftStack ?r ?u ?i ?o } // -- |
+CHR{ { InlineLiteralQuot ?r ?u __ } { ShiftStack ?r ?u ?i ?o } // -- |
           ! { InferredStack ?r ni { } }
           ! { InferredStack ?u no { } }
           { InferStack ?r ?i 0 { } }
@@ -262,7 +244,7 @@ CHR{ { Val ?s ?i ?a } // { InferStack ?s ?n ?i ?l } -- [ ?i known number? ] | [|
 
 ! ! Wrap up inlined calls
 CHR{ { ShiftStack ?s ?t __ __ } { InferredEffect ?s ?t __ } // ! { Linkback ?r __ }
-     { InlineQuot ?r ?u ?q } { CallFrame ?r ?s ?t ?u }
+     { InlineLiteralQuot ?r ?u ?q } { CallFrame ?r ?s ?t ?u }
      -- |
      ! { DeleteBetween ?s ?t }
      ! { InlinedQuot ?r ?u ?q } [ ?s ?r ==! ] [ ?t ?u ==! ]
@@ -271,7 +253,7 @@ CHR{ { ShiftStack ?s ?t __ __ } { InferredEffect ?s ?t __ } // ! { Linkback ?r _
      ! { ShiftStack ?t ?u 0 0 }
    }
 ! CHR{ { ShiftStack ?s ?t __ __ } //
-!      { InlineQuot ?r ?u ?q } { CallFrame ?r ?s ?t ?u } { Linkback ?r __ }
+!      { InlineLiteralQuot ?r ?u ?q } { CallFrame ?r ?s ?t ?u } { Linkback ?r __ }
 !      -- | { InlinedQuot ?r ?u ?q } [ ?s ?r ==! ] [ ?t ?u ==! ]
 !    }
 
@@ -288,68 +270,171 @@ CHR{ { CallFrame __ __ ?r ?s } { Val ?r ?n ?a } // -- | { Val ?s ?n ?a } }
 CHR{ { CallFrame __ __ ?r ?s } { Val ?s ?n ?a } // -- | { Val ?r ?n ?a } }
 
 
-CHR{ { InlineQuot ?r ?u __ } //
+CHR{ { InlineLiteralQuot ?r ?u __ } //
      { InferredStack ?r ?n ?i } { InferredStack ?u ?m ?o } -- |
      [| |
       ! ?i ?o [ [ name>> ] map ] bi@ <effect> :> e
-      { InferredEffect ?r ?u { ?i ?o } }
+      { InferredEffect ?r ?u ?i ?o }
      ] }
 
 CHR{ { InferredStack ?s ?n __ } // -- [ ?n 0 >= ] | { Val ?s ?n ?x } }
     ;
 
+:: complete-shuffle? ( in out e -- ? )
+    { [ e out [ length ] same? ]
+      [ e supremum 1 + in length = ]
+    } 0&& ;
+
+TERM-VARS: ?rho ?sig ;
+
+! ** Effect Assumptions
+CHRAT: basic-stack { Val Lit InferredEffect }
+CHR{ { Word ?s ?t ?w } // -- |
+     [| | ?w chrat-effect :> e { AssumeEffect ?s ?t e } ] }
+CHR{ { AssumeEffect ?s ?t ?e } // -- |
+     [| | ?e [ in>> ] [ out>> ] bi 2dup :> ( i o )
+      [ length ] bi@ :> ( ni no )
+      f
+      ! ?e bivariable-effect? [ { ShiftStack ?s ?t ni no } suffix ] unless
+      i elt-vars :> i
+      o elt-vars :> o
+      i [ ?s swap Pops boa suffix ] unless-empty
+      o [ ?t swap Pushes boa suffix ] unless-empty
+
+      ?s ?t
+      i >list ?rho list*
+      {
+          { [ ?e terminated?>> ] [ __ ] }
+          { [ ?e bivariable-effect? ] [ o >list ?sig list* ] }
+          [ o >list ?rho list* ] } cond InferredEffect boa suffix
+     ] }
+
+! CHR{ { AssumeEffect ?s ?t ?e } { Pops ?s ?i } { Pushes ?t ?o } // -- |
+!      ! gen{ ?rho |
+!           [| |
+!          ?i >list ?rho lappend :> in
+!          ?o >list ?rho lappend :> out
+!          { InferredEffect ?s ?t in out }
+!           ]
+!         ! }
+!    }
+
+CHR{ { InferredEffect ?s ?t ?a ?b } { InferredBetween ?r ?u ?s ?t __ } // -- |
+     { InferredEffect ?r ?u ?a ?b }
+   }
+
+CHR{ { InferredEffect ?s ?t ?a ?b } }
+
+CHR{ // { InferredEffect ?r ?s ?a ?b } { InferredEffect ?s ?t ?b ?c } -- |
+     { InferredEffect ?r ?t ?a ?c } }
+
+CHR{ { InferredEffect ?r ?s ?a ?b } { InferredEffect ?s ?t ?c ?d } // -- |
+     [ ?b ?c ==! ] }
+
+! CHR{ { Pushes ?s ?l } // { ask { Val ?s ?n ?a } } -- [ ?n ?l length < ] | [ ?a ?n ?l nth ==! ] { entailed { Val ?s ?n ?a } } }
+CHR{ { Pushes ?s ?l } { Val ?s ?n ?a } // -- [ ?n ?l length < ] | [ ?a ?n ?l nth ==! ] }
+CHR{ { Pops ?s ?l } { Val ?s ?n ?a } // -- [ ?n ?l length < ] | [ ?a ?n ?l nth ==! ] }
+
+! CHR{ // { Pushes ?s ?t ?a } -- | [ ?a [ f ] [| seq | seq unclip :> ( rest e ) ?s sub-state :> s1 { { Pushes s1 ?t rest } { Push ?s s1 e } } ] if-empty ] }
+! CHR{ // { Push ?s ?t { ?a ?u } } -- | { Push ?s ?t ?a } { Instance ?a ?u } }
+CHR{ { Push ?s ?t ?b } // -- |
+     ! { Val ?t 0 ?b }
+     ! { ShiftPush ?s ?t 1 }
+     ! { ShiftStack ?s ?t 0 1 }
+     { Pushes ?t { ?a } }
+     { Val ?t 0 ?a }
+     { Lit ?a ?b }
+     { InferredEffect ?s ?t ?rho L{ ?a . ?rho } }
+   }
+
+CHR{ { Lit ?a ?b } // -- |
+     [ ?a ?b class-of Instance boa ] }
+
+! CHR{ { Pushes ?s ?t } }
+
+! Two things in parallel: 1. Infer the quotation, 2. Transport the value
+! CHR{ { Word ?s ?u dip } // -- { Val ?s 0 ?q }  |
+!      { InlineLiteralQuot ?s ?t ?q }
+!    }
+
+! CHR{ { Word ?s ?u dip } // -- { Val ?s 1 ?a } |
+!      { InlineLiteralQuot ?s ?t ?q } { Push ?t ?u ?a }
+!    }
+! FIXME: Have to make sure InlineLiteralQuot comes first because of replacement foo not working correctly right now
+! Ideal fix: queue-based runner, so that we always see all var instances!
+! CHR{ { Word ?s ?t dip  } // -- | { Val ?s 1 ?a } { Val ?s 0 ?q } { InlineLiteralQuot ?s ?t ?q } { Val ?t 0 ?a } }
+CHR{ { Word ?s ?t dip } // -- | { InlineQuot ?s ?t ?q } { Val ?s 1 ?a } { Val ?s 0 ?q } { Val ?t 0 ?a } }
+
+CHR{ { Word ?s ?t call } // -- |
+     { InferCall ?s ?t ?q } { Val ?s 0 ?q } }
+
+CHR{ // { Word ?s ?t ?w } -- [ ?w "shuffle" word-prop? ] |
+     [ ?s ?t ?w "shuffle" word-prop shuffle-mapping Shuffle boa ]
+   }
+
+CHR{ { Pops ?s ?i } { Pushes ?t ?o } // { Shuffle ?s ?t ?e }  -- [ ?i ?o ?e complete-shuffle? ] |
+     [ ?o ?e ?i nths [ ==! ] 2map ]
+   }
+
+CHR{ { Pops ?s ?i } { Pushes ?t ?o } { Shuffle ?s ?t ?e } // -- |
+     [ ?o ?e ?i nths [ ==! ] 2map ]
+   }
+
+CHR{ { Word ?s ?t curry } // -- |
+     { Val ?s 0 ?p }
+     { Val ?s 1 ?parm }
+     { Val ?t 0 ?q }
+     { Curried ?q ?parm ?p }
+   }
+
+CHR{ { Word ?s ?t if } // -- |
+     { Val ?s 0 ?q } { Val ?s 1 ?p } { Val ?s 2 ?c }
+     { InlineQuot ?s ?t ?q } { InlineQuot ?s ?t ?p }
+   }
+;
 
 ! ** Syntactic expansion
 CHRAT: expand-quot { InferDef InferToplevelQuot InferBetween }
 IMPORT: call-stack
-IMPORT: infer-stack
-IMPORT: stack-ops
+IMPORT: basic-stack
+! IMPORT: infer-stack
+! IMPORT: stack-ops
+CHR{ { Lit ?p ?q } // { InlineQuot ?s ?t ?p } -- | { InlineLiteralQuot ?s ?t ?q } }
 CHR{ // { InferDef ?w } -- [ ?w deferred? not ] |
      [| | state-in state-out :> ( si so )
       ?w def>> :> def
       ?w :> w
       {
           { Entry +top+ w }
-          { InlineQuot +top+ +end+ def }
+          { InlineLiteralQuot +top+ +end+ def }
           ! { InferToplevelQuot def }
           ! { InferBetween +top+ +end+ def }
       }
      ] }
 
-CHR{ { InlineQuot ?s ?t ?q } // -- | [| | new-state :> s0 "sr" <term-var> :> sr
+CHR{ { InlineLiteralQuot ?s ?t ?q } // -- | [| | new-state :> s0
+                                      ! "sr" <term-var> :> sr
                                       {
-                                          { CallFrame ?s s0 sr ?t }
-                                          { InferBetween s0 sr ?q }
+                                          ! { CallFrame ?s s0 sr ?t }
+                                          { InferBetween ?s ?t s0 ?q }
                                           { Linkback ?s { s0 } }
                                       }
                                      ] }
 
-! CHR{ { InlineQuot ?s ?t ?q } // -- [ ?q known? ] | [| |
-!                                   ! ?s sub-state :> si
-!                                   ?s seq-state :> si
-!                                   {
-!                                       ! { Linkback ?s { si } }
-!                                     ! { BeginQuot ?s si }
-!                                       { Infer ?s si ?q } } ] }
-
-! CHR{ { InlineQuot ?s ?t ?q } // -- | [| |
-!                                      ?s sub-state :> si
-!                                      { { Linkback ?s { si } } { Infer si se ?q } } ] }
-! CHR{ // { InferToplevelQuot ?q } -- | [ +top+ +end+ ?q InlineQuot boa ] }
 CHR{ // { InferToplevelQuot ?q } -- |
      ! { CallFrame +top+ +end+ ?s ?t }
-     ! { InlineQuot ?s ?t ?q }
-     { InlineQuot +top+ +end+ ?q }
-     ! { CallFrame +top+ +end+ ?s ?t }
-     ! { InlineQuot ?s ?t ?q }
+     ! { InlineLiteralQuot ?s ?t ?q }
+     { InlineLiteralQuot +top+ +end+ ?q }
    }
-CHR{ { InferBetween ?s ?t ?q } // -- [ ?q known? ] |
-     ! [| | ?s seq-state :> sn { { Infer ?s sn ?q } } ]
+CHR{ { InferBetween ?r ?t ?s ?q } // -- [ ?q known? ] |
      { Infer ?s ?s ?q }
      ! [| | ?s seq-state :> sn { { Infer ?s sn ?q } } ]
    }
 
-CHR{ // { InferBetween ?s ?t __ } { Infer ?s ?x [ ] } -- | [ ?x ?t ==! ] }
+CHR{ // { InferBetween ?r ?t ?s ?q } { Infer ?s ?x [ ] } -- |
+     ! [ ?x ?t ==! ]
+     { InferredBetween ?r ?t ?s ?x ?q }
+   }
 
 CHR{ // { InsertState ?r ?t ?s } { Linkback ?u ?a } -- [ { ?r ?t } ?a subseq? ] |
      [| | { ?r ?t } ?a subseq-start :> i
@@ -379,8 +464,10 @@ CHR{ // { Exec ?s ?t ?w } -- [ ?w word? ] | { CheckExec ?s ?t ?w } }
 CHR{ // { Exec ?s ?t ?w } -- [ ?w known? ] | { Push ?s ?t ?w } }
 CHR{ // { ExecWord ?s ?t ?w } -- [ ?w inline? ]
      | [| | ?w def>> :> def { InlineCall ?s ?t ?w def } ] }
-CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w } { InlineQuot ?s ?t ?d } }
+CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w } { InlineLiteralQuot ?s ?t ?d } }
 CHR{ // { ExecWord ?s ?t ?w } -- | { Word ?s ?t ?w } }
+
+CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }
 ;
 
 ! * Interface

@@ -14,27 +14,32 @@ TUPLE: Dispatch < trans-pred cond vset ;
 TUPLE: Join < trans-pred cond ;
 
 TUPLE: Val < state-pred n val ;
+TUPLE: Type < state-pred n val ;
 TUPLE: Instance < chr-pred val s ;
+TUPLE: NotInstance < chr-pred val s ;
 TUPLE: ExpectInstance < chr-pred val s ;
 TUPLE: DeclareTos < state-pred s ;
 
 TUPLE: Push < trans-pred val ;
 
 TUPLE: AssumeEffect < trans-pred effect ;
-TUPLE: InferredEffect < trans-pred effect ;
+TUPLE: InferredEffect < trans-pred in out ;
 
 ! Word level
 TUPLE: Exec < trans-pred obj ;
 TUPLE: ExecWord < trans-pred word ;
 TUPLE: Generic < trans-pred word ;
 TUPLE: Definition < chr-pred word quot ;
-TUPLE: Literal < chr-pred val obj ;
+TUPLE: Lit < chr-pred val obj ;
+TUPLE: Curried < chr-pred val parm callable ;
+TUPLE: Composed < chr-pred val callable1 callable2 ;
 
 ! Definition level
+TUPLE: InferCall < trans-pred val ;
 TUPLE: InlineCall < trans-pred word quot ;
 TUPLE: Call < trans-pred word quot ;
 
-! Data split
+! Data Split, duplication
 TUPLE: Split < chr-pred from to ;
 
 ! Known Stack states
@@ -233,3 +238,7 @@ SYNTAX: GEN[ scan-effect define-term-vars
 !   { split c c1 c2 } { sub c1 s1 } { sub c2 s2 } { disjoint s2 s1 }
 !   { dispatch c1 f e }
 !   { dispatch c2 s2 t } { ne c2 f }
+
+! * Control inference
+! There is a notion of data-dependent jump points, e.g. we need to be able to add certain constraints to
+! Data values that will be effective when they get executed.
