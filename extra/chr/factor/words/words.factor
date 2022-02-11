@@ -1,5 +1,6 @@
-USING: accessors arrays assocs chr chr.factor chr.parser combinators effects
-kernel make sequences strings types.util words ;
+USING: accessors arrays assocs chr chr.factor chr.parser
+combinators.short-circuit effects kernel make sequences strings types.util words
+;
 
 IN: chr.factor.words
 

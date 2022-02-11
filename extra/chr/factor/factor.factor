@@ -38,6 +38,7 @@ TUPLE: Call < trans-pred word quot ;
 TUPLE: Split < chr-pred from to ;
 
 ! Known Stack states
+TUPLE: QueryStack < state-pred depth ;
 TUPLE: InferredStack < state-pred n vars ;
 ! TUPLE: BoundedEffect < trans-pred ;
 

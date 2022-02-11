@@ -13,4 +13,5 @@ IN: chr.debug
     \ activate-new [ [ dup "Activating new constraint: %u\n" printf ] prepose ] annotate
     \ activate [ [ chr-state. dup "Activating: %d\n" printf ] prepose ] annotate
     \ test-callable [ [ dup "Builtin Test: " write . ] prepose [ dup " ==> %u\n" printf ] compose ] annotate
+    \ run-occurrence [ [ dup occurrence>> "Try Occurrence %u with Allowed Vars: " printf dup rule-vars>> . ] prepose ] annotate
     ;

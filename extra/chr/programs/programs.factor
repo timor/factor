@@ -18,7 +18,8 @@ TUPLE: constraint-schedule
     { occurrence read-only }
     { keep-active? read-only }
     { arg-vars read-only }
-    { partners read-only } ;
+    { partners read-only }
+    { rule-vars read-only } ;
 C: <constraint-schedule> constraint-schedule
 
 ! * Rule processing
@@ -47,6 +48,7 @@ C: <constraint-schedule> constraint-schedule
          V{ } clone
          rule heads>> [| c i | i occ-hi = not [ i nk < c 2array suffix! ] when ] each-index
          >array
+         rule match-vars>>
          <constraint-schedule>
       ] map
     ] with assoc-map ;

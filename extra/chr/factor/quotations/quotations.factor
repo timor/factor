@@ -84,16 +84,25 @@ CHR{ { Push ?s ?t ?b } // -- |
    }
 
 ! Request from left
-CHR: shiftstack-left @ { ShiftStack ?s ?t ?i ?o } { Val ?s ?n ?a } // -- [ ?n ?i > ]
+CHR: shiftstack-left @ { ShiftStack ?s ?t ?i ?o } { Val ?s ?n ?a } // -- [ ?n ?i >= ]
      | [| | ?n ?o ?i - + :> m { Val ?t m ?a } ] ;
 ! Request from Right
-CHR: shiftstack-right @ { ShiftStack ?t ?u ?i ?o } { Val ?u ?n ?a } // -- [ ?n ?o > ]
+CHR: shiftstack-right @ { ShiftStack ?t ?u ?i ?o } { Val ?u ?n ?a } // -- [ ?n ?o >= ]
      | [| | ?n ?o ?i - - :> m { Val ?t m ?a } ] ;
 
 
 ! Transitivity
+! Known values have been transported, so we can delete any intermediates
+! CHR: shiftstack-trans1 @
+! { ShiftStack ?s ?t ?a ?b } { ShiftStack ?t ?u ?c ?d } // { Val ?t ?n __ } -- [ ?n known? ] [ ?a known? ] [ ?b known? ] [ ?c known? ] [ ?d known? ] | ;
+! ! [| |
+! !  ?a ?c ?b [-] + :> i1
+! !  ?b ?c [-] ?d + :> o2
+! !  { ShiftStack ?s ?u i1 o2 }
+! ! ] ;
+
 CHR: shiftstack-trans @
-// { ShiftStack ?s ?t ?a ?b } { ShiftStack ?t ?u ?c ?d } -- |
+// { ShiftStack ?s ?t ?a ?b } { ShiftStack ?t ?u ?c ?d } -- [ ?a known? ] [ ?b known? ] [ ?c known? ] [ ?d known? ] |
 [| |
  ?a ?c ?b [-] + :> i1
  ?b ?c [-] ?d + :> o2
@@ -133,8 +142,10 @@ CHRAT: def/use { }
 
 TERM-VARS: ?beg ;
 
+TUPLE: Prim < Word ;
 TUPLE: ExecUnknown < Exec ;
 TUPLE: InlineQuot < trans-pred quot ;
+TUPLE: InlinedQuot < InlineQuot ;
 TUPLE: BeginQuot < trans-pred ;
 TUPLE: EndQuot < trans-pred ;
 TUPLE: Infer < chr-pred beg s quot ;
@@ -163,15 +174,32 @@ CHR{ { Entry ?r ?w } // { Link ?r ?s } { CheckExec ?s ?t ?w } --
      | { RecursiveCall ?s ?t ?w ?r } }
 CHR{ // { Link +top+ ?s } { CheckExec ?s ?t ?w } --
      | { ExecWord ?s ?t ?w } }
-CHR{ { CheckExec ?t __ ?w } { Linkback ?s ?l } // -- [ ?t ?l in? ] |
+CHR{ { CheckExec ?t __ ?w } { Linkback ?s ?l } // -- [ ?t known ?l known in? ] |
      { Link ?s ?t } }
-CHR{ { Linkback ?s ?l } // { Link ?t ?u } -- [ ?t ?l in? ] | { Link ?s ?u } }
+CHR{ { Linkback ?s ?l } // { Link ?t ?u } -- [ ?t known ?l known in? ] | { Link ?s ?u } }
     ;
 
+! ** Cleaner
+TUPLE: DeleteBetween < chr-pred from to ;
+TUPLE: DeleteState < chr-pred state ;
+CHRAT: clean-states { DeleteBetween }
+CHR{ { Linkback __ ?a } { DeleteBetween ?s ?t } //
+     -- [ ?s known ?a known in? ] [ ?t known ?a known in? ] |
+     [| | ?s ?a index 1 + ?t ?a index ?a subseq [| si | { DeleteState si } ] map ]
+   }
+CHR{ { DeleteState ?s } // { Val ?s __ __ } -- | }
+CHR{ { DeleteState ?s } // { Linkback ?s ?a } -- |
+     [ ?a [| si | { DeleteState } ] map ] }
+CHR{ { DeleteState ?s } // { Prim ?s __ } -- | }
+CHR{ // { DeleteState __ } -- | }
+;
+
+TUPLE: InferStack < state-pred n i vars ;
+
 ! ** Word-level Inference
-TUPLE: Prim < Word ;
 CHRAT: infer-stack { Word }
 IMPORT: stack-ops
+IMPORT: clean-states
 IMPORT: def/use
 ! CHR{ { InferUnknown __ __ ?q } // -- | { Instance ?q callable } }
 ! CHR{ { BranchIf __ __ ?c __ __ } // -- | { Instance ?c boolean } }
@@ -212,29 +240,56 @@ CHR{ { Word ?s ?t ?w } // -- |
 ! CHR{ // { Word ?s ?t ?w } -- [ ?w inline? ] | { InlineCall ?s ?t ?w } }
 
 ! Inferred stack elements
-CHR{ { CallFrame ?r __ __ ?u } { ShiftStack ?r ?u ?i ?o } // -- |
-     [| | ?i 1 - :> ni ?o 1 - :> no
-      { { InferredStack ?r ni { } }
-        { InferredStack ?u no { } }
+CHR{ { InlineQuot ?r ?u __ } { ShiftStack ?r ?u ?i ?o } // -- |
+          ! { InferredStack ?r ni { } }
+          ! { InferredStack ?u no { } }
+          { InferStack ?r ?i 0 { } }
+          { InferStack ?u ?o 0 { } }
         ! { BoundedEffect ?s ?t }
-      } ] }
+}
 
-CHR{ { Val ?s ?n ?a } // { InferredStack ?s ?n ?l } -- [ ?n 0 >= ] |
-     [| | ?n 1 - :> m ?l ?a suffix :> a2 { InferredStack ?s m a2 } ]
-   }
+CHR{ // { InferStack ?s ?n ?n ?a } -- | { InferredStack ?s ?n ?a } }
+
+CHR{ { Val ?s ?i ?a } // { InferStack ?s ?n ?i ?l } -- [ ?i known number? ] | [| | ?l ?a prefix :> new ?i 1 + :> j { InferStack ?s ?n j new  } ] }
+
+! CHR{ { Val ?s ?n ?a } // { InferredStack ?s ?n ?l } -- [ ?n 0 >= ] |
+! CHR{ { Val ?s ?n ?a } { InferredStack ?s ?n ?l } // -- [ ?n 0 >= ] |
+!      [| | ?n 1 - :> m ?l ?a suffix :> a2 { InferredStack ?s m a2 } ]
+!    }
 
 ! CHR{ { CallFrame ?r ?s ?t ?u } // { ShiftStack ?s ?t ?i ?o } -- |
 !      { ShiftStack ?r ?u ?i ?o } }
 
+! ! Wrap up inlined calls
+CHR{ { ShiftStack ?s ?t __ __ } { InferredEffect ?s ?t __ } // ! { Linkback ?r __ }
+     { InlineQuot ?r ?u ?q } { CallFrame ?r ?s ?t ?u }
+     -- |
+     ! { DeleteBetween ?s ?t }
+     ! { InlinedQuot ?r ?u ?q } [ ?s ?r ==! ] [ ?t ?u ==! ]
+     { InlinedQuot ?r ?u ?q } ! [ ?s ?r ==! ] [ ?t ?u ==! ]
+     ! { ShiftStack ?r ?s 0 0 }
+     ! { ShiftStack ?t ?u 0 0 }
+   }
+! CHR{ { ShiftStack ?s ?t __ __ } //
+!      { InlineQuot ?r ?u ?q } { CallFrame ?r ?s ?t ?u } { Linkback ?r __ }
+!      -- | { InlinedQuot ?r ?u ?q } [ ?s ?r ==! ] [ ?t ?u ==! ]
+!    }
+
 ! Link Call Frame Values
+CHR{ { CallFrame ?r ?s ?t ?u } // -- |
+     { ShiftStack ?r ?s 0 0 }
+     { ShiftStack ?t ?u 0 0 }
+   }
+
 CHR{ { CallFrame ?r ?s __ __ } { Val ?r ?n ?a } // -- | { Val ?s ?n ?a } }
 CHR{ { CallFrame ?r ?s __ __ } { Val ?s ?n ?a } // -- | { Val ?r ?n ?a } }
 
 CHR{ { CallFrame __ __ ?r ?s } { Val ?r ?n ?a } // -- | { Val ?s ?n ?a } }
 CHR{ { CallFrame __ __ ?r ?s } { Val ?s ?n ?a } // -- | { Val ?r ?n ?a } }
 
-CHR{ { CallFrame ?r __ __ ?u } //
-     { InferredStack ?r -1 ?i } { InferredStack ?t -1 ?o } -- |
+
+CHR{ { InlineQuot ?r ?u __ } //
+     { InferredStack ?r ?n ?i } { InferredStack ?u ?m ?o } -- |
      [| |
       ! ?i ?o [ [ name>> ] map ] bi@ <effect> :> e
       { InferredEffect ?r ?u { ?i ?o } }
@@ -294,7 +349,7 @@ CHR{ { InferBetween ?s ?t ?q } // -- [ ?q known? ] |
      ! [| | ?s seq-state :> sn { { Infer ?s sn ?q } } ]
    }
 
-CHR{ { InferBetween ?s ?t __ } // { Infer ?s ?x [ ] } -- | [ ?x ?t ==! ] }
+CHR{ // { InferBetween ?s ?t __ } { Infer ?s ?x [ ] } -- | [ ?x ?t ==! ] }
 
 CHR{ // { InsertState ?r ?t ?s } { Linkback ?u ?a } -- [ { ?r ?t } ?a subseq? ] |
      [| | { ?r ?t } ?a subseq-start :> i
@@ -303,19 +358,19 @@ CHR{ // { InsertState ?r ?t ?s } { Linkback ?u ?a } -- [ { ?r ?t } ?a subseq? ] 
      ]
    }
 
-CHR{ // { Linkback ?r ?a } { LinkStates ?s ?t } -- [ ?s ?a in? ]
-     | [| | ?a ?t suffix :> a2 { Linkback ?r a2 } ] }
+! CHR{ // { Linkback ?r ?a } { LinkStates ?s ?t } -- [ ?s ?a in? ]
+!      | [| | ?a ?t suffix :> a2 { Linkback ?r a2 } ] }
 
 ! Main inference advancer
 CHR{ ! { BeginQuot ?r ?beg }
-     // ! { Linkback ?r ?a }
+     // { Linkback ?r ?a }
      { Infer ?beg ?s ?q } -- [ ?q empty? not ] |
      [| | ?q unclip :> ( rest w ) ?s seq-state :> sn
-      ! ?a sn suffix :> a2
+      ?a sn suffix :> a2
       { { Exec ?s sn w }
+        ! { LinkStates ?s sn }
         { Infer ?beg sn rest }
-        ! { Linkback ?r a2 }
-        { LinkStates ?s sn }
+        { Linkback ?r a2 }
       }
      ] }
 ! CHR{ // { Exec ?s ?t ?w } -- [ ?w word? ]

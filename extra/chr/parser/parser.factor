@@ -20,6 +20,7 @@ SYNTAX: CHR{ \ } parse-chr-rule chr new-chr suffix! ;
 
 SYNTAX: CHR: scan-token "@" expect \ ; parse-chr-rule <named-chr> suffix! ;
 
+! TODO: move to chr vocab
 PREDICATE: term-var < word "term-var" word-prop ;
 INSTANCE: term-var match-var
 

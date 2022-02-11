@@ -1,6 +1,7 @@
-USING: accessors arrays assocs assocs.extras chr chr.programs combinators
-combinators.short-circuit disjoint-sets hash-sets kernel linked-assocs match
-math namespaces quotations sequences sets typed types.util words ;
+USING: accessors arrays assocs assocs.extras chr chr.parser chr.programs
+combinators combinators.short-circuit disjoint-sets hash-sets hashtables kernel
+linked-assocs match math namespaces quotations sequences sets typed types.util
+words ;
 
 IN: chr.state
 
@@ -36,24 +37,47 @@ M: chr-suspension type>> constraint>> constraint-type ;
 M: chr-suspension args>> constraint>> constraint-args ;
 
 ! This is an interface var, which can change during rule processing
+! FIXME Unused
 SYMBOL: substitutions
 SINGLETON: rule-fail
+
+SYMBOL: ground-values
+
+: maybe-add-atom ( x ds -- )
+    2dup disjoint-set-member?
+    [ 2drop ] [ add-atom ] if ; inline
 
 : local-var? ( variable -- ? )
     [ program get local-vars>> in? ] [ f ] if* ;
 
+:: define-ground-value ( var value ds -- )
+    var ds 2dup maybe-add-atom
+    representative ground-values get
+    [| old | old [ old value = [ old ] [ "contradiction" throw ] if ]
+     [ value ] if
+    ] change-at ;
+
+: maybe-define-ground-value ( v1 v2 ds -- )
+    over match-var? [ swapd ] when
+    over match-var? [ 3drop ] [
+        define-ground-value
+    ] if ;
+
 DEFER: activate-new
 ! Interface for builtin solvers!
-: maybe-add-atom ( x ds -- )
-    2dup disjoint-set-member?
-    [ 2drop ] [ add-atom ] if ; inline
 : assume-equal ( a b ds -- )
-    {
-        [ nipd maybe-add-atom ]
-        [ nip maybe-add-atom ]
-        [ equate ]
-    }
-    3cleave ;
+    2over [ match-var? ] both?
+    [
+        {
+            [ nipd maybe-add-atom ]
+            [ nip maybe-add-atom ]
+            [ equate ]
+        }
+        3cleave
+    ] [ maybe-define-ground-value ] if ;
+
+! :: equiv-in? ( v1 v2 set -- ? )
+
 
 DEFER: reactivate
 :: wake-equal ( v k -- )
@@ -69,7 +93,6 @@ DEFER: reactivate
     solve-eq { [  ] [ assoc-empty? ] } 1&& ;
 
 ! Keep track of ground terms for equivalence classes
-SYMBOL: ground-values
 : ?ground-value ( var -- val/key )
     ground-values get ?at drop ;
 
@@ -77,32 +100,50 @@ SYMBOL: ground-values
     dup match-var? [ ?ground-value ] when
     match-var? not ; inline
 
-! : known ( obj -- val )
-!     dup match-var? [ ?ground-value ] when
-!     dup [ "unknown" throw ] unless ;
+: ?representative ( var -- var )
+    { [ defined-equalities get representative ] [  ] } 1|| ;
 
-:: define-ground-value ( var value -- )
-    var ground-values get
-    [| old | old [ old value = [ old ] [ "contradiction" throw ] if ]
-      [ value ] if
-    ] change-at ;
+: known ( obj -- val )
+    ?ground-value ;
+    ! ?representative ?ground-value ;
+    ! dup match-var? [ defined-equalities get representative ?ground-value ] when
+! dup [ "unknown" throw ] unless ;
 
-: maybe-define-ground-value ( v1 v2 -- )
-    dup match-var? [ swap ] when
-    dup match-var? [ 2drop ] [
-        define-ground-value
-    ] if ;
+! NOTE: Using Store-wide replacement for now...
+
+:: wakeup-set ( v k -- ids )
+    store get [ vars>> :> vs { [ v vs in? ] [ k vs in? ] } 0|| ] filter-values
+    keys ;
+
+DEFER: apply-substitution
+: replace-in-store ( v1 v2 -- )
+    dup match-var? [ swap ] unless associate
+    store [ [ apply-substitution ] with map-values ] change
+    ;
+
+: equate-in-store ( v1 v2 -- )
+    [ replace-in-store ]
+    [ defined-equalities get assume-equal ] 2bi ;
 
 : add-equal ( value key -- new )
     2dup [ local-var? ] either?
     [ "equating locals!" throw ] when
-    2dup maybe-define-ground-value
-    2dup test-eq
-    [ 2drop f ]
-    [ [ defined-equalities get assume-equal ]
-      [ 2array \ = prefix 1array ]
-      [ wake-equal ]
-      2tri ] if ;
+    2dup = [ 2drop f ]
+    [ 2dup wakeup-set
+      2over equate-in-store
+      [ reactivate ] each
+      2array \ = prefix 1array
+    ] if ;
+    ! 2dup test-eq
+    ! [ 2drop f ]
+    ! [
+    !     {
+    !         ! [ maybe-define-ground-value ]
+    !         [ defined-equalities get assume-equal ]
+    !         [ 2array \ = prefix 1array ]
+    !         [ wake-equal ]
+    !     }
+    !     2cleave ] if ;
 
 TYPED: create-chr ( c: constraint -- id )
     chr-suspension new swap
@@ -169,7 +210,7 @@ DEFER: activate
     [ ?ground-value ] map-values ;
 
 : apply-substitution ( subst constraint -- constraint )
-    [ substitute-ground-values ] dip
+    ! [ substitute-ground-values ] dip
     apply-substitution* ;
 
 ! TODO: Don't use t as special true value in body anymore...
@@ -197,7 +238,7 @@ DEFER: activate
 
 ! Every level is passed the following info:
 ! rule-id { { id0 keep0 } ...{ id1 keep1} } bindings
-:: (run-occurrence) ( rule-id trace bindings partners -- )
+:: (run-occurrence) ( rule-id trace bindings partners vars -- )
     partners empty? [
         trace [ drop alive? ] assoc-all?
         [ rule-id trace bindings fire-rule ] when
@@ -207,9 +248,12 @@ DEFER: activate
         pc constraint-type lookup
         [| sid sc |
          { [ sid trace key? not ] [ sc alive>> ] } 0&& [
-             bindings sc args>> pc match-constraint :> bindings1
+             ! vars valid-match-vars [
+                 bindings sc args>> pc match-constraint
+             ! ] with-variable
+             :> bindings1
              bindings1 [
-                 rule-id trace sid keep-partner 2array suffix bindings1 rest (run-occurrence)
+                 rule-id trace sid keep-partner 2array suffix bindings1 rest vars (run-occurrence)
              ] when
          ] when
         ] assoc-each
@@ -221,8 +265,14 @@ DEFER: activate
     schedule [ occurrence>> first ] [ arg-vars>> ] [ partners>> ] tri
     :> ( rule-id arg-vars partners )
     rule-id active-id schedule keep-active?>> 2array 1array
+    schedule rule-vars>> ! c vars>> union
+    :> vars ! valid-match-vars set
+    ! [
+        ! vars valid-match-vars [ arg-vars c args>> start-match ] with-variable
     arg-vars c args>> start-match
-    [ partners (run-occurrence) ] [ 2drop ] if* ;
+        [ partners vars (run-occurrence) ] [ 2drop ] if*
+    ! ] with-variable
+    ;
 
 SYMBOL: sentinel
 
@@ -270,8 +320,9 @@ M: callable activate-new
     activate-new ;
 
 ! TODO: check whether in-place store modification is sound
-M: chr-suspension apply-substitution*
-    [ apply-substitution* ] change-constraint ;
+M:: chr-suspension apply-substitution* ( subst c -- c )
+    c [ subst swap apply-substitution* ] change-constraint
+    [ members subst lift >hash-set ] change-vars ;
 
 : with-chr-prog ( prog quot -- )
     [ LH{ } clone store set
