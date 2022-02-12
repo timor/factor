@@ -31,6 +31,11 @@ SYMBOLS: program exec-stack store builtins match-trace current-index ;
 TUPLE: chr-suspension
     constraint id alive activated stored hist vars ;
 
+TUPLE: builtin-suspension < chr-suspension type ;
+: <builtins-suspension> ( -- obj )
+    builtin-suspension new
+    V{ } clone >>constraint ;
+
 SLOT: type
 SLOT: args
 M: chr-suspension type>> constraint>> constraint-type ;
@@ -161,8 +166,11 @@ C: <equiv-activation> equiv-activation
     !     2cleave ] if ;
 
 ERROR: cannot-make-equal lhs rhs ;
+: unify ( t1 t2 -- subst )
+    valid-match-vars [ solve-eq ] with-variable-off ;
+
 : make-equal ( lhs rhs -- new )
-    2dup valid-match-vars [ solve-eq ] with-variable-off
+    2dup unify
     [ 2nip add-equal ]
     [ cannot-make-equal ] if* ;
 
@@ -317,6 +325,9 @@ SYMBOL: sentinel
     ;
 
 GENERIC: activate-new ( c -- )
+M: eq-constraint activate-new
+    builtins store get at constraint>> push ;
+
 M: sequence activate-new
     [ activate-new ] each ;
 
@@ -345,8 +356,11 @@ M:: chr-suspension apply-substitution* ( subst c -- c )
     c [ subst swap apply-substitution* ] change-constraint
     [ members subst lift >hash-set ] change-vars ;
 
+M: builtin-suspension apply-substitution* nip ;
+
 : with-chr-prog ( prog quot -- )
     [ LH{ } clone store set
+      <builtins-suspension> builtins store get set-at
       load-chr dup program set
       local-vars>> valid-match-vars set
       H{ } clone substitutions set
@@ -356,8 +370,9 @@ M:: chr-suspension apply-substitution* ( subst c -- c )
 
 ! Replace all remaining variables with their equivalents
 :: replace-equalities ( c -- c )
-    c eq-constraint? [ c ]
-    [ defined-equalities get :> ds
+    c builtin-suspension? [ c constraint>> ]
+    [ c constraint>> :> c
+      defined-equalities get :> ds
       c vars [| v | v
               v ds disjoint-set-member?
               [ v ds representative
@@ -366,19 +381,6 @@ M:: chr-suspension apply-substitution* ( subst c -- c )
              ] H{ } map>assoc sift-values
       c apply-substitution ] if ;
 
-! : substitutions ( constraints -- substs )
-!     [ constraint-args first2 2array ] map solve-problem ;
-
-! : replace-equalities ( constraints -- constraints )
-!     dup values [ constraint>> ] map [ eq-constraint? ] filter
-!     [ constraint-args first2 2array 1array
-!       '[ _ swap apply-substitution constraint>> ] map-values ] each ;
-    ! [ values [ constraint>> ] map
-    !   [ eq-constraint? ] filter
-    !   substitutions ] keep
-    ! ! [ nip eq-constraint? ] assoc-partition
-    ! [ apply-substitution ] with map-values ;
-
 : run-chr-query ( prog query -- store )
     [ pred>constraint ] map
     [ 0 sentinel set
@@ -386,7 +388,7 @@ M:: chr-suspension apply-substitution* ( subst c -- c )
       [ activate-new ] each
       store get
       ! replace-equalities
-      [ constraint>> replace-equalities ] map-values
+      [ replace-equalities ] map-values
     ] curry with-chr-prog ;
 
 : run-chrat-query ( query -- store )

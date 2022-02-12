@@ -6,7 +6,7 @@ IN: chr.factor.quotations
 FROM: syntax => _ ;
 
 ! * Quotation Inference
-TERM-VARS: ?e ?i ?l ?o ?p ?q ?r ?s ?t ?u ?a ?b ?c ?d ?n ?m ?v ?w ?x ?xs ?y ?z ;
+TERM-VARS: ?e ?i ?l ?o ?p ?q ?r ?s ?st ?sf ?t ?u ?a ?b ?c ?d ?n ?m ?v ?w ?x ?xs ?y ?z ?c1 ?c2 ;
 
 ! ! ** Keep track of word sequencing
 ! TUPLE: word-link < chr-pred a b c ;
@@ -127,10 +127,12 @@ TERM-VARS: ?beg ?parm ;
 
 TUPLE: Prim < Word ;
 TUPLE: ExecUnknown < Exec ;
-TUPLE: InlineQuot < trans-pred val ;
-TUPLE: InlineLiteralQuot < trans-pred quot ;
-! TUPLE: InlineDip < InlineLiteralQuot quot saved ;
-TUPLE: InlinedQuot < InlineLiteralQuot ;
+TUPLE: InlineUnknown < trans-pred val ;
+TUPLE: InlineCond < trans-pred val cond ;
+TUPLE: InlineQuot < trans-pred quot cond ;
+TUPLE: Cond < chr-pred cond constraint ;
+! TUPLE: InlineDip < InlineQuot quot saved ;
+TUPLE: InlinedQuot < InlineQuot ;
 TUPLE: BeginQuot < trans-pred ;
 TUPLE: EndQuot < trans-pred ;
 TUPLE: Infer < chr-pred beg s quot ;
@@ -159,9 +161,14 @@ CHR{ { Entry ?r ?w } // { Link ?r ?s } { CheckExec ?s ?t ?w } --
      | { RecursiveCall ?s ?t ?w ?r } }
 CHR{ // { Link +top+ ?s } { CheckExec ?s ?t ?w } --
      | { ExecWord ?s ?t ?w } }
-CHR{ { CheckExec ?t __ ?w } { Linkback ?s ?l } // -- [ ?t known ?l known in? ] |
+! CHR{ { CheckExec ?t __ ?w } { Linkback ?s ?l } // -- [ ?t known ?l known in? ] |
+CHR{ { CheckExec ?t __ ?w } { Linkback ?s ?l } // -- [ ?t ?l in? ] |
      { Link ?s ?t } }
-CHR{ { Linkback ?s ?l } // { Link ?t ?u } -- [ ?t known ?l known in? ] | { Link ?s ?u } }
+! CHR{ { Linkback ?s ?l } // { Link ?t ?u } -- [ ?t known ?l known in? ] | { Link ?s ?u } }
+CHR{ { Linkback ?s ?l } // { Link ?t ?u } -- [ ?t ?l in? ] | { Link ?s ?u } }
+! CHR{ { SplitState ?s ?s1 __ } // { Link ?s1 ?u } -- | { Link ?s ?u } }
+! CHR{ { SplitState ?s __ ?s2 } // { Link ?s2 ?u } -- | { Link ?s ?u } }
+CHR{ { CondJump ?s ?u __ } // { Link ?r ?u } -- | { Link ?s ?u } }
     ;
 
 ! ** Cleaner
@@ -211,7 +218,7 @@ CHR{ // { Word ?r ?u dip } -- |
      { ShiftStack ?r ?s 2 0 }
      { InsertState ?r ?u ?s }
      ! { LinkStates ?r ?s }
-     ! { InlineLiteralQuot ?s ?t ?q }
+     ! { InlineQuot ?s ?t ?q }
      { ShiftStack ?t ?u 0 1 }
      { Val ?u 0 ?a }
      { InsertState ?s ?u ?t }
@@ -222,7 +229,7 @@ CHR{ // { Word ?r ?u dip } -- |
 ! CHR{ // { Word ?s ?t ?w } -- [ ?w inline? ] | { InlineCall ?s ?t ?w } }
 
 ! Inferred stack elements
-CHR{ { InlineLiteralQuot ?r ?u __ } { ShiftStack ?r ?u ?i ?o } // -- |
+CHR{ { InlineQuot ?r ?u __ } { ShiftStack ?r ?u ?i ?o } // -- |
           ! { InferredStack ?r ni { } }
           ! { InferredStack ?u no { } }
           { InferStack ?r ?i 0 { } }
@@ -244,7 +251,7 @@ CHR{ { Val ?s ?i ?a } // { InferStack ?s ?n ?i ?l } -- [ ?i known number? ] | [|
 
 ! ! Wrap up inlined calls
 CHR{ { ShiftStack ?s ?t __ __ } { InferredEffect ?s ?t __ } // ! { Linkback ?r __ }
-     { InlineLiteralQuot ?r ?u ?q } { CallFrame ?r ?s ?t ?u }
+     { InlineQuot ?r ?u ?q } { CallFrame ?r ?s ?t ?u }
      -- |
      ! { DeleteBetween ?s ?t }
      ! { InlinedQuot ?r ?u ?q } [ ?s ?r ==! ] [ ?t ?u ==! ]
@@ -253,7 +260,7 @@ CHR{ { ShiftStack ?s ?t __ __ } { InferredEffect ?s ?t __ } // ! { Linkback ?r _
      ! { ShiftStack ?t ?u 0 0 }
    }
 ! CHR{ { ShiftStack ?s ?t __ __ } //
-!      { InlineLiteralQuot ?r ?u ?q } { CallFrame ?r ?s ?t ?u } { Linkback ?r __ }
+!      { InlineQuot ?r ?u ?q } { CallFrame ?r ?s ?t ?u } { Linkback ?r __ }
 !      -- | { InlinedQuot ?r ?u ?q } [ ?s ?r ==! ] [ ?t ?u ==! ]
 !    }
 
@@ -270,12 +277,12 @@ CHR{ { CallFrame __ __ ?r ?s } { Val ?r ?n ?a } // -- | { Val ?s ?n ?a } }
 CHR{ { CallFrame __ __ ?r ?s } { Val ?s ?n ?a } // -- | { Val ?r ?n ?a } }
 
 
-CHR{ { InlineLiteralQuot ?r ?u __ } //
-     { InferredStack ?r ?n ?i } { InferredStack ?u ?m ?o } -- |
-     [| |
-      ! ?i ?o [ [ name>> ] map ] bi@ <effect> :> e
-      { InferredEffect ?r ?u ?i ?o }
-     ] }
+! CHR{ { InlineQuot ?r ?u __ __ } //
+!      { InferredStack ?r ?n ?i } { InferredStack ?u ?m ?o } -- |
+!      [| |
+!       ! ?i ?o [ [ name>> ] map ] bi@ <effect> :> e
+!       { InferredEffect ?r ?u ?i ?o }
+!      ] }
 
 CHR{ { InferredStack ?s ?n __ } // -- [ ?n 0 >= ] | { Val ?s ?n ?x } }
     ;
@@ -302,11 +309,11 @@ CHR{ { AssumeEffect ?s ?t ?e } // -- |
       o [ ?t swap Pushes boa suffix ] unless-empty
 
       ?s ?t
-      i >list ?rho list*
+      i >list ?rho lappend
       {
           { [ ?e terminated?>> ] [ __ ] }
-          { [ ?e bivariable-effect? ] [ o >list ?sig list* ] }
-          [ o >list ?rho list* ] } cond InferredEffect boa suffix
+          { [ ?e bivariable-effect? ] [ o >list ?sig lappend ] }
+          [ o >list ?rho lappend ] } cond InferredEffect boa suffix
      ] }
 
 ! CHR{ { AssumeEffect ?s ?t ?e } { Pops ?s ?i } { Pushes ?t ?o } // -- |
@@ -319,11 +326,18 @@ CHR{ { AssumeEffect ?s ?t ?e } // -- |
 !         ! }
 !    }
 
-CHR{ { InferredEffect ?s ?t ?a ?b } { InferredBetween ?r ?u ?s ?t __ } // -- |
+! CHR{ { InferredEffect ?s ?t ?a ?b } // { InferredEffect ?s ?t ?c ?d } -- |
+!      [ { ?a ?b } { ?c ?d } unify
+!        [ [ ?s ?t ] 2dip EitherOr boa ] { } assoc>map
+!      ] }
+
+! CHR{ { InferredEffect ?s ?t ?a ?b } { InlineQuot ?r ?u __ ?c } { InferredBetween ?r ?u ?s ?t __ } // -- [ ?c true == ] |
+!      { InferredEffect ?r ?u ?a ?b }
+!    }
+
+CHR{ { InlineQuot ?r ?u __ ?c } { InferredBetween ?r ?u ?s ?t __ } // { InferredEffect ?s ?t ?a ?b } -- [ ?c true == ] |
      { InferredEffect ?r ?u ?a ?b }
    }
-
-CHR{ { InferredEffect ?s ?t ?a ?b } }
 
 CHR{ // { InferredEffect ?r ?s ?a ?b } { InferredEffect ?s ?t ?b ?c } -- |
      { InferredEffect ?r ?t ?a ?c } }
@@ -354,16 +368,16 @@ CHR{ { Lit ?a ?b } // -- |
 
 ! Two things in parallel: 1. Infer the quotation, 2. Transport the value
 ! CHR{ { Word ?s ?u dip } // -- { Val ?s 0 ?q }  |
-!      { InlineLiteralQuot ?s ?t ?q }
+!      { InlineQuot ?s ?t ?q }
 !    }
 
 ! CHR{ { Word ?s ?u dip } // -- { Val ?s 1 ?a } |
-!      { InlineLiteralQuot ?s ?t ?q } { Push ?t ?u ?a }
+!      { InlineQuot ?s ?t ?q } { Push ?t ?u ?a }
 !    }
-! FIXME: Have to make sure InlineLiteralQuot comes first because of replacement foo not working correctly right now
+! FIXME: Have to make sure InlineQuot comes first because of replacement foo not working correctly right now
 ! Ideal fix: queue-based runner, so that we always see all var instances!
-! CHR{ { Word ?s ?t dip  } // -- | { Val ?s 1 ?a } { Val ?s 0 ?q } { InlineLiteralQuot ?s ?t ?q } { Val ?t 0 ?a } }
-CHR{ { Word ?s ?t dip } // -- | { InlineQuot ?s ?t ?q } { Val ?s 1 ?a } { Val ?s 0 ?q } { Val ?t 0 ?a } }
+! CHR{ { Word ?s ?t dip  } // -- | { Val ?s 1 ?a } { Val ?s 0 ?q } { InlineQuot ?s ?t ?q } { Val ?t 0 ?a } }
+CHR{ { Word ?s ?t dip } // -- | { InlineUnknown ?s ?t ?q } { Val ?s 1 ?a } { Val ?s 0 ?q } { Val ?t 0 ?a } }
 
 CHR{ { Word ?s ?t call } // -- |
      { InferCall ?s ?t ?q } { Val ?s 0 ?q } }
@@ -387,9 +401,21 @@ CHR{ { Word ?s ?t curry } // -- |
      { Curried ?q ?parm ?p }
    }
 
-CHR{ { Word ?s ?t if } // -- |
-     { Val ?s 0 ?q } { Val ?s 1 ?p } { Val ?s 2 ?c }
-     { InlineQuot ?s ?t ?q } { InlineQuot ?s ?t ?p }
+CHR{ { Word ?s ?t compose } // -- |
+     { Val ?s 0 ?p }
+     { Val ?s 1 ?parm }
+     { Val ?t 0 ?q }
+     { Composed ?q ?parm ?p }
+   }
+
+CHR{ { Word ?r ?t if } // -- |
+     ! { SplitState ?r ?st ?sf }
+     ! { InlineUnknown ?r ?t ? }
+     ! { InlineCond ?sf ?t ?q ?c2 } { InlineCond ?st ?t ?p ?c1 }
+     { InlineCond ?r ?t ?q ?c2 } { InlineCond ?r ?t ?p ?c1 }
+     { Cond ?c1 { Not { Instance ?c \ f } } }
+     { Cond ?c2 { Instance ?c \ f } }
+     { Val ?r 0 ?q } { Val ?r 1 ?p } { Val ?r 2 ?c }
    }
 ;
 
@@ -399,23 +425,26 @@ IMPORT: call-stack
 IMPORT: basic-stack
 ! IMPORT: infer-stack
 ! IMPORT: stack-ops
-CHR{ { Lit ?p ?q } // { InlineQuot ?s ?t ?p } -- | { InlineLiteralQuot ?s ?t ?q } }
+CHR{ { Lit ?p ?q } // { InlineUnknown ?s ?t ?p } -- | { InlineQuot ?s ?t ?q true } }
+! TODO: inheritance!
+CHR{ { Lit ?p ?q } // { InlineCond ?s ?t ?p ?c } -- | { InlineQuot ?s ?t ?q ?c } }
 CHR{ // { InferDef ?w } -- [ ?w deferred? not ] |
      [| | state-in state-out :> ( si so )
       ?w def>> :> def
       ?w :> w
       {
           { Entry +top+ w }
-          { InlineLiteralQuot +top+ +end+ def }
+          { InlineQuot +top+ +end+ def true }
           ! { InferToplevelQuot def }
           ! { InferBetween +top+ +end+ def }
       }
      ] }
 
-CHR{ { InlineLiteralQuot ?s ?t ?q } // -- | [| | new-state :> s0
+CHR{ { InlineQuot ?s ?t ?q ?c } // -- | [| | new-state :> s0
                                       ! "sr" <term-var> :> sr
                                       {
                                           ! { CallFrame ?s s0 sr ?t }
+                                          { CondJump ?s s0 ?c }
                                           { InferBetween ?s ?t s0 ?q }
                                           { Linkback ?s { s0 } }
                                       }
@@ -423,12 +452,16 @@ CHR{ { InlineLiteralQuot ?s ?t ?q } // -- | [| | new-state :> s0
 
 CHR{ // { InferToplevelQuot ?q } -- |
      ! { CallFrame +top+ +end+ ?s ?t }
-     ! { InlineLiteralQuot ?s ?t ?q }
-     { InlineLiteralQuot +top+ +end+ ?q }
+     ! { InlineQuot ?s ?t ?q }
+     { InlineQuot +top+ +end+ ?q true }
    }
 CHR{ { InferBetween ?r ?t ?s ?q } // -- [ ?q known? ] |
      { Infer ?s ?s ?q }
      ! [| | ?s seq-state :> sn { { Infer ?s sn ?q } } ]
+   }
+
+CHR{ { InferredBetween ?r ?u ?s ?r } { InlineQuot ?r ?u __ ?c } // -- |
+     { CondRet ?r ?u ?c }
    }
 
 CHR{ // { InferBetween ?r ?t ?s ?q } { Infer ?s ?x [ ] } -- |
@@ -448,6 +481,7 @@ CHR{ // { InsertState ?r ?t ?s } { Linkback ?u ?a } -- [ { ?r ?t } ?a subseq? ] 
 
 ! Main inference advancer
 CHR{ ! { BeginQuot ?r ?beg }
+    { InferBetween ?r __ ?beg __ }
      // { Linkback ?r ?a }
      { Infer ?beg ?s ?q } -- [ ?q empty? not ] |
      [| | ?q unclip :> ( rest w ) ?s seq-state :> sn
@@ -464,7 +498,7 @@ CHR{ // { Exec ?s ?t ?w } -- [ ?w word? ] | { CheckExec ?s ?t ?w } }
 CHR{ // { Exec ?s ?t ?w } -- [ ?w known? ] | { Push ?s ?t ?w } }
 CHR{ // { ExecWord ?s ?t ?w } -- [ ?w inline? ]
      | [| | ?w def>> :> def { InlineCall ?s ?t ?w def } ] }
-CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w } { InlineLiteralQuot ?s ?t ?d } }
+CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w } { InlineQuot ?s ?t ?d true } }
 CHR{ // { ExecWord ?s ?t ?w } -- | { Word ?s ?t ?w } }
 
 CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }

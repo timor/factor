@@ -13,6 +13,8 @@ TUPLE: Word < trans-pred word ;
 TUPLE: Dispatch < trans-pred cond vset ;
 TUPLE: Join < trans-pred cond ;
 
+TUPLE: Not < chr-pred pred ;
+
 TUPLE: Val < state-pred n val ;
 TUPLE: Type < state-pred n val ;
 TUPLE: Instance < chr-pred val s ;
@@ -24,6 +26,9 @@ TUPLE: Push < trans-pred val ;
 
 TUPLE: AssumeEffect < trans-pred effect ;
 TUPLE: InferredEffect < trans-pred in out ;
+TUPLE: EitherOr < chr-pred s1 s2 v1 v2 ;
+
+TUPLE: SplitState < state-pred sa sb ;
 
 ! Word level
 TUPLE: Exec < trans-pred obj ;
@@ -33,6 +38,11 @@ TUPLE: Definition < chr-pred word quot ;
 TUPLE: Lit < chr-pred val obj ;
 TUPLE: Curried < chr-pred val parm callable ;
 TUPLE: Composed < chr-pred val callable1 callable2 ;
+TUPLE: CondJump < trans-pred cond ;
+TUPLE: CondRet < trans-pred cond ;
+
+! This signifies that the referenced condition is part of an exclusive set?
+! TUPLE: Exclusive
 
 ! Definition level
 TUPLE: InferCall < trans-pred val ;
