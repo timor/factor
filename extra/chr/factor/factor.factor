@@ -4,6 +4,7 @@ quotations sequences sequences.generalizations strings types.util vocabs.parser
 words ;
 
 IN: chr.factor
+FROM: syntax => _ ;
 
 TUPLE: state-pred < chr-pred s1 ;
 TUPLE: trans-pred < chr-pred s1 s2 ;
@@ -66,7 +67,9 @@ TUPLE: InferUnknown < trans-pred val ;
     "s" uvar <term-var> ;
 
 SINGLETON: +top+
+! INSTANCE: +top+ match-var
 SINGLETON: +end+
+! INSTANCE: +end+ match-var
 
 : sub-state ( symbol -- symbol )
     dup +top+? [ drop new-state ] when
