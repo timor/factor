@@ -1,7 +1,7 @@
 USING: accessors arrays assocs assocs.extras chr chr.parser chr.programs
 combinators combinators.short-circuit disjoint-sets hash-sets hashtables kernel
-linked-assocs match math namespaces quotations sequences sets typed types.util
-words ;
+linked-assocs match math namespaces quotations sequences sets sorting typed
+types.util words ;
 
 IN: chr.state
 
@@ -55,14 +55,21 @@ SYMBOL: ground-values
 : local-var? ( variable -- ? )
     [ program get local-vars>> in? ] [ f ] if* ;
 
+ERROR: ground-value-contradiction old value ;
+
 :: define-ground-value ( var value ds -- )
     var ds 2dup maybe-add-atom
     representative ground-values get
-    [| old | old [ old value = [ old ] [ "contradiction" throw ] if ]
+    [| old | old [ old value = [ old ] [ old value ground-value-contradiction ] if ]
      [ value ] if
     ] change-at ;
 
+: ground-value? ( obj -- ? )
+    vars empty? ; inline
+
 : maybe-define-ground-value ( v1 v2 ds -- )
+    ! over ground-value? not [ swapd ] when
+    ! over ground-value? not [ 3drop ] [
     over match-var? [ swapd ] when
     over match-var? [ 3drop ] [
         define-ground-value
@@ -105,9 +112,6 @@ DEFER: reactivate
     dup match-var? [ ?ground-value ] when
     match-var? not ; inline
 
-: ?representative ( var -- var )
-    { [ defined-equalities get representative ] [  ] } 1|| ;
-
 : known ( obj -- val )
     ?ground-value ;
     ! ?representative ?ground-value ;
@@ -123,6 +127,8 @@ DEFER: reactivate
 DEFER: apply-substitution
 : replace-in-store ( v1 v2 -- )
     dup match-var? [ swap ] unless associate
+    ! [ store [ [ apply-substitution ] with map-values ] change ]
+    ! [ ground-values [ [ swap lift ] with map-values ] change ] bi
     store [ [ apply-substitution ] with map-values ] change
     ;
 
@@ -306,12 +312,13 @@ DEFER: activate
 SYMBOL: sentinel
 
 : recursion-check ( -- )
-    ! sentinel get 500 > [ "runaway" throw ] when
+    sentinel get 200 > [ "runaway" throw ] when
     sentinel inc ;
 
 ! TODO: check if that is needed to make sure tail recursion works!
 ! Don't reactivate ourselves, don't reactivate more than once!
 : activate ( id -- )
+    recursion-check
     store get at
     ! dup activated>>
     ! [ drop ]
@@ -332,7 +339,7 @@ M: sequence activate-new
     [ activate-new ] each ;
 
 M: constraint activate-new
-    recursion-check
+    ! recursion-check
     create-chr activate ;
 
 M: generator activate-new
@@ -345,7 +352,7 @@ M: generator activate-new
 M: true activate-new drop ;
 
 M: callable activate-new
-    recursion-check
+    ! recursion-check
     call( -- new )
     pred>constraint
     ! reactivate-all
@@ -368,6 +375,7 @@ M: builtin-suspension apply-substitution* nip ;
       0 current-index set
     ] prepose with-var-names ; inline
 
+
 ! Replace all remaining variables with their equivalents
 :: replace-equalities ( c -- c )
     c builtin-suspension? [ c constraint>> ]
@@ -381,6 +389,19 @@ M: builtin-suspension apply-substitution* nip ;
              ] H{ } map>assoc sift-values
       c apply-substitution ] if ;
 
+: solve-ground-values ( assoc -- assoc )
+    ! store get builtins of constraint>>
+    substitute-representatives? [
+        ! [ constraint-args first2 2array ] map solve-problem
+        ! dup
+        valid-match-vars [ >alist solve-problem ] with-variable-off
+        ! [ lift ] curry map-values
+    ] with-variable-on ;
+
+: replace-all-equiv ( store -- store )
+    ground-values [ solve-ground-values ] change
+    [ replace-equalities ] map-values ;
+
 : run-chr-query ( prog query -- store )
     [ pred>constraint ] map
     [ 0 sentinel set
@@ -388,7 +409,7 @@ M: builtin-suspension apply-substitution* nip ;
       [ activate-new ] each
       store get
       ! replace-equalities
-      [ replace-equalities ] map-values
+      replace-all-equiv
     ] curry with-chr-prog ;
 
 : run-chrat-query ( query -- store )

@@ -1,11 +1,10 @@
 USING: accessors arrays assocs assocs.extras classes classes.algebra
 classes.tuple colors.constants combinators combinators.short-circuit
-combinators.smart continuations disjoint-sets generalizations graphs hashtables
-io io.styles kernel lists make match math math.order math.parser mirrors
-namespaces prettyprint.backend prettyprint.custom prettyprint.sections
-quotations sequences sequences.extras sequences.private sets strings threads
-graphs.private
-typed unicode words ;
+combinators.smart continuations disjoint-sets generalizations graphs
+graphs.private hashtables io io.styles kernel lists lists.private make match
+math math.order math.parser mirrors namespaces prettyprint.backend
+prettyprint.custom prettyprint.sections quotations sequences sequences.extras
+sequences.private sets strings threads typed unicode words ;
 
 IN: types.util
 
@@ -219,6 +218,13 @@ MACRO: lmatch-map-as ( branches cons-class -- quot )
     2dup [ list-class ] bi@ class-and
     '[ _ swons* ] foldr ;
 
+: leach* ( ... list quot: ( ... elt -- ... ) -- ... )
+    over atom? [ 2drop ] [ (leach) leach* ] if ; inline recursive
+
+: llength* ( list -- n )
+    0 [ drop 1 + ] swapd leach* ;
+    ! 0 [ drop 1 + ] swapd over atom? [ 2drop ] [ (leach) leach ] if ;
+
 ! * Unification
 ! Baader/Nipkow
 GENERIC: subst ( term -- term )
@@ -232,18 +238,38 @@ M: tuple vars* tuple-slots vars* ;
 : vars ( obj -- seq )
     [ vars* ] { } make ;
 
+SYMBOL: substitute-representatives?
+SYMBOL: defined-equalities
+
+SYMBOL: in-quotation?
 SYMBOL: current-subst
 : get-current-subst ( obj -- obj/f )
     current-subst get at ;
+
+: ?representative ( var -- var )
+    { [ defined-equalities get representative ] [  ] } 1|| ;
+
 : var-subst ( obj -- obj/f )
-    [ get-current-subst ] keep or ; inline
+    substitute-representatives? get
+    [ ?representative ] when
+    [ get-current-subst
+      dup { [ word? ] [ { [ deferred? ] [ match-var? not ] } 1|| ] [ drop in-quotation? get ] } 1&& [ <wrapper> ] when
+    ] keep
+    or ; inline
+
 
 ! M: object subst var-subst ;
 M: object subst ;
 M: match-var subst var-subst ;
-M: sequence subst [ subst ] map ;
+M: sequence subst
+    dup quotation?
+    in-quotation? [ [ subst ] map ] with-variable ;
+M: callable subst
+    in-quotation? [ call-next-method ] with-variable-on ;
 M: tuple subst tuple>array subst >tuple ;
-M: wrapper subst wrapped>> subst <wrapper> ;
+M: wrapper subst wrapped>>
+    in-quotation? [ subst ] with-variable-off
+    <wrapper> ;
 
 : lift ( term subst -- term )
     current-subst [ subst ] with-variable ;
@@ -278,7 +304,6 @@ M: sequence decompose-right
         ]
     } cond ;
 
-SYMBOL: defined-equalities
 :: defined-equal? ( v1 v2 -- ? )
     defined-equalities get
     [| ds |
@@ -329,10 +354,10 @@ SYMBOL: on-recursive-term
     H{ } clone swap solve ; inline
 
 : solve-next ( subst problem -- subst )
-    swap >alist append solve-problem ; inline
+    swap >alist append solve-problem ;
 
 : solve-eq ( term1 term2 -- subst )
-    2array 1array solve-problem ; inline
+    2array 1array solve-problem ;
 
 : solve-eq-with ( subst term1 term2 -- subst )
     2array 1array solve-next ;
@@ -352,6 +377,17 @@ SYMBOL: on-recursive-term
     [ yield ] compose loop ; inline
 
 ! * (Re-)Construction
+: 2assoc-all? ( a1 a2 quot: ( v1 v2 -- ? ) -- ? )
+    2over [ assoc-size ] same? not [ 3drop f ]
+    [| a1 a2 quot |
+     a1 [| k1 v1 | k1 a2 at v1 quot call( x x -- ? ) ] assoc-all?
+    ] if ;
+
+: slots-equiv? ( obj obj quot: ( slot slot -- ?  ) -- ? )
+    [ [ <mirror> ] bi@ ] dip 2assoc-all? ;
+
+: tuple-slots-eq? ( obj obj -- ? )
+    { [ [ class-of ] same? ] [ [ eq? ] slots-equiv? ] } 2&& ;
 
 :: neq? ( n -- quot )
     [ [ eq? ] 2 n mnapply ] [ and ] reduce-outputs ; inline
@@ -364,6 +400,10 @@ SYMBOL: on-recursive-term
     [ n neq? ] n ncurry preserving
     [ n ndrop orig ]
     recons if ; inline
+
+:: with-bi@ ( param x y quot --  )
+    param x quot with call
+    param y quot with call ; inline
 
 : remove-nths ( indices seq -- seq )
    [ swap in? not nip ] with filter-index ; inline
@@ -382,6 +422,12 @@ SYMBOL: on-recursive-term
 
 : deep-find-all ( obj destructure: ( obj -- elts ) test: ( obj -- ? ) -- elts )
     [ (deep-find-all) ] { } make ;
+
+! Returns the object for which the test returns true
+! objects themselves are not tested
+:: deep-find-elt ( obj destructure: ( obj -- elts ) test: ( elt -- ? ) -- obj )
+    obj destructure call( obj -- elts ) :> elts
+    elts [ f ] [ [ test call( obj -- ? ) ] any? [ obj ] [ elts [ destructure test deep-find-elt ] find nip ] if ] if-empty ;
 
 ! * Forest Closure
 
