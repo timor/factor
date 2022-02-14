@@ -149,9 +149,9 @@ TERM-VARS: ?beg ?parm ;
 
 TUPLE: Prim < Word ;
 TUPLE: ExecUnknown < Exec ;
-TUPLE: InlineUnknown < trans-pred val cond ;
+TUPLE: InlineUnknown < trans-pred val ;
 TUPLE: InlineCond < trans-pred val cond ;
-TUPLE: InlineQuot < trans-pred quot cond ;
+TUPLE: InlineQuot < trans-pred quot ;
 TUPLE: Cond < chr-pred cond constraint ;
 ! TUPLE: InlineDip < InlineQuot quot saved ;
 TUPLE: InlinedQuot < InlineQuot ;
@@ -187,14 +187,15 @@ CHR{ // { Link +top+ ?s } { CheckExec ?s ?t ?w } --
 CHR{ { CheckExec ?t __ ?w } { Linkback ?s ?l } // -- [ ?t ?l in? ] |
      { Link ?s ?t } }
 ! CHR{ { Linkback ?s ?l } // { Link ?t ?u } -- [ ?t known ?l known in? ] | { Link ?s ?u } }
-CHR{ { Linkback ?s ?l } // { Link ?t ?u } -- [ ?t ?l in? ] | { Link ?s ?u } }
+CHR{ { Linkback ?s ?l } // { Link ?t ?u } -- [ ?s ?t == not ] [ ?t ?l in? ] | { Link ?s ?u } }
 ! An In/Out also means that we can go backwards
 
 ! CHR{ { In/Out ?s ?u __ __ } // { Link ?r ?u } -- | { Link ?s ?u } }
 
 ! CHR{ { SplitState ?s ?s1 __ } // { Link ?s1 ?u } -- | { Link ?s ?u } }
 ! CHR{ { SplitState ?s __ ?s2 } // { Link ?s2 ?u } -- | { Link ?s ?u } }
-CHR{ { CondJump ?s ?u __ } { Link ?r ?u } // -- | { Link ?s ?u } }
+! CHR{ { CondJump ?s ?u __ } { Link ?r ?u } // -- | { Link ?s ?u } }
+CHR{ { CondJump ?s ?r __ } // { Link ?r ?u } -- | { Link ?s ?u } }
 
 ! Transitivity
 CHR{ // { Link ?r ?s } { Link ?s ?t } -- | { Link ?r ?t } }
@@ -418,7 +419,12 @@ CHR: infer-call @ { InferCall ?r ?t ?q } // -- |
      { Stack ?s0 ?call-rho }
      ! Pseudoframe
      { Linkback ?r { ?s0 } }
-     { InlineUnknown ?s0 ?t ?q true } ;
+     { InlineUnknown ?s0 ?t ?q } ;
+
+CHR: infer-dup @ // { Word ?s ?t dup } -- |
+     { Stack ?s L{ ?x . ?rho } }
+     { Stack ?t L{ ?y ?x . ?rho } }
+     { Split ?x ?y } ;
 
 CHR: infer-shuffle @ // { Word ?s ?t ?w } -- [ ?w "shuffle" word-prop? ] |
      [ ?s ?t ?w "shuffle" word-prop shuffle-mapping Shuffle boa ] ;
@@ -437,12 +443,12 @@ CHR{ // { Word ?s ?t curry } -- |
 !     { InferCall ?s0 ?u ?v }
 !     ! { InlineUnknown ?s0 ?u ?v }
 !     ;
-CHR: infer-curry @ { Curried ?p ?parm ?v } // { InlineUnknown ?r ?u ?p ?c } -- |
+CHR: infer-curry @ { Curried ?p ?parm ?v } // { InlineUnknown ?r ?u ?p } -- |
     { Stack ?r ?rho }
     { Stack ?s0 L{ ?parm . ?rho } }
     { Linkback ?r { ?s0 } }
     ! { InferCall ?s0 ?u ?v }
-    { InlineUnknown ?s0 ?u ?v ?c }
+    { InlineUnknown ?s0 ?u ?v }
     ;
 
 CHR{ // { Word ?s ?t compose } -- |
@@ -452,13 +458,27 @@ CHR{ // { Word ?s ?t compose } -- |
      { Composed ?q ?parm ?p }
    }
 
+TERM-VARS: ?st0 ?st1 ?sf0 ?sf1 ;
+
 CHR: infer-if @ // { Word ?r ?t if } -- |
      { Stack ?r L{ ?q ?p ?c . ?rho } }
-     { Stack ?s0 ?rho }
-     { Linkback ?r { ?s0 } }
-     { InlineUnknown ?s0 ?t ?q ?c2 } { InlineUnknown ?s0 ?t ?p ?c1 }
+
      { Cond ?c1 { Not { Instance ?c \ f } } }
+     { CondJump ?r ?st0 ?c1 }
+     { Stack ?st0 ?rho }
+     { InlineUnknown ?st0 ?st1 ?p }
+     { CondRet ?st1 ?t ?c1 }
+
      { Cond ?c2 { Instance ?c \ f } }
+     { CondJump ?r ?sf0 ?c2 }
+     { Stack ?sf0 ?rho }
+     { InlineUnknown ?sf0 ?sf1 ?q }
+     { CondRet ?sf1 ?t ?c2 }
+
+
+
+     ! { Linkback ?r { ?st0 } }
+     ! { InlineUnknown ?s0 ?t ?q } { InlineUnknown ?s0 ?t ?p }
      ! { Val ?r 0 ?q } { Val ?r 1 ?p } { Val ?r 2 ?c }
    ;
 ;
@@ -469,7 +489,7 @@ IMPORT: call-stack
 IMPORT: basic-stack
 ! IMPORT: infer-stack
 ! IMPORT: stack-ops
-CHR{ { Lit ?p ?q } // { InlineUnknown ?s ?t ?p ?c } -- | { InlineQuot ?s ?t ?q ?c } }
+CHR{ { Lit ?p ?q } // { InlineUnknown ?s ?t ?p } -- | { InlineQuot ?s ?t ?q } }
 ! TODO: inheritance!
 ! CHR{ { Lit ?p ?q } // { InlineCond ?s ?t ?p ?c } -- | { InlineQuot ?s ?t ?q ?c } }
 ! CHR{ { Lit ?p ?q } // { InferCall ?s ?t ?p } -- | { InlineQuot ?s ?t ?q true } }
@@ -479,19 +499,19 @@ CHR{ // { InferDef ?w } -- [ ?w deferred? not ] |
       ?w :> w
       {
           { Entry +top+ w }
-          { InlineQuot +top+ +end+ def true }
+          { InlineQuot +top+ +end+ def }
       }
      ] }
 
-CHR{ { InlineQuot ?s ?t ?q ?c } // -- | [| | new-state :> s0
+CHR{ { InlineQuot ?s ?t ?q } // -- | [| | new-state :> s0
                                       {
-                                          { CondJump ?s ?s0 ?c }
+                                          { CondJump ?s ?s0 true }
                                           { InferBetween ?s ?t ?s0 ?q }
                                       }
                                      ] }
 
 CHR{ // { InferToplevelQuot ?q } -- |
-     { InlineQuot +top+ +end+ ?q true }
+     { InlineQuot +top+ +end+ ?q }
    }
 
 CHR{ { InferBetween ?r ?t ?s ?q } // -- [ ?q known? ] |
@@ -508,8 +528,8 @@ CHR{ { InferBetween ?r ?t ?s ?q } // -- [ ?q known? ] |
 !    }
 
 ! CHR{ { InlineQuot ?r ?u __ ?c } { InferredBetween ?r ?u ?s ?t __ } // -- |
-CHR{ { InlineQuot ?r ?u __ ?c } // { InferredBetween ?r ?u ?s ?t __ } -- |
-     { CondRet ?t ?u ?c }
+CHR{ { InlineQuot ?r ?u __ } // { InferredBetween ?r ?u ?s ?t __ } -- |
+     { CondRet ?t ?u true }
    }
 
 CHR: end-infer @ // { InferBetween ?r ?t ?s ?q } { Infer ?s ?x [ ] } -- |
@@ -539,7 +559,7 @@ CHR{ // { Exec ?s ?t ?w } -- [ ?w word? ] | { CheckExec ?s ?t ?w } }
 CHR{ // { Exec ?s ?t ?w } -- [ ?w known? ] | { Push ?s ?t ?w } }
 CHR{ // { ExecWord ?s ?t ?w } -- [ ?w inline? ]
      | [| | ?w def>> :> def { InlineCall ?s ?t ?w def } ] }
-CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w } { InlineQuot ?s ?t ?d true } }
+CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w } { InlineQuot ?s ?t ?d } }
 CHR{ // { ExecWord ?s ?t ?w } -- | { Word ?s ?t ?w } }
 
 ! CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }
@@ -558,7 +578,7 @@ CHR: do-fold @ // { FoldQuot ?s ?t __ ?q } { LitStack ?s ?v t } -- |
      [| |
       ?v ?q with-datastack :> outs
       ?v length [ drop ] n*quot outs >quotation compose :> new-quot
-      { InlineQuot ?s ?t new-quot true }
+      { InlineQuot ?s ?t new-quot }
      ]
    ;
 
