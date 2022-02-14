@@ -51,9 +51,13 @@ TUPLE: Same < trans-pred m n ;
 TUPLE: Stack < state-pred vals ;
 
 ! Array, for collecting literals
-! TUPLE: LitStack < state-pred n vals ;
+TUPLE: LitStack < state-pred vals ;
+TUPLE: NumLiterals < state-pred n ;
 
-TUPLE: Fold < trans-pred missing lit-stack-in quot ;
+TUPLE: AskLit < state-pred n var ;
+
+! TUPLE: FoldQuot < trans-pred missing lit-stack-in quot ;
+TUPLE: FoldQuot < trans-pred missing quot ;
 
 : elt-vars ( seq -- seq )
     [ swap dup pair? [ first ] when
@@ -62,7 +66,9 @@ TUPLE: Fold < trans-pred missing lit-stack-in quot ;
       <term-var>
     ] map-index <reversed> ;
 
+! CHRAT: stack-ops { LitStack }
 CHRAT: stack-ops { }
+
 ! CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?b } -- [ ?b ?a == ] | }
 CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?a } -- | }
 CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?b } -- | [ ?b ?a ==! ] }
@@ -203,6 +209,30 @@ TERM-VARS: ?rho ?sig ;
 ! ** Effect Assumptions
 CHRAT: basic-stack { Val Lit InferredEffect }
 CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?a } -- | }
+
+! ! Catch questions for literal stack values
+CHR{ { NumLiterals ?s ?n } // -- |
+     [| |
+      ?n [ "lit" uvar <term-var> ] replicate dup :> vars
+      <reversed> [| v i | { AskLit ?s i v } ] map-index
+      { LitStack ?s vars } suffix
+
+      ! ?n [| i | { AskLit ?s i } ] { } map-integers
+      ! { LitStack ?s V{ } } prefix
+     ] }
+
+CHR{ { AskLit ?s ?n ?x } // -- | { Val ?s ?n ?i } }
+! Priority!
+CHR{ { Val ?s ?n ?x } { Lit ?x ?a } // { AskLit ?s ?n ?b } -- | [ ?b ?a ==! ] }
+! CHR{ { Val ?s ?n ?x } { Lit ?x ?a } // { LitStack ?s ?v } { AskLit ?s ?n } -- |
+!      [| | ?a ?n ?v new-nth :> v2 { LitStack ?s v2 } ]
+!    }
+
+! CHR{ { ask { LitStack ?s ?n ?v } } // -- { NumLiterals ?s 0 } }
+! CHR{ { NumLiterals ?s ?n } {  }}
+! CHR{ // { ask { LitStack ?s ?n } } }
+
+
 CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?b } -- | [ ?b ?a ==! ] }
 CHR{ { Stack ?s ?v } // { Stack ?s ?v } -- | }
 CHR: same-stack @ { Stack ?s ?v } // { Stack ?s ?w } -- | [ ?v ?w ==! ] ;
@@ -498,8 +528,23 @@ CHR{ // { ExecWord ?s ?t ?w } -- | { Word ?s ?t ?w } }
 ! CHR{ { Word ?s ?t ?w } { Stack ?s ?v } { Lit ?a ?b } // -- [ ?b ?v ]}
 ! Folding
 CHR{ { Word ?s ?t ?w } // -- [ ?w foldable? ] |
-     [| | ?s ?t ?w stack-effect in>> length <iota> >Vector V{ } clone [ ?w execute ] Fold boa ]
+     [| | ?s ?t ?w stack-effect in>> length [ ?w execute ] FoldQuot boa ] }
+
+CHR{ { FoldQuot ?s __ ?m __ } // -- | { NumLiterals ?s ?m } }
+
+CHR{ // { FoldQuot ?s ?t __ ?q } { LitStack ?s ?v } -- [ ?v [ known? ] all? ] |
+     [| | ?v ?q with-datastack :> res
+      res <reversed> [| w i | "r" uvar <term-var> :> x { { Val ?t i x } { Lit x w } } ] map-index concat
+     ]
    }
+
+! CHR{ { Val ?s ?n ?a } { Lit ?a ?b } // { FoldQuot ?s ?t ?m ?v ?q } -- [ ?n ?m in? ] |
+!      [| |
+!       ?n ?m remove :> m2
+!       ?b ?n ?v new-nth :> v2
+!       { FoldQuot ?s ?t m2 v2 ?q }
+!      ]
+!    }
 ;
 
 ! * Interface

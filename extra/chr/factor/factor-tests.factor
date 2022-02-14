@@ -9,16 +9,16 @@ IN: chr.factor.tests
 !     [ [ Instance? ] count ] bi
 ! ] unit-test
 
-: my-if ( cond then else -- )
-    if ; inline
+! : my-if ( cond then else -- )
+!     if ; inline
 
-CONSTRAINT: if basic ( ..a cond: boolean then: ( ..a1 -- ..b1 ) else: ( ..a2 -- ..b2 ) -- ..b )
-CHR{ { Word a b if } // -- | gen{ "strue" "sfalse" |
-                                  { Dispatch a a1 cond "strue" }
-                                  { Dispatch a a2 cond "sfalse" }
-                                  { Join b1 b cond }
-                                  { Join b2 b cond }
-                                  { InferUnknown a1 b1 then }
-                                  { InferUnknown b1 b2 then }
-                                } }
-    ; drop
+! CONSTRAINT: if basic ( ..a cond: boolean then: ( ..a1 -- ..b1 ) else: ( ..a2 -- ..b2 ) -- ..b )
+! CHR{ { Word a b if } // -- | gen{ "strue" "sfalse" |
+!                                   { Dispatch a a1 cond "strue" }
+!                                   { Dispatch a a2 cond "sfalse" }
+!                                   { Join b1 b cond }
+!                                   { Join b2 b cond }
+!                                   { InferUnknown a1 b1 then }
+!                                   { InferUnknown b1 b2 then }
+!                                 } }
+!     ; drop
