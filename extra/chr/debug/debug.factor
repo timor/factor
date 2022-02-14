@@ -35,7 +35,7 @@ IN: chr.debug
     \ run-rule-body [ [ 2dup [ rule-id ] dip "Rule Match %s with: %u\n" printf ] prepose ] annotate
     ! \ activate-new [ [ dup "Activating new constraint: %u\n" printf ] prepose ] annotate
     \ create-chr [ [ "+ " write dup id-susp. ] compose
-                   [ chr-state. ] compose
+                   ! [ chr-state. ] compose
     ] annotate
     ! \ activate [ [ chr-state. dup "Activating: %d\n" printf ] prepose ] annotate
     \ activate [ [ "! " write dup id-susp. ] prepose ] annotate

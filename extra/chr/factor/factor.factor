@@ -37,6 +37,7 @@ TUPLE: ExecWord < trans-pred word ;
 TUPLE: Generic < trans-pred word ;
 TUPLE: Definition < chr-pred word quot ;
 TUPLE: Lit < chr-pred val obj ;
+! TUPLE: Curried < chr-pred val parm callable ;
 TUPLE: Curried < chr-pred val parm callable ;
 TUPLE: Composed < chr-pred val callable1 callable2 ;
 TUPLE: CondJump < trans-pred cond ;

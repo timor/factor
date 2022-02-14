@@ -1,6 +1,7 @@
 USING: accessors arrays chr chr.factor chr.factor.words chr.parser chr.programs
-chr.state classes combinators combinators.short-circuit effects generic kernel
-lists math math.order math.parser sequences sets terms types.util words ;
+chr.state classes combinators combinators.short-circuit continuations effects
+generalizations kernel lists math math.order math.parser quotations sequences
+sets terms types.util words ;
 
 IN: chr.factor.quotations
 FROM: syntax => _ ;
@@ -51,7 +52,7 @@ TUPLE: Same < trans-pred m n ;
 TUPLE: Stack < state-pred vals ;
 
 ! Array, for collecting literals
-TUPLE: LitStack < state-pred vals ;
+TUPLE: LitStack < state-pred vals done? ;
 TUPLE: NumLiterals < state-pred n ;
 
 TUPLE: AskLit < state-pred n var ;
@@ -148,7 +149,7 @@ TERM-VARS: ?beg ?parm ;
 
 TUPLE: Prim < Word ;
 TUPLE: ExecUnknown < Exec ;
-TUPLE: InlineUnknown < trans-pred val ;
+TUPLE: InlineUnknown < trans-pred val cond ;
 TUPLE: InlineCond < trans-pred val cond ;
 TUPLE: InlineQuot < trans-pred quot cond ;
 TUPLE: Cond < chr-pred cond constraint ;
@@ -211,15 +212,20 @@ CHRAT: basic-stack { Val Lit InferredEffect }
 CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?a } -- | }
 
 ! ! Catch questions for literal stack values
-CHR{ { NumLiterals ?s ?n } // -- |
+CHR{ // { NumLiterals ?s ?n } -- |
      [| |
       ?n [ "lit" uvar <term-var> ] replicate dup :> vars
       <reversed> [| v i | { AskLit ?s i v } ] map-index
-      { LitStack ?s vars } suffix
+      { LitStack ?s vars f } suffix
 
       ! ?n [| i | { AskLit ?s i } ] { } map-integers
       ! { LitStack ?s V{ } } prefix
      ] }
+
+CHR{ // { LitStack ?s ?v f } -- [ ?v [ known? ] all? ] |
+     [| |
+         ?v [ known ] map :> v2
+         { LitStack ?s v2 t } ] }
 
 CHR{ { AskLit ?s ?n ?x } // -- | { Val ?s ?n ?i } }
 ! Priority!
@@ -251,7 +257,8 @@ CHR{ // { AssumeEffect ?s ?t ?e } -- |
       ! o [ ?t swap Pushes boa suffix ] unless-empty
       ! i ?s swap Pops boa suffix
       ! o ?t swap Pushes boa suffix
-      ?s ?t i o In/Out boa suffix
+
+      ! ?s ?t i o In/Out boa suffix
 
 
       ! ?s ?t
@@ -318,13 +325,16 @@ CHR{ // { Shuffle ?s ?t ?m } -- [ ?m known? ] |
      [| | ?m known dup :> m
       ! dup length 1 - :> lo
       dup length :> lo
-      supremum 1 + :> li
-      ?s li [
-          ! "i" swap number>string append "_" append uvar <term-var>
-          ?s swap pos-var
-      ] { } map-integers :> v-in
-      v-in >list ?rho lappend Stack boa
-      ?t m <reversed> [ li swap - 1 - v-in nth ] map >list ?rho lappend Stack boa 2array
+      [ f ]
+      [
+          supremum 1 + :> li
+          ?s li [
+              ! "i" swap number>string append "_" append uvar <term-var>
+              ?s swap pos-var
+          ] { } map-integers :> v-in
+          v-in >list ?rho lappend Stack boa
+          ?t m <reversed> [ li swap - 1 - v-in nth ] map >list ?rho lappend Stack boa 2array
+      ] if-empty
      ]
    }
 
@@ -392,20 +402,11 @@ CHR: assume-word-effect @ { Word ?s ?t ?w } // -- |
 TERM-VARS: ?dipsig ;
 CHR: infer-dip @ // { Word ?r ?u dip } -- |
      { Stack ?r L{ ?q ?x . ?rho } }
-     ! { AssumeEffect ?r ?s ( x -- ) }
-     ! { Stack ?s ?rho }
      { Stack ?s0 L{ ?q . ?rho } }
      { Linkback ?r { ?s0 } }
-     ! { Val ?r 0 ?q }
-     ! { Val ?r 1 ?a }
-     ! { Val ?u 0 ?a }
      { InferCall ?s0 ?t ?q }
      { Stack ?t ?dipsig }
-     ! { AssumeEffect ?t ?u ( -- x ) }
-     ! { Stack ?u L{ ?x . ?sig } }
      { Stack ?u L{ ?x . ?dipsig } }
-     ! { AssumeEffect ?t ?u ( -- x ) }
-     ! { InlineUnknown ?s ?t ?q }
    ;
 
 CHR{ // { Word ?s ?t call } -- |
@@ -417,7 +418,7 @@ CHR: infer-call @ { InferCall ?r ?t ?q } // -- |
      { Stack ?s0 ?call-rho }
      ! Pseudoframe
      { Linkback ?r { ?s0 } }
-     { InlineUnknown ?s0 ?t ?q } ;
+     { InlineUnknown ?s0 ?t ?q true } ;
 
 CHR: infer-shuffle @ // { Word ?s ?t ?w } -- [ ?w "shuffle" word-prop? ] |
      [ ?s ?t ?w "shuffle" word-prop shuffle-mapping Shuffle boa ] ;
@@ -429,6 +430,21 @@ CHR{ // { Word ?s ?t curry } -- |
      { Curried ?q ?parm ?p }
    }
 
+! CHR: infer-curry @ { Curried ?p ?parm ?v } // { InferCall ?r ?u ?p } -- |
+!     { Stack ?r L{ ?p . ?rho } }
+!     { Stack ?s0 L{ ?v ?parm . ?rho } }
+!     { Linkback ?r { ?s0 } }
+!     { InferCall ?s0 ?u ?v }
+!     ! { InlineUnknown ?s0 ?u ?v }
+!     ;
+CHR: infer-curry @ { Curried ?p ?parm ?v } // { InlineUnknown ?r ?u ?p ?c } -- |
+    { Stack ?r ?rho }
+    { Stack ?s0 L{ ?parm . ?rho } }
+    { Linkback ?r { ?s0 } }
+    ! { InferCall ?s0 ?u ?v }
+    { InlineUnknown ?s0 ?u ?v ?c }
+    ;
+
 CHR{ // { Word ?s ?t compose } -- |
      { Val ?s 0 ?p }
      { Val ?s 1 ?parm }
@@ -436,12 +452,15 @@ CHR{ // { Word ?s ?t compose } -- |
      { Composed ?q ?parm ?p }
    }
 
-CHR{ // { Word ?r ?t if } -- |
-     { InlineCond ?r ?t ?q ?c2 } { InlineCond ?r ?t ?p ?c1 }
+CHR: infer-if @ // { Word ?r ?t if } -- |
+     { Stack ?r L{ ?q ?p ?c . ?rho } }
+     { Stack ?s0 ?rho }
+     { Linkback ?r { ?s0 } }
+     { InlineUnknown ?s0 ?t ?q ?c2 } { InlineUnknown ?s0 ?t ?p ?c1 }
      { Cond ?c1 { Not { Instance ?c \ f } } }
      { Cond ?c2 { Instance ?c \ f } }
-     { Val ?r 0 ?q } { Val ?r 1 ?p } { Val ?r 2 ?c }
-   }
+     ! { Val ?r 0 ?q } { Val ?r 1 ?p } { Val ?r 2 ?c }
+   ;
 ;
 
 ! ** Syntactic expansion
@@ -450,9 +469,9 @@ IMPORT: call-stack
 IMPORT: basic-stack
 ! IMPORT: infer-stack
 ! IMPORT: stack-ops
-CHR{ { Lit ?p ?q } // { InlineUnknown ?s ?t ?p } -- | { InlineQuot ?s ?t ?q true } }
+CHR{ { Lit ?p ?q } // { InlineUnknown ?s ?t ?p ?c } -- | { InlineQuot ?s ?t ?q ?c } }
 ! TODO: inheritance!
-CHR{ { Lit ?p ?q } // { InlineCond ?s ?t ?p ?c } -- | { InlineQuot ?s ?t ?q ?c } }
+! CHR{ { Lit ?p ?q } // { InlineCond ?s ?t ?p ?c } -- | { InlineQuot ?s ?t ?q ?c } }
 ! CHR{ { Lit ?p ?q } // { InferCall ?s ?t ?p } -- | { InlineQuot ?s ?t ?q true } }
 CHR{ // { InferDef ?w } -- [ ?w deferred? not ] |
      [| | state-in state-out :> ( si so )
@@ -532,11 +551,16 @@ CHR{ { Word ?s ?t ?w } // -- [ ?w foldable? ] |
 
 CHR{ { FoldQuot ?s __ ?m __ } // -- | { NumLiterals ?s ?m } }
 
-CHR{ // { FoldQuot ?s ?t __ ?q } { LitStack ?s ?v } -- [ ?v [ known? ] all? ] |
-     [| | ?v ?q with-datastack :> res
-      res <reversed> [| w i | "r" uvar <term-var> :> x { { Val ?t i x } { Lit x w } } ] map-index concat
+CHR: do-fold @ // { FoldQuot ?s ?t __ ?q } { LitStack ?s ?v t } -- |
+     ! [| | ?v ?q with-datastack :> res
+     !  res <reversed> [| w i | "r" uvar <term-var> :> x { { Val ?t i x } { Lit x w } } ] map-index concat
+     ! ]
+     [| |
+      ?v ?q with-datastack :> outs
+      ?v length [ drop ] n*quot outs >quotation compose :> new-quot
+      { InlineQuot ?s ?t new-quot true }
      ]
-   }
+   ;
 
 ! CHR{ { Val ?s ?n ?a } { Lit ?a ?b } // { FoldQuot ?s ?t ?m ?v ?q } -- [ ?n ?m in? ] |
 !      [| |
