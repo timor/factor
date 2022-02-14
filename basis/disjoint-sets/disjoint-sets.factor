@@ -52,11 +52,14 @@ PRIVATE>
 
 GENERIC: add-atom ( a disjoint-set -- )
 
-M: disjoint-set add-atom
+: (add-atom) ( a disjoint-set -- )
     [ dupd parents>> set-at ]
     [ [ 0 ] 2dip ranks>> set-at ]
     [ [ 1 ] 2dip counts>> set-at ]
-    2tri ;
+    2tri ; inline
+
+M: disjoint-set add-atom
+    (add-atom) ;
 
 : add-atoms ( seq disjoint-set -- ) '[ _ add-atom ] each ;
 

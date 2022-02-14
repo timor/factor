@@ -1,12 +1,13 @@
 USING: accessors arrays chr chr.factor chr.factor.words chr.parser chr.programs
 chr.state classes combinators combinators.short-circuit effects generic kernel
-lists math math.order math.parser sequences sets types.util words ;
+lists math math.order math.parser sequences sets terms types.util words ;
 
 IN: chr.factor.quotations
 FROM: syntax => _ ;
 
 ! * Quotation Inference
 TERM-VARS: ?e ?i ?l ?o ?p ?q ?r ?s ?st ?sf ?t ?u ?a ?b ?c ?d ?n ?m ?v ?w ?x ?xs ?y ?z ?c1 ?c2 ;
+TERM-VARS: ?s0 ;
 
 ! ! ** Keep track of word sequencing
 ! TUPLE: word-link < chr-pred a b c ;
@@ -48,6 +49,11 @@ TUPLE: Same < trans-pred m n ;
 
 ! List, will be used together with assume-effect
 TUPLE: Stack < state-pred vals ;
+
+! Array, for collecting literals
+! TUPLE: LitStack < state-pred n vals ;
+
+TUPLE: Fold < trans-pred missing lit-stack-in quot ;
 
 : elt-vars ( seq -- seq )
     [ swap dup pair? [ first ] when
@@ -198,11 +204,8 @@ TERM-VARS: ?rho ?sig ;
 CHRAT: basic-stack { Val Lit InferredEffect }
 CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?a } -- | }
 CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?b } -- | [ ?b ?a ==! ] }
-CHR{ { Word ?s ?t ?w } // -- |
-     [| | ?w chrat-effect :> e { AssumeEffect ?s ?t e } ] }
-
 CHR{ { Stack ?s ?v } // { Stack ?s ?v } -- | }
-CHR{ { Stack ?s ?v } // { Stack ?s ?w } -- | [ ?v ?w ==! ] }
+CHR: same-stack @ { Stack ?s ?v } // { Stack ?s ?w } -- | [ ?v ?w ==! ] ;
 
 CHR{ { Stack ?s ?v } { Val ?s ?n ?a } // -- [ ?n ?v llength* < ] |
      [ ?a ?n ?v lnth ==! ]
@@ -253,34 +256,13 @@ CHR{ // { AssumeEffect ?s ?t ?e } -- |
 !      { InferredEffect ?r ?u ?a ?b }
 !    }
 
-! Upwards-propagator, seems to be problematic with refinement assumptions...
-! CHR{ { InlineQuot ?r ?u __ ?c } { InferredBetween ?r ?u ?s ?t __ } // { InferredEffect ?s ?t ?a ?b } -- [ ?c true == ] |
-!      { InferredEffect ?r ?u ?a ?b }
-!    }
+CHR: rem-trivial-jump @
+! { CondJump ?r ?s true } // -- | { Stack ?r ?rho } { Stack ?s ?rho } }
+ // { CondJump ?r ?s true } -- | [ ?r ?s ==! ] ;
 
-! ! TODO: keep this?
-! CHR{ { CondJump ?r ?s true } { InferredEffect ?r __ ?a __ } { InferredEffect ?s __ ?b __ } // -- |
-!      [ ?a ?b ==! ]
-!    }
-
-! CHR{ { CondRet ?t ?u true } { InferredEffect __ ?t __ ?c } { InferredEffect __ ?u __ ?d } // -- |
-!      [ ?c ?d ==! ]
-!    }
-
-! CHR{ { CondJump ?r ?s true } { Stack ?r ?v } { Stack ?s ?w  } // -- |
-!       [ ?v ?w ==! ]
-
-CHR{ { CondJump ?r ?s true } // -- | { Stack ?r ?rho } { Stack ?s ?rho } }
-
-! CHR{ { CondRet ?r ?s true } { Stack ?r ?v } { Stack ?s ?w  } // -- |
-!      [ ?v ?w ==! ]
-
-CHR{ { CondRet ?r ?s true } // -- | { Stack ?r ?sig } { Stack ?s ?sig } }
-
-! CHR{ { CondRet ?t ?u true } { InferredEffect __ ?t __ ?c } { InferredEffect __ ?u __ ?d } // -- |
-!      [ ?c ?d ==! ]
-!    }
-
+CHR: rem-trivial-ret @
+! { CondRet ?r ?s true } // -- | { Stack ?r ?rho } { Stack ?s ?rho } }
+// { CondRet ?r ?s true } -- | [ ?r ?s ==! ] ;
 
 ! Dip return
 ! TODO: Don't keep
@@ -298,12 +280,19 @@ CHR{ { CondRet ?r ?s true } // -- | { Stack ?r ?sig } { Stack ?s ?sig } }
 ! CHR{ { InferredEffect ?r ?s ?a ?b } { InferredEffect ?s ?t ?c ?d } // -- |
 !      [ ?b ?c ==! ] }
 
+: pos-var ( stack-var n -- var )
+    [ name>> "_i" append ] dip number>string append
+    <term-var> ;
+
 CHR{ // { Shuffle ?s ?t ?m } -- [ ?m known? ] |
      [| | ?m known dup :> m
       ! dup length 1 - :> lo
       dup length :> lo
       supremum 1 + :> li
-      ?s li [ "i" swap number>string append "_" append uvar <term-var> ] { } map-integers :> v-in
+      ?s li [
+          ! "i" swap number>string append "_" append uvar <term-var>
+          ?s swap pos-var
+      ] { } map-integers :> v-in
       v-in >list ?rho lappend Stack boa
       ?t m <reversed> [ li swap - 1 - v-in nth ] map >list ?rho lappend Stack boa 2array
      ]
@@ -361,40 +350,47 @@ CHR{ // { Push ?s ?t ?b } -- |
 CHR{ { Lit ?a ?b } // -- |
      [ ?a ?b class-of Instance boa ] }
 
+
+CHR: assume-word-effect @ { Word ?s ?t ?w } // -- |
+[| | ?w chrat-effect :> e { AssumeEffect ?s ?t e } ] ;
+
 ! FIXME: Have to make sure InlineQuot comes first because of replacement foo not working correctly right now
 ! Ideal fix: queue-based runner, so that we always see all var instances!
 ! CHR{ { Word ?s ?t dip  } // -- | { Val ?s 1 ?a } { Val ?s 0 ?q } { InlineQuot ?s ?t ?q } { Val ?t 0 ?a } }
 ! CHR{ // { Word ?s ?t dip } -- | { InlineUnknown ?s ?t ?q } { Val ?s 1 ?a } { Val ?s 0 ?q } { Val ?t 0 ?a } }
 ! CHR{ // { Word ?s ?t dip } -- | { InferDip ?s ?t ?a ?q } { Val ?s 1 ?a } { Val ?s 0 ?q } { Val ?t 0 ?a } }
-CHR{ // { Word ?r ?u dip } -- |
+TERM-VARS: ?dipsig ;
+CHR: infer-dip @ // { Word ?r ?u dip } -- |
      { Stack ?r L{ ?q ?x . ?rho } }
      ! { AssumeEffect ?r ?s ( x -- ) }
      ! { Stack ?s ?rho }
-     { Stack ?s L{ ?q . ?rho } }
+     { Stack ?s0 L{ ?q . ?rho } }
+     { Linkback ?r { ?s0 } }
      ! { Val ?r 0 ?q }
      ! { Val ?r 1 ?a }
      ! { Val ?u 0 ?a }
-     { InferCall ?s ?t ?q }
-     { Stack ?t ?sig }
-     { AssumeEffect ?t ?u ( -- x ) }
-     { Stack ?u L{ ?x . ?sig } }
+     { InferCall ?s0 ?t ?q }
+     { Stack ?t ?dipsig }
+     ! { AssumeEffect ?t ?u ( -- x ) }
+     ! { Stack ?u L{ ?x . ?sig } }
+     { Stack ?u L{ ?x . ?dipsig } }
+     ! { AssumeEffect ?t ?u ( -- x ) }
      ! { InlineUnknown ?s ?t ?q }
-   }
+   ;
 
 CHR{ // { Word ?s ?t call } -- |
      { InferCall ?s ?t ?q } { Val ?s 0 ?q } }
 
+TERM-VARS: ?call-rho ;
 CHR: infer-call @ { InferCall ?r ?t ?q } // -- |
-     { Stack ?r L{ ?q . ?rho } }
-     { Stack ?s ?rho }
+     { Stack ?r L{ ?q . ?call-rho } }
+     { Stack ?s0 ?call-rho }
      ! Pseudoframe
-     { Linkback ?r { ?s } }
-     { InlineUnknown ?s ?t ?q } ;
+     { Linkback ?r { ?s0 } }
+     { InlineUnknown ?s0 ?t ?q } ;
 
-
-CHR{ // { Word ?s ?t ?w } -- [ ?w "shuffle" word-prop? ] |
-     [ ?s ?t ?w "shuffle" word-prop shuffle-mapping Shuffle boa ]
-   }
+CHR: infer-shuffle @ // { Word ?s ?t ?w } -- [ ?w "shuffle" word-prop? ] |
+     [ ?s ?t ?w "shuffle" word-prop shuffle-mapping Shuffle boa ] ;
 
 CHR{ // { Word ?s ?t curry } -- |
      { Val ?s 0 ?p }
@@ -440,8 +436,8 @@ CHR{ // { InferDef ?w } -- [ ?w deferred? not ] |
 
 CHR{ { InlineQuot ?s ?t ?q ?c } // -- | [| | new-state :> s0
                                       {
-                                          { CondJump ?s s0 ?c }
-                                          { InferBetween ?s ?t s0 ?q }
+                                          { CondJump ?s ?s0 ?c }
+                                          { InferBetween ?s ?t ?s0 ?q }
                                       }
                                      ] }
 
@@ -455,14 +451,15 @@ CHR{ { InferBetween ?r ?t ?s ?q } // -- [ ?q known? ] |
    }
 
 ! ! Dip connection
-! CHR{ { Lit ?p ?q } { InferDip ?r ?u ?a ?p } // -- | [| | new-state :> s0 { InferBetween ?r ?u s0 ?q } ] }
+! CHR{ { Lit ?p ?q } { InferDip ?r ?u ?a ?p } // -- | [| | new-state :> ?s0 { InferBetween ?r ?u ?s0 ?q } ] }
 
 ! Clean up unconditional inlining
 ! CHR{ // { InlineQuot ?r ?u ?q true } { CondJump ?r ?s true } { CondRet ?t ?u true } -- |
 !      [ { ?r ?u } { ?s ?t } ==! ]
 !    }
 
-CHR{ { InlineQuot ?r ?u __ ?c } { InferredBetween ?r ?u ?s ?t __ } // -- |
+! CHR{ { InlineQuot ?r ?u __ ?c } { InferredBetween ?r ?u ?s ?t __ } // -- |
+CHR{ { InlineQuot ?r ?u __ ?c } // { InferredBetween ?r ?u ?s ?t __ } -- |
      { CondRet ?t ?u ?c }
    }
 
@@ -496,7 +493,13 @@ CHR{ // { ExecWord ?s ?t ?w } -- [ ?w inline? ]
 CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w } { InlineQuot ?s ?t ?d true } }
 CHR{ // { ExecWord ?s ?t ?w } -- | { Word ?s ?t ?w } }
 
-CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }
+! CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }
+
+! CHR{ { Word ?s ?t ?w } { Stack ?s ?v } { Lit ?a ?b } // -- [ ?b ?v ]}
+! Folding
+CHR{ { Word ?s ?t ?w } // -- [ ?w foldable? ] |
+     [| | ?s ?t ?w stack-effect in>> length <iota> >Vector V{ } clone [ ?w execute ] Fold boa ]
+   }
 ;
 
 ! * Interface

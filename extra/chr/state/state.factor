@@ -1,7 +1,7 @@
-USING: accessors arrays assocs assocs.extras chr chr.parser chr.programs
-combinators combinators.short-circuit disjoint-sets hash-sets hashtables kernel
-linked-assocs match math namespaces quotations sequences sets sorting typed
-types.util words ;
+USING: accessors arrays assocs assocs.extras chr chr.programs
+combinators.short-circuit disjoint-sets hash-sets hashtables kernel
+linked-assocs match math namespaces quotations sequences sets sorting terms
+typed words ;
 
 IN: chr.state
 
@@ -26,7 +26,6 @@ SYMBOLS: program exec-stack store builtins match-trace current-index ;
     { program exec-stack store builtins match-trace current-index }
     [ dup get ] H{ } map>assoc ;
 
-
 ! Operational interface
 TUPLE: chr-suspension
     constraint id alive activated stored hist vars ;
@@ -46,50 +45,12 @@ M: chr-suspension args>> constraint>> constraint-args ;
 SYMBOL: substitutions
 SINGLETON: rule-fail
 
-SYMBOL: ground-values
-
-: maybe-add-atom ( x ds -- )
-    2dup disjoint-set-member?
-    [ 2drop ] [ add-atom ] if ; inline
+DEFER: activate-new
+! Interface for builtin solvers!
+! :: equiv-in? ( v1 v2 set -- ? )
 
 : local-var? ( variable -- ? )
     [ program get local-vars>> in? ] [ f ] if* ;
-
-ERROR: ground-value-contradiction old value ;
-
-:: define-ground-value ( var value ds -- )
-    var ds 2dup maybe-add-atom
-    representative ground-values get
-    [| old | old [ old value = [ old ] [ old value ground-value-contradiction ] if ]
-     [ value ] if
-    ] change-at ;
-
-: ground-value? ( obj -- ? )
-    vars empty? ; inline
-
-: maybe-define-ground-value ( v1 v2 ds -- )
-    ! over ground-value? not [ swapd ] when
-    ! over ground-value? not [ 3drop ] [
-    over match-var? [ swapd ] when
-    over match-var? [ 3drop ] [
-        define-ground-value
-    ] if ;
-
-DEFER: activate-new
-! Interface for builtin solvers!
-: assume-equal ( a b ds -- )
-    2over [ match-var? ] both?
-    [
-        {
-            [ nipd maybe-add-atom ]
-            [ nip maybe-add-atom ]
-            [ equate ]
-        }
-        3cleave
-    ] [ maybe-define-ground-value ] if ;
-
-! :: equiv-in? ( v1 v2 set -- ? )
-
 
 DEFER: reactivate
 :: wake-equal ( v k -- )
@@ -98,15 +59,6 @@ DEFER: reactivate
                { [ v vs in? ] [ k vs in? ] } 0||
                [ id reactivate ] when
     ] assoc-each ;
-
-! Interface for builtin solving
-! NOTE: This tests alpha-equality
-: test-eq ( lhs rhs -- ? )
-    solve-eq { [  ] [ assoc-empty? ] } 1&& ;
-
-! Keep track of ground terms for equivalence classes
-: ?ground-value ( var -- val/key )
-    ground-values get ?at drop ;
 
 : known? ( obj -- ? )
     dup match-var? [ ?ground-value ] when
@@ -129,12 +81,15 @@ DEFER: apply-substitution
     dup match-var? [ swap ] unless associate
     ! [ store [ [ apply-substitution ] with map-values ] change ]
     ! [ ground-values [ [ swap lift ] with map-values ] change ] bi
-    store [ [ apply-substitution ] with map-values ] change
+    store [
+        valid-match-vars [ [ apply-substitution ] with map-values ] with-variable-off
+    ] change
     ;
 
 : equate-in-store ( v1 v2 -- )
-    [ replace-in-store ]
-    [ defined-equalities get assume-equal ] 2bi ;
+    ! [ replace-in-store ]
+    ! [ assume-equal ] 2bi ;
+    assume-equal  ;
 
 TUPLE: equiv-activation { a read-only } { b read-only } { wakeup read-only } ;
 C: <equiv-activation> equiv-activation
@@ -144,8 +99,6 @@ C: <equiv-activation> equiv-activation
     [ "equating locals!" throw ] when
     2dup = [ 2drop f ]
     [ 2dup wakeup-set <equiv-activation> ] if ;
-
-
 
 : add-equal ( assoc -- new )
     [ add-2-equal ] { } assoc>map sift
@@ -365,22 +318,35 @@ M:: chr-suspension apply-substitution* ( subst c -- c )
 
 M: builtin-suspension apply-substitution* nip ;
 
-: with-chr-prog ( prog quot -- )
-    [ LH{ } clone store set
-      <builtins-suspension> builtins store get set-at
-      load-chr dup program set
-      local-vars>> valid-match-vars set
-      H{ } clone substitutions set
-      <disjoint-set> defined-equalities set
-      0 current-index set
-    ] prepose with-var-names ; inline
+! : with-chr-prog ( prog quot -- )
+!     [ LH{ } clone store set
+!       <builtins-suspension> builtins store get set-at
+!       load-chr dup program set
+!       local-vars>> valid-match-vars set
+!       H{ } clone substitutions set
+!       ! <disjoint-set> defined-equalities set
+!       0 current-index set
+!     ] prepose with-var-names ; inline
+
+: init-chr-scope ( prog -- )
+    LH{ } clone store set
+    <builtins-suspension> builtins store get set-at
+    load-chr dup program set
+    local-vars>> valid-match-vars set
+    ! [ import-vars ] bi
+    check-vars? on
+    H{ } clone substitutions set
+    ! <disjoint-set> defined-equalities set
+    0 current-index set
+    H{ } clone var-names set
+    ;
 
 
 ! Replace all remaining variables with their equivalents
 :: replace-equalities ( c -- c )
     c builtin-suspension? [ c constraint>> ]
     [ c constraint>> :> c
-      defined-equalities get :> ds
+      defined-equalities :> ds
       c vars [| v | v
               v ds disjoint-set-member?
               [ v ds representative
@@ -393,9 +359,9 @@ M: builtin-suspension apply-substitution* nip ;
     ! store get builtins of constraint>>
     substitute-representatives? [
         ! [ constraint-args first2 2array ] map solve-problem
-        ! dup
+        dup
         valid-match-vars [ >alist solve-problem ] with-variable-off
-        ! [ lift ] curry map-values
+        [ lift ] curry map-values
     ] with-variable-on ;
 
 : replace-all-equiv ( store -- store )
@@ -404,18 +370,26 @@ M: builtin-suspension apply-substitution* nip ;
 
 : run-chr-query ( prog query -- store )
     [ pred>constraint ] map
+    ! defined-equalities [ clone ] [ <eq-disjoint-set> ] if*
+    over
     [ 0 sentinel set
+      ! [
       H{ } clone ground-values set
+      swap
+      init-chr-scope
       [ activate-new ] each
       store get
       ! replace-equalities
       replace-all-equiv
-    ] curry with-chr-prog ;
+      ! [ constraint>> H{ } lift ] map-values
+      ! [ constraint>> ] map-values
+    ] with-term-vars ;
+    ! ] curry with-chr-prog ;
 
 : run-chrat-query ( query -- store )
-    prepare-query run-chr-query ;
+    ! <eq-disjoint-set> [ prepare-query run-chr-query ] with-eq-scope ;
+     prepare-query run-chr-query  ;
 
-! TODO: move builtin into extra vocab?
 
 ALIAS: == test-eq
 ALIAS: ==! make-equal

@@ -1,5 +1,5 @@
 USING: accessors arrays assocs chr classes.tuple combinators kernel math
-namespaces sequences sets types.util vectors words words.constant ;
+namespaces sequences sets terms vectors words words.constant ;
 
 IN: chr.modular
 
@@ -196,7 +196,7 @@ GENERIC: expand-ask/tell ( rule -- rule )
 
 M: modular-chr expand-ask/tell
     clone
-    "k" uvar <gvar>
+    "k" uvar <term-var>
     [ swap [ convert-ask ] with change-heads ]
     [ swap [ convert-entailed ] with change-body ] bi ;
 
