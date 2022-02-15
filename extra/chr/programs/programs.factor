@@ -1,5 +1,5 @@
 USING: accessors arrays assocs assocs.extras chr chr.modular kernel math
-math.order sequences sets sorting types.util ;
+math.order sequences sets sorting terms types.util ;
 
 IN: chr.programs
 

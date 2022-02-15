@@ -72,9 +72,11 @@ DEFER: reactivate
 
 ! NOTE: Using Store-wide replacement for now...
 
+DEFER: alive?
 :: wakeup-set ( v k -- ids )
-    store get [ vars>> :> vs { [ v vs in? ] [ k vs in? ] } 0|| ] filter-values
-    keys ;
+    v vars k vars union :> check
+    store get [ vars>> check intersects? ] filter-values
+    keys [ alive? ] filter ;
 
 DEFER: apply-substitution
 : replace-in-store ( v1 v2 -- )
@@ -100,10 +102,19 @@ C: <equiv-activation> equiv-activation
     2dup = [ 2drop f ]
     [ 2dup wakeup-set <equiv-activation> ] if ;
 
+: update-vars! ( id -- )
+    dup alive?
+    [ store get at dup constraint>> vars >>vars drop ]
+    [ drop ] if ;
+
 : add-equal ( assoc -- new )
     [ add-2-equal ] { } assoc>map sift
     [ [ [ a>> ] [ b>> ] bi equate-in-store ] each ]
-    [ [ wakeup>> [ reactivate ] each ] each ]
+    [
+        [ wakeup>> ] gather [ alive? ] filter
+        [ dup update-vars! reactivate ] each
+        ! [ wakeup>> members [ dup update-vars! reactivate ] each ] each
+    ]
     [ [ [ a>> ] [ b>> ] bi 2array \ = prefix 1array ] map ] tri ;
     ! 2dup [ local-var? ] either?
     ! [ "equating locals!" throw ] when
@@ -134,6 +145,8 @@ ERROR: cannot-make-equal lhs rhs ;
     [ cannot-make-equal ] if* ;
 
 TYPED: create-chr ( c: constraint -- id )
+    ! FIXME: This is to make sure any representatives get in! That stuff is really meh...
+    H{ } lift
     chr-suspension new swap
     [ >>constraint ]
     [ vars >hash-set >>vars ] bi
@@ -266,7 +279,7 @@ SYMBOL: sentinel
 
 : recursion-check ( -- )
     ! sentinel get 5000 > [ "runaway" throw ] when
-    sentinel get 50 > [ "runaway" throw ] when
+    sentinel get 1000 > [ "runaway" throw ] when
     sentinel inc ;
 
 ! TODO: check if that is needed to make sure tail recursion works!
@@ -372,7 +385,8 @@ M: builtin-suspension apply-substitution* nip ;
 : run-chr-query ( prog query -- store )
     [ pred>constraint ] map
     ! defined-equalities [ clone ] [ <eq-disjoint-set> ] if*
-    over
+    ! over
+    2dup 2array
     [ 0 sentinel set
       ! [
       H{ } clone ground-values set

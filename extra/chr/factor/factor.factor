@@ -1,7 +1,7 @@
 USING: accessors arrays assocs chr chr.parser classes combinators effects
 effects.parser hashtables kernel lexer make namespaces parser persistent.assocs
-quotations sequences sequences.generalizations strings types.util vocabs.parser
-words ;
+quotations sequences sequences.generalizations strings terms types.util
+vocabs.parser words ;
 
 IN: chr.factor
 FROM: syntax => _ ;
@@ -37,6 +37,7 @@ TUPLE: ExecWord < trans-pred word ;
 TUPLE: Generic < trans-pred word ;
 TUPLE: Definition < chr-pred word quot ;
 TUPLE: Lit < chr-pred val obj ;
+TUPLE: Effect < chr-pred val in out ;
 ! TUPLE: Curried < chr-pred val parm callable ;
 TUPLE: Curried < chr-pred val parm callable ;
 TUPLE: Composed < chr-pred val callable1 callable2 ;
@@ -52,7 +53,9 @@ TUPLE: InlineCall < trans-pred word quot ;
 TUPLE: Call < trans-pred word quot ;
 
 ! Data Split, duplication
-TUPLE: Split < chr-pred from to ;
+TUPLE: Dup < chr-pred from to ;
+! Inverse operation
+TUPLE: Drop < chr-pred val ;
 
 ! Known Stack states
 TUPLE: QueryStack < state-pred depth ;

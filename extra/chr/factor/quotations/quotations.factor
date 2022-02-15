@@ -1,7 +1,7 @@
-USING: accessors arrays chr chr.factor chr.factor.words chr.parser chr.programs
-chr.state classes combinators combinators.short-circuit continuations effects
-generalizations kernel lists math math.order math.parser quotations sequences
-sets terms types.util words ;
+USING: accessors arrays chr chr.factor chr.factor.words chr.modular chr.parser
+chr.programs chr.state classes combinators combinators.short-circuit
+continuations effects generalizations kernel lists math math.order math.parser
+quotations sequences sets terms types.util words ;
 
 IN: chr.factor.quotations
 FROM: syntax => _ ;
@@ -59,6 +59,8 @@ TUPLE: AskLit < state-pred n var ;
 
 ! TUPLE: FoldQuot < trans-pred missing lit-stack-in quot ;
 TUPLE: FoldQuot < trans-pred missing quot ;
+
+TUPLE: Uncons < chr-pred car cdr ;
 
 : elt-vars ( seq -- seq )
     [ swap dup pair? [ first ] when
@@ -150,6 +152,7 @@ TERM-VARS: ?beg ?parm ;
 TUPLE: Prim < Word ;
 TUPLE: ExecUnknown < Exec ;
 TUPLE: InlineUnknown < trans-pred val ;
+TUPLE: InlineEffect < trans-pred quot ;
 TUPLE: InlineCond < trans-pred val cond ;
 TUPLE: InlineQuot < trans-pred quot ;
 TUPLE: Cond < chr-pred cond constraint ;
@@ -166,8 +169,11 @@ TUPLE: LinkStates < trans-pred ;
 TUPLE: InsertState < trans-pred between ;
 TUPLE: Entry < state-pred word ;
 TUPLE: CallFrame < chr-pred caller-start callee-start callee-end caller-end ;
-TUPLE: InferBetween < trans-pred entry-state quot ;
+TUPLE: InferBetween < trans-pred quot ;
 TUPLE: InferredBetween < trans-pred entry-state exit-state quot ;
+TUPLE: InferEffect < trans-pred in out quot ;
+TUPLE: RemoveState < state-pred ;
+TUPLE: AddLink < trans-pred ;
 
 ! ** Call-Graph-Inference
 TUPLE: CheckExec < trans-pred word ;
@@ -183,18 +189,27 @@ CHR{ { Entry ?r ?w } // { Link ?r ?s } { CheckExec ?s ?t ?w } --
      | { RecursiveCall ?s ?t ?w ?r } }
 CHR{ // { Link +top+ ?s } { CheckExec ?s ?t ?w } --
      | { ExecWord ?s ?t ?w } }
-! CHR{ { CheckExec ?t __ ?w } { Linkback ?s ?l } // -- [ ?t known ?l known in? ] |
-CHR{ { CheckExec ?t __ ?w } { Linkback ?s ?l } // -- [ ?t ?l in? ] |
-     { Link ?s ?t } }
-! CHR{ { Linkback ?s ?l } // { Link ?t ?u } -- [ ?t known ?l known in? ] | { Link ?s ?u } }
+
+CHR{ { CheckExec ?t __ __ } // -- | { Link ?t ?t } }
+
+CHR{ // { Linkback ?s ?a } { AddLink ?s ?t } -- | [ ?s ?a ?t suffix Linkback boa ] }
+CHR{ // { Linkback ?s ?a } { AddLink ?t ?b } -- [ ?t ?a known in? ] | [ ?s ?a ?b suffix Linkback boa ] }
+! TODO Dangerous?
+CHR{ // { AddLink ?s ?t } { Linkback ?t ?a } -- | [ ?s ?a ?t prefix Linkback boa ] }
+
+! CHR: propagate-linkback @ { Linkback ?r ?a } // { Linkback ?s ?b } -- [ ?s ?a in? ] |
+! ! [| |
+! !  ?a ?b union :> c
+!  { Linkback ?r ?b }
+! ! ]
+!     ;
+
+CHR{ { Linkback ?r ?a } // { Linkback ?r ?b } -- [ ?b ?a subset? ] | }
+
+CHR{ // { Linkback ?r ?a } { Linkback ?r ?b } -- | [| | ?a ?b union :> c { Linkback ?r c } ] }
+
 CHR{ { Linkback ?s ?l } // { Link ?t ?u } -- [ ?s ?t == not ] [ ?t ?l in? ] | { Link ?s ?u } }
-! An In/Out also means that we can go backwards
 
-! CHR{ { In/Out ?s ?u __ __ } // { Link ?r ?u } -- | { Link ?s ?u } }
-
-! CHR{ { SplitState ?s ?s1 __ } // { Link ?s1 ?u } -- | { Link ?s ?u } }
-! CHR{ { SplitState ?s __ ?s2 } // { Link ?s2 ?u } -- | { Link ?s ?u } }
-! CHR{ { CondJump ?s ?u __ } { Link ?r ?u } // -- | { Link ?s ?u } }
 CHR{ { CondJump ?s ?r __ } // { Link ?r ?u } -- | { Link ?s ?u } }
 
 ! Transitivity
@@ -205,6 +220,48 @@ CHR{ // { Link ?r ?s } { Link ?s ?t } -- | { Link ?r ?t } }
     { [ e out [ length ] same? ]
       [ e supremum 1 + in length = ]
     } 0&& ;
+
+! ** Data Flow
+CHRAT: data-flow { Effect }
+! Sanity checks
+CHR{ { Drop ?x } { Drop ?x } // -- | [ "double drop" throw ] }
+! CHR{ { Dup ?x ?y } { Dup ?x ?y } // -- | [ "douple dup" throw ] }
+CHR{ { Dup ?x ?y } // { Dup ?x ?y } -- | }
+CHR{ { Dup ?x ?x } // -- | [ "self-dup" throw ] }
+
+CHR{ // { Dup ?x ?y } { Drop ?y } -- | [ ?x ?y ==! ] }
+CHR{ // { Dup ?x ?y } { Drop ?x } -- | [ ?x ?y ==! ] }
+
+! CHR{ { Dup ?x ?y } { Effect ?x ?a ?b } // -- | { Effect ?y ?c ?d }
+!      { Dup ?a ?c } { Dup ?b ?d } }
+
+! CHR{ { Dup ?x ?y } { Effect ?y ?c ?d } // -- | { Effect ?x ?a ?b }
+!      { Dup ?a ?c } { Dup ?b ?d } }
+
+! CHR{ { ask { Effect ?x ?a ?b } } { Dup ?x ?y } // -- | { Effect ?y ?c ?d } { Dup ?a ?c } { Dup ?b ?d } }
+! CHR{ { ask { Effect ?y ?c ?d } } { Dup ?x ?y } // -- | { Effect ?x ?a ?b } { Dup ?a ?c } { Dup ?b ?d } }
+
+CHR: propagate-dup-right @
+{ Dup ?x L{ ?a . ?b } } // -- | [ ?x L{ ?c . ?d } ==! ] ;
+! CHR: propagate-dup-right @
+! { Dup ?x ?y } // -- [ ?y known cons-state? ] | [ ?x L{ ?c . ?d } ==! ] ;
+
+CHR: propagate-dup-left @
+{ Dup L{ ?a . ?b } ?y } // -- | [ ?y L{ ?c . ?d } ==! ] ;
+! CHR: propagate-dup-left @
+! { Dup ?x ?y } // -- [ ?x known cons-state? ] | [ ?y L{ ?c . ?d } ==! ] ;
+
+CHR: destructure-dup @
+// { Dup L{ ?a . ?b } L{ ?c . ?d } } -- | { Dup ?a ?c } { Dup ?b ?d } ;
+
+CHR: literal-dup1 @
+{ Lit ?x ?v } // { Dup ?x ?y } -- | { Lit ?y ?v } ;
+
+CHR: literal-dup12 @
+{ Lit ?y ?v } // { Dup ?x ?y } -- | { Lit ?x ?v } ;
+
+CHR: drop-lit @ // { Drop ?x } { Lit ?x __ } { Instance ?x __ } { Stack __ L{ ?x . __ } } -- | ;
+;
 
 TERM-VARS: ?rho ?sig ;
 
@@ -242,7 +299,9 @@ CHR{ { Val ?s ?n ?x } { Lit ?x ?a } // { AskLit ?s ?n ?b } -- | [ ?b ?a ==! ] }
 
 CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?b } -- | [ ?b ?a ==! ] }
 CHR{ { Stack ?s ?v } // { Stack ?s ?v } -- | }
-CHR: same-stack @ { Stack ?s ?v } // { Stack ?s ?w } -- | [ ?v ?w ==! ] ;
+! CHR: same-stack @ { Stack ?s ?v } // { Stack ?s ?w } -- | [ ?v ?w ==! ] ;
+CHR: same-stack @ { Stack ?s ?v } { Stack ?s ?w } // -- | [ ?v ?w ==! ] ;
+CHR: same-effect @ { Effect ?q ?i ?o } // { Effect ?q ?a ?b } -- | [ ?i ?a ==! ] [ ?o ?b ==! ] ;
 
 CHR{ { Stack ?s ?v } { Val ?s ?n ?a } // -- [ ?n ?v llength* < ] |
      [ ?a ?n ?v lnth ==! ]
@@ -322,6 +381,12 @@ CHR: rem-trivial-ret @
     [ name>> "_i" append ] dip number>string append
     <term-var> ;
 
+: affine-shuffle? ( mapping -- ? )
+    duplicates empty? ;
+
+: linear-shuffle? ( effect -- ? )
+    [ in>> ] [ out>> ] bi { [ [ length ] same? ] [ set= ] } 2&& ;
+
 CHR{ // { Shuffle ?s ?t ?m } -- [ ?m known? ] |
      [| | ?m known dup :> m
       ! dup length 1 - :> lo
@@ -382,8 +447,10 @@ CHR{ // { Shuffle ?s ?t ?m } -- [ ?m known? ] |
 ! CHR{ // { Push ?s ?t { ?a ?u } } -- | { Push ?s ?t ?a } { Instance ?a ?u } }
 CHR{ // { Push ?s ?t ?b } -- |
      { Lit ?v ?b }
-     { AssumeEffect ?s ?t ( -- v ) }
-     { Val ?t 0 ?v }
+     ! { AssumeEffect ?s ?t ( -- v ) }
+     { Stack ?s ?rho }
+     { Stack ?t L{ ?v . ?rho } }
+     ! { Val ?t 0 ?v }
      ! { InferredEffect ?s ?t ?rho L{ ?v . ?rho } }
 
    }
@@ -392,61 +459,105 @@ CHR{ { Lit ?a ?b } // -- |
      [ ?a ?b class-of Instance boa ] }
 
 
-CHR: assume-word-effect @ { Word ?s ?t ?w } // -- |
-[| | ?w chrat-effect :> e { AssumeEffect ?s ?t e } ] ;
-
 ! FIXME: Have to make sure InlineQuot comes first because of replacement foo not working correctly right now
 ! Ideal fix: queue-based runner, so that we always see all var instances!
 ! CHR{ { Word ?s ?t dip  } // -- | { Val ?s 1 ?a } { Val ?s 0 ?q } { InlineQuot ?s ?t ?q } { Val ?t 0 ?a } }
 ! CHR{ // { Word ?s ?t dip } -- | { InlineUnknown ?s ?t ?q } { Val ?s 1 ?a } { Val ?s 0 ?q } { Val ?t 0 ?a } }
 ! CHR{ // { Word ?s ?t dip } -- | { InferDip ?s ?t ?a ?q } { Val ?s 1 ?a } { Val ?s 0 ?q } { Val ?t 0 ?a } }
 TERM-VARS: ?dipsig ;
-CHR: infer-dip @ // { Word ?r ?u dip } -- |
-     { Stack ?r L{ ?q ?x . ?rho } }
-     { Stack ?s0 L{ ?q . ?rho } }
-     { Linkback ?r { ?s0 } }
+CHR: infer-dip @ // { Word ?s ?u dip } -- |
+     { Stack ?s L{ ?q ?x . ?rho } }
+     ! { Stack ?s0 L{ ?q . ?rho } }
+     { Stack ?s0 ?rho }
+     { Effect ?q ?rho ?sig }
+     { AddLink ?s ?s0 }
      { InferCall ?s0 ?t ?q }
-     { Stack ?t ?dipsig }
-     { Stack ?u L{ ?x . ?dipsig } }
+     { Stack ?t ?sig }
+     ! { Linkback ?s { ?u } }
+     { Stack ?u L{ ?x . ?sig } }
+     ! { Stack ?t ?dipsig }
+     ! { Stack ?t L{ ?x . ?dipsig } }
    ;
 
 CHR{ // { Word ?s ?t call } -- |
-     { InferCall ?s ?t ?q } { Val ?s 0 ?q } }
+     { Stack ?s L{ ?q . ?rho } }
+     { Stack ?s0 ?rho }
+     { Effect ?q ?rho ?sig }
+     { Stack ?t ?sig }
+     { AddLink ?s ?s0 }
+     { InferCall ?s0 ?t ?q }
+     ! { InlineEffect ?s0 ?t ?q }
+   }
 
-TERM-VARS: ?call-rho ;
-CHR: infer-call @ { InferCall ?r ?t ?q } // -- |
-     { Stack ?r L{ ?q . ?call-rho } }
-     { Stack ?s0 ?call-rho }
+TERM-VARS: ?crho ?csig ;
+! FIXME: redundant
+CHR: infer-call @ // { InferCall ?r ?u ?q } -- |
+     ! { Stack ?r L{ ?q . ?rho } }
+     ! { Effect ?q ?crho ?csig }
+     ! { Stack ?s0 ?crho }
+     ! ! Pseudoframe
+     ! { Linkback ?r { ?s0 } }
+     ! { InlineUnknown ?s0 ?u ?q } ;
+     ! { Stack ?r L{ { ?rho ?sig } . ?crho } }
+     ! { Stack ?u ?sig }
+     ! { Stack ?s0 ?crho }
      ! Pseudoframe
-     { Linkback ?r { ?s0 } }
-     { InlineUnknown ?s0 ?t ?q } ;
+     ! { Linkback ?r { ?s0 } }
+     ! { InlineUnknown ?s0 ?t ?q }
+
+     ! { InferEffect ?r ?u ?crho ?csig ?q }
+     { InlineUnknown ?r ?u ?q }
+
+     ! { InlineUnknown ?r ?u ?q }
+     ! [ ?rho ?crho ==! ]
+     ! [ ?sig ?csig ==! ]
+    ;
 
 CHR: infer-dup @ // { Word ?s ?t dup } -- |
      { Stack ?s L{ ?x . ?rho } }
      { Stack ?t L{ ?y ?x . ?rho } }
-     { Split ?x ?y } ;
+     { Dup ?x ?y } ;
 
-CHR: infer-shuffle @ // { Word ?s ?t ?w } -- [ ?w "shuffle" word-prop? ] |
-     [ ?s ?t ?w "shuffle" word-prop shuffle-mapping Shuffle boa ] ;
+CHR: infer-over @ // { Word ?s ?t over } -- |
+     { Stack ?s L{ ?y ?x . ?rho } }
+     { Stack ?t L{ ?z ?y ?x . ?rho } }
+     { Dup ?x ?z } ;
 
-CHR{ // { Word ?s ?t curry } -- |
-     { Val ?s 0 ?p }
-     { Val ?s 1 ?parm }
-     { Val ?t 0 ?q }
-     { Curried ?q ?parm ?p }
-   }
+! CHR{ // { Word ?s ?t curry } -- |
+!      { Val ?s 0 ?p }
+!      { Val ?s 1 ?parm }
+!      { Val ?t 0 ?q }
+!      { Curried ?q ?parm ?p }
+!    }
+CHR: curry-effect @ // { Word ?s ?t curry } -- |
+     { Stack ?s L{ ?p ?parm . ?rho } }
+     ! { Effect ?p L{ ?parm . ?a } ?b }
+     ! { Effect ?p ?a ?b }
+     ! { CurriedEffect ?q ?a ?b ?parm }
+     ! { Effect ?q { uncons  } }
+     { Stack ?t L{ L{ ?parm . ?p } . ?rho } }
+     ! { Effect ?q ?c ?b }
+     ! { Stack ?t L{ ?q . ?rho } }
+   ;
 
-! CHR: infer-curry @ { Curried ?p ?parm ?v } // { InferCall ?r ?u ?p } -- |
-!     { Stack ?r L{ ?p . ?rho } }
-!     { Stack ?s0 L{ ?v ?parm . ?rho } }
-!     { Linkback ?r { ?s0 } }
-!     { InferCall ?s0 ?u ?v }
-!     ! { InlineUnknown ?s0 ?u ?v }
-!     ;
+CHR: assume-word-effect @ { Word ?s ?t ?w } // -- |
+[| | ?w chrat-effect :> e { AssumeEffect ?s ?t e } ] ;
+
+CHR: infer-shuffle @ // { Word ?s ?t ?w } -- [ ?w "shuffle" word-prop? [ linear-shuffle? ] [ f ] if* ] |
+[ ?s ?t ?w "shuffle" word-prop shuffle-mapping Shuffle boa ] ;
+
+
+CHR{ // { Word ?s ?t ?w } -- [ ?w primitive? ] | { Prim ?s ?t ?w } }
+
+CHR{ // { Prim ?s ?t drop } -- |
+     { Stack ?s L{ ?x . ?rho } }
+     { Stack ?t ?rho }
+     { Drop ?x } }
+
 CHR: infer-curry @ { Curried ?p ?parm ?v } // { InlineUnknown ?r ?u ?p } -- |
     { Stack ?r ?rho }
     { Stack ?s0 L{ ?parm . ?rho } }
-    { Linkback ?r { ?s0 } }
+    ! { Linkback ?r { ?s0 } }
     ! { InferCall ?s0 ?u ?v }
     { InlineUnknown ?s0 ?u ?v }
     ;
@@ -475,7 +586,9 @@ CHR: infer-if @ // { Word ?r ?t if } -- |
      { InlineUnknown ?sf0 ?sf1 ?q }
      { CondRet ?sf1 ?t ?c2 }
 
-
+     { Effect ?p ?rho ?sig }
+     { Effect ?q ?rho ?sig }
+     { Stack ?t ?sig }
 
      ! { Linkback ?r { ?st0 } }
      ! { InlineUnknown ?s0 ?t ?q } { InlineUnknown ?s0 ?t ?p }
@@ -483,13 +596,40 @@ CHR: infer-if @ // { Word ?r ?t if } -- |
    ;
 ;
 
+! ** Cleanup
+! Find nearest link
+! mark sweep
+TUPLE: Mark < state-pred ;
+! CHRAT: clean-states { RemoveState }
+! CHR{ { RemoveState ?s } // { Linkback ?s ?a } -- |
+!      [ ?a members [ RemoveState boa ] map ]
+!    }
+! CHR{ { RemoveState ?s } // { Linkback ?r ?a } -- [ ?s ?a known in? ] |
+!      [ ?r ?a remove Linkback boa ]
+!    }
+! CHR{ { RemoveState ?s } // { Stack ?s __ } -- | }
+! ;
+
 ! ** Syntactic expansion
 CHRAT: expand-quot { InferDef InferToplevelQuot InferBetween }
 IMPORT: call-stack
+IMPORT: data-flow
+! IMPORT: clean-states
 IMPORT: basic-stack
 ! IMPORT: infer-stack
 ! IMPORT: stack-ops
-CHR{ { Lit ?p ?q } // { InlineUnknown ?s ?t ?p } -- | { InlineQuot ?s ?t ?q } }
+CHR{ // { Lit ?p ?q } { InlineUnknown ?s ?t ?p } -- | { InlineQuot ?s ?t ?q } }
+CHR: uncurry @ // { InlineUnknown ?s ?t L{ ?parm . ?p } } -- |
+     { Stack ?s ?rho }
+     { Stack ?s0 L{ ?parm . ?rho } }
+     { AddLink ?s ?s0 }
+     { InlineUnknown ?s0 ?t ?p } ;
+
+! CHR{ { Effect ?p ?rho ?sig } // { InlineEffect ?s ?t ?p } -- |
+!      { Stack ?s ?rho }
+!      { InlineUnknown ?s ?t ?p }
+!      { Stack ?t ?sig }
+!    }
 ! TODO: inheritance!
 ! CHR{ { Lit ?p ?q } // { InlineCond ?s ?t ?p ?c } -- | { InlineQuot ?s ?t ?q ?c } }
 ! CHR{ { Lit ?p ?q } // { InferCall ?s ?t ?p } -- | { InlineQuot ?s ?t ?q true } }
@@ -503,53 +643,44 @@ CHR{ // { InferDef ?w } -- [ ?w deferred? not ] |
       }
      ] }
 
-CHR{ { InlineQuot ?s ?t ?q } // -- | [| | new-state :> s0
-                                      {
-                                          { CondJump ?s ?s0 true }
-                                          { InferBetween ?s ?t ?s0 ?q }
-                                      }
-                                     ] }
+CHR{ // { InlineQuot ?s ?t ?q } -- |
+     ! [| | new-state :> s0
+                                      ! {
+                                          ! { CondJump ?s ?s0 true }
+                                          { InferBetween ?s ?t ?q }
+                                      ! }
+   ! ]
+}
 
 CHR{ // { InferToplevelQuot ?q } -- |
      { InlineQuot +top+ +end+ ?q }
    }
 
-CHR{ { InferBetween ?r ?t ?s ?q } // -- [ ?q known? ] |
-     { Infer ?s ?s ?q }
+CHR{ { InferBetween ?r ?s ?q } // -- [ ?q known? ] |
+     { Infer ?r ?r ?q }
      { Linkback ?r { ?s } }
    }
 
-! ! Dip connection
-! CHR{ { Lit ?p ?q } { InferDip ?r ?u ?a ?p } // -- | [| | new-state :> ?s0 { InferBetween ?r ?u ?s0 ?q } ] }
-
-! Clean up unconditional inlining
-! CHR{ // { InlineQuot ?r ?u ?q true } { CondJump ?r ?s true } { CondRet ?t ?u true } -- |
-!      [ { ?r ?u } { ?s ?t } ==! ]
-!    }
-
-! CHR{ { InlineQuot ?r ?u __ ?c } { InferredBetween ?r ?u ?s ?t __ } // -- |
-CHR{ { InlineQuot ?r ?u __ } // { InferredBetween ?r ?u ?s ?t __ } -- |
-     { CondRet ?t ?u true }
-   }
-
-CHR: end-infer @ // { InferBetween ?r ?t ?s ?q } { Infer ?s ?x [ ] } -- |
-     ! [ ?x ?t ==! ]
-     { InferredBetween ?r ?t ?s ?x ?q }
-     { Stack ?x ?sig }
+! CHR: end-infer @ // { InferBetween ?r ?t ?q } { Infer ?r ?x [ ] } -- |
+CHR: end-infer @ // { InferBetween ?r ?t ?q } { Infer ?r ?x [ ] } -- |
+     [ ?x ?t ==! ]
+     ! { InferredBetween ?r ?t ?s ?x ?q }
+     ! { Stack ?x ?sig }
      ! { AssumeEffect ?s ?x ( -- ) }
    ;
 
 ! Main inference advancer
 CHR{ ! { BeginQuot ?r ?beg }
-    { InferBetween ?r __ ?beg __ }
-     // { Linkback ?r ?a }
-     { Infer ?beg ?s ?q } -- [ ?q empty? not ] |
+    { InferBetween ?r ?t __ }
+    //
+    ! { Linkback ?r ?a }
+     { Infer ?r ?s ?q } -- [ ?q empty? not ] |
      [| | ?q unclip :> ( rest w ) ?s seq-state :> sn
-      ?a sn suffix :> a2
+      ! ?a sn suffix :> a2
       { { Exec ?s sn w }
         ! { LinkStates ?s sn }
-        { Infer ?beg sn rest }
-        { Linkback ?r a2 }
+        { Infer ?r sn rest }
+        { AddLink ?r sn }
       }
      ] }
 
@@ -579,6 +710,7 @@ CHR: do-fold @ // { FoldQuot ?s ?t __ ?q } { LitStack ?s ?v t } -- |
       ?v ?q with-datastack :> outs
       ?v length [ drop ] n*quot outs >quotation compose :> new-quot
       { InlineQuot ?s ?t new-quot }
+      ! { RemoveState ?s }
      ]
    ;
 
