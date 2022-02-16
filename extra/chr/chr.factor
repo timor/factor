@@ -73,9 +73,12 @@ PREDICATE: fiat-pred-array < array ?first { [ word? ] [ pred-head-word? not ] } 
 UNION: chr-constraint fiat-pred-array chr-pred ;
 INSTANCE: chr-constraint constraint
 
+: check-slots>tuple ( seq class -- tuple )
+    2dup all-slots [ length ] same? [ "wrong # tuple args" 3array throw ] unless
+    slots>tuple ;
 
 M: pred-array pred>constraint
-    unclip-slice slots>tuple ;
+    unclip-slice check-slots>tuple ;
 
 M: sequence pred>constraint [ pred>constraint ] map ;
 

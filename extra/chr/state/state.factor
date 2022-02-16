@@ -73,10 +73,14 @@ DEFER: reactivate
 ! NOTE: Using Store-wide replacement for now...
 
 DEFER: alive?
+! :: wakeup-set ( v k -- ids )
+!     v vars k vars union :> check
+!     store get [ vars>> check intersects? ] filter-values
+!     keys [ alive? ] filter ;
+
 :: wakeup-set ( v k -- ids )
-    v vars k vars union :> check
-    store get [ vars>> check intersects? ] filter-values
-    keys [ alive? ] filter ;
+    store get [ vars>> :> vs { [ v vs in? ] [ k vs in? ] } 0|| ] filter-values
+    keys ;
 
 DEFER: apply-substitution
 : replace-in-store ( v1 v2 -- )

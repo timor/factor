@@ -31,6 +31,9 @@ TUPLE: EitherOr < chr-pred s1 s2 v1 v2 ;
 
 TUPLE: SplitState < state-pred sa sb ;
 
+! Phi
+TUPLE: JoinStacks < chr-pred in1 in2 out ;
+
 ! Word level
 TUPLE: Exec < trans-pred obj ;
 TUPLE: ExecWord < trans-pred word ;
@@ -56,6 +59,8 @@ TUPLE: Call < trans-pred word quot ;
 TUPLE: Dup < chr-pred from to ;
 ! Inverse operation
 TUPLE: Drop < chr-pred val ;
+! Mark value as dead.  Solvers should update their state accordingly
+TUPLE: Dead < chr-pred val ;
 
 ! Known Stack states
 TUPLE: QueryStack < state-pred depth ;
