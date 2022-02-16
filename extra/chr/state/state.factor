@@ -283,7 +283,7 @@ SYMBOL: sentinel
 
 : recursion-check ( -- )
     ! sentinel get 5000 > [ "runaway" throw ] when
-    sentinel get 1000 > [ "runaway" throw ] when
+    sentinel get 5000 > [ "runaway" throw ] when
     sentinel inc ;
 
 ! TODO: check if that is needed to make sure tail recursion works!
@@ -346,6 +346,8 @@ M: builtin-suspension apply-substitution* nip ;
 !       0 current-index set
 !     ] prepose with-var-names ; inline
 
+SYMBOL: rules-cache
+
 : init-chr-scope ( prog -- )
     LH{ } clone store set
     <builtins-suspension> builtins store get set-at
@@ -357,6 +359,7 @@ M: builtin-suspension apply-substitution* nip ;
     ! <disjoint-set> defined-equalities set
     0 current-index set
     H{ } clone var-names set
+    H{ } clone rules-cache set
     ;
 
 

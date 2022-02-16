@@ -35,6 +35,11 @@ C: <_entailed> _entailed
 TUPLE: _exists < chr-pred var token ;
 C: <_exists> _exists
 
+
+! Experimental
+TUPLE: AskAbout < chr-pred constraint token vars ;
+TUPLE: AnswerAbout < chr-pred constraint token vars ;
+
 ! TUPLE: return < chr-pred vars id ;
 ! C: <return> return
 

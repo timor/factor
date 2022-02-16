@@ -1,5 +1,5 @@
-USING: accessors arrays assocs assocs.extras chr chr.modular kernel math
-math.order sequences sets sorting terms types.util ;
+USING: accessors arrays assocs assocs.extras chr chr.factor chr.modular kernel
+math math.order sequences sets sorting terms types.util ;
 
 IN: chr.programs
 
@@ -54,14 +54,16 @@ C: <constraint-schedule> constraint-schedule
     ] with assoc-map ;
 
 : collect-vars ( rules -- set )
-    vars members ;
+    ! vars { +top+ +end+ } diff members
+    vars +top+ swap remove-eq +end+ swap remove-eq members
+    ;
 
 ERROR: existential-guard-vars rule ;
 :: rule-existentials ( rule -- set )
     rule
-    [ heads>> vars ]
-    [ guard>> vars ]
-    [ body>> vars  ] tri :> ( vh vg vb )
+    [ heads>> collect-vars ]
+    [ guard>> collect-vars ]
+    [ body>> collect-vars  ] tri :> ( vh vg vb )
     vb vh diff :> existentials
     vg members [ vh in? not ] any? [ rule existential-guard-vars ] when
     existentials

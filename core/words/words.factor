@@ -180,6 +180,7 @@ M: word reset-word
         "foldable" "flushable" "reading" "writing" "reader"
         "writer" "delimiter" "deprecated"
         "singleton-class"
+        "chrat-rules"
     } remove-word-props ;
 
 : reset-generic ( word -- )

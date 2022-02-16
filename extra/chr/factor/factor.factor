@@ -1,7 +1,6 @@
 USING: accessors arrays assocs chr chr.parser classes combinators effects
-effects.parser hashtables kernel lexer make namespaces parser persistent.assocs
-quotations sequences sequences.generalizations strings terms types.util
-vocabs.parser words ;
+effects.parser hashtables kernel lexer make match namespaces parser
+persistent.assocs sequences strings terms vocabs.parser words ;
 
 IN: chr.factor
 FROM: syntax => _ ;
@@ -38,6 +37,9 @@ TUPLE: JoinStacks < chr-pred in1 in2 out ;
 TUPLE: Exec < trans-pred obj ;
 TUPLE: ExecWord < trans-pred word ;
 TUPLE: Generic < trans-pred word ;
+TUPLE: Method < trans-pred word ;
+TUPLE: SingleMethod < trans-pred word n class ;
+TUPLE: DefaultMethod < trans-pred word ;
 TUPLE: Definition < chr-pred word quot ;
 TUPLE: Lit < chr-pred val obj ;
 TUPLE: Effect < chr-pred val in out ;
@@ -47,13 +49,32 @@ TUPLE: Composed < chr-pred val callable1 callable2 ;
 TUPLE: CondJump < trans-pred cond ;
 TUPLE: CondRet < trans-pred cond ;
 
+TUPLE: Cond < chr-pred cond constraint ;
+TUPLE: Disjoint < chr-pred cond1 cond2 ;
+! TUPLE: AbsurdState < state-pred ;
+TUPLE: ConflictState < state-pred but why? ;
+TUPLE: Absurd < chr-pred cond ;
+TUPLE: Trivial < chr-pred cond ;
+
+! list of vars
+TUPLE: Stack < state-pred vals ;
+
+TUPLE: AcceptTypes < state-pred list ;
+TUPLE: AcceptType < state-pred var type ;
+TUPLE: ProvideTypes < state-pred list ;
+TUPLE: ProvideType < state-pred var type ;
+! TUPLE: BranchCond < state-pred cond ;
+
 ! This signifies that the referenced condition is part of an exclusive set?
-! TUPLE: Exclusive
 
 ! Definition level
+
 TUPLE: InferCall < trans-pred val ;
 TUPLE: InlineCall < trans-pred word quot ;
 TUPLE: Call < trans-pred word quot ;
+
+! State connections
+TUPLE: Linkback < chr-pred beg states ;
 
 ! Data Split, duplication
 TUPLE: Dup < chr-pred from to ;
@@ -61,6 +82,14 @@ TUPLE: Dup < chr-pred from to ;
 TUPLE: Drop < chr-pred val ;
 ! Mark value as dead.  Solvers should update their state accordingly
 TUPLE: Dead < chr-pred val ;
+
+! High-level Call Graph
+TUPLE: TopEntry < chr-pred state word ;
+TUPLE: Entry < state-pred word ;
+TUPLE: Inlined < chr-pred word ;
+
+
+TUPLE: InlineUnknown < trans-pred val ;
 
 ! Known Stack states
 TUPLE: QueryStack < state-pred depth ;
@@ -72,13 +101,19 @@ TUPLE: BranchIf < trans-pred cond strue sfalse ;
 
 TUPLE: InferUnknown < trans-pred val ;
 
+! Folding
+TUPLE: LitStack < state-pred vals done? ;
+TUPLE: FoldQuot < trans-pred missing quot ;
+TUPLE: AskLit < state-pred n var ;
+
+
 : new-state ( -- symbol )
     "s" uvar <term-var> ;
 
 SINGLETON: +top+
-! INSTANCE: +top+ match-var
+INSTANCE: +top+ match-var
 SINGLETON: +end+
-! INSTANCE: +end+ match-var
+INSTANCE: +end+ match-var
 
 : sub-state ( symbol -- symbol )
     dup +top+? [ drop new-state ] when

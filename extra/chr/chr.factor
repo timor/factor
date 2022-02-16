@@ -97,6 +97,13 @@ INSTANCE: generator constraint
 M: generator pred>constraint
     clone [ [ pred>constraint ] map ] change-body ;
 
+
+TUPLE: is-val var body ;
+C: <is-val> is-val
+INSTANCE: is-val constraint
+M: is-val pred>constraint
+    clone [ [ pred>constraint ] map ] change-body ;
+
 ! TODO: properly fix the variable set in the suspension instead of this mess...
 UNION: chr-atom match-var ;
 GENERIC: atoms* ( obj -- )
@@ -129,6 +136,9 @@ M: fiat-pred-array apply-substitution*
     unclip-slice [ swap lift ] dip prefix ;
 
 M: generator apply-substitution*
+    clone [ [ apply-substitution* ] with map ] change-body ;
+
+M: is-val apply-substitution*
     clone [ [ apply-substitution* ] with map ] change-body ;
 
 ! This one is generated, and reflects the modifications to the internal equality

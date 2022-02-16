@@ -1,114 +1,8 @@
-USING: accessors arrays assocs chr chr.factor combinators.short-circuit effects
-kernel make sequences strings terms words ;
+USING: assocs chr chr.factor chr.modular chr.parser chr.state
+combinators.short-circuit effects generic.single kernel sequences sets terms
+words ;
 
 IN: chr.factor.words
-
-! * Constraint protocol
-GENERIC: tell-chr* ( word -- body )
-M: object tell-chr* drop f ;
-
-: tell-chr ( si so word -- body )
-    [ tell-chr* ] curry with-states ;
-
-GENERIC: element>decl ( elt -- name type )
-M: string element>decl drop f f ;
-M: pair element>decl
-    first2 dup object =
-    [ 2drop f f ] [
-        [ [ "anon" uvar ] unless* ] dip
-    ] if ;
-
-: row-decls ( elts -- seq )
-    <reversed> [ swap element>decl [ 3array ] [ 2drop f ] if* ] map-index sift ;
-
-: effect-elt-decls ( effect -- in out )
-    [ in>> row-decls ]
-    [ out>> row-decls ] bi ;
-
-: make-type-preds ( state specs -- )
-    [| | first3 :> ( s i v d )
-     v "v" prepend <term-var> :> v
-     { Val s i v } ,
-     { ExpectInstance v d } ,
-    ] with each ;
-
-: effect>type-preds ( sin sout e -- seq )
-    [ effect-elt-decls swapd [ make-type-preds ] 2bi@ ]
-    { } make ;
-
-! : effect>stack-preds ( sin sout e -- seq )
-!     [ in>> length dup 0 = [ 3drop f ] [ ShiftPop boa ] if ]
-!     [ out>> length dup 0 = [ 3drop f ] [ ShiftPush boa ] if ] 3bi 2array sift
-!     ;
-
-! : effect>preds ( sin sout e -- seq )
-!     [ effect>type-preds ]
-!     [ effect>stack-preds ] 3bi append ;
-
-: elt>genvar ( assoc elt -- elt )
-    dup pair? [ first ] when of ;
-
-:: effect>genvars ( e -- vars in out )
-    e define-term-vars
-    [ [ drop dup uvar <term-var> ] assoc-map ] with-var-names
-    :> vars
-
-    e in>> <reversed> [ vars swap elt>genvar ] map :> in
-    e out>> <reversed> [ vars swap elt>genvar ] map :> out
-    vars in out ;
-
-! :: word>preds ( sin sout w -- seq )
-!     sin sub-state :> s1
-!     w stack-effect effect>genvars :> ( vars in out )
-!     vars values
-!     sin s1 in Pops boa
-!     s1 sout out Pushes boa 2array
-!     <generator> 1array ;
-
-:: make-word-rule ( body sin sout word -- chr )
-    sin sout word Word boa 1array f
-    body chr new-prop-chr ;
-
-! M: word tell-chr*
-!     [ state-in state-out ] dip
-!     {
-!         ! [ word>preds ]
-!         [ stack-effect AssumeEffect boa ]
-!     } cond ;
-
-! M:: \ if tell-chr* ( word -- constraints )
-!     state-in :> si
-!     state-out :> so
-!     ! si so [ word call-next-method 1array ] with-states
-!     si sub-state :> s1
-!     ! new-state :> s2
-!     ! new-state :> s3
-!     ! CHR{
-!     !     { Word si so if } // -- |
-!         GEN[ ( cond then: ( ..a1 -- ..b ) else: ( ..a2 -- ..c ) -- )
-!              ! { Word si so if }
-!              ! { Pops si s1 { else then cond } }
-!              ! { Pop si s2 then }
-!              ! { Pop si  }
-!              { Val si 2 cond }
-!              { Val si 1 then }
-!              { Val si 0 else }
-!              ! { Instance cond boolean }
-!              { BranchIf s1 so cond a1 a2 }
-!              { InferUnknown a1 b then }
-!              { InferUnknown a2 c else }
-!            ]
-!     ! }
-!     1array ;
-
-! M:: \ call tell-chr* ( word -- constraints )
-!     state-in :> si
-!     state-out :> so
-!     si sub-state :> s1
-!     GEN[ ( q -- )
-!          { Pop si s1 q }
-!          { Call s1 so q }
-!     ] 1array ;
 
 GENERIC: chrat-effect ( word -- effect )
 CONSTANT: effect-overrides H{
@@ -117,3 +11,130 @@ CONSTANT: effect-overrides H{
 }
 M: word chrat-effect
     { [ effect-overrides at ] [ stack-effect ] } 1|| ;
+
+
+GENERIC: chrat-in-types ( word -- seq/f )
+
+M: word chrat-in-types
+    "input-classes" word-prop ;
+
+! M: method chrat-in-types
+!     dup "method-generic" word-prop dup single-generic?
+!     [ [ "method-class" word-prop ] [ dispatch# ] bi* dup 1 + object <array> [ set-nth ] keep ]
+!     [ 2drop f ] if ;
+
+: chrat-out-types ( word -- seq/f )
+    "default-output-classes" word-prop ;
+
+: chrat-methods ( word -- seq/f )
+    "methods" word-prop ;
+
+TERM-VARS: ?r ?s ?t ?u ?s0 ?v ?w ?x ?y ?n ?tau ?k ?c ;
+
+CHRAT: chrat-words { DefaultMethod }
+
+CHR{ // { ask { DefaultMethod ?s ?t ?w } } -- [ ?w "default-method" word-prop? ] |
+     { entailed { DefaultMethod ?s ?t ?w } } }
+
+CHR{ // { Generic ?s ?t ?w } -- [ ?w single-generic? ] |
+     [ ?w [ dispatch# ] [ chrat-methods keys ] bi [| n c | ?s ?t ?w n c SingleMethod boa ] with map ]
+   }
+
+! CHR: method-not-applicable @ // { SingleMethod ?s __ __ ?n ?tau } --
+!     { Val ?s ?n ?x } { NotInstance ?x ?tau } | ;
+
+! TODO: make this a pattern?
+! CHR: ask-method-applicable @ { SingleMethod ?s ?t ?w ?n ?tau } // -- { Val ?s ?n ?x } |
+! { AskAbout { Instance ?x ?tau } ?k { ?s ?t ?w ?n ?x ?tau } }
+! ;
+
+! This would then be general
+! CHR: excluded-middle-1 @ { AnswerAbout { Not ?c } __ ?k } // { AskAbout ?c __ ?k } -- | ;
+! CHR: excluded-middle-2 @ { AnswerAbout ?c __ ?k } // { AskAbout { Not ?c } __ ?k } -- | ;
+
+CHR: method-applicable @
+{ SingleMethod ?s ?t ?w ?n ?tau }
+//
+{ AskAbout __ ?k __ }
+{ AnswerAbout { Instance ?x ?tau } ?k { ?s ?t ?w ?n ?x ?tau } } -- | ;
+
+CHR: method-not-applicable @
+// { SingleMethod ?s ?t ?w ?n ?tau }
+{ AskAbout __ ?k __ }
+{ AnswerAbout { Not { Instance ?x ?tau } } ?k { ?s ?t ?w ?n ?x ?tau } } -- | ;
+
+! ** Dispatch
+CHR{ // { SingleMethod ?s ?u ?w ?n ?tau } -- | { Val ?s ?n ?x }
+    [| |
+     ?tau ?w chrat-methods at :> method
+     {
+         { CondJump ?s ?s0 ?c }
+         { AcceptType ?s0 ?x ?tau }
+         { Cond ?c { Instance ?x ?tau } }
+         { ExecWord ?s0 ?t method }
+         { CondRet ?t ?u ?c }
+     }
+    ] }
+
+! * Create Rules for instantiation
+TUPLE: CompileRule < chr-pred ;
+TUPLE: CondNest < chr-pred c1 c2 ;
+TUPLE: CompileDone < chr-pred ;
+! ** Cleanup
+CHR{ { Absurd ?x } // { Absurd ?x } -- | }
+
+CHR{ // { CondNest ?x ?x } -- | }
+CHR{ { Cond ?x ?c } // { Cond ?x ?c } -- | }
+
+! Erase inner state-specific info, so we can treat stacks as conditions
+! CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s ?ground-value +top+ = ] | { TopEntry +top+ ?w } }
+CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s +top+? not ] | { Cond ?s P{ Inlined ?w } } }
+CHR{ { CompileRule } // { Stack ?s __ } -- [ ?s { +top+ +end+ } in? not ] | }
+CHR{ { CompileRule } // { Val __ __ __ } -- | }
+CHR{ { CompileRule } // { FoldQuot __ __ __ __ } -- | }
+CHR{ { CompileRule } // { LitStack __ __ __  } -- | }
+CHR{ { CompileRule } // { AskLit __ __ __  } -- | }
+CHR{ { CompileRule } // { CondRet __ __ __  } -- | }
+CHR{ { CompileRule } // { Dead __ } -- | }
+CHR{ { CompileRule } // { Lit ?x __ } { Instance ?x __ } -- | }
+CHR{ { CompileRule } // { InlineUnknown __ __ __ } -- | }
+CHR: remove-words-1 @ { CompileRule } // { Generic __ __ __ } -- | ;
+CHR: remove-words-2 @ { CompileRule } // { Word __ __ __ } -- | ;
+
+! Wrap some state-specific Conds
+CHR: wrap-facts-1 @ { CompileRule } // { AcceptType ?s ?x ?tau } -- | { Cond ?s P{ AcceptType ?s ?x ?tau } } ;
+CHR: wrap-facts-2 @ { CompileRule } // { ProvideType ?s ?x ?tau } -- | { Cond ?s P{ ProvideType ?s ?x ?tau } } ;
+
+! CHR: rewrite-conds @ { CompileRule } { Linkback ?s ?v } // { AcceptType ?t ?x ?tau } -- [ ?t ?v known in? ] | { AcceptType ?s ?x ?tau } ;
+CHR: rewrite-conflicts @ { CompileRule } { Linkback ?s ?v } // { ConflictState ?t ?c ?k } -- [ ?t ?v known in? ] | { ConflictState ?s ?c ?k } ;
+
+CHR: jump-state-is-cond @ { CompileRule } // { CondJump ?r ?s ?t } -- | [ ?s ?t ==! ] { CondNest ?r ?s } ;
+
+! Collapse states
+! CHR: collapse-links @ { CompileRule } // { Linkback ?s ?v } -- | [ ?s ?v members [ ==! ] with map ] ;
+CHR: leader-is-cond-1 @ { CompileRule } { Linkback ?s ?v } // { Cond ?x ?c } -- [ ?x ?v known in? ] | { Cond ?s ?c }  ;
+CHR: leader-is-cond-2 @ { CompileRule } { Linkback ?s ?v } // { CondNest ?x ?y } -- [ ?x ?v known in? ] | { CondNest ?s ?y }  ;
+
+! CHR: leader-is-cond @ { CompileRule } { Linkback ?s ?v } // { CondNest ?x ?y } -- [ ?x ?v known in? ] | [ ?s ?x ==! ] ;
+
+CHR{ { CompileRule } { Absurd ?x } { CondNest ?x ?s } // -- | { Absurd ?s } }
+CHR{ { CompileRule } { Absurd ?x } // { CondNest __ ?x } -- | }
+CHR{ { CompileRule } { Absurd ?t } // { Cond ?t ?c } -- | }
+CHR{ { CompileRule } { Absurd ?x } // { Disjoint ?x ?y } -- | { Trivial ?y } }
+CHR{ { CompileRule } { Absurd ?y } // { Disjoint ?x ?y } -- | { Trivial ?x } }
+
+CHR{ { CompileRule } // { ConflictState ?t __ __ } -- | { Absurd ?t } }
+
+
+! CHR: trivial-is-true @ { Trivial ?y } { CondNest ?x ?y } // { Cond ?y ?c } -- | { Cond ?x ?c } ;
+CHR: trivial-is-true @ { CompileRule } { CondNest ?x ?y } // { Trivial ?y } -- |  [ ?x ?y ==! ] ;
+
+! Erase Simplification artefacts
+CHR{ { CompileRule } // { Linkback __ __ } -- | }
+
+CHR{ // { CompileRule } -- | { CompileDone } }
+
+CHR{ { CompileDone } // { Absurd __ } -- | }
+
+CHR{ // { CompileDone } -- | }
+;

@@ -32,6 +32,9 @@ M: generator >pprint-sequence
 
 SYNTAX: G{ scan-token "}" expect <gvar> suffix! ;
 
+SYNTAX: is{ scan-token <term-var> scan-object "}" expect
+        callable check-instance <is-val> suffix! ;
+
 M: gvar pprint*
     \ G{ pprint-word
          name>> H{ { foreground COLOR: solarized-blue } } styled-text
