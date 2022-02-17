@@ -1,6 +1,7 @@
-USING: accessors arrays assocs chr chr.modular colors.constants combinators
-hashtables io.styles kernel lexer namespaces parser prettyprint.backend
-prettyprint.custom prettyprint.sections sequences terms vocabs.parser ;
+USING: accessors arrays assocs chr chr.modular classes colors.constants
+combinators hashtables io.styles kernel lexer namespaces parser
+prettyprint.backend prettyprint.custom prettyprint.sections quotations sequences
+terms vocabs.parser ;
 
 IN: chr.parser
 
@@ -30,15 +31,10 @@ M: generator pprint-delims drop \ gen{ \ } ;
 M: generator >pprint-sequence
     [ vars>> \ | suffix ] [ body>> ] bi suffix ;
 
-SYNTAX: G{ scan-token "}" expect <gvar> suffix! ;
+SYNTAX: G{ scan-token "}" expect <term-var> suffix! ;
 
 SYNTAX: is{ scan-token <term-var> scan-object "}" expect
         callable check-instance <is-val> suffix! ;
-
-M: gvar pprint*
-    \ G{ pprint-word
-         name>> H{ { foreground COLOR: solarized-blue } } styled-text
-         \ } pprint-word ;
 
 : pprint-chr-content ( chr -- )
     { [ keep/remove [ pprint-elements \ // pprint-word ] [ pprint-elements ] bi* ]

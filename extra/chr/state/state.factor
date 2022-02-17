@@ -40,14 +40,7 @@ SLOT: args
 M: chr-suspension type>> constraint>> constraint-type ;
 M: chr-suspension args>> constraint>> constraint-args ;
 
-! This is an interface var, which can change during rule processing
-! FIXME Unused
-SYMBOL: substitutions
-SINGLETON: rule-fail
-
 DEFER: activate-new
-! Interface for builtin solvers!
-! :: equiv-in? ( v1 v2 set -- ? )
 
 : local-var? ( variable -- ? )
     [ program get local-vars>> in? ] [ f ] if* ;
@@ -66,35 +59,16 @@ DEFER: reactivate
 
 : known ( obj -- val )
     ?ground-value ;
-    ! ?representative ?ground-value ;
-    ! dup match-var? [ defined-equalities get representative ?ground-value ] when
-! dup [ "unknown" throw ] unless ;
 
 ! NOTE: Using Store-wide replacement for now...
 
 DEFER: alive?
-! :: wakeup-set ( v k -- ids )
-!     v vars k vars union :> check
-!     store get [ vars>> check intersects? ] filter-values
-!     keys [ alive? ] filter ;
 
 :: wakeup-set ( v k -- ids )
     store get [ vars>> :> vs { [ v vs in? ] [ k vs in? ] } 0|| ] filter-values
     keys ;
 
-DEFER: apply-substitution
-: replace-in-store ( v1 v2 -- )
-    dup match-var? [ swap ] unless associate
-    ! [ store [ [ apply-substitution ] with map-values ] change ]
-    ! [ ground-values [ [ swap lift ] with map-values ] change ] bi
-    store [
-        valid-match-vars [ [ apply-substitution ] with map-values ] with-variable-off
-    ] change
-    ;
-
 : equate-in-store ( v1 v2 -- )
-    ! [ replace-in-store ]
-    ! [ assume-equal ] 2bi ;
     assume-equal  ;
 
 TUPLE: equiv-activation { a read-only } { b read-only } { wakeup read-only } ;
@@ -283,7 +257,7 @@ SYMBOL: sentinel
 
 : recursion-check ( -- )
     ! sentinel get 5000 > [ "runaway" throw ] when
-    sentinel get 5000 > [ "runaway" throw ] when
+    sentinel get 1000 > [ "runaway" throw ] when
     sentinel inc ;
 
 ! TODO: check if that is needed to make sure tail recursion works!
@@ -346,71 +320,31 @@ M: builtin-suspension apply-substitution* nip ;
 !       0 current-index set
 !     ] prepose with-var-names ; inline
 
-SYMBOL: rules-cache
-
 : init-chr-scope ( prog -- )
     LH{ } clone store set
     <builtins-suspension> builtins store get set-at
     load-chr dup program set
     local-vars>> valid-match-vars set
-    ! [ import-vars ] bi
     check-vars? on
-    H{ } clone substitutions set
-    ! <disjoint-set> defined-equalities set
     0 current-index set
     H{ } clone var-names set
-    H{ } clone rules-cache set
     ;
-
-
-! Replace all remaining variables with their equivalents
-:: replace-equalities ( c -- c )
-    c builtin-suspension? [ c constraint>> ]
-    [ c constraint>> :> c
-      defined-equalities :> ds
-      c vars [| v | v
-              v ds disjoint-set-member?
-              [ v ds representative
-                ?ground-value
-              ] [ f ] if
-             ] H{ } map>assoc sift-values
-      c apply-substitution ] if ;
-
-: solve-ground-values ( assoc -- assoc )
-    ! store get builtins of constraint>>
-    substitute-representatives? [
-        ! [ constraint-args first2 2array ] map solve-problem
-        dup
-        valid-match-vars [ >alist solve-problem ] with-variable-off
-        [ lift ] curry map-values
-    ] with-variable-on ;
-
-: replace-all-equiv ( store -- store )
-    ground-values [ solve-ground-values ] change
-    [ replace-equalities ] map-values ;
 
 : run-chr-query ( prog query -- store )
     [ pred>constraint ] map
-    ! defined-equalities [ clone ] [ <eq-disjoint-set> ] if*
-    ! over
     2dup 2array
     [ 0 sentinel set
-      ! [
       H{ } clone ground-values set
       swap
       init-chr-scope
       [ activate-new ] each
       store get
-      ! replace-equalities
-      replace-all-equiv
-      ! [ constraint>> H{ } lift ] map-values
-      ! [ constraint>> ] map-values
+      [ constraint>> over builtins = [ f lift ] unless ] assoc-map
     ] with-term-vars ;
-    ! ] curry with-chr-prog ;
 
 : run-chrat-query ( query -- store )
-    ! <eq-disjoint-set> [ prepare-query run-chr-query ] with-eq-scope ;
-     prepare-query run-chr-query  ;
+    prepare-query run-chr-query
+    ;
 
 
 ALIAS: == test-eq

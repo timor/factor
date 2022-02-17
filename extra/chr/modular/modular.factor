@@ -129,7 +129,7 @@ GENERIC: rewrite-chrat-conts ( chr -- chrs )
 M: chr rewrite-chrat-conts 1array ;
 
 : analyze-chr-guards ( head-vars chr-guards -- asks exists )
-    [ "k" umatchvar ! head-vars guard token
+    [ "k" utermvar ! head-vars guard token
       [ [ vars swap diff ] dip [ <_exists> ] curry map ]
       [ [ [ constraint-type ]
           [ constraint-args ] bi ] dip
@@ -215,7 +215,7 @@ M: chr expand-ask/tell ;
     [ rewrite-chrat ] map concat ;
 
 : chrat-pred-template ( class -- constraint )
-    [ all-slots [ name>> umatchvar ] map ]
+    [ all-slots [ name>> utermvar ] map ]
     [ slots>tuple ] bi ;
 
 : make-default-entailment-rule ( pred -- rule )

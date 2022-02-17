@@ -40,7 +40,7 @@ IN: chr.debug
     ! \ activate [ [ chr-state. dup "Activating: %d\n" printf ] prepose ] annotate
     \ activate [ [ "! " write dup id-susp. ] prepose ] annotate
     ! \ test-callable [ [ dup "Builtin Test: " write . ] prepose [ dup " ==> %u\n" printf ] compose ] annotate
-    ! \ run-occurrence [ [ dup occurrence>> "Try Occurrence %u with Allowed Vars: " printf dup rule-vars>> . ] prepose ] annotate
+    \ run-occurrence [ [ dup occurrence>> "Try Occurrence %u with Schedule: " printf dup partners>> . ] prepose ] annotate
     \ collect-chrat-solvers [ [ "Solvers for Program: " write dup . ] compose ] annotate
     \ load-chr [ [ "Rewritten Program: " write dup rules>> <enumerated> >array . ] compose ] annotate
     ! \ replace-all-equalities [ [ ground-values get "Ground-values: " write . ] prepose ] annotate

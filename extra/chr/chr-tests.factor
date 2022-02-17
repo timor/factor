@@ -1,5 +1,5 @@
 USING: accessors assocs chr chr.parser chr.programs chr.state kernel
-linked-assocs math sequences tools.test types.util words ;
+linked-assocs math sequences terms tools.test words ;
 IN: chr.tests
 
 
@@ -16,7 +16,10 @@ CHR: gcd2 @ { gcd ?i } // { gcd ?j } -- [ ?j ?i >= ] | [ ?j ?i - <gcd> ] ;
 
 
 {
-    LH{ { 3 P{ gcd 3 } } }
+    LH{
+        { builtins V{  } }
+        { 3 P{ gcd 3 } }
+      }
 }
 [ gcd-ex { { gcd 6 } { gcd 9 } } run-chr-query ] unit-test
 
@@ -118,7 +121,7 @@ CONSTANT: stack-ex {
          [| | ?n ?d - :> l { State ?s l ?a } ]
        }
     ! CHR{ // { Infer1 ?s ?t ?a } -- [ W{ ?a } word? ] | { Word ?s ?t ?a } }
-    CHR{ // { Infer1 ?s ?t ?a } -- [ ?a word? ] | { Word ?s ?t ?a } }
+    CHR{ // { Infer1 ?s ?t ?a } -- [ W{ ?a } word? ] | { Word ?s ?t ?a } }
     CHR{ // { Infer ?s [ ] } -- | { Return ?s } }
     CHR{ // { Infer ?s ?q } -- |
          [| | ?q first :> a
@@ -137,39 +140,48 @@ CONSTANT: stack-ex {
     CHR{ { Return ?s } // { State ?t ?n ?x } -- | }
 }
 
-{ LH{
-      { 2 { Start "s0" } }
-      { 7 { Param "s0" 0 G{ ?a1 } } }
-      { 10 { Param "s0" 1 G{ ?b1 } } }
-      { 13 { Return "s1" } }
-      { 14 { Retval "s1" 1 G{ ?a1 } } }
-      { 15 { Retval "s1" 0 G{ ?b1 } } }
-} }
-[ stack-ex { { StartInfer "s0" [ swap ] } } run-chr-query ] unit-test
-
-{ LH{
-      { 2 { Start "s0" } }
-      { 7 { Param "s0" 0 G{ ?b2 } } }
-      { 10 { Param "s0" 1 G{ ?a2 } } }
-      { 16 { = G{ ?a2 } G{ ?b1 } } }
-      { 19 { = G{ ?b2 } G{ ?a1 } } }
-      { 22 { Return "s2" } }
-      { 23 { Retval "s2" 1 G{ ?a2 } } }
-      { 24 { Retval "s2" 0 G{ ?b2 } } }
-} }
-[ stack-ex { { StartInfer "s0" [ swap swap ] } } run-chr-query ] unit-test
-
-{ {
-        { Start "s0" }
-        { Param "s0" 0 G{ ?a1 } }
-        { ShiftPop "s0" "sp_plus1" 1 }
-        { Param "s0" 1 G{ ?b1 } }
-        { ShiftPop "sp_plus1" "sp_plus2" 1 }
-        { Call "s0" "s1" + { G{ ?a1 } G{ ?b1 } } { G{ ?c1 } } }
-        { ShiftPush "sp_plus2" "s1" 1 }
-        { Def "s1" G{ ?c1 } 0 }
-        { Return "s1" }
-        { Retval "s1" 0 G{ ?c1 } }
+{
+    ! LH{
+    !   { builtins V{  } }
+    !   { 2 { Start "s0" } }
+    !   { 7 { Param "s0" 0 G{ ?a1 } } }
+    !   { 10 { Param "s0" 1 G{ ?b1 } } }
+    !   { 13 { Return "s1" } }
+    !   { 14 { Retval "s1" 1 G{ ?a1 } } }
+    !   { 15 { Retval "s1" 0 G{ ?b1 } } }
+    ! }
+    7
 }
+[ stack-ex { { StartInfer "s0" [ swap ] } } run-chr-query assoc-size ] unit-test
+
+{
+    ! LH{
+    !   { 2 { Start "s0" } }
+    !   { 7 { Param "s0" 0 G{ ?b2 } } }
+    !   { 10 { Param "s0" 1 G{ ?a2 } } }
+    !   { 16 { = G{ ?a2 } G{ ?b1 } } }
+    !   { 19 { = G{ ?b2 } G{ ?a1 } } }
+    !   { 22 { Return "s2" } }
+    !   { 23 { Retval "s2" 1 G{ ?a2 } } }
+    !   { 24 { Retval "s2" 0 G{ ?b2 } } }
+    ! }
+    7
 }
-[ stack-ex { { StartInfer "s0" [ + ] } } run-chr-query values ] unit-test
+[ stack-ex { { StartInfer "s0" [ swap swap ] } } run-chr-query assoc-size ] unit-test
+
+{
+    ! {
+    !     { Start "s0" }
+    !     { Param "s0" 0 G{ ?a1 } }
+    !     { ShiftPop "s0" "sp_plus1" 1 }
+    !     { Param "s0" 1 G{ ?b1 } }
+    !     { ShiftPop "sp_plus1" "sp_plus2" 1 }
+    !     { Call "s0" "s1" + { G{ ?a1 } G{ ?b1 } } { G{ ?c1 } } }
+    !     { ShiftPush "sp_plus2" "s1" 1 }
+    !     { Def "s1" G{ ?c1 } 0 }
+    !     { Return "s1" }
+    !     { Retval "s1" 0 G{ ?c1 } }
+    ! }
+    11
+}
+[ stack-ex { { StartInfer "s0" [ + ] } } run-chr-query values assoc-size ] unit-test

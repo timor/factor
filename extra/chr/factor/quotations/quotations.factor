@@ -1,8 +1,8 @@
-USING: accessors arrays assocs chr chr.factor chr.factor.types chr.factor.words
-chr.modular chr.parser chr.programs chr.state classes combinators
-combinators.short-circuit continuations effects generalizations generic kernel
-lists match math math.order math.parser namespaces quotations sequences sets
-terms types.util words ;
+USING: accessors arrays chr chr.factor chr.factor.compiler chr.factor.types
+chr.factor.words chr.modular chr.parser chr.programs chr.state classes
+combinators combinators.short-circuit continuations effects generalizations
+generic kernel lists math math.order math.parser quotations sequences sets terms
+types.util words ;
 
 IN: chr.factor.quotations
 FROM: syntax => _ ;
@@ -156,7 +156,6 @@ TUPLE: EndQuot < trans-pred ;
 TUPLE: Infer < chr-pred beg s quot ;
 TUPLE: InferToplevelQuot < chr-pred quot ;
 TUPLE: InferDef < chr-pred word ;
-TUPLE: ChratInfer < chr-pred obj ;
 TUPLE: InferDip < trans-pred in-stack quot ;
 TUPLE: LinkStates < trans-pred ;
 TUPLE: InsertState < trans-pred between ;
@@ -187,7 +186,7 @@ CHR{ { CheckExec ?t __ __ } // -- | { Link ?t ?t } }
 CHR{ // { Linkback ?s ?a } { AddLink ?s ?t } -- | [ ?s ?a ?t suffix Linkback boa ] }
 CHR{ // { Linkback ?s ?a } { AddLink ?t ?b } -- [ ?t ?a known in? ] | [ ?s ?a ?b suffix Linkback boa ] }
 ! TODO Dangerous?
-CHR{ // { AddLink ?s ?t } { Linkback ?t ?a } -- | [ ?s ?a ?t prefix Linkback boa ] }
+! CHR{ // { AddLink ?s ?t } { Linkback ?t ?a } -- | [ ?s ?a ?t prefix Linkback boa ] }
 
 ! Consolidate link sequences
 CHR: propagate-linkback @ { Linkback ?r ?a } // { Linkback ?s ?b } -- [ ?s ?a in? ] |
@@ -228,13 +227,13 @@ CHR{ // { Dup ?x ?y } { Drop ?x } -- | [ ?x ?y ==! ] }
 ! CHR{ { Effect ?x ?a ?b } // { Effect ?x ?a ?b } -- | }
 
 ! NOTE: This is tricky.  The idea is that any duplication is actually performed correctly on the stack?
-CHR: similar-effect-left @
- { Dup ?x ?y } { Effect ?y L{ ?parm . ?a } ?b } // { Effect ?x ?c ?d } -- [ ?c known term-var? ] |
-     { Effect ?x L{ ?v . ?r } ?s }
-   ;
+! CHR: similar-effect-left @
+!  { Dup ?x ?y } { Effect ?y L{ ?parm . ?a } ?b } // { Effect ?x ?c ?d } -- [ ?c known term-var? ] |
+!      { Effect ?x L{ ?v . ?r } ?s }
+!    ;
 
 ! CHR: copy-effect-left @
-! { Dup ?x ?y } { Effect ?y ?a ?b } // -- ! [ ?a known term-var? ]
+! { Dup ?x ?y } { Effect ?y ?a ?b } // -- [ ?a known term-var? ]
 ! | { Effect ?x ?c ?d } ;
 
 ! CHR: similar-effect-right @
@@ -352,10 +351,11 @@ CHR{ // { AssumeEffect ?s ?t ?e } -- |
 
       ! ?s ?t
       ?s i >list ?rho lappend Stack boa suffix
+      ! Assume bivariable-effect in general!
       ?t {
-           { [ ?e terminated?>> ] [ __ ] }
-           { [ ?e bivariable-effect? ] [ o >list ?sig lappend ] }
-           [ o >list ?rho lappend ]
+           ! { [ ?e terminated?>> ] [ __ ] }
+           ! { [ ?e bivariable-effect? ] [ o >list ?sig lappend ] }
+           [ o >list ?sig lappend ]
       } cond Stack boa suffix
       ! {
       !     { [ ?e terminated?>> ] [ __ ] }
@@ -426,7 +426,7 @@ CHR{ // { Word ?s ?t call } -- |
 
 TERM-VARS: ?crho ?csig ;
 CHR: infer-call @ // { InferCall ?r ?u ?q } -- |
-     { Effect ?q ?a ?b }
+     ! { Effect ?q ?a ?b }
      { InlineUnknown ?r ?u ?q }
     ;
 
@@ -554,7 +554,7 @@ CHR{ // { ChratInfer ?w } -- [ ?w callable? ] | { InferToplevelQuot ?w } }
 !      { Stack ?s L{ ?x . ?a } }
 !      { Stack ?t ?b }
 !    }
-CHR{ { InlineUnknown ?s ?t ?p } { Effect ?p ?a ?b } // -- | { Stack ?s ?a } { Stack ?t ?b } }
+CHR{ { InlineUnknown ?s ?t ?p } // -- | { Effect ?p ?a ?b } { Stack ?s ?a } { Stack ?t ?b } }
 
 CHR{ { Lit ?p ?q } // { InlineUnknown ?s ?t ?p } ! { Effect ?p __ __ }
      -- |
@@ -608,12 +608,17 @@ CHR: end-infer @ // { InferBetween ?r ?t ?q } { Infer ?r ?x [ ] } -- |
    ;
 
 ! Main inference advancer
+! NOTE: We have to handle wrappers here already, because term substitution into
+! quotations will make use of wrapping themselves
 CHR: infer-step @
     { InferBetween ?r ?t __ }
     //
      { Infer ?r ?s ?q } -- [ ?q empty? not ] |
      [| | ?q unclip :> ( rest w ) ?s seq-state :> sn
-      { { Exec ?s sn w }
+      w wrapper?
+      [ w wrapped>> :> x { Push ?s sn x } ]
+      [ { Exec ?s sn w } ] if :> action
+      { action
         { Infer ?r sn rest }
         { AddLink ?r sn }
       }
@@ -627,8 +632,16 @@ CHR{ // { Exec ?s ?t ?w } -- [ ?w known? ] | { Push ?s ?t ?w } }
 
 CHR{ { ExecWord ?s ?t ?w } // -- [ ?w chrat-in-types ]
      | [ ?s ?w chrat-in-types >list AcceptTypes boa ] }
-CHR{ // { ExecWord ?s ?t ?w } -- [ ?w inline? ]
-     | [| | ?w def>> :> def { InlineCall ?s ?t ?w def } ] }
+
+CHR{ // { ExecWord ?s ?t ?w } -- [ ?w inline? ] | { InlineWord ?s ?t ?w  } }
+
+CHR{ // { InlineWord ?s ?t ?w } -- | [| | ?w def>> :> def { InlineCall ?s ?t ?w def } ] }
+
+! Test 2dip with tri
+! CHR{ // { ExecWord ?s ?t 2dip } -- | [| | \ 2dip def>> :> d
+!                                       { InlineQuot ?s ?t  d } ] }
+
+
 ! CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w } { InlineQuot ?s ?t ?d } }
 
 CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w }
@@ -640,12 +653,14 @@ CHR{ // { ExecWord ?s ?t ?w } -- | { Word ?s ?t ?w } }
 CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }
 CHR{ // { Word ?s ?t ?w } -- [ ?w method? ] | { Method ?s ?t ?w } }
 
-CHR{ { Word ?s ?t ?w } // -- | { ApplyWordRules ?s ?t ?w } }
+! CHR{ { Word ?s ?t ?w } // -- | { ApplyWordRules ?s ?t ?w } }
 
-DEFER: instantiate-word-rules
+! CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- |
+! [ ?s ?t ?w instantiate-word-rules ] ;
+
 ! Insert at least one dummy state to prevent hooking into the top node with Entry specs
-CHR{ // { ApplyWordRules ?s ?t ?w } -- | { Stack ?s ?rho } { Stack ?s0 ?rho } { AddLink ?s ?s0 }
-     [ ?s0 ?t ?w instantiate-word-rules ] }
+CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- | { Stack ?s ?rho } { Stack ?s0 ?rho } { AddLink ?s ?s0 }
+     [ ?s0 ?t ?w instantiate-word-rules ] ;
 
 ! CHR{ { Word ?s ?t ?w } { Stack ?s ?v } { Lit ?a ?b } // -- [ ?b ?v ]}
 ! Folding
@@ -691,27 +706,27 @@ CHR: do-fold @ // { Word ?s ?t __ } { FoldQuot ?s ?t __ ?q } { LitStack ?s ?v t 
     [ '{ { InferDef _ } } prepare-query ]
     [ '{ { InferToplevelQuot _ } } prepare-query ] if ;
 
-: chrat-infer ( quot/word -- constraints )
-    prepare-chrat-infer run-chr-query ;
+! : chrat-infer ( quot/word -- constraints )
+!     prepare-chrat-infer run-chr-query ;
     ! dup word?
     ! ! [ expand-quot swap '{ { InferDef _ } } run-chr-query ]
     ! [ '{ { InferDef _ } } run-chrat-query ]
     ! [ '{ { InferToplevelQuot _ } } run-chrat-query ] if ;
 
-: constraints>body ( store -- constraint )
-    values rest
-    ! H{ } lift ! apply ground substs
-    [ defined-equalities-ds [ collect-vars ] with-variable-off ] keep <generator> ;
+! : constraints>body ( store -- constraint )
+!     values rest
+!     H{ } lift ! apply ground substs
+!     ! [ defined-equalities-ds [ collect-vars ] with-variable-off ] keep <generator> ;
+!     dup [
+!         no-defined-equalities on
+!         check-integrity
+!         fresh
+!         [ collect-vars ] keep
+!         "1" .
+!         check-integrity
+!         "2" .
+!         <generator>
+!     ] with-term-vars
+!     ;
+!     ! [ fresh collect-vars ] keep <generator> ;
 
-: chrat-compile ( quot/word -- constraints )
-    '{ { ChratInfer _ } { CompileRule } } run-chrat-query constraints>body ;
-
-: chrat-word-rules ( word -- constraint )
-    rules-cache get [ chrat-compile ] cache ;
-    ! dup "chrat-rules" word-prop [ nip ]
-    ! [ dup chrat-compile [ "chrat-rules" set-word-prop ] ]
-
-:: instantiate-word-rules ( r s w -- new )
-    w chrat-word-rules dup vars>> import-vars
-    H{ { +top+ r } { +end+ s } } [ replace-partial? on replace-patterns ] with-variables ;
-    ! valid-match-vars [ lift ] with-variable-off ;

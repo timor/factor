@@ -40,16 +40,6 @@ C: <id-cons> id-cons
 TUPLE: active-cons { cons maybe{ id-cons } } occs j ;
 C: <active-cons> active-cons
 
-! Generated variable.  Not a match-var, but a child-atom to consider
-! FIXME: need this as match-var!
-! TODO: make identity-tuple?
-TUPLE: gvar { name read-only } ;
-INSTANCE: gvar match-var
-C: <gvar> gvar
-! M: gvar child-atoms drop f ;
-M: gvar subst var-subst ;
-M: gvar vars* , ;
-
 ! Things that can be activated
 MIXIN: constraint
 SINGLETON: true
@@ -153,6 +143,7 @@ PREDICATE: eq-constraint < fiat-pred-array first \ = eq? ;
 INSTANCE: callable constraint
 M: callable apply-substitution* swap lift ;
 : test-callable ( callable -- ? )
+    ! call( -- ? ) ;
     [ call( -- ? ) ] [ 2drop f ] recover ;
 
 M: callable test-constraint

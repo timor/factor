@@ -70,8 +70,12 @@ TUPLE: ProvideType < state-pred var type ;
 ! Definition level
 
 TUPLE: InferCall < trans-pred val ;
+TUPLE: InlineWord < trans-pred word ;
 TUPLE: InlineCall < trans-pred word quot ;
 TUPLE: Call < trans-pred word quot ;
+
+! Compiler Entry
+TUPLE: ChratInfer < chr-pred obj ;
 
 ! State connections
 TUPLE: Linkback < chr-pred beg states ;

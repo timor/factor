@@ -55,7 +55,8 @@ C: <constraint-schedule> constraint-schedule
 
 : collect-vars ( rules -- set )
     ! vars { +top+ +end+ } diff members
-    vars +top+ swap remove-eq +end+ swap remove-eq members
+    ! vars +top+ swap remove-eq +end+ swap remove-eq members
+    term-vars
     ;
 
 ERROR: existential-guard-vars rule ;

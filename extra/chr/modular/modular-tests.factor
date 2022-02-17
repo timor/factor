@@ -1,6 +1,6 @@
 USING: accessors arrays assocs chr chr.factor chr.modular chr.parser chr.state
 combinators.short-circuit grouping kernel linked-assocs macros.expander make
-math quotations sequences sets tools.test types.util words ;
+math quotations sequences sets terms tools.test words ;
 IN: chr.modular.tests
 
 TUPLE: leq < chr-pred v1 v2 ;
@@ -22,12 +22,14 @@ CHR: transitive @ { eq ?x1 ?y1 } { eq ?x2 ?y2 } // -- [ ?y1 ?x2 == ] | { eq ?x1 
 
 
 {
-    LH{ { 1 P{ eq A B } }
+    LH{
+        { builtins V{ } }
+        { 1 P{ eq A B } }
         { 2 P{ eq B A } }
-        { 6 P{ eq B C } }
-        { 7 P{ eq C B } }
-        { 10 P{ eq C A } }
-        { 11 P{ eq A C } } }
+        { 5 P{ eq B C } }
+        { 6 P{ eq C B } }
+        { 9 P{ eq C A } }
+        { 10 P{ eq A C } } }
 }
 [ eq-solver { { eq A B } { eq B C } } run-chr-query ] unit-test
 
@@ -42,7 +44,7 @@ CHR: transitivity @ { leq ?x ?y } { leq ?y ?z } // -- | { leq ?x ?z } ;
 }
 
 {
-    LH{ { 5 { = C A } } { 6 { = C B } } }
+    LH{ { builtins V{ { = C A } { = C B } } } }
 }
 [ leq-solver-orig { { leq A B } { leq C A } { leq B C } } run-chr-query ] unit-test
 
@@ -86,7 +88,7 @@ CHRAT: leq-solver-chrat { leq }
 ;
 
 {
-    LH{ { 5 { = C A } } { 6 { = C B } } }
+    LH{ { builtins V{ { = C A } { = C B } } } }
 }
 [ leq-solver-chrat { { leq A B } { leq C A } { leq B C } } run-chr-query ] unit-test
 
@@ -151,20 +153,23 @@ CHRAT: chrat-min { min }
 TERM-VARS: X Y Z M ;
 : combined ( -- rules )
     leq-solver-chrat chrat-min append ;
-{ LH{ { 5 { = M 1 } } } }
+{ LH{ { builtins V{ { = M 1 } } } } }
 [ combined { { min 1 1 M } } run-chr-query ] unit-test
 
 { t }
-[ combined { { min 1 2 M } } run-chr-query values { = M 1 } swap in? ] unit-test
+[ combined { { min 1 2 M } } run-chr-query builtins of { = M 1 } swap in? ] unit-test
 
 { t }
-[ combined { { min 2 1 M } } run-chr-query values { = M 1 } swap in? ] unit-test
+[ combined { { min 2 1 M } } run-chr-query builtins of { = M 1 } swap in? ] unit-test
 
 { t }
-[ combined { { min A A M } } run-chr-query values { = M A } swap in? ] unit-test
+[ combined { { min A A M } } run-chr-query builtins of { = M A } swap in? ] unit-test
 
 {
-    LH{ { 1 P{ leq Z Y } } { 6 { = Z X } } }
+    LH{
+        { builtins V{ { = Z X } } }
+        { 1 P{ leq Z Y } }
+    }
 }
 [ combined { { leq X Y } { min X Y Z } } run-chr-query ] unit-test
 
@@ -249,7 +254,7 @@ CHR{ { Link ?s ?t ?u } // { Link ?s ?t ?u } -- | }
 ! CHR{ { Link ?s ?s ?t } // { Link ?s ?s ?u } -- | { Link ?s ?u ?u } }
 ! CHR{ // { ask { link-seq ?s ?s ?s } } -- | { entailed { link-seq ?s ?s ?s } } }
 CHR{ { Link ?s ?t ?t } // { ask { link-seq ?s ?t ?t } } -- | { entailed { link-seq ?s ?t ?t } } }
-CHR{ { Word ?r ?s } { Word ?s ?t } // { Link ?s ?t ?t } -- | { Link ?r ?s ?s } }
+CHR{ { Word ?r ?s __ } { Word ?s ?t __ } // { Link ?s ?t ?t } -- | { Link ?r ?s ?s } }
 ;
 
 ! State-specific
