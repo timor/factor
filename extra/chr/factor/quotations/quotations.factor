@@ -637,13 +637,6 @@ CHR{ // { ExecWord ?s ?t ?w } -- [ ?w inline? ] | { InlineWord ?s ?t ?w  } }
 
 CHR{ // { InlineWord ?s ?t ?w } -- | [| | ?w def>> :> def { InlineCall ?s ?t ?w def } ] }
 
-! Test 2dip with tri
-! CHR{ // { ExecWord ?s ?t 2dip } -- | [| | \ 2dip def>> :> d
-!                                       { InlineQuot ?s ?t  d } ] }
-
-
-! CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w } { InlineQuot ?s ?t ?d } }
-
 CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w }
      { ApplyWordRules ?s ?t ?w } }
 
@@ -653,9 +646,6 @@ CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }
 CHR{ // { Word ?s ?t ?w } -- [ ?w method? ] | { Method ?s ?t ?w } }
 
 CHR{ { Word ?s ?t ?w } // -- | { ApplyWordRules ?s ?t ?w } }
-
-! CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- |
-! [ ?s ?t ?w instantiate-word-rules ] ;
 
 ! Insert at least one dummy state to prevent hooking into the top node with Entry specs
 CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- | { Stack ?s ?rho } { Stack ?s0 ?rho } { AddLink ?s ?s0 }
@@ -679,53 +669,4 @@ CHR: do-fold @ // { Word ?s ?t __ } { FoldQuot ?s ?t __ ?q } { LitStack ?s ?v t 
       ! { RemoveState ?s }
      ]
    ;
-
-! CHR{ { Val ?s ?n ?a } { Lit ?a ?b } // { FoldQuot ?s ?t ?m ?v ?q } -- [ ?n ?m in? ] |
-!      [| |
-!       ?n ?m remove :> m2
-!       ?b ?n ?v new-nth :> v2
-!       { FoldQuot ?s ?t m2 v2 ?q }
-!      ]
-!    }
 ;
-
-! * Interface
-! : chrat-infer ( quot -- constraints )
-!     '{ { InferToplevelQuot _ } } run-chrat-query ;
-
-:: chrat-infer-with ( prog w -- constraints )
-    prog
-    w word?
-    ! [ expand-quot swap '{ { InferDef _ } } run-chr-query ]
-    [ { { InferDef w } } run-chr-query ]
-    [ { { InferToplevelQuot w } } run-chr-query ] if ;
-
-: prepare-chrat-infer ( quot/word -- prog query )
-    dup word?
-    [ '{ { InferDef _ } } prepare-query ]
-    [ '{ { InferToplevelQuot _ } } prepare-query ] if ;
-
-! : chrat-infer ( quot/word -- constraints )
-!     prepare-chrat-infer run-chr-query ;
-    ! dup word?
-    ! ! [ expand-quot swap '{ { InferDef _ } } run-chr-query ]
-    ! [ '{ { InferDef _ } } run-chrat-query ]
-    ! [ '{ { InferToplevelQuot _ } } run-chrat-query ] if ;
-
-! : constraints>body ( store -- constraint )
-!     values rest
-!     H{ } lift ! apply ground substs
-!     ! [ defined-equalities-ds [ collect-vars ] with-variable-off ] keep <generator> ;
-!     dup [
-!         no-defined-equalities on
-!         check-integrity
-!         fresh
-!         [ collect-vars ] keep
-!         "1" .
-!         check-integrity
-!         "2" .
-!         <generator>
-!     ] with-term-vars
-!     ;
-!     ! [ fresh collect-vars ] keep <generator> ;
-
