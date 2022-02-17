@@ -10,7 +10,7 @@ FROM: namespaces => set ;
 
 : constraints>body ( store -- constraint )
     ! Make sure we convert the body vars in a fresh scope
-    defined-equalities-ds [ values rest fresh [ term-vars ] keep <generator> ] with-variable-off ;
+    f defined-equalities-ds [ values rest fresh [ term-vars ] keep <generator> ] with-global-variable ;
 
 SYMBOL: rules-cache
 SYMBOL: inline-history
@@ -31,17 +31,26 @@ ERROR: recursive-chrat-compile word ;
 
 : chrat-word-rules ( word -- constraint )
     ! "chrat-rules" word-prop ;
-    rules-cache get [ (chrat-compile) ] cache ;
+    rules-cache get [
+        f defined-equalities-ds [ (chrat-compile) ] with-global-variable
+    ] cache ;
     ! dup "chrat-rules" word-prop [ nip ]
     ! [ dup (chrat-compile) [ "chrat-rules" set-word-prop ] ]
 
+: instantiate-scope ( generator assoc -- generator )
+    [ replace-partial? on replace-patterns ] with-variables ;
+
 :: instantiate-word-rules ( r s w -- new )
+    ! "haha" .
+    ! defined-equalities .
     w chrat-word-rules
     ! w "chrat-rules" word-prop
+    ! "foo" .
+    ! defined-equalities .
     [ dup vars>>
       import-vars
       ! drop
-      H{ { +top+ r } { +end+ s } } [ replace-partial? on replace-patterns ] with-variables ] [ f ] if* ;
+      H{ { +top+ r } { +end+ s } } instantiate-scope ] [ f ] if* ;
     ! valid-match-vars [ lift ] with-variable-off ;
 
 : chrat-compile ( quot/word -- constraints )

@@ -1,13 +1,14 @@
 USING: accessors arrays assocs assocs.extras classes classes.tuple
 colors.constants combinators combinators.short-circuit continuations
-disjoint-sets disjoint-sets.private hashtables hashtables.identity io.styles
-kernel lexer make match math math.order math.parser namespaces parser
+disjoint-sets disjoint-sets.private graphs hashtables hashtables.identity
+io.styles kernel lexer make match math math.order math.parser namespaces parser
 prettyprint.custom prettyprint.sections quotations sequences sets strings
 types.util unicode words words.symbol ;
 
 IN: terms
 
 FROM: syntax => _ ;
+FROM: namespaces => set ;
 
 ! * Specialized to not cause loops
 TUPLE: eq-disjoint-set < tuple
@@ -18,14 +19,9 @@ TUPLE: eq-disjoint-set < tuple
 : <eq-disjoint-set> ( -- obj )
     IH{ } clone IH{ } clone IH{ } clone eq-disjoint-set boa ;
 
-<PRIVATE
 SYMBOL: no-defined-equalities
-PRIVATE>
-! M: eq-disjoint-set equiv?
-!     no-defined-equalities [ call-next-method ] with-variable-on ; inline
 M: eq-disjoint-set equiv?
     representatives eq? ;
-    ! no-defined-equalities [ call-next-method ] with-variable-on ; inline
 M:: eq-disjoint-set representative ( a disjoint-set -- p )
     a disjoint-set parents>> at :> p
     a p eq? [ a ] [
@@ -55,32 +51,43 @@ M:: eq-disjoint-set equate ( a b disjoint-set -- )
 
 SYMBOL: substitute-representatives?
 SYMBOL: defined-equalities-ds
+
+! Using local for debugging
 : defined-equalities ( -- ds )
     defined-equalities-ds get-global ; inline
 
 <PRIVATE
-SYMBOL: eq-stack
+SYMBOL: globals-stack
 PRIVATE>
 
-! :: defined-equal? ( v1 v2 -- ? )
-!     defined-equalities
-!     [| ds |
-!      v1 v2 [ ds disjoint-set-member? ] both?
-!      [ v1 v2 ds equiv? ] [ f ] if
-!     ] [ f ] if* ; inline
+:: with-global-variable ( value var quot -- )
+    ! var get-global "Save: %u\n" printf
+    [
+        globals-stack [ var get-global suffix ] change
+        value var set-global
+        quot
+        [
+            globals-stack get last var set-global
+            globals-stack [ but-last-slice ] change
+            ! dup "Restore: %u\n" printf
+            ! var set-global
+        ] finally
+    ] with-scope
+    ; inline
 
 ! TODO: this is expensive!
 SYMBOL: check-vars?
-: check-vars ( v1 v2 -- )
-    [ defined-equalities disjoint-set-member? ] both?
-    [ "nope" throw ] unless ;
+ERROR: unknown-term-vars v1 v2 ;
+: check-vars ( v1 v2 ds -- )
+    2over rot [ disjoint-set-member? ] curry both?
+    [ 2drop ] [ unknown-term-vars ] if ; inline
 
 : safe-equiv? ( v1 v2 ds -- ? )
-    ! 2over check-vars
+    3dup check-vars
     equiv? ; inline
 
 : defined-equal? ( v1 v2 -- ? )
-    ! no-defined-equalities get
+    ! no-defined-equalities get-global
     ! [ 2drop f ] [
         defined-equalities
     [
@@ -91,18 +98,14 @@ SYMBOL: check-vars?
 
 : check-integrity ( -- )
     defined-equalities parents>> [ nip ] assoc-all?
-    [ "Bad" throw ] unless ;
+    [ defined-equalities "Bad" 2array throw ] unless ;
 
+! Using local scope for now, replace with global when working!
 : with-eq-scope ( disjoint-set quot -- )
-    '[ defined-equalities
-       eq-stack [ swap suffix ] change
-       ! [ clone ] [ <eq-disjoint-set> ] if* defined-equalities-ds set-global
-       _ defined-equalities-ds set-global
-       [ @ ]
+    defined-equalities-ds swap '[
+       @
        check-integrity
-       [ eq-stack [ unclip swap ] change
-         defined-equalities-ds set-global ] finally
-    ] with-scope ; inline
+    ] with-global-variable ; inline
 
 DEFER: vars
 : with-term-vars ( obj quot -- )
@@ -157,99 +160,118 @@ var-names [ H{ } clone ] initialize
 : usym ( name -- word )
     uvar <uninterned-word> ;
 
-: umatchvar ( name -- word )
-    usym dup
-    t "match-var" set-word-prop ;
+! : umatchvar ( name -- word )
+!     usym dup
+!     t "match-var" set-word-prop ;
+
+DEFER: <term-var>
+: utermvar ( name -- word )
+    uvar <term-var> ;
+    ! t "term-var" set-word-prop ;
 
 ! * Term variables
 PREDICATE: term-var < word "term-var" word-prop ;
-INSTANCE: term-var match-var
 
-
+! FIXME: inlining this method causes mass recompile
 M: term-var equal?
     over term-var?
     [ defined-equal? ] [ 2drop f ] if ;
-    ! { [ eq? ]
-    !   [ defined-equal? ] } 2|| ; inline
+
+! inline
 
 : define-term-var ( name -- )
     create-word-in [ define-symbol ]
     [ t "term-var" set-word-prop ]
-    [ t "termplate" set-word-prop ]
-    tri ;
+    bi ;
 
 M: term-var pprint*
     name>> H{ { foreground COLOR: solarized-blue } } styled-text ;
 
 M: term-var reset-word
     [ call-next-method ]
-    [ f "term-var" set-word-prop ]
-    [ "template" remove-word-prop ] tri
-    ;
+    [ f "term-var" set-word-prop ] bi ;
 
 SYNTAX: TERM-VARS: ";" [ define-term-var ] each-token ;
 
 : <term-var> ( name -- var )
     <uninterned-word>
     dup t "term-var" set-word-prop
-    dup defined-equalities add-atom ;
+    defined-equalities
+    [ dupd add-atom ] when* ;
+
+GENERIC: child-elts* ( obj -- nodes )
+M: object child-elts* drop f ;
+M: sequence child-elts* ;
+M: string child-elts* drop f ;
+M: tuple child-elts* tuple-slots ;
 
 GENERIC: vars* ( obj -- )
 M: object vars* drop ;
 M: match-var vars* , ;
-M: sequence vars* [ vars* ] each ;
-M: tuple vars* tuple-slots vars* ;
+M: term-var vars* , ;
+! M: sequence vars* [ vars* ] each ;
+! M: tuple vars* tuple-slots vars* ;
 
 : vars ( obj -- seq )
-    [ vars* ] { } make ;
+    [ [ [ vars* ] [ child-elts* ] bi ] closure drop ] { } make ; inline
 
+: term-vars ( obj -- seq )
+    vars [ term-var? ] filter ;
+
+: match-vars ( obj -- seq )
+    vars [ match-var? ] filter ;
 
 ! * Ground Values
 
 SYMBOL: ground-values
 
-: maybe-add-atom ( x ds -- )
-    2dup disjoint-set-member?
-    [ 2drop ] [ add-atom ] if ; inline
+! : maybe-add-atom ( x ds -- )
+!     2dup disjoint-set-member?
+!     [ 2drop ] [ add-atom ] if ; inline
 
 ERROR: ground-value-contradiction old value ;
 
+! FIXME: definition order!
+DEFER: lift
+: update-ground-values ( assoc -- assoc )
+    [ f lift ] assoc-map ; inline
+
 :: define-ground-value ( var value ds -- )
-    var ds 2dup maybe-add-atom
+    var ds
     representative ground-values get
-    [| old | old [ old value = [ old ] [ old value ground-value-contradiction ] if ]
-     [ value ] if
-    ] change-at ;
+    [
+        [| old | old [ old value = [ old ] [ old value ground-value-contradiction ] if ]
+         [ value ] if
+        ] change-at
+    ] [ update-ground-values ground-values set ] bi
+    ; inline
 
 : ground-value? ( obj -- ? )
     vars empty? ; inline
 
-: maybe-define-ground-value ( v1 v2 ds -- )
-    ! over ground-value? not [ swapd ] when
-    ! over ground-value? not [ 3drop ] [
-    over match-var? [ swapd ] when
-    over match-var? [ 3drop ] [
-        define-ground-value
-    ] if ; inline
+! : maybe-define-ground-value ( v1 v2 ds -- )
+!     ! over ground-value? not [ swapd ] when
+!     ! over ground-value? not [ 3drop ] [
+!     over term-var? [ swapd ] when
+!     over term-var? [ 3drop ] [
+!         define-ground-value
+!     ] if ; inline
 
 ! Keep track of ground terms for equivalence classes
 : ?ground-value ( var -- val/key )
-    ground-values get ?at drop ;
+    dup term-var?
+    [ defined-equalities
+      [ representative
+        ground-values get ?at drop ] when* ] when ;
 
-: assume-equal ( a b -- )
-    defined-equalities
-    [
-        2over [ match-var? ] either?
-        [
-            {
-                [ nipd maybe-add-atom ]
-                [ nip maybe-add-atom ]
-                [ equate ]
-            }
-            3cleave
-        ] [ 3drop ] if
-    ] [ maybe-define-ground-value ] 3bi ;
-
+! Main entry point for atoms
+:: assume-equal ( a b -- )
+    defined-equalities :> ds
+    { { [ a b [ term-var? ] both? ] [ a b ds equate ] }
+      { [ a term-var? ] [ a b ds define-ground-value  ] }
+      { [ b term-var? ] [ b a ds define-ground-value  ] }
+      [ a b "trying to make something other than term vars equal" 3array throw ]
+    } cond ;
 
 ! * Unification
 ! Baader/Nipkow
@@ -261,24 +283,28 @@ SYMBOL: current-subst
 : get-current-subst ( obj -- obj/f )
     current-subst get at ;
 
-: ?representative ( var -- var )
-    { [ defined-equalities representative ] [  ] } 1||
-    ground-values get ?at drop
-    ; inline
+! : ?representative ( var -- var )
+!     { [ defined-equalities [ representative ] when* ] [  ] } 1||
+!     ?ground-value
+    ! ; inline
 
-: var-subst ( obj -- obj/f )
-    ! substitute-representatives? get
-    t
-    [ ?representative ] when
-    [ get-current-subst
-      dup { [ word? ] [ { [ deferred? ] [ match-var? not ] } 1|| ] [ drop in-quotation? get ] } 1&& [ <wrapper> ] when
-    ] keep
-    or ; inline
+! : var-subst ( obj -- obj/f )
+!     ! substitute-representatives? get
+!     t
+!     [ ?representative ] when
+!     [ get-current-subst
+!       dup { [ word? ] [ { [ deferred? ] [ match-var? not ] } 1|| ] [ drop in-quotation? get ] } 1&& [ <wrapper> ] when
+!     ] keep
+!     or ; inline
 
 
 ! M: object subst var-subst ;
 M: object subst ;
-M: match-var subst var-subst ;
+M: term-var subst
+    current-subst get ?at drop
+    ?ground-value
+    dup { [ drop in-quotation? get ] [ word? ] [ { [ deferred? ] [ match-var? not ] } 1|| ] } 1&& [ <wrapper> ] when
+    ;
 M: sequence subst
     dup quotation?
     in-quotation? [ [ subst ] map ] with-variable ;
@@ -323,8 +349,8 @@ M: sequence decompose-right
     } cond ;
 
 SYMBOL: valid-match-vars
-: valid-match-var? ( var -- ? )
-    dup match-var? [
+: valid-term-var? ( var -- ? )
+    dup term-var? [
         valid-match-vars get
         [ in? ] [ drop t ] if*
     ] [ drop f ] if ; inline
@@ -332,11 +358,12 @@ SYMBOL: valid-match-vars
 DEFER: elim
 : (solve) ( subst problem -- subst )
     [ unclip first2
+      [ ?ground-value ] bi@
       {
           { [ 2dup [ __? ] either? ] [ 2drop (solve) ] }
           ! { [ 2dup defined-equal? ] [ 2drop (solve) ] }
-          { [ over valid-match-var? ] [ 2dup = [ 2drop (solve) ] [ elim ] if ] }
-          { [ dup valid-match-var? ] [ swap elim ] }
+          { [ over valid-term-var? ] [ 2dup = [ 2drop (solve) ] [ elim ] if ] }
+          { [ dup valid-term-var? ] [ swap elim ] }
           { [ 2dup = ] [ 2drop (solve) ] }
           [ decompose [ zip prepend ] [ 2drop ] if (solve) ]
        } cond ] unless-empty ; inline recursive
@@ -362,19 +389,25 @@ SYMBOL: on-recursive-term
     recover ; inline
 
 : solve-problem ( problem -- subst )
-    H{ } clone swap solve ; inline
+    H{ } clone swap solve ;
 
 : solve-next ( subst problem -- subst )
-    swap >alist append solve-problem ;
+    swap >alist append solve-problem ; inline
 
 : solve-eq ( term1 term2 -- subst )
-    2array 1array solve-problem ;
+    2array 1array solve-problem ; inline
 
 : solve-eq-with ( subst term1 term2 -- subst )
-    2array 1array solve-next ;
+    2array 1array solve-next ; inline
 
 : solve-in ( term eqns -- term subst )
-    solve-problem [ lift ] keep ;
+    solve-problem [ lift ] keep ; inline
+
+! Only term vars!
+: fresh ( term -- term )
+    clone dup term-vars
+    [ dup name>> uvar <term-var> ] H{ } map>assoc
+    valid-match-vars [ lift ] with-variable-off ;
 
 ! * Interface
 

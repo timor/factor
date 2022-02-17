@@ -1,7 +1,6 @@
 USING: accessors arrays assocs assocs.extras chr chr.programs
-combinators.short-circuit disjoint-sets hash-sets hashtables kernel
-linked-assocs match math namespaces quotations sequences sets sorting terms
-typed words ;
+combinators.short-circuit hash-sets kernel linked-assocs match math namespaces
+quotations sequences sets sorting terms typed words ;
 
 IN: chr.state
 

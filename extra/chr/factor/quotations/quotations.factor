@@ -645,15 +645,14 @@ CHR{ // { InlineWord ?s ?t ?w } -- | [| | ?w def>> :> def { InlineCall ?s ?t ?w 
 ! CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w } { InlineQuot ?s ?t ?d } }
 
 CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w }
-     { ApplyWordRules ?s ?t ?w }
-   }
+     { ApplyWordRules ?s ?t ?w } }
 
 CHR{ // { ExecWord ?s ?t ?w } -- | { Word ?s ?t ?w } }
 
 CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }
 CHR{ // { Word ?s ?t ?w } -- [ ?w method? ] | { Method ?s ?t ?w } }
 
-! CHR{ { Word ?s ?t ?w } // -- | { ApplyWordRules ?s ?t ?w } }
+CHR{ { Word ?s ?t ?w } // -- | { ApplyWordRules ?s ?t ?w } }
 
 ! CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- |
 ! [ ?s ?t ?w instantiate-word-rules ] ;
