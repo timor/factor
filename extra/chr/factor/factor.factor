@@ -47,7 +47,8 @@ TUPLE: Effect < chr-pred val in out ;
 TUPLE: Curried < chr-pred parm q ;
 TUPLE: Composed < chr-pred callable1 callable2 q ;
 TUPLE: CondJump < trans-pred ;
-TUPLE: CondRet < trans-pred cond ;
+! TUPLE: CondRet < trans-pred cond ;
+TUPLE: CondRet < trans-pred ;
 
 TUPLE: SameStack < chr-pred s1 s2 ;
 
@@ -62,9 +63,9 @@ TUPLE: SameStack < chr-pred s1 s2 ;
 TUPLE: Stack < state-pred vals ;
 
 TUPLE: AcceptTypes < state-pred list ;
-TUPLE: AcceptType < state-pred var type ;
+TUPLE: AcceptType < state-pred val type ;
 TUPLE: ProvideTypes < state-pred list ;
-TUPLE: ProvideType < state-pred var type ;
+TUPLE: ProvideType < state-pred val type ;
 ! TUPLE: BranchCond < state-pred cond ;
 
 ! This signifies that the referenced condition is part of an exclusive set?
@@ -74,7 +75,8 @@ TUPLE: ProvideType < state-pred var type ;
 TUPLE: InferCall < trans-pred val ;
 TUPLE: InlineWord < trans-pred word ;
 TUPLE: InlineCall < trans-pred word quot ;
-TUPLE: Call < trans-pred word quot ;
+
+TUPLE: Call < state-pred word in out ;
 
 ! Compiler Entry
 TUPLE: ChratInfer < chr-pred obj ;
@@ -111,7 +113,7 @@ TUPLE: InferUnknown < trans-pred val ;
 ! Folding
 TUPLE: LitStack < state-pred vals done? ;
 TUPLE: FoldQuot < trans-pred missing quot ;
-TUPLE: AskLit < state-pred n var ;
+! TUPLE: AskLit < state-pred n var ;
 
 
 : new-state ( -- symbol )

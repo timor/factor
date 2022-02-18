@@ -89,8 +89,22 @@ ERROR: existential-guard-vars rule ;
     dup [ rules>> ] [ existential-vars>> ] bi
     [ insert-generators! ] 2map >>rules ;
 
+: check-body-constraint-effect ( effect -- ? )
+    { [ terminated?>> ] [ ( -- new ) effect= ] } 1|| ;
+
+ERROR: wrong-builtin-effect quot effect ;
+: check-body-quots ( rules -- )
+    [ body>> [
+          dup callable?
+          [ dup infer dup check-body-constraint-effect
+            [ 2drop ]
+            [ wrong-builtin-effect ] if
+          ] [ drop ] if
+      ] each ] each ;
+
 : load-chr ( rules -- chr-prog )
     read-chr
+    dup check-body-quots
     rewrite-chrat-prog
     dup index-rules
     2dup make-schedule

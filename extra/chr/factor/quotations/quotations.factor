@@ -1,8 +1,8 @@
 USING: accessors arrays chr chr.factor chr.factor.compiler chr.factor.conditions
 chr.factor.control chr.factor.types chr.factor.words chr.modular chr.parser
 chr.state classes combinators combinators.short-circuit continuations effects
-generalizations generic kernel lists math math.order math.parser quotations
-sequences sets terms types.util words ;
+generic kernel lists math math.order math.parser quotations sequences sets terms
+types.util words ;
 
 IN: chr.factor.quotations
 FROM: syntax => _ ;
@@ -163,7 +163,6 @@ TUPLE: CallFrame < chr-pred caller-start callee-start callee-end caller-end ;
 TUPLE: InferBetween < trans-pred quot ;
 TUPLE: InferredBetween < trans-pred entry-state exit-state quot ;
 TUPLE: InferEffect < trans-pred in out quot ;
-TUPLE: RemoveState < state-pred ;
 TUPLE: AddLink < trans-pred ;
 
 ! ** Call-Graph-Inference
@@ -265,16 +264,16 @@ CHR: literal-dup2 @
 { Lit ?y ?v } // { Dup __ ?x ?y } -- | { Lit ?x ?v } ;
 
 ! *** Dead Values
+CHR{ { Dead ?x } // { Dead ?x } -- | }
 ! CHR{ // { Drop __ ?x } { Lit ?x __  } -- | { Dead ?x } }
-CHR{ { Drop +top+ ?x } // -- | { Dead ?x } }
+CHR{ // { Drop +top+ ?x } -- | { Dead ?x } }
 
 ! CHR: drop-lit1 @ { Dead ?x } // { Stack ?s L{ ?x . __ } } -- [ ?s known { +top+ +end+ } in? not ] |  ;
 CHR: drop-lit2 @ { Dead ?x } // { Lit ?x __ } -- | ;
 CHR{ { Dead ?x } // { Instance ?x __ } -- | }
 
-CHR{ { Dead ?x } // { Dead ?x } -- | }
 CHR{ { Dead ?x } // { Effect ?x __ __ } -- | }
-
+CHR{ // { Dead __ } -- | }
 
 ;
 
@@ -292,24 +291,24 @@ CHR: ask-val @ { Stack ?s ?v } // { ask { Val ?s ?n ?a } } --
 
 
 ! ! Catch questions for literal stack values
-CHR{ // { NumLiterals ?s ?n } -- |
-     [| |
-      ?n [ "lit" uvar <term-var> ] replicate dup :> vars
-      <reversed> [| v i | { AskLit ?s i v } ] map-index
-      { LitStack ?s vars f } suffix
+! CHR{ // { NumLiterals ?s ?n } -- |
+!      [| |
+!       ?n [ "lit" uvar <term-var> ] replicate dup :> vars
+!       <reversed> [| v i | { AskLit ?s i v } ] map-index
+!       { LitStack ?s vars f } suffix
 
       ! ?n [| i | { AskLit ?s i } ] { } map-integers
       ! { LitStack ?s V{ } } prefix
-     ] }
+!     ] }
 
-CHR{ // { LitStack ?s ?v f } -- [ ?v [ known? ] all? ] |
-     [| |
-         ?v [ known ] map :> v2
-         { LitStack ?s v2 t } ] }
+! CHR{ // { LitStack ?s ?v f } -- [ ?v [ known? ] all? ] |
+!      [| |
+!          ?v [ known ] map :> v2
+!          { LitStack ?s v2 t } ] }
 
-CHR{ { AskLit ?s ?n ?x } // -- | { Val ?s ?n ?i } }
+! CHR{ { AskLit ?s ?n ?x } // -- | { Val ?s ?n ?i } }
 ! Priority!
-CHR{ { Lit ?x ?a } // { Val ?s ?n ?x } { AskLit ?s ?n ?b } -- | [ ?b ?a ==! ] }
+! CHR{ { Lit ?x ?a } // { Val ?s ?n ?x } { AskLit ?s ?n ?b } -- | [ ?b ?a ==! ] }
 ! CHR{ { Val ?s ?n ?x } { Lit ?x ?a } // { LitStack ?s ?v } { AskLit ?s ?n } -- |
 !      [| | ?a ?n ?v new-nth :> v2 { LitStack ?s v2 } ]
 !    }
@@ -329,6 +328,7 @@ CHR{ { Stack ?s ?v } { Val ?s ?n ?a } // -- [ ?n ?v llength* < ] |
      [ ?a ?n ?v lnth ==! ]
    }
 
+! This is mainly useful for naming vars according to the declared effects...
 CHR{ // { AssumeEffect ?s ?t ?e } -- |
      [| | ?e [ in>> ] [ out>> ] bi 2dup :> ( i o )
       [ length ] bi@ :> ( ni no )
@@ -495,7 +495,8 @@ CHR: infer-if @ // { Word ?r ?t if } -- |
      ! { Stack ?st1 ?a }
      ! { InferCall ?st0 ?st1 ?p }
      ! { CondRet ?st1 ?t ?c1 }
-     { CondRet ?st1 ?t ?st0 }
+
+     { CondRet ?st0 ?t }
 
      ! { Cond ?c2 { Instance ?c \ f } }
      { Cond ?sf0 { Instance ?c \ f } }
@@ -508,7 +509,7 @@ CHR: infer-if @ // { Word ?r ?t if } -- |
      { InlineUnknown ?sf0 ?sf1 ?q }
      ! { InferCall ?sf0 ?sf1 ?q }
      ! { CondRet ?sf1 ?t ?c2 }
-     { CondRet ?sf1 ?t ?sf0 }
+     { CondRet ?sf0 ?t }
      ! { Stack ?sf1 ?b }
 
      ! { JoinStacks ?b ?d ?sig }
@@ -521,17 +522,26 @@ CHR: infer-if @ // { Word ?r ?t if } -- |
      ! { InlineUnknown ?s0 ?t ?q } { InlineUnknown ?s0 ?t ?p }
      ! { Val ?r 0 ?q } { Val ?r 1 ?p } { Val ?r 2 ?c }
    ;
+
+! CHR: phi-stacks @
+! // { CondRet ?a ?u } { CondRet ?b ?u } -- |
+! { Stack ?a ?rho }
+! { Stack ?b ?sig }
+! { Cond ?a  }
+
 ;
 
 ! ** Cleanup
-CHRAT: clean-states { RemoveState }
-! CHR{ { RemoveState ?s } // { Linkback ?s ?a } -- |
-!      [ ?a members [ RemoveState boa ] map ]
-!    }
-! CHR{ { RemoveState ?s } // { Linkback ?r ?a } -- [ ?s ?a known in? ] |
-!      [ ?r ?s ?a remove Linkback boa ]
-!    }
-! CHR{ // { RemoveState ?s } { Stack ?s __ } -- | }
+TUPLE: RemoveScope < trans-pred ;
+TUPLE: RemoveState < state-pred ;
+
+! Remove stack states of segments that are done
+CHRAT: clean-states { RemoveScope RemoveState }
+
+CHR{ { Scope ?s ?t ?l } // { RemoveScope ?s ?t } -- [ ?l known? ] | [ ?l known [ RemoveState boa ] map ] }
+CHR{ // { RemoveState +top+ } -- | }
+CHR{ // { RemoveState +end+ } -- | }
+CHR{ // { RemoveState ?s } { Stack ?s __ } -- | }
 ;
 
 ! ** Syntactic expansion
@@ -544,6 +554,7 @@ IMPORT: condition-prop
 IMPORT: basic-stack
 IMPORT: chrat-types
 IMPORT: chrat-words
+IMPORT: clean-states
 ! IMPORT: infer-stack
 ! IMPORT: stack-ops
 
@@ -602,12 +613,15 @@ CHR{ // { InferToplevelQuot ?q } -- |
    }
 
 CHR{ { InferBetween ?r ?t ?q } // -- [ ?q known? ] |
+     { Stack ?r ?rho }
+     { Stack ?s ?rho }
      { Scope ?r ?t { ?s } }
      { Infer ?r ?s ?q }
    }
 
 CHR: end-infer @ // { InferBetween ?r ?t ?q } { Infer ?r ?x [ ] } -- |
 { Stack ?x ?rho } { Stack ?t ?rho }
+{ RemoveScope ?r ?t }
      ! [ ?x ?t ==! ]
    ;
 
@@ -655,14 +669,54 @@ CHR{ // { CheckInlineQuot ?s ?t ?d }  -- | { InlineQuot ?s ?t ?d } }
 
 CHR{ // { ExecWord ?s ?t ?w } -- | { Word ?s ?t ?w } }
 
-TUPLE: FoldWord < Word ;
+! CHR{ { Word ?s ?t ?w } // -- [ ?w foldable? ] | { Stack ?s ?i } { Stack ?t ?o } { FoldCall ?s ?w ?i ?o } }
 
-CHR{ { Word ?s ?t ?w } // -- [ ?w foldable? ] | { FoldWord ?s ?t ?w } }
+! CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }
+! CHR{ // { Word ?s ?t ?w } -- [ ?w method? ] | { Method ?s ?t ?w } }
 
-CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }
-CHR{ // { Word ?s ?t ?w } -- [ ?w method? ] | { Method ?s ?t ?w } }
+CHR{ { Word ?s ?t ?w } // -- [ ?w generic? not ] |
+     { ApplyWordRules ?s ?t ?w } }
 
-CHR{ { Word ?s ?t ?w } // -- | { ApplyWordRules ?s ?t ?w } }
+! Folding
+
+TUPLE: FoldCall < Call ;
+TUPLE: AskLit < Lit ;
+
+
+! Alternatively, only try folding if we have a top literal?
+CHR{ { Word ?s ?t ?w } { Stack ?s L{ ?x . __ } } { Lit ?x __ } // -- [ ?w foldable? ] |
+     [| | ?w stack-effect in>> elt-vars dup
+      >list ?rho lappend :> stack-in
+      ! <reverse> [ number>string "lv" prepend uvar <term-var> 2array ] map :> var-map-in
+      <reversed> dup :> var-in
+      length [ number>string "lv" prepend uvar <term-var> ] { } map-integers :> lit-in
+      ?w stack-effect out>> elt-vars dup
+      >list ?sig lappend :> stack-out
+      reverse :> var-out
+      { { Stack ?s stack-in }
+        { Stack ?t stack-out }
+        { FoldCall ?s ?w lit-in var-out }
+      }
+      ! var-in [ number>string "lv" prepend uvar <term-var> AskLit boa ] map-index append
+      var-in lit-in [ AskLit boa ] 2map append
+     ]
+   }
+
+! Theoretically this is dead, because we don't expect a value to be used twice
+CHR{ // { Lit ?x ?v } { AskLit ?x ?a } -- | [ ?a ?v ==! ] { Dead ?x } }
+
+CHR: do-fold-call @ // { Call ?s __ __ __ } { FoldCall ?s ?w ?i ?o } -- [ ?i [ known? ] all? ] |
+    [ ?i [ known ] map ?w 1quotation with-datastack
+      ?o swap [ Lit boa ] 2map
+] ;
+
+! Anything else
+
+CHR{ // { Word ?s ?t ?w } -- |
+     { Stack ?s ?i }
+     { Stack ?t ?o }
+     { Call ?s ?w ?i ?o } }
+
 
 ! Insert at least one dummy state to prevent hooking into the top node with Entry specs
 CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- | { Stack ?s ?rho } { Stack ?s0 ?rho } { AddLink ?s ?s0 }
@@ -671,20 +725,20 @@ CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- | { Stack ?s ?rho } {
 ! CHR{ { Word ?s ?t ?w } { Stack ?s ?v } { Lit ?a ?b } // -- [ ?b ?v ]}
 ! Folding
 ! Alternatively, only try folding if we have a top literal?
-CHR{ { Stack ?s L{ ?x . __ } } { Lit ?x __ } // { FoldWord ?s ?t ?w } -- |
-     [| | ?s ?t ?w stack-effect in>> length [ ?w execute ] FoldQuot boa ] }
+! CHR{ { Stack ?s L{ ?x . __ } } { Lit ?x __ } // { FoldCall ?s ?t ?w } -- |
+!      [| | ?s ?t ?w stack-effect in>> length [ ?w execute ] FoldQuot boa ] }
 
-CHR{ { FoldQuot ?s __ ?m __ } // -- | { NumLiterals ?s ?m } }
+! CHR{ { FoldQuot ?s __ ?m __ } // -- | { NumLiterals ?s ?m } }
 
-CHR: do-fold @ // { FoldQuot ?s ?t __ ?q } { LitStack ?s ?v t } -- |
-     ! [| | ?v ?q with-datastack :> res
-     !  res <reversed> [| w i | "r" uvar <term-var> :> x { { Val ?t i x } { Lit x w } } ] map-index concat
-     ! ]
-     [| |
-      ?v ?q with-datastack :> outs
-      ?v length [ drop ] n*quot outs >quotation compose :> new-quot
-      { InlineQuot ?s ?t new-quot }
-      ! { RemoveState ?s }
-     ]
-   ;
+! CHR: do-fold @ // { FoldQuot ?s ?t __ ?q } { LitStack ?s ?v t } -- |
+!      ! [| | ?v ?q with-datastack :> res
+!      !  res <reversed> [| w i | "r" uvar <term-var> :> x { { Val ?t i x } { Lit x w } } ] map-index concat
+!      ! ]
+!      [| |
+!       ?v ?q with-datastack :> outs
+!       ?v length [ drop ] n*quot outs >quotation compose :> new-quot
+!       { InlineQuot ?s ?t new-quot }
+!       ! { RemoveState ?s }
+!      ]
+!    ;
 ;

@@ -1,4 +1,5 @@
-USING: chr chr.factor chr.parser chr.state sets terms ;
+USING: chr chr.factor chr.parser chr.state classes.tuple kernel sequences sets
+terms ;
 
 IN: chr.factor.conditions
 
@@ -40,13 +41,6 @@ CHR{ { Cond ?x ?c } // { Cond ?x ?c } -- | }
 ! Rewrite stuff to scope leaders
 CHR{ { Scope ?s __ ?l } // { Cond ?t ?k } -- [ ?t ?l known in? ] | { Cond ?s ?k } }
 
-! Rewrite stuff to branch conditions
-! FIXME: make this general somehow
-! CHR{ { CondJump ?r ?s } // { Cond ?r ?k } -- | { Cond ?c ?k } }
-
-CHR{ // { ConflictState ?t ?c ?k } -- [ ?t +top+? not ] | { Cond ?t { ConflictState ?c ?k } } }
-CHR{ // { Drop ?t ?x } -- [ ?t +top+? not ] | { Cond ?t { Drop ?x } } }
-
 
 ! Convert Control Flow
 
@@ -58,6 +52,17 @@ CHR{ { Absurd ?t } // { Cond ?t ?c } -- | }
 CHR{ { Absurd ?x } // { Disjoint ?x ?y } -- | { Trivial ?y } }
 CHR{ { Absurd ?y } // { Disjoint ?x ?y } -- | { Trivial ?x } }
 CHR{ // { ConflictState ?t __ __ } -- | { Absurd ?t } }
+
+! Rewrite stuff to branch conditions, to transport that upwards
+! FIXME: make this general somehow
+! CHR{ { CondJump ?r ?s } // { Cond ?r ?k } -- | { Cond ?c ?k } }
+
+CHR{ // { ConflictState ?t ?c ?k } -- [ ?t +top+? not ] | { Cond ?t { ConflictState ?c ?k } } }
+CHR{ // { Drop ?t ?x } -- [ ?t +top+? not ] | { Cond ?t { Drop ?x } } }
+CHR{ // { Dup ?t ?x ?y } -- [ ?t +top+? not ] | { Cond ?t { Dup ?x ?y } } }
+
+! Don't keep literal-related stuff
+CHR{ // { Cond __ { Drop ?x } } -- | { Dead ?x } }
 
 ! Put stuff back
 CHR{ // { Cond +top+ ?a } -- [ ?a sequence? ] [ ?a ?first { ConflictState Drop } in? ] |

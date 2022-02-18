@@ -1,4 +1,5 @@
-USING: chr.factor chr.modular chr.parser classes kernel lists terms ;
+USING: chr.factor chr.factor.conditions chr.modular chr.parser classes kernel
+lists terms ;
 
 IN: chr.factor.types
 

@@ -68,11 +68,11 @@ CHR{ // { SingleMethod ?s ?u ?w ?n ?tau } -- | { Val ?s ?n ?x }
     [| |
      ?tau ?w chrat-methods at :> method
      {
-         { CondJump ?s ?s0 ?c }
+         { CondJump ?s ?s0 }
          { AcceptType ?s0 ?x ?tau }
          { Cond ?c { Instance ?x ?tau } }
          { ExecWord ?s0 ?t method }
-         { CondRet ?t ?u ?c }
+         { CondRet ?t ?u ?s0 }
      }
     ] }
 
@@ -84,11 +84,11 @@ TUPLE: CompileDone < chr-pred ;
 ! Erase inner state-specific info, so we can treat stacks as conditions
 ! CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s ?ground-value +top+ = ] | { TopEntry +top+ ?w } }
 CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s +top+? not ] | { Cond ?s P{ Inlined ?w } } }
-CHR{ { CompileRule } // { Stack ?s __ } -- [ ?s { +top+ +end+ } in? not ] | }
+! CHR{ { CompileRule } // { Stack ?s __ } -- [ ?s { +top+ +end+ } in? not ] | }
 CHR{ { CompileRule } // { Val __ __ __ } -- | }
-CHR{ { CompileRule } // { FoldQuot __ __ __ __ } -- | }
-CHR{ { CompileRule } // { LitStack __ __ __  } -- | }
-CHR{ { CompileRule } // { AskLit __ __ __  } -- | }
+! CHR{ { CompileRule } // { FoldQuot __ __ __ __ } -- | }
+! CHR{ { CompileRule } // { LitStack __ __ __  } -- | }
+! CHR{ { CompileRule } // { AskLit __ __ __  } -- | }
 CHR{ { CompileRule } // { CondRet __ __ __  } -- | }
 CHR{ { CompileRule } // { Dead __ } -- | }
 CHR{ { CompileRule } // { Lit ?x __ } { Instance ?x __ } -- | }
@@ -103,7 +103,7 @@ CHR: wrap-facts-2 @ { CompileRule } // { ProvideType ?s ?x ?tau } -- | { Cond ?s
 ! CHR: rewrite-conds @ { CompileRule } { Linkback ?s ?v } // { AcceptType ?t ?x ?tau } -- [ ?t ?v known in? ] | { AcceptType ?s ?x ?tau } ;
 ! CHR: rewrite-conflicts @ { CompileRule } { Linkback ?s ?v } // { ConflictState ?t ?c ?k } -- [ ?t ?v known in? ] | { ConflictState ?s ?c ?k } ;
 
-CHR: jump-state-is-cond @ { CompileRule } // { CondJump ?r ?s ?t } -- | [ ?s ?t ==! ] { CondNest ?r ?s } ;
+! CHR: jump-state-is-cond @ { CompileRule } // { CondJump ?r ?s ?t } -- | [ ?s ?t ==! ] { CondNest ?r ?s } ;
 
 ! Collapse states
 ! CHR: collapse-links @ { CompileRule } // { Linkback ?s ?v } -- | [ ?s ?v members [ ==! ] with map ] ;
