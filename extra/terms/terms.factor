@@ -49,7 +49,6 @@ M:: eq-disjoint-set equate ( a b disjoint-set -- )
 
 ! * State
 
-SYMBOL: substitute-representatives?
 SYMBOL: defined-equalities-ds
 
 ! Using local for debugging
@@ -92,7 +91,8 @@ ERROR: unknown-term-vars v1 v2 ;
         defined-equalities
     [
         ! check-vars? get [ 2over check-vars ] when
-        safe-equiv? ] [ 2drop f ] if*
+        ! safe-equiv? ] [ 2drop f ] if*
+        equiv? ] [ 2drop f ] if*
     ! ] if
     ; inline
 
@@ -109,6 +109,7 @@ ERROR: unknown-term-vars v1 v2 ;
 
 DEFER: vars
 : with-term-vars ( obj quot -- )
+    ! 2dup swap . .
     [ vars <eq-disjoint-set> [ add-atoms ] keep ] dip
     with-eq-scope ; inline
 
@@ -230,11 +231,17 @@ SYMBOL: ground-values
 !     [ 2drop ] [ add-atom ] if ; inline
 
 ERROR: ground-value-contradiction old value ;
+ERROR: recursive-ground-terms terms ;
 
+: check-recursive-terms ( assoc -- )
+    [ term-vars member-eq? ] assoc-filter
+    dup assoc-empty? [ drop ] [ recursive-ground-terms ] if ;
 ! FIXME: definition order!
 DEFER: lift
 : update-ground-values ( assoc -- assoc )
-    [ f lift ] assoc-map ; inline
+    [ f lift ] assoc-map
+    dup check-recursive-terms
+    ; inline
 
 :: define-ground-value ( var value ds -- )
     var ds
@@ -283,22 +290,6 @@ SYMBOL: current-subst
 : get-current-subst ( obj -- obj/f )
     current-subst get at ;
 
-! : ?representative ( var -- var )
-!     { [ defined-equalities [ representative ] when* ] [  ] } 1||
-!     ?ground-value
-    ! ; inline
-
-! : var-subst ( obj -- obj/f )
-!     ! substitute-representatives? get
-!     t
-!     [ ?representative ] when
-!     [ get-current-subst
-!       dup { [ word? ] [ { [ deferred? ] [ match-var? not ] } 1|| ] [ drop in-quotation? get ] } 1&& [ <wrapper> ] when
-!     ] keep
-!     or ; inline
-
-
-! M: object subst var-subst ;
 M: object subst ;
 M: term-var subst
     current-subst get ?at drop

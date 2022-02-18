@@ -1,6 +1,6 @@
-USING: assocs chr chr.factor chr.modular chr.parser chr.state
-combinators.short-circuit effects generic.single kernel sequences sets terms
-words ;
+USING: assocs chr chr.factor chr.factor.conditions chr.modular chr.parser
+chr.state combinators.short-circuit effects generic.single kernel sequences sets
+terms words ;
 
 IN: chr.factor.words
 
@@ -78,13 +78,8 @@ CHR{ // { SingleMethod ?s ?u ?w ?n ?tau } -- | { Val ?s ?n ?x }
 
 ! * Create Rules for instantiation
 TUPLE: CompileRule < chr-pred ;
-TUPLE: CondNest < chr-pred c1 c2 ;
 TUPLE: CompileDone < chr-pred ;
 ! ** Cleanup
-CHR{ { Absurd ?x } // { Absurd ?x } -- | }
-
-CHR{ // { CondNest ?x ?x } -- | }
-CHR{ { Cond ?x ?c } // { Cond ?x ?c } -- | }
 
 ! Erase inner state-specific info, so we can treat stacks as conditions
 ! CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s ?ground-value +top+ = ] | { TopEntry +top+ ?w } }
@@ -97,7 +92,7 @@ CHR{ { CompileRule } // { AskLit __ __ __  } -- | }
 CHR{ { CompileRule } // { CondRet __ __ __  } -- | }
 CHR{ { CompileRule } // { Dead __ } -- | }
 CHR{ { CompileRule } // { Lit ?x __ } { Instance ?x __ } -- | }
-CHR{ { CompileRule } // { InlineUnknown __ __ __ } -- | }
+! CHR{ { CompileRule } // { InlineUnknown ?s ?t ?x } -- | { Cond ?s { InlinesUnknown ?x } } }
 CHR: remove-words-1 @ { CompileRule } // { Generic __ __ __ } -- | ;
 CHR: remove-words-2 @ { CompileRule } // { Word __ __ __ } -- | ;
 
@@ -106,31 +101,27 @@ CHR: wrap-facts-1 @ { CompileRule } // { AcceptType ?s ?x ?tau } -- | { Cond ?s 
 CHR: wrap-facts-2 @ { CompileRule } // { ProvideType ?s ?x ?tau } -- | { Cond ?s P{ ProvideType ?s ?x ?tau } } ;
 
 ! CHR: rewrite-conds @ { CompileRule } { Linkback ?s ?v } // { AcceptType ?t ?x ?tau } -- [ ?t ?v known in? ] | { AcceptType ?s ?x ?tau } ;
-CHR: rewrite-conflicts @ { CompileRule } { Linkback ?s ?v } // { ConflictState ?t ?c ?k } -- [ ?t ?v known in? ] | { ConflictState ?s ?c ?k } ;
+! CHR: rewrite-conflicts @ { CompileRule } { Linkback ?s ?v } // { ConflictState ?t ?c ?k } -- [ ?t ?v known in? ] | { ConflictState ?s ?c ?k } ;
 
 CHR: jump-state-is-cond @ { CompileRule } // { CondJump ?r ?s ?t } -- | [ ?s ?t ==! ] { CondNest ?r ?s } ;
 
 ! Collapse states
 ! CHR: collapse-links @ { CompileRule } // { Linkback ?s ?v } -- | [ ?s ?v members [ ==! ] with map ] ;
-CHR: leader-is-cond-1 @ { CompileRule } { Linkback ?s ?v } // { Cond ?x ?c } -- [ ?x ?v known in? ] | { Cond ?s ?c }  ;
-CHR: leader-is-cond-2 @ { CompileRule } { Linkback ?s ?v } // { CondNest ?x ?y } -- [ ?x ?v known in? ] | { CondNest ?s ?y }  ;
+! CHR: leader-is-cond-1 @ { CompileRule } { Linkback ?s ?v } // { Cond ?x ?c } -- [ ?x ?v known in? ] | { Cond ?s ?c }  ;
+! CHR: leader-is-cond-2 @ { CompileRule } { Linkback ?s ?v } // { CondNest ?x ?y } -- [ ?x ?v known in? ] | { CondNest ?s ?y }  ;
 
 ! CHR: leader-is-cond @ { CompileRule } { Linkback ?s ?v } // { CondNest ?x ?y } -- [ ?x ?v known in? ] | [ ?s ?x ==! ] ;
 
 CHR{ { CompileRule } { Absurd ?x } { CondNest ?x ?s } // -- | { Absurd ?s } }
 CHR{ { CompileRule } { Absurd ?x } // { CondNest __ ?x } -- | }
-CHR{ { CompileRule } { Absurd ?t } // { Cond ?t ?c } -- | }
-CHR{ { CompileRule } { Absurd ?x } // { Disjoint ?x ?y } -- | { Trivial ?y } }
-CHR{ { CompileRule } { Absurd ?y } // { Disjoint ?x ?y } -- | { Trivial ?x } }
 
-CHR{ { CompileRule } // { ConflictState ?t __ __ } -- | { Absurd ?t } }
 
 
 ! CHR: trivial-is-true @ { Trivial ?y } { CondNest ?x ?y } // { Cond ?y ?c } -- | { Cond ?x ?c } ;
 CHR: trivial-is-true @ { CompileRule } { CondNest ?x ?y } // { Trivial ?y } -- |  [ ?x ?y ==! ] ;
 
 ! Erase Simplification artefacts
-CHR{ { CompileRule } // { Linkback __ __ } -- | }
+! CHR{ { CompileRule } // { Linkback __ __ } -- | }
 
 CHR{ // { CompileRule } -- | { CompileDone } }
 

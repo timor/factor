@@ -53,8 +53,8 @@ DEFER: reactivate
     ] assoc-each ;
 
 : known? ( obj -- ? )
-    dup match-var? [ ?ground-value ] when
-    match-var? not ; inline
+    dup term-var? [ ?ground-value ] when
+    term-var? not ; inline
 
 : known ( obj -- val )
     ?ground-value ;
@@ -329,6 +329,16 @@ M: builtin-suspension apply-substitution* nip ;
     H{ } clone var-names set
     ;
 
+! This should ensure catching terms without a solution!
+! : solve-eq-constraints ( store -- )
+!     builtins of constraint>> dup .
+!     [ constraint-args first2 f lift
+!       2array ] map dup .
+!     f defined-equalities-ds [ valid-match-vars off ground-values off
+!       dup [ valid-match-vars off ground-values off solve-problem ] with-term-vars drop
+!     ] with-global-variable
+!     ;
+
 : run-chr-query ( prog query -- store )
     [ pred>constraint ] map
     2dup 2array
@@ -337,7 +347,9 @@ M: builtin-suspension apply-substitution* nip ;
       swap
       init-chr-scope
       [ activate-new ] each
+      ! ground-values get .
       store get
+      ! dup solve-eq-constraints
       [ constraint>> over builtins = [ f lift ] unless ] assoc-map
     ] with-term-vars ;
 

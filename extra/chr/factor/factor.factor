@@ -31,7 +31,7 @@ TUPLE: EitherOr < chr-pred s1 s2 v1 v2 ;
 TUPLE: SplitState < state-pred sa sb ;
 
 ! Phi
-TUPLE: JoinStacks < chr-pred in1 in2 out ;
+TUPLE: JoinStacks < state-pred in1 in2 ;
 
 ! Word level
 TUPLE: Exec < trans-pred obj ;
@@ -44,17 +44,19 @@ TUPLE: Definition < chr-pred word quot ;
 TUPLE: Lit < chr-pred val obj ;
 TUPLE: Effect < chr-pred val in out ;
 ! TUPLE: Curried < chr-pred val parm callable ;
-TUPLE: Curried < chr-pred val parm callable ;
-TUPLE: Composed < chr-pred val callable1 callable2 ;
-TUPLE: CondJump < trans-pred cond ;
+TUPLE: Curried < chr-pred parm q ;
+TUPLE: Composed < chr-pred callable1 callable2 q ;
+TUPLE: CondJump < trans-pred ;
 TUPLE: CondRet < trans-pred cond ;
 
-TUPLE: Cond < chr-pred cond constraint ;
-TUPLE: Disjoint < chr-pred cond1 cond2 ;
-! TUPLE: AbsurdState < state-pred ;
-TUPLE: ConflictState < state-pred but why? ;
-TUPLE: Absurd < chr-pred cond ;
-TUPLE: Trivial < chr-pred cond ;
+TUPLE: SameStack < chr-pred s1 s2 ;
+
+! TUPLE: Cond < chr-pred cond constraint ;
+! TUPLE: Disjoint < chr-pred cond1 cond2 ;
+! ! TUPLE: AbsurdState < state-pred ;
+! TUPLE: ConflictState < state-pred but why? ;
+! TUPLE: Absurd < chr-pred cond ;
+! TUPLE: Trivial < chr-pred cond ;
 
 ! list of vars
 TUPLE: Stack < state-pred vals ;
@@ -78,12 +80,13 @@ TUPLE: Call < trans-pred word quot ;
 TUPLE: ChratInfer < chr-pred obj ;
 
 ! State connections
-TUPLE: Linkback < chr-pred beg states ;
+! TUPLE: Linkback < chr-pred beg states ;
+TUPLE: Scope < trans-pred sub-states ;
 
 ! Data Split, duplication
-TUPLE: Dup < chr-pred from to ;
+TUPLE: Dup < state-pred from to ;
 ! Inverse operation
-TUPLE: Drop < chr-pred val ;
+TUPLE: Drop < state-pred val ;
 ! Mark value as dead.  Solvers should update their state accordingly
 TUPLE: Dead < chr-pred val ;
 
