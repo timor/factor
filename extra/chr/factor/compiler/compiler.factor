@@ -1,5 +1,6 @@
-USING: accessors assocs chr chr.factor chr.factor.words chr.state kernel match
-namespaces sequences sets terms words ;
+USING: accessors assocs chr chr.factor chr.factor.conditions chr.factor.control
+chr.factor.words chr.parser chr.state kernel match namespaces sequences sets
+terms words ;
 
 IN: chr.factor.compiler
 
@@ -8,6 +9,11 @@ FROM: namespaces => set ;
 
 ! * Compiler interface for chrat-based Interference of Factor code
 
+! ** Create Rules for instantiation
+TUPLE: CompileRule < chr-pred ;
+TUPLE: CompileDone < chr-pred ;
+
+! * Factor Side and Interface
 : constraints>body ( store -- constraint )
     ! Make sure we convert the body vars in a fresh scope
     f defined-equalities-ds [ values rest fresh [ term-vars ] keep <generator> ] with-global-variable ;
@@ -58,3 +64,41 @@ ERROR: recursive-chrat-compile word ;
 
 : chrat-infer ( quot/word -- constraints )
     [ '{ { ChratInfer _ } } run-chrat-query ] with-jit-compile ;
+
+! * Chrat side
+
+CHRAT: compile-rules { CompileRule }
+
+! Insert at least one dummy state to prevent hooking into the top node with Entry specs
+CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- |
+! { Stack ?s ?rho }
+! { Stack ?s0 ?rho } { AddLink ?s ?s0 }
+! [ ?s0 ?t ?w instantiate-word-rules ]
+[ ?s ?t ?w instantiate-word-rules ]
+    ;
+
+
+
+! Erase inner state-specific info, so we can treat stacks as conditions
+! CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s ?ground-value +top+ = ] | { TopEntry +top+ ?w } }
+! CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s +top+? not ] | { Cond ?s P{ Inlined ?w } } }
+! CHR{ { CompileRule } // { Stack ?s __ } -- [ ?s { +top+ +end+ } in? not ] | }
+! CHR{ { CompileRule } // { Val __ __ __ } -- | }
+! CHR{ { CompileRule } // { FoldQuot __ __ __ __ } -- | }
+! CHR{ { CompileRule } // { LitStack __ __ __  } -- | }
+CHR{ { CompileRule } // { AskLit __ __  } -- | }
+! CHR{ { CompileRule } // { CondRet __ __ __  } -- | }
+! CHR{ { CompileRule } // { Dead __ } -- | }
+! CHR{ { CompileRule } // { Lit ?x __ } { Instance ?x __ } -- | }
+! CHR{ { CompileRule } // { InlineUnknown ?s ?t ?x } -- | { Cond ?s { InlinesUnknown ?x } } }
+! CHR: remove-words-1 @ { CompileRule } // { Generic __ __ __ } -- | ;
+CHR: remove-words-2 @ { CompileRule } // { Word __ __ __ } -- | ;
+
+! Erase Simplification artefacts
+
+CHR{ // { CompileRule } -- | { CompileDone } }
+
+CHR{ { CompileDone } // { Absurd __ } -- | }
+
+CHR{ // { CompileDone } -- | }
+;

@@ -1,8 +1,14 @@
-USING: assocs chr chr.factor chr.factor.conditions chr.modular chr.parser
-chr.state combinators.short-circuit effects generic.single kernel sequences sets
-terms words ;
+USING: accessors arrays assocs chr.factor chr.factor.conditions chr.parser
+chr.state combinators.short-circuit continuations effects generic generic.math
+kernel lists math math.parser quotations sequences sets terms types.util words ;
 
 IN: chr.factor.words
+
+TUPLE: Shuffle < trans-pred mapping ;
+TUPLE: ApplyWordRules < trans-pred w ;
+TUPLE: AskLit < Lit ;
+TUPLE: FoldCall < Call ;
+
 
 GENERIC: chrat-effect ( word -- effect )
 CONSTANT: effect-overrides H{
@@ -23,109 +29,136 @@ M: word chrat-in-types
 !     [ [ "method-class" word-prop ] [ dispatch# ] bi* dup 1 + object <array> [ set-nth ] keep ]
 !     [ 2drop f ] if ;
 
-: chrat-out-types ( word -- seq/f )
+GENERIC: chrat-out-types ( word -- seq/f )
+
+M: word chrat-out-types
     "default-output-classes" word-prop ;
+
+! Note: providing values is known upper bound!
+M: math-generic chrat-out-types drop number 1array ;
 
 : chrat-methods ( word -- seq/f )
     "methods" word-prop ;
 
-TERM-VARS: ?r ?s ?t ?u ?s0 ?v ?w ?x ?y ?n ?tau ?k ?c ;
+: linear-shuffle? ( effect -- ? )
+    [ in>> ] [ out>> ] bi { [ [ length ] same? ] [ set= ] } 2&& ;
 
-CHRAT: chrat-words { DefaultMethod }
+: elt-vars ( seq -- seq )
+    [ swap dup pair? [ first ] when
+      [ nip ] [ number>string "v" prepend ] if*
+      uvar
+      <term-var>
+    ] map-index <reversed> ;
 
-CHR{ // { ask { DefaultMethod ?s ?t ?w } } -- [ ?w "default-method" word-prop? ] |
-     { entailed { DefaultMethod ?s ?t ?w } } }
 
-CHR{ // { Generic ?s ?t ?w } -- [ ?w single-generic? ] |
-     [ ?w [ dispatch# ] [ chrat-methods keys ] bi [| n c | ?s ?t ?w n c SingleMethod boa ] with map ]
+CHRAT: chrat-words {  }
+
+! Cleaning up
+CHR{ { Dead ?x } // { AskLit ?x __ } -- | }
+CHR{ { AbsurdState ?s } // { Word ?s __ __ } -- | }
+CHR: absurd-call @ { AbsurdState ?s } // { Call ?s __ ?i ?o } -- |
+     [ V{ } clone ?i [ Dead boa over push ] leach*
+       ?o [ Dead boa over push ] leach* ]
+   ;
+CHR{ { AbsurdState ?s } // { FoldCall ?s __ __ __ } -- | }
+
+! primitives
+
+CHR: infer-dup @ // { Word ?s ?t dup } -- |
+     { Stack ?s L{ ?x . ?rho } }
+     { Stack ?t L{ ?y ?x . ?rho } }
+     { Dup ?s ?x ?y } ;
+
+CHR: infer-over @ // { Word ?s ?t over } -- |
+     { Stack ?s L{ ?y ?x . ?rho } }
+     { Stack ?t L{ ?z ?y ?x . ?rho } }
+     { Dup ?s ?x ?z } ;
+
+CHR: curry-effect @ // { Word ?s ?t curry } -- |
+     { Stack ?s L{ ?p ?parm . ?rho } }
+     { Effect ?p L{ ?parm . ?a } ?b }
+     { Stack ?t L{ L{ ?parm . ?p } . ?rho } } ;
+
+CHR{ // { Word ?s ?t compose } -- |
+     { Stack ?s L{ ?q ?p . ?rho } }
+     { Effect ?p ?a ?b }
+     { Effect ?q ?b ?c }
+     { Stack ?t L{ { ?p ?q } . ?rho } }
    }
 
-! CHR: method-not-applicable @ // { SingleMethod ?s __ __ ?n ?tau } --
-!     { Val ?s ?n ?x } { NotInstance ?x ?tau } | ;
+CHR{ // { Word ?s ?t drop } -- |
+     { Stack ?s L{ ?x . ?rho } }
+     { Stack ?t ?rho }
+     { Drop ?s ?x } }
 
-! TODO: make this a pattern?
-! CHR: ask-method-applicable @ { SingleMethod ?s ?t ?w ?n ?tau } // -- { Val ?s ?n ?x } |
-! { AskAbout { Instance ?x ?tau } ?k { ?s ?t ?w ?n ?x ?tau } }
-! ;
+CHR{ // { Word ?s ?t nip } -- |
+     { Stack ?s L{ ?y ?x . ?rho } }
+     { Stack ?t L{ ?y . ?rho } }
+     { Drop ?s ?x }
+   }
 
-! This would then be general
-! CHR: excluded-middle-1 @ { AnswerAbout { Not ?c } __ ?k } // { AskAbout ?c __ ?k } -- | ;
-! CHR: excluded-middle-2 @ { AnswerAbout ?c __ ?k } // { AskAbout { Not ?c } __ ?k } -- | ;
-
-CHR: method-applicable @
-{ SingleMethod ?s ?t ?w ?n ?tau }
-//
-{ AskAbout __ ?k __ }
-{ AnswerAbout { Instance ?x ?tau } ?k { ?s ?t ?w ?n ?x ?tau } } -- | ;
-
-CHR: method-not-applicable @
-// { SingleMethod ?s ?t ?w ?n ?tau }
-{ AskAbout __ ?k __ }
-{ AnswerAbout { Not { Instance ?x ?tau } } ?k { ?s ?t ?w ?n ?x ?tau } } -- | ;
-
-! ** Dispatch
-CHR{ // { SingleMethod ?s ?u ?w ?n ?tau } -- | { Val ?s ?n ?x }
-    [| |
-     ?tau ?w chrat-methods at :> method
-     {
-         { CondJump ?s ?s0 }
-         { AcceptType ?s0 ?x ?tau }
-         { Cond ?c { Instance ?x ?tau } }
-         { ExecWord ?s0 ?t method }
-         { CondRet ?t ?u ?s0 }
-     }
-    ] }
-
-! * Create Rules for instantiation
-TUPLE: CompileRule < chr-pred ;
-TUPLE: CompileDone < chr-pred ;
-! ** Cleanup
-
-! Erase inner state-specific info, so we can treat stacks as conditions
-! CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s ?ground-value +top+ = ] | { TopEntry +top+ ?w } }
-CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s +top+? not ] | { Cond ?s P{ Inlined ?w } } }
-! CHR{ { CompileRule } // { Stack ?s __ } -- [ ?s { +top+ +end+ } in? not ] | }
-CHR{ { CompileRule } // { Val __ __ __ } -- | }
-! CHR{ { CompileRule } // { FoldQuot __ __ __ __ } -- | }
-! CHR{ { CompileRule } // { LitStack __ __ __  } -- | }
-! CHR{ { CompileRule } // { AskLit __ __ __  } -- | }
-CHR{ { CompileRule } // { CondRet __ __ __  } -- | }
-CHR{ { CompileRule } // { Dead __ } -- | }
-CHR{ { CompileRule } // { Lit ?x __ } { Instance ?x __ } -- | }
-! CHR{ { CompileRule } // { InlineUnknown ?s ?t ?x } -- | { Cond ?s { InlinesUnknown ?x } } }
-CHR: remove-words-1 @ { CompileRule } // { Generic __ __ __ } -- | ;
-CHR: remove-words-2 @ { CompileRule } // { Word __ __ __ } -- | ;
-
-! Wrap some state-specific Conds
-CHR: wrap-facts-1 @ { CompileRule } // { AcceptType ?s ?x ?tau } -- | { Cond ?s P{ AcceptType ?s ?x ?tau } } ;
-CHR: wrap-facts-2 @ { CompileRule } // { ProvideType ?s ?x ?tau } -- | { Cond ?s P{ ProvideType ?s ?x ?tau } } ;
-
-! CHR: rewrite-conds @ { CompileRule } { Linkback ?s ?v } // { AcceptType ?t ?x ?tau } -- [ ?t ?v known in? ] | { AcceptType ?s ?x ?tau } ;
-! CHR: rewrite-conflicts @ { CompileRule } { Linkback ?s ?v } // { ConflictState ?t ?c ?k } -- [ ?t ?v known in? ] | { ConflictState ?s ?c ?k } ;
-
-! CHR: jump-state-is-cond @ { CompileRule } // { CondJump ?r ?s ?t } -- | [ ?s ?t ==! ] { CondNest ?r ?s } ;
-
-! Collapse states
-! CHR: collapse-links @ { CompileRule } // { Linkback ?s ?v } -- | [ ?s ?v members [ ==! ] with map ] ;
-! CHR: leader-is-cond-1 @ { CompileRule } { Linkback ?s ?v } // { Cond ?x ?c } -- [ ?x ?v known in? ] | { Cond ?s ?c }  ;
-! CHR: leader-is-cond-2 @ { CompileRule } { Linkback ?s ?v } // { CondNest ?x ?y } -- [ ?x ?v known in? ] | { CondNest ?s ?y }  ;
-
-! CHR: leader-is-cond @ { CompileRule } { Linkback ?s ?v } // { CondNest ?x ?y } -- [ ?x ?v known in? ] | [ ?s ?x ==! ] ;
-
-CHR{ { CompileRule } { Absurd ?x } { CondNest ?x ?s } // -- | { Absurd ?s } }
-CHR{ { CompileRule } { Absurd ?x } // { CondNest __ ?x } -- | }
+CHR{ // { Word ?s ?t pick } -- |
+     { Stack ?s L{ ?z ?y ?x . ?rho } }
+     { Stack ?t L{ ?w ?z ?y ?x . ?rho } }
+     { Dup ?s ?x ?w }
+   }
 
 
+CHR: assume-word-effect @ { Word ?s ?t ?w } // -- |
+[| | ?w chrat-effect :> e { AssumeEffect ?s ?t e } ] ;
 
-! CHR: trivial-is-true @ { Trivial ?y } { CondNest ?x ?y } // { Cond ?y ?c } -- | { Cond ?x ?c } ;
-CHR: trivial-is-true @ { CompileRule } { CondNest ?x ?y } // { Trivial ?y } -- |  [ ?x ?y ==! ] ;
+CHR: infer-shuffle @ // { Word ?s ?t ?w } -- [ ?w "shuffle" word-prop? [ linear-shuffle? ] [ f ] if* ] |
+[ ?s ?t ?w "shuffle" word-prop shuffle-mapping Shuffle boa ] ;
 
-! Erase Simplification artefacts
-! CHR{ { CompileRule } // { Linkback __ __ } -- | }
+! TODO Math words
+! CHR: { { Word ?s ?t ?w } // -- }
 
-CHR{ // { CompileRule } -- | { CompileDone } }
+! CHR{ // { Word ?s ?t ?w } -- [ ?w primitive? ] | { Prim ?s ?t ?w } }
 
-CHR{ { CompileDone } // { Absurd __ } -- | }
+CHR{ // { InlineWord ?s ?t ?w } -- | [| | ?w def>> :> def { InlineCall ?s ?t ?w def } ] }
 
-CHR{ // { CompileDone } -- | }
+! CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }
+! CHR{ // { Word ?s ?t ?w } -- [ ?w method? ] | { Method ?s ?t ?w } }
+
+! FIXME: apply all rules
+CHR{ { Word ?s ?t ?w } // -- [ ?w generic? not ] |
+     { ApplyWordRules ?s ?t ?w } }
+
+! Folding
+
+
+! Alternatively, only try folding if we have a top literal?
+CHR{ { Word ?s ?t ?w } { Stack ?s L{ ?x . __ } } { Lit ?x __ } // -- [ ?w foldable? ] |
+     [| | ?w stack-effect in>> elt-vars dup
+      >list ?rho lappend :> stack-in
+      ! <reverse> [ number>string "lv" prepend uvar <term-var> 2array ] map :> var-map-in
+      <reversed> dup :> var-in
+      length [ number>string "lv" prepend uvar <term-var> ] { } map-integers :> lit-in
+      ?w stack-effect out>> elt-vars dup
+      >list ?sig lappend :> stack-out
+      reverse :> var-out
+      { { Stack ?s stack-in }
+        { Stack ?t stack-out }
+        { FoldCall ?s ?w lit-in var-out }
+      }
+      ! var-in [ number>string "lv" prepend uvar <term-var> AskLit boa ] map-index append
+      var-in lit-in [ AskLit boa ] 2map append
+     ]
+   }
+
+! Theoretically this is dead, because we don't expect a value to be used twice
+CHR{ // { Lit ?x ?v } { AskLit ?x ?a } -- | [ ?a ?v ==! ] { Dead ?x } }
+
+CHR: do-fold-call @ // { Call ?s __ __ __ } { FoldCall ?s ?w ?i ?o } -- [ ?i [ known? ] all? ] |
+    [ ?i [ known ] map ?w 1quotation with-datastack
+      ?o swap [ Lit boa ] 2map
+] ;
+
+! Anything else
+
+CHR{ // { Word ?s ?t ?w } -- |
+     { Stack ?s ?i }
+     { Stack ?t ?o }
+     { Call ?s ?w ?i ?o } }
+
 ;

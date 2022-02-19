@@ -5,6 +5,10 @@ persistent.assocs sequences strings terms vocabs.parser words ;
 IN: chr.factor
 FROM: syntax => _ ;
 
+TERM-VARS:
+?a ?b ?c ?d ?e ?i ?l ?k ?o ?p ?q ?r ?s ?t ?u ?n ?m ?v ?w ?x ?xs ?y
+?ys ?z ?c1 ?c2 ?s0 ?beg ?parm ?rho ?sig ?tau ?vars ;
+
 TUPLE: state-pred < chr-pred s1 ;
 TUPLE: trans-pred < chr-pred s1 s2 ;
 
@@ -50,7 +54,7 @@ TUPLE: CondJump < trans-pred ;
 ! TUPLE: CondRet < trans-pred cond ;
 TUPLE: CondRet < trans-pred ;
 
-TUPLE: SameStack < chr-pred s1 s2 ;
+! TUPLE: SameStack < state-pred s2 ;
 
 ! TUPLE: Cond < chr-pred cond constraint ;
 ! TUPLE: Disjoint < chr-pred cond1 cond2 ;
@@ -63,9 +67,8 @@ TUPLE: SameStack < chr-pred s1 s2 ;
 TUPLE: Stack < state-pred vals ;
 
 TUPLE: AcceptTypes < state-pred list ;
-TUPLE: AcceptType < state-pred val type ;
 TUPLE: ProvideTypes < state-pred list ;
-TUPLE: ProvideType < state-pred val type ;
+
 ! TUPLE: BranchCond < state-pred cond ;
 
 ! This signifies that the referenced condition is part of an exclusive set?
@@ -83,7 +86,7 @@ TUPLE: ChratInfer < chr-pred obj ;
 
 ! State connections
 ! TUPLE: Linkback < chr-pred beg states ;
-TUPLE: Scope < trans-pred sub-states ;
+TUPLE: Scope < chr-pred beg end sub-states ;
 
 ! Data Split, duplication
 TUPLE: Dup < state-pred from to ;

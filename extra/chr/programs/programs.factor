@@ -1,5 +1,6 @@
-USING: accessors arrays assocs assocs.extras chr chr.factor chr.modular kernel
-math math.order sequences sets sorting terms types.util ;
+USING: accessors arrays assocs assocs.extras chr chr.modular classes.algebra
+combinators.short-circuit effects kernel math math.order quotations sequences
+sets sorting stack-checker terms types.util ;
 
 IN: chr.programs
 
@@ -29,27 +30,55 @@ C: <constraint-schedule> constraint-schedule
       [ 2nip ] if
     ] sort ;
 
+:: add-subtype-index ( ind sub sub-occs -- index )
+    sub class>> :> class
+    ind [| type type-occs |
+         type class class<= [
+             type type-occs sub-occs append
+         ]
+         [ type type-occs ] if
+    ] assoc-map ;
+
+: convert-subtype-matches ( index -- index )
+    [ drop chr-sub-pred? ] assoc-partition swap
+    [ add-subtype-index ] assoc-each ;
+
 : index-rules ( chrs -- index )
     H{ } clone swap
     [ swap heads>>
       [ rot [ 2array ] dip constraint-type pick push-at ] with each-index
     ] each-index
+    convert-subtype-matches
     [ sort-chr-index >array ] map-values ;
+
+:: make-1-schedule ( occ rule occ-hi -- schedule )
+    occ
+    rule nkept>> :> nk
+    occ-hi nk <
+    occ-hi rule heads>> nth constraint-args
+    V{ } clone
+    rule heads>> [| c i | i occ-hi = not [ i nk < c 2array suffix! ] when ] each-index
+    >array
+    rule match-vars>>
+    <constraint-schedule> ;
 
 ! Return an assoc of schedules per constraint type, which are sequences of
 ! { occ keep-active { keep-partner partner-type } } entries
 : make-schedule ( rules occur-index -- schedule )
     [| rules occs |
      occs
-     [ dup first2 [ rules nth ] dip :> ( rule occ-hi )
-         rule nkept>> :> nk
-         occ-hi nk <
-         occ-hi rule heads>> nth constraint-args
-         V{ } clone
-         rule heads>> [| c i | i occ-hi = not [ i nk < c 2array suffix! ] when ] each-index
-         >array
-         rule match-vars>>
-         <constraint-schedule>
+     [ dup first2 [ rules nth ] dip
+       make-1-schedule
+       !  :> ( rule occ-hi )
+         ! rule nkept>> :> nk
+         ! occ-hi nk <
+         ! occ-hi rule heads>> nth constraint-args
+         ! V{ } clone
+         ! rule heads>> [| c i | i occ-hi = not [ i nk < c 2array suffix! ] when ] each-index
+         ! >array
+         ! rule match-vars>>
+         ! <constraint-schedule>
+
       ] map
     ] with assoc-map ;
 
@@ -120,8 +149,8 @@ ERROR: wrong-builtin-effect quot effect ;
 : rules-depend-on-preds ( rules -- words )
     [ rule-depends-on-preds ] gather ;
 
-: pred-depends-on-solvers ( pred -- seq )
-    pred>chrat-definer [ chrat-solver-deps ] keep prefix ;
+: pred-depends-on-solver ( pred -- solver )
+    pred>chrat-definer ;
 
 : solver-depends-on-preds ( word -- seq )
     chrat-solver-rules [ rule-depends-on-preds ] gather ;
@@ -133,10 +162,14 @@ ERROR: wrong-builtin-effect quot effect ;
     dup chrat-pred-class? [ pred>chrat-definer [ chrat-solver-rules ] [ chrat-solver-deps ] bi append ] [ drop f ] if ;
 
 : collect-chrat-solvers ( constraints -- solvers )
-    [ chrat-pred? ] filter [ constraint-type pred-depends-on-solvers ] gather
+    [ chrat-pred? ] filter [ constraint-type pred-depends-on-solver ] map sift
     [
-        solver-depends-on-preds
-        [ pred-depends-on-solvers ] gather
+        ! [ chrat-solver-deps ]
+        ! [
+        !     solver-depends-on-preds
+        !     [ pred-depends-on-solver ] map sift
+        ! ] bi append
+        chrat-solver-deps <reversed>
     ] V{ } forest-as ;
 
 : collect-chrat-rules ( constraints -- rules )

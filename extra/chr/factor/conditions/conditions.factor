@@ -1,5 +1,5 @@
-USING: chr chr.factor chr.parser chr.state classes.tuple kernel sequences sets
-terms ;
+USING: chr chr.factor chr.parser chr.state classes.tuple kernel lists sequences
+sets terms ;
 
 IN: chr.factor.conditions
 
@@ -18,14 +18,20 @@ TUPLE: cond-pred < chr-pred cond ;
 ! Implication
 TUPLE: Cond < cond-pred implied ;
 
-TUPLE: Disjoint < chr-pred cond1 cond2 ;
+TUPLE: Disjoint < chr-pred c1 c2 ;
+TUPLE: SameStack < cond-pred s1 s2 ;
+TUPLE: Same < cond-pred v1 v2 ;
 
-TUPLE: ConflictState < cond-pred but why? ;
+TUPLE: ConflictState < chr-pred state but why? ;
 TUPLE: Absurd < chr-pred cond ;
 TUPLE: Trivial < chr-pred cond ;
 TUPLE: CondNest < chr-pred c1 c2 ;
+TUPLE: AbsurdState < chr-pred state ;
+! TUPLE: AbsurdScope < chr-pred beg end ;
+TUPLE: AbsurdScope < Scope ;
 
-TERM-VARS: ?r ?s ?t ?u ?a ?b ?c ?x ?y ?l ?k ?tau ;
+TUPLE: AcceptType < cond-pred val type ;
+TUPLE: ProvideType < cond-pred val type ;
 
 CHRAT: condition-prop {  }
 
@@ -39,36 +45,62 @@ CHR{ { Cond ?x ?c } // { Cond ?x ?c } -- | }
 ! CHR: leader-is-cond-1 @ { CompileRule } { Linkback ?s ?v } // { Cond ?x ?c } -- [ ?x ?v known in? ] | { Cond ?s ?c }  ;
 
 ! Rewrite stuff to scope leaders
-CHR{ { Scope ?s __ ?l } // { Cond ?t ?k } -- [ ?t ?l known in? ] | { Cond ?s ?k } }
+! CHR{ { Scope ?s __ ?l } // { Cond ?t ?k } -- [ ?t ?l known in? ] | { Cond ?s ?k } }
+! CHR{ { Scope ?s __ ?l } // { Absurd ?t } -- [ ?t ?l known in? ] | { Absurd ?s } }
+! CHR{ { Scope ?s __ ?l } // { Trivial ?t } -- [ ?t ?l known in? ] | { Trivial ?s } }
 
+CHR: propagate-cond-preds @ { Scope ?s __ ?l } // SUB: ?c cond-pred L{ ?x . ?xs } -- [ ?x ?l in? ] |
+    [ ?xs list>array ?s prefix ?c slots>tuple ] ;
+
+! Propagate Absurdness
+CHR{ { AbsurdState ?s } // { AbsurdState ?s } -- | }
+CHR{ { AbsurdScope ?s ?t __ } // { AbsurdScope ?s ?t __ } -- | }
+CHR{ { AbsurdState ?t } // { Scope ?s ?u ?l } -- [ ?t ?l known in? ] | { AbsurdScope ?s ?u ?l } }
+CHR{ { AbsurdState ?s } // { Scope ?s ?u ?l } -- | { AbsurdScope ?s ?u ?l } }
+CHR{ { AbsurdScope ?r ?u ?l } // { Scope ?s ?t ?v } -- [ ?s ?l in? ] | { AbsurdScope ?s ?t ?l } }
+CHR{ { AbsurdScope ?r ?u ?l } // -- [ ?l known? ] | [ ?l known [ AbsurdState boa ] map ] }
+! NOTE: this will be needed when we figure out absurdness afterwards
+CHR{ { Absurd ?s } { CondJump ?s ?t } // -- | { AbsurdState ?t } }
+CHR{ { AbsurdScope ?s __ __ } // -- | { Absurd ?s } }
 
 ! Convert Control Flow
 
 ! CHR: leader-is-cond-1 @ { CompileRule } { Linkback ?s ?v } // { Cond ?x ?c } -- [ ?x ?v known in? ] | { Cond ?s ?c }  ;
 ! CHR: leader-is-cond-2 @ { CompileRule } { Linkback ?s ?v } // { CondNest ?x ?y } -- [ ?x ?v known in? ] | { CondNest ?s ?y }  ;
 
+CHR{ // { ConflictState ?t __ __ } -- | { AbsurdState ?t } }
+
 ! Reasoning
-CHR{ { Absurd ?t } // { Cond ?t ?c } -- | }
+! CHR{ { Absurd ?t } // { Cond ?t ?c } -- | }
+CHR{ { Absurd ?s } // SUB: ?x cond-pred L{ ?s . __ } -- | }
 CHR{ { Absurd ?x } // { Disjoint ?x ?y } -- | { Trivial ?y } }
 CHR{ { Absurd ?y } // { Disjoint ?x ?y } -- | { Trivial ?x } }
-CHR{ // { ConflictState ?t __ __ } -- | { Absurd ?t } }
 
+! Value-level handling
+CHR{ // { Cond ?c { SameStack L{ ?x . ?xs } L{ ?y . ?ys } } } -- |
+     { Cond ?c { Same ?x ?y } }
+     { Cond ?c { SameStack ?xs ?ys } } }
+
+! Expand
+! CHR{ // { Cond ?c { SameStack ?a L{ ?y . ?ys } } } -- [ ?a known term-var? ] |
+!      { Cond ?c { SameStack L{ ?x . ?xs } L{ ?y . ?ys } } } }
+! CHR{ // { Cond ?c { SameStack L{ ?x . ?xs } ?b } } -- [ ?b known term-var? ] |
+!      { Cond ?c { SameStack L{ ?x . ?xs } L{ ?y . ?ys } } } }
+CHR{ { Cond ?c { SameStack ?a L{ ?y . ?ys } } } // -- [ ?a known term-var? ] |
+     [ ?a L{ ?x . ?xs } ==! ] }
+CHR{ { Cond ?c { SameStack L{ ?x . ?xs } ?b } } // -- [ ?b known term-var? ] |
+     [ ?b L{ ?y . ?ys } ==! ] }
+
+! Clean up Links
+CHR{ { Absurd ?s } // { CondJump ?s ?t } -- | }
+CHR{ { Absurd ?t } // { CondJump ?s ?t } -- | }
 ! Rewrite stuff to branch conditions, to transport that upwards
-! FIXME: make this general somehow
-! CHR{ { CondJump ?r ?s } // { Cond ?r ?k } -- | { Cond ?c ?k } }
 
-CHR{ // { ConflictState ?t ?c ?k } -- [ ?t +top+? not ] | { Cond ?t { ConflictState ?c ?k } } }
-CHR{ // { Drop ?t ?x } -- [ ?t +top+? not ] | { Cond ?t { Drop ?x } } }
-CHR{ // { Dup ?t ?x ?y } -- [ ?t +top+? not ] | { Cond ?t { Dup ?x ?y } } }
+CHR: propagate-trivial @ { Trivial ?c } { CondJump ?r ?c } // SUB: ?x cond-pred L{ ?c . ?xs } -- |
+     [ ?xs list>array ?r prefix ?x slots>tuple ]
+   ;
 
-! Don't keep literal-related stuff
-CHR{ // { Cond __ { Drop ?x } } -- | { Dead ?x } }
-
-! Put stuff back
-CHR{ // { Cond +top+ ?a } -- [ ?a sequence? ] [ ?a ?first { ConflictState Drop } in? ] |
-     [| | ?a unclip :> ( args pred )
-       args +top+ prefix pred slots>tuple
-     ]
-   }
+! NOTE: Assumption, there can only be one jump into ?s
+CHR{ // { Trivial ?s } { CondJump ?r ?s } -- | }
 
 ;

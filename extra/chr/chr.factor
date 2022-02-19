@@ -28,6 +28,9 @@ TUPLE: named-chr < chr rule-name ;
 : keep/remove ( chr -- seq seq )
     [ heads>> ] [ nkept>> ] bi cut-slice ; inline
 
+GENERIC: constraint-type ( obj -- type )
+GENERIC: constraint-args ( obj -- args )
+
 ! Internal Constraints form in program
 TUPLE: chr-cons cons atoms ;
 C: <chr-cons> chr-cons
@@ -50,6 +53,16 @@ INSTANCE: false constraint
 TUPLE: chr-pred ;
 INSTANCE: chr-pred constraint
 
+! Match-spec telling that the current class must be preceded!
+! TUPLE: bind-class { var } { args read-only } ;
+! C: <bind-class> bind-class
+
+TUPLE: chr-sub-pred var class args ;
+C: <chr-sub-pred> chr-sub-pred
+M: chr-sub-pred constraint-type ;
+M: chr-sub-pred constraint-args ;
+
+
 ! Turn lexical representation into constraint object
 GENERIC: pred>constraint ( obj -- chr-pred )
 M: constraint pred>constraint ;
@@ -60,7 +73,7 @@ PREDICATE: pred-array < array ?first pred-head-word? ;
 PREDICATE: fiat-pred-array < array ?first { [ word? ] [ pred-head-word? not ] } 1&& ;
 
 ! Things that are considered non-builtin constraints
-UNION: chr-constraint fiat-pred-array chr-pred ;
+UNION: chr-constraint fiat-pred-array chr-pred chr-sub-pred ;
 INSTANCE: chr-constraint constraint
 
 : check-slots>tuple ( seq class -- tuple )
@@ -71,9 +84,6 @@ M: pred-array pred>constraint
     unclip-slice check-slots>tuple ;
 
 M: sequence pred>constraint [ pred>constraint ] map ;
-
-GENERIC: constraint-type ( obj -- type )
-GENERIC: constraint-args ( obj -- args )
 
 M: chr-pred constraint-type class-of ;
 M: chr-pred constraint-args tuple-slots ;

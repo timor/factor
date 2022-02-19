@@ -245,7 +245,7 @@ M: chrat-pred-class pred>chrat-definer
 : chrat-solver-rules ( word -- rules )
     "constant" word-prop ;
 
-: chrat-solver-deps ( word -- rules )
+: chrat-solver-deps ( word -- solvers )
     "chrat-deps" word-prop ;
 
 

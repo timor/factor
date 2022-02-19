@@ -33,6 +33,11 @@ M: generator >pprint-sequence
 
 SYNTAX: G{ scan-token "}" expect <term-var> suffix! ;
 
+
+! SYNTAX: <={ scan-class \ } parse-array <chr-sub-pred> suffix! ;
+
+SYNTAX: SUB: scan-object scan-class scan-object <chr-sub-pred> suffix! ;
+
 SYNTAX: is{ scan-token <term-var> scan-object "}" expect
         callable check-instance <is-val> suffix! ;
 

@@ -1,6 +1,6 @@
-USING: accessors arrays assocs assocs.extras chr chr.programs
-combinators.short-circuit hash-sets kernel linked-assocs match math namespaces
-quotations sequences sets sorting terms typed words ;
+USING: accessors arrays assocs assocs.extras chr chr.programs classes
+classes.algebra combinators.short-circuit hash-sets kernel linked-assocs lists
+math namespaces quotations sequences sets sorting terms typed words ;
 
 IN: chr.state
 
@@ -36,8 +36,9 @@ TUPLE: builtin-suspension < chr-suspension type ;
 
 SLOT: type
 SLOT: args
-M: chr-suspension type>> constraint>> constraint-type ;
-M: chr-suspension args>> constraint>> constraint-args ;
+M: chr-suspension type>> constraint>> constraint-type ; inline
+M: chr-suspension args>> constraint>> constraint-args ; inline
+M: chr-suspension constraint-args args>> ; inline
 
 DEFER: activate-new
 
@@ -169,8 +170,13 @@ DEFER: activate
 !   - Add history info
 !   - execute body
 
-: lookup ( ctype -- seq )
+GENERIC: lookup ( ctype -- seq )
+
+M: class lookup
     store get [ type>> = ] with filter-values ;
+
+M: chr-sub-pred lookup
+    class>> store get [ type>> swap class<= ] with filter-values ;
 
 :: check/update-history ( rule-id trace -- ? )
     trace keys :> matched
@@ -208,11 +214,22 @@ DEFER: activate
       [ nip run-rule-body t ]
     } 3&& drop ;
 
-: start-match ( var-term arg-term -- subst )
-    2array 1array H{ } clone swap solve-next ;
+! : start-match ( var-term arg-term -- subst )
+!     2array 1array H{ } clone swap solve-next ;
+:: try-schedule-match ( bindings arg-spec susp -- bindings )
+    bindings
+    susp constraint-args :> args
+    arg-spec chr-sub-pred?
+    [ susp type>> arg-spec var>> bindings set-at
+      arg-spec args>> args >list
+    ]
+    [ clone arg-spec args ] if
+    2array 1array solve-next ; inline
 
-: match-constraint ( bindings args constraint -- bindings )
-    constraint-args swap 2array 1array solve-next ; inline
+! : match-constraint ( bindings args constraint -- bindings )
+!     over chr-sub-pred? [ break ] when
+!     constraint-args dup chr-sub-pred? [ break ] when
+!     swap 2array 1array solve-next ; inline
 
 ! Every level is passed the following info:
 ! rule-id { { id0 keep0 } ...{ id1 keep1} } bindings
@@ -227,7 +244,7 @@ DEFER: activate
         [| sid sc |
          { [ sid trace key? not ] [ sc alive>> ] } 0&& [
              ! vars valid-match-vars [
-                 bindings sc args>> pc match-constraint
+                 bindings pc constraint-args sc try-schedule-match
              ! ] with-variable
              :> bindings1
              bindings1 [
@@ -247,7 +264,7 @@ DEFER: activate
     :> vars ! valid-match-vars set
     ! [
         ! vars valid-match-vars [ arg-vars c args>> start-match ] with-variable
-    arg-vars c args>> start-match
+    H{ } clone arg-vars c try-schedule-match
         [ partners vars (run-occurrence) ] [ 2drop ] if*
     ! ] with-variable
     ;
