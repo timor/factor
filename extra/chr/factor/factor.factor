@@ -1,16 +1,21 @@
-USING: accessors arrays assocs chr chr.parser classes combinators effects
-effects.parser hashtables kernel lexer make match namespaces parser
-persistent.assocs sequences strings terms vocabs.parser words ;
+USING: accessors arrays assocs chr chr.parser chr.state classes combinators
+effects effects.parser hashtables kernel lexer make match namespaces parser
+persistent.assocs sequences strings terms types.util vocabs.parser words ;
 
 IN: chr.factor
 FROM: syntax => _ ;
 
 TERM-VARS:
 ?a ?b ?c ?d ?e ?i ?l ?k ?o ?p ?q ?r ?s ?t ?u ?n ?m ?v ?w ?x ?xs ?y
+?tau1 ?tau2 ?tau3
 ?ys ?z ?c1 ?c2 ?s0 ?beg ?parm ?rho ?sig ?tau ?vars ;
 
 TUPLE: state-pred < chr-pred s1 ;
 TUPLE: trans-pred < chr-pred s1 s2 ;
+
+! For cleaning up
+GENERIC: state-depends-on-vars ( state-pred -- seq )
+M: state-pred state-depends-on-vars drop f ;
 
 TUPLE: Word < trans-pred word ;
 
@@ -19,12 +24,10 @@ TUPLE: Join < trans-pred cond ;
 
 TUPLE: Not < chr-pred pred ;
 
-TUPLE: Val < state-pred n val ;
-TUPLE: Type < state-pred n val ;
+! TUPLE: Val < state-pred n val ;
 TUPLE: Instance < chr-pred val s ;
 TUPLE: NotInstance < chr-pred val s ;
 TUPLE: ExpectInstance < chr-pred val s ;
-TUPLE: DeclareTos < state-pred s ;
 
 TUPLE: Push < trans-pred val ;
 
@@ -35,7 +38,7 @@ TUPLE: EitherOr < chr-pred s1 s2 v1 v2 ;
 TUPLE: SplitState < state-pred sa sb ;
 
 ! Phi
-TUPLE: JoinStacks < state-pred in1 in2 ;
+TUPLE: PhiState < state-pred in1 in2 ;
 
 ! Word level
 TUPLE: Exec < trans-pred obj ;
@@ -50,48 +53,36 @@ TUPLE: Effect < chr-pred val in out ;
 ! TUPLE: Curried < chr-pred val parm callable ;
 TUPLE: Curried < chr-pred parm q ;
 TUPLE: Composed < chr-pred callable1 callable2 q ;
-TUPLE: CondJump < trans-pred ;
-! TUPLE: CondRet < trans-pred cond ;
-TUPLE: CondRet < trans-pred ;
-
-! TUPLE: SameStack < state-pred s2 ;
-
-! TUPLE: Cond < chr-pred cond constraint ;
-! TUPLE: Disjoint < chr-pred cond1 cond2 ;
-! ! TUPLE: AbsurdState < state-pred ;
-! TUPLE: ConflictState < state-pred but why? ;
-! TUPLE: Absurd < chr-pred cond ;
-! TUPLE: Trivial < chr-pred cond ;
+TUPLE: CondJump < chr-pred parent sub ;
+TUPLE: CondRet < chr-pred sub parent ;
 
 ! list of vars
 TUPLE: Stack < state-pred vals ;
+M: Stack state-depends-on-vars
+    [ vals>> known [ , ] leach* ] { } make ;
 
 TUPLE: AcceptTypes < state-pred list ;
 TUPLE: ProvideTypes < state-pred list ;
-
-! TUPLE: BranchCond < state-pred cond ;
-
-! This signifies that the referenced condition is part of an exclusive set?
-
-! Definition level
 
 TUPLE: InferCall < trans-pred val ;
 TUPLE: InlineWord < trans-pred word ;
 TUPLE: InlineCall < trans-pred word quot ;
 
+! Query marker for stack equivalence
 TUPLE: Call < state-pred word in out ;
+
+TUPLE: Branch < state-pred cs1 cs2 ;
 
 ! Compiler Entry
 TUPLE: ChratInfer < chr-pred obj ;
 
 ! State connections
-! TUPLE: Linkback < chr-pred beg states ;
 TUPLE: Scope < chr-pred beg end sub-states ;
 
 ! Data Split, duplication
 TUPLE: Dup < state-pred from to ;
 ! Inverse operation
-TUPLE: Drop < state-pred val ;
+! TUPLE: Drop < state-pred val ;
 ! Mark value as dead.  Solvers should update their state accordingly
 TUPLE: Dead < chr-pred val ;
 
@@ -103,18 +94,11 @@ TUPLE: Inlined < chr-pred word ;
 
 TUPLE: InlineUnknown < trans-pred val ;
 
-! Known Stack states
-TUPLE: QueryStack < state-pred depth ;
-TUPLE: InferredStack < state-pred n vars ;
-! TUPLE: BoundedEffect < trans-pred ;
-
-! Boolean if then else, cond is a value, the other two are states
-TUPLE: BranchIf < trans-pred cond strue sfalse ;
 
 TUPLE: InferUnknown < trans-pred val ;
 
 ! Folding
-TUPLE: LitStack < state-pred vals done? ;
+! TUPLE: LitStack < state-pred vals done? ;
 TUPLE: FoldQuot < trans-pred missing quot ;
 ! TUPLE: AskLit < state-pred n var ;
 

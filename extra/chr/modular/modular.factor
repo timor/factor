@@ -1,5 +1,5 @@
 USING: accessors arrays assocs chr classes.tuple combinators kernel math
-namespaces sequences sets terms vectors words words.constant ;
+namespaces quotations sequences sets terms vectors words ;
 
 IN: chr.modular
 
@@ -243,7 +243,8 @@ M: chrat-pred-class pred>chrat-definer
     "chrat-solver" word-prop ;
 
 : chrat-solver-rules ( word -- rules )
-    "constant" word-prop ;
+    ( -- prog ) execute-effect ;
+    ! "constant" word-prop ;
 
 : chrat-solver-deps ( word -- solvers )
     "chrat-deps" word-prop ;
@@ -253,9 +254,12 @@ SYMBOL: chrat-imports
 : set-chrat-deps ( word -- )
     chrat-imports get [ "chrat-deps" [ append ] with change-word-prop ] [ drop ] if* ;
 
+: define-solver-word ( word prog -- )
+    1quotation ( -- prog ) define-declared ;
+
 : define-chrat-prog ( word exports rules -- )
     2over [ set-defined-solver ] with each
     swap [ make-default-entailment-rule ] map prepend
     [ internalize-rule ] map
-    [ define-constant ] keepd
+    [ define-solver-word ] keepd
     set-chrat-deps ;

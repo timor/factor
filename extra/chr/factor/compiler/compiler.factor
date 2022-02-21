@@ -82,23 +82,34 @@ CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- |
 ! Erase inner state-specific info, so we can treat stacks as conditions
 ! CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s ?ground-value +top+ = ] | { TopEntry +top+ ?w } }
 ! CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s +top+? not ] | { Cond ?s P{ Inlined ?w } } }
-! CHR{ { CompileRule } // { Stack ?s __ } -- [ ?s { +top+ +end+ } in? not ] | }
+CHR{ { CompileRule } // { Stack ?s __ } -- [ ?s { +top+ +end+ } in? not ] | }
 ! CHR{ { CompileRule } // { Val __ __ __ } -- | }
 ! CHR{ { CompileRule } // { FoldQuot __ __ __ __ } -- | }
 ! CHR{ { CompileRule } // { LitStack __ __ __  } -- | }
 CHR{ { CompileRule } // { AskLit __ __  } -- | }
+CHR{ { CompileRule } // SUB: ?x Call ?r -- | }
+CHR{ { CompileRule } // SUB: ?x Scope ?r -- | }
+
 ! CHR{ { CompileRule } // { CondRet __ __ __  } -- | }
 ! CHR{ { CompileRule } // { Dead __ } -- | }
 ! CHR{ { CompileRule } // { Lit ?x __ } { Instance ?x __ } -- | }
 ! CHR{ { CompileRule } // { InlineUnknown ?s ?t ?x } -- | { Cond ?s { InlinesUnknown ?x } } }
 ! CHR: remove-words-1 @ { CompileRule } // { Generic __ __ __ } -- | ;
-CHR: remove-words-2 @ { CompileRule } // { Word __ __ __ } -- | ;
+! CHR: remove-words-2 @ { CompileRule } // { Word __ __ __ } -- | ;
+
 
 ! Erase Simplification artefacts
 
 CHR{ // { CompileRule } -- | { CompileDone } }
 
 CHR{ { CompileDone } // { Absurd __ } -- | }
+! Relies on all conditions having propagated to their leaders!
+CHR{ { CompileDone } { Trivial ?s } // { CondJump __ ?s } -- | }
+CHR{ { CompileDone } // { Trivial __ } -- | }
+CHR{ { CompileDone } // { CondRet __ __ } -- | }
+
+! Only keep top conditions!
+CHR: only-top-conds @ { CompileDone } // SUB: ?x cond-pred L{ ?c . __ } -- [ ?c known +top+? not ] | ;
 
 CHR{ // { CompileDone } -- | }
 ;

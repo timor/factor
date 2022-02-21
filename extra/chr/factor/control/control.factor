@@ -21,7 +21,7 @@ TUPLE: PrefixLink < trans-pred ;
 
 CHRAT: control-flow { CheckExec AddLink }
 
-CHR{ { AbsurdState ?s } // { AddLink ?s __ } -- | }
+! CHR{ { AbsurdState ?s } // { AddLink ?s __ } -- | }
 
 CHR{ { Link ?t ?u } // { Link ?t ?u } -- | }
 
@@ -36,14 +36,14 @@ CHR{ // { Link +top+ ?s } { CheckExec ?s ?t ?w } --
 CHR{ { CheckExec ?t __ __ } // -- | { Link ?t ?t } }
 
 ! Adding elements
-CHR{ // { Scope ?s ?u ?a } { AddLink ?s ?t } -- |
-   [ ?s ?u ?a ?t suffix Scope boa ] }
+CHR: add-link-to-scope-leader @ // { Scope ?s ?u ?a } { AddLink ?s ?t } -- |
+   [ ?s ?u ?a ?t suffix Scope boa ] ;
 
-CHR{ // { Scope ?s ?u ?a } { AddLink ?t ?b } -- [ ?t ?a known in? ] |
+CHR: add-link-to-scope-member @ // { Scope ?s ?u ?a } { AddLink ?t ?b } -- [ ?t ?a known in? ] |
      [| |
       ?b ?t ?a insert-after :> a2
       { Scope ?s ?u a2 }
-     ] }
+     ] ;
 
 ! In case we cannot be added to an existing scope, we might actually be leading it
 CHR: lead-scope @ // { Scope ?s ?t ?l } { PrefixLink ?r ?s } -- [ ?l known? ] |

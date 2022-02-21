@@ -220,7 +220,7 @@ M: chr-sub-pred lookup
     bindings
     susp constraint-args :> args
     arg-spec chr-sub-pred?
-    [ susp type>> arg-spec var>> bindings set-at
+    [ susp constraint>> arg-spec var>> bindings set-at
       arg-spec args>> args >list
     ]
     [ clone arg-spec args ] if
@@ -273,7 +273,7 @@ SYMBOL: sentinel
 
 : recursion-check ( -- )
     ! sentinel get 5000 > [ "runaway" throw ] when
-    sentinel get 1000 > [ "runaway" throw ] when
+    sentinel get 500 > [ "runaway" throw ] when
     sentinel inc ;
 
 ! TODO: check if that is needed to make sure tail recursion works!

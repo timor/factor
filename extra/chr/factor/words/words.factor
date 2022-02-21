@@ -1,6 +1,8 @@
-USING: accessors arrays assocs chr.factor chr.factor.conditions chr.parser
-chr.state combinators.short-circuit continuations effects generic generic.math
-kernel lists math math.parser quotations sequences sets terms types.util words ;
+USING: accessors arrays assocs chr.factor chr.factor.conditions
+chr.factor.control chr.factor.infer chr.parser chr.state
+combinators.short-circuit continuations effects generic kernel lists
+macros.expander make math.parser quotations sequences sets terms types.util
+words ;
 
 IN: chr.factor.words
 
@@ -34,8 +36,8 @@ GENERIC: chrat-out-types ( word -- seq/f )
 M: word chrat-out-types
     "default-output-classes" word-prop ;
 
-! Note: providing values is known upper bound!
-M: math-generic chrat-out-types drop number 1array ;
+! ! Note: providing values is known upper bound!
+! M: math-generic chrat-out-types drop number 1array ;
 
 : chrat-methods ( word -- seq/f )
     "methods" word-prop ;
@@ -50,17 +52,22 @@ M: math-generic chrat-out-types drop number 1array ;
       <term-var>
     ] map-index <reversed> ;
 
+M: Call state-depends-on-vars
+    [
+        [ in>> known [ , ] leach* ]
+        [ out>> known [ , ] leach* ] bi
+    ] { } make ;
 
 CHRAT: chrat-words {  }
 
 ! Cleaning up
 CHR{ { Dead ?x } // { AskLit ?x __ } -- | }
-CHR{ { AbsurdState ?s } // { Word ?s __ __ } -- | }
+! CHR{ { AbsurdState ?s } // { Word ?s __ __ } -- | }
 CHR: absurd-call @ { AbsurdState ?s } // { Call ?s __ ?i ?o } -- |
      [ V{ } clone ?i [ Dead boa over push ] leach*
        ?o [ Dead boa over push ] leach* ]
    ;
-CHR{ { AbsurdState ?s } // { FoldCall ?s __ __ __ } -- | }
+! CHR{ { AbsurdState ?s } // { FoldCall ?s __ __ __ } -- | }
 
 ! primitives
 
@@ -79,30 +86,50 @@ CHR: curry-effect @ // { Word ?s ?t curry } -- |
      { Effect ?p L{ ?parm . ?a } ?b }
      { Stack ?t L{ L{ ?parm . ?p } . ?rho } } ;
 
-CHR{ // { Word ?s ?t compose } -- |
+CHR: compose-effect @ // { Word ?s ?t compose } -- |
      { Stack ?s L{ ?q ?p . ?rho } }
      { Effect ?p ?a ?b }
      { Effect ?q ?b ?c }
      { Stack ?t L{ { ?p ?q } . ?rho } }
-   }
+   ;
 
-CHR{ // { Word ?s ?t drop } -- |
+CHR: drop-prim @ // { Word ?s ?t drop } -- |
      { Stack ?s L{ ?x . ?rho } }
      { Stack ?t ?rho }
-     { Drop ?s ?x } }
+     { Drop ?s ?x } ;
 
-CHR{ // { Word ?s ?t nip } -- |
+CHR: nip-prim @ // { Word ?s ?t nip } -- |
      { Stack ?s L{ ?y ?x . ?rho } }
      { Stack ?t L{ ?y . ?rho } }
      { Drop ?s ?x }
-   }
+   ;
 
-CHR{ // { Word ?s ?t pick } -- |
+CHR: pick-prim @  // { Word ?s ?t pick } -- |
      { Stack ?s L{ ?z ?y ?x . ?rho } }
      { Stack ?t L{ ?w ?z ?y ?x . ?rho } }
      { Dup ?s ?x ?w }
-   }
+   ;
 
+! Macros
+! TUPLE: AskLits < state-pred lits parms ;
+CHR: expand-macro-quot @ // { Word ?s ?t ?w } -- [ ?w macro-quot ] |
+[| | ?w macro-effect :> n-in
+ n-in [ "mparm" uvar <term-var> ] replicate :> in-parms
+ n-in [ "mlit" uvar <term-var> ] replicate :> in-lits
+ in-parms <reversed> >list ?rho lappend :> in-vars
+ ! L{ ?q . ?rho } :> out-vars
+ ?w macro-quot :> q
+ {
+     { Instance ?q callable }
+     { Stack ?s in-vars }
+     { AddLink ?s ?s0 }
+     ! { AddLink ?s0 ?t }
+     { Stack ?s0 L{ ?q . ?rho } }
+     { InferBetween ?s ?s0 q }
+     { InlineUnknown ?s0 ?t ?q }
+     ! { FoldQuot ?s ?t in-parms q }
+ }
+] ;
 
 CHR: assume-word-effect @ { Word ?s ?t ?w } // -- |
 [| | ?w chrat-effect :> e { AssumeEffect ?s ?t e } ] ;
