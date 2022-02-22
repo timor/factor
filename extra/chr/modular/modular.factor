@@ -1,4 +1,4 @@
-USING: accessors arrays assocs chr classes.tuple combinators kernel math
+USING: accessors arrays assocs chr classes classes.tuple combinators kernel math
 namespaces quotations sequences sets terms vectors words ;
 
 IN: chr.modular

@@ -229,7 +229,7 @@ CHR: infer-if @ // { Exec ?r ?t if } -- |
 { Branch ?r ?t ?st0 ?sf0 }
 { InlineUnknown ?st0 ?st1 ?p }
 { InlineUnknown ?sf0 ?sf1 ?q }
-{ SameDepth ?rho ?a }
+! { SameDepth ?rho ?a }
 ! { SameDepth ?sig ?y }
 { CheckBranch ?rho ?a ?x ?b ?y ?sig } ;
 
@@ -240,13 +240,15 @@ CHR: end-infer-if @ // { CheckBranch ?rho ?a ?x ?b ?y ?sig } --
 ! [ ?rho ?sig [ known lastcdr ] bi@ ==! ]
 ! [ ?rho ?a [ known lastcdr ] bi@ ==! ]
 
-[ ?a ?b [ known lastcdr ] bi@ ==! ]
-[ ?x ?y [ known lastcdr ] bi@ ==! ]
+! [ ?a ?b [ known lastcdr ] bi@ ==! ]
+! [ ?x ?y [ known lastcdr ] bi@ ==! ]
+{ SameDepth ?rho ?a }
 [ ?rho ?a [ known lastcdr ] bi@ ==! ]
 ! [ ?sig ?y [ known lastcdr ] bi@ ==! ]
 { Split ?rho ?a ?b }
+
 { SameDepth ?y ?sig }
-[ ?sig ?y [ known lastcdr ] bi@ ==! ]
+[ ?y ?sig [ known lastcdr ] bi@ ==! ]
 { Join ?sig ?x ?y }
 
 ! [ ?rho ?a [ known lastcdr ] bi@ ==! ]

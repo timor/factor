@@ -281,7 +281,7 @@ SYMBOL: sentinel
 
 : recursion-check ( -- )
     ! sentinel get 5000 > [ "runaway" throw ] when
-    sentinel get 1000 > [ "runaway" throw ] when
+    sentinel get 400 > [ "runaway" throw ] when
     sentinel inc ;
 
 ! TODO: check if that is needed to make sure tail recursion works!

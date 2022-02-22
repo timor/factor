@@ -1,6 +1,5 @@
-USING: accessors arrays assocs chr chr.modular classes colors.constants
-combinators hashtables io.styles kernel lexer namespaces parser
-chr.state.private
+USING: accessors arrays assocs chr chr.modular chr.state.private classes
+classes.tuple combinators hashtables kernel lexer namespaces parser
 prettyprint.backend prettyprint.custom prettyprint.sections quotations sequences
 terms vocabs.parser ;
 

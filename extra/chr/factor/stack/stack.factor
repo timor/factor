@@ -1,6 +1,6 @@
-USING: accessors arrays chr chr.factor chr.factor.conditions
-chr.modular chr.parser chr.state combinators combinators.short-circuit kernel
-lists math math.parser sequences sets terms ;
+USING: accessors arrays chr chr.factor chr.factor.conditions chr.modular
+chr.parser chr.state combinators combinators.short-circuit kernel lists
+math.parser sequences terms types.util ;
 
 IN: chr.factor.stack
 
@@ -29,19 +29,10 @@ CHR: same-stack @ { Stack ?s ?v } // { Stack ?s ?w } -- | [ ?v ?w ==! ] ;
 ! CHR{ // { Cond +top+ P{ SameStack ?a ?b } } -- | [ ?a ?b ==! ] }
 ! CHR{ // { Cond +top+ P{ Same ?x ?y } } -- | [ ?x ?y ==! ] }
 
-! Setting up stack branch/merge
-CHR: check-effects-balance @ // { ask { CompatibleEffects ?a ?x ?b ?y } } --
-[ ?a known ?x known ?effect-height :>> ?v ] [ ?b known ?y known ?effect-height :>> ?w ]
-[
-    ?v ?w { [ and ] [ = not ] } 2&&
-    [ ?a ?x ?b ?y \ imbalanced-branch-stacks boa user-error ] when
-    t
-    ! ?rho lastcdr ?sig lastcdr ==!
-] | { entailed { CompatibleEffects ?a ?x ?b ?y } } ;
-
 ! Subroutines for making structure equal
 TUPLE: SameDepth < chr-pred stack1 stack2 ;
 CHR{ // { SameDepth ?x ?x } -- | }
+CHR{ // { SameDepth ?x ?y } -- [ ?x ?y [ known lastcdr ] bi@ = ] | }
 CHR{ // { SameDepth L{ ?x . ?xs } L{ ?y . ?ys } } -- | { SameDepth ?xs ?ys } }
 
 CHR: destruc-expand-right @ // { SameDepth L{ ?x . ?xs } ?b } -- [ ?b known term-var? ] |
@@ -53,6 +44,18 @@ CHR: destruc-expand-left @ // { SameDepth ?a L{ ?y . ?ys } } -- [ ?a known term-
 ! [ ?a L{ ?x . ?a } ==! ]
 { SameDepth ?xs ?ys } ;
 
+! Setting up stack branch/merge
+CHR: known-effects-balance @ // { ask { CompatibleEffects ?a ?x ?b ?y } } --
+[ ?a known ?x known ?effect-height :>> ?v ] [ ?b known ?y known ?effect-height :>> ?w ]
+[
+    ?v ?w { [ and ] [ = not ] } 2&&
+    [ ?a ?x ?b ?y \ imbalanced-branch-stacks boa user-error ] when
+    t
+] |
+{ SameDepth ?a ?b }
+[ ?a ?b [ known lastcdr ] bi@ ==! ]
+{ entailed { CompatibleEffects ?a ?x ?b ?y } } ;
+
 ! Default Answer for branch stacks
 ! CHR: assume-balanced-stacks @ { ask { CompatibleEffects ?a ?x ?b ?y } } // -- |
 ! FIXME: this should be converted automatically!
@@ -60,6 +63,8 @@ CHR: destruc-expand-left @ // { SameDepth ?a L{ ?y . ?ys } } -- [ ?a known term-
 CHR: assume-balanced-stacks @ // { ask { CompatibleEffects ?a ?x ?b ?y } } -- |
 { SameDepth ?a ?b }
 { SameDepth ?x ?y }
+[ ?a ?b [ known lastcdr ] bi@ ==! ]
+[ ?x ?y [ known lastcdr ] bi@ ==! ]
 { entailed { CompatibleEffects ?a ?x ?b ?y } } ;
 
 ! CHR: branch-stacks @ { Branch ?r ?u ?s ?t } // -- |
