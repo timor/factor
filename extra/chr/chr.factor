@@ -9,6 +9,7 @@ FROM: syntax => _ ;
 
 ! * Constraint Handling Rules
 
+ERROR: user-error error ;
 
 TUPLE: chr heads nkept guard body match-vars existentials ;
 : new-chr ( heads nkept guard body class existentials -- obj )
@@ -158,7 +159,7 @@ INSTANCE: callable constraint
 M: callable apply-substitution* swap lift ;
 : test-callable ( callable -- ? )
     ! call( -- ? ) ;
-    [ call( -- ? ) ] [ 2drop f ] recover ;
+    [ call( -- ? ) ] [ dup user-error? [ error>> throw ] [ 2drop f ] if ] recover ;
 
 M: callable test-constraint
     swap lift test-callable ;

@@ -29,8 +29,11 @@ TUPLE: entailed < chr-pred pred ;
 ! Private
 TUPLE: _ask < chr-pred type vars token ;
 C: <_ask> _ask
+M: _ask constraint-type [ class-of ] [ type>> ] bi 2array ;
+
 TUPLE: _entailed < chr-pred type vars token ;
 C: <_entailed> _entailed
+M: _entailed constraint-type [ class-of ] [ type>> ] bi 2array ;
 
 TUPLE: _exists < chr-pred var token ;
 C: <_exists> _exists

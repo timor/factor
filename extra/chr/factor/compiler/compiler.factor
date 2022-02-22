@@ -68,16 +68,6 @@ ERROR: recursive-chrat-compile word ;
 
 CHRAT: compile-rules { CompileRule }
 
-! Insert at least one dummy state to prevent hooking into the top node with Entry specs
-CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- |
-! { Stack ?s ?rho }
-! { Stack ?s0 ?rho } { AddLink ?s ?s0 }
-! [ ?s0 ?t ?w instantiate-word-rules ]
-[ ?s ?t ?w instantiate-word-rules ]
-    ;
-
-
-
 ! Erase inner state-specific info, so we can treat stacks as conditions
 ! CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s ?ground-value +top+ = ] | { TopEntry +top+ ?w } }
 ! CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s +top+? not ] | { Cond ?s P{ Inlined ?w } } }

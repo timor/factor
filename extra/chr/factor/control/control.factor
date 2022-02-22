@@ -59,7 +59,9 @@ CHR{ { Scope ?s __ ?l } // { Link ?t ?u } -- [ ?s ?t == not ] [ ?t ?l in? ] | { 
 !      [ ?r ?u ?a ?s ?l insert-instead Scope boa ]
 !    }
 
-CHR{ { CondJump ?s ?r } // { Link ?r ?u } -- | { Link ?s ?u } }
+CHR{ { Branch ?s __ ?r __ } // { Link ?r ?u } -- | { Link ?s ?u } }
+CHR{ { Branch ?s __ __ ?r } // { Link ?r ?u } -- | { Link ?s ?u } }
+! CHR{ { CondJump ?s ?r } // { Link ?r ?u } -- | { Link ?s ?u } }
 
 
 ! Transitivity?

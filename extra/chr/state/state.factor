@@ -281,7 +281,7 @@ SYMBOL: sentinel
 
 : recursion-check ( -- )
     ! sentinel get 5000 > [ "runaway" throw ] when
-    sentinel get 500 > [ "runaway" throw ] when
+    sentinel get 1000 > [ "runaway" throw ] when
     sentinel inc ;
 
 ! TODO: check if that is needed to make sure tail recursion works!
@@ -401,6 +401,7 @@ M: builtin-suspension apply-substitution* nip ;
       ! ground-values get .
       store get
       ! dup solve-eq-constraints
+      ! break
       [ constraint>>
         over builtins = [ f lift ] unless
       ] assoc-map

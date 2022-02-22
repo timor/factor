@@ -67,8 +67,8 @@ CHR: trivial-union @ // { UnionType ?tau3 ?tau1 ?tau1 } -- | [ ?tau3 ?tau1 ==! ]
 
 ! NOTE: Here we bubble types upwards already during compilation!
 ! CHR: propagate-accept @ { CondJump ?r ?c1 } { CondJump ?r ?c2 } { AcceptType ?c1 ?x ?tau1 } { AcceptType ?c2 ?x ?tau2 } // -- |
-CHR: propagate-accept @ { Branch ?r ?c1 ?c2 } { AcceptType ?c1 ?x ?tau1 } { AcceptType ?c2 ?x ?tau2 } // -- |
-   { AcceptType ?r ?x ?tau3 } { UnionType ?tau3 ?tau1 ?tau2 } ;
+! CHR: propagate-accept @ { Branch ?r ?c1 ?c2 } { AcceptType ?c1 ?x ?tau1 } { AcceptType ?c2 ?x ?tau2 } // -- |
+!    { AcceptType ?r ?x ?tau3 } { UnionType ?tau3 ?tau1 ?tau2 } ;
 
 ! CHR: propagate-phi-in @ { Branch ?r ?c1 ?c2 } { Cond ?c1 P{ Same ?x ?a } } { Cond ?c2 P{ Same ?x ?b } } // -- |
 ! { Type ?x ?tau3 } { Type ?a ?tau1 } { Type ?b ?tau2 } { UnionType ?tau3 ?tau1 ?tau2 } ;

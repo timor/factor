@@ -13,7 +13,9 @@ IN: chr.factor.conditions
 TUPLE: cond-pred < chr-pred cond ;
 ! TUPLE: state-cond < state-pred cond-pred ;
 ! TUPLE: InlinesUnknown < cond-pred quot ;
-TUPLE: Drop < cond-pred var ;
+
+! FIXME: Move!
+TUPLE: Drop < val-pred ;
 
 ! Implication
 TUPLE: Cond < cond-pred implied ;
@@ -89,28 +91,28 @@ CHR{ { Absurd ?y } // { Disjoint ?x ?y } -- | { Trivial ?x } }
     [ list>simple-type ] bi@ swapd
     = [ - ] [ 2drop f ] if ;
 
-ERROR: imbalanced-branch-stacks i1 o1 i2 o2 ;
+! ERROR: imbalanced-branch-stacks i1 o1 i2 o2 ;
 
-CHR: require-balanced-branch-stacks @ { Branch ?r ?c1 ?c2 }
+! CHR: require-balanced-branch-stacks @ { Branch ?r ?c1 ?c2 }
+! ! { Cond ?c1 P{ SameStack ?rho ?a } }
+! ! { Cond ?c1 P{ SameStack ?x ?sig } }
+! ! { Cond ?c2 P{ SameStack ?rho ?b } }
+! ! { Cond ?c2 P{ SameStack ?y ?sig } } // -- [ break ?a known llength* ?b known llength* = dup [ "branch imbalance" throw ] unless ] | [ ?x ?y ==! ] ;
 ! { Cond ?c1 P{ SameStack ?rho ?a } }
 ! { Cond ?c1 P{ SameStack ?x ?sig } }
 ! { Cond ?c2 P{ SameStack ?rho ?b } }
-! { Cond ?c2 P{ SameStack ?y ?sig } } // -- [ break ?a known llength* ?b known llength* = dup [ "branch imbalance" throw ] unless ] | [ ?x ?y ==! ] ;
-{ Cond ?c1 P{ SameStack ?rho ?a } }
-{ Cond ?c1 P{ SameStack ?x ?sig } }
-{ Cond ?c2 P{ SameStack ?rho ?b } }
-{ Cond ?c2 P{ SameStack ?y ?sig } }
-// --
-[ ?a ?x ?effect-height :>> ?v ] [ ?b ?y ?effect-height :>> ?w ]
-|
-[
-    ?v ?w { [ and ] [ = not ] } 2&&
-    [ ?a ?x ?b ?y imbalanced-branch-stacks ] when
+! { Cond ?c2 P{ SameStack ?y ?sig } }
+! // --
+! [ ?a ?x ?effect-height :>> ?v ] [ ?b ?y ?effect-height :>> ?w ]
+! |
+! [
+!     ?v ?w { [ and ] [ = not ] } 2&&
+!     [ ?a ?x ?b ?y imbalanced-branch-stacks ] when
 
-    ?rho lastcdr ?sig lastcdr ==!
-]
-! [ ?x ?y ==! ]
-    ;
+!     ?rho lastcdr ?sig lastcdr ==!
+! ]
+! ! [ ?x ?y ==! ]
+!     ;
 
 ! Value-level handling
 

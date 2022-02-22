@@ -12,6 +12,7 @@ TERM-VARS:
 
 TUPLE: state-pred < chr-pred s1 ;
 TUPLE: trans-pred < chr-pred s1 s2 ;
+TUPLE: val-pred < chr-pred v ;
 
 ! For cleaning up
 GENERIC: state-depends-on-vars ( state-pred -- seq )
@@ -20,7 +21,6 @@ M: state-pred state-depends-on-vars drop f ;
 TUPLE: Word < trans-pred word ;
 
 TUPLE: Dispatch < trans-pred cond vset ;
-TUPLE: Join < trans-pred cond ;
 
 TUPLE: Not < chr-pred pred ;
 
@@ -71,7 +71,8 @@ TUPLE: InlineCall < trans-pred word quot ;
 ! Query marker for stack equivalence
 TUPLE: Call < state-pred word in out ;
 
-TUPLE: Branch < state-pred cs1 cs2 ;
+! TUPLE: Branch < trans-pred cs1 cs2 ;
+TUPLE: Branch < trans-pred cs1 cs2 ;
 
 ! Compiler Entry
 TUPLE: ChratInfer < chr-pred obj ;
@@ -79,12 +80,27 @@ TUPLE: ChratInfer < chr-pred obj ;
 ! State connections
 TUPLE: Scope < chr-pred beg end sub-states ;
 
-! Data Split, duplication
-TUPLE: Dup < state-pred from to ;
+! Data Duplication, duplication
+TUPLE: Dup < val-pred to ;
 ! Inverse operation
 ! TUPLE: Drop < state-pred val ;
 ! Mark value as dead.  Solvers should update their state accordingly
 TUPLE: Dead < chr-pred val ;
+
+! Data Flow
+! Exclusive Split.
+TUPLE: Split < val-pred out1 out2 ;
+
+! dest value is derived from left value
+TUPLE: Copy < val-pred dest ;
+
+! val is derived from src1 and src2
+TUPLE: Join < val-pred src1 src2 ;
+
+! A Split implies a copy.  A Dup also implies a copy.  Things which are
+! dependent on whether the target value is used twice should be derived from Dup
+! and Split, not Copy.
+
 
 ! High-level Call Graph
 TUPLE: TopEntry < chr-pred state word ;

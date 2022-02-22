@@ -1,7 +1,7 @@
 USING: accessors arrays assocs chr.factor chr.factor.conditions
-chr.factor.control chr.factor.infer chr.parser chr.state
+chr.factor.control chr.factor.infer chr.factor.stack chr.parser chr.state
 combinators.short-circuit continuations effects generic kernel lists
-macros.expander make math.parser quotations sequences sets terms types.util
+macros.expander make math math.parser quotations sequences sets terms types.util
 words ;
 
 IN: chr.factor.words
@@ -45,12 +45,9 @@ M: word chrat-out-types
 : linear-shuffle? ( effect -- ? )
     [ in>> ] [ out>> ] bi { [ [ length ] same? ] [ set= ] } 2&& ;
 
-: elt-vars ( seq -- seq )
-    [ swap dup pair? [ first ] when
-      [ nip ] [ number>string "v" prepend ] if*
-      uvar
-      <term-var>
-    ] map-index <reversed> ;
+: effect>stacks ( effect -- lin lout )
+    [ in>> elt-vars >list ]
+    [ out>> elt-vars >list ] bi ;
 
 M: Call state-depends-on-vars
     [
@@ -71,15 +68,21 @@ CHR: absurd-call @ { AbsurdState ?s } // { Call ?s __ ?i ?o } -- |
 
 ! primitives
 
+TUPLE: DropValue < state-pred x ;
+TUPLE: DupValue < state-pred x y ;
+
+CHR{ // { DupValue ?s ?x ?y } -- | { Cond ?s { Dup ?x ?y } } }
+CHR{ // { DropValue ?s ?x } -- | { Cond ?s { Drop ?x } } }
+
 CHR: infer-dup @ // { Word ?s ?t dup } -- |
      { Stack ?s L{ ?x . ?rho } }
      { Stack ?t L{ ?y ?x . ?rho } }
-     { Dup ?s ?x ?y } ;
+     { DupValue ?s ?x ?y } ;
 
 CHR: infer-over @ // { Word ?s ?t over } -- |
      { Stack ?s L{ ?y ?x . ?rho } }
      { Stack ?t L{ ?z ?y ?x . ?rho } }
-     { Dup ?s ?x ?z } ;
+     { DupValue ?s ?x ?z } ;
 
 CHR: curry-effect @ // { Word ?s ?t curry } -- |
      { Stack ?s L{ ?p ?parm . ?rho } }
@@ -96,18 +99,18 @@ CHR: compose-effect @ // { Word ?s ?t compose } -- |
 CHR: drop-prim @ // { Word ?s ?t drop } -- |
      { Stack ?s L{ ?x . ?rho } }
      { Stack ?t ?rho }
-     { Drop ?s ?x } ;
+     { DropValue ?s ?x } ;
 
 CHR: nip-prim @ // { Word ?s ?t nip } -- |
      { Stack ?s L{ ?y ?x . ?rho } }
      { Stack ?t L{ ?y . ?rho } }
-     { Drop ?s ?x }
+     { DropValue ?s ?x }
    ;
 
 CHR: pick-prim @  // { Word ?s ?t pick } -- |
      { Stack ?s L{ ?z ?y ?x . ?rho } }
      { Stack ?t L{ ?w ?z ?y ?x . ?rho } }
-     { Dup ?s ?x ?w }
+     { DupValue ?s ?x ?w }
    ;
 
 ! Macros
@@ -136,6 +139,28 @@ CHR: assume-word-effect @ { Word ?s ?t ?w } // -- |
 
 CHR: infer-shuffle @ // { Word ?s ?t ?w } -- [ ?w "shuffle" word-prop? [ linear-shuffle? ] [ f ] if* ] |
 [ ?s ?t ?w "shuffle" word-prop shuffle-mapping Shuffle boa ] ;
+
+: pos-var ( stack-var n -- var )
+    [ name>> "_i" append ] dip number>string append
+    <term-var> ;
+
+: affine-shuffle? ( mapping -- ? )
+    duplicates empty? ;
+
+CHR{ // { Shuffle ?s ?t ?m } -- [ ?m known? ] |
+     [| | ?m known dup :> m
+      ! dup length 1 - :> lo
+      dup length :> lo
+      [ f ]
+      [
+          supremum 1 + :> li
+          ?s li [
+              ! "i" swap number>string append "_" append uvar <term-var>
+              ?s swap pos-var
+          ] { } map-integers :> v-in
+          v-in >list ?rho lappend Stack boa
+          ?t m <reversed> [ li swap - 1 - v-in nth ] map >list ?rho lappend Stack boa 2array
+      ] if-empty ] }
 
 ! TODO Math words
 ! CHR: { { Word ?s ?t ?w } // -- }
@@ -187,5 +212,24 @@ CHR{ // { Word ?s ?t ?w } -- |
      { Stack ?s ?i }
      { Stack ?t ?o }
      { Call ?s ?w ?i ?o } }
+
+! Compilation stuff
+CHR: primitive-rules @ // { ApplyWordRules ?s ?t ?w } -- [ ?w primitive? ] |
+! NOTE Assuming all primitive effects here are not broken!
+[ ?w stack-effect
+  [ effect>stacks [ ?rho lappend ?s swap Stack boa ] [ ?sig lappend ?t swap Stack boa ] bi* ]
+  [ bivariable-effect?
+    [ 2array ]
+    [ [ ?rho ?sig ==! ] 3array ] if
+  ] bi
+]
+    ;
+
+! Insert at least one dummy state to prevent hooking into the top node with Entry specs
+! CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- |
+! ! { Stack ?s ?rho }
+! ! { Stack ?s0 ?rho } { AddLink ?s ?s0 }
+! ! [ ?s0 ?t ?w instantiate-word-rules ]
+! [ ?s ?t ?w instantiate-word-rules ] ;
 
 ;

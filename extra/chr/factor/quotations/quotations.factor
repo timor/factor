@@ -1,6 +1,7 @@
 USING: accessors chr chr.factor chr.factor.conditions chr.factor.control
-chr.factor.infer chr.factor.stack chr.factor.types chr.factor.words chr.parser
-chr.state kernel lists quotations sequences sets terms words ;
+chr.factor.infer chr.factor.stack chr.factor.types chr.factor.words chr.modular
+chr.parser chr.state kernel lists quotations sequences sets terms types.util
+words ;
 
 IN: chr.factor.quotations
 FROM: syntax => _ ;
@@ -16,19 +17,25 @@ TUPLE: InferDef < chr-pred word ;
 TUPLE: InferredBetween < trans-pred entry-state exit-state quot ;
 
 ! ** Data Flow
-CHRAT: data-flow { Effect }
+CHRAT: data-flow { Effect Copy Split Dup }
 
 ! Remove dropped literals
-CHR{ // { Drop +top+ ?x } { Lit ?x __  } -- | { Dead ?x } }
+CHR{ // { Drop ?x } { Lit ?x __  } -- | { Dead ?x } }
 
 ! *** Sanity checks
-CHR{ { Drop ?s ?x } { Drop ?s ?x } // -- | [ "double drop" throw ] }
-! CHR{ { Dup ?x ?y } { Dup ?x ?y } // -- | [ "douple dup" throw ] }
-CHR{ { Dup ?s ?x ?y } // { Dup ?s ?x ?y } -- | }
-CHR{ { Dup __ ?x ?x } // -- | [ "self-dup" throw ] }
+CHR{ { Drop ?x } { Drop ?x } // -- | [ "double drop" throw ] }
+CHR{ { Dup ?x ?y } { Dup ?x ?y } // -- | [ "douple dup" throw ] }
+! CHR{ { Dup ?x ?y } // { Dup ?x ?y } -- | }
+CHR{ { Dup ?x ?x } // -- | [ "self-dup" throw ] }
 
-CHR{ // { Dup ?s ?x ?y } { Drop ?s ?y } -- | [ ?x ?y ==! ] }
-CHR{ // { Dup ?s ?x ?y } { Drop ?s ?x } -- | [ ?x ?y ==! ] }
+CHR{ // { Dup ?x ?y } { Drop ?y } -- | [ ?x ?y ==! ] }
+CHR{ // { Dup ?x ?y } { Drop ?x } -- | [ ?x ?y ==! ] }
+
+CHR{ { Dup ?x ?y } // { ask { Copy ?x ?y } } -- | { entailed { Copy ?x ?y } } }
+CHR{ { Split ?a ?x ?y } // { ask { Copy ?a ?y } } -- | { entailed { Copy ?a ?y } } }
+CHR{ { Split ?a ?x ?y } // { ask { Copy ?a ?x } } -- | { entailed { Copy ?a ?y } } }
+! CHR{ { Join ?c ?x ?y } // { ask { Copy ?c ?y } } -- | { entailed { Copy ?c ?y } } }
+! CHR{ { Join ?c ?x ?y } // { ask { Copy ?c ?x } } -- | { entailed { Copy ?c ?x } } }
 
 ! CHR{ { Effect ?x ?a ?b } // { Effect ?x ?a ?b } -- | }
 
@@ -47,8 +54,8 @@ CHR{ // { Dup ?s ?x ?y } { Drop ?s ?x } -- | [ ?x ?y ==! ] }
 ! { Effect ?y L{ ?v . ?r } ?s }
 !     ;
 
-CHR: make-dup-right @ { Dup ?s L{ ?a . ?b } ?y } // -- [ ?y known term-var? ] |
-{ Dup ?s L{ ?a . ?b } L{ ?c . ?d } } [ ?y L{ ?c . ?d } ==! ] ;
+CHR: make-dup-right @ { Dup L{ ?a . ?b } ?y } // -- [ ?y known term-var? ] |
+{ Dup L{ ?a . ?b } L{ ?c . ?d } } [ ?y L{ ?c . ?d } ==! ] ;
 
 ! CHR: propagate-dup-right @
 ! { Dup ?x L{ ?a . ?b } } // -- [ ?x known term-var? ] | [ ?x L{ ?c . ?d } ==! ] ;
@@ -68,13 +75,13 @@ CHR: make-dup-right @ { Dup ?s L{ ?a . ?b } ?y } // -- [ ?y known term-var? ] |
 ! { Dup ?x ?y } // -- [ ?x known cons-state? ] | [ ?y L{ ?c . ?d } ==! ] ;
 
 CHR: destructure-dup @
-// { Dup ?s L{ ?a . ?b } L{ ?c . ?d } } -- [ ?b nil? not ] [ ?d nil? not ] | { Dup ?s ?a ?c } { Dup ?s ?b ?d } ;
+// { Dup L{ ?a . ?b } L{ ?c . ?d } } -- [ ?b nil? not ] [ ?d nil? not ] | { Dup ?a ?c } { Dup ?b ?d } ;
 
 CHR: literal-dup1 @
-{ Lit ?x ?v } // { Dup __ ?x ?y } -- | { Lit ?y ?v } ;
+{ Lit ?x ?v } // { Dup ?x ?y } -- | { Lit ?y ?v } ;
 
 CHR: literal-dup2 @
-{ Lit ?y ?v } // { Dup __ ?x ?y } -- | { Lit ?x ?v } ;
+{ Lit ?y ?v } // { Dup ?x ?y } -- | { Lit ?x ?v } ;
 
 ;
 
@@ -181,7 +188,7 @@ CHR: inline-made-known @  { Lit ?p ?q } // { InlineUnknown ?s ?t ?p } ! { Effect
      -- |
      { InlineQuot ?s ?t ?q }
      ! { Drop ?s ?p } ;
-     { Drop +top+ ?p } ;
+     { Drop ?p } ;
 
 CHR: uncurry @ // { InlineUnknown ?s ?t L{ ?parm . ?p } } -- |
      { Stack ?s ?rho }
@@ -205,6 +212,8 @@ CHR: infer-definition @  // { InferDef ?w } -- [ ?w deferred? not ] |
 
 TERM-VARS: ?st0 ?st1 ?sf0 ?sf1 ;
 
+TUPLE: CheckBranch < chr-pred in true-in true-out false-in false-out out ;
+
 ! Conditionals
 ! For now, let's set the input and output effects of the quotations to be the
 ! same.  The goal is to have things that are branch-independent in the common
@@ -212,47 +221,87 @@ TERM-VARS: ?st0 ?st1 ?sf0 ?sf1 ;
 ! logical system.
 CHR: infer-if @ // { Exec ?r ?t if } -- |
 { Stack ?r L{ ?q ?p ?c . ?rho } }
-! { Stack ?st0 ?rho }
-! { Stack ?sf0 ?rho }
-
-{ Stack ?st0 ?a }
-{ Stack ?st1 ?x }
-
-{ Stack ?sf0 ?b }
-{ Stack ?sf1 ?y }
-
-! { Stack ?st1 ?sig }
-! { Stack ?sf1 ?sig }
-
-
-! NOTE: maybe this as same-val?
 { Stack ?t ?sig }
-{ Branch ?r ?st0 ?sf0 }
+{ Effect ?q ?a ?x }
+{ Effect ?p ?b ?y }
+! { CompatibleEffects ?a ?x ?b ?y }
+! TODO: find best order
+{ Branch ?r ?t ?st0 ?sf0 }
+{ InlineUnknown ?st0 ?st1 ?p }
+{ InlineUnknown ?sf0 ?sf1 ?q }
+{ SameDepth ?rho ?a }
+! { SameDepth ?sig ?y }
+{ CheckBranch ?rho ?a ?x ?b ?y ?sig } ;
 
-{ Equiv ?st0 P{ Not P{ Instance ?c \ f } } }
-{ CondJump ?r ?st0 }
-! { Stack ?st0 ?rho }
+CHR: end-infer-if @ // { CheckBranch ?rho ?a ?x ?b ?y ?sig } --
+{ CompatibleEffects ?a ?x ?b ?y } |
+! TODO
+! If we do both, we may have problems with recursion?
+! [ ?rho ?sig [ known lastcdr ] bi@ ==! ]
+! [ ?rho ?a [ known lastcdr ] bi@ ==! ]
+
+[ ?a ?b [ known lastcdr ] bi@ ==! ]
+[ ?x ?y [ known lastcdr ] bi@ ==! ]
+[ ?rho ?a [ known lastcdr ] bi@ ==! ]
+! [ ?sig ?y [ known lastcdr ] bi@ ==! ]
+{ Split ?rho ?a ?b }
+{ SameDepth ?y ?sig }
+[ ?sig ?y [ known lastcdr ] bi@ ==! ]
+{ Join ?sig ?x ?y }
+
+! [ ?rho ?a [ known lastcdr ] bi@ ==! ]
+! [ ?rho ?b [ known lastcdr ] bi@ ==! ]
+! [ ?x ?sig [ known lastcdr ] bi@ ==! ]
+! [ ?y ?sig [ known lastcdr ] bi@ ==! ]
+    ;
+! [ ?a ?b ?rho [ lastcdr ] tri@ ==! ==! 2array ]
+! [ ?x ?y ?sig [ lastcdr ] tri@ ==! ==! 2array ] ;
+
+! { Split }
+! -- { CompatibleEffects ?a ?x ?b ?y } |
+
+! ! { Stack ?st0 ?rho }
+! ! { Stack ?sf0 ?rho }
+
+! { Stack ?st0 ?a }
+! { Stack ?st1 ?x }
+
+! { Stack ?sf0 ?b }
+! { Stack ?sf1 ?y }
+
+! ! { Stack ?st1 ?sig }
+! ! { Stack ?sf1 ?sig }
 
 
-! { Cond ?sf0 { Instance ?c \ f } }
-{ Equiv ?sf0 P{ Instance ?c \ f } }
+! ! NOTE: maybe this as same-val?
+! { Stack ?t ?sig }
+! { Branch ?r ?st0 ?sf0 }
 
-{ CondJump ?r ?sf0 }
-{ Disjoint ?st0 ?sf0 }
-! { Stack ?sf0 ?rho }
+! { Equiv ?st0 P{ Not P{ Instance ?c \ f } } }
+! { CondJump ?r ?st0 }
+! ! { Stack ?st0 ?rho }
 
 
-! { Stack ?st1 ?a }
-{ Cond ?st0 P{ SameStack ?rho ?a } }
-{ Cond ?st0 P{ SameStack ?x ?sig } }
-! { CondRet ?st1 ?t }
+! ! { Cond ?sf0 { Instance ?c \ f } }
+! { Equiv ?sf0 P{ Instance ?c \ f } }
 
-{ Cond ?sf0 P{ SameStack ?rho ?b } }
-{ Cond ?sf0 P{ SameStack ?y ?sig } }
+! { CondJump ?r ?sf0 }
+! { Disjoint ?st0 ?sf0 }
+! ! { Stack ?sf0 ?rho }
+
+
+! ! { Stack ?st1 ?a }
+! { Cond ?st0 P{ SameStack ?rho ?a } }
+! { Cond ?st0 P{ SameStack ?x ?sig } }
+! ! { CondRet ?st1 ?t }
+
+! { Cond ?sf0 P{ SameStack ?rho ?b } }
+! { Cond ?sf0 P{ SameStack ?y ?sig } }
 
 ! Do inference after conditions have been set up to ensure that absurdity is correctly used to remove alternatives!
-{ InlineUnknown ?st0 ?st1 ?p }
-{ InlineUnknown ?sf0 ?sf1 ?q } ;
+! { InlineUnknown ?st0 ?st1 ?p }
+! { InlineUnknown ?sf0 ?sf1 ?q }
+    ! ;
 
 CHR: infer-dip @ // { Exec ?s ?u dip } -- |
 { Stack ?s L{ ?q ?x . ?rho } }
