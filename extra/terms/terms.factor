@@ -268,14 +268,23 @@ DEFER: lift
 ! Keep track of ground terms for equivalence classes
 : ?ground-value ( var -- val/key )
     dup term-var?
-    [ defined-equalities
-      [ representative
-        ground-values get ?at drop ] when* ] when ;
+    [ defined-equalities representative
+      ground-values get ?at drop
+    ] when ;
+    ! [ defined-equalities
+    !   [ representative
+    !     ground-values get ?at drop ] when* ] when ;
+     ! ;
+
+: maybe-update-ground-values ( a b -- )
+    2drop ground-values [ update-ground-values ] change ;
+    ! [ ground-values get ] 2dip pick [ key? ] curry either?
+    ! [ update-ground-values ground-values set ] [ drop ] if ;
 
 ! Main entry point for atoms
 :: assume-equal ( a b -- )
     defined-equalities :> ds
-    { { [ a b [ term-var? ] both? ] [ a b ds equate ] }
+    { { [ a b [ term-var? ] both? ] [ a b [ ds equate ] [ maybe-update-ground-values ] 2bi ] }
       { [ a term-var? ] [ a b ds define-ground-value  ] }
       { [ b term-var? ] [ b a ds define-ground-value  ] }
       [ a b "trying to make something other than term vars equal" 3array throw ]
