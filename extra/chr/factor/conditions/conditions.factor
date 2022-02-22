@@ -1,5 +1,5 @@
-USING: accessors chr chr.factor chr.parser chr.state kernel lists sequences sets
-terms ;
+USING: accessors chr chr.factor chr.parser chr.state combinators.short-circuit
+kernel lists math sequences sets terms types.util ;
 
 IN: chr.factor.conditions
 
@@ -81,18 +81,36 @@ CHR{ { Absurd ?x } // { Disjoint ?x ?y } -- | { Trivial ?y } }
 CHR{ { Absurd ?y } // { Disjoint ?x ?y } -- | { Trivial ?x } }
 
 ! Balanced stacks through branches
-! CHR: check-balanced-branch-stacks @ { Branch ?r ?c1 ?c2 }
+
+: list>simple-type ( list1 -- n last )
+    0 swap [ dup atom? ] [ [ 1 + ] dip cdr ] until ; inline
+
+: ?effect-height ( list1 list2 -- n/f )
+    [ list>simple-type ] bi@ swapd
+    = [ - ] [ 2drop f ] if ;
+
+ERROR: imbalanced-branch-stacks i1 o1 i2 o2 ;
+
+CHR: require-balanced-branch-stacks @ { Branch ?r ?c1 ?c2 }
 ! { Cond ?c1 P{ SameStack ?rho ?a } }
 ! { Cond ?c1 P{ SameStack ?x ?sig } }
 ! { Cond ?c2 P{ SameStack ?rho ?b } }
 ! { Cond ?c2 P{ SameStack ?y ?sig } } // -- [ break ?a known llength* ?b known llength* = dup [ "branch imbalance" throw ] unless ] | [ ?x ?y ==! ] ;
+{ Cond ?c1 P{ SameStack ?rho ?a } }
+{ Cond ?c1 P{ SameStack ?x ?sig } }
+{ Cond ?c2 P{ SameStack ?rho ?b } }
+{ Cond ?c2 P{ SameStack ?y ?sig } }
+// --
+[ ?a ?x ?effect-height :>> ?v ] [ ?b ?y ?effect-height :>> ?w ]
+|
+[
+    ?v ?w { [ and ] [ = not ] } 2&&
+    [ ?a ?x ?b ?y imbalanced-branch-stacks ] when
 
-! CHR: balanced-branch-stacks @ { Branch ?r ?c1 ?c2 }
-! //
-! { Cond ?c1 P{ SameStack ?x ?a } }
-! { Cond ?c1 P{ SameStack ?a ?y } }
-! { Cond ?c2 P{ SameStack ?x ?b } }
-! { Cond ?c2 P{ SameStack ?b ?y } } -- [ break ?a known llength* ?b known llength* = dup [ "branch imbalance" throw ] unless ] | [ ?x ?y ==! ] ;
+    ?rho lastcdr ?sig lastcdr ==!
+]
+! [ ?x ?y ==! ]
+    ;
 
 ! Value-level handling
 

@@ -1,5 +1,6 @@
 USING: accessors arrays assocs chr chr.modular classes colors.constants
 combinators hashtables io.styles kernel lexer namespaces parser
+chr.state.private
 prettyprint.backend prettyprint.custom prettyprint.sections quotations sequences
 terms vocabs.parser ;
 
@@ -12,13 +13,25 @@ IN: chr.parser
 ! This needs to have the constraint class already defined!
 SYNTAX: P{ \ } parse-array pred>constraint suffix! ;
 
+SYMBOL: defined-existentials
 SYMBOLS: | -- // ;
-: parse-chr-rule ( delim -- heads nkept guard body )
-    [ \ // parse-array dup length [ \ -- parse-array append ] dip \ | parse-array ] dip parse-array ;
+: parse-chr-rule ( delim -- heads nkept guard body existentials )
+    f defined-existentials [
+        [ \ // parse-array dup length [ \ -- parse-array append ] dip \ | parse-array ] dip parse-array
+        defined-existentials get
+    ] with-variable ;
 
 SYNTAX: CHR{ \ } parse-chr-rule chr new-chr suffix! ;
 
-SYNTAX: CHR: scan-token "@" expect \ ; parse-chr-rule <named-chr> suffix! ;
+SYNTAX: CHR: scan-token "@" expect \ ; parse-chr-rule named-chr new-chr swap >>rule-name suffix! ;
+
+: ex-check-setter-quot ( var -- quot )
+    '[ dup [ _ current-bindings get-global set-at ] when* ] ;
+
+SYNTAX: :>> scan-word term-var check-instance
+    [ defined-existentials [ swap suffix ] change ]
+    [ ex-check-setter-quot append! ] bi
+    ;
 
 ! Explicit instantiation.  These create fresh bindings for the variables before the bar
 ! This happens after substitution
@@ -33,6 +46,10 @@ M: generator >pprint-sequence
 
 SYNTAX: G{ scan-token "}" expect <term-var> suffix! ;
 
+SYNTAX: ={ scan-object scan-object "}" eq-constraint boa suffix! ;
+M: eq-constraint pprint* pprint-object ;
+M: eq-constraint pprint-delims drop \ ={ \ } ;
+M: eq-constraint >pprint-sequence tuple-slots ;
 
 ! SYNTAX: <={ scan-class \ } parse-array <chr-sub-pred> suffix! ;
 

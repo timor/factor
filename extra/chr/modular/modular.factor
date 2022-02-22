@@ -223,7 +223,7 @@ M: chr expand-ask/tell ;
     chrat-pred-template
     [ dup ask boa 2array 1 f ]
     [ entailed boa 1array ] bi
-    <named-chr> ;
+    f named-chr new-chr swap >>rule-name ;
 
 ! ERROR: redefining-chr-solver solver word ;
 

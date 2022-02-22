@@ -1,9 +1,13 @@
 USING: accessors arrays assocs chr chr.factor chr.modular chr.parser chr.state
-combinators.short-circuit grouping kernel linked-assocs macros.expander make
-math quotations sequences sets terms tools.test words ;
+combinators.short-circuit grouping hashtables kernel linked-assocs
+macros.expander make math quotations sequences sets terms tools.test words ;
 IN: chr.modular.tests
 
 TUPLE: leq < chr-pred v1 v2 ;
+
+: >old-builtins ( result -- result )
+    builtins over [ [ [ lhs>> ] [ rhs>> ] bi \ = -rot 3array ] map ] change-at ;
+
 
 TERM-VARS: A B C ;
 
@@ -44,9 +48,9 @@ CHR: transitivity @ { leq ?x ?y } { leq ?y ?z } // -- | { leq ?x ?z } ;
 }
 
 {
-    LH{ { builtins V{ { = C A } { = C B } } } }
+    LH{ { builtins V{ { = C B } { = C A } } } }
 }
-[ leq-solver-orig { { leq A B } { leq C A } { leq B C } } run-chr-query ] unit-test
+[ leq-solver-orig { { leq A B } { leq C A } { leq B C } } run-chr-query >old-builtins ] unit-test
 
 {
    { f }
@@ -88,9 +92,9 @@ CHRAT: leq-solver-chrat { leq }
 ;
 
 {
-    LH{ { builtins V{ { = C A } { = C B } } } }
+    LH{ { builtins V{ { = C B } { = C A } } } }
 }
-[ leq-solver-chrat { { leq A B } { leq C A } { leq B C } } run-chr-query ] unit-test
+[ leq-solver-chrat { { leq A B } { leq C A } { leq B C } } run-chr-query >old-builtins ] unit-test
 
 { { f } }
 [
@@ -154,24 +158,24 @@ TERM-VARS: X Y Z M ;
 : combined ( -- rules )
     leq-solver-chrat chrat-min append ;
 { LH{ { builtins V{ { = M 1 } } } } }
-[ combined { { min 1 1 M } } run-chr-query ] unit-test
+[ combined { { min 1 1 M } } run-chr-query >old-builtins ] unit-test
 
 { t }
-[ combined { { min 1 2 M } } run-chr-query builtins of { = M 1 } swap in? ] unit-test
+[ combined { { min 1 2 M } } run-chr-query >old-builtins builtins of { = M 1 } swap in? ] unit-test
 
 { t }
-[ combined { { min 2 1 M } } run-chr-query builtins of { = M 1 } swap in? ] unit-test
+[ combined { { min 2 1 M } } run-chr-query >old-builtins builtins of { = M 1 } swap in? ] unit-test
 
 { t }
-[ combined { { min A A M } } run-chr-query builtins of { = M A } swap in? ] unit-test
+[ combined { { min A A M } } run-chr-query >old-builtins builtins of { = M A } swap in? ] unit-test
 
 {
-    LH{
+    H{
         { builtins V{ { = Z X } } }
         { 1 P{ leq Z Y } }
     }
 }
-[ combined { { leq X Y } { min X Y Z } } run-chr-query ] unit-test
+[ combined { { leq X Y } { min X Y Z } } run-chr-query >old-builtins >hashtable ] unit-test
 
 ! * Comparison example
 ! Example: comparisons

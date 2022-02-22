@@ -1,6 +1,6 @@
-USING: accessors arrays assocs assocs.extras chr chr.modular classes.algebra
-combinators.short-circuit effects kernel math math.order quotations sequences
-sets sorting stack-checker terms types.util ;
+USING: accessors arrays assocs assocs.extras chr chr.modular classes
+classes.algebra combinators.short-circuit effects graphs kernel math math.order
+quotations sequences sets sorting stack-checker terms types.util ;
 
 IN: chr.programs
 
@@ -91,7 +91,7 @@ C: <constraint-schedule> constraint-schedule
 ERROR: existential-guard-vars rule ;
 :: rule-existentials ( rule -- set )
     rule
-    [ heads>> collect-vars ]
+    [ [ heads>> collect-vars ] [ existentials>> ] bi union ]
     [ guard>> collect-vars ]
     [ body>> collect-vars  ] tri :> ( vh vg vb )
     vb vh diff :> existentials
@@ -121,6 +121,9 @@ ERROR: existential-guard-vars rule ;
 : check-body-constraint-effect ( effect -- ? )
     { [ terminated?>> ] [ ( -- new ) effect= ] } 1|| ;
 
+: check-guard-constraint-effect ( effect -- ? )
+    { [ terminated?>> ] [ ( -- ? ) effect= ] } 1|| ;
+
 ERROR: wrong-builtin-effect quot effect ;
 : check-body-quots ( rules -- )
     [ body>> [
@@ -130,18 +133,28 @@ ERROR: wrong-builtin-effect quot effect ;
             [ wrong-builtin-effect ] if
           ] [ drop ] if
       ] each ] each ;
+ERROR: wrong-guard-effect quot effect ;
+
+: check-guard-quots ( rules -- )
+    [ guard>> [ callable check-instance
+                dup infer dup check-guard-constraint-effect
+                [ 2drop ]
+                [ wrong-guard-effect ] if ] each
+    ] each ;
 
 : load-chr ( rules -- chr-prog )
     read-chr
     dup check-body-quots
     rewrite-chrat-prog
+    dup check-guard-quots
     dup index-rules
     2dup make-schedule
     pick
     [ collect-vars ]
     [ collect-existential-vars ] bi
     <chr-prog>
-    convert-existentials! ;
+    convert-existentials!
+    ;
 
 : rule-depends-on-preds ( rule -- words )
     guard>> [ chrat-pred? ] filter [ constraint-type ] map members ;
@@ -177,3 +190,6 @@ ERROR: wrong-builtin-effect quot effect ;
 
 : prepare-query ( query -- program query )
     [ pred>constraint ] map [ collect-chrat-rules ] keep ;
+
+: prepare-query-with ( solver query -- program query )
+    [ [ chrat-solver-deps ] V{ } closure-as <reversed> [ chrat-solver-rules ] gather ] dip ;

@@ -21,6 +21,7 @@ IN: chr.debug
 
 : susp. ( chr-suspension --  )
     [ id>> "%d: " printf ] [ constraint>> . ] bi ;
+    ! [ vars>> "         /%u\n " printf ] tri ;
 
 : id-susp. ( id -- )
     store get at susp. ;

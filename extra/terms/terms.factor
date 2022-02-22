@@ -210,6 +210,7 @@ GENERIC: vars* ( obj -- )
 M: object vars* drop ;
 M: match-var vars* , ;
 M: term-var vars* , ;
+M: wrapper vars* wrapped>> vars* ;
 ! M: sequence vars* [ vars* ] each ;
 ! M: tuple vars* tuple-slots vars* ;
 

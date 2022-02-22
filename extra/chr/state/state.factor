@@ -1,6 +1,6 @@
-USING: accessors arrays assocs assocs.extras chr chr.programs classes
-classes.algebra combinators.short-circuit hash-sets kernel linked-assocs lists
-math namespaces quotations sequences sets sorting terms typed words ;
+USING: accessors arrays assocs assocs.extras chr chr.programs classes.algebra
+combinators.short-circuit hash-sets kernel linked-assocs lists make math
+namespaces quotations sequences sets sorting terms typed words ;
 
 IN: chr.state
 
@@ -71,29 +71,32 @@ DEFER: alive?
 : equate-in-store ( v1 v2 -- )
     assume-equal  ;
 
-TUPLE: equiv-activation { a read-only } { b read-only } { wakeup read-only } ;
+TUPLE: equiv-activation { eqs read-only } ;
 C: <equiv-activation> equiv-activation
 
 : add-2-equal ( value key -- new )
     2dup [ local-var? ] either?
     [ "equating locals!" throw ] when
     2dup = [ 2drop f ]
-    [ 2dup wakeup-set <equiv-activation> ] if ;
+    [ <eq-constraint> ] if ;
+    ! [ 2dup wakeup-set <equiv-activation> ] if ;
 
 : update-vars! ( id -- )
     dup alive?
-    [ store get at dup constraint>> vars >>vars drop ]
+    [ store get at dup constraint>> vars
+      f lift vars
+      >>vars drop ]
     [ drop ] if ;
 
 : add-equal ( assoc -- new )
-    [ add-2-equal ] { } assoc>map sift
-    [ [ [ a>> ] [ b>> ] bi equate-in-store ] each ]
-    [
-        [ wakeup>> ] gather [ alive? ] filter
-        [ dup update-vars! reactivate ] each
-        ! [ wakeup>> members [ dup update-vars! reactivate ] each ] each
-    ]
-    [ [ [ a>> ] [ b>> ] bi 2array \ = prefix 1array ] map ] tri ;
+    [ add-2-equal ] { } assoc>map sift <equiv-activation> ;
+    ! [ [ [ a>> ] [ b>> ] bi equate-in-store ] each ]
+    ! [
+    !     [ wakeup>> ] gather [ alive? ] filter
+    !     [ dup update-vars! reactivate ] each
+    !     ! [ wakeup>> members [ dup update-vars! reactivate ] each ] each
+    ! ]
+    ! [ [ [ a>> ] [ b>> ] bi 2array \ = prefix 1array ] map ] tri ;
     ! 2dup [ local-var? ] either?
     ! [ "equating locals!" throw ] when
     ! 2dup = [ 2drop f ]
@@ -124,10 +127,10 @@ ERROR: cannot-make-equal lhs rhs ;
 
 TYPED: create-chr ( c: constraint -- id )
     ! FIXME: This is to make sure any representatives get in! That stuff is really meh...
-    H{ } lift
+    ! f lift
     chr-suspension new swap
     [ >>constraint ]
-    [ vars >hash-set >>vars ] bi
+    [ vars members >>vars ] bi
     t >>alive
     current-index [ 0 or 1 + dup ] change [ >>id ] keep
     [ store get set-at ] keep ;
@@ -172,8 +175,8 @@ DEFER: activate
 
 GENERIC: lookup ( ctype -- seq )
 
-M: class lookup
-    store get [ type>> = ] with filter-values ;
+M: chr-constraint lookup
+    constraint-type store get [ type>> = ] with filter-values ;
 
 M: chr-sub-pred lookup
     class>> store get [ type>> swap class<= ] with filter-values ;
@@ -186,7 +189,12 @@ M: chr-sub-pred lookup
     [ f ]
     [ stored-cs [ [ sig suffix ] change-hist drop ] each t ] if ;
 
+<PRIVATE
+SYMBOL: current-bindings
+PRIVATE>
+
 : check-guards ( rule-id bindings -- ? )
+    dup current-bindings set-global
     [ program get rules>> nth ] dip
     swap guard>> [ test-constraint ] with all? ;
 
@@ -240,7 +248,7 @@ M: chr-sub-pred lookup
     ] [
         partners unclip-slice :> ( rest next )
         next first2 :> ( keep-partner pc )
-        pc constraint-type lookup
+        pc lookup
         [| sid sc |
          { [ sid trace key? not ] [ sc alive>> ] } 0&& [
              ! vars valid-match-vars [
@@ -293,6 +301,31 @@ SYMBOL: sentinel
     ;
 
 GENERIC: activate-new ( c -- )
+
+M: equiv-activation pred>constraint ;
+: update-eq-constraint-vars ( eqc -- eqc )
+    dup rhs>> vars [ ?ground-value ] map members >>subsumed-vars ;
+
+: eq-wakeup-set ( eq-constraint -- ids )
+    [ rhs>> store get [ vars>> in? [ , ] [ drop ] if ] with assoc-each ] { } make ;
+
+:: update-susp-vars! ( eqc susp -- eqc )
+    eqc lhs>> :> changed
+    [ susp vars>> [ dup changed = [ drop eqc subsumed-vars>> % ] [ , ] if ] each ] { } make susp swap >>vars ;
+
+: update-wakeup-set-vars ( eq-constraint -- ids )
+    dup eq-wakeup-set
+    [ store get swap [ of update-susp-vars! drop ] 2with each ] keep ;
+
+: equiv-wakeup-set ( seq -- ids )
+    [ update-wakeup-set-vars ] gather ;
+
+M: equiv-activation activate-new
+    eqs>>
+    [ [ [ lhs>> ] [ rhs>> ] bi assume-equal ] each ]
+    [ [ update-eq-constraint-vars activate-new ] each ]
+    [ equiv-wakeup-set [ reactivate ] each ] tri ;
+
 M: eq-constraint activate-new
     builtins store get at constraint>> push ;
 
@@ -359,7 +392,8 @@ M: builtin-suspension apply-substitution* nip ;
 : run-chr-query ( prog query -- store )
     [ pred>constraint ] map
     2dup 2array
-    [ 0 sentinel set
+    [
+      0 sentinel set
       H{ } clone ground-values set
       swap
       init-chr-scope
@@ -367,13 +401,18 @@ M: builtin-suspension apply-substitution* nip ;
       ! ground-values get .
       store get
       ! dup solve-eq-constraints
-      [ constraint>> over builtins = [ f lift ] unless ] assoc-map
-    ] with-term-vars ;
+      [ constraint>>
+        over builtins = [ f lift ] unless
+      ] assoc-map
+    ] with-term-vars
+    f current-bindings set-global ;
 
 : run-chrat-query ( query -- store )
-    prepare-query run-chr-query
-    ;
+    prepare-query run-chr-query ;
 
+
+: query-with ( solver query -- store )
+     prepare-query-with run-chr-query ;
 
 ALIAS: == test-eq
 ALIAS: ==! make-equal

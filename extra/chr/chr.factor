@@ -10,20 +10,22 @@ FROM: syntax => _ ;
 ! * Constraint Handling Rules
 
 
-TUPLE: chr heads nkept guard body match-vars ;
-: new-chr ( heads nkept guard body class -- obj )
+TUPLE: chr heads nkept guard body match-vars existentials ;
+: new-chr ( heads nkept guard body class existentials -- obj )
     new
+    swap >>existentials
     swap >>body
     swap >>guard
     swap >>nkept
-    swap >>heads ;
+    swap >>heads
+    ;
 
-: new-prop-chr ( heads guard body class -- obj )
-    [ dup length ] 3dip new-chr ;
+! : new-prop-chr ( heads guard body class -- obj )
+!     [ dup length ] 3dip new-chr ;
 
 TUPLE: named-chr < chr rule-name ;
-: <named-chr> ( name heads nkept guard body -- obj )
-    named-chr new-chr swap >>rule-name ;
+! : <named-chr> ( name heads nkept guard body -- obj )
+!     named-chr new-chr swap >>rule-name ;
 
 : keep/remove ( chr -- seq seq )
     [ heads>> ] [ nkept>> ] bi cut-slice ; inline
@@ -147,7 +149,9 @@ M: is-val apply-substitution*
 ! TODO: perhaps also insert the reflexive constraint? Normaly shouldn't be
 ! needed, since regular tests should be conducted using ==, but it allows
 ! "exporting" the equality solver state
-PREDICATE: eq-constraint < fiat-pred-array first \ = eq? ;
+! PREDICATE: eq-constraint < fiat-pred-array first \ = eq? ;
+TUPLE: eq-constraint lhs rhs subsumed-vars ;
+: <eq-constraint> ( lhs rhs -- obj ) f eq-constraint boa ;
 
 ! * Arbitrary guards
 INSTANCE: callable constraint

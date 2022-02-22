@@ -1,6 +1,5 @@
-USING: accessors assocs chr chr.factor chr.factor.conditions chr.factor.control
-chr.factor.words chr.parser chr.state kernel match namespaces sequences sets
-terms words ;
+USING: accessors assocs chr chr.factor chr.factor.conditions chr.factor.words
+chr.parser chr.state kernel lists match namespaces sequences sets terms words ;
 
 IN: chr.factor.compiler
 
