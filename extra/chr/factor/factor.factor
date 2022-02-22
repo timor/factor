@@ -172,126 +172,124 @@ M: effect make-term-var
 : define-term-vars ( effect -- assoc )
     [ make-term-var ] H{ } make ;
 
-! SYMBOL: make-shuffle?
-! SYMBOL: state-var
-! SYMBOL: position
-! GENERIC: make-effect-constraints ( assoc elt -- )
-! M: string make-effect-constraints
-!     of state-var get swap position get Val boa , ;
 
-! : make-named-type-constraint ( assoc var type -- )
-!     [ drop make-effect-constraints ]
-!     [ [ of ] dip Instance boa , ] 3bi ;
+! * Constraint Semantics for Stack-based inference
 
-! : make-anonymous-type-constraint ( assoc var type -- )
-!     2nip "v" uvar <term-var>
-!     [ state-var get swap position get Val boa , ]
-!     [ swap Instance boa , ] bi ;
+! Generally speaking, all constraints are considered to be conjunctions.
 
-! : make-type-constraint ( assoc var type -- )
-!     make-shuffle? get [ [ drop f ] dip ] unless
-!     over [ make-named-type-constraint ]
-!     [ make-anonymous-type-constraint ] if ;
+! The most fundamental notion is that of a state.  A state denotes a momentary
+! point in time between two computational steps.
 
-! M: pair make-effect-constraints
-!     first2
-!     {
-!         { [ dup classoid? ] [ make-type-constraint ] }
-!         { [ dup effect? ] [
-!               [ drop callable make-type-constraint ]
-!               [ nip make-effect-constraints ] 3bi ] }
-!     } cond ;
+! Basic Constraint types
+! - ~state-pred~ :: First argument is a state.  Defines a statement that is true for
+!   that state
+! - ~trans-pred~ :: First 2 arguments are states.  Defines a relation between two
+!   consecutive states.  This also defines reachability.  For all
+!   ~{ transpred s t }~ state t is reachable iff state s is reachable.  This
+!   defines a consecutive execution graph.
+! - ~Scopes~ :: Successive states are kept in ~{ Scope s1 s2 { s1.0 … s1.n }~
+!   constraints, which are ~trans-pred~ that define a sequence of states that
+!   makes up the transition between two states in the parent scope.  The variable
+!   ~s1~ of such a scope functions as the /leader/ of the scope.  The top-level
+!   scope is always ~{ Scope +top+ +end+ { … } }~.  Nested Scopes without
+!   Branch constructs inbetween can be considered to be part of a parent scope.
+! - Conditions :: These are symbolic variables, which allow collecting constraints
+!   into disjoint sets.  If a /condition/ is assumed, all related constraints are
+!   assumed to hold as conjunction.  This allows definition of logical relations
+!   between conditions.
+! - /Scope Leader/ :: The first argument of a ~Scope~ is a state, but also
+!   functions as reference condition for all constraints which hold for the entire
+!   scope.  The Entry point of a piece of code is the ~+top+~ symbol.
+! - ~cond-pred~ :: First variable argument is a condition.  In contrast to
+!   a ~state-pred~, the statement asserted by a ~cond-pred~ must hold for the
+!   entire scopse the state is part of.  If a state is given,
+!   then it will be rewritten to the left-most upper-most leader, ensuring that
+!   all conditional assertions in the same scope will share the same conditional
+!   variable.  The ~+top+~ symbol thus makes assertions which are true for the
+!   entire program.
+! - ~val-pred~ :: First argument is a variable that denotes a value.  Used to
+!   describe properties of a value.  If a value is /Dead/, all assumptions about
+!   it are erased.  Dead-ness is global,  If a value is dead, it is assumed to be
+!   completely unused.  This happens usually under two circumstances:
+!   1. The Value denoted a literal that was folded
+!   2. The Value is dropped in all branches.
 
-! M: effect make-effect-constraints ( assoc effect -- )
-!     [ dup in-var>> [ pick at ] [ "si" uvar <term-var> ] if*
-!       state-var [ in>> <reversed> [ position set swap make-effect-constraints ] with each-index ] with-variable
-!     ] [ dup out-var>> [ pick at ] [ "so" uvar <term-var> ] if*
-!         state-var [ out>> <reversed> [ position set swap make-effect-constraints ] with each-index ] with-variable
-!     ] 2bi ;
+! * Conditional and Unconditional Statements
+! A variable denoting a value is unique and global.  So the mere presence of a
+! variable in a certain constraint means that the variable's part in defining the
+! meaning is global.  This means that there must be distinctions between things
+! that are always true, and Things that are true only conditional.
 
-! : make-interface-constraints ( effect assoc -- seq )
-!     swap [ make-effect-constraints ] { } make ;
-!     ! swap effect-interface
-!     ! [ make-state-vals ] 2bi@ append ;
+! Frequently encountered issues include:
 
-! : make-interface-rule ( word effect assoc -- chr )
-!     [
-!         [ swap in-var>> of ] [ swap out-var>> of ] bi-curry bi
-!         rot Word boa 1array f
-!     ] [ make-interface-constraints ] 2bi
-!     chr new-prop-chr ;
+! ** The same value enters two different Branches
+!    If we assume the branch stacks of two exclusive code paths to be equal, then
+!    we also assume the values to be equal.  This means that all global properties of
+!    that value must be true in both branches.  E.g. for ~[ 1 ] if~, we would
+!    infer that the top of stack on branch exit is literal.  This is of course not
+!    necessarily true for the corresponding value in the other branch.
 
+!    There are two general approaches to that, (TODO currently not completely
+!    clear which is better: )
 
-: parse-constraints ( assoc -- seq )
-    [ \ ; parse-chr-body ] with-words ;
+!    1. Create new variables for branch scopes, and denote their relation with
+!       conditional ~{ Same cond v1 v2 }~  predicates.
+!    2. Make all value predicates conditional
+!       NOTE: *Rewriting to this approach*
+!    3. Wrap all value predicates in generic ~{ Cond cond constraint }~ preds.
 
+!    The overhead for the second variant should be smaller if there are more
+!    branch-specific properties than non-branch-specific properties.  The third
+!    variant is an alternative to the second, which is a general mechanism of
+!    turning non-conditional statements into conditional statements.
 
-! * CHR for Factor Code Inference
-! : generate-effect-constraints ( effect -- seq )
-!     dup define-term-vars make-interface-constraints ;
+! ** Phi-Interface for Sub-Solvers
 
-: set-word-constraints ( word key seq -- )
-    spin "chr-constraints" [ [ new-at ] [ associate ] if* ] change-word-prop ;
-
-SYNTAX: CONSTRAINT: scan-word scan-token scan-effect
-    define-term-vars
-    ! [ make-interface-constraints ]
-    ! [ nip parse-constraints ] 2bi
-    ! append set-word-constraints
-    parse-constraints 3array suffix! ;
-    ! [ make-interface-constraints ]
-    ! [ nip parse-constraints ] 2bi
-    ! append set-word-constraints
-    ! ;
-
-SYNTAX: GEN[ scan-effect define-term-vars
-            [ values ] keep [ \ ] parse-array ] with-words <generator> suffix! ;
-
-
-! ! * Inclusion Semantics
-
-
-! General principle is subset inclusion, which states that a concrete value at
-! runtime will be in the set of possible values?
-! Also do the negative calculation in parallel ?
-
-! The internal constraints should be as precise as possible.
+!    As a general rule, it is desirable to have a kind of mechanism that allows
+!    definition of solvers that can be asked to provide a solution for the general
+!    necessary case of propagating constraints upwards to the top scope.
 
 
-! E.g. definition:
-! : <= ( x y -- b ) ;
+!    Thus, a basic protocol could be:
 
+!    During Branch inference, all Value-related preds are wrapped in
+!    ~{ Cond s { val-pred v … }~ on the state where they are created.  The branch
+!    solver can then perform queries in the form of
+!    ~{ ask { Phi { val-pred v c1 } { val-pred v c2 } } }~ using the modular CHRat
+!    protocol, querying the sub-solver for a solution.
 
-! CHR{ { <= x y b } // -- { sub x number } { sub y number } { sub y boolean } }
-! CHR{ { <= x y b } // -- { le x y } | [ b f ==! ] }
-! CHR{ { <= x y b } // -- { gt x y } | [ b t ==! ] }
+!    The sub-solver must ensure that parallel (partial) solver states of different
+!    queries don't interfere with each other.
 
-! In order to definitively apply a constraint, we need to have proven that either
-! the condition value is exactcly not equal to f, or exactly equal to f:
-! CHR{ { <= x y b } // -- { ne b f } { sub b object } |  { lt x y } }
-! CHR{ { <= x y b } // -- { = b f } | {
+!    This could be achieved by letting the solvers know about the ~{ Cond c ... }~
+!    format directly, or by creating existential copies, if the solver process can
+!    ensure that existing knowledge will not be corrupted.
 
-! ! Relations of built-in classes
+! ** Resulting Semantics
+!    Note that in any case, the resulting semantics are that there are specific
+!    variables in the solver state for different branches, or different predicate
+!    structures which are separated by the conditions vars in the first place.
+!    The difference is basically whether to expose all these values to the top
+!    level, or to keep them in the sub-scopes, packing/unpacking them on demand
+!    when needed.
 
-! CHR{ // { sub x boolean } { sub x \ f } -- | [ x f ==! ] }
-! CHR{ // { sub x boolean } { sub x t } -- | [ x t ==! ] }
-! # CHR{ // { disjoint x y } { sub v y } { sub v x } -- | false }
-! # CHR{ { sub x y } // { ask { sub x z } } -- { disjoint x z } | { nosub x z } }
-! CHR{ { disjoint x y } { sub v y } // | }
-! CHR{ { disjoint x y } { sub v x } // { sub v y } -- | }
-! CHR{ { instance x \ f } -- | { sub x boolean } [ x f ==! ] }
+! * Basic Inference Constraints
+! ** State Preds
+!    - ~{ Stack s L{ v . r } }~ :: At state s, the stack has row-definition with vars v
+!      and unknown rest r. Whenever two Statements about a Stack are made which
+!      turn out to be the same state, the variables are unified in the whole store.
 
+! ** Val Preds
+!    - ~{ Lit x val }~, where ~val~ is guaranteed to be a Factor ground term.
+!    - ~{ Effect q in out }~, where ~in~ and ~out~ are stack lists.  Define the
+!      Effect of a value ~q~ which assumed to be a callable.
+!    - ~{ Type x tau }~, states that value x has type tau
 
+! ** Trans Preds
+!    - ~{ Word s t w }~ Inferred a word call between states s and t
+!    - ~{ Scope s t si… }~ The states s and t are connected via the intermediate
+!      states ~si~.
 
-! Existential assumptions for booleans, denoting that if there is an exclusive
-! choice of control flow, then there are at least two sets which are distinct?
-! : if ( cond then else -- ... )
-! CHR{ { if c t e } // --
-!   { sub t callable } { sub e callable }
-!   { split c c1 c2 } { sub c1 s1 } { sub c2 s2 } { disjoint s2 s1 }
-!   { dispatch c1 f e }
-!   { dispatch c2 s2 t } { ne c2 f }
-
-! * Control inference
-! There is a notion of data-dependent jump points, e.g. we need to be able to add certain constraints to
-! Data values that will be effective when they get executed.
+! ** Conditional Preds
+!    - ~{ Cond c constraint }~, General container predicate, will rewrite the
+!      corresponding constraint to the most-general-possible leader.
