@@ -1,4 +1,4 @@
-USING: accessors assocs chr chr.factor chr.factor.conditions chr.factor.words
+USING: accessors assocs chr chr.factor chr.factor.conditions
 chr.parser chr.state kernel lists match namespaces sequences sets terms words ;
 
 IN: chr.factor.compiler
@@ -75,14 +75,15 @@ CHR{ { CompileRule } // { Stack ?s __ } -- [ ?s { +top+ +end+ } in? not ] | }
 ! CHR{ { CompileRule } // { Val __ __ __ } -- | }
 ! CHR{ { CompileRule } // { FoldQuot __ __ __ __ } -- | }
 ! CHR{ { CompileRule } // { LitStack __ __ __  } -- | }
-CHR{ { CompileRule } // { AskLit __ __  } -- | }
+! CHR{ { CompileRule } // { AskLit __ __  } -- | }
+! CHR{ { CompileRule } // { InlineUnknown ?s ?t ?x } -- | { Cond ?s { InlinesUnknown ?x } } }
 CHR{ { CompileRule } // SUB: ?x Call ?r -- | }
-CHR{ { CompileRule } // SUB: ?x Scope ?r -- | }
+! CHR{ { CompileRule } // { Scope +top+ +end+ ?rho ?sig __ } -- | { Stack +top+ ?rho } { Stack +end+ ?sig } }
+! CHR{ { CompileRule } // SUB: ?x Scope ?r -- | }
 
 ! CHR{ { CompileRule } // { CondRet __ __ __  } -- | }
 ! CHR{ { CompileRule } // { Dead __ } -- | }
 ! CHR{ { CompileRule } // { Lit ?x __ } { Instance ?x __ } -- | }
-! CHR{ { CompileRule } // { InlineUnknown ?s ?t ?x } -- | { Cond ?s { InlinesUnknown ?x } } }
 ! CHR: remove-words-1 @ { CompileRule } // { Generic __ __ __ } -- | ;
 ! CHR: remove-words-2 @ { CompileRule } // { Word __ __ __ } -- | ;
 
@@ -98,7 +99,7 @@ CHR{ { CompileDone } // { Trivial __ } -- | }
 CHR{ { CompileDone } // { CondRet __ __ } -- | }
 
 ! Only keep top conditions!
-CHR: only-top-conds @ { CompileDone } // SUB: ?x cond-pred L{ ?c . __ } -- [ ?c known +top+? not ] | ;
+! CHR: only-top-conds @ { CompileDone } // SUB: ?x cond-pred L{ ?c . __ } -- [ ?c known +top+? not ] | ;
 
 CHR{ // { CompileDone } -- | }
 ;

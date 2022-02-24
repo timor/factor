@@ -1,6 +1,6 @@
 USING: accessors arrays chr chr.factor chr.factor.conditions chr.modular
 chr.parser chr.state combinators combinators.short-circuit effects generic
-kernel lists math.parser sequences terms types.util ;
+kernel lists make math.parser sequences terms types.util ;
 
 IN: chr.factor.stack
 
@@ -10,7 +10,12 @@ TUPLE: BranchStacks < chr-pred from0 to0 from1 to1 from2 to2 ;
 ERROR: imbalanced-branch-stacks i1 o1 i2 o2 ;
 TUPLE: Val < chr-pred state var ;
 TUPLE: AssumeSameRest l1 l2 ;
-TUPLE: StackOp < trans-pred before after ;
+TUPLE: StackOp < trans-pred in out ;
+M: StackOp state-depends-on-vars
+    [
+        [ in>> known [ , ] leach* ]
+        [ out>> known [ , ] leach* ] bi
+    ] { } make ;
 TUPLE: StartStack < Stack ; ! marker
 TUPLE: EndStack < Stack ; ! marker
 ! TUPLE: SameEffect < chr-pred in1 out1 in2 out2 ;
@@ -45,6 +50,10 @@ CHR: define-stack-op-out @ { StackOp __ ?t __ ?sig } // { Stack ?t ?x } -- | [ ?
 ! CHR: define-set-stack-op-in @ { StackOp ?r __ ?rho __ } // { StartStack ?r ?x } -- | [ ?x ?rho ==! ] ;
 ! CHR: define-set-stack-op-out @ { StackOp __ ?t __ ?sig } { StartStack ?t ?x } // -- | [ ?x ?sig ==! ] ;
 
+CHR: define-scope-stack-out @ { Scope __ ?t __ ?sig __ } // { Stack ?t ?x } --
+| [ ?x ?sig ==! ] ;
+
+
 CHR: stack-ops-collide @ { StackOp ?r ?s ?x ?y } // { StackOp ?r ?s ?a ?b }
 -- |
 [ { ?x ?y } { ?a ?b } ==! ]
@@ -57,7 +66,8 @@ CHR: stack-ops-collide @ { StackOp ?r ?s ?x ?y } // { StackOp ?r ?s ?a ?b }
 ! { Stack ?t ?sig }
 !     ;
 
-CHR: compose-stack-op @ { StackOp ?r ?s ?a ?b } { StackOp ?s ?t ?c ?d } // -- | [ ?c ?b ==! ] ;
+CHR: compose-stack-op @ // { StackOp ?r ?s ?a ?b } { StackOp ?s ?t ?c ?d } --
+| [ ?c ?b ==! ] { StackOp ?r ?t ?a ?d } ;
 
 CHR: answer-stack-op-stack-out @ { StackOp __ ?t __ ?sig } // { ask { Stack ?t ?x } } -- |
 [ ?sig ?x ==! ]
@@ -184,10 +194,10 @@ CHR{ // { AssumeWordEffect ?s ?t ?w ?e } -- |
 
 CHR: make-push-stack @ // { Push ?s ?t ?b } -- |
      ! { Cond ?s { Lit ?v ?b } }
+     { StackOp ?s ?t ?rho L{ ?v . ?rho } }
      { Lit ?v ?b }
      ! { Stack ?s ?rho }
      ! { Stack ?t L{ ?v . ?rho } }
-     { StackOp ?s ?t ?rho L{ ?v . ?rho } }
     ;
 
 ;

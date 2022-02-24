@@ -11,7 +11,7 @@ TERM-VARS:
 ?ys ?z ?c1 ?c2 ?s0 ?beg ?parm ?rho ?sig ?tau ?vars ;
 
 TUPLE: state-pred < chr-pred s1 ;
-TUPLE: trans-pred < chr-pred s1 s2 ;
+TUPLE: trans-pred < state-pred s2 ;
 TUPLE: val-pred < chr-pred v ;
 
 ! For cleaning up
@@ -80,7 +80,8 @@ TUPLE: Branch < trans-pred cs1 cs2 ;
 TUPLE: ChratInfer < chr-pred obj ;
 
 ! State connections
-TUPLE: Scope < chr-pred beg end sub-states ;
+! TUPLE: Scope < chr-pred beg end sub-states ;
+TUPLE: Scope < trans-pred stack-in stack-out sub-states ;
 
 ! Data Duplication, duplication
 TUPLE: Dup < val-pred to ;
@@ -91,13 +92,13 @@ TUPLE: Dead < chr-pred val ;
 
 ! Data Flow
 ! Exclusive Split.
-TUPLE: Split < val-pred out1 out2 ;
+TUPLE: Split < state-pred in out1 out2 ;
 
 ! dest value is derived from left value
 TUPLE: Copy < val-pred dest ;
 
 ! val is derived from src1 and src2
-TUPLE: Join < val-pred src1 src2 ;
+TUPLE: Join < state-pred out src1 src2 ;
 
 ! A Split implies a copy.  A Dup also implies a copy.  Things which are
 ! dependent on whether the target value is used twice should be derived from Dup

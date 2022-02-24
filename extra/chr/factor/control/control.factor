@@ -1,5 +1,5 @@
-USING: arrays chr chr.factor chr.factor.conditions chr.parser chr.state kernel
-math sequences sets splitting terms ;
+USING: arrays chr chr.factor chr.modular chr.parser chr.state kernel lists math
+sequences sets splitting terms ;
 
 IN: chr.factor.control
 
@@ -14,26 +14,31 @@ IN: chr.factor.control
     swapd append append ;
 
 TUPLE: Link < chr-pred from to ;
-TUPLE: CheckExec < trans-pred word ;
+TUPLE: CheckExec < trans-pred word ans ;
 TUPLE: RecursiveCall < trans-pred word back-to ;
 TUPLE: AddLink < trans-pred ;
 TUPLE: PrefixLink < trans-pred ;
+TUPLE: ScopeLeader < chr-pred state leader ;
 
-CHRAT: control-flow { CheckExec AddLink }
+CHRAT: control-flow { CheckExec }
 
 ! CHR{ { AbsurdState ?s } // { AddLink ?s __ } -- | }
 
 CHR{ { Link ?t ?u } // { Link ?t ?u } -- | }
 
 ! Returning answer
-CHR{ { Entry ?r ?w } // { Link ?r ?s } { CheckExec ?s ?t ?w } --
-     | { RecursiveCall ?s ?t ?w ?r } }
+! CHR{ { Entry ?r ?w } // { Link ?r ?s } { CheckExec ?s ?t ?w } --
+!      | { RecursiveCall ?s ?t ?w ?r } }
+CHR: answer-check-exec-recursive @ { Entry ?r ?w } // { Link ?r ?s } { ask { CheckExec ?s ?t ?w ?x } } --
+| [ ?x ?r ==! ] { entailed { CheckExec ?s ?t ?w ?x } } ;
 
-CHR{ // { Link +top+ ?s } { CheckExec ?s ?t ?w } --
-     | { ExecWord ?s ?t ?w } }
+CHR: answer-check-exec-normal @ // { Link +top+ ?s } { ask { CheckExec ?s ?t ?w ?x } } --
+| [ ?x f ==! ] { entailed { CheckExec ?s ?t ?w ?x } } ;
+! CHR{ // { Link +top+ ?s } { CheckExec ?s ?t ?w } --
+!      | { ExecWord ?s ?t ?w } }
 
 ! Initiating Query
-CHR{ { CheckExec ?t __ __ } // -- | { Link ?t ?t } }
+CHR{ { ask { CheckExec ?t __ __ __ } } // -- | { Link ?t ?t } }
 
 ! ! Adding elements
 ! CHR: add-link-to-scope-leader @ // { Scope ?s ?u ?a } { AddLink ?s ?t } -- |
@@ -45,15 +50,16 @@ CHR{ { CheckExec ?t __ __ } // -- | { Link ?t ?t } }
 !       { Scope ?s ?u a2 }
 !      ] ;
 
-! In case we cannot be added to an existing scope, we might actually be leading it
-CHR: lead-scope @ // { Scope ?s ?t ?l } { PrefixLink ?r ?s } -- [ ?l known? ] |
-    [ ?r ?t ?l ?s prefix Scope boa ] ;
+! ! In case we cannot be added to an existing scope, we might actually be leading it
+! CHR: lead-scope @ // { Scope ?s ?t ?l } { PrefixLink ?r ?s } -- [ ?l known? ] |
+!     [ ?r ?t ?l ?s prefix Scope boa ] ;
 
 ! CHR{ { Linkback ?r ?a } // { Linkback ?r ?b } -- [ ?b ?a subset? ] | }
 ! CHR{ // { Linkback ?r ?a } { Linkback ?r ?b } -- | [| | ?a ?b union :> c { Linkback ?r c } ] }
 
 ! Propagation
-CHR{ { Scope ?s __ ?l } // { Link ?t ?u } -- [ ?s ?t == not ] [ ?t ?l in? ] | { Link ?s ?u } }
+! CHR{ { Scope ?s __ ?l } // { Link ?t ?u } -- [ ?s ?t == not ] [ ?t ?l in? ] | { Link ?s ?u } }
+CHR{ SUB: ?x Scope L{ ?s __ __ __ ?l . __ }  // { Link ?t ?u } -- [ ?s ?t == not ] [ ?t ?l in? ] | { Link ?s ?u } }
 
 ! CHR{ // { Scope ?r ?u ?l } { Scope ?s __ ?a } -- [ ?s ?l in? ] |
 !      [ ?r ?u ?a ?s ?l insert-instead Scope boa ]
@@ -63,12 +69,11 @@ CHR{ { Branch ?s __ ?r __ } // { Link ?r ?u } -- | { Link ?s ?u } }
 CHR{ { Branch ?s __ __ ?r } // { Link ?r ?u } -- | { Link ?s ?u } }
 ! CHR{ { CondJump ?s ?r } // { Link ?r ?u } -- | { Link ?s ?u } }
 
-
 ! Transitivity?
 ! CHR{ // { Link ?r ?s } { Link ?s ?t } -- | { Link ?r ?t } }
 
 ! Any trans-pred is by default a control path link
-! CHR: trans-check-exec @ SUB: ?x trans-pred L{ ?s ?r . __ } // { Link ?r ?u } -- |
-! { Link ?s ?u } ;
+CHR: trans-check-exec @ SUB: ?x trans-pred L{ ?s ?r . __ } // { Link ?r ?u } -- |
+{ Link ?s ?u } ;
 
     ;

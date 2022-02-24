@@ -268,8 +268,11 @@ DEFER: lift
 ! Keep track of ground terms for equivalence classes
 : ?ground-value ( var -- val/key )
     dup term-var?
-    [ defined-equalities representative
-      ground-values get ?at drop
+    [ defined-equalities
+      [
+          representative
+          ground-values get ?at drop
+      ] when*
     ] when ;
     ! [ defined-equalities
     !   [ representative

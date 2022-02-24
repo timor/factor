@@ -24,15 +24,19 @@ CHR{ { Dead ?x } // P{ Type ?x __ } -- | }
 
 ! Analyze Stack types
 
-CHR: accept-type-from-stack @ { Stack ?s ?v } // { AcceptTypes ?s ?x } -- | { AcceptType ?s ?v ?x } ;
+! CHR: accept-type-from-stack @ // { AcceptTypes ?s ?x } -- { Stack ?s ?v } | { AcceptType ?s ?v ?x } ;
+CHR: accept-type-from-stack @ // { AcceptTypes ?s ?x } -- | { Stack ?s ?v } { AcceptType ?s ?v ?x } ;
 CHR{ // { AcceptType __ ?v object } -- | }
 CHR{ // { AcceptType __ __ L{ } } -- | }
-CHR: destructure-accept-type @ // { AcceptType ?s L{ ?x . ?xs } L{ ?y . ?ys } } -- | { AcceptType ?s ?x ?y } { AcceptType ?s ?xs ?ys } ;
+CHR: destructure-accept-type-head @ { AcceptType ?s L{ ?x . ?xs } L{ ?y . ?ys } } // -- | { AcceptType ?s ?x ?y } ;
+CHR: destructure-accept-type-rest @ // { AcceptType ?s L{ ?x . ?xs } L{ ?y . ?ys } } -- | { AcceptType ?s ?xs ?ys } ;
 
-CHR: provide-type-from-stack @ { Stack ?s ?v } // { ProvideTypes ?s ?x } -- | { ProvideType ?s ?v ?x } ;
+CHR: provide-type-from-stack @ // { ProvideTypes ?s ?x } -- { Stack ?s ?v } | { ProvideType ?s ?v ?x } ;
 CHR{ // { ProvideType __ ?v object } -- | }
 CHR{ // { ProvideType __ __ L{ } } -- | }
-CHR: destructure-provide-type @ // { ProvideType ?s L{ ?x . ?xs } L{ ?y . ?ys } } -- | { ProvideType ?s ?x ?y } { ProvideType ?s ?xs ?ys } ;
+! CHR: destructure-provide-type @ // { ProvideType ?s L{ ?x . ?xs } L{ ?y . ?ys } } -- | { ProvideType ?s ?x ?y } { ProvideType ?s ?xs ?ys } ;
+CHR: destructure-provide-type-head @ { ProvideType ?s L{ ?x . ?xs } L{ ?y . ?ys } } // -- | { ProvideType ?s ?x ?y } ;
+CHR: destructure-provide-type-rest @ // { ProvideType ?s L{ ?x . ?xs } L{ ?y . ?ys } } -- | { ProvideType ?s ?xs ?ys } ;
 
 CHR: lit-is-instance @ { Lit ?a ?b } // -- | [ ?a ?b class-of Instance boa ] ;
 
@@ -64,6 +68,15 @@ CHR: instance-type @ P{ Instance ?x ?tau } // -- | P{ Type ?x ?tau } ; ! { Subty
 
 ! ** Phi stuff
 CHR: trivial-union @ // { UnionType ?tau3 ?tau1 ?tau1 } -- | [ ?tau3 ?tau1 ==! ] ;
+
+CHR: builtin-union @ // { UnionType ?tau3 ?tau1 ?tau2 } -- [ ?tau1 classoid? ] [ ?tau2 classoid? ] |
+[ ?tau3 ?tau1 ?tau2 class-or ==! ] ;
+
+! CHR: propagate-phi-type-out @ { Join ?y ?a ?b } { Type ?a ?tau1 } { Type ?b ?tau2 } // -- |
+! { Type ?y ?tau3 } { UnionType ?tau3 ?tau1 ?tau2 } ;
+
+! CHR: propagate-phi-type-in @ { Split ?x ?a ?b } { Type ?a ?tau1 } { Type ?b ?tau2 } // -- |
+! { Type ?x ?tau3 } { UnionType ?tau3 ?tau1 ?tau2 } ;
 
 ! NOTE: Here we bubble types upwards already during compilation!
 ! CHR: propagate-accept @ { CondJump ?r ?c1 } { CondJump ?r ?c2 } { AcceptType ?c1 ?x ?tau1 } { AcceptType ?c2 ?x ?tau2 } // -- |

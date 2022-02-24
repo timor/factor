@@ -12,7 +12,7 @@ IN: chr.factor.conditions
 ! be a recursive call
 TUPLE: cond-pred < chr-pred cond ;
 ! TUPLE: state-cond < state-pred cond-pred ;
-! TUPLE: InlinesUnknown < cond-pred quot ;
+TUPLE: InlinesUnknown < cond-pred quot ;
 
 ! FIXME: Move!
 TUPLE: Drop < val-pred ;
@@ -31,11 +31,12 @@ TUPLE: Absurd < chr-pred cond ;
 TUPLE: Trivial < chr-pred cond ;
 TUPLE: CondNest < chr-pred c1 c2 ;
 TUPLE: AbsurdState < chr-pred state ;
-! TUPLE: AbsurdScope < chr-pred beg end ;
-TUPLE: AbsurdScope < Scope ;
+TUPLE: AbsurdScope < chr-pred beg end states ;
+! TUPLE: AbsurdScope < Scope ;
 
-TUPLE: AcceptType < cond-pred val type ;
-TUPLE: ProvideType < cond-pred val type ;
+! TODO move
+TUPLE: AcceptType < state-pred val type ;
+TUPLE: ProvideType < state-pred val type ;
 
 CHRAT: condition-prop {  }
 
@@ -55,15 +56,32 @@ CHR{ { Cond ?x ?c } // { Cond ?x ?c } -- | }
 
 ! CHR: propagate-cond-preds @ { Scope ?s __ ?l } // SUB: ?c cond-pred L{ ?x . ?xs } -- [ ?x ?l in? ] |
 !     [ ?xs list>array ?s prefix ?c slots>tuple ] ;
-CHR: propagate-cond-preds @ { Scope ?s __ ?l } // SUB: ?c cond-pred L{ ?x . __ } -- [ ?x ?l in? ] |
+CHR: propagate-cond-preds-scope @ { Scope ?s __ __ __ ?l } // SUB: ?c cond-pred L{ ?x . __ } -- [ ?x ?l in? ] |
     [ ?c ?s >>cond ] ;
+
+CHR: propagate-cond-preds-trans @ SUB: ?x trans-pred L{ ?r ?s . __ } // SUB: ?c cond-pred L{ ?s . __ } -- |
+[ ?c ?r >>cond ] ;
+
 
 ! Propagate Absurdness
 CHR{ { AbsurdState ?s } // { AbsurdState ?s } -- | }
 CHR{ { AbsurdScope ?s ?t __ } // { AbsurdScope ?s ?t __ } -- | }
-CHR: parent-scope-is-absurd @ { AbsurdState ?t } // { Scope ?s ?u ?l } -- [ ?t ?l known in? ] | { AbsurdScope ?s ?u ?l } ;
-CHR: child-scope-is-absurd @ { AbsurdState ?s } // { Scope ?s ?u ?l } -- | { AbsurdScope ?s ?u ?l } ;
-CHR: subscopes-are-absurd @ { AbsurdScope ?r ?u ?l } // { Scope ?s ?t ?v } -- [ ?s ?l in? ] | { AbsurdScope ?s ?t ?l } ;
+
+CHR: parent-scope-is-absurd @ { AbsurdState ?t } //
+! { Scope ?s ?u __ __ ?l }
+SUB: ?x Scope L{ ?s ?u __ __ ?l . __ }
+-- [ ?t ?l known in? ] | { AbsurdScope ?s ?u ?l } ;
+
+CHR: child-scope-is-absurd @ { AbsurdState ?s } //
+! { Scope ?s ?u __ __ ?l }
+SUB: ?x Scope L{ ?s ?u __ __ ?l . __ }
+-- | { AbsurdScope ?s ?u ?l } ;
+
+! CHR: subscopes-are-absurd @ { AbsurdScope ?r ?u ?l } //
+! ! { Scope ?s ?t __ __ ?v }
+! SUB: ?x Scope L{ ?s ?u __ __ ?l . __ }
+! -- [ ?s ?l in? ] | { AbsurdScope ?s ?t ?l } ;
+
 CHR: scope-states-are-absurd @ { AbsurdScope ?r ?u ?l } // -- [ ?l known? ] | { AbsurdState ?r } { AbsurdState ?u } [ ?l known [ AbsurdState boa ] map ] ;
 ! NOTE: this will be needed when we figure out absurdness afterwards
 CHR: implied-cond-jump-is-absurd @ { Absurd ?s } { CondJump ?s ?t } // -- | { AbsurdState ?t } ;

@@ -1,5 +1,5 @@
-USING: accessors arrays assocs chr.factor chr.factor.conditions
-chr.factor.control chr.factor.infer chr.factor.stack chr.parser chr.state
+USING: accessors arrays assocs chr.factor chr.factor.compiler
+chr.factor.conditions chr.factor.stack chr.parser chr.state
 combinators.short-circuit continuations effects generic kernel lists
 macros.expander make math math.parser quotations sequences sets terms types.util
 words ;
@@ -186,6 +186,8 @@ CHR{ // { Shuffle ?s ?t ?m } -- [ ?m known? ] |
 
 ! ** Inline Words
 CHR{ // { InlineWord ?s ?t ?w } -- | [| | ?w def>> :> def { InlineCall ?s ?t ?w def } ] }
+! CHR: inline-rules-only @ // { InlineWord ?s ?t ?w } -- |
+!      { ApplyWordRules ?s ?t ?w } ;
 
 ! CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }
 ! CHR{ // { Word ?s ?t ?w } -- [ ?w method? ] | { Method ?s ?t ?w } }
@@ -201,7 +203,8 @@ CHR{ { Word ?s ?t ?w } // --
 
 ! Alternatively, only try folding if we have a top literal?
 ! CHR{ { Word ?s ?t ?w } { Stack ?s L{ ?x . __ } } { Lit ?x __ } // -- [ ?w foldable? ] |
-CHR: try-fold-word @ { Word ?s ?t ?w } { Stack ?s L{ ?x . __ } } { Lit ?x __ } // -- [ ?w foldable? ] |
+! CHR: try-fold-word @ { Word ?s ?t ?w } { Lit ?x __ } // -- [ ?w foldable? ] { Stack ?s L{ ?x . __ } } |
+CHR: try-fold-word @ { Word ?s ?t ?w } // -- [ ?w foldable? ] |
      [| | ?w stack-effect :> e { FoldEffect ?s ?t ?w e } ] ;
 
 ! NOTE: Assuming that foldable effects are always bounded!
@@ -259,10 +262,10 @@ CHR: primitive-rules @ // { ApplyWordRules ?s ?t ?w } -- [ ?w primitive? ] |
     ;
 
 ! Insert at least one dummy state to prevent hooking into the top node with Entry specs
-! CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- |
+CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- [ ?w generic? not ] |
 ! ! { Stack ?s ?rho }
 ! ! { Stack ?s0 ?rho } { AddLink ?s ?s0 }
-! ! [ ?s0 ?t ?w instantiate-word-rules ]
-! [ ?s ?t ?w instantiate-word-rules ] ;
+! [ ?s0 ?t ?w instantiate-word-rules ]
+[ ?s ?t ?w instantiate-word-rules ] ;
 
 ;
