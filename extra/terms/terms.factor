@@ -3,7 +3,7 @@ colors.constants combinators combinators.short-circuit continuations
 disjoint-sets disjoint-sets.private graphs hashtables hashtables.identity
 io.styles kernel lexer make match math math.order math.parser namespaces parser
 prettyprint.custom prettyprint.sections quotations sequences sets strings
-types.util unicode words words.symbol ;
+types.util unicode vectors words words.symbol ;
 
 IN: terms
 
@@ -309,6 +309,10 @@ M: term-var subst
 M: sequence subst
     dup quotation?
     in-quotation? [ [ subst ] map ] with-variable ;
+! As an exception, we don't rebuils vectors!
+M: vector subst
+    dup quotation?
+    in-quotation? [ [ subst ] map! ] with-variable ;
 M: callable subst
     in-quotation? [ call-next-method ] with-variable-on ;
 M: tuple subst tuple>array subst >tuple ;
