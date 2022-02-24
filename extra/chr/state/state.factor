@@ -4,30 +4,14 @@ namespaces quotations sequences sets sorting terms typed words ;
 
 IN: chr.state
 
-TUPLE: chr-state stack store builtins trace n vars ;
-
 FROM: namespaces => set ;
 FROM: syntax => _ ;
 
 SYMBOLS: program exec-stack store builtins match-trace current-index ;
 
-: reset-chr-state ( -- )
-    exec-stack off
-    store off
-    builtins off
-    match-trace off
-    0 current-index set ;
-
-: with-new-chr-state ( quot -- )
-    [ reset-chr-state ] prepose with-scope ; inline
-
-: get-chr-state ( -- assoc )
-    { program exec-stack store builtins match-trace current-index }
-    [ dup get ] H{ } map>assoc ;
-
 ! Operational interface
 TUPLE: chr-suspension
-    constraint id alive activated stored hist vars ;
+    constraint id alive activated stored hist vars from-rule ;
 
 TUPLE: builtin-suspension < chr-suspension type ;
 : <builtins-suspension> ( -- obj )
@@ -77,6 +61,8 @@ C: <equiv-activation> equiv-activation
 : add-2-equal ( value key -- new )
     2dup [ local-var? ] either?
     [ "equating locals!" throw ] when
+    ! <eq-constraint> ;
+    ! 2dup eq? [ 2drop f ]
     2dup = [ 2drop f ]
     [ <eq-constraint> ] if ;
     ! [ 2dup wakeup-set <equiv-activation> ] if ;
@@ -125,11 +111,13 @@ ERROR: cannot-make-equal lhs rhs ;
     [ 2nip add-equal ]
     [ cannot-make-equal ] if* ;
 
-TYPED: create-chr ( c: constraint -- id )
+TYPED: create-chr ( from-rule c: constraint -- id )
     ! FIXME: This is to make sure any representatives get in! That stuff is really meh...
-    ! f lift
+    f lift
     chr-suspension new swap
-    [ >>constraint ]
+    [ >>constraint
+      swap >>from-rule
+    ]
     [ vars members >>vars ] bi
     t >>alive
     current-index [ 0 or 1 + dup ] change [ >>id ] keep
@@ -207,10 +195,10 @@ PRIVATE>
 
 ! TODO: Don't use t as special true value in body anymore...
 : run-rule-body ( rule-id bindings -- )
-    [ program get rules>> nth ] dip
+    [ dup program get rules>> nth ] dip
     ! swap body>> dup t =
     ! [ 2drop ] [ [ apply-substitution activate-new ] with each ] if ;
-    swap body>> [ apply-substitution activate-new ] with each ;
+    swap body>> [ apply-substitution activate-new ] 2with each ;
 
 : simplify-constraints ( trace -- )
     [ [ drop ] [ kill-chr ] if ] assoc-each ;
@@ -281,7 +269,7 @@ SYMBOL: sentinel
 
 : recursion-check ( -- )
     ! sentinel get 5000 > [ "runaway" throw ] when
-    sentinel get 400 > [ "runaway" throw ] when
+    sentinel get 5000 > [ "runaway" throw ] when
     sentinel inc ;
 
 ! TODO: check if that is needed to make sure tail recursion works!
@@ -300,18 +288,24 @@ SYMBOL: sentinel
     ! ] if
     ;
 
-GENERIC: activate-new ( c -- )
+GENERIC: activate-new ( rule c -- )
 
 M: equiv-activation pred>constraint ;
 : update-eq-constraint-vars ( eqc -- eqc )
     dup rhs>> vars [ ?ground-value ] map members >>subsumed-vars ;
 
 : eq-wakeup-set ( eq-constraint -- ids )
-    [ rhs>> store get [ vars>> in? [ , ] [ drop ] if ] with assoc-each ] { } make ;
+    [
+        [ rhs>> store get [ vars>> in? [ , ] [ drop ] if ] with assoc-each ]
+        [ lhs>> store get [ vars>> in? [ , ] [ drop ] if ] with assoc-each ] bi
+    ] { } make
+    ;
 
 :: update-susp-vars! ( eqc susp -- eqc )
     eqc lhs>> :> changed
-    [ susp vars>> [ dup changed = [ drop eqc subsumed-vars>> % ] [ , ] if ] each ] { } make susp swap >>vars ;
+    [ susp vars>> [ dup changed = [ drop eqc subsumed-vars>> % ] [ , ] if ] each ] { } make susp swap >>vars
+    ! [ f lift ] change-constraint
+    ;
 
 : update-wakeup-set-vars ( eq-constraint -- ids )
     dup eq-wakeup-set
@@ -320,17 +314,17 @@ M: equiv-activation pred>constraint ;
 : equiv-wakeup-set ( seq -- ids )
     [ update-wakeup-set-vars ] gather ;
 
-M: equiv-activation activate-new
+M: equiv-activation activate-new nip
     eqs>>
     [ [ [ lhs>> ] [ rhs>> ] bi assume-equal ] each ]
-    [ [ update-eq-constraint-vars activate-new ] each ]
+    [ [ update-eq-constraint-vars f swap activate-new ] each ]
     [ equiv-wakeup-set [ reactivate ] each ] tri ;
 
-M: eq-constraint activate-new
+M: eq-constraint activate-new nip
     builtins store get at constraint>> push ;
 
 M: sequence activate-new
-    [ activate-new ] each ;
+    [ activate-new ] with each ;
 
 M: constraint activate-new
     ! recursion-check
@@ -343,7 +337,7 @@ M: generator activate-new
              ] H{ } map>assoc ] bi lift
     activate-new ;
 
-M: true activate-new drop ;
+M: true activate-new 2drop ;
 
 M: callable activate-new
     ! recursion-check
@@ -397,9 +391,10 @@ M: builtin-suspension apply-substitution* nip ;
       H{ } clone ground-values set
       swap
       init-chr-scope
-      [ activate-new ] each
+      [ f swap activate-new ] each
       ! ground-values get .
       store get
+      ! dup .
       ! dup solve-eq-constraints
       ! break
       [ constraint>>

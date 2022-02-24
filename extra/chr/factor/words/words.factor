@@ -66,77 +66,92 @@ CHR: absurd-call @ { AbsurdState ?s } // { Call ?s __ ?i ?o } -- |
    ;
 ! CHR{ { AbsurdState ?s } // { FoldCall ?s __ __ __ } -- | }
 
-! primitives
+! ** Primitives
 
 TUPLE: DropValue < state-pred x ;
 TUPLE: DupValue < state-pred x y ;
 
-CHR{ // { DupValue ?s ?x ?y } -- | { Cond ?s { Dup ?x ?y } } }
-CHR{ // { DropValue ?s ?x } -- | { Cond ?s { Drop ?x } } }
+! CHR{ // { DupValue ?s ?x ?y } -- | { Cond ?s { Dup ?x ?y } } }
+! CHR{ // { DropValue ?s ?x } -- | { Cond ?s { Drop ?x } } }
+CHR{ // { DupValue ?s ?x ?y } -- | { Dup ?x ?y } }
+CHR{ // { DropValue ?s ?x } -- | { Drop ?x } }
 
 CHR: infer-dup @ // { Word ?s ?t dup } -- |
-     { Stack ?s L{ ?x . ?rho } }
-     { Stack ?t L{ ?y ?x . ?rho } }
+     ! { Stack ?s L{ ?x . ?rho } }
+     ! { Stack ?t L{ ?y ?x . ?rho } }
+{ StackOp ?s ?t L{ ?x . ?rho } L{ ?y ?x . ?rho } }
      { DupValue ?s ?x ?y } ;
 
 CHR: infer-over @ // { Word ?s ?t over } -- |
-     { Stack ?s L{ ?y ?x . ?rho } }
-     { Stack ?t L{ ?z ?y ?x . ?rho } }
+     ! { Stack ?s L{ ?y ?x . ?rho } }
+     ! { Stack ?t L{ ?z ?y ?x . ?rho } }
+     { StackOp ?s ?t L{ ?y ?x . ?rho } L{ ?z ?y ?x . ?rho } }
      { DupValue ?s ?x ?z } ;
 
 CHR: curry-effect @ // { Word ?s ?t curry } -- |
-     { Stack ?s L{ ?p ?parm . ?rho } }
-     { Effect ?p L{ ?parm . ?a } ?b }
-     { Stack ?t L{ L{ ?parm . ?p } . ?rho } } ;
+     ! { Stack ?s L{ ?p ?parm . ?rho } }
+     ! { Stack ?t L{ L{ ?parm . ?p } . ?rho } }
+{ StackOp ?s ?t L{ ?p ?parm . ?rho } L{ L{ ?parm . ?p } . ?rho } }
+     { Effect ?p L{ ?parm . ?a } ?b } ;
 
-CHR: compose-effect @ // { Word ?s ?t compose } -- |
-     { Stack ?s L{ ?q ?p . ?rho } }
+CHR: compose-effect @ // { Word ?s ?t compose } --  |
      { Effect ?p ?a ?b }
      { Effect ?q ?b ?c }
-     { Stack ?t L{ { ?p ?q } . ?rho } }
+     ! { Stack ?s L{ ?q ?p . ?rho } }
+     ! { Stack ?t L{ { ?p ?q } . ?rho } }
+     { StackOp ?s ?t L{ ?q ?p . ?rho } L{ { ?p ?q } . ?rho } }
    ;
 
 CHR: drop-prim @ // { Word ?s ?t drop } -- |
-     { Stack ?s L{ ?x . ?rho } }
-     { Stack ?t ?rho }
+     ! { Stack ?s L{ ?x . ?rho } }
+! { Stack ?t ?rho }
+{ StackOp ?s ?t L{ ?x . ?rho } ?rho }
      { DropValue ?s ?x } ;
 
 CHR: nip-prim @ // { Word ?s ?t nip } -- |
-     { Stack ?s L{ ?y ?x . ?rho } }
-     { Stack ?t L{ ?y . ?rho } }
+     ! { Stack ?s L{ ?y ?x . ?rho } }
+     ! { Stack ?t L{ ?y . ?rho } }
+{ StackOp ?s ?t L{ ?y ?x . ?rho } L{ ?y . ?rho } }
      { DropValue ?s ?x }
    ;
 
 CHR: pick-prim @  // { Word ?s ?t pick } -- |
-     { Stack ?s L{ ?z ?y ?x . ?rho } }
-     { Stack ?t L{ ?w ?z ?y ?x . ?rho } }
+     ! { Stack ?s L{ ?z ?y ?x . ?rho } }
+     ! { Stack ?t L{ ?w ?z ?y ?x . ?rho } }
+     { StackOp ?s ?t L{ ?z ?y ?x . ?rho } L{ ?w ?z ?y ?x . ?rho } }
      { DupValue ?s ?x ?w }
    ;
 
-! Macros
+! ** Macros
+TUPLE: FoldEffect < trans-pred exec effect ;
+
 ! TUPLE: AskLits < state-pred lits parms ;
-CHR: expand-macro-quot @ // { Word ?s ?t ?w } -- [ ?w macro-quot ] |
-[| | ?w macro-effect :> n-in
- n-in [ "mparm" uvar <term-var> ] replicate :> in-parms
- n-in [ "mlit" uvar <term-var> ] replicate :> in-lits
- in-parms <reversed> >list ?rho lappend :> in-vars
+CHR: expand-macro-quot @ // { Word ?r ?u ?w } -- [ ?w macro-quot :>> ?p ] |
+[| | ?w macro-effect "mx" <array> "quot" 1array <effect> :> e
+ ! n-in [ "mparm" uvar <term-var> ] replicate :> in-parms
+ ! n-in [ "mlit" uvar <term-var> ] replicate :> in-lits
+ ! in-parms <reversed> >list ?rho lappend :> in-vars
  ! L{ ?q . ?rho } :> out-vars
- ?w macro-quot :> q
  {
-     { Instance ?q callable }
-     { Stack ?s in-vars }
-     { AddLink ?s ?s0 }
+     ! { Stack ?s ?rho }
+     { FoldEffect ?r ?s ?p e }
+     ! { Instance ?q callable }
+     ! { Stack ?s in-vars }
+     ! { AddLink ?s ?s0 }
+     ! { InferBetween ?s ?s0 q }
      ! { AddLink ?s0 ?t }
-     { Stack ?s0 L{ ?q . ?rho } }
-     { InferBetween ?s ?s0 q }
-     { InlineUnknown ?s0 ?t ?q }
+     { StackOp ?s ?t L{ ?q . ?rho } ?rho }
+     ! { InferBetween ?s ?s0 q }
+     { InlineUnknown ?t ?u ?q }
      ! { FoldQuot ?s ?t in-parms q }
  }
 ] ;
 
+! ** General effect assumption
 CHR: assume-word-effect @ { Word ?s ?t ?w } // -- |
-[| | ?w chrat-effect :> e { AssumeEffect ?s ?t e } ] ;
+[| | ?w chrat-effect :> e { AssumeWordEffect ?s ?t ?w e } ] ;
 
+! ** Shuffle
 CHR: infer-shuffle @ // { Word ?s ?t ?w } -- [ ?w "shuffle" word-prop? [ linear-shuffle? ] [ f ] if* ] |
 [ ?s ?t ?w "shuffle" word-prop shuffle-mapping Shuffle boa ] ;
 
@@ -154,12 +169,14 @@ CHR{ // { Shuffle ?s ?t ?m } -- [ ?m known? ] |
       [ f ]
       [
           supremum 1 + :> li
-          ?s li [
+          li [
               ! "i" swap number>string append "_" append uvar <term-var>
               ?s swap pos-var
           ] { } map-integers :> v-in
-          v-in >list ?rho lappend Stack boa
-          ?t m <reversed> [ li swap - 1 - v-in nth ] map >list ?rho lappend Stack boa 2array
+          v-in >list ?rho lappend :> sin
+          m <reversed> [ li swap - 1 - v-in nth ] map >list ?rho lappend :> sout
+          { StackOp ?s ?t sin sout }
+          ! Stack boa 2array
       ] if-empty ] }
 
 ! TODO Math words
@@ -167,27 +184,35 @@ CHR{ // { Shuffle ?s ?t ?m } -- [ ?m known? ] |
 
 ! CHR{ // { Word ?s ?t ?w } -- [ ?w primitive? ] | { Prim ?s ?t ?w } }
 
+! ** Inline Words
 CHR{ // { InlineWord ?s ?t ?w } -- | [| | ?w def>> :> def { InlineCall ?s ?t ?w def } ] }
 
 ! CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }
 ! CHR{ // { Word ?s ?t ?w } -- [ ?w method? ] | { Method ?s ?t ?w } }
 
+! ** General Word Rules
 ! FIXME: apply all rules
-CHR{ { Word ?s ?t ?w } // -- [ ?w generic? not ] |
+CHR{ { Word ?s ?t ?w } // --
+     ! [ ?w generic? not ]
+     |
      { ApplyWordRules ?s ?t ?w } }
 
-! Folding
-
+! ** Foldable Words
 
 ! Alternatively, only try folding if we have a top literal?
-CHR{ { Word ?s ?t ?w } { Stack ?s L{ ?x . __ } } { Lit ?x __ } // -- [ ?w foldable? ] |
-     [| | ?w stack-effect in>> elt-vars dup
+! CHR{ { Word ?s ?t ?w } { Stack ?s L{ ?x . __ } } { Lit ?x __ } // -- [ ?w foldable? ] |
+CHR: try-fold-word @ { Word ?s ?t ?w } { Stack ?s L{ ?x . __ } } { Lit ?x __ } // -- [ ?w foldable? ] |
+     [| | ?w stack-effect :> e { FoldEffect ?s ?t ?w e } ] ;
+
+! NOTE: Assuming that foldable effects are always bounded!
+CHR: try-fold @ { FoldEffect ?s ?t ?w ?e } // -- [ ?e known? ] |
+     [| | ?e in>> elt-vars dup
       >list ?rho lappend :> stack-in
       ! <reverse> [ number>string "lv" prepend uvar <term-var> 2array ] map :> var-map-in
       <reversed> dup :> var-in
       length [ number>string "lv" prepend uvar <term-var> ] { } map-integers :> lit-in
-      ?w stack-effect out>> elt-vars dup
-      >list ?sig lappend :> stack-out
+      ?e out>> elt-vars dup
+      >list ?rho lappend :> stack-out
       reverse :> var-out
       { { Stack ?s stack-in }
         { Stack ?t stack-out }
@@ -196,22 +221,30 @@ CHR{ { Word ?s ?t ?w } { Stack ?s L{ ?x . __ } } { Lit ?x __ } // -- [ ?w foldab
       ! var-in [ number>string "lv" prepend uvar <term-var> AskLit boa ] map-index append
       var-in lit-in [ AskLit boa ] 2map append
      ]
-   }
+   ;
 
 ! Theoretically this is dead, because we don't expect a value to be used twice
 CHR{ // { Lit ?x ?v } { AskLit ?x ?a } -- | [ ?a ?v ==! ] { Dead ?x } }
 
-CHR: do-fold-call @ // { Call ?s __ __ __ } { FoldCall ?s ?w ?i ?o } -- [ ?i [ known? ] all? ] |
+CHR: do-fold-call @ // { Call ?s ?w __ __ } { FoldEffect ?s __ __ __ } { FoldCall ?s ?w ?i ?o } -- [ ?i [ known? ] all? ] |
     [ ?i [ known ] map ?w 1quotation with-datastack
       ?o swap [ Lit boa ] 2map
+    ]
+    ;
+
+CHR: do-fold-quot @ // { FoldEffect ?s __ __ __ } { FoldCall ?s ?q ?i ?o } -- [ ?q callable? ] [ ?i [ known? ] all? ] |
+[ ?i [ known ] map ?q with-datastack
+  ?o swap [ Lit boa ] 2map
 ] ;
 
-! Anything else
+! ** Anything else
 
-CHR{ // { Word ?s ?t ?w } -- |
-     { Stack ?s ?i }
+CHR{ // { Word ?s ?t ?w } -- { Stack ?s ?i } { Stack ?t ?o } |
+     ! { Stack ?s ?i }
+     ! { Stack ?t ?o }
+     { Call ?s ?w ?i ?o }
      { Stack ?t ?o }
-     { Call ?s ?w ?i ?o } }
+   }
 
 ! Compilation stuff
 CHR: primitive-rules @ // { ApplyWordRules ?s ?t ?w } -- [ ?w primitive? ] |

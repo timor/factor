@@ -43,83 +43,13 @@ C: <_exists> _exists
 TUPLE: AskAbout < chr-pred constraint token vars ;
 TUPLE: AnswerAbout < chr-pred constraint token vars ;
 
-! TUPLE: return < chr-pred vars id ;
-! C: <return> return
-
-! TUPLE: env < chr-pred vars token ;
-! C: <env> env
-
-! TUPLE: false < chr-pred token ;
-
-! TUPLE: chrat-call < chr ;
-! TUPLE: chrat-return < chr ;
-
-! Basic rule transformation, where CHR constraint is in the ask position:
-
-! ~min(X, Y, Z) <=> leq(X, Y) | Z = X~
-
-! Goes to a pair
-
-! ~min(X, Y, Z) ==> ask_leq(X, Y, K), r1(X, Y, Z, K)~
-! ~r1(X, Y, Z, K), min(X, Y, Z), entailed(K) <=> Z = X~
-
-! This is basically a cps transformation, where we prepare an answer record that
-! is associated with a control token K.
-! It should be possible to do this with structural matches.
-! Also note that the token K has to be generated for each rule match anew.
-
-! ~{ min X Y Z } ==> { ask { leq X Y } K } { return { min X Y Z } K }~
-! ! ~{ return { min X Y Z } K } { entailed K } <=> Z = X~
-! ~{ return { X Y Z } K } { min X Y Z } { entailed K } <=> Z = X~
-
-! TERM-VARS: ?p ?q ?k ;
-! ! NOTE: Not allowing for false tests here!
-! CONSTANT: chrat-builtin-rules {
-!     CHR: absurd @ // { return __ ?k } { false ?k } -- | ;
-!     ! CHR: ask @ { ask ?p ?k } { return ?q }
-! }
-
 ! env(c...) means variables in the constraints c
 ! Splitting a rule in the following form into:
 ! Hk / Hr -- Gb1 Gh1 Gb2 Gh2 | B1 B2 ;
 ! -> Hk Hr // -- Gb1 | ask(Gh1, k), return(env(Hk+Hr+Gb1+Gh1), r1
 ! + Hk // Hr, return(env(Hk+Hr+Gb1+Gh1), entailed(k) -- Gb2 Gh2 | B1 B2
 ! Which in turn is split recursively until no more chr-guards are present
-
-! : call-cont-chr ( rule builtin-guards ask-constraints -- constraint )
-!     [ heads>> vars ]
-!     [ vars ]
-!     [ [ token>> ] map ] tri* union
-!     "cont" usym <return> ;
-
-! <PRIVATE
-! : builtins ( cs -- cs )
-!     [ chr-constraint? ] reject ;
-! : chrs ( cs -- cs )
-!     [ chr-constraint? ] filter ;
-! PRIVATE>
-
-! : rule-call-part ( rule builtin-guards ask-constraints cont-constraint -- rule )
-!     {
-!         [ heads>> dup length ]
-!         [  ]
-!         [  ]
-!         [ append ]
-!     } spread chr new-chr ;
-
-! : rule-ret-part ( rule builtin-guards ) ;
-
-! : split-continuation ( rule builtin-guards chr-guards -- rules )
-!     [ dup chr-constriant? [ "k" usym <ask> ] when ] map
-!     3dup call-cont-chr ;
-
-! : cut-guards ( chr-guards -- ask-constraints rest  )
-!     [  ]
-
-! : convert-entailments ( rule -- rules )
-!     dup guard>> [ chr-constraint? ] cut-when
-!     dup empty? [ 2drop 1array ]
-!     [ split-continuation ] if ;
+! NOTE: actually not sequencing guards yet!
 
 ! NOTE: This assumes that builtins can be exchanged with user-defineds in the guards!
 ! Actually, the guard check is duplicated.  This is probably wasteful, and the
@@ -143,9 +73,13 @@ M: chr rewrite-chrat-conts 1array ;
 TUPLE: cont-spec head-vars guards asks exists id ;
 C: <cont-spec> cont-spec
 : cont-spec-term ( cont-spec -- term )
-    [ id>> 1vector ]
-    [ asks>> [ token>> suffix! ] each ]
-    [ head-vars>> append! ] tri >array ;
+    {
+        [ id>> 1vector ]
+        [ asks>> [ token>> suffix! ] each ]
+        [ head-vars>> append! ]
+        [ exists>> [ var>> suffix! ] each ]
+    } cleave
+    >array ;
 
 :: analyze-cont ( rule -- cont-spec )
     rule guard>> [ chr-constraint? ] partition :> ( chr-guards builtin-guards )
@@ -183,7 +117,8 @@ M: chrat-rule rewrite-chrat-conts
     [ heads>> [ ask? ] count ]
     [ body>> [ entailed? ] count ] bi ;
 
-PREDICATE: modular-chr < chr get-ask/entail [ 1 = ] both? ;
+PREDICATE: modular-chr < chr get-ask/entail drop 1 <= ;
+PREDICATE: modular-answer-chr < modular-chr get-ask/entail [ 1 = ] both? ;
 PREDICATE: invalid-modular-constraint < chr get-ask/entail [ 1 > ] either? ;
 
 GENERIC: expand-ask/tell ( rule -- rule )
@@ -203,6 +138,9 @@ GENERIC: expand-ask/tell ( rule -- rule )
     ] with map ;
 
 M: modular-chr expand-ask/tell
+    clone __ swap [ convert-ask ] with change-heads ;
+
+M: modular-answer-chr expand-ask/tell
     clone
     "k" uvar <term-var>
     [ swap [ convert-ask ] with change-heads ]

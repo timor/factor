@@ -1,6 +1,6 @@
 USING: accessors arrays chr chr.factor chr.factor.conditions chr.modular
-chr.parser chr.state combinators combinators.short-circuit kernel lists
-math.parser sequences terms types.util ;
+chr.parser chr.state combinators combinators.short-circuit effects generic
+kernel lists math.parser sequences terms types.util ;
 
 IN: chr.factor.stack
 
@@ -9,6 +9,10 @@ TUPLE: CompatibleEffects < chr-pred in1 out1 in2 out2 ;
 TUPLE: BranchStacks < chr-pred from0 to0 from1 to1 from2 to2 ;
 ERROR: imbalanced-branch-stacks i1 o1 i2 o2 ;
 TUPLE: Val < chr-pred state var ;
+TUPLE: AssumeSameRest l1 l2 ;
+TUPLE: StackOp < trans-pred before after ;
+TUPLE: StartStack < Stack ; ! marker
+TUPLE: EndStack < Stack ; ! marker
 ! TUPLE: SameEffect < chr-pred in1 out1 in2 out2 ;
 
 : elt-vars ( seq -- seq )
@@ -19,11 +23,56 @@ TUPLE: Val < chr-pred state var ;
     ] map-index <reversed> ;
 
 ! ** Basic stack handling
-CHRAT: basic-stack { Lit InferredEffect CompatibleEffects }
+CHRAT: basic-stack { Lit InferredEffect CompatibleEffects Stack }
+
+! Convention: If outputs meet, they are set equal.  If an input and an output
+! meets, the input absorbs the output.  StackOps have an input and an output.
+! Stack declarations are output declarations.  When asking for a stack, a stack
+! declaration is consumed.
 
 
 CHR{ { Stack ?s ?v } // { Stack ?s ?v } -- | }
+
+! CHR: answer-stack @ // { Stack ?s ?rho } { ask { Stack ?s ?x } } -- | [ ?rho ?x ==! ]
+! { entailed { Stack ?s ?x } } ;
+
 CHR: same-stack @ { Stack ?s ?v } // { Stack ?s ?w } -- | [ ?v ?w ==! ] ;
+! CHR: same-stack @ // { Stack ?s ?v } { Stack ?s ?w } -- | [ ?v ?w ==! ] ;
+! CHR: set-stack-defines @ { StartStack ?s ?v } // { Stack ?s ?w } -- | [ ?w ?v ==! ] ;
+CHR: define-stack-op-in @ { StackOp ?r __ ?rho __ } // { Stack ?r ?x } -- | [ ?x ?rho ==! ] ;
+! CHR: define-stack-op-out @ { StackOp __ ?t __ ?sig } { Stack ?t ?x } // -- | [ ?x ?sig ==! ] ;
+CHR: define-stack-op-out @ { StackOp __ ?t __ ?sig } // { Stack ?t ?x } -- | [ ?x ?sig ==! ] ;
+! CHR: define-set-stack-op-in @ { StackOp ?r __ ?rho __ } // { StartStack ?r ?x } -- | [ ?x ?rho ==! ] ;
+! CHR: define-set-stack-op-out @ { StackOp __ ?t __ ?sig } { StartStack ?t ?x } // -- | [ ?x ?sig ==! ] ;
+
+CHR: stack-ops-collide @ { StackOp ?r ?s ?x ?y } // { StackOp ?r ?s ?a ?b }
+-- |
+[ { ?x ?y } { ?a ?b } ==! ]
+! [ "conflict" throw ]
+    ;
+
+! CHR: do-stack-op @ { StackOp ?s ?t ?rho ?sig } // -- |
+! { Stack ?s ?rho }
+! ! { AddLink ?s ?t }
+! { Stack ?t ?sig }
+!     ;
+
+CHR: compose-stack-op @ { StackOp ?r ?s ?a ?b } { StackOp ?s ?t ?c ?d } // -- | [ ?c ?b ==! ] ;
+
+CHR: answer-stack-op-stack-out @ { StackOp __ ?t __ ?sig } // { ask { Stack ?t ?x } } -- |
+[ ?sig ?x ==! ]
+{ entailed { Stack ?t ?x } } ;
+
+CHR: answer-stack-op-stack-in @ { StackOp ?r __ ?rho __ } // { ask { Stack ?r ?x } } -- |
+[ ?rho ?x ==! ]
+{ entailed { Stack ?r ?x } } ;
+
+CHR: answer-stack @ // { Stack ?s ?rho } { ask { Stack ?s ?x } } -- | [ ?rho ?x ==! ]
+{ entailed { Stack ?s ?x } } ;
+CHR: answer-start-stack @ { StartStack ?s ?rho } // { ask { Stack ?s ?x } } -- | [ ?rho ?x ==! ]
+{ entailed { Stack ?s ?x } } ;
+CHR: answer-end-stack @ { EndStack ?s ?rho } // { ask { Stack ?s ?x } } -- | [ ?rho ?x ==! ]
+{ entailed { Stack ?s ?x } } ;
 
 ! From condition system
 ! CHR{ // { Cond +top+ P{ SameStack ?a ?b } } -- | [ ?a ?b ==! ] }
@@ -37,12 +86,15 @@ CHR{ // { SameDepth L{ ?x . ?xs } L{ ?y . ?ys } } -- | { SameDepth ?xs ?ys } }
 
 CHR: destruc-expand-right @ // { SameDepth L{ ?x . ?xs } ?b } -- [ ?b known term-var? ] |
 [ ?b L{ ?y . ?ys } ==! ]
-! [ ?b L{ ?y . ?b } ==! ]
 { SameDepth ?xs ?ys } ;
 CHR: destruc-expand-left @ // { SameDepth ?a L{ ?y . ?ys } } -- [ ?a known term-var? ] |
 [ ?a L{ ?x . ?xs } ==! ]
-! [ ?a L{ ?x . ?a } ==! ]
 { SameDepth ?xs ?ys } ;
+
+CHR: assume-same-rest @ // { AssumeSameRest ?x ?y } -- [ ?x ?y [ known ] bi@ [ llength* ] same? ] |
+! { SameDepth ?x ?y }
+[ ?x ?y [ known lastcdr ] bi@ ==! ] ;
+
 
 ! Setting up stack branch/merge
 CHR: known-effects-balance @ // { ask { CompatibleEffects ?a ?x ?b ?y } } --
@@ -52,8 +104,7 @@ CHR: known-effects-balance @ // { ask { CompatibleEffects ?a ?x ?b ?y } } --
     [ ?a ?x ?b ?y \ imbalanced-branch-stacks boa user-error ] when
     t
 ] |
-{ SameDepth ?a ?b }
-[ ?a ?b [ known lastcdr ] bi@ ==! ]
+{ AssumeSameRest ?a ?b }
 { entailed { CompatibleEffects ?a ?x ?b ?y } } ;
 
 ! Default Answer for branch stacks
@@ -61,10 +112,8 @@ CHR: known-effects-balance @ // { ask { CompatibleEffects ?a ?x ?b ?y } } --
 ! FIXME: this should be converted automatically!
 ! CHR: assume-balanced-stacks @ { _ask CompatibleEffects { ?a ?x ?b ?y } __ } // -- |
 CHR: assume-balanced-stacks @ // { ask { CompatibleEffects ?a ?x ?b ?y } } -- |
-{ SameDepth ?a ?b }
-{ SameDepth ?x ?y }
-[ ?a ?b [ known lastcdr ] bi@ ==! ]
-[ ?x ?y [ known lastcdr ] bi@ ==! ]
+{ AssumeSameRest ?a ?b }
+{ AssumeSameRest ?x ?y }
 { entailed { CompatibleEffects ?a ?x ?b ?y } } ;
 
 ! CHR: branch-stacks @ { Branch ?r ?u ?s ?t } // -- |
@@ -72,19 +121,6 @@ CHR: assume-balanced-stacks @ // { ask { CompatibleEffects ?a ?x ?b ?y } } -- |
 ! { CompatibleEffects ?a ?w }
 ! { BranchStacks ?a ?b ?c ?d ?e ?w } ;
 
-TERM-VARS: ?zs ;
-
-CHR{ // { Split ?x ?x ?x } -- | }
-
-CHR: destructure-split @ // { Split L{ ?x . ?xs } L{ ?y . ?ys } L{ ?z . ?zs } } -- |
-{ Split ?x ?y ?z }
-{ Split ?xs ?ys ?zs } ;
-
-CHR{ // { Join ?x ?x ?x } -- | }
-
-CHR: destructure-join @ // { Join L{ ?x . ?xs } L{ ?y . ?ys } L{ ?z . ?zs } } -- |
-{ Join ?x ?y ?z }
-{ Join ?xs ?ys ?zs } ;
 ! CHR: assume-split-in @ { Split ?a L{ ?y . __ } __ } // -- [ ?a known term-var? ] |
 ! [ ?a L{ ?x . ?xs } ==! ] ;
 ! CHR: assume-split-out-1 @ { Split L{ ?x . __ } ?b __ } // -- [ ?b known term-var? ] |
@@ -107,7 +143,7 @@ CHR: same-effect @ { Effect ?q ?i ?o } // { Effect ?q ?a ?b } -- | [ ?i ?a ==! ]
 
 
 ! This is mainly useful for naming vars according to the declared effects...
-CHR{ // { AssumeEffect ?s ?t ?e } -- |
+CHR{ // { AssumeWordEffect ?s ?t ?w ?e } -- |
      [| | ?e [ in>> ] [ out>> ] bi 2dup :> ( i o )
       [ length ] bi@ :> ( ni no )
       f
@@ -133,7 +169,10 @@ CHR{ // { AssumeEffect ?s ?t ?e } -- |
       !     { [ ?e terminated?>> ] [ __ ] }
       !     { [ ?e bivariable-effect? ] [ o >list ?sig lappend ] }
       !     [ o >list ?rho lappend ] } cond InferredEffect boa suffix
-     ] }
+     ]
+     [ { [ ?w generic? ] [ ?e bivariable-effect? not ] } 0&&
+       [ ?rho ?sig ==! ] [ f ] if ]
+   }
 
 ! CHR: rem-trivial-jump @
 ! ! { CondJump ?r ?s true } // -- | { Stack ?r ?rho } { Stack ?s ?rho } }
@@ -146,7 +185,9 @@ CHR{ // { AssumeEffect ?s ?t ?e } -- |
 CHR: make-push-stack @ // { Push ?s ?t ?b } -- |
      ! { Cond ?s { Lit ?v ?b } }
      { Lit ?v ?b }
-     { Stack ?s ?rho }
-     { Stack ?t L{ ?v . ?rho } } ;
+     ! { Stack ?s ?rho }
+     ! { Stack ?t L{ ?v . ?rho } }
+     { StackOp ?s ?t ?rho L{ ?v . ?rho } }
+    ;
 
 ;

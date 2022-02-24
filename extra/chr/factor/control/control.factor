@@ -35,15 +35,15 @@ CHR{ // { Link +top+ ?s } { CheckExec ?s ?t ?w } --
 ! Initiating Query
 CHR{ { CheckExec ?t __ __ } // -- | { Link ?t ?t } }
 
-! Adding elements
-CHR: add-link-to-scope-leader @ // { Scope ?s ?u ?a } { AddLink ?s ?t } -- |
-   [ ?s ?u ?a ?t suffix Scope boa ] ;
+! ! Adding elements
+! CHR: add-link-to-scope-leader @ // { Scope ?s ?u ?a } { AddLink ?s ?t } -- |
+!    [ ?s ?u ?a ?t suffix Scope boa ] ;
 
-CHR: add-link-to-scope-member @ // { Scope ?s ?u ?a } { AddLink ?t ?b } -- [ ?t ?a known in? ] |
-     [| |
-      ?b ?t ?a insert-after :> a2
-      { Scope ?s ?u a2 }
-     ] ;
+! CHR: add-link-to-scope-member @ // { Scope ?s ?u ?a } { AddLink ?t ?b } -- [ ?t ?a known in? ] |
+!      [| |
+!       ?b ?t ?a insert-after :> a2
+!       { Scope ?s ?u a2 }
+!      ] ;
 
 ! In case we cannot be added to an existing scope, we might actually be leading it
 CHR: lead-scope @ // { Scope ?s ?t ?l } { PrefixLink ?r ?s } -- [ ?l known? ] |
@@ -67,4 +67,8 @@ CHR{ { Branch ?s __ __ ?r } // { Link ?r ?u } -- | { Link ?s ?u } }
 ! Transitivity?
 ! CHR{ // { Link ?r ?s } { Link ?s ?t } -- | { Link ?r ?t } }
 
-;
+! Any trans-pred is by default a control path link
+! CHR: trans-check-exec @ SUB: ?x trans-pred L{ ?s ?r . __ } // { Link ?r ?u } -- |
+! { Link ?s ?u } ;
+
+    ;

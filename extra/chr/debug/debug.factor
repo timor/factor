@@ -19,16 +19,16 @@ IN: chr.debug
 !     \ load-chr [ [ "Rewritten Program: " write dup rules>> <enumerated> >array . ] compose ] annotate
 !     ;
 
-: susp. ( chr-suspension --  )
-    [ id>> "%d: " printf ] [ constraint>> . ] bi ;
-    ! [ vars>> "         /%u\n " printf ] tri ;
-
-: id-susp. ( id -- )
-    store get at susp. ;
-
 : rule-id ( id -- id/name )
     program get rules>> over swap nth dup named-chr? [ rule-name>> nip ]
     [ drop ] if ;
+
+: susp. ( chr-suspension --  )
+    [ id>> "%d: " printf ] [ constraint>> pprint ]
+    [ from-rule>> [ rule-id " (Rule: %s)\n" printf ] [ nl ] if* ] tri ;
+
+: id-susp. ( id -- )
+    store get at susp. ;
 
 : chrebug ( -- )
     ! \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate

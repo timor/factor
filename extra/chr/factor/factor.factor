@@ -31,7 +31,8 @@ TUPLE: ExpectInstance < chr-pred val s ;
 
 TUPLE: Push < trans-pred val ;
 
-TUPLE: AssumeEffect < trans-pred effect ;
+! TUPLE: AssumeEffect < trans-pred effect ;
+TUPLE: AssumeWordEffect < trans-pred word effect ;
 TUPLE: InferredEffect < trans-pred in out ;
 TUPLE: EitherOr < chr-pred s1 s2 v1 v2 ;
 
@@ -64,6 +65,7 @@ M: Stack state-depends-on-vars
 TUPLE: AcceptTypes < state-pred list ;
 TUPLE: ProvideTypes < state-pred list ;
 
+TUPLE: InlineQuot < trans-pred quot ;
 TUPLE: InferCall < trans-pred val ;
 TUPLE: InlineWord < trans-pred word ;
 TUPLE: InlineCall < trans-pred word quot ;
@@ -192,43 +194,46 @@ M: effect make-term-var
 ! * Constraint Semantics for Stack-based inference
 
 ! Generally speaking, all constraints are considered to be conjunctions.
+! With regards to refinement semantics, that means that there may not be a state
+! where we have a set of constraints where removing one or equating two variables
+! resulting in a contradiction does not denote an unreachable state.
 
 ! The most fundamental notion is that of a state.  A state denotes a momentary
 ! point in time between two computational steps.
 
-! Basic Constraint types
-! - ~state-pred~ :: First argument is a state.  Defines a statement that is true for
-!   that state
-! - ~trans-pred~ :: First 2 arguments are states.  Defines a relation between two
-!   consecutive states.  This also defines reachability.  For all
-!   ~{ transpred s t }~ state t is reachable iff state s is reachable.  This
-!   defines a consecutive execution graph.
-! - ~Scopes~ :: Successive states are kept in ~{ Scope s1 s2 { s1.0 … s1.n }~
-!   constraints, which are ~trans-pred~ that define a sequence of states that
-!   makes up the transition between two states in the parent scope.  The variable
-!   ~s1~ of such a scope functions as the /leader/ of the scope.  The top-level
-!   scope is always ~{ Scope +top+ +end+ { … } }~.  Nested Scopes without
-!   Branch constructs inbetween can be considered to be part of a parent scope.
-! - Conditions :: These are symbolic variables, which allow collecting constraints
-!   into disjoint sets.  If a /condition/ is assumed, all related constraints are
-!   assumed to hold as conjunction.  This allows definition of logical relations
-!   between conditions.
-! - /Scope Leader/ :: The first argument of a ~Scope~ is a state, but also
-!   functions as reference condition for all constraints which hold for the entire
-!   scope.  The Entry point of a piece of code is the ~+top+~ symbol.
-! - ~cond-pred~ :: First variable argument is a condition.  In contrast to
-!   a ~state-pred~, the statement asserted by a ~cond-pred~ must hold for the
-!   entire scopse the state is part of.  If a state is given,
-!   then it will be rewritten to the left-most upper-most leader, ensuring that
-!   all conditional assertions in the same scope will share the same conditional
-!   variable.  The ~+top+~ symbol thus makes assertions which are true for the
-!   entire program.
-! - ~val-pred~ :: First argument is a variable that denotes a value.  Used to
-!   describe properties of a value.  If a value is /Dead/, all assumptions about
-!   it are erased.  Dead-ness is global,  If a value is dead, it is assumed to be
-!   completely unused.  This happens usually under two circumstances:
-!   1. The Value denoted a literal that was folded
-!   2. The Value is dropped in all branches.
+! ** Basic Constraint types
+!  - ~state-pred~ :: First argument is a state.  Defines a statement that is true for
+!    that state
+!  - ~trans-pred~ :: First 2 arguments are states.  Defines a relation between two
+!    consecutive states.  This also defines reachability.  For all
+!    ~{ transpred s t }~ state t is reachable iff state s is reachable.  This
+!    defines a consecutive execution graph.
+!  - ~Scopes~ :: Successive states are kept in ~{ Scope s1 s2 { s1.0 … s1.n }~
+!    constraints, which are ~trans-pred~ that define a sequence of states that
+!    makes up the transition between two states in the parent scope.  The variable
+!    ~s1~ of such a scope functions as the /leader/ of the scope.  The top-level
+!    scope is always ~{ Scope +top+ +end+ { … } }~.  Nested Scopes without
+!    Branch constructs inbetween can be considered to be part of a parent scope.
+!  - Conditions :: These are symbolic variables, which allow collecting constraints
+!    into disjoint sets.  If a /condition/ is assumed, all related constraints are
+!    assumed to hold as conjunction.  This allows definition of logical relations
+!    between conditions.
+!  - /Scope Leader/ :: The first argument of a ~Scope~ is a state, but also
+!    functions as reference condition for all constraints which hold for the entire
+!    scope.  The Entry point of a piece of code is the ~+top+~ symbol.
+!  - ~cond-pred~ :: First variable argument is a condition.  In contrast to
+!    a ~state-pred~, the statement asserted by a ~cond-pred~ must hold for the
+!    entire scopse the state is part of.  If a state is given,
+!    then it will be rewritten to the left-most upper-most leader, ensuring that
+!    all conditional assertions in the same scope will share the same conditional
+!    variable.  The ~+top+~ symbol thus makes assertions which are true for the
+!    entire program.
+!  - ~val-pred~ :: First argument is a variable that denotes a value.  Used to
+!    describe properties of a value.  If a value is /Dead/, all assumptions about
+!    it are erased.  Dead-ness is global,  If a value is dead, it is assumed to be
+!    completely unused.  This happens usually under two circumstances:
+!    1. The Value denoted a literal that was folded
+!    2. The Value is dropped in all branches.
 
 ! * Conditional and Unconditional Statements
 ! A variable denoting a value is unique and global.  So the mere presence of a
