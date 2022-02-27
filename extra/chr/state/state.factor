@@ -169,6 +169,8 @@ M: chr-constraint lookup
 M: chr-sub-pred lookup
     class>> store get [ type>> swap class<= ] with filter-values ;
 
+M: as-pred lookup pred>> lookup ;
+
 :: check/update-history ( rule-id trace -- ? )
     trace keys :> matched
     matched natural-sort rule-id prefix :> sig
@@ -210,17 +212,34 @@ PRIVATE>
       [ nip run-rule-body t ]
     } 3&& drop ;
 
+GENERIC: match-constraint ( bindings suspension match-spec -- bindings )
+
+M: chr-sub-pred match-constraint
+    args>> swap constraint-args >list 2array 1array solve-next ;
+M: as-pred match-constraint
+    [ [ constraint>> ] [ var>> ] bi* pick set-at ]
+    [ pred>> match-constraint ] 2bi ;
+M: sequence match-constraint
+    swap constraint-args 2array 1array solve-next ;
+
+
+
+! NOTE: match order convention:
+!  rule-constraint =? store-constraint
+
 ! : start-match ( var-term arg-term -- subst )
 !     2array 1array H{ } clone swap solve-next ;
 :: try-schedule-match ( bindings arg-spec susp -- bindings )
-    bindings
-    susp constraint-args :> args
-    arg-spec chr-sub-pred?
-    [ susp constraint>> arg-spec var>> bindings set-at
-      arg-spec args>> args >list
-    ]
-    [ clone arg-spec args ] if
-    2array 1array solve-next ; inline
+    bindings susp ! constraint>>
+    arg-spec match-constraint
+    ! susp constraint-args :> args
+    ! arg-spec chr-sub-pred?
+    ! [ susp constraint>> arg-spec var>> bindings set-at
+    !   arg-spec args>> args >list
+    ! ]
+    ! [ clone arg-spec args ] if
+    ! 2array 1array solve-next
+    ; inline
 
 ! : match-constraint ( bindings args constraint -- bindings )
 !     over chr-sub-pred? [ break ] when
@@ -269,13 +288,14 @@ SYMBOL: sentinel
 
 : recursion-check ( -- )
     ! sentinel get 5000 > [ "runaway" throw ] when
-    sentinel get 5000 > [ "runaway" throw ] when
+    sentinel get 1000 > [ "runaway" throw ] when
     sentinel inc ;
 
 ! TODO: check if that is needed to make sure tail recursion works!
 ! Don't reactivate ourselves, don't reactivate more than once!
 : activate ( id -- )
     recursion-check
+    ! check-integrity
     store get at
     ! dup activated>>
     ! [ drop ]

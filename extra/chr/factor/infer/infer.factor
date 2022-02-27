@@ -1,5 +1,5 @@
-USING: accessors chr chr.factor chr.factor.control chr.factor.stack chr.parser
-chr.state kernel sequences terms words ;
+USING: accessors chr chr.factor chr.factor.control chr.parser chr.state kernel
+sequences terms vectors words ;
 
 IN: chr.factor.infer
 
@@ -16,29 +16,28 @@ TUPLE: EndInferScope < chr-pred last-sub ;
 TUPLE: InferNext < trans-pred word rest ;
 TUPLE: InferScope < Scope quot next ;
 TUPLE: Inferred < state-pred next rest ;
+TUPLE: InsertStates < chr-pred r new ;
 
 CHRAT: infer-factor { InferBetween }
 IMPORT: control-flow
 
 CHR: start-infer-scope @ // { InferBetween ?r ?u ?q } -- { Stack ?r ?rho } |
     { Stack ?s ?rho }
-    { InferScope ?r ?u ?rho ?sig { ?s } ?q ?s }
+    [| | ?s 1vector :> sub { InferScope ?r ?u ?rho ?sig sub ?q ?s } ]
+    ! { InferScope ?r ?u ?rho ?sig { ?s } ?q ?s }
  ;
 
 CHR: end-infer-scope @ // { InferScope ?r ?u ?rho ?sig ?l [ ] ?s } -- |
 { Stack ?s ?sig }
 { Scope ?r ?u ?rho ?sig ?l } ;
 
+
+! NOTE: we really need to capture f here!
 CHR: step-infer-scope-1 @ { InferScope ?r ?u ?rho ?sig ?l ?p ?s } // -- [ ?p empty? not ]
-[ ?p unclip-slice [ :>> ?q ] [ :>> ?w ] bi* and ]
+[ ?p unclip-slice [ :>> ?q ] [ f <wrapper> or :>> ?w ] bi* drop ]
 [ ?s seq-state :>> ?t ]
 |
-! [| | ?s seq-state :> sn
-!  ?q unclip-slice :> ( rest w )
 { InferNext ?s ?t ?w ?q }
- ! { CheckExec ?s ?t ?w }
- ! { Inferred ?s ?t ?q }
-! ]
     ;
 
 ! CHR: link-infer-up @ { InferNext ?r ?s __ __ } // { Link ?s ?u } -- | { Link ?r ?u } ;
@@ -60,9 +59,12 @@ CHR: infer-word-check-exec-1 @ // { InferNext ?s ?t ?w ?q } -- [ ?w word? ] { Ch
 ! If execution made the scope redundant, we shouldn't enter this!
 CHR: step-infer-scope-2 @ // { Inferred ?s ?t ?q } { InferScope ?r ?u ?rho ?sig ?l __ ?s } -- |
 [| |
- ?l ?t suffix :> sub
+ ?l ?t suffix! :> sub
     { InferScope ?r ?u ?rho ?sig sub ?q ?t }
 ] ;
+
+CHR: manual-next @ { InferScope ?r ?u ?rho ?sig ?l ?q ?s } // { InsertStates ?s ?t } -- |
+[ ?t ?l push-all f ] ;
 
 CHR: dangling-infer @ // { Inferred __ __ __ } -- | ;
 

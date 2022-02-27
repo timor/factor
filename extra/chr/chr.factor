@@ -60,11 +60,16 @@ INSTANCE: chr-pred constraint
 ! TUPLE: bind-class { var } { args read-only } ;
 ! C: <bind-class> bind-class
 
-TUPLE: chr-sub-pred var class args ;
+TUPLE: chr-sub-pred class args ;
 C: <chr-sub-pred> chr-sub-pred
 M: chr-sub-pred constraint-type ;
 M: chr-sub-pred constraint-args ;
 
+! Allows matching the predicate also
+TUPLE: as-pred var pred ;
+C: <as-pred> as-pred
+M: as-pred constraint-type pred>> constraint-type ;
+M: as-pred constraint-args ;
 
 ! Turn lexical representation into constraint object
 GENERIC: pred>constraint ( obj -- chr-pred )
@@ -76,7 +81,7 @@ PREDICATE: pred-array < array ?first pred-head-word? ;
 PREDICATE: fiat-pred-array < array ?first { [ word? ] [ pred-head-word? not ] } 1&& ;
 
 ! Things that are considered non-builtin constraints
-UNION: chr-constraint fiat-pred-array chr-pred chr-sub-pred ;
+UNION: chr-constraint fiat-pred-array chr-pred chr-sub-pred as-pred ;
 INSTANCE: chr-constraint constraint
 
 : check-slots>tuple ( seq class -- tuple )
@@ -158,6 +163,7 @@ TUPLE: eq-constraint lhs rhs subsumed-vars ;
 INSTANCE: callable constraint
 M: callable apply-substitution* swap lift ;
 : test-callable ( callable -- ? )
+    ! Swap this in when suspecting that throwing errors will mess up the equivalence theory!
     ! call( -- ? ) ;
     [ call( -- ? ) ] [ dup user-error? [ error>> throw ] [ 2drop f ] if ] recover ;
 

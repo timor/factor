@@ -1,17 +1,25 @@
-USING: chr chr.factor chr.factor.conditions chr.parser chr.state classes kernel
-lists terms ;
+USING: chr chr.factor chr.factor.conditions chr.parser chr.state classes
+classes.algebra kernel lists quotations terms ;
 
 IN: chr.factor.types
 
 ! Statement: var has type
-TUPLE: Type < chr-pred val type ;
+TUPLE: Type < val-pred type ;
 TUPLE: Subtype < chr-pred sub super ;
+TUPLE: Intersect < chr-pred tau sig ;
 TUPLE: UnionType < chr-pred result member1 member2 ;
 TUPLE: AcceptTypeUnion < AcceptType ;
 TUPLE: ProvideTypeUnion < ProvideType ;
 ! TUPLE: AssumeTypes < chr-pred stack ;
 
-CHRAT: chrat-types { NotInstance }
+! * Typing Judgments
+! ** Instances and Types
+! There is a distinction between the concept of "This value can be an instance of
+! this type" and "A variable holding this value has to be declared this type? I
+! suppose in straight-line code, especially without a subtyping relation this
+! does not make any difference?
+
+CHRAT: chrat-types { Type NotInstance Subtype Intersect }
 
 CHR{ { Type ?x ?tau } // { Type ?x ?tau } -- | }
 CHR: same-type @ { Type ?x ?tau2 } // { Type ?x ?tau1 } -- | [ ?tau1 ?tau2 ==! ] ;
@@ -20,13 +28,19 @@ CHR{ { AcceptType ?s ?x ?tau } // { AcceptType ?s ?x ?tau } -- | }
 
 ! Clean up
 ! TODO: make this val-preds?
-CHR{ { Dead ?x } // P{ Type ?x __ } -- | }
+! CHR{ { Dead ?x } // P{ Type ?x __ } -- | }
+
+! CHR{ // { Type __ L{ } } -- | }
+! CHR: destructure-type-head @ { Type L{ ?x . __ } L{ ?y . __ } } // -- | { Type ?x ?y } ;
+! CHR: destructure-type-rest @ // { Type L{ __ . ?xs } L{ __ . ?ys } } -- | { Type ?xs ?ys } ;
 
 ! Analyze Stack types
 
 ! CHR: accept-type-from-stack @ // { AcceptTypes ?s ?x } -- { Stack ?s ?v } | { AcceptType ?s ?v ?x } ;
-CHR: accept-type-from-stack @ // { AcceptTypes ?s ?x } -- | { Stack ?s ?v } { AcceptType ?s ?v ?x } ;
-CHR{ // { AcceptType __ ?v object } -- | }
+! CHR: accept-type-from-stack @ // { AcceptTypes ?s ?x } -- | { Stack ?s ?v } { AcceptType ?s ?v ?x } ;
+CHR: accept-type-from-stack @ // { AcceptTypes ?s ?x } -- [ ?x known :>> ?l list? ] [ ?l list>stack :>> ?v ] |
+{ Stack ?s ?v } { AcceptType ?s ?v ?l } ;
+! CHR{ // { AcceptType __ ?v object } -- | }
 CHR{ // { AcceptType __ __ L{ } } -- | }
 CHR: destructure-accept-type-head @ { AcceptType ?s L{ ?x . ?xs } L{ ?y . ?ys } } // -- | { AcceptType ?s ?x ?y } ;
 CHR: destructure-accept-type-rest @ // { AcceptType ?s L{ ?x . ?xs } L{ ?y . ?ys } } -- | { AcceptType ?s ?xs ?ys } ;
@@ -38,33 +52,24 @@ CHR{ // { ProvideType __ __ L{ } } -- | }
 CHR: destructure-provide-type-head @ { ProvideType ?s L{ ?x . ?xs } L{ ?y . ?ys } } // -- | { ProvideType ?s ?x ?y } ;
 CHR: destructure-provide-type-rest @ // { ProvideType ?s L{ ?x . ?xs } L{ ?y . ?ys } } -- | { ProvideType ?s ?xs ?ys } ;
 
-CHR: lit-is-instance @ { Lit ?a ?b } // -- | [ ?a ?b class-of Instance boa ] ;
+! CHR: lit-is-instance @ { Lit ?a ?b } // -- | [ ?a ?b class-of Instance boa ] ;
+CHR: lit-defines-type @ { Lit ?a ?b } // -- | [ ?a ?b class-of Type boa ] ;
+! CHR: lit-defines-type @ { Lit ?a ?b } // -- | { Type ?a ?tau } [ ?tau class-of Subtype boa ] ;
 
-CHR: accept-lit-type @ { Lit ?x ?v } // { AcceptType __ ?x ?tau } -- [ ?v ?tau instance? ] | ;
-CHR: reject-lit-type @ { Lit ?x ?v } // { AcceptType ?s ?x ?tau } -- [ ?v ?tau instance? not ] |
-     { ConflictState ?s { Lit ?x ?v } { AcceptType ?s ?x ?tau } } ;
+CHR: accept-defines-type @ { AcceptType ?s ?x ?sig } // -- [ ?x known list? not ] | { Type ?x ?tau } { Cond ?s P{ Subtype ?tau ?sig } } ;
+
+CHR: effects-are-callables @ { Effect ?x __ __ } { Type ?x ?tau } // -- |
+{ Subtype ?tau callable } ;
+! CHR: reject-type @ { AcceptType ?s ?x ?sig } // -- [ ?x known list? not ] |
+! { Type ?x ?tau } { Cond P{ Not P{ Intersect ?tau ?sig } } P{ AbsurdState ?s } }  ;
+
+! NOTE: Ideally, the condition system would cut intersections into separate conditions, e.g. a resulting reasoning like this:
+! { AcceptType ?s ?x ?tau2 } => { Type ?x ?tau1 } => ∃ c1,c2:  c1 <=> { Intersect ?tau1 ?tau2 }, c2 ==> { ConflictState ?s }, { Disjoint c1 c2 }
 
 ! ** Algebra
-! CHR: combine-union-accept @ // { AcceptTypeUnion ?c ?x ?tau1 } { AcceptTypeUnion ?c ?x ?tau2 } -- |
-! [| | ?tau1 ?tau2 union :> tau3 { AcceptTypeUnion ?c ?x tau3 } ] ;
-
-! CHR: combine-union-provide @ // { ProvideTypeUnion ?c ?x ?tau1 } { ProvideTypeUnion ?c ?x ?tau2 } -- |
-! [| | ?tau1 ?tau2 union :> tau3 { ProvideTypeUnion ?c ?x tau3 } ] ;
-
-! ! TODO: can we make this generic?
-! CHR: propagate-accept-type @ { AcceptType ?c1 ?x ?tau } { CondJump ?c ?c1 } // -- | { AcceptTypeUnion ?c ?x { ?tau } } ;
-! CHR: propagate-provide-type @ { ProvideType ?c1 ?x ?tau } { CondJump ?c ?c1 } // -- | { ProvideTypeUnion ?c ?x { ?tau } } ;
-! CHR: propagate-accept-union @ { CondJump ?c ?c1 } { AcceptTypeUnion ?c1 ?x ?tau } // -- | { AcceptTypeUnion ?c ?x ?tau } ;
-! CHR: propagate-accept-union @ { CondJump ?c ?c1 } { ProvideTypeUnion ?c1 ?x ?tau } // -- | { ProvideTypeUnion ?c ?x ?tau } ;
-
-! This reasoning is propagated to top-level ?
-! CHR{ { Type ?x ?tau } // { Type ?x ?tau } -- | }
-! CHR: type-conflict @ { Type ?x ?tau } { Type ?x ?sig } // -- [ ?tau ?sig = not ] | [ "double type spec" throw ] ;
-! CHR: instance-type @ { Cond ?c P{ Instance ?x ?tau } } // -- | { Cond ?c P{ Type ?x ?tau } } ; ! { Subtype ?tau1 ?tau } { Subtype ?tau ?tau1 } ;
-CHR: instance-type @ P{ Instance ?x ?tau } // -- | P{ Type ?x ?tau } ; ! { Subtype ?tau1 ?tau } { Subtype ?tau ?tau1 } ;
-! CHR: accept-type @ { AcceptType ?c ?x ?tau } // -- | { Cond ?c { Type ?x ?tau1 } } { Subtype ?tau ?tau1 } ;
-! CHR: provide-type @ { ProvideType ?c ?x ?tau } // -- | { Cond ?c { Type ?x ?tau1 } } { Subtype ?tau1 ?tau } ;
-! CHR: { Subtype ?tau2 ?tau3 } // { Subtype ?tau }
+CHR{ { Subtype ?x ?y } // { Subtype ?x ?y } -- | }
+! CHR: instance-type @ P{ Instance ?x ?tau } // -- | P{ Type ?x ?tau } ; ! { Subtype ?tau1 ?tau } { Subtype ?tau ?tau1 } ;
+CHR{ // { Subtype ?x ?y } -- [ ?x known classoid? ] [ ?y known classoid? ] | [ ?x ?y class<= [ f ] [ "Subtype Contradiction" throw ] if ] }
 
 ! ** Phi stuff
 CHR: trivial-union @ // { UnionType ?tau3 ?tau1 ?tau1 } -- | [ ?tau3 ?tau1 ==! ] ;
@@ -72,21 +77,37 @@ CHR: trivial-union @ // { UnionType ?tau3 ?tau1 ?tau1 } -- | [ ?tau3 ?tau1 ==! ]
 CHR: builtin-union @ // { UnionType ?tau3 ?tau1 ?tau2 } -- [ ?tau1 classoid? ] [ ?tau2 classoid? ] |
 [ ?tau3 ?tau1 ?tau2 class-or ==! ] ;
 
-! CHR: propagate-phi-type-out @ { Join ?y ?a ?b } { Type ?a ?tau1 } { Type ?b ?tau2 } // -- |
-! { Type ?y ?tau3 } { UnionType ?tau3 ?tau1 ?tau2 } ;
+CHR: phi-types @ { Branch ?r __ ?c1 ?c2 } { Cond ?c1 P{ Type ?x ?tau1 } } { Cond ?c2 P{ Type ?x ?tau2 } } // -- |
+{ Cond ?r P{ Type ?x ?tau3 } }
+{ UnionType ?tau3 ?tau1 ?tau2 } ;
 
-! CHR: propagate-phi-type-in @ { Split ?x ?a ?b } { Type ?a ?tau1 } { Type ?b ?tau2 } // -- |
-! { Type ?x ?tau3 } { UnionType ?tau3 ?tau1 ?tau2 } ;
+! * Condition Simplification
+! CHR: answer-trivial-subtype @ // { ask { CheckTrivial P{ Subtype ?x ?y } } }
+!  -- [ { [ ?x classoid? ] [ ?y classoid? ] } 0&& ]
+! | { entailed { CheckTrivial P{ Subtype ?x ?y } } }
+! [ { { [ ?x ?y class<= ] [ { IsTrivial P{ Subtype ?x ?y } } ] }
+!     { [ ?x ?y classes-intersect? not ] [ { IsTrivial P{ Not P{ Subtype ?x ?y } } } ] }
+!     [ f ]
+!   } cond
+! ] ;
 
-! NOTE: Here we bubble types upwards already during compilation!
-! CHR: propagate-accept @ { CondJump ?r ?c1 } { CondJump ?r ?c2 } { AcceptType ?c1 ?x ?tau1 } { AcceptType ?c2 ?x ?tau2 } // -- |
-! CHR: propagate-accept @ { Branch ?r ?c1 ?c2 } { AcceptType ?c1 ?x ?tau1 } { AcceptType ?c2 ?x ?tau2 } // -- |
-!    { AcceptType ?r ?x ?tau3 } { UnionType ?tau3 ?tau1 ?tau2 } ;
+ ! CHR: answer-trivial-subtype @ // { CheckTrivial P{ Subtype ?x ?y } }
+ !  -- [ ?x classoid? ] [ ?y classoid? ]
+ !  |
+ ! [ { { [ ?x ?y class<= ] [ { IsTrivial P{ Subtype ?x ?y } } ] }
+ !     { [ ?x ?y classes-intersect? not ] [ { IsTrivial P{ Not P{ Subtype ?x ?y } } } ] }
+ !     [ f ]
+ !   } cond
+ ! ] ;
+! CHR: trivial-subtypes @ { Subtype ?x ?y } // { Cond ?c P{ Subtype ?x ?y } } -- | { Cond +top+ P{ Subtype ?x ?y } } ;
+CHR: known-subtypes @ // { Cond __ P{ Subtype ?x ?y } } -- [ ?x known ?y known class<= ] | ;
+CHR: known-not-subtypes @ { Cond ?c P{ Subtype ?x ?y } } // -- [ ?x known ?y known classes-intersect? not ] | { Absurd ?c } ;
+! CHR: type-known @ { Equiv ?c P{ Type ?x ?y } } // -- { Type ?x ?y } | { Trivial ?c } ;
+CHR: type-known @ { Equiv ?c P{ Type ?x ?y } } { Type ?x ?y } // -- | { Trivial ?c } ;
+! { Not P{ Subtype ?x ?y } }
 
-! CHR: propagate-phi-in @ { Branch ?r ?c1 ?c2 } { Cond ?c1 P{ Same ?x ?a } } { Cond ?c2 P{ Same ?x ?b } } // -- |
-! { Type ?x ?tau3 } { Type ?a ?tau1 } { Type ?b ?tau2 } { UnionType ?tau3 ?tau1 ?tau2 } ;
-! CHR: propagate-phi-out @ { Branch ?r ?c1 ?c2 } { Cond ?c1 P{ Same ?a ?y } } { Cond ?c2 P{ Same ?b ?y } } // -- |
-! { Type ?y ?tau3 } { Type ?a ?tau1 } { Type ?b ?tau2 } { UnionType ?tau3 ?tau1 ?tau2 } ;
+! CHR: trivial-subtype-contradiction @ { Cond ?c { Subtype ?x ?y } } // --
+! [ [ ? ] ]
 
 ! ** Stack Query
 

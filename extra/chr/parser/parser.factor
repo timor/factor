@@ -1,7 +1,7 @@
 USING: accessors arrays assocs chr chr.modular chr.state.private classes
-classes.tuple combinators hashtables kernel lexer namespaces parser
-prettyprint.backend prettyprint.custom prettyprint.sections quotations sequences
-terms vocabs.parser ;
+classes.tuple combinators hashtables kernel lexer lists lists.private namespaces
+parser prettyprint.backend prettyprint.custom prettyprint.sections quotations
+sequences terms vocabs.parser ;
 
 IN: chr.parser
 
@@ -50,9 +50,24 @@ M: eq-constraint pprint* pprint-object ;
 M: eq-constraint pprint-delims drop \ ={ \ } ;
 M: eq-constraint >pprint-sequence tuple-slots ;
 
-! SYNTAX: <={ scan-class \ } parse-array <chr-sub-pred> suffix! ;
+! Helper
+TUPLE: fake-chr-pred-cons < cons-state ;
 
-SYNTAX: SUB: scan-object scan-class scan-object <chr-sub-pred> suffix! ;
+SYNTAX: <={ scan-class parse-list-literal <chr-sub-pred> suffix! ;
+
+M: fake-chr-pred-cons pprint-delims drop \ <={ \ } ;
+
+M: chr-sub-pred pprint*
+    nesting-limit? [ call-next-method ]
+    [
+        [ class>> ] [ args>> ] bi fake-chr-pred-cons boa
+        pprint*
+    ] if ;
+
+! SYNTAX: SUB: scan-object scan-class scan-object <chr-sub-pred> suffix! ;
+SYNTAX: AS: scan-object scan-object <as-pred> suffix! ;
+
+M: as-pred pprint* \ AS: pprint-word [ var>> pprint* ] [ pred>> pprint* ] bi ;
 
 SYNTAX: is{ scan-token <term-var> scan-object "}" expect
         callable check-instance <is-val> suffix! ;

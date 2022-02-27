@@ -1,5 +1,6 @@
-USING: accessors assocs chr chr.factor chr.factor.conditions
-chr.parser chr.state kernel lists match namespaces sequences sets terms words ;
+USING: accessors assocs chr chr.factor chr.factor.conditions chr.factor.types
+chr.parser chr.state kernel match namespaces sequences sets sets.extras terms
+types.util words ;
 
 IN: chr.factor.compiler
 
@@ -66,37 +67,28 @@ ERROR: recursive-chrat-compile word ;
 
 ! * Chrat side
 
+
 CHRAT: compile-rules { CompileRule }
 
-! Erase inner state-specific info, so we can treat stacks as conditions
-! CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s ?ground-value +top+ = ] | { TopEntry +top+ ?w } }
-! CHR{ { CompileRule } // { Entry ?s ?w } -- [ ?s +top+? not ] | { Cond ?s P{ Inlined ?w } } }
-CHR{ { CompileRule } // { Stack ?s __ } -- [ ?s { +top+ +end+ } in? not ] | }
-! CHR{ { CompileRule } // { Val __ __ __ } -- | }
-! CHR{ { CompileRule } // { FoldQuot __ __ __ __ } -- | }
-! CHR{ { CompileRule } // { LitStack __ __ __  } -- | }
-! CHR{ { CompileRule } // { AskLit __ __  } -- | }
-! CHR{ { CompileRule } // { InlineUnknown ?s ?t ?x } -- | { Cond ?s { InlinesUnknown ?x } } }
-CHR{ { CompileRule } // SUB: ?x Call ?r -- | }
-! CHR{ { CompileRule } // { Scope +top+ +end+ ?rho ?sig __ } -- | { Stack +top+ ?rho } { Stack +end+ ?sig } }
-! CHR{ { CompileRule } // SUB: ?x Scope ?r -- | }
+CHR: query-types @ { CompileRule } { Scope +top+ +end+ ?rho ?sig __ } // -- |
+[ ?rho list>array* ?sig list>array* symmetric-diff
+ [ "tau" uvar <term-var> Type boa ] map ] ;
 
-! CHR{ { CompileRule } // { CondRet __ __ __  } -- | }
-! CHR{ { CompileRule } // { Dead __ } -- | }
-! CHR{ { CompileRule } // { Lit ?x __ } { Instance ?x __ } -- | }
-! CHR: remove-words-1 @ { CompileRule } // { Generic __ __ __ } -- | ;
-! CHR: remove-words-2 @ { CompileRule } // { Word __ __ __ } -- | ;
+CHR: rm-states @ { CompileRule } // <={ state-pred ?s . __ } -- [ ?s +top+ = not ] [ ?s +end+ = not ] | ;
 
+CHR: define-top-stacks @ { CompileRule } // { Scope +top+ +end+ ?rho ?sig __ } -- | { Stack +top+ ?rho } { Stack +end+ ?sig } ;
 
-! Erase Simplification artefacts
+! Erase Simplification artifacts
+
+CHR{ { CompileRule } // { Dead __ } -- | }
 
 CHR{ // { CompileRule } -- | { CompileDone } }
 
 CHR{ { CompileDone } // { Absurd __ } -- | }
 ! Relies on all conditions having propagated to their leaders!
-CHR{ { CompileDone } { Trivial ?s } // { CondJump __ ?s } -- | }
+! CHR{ { CompileDone } { Trivial ?s } // { CondJump __ ?s } -- | }
 CHR{ { CompileDone } // { Trivial __ } -- | }
-CHR{ { CompileDone } // { CondRet __ __ } -- | }
+! CHR{ { CompileDone } // { CondRet __ __ } -- | }
 
 ! Only keep top conditions!
 ! CHR: only-top-conds @ { CompileDone } // SUB: ?x cond-pred L{ ?c . __ } -- [ ?c known +top+? not ] | ;

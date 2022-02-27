@@ -59,7 +59,7 @@ CHR{ { ask { CheckExec ?t __ __ __ } } // -- | { Link ?t ?t } }
 
 ! Propagation
 ! CHR{ { Scope ?s __ ?l } // { Link ?t ?u } -- [ ?s ?t == not ] [ ?t ?l in? ] | { Link ?s ?u } }
-CHR{ SUB: ?x Scope L{ ?s __ __ __ ?l . __ }  // { Link ?t ?u } -- [ ?s ?t == not ] [ ?t ?l in? ] | { Link ?s ?u } }
+CHR{ <={ Scope ?s __ __ __ ?l . __ }  // { Link ?t ?u } -- [ ?s ?t == not ] [ ?t ?l in? ] | { Link ?s ?u } }
 
 ! CHR{ // { Scope ?r ?u ?l } { Scope ?s __ ?a } -- [ ?s ?l in? ] |
 !      [ ?r ?u ?a ?s ?l insert-instead Scope boa ]
@@ -73,7 +73,7 @@ CHR{ { Branch ?s __ __ ?r } // { Link ?r ?u } -- | { Link ?s ?u } }
 ! CHR{ // { Link ?r ?s } { Link ?s ?t } -- | { Link ?r ?t } }
 
 ! Any trans-pred is by default a control path link
-CHR: trans-check-exec @ SUB: ?x trans-pred L{ ?s ?r . __ } // { Link ?r ?u } -- |
+CHR: trans-check-exec @ <={ trans-pred ?s ?r . __ } // { Link ?r ?u } -- |
 { Link ?s ?u } ;
 
     ;

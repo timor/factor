@@ -43,6 +43,9 @@ C: <constraint-schedule> constraint-schedule
     [ drop chr-sub-pred? ] assoc-partition swap
     [ add-subtype-index ] assoc-each ;
 
+! The index returns a mapping that has as key the constraint type to which to
+! compare an activated constraint, and as values the indices of the partner
+! rules to try
 : index-rules ( chrs -- index )
     H{ } clone swap
     [ swap heads>>

@@ -1,5 +1,5 @@
-USING: chr.factor chr.factor.conditions chr.modular chr.parser chr.state kernel
-lists terms ;
+USING: accessors chr.factor chr.factor.conditions chr.modular chr.parser
+chr.state kernel lists terms ;
 
 IN: chr.factor.data-flow
 
@@ -41,8 +41,8 @@ CHR{ { Split __ ?a ?x ?y } // { ask { Copy ?a ?x } } -- | { entailed { Copy ?a ?
 ! { Effect ?y L{ ?v . ?r } ?s }
 !     ;
 
-CHR: make-dup-right @ { Dup L{ ?a . ?b } ?y } // -- [ ?y known term-var? ] |
-{ Dup L{ ?a . ?b } L{ ?c . ?d } } [ ?y L{ ?c . ?d } ==! ] ;
+! CHR: make-dup-right @ { Dup L{ ?a . ?b } ?y } // -- [ ?y known term-var? ] |
+! { Dup L{ ?a . ?b } L{ ?c . ?d } } [ ?y L{ ?c . ?d } ==! ] ;
 
 ! CHR: propagate-dup-right @
 ! { Dup ?x L{ ?a . ?b } } // -- [ ?x known term-var? ] | [ ?x L{ ?c . ?d } ==! ] ;
@@ -76,7 +76,16 @@ CHR: literal-dup2 @
 CHR: split-will-be-dead @  { Dead ?y } { Dead ?z } // { Split __ ?x ?y ?z } -- | { Dead ?x } ;
 
 ! ** Splits and Joins
+! *** Simplify
+CHR: redundant-split-1 @ { Absurd ?c1 } { Branch ?r __ ?c1 ?c2 } // { Split ?r ?x ?y ?z } --
+| [ ?x ?z ==! ] ;
+CHR: redundant-split-2 @ { Absurd ?c2 } { Branch ?r __ ?c1 ?c2 } // { Split ?r ?x ?y ?z } --
+| [ ?x ?y ==! ] ;
 
+CHR: redundant-join-1 @ // { Join __ ?z ?z ?x } -- | ;
+CHR: redundant-join-2 @ // { Join __ ?z ?x ?z } -- | ;
+
+! *** Regular
 CHR: pushdown-literals @ { Split __ ?x ?y ?z } // { Lit ?x ?v } -- | { Lit ?y ?v } { Lit ?z ?v } ;
 
 TERM-VARS: ?zs ;
@@ -93,6 +102,14 @@ CHR: destructure-join @ // { Join ?s L{ ?x . ?xs } L{ ?y . ?ys } L{ ?z . ?zs } }
 { Join ?s ?x ?y ?z }
 { Join ?s ?xs ?ys ?zs } ;
 
+
 ! ** Value info combination
 ! TODO: this might be useful to make into an interface that different value-level things can answer?
-;
+
+CHR: phi-val-pred-out-1 @ { Branch ?r __ ?c1 ?c2 } { Join ?r ?x ?a ?b } AS: ?p <={ val-pred ?a . __ } // -- |
+[ ?c1 ?p clone ?x >>value Cond boa ] ;
+
+CHR: phi-val-pred-out-2 @ { Branch ?r __ ?c1 ?c2 } { Join ?r ?x ?a ?b } AS: ?p <={ val-pred ?b . __ } // -- |
+[ ?c2 ?p clone ?x >>value Cond boa ] ;
+
+    ;

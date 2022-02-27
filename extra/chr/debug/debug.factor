@@ -1,5 +1,6 @@
 USING: accessors arrays assocs assocs.extras chr chr.programs chr.state
-formatting io kernel namespaces prettyprint sequences tools.annotations ;
+formatting io kernel math.parser namespaces prettyprint sequences terms
+tools.annotations ;
 
 IN: chr.debug
 
@@ -20,8 +21,15 @@ IN: chr.debug
 !     ;
 
 : rule-id ( id -- id/name )
-    program get rules>> over swap nth dup named-chr? [ rule-name>> nip ]
-    [ drop ] if ;
+    [ number>string ] keep program get rules>> nth dup named-chr? [ rule-name>> "(" ")" surround " " glue ] [ drop ] if
+    "R" prepend ;
+    ! [ drop ] if ;
+
+: rule-match. ( rule-id bindings -- )
+    ! 2dup [ rule-id ] dip "Rule Match %s with: %u\n" printf
+    over rule-id "Rule Match %s with: " printf
+    [ program get rules>> nth clone f >>match-vars f >>existentials ] dip
+    lift . ;
 
 : susp. ( chr-suspension --  )
     [ id>> "%d: " printf ] [ constraint>> pprint ]
@@ -33,13 +41,13 @@ IN: chr.debug
 : chrebug ( -- )
     ! \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate
     \ kill-chr [ [ "- " write dup id-susp. ] prepose ] annotate
-    \ run-rule-body [ [ 2dup [ rule-id ] dip "Rule Match %s with: %u\n" printf ] prepose ] annotate
+    \ run-rule-body [ [ 2dup rule-match. ] prepose ] annotate
     ! \ activate-new [ [ dup "Activating new constraint: %u\n" printf ] prepose ] annotate
     \ create-chr [ [ "+ " write dup id-susp. ] compose
                    ! [ chr-state. ] compose
     ] annotate
     ! \ activate [ [ chr-state. dup "Activating: %d\n" printf ] prepose ] annotate
-    \ activate [ [ "! " write dup id-susp. ] prepose ] annotate
+    ! \ activate [ [ "! " write dup id-susp. ] prepose ] annotate
     ! \ test-callable [ [ dup "Builtin Test: " write . ] prepose [ dup " ==> %u\n" printf ] compose ] annotate
     ! \ run-occurrence [ [ dup occurrence>> "Try Occurrence %u with Schedule: " printf dup partners>> . ] prepose ] annotate
     \ collect-chrat-solvers [ [ "Solvers for Program: " write dup . ] compose ] annotate

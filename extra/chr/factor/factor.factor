@@ -1,6 +1,5 @@
-USING: accessors arrays assocs chr chr.parser chr.state classes combinators
-effects effects.parser hashtables kernel lexer make match namespaces parser
-persistent.assocs sequences strings terms types.util vocabs.parser words ;
+USING: accessors arrays chr chr.state classes combinators effects kernel lists
+make match namespaces sequences strings terms types.util ;
 
 IN: chr.factor
 FROM: syntax => _ ;
@@ -12,7 +11,7 @@ TERM-VARS:
 
 TUPLE: state-pred < chr-pred s1 ;
 TUPLE: trans-pred < state-pred s2 ;
-TUPLE: val-pred < chr-pred v ;
+TUPLE: val-pred < chr-pred value ;
 
 ! For cleaning up
 GENERIC: state-depends-on-vars ( state-pred -- seq )
@@ -25,7 +24,7 @@ TUPLE: Dispatch < trans-pred cond vset ;
 TUPLE: Not < chr-pred pred ;
 
 ! TUPLE: Val < state-pred n val ;
-TUPLE: Instance < chr-pred val s ;
+TUPLE: Instance < val-pred s ;
 TUPLE: NotInstance < chr-pred val s ;
 TUPLE: ExpectInstance < chr-pred val s ;
 
@@ -49,13 +48,17 @@ TUPLE: Method < trans-pred word ;
 TUPLE: SingleMethod < trans-pred word n class ;
 TUPLE: DefaultMethod < trans-pred word ;
 TUPLE: Definition < chr-pred word quot ;
-TUPLE: Lit < chr-pred val obj ;
-TUPLE: Effect < chr-pred val in out ;
+TUPLE: Lit < val-pred obj ;
+TUPLE: Effect < val-pred in out ;
 ! TUPLE: Curried < chr-pred val parm callable ;
 TUPLE: Curried < chr-pred parm q ;
 TUPLE: Composed < chr-pred callable1 callable2 q ;
 TUPLE: CondJump < chr-pred parent sub ;
 TUPLE: CondRet < chr-pred sub parent ;
+
+: list>stack ( list* -- list* )
+    [ [ drop "v" uvar <term-var> , ] leach* ] { } make >list "rho" uvar <term-var> lappend
+    ;
 
 ! list of vars
 TUPLE: Stack < state-pred vals ;
@@ -74,7 +77,9 @@ TUPLE: InlineCall < trans-pred word quot ;
 TUPLE: Call < state-pred word in out ;
 
 ! TUPLE: Branch < trans-pred cs1 cs2 ;
-TUPLE: Branch < trans-pred cs1 cs2 ;
+TUPLE: Branch < trans-pred then else ;
+M: Branch state-depends-on-vars
+    [ then>> ] [ else>> ] bi 2array ;
 
 ! Compiler Entry
 TUPLE: ChratInfer < chr-pred obj ;

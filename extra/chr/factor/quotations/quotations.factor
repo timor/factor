@@ -1,14 +1,12 @@
 USING: accessors chr chr.factor chr.factor.conditions chr.factor.control
 chr.factor.data-flow chr.factor.infer chr.factor.stack chr.factor.types
-chr.factor.words chr.parser chr.state kernel lists quotations sequences terms
-words words.symbol ;
+chr.factor.words chr.parser chr.state classes.error kernel lists quotations
+sequences terms words words.symbol ;
 
 IN: chr.factor.quotations
 FROM: syntax => _ ;
 
 ! * Quotation Inference
-
-
 
 TUPLE: Prim < Word ;
 TUPLE: InferToplevelQuot < chr-pred quot ;
@@ -29,29 +27,34 @@ CHRAT: chrat-cleanup { }
 CHR{ { Dead ?x } // { Dead ?x } -- | }
 ! CHR{ // { Drop +top+ ?x } -- | { Dead ?x } }
 
-CHR: drop-lit2 @ { Dead ?x } // { Lit ?x __ } -- | ;
-CHR{ { Dead ?x } // { Instance ?x __ } -- | }
+! CHR: drop-lit2 @ { Dead ?x } // { Lit ?x __ } -- | ;
+CHR: drop-dead-val-preds @ { Dead ?x } //
+<={ val-pred ?x . __ } -- | ;
+
+! NOTE: condition values being dead means that they no longer can apply
+CHR: drop-dead-cond-preds @ { Dead ?c } // <={ cond-pred ?c . __ } -- | ;
+
+! TODO: sub-class-only matches
+! CHR: dead-val-conds-are-dead @ { Dead ?v } // { Cond ?c ?p } -- [ p? known dup val-pred? [ value>>  ] [ drop f ] if ]
+CHR: dead-val-conds-are-dead @ { Dead ?v } // { Cond ?c <={ val-pred ?v } } -- | ;
+! CHR{ { Dead ?x } // { Instance ?x __ } -- | }
 !  CHR{ { Dead ?x } // { Cond __ P{ Instance ?x __ } } -- | }
 
-CHR{ { Dead ?x } // { Effect ?x __ __ } -- | }
-CHR{ { Dead ?x } // { Effect L{ ?x . __ } __ __ } -- | }
+! CHR: dead-scopes-are-dead @ { Dead ?s } // SUB: ?x Scope L{ ?s __ __ __ ?l } |
+CHR: dead-scopes-are-dead @ { Dead ?s } // <={ Scope ?s __ __ __ ?l . __ } -- |
+[ ?l known [ Dead boa ] map ] ;
+
+! CHR{ { Dead ?x } // { Effect ?x __ __ } -- | }
+! CHR{ { Dead ?x } // { Effect L{ ?x . __ } __ __ } -- | }
 CHR: inlining-known @ { Dead ?p } // { InlinesUnknown __ ?p } -- | ;
 
-! *** Absurd States
+! *** Dead States
 
-! Stop inference
-! CHR: abort-infer @ { AbsurdState ?r } // { InferBetween ?r __ __ } { Infer ?r __ __ } -- | ;
+! CHR: dead-branches-are-dead { Dead ?s } // { Branch ?s ?t ?a ?b } -- |
+! { Dead }
 
-! CHR: abort-infer-answer @ { AbsurdState ?r } // { ask { InferBetween ?r ?s ?q ?l } } -- |
-! [ ?l f ==! ] { entailed { InferBetween ?r ?s ?q ?l } } ;
-! CHR: abort-infer-step @ { AbsurdState ?r } // { InferBetween ?r __ __ __ } { Infer ?r __ __ } -- | ;
-
-! Collect absurd values
-! CHR: kill-absurd-stack-values @ { AbsurdState ?s } { Stack ?s ?v } // -- [ ?v known? ] |
-!      [ ?v [ Dead boa ] collector [ leach* ] dip ]
-!    ;
-
-CHR: erase-absurd-state-preds @ { AbsurdState ?s } // SUB: ?x state-pred L{ ?s . __ } -- |
+! CHR: erase-absurd-state-preds @ { AbsurdState ?s } // SUB: ?x state-pred L{ ?s . __ } -- |
+CHR: dead-state-vars @ { Dead ?s } // AS: ?x <={ state-pred ?s . __ } -- |
    [ ?x state-depends-on-vars [ Dead boa ] map ] ;
 ! CHR: erase-absurd-trans-preds-1 @ { AbsurdState ?s } // SUB: ?x trans-pred L{ ?s . __ } -- | ;
 ! CHR: erase-absurd-trans-preds-2 @ { AbsurdState ?s } // SUB: ?x trans-pred L{ __ ?s . __ } -- | ;
@@ -59,8 +62,6 @@ CHR: erase-absurd-state-preds @ { AbsurdState ?s } // SUB: ?x state-pred L{ ?s .
 ! This removes the AbsurdState marker!
 ! CHR: finish-absurd-state @ // { AbsurdState ?s } { Stack ?s __ } -- | ;
 ! CHR: finish-absurd-state @ // { AbsurdState ?s } -- | ;
-
-
 ;
 
 
@@ -131,7 +132,7 @@ CHR: chrat-infer-top-quot @ // { ChratInfer ?w } -- [ ?w callable? ] | { InferTo
 !      { Stack ?s L{ ?x . ?a } }
 !      { Stack ?t ?b }
 !    }
-! CHR: inline-unknown-effect @  { InlineUnknown ?s ?t ?p } // -- | { Effect ?p ?a ?b } { Stack ?s ?a } { Stack ?t ?b } ;
+CHR: inline-unknown-effect @  { InlineUnknown ?s ?t ?p } // -- | { Effect ?p ?a ?b } { Stack ?s ?a } { Stack ?t ?b } ;
 ! CHR: inline-unknown-effect @  { InlineUnknown ?s ?t ?p } // --
 ! | { Effect ?p ?a ?b }
 ! ! { Stack ?t ?b }
@@ -139,6 +140,7 @@ CHR: chrat-infer-top-quot @ // { ChratInfer ?w } -- [ ?w callable? ] | { InferTo
 !     ;
 
 CHR: notice-inline-unknown @ { InlineUnknown ?s ?t ?p } // -- | { InlinesUnknown ?s ?p } ;
+CHR: inline-unknown-curried @ // { InlinesUnknown ?c L{ ?x . ?xs } } -- | { InlinesUnknown ?c ?xs } ;
 
 CHR: inline-made-known @  { Lit ?p ?q } // { InlineUnknown ?s ?t ?p } ! { Effect ?p __ __ }
      -- |
@@ -147,7 +149,8 @@ CHR: inline-made-known @  { Lit ?p ?q } // { InlineUnknown ?s ?t ?p } ! { Effect
      ! { effect ?p }
      { InlineQuot ?s ?t ?q }
      ! { Drop ?s ?p } ;
-     { Drop ?p } ;
+     ! { Drop ?p } ;
+     { Dead ?p } ;
 
 CHR: uncurry @ // { InlineUnknown ?s ?t L{ ?parm . ?p } } -- |
      ! { Stack ?s ?rho }
@@ -156,7 +159,7 @@ CHR: uncurry @ // { InlineUnknown ?s ?t L{ ?parm . ?p } } -- |
      { StackOp ?s ?s0 ?rho L{ ?parm . ?rho } }
      ! { Stack ?s ?rho }
      ! { PrefixLink ?s ?s0 }
-     { Stack ?s0 L{ ?parm . ?rho } }
+     ! { Stack ?s0 L{ ?parm . ?rho } }
      { InlineUnknown ?s0 ?t ?p } ;
 
 ! TODO test
@@ -177,19 +180,19 @@ CHR: infer-definition @  // { InferDef ?w } -- [ ?w deferred? not ] |
 
 TERM-VARS: ?st0 ?st1 ?sf0 ?sf1 ;
 
-TUPLE: CheckBranch < chr-pred branch-state in true-in true-out false-in false-out ;
+TUPLE: CheckBranch < state-pred in true-in true-out false-in false-out out ;
 
 ! Conditionals
 ! For now, let's set the input and output effects of the quotations to be the
 ! same.  The goal is to have things that are branch-independent in the common
 ! effect, while anything that is branch-dependent has to be queried using the
 ! logical system.
-CHR: infer-if @ { Exec ?r ?t if } // --
-{ Stack ?r L{ ?q ?p ?c . ?rho } }
-|
+CHR: infer-if @ // { Exec ?r ?t if } --
 ! { Stack ?r L{ ?q ?p ?c . ?rho } }
-{ Effect ?q ?a ?x }
-{ Effect ?p ?b ?y }
+|
+{ Stack ?r L{ ?q ?p ?c . ?rho } }
+{ Effect ?p ?a ?x }
+{ Effect ?q ?b ?y }
 ! { CompatibleEffects ?a ?x ?b ?y }
 ! TODO: find best order
 { SameDepth ?rho ?a }
@@ -200,15 +203,18 @@ CHR: infer-if @ { Exec ?r ?t if } // --
 { Stack ?st1 ?x }
 { Stack ?sf0 ?b }
 { Stack ?sf1 ?y }
+! { Equiv ?st0 P{ Not P{ Instance ?c \ f } } }
+! { Equiv ?sf0 P{ Instance ?c \ f } }
+{ Cond ?st0 P{ Not P{ Type ?c POSTPONE: f } } }
+{ Cond ?sf0 P{ Type ?c POSTPONE: f } }
+{ Disjoint ?st0 ?sf0 }
 { InlineUnknown ?st0 ?st1 ?p }
 { InlineUnknown ?sf0 ?sf1 ?q }
-{ Equiv ?st0 P{ Not P{ Instance ?c \ f } } }
-{ Equiv ?sf0 P{ Instance ?c \ f } }
 ! { Stack ?t ?sig }
-{ CheckBranch ?r ?rho ?a ?x ?b ?y }
+{ CheckBranch ?r ?rho ?a ?x ?b ?y ?t }
     ;
 
-CHR: end-infer-if @ // { Exec ?r ?t if } { CheckBranch ?r ?rho ?a ?x ?b ?y } --
+CHR: end-infer-if @ // { CheckBranch ?r ?rho ?a ?x ?b ?y ?t } --
 { CompatibleEffects ?a ?x ?b ?y }
 |
 
@@ -223,23 +229,28 @@ CHR: end-infer-if @ // { Exec ?r ?t if } { CheckBranch ?r ?rho ?a ?x ?b ?y } --
 ! Link-interface
 CHR: link-branch-up @ { Branch ?r __ ?x __ } // { Link ?x ?u } -- | { Link ?r ?u } ;
 
-CHR: infer-dip @ // { Exec ?s ?u dip } -- |
-! { Stack ?s L{ ?q ?x . ?rho } }
-! { PrefixLink ?s ?s0 }
-! { Stack ?s0  ?rho }
-{ StackOp ?s ?s0 L{ ?q ?x . ?rho } ?rho }
+CHR: infer-call @ // { Exec ?s ?u call } -- |
+! { StackOp ?s ?s0 L{ ?q . ?rho } ?rho }
+! { InlineUnknown ?s0 ?t ?q }
+{ Scope ?s ?u L{ ?q . ?a } ?b { ?s0 ?t } }
+! { Stack ?s L{ ?q . ?rho } }
 ! { Stack ?t ?sig }
-! { Stack ?u L{ ?x . ?sig } }
-{ StackOp ?t ?u ?sig L{ ?x . ?sig } }
+{ Stack ?s L{ ?q . ?a } }
+{ Stack ?s0 ?a }
+{ Stack ?t ?b }
 { InlineUnknown ?s0 ?t ?q }
+{ FinishScope ?s ?u }
     ;
 
-CHR: exec-call @ // { Exec ?s ?t call } -- |
-     ! { Stack ?s L{ ?q . ?rho } }
-     ! { PrefixLink ?s ?s0 }
-     ! { Stack ?s0 ?rho }
-{ StackOp ?s ?s0 L{ ?q . ?rho } ?rho }
-{ InlineUnknown ?s0 ?t ?q } ;
+CHR: infer-dip @ // { Exec ?s ?u dip } -- |
+{ Scope ?s ?u L{ ?q ?x . ?a } L{ ?x . ?b } { ?s0 ?t } }
+{ Stack ?s L{ ?q ?x . ?a } }
+{ Stack ?s0 ?a }
+{ Stack ?t ?b }
+{ InlineUnknown ?s0 ?t ?q }
+{ FinishScope ?s ?u }
+    ;
+
 
 ! We have to split this, because the in-types can already make this execword absurd
 CHR: exec-early-types @ { ExecWord ?s ?t ?w } // -- [ ?w chrat-in-types ]
@@ -247,6 +258,10 @@ CHR: exec-early-types @ { ExecWord ?s ?t ?w } // -- [ ?w chrat-in-types ]
 
 CHR: exec-early-types @ { ExecWord ?s ?t ?w } // -- [ ?w chrat-out-types ]
      | [ ?s ?w chrat-out-types >list ProvideTypes boa ] ;
+
+CHR: exec-error-word @ // { ExecWord ?s ?t ?w } -- [ ?w error-class? ] |
+! { StackOp ?s ?t ?rho ?sig } ;
+{ ConflictState ?s ?w "error" } ;
 
 CHR: exec-symbol-word @ // { ExecWord ?s ?t ?w } -- [ ?w symbol? ] | { Push ?s ?t ?w } ;
 
@@ -280,6 +295,21 @@ CHR: inline-quot @ // { InlineQuot ?s ?t ?q } --
 ! { Stack ?t ?sig }
 { FinishScope ?s ?t } ;
 
+CHR: clean-absurd-finish-scope @ { AbsurdScope ?r ?u __ } // { FinishScope ?r ?u } -- | ;
+
+! CHR: simplify-dead-branch-1 @ { Absurd ?c1 } { Scope ?c2 ?t __ __ __ } // { Branch ?r ?u ?c1 ?c2 } -- |
+! [ { ?r ?u } { ?c2 ?t } ==! ] ;
+! CHR: simplify-dead-branch-2 @ { Absurd ?c2 } { Scope ?c1 ?t __ __ __ } // { Branch ?r ?u ?c1 ?c2 } -- |
+! [ { ?r ?u } { ?c1 ?t } ==! ] ;
+
+! CHR: simplify-dead-branch-2 @ { AbsurdScope ?c2 __ __ } // { Scope ?c1 ?t ?rho ?sig ?l } { Branch ?r ?u ?c1 ?c2 } -- |
+! { Scope ?r ?u ?rho ?sig ?l }
+! [ ?r ?c1 ==! ] ;
+! ! { Stack ?r ?rho }
+! ! { Stack ?u ?sig }
+! [ { ?r ?u } { ?c1 ?t } ==! ]
+!    ;
+
 CHR: inline-top-quot @ // { InferToplevelQuot ?q } -- |
 { Stack +top+ ?rho }
 { InlineQuot +top+ +end+ ?q }
@@ -293,5 +323,9 @@ CHR: regular-word @ // { ExecWord ?s ?t ?w } -- | { Word ?s ?t ?w } ;
 ! CHR{ // { AbsurdScope __ __ __ } -- | }
 ! CHR{ // { Trivial __ } -- | }
 CHR: finish-absurd-state @ // { AbsurdState ?s } -- | ;
-CHR{ // { Dead __ } -- | }
+! CHR{ // { Dead __ } -- | }
+
+! Default Answers
+! CHR: unknown-is-non-trivial @
+! // { ask { IsTrivial ?p ?x } } -- | [ ?x f ==! ] { entailed { IsTrivial ?p ?x } } ;
 ;

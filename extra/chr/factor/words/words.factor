@@ -1,5 +1,5 @@
 USING: accessors arrays assocs chr.factor chr.factor.compiler
-chr.factor.conditions chr.factor.stack chr.parser chr.state
+chr.factor.conditions chr.factor.infer chr.factor.stack chr.parser chr.state
 combinators.short-circuit continuations effects generic kernel lists
 macros.expander make math math.parser quotations sequences sets terms types.util
 words ;
@@ -58,12 +58,12 @@ M: Call state-depends-on-vars
 CHRAT: chrat-words {  }
 
 ! Cleaning up
-CHR{ { Dead ?x } // { AskLit ?x __ } -- | }
+! CHR{ { Dead ?x } // { AskLit ?x __ } -- | }
 ! CHR{ { AbsurdState ?s } // { Word ?s __ __ } -- | }
-CHR: absurd-call @ { AbsurdState ?s } // { Call ?s __ ?i ?o } -- |
-     [ V{ } clone ?i [ Dead boa over push ] leach*
-       ?o [ Dead boa over push ] leach* ]
-   ;
+! CHR: absurd-call @ { AbsurdState ?s } // { Call ?s __ ?i ?o } -- |
+!      [ V{ } clone ?i [ Dead boa over push ] leach*
+!        ?o [ Dead boa over push ] leach* ]
+   ! ;
 ! CHR{ { AbsurdState ?s } // { FoldCall ?s __ __ __ } -- | }
 
 ! ** Primitives
@@ -89,30 +89,31 @@ CHR: infer-over @ // { Word ?s ?t over } -- |
      { DupValue ?s ?x ?z } ;
 
 CHR: curry-effect @ // { Word ?s ?t curry } -- |
-     ! { Stack ?s L{ ?p ?parm . ?rho } }
-     ! { Stack ?t L{ L{ ?parm . ?p } . ?rho } }
+! { Stack ?s L{ ?p ?parm . ?rho } }
+! { Stack ?t L{ L{ ?parm . ?p } . ?rho } }
 { StackOp ?s ?t L{ ?p ?parm . ?rho } L{ L{ ?parm . ?p } . ?rho } }
-     { Effect ?p L{ ?parm . ?a } ?b } ;
+{ Effect ?p L{ ?parm . ?a } ?b }
+    ;
 
 CHR: compose-effect @ // { Word ?s ?t compose } --  |
+     { StackOp ?s ?t L{ ?q ?p . ?rho } L{ { ?p ?q } . ?rho } }
      { Effect ?p ?a ?b }
      { Effect ?q ?b ?c }
      ! { Stack ?s L{ ?q ?p . ?rho } }
      ! { Stack ?t L{ { ?p ?q } . ?rho } }
-     { StackOp ?s ?t L{ ?q ?p . ?rho } L{ { ?p ?q } . ?rho } }
    ;
 
 CHR: drop-prim @ // { Word ?s ?t drop } -- |
      ! { Stack ?s L{ ?x . ?rho } }
 ! { Stack ?t ?rho }
 { StackOp ?s ?t L{ ?x . ?rho } ?rho }
-     { DropValue ?s ?x } ;
+{ DropValue ?s ?x } ;
 
 CHR: nip-prim @ // { Word ?s ?t nip } -- |
      ! { Stack ?s L{ ?y ?x . ?rho } }
      ! { Stack ?t L{ ?y . ?rho } }
 { StackOp ?s ?t L{ ?y ?x . ?rho } L{ ?y . ?rho } }
-     { DropValue ?s ?x }
+{ DropValue ?s ?x }
    ;
 
 CHR: pick-prim @  // { Word ?s ?t pick } -- |
@@ -134,13 +135,14 @@ CHR: expand-macro-quot @ // { Word ?r ?u ?w } -- [ ?w macro-quot :>> ?p ] |
  ! L{ ?q . ?rho } :> out-vars
  {
      ! { Stack ?s ?rho }
+     { InsertStates ?r { ?s ?t } }
      { FoldEffect ?r ?s ?p e }
+     { StackOp ?s ?t L{ ?q . ?rho } ?rho }
      ! { Instance ?q callable }
      ! { Stack ?s in-vars }
      ! { AddLink ?s ?s0 }
      ! { InferBetween ?s ?s0 q }
      ! { AddLink ?s0 ?t }
-     { StackOp ?s ?t L{ ?q . ?rho } ?rho }
      ! { InferBetween ?s ?s0 q }
      { InlineUnknown ?t ?u ?q }
      ! { FoldQuot ?s ?t in-parms q }
@@ -235,10 +237,12 @@ CHR: do-fold-call @ // { Call ?s ?w __ __ } { FoldEffect ?s __ __ __ } { FoldCal
     ]
     ;
 
-CHR: do-fold-quot @ // { FoldEffect ?s __ __ __ } { FoldCall ?s ?q ?i ?o } -- [ ?q callable? ] [ ?i [ known? ] all? ] |
+CHR: do-fold-quot @ // { FoldEffect ?s ?t __ ?e } { FoldCall ?s ?q ?i ?o } -- [ ?q callable? ] [ ?i [ known? ] all? ] |
 [ ?i [ known ] map ?q with-datastack
   ?o swap [ Lit boa ] 2map
-] ;
+]
+[ ?s ?t ?e effect>stacks [ ?rho lappend ] bi@ StackOp boa ]
+    ;
 
 ! ** Anything else
 
