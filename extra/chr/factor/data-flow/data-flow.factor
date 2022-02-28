@@ -3,6 +3,9 @@ chr.state kernel lists terms ;
 
 IN: chr.factor.data-flow
 
+TUPLE: SplitStack < state-pred stack-in stack-out1 stack-out2 ;
+TUPLE: JoinStack < state-pred stack-out stack-in1 stack-in2 ;
+
 ! ** Data Flow
 CHRAT: data-flow { Effect Copy Split Dup }
 
@@ -95,6 +98,15 @@ CHR{ // { Split __ ?x ?x ?x } -- | }
 CHR: destructure-split @ // { Split ?s L{ ?x . ?xs } L{ ?y . ?ys } L{ ?z . ?zs } } -- |
 { Split ?s ?x ?y ?z }
 { Split ?s ?xs ?ys ?zs } ;
+
+CHR: split-stack @ { SplitStack ?s ?x ?y ?z } // -- |
+{ SameDepth ?x ?y } { SameDepth ?x ?z }
+{ Split ?s ?x ?y ?z } ;
+
+CHR: join-stack @ { JoinStack ?s ?x ?y ?z } // -- |
+{ SameDepth ?x ?y } { SameDepth ?x ?z }
+{ Join ?s ?x ?y ?z } ;
+
 
 CHR{ // { Join __ ?x ?x ?x } -- | }
 

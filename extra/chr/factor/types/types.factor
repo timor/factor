@@ -81,6 +81,13 @@ CHR: phi-types @ { Branch ?r __ ?c1 ?c2 } { Cond ?c1 P{ Type ?x ?tau1 } } { Cond
 { Cond ?r P{ Type ?x ?tau3 } }
 { UnionType ?tau3 ?tau1 ?tau2 } ;
 
+! ! ** Comparison implications
+CHR: eq-implies-subtype @ AS: ?a <={ Cond ?c P{ = ?x ?v } } // -- [ ?v known? ] |
+[| | ?v class-of :> tau
+ ?a clone ?v class-of ?x swap Type boa >>implied
+ ! { Cond ?c P{ Type ?x tau } }
+] ;
+
 ! * Condition Simplification
 ! CHR: answer-trivial-subtype @ // { ask { CheckTrivial P{ Subtype ?x ?y } } }
 !  -- [ { [ ?x classoid? ] [ ?y classoid? ] } 0&& ]
@@ -106,8 +113,10 @@ CHR: known-not-subtypes @ { Cond ?c P{ Subtype ?x ?y } } // -- [ ?x known ?y kno
 CHR: type-known @ { Equiv ?c P{ Type ?x ?y } } { Type ?x ?y } // -- | { Trivial ?c } ;
 ! { Not P{ Subtype ?x ?y } }
 
-! CHR: trivial-subtype-contradiction @ { Cond ?c { Subtype ?x ?y } } // --
-! [ [ ? ] ]
+! NOTE: Not completely sure that there isn't a more common pattern to do stuff
+! like this.  This kind of has the semantics of "If there is anything literal
+! known, then it must be exactly true in all cases!"
+! CHR: literal-type-known @  g
 
 ! ** Stack Query
 

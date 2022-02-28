@@ -31,6 +31,13 @@ CHR{ { Dead ?x } // { Dead ?x } -- | }
 CHR: drop-dead-val-preds @ { Dead ?x } //
 <={ val-pred ?x . __ } -- | ;
 
+! *** Dead Phis
+! CHR: trivial-split-1 @ { Branch ?r __ ?a ?b } { Dead ?b } // { SplitStack ?r ?x ?y ?z } -- | [ ?x ?y ==! ] ;
+! CHR: trivial-split-2 @ { Branch ?r __ ?a ?b } { Dead ?a } // { SplitStack ?r ?x ?y ?z } -- | [ ?x ?z ==! ] ;
+! CHR: trivial-join-1 @ { Branch ?r __ ?a ?b } { Dead ?b } // { JoinStack ?r ?x ?y ?z } -- | [ ?x ?y ==! ] ;
+! CHR: trivial-join-2 @ { Branch ?r __ ?a ?b } { Dead ?a } // { JoinStack ?r ?x ?y ?z } -- | [ ?x ?z ==! ] ;
+
+! *** Dead Conditions
 ! NOTE: condition values being dead means that they no longer can apply
 CHR: drop-dead-cond-preds @ { Dead ?c } // <={ cond-pred ?c . __ } -- | ;
 
@@ -98,8 +105,17 @@ TUPLE: RemoveStackops < chr-pred state ;
 ! CHR{ { AbsurdScope ?s ?u } { Scope ?s ?u ?l } // SUB: ?x state-pred L{ ?t . __ } -- [ ?t ?l in? ] | }
 
 CHR: finish-scope-stack-ops @  { Scope ?r ?u __ __ ?l } // { FinishScope ?r ?u } -- |
-[ ?l known [ RemoveStackops boa ] map ]
-    ;
+[ ?l known [ RemoveStackops boa ] map ] ;
+
+
+! CHR: dead-branch-1 @ { Branch ?r ?u ?a ?b } { Dead ?b } { Scope ?a ?x __ __ __ } // -- | [ { ?r ?u } { ?a ?x } ==! ] ;
+! CHR: dead-branch-1 @ { Branch ?r ?u ?a ?b } { Dead ?b } { Scope ?a ?x ?rho ?sig ?l } // -- |
+! { Scope ?r ?u ?rho ?sig ?l } ;
+
+! CHR: dead-branch-2 @ { Branch ?r ?u ?a ?b } { Dead ?a } { Scope ?b ?y __ __ __ } // -- | [ { ?r ?u } { ?b ?y } ==! ] ;
+! CHR: dead-branch-2 @ { Branch ?r ?u ?a ?b } { Dead ?a } { Scope ?b ?y ?rho ?sig ?l } // -- |
+! { Scope ?r ?u ?rho ?sig ?l } ;
+
 ! ! { StartStack ?r ?rho } { EndStack ?u ?sig } { FinishScope ?r ?u ?l } -- [ ?l last :>> ?t ]
 ! { FinishScope ?r ?u } -- [ ?l last :>> ?t ]
 ! ! { Stack ?t ?sig }
@@ -195,9 +211,9 @@ CHR: infer-if @ // { Exec ?r ?t if } --
 { Effect ?q ?b ?y }
 ! { CompatibleEffects ?a ?x ?b ?y }
 ! TODO: find best order
-{ SameDepth ?rho ?a }
-{ SameDepth ?rho ?b }
-{ Split ?r ?rho ?a ?b }
+! { SameDepth ?rho ?a }
+! { SameDepth ?rho ?b }
+{ SplitStack ?r ?rho ?a ?b }
 { Branch ?r ?t ?st0 ?sf0 }
 { Stack ?st0 ?a }
 { Stack ?st1 ?x }
@@ -205,8 +221,9 @@ CHR: infer-if @ // { Exec ?r ?t if } --
 { Stack ?sf1 ?y }
 ! { Equiv ?st0 P{ Not P{ Instance ?c \ f } } }
 ! { Equiv ?sf0 P{ Instance ?c \ f } }
-{ Cond ?st0 P{ Not P{ Type ?c POSTPONE: f } } }
-{ Cond ?sf0 P{ Type ?c POSTPONE: f } }
+! { Cond ?st0 P{ Not P{ Type ?c POSTPONE: f } } }
+! { Cond ?sf0 P{ Type ?c POSTPONE: f } }
+{ Equiv ?sf0 { = ?c f } }
 { Disjoint ?st0 ?sf0 }
 { InlineUnknown ?st0 ?st1 ?p }
 { InlineUnknown ?sf0 ?sf1 ?q }
@@ -218,9 +235,9 @@ CHR: end-infer-if @ // { CheckBranch ?r ?rho ?a ?x ?b ?y ?t } --
 { CompatibleEffects ?a ?x ?b ?y }
 |
 
-{ SameDepth ?y ?sig }
-{ SameDepth ?x ?sig }
-{ Join ?r ?sig ?x ?y }
+! { SameDepth ?y ?sig }
+! { SameDepth ?x ?sig }
+{ JoinStack ?r ?sig ?x ?y }
 { AssumeSameRest ?rho ?a }
 { AssumeSameRest ?y ?sig }
 { Stack ?t ?sig }
@@ -297,7 +314,7 @@ CHR: inline-quot @ // { InlineQuot ?s ?t ?q } --
 
 CHR: clean-absurd-finish-scope @ { AbsurdScope ?r ?u __ } // { FinishScope ?r ?u } -- | ;
 
-! CHR: simplify-dead-branch-1 @ { Absurd ?c1 } { Scope ?c2 ?t __ __ __ } // { Branch ?r ?u ?c1 ?c2 } -- |
+! CHR: simplify-dead-branch-1 @ { AbsurdScope ?c1 __ __ } { Scope ?c2 ?t __ __ __ } // { Branch ?r ?u ?c1 ?c2 } -- |
 ! [ { ?r ?u } { ?c2 ?t } ==! ] ;
 ! CHR: simplify-dead-branch-2 @ { Absurd ?c2 } { Scope ?c1 ?t __ __ __ } // { Branch ?r ?u ?c1 ?c2 } -- |
 ! [ { ?r ?u } { ?c1 ?t } ==! ] ;

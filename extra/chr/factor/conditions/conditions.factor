@@ -1,5 +1,5 @@
-USING: accessors assocs chr chr.factor chr.modular chr.parser chr.state kernel
-lists math namespaces sequences sets terms ;
+USING: accessors chr chr.factor chr.parser chr.state classes kernel sequences
+sets terms ;
 
 IN: chr.factor.conditions
 
@@ -22,7 +22,7 @@ TUPLE: Cond < cond-pred implied ;
 
 ! Complement Implication
 ! This means that if the first condition is absurd, the second is also absurd
-! TUPLE: Requires < cond-pred consequence ;
+TUPLE: Necessary < cond-pred sub-cond ;
 
 ! TODO
 TUPLE: Equiv < Cond ;
@@ -70,10 +70,16 @@ CHR{ { Absurd ?x } // { Absurd ?x } -- | }
 
 CHR{ // { CondNest ?x ?x } -- | }
 ! CHR{ { Cond ?x ?c } // { Cond ?x ?c } -- | }
-CHR{ AS: ?p <={ cond-pred ?s } // AS: ?q <={ cond-pred ?s } -- [ ?p ?q [ class-of ] same? ] | }
+! CHR{ AS: ?p <={ cond-pred ?s } // AS: ?q <={ cond-pred ?s } -- [ ?p ?q [ class-of ] same? ] | }
+CHR: duplicate-cond-pred @ AS: ?p <={ cond-pred ?x . ?y } // AS: ?q <={ cond-pred ?x . ?y } -- [ ?p ?q [ class-of ] same? ] | ;
+
+! CHR: duplicate-equiv @ { Equiv ?c ?p } // { Equiv ?c ?p } -- | ;
 
 ! Reverse dependencies to scopes
+! FIXME: This kind of nesting will only work if matching is destructured completely during compilation
+! CHR: analyze-state-constraint @ // { StateConstraint ?s AS: ?x <={ Cond ?c . __ } } -- |
 ! CHR: analyze-state-constraint @ // { StateConstraint ?s ?x } -- |
+! { Necessary ?s ?c } [ ?x ] ;
 
 ! Destructure Predicates
 ! CHR: assume-condition @ // { Equiv ?x ?y } -- [ ?x known term-var? not ] [ ?y known term-var? not ] |
@@ -137,9 +143,19 @@ CHR: complement-known @ { Cond ?c ?p } { Not ?p } // -- | { Absurd ?c } ;
 !    ~{ Cond p c2 }~
 
 ! Trying 2.
+
+CHR: equiv-subsumes-cond @ { Equiv ?c ?p } // { Cond ?c ?p } -- | ;
+
+CHR: disjoint-is-bounded @ { Disjoint ?c ?c1 } // { Disjoint ?c ?c2 } -- | [ ?c2 ?c1 ==! ] ;
+CHR: disjoint-is-bounded @ { Disjoint ?c1 ?c } // { Disjoint ?c ?c2 } -- | [ ?c2 ?c1 ==! ] ;
+
 CHR: assume-complement-condition @ // { Cond ?c P{ Not ?p } } -- |
 { Equiv ?c2 ?p }
 { Disjoint ?c ?c2 } ;
+
+! Is this a recursion problem?
+CHR: ask-for-complement @ { Cond ?c1 ?p } { Disjoint ?c1 ?c2 } // -- |
+{ Cond ?c2 P{ Not ?p } } ;
 
 
 ! Test for triviality of complement once
@@ -160,6 +176,8 @@ CHR: parent-scope-is-absurd @ { AbsurdState ?t } //
 [ ?t ?l known in? [ t ] [ ?t ?s = ] if ]
 | { AbsurdScope ?s ?u ?l } ;
 
+CHR: branches-establish-nesting @ { Branch ?r ?u ?a ?b } // -- | { Necessary ?r ?a } { Necessary ?r ?b } ;
+
 CHR: branches-are-absurd @ { AbsurdState ?s } { Branch ?s ?t ?a ?b } // -- | { AbsurdState ?a } { AbsurdState ?b } ;
 
 ! CHR: child-scope-is-absurd @ { AbsurdState ?s } //
@@ -168,22 +186,17 @@ CHR: child-scope-is-absurd @ { Absurd ?s } //
 <={ Scope ?s ?u __ __ ?l . __ }
 -- | { AbsurdScope ?s ?u ?l } ;
 
-! CHR: subscopes-are-absurd @ { AbsurdScope ?r ?u ?l } //
-! ! { Scope ?s ?t __ __ ?v }
-! SUB: ?x Scope L{ ?s ?u __ __ ?l . __ }
-! -- [ ?s ?l in? ] | { AbsurdScope ?s ?t ?l } ;
-
 CHR: absurd-scope-states-are-dead @ { AbsurdScope ?r ?u ?l } // -- [ ?l known? ] | { Dead ?r } { Dead ?u } [ ?l known [ Dead boa ] map ] ;
 CHR: absurd-leader-is-cond @ { AbsurdScope ?s __ __ } // -- | { Absurd ?s } ;
 
 ! Convert Control Flow
 
-! CHR: leader-is-cond-1 @ { CompileRule } { Linkback ?s ?v } // { Cond ?x ?c } -- [ ?x ?v known in? ] | { Cond ?s ?c }  ;
-! CHR: leader-is-cond-2 @ { CompileRule } { Linkback ?s ?v } // { CondNest ?x ?y } -- [ ?x ?v known in? ] | { CondNest ?s ?y }  ;
-
 CHR: conflict-state-is-absurd @ // { ConflictState ?t __ __ } -- | { AbsurdState ?t } ;
 
 ! Reasoning
+CHR: dead-is-unnecessary @ { Dead ?c } // { Necessary __ ?c } -- | ;
+CHR: trivial-is-unneccessary @ { Trivial ?c } // { Necessary __ ?c } -- | ;
+
 ! CHR{ { Absurd ?t } // { Cond ?t ?c } -- | }
 CHR: kill-absurd-cond-preds @ { Absurd ?s } // <={ cond-pred ?s . __ } -- | ;
 CHR{ { Absurd ?x } // { Disjoint ?x ?y } -- | { Trivial ?y } }
@@ -193,89 +206,13 @@ CHR{ { Trivial ?y } // { Disjoint ?x ?y } -- | { Absurd ?x } }
 ! CHR{ // { Trivial ?x } { Disjoint ?x ?y } -- | { Absurd ?y } }
 ! CHR{ // { Trivial ?y } { Disjoint ?x ?y } -- | { Absurd ?x } }
 
-! Balanced stacks through branches
-
-: list>simple-type ( list1 -- n last )
-    0 swap [ dup atom? ] [ [ 1 + ] dip cdr ] until ; inline
-
-: ?effect-height ( list1 list2 -- n/f )
-    [ list>simple-type ] bi@ swapd
-    = [ - ] [ 2drop f ] if ;
-
-! ERROR: imbalanced-branch-stacks i1 o1 i2 o2 ;
-
-! CHR: require-balanced-branch-stacks @ { Branch ?r ?c1 ?c2 }
-! ! { Cond ?c1 P{ SameStack ?rho ?a } }
-! ! { Cond ?c1 P{ SameStack ?x ?sig } }
-! ! { Cond ?c2 P{ SameStack ?rho ?b } }
-! ! { Cond ?c2 P{ SameStack ?y ?sig } } // -- [ break ?a known llength* ?b known llength* = dup [ "branch imbalance" throw ] unless ] | [ ?x ?y ==! ] ;
-! { Cond ?c1 P{ SameStack ?rho ?a } }
-! { Cond ?c1 P{ SameStack ?x ?sig } }
-! { Cond ?c2 P{ SameStack ?rho ?b } }
-! { Cond ?c2 P{ SameStack ?y ?sig } }
-! // --
-! [ ?a ?x ?effect-height :>> ?v ] [ ?b ?y ?effect-height :>> ?w ]
-! |
-! [
-!     ?v ?w { [ and ] [ = not ] } 2&&
-!     [ ?a ?x ?b ?y imbalanced-branch-stacks ] when
-
-!     ?rho lastcdr ?sig lastcdr ==!
-! ]
-! ! [ ?x ?y ==! ]
-!     ;
-
-! Value-level handling
-
-! Expand
-! This is tricky.  New strategy: in one direction we set it to equal, in the other, we generate new vars?
-CHR: assume-stack-left @ { Cond ?c P{ SameStack ?a L{ ?y . ?ys } } } // -- [ ?a known term-var? ] |
-[ ?a L{ ?x . ?xs } ==! ] ;
-CHR: assume-stack-right @ { Cond ?c P{ SameStack L{ ?x . ?xs } ?b } } // -- [ ?b known term-var? ] |
-[ ?b L{ ?y . ?ys } ==! ] ;
-! CHR: assume-stack-right @ // { Cond ?c P{ SameStack L{ ?x . ?xs } ?b } } -- [ ?b known term-var? ] |
-! { Cond ?c P{ SameStack L{ ?x . ?xs } L{ ?y . ?b } } } ;
-! [ ?b L{ ?y . ?ys } ==! ] ;
-
-CHR: same-stack-tos @ { Cond ?c P{ SameStack L{ ?x . ?xs } L{ ?y . ?ys } } } // -- |
-{ Cond ?c P{ Same ?x ?y } }
-{ Cond ?c P{ Same ?xs ?ys } } ;
-
-CHR: destruct-same-stack-values @ // { Cond ?c P{ Same L{ ?x . ?xs } L{ ?y . ?ys } } } -- |
-     { Cond ?c P{ Same ?x ?y } }
-     ! { Cond ?c P{ SameStack ?xs ?ys } }
-     { Cond ?c P{ Same ?xs ?ys } }
-    ;
-
-
-
-
-
-
-! If Conjunctions are true in both branches, they are true in parent scope
-CHR: propagate-disjoint-tautology @
-{ CondJump ?r ?c1 } { CondJump ?r ?c2 } { Disjoint ?c1 ?c2 } //
-AS: ?x <={ cond-pred ?c1 . ?a }
-<={ cond-pred ?c2 . ?a } -- |
-! [ ?x clone ?r >>cond ] ;
-[ ?x ?r >>cond ] ;
 
 
 ! Rewrite stuff to branch conditions, to transport that upwards
-! CHR: propagate-trivial @ { Trivial ?c } { CondJump ?r ?c } // SUB: ?x cond-pred L{ ?c . ?xs } -- |
 CHR: propagate-trivial-1 @ { Trivial ?c } { Branch ?r __ ?c __ } // AS: ?x <={ cond-pred ?c . __ } -- |
      [ ?x ?r >>cond ] ;
 CHR: propagate-trivial-2 @ { Trivial ?c } { Branch ?r __ __ ?c } // AS: ?x <={ cond-pred ?c . __ } -- |
 [ ?x ?r >>cond ] ;
 
-! Clean up jump artifacts
-CHR: absurd-jump-from @ { Absurd ?r } // { CondJump ?r __ } -- | ;
-! CHR: absurd-ret-from @ { Absurd ?u } // { CondRet __ ?u } -- | ;
-CHR: absurd-jump-to @ { Absurd ?s } // { CondJump __ ?s } -- | ;
-! CHR: absurd-ret-to @ { Absurd ?t } // { CondRet ?t __ } -- | ;
-
-
-! NOTE: Assumption, there can only be one jump into ?s
-! CHR{ // { Trivial ?s } { CondJump ?r ?s } -- | }
 
 ;

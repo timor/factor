@@ -8,7 +8,6 @@ IN: chr.factor.words
 
 TUPLE: Shuffle < trans-pred mapping ;
 TUPLE: ApplyWordRules < trans-pred w ;
-TUPLE: AskLit < Lit ;
 TUPLE: FoldCall < Call ;
 
 
@@ -264,6 +263,15 @@ CHR: primitive-rules @ // { ApplyWordRules ?s ?t ?w } -- [ ?w primitive? ] |
   ] bi
 ]
     ;
+
+! Instance checks
+CHR: instance-test @ { ApplyWordRules ?s ?t instance? } // -- |
+{ Stack ?s L{ ?tau ?x . __ } }
+{ Stack ?t L{ ?b . __ } }
+{ Type ?b boolean }
+{ Necessary ?s ?c1 }
+{ Cond ?c1 P{ = ?b f } }
+{ Cond ?c1 P{ Not { Type ?x ?tau } } } ;
 
 ! Insert at least one dummy state to prevent hooking into the top node with Entry specs
 CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- [ ?w generic? not ] |

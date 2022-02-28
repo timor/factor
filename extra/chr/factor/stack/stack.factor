@@ -9,7 +9,7 @@ TUPLE: CompatibleEffects < chr-pred in1 out1 in2 out2 ;
 TUPLE: BranchStacks < chr-pred from0 to0 from1 to1 from2 to2 ;
 ERROR: imbalanced-branch-stacks i1 o1 i2 o2 ;
 TUPLE: Val < chr-pred state var ;
-TUPLE: AssumeSameRest l1 l2 ;
+TUPLE: AssumeSameRest < chr-pred l1 l2 ;
 TUPLE: StackOp < trans-pred in out ;
 M: StackOp state-depends-on-vars
     [
@@ -118,9 +118,6 @@ CHR: known-effects-balance @ // { ask { CompatibleEffects ?a ?x ?b ?y } } --
 { entailed { CompatibleEffects ?a ?x ?b ?y } } ;
 
 ! Default Answer for branch stacks
-! CHR: assume-balanced-stacks @ { ask { CompatibleEffects ?a ?x ?b ?y } } // -- |
-! FIXME: this should be converted automatically!
-! CHR: assume-balanced-stacks @ { _ask CompatibleEffects { ?a ?x ?b ?y } __ } // -- |
 CHR: assume-balanced-stacks @ // { ask { CompatibleEffects ?a ?x ?b ?y } } -- |
 { AssumeSameRest ?a ?b }
 { AssumeSameRest ?x ?y }

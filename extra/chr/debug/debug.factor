@@ -38,6 +38,9 @@ IN: chr.debug
 : id-susp. ( id -- )
     store get at susp. ;
 
+: try-rule-match. ( c schedule -- )
+    swap id>> "Try id %d on Rule: " printf occurrence>> first rule-id . ;
+
 : chrebug ( -- )
     ! \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate
     \ kill-chr [ [ "- " write dup id-susp. ] prepose ] annotate
@@ -50,6 +53,7 @@ IN: chr.debug
     ! \ activate [ [ "! " write dup id-susp. ] prepose ] annotate
     ! \ test-callable [ [ dup "Builtin Test: " write . ] prepose [ dup " ==> %u\n" printf ] compose ] annotate
     ! \ run-occurrence [ [ dup occurrence>> "Try Occurrence %u with Schedule: " printf dup partners>> . ] prepose ] annotate
+    \ run-occurrence [ [ 2dup try-rule-match. ] prepose ] annotate
     \ collect-chrat-solvers [ [ "Solvers for Program: " write dup . ] compose ] annotate
     \ load-chr [ [ "Rewritten Program: " write dup rules>> <enumerated> >array . ] compose ] annotate
     ! \ replace-all-equalities [ [ ground-values get "Ground-values: " write . ] prepose ] annotate

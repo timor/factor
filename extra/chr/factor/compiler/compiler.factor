@@ -81,6 +81,7 @@ CHR: define-top-stacks @ { CompileRule } // { Scope +top+ +end+ ?rho ?sig __ } -
 ! Erase Simplification artifacts
 
 CHR{ { CompileRule } // { Dead __ } -- | }
+CHR{ { CompileRule } // { AskLit __ __ } -- | }
 
 CHR{ // { CompileRule } -- | { CompileDone } }
 

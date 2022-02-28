@@ -49,6 +49,7 @@ TUPLE: SingleMethod < trans-pred word n class ;
 TUPLE: DefaultMethod < trans-pred word ;
 TUPLE: Definition < chr-pred word quot ;
 TUPLE: Lit < val-pred obj ;
+TUPLE: AskLit < Lit ;
 TUPLE: Effect < val-pred in out ;
 ! TUPLE: Curried < chr-pred val parm callable ;
 TUPLE: Curried < chr-pred parm q ;
