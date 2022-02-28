@@ -1,16 +1,17 @@
-USING: accessors chr.factor chr.factor.conditions chr.modular chr.parser
-chr.state kernel lists terms ;
+USING: accessors chr.factor chr.factor.conditions chr.factor.stack chr.modular
+chr.parser chr.state kernel lists terms ;
 
 IN: chr.factor.data-flow
 
-TUPLE: SplitStack < state-pred stack-in stack-out1 stack-out2 ;
-TUPLE: JoinStack < state-pred stack-out stack-in1 stack-in2 ;
+! TUPLE: SplitStack < state-pred stack-in stack-out1 stack-out2 ;
+TUPLE: SplitStack < Split ;
+TUPLE: JoinStack < Join ;
 
 ! ** Data Flow
 CHRAT: data-flow { Effect Copy Split Dup }
 
 ! Remove dropped literals
-CHR{ // { Drop ?x } { Lit ?x __  } -- | { Dead ?x } }
+! CHR{ // { Drop ?x } { Lit ?x __  } -- | { Dead ?x } }
 
 ! *** Sanity checks
 CHR{ { Drop ?x } { Drop ?x } // -- | [ "double drop" throw ] }
@@ -69,27 +70,30 @@ CHR: destructure-dup @
 
 ! ** Forward propagation
 
-CHR: literal-dup1 @
-{ Lit ?x ?v } // { Dup ?x ?y } -- | { Lit ?y ?v } ;
+! CHR: literal-dup1 @
+! { Lit ?x ?v } // { Dup ?x ?y } -- | { Lit ?y ?v } ;
 
-CHR: literal-dup2 @
-{ Lit ?y ?v } // { Dup ?x ?y } -- | { Lit ?x ?v } ;
+! CHR: literal-dup2 @
+! { Lit ?y ?v } // { Dup ?x ?y } -- | { Lit ?x ?v } ;
 
 ! ** Backward propagation
 CHR: split-will-be-dead @  { Dead ?y } { Dead ?z } // { Split __ ?x ?y ?z } -- | { Dead ?x } ;
 
 ! ** Splits and Joins
 ! *** Simplify
-CHR: redundant-split-1 @ { Absurd ?c1 } { Branch ?r __ ?c1 ?c2 } // { Split ?r ?x ?y ?z } --
-| [ ?x ?z ==! ] ;
-CHR: redundant-split-2 @ { Absurd ?c2 } { Branch ?r __ ?c1 ?c2 } // { Split ?r ?x ?y ?z } --
-| [ ?x ?y ==! ] ;
+! CHR: redundant-split-1 @ { Absurd ?c1 } { Branch ?r __ ?c1 ?c2 } // { Split ?r ?x ?y ?z } --
+! | [ ?x ?z ==! ] ;
+! CHR: redundant-split-2 @ { Absurd ?c2 } { Branch ?r __ ?c1 ?c2 } // { Split ?r ?x ?y ?z } --
+! | [ ?x ?y ==! ] ;
 
-CHR: redundant-join-1 @ // { Join __ ?z ?z ?x } -- | ;
-CHR: redundant-join-2 @ // { Join __ ?z ?x ?z } -- | ;
+CHR: redundant-split-1 @ // <={ Split __ ?z ?z ?x } -- | ;
+CHR: redundant-split-2 @ // <={ Split __ ?z ?x ?z } -- | ;
+
+CHR: redundant-join-1 @ // <={ Join __ ?z ?z ?x } -- | ;
+CHR: redundant-join-2 @ // <={ Join __ ?z ?x ?z } -- | ;
 
 ! *** Regular
-CHR: pushdown-literals @ { Split __ ?x ?y ?z } // { Lit ?x ?v } -- | { Lit ?y ?v } { Lit ?z ?v } ;
+! CHR: pushdown-literals @ { Split __ ?x ?y ?z } // { Lit ?x ?v } -- | { Lit ?y ?v } { Lit ?z ?v } ;
 
 TERM-VARS: ?zs ;
 

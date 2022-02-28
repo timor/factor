@@ -1,6 +1,6 @@
-USING: accessors arrays chr chr.factor chr.factor.conditions chr.modular
-chr.parser chr.state combinators combinators.short-circuit effects generic
-kernel lists make math.parser sequences terms types.util ;
+USING: accessors arrays chr chr.factor chr.factor.types chr.modular chr.parser
+chr.state classes combinators combinators.short-circuit effects generic kernel
+lists make math math.parser sequences terms types.util ;
 
 IN: chr.factor.stack
 
@@ -28,7 +28,7 @@ TUPLE: EndStack < Stack ; ! marker
     ] map-index <reversed> ;
 
 ! ** Basic stack handling
-CHRAT: basic-stack { Lit InferredEffect CompatibleEffects Stack }
+CHRAT: basic-stack { CompatibleEffects Stack }
 
 ! Convention: If outputs meet, they are set equal.  If an input and an output
 ! meets, the input absorbs the output.  StackOps have an input and an output.
@@ -105,6 +105,12 @@ CHR: assume-same-rest @ // { AssumeSameRest ?x ?y } -- [ ?x ?y [ known ] bi@ [ l
 ! { SameDepth ?x ?y }
 [ ?x ?y [ known lastcdr ] bi@ ==! ] ;
 
+: list>simple-type ( list1 -- n last )
+    0 swap [ dup atom? ] [ [ 1 + ] dip cdr ] until ; inline
+
+: ?effect-height ( list1 list2 -- n/f )
+    [ list>simple-type ] bi@ swapd
+    = [ - ] [ 2drop f ] if ;
 
 ! Setting up stack branch/merge
 CHR: known-effects-balance @ // { ask { CompatibleEffects ?a ?x ?b ?y } } --
@@ -189,10 +195,11 @@ CHR{ // { AssumeWordEffect ?s ?t ?w ?e } -- |
 ! ! { CondRet ?r ?s true } // -- | { Stack ?r ?rho } { Stack ?s ?rho } }
 ! // { CondRet ?r ?s true } -- | [ ?r ?s ==! ] ;
 
-CHR: make-push-stack @ // { Push ?s ?t ?b } -- |
+CHR: make-push-stack @ // { Push ?s ?t ?b } -- [ ?b known? ] [ P{ Lit ?b } :>> ?x ] |
      ! { Cond ?s { Lit ?v ?b } }
-     { StackOp ?s ?t ?rho L{ ?v . ?rho } }
-     { Lit ?v ?b }
+     { StackOp ?s ?t ?rho L{ ?x . ?rho } }
+     [ ?x ?b class-of Type boa ]
+     ! { Lit ?v ?b }
      ! { Stack ?s ?rho }
      ! { Stack ?t L{ ?v . ?rho } }
     ;

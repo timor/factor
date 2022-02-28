@@ -24,18 +24,20 @@ TUPLE: RemoveStack < chr-pred s ;
 CHRAT: chrat-cleanup { }
 
 ! *** Dead Values
+CHR: no-dead-lits @ // { Dead P{ Lit __ } } -- | ;
 CHR{ { Dead ?x } // { Dead ?x } -- | }
 ! CHR{ // { Drop +top+ ?x } -- | { Dead ?x } }
 
-! CHR: drop-lit2 @ { Dead ?x } // { Lit ?x __ } -- | ;
+! NOTE: This does basically the same as the state-dep GC down below.
+CHR: dead-var-type-vars-are-dead @ { Dead ?x } { Type ?x ?tau } // -- | { Dead ?tau } ;
+
 CHR: drop-dead-val-preds @ { Dead ?x } //
 <={ val-pred ?x . __ } -- | ;
 
+CHR: drop-dead-type-preds @ { Dead ?x } //
+<={ type-pred ?x . __ } -- | ;
+
 ! *** Dead Phis
-! CHR: trivial-split-1 @ { Branch ?r __ ?a ?b } { Dead ?b } // { SplitStack ?r ?x ?y ?z } -- | [ ?x ?y ==! ] ;
-! CHR: trivial-split-2 @ { Branch ?r __ ?a ?b } { Dead ?a } // { SplitStack ?r ?x ?y ?z } -- | [ ?x ?z ==! ] ;
-! CHR: trivial-join-1 @ { Branch ?r __ ?a ?b } { Dead ?b } // { JoinStack ?r ?x ?y ?z } -- | [ ?x ?y ==! ] ;
-! CHR: trivial-join-2 @ { Branch ?r __ ?a ?b } { Dead ?a } // { JoinStack ?r ?x ?y ?z } -- | [ ?x ?z ==! ] ;
 
 ! *** Dead Conditions
 ! NOTE: condition values being dead means that they no longer can apply
@@ -43,7 +45,11 @@ CHR: drop-dead-cond-preds @ { Dead ?c } // <={ cond-pred ?c . __ } -- | ;
 
 ! TODO: sub-class-only matches
 ! CHR: dead-val-conds-are-dead @ { Dead ?v } // { Cond ?c ?p } -- [ p? known dup val-pred? [ value>>  ] [ drop f ] if ]
-CHR: dead-val-conds-are-dead @ { Dead ?v } // { Cond ?c <={ val-pred ?v } } -- | ;
+! CHR: dead-val-conds-are-dead @ { Dead ?v } // { Cond ?c <={ val-pred ?v . __ } } -- | ;
+CHR: dead-val-conds-are-dead @ { Dead ?v } // { Cond ?c ?p } -- [ ?p known ]
+[ ?p val-pred? [ ?p value>> ?v = ] [ ?p type-pred? [ ?p type>> ?v = ] [ f ] if ] if  ]
+| ;
+! CHR: dead-type-conds-are-dead @ { Dead ?v } // { Cond ?c <={ type-pred ?v . __ } } -- | ;
 ! CHR{ { Dead ?x } // { Instance ?x __ } -- | }
 !  CHR{ { Dead ?x } // { Cond __ P{ Instance ?x __ } } -- | }
 
@@ -53,7 +59,8 @@ CHR: dead-scopes-are-dead @ { Dead ?s } // <={ Scope ?s __ __ __ ?l . __ } -- |
 
 ! CHR{ { Dead ?x } // { Effect ?x __ __ } -- | }
 ! CHR{ { Dead ?x } // { Effect L{ ?x . __ } __ __ } -- | }
-CHR: inlining-known @ { Dead ?p } // { InlinesUnknown __ ?p } -- | ;
+! CHR: inlining-known @ { Dead ?p } // { InlinesUnknown __ ?p } -- | ;
+CHR: inlining-known @ // { InlinesUnknown __ P{ Lit __ } } -- | ;
 
 ! *** Dead States
 
@@ -109,10 +116,11 @@ CHR: finish-scope-stack-ops @  { Scope ?r ?u __ __ ?l } // { FinishScope ?r ?u }
 
 
 ! CHR: dead-branch-1 @ { Branch ?r ?u ?a ?b } { Dead ?b } { Scope ?a ?x __ __ __ } // -- | [ { ?r ?u } { ?a ?x } ==! ] ;
+CHR: dead-branch-1 @ { Dead ?b } { Scope ?a ?x __ __ __ } // { Branch ?r ?u ?a ?b } -- | [ { ?r ?u } { ?a ?x } ==! ] ;
 ! CHR: dead-branch-1 @ { Branch ?r ?u ?a ?b } { Dead ?b } { Scope ?a ?x ?rho ?sig ?l } // -- |
-! { Scope ?r ?u ?rho ?sig ?l } ;
 
 ! CHR: dead-branch-2 @ { Branch ?r ?u ?a ?b } { Dead ?a } { Scope ?b ?y __ __ __ } // -- | [ { ?r ?u } { ?b ?y } ==! ] ;
+CHR: dead-branch-2 @ { Dead ?a } { Scope ?b ?y __ __ __ } // { Branch ?r ?u ?a ?b } -- | [ { ?r ?u } { ?b ?y } ==! ] ;
 ! CHR: dead-branch-2 @ { Branch ?r ?u ?a ?b } { Dead ?a } { Scope ?b ?y ?rho ?sig ?l } // -- |
 ! { Scope ?r ?u ?rho ?sig ?l } ;
 
@@ -158,7 +166,8 @@ CHR: inline-unknown-effect @  { InlineUnknown ?s ?t ?p } // -- | { Effect ?p ?a 
 CHR: notice-inline-unknown @ { InlineUnknown ?s ?t ?p } // -- | { InlinesUnknown ?s ?p } ;
 CHR: inline-unknown-curried @ // { InlinesUnknown ?c L{ ?x . ?xs } } -- | { InlinesUnknown ?c ?xs } ;
 
-CHR: inline-made-known @  { Lit ?p ?q } // { InlineUnknown ?s ?t ?p } ! { Effect ?p __ __ }
+! CHR: inline-made-known @  { Lit ?p ?q } // { InlineUnknown ?s ?t ?p } ! { Effect ?p __ __ }
+CHR: inline-made-known @ // { InlineUnknown ?s ?t P{ Lit ?q } } ! { Effect ?p __ __ }
      -- |
      ! { Stack ?s ?a }
      ! { Stack ?t ?b }
@@ -223,7 +232,7 @@ CHR: infer-if @ // { Exec ?r ?t if } --
 ! { Equiv ?sf0 P{ Instance ?c \ f } }
 ! { Cond ?st0 P{ Not P{ Type ?c POSTPONE: f } } }
 ! { Cond ?sf0 P{ Type ?c POSTPONE: f } }
-{ Equiv ?sf0 { = ?c f } }
+{ Equiv ?sf0 { = ?c P{ Lit f } } }
 { Disjoint ?st0 ?sf0 }
 { InlineUnknown ?st0 ?st1 ?p }
 { InlineUnknown ?sf0 ?sf1 ?q }

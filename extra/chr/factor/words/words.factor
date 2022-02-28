@@ -44,6 +44,10 @@ M: word chrat-out-types
 : linear-shuffle? ( effect -- ? )
     [ in>> ] [ out>> ] bi { [ [ length ] same? ] [ set= ] } 2&& ;
 
+: effect>vars ( effect -- in-seq out-seq )
+    [ in>> elt-vars ]
+    [ out>> elt-vars ] bi ;
+
 : effect>stacks ( effect -- lin lout )
     [ in>> elt-vars >list ]
     [ out>> elt-vars >list ] bi ;
@@ -205,43 +209,56 @@ CHR{ { Word ?s ?t ?w } // --
 ! Alternatively, only try folding if we have a top literal?
 ! CHR{ { Word ?s ?t ?w } { Stack ?s L{ ?x . __ } } { Lit ?x __ } // -- [ ?w foldable? ] |
 ! CHR: try-fold-word @ { Word ?s ?t ?w } { Lit ?x __ } // -- [ ?w foldable? ] { Stack ?s L{ ?x . __ } } |
-CHR: try-fold-word @ { Word ?s ?t ?w } // -- [ ?w foldable? ] |
-     [| | ?w stack-effect :> e { FoldEffect ?s ?t ?w e } ] ;
+! CHR: try-fold-word @ { Word ?s ?t ?w } // -- [ ?w foldable? ] |
+!      [| | ?w stack-effect :> e { FoldEffect ?s ?t ?w e } ] ;
 
 ! NOTE: Assuming that foldable effects are always bounded!
-CHR: try-fold @ { FoldEffect ?s ?t ?w ?e } // -- [ ?e known? ] |
-     [| | ?e in>> elt-vars dup
-      >list ?rho lappend :> stack-in
-      ! <reverse> [ number>string "lv" prepend uvar <term-var> 2array ] map :> var-map-in
-      <reversed> dup :> var-in
-      length [ number>string "lv" prepend uvar <term-var> ] { } map-integers :> lit-in
-      ?e out>> elt-vars dup
-      >list ?rho lappend :> stack-out
-      reverse :> var-out
-      { { Stack ?s stack-in }
-        { Stack ?t stack-out }
-        { FoldCall ?s ?w lit-in var-out }
-      }
-      ! var-in [ number>string "lv" prepend uvar <term-var> AskLit boa ] map-index append
-      var-in lit-in [ AskLit boa ] 2map append
-     ]
-   ;
+! CHR: try-fold @ { FoldEffect ?s ?t ?w ?e } // -- [ ?e known? ] |
+!      [| | ?e in>> elt-vars dup
+!       >list ?rho lappend :> stack-in
+!       ! <reverse> [ number>string "lv" prepend uvar <term-var> 2array ] map :> var-map-in
+!       <reversed> dup :> var-in
+!       length [ number>string "lv" prepend uvar <term-var> ] { } map-integers :> lit-in
+!       ?e out>> elt-vars dup
+!       >list ?rho lappend :> stack-out
+!       reverse :> var-out
+!       { { Stack ?s stack-in }
+!         { Stack ?t stack-out }
+!         { FoldCall ?s ?w lit-in var-out }
+!       }
+!       ! var-in [ number>string "lv" prepend uvar <term-var> AskLit boa ] map-index append
+!       var-in lit-in [ AskLit boa ] 2map append
+!      ]
+!    ;
 
 ! Theoretically this is dead, because we don't expect a value to be used twice
-CHR{ // { Lit ?x ?v } { AskLit ?x ?a } -- | [ ?a ?v ==! ] { Dead ?x } }
+! CHR{ // { Lit ?x ?v } { AskLit ?x ?a } -- | [ ?a ?v ==! ] { Dead ?x } }
 
-CHR: do-fold-call @ // { Call ?s ?w __ __ } { FoldEffect ?s __ __ __ } { FoldCall ?s ?w ?i ?o } -- [ ?i [ known? ] all? ] |
-    [ ?i [ known ] map ?w 1quotation with-datastack
-      ?o swap [ Lit boa ] 2map
-    ]
-    ;
+! CHR: do-fold-call @ // { Call ?s ?w __ __ } { FoldEffect ?s __ __ __ } { FoldCall ?s ?w ?i ?o } -- [ ?i [ known? ] all? ] |
+!     [ ?i [ known ] map ?w 1quotation with-datastack
+!       ?o swap [ Lit boa ] 2map
+!     ] ;
+CHR: foldable-call @ // { Call ?s ?w ?i ?o } -- [ ?w foldable? ] |
+[| | ?w stack-effect effect>vars :> ( vin vout )
+ vin >list __ lappend :> lin
+ vout >list __ lappend :> lout
+ { lin lout } { ?i ?o } ==!
+ { FoldCall ?s ?w vin vout } 2array
+] ;
 
-CHR: do-fold-quot @ // { FoldEffect ?s ?t __ ?e } { FoldCall ?s ?q ?i ?o } -- [ ?q callable? ] [ ?i [ known? ] all? ] |
-[ ?i [ known ] map ?q with-datastack
-  ?o swap [ Lit boa ] 2map
-]
-[ ?s ?t ?e effect>stacks [ ?rho lappend ] bi@ StackOp boa ]
-    ;
+ERROR: folding-error inputs quot error ;
+
+CHR: do-fold-call @ // { FoldCall ?s ?w ?i ?o } -- [ ?i [ Lit? ] all? ] |
+    [ ?i <reversed> [ obj>> ] map ?w 1quotation [ with-datastack ] [ folding-error ] recover
+      ?o swap [ Lit boa ==! ] 2map
+    ] ;
+
+! CHR: do-fold-quot @ // { FoldEffect ?s ?t __ ?e } { FoldCall ?s ?q ?i ?o } -- [ ?q callable? ] [ ?i [ known? ] all? ] |
+! [ ?i [ known ] map ?q with-datastack
+!   ?o swap [ Lit boa ] 2map
+! ]
+! [ ?s ?t ?e effect>stacks [ ?rho lappend ] bi@ StackOp boa ]
+!     ;
 
 ! ** Anything else
 

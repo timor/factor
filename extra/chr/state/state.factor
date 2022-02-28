@@ -297,15 +297,8 @@ SYMBOL: sentinel
     recursion-check
     ! check-integrity
     store get at
-    ! dup activated>>
-    ! [ drop ]
-    ! [
-    !     dup t >>activated
-    !     recursion-check
-        dup type>> program get schedule>> at
-        [ run-occurrence ] with each
-    !     f >>activated drop
-    ! ] if
+    dup type>> program get schedule>> at
+    [ over alive>> [ run-occurrence ] [ 2drop ] if ] with each
     ;
 
 GENERIC: activate-new ( rule c -- )

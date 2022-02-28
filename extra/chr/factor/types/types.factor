@@ -1,13 +1,15 @@
-USING: chr chr.factor chr.factor.conditions chr.parser chr.state classes
-classes.algebra kernel lists quotations terms ;
+USING: accessors arrays chr chr.factor chr.factor.conditions chr.parser
+chr.state classes classes.algebra kernel lists quotations terms ;
 
 IN: chr.factor.types
 
 ! Statement: var has type
 TUPLE: Type < val-pred type ;
-TUPLE: Subtype < chr-pred sub super ;
-TUPLE: Intersect < chr-pred tau sig ;
-TUPLE: UnionType < chr-pred result member1 member2 ;
+TUPLE: type-pred < chr-pred type ;
+
+TUPLE: Subtype < type-pred super ;
+TUPLE: Intersect < type-pred sig ;
+TUPLE: UnionType < type-pred member1 member2 ;
 TUPLE: AcceptTypeUnion < AcceptType ;
 TUPLE: ProvideTypeUnion < ProvideType ;
 ! TUPLE: AssumeTypes < chr-pred stack ;
@@ -18,6 +20,11 @@ TUPLE: ProvideTypeUnion < ProvideType ;
 ! this type" and "A variable holding this value has to be declared this type? I
 ! suppose in straight-line code, especially without a subtyping relation this
 ! does not make any difference?
+
+! NOTE: Type variables are assumed to be unique to the value variables!  This
+! means that If a value with a type variable is dead, the type variable is also dead!
+! In that sense, there is really not much of a difference between a type-pred
+! and a val-pred...
 
 CHRAT: chrat-types { Type NotInstance Subtype Intersect }
 
@@ -53,7 +60,7 @@ CHR: destructure-provide-type-head @ { ProvideType ?s L{ ?x . ?xs } L{ ?y . ?ys 
 CHR: destructure-provide-type-rest @ // { ProvideType ?s L{ ?x . ?xs } L{ ?y . ?ys } } -- | { ProvideType ?s ?xs ?ys } ;
 
 ! CHR: lit-is-instance @ { Lit ?a ?b } // -- | [ ?a ?b class-of Instance boa ] ;
-CHR: lit-defines-type @ { Lit ?a ?b } // -- | [ ?a ?b class-of Type boa ] ;
+! CHR: lit-defines-type @ { Lit ?a ?b } // -- | [ ?a ?b class-of Type boa ] ;
 ! CHR: lit-defines-type @ { Lit ?a ?b } // -- | { Type ?a ?tau } [ ?tau class-of Subtype boa ] ;
 
 CHR: accept-defines-type @ { AcceptType ?s ?x ?sig } // -- [ ?x known list? not ] | { Type ?x ?tau } { Cond ?s P{ Subtype ?tau ?sig } } ;
@@ -66,10 +73,21 @@ CHR: effects-are-callables @ { Effect ?x __ __ } { Type ?x ?tau } // -- |
 ! NOTE: Ideally, the condition system would cut intersections into separate conditions, e.g. a resulting reasoning like this:
 ! { AcceptType ?s ?x ?tau2 } => { Type ?x ?tau1 } => ∃ c1,c2:  c1 <=> { Intersect ?tau1 ?tau2 }, c2 ==> { ConflictState ?s }, { Disjoint c1 c2 }
 
+! ** Literal simplification
+! CHR: literal-must-be-instance @ // { Type P{ Lit ?v } P{ Lit ?c } } -- |
+CHR: literal-must-be-instance @ // { Type P{ Lit ?v } P{ Lit ?c } } -- |
+[ ?v ?c known instance? [ f ] [ ?v ?c 2array "inconsistent lit types" throw ] if ] ;
+
+CHR: literal-sets-type-constant @ // { Type P{ Lit ?v } ?tau } -- | [ ?tau ?v known class-of ==! ] ;
+
+CHR: check-literal-accept-type @ // { AcceptType __ P{ Lit ?v } ?tau }
+-- [ ?tau known? ] [ ?v ?tau known instance? ] | ;
+
 ! ** Algebra
 CHR{ { Subtype ?x ?y } // { Subtype ?x ?y } -- | }
 ! CHR: instance-type @ P{ Instance ?x ?tau } // -- | P{ Type ?x ?tau } ; ! { Subtype ?tau1 ?tau } { Subtype ?tau ?tau1 } ;
 CHR{ // { Subtype ?x ?y } -- [ ?x known classoid? ] [ ?y known classoid? ] | [ ?x ?y class<= [ f ] [ "Subtype Contradiction" throw ] if ] }
+CHR{ // { Type P{ Lit ?x } ?y } -- [ ?y known classoid? ] | [ ?x ?y known instance? [ f ] [ "Subtype Contradiction" throw ] if ] }
 
 ! ** Phi stuff
 CHR: trivial-union @ // { UnionType ?tau3 ?tau1 ?tau1 } -- | [ ?tau3 ?tau1 ==! ] ;
@@ -107,16 +125,11 @@ CHR: eq-implies-subtype @ AS: ?a <={ Cond ?c P{ = ?x ?v } } // -- [ ?v known? ] 
  !   } cond
  ! ] ;
 ! CHR: trivial-subtypes @ { Subtype ?x ?y } // { Cond ?c P{ Subtype ?x ?y } } -- | { Cond +top+ P{ Subtype ?x ?y } } ;
-CHR: known-subtypes @ // { Cond __ P{ Subtype ?x ?y } } -- [ ?x known ?y known class<= ] | ;
-CHR: known-not-subtypes @ { Cond ?c P{ Subtype ?x ?y } } // -- [ ?x known ?y known classes-intersect? not ] | { Absurd ?c } ;
+CHR: known-subtypes @ // <={ Cond __ P{ Subtype ?x ?y } } -- [ ?x known ?y known class<= ] | ;
+CHR: known-not-subtypes @ <={ Cond ?c P{ Subtype ?x ?y } } // -- [ ?x known ?y known classes-intersect? not ] | { Absurd ?c } ;
 ! CHR: type-known @ { Equiv ?c P{ Type ?x ?y } } // -- { Type ?x ?y } | { Trivial ?c } ;
 CHR: type-known @ { Equiv ?c P{ Type ?x ?y } } { Type ?x ?y } // -- | { Trivial ?c } ;
 ! { Not P{ Subtype ?x ?y } }
-
-! NOTE: Not completely sure that there isn't a more common pattern to do stuff
-! like this.  This kind of has the semantics of "If there is anything literal
-! known, then it must be exactly true in all cases!"
-! CHR: literal-type-known @  g
 
 ! ** Stack Query
 

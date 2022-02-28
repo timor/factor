@@ -149,20 +149,18 @@ CHR: equiv-subsumes-cond @ { Equiv ?c ?p } // { Cond ?c ?p } -- | ;
 CHR: disjoint-is-bounded @ { Disjoint ?c ?c1 } // { Disjoint ?c ?c2 } -- | [ ?c2 ?c1 ==! ] ;
 CHR: disjoint-is-bounded @ { Disjoint ?c1 ?c } // { Disjoint ?c ?c2 } -- | [ ?c2 ?c1 ==! ] ;
 
-CHR: assume-complement-condition @ // { Cond ?c P{ Not ?p } } -- |
+CHR: assume-complement-condition @ { Cond ?c P{ Not ?p } } // -- |
 { Equiv ?c2 ?p }
-{ Disjoint ?c ?c2 } ;
+{ Disjoint ?c2 ?c } ;
 
-! Is this a recursion problem?
-CHR: ask-for-complement @ { Cond ?c1 ?p } { Disjoint ?c1 ?c2 } // -- |
-{ Cond ?c2 P{ Not ?p } } ;
+! Is this a recursion problem? For now, there is kind of a "normalization" behavior if we actually
+! only ask for one of the conditions in the disjoint set...
+CHR: ask-for-complement @ <={ Cond ?c2 ?p } { Disjoint ?c1 ?c2 } // -- [ ?p Not? not ] |
+{ Cond ?c1 P{ Not ?p } } ;
 
-
-! Test for triviality of complement once
-! CHR: ask-trivial-contradiction @ { Cond ?c ?p } //
-! -- { IsTrivial P{ Not ?p } ?b } |
-! { IsTrivial P{ Not ?p } ?b } ;
-
+! eq constraints
+CHR: known-test-equal @ { Equiv ?c P{ = P{ Lit ?x } P{ Lit ?y } } } // -- |
+[ ?c ?x ?y [ known ] same? [ Trivial boa ] [ Absurd boa ] if ] ;
 
 
 ! Propagate Absurdness
