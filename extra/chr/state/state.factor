@@ -217,8 +217,11 @@ GENERIC: match-constraint ( bindings suspension match-spec -- bindings )
 M: chr-sub-pred match-constraint
     args>> swap constraint-args >list 2array 1array solve-next ;
 M: as-pred match-constraint
-    [ [ constraint>> ] [ var>> ] bi* pick set-at ]
-    [ pred>> match-constraint ] 2bi ;
+    ! [ [ constraint>> ] [ var>> ] bi* pick set-at ]
+    [ [ constraint>> ] [ var>> ] bi* swap 2array 1array solve-next ] 2keep rot
+    [ -rot pred>> match-constraint ] [ 2drop f ] if* ;
+
+    ! [ pred>> match-constraint ] 2bi ;
 M: sequence match-constraint
     swap constraint-args 2array 1array solve-next ;
 

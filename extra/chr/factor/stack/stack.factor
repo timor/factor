@@ -1,6 +1,7 @@
-USING: accessors arrays chr chr.factor chr.factor.types chr.modular chr.parser
-chr.state classes combinators combinators.short-circuit effects generic kernel
-lists make math math.parser sequences terms types.util ;
+USING: accessors arrays chr chr.comparisons chr.factor chr.factor.conditions
+chr.factor.types chr.modular chr.parser chr.state classes combinators
+combinators.short-circuit effects generic kernel lists make math math.parser
+sequences terms types.util ;
 
 IN: chr.factor.stack
 
@@ -90,8 +91,9 @@ CHR: answer-end-stack @ { EndStack ?s ?rho } // { ask { Stack ?s ?x } } -- | [ ?
 
 ! Subroutines for making structure equal
 TUPLE: SameDepth < chr-pred stack1 stack2 ;
+CHR{ { SameDepth ?x ?y } // { SameDepth ?x ?y } -- | }
 CHR{ // { SameDepth ?x ?x } -- | }
-CHR{ // { SameDepth ?x ?y } -- [ ?x ?y [ known lastcdr ] bi@ = ] | }
+! CHR{ // { SameDepth ?x ?y } -- [ ?x ?y [ known lastcdr ] bi@ = ] | }
 CHR{ // { SameDepth L{ ?x . ?xs } L{ ?y . ?ys } } -- | { SameDepth ?xs ?ys } }
 
 CHR: destruc-expand-right @ // { SameDepth L{ ?x . ?xs } ?b } -- [ ?b known term-var? ] |
@@ -100,6 +102,8 @@ CHR: destruc-expand-right @ // { SameDepth L{ ?x . ?xs } ?b } -- [ ?b known term
 CHR: destruc-expand-left @ // { SameDepth ?a L{ ?y . ?ys } } -- [ ?a known term-var? ] |
 [ ?a L{ ?x . ?xs } ==! ]
 { SameDepth ?xs ?ys } ;
+
+CHR{ // { SameDepth ?x ?y } -- | }
 
 CHR: assume-same-rest @ // { AssumeSameRest ?x ?y } -- [ ?x ?y [ known ] bi@ [ llength* ] same? ] |
 ! { SameDepth ?x ?y }
@@ -125,8 +129,10 @@ CHR: known-effects-balance @ // { ask { CompatibleEffects ?a ?x ?b ?y } } --
 
 ! Default Answer for branch stacks
 CHR: assume-balanced-stacks @ // { ask { CompatibleEffects ?a ?x ?b ?y } } -- |
-{ AssumeSameRest ?a ?b }
-{ AssumeSameRest ?x ?y }
+! { AssumeSameRest ?a ?b }
+! { AssumeSameRest ?x ?y }
+{ SameDepth ?a ?b }
+{ SameDepth ?x ?y }
 { entailed { CompatibleEffects ?a ?x ?b ?y } } ;
 
 ! CHR: branch-stacks @ { Branch ?r ?u ?s ?t } // -- |
@@ -195,9 +201,12 @@ CHR{ // { AssumeWordEffect ?s ?t ?w ?e } -- |
 ! ! { CondRet ?r ?s true } // -- | { Stack ?r ?rho } { Stack ?s ?rho } }
 ! // { CondRet ?r ?s true } -- | [ ?r ?s ==! ] ;
 
-CHR: make-push-stack @ // { Push ?s ?t ?b } -- [ ?b known? ] [ P{ Lit ?b } :>> ?x ] |
+CHR: make-push-stack @ // { Push ?s ?t ?b } -- |
      ! { Cond ?s { Lit ?v ?b } }
      { StackOp ?s ?t ?rho L{ ?x . ?rho } }
+     ! { --> ?s P{ is ?x ?b } }
+     { is ?x ?b }
+     ! [ ?s ?x ?b class-of Type boa --> boa ]
      [ ?x ?b class-of Type boa ]
      ! { Lit ?v ?b }
      ! { Stack ?s ?rho }

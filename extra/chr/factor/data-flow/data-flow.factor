@@ -1,5 +1,5 @@
-USING: accessors chr.factor chr.factor.conditions chr.factor.stack chr.modular
-chr.parser chr.state kernel lists terms ;
+USING: accessors chr.comparisons chr.factor chr.factor.conditions
+chr.factor.stack chr.modular chr.parser chr.state kernel lists terms ;
 
 IN: chr.factor.data-flow
 
@@ -14,17 +14,18 @@ CHRAT: data-flow { Effect Copy Split Dup }
 ! CHR{ // { Drop ?x } { Lit ?x __  } -- | { Dead ?x } }
 
 ! *** Sanity checks
-CHR{ { Drop ?x } { Drop ?x } // -- | [ "double drop" throw ] }
-CHR{ { Dup ?x ?y } { Dup ?x ?y } // -- | [ "douple dup" throw ] }
-! CHR{ { Dup ?x ?y } // { Dup ?x ?y } -- | }
+! CHR{ { Drop ?x } { Drop ?x } // -- | [ "double drop" throw ] }
+CHR{ { Drop ?x } // { Drop ?x } -- | }
+! CHR{ { Dup ?x ?y } { Dup ?x ?y } // -- | [ "douple dup" throw ] }
+CHR{ { Dup ?x ?y } // { Dup ?x ?y } -- | }
 CHR{ { Dup ?x ?x } // -- | [ "self-dup" throw ] }
 
 CHR{ // { Dup ?x ?y } { Drop ?y } -- | [ ?x ?y ==! ] }
 CHR{ // { Dup ?x ?y } { Drop ?x } -- | [ ?x ?y ==! ] }
 
 CHR{ { Dup ?x ?y } // { ask { Copy ?x ?y } } -- | { entailed { Copy ?x ?y } } }
-CHR{ { Split __ ?a ?x ?y } // { ask { Copy ?a ?y } } -- | { entailed { Copy ?a ?y } } }
-CHR{ { Split __ ?a ?x ?y } // { ask { Copy ?a ?x } } -- | { entailed { Copy ?a ?y } } }
+! CHR{ { Split __ ?a ?x ?y } // { ask { Copy ?a ?y } } -- | { entailed { Copy ?a ?y } } }
+! CHR{ { Split __ ?a ?x ?y } // { ask { Copy ?a ?x } } -- | { entailed { Copy ?a ?y } } }
 ! CHR{ { Join ?c ?x ?y } // { ask { Copy ?c ?y } } -- | { entailed { Copy ?c ?y } } }
 ! CHR{ { Join ?c ?x ?y } // { ask { Copy ?c ?x } } -- | { entailed { Copy ?c ?x } } }
 
@@ -77,7 +78,7 @@ CHR: destructure-dup @
 ! { Lit ?y ?v } // { Dup ?x ?y } -- | { Lit ?x ?v } ;
 
 ! ** Backward propagation
-CHR: split-will-be-dead @  { Dead ?y } { Dead ?z } // { Split __ ?x ?y ?z } -- | { Dead ?x } ;
+! CHR: split-will-be-dead @  { Dead ?y } { Dead ?z } // { Split __ ?x ?y ?z } -- | { Dead ?x } ;
 
 ! ** Splits and Joins
 ! *** Simplify
@@ -86,46 +87,64 @@ CHR: split-will-be-dead @  { Dead ?y } { Dead ?z } // { Split __ ?x ?y ?z } -- |
 ! CHR: redundant-split-2 @ { Absurd ?c2 } { Branch ?r __ ?c1 ?c2 } // { Split ?r ?x ?y ?z } --
 ! | [ ?x ?y ==! ] ;
 
-CHR: redundant-split-1 @ // <={ Split __ ?z ?z ?x } -- | ;
-CHR: redundant-split-2 @ // <={ Split __ ?z ?x ?z } -- | ;
+CHR{ // { Split ?x ?x ?x } -- | }
+CHR{ // { Join ?x ?x ?x } -- | }
 
-CHR: redundant-join-1 @ // <={ Join __ ?z ?z ?x } -- | ;
-CHR: redundant-join-2 @ // <={ Join __ ?z ?x ?z } -- | ;
 
-! *** Regular
-! CHR: pushdown-literals @ { Split __ ?x ?y ?z } // { Lit ?x ?v } -- | { Lit ?y ?v } { Lit ?z ?v } ;
+! This should happen if branch scopes are inferred to be known and balanced
+CHR: redundant-split @ // { Split ?z ?x ?x } -- | [ ?x ?z ==! ] ;
+CHR: redundant-join @ // { Join ?z ?x ?x } -- | [ ?x ?z ==! ] ;
 
 TERM-VARS: ?zs ;
 
-CHR{ // { Split __ ?x ?x ?x } -- | }
+CHR: destructure-split @ // { Split L{ ?x . ?xs } L{ ?y . ?ys } L{ ?z . ?zs } } -- |
+! { Split ?x ?y ?z }
+{ Split ?xs ?ys ?zs } ;
 
-CHR: destructure-split @ // { Split ?s L{ ?x . ?xs } L{ ?y . ?ys } L{ ?z . ?zs } } -- |
-{ Split ?s ?x ?y ?z }
-{ Split ?s ?xs ?ys ?zs } ;
+CHR: destructure-split-balance-1 @ // { Split ?x L{ ?y . ?ys } ?rho } -- [ ?rho known term-var? ] |
+[ ?rho L{ ?z . ?zs } ==! ]
+{ Split ?x L{ ?y . ?ys } ?rho } ;
 
-CHR: split-stack @ { SplitStack ?s ?x ?y ?z } // -- |
-{ SameDepth ?x ?y } { SameDepth ?x ?z }
-{ Split ?s ?x ?y ?z } ;
+CHR: destructure-split-balance-2 @ // { Split ?x ?sig L{ ?z . ?zs } } -- [ ?sig known term-var? ] |
+[ ?sig L{ ?y . ?ys } ==! ]
+{ Split ?x ?sig L{ ?z . ?zs } } ;
 
-CHR: join-stack @ { JoinStack ?s ?x ?y ?z } // -- |
-{ SameDepth ?x ?y } { SameDepth ?x ?z }
-{ Join ?s ?x ?y ?z } ;
+CHR: destructure-split-intro-1 @ // { Split ?tau L{ ?y . ?ys } ?z } -- [ ?tau known term-var? ] |
+[ ?tau L{ ?x . ?xs } ==! ]
+{ Split ?tau L{ ?y . ?ys } ?z } ;
+
+CHR: destructure-split-intro-2 @ // { Split L{ ?x . ?xs } ?sig ?z } -- [ ?sig known term-var? ] |
+[ ?sig L{ ?y . ?ys } ==! ]
+{ Split L{ ?x . ?xs } ?sig ?z } ;
+
+CHR: split-stack @ // { SplitStack ?x ?y ?z } -- |
+! { SameDepth ?x ?y } { SameDepth ?x ?z }
+{ Split ?x ?y ?z } ;
+
+CHR: join-stack @ // { JoinStack ?x ?y ?z } -- |
+{ Split ?x ?y ?z } ;
+! { SameDepth ?x ?y } { SameDepth ?x ?z }
+! { Join ?x ?y ?z } ;
 
 
-CHR{ // { Join __ ?x ?x ?x } -- | }
+CHR: destructure-join @ // { Join L{ ?x . ?xs } L{ ?y . ?ys } L{ ?z . ?zs } } -- |
+{ Join ?x ?y ?z }
+{ Join ?xs ?ys ?zs } ;
 
-CHR: destructure-join @ // { Join ?s L{ ?x . ?xs } L{ ?y . ?ys } L{ ?z . ?zs } } -- |
-{ Join ?s ?x ?y ?z }
-{ Join ?s ?xs ?ys ?zs } ;
+CHR: destructure-same-row @ // { --> ?c P{ is L{ ?x . ?xs } L{ ?y . ?ys } } } -- |
+{ --> ?c P{ is ?x ?y } }
+{ --> ?c P{ is ?xs ?ys } } ;
+
+CHR: trivial-same-row @ // { --> __ P{ is ?x ?x } } -- | ;
 
 
 ! ** Value info combination
 ! TODO: this might be useful to make into an interface that different value-level things can answer?
 
-CHR: phi-val-pred-out-1 @ { Branch ?r __ ?c1 ?c2 } { Join ?r ?x ?a ?b } AS: ?p <={ val-pred ?a . __ } // -- |
-[ ?c1 ?p clone ?x >>value Cond boa ] ;
+! CHR: phi-val-pred-out-1 @ { Branch ?r __ ?c1 ?c2 } { Join ?r ?x ?a ?b } AS: ?p <={ val-pred ?a . __ } // -- |
+! [ ?c1 ?p clone ?x >>value --> boa ] ;
 
-CHR: phi-val-pred-out-2 @ { Branch ?r __ ?c1 ?c2 } { Join ?r ?x ?a ?b } AS: ?p <={ val-pred ?b . __ } // -- |
-[ ?c2 ?p clone ?x >>value Cond boa ] ;
+! CHR: phi-val-pred-out-2 @ { Branch ?r __ ?c1 ?c2 } { Join ?r ?x ?a ?b } AS: ?p <={ val-pred ?b . __ } // -- |
+! [ ?c2 ?p clone ?x >>value --> boa ] ;
 
     ;

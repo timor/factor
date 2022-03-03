@@ -189,7 +189,8 @@ ERROR: wrong-guard-effect quot effect ;
     ] V{ } forest-as ;
 
 : collect-chrat-rules ( constraints -- rules )
-    collect-chrat-solvers <reversed> [ chrat-solver-rules ] gather ;
+    ! collect-chrat-solvers <reversed> [ chrat-solver-rules ] gather ;
+    <reversed> collect-chrat-solvers <reversed> [ chrat-solver-rules ] gather ;
 
 : prepare-query ( query -- program query )
     [ pred>constraint ] map [ collect-chrat-rules ] keep ;

@@ -1,7 +1,7 @@
-USING: accessors chr chr.factor chr.factor.conditions chr.factor.control
-chr.factor.data-flow chr.factor.infer chr.factor.stack chr.factor.types
-chr.factor.words chr.parser chr.state classes.error kernel lists quotations
-sequences terms words words.symbol ;
+USING: accessors chr chr.comparisons chr.factor chr.factor.compiler
+chr.factor.conditions chr.factor.control chr.factor.data-flow chr.factor.infer
+chr.factor.stack chr.factor.types chr.factor.words chr.parser chr.state
+classes.error kernel lists quotations sequences terms words words.symbol ;
 
 IN: chr.factor.quotations
 FROM: syntax => _ ;
@@ -24,7 +24,7 @@ TUPLE: RemoveStack < chr-pred s ;
 CHRAT: chrat-cleanup { }
 
 ! *** Dead Values
-CHR: no-dead-lits @ // { Dead P{ Lit __ } } -- | ;
+CHR: no-dead-lits @ // { Dead A{ __ } } -- | ;
 CHR{ { Dead ?x } // { Dead ?x } -- | }
 ! CHR{ // { Drop +top+ ?x } -- | { Dead ?x } }
 
@@ -37,6 +37,8 @@ CHR: drop-dead-val-preds @ { Dead ?x } //
 CHR: drop-dead-type-preds @ { Dead ?x } //
 <={ type-pred ?x . __ } -- | ;
 
+CHR: drop-dead-eqs @ { Dead ?x } // { is ?x ?y } -- | ;
+
 ! *** Dead Phis
 
 ! *** Dead Conditions
@@ -46,21 +48,25 @@ CHR: drop-dead-cond-preds @ { Dead ?c } // <={ cond-pred ?c . __ } -- | ;
 ! TODO: sub-class-only matches
 ! CHR: dead-val-conds-are-dead @ { Dead ?v } // { Cond ?c ?p } -- [ p? known dup val-pred? [ value>>  ] [ drop f ] if ]
 ! CHR: dead-val-conds-are-dead @ { Dead ?v } // { Cond ?c <={ val-pred ?v . __ } } -- | ;
-CHR: dead-val-conds-are-dead @ { Dead ?v } // { Cond ?c ?p } -- [ ?p known ]
-[ ?p val-pred? [ ?p value>> ?v = ] [ ?p type-pred? [ ?p type>> ?v = ] [ f ] if ] if  ]
-| ;
+! CHR: dead-val-conds-are-dead @ { Dead ?v } // { Cond ?c ?p } -- [ ?p known ]
+! [ ?p val-pred? [ ?p value>> ?v = ] [ ?p type-pred? [ ?p type>> ?v = ] [ f ] if ] if  ]
+! | ;
 ! CHR: dead-type-conds-are-dead @ { Dead ?v } // { Cond ?c <={ type-pred ?v . __ } } -- | ;
 ! CHR{ { Dead ?x } // { Instance ?x __ } -- | }
 !  CHR{ { Dead ?x } // { Cond __ P{ Instance ?x __ } } -- | }
 
+! *** Dead Scopes
 ! CHR: dead-scopes-are-dead @ { Dead ?s } // SUB: ?x Scope L{ ?s __ __ __ ?l } |
 CHR: dead-scopes-are-dead @ { Dead ?s } // <={ Scope ?s __ __ __ ?l . __ } -- |
 [ ?l known [ Dead boa ] map ] ;
 
+CHR: clean-dead-finish-scope @ { Dead ?r } // { FinishScope ?r ?u } -- | ;
+
 ! CHR{ { Dead ?x } // { Effect ?x __ __ } -- | }
 ! CHR{ { Dead ?x } // { Effect L{ ?x . __ } __ __ } -- | }
 ! CHR: inlining-known @ { Dead ?p } // { InlinesUnknown __ ?p } -- | ;
-CHR: inlining-known @ // { InlinesUnknown __ P{ Lit __ } } -- | ;
+! CHR: inlining-known @ // { InlinesUnknown __ A{ __ } } -- | ;
+CHR: inlining-known @ { is ?p A{ ?q } } // { InlinesUnknown __ ?p } -- | ;
 
 ! *** Dead States
 
@@ -76,13 +82,21 @@ CHR: dead-state-vars @ { Dead ?s } // AS: ?x <={ state-pred ?s . __ } -- |
 ! This removes the AbsurdState marker!
 ! CHR: finish-absurd-state @ // { AbsurdState ?s } { Stack ?s __ } -- | ;
 ! CHR: finish-absurd-state @ // { AbsurdState ?s } -- | ;
+
+CHR: phi-dead-vars @ { EitherOr ?c ?c1 ?c2 }
+{ --> ?c1 P{ is ?x ?a } } { --> ?c1 P{ Dead ?a } }
+{ --> ?c2 P{ is ?x ?b } } { --> ?c2 P{ Dead ?b } } // -- |
+{ --> ?c P{ Dead ?x } } ;
+
 ;
 
 
 ! ** Syntactic expansion, Inlining
 CHRAT: expand-quot { InferDef InferToplevelQuot ChratInfer }
+IMPORT: chrat-comp
 ! IMPORT: control-flow
-IMPORT: condition-prop
+! IMPORT: condition-prop
+IMPORT: entailment
 IMPORT: chrat-cleanup
 IMPORT: data-flow
 IMPORT: basic-stack
@@ -145,9 +159,9 @@ CHR{ // { RemoveStackops __ } -- | }
 ! quotations will make use of wrapping themselves
 
 
-CHR: chrat-infer-def @ // { ChratInfer ?w } -- [ ?w word? ] | { InferDef ?w } ;
+CHR: chrat-infer-def @ // { ChratInfer ?w } -- [ ?w word? ] | { InferMode } { InferDef ?w } ;
 
-CHR: chrat-infer-top-quot @ // { ChratInfer ?w } -- [ ?w callable? ] | { InferToplevelQuot ?w } ;
+CHR: chrat-infer-top-quot @ // { ChratInfer ?w } -- [ ?w callable? ] | { InferMode } { InferToplevelQuot ?w } ;
 
 ! This is tricky...
 ! CHR{ { InlineUnknown ?s ?t ?q } { Dup ?p ?q } { Effect ?p ?a ?b } { Effect ?q L{ ?parm . __ } __ } // -- |
@@ -167,7 +181,7 @@ CHR: notice-inline-unknown @ { InlineUnknown ?s ?t ?p } // -- | { InlinesUnknown
 CHR: inline-unknown-curried @ // { InlinesUnknown ?c L{ ?x . ?xs } } -- | { InlinesUnknown ?c ?xs } ;
 
 ! CHR: inline-made-known @  { Lit ?p ?q } // { InlineUnknown ?s ?t ?p } ! { Effect ?p __ __ }
-CHR: inline-made-known @ // { InlineUnknown ?s ?t P{ Lit ?q } } ! { Effect ?p __ __ }
+CHR: inline-made-known @ { is ?p A{ ?q } } // { InlineUnknown ?s ?t ?p } ! { Effect ?p __ __ }
      -- |
      ! { Stack ?s ?a }
      ! { Stack ?t ?b }
@@ -203,9 +217,9 @@ CHR: infer-definition @  // { InferDef ?w } -- [ ?w deferred? not ] |
           { InlineQuot +top+ +end+ def }
       } ] ;
 
-TERM-VARS: ?st0 ?st1 ?sf0 ?sf1 ;
+TERM-VARS: ?true ?st1 ?false ?sf1 ;
 
-TUPLE: CheckBranch < state-pred in true-in true-out false-in false-out out ;
+TUPLE: CheckBranch < state-pred in c1 c2 true-in true-out false-in false-out out ;
 
 ! Conditionals
 ! For now, let's set the input and output effects of the quotations to be the
@@ -222,34 +236,45 @@ CHR: infer-if @ // { Exec ?r ?t if } --
 ! TODO: find best order
 ! { SameDepth ?rho ?a }
 ! { SameDepth ?rho ?b }
-{ SplitStack ?r ?rho ?a ?b }
-{ Branch ?r ?t ?st0 ?sf0 }
-{ Stack ?st0 ?a }
+{ SplitStack ?rho ?a ?b }
+{ Branch ?r ?t ?true ?false }
+{ Stack ?true ?a }
 { Stack ?st1 ?x }
-{ Stack ?sf0 ?b }
+{ Stack ?false ?b }
 { Stack ?sf1 ?y }
-! { Equiv ?st0 P{ Not P{ Instance ?c \ f } } }
-! { Equiv ?sf0 P{ Instance ?c \ f } }
-! { Cond ?st0 P{ Not P{ Type ?c POSTPONE: f } } }
-! { Cond ?sf0 P{ Type ?c POSTPONE: f } }
-{ Equiv ?sf0 { = ?c P{ Lit f } } }
-{ Disjoint ?st0 ?sf0 }
-{ InlineUnknown ?st0 ?st1 ?p }
-{ InlineUnknown ?sf0 ?sf1 ?q }
+! { Equiv ?true P{ Not P{ Instance ?c \ f } } }
+! { Equiv ?false P{ Instance ?c \ f } }
+! { Cond ?true P{ Not P{ Type ?c POSTPONE: f } } }
+! { Cond ?false P{ Type ?c POSTPONE: f } }
+{ EitherOr ?r ?true ?false }
+! { <--> ?true P{ Not P{ is ?c W{ f } } } }
+{ <--> ?false P{ is ?c W{ f } } }
+{ --> ?true P{ is ?rho ?a } }
+! { --> ?true P{ Dead ?false } }
+{ --> ?true P{ Dead ?q } }
+
+{ --> ?false P{ is ?rho ?b } }
+! { --> ?false P{ Dead ?true } }
+{ --> ?false P{ Dead ?p } }
+! { Disjoint { ?true ?false } }
+{ InlineUnknown ?true ?st1 ?p }
+{ InlineUnknown ?false ?sf1 ?q }
 ! { Stack ?t ?sig }
-{ CheckBranch ?r ?rho ?a ?x ?b ?y ?t }
+{ CheckBranch ?r ?true ?false ?rho ?a ?x ?b ?y ?t }
     ;
 
-CHR: end-infer-if @ // { CheckBranch ?r ?rho ?a ?x ?b ?y ?t } --
+CHR: end-infer-if @ // { CheckBranch ?r ?true ?false ?rho ?a ?x ?b ?y ?t } --
 { CompatibleEffects ?a ?x ?b ?y }
 |
 
 ! { SameDepth ?y ?sig }
 ! { SameDepth ?x ?sig }
-{ JoinStack ?r ?sig ?x ?y }
-{ AssumeSameRest ?rho ?a }
-{ AssumeSameRest ?y ?sig }
+{ JoinStack ?sig ?x ?y }
+! { AssumeSameRest ?rho ?a }
+! { AssumeSameRest ?y ?sig }
 { Stack ?t ?sig }
+{ --> ?true P{ is ?sig ?x } }
+{ --> ?false P{ is ?sig ?y } }
     ;
 
 ! Link-interface
@@ -296,8 +321,10 @@ CHR: exec-inline-word @ // { ExecWord ?s ?t ?w } -- [ ?w inline? ] | { InlineWor
 ! TUPLE: CheckInlineQuot < InlineQuot ;
 ! TUPLE: InliningDead < InlineQuot ;
 
-CHR{ // { InlineCall ?s ?t ?w ?d } -- | { Entry ?s ?w }
-     ! { ApplyWordRules ?s ?t ?w }
+CHR{ // { InlineCall ?s ?t ?w ?d } -- |
+     { Entry ?s ?w }
+     { ApplyWordRules ?s ?t ?w }
+
      ! For now be eager
      { InlineQuot ?s ?t ?d }
      ! { CheckInlineQuot ?s ?t ?d }
@@ -320,8 +347,6 @@ CHR: inline-quot @ // { InlineQuot ?s ?t ?q } --
 ! [ ?l last ?sig Stack boa ]
 ! { Stack ?t ?sig }
 { FinishScope ?s ?t } ;
-
-CHR: clean-absurd-finish-scope @ { AbsurdScope ?r ?u __ } // { FinishScope ?r ?u } -- | ;
 
 ! CHR: simplify-dead-branch-1 @ { AbsurdScope ?c1 __ __ } { Scope ?c2 ?t __ __ __ } // { Branch ?r ?u ?c1 ?c2 } -- |
 ! [ { ?r ?u } { ?c2 ?t } ==! ] ;
@@ -351,7 +376,13 @@ CHR: regular-word @ // { ExecWord ?s ?t ?w } -- | { Word ?s ?t ?w } ;
 CHR: finish-absurd-state @ // { AbsurdState ?s } -- | ;
 ! CHR{ // { Dead __ } -- | }
 
-! Default Answers
+! ** Default Answers
 ! CHR: unknown-is-non-trivial @
 ! // { ask { IsTrivial ?p ?x } } -- | [ ?x f ==! ] { entailed { IsTrivial ?p ?x } } ;
+
+! CHR: anything-is-possible @ // { ask { Possible ?c } } -- | { entailed { Possible ?c } } ;
+
+! Don't do this during rule compilation, which will re-lift all top-level value predicates back to +top+ implications
+CHR: fulfilment-by-default @ { InferMode } // { --> +top+ ?c } -- | { Fulfilled ?c } ;
+
 ;

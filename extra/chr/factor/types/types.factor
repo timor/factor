@@ -1,11 +1,14 @@
-USING: accessors arrays chr chr.factor chr.factor.conditions chr.parser
+USING: accessors chr chr.comparisons chr.factor chr.factor.conditions chr.parser
 chr.state classes classes.algebra kernel lists quotations terms ;
 
 IN: chr.factor.types
 
 ! Statement: var has type
 TUPLE: Type < val-pred type ;
+
+
 TUPLE: type-pred < chr-pred type ;
+INSTANCE: type-pred test-pred
 
 TUPLE: Subtype < type-pred super ;
 TUPLE: Intersect < type-pred sig ;
@@ -29,6 +32,13 @@ TUPLE: ProvideTypeUnion < ProvideType ;
 CHRAT: chrat-types { Type NotInstance Subtype Intersect }
 
 CHR{ { Type ?x ?tau } // { Type ?x ?tau } -- | }
+! NOTE: This is ground-term definition stuff.  Two different values can be made
+! equal by branch simplification.  This has eager intersection semantics,
+! i.e. it should be assumed that the more specific constraint was present in the
+! first place.
+CHR: same-atomic-type @ // { Type ?x A{ ?tau1 } } { Type ?x A{ ?tau2 } }
+-- [ ?tau1 ?tau2 class-and :>> ?tau3 ] | { Type ?x ?tau3 } ;
+
 CHR: same-type @ { Type ?x ?tau2 } // { Type ?x ?tau1 } -- | [ ?tau1 ?tau2 ==! ] ;
 
 CHR{ { AcceptType ?s ?x ?tau } // { AcceptType ?s ?x ?tau } -- | }
@@ -63,7 +73,8 @@ CHR: destructure-provide-type-rest @ // { ProvideType ?s L{ ?x . ?xs } L{ ?y . ?
 ! CHR: lit-defines-type @ { Lit ?a ?b } // -- | [ ?a ?b class-of Type boa ] ;
 ! CHR: lit-defines-type @ { Lit ?a ?b } // -- | { Type ?a ?tau } [ ?tau class-of Subtype boa ] ;
 
-CHR: accept-defines-type @ { AcceptType ?s ?x ?sig } // -- [ ?x known list? not ] | { Type ?x ?tau } { Cond ?s P{ Subtype ?tau ?sig } } ;
+! CHR: accept-defines-type @ { AcceptType ?s ?x ?sig } // -- [ ?x known list? not ] | { Type ?x ?tau } { Cond ?s P{ Subtype ?tau ?sig } } ;
+CHR: accept-defines-type @ // { AcceptType ?s ?x ?sig } -- [ ?x known list? not ] | { --> ?s P{ Type ?x ?tau } } { --> ?s P{ Subtype ?tau ?sig } } ;
 
 CHR: effects-are-callables @ { Effect ?x __ __ } { Type ?x ?tau } // -- |
 { Subtype ?tau callable } ;
@@ -73,77 +84,89 @@ CHR: effects-are-callables @ { Effect ?x __ __ } { Type ?x ?tau } // -- |
 ! NOTE: Ideally, the condition system would cut intersections into separate conditions, e.g. a resulting reasoning like this:
 ! { AcceptType ?s ?x ?tau2 } => { Type ?x ?tau1 } => ∃ c1,c2:  c1 <=> { Intersect ?tau1 ?tau2 }, c2 ==> { ConflictState ?s }, { Disjoint c1 c2 }
 
-! ** Literal simplification
-! CHR: literal-must-be-instance @ // { Type P{ Lit ?v } P{ Lit ?c } } -- |
-CHR: literal-must-be-instance @ // { Type P{ Lit ?v } P{ Lit ?c } } -- |
-[ ?v ?c known instance? [ f ] [ ?v ?c 2array "inconsistent lit types" throw ] if ] ;
+! ** Literal Handling
+! CHR: import-ground-types @ { is ?x A{ ?sig } } { Type ?x ?tau } // -- | { Type ?x ?sig } ;
+CHR: import-literal-types-test @ { is ?c A{ ?tau } } // { --> P{ Type ?x ?c } ?q } -- | { --> P{ Type ?x ?tau } ?q } ;
+CHR: import-literal-not-types @ { is ?c A{ ?tau } } // { Not P{ Type ?x ?c } } -- | { Not P{ Type ?x ?tau } } ;
+! CHR: literal-must-be-instance @ // { Type A{ ?v } A{ ?c } } -- |
+! CHR: literal-must-be-instance @ // { Type A{ ?v } A{ ?c } } -- |
+! CHR: literal-must-be-instance @ { eq ?x A{ ?v } } // { Type ?x A{ ?c } } -- |
+! [ ?v ?c instance? [ f ] [ ?x ?v ?c 3array "inconsistent lit types" throw ] if ] ;
 
-CHR: literal-sets-type-constant @ // { Type P{ Lit ?v } ?tau } -- | [ ?tau ?v known class-of ==! ] ;
+! CHR: literal-sets-type-constant @ // { Type A{ ?v } ?tau } -- | [ ?tau ?v class-of ==! ] ;
 
-CHR: check-literal-accept-type @ // { AcceptType __ P{ Lit ?v } ?tau }
--- [ ?tau known? ] [ ?v ?tau known instance? ] | ;
+CHR: check-literal-accept-type @ // { AcceptType __ A{ ?v } A{ ?tau } }
+-- [ ?v ?tau instance? ] | ;
+
+CHR: literal-sets-query-type-constant @ { is ?tau A{ ?sig } } { Equiv __ P{ Type __ ?tau } } // -- | [ ?tau ?sig ==! ] ;
+
+CHR: literal-defines-type @ { --> ?c P{ is ?x A{ ?v } } } //
+-- [ ?v class-of :>> ?sig ] | { --> ?c P{ Type ?x ?sig } }
+! { --> ?c P{ Subtype ?tau ?sig } }
+    ;
+
+CHR: reduntant-atomic-type-restriction @ { Type ?x A{ ?tau } } // { Not P{ Type ?x A{ ?sig } } } -- [ ?tau ?sig classes-intersect? not ] | ;
 
 ! ** Algebra
 CHR{ { Subtype ?x ?y } // { Subtype ?x ?y } -- | }
 ! CHR: instance-type @ P{ Instance ?x ?tau } // -- | P{ Type ?x ?tau } ; ! { Subtype ?tau1 ?tau } { Subtype ?tau ?tau1 } ;
-CHR{ // { Subtype ?x ?y } -- [ ?x known classoid? ] [ ?y known classoid? ] | [ ?x ?y class<= [ f ] [ "Subtype Contradiction" throw ] if ] }
-CHR{ // { Type P{ Lit ?x } ?y } -- [ ?y known classoid? ] | [ ?x ?y known instance? [ f ] [ "Subtype Contradiction" throw ] if ] }
+CHR{ // { Subtype A{ ?x } A{ ?y } } -- | [ ?x ?y class<= [ f ] [ "Subtype Contradiction" throw ] if ] }
+! CHR{ // { Type A{ ?x } ?y } -- [ ?y known classoid? ] | [ ?x ?y known instance? [ f ] [ "Subtype Contradiction" throw ] if ] }
+CHR{ // { Type A{ ?x } A{ ?y } } -- | [ ?x ?y instance? [ f ] [ "Type Contradiction" throw ] if ] }
 
 ! ** Phi stuff
 CHR: trivial-union @ // { UnionType ?tau3 ?tau1 ?tau1 } -- | [ ?tau3 ?tau1 ==! ] ;
+CHR: reflexive-union @ { UnionType ?tau3 ?tau1 ?tau2 } // { UnionType ?tau3 ?tau2 ?tau1 } -- | ;
 
-CHR: builtin-union @ // { UnionType ?tau3 ?tau1 ?tau2 } -- [ ?tau1 classoid? ] [ ?tau2 classoid? ] |
+CHR: builtin-union @ // { UnionType ?tau3 A{ ?tau1 } A{ ?tau2 } } -- |
 [ ?tau3 ?tau1 ?tau2 class-or ==! ] ;
 
-CHR: phi-types @ { Branch ?r __ ?c1 ?c2 } { Cond ?c1 P{ Type ?x ?tau1 } } { Cond ?c2 P{ Type ?x ?tau2 } } // -- |
-{ Cond ?r P{ Type ?x ?tau3 } }
+! CHR: data-phi-types @ { EitherOr ?c ?c1 ?c2 }
+! { --> ?c1 P{ is ?x ?a } } { --> ?c1 P{ Type ?a ?tau1 } }
+! { --> ?c2 P{ is ?x ?b } } { --> ?c2 P{ Type ?b ?tau2 } }
+! // -- |
+! { --> ?c P{ Type ?x ?tau3 } }
+! { UnionType ?tau3 ?tau1 ?tau2 } ;
+
+CHR: data-phi-types @ { EitherOr ?c ?c1 ?c2 }
+{ --> ?c1 P{ is ?x ?a } } P{ Type ?a ?tau1 }
+{ --> ?c2 P{ is ?x ?b } } P{ Type ?b ?tau2 }
+// -- |
+P{ Type ?x ?tau3 }
 { UnionType ?tau3 ?tau1 ?tau2 } ;
 
-! ! ** Comparison implications
-CHR: eq-implies-subtype @ AS: ?a <={ Cond ?c P{ = ?x ?v } } // -- [ ?v known? ] |
-[| | ?v class-of :> tau
- ?a clone ?v class-of ?x swap Type boa >>implied
- ! { Cond ?c P{ Type ?x tau } }
-] ;
+CHR: complete-partial-type @
+{ Type ?x ?tau1 }
+{ --> ?c1 P{ Type ?x ?tau2 } }  // -- [ ?tau1 known term-var? ] |
+{ UnionType ?tau1 ?tau2 ?tau3 } ;
 
-! * Condition Simplification
-! CHR: answer-trivial-subtype @ // { ask { CheckTrivial P{ Subtype ?x ?y } } }
-!  -- [ { [ ?x classoid? ] [ ?y classoid? ] } 0&& ]
-! | { entailed { CheckTrivial P{ Subtype ?x ?y } } }
-! [ { { [ ?x ?y class<= ] [ { IsTrivial P{ Subtype ?x ?y } } ] }
-!     { [ ?x ?y classes-intersect? not ] [ { IsTrivial P{ Not P{ Subtype ?x ?y } } } ] }
-!     [ f ]
-!   } cond
+! ! ** Comparison implications
+! CHR: eq-implies-subtype @ AS: ?a <={ Cond ?c P{ = ?x ?v } } // -- [ ?v known? ] |
+! [| | ?v class-of :> tau
+!  ?a clone ?v class-of ?x swap Type boa >>implied
+!  ! { Cond ?c P{ Type ?x tau } }
 ! ] ;
 
- ! CHR: answer-trivial-subtype @ // { CheckTrivial P{ Subtype ?x ?y } }
- !  -- [ ?x classoid? ] [ ?y classoid? ]
- !  |
- ! [ { { [ ?x ?y class<= ] [ { IsTrivial P{ Subtype ?x ?y } } ] }
- !     { [ ?x ?y classes-intersect? not ] [ { IsTrivial P{ Not P{ Subtype ?x ?y } } } ] }
- !     [ f ]
- !   } cond
- ! ] ;
-! CHR: trivial-subtypes @ { Subtype ?x ?y } // { Cond ?c P{ Subtype ?x ?y } } -- | { Cond +top+ P{ Subtype ?x ?y } } ;
-CHR: known-subtypes @ // <={ Cond __ P{ Subtype ?x ?y } } -- [ ?x known ?y known class<= ] | ;
-CHR: known-not-subtypes @ <={ Cond ?c P{ Subtype ?x ?y } } // -- [ ?x known ?y known classes-intersect? not ] | { Absurd ?c } ;
-! CHR: type-known @ { Equiv ?c P{ Type ?x ?y } } // -- { Type ?x ?y } | { Trivial ?c } ;
-CHR: type-known @ { Equiv ?c P{ Type ?x ?y } } { Type ?x ?y } // -- | { Trivial ?c } ;
-! { Not P{ Subtype ?x ?y } }
+! * Condition Handling
+CHR: known-not-subtype @ // { --> ?c P{ Subtype A{ ?tau } A{ ?sig } } } -- |
+[ ?tau ?sig class<= [ f ] [ { Impossible ?c } ] if ] ;
 
-! ** Stack Query
+CHR: cond-same-type @ { --> ?c P{ Type ?x ?tau } } // { --> ?c P{ Type ?x ?sig } } -- | [ ?sig ?tau ==! ] ;
 
-! CHR: foo @ { CondJump ?c ?c1} { Disjoint ?c1 ?c2 } { AcceptType ?c1 ?a ?tau1 } { AcceptType ?c2 ?a ?tau2 } //
-! { UnionType ?tau3 ?tau2 ?tau1 }
-! { AcceptType ?c  }
+! NOTE: again intersection semantics on IDENTICAL Values, i.e. the constraint
+! set must be consistent
+CHR: global-atomic-type-known @ // { Type ?x A{ ?tau1 } } { Type ?x A{ ?tau2 } } -- [ ?tau1 ?tau2 class-and :>> ?tau3 ] |
+{ Type ?x ?tau3 } ;
 
-! CHR: answer-lit-notinstace @ { Lit ?x ?v } // { ask { NotInstance ?x ?tau } } -- [ ?v ?tau instance? not ] |
-!      { entailed { NotInstance ?x ?tau } } ;
+CHR: test-atomic-type-conflict @ { Type ?x A{ ?tau1 } } { --> P{ Type ?x A{ ?tau2 } } ?q } // -- [ ?tau1 ?tau2 classes-intersect? not ] |
+{ Impossible ?q } ;
 
-! CHR: answer-lit-instance @ { Lit ?x ?v } { AskAbout { Instance ?x ?tau } ?k ?vars } // -- [ ?v ?tau instance? ] |
-! { AnswerAbout { Instance ?x ?tau } ?k ?vars } ;
+! FIXME: this is actually an inconsistency test!
+! CHR: global-type-known @ { Type ?x ?tau } { --> __ P{ Type ?x ?sig } } // -- | [ ?sig ?tau ==! ] ;
 
-! CHR: answer-no-lit-instance @ { Lit ?x ?v } { AskAbout { Instance ?x ?tau } ?k ?vars } // -- [ ?v ?tau instance? not ] |
-! { AnswerAbout { Not { Instance ?x ?tau } } ?k ?vars } ;
+! ** Builtin Defaults
+CHR: boolean-not-false-must-be-true @
+{ Type ?x boolean } // { Not P{ is ?x W{ f } } } -- | { is ?x t } ;
+
 
 ;

@@ -1,5 +1,5 @@
-USING: accessors chr chr.factor chr.parser chr.state classes kernel sequences
-sets terms ;
+USING: accessors assocs chr chr.comparisons chr.factor chr.parser chr.state
+classes kernel namespaces sequences sets terms ;
 
 IN: chr.factor.conditions
 
@@ -7,7 +7,9 @@ IN: chr.factor.conditions
 ! - Every Straightline inference has conditions attached to them
 ! - Any statement about values can be made conditional on that value
 
-
+! Things that can be antecedents and consequents
+MIXIN: test-pred
+INSTANCE: val-pred test-pred
 ! This is left in the compiled constraints, so we can check whether there will
 ! be a recursive call
 TUPLE: cond-pred < chr-pred cond ;
@@ -28,7 +30,8 @@ TUPLE: Necessary < cond-pred sub-cond ;
 TUPLE: Equiv < Cond ;
 ! TUPLE: Equiv < cond-pred c2 ;
 
-TUPLE: Disjoint < chr-pred c1 c2 ;
+! TUPLE: Disjoint < chr-pred c1 c2 ;
+TUPLE: Disjoint < chr-pred members ;
 TUPLE: SameStack < chr-pred s1 s2 ;
 TUPLE: Same < chr-pred v1 v2 ;
 
@@ -46,6 +49,24 @@ TUPLE: AbsurdState < chr-pred state ;
 TUPLE: AbsurdScope < chr-pred beg end states ;
 ! TUPLE: AbsurdScope < Scope ;
 
+! cond is either exactly fulfilled if alt1 is fulfilled or alt2 is fulfilled
+TUPLE: EitherOr < cond-pred alt1 alt2 ;
+TUPLE: --> < cond-pred consequence ;
+TUPLE: \--> < cond-pred consequence ;
+TUPLE: <--> < cond-pred rhs ;
+
+UNION: impl-pred --> \--> ;
+
+! NOTE: This has assume/refute semantics.  This corresponds to open-word semantics,
+! i.e. Anything is considered to be possible unless proven otherwise.
+TUPLE: Assumed < cond-pred ;
+TUPLE: Possible < cond-pred ;
+TUPLE: Impossible < cond-pred ;
+TUPLE: Fulfilled < cond-pred ;
+TUPLE: Refuted < cond-pred ;
+
+TUPLE: Redundant < chr-pred ;
+
 ! This couples a condition to a state, So that if the state is unreachable, the
 ! assumptions can be deleted.
 
@@ -58,6 +79,92 @@ TUPLE: ScopeConds < cond-pred conds ;
 TUPLE: AcceptType < state-pred val type ;
 TUPLE: ProvideType < state-pred val type ;
 
+CHRAT: entailment { }
+
+! Redundancies
+CHR: duplicate-cond-pred @ AS: ?p <={ cond-pred ?x . ?y } // AS: ?q <={ cond-pred ?x . ?y } -- [ ?p ?q [ class-of ] same? ] | ;
+CHR: duplicate-negation @ { Not ?p } // { Not ?p } -- | ;
+
+CHR{ // { <--> ?x ?x } -- | }
+CHR{ // { --> ?x ?x } -- | }
+! *** Propagation
+
+CHR: propagate-cond-preds-scope @
+! { Scope ?s __ __ __ ?l }
+<={ Scope ?r __ __ __ ?l . __ }
+// AS: ?c <={ cond-pred ?s . __ } -- [ ?s ?l known in? ] |
+[ ?c ?r >>cond ] ;
+
+CHR: propagate-cond-preds-trans @ <={ trans-pred ?r ?s . __ } // AS: ?c <={ cond-pred ?s . __ }  -- |
+[ ?c ?r >>cond ] ;
+
+! *** Cleanup
+CHR: remove-unproven-assumptions @ { Impossible ?p } // { --> ?p __ } -- | ;
+CHR{ // { Fulfilled +top+ } -- | }
+CHR{ { Dead ?q } // { --> __ ?q } -- | }
+
+! ** Reasoning
+! *** Destructuring
+! NOTE: Not completely sure if this is correct, also, maybe do this on the implication, not the equivalence?
+CHR: negation-excludes-1 @ { EitherOr ?c ?c1 ?c2 } { <--> ?c1 ?p } // --
+    [ ?p known Not? not ] | { <--> ?c2 P{ Not ?p } } ;
+CHR: negation-excludes-2 @ { EitherOr ?c ?c1 ?c2 } { <--> ?c2 ?p } // --
+    [ ?p known Not? not ] | { <--> ?c1 P{ Not ?p } } ;
+
+CHR: destructure-equiv @ // { <--> ?p ?q } -- | { --> ?p ?q } { --> ?q ?p } ;
+CHR: convert-neg-test @ // { --> P{ Not ?p } ?q } -- | { \--> ?p ?q } ;
+CHR: convert-double-neg-test @ // { \--> P{ Not ?p } ?q } -- | { --> ?p ?q } ;
+CHR: convert-double-neg @ // { Not P{ Not ?p } } -- | [ ?p known ] ;
+CHR: back-propagate-impossible @ { --> ?p ?q } { Impossible ?q } // -- | { Impossible ?p } ;
+CHR: exclude-middle-1 @ { EitherOr __ ?c1 ?c2 } { Fulfilled ?c1 } // -- | { Impossible ?c2 } ;
+CHR: exclude-middle-2 @ { EitherOr __ ?c1 ?c2 } { Fulfilled ?c2 } // -- | { Impossible ?c1 } ;
+CHR: disjunction-1 @ { Impossible ?c1 } // { EitherOr ?p ?c1 ?c2 } -- | { <--> ?p ?c2 } ;
+CHR: disjunction-2 @ { Impossible ?c2 } // { EitherOr ?p ?c1 ?c2 } -- | { <--> ?p ?c1 } ;
+CHR{ { Impossible ?c2 } // -- [ ?c2 known chr-constraint? not ] | { Dead ?c2 } }
+! CHR: propagate-fulfillment @ { Fulfilled ?q } { --> ?p ?q } // { --> ?q ?r } | { --> ?p ?r } ;
+! CHR: propagate-fulfillment @ { --> ?p ?q } // { --> ?q ?r } -- { Fulfilled ?q } | { --> ?p ?r } ;
+
+! *** Fulfilment
+
+! These are store tests
+! This is probably a kind of double negation check?
+
+! CHR: redundant-implication-by-presence @ AS: ?x <={ val-pred __ . __ } // { --> __ ?q } --
+! [ ?q ?x == ] | ;
+
+! CHR: fulfilment-by-presence @ // { --> ?p ?q } AS: ?x <={ val-pred __ . __ } --
+CHR: fulfilment-by-presence @ AS: ?x <={ test-pred __ . __ } // { --> ?p ?q } --
+[ ?p ?x == ]
+| { Fulfilled ?q } ;
+
+CHR: negative-fulfillment-by-presence @ { Not ?p } // { \--> ?p ?q } -- | { Fulfilled ?q } ;
+CHR: negative-redundancy-by-presence @ AS: ?p <={ test-pred } // { \--> ?p __ } -- | ;
+CHR: negative-redundancy-by-fulfillment @ { Fulfilled ?p } // { \--> ?p __ } -- | ;
+
+CHR: assume-fullfillment @ { Fulfilled ?p } // { --> ?p ?q } -- | { Fulfilled ?q } ;
+
+CHR: refute-by-atom-counterexample @ { --> ?c P{ is ?x A{ ?v } } } { is ?x A{ ?w } } // -- [ ?v ?w = not ] |
+{ Impossible ?c } ;
+
+CHR: same-in-both @ { EitherOr ?p ?c1 ?c2 } { --> ?c1 ?p } { --> ?c2 ?p } // -- | { Fulfilled ?p } ;
+
+CHR: enter-fulfilled @ // { Fulfilled ?q } -- [ ?q known chr-constraint? ] | [ ?q known ] ;
+
+CHR: enter-impossible @ // { Impossible ?p } --
+[ ?p known chr-constraint? ] | [ ?p known Not boa ] ;
+
+! ** Simple Phi Stuff
+! Reverse propagation of literals does not make sense
+CHR: propagate-literals-in @ { is ?x A{ ?v } } // { --> __ P{ is ?x ?y } } -- | { is ?y ?v } ;
+CHR: import-literals @ { is ?x A{ ?v } } // { --> ?c P{ is ?y ?x } } -- |
+{ --> ?c P{ is ?y ?v } } ;
+CHR: propagate-dead @ { --> ?c P{ Dead ?y } } { --> ?c P{ is ?x ?y } } // -- | { --> ?c P{ Dead ?x } } ;
+
+! NOTE: is this always valid? Should be, if we consider single-use semantics...
+CHR: transitive-mux @ // { --> ?c P{ is ?x ?a } } { --> ?c P{ is ?y ?a } } -- | { --> ?c P{ is ?y ?x } } ;
+
+;
+
 CHRAT: condition-prop { Not }
 
 ! NOTE: Potentially very expensive?
@@ -66,11 +173,6 @@ CHRAT: condition-prop { Not }
 ! { IsTrivial ?c } ;
 
 ! Redundancies
-CHR{ { Absurd ?x } // { Absurd ?x } -- | }
-
-CHR{ // { CondNest ?x ?x } -- | }
-! CHR{ { Cond ?x ?c } // { Cond ?x ?c } -- | }
-! CHR{ AS: ?p <={ cond-pred ?s } // AS: ?q <={ cond-pred ?s } -- [ ?p ?q [ class-of ] same? ] | }
 CHR: duplicate-cond-pred @ AS: ?p <={ cond-pred ?x . ?y } // AS: ?q <={ cond-pred ?x . ?y } -- [ ?p ?q [ class-of ] same? ] | ;
 
 ! CHR: duplicate-equiv @ { Equiv ?c ?p } // { Equiv ?c ?p } -- | ;
@@ -128,7 +230,7 @@ CHR: propagate-cond-preds-trans @ <={ trans-pred ?r ?s . __ } // AS: ?c <={ cond
 
 ! CHR: ask-trivial-cond @ { Cond ?c ?p } // -- [ ?p known Not? not ] | { CheckTrivial ?p } ;
 
-CHR: complement-known @ { Cond ?c ?p } { Not ?p } // -- | { Absurd ?c } ;
+! CHR: complement-known @ { Cond ?c ?p } { Not ?p } // -- | { Absurd ?c } ;
 
 ! *** Testing cut-producing conditions
 
@@ -146,20 +248,20 @@ CHR: complement-known @ { Cond ?c ?p } { Not ?p } // -- | { Absurd ?c } ;
 
 CHR: equiv-subsumes-cond @ { Equiv ?c ?p } // { Cond ?c ?p } -- | ;
 
-CHR: disjoint-is-bounded @ { Disjoint ?c ?c1 } // { Disjoint ?c ?c2 } -- | [ ?c2 ?c1 ==! ] ;
-CHR: disjoint-is-bounded @ { Disjoint ?c1 ?c } // { Disjoint ?c ?c2 } -- | [ ?c2 ?c1 ==! ] ;
+CHR: disjoint-is-bounded @ { Disjoint { ?c ?c1 } } // { Disjoint { ?c ?c2 } } -- | [ ?c2 ?c1 ==! ] ;
+CHR: disjoint-is-bounded @ { Disjoint { ?c1 ?c } } // { Disjoint { ?c ?c2 } } -- | [ ?c2 ?c1 ==! ] ;
 
 CHR: assume-complement-condition @ { Cond ?c P{ Not ?p } } // -- |
 { Equiv ?c2 ?p }
-{ Disjoint ?c2 ?c } ;
+{ Disjoint { ?c2 ?c } } ;
 
 ! Is this a recursion problem? For now, there is kind of a "normalization" behavior if we actually
 ! only ask for one of the conditions in the disjoint set...
-CHR: ask-for-complement @ <={ Cond ?c2 ?p } { Disjoint ?c1 ?c2 } // -- [ ?p Not? not ] |
+CHR: ask-for-complement @ <={ Cond ?c2 ?p } { Disjoint { ?c1 ?c2 } } // -- [ ?p Not? not ] |
 { Cond ?c1 P{ Not ?p } } ;
 
 ! eq constraints
-CHR: known-test-equal @ { Equiv ?c P{ = P{ Lit ?x } P{ Lit ?y } } } // -- |
+CHR: known-test-equal @ { Equiv ?c P{ = A{ ?x } A{ ?y } } } // -- |
 [ ?c ?x ?y [ known ] same? [ Trivial boa ] [ Absurd boa ] if ] ;
 
 
@@ -193,24 +295,31 @@ CHR: conflict-state-is-absurd @ // { ConflictState ?t __ __ } -- | { AbsurdState
 
 ! Reasoning
 CHR: dead-is-unnecessary @ { Dead ?c } // { Necessary __ ?c } -- | ;
-CHR: trivial-is-unneccessary @ { Trivial ?c } // { Necessary __ ?c } -- | ;
+! CHR: trivial-is-unneccessary @ { Trivial ?c } // { Necessary __ ?c } -- | ;
+
+CHR: necessary-parts-are-necessary @ { Necessary ?c ?c1 } { Disjoint ?l } // -- [ ?c1 ?l in? ] |
+[ ?c ?c1 ?l remove [ Necessary boa ] with map ] ;
 
 ! CHR{ { Absurd ?t } // { Cond ?t ?c } -- | }
 CHR: kill-absurd-cond-preds @ { Absurd ?s } // <={ cond-pred ?s . __ } -- | ;
-CHR{ { Absurd ?x } // { Disjoint ?x ?y } -- | { Trivial ?y } }
-CHR{ { Absurd ?y } // { Disjoint ?x ?y } -- | { Trivial ?x } }
-CHR{ { Trivial ?x } // { Disjoint ?x ?y } -- | { Absurd ?y } }
-CHR{ { Trivial ?y } // { Disjoint ?x ?y } -- | { Absurd ?x } }
-! CHR{ // { Trivial ?x } { Disjoint ?x ?y } -- | { Absurd ?y } }
-! CHR{ // { Trivial ?y } { Disjoint ?x ?y } -- | { Absurd ?x } }
+! CHR{ { Absurd ?x } // { Disjoint ?x ?y } -- | { Trivial ?y } }
+! CHR{ { Absurd ?y } // { Disjoint ?x ?y } -- | { Trivial ?x } }
+! CHR{ { Trivial ?x } // { Disjoint ?x ?y } -- | { Absurd ?y } }
+! CHR{ { Trivial ?y } // { Disjoint ?x ?y } -- | { Absurd ?x } }
+CHR{ { Absurd ?x } // { Disjoint ?l } -- [ ?x known ?l known in? ] | [ ?x known ?l known remove Disjoint boa ] }
+! CHR{ { Absurd ?y } { Disjoint ?x ?y } // -- | { Trivial ?x } }
+CHR{ { Disjoint { ?x ?y } } // { Trivial ?x } -- | { Absurd ?y } }
+CHR{ { Disjoint { ?x ?y } } // { Trivial ?y } -- | { Absurd ?x } }
 
 
 
 ! Rewrite stuff to branch conditions, to transport that upwards
-CHR: propagate-trivial-1 @ { Trivial ?c } { Branch ?r __ ?c __ } // AS: ?x <={ cond-pred ?c . __ } -- |
+CHR: propagate-trivial-1 @ { Disjoint { ?c } } { Branch ?r __ ?c __ } // AS: ?x <={ cond-pred ?c . __ } -- |
      [ ?x ?r >>cond ] ;
-CHR: propagate-trivial-2 @ { Trivial ?c } { Branch ?r __ __ ?c } // AS: ?x <={ cond-pred ?c . __ } -- |
+CHR: propagate-trivial-2 @ { Disjoint { ?c } } { Branch ?r __ __ ?c } // AS: ?x <={ cond-pred ?c . __ } -- |
 [ ?x ?r >>cond ] ;
 
-
+! TODO: maybe that one is the only one needed though?
+CHR: propagate-trivial-dep @ { Disjoint { ?c1 } } { Necessary ?c ?c1 } AS: ?x <={ cond-pred ?c1 . __ } // -- |
+[ ?x clone ?c >>cond ] ;
 ;

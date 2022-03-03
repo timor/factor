@@ -1,8 +1,8 @@
-USING: accessors arrays assocs chr.factor chr.factor.compiler
-chr.factor.conditions chr.factor.infer chr.factor.stack chr.parser chr.state
-combinators.short-circuit continuations effects generic kernel lists
-macros.expander make math math.parser quotations sequences sets terms types.util
-words ;
+USING: accessors arrays assocs chr.comparisons chr.factor chr.factor.compiler
+chr.factor.conditions chr.factor.infer chr.factor.stack chr.factor.types
+chr.parser chr.state classes combinators.short-circuit continuations effects
+generic kernel lists macros.expander make math math.parser quotations sequences
+sets terms types.util words ;
 
 IN: chr.factor.words
 
@@ -77,7 +77,7 @@ TUPLE: DupValue < state-pred x y ;
 ! CHR{ // { DupValue ?s ?x ?y } -- | { Cond ?s { Dup ?x ?y } } }
 ! CHR{ // { DropValue ?s ?x } -- | { Cond ?s { Drop ?x } } }
 CHR{ // { DupValue ?s ?x ?y } -- | { Dup ?x ?y } }
-CHR{ // { DropValue ?s ?x } -- | { Drop ?x } }
+CHR{ // { DropValue ?s ?x } -- | { --> ?s P{ Dead ?x } } { Drop ?x } }
 
 CHR: infer-dup @ // { Word ?s ?t dup } -- |
      ! { Stack ?s L{ ?x . ?rho } }
@@ -138,19 +138,25 @@ CHR: expand-macro-quot @ // { Word ?r ?u ?w } -- [ ?w macro-quot :>> ?p ] |
  ! L{ ?q . ?rho } :> out-vars
  {
      ! { Stack ?s ?rho }
-     { InsertStates ?r { ?s ?t } }
-     { FoldEffect ?r ?s ?p e }
-     { StackOp ?s ?t L{ ?q . ?rho } ?rho }
+     ! { InsertStates ?r { ?s ?t } }
+     ! { FoldEffect ?r ?s ?p e }
+     { FoldEffect ?r ?u ?p e }
+     ! { StackOp ?s ?t L{ ?q . ?rho } ?rho }
      ! { Instance ?q callable }
      ! { Stack ?s in-vars }
      ! { AddLink ?s ?s0 }
      ! { InferBetween ?s ?s0 q }
      ! { AddLink ?s0 ?t }
      ! { InferBetween ?s ?s0 q }
-     { InlineUnknown ?t ?u ?q }
+     ! { InlineUnknown ?t ?u ?q }
      ! { FoldQuot ?s ?t in-parms q }
  }
 ] ;
+
+TUPLE: FoldScope < Scope ;
+CHR: inline-fold-quot @ { FoldEffect ?r ?u ?q ?e } // -- |
+{ InlineQuot ?r ?u [ ?q call call ] }
+;
 
 ! ** General effect assumption
 CHR: assume-word-effect @ { Word ?s ?t ?w } // -- |
@@ -191,8 +197,6 @@ CHR{ // { Shuffle ?s ?t ?m } -- [ ?m known? ] |
 
 ! ** Inline Words
 CHR{ // { InlineWord ?s ?t ?w } -- | [| | ?w def>> :> def { InlineCall ?s ?t ?w def } ] }
-! CHR: inline-rules-only @ // { InlineWord ?s ?t ?w } -- |
-!      { ApplyWordRules ?s ?t ?w } ;
 
 ! CHR{ // { Word ?s ?t ?w } -- [ ?w generic? ] | { Generic ?s ?t ?w } }
 ! CHR{ // { Word ?s ?t ?w } -- [ ?w method? ] | { Method ?s ?t ?w } }
@@ -238,19 +242,21 @@ CHR{ { Word ?s ?t ?w } // --
 !     [ ?i [ known ] map ?w 1quotation with-datastack
 !       ?o swap [ Lit boa ] 2map
 !     ] ;
-CHR: foldable-call @ // { Call ?s ?w ?i ?o } -- [ ?w foldable? ] |
+CHR: try-foldable-call @ { InferMode } { is ?x A{ __ } } // { Call ?s ?w L{ ?x . ?i } ?o } -- [ ?w foldable? ] |
 [| | ?w stack-effect effect>vars :> ( vin vout )
  vin >list __ lappend :> lin
  vout >list __ lappend :> lout
- { lin lout } { ?i ?o } ==!
+ { lin lout } { L{ ?x . ?i } ?o } ==!
  { FoldCall ?s ?w vin vout } 2array
 ] ;
 
+
+
 ERROR: folding-error inputs quot error ;
 
-CHR: do-fold-call @ // { FoldCall ?s ?w ?i ?o } -- [ ?i [ Lit? ] all? ] |
-    [ ?i <reversed> [ obj>> ] map ?w 1quotation [ with-datastack ] [ folding-error ] recover
-      ?o swap [ Lit boa ==! ] 2map
+CHR: do-fold-call @ // { FoldCall ?s ?w A{ ?i } ?o } -- |
+    [ ?i <reversed> ?w 1quotation [ with-datastack ] [ folding-error ] recover
+      ?o swap [ ==! ] 2map
     ] ;
 
 ! CHR: do-fold-quot @ // { FoldEffect ?s ?t __ ?e } { FoldCall ?s ?q ?i ?o } -- [ ?q callable? ] [ ?i [ known? ] all? ] |
@@ -286,15 +292,16 @@ CHR: instance-test @ { ApplyWordRules ?s ?t instance? } // -- |
 { Stack ?s L{ ?tau ?x . __ } }
 { Stack ?t L{ ?b . __ } }
 { Type ?b boolean }
-{ Necessary ?s ?c1 }
-{ Cond ?c1 P{ = ?b f } }
-{ Cond ?c1 P{ Not { Type ?x ?tau } } } ;
+{ <--> P{ is ?b W{ f } } P{ Not P{ Type ?x ?tau } } }
+{ <--> P{ Not P{ is ?b W{ f } } } P{ Type ?x ?tau } }
+! { <--> P{ is ?b t } P{ Type ?x ?tau } }
+;
 
-! Insert at least one dummy state to prevent hooking into the top node with Entry specs
+! General rules
+
+! CHR: predicating-rules @ //
+
 CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- [ ?w generic? not ] |
-! ! { Stack ?s ?rho }
-! ! { Stack ?s0 ?rho } { AddLink ?s ?s0 }
-! [ ?s0 ?t ?w instantiate-word-rules ]
 [ ?s ?t ?w instantiate-word-rules ] ;
 
 ;

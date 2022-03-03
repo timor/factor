@@ -1,5 +1,6 @@
-USING: accessors arrays chr chr.state classes combinators effects kernel lists
-make match namespaces sequences strings terms types.util ;
+USING: accessors arrays chr chr.state classes combinators effects kernel lexer
+lists make match namespaces parser prettyprint.custom sequences strings terms
+types.util ;
 
 IN: chr.factor
 FROM: syntax => _ ;
@@ -33,7 +34,6 @@ TUPLE: Push < trans-pred val ;
 ! TUPLE: AssumeEffect < trans-pred effect ;
 TUPLE: AssumeWordEffect < trans-pred word effect ;
 TUPLE: InferredEffect < trans-pred in out ;
-TUPLE: EitherOr < chr-pred s1 s2 v1 v2 ;
 
 TUPLE: SplitState < state-pred sa sb ;
 
@@ -48,8 +48,15 @@ TUPLE: Method < trans-pred word ;
 TUPLE: SingleMethod < trans-pred word n class ;
 TUPLE: DefaultMethod < trans-pred word ;
 TUPLE: Definition < chr-pred word quot ;
-! TUPLE: Lit < val-pred obj ;
-TUPLE: Lit < chr-pred obj ;
+TUPLE: Lit < val-pred literal ;
+
+SYNTAX: Lit{ scan-object scan-object "}" expect Lit boa suffix! ;
+M: Lit pprint* pprint-object ;
+M: Lit pprint-delims drop \ Lit{ \ } ;
+M: Lit >pprint-sequence
+    [ value>> ] [ literal>> ] bi 2array ;
+
+! TUPLE: Lit < chr-pred obj ;
 TUPLE: AskLit < val-pred lit ;
 TUPLE: Effect < val-pred in out ;
 ! TUPLE: Curried < chr-pred val parm callable ;
@@ -75,6 +82,8 @@ TUPLE: InferCall < trans-pred val ;
 TUPLE: InlineWord < trans-pred word ;
 TUPLE: InlineCall < trans-pred word quot ;
 
+TUPLE: Inconsistent < chr-pred constraint ;
+
 ! Query marker for stack equivalence
 TUPLE: Call < state-pred word in out ;
 
@@ -95,17 +104,19 @@ TUPLE: Dup < val-pred to ;
 ! Inverse operation
 ! TUPLE: Drop < state-pred val ;
 ! Mark value as dead.  Solvers should update their state accordingly
-TUPLE: Dead < chr-pred val ;
+! TUPLE: Dead < chr-pred val ;
+TUPLE: Dead < val-pred ;
 
 ! Data Flow
 ! Exclusive Split.
-TUPLE: Split < state-pred in out1 out2 ;
+! TUPLE: Split < state-pred in out1 out2 ;
+TUPLE: Split < val-pred out1 out2 ;
 
 ! dest value is derived from left value
 TUPLE: Copy < val-pred dest ;
 
 ! val is derived from src1 and src2
-TUPLE: Join < state-pred out src1 src2 ;
+TUPLE: Join < val-pred src1 src2 ;
 
 ! A Split implies a copy.  A Dup also implies a copy.  Things which are
 ! dependent on whether the target value is used twice should be derived from Dup

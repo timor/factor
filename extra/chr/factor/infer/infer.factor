@@ -47,7 +47,7 @@ CHR: infer-wrapper @ // { InferNext ?s ?t ?w ?q } -- [ ?w wrapper? ] |
 { Inferred ?s ?t ?q }
     ;
 
-CHR: infer-push @ // { InferNext ?s ?t ?w ?q } -- [ ?w known word? not ] |
+CHR: infer-push @ // { InferNext ?s ?t A{ ?w } ?q } -- [ ?w word? not ] |
 { Push ?s ?t ?w }
 { Inferred ?s ?t ?q } ;
 

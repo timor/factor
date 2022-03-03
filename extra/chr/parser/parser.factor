@@ -53,7 +53,7 @@ M: eq-constraint >pprint-sequence tuple-slots ;
 ! Helper
 TUPLE: fake-chr-pred-cons < cons-state ;
 
-SYNTAX: <={ scan-class parse-list-literal <chr-sub-pred> suffix! ;
+SYNTAX: <={ scan-class parse-list-literal dup nil? [ drop __ ] when <chr-sub-pred> suffix! ;
 
 M: fake-chr-pred-cons pprint-delims drop \ <={ \ } ;
 

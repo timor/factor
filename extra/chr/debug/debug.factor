@@ -1,6 +1,6 @@
 USING: accessors arrays assocs assocs.extras chr chr.programs chr.state
 formatting io kernel math.parser namespaces prettyprint sequences terms
-tools.annotations ;
+tools.annotations tools.walker ;
 
 IN: chr.debug
 
@@ -59,3 +59,6 @@ IN: chr.debug
     ! \ replace-all-equalities [ [ ground-values get "Ground-values: " write . ] prepose ] annotate
     \ make-equal [ [ 2dup "Unify: %u ==! %u\n" printf ] prepose ] annotate
     ;
+
+:: break-rule-match ( rule-num susp-id -- )
+    \ run-occurrence [ 2dup [ id>> susp-id = ] [ occurrence>> first rule-num = ] bi* and ] breakpoint-if ;
