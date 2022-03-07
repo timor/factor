@@ -298,6 +298,11 @@ DEFER: lift
 GENERIC: subst ( term -- term )
 SINGLETON: __
 
+! This is for matching ground-terms only, basically as if expecting something that can be wrapped
+TUPLE: atom-match var ;
+C: <atom-match> atom-match
+
+
 SYMBOL: in-quotation?
 SYMBOL: current-subst
 : get-current-subst ( obj -- obj/f )
@@ -322,6 +327,8 @@ M: tuple subst tuple>array subst >tuple ;
 M: wrapper subst wrapped>>
     in-quotation? [ subst ] with-variable-off
     <wrapper> ;
+M: atom-match subst
+    var>> subst dup ground-value? [ <atom-match> ] unless ;
 
 : lift ( term subst -- term )
     current-subst [ subst ] with-variable ;
@@ -337,6 +344,11 @@ M: identity-tuple subst rebuilds-identity-tuple ;
 
 ERROR: incompatible-terms term1 term2 ;
 
+SYNTAX: A{ scan-object "}" expect <atom-match> suffix! ;
+M: atom-match pprint* pprint-object ;
+M: atom-match pprint-delims drop \ A{ \ } ;
+M: atom-match >pprint-sequence var>> 1array ;
+
 ! Tried first
 GENERIC#: decompose-left 1 ( term1 term2 -- terms1 terms2 cont? )
 GENERIC: decompose-right ( term1 term2 -- terms1 terms2 cont? )
@@ -347,6 +359,7 @@ M: tuple decompose-right
     [ [ tuple-slots ] bi@ t ] [ f ] if ;
 M: sequence decompose-right
     2dup { [ drop sequence? ] [ [ length ] same? ] } 2&& ;
+
 
 : decompose ( term1 term2 -- term1 term2 cont? )
     {
@@ -364,17 +377,27 @@ SYMBOL: valid-match-vars
     ] [ drop f ] if ; inline
 
 DEFER: elim
+DEFER: (solve)
+! NOTE:
+! - rhs term-vars will always be assumed to the lhs value
+! - lhs term-vars will be checked for equality and dropped, or assumed to the rhs value
+
+: (solve1) ( subst problem var term -- subst )
+    {
+        { [ 2dup [ __? ] either? ] [ 2drop (solve) ] }
+        ! { [ 2dup defined-equal? ] [ 2drop (solve) ] }
+        { [ over atom-match? ] [ dup ground-value? [ [ var>> ] dip (solve1) ] [ 4drop f ] if ] }
+        { [ dup atom-match? ] [ over ground-value? [ var>> (solve1) ] [ 4drop f ] if ] }
+        { [ over valid-term-var? ] [ 2dup = [ 2drop (solve) ] [ elim ] if ] }
+        { [ dup valid-term-var? ] [ swap elim ] }
+        { [ 2dup = ] [ 2drop (solve) ] }
+        [ decompose [ zip prepend ] [ 2drop ] if (solve) ]
+    } cond ; inline recursive
+
 : (solve) ( subst problem -- subst )
     [ unclip first2
       [ ?ground-value ] bi@
-      {
-          { [ 2dup [ __? ] either? ] [ 2drop (solve) ] }
-          ! { [ 2dup defined-equal? ] [ 2drop (solve) ] }
-          { [ over valid-term-var? ] [ 2dup = [ 2drop (solve) ] [ elim ] if ] }
-          { [ dup valid-term-var? ] [ swap elim ] }
-          { [ 2dup = ] [ 2drop (solve) ] }
-          [ decompose [ zip prepend ] [ 2drop ] if (solve) ]
-       } cond ] unless-empty ; inline recursive
+      (solve1) ] unless-empty ; inline recursive
 
 ERROR: recursive-term-error subst problem var term ;
 SINGLETON: +keep+
@@ -389,7 +412,7 @@ SYMBOL: on-recursive-term
     [ swap associate
       [ [ [ lift ] curry map-values ] keep assoc-union ]
       [ [ [ lift ] curry bi@ ] curry assoc-map ] bi-curry bi*
-      (solve) ] if ; inline recursive
+      (solve) ] if ;
 
 : solve ( subst problem -- subst )
     [ (solve) ]
