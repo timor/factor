@@ -1,8 +1,9 @@
 USING: accessors arrays assocs chr.comparisons chr.factor chr.factor.compiler
-chr.factor.conditions chr.factor.stack chr.factor.types chr.parser chr.state
-classes classes.builtin combinators.short-circuit continuations effects generic
-hashtables kernel kernel.private layouts lists macros.expander make math
-math.parser namespaces quotations sequences sets terms types.util words ;
+chr.factor.conditions chr.factor.infer chr.factor.stack chr.factor.types
+chr.parser chr.state classes classes.builtin combinators.short-circuit
+continuations effects generic hashtables kernel kernel.private layouts lists
+macros.expander make math math.parser namespaces quotations sequences sets terms
+types.util words ;
 
 IN: chr.factor.words
 

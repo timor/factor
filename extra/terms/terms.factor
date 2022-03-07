@@ -295,7 +295,7 @@ DEFER: lift
 
 ! * Unification
 ! Baader/Nipkow
-GENERIC: subst ( term -- term )
+GENERIC: subst ( assoc term -- assoc term )
 SINGLETON: __
 
 ! This is for matching ground-terms only, basically as if expecting something that can be wrapped
@@ -305,12 +305,10 @@ C: <atom-match> atom-match
 
 SYMBOL: in-quotation?
 SYMBOL: current-subst
-: get-current-subst ( obj -- obj/f )
-    current-subst get at ;
 
 M: object subst ;
 M: term-var subst
-    current-subst get ?at drop
+    over ?at drop
     ?ground-value
     dup { [ drop in-quotation? get ] [ word? ] [ { [ deferred? ] [ match-var? not ] } 1|| ] } 1&& [ <wrapper> ] when
     ;
@@ -321,6 +319,9 @@ M: sequence subst
 M: vector subst
     dup quotation?
     in-quotation? [ [ subst ] map! ] with-variable ;
+! M: array subst
+!     dup quotation?
+!     in-quotation? [ [ subst ] map! ] with-variable ;
 M: callable subst
     in-quotation? [ call-next-method ] with-variable-on ;
 M: tuple subst tuple>array subst >tuple ;
@@ -331,7 +332,7 @@ M: atom-match subst
     var>> subst dup ground-value? [ <atom-match> ] unless ;
 
 : lift ( term subst -- term )
-    current-subst [ subst ] with-variable ;
+    swap subst nip ;
 
 GENERIC: occurs? ( var term -- ? )
 M: object occurs? 2drop f ;

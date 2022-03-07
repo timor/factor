@@ -1,5 +1,6 @@
 USING: accessors arrays classes classes.algebra classes.tuple
 combinators.short-circuit continuations kernel make match quotations sequences
+combinators.private
 sets terms typed words ;
 
 IN: chr
@@ -165,7 +166,8 @@ M: callable apply-substitution* swap lift ;
 : test-callable ( callable -- ? )
     ! Swap this in when suspecting that throwing errors will mess up the equivalence theory!
     ! call( -- ? ) ;
-    [ call( -- ? ) ] [ dup user-error? [ error>> throw ] [ 2drop f ] if ] recover ;
+    ! [ call( -- ? ) ] [ dup user-error? [ error>> throw ] [ 2drop f ] if ] recover ;
+    [ ( -- ? ) call-effect-unsafe ] [ dup user-error? [ error>> throw ] [ 2drop f ] if ] recover ; inline
 
 M: callable test-constraint
     swap lift test-callable ;

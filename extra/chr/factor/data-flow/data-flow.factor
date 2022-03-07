@@ -1,5 +1,5 @@
-USING: accessors chr.comparisons chr.factor chr.factor.conditions
-chr.factor.stack chr.modular chr.parser chr.state kernel lists terms ;
+USING: chr.comparisons chr.factor chr.factor.conditions chr.modular chr.parser
+chr.state kernel lists terms types.util ;
 
 IN: chr.factor.data-flow
 

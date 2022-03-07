@@ -1,5 +1,6 @@
 USING: accessors arrays assocs assocs.extras chr chr.programs classes.algebra
 combinators.short-circuit hash-sets kernel linked-assocs lists make math
+combinators.private
 namespaces quotations sequences sets sorting terms typed words ;
 
 IN: chr.state
@@ -355,9 +356,10 @@ M: generator activate-new
 
 M: true activate-new 2drop ;
 
-M: callable activate-new
+M: callable activate-new ( quot effect -- )
     ! recursion-check
-    call( -- new )
+    ! call( -- new )
+    ( -- new ) call-effect-unsafe
     pred>constraint
     ! reactivate-all
     activate-new ;
