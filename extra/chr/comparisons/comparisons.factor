@@ -14,7 +14,8 @@ TUPLE: lt < chr-pred x y ;
 TUPLE: gt < chr-pred x y ;
 TUPLE: ne < chr-pred x y ;
 TUPLE: is < val-pred y ;
-CHRAT: chrat-comp { le ge lt gt ne is }
+TUPLE: _is < val-pred y ;
+CHRAT: chrat-comp { le ge lt gt ne is _is }
     CHR{ // { ne ?x ?x } -- | false }
     CHR{ // { is ?x ?x } -- | }
     CHR{ { is ?x ?y } // { is ?x ?y } -- | }
@@ -22,6 +23,8 @@ CHRAT: chrat-comp { le ge lt gt ne is }
     ! CHR{ // { is A{ ?x } A{ ?y } } -- | [ ?x ?y eq? [ f ] [ ?x ?y "inconsistent" throw ] if ] }
     CHR{ // { is A{ ?x } A{ ?y } } -- | [ ?x ?y eq? [ f ] [ { Inconsistent P{ is ?x ?y } } ] if ] }
     CHR{ // { is A{ ?y } ?x } -- | { is ?x ?y } }
+    ! CHR: answer-exist @ { is ?x ?y } // { ask { is ?x ?z } } -- | [ ?z ?y ==! ] { entailed { ask { is ?x ?z } } } ;
+    CHR: answer-exist @ { is ?x ?y } // { _is ?x ?z } -- | [ ?z ?y ==! ] ;
     ! CHR{ // { ask { is ?x ?y } } -- [ ?x ?y == ] | { entailed { is ?x ?y } } }
     CHR{ { lt ?x ?y } // { ask { ne ?x ?y } } -- | { entailed { ne ?x ?y } } }
     CHR{ // { le ?x ?x } -- | }

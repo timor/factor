@@ -1,8 +1,8 @@
 USING: accessors arrays assocs chr.comparisons chr.factor chr.factor.compiler
-chr.factor.conditions chr.factor.infer chr.factor.stack chr.factor.types
-chr.parser chr.state classes combinators.short-circuit continuations effects
-generic kernel lists macros.expander make math math.parser quotations sequences
-sets terms types.util words ;
+chr.factor.conditions chr.factor.stack chr.factor.types chr.parser chr.state
+classes classes.builtin combinators.short-circuit continuations effects generic
+hashtables kernel kernel.private layouts lists macros.expander make math
+math.parser namespaces quotations sequences sets terms types.util words ;
 
 IN: chr.factor.words
 
@@ -76,20 +76,25 @@ TUPLE: DupValue < state-pred x y ;
 
 ! CHR{ // { DupValue ?s ?x ?y } -- | { Cond ?s { Dup ?x ?y } } }
 ! CHR{ // { DropValue ?s ?x } -- | { Cond ?s { Drop ?x } } }
-CHR{ // { DupValue ?s ?x ?y } -- | { Dup ?x ?y } }
-CHR{ // { DropValue ?s ?x } -- | { --> ?s P{ Dead ?x } } { Drop ?x } }
+CHR{ // { DupValue ?s ?x ?y } -- | { --> ?s P{ Dup ?x ?y } } }
+CHR{ // { DropValue ?s ?x } -- | { --> ?s P{ Drop ?x } } }
 
+! FIXME: make a shuffle generator which correctly tracks dups and drops
 CHR: infer-dup @ // { Word ?s ?t dup } -- |
      ! { Stack ?s L{ ?x . ?rho } }
      ! { Stack ?t L{ ?y ?x . ?rho } }
 { StackOp ?s ?t L{ ?x . ?rho } L{ ?y ?x . ?rho } }
      { DupValue ?s ?x ?y } ;
 
+CHR: infer-dupd @ // { Word ?s ?t dupd } -- |
+{ StackOp ?s ?t L{ ?y ?x . ?rho } L{ ?y ?x ?xs } }
+{ DupValue ?s ?x ?xs } ;
+
 CHR: infer-over @ // { Word ?s ?t over } -- |
      ! { Stack ?s L{ ?y ?x . ?rho } }
      ! { Stack ?t L{ ?z ?y ?x . ?rho } }
-     { StackOp ?s ?t L{ ?y ?x . ?rho } L{ ?z ?y ?x . ?rho } }
-     { DupValue ?s ?x ?z } ;
+     { StackOp ?s ?t L{ ?y ?x . ?rho } L{ ?xs ?y ?x . ?rho } }
+     { DupValue ?s ?x ?xs } ;
 
 CHR: curry-effect @ // { Word ?s ?t curry } -- |
 ! { Stack ?s L{ ?p ?parm . ?rho } }
@@ -126,8 +131,15 @@ CHR: pick-prim @  // { Word ?s ?t pick } -- |
      { DupValue ?s ?x ?w }
    ;
 
+
+CHR: declare-prim @ // { Word ?s ?t declare } -- { Stack ?s L{ ?c ?x . ?rho } } |
+{ Stack ?t L{ ?x . ?rho } }
+{ Type ?x ?tau }
+{ _is ?c ?sig }
+{ Subtype ?tau ?sig } ;
+
 ! ** Macros
-TUPLE: FoldEffect < trans-pred exec effect ;
+TUPLE: FoldMacroEffect < trans-pred exec effect ;
 
 ! TUPLE: AskLits < state-pred lits parms ;
 CHR: expand-macro-quot @ // { Word ?r ?u ?w } -- [ ?w macro-quot :>> ?p ] |
@@ -139,8 +151,8 @@ CHR: expand-macro-quot @ // { Word ?r ?u ?w } -- [ ?w macro-quot :>> ?p ] |
  {
      ! { Stack ?s ?rho }
      ! { InsertStates ?r { ?s ?t } }
-     ! { FoldEffect ?r ?s ?p e }
-     { FoldEffect ?r ?u ?p e }
+     ! { FoldMacroEffect ?r ?s ?p e }
+     { FoldMacroEffect ?r ?u ?p e }
      ! { StackOp ?s ?t L{ ?q . ?rho } ?rho }
      ! { Instance ?q callable }
      ! { Stack ?s in-vars }
@@ -153,10 +165,37 @@ CHR: expand-macro-quot @ // { Word ?r ?u ?w } -- [ ?w macro-quot :>> ?p ] |
  }
 ] ;
 
+! TODO: move to expander!
 TUPLE: FoldScope < Scope ;
-CHR: inline-fold-quot @ { FoldEffect ?r ?u ?q ?e } // -- |
-{ InlineQuot ?r ?u [ ?q call call ] }
+CHR: inline-fold-quot @ // { FoldMacroEffect ?r ?u ?q ?e } --
+[ ?e in>> elt-vars :>> ?i ]
+! [ ?i ?rho lappend :>> ?a ]
+! [ L{ ?q . ?rho } :>> ?b ]
+|
+{ InsertStates ?r { ?s0 } }
+[| | ?i >list ?rho lappend :> a
+ { StackOp ?r ?s0 a ?rho }
+]
+{ InlineUnknown ?s0 ?u ?p }
+{ FoldCall ?s0 ?q ?i { ?p }  }
 ;
+
+
+
+! { Scope ?r ?u ?a ?b { ?s0 ?t } }
+! { Stack ?r ?u ?a }
+! { Stack ?s0 ?rho }
+! [
+!     | |
+!  ?e in>> >list ?rho lappend :> lin
+!  ?e out>> >list ?rho lappend :> lout
+!  { Scope ?r ?u lin lout { ?s0 ?t } }
+!  { Stack ?r lin }
+!  { Stack ?s0  }
+! ]
+! { FoldCall }
+! { InlineQuot ?r ?u [ ?q call call ] }
+! ;
 
 ! ** General effect assumption
 CHR: assume-word-effect @ { Word ?s ?t ?w } // -- |
@@ -214,10 +253,10 @@ CHR{ { Word ?s ?t ?w } // --
 ! CHR{ { Word ?s ?t ?w } { Stack ?s L{ ?x . __ } } { Lit ?x __ } // -- [ ?w foldable? ] |
 ! CHR: try-fold-word @ { Word ?s ?t ?w } { Lit ?x __ } // -- [ ?w foldable? ] { Stack ?s L{ ?x . __ } } |
 ! CHR: try-fold-word @ { Word ?s ?t ?w } // -- [ ?w foldable? ] |
-!      [| | ?w stack-effect :> e { FoldEffect ?s ?t ?w e } ] ;
+!      [| | ?w stack-effect :> e { FoldMacroEffect ?s ?t ?w e } ] ;
 
 ! NOTE: Assuming that foldable effects are always bounded!
-! CHR: try-fold @ { FoldEffect ?s ?t ?w ?e } // -- [ ?e known? ] |
+! CHR: try-fold @ { FoldMacroEffect ?s ?t ?w ?e } // -- [ ?e known? ] |
 !      [| | ?e in>> elt-vars dup
 !       >list ?rho lappend :> stack-in
 !       ! <reverse> [ number>string "lv" prepend uvar <term-var> 2array ] map :> var-map-in
@@ -238,7 +277,7 @@ CHR{ { Word ?s ?t ?w } // --
 ! Theoretically this is dead, because we don't expect a value to be used twice
 ! CHR{ // { Lit ?x ?v } { AskLit ?x ?a } -- | [ ?a ?v ==! ] { Dead ?x } }
 
-! CHR: do-fold-call @ // { Call ?s ?w __ __ } { FoldEffect ?s __ __ __ } { FoldCall ?s ?w ?i ?o } -- [ ?i [ known? ] all? ] |
+! CHR: do-fold-call @ // { Call ?s ?w __ __ } { FoldMacroEffect ?s __ __ __ } { FoldCall ?s ?w ?i ?o } -- [ ?i [ known? ] all? ] |
 !     [ ?i [ known ] map ?w 1quotation with-datastack
 !       ?o swap [ Lit boa ] 2map
 !     ] ;
@@ -247,19 +286,22 @@ CHR: try-foldable-call @ { InferMode } { is ?x A{ __ } } // { Call ?s ?w L{ ?x .
  vin >list __ lappend :> lin
  vout >list __ lappend :> lout
  { lin lout } { L{ ?x . ?i } ?o } ==!
- { FoldCall ?s ?w vin vout } 2array
+ ?w 1quotation :> mquot
+ { FoldCall ?s mquot vin vout } 2array
 ] ;
-
 
 
 ERROR: folding-error inputs quot error ;
 
 CHR: do-fold-call @ // { FoldCall ?s ?w A{ ?i } ?o } -- |
-    [ ?i <reversed> ?w 1quotation [ with-datastack ] [ folding-error ] recover
-      ?o swap [ ==! ] 2map
+    [ ?i <reversed> ?w [ with-datastack ] [ folding-error ] recover
+      ?o swap [ is boa ] 2map
     ] ;
 
-! CHR: do-fold-quot @ // { FoldEffect ?s ?t __ ?e } { FoldCall ?s ?q ?i ?o } -- [ ?q callable? ] [ ?i [ known? ] all? ] |
+CHR: get-fold-args @ { is ?x ?v } // { FoldCall ?s ?w ?i ?o }  -- [ ?x ?i in? ] |
+[ ?s ?w ?i ?v ?x associate substitute ?o FoldCall boa ] ;
+
+! CHR: do-fold-quot @ // { FoldMacroEffect ?s ?t __ ?e } { FoldCall ?s ?q ?i ?o } -- [ ?q callable? ] [ ?i [ known? ] all? ] |
 ! [ ?i [ known ] map ?q with-datastack
 !   ?o swap [ Lit boa ] 2map
 ! ]
@@ -268,14 +310,32 @@ CHR: do-fold-call @ // { FoldCall ?s ?w A{ ?i } ?o } -- |
 
 ! ** Anything else
 
-CHR{ // { Word ?s ?t ?w } -- { Stack ?s ?i } { Stack ?t ?o } |
+CHR: normal-word-call @ // { Word ?s ?t ?w } -- { Stack ?s ?i } ! { Stack ?t ?o }
+|
      ! { Stack ?s ?i }
      ! { Stack ?t ?o }
      { Call ?s ?w ?i ?o }
      { Stack ?t ?o }
-   }
+  ;
 
 ! Compilation stuff
+TUPLE: TagTest < val-pred in-obj ;
+
+CHR: insert-tag-check @ // { ApplyWordRules ?s ?t tag } -- { Stack ?s L{ ?x . __ } } |
+{ Stack ?t L{ ?n . __ } }
+! { Type ?x ?tau }
+! { _is ?c ?tau }
+{ TagTest ?n ?x }
+;
+
+CHR: known-tag @ { Type ?x A{ ?v } } // { TagTest ?n ?x } -- [ ?v builtin-class? ] |
+[ ?n ?v tag is boa  ] ;
+
+CHR: expand-partial-tag-rules @ { Type ?x ?tau } { Subtype ?tau A{ ?sig } } // { TagTest ?n ?x } -- |
+[ type-numbers get
+  [| tau n | { <--> P{ Type ?x tau } P{ is ?n n } } ] { } assoc>map
+] ;
+
 CHR: primitive-rules @ // { ApplyWordRules ?s ?t ?w } -- [ ?w primitive? ] |
 ! NOTE Assuming all primitive effects here are not broken!
 [ ?w stack-effect
@@ -288,8 +348,8 @@ CHR: primitive-rules @ // { ApplyWordRules ?s ?t ?w } -- [ ?w primitive? ] |
     ;
 
 ! Instance checks
-CHR: instance-test @ { ApplyWordRules ?s ?t instance? } // -- |
-{ Stack ?s L{ ?tau ?x . __ } }
+CHR: instance-test @ { ApplyWordRules ?s ?t instance? } // -- { Stack ?s L{ ?c ?x . __ } } |
+{ _is ?c ?tau }
 { Stack ?t L{ ?b . __ } }
 { Type ?b boolean }
 { <--> P{ is ?b W{ f } } P{ Not P{ Type ?x ?tau } } }
@@ -300,6 +360,7 @@ CHR: instance-test @ { ApplyWordRules ?s ?t instance? } // -- |
 ! General rules
 
 ! CHR: predicating-rules @ //
+
 
 CHR: instantiate-rules @ // { ApplyWordRules ?s ?t ?w } -- [ ?w generic? not ] |
 [ ?s ?t ?w instantiate-word-rules ] ;

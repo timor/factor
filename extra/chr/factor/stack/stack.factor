@@ -78,8 +78,10 @@ CHR: answer-stack-op-stack-in @ { StackOp ?r __ ?rho __ } // { ask { Stack ?r ?x
 [ ?rho ?x ==! ]
 { entailed { Stack ?r ?x } } ;
 
-CHR: answer-stack @ // { Stack ?s ?rho } { ask { Stack ?s ?x } } -- | [ ?rho ?x ==! ]
+! Singular Stack definition not consumed by question
+CHR: answer-stack @ { Stack ?s ?rho } // { ask { Stack ?s ?x } } -- | [ ?rho ?x ==! ]
 { entailed { Stack ?s ?x } } ;
+
 CHR: answer-start-stack @ { StartStack ?s ?rho } // { ask { Stack ?s ?x } } -- | [ ?rho ?x ==! ]
 { entailed { Stack ?s ?x } } ;
 CHR: answer-end-stack @ { EndStack ?s ?rho } // { ask { Stack ?s ?x } } -- | [ ?rho ?x ==! ]
@@ -162,10 +164,9 @@ CHR: same-effect @ { Effect ?q ?i ?o } // { Effect ?q ?a ?b } -- | [ ?i ?a ==! ]
 
 
 ! This is mainly useful for naming vars according to the declared effects...
-CHR{ // { AssumeWordEffect ?s ?t ?w ?e } -- |
+CHR: assume-stack-effects @ // { AssumeWordEffect ?s ?t ?w ?e } -- { Stack ?s ?i } |
      [| | ?e [ in>> ] [ out>> ] bi 2dup :> ( i o )
       [ length ] bi@ :> ( ni no )
-      f
       i elt-vars :> i
       o elt-vars :> o
       ! i [ ?s swap Pops boa suffix ] unless-empty
@@ -177,21 +178,21 @@ CHR{ // { AssumeWordEffect ?s ?t ?w ?e } -- |
 
 
       ! ?s ?t
-      ?s i >list ?rho lappend Stack boa suffix
+      i >list ?rho lappend :> stack-in
       ! Assume bivariable-effect in general!
-      ?t {
-           ! { [ ?e terminated?>> ] [ __ ] }
-           ! { [ ?e bivariable-effect? ] [ o >list ?sig lappend ] }
-           [ o >list ?sig lappend ]
-      } cond Stack boa suffix
+      o >list ?sig lappend :> stack-out
       ! {
       !     { [ ?e terminated?>> ] [ __ ] }
       !     { [ ?e bivariable-effect? ] [ o >list ?sig lappend ] }
       !     [ o >list ?rho lappend ] } cond InferredEffect boa suffix
+      { [ ?w generic? ] [ ?e bivariable-effect? not ] } 0&&
+      [ ?rho ?sig ==! 1array ] [ f ] if
+      ! { ?i ?o } { stack-in stack-out } ==! suffix
+      ! { ?i ?o } { stack-in stack-out } ==! suffix
+      ?i stack-in ==! suffix
+      { Stack ?t stack-out } suffix
      ]
-     [ { [ ?w generic? ] [ ?e bivariable-effect? not ] } 0&&
-       [ ?rho ?sig ==! ] [ f ] if ]
-   }
+   ;
 
 ! CHR: rem-trivial-jump @
 ! ! { CondJump ?r ?s true } // -- | { Stack ?r ?rho } { Stack ?s ?rho } }

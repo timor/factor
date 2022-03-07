@@ -1,5 +1,5 @@
-USING: accessors assocs chr chr.comparisons chr.factor chr.parser chr.state
-classes kernel namespaces sequences sets terms ;
+USING: accessors chr chr.comparisons chr.factor chr.parser chr.state classes
+kernel sequences sets terms ;
 
 IN: chr.factor.conditions
 
@@ -50,7 +50,8 @@ TUPLE: AbsurdScope < chr-pred beg end states ;
 ! TUPLE: AbsurdScope < Scope ;
 
 ! cond is either exactly fulfilled if alt1 is fulfilled or alt2 is fulfilled
-TUPLE: EitherOr < cond-pred alt1 alt2 ;
+! TUPLE: EitherOr < cond-pred alt1 alt2 ;
+TUPLE: EitherOr < cond-pred cond-val alt1 alt2 ;
 TUPLE: --> < cond-pred consequence ;
 TUPLE: \--> < cond-pred consequence ;
 TUPLE: <--> < cond-pred rhs ;
@@ -81,12 +82,21 @@ TUPLE: ProvideType < state-pred val type ;
 
 CHRAT: entailment { }
 
-! Redundancies
+! Probably expensive!
+! *** Consistency
+CHR: absurd-assumptions @ AS: ?p <={ test-pred } { Not ?p } // -- | { Inconsistent { ?p { Not ?p } } } ;
+
+! *** Redundancies
 CHR: duplicate-cond-pred @ AS: ?p <={ cond-pred ?x . ?y } // AS: ?q <={ cond-pred ?x . ?y } -- [ ?p ?q [ class-of ] same? ] | ;
 CHR: duplicate-negation @ { Not ?p } // { Not ?p } -- | ;
 
+CHR: redundant-exclusion @ { is ?x ?y } // { Not P{ is ?x __ } } -- | ;
+
 CHR{ // { <--> ?x ?x } -- | }
 CHR{ // { --> ?x ?x } -- | }
+
+! *** Combination
+CHR: same-if @ { EitherOr ?r ?c ?a ?b } // { EitherOr ?r ?c ?x ?y } -- | [ { ?a ?b } { ?x ?y } ==! ] ;
 ! *** Propagation
 
 CHR: propagate-cond-preds-scope @
@@ -99,16 +109,25 @@ CHR: propagate-cond-preds-trans @ <={ trans-pred ?r ?s . __ } // AS: ?c <={ cond
 [ ?c ?r >>cond ] ;
 
 ! *** Cleanup
+CHR: will-be-dead @ { EitherOr ?r __ ?c1 ?c2 }
+{ --> ?c1 P{ is ?x ?a } } { Dead ?a }
+{ --> ?c2 P{ is ?x ?b } } { Drop ?b } // -- |
+{ Dead ?x } ;
+
+CHR: drop-dead-conds @ { Dead ?x } // <={ impl-pred __ ?p } -- [ ?p known test-pred? ] [ ?p known constraint-args first ?x == ] | ;
 CHR: remove-unproven-assumptions @ { Impossible ?p } // { --> ?p __ } -- | ;
 CHR{ // { Fulfilled +top+ } -- | }
 CHR{ { Dead ?q } // { --> __ ?q } -- | }
 
+CHR: same-value-assumption-must-be-same @ { --> ?c1 P{ is ?x ?a } } // { --> ?c1 P{ is ?x ?b } } -- |
+[ ?a ?b ==! ] ;
+
 ! ** Reasoning
 ! *** Destructuring
 ! NOTE: Not completely sure if this is correct, also, maybe do this on the implication, not the equivalence?
-CHR: negation-excludes-1 @ { EitherOr ?c ?c1 ?c2 } { <--> ?c1 ?p } // --
+CHR: negation-excludes-1 @ { EitherOr ?c __ ?c1 ?c2 } { <--> ?c1 ?p } // --
     [ ?p known Not? not ] | { <--> ?c2 P{ Not ?p } } ;
-CHR: negation-excludes-2 @ { EitherOr ?c ?c1 ?c2 } { <--> ?c2 ?p } // --
+CHR: negation-excludes-2 @ { EitherOr ?c __ ?c1 ?c2 } { <--> ?c2 ?p } // --
     [ ?p known Not? not ] | { <--> ?c1 P{ Not ?p } } ;
 
 CHR: destructure-equiv @ // { <--> ?p ?q } -- | { --> ?p ?q } { --> ?q ?p } ;
@@ -116,10 +135,10 @@ CHR: convert-neg-test @ // { --> P{ Not ?p } ?q } -- | { \--> ?p ?q } ;
 CHR: convert-double-neg-test @ // { \--> P{ Not ?p } ?q } -- | { --> ?p ?q } ;
 CHR: convert-double-neg @ // { Not P{ Not ?p } } -- | [ ?p known ] ;
 CHR: back-propagate-impossible @ { --> ?p ?q } { Impossible ?q } // -- | { Impossible ?p } ;
-CHR: exclude-middle-1 @ { EitherOr __ ?c1 ?c2 } { Fulfilled ?c1 } // -- | { Impossible ?c2 } ;
-CHR: exclude-middle-2 @ { EitherOr __ ?c1 ?c2 } { Fulfilled ?c2 } // -- | { Impossible ?c1 } ;
-CHR: disjunction-1 @ { Impossible ?c1 } // { EitherOr ?p ?c1 ?c2 } -- | { <--> ?p ?c2 } ;
-CHR: disjunction-2 @ { Impossible ?c2 } // { EitherOr ?p ?c1 ?c2 } -- | { <--> ?p ?c1 } ;
+CHR: exclude-middle-1 @ { EitherOr __ __ ?c1 ?c2 } { Fulfilled ?c1 } // -- | { Impossible ?c2 } ;
+CHR: exclude-middle-2 @ { EitherOr __ __ ?c1 ?c2 } { Fulfilled ?c2 } // -- | { Impossible ?c1 } ;
+CHR: disjunction-1 @ { Impossible ?c1 } // { EitherOr ?p __ ?c1 ?c2 } -- | { <--> ?p ?c2 } ;
+CHR: disjunction-2 @ { Impossible ?c2 } // { EitherOr ?p __ ?c1 ?c2 } -- | { <--> ?p ?c1 } ;
 CHR{ { Impossible ?c2 } // -- [ ?c2 known chr-constraint? not ] | { Dead ?c2 } }
 ! CHR: propagate-fulfillment @ { Fulfilled ?q } { --> ?p ?q } // { --> ?q ?r } | { --> ?p ?r } ;
 ! CHR: propagate-fulfillment @ { --> ?p ?q } // { --> ?q ?r } -- { Fulfilled ?q } | { --> ?p ?r } ;
@@ -146,7 +165,9 @@ CHR: assume-fullfillment @ { Fulfilled ?p } // { --> ?p ?q } -- | { Fulfilled ?q
 CHR: refute-by-atom-counterexample @ { --> ?c P{ is ?x A{ ?v } } } { is ?x A{ ?w } } // -- [ ?v ?w = not ] |
 { Impossible ?c } ;
 
-CHR: same-in-both @ { EitherOr ?p ?c1 ?c2 } { --> ?c1 ?p } { --> ?c2 ?p } // -- | { Fulfilled ?p } ;
+CHR: redundant-by-atom-counterexample @ { is ?x ?b } // { --> P{ is ?x ?c } __ } -- [ ?b ?c == not ] | ;
+
+CHR: same-in-both @ { EitherOr ?p __ ?c1 ?c2 } { --> ?c1 ?p } { --> ?c2 ?p } // -- | { Fulfilled ?p } ;
 
 CHR: enter-fulfilled @ // { Fulfilled ?q } -- [ ?q known chr-constraint? ] | [ ?q known ] ;
 
@@ -158,14 +179,14 @@ CHR: enter-impossible @ // { Impossible ?p } --
 CHR: propagate-literals-in @ { is ?x A{ ?v } } // { --> __ P{ is ?x ?y } } -- | { is ?y ?v } ;
 CHR: import-literals @ { is ?x A{ ?v } } // { --> ?c P{ is ?y ?x } } -- |
 { --> ?c P{ is ?y ?v } } ;
-CHR: propagate-dead @ { --> ?c P{ Dead ?y } } { --> ?c P{ is ?x ?y } } // -- | { --> ?c P{ Dead ?x } } ;
+! CHR: propagate-dead @ { --> ?c P{ Dead ?y } } { --> ?c P{ is ?x ?y } } // -- | { --> ?c P{ Dead ?x } } ;
 
 ! NOTE: is this always valid? Should be, if we consider single-use semantics...
 CHR: transitive-mux @ // { --> ?c P{ is ?x ?a } } { --> ?c P{ is ?y ?a } } -- | { --> ?c P{ is ?y ?x } } ;
 
 ;
 
-CHRAT: condition-prop { Not }
+CHRAT: condition-prop {  }
 
 ! NOTE: Potentially very expensive?
 ! CHR: presence-is-trivial @ // { CheckTrivial ?c } --
@@ -207,7 +228,7 @@ CHR: duplicate-cond-pred @ AS: ?p <={ cond-pred ?x . ?y } // AS: ?q <={ cond-pre
 CHR: propagate-cond-preds-scope @
 ! { Scope ?s __ __ __ ?l }
 <={ Scope ?r __ __ __ ?l . __ }
-// AS: ?c <={ cond-pred ?s . __ } -- [ ?s ?l known in? ] |
+// AS: ?c <={ cond-pred ?s . __ } -- [ ?s ?c == not ] [ ?s ?l known in? ] |
     [ ?c ?r >>cond ] ;
 
 CHR: propagate-cond-preds-trans @ <={ trans-pred ?r ?s . __ } // AS: ?c <={ cond-pred ?s . __ }  -- |

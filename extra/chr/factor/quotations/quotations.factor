@@ -1,7 +1,8 @@
 USING: accessors chr chr.comparisons chr.factor chr.factor.compiler
 chr.factor.conditions chr.factor.control chr.factor.data-flow chr.factor.infer
 chr.factor.stack chr.factor.types chr.factor.words chr.parser chr.state
-classes.error kernel lists quotations sequences terms words words.symbol ;
+classes.error kernel lists quotations sequences sets.extras terms types.util
+words words.symbol ;
 
 IN: chr.factor.quotations
 FROM: syntax => _ ;
@@ -20,6 +21,8 @@ TUPLE: FinishScope < chr-pred beg cont ;
 
 ! This is only for cleanup
 TUPLE: RemoveStack < chr-pred s ;
+
+TUPLE: FinalizeInference < chr-pred ;
 
 CHRAT: chrat-cleanup { }
 
@@ -83,10 +86,10 @@ CHR: dead-state-vars @ { Dead ?s } // AS: ?x <={ state-pred ?s . __ } -- |
 ! CHR: finish-absurd-state @ // { AbsurdState ?s } { Stack ?s __ } -- | ;
 ! CHR: finish-absurd-state @ // { AbsurdState ?s } -- | ;
 
-CHR: phi-dead-vars @ { EitherOr ?c ?c1 ?c2 }
-{ --> ?c1 P{ is ?x ?a } } { --> ?c1 P{ Dead ?a } }
-{ --> ?c2 P{ is ?x ?b } } { --> ?c2 P{ Dead ?b } } // -- |
-{ --> ?c P{ Dead ?x } } ;
+! CHR: phi-dead-vars @ { EitherOr ?c ?c1 ?c2 }
+! { --> ?c1 P{ is ?x ?a } } { --> ?c1 P{ Dead ?a } }
+! { --> ?c2 P{ is ?x ?b } } { --> ?c2 P{ Dead ?b } } // -- |
+! { --> ?c P{ Dead ?x } } ;
 
 ;
 
@@ -129,13 +132,10 @@ CHR: finish-scope-stack-ops @  { Scope ?r ?u __ __ ?l } // { FinishScope ?r ?u }
 [ ?l known [ RemoveStackops boa ] map ] ;
 
 
-! CHR: dead-branch-1 @ { Branch ?r ?u ?a ?b } { Dead ?b } { Scope ?a ?x __ __ __ } // -- | [ { ?r ?u } { ?a ?x } ==! ] ;
-CHR: dead-branch-1 @ { Dead ?b } { Scope ?a ?x __ __ __ } // { Branch ?r ?u ?a ?b } -- | [ { ?r ?u } { ?a ?x } ==! ] ;
-! CHR: dead-branch-1 @ { Branch ?r ?u ?a ?b } { Dead ?b } { Scope ?a ?x ?rho ?sig ?l } // -- |
+! CHR: dead-branch-1 @ { Dead ?b } { Scope ?a ?x __ __ __ } // { Branch ?r ?u ?a ?b } -- | [ { ?r ?u } { ?a ?x } ==! ] ;
 
-! CHR: dead-branch-2 @ { Branch ?r ?u ?a ?b } { Dead ?a } { Scope ?b ?y __ __ __ } // -- | [ { ?r ?u } { ?b ?y } ==! ] ;
-CHR: dead-branch-2 @ { Dead ?a } { Scope ?b ?y __ __ __ } // { Branch ?r ?u ?a ?b } -- | [ { ?r ?u } { ?b ?y } ==! ] ;
-! CHR: dead-branch-2 @ { Branch ?r ?u ?a ?b } { Dead ?a } { Scope ?b ?y ?rho ?sig ?l } // -- |
+! CHR: dead-branch-2 @ { Dead ?a } { Scope ?b ?y __ __ __ } // { Branch ?r ?u ?a ?b } -- | [ { ?r ?u } { ?b ?y } ==! ] ;
+
 ! { Scope ?r ?u ?rho ?sig ?l } ;
 
 ! ! { StartStack ?r ?rho } { EndStack ?u ?sig } { FinishScope ?r ?u ?l } -- [ ?l last :>> ?t ]
@@ -215,11 +215,12 @@ CHR: infer-definition @  // { InferDef ?w } -- [ ?w deferred? not ] |
           { Entry +top+ w }
           { Stack +top+ ?rho }
           { InlineQuot +top+ +end+ def }
+          { FinalizeInference }
       } ] ;
 
 TERM-VARS: ?true ?st1 ?false ?sf1 ;
 
-TUPLE: CheckBranch < state-pred in c1 c2 true-in true-out false-in false-out out ;
+TUPLE: CheckBranch < state-pred in c1 c2 cond true-in true-out false-in false-out out ;
 
 ! Conditionals
 ! For now, let's set the input and output effects of the quotations to be the
@@ -236,7 +237,7 @@ CHR: infer-if @ // { Exec ?r ?t if } --
 ! TODO: find best order
 ! { SameDepth ?rho ?a }
 ! { SameDepth ?rho ?b }
-{ SplitStack ?rho ?a ?b }
+! { SplitStack ?rho ?a ?b }
 { Branch ?r ?t ?true ?false }
 { Stack ?true ?a }
 { Stack ?st1 ?x }
@@ -246,32 +247,36 @@ CHR: infer-if @ // { Exec ?r ?t if } --
 ! { Equiv ?false P{ Instance ?c \ f } }
 ! { Cond ?true P{ Not P{ Type ?c POSTPONE: f } } }
 ! { Cond ?false P{ Type ?c POSTPONE: f } }
-{ EitherOr ?r ?true ?false }
-! { <--> ?true P{ Not P{ is ?c W{ f } } } }
-{ <--> ?false P{ is ?c W{ f } } }
-{ --> ?true P{ is ?rho ?a } }
-! { --> ?true P{ Dead ?false } }
-{ --> ?true P{ Dead ?q } }
+{ EitherOr ?r ?c ?true ?false }
+! { <--> ?false P{ is ?c W{ f } } }
+! { --> ?true P{ is ?rho ?a } }
+! { --> ?true P{ Drop ?q } }
 
-{ --> ?false P{ is ?rho ?b } }
-! { --> ?false P{ Dead ?true } }
-{ --> ?false P{ Dead ?p } }
-! { Disjoint { ?true ?false } }
+! { --> ?false P{ is ?rho ?b } }
+! { --> ?false P{ Drop ?p } }
+
 { InlineUnknown ?true ?st1 ?p }
 { InlineUnknown ?false ?sf1 ?q }
 ! { Stack ?t ?sig }
-{ CheckBranch ?r ?true ?false ?rho ?a ?x ?b ?y ?t }
+{ CheckBranch ?r ?true ?false ?c ?rho ?a ?x ?b ?y ?t }
     ;
 
-CHR: end-infer-if @ // { CheckBranch ?r ?true ?false ?rho ?a ?x ?b ?y ?t } --
+CHR: end-infer-if @ // { CheckBranch ?r ?true ?false ?c ?rho ?a ?x ?b ?y ?t } --
 { CompatibleEffects ?a ?x ?b ?y }
 |
 
 ! { SameDepth ?y ?sig }
 ! { SameDepth ?x ?sig }
-{ JoinStack ?sig ?x ?y }
+! { JoinStack ?sig ?x ?y }
 ! { AssumeSameRest ?rho ?a }
 ! { AssumeSameRest ?y ?sig }
+{ <--> ?false P{ is ?c W{ f } } }
+{ --> ?true P{ is ?rho ?a } }
+{ --> ?true P{ Drop ?q } }
+
+{ --> ?false P{ is ?rho ?b } }
+{ --> ?false P{ Drop ?p } }
+
 { Stack ?t ?sig }
 { --> ?true P{ is ?sig ?x } }
 { --> ?false P{ is ?sig ?y } }
@@ -308,7 +313,7 @@ CHR: exec-early-types @ { ExecWord ?s ?t ?w } // -- [ ?w chrat-in-types ]
      | [ ?s ?w chrat-in-types >list AcceptTypes boa ] ;
 
 CHR: exec-early-types @ { ExecWord ?s ?t ?w } // -- [ ?w chrat-out-types ]
-     | [ ?s ?w chrat-out-types >list ProvideTypes boa ] ;
+     | [ ?t ?w chrat-out-types >list ProvideTypes boa ] ;
 
 CHR: exec-error-word @ // { ExecWord ?s ?t ?w } -- [ ?w error-class? ] |
 ! { StackOp ?s ?t ?rho ?sig } ;
@@ -329,6 +334,8 @@ CHR{ // { InlineCall ?s ?t ?w ?d } -- |
      { InlineQuot ?s ?t ?d }
      ! { CheckInlineQuot ?s ?t ?d }
    }
+
+! TODO insert macro-expansion here!
 
 ! CHR{ { ConflictState ?s __ __ } // { CheckInlineQuot ?s ?t ?d }  -- | { InliningDead ?s ?t ?d } }
 ! CHR{ // { CheckInlineQuot ?s ?t ?d }  -- | { InlineQuot ?s ?t ?d } }
@@ -364,6 +371,7 @@ CHR: inline-quot @ // { InlineQuot ?s ?t ?q } --
 CHR: inline-top-quot @ // { InferToplevelQuot ?q } -- |
 { Stack +top+ ?rho }
 { InlineQuot +top+ +end+ ?q }
+{ FinalizeInference }
     ;
 
 ! Hand off to the word-specific stuff
@@ -384,5 +392,16 @@ CHR: finish-absurd-state @ // { AbsurdState ?s } -- | ;
 
 ! Don't do this during rule compilation, which will re-lift all top-level value predicates back to +top+ implications
 CHR: fulfilment-by-default @ { InferMode } // { --> +top+ ?c } -- | { Fulfilled ?c } ;
+
+! ** Finalizing
+
+CHR: query-types @ { Scope +top+ +end+ ?rho ?sig __ } // -- |
+[ ?rho list>array* ?sig list>array* symmetric-diff
+  [ "tau" uvar <term-var> Type boa ] map ] ;
+
+
+! TODO Don't do this for enum-like structures! Also ensure that this is done at the very end!
+CHR: uninteresting-exclusions @ { FinalizeInference } // { Not P{ is ?x A{ __ } } } -- | ;
+CHR{ // { FinalizeInference } -- | }
 
 ;

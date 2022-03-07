@@ -24,6 +24,8 @@ CHR{ // { Dup ?x ?y } { Drop ?y } -- | [ ?x ?y ==! ] }
 CHR{ // { Dup ?x ?y } { Drop ?x } -- | [ ?x ?y ==! ] }
 
 CHR{ { Dup ?x ?y } // { ask { Copy ?x ?y } } -- | { entailed { Copy ?x ?y } } }
+
+CHR: dup-literal @ { Dup ?x ?y } { is ?x A{ ?v } } // -- | { is ?y ?v } ;
 ! CHR{ { Split __ ?a ?x ?y } // { ask { Copy ?a ?y } } -- | { entailed { Copy ?a ?y } } }
 ! CHR{ { Split __ ?a ?x ?y } // { ask { Copy ?a ?x } } -- | { entailed { Copy ?a ?y } } }
 ! CHR{ { Join ?c ?x ?y } // { ask { Copy ?c ?y } } -- | { entailed { Copy ?c ?y } } }
@@ -71,6 +73,7 @@ CHR: destructure-dup @
 
 ! ** Forward propagation
 
+! CHR: propagate-drop @ { --> ?c P{ Dead ?y } } { --> ?c P{ is ?x ?y } } // -- | { --> ?c P{ Dead ?x } } ;
 ! CHR: literal-dup1 @
 ! { Lit ?x ?v } // { Dup ?x ?y } -- | { Lit ?y ?v } ;
 
@@ -79,6 +82,10 @@ CHR: destructure-dup @
 
 ! ** Backward propagation
 ! CHR: split-will-be-dead @  { Dead ?y } { Dead ?z } // { Split __ ?x ?y ?z } -- | { Dead ?x } ;
+CHR: will-be-dropped @ { EitherOr ?r __ ?c1 ?c2 }
+{ --> ?c1 P{ is ?x ?a } } { --> ?c1 P{ Drop ?a } }
+{ --> ?c2 P{ is ?x ?b } } { --> ?c2 P{ Drop ?b } } // -- |
+{ --> ?r P{ Drop ?x } } ;
 
 ! ** Splits and Joins
 ! *** Simplify
@@ -90,6 +97,7 @@ CHR: destructure-dup @
 CHR{ // { Split ?x ?x ?x } -- | }
 CHR{ // { Join ?x ?x ?x } -- | }
 
+CHR: non-split @ // { Split ?z ?a ?b } -- [ ?z ?a ?b [ lastcdr ] tri@ [ = ] curry bi@ or ] | ;
 
 ! This should happen if branch scopes are inferred to be known and balanced
 CHR: redundant-split @ // { Split ?z ?x ?x } -- | [ ?x ?z ==! ] ;
