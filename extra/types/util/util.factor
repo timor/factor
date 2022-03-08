@@ -164,16 +164,22 @@ MACRO: lmatch-map-as ( branches cons-class -- quot )
 
 
 ! Improper lists
-: list* ( list cdr -- list )
+: list* ( list cdr -- list* )
     2dup [ list-class ] bi@ class-and
     '[ _ swons* ] foldr ;
 
-: leach* ( ... list quot: ( ... elt -- ... ) -- ... )
+: leach* ( ... list* quot: ( ... elt -- ... ) -- ... )
     over atom? [ 2drop ] [ (leach) leach* ] if ; inline recursive
 
-: llength* ( list -- n )
+: llength* ( list* -- n )
     0 [ drop 1 + ] swapd leach* ;
     ! 0 [ drop 1 + ] swapd over atom? [ 2drop ] [ (leach) leach ] if ;
+
+: list>array* ( list* -- array )
+    [ [ , ] leach* ] {  } make ;
+
+: lastcdr ( list -- x )
+    dup atom? [ cdr lastcdr ] unless ; inline recursive
 
 ! * Cache with hit indicator
 
