@@ -58,6 +58,8 @@ CHR{ { AcceptType ?s ?x ?tau } // { AcceptType ?s ?x ?tau } -- | }
 ! *** Early Simplifications
 CHR: object-type-is-trivial @ // { Type ?x object } -- | ;
 CHR: object-subtype-is-trivial @ // { Subtype ?x object  } -- | ;
+CHR: same-subtype-union @  { Subtype ?tau1 ?x } { Subtype ?tau2 ?x } // { UnionType ?tau3 ?tau1 ?tau2 } -- |
+{ Subtype ?tau3 ?x } ;
 
 ! *** Expand Type Specifications
 CHR: accept-type-from-stack @ // { AcceptTypes ?s ?x } -- [ ?x known :>> ?l list? ] [ ?l list>stack :>> ?v ] |
@@ -83,12 +85,14 @@ CHR: lit-defines-type @ { is ?x A{ ?v } } { Type ?x ?tau } // -- [ ?tau known te
 
 
 ! NOTE: This must provide subtype definitions, otherwise we claim to know what the declared type of the input variable is supposed to be
-CHR: accept-defines-type @ // { AcceptType ?s ?x ?tau } -- [ ?x known list? not ] | { --> ?s P{ Type ?x ?sig } } P{ Subtype ?sig ?tau } ;
+! CHR: accept-defines-type @ // { AcceptType ?s ?x ?tau } -- [ ?x known list? not ] | { --> ?s P{ Type ?x ?sig } } P{ Subtype ?sig ?tau } ;
+CHR: accept-defines-type @ // { AcceptType ?s ?x ?tau } -- [ ?x known list? not ] |  P{ Type ?x ?sig }  P{ Subtype ?sig ?tau } ;
 
 ! XXX not sure if this is correct, do we also need subtype reasoning here?
 ! ... pretty sure we do... final-tests should then narrow stuff down...
 ! CHR: provide-defines-type @ // { ProvideType ?s ?x ?tau } -- [ ?x known list? not ] | { --> ?s P{ Type ?x ?tau } } ;
-CHR: provide-defines-type @ // { ProvideType ?s ?x ?tau } -- [ ?x known list? not ] | { --> ?s P{ Type ?x ?sig } } P{ Subtype ?sig ?tau } ;
+! CHR: provide-defines-type @ // { ProvideType ?s ?x ?tau } -- [ ?x known list? not ] | { --> ?s P{ Type ?x ?sig } } P{ Subtype ?sig ?tau } ;
+CHR: provide-defines-type @ // { ProvideType ?s ?x ?tau } -- [ ?x known list? not ] | P{ Type ?x ?sig } P{ Subtype ?sig ?tau } ;
 
 CHR: effects-are-callables @ { Effect ?x __ __ } { Type ?x ?tau } // -- |
 { Subtype ?tau callable } ;
@@ -120,7 +124,7 @@ CHR: literal-defines-type @ { --> ?c P{ is ?x A{ ?v } } } //
 ! { --> ?c P{ Subtype ?tau ?sig } }
     ;
 
-CHR: reduntant-atomic-type-restriction @ { Type ?x A{ ?tau } } // { Not P{ Type ?x A{ ?sig } } } -- [ ?tau ?sig classes-intersect? not ] | ;
+CHR: redundant-atomic-type-restriction @ { Type ?x A{ ?tau } } // { Not P{ Type ?x A{ ?sig } } } -- [ ?tau ?sig classes-intersect? not ] | ;
 
 ! ** Algebra
 CHR{ { Subtype ?x ?y } // { Subtype ?x ?y } -- | }
@@ -150,12 +154,33 @@ CHR: reflexive-union @ { UnionType ?tau3 ?tau1 ?tau2 } // { UnionType ?tau3 ?tau
 CHR: builtin-union @ // { UnionType ?tau3 A{ ?tau1 } A{ ?tau2 } } -- |
 [ ?tau3 ?tau1 ?tau2 class-or ==! ] ;
 
-CHR: data-phi-types @ { EitherOr ?c __ ?c1 ?c2 }
-{ --> ?c1 P{ is ?x ?a } } { --> ?c1 P{ Type ?a ?tau1 } }
-{ --> ?c2 P{ is ?x ?b } } { --> ?c2 P{ Type ?b ?tau2 } }
+CHR: type-phi-up @ { EitherOr ?c __ ?c1 ?c2 }
+{ --> ?c1 P{ is ?x ?a } }
+{ --> ?c1 P{ Type ?a ?tau1 } }
+{ --> ?c2 P{ is ?x ?b } }
+{ --> ?c2 P{ Type ?b ?tau2 } }
 // -- |
-{ --> ?c P{ Type ?x ?tau3 } }
-{ UnionType ?tau3 ?tau1 ?tau2 } ;
+{ Type ?x ?tau3 } { UnionType ?tau3 ?tau1 ?tau2 } ;
+
+CHR: type-phi-in @
+{ --> ?c1 P{ is ?x ?b } } { Type ?x ?tau } // -- [ ?x known term-var? ] |
+{ --> ?c1 P{ Type ?b ?tau } } ;
+! { EitherOr ?c __ ?c1 ?c2 }
+! { --> ?c1 P{ is ?x ?a } } { --> ?c2 P{ is ?x ?b } }
+! { Type ?a ?tau1 } { Type ?b ?tau2 } -- |
+! { Type ?x ?tau3 } { UnionType ?tau3 ?tau1 ?tau2 } ;
+
+! CHR: data-phi-types @ { EitherOr ?c __ ?c1 ?c2 }
+! { --> ?c1 P{ is ?x ?a } }
+! { --> ?c2 P{ is ?x ?b } }
+! // -- [ ?a known term-var? ] [ ?b known term-var? ] [ ?x known term-var? ] |
+! ! { --> ?c1 P{ Type ?a ?tau1 } }
+! ! { --> ?c2 P{ Type ?b ?tau2 } }
+! ! { --> ?c P{ Type ?x ?tau3 } }
+! P{ Type ?a ?tau1 }
+! P{ Type ?b ?tau2 }
+! P{ Type ?x ?tau3 }
+! { UnionType ?tau3 ?tau1 ?tau2 } ;
 
 CHR: data-phi-direct-types @ { EitherOr ?c __ ?c1 ?c2 }
 { --> ?c1 P{ Type ?a ?tau1 } }

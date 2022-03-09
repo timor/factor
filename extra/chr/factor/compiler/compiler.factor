@@ -30,7 +30,8 @@ ERROR: recursive-chrat-compile word ;
     dup inline-history get in? [ recursive-chrat-compile ] when
     inline-history [ over suffix ] change
     '{ { ChratInfer _ } { CompileRule } } run-chrat-query
-    values rest { StartGC } suffix \ dead-code swap query-with
+    ! values rest { StartGC } suffix \ dead-code swap query-with
+    values rest { TopTypes } suffix \ top-types swap query-with
     values rest constraints>body ;
 
 ! : chrat-compile-def ( word -- )
@@ -68,7 +69,7 @@ ERROR: recursive-chrat-compile word ;
 ! * Chrat side
 
 
-CHRAT: compile-rules { }
+CHRAT: compile-rules { CompileRule }
 
 CHR: infer-done @ { CompileRule } // { InferMode } -- | ;
 

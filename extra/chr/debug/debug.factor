@@ -1,6 +1,7 @@
 USING: accessors arrays assocs assocs.extras chr chr.programs chr.state
-formatting io kernel math.parser namespaces prettyprint sequences terms
-tools.annotations tools.walker ;
+classes.private classes.tuple formatting io kernel math math.order math.parser
+namespaces persistent.assocs prettyprint sequences sequences.private
+sorting.slots system terms tools.annotations tools.walker ;
 
 IN: chr.debug
 
@@ -53,7 +54,7 @@ IN: chr.debug
     ! \ activate [ [ "! " write dup id-susp. ] prepose ] annotate
     ! \ test-callable [ [ dup "Builtin Test: " write . ] prepose [ dup " ==> %u\n" printf ] compose ] annotate
     ! \ run-occurrence [ [ dup occurrence>> "Try Occurrence %u with Schedule: " printf dup partners>> . ] prepose ] annotate
-    \ run-occurrence [ [ 2dup try-rule-match. ] prepose ] annotate
+    ! \ run-occurrence [ [ 2dup try-rule-match. ] prepose ] annotate
     \ collect-chrat-solvers [ [ "Solvers for Program: " write dup . ] compose ] annotate
     \ load-chr [ [ "Rewritten Program: " write dup rules>> <enumerated> >array . ] compose ] annotate
     ! \ replace-all-equalities [ [ ground-values get "Ground-values: " write . ] prepose ] annotate
@@ -62,3 +63,29 @@ IN: chr.debug
 
 :: break-rule-match ( rule-num susp-id -- )
     \ run-occurrence [ 2dup [ id>> susp-id = ] [ occurrence>> first rule-num = ] bi* and ] breakpoint-if ;
+
+SYMBOL: chr-trace
+
+: chriming ( -- )
+    \ run-chr-query [ [ V{ } clone chr-trace set-global ] prepose ] annotate
+    \ activate [ [ nano-count \ activate pick dup store get at type>> 3array 2array chr-trace get-global push ] prepose ] annotate
+    \ fire-rule [ [ nano-count \ fire-rule reach 2array 2array chr-trace get-global push ] prepose ] annotate
+    ;
+
+: chr-deltas ( -- seq )
+    chr-trace get-global
+    dup first first
+    '[ _ - ] map-keys
+    unzip swap 0 swap [| delta time | time time delta - 2array time swap ] map
+    nip swap zip
+    ;
+
+! GENERIC: <=>* ( obj1 obj2 -- <=> )
+! M: object <=>* <=> ;
+! M: sequence <=>*
+!     [ mismatch ] 2keep pick [ 2nth-unsafe <=>* ] [ [ length ] compare nip ] if ;
+! M: tuple <=>* over tuple? [ [ tuple>array ] bi@ ] [ [ class-of class-name ] bi@ ] if <=>* ;
+
+! : c. ( result -- )
+!     >alist builtins swap [ at . ] [ pluck-at ] 2bi
+!     { { constraint-type <=>* } { constraint-args <=>* } } sort-values-by . ;

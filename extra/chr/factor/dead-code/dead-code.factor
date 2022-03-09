@@ -7,10 +7,55 @@ IN: chr.factor.dead-code
 TUPLE: Mark < chr-pred vals ;
 TUPLE: Marked < chr-pred pred ;
 TUPLE: StartGC < chr-pred ;
+TUPLE: TopTypes < chr-pred ;
 TUPLE: Sweep < chr-pred ;
 TUPLE: SweepDone < chr-pred ;
 
+! ** Sweep Phase
+
+CHRAT: sweep { }
+
+CHR: sweep-test-preds @ { Sweep } // AS: ?p <={ test-pred } -- | ;
+CHR: sweep-cond-preds @ { Sweep } // AS: ?p <={ cond-pred } -- | ;
+CHR: sweep-state-preds @ { Sweep } // AS: ?p <={ state-pred } -- | ;
+CHR: sweep-not-preds @ { Sweep } // { Not __ } -- | ;
+CHR: sweep-done @ // { Sweep } -- | { SweepDone } ;
+
+CHR: sweep @ { SweepDone } // { Marked ?p } -- | [ ?p known ] ;
+
+;
+
+! ** Top type predicates
+
+CHRAT: top-types { TopTypes }
+IMPORT: sweep
+
+CHR: start-top-types @ // { TopTypes } -- [ V{ +top+ +end+ } clone :>> ?a ] | { Mark ?a } ;
+
+CHR: mark-stacks @ // { Mark ?a } AS: ?p <={ Stack ?x ?l } -- [ ?x ?a in? ] | { Marked ?p }
+[ ?a ?l [ suffix! ] leach* members Mark boa ] ;
+
+CHR: mark-effects @ // AS: ?p <={ Effect ?q ?r ?u } { Mark ?a } -- [ ?q ?a in? ] | { Marked ?p }
+[ ?a ?r [ suffix! ] leach*
+  ?u [ suffix! ] leach* members Mark boa ] ;
+
+CHR: mark-val-types @ // { Mark ?a } AS: ?p <={ Type ?x ?tau } -- [ ?x ?a in? ] |
+{ Marked ?p } [ ?a ?tau known dup term-var? [ suffix! ] [ drop ] if Mark boa ] ;
+
+CHR: mark-type-preds @ // { Mark ?a } AS: ?p <={ type-pred ?tau . ?r } -- [ ?tau ?a in? ] |
+{ Marked ?p } [ ?a ?r term-vars members [ suffix! ] each Mark boa ] ;
+
+! CHR: mark-done @ // { Mark __ } -- | { Sweep } ;
+
+CHR: end-top-types @ // { SweepDone } -- | ;
+
+;
+
+! ** Dead Code cleanup
+
 CHRAT: dead-code { StartGC }
+IMPORT: sweep
+
 ! CHR: start-gc @ { CompileDone } // -- [ V{ +top+ +end+ } clone :>> ?a ] | { Mark ?a } ;
 ! CHR: gc-after-compile @ { CompileDone } // -- | { StartGC } ;
 ! CHR: complete-depth-relation-1 @ { StartGC } { SameDepth ?x ?y } { SameDepth ?y ?z } // -- | { SameDepth ?x ?z } ;
@@ -31,15 +76,6 @@ CHR: mark-not-preds @ // { Mark ?a } AS: ?p <={ Not ?q } -- [ ?q constraint-args
 CHR: mark-impl-preds @ // AS: ?p <={ impl-pred ?x . ?r } { Mark ?a } -- [ ?r term-vars [ ?a in? ] any? ] | { Marked ?p } [ ?a ?x term-vars members [ suffix! ] each Mark boa ] ;
 
 CHR: mark-done @ // { Mark __ } -- | { Sweep } ;
-
-CHR: sweep-test-preds @ { Sweep } // AS: ?p <={ test-pred } -- | ;
-CHR: sweep-cond-preds @ { Sweep } // AS: ?p <={ cond-pred } -- | ;
-CHR: sweep-state-preds @ { Sweep } // AS: ?p <={ state-pred } -- | ;
-CHR: sweep-not-preds @ { Sweep } // { Not __ } -- | ;
-! CHR: sweep-rel-preds @ { Sweep } // { SameDepth __ __ } -- | ;
-CHR: sweep-done @ // { Sweep } -- | { SweepDone } ;
-
-CHR: sweep @ { SweepDone } // { Marked ?p } -- | [ ?p known ] ;
 
 CHR: end-gc @ // { SweepDone } -- | ;
 

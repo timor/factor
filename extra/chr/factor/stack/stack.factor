@@ -107,9 +107,18 @@ CHR: destruc-expand-left @ // { SameDepth ?a L{ ?y . ?ys } } -- [ ?a known term-
 
 CHR{ // { SameDepth ?x ?y } -- | }
 
-CHR: assume-same-rest @ // { AssumeSameRest ?x ?y } -- [ ?x ?y [ known ] bi@ [ llength* ] same? ] |
-! { SameDepth ?x ?y }
-[ ?x ?y [ known lastcdr ] bi@ ==! ] ;
+! CHR: assume-same-rest @ // { AssumeSameRest ?x ?y } -- [ ?x ?y [ known ] bi@ [ llength* ] same? ] |
+! ! { SameDepth ?x ?y }
+! [ ?x ?y [ known lastcdr ] bi@ ==! ] ;
+
+! CHR: assume-same-rest @ // { AssumeSameRest ?x ?y } -- |
+! [| | ?x ?y [ known ] bi@ :> ( v1 v2 )
+!  v1 v2 [ llength* ] :> ( l1 l2 )
+!  v1 v2 l1 l2 > [ swap ] when :> ( a b )
+!  l1 l2 - abs :> d
+!  d [ "x" uvar <term-var> ] replicate >list
+
+! ]
 
 : list>simple-type ( list1 -- n last )
     0 swap [ dup atom? ] [ [ 1 + ] dip cdr ] until ; inline
@@ -126,15 +135,15 @@ CHR: known-effects-balance @ // { ask { CompatibleEffects ?a ?x ?b ?y } } --
     [ ?a ?x ?b ?y \ imbalanced-branch-stacks boa user-error ] when
     t
 ] |
-{ AssumeSameRest ?a ?b }
+! { AssumeSameRest ?a ?b }
 { entailed { CompatibleEffects ?a ?x ?b ?y } } ;
 
 ! Default Answer for branch stacks
 CHR: assume-balanced-stacks @ // { ask { CompatibleEffects ?a ?x ?b ?y } } -- |
 ! { AssumeSameRest ?a ?b }
 ! { AssumeSameRest ?x ?y }
-{ SameDepth ?a ?b }
-{ SameDepth ?x ?y }
+! { SameDepth ?a ?b }
+! { SameDepth ?x ?y }
 { entailed { CompatibleEffects ?a ?x ?b ?y } } ;
 
 ! CHR: branch-stacks @ { Branch ?r ?u ?s ?t } // -- |

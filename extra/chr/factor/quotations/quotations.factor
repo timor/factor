@@ -1,6 +1,7 @@
 USING: accessors chr chr.comparisons chr.factor chr.factor.compiler
 chr.factor.conditions chr.factor.control chr.factor.data-flow chr.factor.infer
 chr.factor.stack chr.factor.types chr.factor.words chr.parser chr.state
+sets
 classes.error kernel lists quotations sequences sets.extras terms types.util
 words words.symbol ;
 
@@ -255,6 +256,13 @@ CHR: infer-if @ // { Exec ?r ?t if } --
 ! { --> ?false P{ is ?rho ?b } }
 ! { --> ?false P{ Drop ?p } }
 
+{ --> ?true P{ is ?rho ?a } }
+{ --> ?false P{ is ?rho ?b } }
+{ --> ?true P{ Drop ?q } }
+
+{ --> ?false P{ Drop ?p } }
+
+
 { InlineUnknown ?true ?st1 ?p }
 { InlineUnknown ?false ?sf1 ?q }
 ! { Stack ?t ?sig }
@@ -271,12 +279,6 @@ CHR: end-infer-if @ // { CheckBranch ?r ?true ?false ?c ?rho ?a ?x ?b ?y ?t } --
 ! { AssumeSameRest ?rho ?a }
 ! { AssumeSameRest ?y ?sig }
 { <--> ?false P{ is ?c W{ f } } }
-{ --> ?true P{ is ?rho ?a } }
-{ --> ?true P{ Drop ?q } }
-
-{ --> ?false P{ is ?rho ?b } }
-{ --> ?false P{ Drop ?p } }
-
 { Stack ?t ?sig }
 { --> ?true P{ is ?sig ?x } }
 { --> ?false P{ is ?sig ?y } }
@@ -307,7 +309,6 @@ CHR: infer-dip @ // { Exec ?s ?u dip } -- |
 { FinishScope ?s ?u }
     ;
 
-
 ! We have to split this, because the in-types can already make this execword absurd
 CHR: exec-early-types @ { ExecWord ?s ?t ?w } // -- [ ?w chrat-in-types ]
      | [ ?s ?w chrat-in-types >list AcceptTypes boa ] ;
@@ -326,14 +327,14 @@ CHR: exec-inline-word @ // { ExecWord ?s ?t ?w } -- [ ?w inline? ] | { InlineWor
 ! TUPLE: CheckInlineQuot < InlineQuot ;
 ! TUPLE: InliningDead < InlineQuot ;
 
-CHR{ // { InlineCall ?s ?t ?w ?d } -- |
+CHR: do-inline-call @ // { InlineCall ?s ?t ?w ?d } -- |
      { Entry ?s ?w }
-     { ApplyWordRules ?s ?t ?w }
+     ! { ApplyWordRules ?s ?t ?w }
 
      ! For now be eager
      { InlineQuot ?s ?t ?d }
      ! { CheckInlineQuot ?s ?t ?d }
-   }
+   ;
 
 ! TODO insert macro-expansion here!
 
@@ -396,7 +397,7 @@ CHR: fulfilment-by-default @ { InferMode } // { --> +top+ ?c } -- | { Fulfilled 
 ! ** Finalizing
 
 CHR: query-types @ { Scope +top+ +end+ ?rho ?sig __ } // -- |
-[ ?rho list>array* ?sig list>array* symmetric-diff
+[ ?rho list>array* ?sig list>array* union members
   [ "tau" uvar <term-var> Type boa ] map ] ;
 
 

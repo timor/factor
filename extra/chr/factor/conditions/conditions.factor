@@ -119,8 +119,12 @@ CHR: remove-unproven-assumptions @ { Impossible ?p } // { --> ?p __ } -- | ;
 CHR{ // { Fulfilled +top+ } -- | }
 CHR{ { Dead ?q } // { --> __ ?q } -- | }
 
-CHR: same-value-assumption-must-be-same @ { --> ?c1 P{ is ?x ?a } } // { --> ?c1 P{ is ?x ?b } } -- |
-[ ?a ?b ==! ] ;
+! CHR: same-value-assumption-must-be-same @ { --> ?c1 P{ is ?x ?a } } // { --> ?c1 P{ is ?x ?b } } -- |
+! [ ?a ?b ==! ] ;
+
+CHR: same-conditional-trait-must-be-same @ { --> ?c1 ?p } // { --> ?c1 ?q } --
+[ ?p val-pred? ] [ ?q val-pred? ] [ ?p constraint-type ?q constraint-type = ] [ ?p value>> ?q value>> = ] |
+[ ?q ?p ==! ] ;
 
 ! ** Reasoning
 ! *** Destructuring
@@ -183,6 +187,10 @@ CHR: import-literals @ { is ?x A{ ?v } } // { --> ?c P{ is ?y ?x } } -- |
 
 ! NOTE: is this always valid? Should be, if we consider single-use semantics...
 CHR: transitive-mux @ // { --> ?c P{ is ?x ?a } } { --> ?c P{ is ?y ?a } } -- | { --> ?c P{ is ?y ?x } } ;
+
+CHR: assume-val-preds @ { --> ?c P{ is ?x ?a } } { --> ?c ?p } // -- [ ?p val-pred? ] [ ?p value>> ?a == ] [ ?p clone ?x >>value :>> ?q ] |
+{ --> ?c ?q } ;
+
 
 ;
 

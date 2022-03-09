@@ -88,7 +88,36 @@ CHR: will-be-dropped @ { EitherOr ?r __ ?c1 ?c2 }
 { --> ?r P{ Drop ?x } } ;
 
 ! ** Splits and Joins
-! *** Simplify
+
+! *** Conditional Copy
+! TODO: \-->
+CHR: destructure-phi-assignment-right @ // { --> ?c P{ is ?a L{ ?y . ?ys } } } -- [ ?a known term-var? ] |
+[ ?a L{ ?x . ?xs } ==! ]
+{ --> ?c P{ is ?xs ?ys } }
+{ --> ?c P{ is ?x ?y } } ;
+
+CHR: destructure-phi-assignment-left @ // { --> ?c P{ is L{ ?x . ?xs } ?b } } -- [ ?b known term-var? ] |
+[ ?b L{ ?y . ?ys } ==! ]
+{ --> ?c P{ is ?xs ?ys } }
+{ --> ?c P{ is ?x ?y } } ;
+
+CHR: redundant-phi @ { EitherOr ?c __ ?c1 ?c2 } //
+{ --> ?c1 P{ is ?a ?x } }
+{ --> ?c2 P{ is ?a ?x } } -- [ ?x known term-var? ] |
+[ ?a ?x ==! ] ;
+
+
+CHR: drop-split-1 @ { EitherOr ?c __ ?c1 ?c2 } { --> ?c1 P{ Drop ?y } } //
+{ --> ?c1 P{ is ?x ?y } }
+{ --> ?c2 P{ is ?x ?a } } -- |
+[ ?x ?a ==! ] ;
+
+CHR: drop-split-2 @ { EitherOr ?c __ ?c2 ?c1 } { --> ?c1 P{ Drop ?y } } //
+{ --> ?c1 P{ is ?x ?y } }
+{ --> ?c2 P{ is ?x ?a } } -- |
+[ ?x ?a ==! ] ;
+
+! *** TBR Simplify
 ! CHR: redundant-split-1 @ { Absurd ?c1 } { Branch ?r __ ?c1 ?c2 } // { Split ?r ?x ?y ?z } --
 ! | [ ?x ?z ==! ] ;
 ! CHR: redundant-split-2 @ { Absurd ?c2 } { Branch ?r __ ?c1 ?c2 } // { Split ?r ?x ?y ?z } --
