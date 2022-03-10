@@ -1,5 +1,5 @@
-USING: arrays chr chr.factor chr.modular chr.parser chr.state kernel lists math
-sequences sets splitting terms ;
+USING: arrays chr chr.comparisons chr.factor chr.factor.conditions chr.modular
+chr.parser chr.state kernel math sequences sets splitting terms ;
 
 IN: chr.factor.control
 
@@ -19,6 +19,7 @@ TUPLE: RecursiveCall < trans-pred word back-to ;
 TUPLE: AddLink < trans-pred ;
 TUPLE: PrefixLink < trans-pred ;
 TUPLE: ScopeLeader < chr-pred state leader ;
+TUPLE: Jump < chr-pred from to ;
 
 CHRAT: control-flow { CheckExec }
 
@@ -65,9 +66,11 @@ CHR{ <={ Scope ?s __ __ __ ?l . __ }  // { Link ?t ?u } -- [ ?s ?t == not ] [ ?t
 !      [ ?r ?u ?a ?s ?l insert-instead Scope boa ]
 !    }
 
+CHR: cond-state-link @ { --> __ P{ is ?s ?r } } // { Link ?r ?u } -- | { Link ?s ?u } ;
+
 CHR{ { Branch ?s __ ?r __ } // { Link ?r ?u } -- | { Link ?s ?u } }
 CHR{ { Branch ?s __ __ ?r } // { Link ?r ?u } -- | { Link ?s ?u } }
-! CHR{ { CondJump ?s ?r } // { Link ?r ?u } -- | { Link ?s ?u } }
+CHR{ { Jump ?s ?r } // { Link ?r ?u } -- | { Link ?s ?u } }
 
 ! Transitivity?
 ! CHR{ // { Link ?r ?s } { Link ?s ?t } -- | { Link ?r ?t } }

@@ -33,6 +33,8 @@ CHRAT: chrat-types { Type NotInstance Subtype Intersect }
 
 ! *** Redundancies
 CHR{ { Type ?x ?tau } // { Type ?x ?tau } -- | }
+CHR{ { Subtype ?tau ?sig } // { Subtype ?tau ?sig } -- | }
+CHR{ // { Subtype ?tau ?tau } -- | }
 ! NOTE: This is ground-term definition stuff.  Two different values can be made
 ! equal by branch simplification.  This has eager intersection semantics,
 ! i.e. it should be assumed that the more specific constraint was present in the
@@ -40,9 +42,13 @@ CHR{ { Type ?x ?tau } // { Type ?x ?tau } -- | }
 CHR: same-atomic-type @ // { Type ?x A{ ?tau1 } } { Type ?x A{ ?tau2 } }
 -- [ ?tau1 ?tau2 class-and :>> ?tau3 ] | { Type ?x ?tau3 } ;
 
-CHR: same-type @ { Type ?x ?tau2 } // { Type ?x ?tau1 } -- | [ ?tau1 ?tau2 ==! ] ;
+CHR: same-type @ { Type ?x ?tau2 } // { Type ?x ?tau1 } -- |
+[ ?tau1 ?tau2 ==! ] ;
+! { is ?tau1 ?tau2 } ;
 
 CHR{ { AcceptType ?s ?x ?tau } // { AcceptType ?s ?x ?tau } -- | }
+
+! CHR: literal-does-not-define-type @ // { Type A{ ?x } ?v } -- [ ?v known term-var? ] | ;
 
 ! CHR: answer-known-type @ { is ?x ?tau } // { ask { Type ?y ?x } } -- | [ ?tau ?sig ==! ]
 ! { entailed { Type ?x ?sig } } ;
@@ -81,11 +87,20 @@ CHR: destructure-provide-type-rest @ // { ProvideType ?s L{ ?x . ?xs } L{ ?y . ?
 ! CHR: lit-defines-type @ { Lit ?a ?b } // -- | { Type ?a ?tau } [ ?tau class-of Subtype boa ] ;
 ! CHR: sane-lit-types @ { is ?x A{ ?v } } { Type ?x A{ ?tau } } // -- | [ ?v ?tau instance? [ f ] [ ?v ?tau "lit type collision" 3array throw ] if ] ;
 ! CHR: lit-defines-type @ { is ?x A{ ?v } } // { Type ?x ?tau } -- [ ?tau known term-var? ] | [ ?x ?v class-of Type boa ] ;
-CHR: lit-defines-type @ { is ?x A{ ?v } } { Type ?x ?tau } // -- [ ?tau known term-var? ] | [ ?tau ?v class-of ==! ] ;
+! CHR: lit-defines-type @ { is ?x A{ ?v } } { Type ?x ?tau } // -- [ ?tau known term-var? ] | [ ?tau ?v class-of ==! ] ;
+CHR: lit-defines-lit-type @ { is ?x A{ ?v } } // -- [ ?v class-of :>> ?c ] |
+{ Type ?x ?c } ;
+! { is ?v ?c } ;
 
+CHR: defined-type-must-be-subtype @ { Subtype ?tau A{ ?c } } // { is ?tau A{ ?d } } -- [ ?d ?c class<= not ] [ ?d null = not ] |
+[ ?tau ?c ?d class-and is boa ] ;
+
+! CHR: defined-type-must-be-valid @ { Subtype ?tau A{ ?c } } // { is ?tau A{ ?d } } -- [ ?d null = not ] [ ?c ?d classes-intersect? not ] |
+! { is ?tau null } ;
 
 ! NOTE: This must provide subtype definitions, otherwise we claim to know what the declared type of the input variable is supposed to be
 ! CHR: accept-defines-type @ // { AcceptType ?s ?x ?tau } -- [ ?x known list? not ] | { --> ?s P{ Type ?x ?sig } } P{ Subtype ?sig ?tau } ;
+! CHR: accept-defines-type @ // { AcceptType ?s ?x ?tau } -- [ ?x known list? not ] |  P{ Type ?x ?sig }  P{ Subtype ?sig ?tau } ;
 CHR: accept-defines-type @ // { AcceptType ?s ?x ?tau } -- [ ?x known list? not ] |  P{ Type ?x ?sig }  P{ Subtype ?sig ?tau } ;
 
 ! XXX not sure if this is correct, do we also need subtype reasoning here?
@@ -117,12 +132,14 @@ CHR: import-literal-not-types @ { is ?c A{ ?tau } } // { Not P{ Type ?x ?c } } -
 CHR: check-literal-accept-type @ // { AcceptType __ A{ ?v } A{ ?tau } }
 -- [ ?v ?tau instance? ] | ;
 
-CHR: literal-sets-query-type-constant @ { is ?tau A{ ?sig } } { Equiv __ P{ Type __ ?tau } } // -- | [ ?tau ?sig ==! ] ;
+CHR: null-values @ { Type ?v ?tau } { is ?tau null } // -- | { Invalid ?v } ;
 
-CHR: literal-defines-type @ { --> ?c P{ is ?x A{ ?v } } } //
--- [ ?v class-of :>> ?sig ] | { --> ?c P{ Type ?x ?sig } }
-! { --> ?c P{ Subtype ?tau ?sig } }
-    ;
+! CHR: literal-sets-query-type-constant @ { is ?tau A{ ?sig } } { Equiv __ P{ Type __ ?tau } } // -- | [ ?tau ?sig ==! ] ;
+
+! CHR: literal-defines-type @ { --> ?c P{ is ?x A{ ?v } } } //
+! -- [ ?v class-of :>> ?sig ] | { --> ?c P{ Type ?x ?sig } }
+! ! { --> ?c P{ Subtype ?tau ?sig } }
+!     ;
 
 CHR: redundant-atomic-type-restriction @ { Type ?x A{ ?tau } } // { Not P{ Type ?x A{ ?sig } } } -- [ ?tau ?sig classes-intersect? not ] | ;
 
@@ -162,34 +179,35 @@ CHR: type-phi-up @ { EitherOr ?c __ ?c1 ?c2 }
 // -- |
 { Type ?x ?tau3 } { UnionType ?tau3 ?tau1 ?tau2 } ;
 
-CHR: type-phi-in @
-{ --> ?c1 P{ is ?x ?b } } { Type ?x ?tau } // -- [ ?x known term-var? ] |
-{ --> ?c1 P{ Type ?b ?tau } } ;
-! { EitherOr ?c __ ?c1 ?c2 }
-! { --> ?c1 P{ is ?x ?a } } { --> ?c2 P{ is ?x ?b } }
-! { Type ?a ?tau1 } { Type ?b ?tau2 } -- |
-! { Type ?x ?tau3 } { UnionType ?tau3 ?tau1 ?tau2 } ;
+! CHR: type-phi-in @
+! { --> ?c1 P{ is ?x ?b } } { Type ?x ?tau } // -- [ ?x known term-var? ] |
+! { --> ?c1 P{ Type ?b ?tau } } ;
 
-! CHR: data-phi-types @ { EitherOr ?c __ ?c1 ?c2 }
-! { --> ?c1 P{ is ?x ?a } }
-! { --> ?c2 P{ is ?x ?b } }
-! // -- [ ?a known term-var? ] [ ?b known term-var? ] [ ?x known term-var? ] |
-! ! { --> ?c1 P{ Type ?a ?tau1 } }
-! ! { --> ?c2 P{ Type ?b ?tau2 } }
-! ! { --> ?c P{ Type ?x ?tau3 } }
-! P{ Type ?a ?tau1 }
-! P{ Type ?b ?tau2 }
+! CHR: data-phi-direct-types @ { EitherOr ?c __ ?c1 ?c2 }
+! { --> ?c1 P{ Type ?a ?tau1 } }
+! { --> ?c2 P{ Type ?a ?tau2 } } // -- |
+! { --> ?c P{ Type ?a ?tau3 } }
+! { UnionType ?tau3 ?tau1 ?tau2 } ;
+
+
+CHR: condition-specializes @ { --> __ P{ is ?x ?a } } { Type ?x ?sig } // -- |
+{ Type ?a ?tau }
+{ Subtype ?tau ?sig } ;
+
+CHR: alternatives-define-union @ { --> __ P{ is ?x ?a } } { --> __ P{ is ?x ?b } }
+{ Type ?a ?tau1 }
+{ Type ?b ?tau2 } // -- |
+{ Type ?x ?tau3 }
+{ UnionType ?tau3 ?tau1 ?tau2 } ;
+
+! CHR: data-phi-types @ { EitherOr ?c ?c1 ?c2 }
+! { --> ?c1 P{ is ?x ?a } } P{ Type ?a ?tau1 }
+! { --> ?c2 P{ is ?x ?b } } P{ Type ?b ?tau2 }
+! // -- |
 ! P{ Type ?x ?tau3 }
 ! { UnionType ?tau3 ?tau1 ?tau2 } ;
 
-CHR: data-phi-direct-types @ { EitherOr ?c __ ?c1 ?c2 }
-{ --> ?c1 P{ Type ?a ?tau1 } }
-{ --> ?c2 P{ Type ?a ?tau2 } } // -- |
-{ --> ?c P{ Type ?a ?tau3 } }
-{ UnionType ?tau3 ?tau1 ?tau2 } ;
-
-
-! CHR: data-phi-types @ { EitherOr ?c ?c1 ?c2 }
+! CHR: data-phi-types @
 ! { --> ?c1 P{ is ?x ?a } } P{ Type ?a ?tau1 }
 ! { --> ?c2 P{ is ?x ?b } } P{ Type ?b ?tau2 }
 ! // -- |

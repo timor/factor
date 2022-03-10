@@ -10,6 +10,7 @@ IN: chr.factor.conditions
 ! Things that can be antecedents and consequents
 MIXIN: test-pred
 INSTANCE: val-pred test-pred
+INSTANCE: Not test-pred
 ! This is left in the compiled constraints, so we can check whether there will
 ! be a recursive call
 TUPLE: cond-pred < chr-pred cond ;
@@ -116,6 +117,7 @@ CHR: will-be-dead @ { EitherOr ?r __ ?c1 ?c2 }
 
 CHR: drop-dead-conds @ { Dead ?x } // <={ impl-pred __ ?p } -- [ ?p known test-pred? ] [ ?p known constraint-args first ?x == ] | ;
 CHR: remove-unproven-assumptions @ { Impossible ?p } // { --> ?p __ } -- | ;
+CHR: exclude-negative-assertions @ { Not ?p } // { --> ?p __ } -- | ;
 CHR{ // { Fulfilled +top+ } -- | }
 CHR{ { Dead ?q } // { --> __ ?q } -- | }
 
@@ -135,15 +137,18 @@ CHR: negation-excludes-2 @ { EitherOr ?c __ ?c1 ?c2 } { <--> ?c2 ?p } // --
     [ ?p known Not? not ] | { <--> ?c1 P{ Not ?p } } ;
 
 CHR: destructure-equiv @ // { <--> ?p ?q } -- | { --> ?p ?q } { --> ?q ?p } ;
-CHR: convert-neg-test @ // { --> P{ Not ?p } ?q } -- | { \--> ?p ?q } ;
-CHR: convert-double-neg-test @ // { \--> P{ Not ?p } ?q } -- | { --> ?p ?q } ;
-CHR: convert-double-neg @ // { Not P{ Not ?p } } -- | [ ?p known ] ;
+! CHR: convert-neg-test @ // { --> P{ Not ?p } ?q } -- | { \--> ?p ?q } ;
+CHR: convert-neg-test @ // { \--> ?p ?q } -- | { --> P{ Not ?p } ?q } ;
+! CHR: convert-double-neg-test @ // { \--> P{ Not ?p } ?q } -- | { --> ?p ?q } ;
+CHR: convert-double-neg-test @ // { --> P{ Not P{ Not ?p } } ?q } -- | { --> ?p ?q } ;
+CHR: convert-double-neg @ // { Not P{ Not ?p } } -- | { Fulfilled ?p } ;
 CHR: back-propagate-impossible @ { --> ?p ?q } { Impossible ?q } // -- | { Impossible ?p } ;
 CHR: exclude-middle-1 @ { EitherOr __ __ ?c1 ?c2 } { Fulfilled ?c1 } // -- | { Impossible ?c2 } ;
 CHR: exclude-middle-2 @ { EitherOr __ __ ?c1 ?c2 } { Fulfilled ?c2 } // -- | { Impossible ?c1 } ;
 CHR: disjunction-1 @ { Impossible ?c1 } // { EitherOr ?p __ ?c1 ?c2 } -- | { <--> ?p ?c2 } ;
 CHR: disjunction-2 @ { Impossible ?c2 } // { EitherOr ?p __ ?c1 ?c2 } -- | { <--> ?p ?c1 } ;
-CHR{ { Impossible ?c2 } // -- [ ?c2 known chr-constraint? not ] | { Dead ?c2 } }
+
+! CHR{ { Impossible ?c2 } // -- [ ?c2 known chr-constraint? not ] | { Dead ?c2 } }
 ! CHR: propagate-fulfillment @ { Fulfilled ?q } { --> ?p ?q } // { --> ?q ?r } | { --> ?p ?r } ;
 ! CHR: propagate-fulfillment @ { --> ?p ?q } // { --> ?q ?r } -- { Fulfilled ?q } | { --> ?p ?r } ;
 
@@ -162,12 +167,16 @@ CHR: fulfilment-by-presence @ AS: ?x <={ test-pred __ . __ } // { --> ?p ?q } --
 
 CHR: negative-fulfillment-by-presence @ { Not ?p } // { \--> ?p ?q } -- | { Fulfilled ?q } ;
 CHR: negative-redundancy-by-presence @ AS: ?p <={ test-pred } // { \--> ?p __ } -- | ;
-CHR: negative-redundancy-by-fulfillment @ { Fulfilled ?p } // { \--> ?p __ } -- | ;
+! CHR: negative-redundancy-by-fulfillment @ { Fulfilled ?p } // { \--> ?p __ } -- | ;
+CHR: negative-redundancy-by-fulfillment @ { Fulfilled ?p } // { --> P{ Not ?p } __ } -- | ;
 
 CHR: assume-fullfillment @ { Fulfilled ?p } // { --> ?p ?q } -- | { Fulfilled ?q } ;
 
 CHR: refute-by-atom-counterexample @ { --> ?c P{ is ?x A{ ?v } } } { is ?x A{ ?w } } // -- [ ?v ?w = not ] |
 { Impossible ?c } ;
+
+! CHR: refute-by-negative-assertion @ AS: ?p <={ test-pred } { --> ?c P{ Not ?p } } // -- | { Not ?c } ;
+CHR: refute-by-negative-assertion @ AS: ?p <={ test-pred } { --> ?c P{ Not ?p } } // -- | { Impossible ?c } ;
 
 CHR: redundant-by-atom-counterexample @ { is ?x ?b } // { --> P{ is ?x ?c } __ } -- [ ?b ?c == not ] | ;
 
@@ -176,13 +185,14 @@ CHR: same-in-both @ { EitherOr ?p __ ?c1 ?c2 } { --> ?c1 ?p } { --> ?c2 ?p } // 
 CHR: enter-fulfilled @ // { Fulfilled ?q } -- [ ?q known chr-constraint? ] | [ ?q known ] ;
 
 CHR: enter-impossible @ // { Impossible ?p } --
-[ ?p known chr-constraint? ] | [ ?p known Not boa ] ;
+! [ ?p known chr-constraint? ]
+| [ ?p known Not boa ] ;
 
 ! ** Simple Phi Stuff
 ! Reverse propagation of literals does not make sense
-CHR: propagate-literals-in @ { is ?x A{ ?v } } // { --> __ P{ is ?x ?y } } -- | { is ?y ?v } ;
-CHR: import-literals @ { is ?x A{ ?v } } // { --> ?c P{ is ?y ?x } } -- |
-{ --> ?c P{ is ?y ?v } } ;
+! CHR: propagate-literals-in @ { is ?x A{ ?v } } // { --> __ P{ is ?x ?y } } -- | { is ?y ?v } ;
+! CHR: import-literals @ { is ?x A{ ?v } } // { --> ?c P{ is ?y ?x } } -- |
+! { --> ?c P{ is ?y ?v } } ;
 ! CHR: propagate-dead @ { --> ?c P{ Dead ?y } } { --> ?c P{ is ?x ?y } } // -- | { --> ?c P{ Dead ?x } } ;
 
 ! NOTE: is this always valid? Should be, if we consider single-use semantics...
@@ -191,9 +201,16 @@ CHR: transitive-mux @ // { --> ?c P{ is ?x ?a } } { --> ?c P{ is ?y ?a } } -- | 
 CHR: assume-val-preds @ { --> ?c P{ is ?x ?a } } { --> ?c ?p } // -- [ ?p val-pred? ] [ ?p value>> ?a == ] [ ?p clone ?x >>value :>> ?q ] |
 { --> ?c ?q } ;
 
+! *** General assumption
+! CHR: phi-is-semi-lattice @ AS: ?r { impl-pred __ P{ is ?x ?a } } AS: ?p <={ val-pred ?a . __ } // -- [ ?a known term-var? ] |
+! [ ?p constraint-type  ]
+! { Assume  }
+! { le ?q ?p } ;
 
 ;
 
+
+! * Old implementation
 CHRAT: condition-prop {  }
 
 ! NOTE: Potentially very expensive?

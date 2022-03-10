@@ -282,7 +282,7 @@ CHR{ { Word ?s ?t ?w } // --
 !     [ ?i [ known ] map ?w 1quotation with-datastack
 !       ?o swap [ Lit boa ] 2map
 !     ] ;
-CHR: try-foldable-call @ { InferMode } { is ?x A{ __ } } // { Call ?s ?w L{ ?x . ?i } ?o } -- [ ?w foldable? ] |
+CHR: try-foldable-call @ { InferMode } { is ?x A{ __ } } { Call ?s ?w L{ ?x . ?i } ?o } // -- [ ?w foldable? ] |
 [| | ?w stack-effect effect>vars :> ( vin vout )
  vin >list __ lappend :> lin
  vout >list __ lappend :> lout
@@ -294,7 +294,7 @@ CHR: try-foldable-call @ { InferMode } { is ?x A{ __ } } // { Call ?s ?w L{ ?x .
 
 ERROR: folding-error inputs quot error ;
 
-CHR: do-fold-call @ // { FoldCall ?s ?w A{ ?i } ?o } -- |
+CHR: do-fold-call @ // { Call ?s __ __ __ } { FoldCall ?s ?w A{ ?i } ?o } -- |
     [ ?i <reversed> ?w [ with-datastack ] [ folding-error ] recover
       ?o swap [ is boa ] 2map
     ] ;

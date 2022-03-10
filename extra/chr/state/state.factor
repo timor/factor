@@ -12,7 +12,7 @@ SYMBOLS: program exec-stack store builtins match-trace current-index ;
 
 ! Operational interface
 TUPLE: chr-suspension
-    constraint id alive activated stored hist vars from-rule ;
+    constraint id alive activated stored hist vars from-rule cond ;
 
 TUPLE: builtin-suspension < chr-suspension type ;
 : <builtins-suspension> ( -- obj )
@@ -292,7 +292,7 @@ SYMBOL: sentinel
 
 : recursion-check ( -- )
     ! sentinel get 5000 > [ "runaway" throw ] when
-    sentinel get 1000 > [ "runaway" throw ] when
+    sentinel get 500 > [ "runaway" throw ] when
     sentinel inc ;
 
 ! TODO: check if that is needed to make sure tail recursion works!

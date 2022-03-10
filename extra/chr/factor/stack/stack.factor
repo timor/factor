@@ -54,6 +54,10 @@ CHR: define-stack-op-out @ { StackOp __ ?t __ ?sig } // { Stack ?t ?x } -- | [ ?
 CHR: define-scope-stack-out @ { Scope __ ?t __ ?sig __ } // { Stack ?t ?x } --
 | [ ?x ?sig ==! ] ;
 
+CHR: answer-scope-stack-out @ { Scope __ ?t __ ?sig __ } // { ask { Stack ?t ?x } } -- |
+[ ?x ?sig ==! ]
+{ entailed { Stack ?t ?x } } ;
+
 
 CHR: stack-ops-collide @ { StackOp ?r ?s ?x ?y } // { StackOp ?r ?s ?a ?b }
 -- |
@@ -146,30 +150,23 @@ CHR: assume-balanced-stacks @ // { ask { CompatibleEffects ?a ?x ?b ?y } } -- |
 ! { SameDepth ?x ?y }
 { entailed { CompatibleEffects ?a ?x ?b ?y } } ;
 
-! CHR: branch-stacks @ { Branch ?r ?u ?s ?t } // -- |
-! { Stack ?r ?v } { Stack ?s ?a } { Stack ?t ?b } { Stack ?u ?w }
-! { CompatibleEffects ?a ?w }
-! { BranchStacks ?a ?b ?c ?d ?e ?w } ;
 
-! CHR: assume-split-in @ { Split ?a L{ ?y . __ } __ } // -- [ ?a known term-var? ] |
-! [ ?a L{ ?x . ?xs } ==! ] ;
-! CHR: assume-split-out-1 @ { Split L{ ?x . __ } ?b __ } // -- [ ?b known term-var? ] |
-! [ ?b L{ ?y . ?ys } ==! ] ;
-! ! CHR: assume-split-out-2 @ { Split L{ ?x . __ } L{ ?y . __ } ?c } // -- [ ?c known term-var? ] |
-! ! [ ?c L{ ?z . ?zs } ==! ] ;
-! CHR: balance-split-left @ { Split __ L{ ?y . __ } ?c } // -- [ ?c known term-var? ] |
-! [ ?c L{ ?z . ?zs } ==! ] ;
-! CHR: balance-split-right @ { Split __ ?b L{ ?z . __ } } // -- [ ?b known term-var? ] |
-! [ ?b L{ ?y . ?ys } ==! ] ;
-
-
-
+! ** Effect
 ! CHR: same-stack @ // { Stack ?s ?v } { Stack ?s ?w } -- | [ ?v ?w ==! ] ;
 CHR: same-effect @ { Effect ?q ?i ?o } // { Effect ?q ?a ?b } -- | [ ?i ?a ==! ] [ ?o ?b ==! ] ;
 
 ! CHR{ { Stack ?s ?v } { Val ?s ?n ?a } // -- [ ?n ?v llength* < ] |
 !      [ ?a ?n ?v lnth ==! ]
 !    }
+
+! CHR: phi-effect-1 @ { --> ?c P{ is ?x ?a } } { Effect ?a ?i ?o } // -- | { Effect ?x ?r ?s }
+! { --> ?c P{ is ?r ?i } }
+! { --> ?c P{ is ?s ?o } } ;
+
+CHR: phi-effect-2 @ { --> ?c P{ is ?x ?a } } { Effect ?x ?r ?s } // -- | { Effect ?a ?i ?o }
+{ --> ?c P{ is ?r ?i } }
+{ --> ?c P{ is ?s ?o } } ;
+
 
 
 ! This is mainly useful for naming vars according to the declared effects...
@@ -203,24 +200,13 @@ CHR: assume-stack-effects @ // { AssumeWordEffect ?s ?t ?w ?e } -- { Stack ?s ?i
      ]
    ;
 
-! CHR: rem-trivial-jump @
-! ! { CondJump ?r ?s true } // -- | { Stack ?r ?rho } { Stack ?s ?rho } }
-!  // { CondJump ?r ?s true } -- | [ ?r ?s ==! ] ;
-
-! CHR: rem-trivial-ret @
-! ! { CondRet ?r ?s true } // -- | { Stack ?r ?rho } { Stack ?s ?rho } }
-! // { CondRet ?r ?s true } -- | [ ?r ?s ==! ] ;
 
 CHR: make-push-stack @ // { Push ?s ?t ?b } -- |
-     ! { Cond ?s { Lit ?v ?b } }
      { StackOp ?s ?t ?rho L{ ?x . ?rho } }
-     ! { --> ?s P{ is ?x ?b } }
      { is ?x ?b }
-     ! [ ?s ?x ?b class-of Type boa --> boa ]
-     [ ?x ?b class-of Type boa ]
-     ! { Lit ?v ?b }
-     ! { Stack ?s ?rho }
-     ! { Stack ?t L{ ?v . ?rho } }
+     { Def ?s ?x }
+     ! { Type ?x ?tau }
+     ! [ ?tau ?b class-of is boa ]
     ;
 
 ;

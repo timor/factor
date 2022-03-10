@@ -1,5 +1,5 @@
-USING: chr.comparisons chr.factor chr.factor.conditions chr.modular chr.parser
-chr.state kernel lists terms types.util ;
+USING: chr chr.comparisons chr.factor chr.factor.conditions chr.factor.stack
+chr.modular chr.parser chr.state kernel lists terms types.util ;
 
 IN: chr.factor.data-flow
 
@@ -89,6 +89,11 @@ CHR: will-be-dropped @ { EitherOr ?r __ ?c1 ?c2 }
 
 ! ** Splits and Joins
 
+CHR: check-phi-effects @ { --> __ P{ is ?q ?x } } { --> __ P{ is ?q ?y } }
+{ Effect ?y ?i ?o } { Effect ?x ?a ?b } // --
+[ ?i ?o ?effect-height :>> ?v ] [ ?a ?b ?effect-height :>> ?w ] |
+[ ?v ?w = [ f ] [ ?i ?o ?a ?b imbalanced-branch-stacks boa user-error ] if ] ;
+
 ! *** Conditional Copy
 ! TODO: \-->
 CHR: destructure-phi-assignment-right @ // { --> ?c P{ is ?a L{ ?y . ?ys } } } -- [ ?a known term-var? ] |
@@ -101,10 +106,15 @@ CHR: destructure-phi-assignment-left @ // { --> ?c P{ is L{ ?x . ?xs } ?b } } --
 { --> ?c P{ is ?xs ?ys } }
 { --> ?c P{ is ?x ?y } } ;
 
-CHR: redundant-phi @ { EitherOr ?c __ ?c1 ?c2 } //
+! CHR: redundant-phi @ { EitherOr ?c __ ?c1 ?c2 } //
+! { --> ?c1 P{ is ?a ?x } }
+! { --> ?c2 P{ is ?a ?x } } -- [ ?x known term-var? ] |
+! [ ?a ?x ==! ] ;
+CHR: redundant-phi @
 { --> ?c1 P{ is ?a ?x } }
-{ --> ?c2 P{ is ?a ?x } } -- [ ?x known term-var? ] |
+{ --> P{ Not ?c1 } P{ is ?a ?x } } // -- [ ?x known term-var? ] |
 [ ?a ?x ==! ] ;
+
 
 
 CHR: drop-split-1 @ { EitherOr ?c __ ?c1 ?c2 } { --> ?c1 P{ Drop ?y } } //

@@ -72,6 +72,10 @@ CHR: clean-dead-finish-scope @ { Dead ?r } // { FinishScope ?r ?u } -- | ;
 ! CHR: inlining-known @ // { InlinesUnknown __ A{ __ } } -- | ;
 CHR: inlining-known @ { is ?p A{ ?q } } // { InlinesUnknown __ ?p } -- | ;
 
+! *** Dead quotations
+CHR: no-dead-inlining @ { Dead ?q } // { InlineUnknown __ __ ?q } -- | ;
+CHR: no-dead-inlining-1 @ { Dead ?q } // { InlinesUnknown __ ?q } -- | ;
+
 ! *** Dead States
 
 ! CHR: dead-branches-are-dead { Dead ?s } // { Branch ?s ?t ?a ?b } -- |
@@ -92,6 +96,19 @@ CHR: dead-state-vars @ { Dead ?s } // AS: ?x <={ state-pred ?s . __ } -- |
 ! { --> ?c2 P{ is ?x ?b } } { --> ?c2 P{ Dead ?b } } // -- |
 ! { --> ?c P{ Dead ?x } } ;
 
+! ** Invalid stuff
+CHR: cannot-create-invalid-values @ { Invalid ?v } { Call ?s ?t __ ?o } // --
+[ ?o [ ?v = ] lany?* ] | { Impossible ?s } ;
+
+CHR: cannot-define-invalid-values @ { Invalid ?v } { Def ?s ?v } // -- | { Impossible ?s } ;
+
+CHR: impossible-true-branch @ { Not ?s } { Mux __ __ ?c __ ?q __ } // { Inlined ?s ?q } -- |
+{ Not ?c } ;
+
+CHR: impossible-false-branch @ { Not ?s } { Mux __ __ ?c __ __ ?q } // { Inlined ?s ?q } -- |
+{ Fulfilled ?c } ;
+
+CHR: invalid-scope-is-dead @ { Not ?s } AS: ?p <={ Scope ?s . __ } // -- | { Dead ?s } ;
 ;
 
 
@@ -184,13 +201,10 @@ CHR: inline-unknown-curried @ // { InlinesUnknown ?c L{ ?x . ?xs } } -- | { Inli
 ! CHR: inline-made-known @  { Lit ?p ?q } // { InlineUnknown ?s ?t ?p } ! { Effect ?p __ __ }
 CHR: inline-made-known @ { is ?p A{ ?q } } // { InlineUnknown ?s ?t ?p } ! { Effect ?p __ __ }
      -- |
-     ! { Stack ?s ?a }
-     ! { Stack ?t ?b }
-     ! { effect ?p }
      { InlineQuot ?s ?t ?q }
-     ! { Drop ?s ?p } ;
-     ! { Drop ?p } ;
-     { Dead ?p } ;
+     ! { Dead ?p }
+     { Inlined ?s ?p }
+    ;
 
 CHR: uncurry @ // { InlineUnknown ?s ?t L{ ?parm . ?p } } -- |
      ! { Stack ?s ?rho }
@@ -221,6 +235,23 @@ CHR: infer-definition @  // { InferDef ?w } -- [ ?w deferred? not ] |
 
 TERM-VARS: ?true ?st1 ?false ?sf1 ;
 
+! *** Specific words
+CHR: infer-mux @ // { Exec ?r ?t ? } -- |
+{ StackOp ?r ?t L{ ?q ?p ?x . ?rho } L{ ?y . ?rho } }
+{ Mux ?r ?x ?c ?y ?p ?q }
+
+{ --> ?c P{ is ?y ?p } }
+{ \--> ?c P{ is ?y ?q } }
+
+{ --> ?c P{ Not P{ is ?x W{ f } } } }
+{ --> ?c P{ Drop ?q } }
+{ \--> ?c P{ is ?x W{ f } } }
+{ \--> ?c P{ Drop ?p } }
+;
+
+CHR: infer-if @ // { Exec ?r ?t if } -- { Stack ?r L{ ?q ?p ?c . ?rho } } |
+{ InlineQuot ?r ?t [ ? call ] } ;
+
 TUPLE: CheckBranch < state-pred in c1 c2 cond true-in true-out false-in false-out out ;
 
 ! Conditionals
@@ -228,61 +259,61 @@ TUPLE: CheckBranch < state-pred in c1 c2 cond true-in true-out false-in false-ou
 ! same.  The goal is to have things that are branch-independent in the common
 ! effect, while anything that is branch-dependent has to be queried using the
 ! logical system.
-CHR: infer-if @ // { Exec ?r ?t if } --
+! CHR: infer-if @ // { Exec ?r ?t if } --
+! ! { Stack ?r L{ ?q ?p ?c . ?rho } }
+! |
 ! { Stack ?r L{ ?q ?p ?c . ?rho } }
-|
-{ Stack ?r L{ ?q ?p ?c . ?rho } }
-{ Effect ?p ?a ?x }
-{ Effect ?q ?b ?y }
-! { CompatibleEffects ?a ?x ?b ?y }
-! TODO: find best order
-! { SameDepth ?rho ?a }
-! { SameDepth ?rho ?b }
-! { SplitStack ?rho ?a ?b }
-{ Branch ?r ?t ?true ?false }
-{ Stack ?true ?a }
-{ Stack ?st1 ?x }
-{ Stack ?false ?b }
-{ Stack ?sf1 ?y }
-! { Equiv ?true P{ Not P{ Instance ?c \ f } } }
-! { Equiv ?false P{ Instance ?c \ f } }
-! { Cond ?true P{ Not P{ Type ?c POSTPONE: f } } }
-! { Cond ?false P{ Type ?c POSTPONE: f } }
-{ EitherOr ?r ?c ?true ?false }
-! { <--> ?false P{ is ?c W{ f } } }
+! { Effect ?p ?a ?x }
+! { Effect ?q ?b ?y }
+! ! { CompatibleEffects ?a ?x ?b ?y }
+! ! TODO: find best order
+! ! { SameDepth ?rho ?a }
+! ! { SameDepth ?rho ?b }
+! ! { SplitStack ?rho ?a ?b }
+! { Branch ?r ?t ?true ?false }
+! { Stack ?true ?a }
+! { Stack ?st1 ?x }
+! { Stack ?false ?b }
+! { Stack ?sf1 ?y }
+! ! { Equiv ?true P{ Not P{ Instance ?c \ f } } }
+! ! { Equiv ?false P{ Instance ?c \ f } }
+! ! { Cond ?true P{ Not P{ Type ?c POSTPONE: f } } }
+! ! { Cond ?false P{ Type ?c POSTPONE: f } }
+! { EitherOr ?r ?c ?true ?false }
+! ! { <--> ?false P{ is ?c W{ f } } }
+! ! { --> ?true P{ is ?rho ?a } }
+! ! { --> ?true P{ Drop ?q } }
+
+! ! { --> ?false P{ is ?rho ?b } }
+! ! { --> ?false P{ Drop ?p } }
+
 ! { --> ?true P{ is ?rho ?a } }
+! { --> ?false P{ is ?rho ?b } }
 ! { --> ?true P{ Drop ?q } }
 
-! { --> ?false P{ is ?rho ?b } }
 ! { --> ?false P{ Drop ?p } }
 
-{ --> ?true P{ is ?rho ?a } }
-{ --> ?false P{ is ?rho ?b } }
-{ --> ?true P{ Drop ?q } }
 
-{ --> ?false P{ Drop ?p } }
+! { InlineUnknown ?true ?st1 ?p }
+! { InlineUnknown ?false ?sf1 ?q }
+! ! { Stack ?t ?sig }
+! { CheckBranch ?r ?true ?false ?c ?rho ?a ?x ?b ?y ?t }
+!     ;
 
+! CHR: end-infer-if @ // { CheckBranch ?r ?true ?false ?c ?rho ?a ?x ?b ?y ?t } --
+! { CompatibleEffects ?a ?x ?b ?y }
+! |
 
-{ InlineUnknown ?true ?st1 ?p }
-{ InlineUnknown ?false ?sf1 ?q }
+! ! { SameDepth ?y ?sig }
+! ! { SameDepth ?x ?sig }
+! ! { JoinStack ?sig ?x ?y }
+! ! { AssumeSameRest ?rho ?a }
+! ! { AssumeSameRest ?y ?sig }
+! { <--> ?false P{ is ?c W{ f } } }
 ! { Stack ?t ?sig }
-{ CheckBranch ?r ?true ?false ?c ?rho ?a ?x ?b ?y ?t }
-    ;
-
-CHR: end-infer-if @ // { CheckBranch ?r ?true ?false ?c ?rho ?a ?x ?b ?y ?t } --
-{ CompatibleEffects ?a ?x ?b ?y }
-|
-
-! { SameDepth ?y ?sig }
-! { SameDepth ?x ?sig }
-! { JoinStack ?sig ?x ?y }
-! { AssumeSameRest ?rho ?a }
-! { AssumeSameRest ?y ?sig }
-{ <--> ?false P{ is ?c W{ f } } }
-{ Stack ?t ?sig }
-{ --> ?true P{ is ?sig ?x } }
-{ --> ?false P{ is ?sig ?y } }
-    ;
+! { --> ?true P{ is ?sig ?x } }
+! { --> ?false P{ is ?sig ?y } }
+!     ;
 
 ! Link-interface
 CHR: link-branch-up @ { Branch ?r __ ?x __ } // { Link ?x ?u } -- | { Link ?r ?u } ;
@@ -308,6 +339,26 @@ CHR: infer-dip @ // { Exec ?s ?u dip } -- |
 { InlineUnknown ?s0 ?t ?q }
 { FinishScope ?s ?u }
     ;
+
+! *** Phi inference
+CHR: phi-inference @ { InlineUnknown ?r ?u ?q } { --> ?c P{ is ?q ?x } } { Effect ?x ?a ?b }
+{ Effect ?q ?i ?o } // -- |
+! { Scope ?s ?u ?i ?b { ?s0 ?u } }
+! { Stack ?s0 ?a }
+{ Jump ?r ?s }
+! { --> ?c P{ is ?r ?s } }
+! { --> ?c P{ is ?u ?t } }
+{ InlineUnknown ?s ?t ?x } ;
+
+! CHR: exhaustive-control-split @ { InlineUnknown __ __ ?a } { InlineUnknown __ __ ?b }
+! { --> ?c P{ is ?q ?a } } { --> P{ Not ?c } P{ is ?q ?b } } // -- | { Dead ?q } ;
+
+CHR: exhaustive-control-split @
+! { InlineUnknown __ __ ?a } { InlineUnknown __ __ ?b }
+! { --> ?c P{ is ?q ?a } } { --> P{ Not ?c } P{ is ?q ?b } } // { InlineUnknown __ __ ?q } -- | ;
+{ --> ?c P{ is ?q ?a } } { --> P{ Not ?c } P{ is ?q ?b } } { InlineUnknown __ __ ?q } // -- | { Dead ?q } ;
+
+! *** Types and Words
 
 ! We have to split this, because the in-types can already make this execword absurd
 CHR: exec-early-types @ { ExecWord ?s ?t ?w } // -- [ ?w chrat-in-types ]
@@ -354,7 +405,8 @@ CHR: inline-quot @ // { InlineQuot ?s ?t ?q } --
 | { InferBetween ?s ?t ?q }
 ! [ ?l last ?sig Stack boa ]
 ! { Stack ?t ?sig }
-{ FinishScope ?s ?t } ;
+{ FinishScope ?s ?t }
+    ;
 
 ! CHR: simplify-dead-branch-1 @ { AbsurdScope ?c1 __ __ } { Scope ?c2 ?t __ __ __ } // { Branch ?r ?u ?c1 ?c2 } -- |
 ! [ { ?r ?u } { ?c2 ?t } ==! ] ;

@@ -29,7 +29,7 @@ TUPLE: Instance < val-pred s ;
 TUPLE: NotInstance < chr-pred val s ;
 TUPLE: ExpectInstance < chr-pred val s ;
 
-TUPLE: Push < trans-pred val ;
+TUPLE: Push < trans-pred lit ;
 
 ! TUPLE: AssumeEffect < trans-pred effect ;
 TUPLE: AssumeWordEffect < trans-pred word effect ;
@@ -65,6 +65,8 @@ TUPLE: Composed < chr-pred callable1 callable2 q ;
 TUPLE: CondJump < chr-pred parent sub ;
 TUPLE: CondRet < chr-pred sub parent ;
 
+TUPLE: Assume < chr-pred type value ;
+
 : list>stack ( list* -- list* )
     [ [ drop "v" uvar <term-var> , ] leach* ] { } make >list "rho" uvar <term-var> lappend
     ;
@@ -84,9 +86,10 @@ TUPLE: InlineCall < trans-pred word quot ;
 
 TUPLE: Inconsistent < chr-pred constraint ;
 
+TUPLE: Mux < state-pred bool-val cond common true false ;
+TUPLE: IfTe < state-pred cond-val true-state false-state ;
 ! Query marker for stack equivalence
 TUPLE: Call < state-pred word in out ;
-
 ! TUPLE: Branch < trans-pred cs1 cs2 ;
 TUPLE: Branch < trans-pred then else ;
 M: Branch state-depends-on-vars
@@ -107,6 +110,8 @@ TUPLE: Dup < val-pred to ;
 ! TUPLE: Dead < chr-pred val ;
 TUPLE: Dead < val-pred ;
 
+TUPLE: Invalid < chr-pred val ;
+
 ! Data Flow
 ! Exclusive Split.
 ! TUPLE: Split < state-pred in out1 out2 ;
@@ -123,13 +128,18 @@ TUPLE: Join < val-pred src1 src2 ;
 ! and Split, not Copy.
 
 
+! Def/Use
+TUPLE: Def < state-pred val ;
+
 ! High-level Call Graph
 TUPLE: TopEntry < chr-pred state word ;
 TUPLE: Entry < state-pred word ;
-TUPLE: Inlined < chr-pred word ;
 
 
-TUPLE: InlineUnknown < trans-pred val ;
+
+TUPLE: InlineUnknown < trans-pred callable-val ;
+TUPLE: Inlined < chr-pred state callable-val ;
+
 
 
 TUPLE: InferUnknown < trans-pred val ;

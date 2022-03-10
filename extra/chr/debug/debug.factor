@@ -5,9 +5,23 @@ sorting.slots system terms tools.annotations tools.walker ;
 
 IN: chr.debug
 
+: solve-builtins ( eq-consts -- subst )
+    [ [ lhs>> ] [ rhs>> ] bi 2array ] map solve-problem ;
+
+: solve-result-store ( store -- store )
+    dup [
+        clone >alist dup builtins swap delete-at* drop
+        solve-builtins lift
+    ] with-term-vars ;
+
+: store. ( consts -- )
+    [ constraint>> ] map-values
+    solve-result-store
+    . ;
+
 : chr-state. ( -- )
     store get "Store: " write
-    [ constraint>> ] map-values . ;
+    store. ;
 
 ! : chrebug ( -- )
 !     \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate
@@ -50,8 +64,7 @@ IN: chr.debug
     \ create-chr [ [ "+ " write dup id-susp. ] compose
                    ! [ chr-state. ] compose
     ] annotate
-    ! \ activate [ [ chr-state. dup "Activating: %d\n" printf ] prepose ] annotate
-    ! \ activate [ [ "! " write dup id-susp. ] prepose ] annotate
+    ! \ activate [ [ "! " write dup . ] prepose ] annotate
     ! \ test-callable [ [ dup "Builtin Test: " write . ] prepose [ dup " ==> %u\n" printf ] compose ] annotate
     ! \ run-occurrence [ [ dup occurrence>> "Try Occurrence %u with Schedule: " printf dup partners>> . ] prepose ] annotate
     ! \ run-occurrence [ [ 2dup try-rule-match. ] prepose ] annotate
