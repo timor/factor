@@ -148,7 +148,7 @@ ERROR: wrong-guard-effect quot effect ;
 : load-chr ( rules -- chr-prog )
     read-chr
     dup check-body-quots
-    rewrite-chrat-prog
+    ! rewrite-chrat-prog
     dup check-guard-quots
     dup index-rules
     2dup make-schedule

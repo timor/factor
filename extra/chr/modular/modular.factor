@@ -3,6 +3,10 @@ namespaces quotations sequences sets terms vectors words ;
 
 IN: chr.modular
 
+! * Housekeeping
+TUPLE: import-solver word ;
+C: <import-solver> import-solver
+
 ! * Modular Ask and Tell Semantics
 ! Basic contract for every modular solver:
 ! leq(X, Y) \ ask(leq(X, Y), K) <=> entailed(K).
@@ -148,7 +152,10 @@ M: modular-answer-chr expand-ask/tell
 
 M: chr expand-ask/tell ;
 
-: rewrite-chrat ( chr -- chr )
+GENERIC: rewrite-chrat ( chr -- chr )
+
+M: import-solver rewrite-chrat 1array ;
+M: chr rewrite-chrat
     expand-ask/tell
     rewrite-chrat-conts ;
 
@@ -196,11 +203,16 @@ SYMBOL: chrat-imports
     chrat-imports get [ "chrat-deps" [ append ] with change-word-prop ] [ drop ] if* ;
 
 : define-solver-word ( word prog -- )
-    1quotation ( -- prog ) define-declared ;
+    ! 2dup "chr-rules" set-word-prop
+    ! 1quotation ( -- prog ) define-declared ;
+    [ dup chr? [ [ suffix ] curry ] [ word>> [ execute( -- prog ) append ] curry ] if ] map [ f ] [ compose ] reduce
+    ( -- prog ) define-declared ;
 
 : define-chrat-prog ( word exports rules -- )
     2over [ set-defined-solver ] with each
     swap [ make-default-entailment-rule ] map prepend
-    [ internalize-rule ] map
-    [ define-solver-word ] keepd
-    set-chrat-deps ;
+    [ dup chr? [ internalize-rule ] when ] map
+    rewrite-chrat-prog
+    define-solver-word ;
+    ! [ define-solver-word ] keepd
+    ! set-chrat-deps ;

@@ -93,13 +93,15 @@ M: chr-pred pprint-delims drop \ P{ \ } ;
 M: chr-pred >pprint-sequence [ constraint-args ] [ constraint-type prefix ] bi ;
 
 : parse-chr-body ( end -- seq )
-    parse-array dup [ chr? ] all? [ "invalid-chr-prog" throw ] unless ;
+    parse-array dup [ { [ chr? ] [ import-solver? ] } 1|| ] all? [ "invalid-chr-prog" throw ] unless ;
 
 ! * CHRat Contract
 
-SYNTAX: IMPORT: scan-word chrat-imports [ swap suffix ] change ;
+! SYNTAX: IMPORT: scan-word chrat-imports [ swap suffix ] change ;
+SYNTAX: IMPORT: scan-word <import-solver> suffix! ;
 
 SYNTAX: CHRAT: scan-new-word
     "{" expect \ } parse-array
-    f chrat-imports [ \ ; parse-chr-body
-          define-chrat-prog ] with-variable ;
+    \ ; parse-chr-body define-chrat-prog ;
+    ! f chrat-imports [ \ ; parse-chr-body
+    !       define-chrat-prog ] with-variable ;

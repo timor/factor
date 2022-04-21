@@ -1,5 +1,6 @@
-USING: accessors arrays chr chr.comparisons chr.factor chr.parser chr.state
-combinators effects kernel lists math.parser namespaces sequences sets terms
+USING: accessors arrays assocs chr chr.comparisons chr.factor chr.factor.defs
+chr.parser chr.state classes combinators combinators.short-circuit effects
+kernel lists math math.parser namespaces quotations sequences sets strings terms
 types.util words words.symbol ;
 
 IN: chr.factor.direct
@@ -10,18 +11,31 @@ PREDICATE: quot-sym < word "quot-id" word-prop? ;
 PREDICATE: callable-word < word { [ symbol? not ] [ quot-sym? not ] } 1&& ;
 ! PREDICATE: callable-word < word symbol? not ;
 
+: pluck ( seq quot: ( elt -- ? ) -- seq' elt )
+    dupd find [ remove-nth ] keep ; inline
+
 : stack-match ( stack-var elts rest -- chr )
     [ __ ] unless*
     [ >list ] dip list*
     <eq-constraint> ;
 
+TUPLE: Q < chr-pred name ;
+
+GENERIC: elt>var ( i elt -- obj )
+M: f elt>var drop number>string "v" prepend utermvar ;
+M: string elt>var nip utermvar ;
+M: pair elt>var
+    first2
+    [ elt>var ] dip
+    effect? [ Q boa ] when ;
 
 : elt-vars ( seq -- seq )
-    [ swap dup pair? [ first ] when
-      [ nip ] [ number>string "v" prepend ] if*
-      uvar
-      <term-var>
-    ] map-index <reversed> ;
+    [ swap elt>var ] map-index <reversed> ;
+    ! [ swap dup pair? [ first ] when
+    !   [ nip ] [ number>string "v" prepend ] if*
+    !   uvar
+    !   <term-var>
+    ! ] map-index <reversed> ;
 
 ! : effect>stacks ( effect -- lin lout )
 !     [ in>> elt-vars >list ]
@@ -55,60 +69,115 @@ TUPLE: BuildQuot < chr-pred quot ;
 TUPLE: BuildNamedQuot < chr-pred name quot ;
 ! TUPLE: DefCallRule < chr-pred name start end ;
 TUPLE: DefCallRule < chr-pred name start end body ;
-TUPLE: SimpRule < chr-pred name heads body ;
+TUPLE: AddRule < chr-pred rule ;
 TUPLE: TransRule < chr-pred head body ;
-TUPLE: Mark < chr-pred val ;
-TUPLE: Marked < chr-pred vals ;
+TUPLE: Mark < chr-pred ctx val ;
+TUPLE: Marked < chr-pred ctx vals ;
+
+! Val stuff
+TUPLE: Sum < chr-pred x y z ;
 
 CHRAT: quots { }
+IMPORT: chrat-comp
+! Extending the solver at runtime
+CHR: add-dynamic-rule @ { AddRule ?r } // -- |
+[ ?r extend-program f ] ;
+
+! Stack and transition build-up
 CHR: stack-match @ { Stack ?s ?a } // { Stack ?s ?b } -- | [ ?a ?b ==! ] ;
 CHR: empty-quot @ // { Transeq ?s ?t [ ] } -- | [ ?s ?t ==! ] ;
 CHR: destructure-quot @ // { Transeq ?s ?t ?p } -- [ ?p first :>> ?w ?p rest :>> ?q ?s seq-state :>> ?s0 3drop t ] |
 { Trans ?s ?s0 ?w }
 { Transeq ?s0 ?t ?q } ;
 
+! Effect-based destructuring
 CHR: effect-predicate @ { Trans ?s ?t ?w } // -- [ ?w callable-word? ]
-[ ?w stack-effect effect>stacks [ :>> ?a ] [ :>> ?b ] bi* 2drop t ]
+! [ ?w quot-sym? not ]
+[ ?w defined-effect :>> ?e ]
+[ ?e effect>stacks [ :>> ?a ] [ :>> ?b ] bi* 2drop t ]
 |
 { Stack ?s ?a }
 { Stack ?t ?b }
-[ ?a list>array* ?b list>array* append ?w prefix ] ;
+[| | { ?a ?b } ?w prefix ] ;
 
 CHR: infer-callable @ // { Trans ?s ?t ?q } -- [ ?q callable? ] [ "q" <quot-sym> :>> ?p ] |
-{ Trans ?s ?t W{ ?p } }
+{ Trans ?s ?t P{ Q ?p } }
+{ Stack ?s ?xs }
+{ Stack ?t L{ P{ Q ?p } . ?xs } }
 { BuildNamedQuot ?p ?q }
 ;
 
-CHR: push-effect @ { Trans ?s ?t ?w } // -- [ ?w callable-word? not ] |
+CHR: push-effect @ { Trans ?s ?t ?w } // -- [ ?w callable-word? not ] [ ?w Q? not ] |
 { Stack ?s ?xs }
 { Stack ?t L{ ?w . ?xs } } ;
 
+! Simple Type stuff
+CHR: literal-instance @ // { Instance A{ ?v } ?t } -- |
+[ ?v ?t instance? not [ { ?v ?t "not instance" } throw ] when f ] ;
 
+! Here be special word stuff
+CHR: do-call @ { call L{ ?q . ?a } ?b } // -- |
+{ Stack ?r ?a } { Stack ?u ?b }
+[| | ?q :> qid
+ { Trans ?r ?u qid }
+] ;
+
+CHR: plus-is-sum @ // { + L{ ?x ?y . __ } L{ ?z . __ } } -- |
+{ Instance ?x number }
+{ Instance ?y number }
+{ Instance ?z number }
+{ Sum ?x ?y ?z } ;
+
+! Subordinate inference
 CHR: build-quot-body @ // { BuildQuot ?q } -- |
 { Transeq +top+ +end+ ?q } ;
 
 CHR: build-named-def @ // { BuildNamedQuot ?n ?q } -- |
 { Transeq ?s ?t ?q }
-{ Mark ?s }
-{ Marked f }
+{ Mark ?n ?s }
+! { Mark ?n ?t }
+{ Marked ?n f }
 { DefCallRule ?n ?s ?t f } ;
 
-CHR: mark-once @ { Mark ?x } // { Mark ?x } -- | ;
-CHR: mark-trans @ { Mark ?s } { Trans ?s ?t __ } // -- | { Mark ?t } ;
-CHR: mark-stack @ { Mark ?s } { Stack ?s ?x } // -- | [ ?x vars [ Mark boa ] map ] ;
-CHR: collect-marks @ // { Marked ?a } { Mark ?x } -- [ ?a ?x suffix :>> ?b drop t ] | { Marked ?b } ;
-CHR: build-call-rule @ // { DefCallRule ?n ?s ?t f } { Marked ?l } -- |
+! Collect predicates
+CHR: mark-once @ { Mark ?k ?x } // { Mark ?k ?x } -- | ;
+CHR: mark-trans @ { Mark ?k ?s } { Trans ?s ?t __ } // -- | { Mark ?k ?t } ;
+CHR: mark-stack @ { Mark ?k ?s } { Stack ?s ?x } // -- | [ ?x vars [ ?k swap Mark boa ] map ] ;
+CHR: collect-marks @ // { Marked ?k ?a } { Mark ?k ?x } -- [ ?a ?x suffix :>> ?b drop t ] | { Marked ?k ?b } ;
+
+DEFER: make-call-simp-rule
+
+! Create rule for quotations
+CHR: build-call-rule @ // { DefCallRule ?n ?s ?t f } { Marked ?n ?l } { Stack ?s ?a } { Stack ?t ?b } -- |
 [| | store get values rest
- [ vars>> [ ?l in? ] all? ] filter :> body-chrs
+ [ vars>> [ ?l in? ] all? ] filter
+ :> body-chrs
  body-chrs [ id>> kill-chr ] each
- body-chrs [ constraint>> ] map :> body
- P{ DefCallRule ?n ?s ?t body }
+ body-chrs [ constraint>> ] map
+ [ Trans? ] reject
+ ! [ constraint-type \ call = ] reject
+ [ Stack? ] reject
+ ! [ { [ Stack? ] [ s1>> { [ ?s == ] [ ?t == ] } 1|| not ] } 1&& ] reject
+ :> body
+ { { call L{ P{ Q ?n } . ?rho } ?sig } }
+ body
+ P{ is ?rho ?a } prefix
+ P{ is ?sig ?b } suffix
+ ?n make-call-simp-rule AddRule boa
+ ! P{ DefCallRule ?n ?s ?t body }
 ] ;
 
-CHR: add-def-rule @ // { DefCallRule ?w ?s ?t ?b } -- |
-{ TransRule { Trans ?s ?t ?w } ?b } ;
+! CHR: add-def-rule @ // { DefCallRule ?w ?s ?t ?b } -- |
+! { TransRule { Trans ?s ?t ?w } ?b } ;
+
+! DEFER: make-trans-rule
+
+! CHR: add-program-rule @ // { TransRule { Trans ?s ?t ?w } ?b } -- |
+! [ ?s ?t ?b ?w make-trans-rule AddRule boa ] ;
 
 ;
+
+! * External
 
 : build-quot ( quot -- chrs )
     quots swap BuildQuot boa 1array run-chr-query values rest ;
@@ -116,40 +185,20 @@ CHR: add-def-rule @ // { DefCallRule ?w ?s ?t ?b } -- |
 : build-quot-rule ( quot name -- chrs )
     swap BuildNamedQuot boa 1array quots swap run-chr-query values rest ;
 
+:: make-call-simp-rule ( heads body word -- rule )
+    word name>> :> wname
+    wname "-call" append :> rname
+    heads 0 f body f named-chr new-chr rname >>rule-name ;
+
 :: make-trans-rule ( sin send body word -- rule )
     word name>> :> wname
     wname "-call" append :> rule-name
-    sin send word Trans boa 1array :> heads
+    sin send word Q boa Trans boa 1array :> heads
     heads
     1 f body f
     named-chr new-chr
     rule-name >>rule-name
     ;
 
-:: filter-marked-chrs ( marked def-rule chrs -- def-rule chrs )
-    chrs [ vars [ marked in? ] all? ] filter
-    def-rule swap ;
-
-:: construct-def-rule ( def-rule chrs -- rule )
-    def-rule [ name>> ] [ start>> ] [ end>> ] tri :> ( w s e )
-    s e chrs w make-trans-rule ;
-
-: extract-def-rule ( chrs -- rule )
-    [ [ Marked? ] find vals>> swap ]
-    [ remove-nth ] bi
-    [ [ DefCallRule? ] find swap ]
-    [ remove-nth ] bi
-    filter-marked-chrs
-    construct-def-rule
-    ;
-
-: infer-quot-rule ( quot -- sym rule )
-    "quot" usym tuck build-quot-rule
-    extract-def-rule ;
-    ! "quot" usym tuck
-    ! [
-
-    !     build-quot-rule [ DefCallRule? ] partition
-    !     [ first [ start>> ] [ end>> ] bi ] dip
-    ! ] keep
-    ! make-trans-rule ;
+: build-word ( word -- chrs )
+    [ def>> ] keep build-quot-rule ;
