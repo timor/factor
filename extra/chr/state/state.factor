@@ -201,7 +201,11 @@ PRIVATE>
     [ dup program get rules>> nth ] dip
     ! swap body>> dup t =
     ! [ 2drop ] [ [ apply-substitution activate-new ] with each ] if ;
-    swap body>> [ apply-substitution activate-new ] 2with each ;
+    ! swap body>> [ apply-substitution activate-new ] 2with each ;
+    swap body>> [ apply-substitution ] with map
+    f current-bindings set-global
+    [ activate-new ] with each
+    ;
 
 : simplify-constraints ( trace -- )
     [ [ drop ] [ kill-chr ] if ] assoc-each ;
@@ -391,6 +395,19 @@ M: builtin-suspension apply-substitution* nip ;
     H{ } clone var-names set
     ;
 
+: update-local-vars ( -- )
+    program get local-vars>> valid-match-vars set ;
+
+: init-dyn-chr-scope ( rules -- )
+    init-chr-prog program set
+    LH{ } clone store set
+    <builtins-suspension> builtins store get set-at
+    update-local-vars
+    check-vars? on
+    0 current-index set
+    H{ } clone var-names set
+    ;
+
 ! This should ensure catching terms without a solution!
 ! : solve-eq-constraints ( store -- )
 !     builtins of constraint>> dup .
@@ -401,6 +418,8 @@ M: builtin-suspension apply-substitution* nip ;
 !     ] with-global-variable
 !     ;
 
+SYMBOL: last-program
+
 : run-chr-query ( prog query -- store )
     [ pred>constraint ] map
     2dup 2array
@@ -408,7 +427,8 @@ M: builtin-suspension apply-substitution* nip ;
       0 sentinel set
       H{ } clone ground-values set
       swap
-      init-chr-scope
+      ! init-chr-scope
+      init-dyn-chr-scope
       [ f swap activate-new ] each
       ! ground-values get .
       store get
@@ -418,12 +438,20 @@ M: builtin-suspension apply-substitution* nip ;
       [ constraint>>
         over builtins = [ f lift ] unless
       ] assoc-map
-    ] with-term-vars
-    f current-bindings set-global ;
+      program get last-program set-global
+    ] with-term-vars ;
+
+
+: extend-program ( rule -- )
+    program [ swap add-rule ] with change update-local-vars ;
+
+! Saving store
+: fork-chr-state ( quot -- )
+    store get [ call ] dip
+    store set ; inline
 
 : run-chrat-query ( query -- store )
     prepare-query run-chr-query ;
-
 
 : query-with ( solver query -- store )
      prepare-query-with run-chr-query ;
