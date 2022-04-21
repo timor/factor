@@ -13,7 +13,7 @@ FROM: syntax => _ ;
 ERROR: user-error error ;
 
 TUPLE: chr heads nkept guard body match-vars existentials ;
-: new-chr ( heads nkept guard body class existentials -- obj )
+: new-chr ( heads nkept guard body existentials class -- obj )
     new
     swap >>existentials
     swap >>body
@@ -149,6 +149,8 @@ M: generator apply-substitution*
 
 M: is-val apply-substitution*
     clone [ [ apply-substitution* ] with map ] change-body ;
+
+! * Builtin Constraints
 
 ! This one is generated, and reflects the modifications to the internal equality
 ! state.  It can be matched on, but it is kind of a "passive" builtin, generated
