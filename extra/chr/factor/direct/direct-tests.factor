@@ -21,3 +21,6 @@ IN: chr.factor.direct.tests
 ! NOTE: This may very well be equivalent to a μ-Quantifier!
 {  }
 [ [ dup call ] "hoho" usym build-quot-rule . ] unit-test
+
+{  }
+[ [ [ drop ] dup call ] "hoho" usym build-quot-rule . ] unit-test

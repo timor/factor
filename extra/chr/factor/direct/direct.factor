@@ -76,9 +76,11 @@ TUPLE: Mark < chr-pred ctx val ;
 TUPLE: Marked < chr-pred ctx vals ;
 TUPLE: Effect < chr-pred word in out constraints ;
 TUPLE: EffectGen < chr-pred word in out body ;
+TUPLE: Eval < chr-pred word in out ;
 
 ! Val stuff
 TUPLE: Sum < chr-pred x y z ;
+TUPLE: Drop < chr-pred val ;
 
 CHRAT: quots { }
 IMPORT: chrat-comp
@@ -101,7 +103,8 @@ CHR: effect-predicate @ { Trans ?s ?t ?w } // -- [ ?w callable-word? ]
 |
 { Stack ?s ?a }
 { Stack ?t ?b }
-[| | { ?a ?b } ?w prefix ] ;
+{ Eval ?w ?a ?b } ;
+! [| | { ?a ?b } ?w prefix ] ;
 
 CHR: infer-callable @ // { Trans ?s ?t ?q } -- [ ?q callable? ] [ "q" <quot-sym> :>> ?p ] |
 { Trans ?s ?t P{ Q ?p } }
@@ -148,7 +151,7 @@ CHR: same-quot-effect @ { Effect ?w ?a ?b ?l } // { Effect ?w ?x ?y ?k } -- |
 ! [ ?k H{ { ?sig ?b } { ?rho ?a } } lift ] ;
 
 ! NOTE: this is probably the universal quantifier equivalent of inferred function types?
-CHR: apply-call-effect @ { call L{ P{ Q ?w } . ?a } ?b } { Effect ?w ?rho ?sig ?k } // -- [ ?k empty? not ] |
+CHR: apply-call-effect @ { Eval call L{ P{ Q ?w } . ?a } ?b } { Effect ?w ?rho ?sig ?k } // -- [ ?k empty? not ] |
 [| | { ?rho ?sig ?k } fresh first3 :> ( rho sig body )
  [ ?a rho ==! ]
  [ ?b sig ==! ] 2array
@@ -160,22 +163,37 @@ CHR: apply-call-effect @ { call L{ P{ Q ?w } . ?a } ?b } { Effect ?w ?rho ?sig ?
 CHR: call-declares-effect @ { Trans ?r ?u call } { Stack ?r L{ P{ Q ?w } . ?a } } { Stack ?u ?b } // -- |
 { Effect ?w ?a ?b f } ;
 
-CHR: plus-is-sum @ // { + L{ ?x ?y . __ } L{ ?z . __ } } -- |
+CHR: plus-is-sum @ // { Eval + L{ ?x ?y . __ } L{ ?z . __ } } -- |
 { Instance ?x number }
 { Instance ?y number }
 { Instance ?z number }
 { Sum ?x ?y ?z } ;
 
-CHR: dup-defines-split @ // { dup L{ ?x . __ } L{ ?a ?b . __ } } -- |
+! Basic data flow
+
+CHR: dup-defines-split @ // { Eval dup L{ ?x . __ } L{ ?a ?b . __ } } -- |
 { Dup ?x ?a }
 { Dup ?x ?b } ;
 
+CHR: self-dup @ // { Dup ?x ?x } -- | ;
 ! Be eager in duplicating quot-representing values, because their effect defs
-! are instantiated with fresh vars if called
-CHR: quot-dup-is-unique @ // { Dup P{ Q ?w } ?x } -- | [ ?x P{ Q ?w } ==! ] ;
-CHR: quot-dupped-is-unique @ // { Dup ?x P{ Q ?w } } -- | [ ?x P{ Q ?w } ==! ] ;
+! are instantiated with fresh vars if called.  Actually extend this to all non-vars!
+CHR: lit-dup-is-unique @ // { Dup A{ ?v } ?x } -- | [ ?x ?v ==! ] ;
+CHR: lit-dupped-is-unique @ // { Dup ?x A{ ?v } } -- | [ ?x ?v ==! ] ;
+
+CHR: do-drop @ // { Eval drop L{ ?x . __ } __ } -- | { Drop ?x } ;
+
+CHR: uninteresting-drop @ // { Drop A{ ?x } } -- | ;
+
+! drops cancel dups
+CHR: dead-dup-1 @ // { Dup ?x ?y } { Dup ?x ?z } { Drop ?y } -- | [ ?x ?z ==! ] ;
+CHR: dead-dup-2 @ // { Dup ?x ?y } { Dup ?x ?z } { Drop ?z } -- | [ ?x ?y ==! ] ;
+
+CHR: do-swap @ // { Eval swap L{ ?x ?y . __ } L{ ?a ?b . __ } } -- | [ ?x ?b ==! ] [ ?y ?a ==! ] ;
 
 ! CHR: curry-defines-callable @
+
+
 
 ! Subordinate inference
 CHR: build-quot-body @ // { BuildQuot ?q } -- |
@@ -215,7 +233,8 @@ CHR: build-call-rule @ // { DefCallRule ?n ?s ?t f } { Marked ?n ?l } { Stack ?s
  [ Trans? ] reject
  ! NOTE: this one here may be worth keeping if it is needed for call graph analysis?
  ! Although, the Effect predicate pretty much expresses the same stuff...
- [ constraint-type \ call = ] reject
+ ! [ constraint-type \ call = ] reject
+ [ Eval? ] reject
  [ Stack? ] reject
  ! [ { [ Stack? ] [ s1>> { [ ?s == ] [ ?t == ] } 1|| not ] } 1&& ] reject
  dup :> word-constraints
@@ -248,5 +267,8 @@ CHR: build-call-rule @ // { DefCallRule ?n ?s ?t f } { Marked ?n ?l } { Stack ?s
     wname "-call" append :> rname
     heads 0 f body f named-chr new-chr rname >>rule-name ;
 
-: build-word ( word -- chrs )
+GENERIC: build-word ( word -- chrs )
+M: callable build-word
+    "anon" usym build-quot-rule ;
+M: word build-word
     [ def>> ] keep swap BuildExecRule boa 1array quots swap run-chr-query values rest ;
