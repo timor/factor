@@ -66,7 +66,8 @@ M: pair elt>var
 TUPLE: Transeq < chr-pred from to quot ;
 TUPLE: Trans < chr-pred from to command ;
 TUPLE: BuildQuot < chr-pred quot ;
-TUPLE: BuildNamedQuot < chr-pred name quot ;
+TUPLE: BuildNamedCall < chr-pred name quot ;
+TUPLE: BuildExecRule < chr-pred name quot ;
 ! TUPLE: DefCallRule < chr-pred name start end ;
 TUPLE: DefCallRule < chr-pred name start end body ;
 TUPLE: AddRule < chr-pred rule ;
@@ -104,7 +105,7 @@ CHR: infer-callable @ // { Trans ?s ?t ?q } -- [ ?q callable? ] [ "q" <quot-sym>
 { Trans ?s ?t P{ Q ?p } }
 { Stack ?s ?xs }
 { Stack ?t L{ P{ Q ?p } . ?xs } }
-{ BuildNamedQuot ?p ?q }
+{ BuildNamedCall ?p ?q }
 ;
 
 CHR: push-effect @ { Trans ?s ?t ?w } // -- [ ?w callable-word? not ] [ ?w Q? not ] |
@@ -132,12 +133,20 @@ CHR: plus-is-sum @ // { + L{ ?x ?y . __ } L{ ?z . __ } } -- |
 CHR: build-quot-body @ // { BuildQuot ?q } -- |
 { Transeq +top+ +end+ ?q } ;
 
-CHR: build-named-def @ // { BuildNamedQuot ?n ?q } -- |
+! For call rules
+CHR: build-named-call-def @ // { BuildNamedCall ?n ?q } -- [ ?n Q boa :>> ?w ] |
 { Transeq ?s ?t ?q }
-{ Mark ?n ?s }
+{ Mark ?w ?s }
 ! { Mark ?n ?t }
-{ Marked ?n f }
-{ DefCallRule ?n ?s ?t f } ;
+{ Marked ?w f }
+{ DefCallRule ?w ?s ?t f } ;
+
+! For regular word rules
+CHR: build-word-exec-rule @ // { BuildExecRule ?w ?q } -- |
+{ Transeq ?s ?t ?q }
+{ Mark ?w ?s }
+{ Marked ?w f }
+{ DefCallRule ?w ?s ?t f } ;
 
 ! Collect predicates
 CHR: mark-once @ { Mark ?k ?x } // { Mark ?k ?x } -- | ;
@@ -146,6 +155,7 @@ CHR: mark-stack @ { Mark ?k ?s } { Stack ?s ?x } // -- | [ ?x vars [ ?k swap Mar
 CHR: collect-marks @ // { Marked ?k ?a } { Mark ?k ?x } -- [ ?a ?x suffix :>> ?b drop t ] | { Marked ?k ?b } ;
 
 DEFER: make-call-simp-rule
+DEFER: make-exec-prop-rule
 
 ! Create rule for quotations
 CHR: build-call-rule @ // { DefCallRule ?n ?s ?t f } { Marked ?n ?l } { Stack ?s ?a } { Stack ?t ?b } -- |
@@ -158,13 +168,16 @@ CHR: build-call-rule @ // { DefCallRule ?n ?s ?t f } { Marked ?n ?l } { Stack ?s
  ! [ constraint-type \ call = ] reject
  [ Stack? ] reject
  ! [ { [ Stack? ] [ s1>> { [ ?s == ] [ ?t == ] } 1|| not ] } 1&& ] reject
- :> body
- { { call L{ P{ Q ?n } . ?rho } ?sig } }
- body
  P{ is ?rho ?a } prefix
  P{ is ?sig ?b } suffix
- ?n make-call-simp-rule AddRule boa
- ! P{ DefCallRule ?n ?s ?t body }
+ :> body
+ ?n Q?
+ [
+     { { call L{ ?n . ?rho } ?sig } }
+     body
+     ?n name>> make-call-simp-rule
+ ] [ { { ?n ?rho ?sig } } body ?n make-exec-prop-rule ] if
+ AddRule boa
 ] ;
 
 ! CHR: add-def-rule @ // { DefCallRule ?w ?s ?t ?b } -- |
@@ -183,12 +196,17 @@ CHR: build-call-rule @ // { DefCallRule ?n ?s ?t f } { Marked ?n ?l } { Stack ?s
     quots swap BuildQuot boa 1array run-chr-query values rest ;
 
 : build-quot-rule ( quot name -- chrs )
-    swap BuildNamedQuot boa 1array quots swap run-chr-query values rest ;
+    swap BuildNamedCall boa 1array quots swap run-chr-query values rest ;
 
 :: make-call-simp-rule ( heads body word -- rule )
     word name>> :> wname
     wname "-call" append :> rname
     heads 0 f body f named-chr new-chr rname >>rule-name ;
+
+:: make-exec-prop-rule ( heads body word -- rule )
+    word name>> :> wname
+    wname "-exec" append :> rname
+    heads 1 f body f named-chr new-chr rname >>rule-name ;
 
 :: make-trans-rule ( sin send body word -- rule )
     word name>> :> wname
@@ -201,4 +219,4 @@ CHR: build-call-rule @ // { DefCallRule ?n ?s ?t f } { Marked ?n ?l } { Stack ?s
     ;
 
 : build-word ( word -- chrs )
-    [ def>> ] keep build-quot-rule ;
+    [ def>> ] keep swap BuildExecRule boa 1array quots swap run-chr-query values rest ;
