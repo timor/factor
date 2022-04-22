@@ -75,6 +75,7 @@ TUPLE: TransRule < chr-pred head body ;
 TUPLE: Mark < chr-pred ctx val ;
 TUPLE: Marked < chr-pred ctx vals ;
 TUPLE: Effect < chr-pred word in out constraints ;
+TUPLE: EffectGen < chr-pred word in out body ;
 
 ! Val stuff
 TUPLE: Sum < chr-pred x y z ;
@@ -117,13 +118,58 @@ CHR: push-effect @ { Trans ?s ?t ?w } // -- [ ?w callable-word? not ] [ ?w Q? no
 CHR: literal-instance @ // { Instance A{ ?v } ?t } -- |
 [ ?v ?t instance? not [ { ?v ?t "not instance" } throw ] when f ] ;
 
+! Effect Type stuff
+
+CHR: redundant-effect @ { Effect ?w ?a ?b ?l } // { Effect ?w ?x ?y ?k } -- [ ?k ?l subset? ] | ;
+
+! NOTE: This does generate a new Effect definition.  In any case, Multiple
+! Effect constraints should all somehow influence a { call ... } construct.
+! Probably should keep those around?  This here should ensure that we reduce
+! duplicate application of constraints as much as possible.  Effectively, this
+! is akin to higher-order intersection types?
+CHR: same-quot-effect @ { Effect ?w ?a ?b ?l } // { Effect ?w ?x ?y ?k } -- |
+! [ ?x ?a ==! ]
+! [ ?y ?b ==! ]
+[| | ?k ?l diff :> new-constraints
+ P{ Effect ?w ?x ?y new-constraints } ] ;
+
+! Temporary? Effect application semantics
+! CHR: effect-generator @ { Effect ?w ?a ?b ?l } // -- [ ?l empty? not ] |
+! [| |
+!  ?a vars ?b vars union ?l vars union :> body-vars
+!  P{ is ?sig ?a }
+!  P{ is ?rho ?b } 2array
+! ?l append body-vars swap <generator>
+!  :> generator-body
+!  { EffectGen ?w ?sig ?rho generator-body }
+! ] ;
+
+! CHR: apply-call-effect @ { call L{ P{ Q ?w } . ?a } ?b } { EffectGen ?w ?rho ?sig ?k } // -- |
+! [ ?k H{ { ?sig ?b } { ?rho ?a } } lift ] ;
+
+CHR: apply-call-effect @ { call L{ P{ Q ?w } . ?a } ?b } { Effect ?w ?rho ?sig ?k } // -- [ ?k empty? not ] |
+[| | { ?rho ?sig ?k } fresh first3 :> ( rho sig body )
+ [ ?a rho ==! ]
+ [ ?b sig ==! ] 2array
+ body append
+] ;
+
 ! Here be special per-word stuff
+
+CHR: call-declares-effect @ { Trans ?r ?u call } { Stack ?r L{ P{ Q ?w } . ?a } } { Stack ?u ?b } // -- |
+{ Effect ?w ?a ?b f } ;
 
 CHR: plus-is-sum @ // { + L{ ?x ?y . __ } L{ ?z . __ } } -- |
 { Instance ?x number }
 { Instance ?y number }
 { Instance ?z number }
 { Sum ?x ?y ?z } ;
+
+CHR: dup-defines-split @ // { dup L{ ?x . __ } L{ ?a ?b . __ } } -- |
+{ Dup ?x ?a }
+{ Dup ?x ?b } ;
+
+! CHR: curry-defines-callable @
 
 ! Subordinate inference
 CHR: build-quot-body @ // { BuildQuot ?q } -- |
@@ -152,6 +198,7 @@ CHR: collect-marks @ // { Marked ?k ?a } { Mark ?k ?x } -- [ ?a ?x suffix :>> ?b
 
 DEFER: make-simp-rule
 
+! TODO Don't call for callable values?
 ! Create rule for quotations
 CHR: build-call-rule @ // { DefCallRule ?n ?s ?t f } { Marked ?n ?l } { Stack ?s ?a } { Stack ?t ?b } -- |
 [| | store get values rest
@@ -160,19 +207,24 @@ CHR: build-call-rule @ // { DefCallRule ?n ?s ?t f } { Marked ?n ?l } { Stack ?s
  body-chrs [ id>> kill-chr ] each
  body-chrs [ constraint>> ] map
  [ Trans? ] reject
- ! [ constraint-type \ call = ] reject
+ ! NOTE: this one here may be worth keeping if it is needed for call graph analysis?
+ ! Although, the Effect predicate pretty much expresses the same stuff...
+ [ constraint-type \ call = ] reject
  [ Stack? ] reject
  ! [ { [ Stack? ] [ s1>> { [ ?s == ] [ ?t == ] } 1|| not ] } 1&& ] reject
+ dup :> word-constraints
  P{ is ?sig ?b } prefix
  P{ is ?rho ?a } prefix
  :> body
- ?n Q?
+ ?n Q? ?n over [ name>> ] when :> w
  [
      { { call L{ ?n . ?rho } ?sig } }
      body
      ?n name>> make-simp-rule
  ] [ { { ?n ?rho ?sig } } body ?n make-simp-rule ] if
- AddRule boa
+ ! AddRule boa
+ drop f
+ P{ Effect w ?a ?b word-constraints } 2array
 ] ;
 
 ;
