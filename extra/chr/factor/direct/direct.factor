@@ -147,6 +147,7 @@ CHR: same-quot-effect @ { Effect ?w ?a ?b ?l } // { Effect ?w ?x ?y ?k } -- |
 ! CHR: apply-call-effect @ { call L{ P{ Q ?w } . ?a } ?b } { EffectGen ?w ?rho ?sig ?k } // -- |
 ! [ ?k H{ { ?sig ?b } { ?rho ?a } } lift ] ;
 
+! NOTE: this is probably the universal quantifier equivalent of inferred function types?
 CHR: apply-call-effect @ { call L{ P{ Q ?w } . ?a } ?b } { Effect ?w ?rho ?sig ?k } // -- [ ?k empty? not ] |
 [| | { ?rho ?sig ?k } fresh first3 :> ( rho sig body )
  [ ?a rho ==! ]
@@ -168,6 +169,11 @@ CHR: plus-is-sum @ // { + L{ ?x ?y . __ } L{ ?z . __ } } -- |
 CHR: dup-defines-split @ // { dup L{ ?x . __ } L{ ?a ?b . __ } } -- |
 { Dup ?x ?a }
 { Dup ?x ?b } ;
+
+! Be eager in duplicating quot-representing values, because their effect defs
+! are instantiated with fresh vars if called
+CHR: quot-dup-is-unique @ // { Dup P{ Q ?w } ?x } -- | [ ?x P{ Q ?w } ==! ] ;
+CHR: quot-dupped-is-unique @ // { Dup ?x P{ Q ?w } } -- | [ ?x P{ Q ?w } ==! ] ;
 
 ! CHR: curry-defines-callable @
 
