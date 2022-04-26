@@ -1,4 +1,5 @@
-USING: chr.factor.direct kernel math prettyprint terms tools.test ;
+USING: chr.factor.direct combinators.short-circuit kernel kernel.private math
+prettyprint terms tools.test ;
 IN: chr.factor.direct.tests
 
 : foo ( x -- y ) 1 + ;
@@ -24,3 +25,7 @@ IN: chr.factor.direct.tests
 
 {  }
 [ [ [ drop ] dup call ] "hoho" usym build-quot-rule . ] unit-test
+
+! Canonical example
+{  }
+[ [ dup number? [ 1 + ] [ drop 0 ] if ] build-quot . ] unit-test

@@ -19,15 +19,11 @@ PREDICATE: callable-word < word { [ symbol? not ] [ quot-sym? not ] } 1&& ;
     [ >list ] dip list*
     <eq-constraint> ;
 
-TUPLE: Q < chr-pred name ;
-
 GENERIC: elt>var ( i elt -- obj )
 M: f elt>var drop number>string "v" prepend utermvar ;
 M: string elt>var nip utermvar ;
 M: pair elt>var
-    first2
-    [ elt>var ] dip
-    effect? [ Q boa ] when ;
+    first2 drop elt>var ;
 
 : elt-vars ( seq -- seq )
     [ swap elt>var ] map-index <reversed> ;
@@ -36,10 +32,6 @@ M: pair elt>var
     !   uvar
     !   <term-var>
     ! ] map-index <reversed> ;
-
-! : effect>stacks ( effect -- lin lout )
-!     [ in>> elt-vars >list ]
-!     [ out>> elt-vars >list ] bi ;
 
 : effect>stack-elts ( effect -- lin lout )
     [ in>> elt-vars >list ]
@@ -77,10 +69,21 @@ TUPLE: Marked < chr-pred ctx vals ;
 TUPLE: Effect < chr-pred word in out constraints ;
 TUPLE: EffectGen < chr-pred word in out body ;
 TUPLE: Eval < chr-pred word in out ;
+TUPLE: Definition < chr-pred name quot ;
 
 ! Val stuff
 TUPLE: Sum < chr-pred x y z ;
-TUPLE: Drop < chr-pred val ;
+! TUPLE: Drop < chr-pred val ;
+TUPLE: Use < chr-pred val ;
+
+! Conditional Stuff
+TUPLE: Rule < chr-pred cond body ;
+TUPLE: Mux < chr-pred cond val then else ;
+TUPLE: C < chr-pred cond then else ;
+! Parametric Maybe type
+! TUPLE: Maybe <
+
+TERM-VARS: Q ;
 
 CHRAT: quots { }
 IMPORT: chrat-comp
@@ -95,25 +98,31 @@ CHR: destructure-quot @ // { Transeq ?s ?t ?p } -- [ ?p first :>> ?w ?p rest :>>
 { Trans ?s ?s0 ?w }
 { Transeq ?s0 ?t ?q } ;
 
+! Early replacement
+CHR: inline-if @ // { Trans ?s ?t if } -- | { Transeq ?s ?t [ ? call ] } ;
+
 ! Effect-based destructuring
-CHR: effect-predicate @ { Trans ?s ?t ?w } // -- [ ?w callable-word? ]
+CHR: effect-predicate @ { Trans ?s ?t A{ ?w } } // -- [ ?w callable-word? ]
 ! [ ?w quot-sym? not ]
 [ ?w defined-effect :>> ?e ]
 [ ?e effect>stacks [ :>> ?a ] [ :>> ?b ] bi* 2drop t ]
 |
 { Stack ?s ?a }
 { Stack ?t ?b }
-{ Eval ?w ?a ?b } ;
-! [| | { ?a ?b } ?w prefix ] ;
+! Calculate used values
+{ Eval ?w ?a ?b }
+    ;
 
-CHR: infer-callable @ // { Trans ?s ?t ?q } -- [ ?q callable? ] [ "q" <quot-sym> :>> ?p ] |
-{ Trans ?s ?t P{ Q ?p } }
+
+CHR: infer-callable @ // { Trans ?s ?t ?q } -- [ ?q callable? ] |
+{ Trans ?s ?t Q }
 { Stack ?s ?xs }
-{ Stack ?t L{ P{ Q ?p } . ?xs } }
-{ BuildNamedCall ?p ?q }
+{ Stack ?t L{ Q . ?xs } }
+{ BuildNamedCall Q ?q }
+{ Definition Q ?q }
 ;
 
-CHR: push-effect @ { Trans ?s ?t ?w } // -- [ ?w callable-word? not ] [ ?w Q? not ] |
+CHR: push-effect @ { Trans ?s ?t ?w } // -- [ ?w callable-word? not ] |
 { Stack ?s ?xs }
 { Stack ?t L{ ?w . ?xs } } ;
 
@@ -131,37 +140,31 @@ CHR: redundant-effect @ { Effect ?w ?a ?b ?l } // { Effect ?w ?x ?y ?k } -- [ ?k
 ! duplicate application of constraints as much as possible.  Effectively, this
 ! is akin to higher-order intersection types?
 CHR: same-quot-effect @ { Effect ?w ?a ?b ?l } // { Effect ?w ?x ?y ?k } -- |
-! [ ?x ?a ==! ]
-! [ ?y ?b ==! ]
 [| | ?k ?l diff :> new-constraints
  P{ Effect ?w ?x ?y new-constraints } ] ;
 
-! Temporary? Effect application semantics
-! CHR: effect-generator @ { Effect ?w ?a ?b ?l } // -- [ ?l empty? not ] |
-! [| |
-!  ?a vars ?b vars union ?l vars union :> body-vars
-!  P{ is ?sig ?a }
-!  P{ is ?rho ?b } 2array
-! ?l append body-vars swap <generator>
-!  :> generator-body
-!  { EffectGen ?w ?sig ?rho generator-body }
-! ] ;
-
-! CHR: apply-call-effect @ { call L{ P{ Q ?w } . ?a } ?b } { EffectGen ?w ?rho ?sig ?k } // -- |
-! [ ?k H{ { ?sig ?b } { ?rho ?a } } lift ] ;
-
 ! NOTE: this is probably the universal quantifier equivalent of inferred function types?
-CHR: apply-call-effect @ { Eval call L{ P{ Q ?w } . ?a } ?b } { Effect ?w ?rho ?sig ?k } // -- [ ?k empty? not ] |
+CHR: apply-call-effect @ { Eval call L{ ?w . ?a } ?b } { Effect ?w ?rho ?sig ?k } // -- [ ?k empty? not ] |
 [| | { ?rho ?sig ?k } fresh first3 :> ( rho sig body )
  [ ?a rho ==! ]
  [ ?b sig ==! ] 2array
  body append
 ] ;
 
-! Here be special per-word stuff
+CHR: apply-dip-effect @ // { Eval dip L{ ?w ?x . ?a  } L{ ?x . ?b } } -- |
+{ Eval call L{ ?w . ?a } ?b } ;
 
-CHR: call-declares-effect @ { Trans ?r ?u call } { Stack ?r L{ P{ Q ?w } . ?a } } { Stack ?u ?b } // -- |
+! ** Here be special per-word stuff
+
+CHR: call-declares-effect @ { Trans ?r ?u call } { Stack ?r L{ ?w . ?a } } { Stack ?u ?b } // -- |
+{ Use ?w }
 { Effect ?w ?a ?b f } ;
+
+! CHR: dip-declares-effect @ { Trans ?r ?u dip L{ ?q ?x . ?a } L{ ?x . ?b } } { Stack  }
+CHR: dip-declares-effect @ { Eval dip L{ ?q ?x . ?a } L{ ?y . ?b } } // -- |
+[ ?x ?y ==! ]
+{ Use ?q }
+{ Effect ?q ?a ?b f } ;
 
 CHR: plus-is-sum @ // { Eval + L{ ?x ?y . __ } L{ ?z . __ } } -- |
 { Instance ?x number }
@@ -171,41 +174,75 @@ CHR: plus-is-sum @ // { Eval + L{ ?x ?y . __ } L{ ?z . __ } } -- |
 
 ! Basic data flow
 
-CHR: dup-defines-split @ // { Eval dup L{ ?x . __ } L{ ?a ?b . __ } } -- |
-{ Dup ?x ?a }
-{ Dup ?x ?b } ;
+: effect-dups ( effect -- assoc )
+    [ in>> ] [ out>> ] bi
+    [| elt index out | index elt out indices ?rest 2array ] curry map-index ;
+
+CHR: do-shuffle @ // { Eval ?w ?a ?b } -- [ ?w "shuffle" word-prop :>> ?e ] |
+[| |
+ ?a list>array* <reversed> :> in
+ in ?e shuffle :> out
+ f
+ ?e effect-dups [| i inds |
+                 i in nth :> in-var
+                 inds [
+                     [| oi |
+                      in-var name>> utermvar :> dupvar
+                      dupvar oi out set-nth
+                      in-var dupvar Dup boa suffix
+                     ] each
+                 ] [ in-var Use boa suffix ] if*
+                ] assoc-each
+ out <reversed> >list __ list* :> b-pat
+ [ ?b b-pat ==! ] suffix
+] ;
 
 CHR: self-dup @ // { Dup ?x ?x } -- | ;
 ! Be eager in duplicating quot-representing values, because their effect defs
 ! are instantiated with fresh vars if called.  Actually extend this to all non-vars!
-CHR: lit-dup-is-unique @ // { Dup A{ ?v } ?x } -- | [ ?x ?v ==! ] ;
-CHR: lit-dupped-is-unique @ // { Dup ?x A{ ?v } } -- | [ ?x ?v ==! ] ;
+CHR: unique-def @ { Definition ?p ?q } // { Definition ?p ?q } -- | ;
+CHR: dup-definition-1 @ { Dup ?p ?q } { Definition ?p ?v } // -- | { Definition ?q ?v } ;
+CHR: dup-definition-2 @ { Dup ?q ?p } { Definition ?p ?v } // -- | { Definition ?q ?v } ;
+CHR: dup-effect-1 @ { Dup ?p ?q } { Effect ?p ?a ?b ?l } // -- | { Effect ?q ?a ?b ?l } ;
+CHR: dup-effect-2 @ { Dup ?q ?p } { Effect ?p ?a ?b ?l } // -- | { Effect ?q ?a ?b ?l } ;
+CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
+CHR: dup-instance-1 @ { Dup ?x ?y } { Instance ?x ?tau } // -- | { Instance ?y ?tau } ;
+CHR: dup-instance-2 @ { Dup ?y ?x } { Instance ?x ?tau } // -- | { Instance ?y ?tau } ;
 
-CHR: do-drop @ // { Eval drop L{ ?x . __ } __ } -- | { Drop ?x } ;
+! CHR: effect-use @ { Use ?q } // { Effect ?q __ __ __ } -- | ;
+CHR: uninteresting-use @ // { Use A{ ?x } } -- | ;
+! CHR: definition-use @ // { Definition ?p _ } ;
 
-CHR: uninteresting-drop @ // { Drop A{ ?x } } -- | ;
-
-! drops cancel dups
-CHR: dead-dup-1 @ // { Dup ?x ?y } { Dup ?x ?z } { Drop ?y } -- | [ ?x ?z ==! ] ;
-CHR: dead-dup-2 @ // { Dup ?x ?y } { Dup ?x ?z } { Drop ?z } -- | [ ?x ?y ==! ] ;
-
-CHR: do-swap @ // { Eval swap L{ ?x ?y . __ } L{ ?a ?b . __ } } -- | [ ?x ?b ==! ] [ ?y ?a ==! ] ;
-
-! CHR: curry-defines-callable @
+! Uses cancel dups
+CHR: dead-dup-1 @ // { Dup ?x ?y } { Use ?y } -- | [ ?x ?y ==! ] ;
+CHR: dead-dup-2 @ // { Dup ?x ?y } { Use ?x } -- | [ ?x ?y ==! ] ;
 
 
+! Lift the choice into the value!  Is that a boolean type constructor???
+! NOTE: not doing that on the stack to simplify value handling
+CHR: do-mux @ // { Eval ? L{ ?q ?p ?c . __ } L{ ?v . __ } } -- |
+! [ ?v P{ C ?c ?p ?q } ==! ] ;
+{ Mux ?c ?v ?p ?q } ;
 
-! Subordinate inference
+! Predicate words
+CHR: add-predicate-rules @ { Eval ?w L{ ?v . __ } L{ ?c . __ } } // -- [ ?w "predicating" word-prop :>> ?tau ] [ P{ Instance ?v ?tau } :>> ?p ] |
+{ C ?c ?p P{ Not ?p } }
+{ Use ?v }
+    ;
+! P{ C ?c P{ Instance ?v ?tau } P{ Not P{ Instance ?v ?tau } } }
+! { Instance ?v P{ C ?c ?tau Not{  } }}
+
+! ** Subordinate inference
 CHR: build-quot-body @ // { BuildQuot ?q } -- |
 { Transeq +top+ +end+ ?q } ;
 
 ! For call rules
-CHR: build-named-call-def @ // { BuildNamedCall ?n ?q } -- [ ?n Q boa :>> ?w ] |
+CHR: build-named-call-def @ // { BuildNamedCall ?n ?q } -- |
 { Transeq ?s ?t ?q }
-{ Mark ?w ?s }
+{ Mark ?n ?s }
 ! { Mark ?n ?t }
-{ Marked ?w f }
-{ DefCallRule ?w ?s ?t f } ;
+{ Marked ?n f }
+{ DefCallRule ?n ?s ?t f } ;
 
 ! For regular word rules
 CHR: build-word-exec-rule @ // { BuildExecRule ?w ?q } -- |
@@ -213,6 +250,9 @@ CHR: build-word-exec-rule @ // { BuildExecRule ?w ?q } -- |
 { Mark ?w ?s }
 { Marked ?w f }
 { DefCallRule ?w ?s ?t f } ;
+
+! Collect inlined quots
+! CHR: quot-use @ // { Use ?q } { Effect ?q __ __ __ } { Definition ?q __ } -- | ;
 
 ! Collect predicates
 CHR: mark-once @ { Mark ?k ?x } // { Mark ?k ?x } -- | ;
@@ -233,33 +273,26 @@ CHR: build-call-rule @ // { DefCallRule ?n ?s ?t f } { Marked ?n ?l } { Stack ?s
  [ Trans? ] reject
  ! NOTE: this one here may be worth keeping if it is needed for call graph analysis?
  ! Although, the Effect predicate pretty much expresses the same stuff...
- ! [ constraint-type \ call = ] reject
  [ Eval? ] reject
  [ Stack? ] reject
+ ! TODO: possibly leave them in there for inline words?  Really they are constant value definitions though...
+ [ Definition? ] reject
  ! [ { [ Stack? ] [ s1>> { [ ?s == ] [ ?t == ] } 1|| not ] } 1&& ] reject
- dup :> word-constraints
- P{ is ?sig ?b } prefix
- P{ is ?rho ?a } prefix
- :> body
- ?n Q? ?n over [ name>> ] when :> w
- [
-     { { call L{ ?n . ?rho } ?sig } }
-     body
-     ?n name>> make-simp-rule
- ] [ { { ?n ?rho ?sig } } body ?n make-simp-rule ] if
- ! AddRule boa
- drop f
- P{ Effect w ?a ?b word-constraints } 2array
+ :> word-constraints
+ P{ Effect ?n ?a ?b word-constraints }
 ] ;
 
 ;
 
 ! * External
 
-: build-quot ( quot -- chrs )
+: build-quot ( thunk -- chrs )
     quots swap BuildQuot boa 1array run-chr-query values rest ;
 
-: build-quot-rule ( quot name -- chrs )
+: build-word ( word -- chrs )
+    def>> build-quot ;
+
+: build-quot-rule ( thunk name -- chrs )
     swap BuildNamedCall boa 1array quots swap run-chr-query values rest ;
 
 :: make-simp-rule ( heads body word -- rule )
@@ -267,8 +300,8 @@ CHR: build-call-rule @ // { DefCallRule ?n ?s ?t f } { Marked ?n ?l } { Stack ?s
     wname "-call" append :> rname
     heads 0 f body f named-chr new-chr rname >>rule-name ;
 
-GENERIC: build-word ( word -- chrs )
-M: callable build-word
+GENERIC: build-type ( word -- chrs )
+M: callable build-type
     "anon" usym build-quot-rule ;
-M: word build-word
+M: word build-type
     [ def>> ] keep swap BuildExecRule boa 1array quots swap run-chr-query values rest ;

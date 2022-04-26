@@ -1,0 +1,45 @@
+* Principles
+** Basic Representation
+   - From CHR-based typing: Translate expressions into predicates on types.
+   - Difference: all types of words are binary, relating stacks to stacks
+     (perhaps the same but basically always expanding the arrows?)
+   -
+** Types
+   - Proposition-based typing: Refinement types (logical typing?)
+   - Basic predicates about types, e.g. ~P{ Instance ?x number }
+   - [logicdiss] Occurrence typing without semantic subtyping is crap
+
+*** Quotations
+    - represented by effect predicates, which act as instantiation templates
+      when a call is registered.  These are inferred from the body.  Currently,
+      all references to the internal variables should be removed once the effect
+      is constructed
+      - Reasoning back into the quotation constraints is thus not really possible
+        after it has been created.
+      - TODO: Currying?
+    - Duplication is currently handled symbolically, e.g. duplication of a
+      callable is referential, and any per-call differentiation happens via
+      instantiation
+*** Intersection/Union semantics
+    - Set of constraints is a conjunction of predicates, so there are two
+      possibilities to interpret something like
+      Type(x) = integer ∧ Type(x) = string
+      1. The variable x must be of the intersection type integer∧string
+      2. The variable x must be able to hold values of type integer as well as
+         values of type string.
+
+
+      In a modal interpretation, this could maybe be read as, respectively:
+      1. Possible(Type(x) = integer) ∧ Possible(Type(x) = string)
+      2. Necessary(Type(x) = (integer∪string))
+
+
+      Without introducing ambiguities in the set semantics.  This would make
+      sense if the types as value-sets specify the value range, while "building"
+      up the type is unterstood as a composition of bottom-bounded sets?
+
+* Compilation/Types
+  - The basic mechanism is stateful inference, e.g. some kind of virtual
+    execution/partial evaluation.
+  - For Type predicates, all state-dependent information is dropped
+  - For Compilation output, state-dependent stuff might still be important
