@@ -29,6 +29,10 @@
          values of type string.
 
 
+      This is a basic conflict of meaning: "The value must be both a string and
+      an integer" vs. "The variable must be able to hold both a string and an integer".
+
+
       In a modal interpretation, this could maybe be read as, respectively:
       1. Possible(Type(x) = integer) ∧ Possible(Type(x) = string)
       2. Necessary(Type(x) = (integer∪string))
@@ -37,6 +41,20 @@
       Without introducing ambiguities in the set semantics.  This would make
       sense if the types as value-sets specify the value range, while "building"
       up the type is unterstood as a composition of bottom-bounded sets?
+
+      The different ways to construct these is already defined by the different
+      ways to interpret the presence of multiple effect definitions.
+      Declarations serve to actively cut the possiblity space, while alternative
+      executions build up the possibility space.
+
+      Approach:
+      - Interpret conjunction of declaration constraints as intersection types
+      - Interpret conjunction of instance constraints as union-creating types
+
+
+      From the conditional structure, could we "force" unions to be indexed?
+
+
 
 * Compilation/Types
   - The basic mechanism is stateful inference, e.g. some kind of virtual

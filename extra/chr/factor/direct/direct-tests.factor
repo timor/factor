@@ -29,3 +29,12 @@ IN: chr.factor.direct.tests
 ! Canonical example
 {  }
 [ [ dup number? [ 1 + ] [ drop 0 ] if ] build-quot . ] unit-test
+
+{  }
+[ [ dup number? [ 1 + ] [ drop 0 ] if ] build-type . ] unit-test
+
+! Target...
+PREDICATE: ubyte < integer { [ 0 > ] [ 255 <= ] } 1&& ;
+
+: addbytes ( x y -- z )
+    + { ubyte } declare ;
