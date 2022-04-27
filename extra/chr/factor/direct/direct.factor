@@ -69,7 +69,7 @@ TUPLE: Marked < chr-pred ctx vals ;
 
 ! Callable Stuff
 TUPLE: Call < chr-pred quot in out ;
-TUPLE: Effect < chr-pred word cond in out constraints ;
+TUPLE: Effect < chr-pred word parms in out constraints ;
 TUPLE: EffectGen < chr-pred word in out body ;
 TUPLE: Eval < chr-pred word in out ;
 TUPLE: Definition < chr-pred name quot ;
@@ -93,13 +93,31 @@ TUPLE: \--> < chr-pred cond consequence ;
 TUPLE: Provide < chr-pred val type ;
 TUPLE: Require < chr-pred val type ;
 
+! Var stuff
+GENERIC: bound-vars ( pred -- vars )
+M: chr-pred bound-vars drop f ;
+GENERIC: free-vars ( pred -- vars )
+M: chr-pred free-vars
+    constraint-args free-vars ;
+M: sequence free-vars [ free-vars ] gather ;
+M: term-var free-vars 1array ;
+M: object free-vars drop f ;
+M: Effect bound-vars [ parms>> ] [ in>> vars union ] [ out>> vars union ] tri ;
+M: Effect free-vars [ constraints>> free-vars ] [ bound-vars diff ] bi ;
+
 TERM-VARS: Q ;
 
 CHRAT: quots { }
 IMPORT: chrat-comp
 ! Set semantics
 CHR: unique-requires @ { Require ?x ?tau } // { Require ?x ?tau } -- | ;
-CHR: provide-conflict @ { Provide ?x ?tau } // { Provide ?x ?sig } -- | [ "nope" throw f ] ;
+CHR: require-intersection @ // { Require ?x A{ ?tau } } { Require ?x A{ ?sig } } -- [ ?tau ?sig class-and :>> ?s ] | { Require ?x ?s } ;
+! CHR: require-same-type @ { Require ?x ?tau } // { Require ?x ?sig } -- [ ?sig term-var? ] | [ ?sig ?tau ==! ] ;
+
+CHR: unique-provides @ { Provide ?x ?tau } // { Provide ?x ?tau } -- | ;
+CHR: provide-intersection @ { Provide ?x A{ ?tau } } // { Provide ?x A{ ?sig } } -- [ ?tau ?sig class-and :>> ?s ] | { Provide ?x ?s } ;
+! CHR: provide-same-type @ { Provide ?x ?tau } // { Provide ?x ?sig } -- [ ?sig term-var? ] | [ ?sig ?tau ==! ] ;
+
 CHR: unique-use @ { Use ?x } // { Use ?x } -- | ;
 
 ! Cleanup
@@ -132,10 +150,11 @@ CHR: effect-predicate @ { Trans ?s ?t A{ ?w } } // -- [ ?w callable-word? ]
 ! [ ?w quot-sym? not ]
 [ ?w defined-effect :>> ?e ]
 [ ?e effect>stacks [ :>> ?a ] [ :>> ?b ] bi* 2drop t ]
+! [ ?a list>array* :>> ?i ]
+! [ ?b list>array* :>> ?o ]
 |
 { Stack ?s ?a }
 { Stack ?t ?b }
-! Calculate used values
 { Eval ?w ?a ?b }
     ;
 
@@ -166,6 +185,7 @@ CHR: literal-instance @ // { Instance A{ ?v } ?t } -- |
 ! ** Effect Type stuff
 
 CHR: redundant-effect @ { Effect ?w ?c ?a ?b ?l } // { Effect ?w ?d ?x ?y ?k } -- [ ?d ?c subset? ] [ ?k ?l subset? ] | ;
+! TODO: maybe do, because of effect matching?
 ! [ { ?a ?x } { ?b ?y } ==! ] ;
 
 ! NOTE: This does generate a new Effect definition.  In any case, Multiple
@@ -173,35 +193,111 @@ CHR: redundant-effect @ { Effect ?w ?c ?a ?b ?l } // { Effect ?w ?d ?x ?y ?k } -
 ! Probably should keep those around?  This here should ensure that we reduce
 ! duplicate application of constraints as much as possible.  Effectively, this
 ! is akin to higher-order intersection types?
-CHR: same-quot-effect @ { Effect ?w ?c ?a ?b ?l } // { Effect ?w ?c ?x ?y ?k } -- [ ?k ?l intersects? ] |
-[| | ?k ?l diff :> new-constraints
- P{ Effect ?w ?c ?x ?y new-constraints } ] ;
+! CHR: same-quot-effect @ { Effect ?w ?c ?a ?b ?l } // { Effect ?w ?c ?x ?y ?k } -- [ ?k ?l intersects? ] |
+! [| | ?k ?l diff :> new-constraints
+!  P{ Effect ?w ?c ?x ?y new-constraints } ] ;
 
-: instantiate-effect ( in out body -- in out body )
-    3array fresh first3 ;
+: instantiate-effect ( effect -- in out body )
+    { [ in>> ] [ out>> ] [ constraints>> 3array dup term-vars ] [ parms>> diff ] } cleave
+    fresh-with first3 ;
+
+! ** Expand Effect Conjunctions
+! The idea here is: whenever there are conflicting definitions about effects:
+! Create a new one, throw all predicates into the store, and collect the ones with the corresponding binder
+CHR: rebuild-effect-conjunction @ // AS: ?r P{ Effect ?p ?c ?a ?b ?k } AS: ?s P{ Effect ?p ?d ?x ?y ?l } -- |
+[| |
+ ?r instantiate-effect :> ( a b k )
+ ?s instantiate-effect :> ( x y l )
+ ! [ { ?a ?b } { ?x ?y } ==! ] 1array
+ k l append
+ [ { a b } { x y } ==! ] suffix
+ ! [ { ?rho ?sig } { a b } ==! ] suffix
+ ?c ?d union :> parms
+ P{ Effect ?p parms a b f } suffix
+] ;
+
+
+! ** Conditional reasoning
+CHR: duplicate-constraints @ { C ?c ?x } // { C ?c ?x } -- | ;
+CHR: expand-conjunction @ // { C ?p ?b } -- [ ?b sequence? ] |
+[| |
+?b [ ?p swap C boa ] map
+] ;
+CHR: lift-tautologies @ // { C ?c ?x } { C P{ Not ?c } ?x } -- |
+[ ?x ] ;
+
+! Distribute Conditional statements
+! CHR: mux-prop-use @ { Mux __ ?v ?x ?y } { Use ?v } // -- | { Use ?x } { Use ?y } ;
+! CHR: both-vals-used @ { Mux __ ?v ?x ?y } { Used ?x } { Used ?y } // -- | { Used ?v } ;
+! CHR: mux-prop-require @ { Mux ?c ?v ?x ?y } { Require ?v ?tau } // -- | { C ?c P{ Require ?x ?tau } } { C P{ Not ?c } P{ Require ?y ?tau } } ;
+! CHR: mux-prop-effect @ { Mux ?c ?q ?x ?y } { Effect ?v ?d ?a ?b ?k } // -- [ ?c ?d in? not ] [ P{ Not ?c } ?d in? not ] [ ?d ?c suffix :>> ?e ] [ ?d P{ Not ?c } suffix :>> ?l ] |
+! { Effect ?x ?e ?a ?b ?k }
+! { Effect ?y ?l ?a ?b ?k } ;
+ ! { C ?c P{ Effect ?x ?d ?a ?b ?k } }
+ ! { C P{ Not ?c } P{ Effect ?y ?d ?a ?b ?k } } ;
+
+! CHR: distribute-effect-condition @ // { C ?c P{ Effect ?q ?d ?a ?b ?k } } -- [ ?d ?c suffix members :>> ?e ] |
+! { Effect ?q ?e ?a ?b ?k } ;
+
+
+! Builtin Types
+! Lifting from branches
+! CHR: least-possible-lit-type @ { C ?c P{ Provide ?x A{ ?tau } } } { C P{ Not ?c } P{ Provide ?x A{ ?sig } } } //
+! -- [ ?tau ?sig class-and dup null = [ drop f ] when :>> ?y ] ! [ ?tau ?sig ?y class= class= and not ]
+! |
+! { Provide ?x ?y } ;
+CHR: provide-conjunction @ { C ?c P{ Provide ?x A{ ?tau } } } { C P{ Not ?c } P{ Provide ?x A{ ?sig } } } // -- [ ?tau ?sig class-or :>> ?s ]
+| { Provide ?x ?s } ;
+
+CHR: require-conjunction @ { C ?c P{ Require ?x A{ ?tau } } } { C P{ Not ?c } P{ Require ?x A{ ?sig } } } // -- [ ?tau ?sig class-and :>> ?s ]
+| { Require ?x ?s } ;
+
+
+! ** Mux effects
+
+! If we know something about the mux inputs
+CHR: mux-effect-1 @ { Mux ?c ?v ?p __ } { Effect ?p ?d ?r ?s ?x } // -- [ ?c ?d in? not ] [ ?d ?c suffix :>> ?e ] |
+{ Effect ?v ?e ?r ?s { P{ C ?c ?x  } } } ;
+CHR: mux-effect-2 @ { Mux ?c ?v __ ?q } { Effect ?q ?d ?r ?s ?x } // -- [ ?c ?d in? not ] [ ?d ?c suffix :>> ?e ] |
+{ Effect ?v ?e ?r ?s { P{ C P{ Not ?c } ?x } } } ;
+
+! ** Constract Effects
+
+
+! This is the collector
+CHR: bind-provides @ AS: ?k P{ Provide __ __ } // AS: ?e P{ Effect __ __ __ __ ?l } --
+[ ?k ?l in? not ]
+[ ?k free-vars ?e bound-vars subset? ] |
+[ ?e clone [ ?k suffix ] change-constraints ] ;
+
+! | [  ] ;
+! CHR: bind-effect @ AS: ?k P{ Effect ?q __ __ __ __  } // AS: ?e P{ Effect __ __ __ __ __ } -- |
+! [ ?q ?c ?a ?b [ vars ] tri@ union ]
+
+! ** Apply Effects at call sites
 
 ! NOTE: this is probably the universal quantifier equivalent of inferred function types?
 ! CHR: apply-call-effect @ { Eval call L{ ?w . ?a } ?b } // { Effect ?w ?c ?rho ?sig ?k } -- |
-CHR: apply-call-effect @ { Call ?w ?a ?b } { Effect ?w ?c ?rho ?sig ?k } // -- |
-[| | ?rho ?sig ?k instantiate-effect :> ( rho sig body )
+CHR: apply-call-effect @ { Call ?w ?a ?b } AS: ?e P{ Effect ?w ?c ?rho ?sig ?k } // -- |
+[| | ?e instantiate-effect :> ( rho sig body )
+ body
  [ ?a rho ==! ]
- [ ?b sig ==! ] 2array
- body ?c [ [ swap C boa ] with map ] when* append
+ [ ?b sig ==! ] 2array append
+ ! body ?c [ [ swap C boa ] with map ] when* append
 ] ;
 
 ! Use-case: known effects are muxed, merged effect is calculated
-CHR: mux-effect @ { Mux ?c ?v ?p ?q } // { Effect ?p ?d ?r ?s ?x } { Effect ?q ?e ?t ?u ?y } --
-[ ?c ?d in? not ] [ P{ Not ?c } ?e in? not ] |
-[| |
- ?d ?c prefix :> c1
- ?e P{ Not ?c } prefix :> c2
- f
-{ Effect ?v c1 ?r ?s ?x } suffix
-{ Effect ?v c2 ?t ?u ?y } suffix ] ;
-! CHR: mux-effect-1 @ { Mux ?c ?v ?p __ } { Effect ?p ?d ?r ?s ?x } // -- [ ?c ?d in? not ] [ ?d ?c suffix :>> ?e ] |
-! { Effect ?v ?e ?r ?s ?x } ;
-! CHR: mux-effect-2 @ { Mux ?c ?v __ ?q } { Effect ?q ?d ?r ?s ?x } // -- [ ?c ?d in? not ] [ ?d ?c suffix :>> ?e ] |
-! { Effect ?v ?e ?r ?s ?x } ;
+! CHR: mux-effect @ { Mux ?c ?v ?p ?q } { Effect ?p ?d ?r ?s ?x } { Effect ?q ?e ?t ?u ?y } // --
+! [ ?c ?d in? not ] [ ?e ?c suffix :>> ?n ] |
+! { Effect ?v ?n ?r ?s { P{ C ?c ?x } } }
+! { Effect ?v ?n ?t ?u { P{ C P{ Not ?c } ?y } } } ;
+! [| |
+!  C{  }
+!  ?d ?c prefix :> c1
+!  ?e P{ Not ?c } prefix :> c2
+!  f
+! { Effect ?v c1 ?r ?s ?x } suffix
+! { Effect ?v c2 ?t ?u ?y } suffix ] ;
 
 ! Use-case: unknown effect, but it is known to be muxed, so the condition must apply
 ! CHR: cond-effect-1 @ { Mux ?c ?v ?p ?q } { Effect ?p ?d ?r ?s ?x } // -- [ ?c ?d in? not ] [ ?d ?c suffix :>> ?e ] |
@@ -297,7 +393,7 @@ CHR: do-mux @ // { Eval ? L{ ?q ?p ?c . __ } L{ ?v . __ } } -- |
 ! Predicate words
 CHR: add-predicate-rules @ { Eval ?w L{ ?v . __ } L{ ?c . __ } } // --
 [ ?w "predicating" word-prop :>> ?tau ] |
-{ C ?c P{ Require ?v ?tau } }
+! { C ?c P{ Require ?v ?tau } }
 { C ?c P{ Provide ?v ?tau } }
 { Provide ?c boolean }
 { Use ?v }
@@ -314,36 +410,6 @@ CHR: do-declare @ { Definition ?x A{ ?tau } } // { Eval declare L{ ?x . ?a } ?b 
  vars ?tau [ Provide boa ] 2map append
  { Use ?x }
 ] ;
-
-! ** Conditional reasoning
-CHR: duplicate-constraints @ { C ?c ?x } // { C ?c ?x } -- | ;
-CHR: expand-conjunction @ // { C ?p ?b } -- [ ?b sequence? ] |
-[| |
-?b [ ?p swap C boa ] map
-] ;
-CHR: lift-tautologies @ // { C ?c ?x } { C P{ Not ?c } ?x } -- |
-[ ?x ] ;
-
-! Distribute Conditional statements
-CHR: mux-prop-use @ { Mux __ ?v ?x ?y } { Use ?v } // -- | { Use ?x } { Use ?y } ;
-! CHR: both-vals-used @ { Mux __ ?v ?x ?y } { Used ?x } { Used ?y } // -- | { Used ?v } ;
-CHR: mux-prop-require @ { Mux ?c ?v ?x ?y } { Require ?v ?tau } // -- | { C ?c P{ Require ?x ?tau } } { C P{ Not ?c } P{ Require ?y ?tau } } ;
-CHR: mux-prop-effect @ { Mux ?c ?q ?x ?y } { Effect ?v ?d ?a ?b ?k } // -- [ ?c ?d in? not ] [ P{ Not ?c } ?d in? not ] [ ?d ?c suffix :>> ?e ] [ ?d P{ Not ?c } suffix :>> ?l ] |
-{ Effect ?x ?e ?a ?b ?k }
-{ Effect ?y ?l ?a ?b ?k } ;
- ! { C ?c P{ Effect ?x ?d ?a ?b ?k } }
- ! { C P{ Not ?c } P{ Effect ?y ?d ?a ?b ?k } } ;
-
-! CHR: distribute-effect-condition @ // { C ?c P{ Effect ?q ?d ?a ?b ?k } } -- [ ?d ?c suffix members :>> ?e ] |
-! { Effect ?q ?e ?a ?b ?k } ;
-
-
-! Builtin Types
-! Lifting from branches
-CHR: least-possible-lit-type @ { C ?c P{ Provide ?x A{ ?tau } } } { C P{ Not ?c } P{ Provide ?x A{ ?sig } } } //
--- [ ?tau ?sig class-and dup null = [ drop f ] when :>> ?y ] ! [ ?tau ?sig ?y class= class= and not ]
-|
-{ Provide ?x ?y } ;
 
 ! ** Subordinate inference
 CHR: build-quot-body @ // { BuildQuot ?s ?t ?q } -- |
