@@ -1,5 +1,6 @@
 USING: accessors arrays assocs chr chr.comparisons chr.factor chr.factor.defs
 chr.parser chr.state classes classes.algebra combinators
+chr.factor.terms
 combinators.short-circuit effects generic.math kernel kernel.private lists match
 math math.parser namespaces quotations sequences sets strings terms types.util
 words words.symbol ;

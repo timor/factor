@@ -1,7 +1,8 @@
 USING: accessors arrays assocs chr chr.modular chr.state.private classes
-classes.tuple combinators hashtables kernel lexer lists lists.private namespaces
-parser prettyprint.backend prettyprint.custom prettyprint.sections quotations
-sequences terms vocabs.parser ;
+classes.tuple combinators combinators.short-circuit generic hashtables kernel
+lexer lists lists.private namespaces parser prettyprint.backend
+prettyprint.custom prettyprint.sections quotations sequences terms vocabs.parser
+words ;
 
 IN: chr.parser
 
@@ -94,6 +95,21 @@ M: chr-pred >pprint-sequence [ constraint-args ] [ constraint-type prefix ] bi ;
 
 : parse-chr-body ( end -- seq )
     parse-array dup [ { [ chr? ] [ import-solver? ] } 1|| ] all? [ "invalid-chr-prog" throw ] unless ;
+
+! * Syntax helper
+SYMBOL: UNK
+: term-delims-pprinter ( reader -- quot )
+    '[ drop _ \ } ] ;
+: parse-term ( accum class -- accum )
+    \ } parse-until swap slots>tuple suffix! ;
+:: make-term-constructor ( class -- )
+    class name>> "{" append create-word-in :> reader
+    reader [ class parse-term ] define-syntax
+    class \ pprint* create-method [ pprint-object ] define
+    class \ pprint-delims create-method reader term-delims-pprinter define
+    class \ >pprint-sequence create-method [ tuple-slots ] define ;
+
+SYNTAX: constructor last-word make-term-constructor ;
 
 ! * CHRat Contract
 
