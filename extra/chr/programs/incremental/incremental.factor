@@ -3,7 +3,6 @@ USING: accessors arrays assocs chr chr.programs kernel math sequences sets terms
 
 IN: chr.programs.incremental
 
-
 : insert-existential-generators ( rule -- rule )
     clone
     dup rule-existentials insert-generators! ;
@@ -18,6 +17,34 @@ IN: chr.programs.incremental
          2array
     ] curry map-index ;
 
+: matchable-head? ( type sub-pred -- ? )
+    { [ drop classoid? ] [ class>> classes-intersect? ] } 2&& ;
+
+GENERIC#: push-at-constraint-type 1 ( elt type index -- )
+
+! When indexing a sub-pred head, add to existing known matching classes
+: push-at-applicable ( elt type index -- )
+    3dup push-at
+    [ ! | itype elt type seq |
+        [ rot matchable-head? ] dip swap
+        [ push ] [ 2drop ] if
+    ] 2with assoc-each ;
+
+! When indexing a classoid type head, initialize with all matching chr-sub-defs if necessary
+: maybe-match-sub-preds ( class index -- )
+    2dup key? [ 2drop ] [
+        [
+            [ drop { [ drop chr-sub-pred? ] [ swap class>> classes-intersect? ] } 2&& ] with assoc-filter values concat
+            >vector
+        ] 2keep set-at
+    ] if ;
+
+M: chr-sub-pred push-at-constraint-type push-at-applicable ;
+M: object push-at-constraint-type push-at ;
+M: classoid push-at-constraint-type
+    2dup maybe-match-sub-preds
+    push-at ;
+
 :: add-heads ( program rule rule-ind entries -- program )
     entries <enumerated> >alist <reversed>
     [| hi ent |
@@ -25,11 +52,10 @@ IN: chr.programs.incremental
      ent first2 :> ( aent partners )
      aent first2 :> ( hkept h )
      h constraint-type :> type
-     occ type program occur-index>> push-at
-
+     occ type program occur-index>> push-at-constraint-type
      occ hkept h constraint-args partners rule match-vars>>
      <constraint-schedule>
-     type program schedule>> push-at
+     type program schedule>> push-at-constraint-type
     ] assoc-each
     program
     ;
@@ -43,7 +69,18 @@ IN: chr.programs.incremental
 : add-vars ( program rule -- program )
     term-vars [ union ] curry change-local-vars ;
 
+: assert-chr-effect ( chr -- )
+    dup callable? [
+        dup infer
+        dup check-body-constraint-effect [ 2drop ] [ "invalid quot chr effect" 3array throw ] if
+    ] [ drop ] if ;
+
+: check-rule ( rule -- )
+    [ guard>> ] [ body>> ] bi
+    [ [ assert-chr-effect ] each ] bi@ ;
+
 : add-rule ( program rule -- program )
+    dup check-rule
     insert-existential-generators
     [ add-to-index ]
     [ [ suffix ] curry change-rules ]
@@ -52,6 +89,6 @@ IN: chr.programs.incremental
 
 : init-chr-prog ( rules -- prog )
     chr-prog new
-    H{ } clone >>occur-index
-    H{ } clone >>schedule
+    LH{ } clone >>occur-index
+    LH{ } clone >>schedule
     swap [ add-rule ] each ;
