@@ -46,10 +46,13 @@ M: generator >pprint-sequence
 
 SYNTAX: G{ scan-token "}" expect <term-var> suffix! ;
 
-SYNTAX: ={ scan-object scan-object "}" eq-constraint boa suffix! ;
+SYNTAX: ={ scan-object scan-object "}" expect <eq-constraint> suffix! ;
 M: eq-constraint pprint* pprint-object ;
 M: eq-constraint pprint-delims drop \ ={ \ } ;
 M: eq-constraint >pprint-sequence tuple-slots ;
+
+! Disjunctions
+SYNTAX: Or{ \ } parse-array [ pred>constraint ] map chr-or boa suffix! ;
 
 ! Helper
 TUPLE: fake-chr-pred-cons < cons-state ;

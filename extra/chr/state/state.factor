@@ -1,18 +1,22 @@
-USING: accessors arrays assocs assocs.extras chr chr.programs classes.algebra
+USING: accessors arrays assocs assocs.extras chr chr.programs
+chr.programs.incremental classes.algebra combinators.private
 combinators.short-circuit hash-sets kernel linked-assocs lists make math
-combinators.private
-namespaces quotations sequences sets sorting terms typed words ;
+math.combinatorics namespaces persistent.assocs quotations sequences sets
+sorting terms typed words ;
 
 IN: chr.state
 
 FROM: namespaces => set ;
 FROM: syntax => _ ;
 
-SYMBOLS: program exec-stack store builtins match-trace current-index ;
+! SYMBOLS: program exec-stack store builtins match-trace current-index ;
+SYMBOLS: program exec-stack store match-trace current-index ;
 
 ! Operational interface
 TUPLE: chr-suspension
     constraint id alive activated stored hist vars from-rule cond ;
+
+TUPLE: solver-state builtins store ;
 
 TUPLE: builtin-suspension < chr-suspension type ;
 : <builtins-suspension> ( -- obj )
@@ -26,17 +30,19 @@ M: chr-suspension args>> constraint>> constraint-args ; inline
 M: chr-suspension constraint-args args>> ; inline
 
 DEFER: activate-new
+SYMBOL: queue
 
 : local-var? ( variable -- ? )
     [ program get local-vars>> in? ] [ f ] if* ;
 
-DEFER: reactivate
-:: wake-equal ( v k -- )
-    store get [| id sus |
-               sus vars>> :> vs
-               { [ v vs in? ] [ k vs in? ] } 0||
-               [ id reactivate ] when
-    ] assoc-each ;
+! DEFER: reactivate
+! :: wake-equal ( v k -- )
+!     store get [| id sus |
+!                sus vars>> :> vs
+!                { [ v vs in? ] [ k vs in? ] } 0||
+!                ! [ id reactivate ] when
+!                [ queue [  ] ] when
+!     ] assoc-each ;
 
 : known? ( obj -- ? )
     dup term-var? [ ?ground-value ] when
@@ -77,31 +83,6 @@ C: <equiv-activation> equiv-activation
 
 : add-equal ( assoc -- new )
     [ add-2-equal ] { } assoc>map sift <equiv-activation> ;
-    ! [ [ [ a>> ] [ b>> ] bi equate-in-store ] each ]
-    ! [
-    !     [ wakeup>> ] gather [ alive? ] filter
-    !     [ dup update-vars! reactivate ] each
-    !     ! [ wakeup>> members [ dup update-vars! reactivate ] each ] each
-    ! ]
-    ! [ [ [ a>> ] [ b>> ] bi 2array \ = prefix 1array ] map ] tri ;
-    ! 2dup [ local-var? ] either?
-    ! [ "equating locals!" throw ] when
-    ! 2dup = [ 2drop f ]
-    ! [ 2dup wakeup-set
-    !   2over equate-in-store
-    !   [ reactivate ] each
-    !   2array \ = prefix 1array
-    ! ] if ;
-    ! 2dup test-eq
-    ! [ 2drop f ]
-    ! [
-    !     {
-    !         ! [ maybe-define-ground-value ]
-    !         [ defined-equalities get assume-equal ]
-    !         [ 2array \ = prefix 1array ]
-    !         [ wake-equal ]
-    !     }
-    !     2cleave ] if ;
 
 ERROR: cannot-make-equal lhs rhs ;
 : unify ( t1 t2 -- subst )
@@ -127,9 +108,13 @@ TYPED: create-chr ( from-rule c: constraint -- id )
 : alive? ( id -- ? )
     store get at [ alive>> ] [ f ] if* ;
 
+: enqueue ( items -- )
+    queue [ append ] change ;
+
 DEFER: activate
-: reactivate ( id -- )
-    dup alive? [ activate ] [ drop ] if ;
+: reactivate ( ids -- )
+    [ alive? ] filter [ enqueue ] when* ;
+    ! dup alive? [ activate ] [ drop ] if ;
 
 :: kill-chr ( id -- )
     store get dup id of
@@ -204,7 +189,8 @@ PRIVATE>
     ! swap body>> [ apply-substitution activate-new ] 2with each ;
     swap body>> [ apply-substitution ] with map
     f current-bindings set-global
-    [ activate-new ] with each
+    ! [ activate-new ] with each
+    activate-new
     ;
 
 : simplify-constraints ( trace -- )
@@ -224,29 +210,44 @@ M: chr-sub-pred match-constraint
 M: as-pred match-constraint
     ! [ [ constraint>> ] [ var>> ] bi* pick set-at ]
     [ [ constraint>> ] [ var>> ] bi* swap 2array 1array solve-next ] 2keep rot
-    [ -rot pred>> match-constraint ] [ 2drop f ] if* ;
+    [ -rot pred>> constraint-args match-constraint ] [ 2drop f ] if* ;
 
     ! [ pred>> match-constraint ] 2bi ;
 M: sequence match-constraint
     swap constraint-args 2array 1array solve-next ;
 
+M: reflexive-parms match-constraint
+    parms>> all-permutations
+    [ match-constraint ] 2with map-find drop ;
 
+! M: reflexive match-constraint
+!     constraint-args
+!     constraint-args [ match-constraint ]
 
 ! NOTE: match order convention:
 !  rule-constraint =? store-constraint
 
 ! : start-match ( var-term arg-term -- subst )
 !     2array 1array H{ } clone swap solve-next ;
-:: try-schedule-match ( bindings arg-spec susp -- bindings )
-    bindings susp ! constraint>>
-    arg-spec match-constraint
-    ! susp constraint-args :> args
-    ! arg-spec chr-sub-pred?
-    ! [ susp constraint>> arg-spec var>> bindings set-at
-    !   arg-spec args>> args >list
-    ! ]
-    ! [ clone arg-spec args ] if
-    ! 2array 1array solve-next
+DEFER: match-reflexive-head
+DEFER: match-single-head
+: match-head ( bindings arg-spec susp -- bindings )
+    ! dup constraint>> reflexive?
+    over reflexive-parms?
+    [ match-reflexive-head ]
+    [ match-single-head ] if ;
+
+: match-single-head ( bindings arg-spec susp -- bindings )
+    swap match-constraint ; inline
+:: match-reflexive-head ( bindings arg-spec susp -- bindings )
+    arg-spec parms>> all-permutations
+    [| p | bindings p susp match-single-head ] map-find drop ; inline
+
+: try-schedule-match ( bindings arg-spec susp -- bindings )
+    swap match-constraint
+    ! match-head
+    ! bindings susp
+    ! arg-spec match-constraint
     ; inline
 
 ! : match-constraint ( bindings args constraint -- bindings )
@@ -258,14 +259,19 @@ M: sequence match-constraint
 ! rule-id { { id0 keep0 } ...{ id1 keep1} } bindings
 :: (run-occurrence) ( rule-id trace bindings partners vars -- )
     partners empty? [
+        ! NOTE: unsure about this optimization here...
         trace [ drop alive? ] assoc-all?
         [ rule-id trace bindings fire-rule ] when
+        ! rule-id trace bindings fire-rule
     ] [
         partners unclip-slice :> ( rest next )
         next first2 :> ( keep-partner pc )
         pc lookup
         [| sid sc |
-         { [ sid trace key? not ] [ sc alive>> ] } 0&& [
+         ! NOTE: unsure about this optimization here
+         { [ sid trace key? not ]
+           [ sc alive>> ]
+         } 0&& [
              ! vars valid-match-vars [
                  bindings pc constraint-args sc try-schedule-match
              ! ] with-variable
@@ -276,7 +282,6 @@ M: sequence match-constraint
          ] when
         ] assoc-each
     ] if ;
-
 
 :: run-occurrence ( c schedule --  )
     c id>> :> active-id
@@ -301,6 +306,9 @@ SYMBOL: sentinel
 
 ! TODO: check if that is needed to make sure tail recursion works!
 ! Don't reactivate ourselves, don't reactivate more than once!
+! : activate ( id -- )
+!     queue [ swap prefix ] change ;
+
 : activate ( id -- )
     recursion-check
     ! check-integrity
@@ -339,13 +347,27 @@ M: equiv-activation activate-new nip
     eqs>>
     [ [ [ lhs>> ] [ rhs>> ] bi assume-equal ] each ]
     [ [ update-eq-constraint-vars f swap activate-new ] each ]
-    [ equiv-wakeup-set [ reactivate ] each ] tri ;
+    [ equiv-wakeup-set reactivate ] tri ;
 
-M: eq-constraint activate-new nip
-    builtins store get at constraint>> push ;
+! M: eq-constraint activate-new nip
+!     builtins store get at constraint>> push ;
+TUPLE: deferred-activation from-rule chr ;
+
+M: eq-constraint activate-new 2drop ;
+GENERIC: activate-item ( susp --  )
+M: deferred-activation activate-item
+    [ from-rule>> ] [ chr>> ] bi activate-new ;
+M: integer activate-item activate ;
+
+: run-queue ( -- )
+    ! [ queue get dup empty? ] [ unclip [ queue namespaces:set ] [ activate-id ] bi* ] until ;
+    [ queue get empty? ] [ queue get unclip [ queue set ] [ activate-item ] bi* ] until ;
 
 M: sequence activate-new
-    [ activate-new ] with each ;
+    [ deferred-activation boa ] with map
+    [ enqueue ] when* ;
+    ! queue [ append ] change ;
+    ! run-queue ;
 
 M: constraint activate-new
     ! recursion-check
@@ -386,8 +408,8 @@ M: builtin-suspension apply-substitution* nip ;
 !     ] prepose with-var-names ; inline
 
 : init-chr-scope ( prog -- )
-    LH{ } clone store set
-    <builtins-suspension> builtins store get set-at
+    H{ } clone store set
+    ! <builtins-suspension> builtins store get set-at
     load-chr dup program set
     local-vars>> valid-match-vars set
     check-vars? on
@@ -400,8 +422,8 @@ M: builtin-suspension apply-substitution* nip ;
 
 : init-dyn-chr-scope ( rules -- )
     init-chr-prog program set
-    LH{ } clone store set
-    <builtins-suspension> builtins store get set-at
+    H{ } clone store set
+    ! <builtins-suspension> builtins store get set-at
     update-local-vars
     check-vars? on
     0 current-index set
@@ -418,37 +440,79 @@ M: builtin-suspension apply-substitution* nip ;
 !     ] with-global-variable
 !     ;
 
-SYMBOL: last-program
+! SYMBOL: last-program
 
-: run-chr-query ( prog query -- store )
+SYMBOL: state-id
+SYMBOL: result-config
+
+: combine-configs ( result-config -- store )
+    H{ } clone H{ } clone
+    [let :> ( res eqs store )
+     res [| id state |
+          state store>> id store set-at
+          state builtins>> id eqs set-at
+         ] assoc-each
+     eqs store solver-state boa
+    ] ;
+
+: store-solver-config ( state id -- )
+    result-config get set-at ;
+
+: finish-solver-state ( -- state )
+    defined-equalities-ds get store get [ constraint>> f lift ] map-values
+    solver-state boa ;
+
+
+: run-chr-query ( prog query -- state )
     [ pred>constraint ] map
     2dup 2array
     [
+      H{ } clone result-config set
+      0 state-id set-global
       0 sentinel set
       H{ } clone ground-values set
       swap
       ! init-chr-scope
       init-dyn-chr-scope
-      [ f swap activate-new ] each
-      ! ground-values get .
-      store get
-      ! dup .
-      ! dup solve-eq-constraints
-      ! break
-      [ constraint>>
-        over builtins = [ f lift ] unless
-      ] assoc-map
-      program get last-program set-global
+      f swap activate-new
+      run-queue
+      finish-solver-state
+      0 store-solver-config
+      result-config get combine-configs
     ] with-term-vars ;
-
 
 : extend-program ( rule -- )
     program [ swap add-rule ] with change update-local-vars ;
 
-! Saving store
-: fork-chr-state ( quot -- )
-    store get [ call ] dip
-    store set ; inline
+: with-cloned-state ( state quot -- state )
+    [
+        [ store>>
+          [ clone ] map-values
+        ]
+        [ builtins>> clone ] bi
+    ] dip '[
+        store set
+        @
+    ] with-var-context ; inline
+
+
+! ! Saving store
+! : fork-chr-state ( quot -- )
+!     store get [ call ] dip
+!     store set ; inline
+: get-solver-state ( -- state )
+    defined-equalities-ds get
+    store get solver-state boa ;
+
+M: chr-or activate-new
+    constraints>>
+    get-solver-state
+    '[ _ [ activate-new
+           run-queue
+           finish-solver-state
+         ] with-cloned-state
+      state-id counter store-solver-config
+    ] with each f queue set ;
 
 : run-chrat-query ( query -- store )
     prepare-query run-chr-query ;

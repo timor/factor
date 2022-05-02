@@ -33,6 +33,8 @@ TUPLE: named-chr < chr rule-name ;
     [ heads>> ] [ nkept>> ] bi cut-slice ; inline
 
 GENERIC: constraint-type ( obj -- type )
+! NOTE: This should really be called constraint-spec instead of constraint-args,
+! since it is used to dispatch on any kind of special matching stuff...
 GENERIC: constraint-args ( obj -- args )
 
 ! Internal Constraints form in program
@@ -41,11 +43,6 @@ C: <chr-cons> chr-cons
 
 TUPLE: builtin-cons cons atoms ;
 C: <builtin-cons> builtin-cons
-
-TUPLE: id-cons { cons maybe{ chr-cons } } id ;
-C: <id-cons> id-cons
-TUPLE: active-cons { cons maybe{ id-cons } } occs j ;
-C: <active-cons> active-cons
 
 ! Things that can be activated
 MIXIN: constraint
@@ -56,6 +53,8 @@ INSTANCE: false constraint
 
 TUPLE: chr-pred ;
 INSTANCE: chr-pred constraint
+
+TUPLE: chr-or < chr-pred constraints ;
 
 ! Match-spec telling that the current class must be preceded!
 ! TUPLE: bind-class { var } { args read-only } ;
@@ -71,6 +70,8 @@ TUPLE: as-pred var pred ;
 C: <as-pred> as-pred
 M: as-pred constraint-type pred>> constraint-type ;
 M: as-pred constraint-args ;
+
+MIXIN: reflexive
 
 ! Turn lexical representation into constraint object
 GENERIC: pred>constraint ( obj -- chr-pred )

@@ -2,8 +2,9 @@ USING: accessors arrays assocs assocs.extras classes classes.tuple
 colors.constants combinators combinators.short-circuit continuations
 disjoint-sets disjoint-sets.private graphs hashtables hashtables.identity
 io.styles kernel lexer make match math math.order math.parser namespaces parser
-prettyprint.custom prettyprint.sections quotations sequences sets strings
-types.util unicode vectors words words.symbol ;
+prettyprint.backend prettyprint.config prettyprint.custom prettyprint.sections
+quotations sequences sets strings types.util unicode vectors words words.symbol
+;
 
 IN: terms
 
@@ -47,13 +48,23 @@ M:: eq-disjoint-set equate ( a b disjoint-set -- )
         disjoint-set link-sets
     ] if ;
 
+M: eq-disjoint-set clone
+    [ parents>> ] [ ranks>> ] [ counts>> ] tri [ clone ] tri@ eq-disjoint-set boa ;
+
 ! * State
+TUPLE: var-context { eqs eq-disjoint-set read-only } { ground-values assoc read-only } ;
+M: var-context clone call-next-method
+    [ eqs>> clone ] [ ground-values>> clone ] bi var-context boa ;
+
 
 SYMBOL: defined-equalities-ds
 
 ! Using local for debugging
 : defined-equalities ( -- ds )
-    defined-equalities-ds get-global ; inline
+    defined-equalities-ds get-global [ eqs>> ] [ f ] if* ; inline
+
+: defined-ground-values ( -- assoc )
+    defined-equalities-ds get-global ground-values>> ; inline
 
 <PRIVATE
 SYMBOL: globals-stack
@@ -86,26 +97,28 @@ ERROR: unknown-term-vars v1 v2 ;
     equiv? ; inline
 
 : defined-equal? ( v1 v2 -- ? )
-    ! no-defined-equalities get-global
-    ! [ 2drop f ] [
-        defined-equalities
+    defined-equalities
     [
         ! check-vars? get [ 2over check-vars ] when
         ! safe-equiv? ] [ 2drop f ] if*
         equiv? ] [ 2drop f ] if*
-    ! ] if
     ; inline
 
 : check-integrity ( -- )
     defined-equalities parents>> [ nip ] assoc-all?
     [ defined-equalities "Bad" 2array throw ] unless ;
 
+: with-var-context ( var-context quot -- )
+    defined-equalities-ds swap '[
+        @
+        check-integrity
+    ] with-global-variable ; inline
+
 ! Using local scope for now, replace with global when working!
 : with-eq-scope ( disjoint-set quot -- )
-    defined-equalities-ds swap '[
-       @
-       check-integrity
-    ] with-global-variable ; inline
+    [ H{ } clone var-context boa ] dip
+    with-var-context
+    ; inline
 
 DEFER: vars
 : with-term-vars ( obj quot -- )
@@ -113,8 +126,9 @@ DEFER: vars
     [ vars <eq-disjoint-set> [ add-atoms ] keep ] dip
     with-eq-scope ; inline
 
-: import-vars ( seq -- )
-    defined-equalities add-atoms ;
+! : import-vars ( seq -- )
+!     defined-equalities add-atoms ;
+
 ! * Unique naming
 
 MIXIN: id-name
@@ -239,31 +253,23 @@ ERROR: recursive-ground-terms terms ;
     dup assoc-empty? [ drop ] [ recursive-ground-terms ] if ;
 ! FIXME: definition order!
 DEFER: lift
-: update-ground-values ( assoc -- assoc )
-    [ f lift ] assoc-map
-    dup check-recursive-terms
+: update-ground-values! ( assoc -- )
+    [ [ keys ] keep [ [ f lift ] change-at ] curry each ]
+    [ check-recursive-terms ] bi
     ; inline
 
 :: define-ground-value ( var value ds -- )
     var ds
-    representative ground-values get
+    representative defined-ground-values
     [
         [| old | old [ old value = [ old ] [ old value ground-value-contradiction ] if ]
          [ value ] if
         ] change-at
-    ] [ update-ground-values ground-values set ] bi
+    ] [ update-ground-values! ] bi
     ; inline
 
 : ground-value? ( obj -- ? )
     vars empty? ; inline
-
-! : maybe-define-ground-value ( v1 v2 ds -- )
-!     ! over ground-value? not [ swapd ] when
-!     ! over ground-value? not [ 3drop ] [
-!     over term-var? [ swapd ] when
-!     over term-var? [ 3drop ] [
-!         define-ground-value
-!     ] if ; inline
 
 ! Keep track of ground terms for equivalence classes
 : ?ground-value ( var -- val/key )
@@ -271,17 +277,17 @@ DEFER: lift
     [ defined-equalities
       [
           representative
-          ground-values get ?at drop
+          defined-ground-values ?at drop
       ] when*
     ] when ;
     ! [ defined-equalities
     !   [ representative
-    !     ground-values get ?at drop ] when* ] when ;
+    !     defined-ground-values ?at drop ] when* ] when ;
      ! ;
 
 : maybe-update-ground-values ( a b -- )
-    2drop ground-values [ update-ground-values ] change ;
-    ! [ ground-values get ] 2dip pick [ key? ] curry either?
+    2drop defined-ground-values update-ground-values! ;
+    ! [ defined-ground-values ] 2dip pick [ key? ] curry either?
     ! [ update-ground-values ground-values set ] [ drop ] if ;
 
 ! Main entry point for atoms
