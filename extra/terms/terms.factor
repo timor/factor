@@ -372,7 +372,7 @@ M: sequence decompose-right
 
 SYMBOL: valid-match-vars
 : valid-term-var? ( var -- ? )
-    dup term-var? [
+    dup { [ term-var? ] [ match-var? ] } 1|| [
         valid-match-vars get
         [ in? ] [ drop t ] if*
     ] [ drop f ] if ; inline
@@ -435,12 +435,14 @@ SYMBOL: on-recursive-term
 : solve-in ( term eqns -- term subst )
     solve-problem [ lift ] keep ; inline
 
-! Only term vars!
-: fresh ( term -- term )
-    clone dup term-vars
+: fresh-with ( term vars -- term )
+    [ clone ] dip
     [ dup name>> uvar <term-var> ] H{ } map>assoc
     valid-match-vars [ lift ] with-variable-off ;
 
+! Only term vars!
+: fresh ( term -- term )
+    dup term-vars fresh-with ;
 ! * Interface
 
 ! Interface for builtin solving
