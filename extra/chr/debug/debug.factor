@@ -1,7 +1,6 @@
 USING: accessors arrays assocs assocs.extras chr chr.programs chr.state
-classes.private classes.tuple formatting io kernel math math.order math.parser
-namespaces persistent.assocs prettyprint sequences sequences.private
-sorting.slots system terms tools.annotations tools.walker ;
+classes.builtin formatting io kernel math math.parser namespaces prettyprint
+sequences system terms tools.annotations tools.walker ;
 
 IN: chr.debug
 
@@ -72,9 +71,15 @@ IN: chr.debug
     \ load-chr [ [ "Rewritten Program: " write dup rules>> <enumerated> >array . ] compose ] annotate
     ! \ replace-all-equalities [ [ ground-values get "Ground-values: " write . ] prepose ] annotate
     \ make-equal [ [ 2dup "Unify: %u ==! %u\n" printf ] prepose ] annotate
+    M\ chr-or activate-new [ [ "SPLIT" print ] prepose ] annotate
+    M\ chr-branch activate-new [ [ "BRANCH" print ] prepose [ "RETURN" print ] compose ] annotate
+    \ run-queue [ [ "Flushing queue" print ] prepose ] annotate
     ;
 
-:: break-rule-match ( rule-num susp-id -- )
+:: break-rule-match ( occ -- )
+    \ run-occurrence [ dup occurrence>> occ =  ] breakpoint-if ;
+
+:: break-id-match ( rule-num susp-id -- )
     \ run-occurrence [ 2dup [ id>> susp-id = ] [ occurrence>> first rule-num = ] bi* and ] breakpoint-if ;
 
 SYMBOL: chr-trace

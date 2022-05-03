@@ -1,5 +1,4 @@
-USING: accessors arrays chr chr.parser kernel lists prettyprint.backend
-prettyprint.custom prettyprint.sections sequences ;
+USING: accessors arrays chr chr.parser kernel sequences sequences.deep vectors ;
 
 IN: chr.factor.terms
 
@@ -18,11 +17,15 @@ M: object justify* <J> ;
 M: array justify* [ justify* ] with map ;
 M: vector justify* [ justify* ] with map ;
 M: J justify*
-    [ tag>> cons ] [ constraint>> ] bi justify* ;
+    ! [ tag>> cons ] [ constraint>> ] bi justify* ;
+    [ tag>> 2array flatten ] [ constraint>> ] bi justify* ;
 
 : justify ( tag constraint -- constraint )
-    over nil? [ nip ] [ justify* ] if ;
+    over not [ nip ] [ justify* ] if ;
+    ! justify* ;
 
 TUPLE: True < type-pred cond ; constructor
 TUPLE: False < type-pred cond ; constructor
 TUPLE: Not < type-pred constraint ; constructor
+TUPLE: In < type-pred cond ; constructor
+TUPLE: Out < type-pred cond ; constructor

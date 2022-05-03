@@ -129,6 +129,12 @@ DEFER: vars
 ! : import-vars ( seq -- )
 !     defined-equalities add-atoms ;
 
+DEFER: term-vars
+: import-term-vars ( term -- )
+    f defined-equalities-ds [ term-vars ] with-global-variable
+    defined-equalities
+    [ 2dup disjoint-set-member? [ 2drop ] [ add-atom ] if ] curry each ;
+
 ! * Unique naming
 
 MIXIN: id-name

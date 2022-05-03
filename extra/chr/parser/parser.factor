@@ -53,6 +53,7 @@ M: eq-constraint >pprint-sequence tuple-slots ;
 
 ! Disjunctions
 SYNTAX: Or{ \ } parse-array [ pred>constraint ] map chr-or boa suffix! ;
+SYNTAX: Cond{ \ } parse-array [ pred>constraint ] map chr-branch boa suffix! ;
 
 ! Helper
 TUPLE: fake-chr-pred-cons < cons-state ;

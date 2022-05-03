@@ -1,8 +1,7 @@
 USING: accessors arrays assocs assocs.extras chr chr.programs
 chr.programs.incremental classes.algebra combinators.private
-combinators.short-circuit hash-sets kernel linked-assocs lists make math
-math.combinatorics namespaces persistent.assocs quotations sequences sets
-sorting terms typed words ;
+combinators.short-circuit hash-sets kernel lists make math math.combinatorics
+namespaces quotations sequences sets sorting terms typed words ;
 
 IN: chr.state
 
@@ -93,6 +92,9 @@ ERROR: cannot-make-equal lhs rhs ;
     [ 2nip add-equal ]
     [ cannot-make-equal ] if* ;
 
+: store-chr ( chr-susp -- )
+    dup id>> store get set-at ; inline
+
 TYPED: create-chr ( from-rule c: constraint -- id )
     ! FIXME: This is to make sure any representatives get in! That stuff is really meh...
     f lift
@@ -103,7 +105,7 @@ TYPED: create-chr ( from-rule c: constraint -- id )
     [ vars members >>vars ] bi
     t >>alive
     current-index [ 0 or 1 + dup ] change [ >>id ] keep
-    [ store get set-at ] keep ;
+    [ store-chr ] dip ;
 
 : alive? ( id -- ? )
     store get at [ alive>> ] [ f ] if* ;
@@ -455,12 +457,32 @@ SYMBOL: result-config
      eqs store solver-state boa
     ] ;
 
-: store-solver-config ( state id -- )
+: get-solver-state ( -- state )
+    defined-equalities-ds get
+    store get solver-state boa ;
+
+TYPED: store-solver-config ( state: solver-state id -- )
     result-config get set-at ;
 
+! TYPED: merge-solver-config ( state: solver-state id -- )
+!     swap store>> [ [ 2array ] change-id store-chr drop ] with assoc-each ;
+! NOTE: to be run in parent context
+TYPED: merge-solver-config ( key state: solver-state -- )
+    ! FIXME: might need to import existential vars here
+    ! NOTE: rule history gets lost here
+    ! store>> [ nip [ from-rule>> ] [ constraint>> ] bi deferred-activation boa ] { } assoc>map enqueue ;
+    store>> values store get [ value? ] curry reject [ constraint>> [ import-term-vars ] [ C boa ] bi ] with map f swap activate-new ;
+    ! store get assoc-diff values [ constraint>> C boa ] with map f swap activate-new ;
+
+
+! NOTE: must be done in correct scope right now (i.e. nested one)
+: petrify-solver-state! ( state -- state )
+    [ [ f lift ] map-values ] change-store ;
+
 : finish-solver-state ( -- state )
-    defined-equalities-ds get store get [ constraint>> f lift ] map-values
-    solver-state boa ;
+    get-solver-state
+    petrify-solver-state!
+    [ [ constraint>> ] map-values ] change-store ;
 
 
 : run-chr-query ( prog query -- state )
@@ -500,10 +522,7 @@ SYMBOL: result-config
 ! : fork-chr-state ( quot -- )
 !     store get [ call ] dip
 !     store set ; inline
-: get-solver-state ( -- state )
-    defined-equalities-ds get
-    store get solver-state boa ;
-
+! Non-return
 M: chr-or activate-new
     constraints>>
     get-solver-state
@@ -513,6 +532,37 @@ M: chr-or activate-new
          ] with-cloned-state
       state-id counter store-solver-config
     ] with each f queue set ;
+
+! Return
+: run-cases ( rule seq -- seq )
+    get-solver-state swap [ swap
+        [ activate-new
+          run-queue
+          get-solver-state petrify-solver-state!
+         ] with-cloned-state
+     ] 2with map ;
+
+M: chr-branch activate-new ( rule c -- )
+    cases>> unzip swap
+    [ run-cases ] dip
+    swap [ merge-solver-config ] 2each ;
+
+! M:: chr-branch activate-new ( rule c -- )
+!     get-solver-state :> parent-state
+!     c cases>>
+!     [ first2 :> ( tag body )
+!       parent-state [
+!           ! queue off
+!           rule body activate-new
+!           queue get .
+!           run-queue
+!           get-solver-state petrify-solver-state!
+!       ] with-cloned-state
+!       tag swap merge-solver-config
+!     ] each ;
+
+! M: And activate-new ( rule c -- )
+!     [ activate-new ] with each ;
 
 : run-chrat-query ( query -- store )
     prepare-query run-chr-query ;
