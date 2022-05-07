@@ -163,7 +163,7 @@ CHR: apply-call-effect @ { Call ?q ?a ?b } // { Effect ?q ?c ?x ?y ?l } -- |
 ! { InferEffect ?q ?c ?a ?b f } ;
 
 CHR: re-infer-call-effect @ // { Call ?q ?a ?b } -- |
-{ InferEffect ?q f ?a ?b f }
+{ Effect ?q f ?a ?b f }
 ! Cond{ { f f }
 !       { f { P{ InferEffect ?q f ?a ?b f } } } }
  ;
@@ -201,7 +201,7 @@ CHR: do-compose @ // { Eval compose L{ ?q ?p . __ } L{ ?k . __ } } -- |
 ! ! { Effect ?p f ?a ?b f }
 ! ! { Effect ?q f ?b ?c f }
 ! !  { Effect ?k f ?a ?c f }
-{ InferEffect ?k f ?a ?c f } ;
+{ Effect ?k f ?a ?c f } ;
 ! { InferDone ?k }
 !     ;
 
@@ -278,7 +278,7 @@ CHR: build-named-call-effect @ // { BuildEffectType ?n A{ ?p } } -- [ ?p :>> ?q 
 { Stack top ?a }
 { Stack end ?b }
 { BuildNamedQuot top end ?q ?n }
-{ InferEffect ?n f ?a ?b f }
+{ Effect ?n f ?a ?b f }
 ! { InferDone Q }
     ;
 

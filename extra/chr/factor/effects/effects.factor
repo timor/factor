@@ -12,9 +12,9 @@ TUPLE: InferEffect < chr-pred word parms in out constraints ;
 CHRAT: chr-effects {  }
 
 ! If we turn out to infer the same thing, combine.
-CHR: unique-inference-marker @ AS: ?x <={ InferEffect ?w ?c ?a ?b ?l } // AS: ?y <={ InferEffect ?w ?c ?a ?b ?l } -- [ ?x ?y class= ] | [ "srsly?" throw ] ;
-CHR: combine-inference-marker @ // { InferEffect ?w ?c ?a ?b ?l } { InferEffect ?w ?c ?a ?b ?k } -- [ ?l ?k union :>> ?m ] | [ "öhm..." throw ]
-{ InferEffect ?w ?c ?a ?b ?m } ;
+! CHR: unique-inference-marker @ AS: ?x <={ InferEffect ?w ?c ?a ?b ?l } // AS: ?y <={ InferEffect ?w ?c ?a ?b ?l } -- [ ?x ?y class= ] | [ "srsly?" throw ] ;
+! CHR: combine-inference-marker @ // { InferEffect ?w ?c ?a ?b ?l } { InferEffect ?w ?c ?a ?b ?k } -- [ ?l ?k union :>> ?m ] | [ "öhm..." throw ]
+! { InferEffect ?w ?c ?a ?b ?m } ;
 
 
 ! : tags-contradict? ( set1 set2 -- ? )
@@ -53,7 +53,8 @@ CHR: subsuming-effect @ { Effect ?w ?c ?a ?b ?l } // { Effect ?w ?d ?x ?y ?k } -
 ! ** Contract Effects
 
 ! CHR: collect-effect-regular-pred @ // AS: ?e <={ InferEffect __ __ __ __ ?l } AS: ?k <={ type-pred } --
-CHR: collect-effect-regular-pred @ AS: ?k <={ type-pred } // AS: ?e <={ InferEffect __ __ __ __ ?l } --
+! CHR: collect-effect-regular-pred @ AS: ?k <={ type-pred } // AS: ?e <={ InferEffect __ __ __ __ ?l } --
+CHR: collect-effect-regular-pred @ AS: ?k <={ type-pred } // AS: ?e <={ Effect __ __ __ __ ?l } --
 [ ?k ?l in? not ] [ ?e bound-vars :>> ?v ]
 [ ?k free-vars ?v subset? ] |
 [ ?e [ ?k suffix ] change-constraints ] ;

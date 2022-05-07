@@ -7,6 +7,7 @@ IN: chr.factor.quotations
 FROM: syntax => _ ;
 FROM: chr.factor.terms => val-pred ;
 FROM: chr.factor.types => Instance ;
+FROM: chr.factor.effects => Effect ;
 
 ! * Quotation Inference
 
@@ -112,7 +113,7 @@ CHR: push-quot @ { Trans ?s ?t A{ ?q } } // -- [ ?q callable? ] |
 { Stack ?rho ?a }
 { Stack ?sig ?b }
 { BuildNamedQuot ?rho ?sig ?q Quot }
-{ InferEffect Quot f ?a ?b f }
+{ Effect Quot f ?a ?b f }
     ;
 
 
