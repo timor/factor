@@ -1,5 +1,6 @@
-USING: accessors arrays assocs chr chr.programs kernel math sequences sets terms
-;
+USING: accessors arrays assocs chr chr.programs classes classes.algebra
+combinators.short-circuit kernel linked-assocs math quotations sequences sets
+stack-checker terms vectors ;
 
 IN: chr.programs.incremental
 
@@ -17,7 +18,8 @@ IN: chr.programs.incremental
          2array
     ] curry map-index ;
 
-: matchable-head? ( type sub-pred -- ? )
+: matchable-head? ( sub-pred type -- ? )
+    swap
     { [ drop classoid? ] [ class>> classes-intersect? ] } 2&& ;
 
 GENERIC#: push-at-constraint-type 1 ( elt type index -- )
@@ -45,6 +47,12 @@ M: classoid push-at-constraint-type
     2dup maybe-match-sub-preds
     push-at ;
 
+
+TUPLE: reflexive-parms { parms read-only } ;
+: match-spec-args ( head -- spec )
+    [ constraint-args ] keep
+    reflexive? [ reflexive-parms boa ] when ;
+
 :: add-heads ( program rule rule-ind entries -- program )
     entries <enumerated> >alist <reversed>
     [| hi ent |
@@ -53,7 +61,7 @@ M: classoid push-at-constraint-type
      aent first2 :> ( hkept h )
      h constraint-type :> type
      occ type program occur-index>> push-at-constraint-type
-     occ hkept h constraint-args partners rule match-vars>>
+     occ hkept h match-spec-args partners rule match-vars>>
      <constraint-schedule>
      type program schedule>> push-at-constraint-type
     ] assoc-each

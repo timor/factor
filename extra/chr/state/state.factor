@@ -17,6 +17,9 @@ TUPLE: chr-suspension
 
 TUPLE: solver-state builtins store ;
 
+: <solver-state> ( -- obj )
+    <eq-disjoint-set> H{ } clone solver-state boa ;
+
 TUPLE: builtin-suspension < chr-suspension type ;
 : <builtins-suspension> ( -- obj )
     builtin-suspension new
@@ -66,6 +69,7 @@ C: <equiv-activation> equiv-activation
 
 : add-2-equal ( value key -- new )
     2dup [ local-var? ] either?
+    ! 2dup [ local-var? ] both?
     [ "equating locals!" throw ] when
     ! <eq-constraint> ;
     ! 2dup eq? [ 2drop f ]
@@ -84,6 +88,8 @@ C: <equiv-activation> equiv-activation
     [ add-2-equal ] { } assoc>map sift <equiv-activation> ;
 
 ERROR: cannot-make-equal lhs rhs ;
+! TODO: not entirely sure why we need this, probably because we don't have the
+! constraint's bodies variables in scope?
 : unify ( t1 t2 -- subst )
     valid-match-vars [ solve-eq ] with-variable-off ;
 
@@ -268,7 +274,7 @@ DEFER: match-single-head
     ] [
         partners unclip-slice :> ( rest next )
         next first2 :> ( keep-partner pc )
-        pc lookup
+        pc lookup sort-keys
         [| sid sc |
          ! NOTE: unsure about this optimization here
          { [ sid trace key? not ]
@@ -311,12 +317,17 @@ SYMBOL: sentinel
 ! : activate ( id -- )
 !     queue [ swap prefix ] change ;
 
+TUPLE: run-schedule c schedule ;
+C: <run-schedule> run-schedule
+
 : activate ( id -- )
     recursion-check
     ! check-integrity
     store get at
-    dup type>> program get schedule>> at
-    [ over alive>> [ run-occurrence ] [ 2drop ] if ] with each
+    [
+        dup type>> program get schedule>> at
+        [ over alive>> [ <run-schedule> ] [ 2drop f ] if ] with map enqueue
+    ] when*
     ;
 
 GENERIC: activate-new ( rule c -- )
@@ -360,6 +371,10 @@ GENERIC: activate-item ( susp --  )
 M: deferred-activation activate-item
     [ from-rule>> ] [ chr>> ] bi activate-new ;
 M: integer activate-item activate ;
+M: run-schedule activate-item
+    [ c>> ] [ schedule>> ] bi
+    over alive>> [ run-occurrence ]
+    [ 2drop ] if ;
 
 : run-queue ( -- )
     ! [ queue get dup empty? ] [ unclip [ queue namespaces:set ] [ activate-id ] bi* ] until ;
@@ -461,18 +476,26 @@ SYMBOL: result-config
     defined-equalities-ds get
     store get solver-state boa ;
 
+: set-solver-state ( state -- )
+    [ store>> store set ]
+    [ builtins>> defined-equalities-ds set ] bi ;
+
 TYPED: store-solver-config ( state: solver-state id -- )
     result-config get set-at ;
 
 ! TYPED: merge-solver-config ( state: solver-state id -- )
 !     swap store>> [ [ 2array ] change-id store-chr drop ] with assoc-each ;
 ! NOTE: to be run in parent context
-TYPED: merge-solver-config ( key state: solver-state -- )
+GENERIC: merge-solver-config ( key state: solver-state -- )
+PREDICATE: failed-solver-state < solver-state store>> [ nip constraint>> false? ] assoc-any? ;
+
+M: failed-solver-state merge-solver-config 2drop ;
+M: solver-state merge-solver-config
     ! FIXME: might need to import existential vars here
     ! NOTE: rule history gets lost here
-    ! store>> [ nip [ from-rule>> ] [ constraint>> ] bi deferred-activation boa ] { } assoc>map enqueue ;
-    store>> values store get [ value? ] curry reject [ constraint>> [ import-term-vars ] [ C boa ] bi ] with map f swap activate-new ;
-    ! store get assoc-diff values [ constraint>> C boa ] with map f swap activate-new ;
+    store>> values store get [ value? ] curry reject
+    [ constraint>> [ import-term-vars ] [ C boa ] bi ] with map
+    f swap activate-new ;
 
 
 ! NOTE: must be done in correct scope right now (i.e. nested one)
@@ -484,12 +507,20 @@ TYPED: merge-solver-config ( key state: solver-state -- )
     petrify-solver-state!
     [ [ constraint>> ] map-values ] change-store ;
 
+SYMBOL: split-states
+
+: join-states ( assoc -- )
+    [ merge-solver-config ] assoc-each ;
+
+: save-split-state ( key solver-state --  )
+    2array split-states get push ;
 
 : run-chr-query ( prog query -- state )
     [ pred>constraint ] map
     2dup 2array
     [
-      H{ } clone result-config set
+        V{ } clone split-states set
+      ! H{ } clone result-config set
       0 state-id set-global
       0 sentinel set
       H{ } clone ground-values set
@@ -498,9 +529,11 @@ TYPED: merge-solver-config ( key state: solver-state -- )
       init-dyn-chr-scope
       f swap activate-new
       run-queue
+      split-states get join-states
+      run-queue
       finish-solver-state
-      0 store-solver-config
-      result-config get combine-configs
+      ! 0 store-solver-config
+      ! result-config get combine-configs
     ] with-term-vars ;
 
 : extend-program ( rule -- )
@@ -518,34 +551,46 @@ TYPED: merge-solver-config ( key state: solver-state -- )
     ] with-var-context ; inline
 
 
-! ! Saving store
-! : fork-chr-state ( quot -- )
-!     store get [ call ] dip
-!     store set ; inline
-! Non-return
-M: chr-or activate-new
-    constraints>>
-    get-solver-state
-    '[ _ [ activate-new
-           run-queue
-           finish-solver-state
-         ] with-cloned-state
-      state-id counter store-solver-config
-    ] with each f queue set ;
-
-! Return
 : run-cases ( rule seq -- seq )
     get-solver-state swap [ swap
-        [ activate-new
-          run-queue
-          get-solver-state petrify-solver-state!
-         ] with-cloned-state
-     ] 2with map ;
+                            [ activate-new
+                              run-queue
+                              get-solver-state petrify-solver-state!
+                            ] with-cloned-state
+    ] 2with map ;
 
+: maybe-invalidate-solver-state ( -- )
+    get-solver-state failed-solver-state?
+    [ <solver-state> set-solver-state ] when ;
+
+
+! M: chr-scope activate-new (  )
+
+! Non-return, proper or
+M:: chr-or activate-new ( rule c -- )
+    c constraints>>
+    get-solver-state :> state
+    [ state [ rule swap activate-new
+           run-queue
+           get-solver-state petrify-solver-state!
+         ] with-cloned-state
+       dup failed-solver-state? [ drop f ] when
+    ] map-find [ set-solver-state ] [ drop rule false activate-new ] if
+    queue off ;
+
+! Return, but merge only at the end.  This means that the first branch will actually be
+! done first?
 M: chr-branch activate-new ( rule c -- )
     cases>> unzip swap
     [ run-cases ] dip
-    swap [ merge-solver-config ] 2each ;
+    <solver-state> set-solver-state queue off
+    swap [ save-split-state ] 2each ;
+    ! ;
+    ! swap [ merge-solver-config ] 2each ;
+
+M: false activate-new ( rule c -- )
+    queue off
+    call-next-method ;
 
 ! M:: chr-branch activate-new ( rule c -- )
 !     get-solver-state :> parent-state

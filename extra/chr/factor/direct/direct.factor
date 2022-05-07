@@ -1,369 +1,209 @@
-USING: accessors arrays assocs chr chr.comparisons chr.factor chr.factor.defs
-chr.factor.terms chr.parser chr.state classes classes.algebra classes.tuple
-combinators combinators.short-circuit effects generic.math kernel kernel.private
-lists match math math.parser namespaces quotations sequences sets strings terms
-types.util words words.symbol ;
+USING: accessors arrays assocs chr chr.comparisons chr.factor
+chr.factor.conditions chr.factor.defs chr.factor.effects chr.factor.quotations
+chr.factor.terms chr.factor.types chr.parser chr.state classes classes.algebra
+classes.tuple combinators combinators.short-circuit effects generic.math kernel
+kernel.private lists match math math.parser namespaces quotations sequences
+sequences.deep sets strings terms types.util vectors words words.symbol ;
 
 IN: chr.factor.direct
+FROM: syntax => _ ;
+FROM: chr.factor.terms => val-pred ;
+FROM: chr.factor.effects => Effect ;
+FROM: chr.factor.types => Instance ;
 
-PREDICATE: quot-sym < word "quot-id" word-prop? ;
-: <quot-sym> ( name -- word ) usym dup t "quot-id" set-word-prop ;
 
-PREDICATE: callable-word < word { [ symbol? not ] [ quot-sym? not ] } 1&& ;
-! PREDICATE: callable-word < word symbol? not ;
-
-: pluck ( seq quot: ( elt -- ? ) -- seq' elt )
-    dupd find [ remove-nth ] keep ; inline
-
-: stack-match ( stack-var elts rest -- chr )
-    [ __ ] unless*
-    [ >list ] dip list*
-    <eq-constraint> ;
-
-GENERIC: elt>var ( i elt -- obj )
-M: f elt>var drop number>string "v" prepend utermvar ;
-M: string elt>var nip utermvar ;
-M: pair elt>var
-    first2 drop elt>var ;
-
-: elt-vars ( seq -- seq )
-    [ swap elt>var ] map-index <reversed> ;
-    ! [ swap dup pair? [ first ] when
-    !   [ nip ] [ number>string "v" prepend ] if*
-    !   uvar
-    !   <term-var>
-    ! ] map-index <reversed> ;
-
-: effect>stack-elts ( effect -- lin lout )
-    [ in>> elt-vars >list ]
-    [ out>> elt-vars >list ] bi ;
-
-:: add-row-vars ( lin lout effect -- lin lout )
-    effect [ in-var>> ] [ out-var>> ] bi
-    [ dup [ utermvar ] when ] bi@
-    :> ( i o )
-    { { [ i o [ not ] both? ]
-        [ "rho" utermvar :> rho
-          lin rho list*
-          lout rho list* ] }
-      { [ i o [  ] both? ]
-        [ lin i list*
-          lout o list* ] }
-      [ lin __ list* lout __ list* ]
-    } cond ;
-
-: effect>stacks ( effect -- lin lout )
-    [ effect>stack-elts ]
-    [ add-row-vars ] bi ;
-
-TUPLE: Transeq < chr-pred from to quot ;
-TUPLE: Trans < chr-pred from to command ;
-TUPLE: BuildQuot < chr-pred from to quot ;
-TUPLE: BuildNamedCall < chr-pred name quot ;
+TUPLE: BuildEffectType < chr-pred name quot ;
 ! TUPLE: DefCallRule < chr-pred name start end ;
 TUPLE: DefCallRule < chr-pred name start end body ;
 TUPLE: AddRule < chr-pred rule ;
 TUPLE: TransRule < chr-pred head body ;
-TUPLE: Mark < chr-pred ctx val ;
-TUPLE: Marked < chr-pred ctx vals ;
 
 ! Callable Stuff
 TUPLE: Call < chr-pred quot in out ;
-TUPLE: Effect < type-pred word parms in out constraints ;
+! Slightly delayed...
+TUPLE: EffectCall < Effect from to ;
+TUPLE: RecursiveCall < type-pred quot in out ;
+TUPLE: InferDone < chr-pred word ;
+TUPLE: RebuildEffect < InferEffect ;
+TUPLE: ApplyEffects < chr-pred word tags in out ;
+TUPLE: PerformCall < chr-pred call-pred effect-pred ;
 TUPLE: EffectGen < chr-pred word in out body ;
-TUPLE: Eval < chr-pred word in out ;
-TUPLE: Definition < chr-pred name quot ;
+
+! These can never be polymorphically different!
+! TUPLE: Literal < chr-pred name quot ;
 
 ! Val stuff
-TUPLE: Sum < type-pred x y z ;
-TUPLE: Dup < type-pred orig copy ;
-! TUPLE: Drop < chr-pred val ;
-TUPLE: Use < type-pred val ;
+TUPLE: Sum < val-pred x y ;
+TUPLE: Dup < val-pred copy ;
+TUPLE: Drop < chr-pred val ;
+TUPLE: Use < val-pred ;
+
+! Types with constructors.
+! Those can appear in effects as syntactic matches
+TUPLE: Tuple < type-pred ;
+    ! Expressions.
+TUPLE: Expr < val-pred term ;
+
 ! Cleanup
 TUPLE: Used < chr-pred val ;
 
 ! Conditional Stuff
-TUPLE: Rule < chr-pred cond body ;
-TUPLE: Mux < chr-pred cond val then else ;
-TUPLE: C < type-pred cond then ;
-
-TUPLE: --> < chr-pred cond consequence ;
-TUPLE: \--> < chr-pred cond consequence ;
 
 ! Type Stuff
 ! TUPLE: Provide < chr-pred val type ;
 ! TUPLE: Require < chr-pred val type ;
-! Partial order
-TUPLE: sub < type-pred t1 t2 ;
-TUPLE: Instance < type-pred val type ;
 
 ! Var stuff
-GENERIC: bound-vars ( pred -- vars )
-M: chr-pred bound-vars drop f ;
-GENERIC: free-vars ( pred -- vars )
-M: chr-pred free-vars
-    constraint-args free-vars ;
-M: array free-vars [ free-vars ] gather ;
-M: vector free-vars [ free-vars ] gather ;
-M: term-var free-vars dup ?ground-value 2dup eq? [ drop 1array ] [ nip free-vars ] if ;
-M: object free-vars drop f ;
-M: tuple free-vars tuple-slots free-vars ;
-M: Effect bound-vars [ parms>> ] [ in>> vars union ] [ out>> vars union ] tri ;
-M: Effect free-vars [ constraints>> free-vars ] [ bound-vars diff ] [ word>> ] tri suffix ;
+! NOTE: there's still an open question here regarding free vars for instatiation
+! and scoping...
+! : effect-bound-vars ( x -- x )
+!     ! [ parms>> ] [ in>> vars union ] [ out>> vars union ] tri ;
+!     ! [ parms>> ] [ in>> vars union ] bi ;
+!     [ in>> vars ] [ out>> vars union ] bi ;
+
+: effect-bound-vars ( x -- x )
+    [ in>> vars ] [ out>> vars ]
+    [ constraints>> bound-vars ] tri union union ;
+
+: effect-free-vars ( x -- x )
+    [
+        { [ parms>> vars ] [ in>> vars union ] [ out>> vars union ]
+          [ constraints>> free-vars union ] } cleave
+    ] [ bound-vars diff ] bi ;
+
+
+    ! [ vars ] [ bound-vars diff ] bi ;
+    ! [ constraints>> free-vars ] [ bound-vars diff ] [ word>> ] tri suffix ;
+
+M: Effect bound-vars effect-bound-vars ;
+M: Effect free-vars effect-free-vars ;
+M: InferEffect bound-vars effect-bound-vars ;
+M: InferEffect free-vars effect-free-vars ;
 
 TERM-VARS: Q ;
+TERM-VARS: top end ;
 
 CHRAT: quots { }
 IMPORT: chrat-comp
-! Set semantics
-! CHR: unique-requires @ { Require ?x ?tau } // { Require ?x ?tau } -- | ;
-! CHR: require-intersection @ // { Require ?x A{ ?tau } } { Require ?x A{ ?sig } } -- [ ?tau ?sig class-and :>> ?s ] | { Require ?x ?s } ;
-! CHR: require-same-type @ { Require ?x ?tau } // { Require ?x ?sig } -- [ ?sig term-var? ] | [ ?sig ?tau ==! ] ;
+IMPORT: chr-cond
+IMPORT: chr-types
+IMPORT: chr-quot
+IMPORT: chr-effects
 
-! CHR: unique-provides @ { Provide ?x ?tau } // { Provide ?x ?tau } -- | ;
-! CHR: provide-intersection @ { Provide ?x A{ ?tau } } // { Provide ?x A{ ?sig } } -- [ ?tau ?sig class-and :>> ?s ] | { Provide ?x ?s } ;
-! CHR: provide-same-type @ { Provide ?x ?tau } // { Provide ?x ?sig } -- [ ?sig term-var? ] | [ ?sig ?tau ==! ] ;
+! Early drops
+CHR: drop-def @ { Drop ?q } // { Literal ?q __ } -- | ;
 
 CHR: unique-use @ { Use ?x } // { Use ?x } -- | ;
 
 ! Cleanup
+CHR: drop-type-preds @ { Drop ?x } // AS: ?p <={ type-pred } -- [ ?x ?p vars in? ] | ;
+
+! CHR: drop-implies-use @ // { Drop ?x } -- | { Use ?x } ;
 CHR: used-use-literal @ // { Use A{ ?x } } -- | ;
 CHR: used-used-literal @ // { Used A{ ?x } } -- | ;
 ! CHR: check-literal-require @ // { Require A{ ?x } A{ ?tau } } -- |
 ! [ ?x ?tau instance? [ "nope" throw ] unless f ] ;
 ! CHR: check-literal-provide @ // { Provide A{ ?x } A{ ?tau } } -- |
 ! [ ?x ?tau instance? [ "nopenope" throw ] unless f ] ;
-! CHR: used-effect @ { Used ?q } // { Effect ?q __ __ __ __ } -- | ;
+CHR: dropped-effect @ { Drop ?q } // { Effect ?q __ __ __ __ } -- | ;
 
-CHR: check-literal-instance @ { Instance A{ ?v } A{ ?tau } } // -- | [ ?v ?tau instance? [ "inconsistent" throw ] unless f ] ;
-! NOTE: This looks flimsy at first, but for value-set semantics, values are special instances of "singleton" types
-! TODO: make sure words are quoted correctly here!
-CHR: check-literal-subtype @ { sub A{ ?x } A{ ?tau } } // -- |
-[ ?x classoid? [ ?x ?tau class<= [ "notsub" throw ] unless ]
-  [ ?x ?tau instance? [ "notsubinst" throw ] unless ] if
-  f
-] ;
+! ** Value/Conditional reasoning
+! CHR: lift-tautologies @ // { C ?c ?x } { C Not{ ?c } ?x } -- |
+! [ ?x ] ;
+! CHR: double-negation @ // { C Not{ Not{ ?c } } ?k } -- | { C ?c ?k } ;
 
-! Extending the solver at runtime
-CHR: add-dynamic-rule @ { AddRule ?r } // -- |
-[ ?r extend-program f ] ;
-SYMBOL: nop
-! Stack and transition build-up
-CHR: stack-match @ { Stack ?s ?a } // { Stack ?s ?b } -- | [ ?a ?b ==! ] ;
-! CHR: empty-quot @ // { Transeq ?s ?t A{ [ ] } } -- | { Stack ?s ?rho } { Stack ?t ?rho } ;
-! CHR: empty-quot @ // { Transeq ?s ?t A{ [ ] } } -- | { Stack ?s ?rho } { Stack ?t ?rho } ;
-CHR: empty-quot @ // { Transeq ?s ?t [ ] } -- | [ ?s ?t ==! ] ;
-CHR: destructure-quot @ // { Transeq ?s ?t ?p } -- [ ?p first dup callable-word? [ <wrapper> ] unless :>> ?w ?p rest :>> ?q ?s seq-state :>> ?s0 3drop t ] |
-{ Trans ?s ?s0 ?w }
-{ Transeq ?s0 ?t ?q } ;
-
-! Early replacement
-CHR: inline-if @ // { Trans ?s ?t if } -- | { Transeq ?s ?t [ ? call ] } ;
-
-! Effect-based destructuring
-CHR: effect-predicate @ { Trans ?s ?t A{ ?w } } // -- [ ?w callable-word? ]
-! [ ?w quot-sym? not ]
-[ ?w defined-effect :>> ?e ]
-[ ?e effect>stacks [ :>> ?a ] [ :>> ?b ] bi* 2drop t ]
-! [ ?a list>array* :>> ?i ]
-! [ ?b list>array* :>> ?o ]
-|
-{ Stack ?s ?a }
-{ Stack ?t ?b }
-{ Eval ?w ?a ?b }
-    ;
+! CHR: distribute-last-cond @ { C { ?c } ?p } // -- | { C ?c ?p } ;
 
 
-! CHR: remove-used-quot-trans @ { Used ?q } // { Trans ?s ?t ?q } -- | ;
+! CHR: instance-union @ J{ ?m P{ Instance ?v A{ ?tau } } } J{ ?n P{ Instance ?v A{ ?sig } } } // -- [ ?m neg ?n = ] [ ?tau ?sig class-or :>> ?c ] |
+! { Instance ?v ?c } ;
 
-! CHR: infer-callable @ // { Trans ?s ?t A{ ?q } } -- [ ?q callable? ] |
-CHR: infer-callable @ // { Trans ?s ?t ?q } -- [ ?q callable? ] |
-{ Trans ?s ?t Q }
-{ Stack ?s ?xs }
-{ Stack ?t L{ Q . ?xs } }
-{ BuildNamedCall Q ?q }
-{ Definition Q ?q }
-;
+CHR: redundant-definition @ // { Literal A{ ?v } A{ ?v } } -- | ;
 
-CHR: push-effect @ { Trans ?s ?t A{ ?w } } // -- ! [ break ?v wrapper? ] [ ?v wrapped>> :>> ?w drop t ]
-[ ?w callable-word? not ] [ ?w :>> ?v drop t ] [ ?w class-of :>> ?tau ] |
-{ Stack ?s ?xs }
-{ Definition ?x ?v }
-! { Instance ?x ?tau }
-{ Stack ?t L{ ?x . ?xs } }
-{ Instance ?x ?tau }
-;
+: xor-tags ( tags1 tags2 -- tags1 )
+    [ [ neg ] dip in? ] curry reject ;
 
-! ! Simple Type stuff
-! CHR: literal-instance @ // { Instance A{ ?v } ?t } -- |
-! [ ?v ?t instance? not [ { ?v ?t "not instance" } throw ] when f ] ;
+: lift-tags ( tags1 tags2 -- tags/f )
+    [ xor-tags ]
+    [ swap xor-tags ] 2bi
+    over set= [ drop f ] unless ;
 
-! ** Effect Type stuff
+! CHR: import-sub-predicates @ { InferEffect ?w ?c ?a ?b __ } { Effect ?w ?d ?x ?y ?k } // -- [ ?c ?d intersects? ] [ { ?x ?y } { ?a ?b } [ solve-eq ] no-var-restrictions :>> ?m ] |
+! [ ?k ?m lift [ ?c swap C boa ] map ]
+!     ;
 
-CHR: redundant-effect @ { Effect ?w ?c ?a ?b ?l } // { Effect ?w ?d ?x ?y ?k } -- [ ?d ?c subset? ] [ ?k ?l subset? ] | ;
-! TODO: maybe do, because of effect matching?
-! [ { ?a ?x } { ?b ?y } ==! ] ;
-
-! NOTE: This does generate a new Effect definition.  In any case, Multiple
-! Effect constraints should all somehow influence a { call ... } construct.
-! Probably should keep those around?  This here should ensure that we reduce
-! duplicate application of constraints as much as possible.  Effectively, this
-! is akin to higher-order intersection types?
-! CHR: same-quot-effect @ { Effect ?w ?c ?a ?b ?l } // { Effect ?w ?c ?x ?y ?k } -- [ ?k ?l intersects? ] |
-! [| | ?k ?l diff :> new-constraints
-!  P{ Effect ?w ?c ?x ?y new-constraints } ] ;
-
-: instantiate-effect ( effect -- in out body )
-    { [ in>> ] [ out>> ] [ constraints>> 3array dup term-vars ] [ parms>> diff ] } cleave
-    fresh-with first3 ;
-
-! ** Expand Effect Conjunctions
-! The idea here is: whenever there are conflicting definitions about effects:
-! Create a new one, throw all predicates into the store, and collect the ones with the corresponding binder
-CHR: rebuild-effect-conjunction @ // AS: ?r P{ Effect ?p ?c ?a ?b ?k } AS: ?s P{ Effect ?p ?d ?x ?y ?l } -- |
-[| |
- ?r instantiate-effect :> ( a b k )
- ?s instantiate-effect :> ( x y l )
- ! [ { ?a ?b } { ?x ?y } ==! ] 1array
- k l append
- [ { a b } { x y } ==! ] suffix
- ! [ { ?rho ?sig } { a b } ==! ] suffix
- ?c ?d union :> parms
- P{ Effect ?p parms a b f } suffix
-] ;
-
-
-! ** Conditional reasoning
-CHR: duplicate-constraints @ { C ?c ?x } // { C ?c ?x } -- | ;
-CHR: expand-conjunction @ // { C ?p ?b } -- [ ?b sequence? ] |
-[| |
-?b [ ?p swap C boa ] map
-] ;
-CHR: lift-tautologies @ // { C ?c ?x } { C Not{ ?c } ?x } -- |
-[ ?x ] ;
-CHR: double-negation @ // { C Not{ Not{ ?c } } ?k } -- | { C ?c ?k } ;
-
-! Distribute Conditional statements
-! CHR: mux-prop-use @ { Mux __ ?v ?x ?y } { Use ?v } // -- | { Use ?x } { Use ?y } ;
-! CHR: both-vals-used @ { Mux __ ?v ?x ?y } { Used ?x } { Used ?y } // -- | { Used ?v } ;
-! CHR: mux-prop-require @ { Mux ?c ?v ?x ?y } { Require ?v ?tau } // -- | { C ?c P{ Require ?x ?tau } } { C Not{  ?c } P{ Require ?y ?tau } } ;
-! CHR: mux-prop-effect @ { Mux ?c ?q ?x ?y } { Effect ?v ?d ?a ?b ?k } // -- [ ?c ?d in? not ] [ Not{  ?c } ?d in? not ] [ ?d ?c suffix :>> ?e ] [ ?d Not{  ?c } suffix :>> ?l ] |
-! { Effect ?x ?e ?a ?b ?k }
-! { Effect ?y ?l ?a ?b ?k } ;
- ! { C ?c P{ Effect ?x ?d ?a ?b ?k } }
- ! { C Not{  ?c } P{ Effect ?y ?d ?a ?b ?k } } ;
-
-! CHR: distribute-effect-condition @ // { C ?c P{ Effect ?q ?d ?a ?b ?k } } -- [ ?d ?c suffix members :>> ?e ] |
-! { Effect ?q ?e ?a ?b ?k } ;
-
-
-! Builtin Types
-! Lifting from branches
-! CHR: least-possible-lit-type @ { C ?c P{ Provide ?x A{ ?tau } } } { C Not{  ?c } P{ Provide ?x A{ ?sig } } } //
-! -- [ ?tau ?sig class-and dup null = [ drop f ] when :>> ?y ] ! [ ?tau ?sig ?y class= class= and not ]
-! |
-! { Provide ?x ?y } ;
-! CHR: provide-conjunction @ { C ?c P{ Provide ?x A{ ?tau } } } { C Not{  ?c } P{ Provide ?x A{ ?sig } } } // -- [ ?tau ?sig class-or :>> ?s ]
-! | { Provide ?x ?s } ;
-
-! CHR: require-conjunction @ { C ?c P{ Require ?x A{ ?tau } } } { C Not{  ?c } P{ Require ?x A{ ?sig } } } // -- [ ?tau ?sig class-and :>> ?s ]
-! | { Require ?x ?s } ;
-
-
-! ** Mux effects
-
-! If we know something about the mux inputs
-CHR: mux-effect-1 @ { Mux ?c ?v ?p __ } { Effect ?p ?d ?r ?s ?x } // -- [ ?c ?d in? not ] [ ?d ?c suffix :>> ?e ] |
-{ Effect ?v ?e ?r ?s { P{ C ?c ?x  } } } ;
-CHR: mux-effect-2 @ { Mux ?c ?v __ ?q } { Effect ?q ?d ?r ?s ?x } // -- [ ?c ?d in? not ] [ ?d ?c suffix :>> ?e ] |
-{ Effect ?v ?e ?r ?s { P{ C P{ Not ?c } ?x } } } ;
-
-! ** Contract Effects
-
-! NOTE: possibly expensive, because it massively blows up the occurrence schedules
-CHR: collect-pred @ AS: ?k <={ type-pred } // AS: ?e P{ Effect __ __ __ __ ?l } --
-[ ?k ?l in? not ] [ ?k free-vars ?e bound-vars subset? ] | [ ?e clone [ ?k suffix ] change-constraints ] ;
-
-! This is the collector
-! CHR: bind-provides @ AS: ?k P{ Provide __ __ } // AS: ?e P{ Effect __ __ __ __ ?l } --
-! [ ?k ?l in? not ]
-! [ ?k free-vars ?e bound-vars subset? ] |
-! [ ?e clone [ ?k suffix ] change-constraints ] ;
-
-! | [  ] ;
-! CHR: bind-effect @ AS: ?k P{ Effect ?q __ __ __ __  } // AS: ?e P{ Effect __ __ __ __ __ } -- |
-! [ ?q ?c ?a ?b [ vars ] tri@ union ]
 
 ! ** Apply Effects at call sites
 
-! NOTE: this is probably the universal quantifier equivalent of inferred function types?
-! CHR: apply-call-effect @ { Eval call L{ ?w . ?a } ?b } // { Effect ?w ?c ?rho ?sig ?k } -- |
-CHR: apply-call-effect @ { Call ?w ?a ?b } AS: ?e P{ Effect ?w ?c ?rho ?sig ?k } // -- |
-[| | ?e instantiate-effect :> ( rho sig body )
- body
- [ ?a rho ==! ]
- [ ?b sig ==! ] 2array append
- ! body ?c [ [ swap C boa ] with map ] when* append
-] ;
+! Here be special per-word stuff
 
-! Use-case: known effects are muxed, merged effect is calculated
-! CHR: mux-effect @ { Mux ?c ?v ?p ?q } { Effect ?p ?d ?r ?s ?x } { Effect ?q ?e ?t ?u ?y } // --
-! [ ?c ?d in? not ] [ ?e ?c suffix :>> ?n ] |
-! { Effect ?v ?n ?r ?s { P{ C ?c ?x } } }
-! { Effect ?v ?n ?t ?u { P{ C Not{  ?c } ?y } } } ;
-! [| |
-!  C{  }
-!  ?d ?c prefix :> c1
-!  ?e Not{  ?c } prefix :> c2
-!  f
-! { Effect ?v c1 ?r ?s ?x } suffix
-! { Effect ?v c2 ?t ?u ?y } suffix ] ;
-
-! Use-case: unknown effect, but it is known to be muxed, so the condition must apply
-! CHR: cond-effect-1 @ { Mux ?c ?v ?p ?q } { Effect ?p ?d ?r ?s ?x } // -- [ ?c ?d in? not ] [ ?d ?c suffix :>> ?e ] |
-! { Effect ?p ?e ?r ?s ?x } ;
-
-! CHR: cond-effect-2 @ { Mux ?c ?v ?p ?q } { Effect ?q ?d ?r ?s ?x } // -- [ Not{  ?c } ?d in? not ] [ ?d Not{  ?c } suffix :>> ?e ] |
-! { Effect ?p ?e ?r ?s ?x } ;
-
-! Use-case: muxed effect, branches unknown, but effect must be compatible
-! TODO: do we need to pull in the bodies and conditions as well?
-! CHR: muxed-effect-shapes @ { Mux __ ?v ?p ?q } { Effect ?v __ ?r ?s __ } // -- | { Effect ?p f ?r ?s f } { Effect ?q f ?r ?s f } ;
-
-
-CHR: apply-dip-effect @ // { Eval dip L{ ?w ?x . ?a  } L{ ?x . ?b } } -- |
-{ Eval call L{ ?w . ?a } ?b } ;
-
-! ** Here be special per-word stuff
+CHR: apply-dip-effect @ // { Eval dip L{ ?w ?x . ?a } L{ ?y . ?b } } -- |
+[ ?x ?y ==! ]
+{ Call ?w ?a ?b } ;
 
 ! TODO: check if it is necessary to do this on trans?
-CHR: call-declares-effect @ { Trans ?r ?u call } { Stack ?r L{ ?w . ?a } } { Stack ?u ?b } // -- |
-{ Effect ?w f ?a ?b f } ;
+! CHR: call-declares-effect @ { Trans ?r ?u call } { Stack ?r L{ ?w . ?a } } { Stack ?u ?b } // -- |
+! { Effect ?w f ?a ?b f } ;
+! If a new Call is there, it will declare an effect.  This in turn will trigger re-inference.
+! Does not apply to recursive calls.
 
-CHR: do-call @ // { Eval call L{ ?q . ?a } ?b } -- | { Call ?q ?a ?b } { Use ?q } ;
+! CHR: recursive-call @ { Call ?x ?a ?b } // -- [ ?x ?a vars in? ] | { RecursiveCall ?x ?a ?b } ;
+CHR: duplicate-call @ { Call ?q ?a ?b } // { Call ?q ?a ?b } -- | ;
 
-CHR: dip-declares-effect @ { Eval dip L{ ?q ?x . ?a } L{ ?y . ?b } } // -- |
-[ ?x ?y ==! ]
-{ Effect ?q f ?a ?b f } ;
+! CHR: call-declares-effect @ { Call ?q ?a ?b } // -- | { Effect ?q f ?a ?b f } ;
+
+! CHR: perform-call-effect @ { Effect ?q ?c ?x ?y ?l } // { Call ?q ?a ?b } -- |
+! Assuming multiple possible effects here
+! Re-inference semantics
+CHR: apply-call-effect @ { Call ?q ?a ?b } // { Effect ?q ?c ?x ?y ?l } -- |
+! { EffectCall ?q ?c ?x ?l ?a ?b } ;
+! [ { ?x ?y } { ?a ?b } ==!  ]
+! [ ?l ]
+[ ?l { ?x ?y } { ?a ?b } unify lift ] ;
+! { InferEffect ?q ?c ?a ?b f } ;
+
+CHR: re-infer-call-effect @ // { Call ?q ?a ?b } -- |
+{ InferEffect ?q f ?a ?b f }
+! Cond{ { f f }
+!       { f { P{ InferEffect ?q f ?a ?b f } } } }
+ ;
+
+
+CHR: do-call @ // { Eval call L{ ?q . ?a } ?b } -- | { Call ?q ?a ?b } ;
 
 CHR: math-uses-numbers @ { Eval ?w L{ ?x ?y . __ } __ } // -- [ ?w math-generic? ] |
-! { Require ?x number }
-! { Require ?y number }
-{ sub ?x number }
-{ sub ?y number }
-{ Use ?x }
-{ Use ?y } ;
+{ Instance ?x number }
+{ Instance ?y number } ;
 
-CHR: plus-is-sum @ // { Eval + L{ ?x ?y . __ } L{ ?z . __ } } -- |
-! { Provide ?z number }
-{ sub ?z number }
+CHR: plus-is-sum @ { Eval + L{ ?x ?y . __ } L{ ?z . __ } } // -- |
+{ Instance ?z number }
 { Sum ?x ?y ?z } ;
 
-! CHR: curry-effect @ { Eval curry L{ ?q ?x . ?a } __ } // -- |
-! CHR: curry-effect @ { Eval curry L{ ?p ?x . __ } L{ ?q . __ } } { Effect ?p ?c ?rho ?sig ?k } // -- |
-! [ L{ ?y . ?a } ?rho ==! ]
-! [| | P{ is ?y ?x }
-! { Effect ?q ?c ?a ?sig ?k } ] ;
+! *** Currying
+! Two approaches:
+! 1. Declare the incoming effect to actually have a parameter.
+! Problem: curry would then modify existing effects, which is a problem when
+! they are dup'ed, because that is actually not cloning.  We could treat it like
+! cloning, but that might mess up existing free-var semantics.
+! 2. Make the curried effect a function of the incoming one
+! It still declares an effect of the incoming quot, though.
+
+CHR: do-unit @ // { Eval 1quotation L{ ?x . __ } L{ ?q . __ } } -- |
+{ Effect ?q f ?a L{ ?x . ?a } f } ;
+! { InferEffect ?q { ?x } ?a L{ ?x . ?a } f } ;
+! { InferEffect ?q f ?a L{ ?x . ?a } f } ;
+
+CHR: do-compose @ // { Eval compose L{ ?q ?p . __ } L{ ?k . __ } } -- |
+! { Effect ?q f ?a ?b f }
+! { InferEffect ?k f ?a ?c f }
+{ Call ?p ?a ?b }
+{ Call ?q ?b ?c }
+! ! { Effect ?p f ?a ?b f }
+! ! { Effect ?q f ?b ?c f }
+! !  { Effect ?k f ?a ?c f }
+{ InferEffect ?k f ?a ?c f } ;
+! { InferDone ?k }
+!     ;
 
 ! Basic data flow
 
@@ -371,61 +211,49 @@ CHR: plus-is-sum @ // { Eval + L{ ?x ?y . __ } L{ ?z . __ } } -- |
     [ in>> ] [ out>> ] bi
     [| elt index out | index elt out indices ?rest 2array ] curry map-index ;
 
-CHR: do-shuffle @ // { Eval ?w ?a ?b } -- [ ?w "shuffle" word-prop :>> ?e ] |
-[| |
- ?a list>array* <reversed> :> in
- in ?e shuffle :> out
- f
- ?e effect-dups [| i inds |
-                 i in nth :> in-var
-                 inds [
-                     [| oi |
-                      in-var name>> utermvar :> dupvar
-                      dupvar oi out set-nth
-                      in-var dupvar Dup boa suffix
-                     ] each
-                 ] [ in-var Use boa suffix ] if*
-                ] assoc-each
- out <reversed> >list __ list* :> b-pat
- [ ?b b-pat ==! ] suffix
+:: effect>drops ( in effect -- res )
+    effect [ in>> elt-vars ] [ dupd shuffle ] bi :> ( in-vars out-vars )
+    V{ } clone
+    in-vars [ dup out-vars in? [ drop __ ] [ dup Drop boa pick push ] if ] map
+    over empty? [ 2drop f ]
+    [ >list __ list* in [ ==! ] 2curry prefix ] if
+    ;
+
+CHR: shuffle-drops @ { Eval ?w ?a ?b } // -- [ ?w "shuffle" word-prop :>> ?e ] |
+[ ?a ?e effect>drops ] ;
+
+! TBR?
+CHR: do-shuffle-direct @ // { Eval ?w ?a ?b } -- [ ?w "shuffle" word-prop :>> ?e ] |
+[
+ ?e in>> elt-vars dup ?e shuffle [ <reversed> >list __ list* ] bi@ 2array { ?a ?b } ==!
 ] ;
 
-CHR: self-dup @ // { Dup ?x ?x } -- | ;
-! Be eager in duplicating quot-representing values, because their effect defs
-! are instantiated with fresh vars if called.  Actually extend this to all non-vars!
-CHR: unique-def @ { Definition ?p ?q } // { Definition ?p ?q } -- | ;
-CHR: dup-definition-1 @ { Dup ?p ?q } { Definition ?p ?v } // -- | { Definition ?q ?v } ;
-CHR: dup-definition-2 @ { Dup ?q ?p } { Definition ?p ?v } // -- | { Definition ?q ?v } ;
-CHR: dup-effect-1 @ { Dup ?p ?q } { Effect ?p ?c ?a ?b ?l } // -- | { Effect ?q ?c ?a ?b ?l } ;
-CHR: dup-effect-2 @ { Dup ?q ?p } { Effect ?p ?c ?a ?b ?l } // -- | { Effect ?q ?c ?a ?b ?l } ;
-CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
-CHR: dup-instance-1 @ { Dup ?x ?y } { Instance ?x ?tau } // -- | { Instance ?y ?tau } ;
-CHR: dup-instance-2 @ { Dup ?y ?x } { Instance ?x ?tau } // -- | { Instance ?y ?tau } ;
-
-! Uses cancel dups
-CHR: dead-dup-1 @ // { Dup ?x ?y } { Use ?y } -- | [ ?x ?y ==! ] ;
-CHR: dead-dup-2 @ // { Dup ?x ?y } { Use ?x } -- | [ ?x ?y ==! ] ;
-
-! Lift the choice into the value!  Is that a boolean type constructor???
-! NOTE: not doing that on the stack to simplify value handling
-CHR: do-mux @ // { Eval ? L{ ?q ?p ?c . __ } L{ ?v . __ } } -- |
-! [ ?v P{ C ?c ?p ?q } ==! ] ;
-{ Mux ?c ?v ?p ?q }
-{ Use ?c } ;
+CHR: do-mux-infer-dispatch @ // { Eval ? L{ ?q ?p ?c . __ } L{ ?v . __ } } -- [ J counter :>> ?n neg :>> ?m ] |
+Cond{
+    ! { True{ ?c } { [ ?c not{ POSTPONE: f } ==! ] [ ?v ?p ==! ] } }
+    ! { False{ ?c } { [ ?c \ f ==! ] [ ?v ?q ==! ] } }
+    { False{ ?c } { False{ ?c } [ ?q ?v ==! ] P{ Drop ?p } P{ Instance ?c POSTPONE: f } } }
+    { True{ ?c } { True{ ?c } [ ?p ?v ==! ] P{ Drop ?q } P{ Instance ?c not{ POSTPONE: f } } } }
+}
+! { Use ?c }
+    ;
 
 ! Predicate words
 CHR: add-predicate-rules @ { Eval ?w L{ ?v . __ } L{ ?c . __ } } // --
 [ ?w "predicating" word-prop :>> ?tau ] |
-! { C ?c P{ Require ?v ?tau } }
-{ C ?c P{ sub ?v ?tau } }
-{ C Not{ ?c } Not{ P{ sub ?v ?tau } } }
-{ is ?c boolean }
-{ Use ?v }
+[| |
+ ?tau :> then-class
+ ?tau class-not :> else-class
+    Cond{ { False{ ?c } { False{ ?c } P{ Instance ?v else-class } } }
+          { True{ ?c } { True{ ?c } P{ Instance ?v then-class } } }
+        }
+]
+! { Use ?v }
     ;
 
 ! Declarations
 ! NOTE: Only doing provide here, which is in effect a down-cast
-CHR: do-declare @ { Definition ?x A{ ?tau } } // { Eval declare L{ ?x . ?a } ?b } -- |
+CHR: do-declare @ { Literal ?x A{ ?tau } } // { Eval declare L{ ?x . ?a } ?b } -- |
 [| |
  ?tau length [ "v" utermvar ] replicate :> vars
  vars >list ?rho list* :> var-stack
@@ -434,34 +262,31 @@ CHR: do-declare @ { Definition ?x A{ ?tau } } // { Eval declare L{ ?x . ?a } ?b 
  vars ?tau [ sub boa ] 2map append
 ] { Use ?x } ;
 
-! ** Subordinate inference
-CHR: build-quot-body @ // { BuildQuot ?s ?t ?q } -- |
-[ ?q empty? [ { Stack ?s ?rho  } { Stack ?t ?rho } 2array ]
-  [ { Transeq ?s ?t ?q } ] if
-] ;
-! { Transeq +top+ +end+ ?q } ;
 
-! For call rules
-CHR: build-named-call-def @ // { BuildNamedCall ?n A{ ?p } } -- [ ?p :>> ?q ] |
-{ BuildQuot ?s ?t ?q }
-{ Stack ?s ?a }
-{ Stack ?t ?b }
-! { DefCallRule ?n ?s ?t f }
-{ Effect ?n f ?a ?b f }
-! { Mark ?n ?s }
-! ! { Mark ?n ?t }
-! { Marked ?n f }
+! Convert anything that is left into an expression if possible
+CHR: make-expression @ // { Eval ?w ?i ?o } -- [ ?w inline? not ] [ ?w stack-effect out>> length 1 = ] |
+[| | ?w stack-effect in>> length :> arity
+ ?i list>array* arity head :> args
+ ?o car :> out-var
+ args ?w prefix :> term
+ P{ Expr out-var term }
+] ;
+
+! ** Subordinate inference
+! Entry point for anonymous quotations
+CHR: build-named-call-effect @ // { BuildEffectType ?n A{ ?p } } -- [ ?p :>> ?q ] |
+{ Stack top ?a }
+{ Stack end ?b }
+{ BuildNamedQuot top end ?q ?n }
+{ InferEffect ?n f ?a ?b f }
+! { InferDone Q }
     ;
 
+
+! For in-domain simulation
+! CHR: call-uncall @ // { ReInferEffect ?q ?c ?a ?b ?k }
+
 ! Collect predicates
-CHR: mark-once @ { Mark ?k ?x } // { Mark ?k ?x } -- | ;
-CHR: mark-trans @ { Mark ?k ?s } { Trans ?s ?t __ } // -- | { Mark ?k ?t } ;
-CHR: mark-stack @ { Mark ?k ?s } { Stack ?s ?x } // -- | [ ?x vars [ ?k swap Mark boa ] map ] ;
-CHR: collect-nested-effect @ { Mark ?k ?q } // { Effect ?q ?c ?a ?b ?l } { DefCallRule ?k ?s ?t ?x } -- [ ?x P{ Effect ?q ?c ?a ?b ?l } suffix :>> ?y ] |
-{ DefCallRule ?k ?s ?t ?y } ;
-
-CHR: collect-marks @ // { Marked ?k ?a } { Mark ?k ?x } -- [ ?a ?x suffix :>> ?b drop t ] | { Marked ?k ?b } ;
-
 DEFER: make-simp-rule
 
 : group-conditionals ( body -- body )
@@ -470,55 +295,20 @@ DEFER: make-simp-rule
     [ [ then>> ] map >array C boa suffix ] assoc-each
     ;
 
-! TODO Don't call for callable values?
-! Create rule for quotations
-! CHR: build-call-rule @ // { DefCallRule ?n ?s ?t ?x } { Marked ?n ?l } { Stack ?s ?a } { Stack ?t ?b } -- |
-CHR: finish-build-effect @ // { Marked ?n ?l } -- |
-[| | store get values rest
- [ dup . constraint>> free-vars ?l subset? ] filter
- ! [ constraint>> Kill boa ] map ] ;
- ! [ dup id>> kill-chr constraint>> Kill boa ] map ] ;
- [ id>> kill-chr ] each f ] ;
-!  :> body-chrs
-!  body-chrs [ id>> kill-chr ] each
-!  body-chrs [ constraint>> ] map
-!  ?x append
-!  [ Trans? ] reject
-!  ! NOTE: this one here may be worth keeping if it is needed for call graph analysis?
-!  ! Although, the Effect predicate pretty much expresses the same stuff...
-!  [ Eval? ] reject
-!  [ Stack? ] reject
-!  [ Used? ] reject
-!  ! TODO: possibly leave them in there for inline words?  Really they are constant value definitions though...
-!  [ Definition? ] reject
-!  [ Call? ] reject
-!  ! XXX: is this true? In a sense it should be, it just has to be made sure that the effect includes those!
-!  [ C? ] reject
-!  ! [ { [ Stack? ] [ s1>> { [ ?s == ] [ ?t == ] } 1|| not ] } 1&& ] reject
-!  group-conditionals
-!  :> word-constraints
-!  P{ Effect ?n f ?a ?b word-constraints }
-! ] ;
-
 ! Cleanup used vals
 
-CHR: used-definition-is-lit @ { Definition ?x A{ ?v } } // { Use ?x } -- |
-[ ?v callable? not [ ?x ?v ==! ] [ f ] if ]
-{ Used ?x }
-    ;
+! CHR: used-definition-is-lit @ { Literal ?x A{ ?v } } // { Use ?x } -- |
+! [ ?v callable? not [ ?x ?v ==! ] [ f ] if ]
+! { Used ?x } ;
 
+CHR: finish-infer-effect-simple @ // { InferEffect ?n ?c ?a ?b ?k } -- |
+{ Effect ?n ?c ?a ?b ?k } ;
 ;
 
 ! * External
 
-: build-quot ( thunk -- chrs )
-    quots swap [ +top+ +end+ ] dip BuildQuot boa 1array run-chr-query values rest ;
-
-: build-word ( word -- chrs )
-    def>> build-quot ;
-
 : build-quot-rule ( thunk name -- chrs )
-    swap BuildNamedCall boa 1array quots swap run-chr-query values rest ;
+    swap BuildEffectType boa 1array quots swap run-chr-query store>> ;
 
 :: make-simp-rule ( heads body word -- rule )
     word name>> :> wname
@@ -529,4 +319,4 @@ GENERIC: build-type ( word -- chrs )
 M: callable build-type
     "anon" utermvar build-quot-rule ;
 M: word build-type
-    [ def>> ] keep swap BuildNamedCall boa 1array quots swap run-chr-query values rest ;
+    [ def>> ] keep swap BuildEffectType boa 1array quots swap run-chr-query store>> ;

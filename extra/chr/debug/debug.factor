@@ -74,6 +74,7 @@ IN: chr.debug
     M\ chr-or activate-new [ [ "SPLIT" print ] prepose ] annotate
     M\ chr-branch activate-new [ [ "BRANCH" print ] prepose [ "RETURN" print ] compose ] annotate
     \ run-queue [ [ "Flushing queue" print ] prepose ] annotate
+    \ merge-solver-config [ [ 2dup swap "Merging store with key: %u\n" printf store>> [ constraint>> ] map-values . ] prepend ] annotate
     ;
 
 :: break-rule-match ( occ -- )

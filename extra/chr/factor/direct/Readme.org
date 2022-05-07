@@ -53,11 +53,146 @@
 
 
       From the conditional structure, could we "force" unions to be indexed?
-
-
+* Constraint Handling Rules
+  - used to express properties about types
+  - Most basic: Effect types
+    - Declare the input/output parms of a function
+    - optionally tagged with a conditional case for keeping track of type
+      disjunctions
+    - "Body" containing constraints about the parameter
+    - effectively a ∀i,o:... construct
+    - The original approach is (ref chr-type-paper) to translate the program
+      into rules for each occurrence.  Important: These are simplification rules
+      at the call sites
+      - This implementation originally also did that by computing the
+        simplification rules on the fly, but switched to simulating the
+        simplification instantiation
+      - One reason: bi-directionality.  We want to be able to add information
+        about an instantiation rule after a function is encountered (Most
+        important example: currying).
+      - Other problem: overloading behavior. (See also [stuckey2005], but for
+        static typing).  We effectively infer different effect types (which
+        correspond to different rules) for different possibilities of
+        execution.  For static typing, the correct one is chosen based on the
+        shape of the argument term.  However, this only works for syntactic
+        typing, where the argument type is completely determined by the
+        structure of the term.  For semantic subtyping, whether a rule would
+        succeed can only be seen by testing the instantiation, hence the need
+        for CHR⋁ semantics.
+      - In other words, it can be the case that while during runtime, only one
+        version will be executed, during compile time, we must deal with the
+        fact that we don't know which one.  Thus, we consider all applicable
+        ones.  Note that this property is "contagious", and leads to exponential
+        blow-up when done naively.  Early termination, depth-limiting, and
+        condition reasoning are expected to handle this.
+** Disjunctions
+   - Although overloaded functions are interpreted as intersection types, actual
+     inference must be done on case analysis
+   - This is achieved by implementing CHR⋁, but creating tagged conjunctions for
+     result types which are then merged "upwards" into the non-case-specific
+     resulting effect
+     - This could be what [gabrielli2009a] decribes as "Qualified Answers"
+** Calls
+   - Anonymous Functions (Quotations) are represented by inferred Effect types
+   - Higher order functions occur in two ways, a "producer" way, and a
+     "consumer" way
+     - "producer" Whenever a quotation is pushed, it is inferred from the content
+     - "consumer" Whenever a call is encountered, the called thing must be an
+       effect compatible with the current stack
+   - This results in a kind of "synchronisation" semantics: When calling a
+     quotation, their effect vars are unified with the current stack to match
+     the input, and the effect is re-inferred to take in information about the
+     current environment.
+* Type System
+  - semantic (sub-)typing needed, since dynamic model
+  - Intersection of Refinement types for functions
+  - no recursive data type definitions
+    - Allows for detection of recursive calls, because if a recursive type has
+      been instantiated, it could only have been by circular call inference, not
+      by instantiating a recursive template
+      - Note: This mirrors the intuition that inductive type definitions are
+        (especially) problematic, since they hide the actual computation
+        required to build/access them (which are always finite in practice).
 
 * Compilation/Types
   - The basic mechanism is stateful inference, e.g. some kind of virtual
     execution/partial evaluation.
   - For Type predicates, all state-dependent information is dropped
   - For Compilation output, state-dependent stuff might still be important
+** Effect Inference steps
+   Input: Infer quot between stack a and b
+
+   1. Call the Transition solver
+      1. Step through quotation, returning a series of Eval Predicates
+      2. Mark/Sweep the remaining Stack definitions
+   2. Perform constraint completion
+      1. Run through all Eval predicates, and fill the store with value constraints
+      2. In parallel, all kinds of subordinate solvers will be active to
+         simplify/complete
+   3. Start the Effect solver
+      1. Put an infer-effect request between stacks a and b
+      2. Collect all predicates that are described by the bound variables,
+         returning an Effect pred.
+      3. Clean up any remaining predicates that are covered by the scope of the
+         Effect between a and b.
+
+*** Calls
+    If a call is encountered, if the callee is literal, call the transition
+    solver in-place.  The quot can be dropped and it's value is uninteresting
+    (This is actually a special case of a foldable call in general).
+
+    If the callee is non-literal, then we are actually /defining/ instead of
+    consuming the effect.  The goal is then to infer an Effect predicate that
+    will effectively be the constraint-level Simplification constraint for any
+    subsequent calls, or the info on the return value, if applicable.
+    There may be existing Effect definitions for this, which
+    have to be applied.
+
+    The order of steps is as follows:
+    1. Perform all Effect instantiation rules on the stack pair at the call
+       site.  After that, no Effect Predicates should be left.  This can split
+       the state if the effect is polymorphic.
+    2. Place an inference marker, which pulls in copies of all applicable predicates
+
+*** Conditionals
+    Branching is performed using the Split semantics of CHR-OR.  This means as
+    soon as a conditional is encountered, the whole solver configuration is
+    split.
+    This is true for encountering the ~?~ word (or the ~if~ by extension), which
+    branches the whole solver state.
+
+    This is handled by the special ~Cond{ { Key1 Body1 } {Key2 Body2 } ... }~ Predicate, which effectively has
+    access to the current continuation of the solver.  It will finish the
+    solving for each case, and return any remaining predicates wrapped in a
+    ~C{ Key Pred }~ construct.  The continuation of the parent execution is
+    dropped.
+
+    After the branches are finished, the wrapped constraints are stored in
+    context with the corresponding key.   After the main solver routine is
+    finished, it will put all those back into the store at the same time.  Thus,
+    all "leaves" appear in the same "horizontal" context at once.  The
+    alternative would be to perform intermediate joins.  However, the goal is to
+    infer a "flat" set of types for each condition, Allowing to create an
+    intersection type indexed by the corresponding choices.
+
+
+**** Duplication of continutations
+   On a split transaction, the complete solver queue is copied over.  This
+   means, that any actions that should be performed in parent context are
+   duplicated in each branch context.  When the corresponding joins happen,
+   these will be duplicates.  Thus, care must be taken that these predicates
+   have regular set semantics, as opposed to multi-set semantics to prevent
+   repeated re-execution of rule matches.
+
+** Intersection Arrow Types
+   The split-store semantics causes all combinations of conditions to be
+   returned at the end, where all conditional rules can be applied in parallel
+   to infer the corresponding effects.  The resulting set is the polymorphic
+   type.
+
+** Subordinate solvers (TODO)
+   - Subtype relation
+   - Interval arithmetics
+   - Linear (in-)equatuions for inferring loop bounds.
+     - fourier-motzkin
+     - possible ref: https://ths.rwth-aachen.de/wp-content/uploads/sites/4/kobialka_master.pdf

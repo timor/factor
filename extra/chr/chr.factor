@@ -48,13 +48,24 @@ C: <builtin-cons> builtin-cons
 MIXIN: constraint
 SINGLETON: true
 SINGLETON: false
+M: false constraint-type ;
+M: true constraint-type ;
 INSTANCE: true constraint
 INSTANCE: false constraint
 
 TUPLE: chr-pred ;
 INSTANCE: chr-pred constraint
 
+! True split, run to completion, return multiple stores
 TUPLE: chr-or < chr-pred constraints ;
+! The cases are run, the resulting store constraints are added to the main store
+TUPLE: chr-branch < chr-pred cases ;
+! Simpler version of chr-branch.  Will run body in forked context, and return all chrs with prefix
+TUPLE: chr-scope < chr-pred cond body ;
+! Unconditional conjunction.  Intended to be used to have control over what happens on direct queue access
+! TUPLE: And < chr-pred constraints ;
+TUPLE: C < chr-pred cond then ;
+
 
 ! Match-spec telling that the current class must be preceded!
 ! TUPLE: bind-class { var } { args read-only } ;
@@ -80,7 +91,7 @@ M: constraint pred>constraint ;
 ! Simplest representation
 PREDICATE: pred-head-word < word chr-pred class<= ;
 PREDICATE: pred-array < array ?first pred-head-word? ;
-PREDICATE: fiat-pred-array < array ?first { [ word? ] [ pred-head-word? not ] } 1&& ;
+PREDICATE: fiat-pred-array < array ?first { [ word? ] [ pred-head-word? not ] [ constraint? not ] } 1&& ;
 
 ! Things that are considered non-builtin constraints
 UNION: chr-constraint fiat-pred-array chr-pred chr-sub-pred as-pred ;
@@ -138,6 +149,7 @@ GENERIC: constraint-fixed? ( constraint -- ? )
 M: constraint constraint-fixed? constraint-args atoms empty? ;
 
 GENERIC: apply-substitution* ( subst constraint -- constraint )
+M: false apply-substitution* nip ;
 M: true apply-substitution* nip ;
 M: chr-pred apply-substitution*
     [ tuple-slots swap lift ]
