@@ -38,6 +38,12 @@ TUPLE: Dup < val-pred copy ;
 TUPLE: Drop < chr-pred val ;
 TUPLE: Use < val-pred ;
 
+TUPLE: Lt < val-pred x ;
+TUPLE: Le < val-pred x ;
+TUPLE: Gt < val-pred x ;
+TUPLE: Ge < val-pred x ;
+TUPLE: Eq < val-pred x ;
+
 ! Types with constructors.
 ! Those can appear in effects as syntactic matches
 TUPLE: Tuple < type-pred ;
@@ -90,13 +96,17 @@ IMPORT: chr-types
 IMPORT: chr-quot
 IMPORT: chr-effects
 
+! Redundancies
+CHR: unique-val-preds @ AS: ?p <={ val-pred ?x . ?xs } // AS: ?q <={ val-pred ?x . ?xs } --
+[ ?p ?q [ class-of ] same? ] | ;
+
 ! Early drops
+CHR: drop-lit-type-preds @ { Drop ?x } { Literal ?x __ } // AS: ?p <={ type-pred } -- [ ?x ?p vars in? ] | ;
 CHR: drop-def @ { Drop ?q } // { Literal ?q __ } -- | ;
 
-CHR: unique-use @ { Use ?x } // { Use ?x } -- | ;
+! CHR: unique-use @ { Use ?x } // { Use ?x } -- | ;
 
 ! Cleanup
-CHR: drop-type-preds @ { Drop ?x } // AS: ?p <={ type-pred } -- [ ?x ?p vars in? ] | ;
 
 ! CHR: drop-implies-use @ // { Drop ?x } -- | { Use ?x } ;
 CHR: used-use-literal @ // { Use A{ ?x } } -- | ;
@@ -162,6 +172,10 @@ CHR: apply-call-effect @ { Call ?q ?a ?b } // { Effect ?q ?c ?x ?y ?l } -- |
 [ ?l { ?x ?y } { ?a ?b } unify lift ] ;
 ! { InferEffect ?q ?c ?a ?b f } ;
 
+! NOTE: already inferred eagerly in quotation solver, so we have an effect which
+! has been applied above
+CHR: lit-call-effect @ // { Literal ?q __  } { Call ?q ?a ?b } -- | { Drop ?q } ;
+
 CHR: re-infer-call-effect @ // { Call ?q ?a ?b } -- |
 { Effect ?q f ?a ?b f }
 ! Cond{ { f f }
@@ -178,6 +192,19 @@ CHR: math-uses-numbers @ { Eval ?w L{ ?x ?y . __ } __ } // -- [ ?w math-generic?
 CHR: plus-is-sum @ { Eval + L{ ?x ?y . __ } L{ ?z . __ } } // -- |
 { Instance ?z number }
 { Sum ?x ?y ?z } ;
+
+CHR: le-defines-le @ { Eval < L{ ?x ?y . __  } L{ ?c . __ } } // -- |
+Cond{
+    { False{ ?c } { False{ ?c } P{ Le ?x ?y } } }
+    { True{ ?c } { True{ ?c } P{ Lt ?x ?y } } }
+} ;
+
+CHR: ge-defines-ge @ { Eval > L{ ?x ?y . __  } L{ ?c . __ } } // -- |
+Cond{
+    { False{ ?c } { False{ ?c } P{ Lt ?y ?x } } }
+    { True{ ?c } { True{ ?c } P{ Le ?y ?x } } }
+} ;
+
 
 ! *** Currying
 ! Two approaches:
@@ -260,7 +287,9 @@ CHR: do-declare @ { Literal ?x A{ ?tau } } // { Eval declare L{ ?x . ?a } ?b } -
  [ ?b var-stack ==! ]
  [ ?a var-stack ==! ] 2array
  vars ?tau [ sub boa ] 2map append
-] { Use ?x } ;
+]
+! { Use ?x }
+    ;
 
 
 ! Convert anything that is left into an expression if possible

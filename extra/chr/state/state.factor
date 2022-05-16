@@ -110,7 +110,8 @@ TYPED: create-chr ( from-rule c: constraint -- id )
     ]
     [ vars members >>vars ] bi
     t >>alive
-    current-index [ 0 or 1 + dup ] change [ >>id ] keep
+    ! current-index [ 0 or 1 + dup ] change-global [ >>id ] keep
+    current-index counter [ >>id ] keep
     [ store-chr ] dip ;
 
 : alive? ( id -- ? )
@@ -430,7 +431,7 @@ M: builtin-suspension apply-substitution* nip ;
     load-chr dup program set
     local-vars>> valid-match-vars set
     check-vars? on
-    0 current-index set
+    0 current-index set-global
     H{ } clone var-names set
     ;
 
@@ -443,7 +444,7 @@ M: builtin-suspension apply-substitution* nip ;
     ! <builtins-suspension> builtins store get set-at
     update-local-vars
     check-vars? on
-    0 current-index set
+    0 current-index set-global
     H{ } clone var-names set
     ;
 
@@ -583,6 +584,7 @@ M:: chr-or activate-new ( rule c -- )
 M: chr-branch activate-new ( rule c -- )
     cases>> unzip swap
     [ run-cases ] dip
+    ! Clear continuation from main branch
     <solver-state> set-solver-state queue off
     swap [ save-split-state ] 2each ;
     ! ;

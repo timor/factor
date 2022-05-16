@@ -52,20 +52,20 @@ CHR: subsuming-effect @ { Effect ?w ?c ?a ?b ?l } // { Effect ?w ?d ?x ?y ?k } -
 
 ! ** Contract Effects
 
-! CHR: collect-effect-regular-pred @ // AS: ?e <={ InferEffect __ __ __ __ ?l } AS: ?k <={ type-pred } --
-! CHR: collect-effect-regular-pred @ AS: ?k <={ type-pred } // AS: ?e <={ InferEffect __ __ __ __ ?l } --
-CHR: collect-effect-regular-pred @ AS: ?k <={ type-pred } // AS: ?e <={ Effect __ __ __ __ ?l } --
+! CHR: collect-effect-regular-pred @ AS: ?k <={ type-pred } // AS: ?e <={ Effect __ __ __ __ ?l } --
+CHR: collect-effect-regular-pred @ // AS: ?k <={ type-pred } AS: ?e <={ Effect __ __ __ __ ?l } --
 [ ?k ?l in? not ] [ ?e bound-vars :>> ?v ]
 [ ?k free-vars ?v subset? ] |
 [ ?e [ ?k suffix ] change-constraints ] ;
 
-! CHR: collect-nested-effect @ AS: ?e <={ InferEffect ?q ?m __ __ ?l } // AS: ?k P{ Effect ?w ?n __ __ __ } --
-! Collect nested effects under the same condition
-! CHR: collect-nested-effect @ AS: ?k P{ Effect ?w ?n __ __ __ } // AS: ?e <={ InferEffect ?q ?n __ __ ?l } --
+! ! CHR: collect-nested-effect @ AS: ?e <={ InferEffect ?q ?m __ __ ?l } // AS: ?k P{ Effect ?w ?n __ __ __ } --
+! ! Collect nested effects under the same condition
+! ! CHR: collect-nested-effect @ AS: ?k P{ Effect ?w ?n __ __ __ } // AS: ?e <={ InferEffect ?q ?n __ __ ?l } --
+! CHR: collect-nested-effect @ // AS: ?k P{ Effect ?w ?n __ __ __ } AS: ?e <={ Effect ?q ?n __ __ ?l } --
 ! [ ?w ?q == not ]
 ! [ ?k ?l in? not ] [ ?e vars :>> ?v ] [ ?w ?v in? ] |
 ! [ ?e [ ?k suffix ] change-constraints ] ;
-! [ ?k ?e constraints>> push f ] ;
+! ! [ ?k ?e constraints>> push f ] ;
 
 
 ! CHR: finish-infer-effect-on-demand @ // { InferDone ?n } { InferEffect ?n ?c ?a ?b ?k } --

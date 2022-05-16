@@ -53,6 +53,24 @@
 
 
       From the conditional structure, could we "force" unions to be indexed?
+*** Occurrence/Refinement Typing
+    Big difference to "regular" type-logic connections:
+    types, propositions and terms are distinct.  Propositions state claims about
+    runtime environment, relating types and variables.
+
+
+    - Approach from [tobin-hochstadt2010logical_types]: Propositional types
+    - For each type, a propositional expression containing the following
+      information is stated:
+      - Type: T, N, #t, #f, union(⋃)
+      - latent propositions:
+        - case 1: expression evaluates to boolean true
+        - case 2: expression evaluates to boolean false
+        - Propositions can be tt, ff, atomic: type_(x), implication,
+          conjunction, disjunction
+        - *object* This one is interesting.  It defines how to access the part
+          of the runtime environment which the proposition refers to.  Base
+          system: variable, empty object
 * Constraint Handling Rules
   - used to express properties about types
   - Most basic: Effect types

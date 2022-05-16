@@ -47,10 +47,13 @@ M: pair elt>var
     [ effect>stack-elts ]
     [ add-row-vars ] bi ;
 
-TUPLE: Transeq < chr-pred from to quot ;
+TUPLE: Transeq < chr-pred label from to quot ;
 TUPLE: Trans < chr-pred from to command ;
 <PRIVATE
+TUPLE: QueueTrans < chr-pred label from to command ;
 TUPLE: BuildQuot < chr-pred from to quot ;
+TUPLE: TransQueue < chr-pred label preds ;
+TUPLE: InferredQuot < chr-pred var quot in out ;
 PRIVATE>
 TUPLE: BuildNamedQuot < BuildQuot var ;
 TUPLE: Mark < chr-pred ctx val ;
@@ -66,14 +69,30 @@ PREDICATE: callable-word < word { [ symbol? not ] [ quot-sym? not ] } 1&& ;
 CHRAT: chr-quot { }
 
 CHR: stack-match @ { Stack ?s ?a } // { Stack ?s ?b } -- | [ ?a ?b ==! ] ;
-CHR: empty-quot @ // { Transeq ?s ?t [ ] } -- | [ ?s ?t ==! ] ;
-CHR: destructure-quot @ // { Transeq ?s ?t ?p } -- [ ?p first dup callable-word? [ <wrapper> ] unless :>> ?w ?p rest :>> ?q ?s seq-state :>> ?s0 3drop t ] |
-{ Transeq ?s0 ?t ?q }
-{ Trans ?s ?s0 ?w } ;
+CHR: empty-quot @ // { Transeq __ ?s ?t [ ] } -- | [ ?s ?t ==! ] ;
+
+! NOTE: This one determines the order of evaluation of the value predicates.
+! Since we want to finish the stack building first, the transition predicates
+! are added in reverse order.
+CHR: destructure-quot @ // { Transeq ?m ?s ?t ?p } -- [ ?p first dup callable-word? [ <wrapper> ] unless :>> ?w ?p rest :>> ?q ?s seq-state :>> ?s0 3drop t ] |
+{ Transeq ?m ?s0 ?t ?q }
+{ QueueTrans ?m ?s ?s0 ?w } ;
 
 ! ! Early replacement
-CHR: inline-if @ // { Trans ?s ?t if } -- | { Transeq ?s ?t [ ? call ] } ;
+CHR: inline-if @ // { QueueTrans ?m ?s ?t if } -- | { Transeq ?m ?s ?t [ ? call ] } ;
 
+TERM-VARS: Quot ;
+CHR: infer-literal-quot @ // { QueueTrans ?m ?s ?t A{ ?q } } -- [ ?q callable? ] |
+{ Stack ?a ?rho }
+{ Stack ?b ?sig }
+{ BuildNamedQuot ?a ?b ?q Quot }
+{ QueueTrans ?m ?s ?t P{ InferredQuot Quot ?q ?rho ?sig } } ;
+
+! Enqueueing
+CHR: queue-trans @ // { QueueTrans ?m ?s ?s0 ?w } { TransQueue ?m ?a }
+-- [ ?a P{ Trans ?s ?s0 ?w } prefix :>> ?b ] | { TransQueue ?m ?b } ;
+
+CHR: play-trans @ // { TransQueue ?m ?a } -- | [ ?a ] ;
 
 ! Effect-based destructuring
 CHR: effect-predicate @ { Trans ?s ?t A{ ?w } } // -- [ ?w callable-word? ]
@@ -95,10 +114,20 @@ CHR: effect-predicate @ { Trans ?s ?t A{ ?w } } // -- [ ?w callable-word? ]
 ! ! { Mark ?n ?s }
 ! ! { Mark ?n ?t }
 ! ! { Marked ?n f } ;
+
+! CHR: push-quot @ { Trans ?s ?t A{ ?q } } // -- [ ?q callable? ] |
+CHR: push-quot @ { Trans ?s ?t P{ InferredQuot ?n ?q ?a ?b } } // -- |
+{ Stack ?s ?xs }
+{ Stack ?t L{ ?n . ?xs } }
+{ Literal ?n ?q }
+{ Effect ?n f ?a ?b f }
+    ;
+
+
 ! ! ! { InferDone ?n } ;
-TERM-VARS: Quot ;
 
 CHR: push-literal @ { Trans ?s ?t A{ ?w } } // -- ! [ break ?v wrapper? ] [ ?v wrapped>> :>> ?w drop t ]
+[ ?w InferredQuot? not ]
 [ ?w callable-word? not ] [ ?w :>> ?v class-of :>> ?tau ] |
 { Stack ?s ?xs }
 { Literal ?x ?v }
@@ -106,16 +135,6 @@ CHR: push-literal @ { Trans ?s ?t A{ ?w } } // -- ! [ break ?v wrapper? ] [ ?v w
 { Stack ?t L{ ?x . ?xs } }
 ! { Instance ?x ?tau }
     ;
-
-CHR: push-quot @ { Trans ?s ?t A{ ?q } } // -- [ ?q callable? ] |
-{ Stack ?s ?xs }
-{ Stack ?t L{ Quot . ?xs } }
-{ Stack ?rho ?a }
-{ Stack ?sig ?b }
-{ BuildNamedQuot ?rho ?sig ?q Quot }
-{ Effect Quot f ?a ?b f }
-    ;
-
 
 CHR: build-empty-quot @ // { BuildQuot ?s ?t [ ] } -- |
 { Stack ?s ?rho } { Stack ?t ?rho } ;
@@ -127,21 +146,25 @@ CHR: build-named-quot @ // { BuildNamedQuot ?s ?t ?q ?n } -- |
 ! { Marked ?n f } ;
 
 CHR: build-quot-body @ // { BuildQuot ?s ?t ?q } -- |
-{ Transeq ?s ?t ?q }
+{ Transeq ?m ?s ?t ?q }
+{ TransQueue ?m f }
 { Mark ?m ?s }
 { Mark ?m ?t }
-{ Marked ?m f } ;
+! { Marked ?m f }
+    ;
 
 
 ! ** Cleanup
 CHR: mark-once @ { Mark ?k ?x } // { Mark ?k ?x } -- | ;
 CHR: mark-sweep-trans @ { Mark ?k ?s } // { Trans ?s ?t __ } -- | { Mark ?k ?t } ;
-CHR: mark-stack @ { Mark ?k ?s } // { Stack ?s ?x } -- | [ ?x vars [ ?k swap Mark boa ] map ] ;
+! CHR: mark-stack @ { Mark ?k ?s } // { Stack ?s ?x } -- | [ ?x vars [ ?k swap Mark boa ] map ] ;
+CHR: mark-stack @ // { Mark ?k ?s } { Stack ?s ?x } -- | ;
+CHR: end-mark @ // { Mark __ __ } -- | ;
 
 CHR: collect-marks @ // { Marked ?k ?a } { Mark ?k ?x } -- [ ?a ?x suffix :>> ?b drop t ] | { Marked ?k ?b } ;
 ! CHR: sweep-leftover-effects @ { Marked ?w ?a } // AS: ?p P{ Effect ?q __ __ __ __ } --
 ! [ ?q ?w == not ] [ ?q ?a in? ] | ;
 ! CHR: sweep-leftover @ { Marked __ ?a } // AS: ?p <={ type-pred } -- [ ?p free-vars ?a subset? ] | ;
-CHR: end-mark @ // { Marked __ __ } -- | ;
+CHR: end-marked @ // { Marked __ __ } -- | ;
 
     ;
