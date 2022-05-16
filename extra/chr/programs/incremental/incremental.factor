@@ -1,6 +1,6 @@
 USING: accessors arrays assocs chr chr.programs classes classes.algebra
-combinators.short-circuit kernel linked-assocs math quotations sequences sets
-stack-checker terms vectors ;
+classes.tuple classes.tuple.private combinators.short-circuit kernel
+linked-assocs math quotations sequences sets stack-checker terms vectors ;
 
 IN: chr.programs.incremental
 
@@ -41,7 +41,11 @@ GENERIC#: push-at-constraint-type 1 ( elt type index -- )
         ] 2keep set-at
     ] if ;
 
+PREDICATE: tuple-chr-sub-pred < chr-sub-pred class>> tuple-class? ;
 M: chr-sub-pred push-at-constraint-type push-at-applicable ;
+M: tuple-chr-sub-pred push-at-constraint-type
+    3dup push-at
+    [ class>> subclasses ] dip [ push-at-constraint-type ] curry with each ;
 M: object push-at-constraint-type push-at ;
 M: classoid push-at-constraint-type
     2dup maybe-match-sub-preds

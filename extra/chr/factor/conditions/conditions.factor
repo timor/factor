@@ -78,12 +78,18 @@ CHR: simplify-and-value2 @ // { And A{ f } ?y ?z } -- | [ ?y ?z ==! ] ;
 CHR: duplicate-constraints @ { C ?c ?x } // { C ?c ?x } -- | ;
 CHR: pull-tautology @ // { C A{ f } ?k } -- | [ ?k ] ;
 CHR: useless-true @ // { True A{ f } } -- | ;
-CHR: redundant-defs @ // { C True{ ?c } ?p } { C False{ ?c } ?p } -- | [ ?p ] ;
 ! TODO: switch to set semantics!
+CHR: contradicting-assumption-1 @ // { C True{ ?c } False{ ?c } } -- | ;
+CHR: contradicting-assumption-2 @ // { C False{ ?c } True{ ?c } } -- | ;
 CHR: contradicting-defs @ // { C True{ ?c } P{ C False{ ?c } __ } } -- | ;
 CHR: contradicting-defs-2 @ // { C False{ ?c } P{ C True{ ?c } __ } } -- | ;
-CHR: implied-defs @ // { C True{ ?c } P{ C True{ ?c } ?p } } -- | [ ?p ] ;
-CHR: implied-defs-2 @ // { C False{ ?c } P{ C False{ ?c } ?p } } -- | [ ?p ] ;
+CHR: implied-assumption-1 @ // { C True{ ?c } True{ ?c } } -- | ;
+CHR: implied-assumption-2 @ // { C False{ ?c } False{ ?c } } -- | ;
+CHR: implied-conds @ // { C True{ ?c } P{ C True{ ?c } ?p } } -- | { C True{ ?c } ?p } ;
+CHR: implied-conds-2 @ // { C False{ ?c } P{ C False{ ?c } ?p } } -- | { C False{ ?c } ?p } ;
+
+! NOTE: the following must not expand things like { C True{ ?c } { C ... } } { C False{ ?c } { C ... } }
+CHR: redundant-defs @ // { C True{ ?c } ?p } { C False{ ?c } ?p } -- | [ ?p ] ;
 
 
 CHR: expand-conjunction @ // { C ?p ?b } -- [ ?b sequence? ] |

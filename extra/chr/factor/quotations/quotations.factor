@@ -68,8 +68,8 @@ CHRAT: chr-quot { }
 CHR: stack-match @ { Stack ?s ?a } // { Stack ?s ?b } -- | [ ?a ?b ==! ] ;
 CHR: empty-quot @ // { Transeq ?s ?t [ ] } -- | [ ?s ?t ==! ] ;
 CHR: destructure-quot @ // { Transeq ?s ?t ?p } -- [ ?p first dup callable-word? [ <wrapper> ] unless :>> ?w ?p rest :>> ?q ?s seq-state :>> ?s0 3drop t ] |
-{ Trans ?s ?s0 ?w }
-{ Transeq ?s0 ?t ?q } ;
+{ Transeq ?s0 ?t ?q }
+{ Trans ?s ?s0 ?w } ;
 
 ! ! Early replacement
 CHR: inline-if @ // { Trans ?s ?t if } -- | { Transeq ?s ?t [ ? call ] } ;
@@ -121,13 +121,16 @@ CHR: build-empty-quot @ // { BuildQuot ?s ?t [ ] } -- |
 { Stack ?s ?rho } { Stack ?t ?rho } ;
 
 CHR: build-named-quot @ // { BuildNamedQuot ?s ?t ?q ?n } -- |
-{ BuildQuot ?s ?t ?q }
-{ Mark ?n ?s }
-{ Mark ?n ?t }
-{ Marked ?n f } ;
+{ BuildQuot ?s ?t ?q } ;
+! { Mark ?n ?s }
+! { Mark ?n ?t }
+! { Marked ?n f } ;
 
 CHR: build-quot-body @ // { BuildQuot ?s ?t ?q } -- |
-{ Transeq ?s ?t ?q } ;
+{ Transeq ?s ?t ?q }
+{ Mark ?m ?s }
+{ Mark ?m ?t }
+{ Marked ?m f } ;
 
 
 ! ** Cleanup
