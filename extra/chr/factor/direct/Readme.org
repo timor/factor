@@ -71,6 +71,12 @@
         - *object* This one is interesting.  It defines how to access the part
           of the runtime environment which the proposition refers to.  Base
           system: variable, empty object
+**** RTR variant:
+     - expression is assigned type-result e: <τ, p, q, o> where
+       - e has type τ
+       - if e evaluates to non-false, then p holds
+       - if e evaluates to false, then q holds
+       - e's value corresponds to symbolic object o
 * Constraint Handling Rules
   - used to express properties about types
   - Most basic: Effect types
@@ -121,6 +127,68 @@
      quotation, their effect vars are unified with the current stack to match
      the input, and the effect is re-inferred to take in information about the
      current environment.
+** Variables
+   Illustrative problem: ~max~ function
+
+   - View 1: 2 inputs, 1 output, ~z = max(x,y)~.
+   - View 2: 2 inputs, 1 conditional mux: ~(x > y ? x : y)~
+
+
+   In the first case, the output value is distinct, and it is easy to define ~z~
+   in terms of ~x~ and ~y~.  In the second case, we either select ~x~ or ~y~ as
+   return value.
+
+   The problem with the former: If we only consider the numerical effect of ~z~,
+   we lose all information about ~x~ or ~y~ which is not related to the
+   numerical comparison.
+
+   The problem with the latter: we don't have a third variable representing the
+   combined output properties.  Ergo, whenever something dependent is to be
+   inferred, we would have to branch everything...
+*** Strategy: Insert explicit muxes
+    - This is tedious for yet unknown effects, as we need to keep track of
+      muxing whole stacks?
+    - This allows full data-flow semantics in predicate inference, but rules
+      need to be specified on these mux predicates.
+*** Strategy: Keep separate execution paths
+    - This means never actually performing the phi's on type level, but
+      accumulating more and more combinations of conditional effects.  This is
+      the most precise, but may have exponential blow-up
+** Role of syntactic types
+   There is a 2-phase distinction during inference:
+   1. match applicable stuff
+   2. generate constraints because of that
+
+
+   For the first part, we want to exclude any possible inference branch which
+   cannot match.  For simple HM inference, this is achieved via non-unifying
+   type terms, e.g. constructors, where their heads are taken from a set of
+   independent base constructors.
+
+   The same thing could also still be used for structural subtyping (recursive
+   constructor term unification).
+
+   With an underlying (compile-time-constant) subtype relation *between constructors* the unification
+   can be extended semantically to check the corresponding subtype property at
+   the call site.
+
+   With semantic subtyping, it may be the case that we don't know yet whether
+   the subtype property holds.  Especially when considering refinement types.
+
+   In these cases, it is not possible to rely on preconditional relation checks
+   only.
+
+   The second part, i.e. constraint generation, is then a pure semantic
+   operation between constraints, resulting in generated refinement predicates.
+
+   However, in the general case of refinement type, it can be the case that it
+   only becomes clear during inference that a considered branch is in fact
+   invalid, (i.e. the corresponding types turned out not to be subtypes at the
+   call site).  This can not be expressed in a pure syntactical way using
+   matching at all.  This becomes obvious if we consider arbitrary predicate
+   type definitions.
+
+
 * Type System
   - semantic (sub-)typing needed, since dynamic model
   - Intersection of Refinement types for functions
@@ -131,6 +199,51 @@
       - Note: This mirrors the intuition that inductive type definitions are
         (especially) problematic, since they hide the actual computation
         required to build/access them (which are always finite in practice).
+
+
+** Dependent types
+   Typed Racket example, ~vector-ref~ function
+   #+begin_src lisp
+     (: vector-ref (∀ (A) (-> (Vectorof A) Integer A)))
+     (define (vector-ref v i)
+       (if (<= 0 i (sub1 (vector-length v)))
+           (unsafe-vector-ref v i)
+           (error 'vector-ref "invalid vector-index ~a" i))))
+   #+end_src
+
+   Supplanting ~unsafe-vector-ref~ with the following ~safe-vector-ref~:
+
+   #+begin_src lisp
+     (: safe-vector-ref
+        (∀ {A} (-> ([v : (Vectorof A)]
+                    [i : Integer])
+                   #:pre (v i) (and (<= 0 i)
+                                    (< i (vector-length v)))
+                   A)))
+     (define safe-vector-ref unsafe-vector-ref)
+   #+end_src
+
+
+** Semantic Subtyping
+   main ref: [frisch2005semantic]
+   - Set-Theoretic interpretation produces interesting subtype relation
+     properties:
+   - ~〚t1〛 ⊆ 〚t2〛 ⇐⇒ 〚t1〛 ∩ (D \〚t2〛) = ∅ ⇐⇒ 〚t1 ∧ ¬t2〛 = ∅~
+     This means:
+     1. ~t1~ is subtype of ~t2~ iff the set of runtime values represented by
+        ~t1~ is a subset of the set of runtime values represented by ~t2~
+     2. ~t1~ is a subtype of ~t2~ iff the set of values represented by ~t1~ does
+        not intersect with the set of all possible runtime values except the
+        ones represented by ~t2~.
+
+   - Function type ~t1 -> t2~ set of binary relations ~f ⊆ D x {D + Ω}~, s.t.
+     ~∀(d,d') ∊ f. d ∊ 〚t1〛=> d' ∊ 〚t2〛~
+
+     Def: If ~D~ is set and ~X~, ~Y~ are subsets of ~D~, with ~D_o = {D + Ω}~,
+     ~Ω~ being the error type:
+
+     ~X → Y = {f ⊆ D x D_o | ∀(d,d'). d ∊ X => d' ∊ Y}~
+
 
 * Compilation/Types
   - The basic mechanism is stateful inference, e.g. some kind of virtual
@@ -185,13 +298,14 @@
     ~C{ Key Pred }~ construct.  The continuation of the parent execution is
     dropped.
 
-    After the branches are finished, the wrapped constraints are stored in
-    context with the corresponding key.   After the main solver routine is
-    finished, it will put all those back into the store at the same time.  Thus,
-    all "leaves" appear in the same "horizontal" context at once.  The
-    alternative would be to perform intermediate joins.  However, the goal is to
-    infer a "flat" set of types for each condition, Allowing to create an
-    intersection type indexed by the corresponding choices.
+    Different to pure CHR-OR semantics, after the branches are finished, the
+    wrapped constraints are stored in context with the corresponding key.  After
+    the main solver routine is finished, it will put all those back into the
+    store at the same time.  Thus, all "leaves" appear in the same "horizontal"
+    context at once.  The alternative would be to perform intermediate joins.
+    However, the goal is to infer a "flat" set of types for each condition,
+    Allowing to create an intersection type indexed by the corresponding
+    choices.
 
 
 **** Duplication of continutations
@@ -201,6 +315,17 @@
    these will be duplicates.  Thus, care must be taken that these predicates
    have regular set semantics, as opposed to multi-set semantics to prevent
    repeated re-execution of rule matches.
+
+** Conditional Effect Type hierarchy
+   To manage split/join semantics:
+
+   During main inference, all effects are unconditional, and thus their effect
+   type predicates are filled with correctly scoped type predicates.
+
+
+*** Strategy, expand-conditional-only
+    During merging, we would then never touch the conditional effects again,
+    only access their predicates to reason about summary conditions
 
 ** Intersection Arrow Types
    The split-store semantics causes all combinations of conditions to be

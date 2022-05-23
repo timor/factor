@@ -5,6 +5,7 @@ IN: chr.factor.effects
 
 ! * Effect types
 
+! TUPLE: Effect < chr-pred word parms in out constraints ;
 TUPLE: Effect < chr-pred word parms in out constraints ;
 TUPLE: InferEffect < chr-pred word parms in out constraints ;
 ! TUPLE: InferDataEffect < InferEffect ;

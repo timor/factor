@@ -1,9 +1,10 @@
 USING: accessors arrays assocs chr chr.comparisons chr.factor
 chr.factor.conditions chr.factor.defs chr.factor.effects chr.factor.quotations
 chr.factor.terms chr.factor.types chr.parser chr.state classes classes.algebra
-classes.tuple combinators combinators.short-circuit effects generic.math kernel
-kernel.private lists match math math.parser namespaces quotations sequences
-sequences.deep sets strings terms types.util vectors words words.symbol ;
+classes.tuple combinators combinators.short-circuit effects generic.math
+grouping kernel kernel.private lists match math math.parser namespaces
+quotations sequences sequences.deep sets strings terms types.util vectors words
+words.symbol ;
 
 IN: chr.factor.direct
 FROM: syntax => _ ;
@@ -34,15 +35,17 @@ TUPLE: EffectGen < chr-pred word in out body ;
 
 ! Val stuff
 TUPLE: Sum < val-pred x y ;
-TUPLE: Dup < val-pred copy ;
+! TUPLE: Drop < chr-pred val ;
+TUPLE: Dup < chr-pred val copy ;
 TUPLE: Drop < chr-pred val ;
-TUPLE: Use < val-pred ;
+! TUPLE: Use < val-pred ;
 
 TUPLE: Lt < val-pred x ;
 TUPLE: Le < val-pred x ;
 TUPLE: Gt < val-pred x ;
 TUPLE: Ge < val-pred x ;
 TUPLE: Eq < val-pred x ;
+TUPLE: Is < val-pred x ;
 
 ! Types with constructors.
 ! Those can appear in effects as syntactic matches
@@ -96,37 +99,69 @@ IMPORT: chr-types
 IMPORT: chr-quot
 IMPORT: chr-effects
 
+
+! ** Value Predicates
 ! Redundancies
 CHR: unique-val-preds @ AS: ?p <={ val-pred ?x . ?xs } // AS: ?q <={ val-pred ?x . ?xs } --
 [ ?p ?q [ class-of ] same? ] | ;
 
 ! Early drops
 CHR: drop-lit-type-preds @ { Drop ?x } { Literal ?x __ } // AS: ?p <={ type-pred } -- [ ?x ?p vars in? ] | ;
-CHR: drop-def @ { Drop ?q } // { Literal ?q __ } -- | ;
+CHR: drop-lit @ { Drop ?q } // { Literal ?q __ } -- | ;
 
 ! CHR: unique-use @ { Use ?x } // { Use ?x } -- | ;
+
+! TODO: same things backward if e.g. interval propagation turned out to know an exact value
+CHR: lit-trans-is-lit-forward @ { Literal ?x __ } // { Is ?x ?y } -- | [ ?y ?x ==! ] ;
+
+CHR: trans-val-preds-forward @ <={ Is ?x ?y } AS: ?p <={ val-pred ?x . ?xs } // -- |
+[ ?p clone ?y >>val ] ;
+
+CHR: trans-val-preds-backward @ <={ Is ?y ?x } AS: ?p <={ val-pred ?x . ?xs } // -- |
+[ ?p clone ?y >>val ] ;
+
+CHR: dup-val-preds-forward @ <={ Dup ?x ?y } AS: ?p <={ val-pred ?x . ?xs } // -- |
+[ ?p clone ?y >>val ] ;
+
+CHR: dup-val-preds-backward @ <={ Dup ?y ?x } AS: ?p <={ val-pred ?x . ?xs } // -- |
+[ ?p clone ?y >>val ] ;
 
 ! Cleanup
 
 ! CHR: drop-implies-use @ // { Drop ?x } -- | { Use ?x } ;
-CHR: used-use-literal @ // { Use A{ ?x } } -- | ;
-CHR: used-used-literal @ // { Used A{ ?x } } -- | ;
+! CHR: used-use-literal @ // { Use A{ ?x } } -- | ;
+! CHR: used-used-literal @ // { Used A{ ?x } } -- | ;
 ! CHR: check-literal-require @ // { Require A{ ?x } A{ ?tau } } -- |
 ! [ ?x ?tau instance? [ "nope" throw ] unless f ] ;
 ! CHR: check-literal-provide @ // { Provide A{ ?x } A{ ?tau } } -- |
 ! [ ?x ?tau instance? [ "nopenope" throw ] unless f ] ;
+
+! TODO: possibly only do for lifts, but then again this would be a val pred, no?
 CHR: dropped-effect @ { Drop ?q } // { Effect ?q __ __ __ __ } -- | ;
 
 ! ** Value/Conditional reasoning
+! CHR: destructure-cases @ // P{ Cases ?l } -- | [ ?l [ unclip swap Case boa ] map ] ;
+! CHR: exclude-false-case @ False{ ?c } // Case{ True{ ?c } __ } -- | ;
+! CHR: exclude-true-case @ True{ ?c } // Case{ False{ ?c } __ } -- | ;
+! CHR: preempt-false-case @ False{ ?c } // Case{ False{ ?c } ?r } -- | [ ?r ] ;
+! CHR: preempt-true-case @ True{ ?c } // Case{ True{ ?c } ?r } -- | [ ?r ] ;
+
+! CHR: split-true-case @ // { Case ?p ?l } -- |
+! Cond{ { ?p ?l } { f f } } ;
+
+CHR: known-false-case @ False{ ?c } // { IfTe ?c ?p ?q } -- | [ ?q ] ;
+CHR: known-true-case @ True{ ?c } // { IfTe ?c ?p ?q } -- | [ ?p ] ;
+CHR: unknown-case @ // { IfTe ?c ?p ?q } -- |
+Cond{ { False{ ?c } { False{ ?c } ?q } }
+      { True{ ?c } { True{ ?c } ?p } }
+    } ;
+
 ! CHR: lift-tautologies @ // { C ?c ?x } { C Not{ ?c } ?x } -- |
 ! [ ?x ] ;
 ! CHR: double-negation @ // { C Not{ Not{ ?c } } ?k } -- | { C ?c ?k } ;
 
 ! CHR: distribute-last-cond @ { C { ?c } ?p } // -- | { C ?c ?p } ;
 
-
-! CHR: instance-union @ J{ ?m P{ Instance ?v A{ ?tau } } } J{ ?n P{ Instance ?v A{ ?sig } } } // -- [ ?m neg ?n = ] [ ?tau ?sig class-or :>> ?c ] |
-! { Instance ?v ?c } ;
 
 CHR: redundant-definition @ // { Literal A{ ?v } A{ ?v } } -- | ;
 
@@ -168,12 +203,12 @@ CHR: duplicate-call @ { Call ?q ?a ?b } // { Call ?q ?a ?b } -- | ;
 CHR: apply-call-effect @ { Call ?q ?a ?b } // { Effect ?q ?c ?x ?y ?l } -- |
 ! { EffectCall ?q ?c ?x ?l ?a ?b } ;
 ! [ { ?x ?y } { ?a ?b } ==!  ]
-! [ ?l ]
-[ ?l { ?x ?y } { ?a ?b } unify lift ] ;
+[ { ?a ?b } { ?x ?y } ==!  ]
+! [ { ?x ?b } { ?a ?y } ==!  ]
+[ ?l ] ;
+! [ ?l { ?x ?y } { ?a ?b } unify lift ] ;
 ! { InferEffect ?q ?c ?a ?b f } ;
 
-! NOTE: already inferred eagerly in quotation solver, so we have an effect which
-! has been applied above
 CHR: lit-call-effect @ // { Literal ?q __  } { Call ?q ?a ?b } -- | { Drop ?q } ;
 
 CHR: re-infer-call-effect @ // { Call ?q ?a ?b } -- |
@@ -193,16 +228,18 @@ CHR: plus-is-sum @ { Eval + L{ ?x ?y . __ } L{ ?z . __ } } // -- |
 { Instance ?z number }
 { Sum ?x ?y ?z } ;
 
-CHR: le-defines-le @ { Eval < L{ ?x ?y . __  } L{ ?c . __ } } // -- |
-Cond{
-    { False{ ?c } { False{ ?c } P{ Le ?x ?y } } }
-    { True{ ?c } { True{ ?c } P{ Lt ?x ?y } } }
-} ;
-
+! : > ( y x -- c ) c=t <-> y > x, c=f <-> y <= x
 CHR: ge-defines-ge @ { Eval > L{ ?x ?y . __  } L{ ?c . __ } } // -- |
-Cond{
-    { False{ ?c } { False{ ?c } P{ Lt ?y ?x } } }
-    { True{ ?c } { True{ ?c } P{ Le ?y ?x } } }
+{ IfTe ?c
+  { P{ Le ?y ?x } }
+  { P{ Lt ?x ?y } }
+ } ;
+
+! : < ( y x -- c ) c=t <-> y < x, c=f <-> y >= x
+CHR: le-defines-le @ { Eval > L{ ?x ?y . __  } L{ ?c . __ } } // -- |
+{ IfTe ?c
+  { P{ Le ?x ?y } }
+  { P{ Lt ?y ?x } }
 } ;
 
 
@@ -238,6 +275,10 @@ CHR: do-compose @ // { Eval compose L{ ?q ?p . __ } L{ ?k . __ } } -- |
     [ in>> ] [ out>> ] bi
     [| elt index out | index elt out indices ?rest 2array ] curry map-index ;
 
+: effect-ops ( effect -- assoc )
+    [ in>> ] [ out>> ] bi
+    [| elt index out | index elt out indices 2array ] curry map-index ;
+
 :: effect>drops ( in effect -- res )
     effect [ in>> elt-vars ] [ dupd shuffle ] bi :> ( in-vars out-vars )
     V{ } clone
@@ -246,24 +287,70 @@ CHR: do-compose @ // { Eval compose L{ ?q ?p . __ } L{ ?k . __ } } -- |
     [ >list __ list* in [ ==! ] 2curry prefix ] if
     ;
 
-CHR: shuffle-drops @ { Eval ?w ?a ?b } // -- [ ?w "shuffle" word-prop :>> ?e ] |
-[ ?a ?e effect>drops ] ;
+! Non-drop version
+! : effect>ops ( in out effect -- seq )
+!     effect-ops
+!     [| ins outs op | op first2 :> ( i os )
+!      os [ f ] [ [| o | i ins nth o outs nth is boa ] map ] if-empty
+!     ] 2with gather ;
 
-! TBR?
-CHR: do-shuffle-direct @ // { Eval ?w ?a ?b } -- [ ?w "shuffle" word-prop :>> ?e ] |
+! Drop/dup version
+: effect>ops ( in out effect -- seq )
+    effect-ops
+    [| ins outs op | op first2 :> ( i os )
+     i ins nth :> in-var
+     os
+     [ in-var Drop boa 1array ]
+     [ [ first outs nth in-var Is boa 1array ]
+       [ 2 <clumps> [ first2 swap [ outs nth ] bi@ Dup boa suffix ] each ] bi
+     ] if-empty
+    ] 2with gather ;
+
+! CHR: shuffle-drops @ { Eval ?w ?a ?b } // -- [ ?w "shuffle" word-prop :>> ?e ] |
+! [ ?a ?e effect>drops ] ;
+
+! CHR: do-shuffle-direct @ // { Eval ?w ?a ?b } -- [ ?w "shuffle" word-prop :>> ?e ] |
+! [
+!  ?e in>> elt-vars dup ?e shuffle [ <reversed> >list __ list* ] bi@ 2array { ?a ?b } ==!
+! ] ;
+
+CHR: do-shuffle-alias @ // { Eval ?w ?a ?b } -- [ ?w "shuffle" word-prop :>> ?e ] |
 [
- ?e in>> elt-vars dup ?e shuffle [ <reversed> >list __ list* ] bi@ 2array { ?a ?b } ==!
+    ?a list>array* ?b list>array* [ <reversed> ] bi@ ?e effect>ops
 ] ;
 
-CHR: do-mux-infer-dispatch @ // { Eval ? L{ ?q ?p ?c . __ } L{ ?v . __ } } -- [ J counter :>> ?n neg :>> ?m ] |
-Cond{
-    ! { True{ ?c } { [ ?c not{ POSTPONE: f } ==! ] [ ?v ?p ==! ] } }
-    ! { False{ ?c } { [ ?c \ f ==! ] [ ?v ?q ==! ] } }
-    { False{ ?c } { False{ ?c } [ ?q ?v ==! ] P{ Drop ?p } P{ Instance ?c POSTPONE: f } } }
-    { True{ ?c } { True{ ?c } [ ?p ?v ==! ] P{ Drop ?q } P{ Instance ?c not{ POSTPONE: f } } } }
-}
-! { Use ?c }
-    ;
+! CHR: do-mux-infer-dispatch @ // { Eval ? L{ ?q ?p ?c . __ } L{ ?v . __ } } -- [ J counter :>> ?n neg :>> ?m ] |
+! Cond{
+!     ! { True{ ?c } { [ ?c not{ POSTPONE: f } ==! ] [ ?v ?p ==! ] } }
+!     ! { False{ ?c } { [ ?c \ f ==! ] [ ?v ?q ==! ] } }
+!     { False{ ?c } { False{ ?c } [ ?q ?v ==! ] P{ Drop ?p } P{ Instance ?c POSTPONE: f } } }
+!     { True{ ?c } { True{ ?c } [ ?p ?v ==! ] P{ Drop ?q } P{ Instance ?c not{ POSTPONE: f } } } }
+! }
+! ! { Use ?c }
+!     ;
+
+! CHR: do-mux @ // { Eval ? L{ ?q ?p ?c . __ } L{ ?v . __ } } -- [ J counter :>> ?n neg :>> ?m ] |
+! Cases{
+!     { False{ ?c } { False{ ?c } [ ?q ?x ==! ] P{ Drop ?p } P{ Instance ?c POSTPONE: f } P{ Is ?v ?x } } }
+!     { True{ ?c } { True{ ?c } [ ?p ?y ==! ] P{ Drop ?q } P{ Instance ?c not{ POSTPONE: f } } P{ Is ?v ?y } } }
+! }
+! ! { Use ?c }
+!     ;
+! CHR: do-mux @ // { Eval ? L{ ?q ?p ?c . __ } L{ ?v . __ } } -- |
+! { IfTe ?c
+!   ! { [ ?p ?y ==! ] P{ Drop ?q } P{ Instance ?c not{ POSTPONE: f } } P{ Is ?v ?y } }
+!   ! { [ ?q ?x ==! ] P{ Drop ?p } P{ Instance ?c POSTPONE: f } P{ Is ?v ?x } }
+!   { [ ?p ?v ==! ] P{ Drop ?q } P{ Instance ?c not{ POSTPONE: f } } }
+!   { [ ?q ?v ==! ] P{ Drop ?p } P{ Instance ?c POSTPONE: f } }
+! } ;
+
+CHR: do-mux-ref @ // { Eval ? L{ ?q ?p ?c . __ } L{ ?v . __ } } -- |
+{ IfTe ?c
+  ! { [ ?p ?y ==! ] P{ Drop ?q } P{ Instance ?c not{ POSTPONE: f } } P{ Is ?v ?y } }
+  ! { [ ?q ?x ==! ] P{ Drop ?p } P{ Instance ?c POSTPONE: f } P{ Is ?v ?x } }
+  { P{ Is ?v ?p } P{ Drop ?q } P{ Instance ?c not{ POSTPONE: f } } }
+  { P{ Is ?v ?q } P{ Drop ?p } P{ Instance ?c POSTPONE: f } }
+} ;
 
 ! Predicate words
 CHR: add-predicate-rules @ { Eval ?w L{ ?v . __ } L{ ?c . __ } } // --
@@ -271,9 +358,10 @@ CHR: add-predicate-rules @ { Eval ?w L{ ?v . __ } L{ ?c . __ } } // --
 [| |
  ?tau :> then-class
  ?tau class-not :> else-class
-    Cond{ { False{ ?c } { False{ ?c } P{ Instance ?v else-class } } }
-          { True{ ?c } { True{ ?c } P{ Instance ?v then-class } } }
-        }
+    { IfTe ?c
+      P{ Instance ?v then-class }
+      P{ Instance ?v else-class }
+    }
 ]
 ! { Use ?v }
     ;

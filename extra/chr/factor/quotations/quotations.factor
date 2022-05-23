@@ -69,6 +69,7 @@ PREDICATE: callable-word < word { [ symbol? not ] [ quot-sym? not ] } 1&& ;
 CHRAT: chr-quot { }
 
 CHR: stack-match @ { Stack ?s ?a } // { Stack ?s ?b } -- | [ ?a ?b ==! ] ;
+CHR: empty-lit-quot @ // { Transeq __ ?s ?t W{ [ ] } } -- | [ ?s ?t ==! ] ;
 CHR: empty-quot @ // { Transeq __ ?s ?t [ ] } -- | [ ?s ?t ==! ] ;
 
 ! NOTE: This one determines the order of evaluation of the value predicates.
@@ -88,21 +89,25 @@ CHR: infer-literal-quot @ // { QueueTrans ?m ?s ?t A{ ?q } } -- [ ?q callable? ]
 { BuildNamedQuot ?a ?b ?q Quot }
 { QueueTrans ?m ?s ?t P{ InferredQuot Quot ?q ?rho ?sig } } ;
 
+! Effect-based destructuring
+! CHR: effect-predicate @ { Trans ?s ?t A{ ?w } } // -- [ ?w callable-word? ]
+CHR: effect-predicate @ // { QueueTrans ?m ?s ?t A{ ?w } } { TransQueue ?m ?l } -- [ ?w callable-word? ]
+[ ?w defined-effect :>> ?e ]
+[ ?e effect>stacks [ :>> ?a ] [ :>> ?b ] bi* 2drop t ]
+[ ?l P{ Trans ?s ?t A{ ?w } } prefix
+  P{ Eval ?w ?a ?b } prefix :>> ?k ]
+|
+{ Stack ?s ?a }
+{ Stack ?t ?b }
+{ TransQueue ?m ?k }
+    ;
+
+
 ! Enqueueing
 CHR: queue-trans @ // { QueueTrans ?m ?s ?s0 ?w } { TransQueue ?m ?a }
 -- [ ?a P{ Trans ?s ?s0 ?w } prefix :>> ?b ] | { TransQueue ?m ?b } ;
 
 CHR: play-trans @ // { TransQueue ?m ?a } -- | [ ?a ] ;
-
-! Effect-based destructuring
-CHR: effect-predicate @ { Trans ?s ?t A{ ?w } } // -- [ ?w callable-word? ]
-[ ?w defined-effect :>> ?e ]
-[ ?e effect>stacks [ :>> ?a ] [ :>> ?b ] bi* 2drop t ]
-|
-{ Stack ?s ?a }
-{ Stack ?t ?b }
-{ Eval ?w ?a ?b }
-    ;
 
 ! CHR: do-infer-inline @ { Literal ?n A{ ?p } } { Trans ?s ?t call } // { Eval call ?n ?a ?b } -- [ ?p :>> ?q ] |
 ! CHR: do-infer-inline @ { Literal ?n A{ ?p } } // { Eval call L{ ?n . ?a } ?b } -- [ ?p :>> ?q ] |

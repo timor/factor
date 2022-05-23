@@ -39,6 +39,7 @@ IN: chr.factor.direct.tests
 ! Type is given: (: max : (-> ([x: Integer]  [y: Integer])
 !                             (Refine [z: Integer] (and (>= z x) (>= z y)))))
 : mymax ( x y -- z ) 2dup > -rot ? ;
+: mymax2 ( x y -- z ) 2dup > [ drop ] [ nip ] if ;
 
 { }
 [ \ mymax build-type . ] unit-test

@@ -1,5 +1,5 @@
-USING: chr chr.factor chr.factor.terms chr.parser chr.state kernel sequences
-terms ;
+USING: arrays chr chr.factor chr.factor.terms chr.parser chr.state classes
+kernel sequences terms vectors ;
 
 IN: chr.factor.conditions
 
@@ -11,10 +11,11 @@ SINGLETON: F
 TUPLE: Rule < chr-pred cond body ;
 TUPLE: Mux < chr-pred cond val then else ;
 TUPLE: ?: < chr-pred cond true false ;
-TUPLE: Assume < chr-pred cond ;
+! TUPLE: Assume < chr-pred cond ;
 
 TUPLE: --> < chr-pred cond consequence ;
 TUPLE: \--> < chr-pred cond consequence ;
+TUPLE: <--> < chr-pred cond1 cond2 ;
 
 CHRAT: chr-cond {  }
 
@@ -92,7 +93,7 @@ CHR: implied-conds-2 @ // { C False{ ?c } P{ C False{ ?c } ?p } } -- | { C False
 CHR: redundant-defs @ // { C True{ ?c } ?p } { C False{ ?c } ?p } -- | [ ?p ] ;
 
 
-CHR: expand-conjunction @ // { C ?p ?b } -- [ ?b sequence? ] |
+CHR: expand-conjunction @ // { C ?p ?b } -- [ ?b union{ array vector } instance? ] |
 [| |
  ?b [ ?p swap C boa ] map
 ] ;

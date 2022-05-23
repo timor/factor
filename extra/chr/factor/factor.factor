@@ -87,7 +87,7 @@ TUPLE: InlineCall < trans-pred word quot ;
 TUPLE: Inconsistent < chr-pred constraint ;
 
 TUPLE: Mux < state-pred bool-val cond common true false ;
-TUPLE: IfTe < state-pred cond-val true-state false-state ;
+! TUPLE: IfTe < state-pred cond-val true-state false-state ;
 ! Query marker for stack equivalence
 TUPLE: Call < state-pred word in out ;
 ! TUPLE: Branch < trans-pred cs1 cs2 ;

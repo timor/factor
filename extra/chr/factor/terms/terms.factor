@@ -54,9 +54,12 @@ TUPLE: Xor < type-pred lhs rhs res ; constructor
 ! Deferred
 TUPLE: Apply < chr-pred in out constraints ; constructor
 
+TUPLE: Case < chr-pred cond preds ; constructor
+
 ! Common
 TUPLE: Eval < chr-pred word in out ;
-TUPLE: Literal < chr-pred var value ;
+! TUPLE: Literal < chr-pred var value ;
+TUPLE: Literal < val-pred value ;
 
 ! ** Lambda Fragment
 ! These are in return positions, and thus can form nested expression trees

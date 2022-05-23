@@ -20,7 +20,8 @@ CHRAT: chrat-comp { le ge lt gt ne is _is }
     CHR{ // { ne ?x ?x } -- | false }
     CHR{ // { is ?x ?x } -- | }
     CHR{ { is ?x ?y } // { is ?x ?y } -- | }
-    CHR{ // { is ?x ?y } -- [ ?x ?y [ ground-value? not ] both? ] | [ ?x ?y ==! ] }
+    CHR{ { is ?x ?y } // { is ?y ?x } -- | }
+    ! CHR{ // { is ?x ?y } -- [ ?x ?y [ ground-value? not ] both? ] | [ ?x ?y ==! ] }
     ! CHR{ // { is A{ ?x } A{ ?y } } -- | [ ?x ?y eq? [ f ] [ ?x ?y "inconsistent" throw ] if ] }
     ! CHR{ // { is A{ ?x } A{ ?y } } -- | [ ?x ?y eq? [ f ] [ { Inconsistent P{ is ?x ?y } } ] if ] }
     ! CHR{ // { is A{ ?y } ?x } -- | { is ?x ?y } }
@@ -47,6 +48,8 @@ CHRAT: chrat-comp { le ge lt gt ne is _is }
 
     ! Existential guard!
     CHR{ { lt ?x ?y } // -- { le ?y ?z } | { lt ?x ?z } }
+
+
     CHR{ { lt ?x ?y } // { lt ?x ?y } -- | }
 
     ! Normalize

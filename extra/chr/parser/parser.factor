@@ -54,10 +54,14 @@ M: eq-constraint >pprint-sequence tuple-slots ;
 ! Disjunctions
 SYNTAX: Or{ \ } parse-array [ pred>constraint ] map chr-or boa suffix! ;
 ! SYNTAX: Cond{ \ } parse-array [ pred>constraint ] map chr-branch boa suffix! ;
+SYNTAX: Cases{ \ } parse-array Cases boa suffix! ;
 SYNTAX: Cond{ \ } parse-array chr-branch boa suffix! ;
 M: chr-branch pprint* pprint-object ;
 M: chr-branch pprint-delims drop \ Cond{ \ } ;
 M: chr-branch >pprint-sequence cases>> ;
+M: Cases pprint* pprint-object ;
+M: Cases pprint-delims drop \ Cases{ \ } ;
+M: Cases >pprint-sequence cases>> ;
 SYNTAX: Assume{ scan-object \ } parse-array [ pred>constraint ] map chr-scope boa suffix! ;
 
 ! Helper

@@ -62,10 +62,17 @@ TUPLE: chr-or < chr-pred constraints ;
 TUPLE: chr-branch < chr-pred cases ;
 ! Simpler version of chr-branch.  Will run body in forked context, and return all chrs with prefix
 TUPLE: chr-scope < chr-pred cond body ;
-! Unconditional conjunction.  Intended to be used to have control over what happens on direct queue access
+! Reification of solutions
 ! TUPLE: And < chr-pred constraints ;
 TUPLE: C < chr-pred cond then ;
 
+! Pre-term for splits
+TUPLE: Cases < chr-pred cases ;
+
+TUPLE: IfTe < chr-pred cond then else ;
+
+! Context condition.  These are used to wrap up the whole store at the end...
+TUPLE: Assume < chr-pred pred ;
 
 ! Match-spec telling that the current class must be preceded!
 ! TUPLE: bind-class { var } { args read-only } ;
