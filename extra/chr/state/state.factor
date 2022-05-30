@@ -1,7 +1,8 @@
 USING: accessors arrays assocs assocs.extras chr chr.programs
 chr.programs.incremental classes.algebra combinators.private
-combinators.short-circuit hash-sets kernel lists make math math.combinatorics
-namespaces quotations sequences sets sorting terms typed words ;
+combinators.short-circuit continuations hash-sets hashtables kernel lists make
+match math math.combinatorics math.order namespaces persistent.assocs quotations
+sequences sets sorting terms typed words ;
 
 IN: chr.state
 
@@ -10,10 +11,12 @@ FROM: syntax => _ ;
 
 ! SYMBOLS: program exec-stack store builtins match-trace current-index ;
 SYMBOLS: program exec-stack store match-trace current-index ;
+SINGLETON: current-context
+INSTANCE: current-context match-var
 
 ! Operational interface
 TUPLE: chr-suspension
-    constraint id alive activated stored hist vars from-rule cond ;
+    constraint id alive activated stored hist vars from-rule ctx ;
 
 TUPLE: solver-state builtins store ;
 
@@ -110,6 +113,7 @@ TYPED: create-chr ( from-rule c: constraint -- id )
     ]
     [ vars members >>vars ] bi
     t >>alive
+    current-context get >>ctx
     ! current-index [ 0 or 1 + dup ] change-global [ >>id ] keep
     current-index counter [ >>id ] keep
     [ store-chr ] dip ;
@@ -117,12 +121,14 @@ TYPED: create-chr ( from-rule c: constraint -- id )
 : alive? ( id -- ? )
     store get at [ alive>> ] [ f ] if* ;
 
+! NOTE: changing to destructive semantics because of context scoping during creation.
+! This needs to be taken into account when considering split-store processing?
 : enqueue ( items -- )
-    queue [ append ] change ;
+    <reversed> queue get push-all ;
 
 DEFER: activate
 : reactivate ( ids -- )
-    [ alive? ] filter [ enqueue ] when* ;
+    [ alive? ] filter [ enqueue ] unless-empty ;
     ! dup alive? [ activate ] [ drop ] if ;
 
 :: kill-chr ( id -- )
@@ -158,13 +164,19 @@ DEFER: activate
 
 GENERIC: lookup ( ctype -- seq )
 
+: in-context? ( susp -- ? )
+    ctx>> current-context get = ;
+
 M: chr-constraint lookup
+    ! constraint-type store get [ { [ type>> = ] [ in-context? ] } 1&& ] with filter-values ;
     constraint-type store get [ type>> = ] with filter-values ;
 
 M: chr-sub-pred lookup
     class>> store get [ type>> swap class<= ] with filter-values ;
 
 M: as-pred lookup pred>> lookup ;
+
+M: C lookup then>> lookup ;
 
 :: check/update-history ( rule-id trace -- ? )
     trace keys :> matched
@@ -192,33 +204,83 @@ PRIVATE>
 
 ! TODO: Don't use t as special true value in body anymore...
 : run-rule-body ( rule-id bindings -- )
-    [ dup program get rules>> nth ] dip
-    ! swap body>> dup t =
-    ! [ 2drop ] [ [ apply-substitution activate-new ] with each ] if ;
-    ! swap body>> [ apply-substitution activate-new ] 2with each ;
-    swap body>> [ apply-substitution ] with map
-    f current-bindings set-global
-    ! [ activate-new ] with each
-    activate-new
+    dup current-context of current-context
+    [
+        [ dup program get rules>> nth ] dip
+        ! swap body>> dup t =
+        ! [ 2drop ] [ [ apply-substitution activate-new ] with each ] if ;
+        ! swap body>> [ apply-substitution activate-new ] 2with each ;
+        swap body>> [ apply-substitution ] with map
+        f current-bindings set-global
+        ! [ activate-new ] with each
+        activate-new
+    ] with-variable
     ;
 
-: simplify-constraints ( trace -- )
+: maybe-inhibit-remove ( trace bindings -- trace )
+    current-context of
+    [ [| id keep? ctx |
+       keep?
+       [ id t ]
+       [ id dup store get at
+         ctx>> ctx = not
+       ] if
+      ] curry assoc-map ] when* ;
+
+: simplify-constraints ( trace bindings -- )
+    maybe-inhibit-remove
     [ [ drop ] [ kill-chr ] if ] assoc-each ;
 
 : fire-rule ( rule-id trace bindings -- )
     { [ nip check-guards ]
       [ drop check/update-history ]
-      [ drop nip simplify-constraints t ]
+      [ [ drop ] 2dip simplify-constraints t ]
       [ nip run-rule-body t ]
     } 3&& drop ;
 
+! The thing dispatched on is in the partner slot in the schedule
 GENERIC: match-constraint ( bindings suspension match-spec -- bindings )
 
+: add-bindings ( bindings rhs lhs -- bindings )
+    swap 2array 1array solve-next ;
+
+! Version that extends context
+! : combine-context ( susp-ctx -- new-ctx ? )
+!     current-context get
+!     2dup = [ drop t ]
+!     [ 2dup and [ drop f ] [ or t ] if ] if ;
+! C1 + f -> C1
+! C1 + C2 -> mismatch
+! f + f -> f
+! f + C1 -> C1
+: combine-context? ( bindings susp-ctx -- bindings/f )
+    current-context pick at
+    2dup and [
+        = [ drop f ] unless
+    ] [ or
+        [ current-context rot new-at ] when*
+    ] if ;
+
+! TODO: sub-context semantics?
+:: match-constraint-in-context ( bindings susp match-spec -- bindings )
+    bindings susp ctx>> combine-context?
+    [ susp match-spec match-constraint ] [ f ] if* ;
+
+! We match a suspension in C1 against a { C ?x ... }
+! When matching a C constraint, we need to turn the context bindings themselves off
+! to make sure we see other partners
+M:: C match-constraint ( binds susp mspec -- bindings )
+    ! binds current-context mspec cond>> add-bindings
+    ! [ susp mspec then>> constraint-args match-constraint-in-context ] [ f ] if* ;
+    current-context binds pluck-at
+    susp ctx>> mspec cond>> add-bindings
+    [ susp mspec then>> constraint-args match-constraint ] [ f ] if* ;
+
 M: chr-sub-pred match-constraint
-    args>> swap constraint-args >list 2array 1array solve-next ;
+    args>> swap constraint-args >list add-bindings ;
 M: as-pred match-constraint
     ! [ [ constraint>> ] [ var>> ] bi* pick set-at ]
-    [ [ constraint>> ] [ var>> ] bi* swap 2array 1array solve-next ] 2keep rot
+    [ [ constraint>> ] [ var>> ] bi* add-bindings ] 2keep rot
     [ -rot pred>> constraint-args match-constraint ] [ 2drop f ] if* ;
 
     ! [ pred>> match-constraint ] 2bi ;
@@ -252,8 +314,9 @@ DEFER: match-single-head
     arg-spec parms>> all-permutations
     [| p | bindings p susp match-single-head ] map-find drop ; inline
 
+
 : try-schedule-match ( bindings arg-spec susp -- bindings )
-    swap match-constraint
+    swap match-constraint-in-context
     ! match-head
     ! bindings susp
     ! arg-spec match-constraint
@@ -266,16 +329,48 @@ DEFER: match-single-head
 
 ! Every level is passed the following info:
 ! rule-id { { id0 keep0 } ...{ id1 keep1} } bindings
+
+! Most specific conditions get priority if a context is provided
+! pair: { store-id suspension }
+:: cond<=> ( pair1 pair2 ctx -- <=> )
+    ctx
+    [ pair1 second ctx>> :> ctx1
+      pair2 second ctx>> :> ctx2
+      ctx1 [ ctx2 [ +eq+ ] [ +lt+ ] if ]
+      [ ctx2 [ +gt+ ] [ +eq+ ] if ] if
+    ]
+    [ +eq+ ] if ;
+
+: sort-lookup ( assoc bindings -- alist )
+    [ sort-keys ] [ current-context of ] bi*
+    [ cond<=> ] curry sort ;
+
+! TUPLE: schedule-cont rule-id trace bindings partners vars ;
+! C: <schedule-cont> schedule-cont
+
+ERROR: more-partners rule-firing more ;
+
+! : run-partners ( -- ) ;
+
+! : partner-cont
+TUPLE: rule-firing rule-id trace bindings ;
+C: <rule-firing> rule-firing
+
 :: (run-occurrence) ( rule-id trace bindings partners vars -- )
     partners empty? [
         ! NOTE: unsure about this optimization here...
         trace [ drop alive? ] assoc-all?
-        [ rule-id trace bindings fire-rule ] when
+        [
+            [ rule-id trace bindings
+          ! fire-rule
+          <rule-firing>
+          swap more-partners ] callcc0
+         ] when
         ! rule-id trace bindings fire-rule
     ] [
         partners unclip-slice :> ( rest next )
         next first2 :> ( keep-partner pc )
-        pc lookup sort-keys
+        pc lookup bindings sort-lookup
         [| sid sc |
          ! NOTE: unsure about this optimization here
          { [ sid trace key? not ]
@@ -294,6 +389,7 @@ DEFER: match-single-head
 
 :: run-occurrence ( c schedule --  )
     c id>> :> active-id
+    ! c ctx>> current-context set
     schedule [ occurrence>> first ] [ arg-vars>> ] [ partners>> ] tri
     :> ( rule-id arg-vars partners )
     rule-id active-id schedule keep-active?>> 2array 1array
@@ -301,7 +397,9 @@ DEFER: match-single-head
     :> vars ! valid-match-vars set
     ! [
         ! vars valid-match-vars [ arg-vars c args>> start-match ] with-variable
-    H{ } clone arg-vars c try-schedule-match
+    current-context c ctx>> [ swap associate ] [ drop H{ } clone ] if* arg-vars c try-schedule-match
+    ! current-context c ctx>> swap associate arg-vars c try-schedule-match
+    ! H{ } clone arg-vars c try-schedule-match
         [ partners vars (run-occurrence) ] [ 2drop ] if*
     ! ] with-variable
     ;
@@ -327,11 +425,16 @@ C: <run-schedule> run-schedule
     store get at
     [
         dup type>> program get schedule>> at
+        ! dup length 1 > [ break ] when
         [ over alive>> [ <run-schedule> ] [ 2drop f ] if ] with map enqueue
     ] when*
     ;
 
 GENERIC: activate-new ( rule c -- )
+
+! M: C activate-new [ cond>> current-context set ] [ then>> activate-new ] bi ;
+M: C activate-new
+    dup cond>> current-context [ then>> activate-new ] with-variable ;
 
 M: equiv-activation pred>constraint ;
 : update-eq-constraint-vars ( eqc -- eqc )
@@ -365,24 +468,47 @@ M: equiv-activation activate-new nip
 
 ! M: eq-constraint activate-new nip
 !     builtins store get at constraint>> push ;
-TUPLE: deferred-activation from-rule chr ;
+TUPLE: deferred-activation from-rule chr ctx ;
 
 M: eq-constraint activate-new 2drop ;
 GENERIC: activate-item ( susp --  )
 M: deferred-activation activate-item
-    [ from-rule>> ] [ chr>> ] bi activate-new ;
-M: integer activate-item activate ;
+    ! dup ctx>> current-context set
+    ! [ from-rule>> ] [ chr>> ] bi activate-new ;
+    dup ctx>> current-context
+    [ [ from-rule>> ] [ chr>> ] bi activate-new ] with-variable ;
+M: integer activate-item
+    ! If we have enqueued it several times, then we basically bumped it up, so no need to run it repeatedly
+    [ queue [ remove ] change ]
+    [ activate ] bi ;
+
+! This is the main entry point to actually start a constraint schedule
 M: run-schedule activate-item
     [ c>> ] [ schedule>> ] bi
     over alive>> [ run-occurrence ]
     [ 2drop ] if ;
 
+M: rule-firing activate-item
+    [ rule-id>> ] [ trace>> ] [ bindings>> ] tri fire-rule ;
+
+M: more-partners activate-item
+    more>> continue ;
+
+
+! If we catch a bailout, then we throw away the tried suspension, and replace it with queuing the
+! continuation and (first) the actual rule firing
 : run-queue ( -- )
     ! [ queue get dup empty? ] [ unclip [ queue namespaces:set ] [ activate-id ] bi* ] until ;
-    [ queue get empty? ] [ queue get unclip [ queue set ] [ activate-item ] bi* ] until ;
+    [ queue get empty? ] [ queue get pop
+                           [ activate-item ]
+                           [ dup more-partners?
+                             [ nip [ queue get push ] [ rule-firing>> queue get push ] bi ]
+                             [ rethrow ] if
+                           ] recover
+    ] until ;
 
 M: sequence activate-new
-    [ deferred-activation boa ] with map
+    current-context get [ deferred-activation boa ] curry with map
     [ enqueue ] when* ;
     ! queue [ append ] change ;
     ! run-queue ;
@@ -425,18 +551,19 @@ M: builtin-suspension apply-substitution* nip ;
 !       0 current-index set
 !     ] prepose with-var-names ; inline
 
+: update-local-vars ( -- )
+    program get local-vars>> current-context suffix
+    valid-match-vars set ;
+
 : init-chr-scope ( prog -- )
     H{ } clone store set
     ! <builtins-suspension> builtins store get set-at
-    load-chr dup program set
-    local-vars>> valid-match-vars set
+    load-chr program set
+    update-local-vars
     check-vars? on
     0 current-index set-global
-    H{ } clone var-names set
+    ! H{ } clone var-names set
     ;
-
-: update-local-vars ( -- )
-    program get local-vars>> valid-match-vars set ;
 
 : init-dyn-chr-scope ( rules -- )
     init-chr-prog program set
@@ -503,10 +630,14 @@ M: solver-state merge-solver-config
 : petrify-solver-state! ( state -- state )
     [ [ f lift ] map-values ] change-store ;
 
+: susp>constraint ( susp -- chr )
+    [ constraint>> ] [ ctx>> ] bi
+    [ swap C boa ] when* ;
+
 : finish-solver-state ( -- state )
     get-solver-state
     petrify-solver-state!
-    [ [ constraint>> ] map-values ] change-store ;
+    [ [ susp>constraint ] map-values ] change-store ;
 
 SYMBOL: split-states
 
@@ -528,10 +659,11 @@ SYMBOL: split-states
       swap
       ! init-chr-scope
       init-dyn-chr-scope
+      V{ } clone queue set
       f swap activate-new
       run-queue
-      split-states get join-states
-      run-queue
+      ! split-states get join-states
+      ! run-queue
       finish-solver-state
       ! 0 store-solver-config
       ! result-config get combine-configs
