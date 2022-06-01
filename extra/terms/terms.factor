@@ -324,6 +324,8 @@ M: term-var subst
     ?ground-value
     dup { [ drop in-quotation? get ] [ word? ] [ { [ deferred? ] [ match-var? not ] } 1|| ] } 1&& [ <wrapper> ] when
     ;
+M: match-var subst
+    over ?at drop ;
 M: sequence subst
     dup quotation?
     in-quotation? [ [ subst ] map ] with-variable ;
@@ -349,6 +351,7 @@ M: atom-match subst
 GENERIC: occurs? ( var term -- ? )
 M: object occurs? 2drop f ;
 M: match-var occurs? = ;
+M: term-var occurs? eq? ;
 M: sequence occurs? [ occurs? ] with any? ;
 M: tuple occurs? tuple-slots occurs? ;
 
@@ -371,7 +374,7 @@ M: tuple decompose-right
     2dup [ class-of ] same?
     [ [ tuple-slots ] bi@ t ] [ f ] if ;
 M: sequence decompose-right
-    2dup { [ drop sequence? ] [ [ length ] same? ] } 2&& ;
+    2dup { [ [ class-of ] same? ] [ [ length ] same? ] } 2&& ;
 
 
 : decompose ( term1 term2 -- term1 term2 cont? )
@@ -447,6 +450,10 @@ SYMBOL: on-recursive-term
 : solve-in ( term eqns -- term subst )
     solve-problem [ lift ] keep ; inline
 
+: no-var-restrictions ( quot -- )
+    valid-match-vars swap with-variable-off ; inline
+
+! Only make parts of vars fresh
 : fresh-with ( term vars -- term )
     [ clone ] dip
     [ dup name>> uvar <term-var> ] H{ } map>assoc
@@ -455,6 +462,14 @@ SYMBOL: on-recursive-term
 ! Only term vars!
 : fresh ( term -- term )
     dup term-vars fresh-with ;
+
+! * Proper Terms
+TUPLE: term parts ;
+SYNTAX: T( \ ) parse-until >array term boa suffix! ;
+M: term pprint* 10 nesting-limit [ pprint-object ] with-variable ;
+M: term pprint-delims drop \ T( \ ) ;
+M: term >pprint-sequence parts>> ;
+
 ! * Interface
 
 ! Interface for builtin solving
