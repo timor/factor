@@ -1,5 +1,6 @@
 USING: accessors arrays assocs assocs.extras classes classes.tuple
 colors.constants combinators combinators.short-circuit continuations
+slots.private
 disjoint-sets disjoint-sets.private graphs hashtables hashtables.identity
 io.styles kernel lexer make match math math.order math.parser namespaces parser
 prettyprint.backend prettyprint.config prettyprint.custom prettyprint.sections
@@ -333,15 +334,23 @@ M: sequence subst
 M: vector subst
     dup quotation?
     in-quotation? [ [ subst ] map! ] with-variable ;
-! M: array subst
-!     dup quotation?
-!     in-quotation? [ [ subst ] map! ] with-variable ;
-M: callable subst
-    in-quotation? [ call-next-method ] with-variable-on ;
-M: tuple subst tuple>array subst >tuple ;
+<PRIVATE
+: num-slots ( tup -- n )
+    1 slot second ; inline
+PRIVATE>
+M: tuple subst
+    dup callable? in-quotation?
+    [ clone dup num-slots
+    [| i | i 2 + :> n
+     [ n slot subst ]
+     [ n set-slot ]
+     [  ] tri
+    ] each-integer ] with-variable ;
+
 M: wrapper subst wrapped>>
     in-quotation? [ subst ] with-variable-off
     <wrapper> ;
+
 M: atom-match subst
     var>> subst dup ground-value? [ <atom-match> ] unless ;
 
