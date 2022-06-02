@@ -5,9 +5,6 @@ IN: chr.factor.terms
 
 ! * Common syntactic term predicates
 
-TUPLE: type-pred < chr-pred ;
-TUPLE: val-pred < type-pred val ;
-
 ! Justifications
 TUPLE: J < chr-pred tag constraint ; constructor
 : <J> ( tag constraint -- constraint )
@@ -58,11 +55,22 @@ TUPLE: Case < chr-pred cond preds ; constructor
 
 ! Common
 TUPLE: Eval < chr-pred word in out ;
+TUPLE: Ev < chr-pred word in ; constructor
 ! TUPLE: Literal < chr-pred var value ;
 TUPLE: Literal < val-pred value ;
+
+TUPLE: Call < chr-pred quot in out ;
+! This indicates that a value will not be used in a context
+TUPLE: Drop < type-pred val ;
+
+! Cleanup
+TUPLE: Used < chr-pred val ;
 
 ! ** Lambda Fragment
 ! These are in return positions, and thus can form nested expression trees
 
 ! A typed definition
 TUPLE: Data < chr-pred tag ; constructor
+
+! ** Expressions
+TUPLE: Expr < type-pred val term ;

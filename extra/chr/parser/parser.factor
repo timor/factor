@@ -105,12 +105,14 @@ M: named-chr pprint* <flow \ CHR: pprint-word [ rule-name>> text "@" text ] keep
 M: chr-pred pprint* pprint-object ;
 M: chr-pred pprint-delims drop \ P{ \ } ;
 M: chr-pred >pprint-sequence [ constraint-args ] [ constraint-type prefix ] bi ;
+M: C >pprint-sequence tuple-slots C prefix ;
 
 : parse-chr-body ( end -- seq )
     parse-array dup [ { [ chr? ] [ import-solver? ] } 1|| ] all? [ "invalid-chr-prog" throw ] unless ;
 
 ! * Syntax helper
 SYMBOL: UNK
+<<
 : term-delims-pprinter ( reader -- quot )
     '[ drop _ \ } ] ;
 : parse-term ( accum class -- accum )
@@ -123,6 +125,11 @@ SYMBOL: UNK
     class \ >pprint-sequence create-method [ tuple-slots ] define ;
 
 SYNTAX: constructor last-word make-term-constructor ;
+>>
+
+<<
+\ Is make-term-constructor
+>>
 
 ! * CHRat Contract
 

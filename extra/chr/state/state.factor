@@ -11,6 +11,9 @@ FROM: syntax => _ ;
 
 ! SYMBOLS: program exec-stack store builtins match-trace current-index ;
 SYMBOLS: program exec-stack store match-trace current-index ;
+! Interpret Is{ ?x ?y } predicates in contexts as extra bindings
+SYMBOL: context-eqs
+
 SINGLETON: current-context
 INSTANCE: current-context match-var
 
@@ -131,8 +134,12 @@ DEFER: activate
     [ alive? ] filter [ enqueue ] unless-empty ;
     ! dup alive? [ activate ] [ drop ] if ;
 
+GENERIC: on-kill-chr ( susp chr -- )
+M: object on-kill-chr 2drop ;
+
 :: kill-chr ( id -- )
     store get dup id of
+    dup dup constraint>> on-kill-chr
     [ f >>alive drop id
       ! 2drop
       swap delete-at
@@ -356,8 +363,14 @@ ERROR: more-partners rule-firing more ;
 TUPLE: rule-firing rule-id trace bindings ;
 C: <rule-firing> rule-firing
 
+:: recursive-drop? ( trace -- ? )
+    trace first first2 :> ( id keep? )
+    keep? [ id store get at activated>> ] [ f ] if ; inline
+
 :: (run-occurrence) ( rule-id trace bindings partners vars -- )
-    partners empty? [
+    trace recursive-drop?
+    ! [ break ]
+    [ partners empty? [
         ! NOTE: unsure about this optimization here...
         trace [ drop alive? ] assoc-all?
         [
@@ -385,31 +398,43 @@ C: <rule-firing> rule-firing
              ] when
          ] when
         ] assoc-each
-    ] if ;
+      ] if ]
+    ! if
+    unless
+    ;
 
-:: run-occurrence ( c schedule --  )
-    c id>> :> active-id
-    ! c ctx>> current-context set
+:: run-occurrence ( susp schedule --  )
+    susp id>> :> active-id
+    ! susp ctx>> current-context set
     schedule [ occurrence>> first ] [ arg-vars>> ] [ partners>> ] tri
     :> ( rule-id arg-vars partners )
-    rule-id active-id schedule keep-active?>> 2array 1array
-    schedule rule-vars>> ! c vars>> union
+    rule-id active-id schedule keep-active?>> dup :> keep?
+    2array 1array
+    schedule rule-vars>> ! susp vars>> union
     :> vars ! valid-match-vars set
+    ! if propagate-transition, reset activated field
+    f susp activated<<
     ! [
-        ! vars valid-match-vars [ arg-vars c args>> start-match ] with-variable
-    current-context c ctx>> [ swap associate ] [ drop H{ } clone ] if* arg-vars c try-schedule-match
-    ! current-context c ctx>> swap associate arg-vars c try-schedule-match
-    ! H{ } clone arg-vars c try-schedule-match
+        ! vars valid-match-vars [ arg-vars susp args>> start-match ] with-variable
+    current-context susp ctx>> [ swap associate ] [ drop H{ } clone ] if* arg-vars susp try-schedule-match
+    ! current-context susp ctx>> swap associate arg-vars susp try-schedule-match
+    ! H{ } clone arg-vars susp try-schedule-match
         [ partners vars (run-occurrence) ] [ 2drop ] if*
     ! ] with-variable
     ;
 
 SYMBOL: sentinel
 
+! : recursion-check ( -- )
+!     ! sentinel get 5000 > [ "runaway" throw ] when
+!     sentinel get 500 > [ "runaway" throw ] when
+!     sentinel inc ;
+
 : recursion-check ( -- )
-    ! sentinel get 5000 > [ "runaway" throw ] when
-    sentinel get 500 > [ "runaway" throw ] when
-    sentinel inc ;
+    queue get length 500 > [ "runaway" throw ] when ;
+    ! ! sentinel get 5000 > [ "runaway" throw ] when
+    ! sentinel get 500 > [ "runaway" throw ] when
+    ! sentinel inc ;
 
 ! TODO: check if that is needed to make sure tail recursion works!
 ! Don't reactivate ourselves, don't reactivate more than once!
@@ -418,6 +443,8 @@ SYMBOL: sentinel
 
 TUPLE: run-schedule c schedule ;
 C: <run-schedule> run-schedule
+TUPLE: set-reactivated id ;
+C: <set-reactivated> set-reactivated
 
 : activate ( id -- )
     recursion-check
@@ -429,6 +456,10 @@ C: <run-schedule> run-schedule
         [ over alive>> [ <run-schedule> ] [ 2drop f ] if ] with map enqueue
     ] when*
     ;
+
+: reactivate-item ( id -- )
+    [ <set-reactivated> 1array enqueue ]
+    [ activate ] bi ;
 
 GENERIC: activate-new ( rule c -- )
 
@@ -477,10 +508,15 @@ M: deferred-activation activate-item
     ! [ from-rule>> ] [ chr>> ] bi activate-new ;
     dup ctx>> current-context
     [ [ from-rule>> ] [ chr>> ] bi activate-new ] with-variable ;
+
 M: integer activate-item
     ! If we have enqueued it several times, then we basically bumped it up, so no need to run it repeatedly
-    [ queue [ remove ] change ]
-    [ activate ] bi ;
+    [ queue get remove! drop ]
+    [ reactivate-item ] bi ;
+
+M: set-reactivated activate-item
+    [ queue get remove! drop ]
+    [ id>> store get ?at [ t >>activated ] when drop ] bi ;
 
 ! This is the main entry point to actually start a constraint schedule
 M: run-schedule activate-item
@@ -651,6 +687,7 @@ SYMBOL: split-states
     [ pred>constraint ] map
     2dup 2array
     [
+        H{ } clone context-eqs set
         V{ } clone split-states set
       ! H{ } clone result-config set
       0 state-id set-global
@@ -723,8 +760,10 @@ M: chr-branch activate-new ( rule c -- )
     ! swap [ merge-solver-config ] 2each ;
 
 M: false activate-new ( rule c -- )
-    queue off
-    call-next-method ;
+    current-context get
+    [ call-next-method ]
+    [ 2drop queue off ] if
+    ;
 
 ! M:: chr-branch activate-new ( rule c -- )
 !     get-solver-state :> parent-state
@@ -742,6 +781,19 @@ M: false activate-new ( rule c -- )
 
 ! M: And activate-new ( rule c -- )
 !     [ activate-new ] with each ;
+
+! ** Dynamic Equivalence
+: maybe-add-context-eq ( rhs lhs -- )
+    swap dup term-var?
+    [ current-context get context-eqs get [ drop H{ } clone ] cache
+      set-at ]
+    [ 2drop ] if ;
+
+M: Is activate-new
+    dup [ var>> ] [ src>> ] bi maybe-add-context-eq
+    call-next-method
+    ;
+! ** Runner
 
 : run-chrat-query ( query -- store )
     prepare-query run-chr-query ;

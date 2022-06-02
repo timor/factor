@@ -9,6 +9,8 @@
    - Basic predicates about types, e.g. ~P{ Instance ?x number }
    - [logicdiss] Occurrence typing without semantic subtyping is crap
 
+
+
 *** Quotations
     - represented by effect predicates, which act as instantiation templates
       when a call is registered.  These are inferred from the body.  Currently,
@@ -77,6 +79,90 @@
        - if e evaluates to non-false, then p holds
        - if e evaluates to false, then q holds
        - e's value corresponds to symbolic object o
+*** Predicate Typing/Branches
+
+    Always problem: keep compositionality.
+    Equal sign ~=~ means assignment from right to left
+    Idea: Distinction: value properties, variable properties, e.g.
+
+    ~dup number? [ swap ] when~
+
+    - x2 = dup(x1)
+    - x3 = number?(x2)
+    - True{ x3 } -->
+      - (x4, x5) = (x1, x0) (just here we know that there was another input underneath)
+    - False{ x3 } -->
+    - Some way to handle branch merge
+    - Stack after cond merge: (x6, x7)
+    - "Return"(x6, x7)
+
+
+    A name like ~x4~ represents a stack element in a certain state.
+    Regarding branching/return, two alternatives:
+    1. Always create new vars, have phi nodes on join
+    2. Split store, carry same var into different branches, rename outputs
+       accordingly
+
+
+    
+    With regards to the target output, we will most likely need to have the same
+    var ref in different branches, since pretty much no language supports
+    anything else in terms of defining return values.  Regarding the type of a
+    ref like ~x2~: Inside a branch, it is the most precise possible.  On the top
+    level (since we assume it is not a local variable), we need to consider that
+    the "container" variable must be able to hold both possible values.
+
+    So there are predicates like
+    - ~True{ x3 } --> { Instance x2 number }~ and
+    - ~False{ x3 } --> { Instance x3 not{ number } }~
+    at the same time.  In the context of CHR, this is to be taken as a
+    conjunction.  So all statements must be true at the same time.  This creates
+    some interpretational difficulties.
+
+    Suppose we have that in one branch: ~{Instance x3 number}~, and in
+    another branch ~{Instance x3 fixnum}~.  If we lift this up into the parent
+    context, then if we say ~{Instance x3 number}~ is certainly always true.
+    But this corresponds to the set-theoretic union operation, and not the
+    set-theoretic intersection operation, which would be the natural equivalent
+    of a conjunction of logical constraints.
+
+**** Predicate functions
+     Problem: During inference, if we infer effects, we infer dependent types.
+     These are sets of constraints.  Once inferred, they can simply be applied.
+     - Effects are scoped sets of predicates that we want to apply again
+     - Effects must also be inferred
+     - So two things happen in parallel:
+       1. A ~call~ indicates that a value must have an effect
+       2. An effect that is present for a ~call~ must be applied to the values
+
+       But these things can happen "in" parallel.  So if we apply an effect, but
+       notice that actually we are refininig it in the process, we would have to
+       re-apply it.  Effectively, this would amount to a fixpoint search for the
+       set of constraints in the predicate function body, which is determined by
+       the call site itself...
+** Stack Effects
+   There is a fundamental difference between e.g. these two approaches regarding
+   shuffle words:
+   1. ~: swap ( a b -- b a )~
+   2. ~: swap ( a b -- x y )~ | Is{ x b } Is{ y a }
+
+
+   The first one simply acts as renaming operations in the theory of Herbrand
+   terms when applying CHR rules.
+   The second one has "interface" semantics in the sense that there are
+   different names for input variables and output variables, and their
+   connection has to be made implicit.
+
+   For the first case, we basically simplify all ~Is{ a b }~ constraints to
+   unify ~a~ and ~b~, while for the second one, we only do that for transitive
+   pairs of this predicate.  Note that we can recover the second representation
+   from the first by simply wrapping the output again in an ~Is~ predicate, but
+   preventing the same simplifaction happending, either by restricting the
+   context, or using a variant of ~Is~ that is excluded from that simplification
+   rule.  This would then be a stable ~Alias~ predicate in the general case, or
+   a kind of ~Return~ predicate when interpreted as the last in a chain of predicates...
+
+
 * Constraint Handling Rules
   - used to express properties about types
   - Most basic: Effect types
@@ -116,6 +202,35 @@
      result types which are then merged "upwards" into the non-case-specific
      resulting effect
      - This could be what [gabrielli2009a] decribes as "Qualified Answers"
+
+*** Subcontext matching
+    - Disjunctions implemented with kind of justification mechanism.
+    - New activation of constraint with context C1
+      - matches store constraints in context C1
+      - matches store constraints in parent context
+      - in any case, newly created constraints must be also placed in C1
+    - New activation of constraint in top context
+      - matches store constraints in top context
+      - matches store constraints in child context, but assumed context then
+        has to be changed to the child context for the rest of the matching
+
+
+    Semantics regarding propagaten/simplification:
+
+    Constraints propagated by propagation rules are valid in the intersection of
+    the matching heads' preconditions.  For this, matching can "specialize" the
+    condition during matching:
+
+    1. Anything that is valid in a more general context is also valid in a more
+       specific context
+    2. If anything followed logically from a more specific context, that is only
+       universally valid in that specific context
+
+
+    Thus, constraints to be removed by simplification rules(and possibly
+    replaced), must be in the *most* specialized condition during building.
+    I.e. we can build up an implication context during matching the kept heads,
+    and this implication context must exactly match for all removed heads.
 ** Calls
    - Anonymous Functions (Quotations) are represented by inferred Effect types
    - Higher order functions occur in two ways, a "producer" way, and a
@@ -187,7 +302,9 @@
    call site).  This can not be expressed in a pure syntactical way using
    matching at all.  This becomes obvious if we consider arbitrary predicate
    type definitions.
-
+** Implementation Notes
+Follows [chr-imperative] approach mostly, especially with regards to scheduling
+using continuations.
 
 * Type System
   - semantic (sub-)typing needed, since dynamic model

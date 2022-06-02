@@ -32,24 +32,28 @@ TUPLE: named-chr < chr rule-name ;
 : keep/remove ( chr -- seq seq )
     [ heads>> ] [ nkept>> ] bi cut-slice ; inline
 
+! ** Constraint protocol
+! Return the type to look up in index
 GENERIC: constraint-type ( obj -- type )
-! NOTE: This should really be called constraint-spec instead of constraint-args,
-! since it is used to dispatch on any kind of special matching stuff...
+! Return the args to match against/display
 GENERIC: constraint-args ( obj -- args )
 
-! Internal Constraints form in program
-TUPLE: chr-cons cons atoms ;
-C: <chr-cons> chr-cons
 
-TUPLE: builtin-cons cons atoms ;
-C: <builtin-cons> builtin-cons
+! Internal Constraints form in program
+! TUPLE: chr-cons cons atoms ;
+! C: <chr-cons> chr-cons
+
+! TUPLE: builtin-cons cons atoms ;
+! C: <builtin-cons> builtin-cons
 
 ! Things that can be activated
 MIXIN: constraint
 SINGLETON: true
 SINGLETON: false
 M: false constraint-type ;
+M: false constraint-args drop f ;
 M: true constraint-type ;
+M: true constraint-args drop f ;
 INSTANCE: true constraint
 INSTANCE: false constraint
 
@@ -65,6 +69,9 @@ TUPLE: chr-scope < chr-pred cond body ;
 ! Reification of solutions
 ! TUPLE: And < chr-pred constraints ;
 TUPLE: C < chr-pred cond then ;
+M: C constraint-type then>> constraint-type ;
+M: C constraint-args ;
+MIXIN: transitive
 
 ! Pre-term for splits
 TUPLE: Cases < chr-pred cases ;
@@ -104,6 +111,10 @@ PREDICATE: fiat-pred-array < array ?first { [ word? ] [ pred-head-word? not ] [ 
 UNION: chr-constraint fiat-pred-array chr-pred chr-sub-pred as-pred ;
 INSTANCE: chr-constraint constraint
 
+! Predicates that have semantic equivalents to their logical negation
+MIXIN: has-opposite
+GENERIC: opposite-pred ( pred -- pred-type )
+
 : check-slots>tuple ( seq class -- tuple )
     2dup all-slots [ length ] same? [ "wrong # tuple args" 3array throw ] unless
     slots>tuple ;
@@ -125,7 +136,6 @@ INSTANCE: generator constraint
 M: generator pred>constraint
     clone [ [ pred>constraint ] map ] change-body ;
 
-
 TUPLE: is-val var body ;
 C: <is-val> is-val
 INSTANCE: is-val constraint
@@ -133,27 +143,27 @@ M: is-val pred>constraint
     clone [ [ pred>constraint ] map ] change-body ;
 
 ! TODO: properly fix the variable set in the suspension instead of this mess...
-UNION: chr-atom match-var ;
-GENERIC: atoms* ( obj -- )
-: atoms ( obj -- seq )
-    [ atoms* ] { } make ;
-M: object atoms* drop ;
-M: chr-atom atoms* , ;
-M: array atoms* [ atoms* ] each ;
-M: tuple atoms* tuple-slots atoms* ;
-M: constraint atoms*
-    constraint-args atoms* ;
-M: callable atoms* [ atoms* ] each ;
+! UNION: chr-atom match-var ;
+! GENERIC: atoms* ( obj -- )
+! : atoms ( obj -- seq )
+!     [ atoms* ] { } make ;
+! M: object atoms* drop ;
+! M: chr-atom atoms* , ;
+! M: array atoms* [ atoms* ] each ;
+! M: tuple atoms* tuple-slots atoms* ;
+! M: constraint atoms*
+!     constraint-args atoms* ;
+! M: callable atoms* [ atoms* ] each ;
 
 ! Wakeup set
-GENERIC: wake-up-set ( constraint -- atoms )
-M: constraint wake-up-set atoms ;
+! GENERIC: wake-up-set ( constraint -- atoms )
+! M: constraint wake-up-set atoms ;
 
 ! Called on constraints in ask position
 GENERIC: test-constraint ( bindings chr -- ? )
 ! TODO track open replacements on suspension?
-GENERIC: constraint-fixed? ( constraint -- ? )
-M: constraint constraint-fixed? constraint-args atoms empty? ;
+! GENERIC: constraint-fixed? ( constraint -- ? )
+! M: constraint constraint-fixed? constraint-args atoms empty? ;
 
 GENERIC: apply-substitution* ( subst constraint -- constraint )
 M: false apply-substitution* nip ;
@@ -194,7 +204,7 @@ M: callable apply-substitution* swap lift ;
 M: callable test-constraint
     swap lift test-callable ;
 
-TYPED: internalize-constraint ( lexical-rep -- c: constraint )
+: internalize-constraint ( lexical-rep -- c: constraint )
     pred>constraint ; inline
 
 : internalize-constraints ( seq -- seq )
@@ -212,3 +222,11 @@ TYPED: internalize-constraint ( lexical-rep -- c: constraint )
     [ internalize-constraints ] change-body
     dup rule-match-vars >>match-vars
     ;
+
+! ** Term hierarchy
+TUPLE: type-pred < chr-pred ;
+TUPLE: val-pred < type-pred val ;
+
+! ** Symbolic equivalences
+
+TUPLE: Is < type-pred var src ;
