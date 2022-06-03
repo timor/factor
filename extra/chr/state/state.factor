@@ -238,11 +238,22 @@ PRIVATE>
     maybe-inhibit-remove
     [ [ drop ] [ kill-chr ] if ] assoc-each ;
 
+ERROR: more-partners rule-firing more ;
+
+TUPLE: rule-firing rule-id bindings ;
+C: <rule-firing> rule-firing
+
+: schedule-fire-cont ( rule-id bindings -- )
+    <rule-firing> '[ _ swap more-partners ] callcc0 ;
+
 : fire-rule ( rule-id trace bindings -- )
     { [ nip check-guards ]
       [ drop check/update-history ]
       [ [ drop ] 2dip simplify-constraints t ]
-      [ nip run-rule-body t ]
+      [ nip
+        schedule-fire-cont
+        ! run-rule-body
+        t ]
     } 3&& drop ;
 
 ! The thing dispatched on is in the partner slot in the schedule
@@ -269,9 +280,14 @@ GENERIC: match-constraint ( bindings suspension match-spec -- bindings )
     ] if ;
 
 ! TODO: sub-context semantics?
+! NOTE: if matching against a C predicate, we don't touch the context
 :: match-constraint-in-context ( bindings susp match-spec -- bindings )
-    bindings susp ctx>> combine-context?
-    [ susp match-spec match-constraint ] [ f ] if* ;
+    match-spec C? [ bindings susp match-spec match-constraint ]
+    [
+        bindings susp ctx>> combine-context?
+        [ susp match-spec match-constraint ] [ f ] if*
+    ] if
+    ;
 
 ! We match a suspension in C1 against a { C ?x ... }
 ! When matching a C constraint, we need to turn the context bindings themselves off
@@ -355,14 +371,6 @@ DEFER: match-single-head
 ! TUPLE: schedule-cont rule-id trace bindings partners vars ;
 ! C: <schedule-cont> schedule-cont
 
-ERROR: more-partners rule-firing more ;
-
-! : run-partners ( -- ) ;
-
-! : partner-cont
-TUPLE: rule-firing rule-id trace bindings ;
-C: <rule-firing> rule-firing
-
 :: recursive-drop? ( trace -- ? )
     trace first first2 :> ( id keep? )
     keep? [ id store get at activated>> ] [ f ] if ; inline
@@ -374,10 +382,12 @@ C: <rule-firing> rule-firing
         ! NOTE: unsure about this optimization here...
         trace [ drop alive? ] assoc-all?
         [
-            [ rule-id trace bindings
-          ! fire-rule
-          <rule-firing>
-          swap more-partners ] callcc0
+            rule-id trace bindings fire-rule
+            ! schedule-fire-cont
+          !   [ rule-id trace bindings
+          ! ! fire-rule
+          ! <rule-firing>
+          ! swap more-partners ] callcc0
          ] when
         ! rule-id trace bindings fire-rule
     ] [
@@ -451,6 +461,7 @@ C: <set-reactivated> set-reactivated
     ! check-integrity
     store get at
     [
+        f >>activated
         dup type>> program get schedule>> at
         ! dup length 1 > [ break ] when
         [ over alive>> [ <run-schedule> ] [ 2drop f ] if ] with map enqueue
@@ -515,17 +526,18 @@ M: integer activate-item
     [ reactivate-item ] bi ;
 
 M: set-reactivated activate-item
-    [ queue get remove! drop ]
-    [ id>> store get ?at [ t >>activated ] when drop ] bi ;
+    ! [ queue get remove! drop ]
+    ! [ id>> store get ?at [ t >>activated ] when drop ] bi ;
+    id>> store get ?at [ t >>activated ] when drop ;
 
 ! This is the main entry point to actually start a constraint schedule
 M: run-schedule activate-item
     [ c>> ] [ schedule>> ] bi
-    over alive>> [ run-occurrence ]
+    over { [ alive>> ] [ activated>> not ] } 1&& [ run-occurrence ]
     [ 2drop ] if ;
 
 M: rule-firing activate-item
-    [ rule-id>> ] [ trace>> ] [ bindings>> ] tri fire-rule ;
+    [ rule-id>> ] [ bindings>> ] bi run-rule-body ;
 
 M: more-partners activate-item
     more>> continue ;
