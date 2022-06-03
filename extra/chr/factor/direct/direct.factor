@@ -24,7 +24,6 @@ TUPLE: TransRule < chr-pred head body ;
 ! Slightly delayed...
 TUPLE: EffectCall < Effect from to ;
 TUPLE: RecursiveCall < type-pred quot in out ;
-TUPLE: InferDone < chr-pred word ;
 TUPLE: RebuildEffect < InferEffect ;
 TUPLE: ApplyEffects < chr-pred word tags in out ;
 TUPLE: PerformCall < chr-pred call-pred effect-pred ;
@@ -163,6 +162,7 @@ CHR: is-transitive @ Is{ ?b ?a } // Is{ ?c ?b } -- | Is{ ?c ?a } ;
 
 ! NOTE: that one necessitates re-wrapping if we need an input-output interface with explicit different var-names.
 CHR: is-same-var-in-top-ctx @ // { C f Is{ ?b ?c } } -- [ ?b term-var? ] [ ?c term-var? ] | [ ?b ?c ==! ] ;
+
 ! CHR: is-transitive @ Is{ ?b ?a } // Is{ ?c ?b } -- | [ ?b ?c ==! ] ;
 ! CHR: is-transitive-in-any-ctx @ Is{ ?c ?b } Is{ ?b ?a } // -- | Is{ ?c ?a } ;
 ! CHR: copy-trans-lit @ Is{ ?b A{ ?v } } // Is{ ?c ?b } -- | Is{ ?c ?v } { Used ?b } ;
@@ -188,6 +188,12 @@ CHR: dup-val-preds-backward @ <={ Dup ?x ?y } AS: ?p <={ val-pred ?x . ?xs } // 
 
 CHR: dup-val-preds-forward @ <={ Dup ?y ?x } AS: ?p <={ val-pred ?x . ?xs } // -- |
 [ ?p clone ?y >>val ] ;
+
+
+! *** Move up expression definitions to the output-most variable
+! CHR: transitive-expr @ Is{ ?c ?b } // { Expr ?b ?v } -- | { Expr ?c ?v } ;
+! CHR: transitive-expr-same-context @ { C ?c Is{ ?c ?b } } // { C ?c P{ Expr ?b ?v } } -- | { C ?c P{ Expr ?c ?v } } ;
+
 
 ! ** Import type solvers
 IMPORT: chr-types
@@ -245,10 +251,17 @@ CHR: propagate-transitive-pred-dup-rhs-2 @ { Dup ?y ?z } AS: ?p <={ transitive ?
 
 IMPORT: chr-effects
 
-
 ! ** Apply Effects at call sites
-CHR: apply-call-effect @ Is{ ?b { call L{ ?q . ?a } } } AS: ?e P{ Effect ?q __ ?rho ?sig ?l } // -- |
-{ ApplyEffect ?a ?b ?e } ;
+CHR: apply-call-effect @ Is{ ?b { call L{ ?q . ?a } } } AS: ?e P{ Effect ?q __ ?rho ?sig ?l } // --
+[ ?e instantiate-effect :>> ?k ]
+|
+[ ?k constraints>> ]
+[ ?k [ in>> ] [ out>> ] bi 2array { ?a ?b } ==! ] ;
+! [ ?e instantiate-effect
+!   [ constraints>> ]
+!   bi 2array
+! ] ;
+! { ApplyEffect ?a ?b ?e } ;
 ! |
 ! [| | ?e instantiate-effect [ in>> ] [ out>> ] [ constraints>> ]
 !  tri :> ( in out body )
@@ -259,13 +272,6 @@ CHR: apply-call-effect @ Is{ ?b { call L{ ?q . ?a } } } AS: ?e P{ Effect ?q __ ?
 !      body
 !  }
 ! ] ;
-
-
-
-! ** Partial evaluation
-
-IMPORT: chr-quot
-
 
 ! ** Domain-specific solver triggers
 ! Here be special per-word stuff
@@ -301,6 +307,10 @@ CHR: comparison-defines-rel @ P{ Expr ?x { ?w ?a ?b } } // -- [ ?w rel-preds key
 ! CHR: le-pred-comp @ { Le ?x ?y } // -- | { le ?x ?y } ;
 
 
+
+! ** Partial evaluation
+
+IMPORT: chr-quot
 
 ! *** Currying
 ! Two approaches:

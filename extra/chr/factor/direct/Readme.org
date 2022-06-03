@@ -370,20 +370,45 @@ using continuations.
 ** Effect Inference steps
    Input: Infer quot between stack a and b
 
-   1. Call the Transition solver
-      1. Step through quotation, returning a series of Eval Predicates
-      2. Mark/Sweep the remaining Stack definitions
-   2. Perform constraint completion
-      1. Run through all Eval predicates, and fill the store with value constraints
-      2. In parallel, all kinds of subordinate solvers will be active to
-         simplify/complete
-   3. Start the Effect solver
-      1. Put an infer-effect request between stacks a and b
-      2. Collect all predicates that are described by the bound variables,
-         returning an Effect pred.
-      3. Clean up any remaining predicates that are covered by the scope of the
-         Effect between a and b.
+   1. Step through quotation, returning a series of ~Is~ Predicates between
+      stack definitions
+      - The basic construct is ~Is{ ?c { call [ w1 w2 ] ?a } }~
+      - This is decomposed into ~Is{ ?b { execute w1 } ?a }~ and
+        ~Is{ ?c { call [ w2 ] ?b } }~ until the quotation is empty
+      - On the ~execute~ level, things like conditionals are intercepted and
+        handled specially
+      - Also, the effect is applied to expand the input and output variables of
+        the ~Is~ predicate structurally.
+      - Eventually, the ~Is{ ?b { execute w } ?a }~ predicate is transformed
+        into a ~Is{ ?b { w ?a } }~ form, denoting an expression instead of a
+        transition, semantically.  The idea is that the predicate is now for
+        value/type reasoning or definition collection, but not for partial
+        execution anymore.
+        There are several ways this is done
+        - Direct handling because we are executing something special
+        - Immediate Conversion because the word is primitive
+        - If we have an inferred effect definition, this is applied to the
+          inputs and outputs, and converted.
+      - From a ~Is{ ?b { w ?a } }~ form, other expressions are derived.
+        - Also, on that level, folding is checked.  This means that we do not jump
+          back to the /execute/ level after values are known.  T
+        - TODO: This has impliciations for e.g. if we have a word that is folded
+          and returns somthing that is called, then we are not on the original
+          execute context anymore.  However, we can trigger an inference on the
+          returned quot, so this should not be a problem.
+        - The most general variant on that level is a
+          ~{ Expr y { foo { x1 x2 x3 } } }~  predicate.
 
+**** Levels of equational theories
+     - Builtin herbrand solver with ~==~ and ~==!~ words, performs
+       (solver-branch-)scoped term equivalence.
+     - ~{ Is y x }~ Predicates, which can exist in a conditional context.  Via
+       ~ground-value-in-context~ it is possible to solve using all applicable
+       ~Is~ predicates in the current context in addition to the (global)
+       equational theory.  This is used for:
+       - Branch balance checks after conditionals
+       - Literal checks for foldable calls
+       - Substituting ground values into ~{ Expr y ... }~ predicates.
 *** Calls
     If a call is encountered, if the callee is literal, call the transition
     solver in-place.  The quot can be dropped and it's value is uninteresting

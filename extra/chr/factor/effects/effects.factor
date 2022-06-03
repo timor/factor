@@ -95,7 +95,7 @@ CHR: redundant-effect @ { Effect ?w ?c ?a ?b ?l } // { Effect ?w ?c ?a ?b ?l } -
     [ get-context-bindings ] 2dip
     2array 1array [ solve-next ] no-var-restrictions ;
 
-CHR: apply-effect-on @ // { ApplyEffect ?a ?b ?e } -- |
+CHR: do-apply-effect-on @ // { ApplyEffect ?a ?b ?e } -- |
 [| | ?e instantiate-effect [ in>> ] [ out>> ] [ constraints>> ]
  tri :> ( in out body )
  ! { in out } { ?a ?b } [ solve-eq ] no-var-restrictions drop
@@ -108,16 +108,23 @@ CHR: apply-effect-on @ // { ApplyEffect ?a ?b ?e } -- |
 ] ;
 
 ! FIXING: Completely rebuild with fresh vars!
-! CHR: same-effect-vars @ { Effect ?q __ ?a ?b __ } // AS: ?e P{ Effect ?q __ ?c ?d ?l } -- |
-CHR: same-effect-vars @ { Effect ?q __ ?a ?b __ } // AS: ?e P{ Effect ?q __ __ __ __ } -- |
-{ ApplyEffect ?a ?b ?e } ;
-! [
-!     ! Make sure we don't create a recursive effect
-!     { ?a ?b } { ?c ?d } solve-eq drop f ]
-! [| | ?e instantiate-effect [ in>> ] [ out>> ] [ constraints>> ]
-!   tri :> ( in out body )
-!   body { in out } { ?a ?b } break [ solve-eq ] no-var-restrictions lift
-! ] ;
+! ! CHR: same-effect-vars @ { Effect ?q __ ?a ?b __ } // AS: ?e P{ Effect ?q __ ?c ?d ?l } -- |
+! CHR: same-effect-vars @ { Effect ?q __ ?a ?b __ } // AS: ?e P{ Effect ?q __ __ __ __ } -- |
+! { ApplyEffect ?a ?b ?e } ;
+! ! [
+! !     ! Make sure we don't create a recursive effect
+! !     { ?a ?b } { ?c ?d } solve-eq drop f ]
+! ! [| | ?e instantiate-effect [ in>> ] [ out>> ] [ constraints>> ]
+! !   tri :> ( in out body )
+! !   body { in out } { ?a ?b } break [ solve-eq ] no-var-restrictions lift
+! ! ] ;
+
+! NOTE: this does _not_ cause effects to be re-applied, only to be re-inferred!
+CHR: rebuild-effect-conjunction @ { Effect ?q __ ?a ?b ?k } // AS: ?e P{ Effect ?q __ ?x ?y ?l } -- |
+[ ?e instantiate-effect
+  [ [ in>> ] [ out>> ] bi 2array { ?a ?b } ==! ]
+  [ constraints>> ] bi 2array
+] ;
 
 ! Expand Effect Conjunctions
 

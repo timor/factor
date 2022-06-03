@@ -14,9 +14,20 @@ TUPLE: lt < chr-pred x y ;
 TUPLE: gt < chr-pred x y ;
 TUPLE: ne < chr-pred x y ;
 TUPLE: is < chr-pred x y ;
+TUPLE: eql < chr-pred x y ;
 TUPLE: _is < chr-pred x y ;
-CHRAT: chrat-comp { le ge lt gt ne is _is }
+UNION: comp-pred le ge lt gt ne eql ;
+INSTANCE: comp-pred has-opposite
+INSTANCE: comp-pred transitive
+M: gt opposite-pred drop le ;
+M: le opposite-pred drop gt ;
+M: ge opposite-pred drop lt ;
+M: lt opposite-pred drop ge ;
+M: eql opposite-pred drop ne ;
+M: ne opposite-pred drop eql ;
+CHRAT: chrat-comp { le ge lt gt ne eql is _is }
 ! CHRAT: chrat-comp { le ge lt gt ne }
+    CHR: unique-comp-pred @ AS: ?p <={ comp-pred } // AS: ?q <={ comp-pred } -- [ ?p ?q == ] | ;
     CHR{ // { ne ?x ?x } -- | false }
     CHR{ // { is ?x ?x } -- | }
     CHR{ { is ?x ?y } // { is ?x ?y } -- | }
@@ -42,12 +53,15 @@ CHRAT: chrat-comp { le ge lt gt ne is _is }
 
     CHR{ { le ?x ?y } // { ask { ge ?y ?x } } -- | { entailed { ge ?y ?x } } }
 
-    CHR{ // { le ?x ?y } { ne ?x ?y } -- | { lt ?x ?y } }
+    ! CHR{ // { le ?x ?y } { ne ?x ?y } -- | { lt ?x ?y } }
 
     CHR{ // { lt ?x ?x } -- | false }
 
     ! Existential guard!
-    CHR{ { lt ?x ?y } // -- { le ?y ?z } | { lt ?x ?z } }
+    ! CHR{ { lt ?x ?y } // -- { le ?y ?z } | { lt ?x ?z } }
+
+    ! Express lt with non-equality
+    ! CHR: lt-excludes-equality @ { lt ?x ?y } // -- | { ne ?x ?y } ;
 
 
     CHR{ { lt ?x ?y } // { lt ?x ?y } -- | }

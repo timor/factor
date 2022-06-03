@@ -1,6 +1,7 @@
 USING: accessors arrays assocs assocs.extras chr chr.programs chr.state
-classes.builtin formatting io kernel math math.parser namespaces prettyprint
-sequences system terms tools.annotations tools.walker ;
+classes.builtin combinators continuations effects formatting io kernel math
+math.parser namespaces prettyprint sequences system terms tools.annotations
+tools.annotations.private tools.continuations tools.walker ;
 
 IN: chr.debug
 
@@ -46,8 +47,13 @@ IN: chr.debug
     lift . ;
 
 : susp. ( chr-suspension --  )
-    [ id>> "%d: " printf ] [ constraint>> pprint ]
-    [ from-rule>> [ rule-id " (Rule: %s)\n" printf ] [ nl ] if* ] tri ;
+    {
+        [ id>> "%d: " printf ]
+        [ ctx>> [ " (%u) " printf ] when* ]
+        [ constraint>> pprint ]
+        [ from-rule>> [ rule-id " (Rule: %s)\n" printf ] [ nl ] if* ]
+    }
+    cleave ;
 
 : id-susp. ( id -- )
     store get at susp. ;
@@ -73,6 +79,8 @@ IN: chr.debug
     \ make-equal [ [ 2dup "Unify: %u ==! %u\n" printf ] prepose ] annotate
     M\ chr-or activate-new [ [ "SPLIT" print ] prepose ] annotate
     M\ chr-branch activate-new [ [ "BRANCH" print ] prepose [ "RETURN" print ] compose ] annotate
+    ! M\ C activate-new [ '[ current-context get _ dip current-context get "CTX %u -> %u\n" printf ] ] annotate
+    M\ C activate-new [ [ dup cond>> current-context get swap "CTX: %u -> %u\n" printf ] prepend ] annotate
     \ run-queue [ [ "Flushing queue" print ] prepose ] annotate
     \ merge-solver-config [ [ 2dup swap "Merging store with key: %u\n" printf store>> [ constraint>> ] map-values . ] prepend ] annotate
     ;
@@ -82,6 +90,46 @@ IN: chr.debug
 
 :: break-id-match ( rule-num susp-id -- )
     \ run-occurrence [ 2dup [ id>> susp-id = ] [ occurrence>> first rule-num = ] bi* and ] breakpoint-if ;
+
+! ** Conditional debug stuff
+SYMBOL: debug-cond
+! : run-with-cond ( quot -- )
+!     [ t debug-cond set-global  ] dip
+!     [  ] [ f debug-cond set-global ] cleanup ; inline
+
+! : annotate-if ( trigger-word condition target-word annotation -- )
+: annotate-trigger ( trigger-word condition -- )
+    '[ [ @ [ t debug-cond set-global ] when ] prepose
+       '[ _ [ f debug-cond set-global ] finally ]
+    ] annotate ;
+
+MACRO: entering-if ( word cond-quot -- quot )
+    [ dup stack-effect [ in>> ] "Entering" trace-quot ] dip swap
+    '[ @ _ when ] ;
+
+MACRO: leaving-if ( word cond-quot -- quot )
+    [ dup stack-effect [ out>> ] "Leaving" trace-quot ] dip swap
+    '[ @ _ when ] ;
+
+: (watch-if) ( word cond-quot def -- def )
+    2over
+    '[ _ _ entering-if @ _ _ leaving-if ] ;
+
+: watch-if ( word cond-quot -- )
+    dupd '[ [ _ _ ] dip (watch-if) ] annotate ;
+
+:: trigger-id-match ( rule-num susp-id -- )
+    \ run-occurrence [ 2dup [ id>> susp-id = ] [ occurrence>> first rule-num = ] bi* and ] annotate-trigger
+    M\ C match-constraint [ [ debug-cond get [ break ] when ] prepose ] annotate
+    \ match-constraint-in-context [ debug-cond get ] watch-if
+    \ sort-lookup [ debug-cond get ] watch-if
+    \ try-schedule-match [ debug-cond get ] watch-if
+    \ check-guards [ debug-cond get ] watch-if
+    ! \ activate-item watch
+    ! \ reactivate watch
+    ;
+
+
 
 SYMBOL: chr-trace
 

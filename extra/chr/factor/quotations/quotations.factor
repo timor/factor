@@ -1,7 +1,7 @@
 USING: accessors arrays chr chr.factor chr.factor.defs chr.factor.effects
 chr.factor.terms chr.parser chr.state classes.algebra combinators
-combinators.short-circuit continuations effects generic kernel lists math
-math.parser quotations sequences sets strings terms types.util words
+combinators.short-circuit compiler continuations effects generic kernel lists
+math math.parser quotations sequences sets strings terms types.util words
 words.symbol ;
 
 IN: chr.factor.quotations
@@ -90,6 +90,7 @@ TUPLE: Mark < chr-pred ctx val ;
 TUPLE: Marked < chr-pred vals ;
 
 TUPLE: InferWord < chr-pred word ;
+TUPLE: InferDone < chr-pred word ;
 TUPLE: InferQuot < chr-pred var code ;
 
 
@@ -180,10 +181,11 @@ CHR: eval-quot-step @ // { Is ?b { call A{ ?q } ?a } } -- [ ?q callable? ] |
 
 ! ** Pushing quotations
 CHR: execute-push-quot @ // Is{ ?b { execute A{ ?v } ?a } } -- [ ?v callable? ] |
+{ InferQuot Quot ?v }
 Is{ ?xs ?a }
 Is{ ?b L{ Quot . ?xs } }
 Is{ Quot ?v }
-{ InferQuot Quot ?v } ;
+    ;
 
 
 ! ** Push literals
@@ -191,10 +193,6 @@ Is{ Quot ?v }
 CHR: execute-push @ // Is{ ?b { execute A{ ?v } ?a } } -- [ ?v callable-word? not ] |
 { Is ?xs ?a }
 { Is ?b L{ W{ ?v } . ?xs } } ;
-
-! ** Catch primitives
-CHR: convert-primitive-exec @ // Is{ ?b { execute A{ ?w } ?a } } -- [ ?w primitive? ] |
-{ Is ?b { ?w ?a } } ;
 
 ! ** Handle known shuffles
 CHR: apply-primitive-shuffle @ // Is{ ?b { A{ ?w } ?a } } -- [ ?w "shuffle" word-prop :>> ?e ] |
@@ -224,40 +222,36 @@ CHR: apply-primitive-shuffle @ // Is{ ?b { A{ ?w } ?a } } -- [ ?w "shuffle" word
 ! Is{ ?b { ? ?a } }
 !     ;
 
-! ** Handle other effects
-CHR: known-effect-structure @ Is{ ?b { execute A{ ?w } ?a } } // -- [ ?w defined-effect :>> ?e ] |
+:: check-effect-structure ( in out effect -- ? )
+    {
+        [ in list>array* length effect in>> length >= ]
+        [ out list>array* length effect out>> length >= ]
+    } 0&& ;
+
+! ** Add info from declared effects
+! CHR: known-effect-structure @ Is{ ?b { execute A{ ?w } ?a } } // -- [ ?w defined-effect :>> ?e ] |
+! NOTE: taking this out to prevent immediate self-reactivation!  This means we
+! do have to check for re-application based on the actual arguments though.
+CHR: known-effect-structure @ // AS: ?k Is{ ?b { execute A{ ?w } ?a } } -- [ ?w defined-effect :>> ?e ]
+[ ?a ?b ?e check-effect-structure not ]
+|
 [| | ?e effect>stacks :> ( sin sout )
  {
      Is{ sin ?a }
      Is{ ?b sout }
  }
-] ;
+]
+[ ?k ] ;
+
+! ** Catch primitives
+CHR: convert-primitive-exec @ // Is{ ?b { execute A{ ?w } ?a } } -- [ ?w primitive? ] |
+{ Is ?b { ?w ?a } } ;
+
 
 ERROR: imbalanced-branch-stacks a b ;
 ! ** Special words
-! CHR: do-branch @ Is{ ?b { if L{ ?q ?p ?c . ?a } } } // -- |
-! Is{ ?x { call L{ ?p . ?a } } }
-! Is{ ?y { call L{ ?q . ?a } } }
-! [ { ?a ?x } { ?a ?y } [ [ solve-eq ] no-var-restrictions ]
-!   [ dup recursive-term-error? [ drop f lift imbalanced-branch-stacks ] [ rethrow ] if ] recover
-!   drop f
-! ]
-! { C True{ ?c } Is{ ?b ?x } }
-! { C False{ ?c } Is{ ?b ?y } } ;
 
-! CHR: do-mux @ Is{ L{ ?v . ?b } { ? L{ ?q ?p ?c . ?a } } } // -- |
-! { Is ?b ?a }
-! { <--> True{ ?c } P{ Instance ?c not{ POSTPONE: f } } }
-! { <--> False{ ?c } Is{ ?c W{ f } } }
-! { C True{ ?c } Is{ ?v ?p } }
-! { C False{ ?c } Is{ ?v ?q } }
-!     ;
-
-! CHR: expand-if @ { Is ?b { if L{ ?q ?p ?c . ?a } } } // -- |
-! { <--> True{ ?c } P{ Instance ?c not{ POSTPONE: f } } }
-! { <--> False{ ?c } Is{ ?c W{ f } } }
-! { C True{ ?c } { Is{ ?b { call L{ ?p . ?a } } } } }
-! { C False{ ?c } { Is{ ?b { call L{ ?q . ?a } } } } } ;
+! *** Conditionals
 
 : check-branch-effects ( pair1 pair2 -- )
     [ solve-in-context drop ]
@@ -266,11 +260,9 @@ ERROR: imbalanced-branch-stacks a b ;
 
 ! NOTE: pre-computing the branches without conditions does not work because of
 ! side-effects which have to be assigned to the corresponding conditions!
-CHR: expand-if @ { Is ?b { if L{ ?q ?p ?c . ?a } } } // -- |
+CHR: expand-if @ { Is ?b { execute if L{ ?q ?p ?c . ?a } } } // -- |
 { C True{ ?c } { P{ Drop ?q } P{ Instance ?c not{ POSTPONE: f } } } }
 { C False{ ?c } { P{ Drop ?p } Is{ ?c W{ f } } } }
-! { C True{ ?c } Is{ ?b { call L{ ?p . ?a } } } }
-! { C False{ ?c } Is{ ?b { call L{ ?q . ?a } } } }
 { C True{ ?c } Is{ ?x { call L{ ?p . ?a } } } }
 { C False{ ?c } Is{ ?y { call L{ ?q . ?a } } } }
 [ { ?a ?x } { ?a ?y }
@@ -281,19 +273,34 @@ CHR: expand-if @ { Is ?b { if L{ ?q ?p ?c . ?a } } } // -- |
 { C False{ ?c } Is{ ?b ?y } }
     ;
 
+! *** Predicate words
+
 CHR: predicate-words @ Is{ L{ ?c . __ } { A{ ?w } L{ ?v . __ } } } // -- [ ?w "predicating" word-prop :>> ?tau ] [ ?tau class-not :>> ?sig ] |
 { C True{ ?c } { Is{ ?c W{ t } } P{ Instance ?v ?tau } } }
 { C False{ ?c } { Is{ ?c W{ f } } P{ Instance ?v ?sig } } }
 ;
 
+! *** Currying
+CHR: expand-curry @ // Is{ L{ ?q . ?b } { execute curry L{ ?p ?x . ?a } } } -- |
+{ Effect ?q f ?rho ?sig { Is{ ?sig { call L{ ?p ?x . ?rho } } } } }
+! { Effect ?p f L{ ?x . ?rho } ?sig f }
+! { Effect ?q f ?rho ?sig f }
+    ;
+
+
+! *** Dynamic Calls
+
+! NOTE: not a primitive, not a regulard word
+CHR: convert-call @ // Is{ ?b { execute call ?a } } -- | Is{ ?b { call ?a } } ;
+
 ! ** Handle general word calls
 
-CHR: apply-known-effect @ AS: ?e P{ Effect ?w ?c ?s ?t ?k } Is{ ?b { ?w ?a } } // -- |
-[| | ?e instantiate-effect
- [ in>> ] [ out>> ] [ constraints>> ] tri :> ( in out body )
- Is{ in ?a }
- Is{ ?b out }
- body 3array ] ;
+! CHR: apply-known-effect @ AS: ?e P{ Effect ?w ?c ?s ?t ?k } Is{ ?b { ?w ?a } } // -- |
+! [| | ?e instantiate-effect
+!  [ in>> ] [ out>> ] [ constraints>> ] tri :> ( in out body )
+!  Is{ in ?a }
+!  Is{ ?b out }
+!  body 3array ] ;
 
 ! ** Recursive Call Site
 TUPLE: RecursiveExec < chr-pred stack-in stack-out word ;
@@ -302,14 +309,50 @@ TUPLE: RecursiveExec < chr-pred stack-in stack-out word ;
 ! { RecursiveExec ?a ?b ?w }
 ! Is{ ?b { ?w ?a } } ;
 
+
+! ** Folding
+
+PREDICATE: predicate-word < word "predicating" word-prop ;
+GENERIC: fold-word? ( w -- ? )
+M: object fold-word? drop f ;
+M: predicate-word fold-word? drop t ;
+M: word fold-word? foldable? ;
+
+! NOTE: fold errors are silent here
+! ! FIXME: do this converstion completely, without using Expr
+! CHR: fold-simple-expr @ // { Expr ?y { ?w ?xs } } -- [ ?w fold-word? ] [ ?xs ground-value-in-context :>> ?x ground-value? ]
+! [ ?x <reversed> [ wrapped>> ] map ?w 1quotation with-datastack first :>> ?r drop t ]
+! |
+! { Is ?y ?r }
+! [ ?xs [ Dead boa ] map ]
+!     ;
+! FIXME: do this converstion completely, without using Expr
+CHR: fold-def-expr @ // { Is ?b { ?w ?a } } --
+[ ?w fold-word? ]
+[ ?w defined-effect :>> ?e ]
+[ ?a ?ground-value list>array* :>> ?i  ]
+[ ?i ground-value-in-context :>> ?x ground-value? ]
+[ ?b ?ground-value list>array* :>> ?o ]
+[ ?o ?e out>> swap longer? not ]
+[ ?i ?e in>> swap longer? not ]
+[ ?x <reversed> [ wrapped>> ] map ?w 1quotation with-datastack [ <wrapper> ] map :>> ?r drop t ]
+|
+[ ?o ?r [ Is boa ] 2map ]
+! [ ?x [ Dead boa ] map ]
+    ;
+
+
 ! ** Make Expression from Execute
 
 ! Step one: interpret words as functions from stacks to stacks
-CHR: convert-exec-expr @ // Is{ ?b { execute A{ ?w } ?a } } -- |
+! NOTE: this is the point where we actually drop out of execute semantics into value-only semantics
+! FIXME: this should only happen if we have a known effect!
+CHR: convert-exec-expr @ { Effect ?w __ __ __ __ } // Is{ ?b { execute A{ ?w } ?a } } -- |
 Is{ ?b { ?w ?a } } ;
 
 ! Step two: Convert normal words with only one output parameter
-CHR: shave-of-term-expr @ Is{ L{ ?y . __ } { A{ ?w } ?a } } // --
+! CHR: shave-of-term-expr @ Is{ L{ ?y . __ } { A{ ?w } ?a } } // --
+CHR: shave-of-term-expr @ // Is{ L{ ?y . __ } { A{ ?w } ?a } } --
 ! CHR: shave-of-term-expr @ // Is{ L{ ?y . __ } { A{ ?w } ?a } } --
 [ ?w inline? not ] [ ?w defined-effect :>> ?e ]
 [ ?e variable-effect? not ]
@@ -319,48 +362,42 @@ CHR: shave-of-term-expr @ Is{ L{ ?y . __ } { A{ ?w } ?a } } // --
 |
 { Expr ?y { ?w ?x } } ;
 
-PREDICATE: predicate-word < word "predicating" word-prop ;
-
-! ** Folding
-GENERIC: fold-word? ( w -- ? )
-M: object fold-word? drop f ;
-M: predicate-word fold-word? drop t ;
-M: word fold-word? foldable? ;
-
-! NOTE: fold errors are silent here
-! FIXME: do this converstion completely, without using Expr
-CHR: fold-simple-expr @ // { Expr ?y { ?w ?xs } } -- [ ?w fold-word? ] [ ?xs ground-value-in-context :>> ?x ground-value? ]
-[ ?x <reversed> [ wrapped>> ] map ?w 1quotation with-datastack first :>> ?r drop t ]
-|
-{ Is ?y ?r }
-[ ?xs [ Dead boa ] map ]
-    ;
-
+CHR: bake-expression-literals @ { Is ?x A{ ?v } } // AS: ?e P{ Expr ?y { ?w ?l } } --
+[ ?x ?l in? ] |
+[ ?e { { ?x ?v } } lift ] ;
 
 ! ** Trigger Inference
-! CHR: request-unknown-effect @ Is{ ?b { execute A{ ?w } ?a } } // --
-! [ ?w no-compile? not ] [ ?w { if } in? not ] [ ?w "predicating" word-prop not ] |
-! { InferWord ?w } ;
-! CHR: request-unknown-effect @ Is{ ?b { execute A{ ?w } ?a } } // --
-! [ ?w no-compile? not ] [ ?w { ? } in? not ] [ ?w "predicating" word-prop not ] |
-! { InferWord ?w } ;
+CHR: request-unknown-effect @ Is{ ?b { execute A{ ?w } ?a } } // --
+[ ?w no-compile? not ] [ ?w { if } in? not ] [ ?w "predicating" word-prop not ] |
+{ InferWord ?w } ;
 
-
-CHR: infer-regular-word @ { InferWord A{ ?w } } // -- [ ?w generic? not ] [ ?w def>> :>> ?q ] |
+! ** Infer word definition
+CHR: infer-regular-word @ { InferWord A{ ?w } } // -- [ ?w word? ] [ ?w generic? not ] [ ?w def>> :>> ?q ] |
 ! NOTE: first putting the effect is another way to prevent circular inference
 { Is ?b { call ?q ?a } }
 { InferEffect ?w f ?a ?b f }
+{ InferDone ?w }
 ! { Effect ?w f ?a ?b f }
     ;
 
+! ** Infer Generic definition
+! NOTE: Placeholder
+CHR: infer-generic-word @ // { InferWord A{ ?w } } -- [ ?w generic? ] [ ?w defined-effect effect>stacks :>> ?b drop :>> ?a ] |
+{ Effect ?w f ?a ?b f } ;
+
 CHR: infer-callable @ { InferWord A{ ?q } } // -- [ ?q callable? ] |
 { Is ?b { call ?q ?a } }
-{ InferEffect ?q f ?a ?b f } ;
+{ InferEffect ?q f ?a ?b f }
+{ InferDone ?q } ;
 
 CHR: infer-quot-var @ // { InferQuot ?w ?q } -- |
 { InferWord ?w }
 { Is ?b { call ?q ?a } }
-{ InferEffect ?w f ?a ?b f } ;
+{ InferEffect ?w f ?a ?b f }
+{ InferDone ?w }
+    ;
+
+CHR: remove-infer-word-marker @ { InferDone ?w } // { InferWord ?w } -- | ;
 
 ! ** Resolve Recursive Call Sites
 CHR: apply-recusive-call-effect @ AS: ?e P{ Effect ?w ?c ?s ?t ?k } // { RecursiveExec ?a ?b ?w } -- |
@@ -372,10 +409,10 @@ CHR: apply-recusive-call-effect @ AS: ?e P{ Effect ?w ?c ?s ?t ?k } // { Recursi
 
 ! ** Wrap up inferred Effect
 ! CHR: finish-infer-effect @ // { InferWord ?n } { InferEffect ?n ?c ?a ?b ?k } -- |
-CHR: finish-infer-effect @ { InferWord ?n } // { InferEffect ?n ?c ?a ?b ?k } -- |
+CHR: finish-infer-effect @ { InferDone ?n } // { InferEffect ?n ?c ?a ?b ?k } -- |
 { Effect ?n ?c ?a ?b ?k } ;
 
-CHR: cleanup-inferred-effect @ { Effect ?n __ ?a ?b __ } // { InferWord ?n } -- [ ?b vars :>> ?v ] |
+CHR: cleanup-inferred-effect @ { Effect ?n __ ?a ?b __ } // { InferDone ?n } -- [ ?b vars :>> ?v ] |
 { Marked ?v } ;
 
 
