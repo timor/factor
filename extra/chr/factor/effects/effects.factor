@@ -179,6 +179,17 @@ CHR: collect-effect-top-pred @ // { C ?d AS: ?k <={ refine-pred } } { C ?c AS: ?
 [ ?k free-vars ?v subset? ] |
 [ ?e [ ?k ?d [ swap C boa ] when* suffix ] change-constraints ?c swap C boa ] ;
 
+CHR: infer-existential-effect-var @ { C ?d AS: ?k Is{ ?y ?x } } // { C ?c AS: ?e P{ Effect __ __ __ __ ?l } } --
+[ ?c not ]
+[ ?c ?d and [ ?c ?d = ] [ ?c not ] if ]
+[ ?k ?l in? not ] [ ?e bound-vars :>> ?v ]
+[ ?y free-vars ?v subset? ]
+[ ?x free-vars :>> ?xs ]
+[ ?xs ?v subset? not ] |
+[ ?e [ ?xs union ?v diff ] change-parms ] ;
+
+
+
 CHR: collect-nested-effect-in-top-effect @ // { C ?d AS: ?k P{ Effect ?x __ __ __ __  } } { C ?c AS: ?e <={ Effect __ __ __ __ ?l } } --
 [ ?c not ]
 [ ?c ?d and [ ?c ?d = ] [ ?c not ] if ]
