@@ -1,212 +1,122 @@
-USING: accessors arrays chr chr.comparisons chr.factor chr.factor.conditions
-chr.factor.types chr.modular chr.parser chr.state classes combinators
-combinators.short-circuit effects generic kernel lists make math math.parser
-sequences terms types.util ;
+USING: accessors arrays chr chr.factor chr.factor.defs chr.parser chr.state
+classes.algebra combinators combinators.short-circuit effects generic.math
+kernel kernel.private lists math math.parser quotations sequences strings terms
+types.util words words.symbol ;
 
 IN: chr.factor.stack
 
-! * Basic Stack and Effect assumptions
-TUPLE: CompatibleEffects < chr-pred in1 out1 in2 out2 ;
-TUPLE: BranchStacks < chr-pred from0 to0 from1 to1 from2 to2 ;
-ERROR: imbalanced-branch-stacks i1 o1 i2 o2 ;
-TUPLE: Val < chr-pred state var ;
-TUPLE: AssumeSameRest < chr-pred l1 l2 ;
-TUPLE: StackOp < trans-pred in out ;
-M: StackOp state-depends-on-vars
-    [
-        [ in>> known [ , ] leach* ]
-        [ out>> known [ , ] leach* ] bi
-    ] { } make ;
-TUPLE: StartStack < Stack ; ! marker
-TUPLE: EndStack < Stack ; ! marker
-! TUPLE: SameEffect < chr-pred in1 out1 in2 out2 ;
+
+! * Util for effect/stack conversions
+
+GENERIC: elt>var ( i elt -- obj )
+M: f elt>var drop number>string "v" prepend utermvar ;
+M: string elt>var nip utermvar ;
+M: pair elt>var
+    first2 drop elt>var ;
 
 : elt-vars ( seq -- seq )
-    [ swap dup pair? [ first ] when
-      [ nip ] [ number>string "v" prepend ] if*
-      uvar
-      <term-var>
-    ] map-index <reversed> ;
+    [ swap elt>var ] map-index ;
 
-! ** Basic stack handling
-CHRAT: basic-stack { CompatibleEffects Stack }
+! * Eval State model
 
-! Convention: If outputs meet, they are set equal.  If an input and an output
-! meets, the input absorbs the output.  StackOps have an input and an output.
-! Stack declarations are output declarations.  When asking for a stack, a stack
-! declaration is consumed.
+PREDICATE: callable-word < word { [ symbol? not ] } 1&& ;
 
+! Elements represent type expressions, which have "Have" semantics
+TUPLE: Stack < chr-pred content ;
+TUPLE: Eval < chr-pred code ;
+TUPLE: Eval1 < chr-pred thing ;
 
-CHR{ { Stack ?s ?v } // { Stack ?s ?v } -- | }
+! Effect Type
+TUPLE: Effect < chr-pred in out ;
 
-! CHR: answer-stack @ // { Stack ?s ?rho } { ask { Stack ?s ?x } } -- | [ ?rho ?x ==! ]
-! { entailed { Stack ?s ?x } } ;
+! Types
+TUPLE: TypeOf < chr-pred var type ;
 
-CHR: same-stack @ { Stack ?s ?v } // { Stack ?s ?w } -- | [ ?v ?w ==! ] ;
-! CHR: same-stack @ // { Stack ?s ?v } { Stack ?s ?w } -- | [ ?v ?w ==! ] ;
-! CHR: set-stack-defines @ { StartStack ?s ?v } // { Stack ?s ?w } -- | [ ?w ?v ==! ] ;
-CHR: define-stack-op-in @ { StackOp ?r __ ?rho __ } // { Stack ?r ?x } -- | [ ?x ?rho ==! ] ;
-! CHR: define-stack-op-out @ { StackOp __ ?t __ ?sig } { Stack ?t ?x } // -- | [ ?x ?sig ==! ] ;
-CHR: define-stack-op-out @ { StackOp __ ?t __ ?sig } // { Stack ?t ?x } -- | [ ?x ?sig ==! ] ;
-! CHR: define-set-stack-op-in @ { StackOp ?r __ ?rho __ } // { StartStack ?r ?x } -- | [ ?x ?rho ==! ] ;
-! CHR: define-set-stack-op-out @ { StackOp __ ?t __ ?sig } { StartStack ?t ?x } // -- | [ ?x ?sig ==! ] ;
+TUPLE: ExpectType < chr-pred stack types ;
 
-CHR: define-scope-stack-out @ { Scope __ ?t __ ?sig __ } // { Stack ?t ?x } --
-| [ ?x ?sig ==! ] ;
+CHRAT: chr-stack {  }
 
-CHR: answer-scope-stack-out @ { Scope __ ?t __ ?sig __ } // { ask { Stack ?t ?x } } -- |
-[ ?x ?sig ==! ]
-{ entailed { Stack ?t ?x } } ;
+! ** Type stack operations
 
 
-CHR: stack-ops-collide @ { StackOp ?r ?s ?x ?y } // { StackOp ?r ?s ?a ?b }
--- |
-[ { ?x ?y } { ?a ?b } ==! ]
-! [ "conflict" throw ]
-    ;
+! *** Destructuring
+CHR: did-expect-types @ // { ExpectType __ +nil+ } -- | ;
+CHR: expecting-types @ // { ExpectType L{ ?x . ?xs } L{ ?y . ?ys } } -- |
+{ ExpectType ?x ?y }
+{ ExpectType ?xs ?ys } ;
 
-! CHR: do-stack-op @ { StackOp ?s ?t ?rho ?sig } // -- |
-! { Stack ?s ?rho }
-! ! { AddLink ?s ?t }
-! { Stack ?t ?sig }
-!     ;
+! *** Asserting required types
+CHR: check-expect-type @ // { ExpectType A{ ?x } A{ ?rho } } --
+! Wrapping this to presever wrapper during expansion
+[ { ?x } first dup wrapper? [ <wrapper> :>> ?tau ] [ :>> ?tau ] if ] |
+! [ { ?x } first :>> ?tau ] |
+[ ?tau ?rho class<= [ { ?tau ?rho "expect type failed" } throw ] unless f ] ;
 
-CHR: compose-stack-op @ // { StackOp ?r ?s ?a ?b } { StackOp ?s ?t ?c ?d } --
-| [ ?c ?b ==! ] { StackOp ?r ?t ?a ?d } ;
+CHR: establish-expect-type @ // { ExpectType ?x A{ ?rho } } -- |
+[ ?x ?rho ==! ] ;
 
-CHR: answer-stack-op-stack-out @ { StackOp __ ?t __ ?sig } // { ask { Stack ?t ?x } } -- |
-[ ?sig ?x ==! ]
-{ entailed { Stack ?t ?x } } ;
+! ** Stack-state advancing
 
-CHR: answer-stack-op-stack-in @ { StackOp ?r __ ?rho __ } // { ask { Stack ?r ?x } } -- |
-[ ?rho ?x ==! ]
-{ entailed { Stack ?r ?x } } ;
+! Internal representation of sequence of words is list...
+CHR: eval-quot @ // { Eval ?p } -- [ ?p callable? ] [ ?p >list :>> ?q ] |
+{ Eval ?q } ;
 
-! Singular Stack definition not consumed by question
-CHR: answer-stack @ { Stack ?s ?rho } // { ask { Stack ?s ?x } } -- | [ ?rho ?x ==! ]
-{ entailed { Stack ?s ?x } } ;
+! CHR: eval-done @ // { Eval +nil+ } -- | ;
+CHR: eval-step @ // { Eval L{ ?x . ?xs } } -- |
+{ Eval1 ?x } { Eval ?xs } ;
 
-CHR: answer-start-stack @ { StartStack ?s ?rho } // { ask { Stack ?s ?x } } -- | [ ?rho ?x ==! ]
-{ entailed { Stack ?s ?x } } ;
-CHR: answer-end-stack @ { EndStack ?s ?rho } // { ask { Stack ?s ?x } } -- | [ ?rho ?x ==! ]
-{ entailed { Stack ?s ?x } } ;
+! *** Literals
+CHR: eval-lit @ // { Eval1 ?x } { Stack ?y } -- [ ?x callable-word? not ] |
+{ Stack L{ W{ ?x } . ?y } } ;
 
-! From condition system
-! CHR{ // { Cond +top+ P{ SameStack ?a ?b } } -- | [ ?a ?b ==! ] }
-! CHR{ // { Cond +top+ P{ Same ?x ?y } } -- | [ ?x ?y ==! ] }
+! *** Executable word with known effect
+! NOTE: destructive!
+CHR: ensure-stack @ { Eval1 ?x } { Stack ?y } // -- [ ?x defined-effect :>> ?e ]
+[ ?e in>> :>> ?i ] [ ?y llength* ?i length < ] |
+[| | ?i elt-vars <reversed> >list ?rho lappend :> lin
+ [ ?y lin ==! ] ] ;
 
-! Subroutines for making structure equal
-TUPLE: SameDepth < chr-pred stack1 stack2 ;
-CHR{ { SameDepth ?x ?y } // { SameDepth ?x ?y } -- | }
-CHR{ // { SameDepth ?x ?x } -- | }
-! CHR{ // { SameDepth ?x ?y } -- [ ?x ?y [ known lastcdr ] bi@ = ] | }
-CHR{ // { SameDepth L{ ?x . ?xs } L{ ?y . ?ys } } -- | { SameDepth ?xs ?ys } }
+! NOTE: destructive!
+CHR: ensure-declare-stack @ { Eval1 declare } { Stack L{ A{ ?a } . ?r } } // -- [ ?a length :>> ?n ] |
+[| | ?n [ f elt>var ] { } map-integers <reversed> >list ?rho lappend :> lin
+ [ ?r lin ==! ]
+] ;
 
-CHR: destruc-expand-right @ // { SameDepth L{ ?x . ?xs } ?b } -- [ ?b known term-var? ] |
-[ ?b L{ ?y . ?ys } ==! ]
-{ SameDepth ?xs ?ys } ;
-CHR: destruc-expand-left @ // { SameDepth ?a L{ ?y . ?ys } } -- [ ?a known term-var? ] |
-[ ?a L{ ?x . ?xs } ==! ]
-{ SameDepth ?xs ?ys } ;
+! *** Shuffle Word Eval
+! NOTE: depends on ensured stack
+CHR: eval-shuffle @ // { Eval1 ?w } { Stack ?y } -- [ ?w "shuffle" word-prop :>> ?e ] |
+[| | ?y ?e in>> length lcut :> ( top rest )
+ top list>array <reversed> :> vin
+ vin ?e shuffle <reversed> >list rest lappend :> sout
+ { Stack sout }
+] ;
 
-CHR{ // { SameDepth ?x ?y } -- | }
+! ** Expected Types at word inputs
+CHR: eval-declare @ // { Eval1 declare } { Stack L{ A{ ?a } . ?r } } -- [ ?a <reversed> >list :>> ?tau ] |
+{ Stack ?r }
+{ ExpectType ?r ?tau } ;
 
-! CHR: assume-same-rest @ // { AssumeSameRest ?x ?y } -- [ ?x ?y [ known ] bi@ [ llength* ] same? ] |
-! ! { SameDepth ?x ?y }
-! [ ?x ?y [ known lastcdr ] bi@ ==! ] ;
+CHR: math-types @ { Eval1 ?w } { Stack ?y } // -- [ ?w math-generic? ] [ ?w stack-effect in>> length number <array> >list :>> ?tau ] |
+{ ExpectType ?y ?tau } ;
 
-! CHR: assume-same-rest @ // { AssumeSameRest ?x ?y } -- |
-! [| | ?x ?y [ known ] bi@ :> ( v1 v2 )
-!  v1 v2 [ llength* ] :> ( l1 l2 )
-!  v1 v2 l1 l2 > [ swap ] when :> ( a b )
-!  l1 l2 - abs :> d
-!  d [ "x" uvar <term-var> ] replicate >list
+! ** Higher-Order
+CHR: eval-call @ // { Eval1 call } { Stack L{ ?q . ?rho } } -- |
+{ Stack L{ ?q ?e . ?rho } }
+{ ExpectType ?q callable }
+{ TypeOf ?q ?e }
+{ Eval1 call-effect } ;
 
-! ]
+! ** Finishing
 
-: list>simple-type ( list1 -- n last )
-    0 swap [ dup atom? ] [ [ 1 + ] dip cdr ] until ; inline
-
-: ?effect-height ( list1 list2 -- n/f )
-    [ list>simple-type ] bi@ swapd
-    = [ - ] [ 2drop f ] if ;
-
-! Setting up stack branch/merge
-CHR: known-effects-balance @ // { ask { CompatibleEffects ?a ?x ?b ?y } } --
-[ ?a known ?x known ?effect-height :>> ?v ] [ ?b known ?y known ?effect-height :>> ?w ]
-[
-    ?v ?w { [ and ] [ = not ] } 2&&
-    [ ?a ?x ?b ?y \ imbalanced-branch-stacks boa user-error ] when
-    t
-] |
-! { AssumeSameRest ?a ?b }
-{ entailed { CompatibleEffects ?a ?x ?b ?y } } ;
-
-! Default Answer for branch stacks
-CHR: assume-balanced-stacks @ // { ask { CompatibleEffects ?a ?x ?b ?y } } -- |
-! { AssumeSameRest ?a ?b }
-! { AssumeSameRest ?x ?y }
-! { SameDepth ?a ?b }
-! { SameDepth ?x ?y }
-{ entailed { CompatibleEffects ?a ?x ?b ?y } } ;
-
-
-! ** Effect
-! CHR: same-stack @ // { Stack ?s ?v } { Stack ?s ?w } -- | [ ?v ?w ==! ] ;
-CHR: same-effect @ { Effect ?q ?i ?o } // { Effect ?q ?a ?b } -- | [ ?i ?a ==! ] [ ?o ?b ==! ] ;
-
-! CHR{ { Stack ?s ?v } { Val ?s ?n ?a } // -- [ ?n ?v llength* < ] |
-!      [ ?a ?n ?v lnth ==! ]
-!    }
-
-! CHR: phi-effect-1 @ { --> ?c P{ is ?x ?a } } { Effect ?a ?i ?o } // -- | { Effect ?x ?r ?s }
-! { --> ?c P{ is ?r ?i } }
-! { --> ?c P{ is ?s ?o } } ;
-
-CHR: phi-effect-2 @ { --> ?c P{ is ?x ?a } } { Effect ?x ?r ?s } // -- | { Effect ?a ?i ?o }
-{ --> ?c P{ is ?r ?i } }
-{ --> ?c P{ is ?s ?o } } ;
-
-
-
-! This is mainly useful for naming vars according to the declared effects...
-CHR: assume-stack-effects @ // { AssumeWordEffect ?s ?t ?w ?e } -- { Stack ?s ?i } |
-     [| | ?e [ in>> ] [ out>> ] bi 2dup :> ( i o )
-      [ length ] bi@ :> ( ni no )
-      i elt-vars :> i
-      o elt-vars :> o
-      ! i [ ?s swap Pops boa suffix ] unless-empty
-      ! o [ ?t swap Pushes boa suffix ] unless-empty
-      ! i ?s swap Pops boa suffix
-      ! o ?t swap Pushes boa suffix
-
-      ! ?s ?t i o In/Out boa suffix
-
-
-      ! ?s ?t
-      i >list ?rho lappend :> stack-in
-      ! Assume bivariable-effect in general!
-      o >list ?sig lappend :> stack-out
-      ! {
-      !     { [ ?e terminated?>> ] [ __ ] }
-      !     { [ ?e bivariable-effect? ] [ o >list ?sig lappend ] }
-      !     [ o >list ?rho lappend ] } cond InferredEffect boa suffix
-      { [ ?w generic? ] [ ?e bivariable-effect? not ] } 0&&
-      [ ?rho ?sig ==! 1array ] [ f ] if
-      ! { ?i ?o } { stack-in stack-out } ==! suffix
-      ! { ?i ?o } { stack-in stack-out } ==! suffix
-      ?i stack-in ==! suffix
-      { Stack ?t stack-out } suffix
-     ]
-   ;
-
-
-CHR: make-push-stack @ // { Push ?s ?t ?b } -- |
-     { StackOp ?s ?t ?rho L{ ?x . ?rho } }
-     { is ?x ?b }
-     { Def ?s ?x }
-     ! { Type ?x ?tau }
-     ! [ ?tau ?b class-of is boa ]
-    ;
+CHR: close-effect @ // { Effect ?rho __ } { Eval +nil+ } { Stack ?sig } -- |
+{ Effect ?rho ?sig } ;
 
 ;
+
+TERM-VARS: ?s0 ;
+
+: bq ( code -- res )
+    P{ Effect ?s0 f }
+    P{ Stack ?s0 }
+    rot Eval boa 3array
+    [ chr-stack swap run-chr-query store>> ] with-var-names ;
