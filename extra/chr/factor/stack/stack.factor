@@ -76,11 +76,27 @@ CHR: expecting-types @ // { ExpectType L{ ?x . ?xs } L{ ?y . ?ys } } -- |
 { ExpectType ?x ?y }
 { ExpectType ?xs ?ys } ;
 
+! NOTE: This catches the case of applying an effect twice resulting in chaining
+! CHR: catch-expand-recursive-types-right @ // { ExpectType L{ ?x . ?xs } ?y } -- [ ?y ?xs lastcdr = ] | ;
+! Above is too late, so we do this expensive test before substitution...
+CHR: catch-expand-recursive-types-right @ // { ExpectType L{ ?x . ?xs } ?y } --
+[ [ ?y ?xs solve-eq not ] no-var-restrictions ] | ;
+
 ! NOTE: destructive
-CHR: expand-expect-types-right @ // { ExpectType L{ ?x . ?xs } ?b } -- [ ?b term-var? ] |
+CHR: expand-expect-types-right @ // { ExpectType L{ ?x . ?xs } ?b } -- [ ?b term-var? ]
+! Cheapo test
+! [ ?b ?xs lastcdr = not ]
+! Not so cheapo test
+! [| | "y" utermvar :> y
+!  "ys" utermvar :> ys
+!  [ { { ?b L{ y . ys } } { L{ ?x . ?xs } L{ y . ys } } } solve-problem dup . ] no-var-restrictions ]
+|
 [ ?b L{ ?y . ?ys } ==! ]
 { ExpectType ?x ?y }
 { ExpectType ?xs ?ys } ;
+
+CHR: catch-expand-recursive-types-left @ // { ExpectType ?a L{ ?y . ?ys } } --
+[ [ ?a ?ys solve-eq not ] no-var-restrictions ] | ;
 
 CHR: expand-expect-types-left @ // { ExpectType ?a L{ ?y . ?ys } } -- [ ?a term-var? ] |
 [ ?a L{ ?x . ?xs } ==! ]
