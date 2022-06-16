@@ -87,11 +87,6 @@ CHR: expand-expect-types-left @ // { ExpectType ?a L{ ?y . ?ys } } -- [ ?a term-
 { ExpectType ?x ?y }
 { ExpectType ?xs ?ys } ;
 
-! *** Intersections
-! NOTE: destructive
-CHR: expect-unknown-type-is-same @ // P{ ExpectType ?a ?b } -- [ ?a term-var? ] [ ?b term-var? ] |
-[ ?a ?b ==! ] ;
-
 ! *** Asserting required types
 CHR: check-expect-type @ // { ExpectType A{ ?x } A{ ?rho } } --
 ! Wrapping this to presever wrapper during expansion
@@ -111,10 +106,11 @@ CHR: expect-effects @ // { ExpectType P{ Effect ?rho ?sig A{ f } } P{ Effect ?a 
 ! In addition to the above, the combination of constraints from both specifications must be met
 
 CHR: expect-effects-pred-both @ // { ExpectType P{ Effect ?rho ?sig ?k } P{ Effect ?a ?b ?l } } -- |
+{ ExpectType ?a ?rho }
+{ ExpectType ?sig ?b }
 [ ?k ]
 [ ?l ]
-{ ExpectType ?a ?rho }
-{ ExpectType ?sig ?b } ;
+    ;
 
 ! *** Instantiate "type scheme" when we expect a literal to fulfill an effect
 ! Semantics: We expect the singleton type of a callable to fulfill some (call-site)
@@ -122,10 +118,18 @@ CHR: expect-effects-pred-both @ // { ExpectType P{ Effect ?rho ?sig ?k } P{ Effe
 CHR: already-inferred-effect @ { TypeOf ?q ?tau } // { ExpectType A{ ?q } P{ Effect ?a ?b ?k } } -- [ ?tau Effect? ] |
 [| | ?tau [ in>> ] [ out>> ] [ preds>> ] tri :> ( in out preds )
  ?tau in vars out vars union fresh-with :> inst
-{ ExpectType inst P{ Effect ?a ?b ?k } }
+ { ExpectType inst P{ Effect ?a ?b ?k } }
+ ! ! One additional layer of wrapping to guard against equal vars...
+ ! { ExpectType inst P{ Effect ?rho ?sig ?k } }
+ ! { ExpectType ?a ?rho }
+ ! { ExpectType ?sig ?b }
+ ! 3array
 ] ;
 
 ! *** Trigger inference of unknown quot
+! FIXME: This could just be a symptom cure for not creating intersection arrows early enough!
+! XXX: Nope, didnt help...
+CHR: infer-only-once @ { InferEffect ?c __ __ ?q } { TypeOf ?q ?c } // { InferEffect ?d __ __ ?q } { TypeOf ?q ?d } -- | ;
 
 CHR: infer-effect @ { ExpectType A{ ?q } P{ Effect ?a ?b ?k } } // -- [ ?q callable? ] |
 { InferEffect ?c ?rho ?sig ?q }
@@ -155,6 +159,14 @@ CHR: establish-expect-type-lhs-effect @ // { ExpectType ?tau ?sig } -- [ ?tau Ef
 
 CHR: establish-expect-type-lhs @ // { ExpectType A{ ?tau } ?sig } -- [ { ?tau } first classoid? ] [ ?sig term-var? ] |
 [ ?sig { ?tau } first ==! ] ;
+
+! *** Symbolic transitivity
+! NOTE: destructive
+CHR: expect-unknown-type-is-same @ // P{ ExpectType ?a ?b } -- [ ?a term-var? ] [ ?b term-var? ] |
+[ ?a ?b ==! ] ;
+! CHR: expect-var-is-transitive @ // { ExpectType ?a ?b } { ExpectType ?b ?c } -- [ ?b term-var? ] |
+! { ExpectType ?a ?c } ;
+
 
 ! ** Subordinate inference
 CHR: do-sub-infer-effect @ // { InferEffect ?c ?rho ?sig ?q } { Eval ?p } { Effect ?a A{ f } ?k } { Stack ?b } -- |
@@ -216,21 +228,24 @@ CHR: math-types @ { Eval1 ?w } { Stack ?y } // -- [ ?w math-generic? ] [ ?w stac
 
 ! ** Conditional execution
 
-! Convert to typecase semantics
-! FIXME
-CHR: eval-mux @ // { Eval1 ? } { Stack L{ ?q ?p ?c . ?rho } } -- |
-{ Stack L{ ?x . ?rho } }
-{ TypeCase ?x { ?c POSTPONE: f } ?p ?q } ;
-! { Xor ?x { ?tau } { ?sig } }
-! { DisjointMember ?tau ?x }
-! { DisjointMember ?rho ?x }
-! { Refine ?x { P{  } } }
-! { C P{ Instance ?c  } }
-! { TypeOf  }
-! { TypeOf ?x P{   } }
-! NOTE: should be outer-most-discriminator, but is coupled via vars...
+! ! Convert to typecase semantics
+! ! FIXME
+! CHR: eval-mux @ // { Eval1 ? } { Stack L{ ?q ?p ?c . ?rho } } -- |
+! { Stack L{ ?x . ?rho } }
+! { TypeCase ?x { ?c POSTPONE: f } ?p ?q } ;
+! ! { Xor ?x { ?tau } { ?sig } }
+! ! { DisjointMember ?tau ?x }
+! ! { DisjointMember ?rho ?x }
+! ! { Refine ?x { P{  } } }
+! ! { C P{ Instance ?c  } }
+! ! { TypeOf  }
+! ! { TypeOf ?x P{   } }
+! ! NOTE: should be outer-most-discriminator, but is coupled via vars...
 
 ! ** Higher-Order
+
+! NOTE: This is call-site immediate: The types on the stack are
+! _referenced_ by the expect declaration
 CHR: call-defines-effect @ // { Eval1 call } { Stack L{ ?q . ?a } } -- |
 { ExpectType ?q P{ Effect ?a ?b f } }
 { Stack ?b } ;
@@ -251,7 +266,7 @@ CHR: eval-any-call @ // { Eval1 ?w } { Stack ?a } -- [ ?w defined-effect :>> ?e 
 { Stack ?b }
     ;
 
-CHR: exec-known-word @ { TypeOf ?w ?e } // { Exec ?w ?a ?b } -- |
+CHR: exec-known-word @ { TypeOf ?w ?e } // { Exec ?w ?a ?b } -- [ ?e Effect? ] |
 ! Trigger instantiation rule
 { ExpectType ?w P{ Effect ?a ?b f } } ;
 ! { ApplyEffect ?a ?b ?e } ;
