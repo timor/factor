@@ -26,7 +26,6 @@ TUPLE: Stack < chr-pred content ;
 TUPLE: Eval < chr-pred code ;
 TUPLE: Eval1 < chr-pred thing ;
 TUPLE: Exec < chr-pred word in out ;
-TUPLE: ApplyEffect < chr-pred in out effect ;
 TUPLE: InferEffect < chr-pred thing in out def ;
 TUPLE: Inferred < chr-pred thing start ;
 
@@ -76,7 +75,6 @@ CHR: expecting-types @ // { ExpectType L{ ?x . ?xs } L{ ?y . ?ys } } -- |
 { ExpectType ?x ?y }
 { ExpectType ?xs ?ys } ;
 
-! NOTE: This catches the case of applying an effect twice resulting in chaining
 ! CHR: catch-expand-recursive-types-right @ // { ExpectType L{ ?x . ?xs } ?y } -- [ ?y ?xs lastcdr = ] | ;
 ! Above is too late, so we do this expensive test before substitution...
 CHR: catch-expand-recursive-types-right @ // { ExpectType L{ ?x . ?xs } ?y } --
@@ -92,16 +90,19 @@ CHR: expand-expect-types-right @ // { ExpectType L{ ?x . ?xs } ?b } -- [ ?b term
 !  [ { { ?b L{ y . ys } } { L{ ?x . ?xs } L{ y . ys } } } solve-problem dup . ] no-var-restrictions ]
 |
 [ ?b L{ ?y . ?ys } ==! ]
+{ ExpectType ?xs ?ys }
 { ExpectType ?x ?y }
-{ ExpectType ?xs ?ys } ;
+    ;
 
 CHR: catch-expand-recursive-types-left @ // { ExpectType ?a L{ ?y . ?ys } } --
 [ [ ?a ?ys solve-eq not ] no-var-restrictions ] | ;
 
 CHR: expand-expect-types-left @ // { ExpectType ?a L{ ?y . ?ys } } -- [ ?a term-var? ] |
-[ ?a L{ ?x . ?xs } ==! ]
+! [ ?a L{ ?x . ?xs } ==! ]
+[ L{ ?x . ?xs } ?a ==! ]
+{ ExpectType ?xs ?ys }
 { ExpectType ?x ?y }
-{ ExpectType ?xs ?ys } ;
+    ;
 
 ! *** Asserting required types
 CHR: check-expect-type @ // { ExpectType A{ ?x } A{ ?rho } } --
@@ -130,16 +131,14 @@ CHR: expect-effects-pred-both @ // { ExpectType P{ Effect ?rho ?sig ?k } P{ Effe
 
 ! *** Instantiate "type scheme" when we expect a literal to fulfill an effect
 ! Semantics: We expect the singleton type of a callable to fulfill some (call-site)
-! effect spec
+! effect spec for quotations
 CHR: already-inferred-effect @ { TypeOf ?q ?tau } // { ExpectType A{ ?q } P{ Effect ?a ?b ?k } } -- [ ?tau Effect? ] |
 [| | ?tau [ in>> ] [ out>> ] [ preds>> ] tri :> ( in out preds )
- ?tau in vars out vars union fresh-with :> inst
+ ! Only instantiate binders
+ ! ?tau in vars out vars union fresh-with :> inst
+ ! Instantiate all locals
+ ?tau fresh :> inst
  { ExpectType inst P{ Effect ?a ?b ?k } }
- ! ! One additional layer of wrapping to guard against equal vars...
- ! { ExpectType inst P{ Effect ?rho ?sig ?k } }
- ! { ExpectType ?a ?rho }
- ! { ExpectType ?sig ?b }
- ! 3array
 ] ;
 
 ! *** Trigger inference of unknown quot
@@ -214,7 +213,8 @@ CHR: eval-lit @ // { Eval1 ?x } { Stack ?y } -- [ ?x callable-word? not ] |
 
 ! *** Executable word with known effect
 ! NOTE: destructive!
-CHR: ensure-stack @ { Eval1 ?x } { Stack ?y } // -- [ ?x defined-effect :>> ?e ]
+! NOTE: exclude inline words
+CHR: ensure-stack @ { Eval1 ?x } { Stack ?y } // -- [ ?x inline? not ] [ ?x defined-effect :>> ?e ]
 [ ?e in>> :>> ?i ] [ ?y llength* ?i length < ] |
 [| | ?i elt-vars <reversed> >list ?rho lappend :> lin
  [ ?y lin ==! ] ] ;
@@ -262,6 +262,11 @@ CHR: math-types @ { Eval1 ?w } { Stack ?y } // -- [ ?w math-generic? ] [ ?w stac
 
 ! NOTE: This is call-site immediate: The types on the stack are
 ! _referenced_ by the expect declaration
+! Semantics: We expect the quotation effect to fulfill the type expectations of a hypothetical effect at the call site.
+! Thus, the given arrow type must be a subtype of the call-site-expected arrow type.
+! Together with input contravariance and output variance, this means:
+! - The set of values provided to the called effect as input must be a subset of the set of values the effect is define on.
+! - The set of values returned by the called effect as output must be a subset of the set of values expected by the continuation.
 CHR: call-defines-effect @ // { Eval1 call } { Stack L{ ?q . ?a } } -- |
 { ExpectType ?q P{ Effect ?a ?b f } }
 { Stack ?b } ;
@@ -271,6 +276,11 @@ CHR: dip-defines-effect @ // { Eval1 dip } { Stack L{ ?q ?x . ?a } } -- |
 { Stack L{ ?x . ?b } } ;
 
 ! ** Unknown Stuff
+CHR: eval-inline-call @ // { Eval1 ?w } { Stack ?a } -- [ ?w inline? ] |
+{ Exec ?w ?a ?b }
+{ Stack ?b } ;
+
+! NOTE: depends on ensured stack
 CHR: eval-any-call @ // { Eval1 ?w } { Stack ?a } -- [ ?w defined-effect :>> ?e ]
 [ ?e in>> :>> ?i ]
 [ ?e out>> :>> ?o ]
@@ -285,16 +295,11 @@ CHR: eval-any-call @ // { Eval1 ?w } { Stack ?a } -- [ ?w defined-effect :>> ?e 
 CHR: exec-known-word @ { TypeOf ?w ?e } // { Exec ?w ?a ?b } -- [ ?e Effect? ] |
 ! Trigger instantiation rule
 { ExpectType ?w P{ Effect ?a ?b f } } ;
-! { ApplyEffect ?a ?b ?e } ;
 
 CHR: exec-unknown-word @ { Exec ?w ?a ?b } // -- [ ?w generic? not ] [ ?w def>> :>> ?q ] |
 { InferEffect ?c ?rho ?sig ?q }
 { TypeOf ?w ?c }
     ;
-
-! CHR: collect-inferred-word @ // { TypeOf ?c f } { C ?c P{ Effect ?rho ?sig } } -- |
-! { TypeOf ?c P{ Effect ?rho ?sig } } ;
-
 
 ! ** Finishing
 TUPLE: CloseEffect < chr-pred in ;
