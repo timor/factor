@@ -10,3 +10,8 @@ IN: chr.factor.stack.tests
 
 : mybiatex ( -- code )
     [ [ 1 + ] ] mybiat compose ;
+
+
+! bad guys:
+! [ [ dup call ] dup call ]
+! [ [ swap ] [  ] if ]
