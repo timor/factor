@@ -1,6 +1,6 @@
 USING: accessors arrays assocs chr chr.factor chr.parser chr.state
-combinators.short-circuit generic kernel kernel.private lists math quotations
-sequences sets terms words words.symbol ;
+classes.algebra combinators.short-circuit generic kernel kernel.private lists
+math math.private quotations sequences sets terms words words.symbol ;
 
 IN: chr.factor.composition
 
@@ -13,6 +13,9 @@ TUPLE: Effect < chr-pred in out preds ;
 TUPLE: TypeOf < chr-pred thing type ;
 TUPLE: ?TypeOf < chr-pred thing ;
 
+
+TUPLE: MakeDispatch < chr-pred cases target ;
+
 ! States that q3 is the composition of q1 and q2
 TUPLE: ComposeType < chr-pred q1 q2 q3 ;
 
@@ -23,8 +26,10 @@ TUPLE: Instance < chr-pred id type ;
 ! For destructuring
 TUPLE: Label < chr-pred stack label ;
 TUPLE: Literal < chr-pred val ;
+TUPLE: Declare < chr-pred classes stack ;
 
 TUPLE: CallEffect < chr-pred thing in out ;
+TUPLE: MakeXor < chr-pred type1 type2 target ;
 TUPLE: Xor < chr-pred type1 type2 ;
 TUPLE: And < chr-pred types ;
 ! TUPLE: Intersection < chr-pred type types ;
@@ -37,12 +42,16 @@ TUPLE: Drop < chr-pred val ;
 TUPLE: Use < chr-pred val ;
 TUPLE: Let < chr-pred var val type ;
 
+TUPLE: Invalid < chr-pred ;
+
+TUPLE: Eq < chr-pred val1 val2 ;
+
 
 : word-alias ( word -- def/f )
     H{
         { rot [ [ swap ] dip swap ] }
         { over [ swap dup [ swap ] dip ] }
-        { call [ (call) ] }
+        ! { call [ (call) ] }
         { nip [ [ drop ] dip ] }
         { 2drop [ drop drop ] }
         { 2dup [ over over ] }
@@ -85,6 +94,37 @@ CHR: type-of-drop @ // { TypeOf [ drop ] ?tau } -- |
 CHR: type-of-swap @ // { TypeOf swap ?tau } -- |
 [ ?tau P{ Effect L{ ?x ?y . ?a } L{ ?y ?x . ?a } f } ==! ] ;
 
+CHR: type-of-mux @ // { TypeOf ? ?tau } -- |
+[
+    ?tau
+    P{ Xor
+       P{ Effect L{ ?q ?p ?c . ?a } L{ ?p . ?a } { P{ Instance ?c not{ W{ f } } } { Drop ?q } { Use ?c } } }
+       P{ Effect L{ ?q ?p ?c . ?a } L{ ?q . ?a } { P{ Instance ?c W{ f } } { Drop ?p } { Use ?c } } }
+     }
+    ==!
+] ;
+
+CHR: type-of-predicate @ // { TypeOf ?w ?tau } -- [ ?w word? ] [ ?w "predicating" word-prop :>> ?c ] |
+[| |
+ ?c class-not :> ?d
+ ?tau
+  P{ Xor
+     P{ Effect L{ ?x . ?a } L{ ?y . ?a } {
+            P{ Instance ?x ?c }
+            P{ Literal ?y }
+            P{ Instance ?y W{ t } }
+            P{ Use ?x }
+        } }
+     P{ Effect L{ ?x . ?a } L{ ?y . ?a } {
+            P{ Instance ?x ?d }
+            P{ Literal ?y }
+            P{ Instance ?y W{ f } }
+            P{ Use ?x }
+        } }
+   }
+  ==!
+] ;
+
 CHR: type-of-word-call @ { TypeOf [ ?w ] ?tau } // -- [ ?w callable-word? ] |
 ! { TypeOf ?w ?rho }
 { TypeOf ?w ?tau } ;
@@ -100,11 +140,37 @@ CHR: type-of-val @ // { TypeOf A{ ?v } ?tau } -- [ ?v callable? not ] [ ?v calla
 ! { Instance ?tau W{ ?v } } ;
 [ ?tau W{ W{ ?v } } ==! ] ;
 
-CHR: type-of-word @ { TypeOf A{ ?w } ?tau } // -- [ ?w word-alias not ] [ ?w callable-word? ] [ ?w generic? not ] [ ?w def>> :>> ?q ] |
+CHR: type-of-declare @ // { TypeOf declare ?tau } -- |
+[ ?tau
+  P{ Effect L{ ?l . ?a } ?a {
+         P{ Instance ?l array }
+         P{ Declare ?l ?a }
+         P{ Use ?l }
+     } }
+  ==! ] ;
+
+! *** Regular words
+CHR: type-of-word @ { TypeOf A{ ?w } ?tau } // -- [ ?w word-alias not ] [ ?w callable-word? ] [ ?w "predicating" word-prop not ] [ ?w generic? not ] [ ?w def>> :>> ?q ] |
 ! { TypeOf ?q ?rho }
 ! { ComposeType P{ Effect ?a ?a { P{ Label ?a ?w } } } ?rho ?tau }
 { TypeOf ?q ?tau }
     ;
+
+CHR: type-of-generic @ { TypeOf ?w ?tau } // -- [ ?w generic? ] [ ?w "methods" word-prop sort-methods <reversed> >list :>> ?l ] |
+{ MakeDispatch ?l ?tau } ;
+
+CHR: dispatch-done @ // { MakeDispatch +nil+ ?tau } -- | [ ?tau null ==! ] ;
+CHR: dispatch-case @ // { MakeDispatch L{ { ?c ?m } . ?r } ?tau } -- |
+{ TypeOf ?m ?rho }
+{ MakeDispatch ?r ?sig }
+{ MakeXor ?rho ?sig ?tau } ;
+
+
+CHR: type-of-fixnum+ @ { TypeOf fixnum+ ?tau } // -- |
+[ ?tau
+  P{ Effect L{ ?x ?y . ?a } L{ ?z . ?b } { P{ Instance ?x fixnum } P{ Instance ?y fixnum } P{ Use ?x } P{ Use ?y } P{ Instance ?z integer } } }
+  ==!
+] ;
 
 CHR: type-of-empty-quot @ // { TypeOf [ ] ?tau } -- | [ ?tau P{ Effect ?a ?a f } ==! ] ;
 
@@ -120,9 +186,52 @@ CHR: compose-effects @ // { ComposeType P{ Effect ?a ?b ?k } P{ Effect ?c ?d ?l 
  P{ ComposeEffect e1 e2 ?tau }
 ] ;
 
-! ** Start Reasoning
-UNION: body-pred Instance Label CallEffect Bind Drop Use Literal ;
+CHR: compose-xor-effects-right @ // { ComposeType P{ Effect ?a ?b ?k } P{ Xor P{ Effect ?c ?d ?l } P{ Effect ?x ?y ?m } } ?tau } -- |
+[| |
+ P{ Effect ?a ?b ?k } fresh :> e1
+ P{ Effect ?c ?d ?l } fresh :> e3
+ P{ Effect ?a ?b ?k } fresh :> e2
+ P{ Effect ?x ?y ?m } fresh :> e4
+ {
+     P{ ComposeEffect e1 e3 ?rho }
+     P{ ComposeEffect e2 e4 ?sig }
+     P{ MakeXor ?rho ?sig ?tau }
+     ! [ ?tau P{ Xor ?rho ?sig } ==! ]
+ }
+] ;
 
+CHR: compose-xor-effects-left @ // { ComposeType P{ Xor P{ Effect ?c ?d ?l } P{ Effect ?x ?y ?m } } P{ Effect ?a ?b ?k } ?tau } -- |
+[| |
+ P{ Effect ?c ?d ?l } fresh :> e1
+ P{ Effect ?x ?y ?m } fresh :> e2
+ P{ Effect ?a ?b ?k } fresh :> e3
+ P{ Effect ?a ?b ?k } fresh :> e4
+ {
+     P{ ComposeEffect e1 e3 ?rho }
+     P{ ComposeEffect e2 e4 ?sig }
+     P{ MakeXor ?rho ?sig ?tau }
+     ! [ ?tau P{ Xor ?rho ?sig } ==! ]
+ }
+] ;
+
+
+CHR: compose-xor-effects-both @ // { ComposeType P{ Xor ?a ?b } P{ Xor ?c ?d } ?tau } -- |
+{ ComposeType ?a P{ Xor ?c ?d } ?rho }
+{ ComposeType ?b P{ Xor ?c ?d } ?sig }
+{ MakeXor ?rho ?sig ?tau }
+! [ ?tau P{ Xor ?rho ?sig } ==! ]
+    ;
+
+
+CHR: make-null-xor @ // { MakeXor null null ?tau } -- | [ ?tau null ==! ] ;
+CHR: make-trivial-xor-left @ // { MakeXor ?rho null ?tau } -- | [ ?rho ?tau ==! ] ;
+CHR: make-trivial-xor-right @ // { MakeXor null ?rho ?tau } -- | [ ?rho ?tau ==! ] ;
+CHR: make-xor @ // { MakeXor ?rho ?sig ?tau } -- | [ ?tau P{ Xor ?rho ?sig } ==! ] ;
+
+! ** Start Reasoning
+UNION: body-pred Instance Label CallEffect Bind Drop Use Literal Declare ;
+
+! NOTE: assumed renaming here already
 CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?k } P{ Effect ?c ?d ?l } ?tau } -- |
 [ ?b ?c ==! ]
 [ ?k ]
@@ -130,6 +239,14 @@ CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?k } P{ Effect 
 { MakeEffect ?a ?d f f ?tau } ;
 
 ! ** Simplification/Intra-Effect reasoning
+CHR: early-exit @ { Invalid } // <={ body-pred } -- | ;
+
+CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
+
+CHR: instance-intersection @ // { Instance ?x A{ ?tau } } { Instance ?x A{ ?sig } } -- [ { ?tau ?sig } first2 class-and :>> ?c ] |
+{ Instance ?x ?c } ;
+
+CHR: null-instance-is-invalid @ { Instance __ null } // -- | { Invalid } ;
 
 CHR: unique-bind-is-same @ // { Bind ?x { ?y } } -- | [ ?x ?y ==! ] ;
 
@@ -143,13 +260,21 @@ CHR: drop-cancels-bind @ // { Drop ?x } { Bind ?a ?l } -- [ ?x ?l in? ]
 
 CHR: drop-cancels-lit @ // { Drop ?x } { Instance ?x __ } { Literal ?x } -- | ;
 
-CHR: use-cancels-bind @ // { Use ?x } { Bind ?a ?l } -- [ ?x ?l in? ]
-[ ?x ?l remove :>> ?k ] |
-{ Bind ?a ?k } ;
-
 CHR: bind-propagates-literals @ // { Bind ?x ?l } { Literal ?x } { Instance ?x ?tau } -- [ { ?tau } first :>> ?c ] |
 [ ?l [ { ?c } first fresh Instance boa ] map ]
 [ ?l [ Literal boa ] map ] ;
+
+CHR: bind-propagates-instance @ { Bind ?x ?l } { Instance ?x ?tau } // -- [ { ?tau } first :>> ?c ] |
+[ ?l [ { ?c } first fresh Instance boa ] map ] ;
+
+CHR: bind-backprops-instance @ { Bind ?x ?l } { Instance ?v ?tau } // -- [ ?v ?l in? ] [ { ?tau } first :>> ?c ] |
+{ Instance ?x ?tau } ;
+
+CHR: used-propagated-instance @ { Use ?x } { Bind __ ?l } // { Instance ?x __ } -- [ ?x ?l in? ] | ;
+
+CHR: use-cancels-bind @ // { Use ?x } { Bind ?a ?l } -- [ ?x ?l in? ]
+[ ?x ?l remove :>> ?k ] |
+{ Bind ?a ?k } ;
 
 ! CHR: same-lit-is-same-var @ { Literal ?x } { Instance ?x A{ ?v } } // { Literal ?y } { Instance ?y A{ ?v } } -- |
 ! [ ?x ?y ==! ] ;
@@ -163,7 +288,15 @@ CHR: call-eats-effect @ // { Literal ?q } { Instance ?q P{ Effect ?c ?d ?l } } {
 ! [ ?l ]
 ! { Use ?q } ;
 
-! CHR: used-instance @ { Use ?q } { Instance ?q __ }
+CHR: did-declare @ // { Declare +nil+ __ } -- | ;
+CHR: do-declare @ // { Declare L{ ?tau . ?r } L{ ?x . ?xs } } -- |
+{ Instance ?x ?tau }
+{ Declare ?r ?xs } ;
+
+CHR: known-declare @ { Declare ?l ?a } { Literal ?l } { Instance ?l ?tau } // -- |
+[ ?l ?tau <reversed> >list ==! ] ;
+
+CHR: used-literal @ // { Use ?x } { Literal ?x } { Instance ?x __  } -- | ;
 
 ! ** Post-Reasoning
 
@@ -173,10 +306,10 @@ CHR: call-eats-effect @ // { Literal ?q } { Instance ?q P{ Effect ?c ?d ?l } } {
     [ in>> vars ] [ out>> vars union ] [ locals>> vars union ] tri ;
 
 ! existentials
-CHR: collect-type-ofs @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } { TypeOf ?v ?rho } --
-[ ?v ?e effect-vars in? ]
-[ ?l P{ TypeOf ?v ?rho } suffix :>> ?k ] |
-{ MakeEffect ?a ?b ?x ?k ?tau } ;
+! CHR: collect-type-ofs @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } { TypeOf ?v ?rho } --
+! [ ?v ?e effect-vars in? ]
+! [ ?l P{ TypeOf ?v ?rho } suffix :>> ?k ] |
+! { MakeEffect ?a ?b ?x ?k ?tau } ;
 
 CHR: collect-bind-defs-forward @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } { Bind ?c ?d } --
 [ ?c ?e effect-vars in? ]
@@ -206,6 +339,15 @@ CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ b
 |
 { MakeEffect ?a ?b ?x ?k ?tau } ;
 
+
+CHR: conflicting-makes @ { MakeEffect __ __ __ __ __ } { MakeEffect __ __ __ __ __ } // -- | [ "recursive-make" throw f ] ;
+
+CHR: must-cleanup @ { MakeEffect __ __ __ __ __ } <={ body-pred } // -- | [ "leftovers" throw f ] ;
+
+CHR: invalid-stays-invalid @ { Invalid } // { Invalid } -- | ;
+
+CHR: finish-invalid-effect @ // { MakeEffect __ __ __ __ ?tau } { Invalid } -- |
+[ ?tau null ==! ] ;
 
 CHR: finish-effect @ // { MakeEffect ?a ?b __ ?l ?tau } -- |
 [ ?tau P{ Effect ?a ?b ?l } ==! ] ;
