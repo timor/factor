@@ -14,7 +14,7 @@ TUPLE: TypeOf < chr-pred thing type ;
 TUPLE: ?TypeOf < chr-pred thing ;
 
 
-TUPLE: MakeDispatch < chr-pred cases target ;
+TUPLE: MakeSingleDispatch < chr-pred index cases target ;
 
 ! States that q3 is the composition of q1 and q2
 TUPLE: ComposeType < chr-pred q1 q2 q3 ;
@@ -59,6 +59,7 @@ TUPLE: Eq < chr-pred val1 val2 ;
     } at ;
 
 CHRAT: chr-comp { TypeOf }
+
 
 ! Tag-level concrete type!
 CHR: unique-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- | [ ?tau ?sig ==! ] ;
@@ -150,19 +151,26 @@ CHR: type-of-declare @ // { TypeOf declare ?tau } -- |
   ==! ] ;
 
 ! *** Regular words
-CHR: type-of-word @ { TypeOf A{ ?w } ?tau } // -- [ ?w word-alias not ] [ ?w callable-word? ] [ ?w "predicating" word-prop not ] [ ?w generic? not ] [ ?w def>> :>> ?q ] |
+CHR: type-of-word @ { TypeOf A{ ?w } ?tau } // -- [ ?w word-alias not ] [ ?w method? not ] [ ?w callable-word? ] [ ?w "predicating" word-prop not ] [ ?w generic? not ] [ ?w def>> :>> ?q ] |
 ! { TypeOf ?q ?rho }
 ! { ComposeType P{ Effect ?a ?a { P{ Label ?a ?w } } } ?rho ?tau }
 { TypeOf ?q ?tau }
     ;
 
-CHR: type-of-generic @ { TypeOf ?w ?tau } // -- [ ?w generic? ] [ ?w "methods" word-prop sort-methods <reversed> >list :>> ?l ] |
-{ MakeDispatch ?l ?tau } ;
+CHR: type-of-generic @ { TypeOf ?w ?tau } // -- [ ?w single-generic? ] [ ?w "methods" word-prop sort-methods <reversed> >list :>> ?l ] [ ?w dispatch# :>> ?i ] |
+{ MakeSingleDispatch ?i ?l ?tau } ;
 
-CHR: dispatch-done @ // { MakeDispatch +nil+ ?tau } -- | [ ?tau null ==! ] ;
-CHR: dispatch-case @ // { MakeDispatch L{ { ?c ?m } . ?r } ?tau } -- |
+: dispatch-decl ( class num -- seq )
+    dup 1 + object <array> [ set-nth ] keep ;
+
+CHR: dispatch-done @ // { MakeSingleDispatch __ +nil+ ?tau } -- | [ ?tau null ==! ] ;
+CHR: dispatch-case @ // { MakeSingleDispatch ?i L{ { ?c ?m } . ?r } ?tau } --
+[ ?c ?i dispatch-decl :>> ?l ]
+[ [ ?l declare ] ?m def>> compose :>> ?q ]
+|
+{ TypeOf ?q ?rho }
 { TypeOf ?m ?rho }
-{ MakeDispatch ?r ?sig }
+{ MakeSingleDispatch ?i ?r ?sig }
 { MakeXor ?rho ?sig ?tau } ;
 
 
