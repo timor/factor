@@ -1,10 +1,44 @@
 USING: accessors arrays assocs chr chr.factor chr.parser chr.state
-classes.algebra combinators.short-circuit generic kernel kernel.private lists
-math math.private quotations sequences sets terms words words.symbol ;
+classes.algebra classes.tuple combinators combinators.short-circuit effects
+generic generic.single kernel kernel.private lists math math.parser math.private
+quotations sequences sets slots.private strings terms types.util words
+words.symbol ;
 
 IN: chr.factor.composition
 
 PREDICATE: callable-word < word { [ symbol? not ] } 1&& ;
+
+! * Helpers for generating declared effects
+
+GENERIC: elt>var ( i elt -- obj )
+M: f elt>var drop number>string "v" prepend utermvar ;
+M: string elt>var nip utermvar ;
+M: pair elt>var
+    first2 drop elt>var ;
+
+: elt-vars ( seq -- seq )
+    [ swap elt>var ] map-index ;
+: effect>stack-elts ( effect -- lin lout )
+    [ in>> elt-vars <reversed> >list ]
+    [ out>> elt-vars <reversed> >list ] bi ;
+
+:: add-row-vars ( lin lout effect -- lin lout )
+    effect [ in-var>> ] [ out-var>> ] bi
+    [ dup [ utermvar ] when ] bi@
+    :> ( i o )
+    { { [ i o [ not ] both? ]
+        [ "rho" utermvar :> rho
+          lin rho list*
+          lout rho list* ] }
+      { [ i o [  ] both? ]
+        [ lin i list*
+          lout o list* ] }
+      [ lin __ list* lout __ list* ]
+    } cond ;
+
+: effect>stacks ( effect -- lin lout )
+    [ effect>stack-elts ]
+    [ add-row-vars ] bi ;
 
 ! * Compositional approach
 
@@ -26,6 +60,7 @@ TUPLE: Instance < chr-pred id type ;
 ! For destructuring
 TUPLE: Label < chr-pred stack label ;
 TUPLE: Literal < chr-pred val ;
+TUPLE: Slot < chr-pred obj n val ;
 TUPLE: Declare < chr-pred classes stack ;
 
 TUPLE: CallEffect < chr-pred thing in out ;
@@ -45,6 +80,7 @@ TUPLE: Let < chr-pred var val type ;
 TUPLE: Invalid < chr-pred ;
 
 TUPLE: Eq < chr-pred val1 val2 ;
+TUPLE: Gt < chr-pred val1 val2 ;
 
 
 : word-alias ( word -- def/f )
@@ -62,9 +98,12 @@ CHRAT: chr-comp { TypeOf }
 
 
 ! Tag-level concrete type!
-CHR: unique-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- | [ ?tau ?sig ==! ] ;
-
+! ** Type Definitions
 CHR: start-type-of @ // { ?TypeOf ?q } -- | { TypeOf ?q ?tau } ;
+
+CHR: unique-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?tau } -- | ;
+CHR: same-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- | [ ?tau ?sig ==! ] ;
+
 
 CHR: alias-type-defined @ { TypeOf ?w ?tau } // -- [ ?w word-alias :>> ?q ] |
 { TypeOf ?q ?tau } ;
@@ -126,6 +165,18 @@ CHR: type-of-predicate @ // { TypeOf ?w ?tau } -- [ ?w word? ] [ ?w "predicating
   ==!
 ] ;
 
+! : slot ( obj m -- value )
+CHR: type-of-slot @ { TypeOf slot ?tau } // -- |
+[ ?tau
+  P{ Effect L{ ?m ?o . ?a } L{ ?v . ?a } {
+         P{ Instance ?m integer }
+         P{ Instance ?o union{ tuple array } }
+         P{ Slot ?o ?m ?v }
+         P{ Use ?m }
+         P{ Use ?o }
+     } }
+  ==! ] ;
+
 CHR: type-of-word-call @ { TypeOf [ ?w ] ?tau } // -- [ ?w callable-word? ] |
 ! { TypeOf ?w ?rho }
 { TypeOf ?w ?tau } ;
@@ -150,14 +201,27 @@ CHR: type-of-declare @ // { TypeOf declare ?tau } -- |
      } }
   ==! ] ;
 
-! *** Regular words
+CHR: type-of-fixnum+ @ { TypeOf fixnum+ ?tau } // -- |
+[ ?tau
+  P{ Effect L{ ?x ?y . ?a } L{ ?z . ?b } { P{ Instance ?x fixnum } P{ Instance ?y fixnum } P{ Use ?x } P{ Use ?y } P{ Instance ?z integer } } }
+  ==!
+] ;
+
+! *** Other words
+
+! NOTE: initializing effect here because of possibly recursive defs
 CHR: type-of-word @ { TypeOf A{ ?w } ?tau } // -- [ ?w word-alias not ] [ ?w method? not ] [ ?w callable-word? ] [ ?w "predicating" word-prop not ] [ ?w generic? not ] [ ?w def>> :>> ?q ] |
 ! { TypeOf ?q ?rho }
 ! { ComposeType P{ Effect ?a ?a { P{ Label ?a ?w } } } ?rho ?tau }
+[ ?tau P{ Effect ?a ?b ?l } ==! ]
 { TypeOf ?q ?tau }
     ;
 
-CHR: type-of-generic @ { TypeOf ?w ?tau } // -- [ ?w single-generic? ] [ ?w "methods" word-prop sort-methods <reversed> >list :>> ?l ] [ ?w dispatch# :>> ?i ] |
+! NOTE: initializing effect here because of possibly recursive defs
+CHR: type-of-generic @ { TypeOf ?w ?tau } // -- [ ?w single-generic? ] [ ?w "methods" word-prop sort-methods <reversed> >list :>> ?l ] [ ?w dispatch# :>> ?i ]
+[ ?w stack-effect effect>stacks :>> ?b drop :>> ?a ]
+|
+! [ ?tau P{ Effect ?a ?b ?k } ==! ]
 { MakeSingleDispatch ?i ?l ?tau } ;
 
 : dispatch-decl ( class num -- seq )
@@ -165,20 +229,38 @@ CHR: type-of-generic @ { TypeOf ?w ?tau } // -- [ ?w single-generic? ] [ ?w "met
 
 CHR: dispatch-done @ // { MakeSingleDispatch __ +nil+ ?tau } -- | [ ?tau null ==! ] ;
 CHR: dispatch-case @ // { MakeSingleDispatch ?i L{ { ?c ?m } . ?r } ?tau } --
-[ ?c ?i dispatch-decl :>> ?l ]
-[ [ ?l declare ] ?m def>> compose :>> ?q ]
+! [ ?c ?i dispatch-decl :>> ?l ]
+! [ [ ?l declare ] ?m def>> compose :>> ?q ]
 |
-{ TypeOf ?q ?rho }
+! { TypeOf ?q ?rho }
 { TypeOf ?m ?rho }
 { MakeSingleDispatch ?i ?r ?sig }
 { MakeXor ?rho ?sig ?tau } ;
 
-
-CHR: type-of-fixnum+ @ { TypeOf fixnum+ ?tau } // -- |
+CHR: type-of-reader @ { TypeOf ?w ?tau } // -- [ ?w method? ] [ ?w "reading" word-prop :>> ?x ]
+[ ?w "method-class" word-prop :>> ?c ]
+[ ?x class>> :>> ?d ] [ ?x name>> :>> ?n ] |
 [ ?tau
-  P{ Effect L{ ?x ?y . ?a } L{ ?z . ?b } { P{ Instance ?x fixnum } P{ Instance ?y fixnum } P{ Use ?x } P{ Use ?y } P{ Instance ?z integer } } }
-  ==!
-] ;
+  P{ Effect L{ ?o . ?a } L{ ?v . ?a }
+     {
+         P{ Instance ?o ?c }
+         P{ Slot ?o ?n ?v }
+         P{ Instance ?v ?d }
+         P{ Use ?o }
+     }
+   }
+  ==! ] ;
+
+CHR: type-of-single-method @ { TypeOf ?w ?tau } // -- [ ?w method? ] [ ?w "method-generic" word-prop single-generic? ] [ ?w "reading" word-prop not ]
+[ ?w def>> :>> ?q ]
+[ ?w "method-class" word-prop
+  ?w "method-generic" word-prop dispatch#
+  dispatch-decl <reversed> >list :>> ?l
+]
+|
+{ TypeOf ?q ?rho }
+{ ComposeType P{ Effect ?a ?a { P{ Declare ?l ?a } } } ?rho ?tau } ;
+
 
 CHR: type-of-empty-quot @ // { TypeOf [ ] ?tau } -- | [ ?tau P{ Effect ?a ?a f } ==! ] ;
 
@@ -194,33 +276,15 @@ CHR: compose-effects @ // { ComposeType P{ Effect ?a ?b ?k } P{ Effect ?c ?d ?l 
  P{ ComposeEffect e1 e2 ?tau }
 ] ;
 
-CHR: compose-xor-effects-right @ // { ComposeType P{ Effect ?a ?b ?k } P{ Xor P{ Effect ?c ?d ?l } P{ Effect ?x ?y ?m } } ?tau } -- |
-[| |
- P{ Effect ?a ?b ?k } fresh :> e1
- P{ Effect ?c ?d ?l } fresh :> e3
- P{ Effect ?a ?b ?k } fresh :> e2
- P{ Effect ?x ?y ?m } fresh :> e4
- {
-     P{ ComposeEffect e1 e3 ?rho }
-     P{ ComposeEffect e2 e4 ?sig }
-     P{ MakeXor ?rho ?sig ?tau }
-     ! [ ?tau P{ Xor ?rho ?sig } ==! ]
- }
-] ;
+CHR: compose-xor-effects-right @ // { ComposeType P{ Effect ?a ?b ?k } P{ Xor ?x ?y } ?tau } -- |
+{ ComposeType P{ Effect ?a ?b ?k } ?x ?rho }
+{ ComposeType P{ Effect ?a ?b ?k } ?y ?sig }
+{ MakeXor ?rho ?sig ?tau } ;
 
-CHR: compose-xor-effects-left @ // { ComposeType P{ Xor P{ Effect ?c ?d ?l } P{ Effect ?x ?y ?m } } P{ Effect ?a ?b ?k } ?tau } -- |
-[| |
- P{ Effect ?c ?d ?l } fresh :> e1
- P{ Effect ?x ?y ?m } fresh :> e2
- P{ Effect ?a ?b ?k } fresh :> e3
- P{ Effect ?a ?b ?k } fresh :> e4
- {
-     P{ ComposeEffect e1 e3 ?rho }
-     P{ ComposeEffect e2 e4 ?sig }
-     P{ MakeXor ?rho ?sig ?tau }
-     ! [ ?tau P{ Xor ?rho ?sig } ==! ]
- }
-] ;
+CHR: compose-xor-effects-left @ // { ComposeType P{ Xor ?x ?y } P{ Effect ?a ?b ?k } ?tau } -- |
+{ ComposeType ?x P{ Effect ?a ?b ?k } ?rho }
+{ ComposeType ?y P{ Effect ?a ?b ?k } ?sig }
+{ MakeXor ?rho ?sig ?tau } ;
 
 
 CHR: compose-xor-effects-both @ // { ComposeType P{ Xor ?a ?b } P{ Xor ?c ?d } ?tau } -- |
@@ -234,16 +298,21 @@ CHR: compose-xor-effects-both @ // { ComposeType P{ Xor ?a ?b } P{ Xor ?c ?d } ?
 CHR: make-null-xor @ // { MakeXor null null ?tau } -- | [ ?tau null ==! ] ;
 CHR: make-trivial-xor-left @ // { MakeXor ?rho null ?tau } -- | [ ?rho ?tau ==! ] ;
 CHR: make-trivial-xor-right @ // { MakeXor null ?rho ?tau } -- | [ ?rho ?tau ==! ] ;
-CHR: make-xor @ // { MakeXor ?rho ?sig ?tau } -- | [ ?tau P{ Xor ?rho ?sig } ==! ] ;
+! NOTE: not closing until we have effect!
+! NOTE: but that is not good if we need this to exclude stuff!
+CHR: make-xor @ // { MakeXor ?rho ?sig ?tau } --
+! [ ?rho term-var? not ] [ ?sig term-var? not ]
+| [ ?tau P{ Xor ?rho ?sig } ==! ] ;
 
 ! ** Start Reasoning
-UNION: body-pred Instance Label CallEffect Bind Drop Use Literal Declare ;
+UNION: body-pred Instance Label CallEffect Bind Drop Use Literal Declare Slot ;
 
 ! NOTE: assumed renaming here already
 CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?k } P{ Effect ?c ?d ?l } ?tau } -- |
 [ ?b ?c ==! ]
-[ ?k ]
-[ ?l ]
+! NOTE: This happens if we have pre-defined effects but no known body yet (e.g. recursive calls)
+[ ?k dup term-var? [ drop f ] when ]
+[ ?l dup term-var? [ drop f ] when ]
 { MakeEffect ?a ?d f f ?tau } ;
 
 ! ** Simplification/Intra-Effect reasoning
@@ -251,10 +320,18 @@ CHR: early-exit @ { Invalid } // <={ body-pred } -- | ;
 
 CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
 
+CHR: uniqe-slot @ { Slot ?o ?n ?v } // { Slot ?o ?n ?v } -- | ;
+
+CHR: same-slot-must-be-same-var @ { Slot ?o ?n ?v } // { Slot ?o ?n ?w } -- | [ ?v ?w ==! ] ;
+
+CHR: useless-instance @ // { Instance __ object } -- | ;
+
 CHR: instance-intersection @ // { Instance ?x A{ ?tau } } { Instance ?x A{ ?sig } } -- [ { ?tau ?sig } first2 class-and :>> ?c ] |
 { Instance ?x ?c } ;
 
 CHR: null-instance-is-invalid @ { Instance __ null } // -- | { Invalid } ;
+
+! *** Bind simplifaction
 
 CHR: unique-bind-is-same @ // { Bind ?x { ?y } } -- | [ ?x ?y ==! ] ;
 
@@ -268,6 +345,8 @@ CHR: drop-cancels-bind @ // { Drop ?x } { Bind ?a ?l } -- [ ?x ?l in? ]
 
 CHR: drop-cancels-lit @ // { Drop ?x } { Instance ?x __ } { Literal ?x } -- | ;
 
+! *** Bind propagation
+
 CHR: bind-propagates-literals @ // { Bind ?x ?l } { Literal ?x } { Instance ?x ?tau } -- [ { ?tau } first :>> ?c ] |
 [ ?l [ { ?c } first fresh Instance boa ] map ]
 [ ?l [ Literal boa ] map ] ;
@@ -278,7 +357,11 @@ CHR: bind-propagates-instance @ { Bind ?x ?l } { Instance ?x ?tau } // -- [ { ?t
 CHR: bind-backprops-instance @ { Bind ?x ?l } { Instance ?v ?tau } // -- [ ?v ?l in? ] [ { ?tau } first :>> ?c ] |
 { Instance ?x ?tau } ;
 
+CHR: bind-backprops-slot @ { Bind ?x ?l } { Slot ?o ?n ?v } // -- [ ?o ?l in? ] |
+{ Slot ?x ?n ?v } ;
+
 CHR: used-propagated-instance @ { Use ?x } { Bind __ ?l } // { Instance ?x __ } -- [ ?x ?l in? ] | ;
+CHR: use-propagated-slot @ { Use ?o } { Bind __ ?l } // { Slot ?o __ __ } -- [ ?o ?l in? ] | ;
 
 CHR: use-cancels-bind @ // { Use ?x } { Bind ?a ?l } -- [ ?x ?l in? ]
 [ ?x ?l remove :>> ?k ] |
@@ -287,6 +370,7 @@ CHR: use-cancels-bind @ // { Use ?x } { Bind ?a ?l } -- [ ?x ?l in? ]
 ! CHR: same-lit-is-same-var @ { Literal ?x } { Instance ?x A{ ?v } } // { Literal ?y } { Instance ?y A{ ?v } } -- |
 ! [ ?x ?y ==! ] ;
 
+! *** Call Effect matching
 ! NOTE: These only meet in renamed form?
 CHR: call-eats-effect @ // { Literal ?q } { Instance ?q P{ Effect ?c ?d ?l } } { CallEffect ?q ?a ?b } -- |
 [ { ?a ?b } { ?c ?d } ==! ]
@@ -301,8 +385,23 @@ CHR: do-declare @ // { Declare L{ ?tau . ?r } L{ ?x . ?xs } } -- |
 { Instance ?x ?tau }
 { Declare ?r ?xs } ;
 
+! *** Substituting ground values into body constraints
+
 CHR: known-declare @ { Declare ?l ?a } { Literal ?l } { Instance ?l ?tau } // -- |
 [ ?l ?tau <reversed> >list ==! ] ;
+
+CHR: known-slot @ { Literal ?n } { Instance ?n ?tau } // { Slot ?o ?n ?v } -- |
+{ Slot ?o ?tau ?v } ;
+
+! Slot conversion
+CHR: known-named-slot @ { Instance ?o A{ ?tau } } // { Slot ?o A{ ?n } ?v } -- [ ?tau tuple-class? ]
+[ ?tau all-slots [ offset>> ?n = ] find nip :>> ?s ] [ ?s name>> :>> ?m ]
+[ ?s class>> :>> ?rho ]
+|
+{ Slot ?o ?m ?v }
+{ Instance ?v ?rho }
+    ;
+
 
 CHR: used-literal @ // { Use ?x } { Literal ?x } { Instance ?x __  } -- | ;
 
@@ -346,6 +445,11 @@ CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ b
 [ ?l ?p suffix :>> ?k ]
 |
 { MakeEffect ?a ?b ?x ?k ?tau } ;
+
+! This will catch [ [ some-generic-word ] call ] inferences
+CHR: make-xor-effect @ // { MakeEffect ?a ?b ?x ?l ?tau } { Literal ?q } { Instance ?q P{ Xor P{ Effect ?c ?d ?k } P{ Effect ?rho ?sig ?m } } } { CallEffect ?q ?a ?b } --
+[ ?a term-var? ] [ ?b term-var? ] |
+[ ?tau P{ Xor P{ Effect ?c ?d ?k } P{ Effect ?rho ?sig ?m } } ==! ] ;
 
 
 CHR: conflicting-makes @ { MakeEffect __ __ __ __ __ } { MakeEffect __ __ __ __ __ } // -- | [ "recursive-make" throw f ] ;
