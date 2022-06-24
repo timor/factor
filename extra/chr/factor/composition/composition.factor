@@ -545,6 +545,12 @@ CHR: resolve-recursive-right @ { ComposeType ?x ?sig ?rho } { ComposeType ?y ?rh
 [ ?e valid-effect-type? ] [ ?x valid-effect-type? ] [ ?y valid-effect-type? ] |
 [ ?sig P{ Effect ?a ?b { P{ CallRecursive ?l } } } ==! ] ;
 
+! Push down Continuations through unit effects
+! TODO: Not sure about which restrictions exactly are needed here...
+CHR: resolve-recursive-unit @ { ComposeType ?rho ?d __ } // { MakeUnit ?sig ?rho } { Recursion ?l ?sig ?e } --
+[ ?e valid-effect-type? ] [ ?d valid-effect-type? ] |
+{ MakeUnit P{ Effect ?a ?b { P{ CallRecursive ?l } } } ?rho } ;
+
 ;
 
 

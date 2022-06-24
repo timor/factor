@@ -4,8 +4,8 @@ IN: chr.factor.composition.tests
 
 GENERIC: mylastcdr ( list -- obj )
 M: list mylastcdr
-    ! cdr>> [ mylastcdr ] (call) ;
-    cdr>> mylastcdr ;
+    cdr>> [ mylastcdr ] (call) ;
+    ! cdr>> mylastcdr ;
 M: +nil+ mylastcdr ;
 ! M: object mylastcdr ;
 ! M: array mylastcdr 2 slot [ mylastcdr ] (call) ;
