@@ -123,7 +123,7 @@ CHR: double-inference @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- [ ?tau term-
 CHR: alias-type-defined @ { TypeOfWord ?w ?tau } // -- [ ?w word-alias :>> ?q ] |
 { TypeOf ?q ?tau } ;
 
-CHR: type-of-prim-call @ // { TypeOfWord (call) ?tau } -- |
+CHR: type-of-prim-call @ // { TypeOf [ (call) ] ?tau } -- |
 [ ?tau P{ Effect L{ ?q . ?a } ?b { P{ CallEffect ?q ?a ?b } } } ==! ] ;
 ! [ ?tau P{ Effect L{ ?q . ?a } ?b { P{ Instance ?q P{ Effect ?a ?b f } } } } ==! ] ;
 
@@ -196,7 +196,6 @@ UNION: valid-effect-type Effect Xor ;
 CHR: have-type-of-word-call @ { TypeOf [ ?w ] ?tau } { TypeOfWord ?w ?sig } // -- [ ?sig valid-effect-type? ] |
 [ ?tau ?sig ==! ] ;
 
-
 ! remNOTE: interjecting here in case we get recursion
 CHR: type-of-word-call @ { TypeOf [ ?w ] ?tau } // -- [ ?w callable-word? ] [ ?tau term-var? ] |
 { TypeOfWord ?w ?sig } ;
@@ -214,8 +213,15 @@ CHR: type-of-unit-val @ { TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ]
 UNION: valid-type Effect classoid ;
 GENERIC: free-effect-vars ( term -- term )
 
-CHR: make-unit-type @ // { MakeUnit ?rho ?tau } -- [ { ?rho } first valid-type? ] |
-{ MakeEffect ?a L{ ?x . ?a } f { P{ Instance ?x ?rho } P{ Literal ?x } } ?tau } ;
+CHR: make-simple-unit-type @ // { MakeUnit ?rho ?tau } -- [ { ?rho } first valid-type? ] |
+! { MakeEffect ?a L{ ?x . ?a } f { P{ Instance ?x ?rho } P{ Literal ?x } } ?tau } ;
+[ ?tau P{ Effect ?a L{ ?x . ?a } { P{ Instance ?x ?rho } P{ Literal ?x } } } ==! ] ;
+
+
+CHR: make-xor-unit-type @ // { MakeUnit P{ Xor ?x ?y } ?tau } -- |
+{ MakeXor ?rho ?sig ?tau }
+{ MakeUnit ?x ?rho }
+{ MakeUnit ?y ?sig } ;
 
 ! CHR: push-recursion-xor-unit-type @ // { MakeUnit P{ Recursion P{ Xor ?x ?y } } ?tau } -- |
 ! { MakeUnit P{ Recursion ?x } ?rho }

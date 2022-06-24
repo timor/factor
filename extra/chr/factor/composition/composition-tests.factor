@@ -7,7 +7,7 @@ M: list mylastcdr
     ! cdr>> [ mylastcdr ] (call) ;
     cdr>> mylastcdr ;
 M: +nil+ mylastcdr ;
-M: object mylastcdr ;
+! M: object mylastcdr ;
 ! M: array mylastcdr 2 slot [ mylastcdr ] (call) ;
 : array-first ( arr -- thing ) 2 slot ;
-M: array mylastcdr array-first mylastcdr ;
+! M: array mylastcdr array-first mylastcdr ;
