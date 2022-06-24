@@ -114,62 +114,11 @@ CHRAT: chr-comp { TypeOf }
 CHR: start-type-of @ // { ?TypeOf ?q } -- | { TypeOf ?q ?tau } ;
 
 CHR: unique-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?tau } -- | ;
-! CHR: same-recursive-type @ { TypeOf ?x ?tau } { RecursiveEffect ?x __ } // { TypeOf ?x ?sig } -- [ ?sig term-var? ] [ ?x callable-word? ] |
-! { RecursiveEffect ?x P{ Effect ?a ?b f } }
-! [ ?sig P{ Effect ?a ?b f } ==! ] ;
 
 CHR: same-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- [ ?tau term-var? not ] | [ ?sig ?tau ==! ] ;
-! CHR: same-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- | [ ?sig ?tau ==! ] ;
-
-! CHR: same-data-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- [ ?x callable-word? not ]
-! [ ?tau term-var? ] [ ?sig term-var? ] |
-! [ ?tau ?sig ==! ] ;
-
 
 CHR: double-inference @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ] |
 { Recursion ?x ?sig ?tau } ;
-
-! remNOTE: We assume a fixpoint, so this must be a nop...
-
-! CHR: double-inference @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- [ ?sig term-var? ] |
-
-! CHR: double-inference @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- [ ?sig term-var? ] [ ?x callable-word? ] |
-! CHR: double-inference @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- [ ?sig term-var? ]
-! ! [ ?x callable? ] [ ?x length 1 = ] [ ?x first callable-word? ]
-! [ ?x callable-word? ]
-! |
-! ! { TypeOf ?x P{ Recursive ?l ?tau } }
-! ! [ ?sig P{ Effect ?a ?a f } ==! ] ;
-! ! { Recursion ?x ?l }
-! [ ?sig P{ Effect ?a ?b { P{ CallRecursive ?l } } } ==! ]
-! ! { Recursion ?x ?l }
-!     ;
-
-! CHR: double-inference @ { TypeOfWord ?x ?tau } // { TypeOfWord ?x ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ] [ ?x callable-word? ]
-! |
-! [ "rec inf" throw ]
-
-
-! { RecursiveEffect ?x P{ Effect ?a ?b f } }
-! [ ?sig P{ Effect ?a ?b f } ==! ]
-! { Recursion ?x ?sig ?tau }
-! [ ?sig P{ Continue ?x } ==! ]
-! { TypeOf ?x ?tau }
-
-
-! CHR: double-inference @ { TypeOf [ ?x ] ?tau } // { TypeOf [ ?x ] ?sig } -- [ ?x callable-word? ] [ ?sig term-var? ] |
-
-! CHR: double-inference @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- [ ?sig term-var? ] |
-! ! [ ?sig Recursion ==! ] ;
-! ! [ ?sig P{ Recursion ?x ?tau } ==! ] ;
-! ! [ ?sig { Recursion ?sig } ]
-! { Recursive ?x ?tau ?sig } ;
-! ! { Invalid } ;
-! ! { Recursive ?x ?sig ?tau } ;
-! ! [ ?sig P{ Effect ?a ?b { P{ Loop ?x ?a ?b } } } ==! ] ;
-! ! [ ?sig P{ Effect ?a ?b { P{ Invalid } } } ==! ] ;
-! ! [ "rec inf" throw f ] ;
-
 
 CHR: alias-type-defined @ { TypeOfWord ?w ?tau } // -- [ ?w word-alias :>> ?q ] |
 { TypeOf ?q ?tau } ;
@@ -250,21 +199,7 @@ CHR: have-type-of-word-call @ { TypeOf [ ?w ] ?tau } { TypeOfWord ?w ?sig } // -
 
 ! remNOTE: interjecting here in case we get recursion
 CHR: type-of-word-call @ { TypeOf [ ?w ] ?tau } // -- [ ?w callable-word? ] [ ?tau term-var? ] |
-{ TypeOfWord ?w ?sig }
-! CHR: type-of-word-call @ // { TypeOf [ ?w ] ?tau } -- [ ?w callable-word? ] [ ?tau term-var? ] |
-! { TypeOf ?w ?rho }
-! { ComposeType P{ Effect ?a ?a f } ?rho ?tau } ;
-! { TypeOf ?w ?sig } ;
-! { TypeOf ?w ?tau }
-! { TypeOf [ ?w ] ?tau }
-    ;
-
-! ! NOTE interjecting here to catch recursion
-! CHR: type-of-callable-unit @ { TypeOf [ ?w ] ?tau } // -- [ ?w callable? ] |
-! { TypeOf ?w ?rho }
-! { ComposeType P{ Effect ?a ?a f } ?rho ?sig }
-! { MakeEffect ?a L{ ?x . ?a } f { P{ Instance ?x ?sig } P{ Literal ?x } } ?tau }
-!     ;
+{ TypeOfWord ?w ?sig } ;
 
 CHR: type-of-unit-val @ { TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ]
 |
@@ -288,12 +223,6 @@ CHR: make-unit-type @ // { MakeUnit ?rho ?tau } -- [ { ?rho } first valid-type? 
 ! { MakeXor ?rho ?sig ?tau } ;
 
 
-! CHR: make-unit-recursive-type @ // { MakeUnit P{ Recursion ?sig } ?tau } -- [ ?sig valid-type? ] |
-! [ ?tau P{ Effect ?a L{ ?x . ?a } { P{ Instance ?x P{ Recursion ?sig } } P{ Literal ?x } } } ==! ] ;
-
-
-! CHR: resolve-unit-recursion @ // { MakeUnit P{ Recursion ?e } ?tau } -- [ ?e term-var? not ] |
-! [ ?tau ?e ==! ] ;
 
 CHR: type-of-val @ // { TypeOf A{ ?v } ?tau } -- [ ?v callable? not ] [ ?v callable-word? not ]
 |
@@ -319,9 +248,6 @@ CHR: type-of-fixnum+ @ { TypeOfWord fixnum+ ?tau } // -- |
 
 ! NOTE: initializing effect here because of possibly recursive defs
 CHR: type-of-word @ { TypeOfWord A{ ?w } ?tau } // -- [ ?tau term-var? ] [ ?w word-alias not ] [ ?w method? not ] [ ?w callable-word? ] [ ?w "predicating" word-prop not ] [ ?w generic? not ] [ ?w def>> :>> ?q ] |
-! { TypeOf ?q ?rho }
-! { ComposeType P{ Effect ?a ?a { P{ Label ?a ?w } } } ?rho ?tau }
-! [ ?tau P{ Effect ?a ?b ?l } ==! ]
 { TypeOf ?q ?tau }
     ;
 
@@ -430,38 +356,6 @@ CHR: make-xor @ // { MakeXor ?rho ?sig ?tau } --
 ! [ ?rho term-var? not ] [ ?sig term-var? not ]
 [ ?rho term-var? not ?sig term-var? not or ]
 | [ ?tau P{ Xor ?rho ?sig } ==! ] ;
-
-! CHR: compose-break-recursion-left @ // { ComposeType ?sig P{ Recursion __ } ?tau } -- [ ?sig term-var? not ] |
-! [ ?tau ?sig ==! ] ;
-
-
-! CHR: compose-propagate-recursion-left @ // { ComposeType ?sig P{ Recursion ?rho } ?tau } -- [ ?sig term-var? not ] [ ?sig Recursion? not ] [ ?rho term-var? not ] [ break t ] |
-! { ComposeType ?sig ?rho ?x }
-! { MakeRecursion ?x ?tau } ;
-
-! CHR: did-make-recursion @ // { MakeRecursion ?rho ?tau } -- [ ?rho term-var? not ] [ ?rho Recursion? not ] |
-! [ ?tau P{ Recursion ?rho } ==! ] ;
-
-! CHR: did-make-xor-recursion @ // { MakeRecursion ?rho ?tau } -- [ ?rho term-var? not ]
-
-! CHR: lift-xor-recursion @ // { MakeRecursion P{ Xor ?x ?y } }
-
-
-
-! CHR: make-xor-recursion @ // { MakeRecursion P{ Xor ?x ?y } ?tau } -- |
-! { MakeRecursion ?x ?rho }
-! { MakeRecursion ?y ?sig }
-! { MakeXor ?rho ?sig ?tau } ;
-
-! CHR: make-xor-recursion @ // { MakeRecursion P{ Xor ?x ?y } ?tau } -- |
-! ! { MakeXor ?x ?y ?rho }
-! ! { MakeRecursion ?rho ?tau } ;
-! { MakeRecursion ?x ?rho }
-! { MakeRecursion ?y ?sig } ;
-! { MakeXor ?rho ?sig ?tau } ;
-
-! CHR: make-recursion-effect @ // { MakeRecursion P{ Effect ?a ?b ?l } ?tau } -- |
-! [ ?tau P{ Recursion P{ Effect ?a ?b ?l } } ==! ] ;
 
 
 ! ** Start Reasoning
@@ -644,25 +538,6 @@ CHR: finish-effect @ // { MakeEffect ?a ?b __ ?l ?tau } -- |
 CHR: resolve-recursive-right @ { ComposeType ?x ?sig ?rho } { ComposeType ?y ?rho ?d } // { Recursion ?l ?sig ?e } --
 [ ?e valid-effect-type? ] [ ?x valid-effect-type? ] [ ?y valid-effect-type? ] |
 [ ?sig P{ Effect ?a ?b { P{ CallRecursive ?l } } } ==! ] ;
-
-
-! ! ! TODO: late enough?
-! ! CHR: copy-recursive-right @ // { ComposeType ?e P{ Recursion __ } ?tau } -- |
-! ! [ ?tau ?e ==! ] ;
-
-! CHR: resolve-recursive-right @ // { Recursive __ ?tau ?sig } -- [ ?sig term-var? not ] [ ?tau term-var? ] |
-! [ ?tau ?sig ==! ] ;
-
-! CHR: resolve-recursive-left @ // { Recursive __ ?tau ?sig } -- [ ?tau term-var? not ] [ ?sig term-var? ] |
-! [ ?sig ?tau ==! ] ;
-
-! CHR: same-recursion @ { Recursion ?x ?a } // { Recursion ?x ?b } -- | [ ?a ?b ==! ] ;
-! CHR: same-recursion @ { TypeOf ?x P{ Recursive ?l ?tau } } // { Recursion ?x ?b } -- | [ ?b ?l ==! ] ;
-
-! CHR: wrap-recursion @ // { Recursion ?x ?l } { TypeOf ?x ?tau } -- | { TypeOf ?x P{ Recursive ?l ?tau } } ;
-
-
-
 
 ;
 
