@@ -76,6 +76,7 @@ TUPLE: Continue < chr-pred tag ;
 TUPLE: Recursion < chr-pred tag from to ;
 TUPLE: MakeXor < chr-pred type1 type2 target ;
 TUPLE: MakeRecursion < chr-pred type target ;
+TUPLE: Copy < chr-pred type target ;
 
 TUPLE: Xor < chr-pred type1 type2 ;
 TUPLE: And < chr-pred types ;
@@ -313,7 +314,7 @@ M: Xor free-effect-vars
     [ type1>> ] [ type2>> ] bi [ free-effect-vars ] bi@ append ;
 M: Effect free-effect-vars
     preds>> [ free-effect-vars ] gather ;
-! M: term-var free-effect-vars 1array ;
+M: term-var free-effect-vars 1array ;
 M: object free-effect-vars drop f ;
 M: Instance free-effect-vars type>> free-effect-vars ;
 M: CallRecursive free-effect-vars tag>> 1array ;
@@ -540,16 +541,91 @@ CHR: finish-effect @ // { MakeEffect ?a ?b __ ?l ?tau } -- |
 
 ! *** Recursion resolution
 
-! Resolve Continuations composing recursive effects
-CHR: resolve-recursive-right @ { ComposeType ?x ?sig ?rho } { ComposeType ?y ?rho ?d } // { Recursion ?l ?sig ?e } --
-[ ?e valid-effect-type? ] [ ?x valid-effect-type? ] [ ?y valid-effect-type? ] |
+
+! RES1
+! Distribute MakeUnit over composition to move towards recursion...
+CHR: resolve-recursive-propagate-make-unit @ // { Recursion ?l ?rho ?e } { ComposeType ?rho ?a ?sig } { MakeUnit ?sig ?tau } ! { ComposeType ?tau ?d }
+--
+[ ?e valid-effect-type? ] [ ?a valid-effect-type? ] |
+{ MakeUnit ?a ?tau }
 [ ?sig P{ Effect ?a ?b { P{ CallRecursive ?l } } } ==! ] ;
 
+
+! RES2
+! Resolve Continuations composing recursive effects
+! TODO: Not sure about which restrictions exactly are needed here...
+! ... because of that, not checking for the second one..
+CHR: resolve-recursive-compose-right @ { ComposeType ?x ?sig ?rho }
+! { ComposeType ?y ?rho ?d }
+// { Recursion ?l ?sig ?e } --
+[ ?e valid-effect-type? ] [ ?x valid-effect-type? ]
+! [ ?y valid-effect-type? ]
+|
+[ ?sig P{ Effect ?a ?b { P{ CallRecursive ?l } } } ==! ] ;
+
+! RES3
 ! Push down Continuations through unit effects
 ! TODO: Not sure about which restrictions exactly are needed here...
-CHR: resolve-recursive-unit @ { ComposeType ?rho ?d __ } // { MakeUnit ?sig ?rho } { Recursion ?l ?sig ?e } --
-[ ?e valid-effect-type? ] [ ?d valid-effect-type? ] |
+CHR: resolve-recursive-unit-left @ { ComposeType ?rho ?d __ }
+// { MakeUnit ?sig ?rho } { Recursion ?l ?sig ?e } --
+[ ?e valid-effect-type? ]
+[ ?d valid-effect-type? ]
+|
 { MakeUnit P{ Effect ?a ?b { P{ CallRecursive ?l } } } ?rho } ;
+
+
+! Quote one iteration
+! I think this basically pulls one iteration into the unit effect...
+
+! CHR: resolve-recursive-unit-right @ { MakeUnit ?rho ?sig } { ComposeType ?d ?sig ?tau } // { Recursion ?l ?rho ?e } --
+! [ ?e valid-effect-type? ]
+! [ ?d valid-effect-type? ]
+! [ ?sig term-var? ]
+! [ ?tau term-var? ]
+! |
+
+! { ComposeType ?d P{ Effect ?a ?b { P{ CallRecursive ?l } } } ?rho }
+
+
+! { MakeUnit ?e ?sig }
+! { ComposeType ?d ?sig ?x }
+! { Copy ?x ?tau }
+    ! ;
+
+! CHR: do-copy @ // { Copy ?x ?tau } -- [ ?x valid-effect-type? ] |
+! [ ?tau ?x ==! ] ;
+! { ComposeType ?d ?sig ?tau }
+    ! ;
+! [ ?sig P{ Effect ?a L{ ?x . ?a } { P{ Instance ?x ?e } } } ==! ] ;
+! { ComposeType ?d P{ Effect ?a L{ ?x . ?a } { P{ Instance ?x ?e } } } ?tau } ;
+! { MakeUnit ?e ?tau } ;
+
+! { ComposeType ?e P{ Effect ?a ?b { P{ CallRecursive ?l } } } ?x }
+! { MakeUnit ?x ?tau } ;
+
+! [ ?sig P{ Effect ?a ?b { P{ CallRecursive ?l } } } ==! ] ;
+
+
+! This seems to break semantics
+! CHR: resolve-recursive-unit-right @ { ComposeType ?d ?rho __ }
+! // { MakeUnit ?sig ?rho } { Recursion ?l ?sig ?e } --
+! [ ?e valid-effect-type? ]
+! [ ?d valid-effect-type? ]
+! |
+! { MakeUnit P{ Effect ?a ?b { P{ CallRecursive ?l } } } ?rho } ;
+
+! ! TODO Pulling the composition into the recursive effect, however, not completely sure that the
+! ! label is correct still!
+! CHR: resolve-recursive-compose-right @ // { ComposeType ?rho ?x ?sig } { Recursion ?l ?rho ?e } --
+! [ ?e valid-effect-type? ] [ ?x valid-effect-type? ] |
+! { ComposeType ?e ?x ?z }
+! { Recursion { ?l ?x } ?sig ?z } ;
+
+! Doing One iteration...
+! XXX As feared, this loops...
+! CHR: resolve-recursive-compose-left @ { ComposeType ?rho ?x ?sig } // { Recursion ?l ?rho ?e } --
+! [ ?e valid-effect-type? ] [ ?x valid-effect-type? ] [ ?rho term-var? ] |
+! [ ?rho ?e ==! ] ;
 
 ;
 
