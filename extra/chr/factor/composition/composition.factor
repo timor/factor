@@ -47,8 +47,9 @@ TUPLE: Effect < chr-pred in out preds ;
 ! Placeholder-effect?
 TUPLE: RecursiveEffect < chr-pred tag effect ;
 TUPLE: TypeOf < chr-pred thing type ;
+TUPLE: ?TypeOf < chr-pred thing type ;
 TUPLE: TypeOfWord < chr-pred word var ;
-TUPLE: ?TypeOf < chr-pred thing ;
+TUPLE: InferType < chr-pred thing ;
 
 
 TUPLE: MakeSingleDispatch < chr-pred index cases target ;
@@ -112,28 +113,39 @@ CHRAT: chr-comp { TypeOf }
 
 ! Tag-level concrete type!
 ! ** Type Definitions
-CHR: start-type-of @ // { ?TypeOf ?q } -- | { TypeOf ?q ?tau } ;
+CHR: start-type-of @ // { InferType ?q } -- | { ?TypeOf ?q ?tau } ;
 
 CHR: unique-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?tau } -- | ;
 
 GENERIC: free-effect-vars ( term -- term )
 : full-type? ( type -- ? ) free-effect-vars empty? ;
 
-CHR: same-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- [ ?tau full-type? ] | [ ?sig ?tau ==! ] ;
+CHR: conflicting-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- | [ "conflicting type-defs" throw f ] ;
+
+CHR: done-with-intermediate-types @ // { ?TypeOf ?x +nil+ } -- | ;
+CHR: answer-intermediate-type @ // { ?TypeOf ?x L{ ?tau . ?r } } { TypeOf ?x ?sig } -- |
+! TODO: order matters?
+{ ?TypeOf ?x ?r }
+[ ?tau ?sig ==! ]
+    ;
+
+CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } -- [ ?tau full-type? ] | [ ?sig ?tau ==! ] ;
 
 ! CHR: double-word-inference @ { TypeOfWord ?x ?tau } // { TypeOfWord ?x ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ] |
-CHR: double-word-inference @ { TypeOf [ ?x ] ?tau } // { TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
+CHR: double-word-inference @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
 [ ?x callable-word? ]
 [ ?x 1quotation :>> ?y ]
 |
 { Recursion ?y ?sig ?tau } ;
 
-! CHR: delay-double-inference @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ] | [ ?sig ?tau ==! ] ;
+CHR: double-inference-queue @ { ?TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ] |
+{ ?TypeOf ?x L{ ?sig } }
+    ;
 
 CHR: alias-type-defined @ { TypeOfWord ?w ?tau } // -- [ ?w word-alias :>> ?q ] |
-{ TypeOf ?q ?tau } ;
+{ ?TypeOf ?q ?tau } ;
 
-CHR: type-of-prim-call @ // { TypeOf [ (call) ] ?tau } -- |
+CHR: type-of-prim-call @ // { ?TypeOf [ (call) ] ?tau } -- |
 [ ?tau P{ Effect L{ ?q . ?a } ?b { P{ CallEffect ?q ?a ?b } } } ==! ] ;
 ! [ ?tau P{ Effect L{ ?q . ?a } ?b { P{ Instance ?q P{ Effect ?a ?b f } } } } ==! ] ;
 
@@ -153,13 +165,13 @@ CHR: type-of-dup @ // { TypeOfWord dup ?tau } -- |
           } }
   ==! ] ;
 
-CHR: type-of-drop @ // { TypeOf [ drop ] ?tau } -- |
+CHR: type-of-drop @ // { ?TypeOf [ drop ] ?tau } -- |
 [ ?tau P{ Effect L{ ?x . ?a } ?a { P{ Drop ?x } } } ==! ] ;
 
-CHR: type-of-swap @ // { TypeOfWord swap ?tau } -- |
+CHR: type-of-swap @ // { ?TypeOf [ swap ] ?tau } -- |
 [ ?tau P{ Effect L{ ?x ?y . ?a } L{ ?y ?x . ?a } f } ==! ] ;
 
-CHR: type-of-mux @ // { TypeOfWord ? ?tau } -- |
+CHR: type-of-mux @ // { ?TypeOf [ ? ] ?tau } -- |
 [
     ?tau
     P{ Xor
@@ -169,7 +181,7 @@ CHR: type-of-mux @ // { TypeOfWord ? ?tau } -- |
     ==!
 ] ;
 
-CHR: type-of-predicate @ // { TypeOfWord ?w ?tau } -- [ ?w "predicating" word-prop :>> ?c ] |
+CHR: type-of-predicate @ { TypeOfWord ?w ?tau } // -- [ ?w "predicating" word-prop :>> ?c ] [ ?tau term-var? ] |
 [| |
  ?c class-not :> ?d
  ?tau
@@ -191,7 +203,7 @@ CHR: type-of-predicate @ // { TypeOfWord ?w ?tau } -- [ ?w "predicating" word-pr
 ] ;
 
 ! : slot ( obj m -- value )
-CHR: type-of-slot @ { TypeOfWord slot ?tau } // -- |
+CHR: type-of-slot @ { TypeOfWord slot ?tau } // -- [ ?tau term-var? ] |
 [ ?tau
   P{ Effect L{ ?m ?o . ?a } L{ ?v . ?a } {
          P{ Instance ?m integer }
@@ -205,20 +217,23 @@ CHR: type-of-slot @ { TypeOfWord slot ?tau } // -- |
 UNION: valid-effect-type Effect Xor ;
 UNION: valid-type Effect classoid ;
 
-CHR: have-type-of-word-call @ { TypeOf [ ?w ] ?tau } { TypeOfWord ?w ?sig } // --
+CHR: have-type-of-word-call @ { ?TypeOf [ ?w ] ?tau } { TypeOfWord ?w ?sig } // --
 ! [ ?sig valid-effect-type? ]
 [ ?sig free-effect-vars empty? ]
+[ ?w 1quotation :>> ?q ]
 |
-[ ?tau ?sig ==! ] ;
+! [ ?tau ?sig ==! ]
+{ TypeOf ?q ?sig } ;
 
-! remNOTE: interjecting here in case we get recursion
-CHR: type-of-word-call @ { TypeOf [ ?w ] ?tau } // -- [ ?w callable-word? ] [ ?tau term-var? ] |
+CHR: type-of-word-call @ { ?TypeOf [ ?w ] ?tau } // -- [ ?w callable-word? ] [ ?tau term-var? ] |
 { TypeOfWord ?w ?sig } ;
 
-CHR: type-of-unit-val @ { TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ]
-|
-{ TypeOf ?v ?rho }
-{ MakeUnit ?rho ?tau } ;
+CHR: type-of-unit-val @ { ?TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ]
+[ ?v 1quotation :>> ?q ] |
+{ ?TypeOf ?v ?rho }
+{ MakeUnit ?rho ?sig }
+{ TypeOf ?q ?sig }
+    ;
 ! CHR: type-of-unit-val-direct @ { TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ]
 ! |
 ! { TypeOf ?v ?rho }
@@ -242,7 +257,7 @@ CHR: make-xor-unit-type @ // { MakeUnit P{ Xor ?x ?y } ?tau } -- |
 
 
 
-CHR: type-of-val @ // { TypeOf A{ ?v } ?tau } -- [ ?v callable? not ] [ ?v callable-word? not ]
+CHR: type-of-val @ // { ?TypeOf A{ ?v } ?tau } -- [ ?v callable? not ] [ ?v callable-word? not ]
 |
 ! { Instance ?tau W{ ?v } } ;
 [ ?tau W{ W{ ?v } } ==! ] ;
@@ -266,7 +281,7 @@ CHR: type-of-fixnum+ @ { TypeOfWord fixnum+ ?tau } // -- |
 
 ! NOTE: initializing effect here because of possibly recursive defs
 CHR: type-of-word @ { TypeOfWord A{ ?w } ?tau } // -- [ ?tau term-var? ] [ ?w word-alias not ] [ ?w method? not ] [ ?w callable-word? ] [ ?w "predicating" word-prop not ] [ ?w generic? not ] [ ?w def>> :>> ?q ] |
-{ TypeOf ?q ?tau }
+{ ?TypeOf ?q ?tau }
     ;
 
 ! NOTE: initializing effect here because of possibly recursive defs
@@ -310,16 +325,17 @@ CHR: type-of-single-method @ { TypeOfWord ?w ?tau } // -- [ ?w method? ] [ ?w "m
   dispatch-decl <reversed> >list :>> ?l
 ]
 |
-{ TypeOf ?q ?rho }
+{ ?TypeOf ?q ?rho }
 { ComposeType P{ Effect ?a ?a { P{ Declare ?l ?a } } } ?rho ?tau } ;
 
 
-CHR: type-of-empty-quot @ // { TypeOf [ ] ?tau } -- | [ ?tau P{ Effect ?a ?a f } ==! ] ;
+CHR: type-of-empty-quot @ // { ?TypeOf [ ] ?tau } -- | [ ?tau P{ Effect ?a ?a f } ==! ] ;
 
-CHR: type-of-quot @ { TypeOf ?q ?tau } // -- [ ?q callable? ] [ ?q length 1 > ] [ ?q dup length 2 /i cut :>> ?y drop :>> ?x drop t ] |
-{ TypeOf ?x ?rho }
-{ TypeOf ?y ?sig }
-{ ComposeType ?rho ?sig ?tau } ;
+CHR: type-of-quot @ { ?TypeOf ?q ?tau } // -- [ ?q callable? ] [ ?q length 1 > ] [ ?q dup length 2 /i cut :>> ?y drop :>> ?x drop t ] |
+{ ?TypeOf ?x ?rho }
+{ ?TypeOf ?y ?sig }
+{ ComposeType ?rho ?sig ?z }
+{ TypeOf ?q ?z } ;
 
 M: Xor free-effect-vars
     [ type1>> ] [ type2>> ] bi [ free-effect-vars ] bi@ append ;
@@ -560,33 +576,39 @@ CHR: propagate-pushdown-rec-compose-left @ { ComposeType ?rho ?e ?sig } // { Pus
 [ ?e valid-effect-type? ] |
 { PushdownRec ?l ?sig } ;
 
+CHR: propagate-pushdown-rec-type-of-back @ { TypeOf ?x ?tau } { ?TypeOf ?x ?rho } // { PushdownRec ?l ?tau } -- |
+{ PushdownRec ?l ?rho } ;
+
 CHR: apply-pushdown-rec-compose-right @ // { ComposeType ?e ?rho ?sig } { PushdownRec ?l ?rho } --
 [ ?e valid-effect-type? ] |
 { ComposeType ?e P{ Effect ?a ?b { P{ CallRecursive ?l } } } ?sig } ;
 
-! CHR: catch-unit-recursion-2 @ { Recursion ?l ?sig ?tau } // { MakeUnit __ ?sig } -- |
-! [ "Nope! dont!" throw f ] ;
+CHR: propagate-pushdown-rec-make-unit @ { MakeUnit ?rho ?tau } // { PushdownRec ?l ?rho } -- |
+{ PushdownRec ?l ?tau } ;
 
-CHR: resolve-recursive-make-unit-compose-left @ { ComposeType ?tau ?e ?x } // { MakeUnit ?rho ?tau } { Recursion ?l ?rho ?sig } --
-[ ?x term-var? ]
+CHR: resolve-recursive-make-unit @ // { Recursion ?l ?rho ?sig } { MakeUnit ?rho ?tau } --
 [ ?rho term-var? ]
 [ ?sig term-var? ]
-[ ?e valid-effect-type? ]
 [ ?tau term-var? ] |
-{ PushdownRec ?l ?tau }
-{ MakeUnit ?sig ?tau } ;
-! [ ?rho P{ Effect ?a ?b { P{ CallRecursive ?l } } } ==! ] ;
-! [ ?tau ?x ==! ]
-! { MakeUnit P{ Effect ?a ?b { P{ CallRecursive ?l } } } ?y }
-! { ComposeType ?e P{ Effect ?a ?b { P{ CallRecursive ?l } } } ?x }
-    ! ;
+{ MakeUnit ?sig ?tau }
+{ PushdownRec ?l ?tau } ;
 
+! CHR: resolve-recursive-make-unit-compose-left @ { ComposeType ?tau ?e ?x } // { MakeUnit ?rho ?tau } { Recursion ?l ?rho ?sig } --
+! [ ?x term-var? ]
+! [ ?rho term-var? ]
+! [ ?sig term-var? ]
+! [ ?e valid-effect-type? ]
+! [ ?tau term-var? ] |
+! { PushdownRec ?l ?tau }
+! { MakeUnit ?sig ?tau } ;
+! ! [ ?rho P{ Effect ?a ?b { P{ CallRecursive ?l } } } ==! ] ;
+! ! [ ?tau ?x ==! ]
+! ! { MakeUnit P{ Effect ?a ?b { P{ CallRecursive ?l } } } ?y }
+! ! { ComposeType ?e P{ Effect ?a ?b { P{ CallRecursive ?l } } } ?x }
+!     ! ;
 
-! CHR: catch-unit-recursion-1 @ { Recursion ?l ?sig ?tau } // { MakeUnit ?sig __ } -- |
-! [ "dont!" throw f ] ;
 
 ! ! Recursion target is unknown
-! CHR: resolve-unknown-recursion-compose-right @ { ComposeType ?d ?sig ?rho } // { Recursion ?l ?sig ?tau } --
 CHR: resolve-unknown-recursion-compose-right @ // { ComposeType ?d ?sig ?rho } { Recursion ?l ?sig ?tau } --
 [ ?d valid-effect-type? ]
 [ ?sig term-var? ]
@@ -595,53 +617,8 @@ CHR: resolve-unknown-recursion-compose-right @ // { ComposeType ?d ?sig ?rho } {
 { ComposeType ?d P{ Effect ?a ?b { P{ CallRecursive ?l } } } ?rho } ;
 ! [ ?sig P{ Effect ?a ?b { P{ CallRecursive ?l } } } ==! ] ;
 
-
-! ! RES1
-! ! Distribute MakeUnit over composition to move towards recursion...
-! CHR: resolve-recursive-propagate-make-unit @ // { Recursion ?l ?rho ?e } { ComposeType ?rho ?a ?sig } { MakeUnit ?sig ?tau } ! { ComposeType ?tau ?d }
-! --
-! [ ?e valid-effect-type? ] [ ?a valid-effect-type? ] |
-! { MakeUnit ?a ?tau }
-! [ ?sig P{ Effect ?a ?b { P{ CallRecursive ?l } } } ==! ] ;
-
-
-! ! RES2
-! ! Resolve Continuations composing recursive effects
-! ! TODO: Not sure about which restrictions exactly are needed here...
-! ! ... because of that, not checking for the second one..
-! CHR: resolve-recursive-compose-right @ { ComposeType ?x ?sig ?rho }
-! ! { ComposeType ?y ?rho ?d }
-! // { Recursion ?l ?sig ?e } --
-! [ ?e valid-effect-type? ] [ ?x valid-effect-type? ]
-! ! [ ?y valid-effect-type? ]
-! |
-! [ ?sig P{ Effect ?a ?b { P{ CallRecursive ?l } } } ==! ] ;
-
-! ! RES3
-! ! Push down Continuations through unit effects
-! ! TODO: Not sure about which restrictions exactly are needed here...
-! CHR: resolve-recursive-unit-left @ { ComposeType ?rho ?d __ }
-! // { MakeUnit ?sig ?rho } { Recursion ?l ?sig ?e } --
-! [ ?e valid-effect-type? ]
-! [ ?d valid-effect-type? ]
-! |
-! { MakeUnit P{ Effect ?a ?b { P{ CallRecursive ?l } } } ?rho } ;
-
-
-! Quote one iteration
-! I think this basically pulls one iteration into the unit effect...
-
-! CHR: resolve-recursive-unit-right @ { MakeUnit ?rho ?sig } { ComposeType ?d ?sig ?tau } // { Recursion ?l ?rho ?e } --
-! [ ?e valid-effect-type? ]
-! [ ?d valid-effect-type? ]
-! [ ?sig term-var? ]
-! [ ?tau term-var? ]
-! |
-
-! { ComposeType ?d P{ Effect ?a ?b { P{ CallRecursive ?l } } } ?rho }
-
 ;
 
 
 : qt ( quot -- res )
-    ?TypeOf boa 1array chr-comp swap [ run-chr-query store>> ] with-var-names ;
+    InferType boa 1array chr-comp swap [ run-chr-query store>> ] with-var-names ;
