@@ -15,8 +15,8 @@ IN: chr.debug
     ] with-term-vars ;
 
 : store. ( consts -- )
-    [ constraint>> ] map-values
-    solve-result-store
+    [ constraint>> f lift ] map-values
+    ! solve-result-store
     . ;
 
 : chr-state. ( -- )
@@ -64,7 +64,7 @@ IN: chr.debug
 : chrebug ( -- )
     ! \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate
     \ kill-chr [ [ "- " write dup id-susp. ] prepose ] annotate
-    \ run-rule-body [ [ 2dup rule-match. ] prepose ] annotate
+    \ run-rule-body [ [ 2dup rule-match. ] prepose [ chr-state. ] prepose ] annotate
     ! \ activate-new [ [ dup "Activating new constraint: %u\n" printf ] prepose ] annotate
     \ create-chr [ [ "+ " write dup id-susp. ] compose
                    ! [ chr-state. ] compose
@@ -83,6 +83,8 @@ IN: chr.debug
     M\ C activate-new [ [ dup cond>> current-context get swap "CTX: %u -> %u\n" printf ] prepend ] annotate
     \ run-queue [ [ "Flushing queue" print ] prepose ] annotate
     \ merge-solver-config [ [ 2dup swap "Merging store with key: %u\n" printf store>> [ constraint>> ] map-values . ] prepend ] annotate
+    ! Very verbose!
+    ! \ store-chr [ [ "Storing new " print chr-state. ] compose ] annotate
     ;
 
 :: break-rule-match ( occ -- )
