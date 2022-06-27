@@ -462,6 +462,9 @@ SYMBOL: on-recursive-term
 : no-var-restrictions ( quot -- )
     valid-match-vars swap with-variable-off ; inline
 
+: lift* ( term subst -- term )
+    [ lift ] no-var-restrictions ;
+
 ! Only make parts of vars fresh
 : fresh-with ( term vars -- term )
     [ clone ] dip
@@ -471,6 +474,9 @@ SYMBOL: on-recursive-term
 ! Only term vars!
 : fresh ( term -- term )
     dup term-vars fresh-with ;
+
+: fresh-without ( term vars -- term )
+    over term-vars swap diff fresh-with ;
 
 ! * Proper Terms
 TUPLE: term parts ;

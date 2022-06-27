@@ -35,6 +35,6 @@ M: +nil+ mylastcdr ;
 ! M: object mylastcdr ;
 ! M: array mylastcdr 2 slot [ mylastcdr ] (call) ;
 TYPED: array-first ( arr: array -- thing ) 2 slot ;
-! M: array mylastcdr array-first mylastcdr ;
-M: array mylastcdr array-first [ mylastcdr ] (call) ;
+M: array mylastcdr array-first mylastcdr ;
+! M: array mylastcdr array-first [ [ mylastcdr ] ] (call) (call) ;
 ! M: array mylastcdr array-first [ [ mylastcdr ] (call) ] (call) ;
