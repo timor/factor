@@ -159,10 +159,10 @@ CHR: alias-type-defined @ { TypeOfWord ?w ?tau } // -- [ ?w word-alias :>> ?q ] 
 CHR: type-of-prim-call @ // { ?TypeOf [ (call) ] ?tau } -- |
 [ ?tau P{ Effect L{ ?q . ?a } ?b { P{ CallEffect ?q ?a ?b } } } ==! ] ;
 
-CHR: type-of-dip @ // { TypeOfWord dip ?tau } -- |
+CHR: type-of-dip @ { TypeOfWord dip ?tau } // -- |
 [ ?tau P{ Effect L{ ?q ?x . ?a } L{ ?x . ?b } { P{ CallEffect ?q ?a ?b } } } ==! ] ;
 
-CHR: type-of-dup @ // { TypeOfWord dup ?tau } -- |
+CHR: type-of-dup @ { TypeOfWord dup ?tau } // -- |
 [ ?tau P{ Effect L{ ?x . ?rho } L{ ?y ?z . ?rho } {
               P{ Bind ?x { ?y ?z } }
           } }
@@ -250,7 +250,7 @@ CHR: type-of-val @ // { ?TypeOf A{ ?v } ?tau } -- [ ?v callable? not ] [ ?v call
 |
 [ ?tau W{ W{ ?v } } ==! ] ;
 
-CHR: type-of-declare @ // { TypeOfWord declare ?tau } -- |
+CHR: type-of-declare @ { TypeOfWord declare ?tau } // -- |
 [ ?tau
   P{ Effect L{ ?l . ?a } ?a {
          P{ Instance ?l array }

@@ -19,7 +19,7 @@ M: list mylastcdr
     ! cdr>> nop [ mylastcdr ] (call) ;
 
 
-    ! cdr>> [ [ mylastcdr ] ] (call) (call) ; ! Doesnt work so well...
+    cdr>> [ [ mylastcdr ] ] (call) (call) ; ! Doesnt work so well...
 
     ! RES3 needed for [ mylastcdr ]
     ! RES1 needed for [ [ mylastcdr ] ]
@@ -29,12 +29,12 @@ M: list mylastcdr
     ! cdr>> [ [ mylastcdr ] (call) ] (call) ; ! Works well
 
     ! seems to work with all combinations...
-    cdr>> mylastcdr ;
+    ! cdr>> mylastcdr ;
 
 M: +nil+ mylastcdr ;
 ! M: object mylastcdr ;
 ! M: array mylastcdr 2 slot [ mylastcdr ] (call) ;
 TYPED: array-first ( arr: array -- thing ) 2 slot ;
-M: array mylastcdr array-first mylastcdr ;
+! M: array mylastcdr array-first mylastcdr ;
 ! M: array mylastcdr array-first [ [ mylastcdr ] ] (call) (call) ;
 ! M: array mylastcdr array-first [ [ mylastcdr ] (call) ] (call) ;
