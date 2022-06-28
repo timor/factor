@@ -84,7 +84,6 @@ TUPLE: FoldCall < chr-pred stack n quot target ;
 
 ! TUPLE: Recursive < chr-pred tag effect ;
 TUPLE: Recursive < chr-pred tag ;
-TUPLE: Loop < chr-pred tag in out ;
 TUPLE: Continue < chr-pred tag ;
 TUPLE: Recursion < chr-pred tag from to ;
 TUPLE: MakeXor < chr-pred type1 type2 target ;
@@ -473,7 +472,8 @@ CHR: make-xor @ // { MakeXor ?rho ?sig ?tau } --
 
 
 ! ** Start Reasoning
-UNION: body-pred Instance Label CallEffect Bind Drop Use Literal Declare Slot Loop CallRecursive Throws ;
+UNION: val-pred Instance Use Literal ;
+UNION: body-pred Instance Label CallEffect Bind Drop Use Literal Declare Slot CallRecursive Throws ;
 
 ! NOTE: assumed renaming here already
 CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?k } P{ Effect ?c ?d ?l } ?tau } -- |
@@ -502,6 +502,12 @@ CHR: useless-instance @ // { Instance __ object } -- | ;
 
 CHR: instance-intersection @ // { Instance ?x A{ ?tau } } { Instance ?x A{ ?sig } } -- [ { ?tau ?sig } first2 class-and :>> ?c ] |
 { Instance ?x ?c } ;
+
+CHR: instance-intersect-effect @ { Instance ?x ?e  } { Literal ?x } // { Instance ?x A{ ?tau } } --
+[ ?e valid-effect-type? ] |
+[ ?tau callable eq? ?tau quotation eq? or
+ f { Invalid } ? ] ;
+
 
 CHR: invalid-stays-invalid @ { Invalid } // { Invalid } -- | ;
 
@@ -547,18 +553,23 @@ CHR: use-cancels-bind @ // { Use ?x } { Bind ?a ?l } -- [ ?x ?l in? ]
 ! CHR: same-lit-is-same-var @ { Literal ?x } { Instance ?x A{ ?v } } // { Literal ?y } { Instance ?y A{ ?v } } -- |
 ! [ ?x ?y ==! ] ;
 
+! Used for values with folding semantics,
+TUPLE: Dead < chr-pred val ;
 ! *** Call Effect matching
 ! NOTE: These only meet in renamed form?
 ! NOTE: not sure this has to be restricted to literals, actually, but it feels like we would
 ! violate the unknown-call safety net...
-CHR: call-applies-effect @ // { Literal ?q } { Instance ?q P{ Effect ?c ?d ?l } } { CallEffect ?q ?a ?b } -- |
+CHR: call-applies-effect @ { Literal ?q } { Instance ?q P{ Effect ?c ?d ?l } } // { CallEffect ?q ?a ?b } -- |
 [ { ?a ?b } { ?c ?d } ==! ]
-[ ?l ] ;
+[ ?l ]
+{ Dead ?q } ;
 
 ! ! This looks really dangerous:
 ! CHR: call-recursive-applies-literal-effect { Literal ?q } { Instance ?q P{ Effect ?c ?d ?l } } { CallRecursive __ ?a ?b } -- |
 ! [ { ?a ?b } { ?c ?d } ==! ]
 ! [ ?l ] ;
+
+! *** Declarations
 
 CHR: did-declare @ // { Declare +nil+ __ } -- | ;
 ! NOTE: destructive!
@@ -708,6 +719,9 @@ CHR: catch-unit-effect-call @ // { MakeEffect ?a ?b f f ?tau } { Literal ?q } { 
 
 CHR: conflicting-makes @ { MakeEffect __ __ __ __ __ } { MakeEffect __ __ __ __ __ } // -- | [ "recursive-make" throw f ] ;
 
+CHR: dead-val-pred @ <={ MakeEffect } { Dead ?v } // <={ val-pred ?v . __ } -- | ;
+CHR: cleanup-dead @ { MakeEffect __ __ __ __ __ } // { Dead __ } -- | ;
+
 CHR: must-cleanup @ { MakeEffect __ __ __ __ __ } AS: ?p <={ body-pred } // -- | [ ?p "leftovers" 2array throw f ] ;
 
 CHR: finish-invalid-effect @ // { MakeEffect __ __ __ __ ?tau } { Invalid } -- |
@@ -717,7 +731,6 @@ CHR: finish-effect @ // { MakeEffect ?a ?b __ ?l ?tau } -- |
 [ ?tau P{ Effect ?a ?b ?l } ==! ] ;
 
 ! *** Recursion resolution
-
 
 CHR: resolve-have-recursive @ // { Recursion ?l ?rho ?tau } -- [ ?tau full-type? ] |
 [ ?rho ?tau ==! ] ;
