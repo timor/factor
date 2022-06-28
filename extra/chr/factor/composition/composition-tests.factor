@@ -19,14 +19,14 @@ M: list mylastcdr
     ! cdr>> nop [ mylastcdr ] (call) ;
 
 
-    cdr>> [ [ mylastcdr ] ] (call) (call) ; ! Doesnt work so well...
+    ! cdr>> [ [ mylastcdr ] ] (call) (call) ; ! Doesnt work so well...
 
     ! RES3 needed for [ mylastcdr ]
     ! RES1 needed for [ [ mylastcdr ] ]
     ! RES3 needed for [ [ mylastcdr ] (call) ]
     ! RES2 needed for [ [ [ mylastcdr ] (call) ] (call) ]
     ! RES1 needed for [ [ [ mylastcdr ] ] (call) (call) ]
-    ! cdr>> [ [ mylastcdr ] (call) ] (call) ; ! Works well
+    cdr>> [ [ mylastcdr ] (call) ] (call) ; ! Works well
 
     ! seems to work with all combinations...
     ! cdr>> mylastcdr ;
@@ -35,6 +35,9 @@ M: +nil+ mylastcdr ;
 ! M: object mylastcdr ;
 ! M: array mylastcdr 2 slot [ mylastcdr ] (call) ;
 TYPED: array-first ( arr: array -- thing ) 2 slot ;
-! M: array mylastcdr array-first mylastcdr ;
+M: array mylastcdr array-first mylastcdr ;
 ! M: array mylastcdr array-first [ [ mylastcdr ] ] (call) (call) ;
 ! M: array mylastcdr array-first [ [ mylastcdr ] (call) ] (call) ;
+
+! Needs make-unit recursion resolution in some form...
+: myloop ( -- ) [ call ] keep swap [ myloop ] [ drop ] if ; inline recursive
