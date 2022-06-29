@@ -97,6 +97,9 @@ TUPLE: And < chr-pred types ;
 TUPLE: Intersection < chr-pred type types ;
 TUPLE: Union < chr-pred type types ;
 TUPLE: SubType < chr-pred sub super ;
+! This predicate states explicitly that the type of the
+! second value depends on the type of the first value
+TUPLE: Depends < chr-pred on var ;
 
 TUPLE: Bind < chr-pred in outs ;
 TUPLE: Drop < chr-pred val ;
@@ -113,7 +116,7 @@ TUPLE: Gt < chr-pred val1 val2 ;
     H{
         { rot [ [ swap ] dip swap ] }
         { over [ swap dup [ swap ] dip ] }
-        ! { call [ (call) ] }
+        { call [ (call) ] }
         { nip [ [ drop ] dip ] }
         { 2drop [ drop drop ] }
         { 2dup [ over over ] }
@@ -471,9 +474,9 @@ CHR: make-xor @ // { MakeXor ?rho ?sig ?tau } --
 | [ ?tau P{ Xor ?rho ?sig } ==! ] ;
 
 
-! ** Start Reasoning
-UNION: val-pred Instance Use Literal ;
-UNION: body-pred Instance Label CallEffect Bind Drop Use Literal Declare Slot CallRecursive Throws ;
+! ** Start Composition Reasoning
+UNION: val-pred Instance Use Literal Slot ;
+UNION: body-pred Instance Label CallEffect Bind Drop Use Literal Declare Slot CallRecursive Throws Depends ;
 
 ! NOTE: assumed renaming here already
 CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?k } P{ Effect ?c ?d ?l } ?tau } -- |
@@ -563,6 +566,15 @@ CHR: call-applies-effect @ { Literal ?q } { Instance ?q P{ Effect ?c ?d ?l } } /
 [ { ?a ?b } { ?c ?d } ==! ]
 [ ?l ]
 { Dead ?q } ;
+
+CHR: call-destructs-curry @ { Instance ?q curried } { Slot ?q "quot" ?p } { Slot ?q "obj" ?x } // { CallEffect ?q ?a ?b } -- |
+{ CallEffect ?p L{ ?x . ?a } ?b }
+{ Dead ?q } ;
+
+CHR: call-destructs-composed @ { Instance ?p composed } { Slot ?p "first" ?q } { Slot ?p "second" ?r } // { CallEffect ?p ?a ?b } -- |
+{ CallEffect ?q ?a ?rho }
+{ CallEffect ?r ?rho ?b }
+{ Dead ?p } ;
 
 ! ! This looks really dangerous:
 ! CHR: call-recursive-applies-literal-effect { Literal ?q } { Instance ?q P{ Effect ?c ?d ?l } } { CallRecursive __ ?a ?b } -- |
@@ -718,6 +730,8 @@ CHR: catch-unit-effect-call @ // { MakeEffect ?a ?b f f ?tau } { Literal ?q } { 
 [ ?tau ?rho ==! ] ;
 
 CHR: conflicting-makes @ { MakeEffect __ __ __ __ __ } { MakeEffect __ __ __ __ __ } // -- | [ "recursive-make" throw f ] ;
+
+! *** Dead-value cleanup
 
 CHR: dead-val-pred @ <={ MakeEffect } { Dead ?v } // <={ val-pred ?v . __ } -- | ;
 CHR: cleanup-dead @ { MakeEffect __ __ __ __ __ } // { Dead __ } -- | ;
