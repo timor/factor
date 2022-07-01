@@ -63,7 +63,7 @@ P{
         Effect
         L{ ?o3 . ?a11 }
         ?b3
-        { P{ CallRecursive __ L{ ?v3 . ?a11 } ?b3 } P{ Instance ?o3 cons-state } P{ Slot ?o3 "cdr" ?v3 } P{ Use ?o3 } }
+        { P{ CallRecursive __ L{ ?v3 . ?a11 } ?b3 } P{ Instance ?o3 cons-state } P{ Slot ?o3 "cdr" ?v3 } }
     }
 }
 
@@ -111,3 +111,7 @@ M: array lastcdr4 array-first lastcdr4 ;
 
 { t }
 [ [ [ lastcdr5 ] ] get-type [ [ [ lastcdr5 ] ] (call) ] get-type isomorphic? ] unit-test
+
+! Stack checker examples
+: bad ( ? quot: ( ? -- ) -- ) 2dup [ not ] dip bad call ; inline recursive
+: good ( ? quot: ( ? -- ) -- ) [ good ] 2keep [ not ] dip call ; inline recursive
