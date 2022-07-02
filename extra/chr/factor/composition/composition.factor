@@ -67,6 +67,8 @@ TUPLE: Instance < chr-pred id type ;
 
 TUPLE: Literal < chr-pred val ;
 TUPLE: Slot < chr-pred obj n val ;
+TUPLE: Element < chr-pred obj type ;
+TUPLE: Length < chr-pred obj val ;
 TUPLE: Declare < chr-pred classes stack ;
 
 TUPLE: CallEffect < chr-pred thing in out ;
@@ -110,8 +112,8 @@ TUPLE: Sum < expr-pred val summand1 summand2 ;
 TUPLE: Eq < expr-pred val var ;
 TUPLE: Neq < expr-pred val var ;
 TUPLE: Le < expr-pred val var ;
-TUPLE: Ge < expr-pred val var ;
-! TUPLE: Lt < expr-pred val var ;
+TUPLE: Lt < expr-pred val var ;
+! TUPLE: Ge < expr-pred val var ;
 ! TUPLE: Gt < expr-pred val var ;
 
 
@@ -213,6 +215,21 @@ CHR: type-of-predicate @ { TypeOfWord ?w ?tau } // -- [ ?w "predicating" word-pr
    }
   ==!
 ] ;
+
+! : nth-unsafe ( n seq -- elt )
+! NOTE: existentials
+CHR: type-of-access @ { TypeOfWord array-nth ?tau } // -- |
+[ ?tau
+  P{ Effect L{ ?n ?l . ?a } L{ ?v . ?a } {
+         P{ Instance ?n fixnum }
+         P{ Instance ?l array }
+         P{ Instance ?x array-capacity }
+         P{ Length ?l ?x }
+         ! P{ Gt ?x ?n }
+         P{ Le ?n ?x }
+         P{ Element ?l ?v }
+     } }
+  ==! ] ;
 
 ! : slot ( obj m -- value )
 CHR: type-of-slot @ { TypeOfWord slot ?tau } // -- [ ?tau term-var? ] |
@@ -335,8 +352,8 @@ CHR: type-of-< @ { TypeOfWord A{ < } ?tau } // -- |
        P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } {
               P{ Literal ?z }
               P{ Instance ?z W{ t } }
-              P{ Le ?y ?x }
-              P{ Neq ?y ?x }
+              P{ Lt ?y ?x }
+              ! P{ Neq ?y ?x }
           } }
         P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a }  {
                P{ Literal ?z }
@@ -512,16 +529,112 @@ CHR: fail-on-rhs-xor @ // { MakeXor __ __ ?tau } -- [ ?tau term-var? not ] |
 CHR: make-null-xor @ // { MakeXor null null ?tau } -- | [ ?tau null ==! ] ;
 CHR: make-trivial-xor-left @ // { MakeXor ?rho null ?tau } -- | [ ?rho ?tau ==! ] ;
 CHR: make-trivial-xor-right @ // { MakeXor null ?rho ?tau } -- | [ ?rho ?tau ==! ] ;
-CHR: make-xor @ // { MakeXor ?rho ?sig ?tau } --
-[ ?rho term-var? not ?sig term-var? not or ]
-| [ ?tau P{ Xor ?rho ?sig } ==! ] ;
+! ** Phi Reasoning
+
+! Approach: A complete xor can be checked for whether parallel application
+! results in disjoint types.  If so, it is indeed an XOR.  If not, generate a union
+! type.  The reasoning is as follows: The XOR case is really only interesting
+! for disjoint reasoning if we can be sure that applying one set of input/output
+! types actually excludes the other alternative.  If we get overlapping types,
+! then the intersection is not-empty, and the best we can do is reason with the convex cover.
+! Note that this strategy here is eager, so it will be re-done for every layer of xor for now...
+
+TUPLE: CheckXor < chr-pred then else target ;
+TUPLE: PhiSchedule < chr-pred list target ;
+TUPLE: DisjointRoot < chr-pred effect ;
+TUPLE: DestrucXor < chr-pred branch ;
+TUPLE: RebuildXor < chr-pred effect target ;
+TUPLE: CurrentPhi < chr-pred effect ;
+TUPLE: MakeUnion < chr-pred effect1 effect2 target ;
+TUPLE: IsUnion < chr-pred pred ;
+TUPLE: PhiMode < chr-pred ;
+TUPLE: PhiDone < chr-pred ;
+
+! Catch
+CHR: maybe-make-trivial-xor @ // { MakeXor ?rho ?sig ?tau } -- [ ?rho full-type? ] [ ?sig full-type? ] |
+[ ?rho ?sig isomorphic?
+  [ ?tau ?rho ==! ]
+  ! [ ?tau P{ Xor ?rho ?sig } ==! ]
+  { CheckXor ?rho ?sig ?tau } ?
+] ;
+
+! Some sanity checks
+CHR: xor-error @ <={ CheckXor } <={ CheckXor } // -- | [ "xor sequencing error" throw ] ;
+CHR: phi-error @ <={ PhiSchedule } <={ PhiSchedule } // -- | [ "phi sequencing error" throw ] ;
+CHR: current-phi-error @ { CurrentPhi __ } { CurrentPhi __ } // -- | [ "current phi sequencing error" throw ] ;
+CHR: make-union-error @ <={ MakeUnion } <={ MakeUnion } // -- | [ "double make-union" throw ] ;
+
+! Start Destructuring, trigger schedule
+CHR: check-xor @ // { CheckXor ?rho ?sig ?tau } -- [ ?rho full-type? ] [ ?sig full-type? ] |
+{ DestrucXor ?rho }
+{ DestrucXor ?sig }
+{ PhiSchedule +nil+ ?tau } ;
+
+CHR: destruc-rebuild-xor @ // { DestrucXor P{ Xor ?a ?b } } -- |
+{ DestrucXor ?a } { DestrucXor ?b } ;
+CHR: destruc-rebuild-effect @ // { PhiSchedule ?r ?tau } { DestrucXor ?e } -- [ ?e Effect? ] |
+{ PhiSchedule L{ ?e . ?r } ?tau } ;
+
+! Triggers actual phi-reasoning
+CHR: try-next-phi @ { CurrentPhi ?a } P{ PhiSchedule L{ ?b . ?r } __ } // -- |
+[| |
+ ?a fresh-effect :> e1
+ ?b fresh-effect :> e2
+ { MakeUnion e1 e2 ?tau } ] ;
+
+! Finished Schedules
+CHR: all-phis-done @ { PhiSchedule +nil+ ?tau } // { DisjointRoot ?a } -- |
+{ RebuildXor ?a ?tau } ;
+
+CHR: try-union-effect @ { MakeUnion ?a ?b ?tau } // -- [ ?tau term-var? ] |
+{ PhiMode }
+{ ComposeEffect ?a ?b ?tau } ;
+
+! After MakeEffect has finished
+CHR: have-union-effect @ // { DisjointRoot ?e } { CurrentPhi ?e } { MakeUnion __ __ ?a } { PhiDone } { PhiSchedule L{ ?b . ?r } ?tau } --
+[ ?a Effect? ] | { DisjointRoot ?a } { PhiSchedule ?r ?tau } ;
+
+CHR: have-disjoint-effect @ // { CurrentPhi ?e } { MakeUnion __ __ null } { PhiDone } -- | ;
+
+CHR: try-next-phi-merge @ { DisjointRoot ?e } { PhiSchedule L{ ?b . ?r } __ } // -- | { CurrentPhi ?e } ;
+
+CHR: no-next-phi-merge @ // { PhiSchedule L{ ?b . ?r } ?tau } -- |
+{ DisjointRoot ?b } { PhiSchedule ?r ?tau } ;
+
+! *** Rebuild after intersection checking
+CHR: rebuild-phi-collect-branch @ { PhiSchedule +nil+ ?tau } // { RebuildXor ?a ?tau } { DisjointRoot ?b } -- |
+{ RebuildXor P{ Xor ?a ?b } ?tau } ;
+
+CHR: rebuild-phi-finished @ // { PhiSchedule +nil+ ?tau } { RebuildXor ?a ?tau } -- |
+[ ?tau ?a ==! ] ;
+
+! ! *** Start intersection checking
+! CHR: try-phi-schedule @ // { CheckXor __ __ ?tau } { PhiSchedule L{ ?e . ?r } ?tau } -- |
+! { DisjointRoot ?e } { PhiSchedule ?r ?tau } ;
 
 
-! ** Start Composition Reasoning
+! CHR: make-xor @ // { MakeXor ?rho ?sig ?tau } --
+! ! [ ?rho term-var? not ?sig term-var? not or ]
+! [ ?rho term-var? not ] [ ?sig term-var? not ]
+! | [ ?tau P{ Xor ?rho ?sig } ==! ] ;
+
+
+! ** Simplification/Intra-Effect reasoning
+
 UNION: val-pred Instance Literal Slot CallEffect ;
 UNION: body-pred Instance CallEffect Literal Declare Slot CallRecursive Throws expr-pred ;
 
+! *** Start unification reasoning
 ! NOTE: assumed renaming here already
+CHR: rebuild-phi-effect @ { PhiMode } // { ComposeEffect P{ Effect ?a ?b ?k } P{ Effect ?c ?d ?l } ?tau } -- |
+[ { ?a ?b } { ?c ?d } ==! ]
+! NOTE: This happens if we have pre-defined effects but no known body yet (e.g. recursive calls)
+! [ ?k dup term-var? [ drop f ] when ]
+! [ ?l dup term-var? [ drop f ] when ]
+[ ?k ]
+[ ?l ]
+{ MakeEffect ?a ?d f f ?tau } ;
+
 CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?k } P{ Effect ?c ?d ?l } ?tau } -- |
 [ ?b ?c ==! ]
 ! NOTE: This happens if we have pre-defined effects but no known body yet (e.g. recursive calls)
@@ -531,20 +644,66 @@ CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?k } P{ Effect 
 [ ?l ]
 { MakeEffect ?a ?d f f ?tau } ;
 
-! ** Simplification/Intra-Effect reasoning
 
 CHR: early-exit @ { Invalid } // <={ body-pred } -- | ;
 
+! *** <Phi
+CHR: same-stays-valid @ { PhiMode } // AS: ?p <={ body-pred } AS: ?q <={ body-pred } -- [ ?p ?q == ] |
+{ IsUnion ?p } ;
+
+! NOTE: this is pretty tricky with regards to what constitutes valid criteria for /not/
+! merging types during phi reasoning.  Couple of approaches:
+! 1. Any joined type, be it input, internal, or output is considered to be in covariant position
+! 2. Only output types are considered to be in covariant position
+! 3. Some explicit dependency type magic determines under what conditions we want to be distinct...
+CHR: phi-disjoint-instance @ { PhiMode } { MakeEffect ?a ?b __ __ __ } // { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } --
+[ ?x ?b vars in? ] [ { ?rho ?tau } first2 classes-intersect? not ] | { Invalid } ;
+
+! ( x <= 5 ) ( 5 <= x ) -> union
+! ( x <= 4 ) ( 5 <= x ) -> disjoint
+! ( x <= 5 ) ( 4 <= x ) -> union
+CHR: phi-disjoint-output-range-le-le @ { PhiMode } // { Le ?x A{ ?m } } { Le A{ ?n } ?x } --
+[ ?m ?n < ] | { Invalid } ;
+! ( x < 5 ) ( 5 <= x ) -> disjoint
+! ( x < 4 ) ( 5 <= x ) -> disjoint
+! ( x < 5 ) ( 4 <= x ) -> union
+CHR: phi-disjoint-output-range-lt-le @ { PhiMode } // { Lt ?x A{ ?m } } { Le A{ ?n } ?x } --
+[ ?m ?n <= ] | { Invalid } ;
+CHR: phi-disjoint-output-range-le-lt @ { PhiMode } // { Le ?x A{ ?m } } { Lt A{ ?n } ?x } --
+[ ?m ?n <= ] | { Invalid } ;
+! ( x < 5 ) ( 5 < x ) -> disjoint
+! ( x < 4 ) ( 5 < x ) -> disjoint
+! ( x < 5 ) ( 4 < x ) -> union
+CHR: phi-disjoint-output-range-lt-lt @ { PhiMode } // { Le ?x A{ ?m } } { Lt A{ ?n } ?x } --
+[ ?m ?n <= ] | { Invalid } ;
+CHR: phi-disjoint-output-range-lt-eq @ { PhiMode } // { Eq ?x A{ ?n } } { Lt ?x A{ ?n } } -- | { Invalid } ;
+
+CHR: phi-effect-instance @ { PhiMode } // { Instance ?x P{ Effect __ __ __ } } -- | { Invalid } ;
+
+CHR: phi-instance @ { PhiMode } // { Instance ?x A{ ?rho } } { Instance ?x A{ ?sig } } --
+[ { ?rho ?sig } first2 class-or :>> ?tau ] |
+{ IsUnion P{ Instance ?x ?tau } } ;
+
+CHR: phi-call-effect @ { PhiMode } // AS: ?p P{ CallEffect ?q ?a ?b } { CallEffect ?q ?x ?y } -- [ { ?a ?b } { ?x ?y } unify ] |
+[ { ?a ?b } { ?x ?y } ==! ]
+{ IsUnion ?p } ;
+CHR: is-inline-effect @ { PhiMode } // <={ CallEffect } -- | { Invalid } ;
+
+! *** Phi>
+
+! TODO: extend to other body preds
 CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
 
 CHR: uniqe-slot @ { Slot ?o ?n ?v } // { Slot ?o ?n ?v } -- | ;
 
 ! NOTE: the reasoning is that this can inductively only happen during composition of two straight-line
-! quotation effects. So the instance in the first one is a "provide", and the instance in the second one is an "expect".
+! effects. So the instance in the first one is a "provide", and the instance in the second one is an "expect".
 ! Since the intersection type operation is commutative, we don't care which came from which.
 CHR: same-slot-must-be-same-var @ { Slot ?o ?n ?v } // { Slot ?o ?n ?w } -- | [ ?v ?w ==! ] ;
 
 CHR: useless-instance @ // { Instance __ object } -- | ;
+
+CHR: null-instance-is-invalid @ { Instance __ null } // -- | { Invalid } ;
 
 CHR: instance-intersection @ // { Instance ?x A{ ?tau } } { Instance ?x A{ ?sig } } -- [ { ?tau ?sig } first2 class-and :>> ?c ] |
 { Instance ?x ?c } ;
@@ -557,19 +716,22 @@ CHR: instance-intersect-effect @ { Instance ?x ?e  } { Literal ?x } // { Instanc
 
 CHR: invalid-stays-invalid @ { Invalid } // { Invalid } -- | ;
 
-! CHR: null-instance-is-invalid @ { Instance __ null } // -- | { Invalid } ;
-
 CHR: call-null-instance-is-invalid @ { CallEffect ?x __ __ } { Instance ?x null } // -- | { Invalid } ;
 
 ! *** Arithmetics
-CHR: check-le @ // { Le A{ ?x } A{ ?y } } -- |
-[ ?x ?y <= f P{ Invalid } ? ] ;
+CHR: normlize-eq @ // { Eq A{ ?v } ?x } -- [ ?x term-var? ] | { Eq ?x ?v } ;
+CHR: check-le @ // { Le A{ ?x } A{ ?y } } -- [ ?x ?y <= not ] | { Invalid } ;
+CHR: check-lt @ // { Lt A{ ?x } A{ ?y } } -- [ ?x ?y < not ] | { Invalid } ;
+CHR: le-defines-eq @ // { Le ?x ?y } { Le ?y ?x } -- | { Eq ?x ?y } ;
+CHR: lt-defines-neq @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Neq ?x ?y } ;
+CHR: check-lt @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Invalid } ;
+CHR: check-lt-eq-1 @ // { Lt ?x ?y } { Eq ?x ?y } -- | { Invalid } ;
+CHR: check-lt-eq-2 @ // { Lt ?x ?y } { Eq ?y ?x } -- | { Invalid } ;
+CHR: check-eq-1 @ // { Eq ?x ?y } { Neq ?x ?y } -- | { Invalid } ;
+CHR: check-eq-2 @ // { Eq ?x ?y } { Neq ?y ?x } -- | { Invalid } ;
+CHR: check-neq @ // { Neq A{ ?x } A{ ?y } } -- [ ?x ?y == ] | { Invalid } ;
 
-CHR: check-neq @ // { Neq A{ ?x } A{ ?y } } -- |
-[ ?x ?y == P{ Invalid } f ? ] ;
-
-CHR: check-sum @ // { Sum A{ ?z } A{ ?x } A{ ?y } } -- |
-[ ?x ?y + ?z = f P{ Invalid } ? ] ;
+CHR: check-sum @ // { Sum A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y + ?z = not ] | P{ Invalid } ;
 
 CHR: define-sum @ // { Sum ?z A{ ?x } A{ ?y } } --
 [ ?x ?y + <wrapper> :>> ?v ] |
@@ -580,15 +742,13 @@ P{ Instance ?z ?v } ;
 ! NOTE: not sure this has to be restricted to literals, actually, but it feels like we would
 ! violate the unknown-call safety net...
 CHR: call-applies-effect @ { Literal ?q } { Instance ?q P{ Effect ?c ?d ?l } } { CallEffect ?q ?a ?b } // -- |
-[ { ?a ?b } { ?c ?d } ==! ]
-[ ?l ] ;
+[ { ?a ?b } { ?c ?d } ==! ] [ ?l ] ;
 
 CHR: call-destructs-curry @ { Instance ?q curried } { Slot ?q "quot" ?p } { Slot ?q "obj" ?x } // { CallEffect ?q ?a ?b } -- |
 { CallEffect ?p L{ ?x . ?a } ?b } ;
 
 CHR: call-destructs-composed @ { Instance ?p composed } { Slot ?p "first" ?q } { Slot ?p "second" ?r } // { CallEffect ?p ?a ?b } -- |
-{ CallEffect ?q ?a ?rho }
-{ CallEffect ?r ?rho ?b } ;
+{ CallEffect ?q ?a ?rho } { CallEffect ?r ?rho ?b } ;
 
 ! *** Declarations
 
@@ -672,6 +832,14 @@ M: Slot defines-vars [ n>> ] [ val>> ] bi 2array ;
 M: Instance live-vars id>> 1array ;
 M: Instance defines-vars type>> defines-vars ;
 
+! *** Phi Mode
+CHR: discard-non-union-pred @ { PhiMode } <={ MakeEffect } // <={ body-pred } -- | ;
+
+CHR: collect-union-preds @ { PhiMode } // { MakeEffect ?a ?b f ?l ?tau } { IsUnion ?p } --
+[ ?l ?p suffix :>> ?k ] |
+{ MakeEffect ?a ?b f ?k ?tau } ;
+
+! *** Composition Mode
 ! These are live after the pred has been taken into account
 ! *** Dead-value cleanup
 ! Used for values with folding semantics
@@ -759,11 +927,14 @@ CHR: conflicting-makes @ { MakeEffect __ __ __ __ __ } { MakeEffect __ __ __ __ 
 ! CHR: must-cleanup @ { MakeEffect __ __ __ __ __ } AS: ?p <={ body-pred } // -- | [ ?p "leftovers" 2array throw f ] ;
 CHR: cleanup-incomplete @ { MakeEffect __ __ __ __ __ } // <={ body-pred } -- | ;
 
-CHR: finish-invalid-effect @ // { MakeEffect __ __ __ __ ?tau } { Invalid } -- |
+CHR: finish-invalid-effect @ { MakeEffect __ __ __ __ ?tau } // { Invalid } -- |
 [ ?tau null ==! ] ;
 
-CHR: finish-effect @ // { MakeEffect ?a ?b __ ?l ?tau } -- |
+CHR: finish-valid-effect @ { MakeEffect ?a ?b __ ?l ?tau } // -- [ ?tau term-var? ] |
 [ ?tau P{ Effect ?a ?b ?l } ==! ] ;
+
+CHR: finish-phi-reasoning @ // { MakeEffect __ __ __ __ ?tau } { PhiMode } -- [ ?tau term-var? not ] | { PhiDone } ;
+CHR: finish-compositional-reasoning @ // { MakeEffect __ __ __ __ ?tau } -- [ ?tau term-var? not ] | ;
 
 ;
 
