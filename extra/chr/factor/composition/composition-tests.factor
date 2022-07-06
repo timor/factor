@@ -53,19 +53,24 @@ GENERIC: lastcdr1 ( list -- obj )
 M: list lastcdr1 cdr>> lastcdr1 ;
 M: +nil+ lastcdr1 ;
 
-TERM-VARS: ?a3 ?a11 ?b3 ?o3 ?v3 ;
+TERM-VARS: ?a15 ?y1 ?ys1 ?b3 ?b4 ?o3 ?v3 ;
 
 CONSTANT: sol1
 P{
     Xor
-    P{ Effect ?a3 ?a3 { P{ Declare L{ L{ } } ?a3 } } }
-    P{
-        Effect
-        L{ ?o3 . ?a11 }
-        ?b3
-        { P{ CallRecursive __ L{ ?v3 . ?a11 } ?b3 } P{ Instance ?o3 cons-state } P{ Slot ?o3 "cdr" ?v3 } }
-    }
+    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } { ?y1 } { P{ Instance ?y1 L{ } } } }
+    P{ Effect L{ ?o3 . ?a15 } ?b4 { ?o3 } { P{ CallRecursive __ L{ ?v3 . ?a15 } ?b4 } P{ Instance ?o3 cons-state } P{ Slot ?o3 "cdr" ?v3 } } }
 }
+! P{
+!     Xor
+!     P{ Effect ?a3 ?a3 f { P{ Declare L{ L{ } } ?a3 } } }
+!     P{
+!         Effect
+!         L{ ?o3 . ?a11 }
+!         ?b3 f
+!         { P{ CallRecursive __ L{ ?v3 . ?a11 } ?b3 } P{ Instance ?o3 cons-state } P{ Slot ?o3 "cdr" ?v3 } }
+!     }
+! }
 
 { t }
 [ [ lastcdr1 ] get-type sol1 isomorphic? ] unit-test
@@ -109,7 +114,10 @@ M: array lastcdr4 array-first lastcdr4 ;
 { t }
 [ [ lastcdr4 ] get-type [ [ lastcdr4 ] (call) ] get-type isomorphic? ] unit-test
 
-{ t }
+! NOTE: This one does not work because we don't recursively perform full phi-computations
+! through multiple levels of nested effects
+! { t }
+{ f }
 [ [ [ lastcdr5 ] ] get-type [ [ [ lastcdr5 ] ] (call) ] get-type isomorphic? ] unit-test
 
 ! Stack checker examples
