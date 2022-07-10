@@ -123,3 +123,7 @@ M: array lastcdr4 array-first lastcdr4 ;
 ! Stack checker examples
 : bad ( ? quot: ( ? -- ) -- ) 2dup [ not ] dip bad call ; inline recursive
 : good ( ? quot: ( ? -- ) -- ) [ good ] 2keep [ not ] dip call ; inline recursive
+
+! ** Practical examples
+
+PREDICATE: u8 < integer { [ 0 >= ] [ 256 < ] } 1&& ;

@@ -1,8 +1,8 @@
-USING: accessors arrays assocs chr chr.factor chr.parser chr.state classes
-classes.algebra classes.builtin classes.predicate classes.tuple
+USING: accessors arrays assocs chr chr.factor chr.modular chr.parser chr.state
+classes classes.algebra classes.builtin classes.predicate classes.tuple
 classes.tuple.private classes.union combinators combinators.short-circuit
-effects generic generic.single kernel kernel.private lists macros math
-math.parser math.private namespaces quotations sequences sequences.private sets
+effects generic generic.single kernel kernel.private lists math math.parser
+math.private namespaces quotations sequences sequences.private sets
 slots.private sorting strings terms types.util vectors words words.symbol ;
 
 IN: chr.factor.composition
@@ -79,8 +79,6 @@ M: pair elt>var
 ! order for these to have the chance to intersect, they must be α-equivalent under
 ! the input stack bindings. (There can be existentials in the outputs)
 
-
-
 TUPLE: Effect < chr-pred in out parms preds ;
 ! Placeholder-effect?
 TUPLE: RecursiveEffect < chr-pred tag effect ;
@@ -101,13 +99,17 @@ TUPLE: ComposeType < chr-pred q1 q2 q3 ;
 TUPLE: ComposeEffect < chr-pred e1 e2 target ;
 TUPLE: MakeEffect < chr-pred in out locals preds target ;
 TUPLE: MakeUnit < chr-pred val target ;
-TUPLE: Instance < chr-pred val type ;
+
+! Value-restricting preds
+TUPLE: val-pred < chr-pred val ;
+
+TUPLE: Instance < val-pred type ;
 TUPLE: NotInstance < Instance ;
 
-TUPLE: Literal < chr-pred val ;
-TUPLE: Slot < chr-pred obj n val ;
-TUPLE: Element < chr-pred obj type ;
-TUPLE: Length < chr-pred obj val ;
+TUPLE: Literal < val-pred ;
+TUPLE: Slot < val-pred n slot-val ;
+TUPLE: Element < val-pred type ;
+TUPLE: Length < val-pred length-val ;
 ! A declaration, has parameterizing character
 TUPLE: Declare < chr-pred classes stack ;
 ! A declaration, has no parameterizing character, just shortcut for Instance constraints
@@ -119,6 +121,8 @@ TUPLE: CallRecursive < chr-pred tag in out ;
 
 TUPLE: Boa < chr-pred spec in id ;
 TUPLE: TupleBoa < Boa ;
+TUPLE: MacroArgs < chr-pred word in out ;
+TUPLE: MacroCall < chr-pred quot args in out ;
 
 ! Macro expansion, folding
 TUPLE: FoldStack < chr-pred stack n ;
@@ -147,7 +151,7 @@ TUPLE: Let < chr-pred var val type ;
 
 TUPLE: Invalid < chr-pred ;
 
-TUPLE: Tag < chr-pred val var ;
+TUPLE: Tag < val-pred tag-var ;
 
 ! Binding for explicit referencing
 TUPLE: Bind < chr-pred var src ;
@@ -155,16 +159,16 @@ TUPLE: Bind < chr-pred var src ;
 ! Arithmetic Reasoning
 ! FIXME: for some reason, this doesnt pick up correctly if it is a union def...
 ! UNION: expr-pred Abs Sum Eq Le Lt Ge Gt ;
-TUPLE: expr-pred < chr-pred ;
-TUPLE: Abs < expr-pred val var ;
-TUPLE: Sum < expr-pred val summand1 summand2 ;
-TUPLE: Prod < expr-pred val factor1 factor2 ;
-TUPLE: Shift < expr-pred val in by ;
-TUPLE: BitAnd < expr-pred val in mask ;
-TUPLE: Eq < expr-pred val var ;
-TUPLE: Neq < expr-pred val var ;
-TUPLE: Le < expr-pred val var ;
-TUPLE: Lt < expr-pred val var ;
+TUPLE: expr-pred < val-pred ;
+TUPLE: Abs < expr-pred var ;
+TUPLE: Sum < expr-pred summand1 summand2 ;
+TUPLE: Prod < expr-pred factor1 factor2 ;
+TUPLE: Shift < expr-pred in by ;
+TUPLE: BitAnd < expr-pred in mask ;
+TUPLE: Eq < expr-pred var ;
+TUPLE: Neq < expr-pred var ;
+TUPLE: Le < expr-pred var ;
+TUPLE: Lt < expr-pred var ;
 ! TUPLE: Ge < expr-pred val var ;
 ! TUPLE: Gt < expr-pred val var ;
 ! Not math, but needed for types
@@ -212,6 +216,39 @@ TUPLE: Lt < expr-pred val var ;
                             P{ Element ?s ?v }
                         } } }
     } at ;
+
+! * CHR Program for Phi handling
+TUPLE: PhiStack < chr-pred out part ;
+TUPLE: Phi < chr-pred out part ;
+TUPLE: ?Phi < chr-pred out then else phi-p ;
+SINGLETONS: Yes No ;
+
+CHRAT: chr-phi { ?Phi }
+! ** Answer Phi Stack Queries
+CHR: answer-have-phi @ { Phi ?z ?x } { Phi ?z ?y } // { ask { ?Phi ?v ?x ?y ?k } } -- |
+[ ?v ?z ==! ] [ ?k Yes ==! ] { entailed { ?Phi ?v ?x ?y ?k } } ;
+! NOTE: destructive
+CHR: ask-phi-destruc-stack @ { Phi ?z ?x } { Phi ?z ?y } { ask { ?Phi ?v L{ ?x . ?xs } L{ ?y . ?ys } ?k } } // --
+| [ ?v L{ ?z . ?zs } ==! ] ;
+CHR: ask-phi-test-stack @ { Phi ?z ?x } { Phi ?z ?y } // { ask { ?Phi L{ ?z . ?zs } L{ ?x . ?xs } L{ ?y . ?ys } ?k } } --
+{ ?Phi ?zs ?xs ?ys ?k } | { entailed { ?Phi L{ ?z . ?zs } L{ ?x . ?xs } L{ ?y . ?ys } ?k } } ;
+CHR: ask-phi-is-no-phi @ // { ask { ?Phi ?z ?x ?y ?k } } -- | [ ?k No ==! ] { entailed { ?Phi ?z ?k ?y ?k } } ;
+
+
+! ** Destructure Phi Specs
+CHR: must-be-same-phi @ { Phi ?z ?x } { Phi ?z ?y } // { Phi ?v ?x } { Phi ?v ?y } -- | [ ?v ?z ==! ] ;
+
+CHR: phi-stack-done @ // { PhiStack ?z ?x } { PhiStack ?z ?y } -- [ ?x term-var? ] [ ?y term-var? ] [ ?z term-var? ] |
+[ ?x ?y ==! ] ;
+CHR: phi-val @ // { PhiStack L{ ?z . ?zs } L{ ?x . ?xs } } { PhiStack L{ ?z . ?zs } L{ ?y . ?ys } } -- |
+{ PhiStack ?zs ?xs } { PhiStack ?zs ?ys }
+{ Phi ?z ?x } { Phi ?z ?y } ;
+! NOTE: destructive
+CHR: phi-stack-expand @ { PhiStack ?a L{ ?x . ?xs } } { PhiStack ?a L{ ?y . ?ys } } // -- | [ ?a L{ ?z . ?zs } ==! ] ;
+! NOTE: destructive
+CHR: phi-balance @ { PhiStack ?z L{ ?x . ?xs } } { PhiStack ?z ?c } // -- | [ ?c L{ ?y . ?ys } ==! ] ;
+
+;
 
 ! * CHR Program for Composition solving
 CHRAT: chr-comp { TypeOf }
@@ -570,13 +607,22 @@ CHR: type-of-typed-word @ { TypeOfWord A{ ?w } ?tau } // --
 
 ! *** Other words
 
+CONSTANT: force-compile
+{ if }
+
 CHR: type-of-macro @ { TypeOfWord A{ ?w } ?tau } // --
 [ ?tau term-var? ]
-[ ?tau macro? ]
-[ ?w "transform-quot" word-prop :>> ?q ] |
-{ ?TypeOf ?q ?rho }
+! [ ?tau macro? ] |
+[ ?w "transform-n" word-prop ?w force-compile in? not and ] |
+! [ ?w "transform-quot" word-prop :>> ?q ] |
+! { ?TypeOf ?q ?rho }
 ! { ?TypeOf [ call call ] ?sig }
 ! { ComposeType ?rho ?sig ?tau }
+[ ?tau P{ Effect ?a ?b f {
+              ! P{ MacroArgs ?w ?a L{ ?q . ?b } }
+              P{ MacroCall ?w f ?a ?b }
+          } }
+==! ]
 ;
 
 CHR: type-of-regular-word @ { TypeOfWord A{ ?w } ?tau } // --
@@ -586,7 +632,7 @@ CHR: type-of-regular-word @ { TypeOfWord A{ ?w } ?tau } // --
 [ ?w callable-word? ]
 [ ?w "no-compile" word-prop not ]
 [ ?w "predicating" word-prop not ]
-[ ?w "transform-quot" word-prop not ]
+! [ ?w "transform-quot" word-prop not ]
 [ ?w generic? not ]
 [ ?w def>> ?w 1quotation = not ]
 [ ?w def>> :>> ?q ]
@@ -598,7 +644,7 @@ CHR: type-of-regular-word @ { TypeOfWord A{ ?w } ?tau } // --
 CHR: type-of-generic @ { TypeOfWord ?w ?tau } // --
 [ ?tau term-var? ]
 [ ?w single-generic? ]
-[ ?w "transform-quot" word-prop not ]
+! [ ?w "transform-quot" word-prop not ]
 [ ?w "methods" word-prop sort-methods <reversed> >list :>> ?l ]
 [ ?w dispatch# :>> ?i ]
 [ ?w stack-effect effect>stacks :>> ?b drop :>> ?a ]
@@ -770,7 +816,6 @@ TUPLE: PhiDone < chr-pred ;
 ! Used during phi reasoning to distinguish regular ids from
 ! possible parametric-type-defining ones
 ! TUPLE: Discrims < chr-pred vars ;
-
 ! Catch
 CHR: maybe-make-trivial-xor @ // { MakeXor ?rho ?sig ?tau } -- [ ?rho full-type? ] [ ?sig full-type? ] |
 [ ?rho ?sig isomorphic?
@@ -821,17 +866,23 @@ CHR: destruc-rebuild-effect @ // { PhiSchedule ?r ?tau } { DestrucXor ?e } -- [ 
     parms >array >>parms
     binds ;
 
+! CHR: try-next-phi @ { CurrentPhi ?a } P{ PhiSchedule L{ ?b . ?r } __ } // -- |
+! [| |
+!  ?a fresh-effect convert-identities :> ( e1 b1 )
+!  ?b fresh-effect convert-identities :> ( e2 b2 )
+!  e1 in>> :> x1
+!  e2 in>> :> x2
+!  {
+!      [ x1 x2 ==! ]
+!      b1 b2
+!      P{ MakeUnion e1 e2 ?tau }
+!  } ] ;
+
 CHR: try-next-phi @ { CurrentPhi ?a } P{ PhiSchedule L{ ?b . ?r } __ } // -- |
 [| |
- ?a fresh-effect convert-identities :> ( e1 b1 )
- ?b fresh-effect convert-identities :> ( e2 b2 )
- e1 in>> :> x1
- e2 in>> :> x2
- {
-     [ x1 x2 ==! ]
-     b1 b2
-     P{ MakeUnion e1 e2 ?tau }
- } ] ;
+ ?a fresh-effect :> e1
+ ?b fresh-effect :> e2
+ { P{ MakeUnion e1 e2 ?tau } } ] ;
 
 ! Finished Schedules
 CHR: all-phis-done @ { PhiSchedule +nil+ ?tau } // { DisjointRoot ?a } -- |
@@ -882,25 +933,33 @@ CHR: rebuild-phi-finished @ // { PhiSchedule +nil+ ?tau } { RebuildXor ?a ?tau }
 ! | [ ?tau P{ Xor ?rho ?sig } ==! ] ;
 
 ! ** Simplification/Intra-Effect reasoning
-
-UNION: body-pred Instance NotInstance CallEffect Literal Declare Slot CallRecursive Throws Tag expr-pred ;
+IMPORT: chr-phi
+UNION: body-pred Instance NotInstance CallEffect Literal Declare Slot CallRecursive Throws Tag
+    MacroCall expr-pred ;
 TUPLE: Params < chr-pred ids ;
+TUPLE: Param < chr-pred id ;
 
 CHR: invalid-stays-invalid @ { Invalid } // { Invalid } -- | ;
 
 ! *** Start unification reasoning
 ! NOTE: assumed renaming here already
 CHR: rebuild-phi-effect @ { PhiMode } // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } --
+[ { ?a ?b } { ?c ?d } unify drop t ]
 |
-[ { ?a ?b } { ?c ?d } ==! ]
 ! NOTE: This happens if we have pre-defined effects but no known body yet (e.g. recursive calls)
 ! [ ?k dup term-var? [ drop f ] when ]
 ! [ ?l dup term-var? [ drop f ] when ]
-[ { ?x ?y } [ f lift ] no-var-restrictions first2 intersect Params boa ]
+! [ { ?x ?y } [ f lift ] no-var-restrictions first2 intersect Params boa ]
 ! [ ?x ?y union Params boa ]
+{ PhiStack ?v ?a }
+{ PhiStack ?v ?c }
+{ PhiStack ?w ?b }
+{ PhiStack ?w ?d }
+[ ?x [ Param boa ] map ]
+[ ?y [ Param boa ] map ]
 [ ?k ]
 [ ?l ]
-{ MakeEffect ?a ?d f f ?tau } ;
+{ MakeEffect ?v ?w f f ?tau } ;
 
 CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } -- |
 [ ?b ?c ==! ]
@@ -916,76 +975,107 @@ CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effe
 CHR: early-exit @ { Invalid } // <={ body-pred } -- | ;
 
 ! *** <Phi
+CHR: invalid-union @ { Invalid } // { IsUnion __ } -- | ;
 
 ! **** Re-building identities
 ! NOTE: the only way how two of these can be present at the same time is if both effects specify
 ! the same bind after stack unification
-CHR: both-bind-same-var @ { PhiMode } // { Bind ?y ?x } { Bind ?y ?x } -- | [ ?y ?x ==! ] ;
+! CHR: both-bind-same-var @ { PhiMode } // { Bind ?y ?x } { Bind ?y ?x } -- | [ ?y ?x ==! ] ;
 
-UNION: bound-propagated-preds Instance Literal expr-pred ;
-CHR: propagate-bound-pred @ { PhiMode } { Bind ?y ?x } AS: ?p <={ bound-propagated-preds ?x . __ } // -- |
-[ ?p clone ?y >>val ] ;
+! UNION: bound-propagated-preds Instance Literal expr-pred ;
+! CHR: propagate-bound-pred @ { PhiMode } { Bind ?y ?x } AS: ?p <={ bound-propagated-preds ?x . __ } // -- |
+! [ ?p clone ?y >>val ] ;
 
-CHR: same-stays-valid @ { PhiMode } // AS: ?p <={ body-pred } AS: ?q <={ body-pred } -- [ ?p ?q == ] |
-{ IsUnion ?p } ;
+! CHR: same-stays-valid @ { Phi ?z ?x } { Phi ?z ?y } // AS: ?p <={ val-pred ?x . ?xs } AS: ?q <={ val-pred ?y . ?xs } -- [ ?p ?q [ class-of ] same? ] |
+! [ ?p clone ?z >>val ] ;
+! **** Phi Parameter Handling
+! CHR: phi-single-parm @ { PhiMode } // { Params ?l } -- | [ ?l [ Param boa ] map ] ;
+CHR: phi-parm-intersect @ { Phi ?z ?x } { Phi ?z ?y } // { Param ?x } { Param ?y } -- | { Params { ?z } } ;
+! CHR: phi-merge-params @ // { IsUnion P{ Params ?l } } { IsUnion P{ Params ?k } } -- [ ?l ?k union :>> ?m ] |
+! { IsUnion P{ Params ?m } } ;
+! CHR: phi-no-param @ // { Param __ } -- | ;
+
 
 ! NOTE: this is pretty tricky with regards to what constitutes valid criteria for /not/
 ! merging types during phi reasoning.  Couple of approaches:
 ! 1. Any joined type, be it input, internal, or output is considered to be in covariant position
 ! 2. Only output types are considered to be in covariant position
 ! 3. Some explicit dependency type magic determines under what conditions we want to be distinct...
-CHR: phi-disjoint-instance @ { PhiMode } { Params ?b } // { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } --
-[ ?x ?b in? ] [ { ?rho ?tau } first2 classes-intersect? not ] | { Invalid } ;
+CHR: phi-disjoint-instance @ { Phi ?z ?x } { Phi ?z ?y } { Params ?l } // { Instance ?x A{ ?rho } } { Instance ?y A{ ?tau } } --
+[ ?z ?l in? ] [ { ?rho ?tau } first2 classes-intersect? not ] | { Invalid } ;
 
-! ( x <= 5 ) ( 5 <= x ) -> union
-! ( x <= 4 ) ( 5 <= x ) -> disjoint
-! ( x <= 5 ) ( 4 <= x ) -> union
-CHR: phi-disjoint-output-range-le-le @ { PhiMode } // { Le ?x A{ ?m } } { Le A{ ?n } ?x } --
-[ ?m ?n < ] | { Invalid } ;
-! ( x < 5 ) ( 5 <= x ) -> disjoint
-! ( x < 4 ) ( 5 <= x ) -> disjoint
-! ( x < 5 ) ( 4 <= x ) -> union
-CHR: phi-disjoint-output-range-lt-le @ { PhiMode } // { Lt ?x A{ ?m } } { Le A{ ?n } ?x } --
-[ ?m ?n <= ] | { Invalid } ;
-CHR: phi-disjoint-output-range-le-lt @ { PhiMode } // { Le ?x A{ ?m } } { Lt A{ ?n } ?x } --
-[ ?m ?n <= ] | { Invalid } ;
-! ( x < 5 ) ( 5 < x ) -> disjoint
-! ( x < 4 ) ( 5 < x ) -> disjoint
-! ( x < 5 ) ( 4 < x ) -> union
-CHR: phi-disjoint-output-range-lt-lt @ { PhiMode } // { Le ?x A{ ?m } } { Lt A{ ?n } ?x } --
-[ ?m ?n <= ] | { Invalid } ;
-CHR: phi-disjoint-output-range-lt-eq @ { PhiMode } // { Eq ?x A{ ?n } } { Lt ?x A{ ?n } } -- | { Invalid } ;
+! ! ( x <= 5 ) ( 5 <= x ) -> union
+! ! ( x <= 4 ) ( 5 <= x ) -> disjoint
+! ! ( x <= 5 ) ( 4 <= x ) -> union
+! CHR: phi-disjoint-output-range-le-le @ { PhiMode } // { Le ?x A{ ?m } } { Le A{ ?n } ?x } --
+! [ ?m ?n < ] | { Invalid } ;
+! ! ( x < 5 ) ( 5 <= x ) -> disjoint
+! ! ( x < 4 ) ( 5 <= x ) -> disjoint
+! ! ( x < 5 ) ( 4 <= x ) -> union
+! CHR: phi-disjoint-output-range-lt-le @ { PhiMode } // { Lt ?x A{ ?m } } { Le A{ ?n } ?x } --
+! [ ?m ?n <= ] | { Invalid } ;
+! CHR: phi-disjoint-output-range-le-lt @ { PhiMode } // { Le ?x A{ ?m } } { Lt A{ ?n } ?x } --
+! [ ?m ?n <= ] | { Invalid } ;
+! ! ( x < 5 ) ( 5 < x ) -> disjoint
+! ! ( x < 4 ) ( 5 < x ) -> disjoint
+! ! ( x < 5 ) ( 4 < x ) -> union
+! CHR: phi-disjoint-output-range-lt-lt @ { PhiMode } // { Le ?x A{ ?m } } { Lt A{ ?n } ?x } --
+! [ ?m ?n <= ] | { Invalid } ;
+! CHR: phi-disjoint-output-range-lt-eq @ { PhiMode } // { Eq ?x A{ ?n } } { Lt ?x A{ ?n } } -- | { Invalid } ;
 
 ! TODO: this is not recursive!
 ! NOTE: Rationale: An effect type is refined by its body predicates, which act as set subtraction.
 ! So the more general type is the one which has body predicates that both must agree on.
 ! If they have the same set of parameters but different bodies, they define a dependent type.
-CHR: phi-phiable-effect-instance @ { PhiMode } // { Instance ?x P{ Effect ?a ?b ?r ?k } } { Instance ?x P{ Effect ?c ?d ?s ?l } } --
-[ ?r empty? ] [ ?s empty? ]
-[ { ?a ?b } { ?c ?d } unify ] |
-[ { ?a ?b } { ?c ?d } ==! ]
-[| | ?l ?k intersect :> body
- P{ IsUnion P{ Instance ?x P{ Effect ?a ?b f body } } }
+! CHR: phi-phiable-effect-instance @ { PhiMode } // { Instance ?x P{ Effect ?a ?b ?r ?k } } { Instance ?x P{ Effect ?c ?d ?s ?l } } --
+! [ ?r empty? ] [ ?s empty? ]
+! [ { ?a ?b } { ?c ?d } unify ] |
+! [ { ?a ?b } { ?c ?d } ==! ]
+! [| | ?l ?k intersect :> body
+!  P{ IsUnion P{ Instance ?x P{ Effect ?a ?b f body } } }
+! ] ;
+! **** phi union types
+CHR: phi-instance @ { Phi ?z ?x } { Phi ?z ?y } // { Instance ?x A{ ?rho } } { Instance ?x A{ ?sig } } --
+[ { ?rho ?sig } first2 class-or :>> ?tau ] |
+{ IsUnion P{ Instance ?z ?tau }  } ;
+
+! Slots
+CHR: phi-slot @ { Phi ?z ?x } { Phi ?z ?y } // { Slot ?x ?n ?a } { Slot ?y ?n ?b } -- |
+{ Phi ?c ?a } { Phi ?c ?b } { IsUnion P{ Slot ?z ?n ?c } } ;
+
+! **** phi higher order
+
+CHR: phi-check-same-call-effect @ { Phi ?r ?p } { Phi ?r ?q }
+// P{ CallEffect ?p ?a ?b } { CallEffect ?q ?x ?y } --
+{ ?Phi ?v ?a ?x ?k } { ?Phi ?w ?b ?y ?l }
+|
+[ ?k Yes == ?l Yes == and
+  P{ IsUnion P{ CallEffect ?r ?v ?w } }
+  P{ Invalid } ?
 ] ;
 
-CHR: phi-instance @ { PhiMode } // { Instance ?x A{ ?rho } } { Instance ?x A{ ?sig } } --
-[ { ?rho ?sig } first2 class-or :>> ?tau ] |
-{ IsUnion P{ Instance ?x ?tau } } ;
-
-CHR: phi-call-effect @ { PhiMode } // AS: ?p P{ CallEffect ?q ?a ?b } { CallEffect ?q ?x ?y } -- [ { ?a ?b } { ?x ?y } unify ] |
-[ { ?a ?b } { ?x ?y } ==! ]
-{ IsUnion ?p } ;
-
-CHR: phi-call-rec-out-fix @ { PhiMode } // AS: ?p P{ CallRecursive ?x ?a ?c } { CallRecursive ?x ?b ?c } -- [ ?a ?b unify ] |
-[ ?a ?b ==! ] { IsUnion ?p } ;
+! TODO: make this dependent on whether we simplify our own def!
+CHR: phi-check-same-call-rec @ { Phi ?r ?p } { Phi ?r ?q }
+// P{ CallRecursive ?w ?a ?b } { CallRecursive ?w ?x ?y } --
+{ ?Phi ?v ?a ?x ?k } { ?Phi ?w ?b ?y ?l }
+|
+[ ?k Yes == ?l Yes == and
+  P{ IsUnion P{ CallRecursive ?w ?v ?w } }
+  P{ Invalid } ?
+] ;
 
 ! **** Conditions under which even a single pred can conserve disjunctivity
+
+CHR: disj-is-macro-effect @ { PhiMode } <={ MakeEffect } // <={ MacroCall } -- | { Invalid } ;
 
 CHR: disj-is-inline-effect @ { PhiMode } <={ MakeEffect } // <={ CallEffect } -- | { Invalid } ;
 
 CHR: disj-single-call-rec @ { PhiMode } <={ MakeEffect } // <={ CallRecursive } -- | { Invalid } ;
 
 CHR: disj-single-effect @ { PhiMode } <={ MakeEffect } // { Instance ?x P{ Effect __ __ __ __ } } -- | { Invalid } ;
+
+! TODO: does that reasoning work? Basically, we would need to have absence as failure here...
+! CHR: disj-unknown-can-be-callable @ { PhiMode } <={ MakeEffect } // { Instance ?x A{ ?tau } }
 
 CHR: disj-symbolic-type @ { PhiMode } <={ MakeEffect } { Params ?b } // { Instance ?x ?tau } -- [ ?tau term-var? ] [ ?x ?b in? ] | { Invalid } ;
 CHR: disj-symbolic-compl-type @ { PhiMode } <={ MakeEffect } { Params ?b } // { NotInstance ?x ?tau } -- [ ?tau term-var? ] [ ?x ?b in? ] | { Invalid } ;
@@ -997,7 +1087,7 @@ CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
 
 CHR: uniqe-slot @ { Slot ?o ?n ?v } // { Slot ?o ?n ?v } -- | ;
 
-CHR: merge-params @ // { Params ?x } { Params ?y } -- [ ?x ?y union :>> ?z ] | { Params ?z } ;
+CHR: merge-params @ // { Params ?x } { Params ?y } -- [ ?x ?y union >array :>> ?z ] | { Params ?z } ;
 
 ! NOTE: the reasoning is that this can inductively only happen during composition of two straight-line
 ! effects. So the instance in the first one is a "provide", and the instance in the second one is an "expect".
@@ -1042,6 +1132,19 @@ CHR: instance-intersect-effect @ { Instance ?x ?e  } { Literal ?x } // { Instanc
  f { Invalid } ? ] ;
 
 CHR: call-null-instance-is-invalid @ { CallEffect ?x __ __ } { Instance ?x null } // -- | { Invalid } ;
+
+! *** Macro Expansion/Folding
+! NOTE: destructive
+CHR: adjust-macro-stack @ // { MacroCall ?w f ?a ?b } -- [ ?w word? ] [ ?w "transform-n" word-prop :>> ?n ]
+[ ?w "transform-quot" word-prop :>> ?q ] |
+[| |
+ ?n "v" utermvar <array> :> mparms
+ mparms <reversed> >list ?rho lappend :> sin
+ {
+     [ ?a sin ==! ]
+     { MacroCall ?q mparms sin ?b }
+ }
+] ;
 
 ! *** Arithmetics
 CHR: normlize-eq @ // { Eq A{ ?v } ?x } -- [ ?x term-var? ] | { Eq ?x ?v } ;
@@ -1130,6 +1233,16 @@ CHR: destruc-declare @ // { Declare L{ ?tau . ?r } L{ ?x . ?xs } } -- |
 CHR: known-declare @ { Literal ?l } { Instance ?l ?tau } // { Declare ?l ?a } --
 [ ?tau <reversed> >list :>> ?m ] | { Declare ?m ?a } ;
 
+! CHR: do-macro @ { Instance ?x ?v }
+
+CHR: known-macro-arg @ { Instance ?x ?v } // { MacroCall ?q ?a ?i ?o } -- [ ?x ?a in? ] [ { ?v } first wrapper? ]
+[ { ?v } first wrapped>> :>> ?z ]
+|
+[| | ?a H{ { ?x ?z } } lift* :> args
+ { MacroCall ?q args ?i ?o }
+] ;
+
+
 ! CHR: constant-ensure @ // { Ensure ?l ?a } -- [ ?l array? ]
 ! [ ?l <reversed> >list :>> ?m ] |
 ! { Ensure ?m ?a } ;
@@ -1211,10 +1324,13 @@ M: Instance live-vars val>> 1array ;
 M: Instance defines-vars type>> defines-vars ;
 M: Tag live-vars val>> 1array ;
 M: Tag defines-vars var>> 1array ;
+! M: MacroCall live-vars out>> vars ;
 
 ! *** Phi Mode
 CHR: discard-non-union-pred @ { PhiMode } <={ MakeEffect } // <={ body-pred } -- | ;
 CHR: discard-leftover-binds @ { PhiMode } <={ MakeEffect } // <={ Bind } -- | ;
+CHR: discard-leftover-params @ { PhiMode } <={ MakeEffect } // <={ Param } -- | ;
+CHR: discard-phi-defs @ { PhiMode } <={ MakeEffect } // <={ Phi } -- | ;
 
 CHR: collect-union-preds @ { PhiMode } // { MakeEffect ?a ?b f ?l ?tau } { IsUnion ?p } --
 [ ?l ?p suffix :>> ?k ] |
