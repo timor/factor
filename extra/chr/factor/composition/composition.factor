@@ -84,6 +84,8 @@ TUPLE: Effect < chr-pred in out parms preds ;
 TUPLE: RecursiveEffect < chr-pred tag effect ;
 TUPLE: TypeOf < chr-pred thing type ;
 TUPLE: ?TypeOf < chr-pred thing type ;
+TUPLE: FixpointTypeOf < chr-pred thing type ;
+TUPLE: RecursionTypeOf < chr-pred thing type ;
 TUPLE: TypeOfWord < chr-pred word var ;
 TUPLE: InferType < chr-pred thing ;
 TUPLE: WaitFull < chr-pred type ;
@@ -99,6 +101,8 @@ TUPLE: ComposeType < chr-pred q1 q2 q3 ;
 TUPLE: ComposeEffect < chr-pred e1 e2 target ;
 TUPLE: MakeEffect < chr-pred in out locals preds target ;
 TUPLE: MakeUnit < chr-pred val target ;
+
+TUPLE: Iterated < chr-pred val prev ;
 
 ! Value-restricting preds
 TUPLE: val-pred < chr-pred val ;
@@ -118,6 +122,7 @@ TUPLE: Ensure < chr-pred classes stack ;
 TUPLE: CallEffect < chr-pred thing in out ;
 TUPLE: MacroCallEffect < chr-pred word in out ;
 TUPLE: CallRecursive < chr-pred tag in out ;
+TUPLE: NullStack < chr-pred stack ;
 
 TUPLE: Boa < chr-pred spec in id ;
 TUPLE: TupleBoa < Boa ;
@@ -134,10 +139,11 @@ TUPLE: Continue < chr-pred tag ;
 TUPLE: Recursion < chr-pred tag back-to from ;
 TUPLE: MakeXor < chr-pred type1 type2 target ;
 
-TUPLE: CheckXor < chr-pred branch target ;
+TUPLE: CheckXor < chr-pred quot branch target ;
 TUPLE: MakeRecursion < chr-pred type target ;
 TUPLE: MakeFoldable < chr-pred type target ;
 TUPLE: Copy < chr-pred type target ;
+TUPLE: CheckFixpoint < chr-pred quot type ;
 
 TUPLE: Xor < chr-pred type1 type2 ;
 TUPLE: And < chr-pred types ;
@@ -238,15 +244,21 @@ CHR: ask-phi-is-no-phi @ // { ask { ?Phi ?z ?x ?y ?k } } -- | [ ?k No ==! ] { en
 ! ** Destructure Phi Specs
 CHR: must-be-same-phi @ { Phi ?z ?x } { Phi ?z ?y } // { Phi ?v ?x } { Phi ?v ?y } -- | [ ?v ?z ==! ] ;
 
+! CHR: phi-stack-done @ // { PhiStack ?z ?x } { PhiStack ?z ?y } -- [ ?x term-var? ] [ ?y term-var? ] [ ?z term-var? ] |
+! [ ?x ?y ==! ] ;
+! CHR: phi-stack-done @ // { PhiStack ?z ?x } { PhiStack ?z ?y } -- [ ?x term-var? ] [ ?y term-var? ] [ ?z term-var? ] | ;
 CHR: phi-stack-done @ // { PhiStack ?z ?x } { PhiStack ?z ?y } -- [ ?x term-var? ] [ ?y term-var? ] [ ?z term-var? ] |
-[ ?x ?y ==! ] ;
+[ ?x ?y ==! ] [ ?z ?x ==! ] ;
+
 CHR: phi-val @ // { PhiStack L{ ?z . ?zs } L{ ?x . ?xs } } { PhiStack L{ ?z . ?zs } L{ ?y . ?ys } } -- |
 { PhiStack ?zs ?xs } { PhiStack ?zs ?ys }
-{ Phi ?z ?x } { Phi ?z ?y } ;
+{ Phi ?z ?x } { Phi ?z ?y }
+{ Instance ?z object } ;
 ! NOTE: destructive
 CHR: phi-stack-expand @ { PhiStack ?a L{ ?x . ?xs } } { PhiStack ?a L{ ?y . ?ys } } // -- | [ ?a L{ ?z . ?zs } ==! ] ;
 ! NOTE: destructive
 CHR: phi-balance @ { PhiStack ?z L{ ?x . ?xs } } { PhiStack ?z ?c } // -- | [ ?c L{ ?y . ?ys } ==! ] ;
+
 
 ;
 
@@ -279,6 +291,7 @@ CHR: double-word-inference-special @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ]
 CHR: double-word-inference @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
 [ ?x callable-word? ] |
 [ ?sig P{ Effect ?a ?b f { { P{ CallRecursive ?x ?a ?b } } } } ==! ] ;
+! [ ?sig P{ Effect ?a ?b f { P{ NullStack ?b } } } ==! ] ;
 
 CHR: double-inference-queue @ { ?TypeOf ?x ?tau } { ?TypeOf ?x ?sig } // -- [ ?tau term-var? ] [ ?sig term-var? ] |
 { Recursion ?x ?tau ?sig } ;
@@ -371,7 +384,8 @@ M: predicate-class make-pred-quot drop def>> ;
 CHR: type-of-predicate @ { TypeOfWord ?w ?tau } // -- [ ?w "predicating" word-prop :>> ?c ]
 [ ?c class-not :>> ?d ]
 [ ?w ?c make-pred-quot :>> ?p ]
-[ ?c predicate-class? [ ?p keep over [ { ?c } declare drop ] [ { ?d } declare drop ] if ] ?p ? :>> ?q ]
+! [ ?c predicate-class? [ ?p keep over [ { ?c } declare drop ] [ { ?d } declare drop ] if ] ?p ? :>> ?q ]
+[ [ ?p keep over [ { ?c } declare drop ] [ { ?d } declare drop ] if ] :>> ?q ]
 |
 { ?TypeOf ?q ?tau } ;
 
@@ -451,11 +465,16 @@ UNION: valid-type Effect classoid ;
 
 TUPLE: MaybeHaveFold < chr-pred word quot type target ;
 
+CHR: check-word-fixpoint-type @ { TypeOfWord ?w ?rho } // -- [ ?rho full-type? ] |
+{ CheckFixpoint ?w ?rho } ;
 CHR: have-type-of-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // --
 ! [ ?rho valid-effect-type? ]
 [ ?rho full-type? ]
 [ ?w 1quotation :>> ?q ]
 |
+! ! NOTE: resolving recursive phi here with this if possible
+! { ComposeType ?rho P{ Effect ?a ?a f f } ?tau }
+! { TypeOf ?q ?tau } ;
 { TypeOf ?q ?rho } ;
 
 CHR: type-of-wrapper @ // { ?TypeOf ?q ?tau } --
@@ -660,7 +679,7 @@ CHR: dispatch-case @ // { MakeSingleDispatch ?i L{ { ?c ?m } . ?r } ?tau } --
 { TypeOfWord ?m ?rho }
 { MakeSingleDispatch ?i ?r ?sig }
 { MakeXor ?rho ?sig ?a }
-{ CheckXor ?a ?tau } ;
+{ CheckXor ?m ?a ?tau } ;
 
 CHR: type-of-reader @ { TypeOfWord ?w ?tau } // -- [ ?w method? ] [ ?w "reading" word-prop :>> ?x ]
 [ ?w "method-class" word-prop :>> ?c ]
@@ -688,13 +707,13 @@ CHR: type-of-single-method @ { TypeOfWord ?w ?tau } // -- [ ?w method? ] [ ?w "m
 
 CHR: type-of-empty-quot @ // { ?TypeOf [ ] ?tau } -- | [ ?tau P{ Effect ?a ?a f f } ==! ] ;
 
-CHR: type-of-quot @ { ?TypeOf ?q ?tau } // -- [ ?q callable? ] [ ?q length 1 > ]
+CHR: type-of-proper-quot @ { ?TypeOf ?q ?tau } // -- [ ?q callable? ] [ ?q length 1 > ]
 [ \ do-primitive ?q in? not ]
 [ ?q dup length 2 /i cut :>> ?y drop :>> ?x drop t ] |
 { ?TypeOf ?x ?rho }
 { ?TypeOf ?y ?sig }
 { ComposeType ?rho ?sig ?a }
-{ CheckXor ?a ?b }
+{ CheckXor ?q ?a ?b }
 { TypeOf ?q ?b } ;
 
 M: Xor free-effect-vars
@@ -804,7 +823,7 @@ CHR: make-trivial-xor-right @ // { MakeXor null ?rho ?tau } -- | [ ?rho ?tau ==!
 
 ! Forall x, y: (..ρ, x, y) → (..ρ, y, x)
 
-TUPLE: PhiSchedule < chr-pred list target ;
+TUPLE: PhiSchedule < chr-pred quot list target ;
 TUPLE: DisjointRoot < chr-pred effect ;
 TUPLE: DestrucXor < chr-pred branch ;
 TUPLE: RebuildXor < chr-pred effect target ;
@@ -812,6 +831,7 @@ TUPLE: CurrentPhi < chr-pred effect ;
 TUPLE: MakeUnion < chr-pred effect1 effect2 target ;
 TUPLE: IsUnion < chr-pred pred ;
 TUPLE: PhiMode < chr-pred ;
+TUPLE: FixpointMode < chr-pred ;
 TUPLE: PhiDone < chr-pred ;
 ! Used during phi reasoning to distinguish regular ids from
 ! possible parametric-type-defining ones
@@ -831,20 +851,22 @@ CHR: phi-error @ <={ PhiSchedule } <={ PhiSchedule } // -- | [ "phi sequencing e
 CHR: current-phi-error @ { CurrentPhi __ } { CurrentPhi __ } // -- | [ "current phi sequencing error" throw ] ;
 CHR: make-union-error @ <={ MakeUnion } <={ MakeUnion } // -- | [ "double make-union" throw ] ;
 
+! CHR: also-check-fixpoint @ { CheckXor ?q ?rho ?tau } // -- [ ?rho full-type? ] |
+! { CheckFixpoint ?q ?rho } ;
 ! Start Destructuring, trigger schedule
-CHR: no-check-xor @ // { CheckXor ?rho ?tau } -- [ ?rho full-type? ] [ ?rho Effect? ] |
+CHR: no-check-xor @ // { CheckXor __ ?rho ?tau } -- [ ?rho full-type? ] [ ?rho Effect? ] |
 ! CHR: no-check-xor @ // { CheckXor ?rho ?tau } -- [ ?rho full-type? ] |
 [ ?rho ?tau ==! ] ;
-CHR: do-check-xor @ // { CheckXor ?rho ?tau } -- [ ?rho full-type? ] |
+CHR: do-check-xor @ // { CheckXor ?q ?rho ?tau } -- [ ?rho full-type? ] |
 { DestrucXor ?rho }
-{ PhiSchedule +nil+ ?tau } ;
+{ PhiSchedule ?q +nil+ ?tau } ;
 
 
 CHR: discard-null-branch @ // { DestrucXor null } -- | ;
 CHR: destruc-rebuild-xor @ // { DestrucXor P{ Xor ?a ?b } } -- |
 { DestrucXor ?a } { DestrucXor ?b } ;
-CHR: destruc-rebuild-effect @ // { PhiSchedule ?r ?tau } { DestrucXor ?e } -- [ ?e Effect? ] |
-{ PhiSchedule L{ ?e . ?r } ?tau } ;
+CHR: destruc-rebuild-effect @ // { PhiSchedule ?q ?r ?tau } { DestrucXor ?e } -- [ ?e Effect? ] |
+{ PhiSchedule ?q L{ ?e . ?r } ?tau } ;
 
 ! Triggers actual phi-reasoning
 ! NOTE: To avoid things like ~[ swap ] when~ to unify the vars,
@@ -852,40 +874,19 @@ CHR: destruc-rebuild-effect @ // { PhiSchedule ?r ?tau } { DestrucXor ?e } -- [ 
 ! e.g. two effects ~( x y -- y x ) ( a b -- a b )~, we first need to unify the inputs, and then check
 ! if we can still unify the whole effect.
 
-! Convert same variables in output to Bind Predicates instead.  This allows us to keep more general types in case one
-! defines that a value is eq to another,  while the other does not have such a constraint.
-:: convert-identities ( e: Effect -- Effect binds )
-    e in>> vars :> vin
-    e out>> [ lastcdr ] [ list>array* <reversed> ] bi :> ( row-out vout )
-    V{ } clone :> binds
-    e parms>> clone >vector :> parms
-    vout [ dup vin in? [ dup name>> utermvar
-                         over parms in? [ dup parms push ] when
-                         [ swap Bind boa binds push ] keep ] when ] map :> new-out
-    e clone new-out <reversed> >list row-out lappend >>out
-    parms >array >>parms
-    binds ;
-
-! CHR: try-next-phi @ { CurrentPhi ?a } P{ PhiSchedule L{ ?b . ?r } __ } // -- |
-! [| |
-!  ?a fresh-effect convert-identities :> ( e1 b1 )
-!  ?b fresh-effect convert-identities :> ( e2 b2 )
-!  e1 in>> :> x1
-!  e2 in>> :> x2
-!  {
-!      [ x1 x2 ==! ]
-!      b1 b2
-!      P{ MakeUnion e1 e2 ?tau }
-!  } ] ;
-
-CHR: try-next-phi @ { CurrentPhi ?a } P{ PhiSchedule L{ ?b . ?r } __ } // -- |
+CHR: try-next-phi @ { CurrentPhi ?a } P{ PhiSchedule __ L{ ?b . ?r } __ } // -- |
 [| |
  ?a fresh-effect :> e1
  ?b fresh-effect :> e2
  { P{ MakeUnion e1 e2 ?tau } } ] ;
 
+! Finished force-union schedule
+CHR: all-fixpoint-phis-done @ // { PhiSchedule __ +nil+ ?tau } { FixpointMode } { DisjointRoot ?a } -- |
+[ ?a Xor? [ ?a "not a straightline-effect" 2array throw ] [ f ] if ]
+[ ?tau ?a ==! ] ;
+
 ! Finished Schedules
-CHR: all-phis-done @ { PhiSchedule +nil+ ?tau } // { DisjointRoot ?a } -- |
+CHR: all-phis-done @ { PhiSchedule __ +nil+ ?tau } // { DisjointRoot ?a } -- |
 { RebuildXor ?a ?tau } ;
 
 :: alpha-equiv-under? ( t1 t2 bound -- subst/f )
@@ -893,11 +894,11 @@ CHR: all-phis-done @ { PhiSchedule +nil+ ?tau } // { DisjointRoot ?a } -- |
     [ t1 t2 solve-eq ] with-variable ;
 
 ! *** Rebuild two effects as union
-CHR: check-non-unionable-effect @ { MakeUnion P{ Effect ?a ?b ?x ?l } P{ Effect ?a ?d ?y ?k } ?tau } // -- [ ?tau term-var? ] |
-[
-    ?b ?d ?a vars alpha-equiv-under? not
-    { [ ?tau null ==! ] P{ PhiDone } } f ?
- ] ;
+! CHR: check-non-unionable-effect @ { MakeUnion P{ Effect ?a ?b ?x ?l } P{ Effect ?a ?d ?y ?k } ?tau } // -- [ ?tau term-var? ] |
+! [
+!     ?b ?d ?a vars alpha-equiv-under? not
+!     { [ ?tau null ==! ] P{ PhiDone } } f ?
+!  ] ;
 
 ! Trigger Phi-mode Composition
 CHR: try-union-effect @ { MakeUnion ?a ?b ?tau } // -- [ ?tau term-var? ] |
@@ -905,37 +906,49 @@ CHR: try-union-effect @ { MakeUnion ?a ?b ?tau } // -- [ ?tau term-var? ] |
 { ComposeEffect ?a ?b ?tau } ;
 
 ! After MakeEffect has finished
-CHR: have-union-effect @ // { DisjointRoot ?e } { CurrentPhi ?e } { MakeUnion __ __ ?a } { PhiDone } { PhiSchedule L{ ?b . ?r } ?tau } --
-[ ?a Effect? ] | { DisjointRoot ?a } { PhiSchedule ?r ?tau } ;
+CHR: have-union-effect @ // { DisjointRoot ?e } { CurrentPhi ?e } { MakeUnion __ __ ?a } { PhiDone } { PhiSchedule ?q L{ ?b . ?r } ?tau } --
+[ ?a Effect? ] | { DisjointRoot ?a } { PhiSchedule ?q ?r ?tau } ;
 
 CHR: have-disjoint-effect @ // { CurrentPhi ?e } { MakeUnion __ __ null } { PhiDone } -- | ;
 
-CHR: try-next-phi-merge @ { DisjointRoot ?e } { PhiSchedule L{ ?b . ?r } __ } // -- | { CurrentPhi ?e } ;
+CHR: try-next-phi-merge @ { DisjointRoot ?e } { PhiSchedule __ L{ ?b . ?r } __ } // -- | { CurrentPhi ?e } ;
 
-CHR: no-next-phi-merge @ // { PhiSchedule L{ ?b . ?r } ?tau } -- |
-{ DisjointRoot ?b } { PhiSchedule ?r ?tau } ;
+CHR: no-next-phi-merge @ // { PhiSchedule ?q L{ ?b . ?r } ?tau } -- |
+{ DisjointRoot ?b } { PhiSchedule ?q ?r ?tau } ;
 
 ! *** Rebuild after intersection checking
-CHR: rebuild-phi-collect-branch @ { PhiSchedule +nil+ ?tau } // { RebuildXor ?a ?tau } { DisjointRoot ?b } -- |
+CHR: rebuild-phi-collect-branch @ { PhiSchedule ?q +nil+ ?tau } // { RebuildXor ?a ?tau } { DisjointRoot ?b } -- |
 { RebuildXor P{ Xor ?b ?a } ?tau } ;
 
-CHR: rebuild-phi-finished @ // { PhiSchedule +nil+ ?tau } { RebuildXor ?a ?tau } -- |
+CHR: rebuild-phi-finished @ // { PhiSchedule ?q +nil+ ?tau } { RebuildXor ?a ?tau } -- |
 [ ?tau ?a ==! ] ;
 
-! ! *** Start intersection checking
-! CHR: try-phi-schedule @ // { CheckXor __ __ ?tau } { PhiSchedule L{ ?e . ?r } ?tau } -- |
-! { DisjointRoot ?e } { PhiSchedule ?r ?tau } ;
-
-
-! CHR: make-xor @ // { MakeXor ?rho ?sig ?tau } --
-! ! [ ?rho term-var? not ?sig term-var? not or ]
-! [ ?rho term-var? not ] [ ?sig term-var? not ]
-! | [ ?tau P{ Xor ?rho ?sig } ==! ] ;
+! *** Build Fixpoint type
+: has-recursive-call? ( tag Effect -- ? )
+    preds>> [ dup CallRecursive? [ tag>> = ] [ 2drop f ] if ] with any? ;
+GENERIC#: recursive-branches? 1 ( type word/quot -- ? )
+M: Effect recursive-branches? swap has-recursive-call? ;
+M: Xor recursive-branches? [ [ type1>> ] [ type2>> ] bi ] dip '[ _ recursive-branches? ] either? ;
+GENERIC#: terminating-branches 1 ( type word/quot -- branches )
+M: Effect terminating-branches over has-recursive-call? [ drop f ] [ 1array ] if ;
+M: Xor terminating-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ terminating-branches ] bi@ append sift ;
+CHR: no-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q recursive-branches? not ] | ;
+CHR: do-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q terminating-branches :>> ?l drop t ] |
+[| |
+    ?l [ f ] [
+        >list :> phis
+        {
+            P{ FixpointMode }
+            P{ PhiSchedule ?q phis ?tau }
+            P{ FixpointTypeOf ?q ?tau }
+        }
+    ] if-empty
+] ;
 
 ! ** Simplification/Intra-Effect reasoning
 IMPORT: chr-phi
 UNION: body-pred Instance NotInstance CallEffect Literal Declare Slot CallRecursive Throws Tag
-    MacroCall expr-pred ;
+    NullStack MacroCall expr-pred Iterated ;
 TUPLE: Params < chr-pred ids ;
 TUPLE: Param < chr-pred id ;
 
@@ -955,6 +968,7 @@ CHR: rebuild-phi-effect @ { PhiMode } // { ComposeEffect P{ Effect ?a ?b ?x ?k }
 { PhiStack ?v ?c }
 { PhiStack ?w ?b }
 { PhiStack ?w ?d }
+{ Params { } }
 [ ?x [ Param boa ] map ]
 [ ?y [ Param boa ] map ]
 [ ?k ]
@@ -972,10 +986,12 @@ CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effe
 [ ?l ]
 { MakeEffect ?a ?d f f ?tau } ;
 
+CHR: force-union @ { PhiMode } { FixpointMode } // { Invalid } -- | ;
+
 CHR: early-exit @ { Invalid } // <={ body-pred } -- | ;
 
 ! *** <Phi
-CHR: invalid-union @ { Invalid } // { IsUnion __ } -- | ;
+! CHR: invalid-union @ { Invalid } // { IsUnion __ } -- | ;
 
 ! **** Re-building identities
 ! NOTE: the only way how two of these can be present at the same time is if both effects specify
@@ -1035,41 +1051,68 @@ CHR: phi-disjoint-instance @ { Phi ?z ?x } { Phi ?z ?y } { Params ?l } // { Inst
 !  P{ IsUnion P{ Instance ?x P{ Effect ?a ?b f body } } }
 ! ] ;
 ! **** phi union types
-CHR: phi-instance @ { Phi ?z ?x } { Phi ?z ?y } // { Instance ?x A{ ?rho } } { Instance ?x A{ ?sig } } --
+CHR: phi-instance @ { Phi ?z ?x } { Phi ?z ?y } // { Instance ?x A{ ?rho } } { Instance ?y A{ ?sig } } --
 [ { ?rho ?sig } first2 class-or :>> ?tau ] |
-{ IsUnion P{ Instance ?z ?tau }  } ;
+{ Instance ?z ?tau } ;
 
 ! Slots
 CHR: phi-slot @ { Phi ?z ?x } { Phi ?z ?y } // { Slot ?x ?n ?a } { Slot ?y ?n ?b } -- |
-{ Phi ?c ?a } { Phi ?c ?b } { IsUnion P{ Slot ?z ?n ?c } } ;
+{ Phi ?c ?a } { Phi ?c ?b } { Slot ?z ?n ?c } ;
 
 ! **** phi higher order
 
-CHR: phi-check-same-call-effect @ { Phi ?r ?p } { Phi ?r ?q }
-// P{ CallEffect ?p ?a ?b } { CallEffect ?q ?x ?y } --
-{ ?Phi ?v ?a ?x ?k } { ?Phi ?w ?b ?y ?l }
-|
-[ ?k Yes == ?l Yes == and
-  P{ IsUnion P{ CallEffect ?r ?v ?w } }
-  P{ Invalid } ?
-] ;
+CHR: phi-call-effect-match-in @ { Phi ?r ?p } { Phi ?r ?q }
+// { CallEffect ?p ?a ?b } { CallEffect ?q ?x ?y } -- |
+{ PhiStack ?v ?a }
+{ PhiStack ?v ?x }
+{ PhiStack ?w ?b }
+{ PhiStack ?w ?y }
+{ CallEffect ?r ?v ?w } ;
 
 ! TODO: make this dependent on whether we simplify our own def!
-CHR: phi-check-same-call-rec @ { Phi ?r ?p } { Phi ?r ?q }
-// P{ CallRecursive ?w ?a ?b } { CallRecursive ?w ?x ?y } --
-{ ?Phi ?v ?a ?x ?k } { ?Phi ?w ?b ?y ?l }
-|
-[ ?k Yes == ?l Yes == and
-  P{ IsUnion P{ CallRecursive ?w ?v ?w } }
-  P{ Invalid } ?
-] ;
+! CHR: phi-call-rec-match @ { Phi ?r ?p } { Phi ?r ?q }
+! // { CallRecursive ?w ?a ?b } { CallRecursive ?w ?x ?y } --
+! { ?Phi ?v ?a ?x ?l }
+! { ?Phi ?z ?b ?y ?l }
+! |
+! [ ?k Yes == ?l Yes == and
+!   {
+!       P{ PhiStack ?z ?a }
+!       P{ PhiStack ?z ?x }
+!       P{ CallRecursive ?w ?v ?z }
+!   }
+!   P{ Invalid } ?
+! ] ;
+
+! **** phi recursive calls
+
+! We don't merge call-recursives for our own disjoint definition
+CHR: phi-call-rec-self @ { PhiMode } { PhiSchedule ?w __ __ } //
+{ CallRecursive ?w __ __ } -- | { Invalid } ;
+
+! CHR: phi-call-rec-have-type @ { PhiMode } { FixpointTypeOf ?w ?e } // { CallRecursive ?w ?a ?b } -- [ ?e full-type? ] |
+! [ { ?a ?b } { ?c ?d } ==! ]
+! { Params ?x }
+! [ ?l ] ;
+! [| | ?e fresh-effect { [ in>> ] [ out>> ] [ parms>> ] [ preds>> ] } cleave
+!  :> ( in out parms preds )
+!  {
+!      [ { ?a ?b } ]
+!  }
+! ]
 
 ! **** Conditions under which even a single pred can conserve disjunctivity
+CHR: disj-output-maybe-callable @ { PhiMode } { MakeEffect __ ?b __ __ __ } // { Instance ?x A{ ?tau } } --
+[ ?x ?b vars in? ] [ { ?tau } first classoid? ] [ { ?tau } first callable classes-intersect? ] | { Invalid } ;
+
+! CHR: disj-param-maybe-callable @ { PhiMode } <={ MakeEffect } { Params ?l } // { Instance ?x A{ ?tau } } --
+! [ ?x ?l in? ] [ { ?tau } first classoid? ] [ { ?tau } first callable classes-intersect? ] | { Invalid } ;
 
 CHR: disj-is-macro-effect @ { PhiMode } <={ MakeEffect } // <={ MacroCall } -- | { Invalid } ;
 
-CHR: disj-is-inline-effect @ { PhiMode } <={ MakeEffect } // <={ CallEffect } -- | { Invalid } ;
+CHR: disj-is-inline-effect @ { PhiMode } <={ MakeEffect } { Phi ?r ?p } // <={ CallEffect ?p . __ } -- | { Invalid } ;
 
+! Unknown call-rec
 CHR: disj-single-call-rec @ { PhiMode } <={ MakeEffect } // <={ CallRecursive } -- | { Invalid } ;
 
 CHR: disj-single-effect @ { PhiMode } <={ MakeEffect } // { Instance ?x P{ Effect __ __ __ __ } } -- | { Invalid } ;
@@ -1113,7 +1156,7 @@ CHR: literal-defines-tag @ { Instance ?x A{ ?v } } { Tag ?x ?n } // -- [ { ?v } 
 CHR: convert-tag @ // { Tag ?x A{ ?n } } -- [ ?n type>class :>> ?tau ] |
 { Instance ?x ?tau } ;
 
-CHR: useless-instance @ // { Instance __ object } -- | ;
+! CHR: useless-instance @ // { Instance __ object } -- | ;
 
 CHR: null-instance-is-invalid @ { Instance __ null } // -- | { Invalid } ;
 
@@ -1162,10 +1205,10 @@ CHR: check-eq-2 @ // { Eq ?x ?y } { Neq ?y ?x } -- | { Invalid } ;
 CHR: check-neq @ // { Neq A{ ?x } A{ ?y } } -- [ ?x ?y == ] | { Invalid } ;
 
 CHR: check-sum @ // { Sum A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y + ?z = not ] | P{ Invalid } ;
-CHR: zero-sum-1 @ // { Sum ?z 0 ?y } -- | [ ?z ?y ==! ] ;
-CHR: zero-sum-2 @ // { Sum ?z ?x 0 } -- | [ ?z ?x ==! ] ;
-CHR: define-sum @ // { Sum ?z A{ ?x } A{ ?y } } --
-[ ?x ?y + <wrapper> :>> ?v ] | { Instance ?z ?v } ;
+! CHR: zero-sum-1 @ // { Sum ?z 0 ?y } -- | [ ?z ?y ==! ] ;
+! CHR: zero-sum-2 @ // { Sum ?z ?x 0 } -- | [ ?z ?x ==! ] ;
+! CHR: define-sum @ // { Sum ?z A{ ?x } A{ ?y } } --
+! [ ?x ?y + <wrapper> :>> ?v ] | { Instance ?z ?v } ;
 
 CHR: check-prod @ // { Prod A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y * ?z = not ] | P{ Invalid } ;
 CHR: neutral-prod-1 @ // { Prod ?z 1 ?y } -- | [ ?z ?y ==! ] ;
@@ -1191,10 +1234,27 @@ CHR: neutral-bitand-2 @ // { BitAnd ?z ?x -1 } -- | [ ?z ?x ==! ] ;
 ! NOTE: These only meet in renamed form?
 ! NOTE: not sure this has to be restricted to literals, actually, but it feels like we would
 ! violate the unknown-call safety net...
-CHR: call-applies-effect @ { Literal ?q } { Instance ?q P{ Effect ?c ?d ?x ?l } } { CallEffect ?q ?a ?b } // -- |
+CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } { CallEffect ?q ?a ?b } // -- |
 [ { ?a ?b } { ?c ?d } ==! ]
 { Params ?x }
 [ ?l ] ;
+
+! ! NOTE: Idea: create an iteration constraint.
+! CHR: call-recursive-iteration @ { TypeOf  }
+
+! NOTE: we don't apply the inputs here, so we should have the effect of a Kleene star for an unknown number of
+! Iterations.  The predicates relating to the inputs of the union type should then be discarded.
+! CHR: call-recursive-applies-fixpoint-effect @ { FixpointTypeOf ?w ?e } // { CallRecursive ?w ?a ?b } -- [ ?e full-type? ] |
+! [| | ?e fresh-effect { [ in>> ] [ out>> ] [ parms>> ] [ preds>> ] } cleave
+!  :> ( in out parms preds )
+!  preds out ?b [ solve-eq lift ] no-var-restrictions
+!  ! {
+!  !     ! [ { ?a ?b } { in out } ==! ]
+!  !     ! [ ?b out ==! ]
+!  !     ! P{ Params parms }
+!  ! }
+!  ! preds append
+! ] ;
 
 CHR: call-destructs-curry @ { Instance ?q curried } { Slot ?q "quot" ?p } { Slot ?q "obj" ?x } // { CallEffect ?q ?a ?b } -- |
 { CallEffect ?p L{ ?x . ?a } ?b } ;
@@ -1318,23 +1378,24 @@ M: chr-pred live-vars vars ;
 M: object defines-vars drop f ;
 M: CallEffect live-vars thing>> 1array ;
 M: CallEffect defines-vars [ in>> vars ] [ out>> vars ] bi union ;
-M: Slot live-vars obj>> 1array ;
+M: Slot live-vars val>> 1array ;
 M: Slot defines-vars [ n>> ] [ val>> ] bi 2array ;
 M: Instance live-vars val>> 1array ;
 M: Instance defines-vars type>> defines-vars ;
 M: Tag live-vars val>> 1array ;
 M: Tag defines-vars var>> 1array ;
+! M: expr-pred defines-vars
 ! M: MacroCall live-vars out>> vars ;
 
 ! *** Phi Mode
-CHR: discard-non-union-pred @ { PhiMode } <={ MakeEffect } // <={ body-pred } -- | ;
-CHR: discard-leftover-binds @ { PhiMode } <={ MakeEffect } // <={ Bind } -- | ;
-CHR: discard-leftover-params @ { PhiMode } <={ MakeEffect } // <={ Param } -- | ;
-CHR: discard-phi-defs @ { PhiMode } <={ MakeEffect } // <={ Phi } -- | ;
+! CHR: discard-non-union-pred @ { PhiMode } <={ MakeEffect } // <={ body-pred } -- | ;
+! CHR: discard-leftover-binds @ { PhiMode } <={ MakeEffect } // <={ Bind } -- | ;
+CHR: phi-discard-leftover-params @ { PhiMode } <={ MakeEffect } // <={ Param } -- | ;
+CHR: phi-discard-phi-defs @ { PhiMode } <={ MakeEffect } // <={ Phi } -- | ;
 
-CHR: collect-union-preds @ { PhiMode } // { MakeEffect ?a ?b f ?l ?tau } { IsUnion ?p } --
-[ ?l ?p suffix :>> ?k ] |
-{ MakeEffect ?a ?b f ?k ?tau } ;
+! CHR: collect-union-preds @ { PhiMode } // { MakeEffect ?a ?b f ?l ?tau } { IsUnion ?p } --
+! [ ?l ?p suffix :>> ?k ] |
+! { MakeEffect ?a ?b f ?k ?tau } ;
 
 ! *** Composition Mode
 ! These are live after the pred has been taken into account
@@ -1383,7 +1444,8 @@ CHR: collect-call-recursive @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p 
 
 ! *** All other preds
 ! CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p vars ?e effect-vars intersects? ]
-CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p live-vars ?e effect-vars subset? ]
+! CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p live-vars ?e effect-vars subset? ]
+CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p live-vars ?e effect-vars intersects? ]
 [ ?l ?p suffix :>> ?k ]
 |
 [| | ?p defines-vars ?x union :> y

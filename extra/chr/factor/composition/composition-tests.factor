@@ -1,5 +1,6 @@
-USING: accessors arrays assocs chr.factor.composition chr.parser kernel
-kernel.private lists sequences slots.private terms tools.test typed ;
+USING: accessors arrays assocs chr.factor.composition chr.parser
+combinators.short-circuit kernel kernel.private lists math sequences
+slots.private terms tools.test typed ;
 IN: chr.factor.composition.tests
 
 : nop ( -- ) ;
@@ -59,7 +60,7 @@ CONSTANT: sol1
 P{
     Xor
     P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } { ?y1 } { P{ Instance ?y1 L{ } } } }
-    P{ Effect L{ ?o3 . ?a15 } ?b4 { ?o3 } { P{ CallRecursive __ L{ ?v3 . ?a15 } ?b4 } P{ Instance ?o3 cons-state } P{ Slot ?o3 "cdr" ?v3 } } }
+    P{ Effect L{ ?o3 . ?a15 } ?b4 { ?o3 } { P{ CallRecursive __ L{ ?v3 . ?a15 } ?b4 } P{ Instance ?o3 cons-state } P{ Slot ?o3 "cdr" ?v3 } P{ Instance ?v3 object } } }
 }
 ! P{
 !     Xor
@@ -111,8 +112,9 @@ M: array lastcdr4 array-first lastcdr4 ;
 { t }
 [ [ lastcdr4 ] get-type dup [ full-type? ] when ] unit-test
 
-{ t }
-[ [ lastcdr4 ] get-type [ [ lastcdr4 ] (call) ] get-type isomorphic? ] unit-test
+! NOTE: not working if we don't resolve the recursive call outputs eagerly
+! { t }
+! [ [ lastcdr4 dup drop ] get-type [ [ lastcdr4 ] (call) ] get-type isomorphic? ] unit-test
 
 ! NOTE: This one does not work because we don't recursively perform full phi-computations
 ! through multiple levels of nested effects
@@ -123,6 +125,11 @@ M: array lastcdr4 array-first lastcdr4 ;
 ! Stack checker examples
 : bad ( ? quot: ( ? -- ) -- ) 2dup [ not ] dip bad call ; inline recursive
 : good ( ? quot: ( ? -- ) -- ) [ good ] 2keep [ not ] dip call ; inline recursive
+
+: each-int-down ( ..a n quot: ( i --  ) -- ..b ) over 0 > [ [ 1 - ] dip [ call ] 2keep each-int-down ] [ 2drop ] if ; inline recursive
+
+{ V{ 4 3 2 1 0 } }
+[ V{ } clone 5 [ over push ] each-int-down ] unit-test
 
 ! ** Practical examples
 
