@@ -97,3 +97,6 @@ TYPED: run-fmc ( state: fmc-state -- trace: fmc-trace )
         [ safe-step-fmc ] [ dup ] produce swap suffix
     ] with-variable
     ;
+
+: <fmc> ( callable -- fmc-state )
+    >fmc-state run-fmc last ;

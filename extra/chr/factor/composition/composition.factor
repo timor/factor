@@ -102,7 +102,8 @@ TUPLE: ComposeEffect < chr-pred e1 e2 target ;
 TUPLE: MakeEffect < chr-pred in out locals preds target ;
 TUPLE: MakeUnit < chr-pred val target ;
 
-TUPLE: Iterated < chr-pred val prev ;
+TUPLE: Iterated < chr-pred init next end ;
+! TUPLE: Iterated < chr-pred val end ;
 
 ! Value-restricting preds
 TUPLE: val-pred < chr-pred val ;
@@ -123,6 +124,7 @@ TUPLE: CallEffect < chr-pred thing in out ;
 TUPLE: MacroCallEffect < chr-pred word in out ;
 TUPLE: CallRecursive < chr-pred tag in out ;
 TUPLE: NullStack < chr-pred stack ;
+TUPLE: RecursivePhi < chr-pred initial stepped end ;
 
 TUPLE: Boa < chr-pred spec in id ;
 TUPLE: TupleBoa < Boa ;
@@ -926,23 +928,39 @@ CHR: rebuild-phi-finished @ // { PhiSchedule ?q +nil+ ?tau } { RebuildXor ?a ?ta
 ! *** Build Fixpoint type
 : has-recursive-call? ( tag Effect -- ? )
     preds>> [ dup CallRecursive? [ tag>> = ] [ 2drop f ] if ] with any? ;
+: filter-recursive-call ( tag Effect -- Effect )
+    clone
+    [ [ dup CallRecursive? [ tag>> = ] [ 2drop f ] if ] with reject ] with change-preds ;
 GENERIC#: recursive-branches? 1 ( type word/quot -- ? )
 M: Effect recursive-branches? swap has-recursive-call? ;
 M: Xor recursive-branches? [ [ type1>> ] [ type2>> ] bi ] dip '[ _ recursive-branches? ] either? ;
 GENERIC#: terminating-branches 1 ( type word/quot -- branches )
 M: Effect terminating-branches over has-recursive-call? [ drop f ] [ 1array ] if ;
 M: Xor terminating-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ terminating-branches ] bi@ append sift ;
+GENERIC#: recursive-branches 1 ( type word/quot -- branches )
+M: Effect recursive-branches over has-recursive-call? [ 1array ] [ drop f ] if ;
+M: Xor recursive-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ recursive-branches ] bi@ append sift ;
 CHR: no-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q recursive-branches? not ] | ;
-CHR: do-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q terminating-branches :>> ?l drop t ] |
+CHR: do-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q terminating-branches :>> ?l drop t ]
+[ ?rho ?q recursive-branches :>> ?k drop t ] |
 [| |
     ?l [ f ] [
-        >list :> phis
+        >list :> fp-phis
         {
             P{ FixpointMode }
-            P{ PhiSchedule ?q phis ?tau }
+            P{ PhiSchedule ?q fp-phis ?tau }
             P{ FixpointTypeOf ?q ?tau }
         }
     ] if-empty
+    ?k [ f ] [
+        ! [ ?q swap filter-recursive-call ] map
+        >list :> rec-phis
+        {
+            P{ FixpointMode }
+            P{ PhiSchedule ?q rec-phis ?sig }
+            P{ RecursionTypeOf ?q ?sig }
+        }
+    ] if-empty append
 ] ;
 
 ! ** Simplification/Intra-Effect reasoning
@@ -991,6 +1009,9 @@ CHR: force-union @ { PhiMode } { FixpointMode } // { Invalid } -- | ;
 CHR: early-exit @ { Invalid } // <={ body-pred } -- | ;
 
 ! *** <Phi
+! ! **** Discarding nested calls for recursion types
+! CHR: clear-rec-type-rec-call @ { PhiMode } { FixpointMode } { PhiSchedule ?w __ __ } // { CallRecursive ?w __ __ } -- | ;
+
 ! CHR: invalid-union @ { Invalid } // { IsUnion __ } -- | ;
 
 ! **** Re-building identities
@@ -1190,6 +1211,8 @@ CHR: adjust-macro-stack @ // { MacroCall ?w f ?a ?b } -- [ ?w word? ] [ ?w "tran
 ] ;
 
 ! *** Arithmetics
+CHR: unique-expr-pred @ <={ expr-pred ?a . ?x } // <={ expr-pred ?a . ?x } -- | ;
+
 CHR: normlize-eq @ // { Eq A{ ?v } ?x } -- [ ?x term-var? ] | { Eq ?x ?v } ;
 CHR: check-le @ // { Le A{ ?x } A{ ?y } } -- [ ?x ?y <= not ] | { Invalid } ;
 CHR: check-le-same @ // { Le ?x ?x } -- | ;
@@ -1207,8 +1230,9 @@ CHR: check-neq @ // { Neq A{ ?x } A{ ?y } } -- [ ?x ?y == ] | { Invalid } ;
 CHR: check-sum @ // { Sum A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y + ?z = not ] | P{ Invalid } ;
 ! CHR: zero-sum-1 @ // { Sum ?z 0 ?y } -- | [ ?z ?y ==! ] ;
 ! CHR: zero-sum-2 @ // { Sum ?z ?x 0 } -- | [ ?z ?x ==! ] ;
-! CHR: define-sum @ // { Sum ?z A{ ?x } A{ ?y } } --
-! [ ?x ?y + <wrapper> :>> ?v ] | { Instance ?z ?v } ;
+CHR: define-sum @ // { Sum ?z A{ ?x } A{ ?y } } --
+[ ?x ?y + <wrapper> :>> ?v ] | { Instance ?z ?v } ;
+CHR: normalize-sum @ // { Sum ?z A{ ?x } ?y } -- | { Sum ?z ?y ?x } ;
 
 CHR: check-prod @ // { Prod A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y * ?z = not ] | P{ Invalid } ;
 CHR: neutral-prod-1 @ // { Prod ?z 1 ?y } -- | [ ?z ?y ==! ] ;
@@ -1230,6 +1254,11 @@ CHR: zero-bitand-2 @ // { BitAnd ?z ?x 0 } -- | { Instance ?z W{ 0 } } ;
 CHR: neutral-bitand-1 @ // { BitAnd ?z -1 ?y } -- | [ ?z ?y ==! ] ;
 CHR: neutral-bitand-2 @ // { BitAnd ?z ?x -1 } -- | [ ?z ?x ==! ] ;
 
+! CHR: propagate-lt-offset @ { Lt A{ ?n } ?x } { Sum ?z ?x A{ ?y } } // --
+! [ ?n ?y + :>> ?m ] | { Lt ?m ?z } ;
+! CHR: propagate-lt-offset @ { Lt ?n ?x } { Sum ?z ?x ?y } // -- |
+! { Sum ?w ?n ?y } { Lt ?z ?w } ;
+
 ! *** Call Effect matching
 ! NOTE: These only meet in renamed form?
 ! NOTE: not sure this has to be restricted to literals, actually, but it feels like we would
@@ -1239,8 +1268,17 @@ CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } { CallEffect 
 { Params ?x }
 [ ?l ] ;
 
-! ! NOTE: Idea: create an iteration constraint.
-! CHR: call-recursive-iteration @ { TypeOf  }
+! ! NOTE: Idea: create an iteration constraint.  Should only be active in subsequent compositions
+! CHR: call-recursive-iteration @ { RecursionTypeOf ?w ?tau } { FixpointTypeOf ?w ?rho } // { CallRecursive ?w ?a ?b } --
+! [ ?tau full-type? ] [ ?rho full-type? ] |
+! [| | ?tau fresh-effect [ in>> ] [ out>> ] [ preds>> ] tri :> ( inext onext pnext )
+!  ?rho fresh-effect [ in>> ] [ out>> ] [ preds>> ] tri :> ( ilast olast plast )
+!  {
+!      [ ?b olast ==! ]
+!      P{ Iterated ?a inext ilast }
+!  } pnext append plast append
+! ] ;
+
 
 ! NOTE: we don't apply the inputs here, so we should have the effect of a Kleene star for an unknown number of
 ! Iterations.  The predicates relating to the inputs of the union type should then be discarded.
@@ -1384,6 +1422,7 @@ M: Instance live-vars val>> 1array ;
 M: Instance defines-vars type>> defines-vars ;
 M: Tag live-vars val>> 1array ;
 M: Tag defines-vars var>> 1array ;
+M: Iterated defines-vars [ next>> vars ] [ end>> vars ] bi union ;
 ! M: expr-pred defines-vars
 ! M: MacroCall live-vars out>> vars ;
 

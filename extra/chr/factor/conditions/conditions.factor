@@ -22,7 +22,8 @@ TUPLE: <--> < cond-pred cond1 cond2 ;
 TUPLE: Disjoint < chr-pred cond1 cond2 ;
 TUPLE: Test < chr-pred pred res ;
 
-: implies? ( a b -- ? )
+! Check if when b, then also a
+: implied? ( a b -- ? )
     over [ = ] [ 2drop t ] if ;
 
 ! CHRAT: chr-cond { Test }

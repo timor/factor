@@ -1,8 +1,8 @@
 USING: accessors arrays assocs chr chr.modular chr.state.private classes
-classes.tuple combinators combinators.short-circuit generic hashtables kernel
-lexer lists lists.private namespaces parser prettyprint.backend
-prettyprint.custom prettyprint.sections quotations sequences terms vocabs.parser
-words ;
+classes.algebra classes.tuple combinators combinators.short-circuit generic
+hashtables kernel lexer lists lists.private namespaces parser
+prettyprint.backend prettyprint.custom prettyprint.sections quotations sequences
+terms vocabs.parser words ;
 
 IN: chr.parser
 
@@ -130,6 +130,13 @@ SYNTAX: constructor last-word make-term-constructor ;
 <<
 \ Is make-term-constructor
 >>
+
+M: Is pprint-delims dup class-of Is class=
+    [ drop \ Is{ \ } ]
+    [ call-next-method ] if ;
+M: Is >pprint-sequence dup class-of Is class=
+    [ tuple-slots ]
+    [ call-next-method ] if ;
 
 ! * CHRat Contract
 

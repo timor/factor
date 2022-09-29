@@ -39,14 +39,6 @@ CHRAT: chr-effects {  }
 !     ;
 
 
-CHR: call-declares-effect @ Is{ ?b { call L{ ?p . ?a } } } // -- |
-! Is{ L{ ?p . ?rho } ?a }
-! Is{ ?rho ?a }
-! Is{ ?b ?sig }
-! { Effect ?p f ?rho ?sig f }
-{ Effect ?p f ?a ?b f }
-    ;
-
 ! If we turn out to infer the same thing, combine.
 ! CHR: unique-inference-marker @ AS: ?x <={ InferEffect ?w ?c ?a ?b ?l } // AS: ?y <={ InferEffect ?w ?c ?a ?b ?l } -- [ ?x ?y class= ] | [ "srsly?" throw ] ;
 ! CHR: combine-inference-marker @ // { InferEffect ?w ?c ?a ?b ?l } { InferEffect ?w ?c ?a ?b ?k } -- [ ?l ?k union :>> ?m ] | [ "öhm..." throw ]
@@ -119,22 +111,29 @@ CHR: do-apply-effect-on @ // { ApplyEffect ?a ?b ?e } -- |
 ! !   body { in out } { ?a ?b } break [ solve-eq ] no-var-restrictions lift
 ! ! ] ;
 
-! NOTE: this does _not_ cause effects to be re-applied, only to be re-inferred!
+! Approach: fix-point iteration on the set of constraints?
+! CHR: subsuming-effect-same-ctx @ { C ?c P{ Effect ?w __ ?a ?b ?l } } // { C ?c P{ Effect ?w __ ?x ?y ?k } } -- [ ?k ?l subset? ] |
+CHR: subsuming-effect @ P{ Effect ?w __ ?a ?b ?l } // P{ Effect ?w __ ?a ?b ?k } -- [ ?k ?l subset? ] |
+! NOTE: This could be problematic regarding recursion? maybe do, because of effect matching?
+! [ { ?a ?b } { ?x ?y } ==! ]
+    ;
+
+! ! NOTE: this SHOULD _not_ cause effects to be re-applied, only to be re-inferred!
 CHR: rebuild-effect-conjunction @ { Effect ?q __ ?a ?b ?k } // AS: ?e P{ Effect ?q __ ?x ?y ?l } -- |
 [ ?e instantiate-effect
   [ [ in>> ] [ out>> ] bi 2array { ?a ?b } ==! ]
   [ constraints>> ] bi 2array
 ] ;
 
+! ! NOTE: this SHOULD _not_ cause effects to be re-applied, only to be re-inferred!
+! ! NOTE: version without re-instantiating
+! CHR: rebuild-effect-conjunction @ { Effect ?q __ ?a ?b ?k } // AS: ?e P{ Effect ?q __ ?x ?y ?l } -- |
+! [ ?e
+!   [ [ in>> ] [ out>> ] bi 2array { ?a ?b } ==! ]
+!   [ constraints>> ] bi ?k diff 2array
+! ] ;
+
 ! Expand Effect Conjunctions
-
-! Approach: fix-point iteration on the set of constraints?
-! CHR: subsuming-effect-same-ctx @ { C ?c P{ Effect ?w __ ?a ?b ?l } } // { C ?c P{ Effect ?w __ ?x ?y ?k } } -- [ ?k ?l subset? ] |
-CHR: subsuming-effect @ P{ Effect ?w __ ?a ?b ?l } // P{ Effect ?w __ ?a ?b ?k } -- [ ?k ?l subset? ] |
-! NOTE: This could be problematic regarding recursion? maybe do, because of effect matching?
-! [ { ?a ?b } { ?x ?y } ==! ]
-;
-
 
 ! CHR: make-dispatch-effect @ // P{ Effect ?w ?c ?a ?b ?k } P{ Effect ?w ?d ?x ?y ?l } -- |
 ! [| |
@@ -179,14 +178,16 @@ CHR: collect-effect-top-pred @ // { C ?d AS: ?k <={ refine-pred } } { C ?c AS: ?
 [ ?k free-vars ?v subset? ] |
 [ ?e [ ?k ?d [ swap C boa ] when* suffix ] change-constraints ?c swap C boa ] ;
 
-CHR: infer-existential-effect-var @ { C ?d AS: ?k Is{ ?y ?x } } // { C ?c AS: ?e P{ Effect __ __ __ __ ?l } } --
+CHR: infer-existential-effect-var @ { C ?d AS: ?k Is{ ?y ?x } } // { C ?c AS: ?e P{ Effect __ __ ?a ?b ?l } } --
 [ ?c not ]
 [ ?c ?d and [ ?c ?d = ] [ ?c not ] if ]
 [ ?k ?l in? not ] [ ?e bound-vars :>> ?v ]
 [ ?y free-vars ?v subset? ]
 [ ?x free-vars :>> ?xs ]
-[ ?xs ?v subset? not ] |
-[ ?e [ ?xs union ?v diff ] change-parms ] ;
+[ ?xs ?v subset? not ]
+[ ?a vars ?b vars union :>> ?p ]
+|
+[ ?e [ ?xs union ?p diff ] change-parms ] ;
 
 
 
@@ -196,7 +197,6 @@ CHR: collect-nested-effect-in-top-effect @ // { C ?d AS: ?k P{ Effect ?x __ __ _
 [ ?k ?l in? not ] [ ?e bound-vars :>> ?v ]
 [ ?x ?v in? ] |
 [ ?e [ ?k ?d [ swap C boa ] when* suffix ] change-constraints ?c swap C boa ] ;
-
 
 ! CHR: assume-sub-scope-effect @ { C ?d AS: ?k <={ refine-pred } } { C ?c AS: ?e <={ Effect __ __ __ __ ?l } } // --
 ! [ ?c not ]

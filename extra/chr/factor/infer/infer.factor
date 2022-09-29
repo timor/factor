@@ -17,6 +17,8 @@ TUPLE: InferNext < trans-pred word rest ;
 TUPLE: InferScope < Scope quot next ;
 TUPLE: Inferred < state-pred next rest ;
 TUPLE: InsertStates < chr-pred r new ;
+TUPLE: Push < trans-pred lit ;
+
 
 CHRAT: infer-factor { InferBetween }
 IMPORT: control-flow

@@ -1,10 +1,9 @@
-USING: accessors arrays assocs assocs.extras classes classes.algebra
-classes.tuple colors.constants combinators combinators.short-circuit
-combinators.smart continuations disjoint-sets generalizations graphs
-graphs.private hashtables io io.styles kernel lists lists.private make match
-math math.order math.parser mirrors namespaces prettyprint.backend
-prettyprint.custom prettyprint.sections quotations sequences sequences.extras
-sequences.private sets strings threads typed unicode words ;
+USING: accessors arrays assocs classes classes.algebra colors.constants
+combinators combinators.short-circuit combinators.smart generalizations graphs
+graphs.private io io.styles kernel lists lists.private make math math.parser
+mirrors namespaces prettyprint.backend prettyprint.custom prettyprint.sections
+quotations sequences sequences.extras sequences.private sets threads typed words
+;
 
 IN: types.util
 
@@ -178,8 +177,21 @@ MACRO: lmatch-map-as ( branches cons-class -- quot )
 : list>array* ( list* -- array )
     [ [ , ] leach* ] {  } make ;
 
+:: lany?* ( l* quot: ( elt -- ? ) -- ? )
+    l* dup atom? [ drop f ]
+    [ unswons quot call( elt -- ? ) [ nip ] [ quot lany?* ] if* ] if ;
+
 : lastcdr ( list -- x )
     dup atom? [ cdr lastcdr ] unless ; inline recursive
+
+! Check for compatible list prefix, return longer one if match
+: list~ ( list1 list2 -- list/f )
+    { [ t [ = and ] 2lreduce ] [ [ [ llength ] bi@ > ] most ] } 2&& ;
+
+! ! Same, but return shorter one
+! : list~< ( list1 list2 -- list/f )
+!     { [ t [ = and ] 2lreduce ] [ [ [ llength ] bi@ < ] most ] } 2&& ;
+
 
 ! * Cache with hit indicator
 

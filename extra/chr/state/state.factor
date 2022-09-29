@@ -373,7 +373,11 @@ DEFER: match-single-head
 
 :: recursive-drop? ( trace -- ? )
     trace first first2 :> ( id keep? )
-    keep? [ id store get at activated>> ] [ f ] if ; inline
+    keep? [ id store get at
+            [ activated>> ]
+            [ ! not alive anymore
+                t ] if*
+    ] [ f ] if ; inline
 
 :: (run-occurrence) ( rule-id trace bindings partners vars -- )
     trace recursive-drop?
@@ -441,7 +445,7 @@ SYMBOL: sentinel
 !     sentinel inc ;
 
 : recursion-check ( -- )
-    queue get length 500 > [ "runaway" throw ] when ;
+    queue get length 1000 > [ "runaway" throw ] when ;
     ! ! sentinel get 5000 > [ "runaway" throw ] when
     ! sentinel get 500 > [ "runaway" throw ] when
     ! sentinel inc ;
@@ -563,6 +567,7 @@ M: sequence activate-new
 
 M: constraint activate-new
     ! recursion-check
+    ! runaway-check
     create-chr activate ;
 
 M: generator activate-new

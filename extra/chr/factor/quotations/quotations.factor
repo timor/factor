@@ -1,8 +1,8 @@
-USING: accessors arrays chr chr.factor chr.factor.defs chr.factor.effects
-chr.factor.terms chr.parser chr.state classes.algebra combinators
-combinators.short-circuit compiler continuations effects generic kernel lists
-math math.parser quotations sequences sets strings terms types.util words
-words.symbol ;
+USING: accessors arrays assocs assocs.extras chr chr.factor chr.factor.defs
+chr.factor.effects chr.factor.terms chr.parser chr.state classes.algebra
+combinators combinators.short-circuit compiler continuations effects generic
+grouping kernel lists math math.parser quotations sequences sequences.extras
+sets strings terms types.util words words.symbol ;
 
 IN: chr.factor.quotations
 FROM: syntax => _ ;
@@ -10,6 +10,8 @@ FROM: chr => val-pred ;
 FROM: chr.factor.terms => Call ;
 FROM: chr.factor.types => Instance ;
 FROM: chr.factor.effects => Effect ;
+
+TUPLE: UseStack < chr-pred ports src num ;
 
 ! * Quotation Inference
 
@@ -55,18 +57,57 @@ M: pair elt>var
     [ effect>stack-elts ]
     [ add-row-vars ] bi ;
 
-:: shuffle-rules ( in out effect -- preds )
-    effect effect>stacks :> ( sin sout )
-    sin list>array* <reversed> :> vin
-    sout list>array* <reversed> :> vout
-    sin lastcdr :> rho
-    sout lastcdr :> sig
-    effect shuffle-mapping
-    [| ni no | no vout nth ni vin nth Is boa ] map-index
-    Is{ sig rho } suffix
-    Is{ sin in } prefix
-    Is{ out sout } suffix
-    vin dup effect shuffle diff [ Drop boa suffix ] each
+! :: shuffle-rules ( in out effect -- preds )
+!     effect effect>stacks :> ( sin sout )
+!     sin list>array* <reversed> :> vin
+!     sout list>array* <reversed> :> vout
+!     sin lastcdr :> rho
+!     sout lastcdr :> sig
+!     effect shuffle-mapping
+!     [| ni no | no vout nth ni vin nth Is boa ] map-index
+!     Is{ sig rho } suffix
+!     Is{ sin in } prefix
+!     Is{ out sout } suffix
+!     vin dup effect shuffle diff [ Drop boa suffix ] each
+!     ;
+: shuffle-drops ( vin effect -- seq )
+    [ in>> ] [ out>> ] bi '[ _ in? not ] find-all keys
+    [ swap nth Drop boa ] with map ;
+
+! : shuffle-eqs ( vin vout effect -- seq )
+!     [ in>> ] [ out>> ] bi '[ swap _ index [ 2array ] [ drop f ] if* ] map-index sift
+!     [ swap [ nth ] 2bi@ swap Is boa ] 2with { } assoc>map
+!     ;
+
+! : (shuffle-dups) ( effect -- seq )
+!     [ in>> ] [ out>> ] bi
+!     '[ _ indices ] map [ length 1 > ] filter
+!     [ 2 <clumps> ] map concat
+!     ;
+
+! : shuffle-dups ( vout effect -- seq )
+!     (shuffle-dups)
+!     [| orig vars copy | copy vars nth orig vars nth Dup boa ] with { } assoc>map ;
+
+! : shuffle-rules ( vin vout effect -- preds )
+!     [ nip shuffle-drops ]
+!     [ shuffle-eqs append ]
+!     [ nipd shuffle-dups append ] 3tri
+!     ;
+
+: shuffle-eqs ( vin vout effect -- seq )
+    shuffle-mapping [ ! | n ins outs i |
+                     swap [ nth ] 2bi@ swap Is boa
+     ] 2with map-index ;
+
+! : shuffle-rules ( vin vout effect -- preds )
+!     [ nip shuffle-drops ]
+!     [ shuffle-eqs append ] 3bi ;
+
+: shuffle-rules ( vin vout effect -- preds )
+    shuffle-mapping zip
+    over [ nth ] curry map-values [ second ] collect-by [ keys ] map-values
+    [ dupd at >array swap Dup boa ] curry map
     ;
 
 
@@ -195,14 +236,17 @@ CHR: execute-push @ // Is{ ?b { execute A{ ?v } ?a } } -- [ ?v callable-word? no
 { Is ?b L{ W{ ?v } . ?xs } } ;
 
 ! ** Handle known shuffles
-CHR: apply-primitive-shuffle @ // Is{ ?b { A{ ?w } ?a } } -- [ ?w "shuffle" word-prop :>> ?e ] |
+! CHR: apply-primitive-shuffle @ // Is{ ?b { A{ ?w } ?a } } -- [ ?w "shuffle" word-prop :>> ?e ]
+CHR: apply-shuffle @ // Is{ ?b { execute A{ ?w } ?a } } -- [ ?w "shuffle" word-prop :>> ?e ]
+! [ ?e effect>stacks :>> ?sig drop :>> ?rho drop t ]
+|
+! [ { ?a ?b } { ?rho ?sig } ==! ]
 [| |
- ?a ?b ?e shuffle-rules
-    ! ?e shuffle-effect>stacks :> ( in out )
-    ! {
-    !     Is{ in ?a }
-    !     Is{ ?b out }
-    ! }
+ ?e effect>stacks :> ( sin sout )
+ sin list>array* <reversed>
+ sout list>array* <reversed>
+ ?e shuffle-rules
+ [ { ?a ?b } { sin sout } ==! ] suffix
 ] ;
 
 ! ** Early special words
@@ -232,66 +276,105 @@ CHR: apply-primitive-shuffle @ // Is{ ?b { A{ ?w } ?a } } -- [ ?w "shuffle" word
 ! CHR: known-effect-structure @ Is{ ?b { execute A{ ?w } ?a } } // -- [ ?w defined-effect :>> ?e ] |
 ! NOTE: taking this out to prevent immediate self-reactivation!  This means we
 ! do have to check for re-application based on the actual arguments though.
-CHR: known-effect-structure @ // AS: ?k Is{ ?b { execute A{ ?w } ?a } } -- [ ?w defined-effect :>> ?e ]
+! CHR: known-effect-structure @ // AS: ?k Is{ ?b { execute A{ ?w } ?a } } -- [ ?w defined-effect :>> ?e ]
+! [ ?a ?b ?e check-effect-structure not ]
+! |
+! [| | ?e effect>stacks :> ( sin sout )
+!  {
+!      Is{ sin ?a }
+!      Is{ ?b sout }
+!  }
+! ]
+! [ ?k ] ;
+
+CHR: known-effect-structure @ // Is{ ?b { execute A{ ?w } ?a } } -- [ ?w defined-effect :>> ?e ]
 [ ?a ?b ?e check-effect-structure not ]
 |
 [| | ?e effect>stacks :> ( sin sout )
  {
      Is{ sin ?a }
+     Is{ sout { execute ?w sin } }
      Is{ ?b sout }
  }
-]
-[ ?k ] ;
+] ;
+! [ ?k ] ;
 
 ! ** Catch primitives
 CHR: convert-primitive-exec @ // Is{ ?b { execute A{ ?w } ?a } } -- [ ?w primitive? ] |
 { Is ?b { ?w ?a } } ;
 
 
-ERROR: imbalanced-branch-stacks a b ;
 ! ** Special words
+
+! *** Dip
+CHR: convert-dip @ // Is{ ?b { execute dip L{ ?q ?x ?y . ?a } } } -- |
+Is{ ?sig { execute call L{ ?q . ?a } } }
+Is{ ?b L{ ?x . ?sig } } ;
+
+CHR: convert-2dip @ // Is{ ?b { execute 2dip L{ ?q ?x ?y . ?a } } } -- |
+Is{ ?sig { execute call L{ ?q . ?a } } }
+Is{ ?b L{ ?x ?y . ?sig } } ;
+
+CHR: convert-3dip @ // Is{ ?b { execute 3dip L{ ?q ?x ?y ?z . ?a } } } -- |
+Is{ ?sig { execute call L{ ?q . ?a } } }
+Is{ ?b L{ ?x ?y ?z . ?sig } } ;
 
 ! *** Conditionals
 
+ERROR: imbalanced-branch-stacks a b ;
 : check-branch-effects ( pair1 pair2 -- )
     [ solve-in-context drop ]
     [ dup recursive-term-error? [ drop [ ground-value-in-context ] bi@ imbalanced-branch-stacks ] [ rethrow ] if ]
     recover ;
 
+! NOTE: to correctly allow transitive variable merging, we would need to ensure
+! that two transitive assignments in the same context can never have a variable
+! that is used in a different context!
+
 ! NOTE: pre-computing the branches without conditions does not work because of
 ! side-effects which have to be assigned to the corresponding conditions!
 CHR: expand-if @ { Is ?b { execute if L{ ?q ?p ?c . ?a } } } // -- |
-{ C True{ ?c } { P{ Drop ?q } P{ Instance ?c not{ POSTPONE: f } } } }
-{ C False{ ?c } { P{ Drop ?p } Is{ ?c W{ f } } } }
-{ C True{ ?c } Is{ ?x { call L{ ?p . ?a } } } }
-{ C False{ ?c } Is{ ?y { call L{ ?q . ?a } } } }
-[ { ?a ?x } { ?a ?y }
+! { C True{ ?c } { P{ Drop ?q } P{ Instance ?c not{ POSTPONE: f } } } }
+! { C False{ ?c } { P{ Drop ?p } Is{ ?c W{ f } } } }
+{ C True{ ?c1 } { P{ Dup { } ?q } P{ Instance ?c not{ POSTPONE: f } } Is{ ?r ?a } } }
+{ C False{ ?c1 } { P{ Dup { } ?p } Is{ ?c W{ f } } Is{ ?s ?a } } }
+{ C True{ ?c1 } Is{ ?x { call L{ ?p . ?r } } } }
+{ C False{ ?c1 } Is{ ?y { call L{ ?q . ?s } } } }
+[
+    ! { ?a ?x } { ?a ?y }
+    { ?r ?x } { ?s ?y }
   check-branch-effects f
   ! break [ ground-value-in-context ] bi@ [ solve-eq ] no-var-restrictions drop f
 ]
-{ C True{ ?c } Is{ ?b ?x } }
-{ C False{ ?c } Is{ ?b ?y } }
+{ C True{ ?c1 } Is{ ?b ?x } }
+{ C False{ ?c1 } Is{ ?b ?y } }
     ;
 
 ! *** Predicate words
 
+PREDICATE: predicate-word < word "predicating" word-prop ;
 CHR: predicate-words @ Is{ L{ ?c . __ } { A{ ?w } L{ ?v . __ } } } // -- [ ?w "predicating" word-prop :>> ?tau ] [ ?tau class-not :>> ?sig ] |
 { C True{ ?c } { Is{ ?c W{ t } } P{ Instance ?v ?tau } } }
 { C False{ ?c } { Is{ ?c W{ f } } P{ Instance ?v ?sig } } }
 ;
 
-! *** Currying
+! *** Curry/Compose
+! : curry ( ..a x quot: ( ..b x -- ..c ) -- ..a quot: ( ..b -- ..c ) )
+! PROBLEM: The var ref of a curried object in an effect is bound in the surrounding context.
+! This might necessitate modifying the parameter list when gobbling up a nested effect.  Also, the free
+! var needs to survive effect rebuilding
 CHR: expand-curry @ // Is{ L{ ?q . ?b } { execute curry L{ ?p ?x . ?a } } } -- |
-{ Effect ?q f ?rho ?sig { Is{ ?sig { call L{ ?p ?x . ?rho } } } } }
+! Input effect matching
 ! { Effect ?p f L{ ?x . ?rho } ?sig f }
+! { Effect ?q { ?x } ?rho ?sig f }
 ! { Effect ?q f ?rho ?sig f }
+! Nested Call version ( ref )
+{ Effect ?q f ?rho ?sig { Is{ ?sig { call L{ ?p ?x . ?rho } } } } }
     ;
 
+! CHR: expand-compose @ // Is{ L{ ?r . ?b } { execute compose L{ ?q ?p . ?a } } } -- |
+! { Effect ?q f ?rho ?sig { Is{ ?sig { call L{ ?q . { call L{ ?p . ?rho } } } } } } }
 
-! *** Dynamic Calls
-
-! NOTE: not a primitive, not a regulard word
-CHR: convert-call @ // Is{ ?b { execute call ?a } } -- | Is{ ?b { call ?a } } ;
 
 ! ** Handle general word calls
 
@@ -312,7 +395,6 @@ TUPLE: RecursiveExec < chr-pred stack-in stack-out word ;
 
 ! ** Folding
 
-PREDICATE: predicate-word < word "predicating" word-prop ;
 GENERIC: fold-word? ( w -- ? )
 M: object fold-word? drop f ;
 M: predicate-word fold-word? drop t ;
@@ -326,47 +408,77 @@ M: word fold-word? foldable? ;
 ! { Is ?y ?r }
 ! [ ?xs [ Dead boa ] map ]
 !     ;
-! FIXME: do this converstion completely, without using Expr
-CHR: fold-def-expr @ // { Is ?b { ?w ?a } } --
-[ ?w fold-word? ]
-[ ?w defined-effect :>> ?e ]
-[ ?a ?ground-value list>array* :>> ?i  ]
-[ ?i ground-value-in-context :>> ?x ground-value? ]
-[ ?b ?ground-value list>array* :>> ?o ]
-[ ?o ?e out>> swap longer? not ]
-[ ?i ?e in>> swap longer? not ]
-[ ?x <reversed> [ wrapped>> ] map ?w 1quotation with-datastack [ <wrapper> ] map :>> ?r drop t ]
-|
-[ ?o ?r [ Is boa ] 2map ]
-! [ ?x [ Dead boa ] map ]
-    ;
+
+
+! CHR: fold-def-expr @ // { Is ?b { ?w ?a } } --
+! [ ?w fold-word? ]
+! [ ?w defined-effect :>> ?e ]
+! [ ?a ?ground-value list>array* :>> ?i  ]
+! [ ?i ground-value-in-context :>> ?x ground-value? ]
+! [ ?b ?ground-value list>array* :>> ?o ]
+! [ ?o ?e out>> swap longer? not ]
+! [ ?i ?e in>> swap longer? not ]
+! [ ?x <reversed> [ wrapped>> ] map ?w 1quotation with-datastack [ <wrapper> ] map :>> ?r drop t ]
+! |
+! [ ?o ?r [ Is boa ] 2map ]
+! ! [ ?x [ Dead boa ] map ]
+!     ;
 
 
 ! ** Make Expression from Execute
 
+! *** Destructure Stack Use
+CHR: did-use-stack @ // { UseStack ?y ?x 0 } -- | ;
+CHR: destructure-stack-use @ // { UseStack L{ ?y . ?ys } L{ ?x . ?xs } ?n } -- [ ?n 1 - :>> ?m ] |
+{ UseStack ?ys ?xs ?m }
+{ UseDef ?y ?x } ;
+
+! *** Convert execute preds
 ! Step one: interpret words as functions from stacks to stacks
 ! NOTE: this is the point where we actually drop out of execute semantics into value-only semantics
-! FIXME: this should only happen if we have a known effect!
-CHR: convert-exec-expr @ { Effect ?w __ __ __ __ } // Is{ ?b { execute A{ ?w } ?a } } -- |
+! NOTE: Does this also work correctly for inferred effects???
+CHR: convert-exec-expr @ { Effect ?w __ __ __ __ } // Is{ ?b { execute A{ ?w } ?a } } -- [ ?w defined-effect in>> length :>> ?i ] |
+! Is{ ?rho ?a }
+{ UseStack ?a ?a ?i }
 Is{ ?b { ?w ?a } } ;
 
 ! Step two: Convert normal words with only one output parameter
 ! CHR: shave-of-term-expr @ Is{ L{ ?y . __ } { A{ ?w } ?a } } // --
-CHR: shave-of-term-expr @ // Is{ L{ ?y . __ } { A{ ?w } ?a } } --
+
 ! CHR: shave-of-term-expr @ // Is{ L{ ?y . __ } { A{ ?w } ?a } } --
+! ! CHR: shave-of-term-expr @ // Is{ L{ ?y . __ } { A{ ?w } ?a } } --
+! [ ?w inline? not ] [ ?w defined-effect :>> ?e ]
+! [ ?e variable-effect? not ]
+! [ ?e out>> length 1 = ]
+! [ ?a list>array* :>> ?xs length ?e in>> length :>> ?l >= ]
+! [ ?xs ?l head :>> ?x  ]
+! |
+! { Expr ?y { ?w ?x } } ;
+
+CHR: shave-of-term-expr @ // Is{ L{ ?y . __ } { A{ ?w } ?a } } --
 [ ?w inline? not ] [ ?w defined-effect :>> ?e ]
 [ ?e variable-effect? not ]
 [ ?e out>> length 1 = ]
 [ ?a list>array* :>> ?xs length ?e in>> length :>> ?l >= ]
-[ ?xs ?l head :>> ?x  ]
+[ ?xs ?l head ?w prefix :>> ?x ]
 |
-{ Expr ?y { ?w ?x } } ;
+Is{ ?y ?x } ;
 
-CHR: bake-expression-literals @ { Is ?x A{ ?v } } // AS: ?e P{ Expr ?y { ?w ?l } } --
-[ ?x ?l in? ] |
-[ ?e { { ?x ?v } } lift ] ;
+! CHR: bake-expression-literals @ { Is ?x A{ ?v } } // AS: ?e P{ Expr ?y { ?w ?l } } --
+! [ ?x ?l in? ] |
+! [ ?e { { ?x ?v } } lift ] ;
 
 ! ** Trigger Inference
+
+! *** Prevent triggering inference
+
+! NOTE: not a primitive, not a regulard word
+! CHR: convert-special-execs @ // Is{ ?b { execute A{ ?w } ?a } } -- [ ?w { [ predicate-word? ] [ { call } in? ] } 1|| ] | Is{ ?b { ?w ?a } } ;
+CHR: provide-special-effects @ Is{ ?b { execute A{ ?w } ?a } } // -- [ ?w { [ predicate-word? ] [ { call if } in? ] } 1|| ] [ ?w defined-effect effect>stacks :>> ?o drop :>> ?i drop t ] |
+{ Effect ?w f ?i ?o f } ;
+
+! *** Actually trigger inference
+! We should only be here if there is no Effect defined for ?w
 CHR: request-unknown-effect @ Is{ ?b { execute A{ ?w } ?a } } // --
 [ ?w no-compile? not ] [ ?w { if } in? not ] [ ?w "predicating" word-prop not ] |
 { InferWord ?w } ;

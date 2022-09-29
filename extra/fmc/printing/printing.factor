@@ -78,11 +78,11 @@ M: fmc-cons >pprint-sequence
 
 ! Print types
 SYMBOL: ⇒
-M: fmc-type pprint* " " pprint-compact ;
-M: fmc-type pprint-delims drop "(" ")" ;
-M: fmc-type >pprint-sequence
-    [ in>> ⇒ ]
-    [ out>> ] bi 3array ;
+! M: fmc-type pprint* " " pprint-compact ;
+! M: fmc-type pprint-delims drop "(" ")" ;
+! M: fmc-type >pprint-sequence
+!     [ in>> ⇒ ]
+!     [ out>> ] bi 3array ;
 
-M: type-var pprint* name>> H{ { foreground COLOR: solarized-green } } styled-text ;
-M: row-type-var pprint* name>> H{ { foreground COLOR: solarized-orange } } styled-text ;
+! M: type-var pprint* name>> H{ { foreground COLOR: solarized-green } } styled-text ;
+! M: row-type-var pprint* name>> H{ { foreground COLOR: solarized-orange } } styled-text ;

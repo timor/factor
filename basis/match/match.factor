@@ -2,8 +2,8 @@
 ! See http://factorcode.org/license.txt for BSD license.
 !
 ! Based on pattern matching code from Paul Graham's book 'On Lisp'.
-USING: assocs classes classes.tuple combinators kernel lexer make namespaces
-parser quotations sequences summary words ;
+USING: assocs classes classes.tuple combinators combinators.short-circuit kernel
+lexer lists make namespaces parser quotations sequences summary words ;
 IN: match
 
 SYMBOL: _
@@ -25,6 +25,19 @@ INSTANCE: match-var-word match-var
 
 : set-match-var ( value var -- ? )
     building get ?at [ = ] [ ,, t ] if ;
+
+DEFER: (match)
+:: (match-list) ( list1 list2 -- matched? )
+    { { [ list1 nil? ] [ list2 nil? [ t ] [ list2 list1 (match-list) ] if ] }
+      { [ list2 nil? ] [ list1 uncons :> ( car1 cdr1 )
+                         car1 match-var? [ list2 car1 set-match-var ]
+                         [ f ] if
+                       ] }
+      [ list1 uncons :> ( car1 cdr1 )
+        list2 uncons :> ( car2 cdr2 )
+        { [ car1 car2 (match) ] [ cdr1 cdr2 (match) ] } 0&&
+      ]
+    } cond ;
 
 : (match) ( value1 value2 -- matched? )
     {

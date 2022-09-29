@@ -199,7 +199,9 @@ M: callable apply-substitution* swap lift ;
     ! Swap this in when suspecting that throwing errors will mess up the equivalence theory!
     ! call( -- ? ) ;
     ! [ call( -- ? ) ] [ dup user-error? [ error>> throw ] [ 2drop f ] if ] recover ;
-    [ ( -- ? ) call-effect-unsafe ] [ dup user-error? [ error>> throw ] [ 2drop f ] if ] recover ; inline
+    ! [ ( -- ? ) call-effect-unsafe ] [ dup user-error? [ error>> throw ] [ 2drop f ] if ] recover ; inline
+    ( -- ? ) call-effect-unsafe ;
+    ! [ dup user-error? [ error>> throw ] [ 2drop f ] if ] recover ; inline
 
 M: callable test-constraint
     swap lift test-callable ;
@@ -227,6 +229,12 @@ M: callable test-constraint
 TUPLE: type-pred < chr-pred ;
 TUPLE: val-pred < type-pred val ;
 
-! ** Symbolic equivalences
+! ** Symbolic equivalences/Data-flow
 
+TUPLE: Copies < chr-pred cond eqs ;
+
+! NOTE: maybe should make these "flow-preds" instead?
+TUPLE: Demux < chr-pred cond ins outs ;
+TUPLE: Mux < chr-pred cond ins outs ;
 TUPLE: Is < type-pred var src ;
+TUPLE: Dup < Is ;

@@ -462,6 +462,10 @@ SYMBOL: on-recursive-term
 : no-var-restrictions ( quot -- )
     valid-match-vars swap with-variable-off ; inline
 
+: isomorphic? ( term1 term2  -- ? )
+    [ solve-eq ] no-var-restrictions
+    [ [ [ term-var? ] both? ] assoc-all? ] [ f ] if* ;
+
 : lift* ( term subst -- term )
     [ lift ] no-var-restrictions ;
 

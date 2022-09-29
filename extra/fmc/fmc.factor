@@ -39,17 +39,23 @@ TUPLE: prim-call word out-names ;
 C: <prim-call> prim-call
 TUPLE: loc-push body { loc fmc-loc } ;
 C: <loc-push> loc-push
-TUPLE: loc-pop { var maybe{ varname } } { loc fmc-loc } ;
+TUPLE: loc-pop { var } { loc fmc-loc } ;
 C: <loc-pop> loc-pop
 UNION: loc-op loc-push loc-pop ;
 
+TUPLE: typed-fmc term type ;
+C: <typed-fmc> typed-fmc
+
+
+! Types
 SINGLETON: +retain+
 SINGLETON: +omega+
 SINGLETON: +tau+
 SINGLETON: +psi+
 SINGLETON: +alpha+
+! These are the atoms used in an fmc thing
 UNION: fmc-seq-term ! fmc-term
-    varname fmc-prim prim-call loc-push loc-pop ;
+    varname fmc-prim prim-call loc-push loc-pop typed-fmc ;
 : fmc-sequence? ( seq -- ? )
     [ dup sequence? [ fmc-sequence? ] [ fmc-seq-term? ] if ] all? ;
 PREDICATE: fmc-seq < sequence fmc-sequence? ;
@@ -100,8 +106,8 @@ TYPED: <uvar> ( name: string -- var: varname )
 TYPED: word-intro ( word -- term: fmc-seq )
     stack-effect effect-in-names
     [ "i" or <uvar> ] map
-    [ [ f <loc-pop> ] map ]
-    [ <reversed> [ f <loc-push> ] map ] bi append ;
+    [ <reversed> [ f <loc-pop> ] map ]
+    [ [ f <loc-push> ] map ] bi append ;
 
 ! TYPED: word-inst ( body word --  term: fmc )
 !     name>> uvar f loc-pop 1quotation

@@ -7,23 +7,54 @@ IN: types.algebraic
 ! Modeling factor vm values as algebraic data types
 
 ! These formalize the values which are distinguished by tags
-VARIANT: object-type
-    fixnum-object: { { value: fixnum } }
-    f-object
-    array-object: { { value: array } }
-    float-object: { { value: float } }
-    quotation-object: { { value: quotation } }
-    bignum-object: { { value: bignum } }
-    alien-object: { { value: alien } }
-    tuple-object: { { value: maybe{ tuple } } }
-    wrapper-object: { { value: maybe{ wrapper } } }
-    byte-array-object: { { value: byte-array } }
-    callstack-object: { { value: maybe{ callstack } } }
-    string-object: { { value: string } }
-    word-object: { { value: maybe{ word } } }
-    dll-object: { { value: maybe{ dll } } }
+VARIANT: Repr
+    VF
+    ! VFix: { { value: fixnum } }
+    VArr: { { value: array } }
+    VFloat: { { value: float } }
+    VQuot: { { value: quotation } }
+    ! VBig: { { value: bignum } }
+    VInt: { { value: integer } }
+    VAlien: { { value: alien } }
+    VTuple: { { value: maybe{ tuple } } }
+    VWrapper: { { value: maybe{ wrapper } } }
+    VByteArr: { { value: byte-array } }
+    VCallstack: { { value: maybe{ callstack } } }
+    VString: { { value: string } }
+    VWord: { { value: maybe{ word } } }
+    VDll: { { value: maybe{ dll } } }
     ;
 
+VARIANT: List
+    Nil
+    Cons: { { car: Repr } { cdr: List } }
+    ;
+
+SINGLETON: VT
+UNION: Bool VF VT ;
+
+VARIANT: Int
+    IFix: { { value: VFix } }
+    IBig: { { value: VBig } }
+
+
+! TODO: make a method combination for this stuff?
+TYPED: _fixnum+ ( a: Repr b: Repr -- c: Repr )
+    {
+        { VInt [ [ value>> ] dip + dup fixnum? [ <VFix> ] [ <VBig> ] if ] }
+    } match ;
+
+TYPED: _bignum+ ( a: VBig b: VBig -- c: VBig )
+    {
+        { VBig [ [ value>> ] dip bignum+ <VBig> ] }
+    } match ;
+
+! NOTE: assuming fixnum = arraycapacity here!
+TYPED: _slot ( obj: Repr m: VFix -- value: Repr )
+    swap {
+        { VArr [ swap value>> slot ] }
+        { VTuple [ swap value>> slot ] }
+    } match ;
 
 ! Use polymorphic wrapper to simplify conversion
 VARIANT: syntactic-type

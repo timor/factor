@@ -1,9 +1,45 @@
 * Principles
+** Definitions
+   - state :: combination of current stack and rest of program
+   - primitive word :: (single-step) instruction, which converts an input state to an
+     output state according to its (machine-dependent) semantics
+   - quotation :: sequence of primitive words and words to describe a sequence of consecutive
+     state changes
+   - word :: named sequence of words and primitive words
+   - call :: special primitive, which takes a quotation from the stack, and
+     executes its content in order
+   - (stack) effect :: auxiliary description of a sequence of words with regards to the usage of the
+     word.  Defines
+     1. Number of inputs required for a word sequence to be able to be executed
+     2. Difference of number of stack elements before and after execution
+     3. optional: information about the required type of values of the stack for
+        which the sequence is defined
+     4. optional: information about the provided type of values on the stack
+        after the sequence is executed
+
+** Semantics of Predicate-based inference
+   Given a word ~: w ( ..a -- ..b )~  the question that a typing
+   judgement answers is:
+
+   Suppose I label the input stack to a call to ~w~ with ~..a~, and the output
+   stack of that call with ~..b~.  What can you tell me about the relations
+   between ~..a~ and ~..b~.
+
+   This really only gets interesting once conditional execution is taken into
+   account.  There is basically only one criteria which is path-invariant, and
+   that is the height of the stack effect: If path i takes ~m_i~ elements, and
+   returns ~n_i~ elements, then ~m_i - n_i = const~ for all possible paths
+   between two states.
+
+   All other criteria can be path dependent, these include:
+   1. (absolute) number of input/output elements
+   2. Acceptable type of input elements on which path can be executed
+   3. any kind of relation between types of values.  This includes relations
+      between input values, output values, and between input/output values.
 ** Basic Representation
    - From CHR-based typing: Translate expressions into predicates on types.
    - Difference: all types of words are binary, relating stacks to stacks
      (perhaps the same but basically always expanding the arrows?)
-   -
 ** Types
    - Proposition-based typing: Refinement types (logical typing?)
    - Basic predicates about types, e.g. ~P{ Instance ?x number }
@@ -55,6 +91,98 @@
 
 
       From the conditional structure, could we "force" unions to be indexed?
+**** Conflicting arrow type specs :noexport:
+     - suppose we have a in a semantic subtyping relation ~x < ( ..a -- ..b )~
+       and ~x < ( ..c -- ..d )~ at the same time.  How to interpret this if a
+       value for ~x~ becomes known, e.g. with ~( ..r -- ..s )~?  Note that the
+       rhs usually represents a call site.
+
+       Assume that Effect of x is known per definition.  If that is the
+       case, then we have for the first call site contravariant inputs,
+       e.g. whatever ~..r~ we feed into ~..a~ must fulfill the semantic subset
+       relation, thus ~..r < ..a~.  At the same type, the output must also be
+       sound with regards to what happens afterwards, so ~..r < ..b~.  In
+       conjunction with the second call site, we get the following set of
+       (simultaneous) constraints:
+       - ~r < a~
+       - ~r < c~
+       - ~b < s~
+       - ~d < s~
+
+       So far, there is no problem.  The issue arises if the call sites actually
+       are arranged in a way where we have overlapping in- and outputs.
+
+
+
+
+
+**** Forcibly disjoint types
+     Idea: use params for types to enforce disjoint-ness strictly
+     E.g. if we derive that depending on some boolean value ~x~ the type of an
+     expression is either ~Int~ or ~String~, then for further reasoning (about
+     the return type of the expression) the paramter ~x~ is not needed to ensure
+     disjoint-ness of these Possibilities.
+
+     On the other hand, (e.g. comparison operation) if we need to enforce
+     disjoint-ness, but have the same base type, we can make them disjoint (by
+     definition), if we arbitrarily define a parametric (intersection) type
+     ~t1=(Int, x=f)~ and ~t2=(Int, x=t)~, which can never overlap.
+
+     The effect should be the same as either keeping, or inferring a type-case
+     expression ~(x∊f)?t1:t2~, where ~t1~ and ~t2~ /must/ be kept symbolic.
+**** Typecase Union inference
+     [castagna2022on_type-cases]
+     - get rid of pesky "current object"
+     - leave type case as possible type expression
+     - subsume occurrence typing stuff
+***** Intersection Type Inference
+      1. Split type of function parameter (assumed to be Any)
+      2. deduce distinct arrow for each split
+***** Union Rule
+      - As deduction rule, if supplied with the union type, one of the subtypes
+        must be guessed?
+***** "IR" canonical form: maximal-sharing (MSC)
+      - list of bindings from variables to atoms
+      - atoms: either expression where all subexprs are vars, or
+        lambda-abstraction with body in MSC form
+        - effect: common subexpressions will have the same binding var!
+        - example: ~(a1a2 ∊ Int)?(a2+1):((a1a2)@a2)~
+          - ~a1a2~ is an application of ~a1~ to ~a2~
+          - ~@~ is string-concatenation
+        - For Factor, this would correspond to having two ~call~ words where we
+          know that the same value (refs) are on the stack.
+          - This would mean hashing the inputs to call, which we only know if we
+            already have the effect...
+            - Indeed, they use hash consing for that.
+              HOWEVER: this is again problematic for stack languages: the same
+              combination of literals does denote completely different types, as
+              only their "differentials" are known...
+          - However, applying constraints in parallel should ideally exhibit the
+            same effect, namely combining info from several call sites onto the
+            same input vars...
+      - All binds in MSC are initially assigned ~Any~, and then refined
+      - Different handling of vars bound by:
+        - binds: produce set of disjoint types so that union is the type of atom
+          in bind
+        - lambdas: split parameter type into set of disjoint types and reject
+          non-type-checking ones
+      - Note: type-cases can not test parametric types, and only for function or
+        not
+      - For every constant of the language, singleton type is assumed
+      - Some blurb: one condition for canonical whatever is that intersection is
+        restricted to arrow types... interesting...
+***** Bind scopes vs. types
+      - Interesting example, both terms have same unwinding, and ~a~ is
+        /expression/ of either integer or boolean, i.e. ~a := {Int, Bool}~,
+        compare:
+        - ~bind x=a in λy.x~ of type: ~(1 → Int) ∨ (1 → Bool)~
+        - ~λy.(bind x=a in x)~ of type: ~1 → (Int ∨ Bool)~ (which is less
+          precise than the former
+
+        The first case is basically a macroification of the body expression,
+        while the second is kind of a local-scope alias of the body expression.
+
+
 *** Occurrence/Refinement Typing
     Big difference to "regular" type-logic connections:
     types, propositions and terms are distinct.  Propositions state claims about
@@ -79,6 +207,13 @@
        - if e evaluates to non-false, then p holds
        - if e evaluates to false, then q holds
        - e's value corresponds to symbolic object o
+*** TODO Intersection Effect types
+    - Consider: call to (unknown) quotation ~q~ with two call sites:
+      - in unrelated branches: Constraints derived due to call site 1 determine
+        runtime value constraints. A second set is derived due to call site 2.
+      - With regards to type inference, we have derived a set of constraints
+        that all possible implementations must fulfill:
+        - If we know nothing about ...
 *** Predicate Typing/Branches
 
     Always problem: keep compositionality.
@@ -103,8 +238,6 @@
     2. Split store, carry same var into different branches, rename outputs
        accordingly
 
-
-    
     With regards to the target output, we will most likely need to have the same
     var ref in different branches, since pretty much no language supports
     anything else in terms of defining return values.  Regarding the type of a
@@ -140,6 +273,33 @@
        re-apply it.  Effectively, this would amount to a fixpoint search for the
        set of constraints in the predicate function body, which is determined by
        the call site itself...
+
+
+***** TODO Strict call order semantics (for quotations)
+      - Represent calls with ~CallEffect~ predicates, which record the exact
+        effect type definition used at the call site.
+      - Idea: Define inference order when call is encountered:
+        1. Mark call from effect:
+           - ~{ Call quot a b } + { Effect quot x y k }~ is replaced by
+             ~{ CallEffect quot a b f }~
+           - Apply all predicates from body ~k~ to ~a~ and ~b~
+        2. "uncall" by collecting all predicates between the input and output of
+           the call site, into ~{ CallEffect quot a b k }~ re-inferring the definition.
+        3. From ~{ CallEffect quot a b k }~ generate ~{ Effect quot a b k }~.
+           - The former is basically the equivalent of the ~call-effect~ word,
+             while the latter is the type definition
+        4. Check for updated call sites: Any ~{ CallEffect quot rho sig l }~
+           where ~l~ is not alpha-equivalent to ~k~ will repeat the procedure
+           from step 1.
+
+      - This should ensure some kind of monotonicity: We only apply things at
+        the call site that we already knew before the call.  After return, we
+        "note down" what we could infer about the inputs and outputs and update
+        the other call sites.
+      - This should result in a fixpoint iteration on the predicate body.  Only
+        if all call-effect sites are alpha-equivalent to the latest effect
+        definition do we have the most-general effect type.
+
 ** Stack Effects
    There is a fundamental difference between e.g. these two approaches regarding
    shuffle words:
@@ -195,6 +355,62 @@
         ones.  Note that this property is "contagious", and leads to exponential
         blow-up when done naively.  Early termination, depth-limiting, and
         condition reasoning are expected to handle this.
+** Variable/Value Layer
+- Basic dataflow is described using ~Is{ sink src }~ predicates.  These can be
+  thought of defining connections between "labeled" input ports and output
+  ports.
+- Shuffle words create additional "connection segments"
+- If a definition is "connected" to the input of a word that actually consumes
+  the value, the named reference can be "consumed", and its term can be
+  substituted by the known source value.
+  - This somewhat corresponds to the closure calculus mechanism of making an
+    explicit distinction between accumulating bindings, and actually
+    substituting them once the closure is applied.
+  - In that way, there is a distinction between variables used to build up data
+    flow (reference level), and their actual value representation as a term.
+- Such an input is defined as "used" using a ~{ Use sink }~ predicate.  This is
+  considered "backwards-contagious", so a ~{ Use y }~ will cause a "deferred"
+  assignment ~{ Is y x }~ to be replaced by actual term assignment ~[ y x ==!
+  ]~, asserting ~{ Use x }~ instead.
+- ~{ Use val }~ for ~val~ being a literal is a tautology.
+- primitive word inputs that are not used "used":
+  - non-dropping shuffles
+  - top-most argument to ~dip~
+*** Data Flow
+- Variables are exact single-use inside basic blocks
+  - This means, inside the same context, any transitive c <-Is- b <-Is- a chain
+    can be simplified by eliminating the definition of b and setting c to b ?
+- Problem: different "layers" of values/references. Confusion of da highest orda!
+*** Value vs. Variable
+- Value: Representation of a runtime value, e.g. register content.
+- Variable: "Container" reference which contains a value after assignment.
+  Assignment /from/ other variables causes the value to be transported.
+  - Only necessary for non-concatenative evaluation semantics, because values
+    need to be identified.
+- Types:
+  - Variables have syntactic /declared types/, denoting what they can "hold"
+  - Values have a semantic type, denoting the set of possible "physical" values
+    they can take on.
+- A value can pass through different variables.  This does not affect the actual
+  runtime type, even so different variables may have different declared types.
+- About branches: If a value enters a branch, there are actually two alternate
+  versions of that value which can enter each branch, where the possible set of
+  machine values is restricted differently in each branch.  However, the
+  variable used for the value then actually must have a /declared type/ which is
+  able to hold both sets of runtime values.
+  - Consequences: Declared types are never branch-dependent: Either the value
+    escapes the branch, then it must be able to hold either variant, or it does
+    not escape the branch, then it is branch local, and non-existent in any
+    other branch.
+  - Predicates about values can be different depending on the assumptions in the
+    branch.
+  - Thus, we could introduce a relation between variables and values,
+    e.g. ~Value(ref, val)~ depending on the branch context.
+  - This decouples the values from their usage:  Due to explicit copy,
+    references must be created and used explicitly.  However, values can be
+    re-used in different references.
+  - Effect inputs are values.
+
 ** Disjunctions
    - Although overloaded functions are interpreted as intersection types, actual
      inference must be done on case analysis
@@ -342,7 +558,7 @@ using continuations.
 
 
 ** Semantic Subtyping
-   main ref: [frisch2005semantic]
+   main ref: [frisch2008semantic]
    - Set-Theoretic interpretation produces interesting subtype relation
      properties:
    - ~〚t1〛 ⊆ 〚t2〛 ⇐⇒ 〚t1〛 ∩ (D \〚t2〛) = ∅ ⇐⇒ 〚t1 ∧ ¬t2〛 = ∅~
@@ -360,6 +576,29 @@ using continuations.
      ~Ω~ being the error type:
 
      ~X → Y = {f ⊆ D x D_o | ∀(d,d'). d ∊ X => d' ∊ Y}~
+
+** Partial Dynamic Evaluation
+   [sullivan2001dynamic]
+
+   - Generic Functions
+   - Multiple Dispatch
+   - Extended Values: {tagged value, expr, type}
+   - environment ~ρ~: map identifiers to extended values
+   - Evaluation: ~|[ e ]| ρ τ => V ≃ <ν ,e', τ'>_val~ if:
+     1. ~ν: τ'~
+     2. ~τ' ≤ τ~
+   - Tagged Value: ~TypeOf(ν)~ returns a type
+   - extended value constructor ~<, , ,>_val~
+   - Subtype relation:
+     - All types < ⟙
+     - ⟘ < All types
+     - Subtyping between types with logical connectives is based on implication
+     - function types with usual contravariant subtyping
+     - *singleton type ~eq(ν)~ is subtype of ~type-of(ν)~*
+     - predefined function ~subtype~ for creating subtypes of (multiple) other types
+   - Dynamic Context: Projection of environment as map from ids to tagged values
+   - Static Context: Projection of environment as map from ids to types
+
 
 
 * Compilation/Types
@@ -409,6 +648,7 @@ using continuations.
        - Branch balance checks after conditionals
        - Literal checks for foldable calls
        - Substituting ground values into ~{ Expr y ... }~ predicates.
+         - TBR with the use of ~Use~ predicates
 *** Calls
     If a call is encountered, if the callee is literal, call the transition
     solver in-place.  The quot can be dropped and it's value is uninteresting
@@ -427,7 +667,7 @@ using continuations.
        the state if the effect is polymorphic.
     2. Place an inference marker, which pulls in copies of all applicable predicates
 
-*** Conditionals
+*** CHR-OR Conditionals
     Branching is performed using the Split semantics of CHR-OR.  This means as
     soon as a conditional is encountered, the whole solver configuration is
     split.
@@ -457,17 +697,6 @@ using continuations.
    these will be duplicates.  Thus, care must be taken that these predicates
    have regular set semantics, as opposed to multi-set semantics to prevent
    repeated re-execution of rule matches.
-
-** Conditional Effect Type hierarchy
-   To manage split/join semantics:
-
-   During main inference, all effects are unconditional, and thus their effect
-   type predicates are filled with correctly scoped type predicates.
-
-
-*** Strategy, expand-conditional-only
-    During merging, we would then never touch the conditional effects again,
-    only access their predicates to reason about summary conditions
 
 ** Intersection Arrow Types
    The split-store semantics causes all combinations of conditions to be

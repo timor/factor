@@ -103,3 +103,21 @@ TUPLE: match-replace-test a b ;
     T{ match-replace-test f ?b ?a }
     match-replace
 ] unit-test
+
+{ t }
+[ L{ 1 2 3 } L{ 1 2 3 } (match-list) ] unit-test
+
+{ f }
+[ L{ 1 2 3 } L{ 1 2 } (match-list) ] unit-test
+
+{ f }
+[ L{ 1 2 3 } L{ 1 2 4 } (match-list) ] unit-test
+
+{ f }
+[ +nil+ L{ 1 2 } (match-list) ] unit-test
+
+{ f }
+[ L{ 1 2 } +nil+ (match-list) ] unit-test
+
+{ H{ { ?a 1 } { ?b 2 } } }
+[ L{ ?a ?b } L{ 1 2 } match ] unit-test

@@ -1,7 +1,8 @@
-USING: accessors arrays assocs assocs.extras chr chr.programs chr.state
-classes.builtin combinators continuations effects formatting io kernel math
-math.parser namespaces prettyprint sequences system terms tools.annotations
-tools.annotations.private tools.continuations tools.walker ;
+USING: accessors arrays assocs assocs.extras chr chr.factor.composition
+chr.programs chr.state classes.builtin combinators continuations effects
+formatting io kernel math math.parser namespaces prettyprint sequences sorting
+system terms tools.annotations tools.annotations.private tools.continuations
+tools.walker ;
 
 IN: chr.debug
 
@@ -16,6 +17,7 @@ IN: chr.debug
 
 : store. ( consts -- )
     [ constraint>> f lift ] map-values
+    sort-keys
     ! solve-result-store
     . ;
 
@@ -64,7 +66,9 @@ IN: chr.debug
 : chrebug ( -- )
     ! \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate
     \ kill-chr [ [ "- " write dup id-susp. ] prepose ] annotate
-    \ run-rule-body [ [ 2dup rule-match. ] prepose [ chr-state. ] prepose ] annotate
+    \ run-rule-body [ [ 2dup rule-match. ] prepose
+                      ! [ chr-state. ] prepose ! Very verbose
+    ] annotate
     ! \ activate-new [ [ dup "Activating new constraint: %u\n" printf ] prepose ] annotate
     \ create-chr [ [ "+ " write dup id-susp. ] compose
                    ! [ chr-state. ] compose
@@ -83,9 +87,10 @@ IN: chr.debug
     M\ C activate-new [ [ dup cond>> current-context get swap "CTX: %u -> %u\n" printf ] prepend ] annotate
     \ run-queue [ [ "Flushing queue" print ] prepose ] annotate
     \ merge-solver-config [ [ 2dup swap "Merging store with key: %u\n" printf store>> [ constraint>> ] map-values . ] prepend ] annotate
-    ! Very verbose!
-    ! \ store-chr [ [ "Storing new " print chr-state. ] compose ] annotate
     ;
+
+: debug-rm ( -- )
+    \ run-rule-body [ [ 2dup rule-match. ] prepose ] annotate ;
 
 :: break-rule-match ( occ -- )
     \ run-occurrence [ dup occurrence>> occ =  ] breakpoint-if ;
@@ -158,3 +163,7 @@ SYMBOL: chr-trace
 ! : c. ( result -- )
 !     >alist builtins swap [ at . ] [ pluck-at ] 2bi
 !     { { constraint-type <=>* } { constraint-args <=>* } } sort-values-by . ;
+
+
+: qt. ( quot -- )
+    qt sort-keys ... ;

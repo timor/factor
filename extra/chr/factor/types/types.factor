@@ -1,5 +1,5 @@
-USING: chr chr.factor chr.factor.terms chr.parser classes classes.algebra kernel
-terms ;
+USING: accessors arrays chr chr.factor chr.factor.terms chr.parser classes
+classes.algebra kernel sequences terms words ;
 
 IN: chr.factor.types
 FROM: chr => val-pred ;
@@ -13,8 +13,10 @@ CHRAT: chr-types {  }
 
 CHR: null-instance-is-failure @ // { Instance __ null } -- | false ;
 
+! CHR: split-val-preds @ // AS: ?p <={ val-pred ?x . __ } -- [ ?x array? ] |
+! [ ?x [ ?p clone swap >>val ] map ] ;
 
-CHR: lit-instance @ Is{ ?b ?v } // -- [ ?v ground-value? ] [ ?v class-of :>> ?tau ] |
+CHR: lit-instance @ Is{ ?b ?v } // -- [ \ ?v wrapper? ] [ \ ?v wrapped>> class-of :>> ?tau ] |
 { Instance ?b ?tau } ;
 
     ! A Set union relation
@@ -27,6 +29,20 @@ CHR: check-literal-instance @ // { Instance A{ ?v } A{ ?tau } } -- | [ ?v ?tau i
 !   [ ?x ?tau instance? [ "notsubinst" throw ] unless ] if
 !   f
 ! ] ;
+
+CHR: conjunct-instance-same-ctx @ // { C ?c P{ Instance ?x A{ ?tau } } } { C ?c P{ Instance ?x A{ ?sig } } } -- [ ?tau ?sig class-and :>> ?k ] |
+{ C ?c P{ Instance ?x ?k } } ;
+
+CHR: detect-booleans-1 @ { C True{ ?c } Is{ ?x W{ t } } } { C False{ ?c } P{ Instance ?x POSTPONE: f } } { C True{ ?c } P{ Instance ?x word } } // -- |
+{ Instance ?x boolean } ;
+
+CHR: detect-booleans-2 @ { C False{ ?c } Is{ ?x W{ t } } } { C True{ ?c } P{ Instance ?x POSTPONE: f } } { C False{ ?c } P{ Instance ?x word } } // -- |
+{ Instance ?x boolean } ;
+
+CHR: phi-instance @ { C True{ ?c } P{ Instance ?x A{ ?tau } } } { C False{ ?c } P{ Instance ?x A{ ?sig } } } // -- [ ?tau ?sig class-or :>> ?k ] |
+{ Instance ?x ?k } ;
+
+
 
 ! ! CHR: literal-def-is-instance @ Is{ ?x A{ ?v } } // -- [ ?v class-of :>> ?tau ] | { Instance ?x ?tau }
 

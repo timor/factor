@@ -22,7 +22,7 @@ SINGLETON: +nil+
 M: +nil+ nil? drop t ;
 M: object nil? drop f ;
 
-: atom? ( obj -- ? ) list? not ; inline
+: atom? ( obj -- ? ) { [ nil? ] [ list? not ] } 1|| ; inline
 
 : nil ( -- symbol ) +nil+ ; inline
 
@@ -78,6 +78,14 @@ PRIVATE>
         identity
     ] [
         list cdr identity quot foldr
+        list car quot call
+    ] if ; inline recursive
+
+:: foldr* ( ... list quot: ( ... prev elt -- ... next ) -- ... result )
+    list atom? [
+        list
+    ] [
+        list cdr quot foldr*
         list car quot call
     ] if ; inline recursive
 

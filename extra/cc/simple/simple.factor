@@ -58,3 +58,14 @@ CCN: K [I]x.[I,x]y.x ;
 CCN: Exec [I]l.((I :: tos -> (Head l) :: rest -> (Tail l))(
                     (I :: sos -> (Head rest) :: cont -> (Tail rest))(
                         (Cons (tos sos) cont) ) ) ) ;
+
+! CCN: Replace [I]x.[I,x]tt.[I,x,tt]u.((I :: x -> tt)@u) ;
+
+! data value = VBool Bool | VNat Nat | VList List
+! CCN: VBool [I]b.[I,b]f.[I,b,f]g.[I,b,f,g]f.b ;
+! CCN: VNat [I]n.[I,n]f.[I,n,f]g.[I,n,f,g]g.n ;
+! CCN: VList [I]l.[I,l]f.[I,l,f]g.[I,l,f,g]h.l ;
+
+! ! Exec VBool Bool Stack = Stack
+! ! Exec VNat
+! CCN: Exec

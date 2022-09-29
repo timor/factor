@@ -131,6 +131,10 @@ M: array lastcdr4 array-first lastcdr4 ;
 { V{ 4 3 2 1 0 } }
 [ V{ } clone 5 [ over push ] each-int-down ] unit-test
 
+GENERIC: foothing ( obj -- result )
+M: fixnum foothing 3 + ;
+M: array foothing array-first ;
+
 ! ** Practical examples
 
 PREDICATE: u8 < integer { [ 0 >= ] [ 256 < ] } 1&& ;

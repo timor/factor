@@ -8,7 +8,7 @@ FROM: syntax => _ ;
 TERM-VARS:
 ?a ?b ?c ?d ?e ?i ?l ?k ?o ?p ?q ?r ?s ?t ?u ?n ?m ?v ?w ?x ?xs ?y
 ?tau1 ?tau2 ?tau3
-?ys ?z ?c1 ?c2 ?s0 ?beg ?parm ?rho ?sig ?tau ?vars ;
+?ys ?z ?zs ?c1 ?c2 ?s0 ?beg ?parm ?rho ?sig ?tau ?vars ;
 
 TUPLE: state-pred < chr-pred s1 ;
 TUPLE: trans-pred < state-pred s2 ;
@@ -28,8 +28,6 @@ TUPLE: Not < chr-pred pred ;
 TUPLE: Instance < val-pred s ;
 TUPLE: NotInstance < chr-pred val s ;
 TUPLE: ExpectInstance < chr-pred val s ;
-
-TUPLE: Push < trans-pred lit ;
 
 ! TUPLE: AssumeEffect < trans-pred effect ;
 TUPLE: AssumeWordEffect < trans-pred word effect ;
@@ -72,9 +70,9 @@ TUPLE: Assume < chr-pred type value ;
     ;
 
 ! list of vars
-TUPLE: Stack < state-pred vals ;
-M: Stack state-depends-on-vars
-    [ vals>> known [ , ] leach* ] { } make ;
+! TUPLE: Stack < state-pred vals ;
+! M: Stack state-depends-on-vars
+!     [ vals>> known [ , ] leach* ] { } make ;
 
 TUPLE: AcceptTypes < state-pred list ;
 TUPLE: ProvideTypes < state-pred list ;
@@ -103,7 +101,7 @@ TUPLE: ChratInfer < chr-pred obj ;
 TUPLE: Scope < trans-pred stack-in stack-out sub-states ;
 
 ! Data Duplication, duplication
-TUPLE: Dup < val-pred to ;
+! TUPLE: Dup < val-pred to ;
 ! Inverse operation
 ! TUPLE: Drop < state-pred val ;
 ! Mark value as dead.  Solvers should update their state accordingly

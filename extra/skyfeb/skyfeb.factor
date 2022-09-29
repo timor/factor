@@ -12,7 +12,7 @@ FROM: syntax => _ ;
 ! * SKYFEB Calculus evaluator
 
 VARIANT: skyfeb-term
-    S K Y F E B
+    S K Y F E B I A W M C T BB AA
     var: { name }
     app: { { left } { right } }
     ;
@@ -26,24 +26,35 @@ M: app cdr right>> ;
 
 ! PREDICATE: skyfeb-atom < word "skyfeb-def" word-prop not ;
 PREDICATE: skyfeb-word < word "skyfeb-def" word-prop ;
-SINGLETONS: I -> || L let letrec ;
-UNION: syntax-sugar I -> || L let letrec ;
+SINGLETONS: -> L let letrec ;
+UNION: syntax-sugar -> L let letrec ;
 ! Syntax sugar, can be in parsed terms, but must be reduced
 
 UNION: term skyfeb-term match-var syntax-sugar ;
 PREDICATE: opaque-operator < object { [ skyfeb-word? ] [ term? ] } 1|| not ;
-UNION: operator S K Y F E B opaque-operator ;
+UNION: skyfeb-operator S K Y F E B I A ;
+UNION: operator skyfeb-operator opaque-operator ;
+! UNION: skyfeb-atom operator opaque-operator
 
-TYPED: arity ( op: operator -- n: integer )
+TYPED: arity ( op: operator -- n: number )
     H{
         { Y 1 }
+        { I 1 }
+        { M 1 }
         { K 2 }
+        { AA 2 }
+        { T 2 }
+        { W 2 }
         { S 3 }
         { F 3 }
+        { BB 3 }
+        { C 3 }
+        { A 3 }
         { E 4 }
-    } at ;
+        ! { B 1/0. }
+    } at 1/0. or ;
 
-PREDICATE: operator-app < app left>> operator? ;
+! PREDICATE: operator-app < app left>> operator? ;
 
 DEFER: >skyfeb
 GENERIC: >skyfeb-atom ( obj -- term: term )
@@ -81,23 +92,57 @@ M: app rewrite-element
       [ 2drop t ]
     } cond ;
 
+: is-compound? ( n app -- ? )
+    { { [ dup app? ] [ [ 1 + ] [ left>> is-compound? ] bi* ] }
+      { [ dup operator? ] [ arity < ] }
+      [ 2drop f ] } cond ;
+    ! dup app?
+    ! [ dup  ]
+    ! dup app? [ [ 1 + ] dip ]
+
 GENERIC: factorable? ( term -- ? )
 M: operator factorable? drop t ;
 M: var factorable? drop f ;
-M: operator-app factorable?
-    [ right>> ] [ left>> ] bi
-    dup B? [ 2drop t ]
-    [ arity 1 - n-args? ] if ;
-M: app factorable? drop f ;
+! M: operator-app factorable?
+!     [ right>> ] [ left>> ] bi
+!     dup B? [ 2drop t ]
+!     [ arity 1 - n-args? ] if ;
+M: app factorable?
+    0 swap is-compound? ;
 
-PREDICATE: compound < operator-app factorable? ;
+PREDICATE: compound < app factorable? ;
+
+: (parse-skyfeb-literal) ( -- obj )
+    \ } parse-until >skyfeb dup operator? not [ literalize ] when ;
 
 : parse-skyfeb-literal ( accum -- accum )
     \ } [ >skyfeb ! dup match-var? [ literalize ] when
           literalize
         ] parse-literal ;
 
-SYNTAX: SF{  parse-skyfeb-literal ;
+! SYNTAX: SF{  parse-skyfeb-literal ;
+SYNTAX: SF{  (parse-skyfeb-literal) suffix! ;
+
+GENERIC: quote-skyfeb ( term -- term )
+GENERIC: quasiquote-skyfeb ( term -- term )
+M: var quote-skyfeb ;
+M: operator quote-skyfeb B swap <app> ;
+M: app quote-skyfeb
+    [ left>> quote-skyfeb ] [ right>> quote-skyfeb ] bi <app> ;
+M: app quasiquote-skyfeb
+    [ left>> quasiquote-skyfeb ] [ right>> quasiquote-skyfeb ] bi <app> ;
+M: operator quasiquote-skyfeb quote-skyfeb ;
+M: var quasiquote-skyfeb
+    dup name>> "_" head?
+    [ B swap <app> ] unless ;
+
+
+: quote-skyfeb-list ( seq -- term )
+    <reversed> f [ swap '{ pair _ _ } >skyfeb ] reduce ;
+
+SYNTAX: Q{ (parse-skyfeb-literal) quote-skyfeb suffix! ;
+SYNTAX: QQ{ (parse-skyfeb-literal) quasiquote-skyfeb suffix! ;
+SYNTAX: QL{ \ } [ quote-skyfeb-list ] parse-literal ;
 
 : scan-maybe-match-var ( -- str/var )
     scan-token dup search dup match-var? [ nip ] [ drop ] if ;
@@ -127,4 +172,26 @@ M: var pprint*
       base-string-style [ name>> pprint* ] with-variable ]
     [ \ VAR{ pprint-word name>> text \ } pprint-word ] if ;
 
-SYNTAX: SKY: scan-new "{" expect [ parse-skyfeb-literal unclip-last-slice ] dip swap "skyfeb-def" set-word-prop ;
+! : set-skyfeb-def ( accum )
+
+SYNTAX: SKY: scan-new "{" expect
+                        (parse-skyfeb-literal) "skyfeb-def" set-word-prop ;
+
+
+GENERIC: sf-size* ( n-apps n-atoms term -- n-apps n-atoms )
+M: operator sf-size* drop 1 + ;
+M: var sf-size* drop 1 + ;
+M: app sf-size*
+    [ 1 + ] 2dip
+    [ left>> ] [ right>> ] bi [ sf-size* ] bi@ ;
+
+: sf-size ( term -- n-apps n-atoms )
+    [ 0 0 ] dip sf-size* ;
+
+GENERIC: sf-pp* ( term -- )
+M: word sf-pp* name>> % ;
+M: object sf-pp* [ pprint ] with-string-writer % ;
+M: var sf-pp* name>> % ;
+M: app sf-pp* [ left>> sf-pp* "(" % ] [ right>> sf-pp* ")" % ] bi ;
+: sf. ( term -- )
+    [ sf-pp* ] "" make ... ;

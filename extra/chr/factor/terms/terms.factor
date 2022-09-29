@@ -63,8 +63,9 @@ TUPLE: Call < chr-pred quot in out ;
 ! This indicates that a value will not be used in a context
 TUPLE: Drop < type-pred val ;
 
-! Cleanup
-TUPLE: Used < chr-pred val ;
+! Semi-Cleanup
+TUPLE: Used < type-pred val ;
+TUPLE: Use < type-pred val ;
 
 ! ** Lambda Fragment
 ! These are in return positions, and thus can form nested expression trees
@@ -72,5 +73,9 @@ TUPLE: Used < chr-pred val ;
 ! A typed definition
 TUPLE: Data < chr-pred tag ; constructor
 
+! ** Value Transport
+TUPLE: UseDef < type-pred sink src ;
+
 ! ** Expressions
 TUPLE: Expr < type-pred val term ;
+! TUPLE: Expr < Is ;

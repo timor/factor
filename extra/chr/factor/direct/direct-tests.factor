@@ -1,6 +1,11 @@
-USING: chr.factor.direct combinators.short-circuit kernel kernel.private math
-prettyprint quotations terms tools.test ;
+USING: chr chr.factor.direct chr.factor.quotations chr.factor.terms chr.parser
+combinators.short-circuit kernel kernel.private math prettyprint quotations
+terms tools.test ;
 IN: chr.factor.direct.tests
+
+
+{ { P{ Drop 3 } Is{ 11 1 } Is{ 22 2 } P{ Dup 11 33 } P{ Dup 22 44 } } }
+[ { 1 2 3 } { 11 22 33 44 } ( x y z -- x y x y ) shuffle-rules ] unit-test
 
 : foo ( x -- y ) 1 + ;
 
@@ -49,3 +54,7 @@ PREDICATE: ubyte < integer { [ 0 > ] [ 255 <= ] } 1&& ;
 
 : addbytes ( x y -- z )
     + { ubyte } declare ;
+
+! Diggin's test
+: constantly ( x -- quot )
+    [ ] curry ;

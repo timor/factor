@@ -328,8 +328,8 @@ M: cons-state pprint*
             dup pprint-narrow? <inset
             [
                 building get
-                length-limit get
-                '[ dup cons-state? _ length _ < and ]
+                length-limit get 1/0. or
+                '[ dup { [ nil? not ] [ list? ] } 1&& _ length _ < and ]
                 [ uncons swap , ] while
             ] { } make
             [ pprint* ] each

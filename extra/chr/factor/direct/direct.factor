@@ -35,12 +35,12 @@ TUPLE: EffectGen < chr-pred word in out body ;
 ! Val stuff
 TUPLE: Sum < val-pred x y ;
 ! TUPLE: Drop < chr-pred val ;
-TUPLE: Dup < type-pred val copy ;
+! TUPLE: Dup < type-pred val copy ;
 
 ! This indicates that we can throw away all information about the variable,
 ! typically that happens if a literal gets inlined.
 TUPLE: Dead < chr-pred val ;
-! TUPLE: Use < val-pred ;
+! TUPLE: Use < type-pred val ;
 
 TUPLE: Lt < val-pred x ;
 TUPLE: Le < val-pred x ;
@@ -78,8 +78,12 @@ TUPLE: Tuple < type-pred ;
 !     [ in>> vars ] [ out>> vars union ] bi ;
 
 : effect-bound-vars ( x -- x )
-    [ in>> vars ] [ out>> vars ]
-    [ constraints>> bound-vars ] tri union union ;
+    {
+        [ in>> vars ] [ out>> vars ]
+        [ parms>> vars ]
+        [ constraints>> bound-vars ]
+    } cleave
+    union union union ;
 
 : effect-free-vars ( x -- x )
     [
@@ -95,6 +99,11 @@ M: Effect bound-vars effect-bound-vars ;
 M: Effect free-vars effect-free-vars ;
 M: InferEffect bound-vars effect-bound-vars ;
 M: InferEffect free-vars effect-free-vars ;
+
+! ! Support stuff
+! CHRAT: chr-copies { }
+
+! ;
 
 TERM-VARS: Q ;
 TERM-VARS: top end ;
@@ -116,13 +125,26 @@ CHR: unique-type-preds @ AS: ?p <={ type-pred ?x . ?xs } // AS: ?q <={ type-pred
 ! If we collected a value in a context, then in that context all predicates containing information about it
 ! would become universally qualified...
 
-CHR: dead-type-preds @ { Dead ?x } // AS: ?p <={ type-pred } -- [ ?x ?p vars in? ] | ;
+CHR: dead-type-preds @ { Dead ?x } // AS: ?p <={ type-pred ?x . __ } -- | ;
+CHR: dead-effects @ { Dead ?p } // { Effect ?p __ __ __ __ } -- | ;
+CHR: use-lit @ // { Use A{ ?v } } -- | ;
+! CHR: use-val-top-ctx @ // { C f Is{ ?y ?x } } { C f P{ Use ?y } } -- | [ ?y ?x ==! ] { Use ?x } ;
+! CHR: propagate-dup-use @ // Is{ ?y ?x } { Use ?v } -- [ ?y array? ] [ ?v ?y in? ] [ ?v ?y remove :>> ?ys ] | Is{ ?v ?x } Is{ ?ys ?x } ;
+! CHR: propagate-trans-use @ // { Use ?z } Is{ ?y ?x }
 ! CHR: simplify-dropped-choice { C ?c P{ Drop ?a } } { C ?d Is{  } }
-CHR: drop-backwards-same-ctx @ { C ?c P{ Drop ?b } } // { C ?c Is{ ?b ?a } } -- | [ ?b ?a ==! ] ;
+! CHR: drop-backwards-same-ctx @ { C ?c P{ Drop ?b } } // { C ?c Is{ ?b ?a } } -- [ ?a term-var? ] | [ ?b ?a ==! ] ;
+! UNION: sink-pred Drop Use Dead ;
+! CHR: drop-dup-1 @ // <={ sink-pred ?b } { Dup ?a ?b } -- | { Is ?a ?b } ;
+! CHR: drop-dup-2 @ // <={ sink-pred ?a } { Dup ?a ?b } -- | { Is ?a ?b } ;
 ! CHR: drop-backwards @ // { Drop ?b } Is{ ?b ?a } -- | { Drop ?a } ;
+! CHR: used-backwards-same-ctx @ { C ?c P{ Drop ?b } }
 
 CHR: unique-is @ // { Is ?x ?x } -- | ;
 
+! CHR: dup-transitive-same-ctx @ { C ?c P{ Dup ?a ?x } } // { C ?c Is{ ?b ?a } } -- | [ ?b ?a ==! ] ;
+
+! CHR: duplicate-is-dup @ { Is ?b ?a } // { Is ?y ?a } -- | { Dup ?y ?a } ;
+! CHR: duplicate-is-dup-2 @ { Is ?b ?a } // { Is ?y ?a } -- | { Dup ?y ?a } ;
 
 ! CHR: same-is-def-must-be-same-var @ { C ?c Is{ ?x ?a } } // { C ?c Is{ ?x ?b } } -- [ ?a term-var? not ]
 ! [ ?b term-var? ] | [ ?x ?b ==! ] ;
@@ -155,13 +177,50 @@ CHR: destructure-stack-assignment @ // Is{ L{ ?x . ?xs } L{ ?y . ?ys } } -- |
 Is{ ?x ?y }
 Is{ ?xs ?ys } ;
 
+! Compress path
+CHR: is-transitive-in-same-ctx @ { C ?x Is{ ?b ?a } } // { C ?x Is{ ?c ?b } } -- | [ ?c ?b ==! ] ;
+CHR: usedef-is-transitive-in-same-ctx @ { C ?x P{ UseDef ?c ?b } } // { C ?x Is{ ?c ?b } } -- [ ?b term-var? ] | [ ?c ?b ==! ] ;
+
+CHR: non-dup-is-is @ // { Dup { ?y } ?x } -- | Is{ ?y ?x } ;
+
+CHR: used-val-pred @ { Used ?x } // <={ val-pred ?x . __ } -- | ;
+CHR: used-lit @ // { Used A{ ?x } } -- | ;
+CHR: used-is @ // { Used ?y } { Is ?y ?x } -- | { Used ?x } ;
+CHR: used-dup @ // { Used ?y } { Dup ?a ?x } -- [ ?y ?a in? ] [ ?y ?a remove :>> ?ys ] |
+{ Dup ?ys ?x } ;
+
+! CHR: use-def-is-is @ { C ?x P{ UseDef ?c ?b } } // { C ?x Is{ ?c ?b } } -- | ;
+CHR: use-def-trans @ Is{ ?b ?a } // { UseDef ?c ?b } -- | { UseDef ?c ?a } ;
+CHR: use-def-dup @ { Dup ?b ?a } // { UseDef ?c ?x } -- [ ?x ?b in? ] | { UseDef ?c ?a } ;
+! CHR: use-lit-def @ // P{ UseDef ?c A{ ?v } } -- | { Used ?c } [ ?c ?v ==! ] ;
+CHR: use-lit-def-top @ // { C f P{ UseDef ?c A{ ?v } }  } -- | { Used ?c } [ ?c ?v ==! ] ;
+
 ! Updating version when tracking dups
 ! CHR: is-transitive @ { Is ?b ?c } // { Is ?a ?b } -- | [ ?b ?a ==! ] ;
-CHR: is-transitive-in-same-ctx @ { C ?x Is{ ?b ?a } } // { C ?x Is{ ?c ?b } } -- | [ ?c ?b ==! ] ;
-CHR: is-transitive @ Is{ ?b ?a } // Is{ ?c ?b } -- | Is{ ?c ?a } ;
+CHR: drop-is-used @ // { Dup { } ?x } -- | { Used ?x } ;
 
-! NOTE: that one necessitates re-wrapping if we need an input-output interface with explicit different var-names.
-CHR: is-same-var-in-top-ctx @ // { C f Is{ ?b ?c } } -- [ ?b term-var? ] [ ?c term-var? ] | [ ?b ?c ==! ] ;
+! CHR: is-transitive @ { C ?x Is{ ?b ?a } } // { C ?y Is{ ?c ?b } } -- [ ?x ?y implied? ] [ ?x ?y or :>> ?z ] | { C ?z Is{ ?c ?a } } ;
+! CHR: is-transitive-same-ctx @ // { C ?x Is{ ?b ?a } } { C ?x Is{ ?c ?b } } -- | { C ?x Is{ ?c ?a } } ;
+
+! Path compression
+! CHR: is-transitive-in-same-ctx @ { C ?x Is{ ?d ?c } } { C ?x Is{ ?b ?a } } // { C ?x Is{ ?c ?b } } -- | [ ?c ?b ==! ] ;
+! CHR: is-transitive-in-top-ctx @ { C f Is{ ?b ?a } } // { C ?x Is{ ?c ?b } } -- | [ ?c ?b ==! ] ;
+
+! CHR: split-dup-is @ // Is{ ?a ?x } -- [ ?a array? ] |
+! [ ?a [ ?x Is boa ] map ] ;
+! CHR: use-var-in-same-ctx @ { C ?c P{ Use ?y } } // { C ?c Is{ ?y ?x } } -- | [ ?y ?x ==! ] ;
+
+! *** Value resolution on use
+! CHR: use-literal @ // { C ?c P{ Use ?y } } { C ?c Is{ ?y A{ ?v } } } -- | [ ?y ?v ==! ] ;
+! CHR: use-is-transitive @ { C ?c P{ Use ?y } } // { C ?c Is{ ?x ?a } } { C ?c Is{ ?y ?x } } -- | { C ?c Is{ ?y ?a } } ;
+! CHR: use-separates-dup @ { C ?d P{ Use ?y } } // { C ?c Is{ ?a ?x } } -- [ ?a array? ] [ ?c ?d implied? ] [ ?y ?a in? ] [ ?y ?a remove :>> ?ys ] |
+! { C ?c Is{ ?ys ?x } } { C ?d Is{ ?y ?x } } ;
+
+! Don't duplicate expression definitions
+! CHR: is-transitive @ Is{ ?b ?a } // Is{ ?c ?b } -- [ ?a term-var? ] | Is{ ?c ?a } ;
+
+! ! NOTE: that one necessitates re-wrapping if we need an input-output interface with explicit different var-names.
+! CHR: is-same-var-in-top-ctx @ // { C f Is{ ?b ?c } } -- [ ?b term-var? ] [ ?c term-var? ] | [ ?b ?c ==! ] ;
 
 ! CHR: is-transitive @ Is{ ?b ?a } // Is{ ?c ?b } -- | [ ?b ?c ==! ] ;
 ! CHR: is-transitive-in-any-ctx @ Is{ ?c ?b } Is{ ?b ?a } // -- | Is{ ?c ?a } ;
@@ -177,17 +236,25 @@ CHR: is-same-var-in-top-ctx @ // { C f Is{ ?b ?c } } -- [ ?b term-var? ] [ ?c te
 ! TODO: same things backward if e.g. interval propagation turned out to know an exact value
 ! CHR: lit-trans-is-lit-forward @ { Literal ?x __ } // { Is ?x ?y } -- | [ ?y ?x ==! ] ;
 
-CHR: trans-val-preds-backward @ <={ Is ?x ?y } AS: ?p <={ val-pred ?x . ?xs } // -- |
+! UNION: effect-or-val-pred Effect val-pred ;
+
+CHR: trans-val-preds-backward @ { Is ?x ?y } AS: ?p <={ val-pred ?x . ?xs } // -- |
 [ ?p clone ?y >>val ] ;
 
-CHR: trans-val-preds-forward @ <={ Is ?y ?x } AS: ?p <={ val-pred ?x . ?xs } // -- |
+! CHR: move-val-preds-backward @ <={ Is ?x ?y } // AS: ?p <={ val-pred ?x . ?xs } -- |
+! [ ?p clone ?y >>val ] ;
+
+CHR: trans-val-preds-forward @ { Is ?y ?x } AS: ?p <={ val-pred ?x . ?xs } // -- |
 [ ?p clone ?y >>val ] ;
 
-CHR: dup-val-preds-backward @ <={ Dup ?x ?y } AS: ?p <={ val-pred ?x . ?xs } // -- |
-[ ?p clone ?y >>val ] ;
+! CHR: copy-effect-foward @ { Dup ?y ?x } { Effect ?x ?c ?a ?b ?l } // -- |
+! { Effect ?y ?c ?a ?b ?l } ;
 
-CHR: dup-val-preds-forward @ <={ Dup ?y ?x } AS: ?p <={ val-pred ?x . ?xs } // -- |
-[ ?p clone ?y >>val ] ;
+! CHR: dup-val-preds-backward @ <={ Dup ?x ?y } AS: ?p <={ val-pred ?x . ?xs } // -- |
+! [ ?p clone ?y >>val ] ;
+
+! CHR: dup-val-preds-forward @ <={ Dup ?y ?x } AS: ?p <={ val-pred ?x . ?xs } // -- |
+! [ ?p clone ?y >>val ] ;
 
 
 ! *** Move up expression definitions to the output-most variable
@@ -233,16 +300,16 @@ CHR: complete-neg-assumption @ // { --> ?c ?p } -- [ ?p has-opposite? ] |
 ! CHR: transitive-rel @ AS: ?p <={ transitive ?x ?y } AS: ?q { transitive ?y ?z } // -- [ ?p ?q [ class-of ] same? ] |
 ! [ { ?x ?z } ?p class-of slots>tuple ] ;
 
-CHR: propagate-transitive-pred-backward @ Is{ ?y ?x } // AS: ?p <={ transitive ?y ?z } -- |
-[ { ?x ?z } ?p class-of slots>tuple ] ;
+! CHR: propagate-transitive-pred-backward @ Is{ ?y ?x } // AS: ?p <={ transitive ?y ?z } -- |
+! [ { ?x ?z } ?p class-of slots>tuple ] ;
 ! CHR: propagate-comp-pred-forward @ Is{ ?y ?z } // AS: ?p <={ transitive ?x ?y } -- |
 ! [ { ?x ?z } ?p class-of tuple>slots ] ;
 ! CHR: propagate-transitive-pred-dup-lhs @ { Dup ?y ?x } AS: ?p <={ transitive ?x ?z } // -- |
 ! [ { ?y ?z } ?p class-of slots>tuple ] ;
-CHR: propagate-transitive-pred-dup-rhs-1 @ { Dup ?z ?y } AS: ?p <={ transitive ?x ?y } // -- |
-[ { ?x ?z } ?p class-of slots>tuple ] ;
-CHR: propagate-transitive-pred-dup-rhs-2 @ { Dup ?y ?z } AS: ?p <={ transitive ?x ?y } // -- |
-[ { ?x ?z } ?p class-of slots>tuple ] ;
+! CHR: propagate-transitive-pred-dup-rhs-1 @ { Dup ?z ?y } AS: ?p <={ transitive ?x ?y } // -- |
+! [ { ?x ?z } ?p class-of slots>tuple ] ;
+! CHR: propagate-transitive-pred-dup-rhs-2 @ { Dup ?y ?z } AS: ?p <={ transitive ?x ?y } // -- |
+! [ { ?x ?z } ?p class-of slots>tuple ] ;
 
 ! ** GC of used-up literals
 ! CHR: collect-dropped-literals { Literal }
@@ -252,26 +319,29 @@ CHR: propagate-transitive-pred-dup-rhs-2 @ { Dup ?y ?z } AS: ?p <={ transitive ?
 IMPORT: chr-effects
 
 ! ** Apply Effects at call sites
-CHR: apply-call-effect @ Is{ ?b { call L{ ?q . ?a } } } AS: ?e P{ Effect ?q __ ?rho ?sig ?l } // --
+! CHR: literal-call-effect @ AS: ?e P{ Effect ?p __ __ __ __ } Is{ ?p A{ ?q } } //  Is{ ?b { call L{ ?p . ?a } } } -- [ ?q callable? ]
+CHR: literal-call-effect @ // AS: ?e P{ Effect ?p __ __ __ __ } Is{ ?b { call L{ ?p . ?a } } } -- [ ?p callable? ]
+[ ?e instantiate-effect :>> ?k ] |
+[ ?k constraints>> ]
+[ ?k [ in>> ] [ out>> ] bi 2array { ?a ?b } ==! ] ;
+! { C f P{ Dead ?p } } ;
+
+
+
+CHR: call-declares-effect @ Is{ ?b { call L{ ?p . ?a } } } // -- |
+! Is{ L{ ?p . ?rho } ?a }
+! Is{ ?rho ?a }
+! Is{ ?b ?sig }
+{ Effect ?p f ?rho ?sig f }
+! { Effect ?p f ?a ?b f }
+    ;
+
+! NOTE: don't remove the call.  This should only be done if we have a literal quotation
+CHR: call-applies-effect @ AS: ?e P{ Effect ?p __ __ __ ?l } Is{ ?b { call L{ ?p . ?a } } } // --
 [ ?e instantiate-effect :>> ?k ]
 |
 [ ?k constraints>> ]
 [ ?k [ in>> ] [ out>> ] bi 2array { ?a ?b } ==! ] ;
-! [ ?e instantiate-effect
-!   [ constraints>> ]
-!   bi 2array
-! ] ;
-! { ApplyEffect ?a ?b ?e } ;
-! |
-! [| | ?e instantiate-effect [ in>> ] [ out>> ] [ constraints>> ]
-!  tri :> ( in out body )
-!  { in out } { ?a ?b } solve-eq drop
-!  {
-!      Is{ in ?a }
-!      Is{ ?b out }
-!      body
-!  }
-! ] ;
 
 ! ** Domain-specific solver triggers
 ! Here be special per-word stuff
@@ -368,6 +438,8 @@ DEFER: make-simp-rule
 ! [ ?v callable? not [ ?x ?v ==! ] [ f ] if ]
 ! { Used ?x } ;
 
+
+! CHR: drop-dead @ // { Dead __ } -- | ;
 ;
 ! * External
 
