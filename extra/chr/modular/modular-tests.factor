@@ -240,7 +240,9 @@ CHRAT: chrat-comp { le ge lt gt ne }
 ;
 
 ! * Stack inference
-
+TUPLE: state-pred < chr-pred s1 ;
+TUPLE: trans-pred < state-pred s2 ;
+TUPLE: Word < trans-pred word ;
 ! Intermediate representation language:
 TUPLE: Call < state-pred word token ;
 TUPLE: CallRet < state-pred word token ;
@@ -282,7 +284,7 @@ CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?b } -- | [ ?b ?a ==! ] }
 
 TUPLE: Infer < trans-pred quot ;
 
-CHRAT: infer-stack { Word }
+CHRAT: infer-stack { }
 CHR: infer-quot @ { Word ?s ?t ?q } // -- [ ?q callable? ] |  { Infer ?s ?t ?q } ;
 CHR: infer-macro @ { Word ?s ?t ?w } // -- [ W{ ?w } macro-quot ] |
     [| | W{ ?w } macro-quot '[ _ call call ] :> body { Word ?s ?t body } ] ;
