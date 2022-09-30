@@ -1,5 +1,5 @@
-USING: accessors assocs chr chr.parser chr.programs chr.state kernel
-linked-assocs math sequences terms tools.test words ;
+USING: accessors assocs chr chr.parser chr.programs chr.state kernel math
+sequences terms tools.test words ;
 IN: chr.tests
 
 
@@ -9,19 +9,18 @@ C: <gcd> gcd
 TERM-VARS: ?i ?j ;
 
 ! TODO Test with symbolic leq
-CONSTANT: gcd-ex {
+CHRAT: gcd-ex { }
 CHR: gcd1 @ // { gcd ?i } -- [ ?i 0 == ] | ;
 CHR: gcd2 @ { gcd ?i } // { gcd ?j } -- [ ?j ?i >= ] | [ ?j ?i - <gcd> ] ;
-}
+;
 
 
 {
-    LH{
-        { builtins V{  } }
+    H{
         { 3 P{ gcd 3 } }
       }
 }
-[ gcd-ex { { gcd 6 } { gcd 9 } } run-chr-query ] unit-test
+[ gcd-ex { { gcd 6 } { gcd 9 } } run-chr-query store>> ] unit-test
 
 TERM-VARS: ?x ?y ?z ;
 
@@ -46,7 +45,7 @@ TERM-VARS: ?a ?b ?c ?r ?s ?s1 ?s2 ?s3 ?t ?u ?v ?w ?n ?m ?l ?d ?e ?q ;
 ! ShiftPop/Push is a parallel constraint, which connects all undefined in/outs below a certain level
 ! Transitions are atomic and well ordered
 ! Shift{ prev next cut_in shift-by }
-CONSTANT: stack-ex {
+CHRAT: stack-ex { }
     ! Connection
     ! Dedup in case we infer equivalent states
     CHR{ { State ?s ?n ?a } // { State ?s ?n ?a } -- | }
@@ -138,11 +137,10 @@ CONSTANT: stack-ex {
     CHR{ { Start ?s } { State ?s ?n ?x } // -- | { Param ?s ?n ?x } }
     ! Gobble up any remaining intermediate states
     CHR{ { Return ?s } // { State ?t ?n ?x } -- | }
-}
+;
 
 {
-    ! LH{
-    !   { builtins V{  } }
+    ! H{
     !   { 2 { Start "s0" } }
     !   { 7 { Param "s0" 0 G{ ?a1 } } }
     !   { 10 { Param "s0" 1 G{ ?b1 } } }
@@ -150,24 +148,22 @@ CONSTANT: stack-ex {
     !   { 14 { Retval "s1" 1 G{ ?a1 } } }
     !   { 15 { Retval "s1" 0 G{ ?b1 } } }
     ! }
-    7
+   6
 }
-[ stack-ex { { StartInfer "s0" [ swap ] } } run-chr-query assoc-size ] unit-test
+[ stack-ex { { StartInfer "s0" [ swap ] } } run-chr-query store>> assoc-size ] unit-test
 
 {
-    ! LH{
+    ! H{
     !   { 2 { Start "s0" } }
     !   { 7 { Param "s0" 0 G{ ?b2 } } }
     !   { 10 { Param "s0" 1 G{ ?a2 } } }
-    !   { 16 { = G{ ?a2 } G{ ?b1 } } }
-    !   { 19 { = G{ ?b2 } G{ ?a1 } } }
     !   { 22 { Return "s2" } }
     !   { 23 { Retval "s2" 1 G{ ?a2 } } }
     !   { 24 { Retval "s2" 0 G{ ?b2 } } }
     ! }
-    7
+    6
 }
-[ stack-ex { { StartInfer "s0" [ swap swap ] } } run-chr-query assoc-size ] unit-test
+[ stack-ex { { StartInfer "s0" [ swap swap ] } } run-chr-query store>> assoc-size ] unit-test
 
 {
     ! {
@@ -182,6 +178,6 @@ CONSTANT: stack-ex {
     !     { Return "s1" }
     !     { Retval "s1" 0 G{ ?c1 } }
     ! }
-    11
+    10
 }
-[ stack-ex { { StartInfer "s0" [ + ] } } run-chr-query values assoc-size ] unit-test
+[ stack-ex { { StartInfer "s0" [ + ] } } run-chr-query store>> assoc-size ] unit-test
