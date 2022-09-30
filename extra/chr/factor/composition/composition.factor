@@ -421,6 +421,7 @@ CHR: type-of-access @ { TypeOfWord array-nth ?tau } // -- |
 CHR: type-of-slot @ { TypeOfWord slot ?tau } // -- [ ?tau term-var? ] |
 [ ?tau
   P{ Effect L{ ?m ?o . ?a } L{ ?v . ?a } f {
+         P{ Instance ?o not{ fixnum } }
          P{ Instance ?m fixnum }
          P{ Slot ?o ?m ?v }
      } }
@@ -859,6 +860,8 @@ CHR: make-union-error @ <={ MakeUnion } <={ MakeUnion } // -- | [ "double make-u
 CHR: no-check-xor @ // { CheckXor __ ?rho ?tau } -- [ ?rho full-type? ] [ ?rho Effect? ] |
 ! CHR: no-check-xor @ // { CheckXor ?rho ?tau } -- [ ?rho full-type? ] |
 [ ?rho ?tau ==! ] ;
+CHR: check-xor-stays-null @ // { CheckXor ?q null ?tau } -- [ ?tau term-var? ] |
+[ ?tau null ==! ] ;
 CHR: do-check-xor @ // { CheckXor ?q ?rho ?tau } -- [ ?rho full-type? ] |
 { DestrucXor ?rho }
 { PhiSchedule ?q +nil+ ?tau } ;

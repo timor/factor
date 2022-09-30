@@ -38,6 +38,10 @@ P{
     P{ Effect L{ ?q5 ?p3 ?c3 . ?a6 } ?b4 { ?c3 } { P{ Instance ?c3 W{ f } } P{ Instance ?q5 callable } P{ CallEffect ?q5 ?a6 ?b4 } } }
 }
 [ [ if ] get-type ] chr-test
+
+null
+[ [ 42 2 slot ] get-type ] chr-test
+
 ! ** Simple Dispatch
 GENERIC: foothing ( obj -- result )
 M: fixnum foothing 3 + ;
