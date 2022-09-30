@@ -15,11 +15,29 @@ M: word get-type
 
 TYPED: array-first ( arr: array -- thing ) 2 slot ;
 
-TERM-VARS: ?o ?a ?v ?y ?z ;
+TERM-VARS: ?o ?a ?b ?v ?x ?y ?z ;
 
 P{ Effect L{ ?o . ?a } L{ ?v . ?a } { ?o } { P{ Instance ?o array } P{ Slot ?o W{ 2 } ?v } } }
 [ \ array-first get-type ] chr-test
 
+! ** Basic Invariants
+
+P{ Effect L{ ?a ?b . ?z } L{ ?a ?b . ?z } { } f }
+[ [ swap swap ] get-type ] chr-test
+
+P{ Effect L{ ?a ?b . ?z } L{ ?b ?a . ?z } { } f }
+[ [ swap swap swap ] get-type ] chr-test
+
+P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { } { P{ Instance ?x number } P{ Instance ?y number } P{ Instance ?z number } P{ Sum ?z ?x ?y } } }
+[ [ + ] get-type ] chr-test
+
+TERM-VARS: ?q3 ?q5 ?p2 ?p3 ?c2 ?c3 ?a4 ?a6 ?b3 ?b4 ;
+P{
+    Xor
+    P{ Effect L{ ?q3 ?p2 ?c2 . ?a4 } ?b3 { ?c2 } { P{ Instance ?c2 not{ W{ f } } } P{ Instance ?p2 callable } P{ CallEffect ?p2 ?a4 ?b3 } } }
+    P{ Effect L{ ?q5 ?p3 ?c3 . ?a6 } ?b4 { ?c3 } { P{ Instance ?c3 W{ f } } P{ Instance ?q5 callable } P{ CallEffect ?q5 ?a6 ?b4 } } }
+}
+[ [ if ] get-type ] chr-test
 ! ** Simple Dispatch
 GENERIC: foothing ( obj -- result )
 M: fixnum foothing 3 + ;
@@ -85,7 +103,7 @@ GENERIC: lastcdr1 ( list -- obj )
 M: list lastcdr1 cdr>> lastcdr1 ;
 M: +nil+ lastcdr1 ;
 
-TERM-VARS: ?a15 ?y1 ?ys1 ?b3 ?b4 ?o3 ?v3 ;
+TERM-VARS: ?a15 ?y1 ?ys1 ?o3 ?v3 ;
 
 CONSTANT: sol1
 P{
