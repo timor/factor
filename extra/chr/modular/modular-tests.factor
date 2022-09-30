@@ -1,13 +1,8 @@
-USING: accessors arrays assocs chr chr.factor chr.modular chr.parser chr.state
-combinators.short-circuit grouping hashtables kernel linked-assocs
-macros.expander make math quotations sequences sets terms tools.test words ;
+USING: accessors chr chr.modular chr.parser chr.state kernel make math terms
+tools.test ;
 IN: chr.modular.tests
 
 TUPLE: leq < chr-pred v1 v2 ;
-
-: >old-builtins ( result -- result )
-    builtins over [ [ [ lhs>> ] [ rhs>> ] bi \ = -rot 3array ] map ] change-at ;
-
 
 TERM-VARS: A B C ;
 
@@ -17,17 +12,16 @@ TERM-VARS: ?x ?y ?z ;
 TUPLE: eq < chr-pred v1 v2 ;
 ! Equality solver from schrijvers paper
 TERM-VARS: ?x1 ?y1 ?x2 ?y2 ;
-CONSTANT: eq-solver {
+CHRAT: eq-solver {  }
 CHR: reflexive @ // { eq ?x ?y } -- [ ?x ?y == ] | ;
 CHR: redundant @ { eq ?x1 ?y1 } // { eq ?x2 ?y2 } -- [ ?x1 ?x2 == ] [ ?y1 ?y2 == ] | ;
 CHR: symmetric @ { eq ?x ?y } // -- | { eq ?y ?x } ;
 CHR: transitive @ { eq ?x1 ?y1 } { eq ?x2 ?y2 } // -- [ ?y1 ?x2 == ] | { eq ?x1 ?y2 } ;
-}
+;
 
 
 {
-    LH{
-        { builtins V{ } }
+    H{
         { 1 P{ eq A B } }
         { 2 P{ eq B A } }
         { 5 P{ eq B C } }
@@ -35,42 +29,8 @@ CHR: transitive @ { eq ?x1 ?y1 } { eq ?x2 ?y2 } // -- [ ?y1 ?x2 == ] | { eq ?x1 
         { 9 P{ eq C A } }
         { 10 P{ eq A C } } }
 }
-[ eq-solver { { eq A B } { eq B C } } run-chr-query ] unit-test
+[ eq-solver { { eq A B } { eq B C } } run-chr-query store>> ] unit-test
 
-
-! This is the original example, relying on builtin equality solver
-! This needs an implementation of asking for syntactic equality, but gives the
-! exact same trace as the chrat one
-CONSTANT: leq-solver-orig {
-    CHR: reflexivity @ // { leq ?x ?y } -- [ ?x ?y == ] | ;
-CHR: antisymmetry @ // { leq ?x ?y } { leq ?y ?x } -- | [ ?x ?y ==! ] ;
-CHR: transitivity @ { leq ?x ?y } { leq ?y ?z } // -- | { leq ?x ?z } ;
-}
-
-{
-    LH{ { builtins V{ { = C B } { = C A } } } }
-}
-[ leq-solver-orig { { leq A B } { leq C A } { leq B C } } run-chr-query >old-builtins ] unit-test
-
-{
-   { f }
-}
-[
-    [
-        leq-solver-orig
-        { { leq A B } { leq C A } { leq B C } [ A 42 == [ t , ] [ f , ] if f ] } run-chr-query drop
-    ] {  } make
-] unit-test
-
-{
-    { t }
-}
-[
-    [
-        leq-solver-orig
-        { { leq A B } { leq C A } { leq B C } [ A B == [ t , ] [ f , ] if f ] } run-chr-query drop
-    ] {  } make
-] unit-test
 
 TERM-VARS: ?k ;
 ! This is the example from the CHRat paper
@@ -90,11 +50,6 @@ CHRAT: leq-solver-chrat { leq }
     ! If we can prove the opposite, return that!
     CHR{ // { ask { leq ?x ?y } } -- [ ?x ?y <= ] | { entailed { leq ?x ?y } } }
 ;
-
-{
-    LH{ { builtins V{ { = C B } { = C A } } } }
-}
-[ leq-solver-chrat { { leq A B } { leq C A } { leq B C } } run-chr-query >old-builtins ] unit-test
 
 { { f } }
 [
@@ -153,29 +108,6 @@ CHRAT: chrat-min { min }
 
     CHR{ // { ask { min ?x ?y ?y } } -- { leq ?y ?x } | { entailed { min ?x ?y ?y } } }
 ;
-
-TERM-VARS: X Y Z M ;
-: combined ( -- rules )
-    leq-solver-chrat chrat-min append ;
-{ LH{ { builtins V{ { = M 1 } } } } }
-[ combined { { min 1 1 M } } run-chr-query >old-builtins ] unit-test
-
-{ t }
-[ combined { { min 1 2 M } } run-chr-query >old-builtins builtins of { = M 1 } swap in? ] unit-test
-
-{ t }
-[ combined { { min 2 1 M } } run-chr-query >old-builtins builtins of { = M 1 } swap in? ] unit-test
-
-{ t }
-[ combined { { min A A M } } run-chr-query >old-builtins builtins of { = M A } swap in? ] unit-test
-
-{
-    H{
-        { builtins V{ { = Z X } } }
-        { 1 P{ leq Z Y } }
-    }
-}
-[ combined { { leq X Y } { min X Y Z } } run-chr-query >old-builtins >hashtable ] unit-test
 
 ! * Comparison example
 ! Example: comparisons
@@ -239,83 +171,3 @@ CHRAT: chrat-comp { le ge lt gt ne }
     CHR{ // { gt ?x ?y } -- | { lt ?y ?x } }
 ;
 
-! * Stack inference
-TUPLE: state-pred < chr-pred s1 ;
-TUPLE: trans-pred < state-pred s2 ;
-TUPLE: Word < trans-pred word ;
-! Intermediate representation language:
-TUPLE: Call < state-pred word token ;
-TUPLE: CallRet < state-pred word token ;
-TUPLE: RecursiveCall < Call back ;
-
-TERM-VARS: ?u ?v ?w ?r ?s ?t ?n ?a ?b ?q ;
-
-! Link helper
-TUPLE: Link < chr-pred a b c ;
-TUPLE: link-seq < chr-pred pred succ o ;
-CHRAT: call-seq { link-seq }
-! CHR{ { Word ?s ?t __ } // -- | { Link ?s ?t } }
-CHR{ { Link ?s ?t ?u } // { Link ?s ?t ?u } -- | }
-! CHR{ { Link ?s ?t ?t } // { Link ?s ?t ?u } -- | { Link ?s ?u ?u } }
-! CHR{ { Link ?s ?s ?t } // { Link ?s ?s ?u } -- | { Link ?s ?u ?u } }
-! CHR{ // { ask { link-seq ?s ?s ?s } } -- | { entailed { link-seq ?s ?s ?s } } }
-CHR{ { Link ?s ?t ?t } // { ask { link-seq ?s ?t ?t } } -- | { entailed { link-seq ?s ?t ?t } } }
-CHR{ { Word ?r ?s __ } { Word ?s ?t __ } // { Link ?s ?t ?t } -- | { Link ?r ?s ?s } }
-;
-
-! State-specific
-TUPLE: Val < state-pred n val ;
-TUPLE: Pop < trans-pred val ;
-TUPLE: Push < trans-pred val ;
-TUPLE: ShiftPush < trans-pred d ;
-TUPLE: ShiftPop < trans-pred d ;
-TUPLE: Transition < trans-pred ;
-
-! Initial representation
-: quot>chr ( callable -- constraints )
-    "si" usym 1array over length 1 - [ "s" usym suffix ] times "so" usym suffix
-    2 <clumps> [ first2 rot Word boa ] 2map ;
-
-! Minimum-element transition solver.
-CHRAT: stack-ops {  }
-CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?a } -- | }
-CHR{ { Val ?s ?n ?a } // { Val ?s ?n ?b } -- | [ ?b ?a ==! ] }
-;
-
-TUPLE: Infer < trans-pred quot ;
-
-CHRAT: infer-stack { }
-CHR: infer-quot @ { Word ?s ?t ?q } // -- [ ?q callable? ] |  { Infer ?s ?t ?q } ;
-CHR: infer-macro @ { Word ?s ?t ?w } // -- [ W{ ?w } macro-quot ] |
-    [| | W{ ?w } macro-quot '[ _ call call ] :> body { Word ?s ?t body } ] ;
-CHR: infer-recursive @ { Call ?s ?w ?t } // { Word ?u ?v ?w } -- { link-seq ?s ?u ?u } |
-    { RecursiveCall ?u ?w ?t ?s } ;
-CHR: infer-inline @ // { Word ?s ?t ?w } -- [ W{ ?w } { [ word? ] [ inline? ] } 1&& ] |
-    [ W{ ?w } def>> '{ { Word ?s ?u _ } { Call ?s ?w ?x } { CallRet ?s ?w ?x } } ] ;
-CHR: infer-literal @ { Word ?s ?t ?w } // -- | { Push ?s ?t ?w } ;
-;
-
-! * Type inference, modular
-! Context
-TUPLE: Disjoint < chr-pred s1 s2 ;
-TUPLE: Sub < chr-pred val s ;
-TUPLE: Nosub < chr-pred val s ;
-CHRAT: solve-sub { Disjoint Sub Nosub }
-! CHR{ { Sub ?v ?s } { Nosub ?v ?s } // { Instance ?v ?s } -- | }
-CHR{ { Sub ?v ?s } { Nosub ?v ?t } // { Instance ?v ?s } -- | }
-CHR{ { = ?v ?x } { Nosub ?x ?y } // -- | { Nosub ?v ?y } }
-CHR{ { = ?v ?x } { Sub ?x ?y } // -- | { Sub ?v ?y } }
-
-;
-
-! * Building constraints based on words
-! GENERIC: word-constraints ( state-in state-out word -- seq )
-! M:: \ if word-constraints ( si so word )
-!     gen{ "c" "then" "else" |
-!          { Val si 2 "c" }
-!          { Val si 1 "then" }
-!          { Val si 0 "else" }
-!          { Instance "c" boolean }
-!          { Instance "then" callable }
-!          { Instance "else" callable }
-!     } ;
