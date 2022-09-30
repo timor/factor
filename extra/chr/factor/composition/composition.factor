@@ -860,8 +860,12 @@ CHR: make-union-error @ <={ MakeUnion } <={ MakeUnion } // -- | [ "double make-u
 CHR: no-check-xor @ // { CheckXor __ ?rho ?tau } -- [ ?rho full-type? ] [ ?rho Effect? ] |
 ! CHR: no-check-xor @ // { CheckXor ?rho ?tau } -- [ ?rho full-type? ] |
 [ ?rho ?tau ==! ] ;
-CHR: check-xor-stays-null @ // { CheckXor ?q null ?tau } -- [ ?tau term-var? ] |
-[ ?tau null ==! ] ;
+
+! If we inferred an effect type to be null, then substitute it with a null-push that will
+! cause exclusion of this effect from further Xor reasonings.
+CHR: check-xor-null-throws @ // { CheckXor ?q null ?tau } -- [ ?tau term-var? ] |
+[ ?tau P{ Effect ?a L{ ?x . ?a } { } { P{ Instance ?x null } } } ==! ] ;
+
 CHR: do-check-xor @ // { CheckXor ?q ?rho ?tau } -- [ ?rho full-type? ] |
 { DestrucXor ?rho }
 { PhiSchedule ?q +nil+ ?tau } ;

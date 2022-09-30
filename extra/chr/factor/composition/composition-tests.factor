@@ -39,8 +39,14 @@ P{
 }
 [ [ if ] get-type ] chr-test
 
-null
+P{ Effect ?a L{ ?x . ?a } { } { P{ Instance ?x null } } }
 [ [ 42 2 slot ] get-type ] chr-test
+
+{ f }
+[ [ [ 42 2 slot ] [ "string" ] if ] get-type [ drop "string" ] get-type isomorphic? ] unit-test
+
+{ t }
+[ [ [ 42 2 slot ] [ "string" ] if ] get-type [ { W{ f } } declare drop "string" ] get-type isomorphic? ] unit-test
 
 ! ** Simple Dispatch
 GENERIC: foothing ( obj -- result )
