@@ -1,9 +1,46 @@
-USING: accessors arrays assocs chr.factor.composition chr.parser
-combinators.short-circuit kernel kernel.private lists math sequences
-slots.private terms tools.test typed ;
+USING: accessors arrays assocs chr.factor.composition chr.parser chr.test
+combinators.short-circuit kernel kernel.private lists literals math quotations
+sequences slots.private terms tools.test typed words ;
 IN: chr.factor.composition.tests
 
-: nop ( -- ) ;
+! ** Test Helpers
+GENERIC: get-type ( quot -- type )
+
+M: callable get-type
+    [ qt values [ TypeOf? ] filter ]
+    [ [ swap thing>> = ] curry find nip ] bi
+    dup [ type>> ] when ;
+M: word get-type
+    1quotation get-type ;
+
+TYPED: array-first ( arr: array -- thing ) 2 slot ;
+
+TERM-VARS: ?o ?a ?v ?y ?z ;
+
+P{ Effect L{ ?o . ?a } L{ ?v . ?a } { ?o } { P{ Instance ?o array } P{ Slot ?o W{ 2 } ?v } } }
+[ \ array-first get-type ] chr-test
+
+! ** Simple Dispatch
+GENERIC: foothing ( obj -- result )
+M: fixnum foothing 3 + ;
+M: array foothing array-first ;
+
+CONSTANT: foothing1
+P{ Effect L{ ?y . ?a } L{ ?z . ?a } { ?y } { P{ Instance ?y fixnum } P{ Instance ?z number } P{ Sum ?z ?y 3 } } }
+foothing1
+[ M\ fixnum foothing get-type ] chr-test
+
+CONSTANT: foothing2
+P{ Effect L{ ?o . ?a } L{ ?v . ?a } { ?o } { P{ Instance ?o array } P{ Slot ?o W{ 2 } ?v } } }
+foothing2
+[ M\ array foothing get-type ] chr-test
+
+P{ Xor $ foothing2 $ foothing1 }
+[ \ foothing get-type ] chr-test
+
+! ** Mutually recursive definitions
+
+! : nop ( -- ) ;
 GENERIC: mylastcdr ( list -- obj )
 M: list mylastcdr
 
@@ -35,18 +72,12 @@ M: list mylastcdr
 M: +nil+ mylastcdr ;
 ! M: object mylastcdr ;
 ! M: array mylastcdr 2 slot [ mylastcdr ] (call) ;
-TYPED: array-first ( arr: array -- thing ) 2 slot ;
 ! M: array mylastcdr array-first mylastcdr ;
 M: array mylastcdr array-first [ [ mylastcdr ] ] (call) (call) ;
 ! M: array mylastcdr array-first [ [ mylastcdr ] (call) ] (call) ;
 
 ! Needs make-unit recursion resolution in some form...
 : myloop ( -- ) [ call ] keep swap [ myloop ] [ drop ] if ; inline recursive
-
-: get-type ( quot -- type )
-    [ qt values [ TypeOf? ] filter ]
-    [ [ swap thing>> = ] curry find nip ] bi
-    dup [ type>> ] when ;
 
 { t } [ [ myloop ] get-type dup [ full-type? ] when ] unit-test
 
@@ -73,28 +104,28 @@ P{
 !     }
 ! }
 
-{ t }
-[ [ lastcdr1 ] get-type sol1 isomorphic? ] unit-test
+sol1
+[ [ lastcdr1 ] get-type ] chr-test
 
 GENERIC: lastcdr2 ( list -- obj )
 M: list lastcdr2 cdr>> [ lastcdr2 ] (call) ;
 M: +nil+ lastcdr2 ;
 
-{ t }
-[ [ lastcdr2 ] get-type sol1 isomorphic? ] unit-test
+sol1
+[ [ lastcdr2 ] get-type ] chr-test
 
 GENERIC: lastcdr3 ( list -- obj )
 M: list lastcdr3 cdr>> [ [ lastcdr3 ] ] (call) (call) ;
 M: +nil+ lastcdr3 ;
 
-{ t }
-[ [ lastcdr3 ] get-type sol1 isomorphic? ] unit-test
+sol1
+[ [ lastcdr3 ] get-type ] chr-test
 
-{ t }
-[ [ [ lastcdr3 ] (call) ] get-type sol1 isomorphic? ] unit-test
+sol1
+[ [ [ lastcdr3 ] (call) ] get-type ] chr-test
 
-{ t }
-[ [ [ [ lastcdr3 ] ] (call) (call) ] get-type sol1 isomorphic? ] unit-test
+sol1
+[ [ [ [ lastcdr3 ] ] (call) (call) ] get-type ] chr-test
 
 GENERIC: lastcdr5 ( list -- obj )
 M: list lastcdr5 cdr>> lastcdr5 ;
@@ -130,10 +161,6 @@ M: array lastcdr4 array-first lastcdr4 ;
 
 { V{ 4 3 2 1 0 } }
 [ V{ } clone 5 [ over push ] each-int-down ] unit-test
-
-GENERIC: foothing ( obj -- result )
-M: fixnum foothing 3 + ;
-M: array foothing array-first ;
 
 ! ** Practical examples
 
