@@ -1,10 +1,11 @@
 USING: accessors arrays assocs assocs.extras chr chr.factor.composition
 chr.programs chr.state classes.builtin combinators continuations effects
-formatting io kernel math math.parser namespaces prettyprint sequences sorting
-system terms tools.annotations tools.annotations.private tools.continuations
-tools.walker ;
+formatting io kernel math math.parser namespaces prettyprint sequences sets
+sorting system terms tools.annotations tools.annotations.private
+tools.continuations tools.walker ;
 
 IN: chr.debug
+FROM: namespaces => set ;
 
 : solve-builtins ( eq-consts -- subst )
     [ [ lhs>> ] [ rhs>> ] bi 2array ] map solve-problem ;
@@ -63,10 +64,43 @@ IN: chr.debug
 : try-rule-match. ( c schedule -- )
     swap id>> "Try id %d on Rule: " printf occurrence>> first rule-id . ;
 
+SYMBOL: rule-matches
+
+: reset-rule-matches ( -- )
+    H{ } clone rule-matches set ;
+
+: remember-rule-match ( id -- )
+    rule-matches get inc-at ;
+
+GENERIC: rule-name ( id chr -- str )
+M: chr rule-name drop number>string "R" prepend ;
+M: named-chr rule-name nip rule-name>> ;
+
+: unused-rules. ( -- )
+    "Unused Rules:" print
+    program get rules>> <enumerated>
+    rule-matches get keys [ in? ] curry reject-keys
+    [ ! ( rules id )
+        rule-name
+    ] { } assoc>map . ;
+
+: rule-match-report. ( -- )
+    "Rule Match Stats:" print
+    program get rules>> rule-matches get sort-keys
+    [ ! ( id rules count  )
+        [ [ nth ] keepd swap rule-name ] dip
+    ] with assoc-map . ;
+
+SYMBOL: debug-chr-stats
+
+: chr-usage-report. ( -- )
+    debug-chr-stats get [ rule-match-report.
+    unused-rules. ] when ;
+
 : chrebug ( -- )
     ! \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate
     \ kill-chr [ [ "- " write dup id-susp. ] prepose ] annotate
-    \ run-rule-body [ [ 2dup rule-match. ] prepose
+    \ run-rule-body [ [ 2dup over remember-rule-match rule-match. ] prepose
                       ! [ chr-state. ] prepose ! Very verbose
     ] annotate
     ! \ activate-new [ [ dup "Activating new constraint: %u\n" printf ] prepose ] annotate
@@ -77,6 +111,7 @@ IN: chr.debug
     ! \ test-callable [ [ dup "Builtin Test: " write . ] prepose [ dup " ==> %u\n" printf ] compose ] annotate
     ! \ run-occurrence [ [ dup occurrence>> "Try Occurrence %u with Schedule: " printf dup partners>> . ] prepose ] annotate
     ! \ run-occurrence [ [ 2dup try-rule-match. ] prepose ] annotate
+    \ init-chr-scope [ [ reset-rule-matches ] compose ] annotate
     \ collect-chrat-solvers [ [ "Solvers for Program: " write dup . ] compose ] annotate
     \ load-chr [ [ "Rewritten Program: " write dup rules>> <enumerated> >array . ] compose ] annotate
     ! \ replace-all-equalities [ [ ground-values get "Ground-values: " write . ] prepose ] annotate
@@ -87,6 +122,7 @@ IN: chr.debug
     M\ C activate-new [ [ dup cond>> current-context get swap "CTX: %u -> %u\n" printf ] prepend ] annotate
     \ run-queue [ [ "Flushing queue" print ] prepose ] annotate
     \ merge-solver-config [ [ 2dup swap "Merging store with key: %u\n" printf store>> [ constraint>> ] map-values . ] prepend ] annotate
+    \ finish-solver-state [ [ chr-usage-report. ] compose ] annotate
     ;
 
 : debug-rm ( -- )
