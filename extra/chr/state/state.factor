@@ -608,17 +608,7 @@ M: builtin-suspension apply-substitution* nip ;
     program get local-vars>> current-context suffix
     valid-match-vars set ;
 
-: init-chr-scope ( prog -- )
-    H{ } clone store set
-    ! <builtins-suspension> builtins store get set-at
-    load-chr program set
-    update-local-vars
-    check-vars? on
-    0 current-index set-global
-    ! H{ } clone var-names set
-    ;
-
-: init-dyn-chr-scope ( rules -- )
+: init-chr-scope ( rules -- )
     init-chr-prog program set
     H{ } clone store set
     ! <builtins-suspension> builtins store get set-at
@@ -711,8 +701,7 @@ SYMBOL: split-states
       0 sentinel set
       H{ } clone ground-values set
       swap
-      ! init-chr-scope
-      init-dyn-chr-scope
+      init-chr-scope
       V{ } clone queue set
       f swap activate-new
       run-queue
