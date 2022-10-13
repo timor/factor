@@ -20,6 +20,10 @@ TERM-VARS: ?o ?a ?b ?v ?x ?y ?z ;
 P{ Effect L{ ?o . ?a } L{ ?v . ?a } { ?o } { P{ Instance ?o array } P{ Slot ?o W{ 2 } ?v } } }
 [ \ array-first get-type ] chr-test
 
+! ** Throwing
+P{ Effect ?a ?b f { P{ Invalid } } }
+[ [ "haha" throw ] get-type ] chr-test
+
 ! ** Basic Invariants
 
 P{ Effect L{ ?a ?b . ?z } L{ ?a ?b . ?z } { } f }
@@ -39,7 +43,7 @@ P{
 }
 [ [ if ] get-type ] chr-test
 
-P{ Effect ?a L{ ?x . ?a } { } { P{ Instance ?x null } } }
+P{ Effect ?a ?b f { P{ Invalid } } }
 [ [ 42 2 slot ] get-type ] chr-test
 
 { f }
@@ -181,6 +185,16 @@ M: array lastcdr4 array-first lastcdr4 ;
 { f }
 [ [ [ lastcdr5 ] ] get-type [ [ [ lastcdr5 ] ] (call) ] get-type isomorphic? ] unit-test
 
+
+! Correct one
+GENERIC: lastcdr6 ( list -- obj )
+M: list lastcdr6 cdr>> lastcdr6 ;
+M: +nil+ lastcdr6 ;
+M: object lastcdr6 ;
+
+{ +nil+ } [ L{ 12 } lastcdr6 ] unit-test
+{ 42 } [ L{ 12 . 42 } lastcdr6 ] unit-test
+
 ! Stack checker examples
 : bad ( ? quot: ( ? -- ) -- ) 2dup [ not ] dip bad call ; inline recursive
 : good ( ? quot: ( ? -- ) -- ) [ good ] 2keep [ not ] dip call ; inline recursive
@@ -190,6 +204,20 @@ M: array lastcdr4 array-first lastcdr4 ;
 { V{ 4 3 2 1 0 } }
 [ V{ } clone 5 [ over push ] each-int-down ] unit-test
 
+: inc-int-down ( n i -- m )
+    dup 0 > [ [ 1 + ] [ 1 - ] bi* inc-int-down ] [ drop 42 + ] if ;
+
 ! ** Practical examples
 
 PREDICATE: u8 < integer { [ 0 >= ] [ 256 < ] } 1&& ;
+
+PREDICATE: cardinal < integer 0 > ;
+PREDICATE: zero < integer 0 = ;
+
+GENERIC: inc-loop ( n i -- m )
+M: cardinal inc-loop [ 1 + ] [ 1 - ] bi* inc-loop ;
+M: zero inc-loop drop 42 + ;
+
+! Note: taking this as an occasion to actually include the default method!
+
+{ 47 } [ 0 5 inc-loop ] unit-test

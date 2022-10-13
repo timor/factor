@@ -437,13 +437,12 @@ CHR: type-of-set-slot @ { TypeOfWord set-slot ?tau } // -- [ ?tau term-var? ] |
   ==!
 ] ;
 
-
 CHR: type-of-throw @ // { ?TypeOf [ throw ] ?tau } -- |
 ! [ ?tau P{ Effect ?a +bottom+ f } ==! ] ;
 ! [ ?tau null ==! ] ;
-[ ?tau P{ Effect L{ ?e . ?a } L{ ?e . ?a } f {
-              P{ Throws ?e }
-              ! P{ Invalid }
+[ ?tau P{ Effect L{ ?e . ?a } ?b f {
+              ! P{ Throws ?e }
+              P{ Invalid }
           } }
   ==! ] ;
 
@@ -863,6 +862,7 @@ CHR: no-check-xor @ // { CheckXor __ ?rho ?tau } -- [ ?rho full-type? ] [ ?rho E
 
 ! If we inferred an effect type to be null, then substitute it with a null-push that will
 ! cause exclusion of this effect from further Xor reasonings.
+! TODO TBR?
 CHR: check-xor-null-throws @ // { CheckXor ?q null ?tau } -- [ ?tau term-var? ] |
 [ ?tau P{ Effect ?a L{ ?x . ?a } { } { P{ Instance ?x null } } } ==! ] ;
 
@@ -870,8 +870,9 @@ CHR: do-check-xor @ // { CheckXor ?q ?rho ?tau } -- [ ?rho full-type? ] |
 { DestrucXor ?rho }
 { PhiSchedule ?q +nil+ ?tau } ;
 
+PREDICATE: InvalidEffect < Effect preds>> [ Invalid? ] any? ;
 
-CHR: discard-null-branch @ // { DestrucXor null } -- | ;
+CHR: discard-invalid-branch @ // { DestrucXor ?e } -- [ ?e InvalidEffect? ] | ;
 CHR: destruc-rebuild-xor @ // { DestrucXor P{ Xor ?a ?b } } -- |
 { DestrucXor ?a } { DestrucXor ?b } ;
 CHR: destruc-rebuild-effect @ // { PhiSchedule ?q ?r ?tau } { DestrucXor ?e } -- [ ?e Effect? ] |
@@ -1185,8 +1186,7 @@ CHR: convert-tag @ // { Tag ?x A{ ?n } } -- [ ?n type>class :>> ?tau ] |
 { Instance ?x ?tau } ;
 
 ! CHR: useless-instance @ // { Instance __ object } -- | ;
-
-CHR: null-instance-is-invalid @ { Instance __ null } // -- | { Invalid } ;
+CHR: null-instance-is-invalid @ { Instance ?x null } // -- | { Invalid } ;
 
 CHR: normalize-not-type @ // { NotInstance ?x A{ ?tau } } -- [ { ?tau } first classoid? ]
 [ { ?tau } first class-not :>> ?sig ] |
@@ -1202,6 +1202,7 @@ CHR: instance-intersect-effect @ { Instance ?x ?e  } { Literal ?x } // { Instanc
 [ ?tau callable eq? ?tau quotation eq? or
  f { Invalid } ? ] ;
 
+! TODO: used? looks like should be subsumed by null-instance-is-invalid
 CHR: call-null-instance-is-invalid @ { CallEffect ?x __ __ } { Instance ?x null } // -- | { Invalid } ;
 
 ! *** Macro Expansion/Folding
@@ -1529,8 +1530,13 @@ CHR: conflicting-makes @ { MakeEffect __ __ __ __ __ } { MakeEffect __ __ __ __ 
 ! CHR: must-cleanup @ { MakeEffect __ __ __ __ __ } AS: ?p <={ body-pred } // -- | [ ?p "leftovers" 2array throw f ] ;
 CHR: cleanup-incomplete @ { MakeEffect __ __ __ __ __ } // AS: ?p <={ body-pred } -- | ;
 
-CHR: finish-invalid-effect @ { MakeEffect __ __ __ __ ?tau } // { Params __ } { Invalid } -- |
+! This is triggered if phi mode is aborted
+CHR: finish-disjoint-effect @ { PhiMode } { MakeEffect __ __ __ __ ?tau } // { Params __ } { Invalid } -- |
 [ ?tau null ==! ] ;
+
+! This is triggered if composition modes determines the effect will terminate
+CHR: finish-invalid-effect @ { MakeEffect __ __ __ __ ?tau } // { Params __ } { Invalid } -- |
+[ ?tau P{ Effect ?a ?b f { P{ Invalid } } } ==! ] ;
 
 CHR: finish-valid-effect @ AS: ?e P{ MakeEffect ?a ?b __ ?l ?tau } // { Params ?x } -- [ ?tau term-var? ]
 [ ?x ?e effect-vars intersect :>> ?y ]
