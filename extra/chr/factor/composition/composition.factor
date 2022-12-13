@@ -662,12 +662,39 @@ CHR: type-of-regular-word @ { TypeOfWord A{ ?w } ?tau } // --
 { ?TypeOf ?q ?sig }
 { ComposeType P{ Effect ?a ?a f { P{ Ensure ?c ?a } } } ?sig ?tau } ;
 
+! This is actually the one spot where we can declare that things don't overlap
+! although they would do if we inferred them as random possible branches of an
+! XOR type.  Normally, if parameters overlap, we unionize them to enforce
+! XOR-Property, i.e. ensure that actually only one branch can be taken.  Here we
+! explicitly encode the not-instance declarations which would be implied during
+! runtime dispatch.
+! Takes an ordered list of { class method } specs, and modifies it to exclude
+! previous ones.
+: make-disjoint-classes-step ( not-class next-in -- not-class next-out )
+    [ swap class-not class-and ]
+    [ class-or ] 2bi swap ;
+
+: make-disjoint-classes ( classes -- classes )
+    null swap [ make-disjoint-classes-step ] map nip ;
+
+: enforce-dispatch-order ( methods -- methods )
+    <reversed> unzip [ make-disjoint-classes ] dip
+    zip ;
+
+: dispatch-method-seq ( single-generic -- seq )
+    dup "methods" word-prop sort-methods object over key?
+    [ nip ]
+    [
+        [ "default-method" word-prop object swap 2array ] dip swap prefix
+    ] if enforce-dispatch-order ;
+
+
 CHR: type-of-generic @ { TypeOfWord ?w ?tau } // --
 [ ?tau term-var? ]
 [ ?w single-generic? ]
-! [ ?w "transform-quot" word-prop not ]
-[ ?w "methods" word-prop sort-methods <reversed> >list :>> ?l ]
 [ ?w dispatch# :>> ?i ]
+[ ?w "transform-quot" word-prop not ]
+[ ?w dispatch-method-seq >list :>> ?l ]
 [ ?w stack-effect effect>stacks :>> ?b drop :>> ?a ]
 |
 { MakeSingleDispatch ?i ?l ?tau } ;
@@ -677,11 +704,15 @@ CHR: type-of-generic @ { TypeOfWord ?w ?tau } // --
 
 CHR: dispatch-done @ // { MakeSingleDispatch __ +nil+ ?tau } -- | [ ?tau null ==! ] ;
 CHR: dispatch-case @ // { MakeSingleDispatch ?i L{ { ?c ?m } . ?r } ?tau } --
+[ ?c ?i dispatch-decl <reversed> >list :>> ?l ]
 |
-{ TypeOfWord ?m ?rho }
+{ TypeOfWord ?m ?a }
+! TODO: make this a declare quot instead of pred?
+! Here we prefix the method word type with the excluded cases from the ordered dispatch
+{ ComposeType P{ Effect ?b ?b f { P{ Declare ?l ?b } } } ?a ?rho }
 { MakeSingleDispatch ?i ?r ?sig }
-{ MakeXor ?rho ?sig ?a }
-{ CheckXor ?m ?a ?tau } ;
+{ MakeXor ?rho ?sig ?d }
+{ CheckXor ?m ?d ?tau } ;
 
 CHR: type-of-reader @ { TypeOfWord ?w ?tau } // -- [ ?w method? ] [ ?w "reading" word-prop :>> ?x ]
 [ ?w "method-class" word-prop :>> ?c ]

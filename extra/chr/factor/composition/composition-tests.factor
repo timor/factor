@@ -120,6 +120,14 @@ foothing2
 P{ Xor $ foothing2 $ foothing1 }
 [ \ foothing get-type ] chr-test
 
+! ** Overlapping dispatch
+GENERIC: auto-dispatch ( obj -- res )
+M: list auto-dispatch cdr>> ;
+M: +nil+ auto-dispatch ;
+M: object auto-dispatch ;
+
+{ { L{ } intersection{ list not{ L{  } } } not{ list } } }
+[ \ auto-dispatch dispatch-method-seq keys ] unit-test
 ! ** Mutually recursive definitions
 
 ! : nop ( -- ) ;
