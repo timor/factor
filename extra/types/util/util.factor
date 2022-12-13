@@ -3,6 +3,7 @@ combinators combinators.short-circuit combinators.smart generalizations graphs
 graphs.private io io.styles kernel lists lists.private make math math.parser
 mirrors namespaces prettyprint.backend prettyprint.custom prettyprint.sections
 quotations sequences sequences.extras sequences.private sets threads typed words
+classes.algebra.private
 ;
 
 IN: types.util
@@ -263,3 +264,37 @@ MACRO: lmatch-map-as ( branches cons-class -- quot )
     exemplar new-empty-set-like :> s
     vertices [ dup s in? [ drop ] [ s quot (closure) ] if ] each
     s ; inline
+
+! * Class simplification
+:: simplify-neg-intersection ( neg -- classes removed? )
+    neg
+    [| ca |
+         neg [| cb | ca cb class< ] find nip
+    ] find :> ( i found? )
+    found? [ i neg remove-nth ] [ neg ] if
+    found? ;
+
+: simplify-intersection ( classes -- classes )
+    [ anonymous-complement? not ] partition
+    [ class>> ] map [ simplify-neg-intersection ] loop
+    [ class-not ] map
+    append [ ] [ class-and ] map-reduce ;
+
+! TODO maybe cache
+
+GENERIC: simplify-class ( class -- class )
+
+! NOTE: this could be important for handling nominative unions/intersections
+! Non-normalizing behavior does not convert defined
+! union/intersection classes to anonymous intersections
+! M: classoid simplify-class normalize-class ;
+
+M: classoid simplify-class ;
+M: anonymous-intersection simplify-class
+    participants>> [ simplify-class ] map
+    simplify-intersection ;
+
+M: anonymous-complement simplify-class
+    class>> simplify-class class-not ;
+M: anonymous-union simplify-class
+    members>> [ simplify-class ] [ class-or ] map-reduce ;

@@ -1,8 +1,30 @@
-USING: accessors arrays assocs chr.factor.composition chr.parser chr.test
-chr.state
-combinators.short-circuit kernel kernel.private lists literals math quotations
-sequences slots.private terms tools.test typed words ;
+USING: accessors arrays assocs chr.factor.composition chr.parser chr.state
+chr.test combinators.short-circuit kernel kernel.private lists literals math
+quotations sequences slots.private terms tools.test typed types.util words ;
 IN: chr.factor.composition.tests
+
+! ** Testing external helper behavior
+! TODO: move to util tests
+
+! NOTE: this highlights an important point: if the think of
+! intersection{ number tuple } as a nominative class specification, it is open
+! as to who the implementors are.  However, rebuilding the the class explicitly
+! using `number tuple class-and` will actually build the smallest cover out of
+! the known subclasses at call time (known world assumption)
+{ union{ ratio complex } }
+[ intersection{ number tuple } simplify-class ] unit-test
+
+{ integer }
+[ intersection{ number integer } simplify-class ] unit-test
+
+{ not{ list } }
+[ not{ list } simplify-class ] unit-test
+
+{ not{ list } }
+[ intersection{ not{ list } } simplify-class ] unit-test
+
+{ not{ list } }
+[ intersection{ not{ cons-state } not{ L{ } } not{ list } } simplify-class ] unit-test
 
 ! ** Test Helpers
 : chr-simp ( constraints -- constraint )
