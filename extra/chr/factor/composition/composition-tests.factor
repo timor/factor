@@ -5,9 +5,12 @@ sequences slots.private terms tools.test typed words ;
 IN: chr.factor.composition.tests
 
 ! ** Test Helpers
-: chr-simp ( constraints -- constraints )
+: chr-simp ( constraints -- constraint )
     chr-comp swap [ run-chr-query store>> ] with-var-names
-    values first ;
+    values ;
+
+: chr-simp1 ( constraints -- constraint )
+    chr-simp first ;
 
 GENERIC: get-type ( quot -- type )
 
@@ -31,20 +34,23 @@ P{ Effect ?a ?b f { P{ Invalid } } }
 
 ! ** Normalization
 P{ Neq ?a 42 }
-[ { P{ Neq ?a 42 } } chr-simp ] chr-test
+[ { P{ Neq ?a 42 } } chr-simp1 ] chr-test
 
 P{ Neq ?a 42 }
-[ { P{ Neq 42 ?a } } chr-simp ] chr-test
+[ { P{ Neq 42 ?a } } chr-simp1 ] chr-test
 
 P{ Eq ?a 42 }
 [ { P{ Eq 42 ?a } } chr-simp1 ] chr-test
 
 P{ Neq ?a ?b }
-[ { P{ Neq ?a ?b } } chr-simp ] chr-test
+[ { P{ Neq ?a ?b } } chr-simp1 ] chr-test
 P{ Neq ?b ?a }
-[ { P{ Neq ?b ?a } } chr-simp ] chr-test
+[ { P{ Neq ?b ?a } } chr-simp1 ] chr-test
 P{ Neq 42 43 }
-[ { P{ Neq 42 43 } } chr-simp ] chr-test
+[ { P{ Neq 42 43 } } chr-simp1 ] chr-test
+
+{ { P{ Instance ?a number } } }
+[ { P{ Neq ?a "haha" } P{ Instance ?a number } } chr-simp ] unit-test
 
 ! ** Basic Invariants
 
