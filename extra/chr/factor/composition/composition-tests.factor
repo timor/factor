@@ -340,6 +340,14 @@ P{
 { V{ 4 3 2 1 0 } }
 [ V{ } clone 5 [ over push ] each-int-down ] unit-test
 
+: each-int-down-complete ( ..a n quot: ( i --  ) -- ..b  )
+    over 0 < [ "negative accum" throw ] [ each-int-down ] if ; inline
+
+[ V{ } clone -1 [ over push ] each-int-down-complete ] [ "negative accum" = ] must-fail-with
+
+{ V{ 4 3 2 1 0 } }
+[ V{ } clone 5 [ over push ] each-int-down-complete ] unit-test
+
 ! stupid test word: increase n, decrease i, when done add 42 to n
 : inc-int-down ( n i -- m )
     dup 0 > [ [ 1 + ] [ 1 - ] bi* inc-int-down ] [ drop 42 + ] if ;

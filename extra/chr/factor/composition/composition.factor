@@ -1009,8 +1009,8 @@ CHR: invalid-stays-invalid @ { Invalid } // { Invalid } -- | ;
 
 
 ! *** Normalizations
-! TODO: maybe do to val-pred?
-CHR: var-is-lhs @ // AS: ?p <={ expr-pred A{ ?l } ?v } -- [ ?v term-var? ] |
+UNION: commutative-pred Eq Neq ;
+CHR: comm-var-is-lhs @ // AS: ?p <={ commutative-pred A{ ?l } ?v } -- [ ?v term-var? ] |
 [ { ?v ?l } ?p class-of slots>tuple ] ;
 
 CHR: singleton-class-is-literal @ // { Instance ?x ?tau } -- [ { ?tau } first wrapper? not ] [ ?tau singleton-class? ] |
@@ -1262,14 +1262,15 @@ CHR: adjust-macro-stack @ // { MacroCall ?w f ?a ?b } -- [ ?w word? ] [ ?w "tran
 ] ;
 
 ! *** Arithmetics
-CHR: unique-expr-pred @ <={ expr-pred ?a . ?x } // <={ expr-pred ?a . ?x } -- | ;
+CHR: unique-expr-pred @ AS: ?p <={ expr-pred ?a . ?x } // AS: ?q <={ expr-pred ?a . ?x } -- [ ?p class-of ?q class-of class= ] | ;
 
 CHR: check-le @ // { Le A{ ?x } A{ ?y } } -- [ ?x ?y <= not ] | { Invalid } ;
 CHR: check-le-same @ // { Le ?x ?x } -- | ;
 CHR: check-lt @ // { Lt A{ ?x } A{ ?y } } -- [ ?x ?y < not ] | { Invalid } ;
+CHR: lt-tightens-le @ { Lt ?x ?y } // { Le ?x ?y } -- | ;
 CHR: le-defines-eq @ // { Le ?x ?y } { Le ?y ?x } -- | { Eq ?x ?y } ;
 CHR: lt-defines-neq @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Neq ?x ?y } ;
-CHR: check-lt-1 @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Invalid } ;
+! CHR: check-lt-1 @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Invalid } ;
 CHR: check-lt-same @ // { Lt ?x ?x } -- | { Invalid } ;
 CHR: check-lt-eq-1 @ // { Lt ?x ?y } { Eq ?x ?y } -- | { Invalid } ;
 CHR: check-lt-eq-2 @ // { Lt ?x ?y } { Eq ?y ?x } -- | { Invalid } ;
