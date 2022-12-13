@@ -313,6 +313,24 @@ M: object lastcdr6 ;
 { +nil+ } [ L{ 12 } lastcdr6 ] unit-test
 { 42 } [ L{ 12 . 42 } lastcdr6 ] unit-test
 
+TERM-VARS: ?o5 ?a47 ?b34 ?v7 ;
+P{
+    Xor
+    P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } { ?y2 } { P{ Instance ?y2 \ +nil+ } } }
+    P{
+        Xor
+        P{
+            Effect
+            L{ ?o5 . ?a47 }
+            ?b34
+            { ?o5 }
+            { P{ CallRecursive lastcdr6 L{ ?v7 . ?a47 } ?b34 } P{ Instance ?o5 cons-state } P{ Slot ?o5 "cdr" ?v7 } P{ Instance ?v7 object } }
+        }
+        P{ Effect L{ ?y6 . ?ys6 } L{ ?y6 . ?ys6 } { ?y6 } { P{ Instance ?y6 not{ list } } } }
+    }
+}
+[ [ lastcdr6 ] get-type ] chr-test
+
 ! Stack checker examples
 : bad ( ? quot: ( ? -- ) -- ) 2dup [ not ] dip bad call ; inline recursive
 : good ( ? quot: ( ? -- ) -- ) [ good ] 2keep [ not ] dip call ; inline recursive
@@ -322,8 +340,12 @@ M: object lastcdr6 ;
 { V{ 4 3 2 1 0 } }
 [ V{ } clone 5 [ over push ] each-int-down ] unit-test
 
+! stupid test word: increase n, decrease i, when done add 42 to n
 : inc-int-down ( n i -- m )
     dup 0 > [ [ 1 + ] [ 1 - ] bi* inc-int-down ] [ drop 42 + ] if ;
+
+{ 47 }
+[ 1 4 inc-int-down ] unit-test
 
 ! ** Practical examples
 
