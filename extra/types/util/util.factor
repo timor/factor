@@ -298,3 +298,6 @@ M: anonymous-complement simplify-class
     class>> simplify-class class-not ;
 M: anonymous-union simplify-class
     members>> [ simplify-class ] [ class-or ] map-reduce ;
+
+: simplifying-class-and ( class1 class2 -- class )
+    class-and simplify-class ;

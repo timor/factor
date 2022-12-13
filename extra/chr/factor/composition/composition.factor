@@ -1,9 +1,10 @@
 USING: accessors arrays assocs chr chr.factor chr.modular chr.parser chr.state
-classes classes.algebra classes.builtin classes.predicate classes.tuple
-classes.tuple.private classes.union combinators combinators.short-circuit
-effects generic generic.single kernel kernel.private lists math math.parser
-math.private namespaces quotations sequences sequences.private sets
-slots.private sorting strings terms types.util vectors words words.symbol ;
+classes classes.algebra classes.builtin classes.predicate classes.singleton
+classes.tuple classes.tuple.private classes.union combinators
+combinators.short-circuit effects generic generic.single kernel kernel.private
+lists math math.parser math.private namespaces quotations sequences
+sequences.private sets slots.private sorting strings terms types.util vectors
+words words.symbol ;
 
 IN: chr.factor.composition
 
@@ -111,13 +112,14 @@ TUPLE: val-pred < chr-pred val ;
 TUPLE: Instance < val-pred type ;
 TUPLE: NotInstance < Instance ;
 
-TUPLE: Literal < val-pred ;
 TUPLE: Slot < val-pred n slot-val ;
 TUPLE: Element < val-pred type ;
 TUPLE: Length < val-pred length-val ;
 ! A declaration, has parameterizing character
 TUPLE: Declare < chr-pred classes stack ;
-! A declaration, has no parameterizing character, just shortcut for Instance constraints
+
+! A declaration, has no parameterizing character, just shortcut for Instance
+! constraints, used to ensure stack depths and instance decls
 TUPLE: Ensure < chr-pred classes stack ;
 
 TUPLE: CallEffect < chr-pred thing in out ;
@@ -339,13 +341,11 @@ CHR: type-of-builtin-predicate @ // { ?TypeOf [ ?w ] ?tau } --
      ! P{ Effect L{ ?x . ?a } L{ ?y . ?a } { ?x ?y } {
      P{ Effect L{ ?x . ?a } L{ ?y . ?a } { ?y } {
             P{ Instance ?x ?c }
-            P{ Literal ?y }
             P{ Instance ?y W{ t } }
         } }
      ! P{ Effect L{ ?x . ?a } L{ ?y . ?a } { ?x ?y } {
      P{ Effect L{ ?x . ?a } L{ ?y . ?a } { ?y } {
             P{ Instance ?x ?d }
-            P{ Literal ?y }
             P{ Instance ?y W{ f } }
         } }
    }
@@ -487,7 +487,7 @@ CHR: type-of-wrapper @ // { ?TypeOf ?q ?tau } --
 |
 [
     ?tau
-    P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x ?v } P{ Literal ?x } } }
+    P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x ?v } } }
     ==!
 ] ;
 
@@ -502,7 +502,7 @@ CHR: type-of-unit-val @ { ?TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ]
 { TypeOf ?q ?sig } ;
 
 CHR: make-unit-simple-type @ // { MakeUnit ?rho ?tau } -- [ { ?rho } first valid-type? ] |
-[ ?tau P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x ?rho } P{ Literal ?x } } } ==! ] ;
+[ ?tau P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x ?rho } } } ==! ] ;
 
 CHR: make-xor-unit-type @ // { MakeUnit P{ Xor ?x ?y } ?tau } -- |
 { MakeXor ?rho ?sig ?tau }
@@ -582,13 +582,11 @@ CHR: type-of-< @ { TypeOfWord A{ < } ?tau } // -- |
     ?sig
     P{ Xor
        P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
-              P{ Literal ?z }
               P{ Instance ?z W{ t } }
               P{ Lt ?y ?x }
               ! P{ Neq ?y ?x }
           } }
         P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
-               P{ Literal ?z }
                P{ Instance ?z W{ f } }
                P{ Le ?x ?y }
            } }
@@ -602,12 +600,10 @@ CHR: type-of-= @ { TypeOfWord A{ = } ?tau } // -- |
     ?sig
     P{ Xor
        P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
-              P{ Literal ?z }
               P{ Instance ?z W{ t } }
               P{ Eq ?x ?y }
           } }
        P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
-              P{ Literal ?z }
               P{ Instance ?z W{ f } }
               P{ Neq ?y ?x }
           } }
@@ -671,7 +667,7 @@ CHR: type-of-regular-word @ { TypeOfWord A{ ?w } ?tau } // --
 ! Takes an ordered list of { class method } specs, and modifies it to exclude
 ! previous ones.
 : make-disjoint-classes-step ( not-class next-in -- not-class next-out )
-    [ swap class-not class-and ]
+    [ swap class-not simplifying-class-and ]
     [ class-or ] 2bi swap ;
 
 : make-disjoint-classes ( classes -- classes )
@@ -1004,7 +1000,7 @@ CHR: do-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q terminating-b
 
 ! ** Simplification/Intra-Effect reasoning
 IMPORT: chr-phi
-UNION: body-pred Instance NotInstance CallEffect Literal Declare Slot CallRecursive Throws Tag
+UNION: body-pred Instance NotInstance CallEffect Declare Slot CallRecursive Throws Tag
     NullStack MacroCall expr-pred Iterated ;
 TUPLE: Params < chr-pred ids ;
 TUPLE: Param < chr-pred id ;
@@ -1012,10 +1008,13 @@ TUPLE: Param < chr-pred id ;
 CHR: invalid-stays-invalid @ { Invalid } // { Invalid } -- | ;
 
 
-! *** Normalize variable expressions
+! *** Normalizations
 ! TODO: maybe do to val-pred?
 CHR: var-is-lhs @ // AS: ?p <={ expr-pred A{ ?l } ?v } -- [ ?v term-var? ] |
 [ { ?v ?l } ?p class-of slots>tuple ] ;
+
+CHR: singleton-class-is-literal @ // { Instance ?x ?tau } -- [ { ?tau } first wrapper? not ] [ ?tau singleton-class? ] |
+{ Instance ?x W{ ?tau } } ;
 
 ! *** Start unification reasoning
 ! NOTE: assumed renaming here already
@@ -1064,7 +1063,7 @@ CHR: early-exit @ { Invalid } // <={ body-pred } -- | ;
 ! the same bind after stack unification
 ! CHR: both-bind-same-var @ { PhiMode } // { Bind ?y ?x } { Bind ?y ?x } -- | [ ?y ?x ==! ] ;
 
-! UNION: bound-propagated-preds Instance Literal expr-pred ;
+! UNION: bound-propagated-preds Instance expr-pred ;
 ! CHR: propagate-bound-pred @ { PhiMode } { Bind ?y ?x } AS: ?p <={ bound-propagated-preds ?x . __ } // -- |
 ! [ ?p clone ?y >>val ] ;
 
@@ -1231,10 +1230,17 @@ CHR: normalize-not-type @ // { NotInstance ?x A{ ?tau } } -- [ { ?tau } first cl
 
 CHR: type-contradiction @ // { NotInstance ?x ?tau } { Instance ?x ?tau } -- | { Invalid } ;
 
-CHR: instance-intersection @ // { Instance ?x A{ ?tau } } { Instance ?x A{ ?sig } } -- [ { ?tau ?sig } first2 class-and :>> ?c ] |
+! NOTE: There are two ways to handle intersections: in factor's type system in
+! the intersection instance type, or in the
+! implicit conjunction of the constraint store.  Currently, this is put into the
+! intersection classes of the factor type system.
+CHR: instance-intersection @
+// { Instance ?x A{ ?tau } } { Instance ?x A{ ?sig } } --
+[ { ?tau ?sig } first2 simplifying-class-and :>> ?c ] |
 { Instance ?x ?c } ;
 
-CHR: instance-intersect-effect @ { Instance ?x ?e  } { Literal ?x } // { Instance ?x A{ ?tau } } --
+CHR: instance-intersect-effect @ { Instance ?x ?e }
+// { Instance ?x A{ ?tau } } --
 [ ?e valid-effect-type? ] |
 [ ?tau callable eq? ?tau quotation eq? or
  f { Invalid } ? ] ;
@@ -1375,7 +1381,10 @@ CHR: destruc-declare @ // { Declare L{ ?tau . ?r } L{ ?x . ?xs } } -- |
 
 ! *** Substituting ground values into body constraints
 
-CHR: known-declare @ { Literal ?l } { Instance ?l ?tau } // { Declare ?l ?a } --
+CHR: known-declare @
+! NOTE: for some reason, we can't match into W{ ?v } objects correctly...
+{ Instance ?l A{ ?tau } } // { Declare ?l ?a } --
+[ { ?tau } first wrapper? ]
 [ ?tau <reversed> >list :>> ?m ] | { Declare ?m ?a } ;
 
 ! CHR: do-macro @ { Instance ?x ?v }
@@ -1392,14 +1401,12 @@ CHR: known-macro-arg @ { Instance ?x ?v } // { MacroCall ?q ?a ?i ?o } -- [ ?x ?
 ! [ ?l <reversed> >list :>> ?m ] |
 ! { Ensure ?m ?a } ;
 
-! CHR: known-slot @ { Literal ?n } { Instance ?n ?tau } // { Slot ?o ?n ?v } -- |
 CHR: known-slot @ { Instance ?n A{ ?tau } } // { Slot ?o ?n ?v } -- |
 { Slot ?o ?tau ?v } ;
 
-! CHR: known-instance @ { Literal ?c } { Instance ?c A{ ?tau } } // { Instance ?x ?c } --
 CHR: known-instance @ { Instance ?c A{ ?tau } } // { Instance ?x ?c } --
 [ { ?tau } first wrapped>> :>> ?d ] | { Instance ?x ?d } ;
-CHR: known-not-instance @ { Literal ?c } { Instance ?c A{ ?tau } } // { NotInstance ?x ?c } --
+CHR: known-not-instance @ { Instance ?c A{ ?tau } } // { NotInstance ?x ?c } --
 [ { ?tau } first wrapped>> :>> ?d ] | { NotInstance ?x ?d } ;
 
 CHR: known-tag-num @ { Instance ?n A{ ?v } } // { Tag ?c ?n } -- [ { ?v } first wrapper? ] [ ?v :>> ?w ] |
@@ -1407,7 +1414,6 @@ CHR: known-tag-num @ { Instance ?n A{ ?v } } // { Tag ?c ?n } -- [ { ?v } first 
 
 
 ! NOTE: this is still a bit tedious...Maybe we can have nice things? (Directly substitute literals...)
-! CHR: known-expr-val @ { Literal ?n } { Instance ?n A{ ?v } } // AS: ?p <={ expr-pred } -- [ ?n ?p vars in? ]
 CHR: known-expr-val @ { Instance ?n ?v } // AS: ?p <={ expr-pred } -- [ ?n ?p vars in? ]
 [ { ?v } first wrapper? ]
 [ { ?v } first wrapped>> :>> ?w ]
@@ -1422,7 +1428,7 @@ CHR: known-named-slot @ { Instance ?o A{ ?tau } } // { Slot ?o A{ ?n } ?v } -- [
 { Slot ?o ?m ?v }
 { Instance ?v ?rho } ;
 
-CHR: known-boa-spec @ { Instance ?c A{ ?v } } { Literal ?c } // AS: ?p <={ Boa ?c ?i ?o } -- |
+CHR: known-boa-spec @ { Instance ?c A{ ?v } } // AS: ?p <={ Boa ?c ?i ?o } -- |
 [ ?p ?v >>spec ] ;
 
 ! *** Boa handling

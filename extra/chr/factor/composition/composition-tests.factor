@@ -128,6 +128,66 @@ M: object auto-dispatch ;
 
 { { L{ } intersection{ list not{ L{  } } } not{ list } } }
 [ \ auto-dispatch dispatch-method-seq keys ] unit-test
+
+TERM-VARS: ?y2 ?ys2 ?o4 ?a43 ?v6 ?y6 ?ys6 ;
+P{
+    Xor
+    P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } { ?y2 } { P{ Instance ?y2 \ +nil+ } } }
+    P{
+        Xor
+        P{ Effect L{ ?o4 . ?a43 } L{ ?v6 . ?a43 } { ?o4 } { P{ Instance ?o4 cons-state } P{ Slot ?o4 "cdr" ?v6 } P{ Instance ?v6 object } } }
+        P{ Effect L{ ?y6 . ?ys6 } L{ ?y6 . ?ys6 } { ?y6 } { P{ Instance ?y6 not{ list } } } }
+    }
+}
+[ \ auto-dispatch get-type ] chr-test
+
+: manual-dispatch ( obj -- res )
+    dup +nil+? [  ]
+    [ dup list? [ cdr>> ] [  ] if ] if ;
+
+{ 42 } [ 42 manual-dispatch ] unit-test
+{ L{ 42 } } [ L{ 43 42 } manual-dispatch ] unit-test
+{ +nil+ } [ L{ } manual-dispatch ] unit-test
+
+TERM-VARS: ?y1 ?ys1 ?x1 ?v1 ?x2 ?x3 ?rho1 ?rho2 ?rho3 ?o1 ?a1 ;
+P{
+    Xor
+    P{ Effect L{ ?x1 . ?rho1 } L{ ?x1 . ?rho1 } { ?x1 } { P{ Instance ?x1 \ +nil+ } } }
+    P{
+        Xor
+        P{
+            Effect
+            L{ ?x2 . ?rho2 }
+            L{ ?v1 . ?rho2 }
+            { ?x2 }
+            { P{ Instance ?x2 cons-state } P{ Slot ?x2 "cdr" ?v1 } P{ Instance ?v1 object } }
+        }
+        P{
+            Effect
+            L{ ?x3 . ?rho3 }
+            L{ ?x3 . ?rho3 }
+            { ?x3 }
+            { P{ Instance ?x3 not{ list } } }
+        }
+    }
+}
+[ \ manual-dispatch get-type ] chr-test
+
+
+{ t } [ \ auto-dispatch get-type \ manual-dispatch get-type isomorphic? ] unit-test
+
+
+GENERIC: default-dispatch ( obj -- res )
+M: list default-dispatch cdr>> ;
+M: +nil+ default-dispatch ;
+
+P{
+    Xor
+    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } { ?y1 } { P{ Instance ?y1 \ +nil+ } } }
+    P{ Effect L{ ?o1 . ?a1 } L{ ?v6 . ?a1 } { ?o1 } { P{ Instance ?o1 cons-state } P{ Slot ?o1 "cdr" ?v6 } P{ Instance ?v6 object } } }
+}
+[ \ default-dispatch get-type ] chr-test
+
 ! ** Mutually recursive definitions
 
 ! : nop ( -- ) ;
@@ -175,12 +235,12 @@ GENERIC: lastcdr1 ( list -- obj )
 M: list lastcdr1 cdr>> lastcdr1 ;
 M: +nil+ lastcdr1 ;
 
-TERM-VARS: ?a15 ?y1 ?ys1 ?o3 ?v3 ;
+TERM-VARS: ?a15 ?o3 ?v3 ;
 
 CONSTANT: sol1
 P{
     Xor
-    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } { ?y1 } { P{ Instance ?y1 L{ } } } }
+    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } { ?y1 } { P{ Instance ?y1 \ +nil+ } } }
     P{ Effect L{ ?o3 . ?a15 } ?b4 { ?o3 } { P{ CallRecursive __ L{ ?v3 . ?a15 } ?b4 } P{ Instance ?o3 cons-state } P{ Slot ?o3 "cdr" ?v3 } P{ Instance ?v3 object } } }
 }
 ! P{
