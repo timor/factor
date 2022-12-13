@@ -1,9 +1,14 @@
 USING: accessors arrays assocs chr.factor.composition chr.parser chr.test
+chr.state
 combinators.short-circuit kernel kernel.private lists literals math quotations
 sequences slots.private terms tools.test typed words ;
 IN: chr.factor.composition.tests
 
 ! ** Test Helpers
+: chr-simp ( constraints -- constraints )
+    chr-comp swap [ run-chr-query store>> ] with-var-names
+    values first ;
+
 GENERIC: get-type ( quot -- type )
 
 M: callable get-type
