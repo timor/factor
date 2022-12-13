@@ -980,6 +980,12 @@ TUPLE: Param < chr-pred id ;
 
 CHR: invalid-stays-invalid @ { Invalid } // { Invalid } -- | ;
 
+
+! *** Normalize variable expressions
+! TODO: maybe do to val-pred?
+CHR: var-is-lhs @ // AS: ?p <={ expr-pred A{ ?l } ?v } -- [ ?v term-var? ] |
+[ { ?v ?l } ?p class-of slots>tuple ] ;
+
 ! *** Start unification reasoning
 ! NOTE: assumed renaming here already
 CHR: rebuild-phi-effect @ { PhiMode } // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } --
@@ -1221,7 +1227,6 @@ CHR: adjust-macro-stack @ // { MacroCall ?w f ?a ?b } -- [ ?w word? ] [ ?w "tran
 ! *** Arithmetics
 CHR: unique-expr-pred @ <={ expr-pred ?a . ?x } // <={ expr-pred ?a . ?x } -- | ;
 
-CHR: normlize-eq @ // { Eq A{ ?v } ?x } -- [ ?x term-var? ] | { Eq ?x ?v } ;
 CHR: check-le @ // { Le A{ ?x } A{ ?y } } -- [ ?x ?y <= not ] | { Invalid } ;
 CHR: check-le-same @ // { Le ?x ?x } -- | ;
 CHR: check-lt @ // { Lt A{ ?x } A{ ?y } } -- [ ?x ?y < not ] | { Invalid } ;

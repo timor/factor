@@ -29,6 +29,23 @@ P{ Effect L{ ?o . ?a } L{ ?v . ?a } { ?o } { P{ Instance ?o array } P{ Slot ?o W
 P{ Effect ?a ?b f { P{ Invalid } } }
 [ [ "haha" throw ] get-type ] chr-test
 
+! ** Normalization
+P{ Neq ?a 42 }
+[ { P{ Neq ?a 42 } } chr-simp ] chr-test
+
+P{ Neq ?a 42 }
+[ { P{ Neq 42 ?a } } chr-simp ] chr-test
+
+P{ Eq ?a 42 }
+[ { P{ Eq 42 ?a } } chr-simp1 ] chr-test
+
+P{ Neq ?a ?b }
+[ { P{ Neq ?a ?b } } chr-simp ] chr-test
+P{ Neq ?b ?a }
+[ { P{ Neq ?b ?a } } chr-simp ] chr-test
+P{ Neq 42 43 }
+[ { P{ Neq 42 43 } } chr-simp ] chr-test
+
 ! ** Basic Invariants
 
 P{ Effect L{ ?a ?b . ?z } L{ ?a ?b . ?z } { } f }
