@@ -1319,9 +1319,8 @@ CHR: neutral-bitand-2 @ // { BitAnd ?z ?x -1 } -- | [ ?z ?x ==! ] ;
 
 ! *** Call Effect matching
 ! NOTE: These only meet in renamed form?
-! NOTE: not sure this has to be restricted to literals, actually, but it feels like we would
-! violate the unknown-call safety net...
-CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } { CallEffect ?q ?a ?b } // -- |
+! CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } { CallEffect ?q ?a ?b } // -- |
+CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } // { CallEffect ?q ?a ?b } -- |
 [ { ?a ?b } { ?c ?d } ==! ]
 { Params ?x }
 [ ?l ] ;
