@@ -859,7 +859,10 @@ TUPLE: RebuildXor < chr-pred effect target ;
 TUPLE: CurrentPhi < chr-pred effect ;
 TUPLE: MakeUnion < chr-pred effect1 effect2 target ;
 TUPLE: IsUnion < chr-pred pred ;
+! Marker to switch reasoning to assume disjunction of value info
 TUPLE: PhiMode < chr-pred ;
+
+! Marker to force disjunction of value info
 TUPLE: FixpointMode < chr-pred ;
 TUPLE: PhiDone < chr-pred ;
 ! Used during phi reasoning to distinguish regular ids from
@@ -938,6 +941,7 @@ CHR: all-phis-done @ { PhiSchedule __ +nil+ ?tau } // { DisjointRoot ?a } -- |
 !  ] ;
 
 ! Trigger Phi-mode Composition
+! This causes the reasoner to assume disjunction instead of conjunction of value predicates.
 CHR: try-union-effect @ { MakeUnion ?a ?b ?tau } // -- [ ?tau term-var? ] |
 { PhiMode }
 { ComposeEffect ?a ?b ?tau } ;
@@ -1167,20 +1171,20 @@ CHR: phi-call-rec-self @ { PhiMode } { PhiSchedule ?w __ __ } //
 ! ]
 
 ! **** Conditions under which even a single pred can conserve disjunctivity
-CHR: disj-output-maybe-callable @ { PhiMode } { MakeEffect __ ?b __ __ __ } // { Instance ?x A{ ?tau } } --
-[ ?x ?b vars in? ] [ { ?tau } first classoid? ] [ { ?tau } first callable classes-intersect? ] | { Invalid } ;
+! CHR: disj-output-maybe-callable @ { PhiMode } { MakeEffect __ ?b __ __ __ } // { Instance ?x A{ ?tau } } --
+! [ ?x ?b vars in? ] [ { ?tau } first classoid? ] [ { ?tau } first callable classes-intersect? ] | { Invalid } ;
 
 ! CHR: disj-param-maybe-callable @ { PhiMode } <={ MakeEffect } { Params ?l } // { Instance ?x A{ ?tau } } --
 ! [ ?x ?l in? ] [ { ?tau } first classoid? ] [ { ?tau } first callable classes-intersect? ] | { Invalid } ;
 
 CHR: disj-is-macro-effect @ { PhiMode } <={ MakeEffect } // <={ MacroCall } -- | { Invalid } ;
 
-CHR: disj-is-inline-effect @ { PhiMode } <={ MakeEffect } { Phi ?r ?p } // <={ CallEffect ?p . __ } -- | { Invalid } ;
+! CHR: disj-is-inline-effect @ { PhiMode } <={ MakeEffect } { Phi ?r ?p } // <={ CallEffect ?p . __ } -- | { Invalid } ;
 
 ! Unknown call-rec
 CHR: disj-single-call-rec @ { PhiMode } <={ MakeEffect } // <={ CallRecursive } -- | { Invalid } ;
 
-CHR: disj-single-effect @ { PhiMode } <={ MakeEffect } // { Instance ?x P{ Effect __ __ __ __ } } -- | { Invalid } ;
+! CHR: disj-single-effect @ { PhiMode } <={ MakeEffect } // { Instance ?x P{ Effect __ __ __ __ } } -- | { Invalid } ;
 
 ! TODO: does that reasoning work? Basically, we would need to have absence as failure here...
 ! CHR: disj-unknown-can-be-callable @ { PhiMode } <={ MakeEffect } // { Instance ?x A{ ?tau } }
