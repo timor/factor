@@ -986,7 +986,7 @@ CHR: do-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q terminating-b
     ?l [ f ] [
         >list :> fp-phis
         {
-            P{ FixpointMode }
+            ! P{ FixpointMode }
             P{ PhiSchedule ?q fp-phis ?tau }
             P{ FixpointTypeOf ?q ?tau }
         }
