@@ -45,7 +45,7 @@ M: word get-type
 
 TYPED: array-first ( arr: array -- thing ) 2 slot ;
 
-TERM-VARS: ?o ?a ?b ?v ?x ?y ?z ;
+TERM-VARS: ?o ?a ?b ?v ?w ?x ?y ?z ;
 
 P{ Effect L{ ?o . ?a } L{ ?v . ?a } { ?o } { P{ Instance ?o array } P{ Slot ?o W{ 2 } ?v } } }
 [ \ array-first get-type ] chr-test
@@ -53,6 +53,24 @@ P{ Effect L{ ?o . ?a } L{ ?v . ?a } { ?o } { P{ Instance ?o array } P{ Slot ?o W
 ! ** Throwing
 P{ Effect ?a ?b f { P{ Invalid } } }
 [ [ "haha" throw ] get-type ] chr-test
+
+TERM-VARS: ?c ?d ;
+! ** Unphiable stacks test
+{ t } [ { ?a ?b } { ?v ?w } unify phi-stacks-unique? ] unit-test
+{ f } [ { ?a ?b } { ?v ?v } unify phi-stacks-unique? ] unit-test
+{ t } [ { L{ ?a ?b . ?v } ?v }
+        { L{ ?c ?d ?x ?y . ?o } L{ ?x ?y . ?o } } unify
+        phi-stacks-unique? ] unit-test
+{ f } [ { L{ ?a ?b . ?v } ?v }
+        { L{ ?c ?d ?x ?y . ?o } L{ ?y ?x . ?o } } unify
+        phi-stacks-unique? ] unit-test
+{ f } [ { L{ ?a ?x } L{ ?b ?x } }
+        { L{ ?c ?d } L{ ?d ?c } } unify
+        phi-stacks-unique? ] unit-test
+
+{ f } [ { L{ ?a ?x . ?o } L{ ?b ?x . ?o } }
+        { L{ ?c ?d . ?z } L{ ?d ?c . ?z } } unify
+        phi-stacks-unique? ] unit-test
 
 ! ** Normalization
 P{ Neq ?a 42 }

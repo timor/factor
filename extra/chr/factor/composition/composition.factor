@@ -1086,6 +1086,10 @@ CHR: phi-parm-intersect @ { Phi ?z ?x } { Phi ?z ?y } // { Param ?x } { Param ?y
 ! 1. Any joined type, be it input, internal, or output is considered to be in covariant position
 ! 2. Only output types are considered to be in covariant position
 ! 3. Some explicit dependency type magic determines under what conditions we want to be distinct...
+! 4. Only keep separate cases if we have conflicting definitions of output row vars due to unknown effects
+
+! Current aproach: Something like 3, where the set of Params is defined
+! explicitly, and contagious, by underlying conditionals
 CHR: phi-disjoint-instance @ { Phi ?z ?x } { Phi ?z ?y } { Params ?l } // { Instance ?x A{ ?rho } } { Instance ?y A{ ?tau } } --
 [ ?z ?l in? ] [ { ?rho ?tau } first2 classes-intersect? not ] | { Invalid } ;
 
