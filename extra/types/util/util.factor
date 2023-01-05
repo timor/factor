@@ -300,8 +300,14 @@ M: anonymous-intersection simplify-class
     participants>> [ simplify-class ] map
     simplify-intersection ;
 
+
+! not{ union{  } } constructs are converted to intersection{ not{  } }
+! constructs.  But not the other way round, since we would run into endless loops?
 M: anonymous-complement simplify-class
-    class>> simplify-class class-not ;
+    class>> simplify-class
+    dup anonymous-union?
+    [ members>> [ class-not ] map simplify-intersection ]
+    [ class-not ] if ;
 
 : simplify-member-classes ( x -- x )
     class-members
@@ -310,6 +316,7 @@ M: anonymous-complement simplify-class
 
 M: union-class simplify-class
     simplify-member-classes ;
+
 ! NOTE: this is different from factor's behavior, which does not expand mixins
 M: mixin-class simplify-class
     simplify-member-classes ;
