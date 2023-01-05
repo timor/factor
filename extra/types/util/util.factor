@@ -1,9 +1,9 @@
-USING: accessors arrays assocs classes classes.algebra colors.constants
-combinators combinators.short-circuit combinators.smart generalizations graphs
+USING: accessors arrays assocs classes classes.algebra classes.algebra.private
+classes.mixin classes.singleton classes.union colors.constants combinators
+combinators.short-circuit combinators.smart generalizations graphs
 graphs.private io io.styles kernel lists lists.private make math math.parser
 mirrors namespaces prettyprint.backend prettyprint.custom prettyprint.sections
 quotations sequences sequences.extras sequences.private sets threads typed words
-classes.algebra.private
 ;
 
 IN: types.util
@@ -185,6 +185,9 @@ MACRO: lmatch-map-as ( branches cons-class -- quot )
 : lastcdr ( list -- x )
     dup atom? [ cdr lastcdr ] unless ; inline recursive
 
+: list*>array ( list* -- array )
+    [ list>array* ] [ lastcdr ] bi suffix ;
+
 ! Check for compatible list prefix, return longer one if match
 : list~ ( list1 list2 -- list/f )
     { [ t [ = and ] 2lreduce ] [ [ [ llength ] bi@ > ] most ] } 2&& ;
@@ -290,14 +293,41 @@ GENERIC: simplify-class ( class -- class )
 ! M: classoid simplify-class normalize-class ;
 
 M: classoid simplify-class ;
+! NOTE: the normal form here is the non-wrapped version!
+M: wrapper simplify-class
+    dup wrapped>> dup singleton-class? [ nip ] [ drop ] if ;
 M: anonymous-intersection simplify-class
     participants>> [ simplify-class ] map
     simplify-intersection ;
 
 M: anonymous-complement simplify-class
     class>> simplify-class class-not ;
+
+: simplify-member-classes ( x -- x )
+    class-members
+    [ null ]
+    [ [ simplify-class ] [ class-or ] map-reduce ] if-empty ;
+
+M: union-class simplify-class
+    simplify-member-classes ;
+! NOTE: this is different from factor's behavior, which does not expand mixins
+M: mixin-class simplify-class
+    simplify-member-classes ;
+
+: expand-intersection ( union-class intersections -- class intersections ? )
+    dup empty? [ f ]
+    [ unclip [ participants>>
+          [ class-or ] with [ class-and ] map-reduce
+       ] dipd t ] if ;
+
 M: anonymous-union simplify-class
-    members>> [ simplify-class ] [ class-or ] map-reduce ;
+    members>> [ simplify-class ] map
+    [ anonymous-intersection? ] partition
+    null [ class-or ] reduce swap
+    [ expand-intersection ] loop drop ;
 
 : simplifying-class-and ( class1 class2 -- class )
     class-and simplify-class ;
+
+: simplifying-class-or ( class1 class2 -- class )
+    class-or simplify-class ;
