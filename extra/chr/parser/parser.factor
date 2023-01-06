@@ -26,7 +26,7 @@ SYNTAX: CHR{ \ } parse-chr-rule chr new-chr suffix! ;
 SYNTAX: CHR: scan-token "@" expect \ ; parse-chr-rule named-chr new-chr swap >>rule-name suffix! ;
 
 : ex-check-setter-quot ( var -- quot )
-    '[ dup [ _ current-bindings get-global set-at ] when* ] ;
+    '[ dup _ current-bindings get-global set-at ] ;
 
 SYNTAX: :>> scan-word term-var check-instance
     [ defined-existentials [ swap suffix ] change ]
