@@ -17,13 +17,16 @@ IN: chr.factor.composition.tests
 { integer }
 [ intersection{ number integer } simplify-class ] unit-test
 
-{ not{ list } }
+! { not{ list } }
+{ intersection{ not{ cons-state } not{ L{ } } } }
 [ not{ list } simplify-class ] unit-test
 
-{ not{ list } }
+! { not{ list } }
+{ intersection{ not{ cons-state } not{ L{ } } } }
 [ intersection{ not{ list } } simplify-class ] unit-test
 
-{ not{ list } }
+! { not{ list } }
+{ intersection{ not{ cons-state } not{ L{ } } } }
 [ intersection{ not{ cons-state } not{ L{ } } not{ list } } simplify-class ] unit-test
 
 ! ** Test Helpers
@@ -47,7 +50,10 @@ TYPED: array-first ( arr: array -- thing ) 2 slot ;
 
 TERM-VARS: ?o ?a ?b ?v ?w ?x ?y ?z ;
 
-P{ Effect L{ ?o . ?a } L{ ?v . ?a } { ?o } { P{ Instance ?o array } P{ Slot ?o W{ 2 } ?v } } }
+P{ Effect L{ ?o . ?a } L{ ?v . ?a } { ?o } {
+       P{ Instance ?o array }
+       P{ Instance ?v object }
+       P{ Slot ?o W{ 2 } ?v } } }
 [ \ array-first get-type ] chr-test
 
 ! ** Throwing
@@ -93,21 +99,36 @@ P{ Neq 42 43 }
 [ { P{ Neq ?a "haha" } P{ Instance ?a number } } chr-simp ] unit-test
 
 ! ** Basic Invariants
+{ t }
+[ [ if* ] get-type valid-effect-type? ] unit-test
 
-P{ Effect L{ ?a ?b . ?z } L{ ?a ?b . ?z } { } f }
+P{ Effect L{ ?a ?b . ?z } L{ ?a ?b . ?z } { } { P{ Instance ?a object }
+                                                P{ Instance ?b object } } }
 [ [ swap swap ] get-type ] chr-test
 
-P{ Effect L{ ?a ?b . ?z } L{ ?b ?a . ?z } { } f }
+P{ Effect L{ ?a ?b . ?z } L{ ?b ?a . ?z } { } { P{ Instance ?a object }
+                                                P{ Instance ?b object } } }
 [ [ swap swap swap ] get-type ] chr-test
 
 P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { } { P{ Instance ?x number } P{ Instance ?y number } P{ Instance ?z number } P{ Sum ?z ?x ?y } } }
 [ [ + ] get-type ] chr-test
 
+{ t }
+[ [ if ] get-type [ [ if ] (call) ] get-type isomorphic? ] unit-test
+
+{ t }
+[ [ [ ? ] ] get-type [ [ [ ? ] ] (call) ] get-type isomorphic? ] unit-test
+
+{ t }
+[ [ [ if ] ] get-type [ [ [ if ] ] (call) ] get-type isomorphic? ] unit-test
+
 TERM-VARS: ?q3 ?q5 ?p2 ?p3 ?c2 ?c3 ?a4 ?a6 ?b3 ?b4 ;
+! NOTE: This is interesting: because we have [ ? ] as basis, we don't enforce
+! that the non-taken branch quotation is actually a quotation!
 P{
     Xor
-    P{ Effect L{ ?q3 ?p2 ?c2 . ?a4 } ?b3 { ?c2 } { P{ Instance ?c2 not{ W{ f } } } P{ Instance ?p2 callable } P{ CallEffect ?p2 ?a4 ?b3 } } }
-    P{ Effect L{ ?q5 ?p3 ?c3 . ?a6 } ?b4 { ?c3 } { P{ Instance ?c3 W{ f } } P{ Instance ?q5 callable } P{ CallEffect ?q5 ?a6 ?b4 } } }
+    P{ Effect L{ ?q3 ?p2 ?c2 . ?a4 } ?b3 { ?c2 } { P{ Instance ?q3 object } P{ Instance ?c2 not{ POSTPONE: f } } P{ Instance ?p2 callable } P{ CallEffect ?p2 ?a4 ?b3 } } }
+    P{ Effect L{ ?q5 ?p3 ?c3 . ?a6 } ?b4 { ?c3 } { P{ Instance ?p3 object } P{ Instance ?c3 POSTPONE: f } P{ Instance ?q5 callable } P{ CallEffect ?q5 ?a6 ?b4 } } }
 }
 [ [ if ] get-type ] chr-test
 
@@ -118,7 +139,17 @@ P{ Effect ?a ?b f { P{ Invalid } } }
 [ [ [ 42 2 slot ] [ "string" ] if ] get-type [ drop "string" ] get-type isomorphic? ] unit-test
 
 { t }
-[ [ [ 42 2 slot ] [ "string" ] if ] get-type [ { W{ f } } declare drop "string" ] get-type isomorphic? ] unit-test
+[ [ [ 42 2 slot ] [ "string" ] if ] get-type [ { POSTPONE: f } declare drop "string" ] get-type isomorphic? ] unit-test
+
+P{ Effect L{ ?y . ?a } L{ ?x . ?a } { ?y }
+   { P{ Instance ?y object } P{ Instance ?x W{ 4 } } } }
+[ [ number? 4 4 ? ] get-type ] chr-test
+
+{ t }
+[ [ number? 4 5 ? ] get-type Xor? ] unit-test
+
+{ t }
+[ [ + 5 = [ swap ] when ] get-type Xor? ] unit-test
 
 ! ** Simple Dispatch
 GENERIC: foothing ( obj -- result )
@@ -131,7 +162,8 @@ foothing1
 [ M\ fixnum foothing get-type ] chr-test
 
 CONSTANT: foothing2
-P{ Effect L{ ?o . ?a } L{ ?v . ?a } { ?o } { P{ Instance ?o array } P{ Slot ?o W{ 2 } ?v } } }
+P{ Effect L{ ?o . ?a } L{ ?v . ?a } { ?o } { P{ Instance ?o array }
+                                             P{ Instance ?v object } P{ Slot ?o W{ 2 } ?v } } }
 foothing2
 [ M\ array foothing get-type ] chr-test
 
@@ -144,21 +176,18 @@ M: list auto-dispatch cdr>> ;
 M: +nil+ auto-dispatch ;
 M: object auto-dispatch ;
 
-{ { L{ } intersection{ list not{ L{  } } } not{ list } } }
+{ { L{ } cons-state intersection{ not{ cons-state } not{ L{ } } } } }
 [ \ auto-dispatch dispatch-method-seq keys ] unit-test
 
 TERM-VARS: ?y2 ?ys2 ?o4 ?a43 ?v6 ?y6 ?ys6 ;
 P{
     Xor
-    P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } { ?y2 } { P{ Instance ?y2 \ +nil+ } } }
-    P{
-        Xor
-        P{ Effect L{ ?o4 . ?a43 } L{ ?v6 . ?a43 } { ?o4 } { P{ Instance ?o4 cons-state } P{ Slot ?o4 "cdr" ?v6 } P{ Instance ?v6 object } } }
-        P{ Effect L{ ?y6 . ?ys6 } L{ ?y6 . ?ys6 } { ?y6 } { P{ Instance ?y6 not{ list } } } }
-    }
+    P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } { ?y2 } { P{ Instance ?y2 not{ cons-state } } } }
+    P{ Effect L{ ?o4 . ?a43 } L{ ?v6 . ?a43 } { ?o4 } { P{ Instance ?o4 cons-state } P{ Slot ?o4 "cdr" ?v6 } P{ Instance ?v6 object } } }
 }
 [ \ auto-dispatch get-type ] chr-test
 
+! TODO: investigate why manual-dispatch takes ages compared to auto-dispatch
 : manual-dispatch ( obj -- res )
     dup +nil+? [  ]
     [ dup list? [ cdr>> ] [  ] if ] if ;
@@ -170,23 +199,13 @@ P{
 TERM-VARS: ?y1 ?ys1 ?x1 ?v1 ?x2 ?x3 ?rho1 ?rho2 ?rho3 ?o1 ?a1 ;
 P{
     Xor
-    P{ Effect L{ ?x1 . ?rho1 } L{ ?x1 . ?rho1 } { ?x1 } { P{ Instance ?x1 \ +nil+ } } }
+    P{ Effect L{ ?x1 . ?rho1 } L{ ?x1 . ?rho1 } { ?x1 } { P{ Instance ?x1 not{ cons-state } } } }
     P{
-        Xor
-        P{
-            Effect
-            L{ ?x2 . ?rho2 }
-            L{ ?v1 . ?rho2 }
-            { ?x2 }
-            { P{ Instance ?x2 cons-state } P{ Slot ?x2 "cdr" ?v1 } P{ Instance ?v1 object } }
-        }
-        P{
-            Effect
-            L{ ?x3 . ?rho3 }
-            L{ ?x3 . ?rho3 }
-            { ?x3 }
-            { P{ Instance ?x3 not{ list } } }
-        }
+        Effect
+        L{ ?x2 . ?rho2 }
+        L{ ?v1 . ?rho2 }
+        { ?x2 }
+        { P{ Instance ?x2 cons-state } P{ Slot ?x2 "cdr" ?v1 } P{ Instance ?v1 object } }
     }
 }
 [ \ manual-dispatch get-type ] chr-test
@@ -201,7 +220,7 @@ M: +nil+ default-dispatch ;
 
 P{
     Xor
-    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } { ?y1 } { P{ Instance ?y1 \ +nil+ } } }
+    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } { ?y1 } { P{ Instance ?y1 L{ } } } }
     P{ Effect L{ ?o1 . ?a1 } L{ ?v6 . ?a1 } { ?o1 } { P{ Instance ?o1 cons-state } P{ Slot ?o1 "cdr" ?v6 } P{ Instance ?v6 object } } }
 }
 [ \ default-dispatch get-type ] chr-test
@@ -258,19 +277,9 @@ TERM-VARS: ?a15 ?o3 ?v3 ;
 CONSTANT: sol1
 P{
     Xor
-    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } { ?y1 } { P{ Instance ?y1 \ +nil+ } } }
+    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } { ?y1 } { P{ Instance ?y1 L{ } } } }
     P{ Effect L{ ?o3 . ?a15 } ?b4 { ?o3 } { P{ CallRecursive __ L{ ?v3 . ?a15 } ?b4 } P{ Instance ?o3 cons-state } P{ Slot ?o3 "cdr" ?v3 } P{ Instance ?v3 object } } }
 }
-! P{
-!     Xor
-!     P{ Effect ?a3 ?a3 f { P{ Declare L{ L{ } } ?a3 } } }
-!     P{
-!         Effect
-!         L{ ?o3 . ?a11 }
-!         ?b3 f
-!         { P{ CallRecursive __ L{ ?v3 . ?a11 } ?b3 } P{ Instance ?o3 cons-state } P{ Slot ?o3 "cdr" ?v3 } }
-!     }
-! }
 
 sol1
 [ [ lastcdr1 ] get-type ] chr-test
@@ -295,14 +304,6 @@ sol1
 sol1
 [ [ [ [ lastcdr3 ] ] (call) (call) ] get-type ] chr-test
 
-GENERIC: lastcdr5 ( list -- obj )
-M: list lastcdr5 cdr>> lastcdr5 ;
-M: +nil+ lastcdr5 ;
-M: array lastcdr5 array-first lastcdr5 ;
-
-{ t }
-[ [ lastcdr5 ] get-type dup [ full-type? ] when ] unit-test
-
 GENERIC: lastcdr4 ( list -- obj )
 M: list lastcdr4 cdr>> [ [ lastcdr4 ] ] (call) (call) ;
 M: +nil+ lastcdr4 ;
@@ -315,8 +316,18 @@ M: array lastcdr4 array-first lastcdr4 ;
 ! { t }
 ! [ [ lastcdr4 dup drop ] get-type [ [ lastcdr4 ] (call) ] get-type isomorphic? ] unit-test
 
+GENERIC: lastcdr5 ( list -- obj )
+M: list lastcdr5 cdr>> lastcdr5 ;
+M: +nil+ lastcdr5 ;
+M: array lastcdr5 array-first lastcdr5 ;
+
+{ t }
+[ [ lastcdr5 ] get-type dup [ full-type? ] when ] unit-test
+
+
 ! NOTE: This one does not work because we don't recursively perform full phi-computations
-! through multiple levels of nested effects
+! through multiple levels of nested effects (yet?)
+! TODO: fix this, at least returning something more useful than object....
 ! { t }
 { f }
 [ [ [ lastcdr5 ] ] get-type [ [ [ lastcdr5 ] ] (call) ] get-type isomorphic? ] unit-test
@@ -334,17 +345,13 @@ M: object lastcdr6 ;
 TERM-VARS: ?o5 ?a47 ?b34 ?v7 ;
 P{
     Xor
-    P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } { ?y2 } { P{ Instance ?y2 \ +nil+ } } }
+    P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } { ?y2 } { P{ Instance ?y2 not{ cons-state } } } }
     P{
-        Xor
-        P{
-            Effect
-            L{ ?o5 . ?a47 }
-            ?b34
-            { ?o5 }
-            { P{ CallRecursive lastcdr6 L{ ?v7 . ?a47 } ?b34 } P{ Instance ?o5 cons-state } P{ Slot ?o5 "cdr" ?v7 } P{ Instance ?v7 object } }
-        }
-        P{ Effect L{ ?y6 . ?ys6 } L{ ?y6 . ?ys6 } { ?y6 } { P{ Instance ?y6 not{ list } } } }
+        Effect
+        L{ ?o5 . ?a47 }
+        ?b34
+        { ?o5 }
+        { P{ CallRecursive lastcdr6 L{ ?v7 . ?a47 } ?b34 } P{ Instance ?o5 cons-state } P{ Slot ?o5 "cdr" ?v7 } P{ Instance ?v7 object } }
     }
 }
 [ [ lastcdr6 ] get-type ] chr-test

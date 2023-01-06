@@ -1,10 +1,10 @@
 USING: accessors arrays assocs chr chr.factor chr.modular chr.parser chr.state
 classes classes.algebra classes.builtin classes.predicate classes.singleton
 classes.tuple classes.tuple.private classes.union combinators
-combinators.short-circuit effects generic generic.single kernel kernel.private
-lists math math.parser math.private namespaces quotations sequences
-sequences.private sets slots.private sorting strings terms types.util vectors
-words words.symbol ;
+combinators.short-circuit continuations effects generic generic.single kernel
+kernel.private lists math math.parser math.private namespaces quotations
+sequences sequences.private sets slots.private sorting strings terms types.util
+vectors words words.symbol ;
 
 IN: chr.factor.composition
 
@@ -256,8 +256,7 @@ CHR: phi-stack-done @ // { PhiStack ?z ?x } { PhiStack ?z ?y } -- [ ?x term-var?
 
 CHR: phi-val @ // { PhiStack L{ ?z . ?zs } L{ ?x . ?xs } } { PhiStack L{ ?z . ?zs } L{ ?y . ?ys } } -- |
 { PhiStack ?zs ?xs } { PhiStack ?zs ?ys }
-{ Phi ?z ?x } { Phi ?z ?y }
-{ Instance ?z object } ;
+{ Phi ?z ?x } { Phi ?z ?y } ;
 ! NOTE: destructive
 CHR: phi-stack-expand @ { PhiStack ?a L{ ?x . ?xs } } { PhiStack ?a L{ ?y . ?ys } } // -- | [ ?a L{ ?z . ?zs } ==! ] ;
 ! NOTE: destructive
@@ -309,23 +308,29 @@ CHR: type-of-prim-call @ // { ?TypeOf [ (call) ] ?tau } -- |
               P{ CallEffect ?q ?a ?b } } } ==! ] ;
 
 CHR: type-of-dip @ { TypeOfWord dip ?tau } // -- |
-[ ?tau P{ Effect L{ ?q ?x . ?a } L{ ?x . ?b } f { P{ CallEffect ?q ?a ?b } } } ==! ] ;
+[ ?tau P{ Effect L{ ?q ?x . ?a } L{ ?x . ?b } f {
+              P{ Instance ?q callable }
+              P{ Instance ?x object }
+              P{ CallEffect ?q ?a ?b } } }
+  ==! ] ;
 
 CHR: type-of-dup @ { TypeOfWord dup ?tau } // -- |
-[ ?tau P{ Effect L{ ?x . ?rho } L{ ?x ?x . ?rho } f f } ==! ] ;
+[ ?tau P{ Effect L{ ?x . ?rho } L{ ?x ?x . ?rho } f { P{ Instance ?x object } } } ==! ] ;
 
 CHR: type-of-drop @ // { ?TypeOf [ drop ] ?tau } -- |
-[ ?tau P{ Effect L{ ?x . ?a } ?a f f } ==! ] ;
+[ ?tau P{ Effect L{ ?x . ?a } ?a f { P{ Instance ?x object } } } ==! ] ;
 
 CHR: type-of-swap @ // { ?TypeOf [ swap ] ?tau } -- |
-[ ?tau P{ Effect L{ ?x ?y . ?a } L{ ?y ?x . ?a } f f } ==! ] ;
+[ ?tau P{ Effect L{ ?x ?y . ?a } L{ ?y ?x . ?a } f { P{ Instance ?x object } P{ Instance ?y object } } } ==! ] ;
+
+! *** Parameter-inducing words
 
 CHR: type-of-mux @ // { ?TypeOf [ ? ] ?tau } -- |
 [
     ?tau
     P{ Xor
-       P{ Effect L{ ?q ?p ?c . ?a } L{ ?p . ?a } { ?c } { P{ Instance ?c not{ W{ f } } } } }
-       P{ Effect L{ ?q ?p ?c . ?a } L{ ?q . ?a } { ?c } { P{ Instance ?c W{ f } } } }
+       P{ Effect L{ ?q ?p ?c . ?a } L{ ?p . ?a } { ?c } { P{ Instance ?q object } P{ Instance ?p object } P{ Instance ?c not{ POSTPONE: f } } } }
+       P{ Effect L{ ?q ?p ?c . ?a } L{ ?q . ?a } { ?c } { P{ Instance ?q object } P{ Instance ?p object } P{ Instance ?c POSTPONE: f } } }
      }
     ==!
 ] ;
@@ -341,12 +346,12 @@ CHR: type-of-builtin-predicate @ // { ?TypeOf [ ?w ] ?tau } --
      ! P{ Effect L{ ?x . ?a } L{ ?y . ?a } { ?x ?y } {
      P{ Effect L{ ?x . ?a } L{ ?y . ?a } { ?y } {
             P{ Instance ?x ?c }
-            P{ Instance ?y W{ t } }
+            P{ Instance ?y t }
         } }
      ! P{ Effect L{ ?x . ?a } L{ ?y . ?a } { ?x ?y } {
      P{ Effect L{ ?x . ?a } L{ ?y . ?a } { ?y } {
             P{ Instance ?x ?d }
-            P{ Instance ?y W{ f } }
+            P{ Instance ?y POSTPONE: f }
         } }
    }
   ==!
@@ -355,17 +360,19 @@ CHR: type-of-builtin-predicate @ // { ?TypeOf [ ?w ] ?tau } --
 ! NOTE: this is kind of a chicken-and-egg situation with instance checks.  There seems to
 ! be some kind of mutually recursive dependency between normative declaration and predicate
 ! checking.
-CHR: type-of-instance? @ // { TypeOfWord instance? ?tau } -- |
+CHR: type-of-instance? @ { TypeOfWord instance? ?tau } // -- |
 [ ?tau P{ Xor
           ! P{ Effect L{ ?o ?sig . ?a } L{ ?c . ?a } { ?o ?c } {
           P{ Effect L{ ?o ?sig . ?a } L{ ?c . ?a } { ?c } {
                  P{ Instance ?o ?sig }
-                 P{ Instance ?c W{ t } }
+                 P{ Instance ?c t }
+                 P{ Instance ?sig classoid }
              } }
           ! P{ Effect L{ ?o ?sig . ?a } L{ ?c . ?a } { ?o ?c } {
           P{ Effect L{ ?o ?sig . ?a } L{ ?c . ?a } { ?c } {
                  P{ NotInstance ?o ?sig }
-                 P{ Instance ?c W{ f } }
+                 P{ Instance ?c POSTPONE: f }
+                 P{ Instance ?sig classoid }
              } }
           } ==! ] ;
 
@@ -381,6 +388,9 @@ M: union-class make-pred-quot nip
      "predicate" word-prop swap
      '[ dup @ [ nip ] _ if* ]
     ] each ;
+! ! NOTE: don't expand the unions for now
+! M: union-class make-pred-quot
+!     nip '[ _ instance? ] ;
 M: predicate-class make-pred-quot drop def>> ;
 
 CHR: type-of-predicate @ { TypeOfWord ?w ?tau } // -- [ ?w "predicating" word-prop :>> ?c ]
@@ -397,6 +407,7 @@ CHR: type-of-<array> @ { TypeOfWord <array> ?tau } // -- |
   P{ Effect L{ ?v ?n . ?r } L{ ?a . ?r } { ?v } {
          P{ Instance ?n fixnum }
          P{ Instance ?a array }
+         P{ Instance ?v object }
          P{ Length ?a ?n }
          P{ Element ?a ?v }
      } }
@@ -410,6 +421,7 @@ CHR: type-of-access @ { TypeOfWord array-nth ?tau } // -- |
          P{ Instance ?n fixnum }
          P{ Instance ?l array }
          P{ Instance ?x array-capacity }
+         P{ Instance ?v object }
          P{ Length ?l ?x }
          ! P{ Gt ?x ?n }
          P{ Le ?n ?x }
@@ -423,6 +435,7 @@ CHR: type-of-slot @ { TypeOfWord slot ?tau } // -- [ ?tau term-var? ] |
   P{ Effect L{ ?m ?o . ?a } L{ ?v . ?a } f {
          P{ Instance ?o not{ fixnum } }
          P{ Instance ?m fixnum }
+         P{ Instance ?v object }
          P{ Slot ?o ?m ?v }
      } }
   ==! ] ;
@@ -432,6 +445,8 @@ CHR: type-of-set-slot @ { TypeOfWord set-slot ?tau } // -- [ ?tau term-var? ] |
 [ ?tau
   P{ Effect L{ ?n ?o ?v . ?a } ?a f {
          P{ Instance ?n fixnum }
+         P{ Instance ?o not{ fixnum } }
+         P{ Instance ?v object }
          P{ Slot ?o ?n ?v }
      } }
   ==!
@@ -514,10 +529,13 @@ CHR: type-of-val @ // { ?TypeOf A{ ?v } ?tau } -- [ ?v callable? not ] [ ?v call
 [ ?tau W{ W{ ?v } } ==! ] ;
 
 ! *** Some Primitives
+
+! induces parameter
 CHR: type-of-eq @ { TypeOfWord eq? ?tau } // -- |
 [ ?tau P{ Xor
-          P{ Effect L{ ?x ?x . ?a } L{ ?c . ?a } { ?c } { P{ Instance ?c W{ t } } } }
-          P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } { ?c } { P{ Instance ?c W{ f } } P{ Neq ?x ?y } } }
+          ! introducing the value which is equal to as parameter?
+          P{ Effect L{ ?x ?x . ?a } L{ ?c . ?a } { ?c } { P{ Instance ?x object } P{ Instance ?c t } } }
+          P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } { ?c } { P{ Instance ?x object } P{ Instance ?c POSTPONE: f } P{ Neq ?x ?y } } }
    } ==! ] ;
 
 CHR: type-of-declare @ { TypeOfWord declare ?tau } // -- |
@@ -533,6 +551,7 @@ CHR: type-of-tag @ { TypeOfWord tag ?tau } // -- |
 [ ?tau
   P{ Effect L{ ?o . ?a } L{ ?n . ?a } f {
          P{ Instance ?n fixnum }
+         P{ Instance ?o object }
          P{ Tag ?o ?n }
      } } ==! ]  ;
 
@@ -577,17 +596,18 @@ CHR: type-of-* @ { TypeOfWord A{ * } ?tau } // -- |
      } } ==! ]
 { ComposeType P{ Effect ?a ?a f { P{ Ensure { number number } ?a } } } ?sig ?tau } ;
 
+! induces parameter
 CHR: type-of-< @ { TypeOfWord A{ < } ?tau } // -- |
 [
     ?sig
     P{ Xor
        P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
-              P{ Instance ?z W{ t } }
+              P{ Instance ?z t }
               P{ Lt ?y ?x }
               ! P{ Neq ?y ?x }
           } }
         P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
-               P{ Instance ?z W{ f } }
+               P{ Instance ?z POSTPONE: f }
                P{ Le ?x ?y }
            } }
      }
@@ -595,16 +615,17 @@ CHR: type-of-< @ { TypeOfWord A{ < } ?tau } // -- |
 ]
 { ComposeType P{ Effect ?a ?a f { P{ Ensure { number number } ?a } } } ?sig ?tau } ;
 
+! induces parameter
 CHR: type-of-= @ { TypeOfWord A{ = } ?tau } // -- |
 [
     ?sig
     P{ Xor
        P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
-              P{ Instance ?z W{ t } }
+              P{ Instance ?z t }
               P{ Eq ?x ?y }
           } }
        P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
-              P{ Instance ?z W{ f } }
+              P{ Instance ?z POSTPONE: f }
               P{ Neq ?y ?x }
           } }
      }
@@ -751,11 +772,16 @@ M: Effect free-effect-vars
     preds>> [ free-effect-vars ] gather ;
 M: term-var free-effect-vars 1array ;
 M: object free-effect-vars drop f ;
-M: Instance free-effect-vars type>> free-effect-vars ;
+M: Instance free-effect-vars type>>
+    dup Effect?
+    [ free-effect-vars ] [ drop f ] if ;
 M: CallRecursive free-effect-vars tag>> free-effect-vars ;
 
 : fresh-effect ( effect -- effect )
     dup free-effect-vars fresh-without ;
+
+: effect-vars ( make-effect -- set )
+    [ in>> vars ] [ out>> vars union ] [ locals>> vars union ] tri ;
 
 CHR: compose-effects @ // { ComposeType P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } --
 |
@@ -809,7 +835,7 @@ CHR: make-trivial-xor-right @ // { MakeXor null ?rho ?tau } -- | [ ?rho ?tau ==!
 ! type.  The reasoning is as follows: The XOR case is really only interesting
 ! for disjoint reasoning if we can be sure that applying one set of input/output
 ! types actually excludes the other alternative.  If we get overlapping types,
-! then the intersection is not-empty, and the best we can do is reason with the convex cover.
+! then the intersection is non-empty, and the best we can do is reason with the convex cover.
 
 ! The question is how to decide which XOR's to keep.  Going bottom-up, pretty much
 ! every conditional and/or type test defines two branches.  So for any composition
@@ -852,13 +878,23 @@ CHR: make-trivial-xor-right @ // { MakeXor null ?rho ?tau } -- | [ ?rho ?tau ==!
 
 ! Forall x, y: (..ρ, x, y) → (..ρ, y, x)
 
+
+! Approach with implicit phis: if we find that we would get non-unique unifiers
+! for the stack effect, then we are hiding implicit equality constraints.  This
+! is a sign that two effects are distinct.
+
 TUPLE: PhiSchedule < chr-pred quot list target ;
 TUPLE: DisjointRoot < chr-pred effect ;
 TUPLE: DestrucXor < chr-pred branch ;
 TUPLE: RebuildXor < chr-pred effect target ;
 TUPLE: CurrentPhi < chr-pred effect ;
 TUPLE: MakeUnion < chr-pred effect1 effect2 target ;
-TUPLE: IsUnion < chr-pred pred ;
+! States that a parameter could be a discriminator during phi reasoning
+TUPLE: Discriminator < chr-pred var ;
+! States that a parameter is definitely a discriminator during phi reasoning
+TUPLE: Decider < Discriminator ;
+! Used during phi inference to mark constraints that are still valid...
+TUPLE: Keep < chr-pred pred ;
 ! Marker to switch reasoning to assume disjunction of value info
 TUPLE: PhiMode < chr-pred ;
 
@@ -1007,7 +1043,6 @@ IMPORT: chr-phi
 UNION: body-pred Instance NotInstance CallEffect Declare Slot CallRecursive Throws Tag
     NullStack MacroCall expr-pred Iterated ;
 TUPLE: Params < chr-pred ids ;
-TUPLE: Param < chr-pred id ;
 
 CHR: invalid-stays-invalid @ { Invalid } // { Invalid } -- | ;
 
@@ -1017,30 +1052,57 @@ UNION: commutative-pred Eq Neq ;
 CHR: comm-var-is-lhs @ // AS: ?p <={ commutative-pred A{ ?l } ?v } -- [ ?v term-var? ] |
 [ { ?v ?l } ?p class-of slots>tuple ] ;
 
-CHR: singleton-class-is-literal @ // { Instance ?x ?tau } -- [ { ?tau } first wrapper? not ] [ ?tau singleton-class? ] |
-{ Instance ?x W{ ?tau } } ;
+CHR: literal-singleton-class-is-class @ // { Instance ?x ?tau } -- [ { ?tau } first wrapper? ] [ { ?tau } first wrapped>> :>> ?rho singleton-class? ] |
+{ Instance ?x ?rho } ;
+
+TUPLE: CheckPhiStack a b res ;
 
 ! *** Start unification reasoning
+: phi-stacks-unique? ( mapping -- ? )
+    [ values [ dup list?
+               ! Note: not testing the cdrs...
+               [ list>array* ]
+               [ 1array ] if
+             ] map concat all-unique? ]
+    [ f ] if* ;
+
+CHR: rebuild-phi-check-stack @ { PhiMode } { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } // -- |
+{ CheckPhiStack { ?a ?b } { ?c ?d } ?u } ;
+
+! This check makes sure we don't run into endless stack balancing cases due to
+! mismatched stack depths of branches, Also, we don't construct union branches
+! if there is no unique phi mapping.  In that case, one branch is hiding
+! equality constraints that the other one does not have
+CHR: do-check-phi-stack @ // { CheckPhiStack ?i ?o ?u } -- [ ?u term-var? ] [ ?i ?o unify phi-stacks-unique? :>> ?w drop t ] |
+{ CheckPhiStack ?i ?o ?w } ;
+
+: default-class-preds ( preds in out -- preds )
+    [ list>array* ] bi@ union
+    [| preds var | preds [ { [ Instance? ] [ val>> var == ] } 1&& ] find nip
+     [ f ] [ P{ Instance var object } ] if
+    ] with map sift ;
+
+ERROR: nested-inference a b ;
+CHR: inference-collision @ AS: ?a <={ MakeEffect } AS: ?b <={ MakeEffect } // -- | [ ?a ?b nested-inference ] ;
+
 ! NOTE: assumed renaming here already
-CHR: rebuild-phi-effect @ { PhiMode } // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } --
-[ { ?a ?b } { ?c ?d } unify drop t ]
+! NOTE: we have to generate object instance predicates for all values that may be generated using unification for each branch if missing!
+CHR: rebuild-phi-effect @ { PhiMode } // { CheckPhiStack { ?a ?b } { ?c ?d } t } { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } --
 |
-! NOTE: This happens if we have pre-defined effects but no known body yet (e.g. recursive calls)
-! [ ?k dup term-var? [ drop f ] when ]
-! [ ?l dup term-var? [ drop f ] when ]
-! [ { ?x ?y } [ f lift ] no-var-restrictions first2 intersect Params boa ]
-! [ ?x ?y union Params boa ]
-{ PhiStack ?v ?a }
-{ PhiStack ?v ?c }
-{ PhiStack ?w ?b }
-{ PhiStack ?w ?d }
-{ Params { } }
-[ ?x [ Param boa ] map ]
-[ ?y [ Param boa ] map ]
+[ { ?a ?b } { ?c ?d } ==! ]
+{ Params ?x }
+{ Params ?y }
+[ ?k ?a ?ground-value ?b ?ground-value default-class-preds ]
+[ ?l ?c ?ground-value ?d ?ground-value default-class-preds ]
 [ ?k ]
 [ ?l ]
-{ MakeEffect ?v ?w f f ?tau } ;
+{ MakeEffect ?a ?b f f ?tau } ;
 
+CHR: dont-rebuild-non-phiable-effect @ // { PhiMode } { CheckPhiStack { ?a ?b } { ?c ?d } f } { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } -- |
+[ ?tau null ==! ]
+{ PhiDone } ;
+
+! non-phi case
 CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } -- |
 [ ?b ?c ==! ]
 ! NOTE: This happens if we have pre-defined effects but no known body yet (e.g. recursive calls)
@@ -1060,7 +1122,7 @@ CHR: early-exit @ { Invalid } // <={ body-pred } -- | ;
 ! ! **** Discarding nested calls for recursion types
 ! CHR: clear-rec-type-rec-call @ { PhiMode } { FixpointMode } { PhiSchedule ?w __ __ } // { CallRecursive ?w __ __ } -- | ;
 
-! CHR: invalid-union @ { Invalid } // { IsUnion __ } -- | ;
+! CHR: invalid-union @ { Invalid } // { Keep __ } -- | ;
 
 ! **** Re-building identities
 ! NOTE: the only way how two of these can be present at the same time is if both effects specify
@@ -1074,12 +1136,6 @@ CHR: early-exit @ { Invalid } // <={ body-pred } -- | ;
 ! CHR: same-stays-valid @ { Phi ?z ?x } { Phi ?z ?y } // AS: ?p <={ val-pred ?x . ?xs } AS: ?q <={ val-pred ?y . ?xs } -- [ ?p ?q [ class-of ] same? ] |
 ! [ ?p clone ?z >>val ] ;
 ! **** Phi Parameter Handling
-! CHR: phi-single-parm @ { PhiMode } // { Params ?l } -- | [ ?l [ Param boa ] map ] ;
-CHR: phi-parm-intersect @ { Phi ?z ?x } { Phi ?z ?y } // { Param ?x } { Param ?y } -- | { Params { ?z } } ;
-! CHR: phi-merge-params @ // { IsUnion P{ Params ?l } } { IsUnion P{ Params ?k } } -- [ ?l ?k union :>> ?m ] |
-! { IsUnion P{ Params ?m } } ;
-! CHR: phi-no-param @ // { Param __ } -- | ;
-
 
 ! NOTE: this is pretty tricky with regards to what constitutes valid criteria for /not/
 ! merging types during phi reasoning.  Couple of approaches:
@@ -1088,10 +1144,39 @@ CHR: phi-parm-intersect @ { Phi ?z ?x } { Phi ?z ?y } // { Param ?x } { Param ?y
 ! 3. Some explicit dependency type magic determines under what conditions we want to be distinct...
 ! 4. Only keep separate cases if we have conflicting definitions of output row vars due to unknown effects
 
-! Current aproach: Something like 3, where the set of Params is defined
+! Current approach: Something like 3, where the set of Params is defined
 ! explicitly, and contagious, by underlying conditionals
-CHR: phi-disjoint-instance @ { Phi ?z ?x } { Phi ?z ?y } { Params ?l } // { Instance ?x A{ ?rho } } { Instance ?y A{ ?tau } } --
-[ ?z ?l in? ] [ { ?rho ?tau } first2 classes-intersect? not ] | { Invalid } ;
+
+CHR: have-equivalence-deciders @ { PhiMode } { MakeEffect ?i ?o __ __ __ } // { Decider ?x } { Decider ?y }
+-- [ ?x ?i list*>array in? ] [ ?y ?o list*>array in? ] | { Invalid } ;
+CHR: have-input-decider @ { PhiMode } { MakeEffect ?i ?o __ __ __ } // { Decider ?x } { Discriminator ?y }
+-- [ ?x ?i list*>array in? ] [ ?y ?o list*>array in? ] | { Invalid } ;
+CHR: have-output-decider @ { PhiMode } { MakeEffect ?i ?o __ __ __ } // { Discriminator ?x } { Decider ?y }
+-- [ ?x ?i list*>array in? ] [ ?y ?o list*>array in? ] | { Invalid } ;
+
+CHR: phi-same-branch-pred @ { PhiMode } // AS: ?p <={ body-pred } AS: ?q <={ body-pred } -- [ ?p ?q == ] |
+{ Keep ?p } ;
+
+CHR: phi-disjoint-instance @ { PhiMode } { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
+[ { ?rho ?tau } first2 classes-intersect? not ] | { Decider ?x } ;
+CHR: phi-maybe-disjoint-instance @ { PhiMode } { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
+[ { ?rho ?tau } first2 { [ classes-intersect? ] [ class= not ] } 2&& ] | { Discriminator ?x } ;
+CHR: phi-union-instance @ { PhiMode } // { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } --
+[ { ?rho ?tau } first2 simplifying-class-or :>> ?sig ] | { Keep P{ Instance ?x ?sig } } ;
+
+! same for effect types
+CHR: phi-unknown-effect-union @ { PhiMode } { Instance ?x A{ ?tau } } // { Instance ?x ?e } --
+[ ?e valid-effect-type? ] |
+{ Instance ?x quotation } ;
+! [ ?e valid-effect-type? ] [ ?tau callable classes-intersect? not ] | { Decider ?x } { Keep P{ Instance ?x ?tau } } ;
+
+! CHR: phi-maybe-disjoint-unknown-effect @ { PhiMode } // { Instance ?x ?e } { Instance ?x A{ ?tau } } --
+! [ ?e valid-effect-type? ] | { Discriminator ?x } { Keep P{ Instance ?x ?tau } } ;
+
+
+CHR: phi-disjoint-le-lhs @ { PhiMode } { Le ?x ?v } { Lt ?v ?x } // -- [ ?x term-var? ] | { Discriminator ?x } ;
+CHR: phi-disjoint-le-rhs @ { PhiMode } { Le ?v ?x } { Lt ?x ?v } // -- [ ?x term-var? ] | { Discriminator ?x } ;
+! TODO: numerical predicates!
 
 ! ! ( x <= 5 ) ( 5 <= x ) -> union
 ! ! ( x <= 4 ) ( 5 <= x ) -> disjoint
@@ -1121,26 +1206,42 @@ CHR: phi-disjoint-instance @ { Phi ?z ?x } { Phi ?z ?y } { Params ?l } // { Inst
 ! [ { ?a ?b } { ?c ?d } unify ] |
 ! [ { ?a ?b } { ?c ?d } ==! ]
 ! [| | ?l ?k intersect :> body
-!  P{ IsUnion P{ Instance ?x P{ Effect ?a ?b f body } } }
+!  P{ Keep P{ Instance ?x P{ Effect ?a ?b f body } } }
 ! ] ;
-! **** phi union types
-CHR: phi-instance @ { Phi ?z ?x } { Phi ?z ?y } // { Instance ?x A{ ?rho } } { Instance ?y A{ ?sig } } --
-[ { ?rho ?sig } first2 class-or :>> ?tau ] |
-{ Instance ?z ?tau } ;
+! ! **** phi union types
+! CHR: phi-instance @ { Phi ?z ?x } { Phi ?z ?y } // { Instance ?x A{ ?rho } } { Instance ?y A{ ?sig } } --
+! [ { ?rho ?sig } first2 class-or :>> ?tau ] |
+! { Instance ?z ?tau } ;
 
 ! Slots
-CHR: phi-slot @ { Phi ?z ?x } { Phi ?z ?y } // { Slot ?x ?n ?a } { Slot ?y ?n ?b } -- |
-{ Phi ?c ?a } { Phi ?c ?b } { Slot ?z ?n ?c } ;
+! CHR: phi-slot @ { Phi ?z ?x } { Phi ?z ?y } // { Slot ?x ?n ?a } { Slot ?y ?n ?b } -- |
+! { Phi ?c ?a } { Phi ?c ?b } { Slot ?z ?n ?c } ;
+
+! **** Relational reasoning
+! Transport relation in
+! TODO: abstract to all relations somehow
+! CHR: phi-eq @ { Phi ?a ?x } { Phi ?a ?y } { Phi ?b ?v } { Phi ?b ?w } // { Eq ?x ?y } { Eq ?v ?w } -- |
+! { Eq ?a ?b } ;
+! CHR: phi-neq @ { Phi ?a ?x } { Phi ?a ?y } { Phi ?b ?v } { Phi ?b ?w } // { Neq ?x ?y } { Neq ?v ?w } -- |
+! { Neq ?a ?b } ;
+! CHR: phi-eq-conflict @ { Phi ?a ?x } { Phi ?a ?y } { Phi ?b ?v } { Phi ?b ?w } // { Eq ?x ?y } { Neq ? }
+
+
 
 ! **** phi higher order
 
-CHR: phi-call-effect-match-in @ { Phi ?r ?p } { Phi ?r ?q }
-// { CallEffect ?p ?a ?b } { CallEffect ?q ?x ?y } -- |
-{ PhiStack ?v ?a }
-{ PhiStack ?v ?x }
-{ PhiStack ?w ?b }
-{ PhiStack ?w ?y }
-{ CallEffect ?r ?v ?w } ;
+! If we have conflicting definitions on what will define an output stack, then we have unresolved control flow
+! CHR: phi-call-effect-out-conflict @ { PhiMode } // { CallEffect ?p ?a ?x } { CallEffect ?q ?b ?x } -- [ ?p ?q == not ?a ?b == not or ] |
+! { Invalid } ;
+
+
+! CHR: phi-call-effect-match-in @ { Phi ?r ?p } { Phi ?r ?q }
+! // { CallEffect ?p ?a ?b } { CallEffect ?q ?x ?y } -- |
+! { PhiStack ?v ?a }
+! { PhiStack ?v ?x }
+! { PhiStack ?w ?b }
+! { PhiStack ?w ?y }
+! { CallEffect ?r ?v ?w } ;
 
 ! TODO: make this dependent on whether we simplify our own def!
 ! CHR: phi-call-rec-match @ { Phi ?r ?p } { Phi ?r ?q }
@@ -1183,7 +1284,8 @@ CHR: phi-call-rec-self @ { PhiMode } { PhiSchedule ?w __ __ } //
 
 CHR: disj-is-macro-effect @ { PhiMode } <={ MakeEffect } // <={ MacroCall } -- | { Invalid } ;
 
-! CHR: disj-is-inline-effect @ { PhiMode } <={ MakeEffect } { Phi ?r ?p } // <={ CallEffect ?p . __ } -- | { Invalid } ;
+! NOTE: this is pretty eager, as it will preserve all higher-order parametrism explicitly
+CHR: disj-is-inline-effect @ { PhiMode } <={ MakeEffect } // <={ CallEffect ?p . __ } -- | { Invalid } ;
 
 ! Unknown call-rec
 CHR: disj-single-call-rec @ { PhiMode } <={ MakeEffect } // <={ CallRecursive } -- | { Invalid } ;
@@ -1250,7 +1352,7 @@ CHR: instance-intersection @
 CHR: instance-intersect-effect @ { Instance ?x ?e }
 // { Instance ?x A{ ?tau } } --
 [ ?e valid-effect-type? ] |
-[ ?tau callable eq? ?tau quotation eq? or
+[ ?tau callable classes-intersect?
  f { Invalid } ? ] ;
 
 ! TODO: used? looks like should be subsumed by null-instance-is-invalid
@@ -1288,13 +1390,15 @@ CHR: check-neq @ // { Neq A{ ?x } A{ ?y } } -- [ ?x ?y == ] | { Invalid } ;
 ! Being not equal to something we can't be anyway is redundant
 CHR: redundant-neq @ { Instance ?x ?c } // { Neq ?x A{ ?l } } --
 [ { ?l } first ?c instance? not ] | ;
+CHR: redundant-neq-instance @ { Instance ?x A{ ?c } } { Instance ?y A{ ?d } } //
+{ Neq ?x ?y } -- [ { ?c ?d } first2 classes-intersect? not ] | ;
 
 CHR: check-sum @ // { Sum A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y + ?z = not ] | P{ Invalid } ;
 ! CHR: zero-sum-1 @ // { Sum ?z 0 ?y } -- | [ ?z ?y ==! ] ;
 ! CHR: zero-sum-2 @ // { Sum ?z ?x 0 } -- | [ ?z ?x ==! ] ;
-CHR: define-sum @ // { Sum ?z A{ ?x } A{ ?y } } --
-[ ?x ?y + <wrapper> :>> ?v ] | { Instance ?z ?v } ;
-CHR: normalize-sum @ // { Sum ?z A{ ?x } ?y } -- | { Sum ?z ?y ?x } ;
+! CHR: define-sum @ // { Sum ?z A{ ?x } A{ ?y } } --
+! [ ?x ?y + <wrapper> :>> ?v ] | { Instance ?z ?v } ;
+CHR: normalize-sum @ // { Sum ?z A{ ?x } ?y } -- [ ?y term-var? ] | { Sum ?z ?y ?x } ;
 
 CHR: check-prod @ // { Prod A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y * ?z = not ] | P{ Invalid } ;
 CHR: neutral-prod-1 @ // { Prod ?z 1 ?y } -- | [ ?z ?y ==! ] ;
@@ -1395,7 +1499,6 @@ CHR: known-declare @
 [ { ?tau } first wrapper? ]
 [ ?tau <reversed> >list :>> ?m ] | { Declare ?m ?a } ;
 
-! CHR: do-macro @ { Instance ?x ?v }
 
 CHR: known-macro-arg @ { Instance ?x ?v } // { MacroCall ?q ?a ?i ?o } -- [ ?x ?a in? ] [ { ?v } first wrapper? ]
 [ { ?v } first wrapped>> :>> ?z ]
@@ -1403,6 +1506,15 @@ CHR: known-macro-arg @ { Instance ?x ?v } // { MacroCall ?q ?a ?i ?o } -- [ ?x ?
 [| | ?a H{ { ?x ?z } } lift* :> args
  { MacroCall ?q args ?i ?o }
 ] ;
+
+! NOTE: only fully expanded macros are treated for now!
+CHR: expand-macro @ // { MacroCall ?q ?a ?i ?o } -- [ ?a ground-value? ]
+[ ?a ?q with-datastack first :>> ?p ]
+|
+{ ?TypeOf ?p ?tau }
+{ CallEffect ?tau ?i ?o } ;
+
+
 
 
 ! CHR: constant-ensure @ // { Ensure ?l ?a } -- [ ?l array? ]
@@ -1413,8 +1525,10 @@ CHR: known-slot @ { Instance ?n A{ ?tau } } // { Slot ?o ?n ?v } -- |
 { Slot ?o ?tau ?v } ;
 
 CHR: known-instance @ { Instance ?c A{ ?tau } } // { Instance ?x ?c } --
+[ { ?tau } first wrapper? ]
 [ { ?tau } first wrapped>> :>> ?d ] | { Instance ?x ?d } ;
 CHR: known-not-instance @ { Instance ?c A{ ?tau } } // { NotInstance ?x ?c } --
+[ { ?tau } first wrapper? ]
 [ { ?tau } first wrapped>> :>> ?d ] | { NotInstance ?x ?d } ;
 
 CHR: known-tag-num @ { Instance ?n A{ ?v } } // { Tag ?c ?n } -- [ { ?v } first wrapper? ] [ ?v :>> ?w ] |
@@ -1471,7 +1585,10 @@ CHR: tuple-boa-decl @ // { TupleBoa A{ ?c } ?a ?b } --
 
 ! ** Post-Reasoning
 ! All of these must be live to take collecting the pred into account
+! Note that the definition of a live variable here is reachability from either input
+! or output
 GENERIC: live-vars ( pred -- vars )
+! Will in turn define these as live
 GENERIC: defines-vars ( pred -- vars )
 M: chr-pred live-vars vars ;
 M: object defines-vars drop f ;
@@ -1484,29 +1601,36 @@ M: Instance defines-vars type>> defines-vars ;
 M: Tag live-vars val>> 1array ;
 M: Tag defines-vars var>> 1array ;
 M: Iterated defines-vars [ next>> vars ] [ end>> vars ] bi union ;
-! M: expr-pred defines-vars
+M: Sum live-vars val>> 1array ;
+M: expr-pred defines-vars vars ;
 ! M: MacroCall live-vars out>> vars ;
 
 ! *** Phi Mode
 ! CHR: discard-non-union-pred @ { PhiMode } <={ MakeEffect } // <={ body-pred } -- | ;
 ! CHR: discard-leftover-binds @ { PhiMode } <={ MakeEffect } // <={ Bind } -- | ;
-CHR: phi-discard-leftover-params @ { PhiMode } <={ MakeEffect } // <={ Param } -- | ;
-CHR: phi-discard-phi-defs @ { PhiMode } <={ MakeEffect } // <={ Phi } -- | ;
+! CHR: phi-discard-leftover-params @ { PhiMode } <={ MakeEffect } // <={ Param } -- | ;
+! CHR: phi-discard-phi-defs @ { PhiMode } <={ MakeEffect } // <={ Phi } -- | ;
 
-! CHR: collect-union-preds @ { PhiMode } // { MakeEffect ?a ?b f ?l ?tau } { IsUnion ?p } --
-! [ ?l ?p suffix :>> ?k ] |
-! { MakeEffect ?a ?b f ?k ?tau } ;
+CHR: collect-union-pred @ { PhiMode } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } { Keep ?p } -- [ ?p live-vars ?e effect-vars intersects? ]
+[ ?p ?l in? not ]
+[ ?l ?p suffix :>> ?k ]
+|
+[| | ?p defines-vars ?x union :> y
+ { MakeEffect ?a ?b y ?k ?tau } ] ;
+
+
+CHR: phi-discard-discriminators @ { PhiMode } <={ MakeEffect } // <={ Discriminator } -- | ;
+CHR: phi-discard-leftover-preds @ { PhiMode } <={ MakeEffect } // <={ body-pred } -- | ;
+! TODO: not 100% sure the following isn't working too eagerly...
+CHR: phi-discard-keeps @ { PhiMode } <={ MakeEffect } // <={ Keep } -- | ;
 
 ! *** Composition Mode
 ! These are live after the pred has been taken into account
 ! *** Dead-value cleanup
 ! Used for values with folding semantics
-TUPLE: Dead < chr-pred val ;
+! TUPLE: Dead < chr-pred val ;
 ! CHR: unref @ <={ MakeEffect } // { Use ?x } { Literal ?x } -- | { Dead ?x } ;
 
-
-: effect-vars ( make-effect -- set )
-    [ in>> vars ] [ out>> vars union ] [ locals>> vars union ] tri ;
 
 ! existentials
 ! CHR: collect-type-ofs @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } { TypeOf ?v ?rho } --
