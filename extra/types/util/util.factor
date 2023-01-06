@@ -290,12 +290,17 @@ GENERIC: simplify-class ( class -- class )
 ! NOTE: this could be important for handling nominative unions/intersections
 ! Non-normalizing behavior does not convert defined
 ! union/intersection classes to anonymous intersections
-! M: classoid simplify-class normalize-class ;
 
 M: classoid simplify-class ;
 ! NOTE: the normal form here is the non-wrapped version!
 M: wrapper simplify-class
-    dup wrapped>> dup singleton-class? [ nip ] [ drop ] if ;
+    dup wrapped>>
+    {
+        { [ dup singleton-class? ] [ nip ] }
+        { [ dup not ] [ 2drop \ f ] }
+        [ drop ]
+    } cond ;
+
 M: anonymous-intersection simplify-class
     participants>> [ simplify-class ] map
     simplify-intersection ;
@@ -314,8 +319,10 @@ M: anonymous-complement simplify-class
     [ null ]
     [ [ simplify-class ] [ class-or ] map-reduce ] if-empty ;
 
-M: union-class simplify-class
-    simplify-member-classes ;
+! NOTE: not expanding simple named unions, since this doesn't give any benefits right now
+! M: union-class simplify-class
+!     simplify-member-classes ;
+M: union-class simplify-class ;
 
 ! NOTE: this is different from factor's behavior, which does not expand mixins
 M: mixin-class simplify-class
