@@ -1164,14 +1164,10 @@ CHR: phi-maybe-disjoint-instance @ { PhiMode } { Instance ?x A{ ?rho } } { Insta
 CHR: phi-union-instance @ { PhiMode } // { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } --
 [ { ?rho ?tau } first2 simplifying-class-or :>> ?sig ] | { Keep P{ Instance ?x ?sig } } ;
 
-! same for effect types
-CHR: phi-unknown-effect-union @ { PhiMode } { Instance ?x A{ ?tau } } // { Instance ?x ?e } --
-[ ?e valid-effect-type? ] |
-{ Instance ?x quotation } ;
-! [ ?e valid-effect-type? ] [ ?tau callable classes-intersect? not ] | { Decider ?x } { Keep P{ Instance ?x ?tau } } ;
-
-! CHR: phi-maybe-disjoint-unknown-effect @ { PhiMode } // { Instance ?x ?e } { Instance ?x A{ ?tau } } --
-! [ ?e valid-effect-type? ] | { Discriminator ?x } { Keep P{ Instance ?x ?tau } } ;
+! TODO: check for isomorphic effects maybe?
+! Higher order: If we find one effect or two different ones, this is unresolved control flow
+CHR: phi-disjoint-effect-type @ { PhiMode } { Instance ?x ?e } // -- [ ?e valid-effect-type? ] |
+{ Invalid } ;
 
 
 CHR: phi-disjoint-le-lhs @ { PhiMode } { Le ?x ?v } { Lt ?v ?x } // -- [ ?x term-var? ] | { Discriminator ?x } ;
@@ -1717,7 +1713,11 @@ CHR: finish-invalid-effect @ { MakeEffect __ __ __ __ ?tau } // { Params __ } { 
 [ ?tau P{ Effect ?a ?b f { P{ Invalid } } } ==! ] ;
 
 CHR: finish-valid-effect @ AS: ?e P{ MakeEffect ?a ?b __ ?l ?tau } // { Params ?x } -- [ ?tau term-var? ]
-[ ?x ?e effect-vars intersect :>> ?y ]
+[ ?x ?e effect-vars intersect
+  ! FIXME: this exposes what seems to be a bug in the term solver, probably something going wrong when f is assigned to a binding,
+  ! resulting in a recursive-term-error in case for checking strange stuff...
+  dup empty? [ drop f ] when
+  :>> ?y drop t ]
 |
 [ ?tau P{ Effect ?a ?b ?y ?l } ==! ] ;
 

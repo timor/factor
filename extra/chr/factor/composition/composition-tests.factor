@@ -102,25 +102,25 @@ P{ Neq 42 43 }
 { t }
 [ [ if* ] get-type valid-effect-type? ] unit-test
 
-P{ Effect L{ ?a ?b . ?z } L{ ?a ?b . ?z } { } { P{ Instance ?a object }
+P{ Effect L{ ?a ?b . ?z } L{ ?a ?b . ?z } f { P{ Instance ?a object }
                                                 P{ Instance ?b object } } }
 [ [ swap swap ] get-type ] chr-test
 
-P{ Effect L{ ?a ?b . ?z } L{ ?b ?a . ?z } { } { P{ Instance ?a object }
+P{ Effect L{ ?a ?b . ?z } L{ ?b ?a . ?z } f { P{ Instance ?a object }
                                                 P{ Instance ?b object } } }
 [ [ swap swap swap ] get-type ] chr-test
 
-P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { } { P{ Instance ?x number } P{ Instance ?y number } P{ Instance ?z number } P{ Sum ?z ?x ?y } } }
+P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } f { P{ Instance ?x number } P{ Instance ?y number } P{ Instance ?z number } P{ Sum ?z ?x ?y } } }
 [ [ + ] get-type ] chr-test
-
-{ t }
-[ [ if ] get-type [ [ if ] (call) ] get-type isomorphic? ] unit-test
 
 { t }
 [ [ [ ? ] ] get-type [ [ [ ? ] ] (call) ] get-type isomorphic? ] unit-test
 
 { t }
 [ [ [ if ] ] get-type [ [ [ if ] ] (call) ] get-type isomorphic? ] unit-test
+
+{ t }
+[ [ [ [ if ] ] ] get-type [ [ [ [ if ] ] ] (call) ] get-type isomorphic? ] unit-test
 
 TERM-VARS: ?q3 ?q5 ?p2 ?p3 ?c2 ?c3 ?a4 ?a6 ?b3 ?b4 ;
 ! NOTE: This is interesting: because we have [ ? ] as basis, we don't enforce
@@ -325,11 +325,10 @@ M: array lastcdr5 array-first lastcdr5 ;
 [ [ lastcdr5 ] get-type dup [ full-type? ] when ] unit-test
 
 
-! NOTE: This one does not work because we don't recursively perform full phi-computations
+! (old)NOTE: This one does not work because we don't recursively perform full phi-computations
 ! through multiple levels of nested effects (yet?)
-! TODO: fix this, at least returning something more useful than object....
-! { t }
-{ f }
+! (update) Fixed by not phi-merging anything to do with unresolved computations
+{ t }
 [ [ [ lastcdr5 ] ] get-type [ [ [ lastcdr5 ] ] (call) ] get-type isomorphic? ] unit-test
 
 
