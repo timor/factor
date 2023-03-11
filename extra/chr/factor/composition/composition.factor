@@ -1,5 +1,5 @@
 USING: accessors arrays assocs chr chr.factor chr.modular chr.parser chr.state
-classes classes.algebra classes.builtin classes.predicate classes.singleton
+classes classes.algebra classes.algebra.private classes.builtin classes.predicate classes.singleton
 classes.tuple classes.tuple.private classes.union combinators
 combinators.short-circuit continuations effects generic generic.single kernel
 kernel.private lists math math.parser math.private namespaces quotations
@@ -103,7 +103,7 @@ TUPLE: ComposeEffect < chr-pred e1 e2 target ;
 TUPLE: MakeEffect < chr-pred in out locals preds target ;
 TUPLE: MakeUnit < chr-pred val target ;
 
-TUPLE: Iterated < chr-pred init next end ;
+TUPLE: Iterated < chr-pred start end ;
 ! TUPLE: Iterated < chr-pred val end ;
 
 ! Value-restricting preds
@@ -187,7 +187,6 @@ TUPLE: Lt < expr-pred var ;
     H{
         { rot [ [ swap ] dip swap ] }
         { over [ swap dup [ swap ] dip ] }
-        { call [ (call) ] }
         { nip [ [ drop ] dip ] }
         { 2nip [ nip nip ] }
         { 2drop [ drop drop ] }
@@ -204,6 +203,7 @@ TUPLE: Lt < expr-pred var ;
         { <= [ 2dup < [ 2drop t ] [ = ] if ] }
         { >= [ swap <= ] }
         { - [ -1 * + ] }
+        { number= [ { number number } declare = ] }
     } at ;
 
 ! These are used as fallbacks for recursive calls to certain words
@@ -304,6 +304,11 @@ CHR: alias-type-defined @ { TypeOfWord ?w ?tau } // -- [ ?w word-alias :>> ?q ] 
 
 CHR: type-of-prim-call @ // { ?TypeOf [ (call) ] ?tau } -- |
 [ ?tau P{ Effect L{ ?q . ?a } ?b f {
+              P{ Instance ?q quotation }
+              P{ CallEffect ?q ?a ?b } } } ==! ] ;
+
+CHR: type-of-call @ // { ?TypeOf [ call ] ?tau } -- |
+[ ?tau P{ Effect L{ ?q . ?a } ?b f {
               P{ Instance ?q callable }
               P{ CallEffect ?q ?a ?b } } } ==! ] ;
 
@@ -362,14 +367,12 @@ CHR: type-of-builtin-predicate @ // { ?TypeOf [ ?w ] ?tau } --
 ! checking.
 CHR: type-of-instance? @ { TypeOfWord instance? ?tau } // -- |
 [ ?tau P{ Xor
-          ! P{ Effect L{ ?o ?sig . ?a } L{ ?c . ?a } { ?o ?c } {
-          P{ Effect L{ ?o ?sig . ?a } L{ ?c . ?a } { ?c } {
+          P{ Effect L{ ?sig ?o . ?a } L{ ?c . ?a } { ?c } {
                  P{ Instance ?o ?sig }
                  P{ Instance ?c t }
                  P{ Instance ?sig classoid }
              } }
-          ! P{ Effect L{ ?o ?sig . ?a } L{ ?c . ?a } { ?o ?c } {
-          P{ Effect L{ ?o ?sig . ?a } L{ ?c . ?a } { ?c } {
+          P{ Effect L{ ?sig ?o . ?a } L{ ?c . ?a } { ?c } {
                  P{ NotInstance ?o ?sig }
                  P{ Instance ?c POSTPONE: f }
                  P{ Instance ?sig classoid }
@@ -555,12 +558,21 @@ CHR: type-of-tag @ { TypeOfWord tag ?tau } // -- |
          P{ Tag ?o ?n }
      } } ==! ]  ;
 
+CONSTANT: primitive-coercers {
+    bignum>fixnum
+    fixnum>bignum
+    fixnum>float
+}
 ! bignum>fixnum ( x -- y )
-CHR: type-of-bignum>fixnum @ { TypeOfWord bignum>fixnum ?tau } // -- |
+CHR: type-of-primitive-coercion @ { TypeOfWord ?w ?tau } // --
+[ ?w primitive-coercers in? ]
+[ ?w "input-classes" word-prop first :>> ?rho ]
+[ ?w "default-output-classes" word-prop first :>> ?sig ]
+|
 [ ?tau
   P{ Effect L{ ?x . ?a } L{ ?y . ?a } f {
-         P{ Instance ?x bignum }
-         P{ Instance ?y fixnum }
+         P{ Instance ?x ?rho }
+         P{ Instance ?y ?sig }
      } }
   ==! ] ;
 
@@ -597,18 +609,19 @@ CHR: type-of-* @ { TypeOfWord A{ * } ?tau } // -- |
 { ComposeType P{ Effect ?a ?a f { P{ Ensure { number number } ?a } } } ?sig ?tau } ;
 
 ! induces parameter
+! ( x y -- ? )
 CHR: type-of-< @ { TypeOfWord A{ < } ?tau } // -- |
 [
     ?sig
     P{ Xor
-       P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
+       P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } { ?z } {
               P{ Instance ?z t }
-              P{ Lt ?y ?x }
+              P{ Lt ?x ?y }
               ! P{ Neq ?y ?x }
           } }
-        P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
+        P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } { ?z } {
                P{ Instance ?z POSTPONE: f }
-               P{ Le ?x ?y }
+               P{ Le ?y ?x }
            } }
      }
     ==!
@@ -1052,8 +1065,21 @@ UNION: commutative-pred Eq Neq ;
 CHR: comm-var-is-lhs @ // AS: ?p <={ commutative-pred A{ ?l } ?v } -- [ ?v term-var? ] |
 [ { ?v ?l } ?p class-of slots>tuple ] ;
 
+CHR: literal-f-is-class-f @ // { Instance ?x W{ f } } -- | { Instance ?x POSTPONE: f } ;
+
 CHR: literal-singleton-class-is-class @ // { Instance ?x ?tau } -- [ { ?tau } first wrapper? ] [ { ?tau } first wrapped>> :>> ?rho singleton-class? ] |
 { Instance ?x ?rho } ;
+
+CHR: normalize-not-type @ // { NotInstance ?x A{ ?tau } } -- [ { ?tau } first classoid? ]
+[ { ?tau } first class-not :>> ?sig ] |
+{ Instance ?x ?sig } ;
+
+
+! ! Flatten union classes for now.
+! CHR: flatten-union-instance @ // { Instance ?x A{ ?tau } } -- [ { ?tau } first :>> ?rho union-class? ] |
+! [| | ?rho flatten-class <anonymous-union> :> c
+!  { Instance ?x c }
+! ] ;
 
 TUPLE: CheckPhiStack a b res ;
 
@@ -1330,10 +1356,7 @@ CHR: convert-tag @ // { Tag ?x A{ ?n } } -- [ ?n type>class :>> ?tau ] |
 ! CHR: useless-instance @ // { Instance __ object } -- | ;
 CHR: null-instance-is-invalid @ { Instance ?x null } // -- | { Invalid } ;
 
-CHR: normalize-not-type @ // { NotInstance ?x A{ ?tau } } -- [ { ?tau } first classoid? ]
-[ { ?tau } first class-not :>> ?sig ] |
-{ Instance ?x ?sig } ;
-
+! NOTE: this could be activated in phi mode if not careful
 CHR: type-contradiction @ // { NotInstance ?x ?tau } { Instance ?x ?tau } -- | { Invalid } ;
 
 ! NOTE: There are two ways to handle intersections: in factor's type system in
@@ -1429,16 +1452,16 @@ CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } // { CallEffe
 { Params ?x }
 [ ?l ] ;
 
-! ! NOTE: Idea: create an iteration constraint.  Should only be active in subsequent compositions
-! CHR: call-recursive-iteration @ { RecursionTypeOf ?w ?tau } { FixpointTypeOf ?w ?rho } // { CallRecursive ?w ?a ?b } --
-! [ ?tau full-type? ] [ ?rho full-type? ] |
-! [| | ?tau fresh-effect [ in>> ] [ out>> ] [ preds>> ] tri :> ( inext onext pnext )
-!  ?rho fresh-effect [ in>> ] [ out>> ] [ preds>> ] tri :> ( ilast olast plast )
-!  {
-!      [ ?b olast ==! ]
-!      P{ Iterated ?a inext ilast }
-!  } pnext append plast append
-! ] ;
+! NOTE: Idea: create an iteration constraint.  Should only be active in subsequent compositions
+CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho } // { CallRecursive ?w ?a ?b } --
+[ ?rho full-type? ] |
+[| |
+ ?rho fresh-effect [ in>> ] [ out>> ] [ preds>> ] tri :> ( ilast olast plast )
+ {
+     [ ?b olast ==! ]
+     P{ Iterated ?a ilast }
+ } plast append
+] ;
 
 
 ! NOTE: we don't apply the inputs here, so we should have the effect of a Kleene star for an unknown number of
@@ -1454,6 +1477,8 @@ CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } // { CallEffe
 !  ! }
 !  ! preds append
 ! ] ;
+
+! NOTE: explicitly instantiating dispatch effects for the three callables here
 
 CHR: call-destructs-curry @ { Instance ?q curried } { Slot ?q "quot" ?p } { Slot ?q "obj" ?x } // { CallEffect ?q ?a ?b } -- |
 { CallEffect ?p L{ ?x . ?a } ?b } ;
@@ -1522,10 +1547,11 @@ CHR: known-slot @ { Instance ?n A{ ?tau } } // { Slot ?o ?n ?v } -- |
 
 CHR: known-instance @ { Instance ?c A{ ?tau } } // { Instance ?x ?c } --
 [ { ?tau } first wrapper? ]
-[ { ?tau } first wrapped>> :>> ?d ] | { Instance ?x ?d } ;
+[ { ?tau } first wrapped>> :>> ?d drop t ] | { Instance ?x ?d } ;
+
 CHR: known-not-instance @ { Instance ?c A{ ?tau } } // { NotInstance ?x ?c } --
 [ { ?tau } first wrapper? ]
-[ { ?tau } first wrapped>> :>> ?d ] | { NotInstance ?x ?d } ;
+[ { ?tau } first wrapped>> :>> ?d drop t ] | { NotInstance ?x ?d } ;
 
 CHR: known-tag-num @ { Instance ?n A{ ?v } } // { Tag ?c ?n } -- [ { ?v } first wrapper? ] [ ?v :>> ?w ] |
 { Tag ?c ?w } ;
@@ -1591,12 +1617,12 @@ M: object defines-vars drop f ;
 M: CallEffect live-vars thing>> 1array ;
 M: CallEffect defines-vars [ in>> vars ] [ out>> vars ] bi union ;
 M: Slot live-vars val>> 1array ;
-M: Slot defines-vars [ n>> ] [ val>> ] bi 2array ;
+M: Slot defines-vars [ n>> ] [ slot-val>> ] bi 2array ;
 M: Instance live-vars val>> 1array ;
 M: Instance defines-vars type>> defines-vars ;
 M: Tag live-vars val>> 1array ;
 M: Tag defines-vars var>> 1array ;
-M: Iterated defines-vars [ next>> vars ] [ end>> vars ] bi union ;
+M: Iterated defines-vars [ start>> vars ] [ end>> vars ] bi union ;
 M: Sum live-vars val>> 1array ;
 M: expr-pred defines-vars vars ;
 ! M: MacroCall live-vars out>> vars ;

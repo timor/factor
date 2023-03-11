@@ -1,5 +1,6 @@
 USING: accessors arrays assocs chr.factor.composition chr.parser chr.state
 chr.test combinators.short-circuit kernel kernel.private lists literals math
+math.private classes
 quotations sequences slots.private terms tools.test typed types.util words ;
 IN: chr.factor.composition.tests
 
@@ -135,6 +136,13 @@ P{
 P{ Effect ?a ?b f { P{ Invalid } } }
 [ [ 42 2 slot ] get-type ] chr-test
 
+P{ Effect ?a ?b f { P{ Invalid } } }
+[ [ curry (call) ] get-type ] chr-test
+
+! NOTE: This would only work if we decide to implement normal forms for the nominative type segment?
+{ f }
+[ [ compose call ] get-type [ [ call ] dip call ] get-type isomorphic? ] unit-test
+
 { f }
 [ [ [ 42 2 slot ] [ "string" ] if ] get-type [ drop "string" ] get-type isomorphic? ] unit-test
 
@@ -148,8 +156,15 @@ P{ Effect L{ ?y . ?a } L{ ?x . ?a } { ?y }
 { t }
 [ [ number? 4 5 ? ] get-type Xor? ] unit-test
 
+! FIXME
+{ t }
+[ [ callable? ] get-type [ callable instance? ] get-type isomorphic? ] unit-test
+
 { t }
 [ [ + 5 = [ swap ] when ] get-type Xor? ] unit-test
+
+P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x bignum } P{ Instance ?y fixnum } } }
+[ [ bignum>fixnum ] get-type ] chr-test
 
 ! ** Simple Dispatch
 GENERIC: foothing ( obj -- result )
@@ -354,6 +369,27 @@ P{
     }
 }
 [ [ lastcdr6 ] get-type ] chr-test
+
+! With array exception
+GENERIC: lastcdr7 ( list -- obj )
+M: list lastcdr7 cdr>> lastcdr7 ;
+M: array lastcdr7 array-first lastcdr7 ;
+M: +nil+ lastcdr7 ;
+M: object lastcdr7 ;
+
+TERM-VARS: ?y14 ?ys14 ?o25 ?a85 ?x17 ?rho31 ;
+P{
+    Xor
+    P{ Effect L{ ?y14 . ?ys14 } L{ ?y14 . ?ys14 } { ?y14 } { P{ Instance ?y14 intersection{ not{ cons-state } not{ array } } } } }
+    P{
+        Effect
+        L{ ?o25 . ?a85 }
+        L{ ?x17 . ?rho31 }
+        { ?o25 }
+        { P{ Instance ?o25 union{ cons-state array } } P{ Instance ?x17 intersection{ not{ cons-state } not{ array } } } }
+    }
+}
+[ [ lastcdr7 dup drop ] get-type ] chr-test
 
 ! Stack checker examples
 : bad ( ? quot: ( ? -- ) -- ) 2dup [ not ] dip bad call ; inline recursive
