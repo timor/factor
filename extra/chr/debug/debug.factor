@@ -47,7 +47,7 @@ FROM: namespaces => set ;
     ! 2dup [ rule-id ] dip "Rule Match %s with: %u\n" printf
     over rule-id "Rule Match %s with: " printf
     [ program get rules>> nth clone f >>match-vars f >>existentials ] dip
-    lift . ;
+    lift . flush ;
 
 : susp. ( chr-suspension --  )
     {
@@ -56,13 +56,13 @@ FROM: namespaces => set ;
         [ constraint>> pprint ]
         [ from-rule>> [ rule-id " (Rule: %s)\n" printf ] [ nl ] if* ]
     }
-    cleave ;
+    cleave flush ;
 
 : id-susp. ( id -- )
-    store get at susp. ;
+    store get at susp. flush ;
 
 : try-rule-match. ( c schedule -- )
-    swap id>> "Try id %d on Rule: " printf occurrence>> first rule-id . ;
+    swap id>> "Try id %d on Rule: " printf occurrence>> first rule-id . flush ;
 
 SYMBOL: rule-matches
 
