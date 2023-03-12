@@ -1,7 +1,9 @@
 USING: accessors arrays assocs chr.factor.composition chr.parser chr.state
 chr.test combinators.short-circuit kernel kernel.private lists literals math
 math.private classes
-quotations sequences slots.private terms tools.test typed types.util words ;
+quotations sequences slots.private terms tools.test typed types.util words
+chr.factor chr.factor.word-types ;
+
 IN: chr.factor.composition.tests
 
 ! ** Testing external helper behavior
