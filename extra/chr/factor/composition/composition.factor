@@ -1,10 +1,10 @@
 USING: accessors arrays assocs chr chr.factor chr.modular chr.parser chr.state
-classes classes.algebra classes.algebra.private classes.builtin classes.predicate classes.singleton
+classes classes.algebra classes.builtin classes.predicate classes.singleton
 classes.tuple classes.tuple.private classes.union combinators
 combinators.short-circuit continuations effects generic generic.single kernel
-kernel.private lists math math.parser math.private namespaces quotations
-sequences sequences.private sets slots.private sorting strings terms types.util
-vectors words words.symbol ;
+kernel.private lists macros macros.expander math math.parser math.private
+namespaces quotations sequences sequences.private sets slots.private sorting
+strings terms types.util words words.symbol ;
 
 IN: chr.factor.composition
 
@@ -123,7 +123,7 @@ TUPLE: Declare < chr-pred classes stack ;
 TUPLE: Ensure < chr-pred classes stack ;
 
 TUPLE: CallEffect < chr-pred thing in out ;
-TUPLE: MacroCallEffect < chr-pred word in out ;
+! Unused: TUPLE: MacroCallEffect < chr-pred word in out ;
 TUPLE: CallRecursive < chr-pred tag in out ;
 TUPLE: NullStack < chr-pred stack ;
 TUPLE: RecursivePhi < chr-pred initial stepped end ;
@@ -362,9 +362,35 @@ CHR: type-of-builtin-predicate @ // { ?TypeOf [ ?w ] ?tau } --
   ==!
 ] ;
 
+! NOTE: don't use internal optimized implementations here
+GENERIC: make-pred-quot ( class -- quot )
+
+
+! { real fixnum array }
+! [ dup real? [ nip ] [ dup fixnum? [ nip ] [ array? ] if* ] if* ]
+M: union-class make-pred-quot
+    "members" word-prop <reversed> unclip "predicate" word-prop
+    swap
+    [ ! ( acc class )
+     "predicate" word-prop swap
+     '[ dup @ [ nip ] _ if* ]
+    ] each ;
+
+! NOTE: relies on implementation detail of the predicate quotation being a singular
+! quotation!
+M: predicate-class make-pred-quot "predicate" word-prop first def>> ;
+
+CHR: type-of-predicate @ { TypeOfWord ?w ?tau } // -- [ ?w "predicating" word-prop :>> ?c ]
+[ ?c class-not :>> ?d ]
+[ ?c make-pred-quot :>> ?p ]
+[ [ ?p keep over [ { ?c } declare drop ] [ { ?d } declare drop ] if ] :>> ?q ]
+|
+{ ?TypeOf ?q ?tau } ;
+
 ! NOTE: this is kind of a chicken-and-egg situation with instance checks.  There seems to
 ! be some kind of mutually recursive dependency between normative declaration and predicate
 ! checking.
+! For now: try to rewrite it to merge with the type-of-predicate code path
 CHR: type-of-instance? @ { TypeOfWord instance? ?tau } // -- |
 [ ?tau P{ Xor
           P{ Effect L{ ?sig ?o . ?a } L{ ?c . ?a } { ?c } {
@@ -379,30 +405,13 @@ CHR: type-of-instance? @ { TypeOfWord instance? ?tau } // -- |
              } }
           } ==! ] ;
 
-! NOTE: don't use internal optimized implementations here
-GENERIC: make-pred-quot ( predicate-word class -- quot )
+UNION: decomposable-class union-class predicate-class ;
 
-! { real fixnum array }
-! [ dup real? [ nip ] [ dup fixnum? [ nip ] [ array? ] if* ] if* ]
-M: union-class make-pred-quot nip
-    "members" word-prop <reversed> unclip "predicate" word-prop
-    swap
-    [ ! ( acc class )
-     "predicate" word-prop swap
-     '[ dup @ [ nip ] _ if* ]
-    ] each ;
-! ! NOTE: don't expand the unions for now
-! M: union-class make-pred-quot
-!     nip '[ _ instance? ] ;
-M: predicate-class make-pred-quot drop def>> ;
-
-CHR: type-of-predicate @ { TypeOfWord ?w ?tau } // -- [ ?w "predicating" word-prop :>> ?c ]
-[ ?c class-not :>> ?d ]
-[ ?w ?c make-pred-quot :>> ?p ]
-! [ ?c predicate-class? [ ?p keep over [ { ?c } declare drop ] [ { ?d } declare drop ] if ] ?p ? :>> ?q ]
-[ [ ?p keep over [ { ?c } declare drop ] [ { ?d } declare drop ] if ] :>> ?q ]
-|
-{ ?TypeOf ?q ?tau } ;
+! CHR: expand-instance-check @ // { Instance ?x A{ ?rho } } -- [ { ?rho } first wrapper? ] [ { ?rho } first wrapped>> decomposable-class?  ]
+! [ { ?rho } first wrapped>> make-pred-quot :>> ?c ]
+! [  ]
+! |
+! {  }
 
 ! : <array> ( n elt -- array )
 CHR: type-of-<array> @ { TypeOfWord <array> ?tau } // -- |
@@ -631,7 +640,8 @@ CHR: type-of-< @ { TypeOfWord A{ < } ?tau } // -- |
 ! induces parameter
 CHR: type-of-= @ { TypeOfWord A{ = } ?tau } // -- |
 [
-    ?sig
+    ! ?sig
+    ?tau
     P{ Xor
        P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
               P{ Instance ?z t }
@@ -661,16 +671,25 @@ CHR: type-of-typed-word @ { TypeOfWord A{ ?w } ?tau } // --
 CONSTANT: force-compile
 { if }
 
+: handle-word-as-macro? ( word -- ? )
+    dup force-compile in? [ drop f ]
+    [ { [ "transform-n" word-prop ]
+        [ macro? ]
+      } 1|| ] if ;
+
+! TODO: maybe handle declared classes of macros?
 CHR: type-of-macro @ { TypeOfWord A{ ?w } ?tau } // --
 [ ?tau term-var? ]
-! [ ?tau macro? ] |
-[ ?w "transform-n" word-prop ?w force-compile in? not and ] |
+[ ?w handle-word-as-macro? ]
+[ ?w macro-effect object <array> :>> ?x ]
+|
 ! [ ?w "transform-quot" word-prop :>> ?q ] |
 ! { ?TypeOf ?q ?rho }
 ! { ?TypeOf [ call call ] ?sig }
 ! { ComposeType ?rho ?sig ?tau }
 [ ?tau P{ Effect ?a ?b f {
               ! P{ MacroArgs ?w ?a L{ ?q . ?b } }
+              P{ Ensure ?x ?a }
               P{ MacroCall ?w f ?a ?b }
           } }
 ==! ]
@@ -1353,6 +1372,8 @@ CHR: literal-defines-tag @ { Instance ?x A{ ?v } } { Tag ?x ?n } // -- [ { ?v } 
 CHR: convert-tag @ // { Tag ?x A{ ?n } } -- [ ?n type>class :>> ?tau ] |
 { Instance ?x ?tau } ;
 
+CHR: instance-of-non-classoid @ { Instance ?x A{ ?c } } // -- [ { ?c } first classoid? not ] | { Invalid } ;
+
 ! CHR: useless-instance @ // { Instance __ object } -- | ;
 CHR: null-instance-is-invalid @ { Instance ?x null } // -- | { Invalid } ;
 
@@ -1415,8 +1436,8 @@ CHR: redundant-neq-instance @ { Instance ?x A{ ?c } } { Instance ?y A{ ?d } } //
 CHR: check-sum @ // { Sum A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y + ?z = not ] | P{ Invalid } ;
 ! CHR: zero-sum-1 @ // { Sum ?z 0 ?y } -- | [ ?z ?y ==! ] ;
 ! CHR: zero-sum-2 @ // { Sum ?z ?x 0 } -- | [ ?z ?x ==! ] ;
-! CHR: define-sum @ // { Sum ?z A{ ?x } A{ ?y } } --
-! [ ?x ?y + <wrapper> :>> ?v ] | { Instance ?z ?v } ;
+CHR: define-sum @ // { Sum ?z A{ ?x } A{ ?y } } --
+[ ?x ?y + <wrapper> :>> ?v ] | { Instance ?z ?v } ;
 CHR: normalize-sum @ // { Sum ?z A{ ?x } ?y } -- [ ?y term-var? ] | { Sum ?z ?y ?x } ;
 
 CHR: check-prod @ // { Prod A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y * ?z = not ] | P{ Invalid } ;
@@ -1521,22 +1542,21 @@ CHR: known-declare @
 [ ?tau <reversed> >list :>> ?m ] | { Declare ?m ?a } ;
 
 
-CHR: known-macro-arg @ { Instance ?x ?v } // { MacroCall ?q ?a ?i ?o } -- [ ?x ?a in? ] [ { ?v } first wrapper? ]
+CHR: known-macro-arg @ { Instance ?x A{ ?v } } // { MacroCall ?q ?a L{ ?x . ?ys } ?o } -- [ { ?v } first wrapper? ]
 [ { ?v } first wrapped>> :>> ?z ]
+[ ?a ?z prefix :>> ?b ]
 |
-[| | ?a H{ { ?x ?z } } lift* :> args
- { MacroCall ?q args ?i ?o }
-] ;
+{ MacroCall ?q ?b ?ys ?o } ;
 
 ! NOTE: only fully expanded macros are treated for now!
-CHR: expand-macro @ // { MacroCall ?q ?a ?i ?o } -- [ ?a ground-value? ]
+CHR: expand-macro @ // { MacroCall ?w ?a ?i ?o } -- [ ?a length ?w macro-effect = ]
+[ ?w macro-quot :>> ?q ]
 [ ?a ?q with-datastack first :>> ?p ]
 |
+{ CallEffect ?tau ?i ?o }
+! NOTE: this should trigger only after the current constraint set is finished!
 { ?TypeOf ?p ?tau }
-{ CallEffect ?tau ?i ?o } ;
-
-
-
+    ;
 
 ! CHR: constant-ensure @ // { Ensure ?l ?a } -- [ ?l array? ]
 ! [ ?l <reversed> >list :>> ?m ] |
