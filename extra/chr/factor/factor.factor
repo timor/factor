@@ -101,7 +101,10 @@ TUPLE: ComposeType < chr-pred q1 q2 q3 ;
 
 ! Actually triggers computing composed effect and storing it into target
 TUPLE: ComposeEffect < chr-pred e1 e2 target ;
+! Accumulator for resulting effect predicate
 TUPLE: MakeEffect < chr-pred in out locals preds target ;
+! End of inference Marker
+TUPLE: FinishEffect < chr-pred target ;
 TUPLE: MakeUnit < chr-pred val target ;
 
 TUPLE: Iterated < chr-pred start end ;
