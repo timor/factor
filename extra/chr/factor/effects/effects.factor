@@ -163,8 +163,9 @@ CHR: finish-valid-effect @ { FinishEffect ?tau } AS: ?e P{ MakeEffect ?a ?b __ ?
 |
 [ ?tau P{ Effect ?a ?b ?y ?l } ==! ] ;
 
-CHR: finish-phi-reasoning @ { FinishEffect ?tau } // { MakeEffect __ __ __ __ ?tau } { PhiMode } -- [ ?tau term-var? not ] | { PhiDone } ;
-CHR: finish-compositional-reasoning @ { FinishEffect ?tau } // { MakeEffect __ __ __ __ ?tau } -- [ ?tau term-var? not ] | ;
+! NOTE: re-inserting the FinishEffect Predicates because they don't get reactivated by substitution
+CHR: finish-phi-reasoning @ // { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { PhiMode } -- [ ?tau term-var? not ] | { FinishEffect ?tau } { PhiDone } ;
+CHR: finish-compositional-reasoning @ // { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } -- [ ?tau term-var? not ] | { FinishEffect ?tau } ;
 CHR: finish-effect-done @ // { FinishEffect ?tau } -- [ ?tau { [ null eq? ] [ Effect? ] } 1|| ] | ;
 
 
