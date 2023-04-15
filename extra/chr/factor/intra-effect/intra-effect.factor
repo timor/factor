@@ -339,6 +339,7 @@ CHR: neutral-bitand-2 @ // { BitAnd ?z ?x -1 } -- | [ ?z ?x ==! ] ;
 
 ! *** Call Effect matching
 ! NOTE: These only meet in renamed form?
+! Probably not. [ ... ] [ call ] keep looks fishy...
 ! CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } { CallEffect ?q ?a ?b } // -- |
 CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } // { CallEffect ?q ?a ?b } -- |
 [ { ?a ?b } { ?c ?d } ==! ]
@@ -427,7 +428,7 @@ CHR: expand-macro @ // { MacroCall ?w ?a ?i ?o } -- [ ?a length ?w macro-effect 
 |
 { CallEffect ?tau ?i ?o }
 ! NOTE: this should trigger only after the current constraint set is finished!
-{ ?TypeOf ?p ?tau }
+{ ?DeferTypeOf ?p ?tau }
     ;
 
 ! CHR: constant-ensure @ // { Ensure ?l ?a } -- [ ?l array? ]

@@ -2,7 +2,7 @@ USING: accessors arrays assocs chr.factor.composition chr.parser chr.state
 chr.test combinators.short-circuit kernel kernel.private lists literals math
 math.private classes
 quotations sequences slots.private terms tools.test typed types.util words
-chr.factor chr.factor.word-types ;
+chr.factor chr.factor.word-types chr.factor.effects ;
 
 IN: chr.factor.composition.tests
 
@@ -139,6 +139,7 @@ P{ Effect ?a ?b f { P{ Invalid } } }
 [ [ 42 2 slot ] get-type ] chr-test
 
 P{ Effect ?a ?b f { P{ Invalid } } }
+! XXX slow as hell?
 [ [ curry (call) ] get-type ] chr-test
 
 ! NOTE: This would only work if we decide to implement normal forms for the nominative type segment?
@@ -410,12 +411,26 @@ P{
 { V{ 4 3 2 1 0 } }
 [ V{ } clone 5 [ over push ] each-int-down-complete ] unit-test
 
+! : if-zero
+
 ! stupid test word: increase n, decrease i, when done add 42 to n
+! FIXME correctly infer stuff for given partial input!
+! Approach: when rebuilding an effect containing a recursive call, and a known
+! fixpoint type exists, then insert a fixpoint type iteration and a loop-step relation
 : inc-int-down ( n i -- m )
     dup 0 > [ [ 1 + ] [ 1 - ] bi* inc-int-down ] [ drop 42 + ] if ;
 
 { 47 }
 [ 1 4 inc-int-down ] unit-test
+
+! ** Macro expansion
+MACRO: my-add1 ( num -- quot )
+    [ + ] curry ;
+
+{ 42 } [ 41 1 my-add1 ] unit-test
+
+{  }
+[ [ my-add1 ] get-type ] chr-test
 
 ! ** Practical examples
 
@@ -424,10 +439,14 @@ PREDICATE: u8 < integer { [ 0 >= ] [ 256 < ] } 1&& ;
 PREDICATE: cardinal < integer 0 > ;
 PREDICATE: zero < integer 0 = ;
 
+! FIXME
+! [ cardinal? ] get-type
+! [ cardinal instance? ] get-type
+
+! [ dup 0 > [ [ 1 + ] [ 1 - ] bi* inc-int-down ] [ drop 42 + ] if ] ;
+
 GENERIC: inc-loop ( n i -- m )
 M: cardinal inc-loop [ 1 + ] [ 1 - ] bi* inc-loop ;
 M: zero inc-loop drop 42 + ;
-
-! Note: taking this as an occasion to actually include the default method!
 
 { 47 } [ 0 5 inc-loop ] unit-test

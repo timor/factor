@@ -86,6 +86,7 @@ TUPLE: Effect < chr-pred in out parms preds ;
 TUPLE: RecursiveEffect < chr-pred tag effect ;
 TUPLE: TypeOf < chr-pred thing type ;
 TUPLE: ?TypeOf < chr-pred thing type ;
+TUPLE: ?DeferTypeOf < ?TypeOf ;
 TUPLE: FixpointTypeOf < chr-pred thing type ;
 TUPLE: RecursionTypeOf < chr-pred thing type ;
 TUPLE: TypeOfWord < chr-pred word var ;
@@ -250,8 +251,6 @@ GENERIC: live-vars ( pred -- vars )
 GENERIC: defines-vars ( pred -- vars )
 M: chr-pred live-vars vars ;
 M: object defines-vars drop f ;
-M: CallEffect live-vars thing>> 1array ;
-M: CallEffect defines-vars [ in>> vars ] [ out>> vars ] bi union ;
 M: Slot live-vars val>> 1array ;
 M: Slot defines-vars [ n>> ] [ slot-val>> ] bi 2array ;
 M: Instance live-vars val>> 1array ;

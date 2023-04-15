@@ -4,7 +4,9 @@ combinators.short-circuit kernel lists sequences sets terms types.util ;
 IN: chr.factor.effects
 
 
-! Effect composition
+! * Effect composition
+! Responsible for actually triggering composing effect types and
+! collecting results of inner predicate reasoning
 
 CHRAT: chr-effects { }
 
@@ -35,6 +37,7 @@ CHR: do-check-phi-stack @ // { CheckPhiStack ?i ?o ?u } -- [ ?u term-var? ] [ ?i
 
 ERROR: nested-inference a b ;
 CHR: inference-collision @ AS: ?a <={ MakeEffect } AS: ?b <={ MakeEffect } // -- | [ ?a ?b nested-inference ] ;
+CHR: inference-collision-2 @ AS: ?a <={ FinishEffect } AS: ?b <={ FinishEffect } // -- | [ ?a ?b nested-inference ] ;
 
 ! NOTE: assumed renaming here already
 ! NOTE: we have to generate object instance predicates for all values that may be generated using unification for each branch if missing!
@@ -160,8 +163,9 @@ CHR: finish-valid-effect @ { FinishEffect ?tau } AS: ?e P{ MakeEffect ?a ?b __ ?
 |
 [ ?tau P{ Effect ?a ?b ?y ?l } ==! ] ;
 
-CHR: finish-phi-reasoning @ // { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { PhiMode } -- [ ?tau term-var? not ] | { PhiDone } ;
-CHR: finish-compositional-reasoning @ // { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } -- [ ?tau term-var? not ] | ;
+CHR: finish-phi-reasoning @ { FinishEffect ?tau } // { MakeEffect __ __ __ __ ?tau } { PhiMode } -- [ ?tau term-var? not ] | { PhiDone } ;
+CHR: finish-compositional-reasoning @ { FinishEffect ?tau } // { MakeEffect __ __ __ __ ?tau } -- [ ?tau term-var? not ] | ;
+CHR: finish-effect-done @ // { FinishEffect ?tau } -- [ ?tau { [ null eq? ] [ Effect? ] } 1|| ] | ;
 
 
 ;
