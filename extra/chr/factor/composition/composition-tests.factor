@@ -432,6 +432,26 @@ MACRO: my-add1 ( num -- quot )
 {  }
 [ [ my-add1 ] get-type ] chr-test
 
+MACRO: my-add2 ( num -- quot )
+    [ + 1 + ] curry ;
+
+{ 43 } [ 41 1 my-add2 ] unit-test
+
+{  }
+[ [ 1 my-add1 ] get-type ] chr-test
+
+{  }
+[ [ my-add1 my-add2 ] get-type ] chr-test
+
+{  }
+[ [ 1 2 my-add1 my-add2 ] get-type ] chr-test
+
+{  }
+[ [ 1 my-add1 my-add2 ] get-type ] chr-test
+
+{  }
+[ [ 1 my-add1 dup 99 my-add2 ] get-type ] chr-test
+
 ! ** Practical examples
 
 PREDICATE: u8 < integer { [ 0 >= ] [ 256 < ] } 1&& ;

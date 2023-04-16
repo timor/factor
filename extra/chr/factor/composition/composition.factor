@@ -1,6 +1,6 @@
 USING: accessors arrays chr.factor chr.factor.effects chr.factor.intra-effect
 chr.factor.phi chr.factor.word-types chr.parser chr.state kernel quotations
-terms ;
+terms sets ;
 
 IN: chr.factor.composition
 
