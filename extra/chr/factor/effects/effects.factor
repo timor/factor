@@ -82,7 +82,7 @@ CHR: force-union @ { PhiMode } { FixpointMode } // { Invalid } -- | ;
 ! CHR: phi-discard-leftover-params @ { PhiMode } <={ MakeEffect } // <={ Param } -- | ;
 ! CHR: phi-discard-phi-defs @ { PhiMode } <={ MakeEffect } // <={ Phi } -- | ;
 
-CHR: collect-union-pred @ { PhiMode } { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } { Keep ?p } -- [ ?p live-vars ?e effect-vars intersects? ]
+CHR: collect-union-pred @ { PhiMode } { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } { Keep ?p } -- [ ?p live-vars ?e make-effect-vars intersects? ]
 [ ?p ?l in? not ]
 [ ?l ?p suffix :>> ?k ]
 |
@@ -99,22 +99,22 @@ CHR: phi-discard-keeps @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __
 ! These are live after the pred has been taken into account
 
 ! CHR: collect-call-recursive-input @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p P{ CallRecursive ?m ?rho ?sig } --
-! [ ?rho vars ?e effect-vars subset? ]
+! [ ?rho vars ?e make-effect-vars subset? ]
 ! [ ?x ?sig vars union :>> ?y ]
 ! [ ?l ?p suffix :>> ?k ]
 ! | { MakeEffect ?a ?b ?y ?k ?tau } ;
 
 ! NOTE: The only time for now where this was needed instead of the one above was for [ t ] loop...
 CHR: collect-call-recursive @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p P{ CallRecursive ?m ?rho ?sig } --
-[ ?rho vars ?sig vars union ?e effect-vars intersects? ]
+[ ?rho vars ?sig vars union ?e make-effect-vars intersects? ]
 [ ?x ?rho vars union ?sig vars union :>> ?y ]
 [ ?l ?p suffix :>> ?k ]
 | { MakeEffect ?a ?b ?y ?k ?tau } ;
 
 ! *** All other preds
-! CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p vars ?e effect-vars intersects? ]
-! CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p live-vars ?e effect-vars subset? ]
-CHR: collect-body-pred @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p live-vars ?e effect-vars intersects? ]
+! CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p vars ?e make-effect-vars intersects? ]
+! CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p live-vars ?e make-effect-vars subset? ]
+CHR: collect-body-pred @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p live-vars ?e make-effect-vars intersects? ]
 [ ?p ?l in? not ]
 [ ?l ?p suffix :>> ?k ]
 |
@@ -122,8 +122,8 @@ CHR: collect-body-pred @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x 
  { MakeEffect ?a ?b y ?k ?tau } ] ;
 
 CHR: collect-boa @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ Boa ?c ?i ?o } --
-! [ ?i ?o [ vars ?e effect-vars in? ] bi@ or ]
-[ ?p vars ?e effect-vars intersects? ]
+! [ ?i ?o [ vars ?e make-effect-vars in? ] bi@ or ]
+[ ?p vars ?e make-effect-vars intersects? ]
 [ ?l ?p suffix :>> ?k ]
 [ ?x ?p vars union :>> ?y ] |
 { MakeEffect ?a ?b ?y ?k ?tau } ;
@@ -155,7 +155,7 @@ CHR: finish-invalid-effect @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau
 [ ?tau P{ Effect ?a ?b f { P{ Invalid } } } ==! ] ;
 
 CHR: finish-valid-effect @ { FinishEffect ?tau } AS: ?e P{ MakeEffect ?a ?b __ ?l ?tau } // { Params ?x } -- [ ?tau term-var? ]
-[ ?x ?e effect-vars intersect
+[ ?x ?e make-effect-vars intersect
   ! FIXME: this exposes what seems to be a bug in the term solver, probably something going wrong when f is assigned to a binding,
   ! resulting in a recursive-term-error in case for checking strange stuff...
   dup empty? [ drop f ] when

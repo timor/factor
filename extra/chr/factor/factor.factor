@@ -240,7 +240,7 @@ M: CallRecursive free-effect-vars tag>> free-effect-vars ;
 : fresh-effect ( effect -- effect )
     dup free-effect-vars fresh-without ;
 
-: effect-vars ( make-effect -- set )
+: make-effect-vars ( make-effect -- set )
     [ in>> vars ] [ out>> vars union ] [ locals>> vars union ] tri ;
 
 ! All of these must be live to take collecting the pred into account
