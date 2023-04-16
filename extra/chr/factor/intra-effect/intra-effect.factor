@@ -195,7 +195,8 @@ CHR: phi-call-rec-self @ { PhiMode } { PhiSchedule ?w __ __ } //
 ! CHR: disj-param-maybe-callable @ { PhiMode } <={ MakeEffect } { Params ?l } // { Instance ?x A{ ?tau } } --
 ! [ ?x ?l in? ] [ { ?tau } first classoid? ] [ { ?tau } first callable classes-intersect? ] | { Invalid } ;
 
-CHR: disj-is-macro-effect @ { PhiMode } <={ MakeEffect } // <={ MacroCall } -- | { Invalid } ;
+! TODO: need?
+CHR: disj-is-macro-effect @ { PhiMode } <={ MakeEffect } // <={ MacroExpand } -- | { Invalid } ;
 
 ! NOTE: this is pretty eager, as it will preserve all higher-order parametrism explicitly
 CHR: disj-is-inline-effect @ { PhiMode } <={ MakeEffect } // <={ CallEffect ?p . __ } -- | { Invalid } ;
@@ -269,19 +270,6 @@ CHR: instance-intersect-effect @ { Instance ?x ?e }
 
 ! TODO: used? looks like should be subsumed by null-instance-is-invalid
 CHR: call-null-instance-is-invalid @ { CallEffect ?x __ __ } { Instance ?x null } // -- | { Invalid } ;
-
-! *** Macro Expansion/Folding
-! NOTE: destructive
-CHR: adjust-macro-stack @ // { MacroCall ?w f ?a ?b } -- [ ?w word? ] [ ?w "transform-n" word-prop :>> ?n ]
-[ ?w "transform-quot" word-prop :>> ?q ] |
-[| |
- ?n "v" utermvar <array> :> mparms
- mparms <reversed> >list ?rho lappend :> sin
- {
-     [ ?a sin ==! ]
-     { MacroCall ?q mparms sin ?b }
- }
-] ;
 
 ! *** Arithmetics
 ! CHR: unique-expr-pred @ AS: ?p <={ expr-pred ?a . ?x } // AS: ?q <={ expr-pred ?a . ?x } -- [ ?p class-of ?q class-of class= ] | ;
@@ -415,20 +403,27 @@ CHR: known-declare @
 [ ?tau <reversed> >list :>> ?m ] | { Declare ?m ?a } ;
 
 
-CHR: known-macro-arg @ { Instance ?x A{ ?v } } // { MacroCall ?q ?a L{ ?x . ?ys } ?o } -- [ { ?v } first wrapper? ]
+! **** Macro Expansion/Folding
+
+CHR: known-macro-arg @ { Instance ?x A{ ?v } } // { MacroExpand ?q ?a L{ ?x . ?ys } ?o } -- [ { ?v } first wrapper? ]
+[ ?a length ?q macro-effect < ]
 [ { ?v } first wrapped>> :>> ?z ]
 [ ?a ?z prefix :>> ?b ]
 |
-{ MacroCall ?q ?b ?ys ?o } ;
+{ MacroExpand ?q ?b ?ys ?o } ;
 
 ! NOTE: only fully expanded macros are treated for now!
-CHR: expand-macro @ // { MacroCall ?w ?a ?i ?o } -- [ ?a length ?w macro-effect = ]
+! NOTE: we need to copy the type here because a different expansion will have a different type
+! NOTE: existentials, (implicit) globals
+! ?o: the type var which is unknown
+! ?p: the expanded macro quotation to infer
+CHR: expand-macro @ // { Instance ?x ?o } { MacroExpand ?w ?a ?i ?o } -- [ ?a length ?w macro-effect = ]
 [ ?w macro-quot :>> ?q ]
 [ ?a ?q with-datastack first :>> ?p ]
 |
-{ CallEffect ?tau ?i ?o }
 ! NOTE: this should trigger only after the current constraint set is finished!
-{ ?DeferTypeOf ?p ?tau }
+{ Instance ?x ?sig }
+{ ?DeferTypeOf ?p ?sig }
     ;
 
 ! CHR: constant-ensure @ // { Ensure ?l ?a } -- [ ?l array? ]

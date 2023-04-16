@@ -91,6 +91,7 @@ TUPLE: FixpointTypeOf < chr-pred thing type ;
 TUPLE: RecursionTypeOf < chr-pred thing type ;
 TUPLE: TypeOfWord < chr-pred word var ;
 TUPLE: InferType < chr-pred thing ;
+TUPLE: ReinferWith < chr-pred type var ;
 TUPLE: WaitFull < chr-pred type ;
 TUPLE: WaitRec < chr-pred orig rec ;
 TUPLE: Throws < chr-pred error ;
@@ -135,8 +136,7 @@ TUPLE: RecursivePhi < chr-pred initial stepped end ;
 
 TUPLE: Boa < chr-pred spec in id ;
 TUPLE: TupleBoa < Boa ;
-TUPLE: MacroArgs < chr-pred word in out ;
-TUPLE: MacroCall < chr-pred quot args in out ;
+TUPLE: MacroExpand < chr-pred quot args in out-val ;
 
 ! Macro expansion, folding
 TUPLE: FoldStack < chr-pred stack n ;
@@ -190,7 +190,7 @@ TUPLE: Lt < expr-pred var ;
 UNION: commutative-pred Eq Neq ;
 
 UNION: body-pred Instance NotInstance CallEffect Declare Slot CallRecursive Throws Tag
-    MacroCall expr-pred Iterated ;
+    MacroExpand expr-pred Iterated ;
 TUPLE: Params < chr-pred ids ;
 
 TUPLE: CheckPhiStack a b res ;
@@ -223,7 +223,7 @@ TUPLE: PhiDone < chr-pred ;
 ! TUPLE: Discrims < chr-pred vars ;
 
 
-GENERIC: free-effect-vars ( term -- term )
+GENERIC: free-effect-vars ( term -- seq )
 : full-type? ( type -- ? ) free-effect-vars empty? ;
 
 M: Xor free-effect-vars
@@ -237,8 +237,21 @@ M: Instance free-effect-vars type>>
     [ free-effect-vars ] [ drop f ] if ;
 M: CallRecursive free-effect-vars tag>> free-effect-vars ;
 
+GENERIC: bound-effect-vars ( term -- seq )
+M: object bound-effect-vars drop f ;
+M: Effect bound-effect-vars
+    {
+        [ in>> vars ] [ out>> vars union ]
+        [ parms>> vars union ]
+        [ preds>> [ bound-effect-vars ] gather union ]
+    } cleave ;
+M: Xor bound-effect-vars
+    [ type1>> bound-effect-vars ]
+    [ type2>> bound-effect-vars ] bi union ;
+
 : fresh-effect ( effect -- effect )
-    dup free-effect-vars fresh-without ;
+    ! dup free-effect-vars fresh-without ;
+    dup bound-effect-vars fresh-with ;
 
 : make-effect-vars ( make-effect -- set )
     [ in>> vars ] [ out>> vars union ] [ locals>> vars union ] tri ;
@@ -251,6 +264,12 @@ GENERIC: live-vars ( pred -- vars )
 GENERIC: defines-vars ( pred -- vars )
 M: chr-pred live-vars vars ;
 M: object defines-vars drop f ;
+! TODO: change this once parameterization is made explicit
+! M: CallEffect live-vars thing>> 1array ;
+! ! M: CallEffect defines-vars [ in>> vars ] [ out>> vars ] bi union ;
+! M: CallEffect defines-vars [ out>> vars ] [ thing>> 1array ] bi union ;
+M: CallEffect defines-vars vars ;
+M: MacroExpand defines-vars in>> vars ;
 M: Slot live-vars val>> 1array ;
 M: Slot defines-vars [ n>> ] [ slot-val>> ] bi 2array ;
 M: Instance live-vars val>> 1array ;

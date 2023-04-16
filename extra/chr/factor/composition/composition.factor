@@ -18,6 +18,22 @@ CHR: conflicting-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- [ ?tau full-
 CHR: have-recursive-type @ // { Recursion ?x __ ?sig } { TypeOf ?x ?rho } { ?TypeOf ?x ?sig } -- |
 [ ?sig ?rho ==! ] ;
 
+! NOTE: assuming that we catch all dependent changes because we assume that all dependent
+! changes reference the unknown type. I.e. it must not matter whether we expand the macro first and then
+! compose types with the expansion, or we delay the expansion, compose with that delayed expansion and then
+! substitute the expanded type.
+CHR: reinfer-deferred-type @ { ReinferWith ?e ?sig } // { TypeOf ?x ?tau } --
+[ ?e full-type? ]
+[ ?sig ?tau vars in? ]
+[ ?tau { { ?sig ?e } } lift* :>> ?d ]
+|
+{ TypeOf ?x ?rho }
+! TODO: check if we need fresh effects here.  If not, could use ComposeEffect directly
+{ ComposeType ?d P{ Effect ?y ?y f f } ?rho } ;
+
+! FIXME: too eager, maybe move to effects and conjoin with FinishEffect
+! CHR: did-reinfer-deferred-type @ // { ReinferWith ?e __ } -- [ ?e full-type? ] | ;
+
 CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } -- [ ?tau full-type? ] | [ ?sig ?tau ==! ] ;
 
 CHR: double-word-inference-special @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]

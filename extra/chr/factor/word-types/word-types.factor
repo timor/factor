@@ -2,8 +2,8 @@ USING: accessors arrays assocs chr.factor chr.parser chr.state classes
 classes.algebra classes.builtin classes.predicate classes.tuple
 classes.tuple.private classes.union combinators.short-circuit effects generic
 generic.single kernel kernel.private lists macros macros.expander math
-math.private quotations sequences sequences.private sets slots.private terms
-types.util words ;
+math.private namespaces quotations sequences sequences.private sets
+slots.private terms types.util words ;
 
 IN: chr.factor.word-types
 
@@ -419,20 +419,21 @@ CONSTANT: force-compile
         [ macro? ]
       } 1|| ] if ;
 
+: macro-effect>stacks ( n -- lin lout )
+    "i" swap "a" <array> "o" { "quot" } <variable-effect>
+    effect>stacks ;
+
 ! TODO: maybe handle declared classes of macros?
 CHR: type-of-macro @ { TypeOfWord A{ ?w } ?tau } // --
 [ ?tau term-var? ]
 [ ?w handle-word-as-macro? ]
-[ ?w macro-effect object <array> :>> ?x ]
+[ ?w macro-effect macro-effect>stacks drop :>> ?a drop t ]
+[ ?a lastcdr :>> ?i drop t ]
 |
-! [ ?w "transform-quot" word-prop :>> ?q ] |
-! { ?TypeOf ?q ?rho }
-! { ?TypeOf [ call call ] ?sig }
-! { ComposeType ?rho ?sig ?tau }
-[ ?tau P{ Effect ?a ?b f {
-              ! P{ MacroArgs ?w ?a L{ ?q . ?b } }
-              P{ Ensure ?x ?a }
-              P{ MacroCall ?w f ?a ?b }
+[ ?tau P{ Effect ?a ?o f {
+              P{ MacroExpand ?w f ?a ?sig }
+              P{ Instance ?q ?sig }
+              P{ CallEffect ?q ?i ?o }
           } }
 ==! ]
 ;
