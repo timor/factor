@@ -18,6 +18,17 @@ CHR: conflicting-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- [ ?tau full-
 CHR: have-recursive-type @ // { Recursion ?x __ ?sig } { TypeOf ?x ?rho } { ?TypeOf ?x ?sig } -- |
 [ ?sig ?rho ==! ] ;
 
+! *** Deferred Inference
+
+! These should become "active" as soon as the current inference is done
+! Assumption: The hook is only activated if no inference is still active
+! TODO: If we ever have recursive macro expansion, this must be verified to still
+!  perform things in the expected order
+CHR: infer-deferred-effect @ // { TypeOfDone } { ?DeferTypeOf ?p ?sig }  -- |
+{ ?TypeOf ?p ?rho }
+{ ReinferWith ?rho ?sig }
+{ TypeOfDone } ;
+
 ! NOTE: assuming that we catch all dependent changes because we assume that all dependent
 ! changes reference the unknown type. I.e. it must not matter whether we expand the macro first and then
 ! compose types with the expansion, or we delay the expansion, compose with that delayed expansion and then
@@ -31,10 +42,10 @@ CHR: reinfer-deferred-type @ { ReinferWith ?e ?sig } // { TypeOf ?x ?tau } --
 ! TODO: check if we need fresh effects here.  If not, could use ComposeEffect directly
 { ComposeType ?d P{ Effect ?y ?y f f } ?rho } ;
 
-! FIXME: too eager, maybe move to effects and conjoin with FinishEffect
-! CHR: did-reinfer-deferred-type @ // { ReinferWith ?e __ } -- [ ?e full-type? ] | ;
+CHR: did-reinfer-deferred-type @ // { ReinferWith ?e __ } -- [ ?e full-type? ] | ;
 
-CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } -- [ ?tau full-type? ] | [ ?sig ?tau ==! ] ;
+CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } -- [ ?tau full-type? ] | [ ?sig ?tau ==! ]
+{ TypeOfDone } ;
 
 CHR: double-word-inference-special @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
 [ ?x callable-word? ] [ ?x rec-defaults :>> ?e ] |
@@ -108,6 +119,9 @@ CHR: compose-xor-effects-both @ // { ComposeType P{ Xor ?a ?b } P{ Xor ?c ?d } ?
 { ComposeType ?a P{ Xor ?c ?d } ?rho }
 { ComposeType ?b P{ Xor ?c ?d } ?sig }
 { MakeXor ?rho ?sig ?tau } ;
+
+
+CHR: typeof-done-hook-finished @ // { TypeOfDone } -- | ;
 
 ;
 

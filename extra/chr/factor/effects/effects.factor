@@ -169,25 +169,6 @@ CHR: finish-valid-effect @ { FinishEffect ?tau } AS: ?e P{ MakeEffect ?a ?b ?x ?
 CHR: finish-phi-reasoning @ // { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { PhiMode } -- [ ?tau term-var? not ] | { FinishEffect ?tau } { PhiDone } ;
 CHR: finish-compositional-reasoning @ // { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } -- [ ?tau term-var? not ] | { FinishEffect ?tau } ;
 
-! * Deferred inference requests
-
-! Collect Effects to re-infer after deferred type has been determined
-! CHR: make-reinfer-list @ { TypeOf ?x ?tau } { ReinferWith ?sig } // -- [ ?sig term-var? ] [ ?sig ?tau vars in? ] |
-! { ReinferWhenKnown ?x ?sig } ;
-
-! CHR: finish-make-reinfer-list @ // { ReinferWith ?sig } -- | ;
-
-! CHR: reinfer-because-known @ // { FinishEffect ?y } { TypeOf ?x ?tau } { ReinferWhenKnown ?x ?sig } -- [ ?sig term-var? not ] [ ?y term-var? not ] |
-! { ComposeType ?tau P{ Effect ?a ?a f f } ?rho }
-! { TypeOf ?x ?rho }
-! { FinishEffect ?y } ;
-
-! These should become "active" as soon as the current inference is done
-CHR: infer-deferred-effect @ // { ?DeferTypeOf ?p ?sig } { FinishEffect ?tau } -- [ ?tau term-var? not ] |
-{ ?TypeOf ?p ?rho }
-{ ReinferWith ?rho ?sig }
-{ FinishEffect ?tau } ;
-
 ! * Token removal
 CHR: finish-effect-done @ // { FinishEffect ?tau } -- [ ?tau term-var? not ] | ;
 

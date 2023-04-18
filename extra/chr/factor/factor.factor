@@ -86,6 +86,8 @@ TUPLE: Effect < chr-pred in out parms preds ;
 TUPLE: RecursiveEffect < chr-pred tag effect ;
 TUPLE: TypeOf < chr-pred thing type ;
 TUPLE: ?TypeOf < chr-pred thing type ;
+! Hook between complete inferences
+TUPLE: TypeOfDone < chr-pred ;
 TUPLE: ?DeferTypeOf < ?TypeOf ;
 TUPLE: FixpointTypeOf < chr-pred thing type ;
 TUPLE: RecursionTypeOf < chr-pred thing type ;
