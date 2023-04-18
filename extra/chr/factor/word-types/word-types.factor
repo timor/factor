@@ -430,9 +430,9 @@ CHR: type-of-macro @ { TypeOfWord A{ ?w } ?tau } // --
 [ ?w macro-effect macro-effect>stacks drop :>> ?a drop t ]
 [ ?a lastcdr :>> ?i drop t ]
 |
-[ ?tau P{ Effect ?a ?o f {
-              P{ MacroExpand ?w f ?a ?sig }
-              P{ Instance ?q ?sig }
+[ ?tau P{ Effect ?a ?o { ?q } {
+              P{ MacroExpand ?w f ?a ?q }
+              P{ Instance ?q callable }
               P{ CallEffect ?q ?i ?o }
           } }
 ==! ]

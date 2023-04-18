@@ -136,7 +136,9 @@ TUPLE: RecursivePhi < chr-pred initial stepped end ;
 
 TUPLE: Boa < chr-pred spec in id ;
 TUPLE: TupleBoa < Boa ;
-TUPLE: MacroExpand < chr-pred quot args in out-val ;
+! explicitly referencing out-quot here for live-ness
+TUPLE: MacroExpand < chr-pred quot args in out-quot ;
+TUPLE: MacroExpanded < MacroExpand out-type ;
 
 ! Macro expansion, folding
 TUPLE: FoldStack < chr-pred stack n ;
@@ -265,13 +267,20 @@ GENERIC: defines-vars ( pred -- vars )
 M: chr-pred live-vars vars ;
 M: object defines-vars drop f ;
 ! TODO: change this once parameterization is made explicit
-! M: CallEffect live-vars thing>> 1array ;
+! UPDATE: not doing parameterization for macro args, because they cannot be
+! collected easily once used.
+M: CallEffect live-vars thing>> 1array ;
 ! ! M: CallEffect defines-vars [ in>> vars ] [ out>> vars ] bi union ;
 ! M: CallEffect defines-vars [ out>> vars ] [ thing>> 1array ] bi union ;
-M: CallEffect defines-vars vars ;
-M: MacroExpand defines-vars in>> vars ;
+! M: CallEffect defines-vars vars ;
+M: CallEffect defines-vars out>> vars ;
+! NOTE: also keeping references to input vars here, to prevent (partially) known input vals from being collected
+M: MacroExpand defines-vars
+    [ out-quot>> vars ]
+    [ in>> vars union ] bi
+    ;
 M: Slot live-vars val>> 1array ;
-M: Slot defines-vars [ n>> ] [ slot-val>> ] bi 2array ;
+M: Slot defines-vars [ n>> vars ] [ slot-val>> vars union ] bi ;
 M: Instance live-vars val>> 1array ;
 M: Instance defines-vars type>> defines-vars ;
 M: Tag live-vars val>> 1array ;

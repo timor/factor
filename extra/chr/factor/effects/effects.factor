@@ -144,6 +144,8 @@ CHR: collect-boa @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?ta
 
 ! *** Sanity check
 ! CHR: must-cleanup @ { MakeEffect __ __ __ __ __ } AS: ?p <={ body-pred } // -- | [ ?p "leftovers" 2array throw f ] ;
+
+! *** Discard unrelated predicates
 CHR: cleanup-incomplete @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // AS: ?p <={ body-pred } -- | ;
 
 ! This is triggered if phi mode is aborted
@@ -154,8 +156,8 @@ CHR: finish-disjoint-effect @ { PhiMode } { FinishEffect ?tau } { MakeEffect __ 
 CHR: finish-invalid-effect @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { Params __ } { Invalid } -- |
 [ ?tau P{ Effect ?a ?b f { P{ Invalid } } } ==! ] ;
 
-CHR: finish-valid-effect @ { FinishEffect ?tau } AS: ?e P{ MakeEffect ?a ?b __ ?l ?tau } // { Params ?x } -- [ ?tau term-var? ]
-[ ?x ?e make-effect-vars intersect
+CHR: finish-valid-effect @ { FinishEffect ?tau } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } // { Params __ } -- [ ?tau term-var? ]
+[ ?x ?a vars diff ?b vars diff
   ! FIXME: this exposes what seems to be a bug in the term solver, probably something going wrong when f is assigned to a binding,
   ! resulting in a recursive-term-error in case for checking strange stuff...
   dup empty? [ drop f ] when

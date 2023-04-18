@@ -196,7 +196,7 @@ CHR: phi-call-rec-self @ { PhiMode } { PhiSchedule ?w __ __ } //
 ! [ ?x ?l in? ] [ { ?tau } first classoid? ] [ { ?tau } first callable classes-intersect? ] | { Invalid } ;
 
 ! TODO: need?
-CHR: disj-is-macro-effect @ { PhiMode } <={ MakeEffect } // <={ MacroExpand } -- | { Invalid } ;
+CHR: disj-is-macro-effect @ { PhiMode } <={ MakeEffect } // { MacroExpand __ __ __ __ } -- | { Invalid } ;
 
 ! NOTE: this is pretty eager, as it will preserve all higher-order parametrism explicitly
 CHR: disj-is-inline-effect @ { PhiMode } <={ MakeEffect } // <={ CallEffect ?p . __ } -- | { Invalid } ;
@@ -209,6 +209,7 @@ CHR: disj-single-call-rec @ { PhiMode } <={ MakeEffect } // <={ CallRecursive } 
 ! TODO: does that reasoning work? Basically, we would need to have absence as failure here...
 ! CHR: disj-unknown-can-be-callable @ { PhiMode } <={ MakeEffect } // { Instance ?x A{ ?tau } }
 
+! TODO: are these actually used (probably instance case)
 CHR: disj-symbolic-type @ { PhiMode } <={ MakeEffect } { Params ?b } // { Instance ?x ?tau } -- [ ?tau term-var? ] [ ?x ?b in? ] | { Invalid } ;
 CHR: disj-symbolic-compl-type @ { PhiMode } <={ MakeEffect } { Params ?b } // { NotInstance ?x ?tau } -- [ ?tau term-var? ] [ ?x ?b in? ] | { Invalid } ;
 
@@ -405,26 +406,29 @@ CHR: known-declare @
 
 ! **** Macro Expansion/Folding
 
-CHR: known-macro-arg @ { Instance ?x A{ ?v } } // { MacroExpand ?q ?a L{ ?x . ?ys } ?o } -- [ { ?v } first wrapper? ]
+CHR: known-macro-arg @ { Instance ?x A{ ?v } } // { MacroExpand ?q ?a L{ ?x . ?ys } ?p } -- [ { ?v } first wrapper? ]
 [ ?a length ?q macro-effect < ]
 [ { ?v } first wrapped>> :>> ?z ]
 [ ?a ?z prefix :>> ?b ]
 |
-{ MacroExpand ?q ?b ?ys ?o } ;
+{ MacroExpand ?q ?b ?ys ?p } ;
 
 ! NOTE: only fully expanded macros are treated for now!
 ! NOTE: we need to copy the type here because a different expansion will have a different type
 ! NOTE: existentials, (implicit) globals
 ! ?o: the type var which is unknown
 ! ?p: the expanded macro quotation to infer
-CHR: expand-macro @ // { Instance ?x ?o } { MacroExpand ?w ?a ?i ?o } -- [ ?a length ?w macro-effect = ]
+CHR: expand-macro @ // { MacroExpand ?w ?a ?i ?x } -- [ ?a length ?w macro-effect = ]
 [ ?w macro-quot :>> ?q ]
 [ ?a ?q with-datastack first :>> ?p ]
 |
 ! NOTE: this should trigger only after the current constraint set is finished!
+{ MacroExpanded ?w ?a ?i ?x ?sig }
 { Instance ?x ?sig }
 { ?DeferTypeOf ?p ?sig }
     ;
+
+CHR: remove-expanded-macro-known-type @ // { MacroExpanded __ __ __ __ ?sig } -- [ ?sig term-var? not ] | ;
 
 ! CHR: constant-ensure @ // { Ensure ?l ?a } -- [ ?l array? ]
 ! [ ?l <reversed> >list :>> ?m ] |

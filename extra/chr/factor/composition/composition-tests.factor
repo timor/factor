@@ -53,7 +53,7 @@ TYPED: array-first ( arr: array -- thing ) 2 slot ;
 
 TERM-VARS: ?o ?a ?b ?v ?w ?x ?y ?z ;
 
-P{ Effect L{ ?o . ?a } L{ ?v . ?a } { ?o } {
+P{ Effect L{ ?o . ?a } L{ ?v . ?a } f {
        P{ Instance ?o array }
        P{ Instance ?v object }
        P{ Slot ?o W{ 2 } ?v } } }
@@ -130,8 +130,8 @@ TERM-VARS: ?q3 ?q5 ?p2 ?p3 ?c2 ?c3 ?a4 ?a6 ?b3 ?b4 ;
 ! that the non-taken branch quotation is actually a quotation!
 P{
     Xor
-    P{ Effect L{ ?q3 ?p2 ?c2 . ?a4 } ?b3 { ?c2 } { P{ Instance ?q3 object } P{ Instance ?c2 not{ POSTPONE: f } } P{ Instance ?p2 callable } P{ CallEffect ?p2 ?a4 ?b3 } } }
-    P{ Effect L{ ?q5 ?p3 ?c3 . ?a6 } ?b4 { ?c3 } { P{ Instance ?p3 object } P{ Instance ?c3 POSTPONE: f } P{ Instance ?q5 callable } P{ CallEffect ?q5 ?a6 ?b4 } } }
+    P{ Effect L{ ?q3 ?p2 ?c2 . ?a4 } ?b3 f { P{ Instance ?q3 object } P{ Instance ?c2 not{ POSTPONE: f } } P{ Instance ?p2 callable } P{ CallEffect ?p2 ?a4 ?b3 } } }
+    P{ Effect L{ ?q5 ?p3 ?c3 . ?a6 } ?b4 f { P{ Instance ?p3 object } P{ Instance ?c3 POSTPONE: f } P{ Instance ?q5 callable } P{ CallEffect ?q5 ?a6 ?b4 } } }
 }
 [ [ if ] get-type ] chr-test
 
@@ -152,7 +152,7 @@ P{ Effect ?a ?b f { P{ Invalid } } }
 { t }
 [ [ [ 42 2 slot ] [ "string" ] if ] get-type [ { POSTPONE: f } declare drop "string" ] get-type isomorphic? ] unit-test
 
-P{ Effect L{ ?y . ?a } L{ ?x . ?a } { ?y }
+P{ Effect L{ ?y . ?a } L{ ?x . ?a } f
    { P{ Instance ?y object } P{ Instance ?x W{ 4 } } } }
 [ [ number? 4 4 ? ] get-type ] chr-test
 
@@ -160,6 +160,8 @@ P{ Effect L{ ?y . ?a } L{ ?x . ?a } { ?y }
 [ [ number? 4 5 ? ] get-type Xor? ] unit-test
 
 ! FIXME
+! Approach: Use the macro-expansion mechanism to map [ foo instance? ] to [ foo? ]
+! ( or the other way round? )
 { t }
 [ [ callable? ] get-type [ callable instance? ] get-type isomorphic? ] unit-test
 
@@ -175,12 +177,12 @@ M: fixnum foothing 3 + ;
 M: array foothing array-first ;
 
 CONSTANT: foothing1
-P{ Effect L{ ?y . ?a } L{ ?z . ?a } { ?y } { P{ Instance ?y fixnum } P{ Instance ?z number } P{ Sum ?z ?y 3 } } }
+P{ Effect L{ ?y . ?a } L{ ?z . ?a } f { P{ Instance ?y fixnum } P{ Instance ?z number } P{ Sum ?z ?y 3 } } }
 foothing1
 [ M\ fixnum foothing get-type ] chr-test
 
 CONSTANT: foothing2
-P{ Effect L{ ?o . ?a } L{ ?v . ?a } { ?o } { P{ Instance ?o array }
+P{ Effect L{ ?o . ?a } L{ ?v . ?a } f { P{ Instance ?o array }
                                              P{ Instance ?v object } P{ Slot ?o W{ 2 } ?v } } }
 foothing2
 [ M\ array foothing get-type ] chr-test
@@ -200,15 +202,15 @@ M: object auto-dispatch ;
 TERM-VARS: ?y2 ?ys2 ?o4 ?a43 ?v6 ?y6 ?ys6 ;
 P{
     Xor
-    P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } { ?y2 } { P{ Instance ?y2 not{ cons-state } } } }
-    P{ Effect L{ ?o4 . ?a43 } L{ ?v6 . ?a43 } { ?o4 } { P{ Instance ?o4 cons-state } P{ Slot ?o4 "cdr" ?v6 } P{ Instance ?v6 object } } }
+    P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } f { P{ Instance ?y2 not{ cons-state } } } }
+    P{ Effect L{ ?o4 . ?a43 } L{ ?v6 . ?a43 } f { P{ Instance ?o4 cons-state } P{ Slot ?o4 "cdr" ?v6 } P{ Instance ?v6 object } } }
 }
 [ \ auto-dispatch get-type ] chr-test
 
 ! TODO: investigate why manual-dispatch takes ages compared to auto-dispatch
 : manual-dispatch ( obj -- res )
-    dup +nil+? [  ]
-    [ dup list? [ cdr>> ] [  ] if ] if ;
+    dup +nil+? [ ]
+    [ dup list? [ cdr>> ] [ ] if ] if ;
 
 { 42 } [ 42 manual-dispatch ] unit-test
 { L{ 42 } } [ L{ 43 42 } manual-dispatch ] unit-test
@@ -217,12 +219,12 @@ P{
 TERM-VARS: ?y1 ?ys1 ?x1 ?v1 ?x2 ?x3 ?rho1 ?rho2 ?rho3 ?o1 ?a1 ;
 P{
     Xor
-    P{ Effect L{ ?x1 . ?rho1 } L{ ?x1 . ?rho1 } { ?x1 } { P{ Instance ?x1 not{ cons-state } } } }
+    P{ Effect L{ ?x1 . ?rho1 } L{ ?x1 . ?rho1 } f { P{ Instance ?x1 not{ cons-state } } } }
     P{
         Effect
         L{ ?x2 . ?rho2 }
         L{ ?v1 . ?rho2 }
-        { ?x2 }
+        f
         { P{ Instance ?x2 cons-state } P{ Slot ?x2 "cdr" ?v1 } P{ Instance ?v1 object } }
     }
 }
@@ -238,8 +240,8 @@ M: +nil+ default-dispatch ;
 
 P{
     Xor
-    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } { ?y1 } { P{ Instance ?y1 L{ } } } }
-    P{ Effect L{ ?o1 . ?a1 } L{ ?v6 . ?a1 } { ?o1 } { P{ Instance ?o1 cons-state } P{ Slot ?o1 "cdr" ?v6 } P{ Instance ?v6 object } } }
+    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } f { P{ Instance ?y1 L{ } } } }
+    P{ Effect L{ ?o1 . ?a1 } L{ ?v6 . ?a1 } f { P{ Instance ?o1 cons-state } P{ Slot ?o1 "cdr" ?v6 } P{ Instance ?v6 object } } }
 }
 [ \ default-dispatch get-type ] chr-test
 
@@ -295,8 +297,8 @@ TERM-VARS: ?a15 ?o3 ?v3 ;
 CONSTANT: sol1
 P{
     Xor
-    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } { ?y1 } { P{ Instance ?y1 L{ } } } }
-    P{ Effect L{ ?o3 . ?a15 } ?b4 { ?o3 } { P{ CallRecursive __ L{ ?v3 . ?a15 } ?b4 } P{ Instance ?o3 cons-state } P{ Slot ?o3 "cdr" ?v3 } P{ Instance ?v3 object } } }
+    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } f { P{ Instance ?y1 L{ } } } }
+    P{ Effect L{ ?o3 . ?a15 } ?b4 { ?v3 } { P{ CallRecursive __ L{ ?v3 . ?a15 } ?b4 } P{ Instance ?o3 cons-state } P{ Slot ?o3 "cdr" ?v3 } P{ Instance ?v3 object } } }
 }
 
 sol1
@@ -316,9 +318,11 @@ M: +nil+ lastcdr3 ;
 sol1
 [ [ lastcdr3 ] get-type ] chr-test
 
+! FIXME (iterated)
 sol1
 [ [ [ lastcdr3 ] (call) ] get-type ] chr-test
 
+! FIXME (iterated)
 sol1
 [ [ [ [ lastcdr3 ] ] (call) (call) ] get-type ] chr-test
 
@@ -362,12 +366,12 @@ M: object lastcdr6 ;
 TERM-VARS: ?o5 ?a47 ?b34 ?v7 ;
 P{
     Xor
-    P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } { ?y2 } { P{ Instance ?y2 not{ cons-state } } } }
+    P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } f { P{ Instance ?y2 not{ cons-state } } } }
     P{
         Effect
         L{ ?o5 . ?a47 }
         ?b34
-        { ?o5 }
+        { ?v7 }
         { P{ CallRecursive lastcdr6 L{ ?v7 . ?a47 } ?b34 } P{ Instance ?o5 cons-state } P{ Slot ?o5 "cdr" ?v7 } P{ Instance ?v7 object } }
     }
 }
@@ -383,12 +387,12 @@ M: object lastcdr7 ;
 TERM-VARS: ?y14 ?ys14 ?o25 ?a85 ?x17 ?rho31 ;
 P{
     Xor
-    P{ Effect L{ ?y14 . ?ys14 } L{ ?y14 . ?ys14 } { ?y14 } { P{ Instance ?y14 intersection{ not{ cons-state } not{ array } } } } }
+    P{ Effect L{ ?y14 . ?ys14 } L{ ?y14 . ?ys14 } f { P{ Instance ?y14 intersection{ not{ cons-state } not{ array } } } } }
     P{
         Effect
         L{ ?o25 . ?a85 }
         L{ ?x17 . ?rho31 }
-        { ?o25 }
+        f
         { P{ Instance ?o25 union{ cons-state array } } P{ Instance ?x17 intersection{ not{ cons-state } not{ array } } } }
     }
 }
@@ -429,7 +433,14 @@ MACRO: my-add1 ( num -- quot )
 
 { 42 } [ 41 1 my-add1 ] unit-test
 
-{  }
+TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ;
+
+P{ Effect L{ ?a1 . ?i1 } ?o1 { ?q1 } {
+       P{ MacroExpand my-add1 f L{ ?a1 . ?i1 } ?q1 }
+       P{ Instance ?q1 callable }
+       P{ CallEffect ?q1 ?i1 ?o1 }
+   }
+ }
 [ [ my-add1 ] get-type ] chr-test
 
 MACRO: my-add2 ( num -- quot )
@@ -437,20 +448,58 @@ MACRO: my-add2 ( num -- quot )
 
 { 43 } [ 41 1 my-add2 ] unit-test
 
-{  }
+
+P{ Effect L{ ?a1 . ?i1 } L{ ?z1 . ?i1 } f {
+       P{ Instance ?a1 number }
+       P{ Instance ?z1 number }
+       P{ Sum ?z1 ?a1 1 }
+   }
+ }
 [ [ 1 my-add1 ] get-type ] chr-test
 
-{  }
+
+P{ Effect L{ ?a1 . ?i1 } ?o4 { ?q2 ?a4 ?i4 ?q1 } {
+       P{ MacroExpand my-add1 f L{ ?a1 . ?i1 } ?q1 }
+       P{ Instance ?q1 callable }
+       P{ CallEffect ?q1 ?i1 L{ ?a4 . ?i4 } }
+       P{ MacroExpand my-add2 f L{ ?a4 . ?i4 } ?q2 }
+       P{ Instance ?q2 callable }
+       P{ CallEffect ?q2 ?i4 ?o4 }
+   }
+ }
 [ [ my-add1 my-add2 ] get-type ] chr-test
 
-{  }
+P{ Effect L{ ?a1 . ?i1 } L{ ?z1 . ?i1 } { ?z6 } {
+       P{ Instance ?a1 number }
+       P{ Instance ?z1 number }
+       P{ Sum ?z1 ?z6 1 }
+       P{ Instance ?z6 number }
+       P{ Sum ?z6 ?a1 3 }
+   }
+ }
 [ [ 1 2 my-add1 my-add2 ] get-type ] chr-test
 
-{  }
+
+P{ Effect L{ ?a1 . ?i1 } ?o4 { ?a4 ?q1 } {
+       P{ Instance ?a1 number }
+       P{ MacroExpand my-add2 f L{ ?a4 . ?i1 } ?q2 }
+       P{ Instance ?a4 number }
+       P{ Sum ?a4 ?a1 1 }
+       P{ Instance ?q2 callable }
+       P{ CallEffect ?q2 ?i1 ?o4 }
+   }
+ }
 [ [ 1 my-add1 my-add2 ] get-type ] chr-test
 
-{  }
-[ [ 1 my-add1 dup 99 my-add2 ] get-type ] chr-test
+! P{ Effect L{ ?a1 . ?i1 } L{ ?z1 . ?i1 } { ?z6 } {
+!        P{ Instance ?a1 number }
+!        P{ Instance ?z1 number }
+!        P{ Sum ?z1 ?z6 1 }
+!        P{ Instance ?z6 number }
+!        P{ Sum ?z6 ?a1 3 }
+!    }
+!  }
+! [ [ 1 my-add1 dup 99 my-add2 ] get-type ] chr-test
 
 ! ** Practical examples
 
