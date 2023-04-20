@@ -1,6 +1,6 @@
 USING: accessors arrays chr.factor chr.factor.effects chr.factor.intra-effect
 chr.factor.phi chr.factor.word-types chr.parser chr.state kernel quotations
-terms sets ;
+sequences sets terms ;
 
 IN: chr.factor.composition
 
@@ -33,16 +33,68 @@ CHR: infer-deferred-effect @ // { TypeOfDone } { ?DeferTypeOf ?p ?sig }  -- |
 ! changes reference the unknown type. I.e. it must not matter whether we expand the macro first and then
 ! compose types with the expansion, or we delay the expansion, compose with that delayed expansion and then
 ! substitute the expanded type.
+! NOTE: inserting a re-try here because of nested expansion???
 CHR: reinfer-deferred-type @ { ReinferWith ?e ?sig } // { TypeOf ?x ?tau } --
 [ ?e full-type? ]
 [ ?sig ?tau vars in? ]
 [ ?tau { { ?sig ?e } } lift* :>> ?d ]
 |
-{ TypeOf ?x ?rho }
 ! TODO: check if we need fresh effects here.  If not, could use ComposeEffect directly
-{ ComposeType ?d P{ Effect ?y ?y f f } ?rho } ;
+{ ComposeType ?d P{ Effect ?y ?y f f } ?rho }
+{ TypeOf ?x ?rho }
+    ;
 
-CHR: did-reinfer-deferred-type @ // { ReinferWith ?e __ } -- [ ?e full-type? ] | ;
+! NOTE: re-inference does affect already present types.  To make sure all references to running inferences
+! are caught, the type is substituted
+CHR: did-reinfer-deferred-type @ // { ReinferWith ?e ?sig } -- [ ?e full-type? ] | [ ?sig ?e ==! ] ;
+
+
+! *** Inference Step done
+
+! find object fulfilling quot, if found, return with rest of sequence.  Otherwise
+! return sequence unchanged and f.
+: find-remove ( seq quot -- seq obj/f )
+    dupd find
+    [ [ swap remove-nth ] dip ] when* ; inline
+
+
+! TODO: destructuring in a sequence match would be nice...
+! Intercept effects that have embedded xors
+! NOTE: it looks like we don't ever see them as reqular answered inference requests,
+! As they occur during re-inference after substituting the lazy effect type...
+! CHR: intercept-xor-call-effect-answer @ { TypeOf ?x P{ Effect ?a ?b ?l ?p } } // { ?TypeOf ?x ?sig } --
+CHR: intercept-xor-call-effect-answer @ // { TypeOf ?x P{ Effect ?a ?b ?l ?p } } --
+[ ?p [ CallXorEffect? ] find-remove swap :>> ?q drop :>> ?r ]
+[ ?r
+
+  [ type>> ]
+  [ in>> ]
+  [ out>> ]
+   tri
+  :>> ?o drop
+  :>> ?i drop
+  [ type2>> ]
+  [ type1>> ] bi
+  :>> ?c drop
+  :>> ?d drop
+  t
+]
+|
+[| |
+ ?a ?b ?l ?q { P{ Instance ?v ?c } P{ CallEffect ?v ?i ?o } } append Effect boa :> y
+ ?a ?b ?l ?q { P{ Instance ?v ?d } P{ CallEffect ?v ?i ?o } } append Effect boa :> z
+
+ P{ ComposeType y P{ Effect ?m ?m f f } ?rho }
+ P{ ComposeType z P{ Effect ?n ?n f f } ?tau }
+ 2array
+]
+{ MakeXor ?rho ?tau ?sig }
+{ CheckXor f ?sig ?s }
+{ TypeOf ?x ?s } ;
+
+! NOTE: this is the point where other depending inferences get assigned their missing type variable.  Any change to the existing type
+! after that is not transported into the dependent inference.  So any stuff that must be changed before supplying the known type must be performed here
+! BUT: Do we even have the macro type available already (in case of macros)
 
 CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } -- [ ?tau full-type? ] | [ ?sig ?tau ==! ]
 { TypeOfDone } ;

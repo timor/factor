@@ -2,7 +2,7 @@ USING: accessors arrays assocs chr.factor.composition chr.parser chr.state
 chr.test combinators.short-circuit kernel kernel.private lists literals math
 math.private classes
 quotations sequences slots.private terms tools.test typed types.util words
-chr.factor chr.factor.word-types chr.factor.effects ;
+chr.factor chr.factor.word-types chr.factor.effects chr combinators ;
 
 IN: chr.factor.composition.tests
 
@@ -39,6 +39,24 @@ IN: chr.factor.composition.tests
 
 : chr-simp1 ( constraints -- constraint )
     chr-simp first ;
+
+GENERIC: same-effect? ( t1 t2 -- ? )
+:: same-xor? ( x1 x2 -- ? )
+    x1 type1>> x2 type1>> same-effect?
+    x1 type2>> x2 type2>> same-effect? and ;
+
+M: Xor same-effect?
+    over Xor?
+    [ { [ same-xor? ]
+        [ [ type2>> ] [ type1>> ] bi Xor boa same-xor? ] } 2||
+    ] [ 2drop f ] if ;
+
+M: chr-pred same-effect?
+    2dup [ class-of ] same?
+    [ isomorphic? ]
+    [ 2drop f ] if ;
+
+! TODO: effect predicates set comparison (expensive!)
 
 GENERIC: get-type ( quot -- type )
 
@@ -433,7 +451,7 @@ MACRO: my-add1 ( num -- quot )
 
 { 42 } [ 41 1 my-add1 ] unit-test
 
-TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ;
+TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ?i2 ;
 
 P{ Effect L{ ?a1 . ?i1 } ?o1 { ?q1 } {
        P{ MacroExpand my-add1 f L{ ?a1 . ?i1 } ?q1 }
@@ -500,6 +518,38 @@ P{ Effect L{ ?a1 . ?i1 } ?o4 { ?a4 ?q1 } {
 !    }
 !  }
 ! [ [ 1 my-add1 dup 99 my-add2 ] get-type ] chr-test
+
+! Macros with conditionals
+
+MACRO: my-mux ( cond -- quot )
+    [ not [ swap ] when drop ] curry ;
+
+{ 1 2 } [ 1 2 [ t my-mux ] [ f my-mux ] 2bi ] unit-test
+
+! NOTE: this is something the current stack checker can not do
+{ t } [ [ t 1 2 rot my-mux ] get-type
+        [ t 1 2 ? ] get-type
+        isomorphic? ] unit-test
+
+MACRO: my-if ( foo -- quot )
+    drop [ if ] ;
+
+{ t } [ [ 42 my-if ] get-type [ if ] get-type same-effect? ] unit-test
+{ t } [ [ [ 1 ] 42 my-if ] get-type [ [ 1 ] if ] get-type same-effect? ] unit-test
+{ t } [ [ [ 1 ] [ 2 ] 42 my-if ] get-type [ [ 1 ] [ 2 ] if ] get-type same-effect? ] unit-test
+{ t } [ [ [ 1 ] [ 1 ] 42 my-if ] get-type [ [ 1 ] [ 1 ] if ] get-type same-effect? ] unit-test
+{ t } [ [ [ [ if ] ] call [ 42 my-if ] call ] get-type [ [ if ] if ] get-type same-effect? ]  unit-test
+! FIXME
+{ t } [ [ [ if ] 42 my-if ] get-type [ [ if ] if ] get-type same-effect? ] unit-test
+
+{ t }
+[ P{ Xor
+     P{ Effect L{ ?x2 . ?i2 } L{ ?y2 . ?i2 } f { P{ Instance ?x2 object } P{ Neq ?x2 1 } P{ Instance ?y2 W{ 99 } } } }
+     P{ Effect L{ ?x1 . ?i1 } L{ ?y1 . ?i1 } f { P{ Instance ?x1 object } P{ Eq ?x1 1 } P{ Instance ?y1 W{ 42 } } } }
+   }
+   [ { { [ dup 1 = ] [ drop 42 ] } [ drop 99 ] } cond ] get-type same-effect? ] chr-test
+
+! TODO: nested expansions
 
 ! ** Practical examples
 

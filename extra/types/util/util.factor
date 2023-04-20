@@ -293,13 +293,15 @@ GENERIC: simplify-class ( class -- class )
 
 M: classoid simplify-class ;
 ! NOTE: the normal form here is the non-wrapped version!
-M: wrapper simplify-class
-    dup wrapped>>
-    {
-        { [ dup singleton-class? ] [ nip ] }
-        { [ dup not ] [ 2drop \ f ] }
-        [ drop ]
-    } cond ;
+! FIXME: This is wrong!
+! M: wrapper simplify-class
+!     dup wrapped>>
+!     {
+!         { [ dup singleton-class? ] [ nip ] }
+!         { [ dup not ] [ 2drop \ f ] }
+!         [ drop ]
+!     } cond ;
+M: wrapper simplify-class ;
 
 M: anonymous-intersection simplify-class
     participants>> [ simplify-class ] map

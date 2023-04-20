@@ -131,6 +131,8 @@ TUPLE: Declare < chr-pred classes stack ;
 TUPLE: Ensure < chr-pred classes stack ;
 
 TUPLE: CallEffect < chr-pred thing in out ;
+! Has CallEffect and Instance properties
+TUPLE: CallXorEffect < chr-pred type in out ;
 ! Unused: TUPLE: MacroCallEffect < chr-pred word in out ;
 TUPLE: CallRecursive < chr-pred tag in out ;
 ! Unused: TUPLE: NullStack < chr-pred stack ;
@@ -141,6 +143,7 @@ TUPLE: TupleBoa < Boa ;
 ! explicitly referencing out-quot here for live-ness
 TUPLE: MacroExpand < chr-pred quot args in out-quot ;
 TUPLE: MacroExpanded < MacroExpand out-type ;
+TUPLE: InstanceCheck < chr-pred class-arg quot complement ;
 
 ! Macro expansion, folding
 TUPLE: FoldStack < chr-pred stack n ;
@@ -193,7 +196,7 @@ TUPLE: Lt < expr-pred var ;
 
 UNION: commutative-pred Eq Neq ;
 
-UNION: body-pred Instance NotInstance CallEffect Declare Slot CallRecursive Throws Tag
+UNION: body-pred Instance NotInstance CallEffect CallXorEffect Declare Slot CallRecursive Throws Tag
     MacroExpand expr-pred Iterated ;
 TUPLE: Params < chr-pred ids ;
 
@@ -237,9 +240,15 @@ M: Effect free-effect-vars
 M: term-var free-effect-vars 1array ;
 M: object free-effect-vars drop f ;
 M: Instance free-effect-vars type>>
-    dup Effect?
+    dup term-var? not
     [ free-effect-vars ] [ drop f ] if ;
 M: CallRecursive free-effect-vars tag>> free-effect-vars ;
+M: CallXorEffect free-effect-vars type>> free-effect-vars ;
+! M: CallXorEffect free-effect-vars
+!     [ then>> ] [ else>> ] bi
+!     [ free-effect-vars ] bi@ union ;
+! We expect an expanded macro to have properly substituted type vars
+! M: MacroExpanded free-effect-vars out-type>> free-effect-vars ;
 
 GENERIC: bound-effect-vars ( term -- seq )
 M: object bound-effect-vars drop f ;
@@ -252,6 +261,11 @@ M: Effect bound-effect-vars
 M: Xor bound-effect-vars
     [ type1>> bound-effect-vars ]
     [ type2>> bound-effect-vars ] bi union ;
+M: Instance bound-effect-vars type>> bound-effect-vars ;
+M: CallXorEffect bound-effect-vars type>> bound-effect-vars ;
+! M: CallXorEffect bound-effect-vars
+!     [ then>> ] [ else>> ] bi
+!     [ bound-effect-vars ] bi@ union ;
 
 : fresh-effect ( effect -- effect )
     ! dup free-effect-vars fresh-without ;
@@ -276,6 +290,16 @@ M: CallEffect live-vars thing>> 1array ;
 ! M: CallEffect defines-vars [ out>> vars ] [ thing>> 1array ] bi union ;
 ! M: CallEffect defines-vars vars ;
 M: CallEffect defines-vars out>> vars ;
+! NOTE: keeping references to input vars here, since they are lazy intermediates...
+M: CallXorEffect defines-vars
+    [ in>> vars ]
+    [ out>> vars union ] bi ;
+! M: CallXorEffect live-vars
+!     [ then>> ] [ else>> ] bi
+!     [ [ live-vars ] gather ] bi@ union ;
+! M: CallXorEffect defines-vars
+!     [ then>> ] [ else>> ] bi
+!     [ [ defines-vars ] gather ] bi@ union ;
 ! NOTE: also keeping references to input vars here, to prevent (partially) known input vals from being collected
 M: MacroExpand defines-vars
     [ out-quot>> vars ]

@@ -164,7 +164,7 @@ CHR: type-of-instance? @ { TypeOfWord instance? ?tau } // -- |
              } }
           } ==! ] ;
 
-UNION: decomposable-class union-class predicate-class ;
+! UNION: decomposable-class union-class predicate-class ;
 
 ! CHR: expand-instance-check @ // { Instance ?x A{ ?rho } } -- [ { ?rho } first wrapper? ] [ { ?rho } first wrapped>> decomposable-class?  ]
 ! [ { ?rho } first wrapped>> make-pred-quot :>> ?c ]
@@ -408,7 +408,7 @@ CHR: type-of-typed-word @ { TypeOfWord A{ ?w } ?tau } // --
 { ?TypeOf ?q ?rho }
 { ComposeType P{ Effect ?x ?x f { P{ Declare ?a ?x } } } ?rho ?tau } ;
 
-! *** Other words
+! *** Delayed Expansion words
 
 CONSTANT: force-compile
 { if }
@@ -419,15 +419,15 @@ CONSTANT: force-compile
         [ macro? ]
       } 1|| ] if ;
 
-: macro-effect>stacks ( n -- lin lout )
+: macro-input>stack ( n -- lin )
     "i" swap "a" <array> "o" { "quot" } <variable-effect>
-    effect>stacks ;
+    effect>stacks drop ;
 
 ! TODO: maybe handle declared classes of macros?
 CHR: type-of-macro @ { TypeOfWord A{ ?w } ?tau } // --
 [ ?tau term-var? ]
 [ ?w handle-word-as-macro? ]
-[ ?w macro-effect macro-effect>stacks drop :>> ?a drop t ]
+[ ?w macro-effect macro-input>stack :>> ?a drop t ]
 [ ?a lastcdr :>> ?i drop t ]
 |
 [ ?tau P{ Effect ?a ?o { ?q } {
@@ -437,6 +437,37 @@ CHR: type-of-macro @ { TypeOfWord A{ ?w } ?tau } // --
           } }
 ==! ]
 ;
+
+! GENERIC: instance-check-quot ( classoid -- quot )
+! M: builtin-class instance-check-quot
+!     nip
+! : instance-check-quot ( classoid -- quot )
+
+
+CHR: type-of-instance? @ { TypeOfWord instance? ?tau } // --
+[ 1 macro-input>stack :>> ?i drop t ]
+|
+[ ?tau P{ Xor
+          P{ Effect L{ ?sig ?o . ?a } L{ ?c . ?a } { ?q } {
+                 P{ Instance ?o ?sig }
+                 P{ Instance ?c t }
+                 P{ Instance ?sig classoid }
+                 P{ Instance ?q callable }
+                 P{ InstanceCheck ?sig ?q t }
+                 P{ CallEffect ?q L{ ?sig ?o . ?a } L{ ?c . ?a } }
+             } }
+          P{ Effect L{ ?sig ?o . ?a } L{ ?c . ?a } { ?q } {
+                 P{ NotInstance ?o ?sig }
+                 P{ Instance ?c POSTPONE: f }
+                 P{ Instance ?sig classoid }
+                 P{ Instance ?q callable }
+                 P{ InstanceCheck ?sig ?q f }
+                 P{ CallEffect ?q L{ ?sig ?o . ?a } L{ ?c . ?a } }
+             } }
+        } ==! ] ;
+
+
+! ** Regular Words
 
 CHR: type-of-regular-word @ { TypeOfWord A{ ?w } ?tau } // --
 [ ?tau term-var? ]

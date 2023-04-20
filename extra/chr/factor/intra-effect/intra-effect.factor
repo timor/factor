@@ -17,10 +17,11 @@ CHR: invalid-stays-invalid @ { Invalid } // { Invalid } -- | ;
 CHR: comm-var-is-lhs @ // AS: ?p <={ commutative-pred A{ ?l } ?v } -- [ ?v term-var? ] |
 [ { ?v ?l } ?p class-of slots>tuple ] ;
 
-CHR: literal-f-is-class-f @ // { Instance ?x W{ f } } -- | { Instance ?x POSTPONE: f } ;
-
-CHR: literal-singleton-class-is-class @ // { Instance ?x ?tau } -- [ { ?tau } first wrapper? ] [ { ?tau } first wrapped>> :>> ?rho singleton-class? ] |
-{ Instance ?x ?rho } ;
+! Not ideal.  If we do that, we mix value and type levels.
+! CHR: literal-f-is-class-f @ // { Instance ?x W{ f } } -- | { Instance ?x POSTPONE: f } ;
+! Same here
+! CHR: literal-singleton-class-is-class @ // { Instance ?x ?tau } -- [ { ?tau } first wrapper? ] [ { ?tau } first wrapped>> :>> ?rho singleton-class? ] |
+! { Instance ?x ?rho } ;
 
 CHR: normalize-not-type @ // { NotInstance ?x A{ ?tau } } -- [ { ?tau } first classoid? ]
 [ { ?tau } first class-not :>> ?sig ] |
@@ -332,8 +333,25 @@ CHR: neutral-bitand-2 @ // { BitAnd ?z ?x -1 } -- | [ ?z ?x ==! ] ;
 ! CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } { CallEffect ?q ?a ?b } // -- |
 CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } // { CallEffect ?q ?a ?b } -- |
 [ { ?a ?b } { ?c ?d } ==! ]
-{ Params ?x }
+{ Params ?x } ! TODO needed?
 [ ?l ] ;
+
+! Trying to apply a conditional is tricky.  The whole idea was to avoid this in the first place by always
+! distributing effect composition through Xor types.  However, if we allow delayed expansion for macros,
+! these (e.g. cond) expand to an Xor Type.  The same will probably be the case in non-trivial versions of
+! delayed instance checks.  If we want to continue being able to arbitrarily compose word types independently of
+! any specific word order, this must be admitted.
+! Approach: Set up a continuation, which will cause the MakeEffect to be able to return an XOR.  For this,
+! we need to capture the Effect inference state, and diverge into the respective Branches of the applied Xor effect
+! type.  This needs to be done recursively if necessary.
+! NOTE: we need to destructure this though for matching...
+CHR: call-applies-xor-effect @ { Instance ?q P{ Xor ?c ?d } } // { CallEffect ?q ?a ?b } -- |
+{ CallXorEffect P{ Xor ?c ?d } ?a ?b } ;
+
+! { { P{ Instance ?q ?c } P{ CallEffect ?q ?a ?b } }
+!   { P{ Instance ?q ?d } P{ CallEffect ?q ?a ?b } } } ;
+
+! *** TODO Recursive Iteration expansion
 
 ! NOTE: Idea: create an iteration constraint.  Should only be active in subsequent compositions
 CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho } // { CallRecursive ?w ?a ?b } --
@@ -429,6 +447,9 @@ CHR: expand-macro @ // { MacroExpand ?w ?a ?i ?x } -- [ ?a length ?w macro-effec
     ;
 
 CHR: remove-expanded-macro-known-type @ // { MacroExpanded __ __ __ __ ?sig } -- [ ?sig term-var? not ] | ;
+
+! FIXME Doing
+! CHR: expand-instance-macro @ // { InstanceCheck A{ ?sig } ?q ?c } --
 
 ! CHR: constant-ensure @ // { Ensure ?l ?a } -- [ ?l array? ]
 ! [ ?l <reversed> >list :>> ?m ] |
