@@ -539,7 +539,6 @@ MACRO: my-if ( foo -- quot )
 { t } [ [ [ 1 ] [ 2 ] 42 my-if ] get-type [ [ 1 ] [ 2 ] if ] get-type same-effect? ] unit-test
 { t } [ [ [ 1 ] [ 1 ] 42 my-if ] get-type [ [ 1 ] [ 1 ] if ] get-type same-effect? ] unit-test
 { t } [ [ [ [ if ] ] call [ 42 my-if ] call ] get-type [ [ if ] if ] get-type same-effect? ]  unit-test
-! FIXME
 { t } [ [ [ if ] 42 my-if ] get-type [ [ if ] if ] get-type same-effect? ] unit-test
 
 { t }
@@ -547,7 +546,7 @@ MACRO: my-if ( foo -- quot )
      P{ Effect L{ ?x2 . ?i2 } L{ ?y2 . ?i2 } f { P{ Instance ?x2 object } P{ Neq ?x2 1 } P{ Instance ?y2 W{ 99 } } } }
      P{ Effect L{ ?x1 . ?i1 } L{ ?y1 . ?i1 } f { P{ Instance ?x1 object } P{ Eq ?x1 1 } P{ Instance ?y1 W{ 42 } } } }
    }
-   [ { { [ dup 1 = ] [ drop 42 ] } [ drop 99 ] } cond ] get-type same-effect? ] chr-test
+   [ { { [ dup 1 = ] [ drop 42 ] } [ drop 99 ] } cond ] get-type same-effect? ] unit-test
 
 ! TODO: nested expansions
 

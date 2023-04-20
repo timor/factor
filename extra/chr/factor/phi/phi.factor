@@ -86,11 +86,25 @@ CHR: phi-error @ <={ PhiSchedule } <={ PhiSchedule } // -- | [ "phi sequencing e
 CHR: current-phi-error @ { CurrentPhi __ } { CurrentPhi __ } // -- | [ "current phi sequencing error" throw ] ;
 CHR: make-union-error @ <={ MakeUnion } <={ MakeUnion } // -- | [ "double make-union" throw ] ;
 
+! ** Entry point, xor check request received
+! Start Destructuring, trigger schedule
+
 ! CHR: also-check-fixpoint @ { CheckXor ?q ?rho ?tau } // -- [ ?rho full-type? ] |
 ! { CheckFixpoint ?q ?rho } ;
-! Start Destructuring, trigger schedule
-CHR: no-check-xor @ // { CheckXor __ ?rho ?tau } -- [ ?rho full-type? ] [ ?rho Effect? ] |
-! CHR: no-check-xor @ // { CheckXor ?rho ?tau } -- [ ?rho full-type? ] |
+
+
+! Returns true if the type contains an unresolved call to an Xor type.  These must "bubble" up
+! as quickly as possible.
+! TODO: It should not be possible to have these hidden in Effect instance type predicates.
+!  The intuition being that they only arise directly from reasoning the innermost defs.
+!  Somehow ensure this?
+
+GENERIC: xor-call? ( type -- ? )
+M: Effect xor-call? preds>> [ CallXorEffect? ] any? ;
+M: Xor xor-call? [ type1>> ] [ type2>> ] bi [ xor-call? ] bi@ or ;
+
+CHR: check-xor-trivial @ // { CheckXor __ ?rho ?tau } --
+[ ?rho full-type? ] [ ?rho Effect? ] [ ?rho xor-call? not ] |
 [ ?rho ?tau ==! ] ;
 
 ! If we inferred an effect type to be null, then substitute it with a null-push that will
@@ -103,11 +117,41 @@ CHR: do-check-xor @ // { CheckXor ?q ?rho ?tau } -- [ ?rho full-type? ] |
 { DestrucXor ?rho }
 { PhiSchedule ?q +nil+ ?tau } ;
 
+! ** Destructuring
+
 PREDICATE: InvalidEffect < Effect preds>> [ Invalid? ] any? ;
 
 CHR: discard-invalid-branch @ // { DestrucXor ?e } -- [ ?e InvalidEffect? ] | ;
 CHR: destruc-rebuild-xor @ // { DestrucXor P{ Xor ?a ?b } } -- |
 { DestrucXor ?a } { DestrucXor ?b } ;
+
+! find object satisfying quot, if found, return with rest of sequence.  Otherwise
+! return sequence unchanged and f.
+: find-remove ( seq quot -- seq obj/f )
+    dupd find
+    [ [ swap remove-nth ] dip ] when* ; inline
+
+:: split-xor-call-effect ( effect inst-var -- then-effect else-effect )
+    effect preds>> [ CallXorEffect? ] find-remove
+    [ in>> ] [ out>> ] [ type>> ] tri
+    [ type1>> ] [ type2>> ] bi
+    :> ( rest-preds call-in call-out then-type else-type )
+    effect [ in>> ] [ out>> ] [ parms>> ] tri
+    rest-preds P{ CallEffect inst-var call-in call-out } suffix Effect boa
+    dup clone
+    [ [ P{ Instance inst-var then-type } suffix ] change-preds ]
+    [ [ P{ Instance inst-var else-type } suffix ] change-preds ] bi* ;
+
+
+CHR: destruc-rebuild-xor-call-effect @ // { DestrucXor ?e } -- [ ?e Effect? ] [ ?e xor-call? ] |
+[| | ?e ?v split-xor-call-effect fresh-effect :> ( then-effect else-effect )
+ P{ ReinferEffect then-effect ?rho }
+ P{ ReinferEffect else-effect ?sig }
+ P{ DestrucXor ?rho }
+ P{ DestrucXor ?sig }
+ 4array
+] ;
+
 CHR: destruc-rebuild-effect @ // { PhiSchedule ?q ?r ?tau } { DestrucXor ?e } -- [ ?e Effect? ] |
 { PhiSchedule ?q L{ ?e . ?r } ?tau } ;
 

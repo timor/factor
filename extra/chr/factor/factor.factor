@@ -102,6 +102,8 @@ TUPLE: MakeSingleDispatch < chr-pred index cases target ;
 
 ! States that q3 is the composition of q1 and q2
 TUPLE: ComposeType < chr-pred q1 q2 q3 ;
+! Reinfer effect body
+TUPLE: ReinferEffect < chr-pred type target ;
 
 ! Actually triggers computing composed effect and storing it into target
 TUPLE: ComposeEffect < chr-pred e1 e2 target ;

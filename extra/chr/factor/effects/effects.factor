@@ -71,6 +71,13 @@ CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effe
 [ ?l ]
 { FinishEffect ?tau } ;
 
+! Body-only reinference requests, usually because some body preds have been changed lazily
+CHR: reinfer-effect @ // { ReinferEffect P{ Effect ?a ?b ?x ?k } ?tau } -- |
+{ MakeEffect ?a ?b f f ?tau }
+{ Params ?x }
+[ ?k ]
+{ FinishEffect ?tau } ;
+
 ! TODO: document this
 CHR: force-union @ { PhiMode } { FixpointMode } // { Invalid } -- | ;
 

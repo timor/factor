@@ -39,58 +39,17 @@ CHR: reinfer-deferred-type @ { ReinferWith ?e ?sig } // { TypeOf ?x ?tau } --
 [ ?sig ?tau vars in? ]
 [ ?tau { { ?sig ?e } } lift* :>> ?d ]
 |
-! TODO: check if we need fresh effects here.  If not, could use ComposeEffect directly
-{ ComposeType ?d P{ Effect ?y ?y f f } ?rho }
-{ TypeOf ?x ?rho }
+{ ReinferEffect ?d ?rho }
+{ CheckXor f ?rho ?w }
+{ TypeOf ?x ?w }
     ;
 
-! NOTE: re-inference does affect already present types.  To make sure all references to running inferences
+! NOTE: re-inference does affect only already present types.  To make sure all references to running inferences
 ! are caught, the type is substituted
 CHR: did-reinfer-deferred-type @ // { ReinferWith ?e ?sig } -- [ ?e full-type? ] | [ ?sig ?e ==! ] ;
 
 
 ! *** Inference Step done
-
-! find object fulfilling quot, if found, return with rest of sequence.  Otherwise
-! return sequence unchanged and f.
-: find-remove ( seq quot -- seq obj/f )
-    dupd find
-    [ [ swap remove-nth ] dip ] when* ; inline
-
-
-! TODO: destructuring in a sequence match would be nice...
-! Intercept effects that have embedded xors
-! NOTE: it looks like we don't ever see them as reqular answered inference requests,
-! As they occur during re-inference after substituting the lazy effect type...
-! CHR: intercept-xor-call-effect-answer @ { TypeOf ?x P{ Effect ?a ?b ?l ?p } } // { ?TypeOf ?x ?sig } --
-CHR: intercept-xor-call-effect-answer @ // { TypeOf ?x P{ Effect ?a ?b ?l ?p } } --
-[ ?p [ CallXorEffect? ] find-remove swap :>> ?q drop :>> ?r ]
-[ ?r
-
-  [ type>> ]
-  [ in>> ]
-  [ out>> ]
-   tri
-  :>> ?o drop
-  :>> ?i drop
-  [ type2>> ]
-  [ type1>> ] bi
-  :>> ?c drop
-  :>> ?d drop
-  t
-]
-|
-[| |
- ?a ?b ?l ?q { P{ Instance ?v ?c } P{ CallEffect ?v ?i ?o } } append Effect boa :> y
- ?a ?b ?l ?q { P{ Instance ?v ?d } P{ CallEffect ?v ?i ?o } } append Effect boa :> z
-
- P{ ComposeType y P{ Effect ?m ?m f f } ?rho }
- P{ ComposeType z P{ Effect ?n ?n f f } ?tau }
- 2array
-]
-{ MakeXor ?rho ?tau ?sig }
-{ CheckXor f ?sig ?s }
-{ TypeOf ?x ?s } ;
 
 ! NOTE: this is the point where other depending inferences get assigned their missing type variable.  Any change to the existing type
 ! after that is not transported into the dependent inference.  So any stuff that must be changed before supplying the known type must be performed here

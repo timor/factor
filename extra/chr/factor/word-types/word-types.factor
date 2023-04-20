@@ -563,6 +563,7 @@ CHR: type-of-single-method @ { TypeOfWord ?w ?tau } // -- [ ?w method? ] [ ?w "m
 
 CHR: type-of-empty-quot @ // { ?TypeOf [ ] ?tau } -- | [ ?tau P{ Effect ?a ?a f f } ==! ] ;
 
+! TODO: expand macros early
 CHR: type-of-proper-quot @ { ?TypeOf ?q ?tau } // -- [ ?q callable? ] [ ?q length 1 > ]
 [ \ do-primitive ?q in? not ]
 [ ?q dup length 2 /i cut :>> ?y drop :>> ?x drop t ] |
