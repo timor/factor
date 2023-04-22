@@ -74,7 +74,7 @@ TERM-VARS: ?o ?a ?b ?v ?w ?x ?y ?z ;
 P{ Effect L{ ?o . ?a } L{ ?v . ?a } f {
        P{ Instance ?o array }
        P{ Instance ?v object }
-       P{ Slot ?o W{ 2 } ?v } } }
+       P{ Slot ?o 2 ?v } } }
 [ \ array-first get-type ] chr-test
 
 ! ** Throwing
@@ -170,8 +170,10 @@ P{ Effect ?a ?b f { P{ Invalid } } }
 { t }
 [ [ [ 42 2 slot ] [ "string" ] if ] get-type [ { POSTPONE: f } declare drop "string" ] get-type isomorphic? ] unit-test
 
+{ t } [ [ fixnum? 4 5 ? ] get-type Xor? ] unit-test
+
 P{ Effect L{ ?y . ?a } L{ ?x . ?a } f
-   { P{ Instance ?y object } P{ Instance ?x W{ 4 } } } }
+   { P{ Instance ?y object } P{ Eq ?x 4 } P{ Instance ?x fixnum } } }
 [ [ number? 4 4 ? ] get-type ] chr-test
 
 { t }
@@ -201,7 +203,7 @@ foothing1
 
 CONSTANT: foothing2
 P{ Effect L{ ?o . ?a } L{ ?v . ?a } f { P{ Instance ?o array }
-                                             P{ Instance ?v object } P{ Slot ?o W{ 2 } ?v } } }
+                                             P{ Instance ?v object } P{ Slot ?o 2 ?v } } }
 foothing2
 [ M\ array foothing get-type ] chr-test
 
@@ -258,7 +260,7 @@ M: +nil+ default-dispatch ;
 
 P{
     Xor
-    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } f { P{ Instance ?y1 L{ } } } }
+    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } f { P{ Instance ?y1 L{ } } P{ Eq ?y1 L{  } } } }
     P{ Effect L{ ?o1 . ?a1 } L{ ?v6 . ?a1 } f { P{ Instance ?o1 cons-state } P{ Slot ?o1 "cdr" ?v6 } P{ Instance ?v6 object } } }
 }
 [ \ default-dispatch get-type ] chr-test
@@ -315,7 +317,7 @@ TERM-VARS: ?a15 ?o3 ?v3 ;
 CONSTANT: sol1
 P{
     Xor
-    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } f { P{ Instance ?y1 L{ } } } }
+    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } f { P{ Instance ?y1 L{ } } P{ Eq ?y1 L{  } } } }
     P{ Effect L{ ?o3 . ?a15 } ?b4 { ?v3 } { P{ CallRecursive __ L{ ?v3 . ?a15 } ?b4 } P{ Instance ?o3 cons-state } P{ Slot ?o3 "cdr" ?v3 } P{ Instance ?v3 object } } }
 }
 
@@ -477,10 +479,10 @@ P{ Effect L{ ?a1 . ?i1 } L{ ?z1 . ?i1 } f {
 
 
 P{ Effect L{ ?a1 . ?i1 } ?o4 { ?q2 ?a4 ?i4 ?q1 } {
-       P{ MacroExpand my-add1 f L{ ?a1 . ?i1 } ?q1 }
+       P{ ExpandQuot [ [ + ] curry ] f L{ ?a1 . ?i1 } ?q1 1 }
        P{ Instance ?q1 callable }
        P{ CallEffect ?q1 ?i1 L{ ?a4 . ?i4 } }
-       P{ MacroExpand my-add2 f L{ ?a4 . ?i4 } ?q2 }
+       P{ ExpandQuot [ [ + 1 + ] curry ] f L{ ?a4 . ?i4 } ?q2 1 }
        P{ Instance ?q2 callable }
        P{ CallEffect ?q2 ?i4 ?o4 }
    }
@@ -500,7 +502,7 @@ P{ Effect L{ ?a1 . ?i1 } L{ ?z1 . ?i1 } { ?z6 } {
 
 P{ Effect L{ ?a1 . ?i1 } ?o4 { ?a4 ?q1 } {
        P{ Instance ?a1 number }
-       P{ MacroExpand my-add2 f L{ ?a4 . ?i1 } ?q2 }
+       P{ ExpandQuot [ [ + 1 + ] curry ] f L{ ?a4 . ?i1 } ?q2 1 }
        P{ Instance ?a4 number }
        P{ Sum ?a4 ?a1 1 }
        P{ Instance ?q2 callable }
@@ -543,8 +545,8 @@ MACRO: my-if ( foo -- quot )
 
 { t }
 [ P{ Xor
-     P{ Effect L{ ?x2 . ?i2 } L{ ?y2 . ?i2 } f { P{ Instance ?x2 object } P{ Neq ?x2 1 } P{ Instance ?y2 W{ 99 } } } }
-     P{ Effect L{ ?x1 . ?i1 } L{ ?y1 . ?i1 } f { P{ Instance ?x1 object } P{ Eq ?x1 1 } P{ Instance ?y1 W{ 42 } } } }
+     P{ Effect L{ ?x2 . ?i2 } L{ ?y2 . ?i2 } f { P{ Instance ?x2 object } P{ Neq ?x2 1 } P{ Instance ?y2 fixnum } P{ Eq ?y2 99 } } }
+     P{ Effect L{ ?x1 . ?i1 } L{ ?y1 . ?i1 } f { P{ Instance ?x1 object } P{ Eq ?x1 1 } P{ Instance ?y1 fixnum } P{ Eq ?y1 42 } } }
    }
    [ { { [ dup 1 = ] [ drop 42 ] } [ drop 99 ] } cond ] get-type same-effect? ] unit-test
 

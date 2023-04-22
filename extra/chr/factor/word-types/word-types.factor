@@ -1,6 +1,7 @@
 USING: accessors arrays assocs chr.factor chr.parser chr.state classes
 classes.algebra classes.builtin classes.predicate classes.tuple
 classes.tuple.private classes.union combinators.short-circuit effects generic
+classes.singleton
 generic.single kernel kernel.private lists macros macros.expander math
 math.private namespaces quotations sequences sequences.private sets
 slots.private terms types.util words ;
@@ -23,6 +24,7 @@ IN: chr.factor.word-types
         { 3dup [ pick pick pick ] }
         { 2dip [ swap [ dip ] dip ] }
         { 3dip [ swap [ 2dip ] dip ] }
+        { dupd [ [ dup ] dip ] }
         { -rot [ swap [ swap ] dip ] }
         { if [ ? call ] }
         { loop [ [ call ] keep swap [ loop ] [ drop ] if ] }
@@ -99,78 +101,43 @@ CHR: type-of-mux @ // { ?TypeOf [ ? ] ?tau } -- |
     ==!
 ] ;
 
-! CHR: type-of-builtin-predicate @ { TypeOfWord ?w ?tau } // -- [ ?w "predicating" word-prop :>> ?c ] [ ?c tuple-class? ?c builtin-class? or ] [ ?tau term-var? ] |
-CHR: type-of-builtin-predicate @ // { ?TypeOf [ ?w ] ?tau } --
-[ ?w word? ] [ ?w "predicating" word-prop :>> ?c ] [ ?c tuple-class? ?c builtin-class? or ] [ ?tau term-var? ]
-[ ?c class-not :>> ?d ]
+PREDICATE: non-trivial-predicate-class < predicate-class singleton-class? not ;
+
+! NOTE: problems with reinference fixpoint here, manually adding a pass
+! CHR: type-of-predicate-call @ { ?TypeOf [ ?w ] ?tau } // --
+CHR: type-of-predicate @ { TypeOfWord ?w ?tau } // --
+[ ?tau term-var? ] [ ?w word? ] [ ?w "predicating" word-prop :>> ?c ]
+[ ?c 1quotation [ instance? ] compose :>> ?p ]
 |
-[| |
- ?tau
-  P{ Xor
-     ! P{ Effect L{ ?x . ?a } L{ ?y . ?a } { ?x ?y } {
-     P{ Effect L{ ?x . ?a } L{ ?y . ?a } { ?y } {
-            P{ Instance ?x ?c }
-            P{ Instance ?y t }
-        } }
-     ! P{ Effect L{ ?x . ?a } L{ ?y . ?a } { ?x ?y } {
-     P{ Effect L{ ?x . ?a } L{ ?y . ?a } { ?y } {
-            P{ Instance ?x ?d }
-            P{ Instance ?y POSTPONE: f }
-        } }
-   }
-  ==!
+{ ?TypeOf ?p ?rho }
+[ ?c non-trivial-predicate-class?
+  [ {
+          P{ ReinferEffect ?rho ?sig }
+          P{ CheckXor f ?sig ?tau }
+      } ]
+  [ [ ?tau ?rho ==! ] ] if
 ] ;
+! { TypeOf ?p ?tau } ;
 
-! NOTE: don't use internal optimized implementations here
-GENERIC: make-pred-quot ( class -- quot )
-
-
-! { real fixnum array }
-! [ dup real? [ nip ] [ dup fixnum? [ nip ] [ array? ] if* ] if* ]
-M: union-class make-pred-quot
-    "members" word-prop <reversed> unclip "predicate" word-prop
-    swap
-    [ ! ( acc class )
-     "predicate" word-prop swap
-     '[ dup @ [ nip ] _ if* ]
-    ] each ;
-
-! NOTE: relies on implementation detail of the predicate quotation being a singular
-! quotation!
-M: predicate-class make-pred-quot "predicate" word-prop first def>> ;
-
-CHR: type-of-predicate @ { TypeOfWord ?w ?tau } // -- [ ?w "predicating" word-prop :>> ?c ]
-[ ?c class-not :>> ?d ]
-[ ?c make-pred-quot :>> ?p ]
-[ [ ?p keep over [ { ?c } declare drop ] [ { ?d } declare drop ] if ] :>> ?q ]
-|
-{ ?TypeOf ?q ?tau } ;
-
-! NOTE: this is kind of a chicken-and-egg situation with instance checks.  There seems to
+! NOTE: There is kind of a chicken-and-egg situation with instance checks and declarations.  There seems to
 ! be some kind of mutually recursive dependency between normative declaration and predicate
-! checking.
-! For now: try to rewrite it to merge with the type-of-predicate code path
+! checking.  Solution so far was to map everything to [ foo instance? ] semantics, which are then
+! expanded when the class of DeclaredInstance becomes known.  This is expensive though, as it is a deferred inference.
 CHR: type-of-instance? @ { TypeOfWord instance? ?tau } // -- |
 [ ?tau P{ Xor
-          P{ Effect L{ ?sig ?o . ?a } L{ ?c . ?a } { ?c } {
-                 P{ Instance ?o ?sig }
+          P{ Effect L{ ?sig ?o . ?a } L{ ?c . ?a } f {
+                 P{ DeclaredInstance ?o ?sig }
                  P{ Instance ?c t }
+                 P{ Eq ?c t }
                  P{ Instance ?sig classoid }
              } }
-          P{ Effect L{ ?sig ?o . ?a } L{ ?c . ?a } { ?c } {
-                 P{ NotInstance ?o ?sig }
+          P{ Effect L{ ?sig ?o . ?a } L{ ?c . ?a } f {
+                 P{ DeclaredNotInstance ?o ?sig }
                  P{ Instance ?c POSTPONE: f }
+                 P{ Eq ?c f }
                  P{ Instance ?sig classoid }
              } }
           } ==! ] ;
-
-! UNION: decomposable-class union-class predicate-class ;
-
-! CHR: expand-instance-check @ // { Instance ?x A{ ?rho } } -- [ { ?rho } first wrapper? ] [ { ?rho } first wrapped>> decomposable-class?  ]
-! [ { ?rho } first wrapped>> make-pred-quot :>> ?c ]
-! [  ]
-! |
-! {  }
 
 ! : <array> ( n elt -- array )
 CHR: type-of-<array> @ { TypeOfWord <array> ?tau } // -- |
@@ -292,6 +259,8 @@ CHR: type-of-eq @ { TypeOfWord eq? ?tau } // -- |
           P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } { ?c } { P{ Instance ?x object } P{ Instance ?c POSTPONE: f } P{ Neq ?x ?y } } }
    } ==! ] ;
 
+! NOTE: Declarations are nominative first of all, although the existing type inference does
+! treat declarations as type intersections.
 CHR: type-of-declare @ { TypeOfWord declare ?tau } // -- |
 [ ?tau
   P{ Effect L{ ?l . ?a } ?a f {
@@ -437,35 +406,6 @@ CHR: type-of-macro @ { TypeOfWord A{ ?w } ?tau } // --
           } }
 ==! ]
 ;
-
-! GENERIC: instance-check-quot ( classoid -- quot )
-! M: builtin-class instance-check-quot
-!     nip
-! : instance-check-quot ( classoid -- quot )
-
-
-CHR: type-of-instance? @ { TypeOfWord instance? ?tau } // --
-[ 1 macro-input>stack :>> ?i drop t ]
-|
-[ ?tau P{ Xor
-          P{ Effect L{ ?sig ?o . ?a } L{ ?c . ?a } { ?q } {
-                 P{ Instance ?o ?sig }
-                 P{ Instance ?c t }
-                 P{ Instance ?sig classoid }
-                 P{ Instance ?q callable }
-                 P{ InstanceCheck ?sig ?q t }
-                 P{ CallEffect ?q L{ ?sig ?o . ?a } L{ ?c . ?a } }
-             } }
-          P{ Effect L{ ?sig ?o . ?a } L{ ?c . ?a } { ?q } {
-                 P{ NotInstance ?o ?sig }
-                 P{ Instance ?c POSTPONE: f }
-                 P{ Instance ?sig classoid }
-                 P{ Instance ?q callable }
-                 P{ InstanceCheck ?sig ?q f }
-                 P{ CallEffect ?q L{ ?sig ?o . ?a } L{ ?c . ?a } }
-             } }
-        } ==! ] ;
-
 
 ! ** Regular Words
 

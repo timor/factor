@@ -72,6 +72,11 @@ CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effe
 { FinishEffect ?tau } ;
 
 ! Body-only reinference requests, usually because some body preds have been changed lazily
+CHR: reinfer-xor-effect @ // { ReinferEffect P{ Xor ?c ?d } ?tau } -- |
+{ ReinferEffect ?c ?rho }
+{ ReinferEffect ?d ?sig }
+{ MakeXor ?rho ?sig ?tau } ;
+
 CHR: reinfer-effect @ // { ReinferEffect P{ Effect ?a ?b ?x ?k } ?tau } -- |
 { MakeEffect ?a ?b f f ?tau }
 { Params ?x }
@@ -104,6 +109,14 @@ CHR: phi-discard-keeps @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __
 
 ! *** Composition Mode
 ! These are live after the pred has been taken into account
+
+
+! NOTE: could be replaced using the { Keep } mechanism, but that has only been defined for PhiMode so far...
+CHR: collect-explicit-root @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p P{ WaitParam ?v ?sig } -- [ ?sig term-var? ]
+[ ?l ?p suffix :>> ?k ]
+[ ?x { ?v } union :>> ?y ]
+|
+{ MakeEffect ?a ?b ?y ?k ?tau } ;
 
 ! CHR: collect-call-recursive-input @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p P{ CallRecursive ?m ?rho ?sig } --
 ! [ ?rho vars ?e make-effect-vars subset? ]

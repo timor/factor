@@ -1,4 +1,5 @@
 USING: accessors arrays chr classes combinators combinators.short-circuit kernel
+classes.union classes.predicate
 lists math.parser sequences sets strings terms types.util words words.symbol ;
 
 IN: chr.factor
@@ -10,6 +11,44 @@ TERM-VARS:
 ?ys ?z ?zs ?c1 ?c2 ?s0 ?beg ?parm ?rho ?sig ?tau ?vars ;
 
 PREDICATE: callable-word < word { [ symbol? not ] } 1&& ;
+
+
+! * Semantic Notes
+
+! ** Type declarations and dispatch
+! There is a chicken-and-egg situation to solve.  With regards to semantic
+! subtyping, a value having a certain type means that this value fulfills certain
+! properties.  If these properties are to be reasoned about, they must become
+! apparent during inference at the correct positions.  There are several cases to
+! consider
+
+! *** Explicit predicate words
+!     This is the most obvious case: If a ~foo?~ word of class ~foo~ is
+!     encountered, the expanded instance check's predicates are inferred for
+!     composition, ususally resulting in an Xor type.
+
+! *** Typed Definitions
+!     These are explicitly defined to have coercing behaviour with regards to the
+!     input classes.  However, the implementation suggests that this is actually
+!     delegated to ~declare~?
+
+! *** Default input/output types
+!     Primitive words have these defined per fiat power.  They are basically used
+!     to "bootstrap" type checking by having default instance assumptions to work with.
+
+! *** Dispatch
+!     This is like typed definitions, but the dispatch process is stateful.  Thus,
+!     the strategy is to actually follow the predicate decision path.
+
+! ** The Role of Declarations
+!    On one hand, declarations are nominative, i.e. we simply state that a value
+!    belongs to a certain type.  On the other hand, declarations are used like
+!    refinements.
+
+! ** Nominative vs. predicative/semantic types
+!    Declarations are kept as nominative declarations.  Instance predicates are
+!    used on the semantic level.   This means we can keep reasoning on a nominative
+!    level, while expanding e.g predicates to have the desired effect.
 
 ! * Helpers for generating declared effects
 
@@ -119,8 +158,11 @@ TUPLE: Iterated < chr-pred start end ;
 ! Value-restricting preds
 TUPLE: val-pred < chr-pred val ;
 
+! Semantic
 TUPLE: Instance < val-pred type ;
-TUPLE: NotInstance < Instance ;
+! Nominative
+TUPLE: DeclaredInstance < Instance ;
+TUPLE: DeclaredNotInstance < Instance ;
 
 TUPLE: Slot < val-pred n slot-val ;
 TUPLE: Element < val-pred type ;
@@ -145,6 +187,8 @@ TUPLE: TupleBoa < Boa ;
 ! explicitly referencing out-quot here for live-ness
 TUPLE: MacroExpand < chr-pred quot args in out-quot ;
 TUPLE: MacroExpanded < MacroExpand out-type ;
+! Used for anonymous expansion
+TUPLE: ExpandQuot < MacroExpand num-args ;
 TUPLE: InstanceCheck < chr-pred class-arg quot complement ;
 
 ! Macro expansion, folding
@@ -198,8 +242,11 @@ TUPLE: Lt < expr-pred var ;
 
 UNION: commutative-pred Eq Neq ;
 
-UNION: body-pred Instance NotInstance CallEffect CallXorEffect Declare Slot CallRecursive Throws Tag
-    MacroExpand expr-pred Iterated ;
+! gc root behavior
+TUPLE: WaitParam < chr-pred var expansion ;
+
+UNION: body-pred Instance DeclaredInstance DeclaredNotInstance CallEffect CallXorEffect Declare Slot CallRecursive Throws Tag
+    MacroExpand expr-pred Iterated WaitParam ;
 TUPLE: Params < chr-pred ids ;
 
 TUPLE: CheckPhiStack a b res ;
@@ -318,3 +365,20 @@ M: Sum live-vars val>> 1array ;
 M: expr-pred defines-vars vars ;
 ! M: MacroCall live-vars out>> vars ;
 
+
+! NOTE: don't use internal optimized implementations here
+GENERIC: make-pred-quot ( class -- quot )
+
+! { real fixnum array }
+! [ dup real? [ nip ] [ dup fixnum? [ nip ] [ array? ] if* ] if* ]
+M: union-class make-pred-quot
+    "members" word-prop <reversed> unclip "predicate" word-prop
+    swap
+    [ ! ( acc class )
+        "predicate" word-prop swap
+        '[ dup @ [ nip ] _ if* ]
+    ] each ;
+
+! NOTE: relies on implementation detail of the predicate quotation being a singular
+! quotation!
+M: predicate-class make-pred-quot "predicate" word-prop first def>> ;

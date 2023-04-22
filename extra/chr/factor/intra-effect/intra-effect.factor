@@ -1,7 +1,8 @@
 USING: accessors arrays chr.factor chr.parser chr.state classes classes.algebra
-classes.builtin classes.singleton classes.tuple classes.tuple.private
-combinators combinators.short-circuit continuations kernel kernel.private lists
-macros.expander math quotations sequences sets sorting terms types.util words ;
+classes.builtin classes.predicate classes.singleton classes.tuple
+classes.tuple.private combinators combinators.short-circuit continuations kernel
+kernel.private lists macros.expander math math.order quotations sequences sets
+sorting terms types.util words ;
 
 IN: chr.factor.intra-effect
 
@@ -23,9 +24,56 @@ CHR: comm-var-is-lhs @ // AS: ?p <={ commutative-pred A{ ?l } ?v } -- [ ?v term-
 ! CHR: literal-singleton-class-is-class @ // { Instance ?x ?tau } -- [ { ?tau } first wrapper? ] [ { ?tau } first wrapped>> :>> ?rho singleton-class? ] |
 ! { Instance ?x ?rho } ;
 
-CHR: normalize-not-type @ // { NotInstance ?x A{ ?tau } } -- [ { ?tau } first classoid? ]
+CHR: wrapper-type-is-eq @ // { Instance ?x ?tau } -- [ { ?tau } first wrapper? ] [ { ?tau } first wrapped>> :>> ?v
+                                                                                   class-of :>> ?rho drop t ]
+|
+{ Instance ?x ?rho }
+{ Eq ?x ?v } ;
+
+! This is used to instantiate the branches of the instance check quotations
+GENERIC: make-instance-check ( class -- quot/f )
+M: classoid make-instance-check drop f ;
+! M: singleton-class make-instance-check '[ _ eq? ] ;
+M: predicate-class make-instance-check make-pred-quot ;
+
+CHR: declared-singleton-class @ // { DeclaredInstance ?x A{ ?tau } } -- [ ?tau singleton-class? ] |
+{ Instance ?x ?tau }
+{ Eq ?x ?tau } ;
+
+CHR: declared-not-singleton-class @ // { DeclaredNotInstance ?x A{ ?tau } } -- [ ?tau singleton-class? ]
+[ ?tau class-not :>> ?rho ] |
+{ Instance ?x ?rho }
+{ Neq ?x ?tau } ;
+
+
+CHR: declared-predicate-class @ // { DeclaredInstance ?x A{ ?tau } } -- [ ?tau predicate-class? ]
+[ ?tau superclass-of :>> ?rho ]
+[ ?tau make-instance-check :>> ?q ]
+|
+{ ?DeferTypeOf ?q ?sig }
+{ WaitParam ?p ?sig }
+{ Instance ?p ?sig }
+{ CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
+{ Instance ?c W{ t } }
+{ DeclaredInstance ?x ?rho } ;
+
+CHR: declared-not-predicate-class @ // { DeclaredNotInstance ?x A{ ?tau } } -- [ ?tau predicate-class? ]
+[ ?tau class-not :>> ?rho ]
+[ ?tau make-instance-check :>> ?q ]
+|
+{ Instance ?x ?rho }
+{ ?DeferTypeOf ?q ?sig }
+{ WaitParam ?p ?sig }
+{ Instance ?p ?sig }
+{ CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
+{ Instance ?c W{ f } } ;
+
+CHR: normalize-known-not-declaration @ // { DeclaredNotInstance ?x A{ ?tau } } -- [ { ?tau } first classoid? ]
 [ { ?tau } first class-not :>> ?sig ] |
-{ Instance ?x ?sig } ;
+{ DeclaredInstance ?x ?sig } ;
+
+CHR: declaration-is-assertion @ // { DeclaredInstance ?x A{ ?tau } } -- |
+{ Instance ?x ?tau } ;
 
 
 ! ! Flatten union classes for now.
@@ -65,6 +113,7 @@ CHR: early-exit @ { Invalid } // <={ body-pred } -- | ;
 ! Current approach: Something like 3, where the set of Params is defined
 ! explicitly, and contagious, by underlying conditionals
 
+! TODO: maybe rename { Invalid } to { Disjoint } in the Phi context...
 CHR: have-equivalence-deciders @ { PhiMode } { MakeEffect ?i ?o __ __ __ } // { Decider ?x } { Decider ?y }
 -- [ ?x ?i list*>array in? ] [ ?y ?o list*>array in? ] | { Invalid } ;
 CHR: have-input-decider @ { PhiMode } { MakeEffect ?i ?o __ __ __ } // { Decider ?x } { Discriminator ?y }
@@ -77,12 +126,15 @@ CHR: phi-same-branch-pred @ { PhiMode } // AS: ?p <={ body-pred } AS: ?q <={ bod
 
 CHR: phi-disjoint-instance @ { PhiMode } { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
 [ { ?rho ?tau } first2 classes-intersect? not ] | { Decider ?x } ;
+! CHR: phi-declared-complement @ { PhiMode } { DeclaredInstance ?x ?tau } { DeclaredNotInstance ?x ?tau } // --
+! | { Decider ?x } ;
 CHR: phi-maybe-disjoint-instance @ { PhiMode } { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
 [ { ?rho ?tau } first2 { [ classes-intersect? ] [ class= not ] } 2&& ] | { Discriminator ?x } ;
 CHR: phi-union-instance @ { PhiMode } // { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } --
 [ { ?rho ?tau } first2 simplifying-class-or :>> ?sig ] | { Keep P{ Instance ?x ?sig } } ;
 
 ! TODO: check for isomorphic effects maybe?
+!  -> If so, this would have to be done in phi-same-branch-pred above...
 ! Higher order: If we find one effect or two different ones, this is unresolved control flow
 CHR: phi-disjoint-effect-type @ { PhiMode } { Instance ?x ?e } // -- [ ?e valid-effect-type? ] |
 { Invalid } ;
@@ -132,7 +184,14 @@ CHR: phi-disjoint-le-rhs @ { PhiMode } { Le ?v ?x } { Lt ?x ?v } // -- [ ?x term
 ! { Phi ?c ?a } { Phi ?c ?b } { Slot ?z ?n ?c } ;
 
 ! **** Relational reasoning
-! Transport relation in
+CHR: phi-eq-decider @ { PhiMode } { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } // -- [ ?b ?c = not ] |
+{ Decider ?x } ;
+: order? ( obj1 obj2 -- min max ? )
+    [ 2dup <=> +gt+ eq? [ swap ] when t ] [ drop f ] recover ;
+CHR: phi-eq-range @ { PhiMode } // { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } -- [ ?b ?c order? [ :>> ?n drop :>> ?m drop ] dip ]
+|
+{ Keep P{ Le ?m ?x } }
+{ Keep P{ Le ?n ?x } } ;
 ! TODO: abstract to all relations somehow
 ! CHR: phi-eq @ { Phi ?a ?x } { Phi ?a ?y } { Phi ?b ?v } { Phi ?b ?w } // { Eq ?x ?y } { Eq ?v ?w } -- |
 ! { Eq ?a ?b } ;
@@ -196,6 +255,8 @@ CHR: phi-call-rec-self @ { PhiMode } { PhiSchedule ?w __ __ } //
 ! CHR: disj-param-maybe-callable @ { PhiMode } <={ MakeEffect } { Params ?l } // { Instance ?x A{ ?tau } } --
 ! [ ?x ?l in? ] [ { ?tau } first classoid? ] [ { ?tau } first callable classes-intersect? ] | { Invalid } ;
 
+CHR: disj-waits-root @ { PhiMode } <={ MakeEffect } // { WaitParam ?v ?sig } -- [ ?sig term-var? ] | { Invalid } ;
+
 ! TODO: need?
 CHR: disj-is-macro-effect @ { PhiMode } <={ MakeEffect } // { MacroExpand __ __ __ __ } -- | { Invalid } ;
 
@@ -210,9 +271,9 @@ CHR: disj-single-call-rec @ { PhiMode } <={ MakeEffect } // <={ CallRecursive } 
 ! TODO: does that reasoning work? Basically, we would need to have absence as failure here...
 ! CHR: disj-unknown-can-be-callable @ { PhiMode } <={ MakeEffect } // { Instance ?x A{ ?tau } }
 
-! TODO: are these actually used (probably instance case)
-CHR: disj-symbolic-type @ { PhiMode } <={ MakeEffect } { Params ?b } // { Instance ?x ?tau } -- [ ?tau term-var? ] [ ?x ?b in? ] | { Invalid } ;
-CHR: disj-symbolic-compl-type @ { PhiMode } <={ MakeEffect } { Params ?b } // { NotInstance ?x ?tau } -- [ ?tau term-var? ] [ ?x ?b in? ] | { Invalid } ;
+! Used in instance? case
+CHR: disj-symbolic-type @ { PhiMode } AS: ?e <={ MakeEffect } // { DeclaredInstance ?x ?tau } -- [ ?tau term-var? ] [ ?x ?e make-effect-vars in? ] | { Invalid } ;
+CHR: disj-symbolic-compl-type @ { PhiMode } AS: ?e <={ MakeEffect } // { DeclaredNotInstance ?x ?tau } -- [ ?tau term-var? ] [ ?x ?e make-effect-vars in? ] | { Invalid } ;
 
 ! *** Phi>
 
@@ -238,6 +299,7 @@ CHR: same-slot-must-be-same-var @ { Slot ?o ?n ?v } // { Slot ?o ?n ?w } -- | [ 
     } cond ;
 
 ! *** Instance reasoning
+! Tags are an implementation detail, and are re-converted to classes as soon as possible
 CHR: check-tag @ { Instance ?x A{ ?v } } // { Tag ?x A{ ?n } } -- [ { ?v } typeof>tag :>> ?m ] |
 [ ?m ?n = f { Invalid } ? ] ;
 
@@ -249,11 +311,7 @@ CHR: convert-tag @ // { Tag ?x A{ ?n } } -- [ ?n type>class :>> ?tau ] |
 
 CHR: instance-of-non-classoid @ { Instance ?x A{ ?c } } // -- [ { ?c } first classoid? not ] | { Invalid } ;
 
-! CHR: useless-instance @ // { Instance __ object } -- | ;
-CHR: null-instance-is-invalid @ { Instance ?x null } // -- | { Invalid } ;
-
-! NOTE: this could be activated in phi mode if not careful
-CHR: type-contradiction @ // { NotInstance ?x ?tau } { Instance ?x ?tau } -- | { Invalid } ;
+CHR: null-instance-is-invalid @ // { Instance ?x null } -- | { Invalid } ;
 
 ! NOTE: There are two ways to handle intersections: in factor's type system in
 ! the intersection instance type, or in the
@@ -269,9 +327,6 @@ CHR: instance-intersect-effect @ { Instance ?x ?e }
 [ ?e valid-effect-type? ] |
 [ ?tau callable classes-intersect?
  f { Invalid } ? ] ;
-
-! TODO: used? looks like should be subsumed by null-instance-is-invalid
-CHR: call-null-instance-is-invalid @ { CallEffect ?x __ __ } { Instance ?x null } // -- | { Invalid } ;
 
 ! *** Arithmetics
 ! CHR: unique-expr-pred @ AS: ?p <={ expr-pred ?a . ?x } // AS: ?q <={ expr-pred ?a . ?x } -- [ ?p class-of ?q class-of class= ] | ;
@@ -388,6 +443,7 @@ CHR: call-destructs-composed @ { Instance ?p composed } { Slot ?p "first" ?q } {
 { CallEffect ?q ?a ?rho } { CallEffect ?r ?rho ?b } ;
 
 ! *** Declarations
+! TODO: why are there Ensure and Declare?
 
 CHR: did-ensure @ // { Ensure +nil+ __ } -- | ;
 CHR: did-declare @ // { Declare +nil+ __ } -- | ;
@@ -395,7 +451,7 @@ CHR: start-ensure @ // { Ensure A{ ?a } ?r } -- [ ?a array? ]
 [ ?a <reversed> >list :>> ?b ] | { Ensure ?b ?r } ;
 CHR: destruc-ensure @ // { Ensure L{ ?tau . ?r } L{ ?x . ?xs } } -- |
 ! { Ensure ?tau ?x }
-{ Instance ?x ?tau }
+{ DeclaredInstance ?x ?tau }
 { Ensure ?r ?xs } ;
 ! NOTE: destructive!
 CHR: ensure-stack @ { Ensure L{ ?tau . ?r } ?x } // -- [ ?x term-var? ] |
@@ -404,7 +460,6 @@ CHR: ensure-stack @ { Ensure L{ ?tau . ?r } ?x } // -- [ ?x term-var? ] |
 CHR: declare-ensures @ { Declare L{ ?tau . ?r } ?x } // -- |
 { Ensure L{ ?tau . ?r } ?x } ;
 CHR: destruc-declare @ // { Declare L{ ?tau . ?r } L{ ?x . ?xs } } -- |
-{ Params { ?x } }
 { Declare ?r ?xs } ;
 
 ! UNION: abstract-class union-class predicate-class ;
@@ -416,76 +471,66 @@ CHR: destruc-declare @ // { Declare L{ ?tau . ?r } L{ ?x . ?xs } } -- |
 ! *** Substituting ground values into body constraints
 
 CHR: known-declare @
-! NOTE: for some reason, we can't match into W{ ?v } objects correctly...
-{ Instance ?l A{ ?tau } } // { Declare ?l ?a } --
-[ { ?tau } first wrapper? ]
+{ Eq ?l A{ ?tau } } // { Declare ?l ?a } --
 [ ?tau <reversed> >list :>> ?m ] | { Declare ?m ?a } ;
 
 
 ! **** Macro Expansion/Folding
 
-CHR: known-macro-arg @ { Instance ?x A{ ?v } } // { MacroExpand ?q ?a L{ ?x . ?ys } ?p } -- [ { ?v } first wrapper? ]
-[ ?a length ?q macro-effect < ]
-[ { ?v } first wrapped>> :>> ?z ]
-[ ?a ?z prefix :>> ?b ]
-|
-{ MacroExpand ?q ?b ?ys ?p } ;
+CHR: known-macro-quot @ // { MacroExpand ?w ?a ?i ?x } -- [ ?w macro-quot :>> ?q ]
+[ ?w macro-effect :>> ?n ] |
+{ ExpandQuot ?q ?a ?i ?x ?n } ;
 
-! NOTE: only fully expanded macros are treated for now!
-! NOTE: we need to copy the type here because a different expansion will have a different type
+CHR: known-macro-arg @ { Eq ?x A{ ?v } } // { ExpandQuot ?q ?a L{ ?x . ?ys } ?p ?n } --
+[ ?a length ?n < ]
+[ ?a ?v prefix :>> ?b ]
+|
+{ ExpandQuot ?q ?b ?ys ?p ?n } ;
+
+! NOTE: only fully expanded macros are treated
 ! NOTE: existentials, (implicit) globals
-! ?o: the type var which is unknown
-! ?p: the expanded macro quotation to infer
-CHR: expand-macro @ // { MacroExpand ?w ?a ?i ?x } -- [ ?a length ?w macro-effect = ]
-[ ?w macro-quot :>> ?q ]
+! TODO: maybe use WaitParam instead of special var defining rules of macroexpanded?
+CHR: expand-macro @ // { ExpandQuot ?q ?a ?i ?x ?n } -- [ ?a length ?n = ]
 [ ?a ?q with-datastack first :>> ?p ]
 |
 ! NOTE: this should trigger only after the current constraint set is finished!
-{ MacroExpanded ?w ?a ?i ?x ?sig }
-{ Instance ?x ?sig }
 { ?DeferTypeOf ?p ?sig }
+{ MacroExpanded ?q ?a ?i ?x ?sig }
+{ Instance ?x ?sig }
     ;
 
 CHR: remove-expanded-macro-known-type @ // { MacroExpanded __ __ __ __ ?sig } -- [ ?sig term-var? not ] | ;
 
-! FIXME Doing
-! CHR: expand-instance-macro @ // { InstanceCheck A{ ?sig } ?q ?c } --
+CHR: known-slot @ { Eq ?n A{ ?a } } // { Slot ?o ?n ?v } -- |
+{ Slot ?o ?a ?v } ;
 
-! CHR: constant-ensure @ // { Ensure ?l ?a } -- [ ?l array? ]
-! [ ?l <reversed> >list :>> ?m ] |
-! { Ensure ?m ?a } ;
+CHR: known-instance @ { Eq ?c A{ ?d } } // { Instance ?x ?c } -- [ ?c term-var? ]
+| { Instance ?x ?d } ;
 
-CHR: known-slot @ { Instance ?n A{ ?tau } } // { Slot ?o ?n ?v } -- |
-{ Slot ?o ?tau ?v } ;
+CHR: known-declared-instance @ { Eq ?c A{ ?d } } // { DeclaredInstance ?x ?c } --
+| { DeclaredInstance ?x ?d } ;
 
-CHR: known-instance @ { Instance ?c A{ ?tau } } // { Instance ?x ?c } --
-[ { ?tau } first wrapper? ]
-[ { ?tau } first wrapped>> :>> ?d drop t ] | { Instance ?x ?d } ;
+CHR: known-not-instance @ { Eq ?c A{ ?d } } // { DeclaredNotInstance ?x ?c } --
+| { DeclaredNotInstance ?x ?d } ;
 
-CHR: known-not-instance @ { Instance ?c A{ ?tau } } // { NotInstance ?x ?c } --
-[ { ?tau } first wrapper? ]
-[ { ?tau } first wrapped>> :>> ?d drop t ] | { NotInstance ?x ?d } ;
-
-CHR: known-tag-num @ { Instance ?n A{ ?v } } // { Tag ?c ?n } -- [ { ?v } first wrapper? ] [ ?v :>> ?w ] |
-{ Tag ?c ?w } ;
+CHR: known-tag-num @ { Eq ?n A{ ?v } } // { Tag ?c ?n } -- |
+{ Tag ?c ?v } ;
 
 
-! NOTE: this is still a bit tedious...Maybe we can have nice things? (Directly substitute literals...)
-CHR: known-expr-val @ { Instance ?n ?v } // AS: ?p <={ expr-pred } -- [ ?n ?p vars in? ]
-[ { ?v } first wrapper? ]
-[ { ?v } first wrapped>> :>> ?w ]
+CHR: known-expr-val @ { Eq ?n A{ ?v } } // AS: ?p <={ expr-pred } -- [ ?n ?p vars in? ]
 |
-[ ?p { { ?n ?w } } lift* ] ;
+[ ?p { { ?n ?v } } lift* ] ;
 
 ! *** Slot conversion
-CHR: known-named-slot @ { Instance ?o A{ ?tau } } // { Slot ?o A{ ?n } ?v } -- [ ?tau tuple-class? ]
+! TODO: this conversion can be wrong when working on numerically optimized code?
+CHR: known-named-slot @ { Eq ?o A{ ?tau } } // { Slot ?o A{ ?n } ?v } -- [ ?tau tuple-class? ]
 [ ?tau all-slots [ offset>> ?n = ] find nip :>> ?s ] [ ?s name>> :>> ?m ]
 [ ?s class>> :>> ?rho ]
 |
 { Slot ?o ?m ?v }
-{ Instance ?v ?rho } ;
+{ DeclaredInstance ?v ?rho } ;
 
-CHR: known-boa-spec @ { Instance ?c A{ ?v } } // AS: ?p <={ Boa ?c ?i ?o } -- |
+CHR: known-boa-spec @ { Eq ?c A{ ?v } } // AS: ?p <={ Boa ?c ?i ?o } -- |
 [ ?p ?v >>spec ] ;
 
 ! *** Boa handling
@@ -517,5 +562,10 @@ CHR: tuple-boa-decl @ // { TupleBoa A{ ?c } ?a ?b } --
  [ { ?a ?b } { sin sout } ==! ] preds push
  preds <reversed> >array
 ] ;
+
+! *** Explicit Parameters
+! Used to keep track of to-be-expanded vars.
+
+CHR: root-was-expanded @ // { WaitParam ?x ?sig } -- [ ?sig term-var? not ] | ;
 
 ;

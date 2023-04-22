@@ -20,6 +20,13 @@ CHR: have-recursive-type @ // { Recursion ?x __ ?sig } { TypeOf ?x ?rho } { ?Typ
 
 ! *** Deferred Inference
 
+! Short circuit already known type
+CHR: deferred-effect-already-known @ { TypeOf ?x ?tau } // { ?DeferTypeOf ?x ?sig } -- [ ?tau full-type? ] |
+[ ?sig ?tau ==! ] ;
+
+CHR: request-same-deferred-type @ { ?DeferTypeOf ?x ?sig } // { ?DeferTypeOf ?x ?tau } -- [ ?sig term-var? ] [ ?tau term-var? ] |
+[ ?sig ?tau ==! ] ;
+
 ! These should become "active" as soon as the current inference is done
 ! Assumption: The hook is only activated if no inference is still active
 ! TODO: If we ever have recursive macro expansion, this must be verified to still
@@ -55,8 +62,9 @@ CHR: did-reinfer-deferred-type @ // { ReinferWith ?e ?sig } -- [ ?e full-type? ]
 ! after that is not transported into the dependent inference.  So any stuff that must be changed before supplying the known type must be performed here
 ! BUT: Do we even have the macro type available already (in case of macros)
 
-CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } -- [ ?tau full-type? ] | [ ?sig ?tau ==! ]
-{ TypeOfDone } ;
+CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } -- [ ?tau full-type? ] |
+{ TypeOfDone }
+[ ?sig ?tau ==! ] ;
 
 CHR: double-word-inference-special @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
 [ ?x callable-word? ] [ ?x rec-defaults :>> ?e ] |
@@ -96,6 +104,7 @@ IMPORT: chr-phi
 IMPORT: chr-effects
 
 
+! Default position where [ foo ] queries are converted to TypeOfWord foo preds.
 CHR: ask-type-of-word-call @ { ?TypeOf [ ?w ] ?tau } // -- [ ?w callable-word? ] [ ?tau term-var? ] |
 { TypeOfWord ?w ?sig } ;
 
