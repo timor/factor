@@ -45,8 +45,6 @@ CHR: rebuild-phi-effect @ // { PhiMode } { CheckPhiStack { ?a ?b } { ?c ?d } t }
 |
 [ { ?a ?b } { ?c ?d } ==! ]
 { MakeEffect ?a ?b f f ?tau }
-{ Params ?x }
-{ Params ?y }
 [ ?k ?a ?ground-value ?b ?ground-value default-class-preds ]
 [ ?l ?c ?ground-value ?d ?ground-value default-class-preds ]
 [ ?k ]
@@ -67,8 +65,6 @@ CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effe
 ! [ ?l dup term-var? [ drop f ] when ]
 { CompMode }
 { MakeEffect ?a ?d f f ?tau }
-{ Params ?x }
-{ Params ?y }
 [ ?k ]
 [ ?l ]
 { FinishEffect ?tau } ;
@@ -80,13 +76,31 @@ CHR: reinfer-xor-effect @ // { ReinferEffect P{ Xor ?c ?d } ?tau } -- |
 { MakeXor ?rho ?sig ?tau } ;
 
 CHR: reinfer-effect @ // { ReinferEffect P{ Effect ?a ?b ?x ?k } ?tau } -- |
+{ CompMode }
 { MakeEffect ?a ?b f f ?tau }
-{ Params ?x }
 [ ?k ]
 { FinishEffect ?tau } ;
 
 ! TODO: document this
 CHR: force-union @ { PhiMode } { FixpointMode } // { Invalid } -- | ;
+
+! * Suspend Reasoning
+CHR: suspend-make-effect @ // { MakeEffect ?a ?b ?x ?l ?tau } { CompMode } { ?DeferTypeOf ?q ?sig } -- |
+{ SuspendMakeEffect ?a ?b ?x ?l ?tau { ?q ?sig } } ;
+
+CHR: collect-suspend-pred @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau { ?q ?sig } } AS: ?p <={ body-pred } --
+[ ?l ?p suffix :>> ?k ]
+|
+{ SuspendMakeEffect ?a ?b ?x ?k ?tau { ?q ?sig } } ;
+
+CHR: suspend-do-reinfer @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau { ?q ?sig } } -- |
+{ ?TypeOf ?q ?sig }
+{ SuspendMakeEffect ?a ?b ?x ?l ?tau ?sig } ;
+
+CHR: continue-suspend-make-effect @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau ?sig } -- [ ?sig full-type? ] |
+{ CompMode }
+{ MakeEffect ?a ?b f f ?tau }
+[ ?l ] ;
 
 ! * Post-Reasoning
 
@@ -113,13 +127,6 @@ CHR: phi-discard-keeps @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __
 ! These are live after the pred has been taken into account
 
 PREFIX-RULES: P{ CompMode }
-
-! NOTE: could be replaced using the { Keep } mechanism, but that has only been defined for PhiMode so far...
-CHR: collect-explicit-root @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p P{ WaitParam ?v ?sig } -- [ ?sig term-var? ]
-[ ?l ?p suffix :>> ?k ]
-[ ?x { ?v } union :>> ?y ]
-|
-{ MakeEffect ?a ?b ?y ?k ?tau } ;
 
 ! CHR: collect-call-recursive-input @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p P{ CallRecursive ?m ?rho ?sig } --
 ! [ ?rho vars ?e make-effect-vars subset? ]
@@ -172,14 +179,14 @@ PREFIX-RULES: f
 CHR: cleanup-incomplete @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // AS: ?p <={ body-pred } -- | ;
 
 ! This is triggered if phi mode is aborted
-CHR: finish-disjoint-effect @ { PhiMode } { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { Params __ } { Invalid } -- |
+CHR: finish-disjoint-effect @ { PhiMode } { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { Invalid } -- |
 [ ?tau null ==! ] ;
 
 ! This is triggered if composition modes determines the effect will terminate
-CHR: finish-invalid-effect @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { Params __ } { Invalid } -- |
+CHR: finish-invalid-effect @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { Invalid } -- |
 [ ?tau P{ Effect ?a ?b f { P{ Invalid } } } ==! ] ;
 
-CHR: finish-valid-effect @ { FinishEffect ?tau } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } // { Params __ } -- [ ?tau term-var? ]
+CHR: finish-valid-effect @ { FinishEffect ?tau } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } // -- [ ?tau term-var? ]
 [ ?x ?a vars diff ?b vars diff
   ! FIXME: this exposes what seems to be a bug in the term solver, probably something going wrong when f is assigned to a binding,
   ! resulting in a recursive-term-error in case for checking strange stuff...
@@ -190,7 +197,7 @@ CHR: finish-valid-effect @ { FinishEffect ?tau } AS: ?e P{ MakeEffect ?a ?b ?x ?
 
 ! NOTE: re-inserting the FinishEffect Predicates because they don't get reactivated by substitution
 CHR: finish-phi-reasoning @ // { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { PhiMode } -- [ ?tau term-var? not ] | { FinishEffect ?tau } { PhiDone } ;
-CHR: finish-compositional-reasoning @ // { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } -- [ ?tau term-var? not ] | { FinishEffect ?tau } ;
+CHR: finish-compositional-reasoning @ // { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { CompMode } -- [ ?tau term-var? not ] | { FinishEffect ?tau } ;
 
 ! * Token removal
 CHR: finish-effect-done @ // { FinishEffect ?tau } -- [ ?tau term-var? not ] | ;

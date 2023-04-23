@@ -1,5 +1,5 @@
-USING: accessors arrays chr.factor chr.parser chr.state kernel lists namespaces
-sequences sets terms ;
+USING: accessors arrays chr.factor chr.parser chr.state
+combinators.short-circuit kernel lists namespaces sequences sets terms ;
 
 IN: chr.factor.phi
 
@@ -189,15 +189,20 @@ CHR: all-phis-done @ { PhiSchedule __ +nil+ ?tau } // { DisjointRoot ?a } -- |
 
 ! Trigger Phi-mode Composition
 ! This causes the reasoner to assume disjunction instead of conjunction of value predicates.
+
+CHR: make-trivial-union @ { MakeUnion ?a ?b ?tau } // -- [ ?a ?b isomorphic? ] |
+[ ?tau ?a ==! ]
+{ PhiDone } ;
+
 CHR: try-union-effect @ { MakeUnion ?a ?b ?tau } // -- [ ?tau term-var? ] |
 { PhiMode }
 { ComposeEffect ?a ?b ?tau } ;
 
 ! After MakeEffect has finished
-CHR: have-union-effect @ // { DisjointRoot ?e } { CurrentPhi ?e } { MakeUnion __ __ ?a } { PhiDone } { PhiSchedule ?q L{ ?b . ?r } ?tau } --
+CHR: have-union-effect @ // { DisjointRoot ?e } { CurrentPhi ?e } { MakeUnion ?x ?y ?a } { PhiDone } { PhiSchedule ?q L{ ?b . ?r } ?tau } --
 [ ?a Effect? ] | { DisjointRoot ?a } { PhiSchedule ?q ?r ?tau } ;
 
-CHR: have-disjoint-effect @ // { CurrentPhi ?e } { MakeUnion __ __ null } { PhiDone } -- | ;
+CHR: have-disjoint-effect @ // { CurrentPhi ?e } { MakeUnion ?x ?y null } { PhiDone } -- | ;
 
 CHR: try-next-phi-merge @ { DisjointRoot ?e } { PhiSchedule __ L{ ?b . ?r } __ } // -- | { CurrentPhi ?e } ;
 

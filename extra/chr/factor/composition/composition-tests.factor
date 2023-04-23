@@ -1,6 +1,7 @@
 USING: accessors arrays assocs chr.factor.composition chr.parser chr.state
 chr.test combinators.short-circuit kernel kernel.private lists literals math
-math.private classes
+math.private classes sequences.private
+chr.factor.util
 quotations sequences slots.private terms tools.test typed types.util words
 chr.factor chr.factor.word-types chr.factor.effects chr combinators ;
 
@@ -34,29 +35,12 @@ IN: chr.factor.composition.tests
 
 ! ** Test Helpers
 : chr-simp ( constraints -- constraint )
+    P{ CompMode } suffix
     chr-comp swap [ run-chr-query store>> ] with-var-names
-    values ;
+    values P{ CompMode } swap remove ;
 
 : chr-simp1 ( constraints -- constraint )
     chr-simp first ;
-
-GENERIC: same-effect? ( t1 t2 -- ? )
-:: same-xor? ( x1 x2 -- ? )
-    x1 type1>> x2 type1>> same-effect?
-    x1 type2>> x2 type2>> same-effect? and ;
-
-M: Xor same-effect?
-    over Xor?
-    [ { [ same-xor? ]
-        [ [ type2>> ] [ type1>> ] bi Xor boa same-xor? ] } 2||
-    ] [ 2drop f ] if ;
-
-M: chr-pred same-effect?
-    2dup [ class-of ] same?
-    [ isomorphic? ]
-    [ 2drop f ] if ;
-
-! TODO: effect predicates set comparison (expensive!)
 
 GENERIC: get-type ( quot -- type )
 
@@ -148,8 +132,8 @@ TERM-VARS: ?q3 ?q5 ?p2 ?p3 ?c2 ?c3 ?a4 ?a6 ?b3 ?b4 ;
 ! that the non-taken branch quotation is actually a quotation!
 P{
     Xor
-    P{ Effect L{ ?q3 ?p2 ?c2 . ?a4 } ?b3 f { P{ Instance ?q3 object } P{ Instance ?c2 not{ POSTPONE: f } } P{ Instance ?p2 callable } P{ CallEffect ?p2 ?a4 ?b3 } } }
-    P{ Effect L{ ?q5 ?p3 ?c3 . ?a6 } ?b4 f { P{ Instance ?p3 object } P{ Instance ?c3 POSTPONE: f } P{ Instance ?q5 callable } P{ CallEffect ?q5 ?a6 ?b4 } } }
+    P{ Effect L{ ?q3 ?p2 ?c2 . ?a4 } ?b3 f { P{ Instance ?q3 object } P{ Instance ?c2 not{ POSTPONE: f } } P{ Neq ?c f } P{ Instance ?p2 callable } P{ CallEffect ?p2 ?a4 ?b3 } } }
+    P{ Effect L{ ?q5 ?p3 ?c3 . ?a6 } ?b4 f { P{ Instance ?p3 object } P{ Instance ?c3 POSTPONE: f } P{ Eq ?c f } P{ Instance ?q5 callable } P{ CallEffect ?q5 ?a6 ?b4 } } }
 }
 [ [ if ] get-type ] chr-test
 
@@ -157,7 +141,6 @@ P{ Effect ?a ?b f { P{ Invalid } } }
 [ [ 42 2 slot ] get-type ] chr-test
 
 P{ Effect ?a ?b f { P{ Invalid } } }
-! XXX slow as hell?
 [ [ curry (call) ] get-type ] chr-test
 
 ! NOTE: This would only work if we decide to implement normal forms for the nominative type segment?
@@ -168,12 +151,12 @@ P{ Effect ?a ?b f { P{ Invalid } } }
 [ [ [ 42 2 slot ] [ "string" ] if ] get-type [ drop "string" ] get-type isomorphic? ] unit-test
 
 { t }
-[ [ [ 42 2 slot ] [ "string" ] if ] get-type [ { POSTPONE: f } declare drop "string" ] get-type isomorphic? ] unit-test
+[ [ [ 42 2 slot ] [ "string" ] if ] get-type [ { W{ f } } declare drop "string" ] get-type same-effect? ] unit-test
 
 { t } [ [ fixnum? 4 5 ? ] get-type Xor? ] unit-test
 
 P{ Effect L{ ?y . ?a } L{ ?x . ?a } f
-   { P{ Instance ?y object } P{ Eq ?x 4 } P{ Instance ?x fixnum } } }
+   { P{ Eq ?x 4 } P{ Instance ?x fixnum } P{ Instance ?y object } } }
 [ [ number? 4 4 ? ] get-type ] chr-test
 
 { t }
@@ -188,7 +171,8 @@ P{ Effect L{ ?y . ?a } L{ ?x . ?a } f
 { t }
 [ [ + 5 = [ swap ] when ] get-type Xor? ] unit-test
 
-P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x bignum } P{ Instance ?y fixnum } } }
+P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x bignum } P{ Instance ?y fixnum }
+                                        P{ Eq ?y ?x } } }
 [ [ bignum>fixnum ] get-type ] chr-test
 
 ! ** Simple Dispatch
@@ -413,7 +397,7 @@ P{
         L{ ?o25 . ?a85 }
         L{ ?x17 . ?rho31 }
         f
-        { P{ Instance ?o25 union{ cons-state array } } P{ Instance ?x17 intersection{ not{ cons-state } not{ array } } } }
+        { P{ Instance ?x17 intersection{ not{ cons-state } not{ array } } } P{ Instance ?o25 union{ cons-state array } } }
     }
 }
 [ [ lastcdr7 dup drop ] get-type ] chr-test
@@ -453,7 +437,7 @@ MACRO: my-add1 ( num -- quot )
 
 { 42 } [ 41 1 my-add1 ] unit-test
 
-TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ?i2 ;
+TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ?i2 ?c1 ?a2 ?z2 ;
 
 P{ Effect L{ ?a1 . ?i1 } ?o1 { ?q1 } {
        P{ MacroExpand my-add1 f L{ ?a1 . ?i1 } ?q1 }
@@ -543,30 +527,53 @@ MACRO: my-if ( foo -- quot )
 { t } [ [ [ [ if ] ] call [ 42 my-if ] call ] get-type [ [ if ] if ] get-type same-effect? ]  unit-test
 { t } [ [ [ if ] 42 my-if ] get-type [ [ if ] if ] get-type same-effect? ] unit-test
 
-{ t }
-[ P{ Xor
-     P{ Effect L{ ?x2 . ?i2 } L{ ?y2 . ?i2 } f { P{ Instance ?x2 object } P{ Neq ?x2 1 } P{ Instance ?y2 fixnum } P{ Eq ?y2 99 } } }
-     P{ Effect L{ ?x1 . ?i1 } L{ ?y1 . ?i1 } f { P{ Instance ?x1 object } P{ Eq ?x1 1 } P{ Instance ?y1 fixnum } P{ Eq ?y1 42 } } }
-   }
-   [ { { [ dup 1 = ] [ drop 42 ] } [ drop 99 ] } cond ] get-type same-effect? ] unit-test
+P{ Xor
+  P{ Effect L{ ?x2 . ?i2 } L{ ?y2 . ?i2 } f { P{ Instance ?x2 object } P{ Neq ?x2 1 } P{ Instance ?y2 fixnum } P{ Eq ?y2 99 } } }
+  P{ Effect L{ ?x1 . ?i1 } L{ ?y1 . ?i1 } f { P{ Instance ?x1 object } P{ Eq ?x1 1 } P{ Instance ?y1 fixnum } P{ Eq ?y1 42 } } }
+}
+[ [ { { [ dup 1 = ] [ drop 42 ] } [ drop 99 ] } cond ] get-type ] chr-test
 
 ! TODO: nested expansions
 
 ! ** Practical examples
+P{
+    Xor
+    P{
+        Effect
+        L{ ?x1 ?y1 . ?a1 }
+        L{ ?z1 . ?a1 }
+        f
+        { P{ Instance ?y1 number } P{ Instance ?x1 number } P{ Instance ?z1 t } P{ Eq ?z1 t } P{ Le ?x1 ?y1 } }
+    }
+    P{
+        Effect
+        L{ ?x2 ?y2 . ?a2 }
+        L{ ?z2 . ?a2 }
+        f
+        { P{ Instance ?y2 number } P{ Instance ?x2 number } P{ Instance ?z2 POSTPONE: f } P{ Eq ?z2 f } P{ Lt ?y2 ?x2 } }
+    }
+}
+[ [ >= ] get-type ] chr-test
 
-PREDICATE: u8 < integer { [ 0 >= ] [ 256 < ] } 1&& ;
+! PREDICATE: u8 < integer { [ 0 >= ] [ 256 < ] } 1&& ;
+PREDICATE: u8 < fixnum { [ 0 >= ] [ 256 < ] } 1&& ;
+
+! FIXME: takes forever:
+! [ u8? ] get-type
 
 PREDICATE: cardinal < integer 0 > ;
 PREDICATE: zero < integer 0 = ;
-
-! FIXME
-! [ cardinal? ] get-type
-! [ cardinal instance? ] get-type
 
 ! [ dup 0 > [ [ 1 + ] [ 1 - ] bi* inc-int-down ] [ drop 42 + ] if ] ;
 
 GENERIC: inc-loop ( n i -- m )
 M: cardinal inc-loop [ 1 + ] [ 1 - ] bi* inc-loop ;
 M: zero inc-loop drop 42 + ;
+
+P{ Xor
+   P{ Effect L{ ?x1 . ?a1 } L{ ?c1 . ?a1 } f { P{ Instance ?x1 integer } P{ Instance ?c1 t } P{ Eq ?c1 t } P{ Lt 0 ?x1 } } }
+   P{ Effect L{ ?x2 . ?a4 } L{ ?c2 . ?a4 } f { P{ Instance ?c2 POSTPONE: f } P{ Eq ?c2 f } P{ Instance ?x2 not{ cardinal } } } }
+ }
+[ [ cardinal? ] get-type ] chr-test
 
 { 47 } [ 0 5 inc-loop ] unit-test

@@ -30,7 +30,11 @@ IN: chr.factor.word-types
         { loop [ [ call ] keep swap [ loop ] [ drop ] if ] }
         { pick [ [ over ] dip swap ] }
         { > [ swap < ] }
+        ! This is tricky.  The first version does not work if we only consider input/output deciders during phi checking,
+        ! because not enough info is kept during composition.
+        ! In any case, the alias for typing does not have the same execution semantics as the other one...
         { <= [ 2dup < [ 2drop t ] [ = ] if ] }
+        ! { <= [ [ < ] [ = ] 2bi or ] }
         { >= [ swap <= ] }
         { - [ -1 * + ] }
         { number= [ { number number } declare = ] }
@@ -95,29 +99,16 @@ CHR: type-of-mux @ // { ?TypeOf [ ? ] ?tau } -- |
 [
     ?tau
     P{ Xor
-       P{ Effect L{ ?q ?p ?c . ?a } L{ ?p . ?a } { ?c } { P{ Instance ?q object } P{ Instance ?p object } P{ Instance ?c not{ POSTPONE: f } } } }
-       P{ Effect L{ ?q ?p ?c . ?a } L{ ?q . ?a } { ?c } { P{ Instance ?q object } P{ Instance ?p object } P{ Instance ?c POSTPONE: f } } }
+       P{ Effect L{ ?q ?p ?c . ?a } L{ ?p . ?a } { ?c } { P{ Instance ?q object } P{ Instance ?p object } P{ Instance ?c not{ POSTPONE: f } } P{ Neq ?c f } } }
+       P{ Effect L{ ?q ?p ?c . ?a } L{ ?q . ?a } { ?c } { P{ Instance ?q object } P{ Instance ?p object } P{ Instance ?c POSTPONE: f } P{ Eq ?c f } } }
      }
     ==!
 ] ;
 
-PREDICATE: non-trivial-predicate-class < predicate-class singleton-class? not ;
-
-! NOTE: problems with reinference fixpoint here, manually adding a pass
-! CHR: type-of-predicate-call @ { ?TypeOf [ ?w ] ?tau } // --
 CHR: type-of-predicate @ { TypeOfWord ?w ?tau } // --
 [ ?tau term-var? ] [ ?w word? ] [ ?w "predicating" word-prop :>> ?c ]
 [ ?c 1quotation [ instance? ] compose :>> ?p ]
-|
-{ ?TypeOf ?p ?rho }
-[ ?c non-trivial-predicate-class?
-  [ {
-          P{ ReinferEffect ?rho ?sig }
-          P{ CheckXor f ?sig ?tau }
-      } ]
-  [ [ ?tau ?rho ==! ] ] if
-] ;
-! { TypeOf ?p ?tau } ;
+| { ?TypeOf ?p ?tau } ;
 
 ! NOTE: There is kind of a chicken-and-egg situation with instance checks and declarations.  There seems to
 ! be some kind of mutually recursive dependency between normative declaration and predicate
@@ -229,6 +220,18 @@ CHR: type-of-wrapper @ // { ?TypeOf ?q ?tau } --
 
 ! *** Destructure unit type queries
 
+CHR: type-of-pushed-quot @ { ?TypeOf [ ?q ] ?tau } // -- [ ?q quotation? ]
+[ ?q 1quotation :>> ?p ]
+|
+{ ?TypeOf ?q ?rho }
+{ MakeUnit ?rho ?sig }
+{ ComposeType ?sig P{ Effect L{ ?x . ?a } L{ ?x . ?a } f { P{ Eq ?x ?q } } } ?c }
+{ TypeOf ?p ?c } ;
+
+! The reason for the existence of this one is because class-of returns word for t, not t
+CHR: type-of-t @ // { ?TypeOf [ t ] ?tau } -- |
+[ ?tau P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x t } P{ Eq ?x t } } } ==! ] ;
+
 CHR: type-of-unit-val @ { ?TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ]
 [ ?v 1quotation :>> ?q ] |
 { ?TypeOf ?v ?rho }
@@ -293,6 +296,7 @@ CHR: type-of-primitive-coercion @ { TypeOfWord ?w ?tau } // --
   P{ Effect L{ ?x . ?a } L{ ?y . ?a } f {
          P{ Instance ?x ?rho }
          P{ Instance ?y ?sig }
+         P{ Eq ?y ?x }
      } }
   ==! ] ;
 
@@ -334,13 +338,15 @@ CHR: type-of-< @ { TypeOfWord A{ < } ?tau } // -- |
 [
     ?sig
     P{ Xor
-       P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } { ?z } {
+       P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } f {
               P{ Instance ?z t }
+              P{ Eq ?z t }
               P{ Lt ?x ?y }
               ! P{ Neq ?y ?x }
           } }
-        P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } { ?z } {
+        P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } f {
                P{ Instance ?z POSTPONE: f }
+               P{ Eq ?z f }
                P{ Le ?y ?x }
            } }
      }
@@ -356,16 +362,17 @@ CHR: type-of-= @ { TypeOfWord A{ = } ?tau } // -- |
     P{ Xor
        P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
               P{ Instance ?z t }
+              P{ Eq ?z t }
               P{ Eq ?x ?y }
           } }
        P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
               P{ Instance ?z POSTPONE: f }
+              P{ Eq ?z f }
               P{ Neq ?y ?x }
           } }
      }
     ==!
-]
-{ ComposeType P{ Effect ?a ?a f { P{ Ensure { number number } ?a } } } ?sig ?tau } ;
+] ;
 
 ! TODO: output types
 ! *** Typed words

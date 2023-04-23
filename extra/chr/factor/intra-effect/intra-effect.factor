@@ -51,8 +51,7 @@ CHR: declared-predicate-class @ // { DeclaredInstance ?x A{ ?tau } } -- [ ?tau p
 [ ?tau make-instance-check :>> ?q ]
 |
 { ?DeferTypeOf ?q ?sig }
-{ WaitParam ?p ?sig }
-{ Instance ?p ?sig }
+{ DeferredInstance ?p ?sig }
 { CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
 { Instance ?c W{ t } }
 { DeclaredInstance ?x ?rho } ;
@@ -63,8 +62,7 @@ CHR: declared-not-predicate-class @ // { DeclaredNotInstance ?x A{ ?tau } } -- [
 |
 { Instance ?x ?rho }
 { ?DeferTypeOf ?q ?sig }
-{ WaitParam ?p ?sig }
-{ Instance ?p ?sig }
+{ DeferredInstance ?p ?sig }
 { CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
 { Instance ?c W{ f } } ;
 
@@ -87,22 +85,14 @@ CHR: early-exit @ { Invalid } // <={ body-pred } -- | ;
 ! *** <Phi
 PREFIX-RULES: P{ PhiMode }
 
+CHR: no-deferred-inference-in-phi-mode @ // <={ ?DeferTypeOf } -- |
+[ "deferred inference in phi mode" throw ] ;
+
 ! ! **** Discarding nested calls for recursion types
 ! CHR: clear-rec-type-rec-call @ { FixpointMode } { PhiSchedule ?w __ __ } // { CallRecursive ?w __ __ } -- | ;
 
 ! CHR: invalid-union @ { Invalid } // { Keep __ } -- | ;
 
-! **** Re-building identities
-! NOTE: the only way how two of these can be present at the same time is if both effects specify
-! the same bind after stack unification
-! CHR: both-bind-same-var @ // { Bind ?y ?x } { Bind ?y ?x } -- | [ ?y ?x ==! ] ;
-
-! UNION: bound-propagated-preds Instance expr-pred ;
-! CHR: propagate-bound-pred @ { Bind ?y ?x } AS: ?p <={ bound-propagated-preds ?x . __ } // -- |
-! [ ?p clone ?y >>val ] ;
-
-! CHR: same-stays-valid @ { Phi ?z ?x } { Phi ?z ?y } // AS: ?p <={ val-pred ?x . ?xs } AS: ?q <={ val-pred ?y . ?xs } -- [ ?p ?q [ class-of ] same? ] |
-! [ ?p clone ?z >>val ] ;
 ! **** Phi Parameter Handling
 
 ! NOTE: this is pretty tricky with regards to what constitutes valid criteria for /not/
@@ -115,21 +105,43 @@ PREFIX-RULES: P{ PhiMode }
 ! Current approach: Something like 3, where the set of Params is defined
 ! explicitly, and contagious, by underlying conditionals
 
+CHR: already-decider @ { Decider ?x } // <={ Discriminator ?x } -- | ;
+CHR: already-discriminator @ { Discriminator ?x } // { Discriminator ?x } -- | ;
+
+CHR: destruc-decider @ // { Decider ?x } -- [ ?x sequence? ] |
+[ ?x [ term-var? ] filter [ Decider boa ] map ] ;
+
+CHR: destruc-discriminator @ // { Discriminator ?x } -- [ ?x sequence? ] |
+[ ?x [ term-var? ] filter [ Discriminator boa ] map ] ;
+
+! *** Deciding to declare disjoint
+
+! NOTE: for now changing this to accept also a discriminator and at least one decider in the input...
 ! TODO: maybe rename { Invalid } to { Disjoint } in the Phi context...
-CHR: have-equivalence-deciders @ { PhiMode } { MakeEffect ?i ?o __ __ __ } // { Decider ?x } { Decider ?y }
--- [ ?x ?i list*>array in? ] [ ?y ?o list*>array in? ] | { Invalid } ;
-CHR: have-input-decider @ { PhiMode } { MakeEffect ?i ?o __ __ __ } // { Decider ?x } { Discriminator ?y }
--- [ ?x ?i list*>array in? ] [ ?y ?o list*>array in? ] | { Invalid } ;
-CHR: have-output-decider @ { PhiMode } { MakeEffect ?i ?o __ __ __ } // { Discriminator ?x } { Decider ?y }
--- [ ?x ?i list*>array in? ] [ ?y ?o list*>array in? ] | { Invalid } ;
+! CHR: have-equivalence-deciders @ { MakeEffect ?i ?o __ __ __ } // { Decider ?x } { Decider ?y }
+! -- [ ?x ?i list*>array in? ] [ ?y ?o list*>array in? ] | { Invalid } ;
 
-CHR: phi-same-branch-pred @ { PhiMode } // AS: ?p <={ body-pred } AS: ?q <={ body-pred } -- [ ?p ?q == ] |
-{ Keep ?p } ;
+! CHR: have-output-input-decider @ { MakeEffect ?i ?o __ __ __ } // { Decider ?x } { Discriminator ?y }
+! -- [ ?x ?i list*>array in? ] [ ?y ?o list*>array in? ] | { Invalid } ;
 
-CHR: phi-disjoint-instance @ { PhiMode } { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
+! CHR: have-input-output-decider @ { MakeEffect ?i ?o __ __ __ } // { Discriminator ?x } { Decider ?y }
+! -- [ ?x ?i list*>array in? ] [ ?y ?o list*>array in? ] | { Invalid } ;
+
+! NOTE: This would also be one point where we could hold on to internal vars, but that is probably
+! too sensitive?
+CHR: have-interesting-decider @ { MakeEffect ?i ?o __ __ __ } // <={ Discriminator ?x } { Decider ?y }
+-- [ ?i ?o [ list*>array ] bi@ append [ ?x swap in? ] [ ?y swap in? ] bi and ] | { Invalid } ;
+
+! *** Phi Predicate Handling
+
+! NOTE: this takes this out of the reasoning.  However, anything that should be able to be reasoned
+! from the existence of same information different branches should have done during composition already.
+! After this rule, existence of predicates is assumed to be only present in one branch.
+CHR: phi-same-branch-pred @ // AS: ?p <={ body-pred } AS: ?q <={ body-pred } -- [ ?p ?q == ] | { Keep ?p } ;
+
+CHR: phi-disjoint-instance @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
 [ { ?rho ?tau } first2 classes-intersect? not ] | { Decider ?x } ;
-! CHR: phi-declared-complement @ { DeclaredInstance ?x ?tau } { DeclaredNotInstance ?x ?tau } // --
-! | { Decider ?x } ;
+
 CHR: phi-maybe-disjoint-instance @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
 [ { ?rho ?tau } first2 { [ classes-intersect? ] [ class= not ] } 2&& ] | { Discriminator ?x } ;
 
@@ -193,13 +205,36 @@ CHR: phi-eq-range @ // { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } -- [ ?b ?c order? [ :
 { Keep P{ Le ?m ?x } }
 { Keep P{ Le ?n ?x } } ;
 ! TODO: abstract to all relations somehow
-! CHR: phi-eq @ { Phi ?a ?x } { Phi ?a ?y } { Phi ?b ?v } { Phi ?b ?w } // { Eq ?x ?y } { Eq ?v ?w } -- |
-! { Eq ?a ?b } ;
-! CHR: phi-neq @ { Phi ?a ?x } { Phi ?a ?y } { Phi ?b ?v } { Phi ?b ?w } // { Neq ?x ?y } { Neq ?v ?w } -- |
-! { Neq ?a ?b } ;
-! CHR: phi-eq-conflict @ { Phi ?a ?x } { Phi ?a ?y } { Phi ?b ?v } { Phi ?b ?w } // { Eq ?x ?y } { Neq ? }
 
+! NOTE: replacing these with discriminators for now.  The idea is that this is not an observable single-value
+! difference thing in the input or output?
+! CHR: phi-eq-neq-1 @ { Eq ?x ?y } { Neq ?x ?y } // -- | { Decider { ?x ?y } } ;
+! CHR: phi-eq-neq-2 @ { Eq ?x ?y } { Neq ?y ?x } // -- | { Decider { ?x ?y } } ;
+CHR: phi-eq-neq-1 @ { Eq ?x ?y } { Neq ?x ?y } // -- | { Discriminator { ?x ?y } } ;
+CHR: phi-eq-neq-2 @ { Eq ?x ?y } { Neq ?y ?x } // -- | { Discriminator { ?x ?y } } ;
+! CHR: phi-neq-is-always-decider @ { Neq ?x ?y } // -- | { Decider { ?x ?y } } ;
 
+! CHR: phi-eq-lt-decider-1 @ // { Eq ?x ?y } { Lt ?x ?y } -- | { Decider { ?x ?y } } { Keep P{ Le ?x ?y } } ;
+! CHR: phi-eq-lt-decider-2 @ // { Eq ?x ?y } { Lt ?y ?x } -- | { Decider { ?x ?y } } { Keep P{ Le ?y ?x } } ;
+CHR: phi-eq-lt-decider-1 @ // { Eq ?x ?y } { Lt ?x ?y } -- | { Discriminator { ?x ?y } } { Keep P{ Le ?x ?y } } ;
+CHR: phi-eq-lt-decider-2 @ // { Eq ?x ?y } { Lt ?y ?x } -- | { Discriminator { ?x ?y } } { Keep P{ Le ?y ?x } } ;
+
+CHR: phi-eq-le-discrim-1 @ // { Eq ?x ?y } { Le ?x ?y } -- | { Discriminator { ?x ?y } } { Keep P{ Le ?x ?y } } ;
+CHR: phi-eq-le-discrim-2 @ // { Eq ?y ?x } { Le ?x ?y } -- | { Discriminator { ?x ?y } } { Keep P{ Le ?x ?y } } ;
+
+! CHR: phi-lt-lt-decider @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Decider { ?y ?x } } ;
+CHR: phi-lt-lt-decider @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Discriminator { ?y ?x } } ;
+
+! These are overlapping, so no deciders
+CHR: phi-discrim-le-lt @ { Le ?x ?v } { Lt ?v ?x } // -- | { Discriminator { ?x ?v } } ;
+! CHR: phi-discrim-le-rhs @ { Le ?v ?x } { Lt ?x ?v } // -- [ ?x term-var? ] | { Discriminator ?x } ;
+
+! *** Phi-Mode single-branch predicates
+
+! These are basically non-surviving single-branch variants
+! The idea is that they do specify an aspect which only a part of the values of
+! the other side would satisfy
+CHR: phi-rel-discriminates @ <={ rel-pred ?x ?y } // -- | { Discriminator { ?x ?y } } ;
 
 ! **** phi higher order
 
@@ -255,8 +290,6 @@ CHR: phi-call-rec-self @ { PhiSchedule ?w __ __ } //
 ! CHR: disj-param-maybe-callable @ <={ MakeEffect } { Params ?l } // { Instance ?x A{ ?tau } } --
 ! [ ?x ?l in? ] [ { ?tau } first classoid? ] [ { ?tau } first callable classes-intersect? ] | { Invalid } ;
 
-! CHR: disj-waits-root @ <={ MakeEffect } // { WaitParam ?v ?sig } -- [ ?sig term-var? ] | { Invalid } ;
-
 ! TODO: need?
 CHR: disj-is-macro-effect @ <={ MakeEffect } // { MacroExpand __ __ __ __ } -- | { Invalid } ;
 
@@ -279,11 +312,11 @@ CHR: disj-symbolic-compl-type @ AS: ?e <={ MakeEffect } // { DeclaredNotInstance
 
 PREFIX-RULES: P{ CompMode }
 ! TODO: extend to other body preds
+! Possibly expensive
+! CHR: unique-body-pred @ AS: ?p <={ body-pred } // AS ?q <={ body-pred } -- [ ?p ?q = ] | ;
 CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
 
 CHR: uniqe-slot @ { Slot ?o ?n ?v } // { Slot ?o ?n ?v } -- | ;
-
-CHR: merge-params @ // { Params ?x } { Params ?y } -- [ ?x ?y union >array :>> ?z ] | { Params ?z } ;
 
 ! NOTE: the reasoning is that this can inductively only happen during composition of two straight-line
 ! effects. So the instance in the first one is a "provide", and the instance in the second one is an "expect".
@@ -336,8 +369,12 @@ CHR: check-le @ // { Le A{ ?x } A{ ?y } } -- [ ?x ?y <= not ] | { Invalid } ;
 CHR: check-le-same @ // { Le ?x ?x } -- | ;
 CHR: check-lt @ // { Lt A{ ?x } A{ ?y } } -- [ ?x ?y < not ] | { Invalid } ;
 CHR: lt-tightens-le @ { Lt ?x ?y } // { Le ?x ?y } -- | ;
-CHR: le-defines-eq @ // { Le ?x ?y } { Le ?y ?x } -- | { Eq ?x ?y } ;
-CHR: lt-defines-neq @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Neq ?x ?y } ;
+CHR: reflexive-le-defines-eq @ // { Le ?x ?y } { Le ?y ?x } -- | { Eq ?x ?y } ;
+CHR: reflexive-lt-defines-neq @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Neq ?x ?y } ;
+CHR: eq-tightens-le-1 @ { Eq ?x ?y } // { Le ?x ?y } -- | ;
+CHR: eq-tightens-le-2 @ { Eq ?x ?y } // { Le ?y ?x } -- | ;
+CHR: neq-tightens-le-1 @ // { Neq ?x ?y } { Le ?x ?y } -- | { Lt ?x ?y } ;
+CHR: neq-tightens-le-2 @ // { Neq ?y ?x } { Le ?x ?y } -- | { Lt ?x ?y } ;
 ! CHR: check-lt-1 @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Invalid } ;
 CHR: check-lt-same @ // { Lt ?x ?x } -- | { Invalid } ;
 CHR: check-lt-eq-1 @ // { Lt ?x ?y } { Eq ?x ?y } -- | { Invalid } ;
@@ -389,7 +426,6 @@ CHR: neutral-bitand-2 @ // { BitAnd ?z ?x -1 } -- | [ ?z ?x ==! ] ;
 ! CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } { CallEffect ?q ?a ?b } // -- |
 CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } // { CallEffect ?q ?a ?b } -- |
 [ { ?a ?b } { ?c ?d } ==! ]
-{ Params ?x } ! TODO needed?
 [ ?l ] ;
 
 ! Trying to apply a conditional is tricky.  The whole idea was to avoid this in the first place by always
@@ -489,20 +525,20 @@ CHR: known-macro-arg @ { Eq ?x A{ ?v } } // { ExpandQuot ?q ?a L{ ?x . ?ys } ?p 
 { ExpandQuot ?q ?b ?ys ?p ?n } ;
 
 ! NOTE: only fully expanded macros are treated
-! NOTE: existentials, (implicit) globals
-! TODO: maybe use WaitParam instead of special var defining rules of macroexpanded?
 CHR: expand-macro @ // { ExpandQuot ?q ?a ?i ?x ?n } -- [ ?a length ?n = ]
 [ ?a ?q with-datastack first :>> ?p ]
 |
-! NOTE: this should trigger only after the current constraint set is finished!
+! This should cause the current MakeEffect to be suspended, infer expansion
 { ?DeferTypeOf ?p ?sig }
-{ MacroExpanded ?q ?a ?i ?x ?sig }
-{ Instance ?x ?sig }
+! And return here...
+{ DeferredInstance ?x ?sig }
     ;
 
-CHR: remove-expanded-macro-known-type @ // { MacroExpanded __ __ __ __ ?sig } -- [ ?sig term-var? not ] | ;
+CHR: copy-deferred-instance @ // { DeferredInstance ?q ?e } -- [ ?e full-type? ]
+[ ?e fresh-effect :>> ?n ] |
+{ Instance ?q ?n } ;
 
-CHR: known-slot @ { Eq ?n A{ ?a } } // { Slot ?o ?n ?v } -- |
+CHR: known-slot-num @ { Eq ?n A{ ?a } } // { Slot ?o ?n ?v } -- |
 { Slot ?o ?a ?v } ;
 
 CHR: known-instance @ { Eq ?c A{ ?d } } // { Instance ?x ?c } -- [ ?c term-var? ]
@@ -563,10 +599,5 @@ CHR: tuple-boa-decl @ // { TupleBoa A{ ?c } ?a ?b } --
  [ { ?a ?b } { sin sout } ==! ] preds push
  preds <reversed> >array
 ] ;
-
-! *** Explicit Parameters
-! Used to keep track of to-be-expanded vars.
-
-CHR: root-was-expanded @ // { WaitParam ?x ?sig } -- [ ?sig term-var? not ] | ;
 
 ;

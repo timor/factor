@@ -1,12 +1,19 @@
 USING: accessors arrays chr.factor chr.factor.effects chr.factor.intra-effect
 chr.factor.phi chr.factor.word-types chr.parser chr.state kernel quotations
-sequences sets terms ;
+terms ;
 
 IN: chr.factor.composition
 
 
 ! * CHR Program for Composition solving
 CHRAT: chr-comp { }
+
+! ** Debug Helpers
+! CHR: print-ask-type @ { ?TypeOf ?q ?tau } // -- |
+! [ "Ask type: " write ?q . flush f ] ;
+
+! CHR: print-have-type @ { TypeOf ?q ?tau } // -- [ ?tau full-type? ] |
+! [ "Have full type: " write ?q . "as" print ?tau . flush f ] ;
 
 ! ** Type Definitions
 CHR: start-type-of @ // { InferType ?q } -- | { ?TypeOf ?q ?tau } ;
@@ -24,37 +31,9 @@ CHR: have-recursive-type @ // { Recursion ?x __ ?sig } { TypeOf ?x ?rho } { ?Typ
 CHR: deferred-effect-already-known @ { TypeOf ?x ?tau } // { ?DeferTypeOf ?x ?sig } -- [ ?tau full-type? ] |
 [ ?sig ?tau ==! ] ;
 
+! TODO: check
 CHR: request-same-deferred-type @ { ?DeferTypeOf ?x ?sig } // { ?DeferTypeOf ?x ?tau } -- [ ?sig term-var? ] [ ?tau term-var? ] |
 [ ?sig ?tau ==! ] ;
-
-! These should become "active" as soon as the current inference is done
-! Assumption: The hook is only activated if no inference is still active
-! TODO: If we ever have recursive macro expansion, this must be verified to still
-!  perform things in the expected order
-CHR: infer-deferred-effect @ // { TypeOfDone } { ?DeferTypeOf ?p ?sig }  -- |
-{ ?TypeOf ?p ?rho }
-{ ReinferWith ?rho ?sig }
-{ TypeOfDone } ;
-
-! NOTE: assuming that we catch all dependent changes because we assume that all dependent
-! changes reference the unknown type. I.e. it must not matter whether we expand the macro first and then
-! compose types with the expansion, or we delay the expansion, compose with that delayed expansion and then
-! substitute the expanded type.
-! NOTE: inserting a re-try here because of nested expansion???
-CHR: reinfer-deferred-type @ { ReinferWith ?e ?sig } // { TypeOf ?x ?tau } --
-[ ?e full-type? ]
-[ ?sig ?tau vars in? ]
-[ ?tau { { ?sig ?e } } lift* :>> ?d ]
-|
-{ ReinferEffect ?d ?rho }
-{ CheckXor f ?rho ?w }
-{ TypeOf ?x ?w }
-    ;
-
-! NOTE: re-inference does affect only already present types.  To make sure all references to running inferences
-! are caught, the type is substituted
-CHR: did-reinfer-deferred-type @ // { ReinferWith ?e ?sig } -- [ ?e full-type? ] | [ ?sig ?e ==! ] ;
-
 
 ! *** Inference Step done
 
@@ -63,7 +42,7 @@ CHR: did-reinfer-deferred-type @ // { ReinferWith ?e ?sig } -- [ ?e full-type? ]
 ! BUT: Do we even have the macro type available already (in case of macros)
 
 CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } -- [ ?tau full-type? ] |
-{ TypeOfDone }
+! [ "Answer Type: " write ?x . f ]
 [ ?sig ?tau ==! ] ;
 
 CHR: double-word-inference-special @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
@@ -113,8 +92,6 @@ CHR: compose-effects @ // { ComposeType P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d 
 [| |
  P{ Effect ?a ?b ?x ?k } fresh-effect :> e1
  P{ Effect ?c ?d ?y ?l } fresh-effect :> e2
- ! P{ Effect ?a ?b ?k } fresh :> e1
- ! P{ Effect ?c ?d ?l } fresh :> e2
  P{ ComposeEffect e1 e2 ?tau }
 ] ;
 
@@ -139,9 +116,6 @@ CHR: compose-xor-effects-both @ // { ComposeType P{ Xor ?a ?b } P{ Xor ?c ?d } ?
 { ComposeType ?a P{ Xor ?c ?d } ?rho }
 { ComposeType ?b P{ Xor ?c ?d } ?sig }
 { MakeXor ?rho ?sig ?tau } ;
-
-
-CHR: typeof-done-hook-finished @ // { TypeOfDone } -- | ;
 
 ;
 

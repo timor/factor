@@ -125,14 +125,13 @@ TUPLE: Effect < chr-pred in out parms preds ;
 TUPLE: RecursiveEffect < chr-pred tag effect ;
 TUPLE: TypeOf < chr-pred thing type ;
 TUPLE: ?TypeOf < chr-pred thing type ;
-! Hook between complete inferences
-TUPLE: TypeOfDone < chr-pred ;
+! Can be used during inference, will either trigger nested inference or
+! immediately answer
 TUPLE: ?DeferTypeOf < ?TypeOf ;
 TUPLE: FixpointTypeOf < chr-pred thing type ;
 TUPLE: RecursionTypeOf < chr-pred thing type ;
 TUPLE: TypeOfWord < chr-pred word var ;
 TUPLE: InferType < chr-pred thing ;
-TUPLE: ReinferWith < chr-pred type var ;
 TUPLE: WaitFull < chr-pred type ;
 TUPLE: WaitRec < chr-pred orig rec ;
 TUPLE: Throws < chr-pred error ;
@@ -148,6 +147,8 @@ TUPLE: ReinferEffect < chr-pred type target ;
 TUPLE: ComposeEffect < chr-pred e1 e2 target ;
 ! Accumulator for resulting effect predicate
 TUPLE: MakeEffect < chr-pred in out locals preds target ;
+! Suspended MakeEffect until type is known
+TUPLE: SuspendMakeEffect < MakeEffect depends-on ;
 ! End of inference Marker
 TUPLE: FinishEffect < chr-pred target ;
 TUPLE: MakeUnit < chr-pred val target ;
@@ -163,6 +164,8 @@ TUPLE: Instance < val-pred type ;
 ! Nominative
 TUPLE: DeclaredInstance < Instance ;
 TUPLE: DeclaredNotInstance < Instance ;
+! Used for deferred inference requests
+TUPLE: DeferredInstance < Instance ;
 
 TUPLE: Slot < val-pred n slot-val ;
 TUPLE: Element < val-pred type ;
@@ -186,7 +189,6 @@ TUPLE: Boa < chr-pred spec in id ;
 TUPLE: TupleBoa < Boa ;
 ! explicitly referencing out-quot here for live-ness
 TUPLE: MacroExpand < chr-pred quot args in out-quot ;
-TUPLE: MacroExpanded < MacroExpand out-type ;
 ! Used for anonymous expansion
 TUPLE: ExpandQuot < MacroExpand num-args ;
 TUPLE: InstanceCheck < chr-pred class-arg quot complement ;
@@ -233,21 +235,18 @@ TUPLE: Sum < expr-pred summand1 summand2 ;
 TUPLE: Prod < expr-pred factor1 factor2 ;
 TUPLE: Shift < expr-pred in by ;
 TUPLE: BitAnd < expr-pred in mask ;
-TUPLE: Eq < expr-pred var ;
-TUPLE: Neq < expr-pred var ;
-TUPLE: Le < expr-pred var ;
-TUPLE: Lt < expr-pred var ;
+TUPLE: rel-pred < expr-pred val2 ;
+TUPLE: Eq < rel-pred ;
+TUPLE: Neq < rel-pred ;
+TUPLE: Le < rel-pred ;
+TUPLE: Lt < rel-pred ;
 ! TUPLE: Ge < expr-pred val var ;
 ! TUPLE: Gt < expr-pred val var ;
 
 UNION: commutative-pred Eq Neq ;
 
-! gc root behavior
-TUPLE: WaitParam < chr-pred var expansion ;
-
 UNION: body-pred Instance DeclaredInstance DeclaredNotInstance CallEffect CallXorEffect Declare Slot CallRecursive Throws Tag
-    MacroExpand expr-pred Iterated WaitParam ;
-TUPLE: Params < chr-pred ids ;
+    MacroExpand expr-pred Iterated ;
 
 TUPLE: CheckPhiStack a b res ;
 
@@ -262,9 +261,9 @@ TUPLE: DestrucXor < chr-pred branch ;
 TUPLE: RebuildXor < chr-pred effect target ;
 TUPLE: CurrentPhi < chr-pred effect ;
 TUPLE: MakeUnion < chr-pred effect1 effect2 target ;
-! States that a parameter could be a discriminator during phi reasoning
+! States that a parameter discriminates two sets during phi reasoning
 TUPLE: Discriminator < chr-pred var ;
-! States that a parameter is definitely a discriminator during phi reasoning
+! States that a parameter is definitely a decider for two sets during phi reasoning
 TUPLE: Decider < Discriminator ;
 ! Used during phi inference to mark constraints that are still valid...
 TUPLE: Keep < chr-pred pred ;
@@ -299,7 +298,6 @@ M: CallXorEffect free-effect-vars type>> free-effect-vars ;
 !     [ then>> ] [ else>> ] bi
 !     [ free-effect-vars ] bi@ union ;
 ! We expect an expanded macro to have properly substituted type vars
-! M: MacroExpanded free-effect-vars out-type>> free-effect-vars ;
 
 GENERIC: bound-effect-vars ( term -- seq )
 M: object bound-effect-vars drop f ;
