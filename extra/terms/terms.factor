@@ -1,11 +1,10 @@
 USING: accessors arrays assocs assocs.extras classes classes.tuple
 colors.constants combinators combinators.short-circuit continuations
-slots.private
-disjoint-sets disjoint-sets.private graphs hashtables hashtables.identity
-io.styles kernel lexer make match math math.order math.parser namespaces parser
-prettyprint.backend prettyprint.config prettyprint.custom prettyprint.sections
-quotations sequences sets strings types.util unicode vectors words words.symbol
-;
+disjoint-sets disjoint-sets.private generalizations graphs hash-sets hashtables
+hashtables.identity io.styles kernel lexer make match math math.combinatorics
+math.order math.parser namespaces parser prettyprint.backend prettyprint.config
+prettyprint.custom prettyprint.sections quotations sequences sets slots.private
+sorting strings types.util unicode vectors words words.symbol ;
 
 IN: terms
 
@@ -385,6 +384,15 @@ M: tuple decompose-right
 M: sequence decompose-right
     2dup { [ [ class-of ] same? ] [ [ length ] same? ] } 2&& ;
 
+TUPLE: match-set elements ;
+C: <match-set> match-set
+: make-match-sets ( set -- seq signature )
+    members [ class-of ] collect-by sort-keys
+    [ [ <match-set> ] map-values ] [ [ length ] map-values >alist ] bi ;
+M: sets:set decompose-right
+    2dup { [ [ class-of ] same? ] [ [ cardinality ] same? ] } 2&&
+    [ [ make-match-sets ] bi@ swapd = ]
+    [ f ] if ;
 
 : decompose ( term1 term2 -- term1 term2 cont? )
     {
@@ -403,10 +411,44 @@ SYMBOL: valid-match-vars
 
 DEFER: elim
 DEFER: (solve)
+
+! If set, only an isomporphic solution is accepted during solving
+SYMBOL: solve-isomorphic-mode?
+
+: isomorphic-solution? ( subst -- ? )
+    [ [ term-var? ] both? ] assoc-all? ; inline
+
+: check-solution ( subst -- ? )
+    [ solve-isomorphic-mode?
+      [ dup isomorphic-solution?
+        [ drop f ] unless
+      ] when
+    ]
+    [ f ] if*
+    ; inline
+
+! NOTE: assume matching signatures here
+! Friggin expensive! Complexity is n1! x n2! x ... nk!
+! In the cardinalities of the partitioned subsets
+! Strategy: Pin down set1, try all permutations of set2
+! CAVEAT: will not work if variables need to match set elements!
+: solve-match-set ( subst problem set1 set2 -- subst )
+    [let f :> sol!
+     [ elements>> ] bi@
+     [ 2array prefix [ (solve)
+                       check-solution
+                       dup [ sol! ] when* ]
+        [ dup incompatible-terms? [ 3drop f ] [ rethrow ] if ] recover
+     ] 3 nwith find-permutation
+     drop sol
+    ] ; inline recursive
+
 ! NOTE:
 ! - rhs term-vars will always be assumed to the lhs value
 ! - lhs term-vars will be checked for equality and dropped, or assumed to the rhs value
 
+! XXX There seems to be a bug with Hash set equality comparison?  Either the
+! complexity is abysmal, or there is something wrong...
 : (solve1) ( subst problem var term -- subst )
     {
         { [ 2dup [ __? ] either? ] [ 2drop (solve) ] }
@@ -415,7 +457,8 @@ DEFER: (solve)
         { [ dup atom-match? ] [ over ground-value? [ var>> (solve1) ] [ 4drop f ] if ] }
         { [ over valid-term-var? ] [ 2dup = [ 2drop (solve) ] [ elim ] if ] }
         { [ dup valid-term-var? ] [ swap elim ] }
-        { [ 2dup = ] [ 2drop (solve) ] }
+        { [ dup hash-set? [ f ] [ 2dup = ] if ] [ 2drop (solve) ] }
+        { [ 2dup [ match-set? ] both? ] [ solve-match-set ] }
         [ decompose [ zip prepend ] [ 2drop ] if (solve) ]
     } cond ; inline recursive
 
@@ -463,8 +506,9 @@ SYMBOL: on-recursive-term
     valid-match-vars swap with-variable-off ; inline
 
 : isomorphic? ( term1 term2  -- ? )
-    [ solve-eq ] no-var-restrictions
-    [ [ [ term-var? ] both? ] assoc-all? ] [ f ] if* ;
+    [ solve-isomorphic-mode? on
+      solve-eq ] no-var-restrictions
+    [ isomorphic-solution? ] [ f ] if* ;
 
 : lift* ( term subst -- term )
     [ lift ] no-var-restrictions ;
