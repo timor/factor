@@ -270,6 +270,8 @@ TUPLE: Decider < Discriminator ;
 TUPLE: Keep < chr-pred pred ;
 ! Marker to switch reasoning to assume disjunction of value info
 TUPLE: PhiMode < chr-pred ;
+! Marker to switch reasoning to assume conjunction of value info
+TUPLE: CompMode < chr-pred ;
 
 ! Marker to force disjunction of value info
 TUPLE: FixpointMode < chr-pred ;

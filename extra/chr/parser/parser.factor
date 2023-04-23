@@ -13,11 +13,16 @@ IN: chr.parser
 ! This needs to have the constraint class already defined!
 SYNTAX: P{ \ } parse-array pred>constraint suffix! ;
 
+SYMBOL: chr-prefix
+! This is a short-hand for adding a pred left of // to every following rule
+SYNTAX: PREFIX-RULES: scan-object chr-prefix set ;
 SYMBOL: defined-existentials
 SYMBOLS: | -- // ;
 : parse-chr-rule ( delim -- heads nkept guard body existentials )
     f defined-existentials [
-        [ \ // parse-array dup length [ \ -- parse-array append ] dip \ | parse-array ] dip parse-array
+        [ \ // parse-array
+          chr-prefix get [ prefix ] when*
+          dup length [ \ -- parse-array append ] dip \ | parse-array ] dip parse-array
         defined-existentials get
     ] with-variable ;
 
@@ -145,6 +150,7 @@ SYNTAX: IMPORT: scan-word <import-solver> suffix! ;
 
 SYNTAX: CHRAT: scan-new-word
     "{" expect \ } parse-array
+    f chr-prefix set
     \ ; parse-chr-body define-chrat-prog ;
     ! f chrat-imports [ \ ; parse-chr-body
     !       define-chrat-prog ] with-variable ;

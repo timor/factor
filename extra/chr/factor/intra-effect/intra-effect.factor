@@ -14,7 +14,7 @@ CHRAT: chr-intra-effect { }
 CHR: invalid-stays-invalid @ { Invalid } // { Invalid } -- | ;
 
 
-! *** Normalizations
+! *** Mode-agnostic Normalizations
 CHR: comm-var-is-lhs @ // AS: ?p <={ commutative-pred A{ ?l } ?v } -- [ ?v term-var? ] |
 [ { ?v ?l } ?p class-of slots>tuple ] ;
 
@@ -85,18 +85,20 @@ CHR: declaration-is-assertion @ // { DeclaredInstance ?x A{ ?tau } } -- |
 CHR: early-exit @ { Invalid } // <={ body-pred } -- | ;
 
 ! *** <Phi
+PREFIX-RULES: P{ PhiMode }
+
 ! ! **** Discarding nested calls for recursion types
-! CHR: clear-rec-type-rec-call @ { PhiMode } { FixpointMode } { PhiSchedule ?w __ __ } // { CallRecursive ?w __ __ } -- | ;
+! CHR: clear-rec-type-rec-call @ { FixpointMode } { PhiSchedule ?w __ __ } // { CallRecursive ?w __ __ } -- | ;
 
 ! CHR: invalid-union @ { Invalid } // { Keep __ } -- | ;
 
 ! **** Re-building identities
 ! NOTE: the only way how two of these can be present at the same time is if both effects specify
 ! the same bind after stack unification
-! CHR: both-bind-same-var @ { PhiMode } // { Bind ?y ?x } { Bind ?y ?x } -- | [ ?y ?x ==! ] ;
+! CHR: both-bind-same-var @ // { Bind ?y ?x } { Bind ?y ?x } -- | [ ?y ?x ==! ] ;
 
 ! UNION: bound-propagated-preds Instance expr-pred ;
-! CHR: propagate-bound-pred @ { PhiMode } { Bind ?y ?x } AS: ?p <={ bound-propagated-preds ?x . __ } // -- |
+! CHR: propagate-bound-pred @ { Bind ?y ?x } AS: ?p <={ bound-propagated-preds ?x . __ } // -- |
 ! [ ?p clone ?y >>val ] ;
 
 ! CHR: same-stays-valid @ { Phi ?z ?x } { Phi ?z ?y } // AS: ?p <={ val-pred ?x . ?xs } AS: ?q <={ val-pred ?y . ?xs } -- [ ?p ?q [ class-of ] same? ] |
@@ -126,48 +128,45 @@ CHR: phi-same-branch-pred @ { PhiMode } // AS: ?p <={ body-pred } AS: ?q <={ bod
 
 CHR: phi-disjoint-instance @ { PhiMode } { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
 [ { ?rho ?tau } first2 classes-intersect? not ] | { Decider ?x } ;
-! CHR: phi-declared-complement @ { PhiMode } { DeclaredInstance ?x ?tau } { DeclaredNotInstance ?x ?tau } // --
+! CHR: phi-declared-complement @ { DeclaredInstance ?x ?tau } { DeclaredNotInstance ?x ?tau } // --
 ! | { Decider ?x } ;
-CHR: phi-maybe-disjoint-instance @ { PhiMode } { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
+CHR: phi-maybe-disjoint-instance @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
 [ { ?rho ?tau } first2 { [ classes-intersect? ] [ class= not ] } 2&& ] | { Discriminator ?x } ;
-CHR: phi-union-instance @ { PhiMode } // { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } --
+
+CHR: phi-union-instance @ // { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } --
 [ { ?rho ?tau } first2 simplifying-class-or :>> ?sig ] | { Keep P{ Instance ?x ?sig } } ;
 
 ! TODO: check for isomorphic effects maybe?
 !  -> If so, this would have to be done in phi-same-branch-pred above...
 ! Higher order: If we find one effect or two different ones, this is unresolved control flow
-CHR: phi-disjoint-effect-type @ { PhiMode } { Instance ?x ?e } // -- [ ?e valid-effect-type? ] |
+CHR: phi-disjoint-effect-type @ { Instance ?x ?e } // -- [ ?e valid-effect-type? ] |
 { Invalid } ;
 
-
-CHR: phi-disjoint-le-lhs @ { PhiMode } { Le ?x ?v } { Lt ?v ?x } // -- [ ?x term-var? ] | { Discriminator ?x } ;
-CHR: phi-disjoint-le-rhs @ { PhiMode } { Le ?v ?x } { Lt ?x ?v } // -- [ ?x term-var? ] | { Discriminator ?x } ;
-! TODO: numerical predicates!
 
 ! ! ( x <= 5 ) ( 5 <= x ) -> union
 ! ! ( x <= 4 ) ( 5 <= x ) -> disjoint
 ! ! ( x <= 5 ) ( 4 <= x ) -> union
-! CHR: phi-disjoint-output-range-le-le @ { PhiMode } // { Le ?x A{ ?m } } { Le A{ ?n } ?x } --
+! CHR: phi-disjoint-output-range-le-le @ // { Le ?x A{ ?m } } { Le A{ ?n } ?x } --
 ! [ ?m ?n < ] | { Invalid } ;
 ! ! ( x < 5 ) ( 5 <= x ) -> disjoint
 ! ! ( x < 4 ) ( 5 <= x ) -> disjoint
 ! ! ( x < 5 ) ( 4 <= x ) -> union
-! CHR: phi-disjoint-output-range-lt-le @ { PhiMode } // { Lt ?x A{ ?m } } { Le A{ ?n } ?x } --
+! CHR: phi-disjoint-output-range-lt-le @ // { Lt ?x A{ ?m } } { Le A{ ?n } ?x } --
 ! [ ?m ?n <= ] | { Invalid } ;
-! CHR: phi-disjoint-output-range-le-lt @ { PhiMode } // { Le ?x A{ ?m } } { Lt A{ ?n } ?x } --
+! CHR: phi-disjoint-output-range-le-lt @ // { Le ?x A{ ?m } } { Lt A{ ?n } ?x } --
 ! [ ?m ?n <= ] | { Invalid } ;
 ! ! ( x < 5 ) ( 5 < x ) -> disjoint
 ! ! ( x < 4 ) ( 5 < x ) -> disjoint
 ! ! ( x < 5 ) ( 4 < x ) -> union
-! CHR: phi-disjoint-output-range-lt-lt @ { PhiMode } // { Le ?x A{ ?m } } { Lt A{ ?n } ?x } --
+! CHR: phi-disjoint-output-range-lt-lt @ // { Le ?x A{ ?m } } { Lt A{ ?n } ?x } --
 ! [ ?m ?n <= ] | { Invalid } ;
-! CHR: phi-disjoint-output-range-lt-eq @ { PhiMode } // { Eq ?x A{ ?n } } { Lt ?x A{ ?n } } -- | { Invalid } ;
+! CHR: phi-disjoint-output-range-lt-eq @ // { Eq ?x A{ ?n } } { Lt ?x A{ ?n } } -- | { Invalid } ;
 
 ! TODO: this is not recursive!
 ! NOTE: Rationale: An effect type is refined by its body predicates, which act as set subtraction.
 ! So the more general type is the one which has body predicates that both must agree on.
 ! If they have the same set of parameters but different bodies, they define a dependent type.
-! CHR: phi-phiable-effect-instance @ { PhiMode } // { Instance ?x P{ Effect ?a ?b ?r ?k } } { Instance ?x P{ Effect ?c ?d ?s ?l } } --
+! CHR: phi-phiable-effect-instance @ // { Instance ?x P{ Effect ?a ?b ?r ?k } } { Instance ?x P{ Effect ?c ?d ?s ?l } } --
 ! [ ?r empty? ] [ ?s empty? ]
 ! [ { ?a ?b } { ?c ?d } unify ] |
 ! [ { ?a ?b } { ?c ?d } ==! ]
@@ -184,11 +183,12 @@ CHR: phi-disjoint-le-rhs @ { PhiMode } { Le ?v ?x } { Lt ?x ?v } // -- [ ?x term
 ! { Phi ?c ?a } { Phi ?c ?b } { Slot ?z ?n ?c } ;
 
 ! **** Relational reasoning
-CHR: phi-eq-decider @ { PhiMode } { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } // -- [ ?b ?c = not ] |
+
+CHR: phi-eq-decider @ { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } // -- [ ?b ?c = not ] |
 { Decider ?x } ;
 : order? ( obj1 obj2 -- min max ? )
     [ 2dup <=> +gt+ eq? [ swap ] when t ] [ drop f ] recover ;
-CHR: phi-eq-range @ { PhiMode } // { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } -- [ ?b ?c order? [ :>> ?n drop :>> ?m drop ] dip ]
+CHR: phi-eq-range @ // { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } -- [ ?b ?c order? [ :>> ?n drop :>> ?m drop ] dip ]
 |
 { Keep P{ Le ?m ?x } }
 { Keep P{ Le ?n ?x } } ;
@@ -204,7 +204,7 @@ CHR: phi-eq-range @ { PhiMode } // { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } -- [ ?b ?
 ! **** phi higher order
 
 ! If we have conflicting definitions on what will define an output stack, then we have unresolved control flow
-! CHR: phi-call-effect-out-conflict @ { PhiMode } // { CallEffect ?p ?a ?x } { CallEffect ?q ?b ?x } -- [ ?p ?q == not ?a ?b == not or ] |
+! CHR: phi-call-effect-out-conflict @ // { CallEffect ?p ?a ?x } { CallEffect ?q ?b ?x } -- [ ?p ?q == not ?a ?b == not or ] |
 ! { Invalid } ;
 
 
@@ -234,10 +234,10 @@ CHR: phi-eq-range @ { PhiMode } // { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } -- [ ?b ?
 ! **** phi recursive calls
 
 ! We don't merge call-recursives for our own disjoint definition
-CHR: phi-call-rec-self @ { PhiMode } { PhiSchedule ?w __ __ } //
+CHR: phi-call-rec-self @ { PhiSchedule ?w __ __ } //
 { CallRecursive ?w __ __ } -- | { Invalid } ;
 
-! CHR: phi-call-rec-have-type @ { PhiMode } { FixpointTypeOf ?w ?e } // { CallRecursive ?w ?a ?b } -- [ ?e full-type? ] |
+! CHR: phi-call-rec-have-type @ { FixpointTypeOf ?w ?e } // { CallRecursive ?w ?a ?b } -- [ ?e full-type? ] |
 ! [ { ?a ?b } { ?c ?d } ==! ]
 ! { Params ?x }
 ! [ ?l ] ;
@@ -249,34 +249,35 @@ CHR: phi-call-rec-self @ { PhiMode } { PhiSchedule ?w __ __ } //
 ! ]
 
 ! **** Conditions under which even a single pred can conserve disjunctivity
-! CHR: disj-output-maybe-callable @ { PhiMode } { MakeEffect __ ?b __ __ __ } // { Instance ?x A{ ?tau } } --
+! CHR: disj-output-maybe-callable @ { MakeEffect __ ?b __ __ __ } // { Instance ?x A{ ?tau } } --
 ! [ ?x ?b vars in? ] [ { ?tau } first classoid? ] [ { ?tau } first callable classes-intersect? ] | { Invalid } ;
 
-! CHR: disj-param-maybe-callable @ { PhiMode } <={ MakeEffect } { Params ?l } // { Instance ?x A{ ?tau } } --
+! CHR: disj-param-maybe-callable @ <={ MakeEffect } { Params ?l } // { Instance ?x A{ ?tau } } --
 ! [ ?x ?l in? ] [ { ?tau } first classoid? ] [ { ?tau } first callable classes-intersect? ] | { Invalid } ;
 
-CHR: disj-waits-root @ { PhiMode } <={ MakeEffect } // { WaitParam ?v ?sig } -- [ ?sig term-var? ] | { Invalid } ;
+! CHR: disj-waits-root @ <={ MakeEffect } // { WaitParam ?v ?sig } -- [ ?sig term-var? ] | { Invalid } ;
 
 ! TODO: need?
-CHR: disj-is-macro-effect @ { PhiMode } <={ MakeEffect } // { MacroExpand __ __ __ __ } -- | { Invalid } ;
+CHR: disj-is-macro-effect @ <={ MakeEffect } // { MacroExpand __ __ __ __ } -- | { Invalid } ;
 
 ! NOTE: this is pretty eager, as it will preserve all higher-order parametrism explicitly
-CHR: disj-is-inline-effect @ { PhiMode } <={ MakeEffect } // <={ CallEffect ?p . __ } -- | { Invalid } ;
+CHR: disj-is-inline-effect @ <={ MakeEffect } // <={ CallEffect ?p . __ } -- | { Invalid } ;
 
 ! Unknown call-rec
-CHR: disj-single-call-rec @ { PhiMode } <={ MakeEffect } // <={ CallRecursive } -- | { Invalid } ;
+CHR: disj-single-call-rec @ <={ MakeEffect } // <={ CallRecursive } -- | { Invalid } ;
 
-! CHR: disj-single-effect @ { PhiMode } <={ MakeEffect } // { Instance ?x P{ Effect __ __ __ __ } } -- | { Invalid } ;
+! CHR: disj-single-effect @ <={ MakeEffect } // { Instance ?x P{ Effect __ __ __ __ } } -- | { Invalid } ;
 
 ! TODO: does that reasoning work? Basically, we would need to have absence as failure here...
-! CHR: disj-unknown-can-be-callable @ { PhiMode } <={ MakeEffect } // { Instance ?x A{ ?tau } }
+! CHR: disj-unknown-can-be-callable @ <={ MakeEffect } // { Instance ?x A{ ?tau } }
 
 ! Used in instance? case
-CHR: disj-symbolic-type @ { PhiMode } AS: ?e <={ MakeEffect } // { DeclaredInstance ?x ?tau } -- [ ?tau term-var? ] [ ?x ?e make-effect-vars in? ] | { Invalid } ;
-CHR: disj-symbolic-compl-type @ { PhiMode } AS: ?e <={ MakeEffect } // { DeclaredNotInstance ?x ?tau } -- [ ?tau term-var? ] [ ?x ?e make-effect-vars in? ] | { Invalid } ;
+CHR: disj-symbolic-type @ AS: ?e <={ MakeEffect } // { DeclaredInstance ?x ?tau } -- [ ?tau term-var? ] [ ?x ?e make-effect-vars in? ] | { Invalid } ;
+CHR: disj-symbolic-compl-type @ AS: ?e <={ MakeEffect } // { DeclaredNotInstance ?x ?tau } -- [ ?tau term-var? ] [ ?x ?e make-effect-vars in? ] | { Invalid } ;
 
 ! *** Phi>
 
+PREFIX-RULES: P{ CompMode }
 ! TODO: extend to other body preds
 CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
 

@@ -41,7 +41,7 @@ CHR: inference-collision-2 @ AS: ?a <={ FinishEffect } AS: ?b <={ FinishEffect }
 
 ! NOTE: assumed renaming here already
 ! NOTE: we have to generate object instance predicates for all values that may be generated using unification for each branch if missing!
-CHR: rebuild-phi-effect @ { PhiMode } // { CheckPhiStack { ?a ?b } { ?c ?d } t } { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } --
+CHR: rebuild-phi-effect @ // { PhiMode } { CheckPhiStack { ?a ?b } { ?c ?d } t } { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } --
 |
 [ { ?a ?b } { ?c ?d } ==! ]
 { MakeEffect ?a ?b f f ?tau }
@@ -51,6 +51,7 @@ CHR: rebuild-phi-effect @ { PhiMode } // { CheckPhiStack { ?a ?b } { ?c ?d } t }
 [ ?l ?c ?ground-value ?d ?ground-value default-class-preds ]
 [ ?k ]
 [ ?l ]
+{ PhiMode }
 { FinishEffect ?tau }
     ;
 
@@ -64,6 +65,7 @@ CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effe
 ! NOTE: This happens if we have pre-defined effects but no known body yet (e.g. recursive calls)
 ! [ ?k dup term-var? [ drop f ] when ]
 ! [ ?l dup term-var? [ drop f ] when ]
+{ CompMode }
 { MakeEffect ?a ?d f f ?tau }
 { Params ?x }
 { Params ?y }
@@ -110,6 +112,7 @@ CHR: phi-discard-keeps @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __
 ! *** Composition Mode
 ! These are live after the pred has been taken into account
 
+PREFIX-RULES: P{ CompMode }
 
 ! NOTE: could be replaced using the { Keep } mechanism, but that has only been defined for PhiMode so far...
 CHR: collect-explicit-root @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p P{ WaitParam ?v ?sig } -- [ ?sig term-var? ]
@@ -164,7 +167,7 @@ CHR: collect-boa @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?ta
 
 ! *** Sanity check
 ! CHR: must-cleanup @ { MakeEffect __ __ __ __ __ } AS: ?p <={ body-pred } // -- | [ ?p "leftovers" 2array throw f ] ;
-
+PREFIX-RULES: f
 ! *** Discard unrelated predicates
 CHR: cleanup-incomplete @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // AS: ?p <={ body-pred } -- | ;
 
