@@ -1,6 +1,6 @@
 USING: accessors arrays chr.factor chr.factor.effects chr.factor.intra-effect
-chr.factor.phi chr.factor.word-types chr.parser chr.state kernel quotations
-terms ;
+chr.factor.phi chr.factor.util chr.factor.word-types chr.parser chr.state kernel
+quotations terms ;
 
 IN: chr.factor.composition
 
@@ -45,19 +45,54 @@ CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } -- [ ?tau full-type
 ! [ "Answer Type: " write ?x . f ]
 [ ?sig ?tau ==! ] ;
 
+! TODO wtf?
 CHR: double-word-inference-special @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
 [ ?x callable-word? ] [ ?x rec-defaults :>> ?e ] |
 [ ?sig ?e ==! ] ;
 
+! This is where a recursion predicate is inserted
 CHR: double-word-inference @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
 [ ?x callable-word? ] |
-[ ?sig P{ Effect ?a ?b f { { P{ CallRecursive ?x ?a ?b } } } } ==! ] ;
+[ ?sig P{ Effect ?a ?b f { P{ CallRecursive ?x ?a ?b } } } ==! ] ;
+! [ ?sig P{ Effect ?a ?b { ?r } { { P{ EnterRecursive ?x ?a ?r } P{ CallRecursive ?x ?r ?b } } } } ==! ] ;
 
 CHR: double-inference-queue @ { ?TypeOf ?x ?tau } { ?TypeOf ?x ?sig } // -- [ ?tau term-var? ] [ ?sig term-var? ] |
 { Recursion ?x ?tau ?sig } ;
 
 CHR: check-word-fixpoint-type @ { TypeOfWord ?w ?rho } // -- [ ?rho full-type? ] |
 { CheckFixpoint ?w ?rho } ;
+
+! NOTE: Rebuilding an annotated effect here.  This could still be not correct because there are cached
+! types of quotations that have been inferred for the recursive word itself, which don't appear in a wrapped
+! context!
+! CHR: have-type-of-recursive-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho }
+! { FixpointTypeOf ?w ?p }
+! { RecursionTypeOf ?w ?tau } // --
+! [ ?rho full-type? ]
+! [ ?p full-type? ]
+! [ ?tau full-type? ]
+! [ ?w 1quotation :>> ?q ]
+! [ ?w ?tau wrap-recursive-effect :>> ?x ]
+! |
+! ! { ComposeType P{ Effect ?a ?b f { P{ EnterRecursive ?w ?a ?b } } }
+! !   ?tau ?x }
+! ! { ComposeType ?x P{ Effect ?c ?d f { P{ ReturnRecursive ?w ?c ?d } } }
+! !   ?y }
+! { TypeOf ?q P{ Xor ?x ?p } } ;
+
+! TODO maybe instantiate the tag
+CHR: have-type-of-recursive-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho }
+{ FixpointTypeOf ?w ?p }
+{ RecursionTypeOf ?w ?tau } // --
+[ ?rho full-type? ]
+[ ?p full-type? ]
+[ ?tau full-type? ]
+[ ?w 1quotation :>> ?q ] |
+{ TypeOf ?q P{ Xor
+               P{ Effect ?a ?b f { P{ CallRecursive ?w ?a ?b } } }
+               ?p
+             } } ;
+
 CHR: have-type-of-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // --
 ! [ ?rho valid-effect-type? ]
 [ ?rho full-type? ]

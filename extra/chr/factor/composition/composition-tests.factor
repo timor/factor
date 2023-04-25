@@ -406,30 +406,11 @@ P{
 : bad ( ? quot: ( ? -- ) -- ) 2dup [ not ] dip bad call ; inline recursive
 : good ( ? quot: ( ? -- ) -- ) [ good ] 2keep [ not ] dip call ; inline recursive
 
-: each-int-down ( ..a n quot: ( i --  ) -- ..b ) over 0 > [ [ 1 - ] dip [ call ] 2keep each-int-down ] [ 2drop ] if ; inline recursive
+! ** TODO Mutual recursion
 
-{ V{ 4 3 2 1 0 } }
-[ V{ } clone 5 [ over push ] each-int-down ] unit-test
-
-: each-int-down-complete ( ..a n quot: ( i --  ) -- ..b  )
-    over 0 < [ "negative accum" throw ] [ each-int-down ] if ; inline
-
-[ V{ } clone -1 [ over push ] each-int-down-complete ] [ "negative accum" = ] must-fail-with
-
-{ V{ 4 3 2 1 0 } }
-[ V{ } clone 5 [ over push ] each-int-down-complete ] unit-test
-
-! : if-zero
-
-! stupid test word: increase n, decrease i, when done add 42 to n
-! FIXME correctly infer stuff for given partial input!
-! Approach: when rebuilding an effect containing a recursive call, and a known
-! fixpoint type exists, then insert a fixpoint type iteration and a loop-step relation
-: inc-int-down ( n i -- m )
-    dup 0 > [ [ 1 + ] [ 1 - ] bi* inc-int-down ] [ drop 42 + ] if ;
-
-{ 47 }
-[ 1 4 inc-int-down ] unit-test
+DEFER: tok
+: tik-tik ( x -- y ) 2 - tok ;
+: tok ( x -- y ) 1 + dup 0 <= [ tik-tik ] unless ;
 
 ! ** Macro expansion
 MACRO: my-add1 ( num -- quot )
@@ -534,6 +515,34 @@ P{ Xor
 [ [ { { [ dup 1 = ] [ drop 42 ] } [ drop 99 ] } cond ] get-type ] chr-test
 
 ! TODO: nested expansions
+
+! *** Iteration
+
+: each-int-down ( ..a n quot: ( ..c i -- ..c ) -- ..b ) over 0 > [ [ 1 - ] dip [ call ] 2keep each-int-down ] [ 2drop ] if ; inline recursive
+
+{ V{ 4 3 2 1 0 } }
+[ V{ } clone 5 [ over push ] each-int-down ] unit-test
+
+: each-int-down-complete ( ..a n quot: ( i --  ) -- ..b  )
+    over 0 < [ "negative accum" throw ] [ each-int-down ] if ; inline
+
+[ V{ } clone -1 [ over push ] each-int-down-complete ] [ "negative accum" = ] must-fail-with
+
+{ V{ 4 3 2 1 0 } }
+[ V{ } clone 5 [ over push ] each-int-down-complete ] unit-test
+
+! : if-zero
+
+! stupid test word: increase n, decrease i, when done add 42 to n
+! FIXME correctly infer stuff for given partial input!
+! Approach: when rebuilding an effect containing a recursive call, and a known
+! fixpoint type exists, then insert a fixpoint type iteration and a loop-step relation
+: inc-int-down ( n i -- m )
+    dup 0 > [ [ 1 + ] [ 1 - ] bi* inc-int-down ] [ drop 42 + ] if ;
+
+{ 47 }
+[ 1 4 inc-int-down ] unit-test
+
 
 ! ** Practical examples
 P{

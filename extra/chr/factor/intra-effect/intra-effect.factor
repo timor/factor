@@ -1,8 +1,8 @@
-USING: accessors arrays chr.factor chr.parser chr.state classes classes.algebra
-classes.builtin classes.predicate classes.singleton classes.tuple
-classes.tuple.private combinators combinators.short-circuit continuations kernel
-kernel.private lists macros.expander math math.order quotations sequences sets
-sorting terms types.util words ;
+USING: accessors arrays chr.factor chr.factor.util chr.parser chr.state classes
+classes.algebra classes.builtin classes.predicate classes.singleton
+classes.tuple classes.tuple.private combinators combinators.short-circuit
+continuations kernel kernel.private lists macros.expander math math.order
+quotations sequences sets sorting terms types.util words ;
 
 IN: chr.factor.intra-effect
 
@@ -297,7 +297,10 @@ CHR: disj-is-macro-effect @ <={ MakeEffect } // { MacroExpand __ __ __ __ } -- |
 CHR: disj-is-inline-effect @ <={ MakeEffect } // <={ CallEffect ?p . __ } -- | { Invalid } ;
 
 ! Unknown call-rec
-CHR: disj-single-call-rec @ <={ MakeEffect } // <={ CallRecursive } -- | { Invalid } ;
+! CHR: disj-single-call-rec @ <={ MakeEffect } // <={ CallRecursive } -- | { Invalid } ;
+CHR: disj-single-call-rec @ // <={ CallRecursive } -- | { Invalid } ;
+
+! That's a loop, don't merge
 
 ! CHR: disj-single-effect @ <={ MakeEffect } // { Instance ?x P{ Effect __ __ __ __ } } -- | { Invalid } ;
 
@@ -415,6 +418,13 @@ CHR: zero-bitand-2 @ // { BitAnd ?z ?x 0 } -- | { Instance ?z W{ 0 } } ;
 CHR: neutral-bitand-1 @ // { BitAnd ?z -1 ?y } -- | [ ?z ?y ==! ] ;
 CHR: neutral-bitand-2 @ // { BitAnd ?z ?x -1 } -- | [ ?z ?x ==! ] ;
 
+! **** Loop-bound related
+! TODO cases for lt, other step sizes
+CHR: sum-le-interval-bound-desc @ { Sum ?z ?y -1 } // { Le ?z A{ ?n } } --
+| { Eq ?z A{ ?n } } ;
+CHR: sum-le-interval-bound-asc @ { Sum ?z ?y 1 } // { Le A{ ?n } ?z } --
+| { Eq ?z A{ ?n } } ;
+
 ! CHR: propagate-lt-offset @ { Lt A{ ?n } ?x } { Sum ?z ?x A{ ?y } } // --
 ! [ ?n ?y + :>> ?m ] | { Lt ?m ?z } ;
 ! CHR: propagate-lt-offset @ { Lt ?n ?x } { Sum ?z ?x ?y } // -- |
@@ -423,10 +433,23 @@ CHR: neutral-bitand-2 @ // { BitAnd ?z ?x -1 } -- | [ ?z ?x ==! ] ;
 ! *** Call Effect matching
 ! NOTE: These only meet in renamed form?
 ! Probably not. [ ... ] [ call ] keep looks fishy...
-! CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } { CallEffect ?q ?a ?b } // -- |
-CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } // { CallEffect ?q ?a ?b } -- |
-[ { ?a ?b } { ?c ?d } ==! ]
+! NOTE: big change: make a fresh effect before every call
+! TODO: since we do that here, remove a lot of other fresh-effects....
+CHR: call-applies-effect @ { Instance ?q ?x } // { CallEffect ?q ?a ?b } -- [ ?x Effect? ]
+[ ?x fresh-effect :>> ?e ]
+[ ?e in>> :>> ?c drop
+  ?e out>> :>> ?d drop
+  ?e preds>> :>> ?l drop
+  t ]
+|
+[ { ?a ?b }
+  { ?c ?d } ==! ]
 [ ?l ] ;
+
+! non-copying
+! CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } // { CallEffect ?q ?a ?b } -- |
+! [ { ?a ?b } { ?c ?d } ==! ]
+! [ ?l ] ;
 
 ! Trying to apply a conditional is tricky.  The whole idea was to avoid this in the first place by always
 ! distributing effect composition through Xor types.  However, if we allow delayed expansion for macros,
@@ -444,17 +467,84 @@ CHR: call-applies-xor-effect @ { Instance ?q P{ Xor ?c ?d } } // { CallEffect ?q
 !   { P{ Instance ?q ?d } P{ CallEffect ?q ?a ?b } } } ;
 
 ! *** TODO Recursive Iteration expansion
+! P{ CallRecursive tag ?a ?b } holds the enter-in stack in ?a
+! iterated approach:
+! tag -prelude-> ?a -RecursionTypePre-> ?b =same-layout-as= ?c -RecursionTypePost-> -FixPointCondition-> ?d
+! NOTE: current layout: initial var_n, var_1, var_0
+! It may be necessary to change this to var_n , var_n-m , var_n-m-1 , var_0
+CHR: break-recursive-iteration @ { Iterated ?w { ?a ?b ?c } } { FixpointTypeOf ?w ?rho } // { CallRecursive ?w ?i ?o } --
+|
+[ ?c ?i ==! ]
+! That part instantiates the loop outro?
+! { Instance ?q ?rho }
+! { CallEffect ?q ?o ?d }
+    ;
+! [ ?o ?d ==! ]
+! { FreshEffect ?rho ?sig }
+! { Instance ?q ?sig }
+! { CallEffect ?q ?c ?d } ;
 
 ! NOTE: Idea: create an iteration constraint.  Should only be active in subsequent compositions
-CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho } // { CallRecursive ?w ?a ?b } --
-[ ?rho full-type? ] |
-[| |
- ?rho fresh-effect [ in>> ] [ out>> ] [ preds>> ] tri :> ( ilast olast plast )
- {
-     [ ?b olast ==! ]
-     P{ Iterated ?a ilast }
- } plast append
-] ;
+CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho }
+{ RecursionTypeOf ?w ?sig }
+// { CallRecursive ?w ?i ?o } --
+[ ?rho full-type? ]
+[ ?sig full-type? ]
+[ ?i fresh :>> ?c ]
+[ ?i fresh :>> ?d ]
+! [ ?i fresh :>> ?e ]
+|
+! [ ?i ?c [ lastcdr ] bi@ ==! ]
+! [ ?i ?d [ lastcdr ] bi@ ==! ]
+! [ ?i ?e [ lastcdr ] bi@ ==! ]
+{ Iterated ?w { ?i ?c ?d } }
+{ LoopVar ?i ?c ?d }
+! Iteration Type call
+! { FreshEffect ?sig ?x }
+{ Instance ?p ?sig }
+{ CallEffect ?p ?c ?e }
+! Return Type call
+! { FreshEffect ?rho ?y }
+{ Instance ?q ?rho }
+{ CallEffect ?q ?d ?o } ;
+
+! { CallEffect ?p ?c ?x }
+! { Instance ?q ?sig }
+! { CallEffect ?q ?d ?b } ;
+! CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho } // { CallRecursive ?w ?i ?o } --
+! [ ?rho full-type? ] |
+! [| |
+!  ?rho fresh-effect [ in>> ] [ out>> ] [ preds>> ] tri :> ( ilast olast plast )
+!  {
+!      [ ?o olast ==! ]
+!      P{ Iterated ?w { ?i ilast } }
+!  } plast append
+! ] ;
+
+
+! *** Loop relation reasoning
+CHR: already-loop-var @ { LoopVar ?x ?y ?z } // { LoopVar ?x ?y ?z } -- | ;
+
+! NOTE: it might make sense to throw these away and regenerate them during next composition?
+CHR: destruc-loop-var @ // { LoopVar L{ ?x . ?xs } L{ ?y . ?ys } L{ ?z . ?zs } } -- |
+{ LoopVar ?x ?y ?z }
+{ LoopVar ?xs ?ys ?zs } ;
+
+! This does not change from the but-last iteration to the last, so it can never change
+CHR: loop-invariant @ // { LoopVar ?x ?y ?y } -- |
+[ ?x ?y ==! ] ;
+
+! TODO not 100% sure this is always correct?
+CHR: loop-invariant-instance @ { LoopVar ?x ?y ?z }
+{ Instance ?y ?rho } { Instance ?z ?rho } // -- |
+{ Instance ?x ?rho } ;
+
+CHR: backprop-loop-effect @ { LoopVar ?x ?y ?z } // --
+[ ?y ?x [ llength* ] bi@ > ]
+[ ?y ?z known-compatible-stacks? ]
+[ ?y fresh :>> ?a ] |
+[ ?y ?a [ lastcdr ] bi@ ==! ]
+[ ?x ?a ==! ] ;
 
 
 ! NOTE: we don't apply the inputs here, so we should have the effect of a Kleene star for an unknown number of

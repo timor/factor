@@ -1,40 +1,15 @@
-USING: accessors arrays chr.factor classes.tuple combinators.smart hash-sets
-kernel sequences terms ;
+USING: accessors arrays chr.factor chr.parser combinators.short-circuit
+combinators.smart hash-sets kernel sequences terms types.util ;
 
 IN: chr.factor.util
 
-! ! GENERIC: same-effect? ( t1 t2 -- ? )
-! ! :: same-xor? ( x1 x2 -- ? )
-! !     x1 type1>> x2 type1>> same-effect?
-! !     x1 type2>> x2 type2>> same-effect? and ;
+! ** Stacks
 
-! ! M: Xor same-effect?
-! !     over Xor?
-! !     [ { [ same-xor? ]
-! !         [ [ type2>> ] [ type1>> ] bi Xor boa same-xor? ] } 2||
-! !     ] [ 2drop f ] if ;
+: known-compatible-stacks? ( l1 l2 -- ? )
+    { [ [ llength* ] same? ]
+        [ [ lastcdr ] same? ] } 2&& ;
 
-! GENERIC: pred<=> ( o1 o2 -- <=> )
-! M: chr-pred pred<=>
-!     over chr-pred?
-!     [ [ tuple>array ] bi@ pred<=> ]
-!     [ call-next-method ] if ;
-! M: word pred<=> <=> ;
-! M: term-var pred<=>
-!     over term-var?
-!     [ 2drop +eq+ ]
-!     [ call-next-method ] if ;
-! M: object pred<=> [ class-of ] compare ;
-! M: sequence pred<=>
-!     [ mismatch ] 2keep pick [ 2nth-unsafe pred<=> ] [ [ length ] compare nip ] if ;
-! M: list pred<=>
-!     [ llength* ] compare ;
-
-! : same-set? ( s1 s2 -- <=> )
-!     { [ [ cardinality ] same? ]
-!       [ [ [ pred<=> ] sort ] bi@
-!         [ same-effect? ] 2all? ]
-!     } 2&& ;
+! ** Effect Type Isomorphism
 GENERIC: expand-xor ( xor -- seq )
 M: Xor expand-xor [ type1>> ] [ type2>> ] bi
     [ expand-xor ] bi@ append ;
@@ -63,4 +38,30 @@ M: Effect effect>nterm
 : same-effect? ( e1 e2 -- ? )
     [ effect>nterm ] bi@ isomorphic? ;
 
-! TODO: effect predicates set comparison (expensive!)
+! ** Recursion
+: has-recursive-call? ( tag Effect -- ? )
+    preds>> [ dup CallRecursive? [ tag>> = ] [ 2drop f ] if ] with any? ;
+: filter-recursive-call ( tag Effect -- Effect )
+    clone
+    [ [ dup CallRecursive? [ tag>> = ] [ 2drop f ] if ] with reject ] with change-preds ;
+GENERIC#: recursive-branches? 1 ( type word/quot -- ? )
+M: Effect recursive-branches? swap has-recursive-call? ;
+M: Xor recursive-branches? [ [ type1>> ] [ type2>> ] bi ] dip '[ _ recursive-branches? ] either? ;
+GENERIC#: terminating-branches 1 ( type word/quot -- branches )
+M: Effect terminating-branches over has-recursive-call? [ drop f ] [ 1array ] if ;
+M: Xor terminating-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ terminating-branches ] bi@ append sift ;
+GENERIC#: recursive-branches 1 ( type word/quot -- branches )
+M: Effect recursive-branches over has-recursive-call? [ 1array ] [ drop f ] if ;
+M: Xor recursive-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ recursive-branches ] bi@ append sift ;
+
+:: wrap-recursive-effect ( w e -- Effect )
+    e in>> :> rin
+    ! e out>> :> rout
+    "enter" utermvar :> ein
+    ! "exit" utermvar :> eout
+    e clone ein >>in
+    ! eout >>out
+    [ rin vars append ] change-parms
+    [ P{ EnterRecursive w ein rin } prefix
+      ! P{ ReturnRecursive w rout eout } suffix
+    ] change-preds ;

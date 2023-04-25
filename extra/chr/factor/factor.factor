@@ -153,8 +153,11 @@ TUPLE: SuspendMakeEffect < MakeEffect depends-on ;
 TUPLE: FinishEffect < chr-pred target ;
 TUPLE: MakeUnit < chr-pred val target ;
 
-TUPLE: Iterated < chr-pred start end ;
-! TUPLE: Iterated < chr-pred val end ;
+! Holds references to the stack at loop entry,
+! loop iteration, and loop exit
+! TUPLE: Iterated < chr-pred entry loop-entry loop-exit exit ;
+TUPLE: Iterated < chr-pred tag stuff ;
+TUPLE: LoopVar < chr-pred in mid end ;
 
 ! Value-restricting preds
 TUPLE: val-pred < chr-pred val ;
@@ -246,7 +249,7 @@ TUPLE: Lt < rel-pred ;
 UNION: commutative-pred Eq Neq ;
 
 UNION: body-pred Instance DeclaredInstance DeclaredNotInstance CallEffect CallXorEffect Declare Slot CallRecursive Throws Tag
-    MacroExpand expr-pred Iterated ;
+    MacroExpand expr-pred Iterated LoopVar ;
 
 TUPLE: CheckPhiStack a b res ;
 
@@ -360,7 +363,9 @@ M: Instance live-vars val>> 1array ;
 M: Instance defines-vars type>> defines-vars ;
 M: Tag live-vars val>> 1array ;
 M: Tag defines-vars var>> 1array ;
-M: Iterated defines-vars [ start>> vars ] [ end>> vars ] bi union ;
+M: Iterated defines-vars
+    stuff>> vars ;
+    ! [ start>> vars ] [ end>> vars ] bi union ;
 M: Sum live-vars val>> 1array ;
 M: expr-pred defines-vars vars ;
 ! M: MacroCall live-vars out>> vars ;

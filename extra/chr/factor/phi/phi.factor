@@ -1,5 +1,5 @@
-USING: accessors arrays chr.factor chr.parser chr.state
-combinators.short-circuit kernel lists namespaces sequences sets terms ;
+USING: accessors arrays chr.factor chr.factor.util chr.parser chr.state kernel
+lists namespaces sequences sets terms ;
 
 IN: chr.factor.phi
 
@@ -217,20 +217,6 @@ CHR: rebuild-phi-finished @ // { PhiSchedule ?q +nil+ ?tau } { RebuildXor ?a ?ta
 [ ?tau ?a ==! ] ;
 
 ! *** Build Fixpoint type
-: has-recursive-call? ( tag Effect -- ? )
-    preds>> [ dup CallRecursive? [ tag>> = ] [ 2drop f ] if ] with any? ;
-: filter-recursive-call ( tag Effect -- Effect )
-    clone
-    [ [ dup CallRecursive? [ tag>> = ] [ 2drop f ] if ] with reject ] with change-preds ;
-GENERIC#: recursive-branches? 1 ( type word/quot -- ? )
-M: Effect recursive-branches? swap has-recursive-call? ;
-M: Xor recursive-branches? [ [ type1>> ] [ type2>> ] bi ] dip '[ _ recursive-branches? ] either? ;
-GENERIC#: terminating-branches 1 ( type word/quot -- branches )
-M: Effect terminating-branches over has-recursive-call? [ drop f ] [ 1array ] if ;
-M: Xor terminating-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ terminating-branches ] bi@ append sift ;
-GENERIC#: recursive-branches 1 ( type word/quot -- branches )
-M: Effect recursive-branches over has-recursive-call? [ 1array ] [ drop f ] if ;
-M: Xor recursive-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ recursive-branches ] bi@ append sift ;
 CHR: no-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q recursive-branches? not ] | ;
 CHR: do-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q terminating-branches :>> ?l drop t ]
 [ ?rho ?q recursive-branches :>> ?k drop t ] |
