@@ -15,6 +15,8 @@ SYMBOLS: program exec-stack store match-trace current-index ;
 SYMBOL: context-eqs
 
 SYMBOL: lookup-index
+SYMBOL: class-counts
+
 SINGLETON: current-context
 INSTANCE: current-context match-var
 
@@ -114,6 +116,7 @@ ERROR: cannot-make-equal lhs rhs ;
     [ 2drop ] if* ; inline
 
 : store-chr ( chr-susp -- )
+    dup constraint>> class-of class-counts get inc-at
     dup id>>
     2dup maybe-store-index
     store get set-at ; inline
@@ -151,9 +154,11 @@ M: object on-kill-chr 2drop ;
 :: kill-chr ( id -- )
     store get dup id of
     dup dup constraint>> on-kill-chr
-    [ f >>alive drop id
-      ! 2drop
-      swap delete-at
+    [
+        -1 over constraint>> class-of class-counts get at+
+        f >>alive drop id
+        ! 2drop
+        swap delete-at
     ]
     [ drop ] if* ;
 ! * Matching
@@ -569,10 +574,26 @@ M: set-reactivated activate-item
     ! [ id>> store get ?at [ t >>activated ] when drop ] bi ;
     id>> store get ?at [ t >>activated ] when drop ;
 
+! Try to prevent the occurrence from failing by
+! checking if the necessary arities exist in the first place
+: check-class-arity ( class counts n -- ? )
+    [ swap
+        '[ _ class<= ] filter-keys
+        sum-values
+     ] dip >= ; inline
+
+! : check-schedule-class-arities ( schedule -- ? )
+!     class-counts get swap class-arity>> [ check-class-arity ] with assoc-all? ; inline
+: check-schedule-class-arities ( schedule -- ? )
+    drop t ; inline
+
 ! This is the main entry point to actually start a constraint schedule
 M: run-schedule activate-item
     [ c>> ] [ schedule>> ] bi
-    over { [ alive>> ] [ activated>> not ] } 1&& [ run-occurrence ]
+    over { [ alive>> ] [ activated>> not ] } 1&&
+    [ dup check-schedule-class-arities
+      [ run-occurrence ]
+      [ drop f >>activated drop ] if  ]
     [ 2drop ] if ;
 
 M: rule-firing activate-item
@@ -647,6 +668,7 @@ M: builtin-suspension apply-substitution* nip ;
     init-chr-prog program set
     H{ } clone store set
     H{ } clone lookup-index set
+    H{ } clone class-counts set
     ! <builtins-suspension> builtins store get set-at
     update-local-vars
     check-vars? on

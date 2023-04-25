@@ -20,7 +20,9 @@ TUPLE: constraint-schedule
     { keep-active? read-only }
     { arg-vars read-only }
     { partners read-only }
-    { rule-vars read-only } ;
+    { rule-vars read-only }
+    { class-arity read-only }
+    ;
 C: <constraint-schedule> constraint-schedule
 
 ! * Rule processing
@@ -63,6 +65,7 @@ C: <constraint-schedule> constraint-schedule
     rule heads>> [| c i | i occ-hi = not [ i nk < c 2array suffix! ] when ] each-index
     >array
     rule match-vars>>
+    f
     <constraint-schedule> ;
 
 ! Return an assoc of schedules per constraint type, which are sequences of
