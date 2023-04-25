@@ -2,7 +2,7 @@ USING: accessors arrays chr.factor chr.factor.util chr.parser chr.state classes
 classes.algebra classes.builtin classes.predicate classes.singleton
 classes.tuple classes.tuple.private combinators combinators.short-circuit
 continuations kernel kernel.private lists macros.expander math math.order
-quotations sequences sets sorting terms types.util words ;
+quotations sequences sets sorting terms types.util ;
 
 IN: chr.factor.intra-effect
 
@@ -51,7 +51,7 @@ CHR: declared-predicate-class @ // { DeclaredInstance ?x A{ ?tau } } -- [ ?tau p
 [ ?tau make-instance-check :>> ?q ]
 |
 { ?DeferTypeOf ?q ?sig }
-{ DeferredInstance ?p ?sig }
+{ Instance ?p ?sig }
 { CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
 { Instance ?c W{ t } }
 { DeclaredInstance ?x ?rho } ;
@@ -62,7 +62,7 @@ CHR: declared-not-predicate-class @ // { DeclaredNotInstance ?x A{ ?tau } } -- [
 |
 { Instance ?x ?rho }
 { ?DeferTypeOf ?q ?sig }
-{ DeferredInstance ?p ?sig }
+{ Instance ?p ?sig }
 { CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
 { Instance ?c W{ f } } ;
 
@@ -105,6 +105,38 @@ CHR: no-deferred-inference-in-phi-mode @ // <={ ?DeferTypeOf } -- |
 ! Current approach: Something like 3, where the set of Params is defined
 ! explicitly, and contagious, by underlying conditionals
 
+CHR: remove-empty-params @ // { Params ?l } { Params __ } -- [ ?l empty? ] | ;
+
+CHR: keep-params-disjoint @ // { Params ?l } { Params ?k } -- [ ?l ?k intersect dup null? [ drop f ] when :>> ?d ]
+[ ?l ?d diff :>> ?x drop t ]
+[ ?k ?d diff :>> ?y drop t ]
+| { Params ?x } { Params ?y } ;
+
+! TODO prove that this does not work and discard
+! If we encounter predicates that differ in vars which are locals, then try to unify them
+! NOTE: this has the potential to create problems if we try to match predicates which have no ties to input or output
+! vars and where multiple ones are present, because then we just guess which parameter corresponds to which without
+! searching all possiblilities.  This could probably only be solved by CHR-OR...
+! Ideally this can't happen, as the regular predicate collection mechanism via live-vars/defines-vars should
+! ensure that at least some connection to input/output is carried through matching...
+! CHR: merge-phi-params @ AS: ?p <={ body-pred } AS: ?q <={ body-pred } { Params ?l } { Params ?k } // --
+! [ ?p ?q [ class-of ] same? ]
+! [ ?p vars ?l intersects? ]
+! [ ?q vars ?k intersects? ]
+! ! TODO: get the right param membership check here lhs/rhs-wise!!!
+! [
+!     ! { ?p ?q ?l ?k } break f lift [ ?p ?q
+!     !           ! [ solve-eq ] no-var-restrictions
+!     !           ! f [ unify ] with-term-vars
+!     !           unify
+!     !           [ { [ drop ?l in? ] [ nip ?k in? ] } 2&& ] assoc-filter
+!     !         ] with-term-vars
+!     ?p ?q unify
+!   [ f ]
+!   [ >alist ] if-assoc-empty
+!   :>> ?s  ] |
+! [ ?s unzip ==! ] ;
+
 CHR: already-decider @ { Decider ?x } // <={ Discriminator ?x } -- | ;
 CHR: already-discriminator @ { Discriminator ?x } // { Discriminator ?x } -- | ;
 
@@ -128,7 +160,7 @@ CHR: destruc-discriminator @ // { Discriminator ?x } -- [ ?x sequence? ] |
 ! -- [ ?x ?i list*>array in? ] [ ?y ?o list*>array in? ] | { Invalid } ;
 
 ! NOTE: This would also be one point where we could hold on to internal vars, but that is probably
-! too sensitive?
+! too sensitive?  If so, they would show up in the Params predicates
 CHR: have-interesting-decider @ { MakeEffect ?i ?o __ __ __ } // <={ Discriminator ?x } { Decider ?y }
 -- [ ?i ?o [ list*>array ] bi@ append [ ?x swap in? ] [ ?y swap in? ] bi and ] | { Invalid } ;
 
@@ -272,17 +304,6 @@ CHR: phi-rel-discriminates @ <={ rel-pred ?x ?y } // -- | { Discriminator { ?x ?
 CHR: phi-call-rec-self @ { PhiSchedule ?w __ __ } //
 { CallRecursive ?w __ __ } -- | { Invalid } ;
 
-! CHR: phi-call-rec-have-type @ { FixpointTypeOf ?w ?e } // { CallRecursive ?w ?a ?b } -- [ ?e full-type? ] |
-! [ { ?a ?b } { ?c ?d } ==! ]
-! { Params ?x }
-! [ ?l ] ;
-! [| | ?e fresh-effect { [ in>> ] [ out>> ] [ parms>> ] [ preds>> ] } cleave
-!  :> ( in out parms preds )
-!  {
-!      [ { ?a ?b } ]
-!  }
-! ]
-
 ! **** Conditions under which even a single pred can conserve disjunctivity
 ! CHR: disj-output-maybe-callable @ { MakeEffect __ ?b __ __ __ } // { Instance ?x A{ ?tau } } --
 ! [ ?x ?b vars in? ] [ { ?tau } first classoid? ] [ { ?tau } first callable classes-intersect? ] | { Invalid } ;
@@ -297,8 +318,8 @@ CHR: disj-is-macro-effect @ <={ MakeEffect } // { MacroExpand __ __ __ __ } -- |
 CHR: disj-is-inline-effect @ <={ MakeEffect } // <={ CallEffect ?p . __ } -- | { Invalid } ;
 
 ! Unknown call-rec
-! CHR: disj-single-call-rec @ <={ MakeEffect } // <={ CallRecursive } -- | { Invalid } ;
-CHR: disj-single-call-rec @ // <={ CallRecursive } -- | { Invalid } ;
+CHR: disj-single-call-rec @ <={ MakeEffect } // <={ CallRecursive } -- | { Invalid } ;
+! CHR: disj-single-call-rec @ // <={ CallRecursive } -- | { Invalid } ;
 
 ! That's a loop, don't merge
 
@@ -463,105 +484,85 @@ CHR: call-applies-effect @ { Instance ?q ?x } // { CallEffect ?q ?a ?b } -- [ ?x
 CHR: call-applies-xor-effect @ { Instance ?q P{ Xor ?c ?d } } // { CallEffect ?q ?a ?b } -- |
 { CallXorEffect P{ Xor ?c ?d } ?a ?b } ;
 
-! { { P{ Instance ?q ?c } P{ CallEffect ?q ?a ?b } }
-!   { P{ Instance ?q ?d } P{ CallEffect ?q ?a ?b } } } ;
-
 ! *** TODO Recursive Iteration expansion
 ! P{ CallRecursive tag ?a ?b } holds the enter-in stack in ?a
 ! iterated approach:
 ! tag -prelude-> ?a -RecursionTypePre-> ?b =same-layout-as= ?c -RecursionTypePost-> -FixPointCondition-> ?d
 ! NOTE: current layout: initial var_n, var_1, var_0
 ! It may be necessary to change this to var_n , var_n-m , var_n-m-1 , var_0
-CHR: break-recursive-iteration @ { Iterated ?w { ?a ?b ?c } } { FixpointTypeOf ?w ?rho } // { CallRecursive ?w ?i ?o } --
+CHR: break-recursive-iteration @ { Iterated ?w { ?a ?b ?c ?d } } // { CallRecursive ?w ?i ?o } --
 |
-[ ?c ?i ==! ]
-! That part instantiates the loop outro?
-! { Instance ?q ?rho }
-! { CallEffect ?q ?o ?d }
-    ;
-! [ ?o ?d ==! ]
-! { FreshEffect ?rho ?sig }
-! { Instance ?q ?sig }
-! { CallEffect ?q ?c ?d } ;
+[ ?c ?i ==! ] ;
 
 ! NOTE: Idea: create an iteration constraint.  Should only be active in subsequent compositions
 CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho }
+! NOTE: relying on the fixpoint type being an effect!
+! { RecursionTypeOf ?w P{ Effect ?r ?s __ __ } }
 { RecursionTypeOf ?w ?sig }
 // { CallRecursive ?w ?i ?o } --
 [ ?rho full-type? ]
 [ ?sig full-type? ]
 [ ?i fresh :>> ?c ]
-[ ?i fresh :>> ?d ]
-! [ ?i fresh :>> ?e ]
-|
-! [ ?i ?c [ lastcdr ] bi@ ==! ]
-! [ ?i ?d [ lastcdr ] bi@ ==! ]
-! [ ?i ?e [ lastcdr ] bi@ ==! ]
-{ Iterated ?w { ?i ?c ?d } }
-{ LoopVar ?i ?c ?d }
-! Iteration Type call
-! { FreshEffect ?sig ?x }
-{ Instance ?p ?sig }
-{ CallEffect ?p ?c ?e }
+[ ?i fresh :>> ?d ] |
+{ Iterated ?w { ?i ?c ?d ?e } }
 ! Return Type call
-! { FreshEffect ?rho ?y }
 { Instance ?q ?rho }
-{ CallEffect ?q ?d ?o } ;
-
-! { CallEffect ?p ?c ?x }
-! { Instance ?q ?sig }
-! { CallEffect ?q ?d ?b } ;
-! CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho } // { CallRecursive ?w ?i ?o } --
-! [ ?rho full-type? ] |
-! [| |
-!  ?rho fresh-effect [ in>> ] [ out>> ] [ preds>> ] tri :> ( ilast olast plast )
-!  {
-!      [ ?o olast ==! ]
-!      P{ Iterated ?w { ?i ilast } }
-!  } plast append
-! ] ;
-
+{ CallEffect ?q ?e ?o }
+! Iteration Type call, don't match output
+{ Instance ?p ?sig }
+{ CallEffect ?p ?c ?x }
+{ LoopVar { ?i ?c ?d ?e } }
+    ;
 
 ! *** Loop relation reasoning
-CHR: already-loop-var @ { LoopVar ?x ?y ?z } // { LoopVar ?x ?y ?z } -- | ;
+CHR: already-loop-var @ { LoopVar ?x } // { LoopVar ?x } -- | ;
 
 ! NOTE: it might make sense to throw these away and regenerate them during next composition?
-CHR: destruc-loop-var @ // { LoopVar L{ ?x . ?xs } L{ ?y . ?ys } L{ ?z . ?zs } } -- |
-{ LoopVar ?x ?y ?z }
-{ LoopVar ?xs ?ys ?zs } ;
+CHR: destruc-loop-var @ // { LoopVar { L{ ?w . ?ws } L{ ?x . ?xs } L{ ?y . ?ys } L{ ?z . ?zs } } } -- |
+{ LoopVar { ?w ?x ?y ?z } }
+{ LoopVar { ?ws ?xs ?ys ?zs } } ;
 
-! This does not change from the but-last iteration to the last, so it can never change
-CHR: loop-invariant @ // { LoopVar ?x ?y ?y } -- |
-[ ?x ?y ==! ] ;
+! This does not change from one iteration to another, so it can never change
+CHR: loop-invariant @ // { LoopVar { ?w ?y ?y ?z } } --
+! [ ?y term-var? ]
+|
+[ ?w ?y ==! ]
+[ ?z ?y ==! ] ;
 
 ! TODO not 100% sure this is always correct?
-CHR: loop-invariant-instance @ { LoopVar ?x ?y ?z }
-{ Instance ?y ?rho } { Instance ?z ?rho } // -- |
-{ Instance ?x ?rho } ;
+CHR: loop-invariant-instance @ { LoopVar { ?w ?x ?y ?z } }
+{ Instance ?x ?rho } { Instance ?y ?rho } // -- |
+{ Instance ?w ?rho }
+{ Instance ?z ?rho } ;
 
-CHR: backprop-loop-effect @ { LoopVar ?x ?y ?z } // --
-[ ?y ?x [ llength* ] bi@ > ]
-[ ?y ?z known-compatible-stacks? ]
-[ ?y fresh :>> ?a ] |
-[ ?y ?a [ lastcdr ] bi@ ==! ]
-[ ?x ?a ==! ] ;
+! TODO: this is even more questionable, but the idea is that we have a monotone relation between
+! Input and output, and we exactly know that we only take the exact same branch, then the monotonicity
+! can be extended backwards (and forwards, for that matter? )
+CHR: loop-instance-specialize-backwards @ { LoopVar { ?w ?x ?y ?z } }
+{ Instance ?x A{ ?rho } } { Instance ?y A{ ?sig } } // -- [ ?rho ?sig class< ] |
+{ Instance ?w ?rho } ;
 
+! If we know the iteration-by-iteration effect, we know how deep the loop
+! digs into the stack during iteration, which we can use to adjust the output stack before
+! the outro, as well as the input stack before the first iteration
+! NOTE: doing this on LoopVar instead of Iterated, because that is not triggered
+CHR: iteration-adjust-output-stack @ // { LoopVar { ?w ?x ?y ?z } } --
+[ ?y ?z [ llength* ] bi@ > ]
+[ ?x ?y known-compatible-stacks? ]
+[ ?y fresh :>> ?b ] |
+[ ?y ?b [ lastcdr ] bi@ ==! ]
+[ ?z ?b ==! ]
+{ LoopVar { ?w ?x ?y ?z } } ;
 
-! NOTE: we don't apply the inputs here, so we should have the effect of a Kleene star for an unknown number of
-! Iterations.  The predicates relating to the inputs of the union type should then be discarded.
-! CHR: call-recursive-applies-fixpoint-effect @ { FixpointTypeOf ?w ?e } // { CallRecursive ?w ?a ?b } -- [ ?e full-type? ] |
-! [| | ?e fresh-effect { [ in>> ] [ out>> ] [ parms>> ] [ preds>> ] } cleave
-!  :> ( in out parms preds )
-!  preds out ?b [ solve-eq lift ] no-var-restrictions
-!  ! {
-!  !     ! [ { ?a ?b } { in out } ==! ]
-!  !     ! [ ?b out ==! ]
-!  !     ! P{ Params parms }
-!  ! }
-!  ! preds append
-! ] ;
+CHR: iteration-adjust-input-stack @ // { LoopVar { ?w ?x ?y ?z } } --
+[ ?w ?x [ llength* ] bi@ < ]
+[ ?x ?y known-compatible-stacks? ]
+[ ?x fresh :>> ?a ] |
+[ ?x ?a [ lastcdr ] bi@ ==! ]
+[ ?w ?a ==! ]
+{ LoopVar { ?w ?x ?y ?z } } ;
 
-! NOTE: explicitly instantiating dispatch effects for the three callables here
+! *** Calling Curry/Compose
 
 CHR: call-destructs-curry @ { Instance ?q curried } { Slot ?q "quot" ?p } { Slot ?q "obj" ?x } // { CallEffect ?q ?a ?b } -- |
 { CallEffect ?p L{ ?x . ?a } ?b } ;
@@ -621,12 +622,8 @@ CHR: expand-macro @ // { ExpandQuot ?q ?a ?i ?x ?n } -- [ ?a length ?n = ]
 ! This should cause the current MakeEffect to be suspended, infer expansion
 { ?DeferTypeOf ?p ?sig }
 ! And return here...
-{ DeferredInstance ?x ?sig }
+{ Instance ?x ?sig }
     ;
-
-CHR: copy-deferred-instance @ // { DeferredInstance ?q ?e } -- [ ?e full-type? ]
-[ ?e fresh-effect :>> ?n ] |
-{ Instance ?q ?n } ;
 
 CHR: known-slot-num @ { Eq ?n A{ ?a } } // { Slot ?o ?n ?v } -- |
 { Slot ?o ?a ?v } ;

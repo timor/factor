@@ -6,7 +6,7 @@ IN: chr.factor
 FROM: syntax => _ ;
 
 TERM-VARS:
-?a ?b ?c ?d ?e ?i ?l ?k ?o ?p ?q ?r ?s ?t ?u ?n ?m ?v ?w ?x ?xs ?y
+?a ?b ?c ?d ?e ?i ?l ?k ?o ?p ?q ?r ?s ?t ?u ?n ?m ?v ?w ?ws ?x ?xs ?y
 ?tau1 ?tau2 ?tau3
 ?ys ?z ?zs ?c1 ?c2 ?s0 ?beg ?parm ?rho ?sig ?tau ?vars ;
 
@@ -121,8 +121,6 @@ M: pair elt>var
 ! the input stack bindings. (There can be existentials in the outputs)
 
 TUPLE: Effect < chr-pred in out parms preds ;
-! Placeholder-effect?
-TUPLE: RecursiveEffect < chr-pred tag effect ;
 TUPLE: TypeOf < chr-pred thing type ;
 TUPLE: ?TypeOf < chr-pred thing type ;
 ! Can be used during inference, will either trigger nested inference or
@@ -157,7 +155,7 @@ TUPLE: MakeUnit < chr-pred val target ;
 ! loop iteration, and loop exit
 ! TUPLE: Iterated < chr-pred entry loop-entry loop-exit exit ;
 TUPLE: Iterated < chr-pred tag stuff ;
-TUPLE: LoopVar < chr-pred in mid end ;
+TUPLE: LoopVar < chr-pred stuff ;
 
 ! Value-restricting preds
 TUPLE: val-pred < chr-pred val ;
@@ -167,8 +165,6 @@ TUPLE: Instance < val-pred type ;
 ! Nominative
 TUPLE: DeclaredInstance < Instance ;
 TUPLE: DeclaredNotInstance < Instance ;
-! Used for deferred inference requests
-TUPLE: DeferredInstance < Instance ;
 
 TUPLE: Slot < val-pred n slot-val ;
 TUPLE: Element < val-pred type ;
@@ -185,8 +181,6 @@ TUPLE: CallEffect < chr-pred thing in out ;
 TUPLE: CallXorEffect < chr-pred type in out ;
 ! Unused: TUPLE: MacroCallEffect < chr-pred word in out ;
 TUPLE: CallRecursive < chr-pred tag in out ;
-! Unused: TUPLE: NullStack < chr-pred stack ;
-TUPLE: RecursivePhi < chr-pred initial stepped end ;
 
 TUPLE: Boa < chr-pred spec in id ;
 TUPLE: TupleBoa < Boa ;
@@ -274,6 +268,10 @@ TUPLE: Keep < chr-pred pred ;
 TUPLE: PhiMode < chr-pred ;
 ! Marker to switch reasoning to assume conjunction of value info
 TUPLE: CompMode < chr-pred ;
+
+! This is used during phi-mode reasoning to hold the list of parameters that have not
+! been unified.
+TUPLE: Params < chr-pred vars ;
 
 ! Marker to force disjunction of value info
 TUPLE: FixpointMode < chr-pred ;

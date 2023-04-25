@@ -302,11 +302,14 @@ CONSTANT: sol1
 P{
     Xor
     P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } f { P{ Instance ?y1 L{ } } P{ Eq ?y1 L{  } } } }
-    P{ Effect L{ ?o3 . ?a15 } ?b4 { ?v3 } { P{ CallRecursive __ L{ ?v3 . ?a15 } ?b4 } P{ Instance ?o3 cons-state } P{ Slot ?o3 "cdr" ?v3 } P{ Instance ?v3 object } } }
+    P{ Effect L{ ?o3 . ?a15 } ?b4 f { P{ CallRecursive __ ?a15 ?b4 } } }
 }
 
 sol1
 [ [ lastcdr1 ] get-type ] chr-test
+
+{ t }
+[ [ lastcdr1 ] get-type [ 1 drop lastcdr1 ] get-type same-effect? ] unit-test
 
 GENERIC: lastcdr2 ( list -- obj )
 M: list lastcdr2 cdr>> [ lastcdr2 ] (call) ;
@@ -401,6 +404,15 @@ P{
     }
 }
 [ [ lastcdr7 dup drop ] get-type ] chr-test
+
+! Same as lastcdr7, but as single word
+: lastfoo ( x -- x )
+    dup +nil+? [  ]
+    [ dup list? [ cdr>> lastfoo ]
+      [ dup array? [ array-first lastfoo ]
+        [  ] if
+      ] if
+     ] if ;
 
 ! Stack checker examples
 : bad ( ? quot: ( ? -- ) -- ) 2dup [ not ] dip bad call ; inline recursive

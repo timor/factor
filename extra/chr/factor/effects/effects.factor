@@ -44,6 +44,8 @@ CHR: inference-collision-2 @ AS: ?a <={ FinishEffect } AS: ?b <={ FinishEffect }
 CHR: rebuild-phi-effect @ // { PhiMode } { CheckPhiStack { ?a ?b } { ?c ?d } t } { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } --
 |
 [ { ?a ?b } { ?c ?d } ==! ]
+! { Params ?x }
+! { Params ?y }
 { MakeEffect ?a ?b f f ?tau }
 [ ?k ?a ?ground-value ?b ?ground-value default-class-preds ]
 [ ?l ?c ?ground-value ?d ?ground-value default-class-preds ]
@@ -107,7 +109,6 @@ CHR: continue-suspend-make-effect @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau ?sig
 ! *** Phi Mode
 ! CHR: discard-non-union-pred @ { PhiMode } <={ MakeEffect } // <={ body-pred } -- | ;
 ! CHR: discard-leftover-binds @ { PhiMode } <={ MakeEffect } // <={ Bind } -- | ;
-! CHR: phi-discard-leftover-params @ { PhiMode } <={ MakeEffect } // <={ Param } -- | ;
 ! CHR: phi-discard-phi-defs @ { PhiMode } <={ MakeEffect } // <={ Phi } -- | ;
 
 CHR: collect-union-pred @ { PhiMode } { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } { Keep ?p } -- [ ?p live-vars ?e make-effect-vars intersects? ]
@@ -122,6 +123,8 @@ CHR: phi-discard-discriminators @ { FinishEffect ?tau } { PhiMode } { MakeEffect
 CHR: phi-discard-leftover-preds @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __ __ ?tau } // <={ body-pred } -- | ;
 ! TODO: not 100% sure the following isn't working too eagerly...
 CHR: phi-discard-keeps @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __ __ ?tau } // <={ Keep } -- | ;
+
+CHR: phi-discard-params @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __ __ ?tau } // <={ Params } -- | ;
 
 ! *** Composition Mode
 ! These are live after the pred has been taken into account

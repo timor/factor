@@ -1,6 +1,6 @@
 USING: accessors arrays chr.factor chr.factor.effects chr.factor.intra-effect
-chr.factor.phi chr.factor.util chr.factor.word-types chr.parser chr.state kernel
-quotations terms ;
+chr.factor.phi chr.factor.word-types chr.parser chr.state kernel quotations
+terms ;
 
 IN: chr.factor.composition
 
@@ -64,44 +64,30 @@ CHR: check-word-fixpoint-type @ { TypeOfWord ?w ?rho } // -- [ ?rho full-type? ]
 
 ! NOTE: Rebuilding an annotated effect here.  This could still be not correct because there are cached
 ! types of quotations that have been inferred for the recursive word itself, which don't appear in a wrapped
-! context!
-! CHR: have-type-of-recursive-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho }
-! { FixpointTypeOf ?w ?p }
-! { RecursionTypeOf ?w ?tau } // --
-! [ ?rho full-type? ]
-! [ ?p full-type? ]
-! [ ?tau full-type? ]
-! [ ?w 1quotation :>> ?q ]
-! [ ?w ?tau wrap-recursive-effect :>> ?x ]
-! |
-! ! { ComposeType P{ Effect ?a ?b f { P{ EnterRecursive ?w ?a ?b } } }
-! !   ?tau ?x }
-! ! { ComposeType ?x P{ Effect ?c ?d f { P{ ReturnRecursive ?w ?c ?d } } }
-! !   ?y }
-! { TypeOf ?q P{ Xor ?x ?p } } ;
+! context?
 
 ! TODO maybe instantiate the tag
+! NOTE: relying on known effect for the fixpoint type for now to derive the stack effect, which is not ideal
 CHR: have-type-of-recursive-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho }
-{ FixpointTypeOf ?w ?p }
+{ FixpointTypeOf ?w P{ Effect ?r ?s ?l ?p } }
 { RecursionTypeOf ?w ?tau } // --
 [ ?rho full-type? ]
-[ ?p full-type? ]
 [ ?tau full-type? ]
 [ ?w 1quotation :>> ?q ] |
+[ ?r fresh ?a ==! ]
+[ ?s fresh ?b ==! ]
+{ ReinferEffect P{ Effect ?a ?b f { P{ CallRecursive ?w ?a ?b } } } ?y }
+{ CheckXor ?w ?y ?z }
 { TypeOf ?q P{ Xor
-               P{ Effect ?a ?b f { P{ CallRecursive ?w ?a ?b } } }
-               ?p
+               ?z
+               P{ Effect ?r ?s ?l ?p }
              } } ;
 
 CHR: have-type-of-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // --
 ! [ ?rho valid-effect-type? ]
 [ ?rho full-type? ]
 [ ?w 1quotation :>> ?q ]
-|
-! ! NOTE: resolving recursive phi here with this if possible
-! { ComposeType ?rho P{ Effect ?a ?a f f } ?tau }
-! { TypeOf ?q ?tau } ;
-{ TypeOf ?q ?rho } ;
+| { TypeOf ?q ?rho } ;
 
 IMPORT: chr-word-types
 

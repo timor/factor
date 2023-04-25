@@ -224,7 +224,9 @@ CHR: do-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q terminating-b
     ?l [ f ] [
         >list :> fp-phis
         {
-            ! P{ FixpointMode }
+            ! NOTE: forcing this for now because we need the stack effect...
+            ! The correct version is probably to infer a recursive version for every base case?
+            P{ FixpointMode }
             P{ PhiSchedule ?q fp-phis ?tau }
             P{ FixpointTypeOf ?q ?tau }
         }
@@ -233,7 +235,6 @@ CHR: do-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q terminating-b
         ! [ ?q swap filter-recursive-call ] map
         >list :> rec-phis
         {
-            P{ FixpointMode }
             P{ PhiSchedule ?q rec-phis ?sig }
             P{ RecursionTypeOf ?q ?sig }
         }
