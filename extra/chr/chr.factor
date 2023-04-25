@@ -96,6 +96,14 @@ C: <as-pred> as-pred
 M: as-pred constraint-type pred>> constraint-type ;
 M: as-pred constraint-args ;
 
+
+GENERIC: lookup-index-key ( pred -- f/obj )
+! indexed on the first argument
+TUPLE: index1-pred < chr-pred key ;
+M: object lookup-index-key drop f ;
+M: index1-pred lookup-index-key key>> ;
+
+
 MIXIN: reflexive
 
 ! Turn lexical representation into constraint object

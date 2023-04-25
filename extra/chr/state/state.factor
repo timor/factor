@@ -1,5 +1,5 @@
 USING: accessors arrays assocs assocs.extras chr chr.programs
-chr.programs.incremental classes.algebra combinators.private
+chr.programs.incremental classes classes.algebra combinators.private
 combinators.short-circuit continuations hash-sets hashtables kernel lists make
 match math math.combinatorics math.order namespaces persistent.assocs quotations
 sequences sets sorting terms typed words ;
@@ -14,6 +14,7 @@ SYMBOLS: program exec-stack store match-trace current-index ;
 ! Interpret Is{ ?x ?y } predicates in contexts as extra bindings
 SYMBOL: context-eqs
 
+SYMBOL: lookup-index
 SINGLETON: current-context
 INSTANCE: current-context match-var
 
@@ -104,8 +105,18 @@ ERROR: cannot-make-equal lhs rhs ;
     [ 2nip add-equal ]
     [ cannot-make-equal ] if* ;
 
+: maybe-store-index ( chr-susp id -- )
+    swap constraint>>
+    dup lookup-index-key
+    ! { [  ]
+    !   [ ?ground-value term-var? ] } 1&&
+    [ [ class-of ] dip 2array lookup-index get set-at ]
+    [ 2drop ] if* ; inline
+
 : store-chr ( chr-susp -- )
-    dup id>> store get set-at ; inline
+    dup id>>
+    2dup maybe-store-index
+    store get set-at ; inline
 
 TYPED: create-chr ( from-rule c: constraint -- id )
     ! FIXME: This is to make sure any representatives get in! That stuff is really meh...
@@ -379,6 +390,25 @@ DEFER: match-single-head
                 t ] if*
     ] [ f ] if ; inline
 
+: chr-index-key ( chr -- key/f )
+    [ class-of ] [ lookup-index-key ] bi
+    [ 2array ] [ drop f ] if* ; inline
+
+: lookup-key-maybe-delete ( key -- id/assoc )
+    dup lookup-index get at
+    [ dup alive?
+      [ nip dup store get at 2array 1array ]
+      [
+          ! break
+          drop lookup-index get delete-at f ] if
+    ]
+    [ drop f ] if* ; inline
+
+: try-index-lookup ( key bindings -- seq/f )
+    lift
+    [ lookup-key-maybe-delete ]
+    [ f ] if* ; inline
+
 :: (run-occurrence) ( rule-id trace bindings partners vars -- )
     trace recursive-drop?
     ! [ break ]
@@ -397,7 +427,12 @@ DEFER: match-single-head
     ] [
         partners unclip-slice :> ( rest next )
         next first2 :> ( keep-partner pc )
-        pc lookup bindings sort-lookup
+        ! lookup returns an { id chr-susp } assoc
+        pc chr-index-key :> ikey
+        ikey [ bindings try-index-lookup ]
+        [ pc lookup ] if*
+        ! pc lookup
+        bindings sort-lookup
         [| sid sc |
          ! NOTE: unsure about this optimization here
          { [ sid trace key? not ]
@@ -611,6 +646,7 @@ M: builtin-suspension apply-substitution* nip ;
 : init-chr-scope ( rules -- )
     init-chr-prog program set
     H{ } clone store set
+    H{ } clone lookup-index set
     ! <builtins-suspension> builtins store get set-at
     update-local-vars
     check-vars? on

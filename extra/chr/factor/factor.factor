@@ -121,7 +121,7 @@ M: pair elt>var
 ! the input stack bindings. (There can be existentials in the outputs)
 
 TUPLE: Effect < chr-pred in out parms preds ;
-TUPLE: TypeOf < chr-pred thing type ;
+TUPLE: TypeOf < index1-pred type ;
 TUPLE: ?TypeOf < chr-pred thing type ;
 ! Can be used during inference, will either trigger nested inference or
 ! immediately answer
