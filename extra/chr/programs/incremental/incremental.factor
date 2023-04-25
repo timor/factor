@@ -1,7 +1,6 @@
-USING: accessors arrays assocs assocs.extras chr chr.programs classes
-classes.algebra classes.tuple classes.tuple.private combinators.short-circuit
-kernel linked-assocs math quotations sequences sets stack-checker terms vectors
-;
+USING: accessors arrays assocs chr chr.programs classes classes.algebra
+classes.tuple classes.tuple.private combinators.short-circuit kernel
+linked-assocs math quotations sequences sets stack-checker terms vectors ;
 
 IN: chr.programs.incremental
 
@@ -58,16 +57,6 @@ TUPLE: reflexive-parms { parms read-only } ;
     [ constraint-args ] keep
     reflexive? [ reflexive-parms boa ] when ;
 
-GENERIC: match-class ( head -- class )
-M: chr-pred match-class class-of ;
-M: as-pred match-class pred>> match-class ;
-M: chr-sub-pred match-class class>> ;
-M: pred-array match-class first ;
-M: fiat-pred-array match-class first ;
-
-: match-head-class-arities ( partner-entries -- assoc )
-    [ second match-class ] collect-by [ length ] map-values ;
-
 :: add-heads ( program rule rule-ind entries -- program )
     entries <enumerated> >alist <reversed>
     [| hi ent |
@@ -77,7 +66,6 @@ M: fiat-pred-array match-class first ;
      h constraint-type :> type
      occ type program occur-index>> push-at-constraint-type
      occ hkept h match-spec-args partners rule match-vars>>
-     partners match-head-class-arities
      <constraint-schedule>
      type program schedule>> push-at-constraint-type
     ] assoc-each
