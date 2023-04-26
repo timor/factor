@@ -53,15 +53,3 @@ M: Xor terminating-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ terminating-
 GENERIC#: recursive-branches 1 ( type word/quot -- branches )
 M: Effect recursive-branches over has-recursive-call? [ 1array ] [ drop f ] if ;
 M: Xor recursive-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ recursive-branches ] bi@ append sift ;
-
-:: wrap-recursive-effect ( w e -- Effect )
-    e in>> :> rin
-    ! e out>> :> rout
-    "enter" utermvar :> ein
-    ! "exit" utermvar :> eout
-    e clone ein >>in
-    ! eout >>out
-    [ rin vars append ] change-parms
-    [ P{ EnterRecursive w ein rin } prefix
-      ! P{ ReturnRecursive w rout eout } suffix
-    ] change-preds ;

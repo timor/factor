@@ -1,9 +1,7 @@
 USING: accessors arrays assocs chr.factor chr.parser chr.state classes
-classes.algebra classes.builtin classes.predicate classes.tuple
-classes.tuple.private classes.union combinators.short-circuit effects generic
-classes.singleton
-generic.single kernel kernel.private lists macros macros.expander math
-math.private namespaces quotations sequences sequences.private sets
+classes.algebra classes.tuple classes.tuple.private combinators.short-circuit
+effects generic generic.single kernel kernel.private lists macros
+macros.expander math math.private quotations sequences sequences.private sets
 slots.private terms types.util words ;
 
 IN: chr.factor.word-types

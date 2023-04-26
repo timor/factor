@@ -1,5 +1,6 @@
 USING: accessors arrays assocs chr.factor chr.parser chr.state
-combinators.short-circuit kernel lists sequences sets terms types.util ;
+combinators.short-circuit grouping kernel lists sequences sets terms types.util
+;
 
 IN: chr.factor.effects
 
@@ -111,7 +112,12 @@ CHR: continue-suspend-make-effect @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau ?sig
 ! CHR: discard-leftover-binds @ { PhiMode } <={ MakeEffect } // <={ Bind } -- | ;
 ! CHR: phi-discard-phi-defs @ { PhiMode } <={ MakeEffect } // <={ Phi } -- | ;
 
-CHR: collect-union-pred @ { PhiMode } { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } { Keep ?p } -- [ ?p live-vars ?e make-effect-vars intersects? ]
+: pred-live-in-effect? ( pred make-effect -- ? )
+    make-effect-vars
+    { [ [ intersects-live-vars ] dip intersects? ]
+      [ [ live-vars ] dip subset? ] } 2|| ;
+
+CHR: collect-union-pred @ { PhiMode } { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } { Keep ?p } -- [ ?p ?e pred-live-in-effect? ]
 [ ?p ?l in? not ]
 [ ?l ?p suffix :>> ?k ]
 |
@@ -137,6 +143,10 @@ PREFIX-RULES: P{ CompMode }
 ! [ ?l ?p suffix :>> ?k ]
 ! | { MakeEffect ?a ?b ?y ?k ?tau } ;
 
+CHR: discard-known-iterated-stack @ { FinishEffect ?tau } // { Iterated __ ?s } --
+[ ?s sequence? ]
+[ ?s [ [ lastcdr ] same? ] monotonic? ] | ;
+
 ! NOTE: The only time for now where this was needed instead of the one above was for [ t ] loop...
 CHR: collect-call-recursive @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p P{ CallRecursive ?m ?rho ?sig } --
 [ ?rho vars ?sig vars union ?e make-effect-vars intersects? ]
@@ -145,9 +155,31 @@ CHR: collect-call-recursive @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?
 | { MakeEffect ?a ?b ?y ?k ?tau } ;
 
 ! *** All other preds
+! **** Parameter liveness propagation
+CHR: unique-implies-param @ { ImpliesParam ?x ?y } // { ImpliesParam ?x ?y } -- | ;
+CHR: remove-non-param-impl @ // { ImpliesParam ?x ?y } -- [ ?y vars empty? ] | ;
+
+CHR: define-implied-param @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } { ImpliesParam ?m ?n } --
+[ ?m vars ?e make-effect-vars subset? ]
+[ ?x ?n union :>> ?y drop t ] |
+{ MakeEffect ?a ?b ?y ?l ?tau } ;
+
+CHR: implied-param-join @ // { ImpliesParam ?x ?a } { ImpliesParam ?y ?b } --
+[ ?b ?x vars subset? ]
+[ ?x vars ?b diff
+  ?y vars ?a diff
+  union
+  :>> ?m ]
+[ ?a ?b union :>> ?k ]
+| { ImpliesParam ?m ?k } ;
+
+
 ! CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p vars ?e make-effect-vars intersects? ]
 ! CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p live-vars ?e make-effect-vars subset? ]
-CHR: collect-body-pred @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p live-vars ?e make-effect-vars intersects? ]
+! NOTE: using overlap right now to extend the set of parameters.  This might be too general to get rid of remaining unused predicates.
+! One approach could be to require a certain number of vars to be live, so the rest actually can be derived.  E.g. for a Sum predicate, we will always
+! Need two out of three vars to be able to determine the third.  Alternatively, we could reason input/output-style?
+CHR: collect-body-pred @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p ?e pred-live-in-effect? ]
 [ ?p ?l in? not ]
 [ ?l ?p suffix :>> ?k ]
 |
@@ -160,6 +192,8 @@ CHR: collect-boa @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?ta
 [ ?l ?p suffix :>> ?k ]
 [ ?x ?p vars union :>> ?y ] |
 { MakeEffect ?a ?b ?y ?k ?tau } ;
+
+CHR: discard-implied-param @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // <={ ImpliesParam } -- | ;
 
 ! TODO: abstract this shit...
 

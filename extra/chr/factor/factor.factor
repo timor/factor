@@ -239,11 +239,13 @@ TUPLE: Le < rel-pred ;
 TUPLE: Lt < rel-pred ;
 ! TUPLE: Ge < expr-pred val var ;
 ! TUPLE: Gt < expr-pred val var ;
+TUPLE: Counter < val-pred from to by ;
 
+UNION: lt-pred Le Lt ;
 UNION: commutative-pred Eq Neq ;
 
-UNION: body-pred Instance DeclaredInstance DeclaredNotInstance CallEffect CallXorEffect Declare Slot CallRecursive Throws Tag
-    MacroExpand expr-pred Iterated LoopVar ;
+UNION: body-pred val-pred CallEffect CallXorEffect Declare CallRecursive Throws
+    MacroExpand Iterated LoopVar ;
 
 TUPLE: CheckPhiStack a b res ;
 
@@ -272,6 +274,10 @@ TUPLE: CompMode < chr-pred ;
 ! This is used during phi-mode reasoning to hold the list of parameters that have not
 ! been unified.
 TUPLE: Params < chr-pred vars ;
+
+! This is an implication relation for parameter membership
+! Useful for functions that can be folded/reduced
+TUPLE: ImpliesParam < chr-pred present include ;
 
 ! Marker to force disjunction of value info
 TUPLE: FixpointMode < chr-pred ;
@@ -322,7 +328,7 @@ M: CallXorEffect bound-effect-vars type>> bound-effect-vars ;
     dup bound-effect-vars fresh-with ;
 
 : make-effect-vars ( make-effect -- set )
-    [ in>> vars ] [ out>> vars union ] [ locals>> vars union ] tri ;
+    [ in>> vars ] [ out>> vars append ] [ locals>> vars union ] tri ;
 
 ! All of these must be live to take collecting the pred into account
 ! Note that the definition of a live variable here is reachability from either input
@@ -330,20 +336,26 @@ M: CallXorEffect bound-effect-vars type>> bound-effect-vars ;
 GENERIC: live-vars ( pred -- vars )
 ! Will in turn define these as live
 GENERIC: defines-vars ( pred -- vars )
+! This is special for predicates where parts of the variables intersect in
+! order to consider it live.
+GENERIC: intersects-live-vars ( pred -- vars )
+M: object intersects-live-vars drop f ;
 M: chr-pred live-vars vars ;
 M: object defines-vars drop f ;
-! TODO: change this once parameterization is made explicit
-! UPDATE: not doing parameterization for macro args, because they cannot be
-! collected easily once used.
+! ! TODO Maybe don't need this if type-inference checks are done using ExpandMacro?
+! M: CallEffect intersects-live-vars in>> vars ;
 M: CallEffect live-vars thing>> 1array ;
 ! ! M: CallEffect defines-vars [ in>> vars ] [ out>> vars ] bi union ;
 ! M: CallEffect defines-vars [ out>> vars ] [ thing>> 1array ] bi union ;
 ! M: CallEffect defines-vars vars ;
-M: CallEffect defines-vars out>> vars ;
+! TODO: add inputs to defined vars of CallEffect, as they are definitely known to exist...
+! M: CallEffect defines-vars out>> vars ;
+M: CallEffect defines-vars [ in>> vars ] [ out>> vars append ] bi ;
+M: CallXorEffect intersects-live-vars in>> vars ;
 ! NOTE: keeping references to input vars here, since they are lazy intermediates...
 M: CallXorEffect defines-vars
     [ in>> vars ]
-    [ out>> vars union ] bi ;
+    [ out>> vars append ] bi ;
 ! M: CallXorEffect live-vars
 !     [ then>> ] [ else>> ] bi
 !     [ [ live-vars ] gather ] bi@ union ;
@@ -353,19 +365,25 @@ M: CallXorEffect defines-vars
 ! NOTE: also keeping references to input vars here, to prevent (partially) known input vals from being collected
 M: MacroExpand defines-vars
     [ out-quot>> vars ]
-    [ in>> vars union ] bi
+    [ in>> vars append ] bi
     ;
+M: MacroExpand intersects-live-vars in>> vars ;
+! M: MacroExpand live-vars in>> vars ;
 M: Slot live-vars val>> 1array ;
-M: Slot defines-vars [ n>> vars ] [ slot-val>> vars union ] bi ;
+M: Slot defines-vars [ n>> vars ] [ slot-val>> vars append ] bi ;
 M: Instance live-vars val>> 1array ;
 M: Instance defines-vars type>> defines-vars ;
 M: Tag live-vars val>> 1array ;
 M: Tag defines-vars var>> 1array ;
+M: Iterated intersects-live-vars
+    stuff>> vars ;
 M: Iterated defines-vars
     stuff>> vars ;
     ! [ start>> vars ] [ end>> vars ] bi union ;
-M: Sum live-vars val>> 1array ;
-M: expr-pred defines-vars vars ;
+! TODO: there might be a pattern here...
+! M: Sum live-vars val>> 1array ;
+M: Counter live-vars val>> 1array ;
+! M: expr-pred defines-vars vars ;
 ! M: MacroCall live-vars out>> vars ;
 
 

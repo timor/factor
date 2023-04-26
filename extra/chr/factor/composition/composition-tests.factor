@@ -175,6 +175,24 @@ P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x bignum } P{ Instance ?y f
                                         P{ Eq ?y ?x } } }
 [ [ bignum>fixnum ] get-type ] chr-test
 
+! ** Sums and Parameters
+{ 1 2 3 4 5 }
+[ { [ + ] [ + + ] [ + + + ] [ + + + + ] [ + + + + + ] }
+  [ get-type preds>> [ Sum? ] count ] each
+] unit-test
+
+{ 1 2 3 4 5 }
+[ { [ * ] [ * * ] [ * * * ] [ * * * * ] [ * * * * * ] }
+  [ get-type preds>> [ Prod? ] count ] each
+] unit-test
+
+! Includes products from negation
+{ 1 2 3 5 7 }
+[ { [ * ] [ + * ] [ + * + ] [ * - * + ] [ - + - * + ] }
+  [ get-type preds>> [ { [ Prod? ] [ Sum? ] } 1|| ] count ] each
+] unit-test
+
+
 ! ** Simple Dispatch
 GENERIC: foothing ( obj -- result )
 M: fixnum foothing 3 + ;
@@ -302,7 +320,9 @@ CONSTANT: sol1
 P{
     Xor
     P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } f { P{ Instance ?y1 L{ } } P{ Eq ?y1 L{  } } } }
-    P{ Effect L{ ?o3 . ?a15 } ?b4 f { P{ CallRecursive __ ?a15 ?b4 } } }
+    ! Finally able to infer the resolved recursion type...
+    P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x cons-state } P{ Instance ?y L{  } } P{ Eq ?y L{  } } } }
+    ! P{ Effect L{ ?o3 . ?a15 } ?b4 f { P{ CallRecursive __ ?a15 ?b4 } } }
 }
 
 sol1
@@ -374,13 +394,7 @@ TERM-VARS: ?o5 ?a47 ?b34 ?v7 ;
 P{
     Xor
     P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } f { P{ Instance ?y2 not{ cons-state } } } }
-    P{
-        Effect
-        L{ ?o5 . ?a47 }
-        ?b34
-        { ?v7 }
-        { P{ CallRecursive lastcdr6 L{ ?v7 . ?a47 } ?b34 } P{ Instance ?o5 cons-state } P{ Slot ?o5 "cdr" ?v7 } P{ Instance ?v7 object } }
-    }
+    P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x cons-state } P{ Instance ?y not{ cons-state } } } }
 }
 [ [ lastcdr6 ] get-type ] chr-test
 
@@ -466,12 +480,14 @@ P{ Effect L{ ?a1 . ?i1 } ?o4 { ?q2 ?a4 ?i4 ?q1 } {
  }
 [ [ my-add1 my-add2 ] get-type ] chr-test
 
-P{ Effect L{ ?a1 . ?i1 } L{ ?z1 . ?i1 } { ?z6 } {
+P{ Effect L{ ?a1 . ?i1 } L{ ?z1 . ?i1 } f ! { ?z6 }
+   {
        P{ Instance ?a1 number }
        P{ Instance ?z1 number }
-       P{ Sum ?z1 ?z6 1 }
-       P{ Instance ?z6 number }
-       P{ Sum ?z6 ?a1 3 }
+       P{ Sum ?z1 ?a1 4 }
+       ! P{ Sum ?z1 ?z6 1 }
+       ! P{ Instance ?z6 number }
+       ! P{ Sum ?z6 ?a1 3 }
    }
  }
 [ [ 1 2 my-add1 my-add2 ] get-type ] chr-test
@@ -534,6 +550,8 @@ P{ Xor
 
 { V{ 4 3 2 1 0 } }
 [ V{ } clone 5 [ over push ] each-int-down ] unit-test
+
+: each-down-int ( ..a n quot: ( ..c i -- ..c ) -- ..b ) [ call ] 2keep over 0 > [ [ 1 - ] dip each-down-int ] [ 2drop ] if ; inline recursive
 
 : each-int-down-complete ( ..a n quot: ( i --  ) -- ..b  )
     over 0 < [ "negative accum" throw ] [ each-int-down ] if ; inline

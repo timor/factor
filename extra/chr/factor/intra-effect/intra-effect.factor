@@ -387,19 +387,20 @@ CHR: instance-intersect-effect @ { Instance ?x ?e }
  f { Invalid } ? ] ;
 
 ! *** Arithmetics
-! CHR: unique-expr-pred @ AS: ?p <={ expr-pred ?a . ?x } // AS: ?q <={ expr-pred ?a . ?x } -- [ ?p class-of ?q class-of class= ] | ;
+CHR: unique-expr-pred @ AS: ?p <={ expr-pred ?a . ?x } // AS: ?q <={ expr-pred ?a . ?x } -- [ ?p class-of ?q class-of class= ] | ;
 
 CHR: check-le @ // { Le A{ ?x } A{ ?y } } -- [ ?x ?y <= not ] | { Invalid } ;
 CHR: check-le-same @ // { Le ?x ?x } -- | ;
 CHR: check-lt @ // { Lt A{ ?x } A{ ?y } } -- [ ?x ?y < not ] | { Invalid } ;
 CHR: lt-tightens-le @ { Lt ?x ?y } // { Le ?x ?y } -- | ;
+CHR: lt-subsumes-lt-lhs @ <={ lt-pred ?x A{ ?m } } // <={ lt-pred ?x A{ ?n } } -- [ ?m ?n < ] | ;
+CHR: lt-subsumes-lt-rhs @ <={ lt-pred A{ ?m } ?x } // <={ lt-pred A{ ?n } ?x } -- [ ?m ?n > ] | ;
 CHR: reflexive-le-defines-eq @ // { Le ?x ?y } { Le ?y ?x } -- | { Eq ?x ?y } ;
 CHR: reflexive-lt-defines-neq @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Neq ?x ?y } ;
 CHR: eq-tightens-le-1 @ { Eq ?x ?y } // { Le ?x ?y } -- | ;
 CHR: eq-tightens-le-2 @ { Eq ?x ?y } // { Le ?y ?x } -- | ;
 CHR: neq-tightens-le-1 @ // { Neq ?x ?y } { Le ?x ?y } -- | { Lt ?x ?y } ;
 CHR: neq-tightens-le-2 @ // { Neq ?y ?x } { Le ?x ?y } -- | { Lt ?x ?y } ;
-! CHR: check-lt-1 @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Invalid } ;
 CHR: check-lt-same @ // { Lt ?x ?x } -- | { Invalid } ;
 CHR: check-lt-eq-1 @ // { Lt ?x ?y } { Eq ?x ?y } -- | { Invalid } ;
 CHR: check-lt-eq-2 @ // { Lt ?x ?y } { Eq ?y ?x } -- | { Invalid } ;
@@ -417,7 +418,19 @@ CHR: check-sum @ // { Sum A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y + ?z = not ] | P{
 ! CHR: zero-sum-2 @ // { Sum ?z ?x 0 } -- | [ ?z ?x ==! ] ;
 CHR: define-sum @ // { Sum ?z A{ ?x } A{ ?y } } --
 [ ?x ?y + <wrapper> :>> ?v ] | { Instance ?z ?v } ;
+CHR: define-diff-1 @ // { Sum A{ ?z } ?x A{ ?y } } --
+[ ?z ?y - <wrapper> :>> ?v ] | { Instance ?x ?v } ;
 CHR: normalize-sum @ // { Sum ?z A{ ?x } ?y } -- [ ?y term-var? ] | { Sum ?z ?y ?x } ;
+! Anything more complex than that needs a linear equation predicate...
+CHR: transitive-literal-sum @ // { Sum ?z ?x A{ ?m } } { Sum ?x ?a A{ ?n } } --
+[ ?m ?n + :>> ?k ]
+| { Sum ?z ?a ?k } ;
+
+! NOTE: this does not work transitively in a correct way
+! TODO: may be better to do this with a linear combination predicate instead?
+UNION: binary-expr Sum Prod ;
+CHR: keep-intermediate-sum-1 @ <={ binary-expr ?z ?x ?y } <={ binary-expr ?x ?a ?b } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
+CHR: keep-intermediate-sum-2 @ <={ binary-expr ?z ?y ?x } <={ binary-expr ?x ?a ?b } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
 
 CHR: check-prod @ // { Prod A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y * ?z = not ] | P{ Invalid } ;
 CHR: neutral-prod-1 @ // { Prod ?z 1 ?y } -- | [ ?z ?y ==! ] ;
@@ -438,13 +451,6 @@ CHR: zero-bitand-1 @ // { BitAnd ?z 0 ?y } -- | { Instance ?z W{ 0 } } ;
 CHR: zero-bitand-2 @ // { BitAnd ?z ?x 0 } -- | { Instance ?z W{ 0 } } ;
 CHR: neutral-bitand-1 @ // { BitAnd ?z -1 ?y } -- | [ ?z ?y ==! ] ;
 CHR: neutral-bitand-2 @ // { BitAnd ?z ?x -1 } -- | [ ?z ?x ==! ] ;
-
-! **** Loop-bound related
-! TODO cases for lt, other step sizes
-CHR: sum-le-interval-bound-desc @ { Sum ?z ?y -1 } // { Le ?z A{ ?n } } --
-| { Eq ?z A{ ?n } } ;
-CHR: sum-le-interval-bound-asc @ { Sum ?z ?y 1 } // { Le A{ ?n } ?z } --
-| { Eq ?z A{ ?n } } ;
 
 ! CHR: propagate-lt-offset @ { Lt A{ ?n } ?x } { Sum ?z ?x A{ ?y } } // --
 ! [ ?n ?y + :>> ?m ] | { Lt ?m ?z } ;
@@ -561,6 +567,48 @@ CHR: iteration-adjust-input-stack @ // { LoopVar { ?w ?x ?y ?z } } --
 [ ?x ?a [ lastcdr ] bi@ ==! ]
 [ ?w ?a ==! ]
 { LoopVar { ?w ?x ?y ?z } } ;
+
+! TODO: once there is loc annotation, maybe return useful syntax error?
+CHR: invalid-loop-effect @ // { LoopVar { ?w ?x ?y ?z } } --
+[ ?x ?y [ llength* ] same? not ]
+[ ?x ?y [ lastcdr ] same? ] | { Invalid } ;
+
+! **** Find Loop Counters
+! TODO: Test if sum is always normalized for this?
+! Define Counters.  Note that These define _inclusive_ intervals, because
+! If the sum is assumed to have been calculated, then the result is included
+CHR: loop-sum-defines-counters @ { Sum ?y ?x ?n } // { LoopVar { ?w ?x ?y ?z } } -- |
+! CHR: loop-sum-defines-counters @ { Sum ?y ?x ?n } { LoopVar { ?w ?x ?y ?z } } // -- |
+! pre-loop-body
+{ Counter ?x ?w ?a ?n }
+{ Sum ?z ?a ?n }
+! post-loop-body
+{ Counter ?y ?b ?z ?n }
+{ Sum ?b ?w ?n }
+;
+
+! TODO cases for lt?
+! If we now we are descending by constant amount m,
+! then the final value can only be in m-range of a lower loop bound (Assuming we terminate!)
+CHR: tighten-loop-bound-desc @ { Counter ?x ?a ?b A{ ?m } } { Le ?b A{ ?n } } // --
+[ ?m 0 < ]
+[ ?m 1 + ?n + :>> ?k ]
+| { Le ?k ?b } ;
+CHR: tighten-loop-bound-asc @ { Counter ?x ?a ?b A{ ?m } } { Le A{ ?n } ?b } // --
+[ ?m 0 > ]
+[ ?m 1 - ?n + :>> ?k ]
+| { Le ?b ?k } ;
+
+! TODO: implement based on predicates on the step, too?
+! CHR: known-down-counter-literal @ // { Counter ?x ?a ?b A{ ?n } } -- [ ?n 0 < ] |
+CHR: known-down-counter-literal @ { Counter ?x ?a ?b A{ ?n } } // -- [ ?n 0 < ] |
+{ Le ?x ?a }
+{ Le ?b ?x } ;
+
+
+! *** TODO Modular arithmetic
+! Needed for fixed-width computations, possibly some loop analysis/transformation foo
+
 
 ! *** Calling Curry/Compose
 
