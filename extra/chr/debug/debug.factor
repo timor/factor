@@ -1,8 +1,9 @@
 USING: accessors arrays assocs assocs.extras chr chr.factor.composition
 chr.programs chr.state classes.builtin combinators continuations effects
-formatting io kernel math math.parser namespaces prettyprint sequences sets
-sorting system terms tools.annotations tools.annotations.private
-tools.continuations tools.walker ;
+formatting io kernel math math.parser namespaces prettyprint sequences
+sequences.extras sets sorting system terms tools.annotations
+tools.time
+tools.annotations.private tools.continuations tools.walker ;
 
 IN: chr.debug
 FROM: namespaces => set ;
@@ -203,3 +204,21 @@ SYMBOL: chr-trace
 
 : qt. ( quot -- )
     qt sort-keys ... ;
+: add-chr-timing ( -- )
+    { lookup test-callable
+      check-guards
+      try-schedule-match
+      check/update-history
+    } M\ equiv-activation activate-new suffix
+    { assume-equal equiv-wakeup-set update-wakeup-set-vars
+      update-ground-values!
+      maybe-update-ground-values
+      check-recursive-terms
+    } append
+    [ add-timing ] each ;
+
+! ** Convenience
+: time.. ( ..a quot -- ..b )
+    reset-word-timing
+    time word-timing.
+    ; inline

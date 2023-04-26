@@ -259,9 +259,14 @@ ERROR: recursive-ground-terms terms ;
     dup assoc-empty? [ drop ] [ recursive-ground-terms ] if ;
 ! FIXME: definition order!
 DEFER: lift
+
+! XXX This is SOOOOOOOOO expensive, check-recursive-terms an the lifting both...
 : update-ground-values! ( assoc -- )
     [ [ keys ] keep [ [ f lift ] change-at ] curry each ]
-    [ check-recursive-terms ] bi
+    [
+        ! check-recursive-terms
+        drop
+    ] bi
     ; inline
 
 :: define-ground-value ( var value ds -- )
@@ -271,7 +276,10 @@ DEFER: lift
         [| old | old [ old value = [ old ] [ old value ground-value-contradiction ] if ]
          [ value ] if
         ] change-at
-    ] [ update-ground-values! ] bi
+    ] [
+        ! update-ground-values!
+        drop
+    ] bi
     ; inline
 
 : ground-value? ( obj -- ? )
@@ -299,7 +307,10 @@ DEFER: lift
 ! Main entry point for atoms
 :: assume-equal ( a b -- )
     defined-equalities :> ds
-    { { [ a b [ term-var? ] both? ] [ a b [ ds equate ] [ maybe-update-ground-values ] 2bi ] }
+    { { [ a b [ term-var? ] both? ] [ a b [ ds equate ] [
+                                          ! maybe-update-ground-values
+                                          2drop
+                                      ] 2bi ] }
       { [ a term-var? ] [ a b ds define-ground-value  ] }
       { [ b term-var? ] [ b a ds define-ground-value  ] }
       [ a b "trying to make something other than term vars equal" 3array throw ]

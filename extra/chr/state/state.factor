@@ -298,7 +298,7 @@ GENERIC: match-constraint ( bindings suspension match-spec -- bindings )
         bindings susp ctx>> combine-context?
         [ susp match-spec match-constraint ] [ f ] if*
     ] if
-    ;
+    ; inline
 
 ! We match a suspension in C1 against a { C ?x ... }
 ! When matching a C constraint, we need to turn the context bindings themselves off
