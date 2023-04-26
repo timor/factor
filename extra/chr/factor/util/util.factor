@@ -35,6 +35,10 @@ M: Effect effect>nterm
         [ parms>> >hash-set ]
     } cleave>array ;
 
+! The tag is unimportant for comparison
+M: Iterated effect>nterm
+    clone [ drop __ ] change-tag ;
+
 : same-effect? ( e1 e2 -- ? )
     [ effect>nterm ] bi@ isomorphic? ;
 

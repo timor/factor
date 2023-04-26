@@ -501,11 +501,8 @@ CHR: break-recursive-iteration @ { Iterated ?w { ?a ?b ?c ?d } } // { CallRecurs
 [ ?c ?i ==! ] ;
 
 ! NOTE: Idea: create an iteration constraint.  Should only be active in subsequent compositions
-CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho }
-! NOTE: relying on the fixpoint type being an effect!
-! { RecursionTypeOf ?w P{ Effect ?r ?s __ __ } }
-{ RecursionTypeOf ?w ?sig }
-// { CallRecursive ?w ?i ?o } --
+CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho } { RecursionTypeOf ?w ?sig } //
+{ CallRecursive ?w ?i ?o } --
 [ ?rho full-type? ]
 [ ?sig full-type? ]
 [ ?i fresh :>> ?c ]

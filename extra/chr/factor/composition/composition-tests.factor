@@ -310,6 +310,10 @@ M: array mylastcdr array-first [ [ mylastcdr ] ] (call) (call) ;
 
 { t } [ [ myloop ] get-type dup [ full-type? ] when ] unit-test
 
+! :)
+{ t }
+[ [ myloop ] get-type [ loop ] get-type same-effect? ] unit-test
+
 GENERIC: lastcdr1 ( list -- obj )
 M: list lastcdr1 cdr>> lastcdr1 ;
 M: +nil+ lastcdr1 ;
