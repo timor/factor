@@ -436,11 +436,17 @@ P{
 : bad ( ? quot: ( ? -- ) -- ) 2dup [ not ] dip bad call ; inline recursive
 : good ( ? quot: ( ? -- ) -- ) [ good ] 2keep [ not ] dip call ; inline recursive
 
-! ** TODO Mutual recursion
+! ** Basic Mutual Recursion
 
 DEFER: tok
 : tik-tik ( x -- y ) 2 - tok ;
 : tok ( x -- y ) 1 + dup 0 <= [ tik-tik ] unless ;
+
+P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?z number } P{ Instance ?y number } P{ Le ?y 0 } } }
+[ [ tik-tik ] get-type ] chr-test
+
+{ t } [ [ tik-tik ] get-type [ 1 drop tik-tik ] get-type same-effect? ] unit-test
+{ t } [ [ tik-tik ] get-type [ tok ] get-type same-effect? ] unit-test
 
 ! ** Macro expansion
 MACRO: my-add1 ( num -- quot )

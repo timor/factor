@@ -77,11 +77,12 @@ CHR: have-type-of-recursive-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w 
 [ ?r fresh ?a ==! ]
 [ ?s fresh ?b ==! ]
 { ReinferEffect P{ Effect ?a ?b f { P{ CallRecursive ?w ?a ?b } } } ?y }
-{ CheckXor ?w ?y ?z }
-{ TypeOf ?q P{ Xor
-               ?z
-               P{ Effect ?r ?s ?l ?p }
-             } } ;
+{ CheckXor ?w P{ Xor
+                 ?y
+                 P{ Effect ?r ?s ?l ?p } }
+  ?z }
+{ TypeOf ?q ?z }
+    ;
 
 CHR: have-type-of-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // --
 ! [ ?rho valid-effect-type? ]
