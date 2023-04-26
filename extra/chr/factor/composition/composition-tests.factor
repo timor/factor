@@ -46,7 +46,7 @@ GENERIC: get-type ( quot -- type )
 
 M: callable get-type
     [ qt values [ TypeOf? ] filter ]
-    [ [ swap thing>> = ] curry find nip ] bi
+    [ [ swap key>> = ] curry find nip ] bi
     dup [ type>> ] when ;
 M: word get-type
     1quotation get-type ;
