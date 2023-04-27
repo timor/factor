@@ -51,6 +51,10 @@ M: callable get-type
 M: word get-type
     1quotation get-type ;
 
+
+: same-type? ( quot quot -- ? )
+    [ get-type ] bi@ same-effect? ;
+
 TYPED: array-first ( arr: array -- thing ) 2 slot ;
 
 TERM-VARS: ?o ?a ?b ?v ?w ?x ?y ?z ;
@@ -143,15 +147,14 @@ P{ Effect ?a ?b f { P{ Invalid } } }
 P{ Effect ?a ?b f { P{ Invalid } } }
 [ [ curry (call) ] get-type ] chr-test
 
-! NOTE: This would only work if we decide to implement normal forms for the nominative type segment?
-{ f }
-[ [ compose call ] get-type [ [ call ] dip call ] get-type isomorphic? ] unit-test
+{ t }
+[ [ compose call ] [ [ call ] dip call ] same-type? ] unit-test
 
 { f }
-[ [ [ 42 2 slot ] [ "string" ] if ] get-type [ drop "string" ] get-type isomorphic? ] unit-test
+[ [ [ 42 2 slot ] [ "string" ] if ] [ drop "string" ] same-type? ] unit-test
 
 { t }
-[ [ [ 42 2 slot ] [ "string" ] if ] get-type [ { W{ f } } declare drop "string" ] get-type same-effect? ] unit-test
+[ [ [ 42 2 slot ] [ "string" ] if ] [ { W{ f } } declare drop "string" ] same-type? ] unit-test
 
 { t } [ [ fixnum? 4 5 ? ] get-type Xor? ] unit-test
 
@@ -162,11 +165,17 @@ P{ Effect L{ ?y . ?a } L{ ?x . ?a } f
 { t }
 [ [ number? 4 5 ? ] get-type Xor? ] unit-test
 
+{ t } [ [ 4 + 2 + ] [ 2 + 4 + ] same-type? ] unit-test
+{ t } [ [ 4 + 2 + 4 - ] [ 2 + ] same-type? ] unit-test
+{ t } [ [ 4 / 2 / ] [ 2 / 4 / ] same-type? ] unit-test
+{ t } [ [ 2 / 4 / ] [ 8 / ] same-type? ] unit-test
+{ t } [ [ 2 / 4 / 2 * ] [ 4 / ] same-type? ] unit-test
+
 ! FIXME
 ! Approach: Use the macro-expansion mechanism to map [ foo instance? ] to [ foo? ]
 ! ( or the other way round? )
 { t }
-[ [ callable? ] get-type [ callable instance? ] get-type isomorphic? ] unit-test
+[ [ callable? ] [ callable instance? ] same-type? ] unit-test
 
 { t }
 [ [ + 5 = [ swap ] when ] get-type Xor? ] unit-test
@@ -199,7 +208,7 @@ M: fixnum foothing 3 + ;
 M: array foothing array-first ;
 
 CONSTANT: foothing1
-P{ Effect L{ ?y . ?a } L{ ?z . ?a } f { P{ Instance ?y fixnum } P{ Instance ?z number } P{ Sum ?z ?y 3 } } }
+P{ Effect L{ ?y . ?a } L{ ?z . ?a } f { P{ Instance ?y fixnum } P{ Instance ?z integer } P{ Sum ?z ?y 3 } } }
 foothing1
 [ M\ fixnum foothing get-type ] chr-test
 
@@ -229,7 +238,6 @@ P{
 }
 [ \ auto-dispatch get-type ] chr-test
 
-! TODO: investigate why manual-dispatch takes ages compared to auto-dispatch
 : manual-dispatch ( obj -- res )
     dup +nil+? [ ]
     [ dup list? [ cdr>> ] [ ] if ] if ;
@@ -312,7 +320,7 @@ M: array mylastcdr array-first [ [ mylastcdr ] ] (call) (call) ;
 
 ! :)
 { t }
-[ [ myloop ] get-type [ loop ] get-type same-effect? ] unit-test
+[ [ myloop ] [ loop ] same-type? ] unit-test
 
 GENERIC: lastcdr1 ( list -- obj )
 M: list lastcdr1 cdr>> lastcdr1 ;
@@ -333,7 +341,7 @@ sol1
 [ [ lastcdr1 ] get-type ] chr-test
 
 { t }
-[ [ lastcdr1 ] get-type [ 1 drop lastcdr1 ] get-type same-effect? ] unit-test
+[ [ lastcdr1 ] [ 1 drop lastcdr1 ] same-type? ] unit-test
 
 GENERIC: lastcdr2 ( list -- obj )
 M: list lastcdr2 cdr>> [ lastcdr2 ] (call) ;
@@ -382,7 +390,7 @@ M: array lastcdr5 array-first lastcdr5 ;
 ! through multiple levels of nested effects (yet?)
 ! (update) Fixed by not phi-merging anything to do with unresolved computations
 { t }
-[ [ [ lastcdr5 ] ] get-type [ [ [ lastcdr5 ] ] (call) ] get-type isomorphic? ] unit-test
+[ [ [ lastcdr5 ] ] [ [ [ lastcdr5 ] ] (call) ] same-type? ] unit-test
 
 
 ! Correct one
@@ -445,8 +453,8 @@ DEFER: tok
 P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?z number } P{ Instance ?y number } P{ Le ?y 0 } } }
 [ [ tik-tik ] get-type ] chr-test
 
-{ t } [ [ tik-tik ] get-type [ 1 drop tik-tik ] get-type same-effect? ] unit-test
-{ t } [ [ tik-tik ] get-type [ tok ] get-type same-effect? ] unit-test
+{ t } [ [ tik-tik ] [ 1 drop tik-tik ] same-type? ] unit-test
+{ t } [ [ tik-tik ] [ tok ] same-type? ] unit-test
 
 ! ** Macro expansion
 MACRO: my-add1 ( num -- quot )
@@ -539,12 +547,12 @@ MACRO: my-mux ( cond -- quot )
 MACRO: my-if ( foo -- quot )
     drop [ if ] ;
 
-{ t } [ [ 42 my-if ] get-type [ if ] get-type same-effect? ] unit-test
-{ t } [ [ [ 1 ] 42 my-if ] get-type [ [ 1 ] if ] get-type same-effect? ] unit-test
-{ t } [ [ [ 1 ] [ 2 ] 42 my-if ] get-type [ [ 1 ] [ 2 ] if ] get-type same-effect? ] unit-test
-{ t } [ [ [ 1 ] [ 1 ] 42 my-if ] get-type [ [ 1 ] [ 1 ] if ] get-type same-effect? ] unit-test
-{ t } [ [ [ [ if ] ] call [ 42 my-if ] call ] get-type [ [ if ] if ] get-type same-effect? ]  unit-test
-{ t } [ [ [ if ] 42 my-if ] get-type [ [ if ] if ] get-type same-effect? ] unit-test
+{ t } [ [ 42 my-if ] [ if ] same-type? ] unit-test
+{ t } [ [ [ 1 ] 42 my-if ] [ [ 1 ] if ] same-type? ] unit-test
+{ t } [ [ [ 1 ] [ 2 ] 42 my-if ] [ [ 1 ] [ 2 ] if ] same-type? ] unit-test
+{ t } [ [ [ 1 ] [ 1 ] 42 my-if ] [ [ 1 ] [ 1 ] if ] same-type? ] unit-test
+{ t } [ [ [ [ if ] ] call [ 42 my-if ] call ] [ [ if ] if ] same-type? ]  unit-test
+{ t } [ [ [ if ] 42 my-if ] [ [ if ] if ] same-type? ] unit-test
 
 P{ Xor
   P{ Effect L{ ?x2 . ?i2 } L{ ?y2 . ?i2 } f { P{ Instance ?x2 object } P{ Neq ?x2 1 } P{ Instance ?y2 fixnum } P{ Eq ?y2 99 } } }

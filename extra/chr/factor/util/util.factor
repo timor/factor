@@ -1,5 +1,5 @@
-USING: accessors arrays chr.factor chr.parser combinators.short-circuit
-combinators.smart hash-sets kernel sequences terms types.util ;
+USING: accessors arrays chr.factor combinators.short-circuit combinators.smart
+generic.math hash-sets kernel math sequences terms types.util ;
 
 IN: chr.factor.util
 
@@ -57,3 +57,6 @@ M: Xor terminating-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ terminating-
 GENERIC#: recursive-branches 1 ( type word/quot -- branches )
 M: Effect recursive-branches over has-recursive-call? [ 1array ] [ drop f ] if ;
 M: Xor recursive-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ recursive-branches ] bi@ append sift ;
+
+: pessimistic-math-class-max ( class class -- class )
+    math-class-max dup fixnum eq? [ drop integer ] when ;

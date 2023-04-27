@@ -81,8 +81,7 @@ CHR: have-type-of-recursive-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w 
                  ?y
                  P{ Effect ?r ?s ?l ?p } }
   ?z }
-{ TypeOf ?q ?z }
-    ;
+{ TypeOf ?q ?z } ;
 
 CHR: have-type-of-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // --
 ! [ ?rho valid-effect-type? ]

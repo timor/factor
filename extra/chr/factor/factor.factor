@@ -241,6 +241,9 @@ TUPLE: Lt < rel-pred ;
 ! TUPLE: Gt < expr-pred val var ;
 TUPLE: Counter < val-pred from to by ;
 
+! commutative binary operations
+UNION: binop Sum Prod ;
+
 UNION: lt-pred Le Lt ;
 UNION: commutative-pred Eq Neq ;
 

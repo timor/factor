@@ -222,3 +222,7 @@ SYMBOL: chr-trace
     reset-word-timing
     time word-timing.
     ; inline
+
+: tqt ( quot -- res )
+    add-chr-timing
+    [ qt ] time.. ;

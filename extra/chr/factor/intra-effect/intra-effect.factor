@@ -416,29 +416,55 @@ CHR: redundant-neq-instance @ { Instance ?x A{ ?c } } { Instance ?y A{ ?d } } //
 CHR: check-sum @ // { Sum A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y + ?z = not ] | P{ Invalid } ;
 ! CHR: zero-sum-1 @ // { Sum ?z 0 ?y } -- | [ ?z ?y ==! ] ;
 ! CHR: zero-sum-2 @ // { Sum ?z ?x 0 } -- | [ ?z ?x ==! ] ;
+CHR: normalize-binop @ // AS: ?p <={ binop ?z A{ ?x } ?y } -- [ ?y term-var? ] |
+[ { ?z ?y ?x } ?p class-of slots>tuple ] ;
+
+! Anything more complex than that needs a linear equation predicate, or
+! a linear solver, for that matter...
+CHR: transitive-literal-sum @ // { Sum ?z ?x A{ ?m } } { Sum ?x ?a A{ ?n } } --
+[ ?m ?n + :>> ?k ] | { Sum ?z ?a ?k } ;
+
+CHR: transitive-literal-prod @ // { Prod ?z ?x A{ ?m } } { Prod ?x ?a A{ ?n } } --
+[ ?m ?n * :>> ?k ] | { Prod ?z ?a ?k } ;
+
+! TODO: also do the non-lit-case, really could use disjunction syntax sugar in the antecedent here...
+! Alternatively, ditch the value-insertion into the expressions altogether...
+! More alternatively, re-normalize into non-lit form somewhere?
+! OR: Keep around both?
+! OROR: Do the full math dispatch on every math word, and these cases don't arise in the first place...
+! Another way: treat fixnum as a predicate class on integers...
+! NOTE: this is nasty with fixnums because we can overflow into bignums from fixnums in the general case...
+CHR: lit-binop-specializes-math-class @ <={ binop ?z ?x A{ ?m } } { Instance ?x ?c } // --
+[ ?m class-of ?c pessimistic-math-class-max :>> ?d ] | { Instance ?z ?d } ;
+
+
+
+! TODO: may be better to do this with a linear combination predicate instead?
+! NOTE: looks like we explicitly coded out the version of if we know 2, let's keep the third...
+CHR: keep-intermediate-op-result-1 @ <={ binop ?z ?x ?y } <={ binop ?x ?a ?b } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
+CHR: keep-intermediate-op-result-2 @ <={ binop ?z ?y ?x } <={ binop ?x ?a ?b } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
+! TODO maybe extend to non-literal too
+CHR: keep-intermediate-op-result-3 @ <={ binop ?z ?y ?x } <={ binop A{ ?m } ?x ?a } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a } { ?x } } ;
+CHR: keep-intermediate-op-result-4 @ <={ binop ?z ?x ?y } <={ binop A{ ?m } ?x ?a } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a } { ?x } } ;
+
 CHR: define-sum @ // { Sum ?z A{ ?x } A{ ?y } } --
 [ ?x ?y + <wrapper> :>> ?v ] | { Instance ?z ?v } ;
 CHR: define-diff-1 @ // { Sum A{ ?z } ?x A{ ?y } } --
 [ ?z ?y - <wrapper> :>> ?v ] | { Instance ?x ?v } ;
-CHR: normalize-sum @ // { Sum ?z A{ ?x } ?y } -- [ ?y term-var? ] | { Sum ?z ?y ?x } ;
-! Anything more complex than that needs a linear equation predicate...
-CHR: transitive-literal-sum @ // { Sum ?z ?x A{ ?m } } { Sum ?x ?a A{ ?n } } --
-[ ?m ?n + :>> ?k ]
-| { Sum ?z ?a ?k } ;
-
-! NOTE: this does not work transitively in a correct way
-! TODO: may be better to do this with a linear combination predicate instead?
-UNION: binary-expr Sum Prod ;
-CHR: keep-intermediate-sum-1 @ <={ binary-expr ?z ?x ?y } <={ binary-expr ?x ?a ?b } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
-CHR: keep-intermediate-sum-2 @ <={ binary-expr ?z ?y ?x } <={ binary-expr ?x ?a ?b } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
+CHR: define-diff-2 @ // { Sum A{ ?z } A{ ?y } ?x } --
+[ ?z ?y - <wrapper> :>> ?v ] | { Instance ?x ?v } ;
 
 CHR: check-prod @ // { Prod A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y * ?z = not ] | P{ Invalid } ;
-CHR: neutral-prod-1 @ // { Prod ?z 1 ?y } -- | [ ?z ?y ==! ] ;
-CHR: neutral-prod-2 @ // { Prod ?z ?x 1 } -- | [ ?z ?x ==! ] ;
+CHR: neutral-prod-1 @ // { Prod ?z 1 ?y } -- [ ?z term-var? ] [ ?y term-var? ] | [ ?z ?y ==! ] ;
+CHR: neutral-prod-2 @ // { Prod ?z ?x 1 } -- [ ?z term-var? ] [ ?x term-var? ] | [ ?z ?x ==! ] ;
 CHR: zero-prod-1 @ // { Prod ?z 0 ?y } -- | { Instance ?z 0 } ;
 CHR: zero-prod-2 @ // { Prod ?z ?y 0 } -- | { Instance ?z 0 } ;
 CHR: define-prod @ // { Prod ?z A{ ?x } A{ ?y } } --
 [ ?x ?y * <wrapper> :>> ?v ] | { Instance ?z ?v } ;
+CHR: define-frac-1 @ // { Prod A{ ?z } ?x A{ ?y } }  --
+[ ?z ?y / <wrapper> :>> ?v ] | { Instance ?x ?v } ;
+CHR: define-frac-2 @ // { Prod A{ ?z } A{ ?y } ?x }  --
+[ ?z ?y / <wrapper> :>> ?v ] | { Instance ?x ?v } ;
 
 CHR: check-shift @ // { Shift A{ ?z } A{ ?x } A{ ?n } } -- [ ?x ?n shift ?z = not ] | P{ Invalid } ;
 CHR: neutral-shift @ // { Shift ?z ?x 0 } -- | [ ?z ?x ==! ] ;
@@ -574,7 +600,7 @@ CHR: invalid-loop-effect @ // { LoopVar { ?w ?x ?y ?z } } --
 ! TODO: Test if sum is always normalized for this?
 ! Define Counters.  Note that These define _inclusive_ intervals, because
 ! If the sum is assumed to have been calculated, then the result is included
-CHR: loop-sum-defines-counters @ { Sum ?y ?x ?n } // { LoopVar { ?w ?x ?y ?z } } -- |
+CHR: loop-sum-defines-counters @ { Sum ?y ?x ?n } { LoopVar { ?w ?x ?y ?z } } // -- |
 ! CHR: loop-sum-defines-counters @ { Sum ?y ?x ?n } { LoopVar { ?w ?x ?y ?z } } // -- |
 ! pre-loop-body
 { Counter ?x ?w ?a ?n }
@@ -583,6 +609,20 @@ CHR: loop-sum-defines-counters @ { Sum ?y ?x ?n } // { LoopVar { ?w ?x ?y ?z } }
 { Counter ?y ?b ?z ?n }
 { Sum ?b ?w ?n }
 ;
+
+! NOTE: this will probably generate some noise in connection with the other instance loop bound
+! propagation rule
+CHR: loop-counter-input-specializes @ { Counter ?x ?a ?b A{ ?m } }
+{ Instance ?a ?c } // --
+[ ?c ?m class-of pessimistic-math-class-max :>> ?d ] |
+{ Instance ?x ?d }
+{ Instance ?b ?d } ;
+
+! CHR: loop-counter-output-specializes @ { Counter ?x ?a ?b A{ ?m } }
+! { Instance ?a ?c } // --
+! [ ?c ?m class-of pessimistic-math-class-max :>> ?d ] |
+! { Instance ?x ?d }
+! { Instance ?b ?d } ;
 
 ! TODO cases for lt?
 ! If we now we are descending by constant amount m,

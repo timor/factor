@@ -330,6 +330,17 @@ CHR: type-of-* @ { TypeOfWord A{ * } ?tau } // -- |
      } } ==! ]
 { ComposeType P{ Effect ?a ?a f { P{ Ensure { number number } ?a } } } ?sig ?tau } ;
 
+CHR: type-of-/ @ { TypeOfWord A{ / } ?tau } // -- |
+[ ?tau
+  P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } f {
+         P{ Instance ?x number }
+         P{ Instance ?y number }
+         P{ Instance ?z number }
+         P{ Prod 1 ?m ?y }
+         P{ Instance ?m number }
+         P{ Prod ?z ?x ?m }
+     } } ==! ] ;
+
 ! induces parameter
 ! ( x y -- ? )
 CHR: type-of-< @ { TypeOfWord A{ < } ?tau } // -- |
