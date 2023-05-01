@@ -1,8 +1,8 @@
-USING: accessors arrays assocs chr.factor chr.parser chr.state classes
-classes.algebra classes.tuple classes.tuple.private combinators.short-circuit
-effects generic generic.single kernel kernel.private lists macros
-macros.expander math math.private quotations sequences sequences.private sets
-slots.private terms types.util words ;
+USING: accessors arrays assocs chr.factor chr.factor.util chr.parser chr.state
+classes classes.tuple classes.tuple.private combinators
+combinators.short-circuit effects generic generic.math generic.single kernel
+kernel.private layouts lists macros macros.expander math math.private quotations
+sequences sequences.private sets slots.private terms types.util words ;
 
 IN: chr.factor.word-types
 
@@ -34,9 +34,15 @@ IN: chr.factor.word-types
         { <= [ 2dup < [ 2drop t ] [ = ] if ] }
         ! { <= [ [ < ] [ = ] 2bi or ] }
         { >= [ swap <= ] }
-        { - [ -1 * + ] }
+        ! { - [ -1 * + ] }
         { number= [ { number number } declare = ] }
+        ! This is according to the word props, but there are methods defined on complex!
+        ! { /i [ { real real } declare / >integer ] }
     } at ;
+
+! ! Are skipped from certain ops?
+! : special-generic? ( word -- ? )
+!     { + < instance? nth length nth-unsafe call throw } in? ;
 
 ! These are used as fallbacks for recursive calls to certain words
 : rec-defaults ( word -- def/f )
@@ -44,16 +50,18 @@ IN: chr.factor.word-types
         { length P{ Effect L{ ?a . ?r } L{ ?n . ?r } f {
                         P{ Instance ?a sequence }
                         P{ Length ?a ?n }
+                        P{ Le 0 ?n }
                     } } }
-        { nth P{ Effect L{ ?n ?s . ?a } L{ ?v . ?a } f {
+        { nth P{ Effect L{ ?s ?n . ?a } L{ ?v . ?a } f {
                      P{ Instance ?n integer }
-                     P{ Lt 0 ?n }
+                     P{ Le 0 ?n }
                      P{ Instance ?s sequence }
-                     P{ Element ?s ?v }
+                     P{ Nth ?v ?s ?n }
+                     ! P{ Element ?s ?v }
                  } } }
-        { nth-unsafe P{ Effect L{ ?n ?s . ?a } L{ ?v . ?a } f {
+        { nth-unsafe P{ Effect L{ ?s ?n . ?a } L{ ?v . ?a } f {
                             P{ Instance ?n integer }
-                            P{ Lt 0 ?n }
+                            P{ Le 0 ?n }
                             P{ Instance ?s sequence }
                             P{ Element ?s ?v }
                         } } }
@@ -61,7 +69,50 @@ IN: chr.factor.word-types
 
 CHRAT: chr-word-types { }
 
+CHR: dont-wrap-classes-invalid @ // { WrapClasses __ __ null ?tau } -- |
+[ ?tau null ==! ] ;
 
+CHR: destruct-wrap-classes-xor @ // { WrapClasses ?i ?o P{ Xor ?c ?d } ?tau } -- |
+{ WrapClasses ?i ?o ?c ?rho }
+{ WrapClasses ?i ?o ?d ?sig }
+{ MakeXor ?rho ?sig ?tau } ;
+
+! NOTE: not using ComposeType because this may not rebuild the effect!
+CHR: add-default-classes-to-effect @ // { WrapDefaultClasses ?w ?e ?tau } --
+|
+[| |
+ ?w { [ "input-classes" word-prop ]
+      [ stack-effect effect-in-types ]
+    } 1|| :> in-types
+ ?w { [ "default-output-classes" word-prop ]
+      [ stack-effect effect-out-types ]
+    } 1|| :> out-types
+ { WrapClasses in-types out-types ?e ?tau }
+] ;
+
+CHR: add-classes-to-effect @ // { WrapClasses ?i ?o P{ Effect ?a ?b ?l ?p } ?tau } -- |
+! [ ?w stack-effect effect>stacks :>> ?o drop :>> ?i ]
+! [ { ?a ?b } { ?i ?o } ==! ]
+[| |
+ ?i length "in" <array> elt-vars dup :> ain
+ ?o length "out" <array> elt-vars dup :> aout
+ [ >list __ list* ] bi@ :> ( lin lout )
+ ain <reversed> ?i
+ [ DeclaredInstance boa ] 2map
+ aout <reversed> ?o
+ [ DeclaredInstance boa ] 2map append ?p append :> preds
+ { ?a ?b } { lin lout } ==!
+ ?tau P{ Effect ?a ?b ?l preds } ==!
+ 2array
+] ;
+! |
+! { ?TypeOf ?i ?x }
+! { ?TypeOf ?o ?y }
+! { ComposeType ?x ?e ?sig }
+! { ComposeType ?sig ?y ?tau } ;
+
+
+! TODO: maybe insert input/output declarations here, too!
 CHR: alias-type-defined @ { TypeOfWord ?w ?tau } // -- [ ?w word-alias :>> ?q ] |
 { ?TypeOf ?q ?tau } ;
 
@@ -142,17 +193,19 @@ CHR: type-of-<array> @ { TypeOfWord <array> ?tau } // -- |
 
 ! : array-nth ( n array -- elt )
 ! NOTE: existentials
-CHR: type-of-access @ { TypeOfWord array-nth ?tau } // -- |
+CHR: type-of-array-nth @ { TypeOfWord array-nth ?tau } // -- |
 [ ?tau
-  P{ Effect L{ ?l ?n . ?a } L{ ?v . ?a } f {
+  P{ Effect L{ ?l ?n . ?a } L{ ?v . ?a } { ?x } {
          P{ Instance ?n fixnum }
+         ! P{ Instance ?n array-capacity }
          P{ Instance ?l array }
-         P{ Instance ?x array-capacity }
+         ! P{ Instance ?x array-capacity }
+         P{ DeclaredInstance ?x array-capacity }
          P{ Instance ?v object }
          P{ Length ?l ?x }
-         ! P{ Gt ?x ?n }
          P{ Le ?n ?x }
-         P{ Element ?l ?v }
+         ! P{ Element ?l ?v }
+         P{ Nth ?v ?l ?n }
      } }
   ==! ] ;
 
@@ -236,13 +289,18 @@ CHR: type-of-unit-val @ { ?TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ]
 { MakeUnit ?rho ?sig }
 { TypeOf ?q ?sig } ;
 
-CHR: make-unit-simple-type @ // { MakeUnit ?rho ?tau } -- [ { ?rho } first valid-type? ] |
+! TODO: gauge impact of not doing the expansion eagerly
+! XXX This breaks isomorphic comparison for some reason.  Normalization broken?
+! CHR: make-unit-simple-type @ // { MakeUnit ?rho ?tau } -- [ { ?rho } first valid-type? ] |
+CHR: make-unit-simple-type @ // { MakeUnit ?rho ?tau } -- [ ?rho term-var? not ] |
 [ ?tau P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x ?rho } } } ==! ] ;
 
-CHR: make-xor-unit-type @ // { MakeUnit P{ Xor ?x ?y } ?tau } -- |
-{ MakeXor ?rho ?sig ?tau }
-{ MakeUnit ?x ?rho }
-{ MakeUnit ?y ?sig } ;
+! NOTE: Big Change! Only make these CallXors!
+! CHR: make-xor-unit-type @ // { MakeUnit P{ Xor ?x ?y } ?tau } -- |
+! { MakeXor ?rho ?sig ?tau }
+! { MakeUnit ?x ?rho }
+! { MakeUnit ?y ?sig } ;
+! CHR: make-xor-unit-type @ // { MakeUnit P{ Xor ?x ?y } }
 
 ! *** Data Values
 
@@ -251,13 +309,25 @@ CHR: type-of-val @ // { ?TypeOf A{ ?v } ?tau } -- [ ?v callable? not ] [ ?v call
 [ ?tau W{ W{ ?v } } ==! ] ;
 
 ! *** Some Primitives
+CHR: type-of-both-fixnums? @ { TypeOfWord both-fixnums? ?tau } // -- |
+{ WrapDefaultClasses both-fixnums?
+  P{ Xor
+     P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f {
+            { Instance ?x fixnum }
+            { Instance ?y fixnum }
+            { Instance ?c W{ t } } } }
 
-! induces parameter
+     P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f {
+            { Instance ?x object }
+            { Instance ?y object }
+            { Instance ?c W{ t } } }
+   } } ?tau } ;
+
 CHR: type-of-eq @ { TypeOfWord eq? ?tau } // -- |
 [ ?tau P{ Xor
           ! introducing the value which is equal to as parameter?
-          P{ Effect L{ ?x ?x . ?a } L{ ?c . ?a } { ?c } { P{ Instance ?x object } P{ Instance ?c t } } }
-          P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } { ?c } { P{ Instance ?x object } P{ Instance ?c POSTPONE: f } P{ Neq ?x ?y } } }
+          P{ Effect L{ ?x ?x . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?c t } } }
+          P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?c POSTPONE: f } } }
    } ==! ] ;
 
 ! NOTE: Declarations are nominative first of all, although the existing type inference does
@@ -279,71 +349,126 @@ CHR: type-of-tag @ { TypeOfWord tag ?tau } // -- |
          P{ Tag ?o ?n }
      } } ==! ]  ;
 
-CONSTANT: primitive-coercers {
-    bignum>fixnum
-    fixnum>bignum
-    fixnum>float
-}
+! CONSTANT: primitive-coercers {
+!     ! bignum fixnum is special because of precision loss.
+!     ! Assuming Overflow to be an error
+!     ! bignum>fixnum
+!     fixnum>bignum
+!     fixnum>float
+! }
+
+! Assume error on overflow conversion.  Not writing as XOR since it would be
+! reasoned out anyways.
 ! bignum>fixnum ( x -- y )
-CHR: type-of-primitive-coercion @ { TypeOfWord ?w ?tau } // --
-[ ?w primitive-coercers in? ]
-[ ?w "input-classes" word-prop first :>> ?rho ]
-[ ?w "default-output-classes" word-prop first :>> ?sig ]
+CHR: type-of-bignum>fixnum @ { TypeOfWord bignum>fixnum ?tau } // --
+[ most-positive-fixnum :>> ?u ]
+[ most-negative-fixnum :>> ?l ] |
+[ ?tau P{ Effect L{ ?x . ?a } L{ ?y . ?a } f {
+              P{ Instance ?x bignum }
+              ! P{ Instance ?x integer }
+              P{ Instance ?y fixnum }
+              P{ Le ?x ?u }
+              P{ Le ?l ?x }
+              P{ Eq ?x ?y }
+          } } ==! ] ;
+
+
+! ! TODO: use wrapclass-thing
+! CHR: type-of-other-primitive-coercion @ { TypeOfWord ?w ?tau } // --
+! [ ?w primitive-coercers in? ]
+! [ ?w "input-classes" word-prop first :>> ?rho ]
+! [ ?w "default-output-classes" word-prop first :>> ?sig ]
+! |
+! [ ?tau
+!   P{ Effect L{ ?x . ?a } L{ ?y . ?a } f {
+!          P{ Instance ?x ?rho }
+!          P{ Instance ?y ?sig }
+!          P{ Eq ?y ?x }
+!      } }
+!   ==! ] ;
+
+! general primitives
+! NOTE: reinferring to catch the conversions as early as possible // --
+! *** Derived Words
+
+! TODO: do for all derived primitives
+! NOTE: This doesn't work for e.g. shift, because of the coercer.
+! CHR: type-of-derived-math-word @ { TypeOfWord ?w ?tau } // --
+! [ ?tau term-var? ]
+! [ ?w "derived-from" word-prop :>> ?l ]
+! [ ?l first 1quotation :>> ?q ] |
+! { ?TypeOf ?q ?sig }
+! { WrapDefaultClasses ?w ?sig ?rho }
+! { ReinferEffect ?rho ?z }
+! { CheckXor ?w ?z ?tau } ;
+
+! *** Primitive Catch-all
+CHR: type-of-other-primitives @ { TypeOfWord ?w ?tau } // --
+[ ?tau term-var? ] [ ?w primitive? ] [ ?w macro-quot not ]
+[ ?w stack-effect :>> ?e effect>stacks :>> ?b drop :>> ?a ]
+[ ?a list*>array but-last reverse ?e in>> length head :>> ?i ]
+[ ?b list*>array but-last reverse ?e out>> length head :>> ?o ]
 |
-[ ?tau
-  P{ Effect L{ ?x . ?a } L{ ?y . ?a } f {
-         P{ Instance ?x ?rho }
-         P{ Instance ?y ?sig }
-         P{ Eq ?y ?x }
-     } }
-  ==! ] ;
+{ WrapDefaultClasses ?w P{ Effect ?a ?b f { P{ PrimCall ?w ?i ?o } } } ?rho }
+{ ReinferEffect ?rho ?tau } ;
+
 
 ! CHR: type-of-fixnum+ @ { TypeOfWord fixnum+ ?tau } // -- |
 ! [ ?tau
-!   P{ Effect L{ ?x ?y . ?a } L{ ?z . ?b } { P{ Instance ?x fixnum } P{ Instance ?y fixnum } P{ Use ?x } P{ Use ?y } P{ Instance ?z integer } } }
+!   P{ Effect L{ ?x ?y . ?a } L{ ?z . ?b } f
+!      { P{ Instance ?x fixnum } P{ Instance ?y fixnum } P{ Instance ?z integer } P{ Sum ?z ?y ?x } } }
 !   ==!
 ! ] ;
 
 ! shift ( x n -- y )
-CHR: type-of-fixnum-shift-fast @ { TypeOfWord fixnum-shift-fast ?tau } // -- |
-[ ?tau P{ Effect L{ ?n ?x . ?a } L{ ?y . ?a } f {
-              P{ Instance ?n fixnum }
-              P{ Instance ?x fixnum }
-              P{ Instance ?y fixnum }
-              P{ Shift ?y ?x ?n }
-          } } ==! ] ;
+! CHR: type-of-fixnum-shift-fast @ { TypeOfWord fixnum-shift-fast ?tau } // -- |
+! [ ?tau P{ Effect L{ ?n ?x . ?a } L{ ?y . ?a } f {
+!               P{ Instance ?n fixnum }
+!               P{ Instance ?x fixnum }
+!               P{ Instance ?y fixnum }
+!               P{ Shift ?y ?x ?n }
+!           } } ==! ] ;
 
 ! *** Math
-CHR: type-of-+ @ { TypeOfWord A{ + } ?tau } // -- |
-[ ?sig
-  P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } f {
-         P{ Instance ?z number }
-         P{ Sum ?z ?x ?y }
-     } } ==! ]
-{ ComposeType P{ Effect ?a ?a f { P{ Ensure { number number } ?a } } } ?sig ?tau } ;
+! NOTE: for now, not making generic dispatches on math words.  For type reasoning, we don't look into this. by default
 
-CHR: type-of-* @ { TypeOfWord A{ * } ?tau } // -- |
-[ ?sig
-  P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } f {
-         P{ Instance ?z number }
-         P{ Prod ?z ?x ?y }
-     } } ==! ]
-{ ComposeType P{ Effect ?a ?a f { P{ Ensure { number number } ?a } } } ?sig ?tau } ;
+! CHR: type-of-+ @ { TypeOfWord A{ + } ?tau } // -- |
+! { MakeGenericDispatch +
+!   P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } f {
+!          P{ Instance ?x number }
+!          P{ Instance ?y number }
+!          P{ Instance ?z number }
+!          P{ Sum ?z ?x ?y } } } ?tau } ;
 
-CHR: type-of-/ @ { TypeOfWord A{ / } ?tau } // -- |
-[ ?tau
-  P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } f {
-         P{ Instance ?x number }
-         P{ Instance ?y number }
-         P{ Instance ?z number }
-         P{ Prod 1 ?m ?y }
-         P{ Instance ?m number }
-         P{ Prod ?z ?x ?m }
-     } } ==! ] ;
+! CHR: type-of-* @ { TypeOfWord A{ * } ?tau } // -- |
+! { MakeGenericDispatch +
+!   P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } f {
+!          P{ Instance ?z number }
+!          P{ Instance ?x number }
+!          P{ Instance ?z number }
+!          P{ Prod ?z ?x ?y } } } ?tau } ;
+
+! CHR: type-of-/ @ { TypeOfWord A{ / } ?tau } // -- |
+! { MakeGenericDispatch /
+!   P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } f {
+!          P{ Instance ?x number }
+!          P{ Instance ?y number }
+!          P{ Instance ?z number }
+!          ! P{ Prod 1 ?m ?y }
+!          P{ Instance ?m number }
+!          ! P{ Prod ?z ?x ?m }
+!          P{ Prod ?x ?z ?y } } } ?tau } ;
 
 ! induces parameter
 ! ( x y -- ? )
 CHR: type-of-< @ { TypeOfWord A{ < } ?tau } // -- |
+! { MakeGenericDispatch <
+!   P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f {
+!          { Instance ?x number }
+!          { Instance ?y number }
+!          { Instance ?c boolean }
+!          { <==> ?c P{ Lt ?x ?y } }
+!      } } ?tau } ;
 [
     ?sig
     P{ Xor
@@ -364,9 +489,19 @@ CHR: type-of-< @ { TypeOfWord A{ < } ?tau } // -- |
 { ComposeType P{ Effect ?a ?a f { P{ Ensure { number number } ?a } } } ?sig ?tau } ;
 
 ! induces parameter
+! TODO: generic
 CHR: type-of-= @ { TypeOfWord A{ = } ?tau } // -- |
+! { MakeGenericDispatch =
+! [ ?tau
+!     P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a  } f {
+!            { Instance ?x object }
+!            { Instance ?y object }
+!            { Instance ?c boolean }
+!            { <==> ?c P{ Eq ?x ?y } }
+!        } }
+!      ==! ] ;
+!     ! ?tau } ;
 [
-    ! ?sig
     ?tau
     P{ Xor
        P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
@@ -383,6 +518,60 @@ CHR: type-of-= @ { TypeOfWord A{ = } ?tau } // -- |
     ==!
 ] ;
 
+! TODO: number declaring outputs on Sum, Prod conversion
+CHR: type-of-math-word @ { TypeOfWord ?w ?tau } // -- [ ?tau term-var? ]
+[ ?w math-generic? ]
+|
+[| | ?w stack-effect effect>stacks :> ( lin lout )
+ ?w stack-effect [ in>> length ] [ out>> length ] bi :> ( ni no )
+ lin lout [ list*>array but-last <reversed> ] bi@
+ [ ni head ] [ no head ] bi* :> ( ain aout )
+ lin L{ ?y ?x . __ } ==!
+ ! { ReinferEffect P{ Effect L{ ?y ?x . ?a } ?b f {
+ { ReinferEffect P{ Effect lin lout f {
+                        P{ Instance ?y number }
+                        P{ Instance ?x number }
+                        P{ MathCall ?w ain aout }
+                    } } ?tau }
+ 2array ] ;
+
+! *** Sequence-related
+CHR: type-of-length @ { TypeOfWord A{ length } ?tau } // --
+[ ?tau term-var? ] |
+{ MakeGenericDispatch length
+  P{ Effect L{ ?s . ?a } L{ ?n . ?a } f {
+         P{ Instance ?s sequence }
+         P{ Instance ?n integer }
+         P{ Le 0 ?n }
+         P{ Length ?s ?n } } }
+  ?tau } ;
+
+CHR: type-of-nth @ { TypeOfWord nth ?tau } // -- |
+{ MakeGenericDispatch nth
+  P{ Effect L{ ?s ?n . ?a } L{ ?v . ?a } { ?x } {
+         P{ Instance ?s sequence }
+         P{ Instance ?n integer }
+         P{ Le 0 ?n }
+         ! Existential
+         P{ Length ?s ?x }
+         P{ Instance ?x integer }
+         P{ Lt ?n ?x  }
+     } } ?tau } ;
+! { nth P{ Effect L{ ?s ?n . ?a } L{ ?v . ?a } f {
+!              P{ Instance ?n integer }
+!              P{ Le 0 ?n }
+!              P{ Instance ?s sequence }
+!              P{ Nth ?v ?s ?n }
+!              ! P{ Element ?s ?v }
+!          } } }
+! { nth-unsafe P{ Effect L{ ?s ?n . ?a } L{ ?v . ?a } f {
+!                     P{ Instance ?n integer }
+!                     P{ Le 0 ?n }
+!                     P{ Instance ?s sequence }
+!                     P{ Element ?s ?v }
+!                 } } }
+
+
 ! TODO: output types
 ! *** Typed words
 CHR: type-of-typed-word @ { TypeOfWord A{ ?w } ?tau } // --
@@ -391,6 +580,7 @@ CHR: type-of-typed-word @ { TypeOfWord A{ ?w } ?tau } // --
 [ ?w "declared-effect" word-prop effect-in-types <reversed> >list :>> ?a ]
 |
 { ?TypeOf ?q ?rho }
+! FIXME: check declaration order!
 { ComposeType P{ Effect ?x ?x f { P{ Declare ?a ?x } } } ?rho ?tau } ;
 
 ! *** Delayed Expansion words
@@ -441,57 +631,60 @@ CHR: type-of-regular-word @ { TypeOfWord A{ ?w } ?tau } // --
 { ?TypeOf ?q ?sig }
 { ComposeType P{ Effect ?a ?a f { P{ Ensure ?c ?a } } } ?sig ?tau } ;
 
-! This is actually the one spot where we can declare that things don't overlap
-! although they would do if we inferred them as random possible branches of an
-! XOR type.  Normally, if parameters overlap, we unionize them to enforce
-! XOR-Property, i.e. ensure that actually only one branch can be taken.  Here we
-! explicitly encode the not-instance declarations which would be implied during
-! runtime dispatch.
-! Takes an ordered list of { class method } specs, and modifies it to exclude
-! previous ones.
-: make-disjoint-classes-step ( not-class next-in -- not-class next-out )
-    [ swap class-not simplifying-class-and ]
-    [ class-or ] 2bi swap ;
+! ** Generic Dispatch
 
-: make-disjoint-classes ( classes -- classes )
-    null swap [ make-disjoint-classes-step ] map nip ;
-
-: enforce-dispatch-order ( methods -- methods )
-    <reversed> unzip [ make-disjoint-classes ] dip
-    zip ;
-
-: dispatch-method-seq ( single-generic -- seq )
-    dup "methods" word-prop sort-methods object over key?
-    [ nip ]
-    [
-        [ "default-method" word-prop object swap 2array ] dip swap prefix
-    ] if enforce-dispatch-order ;
+CHR: make-single-or-math-generic-dispatch @ // { MakeGenericDispatch ?w P{ Effect ?i ?o ?l ?p } ?tau } --
+! [ ?w { [ single-generic? ] [ math-generic? ] } 0|| ]
+[ ?w generic? ]
+[ ?w stack-effect effect>stacks :>> ?b
+  list*>array but-last :>> ?y drop
+  :>> ?a list*>array but-last :>> ?x ]
+[
+    ?x
+    { { [ ?w single-generic? ] [ ?w dispatch# swap nth 1array ] }
+      { [ ?w math-generic? ] [ first2 2array ] }
+    } cond :>> ?d ]
+[ ?p P{ GenericDispatch ?w ?d ?y ?a ?b } suffix :>> ?q ]
+|
+[ { ?i ?o } { ?a ?b } ==! ]
+{ WrapDefaultClasses ?w P{ Effect ?i ?o ?l ?q } ?tau } ;
 
 
 CHR: type-of-generic @ { TypeOfWord ?w ?tau } // --
 [ ?tau term-var? ]
-[ ?w single-generic? ]
-[ ?w dispatch# :>> ?i ]
+[ ?w generic? ]
+! [ ?w dispatch# :>> ?i ]
 [ ?w "transform-quot" word-prop not ]
-[ ?w dispatch-method-seq >list :>> ?l ]
-[ ?w stack-effect effect>stacks :>> ?b drop :>> ?a ]
+! [ ?w dispatch-method-seq >list :>> ?l ]
+! [ ?w stack-effect effect>stacks :>> ?b drop :>> ?a ]
+! [ ?i ?a list*>array but-last <reversed> nth :>> ?d ]
 |
-{ MakeSingleDispatch ?i ?l ?tau } ;
+{ MakeGenericDispatch ?w P{ Effect ?a ?b f f } ?tau } ;
+! [ ?tau P{ Effect ?a ?b f { ?sig } } ==! ] ;
+! [ ?tau P{ Effect ?a ?b f { P{ GenericDispatch ?w { ?d } ?a ?b } } } ==! ] ;
+! { MakeSingleDispatch ?i ?l ?tau } ;
 
-: dispatch-decl ( class num -- seq )
-    dup 1 + object <array> [ set-nth ] keep ;
+! ! NOTE: this really belongs to intra-effect!
+! CHR: expand-single-generic-dispatch @ { CompMode } { Instance ?x A{ ?c } } // { GenericDispatch ?w { x } ?a ?b } -- |
+! [ ?w single-generic? ]
+! [ ?c bounded-class? ]
+! [ ?w dispatch# :>> ?i ]
+! [ ?w dispatch-method-seq [ ?c classes-intersect? ] filter-keys
+!   >list :>> ?l ] |
+! { MakeSingleDispatch ?i ?l ?rho }
 
-CHR: dispatch-done @ // { MakeSingleDispatch __ +nil+ ?tau } -- | [ ?tau null ==! ] ;
-CHR: dispatch-case @ // { MakeSingleDispatch ?i L{ { ?c ?m } . ?r } ?tau } --
-[ ?c ?i dispatch-decl <reversed> >list :>> ?l ]
-|
-{ TypeOfWord ?m ?a }
-! TODO: make this a declare quot instead of pred?
-! Here we prefix the method word type with the excluded cases from the ordered dispatch
-{ ComposeType P{ Effect ?b ?b f { P{ Declare ?l ?b } } } ?a ?rho }
-{ MakeSingleDispatch ?i ?r ?sig }
-{ MakeXor ?rho ?sig ?d }
-{ CheckXor ?m ?d ?tau } ;
+! CHR: dispatch-done @ // { MakeSingleDispatch __ +nil+ ?tau } -- | [ ?tau null ==! ] ;
+
+! CHR: dispatch-case @ // { MakeSingleDispatch ?i L{ { ?c ?m } . ?r } ?tau } --
+! [ ?c ?i dispatch-decl <reversed> >list :>> ?l ]
+! |
+! { TypeOfWord ?m ?a }
+! ! TODO: make this a declare quot instead of pred?
+! ! Here we prefix the method word type with the excluded cases from the ordered dispatch
+! { ComposeType P{ Effect ?b ?b f { P{ Declare ?l ?b } } } ?a ?rho }
+! { MakeSingleDispatch ?i ?r ?sig }
+! { MakeXor ?rho ?sig ?d }
+! { CheckXor ?m ?d ?tau } ;
 
 CHR: type-of-reader @ { TypeOfWord ?w ?tau } // -- [ ?w method? ] [ ?w "reading" word-prop :>> ?x ]
 [ ?w "method-class" word-prop :>> ?c ]
@@ -506,15 +699,17 @@ CHR: type-of-reader @ { TypeOfWord ?w ?tau } // -- [ ?w method? ] [ ?w "reading"
    }
   ==! ] ;
 
-CHR: type-of-single-method @ { TypeOfWord ?w ?tau } // -- [ ?w method? ] [ ?w "method-generic" word-prop single-generic? ] [ ?w "reading" word-prop not ]
+CHR: type-of-single-method @ { TypeOfWord ?w ?tau } // --
+[ ?tau term-var? ]
+[ ?w method? ] [ ?w "method-generic" word-prop single-generic? ] [ ?w "reading" word-prop not ]
 [ ?w def>> :>> ?q ]
 [ ?w "method-class" word-prop
   ?w "method-generic" word-prop dispatch#
-  dispatch-decl <reversed> >list :>> ?l
+  dispatch-decl reverse :>> ?l
 ]
 |
 { ?TypeOf ?q ?rho }
-{ ComposeType P{ Effect ?a ?a f { P{ Declare ?l ?a } } } ?rho ?tau } ;
+{ ComposeType P{ Effect ?a ?a f { P{ Ensure ?l ?a } } } ?rho ?tau } ;
 
 
 CHR: type-of-empty-quot @ // { ?TypeOf [ ] ?tau } -- | [ ?tau P{ Effect ?a ?a f f } ==! ] ;

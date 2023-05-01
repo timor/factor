@@ -108,6 +108,11 @@ P{ Neq 42 43 }
 [ { P{ Neq ?a "haha" } P{ Instance ?a number } } chr-simp ] unit-test
 
 ! ** Basic Invariants
+
+{ t } [ [ 1 drop \ +nil+ ] [ 1 drop +nil+ ] same-type? ] unit-test
+{ t } [ [ 1 drop \ t ] [ 1 drop t ] same-type? ] unit-test
+{ t } [ [ 1 drop \ f ] [ 1 drop f ] same-type? ] unit-test
+
 { t }
 [ [ if* ] get-type valid-effect-type? ] unit-test
 
@@ -165,15 +170,44 @@ P{ Effect L{ ?y . ?a } L{ ?x . ?a } f
 { t }
 [ [ number? 4 5 ? ] get-type Xor? ] unit-test
 
+! NOTE: those stupid drops are in there because otherwise we just
+! get the wrapper type... meh
+{ t } [ [ 1 drop 42 ] [ 40 2 + ] same-type? ] unit-test
+{ t } [ [ 1 drop 42 ] [ 40 2 swap + ] same-type? ] unit-test
+{ t } [ [ 1 drop 42 ] [ 44 2 - ] same-type? ] unit-test
+{ f } [ [ 1 drop 42 ] [ 44 2 swap - ] same-type? ] unit-test
+{ t } [ [ 1 drop 42 ] [ 6 7 * ] same-type? ] unit-test
+{ t } [ [ 1 drop 6 ] [ 42 7 / ] same-type? ] unit-test
+{ f } [ [ 1 drop 6 ] [ 7 42 / ] same-type? ] unit-test
+{ t } [ [ 1 drop 7 ] [ 42 6 / ] same-type? ] unit-test
+
+{ t } [ [ 1 + ] [ 4 - 5 + ] same-type? ] unit-test
+{ t } [ [ 4 - 5 + ] [ 5 + 4 - ] same-type? ] unit-test
+{ t } [ [ 4 - 8 - ]  [ 12 - ] same-type? ] unit-test
+{ t } [ [ 3 - 8 + ]  [ 5 + ] same-type? ] unit-test
+{ t } [ [ 8 + 3 - ]  [ 5 + ] same-type? ] unit-test
+{ t } [ [ 8 - 3 + ]  [ 5 - ] same-type? ] unit-test
+{ t } [ [ 3 + 8 - ]  [ 5 - ] same-type? ] unit-test
+{ -7 } [ 0 4 - 8 - 5 + ] unit-test
+{ t } [ [ 4 - 8 - 5 + ] [ 7 - ] same-type? ] unit-test
+{ t } [ [ 4 - 8 - 5 + ] [ 4 - 5 + 8 - ] same-type? ] unit-test
+{ t } [ [ 4 - 8 - 5 + ] [ 8 - 5 + 4 - ] same-type? ] unit-test
+{ t } [ [ 5 + 8 - 4 - ] [ 8 - 5 + 4 - ] same-type? ] unit-test
+
 { t } [ [ 4 + 2 + ] [ 2 + 4 + ] same-type? ] unit-test
 { t } [ [ 4 + 2 + 4 - ] [ 2 + ] same-type? ] unit-test
 { t } [ [ 4 / 2 / ] [ 2 / 4 / ] same-type? ] unit-test
 { t } [ [ 2 / 4 / ] [ 8 / ] same-type? ] unit-test
 { t } [ [ 2 / 4 / 2 * ] [ 4 / ] same-type? ] unit-test
 
-! FIXME
-! Approach: Use the macro-expansion mechanism to map [ foo instance? ] to [ foo? ]
-! ( or the other way round? )
+{ 4 } [ 16 2 / 4 / 2 * ]  unit-test
+{ 4 } [ 16 2 * 4 / 2 / ] unit-test
+{ 4 } [ 16 4 / 2 * 2 / ]  unit-test
+
+{ t } [ [ 2 / 4 / 2 * ] [ 2 * 4 / 2 / ] same-type? ] unit-test
+{ t } [ [ 2 * 4 / 2 / ] [ 4 / 2 * 2 / ] same-type? ] unit-test
+{ t } [ [ 2 / 4 / 2 * ] [ 4 / 2 * 2 / ] same-type? ] unit-test
+
 { t }
 [ [ callable? ] [ callable instance? ] same-type? ] unit-test
 
@@ -181,7 +215,10 @@ P{ Effect L{ ?y . ?a } L{ ?x . ?a } f
 [ [ + 5 = [ swap ] when ] get-type Xor? ] unit-test
 
 P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x bignum } P{ Instance ?y fixnum }
-                                        P{ Eq ?y ?x } } }
+                                        P{ Eq ?y ?x }
+                                        P{ Le ?x $ most-positive-fixnum }
+                                        P{ Le $ most-negative-fixnum ?x }
+                                      } }
 [ [ bignum>fixnum ] get-type ] chr-test
 
 ! ** Sums and Parameters
@@ -195,8 +232,7 @@ P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x bignum } P{ Instance ?y f
   [ get-type preds>> [ Prod? ] count ] each
 ] unit-test
 
-! Includes products from negation
-{ 1 2 3 5 7 }
+{ 1 2 3 4 5 }
 [ { [ * ] [ + * ] [ + * + ] [ * - * + ] [ - + - * + ] }
   [ get-type preds>> [ { [ Prod? ] [ Sum? ] } 1|| ] count ] each
 ] unit-test
@@ -227,8 +263,9 @@ M: list auto-dispatch cdr>> ;
 M: +nil+ auto-dispatch ;
 M: object auto-dispatch ;
 
-{ { L{ } cons-state intersection{ not{ cons-state } not{ L{ } } } } }
-[ \ auto-dispatch dispatch-method-seq keys ] unit-test
+! ! REM, since dispatch expansion does this calculation on the fly
+! { { L{ } cons-state intersection{ not{ cons-state } not{ L{ } } } } }
+! [ \ auto-dispatch dispatch-method-seq keys ] unit-test
 
 TERM-VARS: ?y2 ?ys2 ?o4 ?a43 ?v6 ?y6 ?ys6 ;
 P{
@@ -326,6 +363,14 @@ GENERIC: lastcdr1 ( list -- obj )
 M: list lastcdr1 cdr>> lastcdr1 ;
 M: +nil+ lastcdr1 ;
 
+{ f } [ object \ lastcdr1 dispatch-method-seq constrains-methods? ] unit-test
+{ t } [ +nil+ \ lastcdr1 dispatch-method-seq constrains-methods? ] unit-test
+! FIXME?
+{ f } [ list \ lastcdr1 dispatch-method-seq constrains-methods? ] unit-test
+{ f } [ object \ length dispatch-method-seq constrains-methods? ] unit-test
+{ f } [ sequence \ length dispatch-method-seq constrains-methods? ] unit-test
+{ t } [ array \ length dispatch-method-seq constrains-methods? ] unit-test
+
 TERM-VARS: ?a15 ?o3 ?v3 ;
 
 CONSTANT: sol1
@@ -357,11 +402,9 @@ M: +nil+ lastcdr3 ;
 sol1
 [ [ lastcdr3 ] get-type ] chr-test
 
-! FIXME (iterated)
 sol1
 [ [ [ lastcdr3 ] (call) ] get-type ] chr-test
 
-! FIXME (iterated)
 sol1
 [ [ [ [ lastcdr3 ] ] (call) (call) ] get-type ] chr-test
 
@@ -429,7 +472,7 @@ P{
         { P{ Instance ?x17 intersection{ not{ cons-state } not{ array } } } P{ Instance ?o25 union{ cons-state array } } }
     }
 }
-[ [ lastcdr7 dup drop ] get-type ] chr-test
+[ [ lastcdr7 ] get-type ] chr-test
 
 ! Same as lastcdr7, but as single word
 : lastfoo ( x -- x )
@@ -615,7 +658,7 @@ P{
 ! PREDICATE: u8 < integer { [ 0 >= ] [ 256 < ] } 1&& ;
 PREDICATE: u8 < fixnum { [ 0 >= ] [ 256 < ] } 1&& ;
 
-! FIXME: takes forever:
+! Takes about 12 seconds right now
 ! [ u8? ] get-type
 
 PREDICATE: cardinal < integer 0 > ;

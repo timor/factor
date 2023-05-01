@@ -1,6 +1,6 @@
-USING: accessors arrays chr classes combinators combinators.short-circuit kernel
-classes.union classes.predicate
-lists math.parser sequences sets strings terms types.util words words.symbol ;
+USING: accessors arrays chr classes classes.predicate classes.tuple
+classes.union combinators combinators.short-circuit kernel lists math.parser
+sequences sets strings terms types.util words words.symbol ;
 
 IN: chr.factor
 FROM: syntax => _ ;
@@ -36,7 +36,7 @@ PREDICATE: callable-word < word { [ symbol? not ] } 1&& ;
 !     Primitive words have these defined per fiat power.  They are basically used
 !     to "bootstrap" type checking by having default instance assumptions to work with.
 
-! *** Dispatch
+! *** GenericDispatch
 !     This is like typed definitions, but the dispatch process is stateful.  Thus,
 !     the strategy is to actually follow the predicate decision path.
 
@@ -49,6 +49,38 @@ PREDICATE: callable-word < word { [ symbol? not ] } 1&& ;
 !    Declarations are kept as nominative declarations.  Instance predicates are
 !    used on the semantic level.   This means we can keep reasoning on a nominative
 !    level, while expanding e.g predicates to have the desired effect.
+
+! ** Relations and Xor Types
+! There seems to be a need to distinguish between not creating union types based on
+! control flow or continuation-level data flow, and not creating union types
+! based on predicates/relations.
+! Example came from bounds-check?, relating length l of a sequence to access at
+! location n.  Inference returns 3 types, two of which
+! return t, while one returns f.  There are different reasons associated to
+! these cases:
+! 1. Returns o = t not f, because 0 <= n  and n <= l
+! 2. Returns o = f not t, because n < 0
+! 3. Returns o = f not t, because n >= l
+! The knowledge we actually want to keep is two logical
+! expressions:
+! 1. o <=> ( n >= 0 )
+! 2. o <=> ( n <= l ) i.e.
+! Which means o <=> (n >= 0)&(n <= l)
+
+! The Problem with the current approach is that there is only exactly one order
+! of phi-unification which would yield this result, which is A = 1. + 2., then B
+! = 1. + 3., then finally C = A + B.
+
+! One thing to consider that it is probably impossible to store the needed
+! knowledge with only the 3 Xor cases, because we have 2x2=4 cases to consider.
+! It is possible though to store this information in two equivalence predicates.
+
+! Some ideas come to mind:
+! 1. Explicit introduction of <==> constraints
+! 2. Early inference of <==> constraints
+
+! For now, try 1.  this might result in the parameter implication reasoning to
+! be unnecessary?
 
 ! * Helpers for generating declared effects
 
@@ -134,7 +166,10 @@ TUPLE: WaitFull < chr-pred type ;
 TUPLE: WaitRec < chr-pred orig rec ;
 TUPLE: Throws < chr-pred error ;
 
-TUPLE: MakeSingleDispatch < chr-pred index cases target ;
+TUPLE: MakeSingleDispatch < chr-pred index cases exclude target ;
+
+TUPLE: GenericDispatch < chr-pred word on out-vals in out ;
+TUPLE: MakeGenericDispatch < chr-pred word effect target ;
 
 ! States that q3 is the composition of q1 and q2
 TUPLE: ComposeType < chr-pred q1 q2 q3 ;
@@ -151,6 +186,9 @@ TUPLE: SuspendMakeEffect < MakeEffect depends-on ;
 TUPLE: FinishEffect < chr-pred target ;
 TUPLE: MakeUnit < chr-pred val target ;
 
+TUPLE: WrapClasses < chr-pred in out effect target ;
+TUPLE: WrapDefaultClasses < chr-pred word effect target ;
+
 ! Holds references to the stack at loop entry,
 ! loop iteration, and loop exit
 ! TUPLE: Iterated < chr-pred entry loop-entry loop-exit exit ;
@@ -166,9 +204,14 @@ TUPLE: Instance < val-pred type ;
 TUPLE: DeclaredInstance < Instance ;
 TUPLE: DeclaredNotInstance < Instance ;
 
+! Need for math method expansion?
+TUPLE: Coerce < val-pred class ;
+
 TUPLE: Slot < val-pred n slot-val ;
+! Element class?
 TUPLE: Element < val-pred type ;
 TUPLE: Length < val-pred length-val ;
+TUPLE: Nth < val-pred seq n ;
 ! A declaration, has parameterizing character
 TUPLE: Declare < chr-pred classes stack ;
 
@@ -177,6 +220,7 @@ TUPLE: Declare < chr-pred classes stack ;
 TUPLE: Ensure < chr-pred classes stack ;
 
 TUPLE: CallEffect < chr-pred thing in out ;
+TUPLE: ApplyEffect < chr-pred effect in out ;
 ! Has CallEffect and Instance properties
 TUPLE: CallXorEffect < chr-pred type in out ;
 ! Unused: TUPLE: MacroCallEffect < chr-pred word in out ;
@@ -226,14 +270,22 @@ TUPLE: Bind < chr-pred var src ;
 ! Arithmetic Reasoning
 ! FIXME: for some reason, this doesnt pick up correctly if it is a union def...
 ! UNION: expr-pred Abs Sum Eq Le Lt Ge Gt ;
+TUPLE: MathCall < chr-pred word in out ;
 TUPLE: expr-pred < val-pred ;
 TUPLE: Abs < expr-pred var ;
 TUPLE: Sum < expr-pred summand1 summand2 ;
 TUPLE: Prod < expr-pred factor1 factor2 ;
+! { Mod  }
+! TUPLE: Mod < expr-pred
 TUPLE: Shift < expr-pred in by ;
 TUPLE: BitAnd < expr-pred in mask ;
+TUPLE: BitNot < expr-pred in ;
 TUPLE: rel-pred < expr-pred val2 ;
+! This represents number equality
+TUPLE: Num= < rel-pred ;
+! This represents equal? equality
 TUPLE: Eq < rel-pred ;
+! TUPLE: StrictEq < rel-pred ;
 TUPLE: Neq < rel-pred ;
 TUPLE: Le < rel-pred ;
 TUPLE: Lt < rel-pred ;
@@ -241,14 +293,35 @@ TUPLE: Lt < rel-pred ;
 ! TUPLE: Gt < expr-pred val var ;
 TUPLE: Counter < val-pred from to by ;
 
+TUPLE: <==> < chr-pred flag consequent ;
+
+GENERIC: opposite-predicate ( pred -- pred/f )
+M: Eq opposite-predicate tuple-slots Neq slots>tuple ;
+M: Neq opposite-predicate tuple-slots Eq slots>tuple ;
+M: Lt opposite-predicate tuple-slots <reversed> Le slots>tuple ;
+M: Le opposite-predicate tuple-slots <reversed> Lt slots>tuple ;
+! HA! Trap? Not correct if we argue semantically.  Handled by Xor expansion
+! of instance? ?
+! M: Instance opposite-predicate
+! This should be fine because it's nominative? In any case, don't try rightaway...
+M: DeclaredInstance opposite-predicate
+    tuple-slots DeclaredNotInstance slots>tuple ;
+
 ! commutative binary operations
 UNION: binop Sum Prod ;
 
 UNION: lt-pred Le Lt ;
-UNION: commutative-pred Eq Neq ;
+UNION: symmetric-pred Eq Neq Num= ;
+! No, that was incorrect.  Simply matching against all permutations does not fix
+! the bindings.  For that, we need a two-step process
+! M: symmetric-pred match-args
+!     call-next-method symmetric-match ;
+
+! Catch some Primitive Calls for easier conversion
+TUPLE: PrimCall < chr-pred word in out ;
 
 UNION: body-pred val-pred CallEffect CallXorEffect Declare CallRecursive Throws
-    MacroExpand Iterated LoopVar ;
+    MacroExpand Iterated LoopVar GenericDispatch <==> MathCall PrimCall ;
 
 TUPLE: CheckPhiStack a b res ;
 
@@ -281,6 +354,11 @@ TUPLE: Params < chr-pred vars ;
 ! This is an implication relation for parameter membership
 ! Useful for functions that can be folded/reduced
 TUPLE: ImpliesParam < chr-pred present include ;
+
+! Helpers, cleaned up like unused body preds at the end
+! MIXIN: inference-pred
+! INSTANCE: ImpliesParam inference-pred
+! INSTANCE: Ensure inference-pred
 
 ! Marker to force disjunction of value info
 TUPLE: FixpointMode < chr-pred ;
@@ -372,8 +450,14 @@ M: MacroExpand defines-vars
     ;
 M: MacroExpand intersects-live-vars in>> vars ;
 ! M: MacroExpand live-vars in>> vars ;
+! For now, have prim calls be "contagious", to make sure we don't miss any!
+M: PrimCall intersects-live-vars vars ;
+M: PrimCall defines-vars vars ;
+
 M: Slot live-vars val>> 1array ;
 M: Slot defines-vars [ n>> vars ] [ slot-val>> vars append ] bi ;
+M: Length live-vars val>> 1array ;
+M: Length defines-vars length-val>> 1array ;
 M: Instance live-vars val>> 1array ;
 M: Instance defines-vars type>> defines-vars ;
 M: Tag live-vars val>> 1array ;
@@ -388,6 +472,14 @@ M: Iterated defines-vars
 M: Counter live-vars val>> 1array ;
 ! M: expr-pred defines-vars vars ;
 ! M: MacroCall live-vars out>> vars ;
+M: GenericDispatch intersects-live-vars
+    out-vals>> vars ;
+    ! [ in>> ] [ out>> ] bi [ vars ] bi@ union vars ;
+! TODO: unsure about the following
+! Pretty sure that it's not ok, because this is not a macro!
+! M: GenericDispatch defines-vars
+!     [ in>> vars ]
+!     [ out-vals>> vars append ] bi ;
 
 
 ! NOTE: don't use internal optimized implementations here

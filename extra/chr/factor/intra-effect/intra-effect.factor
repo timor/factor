@@ -1,8 +1,8 @@
 USING: accessors arrays chr.factor chr.factor.util chr.parser chr.state classes
 classes.algebra classes.builtin classes.predicate classes.singleton
 classes.tuple classes.tuple.private combinators combinators.short-circuit
-continuations kernel kernel.private lists macros.expander math math.order
-quotations sequences sets sorting terms types.util ;
+continuations generic generic.single kernel kernel.private lists macros.expander
+math math.order quotations sequences sets sorting terms types.util ;
 
 IN: chr.factor.intra-effect
 
@@ -15,7 +15,7 @@ CHR: invalid-stays-invalid @ { Invalid } // { Invalid } -- | ;
 
 
 ! *** Mode-agnostic Normalizations
-CHR: comm-var-is-lhs @ // AS: ?p <={ commutative-pred A{ ?l } ?v } -- [ ?v term-var? ] |
+CHR: comm-var-is-lhs @ // AS: ?p <={ symmetric-pred A{ ?l } ?v } -- [ ?v term-var? ] |
 [ { ?v ?l } ?p class-of slots>tuple ] ;
 
 ! Not ideal.  If we do that, we mix value and type levels.
@@ -51,8 +51,9 @@ CHR: declared-predicate-class @ // { DeclaredInstance ?x A{ ?tau } } -- [ ?tau p
 [ ?tau make-instance-check :>> ?q ]
 |
 { ?DeferTypeOf ?q ?sig }
-{ Instance ?p ?sig }
-{ CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
+{ ApplyEffect ?sig L{ ?x . ?b } L{ ?c . ?b } }
+! { Instance ?p ?sig }
+! { CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
 { Instance ?c W{ t } }
 { DeclaredInstance ?x ?rho } ;
 
@@ -73,6 +74,11 @@ CHR: normalize-known-not-declaration @ // { DeclaredNotInstance ?x A{ ?tau } } -
 CHR: declaration-is-assertion @ // { DeclaredInstance ?x A{ ?tau } } -- |
 { Instance ?x ?tau } ;
 
+! *** Same Parameters
+! Relations that define the same parameter when there twice.  True for Composition and Phi Mode
+
+! TODO: might be able to extend this to all expr preds or defining ones somehow?
+CHR: same-length-is-same @ { Length ?a ?n } { Length ?a ?m } // -- | [ ?m ?n ==! ] ;
 
 ! ! Flatten union classes for now.
 ! CHR: flatten-union-instance @ // { Instance ?x A{ ?tau } } -- [ { ?tau } first :>> ?rho union-class? ] |
@@ -87,6 +93,7 @@ PREFIX-RULES: P{ PhiMode }
 
 CHR: no-deferred-inference-in-phi-mode @ // <={ ?DeferTypeOf } -- |
 [ "deferred inference in phi mode" throw ] ;
+
 
 ! ! **** Discarding nested calls for recursion types
 ! CHR: clear-rec-type-rec-call @ { FixpointMode } { PhiSchedule ?w __ __ } // { CallRecursive ?w __ __ } -- | ;
@@ -137,14 +144,15 @@ CHR: keep-params-disjoint @ // { Params ?l } { Params ?k } -- [ ?l ?k intersect 
 !   :>> ?s  ] |
 ! [ ?s unzip ==! ] ;
 
-CHR: already-decider @ { Decider ?x } // <={ Discriminator ?x } -- | ;
-CHR: already-discriminator @ { Discriminator ?x } // { Discriminator ?x } -- | ;
+CHR: already-decider @ { Decider ?x } // <={ Discriminator ?y } -- [ ?x vars ?y vars set= ] | ;
+CHR: already-discriminator @ { Discriminator ?x } // { Discriminator ?y } -- [ ?x vars ?y vars set= ] | ;
 
-CHR: destruc-decider @ // { Decider ?x } -- [ ?x sequence? ] |
-[ ?x [ term-var? ] filter [ Decider boa ] map ] ;
+! NOTE: Changing the decider logic to include the whole pred
+! CHR: destruc-decider @ // { Decider ?x } -- [ ?x sequence? ] |
+! [ ?x [ term-var? ] filter [ Decider boa ] map ] ;
 
-CHR: destruc-discriminator @ // { Discriminator ?x } -- [ ?x sequence? ] |
-[ ?x [ term-var? ] filter [ Discriminator boa ] map ] ;
+! CHR: destruc-discriminator @ // { Discriminator ?x } -- [ ?x sequence? ] |
+! [ ?x [ term-var? ] filter [ Discriminator boa ] map ] ;
 
 ! *** Deciding to declare disjoint
 
@@ -160,9 +168,9 @@ CHR: destruc-discriminator @ // { Discriminator ?x } -- [ ?x sequence? ] |
 ! -- [ ?x ?i list*>array in? ] [ ?y ?o list*>array in? ] | { Invalid } ;
 
 ! NOTE: This would also be one point where we could hold on to internal vars, but that is probably
-! too sensitive?  If so, they would show up in the Params predicates
-CHR: have-interesting-decider @ { MakeEffect ?i ?o __ __ __ } // <={ Discriminator ?x } { Decider ?y }
--- [ ?i ?o [ list*>array ] bi@ append [ ?x swap in? ] [ ?y swap in? ] bi and ] | { Invalid } ;
+! too sensitive?  Trying that approach...
+CHR: have-interesting-decider @ { MakeEffect ?i ?o ?l __ __ } // <={ Discriminator ?x } { Decider ?y }
+-- [ ?i vars ?o vars append ?l vars union [ ?x vars swap subset? ] [ ?y vars swap subset? ] bi and ] | { Invalid } ;
 
 ! *** Phi Predicate Handling
 
@@ -177,6 +185,7 @@ CHR: phi-disjoint-instance @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } }
 CHR: phi-maybe-disjoint-instance @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
 [ { ?rho ?tau } first2 { [ classes-intersect? ] [ class= not ] } 2&& ] | { Discriminator ?x } ;
 
+! TODO: might not be good to use simplifying-class-or here?
 CHR: phi-union-instance @ // { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } --
 [ { ?rho ?tau } first2 simplifying-class-or :>> ?sig ] | { Keep P{ Instance ?x ?sig } } ;
 
@@ -255,7 +264,10 @@ CHR: phi-eq-le-discrim-1 @ // { Eq ?x ?y } { Le ?x ?y } -- | { Discriminator { ?
 CHR: phi-eq-le-discrim-2 @ // { Eq ?y ?x } { Le ?x ?y } -- | { Discriminator { ?x ?y } } { Keep P{ Le ?x ?y } } ;
 
 ! CHR: phi-lt-lt-decider @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Decider { ?y ?x } } ;
-CHR: phi-lt-lt-decider @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Discriminator { ?y ?x } } ;
+CHR: phi-lt-lt-decider @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Discriminator { ?x ?y } } ;
+
+! CHR: phi-lt-le-decider @ // { Lt ?x ?y } { Le ?y ?x } -- | { Discriminator { ?x ?y } } ;
+CHR: phi-lt-le-decider @ // { Lt ?x ?y } { Le ?y ?x } -- | { Decider { ?x ?y } } ;
 
 ! These are overlapping, so no deciders
 CHR: phi-discrim-le-lt @ { Le ?x ?v } { Lt ?v ?x } // -- | { Discriminator { ?x ?v } } ;
@@ -335,16 +347,40 @@ CHR: disj-symbolic-compl-type @ AS: ?e <={ MakeEffect } // { DeclaredNotInstance
 ! *** Phi>
 
 PREFIX-RULES: P{ CompMode }
-! TODO: extend to other body preds
-! Possibly expensive
-! CHR: unique-body-pred @ AS: ?p <={ body-pred } // AS ?q <={ body-pred } -- [ ?p ?q = ] | ;
-CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
 
-CHR: uniqe-slot @ { Slot ?o ?n ?v } // { Slot ?o ?n ?v } -- | ;
+! Possibly expensive?
+CHR: unique-val-pred @ AS: ?p <={ val-pred } // AS: ?q <={ val-pred } -- [ ?p ?q == ] | ;
+! TODO The following is possibly a little bit cheaper, try whether it breaks anything at the end
+! CHR: unique-val-pred @ AS: ?p <={ val-pred } // AS: ?q <={ val-pred } -- [ ?p ?q = ] | ;
+! CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
+
+! CHR: uniqe-slot @ { Slot ?o ?n ?v } // { Slot ?o ?n ?v } -- | ;
+
+! CHR: unique-equiv @ { <==> ?c ?p } // { <==> ?c ?p } -- | ;
+! CHR: assume-equiv-true @ { <==> ?c ?p } { Instance ?c A{ ?tau } } // --
+! [ ?tau \ f classes-intersect? not ] | [ ?p ] ;
+! CHR: assume-equiv-false @ { <==> ?c ?p } { Instance ?c A{ ?tau } } // --
+! [ ?tau t classes-intersect? not ] | [ ?p opposite-predicate ] ;
+
+! NOTE: this is taken directly from the definition of = !
+! TODO: Make sure this does not mess anything up!
+CHR: eq-fixnum-is-same @ { Instance ?x fixnum } // { Instance ?y fixnum } { Eq ?x ?y } -- [ ?x term-var? ] [ ?y term-var? ] | [ ?x ?y ==! ] ;
+CHR: integer-num-is= @ { Instance ?x A{ ?c } } { Instance ?y A{ ?d } } // { Num= ?x ?y } -- [ ?c integer class<= ] [ ?d integer class<= ] |
+{ Eq ?x ?y } ;
+
+! NOTE: currently only known to be needed for bignum exception. Might make sense
+! to eliminate that distinction for reasoning?  Inside the "bignum" processing closure, should
+! stay correct though!
+! FIXME: find some way to automate this.  Either on rule level, or on head level!
+CHR: eq-propagates-nth-n-1 @ { Eq ?n ?m } { Nth ?v ?a ?n } // -- |
+{ Nth ?v ?a ?m } ;
+CHR: eq-propagates-nth-n-2 @ { Eq ?m ?n } { Nth ?v ?a ?n } // -- |
+{ Nth ?v ?a ?m } ;
 
 ! NOTE: the reasoning is that this can inductively only happen during composition of two straight-line
 ! effects. So the instance in the first one is a "provide", and the instance in the second one is an "expect".
 ! Since the intersection type operation is commutative, we don't care which came from which.
+! FIXME: The rule should also apply to Phi Mode reasoning, but for a different reason.
 CHR: same-slot-must-be-same-var @ { Slot ?o ?n ?v } // { Slot ?o ?n ?w } -- | [ ?v ?w ==! ] ;
 
 : typeof>tag ( quoted -- n/f )
@@ -355,6 +391,16 @@ CHR: same-slot-must-be-same-var @ { Slot ?o ?n ?v } // { Slot ?o ?n ?w } -- | [ 
         { [ dup class? ] [ class>type ] }
         [ drop f ]
     } cond ;
+
+! *** Math Conversions
+CHR: math-call-plus @ // { MathCall + { ?x ?y } { ?z } } -- |
+{ Instance ?z number } { Sum ?z ?x ?y } ;
+CHR: math-call-minus @ // { MathCall - { ?x ?y } { ?z } } -- |
+{ Instance ?z number } { Sum ?x ?y ?z } ;
+CHR: math-call-mul @ // { MathCall * { ?x ?y } { ?z } } -- |
+{ Instance ?z number } { Prod ?z ?x ?y } ;
+CHR: math-call-div @ // { MathCall / { ?x ?y } { ?z } } -- |
+{ Instance ?z number } { Prod ?x ?y ?z } ;
 
 ! *** Instance reasoning
 ! Tags are an implementation detail, and are re-converted to classes as soon as possible
@@ -377,7 +423,9 @@ CHR: null-instance-is-invalid @ // { Instance ?x null } -- | { Invalid } ;
 ! intersection classes of the factor type system.
 CHR: instance-intersection @
 // { Instance ?x A{ ?tau } } { Instance ?x A{ ?sig } } --
-[ { ?tau ?sig } first2 simplifying-class-and :>> ?c ] |
+! NOTE: with lazy dispatch, this destroys nominative types
+! [ { ?tau ?sig } first2 simplifying-class-and :>> ?c ] |
+[ { ?tau ?sig } first2 class-and :>> ?c ] |
 { Instance ?x ?c } ;
 
 CHR: instance-intersect-effect @ { Instance ?x ?e }
@@ -387,7 +435,7 @@ CHR: instance-intersect-effect @ { Instance ?x ?e }
  f { Invalid } ? ] ;
 
 ! *** Arithmetics
-CHR: unique-expr-pred @ AS: ?p <={ expr-pred ?a . ?x } // AS: ?q <={ expr-pred ?a . ?x } -- [ ?p class-of ?q class-of class= ] | ;
+! CHR: unique-expr-pred @ AS: ?p <={ expr-pred ?a . ?x } // AS: ?q <={ expr-pred ?a . ?x } -- [ ?p class-of ?q class-of class= ] | ;
 
 CHR: check-le @ // { Le A{ ?x } A{ ?y } } -- [ ?x ?y <= not ] | { Invalid } ;
 CHR: check-le-same @ // { Le ?x ?x } -- | ;
@@ -421,31 +469,21 @@ CHR: normalize-binop @ // AS: ?p <={ binop ?z A{ ?x } ?y } -- [ ?y term-var? ] |
 
 ! Anything more complex than that needs a linear equation predicate, or
 ! a linear solver, for that matter...
-CHR: transitive-literal-sum @ // { Sum ?z ?x A{ ?m } } { Sum ?x ?a A{ ?n } } --
+CHR: elim-transitive-literal-sum @ // { Sum ?z ?x A{ ?m } } { Sum ?x ?a A{ ?n } } --
 [ ?m ?n + :>> ?k ] | { Sum ?z ?a ?k } ;
+CHR: elim-transitive-literal-sum-diff-1 @ // { Sum ?z ?x A{ ?m } } { Sum ?z ?a A{ ?n } } --
+[ ?m ?n - :>> ?k ] | { Sum ?a ?x ?k } ;
 
-CHR: transitive-literal-prod @ // { Prod ?z ?x A{ ?m } } { Prod ?x ?a A{ ?n } } --
+CHR: elim-transitive-literal-prod-mul @ // { Prod ?z ?x A{ ?m } } { Prod ?x ?a A{ ?n } } --
 [ ?m ?n * :>> ?k ] | { Prod ?z ?a ?k } ;
+CHR: elim-transitive-literal-prod-div-1 @ // { Prod ?x ?z A{ ?m } } { Prod ?a ?z A{ ?n } } -- [ ?m ?n >= ]
+[ ?m ?n / :>> ?k ] | { Prod ?x ?a ?k } ;
+CHR: elim-transitive-literal-prod-div-2 @ // { Prod ?z ?x A{ ?n } } { Prod ?z ?a A{ ?m } } -- [ ?m ?n >= ]
+[ ?m ?n / :>> ?k ] | { Prod ?x ?a ?k } ;
 
-! TODO: also do the non-lit-case, really could use disjunction syntax sugar in the antecedent here...
-! Alternatively, ditch the value-insertion into the expressions altogether...
-! More alternatively, re-normalize into non-lit form somewhere?
-! OR: Keep around both?
-! OROR: Do the full math dispatch on every math word, and these cases don't arise in the first place...
-! Another way: treat fixnum as a predicate class on integers...
-! NOTE: this is nasty with fixnums because we can overflow into bignums from fixnums in the general case...
-CHR: lit-binop-specializes-math-class @ <={ binop ?z ?x A{ ?m } } { Instance ?x ?c } // --
+! NOTE: This does not work naively for products!
+CHR: lit-sum-specializes-math-class @ { Sum ?z ?x A{ ?m } } { Instance ?x ?c } // --
 [ ?m class-of ?c pessimistic-math-class-max :>> ?d ] | { Instance ?z ?d } ;
-
-
-
-! TODO: may be better to do this with a linear combination predicate instead?
-! NOTE: looks like we explicitly coded out the version of if we know 2, let's keep the third...
-CHR: keep-intermediate-op-result-1 @ <={ binop ?z ?x ?y } <={ binop ?x ?a ?b } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
-CHR: keep-intermediate-op-result-2 @ <={ binop ?z ?y ?x } <={ binop ?x ?a ?b } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
-! TODO maybe extend to non-literal too
-CHR: keep-intermediate-op-result-3 @ <={ binop ?z ?y ?x } <={ binop A{ ?m } ?x ?a } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a } { ?x } } ;
-CHR: keep-intermediate-op-result-4 @ <={ binop ?z ?x ?y } <={ binop A{ ?m } ?x ?a } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a } { ?x } } ;
 
 CHR: define-sum @ // { Sum ?z A{ ?x } A{ ?y } } --
 [ ?x ?y + <wrapper> :>> ?v ] | { Instance ?z ?v } ;
@@ -484,20 +522,33 @@ CHR: neutral-bitand-2 @ // { BitAnd ?z ?x -1 } -- | [ ?z ?x ==! ] ;
 ! { Sum ?w ?n ?y } { Lt ?z ?w } ;
 
 ! *** Call Effect matching
-! NOTE: These only meet in renamed form?
-! Probably not. [ ... ] [ call ] keep looks fishy...
-! NOTE: big change: make a fresh effect before every call
-! TODO: since we do that here, remove a lot of other fresh-effects....
-CHR: call-applies-effect @ { Instance ?q ?x } // { CallEffect ?q ?a ?b } -- [ ?x Effect? ]
+CHR: apply-regular-effect @ // { ApplyEffect ?x ?i ?o } -- [ ?x Effect? ]
 [ ?x fresh-effect :>> ?e ]
 [ ?e in>> :>> ?c drop
   ?e out>> :>> ?d drop
   ?e preds>> :>> ?l drop
-  t ]
-|
-[ { ?a ?b }
-  { ?c ?d } ==! ]
+  t ] |
+[ { ?i ?o } { ?c ?d } ==! ]
 [ ?l ] ;
+
+CHR: defer-apply-xor-effect @ // { ApplyEffect ?x ?i ?o } -- [ ?x Xor? ] |
+{ CallXorEffect ?x ?i ?o } ;
+
+! NOTE: These only meet in renamed form?
+! Probably not. [ ... ] [ call ] keep looks fishy...
+! NOTE: big change: make a fresh effect before every call
+! TODO: since we do that here, remove a lot of other fresh-effects....
+CHR: call-applies-effect @ { Instance ?q ?x } // { CallEffect ?q ?a ?b } -- [ ?x valid-effect-type? ] |
+{ ApplyEffect ?x ?a ?b } ;
+! [ ?x fresh-effect :>> ?e ]
+! [ ?e in>> :>> ?c drop
+!   ?e out>> :>> ?d drop
+!   ?e preds>> :>> ?l drop
+!   t ]
+! |
+! [ { ?a ?b }
+!   { ?c ?d } ==! ]
+! [ ?l ] ;
 
 ! non-copying
 ! CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } // { CallEffect ?q ?a ?b } -- |
@@ -513,10 +564,11 @@ CHR: call-applies-effect @ { Instance ?q ?x } // { CallEffect ?q ?a ?b } -- [ ?x
 ! we need to capture the Effect inference state, and diverge into the respective Branches of the applied Xor effect
 ! type.  This needs to be done recursively if necessary.
 ! NOTE: we need to destructure this though for matching...
-CHR: call-applies-xor-effect @ { Instance ?q P{ Xor ?c ?d } } // { CallEffect ?q ?a ?b } -- |
-{ CallXorEffect P{ Xor ?c ?d } ?a ?b } ;
+! CHR: call-applies-xor-effect @ { Instance ?q P{ Xor ?c ?d } } // { CallEffect ?q ?a ?b } -- |
+! { CallXorEffect P{ Xor ?c ?d } ?a ?b } ;
 
 ! *** TODO Recursive Iteration expansion
+
 ! P{ CallRecursive tag ?a ?b } holds the enter-in stack in ?a
 ! iterated approach:
 ! tag -prelude-> ?a -RecursionTypePre-> ?b =same-layout-as= ?c -RecursionTypePost-> -FixPointCondition-> ?d
@@ -531,16 +583,16 @@ CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho } { RecursionTypeOf ?w 
 { CallRecursive ?w ?i ?o } --
 [ ?rho full-type? ]
 [ ?sig full-type? ]
-[ ?i fresh :>> ?c ]
-[ ?i fresh :>> ?d ] |
-{ Iterated ?w { ?i ?c ?d ?e } }
+[ ?i fresh :>> ?b ]
+[ ?i fresh :>> ?c ] |
+{ Iterated ?w { ?i ?b ?c ?d } }
 ! Return Type call
 { Instance ?q ?rho }
-{ CallEffect ?q ?e ?o }
+{ CallEffect ?q ?d ?o }
 ! Iteration Type call, don't match output
 { Instance ?p ?sig }
-{ CallEffect ?p ?c ?x }
-{ LoopVar { ?i ?c ?d ?e } }
+{ CallEffect ?p ?b ?x }
+{ LoopVar { ?i ?b ?c ?d } }
     ;
 
 ! *** Loop relation reasoning
@@ -610,6 +662,10 @@ CHR: loop-sum-defines-counters @ { Sum ?y ?x ?n } { LoopVar { ?w ?x ?y ?z } } //
 { Sum ?b ?w ?n }
 ;
 
+! NOTE: the fact that this is necessary kind of stinks...
+! TODO: may be better to keep LoopVars instead?
+CHR: have-counter-already @ { Counter ?x __ __ __ } // { Counter ?x __ __ __ } -- | ;
+
 ! NOTE: this will probably generate some noise in connection with the other instance loop bound
 ! propagation rule
 CHR: loop-counter-input-specializes @ { Counter ?x ?a ?b A{ ?m } }
@@ -657,6 +713,8 @@ CHR: call-destructs-composed @ { Instance ?p composed } { Slot ?p "first" ?q } {
 
 ! *** Declarations
 ! TODO: why are there Ensure and Declare?
+! Seems like Ensure is to be used with declaration order,
+! While Declare is to be used with list-stack order, at the least.
 
 CHR: did-ensure @ // { Ensure +nil+ __ } -- | ;
 CHR: did-declare @ // { Declare +nil+ __ } -- | ;
@@ -688,7 +746,7 @@ CHR: known-declare @
 [ ?tau <reversed> >list :>> ?m ] | { Declare ?m ?a } ;
 
 
-! **** Macro Expansion/Folding
+! *** Macro Expansion/Folding
 
 CHR: known-macro-quot @ // { MacroExpand ?w ?a ?i ?x } -- [ ?w macro-quot :>> ?q ]
 [ ?w macro-effect :>> ?n ] |
@@ -701,6 +759,8 @@ CHR: known-macro-arg @ { Eq ?x A{ ?v } } // { ExpandQuot ?q ?a L{ ?x . ?ys } ?p 
 { ExpandQuot ?q ?b ?ys ?p ?n } ;
 
 ! NOTE: only fully expanded macros are treated
+! TODO: maybe rewrite to not let the calleffect linger before?  This would only be useful
+! if we want to reason about what the macro needs to expand into in the first place, right?
 CHR: expand-macro @ // { ExpandQuot ?q ?a ?i ?x ?n } -- [ ?a length ?n = ]
 [ ?a ?q with-datastack first :>> ?p ]
 |
@@ -709,6 +769,75 @@ CHR: expand-macro @ // { ExpandQuot ?q ?a ?i ?x ?n } -- [ ?a length ?n = ]
 ! And return here...
 { Instance ?x ?sig }
     ;
+
+! **** Generics
+CHR: generic-dispatch-was-folded @ // { GenericDispatch ?w ?d ?a ?i ?o } -- [ ?a ground-value? ] | ;
+
+! TODO: Instead, should probably carry over instance condition into inlined type closure? nope
+! also not good
+! Mad heuristics here: expand if we have less than a couple of applicable methods?
+! TODO: Building the dispatch via XOR here is probably faster, at least for non-hot caches.
+! We still could cache the expansion in predicate form, though...
+CHR: expand-single-generic-dispatch @ { Instance ?d A{ ?c } } // { GenericDispatch ?w { ?d } ?a ?i ?o } --
+[ ?w single-generic? ]
+[ ?w dispatch# :>> ?n ]
+[ ?c ?w method-for-class
+  [ ?c swap 2array 1array ]
+  [ ?c ?w dispatch-method-seq applicable-methods
+    dup length 5 > [ drop f ] when
+  ] if* :>> ?l ]
+[ ?l >list :>> ?m ]
+! [ ?w ?m dispatcher-quot :>> ?q ]
+! TODO: closed world assumption: invalid on empty remaining method list
+|
+! { ?DeferTypeOf ?q ?sig }
+{ MakeSingleDispatch ?n ?m ?c ?sig }
+{ ApplyEffect ?sig ?i ?o }
+ ;
+
+! { MakeSingleDispatch ?i ?l ?rho }
+
+CHR: dispatch-done @ // { MakeSingleDispatch __ +nil+ __ ?tau } -- | [ ?tau null ==! ] ;
+
+CHR: dispatch-case @ // { MakeSingleDispatch ?i L{ { ?c ?m } . ?r } ?d ?tau } --
+! [ ?c ?i dispatch-decl <reversed> :>> ?l ]
+[ ?c class-not ?d class-and :>> ?e ]
+[ ?d ?i dispatch-decl <reversed> :>> ?l ]
+[ ?m 1quotation :>> ?q ]
+|
+! Lazy version, not working correctly
+! { MakeSingleDispatch ?i ?r ?e ?sig }
+! ! { WrapClasses ?l f ?sig ?z }
+! { MakeXor P{ Effect ?a ?b f {
+!                    P{ ?DeferTypeOf ?q ?rho }
+!                    P{ ApplyEffect ?rho ?a ?b }
+!                } }
+!   P{ Effect ?x ?y  f {
+!          P{ Ensure ?l ?x }
+!          P{ ApplyEffect ?sig ?x ?y }
+!      } }
+!   ?tau
+! } ;
+{ ?DeferTypeOf ?q ?rho }
+{ MakeSingleDispatch ?i ?r ?e ?sig }
+! { WrapClasses ?l f ?sig ?z }
+{ MakeXor P{ Effect ?a ?b f {
+                   ! P{ ?DeferTypeOf ?q ?rho }
+                 P{ Ensure ?l ?a }
+                 P{ ApplyEffect ?rho ?a ?b }
+               } }
+  ?sig
+  ?tau
+} ;
+
+! { TypeOfWord ?m ?a }
+! TODO: make this a declare quot instead of pred?
+! Here we prefix the method word type with the excluded cases from the ordered dispatch
+! { ComposeType P{ Effect ?b ?b f { P{ Declare ?l ?b } } } ?a ?rho }
+! { MakeSingleDispatch ?i ?r ?sig }
+! { MakeXor ?rho ?sig ?d }
+! { CheckXor ?m ?d ?tau } ;
+
 
 CHR: known-slot-num @ { Eq ?n A{ ?a } } // { Slot ?o ?n ?v } -- |
 { Slot ?o ?a ?v } ;
@@ -725,10 +854,21 @@ CHR: known-not-instance @ { Eq ?c A{ ?d } } // { DeclaredNotInstance ?x ?c } --
 CHR: known-tag-num @ { Eq ?n A{ ?v } } // { Tag ?c ?n } -- |
 { Tag ?c ?v } ;
 
-
+! UNION: replacable-pred expr-pred fold-pred ;
 CHR: known-expr-val @ { Eq ?n A{ ?v } } // AS: ?p <={ expr-pred } -- [ ?n ?p vars in? ]
 |
 [ ?p { { ?n ?v } } lift* ] ;
+
+CHR: known-generic-input/output @ { Eq ?n A{ ?v } } // { GenericDispatch ?w ?d ?a ?i ?o } -- [ ?n ?a in? ?n ?d in? or ] |
+[| |
+ ?a { { ?n ?v } } lift* :> new-outs
+ ?d { { ?n W{ ?v } } } lift* :> new-dispatcher
+ P{ GenericDispatch ?w new-dispatcher new-outs ?i ?o } ] ;
+
+! CHR: known-generic-dispatch-class @ { Instance ?x ?tau } // { GenericDispatch ?w ?d ?a ?i ?o } -- [ ?x ?d in? ] |
+! [| | ?d { { ?x ?tau } } lift* :> new-dispatcher
+!  P{ GenericDispatch ?w new-dispatcher ?a ?i ?o } ] ;
+
 
 ! *** Slot conversion
 ! TODO: this conversion can be wrong when working on numerically optimized code?
@@ -772,4 +912,22 @@ CHR: tuple-boa-decl @ // { TupleBoa A{ ?c } ?a ?b } --
  preds <reversed> >array
 ] ;
 
-;
+! *** Locals scope expansion
+! NOTE: relies on these things not being replaced by numbers right now...
+! TODO: may be better to do this with a linear combination predicate instead?
+! NOTE: looks like we explicitly coded out the version of if we know 2, let's keep the third...
+CHR: keep-intermediate-op-result-1 @ <={ binop ?z ?x ?y } <={ binop ?x ?a ?b } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
+CHR: keep-intermediate-op-result-2 @ <={ binop ?z ?y ?x } <={ binop ?x ?a ?b } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
+CHR: keep-intermediate-op-result-3 @ <={ binop ?z ?y ?x } <={ binop ?b ?x ?a } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
+CHR: keep-intermediate-op-result-4 @ <={ binop ?z ?x ?y } <={ binop ?b ?x ?a } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
+CHR: keep-intermediate-op-result-5 @ <={ binop ?x ?y ?z } <={ binop ?a ?b ?z } // -- [ ?z term-var? ] | { ImpliesParam { ?x ?y ?a ?b } { ?z } } ;
+CHR: keep-intermediate-op-result-6 @ <={ binop ?x ?y ?z } <={ binop ?a ?z ?b } // -- [ ?z term-var? ] | { ImpliesParam { ?x ?y ?a ?b } { ?z } } ;
+! CHR: keep-intermediate-op-result-7 @ <={ binop  }
+
+! Pivot literal output stuff
+CHR: pivot-output-literal-product @ { MakeEffect ?a ?b __ __ __ } // { Prod ?y ?x A{ ?m } } -- [ ?x ?b vars in? ] [ ?x ?a vars in? not ]
+[ 1 ?m / :>> ?k ] | { Prod ?x ?y ?k } ;
+CHR: pivot-output-literal-sum @ { MakeEffect ?a ?b __ __ __ } // { Sum ?y ?x A{ ?m } } -- [ ?x ?b vars in? ] [ ?x ?a vars in? not ]
+[ 0 ?m - :>> ?k ] | { Sum ?x ?y ?k } ;
+
+    ;

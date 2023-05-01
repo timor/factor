@@ -73,7 +73,10 @@ CHR: make-trivial-xor-right @ // { MakeXor null ?rho ?tau } -- | [ ?rho ?tau ==!
 ! is a sign that two effects are distinct.
 
 CHR: maybe-make-trivial-xor @ // { MakeXor ?rho ?sig ?tau } -- [ ?rho full-type? ] [ ?sig full-type? ] |
-[ ?rho ?sig isomorphic?
+[
+    ?rho ?sig isomorphic?
+    ! TODO: check timing on this!
+    ! ?rho ?sig same-effect?
   [ ?tau ?rho ==! ]
   [ ?tau P{ Xor ?rho ?sig } ==! ]
   ! { CheckXor ?rho ?sig ?tau }
@@ -224,9 +227,13 @@ CHR: do-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q terminating-b
     ?l [ f ] [
         >list :> fp-phis
         {
-            ! NOTE: forcing this for now because we need the stack effect...
+            ! NOTE: not forcing this to fixpoint mode, because that prevents some useful fixpoints
+            ! from being calculated when done incorrectly.
+            ! 1. Either force fixpoint calculation
+            ! 2. Or deal with Xor Fixpoint types correctly, e.g. by assuming different loop types on
+            ! different loop exits.
             ! The correct version is probably to infer a recursive version for every base case?
-            P{ FixpointMode }
+            ! P{ FixpointMode }
             P{ PhiSchedule ?q fp-phis ?tau }
             P{ FixpointTypeOf ?q ?tau }
         }

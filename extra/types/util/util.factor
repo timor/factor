@@ -287,6 +287,10 @@ MACRO: lmatch-map-as ( branches cons-class -- quot )
 
 GENERIC: simplify-class ( class -- class )
 
+! Hack? I don't see any hack here... *whistle*
+M: W{ union{ fixnum bignum } } simplify-class
+    drop integer ;
+
 ! NOTE: this could be important for handling nominative unions/intersections
 ! Non-normalizing behavior does not convert defined
 ! union/intersection classes to anonymous intersections
@@ -306,7 +310,6 @@ M: wrapper simplify-class ;
 M: anonymous-intersection simplify-class
     participants>> [ simplify-class ] map
     simplify-intersection ;
-
 
 ! not{ union{  } } constructs are converted to intersection{ not{  } }
 ! constructs.  But not the other way round, since we would run into endless loops?

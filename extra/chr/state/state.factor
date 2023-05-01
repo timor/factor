@@ -321,9 +321,12 @@ M: as-pred match-constraint
 M: sequence match-constraint
     swap constraint-args 2array 1array solve-next ;
 
-M: reflexive-parms match-constraint
-    parms>> all-permutations
-    [ match-constraint ] 2with map-find drop ;
+M: any-match match-constraint
+    cases>> [ match-constraint ] 2with map-find drop ;
+
+! M: reflexive-parms match-constraint
+!     parms>> all-permutations
+!     [ match-constraint ] 2with map-find drop ;
 
 ! M: reflexive match-constraint
 !     constraint-args
@@ -338,9 +341,10 @@ DEFER: match-reflexive-head
 DEFER: match-single-head
 : match-head ( bindings arg-spec susp -- bindings )
     ! dup constraint>> reflexive?
-    over reflexive-parms?
-    [ match-reflexive-head ]
-    [ match-single-head ] if ;
+    match-single-head ; inline
+    ! over reflexive-parms?
+    ! [ match-reflexive-head ]
+    ! [ match-single-head ] if ;
 
 : match-single-head ( bindings arg-spec susp -- bindings )
     swap match-constraint ; inline

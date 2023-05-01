@@ -52,10 +52,10 @@ M: classoid push-at-constraint-type
     push-at ;
 
 
-TUPLE: reflexive-parms { parms read-only } ;
-: match-spec-args ( head -- spec )
-    [ constraint-args ] keep
-    reflexive? [ reflexive-parms boa ] when ;
+! TUPLE: reflexive-parms { cases read-only } ;
+! : match-spec-args ( head -- spec )
+!     [ constraint-args ] keep
+!     commutative? [ reflexive-parms boa ] when ;
 
 :: add-heads ( program rule rule-ind entries -- program )
     entries <enumerated> >alist <reversed>
@@ -65,7 +65,7 @@ TUPLE: reflexive-parms { parms read-only } ;
      aent first2 :> ( hkept h )
      h constraint-type :> type
      occ type program occur-index>> push-at-constraint-type
-     occ hkept h match-spec-args partners rule match-vars>>
+     occ hkept h match-args partners rule match-vars>>
      <constraint-schedule>
      type program schedule>> push-at-constraint-type
     ] assoc-each

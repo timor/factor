@@ -37,8 +37,8 @@ CHR: do-check-phi-stack @ // { CheckPhiStack ?i ?o ?u } -- [ ?u term-var? ] [ ?i
     ] with map sift ;
 
 ERROR: nested-inference a b ;
-CHR: inference-collision @ AS: ?a <={ MakeEffect } AS: ?b <={ MakeEffect } // -- | [ ?a ?b nested-inference ] ;
-CHR: inference-collision-2 @ AS: ?a <={ FinishEffect } AS: ?b <={ FinishEffect } // -- | [ ?a ?b nested-inference ] ;
+CHR: inference-collision @ AS: ?a P{ MakeEffect __ __ __ __ __ } AS: ?b P{ MakeEffect __ __ __ __ __ } // -- | [ ?a ?b nested-inference ] ;
+! CHR: inference-collision-2 @ AS: ?a <={ FinishEffect } AS: ?b <={ FinishEffect } // -- | [ ?a ?b nested-inference ] ;
 
 ! NOTE: assumed renaming here already
 ! NOTE: we have to generate object instance predicates for all values that may be generated using unification for each branch if missing!
@@ -88,6 +88,8 @@ CHR: reinfer-effect @ // { ReinferEffect P{ Effect ?a ?b ?x ?k } ?tau } -- |
 CHR: force-union @ { PhiMode } { FixpointMode } // { Invalid } -- | ;
 
 ! * Suspend Reasoning
+! NOTE: we only do this at the end to make sure we also collect the { FinishEffect } "closing bracket"
+! Actually, hold on, dual finisheffect markers shouldn't hurt because they are tied to their Makeeffects...
 CHR: suspend-make-effect @ // { MakeEffect ?a ?b ?x ?l ?tau } { CompMode } { ?DeferTypeOf ?q ?sig } -- |
 { SuspendMakeEffect ?a ?b ?x ?l ?tau { ?q ?sig } } ;
 

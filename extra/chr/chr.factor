@@ -1,7 +1,6 @@
 USING: accessors arrays classes classes.algebra classes.tuple
-combinators.short-circuit continuations kernel make match quotations sequences
-combinators.private
-sets terms typed words ;
+combinators.private combinators.short-circuit kernel math.combinatorics
+quotations sequences sets terms words ;
 
 IN: chr
 
@@ -90,6 +89,9 @@ C: <chr-sub-pred> chr-sub-pred
 M: chr-sub-pred constraint-type ;
 M: chr-sub-pred constraint-args ;
 
+GENERIC: match-args ( constraint -- spec )
+M: object match-args constraint-args ;
+
 ! Allows matching the predicate also
 TUPLE: as-pred var pred ;
 C: <as-pred> as-pred
@@ -104,7 +106,9 @@ M: object lookup-index-key drop f ;
 M: index1-pred lookup-index-key key>> ;
 
 
-MIXIN: reflexive
+TUPLE: any-match { cases read-only } ;
+: symmetric-match ( args -- match-spec )
+    all-permutations any-match boa ; inline
 
 ! Turn lexical representation into constraint object
 GENERIC: pred>constraint ( obj -- chr-pred )

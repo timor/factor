@@ -1,6 +1,6 @@
 USING: accessors arrays chr.factor chr.factor.effects chr.factor.intra-effect
-chr.factor.phi chr.factor.word-types chr.parser chr.state kernel quotations
-terms ;
+chr.factor.intra-effect.primitives chr.factor.phi chr.factor.word-types
+chr.parser chr.state generic kernel quotations terms ;
 
 IN: chr.factor.composition
 
@@ -15,12 +15,25 @@ CHRAT: chr-comp { }
 ! CHR: print-have-type @ { TypeOf ?q ?tau } // -- [ ?tau full-type? ] |
 ! [ "Have full type: " write ?q . "as" print ?tau . flush f ] ;
 
+! CHR: print-have-word-type @ { TypeOfWord ?q ?tau } // -- [ ?tau full-type? ] |
+! [ "Have full word type: " write ?q . "as" print ?tau . flush f ] ;
+
+! CHR: print-ask-recursion-type @ { ?TypeOf [ ?x ] ?tau } { ?TypeOf [ ?x ] ?sig } // -- [ ?tau term-var? ] [ ?sig term-var? ]
+! [ ?x callable-word? ]
+! |
+! [ "Recursive Inference of " write ?x . flush f ] ;
+
+! CHR: print-ask-deferred-type @ { ?DeferTypeOf ?q ?tau } // -- |
+! [ "Perform Deferred Inference of " write ?q . flush f ] ;
+
 ! ** Type Definitions
 CHR: start-type-of @ // { InferType ?q } -- | { ?TypeOf ?q ?tau } ;
 
 CHR: unique-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?tau } -- | ;
 
-CHR: conflicting-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?sig } -- [ ?tau full-type? ] [ ?sig full-type? ] | [ "conflicting type-defs" throw f ] ;
+ERROR: conflicting-type-defs thing existing new ;
+CHR: conflicting-type @ { TypeOf ?x ?tau } { TypeOf ?x ?sig } // -- |
+[ ?x ?tau ?sig conflicting-type-defs ] ;
 
 CHR: have-recursive-type @ // { Recursion ?x __ ?sig } { TypeOf ?x ?rho } { ?TypeOf ?x ?sig } -- |
 [ ?sig ?rho ==! ] ;
@@ -32,6 +45,7 @@ CHR: deferred-effect-already-known @ { TypeOf ?x ?tau } // { ?DeferTypeOf ?x ?si
 [ ?sig ?tau ==! ] ;
 
 ! TODO: check
+! FIXME: more like an error if that happens...
 CHR: request-same-deferred-type @ { ?DeferTypeOf ?x ?sig } // { ?DeferTypeOf ?x ?tau } -- [ ?sig term-var? ] [ ?tau term-var? ] |
 [ ?sig ?tau ==! ] ;
 
@@ -45,10 +59,17 @@ CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } -- [ ?tau full-type
 ! [ "Answer Type: " write ?x . f ]
 [ ?sig ?tau ==! ] ;
 
-! TODO wtf?
-CHR: double-word-inference-special @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
-[ ?x callable-word? ] [ ?x rec-defaults :>> ?e ] |
-[ ?sig ?e ==! ] ;
+! These are used when recursive calls are made to some special words (length etc.) for which we have special
+! predicates
+! TODO: replace with lazy dispatch inference
+! CHR: double-word-inference-special @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
+! [ ?x callable-word? ] [ ?x rec-defaults fresh-effect :>> ?e ] |
+! [ ?sig ?e ==! ] ;
+
+! Generics will never get a recursive type, methods might, though
+CHR: recursive-generic-inference @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
+[ ?x generic? ] |
+{ MakeGenericDispatch ?x P{ Effect ?a ?b f f } ?sig } ;
 
 ! This is where a recursion predicate is inserted
 CHR: double-word-inference @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
@@ -56,8 +77,16 @@ CHR: double-word-inference @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } 
 [ ?sig P{ Effect ?a ?b f { P{ CallRecursive ?x ?a ?b } } } ==! ] ;
 ! [ ?sig P{ Effect ?a ?b { ?r } { { P{ EnterRecursive ?x ?a ?r } P{ CallRecursive ?x ?r ?b } } } } ==! ] ;
 
-CHR: double-inference-queue @ { ?TypeOf ?x ?tau } { ?TypeOf ?x ?sig } // -- [ ?tau term-var? ] [ ?sig term-var? ] |
-{ Recursion ?x ?tau ?sig } ;
+! FIXME: This doesn't seem to work correctly...
+! CHR: double-inference-queue @ { ?TypeOf ?x ?tau } { ?TypeOf ?x ?sig } // -- [ ?tau term-var? ] [ ?sig term-var? ] |
+! { Recursion ?x ?tau ?sig } ;
+
+! Replacing with a version that discards one query and equates the variables, and continues destructuring.
+! Should then stop when arriving at a word, where the recursion is then broken.
+CHR: double-inference-queue @ // { ?TypeOf ?x ?tau } { ?TypeOf ?x ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ] |
+[ ?sig ?tau ==! ]
+{ ?TypeOf ?x ?tau } ;
+! { Recursion ?x ?tau ?sig } ;
 
 CHR: check-word-fixpoint-type @ { TypeOfWord ?w ?rho } // -- [ ?rho full-type? ] |
 { CheckFixpoint ?w ?rho } ;
@@ -65,8 +94,7 @@ CHR: check-word-fixpoint-type @ { TypeOfWord ?w ?rho } // -- [ ?rho full-type? ]
 ! NOTE: Rebuilding an annotated effect here.  This could still be not correct because there are cached
 ! types of quotations that have been inferred for the recursive word itself, which don't appear in a wrapped
 ! context?
-
-! TODO maybe instantiate the tag
+! TODO maybe instantiate the tag? Probably not needed.
 ! NOTE: relying on known effect for the fixpoint type for now to derive the stack effect, which is not ideal
 CHR: have-type-of-recursive-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho }
 { FixpointTypeOf ?w P{ Effect ?r ?s ?l ?p } }
@@ -83,13 +111,29 @@ CHR: have-type-of-recursive-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w 
   ?z }
 { TypeOf ?q ?z } ;
 
+
+! This is here because there could be a dispatch expansion hidden, which we don't perform in the word type itself
+CHR: have-type-of-generic-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // --
+[ ?w generic? ]
+[ ?rho full-type? ]
+[ ?w 1quotation :>> ?q ]
+|
+{ ReinferEffect ?rho ?z }
+{ CheckXor ?q ?z ?tau }
+{ TypeOf ?q ?tau } ;
+
+! TODO: Could do the input/output class handling here!
 CHR: have-type-of-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // --
 ! [ ?rho valid-effect-type? ]
+[ ?w generic? not ]
 [ ?rho full-type? ]
 [ ?w 1quotation :>> ?q ]
 | { TypeOf ?q ?rho } ;
 
 IMPORT: chr-word-types
+
+! * Primitive Expansion
+IMPORT: chr-factor-prim
 
 ! * Intra-Effect Reasoning
 
@@ -107,6 +151,11 @@ IMPORT: chr-effects
 ! Default position where [ foo ] queries are converted to TypeOfWord foo preds.
 CHR: ask-type-of-word-call @ { ?TypeOf [ ?w ] ?tau } // -- [ ?w callable-word? ] [ ?tau term-var? ] |
 { TypeOfWord ?w ?sig } ;
+
+CHR: compose-trivial-left @ // { ComposeType P{ Effect ?a ?a f f } ?y ?tau } -- |
+[ ?tau ?y ==! ] ;
+CHR: compose-trivial-right @ // { ComposeType ?x P{ Effect ?a ?a f f } ?tau } -- |
+[ ?tau ?x ==! ] ;
 
 CHR: compose-effects @ // { ComposeType P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } --
 |

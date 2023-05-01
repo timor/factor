@@ -204,6 +204,7 @@ SYMBOL: chr-trace
 
 : qt. ( quot -- )
     qt sort-keys ... ;
+
 : add-chr-timing ( -- )
     { lookup test-callable
       check-guards
@@ -225,4 +226,4 @@ SYMBOL: chr-trace
 
 : tqt ( quot -- res )
     add-chr-timing
-    [ qt ] time.. ;
+    [ qt ] time.. sort-keys ;
