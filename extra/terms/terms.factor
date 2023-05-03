@@ -325,6 +325,10 @@ SINGLETON: __
 TUPLE: atom-match var ;
 C: <atom-match> atom-match
 
+! This is for matching variables only
+TUPLE: var-match var ;
+C: <var-match> var-match
+
 
 SYMBOL: in-quotation?
 SYMBOL: current-subst
@@ -361,6 +365,8 @@ M: wrapper subst wrapped>>
     in-quotation? [ subst ] with-variable-off
     <wrapper> ;
 
+! If substitution result is ground-value, return that.  Otherwise, re-wrap
+! as atom-match.
 M: atom-match subst
     var>> subst dup ground-value? [ <atom-match> ] unless ;
 
@@ -383,6 +389,11 @@ SYNTAX: A{ scan-object "}" expect <atom-match> suffix! ;
 M: atom-match pprint* pprint-object ;
 M: atom-match pprint-delims drop \ A{ \ } ;
 M: atom-match >pprint-sequence var>> 1array ;
+
+SYNTAX: M{ scan-object "}" expect <var-match> suffix! ;
+M: var-match pprint* pprint-object ;
+M: var-match pprint-delims drop \ M{ \ } ;
+M: var-match >pprint-sequence var>> 1array ;
 
 ! Tried first
 GENERIC#: decompose-left 1 ( term1 term2 -- terms1 terms2 cont? )
@@ -466,6 +477,8 @@ SYMBOL: solve-isomorphic-mode?
         ! { [ 2dup defined-equal? ] [ 2drop (solve) ] }
         { [ over atom-match? ] [ dup ground-value? [ [ var>> ] dip (solve1) ] [ 4drop f ] if ] }
         { [ dup atom-match? ] [ over ground-value? [ var>> (solve1) ] [ 4drop f ] if ] }
+        { [ over var-match? ] [ dup term-var? [ [ var>> ] dip (solve1) ] [ 4drop f ] if ] }
+        { [ dup var-match? ] [ over term-var? [ var>> (solve1) ] [ 4drop f ] if ] }
         { [ over valid-term-var? ] [ 2dup = [ 2drop (solve) ] [ elim ] if ] }
         { [ dup valid-term-var? ] [ swap elim ] }
         { [ dup hash-set? [ f ] [ 2dup = ] if ] [ 2drop (solve) ] }
