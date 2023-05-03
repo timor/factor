@@ -114,10 +114,13 @@ CHR: continue-suspend-make-effect @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau ?sig
 ! CHR: discard-leftover-binds @ { PhiMode } <={ MakeEffect } // <={ Bind } -- | ;
 ! CHR: phi-discard-phi-defs @ { PhiMode } <={ MakeEffect } // <={ Phi } -- | ;
 
+! TODO: this is still tricky... not sure how to test this exhaustively
 : pred-live-in-effect? ( pred make-effect -- ? )
     make-effect-vars
-    { [ [ intersects-live-vars ] dip intersects? ]
-      [ [ live-vars ] dip subset? ] } 2|| ;
+    {
+        [ [ vars ] dip subset? ]
+        [ [ intersects-live-vars ] dip intersects? ]
+        [ [ live-vars ] dip subset? ] } 2|| ;
 
 CHR: collect-union-pred @ { PhiMode } { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } { Keep ?p } -- [ ?p ?e pred-live-in-effect? ]
 [ ?p ?l in? not ]
@@ -181,7 +184,7 @@ CHR: implied-param-join @ // { ImpliesParam ?x ?a } { ImpliesParam ?y ?b } --
 ! NOTE: using overlap right now to extend the set of parameters.  This might be too general to get rid of remaining unused predicates.
 ! One approach could be to require a certain number of vars to be live, so the rest actually can be derived.  E.g. for a Sum predicate, we will always
 ! Need two out of three vars to be able to determine the third.  Alternatively, we could reason input/output-style?
-CHR: collect-body-pred @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p ?e pred-live-in-effect? ]
+CHR: collect-body-pred @ { FinishEffect ?tau } // AS: ?p <={ body-pred } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } -- [ ?p ?e pred-live-in-effect? ]
 [ ?p ?l in? not ]
 [ ?l ?p suffix :>> ?k ]
 |

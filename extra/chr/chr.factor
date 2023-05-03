@@ -239,7 +239,6 @@ M: callable test-constraint
 
 ! ** Term hierarchy
 TUPLE: type-pred < chr-pred ;
-TUPLE: val-pred < type-pred val ;
 
 ! ** Symbolic equivalences/Data-flow
 

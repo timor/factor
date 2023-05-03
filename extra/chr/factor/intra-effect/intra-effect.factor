@@ -2,7 +2,8 @@ USING: accessors arrays chr.factor chr.factor.util chr.parser chr.state classes
 classes.algebra classes.builtin classes.predicate classes.singleton
 classes.tuple classes.tuple.private combinators combinators.short-circuit
 continuations generic generic.single kernel kernel.private lists macros.expander
-math math.order quotations sequences sets sorting terms types.util ;
+math math.functions math.order quotations sequences sets sorting terms
+types.util ;
 
 IN: chr.factor.intra-effect
 
@@ -15,6 +16,7 @@ CHR: invalid-stays-invalid @ { Invalid } // { Invalid } -- | ;
 
 
 ! *** Mode-agnostic Normalizations
+! NOTE: Should be safe, as we don't define new stuff here if there is only one var?
 CHR: comm-var-is-lhs @ // AS: ?p <={ symmetric-pred A{ ?l } ?v } -- [ ?v term-var? ] |
 [ { ?v ?l } ?p class-of slots>tuple ] ;
 
@@ -414,6 +416,8 @@ CHR: convert-tag @ // { Tag ?x A{ ?n } } -- [ ?n type>class :>> ?tau ] |
 { Instance ?x ?tau } ;
 
 CHR: instance-of-non-classoid @ { Instance ?x A{ ?c } } // -- [ { ?c } first classoid? not ] | { Invalid } ;
+CHR: check-instance @ // { Instance A{ ?v } A{ ?c } } -- |
+[ ?v ?c instance? f P{ Invalid } ? ] ;
 
 CHR: null-instance-is-invalid @ // { Instance ?x null } -- | { Invalid } ;
 
@@ -437,7 +441,8 @@ CHR: instance-intersect-effect @ { Instance ?x ?e }
 ! *** Arithmetics
 ! CHR: unique-expr-pred @ AS: ?p <={ expr-pred ?a . ?x } // AS: ?q <={ expr-pred ?a . ?x } -- [ ?p class-of ?q class-of class= ] | ;
 
-CHR: check-le @ // { Le A{ ?x } A{ ?y } } -- [ ?x ?y <= not ] | { Invalid } ;
+CHR: check-le @ // { Le A{ ?x } A{ ?y } } -- | [ ?x ?y <= f P{ Invalid } ? ] ;
+CHR: check-lt @ // { Lt A{ ?x } A{ ?y } } -- | [ ?x ?y < f P{ Invalid } ? ] ;
 CHR: check-le-same @ // { Le ?x ?x } -- | ;
 CHR: check-lt @ // { Lt A{ ?x } A{ ?y } } -- [ ?x ?y < not ] | { Invalid } ;
 CHR: lt-tightens-le @ { Lt ?x ?y } // { Le ?x ?y } -- | ;
@@ -452,23 +457,29 @@ CHR: neq-tightens-le-2 @ // { Neq ?y ?x } { Le ?x ?y } -- | { Lt ?x ?y } ;
 CHR: check-lt-same @ // { Lt ?x ?x } -- | { Invalid } ;
 CHR: check-lt-eq-1 @ // { Lt ?x ?y } { Eq ?x ?y } -- | { Invalid } ;
 CHR: check-lt-eq-2 @ // { Lt ?x ?y } { Eq ?y ?x } -- | { Invalid } ;
-CHR: check-eq-1 @ // { Eq ?x ?y } { Neq ?x ?y } -- | { Invalid } ;
-CHR: check-eq-2 @ // { Eq ?x ?y } { Neq ?y ?x } -- | { Invalid } ;
-CHR: check-neq @ // { Neq A{ ?x } A{ ?y } } -- [ ?x ?y == ] | { Invalid } ;
-! Being not equal to something we can't be anyway is redundant
-CHR: redundant-neq @ { Instance ?x ?c } // { Neq ?x A{ ?l } } --
-[ { ?l } first ?c instance? not ] | ;
+! CHR: check-eq @ // { Eq A{ ?x } A{ ?y } } -- | [ ?x ?y = f P{ Invalid } ? ] ;
+CHR: check-eq-neq-1 @ // { Eq ?x ?y } { Neq ?x ?y } -- | { Invalid } ;
+CHR: check-eq-neq-2 @ // { Eq ?x ?y } { Neq ?y ?x } -- | { Invalid } ;
+CHR: check-neq @ // { Neq A{ ?x } A{ ?y } } -- | [ ?x ?y = P{ Invalid } f ? ] ;
+CHR: neq-same-var @ // <={ Neq ?x ?x } -- | { Invalid } ;
+CHR: neq-subsumes-not-same @ { Neq ?x ?y } // { NotSame ?x ?y } -- | ;
+! CHR: not-same-var @ // { NotSame ?x ?x } -- | { Invalid } ;
+! TODO: make sure this doesn't break reasoning in phis
+CHR: redundant-literal-neq @ { Instance ?x ?c } // { Neq ?x A{ ?l } } --
+[ { ?l } first class-of ?c classes-intersect? not ] | ;
 CHR: redundant-neq-instance @ { Instance ?x A{ ?c } } { Instance ?y A{ ?d } } //
 { Neq ?x ?y } -- [ { ?c ?d } first2 classes-intersect? not ] | ;
 
 CHR: check-sum @ // { Sum A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y + ?z = not ] | P{ Invalid } ;
 ! CHR: zero-sum-1 @ // { Sum ?z 0 ?y } -- | [ ?z ?y ==! ] ;
 ! CHR: zero-sum-2 @ // { Sum ?z ?x 0 } -- | [ ?z ?x ==! ] ;
+! This should be fine, as we only swap between output holes
 CHR: normalize-binop @ // AS: ?p <={ binop ?z A{ ?x } ?y } -- [ ?y term-var? ] |
 [ { ?z ?y ?x } ?p class-of slots>tuple ] ;
 
 ! Anything more complex than that needs a linear equation predicate, or
 ! a linear solver, for that matter...
+! TODO reactivate once confirmed that these aren't necessary for liveness
 CHR: elim-transitive-literal-sum @ // { Sum ?z ?x A{ ?m } } { Sum ?x ?a A{ ?n } } --
 [ ?m ?n + :>> ?k ] | { Sum ?z ?a ?k } ;
 CHR: elim-transitive-literal-sum-diff-1 @ // { Sum ?z ?x A{ ?m } } { Sum ?z ?a A{ ?n } } --
@@ -478,10 +489,15 @@ CHR: elim-transitive-literal-prod-mul @ // { Prod ?z ?x A{ ?m } } { Prod ?x ?a A
 [ ?m ?n * :>> ?k ] | { Prod ?z ?a ?k } ;
 CHR: elim-transitive-literal-prod-div-1 @ // { Prod ?x ?z A{ ?m } } { Prod ?a ?z A{ ?n } } -- [ ?m ?n >= ]
 [ ?m ?n / :>> ?k ] | { Prod ?x ?a ?k } ;
-CHR: elim-transitive-literal-prod-div-2 @ // { Prod ?z ?x A{ ?n } } { Prod ?z ?a A{ ?m } } -- [ ?m ?n >= ]
-[ ?m ?n / :>> ?k ] | { Prod ?x ?a ?k } ;
+! CHR: elim-transitive-literal-prod-div-2 @ // { Prod ?z ?x A{ ?n } } { Prod ?z ?a A{ ?m } } -- [ ?m ?n >= ]
+! [ ?m ?n / :>> ?k ] | { Prod ?x ?a ?k } ;
+
+! TODO: lt
+CHR: transitive-le-ge @ { Le ?x ?y } { Le ?y ?z } // -- | { Le ?x ?z } ;
+CHR: transitive-le-gt @ { Lt ?x ?y } { Le ?y ?z } // -- | { Lt ?x ?z } ;
 
 ! NOTE: This does not work naively for products!
+! TODO: might need revisiting after being more explicit with math types and equality
 CHR: lit-sum-specializes-math-class @ { Sum ?z ?x A{ ?m } } { Instance ?x ?c } // --
 [ ?m class-of ?c pessimistic-math-class-max :>> ?d ] | { Instance ?z ?d } ;
 
@@ -652,27 +668,29 @@ CHR: invalid-loop-effect @ // { LoopVar { ?w ?x ?y ?z } } --
 ! TODO: Test if sum is always normalized for this?
 ! Define Counters.  Note that These define _inclusive_ intervals, because
 ! If the sum is assumed to have been calculated, then the result is included
-CHR: loop-sum-defines-counters @ { Sum ?y ?x ?n } { LoopVar { ?w ?x ?y ?z } } // -- |
 ! CHR: loop-sum-defines-counters @ { Sum ?y ?x ?n } { LoopVar { ?w ?x ?y ?z } } // -- |
+CHR: loop-sum-defines-counters @ { Sum ?y ?x ?n } // { LoopVar { ?w ?x ?y ?z } } -- |
 ! pre-loop-body
-{ Counter ?x ?w ?a ?n }
-{ Sum ?z ?a ?n }
-! post-loop-body
-{ Counter ?y ?b ?z ?n }
-{ Sum ?b ?w ?n }
+! { Counter ?x ?w ?a ?n }
+! { Sum ?z ?a ?n }
+! ! post-loop-body
+! { Counter ?y ?b ?z ?n }
+! { Sum ?b ?w ?n }
+{ Counter ?w ?x ?y ?z ?n }
 ;
 
-! NOTE: the fact that this is necessary kind of stinks...
-! TODO: may be better to keep LoopVars instead?
-CHR: have-counter-already @ { Counter ?x __ __ __ } // { Counter ?x __ __ __ } -- | ;
+! ! NOTE: the fact that this is necessary kind of stinks...
+! ! TODO: may be better to keep LoopVars instead?
+! CHR: have-counter-already @ { Counter ?x __ __ __ } // { Counter ?x __ __ __ } -- | ;
 
 ! NOTE: this will probably generate some noise in connection with the other instance loop bound
 ! propagation rule
-CHR: loop-counter-input-specializes @ { Counter ?x ?a ?b A{ ?m } }
-{ Instance ?a ?c } // --
-[ ?c ?m class-of pessimistic-math-class-max :>> ?d ] |
-{ Instance ?x ?d }
-{ Instance ?b ?d } ;
+CHR: loop-counter-input-stays-integer @ { Counter ?x ?a ?b ?y A{ ?m } }
+{ Instance ?x ?c } // -- [ ?c integer class<= ] [ ?m integer? ] |
+{ Instance ?a integer } { Instance ?b integer } { Instance ?y integer } ;
+! [ ?c ?m class-of pessimistic-math-class-max :>> ?d ] |
+! { Instance ?x ?d }
+! { Instance ?b ?d } ;
 
 ! CHR: loop-counter-output-specializes @ { Counter ?x ?a ?b A{ ?m } }
 ! { Instance ?a ?c } // --
@@ -683,21 +701,44 @@ CHR: loop-counter-input-specializes @ { Counter ?x ?a ?b A{ ?m } }
 ! TODO cases for lt?
 ! If we now we are descending by constant amount m,
 ! then the final value can only be in m-range of a lower loop bound (Assuming we terminate!)
-CHR: tighten-loop-bound-desc @ { Counter ?x ?a ?b A{ ?m } } { Le ?b A{ ?n } } // --
-[ ?m 0 < ]
-[ ?m 1 + ?n + :>> ?k ]
-| { Le ?k ?b } ;
-CHR: tighten-loop-bound-asc @ { Counter ?x ?a ?b A{ ?m } } { Le A{ ?n } ?b } // --
-[ ?m 0 > ]
-[ ?m 1 - ?n + :>> ?k ]
-| { Le ?b ?k } ;
+! NOTE: Not sure about that right now
+! In particular, this applies to any Le predicate, while the intention of this was to only work
+! on the lowest bound!
+! CHR: tighten-loop-bound-desc @ { Counter ?x ?a ?b ?y A{ ?m } } { Le ?y A{ ?n } } // --
+! [ ?m 0 < ]
+! [ ?m 1 + ?n + :>> ?k ]
+! | { Le ?k ?y } ;
+! This version is trying to ensure that this only works on the end of the range...
+CHR: tighten-loop-bound-desc @ { Counter ?x ?a ?b ?y A{ ?m } }
+{ Le ?y A{ ?n } } { Le A{ ?n } ?b } // -- [ ?m 0 < ] [ ?m 1 + ?n + :>> ?k ] |
+{ Le ?k ?y } ;
+CHR: tighten-loop-bound-asc @ { Counter ?x ?a ?b ?y A{ ?m } }
+{ Le ?b A{ ?n } } { Le A{ ?n } ?y } // -- [ ?m 0 > ] [ ?m 1 - ?n + :>> ?k ] |
+{ Le ?y ?k } ;
 
 ! TODO: implement based on predicates on the step, too?
 ! CHR: known-down-counter-literal @ // { Counter ?x ?a ?b A{ ?n } } -- [ ?n 0 < ] |
-CHR: known-down-counter-literal @ { Counter ?x ?a ?b A{ ?n } } // -- [ ?n 0 < ] |
-{ Le ?x ?a }
-{ Le ?b ?x } ;
+! TODO: either replace like expr-pred, or add rules for non-lit case
+CHR: known-down-counter-literal @ { Counter ?x ?a ?b ?y A{ ?v } } // -- [ ?v 0 < ] |
+{ Le ?a ?x } { Le ?y ?b } ;
 
+CHR: known-up-counter-literal @ { Counter ?x ?a ?b ?y A{ ?v } } // -- [ ?v 0 > ] |
+{ Le ?x ?a } { Le ?b ?y } ;
+
+CHR: integer-lt-is-le @ { Instance ?x ?c } // { Lt ?x A{ ?m } } -- [ ?c integer class<= ]
+[ ?m 1 - ceiling >integer :>> ?k ] | { Le ?x ?k } ;
+
+CHR: integer-gt-is-ge @ { Instance ?x ?c } // { Lt A{ ?m } ?x } -- [ ?c integer class<= ]
+[ ?m 1 + floor >integer :>> ?k ] | { Le ?k ?x } ;
+
+! TODO: the ge and lt equivalents?.  Class matcher would be nice...
+CHR: le-offset-sum @ { Sum ?y ?x A{ ?n } } { Le ?x A{ ?v } } // --
+[ ?n ?v + :>> ?k ] | { Le ?y ?k } ;
+
+! CHR: gt-offset-sum @ { Sum ?y ?x A{ ?n } } { Lt A{ ?v } ?x } // --
+! [ ?n ?v + :>> ?k ] | { Lt ?k ?y } ;
+CHR: ge-offset-sum @ { Sum ?y ?x A{ ?n } } { Le A{ ?v } ?x } // --
+[ ?n ?v + :>> ?k ] | { Le ?k ?y } ;
 
 ! *** TODO Modular arithmetic
 ! Needed for fixed-width computations, possibly some loop analysis/transformation foo
@@ -771,13 +812,14 @@ CHR: expand-macro @ // { ExpandQuot ?q ?a ?i ?x ?n } -- [ ?a length ?n = ]
     ;
 
 ! **** Generics
-CHR: generic-dispatch-was-folded @ // { GenericDispatch ?w ?d ?a ?i ?o } -- [ ?a ground-value? ] | ;
+! TODO: replace with input/output reasoning?
+CHR: generic-dispatch-was-folded @ // { GenericDispatch ?w ?d ?a ?i ?o } -- [ ?d ground-value? ] [ ?a ground-value? ] | ;
 
 ! TODO: Instead, should probably carry over instance condition into inlined type closure? nope
 ! also not good
 ! Mad heuristics here: expand if we have less than a couple of applicable methods?
 ! TODO: Building the dispatch via XOR here is probably faster, at least for non-hot caches.
-! We still could cache the expansion in predicate form, though...
+! We still could cache the expansion in predicate form, though, or could we?
 CHR: expand-single-generic-dispatch @ { Instance ?d A{ ?c } } // { GenericDispatch ?w { ?d } ?a ?i ?o } --
 [ ?w single-generic? ]
 [ ?w dispatch# :>> ?n ]
@@ -856,8 +898,7 @@ CHR: known-tag-num @ { Eq ?n A{ ?v } } // { Tag ?c ?n } -- |
 
 ! UNION: replacable-pred expr-pred fold-pred ;
 CHR: known-expr-val @ { Eq ?n A{ ?v } } // AS: ?p <={ expr-pred } -- [ ?n ?p vars in? ]
-|
-[ ?p { { ?n ?v } } lift* ] ;
+| [ ?p { { ?n ?v } } lift* ] ;
 
 CHR: known-generic-input/output @ { Eq ?n A{ ?v } } // { GenericDispatch ?w ?d ?a ?i ?o } -- [ ?n ?a in? ?n ?d in? or ] |
 [| |
@@ -913,18 +954,18 @@ CHR: tuple-boa-decl @ // { TupleBoa A{ ?c } ?a ?b } --
 ] ;
 
 ! *** Locals scope expansion
-! NOTE: relies on these things not being replaced by numbers right now...
-! TODO: may be better to do this with a linear combination predicate instead?
-! NOTE: looks like we explicitly coded out the version of if we know 2, let's keep the third...
-CHR: keep-intermediate-op-result-1 @ <={ binop ?z ?x ?y } <={ binop ?x ?a ?b } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
-CHR: keep-intermediate-op-result-2 @ <={ binop ?z ?y ?x } <={ binop ?x ?a ?b } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
-CHR: keep-intermediate-op-result-3 @ <={ binop ?z ?y ?x } <={ binop ?b ?x ?a } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
-CHR: keep-intermediate-op-result-4 @ <={ binop ?z ?x ?y } <={ binop ?b ?x ?a } // -- [ ?x term-var? ] | { ImpliesParam { ?z ?y ?a ?b } { ?x } } ;
-CHR: keep-intermediate-op-result-5 @ <={ binop ?x ?y ?z } <={ binop ?a ?b ?z } // -- [ ?z term-var? ] | { ImpliesParam { ?x ?y ?a ?b } { ?z } } ;
-CHR: keep-intermediate-op-result-6 @ <={ binop ?x ?y ?z } <={ binop ?a ?z ?b } // -- [ ?z term-var? ] | { ImpliesParam { ?x ?y ?a ?b } { ?z } } ;
-! CHR: keep-intermediate-op-result-7 @ <={ binop  }
+
+! Propagate liveness of parameter if it is one connecting predicates together
+! CHR: add-dangling-pred-implication-join @ AS: ?p <={ val-pred } AS: ?q <={ val-pred } // --
+! CHR: add-dangling-pred-implication-join @ AS: ?p <={ expr-pred } AS: ?q <={ expr-pred } // --
+! [ ?p vars :>> ?a length 1 > ]
+! [ ?q vars :>> ?b length 1 > ]
+! [ ?a ?b intersect :>> ?c null? not ]
+! [ ?a ?b union ?c diff :>> ?x null? not ] |
+! { ImpliesParam ?x ?c } ;
 
 ! Pivot literal output stuff
+! TODO: This special-case-repairs the fact that we reversed the predicates for - and / instead of defining them in-order...
 CHR: pivot-output-literal-product @ { MakeEffect ?a ?b __ __ __ } // { Prod ?y ?x A{ ?m } } -- [ ?x ?b vars in? ] [ ?x ?a vars in? not ]
 [ 1 ?m / :>> ?k ] | { Prod ?x ?y ?k } ;
 CHR: pivot-output-literal-sum @ { MakeEffect ?a ?b __ __ __ } // { Sum ?y ?x A{ ?m } } -- [ ?x ?b vars in? ] [ ?x ?a vars in? not ]

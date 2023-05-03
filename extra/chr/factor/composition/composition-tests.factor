@@ -1,7 +1,7 @@
 USING: accessors arrays assocs chr.factor.composition chr.parser chr.state
 chr.test combinators.short-circuit kernel kernel.private lists literals math
 math.private classes sequences.private
-chr.factor.util
+chr.factor.util layouts
 quotations sequences slots.private terms tools.test typed types.util words
 chr.factor chr.factor.word-types chr.factor.effects chr combinators ;
 
@@ -42,22 +42,16 @@ IN: chr.factor.composition.tests
 : chr-simp1 ( constraints -- constraint )
     chr-simp first ;
 
-GENERIC: get-type ( quot -- type )
-
-M: callable get-type
-    [ qt values [ TypeOf? ] filter ]
-    [ [ swap key>> = ] curry find nip ] bi
-    dup [ type>> ] when ;
-M: word get-type
-    1quotation get-type ;
-
-
 : same-type? ( quot quot -- ? )
     [ get-type ] bi@ same-effect? ;
 
 TYPED: array-first ( arr: array -- thing ) 2 slot ;
 
 TERM-VARS: ?o ?a ?b ?v ?w ?x ?y ?z ;
+TERM-VARS: ?y2 ?ys2 ?o4 ?a43 ?v6 ?y6 ?ys6 ;
+TERM-VARS: ?y1 ?ys1 ?x1 ?v1 ?x2 ?x3 ?rho1 ?rho2 ?rho3 ?o1 ?a1 ;
+TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ?i2 ?c1 ?a2 ?z2 ;
+
 
 P{ Effect L{ ?o . ?a } L{ ?v . ?a } f {
        P{ Instance ?o array }
@@ -101,13 +95,20 @@ P{ Neq ?a ?b }
 [ { P{ Neq ?a ?b } } chr-simp1 ] chr-test
 P{ Neq ?b ?a }
 [ { P{ Neq ?b ?a } } chr-simp1 ] chr-test
-P{ Neq 42 43 }
-[ { P{ Neq 42 43 } } chr-simp1 ] chr-test
 
 { { P{ Instance ?a number } } }
 [ { P{ Neq ?a "haha" } P{ Instance ?a number } } chr-simp ] unit-test
 
 ! ** Basic Invariants
+
+{ { P{ Invalid } } } [ { P{ Neq 5 5 } } chr-simp ] unit-test
+{ { P{ Invalid } } } [ { P{ Neq f f } } chr-simp ] unit-test
+{ { P{ Invalid } } } [ { P{ Neq ?c ?c } } chr-simp ] unit-test
+{ { P{ Neq ?c ?d } } } [ { P{ Neq ?c ?d } } chr-simp ] unit-test
+{ { P{ Neq ?c 5 } } } [ { P{ Neq ?c 5 } } chr-simp ] unit-test
+{ { } } [ { P{ Neq f t } } chr-simp ] unit-test
+
+{ t } [ [ drop t ] [ dup eq? ] same-type? ] unit-test
 
 { t } [ [ 1 drop \ +nil+ ] [ 1 drop +nil+ ] same-type? ] unit-test
 { t } [ [ 1 drop \ t ] [ 1 drop t ] same-type? ] unit-test
@@ -141,7 +142,9 @@ TERM-VARS: ?q3 ?q5 ?p2 ?p3 ?c2 ?c3 ?a4 ?a6 ?b3 ?b4 ;
 ! that the non-taken branch quotation is actually a quotation!
 P{
     Xor
-    P{ Effect L{ ?q3 ?p2 ?c2 . ?a4 } ?b3 f { P{ Instance ?q3 object } P{ Instance ?c2 not{ POSTPONE: f } } P{ Neq ?c f } P{ Instance ?p2 callable } P{ CallEffect ?p2 ?a4 ?b3 } } }
+    ! subsumed
+    ! P{ Effect L{ ?q3 ?p2 ?c2 . ?a4 } ?b3 f { P{ Instance ?q3 object } P{ Instance ?c2 not{ POSTPONE: f } } P{ Neq ?c f } P{ Instance ?p2 callable } P{ CallEffect ?p2 ?a4 ?b3 } } }
+    P{ Effect L{ ?q3 ?p2 ?c2 . ?a4 } ?b3 f { P{ Instance ?q3 object } P{ Instance ?c2 not{ POSTPONE: f } } P{ Instance ?p2 callable } P{ CallEffect ?p2 ?a4 ?b3 } } }
     P{ Effect L{ ?q5 ?p3 ?c3 . ?a6 } ?b4 f { P{ Instance ?p3 object } P{ Instance ?c3 POSTPONE: f } P{ Eq ?c f } P{ Instance ?q5 callable } P{ CallEffect ?q5 ?a6 ?b4 } } }
 }
 [ [ if ] get-type ] chr-test
@@ -211,6 +214,11 @@ P{ Effect L{ ?y . ?a } L{ ?x . ?a } f
 { t }
 [ [ callable? ] [ callable instance? ] same-type? ] unit-test
 
+P{ Xor
+   P{ Effect L{ ?y2 . ?a1 } L{ ?z2 . ?a1 } f { P{ Instance ?z2 t } P{ Eq ?z2 t } P{ Eq ?y2 5 } } }
+   P{ Effect L{ ?y . ?a4 } L{ ?z . ?a4 } f { P{ Instance ?z POSTPONE: f } P{ Eq ?z f } P{ Neq ?y 5 } } }
+ } [ [ 5 = ] get-type ] chr-test
+
 { t }
 [ [ + 5 = [ swap ] when ] get-type Xor? ] unit-test
 
@@ -267,7 +275,6 @@ M: object auto-dispatch ;
 ! { { L{ } cons-state intersection{ not{ cons-state } not{ L{ } } } } }
 ! [ \ auto-dispatch dispatch-method-seq keys ] unit-test
 
-TERM-VARS: ?y2 ?ys2 ?o4 ?a43 ?v6 ?y6 ?ys6 ;
 P{
     Xor
     P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } f { P{ Instance ?y2 not{ cons-state } } } }
@@ -283,7 +290,6 @@ P{
 { L{ 42 } } [ L{ 43 42 } manual-dispatch ] unit-test
 { +nil+ } [ L{ } manual-dispatch ] unit-test
 
-TERM-VARS: ?y1 ?ys1 ?x1 ?v1 ?x2 ?x3 ?rho1 ?rho2 ?rho3 ?o1 ?a1 ;
 P{
     Xor
     P{ Effect L{ ?x1 . ?rho1 } L{ ?x1 . ?rho1 } f { P{ Instance ?x1 not{ cons-state } } } }
@@ -505,8 +511,6 @@ MACRO: my-add1 ( num -- quot )
 
 { 42 } [ 41 1 my-add1 ] unit-test
 
-TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ?i2 ?c1 ?a2 ?z2 ;
-
 P{ Effect L{ ?a1 . ?i1 } ?o1 { ?q1 } {
        P{ MacroExpand my-add1 f L{ ?a1 . ?i1 } ?q1 }
        P{ Instance ?q1 callable }
@@ -612,6 +616,10 @@ P{ Xor
 { V{ 4 3 2 1 0 } }
 [ V{ } clone 5 [ over push ] each-int-down ] unit-test
 
+
+! FIXME: maybe do loop exit analysis better on this.  Right now, only works for step size 1...
+: each-int-2down ( ..a n quot: ( ..c i -- ..c ) -- ..b ) over 0 > [ [ 2 - ] dip [ call ] 2keep each-int-2down ] [ 2drop ] if ; inline recursive
+
 : each-down-int ( ..a n quot: ( ..c i -- ..c ) -- ..b ) [ call ] 2keep over 0 > [ [ 1 - ] dip each-down-int ] [ 2drop ] if ; inline recursive
 
 : each-int-down-complete ( ..a n quot: ( i --  ) -- ..b  )
@@ -677,3 +685,6 @@ P{ Xor
 [ [ cardinal? ] get-type ] chr-test
 
 { 47 } [ 0 5 inc-loop ] unit-test
+
+! TODO: shift must transport the Shift relation through the coercion
+! in the bignum branch.  Unit-test this!

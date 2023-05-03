@@ -74,13 +74,20 @@ PREDICATE: callable-word < word { [ symbol? not ] } 1&& ;
 ! One thing to consider that it is probably impossible to store the needed
 ! knowledge with only the 3 Xor cases, because we have 2x2=4 cases to consider.
 ! It is possible though to store this information in two equivalence predicates.
+! => Well, akshually, that's not the case.  3 Xor cases are enough.
 
-! Some ideas come to mind:
-! 1. Explicit introduction of <==> constraints
-! 2. Early inference of <==> constraints
+! ** Liveness of "internal" variables
 
-! For now, try 1.  this might result in the parameter implication reasoning to
-! be unnecessary?
+! Up until now, predicates' holes were considered in/out polarity.  This
+! however, brings problems with liveness analysis for variables.  It's probably
+! necessary to have kind of a def/use-equivalent approach.  This should be
+! possible by not arbitrarily throwing around the order of predicates in
+! seemingly symmetric or commutative relation predicates.  This might make it
+! necessary to introduce a number of new rules, but ideally these should
+! coincide with the ones needed to only keep the relevant predicates alive in
+! the first place...
+! Alternatively, a more general approach could be tried with explicitly
+! declaring which var slots are inputs and outputs, respectively.
 
 ! * Helpers for generating declared effects
 
@@ -285,13 +292,16 @@ TUPLE: rel-pred < expr-pred val2 ;
 TUPLE: Num= < rel-pred ;
 ! This represents equal? equality
 TUPLE: Eq < rel-pred ;
-! TUPLE: StrictEq < rel-pred ;
+! TUPLE: StrictEq < Eq ;
 TUPLE: Neq < rel-pred ;
+TUPLE: NotSame < Neq ;
 TUPLE: Le < rel-pred ;
-TUPLE: Lt < rel-pred ;
+! TUPLE: Lt < rel-pred ;
+TUPLE: Lt < Le ;
 ! TUPLE: Ge < expr-pred val var ;
 ! TUPLE: Gt < expr-pred val var ;
-TUPLE: Counter < val-pred from to by ;
+! TUPLE: Counter < val-pred from to by ;
+TUPLE: Counter < chr-pred start iter-in iter-out end delta ;
 
 TUPLE: <==> < chr-pred flag consequent ;
 
@@ -321,7 +331,7 @@ UNION: symmetric-pred Eq Neq Num= ;
 TUPLE: PrimCall < chr-pred word in out ;
 
 UNION: body-pred val-pred CallEffect CallXorEffect Declare CallRecursive Throws
-    MacroExpand Iterated LoopVar GenericDispatch <==> MathCall PrimCall ;
+    MacroExpand Iterated LoopVar GenericDispatch <==> MathCall PrimCall Counter ;
 
 TUPLE: CheckPhiStack a b res ;
 
@@ -419,6 +429,8 @@ GENERIC: live-vars ( pred -- vars )
 GENERIC: defines-vars ( pred -- vars )
 ! This is special for predicates where parts of the variables intersect in
 ! order to consider it live.
+! TODO: Ideally, this should only be needed for expansions where not all outputs
+! are known to be used anymore...
 GENERIC: intersects-live-vars ( pred -- vars )
 M: object intersects-live-vars drop f ;
 M: chr-pred live-vars vars ;
@@ -454,14 +466,16 @@ M: MacroExpand intersects-live-vars in>> vars ;
 M: PrimCall intersects-live-vars vars ;
 M: PrimCall defines-vars vars ;
 
-M: Slot live-vars val>> 1array ;
-M: Slot defines-vars [ n>> vars ] [ slot-val>> vars append ] bi ;
-M: Length live-vars val>> 1array ;
-M: Length defines-vars length-val>> 1array ;
-M: Instance live-vars val>> 1array ;
-M: Instance defines-vars type>> defines-vars ;
-M: Tag live-vars val>> 1array ;
-M: Tag defines-vars var>> 1array ;
+M: val-pred live-vars val>> 1array ;
+M: val-pred defines-vars tuple-slots rest-slice vars ;
+! M: Slot live-vars val>> 1array ;
+! M: Slot defines-vars [ n>> vars ] [ slot-val>> vars append ] bi ;
+! M: Length live-vars val>> 1array ;
+! M: Length defines-vars length-val>> 1array ;
+! M: Instance live-vars val>> 1array ;
+! M: Instance defines-vars type>> defines-vars ;
+! M: Tag live-vars val>> 1array ;
+! M: Tag defines-vars var>> 1array ;
 M: Iterated intersects-live-vars
     stuff>> vars ;
 M: Iterated defines-vars
@@ -469,7 +483,7 @@ M: Iterated defines-vars
     ! [ start>> vars ] [ end>> vars ] bi union ;
 ! TODO: there might be a pattern here...
 ! M: Sum live-vars val>> 1array ;
-M: Counter live-vars val>> 1array ;
+! M: Counter live-vars val>> 1array ;
 ! M: expr-pred defines-vars vars ;
 ! M: MacroCall live-vars out>> vars ;
 M: GenericDispatch intersects-live-vars

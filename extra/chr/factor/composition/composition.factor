@@ -1,6 +1,7 @@
-USING: accessors arrays chr.factor chr.factor.effects chr.factor.intra-effect
-chr.factor.intra-effect.primitives chr.factor.phi chr.factor.word-types
-chr.parser chr.state generic kernel quotations terms ;
+USING: accessors arrays assocs chr.factor chr.factor.effects
+chr.factor.intra-effect chr.factor.intra-effect.primitives chr.factor.phi
+chr.factor.word-types chr.parser chr.state generic kernel quotations sequences
+terms words ;
 
 IN: chr.factor.composition
 
@@ -191,3 +192,12 @@ CHR: compose-xor-effects-both @ // { ComposeType P{ Xor ?a ?b } P{ Xor ?c ?d } ?
 
 : qt ( quot -- res )
     InferType boa 1array chr-comp swap [ run-chr-query store>> ] with-var-names ;
+
+GENERIC: get-type ( quot -- type )
+
+M: callable get-type
+    [ qt values [ TypeOf? ] filter ]
+    [ [ swap key>> = ] curry find nip ] bi
+    dup [ type>> ] when ;
+M: word get-type
+    1quotation get-type ;

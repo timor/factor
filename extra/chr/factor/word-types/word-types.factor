@@ -35,7 +35,14 @@ IN: chr.factor.word-types
         ! { <= [ [ < ] [ = ] 2bi or ] }
         { >= [ swap <= ] }
         ! { - [ -1 * + ] }
+        ! TODO: revisit
         { number= [ { number number } declare = ] }
+        ! NOTE: Interesting: emulating this gives a sequential relation we don't want, also the implied eq for fixnums is too
+        ! special? Not really, but inside =, it does not work as expected as of yet
+        { both-fixnums? [ fixnum? [ fixnum? ] [ drop f ] if ] }
+        ! ! NOTE: We don't use the both-fixnums short-cut here for reasoning
+        ! Nope, changes semantics!
+        ! { = [ 2dup eq? [ 2drop t ] [ 2dup both-fixnums? [ 2drop f ] [ equal? ] if ] if ] }
         ! This is according to the word props, but there are methods defined on complex!
         ! { /i [ { real real } declare / >integer ] }
     } at ;
@@ -300,7 +307,6 @@ CHR: make-unit-simple-type @ // { MakeUnit ?rho ?tau } -- [ ?rho term-var? not ]
 ! { MakeXor ?rho ?sig ?tau }
 ! { MakeUnit ?x ?rho }
 ! { MakeUnit ?y ?sig } ;
-! CHR: make-xor-unit-type @ // { MakeUnit P{ Xor ?x ?y } }
 
 ! *** Data Values
 
@@ -309,25 +315,28 @@ CHR: type-of-val @ // { ?TypeOf A{ ?v } ?tau } -- [ ?v callable? not ] [ ?v call
 [ ?tau W{ W{ ?v } } ==! ] ;
 
 ! *** Some Primitives
-CHR: type-of-both-fixnums? @ { TypeOfWord both-fixnums? ?tau } // -- |
-{ WrapDefaultClasses both-fixnums?
-  P{ Xor
-     P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f {
-            { Instance ?x fixnum }
-            { Instance ?y fixnum }
-            { Instance ?c W{ t } } } }
+! TODO: We don't express that there is at least one non-fixnum here.  Could be
+! considered not a correct disjunct type?
+! CHR: type-of-both-fixnums? @ { TypeOfWord both-fixnums? ?tau } // -- |
+! { WrapDefaultClasses both-fixnums?
+!   P{ Xor
+!      P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f {
+!             { Instance ?x fixnum }
+!             { Instance ?y fixnum }
+!             { Instance ?c W{ t } } } }
 
-     P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f {
-            { Instance ?x object }
-            { Instance ?y object }
-            { Instance ?c W{ t } } }
-   } } ?tau } ;
+!      P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f {
+!             { Instance ?x object }
+!             { Instance ?y object }
+!             ! { NotSame ?x ?y }
+!             { Instance ?c W{ f } } }
+!    } } ?tau } ;
 
 CHR: type-of-eq @ { TypeOfWord eq? ?tau } // -- |
 [ ?tau P{ Xor
           ! introducing the value which is equal to as parameter?
-          P{ Effect L{ ?x ?x . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?c t } } }
-          P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?c POSTPONE: f } } }
+          P{ Effect L{ ?x ?x . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?c t } P{ Eq ?c t } } }
+          P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?c POSTPONE: f } P{ NotSame ?x ?y } } }
    } ==! ] ;
 
 ! NOTE: Declarations are nominative first of all, although the existing type inference does
@@ -488,9 +497,20 @@ CHR: type-of-< @ { TypeOfWord A{ < } ?tau } // -- |
 ]
 { ComposeType P{ Effect ?a ?a f { P{ Ensure { number number } ?a } } } ?sig ?tau } ;
 
-! induces parameter
-! TODO: generic
-CHR: type-of-= @ { TypeOfWord A{ = } ?tau } // -- |
+! CHR: type-of-equal? @ { TypeOfWord equal? ?tau } // -- |
+CHR: type-of-equal? @ { TypeOfWord equal? ?tau } // -- |
+{ MakeGenericDispatch equal?
+  P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f {
+         { Instance ?c t } { Eq ?c t } { Eq ?x ?y } } } ?rho }
+{ MakeGenericDispatch equal?
+  P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f {
+         { Instance ?c POSTPONE: f } { Eq ?c f } { Neq ?x ?y } } } ?sig }
+{ MakeXor ?rho ?sig ?tau } ;
+! [ ?tau
+!   P{ Xor ?rho ?sig } ==! ] ;
+
+! TODO: generic expansion once fixnums are excluded, or classes are disjunct if needed
+CHR: type-of-= @ { TypeOfWord = ?tau } // -- |
 ! { MakeGenericDispatch =
 ! [ ?tau
 !     P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a  } f {
@@ -504,12 +524,12 @@ CHR: type-of-= @ { TypeOfWord A{ = } ?tau } // -- |
 [
     ?tau
     P{ Xor
-       P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
+       P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } f {
               P{ Instance ?z t }
               P{ Eq ?z t }
               P{ Eq ?x ?y }
           } }
-       P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } { ?z } {
+       P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } f {
               P{ Instance ?z POSTPONE: f }
               P{ Eq ?z f }
               P{ Neq ?y ?x }

@@ -54,7 +54,7 @@ FROM: namespaces => set ;
     {
         [ id>> "%d: " printf ]
         [ ctx>> [ " (%u) " printf ] when* ]
-        [ constraint>> pprint ]
+        [ constraint>> f lift* pprint ]
         [ from-rule>> [ rule-id " (Rule: %s)\n" printf ] [ nl ] if* ]
     }
     cleave flush ;
@@ -97,6 +97,13 @@ SYMBOL: debug-chr-stats
 : chr-usage-report. ( -- )
     debug-chr-stats get [ rule-match-report.
     unused-rules. ] when ;
+
+: chrebugabit ( -- )
+    \ create-chr [ [ "+ " write dup id-susp. ] compose
+                   ! [ chr-state. ] compose
+    ] annotate
+    ! \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate
+    \ kill-chr [ [ "- " write dup id-susp. ] prepose ] annotate ;
 
 : chrebug ( -- )
     ! \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate
@@ -204,6 +211,8 @@ SYMBOL: chr-trace
 
 : qt. ( quot -- )
     qt sort-keys ... ;
+
+: gt. ( quot -- ) get-type ... ;
 
 : add-chr-timing ( -- )
     { lookup test-callable
