@@ -1,8 +1,9 @@
 USING: accessors arrays assocs assocs.extras chr chr.programs
-chr.programs.incremental classes classes.algebra combinators.private
-combinators.short-circuit continuations hash-sets hashtables kernel lists make
-match math math.combinatorics math.order namespaces persistent.assocs quotations
-sequences sets sorting terms typed words ;
+chr.programs.incremental classes classes.algebra colors.constants
+combinators.private combinators.short-circuit continuations hash-sets hashtables
+io.styles kernel lists make match math math.combinatorics math.order math.parser
+namespaces persistent.assocs prettyprint.custom prettyprint.sections quotations
+sequences sets sorting terms typed unicode.subsuper words ;
 
 IN: chr.state
 
@@ -14,6 +15,10 @@ SYMBOLS: program exec-stack store match-trace current-index ;
 ! Interpret Is{ ?x ?y } predicates in contexts as extra bindings
 SYMBOL: context-eqs
 
+! Keep track of rule match counts
+SYMBOL: rule-firings
+SYMBOL: active-rule-firing
+
 SYMBOL: lookup-index
 SINGLETON: current-context
 INSTANCE: current-context match-var
@@ -23,6 +28,21 @@ TUPLE: chr-suspension
     constraint id alive activated stored hist vars from-rule ctx ;
 
 TUPLE: solver-state builtins store ;
+
+TUPLE: susp-id < identity-tuple { number read-only } { rule read-only } { match-num read-only } ;
+C: <susp-id> susp-id
+: pprint-susp-id ( susp-id -- string )
+    [ match-num>> ] [ number>> ] [ rule>> ] tri [ number>string ] dip
+    [ number>string rot number>string "-" glue "(" ")" surround
+      ! >subscript
+      append ] [ nip ] if*
+    ;
+
+M: susp-id pprint*
+    pprint-susp-id
+    H{ { io.styles:foreground COLOR: solarized-violet } } styled-text ;
+
+M: susp-id <=> [ number>> ] bi@ <=> ; inline
 
 : <solver-state> ( -- obj )
     <eq-disjoint-set> H{ } clone solver-state boa ;
@@ -105,12 +125,21 @@ ERROR: cannot-make-equal lhs rhs ;
     [ 2nip add-equal ]
     [ cannot-make-equal ] if* ;
 
+! ERROR: duplicate-index-value key value ;
+
+! FIXME: allow overwriting dead?
+: add-to-lookup-index ( value key assoc -- )
+    2dup [ [ alive? ] filter ] change-at
+    push-at ;
+    ! 2dup at? [ {  } ]
+    ! [ drop push-at ] if* ; inline
+
 : maybe-store-index ( chr-susp id -- )
     swap constraint>>
     dup lookup-index-key
     ! { [  ]
     !   [ ?ground-value term-var? ] } 1&&
-    [ [ class-of ] dip 2array lookup-index get set-at ]
+    [ [ class-of ] dip 2array lookup-index get add-to-lookup-index ]
     [ 2drop ] if* ; inline
 
 : store-chr ( chr-susp -- )
@@ -118,18 +147,34 @@ ERROR: cannot-make-equal lhs rhs ;
     2dup maybe-store-index
     store get set-at ; inline
 
+! : rule-num ( id -- id/name )
+!     [ number>string ] keep program get rules>> nth dup named-chr? [ rule-name>> "(" ")" surround " " glue ] [ drop ] if
+!     "R" prepend
+!     ; inline
+! ! [ drop ] if ;
+
+
+: new-id ( from-rule -- id )
+    ! rule-id
+    current-index counter swap
+    active-rule-firing get
+    ! dup rule-firings get at
+    <susp-id> ; inline
+
 TYPED: create-chr ( from-rule c: constraint -- id )
+    dupd
     ! FIXME: This is to make sure any representatives get in! That stuff is really meh...
     f lift
     chr-suspension new swap
     [ >>constraint
       swap >>from-rule
     ]
-    [ vars members >>vars ] bi
+    [ vars >>vars ] bi
     t >>alive
     current-context get >>ctx
     ! current-index [ 0 or 1 + dup ] change-global [ >>id ] keep
-    current-index counter [ >>id ] keep
+    ! current-index counter [ >>id ] keep
+    swap new-id [ >>id ] keep
     [ store-chr ] dip ;
 
 : alive? ( id -- ? )
@@ -220,8 +265,14 @@ PRIVATE>
     ! [ substitute-ground-values ] dip
     apply-substitution* ;
 
+: record-rule-firing ( rule-id -- )
+    ! drop rule-firings counter drop ;
+    [ rule-firings get inc-at ]
+    [ rule-firings get at active-rule-firing set ] bi ; inline
+
 ! TODO: Don't use t as special true value in body anymore...
 : run-rule-body ( rule-id bindings -- )
+    over record-rule-firing
     dup current-context of current-context
     [
         [ dup program get rules>> nth ] dip
@@ -398,20 +449,25 @@ DEFER: match-single-head
     [ class-of ] [ lookup-index-key ] bi
     [ 2array ] [ drop f ] if* ; inline
 
-: lookup-key-maybe-delete ( key -- id/assoc )
-    dup lookup-index get at
-    [ dup alive?
-      [ nip dup store get at 2array 1array ]
-      [
-          ! break
-          drop lookup-index get delete-at f ] if
-    ]
-    [ drop f ] if* ; inline
+! : lookup-key-maybe-delete ( key -- id/assoc )
+!     dup lookup-index get at
+!     [ dup alive?
+!       [ nip dup store get at 2array 1array ]
+!       [
+!           ! break
+!           drop lookup-index get delete-at f ] if
+!     ]
+!     [ drop f ] if* ; inline
 
 : try-index-lookup ( key bindings -- seq/f )
-    lift
-    [ lookup-key-maybe-delete ]
-    [ f ] if* ; inline
+    lift ! XXX meh?
+    [let f :> result!
+     lookup-index get [ [ alive? ] filter dup result! ] change-at
+     result [ f ]
+     store get '[ [ dup _ at 2array ] map ] if-empty
+    ] ;
+    ! [ lookup-key-maybe-delete ]
+    ! [ f ] if* ; inline
 
 :: (run-occurrence) ( rule-id trace bindings partners vars -- )
     trace recursive-drop?
@@ -553,6 +609,7 @@ M: equiv-activation activate-new nip
 
 ! M: eq-constraint activate-new nip
 !     builtins store get at constraint>> push ;
+! from-rule is { rule-id firing-number }
 TUPLE: deferred-activation from-rule chr ctx ;
 
 M: eq-constraint activate-new 2drop ;
@@ -561,9 +618,15 @@ M: deferred-activation activate-item
     ! dup ctx>> current-context set
     ! [ from-rule>> ] [ chr>> ] bi activate-new ;
     dup ctx>> current-context
-    [ [ from-rule>> ] [ chr>> ] bi activate-new ] with-variable ;
+    [ [ from-rule>>
+        first2 active-rule-firing set
+      ] [ chr>> ] bi activate-new ] with-variable ;
 
-M: integer activate-item
+! M: integer activate-item
+!     ! If we have enqueued it several times, then we basically bumped it up, so no need to run it repeatedly
+!     [ queue get remove! drop ]
+!     [ reactivate-item ] bi ;
+M: susp-id activate-item
     ! If we have enqueued it several times, then we basically bumped it up, so no need to run it repeatedly
     [ queue get remove! drop ]
     [ reactivate-item ] bi ;
@@ -598,8 +661,11 @@ M: more-partners activate-item
                            ] recover
     ] until ;
 
+: <deferred-activation> ( from-rule chr ctx -- obj )
+    [ dup rule-firings get at 2array ] 2dip deferred-activation boa ; inline
+
 M: sequence activate-new
-    current-context get [ deferred-activation boa ] curry with map
+    current-context get [ <deferred-activation> ] curry with map
     [ enqueue ] when* ;
     ! queue [ append ] change ;
     ! run-queue ;
@@ -655,6 +721,7 @@ M: builtin-suspension apply-substitution* nip ;
     update-local-vars
     check-vars? on
     0 current-index set-global
+    H{ } clone rule-firings set
     H{ } clone var-names set
     ;
 
@@ -711,7 +778,8 @@ M: solver-state merge-solver-config
 
 ! NOTE: must be done in correct scope right now (i.e. nested one)
 : petrify-solver-state! ( state -- state )
-    [ [ f lift ] map-values ] change-store ;
+    ! [ [ f lift ] map-values ] change-store ;
+    [ [ clone [ f lift ] change-constraint ] map-values ] change-store ;
 
 : susp>constraint ( susp -- chr )
     [ constraint>> ] [ ctx>> ] bi
@@ -730,6 +798,8 @@ SYMBOL: split-states
 : save-split-state ( key solver-state --  )
     2array split-states get push ;
 
+ERROR: chr-inference-error state error ;
+
 : run-chr-query ( prog query -- state )
     [ pred>constraint ] map
     2dup 2array
@@ -744,7 +814,9 @@ SYMBOL: split-states
       init-chr-scope
       V{ } clone queue set
       f swap activate-new
-      run-queue
+      [ run-queue ] [ dup chr-inference-error? [ rethrow ]
+                      [ get-solver-state swap chr-inference-error ] if ] recover
+
       ! split-states get join-states
       ! run-queue
       finish-solver-state

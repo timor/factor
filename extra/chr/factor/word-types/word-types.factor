@@ -97,13 +97,15 @@ CHR: add-default-classes-to-effect @ // { WrapDefaultClasses ?w ?e ?tau } --
  { WrapClasses in-types out-types ?e ?tau }
 ] ;
 
+! NOTE: not using ComposeType because this may not rebuild the effect!
 CHR: add-classes-to-effect @ // { WrapClasses ?i ?o P{ Effect ?a ?b ?l ?p } ?tau } -- |
 ! [ ?w stack-effect effect>stacks :>> ?o drop :>> ?i ]
 ! [ { ?a ?b } { ?i ?o } ==! ]
 [| |
  ?i length "in" <array> elt-vars dup :> ain
  ?o length "out" <array> elt-vars dup :> aout
- [ >list __ list* ] bi@ :> ( lin lout )
+ ! [ >list __ list* ] bi@ :> ( lin lout )
+ [ >list "rest" utermvar list* ] bi@ :> ( lin lout )
  ain <reversed> ?i
  [ DeclaredInstance boa ] 2map
  aout <reversed> ?o

@@ -1,6 +1,6 @@
-USING: accessors arrays assocs chr.factor chr.parser chr.state
-combinators.short-circuit grouping kernel lists sequences sets terms types.util
-;
+USING: accessors arrays assocs chr.factor chr.factor.intra-effect.liveness chr.parser
+chr.state combinators.short-circuit grouping kernel lists sequences sets terms
+types.util ;
 
 IN: chr.factor.effects
 
@@ -12,6 +12,7 @@ IN: chr.factor.effects
 CHRAT: chr-effects { }
 
 ! ** Unification reasoning
+! TODO: move that stuff over to phi!
 : phi-stacks-unique? ( mapping -- ? )
     [ values [ dup list?
                ! Note: not testing the cdrs...
@@ -60,8 +61,12 @@ CHR: dont-rebuild-non-phiable-effect @ // { PhiMode } { CheckPhiStack { ?a ?b } 
 [ ?tau null ==! ]
 { PhiDone } ;
 
+IMPORT: chr-factor-liveness
+
 ! non-phi case
-CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } -- |
+CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } --
+[ ?a vars ?d vars union :>> ?i ]
+|
 [ ?b ?c ==! ]
 ! NOTE: This happens if we have pre-defined effects but no known body yet (e.g. recursive calls)
 ! [ ?k dup term-var? [ drop f ] when ]
@@ -70,6 +75,9 @@ CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effe
 { MakeEffect ?a ?d f f ?tau }
 [ ?k ]
 [ ?l ]
+! { Roots ?i }
+! { Live ?i }
+[ ?i vars [ Roots boa ] [ Live boa ] bi 2array ]
 { FinishEffect ?tau } ;
 
 ! Body-only reinference requests, usually because some body preds have been changed lazily
@@ -78,10 +86,13 @@ CHR: reinfer-xor-effect @ // { ReinferEffect P{ Xor ?c ?d } ?tau } -- |
 { ReinferEffect ?d ?sig }
 { MakeXor ?rho ?sig ?tau } ;
 
-CHR: reinfer-effect @ // { ReinferEffect P{ Effect ?a ?b ?x ?k } ?tau } -- |
+CHR: reinfer-effect @ // { ReinferEffect P{ Effect ?a ?b ?x ?k } ?tau } --
+[ { ?a ?b } :>> ?i ]
+|
 { CompMode }
 { MakeEffect ?a ?b f f ?tau }
 [ ?k ]
+[ ?i vars [ Roots boa ] [ Live boa ] bi 2array ]
 { FinishEffect ?tau } ;
 
 ! TODO: document this
@@ -102,7 +113,11 @@ CHR: suspend-do-reinfer @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau { ?q ?sig } } 
 { ?TypeOf ?q ?sig }
 { SuspendMakeEffect ?a ?b ?x ?l ?tau ?sig } ;
 
-CHR: continue-suspend-make-effect @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau ?sig } -- [ ?sig full-type? ] |
+GENERIC: maybe-rec-full-type? ( x -- ? )
+M: object maybe-rec-full-type? full-type? ;
+M: Recursive maybe-rec-full-type? effect>> maybe-rec-full-type? ;
+
+CHR: continue-suspend-make-effect @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau ?sig } -- [ ?sig maybe-rec-full-type? ] |
 { CompMode }
 { MakeEffect ?a ?b f f ?tau }
 [ ?l ] ;
@@ -140,7 +155,7 @@ CHR: phi-discard-params @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ _
 ! *** Composition Mode
 ! These are live after the pred has been taken into account
 
-PREFIX-RULES: P{ CompMode }
+PREFIX-RULES: { P{ CompMode } }
 
 ! CHR: collect-call-recursive-input @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p P{ CallRecursive ?m ?rho ?sig } --
 ! [ ?rho vars ?e make-effect-vars subset? ]
@@ -148,9 +163,10 @@ PREFIX-RULES: P{ CompMode }
 ! [ ?l ?p suffix :>> ?k ]
 ! | { MakeEffect ?a ?b ?y ?k ?tau } ;
 
-CHR: discard-known-iterated-stack @ { FinishEffect ?tau } // { Iterated __ ?s } --
-[ ?s sequence? ]
-[ ?s [ [ lastcdr ] same? ] monotonic? ] | ;
+! CHR: discard-known-iterated-stack @ { FinishEffect ?tau } // { Iterated __ ?s } --
+! CHR: discard-known-iterated-stack @ // { Iterated __ ?s } --
+! [ ?s sequence? ]
+! [ ?s [ [ lastcdr ] same? ] monotonic? ] | ;
 
 ! NOTE: The only time for now where this was needed instead of the one above was for [ t ] loop...
 CHR: collect-call-recursive @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p P{ CallRecursive ?m ?rho ?sig } --
@@ -184,11 +200,18 @@ CHR: implied-param-join @ // { ImpliesParam ?x ?a } { ImpliesParam ?y ?b } --
 ! NOTE: using overlap right now to extend the set of parameters.  This might be too general to get rid of remaining unused predicates.
 ! One approach could be to require a certain number of vars to be live, so the rest actually can be derived.  E.g. for a Sum predicate, we will always
 ! Need two out of three vars to be able to determine the third.  Alternatively, we could reason input/output-style?
-CHR: collect-body-pred @ { FinishEffect ?tau } // AS: ?p <={ body-pred } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } -- [ ?p ?e pred-live-in-effect? ]
+! CHR: collect-body-pred @ { FinishEffect ?tau } // AS: ?p <={ body-pred } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } -- [ ?p ?e pred-live-in-effect? ]
+! NOTE: deps should already be present, so we can pluck the predicate
+CHR: collect-live-body-pred @ { FinishEffect ?tau } { Live ?v } // AS: ?p <={ body-pred } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } --
+[ ?p live-vars ?v subset? ]
+! [ ?p ?e pred-live-in-effect? ]
 [ ?p ?l in? not ]
 [ ?l ?p suffix :>> ?k ]
 |
-[| | ?p defines-vars ?x union :> y
+[| |
+ ! FIXME: defines-vars behavior.  Is that adding root scope? or just new rels?
+ ! ?p defines-vars ?x union :> y
+ ?p vars ?x union :> y
  { MakeEffect ?a ?b y ?k ?tau } ] ;
 
 CHR: collect-boa @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ Boa ?c ?i ?o } --
@@ -199,6 +222,7 @@ CHR: collect-boa @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?ta
 { MakeEffect ?a ?b ?y ?k ?tau } ;
 
 CHR: discard-implied-param @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // <={ ImpliesParam } -- | ;
+CHR: discard-liveness-preds @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // <={ liveness-pred } -- | ;
 
 ! TODO: abstract this shit...
 

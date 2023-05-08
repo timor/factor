@@ -220,9 +220,12 @@ CHR: rebuild-phi-finished @ // { PhiSchedule ?q +nil+ ?tau } { RebuildXor ?a ?ta
 [ ?tau ?a ==! ] ;
 
 ! *** Build Fixpoint type
-CHR: no-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q recursive-branches? not ] | ;
-CHR: do-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q terminating-branches :>> ?l drop t ]
-[ ?rho ?q recursive-branches :>> ?k drop t ] |
+! Either no recursive branches, or unresolved recursive calls
+CHR: no-check-fixpoint @ // { CheckFixpoint ?w ?rho } -- [ ?rho ?w recursive-branches? not ] | ;
+! CHR: no-check-fixpoint-unresolved @ // { CheckFixpoint ?w ?rho } -- [ ?w ?rho unresolved-recursive? ] | ;
+! FIXME: clean up those checks in the body
+CHR: do-check-fixpoint @ // { CheckFixpoint ?w ?rho } -- [ ?rho ?w terminating-branches :>> ?l drop t ]
+[ ?rho ?w recursive-branches :>> ?k drop t ] |
 [| |
     ?l [ f ] [
         >list :> fp-phis
@@ -234,18 +237,22 @@ CHR: do-check-fixpoint @ // { CheckFixpoint ?q ?rho } -- [ ?rho ?q terminating-b
             ! different loop exits.
             ! The correct version is probably to infer a recursive version for every base case?
             ! P{ FixpointMode }
-            P{ PhiSchedule ?q fp-phis ?tau }
-            P{ FixpointTypeOf ?q ?tau }
+            P{ PhiSchedule ?w fp-phis ?tau }
+            P{ FixpointTypeOf ?w ?tau }
         }
     ] if-empty
     ?k [ f ] [
-        ! [ ?q swap filter-recursive-call ] map
+        ! [ ?w swap filter-recursive-call ] map
         >list :> rec-phis
         {
-            P{ PhiSchedule ?q rec-phis ?sig }
-            P{ RecursionTypeOf ?q ?sig }
+            P{ PhiSchedule ?w rec-phis ?sig }
+            P{ RecursionTypeOf ?w ?sig }
         }
-    ] if-empty append
-] ;
+    ] if-empty append ]
+! Generate recursive call type
+{ ReinferEffect ?sig ?y }
+{ CheckXor ?w ?y ?z }
+! TODO: maybe make check rule that this one may not contain callrecursives anymore!
+{ RecursiveCallTypeOf ?w ?z } ;
 
 ;

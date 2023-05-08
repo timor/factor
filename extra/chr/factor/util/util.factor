@@ -125,7 +125,8 @@ M: Xor recursive-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ recursive-bran
     ] if enforce-dispatch-order ;
 
 : dispatch-decl ( class num -- seq )
-    dup 1 + object <array> [ set-nth ] keep ;
+    ! dup 1 + object <array> [ set-nth ] keep ;
+    object <array> swap prefix ;
 
 ! NOTE: that 1quotation there causes the method to actually be a word inside
 ! the quotation.  A simple [ M\ foo bar ] entered literally would result in a quotation
@@ -146,3 +147,31 @@ M: Xor recursive-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ recursive-bran
       [ dispatcher-quot ] dip
       swap '[ @ _ if ]
     ] [ nip first second 1quotation ] if ;
+
+! ** Completeness
+
+GENERIC: unresolved-recursive? ( allowed type -- ? )
+M: Effect unresolved-recursive?
+    preds>> [ unresolved-recursive? ] with map-find drop ;
+M: object unresolved-recursive? 2drop f ;
+M: CallRecursive unresolved-recursive? tag>>
+    2dup = [ 2drop f ] [ nip ] if ;
+M: CallXorEffect unresolved-recursive?
+    "should not be checked in this form!" throw ;
+M: Xor unresolved-recursive?
+    { [ type1>> unresolved-recursive? ]
+      [ type2>> unresolved-recursive? ]
+    } 2|| ;
+
+
+GENERIC: recursive-tags* ( x -- )
+M: object recursive-tags* drop ;
+M: Effect recursive-tags* preds>> [ recursive-tags* ] each ;
+M: Xor recursive-tags*
+    [ type1>> recursive-tags* ] [ type2>> recursive-tags* ] bi ;
+M: CallRecursive recursive-tags* tag>> , ;
+M: Instance recursive-tags* type>> recursive-tags* ;
+M: CallXorEffect recursive-tags* "dont look for unresolved effect recursives" throw ;
+
+: recursive-tags ( obj -- seq )
+    [ recursive-tags* ] { } make members [ f ] when-empty ;

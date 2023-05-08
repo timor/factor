@@ -1,5 +1,5 @@
 USING: accessors arrays assocs classes classes.algebra classes.algebra.private
-classes.mixin classes.singleton classes.union colors.constants combinators
+classes.mixin classes.union colors.constants combinators
 combinators.short-circuit combinators.smart generalizations graphs
 graphs.private io io.styles kernel lists lists.private make math math.parser
 mirrors namespaces prettyprint.backend prettyprint.custom prettyprint.sections

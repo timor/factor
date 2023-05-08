@@ -1,9 +1,9 @@
 USING: accessors arrays chr.factor chr.factor.util chr.parser chr.state classes
 classes.algebra classes.builtin classes.predicate classes.singleton
 classes.tuple classes.tuple.private combinators combinators.short-circuit
-continuations generic generic.single kernel kernel.private lists macros.expander
-math math.functions math.order quotations sequences sets sorting terms
-types.util ;
+continuations generic generic.single grouping kernel kernel.private lists
+macros.expander math math.functions math.order quotations sequences sets sorting
+terms types.util ;
 
 IN: chr.factor.intra-effect
 
@@ -89,9 +89,10 @@ CHR: same-length-is-same @ { Length ?a ?n } { Length ?a ?m } // -- | [ ?m ?n ==!
 ! ] ;
 
 CHR: early-exit @ { Invalid } // <={ body-pred } -- | ;
+CHR: early-exit-liveness @ { Invalid } // <={ liveness-pred } -- | ;
 
 ! *** <Phi
-PREFIX-RULES: P{ PhiMode }
+PREFIX-RULES: { P{ PhiMode } }
 
 CHR: no-deferred-inference-in-phi-mode @ // <={ ?DeferTypeOf } -- |
 [ "deferred inference in phi mode" throw ] ;
@@ -246,7 +247,7 @@ CHR: phi-eq-decider @ { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } // -- [ ?b ?c = not ] 
 CHR: phi-eq-range @ // { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } -- [ ?b ?c order? [ :>> ?n drop :>> ?m drop ] dip ]
 |
 { Keep P{ Le ?m ?x } }
-{ Keep P{ Le ?n ?x } } ;
+{ Keep P{ Le ?x ?n } } ;
 ! TODO: abstract to all relations somehow
 
 ! NOTE: replacing these with discriminators for now.  The idea is that this is not an observable single-value
@@ -348,7 +349,7 @@ CHR: disj-symbolic-compl-type @ AS: ?e <={ MakeEffect } // { DeclaredNotInstance
 
 ! *** Phi>
 
-PREFIX-RULES: P{ CompMode }
+PREFIX-RULES: { P{ CompMode } }
 
 ! Possibly expensive?
 CHR: unique-val-pred @ AS: ?p <={ val-pred } // AS: ?q <={ val-pred } -- [ ?p ?q == ] | ;
@@ -374,6 +375,7 @@ CHR: integer-num-is= @ { Instance ?x A{ ?c } } { Instance ?y A{ ?d } } // { Num=
 ! to eliminate that distinction for reasoning?  Inside the "bignum" processing closure, should
 ! stay correct though!
 ! FIXME: find some way to automate this.  Either on rule level, or on head level!
+! Applies to all numeric predicate holes.
 CHR: eq-propagates-nth-n-1 @ { Eq ?n ?m } { Nth ?v ?a ?n } // -- |
 { Nth ?v ?a ?m } ;
 CHR: eq-propagates-nth-n-2 @ { Eq ?m ?n } { Nth ?v ?a ?n } // -- |
@@ -603,13 +605,19 @@ CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho } { RecursionTypeOf ?w 
 [ ?i fresh :>> ?c ] |
 { Iterated ?w { ?i ?b ?c ?d } }
 ! Return Type call
-{ Instance ?q ?rho }
-{ CallEffect ?q ?d ?o }
+{ ApplyEffect ?rho ?d ?o }
+! { Instance ?q ?rho }
+! { CallEffect ?q ?d ?o }
 ! Iteration Type call, don't match output
-{ Instance ?p ?sig }
-{ CallEffect ?p ?b ?x }
+! { Instance ?p ?sig }
+! { CallEffect ?p ?b ?x }
+{ ApplyEffect ?sig ?b ?x }
 { LoopVar { ?i ?b ?c ?d } }
     ;
+
+CHR: discard-known-iterated-stack @ // { Iterated __ ?s } --
+[ ?s sequence? ]
+[ ?s f lift [ [ lastcdr ] same? ] monotonic? ] | ;
 
 ! *** Loop relation reasoning
 CHR: already-loop-var @ { LoopVar ?x } // { LoopVar ?x } -- | ;
@@ -632,12 +640,14 @@ CHR: loop-invariant-instance @ { LoopVar { ?w ?x ?y ?z } }
 { Instance ?w ?rho }
 { Instance ?z ?rho } ;
 
-! TODO: this is even more questionable, but the idea is that we have a monotone relation between
+! TODO: The next approach is even more questionable, but the idea is that we have a monotone relation between
 ! Input and output, and we exactly know that we only take the exact same branch, then the monotonicity
-! can be extended backwards (and forwards, for that matter? )
+! can be extended backwards (and forwards, for that matter?)
 CHR: loop-instance-specialize-backwards @ { LoopVar { ?w ?x ?y ?z } }
 { Instance ?x A{ ?rho } } { Instance ?y A{ ?sig } } // -- [ ?rho ?sig class< ] |
 { Instance ?w ?rho } ;
+
+! TODO: specialize forwards?
 
 ! If we know the iteration-by-iteration effect, we know how deep the loop
 ! digs into the stack during iteration, which we can use to adjust the output stack before
@@ -842,9 +852,9 @@ CHR: expand-single-generic-dispatch @ { Instance ?d A{ ?c } } // { GenericDispat
 CHR: dispatch-done @ // { MakeSingleDispatch __ +nil+ __ ?tau } -- | [ ?tau null ==! ] ;
 
 CHR: dispatch-case @ // { MakeSingleDispatch ?i L{ { ?c ?m } . ?r } ?d ?tau } --
-! [ ?c ?i dispatch-decl <reversed> :>> ?l ]
+! [ ?c ?i dispatch-decl :>> ?l ]
 [ ?c class-not ?d class-and :>> ?e ]
-[ ?d ?i dispatch-decl <reversed> :>> ?l ]
+[ ?d ?i dispatch-decl :>> ?l ]
 [ ?m 1quotation :>> ?q ]
 |
 ! Lazy version, not working correctly

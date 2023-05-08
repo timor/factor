@@ -14,15 +14,19 @@ IN: chr.parser
 SYNTAX: P{ \ } parse-array pred>constraint suffix! ;
 
 SYMBOL: chr-prefix
-! This is a short-hand for adding a pred left of // to every following rule
+SYMBOL: chr-suffix
+! This is a short-hand for adding preds left of // to every following rule
 SYNTAX: PREFIX-RULES: scan-object chr-prefix set ;
+! This is a short-hand for adding preds to the body of every following rule
+SYNTAX: SUFFIX-RULES: scan-object chr-suffix set ;
 SYMBOL: defined-existentials
 SYMBOLS: | -- // ;
 : parse-chr-rule ( delim -- heads nkept guard body existentials )
     f defined-existentials [
         [ \ // parse-array
-          chr-prefix get [ prefix ] when*
+          chr-prefix get prepend
           dup length [ \ -- parse-array append ] dip \ | parse-array ] dip parse-array
+          chr-suffix get append
         defined-existentials get
     ] with-variable ;
 

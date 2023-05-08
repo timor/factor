@@ -17,15 +17,31 @@ FROM: namespaces => set ;
         solve-builtins lift
     ] with-term-vars ;
 
-: store. ( consts -- )
+
+
+: store. ( assoc -- )
+    sort-keys . ;
+
+: susp-store. ( consts -- )
     [ constraint>> f lift ] map-values
-    sort-keys
-    ! solve-result-store
-    . ;
+    store. ;
 
 : chr-state. ( -- )
     store get "Store: " write
     store. ;
+
+: solver-state-chrs ( state -- assoc )
+    store>>
+    [ constraint>> f lift ] map-values sort-keys ;
+
+: pprint-solver-state ( state -- )
+    dup builtins>> [
+        solver-state-chrs pprint*
+        ! store>> pprint*
+    ] with-var-context ;
+
+M: solver-state pprint*
+    solver-state-chrs pprint* ;
 
 ! : chrebug ( -- )
 !     \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate
@@ -52,7 +68,8 @@ FROM: namespaces => set ;
 
 : susp. ( chr-suspension --  )
     {
-        [ id>> "%d: " printf ]
+        ! [ id>> "%d: " printf ]
+        [ id>> "%u: " printf ]
         [ ctx>> [ " (%u) " printf ] when* ]
         [ constraint>> f lift* pprint ]
         [ from-rule>> [ rule-id " (Rule: %s)\n" printf ] [ nl ] if* ]
@@ -220,10 +237,12 @@ SYMBOL: chr-trace
       try-schedule-match
       check/update-history
     } M\ equiv-activation activate-new suffix
+    M\ callable activate-new suffix
     { assume-equal equiv-wakeup-set update-wakeup-set-vars
       update-ground-values!
       maybe-update-ground-values
       check-recursive-terms
+      create-chr
     } append
     [ add-timing ] each ;
 

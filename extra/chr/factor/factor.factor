@@ -167,6 +167,7 @@ TUPLE: ?TypeOf < chr-pred thing type ;
 TUPLE: ?DeferTypeOf < ?TypeOf ;
 TUPLE: FixpointTypeOf < chr-pred thing type ;
 TUPLE: RecursionTypeOf < chr-pred thing type ;
+TUPLE: RecursiveCallTypeOf < chr-pred thing type ;
 TUPLE: TypeOfWord < chr-pred word var ;
 TUPLE: InferType < chr-pred thing ;
 TUPLE: WaitFull < chr-pred type ;
@@ -214,6 +215,8 @@ TUPLE: DeclaredNotInstance < Instance ;
 ! Need for math method expansion?
 TUPLE: Coerce < val-pred class ;
 
+TUPLE: expr-pred < val-pred ;
+! TODO: not sure why this is a val-pred on the object!
 TUPLE: Slot < val-pred n slot-val ;
 ! Element class?
 TUPLE: Element < val-pred type ;
@@ -278,7 +281,6 @@ TUPLE: Bind < chr-pred var src ;
 ! FIXME: for some reason, this doesnt pick up correctly if it is a union def...
 ! UNION: expr-pred Abs Sum Eq Le Lt Ge Gt ;
 TUPLE: MathCall < chr-pred word in out ;
-TUPLE: expr-pred < val-pred ;
 TUPLE: Abs < expr-pred var ;
 TUPLE: Sum < expr-pred summand1 summand2 ;
 TUPLE: Prod < expr-pred factor1 factor2 ;
@@ -377,6 +379,17 @@ TUPLE: PhiDone < chr-pred ;
 ! possible parametric-type-defining ones
 ! TUPLE: Discrims < chr-pred vars ;
 
+! Liveness
+TUPLE: liveness-pred < chr-pred ;
+TUPLE: Live < liveness-pred vars ;
+TUPLE: Roots < Live ;
+! TUPLE: Locals < Live ;
+! TUPLE: In < Live ;
+! TUPLE: Out < Live ;
+! In/out semantics
+TUPLE: Dep < liveness-pred from to ;
+TUPLE: Rel < liveness-pred from to via ;
+
 
 GENERIC: free-effect-vars ( term -- seq )
 : full-type? ( type -- ? ) free-effect-vars empty? ;
@@ -443,15 +456,17 @@ M: CallEffect live-vars thing>> 1array ;
 ! M: CallEffect defines-vars vars ;
 ! TODO: add inputs to defined vars of CallEffect, as they are definitely known to exist...
 ! M: CallEffect defines-vars out>> vars ;
-M: CallEffect defines-vars [ in>> vars ] [ out>> vars append ] bi ;
+! TODO: remove this and use deps like callxoreffect?
+! M: CallEffect defines-vars [ in>> vars ] [ out>> vars append ] bi ;
 M: CallXorEffect intersects-live-vars in>> vars ;
 ! NOTE: keeping references to input vars here, since they are lazy intermediates...
-M: CallXorEffect defines-vars
+M: CallXorEffect live-vars
     [ in>> vars ]
     [ out>> vars append ] bi ;
-! M: CallXorEffect live-vars
-!     [ then>> ] [ else>> ] bi
-!     [ [ live-vars ] gather ] bi@ union ;
+M: CallXorEffect defines-vars
+    type>> defines-vars ;
+    ! [ then>> ] [ else>> ] bi
+    ! [ [ live-vars ] gather ] bi@ union ;
 ! M: CallXorEffect defines-vars
 !     [ then>> ] [ else>> ] bi
 !     [ [ defines-vars ] gather ] bi@ union ;
@@ -466,13 +481,13 @@ M: MacroExpand intersects-live-vars in>> vars ;
 M: PrimCall intersects-live-vars vars ;
 M: PrimCall defines-vars vars ;
 
-M: val-pred live-vars val>> 1array ;
-M: val-pred defines-vars tuple-slots rest-slice vars ;
+! M: val-pred live-vars val>> 1array ;
+! M: val-pred defines-vars tuple-slots rest-slice vars ;
 ! M: Slot live-vars val>> 1array ;
 ! M: Slot defines-vars [ n>> vars ] [ slot-val>> vars append ] bi ;
 ! M: Length live-vars val>> 1array ;
 ! M: Length defines-vars length-val>> 1array ;
-! M: Instance live-vars val>> 1array ;
+M: Instance live-vars val>> 1array ;
 ! M: Instance defines-vars type>> defines-vars ;
 ! M: Tag live-vars val>> 1array ;
 ! M: Tag defines-vars var>> 1array ;

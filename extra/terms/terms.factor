@@ -205,8 +205,20 @@ M: term-var equal?
     [ t "term-var" set-word-prop ]
     bi ;
 
+PREDICATE: known-term-var < term-var
+    defined-equalities [ disjoint-set-member? ] [ drop f ] if* ;
+PREDICATE: unresolved-term-var < known-term-var
+    defined-ground-values key? ;
+
 M: term-var pprint*
     name>> H{ { foreground COLOR: solarized-blue } } styled-text ;
+
+M: known-term-var pprint*
+    name>> H{ { foreground COLOR: solarized-cyan } } styled-text ;
+
+M: unresolved-term-var pprint*
+    name>> H{ { foreground COLOR: solarized-red } } styled-text ;
+
 
 M: term-var reset-word
     [ call-next-method ]
@@ -220,22 +232,27 @@ SYNTAX: TERM-VARS: ";" [ define-term-var ] each-token ;
     defined-equalities
     [ dupd add-atom ] when* ;
 
+DEFER: ?ground-value
 GENERIC: child-elts* ( obj -- nodes )
 M: object child-elts* drop f ;
 M: sequence child-elts* ;
 M: string child-elts* drop f ;
 M: tuple child-elts* tuple-slots ;
+M: term-var child-elts* ?ground-value
+    dup term-var? [ drop f ] [ 1array ] if ;
 
 GENERIC: vars* ( obj -- )
 M: object vars* drop ;
 M: match-var vars* , ;
-M: term-var vars* , ;
+M: term-var vars* ?ground-value
+    dup term-var? [ , ] [ drop ] if ;
 M: wrapper vars* wrapped>> vars* ;
 ! M: sequence vars* [ vars* ] each ;
 ! M: tuple vars* tuple-slots vars* ;
 
 : vars ( obj -- seq )
-    [ [ [ vars* ] [ child-elts* ] bi ] closure drop ] { } make ; inline
+    [ [ [ vars* ] [ child-elts* ] bi ] closure drop ] { } make
+    members ; inline
 
 : term-vars ( obj -- seq )
     vars [ term-var? ] filter ;
@@ -270,6 +287,7 @@ DEFER: lift
     ; inline
 
 :: define-ground-value ( var value ds -- )
+    value f lift :> value
     var ds
     representative defined-ground-values
     [
@@ -344,7 +362,7 @@ M: match-var subst
 M: sequence subst
     dup quotation?
     in-quotation? [ [ subst ] map ] with-variable ;
-! As an exception, we don't rebuils vectors!
+! As an exception, we don't rebuild vectors!
 M: vector subst
     dup quotation?
     in-quotation? [ [ subst ] map! ] with-variable ;
@@ -437,8 +455,10 @@ DEFER: (solve)
 ! If set, only an isomporphic solution is accepted during solving
 SYMBOL: solve-isomorphic-mode?
 
+! TODO: put that into the subst checking early!
 : isomorphic-solution? ( subst -- ? )
-    [ [ term-var? ] both? ] assoc-all? ; inline
+    { [ [ [ term-var? ] both? ] assoc-all? ]
+        [ values all-unique? ] } 1&& ; inline
 
 : check-solution ( subst -- ? )
     [ solve-isomorphic-mode?
