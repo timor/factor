@@ -198,22 +198,90 @@ MACRO: leaving-if ( word cond-quot -- quot )
     ;
 
 
-
+TUPLE: chr-run
+    prog records rule-results activations ;
+TUPLE: rule-result
+    name count time per-firing ;
 SYMBOL: chr-trace
+: push-chr-record ( record -- )
+    chr-trace get-global records>> push ;
+
+: new-chr-run ( prog -- obj )
+    chr-run new swap >>prog
+    V{ } clone >>records
+    H{ } clone >>rule-results
+    ;
+
+: new-rule-result ( name -- obj )
+    0 0 0 rule-result boa ;
+
+: trace-activate ( id -- data )
+    dup store get at
+    [ type>> 2array ]
+    [ f 2array ] if*
+    \ activate prefix ;
 
 : chriming ( -- )
-    \ run-chr-query [ [ V{ } clone chr-trace set-global ] prepose ] annotate
-    \ activate [ [ nano-count \ activate pick dup store get at type>> 3array 2array chr-trace get-global push ] prepose ] annotate
-    \ fire-rule [ [ nano-count \ fire-rule reach 2array 2array chr-trace get-global push ] prepose ] annotate
+    \ run-chr-query [ [ over new-chr-run chr-trace set-global ] prepose ] annotate
+    \ activate [ [ nano-count over trace-activate 2array push-chr-record ] prepose ] annotate
+    \ fire-rule [ [ nano-count reach \ fire-rule swap 2array 2array push-chr-record ] prepose ] annotate
     ;
 
-: chr-deltas ( -- seq )
-    chr-trace get-global
+! { timestamp duration } pairs
+: chr-deltas ( chr-run -- seq )
+    records>>
     dup first first
     '[ _ - ] map-keys
-    unzip swap 0 swap [| delta time | time time delta - 2array time swap ] map
-    nip swap zip
+    unzip swap dup 1 rotate
+    [ [ swap - ] keepd swap 2array ] 2map
+    swap zip
     ;
+
+:: read-trace-record ( run record -- run )
+    record first2 :> ( timing data )
+    data first
+    { { [ dup \ fire-rule eq? ]
+        [ drop timing second :> delta
+          data second
+          run rule-results>> [ run prog>> nth rule-name>> new-rule-result ] cache
+          [ 1 + ] change-count
+          [ delta + ] change-time drop
+        ] }
+      [ drop ]
+    } cond
+    run ;
+
+<PRIVATE
+: calculate-per-firings ( run -- run )
+    dup rule-results>> [ nip
+        dup [ time>> ] [ count>> ] bi /f >>per-firing
+        drop
+     ] assoc-each ;
+
+: duration. ( duration -- )
+    1000 /f "%10.2f" printf ;
+
+PRIVATE>
+
+: read-chr-trace ( -- run )
+    chr-trace get-global
+    dup chr-deltas
+    [ read-trace-record ] each
+    calculate-per-firings
+    ;
+
+: rule-result. ( rule-result -- )
+    {
+        [ count>> "%5d" printf bl ]
+        [ time>> duration. bl ]
+        [ per-firing>> duration. bl ]
+        [ name>> write nl ]
+    } cleave ;
+
+: chr-report. ( -- )
+    read-chr-trace
+    rule-results>> values [ time>> ] inv-sort-with
+    [ rule-result. ] each ;
 
 ! GENERIC: <=>* ( obj1 obj2 -- <=> )
 ! M: object <=>* <=> ;
