@@ -292,7 +292,7 @@ CHR: type-of-pushed-quot @ { ?TypeOf [ ?q ] ?tau } // -- [ ?q quotation? ]
 CHR: type-of-t @ // { ?TypeOf [ t ] ?tau } -- |
 [ ?tau P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x t } P{ Eq ?x t } } } ==! ] ;
 
-CHR: type-of-unit-val @ { ?TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ]
+CHR: type-of-unit-val @ { ?TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ] [ ?v callable? not ]
 [ ?v 1quotation :>> ?q ] |
 { ?TypeOf ?v ?rho }
 { MakeUnit ?rho ?sig }
@@ -654,6 +654,10 @@ CHR: type-of-regular-word @ { TypeOfWord A{ ?w } ?tau } // --
 { ComposeType P{ Effect ?a ?a f { P{ Ensure ?c ?a } } } ?sig ?tau } ;
 
 ! ** Generic Dispatch
+
+! TODO: rebuild this as quotations again to make sure this uses the same inference path
+! as other mutually recursive definitions.  The difference would be that here the recursion is actually hit during
+! "macro" expansion in a dispatch instead of the initial type query tree building?
 
 CHR: make-single-or-math-generic-dispatch @ // { MakeGenericDispatch ?w P{ Effect ?i ?o ?l ?p } ?tau } --
 ! [ ?w { [ single-generic? ] [ math-generic? ] } 0|| ]

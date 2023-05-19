@@ -102,12 +102,8 @@ CHR: make-union-error @ <={ MakeUnion } <={ MakeUnion } // -- | [ "double make-u
 !  The intuition being that they only arise directly from reasoning the innermost defs.
 !  Somehow ensure this?
 
-GENERIC: xor-call? ( type -- ? )
-M: Effect xor-call? preds>> [ CallXorEffect? ] any? ;
-M: Xor xor-call? [ type1>> ] [ type2>> ] bi [ xor-call? ] bi@ or ;
-
 CHR: check-xor-trivial @ // { CheckXor __ ?rho ?tau } --
-[ ?rho full-type? ] [ ?rho Effect? ] [ ?rho xor-call? not ] |
+[ ?rho full-type? ] [ ?rho Effect? ] [ ?rho xor-call? [ "not expecting xor call here" throw ] when t ] |
 [ ?rho ?tau ==! ] ;
 
 ! If we inferred an effect type to be null, then substitute it with a null-push that will
@@ -117,8 +113,14 @@ CHR: check-xor-null-throws @ // { CheckXor ?q null ?tau } -- [ ?tau term-var? ] 
 [ ?tau P{ Effect ?a L{ ?x . ?a } { } { P{ Instance ?x null } } } ==! ] ;
 
 CHR: do-check-xor @ // { CheckXor ?q ?rho ?tau } -- [ ?rho full-type? ] |
-{ DestrucXor ?rho }
-{ PhiSchedule ?q +nil+ ?tau } ;
+[
+    "checkxor" [
+        P{ DestrucXor ?rho }
+        P{ PhiSchedule ?q +nil+ ?tau }
+        2array
+    ] new-context
+]
+    ;
 
 ! ** Destructuring
 
@@ -127,33 +129,6 @@ PREDICATE: InvalidEffect < Effect preds>> [ Invalid? ] any? ;
 CHR: discard-invalid-branch @ // { DestrucXor ?e } -- [ ?e InvalidEffect? ] | ;
 CHR: destruc-rebuild-xor @ // { DestrucXor P{ Xor ?a ?b } } -- |
 { DestrucXor ?a } { DestrucXor ?b } ;
-
-! find object satisfying quot, if found, return with rest of sequence.  Otherwise
-! return sequence unchanged and f.
-: find-remove ( seq quot -- seq obj/f )
-    dupd find
-    [ [ swap remove-nth ] dip ] when* ; inline
-
-:: split-xor-call-effect ( effect inst-var -- then-effect else-effect )
-    effect preds>> [ CallXorEffect? ] find-remove
-    [ in>> ] [ out>> ] [ type>> ] tri
-    [ type1>> ] [ type2>> ] bi
-    :> ( rest-preds call-in call-out then-type else-type )
-    effect [ in>> ] [ out>> ] [ parms>> ] tri
-    rest-preds P{ CallEffect inst-var call-in call-out } suffix Effect boa
-    dup clone
-    [ [ P{ Instance inst-var then-type } suffix ] change-preds ]
-    [ [ P{ Instance inst-var else-type } suffix ] change-preds ] bi* ;
-
-
-CHR: destruc-rebuild-xor-call-effect @ // { DestrucXor ?e } -- [ ?e Effect? ] [ ?e xor-call? ] |
-[| | ?e ?v split-xor-call-effect fresh-effect :> ( then-effect else-effect )
- P{ ReinferEffect then-effect ?rho }
- P{ ReinferEffect else-effect ?sig }
- P{ DestrucXor ?rho }
- P{ DestrucXor ?sig }
- 4array
-] ;
 
 CHR: destruc-rebuild-effect @ // { PhiSchedule ?q ?r ?tau } { DestrucXor ?e } -- [ ?e Effect? ] |
 { PhiSchedule ?q L{ ?e . ?r } ?tau } ;
@@ -225,34 +200,43 @@ CHR: no-check-fixpoint @ // { CheckFixpoint ?w ?rho } -- [ ?rho ?w recursive-bra
 ! CHR: no-check-fixpoint-unresolved @ // { CheckFixpoint ?w ?rho } -- [ ?w ?rho unresolved-recursive? ] | ;
 ! FIXME: clean up those checks in the body
 CHR: do-check-fixpoint @ // { CheckFixpoint ?w ?rho } -- [ ?rho ?w terminating-branches :>> ?l drop t ]
-[ ?rho ?w recursive-branches :>> ?k drop t ] |
-[| |
-    ?l [ f ] [
-        >list :> fp-phis
-        {
-            ! NOTE: not forcing this to fixpoint mode, because that prevents some useful fixpoints
-            ! from being calculated when done incorrectly.
-            ! 1. Either force fixpoint calculation
-            ! 2. Or deal with Xor Fixpoint types correctly, e.g. by assuming different loop types on
-            ! different loop exits.
-            ! The correct version is probably to infer a recursive version for every base case?
-            ! P{ FixpointMode }
-            P{ PhiSchedule ?w fp-phis ?tau }
-            P{ FixpointTypeOf ?w ?tau }
-        }
-    ] if-empty
-    ?k [ f ] [
-        ! [ ?w swap filter-recursive-call ] map
-        >list :> rec-phis
-        {
-            P{ PhiSchedule ?w rec-phis ?sig }
-            P{ RecursionTypeOf ?w ?sig }
-        }
-    ] if-empty append ]
-! Generate recursive call type
-{ ReinferEffect ?sig ?y }
-{ CheckXor ?w ?y ?z }
-! TODO: maybe make check rule that this one may not contain callrecursives anymore!
-{ RecursiveCallTypeOf ?w ?z } ;
+[ ?rho ?w recursive-branches :>> ?k drop t ]
+[ ?l >list :>> ?m ]
+[ ?k >list :>> ?n ]
+|
+[ ?l empty? [ "could not prove that effect can terminate" throw ] when f ]
+[ "fixtype" [ P{ PhiSchedule ?w ?m ?tau } ] new-context ]
+[ "rectype" [ P{ PhiSchedule ?w ?n ?sig } ] new-context ]
+{ FixpointTypeOf ?w ?tau }
+{ RecursionTypeOf ?w ?sig }
+! [| |
+!     ?l >list :> fp-phis
+!     ?k >list :> rec-phis
+!         {
+!             ! NOTE: not forcing this to fixpoint mode, because that prevents some useful fixpoints
+!             ! from being calculated when done incorrectly.
+!             ! 1. Either force fixpoint calculation
+!             ! 2. Or deal with Xor Fixpoint types correctly, e.g. by assuming different loop types on
+!             ! different loop exits.
+!             ! The correct version is probably to infer a recursive version for every base case?
+!             ! P{ FixpointMode }
+!             P{ PhiSchedule ?w fp-phis ?tau }
+!             P{ FixpointTypeOf ?w ?tau }
+!         }
+!     ] if-empty
+!     ?k [ f ] [
+!         ! [ ?w swap filter-recursive-call ] map
+!         >list :> rec-phis
+!         {
+!             P{ PhiSchedule ?w rec-phis ?sig }
+!             P{ RecursionTypeOf ?w ?sig }
+!         }
+!     ] if-empty append ]
+! ! Generate recursive call type
+! ! { ReinferEffect ?sig ?y }
+! ! { CheckXor ?w ?y ?z }
+! ! ! TODO: maybe make check rule that this one may not contain callrecursives anymore!
+! ! { RecursiveCallTypeOf ?w ?z } ;
+;
 
 ;

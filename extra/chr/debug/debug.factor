@@ -1,9 +1,8 @@
 USING: accessors arrays assocs assocs.extras chr chr.factor.composition
 chr.programs chr.state classes.builtin combinators continuations effects
-formatting io kernel math math.parser namespaces prettyprint sequences
-sequences.extras sets sorting system terms tools.annotations
-tools.time
-tools.annotations.private tools.continuations tools.walker ;
+formatting io kernel math math.parser namespaces prettyprint prettyprint.custom
+quotations sequences sequences.extras sets sorting system terms
+tools.annotations tools.annotations.private tools.time tools.walker ;
 
 IN: chr.debug
 FROM: namespaces => set ;
@@ -144,7 +143,7 @@ SYMBOL: debug-chr-stats
     M\ chr-or activate-new [ [ "SPLIT" print ] prepose ] annotate
     M\ chr-branch activate-new [ [ "BRANCH" print ] prepose [ "RETURN" print ] compose ] annotate
     ! M\ C activate-new [ '[ current-context get _ dip current-context get "CTX %u -> %u\n" printf ] ] annotate
-    M\ C activate-new [ [ dup cond>> current-context get swap "CTX: %u -> %u\n" printf ] prepend ] annotate
+    ! M\ C activate-new [ [ dup ctx>> current-context get swap "CTX: %u -> %u\n" printf ] prepend ] annotate
     \ run-queue [ [ "Flushing queue" print ] prepose ] annotate
     \ merge-solver-config [ [ 2dup swap "Merging store with key: %u\n" printf store>> [ constraint>> ] map-values . ] prepend ] annotate
     \ finish-solver-state [ [ chr-usage-report. ] compose ] annotate
@@ -188,9 +187,9 @@ MACRO: leaving-if ( word cond-quot -- quot )
 
 :: trigger-id-match ( rule-num susp-id -- )
     \ run-occurrence [ 2dup [ id>> susp-id = ] [ occurrence>> first rule-num = ] bi* and ] annotate-trigger
-    M\ C match-constraint [ [ debug-cond get [ break ] when ] prepose ] annotate
+    ! M\ C match-constraint [ [ debug-cond get [ break ] when ] prepose ] annotate
     \ match-constraint-in-context [ debug-cond get ] watch-if
-    \ sort-lookup [ debug-cond get ] watch-if
+    ! \ sort-lookup [ debug-cond get ] watch-if
     \ try-schedule-match [ debug-cond get ] watch-if
     \ check-guards [ debug-cond get ] watch-if
     ! \ activate-item watch

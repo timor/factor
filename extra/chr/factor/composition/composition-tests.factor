@@ -37,7 +37,7 @@ IN: chr.factor.composition.tests
 : chr-simp ( constraints -- constraint )
     P{ CompMode } suffix
     chr-comp swap [ run-chr-query store>> ] with-var-names
-    values P{ CompMode } swap remove ;
+    values P{ CompMode } swap remove [ Dep? ] reject ;
 
 : chr-simp1 ( constraints -- constraint )
     chr-simp first ;
@@ -51,7 +51,11 @@ TERM-VARS: ?o ?a ?b ?v ?w ?x ?y ?z ;
 TERM-VARS: ?y2 ?ys2 ?o4 ?a43 ?v6 ?y6 ?ys6 ;
 TERM-VARS: ?y1 ?ys1 ?x1 ?v1 ?x2 ?x3 ?rho1 ?rho2 ?rho3 ?o1 ?a1 ;
 TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ?i2 ?c1 ?a2 ?z2 ;
-
+TERM-VARS: ?c ?d ;
+TERM-VARS: ?q3 ?q5 ?p2 ?p3 ?c2 ?c3 ?a4 ?a6 ?b3 ?b4 ;
+TERM-VARS: ?a15 ?o3 ?v3 ;
+TERM-VARS: ?o5 ?a47 ?b34 ?v7 ;
+TERM-VARS: ?y14 ?ys14 ?o25 ?a85 ?x17 ?rho31 ;
 
 P{ Effect L{ ?o . ?a } L{ ?v . ?a } f {
        P{ Instance ?o array }
@@ -63,7 +67,6 @@ P{ Effect L{ ?o . ?a } L{ ?v . ?a } f {
 P{ Effect ?a ?b f { P{ Invalid } } }
 [ [ "haha" throw ] get-type ] chr-test
 
-TERM-VARS: ?c ?d ;
 ! ** Unphiable stacks test
 { t } [ { ?a ?b } { ?v ?w } unify phi-stacks-unique? ] unit-test
 { f } [ { ?a ?b } { ?v ?v } unify phi-stacks-unique? ] unit-test
@@ -112,7 +115,7 @@ P{ Neq ?b ?a }
 
 { t } [ [ 1 drop \ +nil+ ] [ 1 drop +nil+ ] same-type? ] unit-test
 { t } [ [ 1 drop \ t ] [ 1 drop t ] same-type? ] unit-test
-{ t } [ [ 1 drop \ f ] [ 1 drop f ] same-type? ] unit-test
+{ f } [ [ 1 drop \ f ] [ 1 drop f ] same-type? ] unit-test
 
 { t }
 [ [ if* ] get-type valid-effect-type? ] unit-test
@@ -137,7 +140,6 @@ P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } f { P{ Instance ?x number } P{ Instance ?
 { t }
 [ [ [ [ if ] ] ] get-type [ [ [ [ if ] ] ] (call) ] get-type isomorphic? ] unit-test
 
-TERM-VARS: ?q3 ?q5 ?p2 ?p3 ?c2 ?c3 ?a4 ?a6 ?b3 ?b4 ;
 ! NOTE: This is interesting: because we have [ ? ] as basis, we don't enforce
 ! that the non-taken branch quotation is actually a quotation!
 P{
@@ -145,7 +147,7 @@ P{
     ! subsumed
     ! P{ Effect L{ ?q3 ?p2 ?c2 . ?a4 } ?b3 f { P{ Instance ?q3 object } P{ Instance ?c2 not{ POSTPONE: f } } P{ Neq ?c f } P{ Instance ?p2 callable } P{ CallEffect ?p2 ?a4 ?b3 } } }
     P{ Effect L{ ?q3 ?p2 ?c2 . ?a4 } ?b3 f { P{ Instance ?q3 object } P{ Instance ?c2 not{ POSTPONE: f } } P{ Instance ?p2 callable } P{ CallEffect ?p2 ?a4 ?b3 } } }
-    P{ Effect L{ ?q5 ?p3 ?c3 . ?a6 } ?b4 f { P{ Instance ?p3 object } P{ Instance ?c3 POSTPONE: f } P{ Eq ?c f } P{ Instance ?q5 callable } P{ CallEffect ?q5 ?a6 ?b4 } } }
+    P{ Effect L{ ?q5 ?p3 ?c3 . ?a6 } ?b4 f { P{ Instance ?p3 object } P{ Instance ?c3 POSTPONE: f } P{ Eq ?c3 f } P{ Instance ?q5 callable } P{ CallEffect ?q5 ?a6 ?b4 } } }
 }
 [ [ if ] get-type ] chr-test
 
@@ -223,11 +225,17 @@ P{ Xor
 [ [ + 5 = [ swap ] when ] get-type Xor? ] unit-test
 
 P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x bignum } P{ Instance ?y fixnum }
-                                        P{ Eq ?y ?x }
+                                        P{ Eq ?x ?y }
                                         P{ Le ?x $ most-positive-fixnum }
                                         P{ Le $ most-negative-fixnum ?x }
                                       } }
 [ [ bignum>fixnum ] get-type ] chr-test
+
+{  } [ [ \ swap dup ] get-type ] chr-test
+
+TUPLE: footuple barslot ;
+{  } [ [ barslot>> ] get-type ] chr-test
+{  } [ [ barslot>> barslot>> ] get-type ] chr-test
 
 ! ** Sums and Parameters
 { 1 2 3 4 5 }
@@ -252,7 +260,7 @@ M: fixnum foothing 3 + ;
 M: array foothing array-first ;
 
 CONSTANT: foothing1
-P{ Effect L{ ?y . ?a } L{ ?z . ?a } f { P{ Instance ?y fixnum } P{ Instance ?z integer } P{ Sum ?z ?y 3 } } }
+P{ Effect L{ ?y . ?b } L{ ?z . ?b } f { P{ Instance ?y fixnum } P{ Instance ?z integer } P{ Sum ?z ?y 3 } } }
 foothing1
 [ M\ fixnum foothing get-type ] chr-test
 
@@ -313,10 +321,15 @@ M: +nil+ default-dispatch ;
 
 P{
     Xor
-    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } f { P{ Instance ?y1 L{ } } P{ Eq ?y1 L{  } } } }
+    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } f { P{ Instance ?y1 L{ } } P{ Eq ?y1 L{ } } } }
     P{ Effect L{ ?o1 . ?a1 } L{ ?v6 . ?a1 } f { P{ Instance ?o1 cons-state } P{ Slot ?o1 "cdr" ?v6 } P{ Instance ?v6 object } } }
 }
 [ \ default-dispatch get-type ] chr-test
+
+
+! ** Nested loop inference
+: inner-loop ( x -- y ) dup 0 > [ 1 - inner-loop ] when ;
+: outer-loop ( x -- y ) dup inner-loop drop dup 0 > [ 1 - outer-loop ] when ;
 
 ! ** Mutually recursive definitions
 
@@ -365,6 +378,19 @@ M: array mylastcdr array-first [ [ mylastcdr ] ] (call) (call) ;
 { t }
 [ [ myloop ] [ loop ] same-type? ] unit-test
 
+! Same as lastcdr1, but as single word
+! FIXME: monotonicity propagation into loop input
+: lastfoo1 ( x -- x )
+    dup +nil+? [  ]
+    [ dup list? [ cdr>> lastfoo1 ] [ "nope" throw ] if
+    ] if ;
+{ L{ } } [ L{ } lastfoo1 ] unit-test
+{ L{ } } [ L{ 1 2 3 } lastfoo1 ] unit-test
+[ L{ 1 2 3 . 4 } lastfoo1 ] [ "nope" = ] must-fail-with
+[ 42 lastfoo1 ] [ "nope" = ] must-fail-with
+
+{  } [ [ lastfoo1 ] get-type ] chr-test
+
 GENERIC: lastcdr1 ( list -- obj )
 M: list lastcdr1 cdr>> lastcdr1 ;
 M: +nil+ lastcdr1 ;
@@ -377,14 +403,17 @@ M: +nil+ lastcdr1 ;
 { f } [ sequence \ length dispatch-method-seq constrains-methods? ] unit-test
 { t } [ array \ length dispatch-method-seq constrains-methods? ] unit-test
 
-TERM-VARS: ?a15 ?o3 ?v3 ;
+! This must have the same type when inferred on [ lastcdr1 ] !
+P{ Effect L{ ?x . ?a } L{ ?b . ?a } f
+   { P{ Instance ?x cons-state } P{ Eq ?b L{ } } P{ Instance ?b L{ } } } }
+[ M\ list lastcdr1 get-type ] chr-test
 
 CONSTANT: sol1
 P{
     Xor
-    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } f { P{ Instance ?y1 L{ } } P{ Eq ?y1 L{  } } } }
+    P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } f { P{ Instance ?y1 L{ } } P{ Eq ?y1 L{ } } } }
     ! Finally able to infer the resolved recursion type...
-    P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x cons-state } P{ Instance ?y L{  } } P{ Eq ?y L{  } } } }
+    P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x cons-state } P{ Instance ?y L{ } } P{ Eq ?y L{ } } } }
     ! P{ Effect L{ ?o3 . ?a15 } ?b4 f { P{ CallRecursive __ ?a15 ?b4 } } }
 }
 
@@ -414,6 +443,17 @@ sol1
 sol1
 [ [ [ [ lastcdr3 ] ] (call) (call) ] get-type ] chr-test
 
+! Multiple (tail-recursive) call sites
+: lastfoo4 ( list -- obj )
+    dup +nil+? [ ]
+    [ dup list? [ cdr>> lastfoo4 ]
+      [ dup array? [ array-first lastfoo4 ]
+        [ "nope" throw ] if
+      ] if
+    ] if ;
+
+! TODO: test above
+
 GENERIC: lastcdr4 ( list -- obj )
 M: list lastcdr4 cdr>> [ [ lastcdr4 ] ] (call) (call) ;
 M: +nil+ lastcdr4 ;
@@ -425,6 +465,49 @@ M: array lastcdr4 array-first lastcdr4 ;
 ! NOTE: not working if we don't resolve the recursive call outputs eagerly
 ! { t }
 ! [ [ lastcdr4 dup drop ] get-type [ [ lastcdr4 ] (call) ] get-type isomorphic? ] unit-test
+DEFER: lastfoo-dispatch
+
+! : lastfoo-tuple ( x -- x )
+!     { footuple } declare barslot>> lastfoo-dispatch ;
+: lastfoo-nil ( x -- x )
+    { +nil+ } declare ;
+: lastfoo-list ( x -- x )
+    { list } declare cdr>> lastfoo-dispatch ;
+: lastfoo-array ( x -- x )
+    { array } declare array-first lastfoo-dispatch ;
+
+: lastfoo-dispatch ( x -- x )
+    dup +nil+? [ lastfoo-nil ]
+    [ dup list? [ lastfoo-list ]
+      [ dup array? [ lastfoo-array ]
+        ! [ dup footuple? [ lastfoo-tuple ]
+          [ "nope" throw ]
+          ! if ]
+        if ]
+      if ]
+    if ;
+
+DEFER: lastfoo5-dispatch
+
+: lastfoo5-tuple ( x -- x )
+    { footuple } declare barslot>> lastfoo5-dispatch ;
+: lastfoo5-nil ( x -- x )
+    { +nil+ } declare ;
+: lastfoo5-list ( x -- x )
+    { list } declare cdr>> lastfoo5-dispatch ;
+: lastfoo5-array ( x -- x )
+    { array } declare array-first lastfoo5-dispatch ;
+
+: lastfoo5-dispatch ( x -- x )
+    dup +nil+? [ lastfoo5-nil ]
+    [ dup list? [ lastfoo5-list ]
+      [ dup array? [ lastfoo5-array ]
+        [ dup footuple? [ lastfoo5-tuple ]
+          [ "nope" throw ] if ]
+        if ]
+      if ]
+    if ;
+
 
 GENERIC: lastcdr5 ( list -- obj )
 M: list lastcdr5 cdr>> lastcdr5 ;
@@ -442,6 +525,16 @@ M: array lastcdr5 array-first lastcdr5 ;
 [ [ [ lastcdr5 ] ] [ [ [ lastcdr5 ] ] (call) ] same-type? ] unit-test
 
 
+! NOTE: this one has two loop exit branches!
+: lastfoo6 ( x -- x )
+    dup +nil+? [  ]
+    [ dup list? [ cdr>> lastfoo6 ] when
+    ] if ;
+
+{ +nil+ } [ L{ 12 } lastfoo6 ] unit-test
+{ 42 } [ L{ 12 . 42 } lastfoo6 ] unit-test
+{ 43 } [ 43 lastfoo6 ] unit-test
+
 ! Correct one
 GENERIC: lastcdr6 ( list -- obj )
 M: list lastcdr6 cdr>> lastcdr6 ;
@@ -450,8 +543,8 @@ M: object lastcdr6 ;
 
 { +nil+ } [ L{ 12 } lastcdr6 ] unit-test
 { 42 } [ L{ 12 . 42 } lastcdr6 ] unit-test
+{ 43 } [ 43 lastcdr6 ] unit-test
 
-TERM-VARS: ?o5 ?a47 ?b34 ?v7 ;
 P{
     Xor
     P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } f { P{ Instance ?y2 not{ cons-state } } } }
@@ -466,25 +559,21 @@ M: array lastcdr7 array-first lastcdr7 ;
 M: +nil+ lastcdr7 ;
 M: object lastcdr7 ;
 
-TERM-VARS: ?y14 ?ys14 ?o25 ?a85 ?x17 ?rho31 ;
 P{
     Xor
     P{ Effect L{ ?y14 . ?ys14 } L{ ?y14 . ?ys14 } f { P{ Instance ?y14 intersection{ not{ cons-state } not{ array } } } } }
     P{
-        Effect
-        L{ ?o25 . ?a85 }
-        L{ ?x17 . ?rho31 }
-        f
+        Effect L{ ?o25 . ?a85 } L{ ?x17 . ?rho31 } f
         { P{ Instance ?x17 intersection{ not{ cons-state } not{ array } } } P{ Instance ?o25 union{ cons-state array } } }
     }
 }
 [ [ lastcdr7 ] get-type ] chr-test
 
 ! Same as lastcdr7, but as single word
-: lastfoo ( x -- x )
+: lastfoo7 ( x -- x )
     dup +nil+? [  ]
-    [ dup list? [ cdr>> lastfoo ]
-      [ dup array? [ array-first lastfoo ]
+    [ dup list? [ cdr>> lastfoo7 ]
+      [ dup array? [ array-first lastfoo7 ]
         [  ] if
       ] if
      ] if ;
@@ -494,6 +583,19 @@ P{
 : good ( ? quot: ( ? -- ) -- ) [ good ] 2keep [ not ] dip call ; inline recursive
 
 ! ** Basic Mutual Recursion
+
+DEFER: tock
+! : tick ( x -- y ) 1 - tock ;
+! : tock ( x -- y ) dup 0 <= [ tick ] unless ;
+! : tock ( x -- y ) dup 0 <= [ tick ] unless ;
+: tick ( x -- y ) dup 0 <= [ 1 - tock ] unless ;
+: tock ( x -- y ) dup 0 <= [ 1 - tick ] unless ;
+
+DEFER: tac
+: tic ( x -- y ) dup 0 <= [ 1 - tac ] unless ;
+DEFER: toe
+: tac ( x -- y ) dup 0 <= [ 1 - toe ] unless ;
+: toe ( x -- y ) dup 0 <= [ 1 - tic ] unless ;
 
 DEFER: tok
 : tik-tik ( x -- y ) 2 - tok ;
@@ -674,6 +776,7 @@ PREDICATE: zero < integer 0 = ;
 
 ! [ dup 0 > [ [ 1 + ] [ 1 - ] bi* inc-int-down ] [ drop 42 + ] if ] ;
 
+GENERIC: inc-loop ( n i -- m )
 GENERIC: inc-loop ( n i -- m )
 M: cardinal inc-loop [ 1 + ] [ 1 - ] bi* inc-loop ;
 M: zero inc-loop drop 42 + ;

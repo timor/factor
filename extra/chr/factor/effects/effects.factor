@@ -1,6 +1,6 @@
-USING: accessors arrays assocs chr.factor chr.factor.intra-effect.liveness chr.parser
-chr.state combinators.short-circuit grouping kernel lists sequences sets terms
-types.util ;
+USING: accessors arrays assocs chr.factor chr.factor.intra-effect.liveness
+chr.factor.util chr.parser chr.state combinators.short-circuit kernel lists
+sequences sets terms types.util ;
 
 IN: chr.factor.effects
 
@@ -63,64 +63,96 @@ CHR: dont-rebuild-non-phiable-effect @ // { PhiMode } { CheckPhiStack { ?a ?b } 
 
 IMPORT: chr-factor-liveness
 
+:: make-spool ( target variables preds -- spool )
+    preds variables
+    [ Roots boa ] [ Live boa ] bi [ suffix ] bi@ >list :> body
+    P{ Spool target body } ;
+
 ! non-phi case
-CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } --
-[ ?a vars ?d vars union :>> ?i ]
-|
+CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } -- |
 [ ?b ?c ==! ]
-! NOTE: This happens if we have pre-defined effects but no known body yet (e.g. recursive calls)
-! [ ?k dup term-var? [ drop f ] when ]
-! [ ?l dup term-var? [ drop f ] when ]
-{ CompMode }
-{ MakeEffect ?a ?d f f ?tau }
-[ ?k ]
-[ ?l ]
-! { Roots ?i }
-! { Live ?i }
-[ ?i vars [ Roots boa ] [ Live boa ] bi 2array ]
-{ FinishEffect ?tau } ;
+! FIXME: context scoping!
+[ "comp" [
+      P{ CompMode }
+      ?tau
+      ?a vars ?d vars union
+      ! TODO: maybe sort or adjust order to force early mismatches?
+      ! XXX: this could also be important because of relying on stop conditions here!
+      ! At least for CallXors, or later-known call-recursives? Ideally only for callxors!
+      ?k ?l append
+      make-spool
+      { MakeEffect ?a ?d f f ?tau } 3array
+  ] new-context ] ;
+! [
+!     ?k ?l 2merge
+!     ?i vars [ Roots boa ] [ Live boa ] bi [ suffix ] bi@
+!     >list :>> ?p drop t ]
+! |
+! [ ?b ?c ==! ]
+! ! NOTE: This happens if we have pre-defined effects but no known body yet (e.g. recursive calls)
+! ! [ ?k dup term-var? [ drop f ] when ]
+! ! [ ?l dup term-var? [ drop f ] when ]
+! ! { CompMode }
+! { MakeEffect ?a ?d f f ?tau }
+! { Spool ?tau ?p }
+! ! [ ?k ]
+! ! [ ?l ]
+! ! { Roots ?i }
+! ! { Live ?i }
+! [ ?i vars [ Roots boa ] [ Live boa ] bi 2array ]
+! ! { FinishEffect ?tau }
+!     ;
+
+CHR: interrupt-spool @ { Invalid } // { Spool ?tau L{ ?x . __ } } -- | { Spool ?tau L{ } } ;
+CHR: end-spool @ // { Spool ?tau L{ } } -- | P{ FinishEffect ?tau } ;
+CHR: spool-one-pred @ // { Spool ?tau L{ ?x . ?xs } } -- | [ ?x ] { Spool ?tau ?xs } ;
 
 ! Body-only reinference requests, usually because some body preds have been changed lazily
+! FIXME: ordering might need to be adjusted here to account for mutual recursion branch elimination!
+! FIXME: a checkxor might be needed as well? Currently these are done explicitly
 CHR: reinfer-xor-effect @ // { ReinferEffect P{ Xor ?c ?d } ?tau } -- |
 { ReinferEffect ?c ?rho }
 { ReinferEffect ?d ?sig }
 { MakeXor ?rho ?sig ?tau } ;
 
-CHR: reinfer-effect @ // { ReinferEffect P{ Effect ?a ?b ?x ?k } ?tau } --
-[ { ?a ?b } :>> ?i ]
-|
-{ CompMode }
-{ MakeEffect ?a ?b f f ?tau }
-[ ?k ]
-[ ?i vars [ Roots boa ] [ Live boa ] bi 2array ]
-{ FinishEffect ?tau } ;
+CHR: reinfer-effect @ // { ReinferEffect P{ Effect ?a ?b ?x ?k } ?tau } -- |
+[ ?tau { ?a ?b } vars ?k
+  "reinfer" [ make-spool
+
+              P{ MakeEffect ?a ?b f f ?tau }
+              P{ CompMode } 3array reverse
+            ] new-context
+] ;
+! [ ?k ]
+! [ ?i vars [ Roots boa ] [ Live boa ] bi 2array ]
+! { FinishEffect ?tau } ;
 
 ! TODO: document this
 CHR: force-union @ { PhiMode } { FixpointMode } // { Invalid } -- | ;
 
-! * Suspend Reasoning
-! NOTE: we only do this at the end to make sure we also collect the { FinishEffect } "closing bracket"
-! Actually, hold on, dual finisheffect markers shouldn't hurt because they are tied to their Makeeffects...
-CHR: suspend-make-effect @ // { MakeEffect ?a ?b ?x ?l ?tau } { CompMode } { ?DeferTypeOf ?q ?sig } -- |
-{ SuspendMakeEffect ?a ?b ?x ?l ?tau { ?q ?sig } } ;
+! ! * Suspend Reasoning
+! ! NOTE: we only do this at the end to make sure we also collect the { FinishEffect } "closing bracket"
+! ! Actually, hold on, dual finisheffect markers shouldn't hurt because they are tied to their Makeeffects...
+! CHR: suspend-make-effect @ // { MakeEffect ?a ?b ?x ?l ?tau } { CompMode } { ?DeferTypeOf ?q ?sig } -- |
+! { SuspendMakeEffect ?a ?b ?x ?l ?tau { ?q ?sig } } ;
 
-CHR: collect-suspend-pred @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau { ?q ?sig } } AS: ?p <={ body-pred } --
-[ ?l ?p suffix :>> ?k ]
-|
-{ SuspendMakeEffect ?a ?b ?x ?k ?tau { ?q ?sig } } ;
+! CHR: collect-suspend-pred @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau { ?q ?sig } } AS: ?p <={ body-pred } --
+! [ ?l ?p suffix :>> ?k ]
+! |
+! { SuspendMakeEffect ?a ?b ?x ?k ?tau { ?q ?sig } } ;
 
-CHR: suspend-do-reinfer @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau { ?q ?sig } } -- |
-{ ?TypeOf ?q ?sig }
-{ SuspendMakeEffect ?a ?b ?x ?l ?tau ?sig } ;
+! CHR: suspend-do-reinfer @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau { ?q ?sig } } -- |
+! { ?TypeOf ?q ?sig }
+! { SuspendMakeEffect ?a ?b ?x ?l ?tau ?sig } ;
 
-GENERIC: maybe-rec-full-type? ( x -- ? )
-M: object maybe-rec-full-type? full-type? ;
-M: Recursive maybe-rec-full-type? effect>> maybe-rec-full-type? ;
+! GENERIC: maybe-rec-full-type? ( x -- ? )
+! M: object maybe-rec-full-type? full-type? ;
+! M: Recursive maybe-rec-full-type? effect>> maybe-rec-full-type? ;
 
-CHR: continue-suspend-make-effect @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau ?sig } -- [ ?sig maybe-rec-full-type? ] |
-{ CompMode }
-{ MakeEffect ?a ?b f f ?tau }
-[ ?l ] ;
+! CHR: continue-suspend-make-effect @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau ?sig } -- [ ?sig maybe-rec-full-type? ] |
+! { CompMode }
+! { MakeEffect ?a ?b f f ?tau }
+! [ ?l ] ;
 
 ! * Post-Reasoning
 
@@ -130,17 +162,18 @@ CHR: continue-suspend-make-effect @ // { SuspendMakeEffect ?a ?b ?x ?l ?tau ?sig
 ! CHR: phi-discard-phi-defs @ { PhiMode } <={ MakeEffect } // <={ Phi } -- | ;
 
 ! TODO: this is still tricky... not sure how to test this exhaustively
-: pred-live-in-effect? ( pred make-effect -- ? )
-    make-effect-vars
+: pred-live-in-vars? ( pred vars -- ? )
+    ! make-effect-vars
     {
         [ [ vars ] dip subset? ]
         [ [ intersects-live-vars ] dip intersects? ]
         [ [ live-vars ] dip subset? ] } 2|| ;
 
-CHR: collect-union-pred @ { PhiMode } { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } { Keep ?p } -- [ ?p ?e pred-live-in-effect? ]
+CHR: collect-union-pred @ { PhiMode } { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } { Keep ?p } -- [ ?p ?e make-effect-vars pred-live-in-vars? ]
 [ ?p ?l in? not ]
 [ ?l ?p suffix :>> ?k ]
 |
+! FIXME: this should probably also use the mechanism which excludes free vars?
 [| | ?p defines-vars ?x union :> y
  { MakeEffect ?a ?b y ?k ?tau } ] ;
 
@@ -168,7 +201,13 @@ PREFIX-RULES: { P{ CompMode } }
 ! [ ?s sequence? ]
 ! [ ?s [ [ lastcdr ] same? ] monotonic? ] | ;
 
-! NOTE: The only time for now where this was needed instead of the one above was for [ t ] loop...
+! *** Nested Reasoning Triggering
+! This is triggered at least by macro expansion, which must always succeed
+! in a nested inference manner.
+CHR: throw-type-query @ // { FinishEffect ?tau } { ?DeferTypeOf ?q M{ ?sig } } -- |
+[ [ P{ ?TypeOf ?q ?sig } ] no-context ]
+[ P{ FinishEffect ?tau } ] ;
+
 CHR: collect-call-recursive @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p P{ CallRecursive ?m ?rho ?sig } --
 [ ?rho vars ?sig vars union ?e make-effect-vars intersects? ]
 [ ?x ?rho vars union ?sig vars union :>> ?y ]
@@ -202,8 +241,10 @@ CHR: implied-param-join @ // { ImpliesParam ?x ?a } { ImpliesParam ?y ?b } --
 ! Need two out of three vars to be able to determine the third.  Alternatively, we could reason input/output-style?
 ! CHR: collect-body-pred @ { FinishEffect ?tau } // AS: ?p <={ body-pred } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } -- [ ?p ?e pred-live-in-effect? ]
 ! NOTE: deps should already be present, so we can pluck the predicate
-CHR: collect-live-body-pred @ { FinishEffect ?tau } { Live ?v } // AS: ?p <={ body-pred } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } --
-[ ?p live-vars ?v subset? ]
+! NOTE: Reverting to the previous intersect/defines vars behavior for now because of instance checks forcing an output type!
+CHR: collect-live-body-pred @ { FinishEffect ?tau } // AS: ?p <={ body-pred } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } --
+! [ ?p live-vars ?v subset? ]
+[ ?p ?e make-effect-vars pred-live-in-vars? ]
 ! [ ?p ?e pred-live-in-effect? ]
 [ ?p ?l in? not ]
 [ ?l ?p suffix :>> ?k ]
@@ -211,9 +252,10 @@ CHR: collect-live-body-pred @ { FinishEffect ?tau } { Live ?v } // AS: ?p <={ bo
 [| |
  ! FIXME: defines-vars behavior.  Is that adding root scope? or just new rels?
  ! ?p defines-vars ?x union :> y
- ?p vars ?x union :> y
+ ?p vars ?p free-effect-vars diff ?x union :> y
  { MakeEffect ?a ?b y ?k ?tau } ] ;
 
+! FIXME: Don't use this kind of special case!
 CHR: collect-boa @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ Boa ?c ?i ?o } --
 ! [ ?i ?o [ vars ?e make-effect-vars in? ] bi@ or ]
 [ ?p vars ?e make-effect-vars intersects? ]
@@ -252,7 +294,23 @@ CHR: finish-disjoint-effect @ { PhiMode } { FinishEffect ?tau } { MakeEffect __ 
 CHR: finish-invalid-effect @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { Invalid } -- |
 [ ?tau P{ Effect ?a ?b f { P{ Invalid } } } ==! ] ;
 
-CHR: finish-valid-effect @ { FinishEffect ?tau } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } // -- [ ?tau term-var? ]
+
+! NOTE: changing this to immediately re-infer any xors!
+! FIXME: doing the xor check here now, but that gives context problems? Trying this in a new context, hoping it fixes cardinal? loop
+CHR: finish-rebuild-xor-call-effect @ { MakeEffect ?a ?b ?x ?l M{ ?tau } } // { FinishEffect ?tau } -- [ ?l [ CallXorEffect? ] any? ] |
+[| | ?l split-xor-call-preds :> ( then-preds else-preds )
+ P{ Effect ?a ?b ?x then-preds } fresh-effect :> then-effect
+ P{ Effect ?a ?b ?x else-preds } fresh-effect :> else-effect
+ P{ ReinferEffect then-effect ?rho }
+ P{ ReinferEffect else-effect ?sig }
+ 2array
+]
+! [ "rebuildxor" [ P{ CheckXor f ?z ?tau } ] new-context ]
+{ MakeXor ?rho ?sig ?z }
+{ CheckXor f ?z ?tau }
+{ FinishEffect ?tau } ;
+
+CHR: finish-valid-effect @ { FinishEffect ?tau } AS: ?e P{ MakeEffect ?a ?b ?x ?l M{ ?tau } } // --
 [ ?x ?a vars diff ?b vars diff
   ! FIXME: this exposes what seems to be a bug in the term solver, probably something going wrong when f is assigned to a binding,
   ! resulting in a recursive-term-error in case for checking strange stuff...
@@ -262,7 +320,10 @@ CHR: finish-valid-effect @ { FinishEffect ?tau } AS: ?e P{ MakeEffect ?a ?b ?x ?
 [ ?tau P{ Effect ?a ?b ?y ?l } ==! ] ;
 
 ! NOTE: re-inserting the FinishEffect Predicates because they don't get reactivated by substitution
-CHR: finish-phi-reasoning @ // { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { PhiMode } -- [ ?tau term-var? not ] | { FinishEffect ?tau } { PhiDone } ;
+CHR: finish-phi-reasoning @ // { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { PhiMode } -- [ ?tau term-var? not ] | { FinishEffect ?tau }
+! [ [ P{ PhiDone } ] no-context ]
+{ PhiDone } ;
+
 CHR: finish-compositional-reasoning @ // { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { CompMode } -- [ ?tau term-var? not ] | { FinishEffect ?tau } ;
 
 ! * Token removal

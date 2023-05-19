@@ -15,6 +15,11 @@ SYMBOLS: program exec-stack store match-trace current-index ;
 ! Interpret Is{ ?x ?y } predicates in contexts as extra bindings
 SYMBOL: context-eqs
 
+! Used for implementing :>> and get-context
+<PRIVATE
+SYMBOL: current-bindings
+PRIVATE>
+
 ! Keep track of rule match counts
 SYMBOL: rule-firings
 SYMBOL: active-rule-firing
@@ -22,6 +27,18 @@ SYMBOL: active-rule-firing
 SYMBOL: lookup-index
 SINGLETON: current-context
 INSTANCE: current-context match-var
+! SYMBOL: current-context
+
+: new-context ( name quot -- )
+    ! [ uvar current-context ] dip with-variable ; inline
+    swap uvar current-context namespaces:set call ; inline
+: no-context ( quot -- )
+    ! current-context swap with-variable-off ; inline
+    current-context off call ; inline
+! NOTE: This only works in guards!
+: get-context ( -- x )
+    current-bindings get-global
+    current-context of ;
 
 ! Operational interface
 TUPLE: chr-suspension
@@ -227,8 +244,8 @@ M: object on-kill-chr 2drop ;
 
 GENERIC: lookup ( ctype -- seq )
 
-: in-context? ( susp -- ? )
-    ctx>> current-context get = ;
+! : in-context? ( susp -- ? )
+!     ctx>> current-context get = ;
 
 M: chr-constraint lookup
     ! constraint-type store get [ { [ type>> = ] [ in-context? ] } 1&& ] with filter-values ;
@@ -239,7 +256,7 @@ M: chr-sub-pred lookup
 
 M: as-pred lookup pred>> lookup ;
 
-M: C lookup then>> lookup ;
+! M: C lookup pred>> lookup ;
 
 :: check/update-history ( rule-id trace -- ? )
     trace keys :> matched
@@ -248,10 +265,6 @@ M: C lookup then>> lookup ;
     sig stored-cs [ hist>> in? ] with all?
     [ f ]
     [ stored-cs [ [ sig suffix ] change-hist drop ] each t ] if ;
-
-<PRIVATE
-SYMBOL: current-bindings
-PRIVATE>
 
 : check-guards ( rule-id bindings -- ? )
     dup current-bindings set-global
@@ -286,18 +299,19 @@ PRIVATE>
     ] with-variable
     ;
 
-: maybe-inhibit-remove ( trace bindings -- trace )
-    current-context of
-    [ [| id keep? ctx |
-       keep?
-       [ id t ]
-       [ id dup store get at
-         ctx>> ctx = not
-       ] if
-      ] curry assoc-map ] when* ;
+! : maybe-inhibit-remove ( trace bindings -- trace )
+!     current-context of
+!     [ [| id keep? ctx |
+!        keep?
+!        [ id t ]
+!        [ id dup store get at
+!          ctx>> ctx = not
+!        ] if
+!       ] curry assoc-map ] when* ;
 
 : simplify-constraints ( trace bindings -- )
-    maybe-inhibit-remove
+    ! maybe-inhibit-remove
+    drop
     [ [ drop ] [ kill-chr ] if ] assoc-each ;
 
 ERROR: more-partners rule-firing more ;
@@ -333,7 +347,7 @@ GENERIC: match-constraint ( bindings suspension match-spec -- bindings )
 ! C1 + C2 -> mismatch
 ! f + f -> f
 ! f + C1 -> C1
-: combine-context? ( bindings susp-ctx -- bindings/f )
+: resolve-match-context ( bindings susp-ctx -- bindings/f )
     current-context pick at
     2dup and [
         = [ drop f ] unless
@@ -341,25 +355,29 @@ GENERIC: match-constraint ( bindings suspension match-spec -- bindings )
         [ current-context rot new-at ] when*
     ] if ;
 
-! TODO: sub-context semantics?
-! NOTE: if matching against a C predicate, we don't touch the context
+! This basically implements an implicit guard on the "invisible" context arg of
+! every stored constraint
 :: match-constraint-in-context ( bindings susp match-spec -- bindings )
-    match-spec C? [ bindings susp match-spec match-constraint ]
-    [
-        bindings susp ctx>> combine-context?
-        [ susp match-spec match-constraint ] [ f ] if*
-    ] if
+    ! ! match-spec C? [ bindings susp match-spec match-constraint ]
+    ! ! [
+    ! ! bindings susp ctx>> combine-context?
+    ! !     [ susp match-spec match-constraint ] [ f ] if*
+    ! ! ] if
+    bindings susp ctx>> resolve-match-context
+    [ susp match-spec match-constraint ] [ f ] if*
+    ! current-context bindings at susp ctx>> =
+    ! [ bindings susp match-spec match-constraint ] [ f ] if
     ; inline
 
 ! We match a suspension in C1 against a { C ?x ... }
 ! When matching a C constraint, we need to turn the context bindings themselves off
 ! to make sure we see other partners
-M:: C match-constraint ( binds susp mspec -- bindings )
-    ! binds current-context mspec cond>> add-bindings
-    ! [ susp mspec then>> constraint-args match-constraint-in-context ] [ f ] if* ;
-    current-context binds pluck-at
-    susp ctx>> mspec cond>> add-bindings
-    [ susp mspec then>> constraint-args match-constraint ] [ f ] if* ;
+! M:: C match-constraint ( binds susp mspec -- bindings )
+!     ! binds current-context mspec cond>> add-bindings
+!     ! [ susp mspec then>> constraint-args match-constraint-in-context ] [ f ] if* ;
+!     current-context binds pluck-at
+!     susp ctx>> mspec cond>> add-bindings
+!     [ susp mspec then>> constraint-args match-constraint ] [ f ] if* ;
 
 M: chr-sub-pred match-constraint
     args>> swap constraint-args >list add-bindings ;
@@ -388,7 +406,7 @@ M: any-match match-constraint
 
 ! : start-match ( var-term arg-term -- subst )
 !     2array 1array H{ } clone swap solve-next ;
-DEFER: match-reflexive-head
+! DEFER: match-reflexive-head
 DEFER: match-single-head
 : match-head ( bindings arg-spec susp -- bindings )
     ! dup constraint>> reflexive?
@@ -399,13 +417,14 @@ DEFER: match-single-head
 
 : match-single-head ( bindings arg-spec susp -- bindings )
     swap match-constraint ; inline
-:: match-reflexive-head ( bindings arg-spec susp -- bindings )
-    arg-spec parms>> all-permutations
-    [| p | bindings p susp match-single-head ] map-find drop ; inline
+! :: match-reflexive-head ( bindings arg-spec susp -- bindings )
+!     arg-spec parms>> all-permutations
+!     [| p | bindings p susp match-single-head ] map-find drop ; inline
 
 
 : try-schedule-match ( bindings arg-spec susp -- bindings )
     swap match-constraint-in-context
+    ! swap match-constraint
     ! match-head
     ! bindings susp
     ! arg-spec match-constraint
@@ -421,18 +440,18 @@ DEFER: match-single-head
 
 ! Most specific conditions get priority if a context is provided
 ! pair: { store-id suspension }
-:: cond<=> ( pair1 pair2 ctx -- <=> )
-    ctx
-    [ pair1 second ctx>> :> ctx1
-      pair2 second ctx>> :> ctx2
-      ctx1 [ ctx2 [ +eq+ ] [ +lt+ ] if ]
-      [ ctx2 [ +gt+ ] [ +eq+ ] if ] if
-    ]
-    [ +eq+ ] if ;
+! :: cond<=> ( pair1 pair2 ctx -- <=> )
+!     ctx
+!     [ pair1 second ctx>> :> ctx1
+!       pair2 second ctx>> :> ctx2
+!       ctx1 [ ctx2 [ +eq+ ] [ +lt+ ] if ]
+!       [ ctx2 [ +gt+ ] [ +eq+ ] if ] if
+!     ]
+!     [ +eq+ ] if ;
 
-: sort-lookup ( assoc bindings -- alist )
-    [ sort-keys ] [ current-context of ] bi*
-    [ cond<=> ] curry sort ;
+! : sort-lookup ( assoc bindings -- alist )
+!     [ sort-keys ] [ current-context of ] bi*
+!     [ cond<=> ] curry sort ;
 
 ! TUPLE: schedule-cont rule-id trace bindings partners vars ;
 ! C: <schedule-cont> schedule-cont
@@ -492,7 +511,7 @@ DEFER: match-single-head
         ikey [ bindings try-index-lookup ]
         [ pc lookup ] if*
         ! pc lookup
-        bindings sort-lookup
+        ! bindings sort-lookup
         [| sid sc |
          ! NOTE: unsure about this optimization here
          { [ sid trace key? not ]
@@ -525,7 +544,10 @@ DEFER: match-single-head
     f susp activated<<
     ! [
         ! vars valid-match-vars [ arg-vars susp args>> start-match ] with-variable
+    ! Initialize the occurrence bindings with the required context if one was stored in ctx>> of the susp
+    ! Not always use context! If there is no context specification, don't treat as problem
     current-context susp ctx>> [ swap associate ] [ drop H{ } clone ] if* arg-vars susp try-schedule-match
+    ! Always use context!  The default context is f
     ! current-context susp ctx>> swap associate arg-vars susp try-schedule-match
     ! H{ } clone arg-vars susp try-schedule-match
         [ partners vars (run-occurrence) ] [ 2drop ] if*
@@ -571,11 +593,13 @@ C: <set-reactivated> set-reactivated
     [ <set-reactivated> 1array enqueue ]
     [ activate ] bi ;
 
+! This is called on all body constraints after rule firing.  Runs to completion
+! in the context of the rule bodies, but will created deferred objects and enqueue them.
 GENERIC: activate-new ( rule c -- )
 
 ! M: C activate-new [ cond>> current-context set ] [ then>> activate-new ] bi ;
-M: C activate-new
-    dup cond>> current-context [ then>> activate-new ] with-variable ;
+! M: C activate-new
+!     dup cond>> current-context [ then>> activate-new ] with-variable ;
 
 M: equiv-activation pred>constraint ;
 : update-eq-constraint-vars ( eqc -- eqc )
@@ -617,10 +641,12 @@ GENERIC: activate-item ( susp --  )
 M: deferred-activation activate-item
     ! dup ctx>> current-context set
     ! [ from-rule>> ] [ chr>> ] bi activate-new ;
-    dup ctx>> current-context
-    [ [ from-rule>>
+    dup ctx>> current-context [
+        [ from-rule>>
         first2 active-rule-firing set
-      ] [ chr>> ] bi activate-new ] with-variable ;
+        ] [ chr>> ] bi activate-new
+    ] with-variable
+    ;
 
 ! M: integer activate-item
 !     ! If we have enqueued it several times, then we basically bumped it up, so no need to run it repeatedly
@@ -784,6 +810,7 @@ M: solver-state merge-solver-config
 : susp>constraint ( susp -- chr )
     [ constraint>> ] [ ctx>> ] bi
     [ swap C boa ] when* ;
+    ! constraint>> ;
 
 : finish-solver-state ( -- state )
     get-solver-state

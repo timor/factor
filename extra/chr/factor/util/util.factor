@@ -1,7 +1,7 @@
-USING: accessors arrays assocs assocs.extras chr.factor classes classes.algebra
-classes.algebra.private classes.union combinators.short-circuit
-combinators.smart generic.math generic.single kernel math namespaces quotations
-sequences sets terms types.util words ;
+USING: accessors arrays assocs assocs.extras chr.factor chr.parser classes
+classes.algebra classes.algebra.private classes.union combinators.short-circuit
+combinators.smart generic.math generic.single kernel make math namespaces
+quotations sequences sets terms types.util words ;
 
 IN: chr.factor.util
 
@@ -47,9 +47,12 @@ M: Iterated effect>nterm
 ! ** Recursion
 : has-recursive-call? ( tag Effect -- ? )
     preds>> [ dup CallRecursive? [ tag>> = ] [ 2drop f ] if ] with any? ;
+
+! FIXME unused
 : filter-recursive-call ( tag Effect -- Effect )
     clone
     [ [ dup CallRecursive? [ tag>> = ] [ 2drop f ] if ] with reject ] with change-preds ;
+
 GENERIC#: recursive-branches? 1 ( type word/quot -- ? )
 M: Effect recursive-branches? swap has-recursive-call? ;
 M: Xor recursive-branches? [ [ type1>> ] [ type2>> ] bi ] dip '[ _ recursive-branches? ] either? ;
@@ -59,6 +62,19 @@ M: Xor terminating-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ terminating-
 GENERIC#: recursive-branches 1 ( type word/quot -- branches )
 M: Effect recursive-branches over has-recursive-call? [ 1array ] [ drop f ] if ;
 M: Xor recursive-branches [ [ type1>> ] [ type2>> ] bi ] dip '[ _ recursive-branches ] bi@ append sift ;
+
+GENERIC: substitute-recursive-call ( orig replacement obj -- obj )
+M: object substitute-recursive-call 2nip ;
+M:: Xor substitute-recursive-call ( from to obj -- obj )
+    from to obj type1>> substitute-recursive-call
+    from to obj type2>> substitute-recursive-call Xor boa ;
+M: Effect substitute-recursive-call
+    clone [ [ substitute-recursive-call ] 2with map ] change-preds ;
+! NOTE: excluding effect instances here for now!
+! M:: CallRecursive substitute-recursive-call ( from to obj -- obj )
+!     obj dup tag>> from = [ clone to >>tag ] when ;
+M:: CallRecursive substitute-recursive-call ( from to obj -- obj )
+    obj dup tag>> from = [ drop to ] when ;
 
 ! ** Class algebra
 
@@ -175,3 +191,50 @@ M: CallXorEffect recursive-tags* "dont look for unresolved effect recursives" th
 
 : recursive-tags ( obj -- seq )
     [ recursive-tags* ] { } make members [ f ] when-empty ;
+
+: single-recursive? ( word type -- ? )
+    recursive-tags { [ nip length 1 = ] [ first = ] } 2&&
+    ;
+
+GENERIC: canonical? ( x -- ? )
+M: term-var canonical? drop f ;
+M: Effect canonical? preds>> [ canonical? ] all? ;
+M: body-pred canonical? drop t ;
+M: CallRecursive canonical? drop f ;
+M: Xor canonical?
+    [ type1>> ] [ type2>> ] bi [ canonical? ] both? ;
+M: CallXorEffect canonical? "xor calls should be resolved here" throw ;
+! Those are not body preds, but used when prepping
+M: Invalid canonical? drop t ;
+M: Ensure canonical? drop t ;
+
+! ** Xor Calls
+
+GENERIC: xor-call? ( type -- ? )
+M: Effect xor-call? preds>> [ CallXorEffect? ] any? ;
+M: Xor xor-call? [ type1>> ] [ type2>> ] bi [ xor-call? ] bi@ or ;
+
+! find object satisfying quot, if found, return with rest of sequence.  Otherwise
+! return sequence unchanged and f.
+: find-remove ( seq quot -- seq obj/f )
+    dupd find
+    [ [ swap remove-nth ] dip ] when* ; inline
+
+:: split-xor-call-preds ( preds -- then-preds else-preds )
+    preds [ CallXorEffect? ] find-remove swap :> rest-preds
+    [ in>> ] [ out>> ] [ type>> ] tri
+    [ type1>> ] [ type2>> ] bi
+    :> ( call-in call-out then-type else-type )
+    rest-preds P{ ApplyEffect then-type call-in call-out } suffix
+    rest-preds P{ ApplyEffect else-type call-in call-out } suffix ;
+
+:: split-xor-call-effect ( effect inst-var -- then-effect else-effect )
+    effect preds>> [ CallXorEffect? ] find-remove
+    [ in>> ] [ out>> ] [ type>> ] tri
+    [ type1>> ] [ type2>> ] bi
+    :> ( rest-preds call-in call-out then-type else-type )
+    effect [ in>> ] [ out>> ] [ parms>> ] tri
+    rest-preds P{ CallEffect inst-var call-in call-out } suffix Effect boa
+    dup clone
+    [ [ P{ Instance inst-var then-type } suffix ] change-preds ]
+    [ [ P{ Instance inst-var else-type } suffix ] change-preds ] bi* ;

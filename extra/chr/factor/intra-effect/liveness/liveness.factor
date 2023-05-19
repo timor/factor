@@ -1,5 +1,6 @@
-USING: arrays assocs chr.factor chr.parser chr.state classes.tuple grouping
-kernel math.combinatorics sequences sequences.extras sets terms types.util ;
+USING: accessors arrays assocs chr.factor chr.parser chr.state classes.tuple
+grouping kernel lists math.combinatorics sequences sequences.extras sets terms
+types.util ;
 
 IN: chr.factor.intra-effect.liveness
 
@@ -19,6 +20,11 @@ IN: chr.factor.intra-effect.liveness
 ! output/output values
 
 CHRAT: chr-factor-liveness {  }
+
+! Flattening
+
+CHR: flatten-live-set @ // AS: ?p <={ Live ?s } -- [ ?s [ cons-state? ] any? ] |
+[ ?p clone ?s vars >>vars ] ;
 
 PREFIX-RULES: { P{ CompMode } }
 
@@ -42,7 +48,7 @@ CHR: binary-rel-pred-live-deps @ AS: ?p <={ expr-pred } // -- [ ?p vars >array :
 CHR: ternary-expr-pred-live-deps @ AS: ?p <={ expr-pred } // -- [ ?p vars >array :>> ?v length 3 = ] |
 [ ?v 2 all-combinations [ Dep slots>tuple ] map ] ;
 
-CHR: call-effect-live-deps @ { CallEffect ?q ?i ?o } // -- |
+CHR: call-effect-live-deps @ <={ CallEffect ?q ?i ?o } // -- |
 [ ?i vars [ ?q Dep boa ] map
   ?o vars [ ?q Dep boa ] map append ] ;
 

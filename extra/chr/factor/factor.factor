@@ -186,8 +186,12 @@ TUPLE: ReinferEffect < chr-pred type target ;
 
 ! Actually triggers computing composed effect and storing it into target
 TUPLE: ComposeEffect < chr-pred e1 e2 target ;
+TUPLE: Spool < chr-pred target preds ;
+! Mode wrapper
+TUPLE: CP < chr-pred tag pred ;
 ! Accumulator for resulting effect predicate
 TUPLE: MakeEffect < chr-pred in out locals preds target ;
+TUPLE: MakePhiEffect < MakeEffect ;
 ! Suspended MakeEffect until type is known
 TUPLE: SuspendMakeEffect < MakeEffect depends-on ;
 ! End of inference Marker
@@ -235,6 +239,12 @@ TUPLE: ApplyEffect < chr-pred effect in out ;
 TUPLE: CallXorEffect < chr-pred type in out ;
 ! Unused: TUPLE: MacroCallEffect < chr-pred word in out ;
 TUPLE: CallRecursive < chr-pred tag in out ;
+! The same as above, but different
+TUPLE: CallUnknown < CallEffect ;
+TUPLE: CallSite < chr-pred word var ;
+
+TUPLE: CallsRecursive < chr-pred word other-words ;
+TUPLE: PartialRecursive < chr-pred word temp-word ;
 
 TUPLE: Boa < chr-pred spec in id ;
 TUPLE: TupleBoa < Boa ;
@@ -271,6 +281,7 @@ TUPLE: SubType < chr-pred sub super ;
 TUPLE: Let < chr-pred var val type ;
 
 TUPLE: Invalid < chr-pred ;
+! TUPLE: Invalid < chr-pred var ;
 
 TUPLE: Tag < val-pred tag-var ;
 
@@ -332,8 +343,18 @@ UNION: symmetric-pred Eq Neq Num= ;
 ! Catch some Primitive Calls for easier conversion
 TUPLE: PrimCall < chr-pred word in out ;
 
+! Reference counting on dup'd vars. Counts the copies.
+! Basically distributed def-use. Vars are dead if the value is -1?
+! TUPLE: ref-pred < chr-pred  ;
+! TUPLE: Ref+ < ref-pred vars ;
+! TUPLE: Ref- < ref-pred vars ;
+! TUPLE: Refs < ref-pred map ;
 UNION: body-pred val-pred CallEffect CallXorEffect Declare CallRecursive Throws
-    MacroExpand Iterated LoopVar GenericDispatch <==> MathCall PrimCall Counter ;
+    MacroExpand
+    Iterated
+    LoopVar GenericDispatch <==> MathCall PrimCall Counter
+    ! ref-pred
+    ;
 
 TUPLE: CheckPhiStack a b res ;
 
@@ -405,6 +426,7 @@ M: Instance free-effect-vars type>>
     [ free-effect-vars ] [ drop f ] if ;
 M: CallRecursive free-effect-vars tag>> free-effect-vars ;
 M: CallXorEffect free-effect-vars type>> free-effect-vars ;
+M: CallUnknown free-effect-vars thing>> free-effect-vars ;
 ! M: CallXorEffect free-effect-vars
 !     [ then>> ] [ else>> ] bi
 !     [ free-effect-vars ] bi@ union ;
@@ -445,12 +467,16 @@ GENERIC: defines-vars ( pred -- vars )
 ! TODO: Ideally, this should only be needed for expansions where not all outputs
 ! are known to be used anymore...
 GENERIC: intersects-live-vars ( pred -- vars )
+! HACK Do this for sums for now to fix loop tests
+M: Sum intersects-live-vars vars ;
 M: object intersects-live-vars drop f ;
 M: chr-pred live-vars vars ;
 M: object defines-vars drop f ;
 ! ! TODO Maybe don't need this if type-inference checks are done using ExpandMacro?
 ! M: CallEffect intersects-live-vars in>> vars ;
 M: CallEffect live-vars thing>> 1array ;
+! XXX pure guessing...
+! M: CallUnknown live-vars out>> vars ;
 ! ! M: CallEffect defines-vars [ in>> vars ] [ out>> vars ] bi union ;
 ! M: CallEffect defines-vars [ out>> vars ] [ thing>> 1array ] bi union ;
 ! M: CallEffect defines-vars vars ;

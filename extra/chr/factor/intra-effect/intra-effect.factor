@@ -54,6 +54,9 @@ CHR: declared-predicate-class @ // { DeclaredInstance ?x A{ ?tau } } -- [ ?tau p
 |
 { ?DeferTypeOf ?q ?sig }
 { ApplyEffect ?sig L{ ?x . ?b } L{ ?c . ?b } }
+! NOTE: need to keep this alive in this context to make sure this will get evaluated!
+! Nope, not working, as this will not survive a re-inference due to deferred xor-calls
+! { Live { ?b } }
 ! { Instance ?p ?sig }
 ! { CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
 { Instance ?c W{ t } }
@@ -65,8 +68,9 @@ CHR: declared-not-predicate-class @ // { DeclaredNotInstance ?x A{ ?tau } } -- [
 |
 { Instance ?x ?rho }
 { ?DeferTypeOf ?q ?sig }
-{ Instance ?p ?sig }
-{ CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
+{ ApplyEffect ?sig L{ ?x . ?b } L{ ?c . ?b } }
+! { Instance ?p ?sig }
+! { CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
 { Instance ?c W{ f } } ;
 
 CHR: normalize-known-not-declaration @ // { DeclaredNotInstance ?x A{ ?tau } } -- [ { ?tau } first classoid? ]
@@ -350,8 +354,11 @@ CHR: disj-symbolic-compl-type @ AS: ?e <={ MakeEffect } // { DeclaredNotInstance
 ! *** Phi>
 
 PREFIX-RULES: { P{ CompMode } }
+! TERM-VARS: ?ctx ;
+! MODIFY: [ [ ?ctx swap CP boa ] map ]
 
 ! Possibly expensive?
+! FIXME: support modifier in AS: wrappers
 CHR: unique-val-pred @ AS: ?p <={ val-pred } // AS: ?q <={ val-pred } -- [ ?p ?q == ] | ;
 ! TODO The following is possibly a little bit cheaper, try whether it breaks anything at the end
 ! CHR: unique-val-pred @ AS: ?p <={ val-pred } // AS: ?q <={ val-pred } -- [ ?p ?q = ] | ;
@@ -500,8 +507,14 @@ CHR: transitive-le-gt @ { Lt ?x ?y } { Le ?y ?z } // -- | { Lt ?x ?z } ;
 
 ! NOTE: This does not work naively for products!
 ! TODO: might need revisiting after being more explicit with math types and equality
-CHR: lit-sum-specializes-math-class @ { Sum ?z ?x A{ ?m } } { Instance ?x ?c } // --
-[ ?m class-of ?c pessimistic-math-class-max :>> ?d ] | { Instance ?z ?d } ;
+! FIXME: automate
+CHR: lit-sum-specializes-math-class-1 @ { Sum ?z ?x A{ ?m } } { Instance ?x ?c } // --
+[ ?m class-of ?c pessimistic-math-class-max :>> ?d ] |
+{ Instance ?z ?d } ;
+
+! CHR: lit-sum-specializes-math-class-2 @ { Sum ?z ?x A{ ?m } } { Instance ?z ?c } // --
+! [ ?m class-of ?c pessimistic-math-class-max :>> ?d ] |
+! { Instance ?x ?d } ;
 
 CHR: define-sum @ // { Sum ?z A{ ?x } A{ ?y } } --
 [ ?x ?y + <wrapper> :>> ?v ] | { Instance ?z ?v } ;
@@ -558,15 +571,8 @@ CHR: defer-apply-xor-effect @ // { ApplyEffect ?x ?i ?o } -- [ ?x Xor? ] |
 ! TODO: since we do that here, remove a lot of other fresh-effects....
 CHR: call-applies-effect @ { Instance ?q ?x } // { CallEffect ?q ?a ?b } -- [ ?x valid-effect-type? ] |
 { ApplyEffect ?x ?a ?b } ;
-! [ ?x fresh-effect :>> ?e ]
-! [ ?e in>> :>> ?c drop
-!   ?e out>> :>> ?d drop
-!   ?e preds>> :>> ?l drop
-!   t ]
-! |
-! [ { ?a ?b }
-!   { ?c ?d } ==! ]
-! [ ?l ] ;
+
+CHR: literal-call-type-must-be-known @ // { CallEffect ?q __ __ } { Eq ?q A{ ?p } } -- | [ { ?p "literal-effect-unknown" } throw ] ;
 
 ! non-copying
 ! CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } // { CallEffect ?q ?a ?b } -- |
@@ -587,12 +593,18 @@ CHR: call-applies-effect @ { Instance ?q ?x } // { CallEffect ?q ?a ?b } -- [ ?x
 
 ! *** TODO Recursive Iteration expansion
 
+CHR: call-recursive-eliminated @ // { CallRecursive null __ __ } -- | { Invalid } ;
+
+CHR: call-recursive-canonical @ { TypeOfWord ?w ?rho } // { CallRecursive ?w ?i ?o } --
+[ ?rho full-type? ] [ ?rho canonical? ] |
+{ ApplyEffect ?rho ?i ?o } ;
+
 ! P{ CallRecursive tag ?a ?b } holds the enter-in stack in ?a
 ! iterated approach:
 ! tag -prelude-> ?a -RecursionTypePre-> ?b =same-layout-as= ?c -RecursionTypePost-> -FixPointCondition-> ?d
 ! NOTE: current layout: initial var_n, var_1, var_0
 ! It may be necessary to change this to var_n , var_n-m , var_n-m-1 , var_0
-CHR: break-recursive-iteration @ { Iterated ?w { ?a ?b ?c ?d } } // { CallRecursive ?w ?i ?o } --
+CHR: break-recursive-iteration @ { Iterated ?w { ?a ?b ?c ?d __ } } // { CallRecursive ?w ?i ?o } --
 |
 [ ?c ?i ==! ] ;
 
@@ -603,7 +615,8 @@ CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho } { RecursionTypeOf ?w 
 [ ?sig full-type? ]
 [ ?i fresh :>> ?b ]
 [ ?i fresh :>> ?c ] |
-{ Iterated ?w { ?i ?b ?c ?d } }
+! FIXME: Instantiate in case of double recursion?
+{ Iterated ?w { ?i ?b ?c ?d ?o } }
 ! Return Type call
 { ApplyEffect ?rho ?d ?o }
 ! { Instance ?q ?rho }
@@ -675,19 +688,18 @@ CHR: invalid-loop-effect @ // { LoopVar { ?w ?x ?y ?z } } --
 [ ?x ?y [ lastcdr ] same? ] | { Invalid } ;
 
 ! **** Find Loop Counters
-! TODO: Test if sum is always normalized for this?
+! TODO: Test if sum is always normalized for this? Nope, it doesnt
 ! Define Counters.  Note that These define _inclusive_ intervals, because
 ! If the sum is assumed to have been calculated, then the result is included
 ! CHR: loop-sum-defines-counters @ { Sum ?y ?x ?n } { LoopVar { ?w ?x ?y ?z } } // -- |
-CHR: loop-sum-defines-counters @ { Sum ?y ?x ?n } // { LoopVar { ?w ?x ?y ?z } } -- |
-! pre-loop-body
-! { Counter ?x ?w ?a ?n }
-! { Sum ?z ?a ?n }
-! ! post-loop-body
-! { Counter ?y ?b ?z ?n }
-! { Sum ?b ?w ?n }
+CHR: loop-sum-defines-plus-counter @ { Sum ?y ?x ?n } // { LoopVar { ?w ?x ?y ?z } } -- |
 { Counter ?w ?x ?y ?z ?n }
 ;
+
+! FIXME: only works for literal sums right now
+CHR: loop-sum-defines-minus-counter @ { Sum ?x ?y A{ ?n } } // { LoopVar { ?w ?x ?y ?z } } --
+[ 0 ?n - :>> ?m ] |
+{ Counter ?w ?y ?x ?z ?m } ;
 
 ! ! NOTE: the fact that this is necessary kind of stinks...
 ! ! TODO: may be better to keep LoopVars instead?
@@ -742,13 +754,17 @@ CHR: integer-gt-is-ge @ { Instance ?x ?c } // { Lt A{ ?m } ?x } -- [ ?c integer 
 [ ?m 1 + floor >integer :>> ?k ] | { Le ?k ?x } ;
 
 ! TODO: the ge and lt equivalents?.  Class matcher would be nice...
-CHR: le-offset-sum @ { Sum ?y ?x A{ ?n } } { Le ?x A{ ?v } } // --
-[ ?n ?v + :>> ?k ] | { Le ?y ?k } ;
+CHR: le-offset-sum-1 @ { Sum ?y ?x A{ ?n } } { Le ?x A{ ?v } } // --
+[ ?v ?n + :>> ?k ] | { Le ?y ?k } ;
+CHR: le-offset-sum-2 @ { Sum ?x ?y A{ ?n } } { Le ?x A{ ?v } } // --
+[ ?v ?n - :>> ?k ] | { Le ?y ?k } ;
 
 ! CHR: gt-offset-sum @ { Sum ?y ?x A{ ?n } } { Lt A{ ?v } ?x } // --
 ! [ ?n ?v + :>> ?k ] | { Lt ?k ?y } ;
-CHR: ge-offset-sum @ { Sum ?y ?x A{ ?n } } { Le A{ ?v } ?x } // --
-[ ?n ?v + :>> ?k ] | { Le ?k ?y } ;
+CHR: ge-offset-sum-1 @ { Sum ?y ?x A{ ?n } } { Le A{ ?v } ?x } // --
+[ ?v ?n + :>> ?k ] | { Le ?k ?y } ;
+CHR: ge-offset-sum-2 @ { Sum ?x ?y A{ ?n } } { Le A{ ?v } ?x } // --
+[ ?v ?n - :>> ?k ] | { Le ?k ?y } ;
 
 ! *** TODO Modular arithmetic
 ! Needed for fixed-width computations, possibly some loop analysis/transformation foo

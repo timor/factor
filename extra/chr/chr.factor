@@ -67,9 +67,10 @@ TUPLE: chr-branch < chr-pred cases ;
 TUPLE: chr-scope < chr-pred cond body ;
 ! Reification of solutions
 ! TUPLE: And < chr-pred constraints ;
-TUPLE: C < chr-pred cond then ;
-M: C constraint-type then>> constraint-type ;
-M: C constraint-args ;
+! NOTE: only having this here for printing purposes for now!
+TUPLE: C < chr-pred ctx pred ;
+! M: C constraint-type pred>> constraint-type ;
+! M: C constraint-args ;
 MIXIN: transitive
 
 ! Pre-term for splits
