@@ -45,6 +45,8 @@ M: Iterated effect>nterm
     [ effect>nterm ] bi@ isomorphic? ;
 
 ! ** Recursion
+PREDICATE: effect-instance < Instance type>> valid-effect-type? ;
+
 : has-recursive-call? ( tag Effect -- ? )
     preds>> [ dup CallRecursive? [ tag>> = ] [ 2drop f ] if ] with any? ;
 
@@ -71,10 +73,22 @@ M:: Xor substitute-recursive-call ( from to obj -- obj )
 M: Effect substitute-recursive-call
     clone [ [ substitute-recursive-call ] 2with map ] change-preds ;
 ! NOTE: excluding effect instances here for now!
-! M:: CallRecursive substitute-recursive-call ( from to obj -- obj )
-!     obj dup tag>> from = [ clone to >>tag ] when ;
+! NOTE: including it though!
+M: effect-instance substitute-recursive-call
+    clone [ substitute-recursive-call ] change-type ;
+! FIXME: this would be much easier with a subtree-matcher!
+GENERIC: replace-call-recursive ( in out new -- res )
+M: \ null replace-call-recursive 3drop P{ Invalid } ;
+M:: valid-effect-type replace-call-recursive ( in out new -- res )
+    P{ ApplyEffect new in out } ;
+
+:: call-recursive-substitute-recursive-call ( obj to -- obj )
+    obj P{ CallRecursive __ ?a ?b } solve-eq
+    ! [ solve-eq ] no-var-restrictions
+    [ ?a of ] [ ?b of ] bi to replace-call-recursive ;
+
 M:: CallRecursive substitute-recursive-call ( from to obj -- obj )
-    obj dup tag>> from = [ drop to ] when ;
+    obj tag>> from = [ obj to call-recursive-substitute-recursive-call ] [ obj ] if ;
 
 ! ** Class algebra
 
@@ -166,19 +180,19 @@ M:: CallRecursive substitute-recursive-call ( from to obj -- obj )
 
 ! ** Completeness
 
-GENERIC: unresolved-recursive? ( allowed type -- ? )
-M: Effect unresolved-recursive?
-    preds>> [ unresolved-recursive? ] with map-find drop ;
-M: object unresolved-recursive? 2drop f ;
-M: CallRecursive unresolved-recursive? tag>>
-    2dup = [ 2drop f ] [ nip ] if ;
-M: CallXorEffect unresolved-recursive?
-    "should not be checked in this form!" throw ;
-M: Xor unresolved-recursive?
-    { [ type1>> unresolved-recursive? ]
-      [ type2>> unresolved-recursive? ]
-    } 2|| ;
-
+! ! NOTE: doesn't check in instances!
+! GENERIC: unresolved-recursive? ( allowed type -- ? )
+! M: Effect unresolved-recursive?
+!     preds>> [ unresolved-recursive? ] with map-find drop ;
+! M: object unresolved-recursive? 2drop f ;
+! M: CallRecursive unresolved-recursive? tag>>
+!     2dup = [ 2drop f ] [ nip ] if ;
+! M: CallXorEffect unresolved-recursive?
+!     "should not be checked in this form!" throw ;
+! M: Xor unresolved-recursive?
+!     { [ type1>> unresolved-recursive? ]
+!       [ type2>> unresolved-recursive? ]
+!     } 2|| ;
 
 GENERIC: recursive-tags* ( x -- )
 M: object recursive-tags* drop ;
@@ -187,14 +201,14 @@ M: Xor recursive-tags*
     [ type1>> recursive-tags* ] [ type2>> recursive-tags* ] bi ;
 M: CallRecursive recursive-tags* tag>> , ;
 M: Instance recursive-tags* type>> recursive-tags* ;
-M: CallXorEffect recursive-tags* "dont look for unresolved effect recursives" throw ;
+M: CallXorEffect recursive-tags* "Don't look for unresolved effect recursives!" throw ;
+M: ApplyEffect recursive-tags* effect>> recursive-tags* ;
 
 : recursive-tags ( obj -- seq )
     [ recursive-tags* ] { } make members [ f ] when-empty ;
 
-: single-recursive? ( word type -- ? )
-    recursive-tags { [ nip length 1 = ] [ first = ] } 2&&
-    ;
+: singly-recursive? ( word type -- ? )
+    [ 1array ] [ recursive-tags ] bi* set= ;
 
 GENERIC: canonical? ( x -- ? )
 M: term-var canonical? drop f ;
@@ -204,7 +218,9 @@ M: CallRecursive canonical? drop f ;
 M: Xor canonical?
     [ type1>> ] [ type2>> ] bi [ canonical? ] both? ;
 M: CallXorEffect canonical? "xor calls should be resolved here" throw ;
-! Those are not body preds, but used when prepping
+M: effect-instance canonical? type>> canonical? ;
+    ! Those are not body preds, but used when prepping
+M: ApplyEffect canonical? effect>> canonical? ;
 M: Invalid canonical? drop t ;
 M: Ensure canonical? drop t ;
 

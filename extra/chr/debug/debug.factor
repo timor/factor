@@ -310,6 +310,7 @@ PRIVATE>
       maybe-update-ground-values
       check-recursive-terms
       create-chr
+      isomorphic?
     } append
     [ add-timing ] each ;
 

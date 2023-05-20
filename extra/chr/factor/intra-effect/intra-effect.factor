@@ -53,12 +53,13 @@ CHR: declared-predicate-class @ // { DeclaredInstance ?x A{ ?tau } } -- [ ?tau p
 [ ?tau make-instance-check :>> ?q ]
 |
 { ?DeferTypeOf ?q ?sig }
-{ ApplyEffect ?sig L{ ?x . ?b } L{ ?c . ?b } }
+! NOTE: not using applyeffect here as this will not be correctly carried over
+! { ApplyEffect ?sig L{ ?x . ?b } L{ ?c . ?b } }
 ! NOTE: need to keep this alive in this context to make sure this will get evaluated!
 ! Nope, not working, as this will not survive a re-inference due to deferred xor-calls
 ! { Live { ?b } }
-! { Instance ?p ?sig }
-! { CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
+{ Instance ?p ?sig }
+{ CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
 { Instance ?c W{ t } }
 { DeclaredInstance ?x ?rho } ;
 
@@ -68,9 +69,9 @@ CHR: declared-not-predicate-class @ // { DeclaredNotInstance ?x A{ ?tau } } -- [
 |
 { Instance ?x ?rho }
 { ?DeferTypeOf ?q ?sig }
-{ ApplyEffect ?sig L{ ?x . ?b } L{ ?c . ?b } }
-! { Instance ?p ?sig }
-! { CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
+! { ApplyEffect ?sig L{ ?x . ?b } L{ ?c . ?b } }
+{ Instance ?p ?sig }
+{ CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
 { Instance ?c W{ f } } ;
 
 CHR: normalize-known-not-declaration @ // { DeclaredNotInstance ?x A{ ?tau } } -- [ { ?tau } first classoid? ]
@@ -330,6 +331,8 @@ CHR: phi-call-rec-self @ { PhiSchedule ?w __ __ } //
 ! CHR: disj-param-maybe-callable @ <={ MakeEffect } { Params ?l } // { Instance ?x A{ ?tau } } --
 ! [ ?x ?l in? ] [ { ?tau } first classoid? ] [ { ?tau } first callable classes-intersect? ] | { Invalid } ;
 
+! CHR: disj-apply-unknown-effect @ <={ MakeEffect } // { ApplyEffect M{ ?tau } __ __ } -- | { Invalid } ;
+
 ! TODO: need?
 CHR: disj-is-macro-effect @ <={ MakeEffect } // { MacroExpand __ __ __ __ } -- | { Invalid } ;
 
@@ -565,6 +568,9 @@ CHR: apply-regular-effect @ // { ApplyEffect ?x ?i ?o } -- [ ?x Effect? ]
 CHR: defer-apply-xor-effect @ // { ApplyEffect ?x ?i ?o } -- [ ?x Xor? ] |
 { CallXorEffect ?x ?i ?o } ;
 
+CHR: apply-effect-not-known @ // { ApplyEffect M{ ?rho } ?i ?o } -- | [ "applying unknown effect" throw ] ;
+
+
 ! NOTE: These only meet in renamed form?
 ! Probably not. [ ... ] [ call ] keep looks fishy...
 ! NOTE: big change: make a fresh effect before every call
@@ -572,7 +578,10 @@ CHR: defer-apply-xor-effect @ // { ApplyEffect ?x ?i ?o } -- [ ?x Xor? ] |
 CHR: call-applies-effect @ { Instance ?q ?x } // { CallEffect ?q ?a ?b } -- [ ?x valid-effect-type? ] |
 { ApplyEffect ?x ?a ?b } ;
 
-CHR: literal-call-type-must-be-known @ // { CallEffect ?q __ __ } { Eq ?q A{ ?p } } -- | [ { ?p "literal-effect-unknown" } throw ] ;
+! NOTE: this does not work right now mid-effect because of sequencing the body.
+CHR: literal-call-type-must-be-known @ <={ FinishEffect } // { CallEffect ?q __ __ } { Eq ?q A{ ?p } } --
+! { Instance ?q ?rho } -- [ ?rho valid-effect-type? not ]
+| [ { ?p "literal-effect-unknown" } throw ] ;
 
 ! non-copying
 ! CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } // { CallEffect ?q ?a ?b } -- |

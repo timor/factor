@@ -398,6 +398,8 @@ M: term-var occurs? eq? ;
 M: sequence occurs? [ occurs? ] with any? ;
 M: tuple occurs? tuple-slots occurs? ;
 
+! The whole idea of matching structure kind of conflicts with matching pointer
+! values...
 ERROR: rebuilds-identity-tuple term ;
 M: identity-tuple subst rebuilds-identity-tuple ;
 

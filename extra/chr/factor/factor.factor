@@ -353,7 +353,8 @@ UNION: body-pred val-pred CallEffect CallXorEffect Declare CallRecursive Throws
     MacroExpand
     Iterated
     LoopVar GenericDispatch <==> MathCall PrimCall Counter
-    ! ref-pred
+    ! ! Taking this into account because of generics reinference right now.
+    ! ApplyEffect
     ;
 
 TUPLE: CheckPhiStack a b res ;
@@ -431,6 +432,7 @@ M: CallUnknown free-effect-vars thing>> free-effect-vars ;
 !     [ then>> ] [ else>> ] bi
 !     [ free-effect-vars ] bi@ union ;
 ! We expect an expanded macro to have properly substituted type vars
+! M: ApplyEffect free-effect-vars effect>> free-effect-vars ;
 
 GENERIC: bound-effect-vars ( term -- seq )
 M: object bound-effect-vars drop f ;
@@ -467,8 +469,8 @@ GENERIC: defines-vars ( pred -- vars )
 ! TODO: Ideally, this should only be needed for expansions where not all outputs
 ! are known to be used anymore...
 GENERIC: intersects-live-vars ( pred -- vars )
-! HACK Do this for sums for now to fix loop tests
-M: Sum intersects-live-vars vars ;
+! HACK Do this for sums and products for now to fix tests
+M: binop intersects-live-vars vars ;
 M: object intersects-live-vars drop f ;
 M: chr-pred live-vars vars ;
 M: object defines-vars drop f ;

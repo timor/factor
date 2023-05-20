@@ -1,13 +1,18 @@
 USING: accessors arrays assocs chr.factor chr.factor.effects
 chr.factor.intra-effect chr.factor.intra-effect.primitives chr.factor.phi
-chr.factor.util chr.factor.word-types chr.parser chr.state generic kernel
-quotations sequences sets terms words ;
+chr.factor.util chr.factor.word-types chr.parser chr.state
+combinators.short-circuit generic kernel quotations sequences sets terms words ;
 
 IN: chr.factor.composition
 
 
 ! * CHR Program for Composition solving
 CHRAT: chr-comp { }
+
+! ** Safety Checks
+! TODO remove once not needed safety check
+UNION: context-tag PhiDone PhiMode FinishEffect MakeEffect ;
+CHR: catch-top-level-tag @ // <={ context-tag } -- [ get-context not ] | [ "pred not allowed in toplevel context" throw ] ;
 
 ! ** Debug Helpers
 ! CHR: print-ask-type @ { ?TypeOf ?q ?tau } // -- |
@@ -34,8 +39,11 @@ CHR: no-nested-type-queries @ // { ?TypeOf ?x ?tau } -- [ get-context ] | [ "Typ
 
 CHR: unique-type @ { TypeOf ?x ?tau } // { TypeOf ?x ?tau } -- | ;
 
+: final-type? ( x -- ? ) { [ full-type? ] [ canonical? ] } 1&& ;
+
 ERROR: conflicting-type-defs thing existing new ;
-CHR: conflicting-type @ // { TypeOf ?x ?tau } { TypeOf ?x ?sig } -- |
+CHR: conflicting-type @ // { TypeOf ?x ?tau } { TypeOf ?x ?sig } --
+[ ?tau full-type? ] [ ?sig full-type? ] |
 [ ?x ?tau ?sig conflicting-type-defs ] ;
 
 ! FIXME TBR?
@@ -60,10 +68,25 @@ CHR: request-same-deferred-type @ { ?DeferTypeOf ?x ?sig } // { ?DeferTypeOf ?x 
 ! BUT: Do we even have the macro type available already (in case of macros)
 
 ! TODO: maybe remove answers that are non-canonical?
+! Trying that...
+! 3x benchmark [ lastfoo5-list ] tqt
+! without rule: 6508 preds 13.2 - 14.9 sec
+
+! with rule: 6629 preds 12.5 - 14.4 sec
+! This rule or the aggressive one below is needed for recursion induced over proper quotations
+CHR: answer-incomplete-type @ // { TypeOf ?x ?tau } { ?TypeOf ?x ?sig } --
+[ ?tau full-type? ] [ ?tau canonical? not ] | [ ?sig ?tau ==! ] ;
+
 CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } --
 [ ?tau full-type? ] |
 ! [ "Answer Type: " write ?x . f ]
 [ ?sig ?tau ==! ] ;
+
+! ! ! NOTE: approach too aggressive?
+! CHR: remove-cached-non-canonical-type @ // { TypeOf ?x ?tau } --
+! [ ?tau full-type? ] [ ?tau canonical? not ] | ;
+
+
 
 ! These are used when recursive calls are made to some special words (length etc.) for which we have special
 ! predicates
@@ -73,18 +96,15 @@ CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } --
 ! [ ?sig ?e ==! ] ;
 
 ! Generics will never get a recursive type, methods might, though
-CHR: recursive-generic-inference @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
-[ ?x generic? ] |
-{ MakeGenericDispatch ?x P{ Effect ?a ?b f f } ?sig } ;
+! CHR: recursive-generic-inference @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
+! [ ?x generic? ] |
+! { MakeGenericDispatch ?x P{ Effect ?a ?b f f } ?sig } ;
 
 ! This is where a recursion predicate is inserted
 ! FIXME: for mutual recursion, this is probably not enough?
 CHR: double-word-inference @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
 [ ?x callable-word? ] |
 [ ?sig P{ Effect ?a ?b f { P{ CallRecursive ?x ?a ?b } } } ==! ] ;
-! { CallSite ?x ?r }
-! [ ?sig P{ Effect ?a ?b f { P{ CallUnknown ?r ?a ?b } } } ==! ] ;
-! [ ?sig P{ Effect ?a ?b { ?r } { { P{ EnterRecursive ?x ?a ?r } P{ CallRecursive ?x ?r ?b } } } } ==! ] ;
 
 ! FIXME: This doesn't seem to work correctly...
 ! CHR: double-inference-queue @ { ?TypeOf ?x ?tau } { ?TypeOf ?x ?sig } // -- [ ?tau term-var? ] [ ?sig term-var? ] |
@@ -94,7 +114,7 @@ CHR: double-word-inference @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } 
 ! Should then stop when arriving at a word, where the recursion is then broken.
 CHR: double-inference-queue @ // { ?TypeOf ?x ?tau } { ?TypeOf ?x ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ] |
 ! CHR: double-inference-queue @ { ?TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ] |
-[ "tbr" throw ]
+! [ "tbr" throw ]
 [ ?sig ?tau ==! ]
 ! ;
 { ?TypeOf ?x ?tau } ;
@@ -102,12 +122,14 @@ CHR: double-inference-queue @ // { ?TypeOf ?x ?tau } { ?TypeOf ?x ?sig } -- [ ?t
 
 
 ! ** Recursion resolution
+! Currently relying on eager progress to resolve to at least one singly recursive body.
+! That does not seem to be enough for complex-enough cases involving recursing trough quotations.
+! Trying to resolve these cases once known.  Question is whether that would subsume the existing approach?
+
 ! CHR: have-fixpoint-type @ { FixpointTypeOf ?w ?rho } // { FixpointTypeOf ?w ?tau } -- | [ ?rho ?tau ==! ] ;
 CHR: duplicate-call-edges @ // { CallsRecursive ?w ?rho } { CallsRecursive ?w ?tau } -- | [ "duplicate call edge" throw ] ;
 CHR: compute-call-edges @ { TypeOfWord ?w ?rho } // -- [ ?rho full-type? ] [ ?rho recursive-tags :>> ?t ] |
 { CallsRecursive ?w ?t } ;
-
-
 
 CHR: resolved-all-recursions @ // { TypeOfWord ?w ?rho } { CallsRecursive ?w { } } --
 [ ?rho full-type? ] |
@@ -116,107 +138,46 @@ CHR: resolved-all-recursions @ // { TypeOfWord ?w ?rho } { CallsRecursive ?w { }
 [ ?tau f lift canonical? [ { ?tau "assumed non-recursive not canonical after resolution!" } throw ] unless f ]
 { TypeOfWord ?w ?tau } ;
 
+! ! NOTE: this is probably not needed if the other version is used
+! ! VER1
+! CHR: incomplete-mutrec-word-typequery @ { TypeOfWord ?w ?rho } // { ?TypeOf [ ?w ] ?tau } --
+! [ ?rho full-type? ]
+! [ ?w ?rho recursive-tags remove [ f ] when-empty ] |
+! [ ?tau P{ Effect ?a ?b f { P{ CallRecursive ?w ?a ?b } } } ==! ] ;
+! ! [ ?w null ?rho substitute-recursive-call :>> ?sig ]
+! ! | [ ?tau ?sig ==! ] ;
 
 ! NOTE: Explicitly instantiating the base case in parallel here, otherwise it will not be
 ! kept as alternative!
 CHR: resolve-single-recursion @ // { TypeOfWord ?w ?rho } { CallsRecursive ?w { ?w } } -- [ ?rho full-type? ]
-! [ ?w ?rho single-recursive? ]
 | { CheckFixpoint ?w ?rho }
-! { ReinferEffect P{ Effect ?a ?b f { P{ CallRecursive ?w ?a ?b } } } ?sig }
-! { FixpointTypeOf ?w ?z }
-! { CheckXor ?w P{ Xor ?z ?sig } ?tau }
 { ReinferEffect ?rho ?sig }
 { CheckXor ?w ?sig ?tau }
 [ ?tau f lift canonical? [ { ?tau "single recursive not canonical after resolution!" } throw ] unless f ]
 { TypeOfWord ?w ?tau } ;
 
+! Version where we preclude a recursion to ourselves when providing as partial type
+! VER2
+CHR: have-incomplete-mutrec-word-typequery @ { TypeOfWord ?w ?rho } // { ?TypeOf [ ?w ] ?tau } --
+[ ?rho full-type? ]
+[ ?w ?rho recursive-tags remove [ f ] when-empty ]
+[ ?w null ?rho substitute-recursive-call :>> ?sig ]
+| [ ?tau ?sig ==! ] ;
 
-! ! TODO: try out the version where we remove this thing?
-! CHR: have-incomplete-mutrec-word-type @ { TypeOfWord ?w ?rho } // { ?TypeOf [ ?w ] ?tau } --
-! [ ?rho full-type? ] [ ?w ?rho recursive-tags remove :>> ?t ] |
-! { CallsRecursive ?w ?t }
-! [ ?tau ?rho ==! ] ;
-! ! [ ?tau P{ Effect ?a ?b f { P{ CallRecursive ?w ?a ?b } } } ==! ] ;
-
-! TODO: try out the version where we remove this thing?
-! Version where we preclude a recursion to ourself when providing as partial type
-CHR: have-incomplete-mutrec-word-type @ { TypeOfWord ?w ?rho } // { ?TypeOf [ ?w ] ?tau } --
-[ ?rho full-type? ] [ ?w ?rho recursive-tags remove :>> ?t ]
-[ ?w P{ Invalid } ?rho substitute-recursive-call :>> ?sig ]
-|
-! { CallsRecursive ?w ?t }
-! [ ?tau ?rho ==! ] ;
-[ ?tau ?sig ==! ] ;
-! [ ?tau P{ Effect ?a ?b f { P{ CallRecursive ?w ?a ?b } } } ==! ] ;
-
-! TODO remove once not needed safety check
-UNION: context-tag PhiDone PhiMode FinishEffect MakeEffect ;
-CHR: catch-top-level-tag @ // <={ context-tag } -- [ get-context not ] | [ "pred not allowed in toplevel context" throw ] ;
-
-! CHR: resolved-mutual-recursion @ // { TypeOfWord ?w ?rho } { CallsRecursive ?w { } } --
-! [ ?rho full-type? ] |
-! { ReinferEffect ?rho ?sig }
-! { CheckXor ?w ?sig ?tau }
-! [ ?tau f lift canonical? [ { ?tau "mut rec not canonical after resolution!" } throw ] unless f ]
-! { TypeOfWord ?w ?tau } ;
-
-! CHR: intermediate-mutrec-type @ { TypeOfWord ?w ?rho } { CallsRecursive ?w ?k } // { CallsRecursive ?v ?l }
-! { TypeOfWord ?v ?sig } -- [ ?rho full-type? ] [ ?sig full-type? ]
-! [ ?v ?k in? ] [ ?w ?l in? ]
-! [ ?w ?l remove :>> ?m ]
-! ! That extra check is needed to prevent runaway
-! ! [ ?w ?sig recursive-tags in? ]
-! [ ?w name>> ?v name>> "-sans-" glue <uninterned-word> :>> ?x ]
-! [ ?w ?x ?sig substitute-recursive-call :>> ?tau ]
-! [ ?w ?x ?rho substitute-recursive-call
-!   [ ?v null ] dip substitute-recursive-call :>> ?z ]
-! | { TypeOfWord ?v ?tau } { CallsRecursive ?v ?m }
-! { TypeOfWord ?x ?z } ;
-
-! ! ?v/?sig: Calling word
-! ! ?w/?rho: Called word
-! CHR: intermediate-mutrec-type @ { TypeOfWord ?w ?rho } { CallsRecursive ?w ?k } // { CallsRecursive ?v ?l }
-! { TypeOfWord ?v ?sig } -- [ ?rho full-type? ] [ ?sig full-type? ]
-! [ ?v ?k in? ] [ ?w ?l in? ]
-! [ ?w ?l remove :>> ?m ]
-! ! That extra check is needed to prevent runaway
-! ! [ ?w ?sig recursive-tags in? ]
-! [ ?w name>> dup "-sans-" glue <uninterned-word> :>> ?x ]
-! [ ?w ?x ?sig substitute-recursive-call :>> ?tau ]
-! [ ?w ?x ?rho substitute-recursive-call
-!   [ ?w P{ Invalid } ] dip substitute-recursive-call :>> ?z ]
-! | { TypeOfWord ?v ?tau } { CallsRecursive ?v ?m }
-! { TypeOfWord ?x ?z } ;
+! FIXME: possibly only works in conjunction with the above when removing typeofword pred there?
+! We seem to at least need a call-recursive injection, too.  It looks like the rule above could actually be an
+! optimization here!  Also, without chaining rules we will not find longer recursion chains correctly.
+CHR: expand-incomple-mutrec-word @ { TypeOfWord ?w ?rho } { CallsRecursive ?w ?k } // { TypeOfWord ?v ?sig } { CallsRecursive ?v ?l } --
+[ ?rho full-type? ] [ ?sig full-type? ] [ ?w ?l in? ] [ ?v ?k in? ]
+[ ?w null ?rho substitute-recursive-call :>> ?tau ]
+[ ?w ?tau ?sig substitute-recursive-call :>> ?z ] |
+{ ReinferEffect ?z ?y }
+{ CheckXor ?v ?y ?x }
+{ TypeOfWord ?v ?x } ;
 
 CHR: elim-mutual-recursion-dependency @ { TypeOfWord ?v ?rho } { TypeOfWord ?w ?sig } // { CallsRecursive ?w ?l } --
 [ ?rho full-type? ] [ ?rho canonical? ] [ ?v ?l in? ] [ ?v ?l remove :>> ?k ] |
 { CallsRecursive ?w ?k } ;
-
-
-
-! orig
-! CHR: check-word-fixpoint-type @ { TypeOfWord ?w ?rho } // -- [ ?rho full-type? ] |
-! { CheckFixpoint ?w ?rho } ;
-
-! NOTE: Rebuilding an annotated effect here.  This could still be not correct because there are cached
-! types of quotations that have been inferred for the recursive word itself, which don't appear in a wrapped
-! context?
-! TODO maybe instantiate the tag? Probably not needed.
-! NOTE: relying on known effect for the fixpoint type for now to derive the stack effect, which is not ideal
-! CHR: have-type-of-recursive-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho }
-! { FixpointTypeOf ?w P{ Effect ?r ?s ?l ?p } }
-! { RecursionTypeOf ?w ?tau } // --
-! [ ?rho full-type? ]
-! [ ?tau full-type? ]
-! [ ?w 1quotation :>> ?q ] |
-! [ ?r fresh ?a ==! ]
-! [ ?s fresh ?b ==! ]
-! { ReinferEffect P{ Effect ?a ?b f { P{ CallRecursive ?w ?a ?b } } } ?y }
-! { CheckXor ?w P{ Xor
-!                  ?y
-!                  P{ Effect ?r ?s ?l ?p } }
-!   ?z }
-! { TypeOf ?q ?z } ;
 
 ! ** Call types from word types
 
@@ -299,6 +260,12 @@ CHR: compose-xor-effects-both @ // { ComposeType P{ Xor ?a ?b } P{ Xor ?c ?d } ?
 
 : qt ( quot -- res )
     InferType boa 1array chr-comp swap [ run-chr-query store>> ] with-var-names ;
+
+! helper, really
+: pick-type ( solution word -- type )
+    swap values [ TypeOf? ] filter
+    [ key>> = ] with find nip
+    dup [ type>> ] when ;
 
 GENERIC: get-type ( quot -- type )
 

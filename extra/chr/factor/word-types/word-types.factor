@@ -25,7 +25,6 @@ IN: chr.factor.word-types
         { dupd [ [ dup ] dip ] }
         { -rot [ swap [ swap ] dip ] }
         { if [ ? call ] }
-        { loop [ [ call ] keep swap [ loop ] [ drop ] if ] }
         { pick [ [ over ] dip swap ] }
         { > [ swap < ] }
         ! This is tricky.  The first version does not work if we only consider input/output deciders during phi checking,

@@ -194,49 +194,21 @@ CHR: rebuild-phi-collect-branch @ { PhiSchedule ?q +nil+ ?tau } // { RebuildXor 
 CHR: rebuild-phi-finished @ // { PhiSchedule ?q +nil+ ?tau } { RebuildXor ?a ?tau } -- |
 [ ?tau ?a ==! ] ;
 
+ERROR: no-recursive-fixpoint type ;
+
 ! *** Build Fixpoint type
 ! Either no recursive branches, or unresolved recursive calls
 CHR: no-check-fixpoint @ // { CheckFixpoint ?w ?rho } -- [ ?rho ?w recursive-branches? not ] | ;
 ! CHR: no-check-fixpoint-unresolved @ // { CheckFixpoint ?w ?rho } -- [ ?w ?rho unresolved-recursive? ] | ;
-! FIXME: clean up those checks in the body
 CHR: do-check-fixpoint @ // { CheckFixpoint ?w ?rho } -- [ ?rho ?w terminating-branches :>> ?l drop t ]
 [ ?rho ?w recursive-branches :>> ?k drop t ]
 [ ?l >list :>> ?m ]
 [ ?k >list :>> ?n ]
 |
-[ ?l empty? [ "could not prove that effect can terminate" throw ] when f ]
+[ ?l empty? [ ?rho no-recursive-fixpoint ] when f ]
 [ "fixtype" [ P{ PhiSchedule ?w ?m ?tau } ] new-context ]
 [ "rectype" [ P{ PhiSchedule ?w ?n ?sig } ] new-context ]
 { FixpointTypeOf ?w ?tau }
-{ RecursionTypeOf ?w ?sig }
-! [| |
-!     ?l >list :> fp-phis
-!     ?k >list :> rec-phis
-!         {
-!             ! NOTE: not forcing this to fixpoint mode, because that prevents some useful fixpoints
-!             ! from being calculated when done incorrectly.
-!             ! 1. Either force fixpoint calculation
-!             ! 2. Or deal with Xor Fixpoint types correctly, e.g. by assuming different loop types on
-!             ! different loop exits.
-!             ! The correct version is probably to infer a recursive version for every base case?
-!             ! P{ FixpointMode }
-!             P{ PhiSchedule ?w fp-phis ?tau }
-!             P{ FixpointTypeOf ?w ?tau }
-!         }
-!     ] if-empty
-!     ?k [ f ] [
-!         ! [ ?w swap filter-recursive-call ] map
-!         >list :> rec-phis
-!         {
-!             P{ PhiSchedule ?w rec-phis ?sig }
-!             P{ RecursionTypeOf ?w ?sig }
-!         }
-!     ] if-empty append ]
-! ! Generate recursive call type
-! ! { ReinferEffect ?sig ?y }
-! ! { CheckXor ?w ?y ?z }
-! ! ! TODO: maybe make check rule that this one may not contain callrecursives anymore!
-! ! { RecursiveCallTypeOf ?w ?z } ;
-;
+{ RecursionTypeOf ?w ?sig } ;
 
 ;

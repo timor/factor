@@ -1,7 +1,7 @@
 USING: accessors arrays assocs chr.factor.composition chr.parser chr.state
 chr.test combinators.short-circuit kernel kernel.private lists literals math
 math.private classes sequences.private
-chr.factor.util layouts
+chr.factor.util layouts grouping chr.factor.phi
 quotations sequences slots.private terms tools.test typed types.util words
 chr.factor chr.factor.word-types chr.factor.effects chr combinators ;
 
@@ -128,17 +128,19 @@ P{ Effect L{ ?a ?b . ?z } L{ ?b ?a . ?z } f { P{ Instance ?a object }
                                                 P{ Instance ?b object } } }
 [ [ swap swap swap ] get-type ] chr-test
 
-P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } f { P{ Instance ?x number } P{ Instance ?y number } P{ Instance ?z number } P{ Sum ?z ?x ?y } } }
+P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } f { P{ Instance ?x number } P{ Instance ?y number } P{ Instance ?z number } P{ Sum ?z ?x ?y } } }
 [ [ + ] get-type ] chr-test
 
 { t }
-[ [ [ ? ] ] get-type [ [ [ ? ] ] (call) ] get-type isomorphic? ] unit-test
+[ [ [ ? ] ] [ [ [ ? ] ] (call) ] same-type? ] unit-test
 
 { t }
-[ [ [ if ] ] get-type [ [ [ if ] ] (call) ] get-type isomorphic? ] unit-test
+[ [ [ if ] ] [ [ [ if ] ] (call) ] same-type? ] unit-test
 
-{ t }
-[ [ [ [ if ] ] ] get-type [ [ [ [ if ] ] ] (call) ] get-type isomorphic? ] unit-test
+! FIXME: This one freaks out the isomorphism checker?
+! { t }
+! [ [ [ [ if ] ] ]  [ [ [ [ if ] ] ] (call) ] same-type? ] unit-test
+! [ [ [ [ if ] ] ]  [ [ [ [ if ] ] ] (call) ] [ get-type ] bi@ [ effect>nterm ] bi@ isomorphic? ] unit-test
 
 ! NOTE: This is interesting: because we have [ ? ] as basis, we don't enforce
 ! that the non-taken branch quotation is actually a quotation!
@@ -231,11 +233,19 @@ P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x bignum } P{ Instance ?y f
                                       } }
 [ [ bignum>fixnum ] get-type ] chr-test
 
-{  } [ [ \ swap dup ] get-type ] chr-test
+P{ Effect ?a L{ ?x3 ?x3 . ?a } f { P{ Instance ?x3 word } P{ Eq ?x3 swap } } }
+[ [ \ swap dup ] get-type ] chr-test
 
 TUPLE: footuple barslot ;
-{  } [ [ barslot>> ] get-type ] chr-test
-{  } [ [ barslot>> barslot>> ] get-type ] chr-test
+P{ Effect L{ ?x . ?a } L{ ?y . ?a } f
+   { P{ Instance ?y object } P{ Instance ?x footuple } P{ Slot ?x "barslot" ?y } }
+} [ [ barslot>> ] get-type ] chr-test
+
+! FIXME
+P{ Effect L{ ?x . ?a } L{ ?z . ?a } f
+   { P{ Instance ?y footuple } P{ Instance ?x footuple } P{ Slot ?x "barslot" ?y }
+     P{ P{ Slot ?y "barslot" ?z } } }
+} [ [ barslot>> barslot>> ] get-type ] chr-test
 
 ! ** Sums and Parameters
 { 1 2 3 4 5 }
@@ -312,7 +322,7 @@ P{
 [ \ manual-dispatch get-type ] chr-test
 
 
-{ t } [ \ auto-dispatch get-type \ manual-dispatch get-type isomorphic? ] unit-test
+{ t } [ \ auto-dispatch \ manual-dispatch same-type? ] unit-test
 
 
 GENERIC: default-dispatch ( obj -- res )
@@ -326,60 +336,145 @@ P{
 }
 [ \ default-dispatch get-type ] chr-test
 
-
-! ** Nested loop inference
-: inner-loop ( x -- y ) dup 0 > [ 1 - inner-loop ] when ;
-: outer-loop ( x -- y ) dup inner-loop drop dup 0 > [ 1 - outer-loop ] when ;
-
-! ** Mutually recursive definitions
-
-! : nop ( -- ) ;
-GENERIC: mylastcdr ( list -- obj )
-M: list mylastcdr
-
-    ! RES3 needed for [ mylastcdr ]
-    ! not working with [ [ mylastcdr ] ] (neither RES1,2,3 cause progress)
-    ! RES2 needed for [ [ mylastcdr ] (call) ]
-    ! cdr>> [ mylastcdr ] (call) ;
-
-    ! HA! This works with RES2!
-    ! cdr>> [ nop mylastcdr ] (call) ;
-
-    ! nop cdr>> [ mylastcdr ] (call) ;
-
-    ! cdr>> nop [ mylastcdr ] (call) ;
-
-
-    cdr>> [ [ mylastcdr ] ] (call) (call) ; ! Doesnt work so well...
-
-    ! RES3 needed for [ mylastcdr ]
-    ! RES1 needed for [ [ mylastcdr ] ]
-    ! RES3 needed for [ [ mylastcdr ] (call) ]
-    ! RES2 needed for [ [ [ mylastcdr ] (call) ] (call) ]
-    ! RES1 needed for [ [ [ mylastcdr ] ] (call) (call) ]
-    ! cdr>> [ [ mylastcdr ] (call) ] (call) ; ! Works well
-
-    ! seems to work with all combinations...
-    ! cdr>> mylastcdr ;
-
-M: +nil+ mylastcdr ;
-! M: object mylastcdr ;
-! M: array mylastcdr 2 slot [ mylastcdr ] (call) ;
-! M: array mylastcdr array-first mylastcdr ;
-M: array mylastcdr array-first [ [ mylastcdr ] ] (call) (call) ;
-! M: array mylastcdr array-first [ [ mylastcdr ] (call) ] (call) ;
-
-! Needs make-unit recursion resolution in some form...
+! ** Single recursion
 : myloop ( -- ) [ call ] keep swap [ myloop ] [ drop ] if ; inline recursive
 
 { t } [ [ myloop ] get-type dup [ full-type? ] when ] unit-test
 
 ! :)
-{ t }
-[ [ myloop ] [ loop ] same-type? ] unit-test
+! FIXME works but extremely slow isomorphism test
+! :(
+! { t }
+! [ [ myloop ] [ loop ] same-type? ] unit-test
+
+P{ Effect ?a ?b f { P{ Invalid } } } [ [ [ t ] loop ] get-type ] chr-test
+P{ Effect ?a ?b f { P{ Invalid } } } [ [ [ t ] myloop ] get-type ] chr-test
+
+! FIXME: this must be the same as inner-loop.  It is, but canonical pred bodies aren't fixed yet
+{  } [ [ [ dup 0 > [ 1 - t ] [ f ] if ] loop ] get-type ] chr-test
+
+: indirect-loop ( x -- y ) dup 0 > [ 1 - [ indirect-loop ] call ] when ;
+
+! FIXME: better test?
+{ t } [ [ [ indirect-loop ] call ] get-type canonical? ] unit-test
+
+
+! ** Nested loop inference
+: inner-loop ( x -- y ) dup 0 > [ 1 - inner-loop ] when ;
+: outer-loop ( x -- y ) dup inner-loop drop dup 0 > [ 1 - outer-loop ] when ;
+
+{ t } [ [ inner-loop ] get-type canonical? ] unit-test
+
+{ t } [ [ inner-loop ] [ outer-loop ] same-type? ] unit-test
+
+! ** Mutually recursive definitions
+
+: chr-error ( quot -- quot )
+    '[ dup chr-inference-error? [ error>> @ ] [ drop f ] if ] ;
+
+! Must fail
+DEFER: pong
+: ping ( x -- x ) pong ;
+: pong ( x -- x ) ping ;
+
+[ [ ping ] get-type ] [ no-recursive-fixpoint? ] chr-error must-fail-with
+
+
+! TODO Must infer as same type
+DEFER: peng
+: pang ( x -- x ) peng ;
+: peng ( x -- x ) dup 0 > [ 1 - pang ] when ;
+
+
+! Must fail
+DEFER: ipong
+: iping ( x -- x ) [ ipong ] call ;
+: ipong ( x -- x ) [ iping ] call ;
+
+[ [ iping ] get-type ] [ no-recursive-fixpoint? ] chr-error must-fail-with
+[ [ [ iping ] call ] get-type ] [ no-recursive-fixpoint? ] chr-error must-fail-with
+
+
+! Must infer as same type
+DEFER: ipeng
+: ipang ( x -- x ) [ [ ipeng ] call ] call ;
+: ipeng ( x -- x ) dup 0 > [ 1 - [ ipang ] call ] when ;
+
+{ t } [ [ ipang ] [ ipeng ] same-type? ] unit-test
+
+
+! TODO: test more subtle cases of non-termination
+
+GENERIC: lastfail1 ( x -- x )
+M: array lastfail1 array-first lastfail1 ;
+
+[ [ lastfail1 ] get-type ] [ no-recursive-fixpoint? ] chr-error must-fail-with
+[ M\ array lastfail1 get-type ] [ no-recursive-fixpoint? ] chr-error must-fail-with
+
+GENERIC: lastfail2 ( x -- x )
+M: array lastfail2 array-first lastfail2 ;
+M: list lastfail2 cdr>> lastfail2 ;
+
+[ [ lastfail2 ] get-type ] [ no-recursive-fixpoint? ] chr-error must-fail-with
+[ M\ array lastfail2 get-type ] [ no-recursive-fixpoint? ] chr-error must-fail-with
+[ M\ list lastfail2 get-type ] [ no-recursive-fixpoint? ] chr-error must-fail-with
+
+! FIXME progress!
+GENERIC: nonlastfail3 ( x -- x )
+M: array nonlastfail3 array-first [ nonlastfail3 ] call ;
+M: list nonlastfail3 cdr>> [ [ nonlastfail3 ] call ] call ;
+M: +nil+ nonlastfail3 ;
+
+! FIXME: better test
+{ t } [ [ nonlastfail3 ] get-type canonical? ] unit-test
+
+! Similar to above but explicit
+DEFER: ind3-dispatch
+DEFER: ind3-array
+: ind3-nil ( x -- x ) { L{  } } declare ;
+! : ind3-list ( x -- x ) { list } declare cdr>> ind3-dispatch ;
+! : ind3-array ( x -- x ) { array } declare array-first ind3-dispatch ;
+: ind3-list ( x -- x ) { list } declare cdr>> dup +nil+? [ ind3-nil ] [ dup list? [ ind3-list ] [ dup array? [ ind3-array ] [ "nope" throw ] if ] if ] if ;
+: ind3-array ( x -- x ) { array } declare array-first dup +nil+? [ ind3-nil ] [ dup list? [ ind3-list ] [ dup array? [ ind3-array ] [ "nope" throw ] if ] if ] if ;
+
+! : ind3-dispatch ( x -- x )
+!     dup +nil+? [ ind3-nil ]
+!     [ dup list? [ ind3-list ]
+!       [ dup array? [ ind3-array ]
+!         [ "nope" throw ] if
+!       ] if
+!     ] if ;
+
+{ t } [ [ ind3-list ] get-type canonical? ] unit-test
+
+GENERIC: lastfail3 ( x -- x )
+M: array lastfail3 array-first [ lastfail3 ] call ;
+! M: list lastfail3 cdr>> [ [ lastfail3 ] ] call call ;
+! v that one's the evil one!
+M: list lastfail3 cdr>> [ [ lastfail3 ] call ] call ;
+! M: footuple lastfail3 barslot>> [ [ lastfail3 ] call ] call ;
+! M: footuple lastfail3 barslot>> [ [ lastfail3 ] ] call call ;
+
+! FIXME
+[ [ lastfail3 ] get-type ] [ no-recursive-fixpoint? ] chr-error must-fail-with
+[ M\ array lastfail3 get-type ] [ no-recursive-fixpoint? ] chr-error must-fail-with
+[ M\ list lastfail3 get-type ] [ no-recursive-fixpoint? ] chr-error must-fail-with
+! [ M\ footuple lastfail3 get-type ] [ no-recursive-fixpoint? ] must-fail-with
+
+CONSTANT: sol4 P{ Xor
+                  P{ Effect L{ ?x1 . ?a1 } L{ ?x2 . ?a1 } f { P{ Instance ?x2 L{ } } P{ Eq ?x2 L{ } } P{ Instance ?x1 union{ cons-state array } } } }
+                  P{ Effect L{ ?x3 . ?a2 } L{ ?x3 . ?a2 } f { P{ Instance ?x3 L{ } } P{ Eq ?x3 L{ } } } } }
+
+GENERIC: mylastcdr ( list -- obj )
+M: list mylastcdr
+    cdr>> [ [ mylastcdr ] ] (call) (call) ; ! Doesnt work so well...
+M: +nil+ mylastcdr ;
+M: array mylastcdr array-first [ [ mylastcdr ] (call) ] (call) ;
+! M: array mylastcdr array-first [ [ mylastcdr ] (call) ] (call) ;
+
+sol4 [ [ mylastcdr ] get-type ] chr-test
 
 ! Same as lastcdr1, but as single word
-! FIXME: monotonicity propagation into loop input
 : lastfoo1 ( x -- x )
     dup +nil+? [  ]
     [ dup list? [ cdr>> lastfoo1 ] [ "nope" throw ] if
@@ -389,7 +484,10 @@ M: array mylastcdr array-first [ [ mylastcdr ] ] (call) (call) ;
 [ L{ 1 2 3 . 4 } lastfoo1 ] [ "nope" = ] must-fail-with
 [ 42 lastfoo1 ] [ "nope" = ] must-fail-with
 
-{  } [ [ lastfoo1 ] get-type ] chr-test
+P{ Xor
+    P{ Effect L{ ?x1 . ?a1 } L{ ?x2 . ?a1 } f { P{ Instance ?x1 cons-state } P{ Eq ?x2 L{ } } P{ Instance ?x2 L{ } } } }
+    P{ Effect L{ ?x3 . ?a2 } L{ ?x3 . ?a2 } f { P{ Instance ?x3 L{ } } P{ Eq ?x3 L{ } } } }
+ } [ [ lastfoo1 ] get-type ] chr-test
 
 GENERIC: lastcdr1 ( list -- obj )
 M: list lastcdr1 cdr>> lastcdr1 ;
@@ -404,8 +502,7 @@ M: +nil+ lastcdr1 ;
 { t } [ array \ length dispatch-method-seq constrains-methods? ] unit-test
 
 ! This must have the same type when inferred on [ lastcdr1 ] !
-P{ Effect L{ ?x . ?a } L{ ?b . ?a } f
-   { P{ Instance ?x cons-state } P{ Eq ?b L{ } } P{ Instance ?b L{ } } } }
+P{ Effect L{ ?x . ?a } L{ ?b . ?a } f { P{ Instance ?x cons-state } P{ Eq ?b L{ } } P{ Instance ?b L{ } } } }
 [ M\ list lastcdr1 get-type ] chr-test
 
 CONSTANT: sol1
@@ -422,6 +519,9 @@ sol1
 
 { t }
 [ [ lastcdr1 ] [ 1 drop lastcdr1 ] same-type? ] unit-test
+
+{ t } [ [ lastcdr1 ] [ lastfoo1 ] same-type? ] unit-test
+
 
 GENERIC: lastcdr2 ( list -- obj )
 M: list lastcdr2 cdr>> [ lastcdr2 ] (call) ;
@@ -447,28 +547,30 @@ sol1
 : lastfoo4 ( list -- obj )
     dup +nil+? [ ]
     [ dup list? [ cdr>> lastfoo4 ]
-      [ dup array? [ array-first lastfoo4 ]
+      [ dup array? [ array-first [ lastfoo4 ] (call) ]
         [ "nope" throw ] if
       ] if
     ] if ;
 
-! TODO: test above
+sol4 [ [ lastfoo4 ] get-type ] chr-test
+
+! FIXME: maybe reactivate if a bit quicker?
+! { t } [ [ [ lastfoo4 ] ] get-type canonical? ] chr-test
+
+! sol4 [ [ [ lastfoo4 ] (call) ] get-type ] chr-test
 
 GENERIC: lastcdr4 ( list -- obj )
 M: list lastcdr4 cdr>> [ [ lastcdr4 ] ] (call) (call) ;
 M: +nil+ lastcdr4 ;
 M: array lastcdr4 array-first lastcdr4 ;
 
-{ t }
-[ [ lastcdr4 ] get-type dup [ full-type? ] when ] unit-test
+sol4 [ [ lastcdr4 ] get-type ] chr-test
 
-! NOTE: not working if we don't resolve the recursive call outputs eagerly
-! { t }
-! [ [ lastcdr4 dup drop ] get-type [ [ lastcdr4 ] (call) ] get-type isomorphic? ] unit-test
+sol4 [ [ lastcdr4 dup drop ] get-type ] chr-test
+sol4 [ [ [ lastcdr4 ] (call) ] get-type ] chr-test
+
 DEFER: lastfoo-dispatch
 
-! : lastfoo-tuple ( x -- x )
-!     { footuple } declare barslot>> lastfoo-dispatch ;
 : lastfoo-nil ( x -- x )
     { +nil+ } declare ;
 : lastfoo-list ( x -- x )
@@ -480,12 +582,22 @@ DEFER: lastfoo-dispatch
     dup +nil+? [ lastfoo-nil ]
     [ dup list? [ lastfoo-list ]
       [ dup array? [ lastfoo-array ]
-        ! [ dup footuple? [ lastfoo-tuple ]
-          [ "nope" throw ]
-          ! if ]
+        [ "nope" throw ]
         if ]
       if ]
     if ;
+
+CONSTANT: sol5 P{ Xor
+    P{ Effect L{ ?x1 . ?a1 } L{ ?x1 . ?a1 } f { P{ Eq ?x1 L{ } } P{ Instance ?x1 L{ } } } }
+    P{
+        Effect
+        L{ ?x2 . ?a2 }
+        L{ ?x3 . ?a2 }
+        f
+        { P{ Instance ?x3 L{ } } P{ Eq ?x3 L{ } } P{ Instance ?x2 union{ cons-state array } } } } }
+
+
+sol5 [ [ lastfoo-dispatch ] get-type ] chr-test
 
 DEFER: lastfoo5-dispatch
 
@@ -508,21 +620,23 @@ DEFER: lastfoo5-dispatch
       if ]
     if ;
 
+! TODO: add test which goes through more levels of nesting
+
+{ t } [ [ lastfoo5-dispatch ] get-type canonical? ] unit-test
+{ t } [ [ lastfoo5-list ] get-type canonical? ] unit-test
 
 GENERIC: lastcdr5 ( list -- obj )
 M: list lastcdr5 cdr>> lastcdr5 ;
 M: +nil+ lastcdr5 ;
 M: array lastcdr5 array-first lastcdr5 ;
 
-{ t }
-[ [ lastcdr5 ] get-type dup [ full-type? ] when ] unit-test
+sol5 [ [ lastcdr5 ] get-type ] chr-test
 
 
 ! (old)NOTE: This one does not work because we don't recursively perform full phi-computations
 ! through multiple levels of nested effects (yet?)
 ! (update) Fixed by not phi-merging anything to do with unresolved computations
-{ t }
-[ [ [ lastcdr5 ] ] [ [ [ lastcdr5 ] ] (call) ] same-type? ] unit-test
+{ t } [ [ [ lastcdr5 ] ] [ [ [ lastcdr5 ] ] (call) ] same-type? ] unit-test
 
 
 ! NOTE: this one has two loop exit branches!
@@ -535,6 +649,12 @@ M: array lastcdr5 array-first lastcdr5 ;
 { 42 } [ L{ 12 . 42 } lastfoo6 ] unit-test
 { 43 } [ 43 lastfoo6 ] unit-test
 
+CONSTANT: sol6 P{ Xor
+    P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } f { P{ Instance ?y2 not{ cons-state } } } }
+    P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x cons-state } P{ Instance ?y not{ cons-state } } } } }
+
+sol6 [ [ lastfoo6 ] get-type ] chr-test
+
 ! Correct one
 GENERIC: lastcdr6 ( list -- obj )
 M: list lastcdr6 cdr>> lastcdr6 ;
@@ -545,12 +665,7 @@ M: object lastcdr6 ;
 { 42 } [ L{ 12 . 42 } lastcdr6 ] unit-test
 { 43 } [ 43 lastcdr6 ] unit-test
 
-P{
-    Xor
-    P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } f { P{ Instance ?y2 not{ cons-state } } } }
-    P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x cons-state } P{ Instance ?y not{ cons-state } } } }
-}
-[ [ lastcdr6 ] get-type ] chr-test
+sol6 [ [ lastcdr6 ] get-type ] chr-test
 
 ! With array exception
 GENERIC: lastcdr7 ( list -- obj )
@@ -559,15 +674,13 @@ M: array lastcdr7 array-first lastcdr7 ;
 M: +nil+ lastcdr7 ;
 M: object lastcdr7 ;
 
-P{
-    Xor
+CONSTANT: sol7 P{ Xor
     P{ Effect L{ ?y14 . ?ys14 } L{ ?y14 . ?ys14 } f { P{ Instance ?y14 intersection{ not{ cons-state } not{ array } } } } }
     P{
-        Effect L{ ?o25 . ?a85 } L{ ?x17 . ?rho31 } f
-        { P{ Instance ?x17 intersection{ not{ cons-state } not{ array } } } P{ Instance ?o25 union{ cons-state array } } }
-    }
-}
-[ [ lastcdr7 ] get-type ] chr-test
+        Effect L{ ?o25 . ?a85 } L{ ?x17 . ?a85 } f
+        { P{ Instance ?x17 intersection{ not{ cons-state } not{ array } } } P{ Instance ?o25 union{ cons-state array } } } } }
+
+sol7 [ [ lastcdr7 ] get-type ] chr-test
 
 ! Same as lastcdr7, but as single word
 : lastfoo7 ( x -- x )
@@ -577,6 +690,8 @@ P{
         [  ] if
       ] if
      ] if ;
+
+sol7 [ [ lastfoo7 ] get-type ] chr-test
 
 ! Stack checker examples
 : bad ( ? quot: ( ? -- ) -- ) 2dup [ not ] dip bad call ; inline recursive
@@ -591,17 +706,46 @@ DEFER: tock
 : tick ( x -- y ) dup 0 <= [ 1 - tock ] unless ;
 : tock ( x -- y ) dup 0 <= [ 1 - tick ] unless ;
 
+{ t t }
+[ [ tick tock ] qt
+  [ [ tick ] pick-type ]
+  [ [ tock ] pick-type ] bi
+  [ [ canonical? ] keep ] dip
+  same-effect?
+] unit-test
+
 DEFER: tac
 : tic ( x -- y ) dup 0 <= [ 1 - tac ] unless ;
 DEFER: toe
 : tac ( x -- y ) dup 0 <= [ 1 - toe ] unless ;
 : toe ( x -- y ) dup 0 <= [ 1 - tic ] unless ;
 
+{ t t }
+[ [ tic tac toe ] qt
+  { [ tic ] [ tac ] [ toe ] } [ pick-type ] with map
+  [ first canonical? ] keep
+  [ same-effect? ] monotonic?
+] unit-test
+
+DEFER: itac
+: itic ( x -- y ) dup 0 <= [ 1 - [ [ itac ] ] call call ] unless ;
+DEFER: itoe
+: itac ( x -- y ) dup 0 <= [ 1 - [ [ itoe ] ] call call ] unless ;
+: itoe ( x -- y ) dup 0 <= [ 1 - [ [ itic ] ] call call ] unless ;
+
+{ t t }
+[ [ itic itac itoe ] qt
+  { [ itic ] [ itac ] [ itoe ] } [ pick-type ] with map
+  [ first canonical? ] keep
+  [ same-effect? ] monotonic?
+] unit-test
+
+
 DEFER: tok
 : tik-tik ( x -- y ) 2 - tok ;
 : tok ( x -- y ) 1 + dup 0 <= [ tik-tik ] unless ;
 
-P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?z number } P{ Instance ?y number } P{ Le ?y 0 } } }
+P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x number } P{ Instance ?y number } P{ Le ?y 0 } } }
 [ [ tik-tik ] get-type ] chr-test
 
 { t } [ [ tik-tik ] [ 1 drop tik-tik ] same-type? ] unit-test
@@ -689,9 +833,9 @@ MACRO: my-mux ( cond -- quot )
 { 1 2 } [ 1 2 [ t my-mux ] [ f my-mux ] 2bi ] unit-test
 
 ! NOTE: this is something the current stack checker can not do
-{ t } [ [ t 1 2 rot my-mux ] get-type
-        [ t 1 2 ? ] get-type
-        isomorphic? ] unit-test
+{ t } [ [ t 1 2 rot my-mux ]
+        [ t 1 2 ? ]
+        same-type? ] unit-test
 
 MACRO: my-if ( foo -- quot )
     drop [ if ] ;
@@ -777,12 +921,11 @@ PREDICATE: zero < integer 0 = ;
 ! [ dup 0 > [ [ 1 + ] [ 1 - ] bi* inc-int-down ] [ drop 42 + ] if ] ;
 
 GENERIC: inc-loop ( n i -- m )
-GENERIC: inc-loop ( n i -- m )
 M: cardinal inc-loop [ 1 + ] [ 1 - ] bi* inc-loop ;
 M: zero inc-loop drop 42 + ;
 
 P{ Xor
-   P{ Effect L{ ?x1 . ?a1 } L{ ?c1 . ?a1 } f { P{ Instance ?x1 integer } P{ Instance ?c1 t } P{ Eq ?c1 t } P{ Lt 0 ?x1 } } }
+   P{ Effect L{ ?x1 . ?a1 } L{ ?c1 . ?a1 } f { P{ Instance ?x1 integer } P{ Instance ?c1 t } P{ Eq ?c1 t } P{ Le 1 ?x1 } } }
    P{ Effect L{ ?x2 . ?a4 } L{ ?c2 . ?a4 } f { P{ Instance ?c2 POSTPONE: f } P{ Eq ?c2 f } P{ Instance ?x2 not{ cardinal } } } }
  }
 [ [ cardinal? ] get-type ] chr-test

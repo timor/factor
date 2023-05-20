@@ -61,11 +61,13 @@ CHR: dont-rebuild-non-phiable-effect @ // { PhiMode } { CheckPhiStack { ?a ?b } 
 [ ?tau null ==! ]
 { PhiDone } ;
 
-IMPORT: chr-factor-liveness
+! FIXME This is soooooooo slow, need better alternative
+! IMPORT: chr-factor-liveness
 
 :: make-spool ( target variables preds -- spool )
-    preds variables
-    [ Roots boa ] [ Live boa ] bi [ suffix ] bi@ >list :> body
+    preds
+    ! variables [ Roots boa ] [ Live boa ] bi [ suffix ] bi@
+    >list :> body
     P{ Spool target body } ;
 
 ! non-phi case
