@@ -95,6 +95,7 @@ CHR: same-length-is-same @ { Length ?a ?n } { Length ?a ?m } // -- | [ ?m ?n ==!
 
 CHR: early-exit @ { Invalid } // <={ body-pred } -- | ;
 CHR: early-exit-liveness @ { Invalid } // <={ liveness-pred } -- | ;
+CHR: early-exit-deferred-inference @ { Invalid } // <={ ?DeferTypeOf } -- | ;
 
 ! *** <Phi
 PREFIX-RULES: { P{ PhiMode } }
@@ -428,8 +429,9 @@ CHR: convert-tag @ // { Tag ?x A{ ?n } } -- [ ?n type>class :>> ?tau ] |
 { Instance ?x ?tau } ;
 
 CHR: instance-of-non-classoid @ { Instance ?x A{ ?c } } // -- [ { ?c } first classoid? not ] | { Invalid } ;
-CHR: check-instance @ // { Instance A{ ?v } A{ ?c } } -- |
+CHR: check-lit-instance @ // { Instance A{ ?v } A{ ?c } } -- |
 [ ?v ?c instance? f P{ Invalid } ? ] ;
+CHR: invalid-eq-instance @ // { Instance ?x A{ ?c } } { Eq ?x A{ ?v } } -- [ ?v ?c instance? not ] | { Invalid } ;
 
 CHR: null-instance-is-invalid @ // { Instance ?x null } -- | { Invalid } ;
 
@@ -565,8 +567,8 @@ CHR: apply-regular-effect @ // { ApplyEffect ?x ?i ?o } -- [ ?x Effect? ]
 [ { ?i ?o } { ?c ?d } ==! ]
 [ ?l ] ;
 
-CHR: defer-apply-xor-effect @ // { ApplyEffect ?x ?i ?o } -- [ ?x Xor? ] |
-{ CallXorEffect ?x ?i ?o } ;
+CHR: defer-apply-xor-effect @ // { ApplyEffect ?x ?i ?o } -- [ ?x Xor? ] [ ?x fresh-effect :>> ?y ] |
+{ CallXorEffect ?y ?i ?o } ;
 
 CHR: apply-effect-not-known @ // { ApplyEffect M{ ?rho } ?i ?o } -- | [ "applying unknown effect" throw ] ;
 
@@ -579,8 +581,9 @@ CHR: call-applies-effect @ { Instance ?q ?x } // { CallEffect ?q ?a ?b } -- [ ?x
 { ApplyEffect ?x ?a ?b } ;
 
 ! NOTE: this does not work right now mid-effect because of sequencing the body.
-CHR: literal-call-type-must-be-known @ <={ FinishEffect } // { CallEffect ?q __ __ } { Eq ?q A{ ?p } } --
+CHR: literal-call-type-must-be-known @ <={ FinishEffect } // { CallEffect ?q __ __ } { Eq ?q A{ ?p } }
 ! { Instance ?q ?rho } -- [ ?rho valid-effect-type? not ]
+--
 | [ { ?p "literal-effect-unknown" } throw ] ;
 
 ! non-copying
@@ -624,6 +627,11 @@ CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho } { RecursionTypeOf ?w 
 [ ?sig full-type? ]
 [ ?i fresh :>> ?b ]
 [ ?i fresh :>> ?c ] |
+! ?i : recursive call input stack
+! ?b : enter-out stack
+! ?c : call-recursive in stack
+! ?d : return-recursive out stack
+! ?o : final call output stack
 ! FIXME: Instantiate in case of double recursion?
 { Iterated ?w { ?i ?b ?c ?d ?o } }
 ! Return Type call
@@ -824,26 +832,30 @@ CHR: known-declare @
 
 ! *** Macro Expansion/Folding
 
-CHR: known-macro-quot @ // { MacroExpand ?w ?a ?i ?x } -- [ ?w macro-quot :>> ?q ]
-[ ?w macro-effect :>> ?n ] |
-{ ExpandQuot ?q ?a ?i ?x ?n } ;
+! CHR: known-macro-quot @ // { MacroExpand ?w ?a ?i ?x } -- [ ?w macro-quot :>> ?q ]
+! [ ?w macro-effect :>> ?n ] |
+! { ExpandQuot ?q ?a ?i ?x ?n } ;
 
-CHR: known-macro-arg @ { Eq ?x A{ ?v } } // { ExpandQuot ?q ?a L{ ?x . ?ys } ?p ?n } --
-[ ?a length ?n < ]
-[ ?a ?v prefix :>> ?b ]
-|
-{ ExpandQuot ?q ?b ?ys ?p ?n } ;
+! CHR: known-macro-arg @ { Eq ?x A{ ?v } } // { ExpandQuot ?q ?a L{ ?x . ?ys } ?p ?n } --
+CHR: known-macro-arg @ { Eq ?x A{ ?v } } // { MacroCall ?q ?a ?p } --
+[ ?x ?a in? ] [ ?a { ?x ?v } lift* :>> ?b ] | { MacroCall ?q ?b ?p } ;
+! [ ?a length ?n < ]
+! [ ?a ?v prefix :>> ?b ]
+! |
+! { ExpandQuot ?q ?b ?ys ?p ?n } ;
 
 ! NOTE: only fully expanded macros are treated
 ! TODO: maybe rewrite to not let the calleffect linger before?  This would only be useful
 ! if we want to reason about what the macro needs to expand into in the first place, right?
-CHR: expand-macro @ // { ExpandQuot ?q ?a ?i ?x ?n } -- [ ?a length ?n = ]
-[ ?a ?q with-datastack first :>> ?p ]
+! CHR: expand-macro @ // { ExpandQuot ?q ?a ?i ?x ?n } -- [ ?a length ?n = ]
+CHR: expand-macro @ // { MacroCall ?q A{ ?a } ?p } --
+[ ?a ?q with-datastack first :>> ?v ]
 |
 ! This should cause the current MakeEffect to be suspended, infer expansion
-{ ?DeferTypeOf ?p ?sig }
+{ ?DeferTypeOf ?v ?sig }
 ! And return here...
-{ Instance ?x ?sig }
+{ Eq ?p ?v }
+{ Instance ?p ?sig }
     ;
 
 ! **** Generics
@@ -956,7 +968,7 @@ CHR: known-named-slot @ { Eq ?o A{ ?tau } } // { Slot ?o A{ ?n } ?v } -- [ ?tau 
 { DeclaredInstance ?v ?rho } ;
 
 CHR: known-boa-spec @ { Eq ?c A{ ?v } } // AS: ?p <={ Boa ?c ?i ?o } -- |
-[ ?p ?v >>spec ] ;
+[ ?p clone ?v >>spec ] ;
 
 ! *** Boa handling
 ! NOTE: This is a crucial point regarding re-definitions if we consider incremental operation

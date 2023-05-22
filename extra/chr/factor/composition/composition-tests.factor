@@ -37,7 +37,9 @@ IN: chr.factor.composition.tests
 : chr-simp ( constraints -- constraint )
     P{ CompMode } suffix
     chr-comp swap [ run-chr-query store>> ] with-var-names
-    values P{ CompMode } swap remove [ Dep? ] reject ;
+    values P{ CompMode } swap remove
+    ! [ Dep? ] reject
+    ;
 
 : chr-simp1 ( constraints -- constraint )
     chr-simp first ;
@@ -241,8 +243,7 @@ P{ Effect L{ ?x . ?a } L{ ?y . ?a } f
    { P{ Instance ?y object } P{ Instance ?x footuple } P{ Slot ?x "barslot" ?y } }
 } [ [ barslot>> ] get-type ] chr-test
 
-! FIXME
-P{ Effect L{ ?x . ?a } L{ ?z . ?a } f
+P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y }
    { P{ Instance ?y footuple } P{ Instance ?x footuple } P{ Slot ?x "barslot" ?y }
      P{ P{ Slot ?y "barslot" ?z } } }
 } [ [ barslot>> barslot>> ] get-type ] chr-test
@@ -934,3 +935,5 @@ P{ Xor
 
 ! TODO: shift must transport the Shift relation through the coercion
 ! in the bignum branch.  Unit-test this!
+
+! TODO: [ + ] [ swap + ] if

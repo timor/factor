@@ -223,6 +223,7 @@ CHR: type-of-slot @ { TypeOfWord slot ?tau } // -- [ ?tau term-var? ] |
   P{ Effect L{ ?m ?o . ?a } L{ ?v . ?a } f {
          P{ Instance ?o not{ fixnum } }
          P{ Instance ?m fixnum }
+         ! P{ Le 1 ?m }
          P{ Instance ?v object }
          P{ Slot ?o ?m ?v }
      } }
@@ -615,19 +616,30 @@ CONSTANT: force-compile
         [ macro? ]
       } 1|| ] if ;
 
-: macro-input>stack ( n -- lin )
-    "i" swap "a" <array> "o" { "quot" } <variable-effect>
-    effect>stacks drop ;
+: macro-input>expander-stacks ( n -- lin lout )
+    ! "i" swap "a" <array> "o" { "quot" } <variable-effect>
+    "a" <array> { "quot" } <effect>
+    effect>stacks ;
 
+: macro-input>stack ( n -- lin )
+    macro-input>expander-stacks drop ;
+
+! Macro stacks: L{ argn arg2 arg1 . in } out
+! Sequence: L{ argn arg2 arg1 . in } --> L{ q . in } --> out where q is effect L{ in out }
 ! TODO: maybe handle declared classes of macros?
 CHR: type-of-macro @ { TypeOfWord A{ ?w } ?tau } // --
 [ ?tau term-var? ]
 [ ?w handle-word-as-macro? ]
-[ ?w macro-effect macro-input>stack :>> ?a drop t ]
+[ ?w macro-effect :>> ?n ]
+[ ?n macro-input>expander-stacks :>> ?b drop :>> ?a ]
 [ ?a lastcdr :>> ?i drop t ]
+[ ?b car :>> ?q drop t ]
+[ ?w macro-quot :>> ?x ]
+[ ?a list>array* ?n head reverse :>> ?p ]
 |
 [ ?tau P{ Effect ?a ?o { ?q } {
-              P{ MacroExpand ?w f ?a ?q }
+              P{ MacroCall ?x ?p ?q }
+              ! P{ MacroExpand ?w f ?a ?q }
               P{ Instance ?q callable }
               P{ CallEffect ?q ?i ?o }
           } }

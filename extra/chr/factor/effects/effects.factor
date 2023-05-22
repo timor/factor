@@ -62,7 +62,8 @@ CHR: dont-rebuild-non-phiable-effect @ // { PhiMode } { CheckPhiStack { ?a ?b } 
 { PhiDone } ;
 
 ! FIXME This is soooooooo slow, need better alternative
-! IMPORT: chr-factor-liveness
+! Trying to fix this now...
+IMPORT: chr-factor-liveness
 
 :: make-spool ( target variables preds -- spool )
     preds
@@ -75,6 +76,7 @@ CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effe
 [ ?b ?c ==! ]
 ! FIXME: context scoping!
 [ "comp" [
+      { MakeEffect ?a ?d f f ?tau }
       P{ CompMode }
       ?tau
       ?a vars ?d vars union
@@ -83,7 +85,7 @@ CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effe
       ! At least for CallXors, or later-known call-recursives? Ideally only for callxors!
       ?k ?l append
       make-spool
-      { MakeEffect ?a ?d f f ?tau } 3array
+      3array
   ] new-context ] ;
 ! [
 !     ?k ?l 2merge
@@ -106,7 +108,20 @@ CHR: rebuild-compose-effect @ // { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effe
 !     ;
 
 CHR: interrupt-spool @ { Invalid } // { Spool ?tau L{ ?x . __ } } -- | { Spool ?tau L{ } } ;
-CHR: end-spool @ // { Spool ?tau L{ } } -- | P{ FinishEffect ?tau } ;
+! This is triggered at least by macro expansion, which must always succeed
+! in a nested inference manner.
+CHR: throw-type-query @ // { Spool ?tau L{ } } { ?DeferTypeOf ?q M{ ?sig } } -- |
+[ [ P{ ?TypeOf ?q ?sig } ] no-context ] { Spool ?tau L{ } } ;
+! [ P{ FinishEffect ?tau } ] ;
+
+CHR: end-spool @ { MakeEffect ?i ?o __ __ __ } // { Spool ?tau L{ } } -- [ ?i vars :>> ?a ] [ ?o vars :>> ?b ]
+[ ?a ?b union :>> ?c ]
+|
+! { FinishEffect ?tau }
+{ Live ?c }
+{ Left ?a } { Right ?b }
+! { Given ?a } { Define ?b }
+{ FinishEffect ?tau } ;
 CHR: spool-one-pred @ // { Spool ?tau L{ ?x . ?xs } } -- | [ ?x ] { Spool ?tau ?xs } ;
 
 ! Body-only reinference requests, usually because some body preds have been changed lazily
@@ -204,12 +219,6 @@ PREFIX-RULES: { P{ CompMode } }
 ! [ ?s [ [ lastcdr ] same? ] monotonic? ] | ;
 
 ! *** Nested Reasoning Triggering
-! This is triggered at least by macro expansion, which must always succeed
-! in a nested inference manner.
-CHR: throw-type-query @ // { FinishEffect ?tau } { ?DeferTypeOf ?q M{ ?sig } } -- |
-[ [ P{ ?TypeOf ?q ?sig } ] no-context ]
-[ P{ FinishEffect ?tau } ] ;
-
 CHR: collect-call-recursive @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p P{ CallRecursive ?m ?rho ?sig } --
 [ ?rho vars ?sig vars union ?e make-effect-vars intersects? ]
 [ ?x ?rho vars union ?sig vars union :>> ?y ]
@@ -244,9 +253,10 @@ CHR: implied-param-join @ // { ImpliesParam ?x ?a } { ImpliesParam ?y ?b } --
 ! CHR: collect-body-pred @ { FinishEffect ?tau } // AS: ?p <={ body-pred } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } -- [ ?p ?e pred-live-in-effect? ]
 ! NOTE: deps should already be present, so we can pluck the predicate
 ! NOTE: Reverting to the previous intersect/defines vars behavior for now because of instance checks forcing an output type!
-CHR: collect-live-body-pred @ { FinishEffect ?tau } // AS: ?p <={ body-pred } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } --
+! CHR: collect-live-body-pred @ { FinishEffect ?tau } // AS: ?p <={ body-pred } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } --
+CHR: collect-live-body-pred @ { FinishEffect ?tau } // { Collect ?p } AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } --
 ! [ ?p live-vars ?v subset? ]
-[ ?p ?e make-effect-vars pred-live-in-vars? ]
+! [ ?p ?e make-effect-vars pred-live-in-vars? ]
 ! [ ?p ?e pred-live-in-effect? ]
 [ ?p ?l in? not ]
 [ ?l ?p suffix :>> ?k ]
@@ -257,13 +267,13 @@ CHR: collect-live-body-pred @ { FinishEffect ?tau } // AS: ?p <={ body-pred } AS
  ?p vars ?p free-effect-vars diff ?x union :> y
  { MakeEffect ?a ?b y ?k ?tau } ] ;
 
-! FIXME: Don't use this kind of special case!
-CHR: collect-boa @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ Boa ?c ?i ?o } --
-! [ ?i ?o [ vars ?e make-effect-vars in? ] bi@ or ]
-[ ?p vars ?e make-effect-vars intersects? ]
-[ ?l ?p suffix :>> ?k ]
-[ ?x ?p vars union :>> ?y ] |
-{ MakeEffect ?a ?b ?y ?k ?tau } ;
+! ! FIXME: Don't use this kind of special case!
+! CHR: collect-boa @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ Boa ?c ?i ?o } --
+! ! [ ?i ?o [ vars ?e make-effect-vars in? ] bi@ or ]
+! [ ?p vars ?e make-effect-vars intersects? ]
+! [ ?l ?p suffix :>> ?k ]
+! [ ?x ?p vars union :>> ?y ] |
+! { MakeEffect ?a ?b ?y ?k ?tau } ;
 
 CHR: discard-implied-param @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // <={ ImpliesParam } -- | ;
 CHR: discard-liveness-preds @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // <={ liveness-pred } -- | ;

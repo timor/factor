@@ -217,15 +217,16 @@ TUPLE: DeclaredInstance < Instance ;
 TUPLE: DeclaredNotInstance < Instance ;
 
 ! Need for math method expansion?
-TUPLE: Coerce < val-pred class ;
+! TUPLE: Coerce < val-pred class ;
 
 TUPLE: expr-pred < val-pred ;
 ! TODO: not sure why this is a val-pred on the object!
-TUPLE: Slot < val-pred n slot-val ;
+! TUPLE: Slot < val-pred n slot-val ;
+TUPLE: Slot < expr-pred n slot-val ;
 ! Element class?
-TUPLE: Element < val-pred type ;
-TUPLE: Length < val-pred length-val ;
-TUPLE: Nth < val-pred seq n ;
+TUPLE: Element < expr-pred type ;
+TUPLE: Length < expr-pred length-val ;
+TUPLE: Nth < expr-pred seq n ;
 ! A declaration, has parameterizing character
 TUPLE: Declare < chr-pred classes stack ;
 
@@ -234,10 +235,11 @@ TUPLE: Declare < chr-pred classes stack ;
 TUPLE: Ensure < chr-pred classes stack ;
 
 TUPLE: CallEffect < chr-pred thing in out ;
+TUPLE: MacroCall < chr-pred quot args out-quot-val ;
+    ! in out ;
 TUPLE: ApplyEffect < chr-pred effect in out ;
 ! Has CallEffect and Instance properties
 TUPLE: CallXorEffect < chr-pred type in out ;
-! Unused: TUPLE: MacroCallEffect < chr-pred word in out ;
 TUPLE: CallRecursive < chr-pred tag in out ;
 ! The same as above, but different
 TUPLE: CallUnknown < CallEffect ;
@@ -283,7 +285,7 @@ TUPLE: Let < chr-pred var val type ;
 TUPLE: Invalid < chr-pred ;
 ! TUPLE: Invalid < chr-pred var ;
 
-TUPLE: Tag < val-pred tag-var ;
+TUPLE: Tag < expr-pred tag-var ;
 
 ! Binding for explicit referencing
 TUPLE: Bind < chr-pred var src ;
@@ -349,8 +351,9 @@ TUPLE: PrimCall < chr-pred word in out ;
 ! TUPLE: Ref+ < ref-pred vars ;
 ! TUPLE: Ref- < ref-pred vars ;
 ! TUPLE: Refs < ref-pred map ;
-UNION: body-pred val-pred CallEffect CallXorEffect Declare CallRecursive Throws
-    MacroExpand
+UNION: body-pred val-pred CallEffect CallXorEffect Declare CallRecursive Throws Boa
+    ! MacroExpand
+    MacroCall
     Iterated
     LoopVar GenericDispatch <==> MathCall PrimCall Counter
     ! ! Taking this into account because of generics reinference right now.
@@ -403,14 +406,38 @@ TUPLE: PhiDone < chr-pred ;
 
 ! Liveness
 TUPLE: liveness-pred < chr-pred ;
+TUPLE: Given < liveness-pred vars ;
+TUPLE: Have < liveness-pred vars ;
+TUPLE: Define < liveness-pred vars ;
+TUPLE: Defined < liveness-pred vars ;
+TUPLE: Left < liveness-pred vars ;
+TUPLE: Right < liveness-pred vars ;
+! UNION: fringe Given Define ;
+TUPLE: Path < liveness-pred left vars right ;
 TUPLE: Live < liveness-pred vars ;
-TUPLE: Roots < Live ;
-! TUPLE: Locals < Live ;
-! TUPLE: In < Live ;
-! TUPLE: Out < Live ;
-! In/out semantics
-TUPLE: Dep < liveness-pred from to ;
-TUPLE: Rel < liveness-pred from to via ;
+! Can't get more explicit now?
+TUPLE: Mode < liveness-pred pred in out ;
+TUPLE: In < liveness-pred vars ;
+TUPLE: Out < liveness-pred vars ;
+TUPLE: Forward < liveness-pred vars ;
+TUPLE: Reverse < liveness-pred vars ;
+TUPLE: BiDi < liveness-pred vars ;
+! TUPLE: Def < liveness-pred vars ;
+! TUPLE: Use < liveness-pred vars ;
+TUPLE: UseDefs < liveness-pred from to ;
+! TUPLE: Roots < liveness-pred vars ;
+TUPLE: Collect < liveness-pred pred ;
+TUPLE: ImplyLeft < liveness-pred from to ;
+TUPLE: ImplyRight < liveness-pred from to ;
+TUPLE: Imply < liveness-pred in out ;
+
+! TUPLE: Roots < Live ;
+! ! TUPLE: Locals < Live ;
+! ! TUPLE: In < Live ;
+! ! TUPLE: Out < Live ;
+! ! In/out semantics
+! TUPLE: Dep < liveness-pred from to ;
+! TUPLE: Rel < liveness-pred from to via ;
 
 
 GENERIC: free-effect-vars ( term -- seq )

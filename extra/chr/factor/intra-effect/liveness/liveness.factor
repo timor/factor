@@ -1,6 +1,5 @@
-USING: accessors arrays assocs chr.factor chr.parser chr.state classes.tuple
-grouping kernel lists math.combinatorics sequences sequences.extras sets terms
-types.util ;
+USING: accessors arrays chr.factor chr.parser combinators.short-circuit kernel
+math sequences sets terms ;
 
 IN: chr.factor.intra-effect.liveness
 
@@ -23,112 +22,245 @@ CHRAT: chr-factor-liveness {  }
 
 ! Flattening
 
-CHR: flatten-live-set @ // AS: ?p <={ Live ?s } -- [ ?s [ cons-state? ] any? ] |
-[ ?p clone ?s vars >>vars ] ;
-
 PREFIX-RULES: { P{ CompMode } }
-
-! ** Normalization
-CHR: unique-dep @ { Dep ?x ?y } // { Dep ?x ?y } -- | ;
-CHR: same-rel @ { Rel ?x ?y ?v } // { Rel ?x ?y ?w } -- [ ?v ?w set= ] | ;
-CHR: non-dep @ // { Dep ?x ?x } -- | ;
-CHR: same-live-set @ { Live ?x } // { Live ?y } -- [ ?x ?y set= ] | ;
-CHR: symmetric-dep @ { Dep ?x ?y } // { Dep ?y ?x } -- | ;
-
-! Holding off generating these until finished reasoning, to allow disappearing constraints
-! to take their deps with them!
-PREFIX-RULES: { P{ CompMode } P{ Roots __ } }
-! ** Collecting pairwise dependencies
-! CHR: rel-pred-live-deps @ <={ rel-pred M{ ?x } M{ ?y } } // -- { Dep ?x ?y } { Dep ?y ?x } ;
-CHR: binary-rel-pred-live-deps @ AS: ?p <={ expr-pred } // -- [ ?p vars >array :>> ?v length 2 = ]
-[ ?v first2 :>> ?x drop :>> ?y ] |
-{ Dep ?x ?y } ;
-
-! TODO: expand to n-ary predicates via combinatorial explosion?
-CHR: ternary-expr-pred-live-deps @ AS: ?p <={ expr-pred } // -- [ ?p vars >array :>> ?v length 3 = ] |
-[ ?v 2 all-combinations [ Dep slots>tuple ] map ] ;
-
-CHR: call-effect-live-deps @ <={ CallEffect ?q ?i ?o } // -- |
-[ ?i vars [ ?q Dep boa ] map
-  ?o vars [ ?q Dep boa ] map append ] ;
-
-! TODO: Check Whether we need intra-input or intra-output deps also
-! TODO: expand to other call-like preds
-! NOTE: seems we might not need intra-input or intra-output, but
-! relations with the row vars?
-! TODO: somewhat sure that this also needs to be done for callrecursive, maybe even
-! call-effect ;
-CHR: call-xor-effect-live-deps @ { CallXorEffect __ ?a ?b } // --
-[ ?a vars :>> ?i ?b vars :>> ?o
-  ! intersect :>> ?c
-  2drop t
-] |
-! [ ?i ?c diff ?o ?c diff [ Dep boa ] cartesian-map concat ] ;
-[ ?i ?o [ Dep boa ] cartesian-map concat ] ;
-
-CHR: call-recursive-live-deps @ { CallRecursive __ ?a ?b } // --
-[ ?a vars :>> ?i ?b vars :>> ?o
-  intersect :>> ?c ] |
-[ ?i ?c diff ?o ?c diff [ Dep boa ] cartesian-map concat ] ;
-
-! TODO: Does this apply to all value preds with their rest slots?  The idea is to only include the deps which allow
-! to conclude unique information
-CHR: slot-live-deps-val @ { Slot ?o ?n M{ ?v } } // -- | { Dep ?o ?v } ;
-CHR: slot-live-deps-slot @ { Slot ?o M{ ?n } ?v } // -- | { Dep ?o ?n } ;
-
-CHR: iteration-deps @ { Iterated __ ?s } // --
-[ ?s sequence? ] |
-! FIXME: that explicit lift here is because the ground value won't be present when reasoning
-! inside the eq-disjoint-set scope.
-[ ?s f lift [ list*>array ] map 2 <clumps> [ first2 zip ] map-concat
-  [ Dep slots>tuple ] map
-] ;
-
-! ** Building the chains
-PREFIX-RULES: { P{ CompMode } }
-
-CHR: start-in-rel @ { Dep ?x ?y } { Roots ?v } // -- [ ?x ?v in? ] [ ?y ?v in? not ] | { Rel ?x ?y { } } ;
-CHR: start-out-rel @ { Dep ?x ?y } { Roots ?v } // -- [ ?x ?v in? not ] [ ?y ?v in? ] | { Rel ?x ?y { } } ;
-
-CHR: merge-rel-from @ <={ Live ?l } { Rel ?x ?y ?v } // { Rel ?a ?y ?w } -- [ ?x ?l in? ] [ ?a ?l in? ] [ ?w ?v set= ] | ;
-CHR: merge-rel-to @ <={ Live ?l } { Rel ?x ?y ?v } // { Rel ?x ?z ?w } -- [ ?y ?l in? ] [ ?z ?l in? ] [ ?w ?v set= ] | ;
+! "Liveness Anchor"
+GENERIC: upper-scope-vars ( pred -- term )
+M: expr-pred upper-scope-vars ;
+M: val-pred upper-scope-vars val>> ;
+M: LoopVar upper-scope-vars stuff>> first ;
+M: Iterated upper-scope-vars stuff>> [ first ] [ last ] bi 2array ;
+M: CallEffect upper-scope-vars ;
+M: CallRecursive upper-scope-vars ;
+M: CallXorEffect upper-scope-vars [ in>> ] [ out>> ] bi 2array ;
+M: MacroCall upper-scope-vars ;
 
 
-! NOTE: making them all bidirectional for now...
-CHR: grow-rel-forward-1 @ { Dep ?y ?z } { Roots ?r } { Rel ?x ?y ?v } // -- [ ?z ?v in? not ] [ ?y ?r in? not ] [ ?z ?x == not ]
-[ ?v ?y suffix :>> ?w ] | { Rel ?x ?z ?w } ;
-CHR: grow-rel-forward-2 @ { Dep ?z ?y } { Roots ?r } { Rel ?x ?y ?v } // -- [ ?z ?v in? not ] [ ?y ?r in? not ] [ ?z ?x == not ]
-[ ?v ?y suffix :>> ?w ] | { Rel ?x ?z ?w } ;
+UNION: merging-set Given Define ;
 
-CHR: grow-rel-backward-1 @ { Dep ?a ?x } { Roots ?r } { Rel ?x ?y ?v } // -- [ ?a ?v in? not ] [ ?x ?r in? not ] [ ?a ?y == not ]
-[ ?v ?x prefix :>> ?w ] | { Rel ?a ?y ?w } ;
-CHR: grow-rel-backward-2 @ { Dep ?x ?a } { Roots ?r } { Rel ?x ?y ?v } // -- [ ?a ?v in? not ] [ ?x ?r in? not ] [ ?a ?y == not ]
-[ ?v ?x prefix :>> ?w ] | { Rel ?a ?y ?w } ;
+! CHR: merge-liveness-set @ // AS: ?a <={ merging-set ?x } AS: ?b <={ merging-set ?y } --
+! [ ?a ?b [ class-of ] same? ] | [ ?x ?y union 1array ?a class-of slots>tuple ] ;
 
-! CHR: have-live-in-out-rel @ { Rel ?x ?y ?v } { In ?a } { Out ?b } // -- [ ?v empty? not ]
-! [ ?x ?a in? ] [ ?y ?b in? ] | { Live ?v } ;
+! CHR: have-live @ { Given ?x } { Define ?y } // { Live ?v } -- [ ?x ?y intersect :>> ?z empty? not ]
+! [ ?z ?v subset? not ]
+! [ ?z ?v union :>> ?a ] [ ?y ?z ]
+! |
+CHR: already-live @ { Live ?x } // { Live ?y } -- [ ?y ?x subset? ] | ;
+CHR: merge-live @ // { Live ?x } { Live ?y } -- [ ?x ?y union :>> ?z ] | { Live ?z } ;
 
-CHR: have-live-root-root-rel @ { Rel ?x ?y ?v } { Roots ?a } // -- [ ?v empty? not ]
-[ ?x ?a in? ] [ ?y ?a in? ] | { Live ?v } ;
-! ! Assumption: if we hit the live set from the roots, then we will hit the root set eventually
-! CHR: have-live-root-rel @ { Rel ?x ?y ?v } { Roots ?a } // -- [ ?v empty? not ]
+! ** Predicate-independent handling
+! CHR: body-pred-is-covered @ { Left ?a } { Right ?b } // AS: ?p <={ body-pred } --
+CHR: body-pred-is-covered @ { Live ?a } // AS: ?p <={ body-pred } --
+! CHR: body-pred-is-covered @ { Given ?x } { Define ?y } // AS: ?p <={ body-pred } --
+! [ ?p upper-scope-vars vars :>> ?v ] [ ?v ?a subset? ] ! [ ?v ?b subset? ]
+[ ?p upper-scope-vars vars :>> ?v ] [ ?v ?a subset? ] ! [ ?v ?b subset? ]
+! [ ?p vars :>> ?v ] [ ?v ?a subset? ] ! [ ?v ?b subset? ]
+| { Collect ?p } ;
 
-! CHR: have-live-out-out-rel @ { Rel ?x ?y ?v } { Out ?a } // -- [ ?v empty? not ]
-! [ ?x ?a in? ] [ ?y ?a in? ] | { Live ?v } ;
 
-! CHR: have-live-other-rel @ { Rel ?x ?y ?v } <={ Live ?a } <={ Live ?b } // -- [ ?v empty? not ]
-! [ ? ]
+! CHR: param-is-live @ { Left ?a } { Right ?b } // { Live ?c } -- [ ?a ?b intersect :>> ?x ?c subset? not ]
+! [ ?c ?x union :>> ?d ] | { Live ?d } ;
 
-! CHR: live-rel-pred-start @ <={ rel-pred M{ ?x } M{ ?y } } { In ?v } // -- [ ?x ?v in? ] | { Dep ?x ?y } ;
-! CHR: live-rel-pred-2 @ <={ rel-pred M{ ?y } M{ ?x } } { In ?v } // -- [ ?x ?v in? ] | { Dep ?x ?y } ;
+! misnomer...
+! usually used as ( existing possible-extension -- things-connecting-it new-things )
+: set-xor ( set1 set2 -- common in-set-2-but-not-set-1 )
+    members [ swap in? ] with partition ;
 
-! CHR: live-rel-pred-out-1 @ <={ rel-pred M{ ?x } M{ ?y } } { Out ?v } // -- [ ?x ?v in? ] | { Dep ?x ?y } ;
-! CHR: live-rel-pred-out-2 @ <={ rel-pred M{ ?y } M{ ?x } } { Out ?v } // -- [ ?x ?v in? ] | { Dep ?x ?y } ;
+CHR: circular-path @ // { Path ?a ?m ?b } -- [ ?a ?b intersects? ] | [ { ?a ?m ?b "circular path" } throw ] ;
+CHR: defunct-path @ // { Path ?a ?m ?b } -- [ ?a ?m intersects? ?b ?m intersects? or ] | [ { ?a ?m ?b "malformed path" } throw ] ;
 
-CHR: live-set-join @ // { Live ?k } { Live ?l } -- [ ?k ?l union :>> ?m ] |
-{ Live ?m } ;
-! [ { ?k } ?c slots>tuple ] ;
-! { ?c ?k } ;
+! CHR: duplicate-imply @ { Imply ?x ?y } // { Imply ?x ?y } -- | ;
+CHR: duplicate-imply @ { Path ?x ?v ?y } // { Path ?x ?v ?y } -- | ;
+CHR: subsume-path @ { Path ?a ?m ?b } // { Path ?c ?n ?d } -- [ ?a ?c set= ] [ ?n ?m subset? ] [ ?b ?d set= ] | ;
 
+CHR: impossible-path-left @ { Left ?x } // { Path __ __ ?b } -- [ ?b ?x intersects? ] | ;
+CHR: impossible-path-right @ { Right ?x } // { Path ?a __ __ } -- [ ?a ?x intersects? ] | ;
+
+CHR: have-complete-path @ { Left ?x } { Right ?y } { Path ?a ?m ?b } // --
+[ ?a ?x subset? ] [ ?b ?y subset? ] | { Live ?m } ;
+
+! TODO: Do we need to keep the paths because we could miss stuff? Probably yes...
+! ?m: matched set to absorb
+CHR: join-paths @ { Path ?a ?x ?b } { Path ?c ?y ?d } // -- [ ?b ?c intersect :>> ?m empty? not ]
+[ ?a ?d intersects? not ]
+[ ?a ?y intersects? not ]
+[ ?b ?y intersects? not ]
+[ ?c ?x intersects? not ]
+[ ?d ?x intersects? not ]
+! [ ?a ?c intersects? not ]
+! [ ?b ?d intersects? not ]
+[ ?c ?m diff ?a union :>> ?r ]
+[ ?b ?m diff ?d union :>> ?s ]
+[ ?x ?y union ?m union :>> ?p ] | { Path ?r ?p ?s } ;
+! CHR: redundant-imply @ { Left ?a } { Right ?b } // { Imply ?x ?y } --
+! [ ?x ?b subset? ] [ ?y ?a subset? ] | ;
+! CHR: imply-extends-right @ { Imply ?x ?y } // { Right ?b } -- [ ?y ?b subset? ] [ ?x ?b subset? not ]
+! [ ?x ?b union :>> ?d ] | { Right ?d } ;
+! CHR: imply-extends-left @ { Imply ?x ?y } // { Left ?b } -- [ ?x ?b subset? ] [ ?y ?b subset? not ]
+! [ ?y ?b union :>> ?d ] | { Left ?d } ;
+
+: make-imply ( left right -- pred )
+    ! [ vars ] bi@ 2dup [ empty? not ] both? [ Imply boa ] [ 2drop f ] if ;
+    [ vars ] bi@ 2dup [ empty? not ] both? [ f swap Path boa ] [ 2drop f ] if ;
+
+: use-def ( left right -- pred )
+    [ vars ] bi@ 2dup [ empty? not ] both? [ UseDefs boa ] [ 2drop f ] if ;
+
+! CHR: given-is-given @ { Imply ?a ?b } // { Given ?x } -- [ ?a ?x subset? ] [ ?b ?x subset? not ]
+! [ ?b ?x union :>> ?y ] | { Given ?y } ;
+
+! CHR: would-be-defined-by @ { Imply ?a ?b } // { Define ?x } -- [ ?b ?x subset? ] [ ?a ?x subset? not ]
+! [ ?a ?x union :>> ?y ] | { Define ?y } ;
+
+! CHR: simple-implication-extends-fringe @ AS: ?p <={ expr-pred } // AS: ?s <={ fringe ?x } --
+! [ ?p vars :>> ?v length 1 > ] [ ?v ?x diff :>> ?y length 1 = ] | [ ?s clone [ ?y first suffix ] change-vars ]
+! [ ?v ?y diff ?y ?s Left? [ swap ] unless Imply boa ] ;
+
+! ! Desperate Move: Full contagion from both sides...
+! CHR: pred-intersects-fringe @ AS: ?p <={ body-pred } // AS: ?s <={ fringe ?x } --
+! [ ?p upper-scope-vars vars :>> ?v length 1 > ] [ ?v ?x intersects? ] [ ?v ?x subset? not ] |
+! [ ?s clone [ ?v union ] change-vars ] ;
+
+! CHR: pred-connect-right @ AS: ?p <={ body-pred } { Left ?x } { Right ?y } --
+! [ ?p upper-scope-vars vars :>> ?v ] [ ?v ?x intersects? not ] [ ?y ?v set-xor :>> ?b [ empty? not ] both? ] |
+! {  }
+
+GENERIC: defines-scope ( pred -- left right )
+M: body-pred defines-scope drop f f ;
+M: CallEffect defines-scope [ in>> ] [ out>> ] bi ;
+
+! CHR: collect-defines-scope @ { Collect ?p } // --
+! [ ?p defines-scope [ vars ] bi@ :>> ?b swap :>> ?a [ empty? not ] both? ]
+! [ ?a ?b union :>> ?c ] | { Live ?c } { Left ?a } { Right ?b } ;
+
+PREFIX-RULES: { P{ CompMode } P{ Left __ } P{ Right __ } }
+
+! ** Predicate-speficic Modes and Collection
+
+! *** Relations
+! TODO: only add these if it makes sense for optimization?
+CHR: rel-pred-modes @ <={ rel-pred ?x ?y } // -- | [ ?x ?y make-imply ] [ ?y ?x make-imply ] ;
+
+! *** Mathematical Operations
+
+! TODO: one of these is possibly never used?
+CHR: binop-modes @ <={ binop ?z ?x ?y } // -- |
+[ { ?x ?y } ?z make-imply ]
+[ { ?y ?z } ?x make-imply ]
+[ { ?z ?x } ?y make-imply ] ;
+
+! *** Other expr preds
+CHR: slot-modes @ { Slot ?o ?n ?v } // -- | [ { ?o ?n } ?v make-imply ] ;
+
+
+! *** CallEffect and friends
+
+CHR: call-effect-modes @ { CallEffect ?q ?a ?b } // -- | [ { ?q ?a } ?b make-imply ] ;
+
+! ! TODO: maybe abstract scope-pred abstraction?
+! CHR: call-effect-modes @ { CallEffect ?q ?a ?b } // -- |
+! [ { ?a ?q } ?b make-imply ]
+! [ ?a { ?b ?q } make-imply ] ;
+
+UNION: simple-call-pred CallRecursive CallXorEffect ;
+CHR: call-recursive-modes @ <={ simple-call-pred __ ?a ?b } // -- |
+[ ?a ?b make-imply ] ;
+
+
+! ! *** Effect Instance types
+
+! ! FIXME: prove we are not missing anything by ignoring xor effects here?
+! CHR: effect-instance-modes @ { Instance ?x P{ Effect ?a ?b __ __ } } // -- |
+! [ { ?a ?x } ?b make-imply ]
+! [ ?a { ?b ?x } make-imply ] ;
+
+! ! TODO: need scope here? Right now only assuming that resulting CallEffects from e.g. curry do define scope
+! CHR: collect-effect-instance @ { Live ?v } // AS: ?p P{ Instance ?x P{ Effect __ __ __ __ } } --
+! [ ?x ?v in? ] | { Collect ?p } ;
+
+! ! *** Iteration construct
+! ! TODO: Counters
+
+! CHR: iterated-modes @ { Iterated __ { ?i ?b ?c ?d ?o } } // -- |
+! [ ?i ?b make-imply ]
+! [ ?c ?d make-imply ] ;
+
+! ! CHR: collect-iterated @ { Live ?v } // AS ?p P{ Iterated __ { ?i ?a ?b ?c ?o } } -- |
+! ! [ { ?i ?o } ]
+
+! ! *** Macro-likes
+CHR: macro-call-modes @ { MacroCall __ ?a ?q } // -- | [ ?a ?q make-imply ] ;
+
+CHR: boa-modes @ <={ Boa ?c ?i ?o } // -- | [ { ?c ?i } ?o make-imply ] ;
+
+! GENERIC: expr-modes ( pred -- modes )
+! M: rel-pred expr-modes
+
+! CHR: standard-expr-extend-left @ AS: ?p <={ expr-pred } // { Left ?a } --
+! [ ?p vars :>> ?v ?a diff :>> ?y ]
+
+
+! CHR: pred-defines-imply @ { Left ?a } { Right ?b } AS: ?p <={ body-pred } // --
+! [ ?p vars :>> ?v length 1 > ] [ ?p dep-pair :>> ?m ]
+! [ ?v ?a subset? not ] [ ?v ?b subset? not ]
+! [ ?m first ?b diff :>> ?x ] [ ?m second ?a diff :>> ?y ]
+! ! [ { [ ?x empty? ] [ ?y empty? ] } 0&& not ]
+! | { Imply ?x ?y } ;
+
+
+! CHR: extend-right-set-from-left @ // { Right ?y } { ImplyLeft ?l ?v } -- [ ?v ?y subset? ]
+! [ ?y ?l union :>> ?b ] | { Right ?b } ;
+
+! CHR: extend-left-set-from-right @ // { Left ?y } { ImplyRight ?l ?v } -- [ ?v ?y subset? ]
+! [ ?y ?l union :>> ?b ] | { Left ?b } ;
+
+GENERIC: upper-vars ( pred -- vars )
+M: val-pred upper-vars vars ;
+M: Iterated upper-vars stuff>> [ first vars ] [ last vars ] bi union ;
+M: CallEffect upper-vars vars ;
+M: CallXorEffect upper-vars [ in>> vars ] [ out>> vars ] bi union ;
+M: CallRecursive upper-vars [ in>> vars ] [ out>> vars ] bi union ;
+M: Instance upper-vars val>> 1array ;
+
+! TODO: if this is a performance bottleneck, try smarter implementation!
+! : maybe-join-vars ( set vars -- vars ? )
+!     over '[ unclip-slice _ [ subset? ] [ in? not ] bi-curry bi* and ] find-permutation
+!     [ first suffix t ] [ f ] if* ;
+! : maybe-join-vars ( set vars -- vars var/f )
+!     over diff dup length 1 = [ first [ suffix ] keep ] [ drop f ] if ;
+
+! CHR: live-effect-instance @ { Instance ?x ?e } // { Live ?c } -- [ ?e valid-effect-type? ] [ ?x ?c in? ]
+! ! TODO: possibly also use left and right here?
+! [ ?c ?e vars union :>> ?d ] | { Live ?d } ;
+
+! CHR: iterated-defines-deps @ { Collect P{ Iterated __ { __ ?b ?c ?d __ } } } // { Live ?a } --
+! [ { ?b ?c ?d } vars ?a union :>> ?x ] | { Live ?x } ;
+
+! CHR: live-xor-call @ { CallXorEffect ?tau ?a ?b } // { Live ?c } -- [ { ?a ?b } vars :>> ?x ?c intersects? ]
+! [ ?x ?c append ?tau vars union :>> ?d ] | { Live ?d } ;
+
+GENERIC: flow-vars ( pred -- vars )
+M: body-pred flow-vars vars ;
+M: Iterated flow-vars stuff>> [ first vars ] [ last vars ] bi union ;
+UNION: dataflow-pred expr-pred CallEffect GenericDispatch CallRecursive Iterated ;
+
+! CHR: left-leader-is-left @ { Left ?a } // { ImplyLeft ?x ?y } -- [ ?y ?a intersects? ]
+! [ ?y ?a diff :>> ?z ] | [ ?z [ f ] [ ?x swap ImplyLeft boa ] if-empty ] ;
+
+! ! TODO: check if we really need both ways.
+! CHR: pred-defines-left-join @ AS: ?p <={ dataflow-pred } // { Left ?a } --
+! [ ?p flow-vars :>> ?v ?a subset? not ]
+! [ ?v ?a intersect :>> ?x empty? not ]
+! [ ?v ?a diff :>> ?y empty? not ]
+! [ ?a ?y union :>> ?w ]
+! ! [ ?a ?w maybe-join-vars [ :>> ?v drop ] dip :>> ?x ]
+! ! [ ?x ?w remove :>> ?y ]
+! | { Left ?w } { ImplyLeft ?x ?y } ;
+
+! CHR: pred-defines-right-join @ AS: ?p <={ dataflow-pred } // { Right ?a } --
+! [ ?p flow-vars :>> ?v ?a subset? not ]
+! [ ?v ?a intersect :>> ?x empty? not ]
+! [ ?v ?a diff :>> ?y empty? not ]
+! [ ?a ?y union :>> ?w ]
+! | { Right ?w } { ImplyRight ?x ?y } ;
 
 ;
