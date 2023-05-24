@@ -338,7 +338,7 @@ M: DeclaredInstance opposite-predicate
     tuple-slots DeclaredNotInstance slots>tuple ;
 
 ! commutative binary operations
-UNION: binop Sum Prod ;
+UNION: commutative-op Sum Prod ;
 
 UNION: lt-pred Le Lt ;
 UNION: symmetric-pred Eq Neq Num= ;
@@ -505,7 +505,7 @@ GENERIC: defines-vars ( pred -- vars )
 ! are known to be used anymore...
 GENERIC: intersects-live-vars ( pred -- vars )
 ! HACK Do this for sums and products for now to fix tests
-M: binop intersects-live-vars vars ;
+M: commutative-op intersects-live-vars vars ;
 M: object intersects-live-vars drop f ;
 M: chr-pred live-vars vars ;
 M: object defines-vars drop f ;

@@ -130,10 +130,6 @@ CHR: subsume-path @ { Path ?a ?m ?b } // { Path ?c ?n ?d } -- [ ?a ?c set= ] [ ?
 ! CHR: impossible-path-right @ { Right ?x } // { Path ?a __ __ } -- [ ?a ?x intersects? ] | ;
 CHR: impossible-path @ { Left ?s ?x } { Right ?s ?y } // { Path ?a __ ?b } -- [ ?a ?y intersects? ] [ ?b ?x intersects? ] | ;
 
-! This does not feel hacky at all, nope....
-CHR: path-crosses-masked @ { Left ?rho ?a } { Right ?rho ?b } { Mask ?rho ?v } // { Path ?x __ ?y } --
-[ ?v ?a diff ?b diff :>> ?c empty? not ] [ ?x ?c intersects? ?y ?c intersects? or ] | ;
-
 CHR: have-complete-path @ { Left ?s ?x } { Right ?s ?y } { Path ?a ?m ?b } // --
 [ ?a ?x subset? ] [ ?b ?y subset? ] | { Live ?m } ;
 
@@ -339,12 +335,12 @@ CHR: have-def-use @ { Def ?l } // { Imply ?x ?y } { Use ?r } --
 
 ! TODO: one of these is possibly never used?
 ! Nope, seems like we need all of them, or another error with scoping exists?
-! CHR: binop-modes @ <={ binop ?z ?x ?y } // -- |
-CHR: binop-extend-def @ AS: ?p <={ binop } // { Def ?l } --
+! CHR: commutative-op-modes @ <={ commutative-op ?z ?x ?y } // -- |
+CHR: commutative-op-extend-def @ AS: ?p <={ commutative-op } // { Def ?l } --
 [ ?l ?p vars set-cut :>> { ?x ?y } nip length 1 = ]
 [ ?l ?y first suffix :>> ?m ] | { Def ?m } [ ?x ?y make-imply ] ;
 
-! CHR: binop-extend-use @ AS: ?p <={ binop } { Def ?l } // { Use ?r } --
+! CHR: commutative-op-extend-use @ AS: ?p <={ commutative-op } { Def ?l } // { Use ?r } --
 ! [ ?l ?p vars set-cut :>> { ?x ?y } drop length 2 = ]
 ! [ ?l ?y first suffix :>> ?m ] | { Def ?m } ;
 

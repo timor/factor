@@ -281,6 +281,11 @@ CHR: phi-discrim-le-lt @ { Le ?x ?v } { Lt ?v ?x } // -- | { Discriminator { ?x 
 ! the other side would satisfy
 CHR: phi-rel-discriminates @ <={ rel-pred ?x ?y } // -- | { Discriminator { ?x ?y } } ;
 
+! *** Phi Math
+
+CHR: phi-keep-commutative-pred @ // AS: ?p <={ commutative-op ?z ?x ?y } AS: ?q <={ commutative-op ?z ?y ?x } --
+[ ?p ?q [ class-of ] same? ] | { Keep ?p }  ;
+
 ! **** phi higher order
 
 ! If we have conflicting definitions on what will define an output stack, then we have unresolved control flow
@@ -481,7 +486,7 @@ CHR: check-sum @ // { Sum A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y + ?z = not ] | P{
 ! CHR: zero-sum-1 @ // { Sum ?z 0 ?y } -- | [ ?z ?y ==! ] ;
 ! CHR: zero-sum-2 @ // { Sum ?z ?x 0 } -- | [ ?z ?x ==! ] ;
 ! This should be fine, as we only swap between output holes
-CHR: normalize-binop @ // AS: ?p <={ binop ?z A{ ?x } ?y } -- [ ?y term-var? ] |
+CHR: normalize-commutative-op @ // AS: ?p <={ commutative-op ?z A{ ?x } ?y } -- [ ?y term-var? ] |
 [ { ?z ?y ?x } ?p class-of slots>tuple ] ;
 
 ! Anything more complex than that needs a linear equation predicate, or

@@ -272,6 +272,8 @@ P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y } {
 ! Neuralgic for missing Sum mode
 { 3 } [ [ - 2 swap - swap + ] get-type preds>> [ Sum? ] count ] unit-test
 
+{ 1 } [ [ [ + ] [ swap + ] if ] get-type preds>> [ Sum? ] count ] unit-test
+
 ! ** Simple Dispatch
 GENERIC: foothing ( obj -- result )
 M: fixnum foothing 3 + ;
@@ -956,5 +958,3 @@ P{ Xor
 
 ! TODO: shift must transport the Shift relation through the coercion
 ! in the bignum branch.  Unit-test this!
-
-! TODO: [ + ] [ swap + ] if
