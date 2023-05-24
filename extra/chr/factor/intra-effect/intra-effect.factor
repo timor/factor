@@ -53,13 +53,7 @@ CHR: declared-predicate-class @ // { DeclaredInstance ?x A{ ?tau } } -- [ ?tau p
 [ ?tau make-instance-check :>> ?q ]
 |
 { ?DeferTypeOf ?q ?sig }
-! NOTE: not using applyeffect here as this will not be correctly carried over
-! { ApplyEffect ?sig L{ ?x . ?b } L{ ?c . ?b } }
-! NOTE: need to keep this alive in this context to make sure this will get evaluated!
-! Nope, not working, as this will not survive a re-inference due to deferred xor-calls
-! { Live { ?b } }
-{ Instance ?p ?sig }
-{ CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
+{ ApplyEffect ?sig L{ ?x . ?b } L{ ?c . ?b } }
 { Instance ?c W{ t } }
 { DeclaredInstance ?x ?rho } ;
 
@@ -69,9 +63,7 @@ CHR: declared-not-predicate-class @ // { DeclaredNotInstance ?x A{ ?tau } } -- [
 |
 { Instance ?x ?rho }
 { ?DeferTypeOf ?q ?sig }
-! { ApplyEffect ?sig L{ ?x . ?b } L{ ?c . ?b } }
-{ Instance ?p ?sig }
-{ CallEffect ?p L{ ?x . ?b } L{ ?c . ?b } }
+{ ApplyEffect ?sig L{ ?x . ?b } L{ ?c . ?b } }
 { Instance ?c W{ f } } ;
 
 CHR: normalize-known-not-declaration @ // { DeclaredNotInstance ?x A{ ?tau } } -- [ { ?tau } first classoid? ]
@@ -396,7 +388,8 @@ CHR: eq-propagates-nth-n-2 @ { Eq ?m ?n } { Nth ?v ?a ?n } // -- |
 ! effects. So the instance in the first one is a "provide", and the instance in the second one is an "expect".
 ! Since the intersection type operation is commutative, we don't care which came from which.
 ! FIXME: The rule should also apply to Phi Mode reasoning, but for a different reason.
-CHR: same-slot-must-be-same-var @ { Slot ?o ?n ?v } // { Slot ?o ?n ?w } -- | [ ?v ?w ==! ] ;
+CHR: same-slot-must-be-same-var @ { Slot ?o ?n M{ ?v } } // { Slot ?o ?n M{ ?w } } -- | [ ?v ?w ==! ] ;
+! CHR: same-slot-must-be-eq @ { Slot ?o ?n ?v } { Slot ?o ?n ?w } // -- | { Eq ?v ?w } ;
 
 : typeof>tag ( quoted -- n/f )
     first
@@ -570,9 +563,6 @@ CHR: apply-regular-effect @ // { ApplyEffect ?x ?i ?o } -- [ ?x Effect? ]
 CHR: defer-apply-xor-effect @ // { ApplyEffect ?x ?i ?o } -- [ ?x Xor? ] [ ?x fresh-effect :>> ?y ] |
 { CallXorEffect ?y ?i ?o } ;
 
-CHR: apply-effect-not-known @ // { ApplyEffect M{ ?rho } ?i ?o } -- | [ "applying unknown effect" throw ] ;
-
-
 ! NOTE: These only meet in renamed form?
 ! Probably not. [ ... ] [ call ] keep looks fishy...
 ! NOTE: big change: make a fresh effect before every call
@@ -585,6 +575,8 @@ CHR: literal-call-type-must-be-known @ <={ FinishEffect } // { CallEffect ?q __ 
 ! { Instance ?q ?rho } -- [ ?rho valid-effect-type? not ]
 --
 | [ { ?p "literal-effect-unknown" } throw ] ;
+
+CHR: call-mode-error @ // { CallEffect A{ ?q } ?a ?b } -- | [ { ?q "call mode error" } throw ] ;
 
 ! non-copying
 ! CHR: call-applies-effect @ { Instance ?q P{ Effect ?c ?d ?x ?l } } // { CallEffect ?q ?a ?b } -- |
@@ -710,8 +702,7 @@ CHR: invalid-loop-effect @ // { LoopVar { ?w ?x ?y ?z } } --
 ! If the sum is assumed to have been calculated, then the result is included
 ! CHR: loop-sum-defines-counters @ { Sum ?y ?x ?n } { LoopVar { ?w ?x ?y ?z } } // -- |
 CHR: loop-sum-defines-plus-counter @ { Sum ?y ?x ?n } // { LoopVar { ?w ?x ?y ?z } } -- |
-{ Counter ?w ?x ?y ?z ?n }
-;
+{ Counter ?w ?x ?y ?z ?n } ;
 
 ! FIXME: only works for literal sums right now
 CHR: loop-sum-defines-minus-counter @ { Sum ?x ?y A{ ?n } } // { LoopVar { ?w ?x ?y ?z } } --
@@ -799,9 +790,13 @@ CHR: call-destructs-composed @ { Instance ?p composed } { Slot ?p "first" ?q } {
 ! TODO: why are there Ensure and Declare?
 ! Seems like Ensure is to be used with declaration order,
 ! While Declare is to be used with list-stack order, at the least.
+! Another difference seems to be that Declare(Stack) is actually referring
+! to values!
+
 
 CHR: did-ensure @ // { Ensure +nil+ __ } -- | ;
 CHR: did-declare @ // { Declare +nil+ __ } -- | ;
+CHR: did-declare-stack @ // { DeclareStack +nil+ __ } -- | ;
 CHR: start-ensure @ // { Ensure A{ ?a } ?r } -- [ ?a array? ]
 [ ?a <reversed> >list :>> ?b ] | { Ensure ?b ?r } ;
 CHR: destruc-ensure @ // { Ensure L{ ?tau . ?r } L{ ?x . ?xs } } -- |
@@ -825,8 +820,8 @@ CHR: destruc-declare @ // { Declare L{ ?tau . ?r } L{ ?x . ?xs } } -- |
 
 ! *** Substituting ground values into body constraints
 
-CHR: known-declare @
-{ Eq ?l A{ ?tau } } // { Declare ?l ?a } --
+CHR: known-declare-stack @
+{ Eq ?l A{ ?tau } } // { DeclareStack ?l ?a } --
 [ ?tau <reversed> >list :>> ?m ] | { Declare ?m ?a } ;
 
 
@@ -838,7 +833,7 @@ CHR: known-declare @
 
 ! CHR: known-macro-arg @ { Eq ?x A{ ?v } } // { ExpandQuot ?q ?a L{ ?x . ?ys } ?p ?n } --
 CHR: known-macro-arg @ { Eq ?x A{ ?v } } // { MacroCall ?q ?a ?p } --
-[ ?x ?a in? ] [ ?a { ?x ?v } lift* :>> ?b ] | { MacroCall ?q ?b ?p } ;
+[ ?x ?a in? ] [ ?a { { ?x ?v } } lift* :>> ?b ] | { MacroCall ?q ?b ?p } ;
 ! [ ?a length ?n < ]
 ! [ ?a ?v prefix :>> ?b ]
 ! |
@@ -957,6 +952,7 @@ CHR: known-generic-input/output @ { Eq ?n A{ ?v } } // { GenericDispatch ?w ?d ?
 ! [| | ?d { { ?x ?tau } } lift* :> new-dispatcher
 !  P{ GenericDispatch ?w new-dispatcher ?a ?i ?o } ] ;
 
+! *** TODO Tuple Folding
 
 ! *** Slot conversion
 ! TODO: this conversion can be wrong when working on numerically optimized code?

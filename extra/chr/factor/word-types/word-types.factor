@@ -347,7 +347,7 @@ CHR: type-of-declare @ { TypeOfWord declare ?tau } // -- |
 [ ?tau
   P{ Effect L{ ?l . ?a } ?a f {
          P{ Instance ?l array }
-         P{ Declare ?l ?a }
+         P{ DeclareStack ?l ?a }
      } }
   ==! ] ;
 

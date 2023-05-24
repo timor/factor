@@ -315,11 +315,20 @@ PRIVATE>
     [ add-timing ] each ;
 
 ! ** Convenience
+: word-timing/total. ( -- )
+    word-timing get >alist
+    [ second first ] sort-with
+    [ first2 first2 [ 1000000000 /f ] dip 3array ] map
+    dup [ second ] map-sum "Total:" swap "" 3array suffix
+    simple-table. ;
+
 : time.. ( ..a quot -- ..b )
     reset-word-timing
-    time word-timing.
+    time word-timing/total.
     ; inline
 
 : tqt ( quot -- res )
+    reset-all
     add-chr-timing
-    [ qt ] time.. sort-keys ;
+    [ qt ] time.. sort-keys
+    reset-all ;

@@ -114,13 +114,17 @@ CHR: throw-type-query @ // { Spool ?tau L{ } } { ?DeferTypeOf ?q M{ ?sig } } -- 
 [ [ P{ ?TypeOf ?q ?sig } ] no-context ] { Spool ?tau L{ } } ;
 ! [ P{ FinishEffect ?tau } ] ;
 
-CHR: end-spool @ { MakeEffect ?i ?o __ __ __ } // { Spool ?tau L{ } } -- [ ?i vars :>> ?a ] [ ?o vars :>> ?b ]
+CHR: end-spool @ { MakeEffect ?i ?o __ __ __ } // { Spool ?tau L{ } } --
+! [ ?i value-vars :>> ?a ] [ ?o value-vars :>> ?b ]
+[ ?i vars :>> ?a ] [ ?o vars :>> ?b ]
 [ ?a ?b union :>> ?c ]
 |
 ! { FinishEffect ?tau }
-{ Live ?c }
-{ Left ?a } { Right ?b }
+! { Live ?c }
+! { Left ?a } { Right ?b }
+! { Scope ?i ?o }
 ! { Given ?a } { Define ?b }
+{ Live ?c } { Def ?a } { Use ?b }
 { FinishEffect ?tau } ;
 CHR: spool-one-pred @ // { Spool ?tau L{ ?x . ?xs } } -- | [ ?x ] { Spool ?tau ?xs } ;
 
@@ -276,6 +280,7 @@ CHR: collect-live-body-pred @ { FinishEffect ?tau } // { Collect ?p } AS: ?e P{ 
 ! { MakeEffect ?a ?b ?y ?k ?tau } ;
 
 CHR: discard-implied-param @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // <={ ImpliesParam } -- | ;
+CHR: incomplete-scope @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { Scope ?l ?r } -- | [ { ?l ?r "losing scope" } throw ] ;
 CHR: discard-liveness-preds @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // <={ liveness-pred } -- | ;
 
 ! TODO: abstract this shit...
@@ -296,6 +301,11 @@ CHR: discard-liveness-preds @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?ta
 ! CHR: must-cleanup @ { MakeEffect __ __ __ __ __ } AS: ?p <={ body-pred } // -- | [ ?p "leftovers" 2array throw f ] ;
 PREFIX-RULES: f
 ! *** Discard unrelated predicates
+
+CHR: apply-effect-not-known @ { FinishEffect __  } // { ApplyEffect M{ ?rho } ?i ?o } -- | [ "applying unknown effect" throw ] ;
+CHR: losing-call-effect @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p P{ CallEffect __ __ __ } -- | [ { ?p "discarding a call-effect predicate" } throw ] ;
+CHR: losing-macro-call @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p <={ MacroCall } -- | [ { ?p "discarding a macro call predicate" } throw ] ;
+CHR: losing-unresolved-iteration @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p <={ Iterated } -- | [ { ?p "discarding unresolved iteration predicate" } throw ] ;
 CHR: cleanup-incomplete @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // AS: ?p <={ body-pred } -- | ;
 
 ! This is triggered if phi mode is aborted

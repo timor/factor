@@ -1,8 +1,8 @@
 USING: accessors arrays assocs chr chr.modular chr.state.private classes
-classes.algebra classes.tuple combinators combinators.short-circuit generic
-hashtables kernel lexer lists lists.private namespaces parser
-prettyprint.backend prettyprint.custom prettyprint.sections quotations sequences
-terms vocabs.parser words ;
+classes.algebra classes.tuple combinators combinators.short-circuit
+generalizations generic hashtables kernel lexer lists lists.private make math
+namespaces parser prettyprint.backend prettyprint.custom prettyprint.sections
+quotations sequences terms vocabs.parser words ;
 
 IN: chr.parser
 
@@ -40,13 +40,18 @@ SYNTAX: CHR{ \ } parse-chr-rule chr new-chr suffix! ;
 
 SYNTAX: CHR: scan-token "@" expect \ ; parse-chr-rule named-chr new-chr swap >>rule-name suffix! ;
 
-: ex-check-setter-quot ( var -- quot )
-    '[ dup _ current-bindings get-global set-at ] ;
+: set-binding ( val var -- ) current-bindings get-global set-at ;
 
-SYNTAX: :>> scan-word term-var check-instance
-    [ defined-existentials [ swap suffix ] change ]
-    [ ex-check-setter-quot append! ] bi
-    ;
+: make-binder ( vars -- quot )
+    [ <reversed> [ 1 + swap '[ _ npick _ set-binding ] % ] each-index ] [ ] make ;
+
+: term-var-list ( spec -- seq )
+    dup sequence? [ 1array ] unless
+    [ term-var check-instance ] map ;
+
+SYNTAX: :>> scan-object term-var-list
+    [ defined-existentials [ swap append ] change ]
+    [ make-binder append! ] bi ;
 
 ! Explicit instantiation.  These create fresh bindings for the variables before the bar
 ! This happens after substitution

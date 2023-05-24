@@ -254,3 +254,10 @@ M: Xor xor-call? [ type1>> ] [ type2>> ] bi [ xor-call? ] bi@ or ;
     dup clone
     [ [ P{ Instance inst-var then-type } suffix ] change-preds ]
     [ [ P{ Instance inst-var else-type } suffix ] change-preds ] bi* ;
+
+! ** Liveness scoping
+: value-vars ( stack -- vars )
+    list>array* members ;
+
+: stack-vars ( stack -- vars row )
+    list*>array unclip-last ;

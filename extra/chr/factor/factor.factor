@@ -221,13 +221,15 @@ TUPLE: DeclaredNotInstance < Instance ;
 
 TUPLE: expr-pred < val-pred ;
 ! TODO: not sure why this is a val-pred on the object!
-! TUPLE: Slot < val-pred n slot-val ;
-TUPLE: Slot < expr-pred n slot-val ;
+! ODOT: because we don't want to substitute into the slot-val!
+TUPLE: Slot < val-pred n slot-val ;
+! TUPLE: Slot < expr-pred n slot-val ;
 ! Element class?
-TUPLE: Element < expr-pred type ;
-TUPLE: Length < expr-pred length-val ;
-TUPLE: Nth < expr-pred seq n ;
+TUPLE: Element < val-pred type ;
+TUPLE: Length < val-pred length-val ;
+TUPLE: Nth < val-pred seq n ;
 ! A declaration, has parameterizing character
+TUPLE: DeclareStack < chr-pred classes stack ;
 TUPLE: Declare < chr-pred classes stack ;
 
 ! A declaration, has no parameterizing character, just shortcut for Instance
@@ -235,6 +237,7 @@ TUPLE: Declare < chr-pred classes stack ;
 TUPLE: Ensure < chr-pred classes stack ;
 
 TUPLE: CallEffect < chr-pred thing in out ;
+! FIXME: this is actually a macro-expand op, not a call op! Change naming accordingly
 TUPLE: MacroCall < chr-pred quot args out-quot-val ;
     ! in out ;
 TUPLE: ApplyEffect < chr-pred effect in out ;
@@ -244,6 +247,8 @@ TUPLE: CallRecursive < chr-pred tag in out ;
 ! The same as above, but different
 TUPLE: CallUnknown < CallEffect ;
 TUPLE: CallSite < chr-pred word var ;
+
+UNION: inline-call-pred CallRecursive CallXorEffect ;
 
 TUPLE: CallsRecursive < chr-pred word other-words ;
 TUPLE: PartialRecursive < chr-pred word temp-word ;
@@ -352,6 +357,7 @@ TUPLE: PrimCall < chr-pred word in out ;
 ! TUPLE: Ref- < ref-pred vars ;
 ! TUPLE: Refs < ref-pred map ;
 UNION: body-pred val-pred CallEffect CallXorEffect Declare CallRecursive Throws Boa
+    DeclareStack
     ! MacroExpand
     MacroCall
     Iterated
@@ -406,12 +412,14 @@ TUPLE: PhiDone < chr-pred ;
 
 ! Liveness
 TUPLE: liveness-pred < chr-pred ;
+TUPLE: Scope < liveness-pred left right ;
+TUPLE: SubScope < Scope ;
 TUPLE: Given < liveness-pred vars ;
 TUPLE: Have < liveness-pred vars ;
 TUPLE: Define < liveness-pred vars ;
 TUPLE: Defined < liveness-pred vars ;
-TUPLE: Left < liveness-pred vars ;
-TUPLE: Right < liveness-pred vars ;
+TUPLE: Left < liveness-pred row vars ;
+TUPLE: Right < liveness-pred row vars ;
 ! UNION: fringe Given Define ;
 TUPLE: Path < liveness-pred left vars right ;
 TUPLE: Live < liveness-pred vars ;
@@ -422,13 +430,13 @@ TUPLE: Out < liveness-pred vars ;
 TUPLE: Forward < liveness-pred vars ;
 TUPLE: Reverse < liveness-pred vars ;
 TUPLE: BiDi < liveness-pred vars ;
-! TUPLE: Def < liveness-pred vars ;
-! TUPLE: Use < liveness-pred vars ;
+TUPLE: Def < liveness-pred vars ;
+TUPLE: Use < liveness-pred vars ;
 TUPLE: UseDefs < liveness-pred from to ;
 ! TUPLE: Roots < liveness-pred vars ;
 TUPLE: Collect < liveness-pred pred ;
-TUPLE: ImplyLeft < liveness-pred from to ;
-TUPLE: ImplyRight < liveness-pred from to ;
+! TUPLE: ImplyDef < liveness-pred from to ;
+! TUPLE: ImplyRight < liveness-pred from to ;
 TUPLE: Imply < liveness-pred in out ;
 
 ! TUPLE: Roots < Live ;

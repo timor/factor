@@ -1,0 +1,149 @@
+without rule: 6508  13.2 - 14.9 sec
+
+with rule: 6629  12.5 - 14.4 sec
+
+P{ Path { quot3 rho3 } f { a4 rho4 } } (Rule: R292 (call-effect-modes))
+P{ Path { quot4 rho4 } f { ?o4 } } (Rule: R292 (call-effect-modes))
+CHR: join-paths @ P{ CompMode } // P{ Path { quot3 rho3 } f { a4 rho4 } } P{ Path { quot4 rho4 } f { ?o4 } } --
+P{ Path { quot4 quot3 rho3 } { rho4 } { a4 ?o4 } } (Rule: R288 (join-paths))
+P{ Path { a3 } f { quot3 } } (Rule: R294 (macro-call-modes))
+CHR: join-paths @ P{ CompMode } // P{ Path { a3 } f { quot3 } } P{ Path { quot4 quot3 rho3 } { rho4 } { a4 ?o4 } } --
+P{ Path { quot4 rho3 a3 } { rho4 quot3 } { a4 ?o4 } } (Rule: R288 (join-paths))
+P{ Path { a4 } f { quot4 } } (Rule: R294 (macro-call-modes))
+
+
+Fixpoint type of [ myloop ]
++ 648(296-19):  ("comp19") P{ MakeEffect L{ ?y16 . ?a86 } ?a87 f f ?rho21 } (Rule: R296 (rebuild-compose-effect))
++ 649(296-19):  ("comp19") P{ CompMode } (Rule: R296 (rebuild-compose-effect))
++ 650(296-19):  ("comp19") P{
+    Spool
+    ?rho21
+    L{
+        P{ Instance ?y17 object }
+        P{ CallEffect ?y16 ?a86 L{ ?y17 . ?a87 } }
+        P{ Instance ?y16 callable }
+        P{ Instance ?y16 object }
+        P{ Instance ?y17 POSTPONE: f }
+        P{ Eq ?y17 f }
+    } }
+P{
+    TypeOf
+    [ call call ]
+    P{
+        Effect
+        L{ ?q3 . ?a4 }
+        ?b5
+        { ?q4 ?a5 }
+        { P{ Instance ?q4 callable } P{ Instance ?q3 callable } P{ CallEffect ?q4 ?a5 ?b5 } P{ CallEffect ?q3 ?a4 L{ ?q4 . ?a5 } } }
+    }
+}
+P{
+            TypeOf
+            [ call + + ]
+            P{
+                Effect
+                L{ ?q2 . ?a4 }
+                L{ z4 . rho4 }
+                { x5 x4 z5 y4 }
+                {
+                    P{ CallEffect ?q2 ?a4 L{ y4 x4 x5 . rho4 } }
+                    P{ Instance ?q2 callable }
+                    P{ Instance y4 number }
+                    P{ Instance z5 number }
+                    P{ Sum z5 x4 y4 }
+                    P{ Instance z4 number }
+                    P{ Sum z4 x5 z5 }
+                    P{ Instance x4 number }
+                    P{ Instance x5 number }
+                }
+            }
+        }
+
+dup bi*
++ 158(297-5):  ("comp5") P{ MakeEffect L{ ?x16 ?x17 . ?a21 } ?b15 f f ?a2 } (Rule: R297 (rebuild-compose-effect))
++ 159(297-5):  ("comp5") P{ CompMode } (Rule: R297 (rebuild-compose-effect))
++ 160(297-5):  ("comp5") P{
+    Spool
+    ?a2
+    L{
+        P{ Instance ?x16 object }
+        P{ Instance ?x16 callable }
+        P{ Instance ?x17 object }
+        P{ Instance ?x16 callable }
+        P{ CallEffect ?x16 L{ ?x17 . ?b16 } ?b15 }
+        P{ CallEffect ?x16 ?a21 ?b16 }
+    }
+} (Rule: R297 (rebuild-compose-effect))
+
+P{
+    TypeOf
+    [ curry call ]
+    P{
+        Effect
+        L{ ?x71 obj11 . ?b77 }
+        ?b78
+        f
+        { P{ CallEffect ?x71 L{ obj11 . ?b77 } ?b78 } P{ Instance ?x71 callable } P{ Instance obj11 object } }
+    }
+}
+
+P{
+    TypeOf
+    [ curry call + ]
+    P{
+        Effect
+        L{ ?x72 obj11 . ?b80 }
+        L{ z3 . rho3 }
+        { y3 x3 }
+        {
+            P{ CallEffect ?x72 L{ obj11 . ?b80 } L{ y3 x3 . rho3 } }
+            P{ Instance x3 number }
+            P{ Instance obj11 object }
+            P{ Instance z3 number }
+            P{ Instance ?x72 callable }
+            P{ Sum z3 x3 y3 }
+            P{ Instance y3 number }
+        }
+    }
+}
+
+During [ cardinal? ]:
+P{ MakeEffect L{ ?o4 . ?a7 } L{ ?c4 . ?a7 } f f ?rho4 }
+P{ Eq ?x2 cardinal }
+P{ Instance ?p1 ?sig11 }
+P{ Instance ?c5 word }
+P{ Eq ?c5 t }
+P{ Instance ?x2 intersection{ word classoid } }
+P{
+    CallXorEffect
+    P{
+        Xor
+        P{ Effect L{ ?x77 . ?rho50 } L{ ?z47 . ?rho50 } f { P{ Instance ?x77 integer } P{ Eq ?z47 t } P{ Instance ?z47 t } P{ Le 1 ?x77 } } }
+        P{ Effect L{ ?x78 . ?rho51 } L{ ?z48 . ?rho51 } f { P{ Eq ?z48 f } P{ Instance ?x78 object } P{ Instance ?z48 POSTPONE: f } } }
+    }
+    L{ ?o4 . ?b2 }
+    L{ ?c5 . ?b2 }
+}
+
+[ call call ]
++ 7(302-1):  ("comp1") P{ MakeEffect L{ ?q3 . ?a4 } ?b5 f f ?a1 } (Rule: R302 (rebuild-compose-effect))
+P{ Scope L{ ?q3 . ?a4 } ?b5 } (Rule: R305 (end-spool))
+P{ Instance ?q3 callable }
+P{ CallEffect ?q3 ?a4 L{ ?q4 . ?a5 } }
+P{ Scope ?a4 L{ ?q4 . ?a5 } } (Rule: R295 (collect-call-effect-define-scope))
+P{ Instance ?q4 callable }
+P{ CallEffect ?q4 ?a5 ?b5 }
+P{ Scope ?a5 ?b5 } (Rule: R295 (collect-call-effect-define-scope))
+
+
+[ [ swap ] curry ]
++ 1394(301-32):  ("comp32") P{ MakeEffect L{ obj11 . ?b76 } L{ ?v14 . ?b76 } f f ?a1 } (Rule: R301 (rebuild-compose-effect))
+L{
+    P{ Instance ?x77 P{ Effect L{ ?x78 ?y19 . ?a133 } L{ ?y19 ?x78 . ?a133 } f { P{ Instance ?x78 object } P{ Instance ?y19 object } } } }
+    P{ Eq ?x77 [ swap ] }
+    P{ Instance ?v14 curried }
+    P{ Slot ?v14 "quot" ?x77 }
+    P{ Instance obj11 object }
+    P{ Slot ?v14 "obj" obj11 }
+    P{ Instance ?x77 callable }
+}

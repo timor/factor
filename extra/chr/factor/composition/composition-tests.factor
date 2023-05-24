@@ -144,6 +144,7 @@ P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } f { P{ Instance ?x number } P{ Instance ?
 ! [ [ [ [ if ] ] ]  [ [ [ [ if ] ] ] (call) ] same-type? ] unit-test
 ! [ [ [ [ if ] ] ]  [ [ [ [ if ] ] ] (call) ] [ get-type ] bi@ [ effect>nterm ] bi@ isomorphic? ] unit-test
 
+{ t } [ [ swap swap swap ] [ [ swap ] curry curry call ] same-type? ] unit-test
 ! NOTE: This is interesting: because we have [ ? ] as basis, we don't enforce
 ! that the non-taken branch quotation is actually a quotation!
 P{
@@ -243,9 +244,13 @@ P{ Effect L{ ?x . ?a } L{ ?y . ?a } f
    { P{ Instance ?y object } P{ Instance ?x footuple } P{ Slot ?x "barslot" ?y } }
 } [ [ barslot>> ] get-type ] chr-test
 
-P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y }
-   { P{ Instance ?y footuple } P{ Instance ?x footuple } P{ Slot ?x "barslot" ?y }
-     P{ P{ Slot ?y "barslot" ?z } } }
+P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y } {
+       P{ Instance ?y footuple }
+       P{ Instance ?x footuple }
+       P{ Slot ?x "barslot" ?y }
+       P{ Slot ?y "barslot" ?z }
+       P{ Instance ?z object }
+   }
 } [ [ barslot>> barslot>> ] get-type ] chr-test
 
 ! ** Sums and Parameters
@@ -264,6 +269,8 @@ P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y }
   [ get-type preds>> [ { [ Prod? ] [ Sum? ] } 1|| ] count ] each
 ] unit-test
 
+! Neuralgic for missing Sum mode
+{ 3 } [ [ - 2 swap - swap + ] get-type preds>> [ Sum? ] count ] unit-test
 
 ! ** Simple Dispatch
 GENERIC: foothing ( obj -- result )
@@ -351,9 +358,6 @@ P{
 P{ Effect ?a ?b f { P{ Invalid } } } [ [ [ t ] loop ] get-type ] chr-test
 P{ Effect ?a ?b f { P{ Invalid } } } [ [ [ t ] myloop ] get-type ] chr-test
 
-! FIXME: this must be the same as inner-loop.  It is, but canonical pred bodies aren't fixed yet
-{  } [ [ [ dup 0 > [ 1 - t ] [ f ] if ] loop ] get-type ] chr-test
-
 : indirect-loop ( x -- y ) dup 0 > [ 1 - [ indirect-loop ] call ] when ;
 
 ! FIXME: better test?
@@ -364,9 +368,18 @@ P{ Effect ?a ?b f { P{ Invalid } } } [ [ [ t ] myloop ] get-type ] chr-test
 : inner-loop ( x -- y ) dup 0 > [ 1 - inner-loop ] when ;
 : outer-loop ( x -- y ) dup inner-loop drop dup 0 > [ 1 - outer-loop ] when ;
 
-{ t } [ [ inner-loop ] get-type canonical? ] unit-test
+CONSTANT: dumb-loop
+P{
+    Xor
+    P{ Effect L{ ?x1 . ?a1 } L{ ?y1 . ?a1 } f { P{ Le ?y1 0 } P{ Instance ?y1 number } P{ Lt 0 ?x1 } P{ Instance ?x1 number } } }
+    P{ Effect L{ ?x2 . ?a2 } L{ ?x2 . ?a2 } f { P{ Le ?x2 0 } P{ Instance ?x2 number } } }
+}
 
-{ t } [ [ inner-loop ] [ outer-loop ] same-type? ] unit-test
+dumb-loop [ [ [ dup 0 > [ 1 - t ] [ f ] if ] loop ] get-type ] chr-test
+
+dumb-loop [ [ inner-loop ] get-type ] chr-test
+
+dumb-loop [ [ outer-loop ] get-type ] chr-test
 
 ! ** Mutually recursive definitions
 
@@ -380,12 +393,12 @@ DEFER: pong
 
 [ [ ping ] get-type ] [ no-recursive-fixpoint? ] chr-error must-fail-with
 
-
-! TODO Must infer as same type
 DEFER: peng
 : pang ( x -- x ) peng ;
 : peng ( x -- x ) dup 0 > [ 1 - pang ] when ;
 
+dumb-loop [ [ pang ] get-type ] chr-test
+dumb-loop [ [ peng ] get-type ] chr-test
 
 ! Must fail
 DEFER: ipong
@@ -401,7 +414,10 @@ DEFER: ipeng
 : ipang ( x -- x ) [ [ ipeng ] call ] call ;
 : ipeng ( x -- x ) dup 0 > [ 1 - [ ipang ] call ] when ;
 
-{ t } [ [ ipang ] [ ipeng ] same-type? ] unit-test
+
+! { t } [ [ ipang ] [ ipeng ] same-type? ] unit-test
+dumb-loop [ [ ipang ] get-type ] chr-test
+dumb-loop [ [ ipeng ] get-type ] chr-test
 
 
 ! TODO: test more subtle cases of non-termination
@@ -759,7 +775,7 @@ MACRO: my-add1 ( num -- quot )
 { 42 } [ 41 1 my-add1 ] unit-test
 
 P{ Effect L{ ?a1 . ?i1 } ?o1 { ?q1 } {
-       P{ MacroExpand my-add1 f L{ ?a1 . ?i1 } ?q1 }
+       P{ MacroCall [ [ + ] curry ] { ?a1 } ?q1 }
        P{ Instance ?q1 callable }
        P{ CallEffect ?q1 ?i1 ?o1 }
    }
@@ -782,10 +798,10 @@ P{ Effect L{ ?a1 . ?i1 } L{ ?z1 . ?i1 } f {
 
 
 P{ Effect L{ ?a1 . ?i1 } ?o4 { ?q2 ?a4 ?i4 ?q1 } {
-       P{ ExpandQuot [ [ + ] curry ] f L{ ?a1 . ?i1 } ?q1 1 }
+       P{ MacroCall [ [ + ] curry ] { ?a1 } ?q1 }
        P{ Instance ?q1 callable }
        P{ CallEffect ?q1 ?i1 L{ ?a4 . ?i4 } }
-       P{ ExpandQuot [ [ + 1 + ] curry ] f L{ ?a4 . ?i4 } ?q2 1 }
+       P{ MacroCall [ [ + 1 + ] curry ] { ?a4 } ?q2 }
        P{ Instance ?q2 callable }
        P{ CallEffect ?q2 ?i4 ?o4 }
    }
@@ -805,9 +821,9 @@ P{ Effect L{ ?a1 . ?i1 } L{ ?z1 . ?i1 } f ! { ?z6 }
 [ [ 1 2 my-add1 my-add2 ] get-type ] chr-test
 
 
-P{ Effect L{ ?a1 . ?i1 } ?o4 { ?a4 ?q1 } {
+P{ Effect L{ ?a1 . ?i1 } ?o4 { ?a4 ?q2 } {
        P{ Instance ?a1 number }
-       P{ ExpandQuot [ [ + 1 + ] curry ] f L{ ?a4 . ?i1 } ?q2 1 }
+       P{ MacroCall [ [ + 1 + ] curry ] { ?a4 } ?q2 }
        P{ Instance ?a4 number }
        P{ Sum ?a4 ?a1 1 }
        P{ Instance ?q2 callable }
@@ -853,6 +869,10 @@ P{ Xor
   P{ Effect L{ ?x1 . ?i1 } L{ ?y1 . ?i1 } f { P{ Instance ?x1 object } P{ Eq ?x1 1 } P{ Instance ?y1 fixnum } P{ Eq ?y1 42 } } }
 }
 [ [ { { [ dup 1 = ] [ drop 42 ] } [ drop 99 ] } cond ] get-type ] chr-test
+
+! More than one arg
+MACRO: my-foo ( x y -- quot )
+    [ 4 + * ] 2curry ;
 
 ! TODO: nested expansions
 
@@ -915,6 +935,7 @@ PREDICATE: u8 < fixnum { [ 0 >= ] [ 256 < ] } 1&& ;
 
 ! Takes about 12 seconds right now
 ! [ u8? ] get-type
+! (update) unfortunately, went up to 20 seconds with new liveness inference....
 
 PREDICATE: cardinal < integer 0 > ;
 PREDICATE: zero < integer 0 = ;
