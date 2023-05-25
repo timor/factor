@@ -1,6 +1,6 @@
 USING: accessors arrays classes classes.algebra classes.tuple
 combinators.private combinators.short-circuit kernel math.combinatorics
-quotations sequences sets terms words ;
+math.parser namespaces quotations sequences sets terms words ;
 
 IN: chr
 
@@ -30,6 +30,10 @@ TUPLE: named-chr < chr rule-name ;
 
 : keep/remove ( chr -- seq seq )
     [ heads>> ] [ nkept>> ] bi cut-slice ; inline
+
+GENERIC: rule-name ( id chr -- str )
+M: chr rule-name drop number>string "R" prepend ;
+M: named-chr rule-name nip rule-name>> ;
 
 ! ** Constraint protocol
 ! Return the type to look up in index
@@ -207,7 +211,8 @@ TUPLE: eq-constraint lhs rhs subsumed-vars ;
 
 ! * Arbitrary guards
 INSTANCE: callable constraint
-M: callable apply-substitution* swap lift ;
+M: callable apply-substitution*
+    swap quote-substitution [ lift ] with-variable-on ;
 : test-callable ( callable -- ? )
     ! Swap this in when suspecting that throwing errors will mess up the equivalence theory!
     ! call( -- ? ) ;
@@ -217,7 +222,7 @@ M: callable apply-substitution* swap lift ;
     ! [ dup user-error? [ error>> throw ] [ 2drop f ] if ] recover ; inline
 
 M: callable test-constraint
-    swap lift test-callable ;
+    swap quote-substitution [ lift ] with-variable-on test-callable ;
 
 : internalize-constraint ( lexical-rep -- c: constraint )
     pred>constraint ; inline

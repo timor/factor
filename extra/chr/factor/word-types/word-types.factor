@@ -124,12 +124,13 @@ CHR: add-classes-to-effect @ // { WrapClasses ?i ?o P{ Effect ?a ?b ?l ?p } ?tau
 CHR: alias-type-defined @ { TypeOfWord ?w ?tau } // -- [ ?w word-alias :>> ?q ] |
 { ?TypeOf ?q ?tau } ;
 
-CHR: type-of-prim-call @ // { ?TypeOf [ (call) ] ?tau } -- |
+! NOTE: changing these to caching because this does not use index lookup
+CHR: type-of-prim-call @ { TypeOfWord (call) ?tau } // -- |
 [ ?tau P{ Effect L{ ?q . ?a } ?b f {
               P{ Instance ?q quotation }
               P{ CallEffect ?q ?a ?b } } } ==! ] ;
 
-CHR: type-of-call @ // { ?TypeOf [ call ] ?tau } -- |
+CHR: type-of-call @ { TypeOfWord call ?tau  } // -- |
 [ ?tau P{ Effect L{ ?q . ?a } ?b f {
               P{ Instance ?q callable }
               P{ CallEffect ?q ?a ?b } } } ==! ] ;
@@ -144,15 +145,15 @@ CHR: type-of-dip @ { TypeOfWord dip ?tau } // -- |
 CHR: type-of-dup @ { TypeOfWord dup ?tau } // -- |
 [ ?tau P{ Effect L{ ?x . ?rho } L{ ?x ?x . ?rho } f { P{ Instance ?x object } } } ==! ] ;
 
-CHR: type-of-drop @ // { ?TypeOf [ drop ] ?tau } -- |
+CHR: type-of-drop @ { TypeOfWord drop ?tau } // -- |
 [ ?tau P{ Effect L{ ?x . ?a } ?a f { P{ Instance ?x object } } } ==! ] ;
 
-CHR: type-of-swap @ // { ?TypeOf [ swap ] ?tau } -- |
+CHR: type-of-swap @  { TypeOfWord swap ?tau  } // -- |
 [ ?tau P{ Effect L{ ?x ?y . ?a } L{ ?y ?x . ?a } f { P{ Instance ?x object } P{ Instance ?y object } } } ==! ] ;
 
 ! *** Parameter-inducing words
 
-CHR: type-of-mux @ // { ?TypeOf [ ? ] ?tau } -- |
+CHR: type-of-mux @ { TypeOfWord ? ?tau  } // -- |
 [
     ?tau
     P{ Xor
@@ -241,7 +242,7 @@ CHR: type-of-set-slot @ { TypeOfWord set-slot ?tau } // -- [ ?tau term-var? ] |
   ==!
 ] ;
 
-CHR: type-of-throw @ // { ?TypeOf [ throw ] ?tau } -- |
+CHR: type-of-throw @ { TypeOfWord throw ?tau } // -- |
 ! [ ?tau P{ Effect ?a +bottom+ f } ==! ] ;
 ! [ ?tau null ==! ] ;
 [ ?tau P{ Effect L{ ?e . ?a } ?b f {
@@ -250,14 +251,14 @@ CHR: type-of-throw @ // { ?TypeOf [ throw ] ?tau } -- |
           } }
   ==! ] ;
 
-CHR: type-of-boa @ // { ?TypeOf [ boa ] ?tau } -- |
+CHR: type-of-boa @ { TypeOfWord boa ?tau } // -- |
 [ ?tau
   P{ Effect L{ ?c . ?a } L{ ?v . ?b } f { P{ Instance ?c tuple-class } P{ Boa ?c ?a L{ ?v . ?b } }
                                           P{ Instance ?v tuple } } }
   ==!
 ] ;
 
-CHR: type-of-tuple-boa @ // { ?TypeOf [ <tuple-boa> ] ?tau } -- |
+CHR: type-of-tuple-boa @ { TypeOfWord <tuple-boa> ?tau } // -- |
 [ ?tau
   P{ Effect L{ ?c . ?a } L{ ?v . ?b } f { P{ Instance ?c array } P{ TupleBoa ?c ?a L{ ?v . ?b } }
                                           P{ Instance ?v tuple } } }
@@ -298,17 +299,20 @@ CHR: type-of-unit-val @ { ?TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ] 
 { MakeUnit ?rho ?sig }
 { TypeOf ?q ?sig } ;
 
+! NOTE: Big Change! Only make these CallXors!
+! Interestingly enough, it does not seem to have much impact, at least according
+! to some very quick and rough tests
+! CHR: make-xor-unit-type @ // { MakeUnit P{ Xor ?x ?y } ?tau } -- |
+! { MakeXor ?rho ?sig ?tau }
+! { MakeUnit ?x ?rho }
+! { MakeUnit ?y ?sig } ;
+
+
 ! TODO: gauge impact of not doing the expansion eagerly
 ! XXX This breaks isomorphic comparison for some reason.  Normalization broken?
 ! CHR: make-unit-simple-type @ // { MakeUnit ?rho ?tau } -- [ { ?rho } first valid-type? ] |
 CHR: make-unit-simple-type @ // { MakeUnit ?rho ?tau } -- [ ?rho term-var? not ] |
 [ ?tau P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x ?rho } } } ==! ] ;
-
-! NOTE: Big Change! Only make these CallXors!
-! CHR: make-xor-unit-type @ // { MakeUnit P{ Xor ?x ?y } ?tau } -- |
-! { MakeXor ?rho ?sig ?tau }
-! { MakeUnit ?x ?rho }
-! { MakeUnit ?y ?sig } ;
 
 ! *** Data Values
 

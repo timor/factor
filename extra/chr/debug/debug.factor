@@ -89,10 +89,6 @@ SYMBOL: rule-matches
 : remember-rule-match ( id -- )
     rule-matches get inc-at ;
 
-GENERIC: rule-name ( id chr -- str )
-M: chr rule-name drop number>string "R" prepend ;
-M: named-chr rule-name nip rule-name>> ;
-
 : unused-rules. ( -- )
     "Unused Rules:" print
     program get rules>> <enumerated>
@@ -303,6 +299,7 @@ PRIVATE>
       check-guards
       try-schedule-match
       check/update-history
+      simplify-constraints
     } M\ equiv-activation activate-new suffix
     M\ callable activate-new suffix
     { assume-equal equiv-wakeup-set update-wakeup-set-vars

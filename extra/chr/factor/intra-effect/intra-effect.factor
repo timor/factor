@@ -358,6 +358,8 @@ PREFIX-RULES: { P{ CompMode } }
 ! TERM-VARS: ?ctx ;
 ! MODIFY: [ [ ?ctx swap CP boa ] map ]
 
+CHR: invalid-defer-type-request @ // { ?DeferTypeOf ?x __ } -- [ ?x callable? not ] | [ { ?x "not a valid thing to infer" } throw ] ;
+
 ! Possibly expensive?
 ! FIXME: support modifier in AS: wrappers
 CHR: unique-val-pred @ AS: ?p <={ val-pred } // AS: ?q <={ val-pred } -- [ ?p ?q == ] | ;

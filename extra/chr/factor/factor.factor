@@ -162,6 +162,8 @@ M: pair elt>var
 TUPLE: Effect < chr-pred in out parms preds ;
 TUPLE: TypeOf < index1-pred type ;
 TUPLE: ?TypeOf < chr-pred thing type ;
+! NOTE: doesn't make much sense yet, see TypeOfWord comment below
+! TUPLE: ?TypeOf < index1-pred type ;
 ! Can be used during inference, will either trigger nested inference or
 ! immediately answer
 TUPLE: ?DeferTypeOf < ?TypeOf ;
@@ -169,6 +171,9 @@ TUPLE: FixpointTypeOf < chr-pred thing type ;
 TUPLE: RecursionTypeOf < chr-pred thing type ;
 TUPLE: RecursiveCallTypeOf < chr-pred thing type ;
 TUPLE: TypeOfWord < chr-pred word var ;
+! NOTE: Indexing on that does actually not do a lot, because we are not searching for a lot of stuff in the store,
+! but on the occurrences!  This would make sense if we had an index into the rule occurrences
+! TUPLE: TypeOfWord < index1-pred var ;
 TUPLE: InferType < chr-pred thing ;
 TUPLE: WaitFull < chr-pred type ;
 TUPLE: WaitRec < chr-pred orig rec ;

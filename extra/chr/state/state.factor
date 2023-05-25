@@ -146,6 +146,7 @@ ERROR: cannot-make-equal lhs rhs ;
 
 ! FIXME: allow overwriting dead?
 : add-to-lookup-index ( value key assoc -- )
+    over ground-value? [ "nope" throw ] unless
     2dup [ [ alive? ] filter ] change-at
     push-at ;
     ! 2dup at? [ {  } ]
@@ -194,6 +195,7 @@ TYPED: create-chr ( from-rule c: constraint -- id )
     swap new-id [ >>id ] keep
     [ store-chr ] dip ;
 
+! TODO: this can simply be checked on key presence, or can it?
 : alive? ( id -- ? )
     store get at [ alive>> ] [ f ] if* ;
 
@@ -202,9 +204,15 @@ TYPED: create-chr ( from-rule c: constraint -- id )
 : enqueue ( items -- )
     <reversed> queue get push-all ;
 
+SYMBOL: reactivations
+
+: record-reactivations ( ids -- )
+    store get swap values-of reactivations get [ [ constraint>> constraint-type ] dip inc-at ] curry each ; inline
+
 DEFER: activate
 : reactivate ( ids -- )
-    [ alive? ] filter [ enqueue ] unless-empty ;
+    [ alive? ] filter dup record-reactivations
+    [ enqueue ] unless-empty ;
     ! dup alive? [ activate ] [ drop ] if ;
 
 GENERIC: on-kill-chr ( susp chr -- )
@@ -456,11 +464,27 @@ DEFER: match-single-head
 ! TUPLE: schedule-cont rule-id trace bindings partners vars ;
 ! C: <schedule-cont> schedule-cont
 
+! TODO: why the hell does this work an what does it do?
+! Here's the analysis: If, during the run of an occurrence, the active store constraint is
+! - to be kept
+! - still alive
+! - has been reactivated
+! this occurrence run will be aborted.  Since the reactivation marker has been cleared
+! during the start of this occurrence run, it must have been triggered to be reactivated
+! during the execution of the constraint body.  If so, every guard and rule has already been checked.
+
+
+! Same if the original constraint isn't live anymore
+! Note that it should be possible to extend this to the partner constraints?
+: live-trace? ( trace -- ? )
+    store get [ nip key? ] curry assoc-all? ; inline
+
 :: recursive-drop? ( trace -- ? )
     trace first first2 :> ( id keep? )
     keep? [ id store get at
+            ! Drop after reactivated
             [ activated>> ]
-            [ ! not alive anymore
+            [ ! Early Drop
                 t ] if*
     ] [ f ] if ; inline
 
@@ -479,7 +503,7 @@ DEFER: match-single-head
 !     [ drop f ] if* ; inline
 
 : try-index-lookup ( key bindings -- seq/f )
-    lift ! XXX meh?
+    lift* ! XXX meh?
     [let f :> result!
      lookup-index get [ [ alive? ] filter dup result! ] change-at
      result [ f ]
@@ -488,8 +512,19 @@ DEFER: match-single-head
     ! [ lookup-key-maybe-delete ]
     ! [ f ] if* ; inline
 
+SYMBOL: ocurrence-mismatches
+: record-mismatch ( occ trace susp -- )
+    ! [ length ] [ constraint>> constraint-type ] bi* ocurrence-mismatches get push-at ; inline
+    [ length ] [ constraint>> constraint-type ] bi* ocurrence-mismatches get [
+        [ H{ } clone ] unless*
+        [ swapd push-at ] keep
+    ] change-at ; inline
+
+: filter-lookup-context ( ctx assoc -- assoc )
+    [ ctx>> { [ and ] [ = not ] } 2&& ] with reject-values ;
+
 :: (run-occurrence) ( rule-id trace bindings partners vars -- )
-    trace recursive-drop?
+    trace { [ recursive-drop? not ] [ live-trace? ] } 1&&
     ! [ break ]
     [ partners empty? [
         ! NOTE: unsure about this optimization here...
@@ -510,6 +545,7 @@ DEFER: match-single-head
         pc chr-index-key :> ikey
         ikey [ bindings try-index-lookup ]
         [ pc lookup ] if*
+        bindings current-context of [ swap filter-lookup-context ] when*
         ! pc lookup
         ! bindings sort-lookup
         [| sid sc |
@@ -523,21 +559,23 @@ DEFER: match-single-head
              :> bindings1
              bindings1 [
                  rule-id trace sid keep-partner 2array suffix bindings1 rest vars (run-occurrence)
-             ] when
+             ] [ rule-id trace sc record-mismatch ] if
          ] when
         ] assoc-each
       ] if ]
     ! if
-    unless
+    when
     ;
 
+! Entry point of a CHR occurrence
+! Sets up the initial constraint arguments
 :: run-occurrence ( susp schedule --  )
     susp id>> :> active-id
     ! susp ctx>> current-context set
     schedule [ occurrence>> first ] [ arg-vars>> ] [ partners>> ] tri
     :> ( rule-id arg-vars partners )
     rule-id active-id schedule keep-active?>> dup :> keep?
-    2array 1array
+    2array 1array dup :> trace
     schedule rule-vars>> ! susp vars>> union
     :> vars ! valid-match-vars set
     ! if propagate-transition, reset activated field
@@ -550,7 +588,7 @@ DEFER: match-single-head
     ! Always use context!  The default context is f
     ! current-context susp ctx>> swap associate arg-vars susp try-schedule-match
     ! H{ } clone arg-vars susp try-schedule-match
-        [ partners vars (run-occurrence) ] [ 2drop ] if*
+    [ partners vars (run-occurrence) ] [ 2drop schedule occurrence>> f susp record-mismatch ] if*
     ! ] with-variable
     ;
 
@@ -665,7 +703,10 @@ M: set-reactivated activate-item
 ! This is the main entry point to actually start a constraint schedule
 M: run-schedule activate-item
     [ c>> ] [ schedule>> ] bi
-    over { [ alive>> ] [ activated>> not ] } 1&& [ run-occurrence ]
+    over { [ alive>> ]
+           ! Drop after Reactivation check
+           [ activated>> not ]
+    } 1&& [ run-occurrence ]
     [ 2drop ] if ;
 
 M: rule-firing activate-item
@@ -748,6 +789,8 @@ M: builtin-suspension apply-substitution* nip ;
     check-vars? on
     0 current-index set-global
     H{ } clone rule-firings set
+    H{ } clone ocurrence-mismatches set
+    H{ } clone reactivations set
     H{ } clone var-names set
     ;
 
@@ -825,7 +868,23 @@ SYMBOL: split-states
 : save-split-state ( key solver-state --  )
     2array split-states get push ;
 
-ERROR: chr-inference-error state error ;
+ERROR: chr-inference-error state error cont ;
+SYMBOL: chr-query-stats
+
+: rename-rule-firings ( assoc -- assoc )
+    program get rules>> [ dupd nth rule-name ] curry map-keys ;
+
+: save-stats ( -- )
+    lookup-index [ get ] keep
+    reactivations [ get ] keep
+    rule-firings [ get rename-rule-firings ] keep
+    program [ get ] keep
+    ocurrence-mismatches [ get ] keep associate
+    [ set-at ] keep
+    [ set-at ] keep
+    [ set-at ] keep
+    [ set-at ] keep
+    chr-query-stats set-global ;
 
 : run-chr-query ( prog query -- state )
     [ pred>constraint ] map
@@ -841,12 +900,14 @@ ERROR: chr-inference-error state error ;
       init-chr-scope
       V{ } clone queue set
       f swap activate-new
+      ! run-queue
       [ run-queue ] [ dup chr-inference-error? [ rethrow ]
-                      [ get-solver-state swap chr-inference-error ] if ] recover
+                      [ save-stats get-solver-state swap error-continuation get chr-inference-error ] if ] recover
 
       ! split-states get join-states
       ! run-queue
       finish-solver-state
+      save-stats
       ! 0 store-solver-config
       ! result-config get combine-configs
     ] with-term-vars ;

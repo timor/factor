@@ -349,16 +349,22 @@ C: <var-match> var-match
 
 
 SYMBOL: in-quotation?
+SYMBOL: quote-substitution
 SYMBOL: current-subst
+
+: quote-substitution? ( -- ? )
+    { [ quote-substitution get ] [ in-quotation? get ] } 0&& ;
+    ! in-quotation? get ;
 
 M: object subst ;
 M: term-var subst
     over ?at drop
     ?ground-value
-    dup { [ drop in-quotation? get ] [ word? ] [ { [ deferred? ] [ match-var? not ] } 1|| ] } 1&& [ <wrapper> ] when
+    dup { [ drop quote-substitution? ] [ word? ] [ { [ deferred? ] [ match-var? not ] } 1|| ] } 1&& [ <wrapper> ] when
     ;
 M: match-var subst
     over ?at drop ;
+! TODO: why not write method on quotation?
 M: sequence subst
     dup quotation?
     in-quotation? [ [ subst ] map ] with-variable ;
