@@ -101,18 +101,13 @@ CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } --
 ! { MakeGenericDispatch ?x P{ Effect ?a ?b f f } ?sig } ;
 
 ! This is where a recursion predicate is inserted
-! FIXME: for mutual recursion, this is probably not enough?
-CHR: double-word-inference @ { ?TypeOf [ ?x ] ?tau } // { ?TypeOf [ ?x ] ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ]
+CHR: double-word-inference @ { ?TypeOf [ ?x ] M{ ?tau } } // { ?TypeOf [ ?x ] M{ ?sig } } --
 [ ?x callable-word? ] |
 [ ?sig P{ Effect ?a ?b f { P{ CallRecursive ?x ?a ?b } } } ==! ] ;
 
-! FIXME: This doesn't seem to work correctly...
-! CHR: double-inference-queue @ { ?TypeOf ?x ?tau } { ?TypeOf ?x ?sig } // -- [ ?tau term-var? ] [ ?sig term-var? ] |
-! { Recursion ?x ?tau ?sig } ;
-
 ! Replacing with a version that discards one query and equates the variables, and continues destructuring.
 ! Should then stop when arriving at a word, where the recursion is then broken.
-CHR: double-inference-queue @ // { ?TypeOf ?x ?tau } { ?TypeOf ?x ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ] |
+CHR: double-inference-queue @ // { ?TypeOf ?x M{ ?tau } } { ?TypeOf ?x M{ ?sig } } -- |
 ! CHR: double-inference-queue @ { ?TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } -- [ ?tau term-var? ] [ ?sig term-var? ] |
 ! [ "tbr" throw ]
 [ ?sig ?tau ==! ]
@@ -184,20 +179,16 @@ CHR: elim-mutual-recursion-dependency @ { TypeOfWord ?v ?rho } { TypeOfWord ?w ?
 ! This is here because there could be a dispatch expansion hidden, which we don't perform in the word type itself
 CHR: have-type-of-generic-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // --
 [ ?w generic? ]
-[ ?rho canonical? ]
-[ ?w 1quotation :>> ?q ]
-|
+[ ?rho canonical? ] |
 { ReinferEffect ?rho ?z }
 { CheckXor ?q ?z ?tau }
-{ TypeOf ?q ?tau } ;
+{ TypeOf [ ?w ] ?tau } ;
 
 ! TODO: Could do the input/output class handling here!
 CHR: have-type-of-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // --
-! [ ?rho valid-effect-type? ]
 [ ?w generic? not ]
 [ ?rho canonical? ]
-[ ?w 1quotation :>> ?q ]
-| { TypeOf ?q ?rho } ;
+| { TypeOf [ ?w ] ?rho } ;
 
 IMPORT: chr-word-types
 
@@ -258,6 +249,7 @@ CHR: compose-xor-effects-both @ // { ComposeType P{ Xor ?a ?b } P{ Xor ?c ?d } ?
 
 ;
 
+! Interactive short cut
 : qt ( quot -- res )
     InferType boa 1array chr-comp swap [ run-chr-query store>> ] with-var-names ;
 

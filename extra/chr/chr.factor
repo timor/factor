@@ -109,6 +109,7 @@ GENERIC: lookup-index-key ( pred -- f/obj )
 TUPLE: index1-pred < chr-pred key ;
 M: object lookup-index-key drop f ;
 M: index1-pred lookup-index-key key>> ;
+M: chr-pred lookup-index-key class-of ;
 
 
 TUPLE: any-match { cases read-only } ;

@@ -352,38 +352,45 @@ SYMBOL: in-quotation?
 SYMBOL: quote-substitution
 SYMBOL: current-subst
 
-: quote-substitution? ( -- ? )
-    { [ quote-substitution get ] [ in-quotation? get ] } 0&& ;
-    ! in-quotation? get ;
+: quoting-substitution ( quot -- )
+    [ quote-substitution get in-quotation? ] dip with-variable ; inline
+: no-quoting ( quot -- )
+    in-quotation? swap with-variable-off ; inline
 
 M: object subst ;
 M: term-var subst
     over ?at drop
     ?ground-value
-    dup { [ drop quote-substitution? ] [ word? ] [ { [ deferred? ] [ match-var? not ] } 1|| ] } 1&& [ <wrapper> ] when
+    dup { [ drop in-quotation? get ] [ word? ] [ { [ deferred? ] [ match-var? not ] } 1|| ] } 1&& [ <wrapper> ] when
     ;
+
 M: match-var subst
     over ?at drop ;
-! TODO: why not write method on quotation?
+
+M: callable subst [ [ subst ] map ] quoting-substitution ;
+
 M: sequence subst
-    dup quotation?
-    in-quotation? [ [ subst ] map ] with-variable ;
+    [ [ subst ] map ] no-quoting ;
 ! As an exception, we don't rebuild vectors!
+
 M: vector subst
-    dup quotation?
-    in-quotation? [ [ subst ] map! ] with-variable ;
+    [ [ subst ] map! ] no-quoting ;
+
 <PRIVATE
 : num-slots ( tup -- n )
     1 slot second ; inline
 PRIVATE>
-M: tuple subst
-    dup callable? in-quotation?
-    [ clone dup num-slots
+
+: tuple-subst ( assoc term -- assoc term )
+    clone dup num-slots
     [| i | i 2 + :> n
      [ n slot subst ]
      [ n set-slot ]
      [  ] tri
-    ] each-integer ] with-variable ;
+    ] each-integer ; inline
+
+M: tuple subst
+    [ tuple-subst ] no-quoting ;
 
 M: wrapper subst wrapped>>
     in-quotation? [ subst ] with-variable-off

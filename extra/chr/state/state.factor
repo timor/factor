@@ -1,14 +1,24 @@
 USING: accessors arrays assocs assocs.extras chr chr.programs
 chr.programs.incremental classes classes.algebra colors.constants
-combinators.private combinators.short-circuit continuations hash-sets hashtables
-io.styles kernel lists make match math math.combinatorics math.order math.parser
-namespaces persistent.assocs prettyprint.custom prettyprint.sections quotations
-sequences sets sorting terms typed unicode.subsuper words ;
+combinators.private combinators.short-circuit combinators.smart continuations
+hash-sets hashtables io.styles kernel lists make match math math.order
+math.parser namespaces persistent.assocs prettyprint.custom prettyprint.sections
+quotations sequences sets sorting terms typed words ;
 
 IN: chr.state
 
 FROM: namespaces => set ;
 FROM: syntax => _ ;
+
+SYMBOL: collect-stats
+: collect-stats? ( -- ? )
+    collect-stats get-global ; inline
+! NOTE: quot may not produce outputs!
+: if-trace-stats ( quot -- )
+    collect-stats? swap dup dropping if ; inline
+
+: with-trace-stats ( quot -- )
+    [ t collect-stats ] dip with-global-variable ; inline
 
 ! SYMBOLS: program exec-stack store builtins match-trace current-index ;
 SYMBOLS: program exec-stack store match-trace current-index ;
@@ -144,13 +154,10 @@ ERROR: cannot-make-equal lhs rhs ;
 
 ! ERROR: duplicate-index-value key value ;
 
-! FIXME: allow overwriting dead?
 : add-to-lookup-index ( value key assoc -- )
     over ground-value? [ "nope" throw ] unless
     2dup [ [ alive? ] filter ] change-at
     push-at ;
-    ! 2dup at? [ {  } ]
-    ! [ drop push-at ] if* ; inline
 
 : maybe-store-index ( chr-susp id -- )
     swap constraint>>
@@ -211,9 +218,10 @@ SYMBOL: reactivations
 
 DEFER: activate
 : reactivate ( ids -- )
-    [ alive? ] filter dup record-reactivations
+    [ alive? ] filter dup [ record-reactivations ] if-trace-stats
+    ! NOTE: this needs to be in stable order.  So far, having the store stable seems to cause this
+    ! to be stable too.
     [ enqueue ] unless-empty ;
-    ! dup alive? [ activate ] [ drop ] if ;
 
 GENERIC: on-kill-chr ( susp chr -- )
 M: object on-kill-chr 2drop ;
@@ -502,8 +510,9 @@ DEFER: match-single-head
 !     ]
 !     [ drop f ] if* ; inline
 
+! TODO: correctly support as-pred lookup, and calculate the key more cleverly on chr-susp info?
 : try-index-lookup ( key bindings -- seq/f )
-    lift* ! XXX meh?
+    lift
     [let f :> result!
      lookup-index get [ [ alive? ] filter dup result! ] change-at
      result [ f ]
@@ -513,13 +522,16 @@ DEFER: match-single-head
     ! [ f ] if* ; inline
 
 SYMBOL: ocurrence-mismatches
-: record-mismatch ( occ trace susp -- )
+: (record-mismatch) ( occ trace susp -- )
     ! [ length ] [ constraint>> constraint-type ] bi* ocurrence-mismatches get push-at ; inline
     [ length ] [ constraint>> constraint-type ] bi* ocurrence-mismatches get [
         [ H{ } clone ] unless*
         [ swapd push-at ] keep
     ] change-at ; inline
 
+: record-mismatch ( occ trace susp -- ) [ (record-mismatch) ] if-trace-stats ; inline
+
+! FIXME: if we don't have ctx in the first place, don't even try!
 : filter-lookup-context ( ctx assoc -- assoc )
     [ ctx>> { [ and ] [ = not ] } 2&& ] with reject-values ;
 
@@ -546,8 +558,8 @@ SYMBOL: ocurrence-mismatches
         ikey [ bindings try-index-lookup ]
         [ pc lookup ] if*
         bindings current-context of [ swap filter-lookup-context ] when*
-        ! pc lookup
-        ! bindings sort-lookup
+        ! NOTE: having the store as linked hashtable seems to ensure stability here, even
+        ! with index lookup
         [| sid sc |
          ! NOTE: unsure about this optimization here
          { [ sid trace key? not ]
@@ -782,7 +794,7 @@ M: builtin-suspension apply-substitution* nip ;
 
 : init-chr-scope ( rules -- )
     init-chr-prog program set
-    H{ } clone store set
+    LH{ } clone store set
     H{ } clone lookup-index set
     ! <builtins-suspension> builtins store get set-at
     update-local-vars
@@ -870,16 +882,21 @@ SYMBOL: split-states
 
 ERROR: chr-inference-error state error cont ;
 SYMBOL: chr-query-stats
+: last-chr-stats ( -- x ) chr-query-stats get-global ;
 
 : rename-rule-firings ( assoc -- assoc )
     program get rules>> [ dupd nth rule-name ] curry map-keys ;
+
+: score-mismatches ( assoc -- seq )
+    [ [ values [ length ] map-sum ] keep 3array ] { } assoc>map
+    [ second ] sort-with reverse ;
 
 : save-stats ( -- )
     lookup-index [ get ] keep
     reactivations [ get ] keep
     rule-firings [ get rename-rule-firings ] keep
     program [ get ] keep
-    ocurrence-mismatches [ get ] keep associate
+    ocurrence-mismatches [ get score-mismatches ] keep associate
     [ set-at ] keep
     [ set-at ] keep
     [ set-at ] keep
@@ -907,7 +924,7 @@ SYMBOL: chr-query-stats
       ! split-states get join-states
       ! run-queue
       finish-solver-state
-      save-stats
+      [ save-stats ] if-trace-stats
       ! 0 store-solver-config
       ! result-config get combine-configs
     ] with-term-vars ;

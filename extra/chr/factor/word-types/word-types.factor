@@ -281,23 +281,20 @@ CHR: type-of-wrapper @ // { ?TypeOf ?q ?tau } --
 
 ! *** Destructure unit type queries
 
-CHR: type-of-pushed-quot @ { ?TypeOf [ ?q ] ?tau } // -- [ ?q quotation? ]
-[ ?q 1quotation :>> ?p ]
-|
+CHR: type-of-pushed-quot @ { ?TypeOf [ ?q ] ?tau } // -- [ ?q quotation? ] |
 { ?TypeOf ?q ?rho }
 { MakeUnit ?rho ?sig }
 { ComposeType ?sig P{ Effect L{ ?x . ?a } L{ ?x . ?a } f { P{ Eq ?x ?q } } } ?c }
-{ TypeOf ?p ?c } ;
+{ TypeOf [ ?q ] ?c } ;
 
 ! The reason for the existence of this one is because class-of returns word for t, not t
 CHR: type-of-t @ // { ?TypeOf [ t ] ?tau } -- |
 [ ?tau P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x t } P{ Eq ?x t } } } ==! ] ;
 
 CHR: type-of-unit-val @ { ?TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ] [ ?v callable? not ]
-[ ?v 1quotation :>> ?q ] |
-{ ?TypeOf ?v ?rho }
+| { ?TypeOf ?v ?rho }
 { MakeUnit ?rho ?sig }
-{ TypeOf ?q ?sig } ;
+{ TypeOf [ ?v ] ?sig } ;
 
 ! NOTE: Big Change! Only make these CallXors!
 ! Interestingly enough, it does not seem to have much impact, at least according

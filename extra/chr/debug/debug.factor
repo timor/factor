@@ -295,7 +295,10 @@ PRIVATE>
 : gt. ( quot -- ) get-type ... ;
 
 : add-chr-timing ( -- )
-    { lookup test-callable
+    {
+        try-index-lookup
+        filter-lookup-context
+        lookup test-callable
       check-guards
       try-schedule-match
       check/update-history
