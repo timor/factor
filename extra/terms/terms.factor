@@ -116,7 +116,7 @@ ERROR: unknown-term-vars v1 v2 ;
 
 ! Using local scope for now, replace with global when working!
 : with-eq-scope ( disjoint-set quot -- )
-    [ H{ } clone var-context boa ] dip
+    [ IH{ } clone var-context boa ] dip
     with-var-context
     ; inline
 
@@ -198,7 +198,31 @@ M: term-var equal?
     over term-var?
     [ defined-equal? ] [ 2drop f ] if ;
 
-! inline
+! Keep track of ground terms for equivalence classes
+! This needs to be somewhat fast.  Also, it should return
+! a canonical representation.
+: ?ground-value ( var -- val/key )
+    dup term-var?
+    [ defined-equalities
+      [
+          representative
+          defined-ground-values ?at drop
+      ] when*
+    ] when ; inline
+
+! The idea is to make sure to compute the hash-code of the things
+! actually represented by it, so they can be used as keys without having to
+! perform a lift operation?
+! NOTE: Care must be taken that depth limits are treated similarly if expansion has happened?
+! Approach: if we did resolve to a ground-value, re-increase the depth counter as if
+! nothing happened.
+
+! NOTE: Slow! better not rely on this!
+! M: term-var hashcode*
+!     ! term-var-hashcode* ; inline
+!     ?ground-value dup term-var? [ call-next-method ]
+!     [ [ 1 + ] dip [ hashcode* ] recursive-hashcode ] if ; inline
+
 
 : define-term-var ( name -- )
     create-word-in [ define-symbol ]
@@ -232,7 +256,6 @@ SYNTAX: TERM-VARS: ";" [ define-term-var ] each-token ;
     defined-equalities
     [ dupd add-atom ] when* ;
 
-DEFER: ?ground-value
 GENERIC: child-elts* ( obj -- nodes )
 M: object child-elts* drop f ;
 M: sequence child-elts* ;
@@ -303,20 +326,6 @@ DEFER: lift
 : ground-value? ( obj -- ? )
     vars empty? ; inline
 
-! Keep track of ground terms for equivalence classes
-: ?ground-value ( var -- val/key )
-    dup term-var?
-    [ defined-equalities
-      [
-          representative
-          defined-ground-values ?at drop
-      ] when*
-    ] when ;
-    ! [ defined-equalities
-    !   [ representative
-    !     defined-ground-values ?at drop ] when* ] when ;
-     ! ;
-
 : maybe-update-ground-values ( a b -- )
     2drop defined-ground-values update-ground-values! ;
     ! [ defined-ground-values ] 2dip pick [ key? ] curry either?
@@ -340,12 +349,16 @@ GENERIC: subst ( assoc term -- assoc term )
 SINGLETON: __
 
 ! This is for matching ground-terms only, basically as if expecting something that can be wrapped
-TUPLE: atom-match var ;
+TUPLE: atom-match { var read-only } ;
 C: <atom-match> atom-match
 
 ! This is for matching variables only
-TUPLE: var-match var ;
+TUPLE: var-match { var read-only } ;
 C: <var-match> var-match
+
+! This is for matching certain factor instances only
+TUPLE: class-match { class read-only } { var read-only } ;
+C: <class-match> class-match
 
 
 SYMBOL: in-quotation?
@@ -401,6 +414,13 @@ M: wrapper subst wrapped>>
 M: atom-match subst
     var>> subst dup ground-value? [ <atom-match> ] unless ;
 
+! TODO: do we need to check the instance here? The substitution should
+! only contain a match for the content if the class has been checked, no?
+M:: class-match subst ( asc term -- asc term )
+    asc term var>> subst :> newterm
+    newterm ground-value? [ newterm ]
+    [ term class>> newterm <class-match> ] if ;
+
 : lift ( term subst -- term )
     swap subst nip ;
 
@@ -427,6 +447,12 @@ SYNTAX: M{ scan-object "}" expect <var-match> suffix! ;
 M: var-match pprint* pprint-object ;
 M: var-match pprint-delims drop \ M{ \ } ;
 M: var-match >pprint-sequence var>> 1array ;
+
+SYNTAX: Is( scan-object classoid check-instance scan-object ")" expect <class-match> suffix! ;
+
+M: class-match pprint* pprint-object ;
+M: class-match pprint-delims drop \ Is( \ ) ;
+M: class-match >pprint-sequence [ class>> ] [ var>> ] bi 2array ;
 
 ! Tried first
 GENERIC#: decompose-left 1 ( term1 term2 -- terms1 terms2 cont? )
@@ -500,6 +526,10 @@ SYMBOL: solve-isomorphic-mode?
      drop sol
     ] ; inline recursive
 
+: check-class-match ( lhs class-match -- ? )
+    over valid-term-var? [ 2drop f ]
+    [ class>> instance? ] if ; inline
+
 ! NOTE:
 ! - rhs term-vars will always be assumed to the lhs value
 ! - lhs term-vars will be checked for equality and dropped, or assumed to the rhs value
@@ -512,6 +542,8 @@ SYMBOL: solve-isomorphic-mode?
         ! { [ 2dup defined-equal? ] [ 2drop (solve) ] }
         { [ over atom-match? ] [ dup ground-value? [ [ var>> ] dip (solve1) ] [ 4drop f ] if ] }
         { [ dup atom-match? ] [ over ground-value? [ var>> (solve1) ] [ 4drop f ] if ] }
+        { [ over class-match? ] [ 2dup swap check-class-match [ [ var>> ] dip (solve1) ] [ 4drop f ] if ] }
+        { [ dup class-match? ] [ "class match on rhs" throw ] }
         { [ over var-match? ] [ dup term-var? [ [ var>> ] dip (solve1) ] [ 4drop f ] if ] }
         { [ dup var-match? ] [ over term-var? [ var>> (solve1) ] [ 4drop f ] if ] }
         { [ over valid-term-var? ] [ 2dup = [ 2drop (solve) ] [ elim ] if ] }
