@@ -297,14 +297,21 @@ PRIVATE>
 : add-chr-timing ( -- )
     {
         try-index-lookup
+        lookup-update-index-entry
+        add-to-lookup-index
         filter-lookup-context
-        lookup test-callable
+        ! lookup
+        test-callable
       check-guards
       try-schedule-match
+      ! resolve-match-context
       check/update-history
       simplify-constraints
     } M\ equiv-activation activate-new suffix
     M\ callable activate-new suffix
+    M\ as-pred lookup suffix
+    M\ chr-constraint lookup suffix
+    M\ chr-sub-pred lookup suffix
     { assume-equal equiv-wakeup-set update-wakeup-set-vars
       update-ground-values!
       maybe-update-ground-values
@@ -318,8 +325,8 @@ PRIVATE>
 : word-timing/total. ( -- )
     word-timing get >alist
     [ second first ] sort-with
-    [ first2 first2 [ 1000000000 /f ] dip 3array ] map
-    dup [ second ] map-sum "Total:" swap "" 3array suffix
+    [ first2 first2 [ 1000000000 /f ] dip 2dup /f log10 4array ] map
+    dup [ second ] map-sum "Total:" swap "" "" 4array suffix
     simple-table. ;
 
 : time.. ( ..a quot -- ..b )

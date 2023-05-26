@@ -526,8 +526,11 @@ SYMBOL: solve-isomorphic-mode?
      drop sol
     ] ; inline recursive
 
+! TODO: check if we need the deref check on lhs!
 : check-class-match ( lhs class-match -- ? )
-    over valid-term-var? [ 2drop f ]
+    [ ?ground-value ] dip
+    ! over valid-term-var? [ 2drop f ]
+    over term-var? [ 2drop f ]
     [ class>> instance? ] if ; inline
 
 ! NOTE:

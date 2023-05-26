@@ -37,6 +37,21 @@ SYMBOL: rule-firings
 SYMBOL: active-rule-firing
 
 SYMBOL: lookup-index
+
+DEFER: alive?
+
+: lookup-update-index-entry ( seq -- seq )
+    dup [ [ alive? ] filter! ] when
+    [ f ] [ store get '[ dup _ at 2array ] map ] if-empty ; inline
+
+
+: lookup-update-index ( key assoc -- seq )
+    at lookup-update-index-entry ; inline
+    ! [let f :> result!
+    !  [ [ alive? ] filter dup result! ] change-at
+    !  result [ f ]
+    !  store get '[ [ dup _ at 2array ] map ] if-empty
+    ! ] ; inline
 SINGLETON: current-context
 INSTANCE: current-context match-var
 ! SYMBOL: current-context
@@ -111,8 +126,6 @@ SYMBOL: queue
 
 ! NOTE: Using Store-wide replacement for now...
 
-DEFER: alive?
-
 :: wakeup-set ( v k -- ids )
     store get [ vars>> :> vs { [ v vs in? ] [ k vs in? ] } 0|| ] filter-values
     keys ;
@@ -156,6 +169,7 @@ ERROR: cannot-make-equal lhs rhs ;
 
 ! ERROR: duplicate-index-value key value ;
 
+! TODO correct destructive ops
 : add-to-lookup-index ( value key assoc -- )
     over ground-value? [ "nope" throw ] unless
     2dup [ [ alive? ] filter ] change-at
@@ -221,8 +235,7 @@ SYMBOL: reactivations
 DEFER: activate
 : reactivate ( ids -- )
     [ alive? ] filter dup [ record-reactivations ] when-trace-stats
-    ! NOTE: this needs to be in stable order.  So far, having the store stable seems to cause this
-    ! to be stable too.
+    [ number>> ] sort-with
     [ enqueue ] unless-empty ;
 
 GENERIC: on-kill-chr ( susp chr -- )
@@ -265,12 +278,19 @@ GENERIC: lookup ( ctype -- seq )
 ! : in-context? ( susp -- ? )
 !     ctx>> current-context get = ;
 
+: sameclass-index-lookup ( class -- seq )
+    lookup-index get swap
+    '[ [ swap first _ eq? [ lookup-update-index-entry % ] [ drop ] if ] assoc-each ] { } make ; inline
+
 M: chr-constraint lookup
-    ! constraint-type store get [ { [ type>> = ] [ in-context? ] } 1&& ] with filter-values ;
-    constraint-type store get [ type>> = ] with filter-values ;
+    constraint-type sameclass-index-lookup ;
+
+: subclass-index-lookup ( class -- seq )
+    lookup-index get swap
+    '[ [ swap first _ class<= [ lookup-update-index-entry % ] [ drop ] if ] assoc-each ] { } make ; inline
 
 M: chr-sub-pred lookup
-    class>> store get [ type>> swap class<= ] with filter-values ;
+    class>> subclass-index-lookup ;
 
 M: as-pred lookup pred>> lookup ;
 
@@ -420,6 +440,7 @@ GENERIC: match-constraint ( bindings suspension match-spec -- bindings )
 
 M: chr-sub-pred match-constraint
     args>> swap constraint-args >list add-bindings ;
+
 M: as-pred match-constraint
     ! [ [ constraint>> ] [ var>> ] bi* pick set-at ]
     [ [ constraint>> ] [ var>> ] bi* add-bindings ] 2keep rot
@@ -535,12 +556,7 @@ DEFER: match-single-head
 
 ! TODO: correctly support as-pred lookup, and calculate the key more cleverly on chr-susp info?
 : try-index-lookup ( key bindings -- seq/f )
-    lift
-    [let f :> result!
-     lookup-index get [ [ alive? ] filter dup result! ] change-at
-     result [ f ]
-     store get '[ [ dup _ at 2array ] map ] if-empty
-    ] ;
+    lift lookup-index get lookup-update-index ;
     ! [ lookup-key-maybe-delete ]
     ! [ f ] if* ; inline
 
@@ -837,7 +853,7 @@ M: builtin-suspension apply-substitution* nip ;
 : init-chr-scope ( rules -- )
     init-chr-prog program set
     LH{ } clone store set
-    H{ } clone lookup-index set
+    LH{ } clone lookup-index set
     ! <builtins-suspension> builtins store get set-at
     update-local-vars
     check-vars? on

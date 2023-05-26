@@ -85,10 +85,24 @@ M: DeclareStack upper-scope-vars classes>> ;
 ! UNION: merging-set Given Define ;
 UNION: merging-set Def Use Live ;
 
-CHR: subsume-liveness-set @ AS: ?a <={ merging-set ?x } // AS: ?b <={ merging-set ?y } --
-[ ?a ?b [ class-of ] same? ] [ ?y ?x subset? ] | ;
-CHR: merge-liveness-set @ // AS: ?a <={ merging-set ?x } AS: ?b <={ merging-set ?y } --
-[ ?a ?b [ class-of ] same? ] | [ ?x ?y union 1array ?a class-of slots>tuple ] ;
+! NOTE: this is not optimized right now
+! CHR: subsume-liveness-set @ AS: ?a <={ merging-set ?x } // AS: ?b <={ merging-set ?y } --
+! [ ?a ?b [ class-of ] same? ] [ ?y ?x subset? ] | ;
+! CHR: merge-liveness-set @ // AS: ?a <={ merging-set ?x } AS: ?b <={ merging-set ?y } --
+! [ ?a ?b [ class-of ] same? ] | [ ?x ?y union 1array ?a class-of slots>tuple ] ;
+
+! TODO: check whether removing the subsumption rule is actually faster overall?
+CHR: subsume-def-set @ { Def ?x } // { Def ?y } -- [ ?y ?x subset? ] | ;
+CHR: merge-def-set @ // { Def ?x } { Def ?y } -- [ ?x ?y union :>> ?z ]
+| { Def ?z } ;
+
+CHR: subsume-live-set @ { Live ?x } // { Live ?y } -- [ ?y ?x subset? ] | ;
+CHR: merge-live-set @ // { Live ?x } { Live ?y } -- [ ?x ?y union :>> ?z ]
+| { Live ?z } ;
+
+CHR: subsume-use-set @ { Use ?x } // { Use ?y } -- [ ?y ?x subset? ] | ;
+CHR: merge-use-set @ // { Use ?x } { Use ?y } -- [ ?x ?y union :>> ?z ]
+| { Use ?z } ;
 
 CHR: new-sub-scope @ // { SubScope ?i ?o } --
 ! [ ?i value-vars :>> ?l ] [ ?o value-vars :>> ?r ]

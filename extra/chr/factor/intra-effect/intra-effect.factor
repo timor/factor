@@ -26,9 +26,8 @@ CHR: comm-var-is-lhs @ // AS: ?p <={ symmetric-pred A{ ?l } ?v } -- [ ?v term-va
 ! CHR: literal-singleton-class-is-class @ // { Instance ?x ?tau } -- [ { ?tau } first wrapper? ] [ { ?tau } first wrapped>> :>> ?rho singleton-class? ] |
 ! { Instance ?x ?rho } ;
 
-CHR: wrapper-type-is-eq @ // { Instance ?x ?tau } -- [ { ?tau } first wrapper? ] [ { ?tau } first wrapped>> :>> ?v
-                                                                                   class-of :>> ?rho drop t ]
-|
+CHR: wrapper-type-is-eq @ // { Instance ?x Is( wrapper ?tau ) } --
+[ { ?tau } first wrapped>> :>> ?v class-of :>> ?rho drop t ] |
 { Instance ?x ?rho }
 { Eq ?x ?v } ;
 
@@ -178,7 +177,7 @@ CHR: have-interesting-decider @ { MakeEffect ?i ?o ?l __ __ } // <={ Discriminat
 ! NOTE: this takes this out of the reasoning.  However, anything that should be able to be reasoned
 ! from the existence of same information different branches should have done during composition already.
 ! After this rule, existence of predicates is assumed to be only present in one branch.
-CHR: phi-same-branch-pred @ // AS: ?p <={ body-pred } AS: ?q <={ body-pred } -- [ ?p ?q == ] | { Keep ?p } ;
+CHR: phi-same-branch-pred @ // AS: ?p <={ body-pred } AS: ?p <={ body-pred } -- | { Keep ?p } ;
 
 CHR: phi-disjoint-instance @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
 [ { ?rho ?tau } first2 classes-intersect? not ] | { Decider ?x } ;
@@ -360,12 +359,10 @@ PREFIX-RULES: { P{ CompMode } }
 
 CHR: invalid-defer-type-request @ // { ?DeferTypeOf ?x __ } -- [ ?x callable? not ] | [ { ?x "not a valid thing to infer" } throw ] ;
 
-! Possibly expensive?
-! FIXME: support modifier in AS: wrappers
-CHR: unique-val-pred @ AS: ?p <={ val-pred } // AS: ?q <={ val-pred } -- [ ?p ?q == ] | ;
-! TODO The following is possibly a little bit cheaper, try whether it breaks anything at the end
-! CHR: unique-val-pred @ AS: ?p <={ val-pred } // AS: ?q <={ val-pred } -- [ ?p ?q = ] | ;
-! CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
+! Possibly expensive? Seems like it! But some are definitely needed, e.g. for Eq
+! CHR: unique-val-pred @ AS: ?p <={ val-pred } // AS: ?p <={ val-pred } -- | ;
+CHR: unique-eq-pred @ { Eq ?x ?y } // { Eq ?x ?y } -- | ;
+CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
 
 ! CHR: uniqe-slot @ { Slot ?o ?n ?v } // { Slot ?o ?n ?v } -- | ;
 

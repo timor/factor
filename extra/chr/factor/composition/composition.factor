@@ -10,7 +10,7 @@ IN: chr.factor.composition
 CHRAT: chr-comp { }
 
 ! ** Safety Checks
-! TODO remove once not needed safety check
+! TODO remove once not needed safety check, seems to be quite expensive!
 UNION: context-tag PhiDone PhiMode FinishEffect MakeEffect ;
 CHR: catch-top-level-tag @ // <={ context-tag } -- [ get-context not ] | [ "pred not allowed in toplevel context" throw ] ;
 
