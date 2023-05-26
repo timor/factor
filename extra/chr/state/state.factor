@@ -1,20 +1,22 @@
 USING: accessors arrays assocs assocs.extras chr chr.programs
 chr.programs.incremental classes classes.algebra colors.constants
 combinators.private combinators.short-circuit combinators.smart continuations
-hash-sets hashtables io.styles kernel lists make match math math.order
-math.parser namespaces persistent.assocs prettyprint.custom prettyprint.sections
-quotations sequences sets sorting terms typed words ;
+hash-sets hashtables io.styles kernel linked-assocs lists make match math
+math.order math.parser namespaces persistent.assocs prettyprint
+prettyprint.custom prettyprint.sections quotations sequences
+sequences.generalizations sets sorting system terms typed words ;
 
 IN: chr.state
 
 FROM: namespaces => set ;
 FROM: syntax => _ ;
 
+SYMBOL: schedule-start-time
 SYMBOL: collect-stats
 : collect-stats? ( -- ? )
     collect-stats get-global ; inline
 ! NOTE: quot may not produce outputs!
-: if-trace-stats ( quot -- )
+: when-trace-stats ( quot -- )
     collect-stats? swap dup dropping if ; inline
 
 : with-trace-stats ( quot -- )
@@ -218,7 +220,7 @@ SYMBOL: reactivations
 
 DEFER: activate
 : reactivate ( ids -- )
-    [ alive? ] filter dup [ record-reactivations ] if-trace-stats
+    [ alive? ] filter dup [ record-reactivations ] when-trace-stats
     ! NOTE: this needs to be in stable order.  So far, having the store stable seems to cause this
     ! to be stable too.
     [ enqueue ] unless-empty ;
@@ -282,10 +284,29 @@ M: as-pred lookup pred>> lookup ;
     [ f ]
     [ stored-cs [ [ sig suffix ] change-hist drop ] each t ] if ;
 
-: check-guards ( rule-id bindings -- ? )
-    dup current-bindings set-global
-    [ program get rules>> nth ] dip
-    swap guard>> [ test-constraint ] with all? ;
+DEFER: record-schedule-end
+SYMBOL: guard-fails
+: (record-guard-fail) ( rule-num guard -- )
+    nano-count pick "guard" record-schedule-end
+    2array guard-fails get inc-at ; inline
+
+: record-guard-fail ( rule-num guard -- )
+    [ (record-guard-fail)
+      nano-count schedule-start-time set-global
+    ] when-trace-stats ; inline
+
+! : check-guards ( rule-id bindings -- ? )
+!     dup current-bindings set-global
+!     [ program get rules>> nth ] dip
+!     swap guard>> [ test-constraint ] with all? ;
+
+:: check-guards ( rule-id bindings -- ? )
+    bindings dup current-bindings set-global
+    rule-id program get rules>> nth
+    guard>> [
+        [ test-constraint ] keep :> guard
+        dup [ rule-id guard record-guard-fail ] unless
+    ] with all? ;
 
 : substitute-ground-values ( subst -- subst )
     [ ?ground-value ] map-values ;
@@ -340,13 +361,15 @@ C: <rule-firing> rule-firing
 
 : fire-rule ( rule-id trace bindings -- )
     { [ nip check-guards ]
+      [ [ nano-count 2nip swap "run" record-schedule-end ] when-trace-stats t ]
       [ drop check/update-history ]
       [ [ drop ] 2dip simplify-constraints t ]
       [ nip
         schedule-fire-cont
         ! run-rule-body
         t ]
-    } 3&& drop ;
+    } 3&& drop
+    ;
 
 ! The thing dispatched on is in the partner slot in the schedule
 GENERIC: match-constraint ( bindings suspension match-spec -- bindings )
@@ -521,15 +544,27 @@ DEFER: match-single-head
     ! [ lookup-key-maybe-delete ]
     ! [ f ] if* ; inline
 
-SYMBOL: ocurrence-mismatches
+SYMBOL: occurrence-times
+
+: record-schedule-end ( time key1 event-key -- )
+    [ schedule-start-time get-global -
+      ! FIXME: remove once proven
+      dup 0 < [ "schedule recorder error" throw ] when
+    ] 2dip swap
+    occurrence-times get [ [ H{ } clone ] unless* [ at+ ] keep ] change-at ;
+
+! : extract-rule-number ( occ trace -- num )
+!     [ nip first first rule>> ] [ first ] if* ; inline
+
+SYMBOL: occurrence-mismatches
 : (record-mismatch) ( occ trace susp -- )
-    ! [ length ] [ constraint>> constraint-type ] bi* ocurrence-mismatches get push-at ; inline
-    [ length ] [ constraint>> constraint-type ] bi* ocurrence-mismatches get [
+    ! [ length ] [ constraint>> constraint-type ] bi* occurrence-mismatches get push-at ; inline
+    [ length ] [ constraint>> constraint-type ] bi* occurrence-mismatches get [
         [ H{ } clone ] unless*
         [ swapd push-at ] keep
     ] change-at ; inline
 
-: record-mismatch ( occ trace susp -- ) [ (record-mismatch) ] if-trace-stats ; inline
+: record-mismatch ( occ trace susp -- ) [ (record-mismatch) ] when-trace-stats ; inline
 
 ! FIXME: if we don't have ctx in the first place, don't even try!
 : filter-lookup-context ( ctx assoc -- assoc )
@@ -540,16 +575,13 @@ SYMBOL: ocurrence-mismatches
     ! [ break ]
     [ partners empty? [
         ! NOTE: unsure about this optimization here...
+          ! FIXME: shouldnt be needed after live-trace? check above
         trace [ drop alive? ] assoc-all?
         [
             rule-id trace bindings fire-rule
-            ! schedule-fire-cont
-          !   [ rule-id trace bindings
-          ! ! fire-rule
-          ! <rule-firing>
-          ! swap more-partners ] callcc0
-         ] when
-        ! rule-id trace bindings fire-rule
+            ! NOTE: counting this as starting a new search
+            nano-count schedule-start-time set-global
+        ] [ "shouldn't happen" throw ] if
     ] [
         partners unclip-slice :> ( rest next )
         next first2 :> ( keep-partner pc )
@@ -571,11 +603,15 @@ SYMBOL: ocurrence-mismatches
              :> bindings1
              bindings1 [
                  rule-id trace sid keep-partner 2array suffix bindings1 rest vars (run-occurrence)
-             ] [ rule-id trace sc record-mismatch ] if
+             ] [
+                 ! FIXME: re-integrate into record-mismatch!
+                 [ nano-count rule-id "mismatch" record-schedule-end ] when-trace-stats
+                 rule-id trace sc record-mismatch
+                 nano-count schedule-start-time set-global
+             ] if
          ] when
         ] assoc-each
       ] if ]
-    ! if
     when
     ;
 
@@ -596,11 +632,17 @@ SYMBOL: ocurrence-mismatches
         ! vars valid-match-vars [ arg-vars susp args>> start-match ] with-variable
     ! Initialize the occurrence bindings with the required context if one was stored in ctx>> of the susp
     ! Not always use context! If there is no context specification, don't treat as problem
+    nano-count schedule-start-time set-global
     current-context susp ctx>> [ swap associate ] [ drop H{ } clone ] if* arg-vars susp try-schedule-match
     ! Always use context!  The default context is f
     ! current-context susp ctx>> swap associate arg-vars susp try-schedule-match
     ! H{ } clone arg-vars susp try-schedule-match
-    [ partners vars (run-occurrence) ] [ 2drop schedule occurrence>> f susp record-mismatch ] if*
+    [ partners vars (run-occurrence) ]
+    [ [ nano-count rule-id "mismatch" record-schedule-end ] when-trace-stats
+      2drop schedule occurrence>> f susp record-mismatch
+      nano-count schedule-start-time set-global
+
+     ] if*
     ! ] with-variable
     ;
 
@@ -801,9 +843,11 @@ M: builtin-suspension apply-substitution* nip ;
     check-vars? on
     0 current-index set-global
     H{ } clone rule-firings set
-    H{ } clone ocurrence-mismatches set
+    H{ } clone occurrence-mismatches set
     H{ } clone reactivations set
     H{ } clone var-names set
+    H{ } clone guard-fails set
+    H{ } clone occurrence-times set
     ;
 
 ! This should ensure catching terms without a solution!
@@ -884,24 +928,68 @@ ERROR: chr-inference-error state error cont ;
 SYMBOL: chr-query-stats
 : last-chr-stats ( -- x ) chr-query-stats get-global ;
 
+: get-rule-name ( rules id -- name )
+    swap dupd nth rule-name ;
+
 : rename-rule-firings ( assoc -- assoc )
-    program get rules>> [ dupd nth rule-name ] curry map-keys ;
+    program get rules>> swap [ get-rule-name ] with map-keys ;
 
 : score-mismatches ( assoc -- seq )
     [ [ values [ length ] map-sum ] keep 3array ] { } assoc>map
-    [ second ] sort-with reverse ;
+    [ second ] inv-sort-with ;
+
+: show-guard-fails ( assoc -- seq )
+    program get rules>> '[ swap first2 [ _ swap get-rule-name ] dip 3array ] { } assoc>map
+    [ first ] inv-sort-with ;
+
+: schedule-table ( assoc -- seq )
+    program get rules>> swap
+    [| rule-num rules result |
+     rules rule-num [ get-rule-name ] [ drop f ] if*
+     result "run" of [ 0 ] unless*
+     result "mismatch" of [ 0 ] unless*
+     result "guard" of [ 0 ] unless*
+     [ 1000000000 /f ] tri@
+     [ + + ] 3keep 5 narray
+    ] with { } assoc>map [ second ] inv-sort-with ;
 
 : save-stats ( -- )
+    occurrence-times [ get schedule-table ] keep
     lookup-index [ get ] keep
     reactivations [ get ] keep
     rule-firings [ get rename-rule-firings ] keep
     program [ get ] keep
-    ocurrence-mismatches [ get score-mismatches ] keep associate
+    guard-fails [ get show-guard-fails ] keep
+    occurrence-mismatches [ get score-mismatches ] keep associate
+    [ set-at ] keep
+    [ set-at ] keep
     [ set-at ] keep
     [ set-at ] keep
     [ set-at ] keep
     [ set-at ] keep
     chr-query-stats set-global ;
+
+:: top-time-guzzlers ( table -- table )
+    0 :> sum-total! 0 :> total-run! 0 :> total-mismatch! 0 :> total-guard!
+    table [| results index |
+           results 5 firstn :> ( rule total run mismatch guard )
+           sum-total total + sum-total!
+           total-run run + total-run!
+           total-mismatch mismatch + total-mismatch!
+           total-guard guard + total-guard!
+           sum-total
+    ] map-index
+    sum-total 0.9 * [ > ] curry find drop :> cut-index
+    table cut-index head-slice
+    { "rule" "total" "run" "mismatch" "guard" } prefix
+    { "total" sum-total total-run total-mismatch total-guard } suffix
+    ;
+
+! WIP
+: chr-stats. ( -- )
+    last-chr-stats occurrence-times of
+    top-time-guzzlers simple-table. ;
+
 
 : run-chr-query ( prog query -- state )
     [ pred>constraint ] map
@@ -924,7 +1012,7 @@ SYMBOL: chr-query-stats
       ! split-states get join-states
       ! run-queue
       finish-solver-state
-      [ save-stats ] if-trace-stats
+      [ save-stats ] when-trace-stats
       ! 0 store-solver-config
       ! result-config get combine-configs
     ] with-term-vars ;

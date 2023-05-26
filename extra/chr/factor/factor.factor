@@ -371,7 +371,7 @@ UNION: body-pred val-pred CallEffect CallXorEffect Declare CallRecursive Throws 
     ! ApplyEffect
     ;
 
-TUPLE: CheckPhiStack a b res ;
+TUPLE: CheckPhiStack < chr-pred a b res ;
 
 UNION: valid-effect-type Effect Xor ;
 UNION: valid-type Effect classoid ;
