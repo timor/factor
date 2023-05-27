@@ -161,6 +161,7 @@ M: pair elt>var
 
 TUPLE: Effect < chr-pred in out parms preds ;
 TUPLE: TypeOf < index1-pred type ;
+! TUPLE: ?TypeOf < chr-pred thing type ;
 TUPLE: ?TypeOf < index1-pred type ;
 ! Can be used during inference, will either trigger nested inference or
 ! immediately answer
@@ -168,7 +169,9 @@ TUPLE: ?DeferTypeOf < chr-pred thing type ;
 TUPLE: FixpointTypeOf < chr-pred thing type ;
 TUPLE: RecursionTypeOf < chr-pred thing type ;
 TUPLE: RecursiveCallTypeOf < chr-pred thing type ;
-TUPLE: TypeOfWord < index1-pred var ;
+! FIXME: this breaks at least the nonlastfail3 test
+! TUPLE: TypeOfWord < index1-pred var ;
+TUPLE: TypeOfWord < chr-pred word var ;
 TUPLE: InferType < chr-pred thing ;
 TUPLE: WaitFull < chr-pred type ;
 TUPLE: WaitRec < chr-pred orig rec ;
