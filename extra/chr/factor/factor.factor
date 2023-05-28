@@ -114,7 +114,9 @@ M: pair elt>var
       { [ i o [  ] both? ]
         [ lin i list*
           lout o list* ] }
-      [ lin __ list* lout __ list* ]
+      ! bivariable but not defined
+      [ lin i [ "rho" utermvar ] unless* list*
+        lout o [ "sig" utermvar ] unless* list* ]
     } cond ;
 
 : effect>stacks ( effect -- lin lout )
@@ -264,6 +266,10 @@ TUPLE: MacroExpand < chr-pred quot args in out-quot ;
 TUPLE: ExpandQuot < MacroExpand num-args ;
 TUPLE: InstanceCheck < chr-pred class-arg quot complement ;
 
+! Retain stack reasoning for locals
+TUPLE: RetainEffect < chr-pred row-in row-out rstack-in rstack-out ;
+TUPLE: RetainStack < chr-pred row stack ;
+
 ! Macro expansion, folding
 TUPLE: FoldStack < chr-pred stack n ;
 TUPLE: FoldCall < chr-pred stack n quot target ;
@@ -365,6 +371,8 @@ UNION: body-pred val-pred CallEffect CallXorEffect Declare CallRecursive Throws 
     MacroCall
     Iterated
     LoopVar GenericDispatch <==> MathCall PrimCall Counter
+    RetainEffect
+    RetainStack
     ! ! Taking this into account because of generics reinference right now.
     ! ApplyEffect
     ;

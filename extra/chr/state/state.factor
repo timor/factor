@@ -481,13 +481,8 @@ DEFER: match-single-head
 !     arg-spec parms>> all-permutations
 !     [| p | bindings p susp match-single-head ] map-find drop ; inline
 
-
 : try-schedule-match ( bindings arg-spec susp -- bindings )
     swap match-constraint-in-context
-    ! swap match-constraint
-    ! match-head
-    ! bindings susp
-    ! arg-spec match-constraint
     ; inline
 
 ! : match-constraint ( bindings args constraint -- bindings )

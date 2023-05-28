@@ -1001,6 +1001,18 @@ CHR: tuple-boa-decl @ // { TupleBoa A{ ?c } ?a ?b } --
  preds <reversed> >array
 ] ;
 
+! *** Factor Local Variables
+CHR: resolved-retain-effect @ // { RetainEffect ?a ?b ?x ?x } -- | [ ?a ?b ==! ] ;
+
+CHR: compose-retain-effects @ // { RetainEffect ?a ?b ?x ?y } { RetainEffect ?c ?d ?u ?v } --
+[ ?b ?c [ lastcdr ] same? ] | [ ?y ?u ==! ] { RetainEffect ?a ?d ?x ?v } ;
+
+CHR: apply-retain-stack-in @ { RetainEffect ?a ?b ?x ?y } // { RetainStack ?c ?l } --
+[ ?c ?a [ lastcdr ] same? ] | [ ?x ?l ==! ] ;
+
+CHR: apply-retain-stack-out @ { RetainEffect ?a ?b ?x ?y } // { RetainStack ?c ?l } --
+[ ?c ?b [ lastcdr ] same? ] | [ ?y ?l ==! ] ;
+
 ! *** Locals scope expansion
 
 ! Propagate liveness of parameter if it is one connecting predicates together

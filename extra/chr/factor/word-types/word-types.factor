@@ -1,8 +1,9 @@
 USING: accessors arrays assocs chr.factor chr.factor.util chr.parser chr.state
 classes classes.tuple classes.tuple.private combinators
 combinators.short-circuit effects generic generic.math generic.single kernel
-kernel.private layouts lists macros macros.expander math math.private quotations
-sequences sequences.private sets slots.private terms types.util words ;
+kernel.private layouts lists locals.backend macros macros.expander math
+math.private quotations sequences sequences.private sets slots.private terms
+types.util words ;
 
 IN: chr.factor.word-types
 
@@ -414,14 +415,30 @@ CHR: type-of-bignum>fixnum @ { TypeOfWord bignum>fixnum ?tau } // --
 ! { ReinferEffect ?rho ?z }
 ! { CheckXor ?w ?z ?tau } ;
 
+! *** Locals
+! Note: We consider local handling bi-variable effects since the predicates
+! are coupled to states represented by the row effects.  The intention is that
+! the corresponding row vars are equated once the virtual retain stack usage is
+! balanced?
+
+CHR: type-of-load-local @ { TypeOfWord load-local M{ ?tau } } // -- |
+[ ?tau P{ Effect L{ ?x . ?a } ?b f { P{ PrimCall load-local L{ ?x . ?a } ?b } } } ==! ] ;
+
+CHR: type-of-load-locals @ { TypeOfWord load-locals M{ ?tau } } // -- |
+[ ?tau P{ Effect L{ ?n . ?a } ?b f { P{ Instance ?n integer } P{ PrimCall load-locals L{ ?n . ?a } ?b } } } ==! ] ;
+
+CHR: type-of-get-local @ { TypeOfWord get-local M{ ?tau } } // -- |
+[ ?tau P{ Effect L{ ?n . ?a } L{ ?x . ?a } f { P{ Instance ?n integer } P{ PrimCall get-local L{ ?n . ?a } L{ ?x . ?a } } } } ==! ] ;
+
+CHR: type-of-drop-locals @ { TypeOfWord drop-locals M{ ?tau } } // -- |
+[ ?tau P{ Effect L{ ?n . ?a } ?b f { P{ Instance ?n integer } P{ PrimCall drop-locals L{ ?n . ?a } ?b } } } ==! ] ;
+
 ! *** Primitive Catch-all
-CHR: type-of-other-primitives @ { TypeOfWord ?w ?tau } // --
-[ ?tau term-var? ] [ ?w primitive? ] [ ?w macro-quot not ]
-[ ?w stack-effect :>> ?e effect>stacks :>> ?b drop :>> ?a ]
-[ ?a list*>array but-last reverse ?e in>> length head :>> ?i ]
-[ ?b list*>array but-last reverse ?e out>> length head :>> ?o ]
-|
-{ WrapDefaultClasses ?w P{ Effect ?a ?b f { P{ PrimCall ?w ?i ?o } } } ?rho }
+CHR: type-of-other-primitives @ { TypeOfWord ?w M{ ?tau } } // --
+[ ?w primitive? ] [ ?w "special" word-prop not ]
+[ ?w macro-quot not ]
+[ ?w stack-effect :>> ?e effect>stacks :>> ?b drop :>> ?a ] |
+{ WrapDefaultClasses ?w P{ Effect ?a ?b f { P{ PrimCall ?w ?a ?b } } } ?rho }
 { ReinferEffect ?rho ?tau } ;
 
 
