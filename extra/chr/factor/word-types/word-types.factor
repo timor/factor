@@ -677,7 +677,8 @@ CHR: type-of-regular-word @ { TypeOfWord A{ ?w } ?tau } // --
 [ ?w generic? not ]
 [ ?w def>> ?w 1quotation = not ]
 [ ?w def>> :>> ?q ]
-[ ?w "input-classes" word-prop >array :>> ?c ]
+! NOTE: trying to assess whether we ever hit this case at all!
+[ ?w "input-classes" word-prop >array :>> ?c dup length 1 > [ { ?w "input-class-ensure-on-regular-word" } throw ] when ]
 |
 { ?TypeOf ?q ?sig }
 { ComposeType P{ Effect ?a ?a f { P{ Ensure ?c ?a } } } ?sig ?tau } ;
@@ -760,7 +761,8 @@ CHR: type-of-single-method @ { TypeOfWord ?w ?tau } // --
 [ ?w def>> :>> ?q ]
 [ ?w "method-class" word-prop
   ?w "method-generic" word-prop dispatch#
-  dispatch-decl reverse :>> ?l
+  ! FIXME: Test and make sure this is correct, maybe untangle the Ensure and Declare mess in the first place
+  dispatch-decl :>> ?l
 ]
 |
 { ?TypeOf ?q ?rho }
