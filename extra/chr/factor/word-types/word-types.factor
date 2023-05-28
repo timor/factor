@@ -288,10 +288,6 @@ CHR: type-of-pushed-quot @ { ?TypeOf [ ?q ] ?tau } // -- [ ?q quotation? ] |
 { ComposeType ?sig P{ Effect L{ ?x . ?a } L{ ?x . ?a } f { P{ Eq ?x ?q } } } ?c }
 { TypeOf [ ?q ] ?c } ;
 
-! The reason for the existence of this one is because class-of returns word for t, not t
-CHR: type-of-t @ // { ?TypeOf [ t ] ?tau } -- |
-[ ?tau P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x t } P{ Eq ?x t } } } ==! ] ;
-
 CHR: type-of-unit-val @ { ?TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ] [ ?v callable? not ]
 | { ?TypeOf ?v ?rho }
 { MakeUnit ?rho ?sig }

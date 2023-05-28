@@ -25,6 +25,8 @@ CHR: comm-var-is-lhs @ // AS: ?p <={ symmetric-pred A{ ?l } ?v } -- [ ?v term-va
 ! Same here
 ! CHR: literal-singleton-class-is-class @ // { Instance ?x ?tau } -- [ { ?tau } first wrapper? ] [ { ?tau } first wrapped>> :>> ?rho singleton-class? ] |
 ! { Instance ?x ?rho } ;
+CHR: specialize-t-class @ { Eq ?x t } // { Instance ?x Is( not{ t } ?tau ) } --
+[ ?tau t classes-intersect? ] | { Instance ?x t } ;
 
 CHR: wrapper-type-is-eq @ // { Instance ?x Is( wrapper ?tau ) } --
 [ { ?tau } first wrapped>> :>> ?v class-of :>> ?rho drop t ] |
