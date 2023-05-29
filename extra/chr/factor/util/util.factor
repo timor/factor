@@ -1,7 +1,8 @@
 USING: accessors arrays assocs assocs.extras chr.factor chr.parser classes
-classes.algebra classes.algebra.private classes.union combinators.short-circuit
-combinators.smart generic.math generic.single kernel make math namespaces
-quotations sequences sets terms types.util words ;
+classes.algebra classes.algebra.private classes.builtin classes.tuple
+classes.union combinators.short-circuit combinators.smart generic.math
+generic.single kernel make math namespaces quotations sequences sets terms
+types.util words ;
 
 IN: chr.factor.util
 
@@ -261,3 +262,16 @@ M: Xor xor-call? [ type1>> ] [ type2>> ] bi [ xor-call? ] bi@ or ;
 
 : stack-vars ( stack -- vars row )
     list*>array unclip-last ;
+
+
+! ** Assoc utils
+! Return t if all keys in assoc1 are already present in assoc2
+: key-subset? ( assoc1 assoc2 -- ? )
+    '[ drop _ key? ] assoc-all? ;
+
+! ** Working around strange existing final-class? behavior
+
+GENERIC: final-data-class? ( class -- ? )
+M: object final-data-class? drop f ;
+M: builtin-class final-data-class? tuple eq? not ;
+M: tuple-class final-data-class? final-class? ;

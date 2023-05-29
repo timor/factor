@@ -1,8 +1,8 @@
 USING: accessors arrays assocs assocs.extras chr chr.factor.composition
 chr.programs chr.state classes.builtin combinators continuations effects
-formatting io kernel math math.parser namespaces prettyprint prettyprint.custom
-quotations sequences sequences.extras sets sorting system terms
-tools.annotations tools.annotations.private tools.time tools.walker ;
+formatting io kernel math math.functions math.parser namespaces prettyprint
+prettyprint.custom quotations sequences sequences.extras sets sorting system
+terms tools.annotations tools.annotations.private tools.time tools.walker ;
 
 IN: chr.debug
 FROM: namespaces => set ;

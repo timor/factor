@@ -220,7 +220,7 @@ CHR: type-of-array-nth @ { TypeOfWord array-nth ?tau } // -- |
   ==! ] ;
 
 ! : slot ( obj m -- value )
-CHR: type-of-slot @ { TypeOfWord slot ?tau } // -- [ ?tau term-var? ] |
+CHR: type-of-slot @ { TypeOfWord slot M{ ?tau } } // -- |
 [ ?tau
   P{ Effect L{ ?m ?o . ?a } L{ ?v . ?a } f {
          P{ Instance ?o not{ fixnum } }
@@ -232,7 +232,7 @@ CHR: type-of-slot @ { TypeOfWord slot ?tau } // -- [ ?tau term-var? ] |
   ==! ] ;
 
 ! : set-slot ( value obj n -- )
-CHR: type-of-set-slot @ { TypeOfWord set-slot ?tau } // -- [ ?tau term-var? ] |
+CHR: type-of-set-slot @ { TypeOfWord set-slot M{ ?tau } } // -- |
 [ ?tau
   P{ Effect L{ ?n ?o ?v . ?a } ?a f {
          P{ Instance ?n fixnum }
@@ -252,24 +252,26 @@ CHR: type-of-throw @ { TypeOfWord throw ?tau } // -- |
           } }
   ==! ] ;
 
+! TODO: possibly do this as macro expansion?  Would be the first
+! case of a generic inline method kind of thing...
 CHR: type-of-boa @ { TypeOfWord boa ?tau } // -- |
 [ ?tau
   P{ Effect L{ ?c . ?a } L{ ?v . ?b } f { P{ Instance ?c tuple-class } P{ Boa ?c ?a L{ ?v . ?b } }
-                                          P{ Instance ?v tuple } } }
+                                          P{ Instance ?v tuple } P{ LocalAllocation ?v } } }
   ==!
 ] ;
 
 CHR: type-of-tuple-boa @ { TypeOfWord <tuple-boa> ?tau } // -- |
 [ ?tau
   P{ Effect L{ ?c . ?a } L{ ?v . ?b } f { P{ Instance ?c array } P{ TupleBoa ?c ?a L{ ?v . ?b } }
-                                          P{ Instance ?v tuple } } }
+                                          P{ Instance ?v tuple } P{ LocalAllocation ?v } } }
   ==!
 ] ;
 
 
 ! *** Preserve wrapper objects
 CHR: type-of-wrapper @ // { ?TypeOf ?q ?tau } --
-[ ?q quotation? ]
+[ ?q callable? ]
 [ ?q length 1 = ]
 [ ?q first wrapper? ]
 [ ?q first :>> ?v ]
@@ -282,7 +284,7 @@ CHR: type-of-wrapper @ // { ?TypeOf ?q ?tau } --
 
 ! *** Destructure unit type queries
 
-CHR: type-of-pushed-quot @ { ?TypeOf [ ?q ] ?tau } // -- [ ?q quotation? ] |
+CHR: type-of-pushed-quot @ { ?TypeOf [ ?q ] ?tau } // -- [ ?q callable? ] |
 { ?TypeOf ?q ?rho }
 { MakeUnit ?rho ?sig }
 { ComposeType ?sig P{ Effect L{ ?x . ?a } L{ ?x . ?a } f { P{ Eq ?x ?q } } } ?c }

@@ -380,7 +380,7 @@ M: term-var subst
 M: match-var subst
     over ?at drop ;
 
-M: callable subst [ [ subst ] map ] quoting-substitution ;
+M: quotation subst [ [ subst ] map ] quoting-substitution ;
 
 M: sequence subst
     [ [ subst ] map ] no-quoting ;
@@ -401,6 +401,14 @@ PRIVATE>
      [ n set-slot ]
      [  ] tri
     ] each-integer ; inline
+
+M: curried subst
+    [ obj>> [ subst ] no-quoting ]
+    [ quot>> [ subst ] quoting-substitution ] bi
+    curried boa ;
+
+M: composed subst
+    [ tuple-subst ] quoting-substitution ;
 
 M: tuple subst
     [ tuple-subst ] no-quoting ;
@@ -464,6 +472,15 @@ M: tuple decompose-right
     [ [ tuple-slots ] bi@ t ] [ f ] if ;
 M: sequence decompose-right
     2dup { [ [ class-of ] same? ] [ [ length ] same? ] } 2&& ;
+: decompose-callable ( term1 term2 -- terms1 terms2 cont? )
+    2dup [ callable? ] both?
+    [ 2dup [ length ] same? ] [ f ] if ; inline
+M: curried decompose-left decompose-callable ;
+M: curried decompose-right decompose-callable ;
+M: composed decompose-left decompose-callable ;
+M: composed decompose-right decompose-callable ;
+M: quotation decompose-left decompose-callable ;
+M: quotation decompose-right decompose-callable ;
 
 TUPLE: match-set elements ;
 C: <match-set> match-set

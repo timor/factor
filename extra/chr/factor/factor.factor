@@ -236,6 +236,11 @@ TUPLE: Nth < val-pred seq n ;
 ! A declaration, has parameterizing character
 TUPLE: DeclareStack < chr-pred classes stack ;
 TUPLE: Declare < chr-pred classes stack ;
+! Generalization of structural allocations that can be
+! accessed by key
+TUPLE: Map < expr-pred mapping ;
+TUPLE: LocalAllocation < val-pred ;
+
 
 ! A declaration, has no parameterizing character, just shortcut for Instance
 ! constraints, used to ensure stack depths and instance decls
@@ -331,6 +336,10 @@ TUPLE: Lt < Le ;
 ! TUPLE: Gt < expr-pred val var ;
 ! TUPLE: Counter < val-pred from to by ;
 TUPLE: Counter < chr-pred start iter-in iter-out end delta ;
+
+! Class algebra
+TUPLE: ClassPred < rel-pred class-rel-word ;
+
 
 TUPLE: <==> < chr-pred flag consequent ;
 

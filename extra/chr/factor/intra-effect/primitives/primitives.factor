@@ -1,5 +1,5 @@
-USING: chr.factor chr.parser lists locals.backend math math.private prettyprint
-sequences sets terms types.util ;
+USING: chr.factor chr.parser classes.algebra kernel lists locals.backend math
+math.private sequences sets terms types.util ;
 
 IN: chr.factor.intra-effect.primitives
 
@@ -8,16 +8,24 @@ IN: chr.factor.intra-effect.primitives
 
 CHRAT: chr-factor-prim { }
 
-! *** Prim Conversions
+! *** Math Prim Conversions
 ! FIXME: pred args are stacks now
 CHR: prim-call-bitnot @ // { PrimCall ?w { ?x } { ?y } } -- [ ?w { bignum-bitnot fixnum-bitnot } in? ] | { BitNot ?y ?x } ;
 CHR: prim-call-fixnum> @ // { PrimCall ?w { ?x } { ?y } } -- [ ?w { fixnum>float fixnum>bignum } in? ] | { Num= ?x ?y } ;
 CHR: prim-call-shift @ // { PrimCall fixnum-shift { ?x ?n } { ?y } } -- | { Shift ?y ?x ?n } ;
 
-! **** Locals
+! ** Composition mode expansions
+PREFIX-RULES: { P{ CompMode } }
+
+! *** Cloning
+
+! NOTE: The class pred there has implied directional semantics here, not sure if that is important
+CHR: prim-call-clone @ // { PrimCall (clone) L{ ?x . ?a } L{ ?y . ?a } } -- |
+{ Eq ?x ?y } { LocalAllocation ?y } { ClassPred ?y ?x class= } ;
+
+! *** Locals
 ! [| a b | a ] -> [ 2 load-locals -1 get-local 2 drop-locals ]
 
-PREFIX-RULES: { P{ CompMode } }
 
 :: ensure-retain-stack ( n -- list )
     "rest" utermvar :> tail

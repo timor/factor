@@ -1,9 +1,8 @@
-USING: accessors arrays assocs chr.factor.composition chr.parser chr.state
-chr.test combinators.short-circuit kernel kernel.private lists literals math
-math.private classes sequences.private
-chr.factor.util layouts grouping chr.factor.phi
-quotations sequences slots.private terms tools.test typed types.util words
-chr.factor chr.factor.word-types chr.factor.effects chr combinators ;
+USING: accessors arrays assocs chr.factor chr.factor.composition
+chr.factor.effects chr.factor.phi chr.factor.util chr.parser chr.state chr.test
+classes combinators combinators.short-circuit grouping kernel kernel.private
+layouts lists literals math math.private quotations sequences slots.private
+strings terms tools.test typed types.util words ;
 
 IN: chr.factor.composition.tests
 
@@ -238,6 +237,12 @@ P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x bignum } P{ Instance ?y f
 
 P{ Effect ?a L{ ?x3 ?x3 . ?a } f { P{ Instance ?x3 word } P{ Eq ?x3 swap } } }
 [ [ \ swap dup ] get-type ] chr-test
+
+! *** Some cloning class predicate stuff
+P{ Effect ?a ?b f { P{ Invalid } } }
+[ [ { array } declare (clone) { string } declare ] get-type ] chr-test
+
+! TODO: tests for actually specializing stuff over clone...
 
 TUPLE: footuple barslot ;
 P{ Effect L{ ?x . ?a } L{ ?y . ?a } f

@@ -1,9 +1,9 @@
-USING: accessors arrays chr.factor chr.factor.util chr.parser chr.state classes
-classes.algebra classes.builtin classes.predicate classes.singleton
-classes.tuple classes.tuple.private combinators combinators.short-circuit
-continuations generic generic.single grouping kernel kernel.private lists
-macros.expander math math.functions math.order quotations sequences sets sorting
-terms types.util ;
+USING: accessors arrays chr.factor chr.factor.intra-effect.maps chr.factor.util
+chr.parser chr.state classes classes.algebra classes.builtin classes.predicate
+classes.singleton classes.tuple classes.tuple.private combinators
+combinators.short-circuit continuations generic generic.single grouping kernel
+kernel.private lists math math.functions math.order quotations sequences sets
+sorting terms types.util ;
 
 IN: chr.factor.intra-effect
 
@@ -429,7 +429,8 @@ CHR: convert-tag @ // { Tag ?x A{ ?n } } -- [ ?n type>class :>> ?tau ] |
 { Instance ?x ?tau } ;
 
 CHR: instance-of-non-classoid @ { Instance ?x A{ ?c } } // -- [ { ?c } first classoid? not ] | { Invalid } ;
-CHR: check-lit-instance @ // { Instance A{ ?v } A{ ?c } } -- |
+! NOTE: this shouldn't ever happen!
+CHR: check-lit-instance @ // { Instance A{ ?v } A{ ?c } } -- | [ "bogus rule check-lit-instance" throw ]
 [ ?v ?c instance? f P{ Invalid } ? ] ;
 CHR: invalid-eq-instance @ // { Instance ?x A{ ?c } } { Eq ?x A{ ?v } } -- [ ?v ?c instance? not ] | { Invalid } ;
 
@@ -439,6 +440,10 @@ CHR: null-instance-is-invalid @ // { Instance ?x null } -- | { Invalid } ;
 ! the intersection instance type, or in the
 ! implicit conjunction of the constraint store.  Currently, this is put into the
 ! intersection classes of the factor type system.
+
+! NOTE: effect of this rule on final performance is unclear at the moment
+CHR: instance-subsumption @ { Instance ?x Is( classoid ?tau ) } // { Instance ?x Is( classoid ?sig ) } --
+[ ?tau ?sig class<= ] | ;
 CHR: instance-intersection @
 // { Instance ?x A{ ?tau } } { Instance ?x A{ ?sig } } --
 ! NOTE: with lazy dispatch, this destroys nominative types
@@ -451,6 +456,26 @@ CHR: instance-intersect-effect @ { Instance ?x ?e }
 [ ?e valid-effect-type? ] |
 [ ?tau callable classes-intersect?
  f { Invalid } ? ] ;
+
+! **** Class relations
+! from (clone) y is the output, x is the input
+! CHR: specialize-class=-forward @ { Instance ?x Is( classoid ?tau ) } { ClassPred ?y ?x class= } { Instance ?y Is( classoid ?sig ) } // --
+! [ ?sig ?tau class= not ] | { Instance ?y  }
+
+! in: object, out: array -> don't change
+! in: object, out: object -> don't change
+! in: array, out: object -> out: array & object
+! in: string, out: array -> out: array & string
+! output class <= input class -> don't change.  Intersect otherwise
+! TODO possibly translate into symmetric class<= constraints
+CHR: specialize-class=-forwards @ { ClassPred ?y ?x class= } { Instance ?x Is( classoid ?tau ) } // { Instance ?y Is( classoid ?sig ) } --
+[ ?sig ?tau class<= not ] [ ?sig ?tau class-and :>> ?rho ] | { Instance ?y ?rho } ;
+
+CHR: specialize-class=-backwards @ { ClassPred ?y ?x class= } { Instance ?y Is( classoid ?tau ) } // { Instance ?x Is( classoid ?sig ) } --
+[ ?sig ?tau class<= not ] [ ?sig ?tau class-and :>> ?rho ] | { Instance ?x ?rho } ;
+
+CHR: redundant-final-class= @ { Instance ?x Is( classoid ?rho ) } { Instance ?y Is( classoid ?rho ) } // { ClassPred ?y ?x class= }
+-- [ ?rho final-data-class? ] | ;
 
 ! *** Arithmetics
 ! CHR: unique-expr-pred @ AS: ?p <={ expr-pred ?a . ?x } // AS: ?q <={ expr-pred ?a . ?x } -- [ ?p class-of ?q class-of class= ] | ;
@@ -513,7 +538,7 @@ CHR: transitive-le-gt @ { Lt ?x ?y } { Le ?y ?z } // -- | { Lt ?x ?z } ;
 ! NOTE: This does not work naively for products!
 ! TODO: might need revisiting after being more explicit with math types and equality
 ! FIXME: automate
-CHR: lit-sum-specializes-math-class-1 @ { Sum ?z ?x A{ ?m } } { Instance ?x ?c } // --
+CHR: lit-sum-specializes-math-class-1 @ { Sum M{ ?z } ?x A{ ?m } } { Instance ?x ?c } // --
 [ ?m class-of ?c pessimistic-math-class-max :>> ?d ] |
 { Instance ?z ?d } ;
 
@@ -787,6 +812,13 @@ CHR: ge-offset-sum-2 @ { Sum ?x ?y A{ ?n } } { Le A{ ?v } ?x } // --
 
 ! *** Calling Curry/Compose
 
+! NOTE: Make sure this deferred inference request does not conflict with recursive call inference by
+! introducing artificial recursion requests where there are none!
+PREDICATE: callable-subclass < class callable class<= ;
+
+CHR: infer-literal-callable @ { Eq ?q Is( callable ?v ) } // { Instance ?q Is( callable-subclass ?tau ) } -- |
+{ ?DeferTypeOf ?v ?rho } { Instance ?q ?rho } ;
+
 CHR: call-destructs-curry @ { Instance ?q curried } { Slot ?q "quot" ?p } { Slot ?q "obj" ?x } // { CallEffect ?q ?a ?b } -- |
 { CallEffect ?p L{ ?x . ?a } ?b } ;
 
@@ -933,7 +965,7 @@ CHR: dispatch-case @ // { MakeSingleDispatch ?i L{ { ?c ?m } . ?r } ?d ?tau } --
 CHR: known-slot-num @ { Eq ?n A{ ?a } } // { Slot ?o ?n ?v } -- |
 { Slot ?o ?a ?v } ;
 
-CHR: known-instance @ { Eq ?c A{ ?d } } // { Instance ?x ?c } -- [ ?c term-var? ]
+CHR: known-instance @ { Eq M{ ?c } A{ ?d } } // { Instance ?x M{ ?c } } --
 | { Instance ?x ?d } ;
 
 CHR: known-declared-instance @ { Eq ?c A{ ?d } } // { DeclaredInstance ?x ?c } --
@@ -959,8 +991,6 @@ CHR: known-generic-input/output @ { Eq ?n A{ ?v } } // { GenericDispatch ?w ?d ?
 ! [| | ?d { { ?x ?tau } } lift* :> new-dispatcher
 !  P{ GenericDispatch ?w new-dispatcher ?a ?i ?o } ] ;
 
-! *** TODO Tuple Folding
-
 ! *** Slot conversion
 ! TODO: this conversion can be wrong when working on numerically optimized code?
 CHR: known-named-slot @ { Eq ?o A{ ?tau } } // { Slot ?o A{ ?n } ?v } -- [ ?tau tuple-class? ]
@@ -969,6 +999,9 @@ CHR: known-named-slot @ { Eq ?o A{ ?tau } } // { Slot ?o A{ ?n } ?v } -- [ ?tau 
 |
 { Slot ?o ?m ?v }
 { DeclaredInstance ?v ?rho } ;
+
+
+IMPORT: chr-intra-effect-maps
 
 CHR: known-boa-spec @ { Eq ?c A{ ?v } } // AS: ?p <={ Boa ?c ?i ?o } -- |
 [ ?p clone ?v >>spec ] ;
