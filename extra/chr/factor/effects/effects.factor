@@ -248,6 +248,8 @@ CHR: implied-param-join @ // { ImpliesParam ?x ?a } { ImpliesParam ?y ?b } --
 [ ?a ?b union :>> ?k ]
 | { ImpliesParam ?m ?k } ;
 
+PREFIX-RULES: f
+! NOTE: Big change! Use same collection rule for phi finishing as for composition finishing!
 
 ! CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p vars ?e make-effect-vars intersects? ]
 ! CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p live-vars ?e make-effect-vars subset? ]

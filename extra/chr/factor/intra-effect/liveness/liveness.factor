@@ -332,6 +332,12 @@ CHR: collect-generic-dispatch-is-scope @ { Live ?l } { Def ?a } { Use ?b } // AS
 ! [ ?p defines-scope [ vars ] bi@ :>> ?b swap :>> ?a [ empty? not ] both? ]
 ! [ ?a ?b union :>> ?c ] | { Live ?c } { Left ?a } { Right ?b } ;
 ! PREFIX-RULES: { P{ CompMode } P{ Left __ } P{ Right __ } }
+
+CHR: def-used-is-live @ { Def ?l } { Use ?r } // { Live ?v } --
+[ ?l ?r intersect :>> ?a empty? not ] [ ?a ?v diff :>> ?b empty? not ]
+[ ?v ?b union :>> ?c ] | { Live ?c } ;
+
+
 PREFIX-RULES: { P{ CompMode } P{ Live __ } }
 
 ! ! This is used so as to not always have to touch Def manually
@@ -339,10 +345,9 @@ PREFIX-RULES: { P{ CompMode } P{ Live __ } }
 ! [ ?x ?l subset? ] [ ?y ?l subset? not ] [ ?y ?l union :>> ?m ] |
 ! { Def ?m } ;
 
-CHR: have-def-use @ { Def ?l } // { Imply ?x ?y } { Use ?r } --
+CHR: have-implied-def-use @ { Def ?l } // { Imply ?x ?y } { Use ?r } --
 [ ?y ?r subset? ] [ ?x ?r intersects? not ] [ ?x ?l subset? ]
 [ ?r ?x union :>> ?s ] | { Live ?x } { Use ?s } ;
-
 
 
 ! ** Predicate-speficic Modes and Collection
@@ -351,6 +356,11 @@ CHR: have-def-use @ { Def ?l } // { Imply ?x ?y } { Use ?r } --
 ! *** Relations
 ! TODO: only add these if it makes sense for optimization?
 ! CHR: rel-pred-modes @ <={ rel-pred M{ ?x } M{ ?y } } // -- | [ ?x ?y make-imply ] [ ?y ?x make-imply ] ;
+
+CHR: eq-def-mode-1 @ { Eq M{ ?x } M{ ?y } } // { Def ?l } -- [ ?x ?l in? ]
+[ ?y ?l in? not ] [ ?l ?y suffix :>> ?m ] | { Def ?m } [ ?x ?y make-imply ] ;
+CHR: eq-def-mode-2 @ { Eq M{ ?y } M{ ?x } } // { Def ?l } -- [ ?x ?l in? ]
+[ ?y ?l in? not ] [ ?l ?y suffix :>> ?m ] | { Def ?m } [ ?x ?y make-imply ] ;
 
 ! *** Mathematical Operations
 
@@ -389,6 +399,14 @@ CHR: used-tupe-slots-are-used @ { Slot ?o ?n ?v } // { Use ?w } --
 ! [ { ?o ?n } vars ?l subset? ]
 [ ?o ?w in? ] [ ?v ?w in? not ]
 [ ?w ?v suffix :>> ?b ] | { Live { ?v } } { Use ?b } ;
+
+! The same applies here for the left side, starting from the object node
+! NOTE: special-casing for the slot number here, maybe for the slot var too? Perhaps better to do this as an implication though?
+CHR: defined-tuple-slot-nums-are-used @ { Slot M{ ?o } M{ ?n } M{ ?v } } { Def ?l } // { Use ?w } --
+! CHR: live-tuple-slot-nums-are-used @ { Slot ?o ?n ?v } { Live ?l } // { Use ?w } --
+[ ?o ?l in? ?v ?l in? and ] [ ?n ?w in? not ]
+[ ?w ?n suffix :>> ?b ] | { Use ?b }  ;
+
 
 ! PREFIX-RULES: { P{ CompMode } P{ Live __ } }
 

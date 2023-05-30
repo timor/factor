@@ -179,7 +179,12 @@ CHR: have-interesting-decider @ { MakeEffect ?i ?o ?l __ __ } // <={ Discriminat
 ! NOTE: this takes this out of the reasoning.  However, anything that should be able to be reasoned
 ! from the existence of same information different branches should have done during composition already.
 ! After this rule, existence of predicates is assumed to be only present in one branch.
-CHR: phi-same-branch-pred @ // AS: ?p <={ body-pred } AS: ?p <={ body-pred } -- | { Keep ?p } ;
+CHR: phi-same-branch-pred @ // AS: ?p <={ body-pred } AS: ?p <={ body-pred } -- | { Collect ?p } ;
+
+CHR: phi-same-sum-result-1 @ { Sum ?z ?x ?y } { Sum ?a ?x ?y } // -- | [ ?z ?a ==! ] ;
+CHR: phi-same-prod-result-1 @ { Prod ?z ?x ?y } { Prod ?a ?x ?y } // -- | [ ?z ?a ==! ] ;
+
+CHR: phi-same-slot-val @ { Slot ?o ?n ?v } { Slot ?a ?n ?v } // -- | [ ?o ?a ==! ] ;
 
 CHR: phi-disjoint-instance @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
 [ { ?rho ?tau } first2 classes-intersect? not ] | { Decider ?x } ;
@@ -189,7 +194,7 @@ CHR: phi-maybe-disjoint-instance @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?t
 
 ! TODO: might not be good to use simplifying-class-or here?
 CHR: phi-union-instance @ // { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } --
-[ { ?rho ?tau } first2 simplifying-class-or :>> ?sig ] | { Keep P{ Instance ?x ?sig } } ;
+[ { ?rho ?tau } first2 simplifying-class-or :>> ?sig ] | { Collect P{ Instance ?x ?sig } } ;
 
 ! TODO: check for isomorphic effects maybe?
 !  -> If so, this would have to be done in phi-same-branch-pred above...
@@ -245,8 +250,8 @@ CHR: phi-eq-decider @ { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } // -- [ ?b ?c = not ] 
     [ 2dup <=> +gt+ eq? [ swap ] when t ] [ drop f ] recover ;
 CHR: phi-eq-range @ // { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } -- [ ?b ?c order? [ :>> ?n drop :>> ?m drop ] dip ]
 |
-{ Keep P{ Le ?m ?x } }
-{ Keep P{ Le ?x ?n } } ;
+{ Collect P{ Le ?m ?x } }
+{ Collect P{ Le ?x ?n } } ;
 ! TODO: abstract to all relations somehow
 
 ! NOTE: replacing these with discriminators for now.  The idea is that this is not an observable single-value
@@ -259,11 +264,11 @@ CHR: phi-eq-neq-2 @ { Eq ?x ?y } { Neq ?y ?x } // -- | { Discriminator { ?x ?y }
 
 ! CHR: phi-eq-lt-decider-1 @ // { Eq ?x ?y } { Lt ?x ?y } -- | { Decider { ?x ?y } } { Keep P{ Le ?x ?y } } ;
 ! CHR: phi-eq-lt-decider-2 @ // { Eq ?x ?y } { Lt ?y ?x } -- | { Decider { ?x ?y } } { Keep P{ Le ?y ?x } } ;
-CHR: phi-eq-lt-decider-1 @ // { Eq ?x ?y } { Lt ?x ?y } -- | { Discriminator { ?x ?y } } { Keep P{ Le ?x ?y } } ;
-CHR: phi-eq-lt-decider-2 @ // { Eq ?x ?y } { Lt ?y ?x } -- | { Discriminator { ?x ?y } } { Keep P{ Le ?y ?x } } ;
+CHR: phi-eq-lt-decider-1 @ // { Eq ?x ?y } { Lt ?x ?y } -- | { Discriminator { ?x ?y } } { Collect P{ Le ?x ?y } } ;
+CHR: phi-eq-lt-decider-2 @ // { Eq ?x ?y } { Lt ?y ?x } -- | { Discriminator { ?x ?y } } { Collect P{ Le ?y ?x } } ;
 
-CHR: phi-eq-le-discrim-1 @ // { Eq ?x ?y } { Le ?x ?y } -- | { Discriminator { ?x ?y } } { Keep P{ Le ?x ?y } } ;
-CHR: phi-eq-le-discrim-2 @ // { Eq ?y ?x } { Le ?x ?y } -- | { Discriminator { ?x ?y } } { Keep P{ Le ?x ?y } } ;
+CHR: phi-eq-le-discrim-1 @ // { Eq ?x ?y } { Le ?x ?y } -- | { Discriminator { ?x ?y } } { Collect P{ Le ?x ?y } } ;
+CHR: phi-eq-le-discrim-2 @ // { Eq ?y ?x } { Le ?x ?y } -- | { Discriminator { ?x ?y } } { Collect P{ Le ?x ?y } } ;
 
 ! CHR: phi-lt-lt-decider @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Decider { ?y ?x } } ;
 CHR: phi-lt-lt-decider @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Discriminator { ?x ?y } } ;
@@ -285,7 +290,16 @@ CHR: phi-rel-discriminates @ <={ rel-pred ?x ?y } // -- | { Discriminator { ?x ?
 ! *** Phi Math
 
 CHR: phi-keep-commutative-pred @ // AS: ?p <={ commutative-op ?z ?x ?y } AS: ?q <={ commutative-op ?z ?y ?x } --
-[ ?p ?q [ class-of ] same? ] | { Keep ?p }  ;
+[ ?p ?q [ class-of ] same? ] | { Collect ?p }  ;
+
+! NOTE: There's a load of these, really... maybe only do that if we
+! need parameters?  Have to be careful to not generate too many
+! new dependencies in e.g. loop handling!  Alternatively, only use
+! these things in phi reasoning?  Yeah, seems to be better...
+! TODO: generalize
+CHR: eq-propagate-sum-1 @ { Eq ?x ?y } { Sum ?a ?y ?b } // -- |
+{ Sum ?a ?x ?b } ;
+
 
 ! **** phi higher order
 
@@ -363,11 +377,11 @@ CHR: invalid-defer-type-request @ // { ?DeferTypeOf ?x __ } -- [ ?x callable? no
 
 ! Possibly expensive? Seems like it! But some are definitely needed, e.g. for Eq, aaand for Le
 CHR: unique-val-pred @ AS: ?p <={ val-pred } // AS: ?p <={ val-pred } -- | ;
-CHR: unique-eq-pred @ { Eq ?x ?y } // { Eq ?x ?y } -- | ;
-CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
-CHR: unique-le-pred @ { Le ?x ?y } // { Le ?x ?y } -- | ;
-CHR: unique-lt-pred @ { Lt ?x ?y } // { Lt ?x ?y } -- | ;
-CHR: uniqe-slot-pred @ { Slot ?o ?n ?v } // { Slot ?o ?n ?v } -- | ;
+! CHR: unique-eq-pred @ { Eq ?x ?y } // { Eq ?x ?y } -- | ;
+! CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
+! CHR: unique-le-pred @ { Le ?x ?y } // { Le ?x ?y } -- | ;
+! CHR: unique-lt-pred @ { Lt ?x ?y } // { Lt ?x ?y } -- | ;
+! CHR: uniqe-slot-pred @ { Slot ?o ?n ?v } // { Slot ?o ?n ?v } -- | ;
 
 ! CHR: unique-equiv @ { <==> ?c ?p } // { <==> ?c ?p } -- | ;
 ! CHR: assume-equiv-true @ { <==> ?c ?p } { Instance ?c A{ ?tau } } // --
@@ -516,16 +530,18 @@ CHR: check-sum @ // { Sum A{ ?z } A{ ?x } A{ ?y } } -- [ ?x ?y + ?z = not ] | P{
 CHR: normalize-commutative-op @ // AS: ?p <={ commutative-op ?z A{ ?x } ?y } -- [ ?y term-var? ] |
 [ { ?z ?y ?x } ?p class-of slots>tuple ] ;
 
+CHR: neutral-sum-defines-eq @ // { Sum ?z ?x 0 } -- | { Eq ?z ?x } ;
+
 ! Anything more complex than that needs a linear equation predicate, or
 ! a linear solver, for that matter...
 ! TODO reactivate once confirmed that these aren't necessary for liveness
 CHR: elim-transitive-literal-sum @ // { Sum ?z ?x A{ ?m } } { Sum ?x ?a A{ ?n } } --
-[ ?m ?n + :>> ?k ] | { Sum ?z ?a ?k } ;
+[ ?z ?x == not ] [ ?m ?n + :>> ?k ] | { Sum ?z ?a ?k } ;
 CHR: elim-transitive-literal-sum-diff-1 @ // { Sum ?z ?x A{ ?m } } { Sum ?z ?a A{ ?n } } --
 [ ?m ?n - :>> ?k ] | { Sum ?a ?x ?k } ;
 
 CHR: elim-transitive-literal-prod-mul @ // { Prod ?z ?x A{ ?m } } { Prod ?x ?a A{ ?n } } --
-[ ?m ?n * :>> ?k ] | { Prod ?z ?a ?k } ;
+[ ?z ?x == not ] [ ?m ?n * :>> ?k ] | { Prod ?z ?a ?k } ;
 CHR: elim-transitive-literal-prod-div-1 @ // { Prod ?x ?z A{ ?m } } { Prod ?a ?z A{ ?n } } -- [ ?m ?n >= ]
 [ ?m ?n / :>> ?k ] | { Prod ?x ?a ?k } ;
 ! CHR: elim-transitive-literal-prod-div-2 @ // { Prod ?z ?x A{ ?n } } { Prod ?z ?a A{ ?m } } -- [ ?m ?n >= ]

@@ -201,23 +201,23 @@ CHR: type-of-<array> @ { TypeOfWord <array> ?tau } // -- |
      } }
   ==! ] ;
 
-! : array-nth ( n array -- elt )
-! NOTE: existentials
-CHR: type-of-array-nth @ { TypeOfWord array-nth ?tau } // -- |
-[ ?tau
-  P{ Effect L{ ?l ?n . ?a } L{ ?v . ?a } { ?x } {
-         P{ Instance ?n fixnum }
-         ! P{ Instance ?n array-capacity }
-         P{ Instance ?l array }
-         ! P{ Instance ?x array-capacity }
-         P{ DeclaredInstance ?x array-capacity }
-         P{ Instance ?v object }
-         P{ Length ?l ?x }
-         P{ Le ?n ?x }
-         ! P{ Element ?l ?v }
-         P{ Nth ?v ?l ?n }
-     } }
-  ==! ] ;
+! ! : array-nth ( n array -- elt )
+! ! NOTE: existentials
+! CHR: type-of-array-nth @ { TypeOfWord array-nth ?tau } // -- |
+! [ ?tau
+!   P{ Effect L{ ?l ?n . ?a } L{ ?v . ?a } { ?x } {
+!          P{ Instance ?n fixnum }
+!          ! P{ Instance ?n array-capacity }
+!          P{ Instance ?l array }
+!          ! P{ Instance ?x array-capacity }
+!          P{ DeclaredInstance ?x array-capacity }
+!          P{ Instance ?v object }
+!          P{ Length ?l ?x }
+!          P{ Le ?n ?x }
+!          ! P{ Element ?l ?v }
+!          P{ Nth ?v ?l ?n }
+!      } }
+!   ==! ] ;
 
 ! : slot ( obj m -- value )
 CHR: type-of-slot @ { TypeOfWord slot M{ ?tau } } // -- |
@@ -225,7 +225,7 @@ CHR: type-of-slot @ { TypeOfWord slot M{ ?tau } } // -- |
   P{ Effect L{ ?m ?o . ?a } L{ ?v . ?a } f {
          P{ Instance ?o not{ fixnum } }
          P{ Instance ?m fixnum }
-         ! P{ Le 1 ?m }
+         P{ Le 0 ?m }
          P{ Instance ?v object }
          P{ Slot ?o ?m ?v }
      } }
@@ -239,6 +239,7 @@ CHR: type-of-set-slot @ { TypeOfWord set-slot M{ ?tau } } // -- |
          P{ Instance ?o not{ fixnum } }
          P{ Instance ?v object }
          P{ Slot ?o ?n ?v }
+         P{ Le 0 ?n }
      } }
   ==!
 ] ;

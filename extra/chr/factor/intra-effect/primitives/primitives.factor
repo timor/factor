@@ -9,6 +9,10 @@ IN: chr.factor.intra-effect.primitives
 CHRAT: chr-factor-prim { }
 
 ! *** Math Prim Conversions
+! Instances have already been defined at this point
+CHR: prim-call-fixnum+fast @ // { PrimCall fixnum+fast L{ ?y ?x . ?a } L{ ?z . ?a } } --
+| { Sum ?z ?x ?y } ;
+
 ! FIXME: pred args are stacks now
 CHR: prim-call-bitnot @ // { PrimCall ?w { ?x } { ?y } } -- [ ?w { bignum-bitnot fixnum-bitnot } in? ] | { BitNot ?y ?x } ;
 CHR: prim-call-fixnum> @ // { PrimCall ?w { ?x } { ?y } } -- [ ?w { fixnum>float fixnum>bignum } in? ] | { Num= ?x ?y } ;
