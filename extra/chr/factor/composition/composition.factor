@@ -1,13 +1,22 @@
 USING: accessors arrays assocs chr.factor chr.factor.effects
 chr.factor.intra-effect chr.factor.intra-effect.primitives chr.factor.phi
 chr.factor.util chr.factor.word-types chr.parser chr.state
-combinators.short-circuit generic kernel quotations sequences sets terms words ;
+combinators.short-circuit generic kernel namespaces quotations sequences sets
+terms vocabs words ;
 
 IN: chr.factor.composition
 
+SYMBOL: cache-types?
+SYMBOL: type-solver-state
+: reset-chr-types ( -- )
+    all-words [ "chr-type" remove-word-prop ] each ;
+
+: clear-chr-cache ( -- ) f type-solver-state set-global ;
 
 ! * CHR Program for Composition solving
 CHRAT: chr-comp { }
+
+! ** Caching
 
 ! ** Safety Checks
 ! TODO remove once not needed safety check, seems to be quite expensive!
@@ -86,6 +95,13 @@ CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } --
 ! CHR: remove-cached-non-canonical-type @ // { TypeOf ?x ?tau } --
 ! [ ?tau full-type? ] [ ?tau canonical? not ] | ;
 
+CHR: remove-recursive-type-after @ { TypeOf ?x ?tau } // -- [ ?tau full-type? ] [ ?tau recursive-tags :>> ?l ] |
+{ RemoveRecursiveType ?x ?l } ;
+
+CHR: remove-recursive-type-done @ // { TypeOf ?x ?tau } { RemoveRecursiveType ?x Is( sequence ?l ) } -- [ ?l empty? ] | ;
+
+CHR: remove-recursive-type-step @ { TypeOfWord ?w ?sig } // { RemoveRecursiveType ?x Is( sequence ?l ) } -- [ ?w ?l in? ]
+[ ?sig canonical? ] [ ?w ?l remove :>> ?m ] | { RemoveRecursiveType ?x ?m } ;
 
 
 ! These are used when recursive calls are made to some special words (length etc.) for which we have special
@@ -113,8 +129,12 @@ CHR: double-inference-queue @ // { ?TypeOf ?x M{ ?tau } } { ?TypeOf ?x M{ ?sig }
 [ ?sig ?tau ==! ]
 ! ;
 { ?TypeOf ?x ?tau } ;
+! { RemoveRecursiveType ?x ?rho } ;
 ! { Recursion ?x ?tau ?sig } ;
 
+! ** Caching
+! CHR: cache-word-type @ { TypeOfWord ?w ?rho } // -- [ cache-types? get ] [ ?rho canonical? ] |
+! [ ?w ?rho f lift "chr-type" set-word-prop f ] ;
 
 ! ** Recursion resolution
 ! Currently relying on eager progress to resolve to at least one singly recursive body.
@@ -150,6 +170,9 @@ CHR: resolve-single-recursion @ // { TypeOfWord ?w ?rho } { CallsRecursive ?w { 
 { CheckXor ?w ?sig ?tau }
 [ ?tau f lift canonical? [ { ?tau "single recursive not canonical after resolution!" } throw ] unless f ]
 { TypeOfWord ?w ?tau } ;
+
+CHR: remove-resolved-fixpoint-type @ { TypeOfWord ?w ?rho } // { FixpointTypeOf ?w __ } -- [ ?rho canonical? ] | ;
+CHR: remove-resolved-recursion-type @ { TypeOfWord ?w ?rho } // { RecursionTypeOf ?w __ } -- [ ?rho canonical? ] | ;
 
 ! Version where we preclude a recursion to ourselves when providing as partial type
 ! VER2
@@ -210,7 +233,11 @@ IMPORT: chr-effects
 
 ! Default position where [ foo ] queries are converted to TypeOfWord foo preds.
 CHR: ask-type-of-word-call @ { ?TypeOf [ ?w ] ?tau } // -- [ ?w callable-word? ] [ ?tau term-var? ] |
-{ TypeOfWord ?w ?sig } ;
+[ cache-types? get ?w "chr-type" word-prop and
+  drop f
+  [ dup import-term-vars ?w swap TypeOfWord boa ]
+    [ P{ TypeOfWord ?w ?sig } ] if*
+] ;
 
 CHR: compose-trivial-left @ // { ComposeType P{ Effect ?a ?a f f } ?y ?tau } -- |
 [ ?tau ?y ==! ] ;
@@ -249,9 +276,29 @@ CHR: compose-xor-effects-both @ // { ComposeType P{ Xor ?a ?b } P{ Xor ?c ?d } ?
 
 ;
 
+UNION: word-type-pred TypeOf TypeOfWord ;
+PREDICATE: valid-word-type-pred < word-type-pred type>> canonical? ;
+
+ERROR: invalid-type-solver-result store ;
+
+: check-type-solver-state ( -- state )
+    type-solver-state get-global dup solved-store dup [ nip valid-word-type-pred? ] assoc-all?
+    ! [ drop ] [ f type-solver-state set-global invalid-type-solver-result ] if
+    [ drop ] [ cache-types? off invalid-type-solver-result ] if
+    ;
+
+: maybe-save-solver-state ( state -- )
+    cache-types? get [ type-solver-state set-global ] [ drop ] if ;
+
+: prog-or-state ( -- solvable )
+    cache-types? get type-solver-state get-global and
+    [ check-type-solver-state ] [ chr-comp ] if ;
+
 ! Interactive short cut
 : qt ( quot -- res )
-    InferType boa 1array chr-comp swap [ run-chr-query store>> ] with-var-names ;
+    InferType boa 1array prog-or-state swap [ run-chr-query
+                                         dup maybe-save-solver-state
+                                         solved-store ] with-var-names ;
 
 ! helper, really
 : pick-type ( solution word -- type )

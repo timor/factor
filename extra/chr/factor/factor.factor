@@ -173,11 +173,13 @@ TUPLE: RecursionTypeOf < chr-pred thing type ;
 TUPLE: RecursiveCallTypeOf < chr-pred thing type ;
 ! FIXME: this breaks at least the nonlastfail3 test
 ! TUPLE: TypeOfWord < index1-pred var ;
-TUPLE: TypeOfWord < chr-pred word var ;
+TUPLE: TypeOfWord < chr-pred word type ;
 TUPLE: InferType < chr-pred thing ;
 TUPLE: WaitFull < chr-pred type ;
 TUPLE: WaitRec < chr-pred orig rec ;
 TUPLE: Throws < chr-pred error ;
+
+TUPLE: RemoveRecursiveType < chr-pred thing after ;
 
 TUPLE: MakeSingleDispatch < chr-pred index cases exclude target ;
 

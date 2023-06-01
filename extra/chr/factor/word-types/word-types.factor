@@ -122,39 +122,39 @@ CHR: add-classes-to-effect @ // { WrapClasses ?i ?o P{ Effect ?a ?b ?l ?p } ?tau
 
 
 ! TODO: maybe insert input/output declarations here, too!
-CHR: alias-type-defined @ { TypeOfWord ?w ?tau } // -- [ ?w word-alias :>> ?q ] |
+CHR: alias-type-defined @ { TypeOfWord ?w M{ ?tau } } // -- [ ?w word-alias :>> ?q ] |
 { ?TypeOf ?q ?tau } ;
 
 ! NOTE: changing these to caching because this does not use index lookup
-CHR: type-of-prim-call @ { TypeOfWord (call) ?tau } // -- |
+CHR: type-of-prim-call @ { TypeOfWord (call) M{ ?tau } } // -- |
 [ ?tau P{ Effect L{ ?q . ?a } ?b f {
               P{ Instance ?q quotation }
               P{ CallEffect ?q ?a ?b } } } ==! ] ;
 
-CHR: type-of-call @ { TypeOfWord call ?tau  } // -- |
+CHR: type-of-call @ { TypeOfWord call M{ ?tau }  } // -- |
 [ ?tau P{ Effect L{ ?q . ?a } ?b f {
               P{ Instance ?q callable }
               P{ CallEffect ?q ?a ?b } } } ==! ] ;
 
-CHR: type-of-dip @ { TypeOfWord dip ?tau } // -- |
+CHR: type-of-dip @ { TypeOfWord dip M{ ?tau } } // -- |
 [ ?tau P{ Effect L{ ?q ?x . ?a } L{ ?x . ?b } f {
               P{ Instance ?q callable }
               P{ Instance ?x object }
               P{ CallEffect ?q ?a ?b } } }
   ==! ] ;
 
-CHR: type-of-dup @ { TypeOfWord dup ?tau } // -- |
+CHR: type-of-dup @ { TypeOfWord dup M{ ?tau } } // -- |
 [ ?tau P{ Effect L{ ?x . ?rho } L{ ?x ?x . ?rho } f { P{ Instance ?x object } } } ==! ] ;
 
-CHR: type-of-drop @ { TypeOfWord drop ?tau } // -- |
+CHR: type-of-drop @ { TypeOfWord drop M{ ?tau } } // -- |
 [ ?tau P{ Effect L{ ?x . ?a } ?a f { P{ Instance ?x object } } } ==! ] ;
 
-CHR: type-of-swap @  { TypeOfWord swap ?tau  } // -- |
+CHR: type-of-swap @  { TypeOfWord swap M{ ?tau }  } // -- |
 [ ?tau P{ Effect L{ ?x ?y . ?a } L{ ?y ?x . ?a } f { P{ Instance ?x object } P{ Instance ?y object } } } ==! ] ;
 
 ! *** Parameter-inducing words
 
-CHR: type-of-mux @ { TypeOfWord ? ?tau  } // -- |
+CHR: type-of-mux @ { TypeOfWord ? M{ ?tau }  } // -- |
 [
     ?tau
     P{ Xor
@@ -164,8 +164,8 @@ CHR: type-of-mux @ { TypeOfWord ? ?tau  } // -- |
     ==!
 ] ;
 
-CHR: type-of-predicate @ { TypeOfWord ?w ?tau } // --
-[ ?tau term-var? ] [ ?w word? ] [ ?w "predicating" word-prop :>> ?c ]
+CHR: type-of-predicate @ { TypeOfWord ?w M{ ?tau } } // --
+[ ?w word? ] [ ?w "predicating" word-prop :>> ?c ]
 [ ?c 1quotation [ instance? ] compose :>> ?p ]
 | { ?TypeOf ?p ?tau } ;
 
@@ -173,7 +173,7 @@ CHR: type-of-predicate @ { TypeOfWord ?w ?tau } // --
 ! be some kind of mutually recursive dependency between normative declaration and predicate
 ! checking.  Solution so far was to map everything to [ foo instance? ] semantics, which are then
 ! expanded when the class of DeclaredInstance becomes known.  This is expensive though, as it is a deferred inference.
-CHR: type-of-instance? @ { TypeOfWord instance? ?tau } // -- |
+CHR: type-of-instance? @ { TypeOfWord instance? M{ ?tau } } // -- |
 [ ?tau P{ Xor
           P{ Effect L{ ?sig ?o . ?a } L{ ?c . ?a } f {
                  P{ DeclaredInstance ?o ?sig }
@@ -190,7 +190,7 @@ CHR: type-of-instance? @ { TypeOfWord instance? ?tau } // -- |
           } ==! ] ;
 
 ! : <array> ( n elt -- array )
-CHR: type-of-<array> @ { TypeOfWord <array> ?tau } // -- |
+CHR: type-of-<array> @ { TypeOfWord <array> M{ ?tau } } // -- |
 [ ?tau
   P{ Effect L{ ?v ?n . ?r } L{ ?a . ?r } { ?v } {
          P{ Instance ?n fixnum }
@@ -244,7 +244,7 @@ CHR: type-of-set-slot @ { TypeOfWord set-slot M{ ?tau } } // -- |
   ==!
 ] ;
 
-CHR: type-of-throw @ { TypeOfWord throw ?tau } // -- |
+CHR: type-of-throw @ { TypeOfWord throw M{ ?tau } } // -- |
 ! [ ?tau P{ Effect ?a +bottom+ f } ==! ] ;
 ! [ ?tau null ==! ] ;
 [ ?tau P{ Effect L{ ?e . ?a } ?b f {
@@ -255,14 +255,14 @@ CHR: type-of-throw @ { TypeOfWord throw ?tau } // -- |
 
 ! TODO: possibly do this as macro expansion?  Would be the first
 ! case of a generic inline method kind of thing...
-CHR: type-of-boa @ { TypeOfWord boa ?tau } // -- |
+CHR: type-of-boa @ { TypeOfWord boa M{ ?tau } } // -- |
 [ ?tau
   P{ Effect L{ ?c . ?a } L{ ?v . ?b } f { P{ Instance ?c tuple-class } P{ Boa ?c ?a L{ ?v . ?b } }
                                           P{ Instance ?v tuple } P{ LocalAllocation ?v } } }
   ==!
 ] ;
 
-CHR: type-of-tuple-boa @ { TypeOfWord <tuple-boa> ?tau } // -- |
+CHR: type-of-tuple-boa @ { TypeOfWord <tuple-boa> M{ ?tau } } // -- |
 [ ?tau
   P{ Effect L{ ?c . ?a } L{ ?v . ?b } f { P{ Instance ?c array } P{ TupleBoa ?c ?a L{ ?v . ?b } }
                                           P{ Instance ?v tuple } P{ LocalAllocation ?v } } }
@@ -335,7 +335,7 @@ CHR: type-of-val @ // { ?TypeOf A{ ?v } ?tau } -- [ ?v callable? not ] [ ?v call
 !             { Instance ?c W{ f } } }
 !    } } ?tau } ;
 
-CHR: type-of-eq @ { TypeOfWord eq? ?tau } // -- |
+CHR: type-of-eq @ { TypeOfWord eq? M{ ?tau } } // -- |
 [ ?tau P{ Xor
           ! introducing the value which is equal to as parameter?
           P{ Effect L{ ?x ?x . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?c t } P{ Eq ?c t } } }
@@ -344,7 +344,7 @@ CHR: type-of-eq @ { TypeOfWord eq? ?tau } // -- |
 
 ! NOTE: Declarations are nominative first of all, although the existing type inference does
 ! treat declarations as type intersections.
-CHR: type-of-declare @ { TypeOfWord declare ?tau } // -- |
+CHR: type-of-declare @ { TypeOfWord declare M{ ?tau } } // -- |
 [ ?tau
   P{ Effect L{ ?l . ?a } ?a f {
          P{ Instance ?l array }
@@ -353,7 +353,7 @@ CHR: type-of-declare @ { TypeOfWord declare ?tau } // -- |
   ==! ] ;
 
 ! : tag ( object -- n )
-CHR: type-of-tag @ { TypeOfWord tag ?tau } // -- |
+CHR: type-of-tag @ { TypeOfWord tag M{ ?tau } } // -- |
 [ ?tau
   P{ Effect L{ ?o . ?a } L{ ?n . ?a } f {
          P{ Instance ?n fixnum }
@@ -372,7 +372,7 @@ CHR: type-of-tag @ { TypeOfWord tag ?tau } // -- |
 ! Assume error on overflow conversion.  Not writing as XOR since it would be
 ! reasoned out anyways.
 ! bignum>fixnum ( x -- y )
-CHR: type-of-bignum>fixnum @ { TypeOfWord bignum>fixnum ?tau } // --
+CHR: type-of-bignum>fixnum @ { TypeOfWord bignum>fixnum M{ ?tau } } // --
 [ most-positive-fixnum :>> ?u ]
 [ most-negative-fixnum :>> ?l ] |
 [ ?tau P{ Effect L{ ?x . ?a } L{ ?y . ?a } f {
@@ -489,7 +489,7 @@ CHR: type-of-other-primitives @ { TypeOfWord ?w M{ ?tau } } // --
 
 ! induces parameter
 ! ( x y -- ? )
-CHR: type-of-< @ { TypeOfWord A{ < } ?tau } // -- |
+CHR: type-of-< @ { TypeOfWord A{ < } M{ ?tau } } // -- |
 ! { MakeGenericDispatch <
 !   P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f {
 !          { Instance ?x number }
@@ -517,7 +517,7 @@ CHR: type-of-< @ { TypeOfWord A{ < } ?tau } // -- |
 { ComposeType P{ Effect ?a ?a f { P{ Ensure { number number } ?a } } } ?sig ?tau } ;
 
 ! CHR: type-of-equal? @ { TypeOfWord equal? ?tau } // -- |
-CHR: type-of-equal? @ { TypeOfWord equal? ?tau } // -- |
+CHR: type-of-equal? @ { TypeOfWord equal? M{ ?tau } } // -- |
 { MakeGenericDispatch equal?
   P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f {
          { Instance ?c t } { Eq ?c t } { Eq ?x ?y } } } ?rho }
@@ -529,7 +529,7 @@ CHR: type-of-equal? @ { TypeOfWord equal? ?tau } // -- |
 !   P{ Xor ?rho ?sig } ==! ] ;
 
 ! TODO: generic expansion once fixnums are excluded, or classes are disjunct if needed
-CHR: type-of-= @ { TypeOfWord = ?tau } // -- |
+CHR: type-of-= @ { TypeOfWord = M{ ?tau } } // -- |
 ! { MakeGenericDispatch =
 ! [ ?tau
 !     P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a  } f {
@@ -558,7 +558,7 @@ CHR: type-of-= @ { TypeOfWord = ?tau } // -- |
 ] ;
 
 ! TODO: number declaring outputs on Sum, Prod conversion
-CHR: type-of-math-word @ { TypeOfWord ?w ?tau } // -- [ ?tau term-var? ]
+CHR: type-of-math-word @ { TypeOfWord ?w M{ ?tau } } // --
 [ ?w math-generic? ]
 |
 [| | ?w stack-effect effect>stacks :> ( lin lout )
@@ -575,8 +575,8 @@ CHR: type-of-math-word @ { TypeOfWord ?w ?tau } // -- [ ?tau term-var? ]
  2array ] ;
 
 ! *** Sequence-related
-CHR: type-of-length @ { TypeOfWord A{ length } ?tau } // --
-[ ?tau term-var? ] |
+CHR: type-of-length @ { TypeOfWord A{ length } M{ ?tau } } // --
+|
 { MakeGenericDispatch length
   P{ Effect L{ ?s . ?a } L{ ?n . ?a } f {
          P{ Instance ?s sequence }
@@ -585,7 +585,7 @@ CHR: type-of-length @ { TypeOfWord A{ length } ?tau } // --
          P{ Length ?s ?n } } }
   ?tau } ;
 
-CHR: type-of-nth @ { TypeOfWord nth ?tau } // -- |
+CHR: type-of-nth @ { TypeOfWord nth M{ ?tau } } // -- |
 { MakeGenericDispatch nth
   P{ Effect L{ ?s ?n . ?a } L{ ?v . ?a } { ?x } {
          P{ Instance ?s sequence }
@@ -613,8 +613,7 @@ CHR: type-of-nth @ { TypeOfWord nth ?tau } // -- |
 
 ! TODO: output types
 ! *** Typed words
-CHR: type-of-typed-word @ { TypeOfWord A{ ?w } ?tau } // --
-[ ?tau term-var? ]
+CHR: type-of-typed-word @ { TypeOfWord A{ ?w } M{ ?tau } } // --
 [ ?w "typed-def" word-prop :>> ?q ]
 [ ?w "declared-effect" word-prop effect-in-types <reversed> >list :>> ?a ]
 |
@@ -644,8 +643,7 @@ CONSTANT: force-compile
 ! Macro stacks: L{ argn arg2 arg1 . in } out
 ! Sequence: L{ argn arg2 arg1 . in } --> L{ q . in } --> out where q is effect L{ in out }
 ! TODO: maybe handle declared classes of macros?
-CHR: type-of-macro @ { TypeOfWord A{ ?w } ?tau } // --
-[ ?tau term-var? ]
+CHR: type-of-macro @ { TypeOfWord A{ ?w } M{ ?tau } } // --
 [ ?w handle-word-as-macro? ]
 [ ?w macro-effect :>> ?n ]
 [ ?n macro-input>expander-stacks :>> ?b drop :>> ?a ]
@@ -665,8 +663,7 @@ CHR: type-of-macro @ { TypeOfWord A{ ?w } ?tau } // --
 
 ! ** Regular Words
 
-CHR: type-of-regular-word @ { TypeOfWord A{ ?w } ?tau } // --
-[ ?tau term-var? ]
+CHR: type-of-regular-word @ { TypeOfWord A{ ?w } M{ ?tau } } // --
 [ ?w word-alias not ]
 [ ?w method? not ]
 [ ?w callable-word? ]
@@ -705,8 +702,7 @@ CHR: make-single-or-math-generic-dispatch @ // { MakeGenericDispatch ?w P{ Effec
 { WrapDefaultClasses ?w P{ Effect ?i ?o ?l ?q } ?tau } ;
 
 
-CHR: type-of-generic @ { TypeOfWord ?w ?tau } // --
-[ ?tau term-var? ]
+CHR: type-of-generic @ { TypeOfWord ?w M{ ?tau } } // --
 [ ?w generic? ]
 ! [ ?w dispatch# :>> ?i ]
 [ ?w "transform-quot" word-prop not ]
@@ -741,7 +737,7 @@ CHR: type-of-generic @ { TypeOfWord ?w ?tau } // --
 ! { MakeXor ?rho ?sig ?d }
 ! { CheckXor ?m ?d ?tau } ;
 
-CHR: type-of-reader @ { TypeOfWord ?w ?tau } // -- [ ?w method? ] [ ?w "reading" word-prop :>> ?x ]
+CHR: type-of-reader @ { TypeOfWord ?w M{ ?tau } } // -- [ ?w method? ] [ ?w "reading" word-prop :>> ?x ]
 [ ?w "method-class" word-prop :>> ?c ]
 [ ?x class>> :>> ?d ] [ ?x name>> :>> ?n ] |
 [ ?tau
@@ -754,8 +750,7 @@ CHR: type-of-reader @ { TypeOfWord ?w ?tau } // -- [ ?w method? ] [ ?w "reading"
    }
   ==! ] ;
 
-CHR: type-of-single-method @ { TypeOfWord ?w ?tau } // --
-[ ?tau term-var? ]
+CHR: type-of-single-method @ { TypeOfWord ?w M{ ?tau } } // --
 [ ?w method? ] [ ?w "method-generic" word-prop single-generic? ] [ ?w "reading" word-prop not ]
 [ ?w def>> :>> ?q ]
 [ ?w "method-class" word-prop

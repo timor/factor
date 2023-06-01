@@ -6,6 +6,12 @@ strings terms tools.test typed types.util words ;
 
 IN: chr.factor.composition.tests
 
+! reset-chr-types
+clear-chr-cache
+
+{ } [ cache-types? on ] unit-test
+{ t } [ cache-types? get ] unit-test
+
 ! ** Testing external helper behavior
 ! TODO: move to util tests
 
@@ -35,7 +41,7 @@ IN: chr.factor.composition.tests
 ! ** Test Helpers
 : chr-simp ( constraints -- constraint )
     P{ CompMode } suffix
-    chr-comp swap [ run-chr-query store>> ] with-var-names
+    chr-comp swap [ run-chr-query solved-store ] with-var-names
     values P{ CompMode } swap remove
     ! [ Dep? ] reject
     ;
@@ -970,6 +976,8 @@ P{ Xor
 [ [ cardinal? ] get-type ] chr-test
 
 { 47 } [ 0 5 inc-loop ] unit-test
+
+{ t } [ cache-types? get ] unit-test
 
 ! TODO: shift must transport the Shift relation through the coercion
 ! in the bignum branch.  Unit-test this!

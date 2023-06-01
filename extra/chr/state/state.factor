@@ -25,7 +25,6 @@ SYMBOL: collect-stats
 ! SYMBOLS: program exec-stack store builtins match-trace current-index ;
 SYMBOLS: program exec-stack store match-trace current-index ;
 ! Interpret Is{ ?x ?y } predicates in contexts as extra bindings
-SYMBOL: context-eqs
 
 ! Used for implementing :>> and get-context
 <PRIVATE
@@ -71,7 +70,7 @@ INSTANCE: current-context match-var
 TUPLE: chr-suspension
     constraint id alive activated stored hist vars from-rule ctx ;
 
-TUPLE: solver-state builtins store ;
+TUPLE: solver-state builtins store namestack ;
 
 TUPLE: susp-id < identity-tuple { number read-only } { rule read-only } { match-num read-only } ;
 C: <susp-id> susp-id
@@ -89,7 +88,7 @@ M: susp-id pprint*
 M: susp-id <=> [ number>> ] bi@ <=> ; inline
 
 : <solver-state> ( -- obj )
-    <eq-disjoint-set> H{ } clone solver-state boa ;
+    <eq-disjoint-set> H{ } clone f solver-state boa ;
 
 TUPLE: builtin-suspension < chr-suspension type ;
 : <builtins-suspension> ( -- obj )
@@ -197,7 +196,7 @@ ERROR: cannot-make-equal lhs rhs ;
 
 : new-id ( from-rule -- id )
     ! rule-id
-    current-index counter swap
+    current-index get dup first 1 + [ 0 rot set-nth ] keep swap
     active-rule-firing get
     ! dup rule-firings get at
     <susp-id> ; inline
@@ -700,10 +699,6 @@ C: <set-reactivated> set-reactivated
 ! in the context of the rule bodies, but will created deferred objects and enqueue them.
 GENERIC: activate-new ( rule c -- )
 
-! M: C activate-new [ cond>> current-context set ] [ then>> activate-new ] bi ;
-! M: C activate-new
-!     dup cond>> current-context [ then>> activate-new ] with-variable ;
-
 M: equiv-activation pred>constraint ;
 : update-eq-constraint-vars ( eqc -- eqc )
     dup rhs>> vars [ ?ground-value ] map members >>subsumed-vars ;
@@ -734,8 +729,6 @@ M: equiv-activation activate-new nip
     [ [ update-eq-constraint-vars f swap activate-new ] each ]
     [ equiv-wakeup-set reactivate ] tri ;
 
-! M: eq-constraint activate-new nip
-!     builtins store get at constraint>> push ;
 ! from-rule is { rule-id firing-number }
 TUPLE: deferred-activation from-rule chr ctx ;
 
@@ -751,10 +744,6 @@ M: deferred-activation activate-item
     ] with-variable
     ;
 
-! M: integer activate-item
-!     ! If we have enqueued it several times, then we basically bumped it up, so no need to run it repeatedly
-!     [ queue get remove! drop ]
-!     [ reactivate-item ] bi ;
 M: susp-id activate-item
     ! If we have enqueued it several times, then we basically bumped it up, so no need to run it repeatedly
     [ queue get remove! drop ]
@@ -831,19 +820,13 @@ M:: chr-suspension apply-substitution* ( subst c -- c )
 
 M: builtin-suspension apply-substitution* nip ;
 
-! : with-chr-prog ( prog quot -- )
-!     [ LH{ } clone store set
-!       <builtins-suspension> builtins store get set-at
-!       load-chr dup program set
-!       local-vars>> valid-match-vars set
-!       H{ } clone substitutions set
-!       ! <disjoint-set> defined-equalities set
-!       0 current-index set
-!     ] prepose with-var-names ; inline
-
 : update-local-vars ( -- )
     program get local-vars>> current-context suffix
     valid-match-vars set ;
+
+CONSTANT: state-vars
+{ lookup-index program check-vars? current-index rule-firings valid-match-vars
+  occurrence-mismatches reactivations var-names guard-fails occurrence-times }
 
 : init-chr-scope ( rules -- )
     init-chr-prog program set
@@ -852,7 +835,7 @@ M: builtin-suspension apply-substitution* nip ;
     ! <builtins-suspension> builtins store get set-at
     update-local-vars
     check-vars? on
-    0 current-index set-global
+    { 0 } clone current-index set
     H{ } clone rule-firings set
     H{ } clone occurrence-mismatches set
     H{ } clone reactivations set
@@ -861,56 +844,11 @@ M: builtin-suspension apply-substitution* nip ;
     H{ } clone occurrence-times set
     ;
 
-! This should ensure catching terms without a solution!
-! : solve-eq-constraints ( store -- )
-!     builtins of constraint>> dup .
-!     [ constraint-args first2 f lift
-!       2array ] map dup .
-!     f defined-equalities-ds [ valid-match-vars off ground-values off
-!       dup [ valid-match-vars off ground-values off solve-problem ] with-term-vars drop
-!     ] with-global-variable
-!     ;
-
-! SYMBOL: last-program
-
-SYMBOL: state-id
 SYMBOL: result-config
-
-: combine-configs ( result-config -- store )
-    H{ } clone H{ } clone
-    [let :> ( res eqs store )
-     res [| id state |
-          state store>> id store set-at
-          state builtins>> id eqs set-at
-         ] assoc-each
-     eqs store solver-state boa
-    ] ;
 
 : get-solver-state ( -- state )
     defined-equalities-ds get
-    store get solver-state boa ;
-
-: set-solver-state ( state -- )
-    [ store>> store set ]
-    [ builtins>> defined-equalities-ds set ] bi ;
-
-TYPED: store-solver-config ( state: solver-state id -- )
-    result-config get set-at ;
-
-! TYPED: merge-solver-config ( state: solver-state id -- )
-!     swap store>> [ [ 2array ] change-id store-chr drop ] with assoc-each ;
-! NOTE: to be run in parent context
-GENERIC: merge-solver-config ( key state: solver-state -- )
-PREDICATE: failed-solver-state < solver-state store>> [ nip constraint>> false? ] assoc-any? ;
-
-M: failed-solver-state merge-solver-config 2drop ;
-M: solver-state merge-solver-config
-    ! FIXME: might need to import existential vars here
-    ! NOTE: rule history gets lost here
-    store>> values store get [ value? ] curry reject
-    [ constraint>> [ import-term-vars ] [ C boa ] bi ] with map
-    f swap activate-new ;
-
+    store get get-namestack solver-state boa ;
 
 ! NOTE: must be done in correct scope right now (i.e. nested one)
 : petrify-solver-state! ( state -- state )
@@ -923,17 +861,13 @@ M: solver-state merge-solver-config
     ! constraint>> ;
 
 : finish-solver-state ( -- state )
-    get-solver-state
-    petrify-solver-state!
-    [ [ susp>constraint ] map-values ] change-store ;
+    get-solver-state ;
+    ! petrify-solver-state! ;
+    ! [ [ susp>constraint ] map-values ] change-store ;
 
-SYMBOL: split-states
-
-: join-states ( assoc -- )
-    [ merge-solver-config ] assoc-each ;
-
-: save-split-state ( key solver-state --  )
-    2array split-states get push ;
+: solved-store ( state -- constraints )
+    dup builtins>>
+    [ store>> [ susp>constraint f lift ] map-values ] with-var-context ;
 
 ERROR: chr-inference-error state error cont ;
 SYMBOL: chr-query-stats
@@ -1002,84 +936,41 @@ SYMBOL: chr-query-stats
     top-time-guzzlers simple-table. ;
 
 
-: run-chr-query ( prog query -- state )
+: run-solver-queue ( query -- state )
+    0 sentinel set
+    V{ } clone queue set
+    f swap activate-new
+    [ run-queue ] [ dup chr-inference-error? [ rethrow ]
+                    [ save-stats get-solver-state swap error-continuation get chr-inference-error ] if ] recover
+
+    finish-solver-state
+    [ save-stats ] when-trace-stats ;
+
+GENERIC#: run-chr-query 1 ( prog query -- state )
+
+! FIXME: don't copy whole namestack, only what is needed
+M: solver-state run-chr-query
+    [ pred>constraint ] map
+    over builtins>> clone
+    [ dup import-term-vars swap
+      [ namestack>> state-vars swap '[ [ _ assoc-stack ] [ clone set ] bi ] each ]
+      [ store>> clone store set ] bi
+      run-solver-queue
+    ] with-var-context ;
+
+M: object run-chr-query
     [ pred>constraint ] map
     2dup 2array
     [
-        H{ } clone context-eqs set
-        V{ } clone split-states set
+        ! H{ } clone context-eqs set
+        ! V{ } clone split-states set
       ! H{ } clone result-config set
-      0 state-id set-global
-      0 sentinel set
-      H{ } clone ground-values set
+      ! 0 state-id set-global
+      ! H{ } clone ground-values set
       swap
       init-chr-scope
-      V{ } clone queue set
-      f swap activate-new
-      ! run-queue
-      [ run-queue ] [ dup chr-inference-error? [ rethrow ]
-                      [ save-stats get-solver-state swap error-continuation get chr-inference-error ] if ] recover
-
-      ! split-states get join-states
-      ! run-queue
-      finish-solver-state
-      [ save-stats ] when-trace-stats
-      ! 0 store-solver-config
-      ! result-config get combine-configs
+      run-solver-queue
     ] with-term-vars ;
-
-: extend-program ( rule -- )
-    program [ swap add-rule ] with change update-local-vars ;
-
-: with-cloned-state ( state quot -- state )
-    [
-        [ store>>
-          [ clone ] map-values
-        ]
-        [ builtins>> clone ] bi
-    ] dip '[
-        store set
-        @
-    ] with-var-context ; inline
-
-
-: run-cases ( rule seq -- seq )
-    get-solver-state swap [ swap
-                            [ activate-new
-                              run-queue
-                              get-solver-state petrify-solver-state!
-                            ] with-cloned-state
-    ] 2with map ;
-
-: maybe-invalidate-solver-state ( -- )
-    get-solver-state failed-solver-state?
-    [ <solver-state> set-solver-state ] when ;
-
-
-! M: chr-scope activate-new (  )
-
-! Non-return, proper or
-M:: chr-or activate-new ( rule c -- )
-    c constraints>>
-    get-solver-state :> state
-    [ state [ rule swap activate-new
-           run-queue
-           get-solver-state petrify-solver-state!
-         ] with-cloned-state
-       dup failed-solver-state? [ drop f ] when
-    ] map-find [ set-solver-state ] [ drop rule false activate-new ] if
-    queue off ;
-
-! Return, but merge only at the end.  This means that the first branch will actually be
-! done first?
-M: chr-branch activate-new ( rule c -- )
-    cases>> unzip swap
-    [ run-cases ] dip
-    ! Clear continuation from main branch
-    <solver-state> set-solver-state queue off
-    swap [ save-split-state ] 2each ;
-    ! ;
-    ! swap [ merge-solver-config ] 2each ;
 
 M: false activate-new ( rule c -- )
     current-context get
@@ -1087,34 +978,6 @@ M: false activate-new ( rule c -- )
     [ 2drop queue off ] if
     ;
 
-! M:: chr-branch activate-new ( rule c -- )
-!     get-solver-state :> parent-state
-!     c cases>>
-!     [ first2 :> ( tag body )
-!       parent-state [
-!           ! queue off
-!           rule body activate-new
-!           queue get .
-!           run-queue
-!           get-solver-state petrify-solver-state!
-!       ] with-cloned-state
-!       tag swap merge-solver-config
-!     ] each ;
-
-! M: And activate-new ( rule c -- )
-!     [ activate-new ] with each ;
-
-! ** Dynamic Equivalence
-: maybe-add-context-eq ( rhs lhs -- )
-    swap dup term-var?
-    [ current-context get context-eqs get [ drop H{ } clone ] cache
-      set-at ]
-    [ 2drop ] if ;
-
-M: Is activate-new
-    dup [ var>> ] [ src>> ] bi maybe-add-context-eq
-    call-next-method
-    ;
 ! ** Runner
 
 : run-chrat-query ( query -- store )

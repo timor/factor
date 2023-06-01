@@ -33,14 +33,8 @@ FROM: namespaces => set ;
     store>>
     [ constraint>> f lift ] map-values sort-keys ;
 
-: pprint-solver-state ( state -- )
-    dup builtins>> [
-        solver-state-chrs pprint*
-        ! store>> pprint*
-    ] with-var-context ;
-
 M: solver-state pprint*
-    solver-state-chrs pprint* ;
+    solver-state-chrs "solver state pseudo literal" prefix pprint* ;
 
 ! : chrebug ( -- )
 !     \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate
@@ -59,9 +53,12 @@ M: solver-state pprint*
     "R" prepend ;
     ! [ drop ] if ;
 
+: rule-id-match. ( id -- )
+    rule-id "Rule Match %s" printf ;
+
 : rule-match. ( rule-id bindings -- )
     ! 2dup [ rule-id ] dip "Rule Match %s with: %u\n" printf
-    over rule-id "Rule Match %s with: " printf
+    over rule-id-match. " with:" write
     [ program get rules>> nth clone f >>match-vars f >>existentials ] dip
     lift . flush ;
 
@@ -114,13 +111,14 @@ SYMBOL: debug-chr-stats
     \ create-chr [ [ "+ " write dup id-susp. ] compose
                    ! [ chr-state. ] compose
     ] annotate
+    \ run-rule-body [ [ over rule-id-match. nl flush ] prepose ] annotate
     ! \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate
     \ kill-chr [ [ "- " write dup id-susp. ] prepose ] annotate ;
 
 : chrebug ( -- )
     ! \ check/update-history [ [ 2dup "Rule %d match with match trace: %u\n" printf ] prepose ] annotate
     \ kill-chr [ [ "- " write dup id-susp. ] prepose ] annotate
-    \ run-rule-body [ [ 2dup over remember-rule-match rule-match. ] prepose
+    \ run-rule-body [ [ 2dup rule-match. ] prepose
                       ! [ chr-state. ] prepose ! Very verbose
     ] annotate
     ! \ activate-new [ [ dup "Activating new constraint: %u\n" printf ] prepose ] annotate
@@ -136,12 +134,12 @@ SYMBOL: debug-chr-stats
     \ load-chr [ [ "Rewritten Program: " write dup rules>> <enumerated> >array . ] compose ] annotate
     ! \ replace-all-equalities [ [ ground-values get "Ground-values: " write . ] prepose ] annotate
     \ make-equal [ [ 2dup "Unify: %u ==! %u\n" printf ] prepose ] annotate
-    M\ chr-or activate-new [ [ "SPLIT" print ] prepose ] annotate
-    M\ chr-branch activate-new [ [ "BRANCH" print ] prepose [ "RETURN" print ] compose ] annotate
+    ! M\ chr-or activate-new [ [ "SPLIT" print ] prepose ] annotate
+    ! M\ chr-branch activate-new [ [ "BRANCH" print ] prepose [ "RETURN" print ] compose ] annotate
     ! M\ C activate-new [ '[ current-context get _ dip current-context get "CTX %u -> %u\n" printf ] ] annotate
     ! M\ C activate-new [ [ dup ctx>> current-context get swap "CTX: %u -> %u\n" printf ] prepend ] annotate
     \ run-queue [ [ "Flushing queue" print ] prepose ] annotate
-    \ merge-solver-config [ [ 2dup swap "Merging store with key: %u\n" printf store>> [ constraint>> ] map-values . ] prepend ] annotate
+    ! \ merge-solver-config [ [ 2dup swap "Merging store with key: %u\n" printf store>> [ constraint>> ] map-values . ] prepend ] annotate
     \ finish-solver-state [ [ chr-usage-report. ] compose ] annotate
     ;
 
@@ -338,4 +336,10 @@ PRIVATE>
     reset-all
     add-chr-timing
     [ qt ] time.. sort-keys
+    reset-all ;
+
+: tgt. ( quot -- )
+    reset-all
+    add-chr-timing
+    [ get-type ] time.. ...
     reset-all ;

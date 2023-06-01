@@ -376,12 +376,12 @@ PREFIX-RULES: { P{ CompMode } }
 CHR: invalid-defer-type-request @ // { ?DeferTypeOf ?x __ } -- [ ?x callable? not ] | [ { ?x "not a valid thing to infer" } throw ] ;
 
 ! Possibly expensive? Seems like it! But some are definitely needed, e.g. for Eq, aaand for Le
-CHR: unique-val-pred @ AS: ?p <={ val-pred } // AS: ?p <={ val-pred } -- | ;
-! CHR: unique-eq-pred @ { Eq ?x ?y } // { Eq ?x ?y } -- | ;
-! CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
-! CHR: unique-le-pred @ { Le ?x ?y } // { Le ?x ?y } -- | ;
-! CHR: unique-lt-pred @ { Lt ?x ?y } // { Lt ?x ?y } -- | ;
-! CHR: uniqe-slot-pred @ { Slot ?o ?n ?v } // { Slot ?o ?n ?v } -- | ;
+! CHR: unique-val-pred @ AS: ?p <={ val-pred } // AS: ?p <={ val-pred } -- | ;
+CHR: unique-eq-pred @ { Eq ?x ?y } // { Eq ?x ?y } -- | ;
+CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
+CHR: unique-le-pred @ { Le ?x ?y } // { Le ?x ?y } -- | ;
+CHR: unique-lt-pred @ { Lt ?x ?y } // { Lt ?x ?y } -- | ;
+CHR: unique-slot-pred @ { Slot ?o ?n ?v } // { Slot ?o ?n ?v } -- | ;
 
 ! CHR: unique-equiv @ { <==> ?c ?p } // { <==> ?c ?p } -- | ;
 ! CHR: assume-equiv-true @ { <==> ?c ?p } { Instance ?c A{ ?tau } } // --
