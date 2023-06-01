@@ -427,7 +427,7 @@ CHR: type-of-load-locals @ { TypeOfWord load-locals M{ ?tau } } // -- |
 [ ?tau P{ Effect L{ ?n . ?a } ?b f { P{ Instance ?n integer } P{ PrimCall load-locals L{ ?n . ?a } ?b } } } ==! ] ;
 
 CHR: type-of-get-local @ { TypeOfWord get-local M{ ?tau } } // -- |
-[ ?tau P{ Effect L{ ?n . ?a } L{ ?x . ?a } f { P{ Instance ?n integer } P{ PrimCall get-local L{ ?n . ?a } L{ ?x . ?a } } } } ==! ] ;
+[ ?tau P{ Effect L{ ?n . ?a } L{ ?x . ?b } f { P{ Instance ?n integer } P{ PrimCall get-local L{ ?n . ?a } L{ ?x . ?b } } } } ==! ] ;
 
 CHR: type-of-drop-locals @ { TypeOfWord drop-locals M{ ?tau } } // -- |
 [ ?tau P{ Effect L{ ?n . ?a } ?b f { P{ Instance ?n integer } P{ PrimCall drop-locals L{ ?n . ?a } ?b } } } ==! ] ;

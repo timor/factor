@@ -279,6 +279,16 @@ P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y } {
 
 { 1 } [ [ [ + ] [ swap + ] if ] get-type preds>> [ Sum? ] count ] unit-test
 
+! ** Read-only locals
+
+! FIXME: fail due to missing implicit declarations
+{ t } [ [ swap ] [| a b | b a ] same-type? ] unit-test
+{ t } [ [ swap ] [| | :> a :> b a b ] same-type? ] unit-test
+{ t } [ [ swap swap drop ] [| a b | a ] same-type? ] unit-test
+{ t } [ [ nip ] [| a b | a ] same-type? ] unit-test
+{ t } [ [ + ] [| a b | a b + :> c c ] same-type? ] unit-test
+{ t } [ [ + dup ] [ [ [| | :> a a + ] [ dup ] compose ] call call ] same-type? ] unit-test
+
 ! ** Simple Dispatch
 GENERIC: foothing ( obj -- result )
 M: fixnum foothing 3 + ;

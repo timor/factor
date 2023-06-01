@@ -1053,16 +1053,14 @@ CHR: tuple-boa-decl @ // { TupleBoa A{ ?c } ?a ?b } --
 ] ;
 
 ! *** Factor Local Variables
-CHR: resolved-retain-effect @ // { RetainEffect ?a ?b ?x ?x } -- | [ ?a ?b ==! ] ;
+CHR: resolved-retain-effect @ // { PolyEffect R ?a M{ ?x } ?x ?b } -- | [ ?a ?b ==! ] ;
 
-CHR: compose-retain-effects @ // { RetainEffect ?a ?b ?x ?y } { RetainEffect ?c ?d ?u ?v } --
-[ ?b ?c [ lastcdr ] same? ] | [ ?y ?u ==! ] { RetainEffect ?a ?d ?x ?v } ;
-
-CHR: apply-retain-stack-in @ { RetainEffect ?a ?b ?x ?y } // { RetainStack ?c ?l } --
-[ ?c ?a [ lastcdr ] same? ] | [ ?x ?l ==! ] ;
-
-CHR: apply-retain-stack-out @ { RetainEffect ?a ?b ?x ?y } // { RetainStack ?c ?l } --
-[ ?c ?b [ lastcdr ] same? ] | [ ?y ?l ==! ] ;
+! Only composing if the output stack is a single row variable
+! The effect is to "push through" to the input effect layout correctly.
+! Observation: this heuristic seems to work correctly if a drop-locals is always at the end of a quotation.
+! So have to relax this to non-match-var-only output vars...
+CHR: compose-retain-effects-absorb-front @ // { PolyEffect R ?a ?x ?y ?b } { PolyEffect R ?c ?u ?v ?d } --
+[ ?b ?c [ lastcdr ] same? ] | [ ?y ?u ==! ] [ ?a ?b ==! ] { PolyEffect R ?c ?x ?v ?d } ;
 
 ! *** Locals scope expansion
 

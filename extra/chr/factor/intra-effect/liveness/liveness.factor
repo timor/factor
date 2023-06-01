@@ -80,8 +80,6 @@ M: MacroCall upper-scope-vars ;
 M: Counter upper-scope-vars ;
 M: Declare upper-scope-vars ;
 M: DeclareStack upper-scope-vars classes>> ;
-M: RetainStack upper-scope-vars row>> ;
-
 
 ! UNION: merging-set Given Define ;
 UNION: merging-set Def Use Live ;
@@ -256,8 +254,8 @@ CHR: collect-inline-call-define-scope @ { Live __  } // AS: ?p <={ inline-call-p
 CHR: collect-unresolved-prim-call-define-scope @ { Live __ } // AS: ?p P{ PrimCall ?w ?a ?b } -- |
 { Collect ?p } { SubScope ?a ?b } ;
 
-CHR: collect-retain-effect-define-scope @ { Live __ } // AS: ?p P{ RetainEffect ?a ?b ?rho ?sig } -- |
-{ Collect ?p } { SubScope ?a ?b } { SubScope ?rho ?sig } ;
+CHR: collect-poly-effect-scope @ { Live __ } // AS: ?p P{ PolyEffect ?l ?a ?r ?s ?b } -- |
+{ Collect ?p } { SubScope ?a ?b } { Scope ?r ?s } ;
 
 CHR: collect-iterated @ { Live __ } // AS: ?p <={ Iterated __ { ?i ?b ?c ?d ?o } } -- |
 { Collect ?p }

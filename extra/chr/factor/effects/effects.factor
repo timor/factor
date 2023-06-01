@@ -308,7 +308,6 @@ CHR: apply-effect-not-known @ { FinishEffect __  } // { ApplyEffect M{ ?rho } ?i
 CHR: losing-call-effect @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p P{ CallEffect __ __ __ } -- | [ { ?p "discarding a call-effect predicate" } throw ] ;
 CHR: losing-macro-call @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p <={ MacroCall } -- | [ { ?p "discarding a macro call predicate" } throw ] ;
 CHR: losing-unresolved-iteration @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p <={ Iterated } -- | [ { ?p "discarding unresolved iteration predicate" } throw ] ;
-CHR: losing-retain-stack @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p <={ RetainStack } -- | [ { ?p "discarding unresolved retain stack predicate" } throw ] ;
 CHR: cleanup-incomplete @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // AS: ?p <={ body-pred } -- | ;
 
 ! This is triggered if phi mode is aborted

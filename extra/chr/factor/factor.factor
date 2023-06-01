@@ -272,8 +272,8 @@ TUPLE: ExpandQuot < MacroExpand num-args ;
 TUPLE: InstanceCheck < chr-pred class-arg quot complement ;
 
 ! Retain stack reasoning for locals
-TUPLE: RetainEffect < chr-pred row-in row-out rstack-in rstack-out ;
-TUPLE: RetainStack < chr-pred row stack ;
+SINGLETON: R
+TUPLE: PolyEffect < chr-pred loc lambda-in loc-in loc-out lambda-out ;
 
 ! Macro expansion, folding
 TUPLE: FoldStack < chr-pred stack n ;
@@ -380,8 +380,7 @@ UNION: body-pred val-pred CallEffect CallXorEffect Declare CallRecursive Throws 
     MacroCall
     Iterated
     LoopVar GenericDispatch <==> MathCall PrimCall Counter
-    RetainEffect
-    RetainStack
+    PolyEffect
     ! ! Taking this into account because of generics reinference right now.
     ! ApplyEffect
     ;
