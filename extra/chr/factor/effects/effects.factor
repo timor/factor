@@ -251,6 +251,20 @@ CHR: implied-param-join @ // { ImpliesParam ?x ?a } { ImpliesParam ?y ?b } --
 PREFIX-RULES: f
 ! NOTE: Big change! Use same collection rule for phi finishing as for composition finishing!
 
+! NOTE: this will mess up unification semantics on liveness set var sets, because we unify into existing liveness sets.
+! TODO: test that this is well-behaved in phi merging!
+! FIXME: This is not valid in the general case.  This is only valid if we are losing track of a local allocation.
+! Otherwise, the PushLoc needs to enforce the presence and liveness of any input memory locations!
+! At this point, the it is assumed that the allocation is actually not live
+! CHR: perform-flushable-loc-op @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // <={ LocOp ?x ?a __ ?b t } -- | [ ?a ?b ==! ] ;
+! CHR: perform-flushable-loc-op @ { MakeEffect __ __ __ __ ?tau } // { FinishEffect ?tau } AS: ?p <={ LocOp ?x ?a __ ?b t } -- |
+! [ { "losing loc op" ?p } throw ]
+! [ "flush beta resolve" print
+!   t trace-wakeup set-global f ]
+! [ ?a ?b ==! ]
+! [ f trace-wakeup set-global f ]
+! { FinishEffect ?tau } ;
+
 ! CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p vars ?e make-effect-vars intersects? ]
 ! CHR: collect-body-pred @ // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ body-pred } -- [ ?p live-vars ?e make-effect-vars subset? ]
 ! NOTE: using overlap right now to extend the set of parameters.  This might be too general to get rid of remaining unused predicates.
@@ -281,6 +295,10 @@ CHR: collect-live-body-pred @ { FinishEffect ?tau } // { Collect ?p } AS: ?e P{ 
 ! [ ?x ?p vars union :>> ?y ] |
 ! { MakeEffect ?a ?b ?y ?k ?tau } ;
 
+
+CHR: losing-undefined-loc-spec @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { Def ?l } // AS: ?p <={ LocSpec ?x . __ } --
+[ ?x ?l in? not ] | [ { "locspec has no definition" ?p } throw ] ;
+
 CHR: discard-implied-param @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // <={ ImpliesParam } -- | ;
 CHR: incomplete-scope @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { Scope ?l ?r } -- | [ { ?l ?r "losing scope" } throw ] ;
 CHR: discard-liveness-preds @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // <={ liveness-pred } -- | ;
@@ -308,6 +326,12 @@ CHR: apply-effect-not-known @ { FinishEffect __  } // { ApplyEffect M{ ?rho } ?i
 CHR: losing-call-effect @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p P{ CallEffect __ __ __ } -- | [ { ?p "discarding a call-effect predicate" } throw ] ;
 CHR: losing-macro-call @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p <={ MacroCall } -- | [ { ?p "discarding a macro call predicate" } throw ] ;
 CHR: losing-unresolved-iteration @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p <={ Iterated } -- | [ { ?p "discarding unresolved iteration predicate" } throw ] ;
+CHR: losing-unresolved-loc-op @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // AS: ?p <={ LocOp } --
+[ ?p PushLoc? ?p local?>> and not ]
+| [ { ?p "discarding unresolved location effect" } throw ] ;
+! Still pretty fragile....
+CHR: perform-dead-push-loc @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { PushLoc M{ ?x } ?a __ ?b ?t } -- |
+[ ?a ?b ==! ] ;
 CHR: cleanup-incomplete @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // AS: ?p <={ body-pred } -- | ;
 
 ! This is triggered if phi mode is aborted
@@ -320,7 +344,6 @@ CHR: finish-invalid-effect @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau
 
 
 ! NOTE: changing this to immediately re-infer any xors!
-! FIXME: doing the xor check here now, but that gives context problems? Trying this in a new context, hoping it fixes cardinal? loop
 CHR: finish-rebuild-xor-call-effect @ { MakeEffect ?a ?b ?x ?l M{ ?tau } } // { FinishEffect ?tau } -- [ ?l [ CallXorEffect? ] any? ] |
 [| | ?l split-xor-call-preds :> ( then-preds else-preds )
  P{ Effect ?a ?b ?x then-preds } fresh-effect :> then-effect
@@ -329,10 +352,10 @@ CHR: finish-rebuild-xor-call-effect @ { MakeEffect ?a ?b ?x ?l M{ ?tau } } // { 
  P{ ReinferEffect else-effect ?sig }
  2array
 ]
-! [ "rebuildxor" [ P{ CheckXor f ?z ?tau } ] new-context ]
 { MakeXor ?rho ?sig ?z }
 { CheckXor f ?z ?tau }
 { FinishEffect ?tau } ;
+
 
 CHR: finish-valid-effect @ { FinishEffect ?tau } AS: ?e P{ MakeEffect ?a ?b ?x ?l M{ ?tau } } // --
 [ ?x ?a vars diff ?b vars diff
@@ -341,7 +364,9 @@ CHR: finish-valid-effect @ { FinishEffect ?tau } AS: ?e P{ MakeEffect ?a ?b ?x ?
   dup empty? [ drop f ] when
   :>> ?y drop t ]
 |
-[ ?tau P{ Effect ?a ?b ?y ?l } ==! ] ;
+[ ?tau P{ Effect ?a ?b ?y ?l }
+  ! dup check-for-lost-location-effects
+  ==! ] ;
 
 ! NOTE: re-inserting the FinishEffect Predicates because they don't get reactivated by substitution
 CHR: finish-phi-reasoning @ // { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { PhiMode } -- [ ?tau term-var? not ] | { FinishEffect ?tau }

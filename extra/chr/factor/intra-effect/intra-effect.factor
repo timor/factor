@@ -3,7 +3,7 @@ chr.parser chr.state classes classes.algebra classes.builtin classes.predicate
 classes.singleton classes.tuple classes.tuple.private combinators
 combinators.short-circuit continuations generic generic.single grouping kernel
 kernel.private lists math math.functions math.order quotations sequences sets
-sorting terms types.util ;
+slots slots.private sorting strings terms types.util ;
 
 IN: chr.factor.intra-effect
 
@@ -184,6 +184,8 @@ CHR: phi-same-branch-pred @ // AS: ?p <={ body-pred } AS: ?p <={ body-pred } -- 
 CHR: phi-same-sum-result-1 @ { Sum ?z ?x ?y } { Sum ?a ?x ?y } // -- | [ ?z ?a ==! ] ;
 CHR: phi-same-prod-result-1 @ { Prod ?z ?x ?y } { Prod ?a ?x ?y } // -- | [ ?z ?a ==! ] ;
 
+! XXX SRSLY?????? Can we prove that on the graph??? Maybe only valid for variables, no?
+! FIXME: probably needs to be replaced with location stuff instead!
 CHR: phi-same-slot-val @ { Slot ?o ?n ?v } { Slot ?a ?n ?v } // -- | [ ?o ?a ==! ] ;
 
 CHR: phi-disjoint-instance @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
@@ -382,6 +384,7 @@ CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
 CHR: unique-le-pred @ { Le ?x ?y } // { Le ?x ?y } -- | ;
 CHR: unique-lt-pred @ { Lt ?x ?y } // { Lt ?x ?y } -- | ;
 CHR: unique-slot-pred @ { Slot ?o ?n ?v } // { Slot ?o ?n ?v } -- | ;
+CHR: unique-allocation-pred @ { LocalAllocation ?a ?o } // { LocalAllocation ?a ?o } -- | ;
 
 ! CHR: unique-equiv @ { <==> ?c ?p } // { <==> ?c ?p } -- | ;
 ! CHR: assume-equiv-true @ { <==> ?c ?p } { Instance ?c A{ ?tau } } // --
@@ -395,15 +398,15 @@ CHR: eq-fixnum-is-same @ { Instance ?x fixnum } // { Instance ?y fixnum } { Eq ?
 CHR: integer-num-is= @ { Instance ?x A{ ?c } } { Instance ?y A{ ?d } } // { Num= ?x ?y } -- [ ?c integer class<= ] [ ?d integer class<= ] |
 { Eq ?x ?y } ;
 
-! NOTE: currently only known to be needed for bignum exception. Might make sense
-! to eliminate that distinction for reasoning?  Inside the "bignum" processing closure, should
-! stay correct though!
-! FIXME: find some way to automate this.  Either on rule level, or on head level!
-! Applies to all numeric predicate holes.
-CHR: eq-propagates-nth-n-1 @ { Eq ?n ?m } { Nth ?v ?a ?n } // -- |
-{ Nth ?v ?a ?m } ;
-CHR: eq-propagates-nth-n-2 @ { Eq ?m ?n } { Nth ?v ?a ?n } // -- |
-{ Nth ?v ?a ?m } ;
+! ! NOTE: currently only known to be needed for bignum exception. Might make sense
+! ! to eliminate that distinction for reasoning?  Inside the "bignum" processing closure, should
+! ! stay correct though!
+! ! FIXME: find some way to automate this.  Either on rule level, or on head level!
+! ! Applies to all numeric predicate holes.
+! CHR: eq-propagates-nth-n-1 @ { Eq ?n ?m } { Nth ?v ?a ?n } // -- |
+! { Nth ?v ?a ?m } ;
+! CHR: eq-propagates-nth-n-2 @ { Eq ?m ?n } { Nth ?v ?a ?n } // -- |
+! { Nth ?v ?a ?m } ;
 
 ! NOTE: the reasoning is that this can inductively only happen during composition of two straight-line
 ! effects. So the instance in the first one is a "provide", and the instance in the second one is an "expect".
@@ -685,9 +688,11 @@ CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho } { RecursionTypeOf ?w 
 { LoopVar { ?i ?b ?c ?d } }
     ;
 
+: same-state? ( x y -- ? ) [ lastcdr ] same? ;
+
 CHR: discard-known-iterated-stack @ // { Iterated __ ?s } --
 [ ?s sequence? ]
-[ ?s f lift [ [ lastcdr ] same? ] monotonic? ] | ;
+[ ?s f lift [ same-state? ] monotonic? ] | ;
 
 ! *** Loop relation reasoning
 CHR: already-loop-var @ { LoopVar ?x } // { LoopVar ?x } -- | ;
@@ -742,7 +747,7 @@ CHR: iteration-adjust-input-stack @ // { LoopVar { ?w ?x ?y ?z } } --
 ! TODO: once there is loc annotation, maybe return useful syntax error?
 CHR: invalid-loop-effect @ // { LoopVar { ?w ?x ?y ?z } } --
 [ ?x ?y [ llength* ] same? not ]
-[ ?x ?y [ lastcdr ] same? ] | { Invalid } ;
+[ ?x ?y same-state? ] | { Invalid } ;
 
 ! **** Find Loop Counters
 ! TODO: Test if sum is always normalized for this? Nope, it doesnt
@@ -977,7 +982,6 @@ CHR: dispatch-case @ // { MakeSingleDispatch ?i L{ { ?c ?m } . ?r } ?d ?tau } --
 ! { MakeXor ?rho ?sig ?d }
 ! { CheckXor ?m ?d ?tau } ;
 
-
 CHR: known-slot-num @ { Eq ?n A{ ?a } } // { Slot ?o ?n ?v } -- |
 { Slot ?o ?a ?v } ;
 
@@ -1009,7 +1013,7 @@ CHR: known-generic-input/output @ { Eq ?n A{ ?v } } // { GenericDispatch ?w ?d ?
 
 ! *** Slot conversion
 ! TODO: this conversion can be wrong when working on numerically optimized code?
-CHR: known-named-slot @ { Eq ?o A{ ?tau } } // { Slot ?o A{ ?n } ?v } -- [ ?tau tuple-class? ]
+CHR: convert-to-named-slot @ { Instance ?o A{ ?tau } } // { Slot ?o A{ ?n } ?v } -- [ ?tau tuple-class? ]
 [ ?tau all-slots [ offset>> ?n = ] find nip :>> ?s ] [ ?s name>> :>> ?m ]
 [ ?s class>> :>> ?rho ]
 |
@@ -1030,7 +1034,7 @@ CHR: normalize-tuple-boa @ // { Boa A{ ?v } ?i ?o } --
 
 ! NOTE: Completely ignoring the hierarchy here
 ! NOTE: destructive
-CHR: tuple-boa-decl @ // { TupleBoa A{ ?c } ?a ?b } --
+CHR: tuple-boa-decl @ // { TupleBoa A{ ?c } ?a L{ ?o . ?b } } --
 [ ?c first :>> ?tau ] |
 [| |
  ?tau name>> utermvar :> ov
@@ -1041,26 +1045,133 @@ CHR: tuple-boa-decl @ // { TupleBoa A{ ?c } ?a ?b } --
      spec name>> :> n
      i n elt>var :> iv
      iv in-vars push
-     P{ Slot ov n iv } preds push
+     P{ InitSlot ov iv spec ?b } preds push
      spec class>> :> c
      P{ Instance iv c } preds push
  ] each-index
  in-vars <reversed> >list ?rho lappend :> sin
  P{ Instance ov ?tau } preds push
  L{ ov . ?rho  } :> sout
- [ { ?a ?b } { sin sout } ==! ] preds push
+ [ { ?a L{ ?o . ?b } } { sin sout } ==! ] preds push
  preds <reversed> >array
 ] ;
 
-! *** Factor Local Variables
-CHR: resolved-retain-effect @ // { PolyEffect R ?a M{ ?x } ?x ?b } -- | [ ?a ?b ==! ] ;
+CHR: init-read-only-slot @ // { InitSlot ?o ?i Is( slot-spec ?s ) __ } -- [ ?s read-only>> ]
+[ ?s name>> :>> ?n ]
+| { Slot ?o ?n ?i } ;
 
-! Only composing if the output stack is a single row variable
-! The effect is to "push through" to the input effect layout correctly.
-! Observation: this heuristic seems to work correctly if a drop-locals is always at the end of a quotation.
-! So have to relax this to non-match-var-only output vars...
-CHR: compose-retain-effects-absorb-front @ // { PolyEffect R ?a ?x ?y ?b } { PolyEffect R ?c ?u ?v ?d } --
-[ ?b ?c [ lastcdr ] same? ] | [ ?y ?u ==! ] [ ?a ?b ==! ] { PolyEffect R ?c ?x ?v ?d } ;
+CHR: init-rw-slot @ // { InitSlot ?o ?i Is( slot-spec ?s ) ?b } -- [ ?s read-only>> not ]
+[ ?s name>> :>> ?n ] |
+{ SlotLoc ?x ?o ?n }
+! TODO: optimized:
+! { PushLoc ?x f L{ ?i } ?b t } ;
+{ PushLoc ?x f L{ ?i } ?b f } ;
+
+GENERIC: read-only-slot? ( class n -- ? )
+M: string read-only-slot? swap all-slots [ name>> = ] with find nip
+    read-only>> ;
+M: integer read-only-slot? swap all-slots [ offset>> = ] with find nip
+    dup [ read-only>> ] when ;
+
+! NOTE: there can be multiple ops on the read-only slot, so we have to convert all of them.
+! Relying on the SlotLoc not being collected because it can not be live if there is no loc-op
+! left marking it live.  Could also change the class of the slotloc predicate and not collect it?
+CHR: convert-read-only-slot-access @ { Instance ?o Is( class ?tau ) } { Eq ?m A{ ?n } }
+{ SlotLoc ?x ?o ?m } //
+<={ LocOp ?x ?a L{ ?v } ?b __ . __ } -- [ ?tau ?n read-only-slot? ] |
+[ ?a ?b ==! ] { Slot ?o ?n ?v } ;
+
+! *** State and Locations via FMC semantics
+
+CHR: duplicate-loc-op-in @ // AS: ?p <={ LocOp ?x ?a __ __ __ . __ } AS: ?q <={ LocOp ?x ?b __ __ __ . __ } -- [ ?a ?b same-state? ] |
+[ { ?p ?q "duplicate loc op in" } throw ] ;
+
+CHR: duplicate-loc-op-out @ // AS: ?p <={ LocOp ?x __ __ ?a __ . __ } AS: ?q <={ LocOp ?x __ ?b __ . __ } -- [ ?a ?b same-state? ] |
+[ { ?p ?q "duplicate loc op in" } throw ] ;
+
+! *** Beta
+CHR: resolve-loc-op @ // <={ LocOp __ ?a L{ } ?b __ . __ } -- |
+[ ?a ?b ==! ] ;
+
+! Also TODO: translate that stuff into Nth...
+: valid-slot? ( length slot-num -- ? )
+    [ 1 - ] dip 2 - swap 0 swap between? ;
+
+: pseudo-literal-eq ( lhs rhs -- pred )
+    dup ground-value? [ <wrapper> ] when
+    2dup [ term-var? ] both? [ ==! ] [ Instance boa ] if ;
+
+! NOTE: literals are always local allocations, no? Yes, but sequencing will break if we don't keep track of the allocation state
+CHR: literal-resolve-numeric-loc-pop-request @ { LocalAllocation ?u ?o } { Eq ?o Is( not{ fixnum } ?a ) } { SlotLoc ?x ?o ?m } { Eq ?m Is( integer ?n ) } //
+{ LocPop ?x ?r L{ ?v } ?s t ?b } -- [ ?u ?b same-state? ] |
+[ ?a length ?n valid-slot?
+  [ ?a ?n slot ?v swap
+    pseudo-literal-eq
+    ?r ?s ==! 2array ]
+  [ P{ Invalid } ] if
+] ;
+
+! NOTE: this is a special case, since we are actually swapping the reduction order here locally
+! The intuition is that theses local pushes are always preceeded by a loc-pop on that exact same location
+! TODO: could still be the case that the allocation needs to be "transported" if the preceding loc-pop was transporting...
+CHR: literal-resolve-numeric-push-loc-request @ { LocalAllocation ?u ?o } { SlotLoc ?x ?o ?m } { Eq ?m Is( integer ?n ) } //
+{ Eq ?o Is( not{ fixnum } ?a ) } <={ PushLoc ?x ?r L{ ?v } ?s t } --
+[ ?u ?r same-state? ]
+[ ?v ?a clone ?n [ set-slot ] keepd :>> ?b ] |
+[ ?r ?s ==! ] { Eq ?o ?b } ;
+
+! Local allocation access
+CHR: default-element-resolve-loc-pop-request @ { LocalAllocation ?a ?o } { Element ?o ?v } { SlotLoc ?y ?o __ } //
+{ LocPop ?y ?b L{ ?w } ?c t ?l } --
+[ ?l ?a same-state? ] |
+[ ?w ?v ==! ] [ ?b ?c ==! ] ;
+
+CHR: beta-reduce-loc-push-pop @ //
+{ PushLoc ?l ?a L{ ?x . ?v } ?b ?m } { LocPop ?l ?c L{ ?y . ?w } ?d ?n ?u } --
+[ ?u ?b same-state? ] |
+[ ?x ?y ==! ]
+{ PushLoc ?l ?a ?v ?b ?m } { LocPop ?l ?c ?w ?d ?n ?u } ;
+
+! **** Redex-searching
+
+CHR: independent-loc-op-extends-beta-chain @ <={ LocOp ?y ?a __ ?b ?m . __ } // { LocPop ?x ?c ?s ?d ?n ?u } --
+[ ?m [ ?x ?y == not ] [ ?x R? ] if ] [ ?u ?b same-state? ] |
+{ LocPop ?x ?c ?s ?d ?n ?a } ;
+
+! **** Special cases
+
+! NOTE: While the reduction with the local allocation predicate as implicit push-loc may only start from the head,
+! the fact that the allocation is local does not change anymore, so we can localize all loc-ops, not only the first?
+CHR: slot-loc-op-known-local @ { LocalAllocation __ ?o } { SlotLoc ?x ?o __ } // AS: ?p <={ LocOp M{ ?x } ?b ?s ?c f . __ } --
+| [ ?p clone t >>local? ] ;
+
+! ! TODO: put the length check somewhere else, as it is independent from the actual loc op!
+! ! TODO: extend to byte-arrays and strings
+! ! NOTE: setting an arbitrary limit here to prevent explosion during compilation...
+! CHR: literalize-local-array @ { Instance ?o array } //
+! { LocalAllocation ?o } { Element ?o ?x } { PushLoc ?x f L{ ?y } __ } { Eq ?y A{ ?v } }
+! { Length ?o ?l } { Eq ?l Is( fixnum ?m ) } -- [ ?m 16 <= ] | [ ?o ?m ?v <array> Eq boa ] ;
+
+! NOTE: do we need transitive eq rules?  Or do they break implications...
+CHR: same-obj-slot-is-same-loc @ { SlotLoc ?x ?o ?n } { Eq ?n ?a } { Eq ?m ?a } // { SlotLoc ?y ?o ?m } -- |
+[ ?y ?x ==! ] ;
+
+! **** Input-output proper values
+! NOTE: we are relying on the cdrs of the stacks to encode states for sequencing.
+! After execution of the effect, the stacks will be unified.  However, we assume all effects
+! will be executed.  That means the stack elements can be assumed to be
+! unified in the end.  Thus, we can unify them in advance.
+! NOTE: this could potentially result in an endless loop when constructing
+! recursive structures?
+! TODO: maybe extend this to balancing!
+CHR: unify-loc-op-io-vals @ // AS: ?p <={ LocOp ?l L{ ?x . ?a } ?s L{ ?y . ?b } ?m . __ } -- |
+[ ?x ?y ==! ] [ ?p clone ?a >>before ?b >>after ] ;
+
+CHR: balance-loc-op-produce @ // AS: ?p <={ LocOp ?l L{ ?x . ?a } __ M{ ?b } ?m . __ } -- |
+[ ?b L{ ?x . ?c } ==! ] [ ?p clone ?a >>before ?c >>after ] ;
+
+CHR: balance-loc-op-consume @ // AS: ?p <={ LocOp ?l M{ ?b } __ L{ ?y . ?c } ?m . __ } -- |
+[ ?b L{ ?y . ?a } ==! ] [ ?p clone ?a >>before ?c >>after ] ;
 
 ! *** Locals scope expansion
 

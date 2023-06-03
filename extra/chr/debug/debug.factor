@@ -30,8 +30,7 @@ FROM: namespaces => set ;
     store. ;
 
 : solver-state-chrs ( state -- assoc )
-    store>>
-    [ constraint>> f lift ] map-values sort-keys ;
+    solved-store sort-keys ;
 
 M: solver-state pprint*
     solver-state-chrs "solver state pseudo literal" prefix pprint* ;

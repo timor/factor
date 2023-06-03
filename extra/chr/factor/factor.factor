@@ -119,9 +119,12 @@ M: pair elt>var
         lout o [ "sig" utermvar ] unless* list* ]
     } cond ;
 
+! NOTE assuming all bivariable effects here because we can't make any assumptions about the content
+! not having any effectful predicates!
 : effect>stacks ( effect -- lin lout )
-    [ effect>stack-elts ]
-    [ add-row-vars ] bi ;
+    ! [ effect>stack-elts ]
+    ! [ add-row-vars ] bi ;
+    effect>stack-elts [ "rho" utermvar list* ] [ "sig" utermvar list* ] bi* ;
 
 ! * Compositional approach
 
@@ -226,22 +229,25 @@ TUPLE: DeclaredNotInstance < Instance ;
 ! Need for math method expansion?
 ! TUPLE: Coerce < val-pred class ;
 
-TUPLE: expr-pred < val-pred ;
-! TODO: not sure why this is a val-pred on the object!
-! ODOT: because we don't want to substitute into the slot-val!
+TUPLE: expr-pred < chr-pred val ;
+
+! Reasoning helper to expand Slot Initializations
+TUPLE: InitSlot < chr-pred obj-val in-val slot-spec out-state ;
+
+! Slot values, only apply to read-only slots, really,
+! because only those are state-independent
 TUPLE: Slot < val-pred n slot-val ;
-! TUPLE: Slot < expr-pred n slot-val ;
-! Element class?
-TUPLE: Element < val-pred type ;
+
+! Initial element value of a built-in sequence
+TUPLE: Element < val-pred elt-val ;
 TUPLE: Length < val-pred length-val ;
-TUPLE: Nth < val-pred seq n ;
+! TUPLE: Nth < val-pred seq n ;
 ! A declaration, has parameterizing character
 TUPLE: DeclareStack < chr-pred classes stack ;
 TUPLE: Declare < chr-pred classes stack ;
 ! Generalization of structural allocations that can be
 ! accessed by key
 TUPLE: Map < expr-pred mapping ;
-TUPLE: LocalAllocation < val-pred ;
 
 
 ! A declaration, has no parameterizing character, just shortcut for Instance
@@ -265,7 +271,7 @@ UNION: inline-call-pred CallRecursive CallXorEffect ;
 TUPLE: CallsRecursive < chr-pred word other-words ;
 TUPLE: PartialRecursive < chr-pred word temp-word ;
 
-TUPLE: Boa < chr-pred spec in id ;
+TUPLE: Boa < chr-pred spec in-stack out-stack ;
 TUPLE: TupleBoa < Boa ;
 ! explicitly referencing out-quot here for live-ness
 TUPLE: MacroExpand < chr-pred quot args in out-quot ;
@@ -275,7 +281,20 @@ TUPLE: InstanceCheck < chr-pred class-arg quot complement ;
 
 ! Retain stack reasoning for locals
 SINGLETON: R
-TUPLE: PolyEffect < chr-pred loc lambda-in loc-in loc-out lambda-out ;
+! Poly-λC style effects
+
+TUPLE: LocOp < chr-pred loc before item after local? ;
+TUPLE: PushLoc < LocOp ;
+! head-state is for storing partial redex inference
+TUPLE: LocPop < LocOp head-state ;
+TUPLE: LocalAllocation < chr-pred state obj ;
+! TODO: LocState for read-access
+
+
+TUPLE: LocSpec < chr-pred loc ;
+TUPLE: SlotLoc < LocSpec obj n-val ;
+! TODO: use?
+TUPLE: NthLoc < LocSpec obj n-val ;
 
 ! Macro expansion, folding
 TUPLE: FoldStack < chr-pred stack n ;
@@ -376,15 +395,14 @@ TUPLE: PrimCall < chr-pred word in out ;
 ! TUPLE: Ref+ < ref-pred vars ;
 ! TUPLE: Ref- < ref-pred vars ;
 ! TUPLE: Refs < ref-pred map ;
-UNION: body-pred val-pred CallEffect CallXorEffect Declare CallRecursive Throws Boa
+UNION: body-pred val-pred expr-pred CallEffect CallXorEffect Declare CallRecursive Throws Boa
     DeclareStack
-    ! MacroExpand
     MacroCall
     Iterated
     LoopVar GenericDispatch <==> MathCall PrimCall Counter
-    PolyEffect
-    ! ! Taking this into account because of generics reinference right now.
-    ! ApplyEffect
+    LocOp
+    LocSpec
+    LocalAllocation
     ;
 
 TUPLE: CheckPhiStack < chr-pred a b res ;
@@ -435,39 +453,11 @@ TUPLE: PhiDone < chr-pred ;
 TUPLE: liveness-pred < chr-pred ;
 TUPLE: Scope < liveness-pred left right ;
 TUPLE: SubScope < Scope ;
-TUPLE: Given < liveness-pred vars ;
-TUPLE: Have < liveness-pred vars ;
-TUPLE: Define < liveness-pred vars ;
-TUPLE: Defined < liveness-pred vars ;
-TUPLE: Left < liveness-pred row vars ;
-TUPLE: Right < liveness-pred row vars ;
-! UNION: fringe Given Define ;
-TUPLE: Path < liveness-pred left vars right ;
 TUPLE: Live < liveness-pred vars ;
-! Can't get more explicit now?
-TUPLE: Mode < liveness-pred pred in out ;
-TUPLE: In < liveness-pred vars ;
-TUPLE: Out < liveness-pred vars ;
-TUPLE: Forward < liveness-pred vars ;
-TUPLE: Reverse < liveness-pred vars ;
-TUPLE: BiDi < liveness-pred vars ;
 TUPLE: Def < liveness-pred vars ;
 TUPLE: Use < liveness-pred vars ;
-TUPLE: UseDefs < liveness-pred from to ;
-! TUPLE: Roots < liveness-pred vars ;
 TUPLE: Collect < liveness-pred pred ;
-! TUPLE: ImplyDef < liveness-pred from to ;
-! TUPLE: ImplyRight < liveness-pred from to ;
 TUPLE: Imply < liveness-pred in out ;
-
-! TUPLE: Roots < Live ;
-! ! TUPLE: Locals < Live ;
-! ! TUPLE: In < Live ;
-! ! TUPLE: Out < Live ;
-! ! In/out semantics
-! TUPLE: Dep < liveness-pred from to ;
-! TUPLE: Rel < liveness-pred from to via ;
-
 
 GENERIC: free-effect-vars ( term -- seq )
 : full-type? ( type -- ? ) free-effect-vars empty? ;

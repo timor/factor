@@ -1,5 +1,5 @@
 USING: accessors assocs chr.factor chr.factor.util chr.parser classes.tuple
-kernel sequences terms ;
+kernel sequences strings terms ;
 
 IN: chr.factor.intra-effect.maps
 
@@ -29,12 +29,13 @@ CHR: combine-map @ // { Map ?o ?m } { Map ?o ?n } --
 
 CHR: forget-literal-object-slots @ { Eq ?o A{ ?v } } // { Slot ?o __ __ } -- | ;
 
-CHR: literal-implies-local-alloc @ { Eq ?o A{ ?v } } // { LocalAllocation ?o } -- | ;
+! CHR: literal-implies-local-alloc @ { Eq ?o A{ ?v } } // { LocalAllocation ?o } -- | ;
 
 ! This is kind of the slots value-info structure attached to compiler values
 ! FIXME: unifier seems to go haywire on Hashtables...
 ! CHR: slot-defines-map @ { Slot ?o ?n ?v } // -- | { Map ?o H{ { ?n ?v } } } ;
-CHR: slot-literal-defines-map @ { Slot ?o ?n ?v } { Eq ?v A{ ?a } } // -- | { Map ?o { { ?n ?a } } } ;
+! NOTE: only do this for named slots right now
+CHR: slot-literal-defines-map @ { Slot ?o Is( string ?n ) M{ ?v } } { Eq M{ ?v } A{ ?a } } // -- | { Map ?o { { ?n ?a } } } ;
 
 : assoc>tuple ( assoc class -- obj )
     [ all-slots [ name>> of ] with map ] [ slots>tuple ] bi ;

@@ -10,8 +10,8 @@ CHRAT: chr-factor-prim { }
 
 ! *** Math Prim Conversions
 ! Instances have already been defined at this point
-CHR: prim-call-fixnum+fast @ // { PrimCall fixnum+fast L{ ?y ?x . ?a } L{ ?z . ?a } } --
-| { Sum ?z ?x ?y } ;
+CHR: prim-call-fixnum+fast @ // { PrimCall fixnum+fast L{ ?y ?x . ?a } L{ ?z . ?b } } --
+[ ?a ?b ==! ] | { Sum ?z ?x ?y } ;
 
 ! FIXME: pred args are stacks now
 CHR: prim-call-bitnot @ // { PrimCall ?w { ?x } { ?y } } -- [ ?w { bignum-bitnot fixnum-bitnot } in? ] | { BitNot ?y ?x } ;
@@ -24,8 +24,8 @@ PREFIX-RULES: { P{ CompMode } }
 ! *** Cloning
 
 ! NOTE: The class pred there has implied directional semantics here, not sure if that is important
-CHR: prim-call-clone @ // { PrimCall (clone) L{ ?x . ?a } L{ ?y . ?a } } -- |
-{ Eq ?x ?y } { LocalAllocation ?y } { ClassPred ?y ?x class= } ;
+CHR: prim-call-clone @ // { PrimCall (clone) L{ ?x . ?a } L{ ?y . ?b } } -- |
+[ ?a ?b ==! ] { Eq ?x ?y } { LocalAllocation ?a ?y } { ClassPred ?y ?x class= } ;
 
 ! *** Locals
 ! [| a b | a ] -> [ 2 load-locals -1 get-local 2 drop-locals ]
@@ -38,24 +38,27 @@ CHR: prim-call-clone @ // { PrimCall (clone) L{ ?x . ?a } L{ ?y . ?a } } -- |
 ! L{ ?x . ?a } --> L{ r( ?x ) . ?a } ???
 
 CHR: do-load-local @ // { PrimCall load-local L{ ?x . ?a } ?b } -- |
-{ PolyEffect R ?a ?rho L{ ?x . ?rho } ?b } ;
+{ PushLoc R ?a L{ ?x } ?b t }
+    ;
 
 CHR: do-load-locals @ // { PrimCall load-locals L{ ?n . ?a } ?b } { Eq ?n A{ ?v } } --
 [ ?v ensure-retain-stack :>> ?l ] |
 [| | ?l ?rho list* :> sout
  ?l ?c list* ?a ==!
- P{ PolyEffect R ?c ?rho sout ?b } 2array
+ P{ PushLoc R ?c ?l ?b t }
+ 2array
 ] ;
 
 CHR: do-drop-locals @ // { PrimCall drop-locals L{ ?n . ?a } ?b } { Eq ?n A{ ?v } } --
 [ ?v ensure-retain-stack :>> ?l ] |
 [| | ?l ?rho list* :> sin
- P{ PolyEffect R ?a sin ?rho ?b } ] ;
+ P{ LocPop R ?a ?l ?b t ?a }
+] ;
 
 CHR: do-get-local @ // { PrimCall get-local L{ ?n . ?a } L{ ?x . ?b } } { Eq ?n A{ ?v } } --
-[ ?v neg ensure-retain-stack :>> ?l ] |
-[| | ?l ?x ?rho cons lappend :> sinout
- P{ PolyEffect R ?a sinout sinout ?b } ] ;
+[ ?v neg ensure-retain-stack L{ ?x } lappend :>> ?l ] |
+{ LocPop R ?a ?l ?rho t ?a }
+{ PushLoc R ?rho ?l ?b t } ;
 
 
 

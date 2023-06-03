@@ -275,3 +275,8 @@ GENERIC: final-data-class? ( class -- ? )
 M: object final-data-class? drop f ;
 M: builtin-class final-data-class? tuple eq? not ;
 M: tuple-class final-data-class? final-class? ;
+
+
+! ** List utils
+: nthcdr ( list n -- list )
+    [ cdr ] times ;

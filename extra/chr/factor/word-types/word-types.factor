@@ -1,9 +1,8 @@
 USING: accessors arrays assocs chr.factor chr.factor.util chr.parser chr.state
 classes classes.tuple classes.tuple.private combinators
 combinators.short-circuit effects generic generic.math generic.single kernel
-kernel.private layouts lists locals.backend macros macros.expander math
-math.private quotations sequences sequences.private sets slots.private terms
-types.util words ;
+kernel.private layouts lists macros macros.expander math math.private quotations
+sequences sets slots.private terms types.util words ;
 
 IN: chr.factor.word-types
 
@@ -51,29 +50,6 @@ IN: chr.factor.word-types
 ! : special-generic? ( word -- ? )
 !     { + < instance? nth length nth-unsafe call throw } in? ;
 
-! These are used as fallbacks for recursive calls to certain words
-: rec-defaults ( word -- def/f )
-    H{
-        { length P{ Effect L{ ?a . ?r } L{ ?n . ?r } f {
-                        P{ Instance ?a sequence }
-                        P{ Length ?a ?n }
-                        P{ Le 0 ?n }
-                    } } }
-        { nth P{ Effect L{ ?s ?n . ?a } L{ ?v . ?a } f {
-                     P{ Instance ?n integer }
-                     P{ Le 0 ?n }
-                     P{ Instance ?s sequence }
-                     P{ Nth ?v ?s ?n }
-                     ! P{ Element ?s ?v }
-                 } } }
-        { nth-unsafe P{ Effect L{ ?s ?n . ?a } L{ ?v . ?a } f {
-                            P{ Instance ?n integer }
-                            P{ Le 0 ?n }
-                            P{ Instance ?s sequence }
-                            P{ Element ?s ?v }
-                        } } }
-    } at ;
-
 CHRAT: chr-word-types { }
 
 CHR: dont-wrap-classes-invalid @ // { WrapClasses __ __ null ?tau } -- |
@@ -84,13 +60,25 @@ CHR: destruct-wrap-classes-xor @ // { WrapClasses ?i ?o P{ Xor ?c ?d } ?tau } --
 { WrapClasses ?i ?o ?d ?sig }
 { MakeXor ?rho ?sig ?tau } ;
 
+PREDICATE: single-method < method "method-generic" word-prop single-generic? ;
+
+GENERIC: word-input-classes ( word -- seq )
+M: single-method word-input-classes
+    [ "method-class" word-prop ]
+    [ "method-generic" word-prop dispatch# ] bi
+    dispatch-decl ;
+
+M: word word-input-classes
+    {
+    [ "input-classes" word-prop ]
+    [ stack-effect effect-in-types ]
+    } 1|| ;
+
 ! NOTE: not using ComposeType because this may not rebuild the effect!
 CHR: add-default-classes-to-effect @ // { WrapDefaultClasses ?w ?e ?tau } --
 |
 [| |
- ?w { [ "input-classes" word-prop ]
-      [ stack-effect effect-in-types ]
-    } 1|| :> in-types
+ ?w word-input-classes :> in-types
  ?w { [ "default-output-classes" word-prop ]
       [ stack-effect effect-out-types ]
     } 1|| :> out-types
@@ -99,8 +87,6 @@ CHR: add-default-classes-to-effect @ // { WrapDefaultClasses ?w ?e ?tau } --
 
 ! NOTE: not using ComposeType because this may not rebuild the effect!
 CHR: add-classes-to-effect @ // { WrapClasses ?i ?o P{ Effect ?a ?b ?l ?p } ?tau } -- |
-! [ ?w stack-effect effect>stacks :>> ?o drop :>> ?i ]
-! [ { ?a ?b } { ?i ?o } ==! ]
 [| |
  ?i length "in" <array> elt-vars dup :> ain
  ?o length "out" <array> elt-vars dup :> aout
@@ -114,11 +100,6 @@ CHR: add-classes-to-effect @ // { WrapClasses ?i ?o P{ Effect ?a ?b ?l ?p } ?tau
  ?tau P{ Effect ?a ?b ?l preds } ==!
  2array
 ] ;
-! |
-! { ?TypeOf ?i ?x }
-! { ?TypeOf ?o ?y }
-! { ComposeType ?x ?e ?sig }
-! { ComposeType ?sig ?y ?tau } ;
 
 
 ! TODO: maybe insert input/output declarations here, too!
@@ -190,14 +171,20 @@ CHR: type-of-instance? @ { TypeOfWord instance? M{ ?tau } } // -- |
           } ==! ] ;
 
 ! : <array> ( n elt -- array )
+! NOTE: introducing a virtual "default" location
+! Too complicated.  Treat the Element thing as default location itself
 CHR: type-of-<array> @ { TypeOfWord <array> M{ ?tau } } // -- |
 [ ?tau
-  P{ Effect L{ ?v ?n . ?r } L{ ?a . ?r } { ?v } {
-         P{ Instance ?n fixnum }
+  P{ Effect L{ ?v ?n . ?r } L{ ?a . ?r } f {
+         P{ Instance ?n fixnum } ! would be array capacity, but that is quite verbose
          P{ Instance ?a array }
          P{ Instance ?v object }
          P{ Length ?a ?n }
+         P{ Slot ?a 1 ?n }
          P{ Element ?a ?v }
+         ! P{ Element ?a ?x }
+         ! P{ PushLoc ?x f L{ ?v } ?r }
+         P{ LocalAllocation ?r ?a }
      } }
   ==! ] ;
 
@@ -219,27 +206,36 @@ CHR: type-of-<array> @ { TypeOfWord <array> M{ ?tau } } // -- |
 !      } }
 !   ==! ] ;
 
+! TODO: convert slot accesses to ro-slots! (optimization)
+
 ! : slot ( obj m -- value )
 CHR: type-of-slot @ { TypeOfWord slot M{ ?tau } } // -- |
 [ ?tau
-  P{ Effect L{ ?m ?o . ?a } L{ ?v . ?a } f {
+  P{ Effect L{ ?m ?o . ?a } L{ ?v . ?c } { ?b } {
          P{ Instance ?o not{ fixnum } }
          P{ Instance ?m fixnum }
-         P{ Le 0 ?m }
          P{ Instance ?v object }
-         P{ Slot ?o ?m ?v }
+         P{ Le 0 ?m }
+         P{ SlotLoc ?x ?o ?m }
+         P{ LocPop ?x ?a L{ ?v } ?b f ?a }
+         P{ PushLoc ?x ?b L{ ?v } ?c f }
      } }
   ==! ] ;
+
+! TODO annotate set-local-value and local-value with LocalAllocation predicates!
+! (although that should probably only be an optimization)
 
 ! : set-slot ( value obj n -- )
 CHR: type-of-set-slot @ { TypeOfWord set-slot M{ ?tau } } // -- |
 [ ?tau
-  P{ Effect L{ ?n ?o ?v . ?a } ?a f {
+  P{ Effect L{ ?n ?o ?v . ?a } ?c { ?b ?z } {
          P{ Instance ?n fixnum }
          P{ Instance ?o not{ fixnum } }
          P{ Instance ?v object }
-         P{ Slot ?o ?n ?v }
          P{ Le 0 ?n }
+         P{ SlotLoc ?x ?o ?n }
+         P{ LocPop ?x ?a L{ ?z } ?b f ?a }
+         P{ PushLoc ?x ?b L{ ?v } ?c f }
      } }
   ==!
 ] ;
@@ -258,14 +254,14 @@ CHR: type-of-throw @ { TypeOfWord throw M{ ?tau } } // -- |
 CHR: type-of-boa @ { TypeOfWord boa M{ ?tau } } // -- |
 [ ?tau
   P{ Effect L{ ?c . ?a } L{ ?v . ?b } f { P{ Instance ?c tuple-class } P{ Boa ?c ?a L{ ?v . ?b } }
-                                          P{ Instance ?v tuple } P{ LocalAllocation ?v } } }
+                                          P{ Instance ?v tuple } P{ LocalAllocation ?b ?v } } }
   ==!
 ] ;
 
 CHR: type-of-tuple-boa @ { TypeOfWord <tuple-boa> M{ ?tau } } // -- |
 [ ?tau
   P{ Effect L{ ?c . ?a } L{ ?v . ?b } f { P{ Instance ?c array } P{ TupleBoa ?c ?a L{ ?v . ?b } }
-                                          P{ Instance ?v tuple } P{ LocalAllocation ?v } } }
+                                          P{ Instance ?v tuple } P{ LocalAllocation ?b ?v } } }
   ==!
 ] ;
 
@@ -304,6 +300,12 @@ CHR: type-of-unit-val @ { ?TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ] 
 ! { MakeUnit ?x ?rho }
 ! { MakeUnit ?y ?sig } ;
 
+GENERIC: local-alloc-val? ( value -- ? )
+M: object local-alloc-val? class-of all-slots empty? not ;
+M: word local-alloc-val? drop f ;
+
+CHR: make-unit-local-alloc @ // { MakeUnit A{ ?o } ?tau } -- [ ?o local-alloc-val? ] |
+[ ?tau P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x ?o } P{ LocalAllocation ?a ?x } } } ==! ] ;
 
 ! TODO: gauge impact of not doing the expansion eagerly
 ! XXX This breaks isomorphic comparison for some reason.  Normalization broken?
@@ -418,35 +420,15 @@ CHR: type-of-bignum>fixnum @ { TypeOfWord bignum>fixnum M{ ?tau } } // --
 ! Note: We consider local handling bi-variable effects since the predicates
 ! are coupled to states represented by the row effects.  The intention is that
 ! the corresponding row vars are equated once the virtual retain stack usage is
-! balanced?
-
-CHR: type-of-load-local @ { TypeOfWord load-local M{ ?tau } } // -- |
-[ ?tau P{ Effect L{ ?x . ?a } ?b f { P{ PrimCall load-local L{ ?x . ?a } ?b } } } ==! ] ;
-
-CHR: type-of-load-locals @ { TypeOfWord load-locals M{ ?tau } } // -- |
-[ ?tau P{ Effect L{ ?n . ?a } ?b f { P{ Instance ?n integer } P{ PrimCall load-locals L{ ?n . ?a } ?b } } } ==! ] ;
-
-CHR: type-of-get-local @ { TypeOfWord get-local M{ ?tau } } // -- |
-[ ?tau P{ Effect L{ ?n . ?a } L{ ?x . ?b } f { P{ Instance ?n integer } P{ PrimCall get-local L{ ?n . ?a } L{ ?x . ?b } } } } ==! ] ;
-
-CHR: type-of-drop-locals @ { TypeOfWord drop-locals M{ ?tau } } // -- |
-[ ?tau P{ Effect L{ ?n . ?a } ?b f { P{ Instance ?n integer } P{ PrimCall drop-locals L{ ?n . ?a } ?b } } } ==! ] ;
+! balanced. This is handled by PrimCall expansion though
 
 ! *** Primitive Catch-all
 CHR: type-of-other-primitives @ { TypeOfWord ?w M{ ?tau } } // --
-[ ?w primitive? ] [ ?w "special" word-prop not ]
+[ ?w primitive? ] [ ?w word-alias not ]
 [ ?w macro-quot not ]
 [ ?w stack-effect :>> ?e effect>stacks :>> ?b drop :>> ?a ] |
 { WrapDefaultClasses ?w P{ Effect ?a ?b f { P{ PrimCall ?w ?a ?b } } } ?rho }
 { ReinferEffect ?rho ?tau } ;
-
-
-! CHR: type-of-fixnum+ @ { TypeOfWord fixnum+ ?tau } // -- |
-! [ ?tau
-!   P{ Effect L{ ?x ?y . ?a } L{ ?z . ?b } f
-!      { P{ Instance ?x fixnum } P{ Instance ?y fixnum } P{ Instance ?z integer } P{ Sum ?z ?y ?x } } }
-!   ==!
-! ] ;
 
 ! shift ( x n -- y )
 ! CHR: type-of-fixnum-shift-fast @ { TypeOfWord fixnum-shift-fast ?tau } // -- |
@@ -558,6 +540,9 @@ CHR: type-of-= @ { TypeOfWord = M{ ?tau } } // -- |
 ] ;
 
 ! TODO: number declaring outputs on Sum, Prod conversion
+! TODO: re-insert math dispatch once classes are known.
+! XXX: Making the assumption here that ALL implementations of the underlying
+! generics here DO NOT contain stateful effects.
 CHR: type-of-math-word @ { TypeOfWord ?w M{ ?tau } } // --
 [ ?w math-generic? ]
 |
@@ -566,13 +551,14 @@ CHR: type-of-math-word @ { TypeOfWord ?w M{ ?tau } } // --
  lin lout [ list*>array but-last <reversed> ] bi@
  [ ni head ] [ no head ] bi* :> ( ain aout )
  lin L{ ?y ?x . __ } ==!
+ lin lout [ lastcdr ] bi@ ==!
  ! { ReinferEffect P{ Effect L{ ?y ?x . ?a } ?b f {
  { ReinferEffect P{ Effect lin lout f {
                         P{ Instance ?y number }
                         P{ Instance ?x number }
                         P{ MathCall ?w ain aout }
                     } } ?tau }
- 2array ] ;
+ 3array ] ;
 
 ! *** Sequence-related
 CHR: type-of-length @ { TypeOfWord A{ length } M{ ?tau } } // --
@@ -596,13 +582,6 @@ CHR: type-of-nth @ { TypeOfWord nth M{ ?tau } } // -- |
          P{ Instance ?x integer }
          P{ Lt ?n ?x  }
      } } ?tau } ;
-! { nth P{ Effect L{ ?s ?n . ?a } L{ ?v . ?a } f {
-!              P{ Instance ?n integer }
-!              P{ Le 0 ?n }
-!              P{ Instance ?s sequence }
-!              P{ Nth ?v ?s ?n }
-!              ! P{ Element ?s ?v }
-!          } } }
 ! { nth-unsafe P{ Effect L{ ?s ?n . ?a } L{ ?v . ?a } f {
 !                     P{ Instance ?n integer }
 !                     P{ Le 0 ?n }
@@ -685,6 +664,7 @@ CHR: type-of-regular-word @ { TypeOfWord A{ ?w } M{ ?tau } } // --
 ! as other mutually recursive definitions.  The difference would be that here the recursion is actually hit during
 ! "macro" expansion in a dispatch instead of the initial type query tree building?
 
+! NOTE: we cannot assume any effects to be non-bi-variable when they can contain effect sequencing predicates!!!
 CHR: make-single-or-math-generic-dispatch @ // { MakeGenericDispatch ?w P{ Effect ?i ?o ?l ?p } ?tau } --
 ! [ ?w { [ single-generic? ] [ math-generic? ] } 0|| ]
 [ ?w generic? ]
@@ -737,30 +717,11 @@ CHR: type-of-generic @ { TypeOfWord ?w M{ ?tau } } // --
 ! { MakeXor ?rho ?sig ?d }
 ! { CheckXor ?m ?d ?tau } ;
 
-CHR: type-of-reader @ { TypeOfWord ?w M{ ?tau } } // -- [ ?w method? ] [ ?w "reading" word-prop :>> ?x ]
-[ ?w "method-class" word-prop :>> ?c ]
-[ ?x class>> :>> ?d ] [ ?x name>> :>> ?n ] |
-[ ?tau
-  P{ Effect L{ ?o . ?a } L{ ?v . ?a } f
-     {
-         P{ Instance ?o ?c }
-         P{ Slot ?o ?n ?v }
-         P{ Instance ?v ?d }
-     }
-   }
-  ==! ] ;
-
 CHR: type-of-single-method @ { TypeOfWord ?w M{ ?tau } } // --
-[ ?w method? ] [ ?w "method-generic" word-prop single-generic? ] [ ?w "reading" word-prop not ]
-[ ?w def>> :>> ?q ]
-[ ?w "method-class" word-prop
-  ?w "method-generic" word-prop dispatch#
-  ! FIXME: Test and make sure this is correct, maybe untangle the Ensure and Declare mess in the first place
-  dispatch-decl :>> ?l
-]
-|
+[ ?w single-method? ]
+[ ?w def>> :>> ?q ] |
 { ?TypeOf ?q ?rho }
-{ ComposeType P{ Effect ?a ?a f { P{ Ensure ?l ?a } } } ?rho ?tau } ;
+{ WrapDefaultClasses ?w ?rho ?tau } ;
 
 
 CHR: type-of-empty-quot @ // { ?TypeOf [ ] ?tau } -- | [ ?tau P{ Effect ?a ?a f f } ==! ] ;

@@ -125,6 +125,7 @@ SYMBOL: queue
 
 ! NOTE: Using Store-wide replacement for now...
 
+! FIXME unused?
 :: wakeup-set ( v k -- ids )
     store get [ vars>> :> vs { [ v vs in? ] [ k vs in? ] } 0|| ] filter-values
     keys ;
@@ -703,6 +704,7 @@ M: equiv-activation pred>constraint ;
 : update-eq-constraint-vars ( eqc -- eqc )
     dup rhs>> vars [ ?ground-value ] map members >>subsumed-vars ;
 
+! TODO: Remember reading that the wakeup set only needs to be computed on lhs or rhs?
 : eq-wakeup-set ( eq-constraint -- ids )
     [
         [ rhs>> store get [ vars>> in? [ , ] [ drop ] if ] with assoc-each ]

@@ -1,8 +1,8 @@
 USING: accessors arrays assocs chr.factor chr.factor.composition
 chr.factor.effects chr.factor.phi chr.factor.util chr.parser chr.state chr.test
 classes combinators combinators.short-circuit grouping kernel kernel.private
-layouts lists literals math math.private quotations sequences slots.private
-strings terms tools.test typed types.util words ;
+layouts lists literals locals.backend math math.private namespaces quotations
+sequences slots.private strings terms tools.test typed types.util words ;
 
 IN: chr.factor.composition.tests
 
@@ -64,11 +64,19 @@ TERM-VARS: ?a15 ?o3 ?v3 ;
 TERM-VARS: ?o5 ?a47 ?b34 ?v7 ;
 TERM-VARS: ?y14 ?ys14 ?o25 ?a85 ?x17 ?rho31 ;
 
-P{ Effect L{ ?o . ?a } L{ ?v . ?a } f {
-       P{ Instance ?o array }
-       P{ Instance ?v object }
-       P{ Slot ?o 2 ?v } } }
+P{ Effect L{ ?o3 . ?a6 } L{ ?v3 . ?c3 } { ?x1 ?b4 ?x2 }
+    {
+        P{ Instance ?o3 array }
+        P{ Instance ?v3 object }
+        P{ Eq ?x2 2 }
+        P{ Instance ?x2 fixnum }
+        P{ SlotLoc ?x1 ?o3 ?x2 }
+        P{ PushLoc ?x1 ?b4 L{ ?v3 } ?c3 f }
+        P{ LocPop ?x1 ?a6 L{ ?v3 } ?b4 f ?a6 } } }
 [ \ array-first get-type ] chr-test
+
+{ t } [ [ 1 drop 42 ] [ { 42 } array-first ] same-type? ] unit-test
+{ t } [ [ 1 drop 42 ] [ { 42 43 } array-first ] same-type? ] unit-test
 
 ! ** Throwing
 P{ Effect ?a ?b f { P{ Invalid } } }
@@ -144,10 +152,10 @@ P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } f { P{ Instance ?x number } P{ Instance ?
 { t }
 [ [ [ if ] ] [ [ [ if ] ] (call) ] same-type? ] unit-test
 
-! FIXME: This one freaks out the isomorphism checker?
-! { t }
-! [ [ [ [ if ] ] ]  [ [ [ [ if ] ] ] (call) ] same-type? ] unit-test
-! [ [ [ [ if ] ] ]  [ [ [ [ if ] ] ] (call) ] [ get-type ] bi@ [ effect>nterm ] bi@ isomorphic? ] unit-test
+! This one freaks out the isomorphism checker?
+! Seems to be fixed...
+{ t }
+[ [ [ [ if ] ] ]  [ [ [ [ if ] ] ] (call) ] same-type? ] unit-test
 
 { t } [ [ swap swap swap ] [ [ swap ] curry curry call ] same-type? ] unit-test
 ! NOTE: This is interesting: because we have [ ? ] as basis, we don't enforce
@@ -244,6 +252,59 @@ P{ Effect L{ ?x . ?a } L{ ?y . ?a } f { P{ Instance ?x bignum } P{ Instance ?y f
 P{ Effect ?a L{ ?x3 ?x3 . ?a } f { P{ Instance ?x3 word } P{ Eq ?x3 swap } } }
 [ [ \ swap dup ] get-type ] chr-test
 
+! ** Effectful access
+! Effect must survive
+P{
+    Effect
+    L{ ?o1 ?v1 . ?a1 }
+    ?c2
+    { ?x2 ?z2 ?b3 ?x3 }
+    {
+        P{ Instance ?o1 not{ fixnum } }
+        P{ Instance ?v1 object }
+        P{ Eq ?x3 2 }
+        P{ Instance ?x3 fixnum }
+        P{ SlotLoc ?x2 ?o1 ?x3 }
+        P{ PushLoc ?x2 ?b3 L{ ?v1 } ?c2 f }
+        P{ LocPop ?x2 ?a1 L{ ?z2 } ?b3 f ?a1 }
+    }
+} [ [ 2 set-slot ] get-type ] chr-test
+
+! Local allocations, writeback should be ignored
+P{ Effect ?a1 ?a1 f f }
+[ [ 42 { 43 } 2 set-slot ] get-type ] chr-test
+
+P{ Effect L{ ?z . ?a } ?a f { P{ Instance ?z object } } }
+[ [ 1array 42 swap 2 set-slot ] get-type ] chr-test
+
+! Flushable, thus can be ignored
+! NOTE: not doing that.  Only done on local allocations!
+P{
+    Effect L{ ?o3 . ?a } ?c3 { ?x1 ?v3 ?b ?x2 }
+    {
+        P{ Instance ?o3 not{ fixnum } }
+        P{ Eq ?x2 2 }
+        P{ Instance ?x2 fixnum }
+        P{ SlotLoc ?x1 ?o3 ?x2 }
+        P{ PushLoc ?x1 ?b L{ ?v3 } ?c3 f }
+        P{ Instance ?v3 object }
+        P{ LocPop ?x1 ?a L{ ?v3 } ?b f ?a } } }
+[ [ 2 slot drop ] get-type ] chr-test
+
+P{ Effect L{ ?v . ?a } ?a f { P{ Instance ?v object } } }
+[ [ 1array 2 slot drop ] get-type ] chr-test
+
+! *** basic array manipulation
+
+P{
+    Effect
+    ?a1
+    L{ ?v1 ?x1 . ?a1 }
+    f
+    { P{ Instance ?x1 array } P{ Instance ?v1 object } P{ Eq ?v1 42 } P{ Eq ?x1 { 42 } }
+      P{ LocalAllocation ?a1 ?x1 } } }
+[ [ { 43 } 42 over 2 set-slot dup 2 slot ] get-type ] chr-test
+
 ! *** Some cloning class predicate stuff
 P{ Effect ?a ?b f { P{ Invalid } } }
 [ [ { array } declare (clone) { string } declare ] get-type ] chr-test
@@ -251,18 +312,54 @@ P{ Effect ?a ?b f { P{ Invalid } } }
 ! TODO: tests for actually specializing stuff over clone...
 
 TUPLE: footuple barslot ;
-P{ Effect L{ ?x . ?a } L{ ?y . ?a } f
-   { P{ Instance ?y object } P{ Instance ?x footuple } P{ Slot ?x "barslot" ?y } }
-} [ [ barslot>> ] get-type ] chr-test
+P{
+    Effect
+    L{ ?o . ?a }
+    L{ ?v . ?b }
+    { ?x1 ?y1 ?z1 }
+    {
+        P{ Instance ?v object }
+        P{ Instance ?o footuple }
+        P{ Eq ?z1 2 }
+        P{ Instance ?z1 fixnum }
+        P{ SlotLoc ?x1 ?o ?z1 }
+        P{ PushLoc ?x1 ?y1 L{ ?v } ?b f }
+        P{ LocPop ?x1 ?a L{ ?v } ?y1 f ?a }
+    }
+}
+[ [ barslot>> ] get-type ] chr-test
+
+TUPLE: foo2 aslot { bslot read-only } ;
+
+P{ Effect L{ ?o . ?a } L{ ?v . ?a } f { P{ Slot ?o "bslot" ?v } P{ Instance ?v object } P{ Instance ?o foo2 } } }
+[ [ bslot>> ] get-type ] chr-test
 
 P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y } {
-       P{ Instance ?y footuple }
-       P{ Instance ?x footuple }
-       P{ Slot ?x "barslot" ?y }
-       P{ Slot ?y "barslot" ?z }
+       P{ Instance ?y foo2 }
+       P{ Instance ?x foo2 }
+       P{ Slot ?x "bslot" ?y }
+       P{ Slot ?y "bslot" ?z }
        P{ Instance ?z object }
    }
-} [ [ barslot>> barslot>> ] get-type ] chr-test
+ } [ [ bslot>> bslot>> ] get-type ] chr-test
+
+
+! *** Infinite Structures
+
+! Setting an array's first element to itself, dereferencing
+! That's a pretty interesting case, because it actually results in a hybrid literal structure
+! being created, as in P{ Eq ?x11 { ?x11 } }, which is neither a factor literal, not a type variable.
+! Looks cool because it seems we get recursive structure prototypes for free?
+! This one only works as long as no specialized slots are involved
+{ t } [ [ { 42 } dup dup 2 set-slot 2 slot ]
+        [ { 42 } dup dup 2 set-slot 2 slot 2 slot ]
+        same-type? ] unit-test
+
+! This one should work for all kind of data, as it describes the structure (construction)
+! rather than building the literal
+{ t } [ [ 1array dup dup 2 set-slot 2 slot ]
+        [ 1array dup dup 2 set-slot 2 slot 2 slot ]
+        same-type? ] unit-test
 
 ! ** Sums and Parameters
 { 1 2 3 4 5 }
@@ -287,24 +384,54 @@ P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y } {
 
 ! ** Read-only locals
 
+{ 1 } [ [ + load-local ] get-type preds>> [ Sum? ] count ] unit-test
+{ 1 } [ [ 0 get-local + ] get-type preds>> [ Sum? ] count ] unit-test
+{ 1 } [ [ 0 get-local -1 get-local + ] get-type preds>> [ Sum? ] count ] unit-test
+
 ! FIXME: fail due to missing implicit declarations
 { t } [ [ swap ] [| a b | b a ] same-type? ] unit-test
 { t } [ [ swap ] [| | :> a :> b a b ] same-type? ] unit-test
+{ t } [ [ swap swap drop ] [| | :> a :> b a ] same-type? ] unit-test
 { t } [ [ swap swap drop ] [| a b | a ] same-type? ] unit-test
 { t } [ [ nip ] [| a b | a ] same-type? ] unit-test
 { t } [ [ + ] [| a b | a b + :> c c ] same-type? ] unit-test
 { t } [ [ + dup ] [ [ [| | :> a a + ] [ dup ] compose ] call call ] same-type? ] unit-test
+
+! ** TODO: Mutable locals
+
+P{ Effect L{ ?v . ?a } L{ ?v . ?a } f { P{ Instance ?v object } } }
+[ [| | :> a! a ] get-type ] chr-test
+
+P{ Effect L{ ?v . ?a } ?a  f { P{ Instance ?v object } } }
+[ [| | :> a! ] get-type ] chr-test
+
+P{ Effect L{ ?v ?w . ?a } L{ ?w ?v . ?a }  f { P{ Instance ?v object } P{ Instance ?w object } } }
+[ [| a! b! | b :> c a b! c a! a b ] get-type ] chr-test
+
+P{ Effect L{ ?y . ?a } L{ ?y ?y . ?a } f { P{ Instance ?y object } } }
+[ [ { 43 } over over 2 set-slot 2 slot ] get-type ] chr-test
+
+! ** Nested local allocations
+{ t } [ [ 1array ] [ 1array 1array 2 slot ] same-type? ] unit-test
+
+P{ Effect L{ ?v . ?a } L{ ?v . ?a } f { P{ Instance ?v object } } }
+[ [ 1array 1array 2 slot 2 slot ] get-type ] chr-test
+
+P{ Effect L{ ?v . ?a } ?a  f { P{ Instance ?v object } } }
+[ 1array 1array 2 slot 2 slot drop ] chr-test
 
 ! ** Simple Dispatch
 GENERIC: foothing ( obj -- result )
 M: fixnum foothing 3 + ;
 M: array foothing array-first ;
 
+! FIXME
 CONSTANT: foothing1
 P{ Effect L{ ?y . ?b } L{ ?z . ?b } f { P{ Instance ?y fixnum } P{ Instance ?z integer } P{ Sum ?z ?y 3 } } }
 foothing1
 [ M\ fixnum foothing get-type ] chr-test
 
+! FIXME
 CONSTANT: foothing2
 P{ Effect L{ ?o . ?a } L{ ?v . ?a } f { P{ Instance ?o array }
                                              P{ Instance ?v object } P{ Slot ?o 2 ?v } } }
@@ -313,6 +440,10 @@ foothing2
 
 P{ Xor $ foothing2 $ foothing1 }
 [ \ foothing get-type ] chr-test
+
+P{ Effect L{ ?o . ?a } L{ ?v . ?a } f
+   { P{ Instance ?v object } P{ Instance ?o cons-state } P{ Slot ?o "cdr" ?v } } }
+[ [ cdr>> ] get-type ] chr-test
 
 ! ** Overlapping dispatch
 GENERIC: auto-dispatch ( obj -- res )
@@ -981,3 +1112,6 @@ P{ Xor
 
 ! TODO: shift must transport the Shift relation through the coercion
 ! in the bignum branch.  Unit-test this!
+
+! TODO: must be nop: [ 1array dup 2 slot nip ]
+! TODO: must infer [ 1array dup dup 2 set-slot ]
