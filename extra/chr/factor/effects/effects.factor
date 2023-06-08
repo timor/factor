@@ -326,12 +326,12 @@ CHR: apply-effect-not-known @ { FinishEffect __  } // { ApplyEffect M{ ?rho } ?i
 CHR: losing-call-effect @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p P{ CallEffect __ __ __ } -- | [ { ?p "discarding a call-effect predicate" } throw ] ;
 CHR: losing-macro-call @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p <={ MacroCall } -- | [ { ?p "discarding a macro call predicate" } throw ] ;
 CHR: losing-unresolved-iteration @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p <={ Iterated } -- | [ { ?p "discarding unresolved iteration predicate" } throw ] ;
-CHR: losing-unresolved-loc-op @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // AS: ?p <={ LocOp } --
-[ ?p PushLoc? ?p local?>> and not ]
-| [ { ?p "discarding unresolved location effect" } throw ] ;
 ! Still pretty fragile....
 CHR: perform-dead-push-loc @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { PushLoc M{ ?x } ?a __ ?b ?t } -- |
 [ ?a ?b ==! ] ;
+CHR: losing-unresolved-loc-op @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // AS: ?p <={ LocOp } --
+! [ ?p PushLoc? ?p local?>> and not ]
+| [ { ?p "discarding unresolved location effect" } throw ] ;
 CHR: cleanup-incomplete @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // AS: ?p <={ body-pred } -- | ;
 
 ! This is triggered if phi mode is aborted

@@ -288,7 +288,10 @@ TUPLE: PushLoc < LocOp ;
 ! head-state is for storing partial redex inference
 TUPLE: LocPop < LocOp head-state ;
 TUPLE: LocalAllocation < chr-pred state obj ;
-! TODO: LocState for read-access
+! Thought about LocState for read-access.
+! However, that's not possible.  Tried to re-compose
+! based on a different interpretation, but that
+! messes up ordering.
 
 
 TUPLE: LocSpec < chr-pred loc ;

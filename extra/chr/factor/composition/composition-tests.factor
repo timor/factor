@@ -55,7 +55,7 @@ clear-chr-cache
 TYPED: array-first ( arr: array -- thing ) 2 slot ;
 
 TERM-VARS: ?o ?a ?b ?v ?w ?x ?y ?z ;
-TERM-VARS: ?y2 ?ys2 ?o4 ?a43 ?v6 ?y6 ?ys6 ;
+TERM-VARS: ?y2 ?ys2 ?o4 ?a43 ?y6 ?ys6 ;
 TERM-VARS: ?y1 ?ys1 ?x1 ?v1 ?x2 ?x3 ?rho1 ?rho2 ?rho3 ?o1 ?a1 ;
 TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ?i2 ?c1 ?a2 ?z2 ;
 TERM-VARS: ?c ?d ;
@@ -301,7 +301,7 @@ P{
     ?a1
     L{ ?v1 ?x1 . ?a1 }
     f
-    { P{ Instance ?x1 array } P{ Instance ?v1 object } P{ Eq ?v1 42 } P{ Eq ?x1 { 42 } }
+    { P{ Instance ?x1 array } P{ Instance ?v1 fixnum } P{ Eq ?v1 42 } P{ Eq ?x1 { 42 } }
       P{ LocalAllocation ?a1 ?x1 } } }
 [ [ { 43 } 42 over 2 set-slot dup 2 slot ] get-type ] chr-test
 
@@ -397,7 +397,7 @@ P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y } {
 { t } [ [ + ] [| a b | a b + :> c c ] same-type? ] unit-test
 { t } [ [ + dup ] [ [ [| | :> a a + ] [ dup ] compose ] call call ] same-type? ] unit-test
 
-! ** TODO: Mutable locals
+! ** Mutable locals
 
 P{ Effect L{ ?v . ?a } L{ ?v . ?a } f { P{ Instance ?v object } } }
 [ [| | :> a! a ] get-type ] chr-test
@@ -411,6 +411,21 @@ P{ Effect L{ ?v ?w . ?a } L{ ?w ?v . ?a }  f { P{ Instance ?v object } P{ Instan
 P{ Effect L{ ?y . ?a } L{ ?y ?y . ?a } f { P{ Instance ?y object } } }
 [ [ { 43 } over over 2 set-slot 2 slot ] get-type ] chr-test
 
+P{ Effect L{ ?x . ?a } L{ ?x ?x . ?a } f { P{ Instance ?x object } } }
+[ [| a! | a a ] get-type ] chr-test
+
+P{ Effect L{ ?x . ?a } L{ ?x ?x ?x . ?a } f { P{ Instance ?x object } } }
+[ [| a! | a a a ] get-type ] chr-test
+
+P{ Effect L{ ?x . ?a } L{ ?x ?x ?x ?x . ?a } f { P{ Instance ?x object } } }
+[ [| a! | a a a a ] get-type ] chr-test
+
+P{ Effect L{ ?x . ?a } L{ ?x ?x ?x ?x ?x . ?a } f { P{ Instance ?x object } } }
+[ [| a! | a a a a a ] get-type ] chr-test
+
+! FIXME
+[| | :> a a 2 slot a 2 slot a 2 slot a 2 slot ]
+
 ! ** Nested local allocations
 { t } [ [ 1array ] [ 1array 1array 2 slot ] same-type? ] unit-test
 
@@ -418,7 +433,9 @@ P{ Effect L{ ?v . ?a } L{ ?v . ?a } f { P{ Instance ?v object } } }
 [ [ 1array 1array 2 slot 2 slot ] get-type ] chr-test
 
 P{ Effect L{ ?v . ?a } ?a  f { P{ Instance ?v object } } }
-[ 1array 1array 2 slot 2 slot drop ] chr-test
+[ [ 1array 1array 2 slot 2 slot drop ] get-type ] chr-test
+
+! ** TODO Effectful Predicates Phi
 
 ! ** Simple Dispatch
 GENERIC: foothing ( obj -- result )
@@ -428,15 +445,23 @@ M: array foothing array-first ;
 ! FIXME
 CONSTANT: foothing1
 P{ Effect L{ ?y . ?b } L{ ?z . ?b } f { P{ Instance ?y fixnum } P{ Instance ?z integer } P{ Sum ?z ?y 3 } } }
+
+! Note: extra stuff because need to expand to the call type
 foothing1
-[ M\ fixnum foothing get-type ] chr-test
+[ M\ fixnum foothing 1quotation [ call ] curry get-type ] chr-test
 
 ! FIXME
 CONSTANT: foothing2
-P{ Effect L{ ?o . ?a } L{ ?v . ?a } f { P{ Instance ?o array }
-                                             P{ Instance ?v object } P{ Slot ?o 2 ?v } } }
+P{
+    Effect L{ ?o . ?a } L{ ?v . ?c } { ?x ?b } {
+        P{ Instance ?o array }
+        P{ Instance ?v object }
+        P{ SlotLoc ?x ?o 2 }
+        P{ PushLoc ?x ?b L{ ?v } ?c f }
+        P{ LocPop ?x ?a L{ ?v } ?b f ?a } } }
+
 foothing2
-[ M\ array foothing get-type ] chr-test
+[ M\ array foothing 1quotation [ call ] curry get-type ] chr-test
 
 P{ Xor $ foothing2 $ foothing1 }
 [ \ foothing get-type ] chr-test
@@ -458,7 +483,7 @@ M: object auto-dispatch ;
 P{
     Xor
     P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } f { P{ Instance ?y2 not{ cons-state } } } }
-    P{ Effect L{ ?o4 . ?a43 } L{ ?v6 . ?a43 } f { P{ Instance ?o4 cons-state } P{ Slot ?o4 "cdr" ?v6 } P{ Instance ?v6 object } } }
+    P{ Effect L{ ?o4 . ?a43 } L{ ?v . ?a43 } f { P{ Instance ?o4 cons-state } P{ Slot ?o4 "cdr" ?v } P{ Instance ?v object } } }
 }
 [ \ auto-dispatch get-type ] chr-test
 
@@ -494,7 +519,7 @@ M: +nil+ default-dispatch ;
 P{
     Xor
     P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } f { P{ Instance ?y1 L{ } } P{ Eq ?y1 L{ } } } }
-    P{ Effect L{ ?o1 . ?a1 } L{ ?v6 . ?a1 } f { P{ Instance ?o1 cons-state } P{ Slot ?o1 "cdr" ?v6 } P{ Instance ?v6 object } } }
+    P{ Effect L{ ?o1 . ?a1 } L{ ?v . ?a1 } f { P{ Instance ?o1 cons-state } P{ Slot ?o1 "cdr" ?v } P{ Instance ?v object } } }
 }
 [ \ default-dispatch get-type ] chr-test
 

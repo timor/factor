@@ -985,6 +985,9 @@ CHR: dispatch-case @ // { MakeSingleDispatch ?i L{ { ?c ?m } . ?r } ?d ?tau } --
 CHR: known-slot-num @ { Eq ?n A{ ?a } } // { Slot ?o ?n ?v } -- |
 { Slot ?o ?a ?v } ;
 
+CHR: known-slot-loc-num @ { Eq ?n A{ ?m } } // { SlotLoc ?x ?o ?n } -- |
+{ SlotLoc ?x ?o ?m } ;
+
 CHR: known-instance @ { Eq M{ ?c } A{ ?d } } // { Instance ?x M{ ?c } } --
 | { Instance ?x ?d } ;
 
@@ -1083,11 +1086,20 @@ CHR: convert-read-only-slot-access @ { Instance ?o Is( class ?tau ) } { Eq ?m A{
 
 ! *** State and Locations via FMC semantics
 
-CHR: duplicate-loc-op-in @ // AS: ?p <={ LocOp ?x ?a __ __ __ . __ } AS: ?q <={ LocOp ?x ?b __ __ __ . __ } -- [ ?a ?b same-state? ] |
-[ { ?p ?q "duplicate loc op in" } throw ] ;
+: >states ( row -- seq ) dup array? [ 1array ] unless [ lastcdr ] map ;
 
-CHR: duplicate-loc-op-out @ // AS: ?p <={ LocOp ?x __ __ ?a __ . __ } AS: ?q <={ LocOp ?x __ ?b __ . __ } -- [ ?a ?b same-state? ] |
-[ { ?p ?q "duplicate loc op in" } throw ] ;
+CHR: unique-loc-pop @ { LocPop ?x ?a ?s ?b ?m ?u } // { LocPop ?x ?a ?s ?b ?m ?v } --
+[ ?u ?v [ >states members ] same? ] | ;
+
+CHR: same-loc-pop-same-loc-same-state @ { LocPop ?x ?a ?s __ __ __ } { LocPop ?x ?a ?r __ __ __ } // -- | [ ?s ?r ==! ] ;
+
+! CHR: remove-redundant-loc-reads @ // { LocPop ?x ?a ?s ?a ?m ?u } { PushLoc ?x ?a ?s ?a ?n } -- | ;
+
+! CHR: duplicate-loc-op-in @ // AS: ?p <={ LocOp ?x ?a __ __ __ . __ } AS: ?q <={ LocOp ?x ?b __ __ __ . __ } -- [ ?a ?b same-state? ] |
+! [ { ?p ?q "duplicate loc op in" } throw ] ;
+
+! CHR: duplicate-loc-op-out @ // AS: ?p <={ LocOp ?x __ __ ?a __ . __ } AS: ?q <={ LocOp ?x __ ?b __ . __ } -- [ ?a ?b same-state? ] |
+! [ { ?p ?q "duplicate loc op out" } throw ] ;
 
 ! *** Beta
 CHR: resolve-loc-op @ // <={ LocOp __ ?a L{ } ?b __ . __ } -- |
@@ -1102,7 +1114,7 @@ CHR: resolve-loc-op @ // <={ LocOp __ ?a L{ } ?b __ . __ } -- |
     2dup [ term-var? ] both? [ ==! ] [ Instance boa ] if ;
 
 ! NOTE: literals are always local allocations, no? Yes, but sequencing will break if we don't keep track of the allocation state
-CHR: literal-resolve-numeric-loc-pop-request @ { LocalAllocation ?u ?o } { Eq ?o Is( not{ fixnum } ?a ) } { SlotLoc ?x ?o ?m } { Eq ?m Is( integer ?n ) } //
+CHR: literal-resolve-numeric-loc-pop-request @ { LocalAllocation ?u ?o } { Eq ?o Is( not{ integer } ?a ) } { SlotLoc ?x ?o Is( integer ?n ) } //
 { LocPop ?x ?r L{ ?v } ?s t ?b } -- [ ?u ?b same-state? ] |
 [ ?a length ?n valid-slot?
   [ ?a ?n slot ?v swap
@@ -1114,7 +1126,7 @@ CHR: literal-resolve-numeric-loc-pop-request @ { LocalAllocation ?u ?o } { Eq ?o
 ! NOTE: this is a special case, since we are actually swapping the reduction order here locally
 ! The intuition is that theses local pushes are always preceeded by a loc-pop on that exact same location
 ! TODO: could still be the case that the allocation needs to be "transported" if the preceding loc-pop was transporting...
-CHR: literal-resolve-numeric-push-loc-request @ { LocalAllocation ?u ?o } { SlotLoc ?x ?o ?m } { Eq ?m Is( integer ?n ) } //
+CHR: literal-resolve-numeric-push-loc-request @ { LocalAllocation ?u ?o } { SlotLoc ?x ?o Is( integer ?n ) } //
 { Eq ?o Is( not{ fixnum } ?a ) } <={ PushLoc ?x ?r L{ ?v } ?s t } --
 [ ?u ?r same-state? ]
 [ ?v ?a clone ?n [ set-slot ] keepd :>> ?b ] |
@@ -1123,20 +1135,23 @@ CHR: literal-resolve-numeric-push-loc-request @ { LocalAllocation ?u ?o } { Slot
 ! Local allocation access
 CHR: default-element-resolve-loc-pop-request @ { LocalAllocation ?a ?o } { Element ?o ?v } { SlotLoc ?y ?o __ } //
 { LocPop ?y ?b L{ ?w } ?c t ?l } --
-[ ?l ?a same-state? ] |
+[ ?l >states first ?a same-state? ] |
 [ ?w ?v ==! ] [ ?b ?c ==! ] ;
 
+! NOTE: keeping any circularities here because that represents a slot read!
 CHR: beta-reduce-loc-push-pop @ //
 { PushLoc ?l ?a L{ ?x . ?v } ?b ?m } { LocPop ?l ?c L{ ?y . ?w } ?d ?n ?u } --
-[ ?u ?b same-state? ] |
+[ ?u >states first ?b same-state? ] [ ?a ?d same-state? not ] |
 [ ?x ?y ==! ]
 { PushLoc ?l ?a ?v ?b ?m } { LocPop ?l ?c ?w ?d ?n ?u } ;
 
 ! **** Redex-searching
-
 CHR: independent-loc-op-extends-beta-chain @ <={ LocOp ?y ?a __ ?b ?m . __ } // { LocPop ?x ?c ?s ?d ?n ?u } --
-[ ?m [ ?x ?y == not ] [ ?x R? ] if ] [ ?u ?b same-state? ] |
-{ LocPop ?x ?c ?s ?d ?n ?a } ;
+! TODO: would only need to check the first two chain links right now because the maximum loop length is 2
+[ ?m [ ?x ?y == not ] [ ?x R? ] if ] [ ?u >states :>> ?v first ?b same-state? ] [ ?a lastcdr ?b lastcdr 2array ?v subseq? not ]
+[ ?v ?a prefix :>> ?w ]
+|
+{ LocPop ?x ?c ?s ?d ?n ?w } ;
 
 ! **** Special cases
 
@@ -1153,7 +1168,12 @@ CHR: slot-loc-op-known-local @ { LocalAllocation __ ?o } { SlotLoc ?x ?o __ } //
 ! { Length ?o ?l } { Eq ?l Is( fixnum ?m ) } -- [ ?m 16 <= ] | [ ?o ?m ?v <array> Eq boa ] ;
 
 ! NOTE: do we need transitive eq rules?  Or do they break implications...
-CHR: same-obj-slot-is-same-loc @ { SlotLoc ?x ?o ?n } { Eq ?n ?a } { Eq ?m ?a } // { SlotLoc ?y ?o ?m } -- |
+! CHR: same-obj-slot-is-same-loc @ { SlotLoc ?x ?o ?n } { Eq ?n ?a } { Eq ?m ?a } // { SlotLoc ?y ?o ?m } -- |
+
+CHR: eql-obj-slot-is-same-loc @ { SlotLoc ?x ?o ?n } { Eq ?n ?m } // { SlotLoc ?y ?o ?m } -- |
+[ ?y ?x ==! ] ;
+
+CHR: same-obj-slot-is-same-loc @ { SlotLoc ?x ?o ?n } // { SlotLoc ?y ?o ?n } -- |
 [ ?y ?x ==! ] ;
 
 ! **** Input-output proper values
