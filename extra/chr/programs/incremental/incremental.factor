@@ -81,10 +81,11 @@ M: classoid push-at-constraint-type
 : add-vars ( program rule -- program )
     term-vars [ union ] curry change-local-vars ;
 
+ERROR: invalid-chr-quot-effect quot effect ;
 : assert-chr-effect ( chr -- )
     dup callable? [
         dup infer
-        dup check-body-constraint-effect [ 2drop ] [ "invalid quot chr effect" 3array throw ] if
+        dup check-body-constraint-effect [ 2drop ] [ invalid-chr-quot-effect ] if
     ] [ drop ] if ;
 
 : check-rule ( rule -- )
