@@ -300,10 +300,6 @@ CHR: type-of-unit-val @ { ?TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ] 
 ! { MakeUnit ?x ?rho }
 ! { MakeUnit ?y ?sig } ;
 
-GENERIC: local-alloc-val? ( value -- ? )
-M: object local-alloc-val? class-of all-slots empty? not ;
-M: word local-alloc-val? drop f ;
-
 CHR: make-unit-local-alloc @ // { MakeUnit A{ ?o } ?tau } -- [ ?o local-alloc-val? ] |
 [ ?tau P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x ?o } P{ LocalAllocation ?a ?x } } } ==! ] ;
 

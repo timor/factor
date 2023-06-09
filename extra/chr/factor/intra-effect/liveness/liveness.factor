@@ -86,10 +86,6 @@ CHR: new-scope @ // { Scope ?i ?o } --
 
 ! ** Predicate-independent handling
 
-! misnomer...
-! usually used as ( existing possible-extension -- things-connecting-it new-things )
-: set-cut ( set1 set2 -- common in-set-2-but-not-set-1 )
-    members [ swap in? ] with partition ;
 
 ! ** Collection of Other Preds
 PREFIX-RULES: { P{ CompMode } }

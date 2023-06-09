@@ -1,7 +1,7 @@
 USING: accessors arrays assocs assocs.extras chr.factor chr.parser classes
 classes.algebra classes.algebra.private classes.builtin classes.tuple
 classes.union combinators.short-circuit combinators.smart generic.math
-generic.single kernel make math namespaces quotations sequences sets terms
+generic.single kernel lists make math namespaces quotations sequences sets terms
 types.util words ;
 
 IN: chr.factor.util
@@ -280,3 +280,23 @@ M: tuple-class final-data-class? final-class? ;
 ! ** List utils
 : nthcdr ( list n -- list )
     [ cdr ] times ;
+
+! ** Test if a value needs to be treated as local allocation
+
+GENERIC: local-alloc-class? ( class -- ? )
+M: object local-alloc-class? all-slots empty? not ;
+M: word local-alloc-class? drop f ;
+
+GENERIC: local-alloc-val? ( value -- ? )
+M: word local-alloc-val? drop f ;
+M: object local-alloc-val? class-of local-alloc-class? ;
+
+
+: withd ( param obj obj quot -- obj obj curried )
+    [ swapd ] dip with ; inline
+
+! ** Sets
+! misnomer...
+! usually used as ( existing possible-extension -- things-connecting-it new-things )
+: set-cut ( set1 set2 -- common in-set-2-but-not-set-1 )
+    members [ swap in? ] with partition ;
