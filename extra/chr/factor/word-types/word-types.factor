@@ -337,7 +337,7 @@ CHR: type-of-eq @ { TypeOfWord eq? M{ ?tau } } // -- |
 [ ?tau P{ Xor
           ! introducing the value which is equal to as parameter?
           P{ Effect L{ ?x ?x . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?c t } P{ Eq ?c t } } }
-          P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?c POSTPONE: f } P{ NotSame ?x ?y } } }
+          P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?c POSTPONE: f } P{ Eq ?c f } P{ NotSame ?x ?y } } }
    } ==! ] ;
 
 ! NOTE: Declarations are nominative first of all, although the existing type inference does
