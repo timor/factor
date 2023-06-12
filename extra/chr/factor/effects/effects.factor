@@ -125,6 +125,8 @@ CHR: end-spool @ { MakeEffect ?i ?o __ __ __ } // { Spool ?tau L{ } } --
 ! { Scope ?i ?o }
 ! { Given ?a } { Define ?b }
 { Live ?c } { Def ?a } { Use ?b }
+{ Liveness }
+{ Collection }
 { FinishEffect ?tau } ;
 CHR: spool-one-pred @ // { Spool ?tau L{ ?x . ?xs } } -- | [ ?x ] { Spool ?tau ?xs } ;
 
@@ -295,13 +297,17 @@ CHR: collect-live-body-pred @ { FinishEffect ?tau } // { Collect ?p } AS: ?e P{ 
 ! [ ?x ?p vars union :>> ?y ] |
 ! { MakeEffect ?a ?b ?y ?k ?tau } ;
 
-
-CHR: losing-undefined-loc-spec @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { Def ?l } // AS: ?p <={ LocSpec ?x . __ } --
+CHR: losing-undefined-loc-spec @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { Def ?l } AS: ?p <={ LocSpec ?x . __ } // --
 [ ?x ?l in? not ] | [ { "locspec has no definition" ?p } throw ] ;
 
 CHR: discard-implied-param @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // <={ ImpliesParam } -- | ;
 CHR: incomplete-scope @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { Scope ?l ?r } -- | [ { ?l ?r "losing scope" } throw ] ;
-CHR: discard-liveness-preds @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // <={ liveness-pred } -- | ;
+CHR: discard-liveness-preds @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { Liveness } // <={ liveness-pred } -- | ;
+CHR: finish-liveness-phase @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { Liveness } -- | ;
+CHR: finish-collection-phase @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { Collection } -- | ;
+
+
+
 
 ! TODO: abstract this shit...
 
@@ -325,13 +331,19 @@ PREFIX-RULES: f
 CHR: apply-effect-not-known @ { FinishEffect __  } // { ApplyEffect M{ ?rho } ?i ?o } -- | [ "applying unknown effect" throw ] ;
 CHR: losing-call-effect @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p P{ CallEffect __ __ __ } -- | [ { ?p "discarding a call-effect predicate" } throw ] ;
 CHR: losing-macro-call @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p <={ MacroCall } -- | [ { ?p "discarding a macro call predicate" } throw ] ;
-CHR: losing-unresolved-iteration @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p <={ Iterated } -- | [ { ?p "discarding unresolved iteration predicate" } throw ] ;
-! Still pretty fragile....
-CHR: perform-dead-push-loc @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { PushLoc M{ ?x } ?a __ ?b ?t } -- |
-[ ?a ?b ==! ] ;
-CHR: losing-unresolved-loc-op @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // AS: ?p <={ LocOp } --
-! [ ?p PushLoc? ?p local?>> and not ]
-| [ { ?p "discarding unresolved location effect" } throw ] ;
+CHR: losing-unresolved-iteration @ { FinishEffect ?tau } <={ MakeEffect } AS: ?p <={ Iterated } // -- | [ { ?p "discarding unresolved iteration predicate" } throw ] ;
+! Still pretty fragile.  Also, not needed since a write-back push will have the same states
+! CHR: perform-dead-push-loc @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { PushLoc M{ ?x } ?a __ ?b ?t } -- |
+! [ ?a ?b ==! ] ;
+CHR: losing-non-local-writeback-loc-op @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } AS: ?p <={ LocOp } // --
+[ ?p PushLoc? ?p local?>> and not ]
+| [ { ?p "discarding unresolved location operation" } throw ] ;
+CHR: losing-unresolved-prim-call @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } AS: ?p <={ PrimCall } // --
+| [ { ?p "discarding unresolved primitive call" } throw ] ;
+CHR: losing-generic-dispatch @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } AS: ?p <={ GenericDispatch } // --
+| [ { ?p "discarding unresolved generic dispatch" } throw ] ;
+CHR: losing-xor-call @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } AS: ?p <={ CallXorEffect } // --
+| [ { ?p "discarding unresolved callxoreffect" } throw ] ;
 CHR: cleanup-incomplete @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // AS: ?p <={ body-pred } -- | ;
 
 ! This is triggered if phi mode is aborted
