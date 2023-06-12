@@ -12,6 +12,16 @@ TERM-VARS:
 
 PREDICATE: callable-word < word { [ symbol? not ] } 1&& ;
 
+! XXX
+! Big mess-up: Using Eq for literals (with eql semantics) breaks reasoning about
+! eq?-uality of literals!
+! Problems arise with e.g. [ { 42 } { 42 } eq? ]
+! 1. One way to fix this is to (re-)introduce { Lit ?x "foo" } value preds and use those for
+! substituting into expressions.
+! 2. Another one could be to only expand calls to eq? until both arguments are presented in the input
+! 3. Yet another: Don't treat eq as expr-preds, but transport using Lit instead?
+! 4. Maybe change term matcher to only match eq literals? At least in certain predicates?
+
 
 ! * Semantic Notes
 
@@ -237,6 +247,7 @@ TUPLE: InitSlot < chr-pred obj-val in-val slot-spec out-state ;
 ! Slot values, only apply to read-only slots, really,
 ! because only those are state-independent
 TUPLE: Slot < val-pred n slot-val ;
+TUPLE: Lit < val-pred obj ;
 
 ! Initial element value of a built-in sequence
 TUPLE: Element < val-pred elt-val ;
@@ -282,6 +293,8 @@ TUPLE: InstanceCheck < chr-pred class-arg quot complement ;
 ! Retain stack reasoning for locals
 SINGLETON: R
 ! Poly-λC style effects
+! dev null for
+SINGLETON: +trap+
 
 TUPLE: LocOp < chr-pred loc before item after local? ;
 TUPLE: PushLoc < LocOp ;
@@ -292,6 +305,10 @@ TUPLE: LocalAllocation < chr-pred state obj ;
 ! However, that's not possible.  Tried to re-compose
 ! based on a different interpretation, but that
 ! messes up ordering.
+
+TUPLE: slot-pred < chr-pred obj n val ;
+TUPLE: ReadSlot < slot-pred at-state ;
+TUPLE: WriteSlot < slot-pred in out ;
 
 
 TUPLE: LocSpec < chr-pred loc ;
@@ -453,6 +470,8 @@ TUPLE: PhiDone < chr-pred ;
 ! TUPLE: Discrims < chr-pred vars ;
 
 ! Liveness
+TUPLE: Liveness < chr-pred ; ! mode indicator
+TUPLE: Collection < chr-pred ; ! mode indicator
 TUPLE: liveness-pred < chr-pred ;
 TUPLE: Scope < liveness-pred left right ;
 TUPLE: SubScope < Scope ;

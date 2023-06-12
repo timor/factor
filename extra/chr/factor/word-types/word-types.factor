@@ -212,7 +212,8 @@ CHR: type-of-<array> @ { TypeOfWord <array> M{ ?tau } } // -- |
 CHR: type-of-slot @ { TypeOfWord slot M{ ?tau } } // -- |
 [ ?tau
   P{ Effect L{ ?m ?o . ?a } L{ ?v . ?a } { ?b } {
-         P{ Instance ?o not{ fixnum } }
+  ! P{ Effect L{ ?m ?o . ?a } L{ ?v . ?a } f {
+         P{ Instance ?o not{ integer } }
          P{ Instance ?m fixnum }
          P{ Instance ?v object }
          P{ Le 0 ?m }
@@ -229,8 +230,9 @@ CHR: type-of-slot @ { TypeOfWord slot M{ ?tau } } // -- |
 CHR: type-of-set-slot @ { TypeOfWord set-slot M{ ?tau } } // -- |
 [ ?tau
   P{ Effect L{ ?n ?o ?v . ?a } ?c { ?b ?z } {
+  ! P{ Effect L{ ?n ?o ?v . ?a } ?b f {
          P{ Instance ?n fixnum }
-         P{ Instance ?o not{ fixnum } }
+         P{ Instance ?o not{ integer } }
          P{ Instance ?v object }
          P{ Le 0 ?n }
          P{ SlotLoc ?x ?o ?n }
@@ -678,6 +680,7 @@ CHR: make-single-or-math-generic-dispatch @ // { MakeGenericDispatch ?w P{ Effec
 { WrapDefaultClasses ?w P{ Effect ?i ?o ?l ?q } ?tau } ;
 
 
+! NOTE: don't evaluate into the default method if open-world assumption is made instead
 CHR: type-of-generic @ { TypeOfWord ?w M{ ?tau } } // --
 [ ?w generic? ]
 ! [ ?w dispatch# :>> ?i ]

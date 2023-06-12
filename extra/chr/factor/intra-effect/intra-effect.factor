@@ -16,6 +16,9 @@ CHR: invalid-stays-invalid @ { Invalid } // { Invalid } -- | ;
 
 
 ! *** Mode-agnostic Normalizations
+! ! TODO: big change: don't allow singleton value classes anymore, that messes with the class/value
+! CHR: instance-of-wrapper @ {  }
+
 ! NOTE: Should be safe, as we don't define new stuff here if there is only one var?
 CHR: comm-var-is-lhs @ // AS: ?p <={ symmetric-pred A{ ?l } ?v } -- [ ?v term-var? ] |
 [ { ?v ?l } ?p class-of slots>tuple ] ;
@@ -494,6 +497,9 @@ CHR: specialize-class=-backwards @ { ClassPred ?y ?x class= } { Instance ?y Is( 
 CHR: redundant-final-class= @ { Instance ?x Is( classoid ?rho ) } { Instance ?y Is( classoid ?rho ) } // { ClassPred ?y ?x class= }
 -- [ ?rho final-data-class? ] | ;
 
+! TODO: in-between forms also!
+CHR: check-literal-class-pred @ // { ClassPred A{ ?y } A{ ?x } class= } -- | [ ?y ?x [ class-of ] same? f P{ Invalid } ? ] ;
+
 ! *** Arithmetics
 ! CHR: unique-expr-pred @ AS: ?p <={ expr-pred ?a . ?x } // AS: ?q <={ expr-pred ?a . ?x } -- [ ?p class-of ?q class-of class= ] | ;
 
@@ -513,12 +519,17 @@ CHR: neq-tightens-le-2 @ // { Neq ?y ?x } { Le ?x ?y } -- | { Lt ?x ?y } ;
 CHR: check-lt-same @ // { Lt ?x ?x } -- | { Invalid } ;
 CHR: check-lt-eq-1 @ // { Lt ?x ?y } { Eq ?x ?y } -- | { Invalid } ;
 CHR: check-lt-eq-2 @ // { Lt ?x ?y } { Eq ?y ?x } -- | { Invalid } ;
-! CHR: check-eq @ // { Eq A{ ?x } A{ ?y } } -- | [ ?x ?y = f P{ Invalid } ? ] ;
+! Daheck has this been deactivated?
+CHR: check-eq @ // { Eq A{ ?x } A{ ?y } } -- | [ ?x ?y = f P{ Invalid } ? ] ;
 CHR: check-eq-neq-1 @ // { Eq ?x ?y } { Neq ?x ?y } -- | { Invalid } ;
 CHR: check-eq-neq-2 @ // { Eq ?x ?y } { Neq ?y ?x } -- | { Invalid } ;
+! NOTE: neq has eql sematics!
 CHR: check-neq @ // { Neq A{ ?x } A{ ?y } } -- | [ ?x ?y = P{ Invalid } f ? ] ;
-CHR: neq-same-var @ // <={ Neq ?x ?x } -- | { Invalid } ;
-CHR: neq-subsumes-not-same @ { Neq ?x ?y } // { NotSame ?x ?y } -- | ;
+CHR: neq-same-var @ // <={ Neq M{ ?x } M{ ?x } } -- | { Invalid } ;
+! NOTE: this might not be possible to correctly check because of substitution?
+! A neuralgic case could be literals, actually
+CHR: check-notsame @ { Eq ?x A{ ?a } } { Eq ?y A{ ?b } } // { NotSame ?x ?y } -- | [ ?a ?b eq? P{ Invalid } f ? ] ;
+! FIXME: that is wrong: CHR: neq-subsumes-not-same @ { Neq ?x ?y } // { NotSame ?x ?y } -- | ;
 ! CHR: not-same-var @ // { NotSame ?x ?x } -- | { Invalid } ;
 ! TODO: make sure this doesn't break reasoning in phis
 CHR: redundant-literal-neq @ { Instance ?x ?c } // { Neq ?x A{ ?l } } --
@@ -1002,6 +1013,7 @@ CHR: known-tag-num @ { Eq ?n A{ ?v } } // { Tag ?c ?n } -- |
 
 ! UNION: replacable-pred expr-pred fold-pred ;
 CHR: known-expr-val @ { Eq ?n A{ ?v } } // AS: ?p <={ expr-pred } -- [ ?n ?p vars in? ]
+[ ?p NotSame? not ] ! definitely not a HACK!
 | [ ?p { { ?n ?v } } lift* ] ;
 
 CHR: known-generic-input/output @ { Eq ?n A{ ?v } } // { GenericDispatch ?w ?d ?a ?i ?o } -- [ ?n ?a in? ?n ?d in? or ] |
@@ -1022,6 +1034,17 @@ CHR: convert-to-named-slot @ { Instance ?o A{ ?tau } } // { Slot ?o A{ ?n } ?v }
 |
 { Slot ?o ?m ?v }
 { DeclaredInstance ?v ?rho } ;
+
+GENERIC: get-slot-spec ( class n -- ? )
+M: string get-slot-spec swap all-slots [ name>> = ] with find nip ;
+M: integer get-slot-spec swap all-slots [ offset>> = ] with find nip ;
+
+PREDICATE: class-with-slots < class all-slots empty? not ;
+
+! TODO invalidate undefined slot stuff here?
+CHR: slot-loc-known-slot-spec @ { Instance ?o Is( class-with-slots ?tau ) } // { SlotLoc ?x ?o Is( union{ string integer } ?n  ) } --
+[ ?tau ?n get-slot-spec :>> ?s ] [ ?s class>> :>> ?rho ] |
+{ SlotLoc ?x ?o ?s } ;
 
 
 IMPORT: chr-intra-effect-maps
@@ -1059,16 +1082,21 @@ CHR: tuple-boa-decl @ // { TupleBoa A{ ?c } ?a L{ ?o . ?b } } --
  preds <reversed> >array
 ] ;
 
-CHR: init-read-only-slot @ // { InitSlot ?o ?i Is( slot-spec ?s ) __ } -- [ ?s read-only>> ]
-[ ?s name>> :>> ?n ]
-| { Slot ?o ?n ?i } ;
+! CHR: init-read-only-slot @ // { InitSlot ?o ?i Is( slot-spec ?s ) __ } -- [ ?s read-only>> ]
+! [ ?s name>> :>> ?n ]
+! | { Slot ?o ?n ?i } ;
 
-CHR: init-rw-slot @ // { InitSlot ?o ?i Is( slot-spec ?s ) ?b } -- [ ?s read-only>> not ]
-[ ?s name>> :>> ?n ] |
-{ SlotLoc ?x ?o ?n }
-! TODO: optimized:
-! { PushLoc ?x f L{ ?i } ?b t } ;
-{ PushLoc ?x f L{ ?i } ?b f } ;
+! CHR: init-rw-slot @ // { InitSlot ?o ?i Is( slot-spec ?s ) ?b } -- [ ?s read-only>> not ]
+! [ ?s name>> :>> ?n ] |
+! { SlotLoc ?x ?o ?n }
+! ! TODO: optimized:
+! ! { PushLoc ?x f L{ ?i } ?b t } ;
+! { PushLoc ?x f L{ ?i } ?b f } ;
+
+CHR: init-slot @ // { InitSlot ?o ?i Is( slot-spec ?s ) ?b } -- |
+{ SlotLoc ?x ?o ?s }
+! NOTE: ?a is a dummy state here?  Actually, it will be a circular pseudo-writeback like a slot read
+{ PushLoc ?x ?b L{ ?i } ?b f } ;
 
 GENERIC: read-only-slot? ( class n -- ? )
 M: string read-only-slot? swap all-slots [ name>> = ] with find nip
@@ -1079,9 +1107,9 @@ M: integer read-only-slot? swap all-slots [ offset>> = ] with find nip
 ! NOTE: there can be multiple ops on the read-only slot, so we have to convert all of them.
 ! Relying on the SlotLoc not being collected because it can not be live if there is no loc-op
 ! left marking it live.  Could also change the class of the slotloc predicate and not collect it?
-CHR: convert-read-only-slot-access @ { Instance ?o Is( class ?tau ) } { Eq ?m A{ ?n } }
-{ SlotLoc ?x ?o ?m } //
-<={ LocOp ?x ?a L{ ?v } ?b __ . __ } -- [ ?tau ?n read-only-slot? ] |
+CHR: convert-read-only-slot-access @ { Instance ?o Is( class ?tau ) }
+{ SlotLoc ?x ?o Is( slot-spec ?s ) } //
+<={ LocOp ?x ?a L{ ?v } ?b . __ } -- [ ?s read-only>> ] [ ?s name>> :>> ?n ] |
 [ ?a ?b ==! ] { Slot ?o ?n ?v } ;
 
 ! *** State and Locations via FMC semantics
@@ -1091,38 +1119,42 @@ CHR: convert-read-only-slot-access @ { Instance ?o Is( class ?tau ) } { Eq ?m A{
 CHR: unique-loc-pop @ { LocPop ?x ?a ?s ?b ?m ?u } // { LocPop ?x ?a ?s ?b ?m ?v } --
 [ ?u ?v [ >states members ] same? ] | ;
 
-CHR: same-loc-pop-same-loc-same-state @ { LocPop ?x ?a ?s __ __ __ } { LocPop ?x ?a ?r __ __ __ } // -- | [ ?s ?r ==! ] ;
-
-! CHR: remove-redundant-loc-reads @ // { LocPop ?x ?a ?s ?a ?m ?u } { PushLoc ?x ?a ?s ?a ?n } -- | ;
-
-! CHR: duplicate-loc-op-in @ // AS: ?p <={ LocOp ?x ?a __ __ __ . __ } AS: ?q <={ LocOp ?x ?b __ __ __ . __ } -- [ ?a ?b same-state? ] |
-! [ { ?p ?q "duplicate loc op in" } throw ] ;
-
-! CHR: duplicate-loc-op-out @ // AS: ?p <={ LocOp ?x __ __ ?a __ . __ } AS: ?q <={ LocOp ?x __ ?b __ . __ } -- [ ?a ?b same-state? ] |
-! [ { ?p ?q "duplicate loc op out" } throw ] ;
 
 ! *** Beta
 CHR: resolve-loc-op @ // <={ LocOp __ ?a L{ } ?b __ . __ } -- |
 [ ?a ?b ==! ] ;
 
-! Also TODO: translate that stuff into Nth...
-: valid-slot? ( length slot-num -- ? )
-    [ 1 - ] dip 2 - swap 0 swap between? ;
+! ! Also TODO: translate that stuff into Nth...
+! : valid-slot? ( length slot-num -- ? )
+!     [ 1 - ] dip 2 - swap 0 swap between? ;
 
 : pseudo-literal-eq ( lhs rhs -- pred )
     dup ground-value? [ <wrapper> ] when
     2dup [ term-var? ] both? [ ==! ] [ Instance boa ] if ;
 
 ! NOTE: literals are always local allocations, no? Yes, but sequencing will break if we don't keep track of the allocation state
-CHR: literal-resolve-numeric-loc-pop-request @ { LocalAllocation ?u ?o } { Eq ?o Is( not{ integer } ?a ) } { SlotLoc ?x ?o Is( integer ?n ) } //
+! TODO: unify both below rules, do sanity checks elsewhere (if at all)
+CHR: literal-resolve-slot-loc-pop-request @ { LocalAllocation ?u ?o } { Eq ?o Is( not{ integer } ?a ) } { SlotLoc ?x ?o A{ ?n } } //
 { LocPop ?x ?r L{ ?v } ?s t ?b } -- [ ?u ?b same-state? ] |
-[ ?a length ?n valid-slot?
-  [ ?a ?n slot ?v swap
-    pseudo-literal-eq
-    ?r ?s ==! 2array ]
-  [ P{ Invalid } ] if
+[ ?a ?n dup slot-spec? [ offset>> ] when slot
+  [ ?v swap pseudo-literal-eq 1array ] keep
+  local-alloc-val? [ P{ LocalAllocation ?u ?v } suffix ] when
+  ?r ?s ==! suffix
 ] ;
 
+! [ ?a length ?n valid-slot?
+!   [ ?a ?n slot
+!     [ ?v swap pseudo-literal-eq 1array ] keep
+!     local-alloc-val? [ P{ LocalAllocation ?u ?v } suffix ] when
+!     ?r ?s ==! suffix
+!   ]
+!   [ P{ Invalid } ] if
+! ] ;
+
+! TODO: extend this to local allocations.  In fact, maybe don't use the element mechanism, rather use a cyclic
+! loc-push like InitSlot, and set up the "value-info" of the slot location so that a local pushloc can be
+! resolved based on the slot number properties.  The element mechanism would be useful with the nth set-nth location
+! abstraction on the generic level.
 ! NOTE: this is a special case, since we are actually swapping the reduction order here locally
 ! The intuition is that theses local pushes are always preceeded by a loc-pop on that exact same location
 ! TODO: could still be the case that the allocation needs to be "transported" if the preceding loc-pop was transporting...
@@ -1138,10 +1170,11 @@ CHR: default-element-resolve-loc-pop-request @ { LocalAllocation ?a ?o } { Eleme
 [ ?l >states first ?a same-state? ] |
 [ ?w ?v ==! ] [ ?b ?c ==! ] ;
 
-! NOTE: keeping any circularities here because that represents a slot read!
+! NOTE: keeping any circularities here because that represents a slot read.  Note that two circularities with different
+! items represent parallel reads on the same object, and can be reduced
 CHR: beta-reduce-loc-push-pop @ //
 { PushLoc ?l ?a L{ ?x . ?v } ?b ?m } { LocPop ?l ?c L{ ?y . ?w } ?d ?n ?u } --
-[ ?u >states first ?b same-state? ] [ ?a ?d same-state? not ] |
+[ ?u >states first ?b same-state? ] [ ?a ?d same-state? L{ ?x . ?v } L{ ?y . ?w } == and not ] |
 [ ?x ?y ==! ]
 { PushLoc ?l ?a ?v ?b ?m } { LocPop ?l ?c ?w ?d ?n ?u } ;
 
@@ -1152,6 +1185,18 @@ CHR: independent-loc-op-extends-beta-chain @ <={ LocOp ?y ?a __ ?b ?m . __ } // 
 [ ?v ?a prefix :>> ?w ]
 |
 { LocPop ?x ?c ?s ?d ?n ?w } ;
+
+! **** Sanity check
+! NOTE: a rule like this should only be needed if parallel composition of read accesses is done
+! CHR: same-loc-pop-same-loc-same-state @ { LocPop ?x ?a ?s __ __ __ } { LocPop ?x ?a ?r __ __ __ } // -- | [ ?s ?r ==! ] ;
+
+! TODO: Move those checks to the end?
+! CHR: duplicate-loc-op-in @ // AS: ?p <={ LocOp ?x ?a __ __ __ . __ } AS: ?q <={ LocOp ?x ?b __ __ __ . __ } -- [ ?a ?b same-state? ] |
+! [ { ?p ?q "duplicate loc op in" } throw ] ;
+
+! CHR: duplicate-loc-op-out @ // AS: ?p <={ LocOp ?x __ __ ?a __ . __ } AS: ?q <={ LocOp ?x __ ?b __ . __ } -- [ ?a ?b same-state? ] |
+! [ { ?p ?q "duplicate loc op out" } throw ] ;
+
 
 ! **** Special cases
 

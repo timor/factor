@@ -39,6 +39,9 @@ clear-chr-cache
 [ intersection{ not{ cons-state } not{ L{ } } not{ list } } simplify-class ] unit-test
 
 ! ** Test Helpers
+: test-chr-type ( type quot -- )
+    [ get-type ] curry chr-test ; inline
+
 : chr-simp ( constraints -- constraint )
     P{ CompMode } suffix
     chr-comp swap [ run-chr-query solved-store ] with-var-names
@@ -61,7 +64,7 @@ TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ?i2 ?c1 ?a2 ?z2 ;
 TERM-VARS: ?c ?d ;
 TERM-VARS: ?q3 ?q5 ?p2 ?p3 ?c2 ?c3 ?a4 ?a6 ?b3 ?b4 ;
 TERM-VARS: ?a15 ?o3 ?v3 ;
-TERM-VARS: ?o5 ?a47 ?b34 ?v7 ;
+TERM-VARS: ?o5 ?b34 ?v7 ;
 TERM-VARS: ?y14 ?ys14 ?o25 ?a85 ?x17 ?rho31 ;
 
 P{ Effect L{ ?o3 . ?a6 } L{ ?v3 . ?c3 } { ?x1 ?b4 ?x2 }
@@ -193,6 +196,8 @@ P{ Effect L{ ?y . ?a } L{ ?x . ?a } f
 { t }
 [ [ number? 4 5 ? ] get-type Xor? ] unit-test
 
+[ drop f ] [ dup (clone) eq? ] test-same-type
+
 ! NOTE: those stupid drops are in there because otherwise we just
 ! get the wrapper type... meh
 { t } [ [ 1 drop 42 ] [ 40 2 + ] same-type? ] unit-test
@@ -253,22 +258,35 @@ P{ Effect ?a L{ ?x3 ?x3 . ?a } f { P{ Instance ?x3 word } P{ Eq ?x3 swap } } }
 [ [ \ swap dup ] get-type ] chr-test
 
 ! ** Effectful access
+! ro-slot access conversion
+
+{  }
+[ [ { cons-state } declare cdr>> ] get-type ] unit-test
+
+P{ Effect L{ ?y2 . ?ys2 } L{ ?v3 . ?ys2 } f { P{ Instance ?y2 curried } P{ Instance ?v3 object } P{ Slot ?y2 "obj" ?v3 } } }
+[ [ { curried } declare obj>> ] get-type ] chr-test
+
+[ { curried } declare obj>> ] [ { curried } declare 2 slot ] test-same-type
+
+P{ Effect L{ ?y2 . ?ys2 } L{ ?v3 . ?ys2 } { ?x ?b } {
+        P{ Instance ?y2 curried-effect }
+        P{ Instance ?v3 object }
+        P{ SlotLoc ?x ?y2 T{ slot-spec { name "obj" } { offset 2 } { class object } } }
+        P{ PushLoc ?x ?b L{ ?v3 } ?ys2 f }
+        P{ LocPop ?x ?ys2 L{ ?v3 } ?b f ?ys2 } } }
+[ [ { curried-effect } declare obj>> ] get-type ] chr-test
+
+[ { curried-effect } declare obj>> ] [ { curried-effect } declare 2 slot ] test-same-type
+
 ! Effect must survive
-P{
-    Effect
-    L{ ?o1 ?v1 . ?a1 }
-    ?c2
-    { ?x2 ?z2 ?b3 ?x3 }
-    {
+P{ Effect L{ ?o1 ?v1 . ?a1 } ?c2 { ?x2 ?z2 ?b3 } {
         P{ Instance ?o1 not{ fixnum } }
         P{ Instance ?v1 object }
-        P{ Eq ?x3 2 }
         P{ Instance ?x3 fixnum }
-        P{ SlotLoc ?x2 ?o1 ?x3 }
+        P{ SlotLoc ?x2 ?o1 2 }
         P{ PushLoc ?x2 ?b3 L{ ?v1 } ?c2 f }
-        P{ LocPop ?x2 ?a1 L{ ?z2 } ?b3 f ?a1 }
-    }
-} [ [ 2 set-slot ] get-type ] chr-test
+        P{ LocPop ?x2 ?a1 L{ ?z2 } ?b3 f ?a1 } } }
+[ [ 2 set-slot ] get-type ] chr-test
 
 ! Local allocations, writeback should be ignored
 P{ Effect ?a1 ?a1 f f }
@@ -329,6 +347,11 @@ P{
 }
 [ [ barslot>> ] get-type ] chr-test
 
+! TODO: improve
+{ t } [ [ barslot>> barslot>> ] get-type canonical? ] chr-test
+
+{  } [ footuple boa ] test-chr-type
+
 TUPLE: foo2 aslot { bslot read-only } ;
 
 P{ Effect L{ ?o . ?a } L{ ?v . ?a } f { P{ Slot ?o "bslot" ?v } P{ Instance ?v object } P{ Instance ?o foo2 } } }
@@ -342,6 +365,12 @@ P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y } {
        P{ Instance ?z object }
    }
  } [ [ bslot>> bslot>> ] get-type ] chr-test
+
+TUPLE: foo3 slot1 slot2 ;
+[ 42 33 ] [ 22 33 foo3 boa 42 >>slot1 [ slot1>> ] [ slot2>> ] bi ] test-same-type
+[ 42 69 ] [ 22 33 foo3 boa 42 >>slot1 69 >>slot2 [ slot1>> ] [ slot2>> ] bi ] test-same-type
+[ 42 69 ] [ 22 33 foo3 boa 69 >>slot2 42 >>slot1 [ slot1>> ] [ slot2>> ] bi ] test-same-type
+[ 69 42 ] [ 22 33 foo3 boa 69 >>slot2 42 >>slot1 [ slot2>> ] [ slot1>> ] bi ] test-same-type
 
 
 ! *** Infinite Structures
@@ -388,12 +417,12 @@ P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y } {
 { 1 } [ [ 0 get-local + ] get-type preds>> [ Sum? ] count ] unit-test
 { 1 } [ [ 0 get-local -1 get-local + ] get-type preds>> [ Sum? ] count ] unit-test
 
-! FIXME: fail due to missing implicit declarations
 { t } [ [ swap ] [| a b | b a ] same-type? ] unit-test
 { t } [ [ swap ] [| | :> a :> b a b ] same-type? ] unit-test
-{ t } [ [ swap swap drop ] [| | :> a :> b a ] same-type? ] unit-test
-{ t } [ [ swap swap drop ] [| a b | a ] same-type? ] unit-test
-{ t } [ [ nip ] [| a b | a ] same-type? ] unit-test
+[ swap swap drop ] [| | :> a :> b b ] test-same-type
+[ swap swap drop ] [| a b | a ]  test-same-type
+[ nip ] [| a b | b ] test-same-type
+[ nip ] [| | :> a :> b a ] test-same-type
 { t } [ [ + ] [| a b | a b + :> c c ] same-type? ] unit-test
 { t } [ [ + dup ] [ [ [| | :> a a + ] [ dup ] compose ] call call ] same-type? ] unit-test
 
@@ -423,8 +452,49 @@ P{ Effect L{ ?x . ?a } L{ ?x ?x ?x ?x . ?a } f { P{ Instance ?x object } } }
 P{ Effect L{ ?x . ?a } L{ ?x ?x ?x ?x ?x . ?a } f { P{ Instance ?x object } } }
 [ [| a! | a a a a a ] get-type ] chr-test
 
-! FIXME
-[| | :> a a 2 slot a 2 slot a 2 slot a 2 slot ]
+P{
+    Effect
+    L{ ?o . ?a }
+    L{ ?v ?v ?v ?v . ?a }
+    { ?x }
+    {
+        P{ Instance ?o not{ integer } }
+        P{ Instance ?v object }
+        P{ SlotLoc ?x ?o 2 }
+        P{ PushLoc ?x ?a L{ ?v } ?a f }
+        P{ LocPop ?x ?a L{ ?v } ?a f { L{ ?v ?v . ?a } L{ ?v ?v . ?a } L{ ?v ?v . ?a } } }
+    }
+}
+[| | :> a a 2 slot a 2 slot a 2 slot a 2 slot ] test-chr-type
+
+[ dup drop + ] [ dup 2 = [ + ] [ + ] if ] test-same-type
+
+[ drop ] [ 1array 2 slot drop ] test-same-type
+
+[ drop ] [ 1array 43 swap 2 set-slot ] test-same-type
+
+[ 1 drop f ] [ { 42 } { 42 } eq? ] test-same-type
+
+{ 1 1 1 }
+[ [ 1array 42 over 2 set-slot dup 2 slot over 2 slot ] get-type
+  preds>>
+  [ SlotLoc? count ]
+  [ PushLoc? count ]
+  [ LocalAllocation? count ] tri
+] test
+
+[ drop 42 dup ] [ 1array 42 over 2 set-slot dup 2 slot swap 2 slot ] test-same-type
+
+[ drop 1 ] [ footuple boa drop 1 ] test-same-type
+
+[ 1 drop 42 ] [ { { 42 } } array-first array-first ] test-same-type
+
+[ 1 drop 42 ] [ T{ footuple f 42 } barslot>> ] test-same-type
+
+P{ Effect ?a L{ ?v . ?a } f { P{ Instance ?v array } P{ Eq ?v { 42 } } P{ LocalAllocation ?a ?v } } }
+[ T{ footuple f { 42 } } barslot>> ] test-chr-type
+
+[ 1 drop 42 ] [ T{ footuple f T{ footuple f 42 } } barslot>> barslot>> ] test-same-type
 
 ! ** Nested local allocations
 { t } [ [ 1array ] [ 1array 1array 2 slot ] same-type? ] unit-test

@@ -23,9 +23,10 @@ PREFIX-RULES: { P{ CompMode } }
 
 ! *** Cloning
 
+! TODO: extend the eql and not-same spec to clone generic call
 ! NOTE: The class pred there has implied directional semantics here, not sure if that is important
 CHR: prim-call-clone @ // { PrimCall (clone) L{ ?x . ?a } L{ ?y . ?b } } -- |
-[ ?a ?b ==! ] { Eq ?x ?y } { LocalAllocation ?a ?y } { ClassPred ?y ?x class= } ;
+[ ?a ?b ==! ] { Eq ?x ?y } { LocalAllocation ?a ?y } { ClassPred ?y ?x class= } { NotSame ?x ?y } ;
 
 ! *** Locals
 ! [| a b | a ] -> [ 2 load-locals -1 get-local 2 drop-locals ]

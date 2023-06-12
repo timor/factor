@@ -285,7 +285,7 @@ M: tuple-class final-data-class? final-class? ;
 
 GENERIC: local-alloc-class? ( class -- ? )
 M: object local-alloc-class? all-slots empty? not ;
-M: word local-alloc-class? drop f ;
+! M: word local-alloc-class? drop f ;
 
 GENERIC: local-alloc-val? ( value -- ? )
 M: word local-alloc-val? drop f ;
