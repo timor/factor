@@ -10,6 +10,9 @@ IN: chr.factor.intra-effect
 
 ! * Simplification/Intra-Effect reasoning
 
+PREDICATE: ro-slot-spec < slot-spec read-only>> ;
+PREDICATE: rw-slot-spec < slot-spec read-only>> not ;
+
 CHRAT: chr-intra-effect { }
 
 CHR: invalid-stays-invalid @ { Invalid } // { Invalid } -- | ;
@@ -877,11 +880,18 @@ PREDICATE: callable-subclass < class callable class<= ;
 CHR: infer-literal-callable @ { Eq ?q Is( callable ?v ) } // { Instance ?q Is( callable-subclass ?tau ) } -- [ ?v quote-literals :>> ?w ] |
 { ?DeferTypeOf ?w ?rho } { Instance ?q ?rho } ;
 
-CHR: call-destructs-curry @ { Instance ?q curried } { Slot ?q "quot" ?p } { Slot ?q "obj" ?x } // { CallEffect ?q ?a ?b } -- |
-{ CallEffect ?p L{ ?x . ?a } ?b } ;
+! NOTE: These should eventually be removed when generic methods are stable enough to reason through the dispatch of call...
+CHR: call-destructs-curry @ { Instance ?q curried }
+{ Slot ?q Is( slot-spec ?r ) ?p } { Slot ?q Is( slot-spec ?s ) ?x } // { CallEffect ?q ?a ?b } --
+[ ?r name>> "quot" = ]
+[ ?s name>> "obj" = ]
+| { CallEffect ?p L{ ?x . ?a } ?b } ;
 
-CHR: call-destructs-composed @ { Instance ?p composed } { Slot ?p "first" ?q } { Slot ?p "second" ?r } // { CallEffect ?p ?a ?b } -- |
-{ CallEffect ?q ?a ?rho } { CallEffect ?r ?rho ?b } ;
+CHR: call-destructs-composed @ { Instance ?p composed }
+{ Slot ?p Is( slot-spec ?r ) ?q } { Slot ?p Is( slot-spec ?s ) ?u } // { CallEffect ?p ?a ?b } --
+[ ?r name>> "first" = ]
+[ ?s name>> "second" = ]
+| { CallEffect ?q ?a ?rho } { CallEffect ?u ?rho ?b } ;
 
 ! *** Declarations
 ! TODO: why are there Ensure and Declare?
@@ -1061,18 +1071,26 @@ CHR: known-generic-input/output @ { Eq ?n A{ ?v } } // { GenericDispatch ?w ?d ?
 ! PREDICATE: class-with-slots < class all-slots empty? not ;
 GENERIC: get-slot-spec ( class n -- ? )
 
-CHR: convert-to-named-slot @ { Instance ?o Is( class ?tau ) } // { Slot ?o Is( union{ string integer } ?n ) ?v } --
+! Convert a formerly unknown slot access into one with a valid slot specification known
+CHR: convert-to-specced-slot @ { Instance ?o Is( class ?tau ) } // { Slot ?o Is( integer ?n ) ?v } --
 [ ?tau ?n get-slot-spec :>> ?s ]
 ! [ ?tau tuple-class? ]
 ! [ ?tau all-slots [ offset>> ?n = ] find nip :>> ?s ] ! [ ?s name>> :>> ?m ]
-[ ?s class>> :>> ?rho ]
+! [ ?s class>> :>> ?rho ]
 |
 ! { Slot ?o ?m ?v }
-{ Slot ?o ?s ?v }
-{ DeclaredInstance ?v ?rho } ;
+{ Slot ?o ?s ?v } ;
+! { DeclaredInstance ?v ?rho } ;
 
 M: string get-slot-spec swap all-slots [ name>> = ] with find nip ;
 M: integer get-slot-spec swap all-slots [ offset>> = ] with find nip ;
+
+! NOTE: this would probably be called A LOT, and can result in activating predicate-type inference repeatedly in
+! every compose...
+! Factor semantics is to insert the declare in the slot accessor, i.e. after method resolution, which
+! probably makes much more sense in general...
+! CHR: declare-slot-val-on-access @ { Slot ?o Is( slot-spec ?s ) ?x } <={ LocOp ?x __ L{ ?v } . __ } -- [ ?s class>> :>> ?rho ] |
+! { DeclaredInstance ?v ?rho }
 
 ! CHR: eql-obj-slot-is-same-loc @ { SlotLoc ?x ?o ?n } <={ Eql ?n ?m } // { SlotLoc ?y ?o ?m } -- |
 ! [ ?y ?x ==! ] ;
@@ -1150,9 +1168,18 @@ M: integer read-only-slot? swap all-slots [ offset>> = ] with find nip
 ! { SlotLoc ?x ?o Is( slot-spec ?s ) } //
 ! <={ LocOp ?x ?a L{ ?v } ?b . __ } -- [ ?s read-only>> ] [ ?s name>> :>> ?n ] |
 ! [ ?a ?b ==! ] { Slot ?o ?n ?v } ;
-CHR: collapse-read-only-slot-access @ { Slot ?o Is( slot-spec ?s ) ?x } //
-<={ LocOp ?x ?a L{ ?v } ?b . __ } -- [ ?s read-only>> ] [ ?s name>> :>> ?n ] |
-[ ?a ?b ==! ] ;
+! NOTE: overloading the Slot predicate's location to point to a value var if the spec is read-only!
+CHR: collapse-read-only-slot-read @ { Slot ?o Is( ro-slot-spec ?s ) ?x } //
+<={ LocPop ?x ?a L{ ?v } ?b . __ } -- |
+[ ?a ?b ==! ] [ ?v ?x ==! ] ;
+
+! NOTE: invalid ro-slot writes are not caught.  Factor allows the as unsafe, but no writers are generated so there
+! is no real way of writing code that does that...
+CHR: collapse-read-only-slot-write @ { Slot ?o Is( ro-slot-spec ?s ) ?x } //
+<={ PushLoc ?x ?a L{ ?v } ?b . __ } -- |
+[ ?a ?b ==! ] [ ?v ?x ==! ] ;
+
+
 
 ! NOTE: this is kind of the sledge-hammer version... converting a literal to slot predicates only... might be nicer to only do that to the slots in question...
 ! CHR: unboa-literal-allocation @ { LocalAllocation ?u ?o } { Instance ?o Is( not{ ro-tuple-class } ?tau ) } { SlotLoc ?x ?o __ } <={ LocOp ?x ?a . __ } // { Eq ?o A{ ?l } } --

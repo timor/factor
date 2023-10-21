@@ -258,9 +258,10 @@ TUPLE: expr-pred < chr-pred val ;
 ! Reasoning helper to expand Slot Initializations
 TUPLE: InitSlot < chr-pred obj-val in-val slot-spec out-state ;
 
-! Slot values, only apply to read-only slots, really,
-! because only those are state-independent
-TUPLE: Slot < val-pred n slot-val ;
+! NOTE: This has been changed to refer to the location, but in case of read-only specs
+! the location is actually a value position!
+! NOTE: n is actually a slot spec!
+TUPLE: Slot < val-pred n loc ;
 ! Used as pseudo-slot to match identity
 ! SINGLETON: +lit+
 ! TUPLE: Slots < val-pred map ;
@@ -334,6 +335,7 @@ TUPLE: WriteSlot < slot-pred in out ;
 
 
 TUPLE: LocSpec < chr-pred loc ;
+! NOTE: SlotLoc seems to have been replaced completely by Slot...
 TUPLE: SlotLoc < LocSpec obj n-val ;
 ! TODO: use?
 TUPLE: NthLoc < LocSpec obj n-val ;

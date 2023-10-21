@@ -129,9 +129,9 @@ M: commutative-op imply-def ( def pred -- modes )
       [ nip swap subset? not ]
       [ nipd Imply boa ] } 3&& ;
 
-! If the object and the slot is defined, the slot value is defined
+! If the object and the slot is defined, the slot location is defined
 M: Slot imply-def ( def pred -- modes )
-    [ val>> ] [ n>> 2array ] [ slot-val>> ] tri
+    [ val>> ] [ n>> 2array ] [ loc>> ] tri
     maybe-make-imply ;
 ! ! If the slot and the object is defined, the location is defined
 ! M: SlotLoc imply-def

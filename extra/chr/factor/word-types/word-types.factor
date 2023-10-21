@@ -174,7 +174,7 @@ CHR: type-of-instance? @ { TypeOfWord instance? M{ ?tau } } // -- |
 
 ! : <array> ( n elt -- array )
 ! NOTE: introducing a virtual "default" location
-! Too complicated.  Treat the Element thing as default location itself
+! NOTE2: Nope, too complicated.  Treat the Element thing as default location itself for now
 CHR: type-of-<array> @ { TypeOfWord <array> M{ ?tau } } // -- |
 [ ?tau
   P{ Effect L{ ?v ?n . ?r } L{ ?a . ?r } f {
@@ -207,8 +207,6 @@ CHR: type-of-<array> @ { TypeOfWord <array> M{ ?tau } } // -- |
 !          P{ Nth ?v ?l ?n }
 !      } }
 !   ==! ] ;
-
-! TODO: convert slot accesses to ro-slots! (optimization)
 
 ! : slot ( obj m -- value )
 CHR: type-of-slot @ { TypeOfWord slot M{ ?tau } } // -- |

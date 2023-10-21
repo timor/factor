@@ -2,7 +2,7 @@ USING: accessors arrays assocs chr.factor chr.factor.composition
 chr.factor.effects chr.factor.intra-effect.liveness chr.factor.phi
 chr.factor.util chr.parser chr.state chr.test classes classes.tuple combinators
 combinators.short-circuit grouping kernel kernel.private layouts lists literals
-locals.backend math math.private namespaces quotations sequences slots
+locals.backend math math.private namespaces quotations quotations.private sequences slots
 slots.private stack-checker.values strings terms tools.test typed types.util
 words ;
 
@@ -56,7 +56,7 @@ clear-chr-cache
 
 TYPED: array-first ( arr: array -- thing ) 2 slot ;
 
-TERM-VARS: ?o ?a ?b ?v ?w ?x ?y ?z ;
+TERM-VARS: ?o ?a ?b ?b1 ?v ?w ?x ?y ?z ;
 TERM-VARS: ?y2 ?ys2 ?o4 ?a43 ?y6 ?ys6 ;
 TERM-VARS: ?y1 ?ys1 ?x1 ?v1 ?x2 ?x3 ?rho1 ?rho2 ?rho3 ?o1 ?a1 ;
 TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ?i2 ?c1 ?a2 ?z2 ;
@@ -70,7 +70,7 @@ P{ Effect L{ ?o3 . ?a6 } L{ ?v3 . ?a6 } { ?x1 ?b4 }
     {
         P{ Instance ?o3 array }
         P{ Instance ?v3 object }
-        P{ SlotLoc ?x1 ?o3 2 }
+        P{ Slot ?o3 2 ?x1 }
         P{ LocPop ?x1 ?a6 L{ ?v3 } ?b4 f ?a6 }
         P{ PushLoc ?x1 ?b4 L{ ?v3 } ?a6 f } } }
 [ \ array-first get-type ] chr-test
@@ -165,6 +165,20 @@ P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } f { P{ Instance ?x number } P{ Instance ?
 ! Seems to be fixed...
 { t }
 [ [ [ [ if ] ] ]  [ [ [ [ if ] ] ] (call) ] same-type? ] unit-test
+
+P{ Effect
+   L{ ?x1 ?o1 . ?b1 } L{ ?x1 ?o1 . ?b1 } f {
+       P{ Instance ?x1 callable }
+       P{ Instance ?o1 object } } }
+[ curry uncurry ] test-chr-type
+
+P{ Effect
+   L{ ?x1 ?o1 . ?b1 } L{ ?x1 ?o1 . ?b1 } f {
+       P{ Instance ?x1 callable }
+       P{ Instance ?o1 callable } } }
+[ compose uncompose ] test-chr-type
+
+[ 42 ] [ 42 [ ] curry call ] test-same-type
 
 [ swap swap swap ] [ [ swap ] curry curry call ] test-same-type
 ! NOTE: This is interesting: because we have [ ? ] as basis, we don't enforce
