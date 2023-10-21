@@ -150,7 +150,7 @@ CHR: resolved-all-recursions @ // { TypeOfWord ?w ?rho } { CallsRecursive ?w { }
 [ ?rho full-type? ] |
 { ReinferEffect ?rho ?sig }
 { CheckXor ?w ?sig ?tau }
-[ ?tau f lift canonical? [ { ?tau "assumed non-recursive not canonical after resolution!" } throw ] unless f ]
+[ \ ?tau ?ground-value dup canonical? [ "assumed non-recursive not canonical after resolution!" 2array throw ] unless drop f ]
 { TypeOfWord ?w ?tau } ;
 
 ! ! NOTE: this is probably not needed if the other version is used
@@ -168,7 +168,7 @@ CHR: resolve-single-recursion @ // { TypeOfWord ?w ?rho } { CallsRecursive ?w { 
 | { CheckFixpoint ?w ?rho }
 { ReinferEffect ?rho ?sig }
 { CheckXor ?w ?sig ?tau }
-[ ?tau f lift canonical? [ { ?tau "single recursive not canonical after resolution!" } throw ] unless f ]
+[ \ ?tau ?ground-value dup canonical? [ "single recursive not canonical after resolution!" 2array throw ] unless drop f ]
 { TypeOfWord ?w ?tau } ;
 
 CHR: remove-resolved-fixpoint-type @ { TypeOfWord ?w ?rho } // { FixpointTypeOf ?w __ } -- [ ?rho canonical? ] | ;
@@ -199,19 +199,29 @@ CHR: elim-mutual-recursion-dependency @ { TypeOfWord ?v ?rho } { TypeOfWord ?w ?
 
 ! ** Call types from word types
 
-! This is here because there could be a dispatch expansion hidden, which we don't perform in the word type itself
-CHR: have-type-of-generic-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // --
-[ ?w generic? ]
-[ ?rho canonical? ] |
-{ ReinferEffect ?rho ?z }
-{ CheckXor ?q ?z ?tau }
-{ TypeOf [ ?w ] ?tau } ;
+! ! This is here because there could be a dispatch expansion hidden, which we don't perform in the word type itself
+! CHR: have-type-of-generic-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // --
+! [ ?w generic? ]
+! [ ?rho canonical? ] |
+! { ReinferEffect ?rho ?z }
+! { CheckXor ?q ?z ?tau }
+! { TypeOf [ ?w ] ?tau } ;
 
 ! TODO: Could do the input/output class handling here!
 CHR: have-type-of-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // --
-[ ?w generic? not ]
+! [ ?w generic? not ]
 [ ?rho canonical? ]
+[ ?rho unresolved-declarations? not ]
 | { TypeOf [ ?w ] ?rho } ;
+
+CHR: canonicalize-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // --
+! [ ?w generic? not ]
+[ ?rho canonical? ]
+[ ?rho unresolved-declarations? ] |
+{ ReinferEffect ?rho ?a }
+{ CheckXor ?w ?a ?tau }
+[ \ ?tau ?ground-value dup unresolved-declarations? [ "word call has unresolved declarations after re-infer!" 2array throw ] [ drop ] if f ]
+{ TypeOf [ ?w ] ?tau } ;
 
 IMPORT: chr-word-types
 
@@ -294,8 +304,11 @@ ERROR: invalid-type-solver-result store ;
     cache-types? get type-solver-state get-global and
     [ check-type-solver-state ] [ chr-comp ] if ;
 
+! FIXME: quote-literals is a bit of a hack because of unstable index keys for the typeof predicates?
+! underlying issue is to ensure that we don't match type queries on literals with different identities
 ! Interactive short cut
 : qt ( quot -- res )
+    quote-literals
     InferType boa 1array prog-or-state swap [ run-chr-query
                                          dup maybe-save-solver-state
                                          solved-store ] with-var-names ;
@@ -309,6 +322,7 @@ ERROR: invalid-type-solver-result store ;
 GENERIC: get-type ( quot -- type )
 
 M: callable get-type
+    quote-literals
     [ qt values [ TypeOf? ] filter ]
     [ [ swap key>> = ] curry find nip ] bi
     dup [ type>> ] when ;

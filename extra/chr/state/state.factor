@@ -3,6 +3,7 @@ chr.programs.incremental classes classes.algebra colors.constants
 combinators.private combinators.short-circuit combinators.smart continuations
 hash-sets hashtables io.styles kernel linked-assocs lists make match math
 math.order math.parser namespaces persistent.assocs prettyprint
+hashtables.identity.private
 prettyprint.custom prettyprint.sections quotations sequences
 sequences.generalizations sets sorting system terms typed words ;
 
@@ -38,6 +39,13 @@ SYMBOL: active-rule-firing
 SYMBOL: lookup-index
 
 DEFER: alive?
+
+! : hashlookup. ( obj --  )
+!     dup { [ array? ] [ length 2 = ] [ second identity-wrapper? ]
+!           [ second underlying>> callable? ]
+!     } 1&&
+!     [ [ . ] [ hashcode . ] bi ]
+!     [ drop ] if ;
 
 : lookup-update-index-entry ( seq -- seq )
     dup [ [ alive? ] filter! ] when
@@ -180,7 +188,8 @@ ERROR: cannot-make-equal lhs rhs ;
     dup lookup-index-key
     ! { [  ]
     !   [ ?ground-value term-var? ] } 1&&
-    [ [ class-of ] dip 2array lookup-index get add-to-lookup-index ]
+    [ [ class-of ] dip 2array
+      lookup-index get add-to-lookup-index ]
     [ 2drop ] if* ; inline
 
 : store-chr ( chr-susp -- )
@@ -665,7 +674,9 @@ SYMBOL: sentinel
 !     sentinel inc ;
 
 : recursion-check ( -- )
-    queue get length 1000 > [ "runaway" throw ] when ;
+    ! queue get length 1000 > [ "runaway" throw ] when ;
+    ! queue get length 2000 > [ "runaway" throw ] when ;
+    queue get length 3000 > [ "runaway" throw ] when ;
     ! ! sentinel get 5000 > [ "runaway" throw ] when
     ! sentinel get 500 > [ "runaway" throw ] when
     ! sentinel inc ;
@@ -807,9 +818,10 @@ M: generator activate-new
 
 M: true activate-new 2drop ;
 
-M: callable activate-new ( quot effect -- )
-    ! recursion-check
-    ! call( -- new )
+M: callable activate-new ( rule quot -- )
+    ! NOTE: this messes up dynamic bindings in bodies?
+    ! f lift ! added so that existential vars can be used in bodies
+
     ( -- new ) call-effect-unsafe
     pred>constraint
     ! reactivate-all
@@ -833,6 +845,7 @@ CONSTANT: state-vars
 : init-chr-scope ( rules -- )
     init-chr-prog program set
     LH{ } clone store set
+    ! IH{ } clone <linked-assoc> lookup-index set
     LH{ } clone lookup-index set
     ! <builtins-suspension> builtins store get set-at
     update-local-vars

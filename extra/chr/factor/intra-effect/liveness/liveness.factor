@@ -1,5 +1,6 @@
-USING: accessors arrays chr.factor chr.factor.util chr.parser classes
-classes.tuple combinators.short-circuit kernel lists sequences sets terms ;
+USING: accessors arrays chr.factor chr.factor.util chr.parser classes.tuple
+combinators.short-circuit kernel sequences sequences.generalizations sets terms
+;
 
 IN: chr.factor.intra-effect.liveness
 
@@ -62,6 +63,7 @@ CHR: merge-use-set @ // { Use ?x } { Use ?y } -- [ ?x ?y union :>> ?z ]
 | { Use ?z } ;
 
 CHR: new-sub-scope @ // { SubScope ?i ?o } --
+! NOTE: including state vars only for the loopvar of iterated here!
 ! [ ?i value-vars :>> ?l ] [ ?o value-vars :>> ?r ]
 [ ?i vars :>> ?l ] [ ?o vars :>> ?r ]
 [ ?l ?r union :>> ?v ] | { Live ?v } { Use ?l } { Def ?r } ;
@@ -74,14 +76,28 @@ CHR: new-scope @ // { Scope ?i ?o } --
 ! ** Dependency Generation
 ! *** Unconditional
 UNION: call-pred CallRecursive CallEffect CallXorEffect PrimCall GenericDispatch ;
+GENERIC: pred-scopes ( pred -- preds )
+M: body-pred pred-scopes drop f ;
+M: call-pred pred-scopes [ in>> ] [ out>> ] bi SubScope boa ;
+M:: Iterated pred-scopes ( pred -- preds )
+    pred tuple-slots rest 5 firstn :> ( i b c d o )
+    { P{ SubScope i d }
+      P{ SubScope d o }
+      P{ Scope b c }
+    } ;
+
 GENERIC: pred-def-use ( pred -- defs uses )
 M: body-pred pred-def-use drop f f ;
-M: call-pred pred-def-use [ out>> ] [ in>> ] bi [ value-vars ] bi@ ;
-M: CallEffect pred-def-use
-    [ call-next-method ] keep thing>> suffix ;
+M: CallEffect pred-def-use thing>> 1array f swap ;
 M: LocalAllocation pred-def-use obj>> 1array f ;
 M: Eq pred-def-use dup val2>> term-var? not
     [ val>> 1array ] [ drop f ] if f ;
+! CHR: collect-iterated @ { Live __ } // AS: ?p <={ Iterated __ { ?i ?b ?c ?d ?o } } -- |
+! { Collect ?p }
+! { SubScope ?i ?d }
+! { SubScope ?d ?o }
+! { Scope ?b ?c } ;
+
 
 ! CHR: body-pred-def-use-live @ AS: ?p <={ body-pred } // { Live ?l } -- [ ?p pred-def-use :>> { ?a ?b } [ empty? ] both? not ] [ ?a ?b [ ?l subset? ] both? not ] |
 ! [ ?a ?b append ?l union Live boa ] ;
@@ -92,8 +108,10 @@ CHR: body-pred-defs @ AS: ?p <={ body-pred } // { Def ?l } -- [ ?p pred-def-use 
 CHR: body-pred-uses @ AS: ?p <={ body-pred } // { Use ?l } -- [ ?p pred-def-use nip :>> ?x ?l subset? not ] |
 [ ?l ?x union Use boa ] ;
 
-CHR: call-pred-io-is-live @ AS: ?p <={ call-pred } // { Live ?l } -- [ ?p pred-def-use :>> { ?a ?b } [ ?l subset? ] both? not ] |
-[ ?a ?b append ?l union Live boa ] ;
+CHR: body-pred-scopes @ AS: ?p <={ body-pred } // -- [ ?p pred-scopes :>> ?l ] | [ ?l ] ;
+
+! CHR: call-pred-io-is-live @ AS: ?p <={ call-pred } // { Live ?l } -- [ ?p pred-def-use :>> { ?a ?b } [ ?l subset? ] both? not ] |
+! [ ?a ?b append ?l union Live boa ] ;
 
 ! *** Conditional
 
@@ -111,13 +129,14 @@ M: commutative-op imply-def ( def pred -- modes )
       [ nip swap subset? not ]
       [ nipd Imply boa ] } 3&& ;
 
+! If the object and the slot is defined, the slot value is defined
 M: Slot imply-def ( def pred -- modes )
-    [ val>> ] [ n>> 2array ] [ val>> ] tri
+    [ val>> ] [ n>> 2array ] [ slot-val>> ] tri
     maybe-make-imply ;
-! If the slot and the object is defined, the location is defined
-M: SlotLoc imply-def
-    [ obj>> ] [ n-val>> 2array ] [ loc>> ] tri
-    maybe-make-imply ;
+! ! If the slot and the object is defined, the location is defined
+! M: SlotLoc imply-def
+!     [ obj>> ] [ n-val>> 2array ] [ loc>> ] tri
+!     maybe-make-imply ;
 
 ! ! If the location is defined, the item is defined.
 ! ! NOTE: Probably have to change this to unconditional use of the item?
@@ -126,10 +145,19 @@ M: SlotLoc imply-def
 !     [ loc>> ] [ item>> ] bi maybe-make-imply ;
 M: MacroCall imply-def
     [ args>> ] [ out-quot-val>> ] bi maybe-make-imply ;
-M: Eq imply-def
+: rel-pred-imply-def ( def pred -- modes )
     [ val>> ] [ val2>> ] bi
     [ maybe-make-imply ]
     [ swap maybe-make-imply ] 3bi xor ;
+! NOTE: Eq is really a def, but Eql also to some extent
+M: Eql imply-def rel-pred-imply-def ;
+! M: NotSame imply-def rel-pred-imply-def ;
+! This is a one-way thing.  If we know something has been cloned, then it is defined
+! by the original.  So any modifications to the original prior to cloning will define
+! properties of the clone.  The other way round is not true.  Kind of one-way eql semantics
+! NOTE: while the definition implication might be correct, the associated use implication might not necessarily be so
+! Currently not losing the cloning predicate on things like [ 54 1array (clone) ]
+M: Cloned imply-def [ val2>> ] [ val>> ] bi maybe-make-imply ;
 
 CHR: def-used-is-live @ { Def ?l } { Use ?r } // { Live ?v } --
 [ ?l ?r intersect :>> ?a empty? not ] [ ?a ?v diff :>> ?b empty? not ]
@@ -153,21 +181,25 @@ CHR: used-val-pred-used-by-value @ AS: ?p <={ val-pred ?x . ?a } // { Use ?r } -
 [ ?b ?r union Use boa ] ;
 
 ! ! This makes sure to keep all "attached" predicates to a value
-! CHR: live-val-pred-is-live @ { Live ?v } <={ val-pred ?x . ?r } // -- [ ?x ?v in? ] [ ?r vars ?v diff :>> ?y empty? not ] |
-! { Live ?y } ;
+CHR: live-val-pred-is-live @ { Live ?v } <={ val-pred ?x . ?r } // -- [ ?x ?v in? ] [ ?r vars ?v diff :>> ?y empty? not ] |
+{ Live ?y } ;
+
 ! TODO: might need better generalization! either to expr preds, or to all?
 ! NOTE: this reasoning might need to be transitive! In that case, might actually need more cones?
 ! No! having the rel-preds being too contagious was actually a problem for loop var stuff!
 ! CHR: live-val-uses-rel-preds @ <={ rel-pred M{ ?x } M{ ?y } . __ } // { Live ?v } --
-CHR: notsame-live-modes @ { NotSame ?x ?y } // { Live ?v } --
-[ ?x ?v in?  ?y ?v in? not and :>> ?a
-  ?y ?v in?  ?x ?v in? not and xor ] |
-[ ?v ?a ?y ?x ? suffix Live boa ] ;
+
+! FIXME: deactivating this because it keeps hidden state alive?
+! CHR: notsame-live-modes @ { NotSame M{ ?x } M{ ?y } } // { Live ?v } --
+! [ ?x ?v in?  ?y ?v in? not and :>> ?a
+!   ?y ?v in?  ?x ?v in? not and xor ] |
+! [ ?v ?a ?y ?x ? suffix Live boa ] ;
 
 
-! TODO: Extend this to slot-locs, since they are not val-preds
-CHR: used-object-uses-slot-loc @ { SlotLoc ?x ?o __ } // { Use ?r } -- [ ?o ?r in? ] [ ?x ?r in? not ] |
-[ ?r ?x suffix Use boa ] ;
+! ! FIXME: This could be wrong if slotlocs are only to be included via loc-ops?
+! ! Not really sure which test would fail because of this being present.  Might even be necessary to have this as implication?
+! CHR: used-object-uses-slot-loc @ { SlotLoc ?x ?o __ } <={ LocOp ?x . __ } // { Use ?r } -- [ ?o ?r in? ] [ ?x ?r in? not ] |
+! [ ?r ?x suffix Use boa ] ;
 
 ! set-slot must be live:
 ! object is defined but not used
@@ -187,13 +219,19 @@ CHR: used-object-uses-slot-loc @ { SlotLoc ?x ?o __ } // { Use ?r } -- [ ?o ?r i
 ! [ (clone) 2 slot ] loc-pop must be live:
 ! - local loc-pop
 ! thus: any loc-pop must always be live. -> all loc-ops except for local loc-pushes unconditionally use the location
-CHR: loc-op-must-use-loc @ AS: ?p <={ LocOp M{ ?x } __ ?s __ ?m . __ } // { Use ?l } -- [ ?s vars ?l subset? ?x ?l in? and not ]
-[ ?m not ?p LocPop? or ] | [ ?s vars ?x suffix ?l union Use boa ] ;
+! CHR: loc-op-must-use-loc @ AS: ?p <={ LocOp M{ ?x } __ ?s __ ?m . __ } // { Use ?l } -- [ ?s vars ?l subset? ?x ?l in? and not ]
+! [ ?m not ?p LocPop? or ] | [ ?s vars ?x suffix ?l union Use boa ] ;
 
-CHR: live-loc-pop-defs @ { LocPop ?x __ ?s __ __ __ } { Use ?r } // { Def ?l } -- [ ?x vars ?r subset? ] [ ?s vars :>> ?b ?l subset? not ] |
+! CHR: used-loc-pop-defs-item @ { LocPop ?x __ ?s __ __ __ } { Use ?r } // { Def ?l } -- [ ?x vars ?r subset? ] [ ?s vars :>> ?b ?l subset? not ] |
+! [ ?l ?b union Def boa ] ;
+
+! CHR: used-push-loc-uses-item @ { PushLoc ?x __ ?s __ __ } // { Use ?r } -- [ ?x vars ?r subset? ] [ ?s vars :>> ?b ?r subset? not ] |
+! [ ?r ?b union Use boa ] ;
+
+CHR: live-loc-pop-defs-item @ { LocPop M{ ?x } __ ?s __ __ __ } { Live ?v } // { Def ?l } -- [ ?x ?v in? ] [ ?s vars :>> ?b ?l subset? not ] |
 [ ?l ?b union Def boa ] ;
 
-CHR: live-push-loc-uses @ { PushLoc ?x __ ?s __ __ } // { Use ?r } -- [ ?x vars ?r subset? ] [ ?s vars :>> ?b ?r subset? not ] |
+CHR: live-push-loc-uses-item @ { PushLoc M{ ?x } __ ?s __ __ } { Live ?v } // { Use ?r } -- [ ?x ?v in? ] [ ?s vars :>> ?b ?r subset? not ] |
 [ ?r ?b union Use boa ] ;
 
 
@@ -203,6 +241,7 @@ PREFIX-RULES: { P{ Collection } }
 ! "Liveness Anchor"
 GENERIC: upper-scope-vars ( pred -- term )
 M: body-pred upper-scope-vars ;
+M: Cloned upper-scope-vars [ val>> ] [ val2>> ] bi 2array ;
 M: Instance upper-scope-vars val>> ;
 M: DeclareStack upper-scope-vars classes>> ;
 M: LocalAllocation upper-scope-vars obj>> ;
@@ -213,6 +252,7 @@ M: CallEffect upper-scope-vars thing>> ;
 M: CallRecursive upper-scope-vars drop { } ;
 M: CallXorEffect upper-scope-vars drop { } ;
 M: PrimCall upper-scope-vars [ in>> ] [ out>> ] bi [ value-vars ] bi@ 2array ;
+M: Iterated upper-scope-vars drop { } ;
 
 CHR: collect-covered-body-pred @ { Live ?a } // AS: ?p <={ body-pred } --
 [ ?p upper-scope-vars [ vars :>> ?v drop ] keep ] ! [ ?v empty? not ]

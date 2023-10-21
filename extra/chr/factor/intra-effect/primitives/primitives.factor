@@ -1,5 +1,5 @@
 USING: arrays chr.factor chr.parser chr.state classes.algebra kernel lists
-locals.backend math math.private sequences sets terms types.util ;
+locals.backend math math.private sequences sets terms types.util words ;
 
 IN: chr.factor.intra-effect.primitives
 
@@ -11,7 +11,10 @@ CHRAT: chr-factor-prim { }
 ! *** Math Prim Conversions
 ! Instances have already been defined at this point
 CHR: prim-call-fixnum+fast @ // { PrimCall fixnum+fast L{ ?y ?x . ?a } L{ ?z . ?b } } --
-[ ?a ?b ==! ] | { Sum ?z ?x ?y } ;
+| [ ?a ?b ==! ] { Sum ?z ?x ?y } ;
+
+CHR: prim-call-fixnum-fast @ // { PrimCall fixnum-fast L{ ?y ?x . ?a } L{ ?z . ?b } } --
+| [ ?a ?b ==! ] { Sum ?x ?y ?z } ;
 
 ! FIXME: pred args are stacks now
 CHR: prim-call-bitnot @ // { PrimCall ?w { ?x } { ?y } } -- [ ?w { bignum-bitnot fixnum-bitnot } in? ] | { BitNot ?y ?x } ;
@@ -24,9 +27,15 @@ PREFIX-RULES: { P{ CompMode } }
 ! *** Cloning
 
 ! TODO: extend the eql and not-same spec to clone generic call
-! NOTE: The class pred there has implied directional semantics here, not sure if that is important
+! Actually, (clone) is NOT required to return something that cannot be eq!  That would only be
+! true for allocations.  However, we still assume that because sane code should never call (clone) on fixnums or f
+! If that distinction is really needed, this needs to be expanded into an xor type based on the input classes.
+! Things using (clone) at the time of coding: array, byte-array, string, callstack, growable, hash-set, hashtable
+! timestamp, tuple (all methods of clone), M\ tuple-class new
+! NOTE: The class pred has implied directional semantics here, not sure if that is important
 CHR: prim-call-clone @ // { PrimCall (clone) L{ ?x . ?a } L{ ?y . ?b } } -- |
-[ ?a ?b ==! ] { Eq ?x ?y } { LocalAllocation ?a ?y } { ClassPred ?y ?x class= } { NotSame ?x ?y } ;
+! [ ?a ?b ==! ] { Eql ?x ?y } { LocalAllocation ?a ?y } { ClassPred ?y ?x class= } { NotSame ?x ?y } ;
+[ ?a ?b ==! ] { Cloned ?y ?x ?a } { ClassPred ?y ?x class= } { NotSame ?x ?y } ;
 
 ! *** Locals
 ! [| a b | a ] -> [ 2 load-locals -1 get-local 2 drop-locals ]

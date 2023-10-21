@@ -21,7 +21,20 @@ PREDICATE: callable-word < word { [ symbol? not ] } 1&& ;
 ! 2. Another one could be to only expand calls to eq? until both arguments are presented in the input
 ! 3. Yet another: Don't treat eq as expr-preds, but transport using Lit instead?
 ! 4. Maybe change term matcher to only match eq literals? At least in certain predicates?
-
+! 5. don't use identical term-var in the input of eq?, use StrictEq predicate instead.
+!    so far, the input to eq? is the only case where we want to match into two things
+!    being eq, and detect that they aren't.  This seems to be impossible to express using
+!    the same term-var, which pre-supposes the values are eq by definition.
+! FIXME:
+! All the approaches have the same problem of having to cache on identities for all uses of literals.  This
+! includes declarations, combinators, etc. who have to be cached and expanded everytime.  It is probably better
+! to not support inference of literal eq'ness for all types of allocations.  For things like words and fixnums, this
+! is guaranteed by eql's anyways, and using a literal tuple or array's identity to distinguish between stuff in possibly disjoint
+! types doesn't really seem sane style in the first place...
+! Note that this might have influence on quotation decomposition though, to make sure that e.g. [ { foo } dup eq? ]
+! is assigned the same type regardless of composing [ { foo } dup ] with [ eq? ] or [ { foo } ] with [ dup eq? ], respectively!
+! The correct approach might be to have { Eq ?x ?y } predicates stable between variables, and propagate any { Eql ?x { foo } } literal
+! predicates over the Eq relation though.
 
 ! * Semantic Notes
 
@@ -224,7 +237,7 @@ TUPLE: WrapDefaultClasses < chr-pred word effect target ;
 ! Holds references to the stack at loop entry,
 ! loop iteration, and loop exit
 ! TUPLE: Iterated < chr-pred entry loop-entry loop-exit exit ;
-TUPLE: Iterated < chr-pred tag stuff ;
+TUPLE: Iterated < chr-pred tag enter-in enter-out call-rec-in return-out out ;
 TUPLE: LoopVar < chr-pred stuff ;
 
 ! Value-restricting preds
@@ -232,6 +245,7 @@ TUPLE: val-pred < chr-pred val ;
 
 ! Semantic
 TUPLE: Instance < val-pred type ;
+! M: Instance subst keep-ground-values [ call-next-method ] with-variable-on ;
 ! Nominative
 TUPLE: DeclaredInstance < Instance ;
 TUPLE: DeclaredNotInstance < Instance ;
@@ -247,7 +261,13 @@ TUPLE: InitSlot < chr-pred obj-val in-val slot-spec out-state ;
 ! Slot values, only apply to read-only slots, really,
 ! because only those are state-independent
 TUPLE: Slot < val-pred n slot-val ;
-TUPLE: Lit < val-pred obj ;
+! Used as pseudo-slot to match identity
+! SINGLETON: +lit+
+! TUPLE: Slots < val-pred map ;
+! This is is intended to be used to state that if two values' literals are eq?, then they are indeed the same value
+! TUPLE: Lit < val-pred obj ;
+
+
 
 ! Initial element value of a built-in sequence
 TUPLE: Element < val-pred elt-val ;
@@ -259,6 +279,8 @@ TUPLE: Declare < chr-pred classes stack ;
 ! Generalization of structural allocations that can be
 ! accessed by key
 TUPLE: Map < expr-pred mapping ;
+! M: Map subst
+!     keep-ground-values [ call-next-method ] with-variable-on ;
 
 
 ! A declaration, has no parameterizing character, just shortcut for Instance
@@ -363,13 +385,19 @@ TUPLE: Shift < expr-pred in by ;
 TUPLE: BitAnd < expr-pred in mask ;
 TUPLE: BitNot < expr-pred in ;
 TUPLE: rel-pred < expr-pred val2 ;
+! States that value is a clone of val2
+TUPLE: Cloned < rel-pred at-state ;
 ! This represents number equality
 TUPLE: Num= < rel-pred ;
 ! This represents equal? equality
-TUPLE: Eq < rel-pred ;
-! TUPLE: StrictEq < Eq ;
+TUPLE: Eql < rel-pred ;
+! Strict eq
+TUPLE: Eq < Eql ;
+! M: Eq subst
+!     keep-ground-values [ call-next-method ] with-variable-on ;
 TUPLE: Neq < rel-pred ;
 TUPLE: NotSame < Neq ;
+! M: NotSame subst keep-ground-values [ tuple-subst ] with-variable-on ;
 TUPLE: Le < rel-pred ;
 ! TUPLE: Lt < rel-pred ;
 TUPLE: Lt < Le ;
@@ -381,26 +409,13 @@ TUPLE: Counter < chr-pred start iter-in iter-out end delta ;
 ! Class algebra
 TUPLE: ClassPred < rel-pred class-rel-word ;
 
-
 TUPLE: <==> < chr-pred flag consequent ;
-
-GENERIC: opposite-predicate ( pred -- pred/f )
-M: Eq opposite-predicate tuple-slots Neq slots>tuple ;
-M: Neq opposite-predicate tuple-slots Eq slots>tuple ;
-M: Lt opposite-predicate tuple-slots <reversed> Le slots>tuple ;
-M: Le opposite-predicate tuple-slots <reversed> Lt slots>tuple ;
-! HA! Trap? Not correct if we argue semantically.  Handled by Xor expansion
-! of instance? ?
-! M: Instance opposite-predicate
-! This should be fine because it's nominative? In any case, don't try rightaway...
-M: DeclaredInstance opposite-predicate
-    tuple-slots DeclaredNotInstance slots>tuple ;
 
 ! commutative binary operations
 UNION: commutative-op Sum Prod ;
 
 UNION: lt-pred Le Lt ;
-UNION: symmetric-pred Eq Neq Num= ;
+UNION: symmetric-pred Neq Num= Eql ;
 ! No, that was incorrect.  Simply matching against all permutations does not fix
 ! the bindings.  For that, we need a two-step process
 ! M: symmetric-pred match-args
@@ -588,9 +603,9 @@ M: Instance live-vars val>> 1array ;
 ! M: Tag live-vars val>> 1array ;
 ! M: Tag defines-vars var>> 1array ;
 M: Iterated intersects-live-vars
-    stuff>> vars ;
+    tuple-slots vars ;
 M: Iterated defines-vars
-    stuff>> vars ;
+    tuple-slots vars ;
     ! [ start>> vars ] [ end>> vars ] bi union ;
 ! TODO: there might be a pattern here...
 ! M: Sum live-vars val>> 1array ;

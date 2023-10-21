@@ -3,7 +3,7 @@ chr.parser chr.state classes classes.algebra classes.builtin classes.predicate
 classes.singleton classes.tuple classes.tuple.private combinators
 combinators.short-circuit continuations generic generic.single grouping kernel
 kernel.private lists math math.functions math.order quotations sequences sets
-slots slots.private sorting strings terms types.util ;
+slots slots.private sorting strings terms types.util words ;
 
 IN: chr.factor.intra-effect
 
@@ -80,8 +80,8 @@ CHR: declaration-is-assertion @ // { DeclaredInstance ?x A{ ?tau } } -- |
 ! *** Same Parameters
 ! Relations that define the same parameter when there twice.  True for Composition and Phi Mode
 
-! TODO: might be able to extend this to all expr preds or defining ones somehow?
-CHR: same-length-is-same @ { Length ?a ?n } { Length ?a ?m } // -- | [ ?m ?n ==! ] ;
+CHR: same-length-is-same @ { Length ?a M{ ?n } } // { Length ?a M{ ?m } } -- | [ ?m ?n ==! ] ;
+CHR: same-length-is-eql @ { Length ?a ?n } { Length ?a ?m } // -- | { Eql ?n ?m } ;
 
 ! ! Flatten union classes for now.
 ! CHR: flatten-union-instance @ // { Instance ?x A{ ?tau } } -- [ { ?tau } first :>> ?rho union-class? ] |
@@ -116,7 +116,6 @@ CHR: no-deferred-inference-in-phi-mode @ // <={ ?DeferTypeOf } -- |
 
 ! Current approach: Something like 3, where the set of Params is defined
 ! explicitly, and contagious, by underlying conditionals
-
 CHR: remove-empty-params @ // { Params ?l } { Params __ } -- [ ?l empty? ] | ;
 
 CHR: keep-params-disjoint @ // { Params ?l } { Params ?k } -- [ ?l ?k intersect dup null? [ drop f ] when :>> ?d ]
@@ -174,6 +173,9 @@ CHR: already-discriminator @ { Discriminator ?x } // { Discriminator ?y } -- [ ?
 
 ! NOTE: This would also be one point where we could hold on to internal vars, but that is probably
 ! too sensitive?  Trying that approach...
+! Basic idea: if there is at least one observable value which, when known™ will definitely make exactly one of the
+! two predicates fail, and there is at least one other observable value which will have a limited value range in one pred
+! than the other, then we treat the type as being parameterized in the deciding value.
 CHR: have-interesting-decider @ { MakeEffect ?i ?o ?l __ __ } // <={ Discriminator ?x } { Decider ?y }
 -- [ ?i vars ?o vars append ?l vars union [ ?x vars swap subset? ] [ ?y vars swap subset? ] bi and ] | { Invalid } ;
 
@@ -183,15 +185,32 @@ CHR: have-interesting-decider @ { MakeEffect ?i ?o ?l __ __ } // <={ Discriminat
 ! from the existence of same information different branches should have done during composition already.
 ! After this rule, existence of predicates is assumed to be only present in one branch.
 CHR: phi-same-branch-pred @ // AS: ?p <={ body-pred } AS: ?p <={ body-pred } -- | { Collect ?p } ;
+! TODO: test
+CHR: phi-same-symmetric-pred @ // AS: ?p <={ symmetric-pred ?x ?y } AS: ?q <={ symmetric-pred ?y ?x } -- [ ?p ?q [ class-of ] same? ] |
+{ Collect ?p } ;
 
 CHR: phi-same-sum-result-1 @ { Sum ?z ?x ?y } { Sum ?a ?x ?y } // -- | [ ?z ?a ==! ] ;
 CHR: phi-same-prod-result-1 @ { Prod ?z ?x ?y } { Prod ?a ?x ?y } // -- | [ ?z ?a ==! ] ;
 
-! XXX SRSLY?????? Can we prove that on the graph??? Maybe only valid for variables, no?
-! FIXME: probably needs to be replaced with location stuff instead!
-CHR: phi-same-slot-val @ { Slot ?o ?n ?v } { Slot ?a ?n ?v } // -- | [ ?o ?a ==! ] ;
+! NOTE: This assumes covariant tuple semantics for all expr preds! If there really is a non-overlapping value,
+! It must be caught in another pred!
+CHR: phi-specialized-expr-pred @ // AS: ?p <={ expr-pred } AS: ?q <={ expr-pred } -- [ ?p ?q [ class-of ] same? ]
+[ ?p ?q more-general-pred :>> ?r ] | { Collect ?r } ;
 
-CHR: phi-disjoint-instance @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
+! XXX: this is not correct because it could set different access depth equal by equating internal values with inputs/outputs.
+! This would probably need to be solved by a complete isomorphism checker on the internal structure?
+! CHR: phi-same-slot-must-be-same-var @ { Slot ?o ?n M{ ?v } } { Slot ?o ?n M{ ?w } } // -- | [ ?v ?w ==! ] ;
+! CHR: phi-same-obj-slot-is-same-loc @ { SlotLoc ?x ?o ?n } { SlotLoc ?y ?o ?n } // -- | [ ?y ?x ==! ] ;
+
+! FIXME: follow-up location stuff phi-ing.  Possibly completely loop the locop states in slot reads?
+! Again, the assumption here is basically graph matching.  For circular locops, this should not
+! introduce any ambiguity in the case of multiple reads since those are resolved?
+! Might have to normalize any ..a pop ..a -> ..a push ..b / ..a pop ..b -> ..b push ..b combinations though...
+! FIXME: Losing unresolved loc-ops in phi branches needs to resolve the states?
+CHR: phi-same-loc-pop-item-and-next-state @ { LocPop ?x ?a ?v ?b ?l __ } { LocPop ?x ?a ?w ?c ?l __ } // -- [ ?c ?b == not ] [ ?a ?b == not ] [ ?c ?a == not ] |
+[ ?b ?c ==! ] [ ?v ?w ==! ] ;
+
+CHR: phi-disjoint-instance-decider @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
 [ { ?rho ?tau } first2 classes-intersect? not ] | { Decider ?x } ;
 
 CHR: phi-maybe-disjoint-instance @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
@@ -227,21 +246,7 @@ CHR: phi-disjoint-effect-type @ { Instance ?x ?e } // -- [ ?e valid-effect-type?
 ! [ ?m ?n <= ] | { Invalid } ;
 ! CHR: phi-disjoint-output-range-lt-eq @ // { Eq ?x A{ ?n } } { Lt ?x A{ ?n } } -- | { Invalid } ;
 
-! TODO: this is not recursive!
-! NOTE: Rationale: An effect type is refined by its body predicates, which act as set subtraction.
-! So the more general type is the one which has body predicates that both must agree on.
-! If they have the same set of parameters but different bodies, they define a dependent type.
-! CHR: phi-phiable-effect-instance @ // { Instance ?x P{ Effect ?a ?b ?r ?k } } { Instance ?x P{ Effect ?c ?d ?s ?l } } --
-! [ ?r empty? ] [ ?s empty? ]
-! [ { ?a ?b } { ?c ?d } unify ] |
-! [ { ?a ?b } { ?c ?d } ==! ]
-! [| | ?l ?k intersect :> body
-!  P{ Keep P{ Instance ?x P{ Effect ?a ?b f body } } }
-! ] ;
 ! ! **** phi union types
-! CHR: phi-instance @ { Phi ?z ?x } { Phi ?z ?y } // { Instance ?x A{ ?rho } } { Instance ?y A{ ?sig } } --
-! [ { ?rho ?sig } first2 class-or :>> ?tau ] |
-! { Instance ?z ?tau } ;
 
 ! Slots
 ! CHR: phi-slot @ { Phi ?z ?x } { Phi ?z ?y } // { Slot ?x ?n ?a } { Slot ?y ?n ?b } -- |
@@ -249,7 +254,9 @@ CHR: phi-disjoint-effect-type @ { Instance ?x ?e } // -- [ ?e valid-effect-type?
 
 ! **** Relational reasoning
 
-CHR: phi-eq-decider @ { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } // -- [ ?b ?c = not ] |
+CHR: phi-eq-decider @ { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } // -- [ ?b ?c eq? not ] |
+{ Decider ?x } ;
+CHR: phi-eql-decider @ { Eql ?x A{ ?b } } { Eql ?x A{ ?c } } // -- [ ?b ?c = not ] |
 { Decider ?x } ;
 : order? ( obj1 obj2 -- min max ? )
     [ 2dup <=> +gt+ eq? [ swap ] when t ] [ drop f ] recover ;
@@ -263,27 +270,34 @@ CHR: phi-eq-range @ // { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } -- [ ?b ?c order? [ :
 ! difference thing in the input or output?
 ! CHR: phi-eq-neq-1 @ { Eq ?x ?y } { Neq ?x ?y } // -- | { Decider { ?x ?y } } ;
 ! CHR: phi-eq-neq-2 @ { Eq ?x ?y } { Neq ?y ?x } // -- | { Decider { ?x ?y } } ;
-CHR: phi-eq-neq-1 @ { Eq ?x ?y } { Neq ?x ?y } // -- | { Discriminator { ?x ?y } } ;
-CHR: phi-eq-neq-2 @ { Eq ?x ?y } { Neq ?y ?x } // -- | { Discriminator { ?x ?y } } ;
+CHR: phi-eq-neq-1 @ <={ Eql ?x ?y } { Neq ?x ?y } // -- | { Discriminator { ?x ?y } } ;
+CHR: phi-eq-neq-2 @ <={ Eql ?x ?y } { Neq ?y ?x } // -- | { Discriminator { ?x ?y } } ;
 ! CHR: phi-neq-is-always-decider @ { Neq ?x ?y } // -- | { Decider { ?x ?y } } ;
+
+CHR: phi-eql-eq-1 @ { Eql ?x ?y } { Eq ?x ?y } // -- | { Discriminator { ?x ?y } } { Collect P{ Eql ?x ?y } } ;
+CHR: phi-eql-eq-2 @ { Eql ?x ?y } { Eq ?x ?y } // -- | { Discriminator { ?x ?y } } { Collect P{ Eql ?x ?y } } ;
 
 ! CHR: phi-eq-lt-decider-1 @ // { Eq ?x ?y } { Lt ?x ?y } -- | { Decider { ?x ?y } } { Keep P{ Le ?x ?y } } ;
 ! CHR: phi-eq-lt-decider-2 @ // { Eq ?x ?y } { Lt ?y ?x } -- | { Decider { ?x ?y } } { Keep P{ Le ?y ?x } } ;
-CHR: phi-eq-lt-decider-1 @ // { Eq ?x ?y } { Lt ?x ?y } -- | { Discriminator { ?x ?y } } { Collect P{ Le ?x ?y } } ;
-CHR: phi-eq-lt-decider-2 @ // { Eq ?x ?y } { Lt ?y ?x } -- | { Discriminator { ?x ?y } } { Collect P{ Le ?y ?x } } ;
+CHR: phi-eq-lt-discrim-1 @ // <={ Eql ?x ?y } { Lt ?x ?y } -- | { Discriminator { ?x ?y } } { Collect P{ Le ?x ?y } } ;
+CHR: phi-eq-lt-discrim-2 @ // <={ Eql ?x ?y } { Lt ?y ?x } -- | { Discriminator { ?x ?y } } { Collect P{ Le ?y ?x } } ;
 
-CHR: phi-eq-le-discrim-1 @ // { Eq ?x ?y } { Le ?x ?y } -- | { Discriminator { ?x ?y } } { Collect P{ Le ?x ?y } } ;
-CHR: phi-eq-le-discrim-2 @ // { Eq ?y ?x } { Le ?x ?y } -- | { Discriminator { ?x ?y } } { Collect P{ Le ?x ?y } } ;
+CHR: phi-eq-le-discrim-1 @ // <={ Eql ?x ?y } { Le ?x ?y } -- | { Discriminator { ?x ?y } } { Collect P{ Le ?x ?y } } ;
+CHR: phi-eq-le-discrim-2 @ // <={ Eql ?y ?x } { Le ?x ?y } -- | { Discriminator { ?x ?y } } { Collect P{ Le ?x ?y } } ;
 
 ! CHR: phi-lt-lt-decider @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Decider { ?y ?x } } ;
-CHR: phi-lt-lt-decider @ // { Lt ?x ?y } { Lt ?y ?x } -- | { Discriminator { ?x ?y } } ;
+CHR: phi-lt-lt-decider @ { Lt ?x ?y } { Lt ?y ?x } // -- | { Discriminator { ?x ?y } } ;
 
 ! CHR: phi-lt-le-decider @ // { Lt ?x ?y } { Le ?y ?x } -- | { Discriminator { ?x ?y } } ;
-CHR: phi-lt-le-decider @ // { Lt ?x ?y } { Le ?y ?x } -- | { Decider { ?x ?y } } ;
+CHR: phi-lt-le-decider @ { Lt ?x ?y } { Le ?y ?x } // -- | { Decider { ?x ?y } } ;
 
 ! These are overlapping, so no deciders
 CHR: phi-discrim-le-lt @ { Le ?x ?v } { Lt ?v ?x } // -- | { Discriminator { ?x ?v } } ;
 ! CHR: phi-discrim-le-rhs @ { Le ?v ?x } { Lt ?x ?v } // -- [ ?x term-var? ] | { Discriminator ?x } ;
+
+! FIXME: seems to be unnecessary right now, need to test for this being a decider and not a discriminator
+! ! Definitely disjoint numerical ranges, equality or not
+! CHR: phi-le-le-decider @ <={ Le ?x A{ ?m } } <={ Le A{ ?n } ?x } // -- [ ?m ?n < ] | { Decider ?x } ;
 
 ! *** Phi-Mode single-branch predicates
 
@@ -321,20 +335,6 @@ CHR: eq-propagate-sum-1 @ { Eq ?x ?y } { Sum ?a ?y ?b } // -- |
 ! { PhiStack ?w ?y }
 ! { CallEffect ?r ?v ?w } ;
 
-! TODO: make this dependent on whether we simplify our own def!
-! CHR: phi-call-rec-match @ { Phi ?r ?p } { Phi ?r ?q }
-! // { CallRecursive ?w ?a ?b } { CallRecursive ?w ?x ?y } --
-! { ?Phi ?v ?a ?x ?l }
-! { ?Phi ?z ?b ?y ?l }
-! |
-! [ ?k Yes == ?l Yes == and
-!   {
-!       P{ PhiStack ?z ?a }
-!       P{ PhiStack ?z ?x }
-!       P{ CallRecursive ?w ?v ?z }
-!   }
-!   P{ Invalid } ?
-! ] ;
 
 ! **** phi recursive calls
 
@@ -356,6 +356,10 @@ CHR: disj-is-macro-effect @ <={ MakeEffect } // { MacroExpand __ __ __ __ } -- |
 
 ! NOTE: this is pretty eager, as it will preserve all higher-order parametrism explicitly
 CHR: disj-is-inline-effect @ <={ MakeEffect } // <={ CallEffect ?p . __ } -- | { Invalid } ;
+
+CHR: disj-unresolved-generic @ <={ MakeEffect } // <={ GenericDispatch } -- | { Invalid } ;
+CHR: disj-unresolved-prim-call @ <={ MakeEffect } // <={ PrimCall } -- | { Invalid } ;
+! FIXME: combine phi and comp phases better!  Collection an liveness needs to be way improved!
 
 ! Unknown call-rec
 CHR: disj-single-call-rec @ <={ MakeEffect } // <={ CallRecursive } -- | { Invalid } ;
@@ -380,14 +384,25 @@ PREFIX-RULES: { P{ CompMode } }
 
 CHR: invalid-defer-type-request @ // { ?DeferTypeOf ?x __ } -- [ ?x callable? not ] | [ { ?x "not a valid thing to infer" } throw ] ;
 
+: same-state? ( x y -- ? ) [ lastcdr ] same? ;
+
+
 ! Possibly expensive? Seems like it! But some are definitely needed, e.g. for Eq, aaand for Le
 ! CHR: unique-val-pred @ AS: ?p <={ val-pred } // AS: ?p <={ val-pred } -- | ;
-CHR: unique-eq-pred @ { Eq ?x ?y } // { Eq ?x ?y } -- | ;
+! TODO include num=
+CHR: var-eq-is-true @ // <={ Eql M{ ?x } ?x } -- | ;
+CHR: unique-eq-pred-1 @ { Eq M{ ?x } M{ ?y } } // { Eq M{ ?x } M{ ?y } } -- | ;
+CHR: unique-eq-pred-2 @ { Eq M{ ?x } M{ ?y } } // { Eq M{ ?y } M{ ?x } } -- | ;
+CHR: eq-must-be-same-literal-1 @ { Eq M{ ?x } A{ ?a } } // { Eq M{ ?x } M{ ?y } } -- | [ ?x ?y ==! ] ;
+CHR: eq-must-be-same-literal-2 @ { Eq M{ ?x } A{ ?a } } // { Eq M{ ?y } M{ ?x } } -- | [ ?x ?y ==! ] ;
+CHR: eq-literal-must-be-same-var @ { Eq M{ ?x } A{ ?a } } // { Eq M{ ?y } A{ ?b } } -- [ ?a local-alloc-val? ] [ ?a ?b eq? ] | [ ?x ?y ==! ] ;
+CHR: unique-notsame-pred1 @ { NotSame ?x ?y } // { NotSame ?x ?y } -- | ;
+CHR: unique-notsame-pred2 @ { NotSame ?x ?y } // { NotSame ?y ?x } -- | ;
 CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;
 CHR: unique-le-pred @ { Le ?x ?y } // { Le ?x ?y } -- | ;
 CHR: unique-lt-pred @ { Lt ?x ?y } // { Lt ?x ?y } -- | ;
 CHR: unique-slot-pred @ { Slot ?o ?n ?v } // { Slot ?o ?n ?v } -- | ;
-CHR: unique-allocation-pred @ { LocalAllocation ?a ?o } // { LocalAllocation ?a ?o } -- | ;
+CHR: unique-allocation-pred @ { LocalAllocation ?a ?o } // { LocalAllocation ?b ?o } -- [ ?a ?b same-state? ] [ ?a llength* ?b llength* <= ] | ;
 
 ! CHR: unique-equiv @ { <==> ?c ?p } // { <==> ?c ?p } -- | ;
 ! CHR: assume-equiv-true @ { <==> ?c ?p } { Instance ?c A{ ?tau } } // --
@@ -397,8 +412,13 @@ CHR: unique-allocation-pred @ { LocalAllocation ?a ?o } // { LocalAllocation ?a 
 
 ! NOTE: this is taken directly from the definition of = !
 ! TODO: Make sure this does not mess anything up!
-CHR: eq-fixnum-is-same @ { Instance ?x fixnum } // { Instance ?y fixnum } { Eq ?x ?y } -- [ ?x term-var? ] [ ?y term-var? ] | [ ?x ?y ==! ] ;
-CHR: integer-num-is= @ { Instance ?x A{ ?c } } { Instance ?y A{ ?d } } // { Num= ?x ?y } -- [ ?c integer class<= ] [ ?d integer class<= ] |
+CHR: eq-class-eq-is-same @ { Instance ?x Is( classoid ?rho ) } // { Instance ?y Is( classoid ?tau ) } { Eq M{ ?x } M{ ?y } } --
+[ ?rho union{ word fixnum } class<= ] [ ?rho ?tau class= ]
+| [ ?x ?y ==! ] ;
+
+! FIXME: This treats all integers as fixnums with regards to expression reasoning.  This should be fine as long as we don't reason
+! about bignum implementation details?
+CHR: integer-num=-is-eq @ { Instance ?x A{ ?c } } { Instance ?y A{ ?d } } // { Num= ?x ?y } -- [ ?c integer class<= ] [ ?d integer class<= ] |
 { Eq ?x ?y } ;
 
 ! ! NOTE: currently only known to be needed for bignum exception. Might make sense
@@ -500,8 +520,12 @@ CHR: redundant-final-class= @ { Instance ?x Is( classoid ?rho ) } { Instance ?y 
 ! TODO: in-between forms also!
 CHR: check-literal-class-pred @ // { ClassPred A{ ?y } A{ ?x } class= } -- | [ ?y ?x [ class-of ] same? f P{ Invalid } ? ] ;
 
+CHR: eq-defines-class @ { Eq M{ ?x } M{ ?y } } // { Instance ?x Is( classoid ?rho ) } { Instance ?y Is( classoid ?tau ) } --
+[ { ?rho ?tau } first2 class= not ] [ { ?rho ?tau } first2 class-and :>> ?sig ] | { Instance ?x ?sig } { Instance ?y ?sig } ;
+
 ! *** Arithmetics
-! CHR: unique-expr-pred @ AS: ?p <={ expr-pred ?a . ?x } // AS: ?q <={ expr-pred ?a . ?x } -- [ ?p class-of ?q class-of class= ] | ;
+CHR: check-eql-lit @ // { Eql A{ ?a } A{ ?b } } -- | [ ?a ?b = f P{ Invalid } ? ] ;
+CHR: eq-class-eql-is-eq-pred @ // { Eql ?x Is( union{ fixnum word } ?o ) } -- | { Eq ?x ?o } ;
 
 CHR: check-le @ // { Le A{ ?x } A{ ?y } } -- | [ ?x ?y <= f P{ Invalid } ? ] ;
 CHR: check-lt @ // { Lt A{ ?x } A{ ?y } } -- | [ ?x ?y < f P{ Invalid } ? ] ;
@@ -519,16 +543,21 @@ CHR: neq-tightens-le-2 @ // { Neq ?y ?x } { Le ?x ?y } -- | { Lt ?x ?y } ;
 CHR: check-lt-same @ // { Lt ?x ?x } -- | { Invalid } ;
 CHR: check-lt-eq-1 @ // { Lt ?x ?y } { Eq ?x ?y } -- | { Invalid } ;
 CHR: check-lt-eq-2 @ // { Lt ?x ?y } { Eq ?y ?x } -- | { Invalid } ;
-! Daheck has this been deactivated?
-CHR: check-eq @ // { Eq A{ ?x } A{ ?y } } -- | [ ?x ?y = f P{ Invalid } ? ] ;
-CHR: check-eq-neq-1 @ // { Eq ?x ?y } { Neq ?x ?y } -- | { Invalid } ;
-CHR: check-eq-neq-2 @ // { Eq ?x ?y } { Neq ?y ?x } -- | { Invalid } ;
+! CHR: check-eq @ // { Eq A{ ?x } A{ ?y } } -- | [ ?x ?y eq? f P{ Invalid } ? ] ;
+CHR: check-eq @ { Eq ?x A{ ?a } } // { Eq ?x A{ ?b } } -- | [ ?a ?b eq? f P{ Invalid } ? ] ;
+CHR: local-alloc-never-eq-1 @ // { Eq M{ ?x } M{ ?y } } { LocalAllocation __ ?x } -- | { Invalid } ;
+CHR: local-alloc-never-eq-2 @ // { Eq M{ ?x } M{ ?y } } { LocalAllocation __ ?y } -- | { Invalid } ;
+CHR: check-eql-neq-1 @ // { Eql ?x ?y } { Neq ?x ?y } -- | { Invalid } ;
+CHR: check-eql-neq-2 @ // { Eql ?x ?y } { Neq ?y ?x } -- | { Invalid } ;
 ! NOTE: neq has eql sematics!
 CHR: check-neq @ // { Neq A{ ?x } A{ ?y } } -- | [ ?x ?y = P{ Invalid } f ? ] ;
+! NOTE: might be careful about the following if the (implementation-detail) disjointness of eq? vs equal? definitions
+! is needed?
 CHR: neq-same-var @ // <={ Neq M{ ?x } M{ ?x } } -- | { Invalid } ;
 ! NOTE: this might not be possible to correctly check because of substitution?
 ! A neuralgic case could be literals, actually
-CHR: check-notsame @ { Eq ?x A{ ?a } } { Eq ?y A{ ?b } } // { NotSame ?x ?y } -- | [ ?a ?b eq? P{ Invalid } f ? ] ;
+! CHR: check-notsame @ { Eq ?x A{ ?a } } { Eq ?y A{ ?b } } // { NotSame ?x ?y } -- | [ ?a ?b eq? P{ Invalid } f ? ] ;
+CHR: check-notsame @ // { NotSame A{ ?x } A{ ?y } } -- | [ ?x ?y eq? P{ Invalid } f ? ] ;
 ! FIXME: that is wrong: CHR: neq-subsumes-not-same @ { Neq ?x ?y } // { NotSame ?x ?y } -- | ;
 ! CHR: not-same-var @ // { NotSame ?x ?x } -- | { Invalid } ;
 ! TODO: make sure this doesn't break reasoning in phis
@@ -670,7 +699,7 @@ CHR: call-recursive-canonical @ { TypeOfWord ?w ?rho } // { CallRecursive ?w ?i 
 ! tag -prelude-> ?a -RecursionTypePre-> ?b =same-layout-as= ?c -RecursionTypePost-> -FixPointCondition-> ?d
 ! NOTE: current layout: initial var_n, var_1, var_0
 ! It may be necessary to change this to var_n , var_n-m , var_n-m-1 , var_0
-CHR: break-recursive-iteration @ { Iterated ?w { ?a ?b ?c ?d __ } } // { CallRecursive ?w ?i ?o } --
+CHR: break-recursive-iteration @ { Iterated ?w ?a ?b ?c ?d __ } // { CallRecursive ?w ?i ?o } --
 |
 [ ?c ?i ==! ] ;
 
@@ -687,7 +716,7 @@ CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho } { RecursionTypeOf ?w 
 ! ?d : return-recursive out stack
 ! ?o : final call output stack
 ! FIXME: Instantiate in case of double recursion?
-{ Iterated ?w { ?i ?b ?c ?d ?o } }
+{ Iterated ?w ?i ?b ?c ?d ?o }
 ! Return Type call
 { ApplyEffect ?rho ?d ?o }
 ! { Instance ?q ?rho }
@@ -699,11 +728,8 @@ CHR: call-recursive-iteration @ { FixpointTypeOf ?w ?rho } { RecursionTypeOf ?w 
 { LoopVar { ?i ?b ?c ?d } }
     ;
 
-: same-state? ( x y -- ? ) [ lastcdr ] same? ;
-
-CHR: discard-known-iterated-stack @ // { Iterated __ ?s } --
-[ ?s sequence? ]
-[ ?s f lift [ same-state? ] monotonic? ] | ;
+CHR: discard-known-iterated-stack @ // <={ Iterated __ . ?s } --
+[ ?s list>array f lift [ same-state? ] monotonic? ] | ;
 
 ! *** Loop relation reasoning
 CHR: already-loop-var @ { LoopVar ?x } // { LoopVar ?x } -- | ;
@@ -848,8 +874,8 @@ CHR: ge-offset-sum-2 @ { Sum ?x ?y A{ ?n } } { Le A{ ?v } ?x } // --
 ! introducing artificial recursion requests where there are none!
 PREDICATE: callable-subclass < class callable class<= ;
 
-CHR: infer-literal-callable @ { Eq ?q Is( callable ?v ) } // { Instance ?q Is( callable-subclass ?tau ) } -- |
-{ ?DeferTypeOf ?v ?rho } { Instance ?q ?rho } ;
+CHR: infer-literal-callable @ { Eq ?q Is( callable ?v ) } // { Instance ?q Is( callable-subclass ?tau ) } -- [ ?v quote-literals :>> ?w ] |
+{ ?DeferTypeOf ?w ?rho } { Instance ?q ?rho } ;
 
 CHR: call-destructs-curry @ { Instance ?q curried } { Slot ?q "quot" ?p } { Slot ?q "obj" ?x } // { CallEffect ?q ?a ?b } -- |
 { CallEffect ?p L{ ?x . ?a } ?b } ;
@@ -992,12 +1018,16 @@ CHR: dispatch-case @ // { MakeSingleDispatch ?i L{ { ?c ?m } . ?r } ?d ?tau } --
 ! { MakeSingleDispatch ?i ?r ?sig }
 ! { MakeXor ?rho ?sig ?d }
 ! { CheckXor ?m ?d ?tau } ;
+CHR: invalid-eq-literals @ { Eq A{ ?a } A{ ?b } } // -- | [ "substituted into eq lits!" throw ] ;
 
 CHR: known-slot-num @ { Eq ?n A{ ?a } } // { Slot ?o ?n ?v } -- |
 { Slot ?o ?a ?v } ;
 
-CHR: known-slot-loc-num @ { Eq ?n A{ ?m } } // { SlotLoc ?x ?o ?n } -- |
-{ SlotLoc ?x ?o ?m } ;
+CHR: known-length-val @ { Eq ?n A{ ?v } } // { Length ?a M{ ?n } } -- |
+{ Length ?a ?v } ;
+
+! CHR: known-slot-loc-num @ { Eq ?n A{ ?m } } // { SlotLoc ?x ?o ?n } -- |
+! { SlotLoc ?x ?o ?m } ;
 
 CHR: known-instance @ { Eq M{ ?c } A{ ?d } } // { Instance ?x M{ ?c } } --
 | { Instance ?x ?d } ;
@@ -1013,7 +1043,8 @@ CHR: known-tag-num @ { Eq ?n A{ ?v } } // { Tag ?c ?n } -- |
 
 ! UNION: replacable-pred expr-pred fold-pred ;
 CHR: known-expr-val @ { Eq ?n A{ ?v } } // AS: ?p <={ expr-pred } -- [ ?n ?p vars in? ]
-[ ?p NotSame? not ] ! definitely not a HACK!
+[ ?p Eq? not ]
+! [ ?p NotSame? not ] ! definitely not a HACK!
 | [ ?p { { ?n ?v } } lift* ] ;
 
 CHR: known-generic-input/output @ { Eq ?n A{ ?v } } // { GenericDispatch ?w ?d ?a ?i ?o } -- [ ?n ?a in? ?n ?d in? or ] |
@@ -1027,24 +1058,37 @@ CHR: known-generic-input/output @ { Eq ?n A{ ?v } } // { GenericDispatch ?w ?d ?
 !  P{ GenericDispatch ?w new-dispatcher ?a ?i ?o } ] ;
 
 ! *** Slot conversion
-! TODO: this conversion can be wrong when working on numerically optimized code?
-CHR: convert-to-named-slot @ { Instance ?o A{ ?tau } } // { Slot ?o A{ ?n } ?v } -- [ ?tau tuple-class? ]
-[ ?tau all-slots [ offset>> ?n = ] find nip :>> ?s ] [ ?s name>> :>> ?m ]
+! PREDICATE: class-with-slots < class all-slots empty? not ;
+GENERIC: get-slot-spec ( class n -- ? )
+
+CHR: convert-to-named-slot @ { Instance ?o Is( class ?tau ) } // { Slot ?o Is( union{ string integer } ?n ) ?v } --
+[ ?tau ?n get-slot-spec :>> ?s ]
+! [ ?tau tuple-class? ]
+! [ ?tau all-slots [ offset>> ?n = ] find nip :>> ?s ] ! [ ?s name>> :>> ?m ]
 [ ?s class>> :>> ?rho ]
 |
-{ Slot ?o ?m ?v }
+! { Slot ?o ?m ?v }
+{ Slot ?o ?s ?v }
 { DeclaredInstance ?v ?rho } ;
 
-GENERIC: get-slot-spec ( class n -- ? )
 M: string get-slot-spec swap all-slots [ name>> = ] with find nip ;
 M: integer get-slot-spec swap all-slots [ offset>> = ] with find nip ;
 
-PREDICATE: class-with-slots < class all-slots empty? not ;
+! CHR: eql-obj-slot-is-same-loc @ { SlotLoc ?x ?o ?n } <={ Eql ?n ?m } // { SlotLoc ?y ?o ?m } -- |
+! [ ?y ?x ==! ] ;
+
+CHR: eql-obj-slot-is-same-slot @ { Slot ?o ?n ?x } <={ Eql ?n ?m } // { Slot ?o ?m ?y } -- |
+[ ?y ?x ==! ] ;
+
+! CHR: same-obj-slot-is-same-loc @ { SlotLoc ?x ?o ?n } // { SlotLoc ?y ?o ?n } -- |
+! [ ?y ?x ==! ] ;
+CHR: same-obj-slot-is-same-slot @ { Slot ?o ?n ?x } // { Slot ?o ?n ?y } -- |
+[ ?y ?x ==! ] ;
 
 ! TODO invalidate undefined slot stuff here?
-CHR: slot-loc-known-slot-spec @ { Instance ?o Is( class-with-slots ?tau ) } // { SlotLoc ?x ?o Is( union{ string integer } ?n  ) } --
-[ ?tau ?n get-slot-spec :>> ?s ] [ ?s class>> :>> ?rho ] |
-{ SlotLoc ?x ?o ?s } ;
+! CHR: slot-loc-known-slot-spec @ { Instance ?o Is( class-with-slots ?tau ) } // { SlotLoc ?x ?o Is( union{ string integer } ?n  ) } --
+! [ ?tau ?n get-slot-spec :>> ?s ] [ ?s class>> :>> ?rho ] |
+! { SlotLoc ?x ?o ?s } ;
 
 
 IMPORT: chr-intra-effect-maps
@@ -1082,21 +1126,16 @@ CHR: tuple-boa-decl @ // { TupleBoa A{ ?c } ?a L{ ?o . ?b } } --
  preds <reversed> >array
 ] ;
 
-! CHR: init-read-only-slot @ // { InitSlot ?o ?i Is( slot-spec ?s ) __ } -- [ ?s read-only>> ]
-! [ ?s name>> :>> ?n ]
-! | { Slot ?o ?n ?i } ;
-
-! CHR: init-rw-slot @ // { InitSlot ?o ?i Is( slot-spec ?s ) ?b } -- [ ?s read-only>> not ]
-! [ ?s name>> :>> ?n ] |
-! { SlotLoc ?x ?o ?n }
-! ! TODO: optimized:
-! ! { PushLoc ?x f L{ ?i } ?b t } ;
-! { PushLoc ?x f L{ ?i } ?b f } ;
-
-CHR: init-slot @ // { InitSlot ?o ?i Is( slot-spec ?s ) ?b } -- |
-{ SlotLoc ?x ?o ?s }
-! NOTE: ?a is a dummy state here?  Actually, it will be a circular pseudo-writeback like a slot read
+CHR: init-slot @ // { InitSlot ?o ?i ?s ?b } -- |
+! { SlotLoc ?x ?o ?s }
+{ Slot ?o ?s ?x }
 { PushLoc ?x ?b L{ ?i } ?b f } ;
+
+! CHR: init-default-element-slot-loc @ { LocalAllocation ?r ?a } { Instance ?a Is( classoid ?tau ) } { Length ?a A{ ?n } } // { Element ?a ?v } --
+CHR: init-default-element-slot @ { LocalAllocation ?r ?a } { Instance ?a Is( classoid ?tau ) } { Length ?a A{ ?n } } // { Element ?a ?v } --
+[ ?tau array-like class<= ]
+! [ ?n 0 > ] [ ?n 1 - 2 + :>> ?u ] | { Le 2 ?m } { Le ?m ?u } { SlotLoc ?x ?a ?m } { PushLoc ?x ?r L{ ?v } ?r t } ;
+[ ?n 0 > ] [ ?n 1 - 2 + :>> ?u ] | { Le 2 ?m } { Le ?m ?u } { Slot ?a ?m ?x } { PushLoc ?x ?r L{ ?v } ?r t } ;
 
 GENERIC: read-only-slot? ( class n -- ? )
 M: string read-only-slot? swap all-slots [ name>> = ] with find nip
@@ -1107,10 +1146,53 @@ M: integer read-only-slot? swap all-slots [ offset>> = ] with find nip
 ! NOTE: there can be multiple ops on the read-only slot, so we have to convert all of them.
 ! Relying on the SlotLoc not being collected because it can not be live if there is no loc-op
 ! left marking it live.  Could also change the class of the slotloc predicate and not collect it?
-CHR: convert-read-only-slot-access @ { Instance ?o Is( class ?tau ) }
-{ SlotLoc ?x ?o Is( slot-spec ?s ) } //
+! CHR: convert-read-only-slot-access @ { Instance ?o Is( class ?tau ) }
+! { SlotLoc ?x ?o Is( slot-spec ?s ) } //
+! <={ LocOp ?x ?a L{ ?v } ?b . __ } -- [ ?s read-only>> ] [ ?s name>> :>> ?n ] |
+! [ ?a ?b ==! ] { Slot ?o ?n ?v } ;
+CHR: collapse-read-only-slot-access @ { Slot ?o Is( slot-spec ?s ) ?x } //
 <={ LocOp ?x ?a L{ ?v } ?b . __ } -- [ ?s read-only>> ] [ ?s name>> :>> ?n ] |
-[ ?a ?b ==! ] { Slot ?o ?n ?v } ;
+[ ?a ?b ==! ] ;
+
+! NOTE: this is kind of the sledge-hammer version... converting a literal to slot predicates only... might be nicer to only do that to the slots in question...
+! CHR: unboa-literal-allocation @ { LocalAllocation ?u ?o } { Instance ?o Is( not{ ro-tuple-class } ?tau ) } { SlotLoc ?x ?o __ } <={ LocOp ?x ?a . __ } // { Eq ?o A{ ?l } } --
+CHR: unboa-literal-allocation @ { LocalAllocation ?u ?o } { Instance ?o Is( not{ ro-tuple-class } ?tau ) } { Slot ?o __ ?x } <={ LocOp ?x ?a . __ } // { Eq ?o A{ ?l } } --
+[ ?a ?u same-state? ] |
+[ ?tau all-slots
+  [| slot-spec |
+   ?l slot-spec offset>> slot :> slot-lit
+   ! slot-spec class>> :> slot-class
+   slot-lit class-of :> slot-class
+   slot-spec name>> utermvar :> slot-var
+   P{ Eq slot-var slot-lit }
+   ! NOTE: using the declared class here to make sure any predicates are applied
+   ! NOTE2: not doing that, because to be a literal, this would have been ensured already, and
+   ! the most specific class needs to be taken from a literal
+   ! P{ DeclaredInstance slot-var slot-class }
+   P{ Instance slot-var slot-class }
+   P{ InitSlot ?o slot-var slot-spec ?a }
+   3array
+   slot-lit local-alloc-val? [ P{ LocalAllocation ?a slot-var } suffix ] when
+  ] map concat
+  ?l array-like?
+  [
+       ?l [| elt i | i 2 + :> elt-num
+       "elt" utermvar :> elt-var
+       elt class-of :> elt-class
+       P{ Eq elt-var elt }
+       P{ Instance elt-var elt-class }
+       P{ InitSlot ?o elt-var elt-num ?a }
+       3array
+       elt local-alloc-val? [ P{ LocalAllocation ?a elt-var } suffix ] when
+      ] map-index
+      append
+  ] when
+] ;
+
+! Cloning: Structure must be the same before and after.  RO-Slots must be the same before and after. Locally allocated
+! PushLocs must be the same value after.  Alternatively, consider this a read-access on the original slot?
+! CHR: copy-cloned-ro-slots @ { Cloned ?y ?x } { Slot ?x Is( slot-spec ?s ) ?v } // -- [ ?s read-only>>  ] | { Slot ?y ?s ?v } ;
+CHR: copy-cloned-ro-slots-reverse @ { Cloned ?x ?y __ } { Slot ?x Is( slot-spec ?s ) ?v } // -- [ ?s read-only>>  ] | { Slot ?y ?s ?v } ;
 
 ! *** State and Locations via FMC semantics
 
@@ -1118,7 +1200,6 @@ CHR: convert-read-only-slot-access @ { Instance ?o Is( class ?tau ) }
 
 CHR: unique-loc-pop @ { LocPop ?x ?a ?s ?b ?m ?u } // { LocPop ?x ?a ?s ?b ?m ?v } --
 [ ?u ?v [ >states members ] same? ] | ;
-
 
 ! *** Beta
 CHR: resolve-loc-op @ // <={ LocOp __ ?a L{ } ?b __ . __ } -- |
@@ -1128,49 +1209,54 @@ CHR: resolve-loc-op @ // <={ LocOp __ ?a L{ } ?b __ . __ } -- |
 ! : valid-slot? ( length slot-num -- ? )
 !     [ 1 - ] dip 2 - swap 0 swap between? ;
 
-: pseudo-literal-eq ( lhs rhs -- pred )
-    dup ground-value? [ <wrapper> ] when
-    2dup [ term-var? ] both? [ ==! ] [ Instance boa ] if ;
+! : pseudo-literal-eq ( lhs rhs -- pred )
+!     dup ground-value? [ <wrapper> ] when
+!     2dup [ term-var? ] both? [ ==! ] [ Instance boa ] if ;
 
+! TODO: Modifying literals is probably too flimsy.  Would be safer and share mode code paths to deconstruct
+! as if they were local allocations.  The exception are read-only tuples, which will be reconstructed as soon as possible.
 ! NOTE: literals are always local allocations, no? Yes, but sequencing will break if we don't keep track of the allocation state
 ! TODO: unify both below rules, do sanity checks elsewhere (if at all)
-CHR: literal-resolve-slot-loc-pop-request @ { LocalAllocation ?u ?o } { Eq ?o Is( not{ integer } ?a ) } { SlotLoc ?x ?o A{ ?n } } //
-{ LocPop ?x ?r L{ ?v } ?s t ?b } -- [ ?u ?b same-state? ] |
-[ ?a ?n dup slot-spec? [ offset>> ] when slot
-  [ ?v swap pseudo-literal-eq 1array ] keep
-  local-alloc-val? [ P{ LocalAllocation ?u ?v } suffix ] when
-  ?r ?s ==! suffix
-] ;
-
-! [ ?a length ?n valid-slot?
-!   [ ?a ?n slot
-!     [ ?v swap pseudo-literal-eq 1array ] keep
-!     local-alloc-val? [ P{ LocalAllocation ?u ?v } suffix ] when
-!     ?r ?s ==! suffix
-!   ]
-!   [ P{ Invalid } ] if
+! NOTE: it seems that sequencing goes haywire if we actually equalize the states here?
+! CHR: literal-apply-slot-loc-pop-request @ { LocalAllocation ?u ?o } { Eq ?o Is( not{ integer } ?a ) } { SlotLoc ?x ?o A{ ?n } }
+! { LocPop ?x ?r L{ ?v } ?s t ?b } // -- [ ?u ?b same-state? ] |
+! [ ?a ?n dup slot-spec? [ offset>> ] when slot
+!   [ ?v swap pseudo-literal-eq 1array ] keep
+!   local-alloc-val? [ P{ LocalAllocation ?s ?v } suffix ] when
+!   ! ?r ?s ==! suffix
 ! ] ;
 
-! TODO: extend this to local allocations.  In fact, maybe don't use the element mechanism, rather use a cyclic
-! loc-push like InitSlot, and set up the "value-info" of the slot location so that a local pushloc can be
-! resolved based on the slot number properties.  The element mechanism would be useful with the nth set-nth location
-! abstraction on the generic level.
-! NOTE: this is a special case, since we are actually swapping the reduction order here locally
-! The intuition is that theses local pushes are always preceeded by a loc-pop on that exact same location
-! TODO: could still be the case that the allocation needs to be "transported" if the preceding loc-pop was transporting...
-CHR: literal-resolve-numeric-push-loc-request @ { LocalAllocation ?u ?o } { SlotLoc ?x ?o Is( integer ?n ) } //
-{ Eq ?o Is( not{ fixnum } ?a ) } <={ PushLoc ?x ?r L{ ?v } ?s t } --
-[ ?u ?r same-state? ]
-[ ?v ?a clone ?n [ set-slot ] keepd :>> ?b ] |
-[ ?r ?s ==! ] { Eq ?o ?b } ;
+! CHR: perform-literal-read-slot-update @ { LocalAllocation ?u ?o } { SlotLoc ?x ?o A{ ?n } } { Eq ?o Is( not{ integer } ?l ) } //
+! { LocPop ?x ?a L{ ?v } ?b t ?d } { PushLoc ?x ?b L{ ?v } ?c t } -- [ ?u ?a same-state? ] [ ?d >states first ?u same-state? ] |
+! [ ?a ?c ==! ] ;
 
-! Local allocation access
-CHR: default-element-resolve-loc-pop-request @ { LocalAllocation ?a ?o } { Element ?o ?v } { SlotLoc ?y ?o __ } //
-{ LocPop ?y ?b L{ ?w } ?c t ?l } --
-[ ?l >states first ?a same-state? ] |
-[ ?w ?v ==! ] [ ?b ?c ==! ] ;
+! ! NOTE: creating a copy here because otherwise the type inference would actually modify allocations inside the analyzed quotation.
+! ! This also means reducing the equality from eq to eql.  Proper identity propagation should be performed via the variables.
+! CHR: perform-literal-write-slot-update @ { LocalAllocation ?u ?o } { SlotLoc ?x ?o A{ ?n } } { Eq ?w A{ ?k } } //
+! { Eq ?o Is( not{ integer } ?l ) } { LocPop ?x ?a L{ ?v } ?b t ?d } { PushLoc ?x ?b L{ ?w } ?c t } --
+! [ ?u ?a same-state? ] [ ?d >states first ?u same-state? ] |
+! [ ?k ?l clone [ ?n set-slot ] keep ?o swap Eql boa ]
+! [ ?a ?c ==! ] ;
 
-! NOTE: keeping any circularities here because that represents a slot read.  Note that two circularities with different
+! ! TODO: extend this to local allocations.  In fact, maybe don't use the element mechanism, rather use a cyclic
+! ! loc-push like InitSlot, and set up the "value-info" of the slot location so that a local pushloc can be
+! ! resolved based on the slot number properties.  The element mechanism would be useful with the nth set-nth location
+! ! abstraction on the generic level.
+! ! NOTE: this is a special case, since we are actually swapping the reduction order here locally
+! ! The intuition is that theses local pushes are always preceeded by a loc-pop on that exact same location
+! ! TODO: could still be the case that the allocation needs to be "transported" if the preceding loc-pop was transporting...
+! CHR: literal-resolve-numeric-push-loc-request @ { LocalAllocation ?u ?o } { SlotLoc ?x ?o Is( integer ?n ) } //
+! { Eq ?o Is( not{ fixnum } ?a ) } <={ PushLoc ?x ?r L{ ?v } ?s t } --
+! [ ?u ?r same-state? ]
+! [ ?v ?a clone ?n [ set-slot ] keepd :>> ?b ] |
+! [ ?r ?s ==! ] { Eq ?o ?b } ;
+
+! Re-create initializer semantics
+! CHR: compact-local-writeback @ { LocalAllocation ?u ?o } { SlotLoc ?x ?o __ } { PushLoc M{ ?x } ?a __ ?b t } // -- [ ?a ?b == not ] |
+CHR: compact-local-writeback @ { LocalAllocation ?u ?o } { Slot ?o __ ?x } { PushLoc M{ ?x } ?a __ ?b t } // -- [ ?a ?b == not ] |
+[ ?a ?b ==! ] ;
+
+! NOTE: keeping any circularities here because that represents a slot read/writeback.  Note that two circularities with different
 ! items represent parallel reads on the same object, and can be reduced
 CHR: beta-reduce-loc-push-pop @ //
 { PushLoc ?l ?a L{ ?x . ?v } ?b ?m } { LocPop ?l ?c L{ ?y . ?w } ?d ?n ?u } --
@@ -1185,6 +1271,11 @@ CHR: independent-loc-op-extends-beta-chain @ <={ LocOp ?y ?a __ ?b ?m . __ } // 
 [ ?v ?a prefix :>> ?w ]
 |
 { LocPop ?x ?c ?s ?d ?n ?w } ;
+
+! **** Resolve clone slot access
+! Approach: if there is a locpop on a cloned object's slot, duplicate the content as initial pushloc.
+CHR: copy-cloned-slot-access @ { Cloned ?x ?y ?a } { Slot ?y ?i ?v } { PushLoc ?v __ ?r ?a __ } { Slot ?x ?i ?w } { LocPop ?w __ ?s __ __ ?b } // --
+[ ?b >states first ?a same-state? ] | { PushLoc ?w ?a ?r ?a t } ;
 
 ! **** Sanity check
 ! NOTE: a rule like this should only be needed if parallel composition of read accesses is done
@@ -1202,7 +1293,11 @@ CHR: independent-loc-op-extends-beta-chain @ <={ LocOp ?y ?a __ ?b ?m . __ } // 
 
 ! NOTE: While the reduction with the local allocation predicate as implicit push-loc may only start from the head,
 ! the fact that the allocation is local does not change anymore, so we can localize all loc-ops, not only the first?
-CHR: slot-loc-op-known-local @ { LocalAllocation __ ?o } { SlotLoc ?x ?o __ } // AS: ?p <={ LocOp M{ ?x } ?b ?s ?c f . __ } --
+! CHR: slot-loc-op-known-local @ { LocalAllocation __ ?o } { SlotLoc ?x ?o __ } // AS: ?p <={ LocOp M{ ?x } ?b ?s ?c f . __ } --
+CHR: slot-loc-op-known-local @ { LocalAllocation __ ?o } { Slot ?o __ ?x } // AS: ?p <={ LocOp M{ ?x } ?b ?s ?c f . __ } --
+| [ ?p clone t >>local? ] ;
+
+CHR: slot-loc-op-known-local-cloned @ { Cloned ?o __ __ } { Slot ?o __ ?x } // AS: ?p <={ LocOp M{ ?x } __ __ __ f . __ } --
 | [ ?p clone t >>local? ] ;
 
 ! ! TODO: put the length check somewhere else, as it is independent from the actual loc op!
@@ -1214,12 +1309,6 @@ CHR: slot-loc-op-known-local @ { LocalAllocation __ ?o } { SlotLoc ?x ?o __ } //
 
 ! NOTE: do we need transitive eq rules?  Or do they break implications...
 ! CHR: same-obj-slot-is-same-loc @ { SlotLoc ?x ?o ?n } { Eq ?n ?a } { Eq ?m ?a } // { SlotLoc ?y ?o ?m } -- |
-
-CHR: eql-obj-slot-is-same-loc @ { SlotLoc ?x ?o ?n } { Eq ?n ?m } // { SlotLoc ?y ?o ?m } -- |
-[ ?y ?x ==! ] ;
-
-CHR: same-obj-slot-is-same-loc @ { SlotLoc ?x ?o ?n } // { SlotLoc ?y ?o ?n } -- |
-[ ?y ?x ==! ] ;
 
 ! **** Input-output proper values
 ! NOTE: we are relying on the cdrs of the stacks to encode states for sequencing.

@@ -56,7 +56,6 @@ TUPLE: var-context { eqs eq-disjoint-set read-only } { ground-values assoc read-
 M: var-context clone call-next-method
     [ eqs>> clone ] [ ground-values>> clone ] bi var-context boa ;
 
-
 SYMBOL: defined-equalities-ds
 
 ! Using local for debugging
@@ -119,6 +118,9 @@ ERROR: unknown-term-vars v1 v2 ;
     [ IH{ } clone var-context boa ] dip
     with-var-context
     ; inline
+
+! : with-new-eq-scope ( quot -- )
+!     <eq-disjoint-set> swap with-eq-scope ; inline
 
 DEFER: vars
 : with-term-vars ( obj quot -- )
@@ -201,6 +203,7 @@ M: term-var equal?
 ! Keep track of ground terms for equivalence classes
 ! This needs to be somewhat fast.  Also, it should return
 ! a canonical representation.
+! Return flag indicating whether the variable was changed
 : ?ground-value ( var -- val/key )
     dup term-var?
     [ defined-equalities
@@ -209,6 +212,10 @@ M: term-var equal?
           defined-ground-values ?at drop
       ] when*
     ] when ; inline
+
+! Return flag indicating whether the variable was changed
+: ?ground-value? ( var -- val/key changed )
+    [ ?ground-value ] keep over eq? not ; inline
 
 ! The idea is to make sure to compute the hash-code of the things
 ! actually represented by it, so they can be used as keys without having to
@@ -345,7 +352,14 @@ DEFER: lift
 
 ! * Unification
 ! Baader/Nipkow
-GENERIC: subst ( assoc term -- assoc term )
+! FIXME: this probably needs to be rewritten to never clone stuff that does not contain variables
+! to make sure that eq? checks on values are stable over e.g. creating fresh effects
+! Either check subterm for variables, or first deconstruct while keeping track of where rebuilding
+! needs to take place
+! Maybe do this efficiently with continuations?  Pass a continuation down which to invoke if the element has been changed.
+! E.g. for a sequence:
+! Create a quotation, which when invoked with one arg, prefixes the supplied value to the REST OF THE SEQUENCE.  Pass that continuation down.
+GENERIC: subst ( modified? assoc term -- modified? assoc term )
 SINGLETON: __
 
 ! This is for matching ground-terms only, basically as if expecting something that can be wrapped
@@ -360,10 +374,36 @@ C: <var-match> var-match
 TUPLE: class-match { class read-only } { var read-only } ;
 C: <class-match> class-match
 
+! Adding bindings inside matcher structure
+TUPLE: bind-match { var read-only } { obj read-only } ;
+C: <bind-match> bind-match
 
 SYMBOL: in-quotation?
 SYMBOL: quote-substitution
 SYMBOL: current-subst
+! ! SYMBOL: keep-ground-values
+! SYMBOL: did-subst
+
+! : when-has-vars ( assoc term quot -- assoc term )
+!     2over vars [ swap key? ] with any?
+!     [ call( a term -- a term ) ] [ drop ] if ; inline
+
+! :: maybe-unmodified ( assoc term quot -- assoc term )
+!     keep-ground-values get [ term ground-value? ] [ f ] if
+!     [ assoc term ]
+!     [ assoc term quot call( x x -- x x ) ] if ; inline
+! :: maybe-unmodified ( assoc term quot -- assoc term )
+!     [ did-subst off
+!       assoc term quot call( x x -- x x )
+!       did-subst get
+!     ] with-scope :> ( assoc new-term modified? )
+!     modified? dup did-subst set
+!     [ new-term ] [ term ] if assoc swap ;
+:: maybe-unmodified ( mod assoc term quot -- mod assoc term )
+    f assoc term quot call( x x x -- x x x ) :> ( new-mod assoc new-term )
+    ! mod assoc term quot call( x x x -- x x x ) :> ( new-mod assoc new-term )
+    new-mod mod or assoc
+    new-mod new-term term ? ;
 
 : quoting-substitution ( quot -- )
     [ quote-substitution get in-quotation? ] dip with-variable ; inline
@@ -372,40 +412,44 @@ SYMBOL: current-subst
 
 M: object subst ;
 M: term-var subst
-    over ?at drop
-    ?ground-value
+    over ?at
+    -rot [ or ] 2dip
+    ?ground-value?
+    -rot [ or ] 2dip
     dup { [ drop in-quotation? get ] [ word? ] [ { [ deferred? ] [ match-var? not ] } 1|| ] } 1&& [ <wrapper> ] when
     ;
 
 M: match-var subst
-    over ?at drop ;
+    over ?at -rot [ or ] 2dip ;
 
-M: quotation subst [ [ subst ] map ] quoting-substitution ;
+M: quotation subst
+    [ [ [ subst ] map ] quoting-substitution ] maybe-unmodified ;
 
 M: sequence subst
-    [ [ subst ] map ] no-quoting ;
-! As an exception, we don't rebuild vectors!
+    [ [ [ subst ] map ] no-quoting ] maybe-unmodified ;
 
-M: vector subst
-    [ [ subst ] map! ] no-quoting ;
+! ! TODO: assess whether this is 1. sound, 2. necessary at all?
+! ! As an exception, we don't rebuild vectors!
+! M: vector subst
+!     [ [ subst ] map! ] no-quoting ;
 
 <PRIVATE
 : num-slots ( tup -- n )
     1 slot second ; inline
 PRIVATE>
 
-: tuple-subst ( assoc term -- assoc term )
-    clone dup num-slots
+: tuple-subst ( mod assoc term -- mod assoc term )
+    [ clone dup num-slots
     [| i | i 2 + :> n
      [ n slot subst ]
      [ n set-slot ]
      [  ] tri
-    ] each-integer ; inline
+    ] each-integer ] maybe-unmodified ; inline
 
 M: curried subst
-    [ obj>> [ subst ] no-quoting ]
-    [ quot>> [ subst ] quoting-substitution ] bi
-    curried boa ;
+    [ [ obj>> [ subst ] no-quoting ]
+      [ quot>> [ subst ] quoting-substitution ] bi
+      curried boa ] maybe-unmodified ;
 
 M: composed subst
     [ tuple-subst ] quoting-substitution ;
@@ -414,7 +458,9 @@ M: tuple subst
     [ tuple-subst ] no-quoting ;
 
 M: wrapper subst wrapped>>
-    in-quotation? [ subst ] with-variable-off
+    in-quotation? [
+        [ subst ] maybe-unmodified
+    ] with-variable-off
     <wrapper> ;
 
 ! If substitution result is ground-value, return that.  Otherwise, re-wrap
@@ -424,13 +470,13 @@ M: atom-match subst
 
 ! TODO: do we need to check the instance here? The substitution should
 ! only contain a match for the content if the class has been checked, no?
-M:: class-match subst ( asc term -- asc term )
-    asc term var>> subst :> newterm
+M:: class-match subst ( mod asc term -- mod asc term )
+    mod asc term var>> subst :> newterm
     newterm ground-value? [ newterm ]
     [ term class>> newterm <class-match> ] if ;
 
 : lift ( term subst -- term )
-    swap subst nip ;
+    f spin subst 2nip ;
 
 GENERIC: occurs? ( var term -- ? )
 M: object occurs? 2drop f ;
@@ -443,6 +489,32 @@ M: tuple occurs? tuple-slots occurs? ;
 ! values...
 ERROR: rebuilds-identity-tuple term ;
 M: identity-tuple subst rebuilds-identity-tuple ;
+
+! NOTE: basically a copy of eq-wrapper of bootstrap.image.private
+TUPLE: eq-wrap { obj read-only } ;
+C: <eq-wrap> eq-wrap
+
+ERROR: parsing-non-eq-testable-literal obj ;
+: check-literal-eq-wrap-object ( x -- x )
+    dup union{ fixnum word term-var } instance?
+    [ parsing-non-eq-testable-literal ] unless ; inline
+SYNTAX: Eq{ scan-object "}" expect
+    check-literal-eq-wrap-object <eq-wrap> suffix! ;
+
+! Do not touch anything inside here
+! eq-wrappers are equal if their objects are eq.
+! eq-wraps are equal if either their objects are eq, but on the term-var level.
+! So as long as two eq-wraps which are supposed to be eq are always constructed with the same term-var,
+! that coundition should be fulfilled?
+M: eq-wrap equal? over eq-wrap? [ [ obj>> ] bi@ eq? ] [ 2drop f ] if ;
+M: eq-wrap hashcode* nip obj>> identity-hashcode ;
+! M: eq-wrap subst dup obj>> term-var? [ call-next-method ] when  ;
+! M: eq-wrap subst rebuilds-identity-tuple ;
+M: eq-wrap subst ;
+M: eq-wrap pprint* pprint-object ;
+M: eq-wrap pprint-delims drop \ Eq{ \ } ;
+M: eq-wrap >pprint-sequence obj>> 1array ;
+
 
 ERROR: incompatible-terms term1 term2 ;
 
@@ -461,6 +533,11 @@ SYNTAX: Is( scan-object classoid check-instance scan-object ")" expect <class-ma
 M: class-match pprint* pprint-object ;
 M: class-match pprint-delims drop \ Is( \ ) ;
 M: class-match >pprint-sequence [ class>> ] [ var>> ] bi 2array ;
+
+SYNTAX: Bind( scan-object term-var check-instance scan-object ")" expect <bind-match> suffix! ;
+M: bind-match pprint* pprint-object ;
+M: bind-match pprint-delims drop \ Bind( \ ) ;
+M: bind-match >pprint-sequence tuple-slots ;
 
 ! Tried first
 GENERIC#: decompose-left 1 ( term1 term2 -- terms1 terms2 cont? )
@@ -482,10 +559,15 @@ M: composed decompose-right decompose-callable ;
 M: quotation decompose-left decompose-callable ;
 M: quotation decompose-right decompose-callable ;
 
+M: bind-match decompose-right "bind-match on rhs" throw ;
+! lhs-seq: { var obj } rhs-seq: { term term }
+M:: bind-match decompose-left ( bmatch term -- terms1 terms2 cont? )
+    bmatch var>> bmatch obj>> 2array
+    term dup 2array t ;
 TUPLE: match-set elements ;
 C: <match-set> match-set
 : make-match-sets ( set -- seq signature )
-    members [ class-of ] collect-by sort-keys
+    members [ ?ground-value dup term-var? [ "term vars in match set not supported" throw ] when class-of ] collect-by sort-keys
     [ [ <match-set> ] map-values ] [ [ length ] map-values >alist ] bi ;
 M: sets:set decompose-right
     2dup { [ [ class-of ] same? ] [ [ cardinality ] same? ] } 2&&
@@ -496,7 +578,7 @@ M: sets:set decompose-right
     {
         [
             { [ decompose-left ] [ decompose-right ] } 0||
-            [ 2dup = [ f ] [ incompatible-terms ] if ] unless*
+            [ 2dup eq? [ f ] [ incompatible-terms ] if ] unless*
         ]
     } cond ;
 
@@ -519,7 +601,7 @@ SYMBOL: solve-isomorphic-mode?
         [ values all-unique? ] } 1&& ; inline
 
 : check-solution ( subst -- ? )
-    [ solve-isomorphic-mode?
+    [ solve-isomorphic-mode? get
       [ dup isomorphic-solution?
         [ drop f ] unless
       ] when
@@ -560,6 +642,7 @@ SYMBOL: solve-isomorphic-mode?
     {
         { [ 2dup [ __? ] either? ] [ 2drop (solve) ] }
         ! { [ 2dup defined-equal? ] [ 2drop (solve) ] }
+        { [ 2dup [ eq-wrap? ] both? ] [ 2dup = [ 2drop (solve) ] [ 4drop f ] if ] }
         { [ over atom-match? ] [ dup ground-value? [ [ var>> ] dip (solve1) ] [ 4drop f ] if ] }
         { [ dup atom-match? ] [ over ground-value? [ var>> (solve1) ] [ 4drop f ] if ] }
         { [ over class-match? ] [ 2dup swap check-class-match [ [ var>> ] dip (solve1) ] [ 4drop f ] if ] }
@@ -568,7 +651,8 @@ SYMBOL: solve-isomorphic-mode?
         { [ dup var-match? ] [ over term-var? [ var>> (solve1) ] [ 4drop f ] if ] }
         { [ over valid-term-var? ] [ 2dup = [ 2drop (solve) ] [ elim ] if ] }
         { [ dup valid-term-var? ] [ swap elim ] }
-        { [ dup hash-set? [ f ] [ 2dup = ] if ] [ 2drop (solve) ] }
+        ! { [ dup hash-set? [ f ] [ 2dup = ] if ] [ 2drop (solve) ] }
+        { [ dup hash-set? [ f ] [ 2dup eq? ] if ] [ 2drop (solve) ] }
         { [ 2dup [ match-set? ] both? ] [ solve-match-set ] }
         [ decompose [ zip prepend ] [ 2drop ] if (solve) ]
     } cond ; inline recursive

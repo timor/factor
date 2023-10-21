@@ -1,8 +1,8 @@
-USING: accessors arrays assocs assocs.extras chr.factor chr.parser classes
-classes.algebra classes.algebra.private classes.builtin classes.tuple
-classes.union combinators.short-circuit combinators.smart generic.math
-generic.single kernel lists make math namespaces quotations sequences sets terms
-types.util words ;
+USING: accessors arrays assocs assocs.extras byte-arrays chr chr.factor
+chr.parser chr.state classes classes.algebra classes.algebra.private
+classes.builtin classes.tuple classes.union combinators.short-circuit
+combinators.smart generic.math generic.single kernel lists make math namespaces
+quotations sequences sets terms types.util words ;
 
 IN: chr.factor.util
 
@@ -225,6 +225,14 @@ M: ApplyEffect canonical? effect>> canonical? ;
 M: Invalid canonical? drop t ;
 M: Ensure canonical? drop t ;
 
+
+GENERIC: unresolved-declarations? ( x -- ? )
+M: Effect unresolved-declarations? preds>> [ unresolved-declarations? ] any? ;
+M: Xor unresolved-declarations? tuple-slots [ unresolved-declarations? ] any? ;
+M: chr-pred unresolved-declarations? drop f ;
+M: DeclaredInstance unresolved-declarations? type>> term-var? not ;
+M: DeclaredNotInstance unresolved-declarations? type>> term-var? not ;
+
 ! ** Xor Calls
 
 GENERIC: xor-call? ( type -- ? )
@@ -292,11 +300,41 @@ M: word local-alloc-val? drop f ;
 M: object local-alloc-val? class-of local-alloc-class? ;
 
 
-: withd ( param obj obj quot -- obj obj curried )
-    [ swapd ] dip with ; inline
+PREDICATE: ro-tuple-class < class { [ tuple class< ] [ all-slots [ read-only>> ] all? ] } 1&& ;
+UNION: array-like array byte-array ;
 
 ! ** Sets
 ! misnomer...
 ! usually used as ( existing possible-extension -- things-connecting-it new-things )
 : set-cut ( set1 set2 -- common in-set-2-but-not-set-1 )
     members [ swap in? ] with partition ;
+
+! ** Quoting
+
+! This is used to ensure that the matcher does not match quotations
+GENERIC: quote-literals ( obj -- obj )
+! M: quotation quote-literals
+M: callable quote-literals
+    [ quote-literals ] map ;
+! TODO: the value slot of a curried does not need special treatment here?
+! M: curried quote-literals
+!     tuple-slots [ quote-literals ] map curried slots>tuple ;
+! M: composed quote-literals
+!     tuple-slots [ quote-literals ] map composed slots>tuple ;
+M: object quote-literals ;
+M: tuple quote-literals dup class-of all-slots [ read-only>> ] all? [ <eq-wrap> ] unless ;
+M: POSTPONE: f quote-literals ;
+M: sequence quote-literals <eq-wrap> ;
+
+! ** Class-of t exception
+GENERIC: precise-class-of ( obj -- class )
+M: object precise-class-of class-of ;
+M: t precise-class-of drop t ;
+
+! ** Finding the more general predicate
+: more-general-pred ( p1 p2 -- p/f )
+    2dup unify dup { [ not ] [ values [ term-var? ] any? ] } 1||
+    [ 3drop f ]
+    [| | keys :> ( p1 p2 k )
+     k p1 vars subset? [ p1 ]
+     [ k p2 vars subset? [ p2 ] [ f ] if ] if ] if ;

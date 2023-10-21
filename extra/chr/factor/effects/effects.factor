@@ -201,13 +201,6 @@ CHR: collect-union-pred @ { PhiMode } { FinishEffect ?tau } // AS: ?e P{ MakeEff
  { MakeEffect ?a ?b y ?k ?tau } ] ;
 
 
-CHR: phi-discard-discriminators @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __ __ ?tau } // <={ Discriminator } -- | ;
-CHR: phi-discard-leftover-preds @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __ __ ?tau } // <={ body-pred } -- | ;
-! TODO: not 100% sure the following isn't working too eagerly...
-CHR: phi-discard-keeps @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __ __ ?tau } // <={ Keep } -- | ;
-
-CHR: phi-discard-params @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __ __ ?tau } // <={ Params } -- | ;
-
 ! *** Composition Mode
 ! These are live after the pred has been taken into account
 
@@ -225,11 +218,12 @@ PREFIX-RULES: { P{ CompMode } }
 ! [ ?s [ [ lastcdr ] same? ] monotonic? ] | ;
 
 ! *** Nested Reasoning Triggering
+! TODO: why is this here?
 CHR: collect-call-recursive @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p P{ CallRecursive ?m ?rho ?sig } --
 [ ?rho vars ?sig vars union ?e make-effect-vars intersects? ]
 [ ?x ?rho vars union ?sig vars union :>> ?y ]
 [ ?l ?p suffix :>> ?k ]
-| { MakeEffect ?a ?b ?y ?k ?tau } ;
+| [ "collect-call-recursive triggered" throw ] { MakeEffect ?a ?b ?y ?k ?tau } ;
 
 ! *** All other preds
 ! **** Parameter liveness propagation
@@ -289,16 +283,16 @@ CHR: collect-live-body-pred @ { FinishEffect ?tau } // { Collect ?p } AS: ?e P{ 
  ?p vars ?p free-effect-vars diff ?x union :> y
  { MakeEffect ?a ?b y ?k ?tau } ] ;
 
-! ! FIXME: Don't use this kind of special case!
-! CHR: collect-boa @ { FinishEffect ?tau } // AS: ?e P{ MakeEffect ?a ?b ?x ?l ?tau } AS: ?p <={ Boa ?c ?i ?o } --
-! ! [ ?i ?o [ vars ?e make-effect-vars in? ] bi@ or ]
-! [ ?p vars ?e make-effect-vars intersects? ]
-! [ ?l ?p suffix :>> ?k ]
-! [ ?x ?p vars union :>> ?y ] |
-! { MakeEffect ?a ?b ?y ?k ?tau } ;
+CHR: phi-discard-discriminators @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __ __ ?tau } // <={ Discriminator } -- | ;
+CHR: losing-unresolved-iteration @ { FinishEffect ?tau } <={ MakeEffect } AS: ?p <={ Iterated } // -- | [ { ?p "discarding unresolved iteration predicate" } throw ] ;
+CHR: phi-discard-leftover-preds @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __ __ ?tau } // <={ body-pred } -- | ;
+! TODO: not 100% sure the following isn't working too eagerly...
+CHR: phi-discard-keeps @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __ __ ?tau } // <={ Keep } -- | ;
 
-CHR: losing-undefined-loc-spec @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { Def ?l } AS: ?p <={ LocSpec ?x . __ } // --
-[ ?x ?l in? not ] | [ { "locspec has no definition" ?p } throw ] ;
+CHR: phi-discard-params @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __ __ ?tau } // <={ Params } -- | ;
+
+! CHR: losing-undefined-loc-spec @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } { Def ?l } AS: ?p <={ LocSpec ?x . __ } // --
+! [ ?x ?l in? not ] | [ { "locspec has no definition" ?p } throw ] ;
 
 CHR: discard-implied-param @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // <={ ImpliesParam } -- | ;
 CHR: incomplete-scope @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { Scope ?l ?r } -- | [ { ?l ?r "losing scope" } throw ] ;
@@ -331,13 +325,12 @@ PREFIX-RULES: f
 CHR: apply-effect-not-known @ { FinishEffect __  } // { ApplyEffect M{ ?rho } ?i ?o } -- | [ "applying unknown effect" throw ] ;
 CHR: losing-call-effect @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p P{ CallEffect __ __ __ } -- | [ { ?p "discarding a call-effect predicate" } throw ] ;
 CHR: losing-macro-call @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p <={ MacroCall } -- | [ { ?p "discarding a macro call predicate" } throw ] ;
-CHR: losing-unresolved-iteration @ { FinishEffect ?tau } <={ MakeEffect } AS: ?p <={ Iterated } // -- | [ { ?p "discarding unresolved iteration predicate" } throw ] ;
 ! Still pretty fragile.  Also, not needed since a write-back push will have the same states
-! CHR: perform-dead-push-loc @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { PushLoc M{ ?x } ?a __ ?b ?t } -- |
-! [ ?a ?b ==! ] ;
-CHR: losing-non-local-writeback-loc-op @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } AS: ?p <={ LocOp } // --
-[ ?p PushLoc? ?p local?>> and not ]
-| [ { ?p "discarding unresolved location operation" } throw ] ;
+! NOTE: Wrong.  This is needed for e.g. writing unknown values into local allocations and forgetting everything
+CHR: perform-dead-push-loc @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { PushLoc M{ ?x } ?a __ ?b t } -- |
+[ ?a ?b ==! ] ;
+CHR: losing-unresolved-loc-op @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } AS: ?p <={ LocOp __ ?a __ ?b . __ } // --
+[ ?a ?b == not ] | [ { ?p "discarding unresolved location operation" } throw ] ;
 CHR: losing-unresolved-prim-call @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } AS: ?p <={ PrimCall } // --
 | [ { ?p "discarding unresolved primitive call" } throw ] ;
 CHR: losing-generic-dispatch @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } AS: ?p <={ GenericDispatch } // --

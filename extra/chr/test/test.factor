@@ -32,3 +32,8 @@ M:: expected-same-type error. ( e -- )
     [ q1 q2 [ get-type ] bi@ 2dup same-effect? [ 2drop f f ] [ [ q1 q2 ] 2dip expected-same-type ] if ] [ t ] recover t ;
 
 TEST: test-same-type
+
+: (test-chr-type) ( type quot -- error/f failed? tested? )
+    [ get-type ] curry (chr-test) ;
+
+TEST: test-chr-type

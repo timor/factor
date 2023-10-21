@@ -18,6 +18,7 @@ IN: chr.factor.word-types
         { 2nip [ nip nip ] }
         { 2drop [ drop drop ] }
         { 3drop [ drop drop drop ] }
+        { 4drop [ drop drop drop drop ] }
         { 2dup [ over over ] }
         { 3dup [ pick pick pick ] }
         { 2dip [ swap [ dip ] dip ] }
@@ -71,6 +72,7 @@ M: single-method word-input-classes
 M: word word-input-classes
     {
     [ "input-classes" word-prop ]
+    [ "derived-from" word-prop dup [ rest ] when ]
     [ stack-effect effect-in-types ]
     } 1|| ;
 
@@ -179,8 +181,8 @@ CHR: type-of-<array> @ { TypeOfWord <array> M{ ?tau } } // -- |
          P{ Instance ?n fixnum } ! would be array capacity, but that is quite verbose
          P{ Instance ?a array }
          P{ Instance ?v object }
-         P{ Length ?a ?n }
          P{ Slot ?a 1 ?n }
+         P{ Length ?a ?n }
          P{ Element ?a ?v }
          ! P{ Element ?a ?x }
          ! P{ PushLoc ?x f L{ ?v } ?r }
@@ -217,7 +219,8 @@ CHR: type-of-slot @ { TypeOfWord slot M{ ?tau } } // -- |
          P{ Instance ?m fixnum }
          P{ Instance ?v object }
          P{ Le 0 ?m }
-         P{ SlotLoc ?x ?o ?m }
+         ! P{ SlotLoc ?x ?o ?m }
+         P{ Slot ?o ?m ?x }
          P{ LocPop ?x ?a L{ ?v } ?b f ?a }
          P{ PushLoc ?x ?b L{ ?v } ?a f }
      } }
@@ -235,7 +238,8 @@ CHR: type-of-set-slot @ { TypeOfWord set-slot M{ ?tau } } // -- |
          P{ Instance ?o not{ integer } }
          P{ Instance ?v object }
          P{ Le 0 ?n }
-         P{ SlotLoc ?x ?o ?n }
+         ! P{ SlotLoc ?x ?o ?n }
+         P{ Slot ?o ?n ?x }
          P{ LocPop ?x ?a L{ ?z } ?b f ?a }
          P{ PushLoc ?x ?b L{ ?v } ?c f }
      } }
@@ -283,16 +287,25 @@ CHR: type-of-wrapper @ // { ?TypeOf ?q ?tau } --
 
 ! *** Destructure unit type queries
 
-CHR: type-of-pushed-quot @ { ?TypeOf [ ?q ] ?tau } // -- [ ?q callable? ] |
+CHR: type-of-pushed-quot @ { ?TypeOf Bind( ?p [ ?q ] ) ?tau } // -- [ ?q callable? ] |
 { ?TypeOf ?q ?rho }
 { MakeUnit ?rho ?sig }
 { ComposeType ?sig P{ Effect L{ ?x . ?a } L{ ?x . ?a } f { P{ Eq ?x ?q } } } ?c }
-{ TypeOf [ ?q ] ?c } ;
+{ TypeOf ?p ?c } ;
 
-CHR: type-of-unit-val @ { ?TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ] [ ?v callable? not ]
-| { ?TypeOf ?v ?rho }
-{ MakeUnit ?rho ?sig }
-{ TypeOf [ ?v ] ?sig } ;
+CHR: type-of-unit-val @ { ?TypeOf Bind( ?p [ ?v ] ) ?tau } // -- [ ?v callable-word? not ] [ ?v callable? not ]
+[ ?v dup eq-wrap? :>> ?l [ obj>> ] when :>> ?o drop t ] [ ?o precise-class-of :>> ?c ]
+|
+[ ?p P{ Effect ?a L{ ?x . ?a } f {
+            P{ Instance ?x ?c }
+            P{ Eq ?x ?o }
+        } }
+  ?l [ [ P{ LocalAllocation ?a ?x } suffix ] change-preds ] when
+  TypeOf boa ] ;
+
+! ! { ?TypeOf ?v ?rho }
+! { MakeUnit ?rho ?sig }
+! { TypeOf [ ?v ] ?sig } ;
 
 ! NOTE: Big Change! Only make these CallXors!
 ! Interestingly enough, it does not seem to have much impact, at least according
@@ -302,20 +315,18 @@ CHR: type-of-unit-val @ { ?TypeOf [ ?v ] ?tau } // -- [ ?v callable-word? not ] 
 ! { MakeUnit ?x ?rho }
 ! { MakeUnit ?y ?sig } ;
 
-CHR: make-unit-local-alloc @ // { MakeUnit A{ ?o } ?tau } -- [ ?o local-alloc-val? ] |
-[ ?tau P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x ?o } P{ LocalAllocation ?a ?x } } } ==! ] ;
+! CHR: make-unit-local-alloc @ // { MakeUnit A{ ?o } ?tau } -- [ ?o local-alloc-val? ] |
+! [ ?tau P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x ?o } P{ LocalAllocation ?a ?x } } } ==! ] ;
 
-! TODO: gauge impact of not doing the expansion eagerly
-! XXX This breaks isomorphic comparison for some reason.  Normalization broken?
 ! CHR: make-unit-simple-type @ // { MakeUnit ?rho ?tau } -- [ { ?rho } first valid-type? ] |
 CHR: make-unit-simple-type @ // { MakeUnit ?rho ?tau } -- [ ?rho term-var? not ] |
 [ ?tau P{ Effect ?a L{ ?x . ?a } f { P{ Instance ?x ?rho } } } ==! ] ;
 
 ! *** Data Values
 
-CHR: type-of-val @ // { ?TypeOf A{ ?v } ?tau } -- [ ?v callable? not ] [ ?v callable-word? not ]
-|
-[ ?tau W{ W{ ?v } } ==! ] ;
+! CHR: type-of-val @ // { ?TypeOf A{ ?v } ?tau } -- [ ?v callable? not ] [ ?v callable-word? not ]
+! |
+! [ ?tau W{ W{ ?v } } ==! ] ;
 
 ! *** Some Primitives
 ! TODO: We don't express that there is at least one non-fixnum here.  Could be
@@ -337,9 +348,9 @@ CHR: type-of-val @ // { ?TypeOf A{ ?v } ?tau } -- [ ?v callable? not ] [ ?v call
 
 CHR: type-of-eq @ { TypeOfWord eq? M{ ?tau } } // -- |
 [ ?tau P{ Xor
-          ! introducing the value which is equal to as parameter?
-          P{ Effect L{ ?x ?x . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?c t } P{ Eq ?c t } } }
-          P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?c POSTPONE: f } P{ Eq ?c f } P{ NotSame ?x ?y } } }
+          ! P{ Effect L{ ?x ?x . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?c t } P{ Eq ?c t } } }
+          P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?y object } P{ Instance ?c t } P{ Eq ?c t } P{ Eq ?x ?y } } }
+          P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f { P{ Instance ?x object } P{ Instance ?y object } P{ Instance ?c POSTPONE: f } P{ Eq ?c f } P{ NotSame ?x ?y } } }
    } ==! ] ;
 
 ! NOTE: Declarations are nominative first of all, although the existing type inference does
@@ -405,11 +416,11 @@ CHR: type-of-bignum>fixnum @ { TypeOfWord bignum>fixnum M{ ?tau } } // --
 
 ! TODO: do for all derived primitives
 ! NOTE: This doesn't work for e.g. shift, because of the coercer.
-! CHR: type-of-derived-math-word @ { TypeOfWord ?w ?tau } // --
-! [ ?tau term-var? ]
-! [ ?w "derived-from" word-prop :>> ?l ]
-! [ ?l first 1quotation :>> ?q ] |
-! { ?TypeOf ?q ?sig }
+CHR: type-of-derived-word @ { TypeOfWord ?w M{ ?tau } } // --
+[ ?w "derived-from" word-prop :>> ?l ]
+[ ?l first 1quotation :>> ?q ] |
+{ ?TypeOf ?q ?sig }
+{ WrapDefaultClasses ?w ?sig ?tau } ;
 ! { WrapDefaultClasses ?w ?sig ?rho }
 ! { ReinferEffect ?rho ?z }
 ! { CheckXor ?w ?z ?tau } ;
@@ -469,7 +480,7 @@ CHR: type-of-other-primitives @ { TypeOfWord ?w M{ ?tau } } // --
 
 ! induces parameter
 ! ( x y -- ? )
-CHR: type-of-< @ { TypeOfWord A{ < } M{ ?tau } } // -- |
+CHR: type-of-< @ { TypeOfWord < M{ ?tau } } // -- |
 ! { MakeGenericDispatch <
 !   P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f {
 !          { Instance ?x number }
@@ -477,8 +488,8 @@ CHR: type-of-< @ { TypeOfWord A{ < } M{ ?tau } } // -- |
 !          { Instance ?c boolean }
 !          { <==> ?c P{ Lt ?x ?y } }
 !      } } ?tau } ;
-[
-    ?sig
+[| |
+    ! ?sig
     P{ Xor
        P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } f {
               P{ Instance ?z t }
@@ -492,15 +503,15 @@ CHR: type-of-< @ { TypeOfWord A{ < } M{ ?tau } } // -- |
                P{ Le ?y ?x }
            } }
      }
-    ==!
-]
-{ ComposeType P{ Effect ?a ?a f { P{ Ensure { number number } ?a } } } ?sig ?tau } ;
+    :> sig
+{ ComposeType P{ Effect ?a ?a f { P{ Ensure { number number } ?a } } } sig ?tau }
+] ;
 
 ! CHR: type-of-equal? @ { TypeOfWord equal? ?tau } // -- |
 CHR: type-of-equal? @ { TypeOfWord equal? M{ ?tau } } // -- |
 { MakeGenericDispatch equal?
   P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f {
-         { Instance ?c t } { Eq ?c t } { Eq ?x ?y } } } ?rho }
+         { Instance ?c t } { Eq ?c t } { Eql ?x ?y } } } ?rho }
 { MakeGenericDispatch equal?
   P{ Effect L{ ?x ?y . ?a } L{ ?c . ?a } f {
          { Instance ?c POSTPONE: f } { Eq ?c f } { Neq ?x ?y } } } ?sig }
@@ -523,15 +534,15 @@ CHR: type-of-= @ { TypeOfWord = M{ ?tau } } // -- |
 [
     ?tau
     P{ Xor
-       P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } f {
+       P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } f {
               P{ Instance ?z t }
               P{ Eq ?z t }
-              P{ Eq ?x ?y }
+              P{ Eql ?x ?y }
           } }
-       P{ Effect L{ ?x ?y . ?a } L{ ?z . ?a } f {
+       P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } f {
               P{ Instance ?z POSTPONE: f }
               P{ Eq ?z f }
-              P{ Neq ?y ?x }
+              P{ Neq ?x ?y }
           } }
      }
     ==!
@@ -649,7 +660,7 @@ CHR: type-of-regular-word @ { TypeOfWord A{ ?w } M{ ?tau } } // --
 ! [ ?w "transform-quot" word-prop not ]
 [ ?w generic? not ]
 [ ?w def>> ?w 1quotation = not ]
-[ ?w def>> :>> ?q ]
+[ ?w def>> quote-literals :>> ?q ]
 ! NOTE: trying to assess whether we ever hit this case at all!
 [ ?w "input-classes" word-prop >array :>> ?c dup length 1 > [ { ?w "input-class-ensure-on-regular-word" } throw ] when ]
 |
@@ -718,7 +729,7 @@ CHR: type-of-generic @ { TypeOfWord ?w M{ ?tau } } // --
 
 CHR: type-of-single-method @ { TypeOfWord ?w M{ ?tau } } // --
 [ ?w single-method? ]
-[ ?w def>> :>> ?q ] |
+[ ?w def>> quote-literals :>> ?q ] |
 { ?TypeOf ?q ?rho }
 { WrapDefaultClasses ?w ?rho ?tau } ;
 

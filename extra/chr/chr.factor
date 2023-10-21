@@ -108,6 +108,8 @@ GENERIC: lookup-index-key ( pred -- f/obj )
 ! indexed on the first argument
 TUPLE: index1-pred < chr-pred key ;
 M: object lookup-index-key drop f ;
+! FIXME
+! M: index1-pred lookup-index-key key>> <identity-wrapper> ;
 M: index1-pred lookup-index-key key>> ;
 M: chr-pred lookup-index-key class-of ;
 

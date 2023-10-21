@@ -1,5 +1,5 @@
-USING: accessors assocs chr.factor chr.factor.util chr.parser classes.tuple
-kernel sequences strings terms ;
+USING: accessors arrays assocs chr.factor chr.factor.util chr.parser classes
+classes.tuple kernel sequences strings terms ;
 
 IN: chr.factor.intra-effect.maps
 
@@ -17,6 +17,9 @@ IN: chr.factor.intra-effect.maps
 
 CHRAT: chr-intra-effect-maps {  }
 
+CHR: forget-literal-object-slots @ { Liveness } { Eq ?o A{ ?v } } // { Slot ?o __ __ } -- | ;
+CHR: forget-literal-map @ { Liveness } // { Map A{ ?o } __ } -- | ;
+
 PREFIX-RULES: { P{ CompMode } }
 
 ! Not checking for actual values, only key subsets!
@@ -27,25 +30,31 @@ CHR: subsume-map @ { Map ?o ?m } // { Map ?o ?n } --
 CHR: combine-map @ // { Map ?o ?m } { Map ?o ?n } --
 [ ?n ?m assoc-union :>> ?k ] | { Map ?o ?k } ;
 
-CHR: forget-literal-object-slots @ { Eq ?o A{ ?v } } // { Slot ?o __ __ } -- | ;
+! NOTE: this is getting messy in combination with the Map predicate...
+CHR: literal-ro-slot-access @ { Eq ?o A{ ?a } } { Slot ?o Is( string ?n ) ?v } // -- |
+[ ?v ?n ?a get-slot-named
+  [ Eq boa ]
+  [ class-of Instance boa ] 2bi 2array
+] ;
 
+! NOTE: could be resurrected for ro-tuples possibly?
 ! CHR: literal-implies-local-alloc @ { Eq ?o A{ ?v } } // { LocalAllocation ?o } -- | ;
 
 ! This is kind of the slots value-info structure attached to compiler values
 ! FIXME: unifier seems to go haywire on Hashtables...
 ! CHR: slot-defines-map @ { Slot ?o ?n ?v } // -- | { Map ?o H{ { ?n ?v } } } ;
-! NOTE: only do this for named slots right now
-CHR: slot-literal-defines-map @ { Slot ?o Is( string ?n ) M{ ?v } } { Eq M{ ?v } A{ ?a } } // -- | { Map ?o { { ?n ?a } } } ;
+! NOTE: only do this for named slots of ro-tuples right now
+CHR: slot-literal-defines-map @ { Instance ?o Is( ro-tuple-class ?tau ) } { Slot ?o Is( string ?n ) M{ ?v } } { Eq M{ ?v } A{ ?a } } // -- |
+! NOTE: here seems to be a problem with rebuilding!
+{ Map ?o { { ?n ?a } } } ;
+! [ ?o ?n ?a 2array 1array Map boa ] ;
 
 : assoc>tuple ( assoc class -- obj )
     [ all-slots [ name>> of ] with map ] [ slots>tuple ] bi ;
 
-CHR: literalize-tuple @ { Instance ?o Is( tuple-class ?tau ) } // { Map M{ ?o } A{ ?m } } --
+CHR: literalize-tuple @ { Instance ?o Is( ro-tuple-class ?tau ) } // { Map M{ ?o } A{ ?m } } --
 [ ?tau all-slots :>> ?s ]
-[ ?s [ [ read-only>> ]
-       [ name>> ?m key? ]
-       ! [ name>> ?m at ground-value? ]
-       bi and ] all? ]
+[ ?s [ name>> ?m key? ] all? ]
 [ ?m ?tau assoc>tuple :>> ?v ]
 | { Eq ?o ?v } ;
 
