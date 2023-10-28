@@ -112,6 +112,8 @@ PREDICATE: callable-word < word { [ symbol? not ] } 1&& ;
 ! Alternatively, a more general approach could be tried with explicitly
 ! declaring which var slots are inputs and outputs, respectively.
 
+! TODO ** Document Eq-ness and same-variable-ness!
+
 ! * Helpers for generating declared effects
 
 GENERIC: elt>var ( i elt -- obj )
@@ -397,7 +399,9 @@ TUPLE: Eql < rel-pred ;
 TUPLE: Eq < Eql ;
 ! M: Eq subst
 !     keep-ground-values [ call-next-method ] with-variable-on ;
+! NOTE: this has "not eql" semantics!
 TUPLE: Neq < rel-pred ;
+! ... while this has "not eq" semantics!
 TUPLE: NotSame < Neq ;
 ! M: NotSame subst keep-ground-values [ tuple-subst ] with-variable-on ;
 TUPLE: Le < rel-pred ;

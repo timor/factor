@@ -270,11 +270,11 @@ CHR: phi-eq-range @ // { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } -- [ ?b ?c order? [ :
 ! TODO: abstract to all relations somehow
 
 ! NOTE: replacing these with discriminators for now.  The idea is that this is not an observable single-value
-! difference thing in the input or output?
+! difference thing in the input or output? TODO: revisit this with additional notsame definition...
 ! CHR: phi-eq-neq-1 @ { Eq ?x ?y } { Neq ?x ?y } // -- | { Decider { ?x ?y } } ;
 ! CHR: phi-eq-neq-2 @ { Eq ?x ?y } { Neq ?y ?x } // -- | { Decider { ?x ?y } } ;
-CHR: phi-eq-neq-1 @ <={ Eql ?x ?y } { Neq ?x ?y } // -- | { Discriminator { ?x ?y } } ;
-CHR: phi-eq-neq-2 @ <={ Eql ?x ?y } { Neq ?y ?x } // -- | { Discriminator { ?x ?y } } ;
+CHR: phi-eql-neq-1 @ <={ Eql ?x ?y } { Neq ?x ?y } // -- | { Discriminator { ?x ?y } } ;
+CHR: phi-eql-neq-2 @ <={ Eql ?x ?y } { Neq ?y ?x } // -- | { Discriminator { ?x ?y } } ;
 ! CHR: phi-neq-is-always-decider @ { Neq ?x ?y } // -- | { Decider { ?x ?y } } ;
 
 CHR: phi-eql-eq-1 @ { Eql ?x ?y } { Eq ?x ?y } // -- | { Discriminator { ?x ?y } } { Collect P{ Eql ?x ?y } } ;
@@ -392,6 +392,10 @@ CHR: invalid-defer-type-request @ // { ?DeferTypeOf ?x __ } -- [ ?x callable? no
 
 ! Possibly expensive? Seems like it! But some are definitely needed, e.g. for Eq, aaand for Le
 ! CHR: unique-val-pred @ AS: ?p <={ val-pred } // AS: ?p <={ val-pred } -- | ;
+
+! So the solution is to define the duplicate checks explicitly for the cases
+! where we could trigger duplicate reasoning.  In general, duplicate predicates are never collected.
+
 ! TODO include num=
 CHR: var-eq-is-true @ // <={ Eql M{ ?x } ?x } -- | ;
 CHR: unique-eq-pred-1 @ { Eq M{ ?x } M{ ?y } } // { Eq M{ ?x } M{ ?y } } -- | ;
@@ -406,6 +410,7 @@ CHR: unique-le-pred @ { Le ?x ?y } // { Le ?x ?y } -- | ;
 CHR: unique-lt-pred @ { Lt ?x ?y } // { Lt ?x ?y } -- | ;
 CHR: unique-slot-pred @ { Slot ?o ?n ?v } // { Slot ?o ?n ?v } -- | ;
 CHR: unique-allocation-pred @ { LocalAllocation ?a ?o } // { LocalAllocation ?b ?o } -- [ ?a ?b same-state? ] [ ?a llength* ?b llength* <= ] | ;
+CHR: unique-clone-pred @ { Cloned ?x ?y ?a } // { Cloned ?x ?y ?a } -- | ;
 
 ! CHR: unique-equiv @ { <==> ?c ?p } // { <==> ?c ?p } -- | ;
 ! CHR: assume-equiv-true @ { <==> ?c ?p } { Instance ?c A{ ?tau } } // --
@@ -550,9 +555,15 @@ CHR: check-lt-eq-2 @ // { Lt ?x ?y } { Eq ?y ?x } -- | { Invalid } ;
 CHR: check-eq @ { Eq ?x A{ ?a } } // { Eq ?x A{ ?b } } -- | [ ?a ?b eq? f P{ Invalid } ? ] ;
 CHR: local-alloc-never-eq-1 @ // { Eq M{ ?x } M{ ?y } } { LocalAllocation __ ?x } -- | { Invalid } ;
 CHR: local-alloc-never-eq-2 @ // { Eq M{ ?x } M{ ?y } } { LocalAllocation __ ?y } -- | { Invalid } ;
-CHR: check-eql-neq-1 @ // { Eql ?x ?y } { Neq ?x ?y } -- | { Invalid } ;
-CHR: check-eql-neq-2 @ // { Eql ?x ?y } { Neq ?y ?x } -- | { Invalid } ;
-! NOTE: neq has eql sematics!
+! NOTE: Neq has eql sematics! ( bad naming )
+! a notsame b + a eq b -> invalid by definition
+! a neq b + a eq b -> invalid because a eq b implies a eql b
+! a notsame b + a eql b -> valid, they are eql but not eq
+! a neq b + a eql b -> invalid, because not eql by definition
+CHR: conflict-eql-neq-1 @ // <={ Eql ?x ?y } { Neq ?x ?y } -- | { Invalid } ;
+CHR: conflict-eql-neq-2 @ // <={ Eql ?x ?y } { Neq ?y ?x } -- | { Invalid } ;
+CHR: conflict-eq-notsame-1 @ // { Eq ?x ?y } { NotSame ?x ?y } -- | { Invalid } ;
+CHR: conflict-eq-notsame-2 @ // { Eq ?x ?y } { NotSame ?x ?y } -- | { Invalid } ;
 CHR: check-neq @ // { Neq A{ ?x } A{ ?y } } -- | [ ?x ?y = P{ Invalid } f ? ] ;
 ! NOTE: might be careful about the following if the (implementation-detail) disjointness of eq? vs equal? definitions
 ! is needed?
@@ -1219,7 +1230,7 @@ CHR: unboa-literal-allocation @ { LocalAllocation ?u ?o } { Instance ?o Is( not{
 ! Cloning: Structure must be the same before and after.  RO-Slots must be the same before and after. Locally allocated
 ! PushLocs must be the same value after.  Alternatively, consider this a read-access on the original slot?
 ! CHR: copy-cloned-ro-slots @ { Cloned ?y ?x } { Slot ?x Is( slot-spec ?s ) ?v } // -- [ ?s read-only>>  ] | { Slot ?y ?s ?v } ;
-CHR: copy-cloned-ro-slots-reverse @ { Cloned ?x ?y __ } { Slot ?x Is( slot-spec ?s ) ?v } // -- [ ?s read-only>>  ] | { Slot ?y ?s ?v } ;
+CHR: copy-cloned-ro-slots-reverse @ { Cloned ?x ?y __ } { Slot ?x Is( ro-slot-spec ?s ) ?v } // -- | { Slot ?y ?s ?v } ;
 
 ! *** State and Locations via FMC semantics
 
