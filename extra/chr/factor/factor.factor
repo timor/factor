@@ -112,7 +112,55 @@ PREDICATE: callable-word < word { [ symbol? not ] } 1&& ;
 ! Alternatively, a more general approach could be tried with explicitly
 ! declaring which var slots are inputs and outputs, respectively.
 
-! TODO ** Document Eq-ness and same-variable-ness!
+! ** Equality
+! Domains of dicourse:
+! 1. term variables
+! 2. factor values
+
+! Several aspects to consider:
+! - "computational" equality: Things that evaluate to the result being equal under
+!   a certain equality test
+! - symbolic equivalence in constraints: Two things that are represented by the same
+!   variable
+
+
+! This creates some questions about how to "translate" equality predicates from
+! factor into either predicates or symbolic equivalences in CHR constraints.
+! In general, it seems to be non-obvious so far what the correct semantics are
+! regarding value substituion.  The only reliable metric seems to be that
+! "translated" symbolic substitutions must be stable with regards to any
+! subsequent operations.
+
+! So far, the ~Eq~ constraint has been used as kind of a defining let-binding, as
+! well as the predicate which directly results from an ~eq?~ test being ~t~.
+
+! As a conservative approach, maybe the following approach is sound:
+! - Use ~Eq~ and ~Eql~ predicates only in word types iff the semantics of the word
+!   explicitly derive from ~eq?~ and ~=~ tests, respectively, although that
+!   already may hide that a lot of equality assertions actually have ~=~ test
+!   semantics underneath, which can be considered to _not_ be equivalent to
+!   ~equal?~, depending on the logical framework assumed, since ~=~ has, by merits
+!   of its implementation, these semantics:
+!   =(a eq? b) or (!(a eq? b) and (a equal? b)) -> (a = b)=
+
+!   Thus, only observing evaluation results of ~=~ do not allow any assumptions on
+!   equality per se.  Note the following statement in the Factor manual:
+!   "... methods defined on equal? assume they are never called on objects that
+!   are eq?"
+
+!   This would imply the following additional statement:
+!   =(a equal? b) -> !(a eq? b)=
+! - For all predicates working with actual values, explicitly do the value
+!   substution based on
+!   1. the presence of ~Eq~ and ~Eql~ predicates
+!   2. the semantics of the actual predicate domain of discourse
+! - NOTE: currently ~Eql~ represents Factor's ~=~ test, so it should be sound to
+!   have ~Eq~ as a predicate subtype of ~Eql~
+! - Create the corresponding transitive rules for ~Eql~
+! - TODO: The major question remains for now: is it sound to apply ~Eq~ symbollically? Or
+!   would we have to treat it transitively too and generate more predicates?  If
+!   we need the latter, then we must be able to rely on the Def/Use analysis of the
+!   collection pass to clean up inferred predicate bodies.
 
 ! * Helpers for generating declared effects
 
