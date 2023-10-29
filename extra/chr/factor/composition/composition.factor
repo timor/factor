@@ -217,8 +217,10 @@ CHR: have-type-of-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // 
 CHR: canonicalize-word-call @ { ?TypeOf [ ?w ] ?sig } { TypeOfWord ?w ?rho } // --
 ! [ ?w generic? not ]
 [ ?rho canonical? ]
-[ ?rho unresolved-declarations? ] |
-{ ReinferEffect ?rho ?a }
+[ ?rho unresolved-declarations? ]
+[ ?rho fresh-effect :>> ?e ]
+|
+{ ReinferEffect ?e ?a }
 { CheckXor ?w ?a ?tau }
 [ \ ?tau ?ground-value dup unresolved-declarations? [ "word call has unresolved declarations after re-infer!" 2array throw ] [ drop ] if f ]
 { TypeOf [ ?w ] ?tau } ;

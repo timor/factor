@@ -361,21 +361,44 @@ TUPLE: barbox { barbox-a read-only } { barbox-b read-only } ;
 ! ro-slot access conversion
 
 P{ Effect L{ ?o . ?a } L{ ?v . ?a } f
-   { P{ Instance ?o cons-state } P{ Instance ?v object } P{ Slot ?o "cdr" ?v } } }
+   { P{ Instance ?o cons-state }
+     P{ Instance ?v object }
+     P{ Slot ?o  T{ slot-spec { name "cdr" } { offset 3 } { class object } { read-only t } }
+        ?v } } }
 [ { cons-state } declare cdr>> ] test-chr-type
 
-P{ Effect L{ ?y2 . ?ys2 } L{ ?v3 . ?ys2 } f { P{ Instance ?y2 curried } P{ Instance ?v3 object } P{ Slot ?y2 "obj" ?v3 } } }
-[ [ { curried } declare obj>> ] get-type ] chr-test
+P{ Effect L{ ?y2 . ?ys2 } L{ ?v3 . ?ys2 } f
+   { P{ Instance ?y2 curried } P{ Instance ?v3 object }
+     P{ Slot ?y2
+        T{ slot-spec { name "obj" } { offset 2 } { class object } { read-only t } }
+        ?v3 } } }
+[ { curried } declare obj>> ] test-chr-type
+
+! insert check here that 2 slot hasn't been messed up!
+P{
+    Effect
+    L{ ?o . ?a }
+    L{ ?v . ?a }
+    { ?x1 }
+    {
+        P{ Instance ?o not{ integer } }
+        P{ Instance ?v object }
+        P{ Slot ?o 2 ?x1 }
+        P{ LocPop ?x1 ?a L{ ?v } ?a f ?a }
+        P{ PushLoc ?x1 ?a L{ ?v } ?a f }
+    }
+}
+[ [ { curried } declare obj>> ] qt [ 2 slot ] pick-type ] chr-test
 
 [ { curried } declare obj>> ] [ { curried } declare 2 slot ] test-same-type
 
-P{ Effect L{ ?y2 . ?ys2 } L{ ?v3 . ?ys2 } { ?x ?b } {
+P{ Effect L{ ?y2 . ?ys2 } L{ ?v3 . ?ys2 } { ?x } {
         P{ Instance ?y2 curried-effect }
         P{ Instance ?v3 object }
-        P{ SlotLoc ?x ?y2 T{ slot-spec { name "obj" } { offset 2 } { class object } } }
-        P{ PushLoc ?x ?b L{ ?v3 } ?ys2 f }
-        P{ LocPop ?x ?ys2 L{ ?v3 } ?b f ?ys2 } } }
-[ [ { curried-effect } declare obj>> ] get-type ] chr-test
+        P{ Slot ?y2 T{ slot-spec { name "obj" } { offset 2 } { class object } } ?x }
+        P{ PushLoc ?x ?ys2 L{ ?v3 } ?ys2 f }
+        P{ LocPop ?x ?ys2 L{ ?v3 } ?ys2 f ?ys2 } } }
+[ { curried-effect } declare obj>> ] test-chr-type
 
 [ { curried-effect } declare obj>> ] [ { curried-effect } declare 2 slot ] test-same-type
 
@@ -386,14 +409,14 @@ P{ Effect L{ ?o1 ?v1 . ?a1 } ?c2 { ?x2 ?z2 ?b3 } {
         P{ SlotLoc ?x2 ?o1 2 }
         P{ PushLoc ?x2 ?b3 L{ ?v1 } ?c2 f }
         P{ LocPop ?x2 ?a1 L{ ?z2 } ?b3 f ?a1 } } }
-[ [ 2 set-slot ] get-type ] chr-test
+[ 2 set-slot ] test-chr-type
 
 ! Local allocations, writeback should be ignored
 P{ Effect ?a1 ?a1 f f }
-[ [ 42 { 43 } 2 set-slot ] get-type ] chr-test
+[ 42 { 43 } 2 set-slot ] test-chr-type
 
 P{ Effect L{ ?z . ?a } ?a f { P{ Instance ?z object } } }
-[ [ 1array 42 swap 2 set-slot ] get-type ] chr-test
+[ 1array 42 swap 2 set-slot ] test-chr-type
 
 ! Flushable, thus can be ignored
 ! NOTE: not doing that.  Only done on local allocations!
