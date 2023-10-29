@@ -577,8 +577,8 @@ CHR: local-alloc-never-eq-2 @ // { Eq M{ ?x } M{ ?y } } { LocalAllocation __ ?y 
 ! a neq b + a eql b -> invalid, because not eql by definition
 CHR: conflict-eql-neq-1 @ // <={ Eql ?x ?y } { Neq ?x ?y } -- | { Invalid } ;
 CHR: conflict-eql-neq-2 @ // <={ Eql ?x ?y } { Neq ?y ?x } -- | { Invalid } ;
-CHR: conflict-eq-notsame-1 @ // { Eq ?x ?y } { NotSame ?x ?y } -- | { Invalid } ;
-CHR: conflict-eq-notsame-2 @ // { Eq ?x ?y } { NotSame ?x ?y } -- | { Invalid } ;
+CHR: conflict-eq-notsame-1 @ // { Eq M{ ?x } M{ ?y } } { NotSame ?x ?y } -- | { Invalid } ;
+CHR: conflict-eq-notsame-2 @ // { Eq M{ ?x } M{ ?y } } { NotSame ?x ?y } -- | { Invalid } ;
 CHR: check-neq @ // { Neq A{ ?x } A{ ?y } } -- | [ ?x ?y = P{ Invalid } f ? ] ;
 ! NOTE: might be careful about the following if the (implementation-detail) disjointness of eq? vs equal? definitions
 ! is needed?
