@@ -1,6 +1,6 @@
 USING: accessors arrays chr classes classes.predicate classes.tuple
 classes.union combinators combinators.short-circuit kernel lists math.parser
-sequences sets strings terms types.util words words.symbol ;
+sequences sequences.extras sets strings terms types.util words words.symbol ;
 
 IN: chr.factor
 FROM: syntax => _ ;
@@ -371,8 +371,13 @@ SINGLETON: +trap+
 
 TUPLE: LocOp < chr-pred loc before item after local? ;
 TUPLE: PushLoc < LocOp ;
-! head-state is for storing partial redex inference
+! head-state is for storing partial redex inference.  For optimization reasons,
+! only the lastcdr of the head-state carries information
 TUPLE: LocPop < LocOp head-state ;
+! isomorphism checker chokes on this if we don't sanitize the state chains
+M: LocPop decompose-right call-next-method
+    dup [ [ 2dup [ [ lastcdr ] change-last ] bi@ ] dip ] when ;
+
 TUPLE: LocalAllocation < chr-pred state obj ;
 ! Thought about LocState for read-access.
 ! However, that's not possible.  Tried to re-compose

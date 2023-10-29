@@ -319,6 +319,8 @@ P{ Effect L{ ?x ?x . ?a } L{ ?x . ?a } f { P{ Instance ?x array } } }
 
 ! Tracking eq through slots and potentially literal slots
 TUPLE: foobox foobox-a foobox-b ;
+! NOTE: isomorphism checker chokes on this if we don't sanitize the state chains?
+[ [ foobox-a>> ] keep foobox-b>> ] [ [ foobox-b>> ] keep foobox-a>> swap ] test-same-type
 [ t ] [ { 42 } dup foobox boa [ foobox-a>> ] [ foobox-b>> ] bi eq? ] test-same-type
 [ f ] [ { 42 } { 42 } foobox boa [ foobox-a>> ] [ foobox-b>> ] bi eq? ] test-same-type
 [ t ] [ [ { 42 } dup foobox boa [ foobox-a>> ] [ foobox-b>> ] bi ] call eq? ] test-same-type
