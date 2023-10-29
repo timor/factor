@@ -12,15 +12,6 @@ IN: chr.factor.effects
 CHRAT: chr-effects { }
 
 ! ** Unification reasoning
-! TODO: move that stuff over to phi!
-: phi-stacks-unique? ( mapping -- ? )
-    [ values [ dup list?
-               ! Note: not testing the cdrs...
-               [ list>array* ]
-               [ 1array ] if
-             ] map concat all-unique? ]
-    [ f ] if* ;
-
 CHR: rebuild-phi-check-stack @ { PhiMode } { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } // -- |
 { CheckPhiStack { ?a ?b } { ?c ?d } ?u } ;
 

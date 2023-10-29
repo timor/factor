@@ -340,6 +340,28 @@ M: t precise-class-of drop t ;
      k p1 vars subset? [ p1 ]
      [ k p2 vars subset? [ p2 ] [ f ] if ] if ] if ;
 
+! ** Term Stuff
+:: alpha-equiv-under? ( t1 t2 bound -- subst/f )
+    t1 vars t2 vars union bound diff valid-match-vars
+    [ t1 t2 solve-eq ] with-variable ;
+
+: phi-stacks-unique? ( mapping -- ? )
+    [ values [ dup list?
+               ! Note: not testing the cdrs...
+               [ list>array* ]
+               [ 1array ] if
+             ] map concat all-unique? ]
+    [ f ] if* ;
+
+
+! TODO: have to exclude cases like matching { foo ?a ?b } with { foo ?a ?a } ???
+: unary-unifier? ( pred pred -- unifier/f )
+    { [ [ class-of ] same? ]
+      [ unify ]
+    } 2&&
+    dup assoc-size 1 = [ drop f ] unless ;
+
+
 ! ** Test helpers
 ERROR: test-failure-abort test-failure ;
 SINGLETON: unit-test-aborter

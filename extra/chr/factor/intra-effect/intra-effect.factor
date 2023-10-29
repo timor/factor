@@ -1,9 +1,9 @@
-USING: accessors arrays chr.factor chr.factor.intra-effect.maps chr.factor.util
-chr.parser chr.state classes classes.algebra classes.builtin classes.predicate
-classes.singleton classes.tuple classes.tuple.private combinators
-combinators.short-circuit continuations generic generic.single grouping kernel
-kernel.private lists math math.functions math.order quotations sequences sets
-slots slots.private sorting strings terms types.util words ;
+USING: accessors arrays assocs chr.factor chr.factor.intra-effect.maps
+chr.factor.util chr.parser chr.state classes classes.algebra classes.builtin
+classes.predicate classes.singleton classes.tuple classes.tuple.private
+combinators combinators.short-circuit continuations generic generic.single
+grouping kernel kernel.private lists math math.functions math.order quotations
+sequences sets slots slots.private sorting strings terms types.util words ;
 
 IN: chr.factor.intra-effect
 

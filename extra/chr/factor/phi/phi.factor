@@ -154,10 +154,6 @@ CHR: all-fixpoint-phis-done @ // { PhiSchedule __ +nil+ ?tau } { FixpointMode } 
 CHR: all-phis-done @ { PhiSchedule __ +nil+ ?tau } // { DisjointRoot ?a } -- |
 { RebuildXor ?a ?tau } ;
 
-:: alpha-equiv-under? ( t1 t2 bound -- subst/f )
-    t1 vars t2 vars union bound diff valid-match-vars
-    [ t1 t2 solve-eq ] with-variable ;
-
 ! *** Rebuild two effects as union
 ! CHR: check-non-unionable-effect @ { MakeUnion P{ Effect ?a ?b ?x ?l } P{ Effect ?a ?d ?y ?k } ?tau } // -- [ ?tau term-var? ] |
 ! [
