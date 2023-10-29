@@ -400,9 +400,24 @@ CHR: invalid-defer-type-request @ // { ?DeferTypeOf ?x __ } -- [ ?x callable? no
 CHR: var-eq-is-true @ // <={ Eql M{ ?x } ?x } -- | ;
 CHR: unique-eq-pred-1 @ { Eq M{ ?x } M{ ?y } } // { Eq M{ ?x } M{ ?y } } -- | ;
 CHR: unique-eq-pred-2 @ { Eq M{ ?x } M{ ?y } } // { Eq M{ ?y } M{ ?x } } -- | ;
-CHR: eq-must-be-same-literal-1 @ { Eq M{ ?x } A{ ?a } } // { Eq M{ ?x } M{ ?y } } -- | [ ?x ?y ==! ] ;
-CHR: eq-must-be-same-literal-2 @ { Eq M{ ?x } A{ ?a } } // { Eq M{ ?y } M{ ?x } } -- | [ ?x ?y ==! ] ;
-CHR: eq-literal-must-be-same-var @ { Eq M{ ?x } A{ ?a } } // { Eq M{ ?y } A{ ?b } } -- [ ?a local-alloc-val? ] [ ?a ?b eq? ] | [ ?x ?y ==! ] ;
+
+! **** Indirect eq predicate approach
+! ! Resolves to only keep one term variable reference
+! CHR: eq-must-be-same-literal-1 @ { Eq M{ ?x } A{ ?a } } // { Eq M{ ?x } M{ ?y } } -- | [ ?x ?y ==! ] ;
+! CHR: eq-must-be-same-literal-2 @ { Eq M{ ?x } A{ ?a } } // { Eq M{ ?y } M{ ?x } } -- | [ ?x ?y ==! ] ;
+
+! **** Direct eq predicate approach
+! assumption: eq means same address and same "wire"
+CHR: eq-var-is-same-var @ // { Eq M{ ?x } M{ ?y } } -- | [ ?x ?y ==! ] ;
+
+! x eq a and y eq b ==> x eq y if a eq b and a is something that would have to be allocated, e.g. not a word or number
+! This comes down to representing "sameness" correctly
+: allocation-implies-unique? ( val -- ? ) local-alloc-val? ;
+CHR: eq-literal-must-be-same-var @ { Eq M{ ?x } A{ ?a } } // { Eq M{ ?y } A{ ?b } } -- [ ?a allocation-implies-unique? ] [ ?a ?b eq? ] | [ ?x ?y ==! ] ;
+! ! **** Fully transitive approach
+! TODO: see how this interacts with reflexive stuff!
+! CHR: transitive-binary-rel @ AS: ?p <={ transitive-rel-pred ?a M{ ?b } }
+
 CHR: unique-notsame-pred1 @ { NotSame ?x ?y } // { NotSame ?x ?y } -- | ;
 CHR: unique-notsame-pred2 @ { NotSame ?x ?y } // { NotSame ?y ?x } -- | ;
 CHR: unique-instance @ { Instance ?x ?tau } // { Instance ?x ?tau } -- | ;

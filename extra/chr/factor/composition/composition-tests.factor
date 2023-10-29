@@ -118,8 +118,8 @@ P{ Neq ?b ?a }
 [ { P{ Neq ?a "haha" } P{ Instance ?a number } } chr-simp ] unit-test
 
 ! ** Basic Invariants
-{ { P{ Eq ?a1 { 43 } } } }
-[ { P{ Eq ?y1 ?a1 } P{ Eq ?x1 ?a1 } P{ Eq ?a1 { 43 } } P{ Eq ?y1 ?x1 } } chr-simp ] unit-test
+{ P{ Eq ?c { 43 } } }
+[ { P{ Eq ?y1 ?a1 } P{ Eq ?x1 ?a1 } P{ Eq ?a1 { 43 } } P{ Eq ?y1 ?x1 } } chr-simp ] chr-test
 
 
 { t } [ { 43 } dup Eq boa tuple-slots first2 eq? ] unit-test
@@ -300,8 +300,7 @@ P{ Effect L{ ?x ?x . ?a } L{ ?x . ?a } f { P{ Instance ?x fixnum } } }
 P{ Effect L{ ?x ?x . ?a } L{ ?x . ?a } f { P{ Instance ?x word } } }
 [ { word union{ fixnum word } } declare over eq? { t } declare drop ] test-chr-type
 
-! Although this is somewhat unsatisfying, we still need to detect this case being invalid
-P{ Effect L{ ?x ?y . ?a } L{ ?y . ?a } f { P{ Eq ?y ?x } P{ Instance ?y array } P{ Instance ?x array } } }
+P{ Effect L{ ?x ?x . ?a } L{ ?x . ?a } f { P{ Instance ?x array } } }
 [ { array } declare over eq? { t } declare drop ] test-chr-type
 
 [ t 1 ] [ { 42 } dup eq? 1 ] test-same-type
