@@ -66,13 +66,13 @@ TERM-VARS: ?a15 ?o3 ?v3 ;
 TERM-VARS: ?o5 ?b34 ?v7 ;
 TERM-VARS: ?y14 ?ys14 ?o25 ?a85 ?x17 ?rho31 ;
 
-P{ Effect L{ ?o3 . ?a6 } L{ ?v3 . ?a6 } { ?x1 ?b4 }
+P{ Effect L{ ?o3 . ?a6 } L{ ?v3 . ?a6 } { ?x1 }
     {
         P{ Instance ?o3 array }
         P{ Instance ?v3 object }
         P{ Slot ?o3 2 ?x1 }
-        P{ LocPop ?x1 ?a6 L{ ?v3 } ?b4 f ?a6 }
-        P{ PushLoc ?x1 ?b4 L{ ?v3 } ?a6 f } } }
+        P{ LocPop ?x1 ?a6 L{ ?v3 } ?a6 f ?a6 }
+        P{ PushLoc ?x1 ?a6 L{ ?v3 } ?a6 f } } }
 [ \ array-first get-type ] chr-test
 
 { t } [ [ 1 drop 42 ] [ { 42 } array-first ] same-type? ] unit-test
@@ -319,6 +319,31 @@ P{ Effect L{ ?x ?x . ?a } L{ ?x . ?a } f { P{ Instance ?x array } } }
 
 ! Tracking eq through slots and potentially literal slots
 TUPLE: foobox foobox-a foobox-b ;
+{ 1 1 1 } [
+    [ boa foobox-a>> ]
+    get-type preds>>
+    [ [ Slot? ] count ]
+    [ [ LocPop? ] count ]
+    [ [ PushLoc? ] count ] tri ] unit-test
+
+[ { object object } declare drop ] [ foobox boa foobox-a>> ] test-same-type
+[ nip ] [ foobox boa foobox-b>> ] test-same-type
+[ foobox-a>> dup ] [ [ foobox-a>> ] [ foobox-a>> ] bi ] test-same-type
+
+{ 1 1 1 } [
+    [ dup foobox-a>> [ 42 >>foobox-a ] dip ]
+    get-type preds>>
+    [ [ Slot? ] count ]
+    [ [ LocPop? ] count ]
+    [ [ PushLoc? ] count ] tri ] unit-test
+
+{ 1 1 1 } [
+    [ boa dup foobox-a>> [ 42 >>foobox-a ] dip ]
+    get-type preds>>
+    [ [ Slot? ] count ]
+    [ [ LocPop? ] count ]
+    [ [ PushLoc? ] count ] tri ] unit-test
+
 ! NOTE: isomorphism checker chokes on this if we don't sanitize the state chains?
 [ [ foobox-a>> ] keep foobox-b>> ] [ [ foobox-b>> ] keep foobox-a>> swap ] test-same-type
 [ t ] [ { 42 } dup foobox boa [ foobox-a>> ] [ foobox-b>> ] bi eq? ] test-same-type

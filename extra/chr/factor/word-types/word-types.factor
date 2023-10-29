@@ -211,7 +211,7 @@ CHR: type-of-<array> @ { TypeOfWord <array> M{ ?tau } } // -- |
 ! : slot ( obj m -- value )
 CHR: type-of-slot @ { TypeOfWord slot M{ ?tau } } // -- |
 [ ?tau
-  P{ Effect L{ ?m ?o . ?a } L{ ?v . ?a } { ?b } {
+  P{ Effect L{ ?m ?o . ?a } L{ ?v . ?a } { ?x } {
   ! P{ Effect L{ ?m ?o . ?a } L{ ?v . ?a } f {
          P{ Instance ?o not{ integer } }
          P{ Instance ?m fixnum }
@@ -219,8 +219,8 @@ CHR: type-of-slot @ { TypeOfWord slot M{ ?tau } } // -- |
          P{ Le 0 ?m }
          ! P{ SlotLoc ?x ?o ?m }
          P{ Slot ?o ?m ?x }
-         P{ LocPop ?x ?a L{ ?v } ?b f ?a }
-         P{ PushLoc ?x ?b L{ ?v } ?a f }
+         P{ LocPop ?x ?a L{ ?v } ?a f ?a }
+         P{ PushLoc ?x ?a L{ ?v } ?a f }
      } }
   ==! ] ;
 

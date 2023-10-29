@@ -1306,8 +1306,9 @@ CHR: resolve-loc-op @ // <={ LocOp __ ?a L{ } ?b __ . __ } -- |
 
 ! Re-create initializer semantics
 ! CHR: compact-local-writeback @ { LocalAllocation ?u ?o } { SlotLoc ?x ?o __ } { PushLoc M{ ?x } ?a __ ?b t } // -- [ ?a ?b == not ] |
-CHR: compact-local-writeback @ { LocalAllocation ?u ?o } { Slot ?o __ ?x } { PushLoc M{ ?x } ?a __ ?b t } // -- [ ?a ?b == not ] |
-[ ?a ?b ==! ] ;
+! TODO: what's the motivation behind this?
+! CHR: compact-local-writeback @ { LocalAllocation ?u ?o } { Slot ?o __ ?x } { PushLoc M{ ?x } ?a __ ?b t } // -- [ ?a ?b == not ] |
+! [ ?a ?b ==! ] ;
 
 ! NOTE: keeping any circularities here because that represents a slot read/writeback.  Note that two circularities with different
 ! items represent parallel reads on the same object, and can be reduced

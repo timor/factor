@@ -162,6 +162,13 @@ PREDICATE: callable-word < word { [ symbol? not ] } 1&& ;
 !   we need the latter, then we must be able to rely on the Def/Use analysis of the
 !   collection pass to clean up inferred predicate bodies.
 
+! ** LocOps
+! - Slot and Retain stack operations are modelled after FMC fragments.  Since
+!   multiple fragments must be able to co-exist in an unresolved state, these are
+!   sequenced using intermediate states.
+! - slot reads are circular reads with writeback on the same state
+! - slot writes are reads and writebacks on different states
+
 ! * Helpers for generating declared effects
 
 GENERIC: elt>var ( i elt -- obj )

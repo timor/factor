@@ -2,8 +2,8 @@ USING: accessors arrays assocs assocs.extras byte-arrays chr chr.factor
 chr.parser chr.state classes classes.algebra classes.algebra.private
 classes.builtin classes.tuple classes.union combinators.short-circuit
 combinators.smart continuations generic.math generic.single kernel lists make
-math namespaces quotations sequences sequences.extras sets source-files.errors
-terms tools.test types.util words ;
+math namespaces quotations sequences sets source-files.errors terms
+tools.annotations tools.test types.util words ;
 
 IN: chr.factor.util
 

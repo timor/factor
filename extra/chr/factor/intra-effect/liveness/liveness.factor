@@ -85,6 +85,8 @@ M:: Iterated pred-scopes ( pred -- preds )
       P{ SubScope d o }
       P{ Scope b c }
     } ;
+M: Boa pred-scopes
+    [ spec>> ] [ in-stack>> cons ] [ out-stack>> ] tri SubScope boa ;
 
 GENERIC: pred-def-use ( pred -- defs uses )
 M: body-pred pred-def-use drop f f ;
