@@ -367,11 +367,18 @@ M: t precise-class-of drop t ;
 
 ! ** Test helpers
 ERROR: test-failure-abort test-failure ;
+SYMBOL: last-tested-prefix
 SINGLETON: unit-test-aborter
 M: unit-test-aborter errors-changed drop
     test-failures get ?last [ test-failure-abort ] when* ;
 
 : stest ( prefix -- )
+    reset-all
+    dup last-tested-prefix namespaces:set
     [ unit-test-aborter add-error-observer
       test ]
     [ unit-test-aborter remove-error-observer ] finally ;
+
+: retest ( -- )
+    last-tested-prefix get
+    [ stest ] when* ;
