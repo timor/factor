@@ -1,8 +1,9 @@
 USING: accessors arrays assocs assocs.extras byte-arrays chr chr.factor
 chr.parser chr.state classes classes.algebra classes.algebra.private
 classes.builtin classes.tuple classes.union combinators.short-circuit
-combinators.smart generic.math generic.single kernel lists make math namespaces
-quotations sequences sets terms types.util words ;
+combinators.smart continuations generic.math generic.single kernel lists make
+math namespaces quotations sequences sets source-files.errors terms tools.test
+types.util words ;
 
 IN: chr.factor.util
 
@@ -290,7 +291,7 @@ M: tuple-class final-data-class? final-class? ;
     [ cdr ] times ;
 
 ! ** Test if a value needs to be treated as local allocation
-
+! TODO: document why this is needed!
 GENERIC: local-alloc-class? ( class -- ? )
 M: object local-alloc-class? all-slots empty? not ;
 ! M: word local-alloc-class? drop f ;
@@ -338,3 +339,14 @@ M: t precise-class-of drop t ;
     [| | keys :> ( p1 p2 k )
      k p1 vars subset? [ p1 ]
      [ k p2 vars subset? [ p2 ] [ f ] if ] if ] if ;
+
+! ** Test helpers
+ERROR: test-failure-abort test-failure ;
+SINGLETON: unit-test-aborter
+M: unit-test-aborter errors-changed drop
+    test-failures get ?last [ test-failure-abort ] when* ;
+
+: stest ( prefix -- )
+    [ unit-test-aborter add-error-observer
+      test ]
+    [ unit-test-aborter remove-error-observer ] finally ;
