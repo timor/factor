@@ -166,6 +166,14 @@ P{ Effect L{ ?y ?x . ?a } L{ ?z . ?a } f { P{ Instance ?x number } P{ Instance ?
 { t }
 [ [ [ [ if ] ] ]  [ [ [ [ if ] ] ] (call) ] same-type? ] unit-test
 
+[ 2 + ] [ 2 swap + ] test-same-type
+[ + ] [ swap + ] test-same-type
+[ + swap + + ] [ + + swap + ] test-same-type
+[ swap + swap + swap + ] [ + + + ] test-same-type
+! NOTE: the following is actually not the same type, because overflow behavior
+! could be different based on the data types???
+! [ + 2 + ] [ 2 + + ] test-same-type
+
 P{ Effect
    L{ ?x1 ?o1 . ?b1 } L{ ?x1 ?o1 . ?b1 } f {
        P{ Instance ?x1 callable }

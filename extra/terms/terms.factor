@@ -4,7 +4,7 @@ disjoint-sets disjoint-sets.private generalizations graphs hash-sets hashtables
 hashtables.identity io.styles kernel lexer make match math math.combinatorics
 math.order math.parser namespaces parser prettyprint.backend prettyprint.config
 prettyprint.custom prettyprint.sections quotations sequences sets slots.private
-sorting strings types.util unicode vectors words words.symbol ;
+sorting strings types.util unicode words words.symbol ;
 
 IN: terms
 
@@ -609,20 +609,36 @@ SYMBOL: solve-isomorphic-mode?
     [ f ] if*
     ; inline
 
+ERROR: imbalanced-match-sets-after-pruning elts1 elts2 ;
 ! NOTE: assume matching signatures here
 ! Friggin expensive! Complexity is n1! x n2! x ... nk!
 ! In the cardinalities of the partitioned subsets
 ! Strategy: Pin down set1, try all permutations of set2
-! CAVEAT: will not work if variables need to match set elements!
+! CAVEAT: will not work if variables need to match set elements! (really?)
+! Semantic restriction: If the elements are present in both sets, they are pruned
+! in hopes of getting the smallest unifier...
+: prune-match-sets ( set1 set2 -- elts1 elts2 )
+    [ elements>> ] bi@
+    2dup [ [ match-set? ] reject ] bi@ intersect
+    [ diff ] curry bi@
+    2dup [ length ] same? [ imbalanced-match-sets-after-pruning ] unless
+    ;
+
+: compatible-match-sets? ( set1 set2 -- ? )
+    [ elements>> length ] same? ;
+
 : solve-match-set ( subst problem set1 set2 -- subst )
     [let f :> sol!
-     [ elements>> ] bi@
-     [ 2array prefix [ (solve)
-                       check-solution
-                       dup [ sol! ] when* ]
-        [ dup incompatible-terms? [ 3drop f ] [ rethrow ] if ] recover
-     ] 3 nwith find-permutation
-     drop sol
+     2dup compatible-match-sets?
+     [
+         prune-match-sets
+         [ 2array prefix [ (solve)
+                           check-solution
+                           dup [ sol! ] when* ]
+           [ dup incompatible-terms? [ 3drop f ] [ rethrow ] if ] recover
+         ] 3 nwith find-permutation drop
+     ] [ 4drop ] if
+     sol
     ] ; inline recursive
 
 ! TODO: check if we need the deref check on lhs!

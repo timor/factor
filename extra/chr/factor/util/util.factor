@@ -43,6 +43,9 @@ M: Effect effect>nterm
 M: Iterated effect>nterm
     clone [ drop __ ] change-tag ;
 
+M: commutative-op effect>nterm
+    tuple>array 2 cut <match-set> 2array ;
+
 : same-effect? ( e1 e2 -- ? )
     [ effect>nterm ] bi@ isomorphic? ;
 
