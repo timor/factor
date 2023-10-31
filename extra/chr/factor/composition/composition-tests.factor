@@ -518,9 +518,19 @@ P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y } {
    }
  } [ [ bslot>> bslot>> ] get-type ] chr-test
 
-! FIXME not losing internal predicates!
-[ 1 drop 42 ] [ T{ foo2 f f T{ foo2 f f 42 } } bslot>> bslot>> ] test-same-type
-[ 1 drop 42 ] [ f 42 foo2 boa f swap foo2 boa bslot>> bslot>> ] test-same-type
+[ 42 ] [ 42 f foo2 boa f foo2 boa aslot>> aslot>> ] test-same-type
+[ 42 ] [ [ 42 f foo2 boa f foo2 boa ] call [ aslot>> aslot>> ] call ] test-same-type
+[ 42 ] [ T{ foo2 f T{ foo2 f 42 f } f } aslot>> aslot>> ] test-same-type
+
+[ 42 ] [ f 42 foo2 boa f swap foo2 boa bslot>> bslot>> ] test-same-type
+[ 42 ] [ [ f 42 foo2 boa f swap foo2 boa ] call [ bslot>> bslot>> ] call ] test-same-type
+
+[ 42 43 ] [ T{ foo2 f 42 43 } [ aslot>> ] [ bslot>> ] bi ] test-same-type
+[ 43 42 ] [ T{ foo2 f 42 43 } [ bslot>> ] [ aslot>> ] bi ] test-same-type
+
+! FIXME not losing internal predicates when unboa-allocation rule is not used!
+[ 42 ] [ T{ foo2 f 42 } bslot>> ] test-same-type
+[ 42 ] [ T{ foo2 f f T{ foo2 f f 42 } } bslot>> bslot>> ] test-same-type
 
 TUPLE: foo3 slot1 slot2 ;
 [ 42 33 ] [ 22 33 foo3 boa 42 >>slot1 [ slot1>> ] [ slot2>> ] bi ] test-same-type
