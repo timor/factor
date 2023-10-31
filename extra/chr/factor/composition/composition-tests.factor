@@ -58,7 +58,7 @@ TYPED: array-first ( arr: array -- thing ) 2 slot ;
 
 TERM-VARS: ?o ?a ?b ?b1 ?v ?w ?x ?y ?z ;
 TERM-VARS: ?y2 ?ys2 ?o4 ?a43 ?y6 ?ys6 ;
-TERM-VARS: ?y1 ?ys1 ?x1 ?v1 ?x2 ?x3 ?rho1 ?rho2 ?rho3 ?o1 ?a1 ;
+TERM-VARS: ?y1 ?ys1 ?x1 ?v1 ?x2 ?x3 ?rho1 ??rho1 ?rho3 ?o1 ?o2 ?a1 ;
 TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ?i2 ?c1 ?a2 ?z2 ;
 TERM-VARS: ?c ?d ;
 TERM-VARS: ?q3 ?q5 ?p2 ?p3 ?c2 ?c3 ?a4 ?a6 ?b3 ?b4 ;
@@ -263,6 +263,14 @@ P{
 { 1 } [ [ 2 slot + ] get-type preds>> [ Sum? ] count ] unit-test
 { 1 } [ [ 2 slot swap 2 slot + ] get-type preds>> [ Sum? ] count ] unit-test
 
+: count-preds ( quot classes -- res )
+    [ get-type preds>> ] dip
+    [ [ instance? ] curry count ] with map ;
+
+! Test calculated slot numbers to ensure correct slot modes
+{ { 1 2 } } [ [ + slot ] { Sum LocOp } count-preds ] unit-test
+{ { 1 4 } } [ [ slot + slot ] { Sum LocOp } count-preds ] unit-test
+
 ! NOTE: this will not reduce to 5 sums unless ordering partial known sums correctly?
 { 6 } [ [ + + 2 + + 3 + + ] get-type preds>> [ Sum? ] count ] unit-test
 { 3 } [ [ + 2 + - ] get-type preds>> [ Sum? ] count ] unit-test
@@ -363,6 +371,8 @@ P{ Effect L{ ?x ?x . ?a } L{ ?x . ?a } f { P{ Instance ?x array } } }
 
 ! Tracking eq through slots and potentially literal slots
 TUPLE: foobox foobox-a foobox-b ;
+[ 2dup 2drop ] [ foobox boa [ foobox-a>> ] [ foobox-b>> ] bi ] test-same-type
+
 { 1 1 1 } [
     [ boa foobox-a>> ]
     get-type preds>>
@@ -518,9 +528,24 @@ CONSTANT: obj1 { 42 }
 P{ Effect ?a ?b f { P{ Invalid } } }
 [ [ { array } declare (clone) { string } declare ] get-type ] chr-test
 
-! FIXME
-{  } [ (clone) 2 slot ] test-chr-type
-{  } [ 1array (clone) ] test-chr-type
+ P{
+     Effect
+     L{ ?o1 . ?rho1 }
+     L{ ?v3 . ?rho1 }
+     { ?x1 ?o2 }
+     {
+         P{ Cloned ?o2 ?o1 ?rho1 }
+         P{ LocalAllocation ?rho1 ?o2 }
+         P{ ClassPred ?o2 ?o1 class= }
+         P{ NotSame ?o1 ?o2 }
+         P{ Instance ?o2 not{ integer } }
+         P{ Instance ?o1 not{ integer } }
+         P{ Instance ?v3 object }
+         P{ Slot ?o2 2 ?x1 }
+         P{ LocPop ?x1 ?rho1 L{ ?v3 } ?rho1 t ?rho1 }
+         P{ PushLoc ?x1 ?rho1 L{ ?v3 } ?rho1 t } } }
+[ (clone) 2 slot ] test-chr-type
+{ { 2 1 2 } } [ [ 1array (clone) ] { Slot LocOp LocalAllocation } count-preds ] unit-test
 
 [ dup drop ] [ 1array (clone) 2 slot ] test-same-type
 ! NOTE: See caveat in ...primitives.factor!
@@ -544,8 +569,7 @@ P{
 }
 [ barslot>> ] test-chr-type
 
-! TODO: improve what to test for
-{ t } [ [ barslot>> barslot>> ] get-type canonical? ] unit-test
+{ { 2 4 } } [ [ barslot>> barslot>> ] { Slot LocOp } count-preds ] unit-test
 
 P{ Effect L{ ?v . ?b3 } L{ ?o . ?b3 } { ?x3 } {
         P{ Slot ?o T{ slot-spec { name "barslot" } { offset 2 } { class object } } ?x3 }
@@ -562,9 +586,9 @@ P{ Effect L{ ?o . ?a } L{ ?v . ?a } f { P{ Slot ?o T{ slot-spec { name "bslot" }
 
 [ 42 ] [ T{ foo2 f 42 88 } aslot>> ] test-same-type
 [ 88 ] [ T{ foo2 f 42 88 } bslot>> ] test-same-type
-
-! { P{ Imply { ?o } { ?v } } }
-! [ { ?o } P{ Slot ?o "bslot" ?v } imply-def ] unit-test
+! FIXME
+[ 42 ] [ T{ foo2 f 42 88 } (clone) aslot>> ] test-same-type
+[ 88 ] [ T{ foo2 f 42 88 } (clone) bslot>> ] test-same-type
 
 P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y } {
        P{ Instance ?y foo2 }
@@ -585,8 +609,7 @@ P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y } {
 [ 42 43 ] [ T{ foo2 f 42 43 } [ aslot>> ] [ bslot>> ] bi ] test-same-type
 [ 43 42 ] [ T{ foo2 f 42 43 } [ bslot>> ] [ aslot>> ] bi ] test-same-type
 
-! FIXME not losing internal predicates when unboa-allocation rule is not used!
-[ 42 ] [ T{ foo2 f 42 } bslot>> ] test-same-type
+[ 42 ] [ T{ foo2 f f 42 } bslot>> ] test-same-type
 [ 42 ] [ T{ foo2 f f T{ foo2 f f 42 } } bslot>> bslot>> ] test-same-type
 
 TUPLE: foo3 slot1 slot2 ;
@@ -785,8 +808,8 @@ P{
     P{ Effect L{ ?x1 . ?rho1 } L{ ?x1 . ?rho1 } f { P{ Instance ?x1 not{ cons-state } } } }
     P{
         Effect
-        L{ ?x2 . ?rho2 }
-        L{ ?v1 . ?rho2 }
+        L{ ?x2 . ??rho1 }
+        L{ ?v1 . ??rho1 }
         f
         { P{ Instance ?x2 cons-state } P{ Slot ?x2 "cdr" ?v1 } P{ Instance ?v1 object } }
     }

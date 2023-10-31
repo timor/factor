@@ -72,7 +72,7 @@ CHR: used-loc-uses-item @ <={ LocOp ?x __ ?i . ?r } { Use ?v } // -- [ ?x ?v in?
 
 CHR: unique-implication @ { Imply ?a ?b } // { Imply ?c ?d } -- [ ?a ?c set= ] [ ?b ?d set= ] | ;
 
-CHR: redundant-implication @ { Use ?v } // { Imply ?a ?b } -- [ ?b ?v subset? ] | ;
+CHR: redundant-implication @ { Use ?v } // { Imply __ ?b } -- [ ?b ?v subset? ] | ;
 
 ! TODO: need to keep the implications? -> shouldnt, because they couldn't add new info anyways?
 CHR: independent-implication-match @ // { Imply ?a ?b } { Imply ?c ?d } -- [ ?a ?c intersects? not ] [ ?b ?d set= ]
@@ -94,10 +94,12 @@ M: Cloned expression-vars
     [ val>> ] [ val2>> ] bi 2array vars ;
 M: LocOp expression-vars
     [ loc>> ] [ item>> ] bi [ vars ] bi@ union ;
-! TODO: Is this really symmetric like this?
-M: Slot expression-vars vars ;
+! Slot def-use reasoning is not symmetric, becoming apparent in
+! [ curry uncurry ], leaving dead unreachable info.
+! Does this apply to locations as well? -> Test with curry uncurry example on mutable locs!
+! at least removing the following bidirectional slot rule also fixes those..
+! M: Slot expression-vars vars ;
 
-! Hole matching modes of missing arguments, general approach, assuming every expr-pred defines a missing var?
 CHR: imply-body-pred-could-define @ AS: ?p <={ body-pred } { Use ?v } // --
 [ ?p expression-vars :>> ?x ]
 [ ?x ?v [ in? ] curry partition :>> { ?a ?b } [ empty? not ] both? ] |
@@ -112,6 +114,34 @@ CHR: imply-body-pred-could-extend @ AS: ?p <={ body-pred } { Use ?v } // { Imply
 [ ?d ?a diff ?b union :>> ?y ]
 |
 { Imply ?x ?y } ;
+
+! Hole matching of "directional" predicates, where it matters what stuff is known and
+! what is unknown!
+GENERIC: directed-vars ( pred -- ante conse )
+M: body-pred directed-vars drop f f ;
+M: Slot directed-vars
+    [ val>> ] [ n>> ]
+    [ loc>> ] tri
+    [ drop 2array vars ] 2keep
+    2array vars ;
+
+CHR: directed-imply-could-define @ AS: ?p <={ body-pred } { Use ?v } // --
+[ ?p directed-vars :>> { ?x ?y } [ empty? not ] both? ]
+[ ?x ?v intersect ?y ?v diff :>> { ?a ?b } [ empty? not ] both? ] |
+{ Imply ?a ?b } ;
+
+! NOTE: at least for [ 1array (clone) ] this needs to keep the original implication in tact
+! to make sure that other slot preds have the chance to close the chain correctly!
+! CHR: directed-imply-could-extend @ AS: ?p <={ body-pred } { Use ?v } // { Imply ?c ?d } --
+CHR: directed-imply-could-extend @ AS: ?p <={ body-pred } { Use ?v } { Imply ?c ?d } // --
+[ ?p directed-vars :>> { ?x ?y } [ empty? not ] both? ]
+[ ?x ?v intersects? not ]
+[ ?x ?d intersect ?y ?d diff :>> { ?a ?b } [ empty? not ] both? ]
+[ ?b ?c subset? not ]
+[ ?c ?a union :>> ?r ]
+[ ?d ?a diff ?b union :>> ?s ]
+|
+{ Imply ?r ?s } ;
 
 ! ** Collection
 
