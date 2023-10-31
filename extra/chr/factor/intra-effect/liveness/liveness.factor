@@ -91,7 +91,7 @@ M: body-pred expression-vars drop f ;
 M: expr-pred expression-vars vars ;
 M: Neq expression-vars drop f ;
 M: Cloned expression-vars
-    [ val>> ] [ val2>> ] bi 2array vars ;
+    [ cloned-val>> ] [ orig-val>> ] bi 2array ;
 M: LocOp expression-vars
     [ loc>> ] [ item>> ] bi [ vars ] bi@ union ;
 ! Slot def-use reasoning is not symmetric, becoming apparent in
@@ -149,7 +149,7 @@ PREFIX-RULES: { P{ Collection } }
 ! "Liveness Anchor"
 GENERIC: upper-scope-vars ( pred -- term )
 M: body-pred upper-scope-vars ;
-M: Cloned upper-scope-vars [ val>> ] [ val2>> ] bi 2array ;
+M: Cloned upper-scope-vars [ cloned-val>> ] [ orig-val>> ] bi 2array ;
 M: Instance upper-scope-vars val>> ;
 M: DeclareStack upper-scope-vars classes>> ;
 M: LocalAllocation upper-scope-vars obj>> ;

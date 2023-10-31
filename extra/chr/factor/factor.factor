@@ -484,7 +484,7 @@ TUPLE: BitNot < expr-pred in ;
 TUPLE: rel-pred < expr-pred val2 ;
 TUPLE: transitive-rel-pred < rel-pred ;
 ! States that value is a clone of val2
-TUPLE: Cloned < rel-pred at-state ;
+TUPLE: Cloned < chr-pred cloned-val orig-val at-state ;
 ! This represents number equality
 TUPLE: Num= < transitive-rel-pred ;
 ! This represents equal? equality
@@ -538,6 +538,7 @@ UNION: body-pred val-pred expr-pred CallEffect CallXorEffect Declare CallRecursi
     LocOp
     LocSpec
     LocalAllocation
+    Cloned
     ;
 
 TUPLE: CheckPhiStack < chr-pred a b res ;

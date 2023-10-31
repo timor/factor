@@ -1257,9 +1257,20 @@ CHR: infer-length-predicate-from-slot @ { Instance ?s Is( array-like-class ?tau 
 [ ?u name>> "length" = ] | { Length ?s ?v } ;
 
 
+CHR: literal-ro-slot-access @ <={ Eql ?x A{ ?o } } // { Slot ?x Is( ro-slot-spec ?u ) ?v } --
+[ ?o <mirror> :>> ?p ]
+[ ?u name>> :>> ?n ] |
+[ ?n ?p at* [
+      [ ?v swap Eq boa ]
+      [ class-of ?v swap Instance boa ] bi
+      2array
+  ]
+  [ drop P{ Invalid } ] if ] ;
+
 ! NOTE: this is kind of the sledge-hammer version... converting a literal to slot predicates only... might be nicer to only do that to the slots in question...
 ! CHR: unboa-literal-allocation @ { LocalAllocation ?u ?o } { Instance ?o Is( not{ ro-tuple-class } ?tau ) } { SlotLoc ?x ?o __ } <={ LocOp ?x ?a . __ } // { Eq ?o A{ ?l } } --
-CHR: unboa-literal-allocation @ { LocalAllocation ?u ?o } { Instance ?o Is( not{ ro-tuple-class } ?tau ) } { Slot ?o __ ?x } <={ LocOp ?x ?a . __ } // { Eq ?o A{ ?l } } --
+! CHR: unboa-literal-allocation @ { LocalAllocation ?u ?o } { Instance ?o Is( not{ ro-tuple-class } ?tau ) } { Slot ?o __ ?x } <={ LocOp ?x ?a . __ } // { Eq ?o A{ ?l } } --
+CHR: unboa-literal-allocation @ { LocalAllocation ?u ?o } { Instance ?o Is( not{ ro-tuple-class } ?tau ) } { Slot ?o __ ?x } <={ LocOp ?x ?a . __ } // <={ Eql ?o A{ ?l } } --
 [ ?a ?u same-state? ] |
 [ ?tau all-slots
   [| slot-spec |
@@ -1295,6 +1306,7 @@ CHR: unboa-literal-allocation @ { LocalAllocation ?u ?o } { Instance ?o Is( not{
 ! Cloning: Structure must be the same before and after.  RO-Slots must be the same before and after. Locally allocated
 ! PushLocs must be the same value after.  Alternatively, consider this a read-access on the original slot?
 ! CHR: copy-cloned-ro-slots @ { Cloned ?y ?x } { Slot ?x Is( slot-spec ?s ) ?v } // -- [ ?s read-only>>  ] | { Slot ?y ?s ?v } ;
+! TODO: test this stuff!!!
 CHR: copy-cloned-ro-slots-reverse @ { Cloned ?x ?y __ } { Slot ?x Is( ro-slot-spec ?s ) ?v } // -- | { Slot ?y ?s ?v } ;
 
 ! *** State and Locations via FMC semantics
@@ -1377,6 +1389,8 @@ CHR: independent-loc-op-extends-beta-chain @ <={ LocOp ?y ?a __ ?b ?m . __ } // 
 { LocPop ?x ?c ?s ?d ?n ?w } ;
 
 ! **** Resolve clone slot access
+CHR: cloned-eq-is-eql @ { Cloned ?y ?x __ } { Eq ?x ?v } // -- | { Eql ?y ?v } ;
+
 ! Approach: if there is a locpop on a cloned object's slot, duplicate the content as initial pushloc.
 ! Approach 2.0: if there is a loc-op on a cloned allocation, then since it is a byte-by-byte copy,
 ! the slots must have the exact same contents before and after!

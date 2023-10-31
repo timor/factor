@@ -1,4 +1,4 @@
-USING: accessors arrays assocs chr.factor chr.factor.composition
+USING: accessors arrays assocs classes.algebra chr.factor chr.factor.composition
 chr.factor.effects chr.factor.intra-effect.liveness chr.factor.phi
 chr.factor.util chr.parser chr.state chr.test classes classes.tuple combinators
 combinators.short-circuit grouping kernel kernel.private layouts lists literals
