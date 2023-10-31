@@ -297,7 +297,8 @@ TUPLE: WrapDefaultClasses < chr-pred word effect target ;
 TUPLE: Iterated < chr-pred tag enter-in enter-out call-rec-in return-out out ;
 TUPLE: LoopVar < chr-pred stuff ;
 
-! Value-restricting preds
+! Value-restricting preds: These restrict the possible range of values of the value
+! in the first slot
 TUPLE: val-pred < chr-pred val ;
 
 ! Semantic
@@ -310,7 +311,12 @@ TUPLE: DeclaredNotInstance < Instance ;
 ! Need for math method expansion?
 ! TUPLE: Coerce < val-pred class ;
 
+! expr-pred: base class for predicates that can express relations between different values, at least one.
+! Atomic values are substituted for variables if known to be Eq?
 TUPLE: expr-pred < chr-pred val ;
+
+! TODO: maybe add abstractions underneath expr-pred to differentiate between equality domains of
+! their arguments
 
 ! Reasoning helper to expand Slot Initializations
 TUPLE: InitSlot < chr-pred obj-val in-val slot-spec out-state ;
@@ -330,6 +336,7 @@ TUPLE: Slot < val-pred n loc ;
 ! Initial element value of a built-in sequence
 TUPLE: Element < val-pred elt-val ;
 TUPLE: Length < val-pred length-val ;
+! TUPLE: Length < expr-pred length-val ;
 ! TUPLE: Nth < val-pred seq n ;
 ! A declaration, has parameterizing character
 TUPLE: DeclareStack < chr-pred classes stack ;
@@ -449,12 +456,13 @@ TUPLE: Shift < expr-pred in by ;
 TUPLE: BitAnd < expr-pred in mask ;
 TUPLE: BitNot < expr-pred in ;
 TUPLE: rel-pred < expr-pred val2 ;
+TUPLE: transitive-rel-pred < rel-pred ;
 ! States that value is a clone of val2
 TUPLE: Cloned < rel-pred at-state ;
 ! This represents number equality
-TUPLE: Num= < rel-pred ;
+TUPLE: Num= < transitive-rel-pred ;
 ! This represents equal? equality
-TUPLE: Eql < rel-pred ;
+TUPLE: Eql < transitive-rel-pred ;
 ! Strict eq
 TUPLE: Eq < Eql ;
 ! M: Eq subst
@@ -464,7 +472,7 @@ TUPLE: Neq < rel-pred ;
 ! ... while this has "not eq" semantics!
 TUPLE: NotSame < Neq ;
 ! M: NotSame subst keep-ground-values [ tuple-subst ] with-variable-on ;
-TUPLE: Le < rel-pred ;
+TUPLE: Le < transitive-rel-pred ;
 ! TUPLE: Lt < rel-pred ;
 TUPLE: Lt < Le ;
 ! TUPLE: Ge < expr-pred val var ;
@@ -554,7 +562,11 @@ TUPLE: PhiDone < chr-pred ;
 TUPLE: Liveness < chr-pred ; ! mode indicator
 TUPLE: Collection < chr-pred ; ! mode indicator
 TUPLE: liveness-pred < chr-pred ;
+! Used to establish def use scope, where the left values "appear",
+! while the right values are "consumed":
 TUPLE: Scope < liveness-pred left right ;
+! Mirrored semantics with regards to Scope, used to tie black box regions
+! left values are "consumed", while right values "appear"
 TUPLE: SubScope < Scope ;
 TUPLE: Live < liveness-pred vars ;
 TUPLE: Def < liveness-pred vars ;

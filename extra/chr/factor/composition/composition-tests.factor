@@ -406,7 +406,7 @@ P{ Effect L{ ?y2 . ?ys2 } L{ ?v3 . ?ys2 } { ?x } {
 P{ Effect L{ ?o1 ?v1 . ?a1 } ?c2 { ?x2 ?z2 ?b3 } {
         P{ Instance ?o1 not{ integer } }
         P{ Instance ?v1 object }
-        P{ SlotLoc ?x2 ?o1 2 }
+        P{ Slot ?o1 2 ?x2 }
         P{ PushLoc ?x2 ?b3 L{ ?v1 } ?c2 f }
         P{ LocPop ?x2 ?a1 L{ ?z2 } ?b3 f ?a1 } } }
 [ 2 set-slot ] test-chr-type
@@ -419,19 +419,22 @@ P{ Effect L{ ?z . ?a } ?a f { P{ Instance ?z object } } }
 [ 1array 42 swap 2 set-slot ] test-chr-type
 
 ! Flushable, thus can be ignored
-! NOTE: not doing that.  Only done on local allocations!
+! FIXME: not doing that, keeping volatile access semantics
+! right now, but that's really not intended?
 P{
-    Effect L{ ?o3 . ?a } ?a { ?x1 ?v3 ?b }
+    Effect L{ ?o3 . ?a } ?a { ?x1 ?v3 }
     {
         P{ Instance ?o3 not{ integer } }
-        P{ SlotLoc ?x1 ?o3 2 }
-        P{ PushLoc ?x1 ?b L{ ?v3 } ?a f }
+        P{ Slot ?o3 2 ?x1 }
+        P{ PushLoc ?x1 ?a L{ ?v3 } ?a f }
         P{ Instance ?v3 object }
-        P{ LocPop ?x1 ?a L{ ?v3 } ?b f ?a } } }
+        P{ LocPop ?x1 ?a L{ ?v3 } ?a f ?a } } }
 [ [ 2 slot drop ] get-type ] chr-test
 
 P{ Effect L{ ?v . ?a } ?a f { P{ Instance ?v object } } }
 [ [ 1array 2 slot drop ] get-type ] chr-test
+
+! *** Basic Array Manipulation
 
 P{ Effect ?a1 L{ ?x2 . ?a1 } f { P{ LocalAllocation ?a1 ?x2 } P{ Eq ?x2 { 42 } } P{ Instance ?x2 array } } }
 [ [ { 42 } [  ] curry ] call call ] test-chr-type
@@ -439,16 +442,16 @@ P{ Effect ?a1 L{ ?x2 . ?a1 } f { P{ LocalAllocation ?a1 ?x2 } P{ Eq ?x2 { 42 } }
 CONSTANT: obj1 { 42 }
 [ $ obj1 dup ] [ $ obj1 dup [ ] curry swap [ ] curry [ call ] bi@ ] test-same-type
 [ obj1 dup ] [ obj1 dup [ ] curry swap [ ] curry [ call ] bi@ ] test-same-type
-! FIXME: losing local-allocation predicate here
 [ $ obj1 dup ] [ [ $ obj1 dup [ ] curry swap [ ] curry ] call [ call ] bi@ ] test-same-type
 [ obj1 dup ] [ [ obj1 dup [ ] curry swap [ ] curry ] call [ call ] bi@ ] test-same-type
 
 [ t ] [ { 42 } dup [ ] curry swap [ ] curry [ call ] bi@ eq? ] test-same-type
 
-! *** basic array manipulation
+! FIXME: this can only work if we choose to compact to a literal again...
+{ f } [ [ 1 drop { 43 } ] [ { 42 } 43 over 2 set-slot ] same-type? ] unit-test
 
-! FIXME: this is eq? not eql
-! [ 1 drop { 43 } ] [ { 42 } 43 over 2 set-slot ] test-same-type
+[ 1 drop { 43 } 2 slot ] [ { 42 } 43 over 2 set-slot 2 slot ] test-same-type
+[ 1 drop { 43 } dup 2 slot ] [ { 42 } 43 over 2 set-slot dup 2 slot ] test-same-type
 
 ! ! TODO: this is really verbose right now...
 ! P{
@@ -458,7 +461,7 @@ CONSTANT: obj1 { 42 }
 !     f
 !     { P{ Instance ?x1 array } P{ Instance ?v1 fixnum } P{ Eq ?v1 42 } P{ Eq ?x1 { 42 } }
 !       P{ LocalAllocation ?a1 ?x1 } } }
-[ 43 1array 42 over 2 set-slot dup 2 slot ] [ [ { 43 } 42 over 2 set-slot dup 2 slot ] get-type ] test-same-type
+[ 43 1array 42 over 2 set-slot dup 2 slot ] [ { 43 } 42 over 2 set-slot dup 2 slot ] test-same-type
 
 ! *** Some cloning class predicate stuff
 P{ Effect ?a ?b f { P{ Invalid } } }
@@ -473,22 +476,22 @@ P{
     Effect
     L{ ?o . ?a }
     L{ ?v . ?a }
-    { ?x1 ?a1 }
+    { ?x1 }
     {
         P{ Instance ?v object }
         P{ Instance ?o footuple }
-        P{ SlotLoc ?x1 ?o T{ slot-spec { name "barslot" } { offset 2 } { class object } } }
-        P{ LocPop ?x1 ?a L{ ?v } ?a1 f ?a }
-        P{ PushLoc ?x1 ?a1 L{ ?v } ?a f }
+        P{ Slot ?o T{ slot-spec { name "barslot" } { offset 2 } { class object } } ?x1 }
+        P{ LocPop ?x1 ?a L{ ?v } ?a f ?a }
+        P{ PushLoc ?x1 ?a L{ ?v } ?a f }
     }
 }
-[ [ barslot>> ] get-type ] chr-test
+[ barslot>> ] test-chr-type
 
-! TODO: improve
+! TODO: improve what to test for
 { t } [ [ barslot>> barslot>> ] get-type canonical? ] unit-test
 
 P{ Effect L{ ?v . ?b3 } L{ ?o . ?b3 } { ?x3 } {
-        P{ SlotLoc ?x3 ?o T{ slot-spec { name "barslot" } { offset 2 } { class object } } }
+        P{ Slot ?o T{ slot-spec { name "barslot" } { offset 2 } { class object } } ?x3 }
         P{ Instance ?o footuple }
         P{ Instance ?v object }
         P{ LocalAllocation ?b3 ?o }
@@ -497,8 +500,11 @@ P{ Effect L{ ?v . ?b3 } L{ ?o . ?b3 } { ?x3 } {
 
 TUPLE: foo2 aslot { bslot read-only } ;
 
-P{ Effect L{ ?o . ?a } L{ ?v . ?a } f { P{ Slot ?o "bslot" ?v } P{ Instance ?v object } P{ Instance ?o foo2 } } }
-[ [ bslot>> ] get-type ] chr-test
+P{ Effect L{ ?o . ?a } L{ ?v . ?a } f { P{ Slot ?o T{ slot-spec { name "bslot" } { offset 3 } { class object } { read-only t } } ?v } P{ Instance ?v object } P{ Instance ?o foo2 } } }
+[ bslot>> ] test-chr-type
+
+[ 42 ] [ T{ foo2 f 42 88 } aslot>> ] test-same-type
+[ 88 ] [ T{ foo2 f 42 88 } bslot>> ] test-same-type
 
 { P{ Imply { ?o } { ?v } } }
 [ { ?o } P{ Slot ?o "bslot" ?v } imply-def ] unit-test
@@ -506,13 +512,15 @@ P{ Effect L{ ?o . ?a } L{ ?v . ?a } f { P{ Slot ?o "bslot" ?v } P{ Instance ?v o
 P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y } {
        P{ Instance ?y foo2 }
        P{ Instance ?x foo2 }
-       P{ Slot ?x "bslot" ?y }
-       P{ Slot ?y "bslot" ?z }
+       P{ Slot ?x T{ slot-spec { name "bslot" } { offset 3 } { class object } { read-only t } } ?y }
+       P{ Slot ?y T{ slot-spec { name "bslot" } { offset 3 } { class object } { read-only t } } ?z }
        P{ Instance ?z object }
    }
  } [ [ bslot>> bslot>> ] get-type ] chr-test
 
+! FIXME not losing internal predicates!
 [ 1 drop 42 ] [ T{ foo2 f f T{ foo2 f f 42 } } bslot>> bslot>> ] test-same-type
+[ 1 drop 42 ] [ f 42 foo2 boa f swap foo2 boa bslot>> bslot>> ] test-same-type
 
 TUPLE: foo3 slot1 slot2 ;
 [ 42 33 ] [ 22 33 foo3 boa 42 >>slot1 [ slot1>> ] [ slot2>> ] bi ] test-same-type
@@ -521,7 +529,7 @@ TUPLE: foo3 slot1 slot2 ;
 [ 69 42 ] [ 22 33 foo3 boa 69 >>slot2 42 >>slot1 [ slot2>> ] [ slot1>> ] bi ] test-same-type
 
 
-! *** FIXME Infinite Structures
+! *** Infinite Structures
 
 ! Setting an array's first element to itself, dereferencing
 ! That's a pretty interesting case, because it actually results in a hybrid literal structure

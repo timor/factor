@@ -31,6 +31,7 @@ CHR: comm-var-is-lhs @ // AS: ?p <={ symmetric-pred A{ ?l } ?v } -- [ ?v term-va
 ! Same here
 ! CHR: literal-singleton-class-is-class @ // { Instance ?x ?tau } -- [ { ?tau } first wrapper? ] [ { ?tau } first wrapped>> :>> ?rho singleton-class? ] |
 ! { Instance ?x ?rho } ;
+! TODO: why?
 CHR: specialize-t-class @ { Eq ?x t } // { Instance ?x Is( not{ t } ?tau ) } --
 [ ?tau t classes-intersect? ] | { Instance ?x t } ;
 
@@ -200,18 +201,43 @@ CHR: phi-same-prod-result-1 @ { Prod ?z ?x ?y } { Prod ?a ?x ?y } // -- | [ ?z ?
 CHR: phi-specialized-expr-pred @ // AS: ?p <={ expr-pred } AS: ?q <={ expr-pred } -- [ ?p ?q [ class-of ] same? ]
 [ ?p ?q more-general-pred :>> ?r ] | { Collect ?r } ;
 
+
+! *** Phi LocOp handling
+! Rationale: If we apply the multi-stack FMC approach to effects, then in theory, each location has its own effect
+! which is calculated in lock-step to the effect on the lambda-stack.  To unify
+! those would then mean to prove that a sequence of operations on these stacks
+! is actually performed in the exact same order on the exact same locations.
+! This becomes expensive really quickly as all possible parallel access
+! sequences would have to be matched correctly to one another.  Thus, we limit
+! these cases to the ones where the location predicates uniquely identify
+! exactly one unknown, and try to unify that.  In all other cases, it is treated
+! as a discriminator.
+
 ! XXX: this is not correct because it could set different access depth equal by equating internal values with inputs/outputs.
 ! This would probably need to be solved by a complete isomorphism checker on the internal structure?
 ! CHR: phi-same-slot-must-be-same-var @ { Slot ?o ?n M{ ?v } } { Slot ?o ?n M{ ?w } } // -- | [ ?v ?w ==! ] ;
 ! CHR: phi-same-obj-slot-is-same-loc @ { SlotLoc ?x ?o ?n } { SlotLoc ?y ?o ?n } // -- | [ ?y ?x ==! ] ;
+CHR: phi-same-obj-slot-is-same-loc @ { Slot ?o ?n ?x } { Slot ?o ?n ?y } // -- | [ ?y ?x ==! ] ;
 
 ! FIXME: follow-up location stuff phi-ing.  Possibly completely loop the locop states in slot reads?
 ! Again, the assumption here is basically graph matching.  For circular locops, this should not
 ! introduce any ambiguity in the case of multiple reads since those are resolved?
 ! Might have to normalize any ..a pop ..a -> ..a push ..b / ..a pop ..b -> ..b push ..b combinations though...
 ! FIXME: Losing unresolved loc-ops in phi branches needs to resolve the states?
-CHR: phi-same-loc-pop-item-and-next-state @ { LocPop ?x ?a ?v ?b ?l __ } { LocPop ?x ?a ?w ?c ?l __ } // -- [ ?c ?b == not ] [ ?a ?b == not ] [ ?c ?a == not ] |
-[ ?b ?c ==! ] [ ?v ?w ==! ] ;
+! CHR: phi-same-loc-pop-item-and-next-state @ { LocPop ?x ?a ?v ?b ?l __ } { LocPop ?x ?a ?w ?c ?l __ } // -- [ ?c ?b == not ] [ ?a ?b == not ] [ ?c ?a == not ] |
+! [ ?b ?c ==! ] [ ?v ?w ==! ] ;
+
+CHR: phi-try-unify-loc-op @ AS: ?p <={ LocOp } AS: ?q <={ LocOp } // -- [ ?p ?q unary-unifier? :>> ?u ] |
+[ ?u add-equal ] ;
+
+! At this point, the rule above should have unified all isomorphic stack op chains...
+CHR: phi-loc-op-discriminator @ AS: ?p <={ LocOp } AS: ?q <={ LocOp } // -- [ ?p ?q [ class-of ] same? ] [ ?p ?q unify :>> ?u assoc-size 1 > ] |
+! TODO: find out if we can get away with or without a conjunction here -> might become tricky again
+! when ∃-quantified intermediate results are present
+! disjunction:
+! [ ?p vars ?q vars intersect [ Discriminator boa ] map ] ;
+! conjunction:
+[ ?p vars ?q vars intersect Discriminator boa ] ;
 
 CHR: phi-disjoint-instance-decider @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
 [ { ?rho ?tau } first2 classes-intersect? not ] | { Decider ?x } ;
@@ -275,6 +301,10 @@ CHR: phi-eq-range @ // { Eq ?x A{ ?b } } { Eq ?x A{ ?c } } -- [ ?b ?c order? [ :
 ! CHR: phi-eq-neq-2 @ { Eq ?x ?y } { Neq ?y ?x } // -- | { Decider { ?x ?y } } ;
 CHR: phi-eql-neq-1 @ <={ Eql ?x ?y } { Neq ?x ?y } // -- | { Discriminator { ?x ?y } } ;
 CHR: phi-eql-neq-2 @ <={ Eql ?x ?y } { Neq ?y ?x } // -- | { Discriminator { ?x ?y } } ;
+! CHR: phi-eq-notsame-1 @ { Eq ?x ?y } { NotSame ?x ?y } // -- | { Discriminator { ?x ?y } } ;
+! CHR: phi-eq-notsame-2 @ { Eq ?x ?y } { NotSame ?y ?x } // -- | { Discriminator { ?x ?y } } ;
+
+! FIXME: huh. bs?
 ! CHR: phi-neq-is-always-decider @ { Neq ?x ?y } // -- | { Decider { ?x ?y } } ;
 
 CHR: phi-eql-eq-1 @ { Eql ?x ?y } { Eq ?x ?y } // -- | { Discriminator { ?x ?y } } { Collect P{ Eql ?x ?y } } ;
@@ -606,7 +636,6 @@ CHR: neutral-sum-defines-eq @ // { Sum ?z ?x 0 } -- | { Eq ?z ?x } ;
 
 ! Anything more complex than that needs a linear equation predicate, or
 ! a linear solver, for that matter...
-! TODO reactivate once confirmed that these aren't necessary for liveness
 CHR: elim-transitive-literal-sum @ // { Sum ?z ?x A{ ?m } } { Sum ?x ?a A{ ?n } } --
 [ ?z ?x == not ] [ ?m ?n + :>> ?k ] | { Sum ?z ?a ?k } ;
 CHR: elim-transitive-literal-sum-diff-1 @ // { Sum ?z ?x A{ ?m } } { Sum ?z ?a A{ ?n } } --
@@ -622,6 +651,13 @@ CHR: elim-transitive-literal-prod-div-1 @ // { Prod ?x ?z A{ ?m } } { Prod ?a ?z
 ! TODO: lt
 CHR: transitive-le-ge @ { Le ?x ?y } { Le ?y ?z } // -- | { Le ?x ?z } ;
 CHR: transitive-le-gt @ { Lt ?x ?y } { Le ?y ?z } // -- | { Lt ?x ?z } ;
+
+CHR: transitive-eql-1 @ AS: ?p <={ Eql ?x ?y } AS: ?q <={ Eql ?y ?z } // -- [ ?p ?q [ class-of :>> ?rho ] same? ] |
+[ { ?rho ?x ?z } ] ;
+
+! CHR: transitive-eq-2 @ { Eq ?x ?y } { Eq ?z ?y } // -- | { Eq ?x ?z } ;
+! NOTE: although the predicate is called Cloned, it is to be read as "initialized by"
+! CHR: transitive-clone-same-state @ { Cloned ?y ?x ?a } { Cloned ?z ?y ?a } // -- { Cloned ?z ?x ?a }
 
 ! NOTE: This does not work naively for products!
 ! TODO: might need revisiting after being more explicit with math types and equality
@@ -1059,6 +1095,7 @@ CHR: invalid-eq-literals @ { Eq A{ ?a } A{ ?b } } // -- | [ "substituted into eq
 CHR: known-slot-num @ { Eq ?n A{ ?a } } // { Slot ?o ?n ?v } -- |
 { Slot ?o ?a ?v } ;
 
+! NOTE: for some reason, Length is not an expr pred... but why?
 CHR: known-length-val @ { Eq ?n A{ ?v } } // { Length ?a M{ ?n } } -- |
 { Length ?a ?v } ;
 
@@ -1205,6 +1242,12 @@ CHR: collapse-read-only-slot-write @ { Slot ?o Is( ro-slot-spec ?s ) ?x } //
 <={ PushLoc ?x ?a L{ ?v } ?b . __ } -- |
 [ ?a ?b ==! ] [ ?v ?x ==! ] ;
 
+
+! NOTE: not keeping it doesn't seem to work, as there might still be loc-ops on this!
+! TODO: test keeping/not keeping the Slot predicate by moving this rule to the collector phase!
+! CHR: infer-length-predicate-from-slot @ { Instance ?s Is( array-like-class ?tau ) } // { Slot ?s Is( ro-slot-spec ?u ) ?v } --
+CHR: infer-length-predicate-from-slot @ { Instance ?s Is( array-like-class ?tau ) } { Slot ?s Is( ro-slot-spec ?u ) ?v } // --
+[ ?u name>> "length" = ] | { Length ?s ?v } ;
 
 
 ! NOTE: this is kind of the sledge-hammer version... converting a literal to slot predicates only... might be nicer to only do that to the slots in question...

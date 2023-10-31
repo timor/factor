@@ -276,6 +276,8 @@ CHR: collect-live-body-pred @ { FinishEffect ?tau } // { Collect ?p } AS: ?e P{ 
 
 CHR: phi-discard-discriminators @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __ __ ?tau } // <={ Discriminator } -- | ;
 CHR: losing-unresolved-iteration @ { FinishEffect ?tau } <={ MakeEffect } AS: ?p <={ Iterated } // -- | [ { ?p "discarding unresolved iteration predicate" } throw ] ;
+! CHR: losing-unresolved-phi-loc-op @ { PhiMode } { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } AS: ?p <={ LocOp } // --
+! | [ { ?p "discarding unresolved location operation in phi" } throw ] ;
 CHR: phi-discard-leftover-preds @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __ __ ?tau } // <={ body-pred } -- | ;
 ! TODO: not 100% sure the following isn't working too eagerly...
 CHR: phi-discard-keeps @ { FinishEffect ?tau } { PhiMode } { MakeEffect __ __ __ __ ?tau } // <={ Keep } -- | ;

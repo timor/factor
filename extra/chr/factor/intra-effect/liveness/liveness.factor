@@ -178,6 +178,12 @@ CHR: redundant-implication @ { Use ?r } // { Imply ?x ?y } -- [ ?x ?r subset? ] 
 CHR: body-pred-imply-def @ AS: ?p <={ body-pred } // { Def ?l } -- [ ?l ?p imply-def ] |
 [ ?l ?p imply-def [ out>> ?l union Def boa ] keep 2array ] ;
 
+! CHR: eql-imply-use-1 @ AS: ?p <={ Eql M{ ?x } M{ ?y } } { Def ?l } { Use ?r } // -- [ ?x ?l in? not ] [ ?y ?r in? ] |
+! { Imply { ?x } { ?y } } ;
+
+! CHR: eql-imply-use-2 @ AS: ?p <={ Eql M{ ?y } M{ ?x } } { Def ?l } { Use ?r } // -- [ ?x ?l in? not ] [ ?y ?r in? ] |
+! { Imply { ?x } { ?y } } ;
+
 ! If a value is used, all it's defining characteristics are also used
 CHR: used-val-pred-used-by-value @ AS: ?p <={ val-pred ?x . ?a } // { Use ?r } -- [ ?x ?r in? ] [ ?a vars :>> ?b ?r subset? not ] |
 [ ?b ?r union Use boa ] ;

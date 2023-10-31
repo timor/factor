@@ -227,6 +227,7 @@ CHR: type-of-slot @ { TypeOfWord slot M{ ?tau } } // -- |
 ! TODO annotate set-local-value and local-value with LocalAllocation predicates!
 ! (although that should probably only be an optimization)
 
+! TODO: test whether using loop locpop would work as well!
 ! : set-slot ( value obj n -- )
 CHR: type-of-set-slot @ { TypeOfWord set-slot M{ ?tau } } // -- |
 [ ?tau

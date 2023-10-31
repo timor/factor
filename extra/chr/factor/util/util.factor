@@ -306,6 +306,7 @@ M: object local-alloc-val? class-of local-alloc-class? ;
 
 PREDICATE: ro-tuple-class < class { [ tuple class< ] [ all-slots [ read-only>> ] all? ] } 1&& ;
 UNION: array-like array byte-array ;
+PREDICATE: array-like-class < class array-like class<= ;
 
 ! ** Sets
 ! misnomer...
