@@ -372,6 +372,7 @@ CHR: eq-propagate-sum-1 @ { Eq ?x ?y } { Sum ?a ?y ?b } // -- |
 ! **** phi recursive calls
 
 ! We don't merge call-recursives for our own disjoint definition
+! FIXME: Is this used anywhere anymore???
 CHR: phi-call-rec-self @ { PhiSchedule ?w __ __ } //
 { CallRecursive ?w __ __ } -- | { Invalid } ;
 
@@ -390,6 +391,7 @@ CHR: disj-is-macro-effect @ <={ MakeEffect } // { MacroExpand __ __ __ __ } -- |
 ! NOTE: this is pretty eager, as it will preserve all higher-order parametrism explicitly
 CHR: disj-is-inline-effect @ <={ MakeEffect } // <={ CallEffect ?p . __ } -- | { Invalid } ;
 
+CHR: disj-unresolved-boa @ <={ MakeEffect } // { Boa __ __ __ } -- | { Invalid } ;
 CHR: disj-unresolved-generic @ <={ MakeEffect } // <={ GenericDispatch } -- | { Invalid } ;
 CHR: disj-unresolved-prim-call @ <={ MakeEffect } // <={ PrimCall } -- | { Invalid } ;
 ! FIXME: combine phi and comp phases better!  Collection an liveness needs to be way improved!
@@ -598,8 +600,10 @@ CHR: check-lt-eq-1 @ // { Lt ?x ?y } { Eq ?x ?y } -- | { Invalid } ;
 CHR: check-lt-eq-2 @ // { Lt ?x ?y } { Eq ?y ?x } -- | { Invalid } ;
 ! CHR: check-eq @ // { Eq A{ ?x } A{ ?y } } -- | [ ?x ?y eq? f P{ Invalid } ? ] ;
 CHR: check-eq @ { Eq ?x A{ ?a } } // { Eq ?x A{ ?b } } -- | [ ?a ?b eq? f P{ Invalid } ? ] ;
-CHR: local-alloc-never-eq-1 @ // { Eq M{ ?x } M{ ?y } } { LocalAllocation __ ?x } -- | { Invalid } ;
-CHR: local-alloc-never-eq-2 @ // { Eq M{ ?x } M{ ?y } } { LocalAllocation __ ?y } -- | { Invalid } ;
+! Not using the following, catching relevant cases via checking that a local allocation would be in
+! the input
+! CHR: local-alloc-never-eq-1 @ // { Eq M{ ?x } M{ ?y } } { LocalAllocation __ ?x } -- | { Invalid } ;
+! CHR: local-alloc-never-eq-2 @ // { Eq M{ ?x } M{ ?y } } { LocalAllocation __ ?y } -- | { Invalid } ;
 ! NOTE: Neq has eql sematics! ( bad naming )
 ! a notsame b + a eq b -> invalid by definition
 ! a neq b + a eq b -> invalid because a eq b implies a eql b
@@ -1130,6 +1134,9 @@ CHR: known-generic-input/output @ { Eq ?n A{ ?v } } // { GenericDispatch ?w ?d ?
 ! [| | ?d { { ?x ?tau } } lift* :> new-dispatcher
 !  P{ GenericDispatch ?w new-dispatcher ?a ?i ?o } ] ;
 
+CHR: local-allocation-in-input @ { MakeEffect ?i __ __ __ __ } // { LocalAllocation __ ?o } --
+[ ?o ?i vars in? ] | { Invalid } ;
+
 ! *** Slot conversion
 ! PREDICATE: class-with-slots < class all-slots empty? not ;
 GENERIC: get-slot-spec ( class n -- ? )
@@ -1371,6 +1378,8 @@ CHR: independent-loc-op-extends-beta-chain @ <={ LocOp ?y ?a __ ?b ?m . __ } // 
 
 ! **** Resolve clone slot access
 ! Approach: if there is a locpop on a cloned object's slot, duplicate the content as initial pushloc.
+! Approach 2.0: if there is a loc-op on a cloned allocation, then since it is a byte-by-byte copy,
+! the slots must have the exact same contents before and after!
 CHR: copy-cloned-slot-access @ { Cloned ?x ?y ?a } { Slot ?y ?i ?v } { PushLoc ?v __ ?r ?a __ } { Slot ?x ?i ?w } { LocPop ?w __ ?s __ __ ?b } // --
 [ ?b >states first ?a same-state? ] | { PushLoc ?w ?a ?r ?a t } ;
 
@@ -1394,8 +1403,10 @@ CHR: copy-cloned-slot-access @ { Cloned ?x ?y ?a } { Slot ?y ?i ?v } { PushLoc ?
 CHR: slot-loc-op-known-local @ { LocalAllocation __ ?o } { Slot ?o __ ?x } // AS: ?p <={ LocOp M{ ?x } ?b ?s ?c f . __ } --
 | [ ?p clone t >>local? ] ;
 
-CHR: slot-loc-op-known-local-cloned @ { Cloned ?o __ __ } { Slot ?o __ ?x } // AS: ?p <={ LocOp M{ ?x } __ __ __ f . __ } --
-| [ ?p clone t >>local? ] ;
+
+! FIXME TBR Shouldn't be needed since we explicitly state that is is local in the primitive expansion
+! CHR: slot-loc-op-known-local-cloned @ { Cloned ?o __ __ } { Slot ?o __ ?x } // AS: ?p <={ LocOp M{ ?x } __ __ __ f . __ } --
+! | [ ?p clone t >>local? ] ;
 
 ! ! TODO: put the length check somewhere else, as it is independent from the actual loc op!
 ! ! TODO: extend to byte-arrays and strings

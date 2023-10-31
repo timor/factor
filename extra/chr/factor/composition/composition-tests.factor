@@ -75,7 +75,9 @@ P{ Effect L{ ?o3 . ?a6 } L{ ?v3 . ?a6 } { ?x1 }
         P{ PushLoc ?x1 ?a6 L{ ?v3 } ?a6 f } } }
 [ \ array-first get-type ] chr-test
 
-{ t } [ [ 1 drop 42 ] [ { 42 } array-first ] same-type? ] unit-test
+[ { 42 } array-first ] [ [ { 42 } array-first ] call ] test-same-type
+
+[ 1 drop 42 ] [ { 42 } array-first ] test-same-type
 [ 1 drop 42 ] [ { 42 43 } array-first ] test-same-type
 
 ! ** Throwing
@@ -226,8 +228,50 @@ P{ Effect L{ ?y . ?a } L{ ?x . ?a } f
 
 [ drop f ] [ dup (clone) eq? ] test-same-type
 
+! ** Sums and Parameters
+
+
+P{
+    Effect
+    L{ ?y1 ?x1 . ?rho1 }
+    L{ ?z1 . ?rho1 }
+    f
+    { P{ Instance ?y1 number } P{ Instance ?x1 number } P{ Instance ?z1 number } P{ Sum ?z1 ?x1 ?y1 } }
+} [ + ] test-chr-type
+
+{ 1 2 3 4 5 }
+[ { [ + ] [ + + ] [ + + + ] [ + + + + ] [ + + + + + ] }
+  [ get-type preds>> [ Sum? ] count ] each
+] unit-test
+
+{ 1 2 3 4 5 }
+[ { [ * ] [ * * ] [ * * * ] [ * * * * ] [ * * * * * ] }
+  [ get-type preds>> [ Prod? ] count ] each
+] unit-test
+
+{ 1 2 3 4 5 }
+[ { [ * ] [ + * ] [ + * + ] [ * - * + ] [ - + - * + ] }
+  [ get-type preds>> [ { [ Prod? ] [ Sum? ] } 1|| ] count ] each
+] unit-test
+
+! Neuralgic for missing Sum mode
+{ 2 } [ [ - 2 + ] get-type preds>> [ Sum? ] count ] unit-test
+{ 3 } [ [ + 2 + + ] get-type preds>> [ Sum? ] count ] unit-test
+{ 4 } [ [ + + 2 + + ] get-type preds>> [ Sum? ] count ] unit-test
+
+{ 1 } [ [ slot + ] get-type preds>> [ Sum? ] count ] unit-test
+{ 1 } [ [ 2 slot + ] get-type preds>> [ Sum? ] count ] unit-test
+{ 1 } [ [ 2 slot swap 2 slot + ] get-type preds>> [ Sum? ] count ] unit-test
+
+! NOTE: this will not reduce to 5 sums unless ordering partial known sums correctly?
+{ 6 } [ [ + + 2 + + 3 + + ] get-type preds>> [ Sum? ] count ] unit-test
+{ 3 } [ [ + 2 + - ] get-type preds>> [ Sum? ] count ] unit-test
+{ 3 } [ [ - 2 swap - swap + ] get-type preds>> [ Sum? ] count ] unit-test
+{ 1 } [ [ [ + ] [ swap + ] if ] get-type preds>> [ Sum? ] count ] unit-test
+
+
 ! NOTE: those stupid drops are in there because otherwise we just
-! get the wrapper type... meh
+! get the wrapper type... meh FIXME should be fixed now
 { t } [ [ 1 drop 42 ] [ 40 2 + ] same-type? ] unit-test
 { t } [ [ 1 drop 42 ] [ 40 2 swap + ] same-type? ] unit-test
 { t } [ [ 1 drop 42 ] [ 44 2 - ] same-type? ] unit-test
@@ -346,9 +390,11 @@ TUPLE: foobox foobox-a foobox-b ;
 
 ! NOTE: isomorphism checker chokes on this if we don't sanitize the state chains?
 [ [ foobox-a>> ] keep foobox-b>> ] [ [ foobox-b>> ] keep foobox-a>> swap ] test-same-type
+[ drop t ] [ dup foobox boa [ foobox-a>> ] [ foobox-b>> ] bi eq? ] test-same-type
 [ t ] [ { 42 } dup foobox boa [ foobox-a>> ] [ foobox-b>> ] bi eq? ] test-same-type
-[ f ] [ { 42 } { 42 } foobox boa [ foobox-a>> ] [ foobox-b>> ] bi eq? ] test-same-type
 [ t ] [ [ { 42 } dup foobox boa [ foobox-a>> ] [ foobox-b>> ] bi ] call eq? ] test-same-type
+[ f ] [ [ { 42 } { 42 } foobox boa [ foobox-a>> ] [ foobox-b>> ] bi ] call [ eq? ] call ] test-same-type
+[ f ] [ { 42 } { 42 } foobox boa [ foobox-a>> ] [ foobox-b>> ] bi eq? ] test-same-type
 TUPLE: barbox { barbox-a read-only } { barbox-b read-only } ;
 { t } [ [ [ barbox-a>> ] [ barbox-b>> ] bi eq? ] get-type Xor? ] unit-test
 [ 5 ] [ 5 dup barbox boa [ barbox-a>> ] call ] test-same-type
@@ -357,6 +403,11 @@ TUPLE: barbox { barbox-a read-only } { barbox-b read-only } ;
 [ f ] [ [ { 42 } { 42 } barbox boa [ barbox-a>> ] [ barbox-b>> ] bi ] call eq? ] test-same-type
 [ t ] [ [ 5 5 barbox boa [ barbox-a>> ] [ barbox-b>> ] bi ] call eq? ] test-same-type
 
+! Prove that a local allocation can only be eq? if it is the same var?
+! Indirectly, by catching the case where local allocations can never
+! appear in word inputs!
+{ t } [ [ boa eq? ] get-type Xor? ] unit-test
+[ 3drop f ] [ foobox boa eq? ] test-same-type
 ! ** Effectful access
 ! ro-slot access conversion
 
@@ -467,7 +518,13 @@ CONSTANT: obj1 { 42 }
 P{ Effect ?a ?b f { P{ Invalid } } }
 [ [ { array } declare (clone) { string } declare ] get-type ] chr-test
 
+! FIXME
+{  } [ (clone) 2 slot ] test-chr-type
+{  } [ 1array (clone) ] test-chr-type
+
 [ dup drop ] [ 1array (clone) 2 slot ] test-same-type
+! NOTE: See caveat in ...primitives.factor!
+[ 2drop f ] [ (clone) eq? ] test-same-type
 
 ! TODO: tests for actually specializing stuff over clone...
 
@@ -506,8 +563,8 @@ P{ Effect L{ ?o . ?a } L{ ?v . ?a } f { P{ Slot ?o T{ slot-spec { name "bslot" }
 [ 42 ] [ T{ foo2 f 42 88 } aslot>> ] test-same-type
 [ 88 ] [ T{ foo2 f 42 88 } bslot>> ] test-same-type
 
-{ P{ Imply { ?o } { ?v } } }
-[ { ?o } P{ Slot ?o "bslot" ?v } imply-def ] unit-test
+! { P{ Imply { ?o } { ?v } } }
+! [ { ?o } P{ Slot ?o "bslot" ?v } imply-def ] unit-test
 
 P{ Effect L{ ?x . ?a } L{ ?z . ?a } { ?y } {
        P{ Instance ?y foo2 }
@@ -558,27 +615,6 @@ TUPLE: foo3 slot1 slot2 ;
 ! rather than building the literal
 [ 1array dup dup 2 set-slot 2 slot ]
 [ 1array dup dup 2 set-slot 2 slot 2 slot ] test-same-type
-
-! ** Sums and Parameters
-{ 1 2 3 4 5 }
-[ { [ + ] [ + + ] [ + + + ] [ + + + + ] [ + + + + + ] }
-  [ get-type preds>> [ Sum? ] count ] each
-] unit-test
-
-{ 1 2 3 4 5 }
-[ { [ * ] [ * * ] [ * * * ] [ * * * * ] [ * * * * * ] }
-  [ get-type preds>> [ Prod? ] count ] each
-] unit-test
-
-{ 1 2 3 4 5 }
-[ { [ * ] [ + * ] [ + * + ] [ * - * + ] [ - + - * + ] }
-  [ get-type preds>> [ { [ Prod? ] [ Sum? ] } 1|| ] count ] each
-] unit-test
-
-! Neuralgic for missing Sum mode
-{ 3 } [ [ - 2 swap - swap + ] get-type preds>> [ Sum? ] count ] unit-test
-
-{ 1 } [ [ [ + ] [ swap + ] if ] get-type preds>> [ Sum? ] count ] unit-test
 
 ! ** Read-only locals
 

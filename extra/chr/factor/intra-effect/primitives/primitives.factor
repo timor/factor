@@ -35,7 +35,7 @@ PREFIX-RULES: { P{ CompMode } }
 ! NOTE: The class pred has implied directional semantics here, not sure if that is important
 CHR: prim-call-clone @ // { PrimCall (clone) L{ ?x . ?a } L{ ?y . ?b } } -- |
 ! [ ?a ?b ==! ] { Eql ?x ?y } { LocalAllocation ?a ?y } { ClassPred ?y ?x class= } { NotSame ?x ?y } ;
-[ ?a ?b ==! ] { Cloned ?y ?x ?a } { ClassPred ?y ?x class= } { NotSame ?x ?y } ;
+[ ?a ?b ==! ] { Cloned ?y ?x ?a } { LocalAllocation ?a ?y } { ClassPred ?y ?x class= } { NotSame ?x ?y } ;
 
 ! *** Locals
 ! [| a b | a ] -> [ 2 load-locals -1 get-local 2 drop-locals ]

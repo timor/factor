@@ -73,6 +73,14 @@ PREDICATE: callable-word < word { [ symbol? not ] } 1&& ;
 !    used on the semantic level.   This means we can keep reasoning on a nominative
 !    level, while expanding e.g predicates to have the desired effect.
 
+!    The statement above did not take into account the difference between the
+!    =DeclaredInstance= / =DeclaredNotInstance= and =Instance= predicates yet.
+!    Placing a =DeclaredInstance= / =DeclaredNotInstance= predicate is a
+!    nominative assertion possibly over predicate classes, which turns into a
+!    semantic one by actually evaluating the type predicate, once known.
+!    =Instance= predicates on the other hand remain nominative designations of
+!    Factor's "regular" class hierarchy.
+
 ! ** Relations and Xor Types
 ! There seems to be a need to distinguish between not creating union types based on
 ! control flow or continuation-level data flow, and not creating union types
@@ -111,6 +119,23 @@ PREDICATE: callable-word < word { [ symbol? not ] } 1&& ;
 ! the first place...
 ! Alternatively, a more general approach could be tried with explicitly
 ! declaring which var slots are inputs and outputs, respectively.
+
+! *** Use-set only approach
+! For now, switching back to a simpler approach, treating Effects like
+! ∀(i,o)∃(x)... expressions, where i and o are the word in/outputs, and x are
+! existentially qualified variables because they are needed to establish more complex
+! relations.  For this approach:
+! - Use set includes input and outputs
+! - Value predicates of used values have their arguments used
+
+! Note that this smells like it could break because of internal stable dependency cycles
+! by ignoring predicate hole polarity?
+! Things known to be related to neuralgic cases, especially when transitivity and commutativity is involved:
+! - P{ Sum x y z }
+! - P{ Slot obj spec val }
+! - LocOps...
+! - Reflexive relation predicates
+! - possibly internal predicates left after erasing Iterated predicates
 
 ! ** Equality
 ! Domains of dicourse:
@@ -372,6 +397,7 @@ TUPLE: PartialRecursive < chr-pred word temp-word ;
 TUPLE: Boa < chr-pred spec in-stack out-stack ;
 TUPLE: TupleBoa < Boa ;
 ! explicitly referencing out-quot here for live-ness
+! TODO: unused?
 TUPLE: MacroExpand < chr-pred quot args in out-quot ;
 ! Used for anonymous expansion
 TUPLE: ExpandQuot < MacroExpand num-args ;

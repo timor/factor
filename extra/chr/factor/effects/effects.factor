@@ -107,15 +107,15 @@ CHR: throw-type-query @ // { Spool ?tau L{ } } { ?DeferTypeOf ?q M{ ?sig } } -- 
 
 CHR: end-spool @ { MakeEffect ?i ?o __ __ __ } // { Spool ?tau L{ } } --
 ! [ ?i value-vars :>> ?a ] [ ?o value-vars :>> ?b ]
-[ ?i vars :>> ?a ] [ ?o vars :>> ?b ]
-[ ?a ?b union :>> ?c ]
+! [ ?i vars :>> ?a ] [ ?o vars :>> ?b ]
+! [ ?a ?b union :>> ?c ]
 |
 ! { FinishEffect ?tau }
 ! { Live ?c }
 ! { Left ?a } { Right ?b }
-! { Scope ?i ?o }
+{ Scope ?i ?o }
 ! { Given ?a } { Define ?b }
-{ Live ?c } { Def ?a } { Use ?b }
+! { Live ?c } { Def ?a } { Use ?b }
 { Liveness }
 { Collection }
 { FinishEffect ?tau } ;
@@ -320,6 +320,7 @@ CHR: losing-call-effect @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p P{ Ca
 CHR: losing-macro-call @ { FinishEffect ?tau } <={ MakeEffect } // AS: ?p <={ MacroCall } -- | [ { ?p "discarding a macro call predicate" } throw ] ;
 ! Still pretty fragile.  Also, not needed since a write-back push will have the same states
 ! NOTE: Wrong.  This is needed for e.g. writing unknown values into local allocations and forgetting everything
+! Rationale: If the object is still used, the pushloc will be collected?
 CHR: perform-dead-push-loc @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } // { PushLoc M{ ?x } ?a __ ?b t } -- |
 [ ?a ?b ==! ] ;
 CHR: losing-unresolved-loc-op @ { FinishEffect ?tau } { MakeEffect __ __ __ __ ?tau } AS: ?p <={ LocOp __ ?a __ ?b . __ } // --
