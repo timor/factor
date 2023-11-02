@@ -383,3 +383,12 @@ M: unit-test-aborter errors-changed drop
 : retest ( -- )
     last-tested-prefix get
     [ stest ] when* ;
+
+: check-decomp-ortho ( quot -- type/f )
+    [ get-type ] keep
+    dup length 1 - [ 1 + cut
+                     '[ _ call _ call ] get-type
+    ] with { } map-integers
+    over prefix [ same-effect? ] monotonic?
+    [ drop f ] unless
+    ;
