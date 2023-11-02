@@ -89,6 +89,8 @@ CHR: combine-implications @ // { Imply ?a ?b } { Imply ?c ?d } -- [ ?a ?c inters
 GENERIC: expression-vars ( pred -- set )
 M: body-pred expression-vars drop f ;
 M: expr-pred expression-vars vars ;
+! Keep non-equating relations between variables only if determined to be live another way
+M: Le expression-vars drop f ;
 M: Neq expression-vars drop f ;
 M: Cloned expression-vars
     [ cloned-val>> ] [ orig-val>> ] bi 2array ;
@@ -142,6 +144,10 @@ CHR: directed-imply-could-extend @ AS: ?p <={ body-pred } { Use ?v } { Imply ?c 
 [ ?d ?a diff ?b union :>> ?s ]
 |
 { Imply ?r ?s } ;
+
+! Special case: Retain stack values are always used
+CHR: use-retain-stack-values @ AS: ?p <={ LocOp R __ ?v . __ } // -- [ ?v vars :>> ?x ] |
+{ Use ?x } ;
 
 ! ** Collection
 

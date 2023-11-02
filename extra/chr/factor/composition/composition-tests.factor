@@ -645,14 +645,14 @@ TUPLE: foo3 slot1 slot2 ;
 { 1 } [ [ 0 get-local + ] get-type preds>> [ Sum? ] count ] unit-test
 { 1 } [ [ 0 get-local -1 get-local + ] get-type preds>> [ Sum? ] count ] unit-test
 
-{ t } [ [ swap ] [| a b | b a ] same-type? ] unit-test
-{ t } [ [ swap ] [| | :> a :> b a b ] same-type? ] unit-test
+[ swap ] [| a b | b a ] test-same-type
+[ swap ] [| | :> a :> b a b ] test-same-type
 [ swap swap drop ] [| | :> a :> b b ] test-same-type
 [ swap swap drop ] [| a b | a ]  test-same-type
 [ nip ] [| a b | b ] test-same-type
 [ nip ] [| | :> a :> b a ] test-same-type
-{ t } [ [ + ] [| a b | a b + :> c c ] same-type? ] unit-test
-{ t } [ [ + dup ] [ [ [| | :> a a + ] [ dup ] compose ] call call ] same-type? ] unit-test
+[ + ] [| a b | a b + :> c c ] test-same-type
+[ + dup ] [ [ [| | :> a a + ] [ dup ] compose ] call call ] test-same-type
 
 ! *** With local write access
 P{ Effect L{ ?o . ?a } L{ ?x2 ?x1 ?o . ?a } f
@@ -662,16 +662,16 @@ P{ Effect L{ ?o . ?a } L{ ?x2 ?x1 ?o . ?a } f
 ! ** Mutable locals
 
 P{ Effect L{ ?v . ?a } L{ ?v . ?a } f { P{ Instance ?v object } } }
-[ [| | :> a! a ] get-type ] chr-test
+[| | :> a! a ] test-chr-type
 
 P{ Effect L{ ?v . ?a } ?a  f { P{ Instance ?v object } } }
-[ [| | :> a! ] get-type ] chr-test
+[| | :> a! ] test-chr-type
 
 P{ Effect L{ ?v ?w . ?a } L{ ?w ?v . ?a }  f { P{ Instance ?v object } P{ Instance ?w object } } }
-[ [| a! b! | b :> c a b! c a! a b ] get-type ] chr-test
+[| a! b! | b :> c a b! c a! a b ] test-chr-type
 
 P{ Effect L{ ?y . ?a } L{ ?y ?y . ?a } f { P{ Instance ?y object } } }
-[ [ { 43 } over over 2 set-slot 2 slot ] get-type ] chr-test
+[ { 43 } over over 2 set-slot 2 slot ] test-chr-type
 
 P{ Effect L{ ?x . ?a } L{ ?x ?x . ?a } f { P{ Instance ?x object } } }
 [| a! | a a ] test-chr-type
@@ -693,7 +693,7 @@ P{
     {
         P{ Instance ?o not{ integer } }
         P{ Instance ?v object }
-        P{ SlotLoc ?x ?o 2 }
+        P{ Slot ?o 2 ?x }
         P{ PushLoc ?x ?a L{ ?v } ?a f }
         P{ LocPop ?x ?a L{ ?v } ?a f __ }
     }
@@ -708,12 +708,9 @@ P{
 
 [ 1 drop f ] [ { 42 } { 42 } eq? ] test-same-type
 
-{ 1 1 1 }
-[ [ 1array 42 over 2 set-slot dup 2 slot over 2 slot ] get-type
-  preds>>
-  [ [ SlotLoc? ] count ]
-  [ [ PushLoc? ] count ]
-  [ [ LocalAllocation? ] count ] tri
+{ { 2 1 1 } }
+[ [ 1array 42 over 2 set-slot dup 2 slot over 2 slot ]
+  { Slot PushLoc LocalAllocation } count-preds
 ] unit-test
 
 [ drop 42 dup ] [ 1array 42 over 2 set-slot dup 2 slot swap 2 slot ] test-same-type
@@ -742,15 +739,14 @@ P{ Effect L{ ?v . ?a } ?a  f { P{ Instance ?v object } } }
 
 [ drop 2 slot ] [ [ 2 slot ] [ 2 slot ] if ] test-same-type
 [ drop 2 slot 2 slot ] [ [ 2 slot 2 slot ] [ 2 slot 2 slot ] if ] test-same-type
-! FIXME
-[ drop 2 slot 2 slot ] [ [ 2 slot 2 slot ] [ 2 slot ] if ] test-same-type
+! Actually, we don't assume taking second slot of f is something to disprove...
+! [ drop 2 slot 2 slot ] [ [ 2 slot 2 slot ] [ 2 slot ] if ] test-same-type
 
 ! ** Simple Dispatch
 GENERIC: foothing ( obj -- result )
 M: fixnum foothing 3 + ;
 M: array foothing array-first ;
 
-! FIXME
 CONSTANT: foothing1
 P{ Effect L{ ?y . ?c } L{ ?z . ?c } f { P{ Instance ?y fixnum } P{ Instance ?z integer } P{ Sum ?z ?y 3 } } }
 
@@ -758,15 +754,14 @@ P{ Effect L{ ?y . ?c } L{ ?z . ?c } f { P{ Instance ?y fixnum } P{ Instance ?z i
 foothing1
 [ M\ fixnum foothing 1quotation [ call ] curry get-type ] chr-test
 
-! FIXME
 CONSTANT: foothing2
 P{
-    Effect L{ ?o . ?a } L{ ?v . ?a } { ?x ?b } {
+    Effect L{ ?o . ?a } L{ ?v . ?a } { ?x } {
         P{ Instance ?o array }
         P{ Instance ?v object }
-        P{ SlotLoc ?x ?o 2 }
-        P{ PushLoc ?x ?b L{ ?v } ?a f }
-        P{ LocPop ?x ?a L{ ?v } ?b f ?a } } }
+        P{ Slot ?o 2 ?x }
+        P{ LocPop ?x ?a L{ ?v } ?a f ?a }
+        P{ PushLoc ?x ?a L{ ?v } ?a f } } }
 
 foothing2
 [ M\ array foothing 1quotation [ call ] curry get-type ] chr-test
@@ -774,8 +769,14 @@ foothing2
 P{ Xor $ foothing2 $ foothing1 }
 [ \ foothing get-type ] chr-test
 
+CONSTANT: cdr-slot-spec T{ slot-spec { name "cdr" } { offset 3 } { class object } { read-only t } }
+
 P{ Effect L{ ?o . ?a } L{ ?v . ?a } f
-   { P{ Instance ?v object } P{ Instance ?o cons-state } P{ Slot ?o "cdr" ?v } } }
+   { P{ Instance ?v object } P{ Instance ?o cons-state }
+     P{ Slot
+        ?o
+        $ cdr-slot-spec
+        ?v } } }
 [ [ cdr>> ] get-type ] chr-test
 
 ! ** Overlapping dispatch
@@ -791,7 +792,7 @@ M: object auto-dispatch ;
 P{
     Xor
     P{ Effect L{ ?y2 . ?ys2 } L{ ?y2 . ?ys2 } f { P{ Instance ?y2 not{ cons-state } } } }
-    P{ Effect L{ ?o4 . ?a43 } L{ ?v . ?a43 } f { P{ Instance ?o4 cons-state } P{ Slot ?o4 "cdr" ?v } P{ Instance ?v object } } }
+    P{ Effect L{ ?o4 . ?a43 } L{ ?v . ?a43 } f { P{ Instance ?o4 cons-state } P{ Slot ?o4 $ cdr-slot-spec ?v } P{ Instance ?v object } } }
 }
 [ \ auto-dispatch get-type ] chr-test
 
@@ -811,7 +812,7 @@ P{
         L{ ?x2 . ??rho1 }
         L{ ?v1 . ??rho1 }
         f
-        { P{ Instance ?x2 cons-state } P{ Slot ?x2 "cdr" ?v1 } P{ Instance ?v1 object } }
+        { P{ Instance ?x2 cons-state } P{ Slot ?x2 $ cdr-slot-spec ?v1 } P{ Instance ?v1 object } }
     }
 }
 [ \ manual-dispatch get-type ] chr-test
@@ -827,7 +828,7 @@ M: +nil+ default-dispatch ;
 P{
     Xor
     P{ Effect L{ ?y1 . ?ys1 } L{ ?y1 . ?ys1 } f { P{ Instance ?y1 L{ } } P{ Eq ?y1 L{ } } } }
-    P{ Effect L{ ?o1 . ?a1 } L{ ?v . ?a1 } f { P{ Instance ?o1 cons-state } P{ Slot ?o1 "cdr" ?v } P{ Instance ?v object } } }
+    P{ Effect L{ ?o1 . ?a1 } L{ ?v . ?a1 } f { P{ Instance ?o1 cons-state } P{ Slot ?o1 $ cdr-slot-spec ?v } P{ Instance ?v object } } }
 }
 [ \ default-dispatch get-type ] chr-test
 
@@ -842,8 +843,8 @@ P{
 ! { t }
 ! [ [ myloop ] [ loop ] same-type? ] unit-test
 
-P{ Effect ?a ?b f { P{ Invalid } } } [ [ [ t ] loop ] get-type ] chr-test
-P{ Effect ?a ?b f { P{ Invalid } } } [ [ [ t ] myloop ] get-type ] chr-test
+P{ Effect ?a ?b f { P{ Invalid } } } [ [ t ] loop ] test-chr-type
+P{ Effect ?a ?b f { P{ Invalid } } } [ [ t ] myloop ] test-chr-type
 
 : indirect-loop ( x -- y ) dup 0 > [ 1 - [ indirect-loop ] call ] when ;
 
@@ -862,11 +863,11 @@ P{
     P{ Effect L{ ?x2 . ?a2 } L{ ?x2 . ?a2 } f { P{ Le ?x2 0 } P{ Instance ?x2 number } } }
 }
 
-dumb-loop [ [ [ dup 0 > [ 1 - t ] [ f ] if ] loop ] get-type ] chr-test
+dumb-loop  [ [ dup 0 > [ 1 - t ] [ f ] if ] loop ] test-chr-type
 
-dumb-loop [ [ inner-loop ] get-type ] chr-test
+dumb-loop [ inner-loop ] test-chr-type
 
-dumb-loop [ [ outer-loop ] get-type ] chr-test
+dumb-loop [ outer-loop ] test-chr-type
 
 ! ** Mutually recursive definitions
 

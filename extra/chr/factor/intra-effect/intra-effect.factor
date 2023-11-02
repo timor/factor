@@ -1382,9 +1382,9 @@ CHR: beta-reduce-loc-push-pop @ //
 
 ! **** Redex-searching
 CHR: independent-loc-op-extends-beta-chain @ <={ LocOp ?y ?a __ ?b ?m . __ } // { LocPop ?x ?c ?s ?d ?n ?u } --
-! TODO: would only need to check the first two chain links right now because the maximum loop length is 2
+! TODO: Document why the prefix checking is necessary
 [ ?m [ ?x ?y == not ] [ ?x R? ] if ] [ ?u >states :>> ?v first ?b same-state? ] [ ?a lastcdr ?b lastcdr 2array ?v subseq? not ]
-[ ?v ?a prefix :>> ?w ]
+[ ?a ?b [ lastcdr ] bi@ 2array :>> ?w ]
 |
 { LocPop ?x ?c ?s ?d ?n ?w } ;
 

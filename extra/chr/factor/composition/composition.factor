@@ -86,6 +86,14 @@ CHR: request-same-deferred-type @ { ?DeferTypeOf ?x ?sig } // { ?DeferTypeOf ?x 
 CHR: answer-incomplete-type @ // { TypeOf ?x ?tau } { ?TypeOf ?x ?sig } --
 [ ?tau full-type? ] [ ?tau canonical? not ] | [ ?sig ?tau ==! ] ;
 
+! TODO: To skip any stuff that contains eq-wraps from being cached, find the most efficient strategy:
+! - subclass TypeOf to TypeOfNoCache, determine that at quot decomposition time, or
+! - check quot for cacheability at time of answering?
+PREDICATE: lit-push-quot < callable { [ length 1 = ] [ first eq-wrap? ] } 1&& ;
+CHR: answer-non-memoizable-type @ // { TypeOf Is( lit-push-quot ?x ) ?tau } { ?TypeOf Is( lit-push-quot ?x ) ?sig } --
+[ ?tau full-type? ] |
+[ ?sig ?tau ==! ] ;
+
 CHR: answer-type @ { TypeOf ?x ?tau } // { ?TypeOf ?x ?sig } --
 [ ?tau full-type? ] |
 ! [ "Answer Type: " write ?x . f ]
