@@ -1,17 +1,20 @@
 USING: accessors arrays assocs assocs.extras byte-arrays chr chr.factor
-chr.parser chr.state classes classes.algebra classes.algebra.private
-classes.builtin classes.tuple classes.union combinators.short-circuit
-combinators.smart continuations generic.math generic.single kernel lists make
-math namespaces quotations sequences sets source-files.errors terms
-tools.annotations tools.test types.util words ;
+chr.factor.composition chr.parser chr.state classes classes.algebra
+classes.algebra.private classes.builtin classes.tuple classes.union combinators
+combinators.short-circuit combinators.smart continuations disjoint-sets
+disjoint-sets.private generic.math generic.single grouping hashtables kernel
+lists make math math.combinatorics namespaces quotations sequences sets
+source-files.errors terms tools.annotations tools.test types.util words ;
 
 IN: chr.factor.util
+
+PREDICATE: effect-instance < Instance type>> valid-effect-type? ;
 
 ! ** Stacks
 
 : known-compatible-stacks? ( l1 l2 -- ? )
     { [ [ llength* ] same? ]
-        [ [ lastcdr ] same? ] } 2&& ;
+      [ [ lastcdr ] same? ] } 2&& ;
 
 ! ** Effect Type Isomorphism
 GENERIC: expand-xor ( xor -- seq )
@@ -19,6 +22,7 @@ M: Xor expand-xor [ type1>> ] [ type2>> ] bi
     [ expand-xor ] bi@ append ;
 M: object expand-xor 1array ;
 
+! Compute a normal form for isomorphism checking
 GENERIC: effect>nterm ( effect -- term )
 M: Xor effect>nterm
     expand-xor
@@ -49,9 +53,208 @@ M: commutative-op effect>nterm
 : same-effect? ( e1 e2 -- ? )
     [ effect>nterm ] bi@ isomorphic? ;
 
-! ** Recursion
-PREDICATE: effect-instance < Instance type>> valid-effect-type? ;
+! *** Maximum structural match
+! Similar to semi-unification, we check all predicates related to symbolic equivalence whether there is
+! a partial assignment that results in compatible effects and slot operations.  Basically graph matching of the data-flow
+! part.  Since we don't allow any recursive results, invalid unifiers resulting from non-unique variable assignments, which
+! would result in loops in the substituted graph, are easy to find.
+! TODO: only returning the first structural match after checking all predicates here.  Either prove that we will always find the
+! largest one, (if there are larger ones possible, more preds are going to be checked?), or implement a maximum search.
+! TODO: As long as there is no purely hidden state, it should not be possible to find 2 different unifiers of the same size
+TUPLE: term-relation < eq-disjoint-set
+    { schema read-only }
+    { var-eqs read-only } ;
+: <term-relation> ( -- obj )
+    IH{ } clone
+    IH{ } clone
+    IH{ } clone
+    IH{ } clone
+    IH{ } clone term-relation boa ;
+M: term-relation clone
+    { [ parents>> clone ]
+      [ ranks>> clone ]
+      [ counts>> clone ]
+      [ schema>> clone ]
+      [ var-eqs>> clone ]
+    } cleave term-relation boa ;
+M:: term-relation representative ( a disjoint-set -- p )
+    a disjoint-set parents>> ?at :> ( p member? )
+    member? not [ a disjoint-set add-atom ] when
+    a p eq? [ a ] [
+        p disjoint-set representative [
+            a disjoint-set set-parent
+        ] keep
+    ] if ;
 
+PREDICATE: symbolic-eq < Eq { [ val>> term-var? ] [ val2>> term-var? ] } 1&& ;
+UNION: struct-pred Slot LocOp symbolic-eq effect-instance CallEffect ;
+ERROR: structure-mismatch rel term1 term2 ;
+ERROR: non-unique-var rel lvar rvar ;
+! NOTE: assume compatible class in term1!
+SYMBOL: search-stack
+
+: restart-find-next-match ( -- rel/f )
+    search-stack get [ f ]
+    [ pop call( -- x ) ]
+    if-empty ;
+
+DEFER: (unify-struct)
+GENERIC: unify-struct* ( rel term1 term2 -- rel/f )
+: when-compatible ( rel term1 term2 class1 quot -- rel/f )
+    [ [ over ] dip instance? ] dip swap
+    [ call ]
+    [ 3drop ] if ; inline
+M: object unify-struct* dup class-of
+    [ eq? [ drop f ] unless ] when-compatible ;
+M: sequence unify-struct* ( rel seq1 seq2 -- rel/f )
+    sequence
+    [
+        2dup same-length?
+        [ [ (unify-struct) ] 2each ]
+        [ 3drop f ] if
+    ] when-compatible ;
+M: tuple unify-struct*
+    dup class-of
+    [ [ tuple-slots ] bi@ (unify-struct) ] when-compatible ;
+: structure-match-set ( preds -- match-set )
+    [ class-of ] collect-by [ <match-set> ] map-values ;
+M: hashtable unify-struct*
+    hashtable [| rel h1 h2 |
+               h1 keys h2 keys intersect :> keys
+               rel keys [| k | k h1 at k h2 at (unify-struct) ] each
+    ] when-compatible ;
+M: Effect unify-struct*
+    Effect
+    [ [
+        {
+            [ in>> ]
+            [ out>> ]
+            [ preds>> [ struct-pred? ] filter structure-match-set ]
+            [ parms>> <match-set> ]
+        } cleave>array
+    ] bi@
+    (unify-struct) ] when-compatible ;
+M: Eq unify-struct*
+    Eq
+    [ [ tuple-slots <match-set> ] bi@
+      (unify-struct) ] when-compatible ;
+M: effect-instance unify-struct*
+    effect-instance
+    [ [ type>> ] bi@ (unify-struct) ] when-compatible ;
+M: LocOp unify-struct*
+    dup class-of
+    [ [ { [ loc>> ] [ before>> ] [ item>> ] [ after>> ] } cleave>array ] bi@
+    (unify-struct) ] when-compatible ;
+
+! NOTE: two things here:
+! skips non-working pairings
+! FIXME: possibly maximize working pairings
+:: find-set-match ( rel seq cases -- rel )
+    cases empty? [ f ]
+    [ rel cases unclip-slice
+      [| k k-rel rest-cases next |
+       [ k-rel seq rest-cases find-set-match k continue-with ]
+       search-stack get push
+       ! "try " io:write next .
+       k-rel clone seq next (unify-struct)
+      ] 3curry callcc1
+    ] if
+    ;
+
+M: match-set unify-struct*
+    match-set
+    [ [ elements>> ] bi@
+    2dup [ empty? ] both?
+    [ 2drop ]
+    [ 2dup shorter? [ swap ] unless
+      ! "match " write
+      over length <k-permutations>
+      ! 2dup swap . .
+      find-set-match
+    ] if ] when-compatible ;
+
+M: Xor unify-struct*
+    Xor
+    [ [ tuple-slots <match-set> ] bi@ (unify-struct) ] when-compatible ;
+
+:: recursive-schema? ( fun-form var-eqs -- ? )
+    fun-form vars { [ var-eqs keys intersects? ] [ var-eqs values intersects? ] } 1|| ; inline
+
+:: in-schema? ( var1 var2 rel -- ? )
+    rel schema>> values [ vars ] gather
+    [ { [ var1 rel equiv? ] [ var2 rel equiv? ] } 1|| ] any? ; inline
+
+! For new binding { t1 t2 }, if both are variables:
+! Check whether any of them are already have a symbolic equivalence
+:: add-pair-or-fail ( rel t1 t2 -- rel/f )
+    rel var-eqs>> :> var-eqs
+    rel schema>> :> schema
+    t1 t2 [ term-var? ] both?
+    [
+        {
+            [ t1 var-eqs key? ]
+            [ t2 var-eqs key? ]
+            [ t1 t2 rel in-schema? ]
+        } 0||
+        [
+            ! "fail " write var-eqs { t1 t2 } 2array .
+            f  ]
+        [
+            t1 t2 rel equate
+            t2 t1 var-eqs set-at rel
+        ] if
+    ]
+    [
+        t1 term-var? not [ t2 t1 ] [ t1 t2 ] if :> ( var fun-form )
+        ! NOTE: restricted occurs check here.  If we have any vars in a schema term as single var assignments, then
+        ! it is not a non-circular unambiguous mapping
+        fun-form var-eqs recursive-schema?
+        [ f ]
+        [
+            var fun-form rel equate
+            fun-form var rel representative schema set-at
+            rel
+        ] if
+    ] if ;
+
+:: find-schema ( rel term -- term )
+    term dup term-var? [
+        rel representative
+        rel schema>> ?at drop
+    ] when ;
+
+! elim var order discipline
+:: (unify-struct) ( rel term1 term2 -- rel/f )
+    rel
+    [ term1 term2 [ rel swap find-schema ] bi@ :> ( t1 t2 )
+      { { [ t1 t2 eq? ] [ rel ] }
+        { [ t1 t2 { [ [ term-var? not ] both? ]
+                    ! [ [ class-of ] same? ]
+                  } 2&& ]
+          [
+              ! NOTE: maybe the next equate is only needed for the recursion check?
+              t1 t2 rel equate
+              rel t1 t2 unify-struct*
+          ] }
+        [ rel t1 t2 add-pair-or-fail ]
+      } cond
+      [ restart-find-next-match ] unless* ]
+    [ f ] if ;
+
+! enforces bijective variable matching!
+: unify-struct ( term1 term2 -- rel )
+    [ V{ } clone search-stack namespaces:set
+      <term-relation> -rot
+      (unify-struct)
+    ] with-scope
+    dup
+    [
+        [ var-eqs>> ]
+        [ schema>> ] bi H{ } assoc-union-as
+    ] when
+    ;
+
+! ** Recursion
 : has-recursive-call? ( tag Effect -- ? )
     preds>> [ dup CallRecursive? [ tag>> = ] [ 2drop f ] if ] with any? ;
 
@@ -116,21 +319,6 @@ M:: CallRecursive substitute-recursive-call ( from to obj -- obj )
     [ classes-intersect? ] with filter-keys ;
     ! [ swap class<= ] with filter-keys ;
 
-! Call site is constrained if the set of methods (excluding the default method) after
-! checking the class intersection is a proper subset?
-! TODO maybe make a difference if the class is a union or mixin?
-! Different strategy: If it's directly in there and not the default method, then
-! go for it.  Otherwise, if it's a union class or mixin, then not.
-! Too general.  Restricting to bounded classes only for now
-: constrains-methods? ( class methods -- ? )
-    {
-        ! [ [ default-method? ] reject-values key? ]
-        [ drop bounded-class? ] } 2|| ;
-
-: constrain-methods ( class methods -- methods/f )
-    2dup constrains-methods?
-    [ applicable-methods ] [ 2drop f ] if ;
-
 ! This is actually the one spot where we can declare that things don't overlap
 ! although they would do if we inferred them as random possible branches of an
 ! XOR type.  Normally, if parameters overlap, we unionize them to enforce
@@ -173,7 +361,7 @@ M:: CallRecursive substitute-recursive-call ( from to obj -- obj )
 
 ! Whish they didn't do this as hook combination...
 : picker* ( generic -- quot )
-    "combination" word-prop combination [ picker ] with-variable ;
+    "combination" word-prop generic.single:combination [ picker ] with-variable ;
 
 : dispatcher-quot ( generic methods -- quot )
     dup length 1 >

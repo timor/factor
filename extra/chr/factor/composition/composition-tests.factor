@@ -8,6 +8,21 @@ words ;
 
 IN: chr.factor.composition.tests
 
+TERM-VARS: ?o ?a ?b ?b1 ?v ?w ?x ?y ?z ;
+TERM-VARS: ?y2 ?ys2 ?o4 ?a43 ?y6 ?ys6 ;
+TERM-VARS: ?y1 ?ys1 ?x1 ?v1 ?x2 ?x3 ?rho1 ??rho1 ?rho3 ?o1 ?o2 ?a1 ;
+TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ?i2 ?c1 ?a2 ?z2 ;
+TERM-VARS: ?c ?d ;
+TERM-VARS: ?q3 ?q5 ?p2 ?p3 ?c2 ?c3 ?a4 ?a6 ?b3 ?b4 ;
+TERM-VARS: ?a15 ?o3 ?v3 ;
+TERM-VARS: ?o5 ?b34 ?v7 ;
+TERM-VARS: ?y14 ?ys14 ?o25 ?a85 ?x17 ?rho31 ;
+
+
+: count-preds ( quot classes -- res )
+    [ get-type preds>> ] dip
+    [ [ instance? ] curry count ] with map ;
+
 ! reset-chr-types
 clear-chr-cache
 
@@ -16,6 +31,9 @@ clear-chr-cache
 
 ! ** Testing external helper behavior
 ! TODO: move to util tests
+
+{ f } [ { ?a ?a } { ?b ?c } unify-struct ] unit-test
+{ f } [ { ?b ?c } { ?a ?a } unify-struct ] unit-test
 
 ! NOTE: this highlights an important point: if the think of
 ! intersection{ number tuple } as a nominative class specification, it is open
@@ -55,16 +73,6 @@ clear-chr-cache
     [ get-type ] bi@ same-effect? ;
 
 TYPED: array-first ( arr: array -- thing ) 2 slot ;
-
-TERM-VARS: ?o ?a ?b ?b1 ?v ?w ?x ?y ?z ;
-TERM-VARS: ?y2 ?ys2 ?o4 ?a43 ?y6 ?ys6 ;
-TERM-VARS: ?y1 ?ys1 ?x1 ?v1 ?x2 ?x3 ?rho1 ??rho1 ?rho3 ?o1 ?o2 ?a1 ;
-TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ?i2 ?c1 ?a2 ?z2 ;
-TERM-VARS: ?c ?d ;
-TERM-VARS: ?q3 ?q5 ?p2 ?p3 ?c2 ?c3 ?a4 ?a6 ?b3 ?b4 ;
-TERM-VARS: ?a15 ?o3 ?v3 ;
-TERM-VARS: ?o5 ?b34 ?v7 ;
-TERM-VARS: ?y14 ?ys14 ?o25 ?a85 ?x17 ?rho31 ;
 
 P{ Effect L{ ?o3 . ?a6 } L{ ?v3 . ?a6 } { ?x1 }
     {
@@ -262,10 +270,6 @@ P{
 { 1 } [ [ slot + ] get-type preds>> [ Sum? ] count ] unit-test
 { 1 } [ [ 2 slot + ] get-type preds>> [ Sum? ] count ] unit-test
 { 1 } [ [ 2 slot swap 2 slot + ] get-type preds>> [ Sum? ] count ] unit-test
-
-: count-preds ( quot classes -- res )
-    [ get-type preds>> ] dip
-    [ [ instance? ] curry count ] with map ;
 
 ! Test calculated slot numbers to ensure correct slot modes
 { { 1 2 } } [ [ + slot ] { Sum LocOp } count-preds ] unit-test
