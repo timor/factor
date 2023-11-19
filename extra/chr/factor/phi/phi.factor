@@ -164,6 +164,7 @@ CHR: all-phis-done @ { PhiSchedule __ +nil+ ?tau } // { DisjointRoot ?a } -- |
 ! Trigger Phi-mode Composition
 ! This causes the reasoner to assume disjunction instead of conjunction of value predicates.
 
+! TODO: Might be more efficient to combine isomoprhism check and unify-struct if this turns out to be slow.
 CHR: make-trivial-union @ { MakeUnion ?a ?b ?tau } // -- [ ?a ?b isomorphic? ] |
 [ ?tau ?a ==! ]
 { PhiDone } ;

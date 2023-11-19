@@ -130,7 +130,10 @@ M: Effect unify-struct*
             [ in>> ]
             [ out>> ]
             [ preds>> [ struct-pred? ] filter structure-match-set ]
-            [ parms>> <match-set> ]
+            ! NOTE: Not using the parameters for matching here.  They are interesting
+            ! for checking for isomorphism, but matching a subtype should not fail because of the number of
+            ! existentials in each Effect!
+            ! [ parms>> <match-set> ]
         } cleave>array
     ] bi@
     (unify-struct) ] when-compatible ;

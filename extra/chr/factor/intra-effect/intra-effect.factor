@@ -2,8 +2,9 @@ USING: accessors arrays assocs chr.factor chr.factor.intra-effect.maps
 chr.factor.util chr.parser chr.state classes classes.algebra classes.builtin
 classes.predicate classes.singleton classes.tuple classes.tuple.private
 combinators combinators.short-circuit continuations generic generic.single
-grouping kernel kernel.private lists math math.functions math.order quotations
-sequences sets slots slots.private sorting strings terms types.util words ;
+grouping kernel kernel.private lists math math.functions math.order mirrors
+quotations sequences sets slots slots.private sorting strings terms types.util
+words ;
 
 IN: chr.factor.intra-effect
 
@@ -217,7 +218,7 @@ CHR: phi-specialized-expr-pred @ // AS: ?p <={ expr-pred } AS: ?q <={ expr-pred 
 ! This would probably need to be solved by a complete isomorphism checker on the internal structure?
 ! CHR: phi-same-slot-must-be-same-var @ { Slot ?o ?n M{ ?v } } { Slot ?o ?n M{ ?w } } // -- | [ ?v ?w ==! ] ;
 ! CHR: phi-same-obj-slot-is-same-loc @ { SlotLoc ?x ?o ?n } { SlotLoc ?y ?o ?n } // -- | [ ?y ?x ==! ] ;
-CHR: phi-same-obj-slot-is-same-loc @ { Slot ?o ?n ?x } { Slot ?o ?n ?y } // -- | [ ?y ?x ==! ] ;
+! CHR: phi-same-obj-slot-is-same-loc @ { Slot ?o ?n ?x } { Slot ?o ?n ?y } // -- | [ ?y ?x ==! ] ;
 
 ! FIXME: follow-up location stuff phi-ing.  Possibly completely loop the locop states in slot reads?
 ! Again, the assumption here is basically graph matching.  For circular locops, this should not
@@ -227,27 +228,38 @@ CHR: phi-same-obj-slot-is-same-loc @ { Slot ?o ?n ?x } { Slot ?o ?n ?y } // -- |
 ! CHR: phi-same-loc-pop-item-and-next-state @ { LocPop ?x ?a ?v ?b ?l __ } { LocPop ?x ?a ?w ?c ?l __ } // -- [ ?c ?b == not ] [ ?a ?b == not ] [ ?c ?a == not ] |
 ! [ ?b ?c ==! ] [ ?v ?w ==! ] ;
 
-CHR: phi-try-unify-loc-op @ AS: ?p <={ LocOp } AS: ?q <={ LocOp } // -- [ ?p ?q unary-unifier? :>> ?u ] |
-[ ?u add-equal ] ;
+! CHR: phi-try-unify-loc-op @ AS: ?p <={ LocOp } AS: ?q <={ LocOp } // -- [ ?p ?q unary-unifier? :>> ?u ] |
+! [ ?u add-equal ] ;
 
-! At this point, the rule above should have unified all isomorphic stack op chains...
-CHR: phi-loc-op-discriminator @ AS: ?p <={ LocOp } AS: ?q <={ LocOp } // -- [ ?p ?q [ class-of ] same? ] [ ?p ?q unify :>> ?u assoc-size 1 > ] |
-! TODO: find out if we can get away with or without a conjunction here -> might become tricky again
-! when ∃-quantified intermediate results are present
-! disjunction:
-! [ ?p vars ?q vars intersect [ Discriminator boa ] map ] ;
-! conjunction:
-[ ?p vars ?q vars intersect Discriminator boa ] ;
+! ! At this point, the rule above should have unified all isomorphic stack op chains...
+! CHR: phi-loc-op-discriminator @ AS: ?p <={ LocOp } AS: ?q <={ LocOp } // -- [ ?p ?q [ class-of ] same? ] [ ?p ?q unify :>> ?u assoc-size 1 > ] |
+! ! TODO: find out if we can get away with or without a conjunction here -> might become tricky again
+! ! when ∃-quantified intermediate results are present
+! ! disjunction:
+! ! [ ?p vars ?q vars intersect [ Discriminator boa ] map ] ;
+! ! conjunction:
+! [ ?p vars ?q vars intersect Discriminator boa ] ;
 
-CHR: phi-disjoint-instance-decider @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
-[ { ?rho ?tau } first2 classes-intersect? not ] | { Decider ?x } ;
+! CHR: phi-disjoint-instance-decider @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
+! [ { ?rho ?tau } first2 classes-intersect? not ] | { Decider ?x } ;
 
-CHR: phi-maybe-disjoint-instance @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
-[ { ?rho ?tau } first2 { [ classes-intersect? ] [ class= not ] } 2&& ] | { Discriminator ?x } ;
+! CHR: phi-maybe-disjoint-instance @ { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } // --
+! [ { ?rho ?tau } first2 { [ classes-intersect? ] [ class= not ] } 2&& ] | { Discriminator ?x } ;
 
-! TODO: might not be good to use simplifying-class-or here?
-CHR: phi-union-instance @ // { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } --
-[ { ?rho ?tau } first2 simplifying-class-or :>> ?sig ] | { Collect P{ Instance ?x ?sig } } ;
+! ! TODO: might not be good to use simplifying-class-or here?
+! CHR: phi-union-instance @ // { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } --
+! [ { ?rho ?tau } first2 simplifying-class-or :>> ?sig ] | { Collect P{ Instance ?x ?sig } } ;
+
+CHR: phi-instance-join @ // { Instance ?x A{ ?rho } } { Instance ?x A{ ?tau } } --
+[ { ?rho ?tau } first2
+  2dup simplifying-class-or :>> ?sig drop
+  classes-intersect? not :>> ?d drop t ] |
+{ Collect P{ Instance ?x ?sig } }
+[ ?x ?d [ Decider boa ] [ Discriminator boa ] if ]
+    ;
+
+CHR: phi-single-instance-is-object-union @ { Instance ?x A{ ?rho } } // -- |
+{ Instance ?x object } ;
 
 ! TODO: check for isomorphic effects maybe?
 !  -> If so, this would have to be done in phi-same-branch-pred above...
@@ -768,6 +780,7 @@ CHR: call-recursive-canonical @ { TypeOfWord ?w ?rho } // { CallRecursive ?w ?i 
 ! tag -prelude-> ?a -RecursionTypePre-> ?b =same-layout-as= ?c -RecursionTypePost-> -FixPointCondition-> ?d
 ! NOTE: current layout: initial var_n, var_1, var_0
 ! It may be necessary to change this to var_n , var_n-m , var_n-m-1 , var_0
+! This rule is the equivalent to setting the in values of the ReturnRecursive node
 CHR: break-recursive-iteration @ { Iterated ?w ?a ?b ?c ?d __ } // { CallRecursive ?w ?i ?o } --
 |
 [ ?c ?i ==! ] ;
@@ -1439,8 +1452,7 @@ CHR: slot-loc-op-known-local @ { LocalAllocation __ ?o } { Slot ?o __ ?x } // AS
 ! unified in the end.  Thus, we can unify them in advance.
 ! NOTE: this could potentially result in an endless loop when constructing
 ! recursive structures?
-! TODO: maybe extend this to balancing!
-CHR: unify-loc-op-io-vals @ // AS: ?p <={ LocOp ?l L{ ?x . ?a } ?s L{ ?y . ?b } ?m . __ } -- |
+CHR: simplify-loc-op-io-states @ // AS: ?p <={ LocOp ?l L{ ?x . ?a } ?s L{ ?y . ?b } ?m . __ } -- |
 [ ?x ?y ==! ] [ ?p clone ?a >>before ?b >>after ] ;
 
 CHR: balance-loc-op-produce @ // AS: ?p <={ LocOp ?l L{ ?x . ?a } __ M{ ?b } ?m . __ } -- |

@@ -137,6 +137,15 @@ PREDICATE: callable-word < word { [ symbol? not ] } 1&& ;
 ! - Reflexive relation predicates
 ! - possibly internal predicates left after erasing Iterated predicates
 
+
+! *** Slot handling
+! Slot predicates are used to keep information about internal values hidden inside
+! structural data.  A bit of an issue is when to determine that if the object is
+! live, the slot is live too.  At first, it seems to always make sense to keep
+! any specializing information about an object, whether it is used as an input or
+! output of an Effect type.  However, there might be cases where there is too much
+! useless information kept around about slots.
+
 ! ** Equality
 ! Domains of dicourse:
 ! 1. term variables

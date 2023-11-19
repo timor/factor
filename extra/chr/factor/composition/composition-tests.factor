@@ -4,13 +4,14 @@ chr.factor.util chr.parser chr.state chr.test classes classes.tuple combinators
 combinators.short-circuit grouping kernel kernel.private layouts lists literals
 locals.backend math math.private namespaces quotations quotations.private sequences slots
 slots.private stack-checker.values strings terms tools.test typed types.util
+generic.single
 words ;
 
 IN: chr.factor.composition.tests
 
 TERM-VARS: ?o ?a ?b ?b1 ?v ?w ?x ?y ?z ;
 TERM-VARS: ?y2 ?ys2 ?o4 ?a43 ?y6 ?ys6 ;
-TERM-VARS: ?y1 ?ys1 ?x1 ?v1 ?x2 ?x3 ?rho1 ??rho1 ?rho3 ?o1 ?o2 ?a1 ;
+TERM-VARS: ?y1 ?ys1 ?x1 ?v1 ?x2 ?x3 ?rho1 ?rho2 ?rho3 ?o1 ?o2 ?a1 ;
 TERM-VARS: ?i1 ?q1 ?q2 ?z1 ?i4 ?z6 ?i2 ?c1 ?a2 ?z2 ;
 TERM-VARS: ?c ?d ;
 TERM-VARS: ?q3 ?q5 ?p2 ?p3 ?c2 ?c3 ?a4 ?a6 ?b3 ?b4 ;
@@ -34,6 +35,8 @@ clear-chr-cache
 
 { f } [ { ?a ?a } { ?b ?c } unify-struct ] unit-test
 { f } [ { ?b ?c } { ?a ?a } unify-struct ] unit-test
+{ f } [ { L{ ?a . ?rho1 } L{ ?a ?a . ?rho1 } } { L{ ?b . ?rho2 } L{ ?b . ?rho2 } } unify-struct ] unit-test
+{ H{ { ?a ?c } { ?b ?d } } } [ { ?a ?b } { ?c ?d } unify-struct ] unit-test
 
 ! NOTE: this highlights an important point: if the think of
 ! intersection{ number tuple } as a nominative class specification, it is open
@@ -198,6 +201,7 @@ P{ Effect
 
 [ 42 ] [ 42 [ ] curry call ] test-same-type
 
+{ { 2 } } [ [ [ swap ] curry ] { Slot } count-preds ] unit-test
 [ swap swap swap ] [ [ swap ] curry curry call ] test-same-type
 ! NOTE: This is interesting: because we have [ ? ] as basis, we don't enforce
 ! that the non-taken branch quotation is actually a quotation!
@@ -404,12 +408,14 @@ TUPLE: foobox foobox-a foobox-b ;
 
 ! NOTE: isomorphism checker chokes on this if we don't sanitize the state chains?
 [ [ foobox-a>> ] keep foobox-b>> ] [ [ foobox-b>> ] keep foobox-a>> swap ] test-same-type
+! FIXME: Depends on phi-try-unify-loc-op rule -> should be fixed by using unify-struct instead
 [ drop t ] [ dup foobox boa [ foobox-a>> ] [ foobox-b>> ] bi eq? ] test-same-type
 [ t ] [ { 42 } dup foobox boa [ foobox-a>> ] [ foobox-b>> ] bi eq? ] test-same-type
 [ t ] [ [ { 42 } dup foobox boa [ foobox-a>> ] [ foobox-b>> ] bi ] call eq? ] test-same-type
 [ f ] [ [ { 42 } { 42 } foobox boa [ foobox-a>> ] [ foobox-b>> ] bi ] call [ eq? ] call ] test-same-type
 [ f ] [ { 42 } { 42 } foobox boa [ foobox-a>> ] [ foobox-b>> ] bi eq? ] test-same-type
 TUPLE: barbox { barbox-a read-only } { barbox-b read-only } ;
+! FIXME: This depends on phi-same-obj-slot-is-same-loc rule -> should be fixed by using unify-struct instead
 { t } [ [ [ barbox-a>> ] [ barbox-b>> ] bi eq? ] get-type Xor? ] unit-test
 [ 5 ] [ 5 dup barbox boa [ barbox-a>> ] call ] test-same-type
 [ t ] [ { 42 } dup barbox boa [ barbox-a>> ] [ barbox-b>> ] bi eq? ] test-same-type
@@ -813,12 +819,14 @@ P{
     P{ Effect L{ ?x1 . ?rho1 } L{ ?x1 . ?rho1 } f { P{ Instance ?x1 not{ cons-state } } } }
     P{
         Effect
-        L{ ?x2 . ??rho1 }
-        L{ ?v1 . ??rho1 }
+        L{ ?x2 . ?rho2 }
+        L{ ?v1 . ?rho2 }
         f
         { P{ Instance ?x2 cons-state } P{ Slot ?x2 $ cdr-slot-spec ?v1 } P{ Instance ?v1 object } }
     }
 }
+! FIXME: for some reason, this is half an order of magnitude slower than auto-dispatch...
+! ... maybe having generic call sites lazily until known is more effective than nested if structures?
 [ \ manual-dispatch get-type ] chr-test
 
 
@@ -842,10 +850,8 @@ P{
 { t } [ [ myloop ] get-type dup [ full-type? ] when ] unit-test
 
 ! :)
-! FIXME works but extremely slow isomorphism test
-! :(
-! { t }
-! [ [ myloop ] [ loop ] same-type? ] unit-test
+{ t }
+[ [ myloop ] [ loop ] same-type? ] unit-test
 
 P{ Effect ?a ?b f { P{ Invalid } } } [ [ t ] loop ] test-chr-type
 P{ Effect ?a ?b f { P{ Invalid } } } [ [ t ] myloop ] test-chr-type
@@ -954,6 +960,9 @@ DEFER: ind3-array
 !       ] if
 !     ] if ;
 
+! FIXME: extremely slow in the test, maybe symptom of memoizing problem with Eq{  } types?
+! doesn't look like it on first glance.  Test output said 8.smth seconds,
+! while cold cache inference takes something like 15 seconds
 { t } [ [ ind3-list ] get-type canonical? ] unit-test
 
 GENERIC: lastfail3 ( x -- x )
@@ -981,7 +990,24 @@ M: +nil+ mylastcdr ;
 M: array mylastcdr array-first [ [ mylastcdr ] (call) ] (call) ;
 ! M: array mylastcdr array-first [ [ mylastcdr ] (call) ] (call) ;
 
-sol4 [ [ mylastcdr ] get-type ] chr-test
+! FIXME: This turned out to be waaaay more precise than before!
+! Currently distinguishes between those cases:
+! 1. L{ } -> L{ }
+! 2. { L{ } } -> L{ }
+! 3. { x } -..> L{ }, where x ∊ { cons-state array }
+! 4. L{ x . L{ } } -> L{ }
+! 5. L{ x . y } -..> L{ }, where x ∊ { cons-state array }
+! TODO: find out why 3 and 5 don't get merged!
+! It looks like the new unify-struct implementation generally will not unify
+! n=1 and n>1 iteration cases, i.e. for n = 1, the slot content will be present in the output,
+! while for n>1, the slot content will be put into n existential only.  Currently, unify-struct will declare
+! those as incompatible structure and thus disjoint types, since an equivalence constraint of
+! x = foo.x would be possibe otherwise?
+! TODO: possibly liveness is too eager here, keeping predicates about existential slots alive which
+! shouldn't be live anymore: a possible issue could be to discern between keeping slots of inputs alive
+! vs keeping slots of outputs alive.
+! -> This could be connected via matching for phi'ing to the symbolic equivalence can of worms!
+sol4 [ mylastcdr ] test-chr-type
 
 ! Same as lastcdr1, but as single word
 : lastfoo1 ( x -- x )
@@ -993,26 +1019,29 @@ sol4 [ [ mylastcdr ] get-type ] chr-test
 [ L{ 1 2 3 . 4 } lastfoo1 ] [ "nope" = ] must-fail-with
 [ 42 lastfoo1 ] [ "nope" = ] must-fail-with
 
+! Not a bug, a feature: we can prove that in the looping case, the cdr slot must actually contain a cons-state!
 P{ Xor
-    P{ Effect L{ ?x1 . ?a1 } L{ ?x2 . ?a1 } f { P{ Instance ?x1 cons-state } P{ Eq ?x2 L{ } } P{ Instance ?x2 L{ } } } }
+   P{ Effect L{ ?x1 . ?a1 } L{ ?x2 . ?a1 } { ?b1 } {
+          P{ Instance ?x1 cons-state }
+          P{ Slot ?x1 $ cdr-slot-spec ?b1 }
+          P{ Instance ?b1 cons-state }
+          P{ Eq ?x2 L{ } }
+          P{ Instance ?x2 L{ } } } }
     P{ Effect L{ ?x3 . ?a2 } L{ ?x3 . ?a2 } f { P{ Instance ?x3 L{ } } P{ Eq ?x3 L{ } } } }
- } [ [ lastfoo1 ] get-type ] chr-test
+ } [ lastfoo1 ] test-chr-type
 
 GENERIC: lastcdr1 ( list -- obj )
 M: list lastcdr1 cdr>> lastcdr1 ;
 M: +nil+ lastcdr1 ;
+{ L{ } } [ L{ } lastcdr1 ] unit-test
+{ L{ } } [ L{ 1 2 3 } lastcdr1 ] unit-test
+[ L{ 1 2 3 . 4 } lastcdr1 ] [ no-method? ] must-fail-with
+[ 42 lastcdr1 ] [ no-method? ] must-fail-with
 
-{ f } [ object \ lastcdr1 dispatch-method-seq constrains-methods? ] unit-test
-{ t } [ +nil+ \ lastcdr1 dispatch-method-seq constrains-methods? ] unit-test
-! FIXME?
-{ f } [ list \ lastcdr1 dispatch-method-seq constrains-methods? ] unit-test
-{ f } [ object \ length dispatch-method-seq constrains-methods? ] unit-test
-{ f } [ sequence \ length dispatch-method-seq constrains-methods? ] unit-test
-{ t } [ array \ length dispatch-method-seq constrains-methods? ] unit-test
-
-! This must have the same type when inferred on [ lastcdr1 ] !
+! NOTE: this breaks because of phi-same-obj-slot-is-same-loc rule, which is allowed to assume that a parameter
+! matches an output
 P{ Effect L{ ?x . ?a } L{ ?b . ?a } f { P{ Instance ?x cons-state } P{ Eq ?b L{ } } P{ Instance ?b L{ } } } }
-[ M\ list lastcdr1 get-type ] chr-test
+M\ list lastcdr1 test-chr-type
 
 CONSTANT: sol1
 P{
@@ -1023,8 +1052,7 @@ P{
     ! P{ Effect L{ ?o3 . ?a15 } ?b4 f { P{ CallRecursive __ ?a15 ?b4 } } }
 }
 
-sol1
-[ [ lastcdr1 ] get-type ] chr-test
+sol1 [ lastcdr1 ] test-chr-type
 
 { t }
 [ [ lastcdr1 ] [ 1 drop lastcdr1 ] same-type? ] unit-test

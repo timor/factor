@@ -12,21 +12,29 @@ IN: chr.factor.effects
 CHRAT: chr-effects { }
 
 ! ** Unification reasoning
-CHR: rebuild-phi-check-stack @ { PhiMode } { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } // -- |
-{ CheckPhiStack { ?a ?b } { ?c ?d } ?u } ;
+! CHR: rebuild-phi-check-stack @ { PhiMode } { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } // -- |
+! { CheckPhiStack { ?a ?b } { ?c ?d } ?u } ;
 
 ! This check makes sure we don't run into endless stack balancing cases due to
 ! mismatched stack depths of branches, Also, we don't construct union branches
 ! if there is no unique phi mapping.  In that case, one branch is hiding
 ! equality constraints that the other one does not have
-CHR: do-check-phi-stack @ // { CheckPhiStack ?i ?o ?u } -- [ ?u term-var? ] [ ?i ?o unify phi-stacks-unique? :>> ?w drop t ] |
-{ CheckPhiStack ?i ?o ?w } ;
+! TODO: combine with structural unification
+! CHR: do-check-phi-stack @ // { CheckPhiStack ?i ?o ?u } -- [ ?u term-var? ] [ ?i ?o unify phi-stacks-unique? :>> ?w drop t ] |
+! { CheckPhiStack ?i ?o ?w } ;
 
-: default-class-preds ( preds in out -- preds )
-    [ list>array* ] bi@ union
-    [| preds var | preds [ { [ Instance? ] [ val>> var == ] } 1&& ] find nip
-     [ f ] [ P{ Instance var object } ] if
-    ] with map sift ;
+! These are added after unification to ensure that effects which don't dig as deep have instance
+! predicates attached
+! NOTE: Trying without that.  Reasoning:
+! - Reasoning is activated when the PhiMode "marker" is put into the store.  I.e. any exisiting instance predicates are
+!   guaranteed to be present already.
+! - If two instance predicates appear, then both branches restrict the type -> decider if types are disjoint, discriminator otherwise
+! - If one instance predicate appears, then the other one is implicitly object -> still at least a discriminator
+! : default-class-preds ( preds in out -- preds )
+!     [ list>array* ] bi@ union
+!     [| preds var | preds [ { [ Instance? ] [ val>> var == ] } 1&& ] find nip
+!      [ f ] [ P{ Instance var object } ] if
+!     ] with map sift ;
 
 ERROR: nested-inference a b ;
 CHR: inference-collision @ AS: ?a P{ MakeEffect __ __ __ __ __ } AS: ?b P{ MakeEffect __ __ __ __ __ } // -- | [ ?a ?b nested-inference ] ;
@@ -34,23 +42,39 @@ CHR: inference-collision @ AS: ?a P{ MakeEffect __ __ __ __ __ } AS: ?b P{ MakeE
 
 ! NOTE: assumed renaming here already
 ! NOTE: we have to generate object instance predicates for all values that may be generated using unification for each branch if missing!
-CHR: rebuild-phi-effect @ // { PhiMode } { CheckPhiStack { ?a ?b } { ?c ?d } t } { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } --
+! CHR: rebuild-phi-effect @ // { PhiMode } { CheckPhiStack { ?a ?b } { ?c ?d } t } { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } --
+CHR: rebuild-phi-effect @ // { PhiMode } { ComposeEffect Bind( ?p P{ Effect ?a ?b ?x ?k } ) Bind( ?q P{ Effect ?c ?d ?y ?l } ) ?tau } --
 |
-[ { ?a ?b } { ?c ?d } ==! ]
-! { Params ?x }
-! { Params ?y }
-{ MakeEffect ?a ?b f f ?tau }
-[ ?k ?a ?ground-value ?b ?ground-value default-class-preds ]
-[ ?l ?c ?ground-value ?d ?ground-value default-class-preds ]
-[ ?k ]
-[ ?l ]
-{ PhiMode }
-{ FinishEffect ?tau }
-    ;
+[ ?p ?q unify-struct
+  [ add-equal
+    { MakeEffect ?a ?b f f ?tau } 2array
+    ! ?k ?a ?ground-value ?b ?ground-value default-class-preds append
+    ! ?l ?c ?ground-value ?d ?ground-value default-class-preds append
+    ?k append
+    ?l append
+    { PhiMode } suffix
+    { FinishEffect ?tau } suffix
+  ]
+  [ ?tau null ==!
+    { PhiDone }  2array
+  ] if*
+] ;
 
-CHR: dont-rebuild-non-phiable-effect @ // { PhiMode } { CheckPhiStack { ?a ?b } { ?c ?d } f } { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } -- |
-[ ?tau null ==! ]
-{ PhiDone } ;
+! [ { ?a ?b } { ?c ?d } ==! ]
+! ! { Params ?x }
+! ! { Params ?y }
+! { MakeEffect ?a ?b f f ?tau }
+! [ ?k ?a ?ground-value ?b ?ground-value default-class-preds ]
+! [ ?l ?c ?ground-value ?d ?ground-value default-class-preds ]
+! [ ?k ]
+! [ ?l ]
+! { PhiMode }
+! { FinishEffect ?tau }
+!     ;
+
+! CHR: dont-rebuild-non-phiable-effect @ // { PhiMode } { CheckPhiStack { ?a ?b } { ?c ?d } f } { ComposeEffect P{ Effect ?a ?b ?x ?k } P{ Effect ?c ?d ?y ?l } ?tau } -- |
+! [ ?tau null ==! ]
+! { PhiDone } ;
 
 ! FIXME This is soooooooo slow, need better alternative
 ! Trying to fix this now...
