@@ -166,13 +166,22 @@ var-names [ H{ } clone ] initialize
 : get-name-suffix ( key -- name )
     dup name-part var-names get at <id-name> ;
 
+! NOTE: This "imports" the current max suffix, never creating lower numbers!
 : update-var-suffix ( key -- )
     [ id-part 0 or ]
     [ name-part var-names get ] bi
     [ 0 or max 1 + ] change-at ; inline
 
+SYMBOL: reset-fresh-var-suffix
+
+: maybe-update-var-suffix ( key -- )
+    reset-fresh-var-suffix get [
+        name-part var-names get inc-at
+    ]
+    [ update-var-suffix ] if ; inline
+
 : uvar ( key -- name )
-    [ update-var-suffix ]
+    [ maybe-update-var-suffix ]
     [ get-name-suffix ] bi ;
 
 : uvar-shuffle ( in out -- in out )
@@ -736,6 +745,11 @@ SYMBOL: on-recursive-term
 
 : fresh-without ( term vars -- term )
     over term-vars swap diff fresh-with ;
+
+: fresh-recount ( term -- term )
+    [ reset-fresh-var-suffix on
+      fresh
+    ] with-var-names ;
 
 ! * Proper Terms
 TUPLE: term parts ;
