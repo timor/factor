@@ -1,8 +1,9 @@
 USING: accessors arrays assocs assocs.extras chr chr.factor.composition
-chr.programs chr.state classes.builtin combinators continuations effects
-formatting io kernel math math.functions math.parser namespaces prettyprint
-prettyprint.custom quotations sequences sequences.extras sets sorting system
-terms tools.annotations tools.annotations.private tools.time tools.walker ;
+chr.factor.util chr.programs chr.state classes.builtin combinators continuations
+effects formatting io kernel math math.functions math.parser namespaces
+prettyprint prettyprint.custom quotations sequences sequences.extras sets
+sorting system terms tools.annotations tools.annotations.private tools.time
+tools.walker ;
 
 IN: chr.debug
 FROM: namespaces => set ;
@@ -315,6 +316,7 @@ PRIVATE>
       check-recursive-terms
       create-chr
       isomorphic?
+      unify-struct
     } append
     [ add-timing ] each ;
 
@@ -336,6 +338,12 @@ PRIVATE>
     add-chr-timing
     [ qt ] time.. sort-keys
     reset-all ;
+
+: chr-time ( ..a quot -- ..b )
+    reset-all
+    add-chr-timing
+    time..
+    reset-all ; inline
 
 : tgt. ( quot -- )
     reset-all

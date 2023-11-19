@@ -258,3 +258,6 @@ TUPLE: Demux < chr-pred cond ins outs ;
 TUPLE: Mux < chr-pred cond ins outs ;
 TUPLE: Is < type-pred var src ;
 TUPLE: Dup < Is ;
+
+! ** Inference entry point
+GENERIC: get-type ( quot -- type )

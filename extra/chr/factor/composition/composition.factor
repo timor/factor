@@ -1,8 +1,8 @@
-USING: accessors arrays assocs chr.factor chr.factor.effects
+USING: accessors arrays assocs chr chr.factor chr.factor.effects
 chr.factor.intra-effect chr.factor.intra-effect.primitives chr.factor.phi
 chr.factor.util chr.factor.word-types chr.parser chr.state
-combinators.short-circuit generic kernel namespaces quotations sequences sets
-terms vocabs words ;
+combinators.short-circuit kernel namespaces quotations sequences sets terms
+vocabs words ;
 
 IN: chr.factor.composition
 
@@ -328,8 +328,6 @@ ERROR: invalid-type-solver-result store ;
     swap values [ TypeOf? ] filter
     [ key>> = ] with find nip
     dup [ type>> ] when ;
-
-GENERIC: get-type ( quot -- type )
 
 M: callable get-type
     quote-literals
