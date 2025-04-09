@@ -77,6 +77,6 @@ PRIVATE>
 : bf-choose ( choices -- item )
     [ ! | k choices |
         [ swap [ continue-with ] 2curry ] with map
-        paths swap append set: paths
+        paths append set: paths
         fail
     ] curry callcc1 ;

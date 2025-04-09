@@ -158,7 +158,6 @@ SYMBOLS: la ny bos ;
 [ paths empty? ] unit-test
 
 ! 22.6 cyclic graphs
-! TODO: test with double edges?
 : neighbors ( node -- nodes )
    { { a [ { b d } ] }
      { b [ { c } ] }
@@ -174,10 +173,13 @@ SYMBOLS: la ny bos ;
       [ ns bf-choose [ node2 path ] keep prefix ]
     } cond ;
 
-! fails with inifinite loop!
+{ { d e } } [ [ a e path ] with-choice ] unit-test
+
 :: path2 ( node1 node2 -- path )
     node1 neighbors <reversed> :> ns
     { { [ ns not ] [ fail ] }
       { [ node2 ns in? ] [ { node2 } ] }
       [ ns bf-choose [ node2 path2 ] keep prefix ]
-     } cond ;
+    } cond ;
+
+{ { d e } } [ [ a e path2 ] with-choice ] unit-test
