@@ -68,3 +68,30 @@ IN: choose-fail.tests
       ] with-choice ] try-remaining 
   ] V{ } make
 ] unit-test
+
+! 22.5 descent
+SYMBOLS: a b c d e eff g ;
+
+: kids ( node -- nodes )
+    { { a [ { b c } ] }
+      { b [ { d e } ] }
+      { c [ { d eff } ] }
+      { eff [ { g } ] }
+      [ drop f ]
+    } case ;
+
+: descent ( n1 n2 -- path )
+    { { [ 2dup = ] [ nip 1array ] }
+      { [ over kids ] [ over kids choose
+                        swap descent
+                        swap prefix ] }
+      [ 2drop fail ]
+     } cond ;
+
+{ { a c eff g } }
+[ [ a g descent ] with-choice ] unit-test
+
+{ { a b d } }
+[ [ a d descent ] with-choice ] unit-test
+
+! TODO: second path

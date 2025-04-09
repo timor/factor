@@ -5,7 +5,7 @@ IN: choose-fail
 ! Some backtracking tools
 ! Goal: equivalent to Paul Graham's choose/true-choose
 
-! 22.4
+! 22.2
 
 ERROR: no-more-choices ;
 <PRIVATE
@@ -56,6 +56,8 @@ PRIVATE>
          head-choice
         ] 2curry callcc1
     ] if-empty ;
+
+! 22.5
 
 : mark ( -- )
     [ fail ] push-path ;
