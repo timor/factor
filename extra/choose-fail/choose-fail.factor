@@ -16,7 +16,8 @@ ERROR: no-more-choices ;
 VAR: paths
 
 : ensure-paths ( -- paths )
-    paths dup array? [ not-in-choice-context ] unless ;
+    ! paths dup array? [ not-in-choice-context ] unless ;
+    paths ;
 
 : push-path ( thing -- )
     ensure-paths swap suffix set: paths ;
@@ -25,11 +26,17 @@ VAR: paths
     ensure-paths unclip-last swap set: paths ;
 PRIVATE>
 
+SYMBOL: failsym
+
+: cut-all ( -- )
+    f set: paths ;
+
 : with-choice ( quot -- )
     { } \ paths rot with-variable ; inline
 
 : fail ( -- x )
-    ensure-paths [ no-more-choices ]
+    ! ensure-paths [ failsym ]
+    paths [ failsym ]
     [ unclip-last swap set: paths call( -- x ) ] if-empty ;
 
 ! First try: doesn't work
