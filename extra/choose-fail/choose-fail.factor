@@ -24,13 +24,12 @@ PRIVATE>
 : with-choice ( quot -- )
     { } \ paths rot with-variable ; inline
 
-: fail ( -- x )
+! : fail ( -- * )
+!     paths [ no-more-choices ]
+!     [ unclip-last swap set: paths call( -- * ) ] if-empty ;
+: fail ( -- * )
     paths [ no-more-choices ]
-    [ unclip-last swap set: paths call( -- x ) ] if-empty ;
-
-! : rewind ( -- )
-!     paths
-!     [ unclip-last swap set: paths call( -- ) ] unless-empty ;
+    [ unclip-last swap set: paths call( -- * ) ] if-empty ;
 
 ! First try: doesn't work
 ! : choose ( seq -- item )
@@ -51,15 +50,16 @@ PRIVATE>
 ! Does this do dfs or bfs? Also, does it actually use the stack with more than
 ! one element?
 ! This one stack-checks
-
 : choose ( seq -- item )
-    [ fail ] [
+    [ fail ] when-empty
+    dup length 1 =
+    [ first ] [
         unclip-slice
         [| k rest-choices head-choice |
          [ rest-choices choose k continue-with ] push-path
          head-choice
         ] 2curry callcc1
-    ] if-empty ;
+    ] if ;
 
 ! 22.5
 

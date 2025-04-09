@@ -1,17 +1,19 @@
 ! Copyright (C) 2025 .
 ! See https://factorcode.org/license.txt for BSD license.
-USING: arrays choose-fail choose-fail.private continuations kernel make math
-tools.test generalizations ;
+USING: arrays choose-fail choose-fail.private combinators continuations
+formatting io io.streams.string kernel make math sequences sets tools.test ;
 IN: choose-fail.tests
 
-: try-remaining ( quot -- )
+: exhaust ( quot -- )
     [ no-more-choices? ] ignore-error ; inline
 
 ! modify quot to not have any outputs, instead waiting
 ! for no-more-choices? being thrown
 : exhaustive ( quot -- quot )
-    ! dup outputs '[ _ [ dup no-more-choices? [ drop _ ndrop ] [ rethrow ] if ] recover ] ; inline
-    '[ _ drop-outputs ] '[ _ [ dup no-more-choices? [ drop ] [ rethrow ] if ] recover ] ; inline
+    [ exhaust ] curry ; inline
+
+: bag-of ( quot exemplar -- seq )
+    [ exhaustive ] dip make ; inline
 
 { V{ 0 }
   f }
@@ -23,9 +25,9 @@ IN: choose-fail.tests
 { f
   V{ 0 1 }
   f }
-[ paths 
+[ paths
   [
-      { 0 1 } choose , [ fail ] try-remaining
+      { 0 1 } choose , [ fail ] exhaust
   ]
   V{ } make
   paths
@@ -35,13 +37,13 @@ IN: choose-fail.tests
 { 0 f }
 [ [ { 0 1 } choose ] with-choice paths ] unit-test
 
-{ V{ 0 1 2 } }
-[ [ [ { 0 1 2 } choose , fail
-    ] exhaustive with-choice ] V{ } make ] unit-test
+{ { 0 1 2 } }
+[ [ [ { 0 1 2 } choose , fail ] { } bag-of ] with-choice ] unit-test 
 
-{ V{ 0 1 2 } }
-[ [ [ { 0 1 2 3 } choose dup 3 = [ drop ] [ , fail ] if
-    ] with-choice ] V{ } make ] unit-test
+[ { 0 1 2 3 } choose dup 3 = [ drop ] [ , fail ] if ] must-infer
+
+{ { 0 1 2 } }
+[ [ [ { 0 1 2 3 } choose dup 3 = [ drop ] [ , fail ] if ] { } bag-of ] with-choice ] unit-test
 
 { 2 }
 [ [ { 0 1 2 3 } choose dup 2 = [ fail ] unless
@@ -56,7 +58,7 @@ IN: choose-fail.tests
     { 2 4 }
     { 2 5 } } }
 [ [ [ { 1 2 } choose { 4 5 } choose
-      2array , fail ] exhaustive { } make ] with-choice
+      2array , fail ] { } bag-of ] with-choice
  ] unit-test
 
 : two-numbers ( -- num1 num2 )
@@ -65,20 +67,20 @@ IN: choose-fail.tests
 
 : parlor-trick ( sum -- result )
     [ two-numbers ] dip 2over + =
-    [ 2array ] [ 2drop fail ] if ;
+    [ 2array ] [ 2drop fail f ] if ;
 
 { { 2 5 } }
 [ [ 7 parlor-trick ] with-choice ] unit-test
 
 [ [ 42 parlor-trick ] with-choice ] [ no-more-choices? ] must-fail-with
 
-{ V{ { 2 5 }
-     { 3 4 }
-     { 4 3 }
-     { 5 2 }
-   } }
-[ [ [ 7 parlor-trick , fail ] exhaustive with-choice 
-  ] V{ } make
+{ { { 2 5 }
+    { 3 4 }
+    { 4 3 }
+    { 5 2 }
+  } }
+[ [ [ 7 parlor-trick , fail ] { } bag-of
+  ] with-choice
 ] unit-test
 
 ! 22.5 descent
@@ -107,17 +109,31 @@ SYMBOLS: a b c d e eff g ;
 [ [ a d descent ] with-choice ] unit-test
 
 ! each-choice triggers the fails inside the [ , ] quotation,
-! while the outer try-remaining handles the fail call i
+! while the outer exhaust handles the fail call i
 { { { a b d }
     { a c d }
   } }
-[ [ [ a d descent , fail ] exhaustive { } make ] with-choice
+[ [ [ a d descent , fail ] { } bag-of ] with-choice
   ] unit-test
 
 SYMBOLS: la ny bos ;
 
-! :: find-boxes ( -- )
-!     { la ny bos } choose :> city
-!     mark nl
-!     { 1 2 } choose :> store
-!     { 1 2 } choose :> box
+: coin? ( city store box -- ? )
+    3array
+    { { la 1 2 } { ny 1 1 } { bos 2 2 } } in? ;
+
+:: find-boxes-1 ( -- )
+    { la ny bos } choose :> city
+    nl
+    { 1 2 } choose :> store
+    { 1 2 } choose :> box
+    city store box 3dup "(%S %S %S)" printf
+    coin? [ "C" write ] when
+    fail ;
+
+{ "
+(LA 1 1)(LA 1 2)C(LA 2 1)(LA 2 2)
+(NY 1 1)C(NY 1 2)(NY 2 1)(NY 2 2)
+(BOS 1 1)(BOS 1 2)(BOS 2 1)(BOS 2 2)C"
+ }
+[ [ find-boxes-1 ] exhaustive with-string-writer ] unit-test
