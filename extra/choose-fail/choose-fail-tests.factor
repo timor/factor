@@ -1,6 +1,7 @@
 ! Copyright (C) 2025 .
 ! See https://factorcode.org/license.txt for BSD license.
-USING: tools.test choose-fail choose-fail.private kernel math make ;
+USING: tools.test choose-fail choose-fail.private kernel math make
+    continuations ;
 IN: choose-fail.tests
 
 : two-numbers ( -- num1 num2 )
@@ -10,6 +11,9 @@ IN: choose-fail.tests
 : parlor-trick ( sum -- result )
     [ two-numbers ] dip 2over + =
     [ '{ "the sum of " _ _ } ] [ 2drop fail ] if ;
+
+: try-remaining ( quot -- )
+    [ no-more-choices? ] ignore-error ; inline
 
 { V{ 0 }
   f }
@@ -21,18 +25,15 @@ IN: choose-fail.tests
     cut-all paths
 ] unit-test
 
-! This unravels. The failsym on the stack is the last fail which is not captured
-! by the make
 {
     f
-    failsym
-    V{ 0 1 failsym }
+    V{ 0 1 }
     f
 }
 [
     paths
     [
-        { 0 1 } choose , fail
+        { 0 1 } choose , [ fail ] try-remaining
     ]
     V{ } make
     paths
@@ -41,3 +42,7 @@ IN: choose-fail.tests
 
 { 0 f }
 [ [ { 0 1 } choose ] with-choice paths ] unit-test
+
+{ V{ 0 1 2 } }
+[ [ [ { 0 1 2 } choose , [ fail ] try-remaining
+    ] with-choice ] V{ } make ] unit-test

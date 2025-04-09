@@ -14,20 +14,12 @@ ERROR: no-more-choices ;
 <PRIVATE
 VAR: paths
 
-! : ensure-paths ( -- paths )
-!     ! paths dup array? [ not-in-choice-context ] unless ;
-!     paths ;
-
 : push-path ( thing -- )
-    ! ensure-paths swap suffix set: paths ;
     paths swap suffix set: paths ;
 
 : pop-path ( -- thing )
-    ! ensure-paths unclip-last swap set: paths ;
     paths unclip-last swap set: paths ;
 PRIVATE>
-
-SYMBOL: failsym
 
 : cut-all ( -- )
     f set: paths ;
@@ -36,8 +28,6 @@ SYMBOL: failsym
     { } \ paths rot with-variable ; inline
 
 : fail ( -- x )
-    ! ensure-paths [ failsym ]
-    ! paths [ failsym ]
     paths [ no-more-choices ]
     [ unclip-last swap set: paths call( -- x ) ] if-empty ;
 
@@ -71,4 +61,4 @@ SYMBOL: failsym
     ] if-empty ;
 
 : mark ( -- )
-    \ fail push-path ;
+    [ fail ] push-path ;
