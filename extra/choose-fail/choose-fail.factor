@@ -2,7 +2,6 @@ USING: arrays continuations kernel sequences variables ;
 
 IN: choose-fail
 
-
 ! Some backtracking tools
 ! Goal: equivalent to Paul Graham's choose/true-choose
 
@@ -15,15 +14,17 @@ ERROR: no-more-choices ;
 <PRIVATE
 VAR: paths
 
-: ensure-paths ( -- paths )
-    ! paths dup array? [ not-in-choice-context ] unless ;
-    paths ;
+! : ensure-paths ( -- paths )
+!     ! paths dup array? [ not-in-choice-context ] unless ;
+!     paths ;
 
 : push-path ( thing -- )
-    ensure-paths swap suffix set: paths ;
+    ! ensure-paths swap suffix set: paths ;
+    paths swap suffix set: paths ;
 
 : pop-path ( -- thing )
-    ensure-paths unclip-last swap set: paths ;
+    ! ensure-paths unclip-last swap set: paths ;
+    paths unclip-last swap set: paths ;
 PRIVATE>
 
 SYMBOL: failsym
@@ -36,7 +37,8 @@ SYMBOL: failsym
 
 : fail ( -- x )
     ! ensure-paths [ failsym ]
-    paths [ failsym ]
+    ! paths [ failsym ]
+    paths [ no-more-choices ]
     [ unclip-last swap set: paths call( -- x ) ] if-empty ;
 
 ! First try: doesn't work

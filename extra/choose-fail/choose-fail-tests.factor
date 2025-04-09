@@ -8,8 +8,8 @@ IN: choose-fail.tests
     { 0 1 2 3 4 5 } choose ;
 
 : parlor-trick ( sum -- result )
-    two-numbers [ + = ] 2keep
-    [ '[ { "the sum of " _ _ } ] ] [ 2drop fail ] if ;
+    [ two-numbers ] dip 2over + =
+    [ '{ "the sum of " _ _ } ] [ 2drop fail ] if ;
 
 { V{ 0 }
   f }
@@ -37,3 +37,7 @@ IN: choose-fail.tests
     V{ } make
     paths
 ] unit-test
+
+
+{ 0 f }
+[ [ { 0 1 } choose ] with-choice paths ] unit-test
