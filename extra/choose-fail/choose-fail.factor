@@ -1,4 +1,4 @@
-USING: arrays continuations kernel sequences variables ;
+USING: continuations kernel namespaces sequences splitting variables ;
 
 IN: choose-fail
 
@@ -69,3 +69,14 @@ PRIVATE>
 : cut-choice ( -- )
     paths { [ fail ] } split1-last dup [ drop ] [ nip ] if
     set: paths ;
+
+! 22.6
+
+! cf. true-choose
+! Why in the world does this work???
+: bf-choose ( choices -- item )
+    [ ! | k choices |
+        [ swap [ continue-with ] 2curry ] with map
+        paths swap append set: paths
+        fail
+    ] curry callcc1 ;

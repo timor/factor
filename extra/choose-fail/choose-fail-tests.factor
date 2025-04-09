@@ -153,3 +153,31 @@ SYMBOLS: la ny bos ;
     coin? [ "C" write cut-choice ] when
     fail ;
 [ [ find-boxes-2 ] exhaustive with-string-writer ] unit-test
+
+{ t }
+[ paths empty? ] unit-test
+
+! 22.6 cyclic graphs
+! TODO: test with double edges?
+: neighbors ( node -- nodes )
+   { { a [ { b d } ] }
+     { b [ { c } ] }
+     { c [ { a } ] }
+     { d [ { e } ] }
+     [ drop f ]
+    } case ;
+
+:: path ( node1 node2 -- path )
+    node1 neighbors :> ns
+    { { [ ns not ] [ fail ] }
+      { [ node2 ns in? ] [ { node2 } ] }
+      [ ns bf-choose [ node2 path ] keep prefix ]
+    } cond ;
+
+! fails with inifinite loop!
+:: path2 ( node1 node2 -- path )
+    node1 neighbors <reversed> :> ns
+    { { [ ns not ] [ fail ] }
+      { [ node2 ns in? ] [ { node2 } ] }
+      [ ns bf-choose [ node2 path2 ] keep prefix ]
+     } cond ;
