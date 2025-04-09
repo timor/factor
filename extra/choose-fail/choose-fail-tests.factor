@@ -1,19 +1,17 @@
 ! Copyright (C) 2025 .
 ! See https://factorcode.org/license.txt for BSD license.
 USING: arrays choose-fail choose-fail.private continuations kernel make math
-tools.test ;
+tools.test generalizations ;
 IN: choose-fail.tests
 
 : try-remaining ( quot -- )
     [ no-more-choices? ] ignore-error ; inline
 
-! unwind to each choice, calling quotation on it until no choices are left
-! NOTE: everything up to the invocation of the quotation will be repeated!
-! NOTE: the fail handler is only called for fail invocations inside quot!  Any
-! calls to fail inside the preceding code are not handled, since their
-! continuations are _not_ inside the frame that calls fail.
-: each-choice ( first-elt quot: ( elt -- ) -- last-elt )
-    '[ @ fail ] try-remaining ; inline
+! modify quot to not have any outputs, instead waiting
+! for no-more-choices? being thrown
+: exhaustive ( quot -- quot )
+    ! dup outputs '[ _ [ dup no-more-choices? [ drop _ ndrop ] [ rethrow ] if ] recover ] ; inline
+    '[ _ drop-outputs ] '[ _ [ dup no-more-choices? [ drop ] [ rethrow ] if ] recover ] ; inline
 
 { V{ 0 }
   f }
@@ -38,8 +36,8 @@ IN: choose-fail.tests
 [ [ { 0 1 } choose ] with-choice paths ] unit-test
 
 { V{ 0 1 2 } }
-[ [ [ { 0 1 2 } choose , [ fail ] try-remaining
-    ] with-choice ] V{ } make ] unit-test
+[ [ [ { 0 1 2 } choose , fail
+    ] exhaustive with-choice ] V{ } make ] unit-test
 
 { V{ 0 1 2 } }
 [ [ [ { 0 1 2 3 } choose dup 3 = [ drop ] [ , fail ] if
@@ -58,7 +56,7 @@ IN: choose-fail.tests
     { 2 4 }
     { 2 5 } } }
 [ [ [ { 1 2 } choose { 4 5 } choose
-    2array [ , ] each-choice drop ] { } make ] with-choice
+      2array , fail ] exhaustive { } make ] with-choice
  ] unit-test
 
 : two-numbers ( -- num1 num2 )
@@ -79,9 +77,7 @@ IN: choose-fail.tests
      { 4 3 }
      { 5 2 }
    } }
-[ [ [ [ 7 parlor-trick
-      [ , fail ] try-remaining
-      ] with-choice ] try-remaining 
+[ [ [ 7 parlor-trick , fail ] exhaustive with-choice 
   ] V{ } make
 ] unit-test
 
@@ -115,5 +111,13 @@ SYMBOLS: a b c d e eff g ;
 { { { a b d }
     { a c d }
   } }
-[ [ [ [ a d descent [ , ] each-choice ] try-remaining ] { } make ] with-choice
+[ [ [ a d descent , fail ] exhaustive { } make ] with-choice
   ] unit-test
+
+SYMBOLS: la ny bos ;
+
+! :: find-boxes ( -- )
+!     { la ny bos } choose :> city
+!     mark nl
+!     { 1 2 } choose :> store
+!     { 1 2 } choose :> box

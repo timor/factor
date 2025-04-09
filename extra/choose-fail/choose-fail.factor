@@ -28,6 +28,10 @@ PRIVATE>
     paths [ no-more-choices ]
     [ unclip-last swap set: paths call( -- x ) ] if-empty ;
 
+! : rewind ( -- )
+!     paths
+!     [ unclip-last swap set: paths call( -- ) ] unless-empty ;
+
 ! First try: doesn't work
 ! : choose ( seq -- item )
 !     [ fail ] [
@@ -61,3 +65,7 @@ PRIVATE>
 
 : mark ( -- )
     [ fail ] push-path ;
+
+: cut-choice ( -- )
+    paths { [ fail ] } split1-last dup [ drop ] [ nip ] if
+    set: paths ;
