@@ -116,18 +116,19 @@ SYMBOLS: a b c d e eff g ;
 [ [ [ a d descent , fail ] { } bag-of ] with-choice
   ] unit-test
 
+! chocoblobs!1!
 SYMBOLS: la ny bos ;
 
 : coin? ( city store box -- ? )
     3array
     { { la 1 2 } { ny 1 1 } { bos 2 2 } } in? ;
 
-:: find-boxes-1 ( -- )
-    { la ny bos } choose :> city
+: find-boxes-1 ( -- )
+    { la ny bos } choose
     nl
-    { 1 2 } choose :> store
-    { 1 2 } choose :> box
-    city store box 3dup "(%S %S %S)" printf
+    { 1 2 } choose
+    { 1 2 } choose
+    3dup "(%S %S %S)" printf
     coin? [ "C" write ] when
     fail ;
 
@@ -135,5 +136,20 @@ SYMBOLS: la ny bos ;
 (LA 1 1)(LA 1 2)C(LA 2 1)(LA 2 2)
 (NY 1 1)C(NY 1 2)(NY 2 1)(NY 2 2)
 (BOS 1 1)(BOS 1 2)(BOS 2 1)(BOS 2 2)C"
- }
+}
 [ [ find-boxes-1 ] exhaustive with-string-writer ] unit-test
+
+{ "
+(LA 1 1)(LA 1 2)C
+(NY 1 1)C
+(BOS 1 1)(BOS 1 2)(BOS 2 1)(BOS 2 2)C"
+}
+: find-boxes-2 ( -- )
+    { la ny bos } choose
+    mark nl
+    { 1 2 } choose
+    { 1 2 } choose
+    3dup "(%S %S %S)" printf
+    coin? [ "C" write cut-choice ] when
+    fail ;
+[ [ find-boxes-2 ] exhaustive with-string-writer ] unit-test
