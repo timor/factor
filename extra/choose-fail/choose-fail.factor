@@ -7,9 +7,6 @@ IN: choose-fail
 
 ! 22.4
 
-! NOTE: forcing delimiting here for now?
-
-ERROR: not-in-choice-context ;
 ERROR: no-more-choices ;
 <PRIVATE
 VAR: paths

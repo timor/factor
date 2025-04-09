@@ -56,12 +56,15 @@ IN: choose-fail.tests
 { { 2 5 } }
 [ [ 7 parlor-trick ] with-choice ] unit-test
 
+[ [ 42 parlor-trick ] with-choice ] [ no-more-choices? ] must-fail-with
+
 { V{ { 2 5 }
      { 3 4 }
      { 4 3 }
-     { 5 0 }
+     { 5 2 }
    } }
-[ [ [ 7 parlor-trick
-      , [ fail ] try-remaining
-    ] with-choice ] V{ } make
+[ [ [ [ 7 parlor-trick
+      [ , fail ] try-remaining
+      ] with-choice ] try-remaining 
+  ] V{ } make
 ] unit-test
