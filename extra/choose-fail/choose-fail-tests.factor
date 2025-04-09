@@ -1,16 +1,8 @@
 ! Copyright (C) 2025 .
 ! See https://factorcode.org/license.txt for BSD license.
-USING: tools.test choose-fail choose-fail.private kernel math make
-    continuations ;
+USING: arrays choose-fail choose-fail.private continuations kernel make math
+tools.test ;
 IN: choose-fail.tests
-
-: two-numbers ( -- num1 num2 )
-    { 0 1 2 3 4 5 } choose
-    { 0 1 2 3 4 5 } choose ;
-
-: parlor-trick ( sum -- result )
-    [ two-numbers ] dip 2over + =
-    [ '{ "the sum of " _ _ } ] [ 2drop fail ] if ;
 
 : try-remaining ( quot -- )
     [ no-more-choices? ] ignore-error ; inline
@@ -18,18 +10,14 @@ IN: choose-fail.tests
 { V{ 0 }
   f }
 [
-    [
-        { 0 1 } choose ,
-    ]
+    [ { 0 1 } choose , ]
     V{ } make
     cut-all paths
 ] unit-test
 
-{
-    f
-    V{ 0 1 }
-    f
-}
+{ f
+  V{ 0 1 }
+  f }
 [
     paths
     [
@@ -46,3 +34,34 @@ IN: choose-fail.tests
 { V{ 0 1 2 } }
 [ [ [ { 0 1 2 } choose , [ fail ] try-remaining
     ] with-choice ] V{ } make ] unit-test
+
+{ V{ 0 1 2 } }
+[ [ [ { 0 1 2 3 } choose dup 3 = [ drop ] [ , fail ] if
+    ] with-choice ] V{ } make ] unit-test
+
+{ 2 }
+[ [ { 0 1 2 3 } choose dup 2 = [ fail ] unless
+  ] with-choice ] unit-test
+
+[ { 0 1 2 3 } choose dup 42 = [ fail ] unless ] [ no-more-choices? ] must-fail-with
+
+: two-numbers ( -- num1 num2 )
+    { 0 1 2 3 4 5 } choose
+    { 0 1 2 3 4 5 } choose ;
+
+: parlor-trick ( sum -- result )
+    [ two-numbers ] dip 2over + =
+    [ 2array ] [ 2drop fail ] if ;
+
+{ { 2 5 } }
+[ [ 7 parlor-trick ] with-choice ] unit-test
+
+{ V{ { 2 5 }
+     { 3 4 }
+     { 4 3 }
+     { 5 0 }
+   } }
+[ [ [ 7 parlor-trick
+      , [ fail ] try-remaining
+    ] with-choice ] V{ } make
+] unit-test
