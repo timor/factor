@@ -1,6 +1,6 @@
 ! Copyright (C) 2025 .
 ! See https://factorcode.org/license.txt for BSD license.
-USING: arrays choose-fail choose-fail.private combinators continuations
+USING: arrays assocs choose-fail choose-fail.private combinators continuations
 formatting io io.streams.string kernel make math sequences sets tools.test ;
 IN: choose-fail.tests
 
@@ -191,3 +191,36 @@ SYMBOLS: la ny bos ;
     } cond ;
 
 { { d e } } [ [ a e path2 ] with-choice ] unit-test
+
+! same thing, but as factor's graph
+CONSTANT: G1 H{
+    { a HS{ c } }
+    { b HS{ a } }
+    { c HS{ b } }
+    { d HS{ a } }
+    { e HS{ d } }
+}
+
+:: mypath ( n1 n2 -- path )
+    n2 G1 at* [ fail ] unless :> inc
+    n1 inc in? [ { n2 } ]
+    [ n1 inc members bf-choose mypath n2 suffix ] if ;
+
+{ { d e } } [ [ a e path2 ] with-choice ] unit-test
+! for the incoming adjacancy list, we have to end in a loop to make
+! it interesting, so reverse all edges
+
+CONSTANT: G2 H{
+    { a HS{ b d } }
+    { b HS{ c } }
+    { c HS{ a } }
+    { d HS{ e } }
+}
+
+:: mypath2 ( n1 n2 -- path )
+    n2 G2 at* [ fail ] unless :> inc
+    n1 inc in? [ { n2 } ]
+    [ n1 inc members bf-choose mypath2 n2 suffix ] if ;
+
+{ { d a } } [ [ e a mypath2 ] with-choice ] unit-test
+{ { d a c b } } [ [ e b mypath2 ] with-choice ] unit-test
