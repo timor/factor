@@ -3,19 +3,24 @@ USING: continuations kernel namespaces sequences splitting variables ;
 IN: choose-fail
 
 ! Some backtracking tools
-! Goal: equivalent to Paul Graham's choose/true-choose
+! mostly equivalent to Paul Graham's choose/true-choose
 
 ! 22.2
 
 ERROR: no-more-choices ;
+ERROR: not-in-choice-context ;
 <PRIVATE
 VAR: paths
+! make sure we actually have a choice stack set
+: check ( paths -- paths )
+    dup [ not-in-choice-context ] unless ; inline
 
-: push-path ( thing -- )
-    paths swap suffix set: paths ;
+: push-path ( cont -- )
+    paths check swap suffix set: paths ;
 
-: pop-path ( -- thing )
-    paths unclip-last swap set: paths ;
+: pop-path ( -- cont )
+    paths check unclip-last swap set: paths ;
+
 PRIVATE>
 
 : cut-all ( -- )
@@ -24,32 +29,14 @@ PRIVATE>
 : with-choice ( quot -- )
     { } \ paths rot with-variable ; inline
 
-! : fail ( -- * )
-!     paths [ no-more-choices ]
-!     [ unclip-last swap set: paths call( -- * ) ] if-empty ;
+: choosing ( quot -- quot )
+    [ with-choice ] curry ; inline
+
 : fail ( -- * )
-    paths [ no-more-choices ]
+    paths check [ no-more-choices ]
     [ unclip-last swap set: paths call( -- * ) ] if-empty ;
 
-! First try: doesn't work
-! : choose ( seq -- item )
-!     [ fail ] [
-!         unclip swap
-!         '[ [ _ choose ] paths push ] callcc0
-!     ] if-empty ;
-
-! Hunch: doing the recurrence in the recovery quotation to ifcc amounts to bfs? no...
-! Also wrong effects:
-! : choose ( seq -- item )
-!     [ fail ] [
-!         unclip swap ! first rest
-!         [ paths push ]
-!         [ choose ] bi-curry* ifcc
-!     ] if-empty ;
-
-! Does this do dfs or bfs? Also, does it actually use the stack with more than
-! one element?
-! This one stack-checks
+! depth-first traversal
 : choose ( seq -- item )
     [ fail ] when-empty
     dup length 1 =
@@ -67,16 +54,16 @@ PRIVATE>
     [ fail ] push-path ;
 
 : cut-choice ( -- )
-    paths { [ fail ] } split1-last dup [ drop ] [ nip ] if
+    paths check { [ fail ] } split1-last dup [ drop ] [ nip ] if
     set: paths ;
 
 ! 22.6
 
 ! cf. true-choose
-! Why in the world does this work???
+! breadth-first traversal
 : bf-choose ( choices -- item )
     [ ! | k choices |
         [ swap [ continue-with ] 2curry ] with map
-        paths append set: paths
+        paths check append set: paths
         fail
     ] curry callcc1 ;

@@ -15,11 +15,19 @@ IN: choose-fail.tests
 : bag-of ( quot exemplar -- seq )
     [ exhaustive ] dip make ; inline
 
+{ f } [ paths ] unit-test
+[ fail ] [ not-in-choice-context? ] must-fail-with
+[ { 1 2 } choose ] [ not-in-choice-context? ] must-fail-with
+[ mark ] [ not-in-choice-context? ] must-fail-with
+[ cut-choice ] [ not-in-choice-context? ] must-fail-with
+[ { 1 2 } choose ] [ not-in-choice-context? ] must-fail-with
+[ { 1 2 } bf-choose ] [ not-in-choice-context? ] must-fail-with
+
 { V{ 0 }
   f }
-[ [ { 0 1 } choose , ]
+[ [ { 0 1 } choose , ] choosing
   V{ } make
-  cut-all paths
+  paths
 ] unit-test
 
 { f
@@ -28,7 +36,7 @@ IN: choose-fail.tests
 [ paths
   [
       { 0 1 } choose , [ fail ] exhaust
-  ]
+  ] choosing
   V{ } make
   paths
 ] unit-test
@@ -49,7 +57,7 @@ IN: choose-fail.tests
 [ [ { 0 1 2 3 } choose dup 2 = [ fail ] unless
   ] with-choice ] unit-test
 
-[ { 0 1 2 3 } choose dup 42 = [ fail ] unless ] [ no-more-choices? ] must-fail-with
+[ { 0 1 2 3 } choose dup 42 = [ fail ] unless ] choosing [ no-more-choices? ] must-fail-with
 
 
 ! this is similar to amb
@@ -137,7 +145,7 @@ SYMBOLS: la ny bos ;
 (NY 1 1)C(NY 1 2)(NY 2 1)(NY 2 2)
 (BOS 1 1)(BOS 1 2)(BOS 2 1)(BOS 2 2)C"
 }
-[ [ find-boxes-1 ] exhaustive with-string-writer ] unit-test
+[ [ find-boxes-1 ] choosing exhaustive with-string-writer ] unit-test
 
 { "
 (LA 1 1)(LA 1 2)C
@@ -152,7 +160,7 @@ SYMBOLS: la ny bos ;
     3dup "(%S %S %S)" printf
     coin? [ "C" write cut-choice ] when
     fail ;
-[ [ find-boxes-2 ] exhaustive with-string-writer ] unit-test
+[ [ find-boxes-2 ] choosing exhaustive with-string-writer ] unit-test
 
 { t }
 [ paths empty? ] unit-test
