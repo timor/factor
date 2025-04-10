@@ -23,6 +23,14 @@ SYNTAX: set:
 : [variable-setter] ( variable -- quot )
     '[ _ set ] ;
 
+! ( variable -- quot:( q: ( ..a x ) -- ..b y ) -- p: ( ..a -- ..b ) )
+: [variable-changer] ( variable -- quot )
+    [ [variable-getter] ] [ variable-setter 1quotation ] bi
+    '[ _ prepose _ compose call ] ;
+
+SYNTAX: change:
+    scan-object [variable-changer] append! ;
+
 : (define-variable) ( word getter setter -- )
     [ ( -- value ) define-inline ]
     [
