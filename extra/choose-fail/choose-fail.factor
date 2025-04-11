@@ -16,10 +16,10 @@ VAR: paths
     dup [ not-in-choice-context ] unless ; inline
 
 : push-path ( cont -- )
-    paths check swap suffix set: paths ;
+    [ check swap suffix ] change: paths ;
 
 : pop-path ( -- cont )
-    paths check unclip-last swap set: paths ;
+    [ check unclip-last swap ] change: paths ;
 
 PRIVATE>
 
@@ -54,8 +54,8 @@ PRIVATE>
     [ fail ] push-path ;
 
 : cut-choice ( -- )
-    paths check { [ fail ] } split1-last dup [ drop ] [ nip ] if
-    set: paths ;
+    [ check { [ fail ] } split1-last dup [ drop ] [ nip ] if ]
+    change: paths ;
 
 ! 22.6
 
@@ -64,6 +64,6 @@ PRIVATE>
 : bf-choose ( choices -- item )
     [ ! | k choices |
         [ swap [ continue-with ] 2curry ] with map
-        paths check append set: paths
+        [ check append ] change: paths
         fail
     ] curry callcc1 ;
