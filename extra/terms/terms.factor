@@ -2,9 +2,19 @@ USING: assocs kernel math mirrors sequences strings variants ;
 
 IN: terms
 
+! Disjoint set of variable equivalence sets
+! TODO: make global for performance increase, in that case, move to
+! terms.context vocabulary or some such
+! TODO: find better name!
+VAR: eqs
+
+
 TUPLE: term-var
     { name string read-only }
     { counter fixnum read-only } ;
+
+M: term-var equal?
+    eqs equiv? ;
 
 C: <term-var> term-var
 
