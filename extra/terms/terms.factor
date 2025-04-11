@@ -17,6 +17,20 @@ M: sequence fresh
     [ fresh ] map ;
 
 M: tuple fresh
-    clone dup <mirror> dup '[ nip _ [ fresh ] change-at ] assoc-each ;
+    clone dup <mirror> dup '[ drop _ [ fresh ] change-at ] assoc-each ;
 
 M: object fresh ;
+M: string fresh ;
+
+GENERIC: subst ( subst term -- term' )
+M: term-var subst
+    swap ?at drop ;
+
+M: sequence subst
+    [ subst ] with map ;
+
+M: tuple subst
+    tuple>array unclip [ [ subst ] with map ] dip slots>tuple ;
+
+M: object subst nip ;
+M: string subst nip ;
