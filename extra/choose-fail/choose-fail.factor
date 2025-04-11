@@ -29,7 +29,7 @@ PRIVATE>
 : with-choice ( quot -- )
     { } \ paths rot with-variable ; inline
 
-: choosing ( quot -- quot )
+: choosing ( quot1: ( a.. -- ..b ) -- quot2: ( a.. -- ..b ) )
     [ with-choice ] curry ; inline
 
 : fail ( -- * )
@@ -37,7 +37,7 @@ PRIVATE>
     [ unclip-last swap set: paths call( -- * ) ] if-empty ;
 
 ! depth-first traversal
-: choose ( seq -- item )
+: choose ( choices -- item )
     [ fail ] when-empty
     dup length 1 =
     [ first ] [
