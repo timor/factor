@@ -1,13 +1,13 @@
-USING: continuations disjoint-sets kernel namespaces persistent.disjoint-sets
-sequences variables ;
+USING: accessors assocs continuations disjoint-sets kernel namespaces
+persistent.assocs persistent.disjoint-sets sequences terms.relations variables ;
 
 IN: terms.context
 
 ! Disjoint set of variable equivalence sets
 
-<< TYPED-GLOBAL: equivs maybe{ persistent-union-find } >>
+<< TYPED-GLOBAL: equivs maybe{ term-relation } >>
 ! Option for optimization if equiv? is inlined:
-! << TYPED-GLOBAL: equivs persistent-union-find >>
+! << TYPED-GLOBAL: equivs term-relation >>
 
 <PRIVATE
 
@@ -47,3 +47,11 @@ PRIVATE>
 
 : var-rep ( var -- representative )
     equivs representative ;
+
+: ?get-schema ( var -- var/term ? )
+    equivs dup representative
+    schema>> ?at ;
+
+! NOTE: not rebuilding the whole thing here.  Subject to scoping!
+: set-rep-schema ( term rep -- )
+    swap equivs [ new-at ] change-schema ;
