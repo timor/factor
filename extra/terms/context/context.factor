@@ -1,11 +1,10 @@
-USING: continuations kernel namespaces persistent.disjoint-sets sequences
-variables ;
+USING: continuations disjoint-sets kernel namespaces persistent.disjoint-sets
+sequences variables ;
 
 IN: terms.context
 
 ! Disjoint set of variable equivalence sets
-! terms.context vocabulary or some such
-! TODO: find better name!
+
 << TYPED-GLOBAL: equivs maybe{ persistent-union-find } >>
 ! Option for optimization if equiv? is inlined:
 ! << TYPED-GLOBAL: equivs persistent-union-find >>
@@ -15,14 +14,20 @@ IN: terms.context
 ! NOTE: equivs-stack itself is _not_ a global!
 SYMBOL: equivs-stack
 
+! : save-equivs ( quot -- )
+: push-equivs ( -- )
+    equivs-stack [ equivs suffix ] change
+    [ T{ persistent-union-find } or ] change: equivs ;
+
+: pop-equivs ( -- )
+    equivs-stack get unclip-last-slice set: equivs
+    equivs-stack set ;
+
 PRIVATE>
 
-! : save-equivs ( quot -- )
 : with-equiv-scope ( quot -- )
-    equivs-stack [ equivs suffix ] change
-    [ T{ persistent-union-find } or ] change: equivs
-    [ equivs-stack get unclip-last-slice set: equivs
-      equivs-stack set
+    push-equivs
+    [ pop-equivs
     ] finally ; inline
 
 : on-equivs ( quot: ( ..a equivs -- ..b equivs ) -- )

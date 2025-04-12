@@ -1,4 +1,5 @@
-USING: assocs kernel math mirrors sequences strings variants ;
+USING: assocs classes.tuple disjoint-sets kernel math mirrors sequences strings
+terms.context variants ;
 
 IN: terms
 
@@ -6,7 +7,9 @@ TUPLE: term-var
     { name string read-only } ;
 
 M: term-var equal?
-    eqs equiv? ;
+    over term-var?
+    [ equivs equiv? ]
+    [ 2drop f ] if ; inline
 
 C: <term-var> term-var
 

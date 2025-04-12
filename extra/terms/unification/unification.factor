@@ -9,20 +9,23 @@ IN: terms.unification
 ! Model: UnifyClosure
 
 
+<PRIVATE
+! Have this in variables for now
 ! keep track of visited terms
-VAR: visited
+TYPED-VAR: visited hash-set
 
 ! prevent cycles
-VAR: acyclic
+TYPED-VAR: acyclic hash-set
 
 ! keep set of vars which belog to the representative
-VAR: var-set
+TYPED-VAR: var-set hash-set
 
 ! maps representatives from eqs to ground terms
 VAR: schema
 
 : unif-closure ( s t -- )
-    2dup eqs representatives
-    2dup eq? [ 2drop ] [
-        j
+    2dup = [ 2drop ] [
+
     ] if
+
+PRIVATE>
