@@ -51,6 +51,11 @@ VAR: puf2
   puf2 disjoint-set-members >array
 ] unit-test
 
+! double adding
+{ { 0 } }
+[ puf a added-atom a added-atom
+  parents>> >array ] unit-test
+
 ! equating
 [ puf a b equated ] [ not-a-member? ] must-fail-with
 
