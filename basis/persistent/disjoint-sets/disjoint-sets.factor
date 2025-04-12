@@ -64,15 +64,20 @@ ERROR: not-a-member element disjoint-set ;
 : find-rep ( i puf! -- r )
     [ find-aux ] change-parents drop ;
 
-PRIVATE>
-
-: added-atom ( puf: persistent-union-find atom -- puf )
+! unsafe with regards to adding already existing atom
+: (added-atom) ( puf: persistent-union-find atom -- puf )
     swap
     [ new-index ] keep
     [ parents>> ppush ]
     [ ranks>> 0 swap ppush ] bi
-    swap <persistent-union-find>
-    ;
+    swap <persistent-union-find> ;  inline
+
+PRIVATE>
+
+: added-atom ( puf: persistent-union-find atom -- puf )
+    2dup swap disjoint-set-member?
+    [ drop ] [ (added-atom) ] if ;
+
 
 :: equated ( puf a b -- puf )
     a b puf 2item>index :> ( x y puf )
