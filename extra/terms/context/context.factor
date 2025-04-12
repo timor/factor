@@ -44,3 +44,6 @@ PRIVATE>
 
 : add-vars ( vars -- )
     [ swap [ added-atom ] each ] change: equivs ;
+
+: var-rep ( var -- representative )
+    equivs representative ;
