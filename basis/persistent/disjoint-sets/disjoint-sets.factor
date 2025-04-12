@@ -66,14 +66,15 @@ ERROR: not-a-member element disjoint-set ;
 
 PRIVATE>
 
-: added-atom ( atom puf: persistent-union-find -- puf )
+: added-atom ( puf: persistent-union-find atom -- puf )
+    swap
     [ new-index ] keep
     [ parents>> ppush ]
     [ ranks>> 0 swap ppush ] bi
     swap <persistent-union-find>
     ;
 
-:: equated ( a b puf -- puf )
+:: equated ( puf a b -- puf )
     a b puf 2item>index :> ( x y puf )
     x y [ puf find-rep ] bi@ :> ( cx cy )
     cx cy = [ puf ]
