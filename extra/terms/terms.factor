@@ -1,22 +1,34 @@
-USING: assocs classes.tuple disjoint-sets io.styles kernel math mirrors sequences strings
-terms.context variants ;
+USING: accessors assocs classes.tuple colors disjoint-sets io.styles kernel math
+mirrors prettyprint.custom prettyprint.sections sequences strings terms.context
+variants words ;
 
 IN: terms
 
-TUPLE: term-var
-    { name string read-only } ;
+
+! Term variables
+
+! TUPLE: term-var
+!     { name string read-only } ;
+
+PREDICATE: term-var < word "term-var" word-prop ;
+M: term-var reset-word
+    [ call-next-method ]
+    [ f "term-var" set-word-prop ] bi ;
+
+: <term-var> ( name -- var )
+    <uninterned-word>
+    dup t "term-var" set-word-prop ;
+    ! defined-equalities
+    ! [ dupd add-atom ] when* ;
 
 M: term-var equal?
     over term-var?
     [ equivs equiv? ]
     [ 2drop f ] if ; inline
 
-C: <term-var> term-var
-
 GENERIC: fresh ( term -- term' )
 M: term-var fresh
-    ! TODO: check for overflow
-    term-var unboa 1 + <term-var> ;
+    name>> <term-var> ;
 
 M: sequence fresh
     [ fresh ] map ;
@@ -42,6 +54,3 @@ M: string subst nip ;
 
 M: term-var pprint*
     name>> "?" prepend H{ { foreground COLOR: solarized-blue } } styled-text ;
-
-: parse-with-term-vars ( quot -- )
-    [ [ dup no-word? [ parse-new-term-var? ] [ rethrow ] if ] recover ] ;
