@@ -1,4 +1,4 @@
-USING: assocs classes.tuple disjoint-sets kernel math mirrors sequences strings
+USING: assocs classes.tuple disjoint-sets io.styles kernel math mirrors sequences strings
 terms.context variants ;
 
 IN: terms
@@ -39,3 +39,9 @@ M: tuple subst
 
 M: object subst nip ;
 M: string subst nip ;
+
+M: term-var pprint*
+    name>> "?" prepend H{ { foreground COLOR: solarized-blue } } styled-text ;
+
+: parse-with-term-vars ( quot -- )
+    [ [ dup no-word? [ parse-new-term-var? ] [ rethrow ] if ] recover ] ;

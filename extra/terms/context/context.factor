@@ -54,4 +54,4 @@ PRIVATE>
 
 ! NOTE: not rebuilding the whole thing here.  Subject to scoping!
 : set-rep-schema ( term rep -- )
-    swap equivs [ new-at ] change-schema ;
+    equivs [ new-at ] change-schema drop ;
