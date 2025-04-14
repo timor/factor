@@ -1,5 +1,6 @@
-USING: accessors assocs combinators compiler.units continuations kernel lexer
-namespaces parser quotations sequences vocabs vocabs.parser words words.symbol ;
+USING: accessors combinators compiler.units continuations kernel lexer
+namespaces parser quotations sequences terms.util vocabs.parser words
+words.symbol ;
 
 IN: terms.parser
 
@@ -39,10 +40,6 @@ M: object override-condition* drop rethrow ;
 : override-condition ( error/condition -- * )
     dup condition? [ dup error>> override-condition* ]
     [ rethrow ] if ;
-
-: unintern ( word -- )
-    dup vocabulary>> [ [ name>> ] dip vocab-words-assoc delete-at ] keepd
-    f >>vocabulary drop ;
 
 : finalize-vars ( vec-of-names -- )
     [ search 
