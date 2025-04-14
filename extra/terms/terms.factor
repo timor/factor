@@ -23,7 +23,7 @@ M: term-var reset-word
 
 M: term-var equal?
     over term-var?
-    [ equivs equiv? ]
+    [ equivs [ equiv? ] [ 2drop f ] if* ]
     [ 2drop f ] if ; inline
 
 GENERIC: fresh ( term -- term' )
@@ -53,4 +53,4 @@ M: object subst nip ;
 M: string subst nip ;
 
 M: term-var pprint*
-    name>> "?" prepend H{ { foreground COLOR: solarized-blue } } styled-text ;
+    name>> H{ { foreground COLOR: solarized-blue } } styled-text ;
