@@ -29,6 +29,10 @@ C: <persistent-union-find> persistent-union-find
 
 ERROR: not-a-member element disjoint-set ;
 
+GENERIC#: added-atom 1 ( persistent-disjoint-set atom -- persistent-disjoint-set' )
+
+GENERIC#: equated 2 ( persistent-disjoint-set a b -- persistent-disjoint-set' )
+
 <PRIVATE
 :: new-index ( atom puf -- map pam i )
     puf imap>> :> imap
@@ -37,6 +41,18 @@ ERROR: not-a-member element disjoint-set ;
     i atom imap new-at
     atom pami ppush
     i ; inline
+
+! NOTE: making this add unknown stuff for now
+
+:: maybe-add1 ( puf a -- puf/puf' a )
+    puf dup imap>> a key? [ a added-atom ] unless
+    a ; inline
+
+:: maybe-add2 ( puf a b -- puf/puf' a b )
+    puf dup imap>> :> imap
+    a imap key? [ a added-atom ] unless
+    b imap key? [ b added-atom ] unless
+    a b ; inline
 
 : item-at ( key imap -- value )
     [ ?at ] keep swap
@@ -74,12 +90,12 @@ ERROR: not-a-member element disjoint-set ;
 
 PRIVATE>
 
-: added-atom ( puf: persistent-union-find atom -- puf )
+M: persistent-union-find added-atom ( puf: persistent-union-find atom -- puf )
     2dup swap disjoint-set-member?
     [ drop ] [ (added-atom) ] if ;
 
-
-:: equated ( puf a b -- puf )
+M:: persistent-union-find equated ( puf a b -- puf )
+    puf a b maybe-add2 :> ( puf a b )
     a b puf 2item>index :> ( x y puf )
     x y [ puf find-rep ] bi@ :> ( cx cy )
     cx cy = [ puf ]
@@ -103,12 +119,15 @@ M: persistent-union-find clone ;
 
 ! non-persistent interface can be implemented
 
+! NOTE: for disjoint-sets, this returns f.  Here we return the identity.
 M: persistent-union-find representative
-    item>index
-    [ find-rep ] keep pami>> nth ;
+    2dup disjoint-set-member?
+    [ item>index
+      [ find-rep ] keep pami>> nth ]
+    [ drop ] if ;
 
 M: persistent-union-find disjoint-set-member?
-    imap>> key? ;
+    imap>> key? ; inline
 M: persistent-union-find disjoint-set-members
     pami>> ;
 M: persistent-union-find equiv?
