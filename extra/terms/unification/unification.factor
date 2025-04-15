@@ -1,5 +1,5 @@
-USING: assocs assocs.extras choose-fail classes classes.tuple combinators
-combinators.short-circuit hash-sets hashtables kernel sequences terms.context
+USING: choose-fail classes classes.tuple combinators combinators.short-circuit
+hash-sets hashtables kernel persistent.hashtables sequences sets terms.context
 variables ;
 
 IN: terms.unification
@@ -27,20 +27,20 @@ TYPED-VAR: var-set hashtable
 ! maps representatives from eqs to ground terms
 ! TODO: this must probably be escalated to global level to keep around after
 ! unification efficiently?
-TYPED-VAR: schema persistent-hash
+! TYPED-VAR: schema persistent-hash
 
 : vars-union ( s t -- )
     2dup equate-vars
-    dup var-rep var-set adjoin-at* adjoin-at ;
+    dup var-rep var-set '[ _ _ adjoin-at ] bi@ ;
 
 : unif-closure ( s t -- )
     2dup = [ 2drop ]
     [
         2dup [ term-var? ] both?
-        [ [ ?get-schema drop ] bi@ ] when
+        [ [ get-schema ] bi@ ] when
         2dup [ term-var? ] bi@
-        { { [ 2dup and ] [ 2drop vars ] }
-          { [ 2dup and not ] [ 2drop unify-terms ] }
+        { { [ 2dup and ] [ 2drop vars-union ] }
+          { [ 2dup or not ] [ 2drop unify-terms ] }
           { [ dup ] [ 2drop set-rep-schema ] }
           [ 2drop swap set-rep-schema ]
         } cond
@@ -68,6 +68,10 @@ M: term-var unify-terms
 
 M: object unify-terms
     = [ fail ] unless ;
+
+! compute only unifier
+: unifier ( s t -- term-relation vars )
+    [ unif-closure equivs var-set ] with-equiv-scope ;
 
 ! term building
 ! : find-solution

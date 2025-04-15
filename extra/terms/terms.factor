@@ -1,6 +1,6 @@
-USING: accessors assocs classes.tuple colors disjoint-sets io.styles kernel math
+USING: accessors assocs classes.tuple colors disjoint-sets io.styles kernel
 mirrors prettyprint.custom prettyprint.sections sequences strings terms.context
-variants words ;
+words ;
 
 IN: terms
 
