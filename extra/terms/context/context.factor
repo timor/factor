@@ -17,7 +17,7 @@ SYMBOL: equivs-stack
 ! : save-equivs ( quot -- )
 : push-equivs ( -- )
     equivs-stack [ equivs suffix ] change
-    [ T{ persistent-union-find } or ] change: equivs ;
+    [ T{ term-relation } or ] change: equivs ;
 
 : pop-equivs ( -- )
     equivs-stack get unclip-last-slice set: equivs
@@ -33,24 +33,31 @@ PRIVATE>
 : on-equivs ( quot: ( ..a equivs -- ..b equivs ) -- )
     equivs swap call set: equivs ; inline
 
-! TODO: this always checks for existing atoms.  If that is a bottlenck, it could
-! be tackled by forcing an equiv scope whenever variables are instantiated
-! somehow, and directly adding them then?
-: equate-vars ( a b -- )
-    [| a b puf | puf a added-atom b added-atom a b equated ] change: equivs ;
-
-: vars-equiv? ( a b -- ? )
-    equivs equiv? ;
+: add-var ( var -- )
+    [ swap added-atom ] change: equivs ;
 
 : add-vars ( vars -- )
     [ swap [ added-atom ] each ] change: equivs ;
 
+! TODO: this always checks for existing atoms.  If that is a bottlenck, it could
+! be tackled by forcing an equiv scope whenever variables are instantiated
+! somehow, and directly adding them then?
+! NOTE: this is done at the underlying data structure for now
+: equate-vars ( a b -- )
+    ! [| a b puf | puf a added-atom b added-atom a b equated ] change: equivs ;
+    [| a b puf | puf a b equated ] change: equivs ;
+
+! TODO: same overhead here
+: vars-equiv? ( a b -- ? )
+    2dup [ add-var ] bi@
+    equivs equiv? ;
+
 : var-rep ( var -- representative )
     equivs representative ;
 
-: ?get-schema ( var -- var/term ? )
-    equivs dup representative
-    schema>> ?at ;
+: get-schema ( thing -- var/term )
+    dup equivs [ representative ] [ schema>> ] bi ?at
+    swapd ? ;
 
 ! NOTE: not rebuilding the whole thing here.  Subject to scoping!
 : set-rep-schema ( term rep -- )
