@@ -15,9 +15,11 @@ IN: terms.context
 SYMBOL: equivs-stack
 
 ! : save-equivs ( quot -- )
+! NOTE: that clone call is due to being too lazy to completely reconstruct the
+! term relation in set-rep-schema!
 : push-equivs ( -- )
     equivs-stack [ equivs suffix ] change
-    [ T{ term-relation } or ] change: equivs ;
+    [ [ clone ] [ term-relation new ] if* ] change: equivs ;
 
 : pop-equivs ( -- )
     equivs-stack get unclip-last-slice set: equivs

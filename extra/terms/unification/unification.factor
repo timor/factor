@@ -1,5 +1,6 @@
 USING: choose-fail classes classes.tuple combinators combinators.short-circuit
-hash-sets hashtables kernel sequences sets terms terms.context variables ;
+continuations hash-sets hashtables kernel sequences sets terms terms.context
+variables ;
 
 IN: terms.unification
 
@@ -71,6 +72,9 @@ M: object unify-terms
 ! compute only unifier
 : unifier ( s t -- term-relation vars )
     [ unif-closure equivs var-set ] choosing with-equiv-scope ;
+
+: unify ( s t -- term-relation vars )
+    [ unifier ] [ dup no-more-choices? [ 3drop f f ] [ rethrow ] if ] recover ;
 
 ! term building
 ! : find-solution
