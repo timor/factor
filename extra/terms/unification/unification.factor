@@ -1,6 +1,5 @@
 USING: choose-fail classes classes.tuple combinators combinators.short-circuit
-hash-sets hashtables kernel persistent.hashtables sequences sets terms.context
-variables ;
+hash-sets hashtables kernel sequences sets terms terms.context variables ;
 
 IN: terms.unification
 
@@ -34,10 +33,10 @@ TYPED-VAR: var-set hashtable
     dup var-rep var-set '[ _ _ adjoin-at ] bi@ ;
 
 : unif-closure ( s t -- )
-    2dup = [ 2drop ]
+    [ get-schema ] bi@ 2dup = [ 2drop ]
     [
-        2dup [ term-var? ] both?
-        [ [ get-schema ] bi@ ] when
+        ! 2dup [ term-var? ] both?
+        ! [ [ get-schema ] bi@ ] when
         2dup [ term-var? ] bi@
         { { [ 2dup and ] [ 2drop vars-union ] }
           { [ 2dup or not ] [ 2drop unify-terms ] }
@@ -71,7 +70,7 @@ M: object unify-terms
 
 ! compute only unifier
 : unifier ( s t -- term-relation vars )
-    [ unif-closure equivs var-set ] with-equiv-scope ;
+    [ unif-closure equivs var-set ] choosing with-equiv-scope ;
 
 ! term building
 ! : find-solution

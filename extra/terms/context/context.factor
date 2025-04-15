@@ -57,7 +57,7 @@ PRIVATE>
 
 : get-schema ( thing -- var/term )
     dup equivs [ representative ] [ schema>> ] bi ?at
-    swapd ? ;
+    spin ? ;
 
 ! NOTE: not rebuilding the whole thing here.  Subject to scoping!
 : set-rep-schema ( term rep -- )
