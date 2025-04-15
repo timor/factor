@@ -1,9 +1,10 @@
-USING: accessors assocs kernel vocabs ;
+USING: accessors assocs kernel math namespaces vocabs words ;
 
 IN: terms.util
 
 ! Words that should be defined in other vocabs...
 
 : unintern ( word -- )
-    dup vocabulary>> [ [ name>> ] dip vocab-words-assoc delete-at ] keepd
-    f >>vocabulary drop ;
+    [ [ f ] change-vocabulary
+      name>> swap vocab-words-assoc delete-at ] keep
+    [ \ <uninterned-word> counter >fixnum ] dip hashcode<< ;
