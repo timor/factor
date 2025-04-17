@@ -67,3 +67,6 @@ PRIVATE>
         [ check append ] change: paths
         fail
     ] curry callcc1 ;
+
+: when-failing ( try-quot recover-quot -- quot )
+    '[ _ [ dup no-more-choices? [ drop @ ] [ rethrow ] if ] recover ] ; inline
