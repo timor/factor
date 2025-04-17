@@ -61,6 +61,14 @@ PRIVATE>
     dup equivs [ representative ] [ schema>> ] bi ?at
     spin ? ;
 
+ERROR: unbound-term-variable var ;
+:: var-value ( var -- value )
+    equivs [
+        [ var swap representative ]
+        [ schema>> ] bi at*
+    ] [ f f ] if*
+    [ drop var unbound-term-variable ] unless ;
+
 ! NOTE: not rebuilding the whole thing here.  Subject to scoping!
 : set-rep-schema ( term rep -- )
     equivs [ new-at ] change-schema drop ;
