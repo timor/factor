@@ -28,9 +28,13 @@ SYMBOL: equivs-stack
 PRIVATE>
 
 : with-match ( quot -- )
+    choosing
     push-equivs
     [ pop-equivs
     ] finally ; inline
+
+: matching ( quot1 -- quot2 )
+    [ with-match ] curry ; inline
 
 : on-equivs ( quot: ( ..a equivs -- ..b equivs ) -- )
     equivs swap call set: equivs ; inline

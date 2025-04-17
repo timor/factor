@@ -70,7 +70,7 @@ M: object unify-terms
     = [ fail ] unless ;
 
 ! compute only unifier
-! new scope
+! new equivs scope, new choice scope, so probably not that useful
 : unifier ( s t -- term-relation vars )
     [ unif-closure equivs var-set ] choosing with-match ;
 
