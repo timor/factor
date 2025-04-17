@@ -27,3 +27,10 @@ TERM-VARS: ?a ?b ;
 
 { { 2 3 4 } }
 [ [ T{ foo f 1 { 2 3 4 } } T{ foo f 1 ?a } matcher* call ?a var-value ] with-match ] choosing unit-test
+
+{ ( x -- ) } [ { 1 2 [ odd? ] ?a } matcher* infer ] unit-test
+
+{ 6 }
+[ [ { 1 2 5 6 } { 1 2 [ odd? ] ?a } matcher* call ?a var-value ] with-match ] choosing unit-test
+
+[ [ { 1 2 4 } { 1 2 [ odd? ] } matcher* call ] with-match ] choosing [ no-more-choices? ] must-fail-with

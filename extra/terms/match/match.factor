@@ -37,7 +37,7 @@ M: tuple matcher*
 
 ! NOTE: quotations are simply tests
 M: callable matcher*
-    '[ _ [ fail ] unless ] ;
+    '[ @ [ fail ] unless ] ;
 
 ! allows reflexive access to the value being checked
 TUPLE: bind-match
