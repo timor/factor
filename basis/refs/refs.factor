@@ -1,6 +1,6 @@
 ! Copyright (C) 2007, 2008 Slava Pestov, 2009 Alex Chapman
 ! See https://factorcode.org/license.txt for BSD license.
-USING: accessors assocs boxes kernel math namespaces
+USING: accessors assocs boxes kernel make math namespaces sequences
 slots.private ;
 IN: refs
 
@@ -73,3 +73,26 @@ C: <value-ref> value-ref
 M: value-ref get-ref >assoc-ref< at ;
 M: value-ref set-ref >assoc-ref< set-at ;
 INSTANCE: value-ref ref
+
+TUPLE: nth-ref sequence n ;
+C: <nth-ref> nth-ref
+: >nth-ref< ( nth-ref -- n sequence ) [ n>> ] [ sequence>> ] bi ; inline
+M: nth-ref get-ref >nth-ref< nth ;
+M: nth-ref set-ref >nth-ref< set-nth ;
+M: nth-ref delete-ref >nth-ref< remove-nth! drop ;
+
+: find>ref ( ... seq quot: ( ... elt -- ... ? ) -- ref/f )
+    [ find ] keepd -rot [ <nth-ref> ] [ 2drop f ] if ; inline
+
+TUPLE: ref-sequence
+    { underlying read-only }
+    { refs read-only } ;
+
+INSTANCE: ref-sequence virtual-sequence
+M: ref-sequence length refs>> length ; inline
+M: ref-sequence virtual-exemplar underlying>> ; inline
+M: ref-sequence virtual@ refs>> nth >nth-ref< ;
+
+: filter>ref ( ... seq quot: ( ... elt -- ... ? ) -- ref-sequence )
+    [ [ dupd [| i elt seq quot | elt quot call [ seq i <nth-ref> , ] when ] 2curry each-index ] V{ } make ]
+    keepd swap ref-sequence boa ; inline
