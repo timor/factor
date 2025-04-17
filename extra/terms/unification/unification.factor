@@ -70,8 +70,9 @@ M: object unify-terms
     = [ fail ] unless ;
 
 ! compute only unifier
+! new scope
 : unifier ( s t -- term-relation vars )
-    [ unif-closure equivs var-set ] choosing with-equiv-scope ;
+    [ unif-closure equivs var-set ] choosing with-match ;
 
 : unify ( s t -- term-relation vars )
     [ unifier ] [ dup no-more-choices? [ 3drop f f ] [ rethrow ] if ] recover ;

@@ -27,7 +27,7 @@ SYMBOL: equivs-stack
 
 PRIVATE>
 
-: with-equiv-scope ( quot -- )
+: with-match ( quot -- )
     push-equivs
     [ pop-equivs
     ] finally ; inline
