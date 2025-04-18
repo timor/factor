@@ -23,16 +23,20 @@ M: sequence matcher*
         dup { [ sequence? ] [ length _ = ] } 1&&
         [ _ cleave ] [ fail ] if ] ;
 
-! NOTE: depends on tuple layout
-M: tuple matcher*
-    [ class-of ]
-    [ tuple-slots ] bi
+<PRIVATE
+: slots-matcher ( specs -- quot )
     [ 2 + swap matcher*
       '[ _ slot @ ]
     ] map-index
+    '[ _ cleave ] ;
+PRIVATE>
+
+! NOTE: depends on tuple layout
+M: tuple matcher*
+    [ class-of ]
+    [ tuple-slots slots-matcher ] bi
     '[ dup class-of _ eq?
-      [ _ cleave ]
-      [ fail ] if
+       _ [ fail ] if
     ] ;
 
 ! NOTE: quotations are simply tests
@@ -54,3 +58,20 @@ SYNTAX: As(
     scan-object
     scan-object
     ")" expect bind-match boa suffix! ;
+
+! Tuple "template" match pattern
+! NOTE: does not length check
+! _T{ class slot slot... }
+TUPLE: tuple-match
+    class-pattern
+    slot-patterns ;
+
+M: tuple-match matcher*
+    [ class-pattern>> ]
+    [ slot-patterns>> slots-matcher ] bi
+    '[ dup _ instance?
+       _ [ fail ] if
+    ] ;
+
+! TODO: rest argument, sanity check on slot number
+SYNTAX: _T{ scan-class \ } parse-until tuple-match boa suffix! ;

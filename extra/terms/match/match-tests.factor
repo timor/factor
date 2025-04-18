@@ -35,3 +35,15 @@ TERM-VARS: ?a ?b ;
 [ [ { 1 2 5 6 } { 1 2 [ odd? ] ?a } matcher* call ?a var-value ] with-match ] choosing unit-test
 
 [ { 1 2 4 } { 1 2 [ odd? ] } matcher* with-match ] [ no-more-choices? ] must-fail-with
+
+! Tuple templates
+
+TUPLE: bar < foo c ;
+
+{ 1 2 }
+[ T{ foo f 1 2 } _T{ foo ?a ?b } matcher* [ ?a var-value ?b var-value ] compose with-match ] unit-test
+
+[ T{ foo f 1 2 } _T{ bar ?a ?b } matcher* [ ?a var-value ?b var-value ] compose with-match ] [ no-more-choices? ] must-fail-with
+
+{ 1 2 }
+[ T{ bar f 1 2 3 } _T{ foo ?a ?b } matcher* [ ?a var-value ?b var-value ] compose with-match ] unit-test
