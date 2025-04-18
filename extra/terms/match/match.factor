@@ -1,6 +1,6 @@
 USING: accessors choose-fail classes classes.tuple combinators
-combinators.short-circuit kernel lexer math parser sequences slots.private terms
-terms.unification.private ;
+combinators.short-circuit kernel lexer math parser quotations sequences
+slots.private terms.unification.private ;
 
 IN: terms.match
 
@@ -29,6 +29,10 @@ M: sequence matcher*
       '[ _ slot @ ]
     ] map-index
     '[ _ cleave ] ;
+
+: (and-match) ( specs -- quot )
+    [ matcher* ] map
+    [ cleave ] curry ;
 PRIVATE>
 
 ! NOTE: depends on tuple layout
@@ -43,7 +47,17 @@ M: tuple matcher*
 M: callable matcher*
     '[ @ [ fail ] unless ] ;
 
+TUPLE: and-match
+    patterns ;
+
+M: and-match matcher*
+    patterns>> (and-match) ;
+
+DEFER: ) delimiter
+SYNTAX: &( \ ) parse-until and-match boa suffix! ;
+
 ! allows reflexive access to the value being checked
+! NOTE: this is just a special case for an and!
 TUPLE: bind-match
     var
     pattern ;
@@ -65,6 +79,9 @@ SYNTAX: As(
 TUPLE: tuple-match
     class-pattern
     slot-patterns ;
+
+! : <tuple-match> ( class slots -- obj )
+
 
 M: tuple-match matcher*
     [ class-pattern>> ]

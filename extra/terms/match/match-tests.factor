@@ -36,6 +36,11 @@ TERM-VARS: ?a ?b ;
 
 [ { 1 2 4 } { 1 2 [ odd? ] } matcher* with-match ] [ no-more-choices? ] must-fail-with
 
+! And match
+{ ( x -- ) }
+[ &( ?a [ 8 = ] ) matcher* infer ] unit-test
+
+
 ! Tuple templates
 
 TUPLE: bar < foo c ;
@@ -47,3 +52,5 @@ TUPLE: bar < foo c ;
 
 { 1 2 }
 [ T{ bar f 1 2 3 } _T{ foo ?a ?b } matcher* [ ?a var-value ?b var-value ] compose with-match ] unit-test
+
+
