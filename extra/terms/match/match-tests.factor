@@ -40,6 +40,11 @@ TERM-VARS: ?a ?b ;
 { ( x -- ) }
 [ &( ?a [ 8 = ] ) matcher* infer ] unit-test
 
+{ 8 }
+[ 8 &( ?a [ 8 = ] ) matcher* [ ?a var-value ] compose with-match ] unit-test
+
+{ 8 }
+[ { 8 } { &( ?a [ 8 = ] ) } matcher* [ ?a var-value ] compose with-match ] unit-test
 
 ! Tuple templates
 

@@ -1,5 +1,6 @@
-USING: accessors assocs continuations disjoint-sets kernel namespaces
-persistent.assocs persistent.disjoint-sets sequences terms.relations variables ;
+USING: accessors assocs choose-fail continuations disjoint-sets kernel
+namespaces persistent.assocs persistent.disjoint-sets sequences terms.relations
+variables ;
 
 IN: terms.context
 

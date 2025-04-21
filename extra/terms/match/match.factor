@@ -53,9 +53,6 @@ TUPLE: and-match
 M: and-match matcher*
     patterns>> (and-match) ;
 
-DEFER: ) delimiter
-SYNTAX: &( \ ) parse-until and-match boa suffix! ;
-
 ! allows reflexive access to the value being checked
 ! NOTE: this is just a special case for an and!
 TUPLE: bind-match
@@ -69,9 +66,9 @@ M: bind-match matcher*
        @ ] ;
 
 SYNTAX: As(
-    scan-object
-    scan-object
-    ")" expect bind-match boa suffix! ;
+        scan-object
+        scan-object
+        ")" expect bind-match boa suffix! ;
 
 ! Tuple "template" match pattern
 ! NOTE: does not length check
@@ -92,3 +89,6 @@ M: tuple-match matcher*
 
 ! TODO: rest argument, sanity check on slot number
 SYNTAX: _T{ scan-class \ } parse-until tuple-match boa suffix! ;
+
+DEFER: ) delimiter
+SYNTAX: &( \ ) parse-until and-match boa suffix! ;
