@@ -69,6 +69,9 @@ M: term-var unify-terms
 M: object unify-terms
     = [ fail ] unless ;
 
+: match ( s t -- )
+    unif-closure ;
+
 ! compute only unifier
 ! new equivs scope, new choice scope, so probably not that useful
 : unifier ( s t -- term-relation vars )
