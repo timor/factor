@@ -43,9 +43,9 @@ M: tuple matcher*
        _ [ fail ] if
     ] ;
 
-! NOTE: quotations are simply tests
-M: callable matcher*
-    '[ @ [ fail ] unless ] ;
+! NOTE: quotations are simply executed
+M: callable matcher* ;
+    ! '[ @ [ fail ] unless ] ;
 
 TUPLE: and-match
     patterns ;
@@ -89,6 +89,8 @@ M: tuple-match matcher*
 
 ! TODO: rest argument, sanity check on slot number
 SYNTAX: _T{ scan-class \ } parse-until tuple-match boa suffix! ;
+
+SYNTAX: ?[ parse-quotation [ [ fail ] unless ] compose suffix! ;
 
 DEFER: ) delimiter
 SYNTAX: &( \ ) parse-until and-match boa suffix! ;
