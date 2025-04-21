@@ -26,6 +26,9 @@ SYMBOL: equivs-stack
     equivs-stack get unclip-last-slice set: equivs
     equivs-stack set ;
 
+: keep-equivs ( -- )
+    equivs-stack [ but-last-slice ] change
+
 PRIVATE>
 
 : with-match ( quot -- )
