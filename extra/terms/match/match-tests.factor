@@ -1,8 +1,7 @@
 ! Copyright (C) 2025 .
 ! See https://factorcode.org/license.txt for BSD license.
-USING: choose-fail kernel math stack-checker terms.context terms.match
-terms.match.private
-terms.parser tools.test ;
+USING: choose-fail classes.algebra kernel literals math stack-checker
+terms.context terms.match terms.match.private terms.parser tools.test ;
 IN: terms.match.tests
 
 
@@ -15,6 +14,20 @@ IN: terms.match.tests
 
 [ 1 { 2 } matcher* with-match ] [ no-more-choices? ] must-fail-with
 
+[ V{ 1 2 } { 1 2 } matcher* with-match ] [ no-more-choices? ] must-fail-with
+
+[ { 1 2 } V{ 1 2 } matcher* with-match ] [ no-more-choices? ] must-fail-with
+
+[ [ 1 2 ] V{ 1 2 } matcher* with-match ] [ no-more-choices? ] must-fail-with
+
+{  }
+[ { 1 2 } { 1 2 } matcher* with-match ] unit-test
+
+{  }
+[ V{ 1 2 } V{ 1 2 } matcher* with-match ] unit-test
+
+{  }
+[ [ 1 2 ] [ 1 2 ] matcher* with-match ] unit-test
 
 TUPLE: foo a b ;
 TERM-VARS: ?a ?b ?c ?d ;
@@ -77,10 +90,11 @@ TUPLE: bar < foo c ;
 [ T{ foo f 1 2 } _T{ bar ?a ?b } matcher* [ ?a var-value ?b var-value ] compose with-match ] [ no-more-choices? ] must-fail-with
 
 { 1 2 }
-[ T{ bar f 1 2 3 } _T{ foo ?a ?b } matcher* [ ?a var-value ?b var-value ] compose with-match ] unit-test
+[ T{ bar f 1 2 3 } _T{ ?[ foo class<= ] ?a ?b } matcher* [ ?a var-value ?b var-value ] compose with-match ] unit-test
 
+! Using call matcher
 { ( x -- ) }
-[ &( ?[ foo instance? ] $[ { 1 2 3 } slots-matcher ] ) matcher* infer ] unit-test
+[ &( ?[ foo? ] $[ { 1 2 3 } slots-matcher <call-matcher> ] ) matcher* infer ] unit-test
 
 {  }
-[ T{ bar f 1 2 3 } &( ?[ foo instance? ] $[ { 1 2 3 } slots-matcher ] ) matcher* call ] matching unit-test
+[ T{ bar f 1 2 3 } &( ?[ foo? ] $[ { 1 2 3 } slots-matcher <call-matcher> ] ) matcher* call ] matching unit-test
