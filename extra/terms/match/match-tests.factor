@@ -17,7 +17,7 @@ IN: terms.match.tests
 
 
 TUPLE: foo a b ;
-TERM-VARS: ?a ?b ;
+TERM-VARS: ?a ?b ?c ?d ;
 
 {  }
 [ T{ foo f 1 2 } dup matcher* with-match ] unit-test
@@ -46,6 +46,26 @@ TERM-VARS: ?a ?b ;
 
 { 8 }
 [ { 8 } { &( ?a ?[ 8 = ] ) } matcher* [ ?a var-value ] compose with-match ] unit-test
+
+! ! As match
+! { 5 { 7 8 } 7 8 }
+! [ { 5 { 7 8 } } { ?a As( ?b { ?c ?d } ) } matcher* [ ?a var-value ?b var-value ?c var-value ?d var-value ] compose with-match ] unit-test
+
+! [ { 5 { 7 8 } } { ?a As( ?b { ?a ?c } ) } matcher* [ ?a var-value ?b var-value ?c var-value ] compose with-match ]
+! [ no-more-choices? ] must-fail-with
+
+! { 5 { 5 8 } 8 }
+! [ { 5 { 5 8 } } { ?a As( ?b { ?a ?c } ) } matcher* [ ?a var-value ?b var-value ?c var-value ] compose with-match ] unit-test
+
+! Using and-match
+{ 5 { 7 8 } 7 8 }
+[ { 5 { 7 8 } } { ?a &( ?b { ?c ?d } ) } matcher* [ ?a var-value ?b var-value ?c var-value ?d var-value ] compose with-match ] unit-test
+
+[ { 5 { 7 8 } } { ?a &( ?b { ?a ?c } ) } matcher* [ ?a var-value ?b var-value ?c var-value ] compose with-match ]
+[ no-more-choices? ] must-fail-with
+
+{ 5 { 5 8 } 8 }
+[ { 5 { 5 8 } } { ?a &( ?b { ?a ?c } ) } matcher* [ ?a var-value ?b var-value ?c var-value ] compose with-match ] unit-test
 
 ! Tuple templates
 

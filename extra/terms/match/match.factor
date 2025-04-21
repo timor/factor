@@ -45,7 +45,9 @@ M: tuple matcher*
 
 ! NOTE: quotations are simply executed
 M: callable matcher* ;
-    ! '[ @ [ fail ] unless ] ;
+
+: or-failing ( quot -- quot )
+    [ [ fail ] unless ] compose ;
 
 TUPLE: and-match
     patterns ;
@@ -53,22 +55,22 @@ TUPLE: and-match
 M: and-match matcher*
     patterns>> (and-match) ;
 
-! allows reflexive access to the value being checked
-! NOTE: this is just a special case for an and!
-TUPLE: bind-match
-    var
-    pattern ;
+! ! allows reflexive access to the value being checked
+! ! NOTE: this is just a special case for an and!
+! TUPLE: bind-match
+!     var
+!     pattern ;
 
-M: bind-match matcher*
-    [ var>> ]
-    [ pattern>> matcher* ] bi
-    '[ dup _ unif-closure
-       @ ] ;
+! M: bind-match matcher*
+!     [ var>> ]
+!     [ pattern>> matcher* ] bi
+!     '[ dup _ unif-closure
+!        @ ] ;
 
-SYNTAX: As(
-        scan-object
-        scan-object
-        ")" expect bind-match boa suffix! ;
+! SYNTAX: As(
+!         scan-object
+!         scan-object
+!         ")" expect bind-match boa suffix! ;
 
 ! Tuple "template" match pattern
 ! NOTE: does not length check
@@ -90,7 +92,7 @@ M: tuple-match matcher*
 ! TODO: rest argument, sanity check on slot number
 SYNTAX: _T{ scan-class \ } parse-until tuple-match boa suffix! ;
 
-SYNTAX: ?[ parse-quotation [ [ fail ] unless ] compose suffix! ;
+SYNTAX: ?[ parse-quotation or-failing suffix! ;
 
 DEFER: ) delimiter
 SYNTAX: &( \ ) parse-until and-match boa suffix! ;
